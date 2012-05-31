@@ -11,6 +11,8 @@
 
 #include "Ellipsoid.hpp"
 
+#include <string>
+
 
 class Planet: Ellipsoid {
 private:
@@ -29,6 +31,6 @@ public:
     return _name;
   }
 
-}
+};
 
 #endif

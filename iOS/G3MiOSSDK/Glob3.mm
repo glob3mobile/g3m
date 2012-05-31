@@ -12,6 +12,7 @@
 
 #include "G3Widget.h"
 #include "CompositeRenderer.h"
+#include "Planet.hpp"
 
 @interface Glob3 ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
@@ -60,7 +61,8 @@
         G3Widget *g3W = (G3Widget*) [self g3Widget]; 
         
         CompositeRenderer *comp = new CompositeRenderer();
-        g3W->create(NULL, comp);
+        Planet *p = Planet::createEarth();
+        g3W->create(p, comp);
 
         
         glEnable(GL_DEPTH_TEST);

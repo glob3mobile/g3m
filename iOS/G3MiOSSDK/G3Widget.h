@@ -10,19 +10,23 @@
 #define G3MiOSSDK_G3Widget_h
 
 #include "Renderer.h"
+#include "Planet.hpp"
 
 class Globe{};
 
 class G3Widget
 {
 public:
-    void create(Globe *g, Renderer *r);
+    
+    ~G3Widget();
+    
+    void create(Planet *g, Renderer *r);
     
     bool render();
     
 private:
     Renderer *_renderer;
-    Globe * _globe;
+    Planet * _globe;
     Factory * _factory;
     IGL * _gl;
 };

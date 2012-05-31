@@ -10,6 +10,12 @@
 
 #include "G3Widget.h"
 
+G3Widget::~G3Widget()
+{
+    delete _factory;
+    delete _gl;
+}
+
 void G3Widget::create(Globe *g, Renderer *r)
 {
     //Factory = new Fac....
