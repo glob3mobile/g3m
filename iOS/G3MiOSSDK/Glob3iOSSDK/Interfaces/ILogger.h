@@ -9,6 +9,9 @@
 #ifndef G3MiOSSDK_ILogger_h
 #define G3MiOSSDK_ILogger_h
 
+
+#include <string>
+
 enum LogLevel {
     InfoLevel,
     WarningLevel,
@@ -17,12 +20,8 @@ enum LogLevel {
 
 
 class ILogger {
-protected:
-  const LogLevel _level;
 
 public:
-    ILogger(const LogLevel level): _level(level) {}
-    
     virtual void logInfo(const std::string x, ...) = 0;
     virtual void logWarning(const std::string x, ...) = 0;
     virtual void logError(const std::string x, ...) = 0;
