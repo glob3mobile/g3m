@@ -63,7 +63,7 @@ ILogger *logger = (ILogger *) new Logger_iOS(InfoLevel);
         
             
         // testing Logger
-        logger->logInfo("probando Logger...\n");
+        logger->logInfo("testing Logger...\n");
         
         
         

@@ -13,9 +13,9 @@
 #include <string>
 
 enum LogLevel {
-    InfoLevel,
-    WarningLevel,
-    ErrorLevel
+  InfoLevel,
+  WarningLevel,
+  ErrorLevel
 };
 
 

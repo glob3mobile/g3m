@@ -25,13 +25,6 @@ private:
   
   
 public:
-  static Ellipsoid WGS84() {
-    return Ellipsoid(Vector3D(6378137.0, 6378137.0, 6356752.314245));
-  }
-  
-  static Ellipsoid SPHERE_6365000() {
-    return Ellipsoid(Vector3D(6365000.0, 6365000.0, 6365000.0));
-  }
   
   Ellipsoid(const Vector3D& radii);
   
