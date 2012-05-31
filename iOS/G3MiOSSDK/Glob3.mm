@@ -11,6 +11,9 @@
 #import "ES1Renderer.h"
 #import "ES2Renderer.h"
 
+//#include "ILogger.h"
+
+
 @interface Glob3 ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
 @end
@@ -53,6 +56,7 @@
         //int w = [self frame].size.width;
         //int h = [self frame].size.height;
         
+            
         
         
         glEnable(GL_DEPTH_TEST);
