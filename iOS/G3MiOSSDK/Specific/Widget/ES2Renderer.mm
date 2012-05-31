@@ -8,7 +8,7 @@
 
 #import "ES2Renderer.h"
 
-#include "G3MWidget.cpp"
+#include "G3MWidget.h"
 
 
 // uniform index
