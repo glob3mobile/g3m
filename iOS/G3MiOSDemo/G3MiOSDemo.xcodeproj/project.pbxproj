@@ -16,42 +16,49 @@
 		D8EEF39E1577920B003FEB5E /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8EEF39C1577920B003FEB5E /* MainStoryboard_iPhone.storyboard */; };
 		D8EEF3A11577920B003FEB5E /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8EEF39F1577920B003FEB5E /* MainStoryboard_iPad.storyboard */; };
 		D8EEF3A41577920B003FEB5E /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = D8EEF3A31577920B003FEB5E /* ViewController.mm */; };
-		D8EEF3D0157792B0003FEB5E /* libGlob3iOSSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3CD15779277003FEB5E /* libGlob3iOSSDK.a */; };
+		D8EEF40B1577A93D003FEB5E /* G3Widget.m in Sources */ = {isa = PBXBuildFile; fileRef = D8EEF40A1577A93D003FEB5E /* G3Widget.m */; };
+		D8EEF40F1577AA61003FEB5E /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF40E1577AA61003FEB5E /* OpenGLES.framework */; };
+		D8EEF4111577AAE2003FEB5E /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF4101577AAE2003FEB5E /* QuartzCore.framework */; };
+		D8EEF4221577AEE0003FEB5E /* libG3MiOSSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF41E1577AEC8003FEB5E /* libG3MiOSSDK.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		D8EEF3CC15779277003FEB5E /* PBXContainerItemProxy */ = {
+		D8EEF41D1577AEC8003FEB5E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = D8EEF3C515779276003FEB5E /* Glob3iOSSDK.xcodeproj */;
+			containerPortal = D8EEF4161577AEC8003FEB5E /* G3MiOSSDK.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = D8EEF3B51577924D003FEB5E;
-			remoteInfo = Glob3iOSSDK;
+			remoteInfo = G3MiOSSDK;
 		};
-		D8EEF3CE157792AA003FEB5E /* PBXContainerItemProxy */ = {
+		D8EEF4201577AEDC003FEB5E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = D8EEF3C515779276003FEB5E /* Glob3iOSSDK.xcodeproj */;
+			containerPortal = D8EEF4161577AEC8003FEB5E /* G3MiOSSDK.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = D8EEF3B41577924D003FEB5E;
-			remoteInfo = Glob3iOSSDK;
+			remoteInfo = G3MiOSSDK;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		D8EEF3861577920B003FEB5E /* Glob3iOSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Glob3iOSDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8EEF3861577920B003FEB5E /* G3MiOSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = G3MiOSDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8EEF38A1577920B003FEB5E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		D8EEF38C1577920B003FEB5E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D8EEF38E1577920B003FEB5E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		D8EEF3921577920B003FEB5E /* Glob3iOSDemo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Glob3iOSDemo-Info.plist"; sourceTree = "<group>"; };
+		D8EEF3921577920B003FEB5E /* G3MiOSDemo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "G3MiOSDemo-Info.plist"; sourceTree = "<group>"; };
 		D8EEF3941577920B003FEB5E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D8EEF3961577920B003FEB5E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		D8EEF3981577920B003FEB5E /* Glob3iOSDemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Glob3iOSDemo-Prefix.pch"; sourceTree = "<group>"; };
+		D8EEF3981577920B003FEB5E /* G3MiOSDemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "G3MiOSDemo-Prefix.pch"; sourceTree = "<group>"; };
 		D8EEF3991577920B003FEB5E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		D8EEF39A1577920B003FEB5E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		D8EEF39D1577920B003FEB5E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
 		D8EEF3A01577920B003FEB5E /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
 		D8EEF3A21577920B003FEB5E /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		D8EEF3A31577920B003FEB5E /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
-		D8EEF3C515779276003FEB5E /* Glob3iOSSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Glob3iOSSDK.xcodeproj; path = ../Glob3iOSSDK/Glob3iOSSDK.xcodeproj; sourceTree = "<group>"; };
+		D8EEF4091577A93D003FEB5E /* G3Widget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3Widget.h; sourceTree = "<group>"; };
+		D8EEF40A1577A93D003FEB5E /* G3Widget.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = G3Widget.m; sourceTree = "<group>"; };
+		D8EEF40E1577AA61003FEB5E /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		D8EEF4101577AAE2003FEB5E /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		D8EEF4161577AEC8003FEB5E /* G3MiOSSDK.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = G3MiOSSDK.xcodeproj; path = ../G3MiOSSDK/G3MiOSSDK.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,7 +66,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D8EEF3D0157792B0003FEB5E /* libGlob3iOSSDK.a in Frameworks */,
+				D8EEF4221577AEE0003FEB5E /* libG3MiOSSDK.a in Frameworks */,
+				D8EEF4111577AAE2003FEB5E /* QuartzCore.framework in Frameworks */,
+				D8EEF40F1577AA61003FEB5E /* OpenGLES.framework in Frameworks */,
 				D8EEF38B1577920B003FEB5E /* UIKit.framework in Frameworks */,
 				D8EEF38D1577920B003FEB5E /* Foundation.framework in Frameworks */,
 				D8EEF38F1577920B003FEB5E /* CoreGraphics.framework in Frameworks */,
@@ -72,17 +81,19 @@
 		D8EEF37B1577920A003FEB5E = {
 			isa = PBXGroup;
 			children = (
-				D8EEF3901577920B003FEB5E /* Glob3iOSDemo */,
+				D8EEF4101577AAE2003FEB5E /* QuartzCore.framework */,
+				D8EEF40E1577AA61003FEB5E /* OpenGLES.framework */,
+				D8EEF3901577920B003FEB5E /* G3MiOSDemo */,
 				D8EEF3891577920B003FEB5E /* Frameworks */,
 				D8EEF3871577920B003FEB5E /* Products */,
-				D8EEF3C515779276003FEB5E /* Glob3iOSSDK.xcodeproj */,
+				D8EEF4161577AEC8003FEB5E /* G3MiOSSDK.xcodeproj */,
 			);
 			sourceTree = "<group>";
 		};
 		D8EEF3871577920B003FEB5E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D8EEF3861577920B003FEB5E /* Glob3iOSDemo.app */,
+				D8EEF3861577920B003FEB5E /* G3MiOSDemo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -97,7 +108,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		D8EEF3901577920B003FEB5E /* Glob3iOSDemo */ = {
+		D8EEF3901577920B003FEB5E /* G3MiOSDemo */ = {
 			isa = PBXGroup;
 			children = (
 				D8EEF3991577920B003FEB5E /* AppDelegate.h */,
@@ -107,25 +118,28 @@
 				D8EEF3A21577920B003FEB5E /* ViewController.h */,
 				D8EEF3A31577920B003FEB5E /* ViewController.mm */,
 				D8EEF3911577920B003FEB5E /* Supporting Files */,
+				D8EEF4091577A93D003FEB5E /* G3Widget.h */,
+				D8EEF40A1577A93D003FEB5E /* G3Widget.m */,
 			);
+			name = G3MiOSDemo;
 			path = Glob3iOSDemo;
 			sourceTree = "<group>";
 		};
 		D8EEF3911577920B003FEB5E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				D8EEF3921577920B003FEB5E /* Glob3iOSDemo-Info.plist */,
+				D8EEF3921577920B003FEB5E /* G3MiOSDemo-Info.plist */,
 				D8EEF3931577920B003FEB5E /* InfoPlist.strings */,
 				D8EEF3961577920B003FEB5E /* main.m */,
-				D8EEF3981577920B003FEB5E /* Glob3iOSDemo-Prefix.pch */,
+				D8EEF3981577920B003FEB5E /* G3MiOSDemo-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		D8EEF3C615779276003FEB5E /* Products */ = {
+		D8EEF4171577AEC8003FEB5E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D8EEF3CD15779277003FEB5E /* libGlob3iOSSDK.a */,
+				D8EEF41E1577AEC8003FEB5E /* libG3MiOSSDK.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -133,9 +147,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D8EEF3851577920A003FEB5E /* Glob3iOSDemo */ = {
+		D8EEF3851577920A003FEB5E /* G3MiOSDemo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D8EEF3A71577920B003FEB5E /* Build configuration list for PBXNativeTarget "Glob3iOSDemo" */;
+			buildConfigurationList = D8EEF3A71577920B003FEB5E /* Build configuration list for PBXNativeTarget "G3MiOSDemo" */;
 			buildPhases = (
 				D8EEF3821577920A003FEB5E /* Sources */,
 				D8EEF3831577920A003FEB5E /* Frameworks */,
@@ -144,11 +158,11 @@
 			buildRules = (
 			);
 			dependencies = (
-				D8EEF3CF157792AA003FEB5E /* PBXTargetDependency */,
+				D8EEF4211577AEDC003FEB5E /* PBXTargetDependency */,
 			);
-			name = Glob3iOSDemo;
+			name = G3MiOSDemo;
 			productName = Glob3iOSDemo;
-			productReference = D8EEF3861577920B003FEB5E /* Glob3iOSDemo.app */;
+			productReference = D8EEF3861577920B003FEB5E /* G3MiOSDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -159,7 +173,7 @@
 			attributes = {
 				LastUpgradeCheck = 0420;
 			};
-			buildConfigurationList = D8EEF3801577920A003FEB5E /* Build configuration list for PBXProject "Glob3iOSDemo" */;
+			buildConfigurationList = D8EEF3801577920A003FEB5E /* Build configuration list for PBXProject "G3MiOSDemo" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -171,23 +185,23 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = D8EEF3C615779276003FEB5E /* Products */;
-					ProjectRef = D8EEF3C515779276003FEB5E /* Glob3iOSSDK.xcodeproj */;
+					ProductGroup = D8EEF4171577AEC8003FEB5E /* Products */;
+					ProjectRef = D8EEF4161577AEC8003FEB5E /* G3MiOSSDK.xcodeproj */;
 				},
 			);
 			projectRoot = "";
 			targets = (
-				D8EEF3851577920A003FEB5E /* Glob3iOSDemo */,
+				D8EEF3851577920A003FEB5E /* G3MiOSDemo */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		D8EEF3CD15779277003FEB5E /* libGlob3iOSSDK.a */ = {
+		D8EEF41E1577AEC8003FEB5E /* libG3MiOSSDK.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = libGlob3iOSSDK.a;
-			remoteRef = D8EEF3CC15779277003FEB5E /* PBXContainerItemProxy */;
+			path = libG3MiOSSDK.a;
+			remoteRef = D8EEF41D1577AEC8003FEB5E /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -213,16 +227,17 @@
 				D8EEF3971577920B003FEB5E /* main.m in Sources */,
 				D8EEF39B1577920B003FEB5E /* AppDelegate.m in Sources */,
 				D8EEF3A41577920B003FEB5E /* ViewController.mm in Sources */,
+				D8EEF40B1577A93D003FEB5E /* G3Widget.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		D8EEF3CF157792AA003FEB5E /* PBXTargetDependency */ = {
+		D8EEF4211577AEDC003FEB5E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = Glob3iOSSDK;
-			targetProxy = D8EEF3CE157792AA003FEB5E /* PBXContainerItemProxy */;
+			name = G3MiOSSDK;
+			targetProxy = D8EEF4201577AEDC003FEB5E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -310,10 +325,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Glob3iOSDemo/Glob3iOSDemo-Prefix.pch";
+				GCC_PREFIX_HEADER = "Glob3iOSDemo/G3MiOSDemo-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
-				INFOPLIST_FILE = "Glob3iOSDemo/Glob3iOSDemo-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "Glob3iOSDemo/G3MiOSDemo-Info.plist";
+				PRODUCT_NAME = G3MiOSDemo;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -323,10 +338,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Glob3iOSDemo/Glob3iOSDemo-Prefix.pch";
+				GCC_PREFIX_HEADER = "Glob3iOSDemo/G3MiOSDemo-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
-				INFOPLIST_FILE = "Glob3iOSDemo/Glob3iOSDemo-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "Glob3iOSDemo/G3MiOSDemo-Info.plist";
+				PRODUCT_NAME = G3MiOSDemo;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -334,7 +349,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		D8EEF3801577920A003FEB5E /* Build configuration list for PBXProject "Glob3iOSDemo" */ = {
+		D8EEF3801577920A003FEB5E /* Build configuration list for PBXProject "G3MiOSDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D8EEF3A51577920B003FEB5E /* Debug */,
@@ -343,7 +358,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D8EEF3A71577920B003FEB5E /* Build configuration list for PBXNativeTarget "Glob3iOSDemo" */ = {
+		D8EEF3A71577920B003FEB5E /* Build configuration list for PBXNativeTarget "G3MiOSDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D8EEF3A81577920B003FEB5E /* Debug */,

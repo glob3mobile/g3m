@@ -12,7 +12,6 @@
 class G3Widget
 {
     
-    
 };
 
 #endif

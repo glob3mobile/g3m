@@ -10,6 +10,8 @@
 
 @implementation ViewController
 
+@synthesize G3MWidget;
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -22,6 +24,8 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    
+    [[self G3MWidget] startAnimation];
 }
 
 - (void)viewDidUnload
