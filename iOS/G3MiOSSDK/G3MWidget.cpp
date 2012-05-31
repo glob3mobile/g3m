@@ -1,5 +1,5 @@
 //
-//  G3Widget.cpp
+//  G3MWidget.cpp
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 31/05/12.
@@ -8,15 +8,15 @@
 
 #include <iostream>
 
-#include "G3Widget.h"
+#include "G3MWidget.h"
 
-G3Widget::~G3Widget()
+G3MWidget::~G3MWidget()
 {
     delete _factory;
     delete _gl;
 }
 
-void G3Widget::create(Planet *g, Renderer *r)
+void G3MWidget::create(Planet *g, Renderer *r)
 {
     //Factory = new Fac....
     
@@ -27,7 +27,7 @@ void G3Widget::create(Planet *g, Renderer *r)
     _renderer->initialize(ic);
 }
 
-bool G3Widget::render()
+bool G3MWidget::render()
 {
     RenderContext rc(_factory, _gl);
     

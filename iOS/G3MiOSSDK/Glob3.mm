@@ -10,7 +10,7 @@
 
 #import "ES2Renderer.h"
 
-#include "G3Widget.h"
+#include "G3MWidget.h"
 #include "CompositeRenderer.h"
 #include "Planet.hpp"
 #include "Logger_iOS.h"
@@ -26,7 +26,7 @@ ILogger *logger = (ILogger *) new Logger_iOS(InfoLevel);
 
 @implementation Glob3
 
-@synthesize animating, animationFrameInterval, displayLink, animationTimer, renderer /*, multipleTouchEnabled*/, g3Widget;
+@synthesize animating, animationFrameInterval, displayLink, animationTimer, renderer /*, multipleTouchEnabled*/, widget;
 
 
 // You must implement this method
@@ -62,8 +62,8 @@ ILogger *logger = (ILogger *) new Logger_iOS(InfoLevel);
         //int w = [self frame].size.width;
         //int h = [self frame].size.height;
         
-        g3Widget = new G3Widget();
-        G3Widget *g3W = (G3Widget*) [self g3Widget]; 
+        widget = new G3MWidget();
+        G3MWidget *g3W = (G3MWidget*) [self widget]; 
         // testing Logger
         logger->logInfo("testing Logger...\n");
         
@@ -109,7 +109,7 @@ ILogger *logger = (ILogger *) new Logger_iOS(InfoLevel);
 
 - (void)drawView:(id)sender {
     if (animating) {
-        [renderer render: (G3Widget*)[self g3Widget]];
+        [renderer render: (G3MWidget*)[self widget]];
     }
 }
 

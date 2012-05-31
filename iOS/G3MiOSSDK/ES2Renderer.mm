@@ -8,7 +8,7 @@
 
 #import "ES2Renderer.h"
 
-#include "G3Widget.cpp"
+#include "G3MWidget.cpp"
 
 
 // uniform index
@@ -81,7 +81,7 @@ enum {
     // pintamos la escena
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
     
-    bool result = ((G3Widget*)g3w)->render();
+    bool result = ((G3MWidget*)g3w)->render();
     
 
 
