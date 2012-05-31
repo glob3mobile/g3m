@@ -20,6 +20,10 @@ enum LogLevel {
 
 
 class ILogger {
+protected:
+  const LogLevel _level;
+  
+  ILogger(const LogLevel level): _level(level) {}
 
 public:
     virtual void logInfo(const std::string x, ...) = 0;

@@ -13,17 +13,12 @@
 
 
 class Logger_iOS: public ILogger {
-    
-protected:
-    const LogLevel _level;
-
 public:  
-    Logger_iOS(const LogLevel level): _level(level) {}
+    Logger_iOS(const LogLevel level): ILogger(level) { }
     
     void logInfo(const std::string x, ...);
     void logWarning(const std::string x, ...);
     void logError(const std::string x, ...);
-
 };
 
 #endif
