@@ -6,32 +6,26 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#include <iostream>
-
 #include "G3MWidget.h"
 
 G3MWidget::~G3MWidget()
 {
-    delete _factory;
-    delete _gl;
-}
-
-void G3MWidget::create(Planet *g, Renderer *r)
-{
-    //Factory = new Fac....
-    
-    _planet = g;
-    _renderer = r;
-    
-    InitializationContext ic(_factory);
-    _renderer->initialize(ic);
+  delete _factory;
+  delete _gl;
 }
 
 bool G3MWidget::render()
 {
-    RenderContext rc(_factory, _gl);
-    
-    _renderer->render(rc);
-    
-    return true;
+  RenderContext rc(_factory, _gl);
+  
+  _renderer.render(rc);
+  
+  return true;
+}
+
+G3MWidget G3MWidget::create(const Planet &planet, Renderer &renderer) {
+  int __TODO_create_factory_and_gl;
+  IFactory* factory = NULL;
+  IGL* gl  = NULL;
+  return G3MWidget(planet, renderer, factory, gl);
 }

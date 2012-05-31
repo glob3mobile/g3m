@@ -23,17 +23,17 @@ enum GL_version {
 // Note that setting the view non-opaque will only work if the EAGL surface has an alpha channel.
 @interface G3MWidget_iOS : UIView {
 @private
-    ES2Renderer *renderer;
+//    ES2Renderer *renderer;
 
-    BOOL animating;
+//    BOOL animating;
     BOOL displayLinkSupported;
-    NSInteger animationFrameInterval;
+//    NSInteger animationFrameInterval;
     // Use of the CADisplayLink class is the preferred method for controlling your animation timing.
     // CADisplayLink will link to the main display and fire every vsync when added to a given run-loop.
     // The NSTimer class is used only as fallback when running on a pre 3.1 device where CADisplayLink
     // isn't available.
-    id displayLink;
-    NSTimer *__weak animationTimer;
+//    id displayLink;
+//    NSTimer *__weak animationTimer;
 
     //BOOL multipleTouchEnabled;
 

@@ -15,21 +15,29 @@
 
 class Globe{};
 
-class G3MWidget
-{
-public:
-    
-    ~G3MWidget();
-    
-    void create(Planet *g, Renderer *r);
-    
-    bool render();
-    
+class G3MWidget {
 private:
-    Renderer *_renderer;
-    Planet * _planet;
-    IFactory * _factory;
-    IGL * _gl;
+  G3MWidget(const Planet& planet,
+            Renderer& renderer,
+            IFactory* factory,
+            IGL* gl): _planet(planet), _renderer(renderer), _factory(factory), _gl(gl) {
+    InitializationContext ic(_factory);
+    _renderer.initialize(ic);
+  }
+  
+public:
+  
+  static G3MWidget create(const Planet& planet,
+                          Renderer& renderer);  
+  ~G3MWidget();
+  
+  bool render();
+  
+private:
+  Renderer& _renderer;
+  const Planet&   _planet;
+  IFactory* _factory;
+  IGL*      _gl;
 };
 
 #endif

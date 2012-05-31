@@ -26,7 +26,13 @@ ILogger *logger = (ILogger *) new Logger_iOS(InfoLevel);
 
 @implementation G3MWidget_iOS
 
-@synthesize animating, animationFrameInterval, displayLink, animationTimer, renderer /*, multipleTouchEnabled*/, widget;
+@synthesize animating              = _animating;
+@synthesize animationFrameInterval = _animationFrameInterval;
+@synthesize displayLink            = _displayLink;
+@synthesize animationTimer         = _animationTimer;
+@synthesize renderer               = _renderer;
+@synthesize widget                 = _widget;
+/*@synthesize  multipleTouchEnabled*/
 
 
 // You must implement this method
@@ -47,10 +53,8 @@ ILogger *logger = (ILogger *) new Logger_iOS(InfoLevel);
                 [NSNumber numberWithBool:FALSE], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
 
         // create IGL object
-        renderer = nil;
-        
-        renderer = [[ES2Renderer alloc] init];
-        if (!renderer) {
+        _renderer = [[ES2Renderer alloc] init];
+        if (!_renderer) {
             printf("**** ERROR: G3MWidget_iOS Mobile needs Opengl ES 2.0\n");
         }
         else {
@@ -61,26 +65,21 @@ ILogger *logger = (ILogger *) new Logger_iOS(InfoLevel);
         // create GLOB3M WIDGET
         //int w = [self frame].size.width;
         //int h = [self frame].size.height;
-        
-        widget = new G3MWidget();
-        G3MWidget *g3W = (G3MWidget*) [self widget]; 
+
+        CompositeRenderer comp = CompositeRenderer();
+        G3MWidget g3W = G3MWidget::create(Planet::createEarth(), comp); 
         // testing Logger
         logger->logInfo("testing Logger...\n");
-        
-        CompositeRenderer *comp = new CompositeRenderer();
-        Planet * p = Planet::createEarth();
-        g3W->create(p, comp);
-
-        
+                
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
 
         // rest of initialization
-        animating = FALSE;
+        _animating = FALSE;
         displayLinkSupported = FALSE;
-        animationFrameInterval = 1;
-        displayLink = nil;
-        animationTimer = nil;
+        _animationFrameInterval = 1;
+        _displayLink = nil;
+        _animationTimer = nil;
 
         self.multipleTouchEnabled = YES; //NECESSARY FOR PROPER PINCH EVENT
 
@@ -108,8 +107,8 @@ ILogger *logger = (ILogger *) new Logger_iOS(InfoLevel);
 
 
 - (void)drawView:(id)sender {
-    if (animating) {
-        [renderer render: (G3MWidget*)[self widget]];
+    if (_animating) {
+      [_renderer render: [self widget]];
     }
 }
 
@@ -120,13 +119,13 @@ ILogger *logger = (ILogger *) new Logger_iOS(InfoLevel);
     printf("RESIZING CANVAS: %d, %d\n", w, h);
     //SceneController::GetInstance()->ForceRedrawNextFrame();
 
-    [renderer resizeFromLayer:(CAEAGLLayer *) self.layer];
+    [_renderer resizeFromLayer:(CAEAGLLayer *) self.layer];
     [self drawView:nil];
 }
 
-- (NSInteger)animationFrameInterval {
-    return animationFrameInterval;
-}
+//- (NSInteger)animationFrameInterval {
+//    return _animationFrameInterval;
+//}
 
 - (void)setAnimationFrameInterval:(NSInteger)frameInterval {
     // Frame interval defines how many display frames must pass between each time the
@@ -136,9 +135,9 @@ ILogger *logger = (ILogger *) new Logger_iOS(InfoLevel);
     // at 60 times a second. A frame interval setting of less than one results in undefined
     // behavior.
     if (frameInterval >= 1) {
-        animationFrameInterval = frameInterval;
+        _animationFrameInterval = frameInterval;
 
-        if (animating) {
+        if (_animating) {
             [self stopAnimation];
             [self startAnimation];
         }
@@ -146,31 +145,31 @@ ILogger *logger = (ILogger *) new Logger_iOS(InfoLevel);
 }
 
 - (void)startAnimation {
-    if (!animating) {
+    if (!_animating) {
         if (displayLinkSupported) {
             // CADisplayLink is API new to iPhone SDK 3.1. Compiling against earlier versions will result in a warning, but can be dismissed
             // if the system version runtime check for CADisplayLink exists in -initWithCoder:. The runtime check ensures this code will
             // not be called in system versions earlier than 3.1.
 
             self.displayLink = [NSClassFromString(@"CADisplayLink") displayLinkWithTarget:self selector:@selector(drawView:)];
-            [displayLink setFrameInterval:animationFrameInterval];
-            [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+            [_displayLink setFrameInterval:_animationFrameInterval];
+            [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
         }
         else
-            self.animationTimer = [NSTimer scheduledTimerWithTimeInterval:(NSTimeInterval) ((1.0 / 60.0) * animationFrameInterval) target:self selector:@selector(drawView:) userInfo:nil repeats:TRUE];
+            self.animationTimer = [NSTimer scheduledTimerWithTimeInterval:(NSTimeInterval) ((1.0 / 60.0) * _animationFrameInterval) target:self selector:@selector(drawView:) userInfo:nil repeats:TRUE];
 
         self.animating = TRUE;
     }
 }
 
 - (void)stopAnimation {
-    if (animating) {
+    if (_animating) {
         if (displayLinkSupported) {
-            [displayLink invalidate];
+            [_displayLink invalidate];
             self.displayLink = nil;
         }
         else {
-            [animationTimer invalidate];
+            [_animationTimer invalidate];
             self.animationTimer = nil;
         }
 

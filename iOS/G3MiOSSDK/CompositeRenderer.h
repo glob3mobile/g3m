@@ -13,23 +13,26 @@
 
 #include <vector>
 
-using namespace std;
-
 class CompositeRenderer: public Renderer
 {
 private:
-    vector<Renderer> _renderers;
-    
+  std::vector<Renderer*> _renderers;
+  
+  InitializationContext* _ic;
+  
 public:
-    void initialize(InitializationContext& ic);  
+  CompositeRenderer(): _ic(NULL) {
     
-    int render(RenderContext &rc);
-    
-    bool onTapEvent(TapEvent& event);
-    bool onTouchEvent(TouchEvent &event);
-    
-private:
-    
+  }
+  
+  void initialize(InitializationContext& ic);  
+  
+  int render(RenderContext &rc);
+  
+  bool onTapEvent(TapEvent& event);
+  bool onTouchEvent(TouchEvent &event);
+  
+  void addRenderer(Renderer* renderer);
 };
 
 #endif

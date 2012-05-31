@@ -6,47 +6,48 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#include <iostream>
-
 #include "CompositeRenderer.h"
 
-void CompositeRenderer::initialize(InitializationContext& ic)
-{
-    for (int i = 0; i < _renderers.size(); i++) {
-        _renderers[i].initialize(ic);
-    }
+void CompositeRenderer::initialize(InitializationContext& ic) {
+  _ic = &ic;
+  
+  for (int i = 0; i < _renderers.size(); i++) {
+    _renderers[i]->initialize(ic);
+  }
 }
 
-int CompositeRenderer::render(RenderContext &rc)
-{
-    int min = 9999;
-    for (int i = 0; i < _renderers.size(); i++) {
-        int x = _renderers[i].render(rc);
-        if (x < min) min = x; 
-    }
-    return min;
+void CompositeRenderer::addRenderer(Renderer *renderer) {
+  _renderers.push_back(renderer);
+  renderer->initialize(*_ic);
 }
 
-bool CompositeRenderer::onTapEvent(TapEvent& event)
-{
-    for (int i = 0; i < _renderers.size(); i++) {
-        //THE EVENT IS PROCESSED ONLY BY THE FIRST RENDERER
-        if (_renderers[i].onTapEvent(event))
-        {
-            return true;
-        }
-    }
-    return false;
+int CompositeRenderer::render(RenderContext &rc) {
+  int min = 9999;
+  for (int i = 0; i < _renderers.size(); i++) {
+    int x = _renderers[i]->render(rc);
+    if (x < min) min = x; 
+  }
+  return min;
 }
 
-bool CompositeRenderer::onTouchEvent(TouchEvent &event)
-{
-    for (int i = 0; i < _renderers.size(); i++) {
-        //THE EVENT IS PROCESSED ONLY BY THE FIRST RENDERER
-        if (_renderers[i].onTouchEvent(event))
-        {
-            return true;
-        }
+bool CompositeRenderer::onTapEvent(TapEvent& event) {
+  for (int i = 0; i < _renderers.size(); i++) {
+    //THE EVENT IS PROCESSED ONLY BY THE FIRST RENDERER
+    if (_renderers[i]->onTapEvent(event))
+    {
+      return true;
     }
-    return false;
+  }
+  return false;
+}
+
+bool CompositeRenderer::onTouchEvent(TouchEvent &event) {
+  for (int i = 0; i < _renderers.size(); i++) {
+    //THE EVENT IS PROCESSED ONLY BY THE FIRST RENDERER
+    if (_renderers[i]->onTouchEvent(event))
+    {
+      return true;
+    }
+  }
+  return false;
 }

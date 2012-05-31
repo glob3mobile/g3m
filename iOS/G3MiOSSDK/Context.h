@@ -12,31 +12,40 @@
 #include "IFactory.h"
 class IGL;
 
-class Context
-{
+class Context {
+protected:
+  IFactory * _factory;
+  
+  Context(IFactory *factory) : _factory(factory) {}
+  
 public:
-    
-    Context(IFactory *f, IGL *gl);
-    
-    IFactory * _factory;
-    IGL * _gl;
+  
+  IFactory *getFactory() {
+    return _factory;
+  }
+  
 };
 
-class InitializationContext: private Context
-{
+
+class InitializationContext: private Context {
 public:
-    InitializationContext(IFactory * f);
-    
-    IFactory *getFactory(){ return _factory;}
+  InitializationContext(IFactory * factory) : Context(factory) {}
 };
 
-class RenderContext: private Context
-{
+
+class RenderContext: private Context {
+private:
+  IGL * _gl;
+  
 public:
-    RenderContext(IFactory * f, IGL *gl);
+  RenderContext(IFactory * factory,
+                IGL *gl): Context(factory), _gl(gl) {
     
-    IFactory *getFactory(){ return _factory;}
-    IGL *getGL(){ return _gl;}
+  }
+  
+  IGL *getGL(){
+    return _gl;
+  }
 };
 
 #endif
