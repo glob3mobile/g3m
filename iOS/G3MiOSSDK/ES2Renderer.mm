@@ -37,7 +37,7 @@ enum {
 
 // Create an OpenGL ES 2.0 context
 - (id)init {
-    self = [super init];
+    
     if (self) {
         context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
 
@@ -62,7 +62,7 @@ enum {
 }
 
 
-- (void)render{
+- (void)render: (G3Widget*) g3w{
 
     // This application only creates a single context which is already set current at this point.
     // This call is redundant, but needed if dealing with multiple contexts.	
@@ -77,9 +77,11 @@ enum {
     //sceneController->GetRenderContext()->GetGL()->UseProgram(program);
 
     // pintamos la escena
-    bool result = true; //sceneController->Render();
-    
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+    
+    bool result = g3w->render();
+    
+
 
     if (result) {
         // This application only creates a single color renderbuffer which is already bound at this point.

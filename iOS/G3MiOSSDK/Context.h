@@ -24,6 +24,7 @@ public:
 
 class InitializationContext: private Context
 {
+public:
     InitializationContext(Factory * f);
     
     Factory *getFactory(){ return _factory;}
@@ -31,7 +32,8 @@ class InitializationContext: private Context
 
 class RenderContext: private Context
 {
-    RenderContext(Factory * f, IGL gl);
+public:
+    RenderContext(Factory * f, IGL *gl);
     
     Factory *getFactory(){ return _factory;}
     IGL *getGL(){ return _gl;}

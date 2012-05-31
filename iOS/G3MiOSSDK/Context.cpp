@@ -18,3 +18,5 @@ Context(f,NULL)
 {
     
 };
+
+RenderContext::RenderContext(Factory * f, IGL *gl): Context(f,gl){}

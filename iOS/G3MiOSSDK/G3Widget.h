@@ -18,11 +18,13 @@ class G3Widget
 public:
     void create(Globe *g, Renderer *r);
     
-    void render();
+    bool render();
     
 private:
     Renderer *_renderer;
-    Globe *g;
+    Globe * _globe;
+    Factory * _factory;
+    IGL * _gl;
 };
 
 #endif

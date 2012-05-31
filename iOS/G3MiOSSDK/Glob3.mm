@@ -8,10 +8,10 @@
 
 #import "Glob3.h"
 
-#import "ES1Renderer.h"
 #import "ES2Renderer.h"
 
 #include "G3Widget.h"
+#include "CompositeRenderer.h"
 
 @interface Glob3 ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
@@ -42,6 +42,7 @@
 
         // create IGL object
         renderer = nil;
+        
         renderer = [[ES2Renderer alloc] init];
         if (!renderer) {
             printf("**** ERROR: Glob3 Mobile needs Opengl ES 2.0\n");
@@ -58,7 +59,8 @@
         g3Widget = new G3Widget();
         G3Widget *g3W = (G3Widget*) [self g3Widget]; 
         
-        g3W->create(NULL, NULL);
+        CompositeRenderer *comp = new CompositeRenderer();
+        g3W->create(NULL, comp);
         
         
         
@@ -108,7 +110,7 @@
 
 - (void)drawView:(id)sender {
     if (animating) {
-        [renderer render];
+        [renderer render: (G3Widget*)[self g3Widget]];
     }
 }
 

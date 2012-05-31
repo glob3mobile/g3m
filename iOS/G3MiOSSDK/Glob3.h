@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 
-#import "ESRenderer.h"
+#import "ES2Renderer.h"
 
 // opengl versions value
 enum GL_version {
@@ -23,7 +23,7 @@ enum GL_version {
 // Note that setting the view non-opaque will only work if the EAGL surface has an alpha channel.
 @interface Glob3 : UIView {
 @private
-    id <ESRenderer> renderer;
+    ES2Renderer *renderer;
 
     BOOL animating;
     BOOL displayLinkSupported;
@@ -48,7 +48,7 @@ enum GL_version {
 @property(nonatomic, strong) id displayLink;
 @property(nonatomic, weak) NSTimer *animationTimer;
 //@property(nonatomic, getter=isMultipleTouchEnabled) BOOL multipleTouchEnabled;
-@property(nonatomic, retain) id <ESRenderer> renderer;
+@property(nonatomic, retain) ES2Renderer *renderer;
 
 @property(nonatomic) void *g3Widget;
 

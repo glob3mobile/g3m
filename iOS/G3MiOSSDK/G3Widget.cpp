@@ -12,10 +12,20 @@
 
 void G3Widget::create(Globe *g, Renderer *r)
 {
+    //Factory = new Fac....
     
+    _globe = g;
+    _renderer = r;
+    
+    InitializationContext ic(_factory);
+    _renderer->initialize(ic);
 }
 
-void G3Widget::render()
+bool G3Widget::render()
 {
+    RenderContext rc(_factory, _gl);
     
+    _renderer->render(rc);
+    
+    return true;
 }
