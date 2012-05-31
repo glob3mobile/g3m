@@ -11,7 +11,12 @@
 #import "ES1Renderer.h"
 #import "ES2Renderer.h"
 
-//#include "ILogger.h"
+#include "Logger_iOS.h"
+#include "Factory_iOS.h"
+
+IFactory *factory = (IFactory *) new Factory_iOS();
+ILogger *logger = (ILogger *) new Logger_iOS(InfoLevel);
+
 
 
 @interface Glob3 ()
@@ -57,6 +62,9 @@
         //int h = [self frame].size.height;
         
             
+        // testing Logger
+        logger->logInfo("testing Logger...\n");
+        
         
         
         glEnable(GL_DEPTH_TEST);
