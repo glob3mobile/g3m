@@ -19,14 +19,14 @@ enum LogLevel {
 class ILogger {
     
 public:
-    ILogger(LogLevel level): _level(level) {}
+    ILogger(const LogLevel level): _level(level) {}
     
-    virtual void logInfo(std::string x, ...) = 0;
-    virtual void logWarning(std::string x, ...) = 0;
-    virtual void logError(std::string x, ...) = 0;
+    virtual void logInfo(const std::string x, ...) = 0;
+    virtual void logWarning(const std::string x, ...) = 0;
+    virtual void logError(const std::string x, ...) = 0;
     
 private:
-    LogLevel _level;
+    const LogLevel _level;
 };
 
 

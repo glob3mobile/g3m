@@ -15,14 +15,12 @@
 class Logger_iOS: public ILogger {
     
 public:
-    void logInfo(std::string x, ...);
-    void logWarning(std::string x, ...);
-    void logError(std::string x, ...);
+    void logInfo(const std::string x, ...);
+    void logWarning(const std::string x, ...);
+    void logError(const std::string x, ...);
 
 private:
-    void print(std::string x, ...);
-
-    LogLevel _level;
+    void print(const std::string x, ...);
 
 };
 
