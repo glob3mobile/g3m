@@ -13,6 +13,11 @@
 #include "G3Widget.h"
 #include "CompositeRenderer.h"
 #include "Planet.hpp"
+#include "Logger_iOS.h"
+#include "Factory_iOS.h"
+
+IFactory *factory = (IFactory *) new Factory_iOS();
+ILogger *logger = (ILogger *) new Logger_iOS(InfoLevel);
 
 @interface Glob3 ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
@@ -59,6 +64,8 @@
         
         g3Widget = new G3Widget();
         G3Widget *g3W = (G3Widget*) [self g3Widget]; 
+        // testing Logger
+        logger->logInfo("testing Logger...\n");
         
         CompositeRenderer *comp = new CompositeRenderer();
         Planet * p = Planet::createEarth();

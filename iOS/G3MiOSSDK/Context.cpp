@@ -10,13 +10,13 @@
 
 #include "Context.h"
 
-Context::Context(Factory *f, IGL *gl):
+Context::Context(IFactory *f, IGL *gl):
 _factory(f), _gl(gl){}
 
-InitializationContext::InitializationContext(Factory * f):
+InitializationContext::InitializationContext(IFactory * f):
 Context(f,NULL)
 {
     
 };
 
-RenderContext::RenderContext(Factory * f, IGL *gl): Context(f,gl){}
+RenderContext::RenderContext(IFactory * f, IGL *gl): Context(f,gl){}

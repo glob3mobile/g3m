@@ -11,6 +11,7 @@
 
 #include "Renderer.h"
 #include "Planet.hpp"
+#include "IFactory.h"
 
 class Globe{};
 
@@ -27,7 +28,7 @@ public:
 private:
     Renderer *_renderer;
     Planet * _planet;
-    Factory * _factory;
+    IFactory * _factory;
     IGL * _gl;
 };
 

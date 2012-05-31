@@ -207,7 +207,7 @@ std::list<Vector3D> Ellipsoid::computeCurve(const Vector3D& start,
   for (int i = 1; i <= n; ++i) {
     double phi = (i * granularity);
     
-    positions.push_back(scaleToGeocentricSurface(start.rotateAroundAxis(normal, phi)));
+    positions.push_back(scaleToGeocentricSurface(start.rotatedAroundAxis(normal, phi)));
   }
   
   positions.push_back(stop);

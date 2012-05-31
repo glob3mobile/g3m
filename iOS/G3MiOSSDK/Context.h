@@ -9,33 +9,33 @@
 #ifndef G3MiOSSDK_InitializationContext_h
 #define G3MiOSSDK_InitializationContext_h
 
-class Factory;
+#include "IFactory.h"
 class IGL;
 
 class Context
 {
 public:
     
-    Context(Factory *f, IGL *gl);
+    Context(IFactory *f, IGL *gl);
     
-    Factory * _factory;
+    IFactory * _factory;
     IGL * _gl;
 };
 
 class InitializationContext: private Context
 {
 public:
-    InitializationContext(Factory * f);
+    InitializationContext(IFactory * f);
     
-    Factory *getFactory(){ return _factory;}
+    IFactory *getFactory(){ return _factory;}
 };
 
 class RenderContext: private Context
 {
 public:
-    RenderContext(Factory * f, IGL *gl);
+    RenderContext(IFactory * f, IGL *gl);
     
-    Factory *getFactory(){ return _factory;}
+    IFactory *getFactory(){ return _factory;}
     IGL *getGL(){ return _gl;}
 };
 
