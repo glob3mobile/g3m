@@ -12,14 +12,14 @@
 #include "Ellipsoid.hpp"
 
 
-class Planet: Ellipsoid {
+class Planet : Ellipsoid {
 private:
   std::string _name;
   
 public:
 
   static Planet createEarth() {
-    return Planet(Vector3D(6378137.0, 6378137.0, 6356752.314245));
+    return Planet("Earth", Vector3D(6378137.0, 6378137.0, 6356752.314245));
   }
   
   Planet(const sts::string name,
