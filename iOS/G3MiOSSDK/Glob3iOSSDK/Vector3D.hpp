@@ -33,12 +33,6 @@ public:
   
   Vector3D normalized() const;
   
-  Vector3D normalized(const double magnitude) const {
-    return Vector3D(_x / magnitude,
-                    _y / magnitude,
-                    _z / magnitude);
-  }
-  
   double length() const {
     return sqrt(squaredLength());
   }

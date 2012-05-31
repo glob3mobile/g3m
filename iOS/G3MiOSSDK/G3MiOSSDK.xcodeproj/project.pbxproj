@@ -12,6 +12,8 @@
 		CF05CCC81577BD8A007C336F /* Geodetic3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF05CCC71577BD89007C336F /* Geodetic3D.cpp */; };
 		CF05CCCB1577BF40007C336F /* Geodetic2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF05CCC91577BF3F007C336F /* Geodetic2D.cpp */; };
 		CF05CCCC1577BF40007C336F /* Geodetic2D.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF05CCCA1577BF40007C336F /* Geodetic2D.hpp */; };
+		CF05CCCF1577CACC007C336F /* Vector2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF05CCCD1577CACC007C336F /* Vector2D.cpp */; };
+		CF05CCD01577CACC007C336F /* Vector2D.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF05CCCE1577CACC007C336F /* Vector2D.hpp */; };
 		CFF485A21577B35800FF703B /* Angle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFF485A11577B35800FF703B /* Angle.cpp */; };
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; };
 		D8EEF3BF1577924D003FEB5E /* Glob3iOSSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = D8EEF3BE1577924D003FEB5E /* Glob3iOSSDK.m */; };
@@ -34,6 +36,8 @@
 		CF05CCC71577BD89007C336F /* Geodetic3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Geodetic3D.cpp; sourceTree = "<group>"; };
 		CF05CCC91577BF3F007C336F /* Geodetic2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Geodetic2D.cpp; sourceTree = "<group>"; };
 		CF05CCCA1577BF40007C336F /* Geodetic2D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Geodetic2D.hpp; sourceTree = "<group>"; };
+		CF05CCCD1577CACC007C336F /* Vector2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vector2D.cpp; sourceTree = "<group>"; };
+		CF05CCCE1577CACC007C336F /* Vector2D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Vector2D.hpp; sourceTree = "<group>"; };
 		CFF485A11577B35800FF703B /* Angle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Angle.cpp; sourceTree = "<group>"; };
 		CFF485A31577B36700FF703B /* Angle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Angle.hpp; sourceTree = "<group>"; };
 		D8EEF3B51577924D003FEB5E /* libG3MiOSSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libG3MiOSSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -76,6 +80,8 @@
 				CF05CCC41577B907007C336F /* Vector3D.cpp */,
 				CF05CCC61577BD81007C336F /* Geodetic3D.hpp */,
 				CF05CCC71577BD89007C336F /* Geodetic3D.cpp */,
+				CF05CCCD1577CACC007C336F /* Vector2D.cpp */,
+				CF05CCCE1577CACC007C336F /* Vector2D.hpp */,
 			);
 			name = Basics;
 			sourceTree = "<group>";
@@ -162,6 +168,7 @@
 				D8EEF4061577A656003FEB5E /* ESRenderer.h in Headers */,
 				D8EEF4071577A656003FEB5E /* Glob3.h in Headers */,
 				CF05CCCC1577BF40007C336F /* Geodetic2D.hpp in Headers */,
+				CF05CCD01577CACC007C336F /* Vector2D.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -224,6 +231,7 @@
 				CF05CCC51577B907007C336F /* Vector3D.cpp in Sources */,
 				CF05CCC81577BD8A007C336F /* Geodetic3D.cpp in Sources */,
 				CF05CCCB1577BF40007C336F /* Geodetic2D.cpp in Sources */,
+				CF05CCCF1577CACC007C336F /* Vector2D.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
