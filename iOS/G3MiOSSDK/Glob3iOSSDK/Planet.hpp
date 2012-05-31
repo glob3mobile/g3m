@@ -19,13 +19,15 @@ private:
   std::string _name;
   
 public:
+    
+    Planet(const std::string name,
+           const Vector3D& radii): Ellipsoid(radii), _name(name) { }
 
-  static Planet createEarth() {
-    return Planet("Earth", Vector3D(6378137.0, 6378137.0, 6356752.314245));
+  static Planet * createEarth() {
+    return new Planet("Earth", Vector3D(6378137.0, 6378137.0, 6356752.314245));
   }
   
-  Planet(const sts::string name,
-         const Vector3D& radii): Ellipsoid(radii), _name(name) { }
+
 
   std::string getName() const {
     return _name;

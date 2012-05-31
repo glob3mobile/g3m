@@ -61,7 +61,7 @@
         G3Widget *g3W = (G3Widget*) [self g3Widget]; 
         
         CompositeRenderer *comp = new CompositeRenderer();
-        Planet *p = Planet::createEarth();
+        Planet * p = Planet::createEarth();
         g3W->create(p, comp);
 
         

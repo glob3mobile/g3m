@@ -11,9 +11,9 @@
 
 #include <vector>
 
-using namespace std;
+#include "Vector2D.hpp"
 
-class Vector2D{};
+using namespace std;
 
 class Pointer{
     

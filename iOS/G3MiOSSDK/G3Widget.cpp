@@ -16,11 +16,11 @@ G3Widget::~G3Widget()
     delete _gl;
 }
 
-void G3Widget::create(Globe *g, Renderer *r)
+void G3Widget::create(Planet *g, Renderer *r)
 {
     //Factory = new Fac....
     
-    _globe = g;
+    _planet = g;
     _renderer = r;
     
     InitializationContext ic(_factory);

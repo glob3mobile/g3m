@@ -26,7 +26,7 @@ public:
     
 private:
     Renderer *_renderer;
-    Planet * _globe;
+    Planet * _planet;
     Factory * _factory;
     IGL * _gl;
 };
