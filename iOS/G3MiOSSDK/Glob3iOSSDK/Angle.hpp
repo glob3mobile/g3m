@@ -9,18 +9,83 @@
 #ifndef G3MiOSSDK_Angle_hpp
 #define G3MiOSSDK_Angle_hpp
 
-Angle::clampedTo(const Angle& min,
-                 const Angle& max) const {
-  if (_degrees < min._degrees) {
-    return min;
+
+#define PI            3.14159265358979323846
+#define PI_TIMES_180  (PI * 180.0)
+#define THRESHOLD     1e-5
+
+#include <math.h>
+
+class Angle {
+private:
+  const double _degrees;
+  
+  Angle(const double degrees) : _degrees(degrees) {
+    
   }
   
-  if (_degrees > max._degrees) {
-    return max;
+public:
+  
+  static Angle fromDegrees(const double degrees) {
+    return Angle(degrees);
   }
   
-  return *this;
-}
+  static Angle fromRadians(const double radians) {
+    return Angle::fromDegrees(radians * (180.0 / PI));
+  }
+  
+  static Angle zero() {
+    return Angle::fromDegrees(0);
+  }
+  
+  Angle(const Angle& angle): _degrees(angle._degrees) {
+    
+  }
+  
+  double sinus() const {
+    return sin(_degrees / PI_TIMES_180);
+  }
+  
+  double cosinus() const {
+    return cos(_degrees / PI_TIMES_180);
+  }
+  
+  double degrees() const {
+    return _degrees;
+  }
+  
+  double radians() const {
+    return _degrees / PI_TIMES_180;
+  }
+  
+  bool closeTo(const Angle& other) const {
+    return (fabs(_degrees - other._degrees) < THRESHOLD);
+  }
+  
+  Angle add(const Angle& a) const {
+    return Angle(_degrees + a._degrees);
+  }
+  
+  Angle sub(const Angle& a) const {
+    return Angle(_degrees - a._degrees);
+  }
+  
+  Angle times(double k) const {
+    return Angle(k * _degrees);
+  }
+  
+  bool greaterThan(const Angle& a) const {
+    return (_degrees > a._degrees);
+  }
+  
+  bool lowerThan(const Angle& a) const {
+    return (_degrees < a._degrees);
+  }
+  
+  Angle clampedTo(const Angle& min,
+                  const Angle& max) const;  
+  
+};
 
 
 #endif
