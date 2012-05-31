@@ -14,8 +14,6 @@
 #import <OpenGLES/ES2/gl.h>
 #import <OpenGLES/ES2/glext.h>
 
-#include "G3Widget.h"
-
 @interface ES2Renderer :NSObject  {
 @private
     EAGLContext *context;
@@ -30,7 +28,7 @@
     GLuint program;
 }
 
-- (void)render: (G3Widget*) g3w;
+- (void)render: (void*) g3w;
 
 - (BOOL)resizeFromLayer:(CAEAGLLayer *)layer;
 

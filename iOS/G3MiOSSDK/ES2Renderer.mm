@@ -8,6 +8,8 @@
 
 #import "ES2Renderer.h"
 
+#include "G3Widget.cpp"
+
 
 // uniform index
 enum {
@@ -62,7 +64,7 @@ enum {
 }
 
 
-- (void)render: (G3Widget*) g3w{
+- (void)render: (void*) g3w{
 
     // This application only creates a single context which is already set current at this point.
     // This call is redundant, but needed if dealing with multiple contexts.	
@@ -79,7 +81,7 @@ enum {
     // pintamos la escena
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
     
-    bool result = g3w->render();
+    bool result = ((G3Widget*)g3w)->render();
     
 
 

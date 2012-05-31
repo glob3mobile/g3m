@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		383BD2F11577C57E0012AC53 /* ILogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 383BD2F01577C57E0012AC53 /* ILogger.h */; };
+		383BD2F31577C5ED0012AC53 /* Logger_iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 383BD2F21577C5ED0012AC53 /* Logger_iOS.h */; };
+		383BD2FE1577C8130012AC53 /* Logger_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 383BD2FD1577C8130012AC53 /* Logger_iOS.cpp */; };
+		383BD32F1577D1320012AC53 /* IFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 383BD32E1577D1320012AC53 /* IFactory.h */; };
+		383BD3321577D18D0012AC53 /* Factory_iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 383BD3311577D18C0012AC53 /* Factory_iOS.h */; };
 		CF05CCC21577B769007C336F /* Ellipsoid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF05CCC11577B769007C336F /* Ellipsoid.cpp */; };
 		CF05CCC51577B907007C336F /* Vector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF05CCC41577B907007C336F /* Vector3D.cpp */; };
 		CF05CCC81577BD8A007C336F /* Geodetic3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF05CCC71577BD89007C336F /* Geodetic3D.cpp */; };
@@ -32,6 +37,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		383BD2F01577C57E0012AC53 /* ILogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ILogger.h; path = Interfaces/ILogger.h; sourceTree = "<group>"; };
+		383BD2F21577C5ED0012AC53 /* Logger_iOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Logger_iOS.h; path = Glob3iOSSDK/Specific/Derived/Logger_iOS.h; sourceTree = "<group>"; };
+		383BD2FD1577C8130012AC53 /* Logger_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Logger_iOS.cpp; path = Glob3iOSSDK/Specific/Derived/Logger_iOS.cpp; sourceTree = "<group>"; };
+		383BD32E1577D1320012AC53 /* IFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IFactory.h; path = Interfaces/IFactory.h; sourceTree = "<group>"; };
+		383BD3311577D18C0012AC53 /* Factory_iOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Factory_iOS.h; path = Glob3iOSSDK/Specific/Derived/Factory_iOS.h; sourceTree = "<group>"; };
 		CF05CCBF1577B761007C336F /* Ellipsoid.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Ellipsoid.hpp; sourceTree = "<group>"; };
 		CF05CCC11577B769007C336F /* Ellipsoid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Ellipsoid.cpp; sourceTree = "<group>"; };
 		CF05CCC31577B8FB007C336F /* Vector3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Vector3D.hpp; sourceTree = "<group>"; };
@@ -74,6 +84,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		383BD2E21577C3430012AC53 /* Interfaces */ = {
+			isa = PBXGroup;
+			children = (
+				383BD2F01577C57E0012AC53 /* ILogger.h */,
+				383BD32E1577D1320012AC53 /* IFactory.h */,
+			);
+			name = Interfaces;
+			sourceTree = "<group>";
+		};
+		383BD2EF1577C5310012AC53 /* Derived */ = {
+			isa = PBXGroup;
+			children = (
+				383BD2F21577C5ED0012AC53 /* Logger_iOS.h */,
+				383BD2FD1577C8130012AC53 /* Logger_iOS.cpp */,
+				383BD3311577D18C0012AC53 /* Factory_iOS.h */,
+			);
+			name = Derived;
+			sourceTree = "<group>";
+		};
 		CFF4859F1577B34500FF703B /* Basics */ = {
 			isa = PBXGroup;
 			children = (
@@ -123,6 +152,7 @@
 		D8EEF3BA1577924D003FEB5E /* G3MiOSSDK */ = {
 			isa = PBXGroup;
 			children = (
+				383BD2E21577C3430012AC53 /* Interfaces */,
 				CFF4859F1577B34500FF703B /* Basics */,
 				D8EEF3BB1577924D003FEB5E /* Supporting Files */,
 			);
@@ -141,6 +171,7 @@
 		D8EEF3F81577A629003FEB5E /* Specific */ = {
 			isa = PBXGroup;
 			children = (
+				383BD2EF1577C5310012AC53 /* Derived */,
 				D8EEF3FA1577A635003FEB5E /* Widget */,
 			);
 			name = Specific;
@@ -187,6 +218,10 @@
 				D8EEF4331577BC0D003FEB5E /* CompositeRenderer.h in Headers */,
 				D8EEF4371577BD74003FEB5E /* Context.h in Headers */,
 				D8EEF43B1577BF3B003FEB5E /* TouchEvent.h in Headers */,
+				383BD2F11577C57E0012AC53 /* ILogger.h in Headers */,
+				383BD2F31577C5ED0012AC53 /* Logger_iOS.h in Headers */,
+				383BD32F1577D1320012AC53 /* IFactory.h in Headers */,
+				383BD3321577D18D0012AC53 /* Factory_iOS.h in Headers */,
 				CF05CCCC1577BF40007C336F /* Geodetic2D.hpp in Headers */,
 				CF05CCD01577CACC007C336F /* Vector2D.hpp in Headers */,
 			);
@@ -249,6 +284,7 @@
 				D8EEF4391577BD80003FEB5E /* Context.cpp in Sources */,
 				D8EEF43D1577C435003FEB5E /* TouchEvent.cpp in Sources */,
 				CFF485A21577B35800FF703B /* Angle.cpp in Sources */,
+				383BD2FE1577C8130012AC53 /* Logger_iOS.cpp in Sources */,
 				CF05CCC21577B769007C336F /* Ellipsoid.cpp in Sources */,
 				CF05CCC51577B907007C336F /* Vector3D.cpp in Sources */,
 				CF05CCC81577BD8A007C336F /* Geodetic3D.cpp in Sources */,

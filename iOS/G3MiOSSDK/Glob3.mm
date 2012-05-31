@@ -61,9 +61,7 @@
         
         CompositeRenderer *comp = new CompositeRenderer();
         g3W->create(NULL, comp);
-        
-        
-        
+
         
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
@@ -83,14 +81,6 @@
         NSString *currSysVer = [[UIDevice currentDevice] systemVersion];
         if ([currSysVer compare:reqSysVer options:NSNumericSearch] != NSOrderedAscending)
             displayLinkSupported = TRUE;
-
-        // para poder cambiar la orientación de la pantalla
-//		[[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];        
-//        [[NSNotificationCenter defaultCenter]
-//		 addObserver:self
-//		 selector:@selector(deviceOrientationDidChange:)
-//		 name:UIDeviceOrientationDidChangeNotification
-//		 object:nil];
 
         //Detecting LongPress
         UILongPressGestureRecognizer *longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
