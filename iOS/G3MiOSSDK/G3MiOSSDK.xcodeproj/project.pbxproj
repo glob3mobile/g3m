@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CFF485A21577B35800FF703B /* Angle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFF485A11577B35800FF703B /* Angle.cpp */; };
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; };
 		D8EEF3BF1577924D003FEB5E /* Glob3iOSSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = D8EEF3BE1577924D003FEB5E /* Glob3iOSSDK.m */; };
 		D8EEF3D31577979E003FEB5E /* G3Widget.h in Headers */ = {isa = PBXBuildFile; fileRef = D8EEF3D21577979E003FEB5E /* G3Widget.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -20,9 +21,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CFF485A11577B35800FF703B /* Angle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Angle.cpp; sourceTree = "<group>"; };
+		CFF485A31577B36700FF703B /* Angle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Angle.hpp; sourceTree = "<group>"; };
 		D8EEF3B51577924D003FEB5E /* libG3MiOSSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libG3MiOSSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8EEF3B81577924D003FEB5E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		D8EEF3BC1577924D003FEB5E /* G3MiOSSDK-Prefix.pch */ = {isa = PBXFileReference; path = "G3MiOSSDK-Prefix.pch"; sourceTree = "<group>"; };
+		D8EEF3BC1577924D003FEB5E /* G3MiOSSDK-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "G3MiOSSDK-Prefix.pch"; sourceTree = "<group>"; };
 		D8EEF3BD1577924D003FEB5E /* Glob3iOSSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Glob3iOSSDK.h; sourceTree = "<group>"; };
 		D8EEF3BE1577924D003FEB5E /* Glob3iOSSDK.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Glob3iOSSDK.m; sourceTree = "<group>"; };
 		D8EEF3D21577979E003FEB5E /* G3Widget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3Widget.h; sourceTree = "<group>"; };
@@ -47,6 +50,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CFF4859F1577B34500FF703B /* Basics */ = {
+			isa = PBXGroup;
+			children = (
+				CFF485A11577B35800FF703B /* Angle.cpp */,
+				CFF485A31577B36700FF703B /* Angle.hpp */,
+			);
+			name = Basics;
+			sourceTree = "<group>";
+		};
 		D8EEF3AA1577924D003FEB5E = {
 			isa = PBXGroup;
 			children = (
@@ -77,6 +89,7 @@
 		D8EEF3BA1577924D003FEB5E /* G3MiOSSDK */ = {
 			isa = PBXGroup;
 			children = (
+				CFF4859F1577B34500FF703B /* Basics */,
 				D8EEF3BD1577924D003FEB5E /* Glob3iOSSDK.h */,
 				D8EEF3BE1577924D003FEB5E /* Glob3iOSSDK.m */,
 				D8EEF3BB1577924D003FEB5E /* Supporting Files */,
@@ -184,6 +197,7 @@
 				D8EEF4031577A656003FEB5E /* ES1Renderer.mm in Sources */,
 				D8EEF4051577A656003FEB5E /* ES2Renderer.mm in Sources */,
 				D8EEF4081577A656003FEB5E /* Glob3.mm in Sources */,
+				CFF485A21577B35800FF703B /* Angle.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
