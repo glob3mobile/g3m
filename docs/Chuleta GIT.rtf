@@ -1,0 +1,105 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf360
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\paperw11900\paperh16840\vieww12000\viewh15840\viewkind0
+\deftab720
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\ql\qnatural
+
+\f0\fs24 \cf0 \
+
+\b CHULETA PARA EL GIT\
+-----------------------------------
+\b0 -\
+\
+Pasos a seguir un d\'eda normal de trabajo:\
+\
+
+\b AL EMPEZAR EL D\'cdA:
+\b0 \
+\
+1) Al comenzar el d\'eda, hacer 'git branch' para ver las ramas que tengo en local. Deber\'eda aparecer esto:\
+* mi_rama\
+otra_rama_1\
+otra_rama_2\
+master\
+\
+El asterisco indica la rama en la que estoy actualmente. Debe estar en 'mi_rama'. Si no fuera as\'ed, cambiar a mi rama\
+git checkout mi_rama\
+\
+2) Traernos lo nuevo del repositorio (resolver conflictos si los hay)\
+git pull\
+\
+3) Mezclar con la master por si han habido cambios (resolver conflictos si los hay)\
+git merge origin/master\
+\
+4) Trabajar normalmente\
+\
+
+\b AL ACABAR EL DIA
+\b0 \
+\
+5) Al terminar la tarea o terminar el d\'eda de trabajo, miramos qu\'e9 ha cambiado\
+git status\
+\
+6) Si vemos que hay ficheros nuevos creados (aparte de los modificados), y queremos a\'f1adirlos al repo: \
+git add .\
+\
+7) Al acabar guardar los cambios en local\
+git commit -a -m "contar lo que se ha hecho hoy"\
+\
+8) Subir los cambios a la rama del repositorio\
+git push\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\ql\qnatural
+\cf0 Si alguna vez probamos algo y, antes de hacer comitt, queremos desechar todo lo que hemos hecho en local y volver a la situaci\'f3n de cuando hicimos pulo:\
+git checkout .\
+\
+Si s\'f3lo queremos deshacer un fichero concreto:\
+git checkout -- fichero\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardeftab720\ql\qnatural
+\cf0 \
+\
+\
+
+\b CHULETA SOLO PARA AGUST\'cdN\
+-----------------------------------------------\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\ql\qnatural
+
+\b0 \cf0 Para ver las ramas remotas en el reo:\
+git branch -r\
+\
+Crear una rama local y compartirla en remoto:\
+ASEGURATE PRIMERO DE ESTAR EN LA MASTER cuando lo hagas!!\
+git checkout -b nueva_rama\
+git push -u origin nueva_rama\
+\
+Para crear una rama local en otra m\'e1quina, y asociarla a la rama remota:\
+git checkout master\
+git pull\
+git checkout --track -b nueva_rama origin/nueva_rama\
+\
+Para borrar una rama local:\
+git branch -d nueva_rama\
+\
+Para borrar una rama remota:\
+git push origin :nueva_rama\
+\
+Cuando pasemos una rama a convertirse en m\'e1ster hay que hacer un tag:\
+git tag tag_mi_etiqueta -m "descripcion"\
+git push --tags\
+\
+Para actualizar la vista de las ramas remotas, despu\'e9s de que se hayan borrado algunas en el repositorio\
+git remote show origin\
+git remote prune origin\
+\
+Gu\'eda resumen del GIT\
+http://www.edy.es/dev/docs/git-guia-rapida/\
+\
+\
+\
+\
+\
+}
