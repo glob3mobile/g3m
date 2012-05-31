@@ -11,7 +11,6 @@
 
 #import "ESRenderer.h"
 
-
 // opengl versions value
 enum GL_version {
     OpenGL_1,   //obsolete
@@ -39,6 +38,9 @@ enum GL_version {
     //BOOL multipleTouchEnabled;
 
     enum GL_version glver;
+    
+    void * g3Widget;
+    
 }
 
 @property(readonly, nonatomic, getter=isAnimating) BOOL animating;
@@ -47,6 +49,9 @@ enum GL_version {
 @property(nonatomic, weak) NSTimer *animationTimer;
 //@property(nonatomic, getter=isMultipleTouchEnabled) BOOL multipleTouchEnabled;
 @property(nonatomic, retain) id <ESRenderer> renderer;
+
+@property(nonatomic) void *g3Widget;
+
 
 - (void)startAnimation;
 

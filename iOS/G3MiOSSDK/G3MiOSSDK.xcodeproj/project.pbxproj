@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; };
 		D8EEF3BF1577924D003FEB5E /* Glob3iOSSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = D8EEF3BE1577924D003FEB5E /* Glob3iOSSDK.m */; };
-		D8EEF3D31577979E003FEB5E /* G3Widget.h in Headers */ = {isa = PBXBuildFile; fileRef = D8EEF3D21577979E003FEB5E /* G3Widget.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8EEF4021577A656003FEB5E /* ES1Renderer.h in Headers */ = {isa = PBXBuildFile; fileRef = D8EEF3FB1577A656003FEB5E /* ES1Renderer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8EEF4031577A656003FEB5E /* ES1Renderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = D8EEF3FC1577A656003FEB5E /* ES1Renderer.mm */; };
 		D8EEF4041577A656003FEB5E /* ES2Renderer.h in Headers */ = {isa = PBXBuildFile; fileRef = D8EEF3FD1577A656003FEB5E /* ES2Renderer.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -17,15 +16,23 @@
 		D8EEF4061577A656003FEB5E /* ESRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = D8EEF3FF1577A656003FEB5E /* ESRenderer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8EEF4071577A656003FEB5E /* Glob3.h in Headers */ = {isa = PBXBuildFile; fileRef = D8EEF4001577A656003FEB5E /* Glob3.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8EEF4081577A656003FEB5E /* Glob3.mm in Sources */ = {isa = PBXBuildFile; fileRef = D8EEF4011577A656003FEB5E /* Glob3.mm */; };
+		D8EEF42D1577B973003FEB5E /* G3Widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8EEF42C1577B973003FEB5E /* G3Widget.cpp */; };
+		D8EEF42F1577B984003FEB5E /* G3Widget.h in Headers */ = {isa = PBXBuildFile; fileRef = D8EEF42E1577B984003FEB5E /* G3Widget.h */; };
+		D8EEF4311577BA69003FEB5E /* Renderer.h in Headers */ = {isa = PBXBuildFile; fileRef = D8EEF4301577BA69003FEB5E /* Renderer.h */; };
+		D8EEF4331577BC0D003FEB5E /* CompositeRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = D8EEF4321577BC0D003FEB5E /* CompositeRenderer.h */; };
+		D8EEF4351577BC1C003FEB5E /* CompositeRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8EEF4341577BC1C003FEB5E /* CompositeRenderer.cpp */; };
+		D8EEF4371577BD74003FEB5E /* Context.h in Headers */ = {isa = PBXBuildFile; fileRef = D8EEF4361577BD74003FEB5E /* Context.h */; };
+		D8EEF4391577BD80003FEB5E /* Context.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8EEF4381577BD80003FEB5E /* Context.cpp */; };
+		D8EEF43B1577BF3B003FEB5E /* TouchEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = D8EEF43A1577BF3B003FEB5E /* TouchEvent.h */; };
+		D8EEF43D1577C435003FEB5E /* TouchEvent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8EEF43C1577C435003FEB5E /* TouchEvent.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		D8EEF3B51577924D003FEB5E /* libG3MiOSSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libG3MiOSSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8EEF3B81577924D003FEB5E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		D8EEF3BC1577924D003FEB5E /* G3MiOSSDK-Prefix.pch */ = {isa = PBXFileReference; path = "G3MiOSSDK-Prefix.pch"; sourceTree = "<group>"; };
+		D8EEF3BC1577924D003FEB5E /* G3MiOSSDK-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "G3MiOSSDK-Prefix.pch"; sourceTree = "<group>"; };
 		D8EEF3BD1577924D003FEB5E /* Glob3iOSSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Glob3iOSSDK.h; sourceTree = "<group>"; };
 		D8EEF3BE1577924D003FEB5E /* Glob3iOSSDK.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Glob3iOSSDK.m; sourceTree = "<group>"; };
-		D8EEF3D21577979E003FEB5E /* G3Widget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3Widget.h; sourceTree = "<group>"; };
 		D8EEF3FB1577A656003FEB5E /* ES1Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES1Renderer.h; sourceTree = "<group>"; };
 		D8EEF3FC1577A656003FEB5E /* ES1Renderer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ES1Renderer.mm; sourceTree = "<group>"; };
 		D8EEF3FD1577A656003FEB5E /* ES2Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES2Renderer.h; sourceTree = "<group>"; };
@@ -33,6 +40,15 @@
 		D8EEF3FF1577A656003FEB5E /* ESRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESRenderer.h; sourceTree = "<group>"; };
 		D8EEF4001577A656003FEB5E /* Glob3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Glob3.h; sourceTree = "<group>"; };
 		D8EEF4011577A656003FEB5E /* Glob3.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Glob3.mm; sourceTree = "<group>"; };
+		D8EEF42C1577B973003FEB5E /* G3Widget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = G3Widget.cpp; sourceTree = "<group>"; };
+		D8EEF42E1577B984003FEB5E /* G3Widget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = G3Widget.h; sourceTree = "<group>"; };
+		D8EEF4301577BA69003FEB5E /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
+		D8EEF4321577BC0D003FEB5E /* CompositeRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompositeRenderer.h; sourceTree = "<group>"; };
+		D8EEF4341577BC1C003FEB5E /* CompositeRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CompositeRenderer.cpp; sourceTree = "<group>"; };
+		D8EEF4361577BD74003FEB5E /* Context.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Context.h; sourceTree = "<group>"; };
+		D8EEF4381577BD80003FEB5E /* Context.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Context.cpp; sourceTree = "<group>"; };
+		D8EEF43A1577BF3B003FEB5E /* TouchEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TouchEvent.h; sourceTree = "<group>"; };
+		D8EEF43C1577C435003FEB5E /* TouchEvent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TouchEvent.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,7 +67,7 @@
 			isa = PBXGroup;
 			children = (
 				D8EEF3F81577A629003FEB5E /* Specific */,
-				D8EEF3D21577979E003FEB5E /* G3Widget.h */,
+				D8EEF42A1577B8F9003FEB5E /* Commons */,
 				D8EEF3BA1577924D003FEB5E /* G3MiOSSDK */,
 				D8EEF3B71577924D003FEB5E /* Frameworks */,
 				D8EEF3B61577924D003FEB5E /* Products */,
@@ -115,6 +131,22 @@
 			name = Widget;
 			sourceTree = "<group>";
 		};
+		D8EEF42A1577B8F9003FEB5E /* Commons */ = {
+			isa = PBXGroup;
+			children = (
+				D8EEF42C1577B973003FEB5E /* G3Widget.cpp */,
+				D8EEF42E1577B984003FEB5E /* G3Widget.h */,
+				D8EEF4301577BA69003FEB5E /* Renderer.h */,
+				D8EEF4321577BC0D003FEB5E /* CompositeRenderer.h */,
+				D8EEF4341577BC1C003FEB5E /* CompositeRenderer.cpp */,
+				D8EEF4361577BD74003FEB5E /* Context.h */,
+				D8EEF4381577BD80003FEB5E /* Context.cpp */,
+				D8EEF43A1577BF3B003FEB5E /* TouchEvent.h */,
+				D8EEF43C1577C435003FEB5E /* TouchEvent.cpp */,
+			);
+			name = Commons;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -122,11 +154,15 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D8EEF3D31577979E003FEB5E /* G3Widget.h in Headers */,
 				D8EEF4021577A656003FEB5E /* ES1Renderer.h in Headers */,
 				D8EEF4041577A656003FEB5E /* ES2Renderer.h in Headers */,
 				D8EEF4061577A656003FEB5E /* ESRenderer.h in Headers */,
 				D8EEF4071577A656003FEB5E /* Glob3.h in Headers */,
+				D8EEF42F1577B984003FEB5E /* G3Widget.h in Headers */,
+				D8EEF4311577BA69003FEB5E /* Renderer.h in Headers */,
+				D8EEF4331577BC0D003FEB5E /* CompositeRenderer.h in Headers */,
+				D8EEF4371577BD74003FEB5E /* Context.h in Headers */,
+				D8EEF43B1577BF3B003FEB5E /* TouchEvent.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -184,6 +220,10 @@
 				D8EEF4031577A656003FEB5E /* ES1Renderer.mm in Sources */,
 				D8EEF4051577A656003FEB5E /* ES2Renderer.mm in Sources */,
 				D8EEF4081577A656003FEB5E /* Glob3.mm in Sources */,
+				D8EEF42D1577B973003FEB5E /* G3Widget.cpp in Sources */,
+				D8EEF4351577BC1C003FEB5E /* CompositeRenderer.cpp in Sources */,
+				D8EEF4391577BD80003FEB5E /* Context.cpp in Sources */,
+				D8EEF43D1577C435003FEB5E /* TouchEvent.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

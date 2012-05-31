@@ -11,6 +11,8 @@
 #import "ES1Renderer.h"
 #import "ES2Renderer.h"
 
+#include "G3Widget.h"
+
 @interface Glob3 ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
 @end
@@ -18,7 +20,7 @@
 
 @implementation Glob3
 
-@synthesize animating, animationFrameInterval, displayLink, animationTimer, renderer /*, multipleTouchEnabled*/;
+@synthesize animating, animationFrameInterval, displayLink, animationTimer, renderer /*, multipleTouchEnabled*/, g3Widget;
 
 
 // You must implement this method
@@ -52,6 +54,12 @@
         // create GLOB3M WIDGET
         //int w = [self frame].size.width;
         //int h = [self frame].size.height;
+        
+        g3Widget = new G3Widget();
+        G3Widget *g3W = (G3Widget*) [self g3Widget]; 
+        
+        g3W->create(NULL, NULL);
+        
         
         
         
