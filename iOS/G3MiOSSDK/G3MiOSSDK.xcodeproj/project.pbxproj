@@ -48,6 +48,7 @@
 		CF05CCCA1577BF40007C336F /* Geodetic2D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Geodetic2D.hpp; sourceTree = "<group>"; };
 		CF05CCCD1577CACC007C336F /* Vector2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vector2D.cpp; sourceTree = "<group>"; };
 		CF05CCCE1577CACC007C336F /* Vector2D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Vector2D.hpp; sourceTree = "<group>"; };
+		CF05CCD41577DA6E007C336F /* Planet.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Planet.hpp; sourceTree = "<group>"; };
 		CFF485A11577B35800FF703B /* Angle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Angle.cpp; sourceTree = "<group>"; };
 		CFF485A31577B36700FF703B /* Angle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Angle.hpp; sourceTree = "<group>"; };
 		D8EEF3B51577924D003FEB5E /* libG3MiOSSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libG3MiOSSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -111,6 +112,7 @@
 				CF05CCC71577BD89007C336F /* Geodetic3D.cpp */,
 				CF05CCCD1577CACC007C336F /* Vector2D.cpp */,
 				CF05CCCE1577CACC007C336F /* Vector2D.hpp */,
+				CF05CCD41577DA6E007C336F /* Planet.hpp */,
 			);
 			name = Basics;
 			sourceTree = "<group>";
