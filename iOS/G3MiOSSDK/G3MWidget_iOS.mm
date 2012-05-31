@@ -6,7 +6,7 @@
 //  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
-#import "Glob3.h"
+#import "G3MWidget_iOS.h"
 
 #import "ES2Renderer.h"
 
@@ -19,12 +19,12 @@
 IFactory *factory = (IFactory *) new Factory_iOS();
 ILogger *logger = (ILogger *) new Logger_iOS(InfoLevel);
 
-@interface Glob3 ()
+@interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
 @end
 
 
-@implementation Glob3
+@implementation G3MWidget_iOS
 
 @synthesize animating, animationFrameInterval, displayLink, animationTimer, renderer /*, multipleTouchEnabled*/, widget;
 
@@ -51,7 +51,7 @@ ILogger *logger = (ILogger *) new Logger_iOS(InfoLevel);
         
         renderer = [[ES2Renderer alloc] init];
         if (!renderer) {
-            printf("**** ERROR: Glob3 Mobile needs Opengl ES 2.0\n");
+            printf("**** ERROR: G3MWidget_iOS Mobile needs Opengl ES 2.0\n");
         }
         else {
             printf("*** Using Opengl ES 2.0\n\n");

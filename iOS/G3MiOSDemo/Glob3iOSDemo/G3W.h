@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "Glob3.h"
+#import "G3MWidget_iOS.h"
 
-@interface G3W: Glob3
+@interface G3W: G3MWidget_iOS
 
 @end

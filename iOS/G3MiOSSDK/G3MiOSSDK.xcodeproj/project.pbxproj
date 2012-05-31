@@ -23,8 +23,8 @@
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; };
 		D8EEF4041577A656003FEB5E /* ES2Renderer.h in Headers */ = {isa = PBXBuildFile; fileRef = D8EEF3FD1577A656003FEB5E /* ES2Renderer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8EEF4051577A656003FEB5E /* ES2Renderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = D8EEF3FE1577A656003FEB5E /* ES2Renderer.mm */; };
-		D8EEF4071577A656003FEB5E /* Glob3.h in Headers */ = {isa = PBXBuildFile; fileRef = D8EEF4001577A656003FEB5E /* Glob3.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D8EEF4081577A656003FEB5E /* Glob3.mm in Sources */ = {isa = PBXBuildFile; fileRef = D8EEF4011577A656003FEB5E /* Glob3.mm */; };
+		D8EEF4071577A656003FEB5E /* G3MWidget_iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = D8EEF4001577A656003FEB5E /* G3MWidget_iOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D8EEF4081577A656003FEB5E /* G3MWidget_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = D8EEF4011577A656003FEB5E /* G3MWidget_iOS.mm */; };
 		D8EEF42D1577B973003FEB5E /* G3MWidget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8EEF42C1577B973003FEB5E /* G3MWidget.cpp */; };
 		D8EEF42F1577B984003FEB5E /* G3MWidget.h in Headers */ = {isa = PBXBuildFile; fileRef = D8EEF42E1577B984003FEB5E /* G3MWidget.h */; };
 		D8EEF4311577BA69003FEB5E /* Renderer.h in Headers */ = {isa = PBXBuildFile; fileRef = D8EEF4301577BA69003FEB5E /* Renderer.h */; };
@@ -60,8 +60,8 @@
 		D8EEF3BC1577924D003FEB5E /* G3MiOSSDK-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "G3MiOSSDK-Prefix.pch"; sourceTree = "<group>"; };
 		D8EEF3FD1577A656003FEB5E /* ES2Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES2Renderer.h; sourceTree = "<group>"; };
 		D8EEF3FE1577A656003FEB5E /* ES2Renderer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = ES2Renderer.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		D8EEF4001577A656003FEB5E /* Glob3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = Glob3.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		D8EEF4011577A656003FEB5E /* Glob3.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Glob3.mm; sourceTree = "<group>"; };
+		D8EEF4001577A656003FEB5E /* G3MWidget_iOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = G3MWidget_iOS.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		D8EEF4011577A656003FEB5E /* G3MWidget_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MWidget_iOS.mm; sourceTree = "<group>"; };
 		D8EEF42C1577B973003FEB5E /* G3MWidget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3MWidget.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8EEF42E1577B984003FEB5E /* G3MWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = G3MWidget.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		D8EEF4301577BA69003FEB5E /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
@@ -184,8 +184,8 @@
 			children = (
 				D8EEF3FD1577A656003FEB5E /* ES2Renderer.h */,
 				D8EEF3FE1577A656003FEB5E /* ES2Renderer.mm */,
-				D8EEF4001577A656003FEB5E /* Glob3.h */,
-				D8EEF4011577A656003FEB5E /* Glob3.mm */,
+				D8EEF4001577A656003FEB5E /* G3MWidget_iOS.h */,
+				D8EEF4011577A656003FEB5E /* G3MWidget_iOS.mm */,
 			);
 			name = Widget;
 			sourceTree = "<group>";
@@ -214,7 +214,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8EEF4041577A656003FEB5E /* ES2Renderer.h in Headers */,
-				D8EEF4071577A656003FEB5E /* Glob3.h in Headers */,
+				D8EEF4071577A656003FEB5E /* G3MWidget_iOS.h in Headers */,
 				D8EEF42F1577B984003FEB5E /* G3MWidget.h in Headers */,
 				D8EEF4311577BA69003FEB5E /* Renderer.h in Headers */,
 				D8EEF4331577BC0D003FEB5E /* CompositeRenderer.h in Headers */,
@@ -280,7 +280,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8EEF4051577A656003FEB5E /* ES2Renderer.mm in Sources */,
-				D8EEF4081577A656003FEB5E /* Glob3.mm in Sources */,
+				D8EEF4081577A656003FEB5E /* G3MWidget_iOS.mm in Sources */,
 				D8EEF42D1577B973003FEB5E /* G3MWidget.cpp in Sources */,
 				D8EEF4351577BC1C003FEB5E /* CompositeRenderer.cpp in Sources */,
 				D8EEF4391577BD80003FEB5E /* Context.cpp in Sources */,

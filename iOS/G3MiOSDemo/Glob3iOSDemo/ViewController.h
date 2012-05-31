@@ -8,14 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-#import "Glob3.h"
+#import "G3MWidget_iOS.h"
 
 @interface ViewController : UIViewController{
 
-IBOutlet Glob3 *G3MWidget;
+IBOutlet G3MWidget_iOS *G3MWidget;
     
 }
 
-@property (retain, nonatomic) Glob3 *G3MWidget;
+@property (retain, nonatomic) G3MWidget_iOS *G3MWidget;
 
 @end
