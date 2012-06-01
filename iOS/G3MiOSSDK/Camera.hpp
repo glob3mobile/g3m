@@ -158,7 +158,7 @@ private:
 
     float lastYValid;            // used when horizontal rotation
 
-    //double dragWx, dragWy, dragWz;		// rotation axe for dragging
+  /*
     Vector3D dragW;                     // rotation axe for dragging
     double dragAngle, dragStep;            // for automatic drag
     double rotAngle, rotStep;            // for automatic zoom & rotate
@@ -167,7 +167,8 @@ private:
     float gotoposDesp, gotoposStep;     // for GoToPos function
 
     int gotoposIter;        
-
+*/
+   
 	void SetPosXYZ(const Vector3D p, double lon);
     void ApplyTransform (const Camera &camera0, double M[16]);	
 	Vector3D GetHorizVector () const;

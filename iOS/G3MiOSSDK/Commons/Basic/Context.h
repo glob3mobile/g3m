@@ -10,7 +10,7 @@
 #define G3MiOSSDK_InitializationContext_h
 
 #include "IFactory.h"
-class IGL;
+#include "IGL.h"
 
 class Context {
 protected:
