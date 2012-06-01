@@ -9,7 +9,7 @@
 #include "CompositeRenderer.h"
 
 void CompositeRenderer::initialize(InitializationContext& ic) {
-  _ic = &ic;
+  _ic = ic;
   
   for (int i = 0; i < _renderers.size(); i++) {
     _renderers[i]->initialize(ic);
@@ -18,7 +18,7 @@ void CompositeRenderer::initialize(InitializationContext& ic) {
 
 void CompositeRenderer::addRenderer(Renderer *renderer) {
   _renderers.push_back(renderer);
-  renderer->initialize(*_ic);
+  renderer->initialize(_ic);
 }
 
 int CompositeRenderer::render(RenderContext &rc) {

@@ -29,7 +29,6 @@ public:
   Vector2D(const Vector2D &v): _x(v._x), _y(v._y) {
     
   }
-
   
   Vector2D normalized() const;
   

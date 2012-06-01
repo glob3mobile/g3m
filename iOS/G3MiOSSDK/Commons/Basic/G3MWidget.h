@@ -32,9 +32,9 @@ public:
   ~G3MWidget();
   
   bool render();
-    
-    void onTapEvent(TapEvent &event);
-    void onTouchEvent(TouchEvent &event);
+  
+  void onTapEvent(TapEvent &event);
+  void onTouchEvent(TouchEvent &event);
   
 private:
   Renderer& _renderer;
