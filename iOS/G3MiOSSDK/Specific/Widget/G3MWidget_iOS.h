@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 
-#import "ES2Renderer.h"
+@class ES2Renderer;
 
 // opengl versions value
 enum GL_version {
