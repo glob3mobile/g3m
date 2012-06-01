@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#include "Logger_iOS.h"
+#include "Logger_iOS.hpp"
 
 void Logger_iOS::logInfo(const std::string x, ...) const
 {

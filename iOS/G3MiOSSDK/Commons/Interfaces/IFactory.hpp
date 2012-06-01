@@ -9,7 +9,7 @@
 #ifndef G3MiOSSDK_IFactory_h
 #define G3MiOSSDK_IFactory_h
 
-#include "ILogger.h"
+#include "ILogger.hpp"
 
 
 class IFactory {

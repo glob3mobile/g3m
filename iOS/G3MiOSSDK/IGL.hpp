@@ -11,7 +11,7 @@
 
 #include <vector>
 
-#include "IImage.h"
+#include "IImage.hpp"
 
 
 class IGL {

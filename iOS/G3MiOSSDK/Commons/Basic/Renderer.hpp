@@ -9,9 +9,9 @@
 #ifndef G3MiOSSDK_IRenderer_h
 #define G3MiOSSDK_IRenderer_h
 
-#include "Context.h"
+#include "Context.hpp"
 
-#include "TouchEvent.h"
+#include "TouchEvent.hpp"
 
 class Renderer {
 public:

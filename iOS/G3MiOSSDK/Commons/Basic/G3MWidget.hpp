@@ -9,9 +9,9 @@
 #ifndef G3MiOSSDK_G3MWidget_h
 #define G3MiOSSDK_G3MWidget_h
 
-#include "Renderer.h"
+#include "Renderer.hpp"
 #include "Planet.hpp"
-#include "IFactory.h"
+#include "IFactory.hpp"
 
 class Globe{};
 

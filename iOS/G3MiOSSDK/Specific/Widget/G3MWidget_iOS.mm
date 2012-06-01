@@ -10,11 +10,11 @@
 
 #import "ES2Renderer.h"
 
-#include "G3MWidget.h"
-#include "CompositeRenderer.h"
+#include "G3MWidget.hpp"
+#include "CompositeRenderer.hpp"
 #include "Planet.hpp"
-#include "Logger_iOS.h"
-#include "Factory_iOS.h"
+#include "Logger_iOS.hpp"
+#include "Factory_iOS.hpp"
 
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;

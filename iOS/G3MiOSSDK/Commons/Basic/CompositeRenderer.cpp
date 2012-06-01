@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#include "CompositeRenderer.h"
+#include "CompositeRenderer.hpp"
 
 void CompositeRenderer::initialize(const InitializationContext* ic) {
   _ic = ic;

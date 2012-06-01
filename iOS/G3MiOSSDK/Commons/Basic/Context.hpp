@@ -9,8 +9,8 @@
 #ifndef G3MiOSSDK_InitializationContext_h
 #define G3MiOSSDK_InitializationContext_h
 
-#include "IFactory.h"
-#include "IGL.h"
+#include "IFactory.hpp"
+#include "IGL.hpp"
 #include "Planet.hpp"
 
 class Context {
@@ -25,6 +25,7 @@ protected:
   _factory(factory),
   _logger(logger),
   _planet(planet) {
+    
   }
   
 public:

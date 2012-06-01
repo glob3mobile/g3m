@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#include "G3MWidget.h"
+#include "G3MWidget.hpp"
 
 
 G3MWidget* G3MWidget::create(IFactory* factory,

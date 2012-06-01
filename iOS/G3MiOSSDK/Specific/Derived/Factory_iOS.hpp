@@ -9,7 +9,7 @@
 #ifndef G3MiOSSDK_Factory_iOS_h
 #define G3MiOSSDK_Factory_iOS_h
 
-#include "IFactory.h"
+#include "IFactory.hpp"
 
 class Factory_iOS: public IFactory {
   

@@ -9,7 +9,7 @@
 #ifndef G3MiOSSDK_CompositeRenderer_h
 #define G3MiOSSDK_CompositeRenderer_h
 
-#include "Renderer.h"
+#include "Renderer.hpp"
 
 #include <vector>
 

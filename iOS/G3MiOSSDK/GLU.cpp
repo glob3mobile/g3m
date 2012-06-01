@@ -11,7 +11,7 @@
 #include <math.h>
 #include <strings.h>
 
-#include "GLU.h"
+#include "GLU.hpp"
 
 
 #define PI 3.141592653589793
