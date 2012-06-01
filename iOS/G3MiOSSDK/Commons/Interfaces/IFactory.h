@@ -15,6 +15,7 @@
 class IFactory {
     
 public:
+  virtual ~IFactory() {}
     
 };
 
