@@ -10,6 +10,9 @@
 
 G3MWidget::~G3MWidget()
 {
+  delete _renderer;
+  delete _planet;
+  
   delete _factory;
   delete _gl;
 }
@@ -23,7 +26,8 @@ bool G3MWidget::render()
   return true;
 }
 
-G3MWidget* G3MWidget::create(const Planet* planet, Renderer* renderer) {
+G3MWidget* G3MWidget::create(const Planet* planet, Renderer* renderer)
+{
   int __TODO_create_factory_and_gl;
   IFactory* factory = NULL;
   IGL* gl  = NULL;

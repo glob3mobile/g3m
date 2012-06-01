@@ -91,7 +91,7 @@ public:
   virtual void LineWidth(float width) = 0;
   
   
-  
+  virtual ~IGL() {};
 };
 
 

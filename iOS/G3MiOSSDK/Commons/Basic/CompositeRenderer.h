@@ -25,6 +25,10 @@ public:
     _renderers = std::vector<Renderer*>();
   }
   
+  virtual ~CompositeRenderer() {
+    
+  }
+  
   void initialize(const InitializationContext& ic);  
   
   int render(const RenderContext &rc);
