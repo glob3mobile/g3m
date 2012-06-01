@@ -18,7 +18,7 @@ class CompositeRenderer: public Renderer
 private:
   std::vector<Renderer*> _renderers;
   
-  InitializationContext* _ic;
+  InitializationContext _ic;
   
 public:
   CompositeRenderer(): _ic(NULL) {
