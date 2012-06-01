@@ -29,6 +29,8 @@ public:
   virtual void logInfo(const std::string x, ...) = 0;
   virtual void logWarning(const std::string x, ...) = 0;
   virtual void logError(const std::string x, ...) = 0;
+  
+  // a virtual destructor is needed for conversion to Java
   virtual ~ILogger() {}
 };
 
