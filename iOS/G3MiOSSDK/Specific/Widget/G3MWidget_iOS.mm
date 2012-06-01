@@ -77,7 +77,7 @@
     
     // rest of initialization
     _animating = FALSE;
-    displayLinkSupported = FALSE;
+    _displayLinkSupported = FALSE;
     _animationFrameInterval = 1;
     _displayLink = nil;
     _animationTimer = nil;
@@ -89,7 +89,7 @@
     NSString *reqSysVer = @"3.1";
     NSString *currSysVer = [[UIDevice currentDevice] systemVersion];
     if ([currSysVer compare:reqSysVer options:NSNumericSearch] != NSOrderedAscending)
-      displayLinkSupported = TRUE;
+      _displayLinkSupported = TRUE;
     
     //Detecting LongPress
     UILongPressGestureRecognizer *longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
@@ -147,7 +147,7 @@
 
 - (void)startAnimation {
   if (!_animating) {
-    if (displayLinkSupported) {
+    if (_displayLinkSupported) {
       // CADisplayLink is API new to iPhone SDK 3.1. Compiling against earlier versions will result in a warning, but can be dismissed
       // if the system version runtime check for CADisplayLink exists in -initWithCoder:. The runtime check ensures this code will
       // not be called in system versions earlier than 3.1.
@@ -165,7 +165,7 @@
 
 - (void)stopAnimation {
   if (_animating) {
-    if (displayLinkSupported) {
+    if (_displayLinkSupported) {
       [_displayLink invalidate];
       self.displayLink = nil;
     }

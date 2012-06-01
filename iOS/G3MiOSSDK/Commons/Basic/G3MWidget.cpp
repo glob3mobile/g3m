@@ -15,12 +15,11 @@ G3MWidget* G3MWidget::create(IFactory* factory,
                              const Planet* planet,
                              Renderer* renderer)
 {
-  logger->logInfo("Creating G3MWidget...");
-  return new G3MWidget(factory,
-                       logger,
-                       gl,
-                       planet,
-                       renderer);
+  if (logger != NULL) {
+    logger->logInfo("Creating G3MWidget...");
+  }
+  
+  return new G3MWidget(factory, logger, gl, planet, renderer);
 }
 
 G3MWidget::~G3MWidget()

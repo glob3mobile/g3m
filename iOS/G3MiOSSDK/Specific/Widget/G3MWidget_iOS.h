@@ -26,7 +26,7 @@ enum GL_version {
 //    ES2Renderer *renderer;
 
 //    BOOL animating;
-    BOOL displayLinkSupported;
+    BOOL _displayLinkSupported;
 //    NSInteger animationFrameInterval;
     // Use of the CADisplayLink class is the preferred method for controlling your animation timing.
     // CADisplayLink will link to the main display and fire every vsync when added to a given run-loop.
