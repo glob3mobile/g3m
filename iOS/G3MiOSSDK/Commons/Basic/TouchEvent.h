@@ -43,11 +43,11 @@ enum TouchEventType {
 
 class TouchEvent {
 private:
-  const TouchEventType       _eventType;
-  const std::vector<Pointer> _pointers;
+  const TouchEventType              _eventType;
+  const std::vector<const Pointer*> _pointers;
   
   TouchEvent(const TouchEventType& type,
-             const std::vector<Pointer> pointers): _eventType(type), _pointers(pointers) { }
+             const std::vector<const Pointer*> pointers): _eventType(type), _pointers(pointers) { }
   
 public:
   TouchEvent(const TouchEvent& other): _eventType(other._eventType), _pointers(other._pointers) {
@@ -55,34 +55,27 @@ public:
   }
   
   static TouchEvent create(const TouchEventType& type,
-                           const std::vector<Pointer> pointers) {
+                           const std::vector<const Pointer*> pointers) {
     return TouchEvent(type, pointers);
   }
   
   static TouchEvent create(const TouchEventType& type,
-                           const std::vector<const Pointer*> pointers) {
-
-    int __TODODODODO;
-    
-//    const std::vector<Pointer> poi = std::vector<Pointer>(pointers.size());
-//
-//    for(int i = 0; i < pointers.size(); i++) {
-//      poi.push
-//    }
-    
-    //return TouchEvent(type, pointers);
-  }
-  
-  static TouchEvent create(const TouchEventType& type,
-                           const Pointer& pointer) {
-    const Pointer pa[] = { pointer };
-    const std::vector<Pointer> pointers = std::vector<Pointer>(pa, pa+1);
+                           const Pointer* pointer) {
+    const Pointer* pa[] = { pointer };
+    const std::vector<const Pointer*> pointers = std::vector<const Pointer*>(pa, pa+1);
     return TouchEvent::create(type, pointers);
   }
   
   TouchEventType getType() {
     return _eventType;
-  }  
+  }
+  
+  ~TouchEvent() {
+    for (int i = 0; i < _pointers.size(); i++) {
+      delete _pointers[i];
+    }
+  }
+  
 };
 
 #endif

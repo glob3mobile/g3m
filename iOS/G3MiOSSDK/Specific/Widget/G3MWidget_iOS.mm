@@ -186,7 +186,7 @@ ILogger *logger = (ILogger *) new Logger_iOS(InfoLevel);
   //TOUCH EVENT
   Vector2D pos(current.x, current.y);
   Vector2D prevPos(previous.x, previous.y);
-  TouchEvent te(TouchEvent::create(Down, Pointer(pos, prevPos)));
+  TouchEvent te(TouchEvent::create(Down, new Pointer(pos, prevPos)));
   
   ((G3MWidget*)[self widget])->onTouchEvent(te);
 }
@@ -228,7 +228,7 @@ ILogger *logger = (ILogger *) new Logger_iOS(InfoLevel);
   //TOUCH EVENT
   Vector2D pos(current.x, current.y);
   Vector2D prevPos(previous.x, previous.y);
-  TouchEvent te( TouchEvent::create(Up, Pointer(pos, prevPos)));
+  TouchEvent te( TouchEvent::create(Up, new Pointer(pos, prevPos)));
   
   ((G3MWidget*)[self widget])->onTouchEvent(te);
 }
