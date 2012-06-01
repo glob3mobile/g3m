@@ -18,12 +18,12 @@ bool G3MWidget::render()
 {
   RenderContext rc(_factory, _gl);
   
-  _renderer.render(rc);
+  _renderer->render(rc);
   
   return true;
 }
 
-G3MWidget* G3MWidget::create(const Planet &planet, Renderer &renderer) {
+G3MWidget* G3MWidget::create(const Planet* planet, Renderer* renderer) {
   int __TODO_create_factory_and_gl;
   IFactory* factory = NULL;
   IGL* gl  = NULL;
@@ -34,5 +34,5 @@ G3MWidget* G3MWidget::create(const Planet &planet, Renderer &renderer) {
 
 void G3MWidget::onTouchEvent(const TouchEvent &event)
 {
-  _renderer.onTouchEvent(event);
+  _renderer->onTouchEvent(event);
 }

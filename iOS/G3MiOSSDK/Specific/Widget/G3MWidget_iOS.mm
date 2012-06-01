@@ -66,7 +66,7 @@ ILogger *logger = (ILogger *) new Logger_iOS(InfoLevel);
     //int w = [self frame].size.width;
     //int h = [self frame].size.height;
     
-    CompositeRenderer comp = CompositeRenderer();
+    CompositeRenderer* comp = new CompositeRenderer();
     _widget = G3MWidget::create(Planet::createEarth(), comp); 
     // testing Logger
     logger->logInfo("testing Logger...\n");

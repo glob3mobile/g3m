@@ -22,7 +22,7 @@ private:
   
 public:
   CompositeRenderer(): _ic(NULL) {
-    
+    _renderers = std::vector<Renderer*>();
   }
   
   void initialize(const InitializationContext& ic);  
