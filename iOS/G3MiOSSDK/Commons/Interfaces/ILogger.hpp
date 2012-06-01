@@ -13,6 +13,7 @@
 #include <string>
 
 enum LogLevel {
+  SilenceLevel,
   InfoLevel,
   WarningLevel,
   ErrorLevel

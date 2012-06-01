@@ -63,14 +63,13 @@
     //int w = [self frame].size.width;
     //int h = [self frame].size.height;
     
-    CompositeRenderer* comp = new CompositeRenderer();
     
-    IFactory *factory = (IFactory *) new Factory_iOS();
-    ILogger *logger = (ILogger *) new Logger_iOS(InfoLevel);
-
+    IFactory *factory = new Factory_iOS();
+    ILogger *logger = new Logger_iOS(ErrorLevel);
     int __TODO_create_gl;
     IGL* gl  = NULL;
     
+    CompositeRenderer* comp = new CompositeRenderer();
     _widget = G3MWidget::create(factory, logger, gl, Planet::createEarth(), comp); 
     
     glEnable(GL_DEPTH_TEST);
@@ -198,7 +197,7 @@
   NSSet *allTouches = [event allTouches];
   
   NSUInteger pointersCount = [allTouches count];
-
+  
   std::vector<const Pointer*> pointers = std::vector<const Pointer*>(pointersCount);
   
   for (int n = 0; n < pointersCount; n++) {
@@ -211,7 +210,7 @@
     Vector2D prevPos(previous.x, previous.y);
     pointers.push_back(new Pointer(pos, prevPos));
   }
-
+  
   //TOUCH EVENT
   TouchEvent te( TouchEvent::create(Move, pointers) );
   
