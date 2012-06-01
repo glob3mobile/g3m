@@ -1,14 +1,16 @@
 @echo off
 cls
+echo Project G3M
 echo Init conversion from C++ to Java ....
 
 rem Rutas y variables globales
-set "commons=..\iOS\Glob3SDK\commons"
+set "commons=..\iOS\G3MiOSSDK\Commons"
 set "java_temp=java_temp"
 set "cpp_temp=c_temp"
 set "package_path=org.glob3.mobile.generated"
-set "android_project=..\Android\Glob3AndroidSDK\src\org\glob3\mobile\generated"
-set "gwt_project=..\HTML5\Glob3WebGLSDK\org\glob3\mobile\generated"
+set "android_project=..\Android\Generated"
+rem *** PROYECTO WEBGL: DESCOMENTAR LA SIGUIENTE LINEA
+rem set "gwt_project=..\HTML5\Glob3WebGLSDK\org\glob3\mobile\generated"
 
 rem Se eliminan los archivos temporales para asegurar que no haya quedado nada de conversiones anteriores
 2>nul rmdir %cpp_temp% /s /q
@@ -80,8 +82,9 @@ rem Finalmente se mueven todos los .java al directorio del proyecto, eliminando 
 copy %java_temp%\*.java %android_project% > NUL
 
 rem Lo mismo para WebGL
-2>nul del /f /q %gwt_project%\*.*
-copy %java_temp%\*.java %gwt_project% > NUL
+rem *** PROYECTO WEBGL: DESCOMENTAR LAS DOS SIGUIENTES LINEAS
+rem 2>nul del /f /q %gwt_project%\*.*
+rem copy %java_temp%\*.java %gwt_project% > NUL
 
 rmdir %cpp_temp% /s /q
 rmdir %java_temp% /s /q
@@ -97,7 +100,7 @@ if %length% gtr 0 (
 )
 	
 echo Code converted succesfully. 
-echo Remember to execute 'doxygen' to update reference documentation.
+rem echo Remember to execute 'doxygen' to update reference documentation.
 rem 2>nul doxygen > NUL
 
 exit /B
