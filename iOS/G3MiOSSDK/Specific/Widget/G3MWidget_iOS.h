@@ -47,7 +47,7 @@ enum GL_version {
 //@property(nonatomic, getter=isMultipleTouchEnabled) BOOL multipleTouchEnabled;
 @property(nonatomic, retain) ES2Renderer *renderer;
 
-@property(nonatomic) void *widget;
+@property(readonly, nonatomic) void *widget;
 
 
 - (void)startAnimation;

@@ -27,8 +27,9 @@ private:
   
 public:
   
-  static G3MWidget create(const Planet& planet,
-                          Renderer& renderer);  
+  static G3MWidget* create(const Planet& planet,
+                           Renderer& renderer);
+  
   ~G3MWidget();
   
   bool render();

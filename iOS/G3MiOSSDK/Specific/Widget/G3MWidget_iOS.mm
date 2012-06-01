@@ -67,7 +67,7 @@ ILogger *logger = (ILogger *) new Logger_iOS(InfoLevel);
     //int h = [self frame].size.height;
     
     CompositeRenderer comp = CompositeRenderer();
-    G3MWidget g3W = G3MWidget::create(Planet::createEarth(), comp); 
+    _widget = G3MWidget::create(Planet::createEarth(), comp); 
     // testing Logger
     logger->logInfo("testing Logger...\n");
     
@@ -207,9 +207,6 @@ ILogger *logger = (ILogger *) new Logger_iOS(InfoLevel);
     //1 POINTER
     Vector2D pos(current.x, current.y);
     Vector2D prevPos(previous.x, previous.y);
-//    const Pointer p(pos, prevPos);
-//    pointers.push_back(&p);
-//    const Pointer p(pos, prevPos);
     pointers.push_back(new Pointer(pos, prevPos));
   }
 
