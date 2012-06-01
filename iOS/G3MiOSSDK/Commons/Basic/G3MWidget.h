@@ -33,7 +33,6 @@ public:
   
   bool render();
   
-  void onTapEvent(TapEvent &event);
   void onTouchEvent(TouchEvent &event);
   
 private:

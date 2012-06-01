@@ -19,7 +19,6 @@ public:
     
     virtual int render(RenderContext &rc) = 0;
     
-    virtual bool onTapEvent(TapEvent& event) = 0;
     virtual bool onTouchEvent(TouchEvent &event) = 0;
 };
 

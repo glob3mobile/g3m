@@ -30,11 +30,6 @@ G3MWidget G3MWidget::create(const Planet &planet, Renderer &renderer) {
   return G3MWidget(planet, renderer, factory, gl);
 }
 
-void G3MWidget::onTapEvent(TapEvent &event)
-{
-    
-}
-
 
 void G3MWidget::onTouchEvent(TouchEvent &event)
 {

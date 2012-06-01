@@ -66,34 +66,32 @@ enum {
 
 - (void)render: (void*) widget
 {
+  if (widget) {
     // This application only creates a single context which is already set current at this point.
     // This call is redundant, but needed if dealing with multiple contexts.	
     [EAGLContext setCurrentContext:context];
-
+    
     // This application only creates a single default framebuffer which is already bound at this point.
     // This call is redundant, but needed if dealing with multiple framebuffers.
     glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);
     glViewport(0, 0, backingWidth, backingHeight);
-
+    
     // Use shader program
     //sceneController->GetRenderContext()->GetGL()->UseProgram(program);
-
-    // pintamos la escena
+    
+    // Clear the scene
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
     
-    //bool result = ((G3MWidget*)g3w)->render();
-    if (widget) {
-//      widget->render();
-      bool result = ((G3MWidget*)widget)->render();
+    bool result = ((G3MWidget*)widget)->render();
+    
+    if (result) {
+      int __check_with_agustin_result;
+      // This application only creates a single color renderbuffer which is already bound at this point.
+      // This call is redundant, but needed if dealing with multiple renderbuffers.
+      glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
+      [context presentRenderbuffer:GL_RENDERBUFFER];
     }
-
-
-//    if (result) {
-        // This application only creates a single color renderbuffer which is already bound at this point.
-        // This call is redundant, but needed if dealing with multiple renderbuffers.
-        glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
-        [context presentRenderbuffer:GL_RENDERBUFFER];
-//    }
+  }
 }
 
 
