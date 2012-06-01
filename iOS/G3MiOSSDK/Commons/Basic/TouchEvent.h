@@ -13,35 +13,69 @@
 
 #include "Vector2D.hpp"
 
-using namespace std;
 
-class Pointer{
-public:
-    Pointer(Vector2D pos, Vector2D prev);
-    Vector2D getPos() const { return _pos;}
-    Vector2D getPrevPos() const { return _prevPos;}
-    
+class Pointer {
 private:
-    Vector2D _pos;
-    Vector2D _prevPos;
+  const Vector2D _pos;
+  const Vector2D _prevPos;
+  
+  Pointer& operator=(const Pointer& v);
+  
+public:
+  Pointer(const Pointer& other) : _pos(other._pos), _prevPos(other._prevPos) {
+    
+  }
+  
+  Pointer(const Vector2D& pos, const Vector2D& prev) : _pos(pos), _prevPos(prev) { }
+  
+  const Vector2D getPos() const { return _pos; }
+  const Vector2D getPrevPos() const { return _prevPos; }
 };
 
-enum TouchEventType { Down, Up, Move, LongPress};
-class TouchEvent : public vector<Pointer> {
-public:
-    TouchEvent(TouchEventType type);
-    
-    TouchEventType getType(){ return _eventType;}
-    
-private:
-    TouchEventType _eventType;
+
+enum TouchEventType {
+  Down,
+  Up,
+  Move,
+  LongPress
 };
+
+
+class TouchEvent {
+private:
+  const TouchEventType       _eventType;
+  const std::vector<Pointer> _pointers;
+  
+  TouchEvent(const TouchEventType& type,
+             const std::vector<Pointer> pointers): _eventType(type), _pointers(pointers) { }
+  
+public:
+  TouchEvent(const TouchEvent& other): _eventType(other._eventType), _pointers(other._pointers) {
+    
+  }
+  
+  static TouchEvent create(const TouchEventType& type,
+                           const std::vector<Pointer> pointers) {
+    return TouchEvent(type, pointers);
+  }
+  
+  static TouchEvent create(const TouchEventType& type,
+                           const Pointer& pointer) {
+    const Pointer pa[] = { pointer };
+    const std::vector<Pointer> pointers = std::vector<Pointer>(pa, pa+1);
+    return TouchEvent::create(type, pointers);
+  }
+  
+  TouchEventType getType() {
+    return _eventType;
+  }  
+};
+
 
 class TapEvent : Vector2D{
 public:
-    TapEvent(double x, double y): Vector2D(x,y){}
+  TapEvent(double x, double y): Vector2D(x,y) {}
 };
-
 
 
 #endif
