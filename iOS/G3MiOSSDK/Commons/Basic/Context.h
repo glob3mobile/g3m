@@ -11,39 +11,64 @@
 
 #include "IFactory.h"
 #include "IGL.h"
+#include "Planet.hpp"
 
 class Context {
 protected:
-  IFactory * _factory;
+  const IFactory * _factory;
+  const ILogger*   _logger;
+  const Planet*    _planet;
   
-  Context(IFactory *factory) : _factory(factory) {}
+  Context(const IFactory *factory,
+          const ILogger* logger,
+          const Planet* planet) :
+  _factory(factory),
+  _logger(logger),
+  _planet(planet) {
+  }
   
 public:
   
-  IFactory *getFactory() {
+  const IFactory* getFactory() const {
     return _factory;
+  }
+  
+  const ILogger* getLogger() const {
+    return _logger;
+  }
+  
+  const Planet* getPlanet() const {
+    return _planet;
   }
   
 };
 
 
-class InitializationContext: private Context {
+class InitializationContext: public Context {
 public:
-  InitializationContext(IFactory * factory) : Context(factory) {}
+  InitializationContext(IFactory *factory,
+                        ILogger* logger,
+                        const Planet* planet) :
+  Context(factory, logger, planet) {
+  }
 };
 
 
-class RenderContext: private Context {
+class RenderContext: public Context {
 private:
   IGL * _gl;
   
 public:
-  RenderContext(IFactory * factory,
-                IGL *gl): Context(factory), _gl(gl) {
+  RenderContext(IFactory *factory,
+                ILogger* logger,
+                const Planet* planet,
+                IGL *gl) :
+  Context(factory, logger, planet),
+  _gl(gl) {
     
   }
   
-  IGL *getGL(){
+  IGL *getGL() const {
     return _gl;
   }
 };

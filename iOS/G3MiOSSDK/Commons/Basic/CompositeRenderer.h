@@ -18,7 +18,7 @@ class CompositeRenderer: public Renderer
 private:
   std::vector<Renderer*> _renderers;
   
-  InitializationContext _ic;
+  const InitializationContext* _ic;
   
 public:
   CompositeRenderer(): _ic(NULL) {
@@ -26,14 +26,13 @@ public:
   }
   
   virtual ~CompositeRenderer() {
-    
   }
   
-  void initialize(const InitializationContext& ic);  
+  void initialize(const InitializationContext* ic);  
   
-  int render(const RenderContext &rc);
+  int render(const RenderContext* rc);
   
-  bool onTouchEvent(const TouchEvent &event);
+  bool onTouchEvent(const TouchEvent& event);
   
   void addRenderer(Renderer* renderer);
 };

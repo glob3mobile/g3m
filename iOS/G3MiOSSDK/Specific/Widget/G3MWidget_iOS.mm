@@ -16,9 +16,6 @@
 #include "Logger_iOS.h"
 #include "Factory_iOS.h"
 
-IFactory *factory = (IFactory *) new Factory_iOS();
-ILogger *logger = (ILogger *) new Logger_iOS(InfoLevel);
-
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
 @end
@@ -67,9 +64,14 @@ ILogger *logger = (ILogger *) new Logger_iOS(InfoLevel);
     //int h = [self frame].size.height;
     
     CompositeRenderer* comp = new CompositeRenderer();
-    _widget = G3MWidget::create(Planet::createEarth(), comp); 
-    // testing Logger
-    logger->logInfo("testing Logger...\n");
+    
+    IFactory *factory = (IFactory *) new Factory_iOS();
+    ILogger *logger = (ILogger *) new Logger_iOS(InfoLevel);
+
+    int __TODO_create_gl;
+    IGL* gl  = NULL;
+    
+    _widget = G3MWidget::create(factory, logger, gl, Planet::createEarth(), comp); 
     
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);

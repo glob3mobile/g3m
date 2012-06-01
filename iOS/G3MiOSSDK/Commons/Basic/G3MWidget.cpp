@@ -8,6 +8,21 @@
 
 #include "G3MWidget.h"
 
+
+G3MWidget* G3MWidget::create(IFactory* factory,
+                             ILogger *logger,
+                             IGL* gl,
+                             const Planet* planet,
+                             Renderer* renderer)
+{
+  logger->logInfo("Creating G3MWidget...");
+  return new G3MWidget(factory,
+                       logger,
+                       gl,
+                       planet,
+                       renderer);
+}
+
 G3MWidget::~G3MWidget()
 {
   delete _renderer;
@@ -19,22 +34,12 @@ G3MWidget::~G3MWidget()
 
 bool G3MWidget::render()
 {
-  RenderContext rc(_factory, _gl);
+  RenderContext rc(_factory, _logger, _planet, _gl);
   
-  _renderer->render(rc);
+  _renderer->render(&rc);
   
   return true;
 }
-
-G3MWidget* G3MWidget::create(const Planet* planet, Renderer* renderer)
-{
-  int __TODO_create_factory_and_gl;
-  IFactory* factory = NULL;
-  IGL* gl  = NULL;
-  
-  return new G3MWidget(planet, renderer, factory, gl);
-}
-
 
 void G3MWidget::onTouchEvent(const TouchEvent &event)
 {

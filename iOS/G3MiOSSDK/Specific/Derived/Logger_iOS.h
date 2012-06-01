@@ -16,9 +16,9 @@ class Logger_iOS: public ILogger {
 public:  
     Logger_iOS(const LogLevel level): ILogger(level) { }
     
-    void logInfo(const std::string x, ...);
-    void logWarning(const std::string x, ...);
-    void logError(const std::string x, ...);
+    void logInfo(const std::string x, ...) const ;
+    void logWarning(const std::string x, ...) const ;
+    void logError(const std::string x, ...) const ;
 };
 
 #endif

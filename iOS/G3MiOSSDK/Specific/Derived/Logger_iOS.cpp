@@ -8,33 +8,39 @@
 
 #include "Logger_iOS.h"
 
-void Logger_iOS::logInfo(const std::string x, ...)
+void Logger_iOS::logInfo(const std::string x, ...) const
 {
   if (_level <= InfoLevel) {
+    printf("Info: ");
     va_list args;
     va_start (args, x);
     vprintf(x.c_str(), args);
     va_end(args);
+    printf("\n");
   }
 }
 
-void Logger_iOS::logWarning(const std::string x, ...)
+void Logger_iOS::logWarning(const std::string x, ...) const
 {
   if (_level <= WarningLevel) {
+    printf("Warning: ");
     va_list args;
     va_start (args, x);
     vprintf(x.c_str(), args);
     va_end(args);
+    printf("\n");
   }    
 }
 
-void Logger_iOS::logError(const std::string x, ...)
+void Logger_iOS::logError(const std::string x, ...) const
 {
   if (_level <= ErrorLevel) {
+    printf("Error: ");
     va_list args;
     va_start (args, x);
     vprintf(x.c_str(), args);
     va_end(args);
+    printf("\n");
   }    
 }
 

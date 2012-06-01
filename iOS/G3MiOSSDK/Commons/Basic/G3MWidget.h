@@ -17,17 +17,27 @@ class Globe{};
 
 class G3MWidget {
 private:
-  G3MWidget(const Planet* planet,
-            Renderer* renderer,
-            IFactory* factory,
-            IGL* gl): _planet(planet), _renderer(renderer), _factory(factory), _gl(gl) {
-    InitializationContext ic(_factory);
-    _renderer->initialize(ic);
+  G3MWidget(IFactory* factory,
+            ILogger *logger,
+            IGL* gl,
+            const Planet* planet,
+            Renderer* renderer):
+  _factory(factory),
+  _logger(logger),
+  _gl(gl),
+  _planet(planet),
+  _renderer(renderer)
+  {
+    InitializationContext ic(_factory, _logger, _planet);
+    _renderer->initialize(&ic);
   }
   
 public:
   
-  static G3MWidget* create(const Planet* planet,
+  static G3MWidget* create(IFactory* factory,
+                           ILogger *logger,
+                           IGL* gl,
+                           const Planet* planet,
                            Renderer* renderer);
   
   ~G3MWidget();
@@ -37,10 +47,11 @@ public:
   void onTouchEvent(const TouchEvent &event);
   
 private:
-  Renderer*       _renderer;
-  const Planet*   _planet;
-  IFactory*       _factory;
-  IGL*            _gl;
+  IFactory*     _factory;
+  ILogger*      _logger;
+  IGL*          _gl;
+  const Planet* _planet;
+  Renderer*     _renderer;
 };
 
 #endif

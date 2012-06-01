@@ -8,7 +8,7 @@
 
 #include "CompositeRenderer.h"
 
-void CompositeRenderer::initialize(const InitializationContext& ic) {
+void CompositeRenderer::initialize(const InitializationContext* ic) {
   _ic = ic;
   
   for (int i = 0; i < _renderers.size(); i++) {
@@ -21,7 +21,9 @@ void CompositeRenderer::addRenderer(Renderer *renderer) {
   renderer->initialize(_ic);
 }
 
-int CompositeRenderer::render(const RenderContext &rc) {
+int CompositeRenderer::render(const RenderContext* rc) {
+  //rc->getLogger()->logInfo("CompositeRenderer::render()");
+  
   int min = 9999;
   for (int i = 0; i < _renderers.size(); i++) {
     int x = _renderers[i]->render(rc);
@@ -33,8 +35,7 @@ int CompositeRenderer::render(const RenderContext &rc) {
 bool CompositeRenderer::onTouchEvent(const TouchEvent &event) {
   for (int i = 0; i < _renderers.size(); i++) {
     //THE EVENT IS PROCESSED ONLY BY THE FIRST RENDERER
-    if (_renderers[i]->onTouchEvent(event))
-    {
+    if (_renderers[i]->onTouchEvent(event)) {
       return true;
     }
   }
