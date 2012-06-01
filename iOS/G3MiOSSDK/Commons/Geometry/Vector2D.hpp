@@ -15,8 +15,9 @@ class Vector2D {
 private:
   const double _x;
   const double _y;
-  
-  Vector2D& operator=(const Vector2D& v);
+    
+    
+    Vector2D& operator=(const Vector2D& v);
   
 public:
   
@@ -28,11 +29,6 @@ public:
   Vector2D(const Vector2D &v): _x(v._x), _y(v._y) {
     
   }
-    
-//  Vector2D& operator=(const Vector2D& v) {
-//    Vector2D *v2 = new Vector2D(v);
-//    return *v2;
-//  }
   
   Vector2D normalized() const;
   
