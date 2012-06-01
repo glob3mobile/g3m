@@ -8,7 +8,7 @@
 
 #include "TouchEvent.h"
 
-Pointer::Pointer(Vector2D pos, Vector2D prev):
+Pointer::Pointer(const Vector2D pos, const Vector2D prev):
 _pos(pos), _prevPos(prev){}
 
 TouchEvent::TouchEvent(TouchEventType type): _eventType(type){}

@@ -200,6 +200,8 @@ ILogger *logger = (ILogger *) new Logger_iOS(InfoLevel);
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     NSSet *allTouches = [event allTouches];
     
+    std::vector<Pointer> vp;
+    
     //TOUCH EVENT
     TouchEvent te(Move);
     
@@ -213,7 +215,13 @@ ILogger *logger = (ILogger *) new Logger_iOS(InfoLevel);
         Vector2D prevPos(previous.x, previous.y);
         const Pointer p(pos, prevPos);
         te.push_back(p);
+        
+        vp.push_back(p);
     }
+    
+    
+    const std::vector<Pointer> vp2(vp);
+    TouchEvent::create(Down, vp2);
     
     ((G3MWidget*)[self widget])->onTouchEvent(te);
 }

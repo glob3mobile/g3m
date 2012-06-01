@@ -38,6 +38,10 @@
 		383BD3B71577EE5A0012AC53 /* Vector3D.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 383BD3AA1577EE5A0012AC53 /* Vector3D.hpp */; };
 		383BD3BA1577EE630012AC53 /* IFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 383BD3B81577EE630012AC53 /* IFactory.h */; };
 		383BD3BB1577EE630012AC53 /* ILogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 383BD3B91577EE630012AC53 /* ILogger.h */; };
+		D83094991578CD5100AC568B /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D83094971578CD5100AC568B /* Camera.cpp */; };
+		D830949A1578CD5100AC568B /* Camera.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D83094981578CD5100AC568B /* Camera.hpp */; };
+		D830949D1578CDC000AC568B /* GLU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D830949B1578CDC000AC568B /* GLU.cpp */; };
+		D830949E1578CDC000AC568B /* GLU.h in Headers */ = {isa = PBXBuildFile; fileRef = D830949C1578CDC000AC568B /* GLU.h */; };
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
@@ -73,6 +77,10 @@
 		383BD3AA1577EE5A0012AC53 /* Vector3D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Vector3D.hpp; path = Commons/Geometry/Vector3D.hpp; sourceTree = "<group>"; };
 		383BD3B81577EE630012AC53 /* IFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IFactory.h; path = Commons/Interfaces/IFactory.h; sourceTree = "<group>"; };
 		383BD3B91577EE630012AC53 /* ILogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ILogger.h; path = Commons/Interfaces/ILogger.h; sourceTree = "<group>"; };
+		D83094971578CD5100AC568B /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
+		D83094981578CD5100AC568B /* Camera.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Camera.hpp; sourceTree = "<group>"; };
+		D830949B1578CDC000AC568B /* GLU.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLU.cpp; sourceTree = "<group>"; };
+		D830949C1578CDC000AC568B /* GLU.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLU.h; sourceTree = "<group>"; };
 		D8EEF3B51577924D003FEB5E /* libG3MiOSSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libG3MiOSSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8EEF3B81577924D003FEB5E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D8EEF3BC1577924D003FEB5E /* G3MiOSSDK-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "G3MiOSSDK-Prefix.pch"; sourceTree = "<group>"; };
@@ -123,6 +131,7 @@
 		383BD3881577EDE30012AC53 /* Commons */ = {
 			isa = PBXGroup;
 			children = (
+				D83094911578CC7500AC568B /* GL */,
 				383BD3891577EDF40012AC53 /* Basic */,
 				383BD38A1577EDFD0012AC53 /* Geometry */,
 				383BD38B1577EE040012AC53 /* Interfaces */,
@@ -133,6 +142,8 @@
 		383BD3891577EDF40012AC53 /* Basic */ = {
 			isa = PBXGroup;
 			children = (
+				D83094971578CD5100AC568B /* Camera.cpp */,
+				D83094981578CD5100AC568B /* Camera.hpp */,
 				383BD38C1577EE500012AC53 /* CompositeRenderer.cpp */,
 				383BD38D1577EE500012AC53 /* CompositeRenderer.h */,
 				383BD38E1577EE500012AC53 /* Context.cpp */,
@@ -149,6 +160,8 @@
 		383BD38A1577EDFD0012AC53 /* Geometry */ = {
 			isa = PBXGroup;
 			children = (
+				D830949B1578CDC000AC568B /* GLU.cpp */,
+				D830949C1578CDC000AC568B /* GLU.h */,
 				383BD39E1577EE5A0012AC53 /* Angle.cpp */,
 				383BD39F1577EE5A0012AC53 /* Angle.hpp */,
 				383BD3A01577EE5A0012AC53 /* Ellipsoid.cpp */,
@@ -173,6 +186,13 @@
 				383BD3B91577EE630012AC53 /* ILogger.h */,
 			);
 			name = Interfaces;
+			sourceTree = "<group>";
+		};
+		D83094911578CC7500AC568B /* GL */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = GL;
 			sourceTree = "<group>";
 		};
 		D8EEF3AA1577924D003FEB5E = {
@@ -244,6 +264,8 @@
 				383BD3B71577EE5A0012AC53 /* Vector3D.hpp in Headers */,
 				383BD3BA1577EE630012AC53 /* IFactory.h in Headers */,
 				383BD3BB1577EE630012AC53 /* ILogger.h in Headers */,
+				D830949A1578CD5100AC568B /* Camera.hpp in Headers */,
+				D830949E1578CDC000AC568B /* GLU.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -310,6 +332,8 @@
 				383BD3B11577EE5A0012AC53 /* Geodetic3D.cpp in Sources */,
 				383BD3B41577EE5A0012AC53 /* Vector2D.cpp in Sources */,
 				383BD3B61577EE5A0012AC53 /* Vector3D.cpp in Sources */,
+				D83094991578CD5100AC568B /* Camera.cpp in Sources */,
+				D830949D1578CDC000AC568B /* GLU.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
