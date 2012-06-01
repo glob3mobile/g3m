@@ -60,6 +60,20 @@ public:
   }
   
   static TouchEvent create(const TouchEventType& type,
+                           const std::vector<const Pointer*> pointers) {
+
+    int __TODODODODO;
+    
+//    const std::vector<Pointer> poi = std::vector<Pointer>(pointers.size());
+//
+//    for(int i = 0; i < pointers.size(); i++) {
+//      poi.push
+//    }
+    
+    //return TouchEvent(type, pointers);
+  }
+  
+  static TouchEvent create(const TouchEventType& type,
                            const Pointer& pointer) {
     const Pointer pa[] = { pointer };
     const std::vector<Pointer> pointers = std::vector<Pointer>(pa, pa+1);
@@ -70,12 +84,5 @@ public:
     return _eventType;
   }  
 };
-
-
-class TapEvent : Vector2D{
-public:
-  TapEvent(double x, double y): Vector2D(x,y) {}
-};
-
 
 #endif

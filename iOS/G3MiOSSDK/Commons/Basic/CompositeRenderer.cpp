@@ -30,17 +30,6 @@ int CompositeRenderer::render(RenderContext &rc) {
   return min;
 }
 
-bool CompositeRenderer::onTapEvent(TapEvent& event) {
-  for (int i = 0; i < _renderers.size(); i++) {
-    //THE EVENT IS PROCESSED ONLY BY THE FIRST RENDERER
-    if (_renderers[i]->onTapEvent(event))
-    {
-      return true;
-    }
-  }
-  return false;
-}
-
 bool CompositeRenderer::onTouchEvent(TouchEvent &event) {
   for (int i = 0; i < _renderers.size(); i++) {
     //THE EVENT IS PROCESSED ONLY BY THE FIRST RENDERER

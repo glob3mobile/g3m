@@ -189,10 +189,6 @@ ILogger *logger = (ILogger *) new Logger_iOS(InfoLevel);
   TouchEvent te(TouchEvent::create(Down, Pointer(pos, prevPos)));
   
   ((G3MWidget*)[self widget])->onTouchEvent(te);
-  
-  //TAP EVENT
-  TapEvent tap(current.x, current.y);
-  ((G3MWidget*)[self widget])->onTapEvent(tap);
 }
 
 
@@ -201,7 +197,7 @@ ILogger *logger = (ILogger *) new Logger_iOS(InfoLevel);
   
   NSUInteger pointersCount = [allTouches count];
 
-  std::vector<Pointer> pointers = std::vector<Pointer>(pointersCount);
+  std::vector<const Pointer*> pointers = std::vector<const Pointer*>(pointersCount);
   
   for (int n = 0; n < pointersCount; n++) {
     UITouch *touch = [[allTouches allObjects] objectAtIndex:n];
@@ -211,14 +207,14 @@ ILogger *logger = (ILogger *) new Logger_iOS(InfoLevel);
     //1 POINTER
     Vector2D pos(current.x, current.y);
     Vector2D prevPos(previous.x, previous.y);
-    const Pointer p(pos, prevPos);
-    pointers.push_back(p);
+//    const Pointer p(pos, prevPos);
+//    pointers.push_back(&p);
+//    const Pointer p(pos, prevPos);
+    pointers.push_back(new Pointer(pos, prevPos));
   }
 
-  const std::vector<Pointer> pointersC = std::vector<Pointer>(pointers);
-
   //TOUCH EVENT
-  TouchEvent te( TouchEvent::create(Move, pointersC) );
+  TouchEvent te( TouchEvent::create(Move, pointers) );
   
   ((G3MWidget*)[self widget])->onTouchEvent(te);
 }

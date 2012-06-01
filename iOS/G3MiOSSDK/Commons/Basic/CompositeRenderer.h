@@ -29,7 +29,6 @@ public:
   
   int render(RenderContext &rc);
   
-  bool onTapEvent(TapEvent& event);
   bool onTouchEvent(TouchEvent &event);
   
   void addRenderer(Renderer* renderer);
