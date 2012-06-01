@@ -180,21 +180,58 @@ ILogger *logger = (ILogger *) new Logger_iOS(InfoLevel);
 
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-//    UITouch *touch = [touches anyObject];
-//    CGPoint current = [touch locationInView:self];
-//    CGPoint previous = [touch previousLocationInView:self];
+    UITouch *touch = [touches anyObject];
+    CGPoint current = [touch locationInView:self];
+    CGPoint previous = [touch previousLocationInView:self];
+    
+    //TOUCH EVENT
+    Vector2D pos(current.x, current.y);
+    Vector2D prevPos(previous.x, previous.y);
+    const Pointer p(pos, prevPos);
+    TouchEvent te(Down);
+    te.push_back(p);
+    ((G3MWidget*)[self widget])->onTouchEvent(te);
+
+    //TAP EVENT
+    TapEvent tap(current.x, current.y);
+    ((G3MWidget*)[self widget])->onTapEvent(tap);
 }
 
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-//    NSSet *allTouches = [event allTouches];
+    NSSet *allTouches = [event allTouches];
+    
+    //TOUCH EVENT
+    TouchEvent te(Move);
+    
+    for (int n = 0; n < [allTouches count]; n++) {
+        UITouch *touch = [[allTouches allObjects] objectAtIndex:n];
+        CGPoint previous = [touch previousLocationInView:self];
+        CGPoint current = [touch locationInView:self];
+        
+        //1 POINTER
+        Vector2D pos(current.x, current.y);
+        Vector2D prevPos(previous.x, previous.y);
+        const Pointer p(pos, prevPos);
+        te.push_back(p);
+    }
+    
+    ((G3MWidget*)[self widget])->onTouchEvent(te);
 }
 
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-//    UITouch *touch = [touches anyObject];
-//    CGPoint previous = [touch previousLocationInView:self];
-//    CGPoint current = [touch locationInView:self];
+    UITouch *touch = [touches anyObject];
+    CGPoint current = [touch locationInView:self];
+    CGPoint previous = [touch previousLocationInView:self];
+    
+    //TOUCH EVENT
+    Vector2D pos(current.x, current.y);
+    Vector2D prevPos(previous.x, previous.y);
+    const Pointer p(pos, prevPos);
+    TouchEvent te(Up);
+    te.push_back(p);
+    ((G3MWidget*)[self widget])->onTouchEvent(te);
 }
 
 - (void)dealloc {

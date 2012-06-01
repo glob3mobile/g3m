@@ -16,7 +16,7 @@
 using namespace std;
 
 class Pointer{
-    
+public:
     Pointer(Vector2D pos, Vector2D prev);
     Vector2D getPos() const { return _pos;}
     Vector2D getPrevPos() const { return _prevPos;}
@@ -27,17 +27,20 @@ private:
 };
 
 enum TouchEventType { Down, Up, Move, LongPress};
-class TouchEvent : vector<Pointer> {
-    
+class TouchEvent : public vector<Pointer> {
+public:
     TouchEvent(TouchEventType type);
     
     TouchEventType getType(){ return _eventType;}
     
-public:
+private:
     TouchEventType _eventType;
 };
 
-class TapEvent : Vector2D{};
+class TapEvent : Vector2D{
+public:
+    TapEvent(double x, double y): Vector2D(x,y){}
+};
 
 
 

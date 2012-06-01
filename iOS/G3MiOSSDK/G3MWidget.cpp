@@ -35,3 +35,14 @@ bool G3MWidget::render()
     
     return true;
 }
+
+bool G3MWidget::onTapEvent(TapEvent& event)
+{
+    
+    
+    
+}
+
+bool G3MWidget::onTouchEvent(TouchEvent &event)
+{
+}

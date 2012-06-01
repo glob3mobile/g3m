@@ -25,6 +25,9 @@ public:
     
     bool render();
     
+    bool onTapEvent(TapEvent& event);
+    bool onTouchEvent(TouchEvent &event);
+    
 private:
     Renderer *_renderer;
     Planet * _planet;
