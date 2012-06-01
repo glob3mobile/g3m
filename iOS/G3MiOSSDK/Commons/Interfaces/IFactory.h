@@ -13,10 +13,9 @@
 
 
 class IFactory {
-    
 public:
+  
   virtual ~IFactory() {}
-    
 };
 
 #endif
