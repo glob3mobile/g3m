@@ -28,9 +28,6 @@ public:
     return Geodetic3D(Angle::zero(), Angle::zero(), 0);
   }
   
-  /**
-   * Constructor of Geodetic3D where latitude, longitude and altitude are set to zero.
-   */
   Geodetic3D(const Angle& latitude,
              const Angle& longitude,
              const double height): _latitude(latitude), _longitude(longitude), _height(height) {
