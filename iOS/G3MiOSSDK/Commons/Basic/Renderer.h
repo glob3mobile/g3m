@@ -15,11 +15,11 @@
 
 class Renderer {
 public:
-    virtual void initialize(InitializationContext& ic) = 0;  
+    virtual void initialize(const InitializationContext& ic) = 0;  
     
-    virtual int render(RenderContext &rc) = 0;
+    virtual int render(const RenderContext &rc) = 0;
     
-    virtual bool onTouchEvent(TouchEvent &event) = 0;
+    virtual bool onTouchEvent(const TouchEvent &event) = 0;
 };
 
 

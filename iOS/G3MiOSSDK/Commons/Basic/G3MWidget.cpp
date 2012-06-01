@@ -32,7 +32,7 @@ G3MWidget* G3MWidget::create(const Planet &planet, Renderer &renderer) {
 }
 
 
-void G3MWidget::onTouchEvent(TouchEvent &event)
+void G3MWidget::onTouchEvent(const TouchEvent &event)
 {
-  
+  _renderer.onTouchEvent(event);
 }

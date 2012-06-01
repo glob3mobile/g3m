@@ -25,11 +25,11 @@ public:
     
   }
   
-  void initialize(InitializationContext& ic);  
+  void initialize(const InitializationContext& ic);  
   
-  int render(RenderContext &rc);
+  int render(const RenderContext &rc);
   
-  bool onTouchEvent(TouchEvent &event);
+  bool onTouchEvent(const TouchEvent &event);
   
   void addRenderer(Renderer* renderer);
 };

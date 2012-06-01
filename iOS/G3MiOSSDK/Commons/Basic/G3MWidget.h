@@ -34,7 +34,7 @@ public:
   
   bool render();
   
-  void onTouchEvent(TouchEvent &event);
+  void onTouchEvent(const TouchEvent &event);
   
 private:
   Renderer& _renderer;
