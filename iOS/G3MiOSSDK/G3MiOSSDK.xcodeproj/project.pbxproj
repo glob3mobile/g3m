@@ -7,70 +7,75 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		383BD2F11577C57E0012AC53 /* ILogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 383BD2F01577C57E0012AC53 /* ILogger.h */; };
-		383BD2F31577C5ED0012AC53 /* Logger_iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 383BD2F21577C5ED0012AC53 /* Logger_iOS.h */; };
-		383BD2FE1577C8130012AC53 /* Logger_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 383BD2FD1577C8130012AC53 /* Logger_iOS.cpp */; };
-		383BD32F1577D1320012AC53 /* IFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 383BD32E1577D1320012AC53 /* IFactory.h */; };
-		383BD3321577D18D0012AC53 /* Factory_iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 383BD3311577D18C0012AC53 /* Factory_iOS.h */; };
-		CF05CCC21577B769007C336F /* Ellipsoid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF05CCC11577B769007C336F /* Ellipsoid.cpp */; };
-		CF05CCC51577B907007C336F /* Vector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF05CCC41577B907007C336F /* Vector3D.cpp */; };
-		CF05CCC81577BD8A007C336F /* Geodetic3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF05CCC71577BD89007C336F /* Geodetic3D.cpp */; };
-		CF05CCCB1577BF40007C336F /* Geodetic2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF05CCC91577BF3F007C336F /* Geodetic2D.cpp */; };
-		CF05CCCC1577BF40007C336F /* Geodetic2D.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF05CCCA1577BF40007C336F /* Geodetic2D.hpp */; };
-		CF05CCCF1577CACC007C336F /* Vector2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF05CCCD1577CACC007C336F /* Vector2D.cpp */; };
-		CF05CCD01577CACC007C336F /* Vector2D.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF05CCCE1577CACC007C336F /* Vector2D.hpp */; };
-		CFF485A21577B35800FF703B /* Angle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFF485A11577B35800FF703B /* Angle.cpp */; };
+		383BD37C1577EDC00012AC53 /* Factory_iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 383BD3791577EDC00012AC53 /* Factory_iOS.h */; };
+		383BD37D1577EDC00012AC53 /* Logger_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 383BD37A1577EDC00012AC53 /* Logger_iOS.cpp */; };
+		383BD37E1577EDC00012AC53 /* Logger_iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 383BD37B1577EDC00012AC53 /* Logger_iOS.h */; };
+		383BD3841577EDDB0012AC53 /* ES2Renderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 383BD3801577EDDB0012AC53 /* ES2Renderer.h */; };
+		383BD3851577EDDB0012AC53 /* ES2Renderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3811577EDDB0012AC53 /* ES2Renderer.mm */; };
+		383BD3861577EDDB0012AC53 /* G3MWidget_iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 383BD3821577EDDB0012AC53 /* G3MWidget_iOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		383BD3871577EDDB0012AC53 /* G3MWidget_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3831577EDDB0012AC53 /* G3MWidget_iOS.mm */; };
+		383BD3951577EE500012AC53 /* CompositeRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 383BD38C1577EE500012AC53 /* CompositeRenderer.cpp */; };
+		383BD3961577EE500012AC53 /* CompositeRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 383BD38D1577EE500012AC53 /* CompositeRenderer.h */; };
+		383BD3971577EE500012AC53 /* Context.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 383BD38E1577EE500012AC53 /* Context.cpp */; };
+		383BD3981577EE500012AC53 /* Context.h in Headers */ = {isa = PBXBuildFile; fileRef = 383BD38F1577EE500012AC53 /* Context.h */; };
+		383BD3991577EE500012AC53 /* G3MWidget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3901577EE500012AC53 /* G3MWidget.cpp */; };
+		383BD39A1577EE500012AC53 /* G3MWidget.h in Headers */ = {isa = PBXBuildFile; fileRef = 383BD3911577EE500012AC53 /* G3MWidget.h */; };
+		383BD39B1577EE500012AC53 /* Renderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 383BD3921577EE500012AC53 /* Renderer.h */; };
+		383BD39C1577EE500012AC53 /* TouchEvent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3931577EE500012AC53 /* TouchEvent.cpp */; };
+		383BD39D1577EE500012AC53 /* TouchEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = 383BD3941577EE500012AC53 /* TouchEvent.h */; };
+		383BD3AB1577EE5A0012AC53 /* Angle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 383BD39E1577EE5A0012AC53 /* Angle.cpp */; };
+		383BD3AC1577EE5A0012AC53 /* Angle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 383BD39F1577EE5A0012AC53 /* Angle.hpp */; };
+		383BD3AD1577EE5A0012AC53 /* Ellipsoid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3A01577EE5A0012AC53 /* Ellipsoid.cpp */; };
+		383BD3AE1577EE5A0012AC53 /* Ellipsoid.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 383BD3A11577EE5A0012AC53 /* Ellipsoid.hpp */; };
+		383BD3AF1577EE5A0012AC53 /* Geodetic2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3A21577EE5A0012AC53 /* Geodetic2D.cpp */; };
+		383BD3B01577EE5A0012AC53 /* Geodetic2D.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 383BD3A31577EE5A0012AC53 /* Geodetic2D.hpp */; };
+		383BD3B11577EE5A0012AC53 /* Geodetic3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3A41577EE5A0012AC53 /* Geodetic3D.cpp */; };
+		383BD3B21577EE5A0012AC53 /* Geodetic3D.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 383BD3A51577EE5A0012AC53 /* Geodetic3D.hpp */; };
+		383BD3B31577EE5A0012AC53 /* Planet.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 383BD3A61577EE5A0012AC53 /* Planet.hpp */; };
+		383BD3B41577EE5A0012AC53 /* Vector2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3A71577EE5A0012AC53 /* Vector2D.cpp */; };
+		383BD3B51577EE5A0012AC53 /* Vector2D.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 383BD3A81577EE5A0012AC53 /* Vector2D.hpp */; };
+		383BD3B61577EE5A0012AC53 /* Vector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 383BD3A91577EE5A0012AC53 /* Vector3D.cpp */; };
+		383BD3B71577EE5A0012AC53 /* Vector3D.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 383BD3AA1577EE5A0012AC53 /* Vector3D.hpp */; };
+		383BD3BA1577EE630012AC53 /* IFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 383BD3B81577EE630012AC53 /* IFactory.h */; };
+		383BD3BB1577EE630012AC53 /* ILogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 383BD3B91577EE630012AC53 /* ILogger.h */; };
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; };
-		D8EEF4041577A656003FEB5E /* ES2Renderer.h in Headers */ = {isa = PBXBuildFile; fileRef = D8EEF3FD1577A656003FEB5E /* ES2Renderer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D8EEF4051577A656003FEB5E /* ES2Renderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = D8EEF3FE1577A656003FEB5E /* ES2Renderer.mm */; };
-		D8EEF4071577A656003FEB5E /* G3MWidget_iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = D8EEF4001577A656003FEB5E /* G3MWidget_iOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D8EEF4081577A656003FEB5E /* G3MWidget_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = D8EEF4011577A656003FEB5E /* G3MWidget_iOS.mm */; };
-		D8EEF42D1577B973003FEB5E /* G3MWidget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8EEF42C1577B973003FEB5E /* G3MWidget.cpp */; };
-		D8EEF42F1577B984003FEB5E /* G3MWidget.h in Headers */ = {isa = PBXBuildFile; fileRef = D8EEF42E1577B984003FEB5E /* G3MWidget.h */; };
-		D8EEF4311577BA69003FEB5E /* Renderer.h in Headers */ = {isa = PBXBuildFile; fileRef = D8EEF4301577BA69003FEB5E /* Renderer.h */; };
-		D8EEF4331577BC0D003FEB5E /* CompositeRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = D8EEF4321577BC0D003FEB5E /* CompositeRenderer.h */; };
-		D8EEF4351577BC1C003FEB5E /* CompositeRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8EEF4341577BC1C003FEB5E /* CompositeRenderer.cpp */; };
-		D8EEF4371577BD74003FEB5E /* Context.h in Headers */ = {isa = PBXBuildFile; fileRef = D8EEF4361577BD74003FEB5E /* Context.h */; };
-		D8EEF4391577BD80003FEB5E /* Context.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8EEF4381577BD80003FEB5E /* Context.cpp */; };
-		D8EEF43B1577BF3B003FEB5E /* TouchEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = D8EEF43A1577BF3B003FEB5E /* TouchEvent.h */; };
-		D8EEF43D1577C435003FEB5E /* TouchEvent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8EEF43C1577C435003FEB5E /* TouchEvent.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		383BD2F01577C57E0012AC53 /* ILogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ILogger.h; path = Interfaces/ILogger.h; sourceTree = "<group>"; };
-		383BD2F21577C5ED0012AC53 /* Logger_iOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Logger_iOS.h; path = Glob3iOSSDK/Specific/Derived/Logger_iOS.h; sourceTree = "<group>"; };
-		383BD2FD1577C8130012AC53 /* Logger_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Logger_iOS.cpp; path = Glob3iOSSDK/Specific/Derived/Logger_iOS.cpp; sourceTree = "<group>"; };
-		383BD32E1577D1320012AC53 /* IFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IFactory.h; path = Interfaces/IFactory.h; sourceTree = "<group>"; };
-		383BD3311577D18C0012AC53 /* Factory_iOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Factory_iOS.h; path = Glob3iOSSDK/Specific/Derived/Factory_iOS.h; sourceTree = "<group>"; };
-		CF05CCBF1577B761007C336F /* Ellipsoid.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Ellipsoid.hpp; sourceTree = "<group>"; };
-		CF05CCC11577B769007C336F /* Ellipsoid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Ellipsoid.cpp; sourceTree = "<group>"; };
-		CF05CCC31577B8FB007C336F /* Vector3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Vector3D.hpp; sourceTree = "<group>"; };
-		CF05CCC41577B907007C336F /* Vector3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vector3D.cpp; sourceTree = "<group>"; };
-		CF05CCC61577BD81007C336F /* Geodetic3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Geodetic3D.hpp; sourceTree = "<group>"; };
-		CF05CCC71577BD89007C336F /* Geodetic3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Geodetic3D.cpp; sourceTree = "<group>"; };
-		CF05CCC91577BF3F007C336F /* Geodetic2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Geodetic2D.cpp; sourceTree = "<group>"; };
-		CF05CCCA1577BF40007C336F /* Geodetic2D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Geodetic2D.hpp; sourceTree = "<group>"; };
-		CF05CCCD1577CACC007C336F /* Vector2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Vector2D.cpp; sourceTree = "<group>"; };
-		CF05CCCE1577CACC007C336F /* Vector2D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Vector2D.hpp; sourceTree = "<group>"; };
-		CF05CCD41577DA6E007C336F /* Planet.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Planet.hpp; sourceTree = "<group>"; };
-		CFF485A11577B35800FF703B /* Angle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Angle.cpp; sourceTree = "<group>"; };
-		CFF485A31577B36700FF703B /* Angle.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Angle.hpp; sourceTree = "<group>"; };
+		383BD3791577EDC00012AC53 /* Factory_iOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Factory_iOS.h; path = Specific/Derived/Factory_iOS.h; sourceTree = "<group>"; };
+		383BD37A1577EDC00012AC53 /* Logger_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Logger_iOS.cpp; path = Specific/Derived/Logger_iOS.cpp; sourceTree = "<group>"; };
+		383BD37B1577EDC00012AC53 /* Logger_iOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Logger_iOS.h; path = Specific/Derived/Logger_iOS.h; sourceTree = "<group>"; };
+		383BD3801577EDDB0012AC53 /* ES2Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ES2Renderer.h; path = Specific/Widget/ES2Renderer.h; sourceTree = "<group>"; };
+		383BD3811577EDDB0012AC53 /* ES2Renderer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ES2Renderer.mm; path = Specific/Widget/ES2Renderer.mm; sourceTree = "<group>"; };
+		383BD3821577EDDB0012AC53 /* G3MWidget_iOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = G3MWidget_iOS.h; path = Specific/Widget/G3MWidget_iOS.h; sourceTree = "<group>"; };
+		383BD3831577EDDB0012AC53 /* G3MWidget_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = G3MWidget_iOS.mm; path = Specific/Widget/G3MWidget_iOS.mm; sourceTree = "<group>"; };
+		383BD38C1577EE500012AC53 /* CompositeRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CompositeRenderer.cpp; path = Commons/Basic/CompositeRenderer.cpp; sourceTree = "<group>"; };
+		383BD38D1577EE500012AC53 /* CompositeRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CompositeRenderer.h; path = Commons/Basic/CompositeRenderer.h; sourceTree = "<group>"; };
+		383BD38E1577EE500012AC53 /* Context.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Context.cpp; path = Commons/Basic/Context.cpp; sourceTree = "<group>"; };
+		383BD38F1577EE500012AC53 /* Context.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Context.h; path = Commons/Basic/Context.h; sourceTree = "<group>"; };
+		383BD3901577EE500012AC53 /* G3MWidget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = G3MWidget.cpp; path = Commons/Basic/G3MWidget.cpp; sourceTree = "<group>"; };
+		383BD3911577EE500012AC53 /* G3MWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = G3MWidget.h; path = Commons/Basic/G3MWidget.h; sourceTree = "<group>"; };
+		383BD3921577EE500012AC53 /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Renderer.h; path = Commons/Basic/Renderer.h; sourceTree = "<group>"; };
+		383BD3931577EE500012AC53 /* TouchEvent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TouchEvent.cpp; path = Commons/Basic/TouchEvent.cpp; sourceTree = "<group>"; };
+		383BD3941577EE500012AC53 /* TouchEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TouchEvent.h; path = Commons/Basic/TouchEvent.h; sourceTree = "<group>"; };
+		383BD39E1577EE5A0012AC53 /* Angle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Angle.cpp; path = Commons/Geometry/Angle.cpp; sourceTree = "<group>"; };
+		383BD39F1577EE5A0012AC53 /* Angle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Angle.hpp; path = Commons/Geometry/Angle.hpp; sourceTree = "<group>"; };
+		383BD3A01577EE5A0012AC53 /* Ellipsoid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Ellipsoid.cpp; path = Commons/Geometry/Ellipsoid.cpp; sourceTree = "<group>"; };
+		383BD3A11577EE5A0012AC53 /* Ellipsoid.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Ellipsoid.hpp; path = Commons/Geometry/Ellipsoid.hpp; sourceTree = "<group>"; };
+		383BD3A21577EE5A0012AC53 /* Geodetic2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Geodetic2D.cpp; path = Commons/Geometry/Geodetic2D.cpp; sourceTree = "<group>"; };
+		383BD3A31577EE5A0012AC53 /* Geodetic2D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Geodetic2D.hpp; path = Commons/Geometry/Geodetic2D.hpp; sourceTree = "<group>"; };
+		383BD3A41577EE5A0012AC53 /* Geodetic3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Geodetic3D.cpp; path = Commons/Geometry/Geodetic3D.cpp; sourceTree = "<group>"; };
+		383BD3A51577EE5A0012AC53 /* Geodetic3D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Geodetic3D.hpp; path = Commons/Geometry/Geodetic3D.hpp; sourceTree = "<group>"; };
+		383BD3A61577EE5A0012AC53 /* Planet.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Planet.hpp; path = Commons/Geometry/Planet.hpp; sourceTree = "<group>"; };
+		383BD3A71577EE5A0012AC53 /* Vector2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Vector2D.cpp; path = Commons/Geometry/Vector2D.cpp; sourceTree = "<group>"; };
+		383BD3A81577EE5A0012AC53 /* Vector2D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Vector2D.hpp; path = Commons/Geometry/Vector2D.hpp; sourceTree = "<group>"; };
+		383BD3A91577EE5A0012AC53 /* Vector3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Vector3D.cpp; path = Commons/Geometry/Vector3D.cpp; sourceTree = "<group>"; };
+		383BD3AA1577EE5A0012AC53 /* Vector3D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Vector3D.hpp; path = Commons/Geometry/Vector3D.hpp; sourceTree = "<group>"; };
+		383BD3B81577EE630012AC53 /* IFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IFactory.h; path = Commons/Interfaces/IFactory.h; sourceTree = "<group>"; };
+		383BD3B91577EE630012AC53 /* ILogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ILogger.h; path = Commons/Interfaces/ILogger.h; sourceTree = "<group>"; };
 		D8EEF3B51577924D003FEB5E /* libG3MiOSSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libG3MiOSSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8EEF3B81577924D003FEB5E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D8EEF3BC1577924D003FEB5E /* G3MiOSSDK-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "G3MiOSSDK-Prefix.pch"; sourceTree = "<group>"; };
-		D8EEF3FD1577A656003FEB5E /* ES2Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ES2Renderer.h; sourceTree = "<group>"; };
-		D8EEF3FE1577A656003FEB5E /* ES2Renderer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = ES2Renderer.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		D8EEF4001577A656003FEB5E /* G3MWidget_iOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = G3MWidget_iOS.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		D8EEF4011577A656003FEB5E /* G3MWidget_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = G3MWidget_iOS.mm; sourceTree = "<group>"; };
-		D8EEF42C1577B973003FEB5E /* G3MWidget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = G3MWidget.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		D8EEF42E1577B984003FEB5E /* G3MWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = G3MWidget.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		D8EEF4301577BA69003FEB5E /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
-		D8EEF4321577BC0D003FEB5E /* CompositeRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CompositeRenderer.h; sourceTree = "<group>"; };
-		D8EEF4341577BC1C003FEB5E /* CompositeRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CompositeRenderer.cpp; sourceTree = "<group>"; };
-		D8EEF4361577BD74003FEB5E /* Context.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Context.h; sourceTree = "<group>"; };
-		D8EEF4381577BD80003FEB5E /* Context.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Context.cpp; sourceTree = "<group>"; };
-		D8EEF43A1577BF3B003FEB5E /* TouchEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TouchEvent.h; sourceTree = "<group>"; };
-		D8EEF43C1577C435003FEB5E /* TouchEvent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TouchEvent.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,50 +90,96 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		383BD2E21577C3430012AC53 /* Interfaces */ = {
+		383BD3771577EDA20012AC53 /* Specific */ = {
 			isa = PBXGroup;
 			children = (
-				383BD2F01577C57E0012AC53 /* ILogger.h */,
-				383BD32E1577D1320012AC53 /* IFactory.h */,
+				383BD3781577EDAC0012AC53 /* Derived */,
+				383BD37F1577EDCB0012AC53 /* Widget */,
 			);
-			name = Interfaces;
+			name = Specific;
 			sourceTree = "<group>";
 		};
-		383BD2EF1577C5310012AC53 /* Derived */ = {
+		383BD3781577EDAC0012AC53 /* Derived */ = {
 			isa = PBXGroup;
 			children = (
-				383BD2F21577C5ED0012AC53 /* Logger_iOS.h */,
-				383BD2FD1577C8130012AC53 /* Logger_iOS.cpp */,
-				383BD3311577D18C0012AC53 /* Factory_iOS.h */,
+				383BD3791577EDC00012AC53 /* Factory_iOS.h */,
+				383BD37A1577EDC00012AC53 /* Logger_iOS.cpp */,
+				383BD37B1577EDC00012AC53 /* Logger_iOS.h */,
 			);
 			name = Derived;
 			sourceTree = "<group>";
 		};
-		CFF4859F1577B34500FF703B /* Basics */ = {
+		383BD37F1577EDCB0012AC53 /* Widget */ = {
 			isa = PBXGroup;
 			children = (
-				CF05CCC91577BF3F007C336F /* Geodetic2D.cpp */,
-				CF05CCCA1577BF40007C336F /* Geodetic2D.hpp */,
-				CFF485A11577B35800FF703B /* Angle.cpp */,
-				CFF485A31577B36700FF703B /* Angle.hpp */,
-				CF05CCBF1577B761007C336F /* Ellipsoid.hpp */,
-				CF05CCC11577B769007C336F /* Ellipsoid.cpp */,
-				CF05CCC31577B8FB007C336F /* Vector3D.hpp */,
-				CF05CCC41577B907007C336F /* Vector3D.cpp */,
-				CF05CCC61577BD81007C336F /* Geodetic3D.hpp */,
-				CF05CCC71577BD89007C336F /* Geodetic3D.cpp */,
-				CF05CCCD1577CACC007C336F /* Vector2D.cpp */,
-				CF05CCCE1577CACC007C336F /* Vector2D.hpp */,
-				CF05CCD41577DA6E007C336F /* Planet.hpp */,
+				383BD3801577EDDB0012AC53 /* ES2Renderer.h */,
+				383BD3811577EDDB0012AC53 /* ES2Renderer.mm */,
+				383BD3821577EDDB0012AC53 /* G3MWidget_iOS.h */,
+				383BD3831577EDDB0012AC53 /* G3MWidget_iOS.mm */,
 			);
-			name = Basics;
+			name = Widget;
+			sourceTree = "<group>";
+		};
+		383BD3881577EDE30012AC53 /* Commons */ = {
+			isa = PBXGroup;
+			children = (
+				383BD3891577EDF40012AC53 /* Basic */,
+				383BD38A1577EDFD0012AC53 /* Geometry */,
+				383BD38B1577EE040012AC53 /* Interfaces */,
+			);
+			name = Commons;
+			sourceTree = "<group>";
+		};
+		383BD3891577EDF40012AC53 /* Basic */ = {
+			isa = PBXGroup;
+			children = (
+				383BD38C1577EE500012AC53 /* CompositeRenderer.cpp */,
+				383BD38D1577EE500012AC53 /* CompositeRenderer.h */,
+				383BD38E1577EE500012AC53 /* Context.cpp */,
+				383BD38F1577EE500012AC53 /* Context.h */,
+				383BD3901577EE500012AC53 /* G3MWidget.cpp */,
+				383BD3911577EE500012AC53 /* G3MWidget.h */,
+				383BD3921577EE500012AC53 /* Renderer.h */,
+				383BD3931577EE500012AC53 /* TouchEvent.cpp */,
+				383BD3941577EE500012AC53 /* TouchEvent.h */,
+			);
+			name = Basic;
+			sourceTree = "<group>";
+		};
+		383BD38A1577EDFD0012AC53 /* Geometry */ = {
+			isa = PBXGroup;
+			children = (
+				383BD39E1577EE5A0012AC53 /* Angle.cpp */,
+				383BD39F1577EE5A0012AC53 /* Angle.hpp */,
+				383BD3A01577EE5A0012AC53 /* Ellipsoid.cpp */,
+				383BD3A11577EE5A0012AC53 /* Ellipsoid.hpp */,
+				383BD3A21577EE5A0012AC53 /* Geodetic2D.cpp */,
+				383BD3A31577EE5A0012AC53 /* Geodetic2D.hpp */,
+				383BD3A41577EE5A0012AC53 /* Geodetic3D.cpp */,
+				383BD3A51577EE5A0012AC53 /* Geodetic3D.hpp */,
+				383BD3A61577EE5A0012AC53 /* Planet.hpp */,
+				383BD3A71577EE5A0012AC53 /* Vector2D.cpp */,
+				383BD3A81577EE5A0012AC53 /* Vector2D.hpp */,
+				383BD3A91577EE5A0012AC53 /* Vector3D.cpp */,
+				383BD3AA1577EE5A0012AC53 /* Vector3D.hpp */,
+			);
+			name = Geometry;
+			sourceTree = "<group>";
+		};
+		383BD38B1577EE040012AC53 /* Interfaces */ = {
+			isa = PBXGroup;
+			children = (
+				383BD3B81577EE630012AC53 /* IFactory.h */,
+				383BD3B91577EE630012AC53 /* ILogger.h */,
+			);
+			name = Interfaces;
 			sourceTree = "<group>";
 		};
 		D8EEF3AA1577924D003FEB5E = {
 			isa = PBXGroup;
 			children = (
-				D8EEF3F81577A629003FEB5E /* Specific */,
-				D8EEF42A1577B8F9003FEB5E /* Commons */,
+				383BD3881577EDE30012AC53 /* Commons */,
+				383BD3771577EDA20012AC53 /* Specific */,
 				D8EEF3BA1577924D003FEB5E /* G3MiOSSDK */,
 				D8EEF3B71577924D003FEB5E /* Frameworks */,
 				D8EEF3B61577924D003FEB5E /* Products */,
@@ -154,8 +205,6 @@
 		D8EEF3BA1577924D003FEB5E /* G3MiOSSDK */ = {
 			isa = PBXGroup;
 			children = (
-				383BD2E21577C3430012AC53 /* Interfaces */,
-				CFF4859F1577B34500FF703B /* Basics */,
 				D8EEF3BB1577924D003FEB5E /* Supporting Files */,
 			);
 			name = G3MiOSSDK;
@@ -170,42 +219,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		D8EEF3F81577A629003FEB5E /* Specific */ = {
-			isa = PBXGroup;
-			children = (
-				383BD2EF1577C5310012AC53 /* Derived */,
-				D8EEF3FA1577A635003FEB5E /* Widget */,
-			);
-			name = Specific;
-			sourceTree = "<group>";
-		};
-		D8EEF3FA1577A635003FEB5E /* Widget */ = {
-			isa = PBXGroup;
-			children = (
-				D8EEF3FD1577A656003FEB5E /* ES2Renderer.h */,
-				D8EEF3FE1577A656003FEB5E /* ES2Renderer.mm */,
-				D8EEF4001577A656003FEB5E /* G3MWidget_iOS.h */,
-				D8EEF4011577A656003FEB5E /* G3MWidget_iOS.mm */,
-			);
-			name = Widget;
-			sourceTree = "<group>";
-		};
-		D8EEF42A1577B8F9003FEB5E /* Commons */ = {
-			isa = PBXGroup;
-			children = (
-				D8EEF42C1577B973003FEB5E /* G3MWidget.cpp */,
-				D8EEF42E1577B984003FEB5E /* G3MWidget.h */,
-				D8EEF4301577BA69003FEB5E /* Renderer.h */,
-				D8EEF4321577BC0D003FEB5E /* CompositeRenderer.h */,
-				D8EEF4341577BC1C003FEB5E /* CompositeRenderer.cpp */,
-				D8EEF4361577BD74003FEB5E /* Context.h */,
-				D8EEF4381577BD80003FEB5E /* Context.cpp */,
-				D8EEF43A1577BF3B003FEB5E /* TouchEvent.h */,
-				D8EEF43C1577C435003FEB5E /* TouchEvent.cpp */,
-			);
-			name = Commons;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -213,19 +226,24 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D8EEF4041577A656003FEB5E /* ES2Renderer.h in Headers */,
-				D8EEF4071577A656003FEB5E /* G3MWidget_iOS.h in Headers */,
-				D8EEF42F1577B984003FEB5E /* G3MWidget.h in Headers */,
-				D8EEF4311577BA69003FEB5E /* Renderer.h in Headers */,
-				D8EEF4331577BC0D003FEB5E /* CompositeRenderer.h in Headers */,
-				D8EEF4371577BD74003FEB5E /* Context.h in Headers */,
-				D8EEF43B1577BF3B003FEB5E /* TouchEvent.h in Headers */,
-				383BD2F11577C57E0012AC53 /* ILogger.h in Headers */,
-				383BD2F31577C5ED0012AC53 /* Logger_iOS.h in Headers */,
-				383BD32F1577D1320012AC53 /* IFactory.h in Headers */,
-				383BD3321577D18D0012AC53 /* Factory_iOS.h in Headers */,
-				CF05CCCC1577BF40007C336F /* Geodetic2D.hpp in Headers */,
-				CF05CCD01577CACC007C336F /* Vector2D.hpp in Headers */,
+				383BD3861577EDDB0012AC53 /* G3MWidget_iOS.h in Headers */,
+				383BD37C1577EDC00012AC53 /* Factory_iOS.h in Headers */,
+				383BD37E1577EDC00012AC53 /* Logger_iOS.h in Headers */,
+				383BD3841577EDDB0012AC53 /* ES2Renderer.h in Headers */,
+				383BD3961577EE500012AC53 /* CompositeRenderer.h in Headers */,
+				383BD3981577EE500012AC53 /* Context.h in Headers */,
+				383BD39A1577EE500012AC53 /* G3MWidget.h in Headers */,
+				383BD39B1577EE500012AC53 /* Renderer.h in Headers */,
+				383BD39D1577EE500012AC53 /* TouchEvent.h in Headers */,
+				383BD3AC1577EE5A0012AC53 /* Angle.hpp in Headers */,
+				383BD3AE1577EE5A0012AC53 /* Ellipsoid.hpp in Headers */,
+				383BD3B01577EE5A0012AC53 /* Geodetic2D.hpp in Headers */,
+				383BD3B21577EE5A0012AC53 /* Geodetic3D.hpp in Headers */,
+				383BD3B31577EE5A0012AC53 /* Planet.hpp in Headers */,
+				383BD3B51577EE5A0012AC53 /* Vector2D.hpp in Headers */,
+				383BD3B71577EE5A0012AC53 /* Vector3D.hpp in Headers */,
+				383BD3BA1577EE630012AC53 /* IFactory.h in Headers */,
+				383BD3BB1577EE630012AC53 /* ILogger.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,19 +297,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D8EEF4051577A656003FEB5E /* ES2Renderer.mm in Sources */,
-				D8EEF4081577A656003FEB5E /* G3MWidget_iOS.mm in Sources */,
-				D8EEF42D1577B973003FEB5E /* G3MWidget.cpp in Sources */,
-				D8EEF4351577BC1C003FEB5E /* CompositeRenderer.cpp in Sources */,
-				D8EEF4391577BD80003FEB5E /* Context.cpp in Sources */,
-				D8EEF43D1577C435003FEB5E /* TouchEvent.cpp in Sources */,
-				CFF485A21577B35800FF703B /* Angle.cpp in Sources */,
-				383BD2FE1577C8130012AC53 /* Logger_iOS.cpp in Sources */,
-				CF05CCC21577B769007C336F /* Ellipsoid.cpp in Sources */,
-				CF05CCC51577B907007C336F /* Vector3D.cpp in Sources */,
-				CF05CCC81577BD8A007C336F /* Geodetic3D.cpp in Sources */,
-				CF05CCCB1577BF40007C336F /* Geodetic2D.cpp in Sources */,
-				CF05CCCF1577CACC007C336F /* Vector2D.cpp in Sources */,
+				383BD37D1577EDC00012AC53 /* Logger_iOS.cpp in Sources */,
+				383BD3851577EDDB0012AC53 /* ES2Renderer.mm in Sources */,
+				383BD3871577EDDB0012AC53 /* G3MWidget_iOS.mm in Sources */,
+				383BD3951577EE500012AC53 /* CompositeRenderer.cpp in Sources */,
+				383BD3971577EE500012AC53 /* Context.cpp in Sources */,
+				383BD3991577EE500012AC53 /* G3MWidget.cpp in Sources */,
+				383BD39C1577EE500012AC53 /* TouchEvent.cpp in Sources */,
+				383BD3AB1577EE5A0012AC53 /* Angle.cpp in Sources */,
+				383BD3AD1577EE5A0012AC53 /* Ellipsoid.cpp in Sources */,
+				383BD3AF1577EE5A0012AC53 /* Geodetic2D.cpp in Sources */,
+				383BD3B11577EE5A0012AC53 /* Geodetic3D.cpp in Sources */,
+				383BD3B41577EE5A0012AC53 /* Vector2D.cpp in Sources */,
+				383BD3B61577EE5A0012AC53 /* Vector3D.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

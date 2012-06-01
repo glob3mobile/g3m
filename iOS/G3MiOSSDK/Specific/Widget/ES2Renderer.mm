@@ -8,7 +8,7 @@
 
 #import "ES2Renderer.h"
 
-#include "G3MWidget.cpp"
+#include "G3MWidget.h"
 
 
 // uniform index
@@ -64,8 +64,8 @@ enum {
 }
 
 
-- (void)render: (void*) g3w{
-
+- (void)render: (void*) widget
+{
     // This application only creates a single context which is already set current at this point.
     // This call is redundant, but needed if dealing with multiple contexts.	
     [EAGLContext setCurrentContext:context];
@@ -81,16 +81,19 @@ enum {
     // pintamos la escena
     glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
     
-    bool result = ((G3MWidget*)g3w)->render();
-    
+    //bool result = ((G3MWidget*)g3w)->render();
+    if (widget) {
+//      widget->render();
+      bool result = ((G3MWidget*)widget)->render();
+    }
 
 
-    if (result) {
+//    if (result) {
         // This application only creates a single color renderbuffer which is already bound at this point.
         // This call is redundant, but needed if dealing with multiple renderbuffers.
         glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
         [context presentRenderbuffer:GL_RENDERBUFFER];
-    }
+//    }
 }
 
 

@@ -6,8 +6,6 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#include <iostream>
-
 #include "TouchEvent.h"
 
 Pointer::Pointer(Vector2D pos, Vector2D prev):
