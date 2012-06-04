@@ -15,6 +15,10 @@ public class Vector2D
   private final double _y;
 
 
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//	Vector2D operator =(Vector2D v);
+
+
   public Vector2D(double x, double y)
   {
 	  _x = x;
@@ -28,14 +32,6 @@ public class Vector2D
 	  _y = v._y;
 
   }
-
-//C++ TO JAVA CONVERTER NOTE: This 'copyFrom' method was converted from the original C++ copy assignment operator:
-//ORIGINAL LINE: Vector2D& operator =(const Vector2D& v)
-	public final Vector2D copyFrom(Vector2D v)
-	{
-		Vector2D v2 = new Vector2D(v);
-		return v2;
-	}
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Vector2D normalized() const;

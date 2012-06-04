@@ -1,10 +1,10 @@
 package org.glob3.mobile.generated; 
 public enum TouchEventType
 {
-	Down,
-	Up,
-	Move,
-	LongPress;
+  Down,
+  Up,
+  Move,
+  LongPress;
 
 	public int getValue()
 	{

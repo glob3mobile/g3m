@@ -22,12 +22,16 @@ public class CompositeRenderer extends Renderer
 {
   private java.util.ArrayList<Renderer> _renderers = new java.util.ArrayList<Renderer>();
 
-  private InitializationContext _ic = new InitializationContext();
+  private final InitializationContext _ic;
 
   public CompositeRenderer()
   {
-	  _ic = new InitializationContext(null);
+	  _ic = null;
+	_renderers = new java.util.ArrayList<Renderer>();
+  }
 
+  public void dispose()
+  {
   }
 
   public final void initialize(InitializationContext ic)
@@ -42,6 +46,8 @@ public class CompositeRenderer extends Renderer
 
   public final int render(RenderContext rc)
   {
+	//rc->getLogger()->logInfo("CompositeRenderer::render()");
+  
 	int min = 9999;
 	for (int i = 0; i < _renderers.size(); i++)
 	{
@@ -53,9 +59,7 @@ public class CompositeRenderer extends Renderer
   }
 
 //C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
-//  boolean onTapEvent(TapEvent& event);
-//C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
-//  boolean onTouchEvent(TouchEvent &event);
+//  boolean onTouchEvent(const TouchEvent& event);
 
   public final void addRenderer(Renderer renderer)
   {
@@ -64,21 +68,7 @@ public class CompositeRenderer extends Renderer
   }
 }
 //C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
-//boolean CompositeRenderer::onTapEvent(TapEvent& event)
-//{
-//  for (int i = 0; i < _renderers.size(); i++)
-//  {
-//	//THE EVENT IS PROCESSED ONLY BY THE FIRST RENDERER
-//	if (_renderers[i]->onTapEvent(event))
-//	{
-//	  return true;
-//	}
-//  }
-//  return false;
-//}
-
-//C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
-//boolean CompositeRenderer::onTouchEvent(TouchEvent &event)
+//boolean CompositeRenderer::onTouchEvent(const TouchEvent &event)
 //{
 //  for (int i = 0; i < _renderers.size(); i++)
 //  {

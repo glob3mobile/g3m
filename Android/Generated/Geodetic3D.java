@@ -25,9 +25,6 @@ public class Geodetic3D
 	return new Geodetic3D(Angle.zero(), Angle.zero(), 0);
   }
 
-  /**
-   * Constructor of Geodetic3D where latitude, longitude and altitude are set to zero.
-   */
   public Geodetic3D(Angle latitude, Angle longitude, double height)
   {
 	  _latitude = new Angle(latitude);
