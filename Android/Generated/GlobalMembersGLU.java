@@ -4,7 +4,6 @@ public class GlobalMembersGLU
 
 
 
-	//#define PI 3.141592653589793
 	//#define DEG_TO_RAD 0.017453292519943
 
 

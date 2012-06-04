@@ -2,9 +2,9 @@ package org.glob3.mobile.generated;
 public class TouchEvent
 {
   private final TouchEventType _eventType;
-  private final java.util.ArrayList<const Pointer> _pointers = new java.util.ArrayList<const Pointer>();
+  private final java.util.ArrayList<Pointer> _pointers = new java.util.ArrayList<Pointer>();
 
-  private TouchEvent(TouchEventType type, java.util.ArrayList<const Pointer> pointers)
+  private TouchEvent(TouchEventType type, java.util.ArrayList<Pointer> pointers)
   {
 	  _eventType = type;
 	  _pointers = pointers;
@@ -17,7 +17,7 @@ public class TouchEvent
 
   }
 
-  public static TouchEvent create(TouchEventType type, java.util.ArrayList<const Pointer> pointers)
+  public static TouchEvent create(TouchEventType type, java.util.ArrayList<Pointer> pointers)
   {
 	return new TouchEvent(type, pointers);
   }
@@ -25,7 +25,7 @@ public class TouchEvent
   public static TouchEvent create(TouchEventType type, Pointer pointer)
   {
 	Pointer[] pa = { pointer };
-	final java.util.ArrayList<const Pointer> pointers = new java.util.ArrayList<const Pointer>(pa, pa+1);
+	final java.util.ArrayList<Pointer> pointers = new java.util.ArrayList<Pointer>(pa, pa+1);
 	return TouchEvent.create(type, pointers);
   }
 

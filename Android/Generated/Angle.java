@@ -17,10 +17,10 @@ package org.glob3.mobile.generated;
 
 
 
-//#define PI 3.14159265358979323846
 //C++ TO JAVA CONVERTER NOTE: The following #define macro was replaced in-line:
-//#define PI_TIMES_180 (PI * 180.0)
+//#define PI_TIMES_180 (M_PI * 180.0)
 //#define THRESHOLD 1e-5
+
 
 
 public class Angle
@@ -41,7 +41,7 @@ public class Angle
 
   public static Angle fromRadians(double radians)
   {
-	return Angle.fromDegrees(radians * (180.0 / DefineConstants.PI));
+	return Angle.fromDegrees(radians * (180.0 / Math.PI));
   }
 
   public static Angle zero()
@@ -59,14 +59,14 @@ public class Angle
 //ORIGINAL LINE: double sinus() const
   public final double sinus()
   {
-	return Math.sin(_degrees / DefineConstants.PI * 180.0);
+	return Math.sin(_degrees / Math.PI * 180.0);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: double cosinus() const
   public final double cosinus()
   {
-	return Math.cos(_degrees / DefineConstants.PI * 180.0);
+	return Math.cos(_degrees / Math.PI * 180.0);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -80,7 +80,7 @@ public class Angle
 //ORIGINAL LINE: double radians() const
   public final double radians()
   {
-	return _degrees / DefineConstants.PI * 180.0;
+	return _degrees / Math.PI * 180.0;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

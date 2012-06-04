@@ -10,8 +10,6 @@ package org.glob3.mobile.generated;
 
 
 
-//#define PI 3.141592653589793
-
 
 /*
  *  Camera.hpp
@@ -36,6 +34,7 @@ package org.glob3.mobile.generated;
 //#define NUM_FRAMES_GO_TO_POS 100
 
 //#define MIN_CAMERA_HEIGHT 65
+
 
 
 public class ProjectedPixel

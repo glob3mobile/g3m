@@ -29,6 +29,7 @@
 #define MIN_CAMERA_HEIGHT               65    // minimum camera height from ground (in m)
 
 
+
 struct ProjectedPixel {
     double x, y;    // pixel coordinates
     double incl;    // inclination cosinus

@@ -18,6 +18,6 @@ Angle Angle::clampedTo(const Angle& min,
   if (_degrees > max._degrees) {
     return max;
   }
-  
+    
   return *this;
 }
