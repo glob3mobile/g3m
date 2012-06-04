@@ -21,7 +21,7 @@ void CompositeRenderer::addRenderer(Renderer *renderer) {
   renderer->initialize(_ic);
 }
 
-int CompositeRenderer::render(const RenderContext* rc) {
+int CompositeRenderer::render(const RenderContext& rc) {
   //rc->getLogger()->logInfo("CompositeRenderer::render()");
   
   int min = 9999;

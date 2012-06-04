@@ -13,13 +13,13 @@ G3MWidget* G3MWidget::create(IFactory* factory,
                              ILogger *logger,
                              IGL* gl,
                              const Planet* planet,
-                             Renderer* renderer)
+                             Renderer* renderer, int width, int height)
 {
   if (logger != NULL) {
     logger->logInfo("Creating G3MWidget...");
   }
   
-  return new G3MWidget(factory, logger, gl, planet, renderer);
+  return new G3MWidget(factory, logger, gl, planet, renderer, width, height);
 }
 
 G3MWidget::~G3MWidget()
@@ -33,9 +33,16 @@ G3MWidget::~G3MWidget()
 
 bool G3MWidget::render()
 {
-  RenderContext rc(_factory, _logger, _planet, _gl);
+  RenderContext rc(_factory, _logger, _planet, _gl, _camera);
   
-  _renderer->render(&rc);
+  // Clear the scene
+  //glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+  //glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
+  _gl->ClearScreen(1, 1, 0);
+  _gl->EnableVertices();
+
+  
+  _renderer->render(rc);
   
   return true;
 }

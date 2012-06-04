@@ -13,18 +13,21 @@
 #include "IGL.hpp"
 #include "Planet.hpp"
 
+class Camera;
+
 class Context {
 protected:
   const IFactory * _factory;
   const ILogger*   _logger;
   const Planet*    _planet;
+
   
   Context(const IFactory *factory,
           const ILogger* logger,
           const Planet* planet) :
   _factory(factory),
   _logger(logger),
-  _planet(planet) {
+  _planet(planet){
     
   }
   
@@ -58,20 +61,25 @@ public:
 class RenderContext: public Context {
 private:
   IGL * _gl;
+  Camera*    _camera;
   
 public:
   RenderContext(IFactory *factory,
                 ILogger* logger,
                 const Planet* planet,
-                IGL *gl) :
+                IGL *gl,
+                Camera* camera) :
   Context(factory, logger, planet),
-  _gl(gl) {
+  _gl(gl),
+  _camera(camera) {
     
   }
   
   IGL *getGL() const {
     return _gl;
   }
+  
+  Camera* getCamera() const { return _camera;}
 };
 
 #endif

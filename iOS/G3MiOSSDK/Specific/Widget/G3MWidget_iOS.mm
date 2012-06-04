@@ -15,6 +15,10 @@
 #include "Planet.hpp"
 #include "Logger_iOS.hpp"
 #include "Factory_iOS.hpp"
+#include "GL2.hpp"
+
+#include "CameraRenderer.hpp"
+#include "DummyRenderer.hpp"
 
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
@@ -60,17 +64,22 @@
     }
     
     // create GLOB3M WIDGET
-    //int w = [self frame].size.width;
-    //int h = [self frame].size.height;
+    int width = [self frame].size.width;
+    int height = [self frame].size.height;
     
     
     IFactory *factory = new Factory_iOS();
     ILogger *logger = new Logger_iOS(ErrorLevel);
-    int __TODO_create_gl;
-    IGL* gl  = NULL;
+    IGL* gl  = new GL2();
     
     CompositeRenderer* comp = new CompositeRenderer();
-    _widget = G3MWidget::create(factory, logger, gl, Planet::createEarth(), comp); 
+    CameraRenderer *cameraRenderer = new CameraRenderer();
+    comp->addRenderer(cameraRenderer);
+    
+    DummyRenderer* dum = new DummyRenderer();
+    comp->addRenderer(dum);
+    
+    _widget = G3MWidget::create(factory, logger, gl, Planet::createEarth(), comp, width, height); 
     
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);

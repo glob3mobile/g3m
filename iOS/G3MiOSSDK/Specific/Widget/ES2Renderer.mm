@@ -84,10 +84,10 @@ enum {
   // Use shader program
   //sceneController->GetRenderContext()->GetGL()->UseProgram(program);
   
-  // Clear the scene
-  glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
   
+  widget->getGL()->UseProgram(program);
   bool result = widget->render();
+    
   
   if (result) {
     int __check_with_agustin_result;
