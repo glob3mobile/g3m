@@ -12,9 +12,7 @@
 #include "Renderer.hpp"
 
 class DummyRenderer: public Renderer {
-
 public:
-
   void initialize(const InitializationContext* ic);  
   
   int render(const RenderContext& rc);

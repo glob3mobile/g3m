@@ -8,10 +8,12 @@
 
 #include "DummyRenderer.hpp"
 
-void DummyRenderer::initialize(const InitializationContext* ic) {
+void DummyRenderer::initialize(const InitializationContext* ic)
+{
 }
 
-bool DummyRenderer::onTouchEvent(const TouchEvent& event) {
+bool DummyRenderer::onTouchEvent(const TouchEvent& event)
+{
   return false;
 }
 
@@ -21,17 +23,17 @@ int DummyRenderer::render(const RenderContext& rc)
   float *vertices = new float[res * res * 3];
   int numIndices = 2 * (res - 1) * (res + 1);
   unsigned char *index = new unsigned char[numIndices];
-  unsigned char *wIndex = new unsigned char[numIndices];
   
   // create vertices
   float size = 1e7;
   int n = 0;
-  for (int j = 0; j < res; j++)
+  for (int j = 0; j < res; j++) {
     for (int i = 0; i < res; i++) {
       vertices[n++] = (float) 0;
       vertices[n++] = (float) (-size + i / (float) (res - 1) * 2*size);
       vertices[n++] = (float) (size - j / (float) (res - 1) * 2*size);
     }
+  }
   
   n = 0;
   for (int j = 0; j < res - 1; j++) {
@@ -48,7 +50,7 @@ int DummyRenderer::render(const RenderContext& rc)
   // obtaing gl object reference
   IGL *gl = rc.getGL();
   
-  // draw a white square
+  // draw a red square
   gl->Color((float) 1, (float) 0, (float) 0);
   
   // insert pointers
@@ -61,15 +63,10 @@ int DummyRenderer::render(const RenderContext& rc)
   gl->DisablePolygonOffset();
   gl->PopMatrix();
   gl->EnableTextures();
-   
+  
   
   delete[] index;
   delete[] vertices;
-  delete[] wIndex;
   
   return 9999;
 }
-
-
-
-
