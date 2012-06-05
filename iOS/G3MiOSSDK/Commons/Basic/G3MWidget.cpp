@@ -42,12 +42,12 @@ bool G3MWidget::render()
   _gl->EnableVertices();
 
   
-  _renderer->render(rc);
+  _renderer->render(&rc);
   
   return true;
 }
 
-void G3MWidget::onTouchEvent(const TouchEvent &event)
+void G3MWidget::onTouchEvent(const TouchEvent* event)
 {
   _renderer->onTouchEvent(event);
 }

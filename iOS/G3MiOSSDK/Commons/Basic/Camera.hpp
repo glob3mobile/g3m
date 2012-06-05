@@ -59,7 +59,7 @@ public:
     /*
     * Sets camera params at the beginning of every frame.
 	*/
-    void Draw(const RenderContext &rc);
+    void Draw(const RenderContext* rc);
     /* 
      * Returns opengl lookat matrix.
      * @param m The array where the data will be stored.

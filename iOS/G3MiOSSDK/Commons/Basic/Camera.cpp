@@ -31,7 +31,7 @@ void Camera::ResizeViewport(int width, int height) {
 }
 
 
-void Camera::Draw(const RenderContext &rc) {
+void Camera::Draw(const RenderContext* rc) {
     double znear;
 
     // update znear
@@ -50,7 +50,7 @@ void Camera::Draw(const RenderContext &rc) {
     Glu::ComputeProjectionMatrix(-0.3 / ratioScreen * znear, 0.3 / ratioScreen * znear, -0.3 * znear, 0.3 * znear, znear, 10000 * znear, _projection);
 
     // obtaing gl object reference
-    IGL *gl = rc.getGL();
+    IGL *gl = rc->getGL();
     gl->SetProjection(_projection);
 
     // make the lookat

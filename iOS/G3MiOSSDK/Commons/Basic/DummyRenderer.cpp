@@ -12,12 +12,12 @@ void DummyRenderer::initialize(const InitializationContext* ic)
 {
 }
 
-bool DummyRenderer::onTouchEvent(const TouchEvent& event)
+bool DummyRenderer::onTouchEvent(const TouchEvent* event)
 {
   return false;
 }
 
-int DummyRenderer::render(const RenderContext& rc)
+int DummyRenderer::render(const RenderContext* rc)
 {
   int res = 12;
   float *vertices = new float[res * res * 3];
@@ -48,7 +48,7 @@ int DummyRenderer::render(const RenderContext& rc)
   
   
   // obtaing gl object reference
-  IGL *gl = rc.getGL();
+  IGL *gl = rc->getGL();
   
   // draw a red square
   gl->Color((float) 1, (float) 0, (float) 0);
