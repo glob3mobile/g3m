@@ -17,25 +17,6 @@
 class Globe{};
 
 class G3MWidget {
-private:
-  G3MWidget(IFactory* factory,
-            ILogger *logger,
-            IGL* gl,
-            const Planet* planet,
-            Renderer* renderer, int width, int height):
-  _factory(factory),
-  _logger(logger),
-  _gl(gl),
-  _planet(planet),
-  _renderer(renderer)
-  {
-    
-    _camera = new Camera(width, height);
-    
-    InitializationContext ic(_factory, _logger, _planet);
-    _renderer->initialize(&ic);
-  }
-  
 public:
   
   static G3MWidget* create(IFactory* factory,
@@ -52,13 +33,31 @@ public:
   
   IGL * getGL() const{ return _gl;} 
   
+  
 private:
   IFactory*     _factory;
   ILogger*      _logger;
   IGL*          _gl;
   const Planet* _planet;
   Renderer*     _renderer;
-  Camera *      _camera;
+  Camera*       _camera;
+  
+  
+  G3MWidget(IFactory* factory,
+            ILogger *logger,
+            IGL* gl,
+            const Planet* planet,
+            Renderer* renderer, int width, int height):
+  _factory(factory),
+  _logger(logger),
+  _gl(gl),
+  _planet(planet),
+  _renderer(renderer),
+  _camera(new Camera(width, height))
+  {
+    InitializationContext ic(_factory, _logger, _planet);
+    _renderer->initialize(&ic);
+  }
 };
 
 #endif

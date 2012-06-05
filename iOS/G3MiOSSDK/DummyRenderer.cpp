@@ -8,11 +8,12 @@
 
 #include "DummyRenderer.hpp"
 
-void DummyRenderer::initialize(const InitializationContext* ic){}  
+void DummyRenderer::initialize(const InitializationContext* ic) {
+}
 
-
-bool DummyRenderer::onTouchEvent(const TouchEvent& event){}
-
+bool DummyRenderer::onTouchEvent(const TouchEvent& event) {
+  return false;
+}
 
 int DummyRenderer::render(const RenderContext& rc)
 {

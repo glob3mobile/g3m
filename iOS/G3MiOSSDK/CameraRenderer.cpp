@@ -17,4 +17,9 @@ int CameraRenderer::render(const RenderContext& rc)
   rc.getCamera()->Draw(rc);
 }
 
-bool CameraRenderer::onTouchEvent(const TouchEvent& event){}
+bool CameraRenderer::onTouchEvent(const TouchEvent& event){
+
+  int __TODO_JM_at_work;
+  
+  return false;
+}
