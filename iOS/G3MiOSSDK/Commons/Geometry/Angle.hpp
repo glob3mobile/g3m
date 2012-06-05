@@ -9,12 +9,12 @@
 #ifndef G3MiOSSDK_Angle_hpp
 #define G3MiOSSDK_Angle_hpp
 
+#include <math.h>
 
-#define PI            3.14159265358979323846
-#define PI_TIMES_180  (PI * 180.0)
+#define PI_TIMES_180  (M_PI * 180.0)
 #define THRESHOLD     1e-5
 
-#include <math.h>
+
 
 class Angle {
 private:
@@ -31,7 +31,7 @@ public:
   }
   
   static Angle fromRadians(const double radians) {
-    return Angle::fromDegrees(radians * (180.0 / PI));
+    return Angle::fromDegrees(radians * (180.0 / M_PI));
   }
   
   static Angle zero() {

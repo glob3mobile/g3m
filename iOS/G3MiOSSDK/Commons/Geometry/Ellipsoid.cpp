@@ -102,8 +102,8 @@ Vector3D Ellipsoid::toVector3D(const Geodetic3D& geodetic) const {
 Geodetic2D Ellipsoid::toGeodetic2D(const Vector3D& positionOnEllipsoid) const {
   Vector3D n = geodeticSurfaceNormal(positionOnEllipsoid);
   
-  return Geodetic2D(Angle::fromDegrees(asin(n.z() / n.length()) * 180 / PI),
-                    Angle::fromDegrees(atan2(n.y(), n.x()) * 180 / PI));;
+  return Geodetic2D(Angle::fromDegrees(asin(n.z() / n.length()) * 180 / M_PI),
+                    Angle::fromDegrees(atan2(n.y(), n.x()) * 180 / M_PI));;
 }
 
 
@@ -232,7 +232,7 @@ double Ellipsoid::computePreciseLatLonDistance(const Geodetic2D& g1,
   //double latP=lat/180*PI, lonP=lon/180*PI;
   //double latP=g.latitude()/180*PI, lonP=g.longitude()/180*PI;
   double latP = g2.latitude().radians(), lonP = g2.longitude().radians();
-  double latQ = medLat / 180 * PI, lonQ = medLon / 180 * PI;
+  double latQ = medLat / 180 * M_PI, lonQ = medLon / 180 * M_PI;
   double coslatP = cos(latP), sinlatP = sin(latP);
   double coslonP = cos(lonP), sinlonP = sin(lonP);
   double coslatQ = cos(latQ), sinlatQ = sin(latQ);
@@ -259,5 +259,5 @@ double Ellipsoid::computeFastLatLonDistance(const Geodetic2D& g1,
   double diflon = fabs(g2.longitude().degrees() - medLon);
   if (diflon > 180) diflon = 360 - diflon;
   double dist = sqrt(diflat * diflat + diflon * diflon);
-  return dist * PI / 180 * R;
+  return dist * M_PI / 180 * R;
 }

@@ -11,8 +11,6 @@
 #include <math.h>
 #include <string.h>
 
-#define PI 3.141592653589793
-
 #include "GLU.hpp"
 
 #include "Camera.hpp"
