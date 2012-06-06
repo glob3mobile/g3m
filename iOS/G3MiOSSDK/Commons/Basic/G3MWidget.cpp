@@ -38,8 +38,8 @@ bool G3MWidget::render()
   // Clear the scene
   //glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
   //glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
-  _gl->ClearScreen(1, 1, 0);
-  _gl->EnableVertices();
+  _gl->clearScreen(1, 1, 0);
+  _gl->enableVertices();
   
   int timeToRedraw = _renderer->render(&rc);
   

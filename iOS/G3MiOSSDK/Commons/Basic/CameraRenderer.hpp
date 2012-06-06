@@ -11,8 +11,27 @@
 
 #include "Renderer.hpp"
 
+#include "Camera.hpp"
+
 class CameraRenderer: public Renderer
 {
+private:
+
+  Camera * _camera;   //Camera used at current frame
+  const Planet * _planet;   //Planet
+  
+  Camera _camera0;                //Initial Camera saved on Down event
+  MutableVector3D _initialPoint;  //Initial point at dragging
+  
+  void onDown(const TouchEvent& event);
+  void onMove(const TouchEvent& event);
+  void onUp(const TouchEvent& event);
+  
+  Vector3D intersectionRayWithPlanet(Vector3D pos, Vector3D ray);
+  
+public:
+  
+  CameraRenderer();
   
   void initialize(const InitializationContext* ic);  
   

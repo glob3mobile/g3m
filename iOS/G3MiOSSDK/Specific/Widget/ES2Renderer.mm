@@ -82,7 +82,7 @@ enum {
   glViewport(0, 0, backingWidth, backingHeight);
   
   // Use shader program
-  widget->getGL()->UseProgram(program);
+  widget->getGL()->useProgram(program);
   
   bool result = widget->render();
   if (result) {
