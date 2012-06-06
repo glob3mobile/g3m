@@ -85,7 +85,7 @@ enum {
   //sceneController->GetRenderContext()->GetGL()->UseProgram(program);
   
   
-  widget->getGL()->UseProgram(program);
+  widget->getGL()->useProgram(program);
   bool result = widget->render();
     
   

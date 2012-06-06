@@ -11,7 +11,9 @@
 void DummyRenderer::initialize(const InitializationContext* ic){}  
 
 
-bool DummyRenderer::onTouchEvent(const TouchEvent& event){}
+bool DummyRenderer::onTouchEvent(const TouchEvent& event){
+  return false;
+}
 
 
 int DummyRenderer::render(const RenderContext& rc)
@@ -48,18 +50,18 @@ int DummyRenderer::render(const RenderContext& rc)
   IGL *gl = rc.getGL();
   
   // draw a white square
-  gl->Color((float) 1, (float) 0, (float) 0);
+  gl->color((float) 1, (float) 0, (float) 0);
   
   // insert pointers
-  gl->DisableTextures();
-  gl->VertexPointer(3, 0, vertices);
+  gl->disableTextures();
+  gl->vertexPointer(3, 0, vertices);
   
-  gl->PushMatrix();
-  gl->EnablePolygonOffset(1.0f, 5.0f);
-  gl->DrawTriangleStrip(n, index);
-  gl->DisablePolygonOffset();
-  gl->PopMatrix();
-  gl->EnableTextures();
+  gl->pushMatrix();
+  gl->enablePolygonOffset(1.0f, 5.0f);
+  gl->drawTriangleStrip(n, index);
+  gl->disablePolygonOffset();
+  gl->popMatrix();
+  gl->enableTextures();
    
   
   delete[] index;

@@ -13,69 +13,73 @@
 
 #include "Vector2D.hpp"
 
-
-class Pointer {
-private:
-  const Vector2D _pos;
-  const Vector2D _prevPos;
-  
-  Pointer& operator=(const Pointer& v);
-  
-public:
-  Pointer(const Pointer& other) : _pos(other._pos), _prevPos(other._prevPos) {
-    
-  }
-  
-  Pointer(const Vector2D& pos, const Vector2D& prev) : _pos(pos), _prevPos(prev) { }
-  
-  const Vector2D getPos() const { return _pos; }
-  const Vector2D getPrevPos() const { return _prevPos; }
-};
-
-
-enum TouchEventType {
-  Down,
-  Up,
-  Move,
-  LongPress
-};
-
-
-class TouchEvent {
-private:
-  const TouchEventType       _eventType;
-  const std::vector<Pointer> _pointers;
-  
-  TouchEvent(const TouchEventType& type,
-             const std::vector<Pointer> pointers): _eventType(type), _pointers(pointers) { }
-  
-public:
-  TouchEvent(const TouchEvent& other): _eventType(other._eventType), _pointers(other._pointers) {
-    
-  }
-  
-  static TouchEvent create(const TouchEventType& type,
-                           const std::vector<Pointer> pointers) {
-    return TouchEvent(type, pointers);
-  }
-  
-  static TouchEvent create(const TouchEventType& type,
-                           const Pointer& pointer) {
-    const Pointer pa[] = { pointer };
-    const std::vector<Pointer> pointers = std::vector<Pointer>(pa, pa+1);
-    return TouchEvent::create(type, pointers);
-  }
-  
-  TouchEventType getType() {
-    return _eventType;
-  }  
-};
-
-
-class TapEvent : Vector2D{
-public:
-  TapEvent(double x, double y): Vector2D(x,y) {}
-};
+#include "TouchEvent.hpp"
+//
+//
+//class Touch {
+//private:
+//  const Vector2D _pos;
+//  const Vector2D _prevPos;
+//  
+//  Touch& operator=(const Touch& v);
+//  
+//public:
+//  Touch(const Touch& other) : _pos(other._pos), _prevPos(other._prevPos) {
+//    
+//  }
+//  
+//  Touch(const Vector2D& pos, const Vector2D& prev) : _pos(pos), _prevPos(prev) { }
+//  
+//  const Vector2D getPos() const { return _pos; }
+//  const Vector2D getPrevPos() const { return _prevPos; }
+//};
+//
+//
+//enum TouchEventType {
+//  Down,
+//  Up,
+//  Move,
+//  LongPress
+//};
+//
+//
+//class TouchEvent {
+//private:
+//  const TouchEventType       _eventType;
+//  const std::vector<Touch> _touchs;
+//  
+//  TouchEvent(const TouchEventType& type,
+//             const std::vector<Touch> Touchs): _eventType(type), _touchs(Touchs) { }
+//  
+//public:
+//  TouchEvent(const TouchEvent& other): _eventType(other._eventType), _touchs(other._touchs) {
+//    
+//  }
+//  
+//  static TouchEvent create(const TouchEventType& type,
+//                           const std::vector<Touch> Touchs) {
+//    return TouchEvent(type, Touchs);
+//  }
+//  
+//  static TouchEvent create(const TouchEventType& type,
+//                           const Touch& Touch) {
+//    const class Touch pa[] = { Touch };
+//    const std::vector<class Touch> Touchs = std::vector<class Touch>(pa, pa+1);
+//    return TouchEvent::create(type, Touchs);
+//  }
+//  
+//  TouchEventType getType() const {
+//    return _eventType;
+//  }  
+//  
+//  Touch getTouch(int i){ return _touchs[i];}
+//};
+//
+//
+//class TapEvent : Vector2D{
+//public:
+//  TapEvent(double x, double y): Vector2D(x,y) {}
+//};
 
 
 #endif

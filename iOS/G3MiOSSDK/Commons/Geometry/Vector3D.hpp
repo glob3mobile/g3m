@@ -11,6 +11,9 @@
 
 #include <math.h>
 
+#include "MutableVector3D.hpp"
+#include "MutableMatrix44D.hpp"
+
 class Vector3D {
 private:
   const double _x;
@@ -26,6 +29,8 @@ public:
            const double z): _x(x), _y(y), _z(z) {
     
   }
+  
+  Vector3D(const MutableVector3D& mv): _x(mv.x()), _y(mv.y()), _z(mv.z()){}
   
   Vector3D(const Vector3D &v): _x(v._x), _y(v._y), _z(v._z) {
     
@@ -101,6 +106,17 @@ public:
   
   double z() const {
     return _z;
+  }
+  
+  Vector3D applyTransform(const MutableMatrix44D &m) const
+  {
+    const double * M = m.getMatrix();
+    
+    Vector3D v(_x * M[0] + _y * M[4] + _z * M[8] + M[12],
+             _x * M[1] + _y * M[5] + _z * M[9] + M[13],
+             _x * M[2] + _y * M[6] + _z * M[10] + M[14]);
+    
+    return v;
   }
   
 };
