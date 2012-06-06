@@ -42,14 +42,6 @@ public class Vector3D
 
   }
 
-  public Vector3D()
-  {
-	  _x = 0;
-	  _y = 0;
-	  _z = 0;
-
-  }
-
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Vector3D normalized() const
   public final Vector3D normalized()

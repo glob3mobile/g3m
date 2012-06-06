@@ -89,9 +89,9 @@ public class Camera
 
 	//void ApplyTransform (double M[16]);	
 
-	private Vector3D _pos = new Vector3D(); // position
-	private Vector3D _center = new Vector3D(); // center of view
-	private Vector3D _up = new Vector3D(); // vertical vector
+	private Vector3D _pos ; // position
+	private Vector3D _center ; // center of view
+	private Vector3D _up ; // vertical vector
 
 	//std::vector <ICameraStopEventListener *> listeners;
 

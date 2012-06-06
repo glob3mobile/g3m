@@ -21,10 +21,10 @@ package org.glob3.mobile.generated;
 
 public class Ellipsoid
 {
-  private final Vector3D _radii = new Vector3D();
-  private final Vector3D _radiiSquared = new Vector3D();
-  private final Vector3D _radiiToTheFourth = new Vector3D();
-  private final Vector3D _oneOverRadiiSquared = new Vector3D();
+  private final Vector3D _radii ;
+  private final Vector3D _radiiSquared ;
+  private final Vector3D _radiiToTheFourth ;
+  private final Vector3D _oneOverRadiiSquared ;
 
 
 
