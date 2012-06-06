@@ -18,12 +18,12 @@ _initialPoint(0,0,0)
 
 void CameraRenderer::initialize(const InitializationContext* ic){}
 
-int CameraRenderer::render(const RenderContext& rc)
+int CameraRenderer::render(const RenderContext* rc)
 {
-  _camera = rc.getCamera(); //Saving camera reference 
-  _planet = rc.getPlanet();
+  _camera = rc->getCamera(); //Saving camera reference 
+  _planet = rc->getPlanet();
   
-  rc.getCamera()->draw(rc);
+  rc->getCamera()->draw(*rc);
   return 0;
 }
 
@@ -57,17 +57,17 @@ void CameraRenderer::onUp(const TouchEvent& event)
   
 }
 
-bool CameraRenderer::onTouchEvent(const TouchEvent& event)
+bool CameraRenderer::onTouchEvent(const TouchEvent* event)
 {
-  switch (event.getType()) {
+  switch (event->getType()) {
     case Down:
-      onDown(event);
+      onDown(*event);
       break;
     case Move:
-      onMove(event);
+      onMove(*event);
       break;
     case Up:
-      onUp(event);
+      onUp(*event);
     default:
       break;
   }

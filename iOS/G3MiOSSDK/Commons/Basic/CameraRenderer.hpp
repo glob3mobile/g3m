@@ -35,9 +35,9 @@ public:
   
   void initialize(const InitializationContext* ic);  
   
-  int render(const RenderContext& rc);
+  int render(const RenderContext* rc);
   
-  bool onTouchEvent(const TouchEvent& event);
+  bool onTouchEvent(const TouchEvent* event);
   
   
 };

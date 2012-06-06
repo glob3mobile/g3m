@@ -17,25 +17,6 @@
 class Globe{};
 
 class G3MWidget {
-private:
-  G3MWidget(IFactory* factory,
-            ILogger *logger,
-            IGL* gl,
-            const Planet* planet,
-            Renderer* renderer, int width, int height):
-  _factory(factory),
-  _logger(logger),
-  _gl(gl),
-  _planet(planet),
-  _renderer(renderer)
-  {
-    
-    _camera = new Camera(width, height);
-    
-    InitializationContext ic(_factory, _logger, _planet);
-    _renderer->initialize(&ic);
-  }
-  
 public:
   
   static G3MWidget* create(IFactory* factory,
@@ -48,9 +29,10 @@ public:
   
   bool render();
   
-  void onTouchEvent(const TouchEvent &event);
+  void onTouchEvent(const TouchEvent* event);
   
   IGL * getGL() const{ return _gl;} 
+  
   
 private:
   IFactory*     _factory;
@@ -58,7 +40,24 @@ private:
   IGL*          _gl;
   const Planet* _planet;
   Renderer*     _renderer;
-  Camera *      _camera;
+  Camera*       _camera;
+  
+  
+  G3MWidget(IFactory* factory,
+            ILogger *logger,
+            IGL* gl,
+            const Planet* planet,
+            Renderer* renderer, int width, int height):
+  _factory(factory),
+  _logger(logger),
+  _gl(gl),
+  _planet(planet),
+  _renderer(renderer),
+  _camera(new Camera(width, height))
+  {
+    InitializationContext ic(_factory, _logger, _planet);
+    _renderer->initialize(&ic);
+  }
 };
 
 #endif

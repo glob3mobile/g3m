@@ -59,7 +59,7 @@ public class CompositeRenderer extends Renderer
   }
 
 //C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
-//  boolean onTouchEvent(const TouchEvent& event);
+//  boolean onTouchEvent(const TouchEvent* event);
 
   public final void addRenderer(Renderer renderer)
   {
@@ -68,7 +68,7 @@ public class CompositeRenderer extends Renderer
   }
 }
 //C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
-//boolean CompositeRenderer::onTouchEvent(const TouchEvent &event)
+//boolean CompositeRenderer::onTouchEvent(const TouchEvent* event)
 //{
 //  for (int i = 0; i < _renderers.size(); i++)
 //  {

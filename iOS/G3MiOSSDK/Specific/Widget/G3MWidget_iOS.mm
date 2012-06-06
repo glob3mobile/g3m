@@ -19,6 +19,7 @@
 
 #include "CameraRenderer.hpp"
 #include "DummyRenderer.hpp"
+#include "MarksRenderer.hpp"
 
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
@@ -78,6 +79,10 @@
     
     DummyRenderer* dum = new DummyRenderer();
     comp->addRenderer(dum);
+    
+    MarksRenderer* marks = new MarksRenderer();
+    comp->addRenderer(marks);
+
     
     _widget = G3MWidget::create(factory, logger, gl, Planet::createEarth(), comp, width, height); 
     
@@ -198,7 +203,7 @@
   Vector2D prevPos(previous.x, previous.y);
   TouchEvent te(TouchEvent::create(Down, new Touch(pos, prevPos)));
   
-  ((G3MWidget*)[self widget])->onTouchEvent(te);
+  ((G3MWidget*)[self widget])->onTouchEvent(&te);
 }
 
 
@@ -225,7 +230,7 @@
   //TOUCH EVENT
   TouchEvent te( TouchEvent::create(Move, pointers) );
   
-  ((G3MWidget*)[self widget])->onTouchEvent(te);
+  ((G3MWidget*)[self widget])->onTouchEvent(&te);
 }
 
 
@@ -239,7 +244,7 @@
   Vector2D prevPos(previous.x, previous.y);
   TouchEvent te( TouchEvent::create(Up, new Touch(pos, prevPos)));
   
-  ((G3MWidget*)[self widget])->onTouchEvent(te);
+  ((G3MWidget*)[self widget])->onTouchEvent(&te);
 }
 
 - (void)dealloc {

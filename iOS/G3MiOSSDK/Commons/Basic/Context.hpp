@@ -60,8 +60,8 @@ public:
 
 class RenderContext: public Context {
 private:
-  IGL * _gl;
-  Camera*    _camera;
+  IGL*    _gl;
+  Camera* _camera;
   
 public:
   RenderContext(IFactory *factory,
@@ -75,11 +75,13 @@ public:
     
   }
   
-  IGL *getGL() const {
+  IGL* getGL() const {
     return _gl;
   }
   
-  Camera* getCamera() const { return _camera;}
+  Camera* getCamera() const {
+    return _camera;
+  }
 };
 
 #endif

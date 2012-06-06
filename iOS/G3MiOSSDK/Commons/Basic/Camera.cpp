@@ -48,7 +48,6 @@ void Camera::resizeViewport(int width, int height) {
     _viewport[3] = height;
 }
 
-
 void Camera::draw(const RenderContext &rc) {
     double znear;
 
@@ -72,7 +71,6 @@ void Camera::draw(const RenderContext &rc) {
 
     // make the lookat
     _lookAt = Glu::lookAtMatrix(_pos, _center, _up);
-  
     gl->loadMatrixf(_lookAt);
   
 }

@@ -13,7 +13,7 @@ public class RenderContext extends Context
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: IGL *getGL() const
+//ORIGINAL LINE: IGL* getGL() const
   public final IGL getGL()
   {
 	return _gl;
@@ -23,6 +23,6 @@ public class RenderContext extends Context
 //ORIGINAL LINE: Camera* getCamera() const
   public final Camera getCamera()
   {
-	  return _camera;
+	return _camera;
   }
 }

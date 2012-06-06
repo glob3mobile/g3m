@@ -60,7 +60,7 @@ public:
     for (int k = 0; k < 4; k++) printf("%d ",  _viewport[k] );
     printf("\n\n");
   }
-  
+
 private:
   int _width, _height;
   

@@ -17,7 +17,7 @@ public abstract class Renderer
   public abstract int render(RenderContext rc);
 
 //C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
-//  virtual boolean onTouchEvent(const TouchEvent& event) = 0;
+//  virtual boolean onTouchEvent(const TouchEvent* event) = 0;
 
   public void dispose()
   {

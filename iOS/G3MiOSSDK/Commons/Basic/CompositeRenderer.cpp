@@ -21,7 +21,7 @@ void CompositeRenderer::addRenderer(Renderer *renderer) {
   renderer->initialize(_ic);
 }
 
-int CompositeRenderer::render(const RenderContext& rc) {
+int CompositeRenderer::render(const RenderContext* rc) {
   //rc->getLogger()->logInfo("CompositeRenderer::render()");
   
   int min = 9999;
@@ -32,7 +32,7 @@ int CompositeRenderer::render(const RenderContext& rc) {
   return min;
 }
 
-bool CompositeRenderer::onTouchEvent(const TouchEvent &event) {
+bool CompositeRenderer::onTouchEvent(const TouchEvent* event) {
   for (int i = 0; i < _renderers.size(); i++) {
     //THE EVENT IS PROCESSED ONLY BY THE FIRST RENDERER
     if (_renderers[i]->onTouchEvent(event)) {
