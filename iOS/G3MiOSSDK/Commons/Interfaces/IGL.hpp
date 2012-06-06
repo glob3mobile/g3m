@@ -90,7 +90,7 @@ public:
   
   virtual void LineWidth(float width) = 0;
   
-  
+  // a virtual destructor is needed for conversion to Java
   virtual ~IGL() {};
 };
 

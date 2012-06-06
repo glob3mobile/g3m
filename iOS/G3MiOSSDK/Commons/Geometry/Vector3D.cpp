@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#include <Vector3D.hpp>
+#include "Vector3D.hpp"
 
 Vector3D Vector3D::normalized() const
 {

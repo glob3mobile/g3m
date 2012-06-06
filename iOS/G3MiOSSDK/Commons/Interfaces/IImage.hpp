@@ -14,6 +14,9 @@ public:
   
   virtual void scale(unsigned int size) = 0;
   virtual void combine(IImage *image) = 0;
+  
+  // a virtual destructor is needed for conversion to Java
+  virtual ~IImage() {}
 };
 
 #endif

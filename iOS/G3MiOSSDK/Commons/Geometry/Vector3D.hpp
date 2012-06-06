@@ -31,8 +31,12 @@ public:
     
   }
   
-  Vector3D normalized() const;
+  Vector3D(): _x(0), _y(0), _z(0) {
+    
+  }
   
+  Vector3D normalized() const;
+    
   double length() const {
     return sqrt(squaredLength());
   }

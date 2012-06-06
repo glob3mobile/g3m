@@ -14,7 +14,8 @@
 
 class IFactory {
 public:
-  
+
+  // a virtual destructor is needed for conversion to Java
   virtual ~IFactory() {}
 };
 

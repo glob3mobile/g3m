@@ -84,7 +84,7 @@ public abstract class IGL
 
   public abstract void LineWidth(float width);
 
-
+  // a virtual destructor is needed for conversion to Java
   public void dispose()
   {
   }

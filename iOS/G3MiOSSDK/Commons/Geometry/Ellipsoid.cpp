@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#include <Ellipsoid.hpp>
+#include "Ellipsoid.hpp"
 
 
 Ellipsoid::Ellipsoid(const Vector3D& radii):

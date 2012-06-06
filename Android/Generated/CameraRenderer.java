@@ -30,11 +30,15 @@ public class CameraRenderer extends Renderer
   }
 
 //C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
-//  boolean onTouchEvent(const TouchEvent& event);
+//  boolean onTouchEvent(const TouchEvent* event);
 
 
 }
 //C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
-//boolean CameraRenderer::onTouchEvent(const TouchEvent& event)
+//boolean CameraRenderer::onTouchEvent(const TouchEvent* event)
 //{
+//
+//  int __TODO_JM_at_work;
+//
+//  return false;
 //}

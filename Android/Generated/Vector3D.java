@@ -1,5 +1,13 @@
 package org.glob3.mobile.generated; 
 //
+//  Vector3D.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 31/05/12.
+//  Copyright (c) 2012 IGO Software SL. All rights reserved.
+//
+
+//
 //  Vector3D.hpp
 //  G3MiOSSDK
 //
@@ -34,10 +42,21 @@ public class Vector3D
 
   }
 
+  public Vector3D()
+  {
+	  _x = 0;
+	  _y = 0;
+	  _z = 0;
+
+  }
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Vector3D normalized() const;
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  Vector3D normalized();
+//ORIGINAL LINE: Vector3D normalized() const
+  public final Vector3D normalized()
+  {
+	  double d = length();
+	  return new Vector3D(_x / d, _y /d, _z / d);
+  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: double length() const
@@ -110,9 +129,18 @@ public class Vector3D
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double angleBetween(const Vector3D& other) const;
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  double angleBetween(Vector3D other);
+//ORIGINAL LINE: double angleBetween(const Vector3D& other) const
+  public final double angleBetween(Vector3D other)
+  {
+	Vector3D v1 = normalized();
+	Vector3D v2 = other.normalized();
+	double c = v1.dot(v2);
+	if (c > 1.0)
+		c = 1.0;
+	else if (c < -1.0)
+		c = -1.0;
+	return Math.acos(c);
+  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Vector3D rotatedAroundAxis(const Vector3D& other, const double theta) const;

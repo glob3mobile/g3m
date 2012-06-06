@@ -1,20 +1,6 @@
 package org.glob3.mobile.generated; 
 public class G3MWidget
 {
-  private G3MWidget(IFactory factory, ILogger logger, IGL gl, Planet planet, Renderer renderer, int width, int height)
-  {
-	  _factory = factory;
-	  _logger = logger;
-	  _gl = gl;
-	  _planet = planet;
-	  _renderer = renderer;
-
-	_camera = new Camera(width, height);
-
-	InitializationContext ic = new InitializationContext(_factory, _logger, _planet);
-	_renderer.initialize(ic);
-  }
-
 
   public static G3MWidget create(IFactory factory, ILogger logger, IGL gl, Planet planet, Renderer renderer, int width, int height)
   {
@@ -52,7 +38,7 @@ public class G3MWidget
   }
 
 //C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
-//  void onTouchEvent(const TouchEvent &event);
+//  void onTouchEvent(const TouchEvent* event);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: IGL * getGL() const
@@ -61,15 +47,29 @@ public class G3MWidget
 	  return _gl;
   }
 
+
   private IFactory _factory;
   private ILogger _logger;
   private IGL _gl;
   private final Planet _planet;
   private Renderer _renderer;
   private Camera _camera;
+
+
+  private G3MWidget(IFactory factory, ILogger logger, IGL gl, Planet planet, Renderer renderer, int width, int height)
+  {
+	  _factory = factory;
+	  _logger = logger;
+	  _gl = gl;
+	  _planet = planet;
+	  _renderer = renderer;
+	  _camera = new Camera(width, height);
+	InitializationContext ic = new InitializationContext(_factory, _logger, _planet);
+	_renderer.initialize(ic);
+  }
 }
 //C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
-//void G3MWidget::onTouchEvent(const TouchEvent &event)
+//void G3MWidget::onTouchEvent(const TouchEvent* event)
 //{
 //  _renderer->onTouchEvent(event);
 //}

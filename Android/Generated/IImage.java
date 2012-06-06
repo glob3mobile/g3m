@@ -8,9 +8,14 @@ package org.glob3.mobile.generated;
 //
 
 
-public interface IImage
+public abstract class IImage
 {
 
-  void scale(int size);
-  void combine(IImage image);
+  public abstract void scale(int size);
+  public abstract void combine(IImage image);
+
+  // a virtual destructor is needed for conversion to Java
+  public void dispose()
+  {
+  }
 }
