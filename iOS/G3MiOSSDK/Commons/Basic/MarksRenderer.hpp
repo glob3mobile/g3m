@@ -9,10 +9,14 @@
 #ifndef G3MiOSSDK_MarksRenderer_hpp
 #define G3MiOSSDK_MarksRenderer_hpp
 
-
+#include <vector>
 #include "Renderer.hpp"
+#include "Mark.hpp"
 
 class MarksRenderer : public Renderer {
+private:
+  std::vector<Mark*> _marks;
+  
 public:
 
   virtual void initialize(const InitializationContext* ic);
@@ -23,6 +27,9 @@ public:
   
   virtual ~MarksRenderer() { };
 
+  void addMark(Mark* mark) {
+    _marks.push_back(mark);
+  }
 };
 
 #endif

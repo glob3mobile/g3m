@@ -31,7 +31,7 @@ public:
   
   void onTouchEvent(const TouchEvent* event);
   
-  IGL * getGL() const{ return _gl;} 
+  IGL * getGL() const{ return _gl; } 
   
   
 private:

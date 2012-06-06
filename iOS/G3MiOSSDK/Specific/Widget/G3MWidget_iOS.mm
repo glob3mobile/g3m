@@ -20,6 +20,7 @@
 #include "CameraRenderer.hpp"
 #include "DummyRenderer.hpp"
 #include "MarksRenderer.hpp"
+#include "Mark.hpp"
 
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
@@ -81,6 +82,19 @@
     comp->addRenderer(dum);
     
     MarksRenderer* marks = new MarksRenderer();
+    
+    Geodetic3D g(Angle::fromDegrees(28.05),
+                 Angle::fromDegrees(-14.36),
+                 0);
+    
+    
+    Mark* m = new Mark("Fuerteventura",
+                       "Description of Fuerteventura",
+                       "Mark.png",
+                       g);
+    //m->addTouchListener(listener);
+    marks->addMark(m);
+   
     comp->addRenderer(marks);
 
     
