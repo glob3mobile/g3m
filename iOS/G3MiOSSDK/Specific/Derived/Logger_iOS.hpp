@@ -13,9 +13,6 @@
 
 
 class Logger_iOS: public ILogger {
-private:
-  void log(const std::string label, const std::string x, ...) const;
-  
 public:  
   Logger_iOS(const LogLevel level): ILogger(level) { }
   
