@@ -13,11 +13,20 @@
 
 class DummyRenderer: public Renderer {
 public:
+  ~DummyRenderer();
+  
   void initialize(const InitializationContext* ic);  
   
   int render(const RenderContext* rc);
   
   bool onTouchEvent(const TouchEvent* event);
+  
+private:
+  float *vertices;
+  unsigned char *index;
+  
+  int numIndices;
+  double halfSize;
 };
 
 #endif

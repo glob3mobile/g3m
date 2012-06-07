@@ -90,17 +90,17 @@ void Camera::draw(const RenderContext &rc) {
 
     // compute projection matrix
     double ratioScreen = (double) _viewport[3] / _viewport[2];
-    _projection = Glu::projectionMatrix(-0.3 / ratioScreen * znear, 0.3 / ratioScreen * znear, -0.3 * znear, 0.3 * znear, znear, 10000 * znear);
+    _projection = GLU::projectionMatrix(-0.3 / ratioScreen * znear, 0.3 / ratioScreen * znear, -0.3 * znear, 0.3 * znear, znear, 10000 * znear);
   
   
-  _projection.print();
+  //_projection.print();
   
     // obtaing gl object reference
     IGL *gl = rc.getGL();
     gl->setProjection(_projection);
 
     // make the lookat
-    _lookAt = Glu::lookAtMatrix(_pos, _center, _up);
+    _lookAt = GLU::lookAtMatrix(_pos, _center, _up);
     gl->loadMatrixf(_lookAt);
   
 }
@@ -110,7 +110,7 @@ Vector3D Camera::pixel2Vector(const Vector2D& pixel) const {
   double px = (int) pixel.x();
 
   py = _viewport[3] - py;
-  Vector3D *obj = Glu::unproject(px, py, 0, _lookAt, _projection, _viewport);
+  Vector3D *obj = GLU::unproject(px, py, 0, _lookAt, _projection, _viewport);
   if (obj == NULL) return Vector3D(0.0,0.0,0.0);
   
   Vector3D v = obj->sub(_pos);
@@ -134,7 +134,7 @@ void Camera::dragCamera(const Vector3D& p0, const Vector3D& p1) {
   if (isnan(_rotationDelta)) return;
   
   dragCamera(_rotationAxis, _rotationDelta);
-  
+    
   //Inertia
   _rotationDelta /= 10.0; //Rotate much less with inertia
   if (fabs(_rotationDelta) < AUTO_DRAG_MIN * 3.0) _rotationDelta = 0.0;
@@ -142,7 +142,7 @@ void Camera::dragCamera(const Vector3D& p0, const Vector3D& p1) {
 
 void Camera::dragCamera(const Vector3D& axis, double delta) {
   // update the camera
-  MutableMatrix44D rot = Glu::rotationMatrix(delta, axis);
+  MutableMatrix44D rot = GLU::rotationMatrix(Angle::fromRadians(delta), axis);  
   applyTransform(rot);
 }
 

@@ -30,7 +30,7 @@ int CameraRenderer::render(const RenderContext* rc)
   
   rc->getCamera()->draw(*rc);
   
-  _camera->print();
+  //_camera->print();
   return 0;
 }
 

@@ -7,14 +7,16 @@
  *
  */
 
-#ifndef GLU
-#define GLU
+#ifndef G3MiOSSDK_GLU_hpp
+#define G3MiOSSDK_GLU_hpp
 
 #include "Vector3D.hpp"
 
 #include "MutableMatrix44D.hpp"
 
-class Glu {
+#include "Angle.hpp"
+
+class GLU {
 private:
 
     static void transform_point(double out[4], const double m[16], const double in[4]);
@@ -27,7 +29,7 @@ public:
 
   static MutableMatrix44D translationMatrix(Vector3D t);
   
-  static MutableMatrix44D rotationMatrix(double angle_rad, Vector3D p);
+  static MutableMatrix44D rotationMatrix(Angle angle, Vector3D p);
 
   static MutableMatrix44D lookAtMatrix(Vector3D pos, Vector3D center, Vector3D up);
 
