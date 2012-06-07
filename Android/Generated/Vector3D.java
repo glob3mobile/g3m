@@ -135,9 +135,21 @@ public class Vector3D
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Vector3D rotatedAroundAxis(const Vector3D& other, const double theta) const;
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  Vector3D rotatedAroundAxis(Vector3D other, double theta);
+//ORIGINAL LINE: Vector3D rotateAroundAxis(const Vector3D& axis, double theta) const
+  public final Vector3D rotateAroundAxis(Vector3D axis, double theta)
+  {
+	final double u = axis.x();
+	final double v = axis.y();
+	final double w = axis.z();
+  
+	final double cosTheta = Math.cos(theta);
+	final double sinTheta = Math.sin(theta);
+  
+	final double ms = axis.squaredLength();
+	final double m = Math.sqrt(ms);
+  
+	return new Vector3D(((u * (u * _x + v * _y + w * _z)) + (((_x * (v * v + w * w)) - (u * (v * _y + w * _z))) * cosTheta) + (m * ((-w * _y) + (v * _z)) * sinTheta)) / ms, ((v * (u * _x + v * _y + w * _z)) + (((_y * (u * u + w * w)) - (v * (u * _x + w * _z))) * cosTheta) + (m * ((w * _x) - (u * _z)) * sinTheta)) / ms, ((w * (u * _x + v * _y + w * _z)) + (((_z * (u * u + v * v)) - (w * (u * _x + v * _y))) * cosTheta) + (m * (-(v * _x) + (u * _y)) * sinTheta)) / ms);
+  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: double x() const

@@ -243,7 +243,7 @@ public class Ellipsoid
 	{
 	  double phi = (i * granularity);
   
-	  positions.addLast(scaleToGeocentricSurface(start.rotatedAroundAxis(normal, phi)));
+	  positions.addLast(scaleToGeocentricSurface(start.rotateAroundAxis(normal, phi)));
 	}
   
 	positions.addLast(stop);

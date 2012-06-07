@@ -13,6 +13,8 @@
 
 #include "MutableMatrix44D.hpp"
 
+#include <stdio.h>
+
 class Vector3D;
 
 class MutableVector3D {
@@ -22,8 +24,6 @@ private:
   double _z;
   
 public:
-  
-//  MutableVector3D(Geodetic3D g);  // TO CONVERT TO SPHERICAL COORDINATES
   
   MutableVector3D(const double x,
            const double y,
@@ -38,6 +38,8 @@ public:
   MutableVector3D(const Vector3D &v);
   
   MutableVector3D normalized() const;
+  
+  void print() const { printf("%.2f  %.2f %.2f\n", _x, _y, _z );}
   
   double length() const {
     return sqrt(squaredLength());

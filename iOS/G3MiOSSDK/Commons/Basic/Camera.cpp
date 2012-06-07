@@ -18,7 +18,11 @@
 Camera::Camera(const Camera &c):
 _pos(c._pos),
 _center(c._center),
-_up(_up)
+_up(_up),
+_lookAt(c._lookAt),
+_projection(c._projection),
+_rotationAxis(c._rotationAxis),
+_rotationDelta(c._rotationDelta)
 {
   resizeViewport(c.getWidth(), c.getHeight());
 }
@@ -28,15 +32,21 @@ void Camera::copyFrom(const Camera &c)
   _pos = c.getPos();
   _center = c.getCenter();
   _up = c.getUp();
+  _lookAt = c._lookAt;
+  _projection =c._projection;
+  _rotationAxis=c._rotationAxis;
+  _rotationDelta=c._rotationDelta;
 }
 
 
 Camera::Camera(int width, int height) :
 _pos(63650000.0, 0.0, 0.0),
 _center(0.0, 0.0, 0.0),
-_up(0.0, 0.0, 1.0)
+_up(0.0, 0.0, 1.0), 
+_rotationAxis(0.0, 0.0, 0.0)
 {
-    resizeViewport(width, height);
+  _rotationDelta = 0.0;
+  resizeViewport(width, height);
 }
 
 void Camera::resizeViewport(int width, int height) {
@@ -46,6 +56,19 @@ void Camera::resizeViewport(int width, int height) {
     _viewport[0] = _viewport[1] = 0;
     _viewport[2] = width;
     _viewport[3] = height;
+}
+
+void Camera::print() const
+{
+  printf("LOOKAT: \n"); 
+  _lookAt.print();
+  printf("\n");
+  printf("PROJECTION: \n");
+  _projection.print();
+  printf("\n");
+  printf("VIEWPORT: \n");
+  for (int k = 0; k < 4; k++) printf("%d ",  _viewport[k] );
+  printf("\n\n");
 }
 
 void Camera::draw(const RenderContext &rc) {
@@ -65,6 +88,9 @@ void Camera::draw(const RenderContext &rc) {
     double ratioScreen = (double) _viewport[3] / _viewport[2];
     _projection = Glu::projectionMatrix(-0.3 / ratioScreen * znear, 0.3 / ratioScreen * znear, -0.3 * znear, 0.3 * znear, znear, 10000 * znear);
   
+  
+  _projection.print();
+  
     // obtaing gl object reference
     IGL *gl = rc.getGL();
     gl->setProjection(_projection);
@@ -80,14 +106,10 @@ Vector3D Camera::pixel2Vector(const Vector2D& pixel) const {
   double px = (int) pixel.x();
 
   py = _viewport[3] - py;
-  print();
-  
   Vector3D *obj = Glu::unproject(px, py, 0, _lookAt, _projection, _viewport);
-  
-  printf("%f, %f, %f\n", obj->x(), obj->y(), obj->z() );
+  if (obj == NULL) return Vector3D(0.0,0.0,0.0);
   
   Vector3D v = obj->sub(_pos);
-  
   delete obj;
   return v;
 }
@@ -99,16 +121,30 @@ void Camera::applyTransform(MutableMatrix44D M)
   _up = _up.applyTransform(M);
 }
 
-void Camera::dragCamera(Vector3D p0, Vector3D p1) {
+void Camera::dragCamera(const Vector3D& p0, const Vector3D& p1) {
   // compute the rotation axe
-  Vector3D dragW = p0.cross(p1);
+  _rotationAxis = p0.cross(p1);
   
   // compute the angle
-  double angle_rad = acos(p0.normalized().dot(p1.normalized()));
-  if (isnan(angle_rad)) return;
+  _rotationDelta = - acos(p0.normalized().dot(p1.normalized()));
+  if (isnan(_rotationDelta)) return;
   
+  dragCamera(_rotationAxis, _rotationDelta);
+}
+
+void Camera::dragCamera(const Vector3D& axis, double delta) {
   // update the camera
-  
-  MutableMatrix44D rot = Glu::rotationMatrix(-angle_rad, dragW);
+  MutableMatrix44D rot = Glu::rotationMatrix(delta, axis);
   applyTransform(rot);
+}
+
+void Camera::applyInertia()
+{
+  if (fabs(_rotationDelta) > AUTO_DRAG_MIN)
+  {
+    _rotationDelta *= AUTO_DRAG_FRICTION;
+    dragCamera(_rotationAxis, _rotationDelta);
+  } else {
+    _rotationDelta = 0.0;
+  }
 }

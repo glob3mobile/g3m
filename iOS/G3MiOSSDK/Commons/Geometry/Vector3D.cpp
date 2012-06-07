@@ -24,7 +24,7 @@ double Vector3D::angleBetween(const Vector3D& other) const {
   return acos(c);
 }
 
-Vector3D Vector3D::rotatedAroundAxis(const Vector3D& axis,
+Vector3D Vector3D::rotateAroundAxis(const Vector3D& axis,
                                     double theta) const {
   const double u = axis.x();
   const double v = axis.y();
@@ -49,3 +49,4 @@ Vector3D Vector3D::rotatedAroundAxis(const Vector3D& axis,
                    (((_z * (u * u + v * v)) - (w * (u * _x + v * _y))) * cosTheta) +
                    (m * (-(v * _x) + (u * _y)) * sinTheta)) / ms);
 }
+

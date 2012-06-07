@@ -71,6 +71,8 @@ public:
   
   const Touch* getTouch(int i) const { return _touchs[i];}
   
+  int getNumTouch() const { return _touchs.size(); }
+  
   ~TouchEvent() {
     for (int i = 0; i < _touchs.size(); i++) {
       delete _touchs[i];
