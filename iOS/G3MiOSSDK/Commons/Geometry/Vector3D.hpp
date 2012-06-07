@@ -88,8 +88,8 @@ public:
   }
   
   double angleBetween(const Vector3D& other) const;
-  
-  Vector3D rotatedAroundAxis(const Vector3D& other, const double theta) const;
+    
+  Vector3D rotateAroundAxis(const Vector3D& axis, double theta) const;
   
   double x() const {
     return _x;
