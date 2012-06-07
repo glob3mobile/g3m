@@ -49,7 +49,6 @@ _rotationAxis(0.0, 0.0, 0.0),
 _rotationDelta(0.0),
 _zoomFactor(1.0)
 {
-  _rotationDelta = 0.0;
   resizeViewport(width, height);
 }
 

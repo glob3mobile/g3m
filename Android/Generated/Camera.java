@@ -28,6 +28,8 @@ package org.glob3.mobile.generated;
 
 //#define AUTO_DRAG_FRICTION 0.985
 //#define AUTO_DRAG_MIN 1e-7
+//#define AUTO_ZOOM_FRICTION 0.850
+//#define AUTO_ZOOM_MIN 1e-7
 
 
 /**
@@ -46,6 +48,7 @@ public class Camera
 	  _projection = new MutableMatrix44D(c._projection);
 	  _rotationAxis = new MutableVector3D(c._rotationAxis);
 	  _rotationDelta = c._rotationDelta;
+	  _zoomFactor = c._zoomFactor;
 	resizeViewport(c.getWidth(), c.getHeight());
   }
 
@@ -55,7 +58,8 @@ public class Camera
 	  _center = new MutableVector3D(0.0, 0.0, 0.0);
 	  _up = new MutableVector3D(0.0, 0.0, 1.0);
 	  _rotationAxis = new MutableVector3D(0.0, 0.0, 0.0);
-	_rotationDelta = 0.0;
+	  _rotationDelta = 0.0;
+	  _zoomFactor = 1.0;
 	resizeViewport(width, height);
   }
 
@@ -68,6 +72,7 @@ public class Camera
 	_projection = c._projection;
 	_rotationAxis = c._rotationAxis;
 	_rotationDelta = c._rotationDelta;
+	_zoomFactor = c._zoomFactor;
   }
 
   public final void resizeViewport(int width, int height)
@@ -99,17 +104,16 @@ public class Camera
   
 	  // compute projection matrix
 	  double ratioScreen = (double) _viewport[3] / _viewport[2];
-	  _projection = Glu.projectionMatrix(-0.3 / ratioScreen * znear, 0.3 / ratioScreen * znear, -0.3 * znear, 0.3 * znear, znear, 10000 * znear);
+	  _projection = GLU.projectionMatrix(-0.3 / ratioScreen * znear, 0.3 / ratioScreen * znear, -0.3 * znear, 0.3 * znear, znear, 10000 * znear);
   
-  
-	_projection.print();
+	//_projection.print();
   
 	  // obtaing gl object reference
 	  IGL gl = rc.getGL();
 	  gl.setProjection(_projection);
   
 	  // make the lookat
-	  _lookAt = Glu.lookAtMatrix(_pos, _center, _up);
+	  _lookAt = GLU.lookAtMatrix(_pos, _center, _up);
 	  gl.loadMatrixf(_lookAt);
   
   }
@@ -122,7 +126,7 @@ public class Camera
 	double px = (int) pixel.x();
   
 	py = _viewport[3] - py;
-	Vector3D obj = Glu.unproject(px, py, 0, _lookAt, _projection, _viewport);
+	Vector3D obj = GLU.unproject(px, py, 0, _lookAt, _projection, _viewport);
 	if (obj == null)
 		return new Vector3D(0.0,0.0,0.0);
   
@@ -175,17 +179,35 @@ public class Camera
 		return;
   
 	dragCamera(_rotationAxis, _rotationDelta);
+  
+	//Inertia
+	_rotationDelta /= 10.0; //Rotate much less with inertia
+	if (Math.abs(_rotationDelta) < DefineConstants.AUTO_DRAG_MIN * 3.0)
+		_rotationDelta = 0.0;
   }
   public final void dragCamera(Vector3D axis, double delta)
   {
 	// update the camera
-	MutableMatrix44D rot = Glu.rotationMatrix(delta, axis);
+	MutableMatrix44D rot = GLU.rotationMatrix(Angle.fromRadians(delta), axis);
 	applyTransform(rot);
+  }
+
+  //Zoom
+  public final void zoom(double factor)
+  {
+  
+	if (factor != 1.0)
+	{
+	  Vector3D w = _pos.sub(_center);
+	  _pos = _center.add(w.times(factor));
+	  _zoomFactor = factor;
+	}
   }
 
   //Camera inertia
   public final void applyInertia()
   {
+	//DRAGGING
 	if (Math.abs(_rotationDelta) > DefineConstants.AUTO_DRAG_MIN)
 	{
 	  _rotationDelta *= DefineConstants.AUTO_DRAG_FRICTION;
@@ -195,6 +217,19 @@ public class Camera
 	{
 	  _rotationDelta = 0.0;
 	}
+  
+	//ZOOMING
+	if ((Math.abs(_zoomFactor) - 1.0) > DefineConstants.AUTO_ZOOM_MIN)
+	{
+	  _zoomFactor = (_zoomFactor - 1.0) *DefineConstants.AUTO_ZOOM_FRICTION +1.0;
+	  zoom(_zoomFactor);
+	}
+  
+  }
+  public final void stopInertia()
+  {
+	_rotationDelta = 0.0;
+	_zoomFactor = 0.0;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -228,6 +263,7 @@ public class Camera
   //Camera Inertia
   private MutableVector3D _rotationAxis = new MutableVector3D(); // Rotation Axis
   private double _rotationDelta; // Rotation Delta
+  private double _zoomFactor;
 
   private void applyTransform(MutableMatrix44D M)
   {

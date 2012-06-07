@@ -41,9 +41,11 @@ public abstract class IGL
 
   public abstract void loadMatrixf(MutableMatrix44D m);
 
+  public abstract void multMatrixf(MutableMatrix44D m);
+
   public abstract void vertexPointer(int size, int stride, float[] vertex);
 
-  public abstract void drawTriangleStrip(int n, byte []i);
+  public abstract void drawTriangleStrip(int n, byte[]i NamelessParameter2);
 
   public abstract void setProjection(MutableMatrix44D projection);
 

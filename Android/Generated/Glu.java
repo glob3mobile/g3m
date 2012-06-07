@@ -22,7 +22,8 @@ package org.glob3.mobile.generated;
 
 
 
-public class Glu
+
+public class GLU
 {
 
 
@@ -80,13 +81,13 @@ public class Glu
 	return res;
   }
 
-  public static MutableMatrix44D rotationMatrix(double angle_rad, Vector3D p)
+  public static MutableMatrix44D rotationMatrix(Angle angle, Vector3D p)
   {
   
-  
 	  Vector3D p0 = p.normalized();
-	  double c = Math.cos(angle_rad);
-	  double s = Math.sin(angle_rad);
+	  double c = angle.cosinus();
+	  double s = angle.sinus();
+  
 	  double[] R = {p0.x() * p0.x() * (1 - c) + c, p0.x() * p0.y() * (1 - c) + p0.z() * s, p0.x() * p0.z() * (1 - c) - p0.y() * s, 0, p0.y() * p0.x() * (1 - c) - p0.z() * s, p0.y() * p0.y() * (1 - c) + c, p0.y() * p0.z() * (1 - c) + p0.x() * s, 0, p0.x() * p0.z() * (1 - c) + p0.y() * s, p0.y() * p0.z() * (1 - c) - p0.x() * s, p0.z() * p0.z() * (1 - c) + c, 0, 0, 0, 0, 1};
   
 	MutableMatrix44D rot = new MutableMatrix44D(R);

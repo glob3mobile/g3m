@@ -49,8 +49,6 @@ public class CameraRenderer extends Renderer
 
   public final int render(RenderContext rc)
   {
-  
-  
 	_camera = rc.getCamera(); //Saving camera reference
 	_planet = rc.getPlanet();
   
@@ -58,6 +56,8 @@ public class CameraRenderer extends Renderer
 		_camera.applyInertia();
   
 	rc.getCamera().draw(rc);
+  
+	//_camera->print();
 	return 0;
   }
 
@@ -69,6 +69,9 @@ public class CameraRenderer extends Renderer
 //C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
 //void CameraRenderer::onDown(const TouchEvent& event)
 //{
+//  //Stop movement
+//  _camera->stopInertia();
+//
 //  //Saving Camera0
 //  Camera c(*_camera);
 //  _camera0 = c;
@@ -77,7 +80,6 @@ public class CameraRenderer extends Renderer
 //
 //  Vector3D ray = _camera0.pixel2Vector(pixel);
 //  _initialPoint = _planet->closestIntersection(_camera0.getPos(), ray);
-//  _initialPoint.print();
 //
 //  _cameraFixed = true;
 //}
@@ -86,6 +88,8 @@ public class CameraRenderer extends Renderer
 //void CameraRenderer::onMove(const TouchEvent& event)
 //{
 //  int n = event.getNumTouch();
+//
+//  //ONE FINGER
 //  if (n == 1)
 //  {
 //
@@ -114,7 +118,40 @@ public class CameraRenderer extends Renderer
 //	}
 //  }
 //
+//
+//  //TWO FINGERS
+//  if (n==2)
+//  {
+//	Vector2D pixel0 = event.getTouch(0)->getPos();
+//	Vector2D pixel1 = event.getTouch(1)->getPos();
+//	Vector2D pixelCenter = pixel0.add(pixel1).div(2.0);
+//
+//	Vector3D ray = _camera0.pixel2Vector(pixelCenter);
+//	_initialPoint = _planet->closestIntersection(_camera0.getPos(), ray);
+//
+//	//IF CENTER PIXEL INTERSECTS THE PLANET
+//	if (_initialPoint.length() > 0)
+//	{
+//	  Vector2D prevPixel0 = event.getTouch(0)->getPrevPos();
+//	  Vector2D prevPixel1 = event.getTouch(1)->getPrevPos();
+//
+//	  double dist = pixel0.sub(pixel1).length();
+//	  double prevDist = prevPixel0.sub(prevPixel1).length();
+//
+//	  //ZOOM
+//	  if (_planet->intersections(_camera->getPos(), _camera->getCenter()).size() > 0)
+//	  {
+//		//IF THE CENTER OF THE VIEW INTERSECTS THE PLANET
+//		_camera->zoom(prevDist /dist);
+//	  }
+//
+//
+//	}
+//
+//  }
+//
 //}
+
 
 //C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
 //void CameraRenderer::onUp(const TouchEvent& event)

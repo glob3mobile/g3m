@@ -48,7 +48,7 @@ void DummyRenderer::initialize(const InitializationContext* ic)
 }  
 
 
-bool DummyRenderer::onTouchEvent(const TouchEvent* event){
+bool DummyRenderer::onTouchEvent(const TouchEvent* touchEvent){
   return false;
 }
 

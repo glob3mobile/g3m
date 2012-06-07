@@ -19,27 +19,37 @@ package org.glob3.mobile.generated;
 
 public class DummyRenderer extends Renderer
 {
-  public final void initialize(InitializationContext ic)
+
+  private int numIndices;
+  private double halfSize;
+
+  private byte[] index;
+  private float[] vertices;
+
+  public void dispose()
   {
+	index = null;
+	vertices = null;
   }
 
-  public final int render(RenderContext rc)
+  public final void initialize(InitializationContext ic)
   {
 	int res = 12;
-	float[] vertices = new float[res * res * 3];
-	int numIndices = 2 * (res - 1) * (res + 1);
-	byte []index = new byte[numIndices];
+	vertices = new float[res * res * 3];
+	numIndices = 2 * (res - 1) * (res + 1);
+	index = new byte[numIndices];
   
 	// create vertices
-	float size = 1e7F;
+	halfSize = 7e6;
+  
 	int n = 0;
 	for (int j = 0; j < res; j++)
 	{
 	  for (int i = 0; i < res; i++)
 	  {
 		vertices[n++] = (float) 0;
-		vertices[n++] = (float)(-size + i / (float)(res - 1) * 2 *size);
-		vertices[n++] = (float)(size - j / (float)(res - 1) * 2 *size);
+		vertices[n++] = (float)(-halfSize + i / (float)(res - 1) * 2 *halfSize);
+		vertices[n++] = (float)(halfSize - j / (float)(res - 1) * 2 *halfSize);
 	  }
 	}
   
@@ -55,37 +65,92 @@ public class DummyRenderer extends Renderer
 	  }
 	  index[n++] = (byte)(j * res + 2 * res - 1);
 	}
-  
-  
+  }
+
+  public final int render(RenderContext rc)
+  {
   
 	// obtaing gl object reference
 	IGL gl = rc.getGL();
-  
-	// draw a white square
-	gl.color((float) 1, (float) 0, (float) 0);
   
 	// insert pointers
 	gl.disableTextures();
 	gl.vertexPointer(3, 0, vertices);
   
-	gl.pushMatrix();
-	gl.enablePolygonOffset(1.0f, 5.0f);
-	gl.drawTriangleStrip(n, index);
-	gl.disablePolygonOffset();
-	gl.popMatrix();
-	gl.enableTextures();
+	{
+	  // draw a red square
+	  gl.color((float) 1, (float) 0, (float) 0);
+	  gl.pushMatrix();
+	  MutableMatrix44D T = GLU.translationMatrix(new Vector3D(halfSize,0,0));
+	  gl.multMatrixf(T);
+	  gl.drawTriangleStrip(numIndices, index);
+	  gl.popMatrix();
+	}
   
-	index = null;
-	vertices = null;
+	{
+	  // draw a green square
+	  gl.color((float) 0, (float) 1, (float) 0);
+	  gl.pushMatrix();
+	  MutableMatrix44D T = GLU.translationMatrix(new Vector3D(0,halfSize,0));
+	  MutableMatrix44D R = GLU.rotationMatrix(Angle.fromDegrees(90), new Vector3D(0,0,1));
+	  gl.multMatrixf(T.multMatrix(R));
+	  gl.drawTriangleStrip(numIndices, index);
+	  gl.popMatrix();
+	}
+  
+	{
+	  // draw a blue square
+	  gl.color((float) 0, (float) 0, (float) 1);
+	  gl.pushMatrix();
+	  MutableMatrix44D T = GLU.translationMatrix(new Vector3D(0,-halfSize,0));
+	  MutableMatrix44D R = GLU.rotationMatrix(Angle.fromDegrees(-90), new Vector3D(0,0,1));
+	  gl.multMatrixf(T.multMatrix(R));
+	  gl.drawTriangleStrip(numIndices, index);
+	  gl.popMatrix();
+	}
+  
+	{
+	  // draw a purple square
+	  gl.color((float) 1, (float) 0, (float) 1);
+	  gl.pushMatrix();
+	  MutableMatrix44D T = GLU.translationMatrix(new Vector3D(0,0,-halfSize));
+	  MutableMatrix44D R = GLU.rotationMatrix(Angle.fromDegrees(90), new Vector3D(0,1,0));
+	  gl.multMatrixf(T.multMatrix(R));
+	  gl.drawTriangleStrip(numIndices, index);
+	  gl.popMatrix();
+	}
+  
+	{
+	  // draw a cian square
+	  gl.color((float) 0, (float) 1, (float) 1);
+	  gl.pushMatrix();
+	  MutableMatrix44D T = GLU.translationMatrix(new Vector3D(0,0,halfSize));
+	  MutableMatrix44D R = GLU.rotationMatrix(Angle.fromDegrees(-90), new Vector3D(0,1,0));
+	  gl.multMatrixf(T.multMatrix(R));
+	  gl.drawTriangleStrip(numIndices, index);
+	  gl.popMatrix();
+	}
+  
+	{
+	  // draw a grey square
+	  gl.color((float) 0.5, (float) 0.5, (float) 0.5);
+	  gl.pushMatrix();
+	  MutableMatrix44D T = GLU.translationMatrix(new Vector3D(-halfSize,0,0));
+	  MutableMatrix44D R = GLU.rotationMatrix(Angle.fromDegrees(180), new Vector3D(0,0,1));
+	  gl.multMatrixf(T.multMatrix(R));
+	  gl.drawTriangleStrip(numIndices, index);
+	  gl.popMatrix();
+	}
+  
+	gl.enableTextures();
   
 	return 9999;
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
-//  boolean onTouchEvent(const TouchEvent* event);
+  public final boolean onTouchEvent(TouchEvent touchEvent)
+  {
+	return false;
+  }
+
+
 }
-//C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
-//boolean DummyRenderer::onTouchEvent(const TouchEvent* event)
-//{
-//  return false;
-//}

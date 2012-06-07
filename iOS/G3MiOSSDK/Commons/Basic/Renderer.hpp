@@ -19,9 +19,9 @@ public:
   
   virtual int render(const RenderContext* rc) = 0;
   
-  virtual bool onTouchEvent(const TouchEvent* event) = 0;
+  virtual bool onTouchEvent(const TouchEvent* touchEvent) = 0;
   
-  virtual ~Renderer() { };
+  //virtual ~Renderer() { };
 };
 
 
