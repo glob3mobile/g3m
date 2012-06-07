@@ -22,12 +22,11 @@ private:
   
   Camera _camera0;                //Initial Camera saved on Down event
   MutableVector3D _initialPoint;  //Initial point at dragging
+  bool _cameraFixed;              //If true the camera is being moved and has no inertia
   
   void onDown(const TouchEvent& event);
   void onMove(const TouchEvent& event);
   void onUp(const TouchEvent& event);
-  
-  Vector3D intersectionRayWithPlanet(Vector3D pos, Vector3D ray);
   
 public:
   

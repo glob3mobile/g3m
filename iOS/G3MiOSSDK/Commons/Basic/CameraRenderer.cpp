@@ -12,7 +12,8 @@
 
 CameraRenderer::CameraRenderer():
 _camera0(0,0),
-_initialPoint(0,0,0)
+_initialPoint(0,0,0),
+_cameraFixed(false)
 {
 }
 
@@ -20,8 +21,12 @@ void CameraRenderer::initialize(const InitializationContext* ic){}
 
 int CameraRenderer::render(const RenderContext* rc)
 {
+  
+  
   _camera = rc->getCamera(); //Saving camera reference 
   _planet = rc->getPlanet();
+  
+  if (!_cameraFixed) _camera->applyInertia();    //AutoDragging
   
   rc->getCamera()->draw(*rc);
   return 0;
@@ -36,25 +41,43 @@ void CameraRenderer::onDown(const TouchEvent& event)
   Vector2D pixel = event.getTouch(0)->getPos();
   
   Vector3D ray = _camera0.pixel2Vector(pixel);
-  _initialPoint = intersectionRayWithPlanet(_camera0.getPos(), ray);
+  _initialPoint = _planet->closestIntersection(_camera0.getPos(), ray);
+  _initialPoint.print();
+  
+  _cameraFixed = true;
 }
 
 void CameraRenderer::onMove(const TouchEvent& event)
 {
-  Vector2D pixel = event.getTouch(0)->getPos();
-  
-  Vector3D ray = _camera0.pixel2Vector(pixel);
-  Vector3D newPoint = intersectionRayWithPlanet(_camera0.getPos(), ray);
-  
-  _camera->copyFrom(_camera0);
-  
-  _camera->dragCamera(_initialPoint, newPoint);
-  
+  int n = event.getNumTouch();
+  if (n == 1){
+    
+    if (_initialPoint.length() > 0){ //VALID INITIAL POINT
+    
+      Vector2D pixel = event.getTouch(0)->getPos();
+      Vector3D ray = _camera0.pixel2Vector(pixel);
+      Vector3D pos = _camera0.getPos();
+      
+      Vector3D finalPoint = _planet->closestIntersection(pos, ray);
+      
+      if (finalPoint.length() <= 0.0){ //INVALID FINAL POINT
+        //We take the closest point to the sphere
+        Vector3D finalPoint2 = _planet->closestPointToSphere(pos, ray);
+        _camera->copyFrom(_camera0);
+        _camera->dragCamera(_initialPoint, finalPoint2);
+        
+      } else {
+        _camera->copyFrom(_camera0);
+        _camera->dragCamera(_initialPoint, finalPoint);
+      }
+    }
+  }
+
 }
 
 void CameraRenderer::onUp(const TouchEvent& event)
 {
-  
+  _cameraFixed = false;
 }
 
 bool CameraRenderer::onTouchEvent(const TouchEvent* event)
@@ -73,12 +96,4 @@ bool CameraRenderer::onTouchEvent(const TouchEvent* event)
   }
   
   return true;
-}
-
-Vector3D CameraRenderer::intersectionRayWithPlanet(Vector3D pos, Vector3D ray)
-{
-  std::vector<double> t = _planet->intersections(pos , ray);
-  if (t.empty()) return Vector3D(0,0,0);
-  Vector3D solution = pos.add(ray.times(t[0]));
-  return solution;
 }

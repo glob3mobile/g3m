@@ -41,6 +41,8 @@ public:
     for (int i = 0; i < 16; i++) { M[i] = _m[i];}
   }
   
+  void print() const;
+  
 private:
   double _m[16];
   

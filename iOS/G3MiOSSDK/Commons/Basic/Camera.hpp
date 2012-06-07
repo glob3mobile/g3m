@@ -21,6 +21,10 @@
 
 #include "MutableMatrix44D.hpp"
 
+#define AUTO_DRAG_FRICTION              0.985
+#define AUTO_DRAG_MIN                   1e-7
+
+
 /**
  * Class to control the camera.
  */
@@ -46,20 +50,14 @@ public:
   Vector3D getCenter() const { return _center;}
   Vector3D getUp() const { return _up;}
   
-  void dragCamera(Vector3D p0, Vector3D p1);
+  //Dragging camera
+  void dragCamera(const Vector3D& p0, const Vector3D& p1);
+  void dragCamera(const Vector3D& axis, double delta);
   
-  void print() const
-  {
-    printf("LOOKAT: \n");
-    for (int k = 0; k < 16; k++) printf("%f ",  _lookAt.get(k) );
-    printf("\n");
-    printf("PROJECTION: \n");
-    for (int k = 0; k < 16; k++) printf("%f ", _projection.get(k) );
-    printf("\n");
-    printf("VIEWPORT: \n");
-    for (int k = 0; k < 4; k++) printf("%d ",  _viewport[k] );
-    printf("\n\n");
-  }
+  //Camera inertia
+  void applyInertia();
+  
+  void print() const;
 
 private:
   int _width, _height;
@@ -72,6 +70,10 @@ private:
   MutableVector3D _pos;             // position
   MutableVector3D _center;          // center of view
   MutableVector3D _up;              // vertical vector
+  
+  //Camera Inertia
+  MutableVector3D _rotationAxis;              // Rotation Axis
+  double _rotationDelta;                      // Rotation Delta
   
   void applyTransform(MutableMatrix44D mat);
   

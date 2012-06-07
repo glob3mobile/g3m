@@ -8,6 +8,8 @@
 
 #include "MutableMatrix44D.hpp"
 
+#include <stdio.h>
+
 MutableMatrix44D MutableMatrix44D::multMatrix(const MutableMatrix44D& m) const {
   double R[16];
   for (int j = 0; j < 4; j++)
@@ -20,6 +22,13 @@ MutableMatrix44D MutableMatrix44D::multMatrix(const MutableMatrix44D& m) const {
   MutableMatrix44D m2(R);
   
   return m2;
+}
+
+void MutableMatrix44D::print() const
+{
+  for (int j = 0; j < 4; j++)
+    printf("%.2f  %.2f %.2f %.2f\n", _m[j * 4], _m[j * 4 + 1],_m[j * 4 + 2], _m[j * 4 + 3] );
+
 }
 
 
