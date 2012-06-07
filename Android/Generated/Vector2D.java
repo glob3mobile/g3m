@@ -36,8 +36,8 @@ public class Vector2D
 
   public Vector2D(Vector2D v)
   {
-	  _x = v._x;
-	  _y = v._y;
+	  _x = v.x();
+	  _y = v.y();
 
   }
 

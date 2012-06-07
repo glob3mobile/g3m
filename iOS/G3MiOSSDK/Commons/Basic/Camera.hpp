@@ -46,9 +46,9 @@ public:
   
   int getWidth() const{ return _width;}
   int getHeight() const{ return _height;}
-  Vector3D getPos() const { return _pos;}
-  Vector3D getCenter() const { return _center;}
-  Vector3D getUp() const { return _up;}
+  MutableVector3D getPos() const { return _pos;}
+  MutableVector3D getCenter() const { return _center;}
+  MutableVector3D getUp() const { return _up;}
   
   //Dragging camera
   void dragCamera(const Vector3D& p0, const Vector3D& p1);

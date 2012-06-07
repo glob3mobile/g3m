@@ -310,4 +310,62 @@ public class Ellipsoid
 	return dist * Math.PI / 180 * R;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector3D closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const
+  public final Vector3D closestPointToSphere(Vector3D pos, Vector3D ray)
+  {
+	double t = 0;
+  
+	// compute radius for the rotation
+	double R0 = (_radii.x() + _radii.y() + _radii.y()) /3;
+  
+	// compute the point in this ray that are to a distance R from the origin.
+	double U2 = ray.squaredLength();
+	double O2 = pos.squaredLength();
+	double OU = pos.dot(ray);
+	double a = U2;
+	double b = 2 * OU;
+	double c = O2 - R0 * R0;
+	double rad = b * b - 4 * a * c;
+  
+	// if there is solution, the ray intersects the sphere
+	if (rad > 0)
+	{
+	  // compute the final point (the smaller positive t value)
+	  t = (-b - Math.sqrt(rad)) / (2 * a);
+	  if (t < 1)
+		  t = (-b + Math.sqrt(rad)) / (2 * a);
+	  // if the ideal ray intersects, but not the mesh --> case 2
+	  if (t < 1)
+		  rad = -12345;
+	}
+  
+	// if no solution found, find a point in the contour line
+	if (rad < 0)
+	{
+	  double D = Math.sqrt(O2);
+	  double co2 = R0 * R0 / (D * D);
+	  double a_ = OU * OU - co2 * O2 * U2;
+	  double b_ = 2 * OU * O2 - co2 * 2 * OU * O2;
+	  double c_ = O2 * O2 - co2 * O2 * O2;
+	  double rad_ = b_ * b_ - 4 * a_ * c_;
+	  t = (-b_ - Math.sqrt(rad_)) / (2 * a_);
+	}
+  
+	// compute the final point
+	Vector3D p = pos.add(ray.times(t));
+	return p;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector3D closestIntersection(const Vector3D& pos, const Vector3D& ray) const
+  public final Vector3D closestIntersection(Vector3D pos, Vector3D ray)
+  {
+	java.util.ArrayList<Double> t = intersections(pos, ray);
+	if (t.isEmpty())
+		return new Vector3D(0,0,0);
+	  Vector3D solution = pos.add(ray.times(t.get(0)));
+	  return solution;
+  }
+
 }
