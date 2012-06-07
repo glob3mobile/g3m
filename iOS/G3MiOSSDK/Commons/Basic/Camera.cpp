@@ -22,7 +22,8 @@ _up(_up),
 _lookAt(c._lookAt),
 _projection(c._projection),
 _rotationAxis(c._rotationAxis),
-_rotationDelta(c._rotationDelta)
+_rotationDelta(c._rotationDelta),
+_zoomFactor(c._zoomFactor)
 {
   resizeViewport(c.getWidth(), c.getHeight());
 }
@@ -36,6 +37,7 @@ void Camera::copyFrom(const Camera &c)
   _projection =c._projection;
   _rotationAxis=c._rotationAxis;
   _rotationDelta=c._rotationDelta;
+  _zoomFactor = c._zoomFactor;
 }
 
 
@@ -43,7 +45,9 @@ Camera::Camera(int width, int height) :
 _pos(63650000.0, 0.0, 0.0),
 _center(0.0, 0.0, 0.0),
 _up(0.0, 0.0, 1.0), 
-_rotationAxis(0.0, 0.0, 0.0)
+_rotationAxis(0.0, 0.0, 0.0),
+_rotationDelta(0.0),
+_zoomFactor(1.0)
 {
   _rotationDelta = 0.0;
   resizeViewport(width, height);
@@ -130,6 +134,10 @@ void Camera::dragCamera(const Vector3D& p0, const Vector3D& p1) {
   if (isnan(_rotationDelta)) return;
   
   dragCamera(_rotationAxis, _rotationDelta);
+  
+  //Inertia
+  _rotationDelta /= 10.0; //Rotate much less with inertia
+  if (fabs(_rotationDelta) < AUTO_DRAG_MIN * 3.0) _rotationDelta = 0.0;
 }
 
 void Camera::dragCamera(const Vector3D& axis, double delta) {
@@ -140,11 +148,35 @@ void Camera::dragCamera(const Vector3D& axis, double delta) {
 
 void Camera::applyInertia()
 {
+  //DRAGGING
   if (fabs(_rotationDelta) > AUTO_DRAG_MIN)
   {
     _rotationDelta *= AUTO_DRAG_FRICTION;
     dragCamera(_rotationAxis, _rotationDelta);
   } else {
     _rotationDelta = 0.0;
+  }
+  
+  //ZOOMING
+  if ((fabs(_zoomFactor) - 1.0) > AUTO_ZOOM_MIN)
+  {
+    _zoomFactor = (_zoomFactor - 1.0) *AUTO_ZOOM_FRICTION +1.0;
+    zoom(_zoomFactor);
+  }
+  
+}
+
+void Camera::stopInertia()
+{
+  _rotationDelta = 0.0;
+  _zoomFactor = 0.0;
+}
+
+void Camera::zoom(double factor) {
+  
+  if (factor != 1.0){
+    Vector3D w = _pos.sub(_center);
+    _pos = _center.add(w.times(factor));
+    _zoomFactor = factor;
   }
 }

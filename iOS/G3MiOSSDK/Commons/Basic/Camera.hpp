@@ -23,6 +23,8 @@
 
 #define AUTO_DRAG_FRICTION              0.985
 #define AUTO_DRAG_MIN                   1e-7
+#define AUTO_ZOOM_FRICTION              0.850
+#define AUTO_ZOOM_MIN                   1e-7
 
 
 /**
@@ -54,8 +56,12 @@ public:
   void dragCamera(const Vector3D& p0, const Vector3D& p1);
   void dragCamera(const Vector3D& axis, double delta);
   
+  //Zoom
+  void zoom(double factor);
+  
   //Camera inertia
   void applyInertia();
+  void stopInertia();
   
   void print() const;
 
@@ -74,6 +80,7 @@ private:
   //Camera Inertia
   MutableVector3D _rotationAxis;              // Rotation Axis
   double _rotationDelta;                      // Rotation Delta
+  double _zoomFactor;
   
   void applyTransform(MutableMatrix44D mat);
   
