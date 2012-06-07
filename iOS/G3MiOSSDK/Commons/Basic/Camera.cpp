@@ -92,7 +92,6 @@ void Camera::draw(const RenderContext &rc) {
     double ratioScreen = (double) _viewport[3] / _viewport[2];
     _projection = GLU::projectionMatrix(-0.3 / ratioScreen * znear, 0.3 / ratioScreen * znear, -0.3 * znear, 0.3 * znear, znear, 10000 * znear);
   
-  
   //_projection.print();
   
     // obtaing gl object reference

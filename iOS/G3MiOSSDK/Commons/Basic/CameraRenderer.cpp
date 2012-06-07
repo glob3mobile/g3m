@@ -21,15 +21,13 @@ void CameraRenderer::initialize(const InitializationContext* ic){}
 
 int CameraRenderer::render(const RenderContext* rc)
 {
-  
-  
   _camera = rc->getCamera(); //Saving camera reference 
   _planet = rc->getPlanet();
   
   if (!_cameraFixed) _camera->applyInertia();    //AutoDragging
   
   rc->getCamera()->draw(*rc);
-  
+
   //_camera->print();
   return 0;
 }
