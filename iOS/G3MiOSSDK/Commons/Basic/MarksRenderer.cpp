@@ -26,7 +26,7 @@ int MarksRenderer::render(const RenderContext* rc) {
   int marksSize = _marks.size();
   for (int i = 0; i < marksSize; i++) {
     Mark* mark = _marks[i];
-    //rc->getLogger()->logInfo("Mark: %s", mark->getName().c_str());
+    //rc->getLogger()->logInfo("Rendering Mark: \"%s\"", mark->getName().c_str());
   }
   
   return 9999;

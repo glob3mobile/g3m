@@ -25,11 +25,17 @@ public:
   
   virtual bool onTouchEvent(const TouchEvent* event);
   
-  virtual ~MarksRenderer() { };
+  virtual ~MarksRenderer() {
+    int marksSize = _marks.size();
+    for (int i = 0; i < marksSize; i++) {
+      delete _marks[i];
+    }
+  };
 
   void addMark(Mark* mark) {
     _marks.push_back(mark);
   }
+  
 };
 
 #endif
