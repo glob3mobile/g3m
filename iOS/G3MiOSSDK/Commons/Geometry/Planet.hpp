@@ -14,7 +14,7 @@
 #include <string>
 
 
-class Planet : Ellipsoid {
+class Planet : public Ellipsoid {
 private:
   std::string _name;
   

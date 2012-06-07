@@ -50,6 +50,10 @@
 		CC14B64A157D35A200793C92 /* GLU.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC14B648157D35A200793C92 /* GLU.hpp */; };
 		CC14B64D157D35C100793C92 /* IGL.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC14B64B157D35C100793C92 /* IGL.hpp */; };
 		CC14B64E157D35C100793C92 /* IImage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC14B64C157D35C100793C92 /* IImage.hpp */; };
+		CF0C396A157F988100646A2F /* Mark.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0C3969157F988100646A2F /* Mark.cpp */; };
+		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
+		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
+		D84D5A32157E0EAA000C5E35 /* MutableVector3D.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D84D5A30157E0EAA000C5E35 /* MutableVector3D.hpp */; };
 		CFA3E7C9157E537B00DAABD6 /* MarksRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA3E7C8157E537B00DAABD6 /* MarksRenderer.cpp */; };
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; };
 /* End PBXBuildFile section */
@@ -98,6 +102,12 @@
 		CC14B648157D35A200793C92 /* GLU.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GLU.hpp; path = Commons/Geometry/GLU.hpp; sourceTree = "<group>"; };
 		CC14B64B157D35C100793C92 /* IGL.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IGL.hpp; path = Commons/Interfaces/IGL.hpp; sourceTree = "<group>"; };
 		CC14B64C157D35C100793C92 /* IImage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IImage.hpp; path = Commons/Interfaces/IImage.hpp; sourceTree = "<group>"; };
+		CF0C3967157F987200646A2F /* Mark.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Mark.hpp; path = Commons/Basic/Mark.hpp; sourceTree = "<group>"; };
+		CF0C3969157F988100646A2F /* Mark.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Mark.cpp; path = Commons/Basic/Mark.cpp; sourceTree = "<group>"; };
+		D8228EBC157F7F6100BBAF60 /* MutableMatrix44D.hpp */ = {isa = PBXFileReference; name = MutableMatrix44D.hpp; path = Commons/Geometry/MutableMatrix44D.hpp; sourceTree = "<group>"; };
+		D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableMatrix44D.cpp; path = Commons/Geometry/MutableMatrix44D.cpp; sourceTree = "<group>"; };
+		D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector3D.cpp; path = Commons/Geometry/MutableVector3D.cpp; sourceTree = "<group>"; };
+		D84D5A30157E0EAA000C5E35 /* MutableVector3D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MutableVector3D.hpp; path = Commons/Geometry/MutableVector3D.hpp; sourceTree = "<group>"; };
 		CFA3E7C7157E536900DAABD6 /* MarksRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MarksRenderer.hpp; path = Commons/Basic/MarksRenderer.hpp; sourceTree = "<group>"; };
 		CFA3E7C8157E537B00DAABD6 /* MarksRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MarksRenderer.cpp; path = Commons/Basic/MarksRenderer.cpp; sourceTree = "<group>"; };
 		D8EEF3B51577924D003FEB5E /* libG3MiOSSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libG3MiOSSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -178,6 +188,8 @@
 				383BD3941577EE500012AC53 /* TouchEvent.hpp */,
 				CFA3E7C7157E536900DAABD6 /* MarksRenderer.hpp */,
 				CFA3E7C8157E537B00DAABD6 /* MarksRenderer.cpp */,
+				CF0C3967157F987200646A2F /* Mark.hpp */,
+				CF0C3969157F988100646A2F /* Mark.cpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -185,6 +197,8 @@
 		383BD38A1577EDFD0012AC53 /* Geometry */ = {
 			isa = PBXGroup;
 			children = (
+				D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */,
+				D84D5A30157E0EAA000C5E35 /* MutableVector3D.hpp */,
 				CC14B647157D35A200793C92 /* GLU.cpp */,
 				CC14B648157D35A200793C92 /* GLU.hpp */,
 				383BD39E1577EE5A0012AC53 /* Angle.cpp */,
@@ -200,6 +214,8 @@
 				383BD3A81577EE5A0012AC53 /* Vector2D.hpp */,
 				383BD3A91577EE5A0012AC53 /* Vector3D.cpp */,
 				383BD3AA1577EE5A0012AC53 /* Vector3D.hpp */,
+				D8228EBC157F7F6100BBAF60 /* MutableMatrix44D.hpp */,
+				D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */,
 			);
 			name = Geometry;
 			sourceTree = "<group>";
@@ -300,6 +316,7 @@
 				CC14B64A157D35A200793C92 /* GLU.hpp in Headers */,
 				CC14B64D157D35C100793C92 /* IGL.hpp in Headers */,
 				CC14B64E157D35C100793C92 /* IImage.hpp in Headers */,
+				D84D5A32157E0EAA000C5E35 /* MutableVector3D.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -371,7 +388,10 @@
 				CC14B641157D356800793C92 /* CameraRenderer.cpp in Sources */,
 				CC14B645157D358100793C92 /* DummyRenderer.cpp in Sources */,
 				CC14B649157D35A200793C92 /* GLU.cpp in Sources */,
+				D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */,
+				D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */,
 				CFA3E7C9157E537B00DAABD6 /* MarksRenderer.cpp in Sources */,
+				CF0C396A157F988100646A2F /* Mark.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

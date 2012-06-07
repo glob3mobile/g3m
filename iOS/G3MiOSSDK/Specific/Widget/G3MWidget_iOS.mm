@@ -20,6 +20,7 @@
 #include "CameraRenderer.hpp"
 #include "DummyRenderer.hpp"
 #include "MarksRenderer.hpp"
+#include "Mark.hpp"
 
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
@@ -81,6 +82,19 @@
     comp->addRenderer(dum);
     
     MarksRenderer* marks = new MarksRenderer();
+    
+    Geodetic3D g(Angle::fromDegrees(28.05),
+                 Angle::fromDegrees(-14.36),
+                 0);
+    
+    
+    Mark* m = new Mark("Fuerteventura",
+                       "Description of Fuerteventura",
+                       "Mark.png",
+                       g);
+    //m->addTouchListener(listener);
+    marks->addMark(m);
+   
     comp->addRenderer(marks);
 
     
@@ -201,7 +215,7 @@
   //TOUCH EVENT
   Vector2D pos(current.x, current.y);
   Vector2D prevPos(previous.x, previous.y);
-  TouchEvent te(TouchEvent::create(Down, new Pointer(pos, prevPos)));
+  TouchEvent te(TouchEvent::create(Down, new Touch(pos, prevPos)));
   
   ((G3MWidget*)[self widget])->onTouchEvent(&te);
 }
@@ -212,7 +226,7 @@
   
   NSUInteger pointersCount = [allTouches count];
   
-  std::vector<const Pointer*> pointers = std::vector<const Pointer*>(pointersCount);
+  std::vector<const Touch*> pointers = std::vector<const Touch*>();
   
   for (int n = 0; n < pointersCount; n++) {
     UITouch *touch = [[allTouches allObjects] objectAtIndex:n];
@@ -222,7 +236,9 @@
     //1 POINTER
     Vector2D pos(current.x, current.y);
     Vector2D prevPos(previous.x, previous.y);
-    pointers.push_back(new Pointer(pos, prevPos));
+    Touch *to = new Touch(pos, prevPos);
+    
+    pointers.push_back(to);
   }
   
   //TOUCH EVENT
@@ -240,7 +256,7 @@
   //TOUCH EVENT
   Vector2D pos(current.x, current.y);
   Vector2D prevPos(previous.x, previous.y);
-  TouchEvent te( TouchEvent::create(Up, new Pointer(pos, prevPos)));
+  TouchEvent te( TouchEvent::create(Up, new Touch(pos, prevPos)));
   
   ((G3MWidget*)[self widget])->onTouchEvent(&te);
 }

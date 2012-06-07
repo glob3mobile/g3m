@@ -13,85 +13,48 @@
 
 #include "IImage.hpp"
 
+#include "MutableMatrix44D.hpp"
+
 
 class IGL {
 public:
   
-  virtual void EnableVertices() = 0;
-  
-  virtual void EnableTextures() = 0;
-  
-  virtual void EnableTexture2D() = 0;
-  
-  virtual void DisableTexture2D() = 0;
-  
-  virtual void DisableVertices() = 0;
-  
-  virtual void DisableTextures() = 0;
-  
-  virtual void ClearScreen(float r, float g, float b) = 0;
-  
-  virtual void Color(float r, float g, float b) = 0;
-  
-  virtual void PushMatrix() = 0;
-  
-  virtual void PopMatrix() = 0;
-  
-  virtual bool IsTexture(unsigned int texture) = 0;
-
-  virtual void DeleteTexture(unsigned int n) = 0;
-  
-  virtual void LoadMatrixf(const float m[]) = 0;
-  
-  virtual void Translate(float tx, float ty, float tz) = 0;
-  
-  virtual void BindTexture(unsigned int texture) = 0;
-  
-  virtual void VertexPointer(int size, int stride, const float vertex[]) = 0;
-  
-  virtual void TexCoordPointer(int size, int stride, const float texcoord[]) = 0;
-  
-  virtual void DrawTriangleStrip(int n, unsigned char *i) = 0;
-  
-  virtual void DrawLines(int n, unsigned char *i) = 0;
-  
-  virtual void DrawLineLoop(int n, unsigned char *i) = 0;
-  
-  virtual unsigned int UploadTextures(std::vector<IImage *> images, bool transparent) = 0;
-  
-  virtual unsigned int UploadTexture(int size, const void *pixels) = 0;
-  
-  virtual unsigned int UploadTexture(IImage *image) = 0;
-  
-  virtual void UpdateTexture(unsigned int id, int size, const void *pixels) = 0;
-  
-  virtual void UpdateTexture(unsigned int id, IImage *image) = 0;
-  
-  virtual void SetProjection(float projection[]) = 0;
-  
-  virtual void AllocateTextureMemory(unsigned int num) = 0;
-  
-  virtual unsigned int GetNumFreeIdTextures() = 0;
-  
-  virtual void UseProgram(unsigned int program) = 0;
-  
-  virtual void DrawBillBoard(const unsigned int tex,
-                             const float x, 
-                             const float y, 
-                             const float z) = 0;
-  
-  virtual void DepthTestEnabled(bool t) = 0;
-  
-  virtual void BlendingEnabled(bool t) = 0;
-  
-  virtual void EnablePolygonOffset(float factor, float units) = 0;
-  
-  virtual void DisablePolygonOffset() = 0;
-  
-  virtual void LineWidth(float width) = 0;
-  
-  // a virtual destructor is needed for conversion to Java
   virtual ~IGL() {};
+  
+  virtual void enableVertices() = 0;
+  
+  virtual void enableTextures() = 0;
+  
+  virtual void enableTexture2D() = 0;
+  
+  virtual void disableTexture2D() = 0;
+  
+  virtual void disableVertices() = 0;
+  
+  virtual void disableTextures() = 0;
+  
+  virtual void clearScreen(float r, float g, float b) = 0;
+  
+  virtual void color(float r, float g, float b) = 0;
+  
+  virtual void pushMatrix() = 0;
+  
+  virtual void popMatrix() = 0;
+  
+  virtual void loadMatrixf(const MutableMatrix44D &m) = 0;
+  
+  virtual void vertexPointer(int size, int stride, const float vertex[]) = 0;
+  
+  virtual void drawTriangleStrip(int n, unsigned char *i) = 0;
+
+  virtual void setProjection(const MutableMatrix44D &projection) = 0;
+  
+  virtual void useProgram(unsigned int program) = 0;
+  
+  virtual void enablePolygonOffset(float factor, float units) = 0;
+  
+  virtual void disablePolygonOffset() = 0;
+
 };
 
 

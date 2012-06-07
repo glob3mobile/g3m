@@ -82,15 +82,10 @@ enum {
   glViewport(0, 0, backingWidth, backingHeight);
   
   // Use shader program
-  //sceneController->GetRenderContext()->GetGL()->UseProgram(program);
+  widget->getGL()->useProgram(program);
   
-  
-  widget->getGL()->UseProgram(program);
   bool result = widget->render();
-    
-  
   if (result) {
-    int __check_with_agustin_result;
     // This application only creates a single color renderbuffer which is already bound at this point.
     // This call is redundant, but needed if dealing with multiple renderbuffers.
     glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);

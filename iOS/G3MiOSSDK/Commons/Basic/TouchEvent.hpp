@@ -14,19 +14,17 @@
 #include "Vector2D.hpp"
 
 
-class Pointer {
+class Touch {
 private:
   const Vector2D _pos;
   const Vector2D _prevPos;
-  
-  Pointer& operator=(const Pointer& v);
-  
+
 public:
-  Pointer(const Pointer& other) : _pos(other._pos), _prevPos(other._prevPos) {
+  Touch(const Touch& other) : _pos(other._pos), _prevPos(other._prevPos) {
     
   }
   
-  Pointer(const Vector2D& pos, const Vector2D& prev) : _pos(pos), _prevPos(prev) { }
+  Touch(const Vector2D& pos, const Vector2D& prev) : _pos(pos), _prevPos(prev) { }
   
   const Vector2D getPos() const { return _pos; }
   const Vector2D getPrevPos() const { return _prevPos; }
@@ -44,35 +42,40 @@ enum TouchEventType {
 class TouchEvent {
 private:
   const TouchEventType              _eventType;
-  const std::vector<const Pointer*> _pointers;
+  const std::vector<const Touch*> _touchs;
   
   TouchEvent(const TouchEventType& type,
-             const std::vector<const Pointer*> pointers): _eventType(type), _pointers(pointers) { }
+             const std::vector<const Touch*> touchs): _eventType(type), _touchs(touchs) { 
+  }
   
 public:
-  TouchEvent(const TouchEvent& other): _eventType(other._eventType), _pointers(other._pointers) {
+  TouchEvent(const TouchEvent& other): _eventType(other._eventType), _touchs(other._touchs) {
     
   }
   
   static TouchEvent create(const TouchEventType& type,
-                           const std::vector<const Pointer*> pointers) {
-    return TouchEvent(type, pointers);
+                           const std::vector<const Touch*> Touchs) {
+    return TouchEvent(type, Touchs);
   }
   
   static TouchEvent create(const TouchEventType& type,
-                           const Pointer* pointer) {
-    const Pointer* pa[] = { pointer };
-    const std::vector<const Pointer*> pointers = std::vector<const Pointer*>(pa, pa+1);
-    return TouchEvent::create(type, pointers);
+                           const Touch* touch) {
+    const Touch * pa[] = { touch };
+    const std::vector<const Touch*> touchs = std::vector<const Touch*>(pa, pa+1);
+    return create(type, touchs);
   }
   
-  TouchEventType getType() {
+  TouchEventType getType() const {
     return _eventType;
   }
   
+  const Touch* getTouch(int i) const { return _touchs[i];}
+  
+  int getNumTouch() const { return _touchs.size(); }
+  
   ~TouchEvent() {
-    for (int i = 0; i < _pointers.size(); i++) {
-      delete _pointers[i];
+    for (int i = 0; i < _touchs.size(); i++) {
+      delete _touchs[i];
     }
   }
   

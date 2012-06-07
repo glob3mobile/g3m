@@ -11,8 +11,26 @@
 
 #include "Renderer.hpp"
 
+#include "Camera.hpp"
+
 class CameraRenderer: public Renderer
 {
+private:
+
+  Camera * _camera;   //Camera used at current frame
+  const Planet * _planet;   //Planet
+  
+  Camera _camera0;                //Initial Camera saved on Down event
+  MutableVector3D _initialPoint;  //Initial point at dragging
+  bool _cameraFixed;              //If true the camera is being moved and has no inertia
+  
+  void onDown(const TouchEvent& event);
+  void onMove(const TouchEvent& event);
+  void onUp(const TouchEvent& event);
+  
+public:
+  
+  CameraRenderer();
   
   void initialize(const InitializationContext* ic);  
   
