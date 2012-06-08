@@ -162,7 +162,7 @@ public class Camera
 	// compute the angle
 	Angle rotationDelta = Angle.fromRadians(- Math.acos(p0.normalized().dot(p1.normalized())));
   
-	if (isnan(rotationDelta.radians()))
+	if (Double.isNaN(rotationDelta.radians()))
 		return;
   
 	rotateWithAxis(rotationAxis, rotationDelta);
