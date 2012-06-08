@@ -8,8 +8,6 @@ package org.glob3.mobile.generated;
 //
 
 
-
-
 //
 //  TouchEvent.h
 //  G3MiOSSDK

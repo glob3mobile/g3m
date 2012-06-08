@@ -36,6 +36,14 @@ public:
     return Angle::fromDegrees(0);
   }
   
+  static Angle nan() {
+    return Angle::fromDegrees(NAN);
+  }
+  
+  bool isNan() const {
+    return isnan(_degrees);
+  }
+  
   Angle(const Angle& angle): _degrees(angle._degrees) {
     
   }

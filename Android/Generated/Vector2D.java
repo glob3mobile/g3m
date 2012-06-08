@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class Vector2D
 {
   private final double _x;
@@ -100,6 +101,14 @@ public class Vector2D
   public final Vector2D div(double v)
   {
 	return new Vector2D(_x / v, _y / v);
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Angle angle() const
+  public final Angle angle()
+  {
+	double a = Math.atan2(_y, _x);
+	return Angle.fromRadians(a);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

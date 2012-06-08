@@ -10,13 +10,15 @@ package org.glob3.mobile.generated;
 
 
 
-public interface Renderer
+public abstract class Renderer
 {
-  void initialize(InitializationContext ic);
+  public abstract void initialize(InitializationContext ic);
 
-  int render(RenderContext rc);
+  public abstract int render(RenderContext rc);
 
-  boolean onTouchEvent(TouchEvent touchEvent);
+  public abstract boolean onTouchEvent(TouchEvent touchEvent);
 
-  //virtual ~Renderer() { };
+  public void dispose()
+  {
+  }
 }

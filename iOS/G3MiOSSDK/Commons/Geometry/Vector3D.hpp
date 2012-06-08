@@ -33,6 +33,14 @@ public:
     
   }
   
+  static Vector3D nan() {
+    return Vector3D(NAN, NAN, NAN);
+  }
+  
+  bool isNan() const {
+    return isnan(_x*_y*_z);
+  }
+  
   Vector3D normalized() const;
     
   double length() const {
