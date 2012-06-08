@@ -39,7 +39,7 @@ public class MarksRenderer extends Renderer
 	for (int i = 0; i < marksSize; i++)
 	{
 	  Mark mark = _marks.get(i);
-	  //rc->getLogger()->logInfo("Mark: %s", mark->getName().c_str());
+	  //rc->getLogger()->logInfo("Rendering Mark: \"%s\"", mark->getName().c_str());
 	}
   
 	return 9999;
@@ -50,12 +50,19 @@ public class MarksRenderer extends Renderer
 
   public void dispose()
   {
+	int marksSize = _marks.size();
+	for (int i = 0; i < marksSize; i++)
+	{
+	  if (_marks.get(i) != null)
+		  _marks.get(i).dispose();
+	}
   }
 
   public final void addMark(Mark mark)
   {
 	_marks.add(mark);
   }
+
 }
 //C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
 //boolean MarksRenderer::onTouchEvent(const TouchEvent* event)

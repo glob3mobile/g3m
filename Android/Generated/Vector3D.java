@@ -18,6 +18,9 @@ package org.glob3.mobile.generated;
 
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class MutableVector3D;
+
 public class Vector3D
 {
   private final double _x;
@@ -25,21 +28,12 @@ public class Vector3D
   private final double _z;
 
 
-//  Vector3D(Geodetic3D g);  // TO CONVERT TO SPHERICAL COORDINATES
-
   public Vector3D(double x, double y, double z)
   {
 	  _x = x;
 	  _y = y;
 	  _z = z;
 
-  }
-
-  public Vector3D(MutableVector3D mv)
-  {
-	  _x = mv.x();
-	  _y = mv.y();
-	  _z = mv.z();
   }
 
   public Vector3D(Vector3D v)
@@ -189,6 +183,13 @@ public class Vector3D
 	Vector3D v = new Vector3D(_x * M[0] + _y * M[4] + _z * M[8] + M[12], _x * M[1] + _y * M[5] + _z * M[9] + M[13], _x * M[2] + _y * M[6] + _z * M[10] + M[14]);
 
 	return v;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: MutableVector3D asMutableVector3D() const
+  public final MutableVector3D asMutableVector3D()
+  {
+	return new MutableVector3D(_x, _y, _z);
   }
 
 }

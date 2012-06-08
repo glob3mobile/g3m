@@ -1,23 +1,4 @@
 package org.glob3.mobile.generated; 
-//
-//  CameraRenderer.cpp
-//  G3MiOSSDK
-//
-//  Created by José Miguel S N on 04/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
-//
-
-//
-//  CameraRenderer.h
-//  G3MiOSSDK
-//
-//  Created by José Miguel S N on 04/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
-//
-
-
-
-
 public class CameraRenderer extends Renderer
 {
 
@@ -26,7 +7,8 @@ public class CameraRenderer extends Renderer
 
   private Camera _camera0 = new Camera(); //Initial Camera saved on Down event
   private MutableVector3D _initialPoint = new MutableVector3D(); //Initial point at dragging
-  private boolean _cameraFixed; //If true the camera is being moved and has no inertia
+
+  private Gesture _currentGesture; //Gesture the user is making at the moment
 
 //C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
 //  void onDown(const TouchEvent& event);
@@ -40,7 +22,7 @@ public class CameraRenderer extends Renderer
   {
 	  _camera0 = new Camera(0,0);
 	  _initialPoint = new MutableVector3D(0,0,0);
-	  _cameraFixed = false;
+	  _currentGesture = Gesture.None;
   }
 
   public final void initialize(InitializationContext ic)
@@ -52,12 +34,7 @@ public class CameraRenderer extends Renderer
 	_camera = rc.getCamera(); //Saving camera reference
 	_planet = rc.getPlanet();
   
-	if (!_cameraFixed) //AutoDragging
-		_camera.applyInertia();
-  
-	rc.getCamera().draw(rc);
-  
-	//_camera->print();
+	rc.getCamera().draw(rc); //We "draw" the camera with IGL
 	return 0;
   }
 
@@ -69,19 +46,15 @@ public class CameraRenderer extends Renderer
 //C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
 //void CameraRenderer::onDown(const TouchEvent& event)
 //{
-//  //Stop movement
-//  _camera->stopInertia();
-//
 //  //Saving Camera0
 //  Camera c(*_camera);
 //  _camera0 = c;
 //
+//  //Initial Point for Dragging
 //  Vector2D pixel = event.getTouch(0)->getPos();
-//
 //  Vector3D ray = _camera0.pixel2Vector(pixel);
-//  _initialPoint = _planet->closestIntersection(_camera0.getPos(), ray);
-//
-//  _cameraFixed = true;
+//  _initialPoint = _planet->closestIntersection(_camera0.getPos(), ray).asMutableVector3D();
+//  _currentGesture = Drag; //Dragging
 //}
 
 //C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
@@ -90,31 +63,22 @@ public class CameraRenderer extends Renderer
 //  int n = event.getNumTouch();
 //
 //  //ONE FINGER
-//  if (n == 1)
+//  if (n == 1 && _currentGesture == Drag)
 //  {
 //
 //	if (_initialPoint.length() > 0) //VALID INITIAL POINT
 //	{
-//
 //	  Vector2D pixel = event.getTouch(0)->getPos();
 //	  Vector3D ray = _camera0.pixel2Vector(pixel);
 //	  Vector3D pos = _camera0.getPos();
 //
-//	  Vector3D finalPoint = _planet->closestIntersection(pos, ray);
-//
+//	  MutableVector3D finalPoint = _planet->closestIntersection(pos, ray).asMutableVector3D();
 //	  if (finalPoint.length() <= 0.0) //INVALID FINAL POINT
 //	  {
-//		//We take the closest point to the sphere
-//		Vector3D finalPoint2 = _planet->closestPointToSphere(pos, ray);
-//		_camera->copyFrom(_camera0);
-//		_camera->dragCamera(_initialPoint, finalPoint2);
-//
+//		finalPoint = _planet->closestPointToSphere(pos, ray).asMutableVector3D();
 //	  }
-//	  else
-//	  {
-//		_camera->copyFrom(_camera0);
-//		_camera->dragCamera(_initialPoint, finalPoint);
-//	  }
+//	  _camera->copyFrom(_camera0);
+//	  _camera->dragCamera(_initialPoint.asVector3D(), finalPoint.asVector3D());
 //	}
 //  }
 //
@@ -127,36 +91,43 @@ public class CameraRenderer extends Renderer
 //	Vector2D pixelCenter = pixel0.add(pixel1).div(2.0);
 //
 //	Vector3D ray = _camera0.pixel2Vector(pixelCenter);
-//	_initialPoint = _planet->closestIntersection(_camera0.getPos(), ray);
+//	_initialPoint = _planet->closestIntersection(_camera0.getPos(), ray).asMutableVector3D();
 //
 //	//IF CENTER PIXEL INTERSECTS THE PLANET
 //	if (_initialPoint.length() > 0)
 //	{
-//	  Vector2D prevPixel0 = event.getTouch(0)->getPrevPos();
-//	  Vector2D prevPixel1 = event.getTouch(1)->getPrevPos();
-//
-//	  double dist = pixel0.sub(pixel1).length();
-//	  double prevDist = prevPixel0.sub(prevPixel1).length();
-//
-//	  //ZOOM
+//	  //IF THE CENTER OF THE VIEW INTERSECTS THE PLANET
 //	  if (_planet->intersections(_camera->getPos(), _camera->getCenter()).size() > 0)
 //	  {
-//		//IF THE CENTER OF THE VIEW INTERSECTS THE PLANET
+//
+//		//ZOOM
+//		_currentGesture = Zoom; //Zoom gesture
+//
+//		Vector2D prevPixel0 = event.getTouch(0)->getPrevPos();
+//		Vector2D prevPixel1 = event.getTouch(1)->getPrevPos();
+//
+//		double dist = pixel0.sub(pixel1).length();
+//		double prevDist = prevPixel0.sub(prevPixel1).length();
+//
+//		Vector2D pixelDelta = pixel1.sub(pixel0);
+//		Vector2D prevPixelDelta = prevPixel1.sub(prevPixel0);
+//
+//		Angle angle = pixelDelta.angle();
+//		Angle prevAngle = prevPixelDelta.angle();
+//
+//		//We rotate and zoom the camera with the same gesture
 //		_camera->zoom(prevDist /dist);
+//		_camera->rotate(angle.sub(prevAngle));
 //	  }
-//
-//
 //	}
-//
 //  }
 //
 //}
 
-
 //C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
 //void CameraRenderer::onUp(const TouchEvent& event)
 //{
-//  _cameraFixed = false;
+//  _currentGesture = None;
 //}
 
 //C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:

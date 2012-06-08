@@ -1,14 +1,5 @@
 package org.glob3.mobile.generated; 
 //
-//  MutableVector3D.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 31/05/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
-//
-
-
-//
 //  MutableVector3D.hpp
 //  G3MiOSSDK
 //
@@ -19,8 +10,6 @@ package org.glob3.mobile.generated;
 
 
 
-
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Vector3D;
 
 public class MutableVector3D
@@ -46,20 +35,10 @@ public class MutableVector3D
 
   }
 
-  public MutableVector3D(Vector3D v)
-  {
-	_x = v.x();
-	_y = v.y();
-	_z = v.z();
-  }
-
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: MutableVector3D normalized() const
-  public final MutableVector3D normalized()
-  {
-	  double d = length();
-	  return new MutableVector3D(_x / d, _y /d, _z / d);
-  }
+//ORIGINAL LINE: MutableVector3D normalized() const;
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  MutableVector3D normalized();
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: void print() const
@@ -139,18 +118,9 @@ public class MutableVector3D
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double angleBetween(const MutableVector3D& other) const
-  public final double angleBetween(MutableVector3D other)
-  {
-	MutableVector3D v1 = normalized();
-	MutableVector3D v2 = other.normalized();
-	double c = v1.dot(v2);
-	if (c > 1.0)
-		c = 1.0;
-	else if (c < -1.0)
-		c = -1.0;
-	return Math.acos(c);
-  }
+//ORIGINAL LINE: double angleBetween(const MutableVector3D& other) const;
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  double angleBetween(MutableVector3D other);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: MutableVector3D rotatedAroundAxis(const MutableVector3D& other, const double theta) const;
@@ -187,6 +157,13 @@ public class MutableVector3D
 	MutableVector3D v = new MutableVector3D(_x * M[0] + _y * M[4] + _z * M[8] + M[12], _x * M[1] + _y * M[5] + _z * M[9] + M[13], _x * M[2] + _y * M[6] + _z * M[10] + M[14]);
 
 	return v;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector3D asVector3D() const
+  public final Vector3D asVector3D()
+  {
+	return new Vector3D(_x, _y, _z);
   }
 
 }
