@@ -7,6 +7,8 @@
 //
 
 #include "Vector3D.hpp"
+#include "MutableVector3D.hpp"
+
 
 Vector3D Vector3D::normalized() const
 {
@@ -50,3 +52,6 @@ Vector3D Vector3D::rotateAroundAxis(const Vector3D& axis,
                    (m * (-(v * _x) + (u * _y)) * sinTheta)) / ms);
 }
 
+MutableVector3D Vector3D::asMutableVector3D() const {
+  return MutableVector3D(_x, _y, _z);
+}

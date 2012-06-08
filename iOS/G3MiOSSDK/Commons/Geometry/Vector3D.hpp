@@ -13,6 +13,8 @@
 
 #include "MutableMatrix44D.hpp"
 
+class MutableVector3D;
+
 class Vector3D {
 private:
   const double _x;
@@ -21,15 +23,11 @@ private:
   
 public:
   
-//  Vector3D(Geodetic3D g);  // TO CONVERT TO SPHERICAL COORDINATES
-  
   Vector3D(const double x,
            const double y,
            const double z): _x(x), _y(y), _z(z) {
     
   }
-  
-//  Vector3D(const MutableVector3D& mv): _x(mv.x()), _y(mv.y()), _z(mv.z()){}
   
   Vector3D(const Vector3D &v): _x(v._x), _y(v._y), _z(v._z) {
     
@@ -117,6 +115,8 @@ public:
     
     return v;
   }
+  
+  MutableVector3D asMutableVector3D() const;
   
 };
 

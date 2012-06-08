@@ -8,14 +8,6 @@
 
 #include <MutableVector3D.hpp>
 
-#include "Vector3D.hpp"
-
-MutableVector3D::MutableVector3D(const Vector3D &v)
-{
-  _x = v.x();
-  _y = v.y();
-  _z = v.z();
-}
 
 MutableVector3D MutableVector3D::normalized() const
 {

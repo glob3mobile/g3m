@@ -35,8 +35,6 @@ public:
     
   }
   
-  MutableVector3D(const Vector3D &v);
-  
   MutableVector3D normalized() const;
   
   void print() const { printf("%.2f  %.2f %.2f\n", _x, _y, _z );}

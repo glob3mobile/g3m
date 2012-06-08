@@ -13,6 +13,12 @@
 
 #include "Camera.hpp"
 
+enum Gesture {
+  None,                   // used only for animation, not for gesture
+  Drag,
+  Zoom,
+};
+
 class CameraRenderer: public Renderer
 {
 private:
@@ -22,7 +28,8 @@ private:
   
   Camera _camera0;                //Initial Camera saved on Down event
   MutableVector3D _initialPoint;  //Initial point at dragging
-  bool _cameraFixed;              //If true the camera is being moved and has no inertia
+  
+  Gesture _currentGesture;        //Gesture the user is making at the moment
   
   void onDown(const TouchEvent& event);
   void onMove(const TouchEvent& event);

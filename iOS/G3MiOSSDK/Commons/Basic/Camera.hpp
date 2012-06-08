@@ -54,14 +54,13 @@ public:
   
   //Dragging camera
   void dragCamera(const Vector3D& p0, const Vector3D& p1);
-  void dragCamera(const Vector3D& axis, double delta);
+  void rotateWithAxis(const Vector3D& axis, const Angle& delta);
   
   //Zoom
   void zoom(double factor);
   
-  //Camera inertia
-  void applyInertia();
-  void stopInertia();
+  //Rotate
+  void rotate(const Angle& a);
   
   void print() const;
 
@@ -77,12 +76,7 @@ private:
   MutableVector3D _center;          // center of view
   MutableVector3D _up;              // vertical vector
   
-  //Camera Inertia
-  MutableVector3D _rotationAxis;              // Rotation Axis
-  double _rotationDelta;                      // Rotation Delta
-  double _zoomFactor;
-  
-  void applyTransform(MutableMatrix44D mat);
+  void applyTransform(const MutableMatrix44D& mat);
   
 };
 
