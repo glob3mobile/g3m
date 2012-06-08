@@ -68,11 +68,11 @@ void CameraRenderer::onMove(const TouchEvent& event)
         //We take the closest point to the sphere
         Vector3D finalPoint2 = _planet->closestPointToSphere(pos, ray);
         _camera->copyFrom(_camera0);
-        _camera->dragCamera(_initialPoint, finalPoint2);
+        _camera->dragCamera(_initialPoint.asVector3D(), finalPoint2);
         
       } else {
         _camera->copyFrom(_camera0);
-        _camera->dragCamera(_initialPoint, finalPoint);
+        _camera->dragCamera(_initialPoint.asVector3D(), finalPoint);
       }
     }
   }

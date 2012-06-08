@@ -14,8 +14,8 @@
 #include "MutableMatrix44D.hpp"
 
 #include <stdio.h>
-
-class Vector3D;
+#include "Vector3D.hpp"
+//class Vector3D;
 
 class MutableVector3D {
 private:
@@ -26,8 +26,8 @@ private:
 public:
   
   MutableVector3D(const double x,
-           const double y,
-           const double z): _x(x), _y(y), _z(z) {
+                  const double y,
+                  const double z): _x(x), _y(y), _z(z) {
     
   }
   
@@ -55,44 +55,44 @@ public:
   
   MutableVector3D add(const MutableVector3D& v) const {
     return MutableVector3D(_x + v._x,
-                    _y + v._y,
-                    _z + v._z);
+                           _y + v._y,
+                           _z + v._z);
   }
   
   MutableVector3D sub(const MutableVector3D& v) const {
     return MutableVector3D(_x - v._x,
-                    _y - v._y,
-                    _z - v._z);
+                           _y - v._y,
+                           _z - v._z);
   }
   
   MutableVector3D times(const MutableVector3D& v) const {
     return MutableVector3D(_x * v._x,
-                    _y * v._y,
-                    _z * v._z);
+                           _y * v._y,
+                           _z * v._z);
   }
   
   MutableVector3D times(const double magnitude) const {
     return MutableVector3D(_x * magnitude,
-                    _y * magnitude,
-                    _z * magnitude);
+                           _y * magnitude,
+                           _z * magnitude);
   }
   
   MutableVector3D div(const MutableVector3D& v) const {
     return MutableVector3D(_x / v._x,
-                    _y / v._y,
-                    _z / v._z);
+                           _y / v._y,
+                           _z / v._z);
   }
   
   MutableVector3D div(const double v) const {
     return MutableVector3D(_x / v,
-                    _y / v,
-                    _z / v);
+                           _y / v,
+                           _z / v);
   }
   
   MutableVector3D cross(const MutableVector3D& other) const {
     return MutableVector3D(_y * other._z - _z * other._y,
-                    _z * other._x - _x * other._z,
-                    _x * other._y - _y * other._x);
+                           _z * other._x - _x * other._z,
+                           _x * other._y - _y * other._x);
   }
   
   double angleBetween(const MutableVector3D& other) const;
@@ -116,10 +116,14 @@ public:
     const double * M = m.getMatrix();
     
     MutableVector3D v(_x * M[0] + _y * M[4] + _z * M[8] + M[12],
-               _x * M[1] + _y * M[5] + _z * M[9] + M[13],
-               _x * M[2] + _y * M[6] + _z * M[10] + M[14]);
+                      _x * M[1] + _y * M[5] + _z * M[9] + M[13],
+                      _x * M[2] + _y * M[6] + _z * M[10] + M[14]);
     
     return v;
+  }
+  
+  Vector3D asVector3D() const {
+    return Vector3D(_x, _y, _z);
   }
   
 };

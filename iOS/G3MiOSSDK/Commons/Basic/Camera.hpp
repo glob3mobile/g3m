@@ -46,11 +46,11 @@ public:
   
   Vector3D pixel2Vector(const Vector2D& pixel) const;
   
-  int getWidth() const{ return _width;}
-  int getHeight() const{ return _height;}
-  MutableVector3D getPos() const { return _pos;}
-  MutableVector3D getCenter() const { return _center;}
-  MutableVector3D getUp() const { return _up;}
+  int getWidth() const{ return _width; }
+  int getHeight() const{ return _height; }
+  Vector3D getPos() const { return _pos.asVector3D(); }
+  Vector3D getCenter() const { return _center.asVector3D(); }
+  Vector3D getUp() const { return _up.asVector3D(); }
   
   //Dragging camera
   void dragCamera(const Vector3D& p0, const Vector3D& p1);

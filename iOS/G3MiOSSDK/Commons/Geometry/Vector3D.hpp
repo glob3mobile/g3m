@@ -11,7 +11,6 @@
 
 #include <math.h>
 
-#include "MutableVector3D.hpp"
 #include "MutableMatrix44D.hpp"
 
 class Vector3D {
@@ -30,7 +29,7 @@ public:
     
   }
   
-  Vector3D(const MutableVector3D& mv): _x(mv.x()), _y(mv.y()), _z(mv.z()){}
+//  Vector3D(const MutableVector3D& mv): _x(mv.x()), _y(mv.y()), _z(mv.z()){}
   
   Vector3D(const Vector3D &v): _x(v._x), _y(v._y), _z(v._z) {
     

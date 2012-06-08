@@ -21,7 +21,7 @@ public:
   
   virtual bool onTouchEvent(const TouchEvent* touchEvent) = 0;
   
-  //virtual ~Renderer() { };
+  virtual ~Renderer() { };
 };
 
 

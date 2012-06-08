@@ -1,11 +1,11 @@
 /*
-*  Camera.cpp
-*  Prueba Opengl iPad
-*
-*  Created by Agustín Trujillo Pino on 24/01/11.
-*  Copyright 2011 Universidad de Las Palmas. All rights reserved.
-*
-*/
+ *  Camera.cpp
+ *  Prueba Opengl iPad
+ *
+ *  Created by Agustín Trujillo Pino on 24/01/11.
+ *  Copyright 2011 Universidad de Las Palmas. All rights reserved.
+ *
+ */
 
 
 #include <math.h>
@@ -56,9 +56,9 @@ void Camera::resizeViewport(int width, int height) {
   _width = width;
   _height = height;
   
-    _viewport[0] = _viewport[1] = 0;
-    _viewport[2] = width;
-    _viewport[3] = height;
+  _viewport[0] = _viewport[1] = 0;
+  _viewport[2] = width;
+  _viewport[3] = height;
 }
 
 void Camera::print() const
@@ -75,43 +75,43 @@ void Camera::print() const
 }
 
 void Camera::draw(const RenderContext &rc) {
-    double znear;
-
-    // update znear
-    //double height = GetPosGeo3D().height();
+  double znear;
+  
+  // update znear
+  //double height = GetPosGeo3D().height();
   double height = _pos.length();
   
-    if (height > 1273000.0) znear = 636500.0;
-    else if (height > 12730.0) znear = 6365.0;
-    else if (height > 3182.5) znear = 63.65;
-    else
-        znear = 19.095;
-
-    // compute projection matrix
-    double ratioScreen = (double) _viewport[3] / _viewport[2];
-    _projection = GLU::projectionMatrix(-0.3 / ratioScreen * znear, 0.3 / ratioScreen * znear, -0.3 * znear, 0.3 * znear, znear, 10000 * znear);
+  if (height > 1273000.0) znear = 636500.0;
+  else if (height > 12730.0) znear = 6365.0;
+  else if (height > 3182.5) znear = 63.65;
+  else
+    znear = 19.095;
+  
+  // compute projection matrix
+  double ratioScreen = (double) _viewport[3] / _viewport[2];
+  _projection = GLU::projectionMatrix(-0.3 / ratioScreen * znear, 0.3 / ratioScreen * znear, -0.3 * znear, 0.3 * znear, znear, 10000 * znear);
   
   //_projection.print();
   
-    // obtaing gl object reference
-    IGL *gl = rc.getGL();
-    gl->setProjection(_projection);
-
-    // make the lookat
-    _lookAt = GLU::lookAtMatrix(_pos, _center, _up);
-    gl->loadMatrixf(_lookAt);
+  // obtaing gl object reference
+  IGL *gl = rc.getGL();
+  gl->setProjection(_projection);
+  
+  // make the lookat
+  _lookAt = GLU::lookAtMatrix(_pos, _center, _up);
+  gl->loadMatrixf(_lookAt);
   
 }
 
 Vector3D Camera::pixel2Vector(const Vector2D& pixel) const {
   double py = (int) pixel.y();
   double px = (int) pixel.x();
-
+  
   py = _viewport[3] - py;
   Vector3D *obj = GLU::unproject(px, py, 0, _lookAt, _projection, _viewport);
   if (obj == NULL) return Vector3D(0.0,0.0,0.0);
   
-  Vector3D v = obj->sub(_pos);
+  Vector3D v = obj->sub(_pos.asVector3D());
   delete obj;
   return v;
 }
@@ -131,8 +131,8 @@ void Camera::dragCamera(const Vector3D& p0, const Vector3D& p1) {
   _rotationDelta = - acos(p0.normalized().dot(p1.normalized()));
   if (isnan(_rotationDelta)) return;
   
-  dragCamera(_rotationAxis, _rotationDelta);
-    
+  dragCamera(_rotationAxis.asVector3D(), _rotationDelta);
+  
   //Inertia
   _rotationDelta /= 10.0; //Rotate much less with inertia
   if (fabs(_rotationDelta) < AUTO_DRAG_MIN * 3.0) _rotationDelta = 0.0;
@@ -150,7 +150,7 @@ void Camera::applyInertia()
   if (fabs(_rotationDelta) > AUTO_DRAG_MIN)
   {
     _rotationDelta *= AUTO_DRAG_FRICTION;
-    dragCamera(_rotationAxis, _rotationDelta);
+    dragCamera(_rotationAxis.asVector3D(), _rotationDelta);
   } else {
     _rotationDelta = 0.0;
   }
@@ -173,7 +173,7 @@ void Camera::stopInertia()
 void Camera::zoom(double factor) {
   
   if (factor != 1.0){
-    Vector3D w = _pos.sub(_center);
+    MutableVector3D w = _pos.sub(_center);
     _pos = _center.add(w.times(factor));
     _zoomFactor = factor;
   }
