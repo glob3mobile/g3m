@@ -10,7 +10,6 @@ package org.glob3.mobile.generated;
 
 
 
-
 /*
  *  Camera.hpp
  *  Prueba Opengl iPad
@@ -44,7 +43,7 @@ public class Camera
 	  _pos = new MutableVector3D(c._pos);
 	  _center = new MutableVector3D(c._center);
 	  _up = new MutableVector3D(c._up);
-	  _lookAt = new MutableMatrix44D(c._lookAt);
+	  _model = new MutableMatrix44D(c._model);
 	  _projection = new MutableMatrix44D(c._projection);
 	resizeViewport(c.getWidth(), c.getHeight());
   }
@@ -62,7 +61,7 @@ public class Camera
 	_pos = c._pos;
 	_center = c._center;
 	_up = c._up;
-	_lookAt = c._lookAt;
+	_model = c._model;
 	_projection = c._projection;
   }
 
@@ -93,15 +92,15 @@ public class Camera
   
 	// compute projection matrix
 	double ratioScreen = (double) _viewport[3] / _viewport[2];
-	_projection = GLU.projectionMatrix(-0.3 / ratioScreen * znear, 0.3 / ratioScreen * znear, -0.3 * znear, 0.3 * znear, znear, 10000 * znear);
+	_projection = MutableMatrix44D.createProjectionMatrix(-0.3 / ratioScreen * znear, 0.3 / ratioScreen * znear, -0.3 * znear, 0.3 * znear, znear, 10000 * znear);
   
 	// obtaing gl object reference
 	IGL gl = rc.getGL();
 	gl.setProjection(_projection);
   
-	// make the lookat
-	_lookAt = GLU.lookAtMatrix(_pos, _center, _up);
-	gl.loadMatrixf(_lookAt);
+	// make the model
+	_model = MutableMatrix44D.createModelMatrix(_pos, _center, _up);
+	gl.loadMatrixf(_model);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -110,15 +109,15 @@ public class Camera
   {
 	double py = (int) pixel.y();
 	double px = (int) pixel.x();
-  
 	py = _viewport[3] - py;
-	Vector3D obj = GLU.unproject(px, py, 0, _lookAt, _projection, _viewport);
-	if (obj == null)
-		return new Vector3D(0.0,0.0,0.0);
+	Vector3D pixel3D = new Vector3D(px, py, 0);
+  
+	MutableMatrix44D modelView = _projection.multMatrix(_model);
+	Vector3D obj = modelView.unproject(pixel3D, _viewport);
+	if (obj.isNan())
+		return obj;
   
 	Vector3D v = obj.sub(_pos.asVector3D());
-	if (obj != null)
-		obj.dispose();
 	return v;
   }
 
@@ -162,7 +161,8 @@ public class Camera
 	// compute the angle
 	Angle rotationDelta = Angle.fromRadians(- Math.acos(p0.normalized().dot(p1.normalized())));
   
-	if (Double.isNaN(rotationDelta.radians()))
+	//if (isnan(rotationDelta.radians())) return;
+	if (rotationDelta.isNan())
 		return;
   
 	rotateWithAxis(rotationAxis, rotationDelta);
@@ -170,7 +170,7 @@ public class Camera
   public final void rotateWithAxis(Vector3D axis, Angle delta)
   {
 	// update the camera
-	MutableMatrix44D rot = GLU.rotationMatrix(delta, axis);
+	MutableMatrix44D rot = MutableMatrix44D.createRotationMatrix(delta, axis);
 	applyTransform(rot);
   }
 
@@ -195,8 +195,8 @@ public class Camera
 //ORIGINAL LINE: void print() const
   public final void print()
   {
-	System.out.print("LOOKAT: \n");
-	_lookAt.print();
+	System.out.print("MODEL: \n");
+	_model.print();
 	System.out.print("\n");
 	System.out.print("PROJECTION: \n");
 	_projection.print();
@@ -212,7 +212,7 @@ public class Camera
 
   private int[] _viewport = new int[4];
 
-  private MutableMatrix44D _lookAt = new MutableMatrix44D(); // gluLookAt matrix, computed in CPU in double precision
+  private MutableMatrix44D _model = new MutableMatrix44D(); // Model matrix, computed in CPU in double precision
   private MutableMatrix44D _projection = new MutableMatrix44D(); // opengl projection matrix
 
   private MutableVector3D _pos = new MutableVector3D(); // position

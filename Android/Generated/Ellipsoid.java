@@ -363,7 +363,7 @@ public class Ellipsoid
   {
 	java.util.ArrayList<Double> t = intersections(pos, ray);
 	if (t.isEmpty())
-		return new Vector3D(0,0,0);
+		return Vector3D.nan();
 	  Vector3D solution = pos.add(ray.times(t.get(0)));
 	  return solution;
   }

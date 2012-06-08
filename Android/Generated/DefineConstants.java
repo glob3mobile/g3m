@@ -6,5 +6,4 @@ final class DefineConstants
 	public static final double AUTO_DRAG_MIN = 1e-7;
 	public static final double AUTO_ZOOM_FRICTION = 0.850;
 	public static final double AUTO_ZOOM_MIN = 1e-7;
-	public static final double DEG_TO_RAD = 0.017453292519943;
 }

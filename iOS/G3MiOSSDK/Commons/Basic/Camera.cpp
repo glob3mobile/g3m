@@ -95,7 +95,7 @@ Vector3D Camera::pixel2Vector(const Vector2D& pixel) const {
   
   MutableMatrix44D modelView = _projection.multMatrix(_model);
   Vector3D obj = modelView.unproject(pixel3D, _viewport);
-  if (obj.isNan()) return Vector3D::nan();
+  if (obj.isNan()) return obj;
   
   Vector3D v = obj.sub(_pos.asVector3D());
   return v;
