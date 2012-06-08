@@ -17,9 +17,10 @@ package org.glob3.mobile.generated;
 
 
 
-
 public class MarksRenderer extends Renderer
 {
+  private java.util.ArrayList<Mark> _marks = new java.util.ArrayList<Mark>();
+
 
   public void initialize(InitializationContext ic)
   {
@@ -30,9 +31,16 @@ public class MarksRenderer extends Renderer
   {
   //  rc.getLogger()->logInfo("MarksRenderer::render()");
   
-	//IGL* gl = rc.getGL();
+  //  IGL* gl = rc->getGL();
   
 	int __dgd_at_work;
+  
+	int marksSize = _marks.size();
+	for (int i = 0; i < marksSize; i++)
+	{
+	  Mark mark = _marks.get(i);
+	  //rc->getLogger()->logInfo("Mark: %s", mark->getName().c_str());
+	}
   
 	return 9999;
   }
@@ -44,6 +52,10 @@ public class MarksRenderer extends Renderer
   {
   }
 
+  public final void addMark(Mark mark)
+  {
+	_marks.add(mark);
+  }
 }
 //C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
 //boolean MarksRenderer::onTouchEvent(const TouchEvent* event)

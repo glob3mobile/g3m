@@ -10,16 +10,13 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class Renderer
+public interface Renderer
 {
-  public abstract void initialize(InitializationContext ic);
+  void initialize(InitializationContext ic);
 
-  public abstract int render(RenderContext rc);
+  int render(RenderContext rc);
 
-//C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
-//  virtual boolean onTouchEvent(const TouchEvent* event) = 0;
+  boolean onTouchEvent(TouchEvent touchEvent);
 
-  public void dispose()
-  {
-  }
+  //virtual ~Renderer() { };
 }

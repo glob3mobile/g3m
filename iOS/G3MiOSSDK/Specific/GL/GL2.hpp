@@ -36,6 +36,8 @@ public:
   
    void loadMatrixf(const MutableMatrix44D &m) ;
   
+   void multMatrixf(const MutableMatrix44D &m) ;
+  
    void vertexPointer(int size, int stride, const float vertex[]) ;
   
    void drawTriangleStrip(int n, unsigned char *i) ;

@@ -43,6 +43,8 @@ public:
   
   virtual void loadMatrixf(const MutableMatrix44D &m) = 0;
   
+  virtual void multMatrixf(const MutableMatrix44D &m) = 0;
+  
   virtual void vertexPointer(int size, int stride, const float vertex[]) = 0;
   
   virtual void drawTriangleStrip(int n, unsigned char *i) = 0;

@@ -75,6 +75,16 @@ void GL2::loadMatrixf(const MutableMatrix44D &m) {
   _modelView = m;
 }
 
+void GL2::multMatrixf(const MutableMatrix44D &m) {
+  MutableMatrix44D product = _modelView.multMatrix(m);
+  
+  float M[16];
+  product.copyToFloatMatrix(M);
+  glUniformMatrix4fv(Uniforms.Modelview, 1, 0, M);
+  _modelView = product;
+}
+
+
 void GL2::popMatrix() {
     _modelView = _matrixStack.back();
     _matrixStack.pop_back();

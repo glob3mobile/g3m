@@ -12,12 +12,24 @@
 #include "Renderer.hpp"
 
 class DummyRenderer: public Renderer {
+
+private:
+  int numIndices;
+  double halfSize;
+  
+  unsigned char * index;
+  float * vertices;
+
 public:
+  ~DummyRenderer();
+  
   void initialize(const InitializationContext* ic);  
   
   int render(const RenderContext* rc);
   
-  bool onTouchEvent(const TouchEvent* event);
+  bool onTouchEvent(const TouchEvent* touchEvent);
+  
+  
 };
 
 #endif

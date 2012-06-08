@@ -23,7 +23,7 @@
  *         in - the 4x1 vector
  * Output:  out - the resulting 4x1 vector.
  */
-void Glu::transform_point(double out[4], const double m[16], const double in[4]) {
+void GLU::transform_point(double out[4], const double m[16], const double in[4]) {
 #define M(row,col)  m[col*4+row]
     out[0] =
             M(0, 0) * in[0] + M(0, 1) * in[1] + M(0, 2) * in[2] + M(0, 3) * in[3];
@@ -36,7 +36,7 @@ void Glu::transform_point(double out[4], const double m[16], const double in[4])
 #undef M
 }
 
-Vector3D *Glu::unproject(double winx, double winy, double winz, 
+Vector3D *GLU::unproject(double winx, double winy, double winz, 
                          MutableMatrix44D model, MutableMatrix44D proj,
         const int viewport[4]) {
     /* matrice de transformation */
@@ -62,7 +62,7 @@ Vector3D *Glu::unproject(double winx, double winy, double winz,
     return new Vector3D(objx, objy, objz);
 }
 
-MutableMatrix44D Glu::translationMatrix(Vector3D t) {
+MutableMatrix44D GLU::translationMatrix(Vector3D t) {
   
     double T[16] = {
             1, 0, 0, 0,
@@ -74,11 +74,11 @@ MutableMatrix44D Glu::translationMatrix(Vector3D t) {
   return res;
 }
 
-MutableMatrix44D Glu::rotationMatrix(double angle_rad, Vector3D p) {
-  
+MutableMatrix44D GLU::rotationMatrix(Angle angle, Vector3D p) {
   
     Vector3D p0 = p.normalized();
-    double c = cos(angle_rad), s = sin(angle_rad);
+    double c = angle.cosinus(), s = angle.sinus();
+  
     double R[16] = {p0.x() * p0.x() * (1 - c) + c, p0.x() * p0.y() * (1 - c) + p0.z() * s, p0.x() * p0.z() * (1 - c) - p0.y() * s, 0,
             p0.y() * p0.x() * (1 - c) - p0.z() * s, p0.y() * p0.y() * (1 - c) + c, p0.y() * p0.z() * (1 - c) + p0.x() * s, 0,
             p0.x() * p0.z() * (1 - c) + p0.y() * s, p0.y() * p0.z() * (1 - c) - p0.x() * s, p0.z() * p0.z() * (1 - c) + c, 0,
@@ -88,7 +88,7 @@ MutableMatrix44D Glu::rotationMatrix(double angle_rad, Vector3D p) {
   return rot;
 }
 
-MutableMatrix44D Glu::lookAtMatrix(Vector3D pos, Vector3D center, Vector3D up) {
+MutableMatrix44D GLU::lookAtMatrix(Vector3D pos, Vector3D center, Vector3D up) {
   
     Vector3D w = center.sub(pos).normalized();
     double pe = w.dot(up);
@@ -107,7 +107,7 @@ MutableMatrix44D Glu::lookAtMatrix(Vector3D pos, Vector3D center, Vector3D up) {
 
 extern bool DEBUG_PRINT;
 
-MutableMatrix44D Glu::projectionMatrix(double left, double right, double bottom, double top,
+MutableMatrix44D GLU::projectionMatrix(double left, double right, double bottom, double top,
         double near, double far) {
     // set frustum matrix in double
     double rl = right - left, tb = top - bottom, fn = far - near;

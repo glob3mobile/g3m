@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class Vector3D
 {
   private final double _x;
@@ -32,6 +33,13 @@ public class Vector3D
 	  _y = y;
 	  _z = z;
 
+  }
+
+  public Vector3D(MutableVector3D mv)
+  {
+	  _x = mv.x();
+	  _y = mv.y();
+	  _z = mv.z();
   }
 
   public Vector3D(Vector3D v)
@@ -170,6 +178,17 @@ public class Vector3D
   public final double z()
   {
 	return _z;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector3D applyTransform(const MutableMatrix44D &m) const
+  public final Vector3D applyTransform(MutableMatrix44D m)
+  {
+	double[] M = m.getMatrix();
+
+	Vector3D v = new Vector3D(_x * M[0] + _y * M[4] + _z * M[8] + M[12], _x * M[1] + _y * M[5] + _z * M[9] + M[13], _x * M[2] + _y * M[6] + _z * M[10] + M[14]);
+
+	return v;
   }
 
 }

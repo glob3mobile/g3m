@@ -11,7 +11,6 @@
 
 #include <math.h>
 
-#define PI_TIMES_180  (M_PI * 180.0)
 #define THRESHOLD     1e-5
 
 
@@ -20,18 +19,17 @@ class Angle {
 private:
   const double _degrees;
   
-  Angle(const double degrees) : _degrees(degrees) {
-    
-  }
+  Angle(const double degrees) : _degrees(degrees) {  }
+  Angle() : _degrees(0) { }
   
 public:
-  
+    
   static Angle fromDegrees(const double degrees) {
     return Angle(degrees);
   }
   
   static Angle fromRadians(const double radians) {
-    return Angle::fromDegrees(radians * (180.0 / M_PI));
+    return Angle::fromDegrees(radians / M_PI * 180.0);
   }
   
   static Angle zero() {
@@ -43,11 +41,11 @@ public:
   }
   
   double sinus() const {
-    return sin(_degrees / PI_TIMES_180);
+    return sin(_degrees / 180.0 * M_PI);
   }
   
   double cosinus() const {
-    return cos(_degrees / PI_TIMES_180);
+    return cos(_degrees / 180.0 * M_PI);
   }
   
   double degrees() const {
@@ -55,13 +53,13 @@ public:
   }
   
   double radians() const {
-    return _degrees / PI_TIMES_180;
+    return _degrees / 180.0 * M_PI;
   }
   
   bool closeTo(const Angle& other) const {
     return (fabs(_degrees - other._degrees) < THRESHOLD);
   }
-  
+    
   Angle add(const Angle& a) const {
     return Angle(_degrees + a._degrees);
   }
