@@ -50,6 +50,18 @@ public class Angle
 	return Angle.fromDegrees(0);
   }
 
+  public static Angle nan()
+  {
+	return Angle.fromDegrees(Double.NaN);
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isNan() const
+  public final boolean isNan()
+  {
+	return Double.isNaN(_degrees);
+  }
+
   public Angle(Angle angle)
   {
 	  _degrees = angle._degrees;

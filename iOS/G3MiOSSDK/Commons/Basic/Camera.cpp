@@ -115,7 +115,8 @@ void Camera::dragCamera(const Vector3D& p0, const Vector3D& p1) {
   // compute the angle
   Angle rotationDelta = Angle::fromRadians( - acos(p0.normalized().dot(p1.normalized())) );
   
-  if (isnan(rotationDelta.radians())) return;
+  //if (isnan(rotationDelta.radians())) return;
+  if (rotationDelta.isNan()) return;
   
   rotateWithAxis(rotationAxis, rotationDelta);
 }

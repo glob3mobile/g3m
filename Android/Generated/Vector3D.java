@@ -44,6 +44,18 @@ public class Vector3D
 
   }
 
+  public static Vector3D nan()
+  {
+	return new Vector3D(Double.NaN, Double.NaN, Double.NaN);
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isNan() const
+  public final boolean isNan()
+  {
+	return Double.isNaN(_x *_y *_z);
+  }
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Vector3D normalized() const
   public final Vector3D normalized()
