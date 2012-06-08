@@ -9,6 +9,8 @@
 #ifndef G3MiOSSDK_Mat4_h
 #define G3MiOSSDK_Mat4_h
 
+class Vector3D;
+
 // class to keep a 4x4 matrix
 class MutableMatrix44D {
 public:
@@ -43,10 +45,14 @@ public:
   
   void print() const;
   
+  Vector3D *unproject(const Vector3D& pixel3D, const int viewport[4]) const;
+  
 private:
   double _m[16];
   
   static bool invert_matrix(const double m[16], double out[16]);
+  
+  void transformPoint(double out[4], const double in[4]);
 };
 
 

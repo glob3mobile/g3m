@@ -94,6 +94,9 @@ Vector3D Camera::pixel2Vector(const Vector2D& pixel) const {
   double px = (int) pixel.x();
   
   py = _viewport[3] - py;
+  
+  
+  
   Vector3D *obj = GLU::unproject(px, py, 0, _lookAt, _projection, _viewport);
   if (obj == NULL) return Vector3D(0.0,0.0,0.0);
   
