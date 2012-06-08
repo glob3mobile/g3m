@@ -18,12 +18,9 @@
 Camera::Camera(const Camera &c):
 _pos(c._pos),
 _center(c._center),
-_up(_up),
+_up(c._up),
 _lookAt(c._lookAt),
-_projection(c._projection),
-_rotationAxis(c._rotationAxis),
-_rotationDelta(c._rotationDelta),
-_zoomFactor(c._zoomFactor)
+_projection(c._projection)
 {
   resizeViewport(c.getWidth(), c.getHeight());
 }
@@ -35,19 +32,13 @@ void Camera::copyFrom(const Camera &c)
   _up = c.getUp();
   _lookAt = c._lookAt;
   _projection =c._projection;
-  _rotationAxis=c._rotationAxis;
-  _rotationDelta=c._rotationDelta;
-  _zoomFactor = c._zoomFactor;
 }
 
 
 Camera::Camera(int width, int height) :
 _pos(63650000.0, 0.0, 0.0),
 _center(0.0, 0.0, 0.0),
-_up(0.0, 0.0, 1.0), 
-_rotationAxis(0.0, 0.0, 0.0),
-_rotationDelta(0.0),
-_zoomFactor(1.0)
+_up(0.0, 0.0, 1.0)
 {
   resizeViewport(width, height);
 }
@@ -77,8 +68,6 @@ void Camera::print() const
 void Camera::draw(const RenderContext &rc) {
     double znear;
 
-    // update znear
-    //double height = GetPosGeo3D().height();
   double height = _pos.length();
   
     if (height > 1273000.0) znear = 636500.0;
@@ -90,8 +79,6 @@ void Camera::draw(const RenderContext &rc) {
     // compute projection matrix
     double ratioScreen = (double) _viewport[3] / _viewport[2];
     _projection = GLU::projectionMatrix(-0.3 / ratioScreen * znear, 0.3 / ratioScreen * znear, -0.3 * znear, 0.3 * znear, znear, 10000 * znear);
-  
-  //_projection.print();
   
     // obtaing gl object reference
     IGL *gl = rc.getGL();
@@ -116,7 +103,7 @@ Vector3D Camera::pixel2Vector(const Vector2D& pixel) const {
   return v;
 }
 
-void Camera::applyTransform(MutableMatrix44D M)
+void Camera::applyTransform(const MutableMatrix44D& M)
 {
   _pos = _pos.applyTransform(M);
   _center = _center.applyTransform(M);
@@ -125,49 +112,20 @@ void Camera::applyTransform(MutableMatrix44D M)
 
 void Camera::dragCamera(const Vector3D& p0, const Vector3D& p1) {
   // compute the rotation axe
-  _rotationAxis = p0.cross(p1);
+  Vector3D rotationAxis = p0.cross(p1);
   
   // compute the angle
-  _rotationDelta = - acos(p0.normalized().dot(p1.normalized()));
-  if (isnan(_rotationDelta)) return;
+  Angle rotationDelta = Angle::fromRadians( - acos(p0.normalized().dot(p1.normalized())) );
   
-  dragCamera(_rotationAxis, _rotationDelta);
-    
-  //Inertia
-  _rotationDelta /= 10.0; //Rotate much less with inertia
-  if (fabs(_rotationDelta) < AUTO_DRAG_MIN * 3.0) _rotationDelta = 0.0;
+  if (isnan(rotationDelta.radians())) return;
+  
+  rotateWithAxis(rotationAxis, rotationDelta);
 }
 
-void Camera::dragCamera(const Vector3D& axis, double delta) {
+void Camera::rotateWithAxis(const Vector3D& axis, const Angle& delta) {
   // update the camera
-  MutableMatrix44D rot = GLU::rotationMatrix(Angle::fromRadians(delta), axis);  
+  MutableMatrix44D rot = GLU::rotationMatrix(delta, axis);  
   applyTransform(rot);
-}
-
-void Camera::applyInertia()
-{
-  //DRAGGING
-  if (fabs(_rotationDelta) > AUTO_DRAG_MIN)
-  {
-    _rotationDelta *= AUTO_DRAG_FRICTION;
-    dragCamera(_rotationAxis, _rotationDelta);
-  } else {
-    _rotationDelta = 0.0;
-  }
-  
-  //ZOOMING
-  if ((fabs(_zoomFactor) - 1.0) > AUTO_ZOOM_MIN)
-  {
-    _zoomFactor = (_zoomFactor - 1.0) *AUTO_ZOOM_FRICTION +1.0;
-    zoom(_zoomFactor);
-  }
-  
-}
-
-void Camera::stopInertia()
-{
-  _rotationDelta = 0.0;
-  _zoomFactor = 0.0;
 }
 
 void Camera::zoom(double factor) {
@@ -175,6 +133,11 @@ void Camera::zoom(double factor) {
   if (factor != 1.0){
     Vector3D w = _pos.sub(_center);
     _pos = _center.add(w.times(factor));
-    _zoomFactor = factor;
   }
+}
+
+void Camera::rotate(const Angle& a)
+{
+  Vector3D rotationAxis = _pos.sub(_center);
+  rotateWithAxis(rotationAxis, a);
 }

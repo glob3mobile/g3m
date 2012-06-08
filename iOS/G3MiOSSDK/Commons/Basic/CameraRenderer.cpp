@@ -13,7 +13,7 @@
 CameraRenderer::CameraRenderer():
 _camera0(0,0),
 _initialPoint(0,0,0),
-_cameraFixed(false)
+_currentGesture(None)
 {
 }
 
@@ -24,29 +24,21 @@ int CameraRenderer::render(const RenderContext* rc)
   _camera = rc->getCamera(); //Saving camera reference 
   _planet = rc->getPlanet();
   
-  if (!_cameraFixed) _camera->applyInertia();    //AutoDragging
-  
-  rc->getCamera()->draw(*rc);
-
-  //_camera->print();
+  rc->getCamera()->draw(*rc);   //We "draw" the camera with IGL
   return 0;
 }
 
 void CameraRenderer::onDown(const TouchEvent& event)
 {
-  //Stop movement
-  _camera->stopInertia();
-  
   //Saving Camera0
   Camera c(*_camera);
   _camera0 = c;
   
+  //Initial Point for Dragging
   Vector2D pixel = event.getTouch(0)->getPos();
-  
   Vector3D ray = _camera0.pixel2Vector(pixel);
   _initialPoint = _planet->closestIntersection(_camera0.getPos(), ray);
-  
-  _cameraFixed = true;
+  _currentGesture = Drag; //Dragging
 }
 
 void CameraRenderer::onMove(const TouchEvent& event)
@@ -54,7 +46,7 @@ void CameraRenderer::onMove(const TouchEvent& event)
   int n = event.getNumTouch();
   
   //ONE FINGER
-  if (n == 1){
+  if (n == 1 && _currentGesture == Drag){
     
     if (_initialPoint.length() > 0){ //VALID INITIAL POINT
     
@@ -62,18 +54,14 @@ void CameraRenderer::onMove(const TouchEvent& event)
       Vector3D ray = _camera0.pixel2Vector(pixel);
       Vector3D pos = _camera0.getPos();
       
-      Vector3D finalPoint = _planet->closestIntersection(pos, ray);
+      MutableVector3D finalPoint = _planet->closestIntersection(pos, ray);
       
       if (finalPoint.length() <= 0.0){ //INVALID FINAL POINT
         //We take the closest point to the sphere
-        Vector3D finalPoint2 = _planet->closestPointToSphere(pos, ray);
-        _camera->copyFrom(_camera0);
-        _camera->dragCamera(_initialPoint, finalPoint2);
-        
-      } else {
-        _camera->copyFrom(_camera0);
-        _camera->dragCamera(_initialPoint, finalPoint);
+        finalPoint = _planet->closestPointToSphere(pos, ray);
       }
+      _camera->copyFrom(_camera0);
+      _camera->dragCamera(_initialPoint, finalPoint);
     }
   }
   
@@ -90,29 +78,36 @@ void CameraRenderer::onMove(const TouchEvent& event)
     
     //IF CENTER PIXEL INTERSECTS THE PLANET
     if (_initialPoint.length() > 0){
-      Vector2D prevPixel0 = event.getTouch(0)->getPrevPos();
-      Vector2D prevPixel1 = event.getTouch(1)->getPrevPos();
-      
-      double dist = pixel0.sub(pixel1).length();
-      double prevDist = prevPixel0.sub(prevPixel1).length();
-      
-      //ZOOM
+      //IF THE CENTER OF THE VIEW INTERSECTS THE PLANET
       if (_planet->intersections(_camera->getPos(), _camera->getCenter()).size() > 0){
-        //IF THE CENTER OF THE VIEW INTERSECTS THE PLANET
+        
+        //ZOOM
+        _currentGesture = Zoom; //Zoom gesture
+        
+        Vector2D prevPixel0 = event.getTouch(0)->getPrevPos();
+        Vector2D prevPixel1 = event.getTouch(1)->getPrevPos();
+        
+        double dist = pixel0.sub(pixel1).length();
+        double prevDist = prevPixel0.sub(prevPixel1).length();
+        
+        Vector2D pixelDelta = pixel1.sub(pixel0);
+        Vector2D prevPixelDelta = prevPixel1.sub(prevPixel0);
+        
+        Angle angle = pixelDelta.angle();
+        Angle prevAngle = prevPixelDelta.angle();
+        
+        //We rotate and zoom the camera with the same gesture
         _camera->zoom(prevDist /dist);
+        _camera->rotate(angle.sub(prevAngle));
       }
-      
-      
     }
-    
   }
 
 }
 
-
 void CameraRenderer::onUp(const TouchEvent& event)
 {
-  _cameraFixed = false;
+  _currentGesture = None;
 }
 
 bool CameraRenderer::onTouchEvent(const TouchEvent* event)

@@ -11,6 +11,8 @@
 
 #include <math.h>
 
+#include "Angle.hpp"
+
 class Vector2D {
 private:
   const double _x;
@@ -68,6 +70,11 @@ public:
   Vector2D div(const double v) const {
     return Vector2D(_x / v,
                     _y / v);
+  }
+  
+  Angle angle() const { 
+    double a = atan2(_y, _x);
+    return Angle::fromRadians(a);
   }
   
   double x() const {
