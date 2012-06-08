@@ -265,7 +265,7 @@ double Ellipsoid::computeFastLatLonDistance(const Geodetic2D& g1,
 Vector3D Ellipsoid::closestIntersection(const Vector3D& pos, const Vector3D& ray) const
 {
   std::vector<double> t = intersections(pos , ray);
-  if (t.empty()) return Vector3D(0,0,0);
+  if (t.empty()) return Vector3D::nan();
     Vector3D solution = pos.add(ray.times(t[0]));
     return solution;
 }

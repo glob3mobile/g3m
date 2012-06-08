@@ -10,6 +10,8 @@
 #define G3MiOSSDK_Mat4_h
 
 class Vector3D;
+class Angle;
+class MutableVector3D;
 
 // class to keep a 4x4 matrix
 class MutableMatrix44D {
@@ -45,7 +47,18 @@ public:
   
   void print() const;
   
-  Vector3D *unproject(const Vector3D& pixel3D, const int viewport[4]) const;
+  Vector3D unproject(const Vector3D& pixel3D, const int viewport[4]) const;
+  
+  static MutableMatrix44D createTranslationMatrix(const Vector3D& t);
+
+  static MutableMatrix44D createRotationMatrix(const Angle& angle, const Vector3D& p);
+  
+  static MutableMatrix44D createModelMatrix(const MutableVector3D& pos, 
+                                            const MutableVector3D& center,
+                                            const MutableVector3D& up);
+  
+  static MutableMatrix44D createProjectionMatrix(double left, double right, double bottom, double top, 
+                                                 double near, double far);
   
 private:
   double _m[16];

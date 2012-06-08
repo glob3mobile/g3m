@@ -11,15 +11,13 @@
 #include <math.h>
 #include <string.h>
 
-#include "GLU.hpp"
-
 #include "Camera.hpp"
 
 Camera::Camera(const Camera &c):
 _pos(c._pos),
 _center(c._center),
 _up(c._up),
-_lookAt(c._lookAt),
+_model(c._model),
 _projection(c._projection)
 {
   resizeViewport(c.getWidth(), c.getHeight());
@@ -30,7 +28,7 @@ void Camera::copyFrom(const Camera &c)
   _pos = c._pos;
   _center = c._center;
   _up = c._up;
-  _lookAt = c._lookAt;
+  _model = c._model;
   _projection =c._projection;
 }
 
@@ -54,8 +52,8 @@ void Camera::resizeViewport(int width, int height) {
 
 void Camera::print() const
 {
-  printf("LOOKAT: \n"); 
-  _lookAt.print();
+  printf("MODEL: \n"); 
+  _model.print();
   printf("\n");
   printf("PROJECTION: \n");
   _projection.print();
@@ -78,30 +76,28 @@ void Camera::draw(const RenderContext &rc) {
   
   // compute projection matrix
   double ratioScreen = (double) _viewport[3] / _viewport[2];
-  _projection = GLU::projectionMatrix(-0.3 / ratioScreen * znear, 0.3 / ratioScreen * znear, -0.3 * znear, 0.3 * znear, znear, 10000 * znear);
+  _projection = MutableMatrix44D::createProjectionMatrix(-0.3 / ratioScreen * znear, 0.3 / ratioScreen * znear, -0.3 * znear, 0.3 * znear, znear, 10000 * znear);
   
   // obtaing gl object reference
   IGL *gl = rc.getGL();
   gl->setProjection(_projection);
   
-  // make the lookat
-  _lookAt = GLU::lookAtMatrix(_pos, _center, _up);
-  gl->loadMatrixf(_lookAt);
+  // make the model
+  _model = MutableMatrix44D::createModelMatrix(_pos, _center, _up);
+  gl->loadMatrixf(_model);
 }
 
 Vector3D Camera::pixel2Vector(const Vector2D& pixel) const {
   double py = (int) pixel.y();
   double px = (int) pixel.x();
-  
   py = _viewport[3] - py;
+  Vector3D pixel3D(px, py, 0);
   
+  MutableMatrix44D modelView = _projection.multMatrix(_model);
+  Vector3D obj = modelView.unproject(pixel3D, _viewport);
+  if (obj.isNan()) return Vector3D::nan();
   
-  
-  Vector3D *obj = GLU::unproject(px, py, 0, _lookAt, _projection, _viewport);
-  if (obj == NULL) return Vector3D(0.0,0.0,0.0);
-  
-  Vector3D v = obj->sub(_pos.asVector3D());
-  delete obj;
+  Vector3D v = obj.sub(_pos.asVector3D());
   return v;
 }
 
@@ -126,7 +122,7 @@ void Camera::dragCamera(const Vector3D& p0, const Vector3D& p1) {
 
 void Camera::rotateWithAxis(const Vector3D& axis, const Angle& delta) {
   // update the camera
-  MutableMatrix44D rot = GLU::rotationMatrix(delta, axis);  
+  MutableMatrix44D rot = MutableMatrix44D::createRotationMatrix(delta, axis);  
   applyTransform(rot);
 }
 

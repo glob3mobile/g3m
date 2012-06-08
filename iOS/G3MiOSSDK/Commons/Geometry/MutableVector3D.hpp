@@ -37,6 +37,14 @@ public:
   
   MutableVector3D normalized() const;
   
+  static Vector3D nan() {
+    return Vector3D(NAN, NAN, NAN);
+  }
+  
+  bool isNan() const {
+    return isnan(_x*_y*_z);
+  }
+  
   void print() const { printf("%.2f  %.2f %.2f\n", _x, _y, _z );}
   
   double length() const {

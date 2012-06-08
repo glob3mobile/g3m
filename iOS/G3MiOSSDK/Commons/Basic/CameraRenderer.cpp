@@ -48,15 +48,16 @@ void CameraRenderer::onMove(const TouchEvent& event)
   //ONE FINGER
   if (n == 1 && _currentGesture == Drag){
     
-    if (_initialPoint.length() > 0){ //VALID INITIAL POINT
+    if (!_initialPoint.isNan()){ //VALID INITIAL POINT
       Vector2D pixel = event.getTouch(0)->getPos();
       Vector3D ray = _camera0.pixel2Vector(pixel);
       Vector3D pos = _camera0.getPos();
       
       MutableVector3D finalPoint = _planet->closestIntersection(pos, ray).asMutableVector3D();
-      if (finalPoint.length() <= 0.0){ //INVALID FINAL POINT
+      if (finalPoint.isNan()){ //INVALID FINAL POINT
         finalPoint = _planet->closestPointToSphere(pos, ray).asMutableVector3D();
       }
+      
       _camera->copyFrom(_camera0);
       _camera->dragCamera(_initialPoint.asVector3D(), finalPoint.asVector3D());
     }

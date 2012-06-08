@@ -69,7 +69,7 @@ private:
   
   int _viewport[4];
   
-  MutableMatrix44D _lookAt;           // gluLookAt matrix, computed in CPU in double precision
+  MutableMatrix44D _model;              // Model matrix, computed in CPU in double precision
   MutableMatrix44D _projection;        // opengl projection matrix
   
   MutableVector3D _pos;             // position

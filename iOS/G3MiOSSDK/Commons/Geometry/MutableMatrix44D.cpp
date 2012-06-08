@@ -11,6 +11,8 @@
 #include <stdio.h>
 
 #include "Vector3D.hpp"
+#include "Angle.hpp"
+#include "MutableVector3D.hpp"
 
 MutableMatrix44D MutableMatrix44D::multMatrix(const MutableMatrix44D& m) const {
   double R[16];
@@ -116,7 +118,7 @@ void MutableMatrix44D::transformPoint(double out[4], const double in[4]) {
 /*
  This function is intended to be used on a ModelView matrix. ModelView = Projection * Model
  */
-Vector3D *MutableMatrix44D::unproject(const Vector3D& pixel3D, const int viewport[4]) const {
+Vector3D MutableMatrix44D::unproject(const Vector3D& pixel3D, const int viewport[4]) const {
   
   double winx = pixel3D.x();
   double winy = pixel3D.y();
@@ -137,10 +139,78 @@ Vector3D *MutableMatrix44D::unproject(const Vector3D& pixel3D, const int viewpor
   /* d'ou les coordonnees objets */
   m.transformPoint(out, in);
   if (out[3] == 0.0)
-    return NULL;
+    return Vector3D::nan();
+  
   double objx = out[0] / out[3];
   double objy = out[1] / out[3];
   double objz = out[2] / out[3];
-  return new Vector3D(objx, objy, objz);
+  
+  Vector3D p(objx, objy, objz);
+  return p;
+}
+
+MutableMatrix44D MutableMatrix44D::createTranslationMatrix(const Vector3D& t) {
+  
+  double T[16] = {
+    1, 0, 0, 0,
+    0, 1, 0, 0,
+    0, 0, 1, 0,
+    t.x(), t.y(), t.z(), 1};
+  
+  MutableMatrix44D res(T);
+  return res;
+}
+
+MutableMatrix44D MutableMatrix44D::createRotationMatrix(const Angle& angle, const Vector3D& p)
+{
+  Vector3D p0 = p.normalized();
+  double c = angle.cosinus(), s = angle.sinus();
+  
+  double R[16] = {p0.x() * p0.x() * (1 - c) + c, p0.x() * p0.y() * (1 - c) + p0.z() * s, p0.x() * p0.z() * (1 - c) - p0.y() * s, 0,
+    p0.y() * p0.x() * (1 - c) - p0.z() * s, p0.y() * p0.y() * (1 - c) + c, p0.y() * p0.z() * (1 - c) + p0.x() * s, 0,
+    p0.x() * p0.z() * (1 - c) + p0.y() * s, p0.y() * p0.z() * (1 - c) - p0.x() * s, p0.z() * p0.z() * (1 - c) + c, 0,
+    0, 0, 0, 1};
+  
+  MutableMatrix44D rot(R);
+  return rot;
+}
+
+MutableMatrix44D MutableMatrix44D::createModelMatrix(const MutableVector3D& pos,
+                                   const MutableVector3D& center,
+                                   const MutableVector3D& up) {
+  MutableVector3D w = center.sub(pos).normalized();
+  double pe = w.dot(up);
+  MutableVector3D v = up.sub(w.times(pe)).normalized();
+  MutableVector3D u = w.cross(v);
+  double LA[16] = {
+    u.x(), v.x(), -w.x(), 0,
+    u.y(), v.y(), -w.y(), 0,
+    u.z(), v.z(), -w.z(), 0,
+    -pos.dot(u), -pos.dot(v), pos.dot(w), 1};
+  
+  MutableMatrix44D m(LA);
+  
+  return m;
+}
+
+MutableMatrix44D MutableMatrix44D::createProjectionMatrix(double left, double right, double bottom, double top,double near, double far)
+{
+  // set frustum matrix in double
+  double rl = right - left, tb = top - bottom, fn = far - near;
+  double P[16];
+  P[0] = 2 * near / rl;
+  P[1] = P[2] = P[3] = P[4] = 0;
+  P[5] = 2 * near / tb;
+  P[6] = P[7] = 0;
+  P[8] = (right + left) / rl;
+  P[9] = (top + bottom) / tb;
+  P[10] = -(far + near) / fn;
+  P[11] = -1;
+  P[12] = P[13] = 0;
+  P[14] = -2 * far / fn * near;
+  P[15] = 0;
+  
+  MutableMatrix44D m(P);
+  return m;
 }
 
