@@ -144,9 +144,8 @@
 - (void)layoutSubviews {
   int w = [self frame].size.width;
   int h = [self frame].size.height;
-  //SceneController::GetInstance()->ResizeCanvas(w, h);
   printf("RESIZING CANVAS: %d, %d\n", w, h);
-  //SceneController::GetInstance()->ForceRedrawNextFrame();
+  ((G3MWidget*)_widget)->onResizeViewportEvent(w,h);
   
   [_renderer resizeFromLayer:(CAEAGLLayer *) self.layer];
   [self drawView:nil];

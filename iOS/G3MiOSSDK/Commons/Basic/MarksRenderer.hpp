@@ -36,6 +36,8 @@ public:
     _marks.push_back(mark);
   }
   
+  bool onResizeViewportEvent(int width, int height){ return false;}
+  
 };
 
 #endif

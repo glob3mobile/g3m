@@ -59,8 +59,12 @@ public:
   //Zoom
   void zoom(double factor);
   
+  //Pivot
+  void pivotOnCenter(const Angle& a);
+  
   //Rotate
-  void rotate(const Angle& a);
+  //void rotate(const Vector3D& axis, double angle)
+  
   
   void print() const;
 

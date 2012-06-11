@@ -21,6 +21,8 @@ public:
   
   virtual bool onTouchEvent(const TouchEvent* touchEvent) = 0;
   
+  virtual bool onResizeViewportEvent(int width, int height) = 0;
+  
   virtual ~Renderer() { };
 };
 

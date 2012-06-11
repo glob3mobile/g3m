@@ -17,6 +17,7 @@ enum Gesture {
   None,                   // used only for animation, not for gesture
   Drag,
   Zoom,
+  Rotate
 };
 
 class CameraRenderer: public Renderer
@@ -35,6 +36,12 @@ private:
   void onMove(const TouchEvent& event);
   void onUp(const TouchEvent& event);
   
+  Gesture getGesture(const TouchEvent& event) const;
+  
+  void makeDrag(const TouchEvent& event);
+  void makeZoom(const TouchEvent& event);
+  void makeRotate(const TouchEvent& event);
+  
 public:
   
   CameraRenderer();
@@ -44,6 +51,8 @@ public:
   int render(const RenderContext* rc);
   
   bool onTouchEvent(const TouchEvent* event);
+  
+  bool onResizeViewportEvent(int width, int height);
   
   
 };

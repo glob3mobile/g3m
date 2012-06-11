@@ -35,6 +35,8 @@ public:
   bool onTouchEvent(const TouchEvent* event);
   
   void addRenderer(Renderer* renderer);
+  
+  bool onResizeViewportEvent(int width, int height);
 };
 
 #endif

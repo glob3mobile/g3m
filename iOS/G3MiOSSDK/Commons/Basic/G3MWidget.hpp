@@ -31,7 +31,9 @@ public:
   
   void onTouchEvent(const TouchEvent* event);
   
-  IGL * getGL() const{ return _gl; } 
+  void onResizeViewportEvent(int width, int height);
+  
+  IGL * getGL() const{ return _gl; }
   
   
 private:

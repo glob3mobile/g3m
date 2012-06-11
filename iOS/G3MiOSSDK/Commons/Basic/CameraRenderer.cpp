@@ -13,7 +13,8 @@
 CameraRenderer::CameraRenderer():
 _camera0(0,0),
 _initialPoint(0,0,0),
-_currentGesture(None)
+_currentGesture(None),
+_camera(NULL)
 {
 }
 
@@ -26,6 +27,16 @@ int CameraRenderer::render(const RenderContext* rc)
   
   rc->getCamera()->draw(*rc);   //We "draw" the camera with IGL
   return 0;
+}
+
+bool CameraRenderer::onResizeViewportEvent(int width, int height)
+{
+  if (_camera != NULL)
+  {
+    _camera->resizeViewport(width, height);
+    return true;
+  } else 
+    return false;
 }
 
 void CameraRenderer::onDown(const TouchEvent& event)
@@ -41,66 +52,121 @@ void CameraRenderer::onDown(const TouchEvent& event)
   _currentGesture = Drag; //Dragging
 }
 
-void CameraRenderer::onMove(const TouchEvent& event)
+void CameraRenderer::makeDrag(const TouchEvent& event)
+{
+  if (!_initialPoint.isNan()) //VALID INITIAL POINT
+  { 
+    Vector2D pixel = event.getTouch(0)->getPos();
+    Vector3D ray = _camera0.pixel2Vector(pixel);
+    Vector3D pos = _camera0.getPos();
+    
+    MutableVector3D finalPoint = _planet->closestIntersection(pos, ray).asMutableVector3D();
+    if (finalPoint.isNan()){ //INVALID FINAL POINT
+      finalPoint = _planet->closestPointToSphere(pos, ray).asMutableVector3D();
+    }
+    
+    _camera->copyFrom(_camera0);
+    _camera->dragCamera(_initialPoint.asVector3D(), finalPoint.asVector3D());
+  }
+}
+
+void CameraRenderer::makeZoom(const TouchEvent& event)
+{
+  Vector2D pixel0 = event.getTouch(0)->getPos();
+  Vector2D pixel1 = event.getTouch(1)->getPos();
+  Vector2D pixelCenter = pixel0.add(pixel1).div(2.0);
+  
+  Vector3D ray = _camera0.pixel2Vector(pixelCenter);
+  _initialPoint = _planet->closestIntersection(_camera0.getPos(), ray).asMutableVector3D();
+  
+  //IF CENTER PIXEL INTERSECTS THE PLANET
+  if (_initialPoint.length() > 0){
+    //IF THE CENTER OF THE VIEW INTERSECTS THE PLANET
+    if (_planet->intersections(_camera->getPos(), _camera->getCenter()).size() > 0){
+      
+      Vector2D prevPixel0 = event.getTouch(0)->getPrevPos();
+      Vector2D prevPixel1 = event.getTouch(1)->getPrevPos();
+      
+      double dist = pixel0.sub(pixel1).length();
+      double prevDist = prevPixel0.sub(prevPixel1).length();
+      
+      Vector2D pixelDelta = pixel1.sub(pixel0);
+      Vector2D prevPixelDelta = prevPixel1.sub(prevPixel0);
+      
+      Angle angle = pixelDelta.angle();
+      Angle prevAngle = prevPixelDelta.angle();
+      
+      //We rotate and zoom the camera with the same gesture
+      _camera->zoom(prevDist /dist);
+      _camera->pivotOnCenter(angle.sub(prevAngle));
+    }
+  }
+}
+
+Gesture CameraRenderer::getGesture(const TouchEvent& event) const
 {
   int n = event.getNumTouch();
-  
-  //ONE FINGER
-  if (n == 1 && _currentGesture == Drag){
-    
-    if (!_initialPoint.isNan()){ //VALID INITIAL POINT
-      Vector2D pixel = event.getTouch(0)->getPos();
-      Vector3D ray = _camera0.pixel2Vector(pixel);
-      Vector3D pos = _camera0.getPos();
-      
-      MutableVector3D finalPoint = _planet->closestIntersection(pos, ray).asMutableVector3D();
-      if (finalPoint.isNan()){ //INVALID FINAL POINT
-        finalPoint = _planet->closestPointToSphere(pos, ray).asMutableVector3D();
-      }
-      
-      _camera->copyFrom(_camera0);
-      _camera->dragCamera(_initialPoint.asVector3D(), finalPoint.asVector3D());
-    }
+  if (n == 1){
+    //Dragging
+    if (_currentGesture == Drag) 
+      return Drag;
+    else 
+      return None;
   }
   
-  
-  //TWO FINGERS
-  if (n==2)
-  {
+  if (n== 2){
+    
+    //If the gesture is set we don't have to change it
+    if (_currentGesture == Zoom) return Zoom;
+    if (_currentGesture == Rotate) return Rotate;
+    
+    //We have to fingers and the previous event was Drag
     Vector2D pixel0 = event.getTouch(0)->getPos();
     Vector2D pixel1 = event.getTouch(1)->getPos();
-    Vector2D pixelCenter = pixel0.add(pixel1).div(2.0);
     
-    Vector3D ray = _camera0.pixel2Vector(pixelCenter);
-    _initialPoint = _planet->closestIntersection(_camera0.getPos(), ray).asMutableVector3D();
+    Vector2D prevPixel0 = event.getTouch(0)->getPrevPos();
+    Vector2D prevPixel1 = event.getTouch(1)->getPrevPos();
     
-    //IF CENTER PIXEL INTERSECTS THE PLANET
-    if (_initialPoint.length() > 0){
-      //IF THE CENTER OF THE VIEW INTERSECTS THE PLANET
-      if (_planet->intersections(_camera->getPos(), _camera->getCenter()).size() > 0){
-        
-        //ZOOM
-        _currentGesture = Zoom; //Zoom gesture
-        
-        Vector2D prevPixel0 = event.getTouch(0)->getPrevPos();
-        Vector2D prevPixel1 = event.getTouch(1)->getPrevPos();
-        
-        double dist = pixel0.sub(pixel1).length();
-        double prevDist = prevPixel0.sub(prevPixel1).length();
-        
-        Vector2D pixelDelta = pixel1.sub(pixel0);
-        Vector2D prevPixelDelta = prevPixel1.sub(prevPixel0);
-        
-        Angle angle = pixelDelta.angle();
-        Angle prevAngle = prevPixelDelta.angle();
-        
-        //We rotate and zoom the camera with the same gesture
-        _camera->zoom(prevDist /dist);
-        _camera->rotate(angle.sub(prevAngle));
-      }
+    //If both fingers go in the same direction we should rotate the camera
+    if ( (pixel0.y() > prevPixel0.y() && pixel1.y() > prevPixel0.y()) ||
+         (pixel0.x() > prevPixel0.x() && pixel1.x() > prevPixel0.x()) ||
+         (pixel0.y() < prevPixel0.y() && pixel1.y() < prevPixel0.y()) ||
+        (pixel0.x() < prevPixel0.x() && pixel1.x() < prevPixel0.x())) {
+      return Rotate;
     }
+    else {
+      
+      //If fingers are diverging it is zoom
+      return Zoom;
+    }
+ 
   }
+  return None;
+}
+
+void CameraRenderer::makeRotate(const TouchEvent& event)
+{
+  int todo_rotate;
+}
+
+
+void CameraRenderer::onMove(const TouchEvent& event)
+{
+  _currentGesture = getGesture(event);
   
+  switch (_currentGesture) {
+    case Drag:
+      makeDrag(event);
+      break;
+    case Zoom:
+      makeZoom(event);
+      break;
+    case Rotate:
+      makeRotate(event);
+      break;
+    default:
+      break;
+  }
 }
 
 void CameraRenderer::onUp(const TouchEvent& event)

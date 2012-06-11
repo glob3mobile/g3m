@@ -134,7 +134,7 @@ void Camera::zoom(double factor) {
   }
 }
 
-void Camera::rotate(const Angle& a)
+void Camera::pivotOnCenter(const Angle& a)
 {
   Vector3D rotationAxis = _pos.sub(_center).asVector3D();
   rotateWithAxis(rotationAxis, a);

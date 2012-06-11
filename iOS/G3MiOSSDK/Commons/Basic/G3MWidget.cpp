@@ -36,8 +36,6 @@ bool G3MWidget::render()
   RenderContext rc(_factory, _logger, _planet, _gl, _camera);
   
   // Clear the scene
-  //glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-  //glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
   _gl->clearScreen(1, 1, 0);
   _gl->enableVertices();
   
@@ -49,4 +47,9 @@ bool G3MWidget::render()
 void G3MWidget::onTouchEvent(const TouchEvent* event)
 {
   _renderer->onTouchEvent(event);
+}
+
+void G3MWidget::onResizeViewportEvent(int width, int height)
+{
+  _renderer->onResizeViewportEvent(width, height);
 }
