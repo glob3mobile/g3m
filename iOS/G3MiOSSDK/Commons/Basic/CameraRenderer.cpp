@@ -154,8 +154,8 @@ void CameraRenderer::makeRotate(const TouchEvent& touchEvent)
 {
   int todo_JM_working;
   
-  Vector2D pixel0 = event.getTouch(0)->getPos();
-  Vector2D pixel1 = event.getTouch(1)->getPos();
+  Vector2D pixel0 = touchEvent.getTouch(0)->getPos();
+  Vector2D pixel1 = touchEvent.getTouch(1)->getPos();
   Vector2D pixelCenter = pixel0.add(pixel1).div(2.0);
   
   //The gesture is starting
