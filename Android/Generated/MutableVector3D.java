@@ -1,5 +1,13 @@
 package org.glob3.mobile.generated; 
 //
+//  MutableVector3D.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 31/05/12.
+//  Copyright (c) 2012 IGO Software SL. All rights reserved.
+//
+
+//
 //  MutableVector3D.hpp
 //  G3MiOSSDK
 //
@@ -43,9 +51,12 @@ public class MutableVector3D
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: MutableVector3D normalized() const;
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  MutableVector3D normalized();
+//ORIGINAL LINE: MutableVector3D normalized() const
+  public final MutableVector3D normalized()
+  {
+	  double d = length();
+	  return new MutableVector3D(_x / d, _y /d, _z / d);
+  }
 
   public static Vector3D nan()
   {
@@ -137,9 +148,18 @@ public class MutableVector3D
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double angleBetween(const MutableVector3D& other) const;
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  double angleBetween(MutableVector3D other);
+//ORIGINAL LINE: double angleBetween(const MutableVector3D& other) const
+  public final double angleBetween(MutableVector3D other)
+  {
+	MutableVector3D v1 = normalized();
+	MutableVector3D v2 = other.normalized();
+	double c = v1.dot(v2);
+	if (c > 1.0)
+		c = 1.0;
+	else if (c < -1.0)
+		c = -1.0;
+	return Math.acos(c);
+  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: MutableVector3D rotatedAroundAxis(const MutableVector3D& other, const double theta) const;

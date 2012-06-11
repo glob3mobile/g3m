@@ -51,7 +51,7 @@ public:
   //const double * getMatrix() const { return _m;}
   
   void copyToFloatMatrix(float M[16]) const { 
-    for (int i = 0; i < 16; i++) { M[i] = _m[i];}
+    for (int i = 0; i < 16; i++) { M[i] = (float) _m[i];}
   }
   
   void print() const;

@@ -158,7 +158,7 @@ public class MutableMatrix44D
   {
 	for (int i = 0; i < 16; i++)
 	{
-		M[i] = _m[i];
+		M[i] = (float) _m[i];
 	}
   }
 
