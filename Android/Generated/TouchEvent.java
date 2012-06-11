@@ -2,7 +2,7 @@ package org.glob3.mobile.generated;
 public class TouchEvent
 {
   private final TouchEventType _eventType;
-  private final java.util.ArrayList<Touch> _touchs = new java.util.ArrayList<Touch>();
+  private final java.util.ArrayList<Touch> _touchs; // *** REMOVED CONSTRUCTOR BY MY RULES<Touch>();
 
   private TouchEvent(TouchEventType type, java.util.ArrayList<Touch> touchs)
   {
