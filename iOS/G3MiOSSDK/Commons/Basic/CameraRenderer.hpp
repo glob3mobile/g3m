@@ -29,6 +29,7 @@ private:
   
   Camera _camera0;                //Initial Camera saved on Down event
   MutableVector3D _initialPoint;  //Initial point at dragging
+  MutableVector3D _initialPixel;  //Initial pixel at start of gesture
   
   Gesture _currentGesture;        //Gesture the user is making at the moment
   
@@ -41,6 +42,8 @@ private:
   void makeDrag(const TouchEvent& event);
   void makeZoom(const TouchEvent& event);
   void makeRotate(const TouchEvent& event);
+  
+  bool cameraLooksToPlanet(const Camera& c) const;
   
 public:
   

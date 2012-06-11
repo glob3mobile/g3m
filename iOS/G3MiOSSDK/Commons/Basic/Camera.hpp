@@ -63,7 +63,7 @@ public:
   void pivotOnCenter(const Angle& a);
   
   //Rotate
-  //void rotate(const Vector3D& axis, double angle)
+  void rotateWithAxisAndPoint(const Vector3D& axis, const Vector3D& point, const Angle& delta);
   
   
   void print() const;
