@@ -23,9 +23,68 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class MutableVector3D;
 
+
 // class to keep a 4x4 matrix
 public class MutableMatrix44D
 {
+  private double[] _m = new double[16];
+
+
+  /*
+   * Compute inverse of 4x4 transformation matrix.
+   * Code contributed by Jacques Leroy jle@star.be
+   * Return GL_TRUE for success, GL_FALSE for failure (singular matrix)
+   */
+  private static boolean invert_matrix(double[] m, double[] out)
+  {
+	//NEW METHOD FOR ENHANCING JAVA TRANSLATION
+	double[] inv = new double[16];
+	double det;
+	int i;
+  
+	inv[0] = m[5] * m[10] * m[15] - m[5] * m[11] * m[14] - m[9] * m[6] * m[15] + m[9] * m[7] * m[14] + m[13] * m[6] * m[11] - m[13] * m[7] * m[10];
+	inv[4] = -m[4] * m[10] * m[15] + m[4] * m[11] * m[14] + m[8] * m[6] * m[15] - m[8] * m[7] * m[14] - m[12] * m[6] * m[11] + m[12] * m[7] * m[10];
+	inv[8] = m[4] * m[9] * m[15] - m[4] * m[11] * m[13] - m[8] * m[5] * m[15] + m[8] * m[7] * m[13] + m[12] * m[5] * m[11] - m[12] * m[7] * m[9];
+	inv[12] = -m[4] * m[9] * m[14] + m[4] * m[10] * m[13] + m[8] * m[5] * m[14] - m[8] * m[6] * m[13] - m[12] * m[5] * m[10] + m[12] * m[6] * m[9];
+	inv[1] = -m[1] * m[10] * m[15] + m[1] * m[11] * m[14] + m[9] * m[2] * m[15] - m[9] * m[3] * m[14] - m[13] * m[2] * m[11] + m[13] * m[3] * m[10];
+	inv[5] = m[0] * m[10] * m[15] - m[0] * m[11] * m[14] - m[8] * m[2] * m[15] + m[8] * m[3] * m[14] + m[12] * m[2] * m[11] - m[12] * m[3] * m[10];
+	inv[9] = -m[0] * m[9] * m[15] + m[0] * m[11] * m[13] + m[8] * m[1] * m[15] - m[8] * m[3] * m[13] - m[12] * m[1] * m[11] + m[12] * m[3] * m[9];
+	inv[13] = m[0] * m[9] * m[14] - m[0] * m[10] * m[13] - m[8] * m[1] * m[14] + m[8] * m[2] * m[13] + m[12] * m[1] * m[10] - m[12] * m[2] * m[9];
+	inv[2] = m[1] * m[6] * m[15] - m[1] * m[7] * m[14] - m[5] * m[2] * m[15] + m[5] * m[3] * m[14] + m[13] * m[2] * m[7] - m[13] * m[3] * m[6];
+	inv[6] = -m[0] * m[6] * m[15] + m[0] * m[7] * m[14] + m[4] * m[2] * m[15] - m[4] * m[3] * m[14] - m[12] * m[2] * m[7] + m[12] * m[3] * m[6];
+	inv[10] = m[0] * m[5] * m[15] - m[0] * m[7] * m[13] - m[4] * m[1] * m[15] + m[4] * m[3] * m[13] + m[12] * m[1] * m[7] - m[12] * m[3] * m[5];
+	inv[14] = -m[0] * m[5] * m[14] + m[0] * m[6] * m[13] + m[4] * m[1] * m[14] - m[4] * m[2] * m[13] - m[12] * m[1] * m[6] + m[12] * m[2] * m[5];
+	inv[3] = -m[1] * m[6] * m[11] + m[1] * m[7] * m[10] + m[5] * m[2] * m[11] - m[5] * m[3] * m[10] - m[9] * m[2] * m[7] + m[9] * m[3] * m[6];
+	inv[7] = m[0] * m[6] * m[11] - m[0] * m[7] * m[10] - m[4] * m[2] * m[11] + m[4] * m[3] * m[10] + m[8] * m[2] * m[7] - m[8] * m[3] * m[6];
+	inv[11] = -m[0] * m[5] * m[11] + m[0] * m[7] * m[9] + m[4] * m[1] * m[11] - m[4] * m[3] * m[9] - m[8] * m[1] * m[7] + m[8] * m[3] * m[5];
+	inv[15] = m[0] * m[5] * m[10] - m[0] * m[6] * m[9] - m[4] * m[1] * m[10] + m[4] * m[2] * m[9] + m[8] * m[1] * m[6] - m[8] * m[2] * m[5];
+  
+	det = m[0] * inv[0] + m[1] * inv[4] + m[2] * inv[8] + m[3] * inv[12];
+	if (det == 0)
+	  return false;
+  
+	det = 1.0 / det;
+  
+	for (i = 0; i < 16; i++)
+	  out[i] = inv[i] * det;
+  
+	return true;
+  
+  }
+
+  private void transformPoint(double[] out, double[] in)
+  {
+//C++ TO JAVA CONVERTER NOTE: The following #define macro was replaced in-line:
+//#define M(row,col) _m[col*4+row]
+	out[0] = _m[0 *4+0] * in[0] + _m[1 *4+0] * in[1] + _m[2 *4+0] * in[2] + _m[3 *4+0] * in[3];
+	out[1] = _m[0 *4+1] * in[0] + _m[1 *4+1] * in[1] + _m[2 *4+1] * in[2] + _m[3 *4+1] * in[3];
+	out[2] = _m[0 *4+2] * in[0] + _m[1 *4+2] * in[1] + _m[2 *4+2] * in[2] + _m[3 *4+2] * in[3];
+	out[3] = _m[0 *4+3] * in[0] + _m[1 *4+3] * in[1] + _m[2 *4+3] * in[2] + _m[3 *4+3] * in[3];
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#undef M
+  }
+
+
 
   public MutableMatrix44D()
   {
@@ -85,19 +144,13 @@ public class MutableMatrix44D
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: float get(int i) const
-  public final float get(int i)
+//ORIGINAL LINE: double get(int i) const
+  public final double get(int i)
   {
 	  return _m[i];
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const double* getMatrix() const
-//C++ TO JAVA CONVERTER WARNING: Java has no equivalent to methods returning pointers to value types:
-  public final double getMatrix()
-  {
-	  return _m;
-  }
+  //const double * getMatrix() const { return _m;}
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: void copyToFloatMatrix(float M[16]) const
@@ -214,60 +267,4 @@ public class MutableMatrix44D
 	return m;
   }
 
-  private double[] _m = new double[16];
-
-
-  /*
-   * Compute inverse of 4x4 transformation matrix.
-   * Code contributed by Jacques Leroy jle@star.be
-   * Return GL_TRUE for success, GL_FALSE for failure (singular matrix)
-   */
-  private static boolean invert_matrix(double[] m, double[] out)
-  {
-	//NEW METHOD FOR ENHANCING JAVA TRANSLATION
-	double[] inv = new double[16];
-	double det;
-	int i;
-  
-	inv[0] = m[5] * m[10] * m[15] - m[5] * m[11] * m[14] - m[9] * m[6] * m[15] + m[9] * m[7] * m[14] + m[13] * m[6] * m[11] - m[13] * m[7] * m[10];
-	inv[4] = -m[4] * m[10] * m[15] + m[4] * m[11] * m[14] + m[8] * m[6] * m[15] - m[8] * m[7] * m[14] - m[12] * m[6] * m[11] + m[12] * m[7] * m[10];
-	inv[8] = m[4] * m[9] * m[15] - m[4] * m[11] * m[13] - m[8] * m[5] * m[15] + m[8] * m[7] * m[13] + m[12] * m[5] * m[11] - m[12] * m[7] * m[9];
-	inv[12] = -m[4] * m[9] * m[14] + m[4] * m[10] * m[13] + m[8] * m[5] * m[14] - m[8] * m[6] * m[13] - m[12] * m[5] * m[10] + m[12] * m[6] * m[9];
-	inv[1] = -m[1] * m[10] * m[15] + m[1] * m[11] * m[14] + m[9] * m[2] * m[15] - m[9] * m[3] * m[14] - m[13] * m[2] * m[11] + m[13] * m[3] * m[10];
-	inv[5] = m[0] * m[10] * m[15] - m[0] * m[11] * m[14] - m[8] * m[2] * m[15] + m[8] * m[3] * m[14] + m[12] * m[2] * m[11] - m[12] * m[3] * m[10];
-	inv[9] = -m[0] * m[9] * m[15] + m[0] * m[11] * m[13] + m[8] * m[1] * m[15] - m[8] * m[3] * m[13] - m[12] * m[1] * m[11] + m[12] * m[3] * m[9];
-	inv[13] = m[0] * m[9] * m[14] - m[0] * m[10] * m[13] - m[8] * m[1] * m[14] + m[8] * m[2] * m[13] + m[12] * m[1] * m[10] - m[12] * m[2] * m[9];
-	inv[2] = m[1] * m[6] * m[15] - m[1] * m[7] * m[14] - m[5] * m[2] * m[15] + m[5] * m[3] * m[14] + m[13] * m[2] * m[7] - m[13] * m[3] * m[6];
-	inv[6] = -m[0] * m[6] * m[15] + m[0] * m[7] * m[14] + m[4] * m[2] * m[15] - m[4] * m[3] * m[14] - m[12] * m[2] * m[7] + m[12] * m[3] * m[6];
-	inv[10] = m[0] * m[5] * m[15] - m[0] * m[7] * m[13] - m[4] * m[1] * m[15] + m[4] * m[3] * m[13] + m[12] * m[1] * m[7] - m[12] * m[3] * m[5];
-	inv[14] = -m[0] * m[5] * m[14] + m[0] * m[6] * m[13] + m[4] * m[1] * m[14] - m[4] * m[2] * m[13] - m[12] * m[1] * m[6] + m[12] * m[2] * m[5];
-	inv[3] = -m[1] * m[6] * m[11] + m[1] * m[7] * m[10] + m[5] * m[2] * m[11] - m[5] * m[3] * m[10] - m[9] * m[2] * m[7] + m[9] * m[3] * m[6];
-	inv[7] = m[0] * m[6] * m[11] - m[0] * m[7] * m[10] - m[4] * m[2] * m[11] + m[4] * m[3] * m[10] + m[8] * m[2] * m[7] - m[8] * m[3] * m[6];
-	inv[11] = -m[0] * m[5] * m[11] + m[0] * m[7] * m[9] + m[4] * m[1] * m[11] - m[4] * m[3] * m[9] - m[8] * m[1] * m[7] + m[8] * m[3] * m[5];
-	inv[15] = m[0] * m[5] * m[10] - m[0] * m[6] * m[9] - m[4] * m[1] * m[10] + m[4] * m[2] * m[9] + m[8] * m[1] * m[6] - m[8] * m[2] * m[5];
-  
-	det = m[0] * inv[0] + m[1] * inv[4] + m[2] * inv[8] + m[3] * inv[12];
-	if (det == 0)
-	  return false;
-  
-	det = 1.0 / det;
-  
-	for (i = 0; i < 16; i++)
-	  out[i] = inv[i] * det;
-  
-	return true;
-  
-  }
-
-  private void transformPoint(double[] out, double[] in)
-  {
-//C++ TO JAVA CONVERTER NOTE: The following #define macro was replaced in-line:
-//#define M(row,col) _m[col*4+row]
-	out[0] = _m[0 *4+0] * in[0] + _m[1 *4+0] * in[1] + _m[2 *4+0] * in[2] + _m[3 *4+0] * in[3];
-	out[1] = _m[0 *4+1] * in[0] + _m[1 *4+1] * in[1] + _m[2 *4+1] * in[2] + _m[3 *4+1] * in[3];
-	out[2] = _m[0 *4+2] * in[0] + _m[1 *4+2] * in[1] + _m[2 *4+2] * in[2] + _m[3 *4+2] * in[3];
-	out[3] = _m[0 *4+3] * in[0] + _m[1 *4+3] * in[1] + _m[2 *4+3] * in[2] + _m[3 *4+3] * in[3];
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#undef M
-  }
 }

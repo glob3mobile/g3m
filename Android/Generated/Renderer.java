@@ -18,6 +18,8 @@ public abstract class Renderer
 
   public abstract boolean onTouchEvent(TouchEvent touchEvent);
 
+  public abstract boolean onResizeViewportEvent(int width, int height);
+
   public void dispose()
   {
   }

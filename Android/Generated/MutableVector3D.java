@@ -19,6 +19,13 @@ public class MutableVector3D
   private double _z;
 
 
+  public MutableVector3D()
+  {
+	  _x = 0;
+	  _y = 0;
+	  _z = 0;
+  }
+
   public MutableVector3D(double x, double y, double z)
   {
 	  _x = x;
@@ -164,9 +171,9 @@ public class MutableVector3D
 //ORIGINAL LINE: MutableVector3D applyTransform(const MutableMatrix44D &m) const
   public final MutableVector3D applyTransform(MutableMatrix44D m)
   {
-	double[] M = m.getMatrix();
+	//const double * M = m.getMatrix();
 
-	MutableVector3D v = new MutableVector3D(_x * M[0] + _y * M[4] + _z * M[8] + M[12], _x * M[1] + _y * M[5] + _z * M[9] + M[13], _x * M[2] + _y * M[6] + _z * M[10] + M[14]);
+	MutableVector3D v = new MutableVector3D(_x * m.get(0) + _y * m.get(4) + _z * m.get(8) + m.get(12), _x * m.get(1) + _y * m.get(5) + _z * m.get(9) + m.get(13), _x * m.get(2) + _y * m.get(6) + _z * m.get(10) + m.get(14));
 
 	return v;
   }

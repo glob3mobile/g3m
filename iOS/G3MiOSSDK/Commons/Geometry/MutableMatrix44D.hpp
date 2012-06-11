@@ -13,11 +13,20 @@ class Vector3D;
 class Angle;
 class MutableVector3D;
 
+
 // class to keep a 4x4 matrix
 class MutableMatrix44D {
+private:
+  double _m[16];
+    
+  static bool invert_matrix(const double m[16], double out[16]);
+  
+  void transformPoint(double out[4], const double in[4]);
+  
+  
 public:
   
-  MutableMatrix44D(){
+  MutableMatrix44D() {
     for (int i = 0; i < 16; i++) { _m[i] = 0.0;}
   }
   
@@ -37,9 +46,9 @@ public:
   
   MutableMatrix44D inverse() const;
   
-  float get(int i) const { return _m[i];}
-  
-  const double* getMatrix() const { return _m;}
+  double get(int i) const { return _m[i];}
+    
+  //const double * getMatrix() const { return _m;}
   
   void copyToFloatMatrix(float M[16]) const { 
     for (int i = 0; i < 16; i++) { M[i] = _m[i];}
@@ -50,7 +59,7 @@ public:
   Vector3D unproject(const Vector3D& pixel3D, const int viewport[4]) const;
   
   static MutableMatrix44D createTranslationMatrix(const Vector3D& t);
-
+  
   static MutableMatrix44D createRotationMatrix(const Angle& angle, const Vector3D& p);
   
   static MutableMatrix44D createModelMatrix(const MutableVector3D& pos, 
@@ -60,12 +69,6 @@ public:
   static MutableMatrix44D createProjectionMatrix(double left, double right, double bottom, double top, 
                                                  double near, double far);
   
-private:
-  double _m[16];
-  
-  static bool invert_matrix(const double m[16], double out[16]);
-  
-  void transformPoint(double out[4], const double in[4]);
 };
 
 
