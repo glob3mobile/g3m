@@ -20,7 +20,7 @@ private:
   const double _degrees;
   
   Angle(const double degrees) : _degrees(degrees) {  }
-  Angle() : _degrees(0) { }
+  //Angle() : _degrees(0) { }
   
 public:
     
