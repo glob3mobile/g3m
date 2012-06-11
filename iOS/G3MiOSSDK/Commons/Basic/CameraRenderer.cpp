@@ -40,24 +40,24 @@ bool CameraRenderer::onResizeViewportEvent(int width, int height)
     return false;
 }
 
-void CameraRenderer::onDown(const TouchEvent& event)
+void CameraRenderer::onDown(const TouchEvent& touchEvent)
 {
   //Saving Camera0
   Camera c(*_camera);
   _camera0 = c;
   
   //Initial Point for Dragging
-  Vector2D pixel = event.getTouch(0)->getPos();
+  Vector2D pixel = touchEvent.getTouch(0)->getPos();
   Vector3D ray = _camera0.pixel2Vector(pixel);
   _initialPoint = _planet->closestIntersection(_camera0.getPos(), ray).asMutableVector3D();
   _currentGesture = Drag; //Dragging
 }
 
-void CameraRenderer::makeDrag(const TouchEvent& event)
+void CameraRenderer::makeDrag(const TouchEvent& touchEvent)
 {
   if (!_initialPoint.isNan()) //VALID INITIAL POINT
   { 
-    Vector2D pixel = event.getTouch(0)->getPos();
+    Vector2D pixel = touchEvent.getTouch(0)->getPos();
     Vector3D ray = _camera0.pixel2Vector(pixel);
     Vector3D pos = _camera0.getPos();
     
@@ -71,10 +71,10 @@ void CameraRenderer::makeDrag(const TouchEvent& event)
   }
 }
 
-void CameraRenderer::makeZoom(const TouchEvent& event)
+void CameraRenderer::makeZoom(const TouchEvent& touchEvent)
 {
-  Vector2D pixel0 = event.getTouch(0)->getPos();
-  Vector2D pixel1 = event.getTouch(1)->getPos();
+  Vector2D pixel0 = touchEvent.getTouch(0)->getPos();
+  Vector2D pixel1 = touchEvent.getTouch(1)->getPos();
   Vector2D pixelCenter = pixel0.add(pixel1).div(2.0);
   
   Vector3D ray = _camera0.pixel2Vector(pixelCenter);
@@ -90,8 +90,8 @@ void CameraRenderer::makeZoom(const TouchEvent& event)
     //IF THE CENTER OF THE VIEW INTERSECTS THE PLANET
     if (!pointInCenterOfView.isNan()){
       
-      Vector2D prevPixel0 = event.getTouch(0)->getPrevPos();
-      Vector2D prevPixel1 = event.getTouch(1)->getPrevPos();
+      Vector2D prevPixel0 = touchEvent.getTouch(0)->getPrevPos();
+      Vector2D prevPixel1 = touchEvent.getTouch(1)->getPrevPos();
       
       double dist = pixel0.sub(pixel1).length();
       double prevDist = prevPixel0.sub(prevPixel1).length();
@@ -109,9 +109,9 @@ void CameraRenderer::makeZoom(const TouchEvent& event)
   }
 }
 
-Gesture CameraRenderer::getGesture(const TouchEvent& event) const
+Gesture CameraRenderer::getGesture(const TouchEvent& touchEvent) const
 {
-  int n = event.getNumTouch();
+  int n = touchEvent.getNumTouch();
   if (n == 1){
     //Dragging
     if (_currentGesture == Drag) 
@@ -127,11 +127,11 @@ Gesture CameraRenderer::getGesture(const TouchEvent& event) const
     if (_currentGesture == Rotate) return Rotate;
     
     //We have to fingers and the previous event was Drag
-    Vector2D pixel0 = event.getTouch(0)->getPos();
-    Vector2D pixel1 = event.getTouch(1)->getPos();
+    Vector2D pixel0 = touchEvent.getTouch(0)->getPos();
+    Vector2D pixel1 = touchEvent.getTouch(1)->getPos();
     
-    Vector2D prevPixel0 = event.getTouch(0)->getPrevPos();
-    Vector2D prevPixel1 = event.getTouch(1)->getPrevPos();
+    Vector2D prevPixel0 = touchEvent.getTouch(0)->getPrevPos();
+    Vector2D prevPixel1 = touchEvent.getTouch(1)->getPrevPos();
     
     //If both fingers go in the same direction we should rotate the camera
     if ( (pixel0.y() > prevPixel0.y() && pixel1.y() > prevPixel1.y()) ||
@@ -150,7 +150,7 @@ Gesture CameraRenderer::getGesture(const TouchEvent& event) const
   return None;
 }
 
-void CameraRenderer::makeRotate(const TouchEvent& event)
+void CameraRenderer::makeRotate(const TouchEvent& touchEvent)
 {
   int todo_JM_working;
   
@@ -221,42 +221,42 @@ bool CameraRenderer::cameraLooksToPlanet(const Camera& c) const
 }
 
 
-void CameraRenderer::onMove(const TouchEvent& event)
+void CameraRenderer::onMove(const TouchEvent& touchEvent)
 {
-  _currentGesture = getGesture(event);
+  _currentGesture = getGesture(touchEvent);
   
   switch (_currentGesture) {
     case Drag:
-      makeDrag(event);
+      makeDrag(touchEvent);
       break;
     case Zoom:
-      makeZoom(event);
+      makeZoom(touchEvent);
       break;
     case Rotate:
-      makeRotate(event);
+      makeRotate(touchEvent);
       break;
     default:
       break;
   }
 }
 
-void CameraRenderer::onUp(const TouchEvent& event)
+void CameraRenderer::onUp(const TouchEvent& touchEvent)
 {
   _currentGesture = None;
   _initialPixel = Vector3D::nan().asMutableVector3D();
 }
 
-bool CameraRenderer::onTouchEvent(const TouchEvent* event)
+bool CameraRenderer::onTouchEvent(const TouchEvent* touchEvent)
 {
-  switch (event->getType()) {
+  switch (touchEvent->getType()) {
     case Down:
-      onDown(*event);
+      onDown(*touchEvent);
       break;
     case Move:
-      onMove(*event);
+      onMove(*touchEvent);
       break;
     case Up:
-      onUp(*event);
+      onUp(*touchEvent);
     default:
       break;
   }

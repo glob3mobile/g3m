@@ -66,6 +66,17 @@ public class CompositeRenderer extends Renderer
 	_renderers.add(renderer);
 	renderer.initialize(_ic);
   }
+
+  public final boolean onResizeViewportEvent(int width, int height)
+  {
+	boolean res = false;
+	for (int i = 0; i < _renderers.size(); i++)
+	{
+	  //THE EVENT IS PROCESSED ONLY BY ALL RENDERERS
+	  res = res | _renderers.get(i).onResizeViewportEvent(width, height);
+	}
+	return res;
+  }
 }
 //C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
 //boolean CompositeRenderer::onTouchEvent(const TouchEvent* event)

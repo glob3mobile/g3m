@@ -22,7 +22,8 @@ public enum Gesture
 {
   None, // used only for animation, not for gesture
   Drag,
-  Zoom;
+  Zoom,
+  Rotate;
 
 	public int getValue()
 	{

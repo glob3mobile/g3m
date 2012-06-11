@@ -26,8 +26,6 @@ public class G3MWidget
 	RenderContext rc = new RenderContext(_factory, _logger, _planet, _gl, _camera);
   
 	// Clear the scene
-	//glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-	//glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
 	_gl.clearScreen(1, 1, 0);
 	_gl.enableVertices();
   
@@ -38,6 +36,11 @@ public class G3MWidget
 
 //C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
 //  void onTouchEvent(const TouchEvent* event);
+
+  public final void onResizeViewportEvent(int width, int height)
+  {
+	_renderer.onResizeViewportEvent(width, height);
+  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: IGL * getGL() const

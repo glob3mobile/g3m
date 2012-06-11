@@ -184,12 +184,16 @@ public class Camera
 	}
   }
 
-  //Rotate
-  public final void rotate(Angle a)
+  //Pivot
+  public final void pivotOnCenter(Angle a)
   {
 	Vector3D rotationAxis = _pos.sub(_center).asVector3D();
 	rotateWithAxis(rotationAxis, a);
   }
+
+  //Rotate
+  //void rotate(const Vector3D& axis, double angle)
+
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: void print() const

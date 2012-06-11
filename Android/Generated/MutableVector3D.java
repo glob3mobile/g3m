@@ -1,5 +1,13 @@
 package org.glob3.mobile.generated; 
 //
+//  MutableVector3D.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 31/05/12.
+//  Copyright (c) 2012 IGO Software SL. All rights reserved.
+//
+
+//
 //  MutableVector3D.hpp
 //  G3MiOSSDK
 //
@@ -19,6 +27,13 @@ public class MutableVector3D
   private double _z;
 
 
+  public MutableVector3D()
+  {
+	  _x = 0;
+	  _y = 0;
+	  _z = 0;
+  }
+
   public MutableVector3D(double x, double y, double z)
   {
 	  _x = x;
@@ -36,9 +51,12 @@ public class MutableVector3D
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: MutableVector3D normalized() const;
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  MutableVector3D normalized();
+//ORIGINAL LINE: MutableVector3D normalized() const
+  public final MutableVector3D normalized()
+  {
+	  double d = length();
+	  return new MutableVector3D(_x / d, _y /d, _z / d);
+  }
 
   public static Vector3D nan()
   {
@@ -130,9 +148,18 @@ public class MutableVector3D
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double angleBetween(const MutableVector3D& other) const;
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  double angleBetween(MutableVector3D other);
+//ORIGINAL LINE: double angleBetween(const MutableVector3D& other) const
+  public final double angleBetween(MutableVector3D other)
+  {
+	MutableVector3D v1 = normalized();
+	MutableVector3D v2 = other.normalized();
+	double c = v1.dot(v2);
+	if (c > 1.0)
+		c = 1.0;
+	else if (c < -1.0)
+		c = -1.0;
+	return Math.acos(c);
+  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: MutableVector3D rotatedAroundAxis(const MutableVector3D& other, const double theta) const;
@@ -164,9 +191,9 @@ public class MutableVector3D
 //ORIGINAL LINE: MutableVector3D applyTransform(const MutableMatrix44D &m) const
   public final MutableVector3D applyTransform(MutableMatrix44D m)
   {
-	double[] M = m.getMatrix();
+	//const double * M = m.getMatrix();
 
-	MutableVector3D v = new MutableVector3D(_x * M[0] + _y * M[4] + _z * M[8] + M[12], _x * M[1] + _y * M[5] + _z * M[9] + M[13], _x * M[2] + _y * M[6] + _z * M[10] + M[14]);
+	MutableVector3D v = new MutableVector3D(_x * m.get(0) + _y * m.get(4) + _z * m.get(8) + m.get(12), _x * m.get(1) + _y * m.get(5) + _z * m.get(9) + m.get(13), _x * m.get(2) + _y * m.get(6) + _z * m.get(10) + m.get(14));
 
 	return v;
   }
