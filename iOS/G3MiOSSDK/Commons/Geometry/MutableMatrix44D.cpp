@@ -32,7 +32,7 @@ void MutableMatrix44D::print() const
 {
   for (int j = 0; j < 4; j++)
     printf("%.2f  %.2f %.2f %.2f\n", _m[j * 4], _m[j * 4 + 1],_m[j * 4 + 2], _m[j * 4 + 3] );
-
+  
 }
 
 
@@ -176,8 +176,8 @@ MutableMatrix44D MutableMatrix44D::createRotationMatrix(const Angle& angle, cons
 }
 
 MutableMatrix44D MutableMatrix44D::createModelMatrix(const MutableVector3D& pos,
-                                   const MutableVector3D& center,
-                                   const MutableVector3D& up) {
+                                                     const MutableVector3D& center,
+                                                     const MutableVector3D& up) {
   MutableVector3D w = center.sub(pos).normalized();
   double pe = w.dot(up);
   MutableVector3D v = up.sub(w.times(pe)).normalized();
