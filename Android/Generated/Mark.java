@@ -22,7 +22,7 @@ public class Mark
   private final String _name;
   private final String _description;
   private final String _imageFileName;
-  private final Geodetic3D _position = new Geodetic3D();
+  private final Geodetic3D _position ;
 
   public Mark(String name, String description, String imageFileName, Geodetic3D position)
   {
