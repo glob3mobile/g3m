@@ -115,12 +115,12 @@ public:
   
   Vector3D applyTransform(const MutableMatrix44D &m) const
   {
-    const double * M = m.getMatrix();
+    //const double * M = m.getMatrix();
     
-    Vector3D v(_x * M[0] + _y * M[4] + _z * M[8] + M[12],
-             _x * M[1] + _y * M[5] + _z * M[9] + M[13],
-             _x * M[2] + _y * M[6] + _z * M[10] + M[14]);
-    
+    Vector3D v(_x * m.get(0) + _y * m.get(4) + _z * m.get(8) + m.get(12),
+               _x * m.get(1) + _y * m.get(5) + _z * m.get(9) + m.get(13),
+               _x * m.get(2) + _y * m.get(6) + _z * m.get(10) + m.get(14));
+        
     return v;
   }
   

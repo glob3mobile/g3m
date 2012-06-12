@@ -29,10 +29,7 @@ public class Angle
   {
 	  _degrees = degrees;
   }
-  private Angle()
-  {
-	  _degrees = 0;
-  }
+  //Angle() : _degrees(0) { }
 
 
   public static Angle fromDegrees(double degrees)

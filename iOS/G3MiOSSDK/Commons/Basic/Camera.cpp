@@ -139,3 +139,20 @@ void Camera::pivotOnCenter(const Angle& a)
   Vector3D rotationAxis = _pos.sub(_center).asVector3D();
   rotateWithAxis(rotationAxis, a);
 }
+
+void Camera::rotateWithAxisAndPoint(const Vector3D& axis, const Vector3D& point, const Angle& delta)
+{
+  MutableMatrix44D trans1 = MutableMatrix44D::createTranslationMatrix(point.times(-1.0));
+  MutableMatrix44D rot = MutableMatrix44D::createRotationMatrix(delta, axis);
+  MutableMatrix44D trans2 = MutableMatrix44D::createTranslationMatrix(point);
+  
+  //MutableMatrix44D m = trans1.multMatrix(rot).multMatrix(trans2);
+  
+  MutableMatrix44D m = trans2.multMatrix(rot).multMatrix(trans1);
+  
+  //MutableMatrix44D m = trans1.multMatrix(trans2);
+  
+  //m.print();
+  
+  applyTransform(m);
+}

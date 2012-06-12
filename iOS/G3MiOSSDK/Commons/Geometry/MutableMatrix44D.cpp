@@ -14,6 +14,7 @@
 #include "Angle.hpp"
 #include "MutableVector3D.hpp"
 
+
 MutableMatrix44D MutableMatrix44D::multMatrix(const MutableMatrix44D& m) const {
   double R[16];
   for (int j = 0; j < 4; j++)

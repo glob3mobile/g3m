@@ -22,7 +22,11 @@ void DummyRenderer::initialize(const InitializationContext* ic)
   index = new unsigned char[numIndices];
   
   // create vertices
-  halfSize = 7e6;
+  
+  if (ic != NULL && ic->getPlanet() != NULL)
+    halfSize = ic->getPlanet()->getRadii().x() / 2.0;
+  else     
+    halfSize = 7e6;
   
   int n = 0;
   for (int j = 0; j < res; j++) {

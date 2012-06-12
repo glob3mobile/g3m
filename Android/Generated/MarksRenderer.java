@@ -63,6 +63,11 @@ public class MarksRenderer extends Renderer
 	_marks.add(mark);
   }
 
+  public final boolean onResizeViewportEvent(int width, int height)
+  {
+	  return false;
+  }
+
 }
 //C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
 //boolean MarksRenderer::onTouchEvent(const TouchEvent* event)

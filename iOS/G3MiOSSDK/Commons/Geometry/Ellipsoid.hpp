@@ -28,7 +28,7 @@ public:
   
   Ellipsoid(const Vector3D& radii);
   
-  Vector3D getRadii() {
+  Vector3D getRadii() const{
     return _radii;
   }
   

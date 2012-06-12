@@ -22,8 +22,8 @@ package org.glob3.mobile.generated;
  */
 public class Geodetic2D
 {
-  private final Angle _latitude = new Angle();
-  private final Angle _longitude = new Angle();
+  private final Angle _latitude ;
+  private final Angle _longitude ;
 
 
   public static Geodetic2D zero()

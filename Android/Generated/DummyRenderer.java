@@ -153,5 +153,10 @@ public class DummyRenderer extends Renderer
 	return false;
   }
 
+  public final boolean onResizeViewportEvent(int width, int height)
+  {
+	  return false;
+  }
+
 
 }
