@@ -3,10 +3,11 @@ public class CameraRenderer extends Renderer
 {
 
   private Camera _camera; //Camera used at current frame
-  private final Planet _planet; //Planet
+  private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE //Planet
 
-  private Camera _camera0 = new Camera(); //Initial Camera saved on Down event
+  private Camera _camera0 ; //Initial Camera saved on Down event
   private MutableVector3D _initialPoint = new MutableVector3D(); //Initial point at dragging
+  private MutableVector3D _initialPixel = new MutableVector3D(); //Initial pixel at start of gesture
 
   private Gesture _currentGesture; //Gesture the user is making at the moment
 
@@ -44,6 +45,7 @@ public class CameraRenderer extends Renderer
   private void onUp(TouchEvent touchEvent)
   {
 	_currentGesture = Gesture.None;
+	_initialPixel = Vector3D.nan().asMutableVector3D();
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -77,7 +79,7 @@ public class CameraRenderer extends Renderer
 	  Vector2D prevPixel1 = touchEvent.getTouch(1).getPrevPos();
   
 	  //If both fingers go in the same direction we should rotate the camera
-	  if ((pixel0.y() > prevPixel0.y() && pixel1.y() > prevPixel0.y()) || (pixel0.x() > prevPixel0.x() && pixel1.x() > prevPixel0.x()) || (pixel0.y() < prevPixel0.y() && pixel1.y() < prevPixel0.y()) || (pixel0.x() < prevPixel0.x() && pixel1.x() < prevPixel0.x()))
+	  if ((pixel0.y() > prevPixel0.y() && pixel1.y() > prevPixel1.y()) || (pixel0.x() > prevPixel0.x() && pixel1.x() > prevPixel1.x()) || (pixel0.y() < prevPixel0.y() && pixel1.y() < prevPixel1.y()) || (pixel0.x() < prevPixel0.x() && pixel1.x() < prevPixel1.x()))
 	  {
 		return Gesture.Rotate;
 	  }
@@ -119,11 +121,16 @@ public class CameraRenderer extends Renderer
 	Vector3D ray = _camera0.pixel2Vector(pixelCenter);
 	_initialPoint = _planet.closestIntersection(_camera0.getPos(), ray).asMutableVector3D();
   
+	Vector2D centerOfViewport = new Vector2D(_camera0.getWidth() / 2, _camera0.getHeight() / 2);
+	Vector3D ray2 = _camera0.pixel2Vector(centerOfViewport);
+	Vector3D pointInCenterOfView = _planet.closestIntersection(_camera0.getPos(), ray2);
+  
 	//IF CENTER PIXEL INTERSECTS THE PLANET
-	if (_initialPoint.length() > 0)
+	if (!_initialPoint.isNan())
 	{
+  
 	  //IF THE CENTER OF THE VIEW INTERSECTS THE PLANET
-	  if (_planet.intersections(_camera.getPos(), _camera.getCenter()).size() > 0)
+	  if (!pointInCenterOfView.isNan())
 	  {
   
 		Vector2D prevPixel0 = touchEvent.getTouch(0).getPrevPos();
@@ -146,7 +153,77 @@ public class CameraRenderer extends Renderer
   }
   private void makeRotate(TouchEvent touchEvent)
   {
-	int todo_rotate;
+	int todo_JM_working;
+  
+	Vector2D pixel0 = touchEvent.getTouch(0).getPos();
+	Vector2D pixel1 = touchEvent.getTouch(1).getPos();
+	Vector2D pixelCenter = pixel0.add(pixel1).div(2.0);
+  
+	//The gesture is starting
+	if (_initialPixel.isNan())
+	{
+	  Vector3D v = new Vector3D(pixelCenter.x(), pixelCenter.y(), 0);
+	  _initialPixel = v.asMutableVector3D(); //Storing starting pixel
+	}
+  
+	Vector3D ray = _camera0.pixel2Vector(pixelCenter);
+	_initialPoint = _planet.closestIntersection(_camera0.getPos(), ray).asMutableVector3D();
+  
+	//Calculating the point we are going to rotate around
+	Vector2D centerViewport = new Vector2D(_camera.getWidth() /2, _camera.getHeight() /2);
+	Vector3D rayCV = _camera0.pixel2Vector(pixelCenter);
+	Vector3D rotatingPoint = _planet.closestIntersection(_camera0.getPos(), rayCV);
+  
+	//We don't rotate
+	if (_initialPoint.isNan() || rotatingPoint.isNan())
+		return;
+  
+	//Rotating axis
+	Vector3D camVec = _camera0.getPos().sub(_camera0.getCenter());
+	Vector3D normal = _planet.geodeticSurfaceNormal(rotatingPoint);
+	Vector3D horizontalAxis = normal.cross(camVec);
+  
+	//Calculating the angle we have to rotate the camera vertically
+	double distY = pixelCenter.y() - _initialPixel.y();
+	Angle horizontalAngle = Angle.fromDegrees(((double)distY / (double)_camera0.getHeight()) * 180.0);
+  
+	//We don't put the camera upside down
+	if (horizontalAngle.degrees() < 0.0 || horizontalAngle.degrees() > 85.0)
+		return;
+	System.out.printf("%f\n", horizontalAngle.degrees());
+  
+	//Back-Up camera
+	Camera cameraAux = new Camera(0,0);
+	cameraAux.copyFrom(_camera);
+  
+	//Apply rotation
+	_camera.copyFrom(_camera0);
+	_camera.rotateWithAxisAndPoint(horizontalAxis, _initialPoint.asVector3D(), horizontalAngle);
+  
+	//If the final camera don't intersect the planet we don't apply the transformation
+  
+	Vector3D newCamVec = _camera.getPos().sub(_camera.getCenter());
+	Angle a = Angle.fromRadians(newCamVec.angleBetween(normal));
+	System.out.printf("ANGLE NCV : %f\n", a.degrees());
+  
+	//If the camera is too low or doesn't intersect the planet
+	if ((a.degrees() > 85.0) || !cameraLooksToPlanet(_camera))
+	{
+	  System.out.print("MOVEMENT NOT ALLOWED\n");
+	  // we don't apply the transformation
+	  _camera.copyFrom(cameraAux);
+	}
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean cameraLooksToPlanet(const Camera& c) const
+  private boolean cameraLooksToPlanet(Camera c)
+  {
+	  int todo_JM_working;
+  
+	Vector2D centerViewport = new Vector2D(c.getWidth() /2, c.getHeight() /2);
+	Vector3D rayCV = c.pixel2Vector(centerViewport);
+	return ! _planet.closestIntersection(c.getPos(), rayCV).isNan();
   }
 
 
@@ -156,6 +233,7 @@ public class CameraRenderer extends Renderer
 	  _initialPoint = new MutableVector3D(0,0,0);
 	  _currentGesture = Gesture.None;
 	  _camera = null;
+	  _initialPixel = new MutableVector3D(0,0,0);
   }
 
   public final void initialize(InitializationContext ic)
