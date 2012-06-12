@@ -21,6 +21,7 @@
 #include "DummyRenderer.hpp"
 #include "MarksRenderer.hpp"
 #include "Mark.hpp"
+#include "SimplePlanetRenderer.hpp"
 
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
@@ -78,8 +79,11 @@
     CameraRenderer *cameraRenderer = new CameraRenderer();
     comp->addRenderer(cameraRenderer);
     
-    DummyRenderer* dum = new DummyRenderer();
-    comp->addRenderer(dum);
+    //DummyRenderer* dum = new DummyRenderer();
+    //comp->addRenderer(dum);
+    
+    SimplePlanetRenderer* spr = new SimplePlanetRenderer();
+    comp->addRenderer(spr);
     
     MarksRenderer* marks = new MarksRenderer();
     

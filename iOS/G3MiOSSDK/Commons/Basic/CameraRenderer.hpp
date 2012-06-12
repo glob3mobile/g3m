@@ -43,7 +43,7 @@ private:
   void makeZoom(const TouchEvent& touchEvent);
   void makeRotate(const TouchEvent& touchEvent);
   
-  bool cameraLooksToPlanet(const Camera& c) const;
+  Vector3D centerOfViewOnPlanet(const Camera& c) const;
   
 public:
   
