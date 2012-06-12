@@ -50,4 +50,7 @@ public class Touch
   {
 	  return _prevPos;
   }
+  public void dispose()
+  {
+  }
 }
