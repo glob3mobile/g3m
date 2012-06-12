@@ -33,6 +33,10 @@ public class Mark
 
   }
 
+  public void dispose()
+  {
+  }
+
   public final String getName()
   {
 	return _name;

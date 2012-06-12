@@ -45,8 +45,10 @@ public class MarksRenderer extends Renderer
 	return 9999;
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
-//  virtual boolean onTouchEvent(const TouchEvent* event);
+  public boolean onTouchEvent(TouchEvent touchEvent)
+  {
+	return false;
+  }
 
   public void dispose()
   {
@@ -69,8 +71,3 @@ public class MarksRenderer extends Renderer
   }
 
 }
-//C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
-//boolean MarksRenderer::onTouchEvent(const TouchEvent* event)
-//{
-//  return false;
-//}

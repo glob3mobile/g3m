@@ -12,7 +12,7 @@ void MarksRenderer::initialize(const InitializationContext* ic) {
   
 }
 
-bool MarksRenderer::onTouchEvent(const TouchEvent* event) {
+bool MarksRenderer::onTouchEvent(const TouchEvent* touchEvent) {
   return false;
 }
 
