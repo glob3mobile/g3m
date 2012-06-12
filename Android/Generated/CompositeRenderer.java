@@ -22,7 +22,7 @@ public class CompositeRenderer extends Renderer
 {
   private java.util.ArrayList<Renderer> _renderers = new java.util.ArrayList<Renderer>();
 
-  private final InitializationContext _ic;
+  private InitializationContext _ic; // CHANGED BY CONVERSOR RULE
 
   public CompositeRenderer()
   {
@@ -58,8 +58,18 @@ public class CompositeRenderer extends Renderer
 	return min;
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
-//  boolean onTouchEvent(const TouchEvent* event);
+  public final boolean onTouchEvent(TouchEvent touchEvent)
+  {
+	for (int i = 0; i < _renderers.size(); i++)
+	{
+	  //THE EVENT IS PROCESSED ONLY BY THE FIRST RENDERER
+	  if (_renderers.get(i).onTouchEvent(touchEvent))
+	  {
+		return true;
+	  }
+	}
+	return false;
+  }
 
   public final void addRenderer(Renderer renderer)
   {
@@ -78,16 +88,3 @@ public class CompositeRenderer extends Renderer
 	return res;
   }
 }
-//C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
-//boolean CompositeRenderer::onTouchEvent(const TouchEvent* event)
-//{
-//  for (int i = 0; i < _renderers.size(); i++)
-//  {
-//	//THE EVENT IS PROCESSED ONLY BY THE FIRST RENDERER
-//	if (_renderers[i]->onTouchEvent(event))
-//	{
-//	  return true;
-//	}
-//  }
-//  return false;
-//}
