@@ -12,7 +12,7 @@
 #include "Renderer.hpp"
 #include "TimeInterval.hpp"
 #include "ITimer.hpp"
-
+#include "Camera.hpp"
 
 class Effect {
 public:
@@ -34,27 +34,49 @@ public:
 
 class DummyEffect : public Effect {
 private:
-  unsigned int _counter;
+  long _started;
+  const long _duration;
   
+  double percentDone(const TimeInterval& now) const {
+    const long elapsed = now.milliseconds() - _started;
+    
+    const double percent = (double) elapsed / _duration;
+    if (percent > 1) return 1;
+    if (percent < 0) return 0;
+    return percent;
+  }
+
 public:
+  
+  DummyEffect(TimeInterval duration) :
+  _started(0),
+  _duration(duration.milliseconds())
+  {
+    
+  }
   
   virtual void start(const RenderContext *rc,
                      const TimeInterval& now) {
     rc->getLogger()->logInfo("start %i", now.milliseconds());
     
-    _counter = 0;
+    _started = now.milliseconds();
   }
   
   virtual void doStep(const RenderContext *rc,
                       const TimeInterval& now) {
-    rc->getLogger()->logInfo("doStep %i", now.milliseconds());
+//    rc->getLogger()->logInfo("doStep %i", now.milliseconds());
+    const double percent = percentDone(now);
+
+    rc->getCamera()->zoom(1 - (percent / 25));
   }
   
   virtual bool isDone(const RenderContext *rc,
                       const TimeInterval& now) {
-    rc->getLogger()->logInfo("isDone %i", now.milliseconds());
+    const double percent = percentDone(now);
     
-    return ++_counter >= 2;
+//    rc->getLogger()->logInfo("isDone %i, %f", now.milliseconds(), percent);
+    
+    return percent >= 1;
   }
   
   virtual void stop(const RenderContext *rc,
@@ -64,28 +86,26 @@ public:
 };
 
 
-class EffectRun {
-public:
-  Effect* _effect;
-  bool    _started;
-  
-  EffectRun(Effect* effect) :
-  _effect(effect),
-  _started(false)
-  {
-    
-  }
-  
-  ~EffectRun() {
-    delete _effect;
-  }
-  
-};
-
-
 class EffectsScheduler : public Renderer {
 private:
-  std::vector<EffectRun*> _effects;
+  
+  class EffectRun {
+  public:
+    Effect* _effect;
+    bool    _started;
+    
+    EffectRun(Effect* effect) : _effect(effect), _started(false) {
+    }
+    
+    ~EffectRun() {
+      delete _effect;
+    }
+  };
+  
+  
+
+  
+  std::vector<EffectRun*> _effectsRuns;
   ITimer*                 _timer;
   const IFactory*         _factory;
   
@@ -95,7 +115,7 @@ private:
                               const TimeInterval& now);
   
 public:
-  EffectsScheduler(): _effects(std::vector<EffectRun*>()) {
+  EffectsScheduler(): _effectsRuns(std::vector<EffectRun*>()) {
     
   };
   
@@ -110,8 +130,8 @@ public:
   virtual ~EffectsScheduler() {
     _factory->deleteTimer(_timer);
     
-    for (int i = 0; i < _effects.size(); i++) {
-      EffectRun* effectRun = _effects[i];
+    for (int i = 0; i < _effectsRuns.size(); i++) {
+      EffectRun* effectRun = _effectsRuns[i];
       delete effectRun;
     }
   };

@@ -113,7 +113,7 @@
     comp->addRenderer(marks);
 
     EffectsScheduler* scheduler = new EffectsScheduler();
-    scheduler->startEffect(new DummyEffect());
+    scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(2)));
     comp->addRenderer(scheduler);
     
     

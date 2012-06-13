@@ -9,6 +9,8 @@
 #ifndef G3MiOSSDK_TimeInterval_hpp
 #define G3MiOSSDK_TimeInterval_hpp
 
+#include <math.h>
+
 
 class TimeInterval {
 private:
@@ -24,6 +26,9 @@ public:
     
   }
   
+  static TimeInterval nan() {
+    return TimeInterval(NAN);
+  }
   
   static TimeInterval fromMilliseconds(const long milliseconds) {
     return TimeInterval(milliseconds);
@@ -36,6 +41,10 @@ public:
   
   long milliseconds() const {
     return _milliseconds;
+  }
+  
+  bool isNan() const {
+    return isnan(_milliseconds);
   }
   
 };

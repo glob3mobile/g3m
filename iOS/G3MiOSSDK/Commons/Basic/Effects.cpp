@@ -11,14 +11,14 @@
 
 void EffectsScheduler::initialize(const InitializationContext* ic) {
   _factory = ic->getFactory();
-  _timer = ic->getFactory()->createTimer();
+  _timer = _factory->createTimer();
 }
 
 void EffectsScheduler::processFinishedEffects(const RenderContext *rc,
                                               const TimeInterval& now) {
   std::vector<int> indicesToRemove;
-  for (int i = 0; i < _effects.size(); i++) {
-    EffectRun* effectRun = _effects[i];
+  for (int i = 0; i < _effectsRuns.size(); i++) {
+    EffectRun* effectRun = _effectsRuns[i];
     
     if (effectRun->_started == true) {
       if (effectRun->_effect->isDone(rc, now)) {
@@ -32,7 +32,8 @@ void EffectsScheduler::processFinishedEffects(const RenderContext *rc,
   // backward iteration, to remove from bottom to top
   for (int i = indicesToRemove.size() - 1; i >= 0; i--) {
     const int indexToRemove = indicesToRemove[i];
-    _effects.erase(_effects.begin() + indexToRemove);
+    delete _effectsRuns[indexToRemove];
+    _effectsRuns.erase(_effectsRuns.begin() + indexToRemove);
   }
 }
 
@@ -43,8 +44,8 @@ void EffectsScheduler::doOneCyle(const RenderContext *rc) {
   processFinishedEffects(rc, now);
   
   
-  for (int i = 0; i < _effects.size(); i++) {
-    EffectRun* effectRun = _effects[i];
+  for (int i = 0; i < _effectsRuns.size(); i++) {
+    EffectRun* effectRun = _effectsRuns[i];
     
     if (effectRun->_started == false) {
       effectRun->_effect->start(rc, now);
@@ -70,5 +71,5 @@ bool EffectsScheduler::onResizeViewportEvent(int width, int height) {
 }
 
 void EffectsScheduler::startEffect(Effect* effect) {
-  _effects.push_back(new EffectRun(effect));
+  _effectsRuns.push_back(new EffectRun(effect));
 }
