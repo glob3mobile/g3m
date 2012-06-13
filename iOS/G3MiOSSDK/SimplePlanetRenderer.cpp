@@ -106,6 +106,7 @@ int SimplePlanetRenderer::render(const RenderContext* rc){
   }
   
   // insert pointers
+  gl->enableTextures();
   gl->enableTexture2D();
   
   gl->bindTexture(_textureID);
@@ -115,6 +116,9 @@ int SimplePlanetRenderer::render(const RenderContext* rc){
   // draw a red sphere
   gl->color((float) 1, (float) 0, (float) 0, 1);
   gl->drawTriangleStrip(_numIndex, _index);
+  
+  gl->disableTexture2D();
+  gl->disableTextures();
   
   return 0;
 }

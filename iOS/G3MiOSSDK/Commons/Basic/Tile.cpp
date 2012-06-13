@@ -91,7 +91,7 @@ void Tile::createVertices(const Planet *planet)
   Vector3D center = planet->toVector3D(g3);
   
   
-  // AGUSTIN NOTE: THIS IS TEMPORARY
+  // AGUSTIN NOTE: THIS IS TEMPORARY. WE NEED A VECTOR3D OR MUTABLE VECTOR3D HERE
   centerx = center.x();
   centery = center.y();
   centerz = center.z();

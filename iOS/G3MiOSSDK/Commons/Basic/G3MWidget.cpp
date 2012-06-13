@@ -42,8 +42,6 @@ bool G3MWidget::render()
 
   int ___check_with_JM_and_Agustin;
   _gl->enableVertices();
-  _gl->enableTextures();
-
   
   int timeToRedraw = _renderer->render(&rc);
   

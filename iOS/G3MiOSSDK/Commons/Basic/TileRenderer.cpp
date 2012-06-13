@@ -47,6 +47,7 @@ bool TileRenderer::onTouchEvent(const TouchEvent* touchEvent){
 int TileRenderer::render(const RenderContext* rc)
 {
   for (int n=0; n<initialTiles.size(); n++) initialTiles[n]->render(rc);
+  
   return 9999;
 }
 
