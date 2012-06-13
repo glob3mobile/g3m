@@ -15,15 +15,51 @@
 
 class Effect {
 public:
+  virtual void start(const RenderContext *rc,
+                     double now) = 0;
   
-  virtual void start(double now);
+  virtual void doStep(const RenderContext *rc,
+                      double now) = 0;
   
-  virtual void doStep(double now);
+  virtual bool isDone(const RenderContext *rc,
+                      double now) = 0;
   
-  virtual bool isDone(double now);
+  virtual void stop(const RenderContext *rc,
+                    double now) = 0;
+  
+  virtual ~Effect() { }
+};
 
-  virtual void stop(double now);
 
+class DummyEffect : public Effect {
+private:
+  unsigned int _counter;
+  
+public:
+  
+  virtual void start(const RenderContext *rc,
+                     const double now) {
+    rc->getLogger()->logInfo("start %f", now);
+    
+    _counter = 0;
+  }
+  
+  virtual void doStep(const RenderContext *rc,
+                      const double now) {
+    rc->getLogger()->logInfo("doStep %f", now);
+  }
+  
+  virtual bool isDone(const RenderContext *rc,
+                      const double now) {
+    rc->getLogger()->logInfo("isDone %f", now);
+    
+    return ++_counter > 5;
+  }
+  
+  virtual void stop(const RenderContext *rc,
+                    const double now) {
+    rc->getLogger()->logInfo("stop %f", now);
+  }
 };
 
 
@@ -31,12 +67,16 @@ class EffectRun {
 public:
   Effect* _effect;
   bool    _started;
-
+  
   EffectRun(Effect* effect) :
-    _effect(effect),
-    _started(false)
+  _effect(effect),
+  _started(false)
   {
     
+  }
+  
+  ~EffectRun() {
+    delete _effect;
   }
   
 };
@@ -44,16 +84,17 @@ public:
 
 class EffectsScheduler : public Renderer {
 private:
-  std::vector<EffectRun> _effects;
-  ITimer*                _timer;
-  const IFactory*        _factory;
+  std::vector<EffectRun*> _effects;
+  ITimer*                 _timer;
+  const IFactory*         _factory;
   
-  void doOneCyle();
+  void doOneCyle(const RenderContext *rc);
   
-  void processFinishedEffects(const double now);
-
+  void processFinishedEffects(const RenderContext *rc,
+                              const double now);
+  
 public:
-  EffectsScheduler(): _effects(std::vector<EffectRun>()) {
+  EffectsScheduler(): _effects(std::vector<EffectRun*>()) {
     
   };
   
@@ -69,8 +110,8 @@ public:
     _factory->deleteTimer(_timer);
     
     for (int i = 0; i < _effects.size(); i++) {
-      EffectRun effectRun = _effects[i];
-      delete effectRun._effect;
+      EffectRun* effectRun = _effects[i];
+      delete effectRun;
     }
   };
   

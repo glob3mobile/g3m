@@ -14,14 +14,15 @@ void EffectsScheduler::initialize(const InitializationContext* ic) {
   _timer = ic->getFactory()->createTimer();
 }
 
-void EffectsScheduler::processFinishedEffects(const double now) {
+void EffectsScheduler::processFinishedEffects(const RenderContext *rc,
+                                              const double now) {
   std::vector<int> indicesToRemove;
   for (int i = 0; i < _effects.size(); i++) {
-    EffectRun effectRun = _effects[i];
+    EffectRun* effectRun = _effects[i];
     
-    if (effectRun._started == true) {
-      if (effectRun._effect->isDone(now)) {
-        effectRun._effect->stop(now);
+    if (effectRun->_started == true) {
+      if (effectRun->_effect->isDone(rc, now)) {
+        effectRun->_effect->stop(rc, now);
         
         indicesToRemove.push_back(i);
       }
@@ -35,27 +36,27 @@ void EffectsScheduler::processFinishedEffects(const double now) {
   }
 }
 
-void EffectsScheduler::doOneCyle() {
+void EffectsScheduler::doOneCyle(const RenderContext *rc) {
   const double now = _timer->now();
   
   
-  processFinishedEffects(now);
+  processFinishedEffects(rc, now);
   
   
   for (int i = 0; i < _effects.size(); i++) {
-    EffectRun effectRun = _effects[i];
+    EffectRun* effectRun = _effects[i];
     
-    if (effectRun._started == false) {
-      effectRun._effect->start(now);
-      effectRun._started = true;
+    if (effectRun->_started == false) {
+      effectRun->_effect->start(rc, now);
+      effectRun->_started = true;
     }
     
-    effectRun._effect->doStep(now);
+    effectRun->_effect->doStep(rc, now);
   }
 }
 
 int EffectsScheduler::render(const RenderContext *rc) {
-  doOneCyle();
+  doOneCyle(rc);
   
   return 99999;
 }
@@ -69,5 +70,5 @@ bool EffectsScheduler::onResizeViewportEvent(int width, int height) {
 }
 
 void EffectsScheduler::startEffect(Effect* effect) {
-  _effects.push_back(EffectRun(effect));
+  _effects.push_back(new EffectRun(effect));
 }

@@ -99,8 +99,9 @@
    
     comp->addRenderer(marks);
 
-    
-    comp->addRenderer(new EffectsScheduler());
+    EffectsScheduler* scheduler = new EffectsScheduler();
+    scheduler->startEffect(new DummyEffect());
+    comp->addRenderer(scheduler);
     
     
     _widget = G3MWidget::create(factory, logger, gl, Planet::createEarth(), comp, width, height); 
