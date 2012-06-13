@@ -37,6 +37,8 @@ public class Ellipsoid
   
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector3D getRadii() const
   public final Vector3D getRadii()
   {
 	return _radii;

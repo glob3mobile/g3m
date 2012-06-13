@@ -23,7 +23,7 @@ public:
   
   virtual int render(const RenderContext* rc);
   
-  virtual bool onTouchEvent(const TouchEvent* event);
+  virtual bool onTouchEvent(const TouchEvent* touchEvent);
   
   virtual ~MarksRenderer() {
     int marksSize = _marks.size();

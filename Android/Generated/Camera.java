@@ -192,7 +192,22 @@ public class Camera
   }
 
   //Rotate
-  //void rotate(const Vector3D& axis, double angle)
+  public final void rotateWithAxisAndPoint(Vector3D axis, Vector3D point, Angle delta)
+  {
+	MutableMatrix44D trans1 = MutableMatrix44D.createTranslationMatrix(point.times(-1.0));
+	MutableMatrix44D rot = MutableMatrix44D.createRotationMatrix(delta, axis);
+	MutableMatrix44D trans2 = MutableMatrix44D.createTranslationMatrix(point);
+  
+	//MutableMatrix44D m = trans1.multMatrix(rot).multMatrix(trans2);
+  
+	MutableMatrix44D m = trans2.multMatrix(rot).multMatrix(trans1);
+  
+	//MutableMatrix44D m = trans1.multMatrix(trans2);
+  
+	//m.print();
+  
+	applyTransform(m);
+  }
 
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

@@ -24,8 +24,10 @@ public class TouchEvent
 
   public static TouchEvent create(TouchEventType type, Touch touch)
   {
-	Touch[] pa = { touch };
-	final java.util.ArrayList<Touch> touchs = new java.util.ArrayList<Touch>(pa, pa+1);
+	//const Touch * pa[] = { touch };
+	//const std::vector<const Touch*> touchs = std::vector<const Touch*>(pa, &pa[1);
+	final java.util.ArrayList<Touch> touchs = new java.util.ArrayList<Touch>(java.util.Arrays.asList(touch)); //CHANGED BY CONVERSOR RULE
+
 	return create(type, touchs);
   }
 

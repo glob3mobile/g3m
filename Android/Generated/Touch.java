@@ -22,8 +22,8 @@ package org.glob3.mobile.generated;
 
 public class Touch
 {
-  private final Vector2D _pos = new Vector2D();
-  private final Vector2D _prevPos = new Vector2D();
+  private final Vector2D _pos ;
+  private final Vector2D _prevPos ;
 
   public Touch(Touch other)
   {
@@ -49,5 +49,8 @@ public class Touch
   public final Vector2D getPrevPos()
   {
 	  return _prevPos;
+  }
+  public void dispose()
+  {
   }
 }
