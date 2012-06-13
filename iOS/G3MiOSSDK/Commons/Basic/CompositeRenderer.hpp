@@ -32,7 +32,7 @@ public:
   
   int render(const RenderContext* rc);
   
-  bool onTouchEvent(const TouchEvent* event);
+  bool onTouchEvent(const TouchEvent* touchEvent);
   
   void addRenderer(Renderer* renderer);
   

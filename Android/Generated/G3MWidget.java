@@ -53,7 +53,7 @@ public class G3MWidget
   private IFactory _factory;
   private ILogger _logger;
   private IGL _gl;
-  private final Planet _planet;
+  private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
   private Renderer _renderer;
   private Camera _camera;
 

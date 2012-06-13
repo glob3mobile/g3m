@@ -40,7 +40,11 @@ public class DummyRenderer extends Renderer
 	index = new byte[numIndices];
   
 	// create vertices
-	halfSize = 7e6;
+  
+	if (ic != null && ic.getPlanet() != null)
+	  halfSize = ic.getPlanet().getRadii().x() / 2.0;
+	else
+	  halfSize = 7e6;
   
 	int n = 0;
 	for (int j = 0; j < res; j++)

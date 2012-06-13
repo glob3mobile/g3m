@@ -32,6 +32,8 @@ public:
     
   }
   
+  ~Mark() {}
+  
   const std::string getName() {
     return _name;
   }

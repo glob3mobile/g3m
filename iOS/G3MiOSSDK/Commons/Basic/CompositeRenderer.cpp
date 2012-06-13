@@ -32,10 +32,10 @@ int CompositeRenderer::render(const RenderContext* rc) {
   return min;
 }
 
-bool CompositeRenderer::onTouchEvent(const TouchEvent* event) {
+bool CompositeRenderer::onTouchEvent(const TouchEvent* touchEvent) {
   for (int i = 0; i < _renderers.size(); i++) {
     //THE EVENT IS PROCESSED ONLY BY THE FIRST RENDERER
-    if (_renderers[i]->onTouchEvent(event)) {
+    if (_renderers[i]->onTouchEvent(touchEvent)) {
       return true;
     }
   }

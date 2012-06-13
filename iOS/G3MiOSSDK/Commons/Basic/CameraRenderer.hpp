@@ -20,10 +20,11 @@ enum Gesture {
   Rotate
 };
 
+
 class CameraRenderer: public Renderer
 {
 private:
-
+  
   Camera * _camera;   //Camera used at current frame
   const Planet * _planet;   //Planet
   
