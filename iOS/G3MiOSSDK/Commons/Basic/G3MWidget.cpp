@@ -38,6 +38,8 @@ bool G3MWidget::render()
   // Clear the scene
   _gl->clearScreen(1, 1, 0);
   _gl->enableVertices();
+  _gl->enableTextures();
+
   
   int timeToRedraw = _renderer->render(&rc);
   

@@ -59,7 +59,11 @@ public:
   
   virtual void getError() = 0;
   
-  virtual int uploadTexture(const IImage& image) = 0;
+  virtual int uploadTexture(const IImage& image, int widthTexture, int heightTexture) = 0;
+  
+  virtual void setTextureCoordinates(int size, int stride, const float texcoord[]) = 0;
+  
+  virtual void bindTexture(unsigned int n) = 0;
 
 };
 

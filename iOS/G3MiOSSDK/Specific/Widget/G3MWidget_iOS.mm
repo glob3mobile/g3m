@@ -86,7 +86,10 @@
     
     //Image of the whole world
     Image_iOS *worldImage = new Image_iOS();
-    worldImage->loadFromFileName("");
+    
+    NSString* path = [[NSBundle mainBundle] pathForResource:@"world" ofType:@"jpg"];
+    
+    worldImage->loadFromFileName([path UTF8String]);
     
     SimplePlanetRenderer* spr = new SimplePlanetRenderer(worldImage);
     comp->addRenderer(spr);

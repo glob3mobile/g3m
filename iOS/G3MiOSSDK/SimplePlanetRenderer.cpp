@@ -51,10 +51,6 @@ void SimplePlanetRenderer::createVertices(const Planet& planet)
       Geodetic2D g(lat, lon);
       
       Vector3D v = planet.toVector3D(g);
-      
-      //Vector3D v( (i * planet->getRadii().x() / lonRes1), (j * planet->getRadii().x() / latRes1) , 0.0);
-      
-      printf("P: %f, %f -> V= %f, %f, %f\n", lat.degrees(), lon.degrees(), v.x(), v.y(), v.z());
       _vertices[p++] = (float) v.x();//Vertices
       _vertices[p++] = (float) v.y();
       _vertices[p++] = (float) v.z();
@@ -80,11 +76,6 @@ void SimplePlanetRenderer::createMeshIndex()
     }
     _index[n++] = (char) (j * res + 2 * res - 1);
   }
-  
-//  for (int j = 0; j < _numIndex; j++) {
-//    printf("I: %hhu\n", _index[j]);
-//  }
-  
 }
 
 void SimplePlanetRenderer::createTextureCoordinates()
@@ -96,7 +87,7 @@ void SimplePlanetRenderer::createTextureCoordinates()
   for(double i = 0.0; i < _lonRes; i++){
     double u = (i / lonRes1);
     for (double j = 0.0; j < _latRes; j++) {
-      double v = (j / latRes1);
+      double v = 1.0 - (j / latRes1);
       _texCoors[p++] = (float) u;
       _texCoors[p++] = (float) v;
     }
@@ -111,12 +102,16 @@ int SimplePlanetRenderer::render(const RenderContext* rc){
   
   if (_textureImage != NULL && _textureID < 1)
   {
-    gl->uploadTexture(*_textureImage);
+    _textureID = gl->uploadTexture(*_textureImage, 1024, 1024);
   }
   
   // insert pointers
-  gl->disableTextures();
+  gl->enableTexture2D();
+  
+  gl->bindTexture(_textureID);
   gl->vertexPointer(3, 0, _vertices);
+  gl->setTextureCoordinates(2, 0, _texCoors); 
+  
   // draw a red sphere
   gl->color((float) 1, (float) 0, (float) 0);
   gl->drawTriangleStrip(_numIndex, _index);
