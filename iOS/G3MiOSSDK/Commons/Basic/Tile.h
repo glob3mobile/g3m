@@ -17,7 +17,7 @@
 class Tile {
   
 public:
-  Tile(Sector bbox): BBox(bbox), vertices(NULL) {}
+  Tile(const Sector &bbox): BBox(bbox), vertices(NULL) {}
   ~Tile();
   
   void createVertices(const Planet *planet);

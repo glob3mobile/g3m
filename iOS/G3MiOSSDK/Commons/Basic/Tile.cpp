@@ -18,15 +18,15 @@ unsigned int Tile::numIndices = 0;
 unsigned int Tile::numBorderIndices = 0;
 unsigned int Tile::numInnerIndices = 0;
 unsigned char * Tile::indices;
-unsigned char *Tile::borderIndices = NULL;
-unsigned char *Tile::innerIndices = NULL;
+unsigned char *Tile::borderIndices;
+unsigned char *Tile::innerIndices;
 unsigned int Tile::_resolution;
 bool Tile::_skirts;
 
 
 Tile::~Tile()
 {
-  if (!vertices) delete[] vertices;
+  if (vertices!=NULL) delete[] vertices;
 }
 
 
@@ -164,19 +164,16 @@ void Tile::createVertices(const Planet *planet)
 
 void Tile::deleteIndices()
 {
-  if (indices) {
+  if (numIndices) {
     delete[] indices;
-    indices = NULL;
     numIndices = 0;
   }
-  if (innerIndices) {
+  if (numInnerIndices) {
     delete[] innerIndices;
-    innerIndices = NULL;
     numInnerIndices = 0;
   }
-  if (borderIndices) {
+  if (numBorderIndices) {
     delete[] borderIndices;
-    borderIndices = NULL;
     numBorderIndices = 0;
   }
 }
@@ -292,7 +289,7 @@ void Tile::render(const RenderContext* rc)
   //gl->BindTexture(idTexture);
   gl->vertexPointer(3, 0, vertices);
   //gl->TexCoordPointer(2, 0, textureCoor);
-  gl->color(0.5,0.5,0.8,1);
+  gl->color(0.5f,0.5f,0.8f,1.0f);
   
   // draw tile geometry
   if (true /*g->GetWireframe()*/) {
@@ -306,10 +303,10 @@ void Tile::render(const RenderContext* rc)
     //gl->disableTexture2D();
     //gl->disableTextures();
     gl->lineWidth(1);
-    gl->color(0.0f, 0.0f, 0.0f, 1);
+    gl->color(0.0f, 0.0f, 0.0f, 1.0f);
     gl->drawLines(numInnerIndices, innerIndices);
     gl->lineWidth(2);
-    gl->color(1.0f, 0.0f, 0.0f, 1);
+    gl->color(1.0f, 0.0f, 0.0f, 1.0f);
     gl->drawLineLoop(numBorderIndices, borderIndices);
     //gl->EnableTextures();
     //gl->EnableTexture2D();

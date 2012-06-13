@@ -28,7 +28,7 @@ public class Tile
   }
   public void dispose()
   {
-	if (!vertices)
+	if (vertices!=null)
 		vertices = null;
   }
 
@@ -198,7 +198,7 @@ public class Tile
 	//gl->BindTexture(idTexture);
 	gl.vertexPointer(3, 0, vertices);
 	//gl->TexCoordPointer(2, 0, textureCoor);
-	gl.color(0.5,0.5,0.8,1);
+	gl.color(0.5f,0.5f,0.8f,1.0f);
   
 	// draw tile geometry
 	if (true) //g->GetWireframe()
@@ -213,10 +213,10 @@ public class Tile
 	  //gl->disableTexture2D();
 	  //gl->disableTextures();
 	  gl.lineWidth(1);
-	  gl.color(0.0f, 0.0f, 0.0f, 1);
+	  gl.color(0.0f, 0.0f, 0.0f, 1.0f);
 	  gl.drawLines(numInnerIndices, innerIndices);
 	  gl.lineWidth(2);
-	  gl.color(1.0f, 0.0f, 0.0f, 1);
+	  gl.color(1.0f, 0.0f, 0.0f, 1.0f);
 	  gl.drawLineLoop(numBorderIndices, borderIndices);
 	  //gl->EnableTextures();
 	  //gl->EnableTexture2D();
@@ -333,27 +333,24 @@ public class Tile
   }
   public static void deleteIndices()
   {
-	if (indices)
+	if (numIndices != 0)
 	{
-	  indices = null;
 	  indices = null;
 	  numIndices = 0;
 	}
-	if (innerIndices)
+	if (numInnerIndices != 0)
 	{
-	  innerIndices = null;
 	  innerIndices = null;
 	  numInnerIndices = 0;
 	}
-	if (borderIndices)
+	if (numBorderIndices != 0)
 	{
-	  borderIndices = null;
 	  borderIndices = null;
 	  numBorderIndices = 0;
 	}
   }
 
-  private final Sector BBox = new Sector();
+  private final Sector BBox ;
   private float[]vertices;
 
   private static int _resolution;
@@ -362,8 +359,8 @@ public class Tile
   private static int numBorderIndices = 0;
   private static int numInnerIndices = 0;
   private static byte[]indices;
-  private static byte[]borderIndices = 0;
-  private static byte[]innerIndices = 0;
+  private static byte[]borderIndices;
+  private static byte[]innerIndices;
 
   // AGUSTIN NOTE: the center must be Vector3D or MutableVector3D
   private double centerx;
