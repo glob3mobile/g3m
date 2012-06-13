@@ -42,6 +42,10 @@ public:
   
    void drawTriangleStrip(int n, unsigned char *i) ;
   
+   void drawLines(int n, unsigned char *i); 
+   
+   void drawLineLoop(int n, unsigned char *i); 
+  
    void setProjection(const MutableMatrix44D &projection) ;
   
    void useProgram(unsigned int program) ;
@@ -49,6 +53,8 @@ public:
    void enablePolygonOffset(float factor, float units) ;
   
    void disablePolygonOffset() ;
+  
+   void lineWidth(float width);
   
   
 private:

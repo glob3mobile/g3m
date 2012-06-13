@@ -18,6 +18,7 @@
 #include "GL2.hpp"
 
 #include "CameraRenderer.hpp"
+#include "TileRenderer.h"
 #include "DummyRenderer.hpp"
 #include "MarksRenderer.hpp"
 #include "Mark.hpp"
@@ -78,8 +79,11 @@
     CameraRenderer *cameraRenderer = new CameraRenderer();
     comp->addRenderer(cameraRenderer);
     
-    DummyRenderer* dum = new DummyRenderer();
-    comp->addRenderer(dum);
+    TileRenderer* tr = new TileRenderer(12);
+    comp->addRenderer(tr);
+    
+    /*DummyRenderer* dum = new DummyRenderer();
+    comp->addRenderer(dum);*/
     
     MarksRenderer* marks = new MarksRenderer();
     

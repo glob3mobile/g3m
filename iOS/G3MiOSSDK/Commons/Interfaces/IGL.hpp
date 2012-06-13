@@ -48,6 +48,10 @@ public:
   virtual void vertexPointer(int size, int stride, const float vertex[]) = 0;
   
   virtual void drawTriangleStrip(int n, unsigned char i[]) = 0;
+  
+  virtual void drawLines(int n, unsigned char *i) = 0; 
+  
+  virtual void drawLineLoop(int n, unsigned char *i) = 0;
 
   virtual void setProjection(const MutableMatrix44D &projection) = 0;
   
@@ -56,6 +60,8 @@ public:
   virtual void enablePolygonOffset(float factor, float units) = 0;
   
   virtual void disablePolygonOffset() = 0;
+  
+  virtual void lineWidth(float width) = 0;
 
 };
 

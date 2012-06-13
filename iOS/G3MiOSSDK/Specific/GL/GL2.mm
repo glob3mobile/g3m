@@ -158,4 +158,16 @@ void GL2::drawTriangleStrip(int n, unsigned char *i) {
   glDrawElements(GL_TRIANGLE_STRIP, n, GL_UNSIGNED_BYTE, i);
 }
 
+void GL2::drawLines(int n, unsigned char *i) {
+  glDrawElements(GL_LINES, n, GL_UNSIGNED_BYTE, i);
+}
+
+void GL2::drawLineLoop(int n, unsigned char *i) {
+  glDrawElements(GL_LINE_LOOP, n, GL_UNSIGNED_BYTE, i);
+}
+
+void GL2::lineWidth(float width) {
+  glLineWidth(width);
+}
+
 
