@@ -152,7 +152,7 @@ Gesture CameraRenderer::getGesture(const TouchEvent& touchEvent) const
 
 void CameraRenderer::makeRotate(const TouchEvent& touchEvent)
 {
-  int todo_JM_working;
+  int todo_JM_there_is_a_bug;
   
   Vector2D pixel0 = touchEvent.getTouch(0)->getPos();
   Vector2D pixel1 = touchEvent.getTouch(1)->getPos();
@@ -207,8 +207,6 @@ void CameraRenderer::makeRotate(const TouchEvent& touchEvent)
 
 Vector3D CameraRenderer::centerOfViewOnPlanet(const Camera& c) const
 {
-    int todo_JM_working;
-  
   Vector2D centerViewport(c.getWidth() /2, c.getHeight() /2);
   Vector3D rayCV = c.pixel2Vector(centerViewport);
   Vector3D center = _planet->closestIntersection(c.getPos(), rayCV);

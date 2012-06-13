@@ -56,6 +56,10 @@ public:
   virtual void enablePolygonOffset(float factor, float units) = 0;
   
   virtual void disablePolygonOffset() = 0;
+  
+  virtual void getError() = 0;
+  
+  virtual int uploadTexture(const IImage& image) = 0;
 
 };
 

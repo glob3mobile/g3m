@@ -11,9 +11,14 @@
 
 #include "Renderer.hpp"
 
+#include "IImage.hpp"
+
 class SimplePlanetRenderer: public Renderer {
   
 private:
+  
+  const IImage* _textureImage;
+  int _textureID;
   
   int _numIndex;
   
@@ -30,7 +35,7 @@ private:
   void createTextureCoordinates();
   
 public:
-  SimplePlanetRenderer();
+  SimplePlanetRenderer(const IImage* image);
   ~SimplePlanetRenderer();
   
   void initialize(const InitializationContext* ic);  

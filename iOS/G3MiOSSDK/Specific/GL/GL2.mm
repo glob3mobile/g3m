@@ -11,7 +11,8 @@
 
 #include "GL2.hpp"
 
-#include "IImage.hpp"
+#include "Image_iOS.h"
+
 
 /*
 IGL* CreateGL()
@@ -156,6 +157,53 @@ void GL2::vertexPointer(int size, int stride, const float vertex[]) {
 
 void GL2::drawTriangleStrip(int n, unsigned char *i) {
   glDrawElements(GL_TRIANGLE_STRIP, n, GL_UNSIGNED_BYTE, i);
+}
+
+void GL2::getError()
+{
+  int todo_getErrorDesc; //This function is used in an ErrorRenderer
+  GLenum err = glGetError();
+  while (err != GL_NO_ERROR){
+    /*const GLubyte* errString = gluErrorString(err);*/
+    NSLog(@"Error uploading texture. glError: 0x%04X, Description: %s", err, "");
+  }
+    
+}
+
+int GL2::uploadTexture(const IImage& image)
+{
+  UIImage * im = ((Image_iOS&) image).getUIImage();
+  
+  int numComponents = 4;
+  CGImageRef imageRef = [im CGImage];
+  int width = CGImageGetWidth(imageRef);
+  int height = CGImageGetHeight(imageRef);
+  
+  //Allocate texture data
+  GLubyte* textureData = new GLubyte[width * height * numComponents];    
+  
+  //Creating Context
+  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+  NSUInteger bytesPerPixel = 4;
+  NSUInteger bytesPerRow = bytesPerPixel * width;
+  NSUInteger bitsPerComponent = 8;
+  CGContextRef context = CGBitmapContextCreate(textureData, width, height,
+                                               bitsPerComponent, bytesPerRow, colorSpace,
+                                               kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+  CGColorSpaceRelease(colorSpace);
+  
+  CGContextDrawImage(context, CGRectMake(0, 0, width, height), imageRef);
+  CGContextRelease(context);
+  
+  //texture setup
+  GLuint textureID;    
+  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+  glGenTextures(1, &textureID);
+  
+  glBindTexture(GL_TEXTURE_2D, textureID);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureData); 
+  
+  return textureID;
 }
 
 

@@ -23,6 +23,8 @@
 #include "Mark.hpp"
 #include "SimplePlanetRenderer.hpp"
 
+#include "Image_iOS.h"
+
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
 @end
@@ -82,7 +84,11 @@
     //DummyRenderer* dum = new DummyRenderer();
     //comp->addRenderer(dum);
     
-    SimplePlanetRenderer* spr = new SimplePlanetRenderer();
+    //Image of the whole world
+    Image_iOS *worldImage = new Image_iOS();
+    worldImage->loadFromFileName("");
+    
+    SimplePlanetRenderer* spr = new SimplePlanetRenderer(worldImage);
     comp->addRenderer(spr);
     
     MarksRenderer* marks = new MarksRenderer();

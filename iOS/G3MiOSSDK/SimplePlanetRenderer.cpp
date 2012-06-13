@@ -8,9 +8,11 @@
 
 #include "SimplePlanetRenderer.hpp"
 
-SimplePlanetRenderer::SimplePlanetRenderer():
+SimplePlanetRenderer::SimplePlanetRenderer(const IImage* image):
 _latRes(16),//FOR NOW THEY MUST BE EQUAL
-_lonRes(16)
+_lonRes(16),
+_textureImage(image),
+_textureID(-1)
 {
   _index = NULL;
   _vertices = NULL;
@@ -106,6 +108,11 @@ int SimplePlanetRenderer::render(const RenderContext* rc){
   
   // obtaing gl object reference
   IGL *gl = rc->getGL();
+  
+  if (_textureImage != NULL && _textureID < 1)
+  {
+    gl->uploadTexture(*_textureImage);
+  }
   
   // insert pointers
   gl->disableTextures();
