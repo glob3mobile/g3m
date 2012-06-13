@@ -22,6 +22,8 @@
 #include "MarksRenderer.hpp"
 #include "Mark.hpp"
 
+#include "Effects.hpp"
+
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
 @end
@@ -97,6 +99,9 @@
    
     comp->addRenderer(marks);
 
+    
+    comp->addRenderer(new EffectsScheduler());
+    
     
     _widget = G3MWidget::create(factory, logger, gl, Planet::createEarth(), comp, width, height); 
     

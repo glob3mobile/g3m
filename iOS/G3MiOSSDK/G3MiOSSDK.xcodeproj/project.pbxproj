@@ -49,6 +49,7 @@
 		CC14B64D157D35C100793C92 /* IGL.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC14B64B157D35C100793C92 /* IGL.hpp */; };
 		CC14B64E157D35C100793C92 /* IImage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC14B64C157D35C100793C92 /* IImage.hpp */; };
 		CF0C396A157F988100646A2F /* Mark.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0C3969157F988100646A2F /* Mark.cpp */; };
+		CF31CBF1158776130085E8F1 /* Effects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF31CBF0158776120085E8F1 /* Effects.cpp */; };
 		CFA3E7C9157E537B00DAABD6 /* MarksRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA3E7C8157E537B00DAABD6 /* MarksRenderer.cpp */; };
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
@@ -100,6 +101,10 @@
 		CC14B64C157D35C100793C92 /* IImage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IImage.hpp; path = Commons/Interfaces/IImage.hpp; sourceTree = "<group>"; };
 		CF0C3967157F987200646A2F /* Mark.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = Mark.hpp; path = Commons/Basic/Mark.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF0C3969157F988100646A2F /* Mark.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Mark.cpp; path = Commons/Basic/Mark.cpp; sourceTree = "<group>"; };
+		CF31CBEE158776020085E8F1 /* Effects.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Effects.hpp; path = Commons/Basic/Effects.hpp; sourceTree = "<group>"; };
+		CF31CBF0158776120085E8F1 /* Effects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Effects.cpp; path = Commons/Basic/Effects.cpp; sourceTree = "<group>"; };
+		CF31CBF215878AF90085E8F1 /* ITimer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ITimer.hpp; path = Commons/Interfaces/ITimer.hpp; sourceTree = "<group>"; };
+		CF31CBF315878BE40085E8F1 /* Timer_iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Timer_iOS.h; path = Specific/Derived/Timer_iOS.h; sourceTree = "<group>"; };
 		CFA3E7C7157E536900DAABD6 /* MarksRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MarksRenderer.hpp; path = Commons/Basic/MarksRenderer.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFA3E7C8157E537B00DAABD6 /* MarksRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MarksRenderer.cpp; path = Commons/Basic/MarksRenderer.cpp; sourceTree = "<group>"; };
 		D8228EBC157F7F6100BBAF60 /* MutableMatrix44D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MutableMatrix44D.hpp; path = Commons/Geometry/MutableMatrix44D.hpp; sourceTree = "<group>"; };
@@ -139,6 +144,7 @@
 				383BD3791577EDC00012AC53 /* Factory_iOS.hpp */,
 				383BD37A1577EDC00012AC53 /* Logger_iOS.cpp */,
 				383BD37B1577EDC00012AC53 /* Logger_iOS.hpp */,
+				CF31CBF315878BE40085E8F1 /* Timer_iOS.h */,
 			);
 			name = Derived;
 			sourceTree = "<group>";
@@ -186,6 +192,8 @@
 				CFA3E7C8157E537B00DAABD6 /* MarksRenderer.cpp */,
 				CF0C3967157F987200646A2F /* Mark.hpp */,
 				CF0C3969157F988100646A2F /* Mark.cpp */,
+				CF31CBEE158776020085E8F1 /* Effects.hpp */,
+				CF31CBF0158776120085E8F1 /* Effects.cpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -221,6 +229,7 @@
 				CC14B64C157D35C100793C92 /* IImage.hpp */,
 				383BD3B81577EE630012AC53 /* IFactory.hpp */,
 				383BD3B91577EE630012AC53 /* ILogger.hpp */,
+				CF31CBF215878AF90085E8F1 /* ITimer.hpp */,
 			);
 			name = Interfaces;
 			sourceTree = "<group>";
@@ -384,6 +393,7 @@
 				D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */,
 				CFA3E7C9157E537B00DAABD6 /* MarksRenderer.cpp in Sources */,
 				CF0C396A157F988100646A2F /* Mark.cpp in Sources */,
+				CF31CBF1158776130085E8F1 /* Effects.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
