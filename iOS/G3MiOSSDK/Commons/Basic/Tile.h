@@ -17,7 +17,7 @@
 class Tile {
   
 public:
-  Tile(Sector bbox): BBox(bbox), vertexCoor(NULL) {}
+  Tile(Sector bbox): BBox(bbox), vertices(NULL) {}
   ~Tile();
   
   void createVertices(const Planet *planet);
@@ -28,7 +28,7 @@ public:
   
 private:
   const Sector BBox;
-  float *vertexCoor;
+  float *vertices;
   
   static unsigned int _resolution;
   static bool _skirts;

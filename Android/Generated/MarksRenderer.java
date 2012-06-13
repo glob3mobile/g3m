@@ -33,14 +33,13 @@ public class MarksRenderer extends Renderer
   
   //  IGL* gl = rc->getGL();
   
-	int __dgd_at_work;
-  
-	int marksSize = _marks.size();
-	for (int i = 0; i < marksSize; i++)
-	{
-	  Mark mark = _marks.get(i);
-	  //rc->getLogger()->logInfo("Rendering Mark: \"%s\"", mark->getName().c_str());
-	}
+  //  int __dgd_at_work;
+  //
+  //  int marksSize = _marks.size();
+  //  for (int i = 0; i < marksSize; i++) {
+  //    Mark* mark = _marks[i];
+  //    //rc->getLogger()->logInfo("Rendering Mark: \"%s\"", mark->getName().c_str());
+  //  }
   
 	return 9999;
   }

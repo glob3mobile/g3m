@@ -10,8 +10,6 @@ package org.glob3.mobile.generated;
 
 
 
-
-
 public abstract class IGL
 {
 
@@ -31,9 +29,19 @@ public abstract class IGL
 
   public abstract void disableTextures();
 
-  public abstract void clearScreen(float r, float g, float b);
+  public abstract void clearScreen(float r, float g, float b, float a);
 
-  public abstract void color(float r, float g, float b);
+  public void clearScreen(Color col)
+  {
+	  clearScreen(col.getRed(), col.getGreen(), col.getBlue(), col.getAlpha());
+  }
+
+  public abstract void color(float r, float g, float b, float a);
+
+  public void color(Color col)
+  {
+	color(col.getRed(), col.getGreen(), col.getBlue(), col.getAlpha());
+  }
 
   public abstract void pushMatrix();
 
@@ -47,6 +55,10 @@ public abstract class IGL
 
   public abstract void drawTriangleStrip(int n, byte[] i);
 
+  public abstract void drawLines(int n, byte[] i);
+
+  public abstract void drawLineLoop(int n, byte[] i);
+
   public abstract void setProjection(MutableMatrix44D projection);
 
   public abstract void useProgram(int program);
@@ -54,5 +66,15 @@ public abstract class IGL
   public abstract void enablePolygonOffset(float factor, float units);
 
   public abstract void disablePolygonOffset();
+
+  public abstract void lineWidth(float width);
+
+  public abstract void getError();
+
+  public abstract int uploadTexture(IImage image, int widthTexture, int heightTexture);
+
+  public abstract void setTextureCoordinates(int size, int stride, float[] texcoord);
+
+  public abstract void bindTexture(int n);
 
 }

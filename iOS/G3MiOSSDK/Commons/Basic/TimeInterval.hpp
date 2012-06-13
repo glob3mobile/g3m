@@ -30,7 +30,7 @@ public:
   }
   
   static TimeInterval fromSeconds(const double seconds) {
-    return TimeInterval::fromMilliseconds(seconds * 1000.0);
+    return TimeInterval::fromMilliseconds((long)(seconds*1000.0));
   }
   
   

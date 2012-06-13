@@ -74,7 +74,10 @@ public class CompositeRenderer extends Renderer
   public final void addRenderer(Renderer renderer)
   {
 	_renderers.add(renderer);
-	renderer.initialize(_ic);
+	if (_ic != null)
+	{
+	  renderer.initialize(_ic);
+	}
   }
 
   public final boolean onResizeViewportEvent(int width, int height)

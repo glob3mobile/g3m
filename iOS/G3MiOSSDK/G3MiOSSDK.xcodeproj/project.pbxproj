@@ -40,6 +40,8 @@
 		383BD3BB1577EE630012AC53 /* ILogger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 383BD3B91577EE630012AC53 /* ILogger.hpp */; };
 		38D786E31587ACA6003BBC75 /* TileRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 38D786E21587ACA5003BBC75 /* TileRenderer.cpp */; };
 		38D786E61587B446003BBC75 /* Tile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 38D786E51587B446003BBC75 /* Tile.cpp */; };
+		38D787091588F886003BBC75 /* SimplePlanetRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 38D787071588F886003BBC75 /* SimplePlanetRenderer.cpp */; };
+		38D7870A1588F886003BBC75 /* SimplePlanetRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 38D787081588F886003BBC75 /* SimplePlanetRenderer.hpp */; };
 		CC14B639157D34C700793C92 /* GL2.mm in Sources */ = {isa = PBXBuildFile; fileRef = CC14B637157D34C700793C92 /* GL2.mm */; };
 		CC14B63A157D34C700793C92 /* GL2.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC14B638157D34C700793C92 /* GL2.hpp */; };
 		CC14B63D157D354C00793C92 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC14B63B157D354C00793C92 /* Camera.cpp */; };
@@ -58,7 +60,6 @@
 		D84D5A32157E0EAA000C5E35 /* MutableVector3D.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D84D5A30157E0EAA000C5E35 /* MutableVector3D.hpp */; };
 		D86DD8A51588945200E25609 /* Image_iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = D86DD8A31588945200E25609 /* Image_iOS.h */; };
 		D86DD8A61588945200E25609 /* Image_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = D86DD8A41588945200E25609 /* Image_iOS.mm */; };
-		D89176C915875DBE008C705C /* SimplePlanetRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89176C815875DBE008C705C /* SimplePlanetRenderer.cpp */; };
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
@@ -99,6 +100,8 @@
 		38D786E41587B3DD003BBC75 /* Tile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Tile.h; path = Commons/Basic/Tile.h; sourceTree = "<group>"; };
 		38D786E51587B446003BBC75 /* Tile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Tile.cpp; path = Commons/Basic/Tile.cpp; sourceTree = "<group>"; };
 		38D786E71587B52F003BBC75 /* Sector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Sector.h; path = Commons/Geometry/Sector.h; sourceTree = "<group>"; };
+		38D787071588F886003BBC75 /* SimplePlanetRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SimplePlanetRenderer.cpp; path = Commons/Basic/SimplePlanetRenderer.cpp; sourceTree = "<group>"; };
+		38D787081588F886003BBC75 /* SimplePlanetRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SimplePlanetRenderer.hpp; path = Commons/Basic/SimplePlanetRenderer.hpp; sourceTree = "<group>"; };
 		CC14B637157D34C700793C92 /* GL2.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = GL2.mm; path = Specific/GL/GL2.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CC14B638157D34C700793C92 /* GL2.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GL2.hpp; path = Specific/GL/GL2.hpp; sourceTree = "<group>"; };
 		CC14B63B157D354C00793C92 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = Camera.cpp; path = Commons/Basic/Camera.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -125,8 +128,6 @@
 		D84D5A30157E0EAA000C5E35 /* MutableVector3D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MutableVector3D.hpp; path = Commons/Geometry/MutableVector3D.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D86DD8A31588945200E25609 /* Image_iOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Image_iOS.h; path = Specific/Derived/Image_iOS.h; sourceTree = "<group>"; };
 		D86DD8A41588945200E25609 /* Image_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Image_iOS.mm; path = Specific/Derived/Image_iOS.mm; sourceTree = "<group>"; };
-		D89176C615875DB1008C705C /* SimplePlanetRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SimplePlanetRenderer.hpp; sourceTree = "<group>"; };
-		D89176C815875DBE008C705C /* SimplePlanetRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SimplePlanetRenderer.cpp; sourceTree = "<group>"; };
 		D8EEF3B51577924D003FEB5E /* libG3MiOSSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libG3MiOSSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8EEF3B81577924D003FEB5E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D8EEF3BC1577924D003FEB5E /* G3MiOSSDK-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "G3MiOSSDK-Prefix.pch"; sourceTree = "<group>"; };
@@ -191,6 +192,8 @@
 		383BD3891577EDF40012AC53 /* Basic */ = {
 			isa = PBXGroup;
 			children = (
+				38D787071588F886003BBC75 /* SimplePlanetRenderer.cpp */,
+				38D787081588F886003BBC75 /* SimplePlanetRenderer.hpp */,
 				CC14B643157D358100793C92 /* DummyRenderer.cpp */,
 				CC14B644157D358100793C92 /* DummyRenderer.hpp */,
 				CC14B63F157D356800793C92 /* CameraRenderer.cpp */,
@@ -216,8 +219,6 @@
 				38D786E51587B446003BBC75 /* Tile.cpp */,
 				CF31CBEE158776020085E8F1 /* Effects.hpp */,
 				CF31CBF0158776120085E8F1 /* Effects.cpp */,
-				D89176C615875DB1008C705C /* SimplePlanetRenderer.hpp */,
-				D89176C815875DBE008C705C /* SimplePlanetRenderer.cpp */,
 				CFF95F741588DF0A00B56E11 /* TimeInterval.hpp */,
 				CFF95F761588E82200B56E11 /* Color.hpp */,
 			);
@@ -347,6 +348,7 @@
 				CC14B64E157D35C100793C92 /* IImage.hpp in Headers */,
 				D84D5A32157E0EAA000C5E35 /* MutableVector3D.hpp in Headers */,
 				D86DD8A51588945200E25609 /* Image_iOS.h in Headers */,
+				38D7870A1588F886003BBC75 /* SimplePlanetRenderer.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -424,8 +426,8 @@
 				38D786E31587ACA6003BBC75 /* TileRenderer.cpp in Sources */,
 				38D786E61587B446003BBC75 /* Tile.cpp in Sources */,
 				CF31CBF1158776130085E8F1 /* Effects.cpp in Sources */,
-				D89176C915875DBE008C705C /* SimplePlanetRenderer.cpp in Sources */,
 				D86DD8A61588945200E25609 /* Image_iOS.mm in Sources */,
+				38D787091588F886003BBC75 /* SimplePlanetRenderer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

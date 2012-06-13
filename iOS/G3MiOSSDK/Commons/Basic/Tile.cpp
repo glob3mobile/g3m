@@ -17,7 +17,7 @@
 unsigned int Tile::numIndices = 0;
 unsigned int Tile::numBorderIndices = 0;
 unsigned int Tile::numInnerIndices = 0;
-unsigned char *Tile::indices = NULL;
+unsigned char * Tile::indices;
 unsigned char *Tile::borderIndices = NULL;
 unsigned char *Tile::innerIndices = NULL;
 unsigned int Tile::_resolution;
@@ -26,7 +26,7 @@ bool Tile::_skirts;
 
 Tile::~Tile()
 {
-  if (!vertexCoor) delete[] vertexCoor;
+  if (!vertices) delete[] vertices;
 }
 
 
@@ -52,8 +52,8 @@ void Tile::createVertices(const Planet *planet)
   if (_skirts) numVertices += 4 * resol - 4;
   
   // if first time for tile, alloc memory
-  if (vertexCoor == NULL) {
-    vertexCoor = new float[numVertices * 3];
+  if (vertices == NULL) {
+    vertices = new float[numVertices * 3];
     //textureCoor = new float[numVertices * 2];
   }
   
@@ -102,9 +102,9 @@ void Tile::createVertices(const Planet *planet)
   for (int j = 0; j < resol; j++)
     for (int i = 0; i < resol; i++) {
       unsigned int pos = j * resol + i;
-      vertexCoor[posV++] = (float) (x[pos] - center.x());
-      vertexCoor[posV++] = (float) (y[pos] - center.y());
-      vertexCoor[posV++] = (float) (z[pos] - center.z());
+      vertices[posV++] = (float) (x[pos] - center.x());
+      vertices[posV++] = (float) (y[pos] - center.y());
+      vertices[posV++] = (float) (z[pos] - center.z());
       //textureCoor[posT++] = u[pos];
       //textureCoor[posT++] = v[pos];
     }
@@ -115,9 +115,9 @@ void Tile::createVertices(const Planet *planet)
     // west side
     for (int j = 0; j < resol - 1; j++) {
       unsigned int pos = j * resol;
-      vertexCoor[posV++] = (float) (x[pos] * sizeSkirt - center.x());
-      vertexCoor[posV++] = (float) (y[pos] * sizeSkirt - center.y());
-      vertexCoor[posV++] = (float) (z[pos] * sizeSkirt - center.z());
+      vertices[posV++] = (float) (x[pos] * sizeSkirt - center.x());
+      vertices[posV++] = (float) (y[pos] * sizeSkirt - center.y());
+      vertices[posV++] = (float) (z[pos] * sizeSkirt - center.z());
       //textureCoor[posT++] = u[pos];
       //textureCoor[posT++] = v[pos];
     }
@@ -125,9 +125,9 @@ void Tile::createVertices(const Planet *planet)
     // south side
     for (int i = 0; i < resol - 1; i++) {
       unsigned int pos = (resol - 1) * resol + i;
-      vertexCoor[posV++] = (float) (x[pos] * sizeSkirt - center.x());
-      vertexCoor[posV++] = (float) (y[pos] * sizeSkirt - center.y());
-      vertexCoor[posV++] = (float) (z[pos] * sizeSkirt - center.z());
+      vertices[posV++] = (float) (x[pos] * sizeSkirt - center.x());
+      vertices[posV++] = (float) (y[pos] * sizeSkirt - center.y());
+      vertices[posV++] = (float) (z[pos] * sizeSkirt - center.z());
       //textureCoor[posT++] = u[pos];
       //textureCoor[posT++] = v[pos];
     }
@@ -135,9 +135,9 @@ void Tile::createVertices(const Planet *planet)
     // east side
     for (int j = resol - 1; j > 0; j--) {
       unsigned int pos = j * resol + resol - 1;
-      vertexCoor[posV++] = (float) (x[pos] * sizeSkirt - center.x());
-      vertexCoor[posV++] = (float) (y[pos] * sizeSkirt - center.y());
-      vertexCoor[posV++] = (float) (z[pos] * sizeSkirt - center.z());
+      vertices[posV++] = (float) (x[pos] * sizeSkirt - center.x());
+      vertices[posV++] = (float) (y[pos] * sizeSkirt - center.y());
+      vertices[posV++] = (float) (z[pos] * sizeSkirt - center.z());
       //textureCoor[posT++] = u[pos];
       //textureCoor[posT++] = v[pos];
     }
@@ -145,9 +145,9 @@ void Tile::createVertices(const Planet *planet)
     // north side
     for (int i = resol - 1; i > 0; i--) {
       unsigned int pos = i;
-      vertexCoor[posV++] = (float) (x[pos] * sizeSkirt - center.x());
-      vertexCoor[posV++] = (float) (y[pos] * sizeSkirt - center.y());
-      vertexCoor[posV++] = (float) (z[pos] * sizeSkirt - center.z());
+      vertices[posV++] = (float) (x[pos] * sizeSkirt - center.x());
+      vertices[posV++] = (float) (y[pos] * sizeSkirt - center.y());
+      vertices[posV++] = (float) (z[pos] * sizeSkirt - center.z());
       //textureCoor[posT++] = u[pos];
       //textureCoor[posT++] = v[pos];
     }
@@ -289,7 +289,7 @@ void Tile::render(const RenderContext* rc)
 
   // set opengl texture and pointers
   //gl->BindTexture(idTexture);
-  gl->vertexPointer(3, 0, vertexCoor);
+  gl->vertexPointer(3, 0, vertices);
   //gl->TexCoordPointer(2, 0, textureCoor);
   gl->color(0.5,0.5,0.8,1);
   

@@ -62,9 +62,9 @@ public:
   
   virtual void drawTriangleStrip(int n, unsigned char i[]) = 0;
   
-  virtual void drawLines(int n, unsigned char *i) = 0; 
+  virtual void drawLines(int n, unsigned char i[]) = 0; 
   
-  virtual void drawLineLoop(int n, unsigned char *i) = 0;
+  virtual void drawLineLoop(int n, unsigned char i[]) = 0;
 
   virtual void setProjection(const MutableMatrix44D &projection) = 0;
   
