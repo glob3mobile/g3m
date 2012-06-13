@@ -13,13 +13,15 @@ G3MWidget* G3MWidget::create(IFactory* factory,
                              ILogger *logger,
                              IGL* gl,
                              const Planet* planet,
-                             Renderer* renderer, int width, int height)
+                             Renderer* renderer,
+                             int width, int height,
+                             Color backgroundColor)
 {
   if (logger != NULL) {
     logger->logInfo("Creating G3MWidget...");
   }
   
-  return new G3MWidget(factory, logger, gl, planet, renderer, width, height);
+  return new G3MWidget(factory, logger, gl, planet, renderer, width, height, backgroundColor);
 }
 
 G3MWidget::~G3MWidget()
@@ -36,7 +38,11 @@ bool G3MWidget::render()
   RenderContext rc(_factory, _logger, _planet, _gl, _camera);
   
   // Clear the scene
-  _gl->clearScreen(0, 0.1, 0.2);
+  _gl->clearScreen(_backgroundColor.getRed(),
+                   _backgroundColor.getGreen(), 
+                   _backgroundColor.getBlue());
+
+  int ___check_with_JM_and_Agustin;
   _gl->enableVertices();
   _gl->enableTextures();
 

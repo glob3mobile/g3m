@@ -117,8 +117,14 @@
     comp->addRenderer(scheduler);
     
     
-    _widget = G3MWidget::create(factory, logger, gl, Planet::createEarth(), comp, width, height); 
-    
+    _widget = G3MWidget::create(factory,
+                                logger,
+                                gl,
+                                Planet::createEarth(),
+                                comp,
+                                width, height,
+                                Color::fromRGB(0, 0.1, 0.2)); 
+
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     
