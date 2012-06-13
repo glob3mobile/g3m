@@ -26,9 +26,9 @@ public:
   
    void disableTextures() ;
   
-   void clearScreen(float r, float g, float b) ;
+   void clearScreen(float r, float g, float b, float a) ;
   
-   void color(float r, float g, float b) ;
+   void color(float r, float g, float b, float a) ;
   
    void pushMatrix() ;
   

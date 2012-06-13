@@ -12,9 +12,8 @@
 #include <vector>
 
 #include "IImage.hpp"
-
 #include "MutableMatrix44D.hpp"
-
+#include "Color.hpp"
 
 class IGL {
 public:
@@ -33,10 +32,24 @@ public:
   
   virtual void disableTextures() = 0;
   
-  virtual void clearScreen(float r, float g, float b) = 0;
+  virtual void clearScreen(float r, float g, float b, float a) = 0;
+
+  virtual void clearScreen(const Color& col) {
+      clearScreen(col.getRed(),
+                  col.getGreen(),
+                  col.getBlue(),
+                  col.getAlpha());
+  }
   
-  virtual void color(float r, float g, float b) = 0;
+  virtual void color(float r, float g, float b, float a) = 0;
   
+  virtual void color(const Color& col) {
+    color(col.getRed(),
+          col.getGreen(),
+          col.getBlue(),
+          col.getAlpha());
+  }
+
   virtual void pushMatrix() = 0;
   
   virtual void popMatrix() = 0;

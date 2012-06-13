@@ -38,9 +38,7 @@ bool G3MWidget::render()
   RenderContext rc(_factory, _logger, _planet, _gl, _camera);
   
   // Clear the scene
-  _gl->clearScreen(_backgroundColor.getRed(),
-                   _backgroundColor.getGreen(), 
-                   _backgroundColor.getBlue());
+  _gl->clearScreen(_backgroundColor);
 
   int ___check_with_JM_and_Agustin;
   _gl->enableVertices();

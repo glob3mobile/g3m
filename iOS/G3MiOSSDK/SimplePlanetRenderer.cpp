@@ -113,7 +113,7 @@ int SimplePlanetRenderer::render(const RenderContext* rc){
   gl->setTextureCoordinates(2, 0, _texCoors); 
   
   // draw a red sphere
-  gl->color((float) 1, (float) 0, (float) 0);
+  gl->color((float) 1, (float) 0, (float) 0, 1);
   gl->drawTriangleStrip(_numIndex, _index);
   
   return 0;

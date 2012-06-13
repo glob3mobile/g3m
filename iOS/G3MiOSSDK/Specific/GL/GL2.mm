@@ -131,14 +131,14 @@ void GL2::disableTextures() {
 }
 
 
-void GL2::clearScreen(float r, float g, float b) {
-    glClearColor(r, g, b, 1);
+void GL2::clearScreen(float r, float g, float b, float a) {
+    glClearColor(r, g, b, a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 
-void GL2::color(float r, float g, float b) {
-    glUniform4f(Uniforms.FlatColor, r, g, b, 1);
+void GL2::color(float r, float g, float b, float a) {
+    glUniform4f(Uniforms.FlatColor, r, g, b, a);
 }
 
 void GL2::enablePolygonOffset(float factor, float units) {

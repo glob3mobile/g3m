@@ -14,13 +14,16 @@ private:
   const float _red;
   const float _green;
   const float _blue;
+  const float _alpha;
 
   Color(const float red,
         const float green,
-        const float blue) :
+        const float blue,
+        const float alpha) :
   _red(red),
   _green(green),
-  _blue(blue)
+  _blue(blue),
+  _alpha(alpha)
   {
     
   }
@@ -29,16 +32,17 @@ public:
   
   static Color fromRGB(const float red,
                        const float green,
-                       const float blue) {
-    return Color(red, green, blue);
+                       const float blue,
+                       const float alpha) {
+    return Color(red, green, blue, alpha);
   }
   
   static Color black() {
-    return Color::fromRGB(0, 0, 0);
+    return Color::fromRGB(0, 0, 0, 1);
   }
   
   static Color white() {
-    return Color::fromRGB(1, 1, 1);
+    return Color::fromRGB(1, 1, 1, 1);
   }
   
   
@@ -52,6 +56,10 @@ public:
   
   float getBlue() const {
     return _blue;
+  }
+  
+  float getAlpha() const {
+    return _alpha;
   }
   
 };
