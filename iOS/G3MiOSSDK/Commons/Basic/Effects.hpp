@@ -46,6 +46,7 @@ class EffectsScheduler : public Renderer {
 private:
   std::vector<EffectRun> _effects;
   ITimer*                _timer;
+  const IFactory*        _factory;
   
   void doOneCyle();
   
@@ -65,6 +66,8 @@ public:
   virtual bool onResizeViewportEvent(int width, int height);
   
   virtual ~EffectsScheduler() {
+    _factory->deleteTimer(_timer);
+    
     for (int i = 0; i < _effects.size(); i++) {
       EffectRun effectRun = _effects[i];
       delete effectRun._effect;

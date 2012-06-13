@@ -10,6 +10,7 @@
 
 
 void EffectsScheduler::initialize(const InitializationContext* ic) {
+  _factory = ic->getFactory();
   _timer = ic->getFactory()->createTimer();
 }
 
@@ -37,7 +38,9 @@ void EffectsScheduler::processFinishedEffects(const double now) {
 void EffectsScheduler::doOneCyle() {
   const double now = _timer->now();
   
+  
   processFinishedEffects(now);
+  
   
   for (int i = 0; i < _effects.size(); i++) {
     EffectRun effectRun = _effects[i];
