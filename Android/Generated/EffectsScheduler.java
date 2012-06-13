@@ -49,6 +49,10 @@ public class EffectsScheduler extends Renderer
 	for (int i = indicesToRemove.size() - 1; i >= 0; i--)
 	{
 	  final int indexToRemove = indicesToRemove.get(i);
+  
+	  // AGUSTIN NOTE: CAREFUL WHIT THE FOLLOWING SENTENCE
+	  //There is no direct equivalent to the STL vector 'erase' method in Java:
+	  // AND ALSO OPERATION + IS NOT ALLOWED HERE IN JAVA
 //C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'erase' method in Java:
 	  _effects.erase(_effects.iterator() + indexToRemove);
 	}

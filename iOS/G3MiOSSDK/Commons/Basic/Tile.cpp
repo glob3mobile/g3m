@@ -276,6 +276,7 @@ void Tile::render(const RenderContext* rc)
   // obtain the gl object
   IGL *gl = rc->getGL();
   
+  // AGUSTIN NOTE: THE FOLLOWING MUST BE DONE USING MATRIX CLASS METHODS. IN FACT, IT'S A TRASLATION
   // compute the matriz centered on the tile  
   MutableMatrix44D lookAt = rc->getCamera()->getModelMatrix();
   double M[16];

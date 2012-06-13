@@ -81,7 +81,7 @@
     IGL* gl  = new GL2();
     
     
-    // AGUSTIN NOTE: ALL OF THESE RENDERES MUST BE CREATED INSIDE COMMONS
+    // AGUSTIN NOTE: ALL OF THE FOLLOWING RENDERES MUST BE CREATED INSIDE COMMONS
     
     // composite renderer is the father of the rest of renderers
     CompositeRenderer* comp = new CompositeRenderer();

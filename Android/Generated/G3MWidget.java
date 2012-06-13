@@ -58,7 +58,7 @@ public class G3MWidget
   private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
   private Renderer _renderer;
   private Camera _camera;
-  private final Color _backgroundColor = new Color();
+  private final Color _backgroundColor ;
 
   private G3MWidget(IFactory factory, ILogger logger, IGL gl, Planet planet, Renderer renderer, int width, int height, Color backgroundColor)
   {
