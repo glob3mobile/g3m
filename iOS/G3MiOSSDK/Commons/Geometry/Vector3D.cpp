@@ -8,6 +8,7 @@
 
 #include "Vector3D.hpp"
 #include "MutableVector3D.hpp"
+#include "Angle.hpp"
 
 
 Vector3D Vector3D::normalized() const
@@ -17,13 +18,16 @@ Vector3D Vector3D::normalized() const
 }
 
 
-double Vector3D::angleBetween(const Vector3D& other) const {
+Angle Vector3D::angleBetween(const Vector3D& other) const {
   Vector3D v1 = normalized();
   Vector3D v2 = other.normalized();
   double c = v1.dot(v2);
   if (c > 1.0) c = 1.0;
   else if (c < -1.0) c = -1.0;
-  return acos(c);
+  
+  Angle a = Angle::fromRadians(acos(c));
+  
+  return a;
 }
 
 Vector3D Vector3D::rotateAroundAxis(const Vector3D& axis,

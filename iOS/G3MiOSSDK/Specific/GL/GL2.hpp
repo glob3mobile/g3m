@@ -50,6 +50,14 @@ public:
   
    void disablePolygonOffset() ;
   
+  void getError();
+  
+  int uploadTexture(const IImage& image, int widthTexture, int heightTexture);
+  
+  void setTextureCoordinates(int size, int stride, const float texcoord[]);
+  
+  void bindTexture (unsigned int n);
+  
   
 private:
     // stack of ModelView matrices

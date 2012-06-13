@@ -195,7 +195,7 @@ std::list<Vector3D> Ellipsoid::computeCurve(const Vector3D& start,
   }
   
   Vector3D normal = start.cross(stop).normalized();
-  double theta = start.angleBetween(stop);
+  double theta = start.angleBetween(stop).radians();
   
   //int n = max((int)(theta / granularity) - 1, 0);
   int n = ((int) (theta / granularity) - 1) > 0 ? (int) (theta / granularity) - 1 : 0;
@@ -266,8 +266,8 @@ Vector3D Ellipsoid::closestIntersection(const Vector3D& pos, const Vector3D& ray
 {
   std::vector<double> t = intersections(pos , ray);
   if (t.empty()) return Vector3D::nan();
-    Vector3D solution = pos.add(ray.times(t[0]));
-    return solution;
+  Vector3D solution = pos.add(ray.times(t[0]));
+  return solution;
 }
 
 

@@ -11,7 +11,8 @@
 
 #include "GL2.hpp"
 
-#include "IImage.hpp"
+#include "Image_iOS.h"
+
 
 /*
 IGL* CreateGL()
@@ -156,6 +157,68 @@ void GL2::vertexPointer(int size, int stride, const float vertex[]) {
 
 void GL2::drawTriangleStrip(int n, unsigned char *i) {
   glDrawElements(GL_TRIANGLE_STRIP, n, GL_UNSIGNED_BYTE, i);
+}
+
+void GL2::getError()
+{
+  int todo_getErrorDesc; //This function is used in an ErrorRenderer
+  GLenum err = glGetError();
+  while (err != GL_NO_ERROR){
+    /*const GLubyte* errString = gluErrorString(err);*/
+    NSLog(@"Error uploading texture. glError: 0x%04X, Description: %s", err, "");
+  }
+    
+}
+
+int GL2::uploadTexture(const IImage& image, int widthTexture, int heightTexture)
+{
+  UIImage * im = ((Image_iOS&) image).getUIImage();
+  
+  int numComponents = 4;
+  CGImageRef imageRef = [im CGImage];
+
+  //Allocate texture data
+  GLubyte* textureData = new GLubyte[widthTexture * heightTexture * numComponents];  
+  
+  //Creating Context
+  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+  NSUInteger bytesPerPixel = 4;
+  NSUInteger bytesPerRow = bytesPerPixel * widthTexture;
+  NSUInteger bitsPerComponent = 8;
+  CGContextRef context = CGBitmapContextCreate(textureData, widthTexture, heightTexture,
+                                               bitsPerComponent, bytesPerRow, colorSpace,
+                                               kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+  CGColorSpaceRelease(colorSpace);
+  
+  CGContextDrawImage(context, CGRectMake(0, 0, widthTexture, heightTexture), imageRef);
+  CGContextRelease(context);
+  
+  //NOW WE ARE CREATING A TRANSPARENT TEXTURE (4 BYTES DEPTH)
+  GLuint textureID;    
+  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+  
+  glGenTextures(1, &textureID);
+  
+  glBindTexture(GL_TEXTURE_2D, textureID);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  
+
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, widthTexture, heightTexture, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureData); 
+  
+  return textureID;
+}
+
+void GL2::setTextureCoordinates(int size, int stride, const float texcoord[])
+{
+  glVertexAttribPointer(Attributes.TextureCoord, size, GL_FLOAT, 0, stride, (const void *) texcoord);
+}
+
+void GL2::bindTexture (unsigned int n)
+{
+  glBindTexture(GL_TEXTURE_2D, n);
 }
 
 

@@ -21,6 +21,9 @@
 #include "DummyRenderer.hpp"
 #include "MarksRenderer.hpp"
 #include "Mark.hpp"
+#include "SimplePlanetRenderer.hpp"
+
+#include "Image_iOS.h"
 
 #include "Effects.hpp"
 
@@ -80,8 +83,18 @@
     CameraRenderer *cameraRenderer = new CameraRenderer();
     comp->addRenderer(cameraRenderer);
     
-    DummyRenderer* dum = new DummyRenderer();
-    comp->addRenderer(dum);
+    //DummyRenderer* dum = new DummyRenderer();
+    //comp->addRenderer(dum);
+    
+    //Image of the whole world
+    Image_iOS *worldImage = new Image_iOS();
+    
+    NSString* path = [[NSBundle mainBundle] pathForResource:@"world" ofType:@"jpg"];
+    
+    worldImage->loadFromFileName([path UTF8String]);
+    
+    SimplePlanetRenderer* spr = new SimplePlanetRenderer(worldImage);
+    comp->addRenderer(spr);
     
     MarksRenderer* marks = new MarksRenderer();
     

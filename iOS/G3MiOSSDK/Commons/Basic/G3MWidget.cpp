@@ -36,8 +36,10 @@ bool G3MWidget::render()
   RenderContext rc(_factory, _logger, _planet, _gl, _camera);
   
   // Clear the scene
-  _gl->clearScreen(1, 1, 0);
+  _gl->clearScreen(0, 0.1, 0.2);
   _gl->enableVertices();
+  _gl->enableTextures();
+
   
   int timeToRedraw = _renderer->render(&rc);
   

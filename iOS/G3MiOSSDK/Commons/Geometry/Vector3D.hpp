@@ -97,7 +97,7 @@ public:
                     _x * other._y - _y * other._x);
   }
   
-  double angleBetween(const Vector3D& other) const;
+  Angle angleBetween(const Vector3D& other) const;
     
   Vector3D rotateAroundAxis(const Vector3D& axis, double theta) const;
   
