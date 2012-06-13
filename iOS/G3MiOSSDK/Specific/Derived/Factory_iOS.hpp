@@ -11,9 +11,19 @@
 
 #include "IFactory.hpp"
 
+#include "Timer_iOS.h"
+
+
 class Factory_iOS: public IFactory {
+public:
+  virtual ITimer* createTimer() const {
+    return new Timer_iOS();
+  }
   
-    
+  virtual void deleteTimer(ITimer* timer) const {
+    delete ((Timer_iOS *) timer);
+  }
+  
 };
 
 #endif

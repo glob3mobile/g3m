@@ -22,6 +22,11 @@
 #include "DummyRenderer.hpp"
 #include "MarksRenderer.hpp"
 #include "Mark.hpp"
+#include "SimplePlanetRenderer.hpp"
+
+#include "Image_iOS.h"
+
+#include "Effects.hpp"
 
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
@@ -79,11 +84,21 @@
     CameraRenderer *cameraRenderer = new CameraRenderer();
     comp->addRenderer(cameraRenderer);
     
-    TileRenderer* tr = new TileRenderer(12);
-    comp->addRenderer(tr);
+    /*TileRenderer* tr = new TileRenderer(12);
+    comp->addRenderer(tr);*/
     
-    /*DummyRenderer* dum = new DummyRenderer();
-    comp->addRenderer(dum);*/
+    //DummyRenderer* dum = new DummyRenderer();
+    //comp->addRenderer(dum);
+    
+    //Image of the whole world
+    Image_iOS *worldImage = new Image_iOS();
+    
+    NSString* path = [[NSBundle mainBundle] pathForResource:@"world" ofType:@"jpg"];
+    
+    worldImage->loadFromFileName([path UTF8String]);
+    
+    SimplePlanetRenderer* spr = new SimplePlanetRenderer(worldImage);
+    comp->addRenderer(spr);
     
     MarksRenderer* marks = new MarksRenderer();
     
@@ -101,9 +116,19 @@
    
     comp->addRenderer(marks);
 
+    EffectsScheduler* scheduler = new EffectsScheduler();
+    scheduler->startEffect(new DummyEffect());
+    comp->addRenderer(scheduler);
     
-    _widget = G3MWidget::create(factory, logger, gl, Planet::createEarth(), comp, width, height); 
     
+    _widget = G3MWidget::create(factory,
+                                logger,
+                                gl,
+                                Planet::createEarth(),
+                                comp,
+                                width, height,
+                                Color::fromRGB(0, 0.1, 0.2, 1)); 
+
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     

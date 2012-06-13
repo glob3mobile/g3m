@@ -291,7 +291,7 @@ void Tile::render(const RenderContext* rc)
   //gl->BindTexture(idTexture);
   gl->vertexPointer(3, 0, vertexCoor);
   //gl->TexCoordPointer(2, 0, textureCoor);
-  gl->color(0.5,0.5,0.8);
+  gl->color(0.5,0.5,0.8,1);
   
   // draw tile geometry
   if (true /*g->GetWireframe()*/) {
@@ -305,10 +305,10 @@ void Tile::render(const RenderContext* rc)
     //gl->disableTexture2D();
     //gl->disableTextures();
     gl->lineWidth(1);
-    gl->color(0.0f, 0.0f, 0.0f);
+    gl->color(0.0f, 0.0f, 0.0f, 1);
     gl->drawLines(numInnerIndices, innerIndices);
     gl->lineWidth(2);
-    gl->color(1.0f, 0.0f, 0.0f);
+    gl->color(1.0f, 0.0f, 0.0f, 1);
     gl->drawLineLoop(numBorderIndices, borderIndices);
     //gl->EnableTextures();
     //gl->EnableTexture2D();

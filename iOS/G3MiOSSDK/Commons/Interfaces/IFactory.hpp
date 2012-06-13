@@ -12,8 +12,14 @@
 #include "ILogger.hpp"
 
 
+class ITimer;
+
+
 class IFactory {
 public:
+  virtual ITimer* createTimer() const = 0;
+  
+  virtual void deleteTimer(ITimer* timer) const = 0;
 
   // a virtual destructor is needed for conversion to Java
   virtual ~IFactory() {}

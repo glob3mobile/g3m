@@ -152,7 +152,7 @@ Gesture CameraRenderer::getGesture(const TouchEvent& touchEvent) const
 
 void CameraRenderer::makeRotate(const TouchEvent& touchEvent)
 {
-  int todo_JM_working;
+  int todo_JM_there_is_a_bug;
   
   Vector2D pixel0 = touchEvent.getTouch(0)->getPos();
   Vector2D pixel1 = touchEvent.getTouch(1)->getPos();
@@ -163,17 +163,10 @@ void CameraRenderer::makeRotate(const TouchEvent& touchEvent)
     Vector3D v(pixelCenter.x(), pixelCenter.y(), 0); 
     _initialPixel = v.asMutableVector3D(); //Storing starting pixel
   }
-  
-  Vector3D ray = _camera0.pixel2Vector(pixelCenter);
-  _initialPoint = _planet->closestIntersection(_camera0.getPos(), ray).asMutableVector3D();
-  
+
   //Calculating the point we are going to rotate around
-  Vector2D centerViewport(_camera->getWidth() /2, _camera->getHeight() /2);
-  Vector3D rayCV = _camera0.pixel2Vector(pixelCenter);
-  Vector3D rotatingPoint = _planet->closestIntersection(_camera0.getPos(), rayCV);
-  
-  //We don't rotate
-  if (_initialPoint.isNan() || rotatingPoint.isNan()) return;
+  Vector3D rotatingPoint = centerOfViewOnPlanet(_camera0);
+  if (rotatingPoint.isNan()) return; //We don't rotate without a valid rotating point
   
   //Rotating axis
   Vector3D camVec = _camera0.getPos().sub(_camera0.getCenter());
@@ -182,42 +175,43 @@ void CameraRenderer::makeRotate(const TouchEvent& touchEvent)
 
   //Calculating the angle we have to rotate the camera vertically
   double distY = pixelCenter.y() - _initialPixel.y();
-  Angle horizontalAngle = Angle::fromDegrees( ((double)distY / (double)_camera0.getHeight()) * 180.0 );
+  double distX = pixelCenter.x() - _initialPixel.x();
+  Angle verticalAngle = Angle::fromDegrees( (distY / (double)_camera0.getHeight()) * 180.0 );
+  Angle horizontalAngle = Angle::fromDegrees( (distX / (double)_camera0.getWidth()) * 360.0 );
   
-  //We don't put the camera upside down
-  if (horizontalAngle.degrees() < 0.0 || horizontalAngle.degrees() > 85.0) return;
-  printf("%f\n", horizontalAngle.degrees());
+  printf("ROTATING V=%f H=%f\n", verticalAngle.degrees(), horizontalAngle.degrees());
   
-  //Back-Up camera
+  //Back-Up camera0
   Camera cameraAux(0,0);
-  cameraAux.copyFrom(*_camera);
+  cameraAux.copyFrom(_camera0);
+
+  //Rotating vertically
+  cameraAux.rotateWithAxisAndPoint(horizontalAxis, rotatingPoint, verticalAngle); //Up and down
   
-  //Apply rotation
-  _camera->copyFrom(_camera0);
-  _camera->rotateWithAxisAndPoint(horizontalAxis, _initialPoint.asVector3D(), horizontalAngle);
+  //Check if the view isn't too low
+  Vector3D vCamAux = cameraAux.getPos().sub(cameraAux.getCenter());
+  Angle alpha = vCamAux.angleBetween(normal);
   
-  //If the final camera don't intersect the planet we don't apply the transformation
-  
-  Vector3D newCamVec = _camera->getPos().sub(_camera->getCenter());
-  Angle a = Angle::fromRadians( newCamVec.angleBetween(normal) );
-  printf("ANGLE NCV : %f\n", a.degrees());
-  
-  //If the camera is too low or doesn't intersect the planet
-  if ((a.degrees() > 85.0) || !cameraLooksToPlanet(*_camera))
-  {
-    printf("MOVEMENT NOT ALLOWED\n");
-    // we don't apply the transformation
-    _camera->copyFrom(cameraAux);
+  if ((alpha.degrees() > 85.0) ||
+      centerOfViewOnPlanet(*_camera).isNan()){
+      cameraAux.copyFrom(_camera0); //We trash the vertical rotation
   }
+  
+  //Rotating horizontally
+  cameraAux.rotateWithAxisAndPoint(normal, rotatingPoint, horizontalAngle); //Horizontally
+  
+  //Finally we copy the new camera
+  _camera->copyFrom(cameraAux);
+
 }
 
-bool CameraRenderer::cameraLooksToPlanet(const Camera& c) const
+Vector3D CameraRenderer::centerOfViewOnPlanet(const Camera& c) const
 {
-    int todo_JM_working;
-  
   Vector2D centerViewport(c.getWidth() /2, c.getHeight() /2);
   Vector3D rayCV = c.pixel2Vector(centerViewport);
-  return ! _planet->closestIntersection(c.getPos(), rayCV).isNan() ;
+  Vector3D center = _planet->closestIntersection(c.getPos(), rayCV);
+  
+  return center;
 }
 
 

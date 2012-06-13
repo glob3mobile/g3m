@@ -13,6 +13,7 @@
 #include "Planet.hpp"
 #include "IFactory.hpp"
 #include "Camera.hpp"
+#include "Color.hpp"
 
 class Globe{};
 
@@ -23,7 +24,9 @@ public:
                            ILogger *logger,
                            IGL* gl,
                            const Planet* planet,
-                           Renderer* renderer, int width, int height);
+                           Renderer* renderer,
+                           int width, int height,
+                           Color backgroundColor);
   
   ~G3MWidget();
   
@@ -43,19 +46,22 @@ private:
   const Planet* _planet;
   Renderer*     _renderer;
   Camera*       _camera;
-  
+  const Color   _backgroundColor;
   
   G3MWidget(IFactory* factory,
             ILogger *logger,
             IGL* gl,
             const Planet* planet,
-            Renderer* renderer, int width, int height):
+            Renderer* renderer,
+            int width, int height,
+            Color backgroundColor):
   _factory(factory),
   _logger(logger),
   _gl(gl),
   _planet(planet),
   _renderer(renderer),
-  _camera(new Camera(width, height))
+  _camera(new Camera(width, height)),
+  _backgroundColor(backgroundColor)
   {
     InitializationContext ic(_factory, _logger, _planet);
     _renderer->initialize(&ic);

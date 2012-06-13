@@ -18,9 +18,6 @@ void CompositeRenderer::initialize(const InitializationContext* ic) {
 
 void CompositeRenderer::addRenderer(Renderer *renderer) {
   _renderers.push_back(renderer);
-  //renderer->initialize(_ic);
-  
-  // maybe this part is conflicted with diego -> in that case, remove it
   if (_ic != NULL) {
     renderer->initialize(_ic);
   }

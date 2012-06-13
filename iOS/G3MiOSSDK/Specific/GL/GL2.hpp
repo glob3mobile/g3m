@@ -26,9 +26,9 @@ public:
   
    void disableTextures() ;
   
-   void clearScreen(float r, float g, float b) ;
+   void clearScreen(float r, float g, float b, float a) ;
   
-   void color(float r, float g, float b) ;
+   void color(float r, float g, float b, float a) ;
   
    void pushMatrix() ;
   
@@ -55,6 +55,14 @@ public:
    void disablePolygonOffset() ;
   
    void lineWidth(float width);
+
+  void getError();
+  
+  int uploadTexture(const IImage& image, int widthTexture, int heightTexture);
+  
+  void setTextureCoordinates(int size, int stride, const float texcoord[]);
+  
+  void bindTexture (unsigned int n);
   
   
 private:
