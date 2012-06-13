@@ -232,7 +232,7 @@ public class Ellipsoid
 	}
   
 	Vector3D normal = start.cross(stop).normalized();
-	double theta = start.angleBetween(stop);
+	double theta = start.angleBetween(stop).radians();
   
 	//int n = max((int)(theta / granularity) - 1, 0);
 	int n = ((int)(theta / granularity) - 1) > 0 ? (int)(theta / granularity) - 1 : 0;
@@ -366,8 +366,8 @@ public class Ellipsoid
 	java.util.ArrayList<Double> t = intersections(pos, ray);
 	if (t.isEmpty())
 		return Vector3D.nan();
-	  Vector3D solution = pos.add(ray.times(t.get(0)));
-	  return solution;
+	Vector3D solution = pos.add(ray.times(t.get(0)));
+	return solution;
   }
 
 }

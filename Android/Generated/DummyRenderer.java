@@ -83,7 +83,7 @@ public class DummyRenderer extends Renderer
   
 	{
 	  // draw a red square
-	  gl.color((float) 1, (float) 0, (float) 0);
+	  gl.color((float) 1, (float) 0, (float) 0, 1);
 	  gl.pushMatrix();
 	  //MutableMatrix44D T = GLU::translationMatrix(Vector3D(halfSize,0,0));
 	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(halfSize,0,0));
@@ -94,7 +94,7 @@ public class DummyRenderer extends Renderer
   
 	{
 	  // draw a green square
-	  gl.color((float) 0, (float) 1, (float) 0);
+	  gl.color((float) 0, (float) 1, (float) 0, 1);
 	  gl.pushMatrix();
 	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(0,halfSize,0));
 	  MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(90), new Vector3D(0,0,1));
@@ -105,7 +105,7 @@ public class DummyRenderer extends Renderer
   
 	{
 	  // draw a blue square
-	  gl.color((float) 0, (float) 0, (float) 1);
+	  gl.color((float) 0, (float) 0, (float) 1, 1);
 	  gl.pushMatrix();
 	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(0,-halfSize,0));
 	  MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(-90), new Vector3D(0,0,1));
@@ -116,7 +116,7 @@ public class DummyRenderer extends Renderer
   
 	{
 	  // draw a purple square
-	  gl.color((float) 1, (float) 0, (float) 1);
+	  gl.color((float) 1, (float) 0, (float) 1, 1);
 	  gl.pushMatrix();
 	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(0,0,-halfSize));
 	  MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(90), new Vector3D(0,1,0));
@@ -127,7 +127,7 @@ public class DummyRenderer extends Renderer
   
 	{
 	  // draw a cian square
-	  gl.color((float) 0, (float) 1, (float) 1);
+	  gl.color((float) 0, (float) 1, (float) 1, 1);
 	  gl.pushMatrix();
 	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(0,0,halfSize));
 	  MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(-90), new Vector3D(0,1,0));
@@ -138,7 +138,7 @@ public class DummyRenderer extends Renderer
   
 	{
 	  // draw a grey square
-	  gl.color((float) 0.5, (float) 0.5, (float) 0.5);
+	  gl.color((float) 0.5, (float) 0.5, (float) 0.5, 1);
 	  gl.pushMatrix();
 	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(-halfSize,0,0));
 	  MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(180), new Vector3D(0,0,1));

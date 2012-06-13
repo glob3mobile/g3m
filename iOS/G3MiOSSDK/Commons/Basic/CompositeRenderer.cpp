@@ -18,7 +18,6 @@ void CompositeRenderer::initialize(const InitializationContext* ic) {
 
 void CompositeRenderer::addRenderer(Renderer *renderer) {
   _renderers.push_back(renderer);
-  
   if (_ic != NULL) {
     renderer->initialize(_ic);
   }

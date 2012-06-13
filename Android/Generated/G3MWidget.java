@@ -2,14 +2,14 @@ package org.glob3.mobile.generated;
 public class G3MWidget
 {
 
-  public static G3MWidget create(IFactory factory, ILogger logger, IGL gl, Planet planet, Renderer renderer, int width, int height)
+  public static G3MWidget create(IFactory factory, ILogger logger, IGL gl, Planet planet, Renderer renderer, int width, int height, Color backgroundColor)
   {
 	if (logger != null)
 	{
 	  logger.logInfo("Creating G3MWidget...");
 	}
   
-	return new G3MWidget(factory, logger, gl, planet, renderer, width, height);
+	return new G3MWidget(factory, logger, gl, planet, renderer, width, height, backgroundColor);
   }
 
   public void dispose()
@@ -26,7 +26,9 @@ public class G3MWidget
 	RenderContext rc = new RenderContext(_factory, _logger, _planet, _gl, _camera);
   
 	// Clear the scene
-	_gl.clearScreen(1, 1, 0);
+	_gl.clearScreen(_backgroundColor);
+  
+	int ___check_with_JM_and_Agustin;
 	_gl.enableVertices();
   
 	int timeToRedraw = _renderer.render(rc);
@@ -56,9 +58,9 @@ public class G3MWidget
   private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
   private Renderer _renderer;
   private Camera _camera;
+  private final Color _backgroundColor ;
 
-
-  private G3MWidget(IFactory factory, ILogger logger, IGL gl, Planet planet, Renderer renderer, int width, int height)
+  private G3MWidget(IFactory factory, ILogger logger, IGL gl, Planet planet, Renderer renderer, int width, int height, Color backgroundColor)
   {
 	  _factory = factory;
 	  _logger = logger;
@@ -66,6 +68,7 @@ public class G3MWidget
 	  _planet = planet;
 	  _renderer = renderer;
 	  _camera = new Camera(width, height);
+	  _backgroundColor = backgroundColor;
 	InitializationContext ic = new InitializationContext(_factory, _logger, _planet);
 	_renderer.initialize(ic);
   }

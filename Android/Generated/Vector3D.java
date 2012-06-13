@@ -135,8 +135,8 @@ public class Vector3D
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double angleBetween(const Vector3D& other) const
-  public final double angleBetween(Vector3D other)
+//ORIGINAL LINE: Angle angleBetween(const Vector3D& other) const
+  public final Angle angleBetween(Vector3D other)
   {
 	Vector3D v1 = normalized();
 	Vector3D v2 = other.normalized();
@@ -145,7 +145,10 @@ public class Vector3D
 		c = 1.0;
 	else if (c < -1.0)
 		c = -1.0;
-	return Math.acos(c);
+  
+	Angle a = Angle.fromRadians(Math.acos(c));
+  
+	return a;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

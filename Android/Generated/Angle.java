@@ -152,4 +152,12 @@ public class Angle
 	return this;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Angle average(const Angle& a) const
+  public final Angle average(Angle a)
+  {
+	Angle theSum = this.add(a);
+	return theSum.times(0.5);
+  }
+
 }

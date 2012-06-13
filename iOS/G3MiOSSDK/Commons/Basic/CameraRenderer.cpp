@@ -191,9 +191,9 @@ void CameraRenderer::makeRotate(const TouchEvent& touchEvent)
   //Check if the view isn't too low
   Vector3D vCamAux = cameraAux.getPos().sub(cameraAux.getCenter());
   Angle alpha = vCamAux.angleBetween(normal);
+  Vector3D center = centerOfViewOnPlanet(*_camera);
   
-  if ((alpha.degrees() > 85.0) ||
-      centerOfViewOnPlanet(*_camera).isNan()){
+  if ((alpha.degrees() > 85.0) || center.isNan()){
       cameraAux.copyFrom(_camera0); //We trash the vertical rotation
   }
   

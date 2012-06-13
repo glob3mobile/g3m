@@ -40,6 +40,15 @@ public:
     return _longitude;
   }
 
+  /*
+  bool closeTo(const Geodetic2D& other) const {
+    if (!_latitude.closeTo(other._latitude)) {
+      return false;
+    }
+    
+    return _longitude.closeTo(other._longitude);
+  }*/
+
 };
 
 

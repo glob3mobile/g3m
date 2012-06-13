@@ -52,6 +52,9 @@ public:
   Vector3D getCenter() const { return _center.asVector3D(); }
   Vector3D getUp() const { return _up.asVector3D(); }
   
+  // AGUSTIN NOTE: THIS FUNCTION MUST RETURN MATRIX44D UNMUTABLE??
+  MutableMatrix44D getModelMatrix() { return _model; }
+  
   //Dragging camera
   void dragCamera(const Vector3D& p0, const Vector3D& p1);
   void rotateWithAxis(const Vector3D& axis, const Angle& delta);

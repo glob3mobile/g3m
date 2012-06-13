@@ -21,3 +21,8 @@ Angle Angle::clampedTo(const Angle& min,
     
   return *this;
 }
+
+Angle Angle::average(const Angle& a) const {
+  Angle theSum = this->add(a);
+  return theSum.times(0.5);
+}

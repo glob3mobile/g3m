@@ -91,6 +91,8 @@ public:
   Angle clampedTo(const Angle& min,
                   const Angle& max) const;  
   
+  Angle average(const Angle& a) const;
+  
 };
 
 

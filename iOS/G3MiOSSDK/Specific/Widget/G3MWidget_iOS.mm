@@ -18,6 +18,7 @@
 #include "GL2.hpp"
 
 #include "CameraRenderer.hpp"
+#include "TileRenderer.h"
 #include "DummyRenderer.hpp"
 #include "MarksRenderer.hpp"
 #include "Mark.hpp"
@@ -79,39 +80,42 @@
     ILogger *logger = new Logger_iOS(ErrorLevel);
     IGL* gl  = new GL2();
     
+    
+    // AGUSTIN NOTE: ALL OF THE FOLLOWING RENDERES MUST BE CREATED INSIDE COMMONS
+    
+    // composite renderer is the father of the rest of renderers
     CompositeRenderer* comp = new CompositeRenderer();
+    
+    // camera renderer
     CameraRenderer *cameraRenderer = new CameraRenderer();
     comp->addRenderer(cameraRenderer);
     
-    //DummyRenderer* dum = new DummyRenderer();
-    //comp->addRenderer(dum);
+    // very basic tile renderer
+    TileRenderer* tr = new TileRenderer(12);
+    comp->addRenderer(tr);
     
-    //Image of the whole world
+    /*
+    // dummy renderer with a simple box
+    DummyRenderer* dum = new DummyRenderer();
+    comp->addRenderer(dum);
+     */
+    
+    // simple planet renderer, with a basic world image
     Image_iOS *worldImage = new Image_iOS();
-    
     NSString* path = [[NSBundle mainBundle] pathForResource:@"world" ofType:@"jpg"];
-    
     worldImage->loadFromFileName([path UTF8String]);
-    
     SimplePlanetRenderer* spr = new SimplePlanetRenderer(worldImage);
     comp->addRenderer(spr);
     
+    // marks renderer
     MarksRenderer* marks = new MarksRenderer();
-    
-    Geodetic3D g(Angle::fromDegrees(28.05),
-                 Angle::fromDegrees(-14.36),
-                 0);
-    
-    
-    Mark* m = new Mark("Fuerteventura",
-                       "Description of Fuerteventura",
-                       "Mark.png",
-                       g);
+    Geodetic3D g(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0);
+    Mark* m = new Mark("Fuerteventura", "Description of Fuerteventura", "Mark.png", g);
     //m->addTouchListener(listener);
     marks->addMark(m);
-   
     comp->addRenderer(marks);
 
+    // scheduler renderer
     EffectsScheduler* scheduler = new EffectsScheduler();
     scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(2)));
     comp->addRenderer(scheduler);

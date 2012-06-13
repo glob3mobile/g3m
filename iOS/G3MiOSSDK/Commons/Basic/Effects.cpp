@@ -33,6 +33,10 @@ void EffectsScheduler::processFinishedEffects(const RenderContext *rc,
   for (int i = indicesToRemove.size() - 1; i >= 0; i--) {
     const int indexToRemove = indicesToRemove[i];
     delete _effectsRuns[indexToRemove];
+    
+    // AGUSTIN NOTE: CAREFUL WHIT THE FOLLOWING SENTENCE
+    //There is no direct equivalent to the STL vector 'erase' method in Java:
+    // AND ALSO OPERATION + IS NOT ALLOWED HERE IN JAVA 
     _effectsRuns.erase(_effectsRuns.begin() + indexToRemove);
   }
 }
