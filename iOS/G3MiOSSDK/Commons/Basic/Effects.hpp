@@ -103,8 +103,6 @@ private:
   };
   
   
-
-  
   std::vector<EffectRun*> _effectsRuns;
   ITimer*                 _timer;
   const IFactory*         _factory;

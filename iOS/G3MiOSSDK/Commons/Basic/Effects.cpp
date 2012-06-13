@@ -37,6 +37,9 @@ void EffectsScheduler::processFinishedEffects(const RenderContext *rc,
     // AGUSTIN NOTE: CAREFUL WHIT THE FOLLOWING SENTENCE
     //There is no direct equivalent to the STL vector 'erase' method in Java:
     // AND ALSO OPERATION + IS NOT ALLOWED HERE IN JAVA 
+    int __dgd_answer_to_agustin;
+    // In Java:
+    //_effectsRuns.remove(indexToRemove);
     _effectsRuns.erase(_effectsRuns.begin() + indexToRemove);
   }
 }
