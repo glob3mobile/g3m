@@ -13,8 +13,8 @@ package org.glob3.mobile.generated;
 public class Sector
 {
 
-   private final Geodetic2D _min = new Geodetic2D();
-   private final Geodetic2D _max = new Geodetic2D();
+   private final Geodetic2D _min ;
+   private final Geodetic2D _max ;
 
 
   public Sector(Angle minLat, Angle minLon, Angle maxLat, Angle maxLon)
