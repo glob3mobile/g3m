@@ -15,7 +15,7 @@ void EffectsScheduler::initialize(const InitializationContext* ic) {
 }
 
 void EffectsScheduler::processFinishedEffects(const RenderContext *rc,
-                                              const double now) {
+                                              const TimeInterval& now) {
   std::vector<int> indicesToRemove;
   for (int i = 0; i < _effects.size(); i++) {
     EffectRun* effectRun = _effects[i];
@@ -37,7 +37,7 @@ void EffectsScheduler::processFinishedEffects(const RenderContext *rc,
 }
 
 void EffectsScheduler::doOneCyle(const RenderContext *rc) {
-  const double now = _timer->now();
+  const TimeInterval now = _timer->now();
   
   
   processFinishedEffects(rc, now);

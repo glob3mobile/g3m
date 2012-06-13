@@ -102,7 +102,7 @@ int SimplePlanetRenderer::render(const RenderContext* rc){
   
   if (_textureImage != NULL && _textureID < 1)
   {
-    _textureID = gl->uploadTexture(*_textureImage, 1024, 1024);
+    _textureID = gl->uploadTexture(*_textureImage, 2048, 1024);
   }
   
   // insert pointers

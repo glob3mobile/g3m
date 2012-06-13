@@ -10,22 +10,23 @@
 #define G3MiOSSDK_Effects_hpp
 
 #include "Renderer.hpp"
+#include "TimeInterval.hpp"
 #include "ITimer.hpp"
 
 
 class Effect {
 public:
   virtual void start(const RenderContext *rc,
-                     double now) = 0;
+                     const TimeInterval& now) = 0;
   
   virtual void doStep(const RenderContext *rc,
-                      double now) = 0;
+                      const TimeInterval& now) = 0;
   
   virtual bool isDone(const RenderContext *rc,
-                      double now) = 0;
+                      const TimeInterval& now) = 0;
   
   virtual void stop(const RenderContext *rc,
-                    double now) = 0;
+                    const TimeInterval& now) = 0;
   
   virtual ~Effect() { }
 };
@@ -38,27 +39,27 @@ private:
 public:
   
   virtual void start(const RenderContext *rc,
-                     const double now) {
-    rc->getLogger()->logInfo("start %f", now);
+                     const TimeInterval& now) {
+    rc->getLogger()->logInfo("start %i", now.milliseconds());
     
     _counter = 0;
   }
   
   virtual void doStep(const RenderContext *rc,
-                      const double now) {
-    rc->getLogger()->logInfo("doStep %f", now);
+                      const TimeInterval& now) {
+    rc->getLogger()->logInfo("doStep %i", now.milliseconds());
   }
   
   virtual bool isDone(const RenderContext *rc,
-                      const double now) {
-    rc->getLogger()->logInfo("isDone %f", now);
+                      const TimeInterval& now) {
+    rc->getLogger()->logInfo("isDone %i", now.milliseconds());
     
-    return ++_counter > 5;
+    return ++_counter >= 2;
   }
   
   virtual void stop(const RenderContext *rc,
-                    const double now) {
-    rc->getLogger()->logInfo("stop %f", now);
+                    const TimeInterval& now) {
+    rc->getLogger()->logInfo("stop %i", now.milliseconds());
   }
 };
 
@@ -91,7 +92,7 @@ private:
   void doOneCyle(const RenderContext *rc);
   
   void processFinishedEffects(const RenderContext *rc,
-                              const double now);
+                              const TimeInterval& now);
   
 public:
   EffectsScheduler(): _effects(std::vector<EffectRun*>()) {

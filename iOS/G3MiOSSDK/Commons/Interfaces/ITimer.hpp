@@ -9,13 +9,15 @@
 #ifndef G3MiOSSDK_ITimer_hpp
 #define G3MiOSSDK_ITimer_hpp
 
+#include "TimeInterval.hpp"
+
 class ITimer {
 public:
-  virtual double now() const = 0;
+  virtual TimeInterval now() const = 0;
   
   virtual void start() = 0;
   
-  virtual double elapsedTime() const = 0;
+  virtual TimeInterval elapsedTime() const = 0;
   
   virtual ~ITimer() { }
   
