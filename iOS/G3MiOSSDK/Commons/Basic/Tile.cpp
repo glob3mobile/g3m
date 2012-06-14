@@ -88,13 +88,8 @@ void Tile::createVertices(const Planet *planet)
   Angle lat = Angle::fromDegrees((minLat.degrees() + maxLat.degrees()) / 2);
   Angle lon = Angle::fromDegrees((minLon.degrees() + maxLon.degrees()) / 2);
   Geodetic3D g3(lat, lon, maxH);
-  Vector3D center = planet->toVector3D(g3);
-  
-  
-  // AGUSTIN NOTE: THIS IS TEMPORARY. WE NEED A VECTOR3D OR MUTABLE VECTOR3D HERE
-  centerx = center.x();
-  centery = center.y();
-  centerz = center.z();
+  //Vector3D center = planet->toVector3D(g3);
+  center = planet->toVector3D(g3).asMutableVector3D();
   
   // create a nxn mesh 
   unsigned int posV = 0;
@@ -272,18 +267,11 @@ void Tile::render(const RenderContext* rc)
 {
   // obtain the gl object
   IGL *gl = rc->getGL();
-  
-  // AGUSTIN NOTE: THE FOLLOWING MUST BE DONE USING MATRIX CLASS METHODS. IN FACT, IT'S A TRASLATION
-  // compute the matriz centered on the tile  
-  MutableMatrix44D lookAt = rc->getCamera()->getModelMatrix();
-  double M[16];
-  for (int i = 0; i < 16; i++) M[i] = lookAt.get(i);
-  M[12] += M[0] * centerx + M[4] * centery + M[8] * centerz;
-  M[13] += M[1] * centerx + M[5] * centery + M[9] * centerz;
-  M[14] += M[2] * centerx + M[6] * centery + M[10] * centerz;
-  float Mf[16];
-  for (int k = 0; k < 16; k++) Mf[k] = (float) M[k];
-  gl->loadMatrixf(Mf);
+    
+  // translate model reference system to tile center
+  gl->pushMatrix();
+  MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(center.asVector3D());
+  gl->multMatrixf(T);
 
   // set opengl texture and pointers
   //gl->BindTexture(idTexture);
@@ -316,5 +304,8 @@ void Tile::render(const RenderContext* rc)
     // draw the mesh
     gl->drawTriangleStrip(numIndices, indices);
   }
+  
+  // recover original model matrix
+  gl->popMatrix();
 }
 
