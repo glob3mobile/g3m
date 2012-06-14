@@ -14,6 +14,7 @@
 #include "ITimer.hpp"
 #include "Camera.hpp"
 
+
 class Effect {
 protected:
   
@@ -70,10 +71,19 @@ public:
 };
 
 
-class DummyEffect : public Effect {
+class EffectWithDuration : public Effect {
 private:
   long _started;
   const long _duration;
+  
+protected:
+  
+  EffectWithDuration(TimeInterval duration) :
+  _started(0),
+  _duration(duration.milliseconds())
+  {
+    
+  }
   
   double percentDone(const TimeInterval& now) const {
     const long elapsed = now.milliseconds() - _started;
@@ -84,42 +94,20 @@ private:
     return percent;
   }
   
-public:
-  
-  DummyEffect(TimeInterval duration) :
-  _started(0),
-  _duration(duration.milliseconds())
-  {
-    
-  }
-  
   virtual void start(const RenderContext *rc,
                      const TimeInterval& now) {
-//    rc->getLogger()->logInfo("start %i", now.milliseconds());
-    
     _started = now.milliseconds();
-  }
-  
-  virtual void doStep(const RenderContext *rc,
-                      const TimeInterval& now) {
-//    rc->getLogger()->logInfo("doStep %i", now.milliseconds());
-    const double percent = pace( percentDone(now) );
-    
-    rc->getCamera()->zoom(1 - (percent / 25));
   }
   
   virtual bool isDone(const RenderContext *rc,
                       const TimeInterval& now) {
     const double percent = percentDone(now);
-    
-//    rc->getLogger()->logInfo("isDone %i, %f", now.milliseconds(), percent);
-    
     return percent >= 1;
   }
   
   virtual void stop(const RenderContext *rc,
                     const TimeInterval& now) {
-//    rc->getLogger()->logInfo("stop %i", now.milliseconds());
+    
   }
 };
 
@@ -173,6 +161,33 @@ public:
   };
   
   void startEffect(Effect* effect);
+};
+
+
+class DummyEffect : public EffectWithDuration {
+public:
+  
+  DummyEffect(TimeInterval duration) : EffectWithDuration(duration) {
+  }
+  
+  virtual void start(const RenderContext *rc,
+                     const TimeInterval& now) {
+    EffectWithDuration::start(rc, now);
+  }
+  
+  virtual void doStep(const RenderContext *rc,
+                      const TimeInterval& now) {
+    const double percent = pace( percentDone(now) );
+    
+    rc->getCamera()->zoom(1 - (percent / 50));
+//    rc->getCamera()->pivotOnCenter(Angle::fromDegrees(1));
+  }
+  
+  virtual void stop(const RenderContext *rc,
+                    const TimeInterval& now) {
+    EffectWithDuration::stop(rc, now);
+  }
+  
 };
 
 

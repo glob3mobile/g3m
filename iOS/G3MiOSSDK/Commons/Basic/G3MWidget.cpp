@@ -33,7 +33,7 @@ G3MWidget::~G3MWidget()
   delete _gl;
 }
 
-bool G3MWidget::render()
+int G3MWidget::render()
 {
   RenderContext rc(_factory, _logger, _planet, _gl, _camera);
   
@@ -45,7 +45,7 @@ bool G3MWidget::render()
   
   int timeToRedraw = _renderer->render(&rc);
   
-  return true;
+  return timeToRedraw;
 }
 
 void G3MWidget::onTouchEvent(const TouchEvent* event)

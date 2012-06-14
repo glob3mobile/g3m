@@ -168,7 +168,7 @@
 
 - (void)drawView:(id)sender {
   if (_animating) {
-    [_renderer render: [self widget]];
+    int timeToRedraw = [_renderer render: [self widget]];
   }
 }
 

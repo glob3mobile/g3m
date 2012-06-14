@@ -28,7 +28,7 @@
     GLuint program;
 }
 
-- (void)render: (void*) widget;
+- (int)render: (void*) widget;
 
 - (BOOL)resizeFromLayer:(CAEAGLLayer *)layer;
 

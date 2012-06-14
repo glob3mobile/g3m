@@ -64,10 +64,10 @@ enum {
 }
 
 
-- (void)render: (void*) widgetV
+- (int)render: (void*) widgetV
 {
   if (widgetV == NULL) {
-    return;
+    return 0;
   }
   
   G3MWidget* widget = (G3MWidget*) widgetV;
@@ -84,13 +84,14 @@ enum {
   // Use shader program
   widget->getGL()->useProgram(program);
   
-  bool result = widget->render();
-  if (result) {
-    // This application only creates a single color renderbuffer which is already bound at this point.
-    // This call is redundant, but needed if dealing with multiple renderbuffers.
-    glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
-    [context presentRenderbuffer:GL_RENDERBUFFER];
-  }
+  int timeToRedraw = widget->render();
+  
+  // This application only creates a single color renderbuffer which is already bound at this point.
+  // This call is redundant, but needed if dealing with multiple renderbuffers.
+  glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
+  [context presentRenderbuffer:GL_RENDERBUFFER];
+  
+  return timeToRedraw;
 }
 
 - (BOOL)compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file {
