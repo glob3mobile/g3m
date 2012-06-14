@@ -183,11 +183,11 @@ public class Camera
   //Zoom
   public final void zoom(double factor)
   {
-	if (factor != 1.0)
-	{
-	  MutableVector3D w = _pos.sub(_center);
-	  _pos = _center.add(w.times(factor));
-	}
+	int __ask_JM_;
+  //  if (factor != 1.0){
+	MutableVector3D w = _pos.sub(_center);
+	_pos = _center.add(w.times(factor));
+  //  }
   }
 
   //Pivot
