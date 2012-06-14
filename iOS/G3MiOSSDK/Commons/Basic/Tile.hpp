@@ -35,8 +35,7 @@ private:
   static unsigned int numIndices, numBorderIndices, numInnerIndices;
   static unsigned char *indices, *borderIndices, *innerIndices;
   
-  // AGUSTIN NOTE: the center must be Vector3D or MutableVector3D
-  double centerx, centery, centerz;
+  MutableVector3D center;
 
 
   

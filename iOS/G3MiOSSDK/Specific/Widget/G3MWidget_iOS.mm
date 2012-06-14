@@ -81,7 +81,8 @@
     IGL* gl  = new GL2();
     
     
-    // AGUSTIN NOTE: ALL OF THE FOLLOWING RENDERES MUST BE CREATED INSIDE COMMONS
+    // all the creation of renderers must be move to common source code, instead of specific
+    int __to_move_to_common_source_code;
     
     // composite renderer is the father of the rest of renderers
     CompositeRenderer* comp = new CompositeRenderer();
@@ -91,7 +92,7 @@
     comp->addRenderer(cameraRenderer);
     
     // very basic tile renderer
-    if (false) {
+    if (true) {
       TileRenderer* tr = new TileRenderer(12);
       comp->addRenderer(tr);
     }
@@ -102,12 +103,14 @@
     comp->addRenderer(dum);
      */
     
+    if (false) {
     // simple planet renderer, with a basic world image
     Image_iOS *worldImage = new Image_iOS();
     NSString* path = [[NSBundle mainBundle] pathForResource:@"world" ofType:@"jpg"];
     worldImage->loadFromFileName([path UTF8String]);
     SimplePlanetRenderer* spr = new SimplePlanetRenderer(worldImage);
     comp->addRenderer(spr);
+    }
     
     // marks renderer
     MarksRenderer* marks = new MarksRenderer();
@@ -117,10 +120,12 @@
     marks->addMark(m);
     comp->addRenderer(marks);
 
+    if (false) {
     // scheduler renderer
     EffectsScheduler* scheduler = new EffectsScheduler();
-    scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(2)));
+    scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(3)));
     comp->addRenderer(scheduler);
+    }
     
     
     _widget = G3MWidget::create(factory,
@@ -168,7 +173,7 @@
 
 - (void)drawView:(id)sender {
   if (_animating) {
-    [_renderer render: [self widget]];
+    int timeToRedraw = [_renderer render: [self widget]];
   }
 }
 
