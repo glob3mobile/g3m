@@ -182,17 +182,17 @@ public class Tile
   
 	// AGUSTIN NOTE: THE FOLLOWING MUST BE DONE USING MATRIX CLASS METHODS. IN FACT, IT'S A TRASLATION
 	// compute the matriz centered on the tile
-	MutableMatrix44D lookAt = rc.getCamera().getModelMatrix();
-	double[] M = new double[16];
-	for (int i = 0; i < 16; i++)
-		M[i] = lookAt.get(i);
-	M[12] += M[0] * centerx + M[4] * centery + M[8] * centerz;
-	M[13] += M[1] * centerx + M[5] * centery + M[9] * centerz;
-	M[14] += M[2] * centerx + M[6] * centery + M[10] * centerz;
-	float[] Mf = new float[16];
-	for (int k = 0; k < 16; k++)
-		Mf[k] = (float) M[k];
-	gl.loadMatrixf(Mf);
+//	MutableMatrix44D lookAt = rc.getCamera().getModelMatrix();
+//	double[] M = new double[16];
+//	for (int i = 0; i < 16; i++)
+//		M[i] = lookAt.get(i);
+//	M[12] += M[0] * centerx + M[4] * centery + M[8] * centerz;
+//	M[13] += M[1] * centerx + M[5] * centery + M[9] * centerz;
+//	M[14] += M[2] * centerx + M[6] * centery + M[10] * centerz;
+//	float[] Mf = new float[16];
+//	for (int k = 0; k < 16; k++)
+//		Mf[k] = (float) M[k];
+//	gl.loadMatrixf(Mf);
   
 	// set opengl texture and pointers
 	//gl->BindTexture(idTexture);

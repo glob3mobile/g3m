@@ -3,7 +3,7 @@ public class EffectsScheduler extends Renderer
 {
   private java.util.ArrayList<EffectRun> _effects = new java.util.ArrayList<EffectRun>();
   private ITimer _timer;
-  private final IFactory _factory;
+  private IFactory _factory;
 
   private void doOneCyle(RenderContext rc)
   {
@@ -54,7 +54,7 @@ public class EffectsScheduler extends Renderer
 	  //There is no direct equivalent to the STL vector 'erase' method in Java:
 	  // AND ALSO OPERATION + IS NOT ALLOWED HERE IN JAVA
 //C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'erase' method in Java:
-	  _effects.erase(_effects.iterator() + indexToRemove);
+	  _effects.remove(indexToRemove);
 	}
   }
 

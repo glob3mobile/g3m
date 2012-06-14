@@ -10,7 +10,7 @@
 #define G3MiOSSDK_TileRenderer_h
 
 #include "Renderer.hpp"
-#include "Tile.h"
+#include "Tile.hpp"
 
 class TileRenderer: public Renderer {
   

@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-#include "TileRenderer.h"
+#include "TileRenderer.hpp"
 
 
 TileRenderer::TileRenderer(int resolution):

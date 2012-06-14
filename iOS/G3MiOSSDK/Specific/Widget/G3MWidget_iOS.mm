@@ -18,7 +18,7 @@
 #include "GL2.hpp"
 
 #include "CameraRenderer.hpp"
-#include "TileRenderer.h"
+#include "TileRenderer.hpp"
 #include "DummyRenderer.hpp"
 #include "MarksRenderer.hpp"
 #include "Mark.hpp"

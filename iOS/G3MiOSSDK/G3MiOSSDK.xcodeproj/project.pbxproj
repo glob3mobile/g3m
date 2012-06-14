@@ -95,9 +95,9 @@
 		383BD3AA1577EE5A0012AC53 /* Vector3D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Vector3D.hpp; path = Commons/Geometry/Vector3D.hpp; sourceTree = "<group>"; };
 		383BD3B81577EE630012AC53 /* IFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IFactory.hpp; path = Commons/Interfaces/IFactory.hpp; sourceTree = "<group>"; };
 		383BD3B91577EE630012AC53 /* ILogger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = ILogger.hpp; path = Commons/Interfaces/ILogger.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		38D786E01587AC40003BBC75 /* TileRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TileRenderer.h; path = Commons/Basic/TileRenderer.h; sourceTree = "<group>"; };
+		38D786E01587AC40003BBC75 /* TileRenderer.hpp */ = {isa = PBXFileReference; name = TileRenderer.hpp; path = Commons/Basic/TileRenderer.hpp; sourceTree = "<group>"; };
 		38D786E21587ACA5003BBC75 /* TileRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileRenderer.cpp; path = Commons/Basic/TileRenderer.cpp; sourceTree = "<group>"; };
-		38D786E41587B3DD003BBC75 /* Tile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Tile.h; path = Commons/Basic/Tile.h; sourceTree = "<group>"; };
+		38D786E41587B3DD003BBC75 /* Tile.hpp */ = {isa = PBXFileReference; name = Tile.hpp; path = Commons/Basic/Tile.hpp; sourceTree = "<group>"; };
 		38D786E51587B446003BBC75 /* Tile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Tile.cpp; path = Commons/Basic/Tile.cpp; sourceTree = "<group>"; };
 		38D786E71587B52F003BBC75 /* Sector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Sector.h; path = Commons/Geometry/Sector.h; sourceTree = "<group>"; };
 		38D787071588F886003BBC75 /* SimplePlanetRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SimplePlanetRenderer.cpp; path = Commons/Basic/SimplePlanetRenderer.cpp; sourceTree = "<group>"; };
@@ -213,9 +213,9 @@
 				CFA3E7C8157E537B00DAABD6 /* MarksRenderer.cpp */,
 				CF0C3967157F987200646A2F /* Mark.hpp */,
 				CF0C3969157F988100646A2F /* Mark.cpp */,
-				38D786E01587AC40003BBC75 /* TileRenderer.h */,
+				38D786E01587AC40003BBC75 /* TileRenderer.hpp */,
 				38D786E21587ACA5003BBC75 /* TileRenderer.cpp */,
-				38D786E41587B3DD003BBC75 /* Tile.h */,
+				38D786E41587B3DD003BBC75 /* Tile.hpp */,
 				38D786E51587B446003BBC75 /* Tile.cpp */,
 				CF31CBEE158776020085E8F1 /* Effects.hpp */,
 				CF31CBF0158776120085E8F1 /* Effects.cpp */,

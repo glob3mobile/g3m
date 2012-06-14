@@ -171,15 +171,9 @@ void GL2::lineWidth(float width) {
   glLineWidth(width);
 }
 
-void GL2::getError()
+int GL2::getError()
 {
-  int todo_getErrorDesc; //This function is used in an ErrorRenderer
-  GLenum err = glGetError();
-  while (err != GL_NO_ERROR){
-    /*const GLubyte* errString = gluErrorString(err);*/
-    NSLog(@"Error uploading texture. glError: 0x%04X, Description: %s", err, "");
-  }
-    
+  return glGetError();
 }
 
 int GL2::uploadTexture(const IImage& image, int widthTexture, int heightTexture)
@@ -232,5 +226,3 @@ void GL2::bindTexture (unsigned int n)
 {
   glBindTexture(GL_TEXTURE_2D, n);
 }
-
-

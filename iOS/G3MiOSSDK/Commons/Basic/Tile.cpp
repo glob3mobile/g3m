@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-#include "Tile.h"
+#include "Tile.hpp"
 #include "Angle.hpp"
 #include "Geodetic3D.hpp"
 #include "Vector3D.hpp"
