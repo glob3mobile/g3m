@@ -17,7 +17,6 @@ package org.glob3.mobile.generated;
 
 
 
-
 public abstract class Effect
 {
   public abstract void start(RenderContext rc, TimeInterval now);
