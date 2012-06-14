@@ -91,8 +91,10 @@
     comp->addRenderer(cameraRenderer);
     
     // very basic tile renderer
-    TileRenderer* tr = new TileRenderer(12);
-    comp->addRenderer(tr);
+    if (false) {
+      TileRenderer* tr = new TileRenderer(12);
+      comp->addRenderer(tr);
+    }
     
     /*
     // dummy renderer with a simple box
