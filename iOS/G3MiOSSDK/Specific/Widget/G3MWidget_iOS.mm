@@ -119,7 +119,7 @@
 
     // scheduler renderer
     EffectsScheduler* scheduler = new EffectsScheduler();
-    scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(2)));
+    scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(3)));
     comp->addRenderer(scheduler);
     
     

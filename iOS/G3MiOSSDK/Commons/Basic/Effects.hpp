@@ -15,6 +15,44 @@
 #include "Camera.hpp"
 
 class Effect {
+protected:
+  
+  double pace(const double f) const {
+    if (f < 0) return 0;
+    if (f > 1) return 1;
+    
+    //return sigmoid(f);
+    return gently(f, 0.6, 0.85);
+  }
+  
+  double sigmoid(double x) const {
+    x = 12.0*x - 6.0;
+    return (1.0 / (1.0 + exp(-1.0 * x)));
+  }
+  
+  double gently(const double x,
+                const double lower,
+                const double upper) const {
+    const double uperSquared = upper * upper;
+    const double lowerPerUper = lower * upper;
+    const double tmp = uperSquared - lowerPerUper + lower - 1;
+    
+    if (x < lower) {
+      return ((upper - 1) / (lower *  tmp)) * x * x;
+    }
+    
+    if (x > upper) {
+      const double a3 = 1 / tmp;
+      const double b3 = -2 * a3;
+      const double c3 = 1 + a3;
+      return (a3 * x * x) + (b3 * x) + c3;
+    }
+    
+    const double m = 2 * (upper - 1) / tmp;
+    const double b2 = (0 - m) * lower / 2;
+    return m * x + b2;
+  }
+  
 public:
   virtual void start(const RenderContext *rc,
                      const TimeInterval& now) = 0;
@@ -45,7 +83,7 @@ private:
     if (percent < 0) return 0;
     return percent;
   }
-
+  
 public:
   
   DummyEffect(TimeInterval duration) :
@@ -57,7 +95,7 @@ public:
   
   virtual void start(const RenderContext *rc,
                      const TimeInterval& now) {
-    rc->getLogger()->logInfo("start %i", now.milliseconds());
+//    rc->getLogger()->logInfo("start %i", now.milliseconds());
     
     _started = now.milliseconds();
   }
@@ -65,8 +103,8 @@ public:
   virtual void doStep(const RenderContext *rc,
                       const TimeInterval& now) {
 //    rc->getLogger()->logInfo("doStep %i", now.milliseconds());
-    const double percent = percentDone(now);
-
+    const double percent = pace( percentDone(now) );
+    
     rc->getCamera()->zoom(1 - (percent / 25));
   }
   
@@ -81,7 +119,7 @@ public:
   
   virtual void stop(const RenderContext *rc,
                     const TimeInterval& now) {
-    rc->getLogger()->logInfo("stop %i", now.milliseconds());
+//    rc->getLogger()->logInfo("stop %i", now.milliseconds());
   }
 };
 
