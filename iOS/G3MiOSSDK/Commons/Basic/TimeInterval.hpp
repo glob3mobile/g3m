@@ -20,6 +20,8 @@ private:
     
   }
   
+  // the next function is for compatibility with Java
+  TimeInterval(const double milliseconds) : _milliseconds((long)milliseconds) {}  
   
 public:
   TimeInterval(const TimeInterval& other) : _milliseconds(other._milliseconds) {

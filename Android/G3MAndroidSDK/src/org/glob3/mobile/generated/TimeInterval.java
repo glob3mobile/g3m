@@ -9,6 +9,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class TimeInterval
 {
   private final int _milliseconds;
@@ -19,6 +20,11 @@ public class TimeInterval
 
   }
 
+  // the next function is for compatibility with Java
+  private TimeInterval(double milliseconds)
+  {
+	  _milliseconds = (int)milliseconds;
+  }
 
   public TimeInterval(TimeInterval other)
   {
@@ -26,6 +32,10 @@ public class TimeInterval
 
   }
 
+  public static TimeInterval nan()
+  {
+	return new TimeInterval(Double.NaN);
+  }
 
   public static TimeInterval fromMilliseconds(int milliseconds)
   {
@@ -43,6 +53,13 @@ public class TimeInterval
   public final int milliseconds()
   {
 	return _milliseconds;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isNan() const
+  public final boolean isNan()
+  {
+	return Double.isNaN(_milliseconds);
   }
 
 }

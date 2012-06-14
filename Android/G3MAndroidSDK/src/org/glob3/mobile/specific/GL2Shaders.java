@@ -1,5 +1,3 @@
-
-
 package org.glob3.mobile.specific;
 
 import android.opengl.GLES20;
