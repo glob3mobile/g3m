@@ -79,7 +79,7 @@ public class EffectsScheduler extends Renderer
 	  // In Java:
 	  //_effectsRuns.remove(indexToRemove);
 //C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'erase' method in Java:
-	  _effectsRuns.erase(_effectsRuns.iterator() + indexToRemove);
+	  _effectsRuns.remove(indexToRemove);
 	}
   }
 
