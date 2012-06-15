@@ -15,50 +15,50 @@
 
 
 /*
-IGL* CreateGL()
-{
-    return new GL2();
-}*/
+ IGL* CreateGL()
+ {
+ return new GL2();
+ }*/
 
 struct UniformsStruct {
-    GLuint Projection;
-    GLuint Modelview;
-    GLint Sampler;
-    GLint EnableTexture;
-    GLint FlatColor;
-
-    //FOR BILLBOARDING
-    GLint BillBoard;
-    GLint ViewPortRatio;
+  GLuint Projection;
+  GLuint Modelview;
+  GLint Sampler;
+  GLint EnableTexture;
+  GLint FlatColor;
+  
+  //FOR BILLBOARDING
+  GLint BillBoard;
+  GLint ViewPortRatio;
 } Uniforms;
 
 struct AttributesStruct {
-    GLint Position;
-    GLint TextureCoord;
+  GLint Position;
+  GLint TextureCoord;
 } Attributes;
 
 
 
 
 void GL2::useProgram(unsigned int program) {
-    // set shaders
-    glUseProgram(program);
-
-    // Extract the handles to attributes
-    Attributes.Position = glGetAttribLocation(program, "Position");
-    Attributes.TextureCoord = glGetAttribLocation(program, "TextureCoord");
-
-    // Extract the handles to uniforms
-    Uniforms.Projection = glGetUniformLocation(program, "Projection");
-    Uniforms.Modelview = glGetUniformLocation(program, "Modelview");
-    Uniforms.Sampler = glGetUniformLocation(program, "Sampler");
-    Uniforms.EnableTexture = glGetUniformLocation(program, "EnableTexture");
-    Uniforms.FlatColor = glGetUniformLocation(program, "FlatColor");
-
-    //BILLBOARDS
-    Uniforms.BillBoard = glGetUniformLocation(program, "BillBoard");
-    glUniform1i(Uniforms.BillBoard, false); //NOT DRAWING BILLBOARD
-    Uniforms.ViewPortRatio = glGetUniformLocation(program, "ViewPortRatio");
+  // set shaders
+  glUseProgram(program);
+  
+  // Extract the handles to attributes
+  Attributes.Position = glGetAttribLocation(program, "Position");
+  Attributes.TextureCoord = glGetAttribLocation(program, "TextureCoord");
+  
+  // Extract the handles to uniforms
+  Uniforms.Projection = glGetUniformLocation(program, "Projection");
+  Uniforms.Modelview = glGetUniformLocation(program, "Modelview");
+  Uniforms.Sampler = glGetUniformLocation(program, "Sampler");
+  Uniforms.EnableTexture = glGetUniformLocation(program, "EnableTexture");
+  Uniforms.FlatColor = glGetUniformLocation(program, "FlatColor");
+  
+  //BILLBOARDS
+  Uniforms.BillBoard = glGetUniformLocation(program, "BillBoard");
+  glUniform1i(Uniforms.BillBoard, false); //NOT DRAWING BILLBOARD
+  Uniforms.ViewPortRatio = glGetUniformLocation(program, "ViewPortRatio");
 }
 
 
@@ -87,68 +87,68 @@ void GL2::multMatrixf(const MutableMatrix44D &m) {
 
 
 void GL2::popMatrix() {
-    _modelView = _matrixStack.back();
-    _matrixStack.pop_back();
+  _modelView = _matrixStack.back();
+  _matrixStack.pop_back();
   
   float M[16];
   _modelView.copyToFloatMatrix(M);
   
-    glUniformMatrix4fv(Uniforms.Modelview, 1, 0, M);
+  glUniformMatrix4fv(Uniforms.Modelview, 1, 0, M);
 }
 
 void GL2::pushMatrix() {
-    _matrixStack.push_back(_modelView);
+  _matrixStack.push_back(_modelView);
 }
 
 
 void GL2::enableVertices() {
-    glEnableVertexAttribArray(Attributes.Position);
+  glEnableVertexAttribArray(Attributes.Position);
 }
 
 
 void GL2::enableTextures() {
-    glEnableVertexAttribArray(Attributes.TextureCoord);
+  glEnableVertexAttribArray(Attributes.TextureCoord);
 }
 
 
 void GL2::enableTexture2D() {
-    glUniform1i(Uniforms.EnableTexture, true);
+  glUniform1i(Uniforms.EnableTexture, true);
 }
 
 
 void GL2::disableTexture2D() {
-    glUniform1i(Uniforms.EnableTexture, false);
+  glUniform1i(Uniforms.EnableTexture, false);
 }
 
 
 void GL2::disableVertices() {
-    glDisableVertexAttribArray(Attributes.Position);
+  glDisableVertexAttribArray(Attributes.Position);
 }
 
 
 void GL2::disableTextures() {
-    glDisableVertexAttribArray(Attributes.TextureCoord);
+  glDisableVertexAttribArray(Attributes.TextureCoord);
 }
 
 
 void GL2::clearScreen(float r, float g, float b, float a) {
-    glClearColor(r, g, b, a);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glClearColor(r, g, b, a);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 
 void GL2::color(float r, float g, float b, float a) {
-    glUniform4f(Uniforms.FlatColor, r, g, b, a);
+  glUniform4f(Uniforms.FlatColor, r, g, b, a);
 }
 
 void GL2::enablePolygonOffset(float factor, float units) {
-    glEnable(GL_POLYGON_OFFSET_FILL);
-    glPolygonOffset(factor, units);
+  glEnable(GL_POLYGON_OFFSET_FILL);
+  glPolygonOffset(factor, units);
 }
 
 
 void GL2::disablePolygonOffset() {
-    glDisable(GL_POLYGON_OFFSET_FILL);
+  glDisable(GL_POLYGON_OFFSET_FILL);
 }
 
 void GL2::vertexPointer(int size, int stride, const float vertex[]) {
@@ -171,8 +171,7 @@ void GL2::lineWidth(float width) {
   glLineWidth(width);
 }
 
-int GL2::getError()
-{
+int GL2::getError() {
   return glGetError();
 }
 
@@ -182,7 +181,7 @@ int GL2::uploadTexture(const IImage& image, int widthTexture, int heightTexture)
   
   int numComponents = 4;
   CGImageRef imageRef = [im CGImage];
-
+  
   //Allocate texture data
   GLubyte* textureData = new GLubyte[widthTexture * heightTexture * numComponents];  
   
@@ -211,7 +210,7 @@ int GL2::uploadTexture(const IImage& image, int widthTexture, int heightTexture)
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
   
-
+  
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, widthTexture, heightTexture, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureData); 
   
   return textureID;
@@ -225,4 +224,57 @@ void GL2::setTextureCoordinates(int size, int stride, const float texcoord[])
 void GL2::bindTexture (unsigned int n)
 {
   glBindTexture(GL_TEXTURE_2D, n);
+}
+
+void GL2::depthTest(bool b) {
+  if (b) {
+    glEnable(GL_DEPTH_TEST);
+  } else {
+    glDisable(GL_DEPTH_TEST);
+  }
+}
+
+void GL2::blend(bool b) {
+  if (b) {
+    glEnable(GL_BLEND);
+  } else {
+    glDisable(GL_BLEND);
+  }
+}
+
+void GL2::drawBillBoard(const unsigned int textureId,
+                        const float x, const float y, const float z,
+                        const float viewPortRatio) {
+  glUniform1i(Uniforms.BillBoard, true);
+  
+  const float vertex[] = {
+    x, y, z,
+    x, y, z,
+    x, y, z,
+    x, y, z
+  };
+  
+  glUniform1f(Uniforms.ViewPortRatio, viewPortRatio);
+  
+  const static float texcoord[] = {
+    1, 1,
+    1, 0,
+    0, 1,
+    0, 0
+  };
+  
+  glDisable(GL_DEPTH_TEST);
+  
+  glUniform1i(Uniforms.EnableTexture, true);
+  glUniform4f(Uniforms.FlatColor, 1.0, 0.0, 0.0, 1);
+  
+  glBindTexture(GL_TEXTURE_2D, textureId);
+  glVertexAttribPointer(Attributes.Position, 3, GL_FLOAT, 0, 0, (const void *) vertex);
+  glVertexAttribPointer(Attributes.TextureCoord, 2, GL_FLOAT, 0, 0, (const void *) texcoord);
+  
+  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+  
+  glEnable(GL_DEPTH_TEST);
+  
+  glUniform1i(Uniforms.BillBoard, false); //NOT DRAWING BILLBOARD
 }

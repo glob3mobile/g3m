@@ -14,13 +14,13 @@ _lonRes(16),
 _textureImage(image),
 _textureID(-1)
 {
-  _index = NULL;
+  _indexes = NULL;
   _vertices = NULL;
 }
 
 SimplePlanetRenderer::~SimplePlanetRenderer()
 {
-  delete[] _index;
+  delete[] _indexes;
   delete[] _vertices;
 }
 
@@ -64,17 +64,17 @@ void SimplePlanetRenderer::createMeshIndex()
 {
   int res = _lonRes;
   
-  _numIndex = 2 * (res - 1) * (res + 1);
-  _index = new unsigned char[_numIndex];
+  _numIndexes = 2 * (res - 1) * (res + 1);
+  _indexes = new unsigned char[_numIndexes];
   
   int n = 0;
   for (int j = 0; j < res - 1; j++) {
-    if (j > 0) _index[n++] = (char) (j * res);
+    if (j > 0) _indexes[n++] = (char) (j * res);
     for (int i = 0; i < res; i++) {
-      _index[n++] = (char) (j * res + i);
-      _index[n++] = (char) (j * res + i + res);
+      _indexes[n++] = (char) (j * res + i);
+      _indexes[n++] = (char) (j * res + i + res);
     }
-    _index[n++] = (char) (j * res + 2 * res - 1);
+    _indexes[n++] = (char) (j * res + 2 * res - 1);
   }
 }
 
@@ -116,7 +116,7 @@ int SimplePlanetRenderer::render(const RenderContext* rc){
   
   // draw a red sphere
   gl->color((float) 1, (float) 0, (float) 0, 1);
-  gl->drawTriangleStrip(_numIndex, _index);
+  gl->drawTriangleStrip(_numIndexes, _indexes);
   
   gl->disableTexture2D();
   gl->disableTextures();

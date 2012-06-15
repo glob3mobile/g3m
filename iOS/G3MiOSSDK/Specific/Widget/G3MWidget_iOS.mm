@@ -92,7 +92,7 @@
     comp->addRenderer(cameraRenderer);
     
     // very basic tile renderer
-    if (true) {
+    if (false) {
       TileRenderer* tr = new TileRenderer(12);
       comp->addRenderer(tr);
     }
@@ -103,28 +103,33 @@
     comp->addRenderer(dum);
      */
     
-    if (false) {
-    // simple planet renderer, with a basic world image
-    Image_iOS *worldImage = new Image_iOS();
-    NSString* path = [[NSBundle mainBundle] pathForResource:@"world" ofType:@"jpg"];
-    worldImage->loadFromFileName([path UTF8String]);
-    SimplePlanetRenderer* spr = new SimplePlanetRenderer(worldImage);
-    comp->addRenderer(spr);
+    if (true) {
+      // simple planet renderer, with a basic world image
+      Image_iOS *worldImage = new Image_iOS();
+      NSString* path1 = [[NSBundle mainBundle] pathForResource:@"world" ofType:@"jpg"];
+      worldImage->loadFromFileName([path1 UTF8String]);
+      SimplePlanetRenderer* spr = new SimplePlanetRenderer(worldImage);
+      comp->addRenderer(spr);
     }
     
     // marks renderer
+    Image_iOS *markImage = new Image_iOS();
+    NSString* path2 = [[NSBundle mainBundle] pathForResource:@"plane" ofType:@"png"];
+    markImage->loadFromFileName([path2 UTF8String]);
+
+    
     MarksRenderer* marks = new MarksRenderer();
     Geodetic3D g(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0);
-    Mark* m = new Mark("Fuerteventura", "Description of Fuerteventura", "Mark.png", g);
+    Mark* m = new Mark("Fuerteventura", "Description of Fuerteventura", markImage, g);
     //m->addTouchListener(listener);
     marks->addMark(m);
     comp->addRenderer(marks);
 
-    if (false) {
-    // scheduler renderer
-    EffectsScheduler* scheduler = new EffectsScheduler();
-    scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(3)));
-    comp->addRenderer(scheduler);
+    if (true) {
+      // scheduler renderer
+      EffectsScheduler* scheduler = new EffectsScheduler();
+      scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(3)));
+      comp->addRenderer(scheduler);
     }
     
     
@@ -170,7 +175,6 @@
   
 }
 
-
 - (void)drawView:(id)sender {
   if (_animating) {
     int timeToRedraw = [_renderer render: [self widget]];
@@ -211,16 +215,19 @@
 - (void)startAnimation {
   if (!_animating) {
     if (_displayLinkSupported) {
-      // CADisplayLink is API new to iPhone SDK 3.1. Compiling against earlier versions will result in a warning, but can be dismissed
-      // if the system version runtime check for CADisplayLink exists in -initWithCoder:. The runtime check ensures this code will
-      // not be called in system versions earlier than 3.1.
-      
-      self.displayLink = [NSClassFromString(@"CADisplayLink") displayLinkWithTarget:self selector:@selector(drawView:)];
+      self.displayLink = [CADisplayLink displayLinkWithTarget:self
+                                                     selector:@selector(drawView:)];
       [_displayLink setFrameInterval:_animationFrameInterval];
-      [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+      [_displayLink addToRunLoop:[NSRunLoop currentRunLoop]
+                         forMode:NSDefaultRunLoopMode];
     }
-    else
-      self.animationTimer = [NSTimer scheduledTimerWithTimeInterval:(NSTimeInterval) ((1.0 / 60.0) * _animationFrameInterval) target:self selector:@selector(drawView:) userInfo:nil repeats:TRUE];
+    else {
+      self.animationTimer = [NSTimer scheduledTimerWithTimeInterval:(NSTimeInterval) ((1.0 / 60.0) * _animationFrameInterval) 
+                                                             target:self
+                                                           selector:@selector(drawView:)
+                                                           userInfo:nil
+                                                            repeats:TRUE];
+    }
     
     self.animating = TRUE;
   }
