@@ -25,13 +25,11 @@ public:
     start();
   }
   
-  
-  
   TimeInterval now() const {
     return TimeInterval::fromSeconds(nowInSeconds());
   }
   
-  virtual void start() {
+  void start() {
     _started = nowInSeconds();
   }
   
