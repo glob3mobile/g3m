@@ -138,6 +138,7 @@ public class SimplePlanetRenderer extends Renderer
 	}
   
 	// insert pointers
+	gl.enableVertices();
 	gl.enableTextures();
 	gl.enableTexture2D();
   
@@ -151,6 +152,7 @@ public class SimplePlanetRenderer extends Renderer
   
 	gl.disableTexture2D();
 	gl.disableTextures();
+	gl.disableVertices();
   
 	return 0;
   }

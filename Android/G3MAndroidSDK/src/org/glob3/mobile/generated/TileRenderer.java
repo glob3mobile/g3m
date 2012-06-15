@@ -53,8 +53,11 @@ public class TileRenderer extends Renderer
 
   public final int render(RenderContext rc)
   {
+	IGL gl = rc.getGL();
+	gl.enableVertices();
 	for (int n = 0; n<initialTiles.size(); n++)
 		initialTiles.get(n).render(rc);
+	gl.disableVertices();
   
 	return 9999;
   }

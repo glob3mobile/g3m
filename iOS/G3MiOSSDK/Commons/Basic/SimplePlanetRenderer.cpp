@@ -106,6 +106,7 @@ int SimplePlanetRenderer::render(const RenderContext* rc){
   }
   
   // insert pointers
+  gl->enableVertices();
   gl->enableTextures();
   gl->enableTexture2D();
   
@@ -119,6 +120,7 @@ int SimplePlanetRenderer::render(const RenderContext* rc){
   
   gl->disableTexture2D();
   gl->disableTextures();
+  gl->disableVertices();
   
   return 0;
 }
