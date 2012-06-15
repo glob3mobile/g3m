@@ -23,7 +23,7 @@ public class EffectsScheduler extends Renderer
 
   private java.util.ArrayList<EffectRun> _effectsRuns = new java.util.ArrayList<EffectRun>();
   private ITimer _timer;
-  private IFactory _factory;
+  private IFactory _factory; // FINAL WORD REMOVE BY CONVERSOR RULE
 
   private void doOneCyle(RenderContext rc)
   {
@@ -72,18 +72,8 @@ public class EffectsScheduler extends Renderer
 	  if (_effectsRuns.get(indexToRemove) != null)
 		  _effectsRuns.get(indexToRemove).dispose();
   
-	  // AGUSTIN NOTE: CAREFUL WHIT THE FOLLOWING SENTENCE
-	  //There is no direct equivalent to the STL vector 'erase' method in Java:
-	  // AND ALSO OPERATION + IS NOT ALLOWED HERE IN JAVA
-	  int __dgd_answer_to_agustin;
-	  // In Java:
-	  //_effectsRuns.remove(indexToRemove);
 //C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'erase' method in Java:
-<<<<<<< HEAD:Android/G3MAndroidSDK/src/org/glob3/mobile/generated/EffectsScheduler.java
-	  _effects.remove(indexToRemove);
-=======
 	  _effectsRuns.remove(indexToRemove);
->>>>>>> 56eb9706f2697375a7f1ee92bf11632c9d8babe9:Android/Generated/EffectsScheduler.java
 	}
   }
 

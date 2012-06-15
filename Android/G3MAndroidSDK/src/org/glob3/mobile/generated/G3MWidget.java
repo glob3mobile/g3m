@@ -1,4 +1,22 @@
 package org.glob3.mobile.generated; 
+//
+//  G3MWidget.cpp
+//  G3MiOSSDK
+//
+//  Created by José Miguel S N on 31/05/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//
+
+//
+//  G3MWidget.h
+//  G3MiOSSDK
+//
+//  Created by José Miguel S N on 31/05/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//
+
+
+
 public class G3MWidget
 {
 
@@ -21,7 +39,7 @@ public class G3MWidget
 	_gl = null;
   }
 
-  public final boolean render()
+  public final int render()
   {
 	RenderContext rc = new RenderContext(_factory, _logger, _planet, _gl, _camera);
   
@@ -33,7 +51,7 @@ public class G3MWidget
   
 	int timeToRedraw = _renderer.render(rc);
   
-	return true;
+	return timeToRedraw;
   }
 
 //C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:

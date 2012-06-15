@@ -94,6 +94,13 @@ protected:
     return percent;
   }
   
+  
+public:
+  virtual void stop(const RenderContext *rc,
+                    const TimeInterval& now) {
+    
+  }
+  
   virtual void start(const RenderContext *rc,
                      const TimeInterval& now) {
     _started = now.milliseconds();
@@ -104,11 +111,7 @@ protected:
     const double percent = percentDone(now);
     return percent >= 1;
   }
-  
-  virtual void stop(const RenderContext *rc,
-                    const TimeInterval& now) {
-    
-  }
+
 };
 
 

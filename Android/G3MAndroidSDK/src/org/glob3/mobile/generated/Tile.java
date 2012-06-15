@@ -97,13 +97,8 @@ public class Tile
 	Angle lat = Angle.fromDegrees((minLat.degrees() + maxLat.degrees()) / 2);
 	Angle lon = Angle.fromDegrees((minLon.degrees() + maxLon.degrees()) / 2);
 	Geodetic3D g3 = new Geodetic3D(lat, lon, maxH);
-	Vector3D center = planet.toVector3D(g3);
-  
-  
-	// AGUSTIN NOTE: THIS IS TEMPORARY. WE NEED A VECTOR3D OR MUTABLE VECTOR3D HERE
-	centerx = center.x();
-	centery = center.y();
-	centerz = center.z();
+	//Vector3D center = planet->toVector3D(g3);
+	center = planet.toVector3D(g3).asMutableVector3D();
   
 	// create a nxn mesh
 	int posV = 0;
@@ -180,19 +175,10 @@ public class Tile
 	// obtain the gl object
 	IGL gl = rc.getGL();
   
-	// AGUSTIN NOTE: THE FOLLOWING MUST BE DONE USING MATRIX CLASS METHODS. IN FACT, IT'S A TRASLATION
-	// compute the matriz centered on the tile
-//	MutableMatrix44D lookAt = rc.getCamera().getModelMatrix();
-//	double[] M = new double[16];
-//	for (int i = 0; i < 16; i++)
-//		M[i] = lookAt.get(i);
-//	M[12] += M[0] * centerx + M[4] * centery + M[8] * centerz;
-//	M[13] += M[1] * centerx + M[5] * centery + M[9] * centerz;
-//	M[14] += M[2] * centerx + M[6] * centery + M[10] * centerz;
-//	float[] Mf = new float[16];
-//	for (int k = 0; k < 16; k++)
-//		Mf[k] = (float) M[k];
-//	gl.loadMatrixf(Mf);
+	// translate model reference system to tile center
+	gl.pushMatrix();
+	MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(center.asVector3D());
+	gl.multMatrixf(T);
   
 	// set opengl texture and pointers
 	//gl->BindTexture(idTexture);
@@ -228,6 +214,9 @@ public class Tile
 	  // draw the mesh
 	  gl.drawTriangleStrip(numIndices, indices);
 	}
+  
+	// recover original model matrix
+	gl.popMatrix();
   }
 
   public static void createIndices(int resol, boolean skirts)
@@ -362,10 +351,7 @@ public class Tile
   private static byte[]borderIndices;
   private static byte[]innerIndices;
 
-  // AGUSTIN NOTE: the center must be Vector3D or MutableVector3D
-  private double centerx;
-  private double centery;
-  private double centerz;
+  private MutableVector3D center = new MutableVector3D();
 
 
 

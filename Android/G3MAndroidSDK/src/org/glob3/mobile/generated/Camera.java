@@ -152,12 +152,6 @@ public class Camera
 	  return _up.asVector3D();
   }
 
-  // AGUSTIN NOTE: THIS FUNCTION MUST RETURN MATRIX44D UNMUTABLE??
-  public final MutableMatrix44D getModelMatrix()
-  {
-	  return _model;
-  }
-
   //Dragging camera
   public final void dragCamera(Vector3D p0, Vector3D p1)
   {

@@ -31,9 +31,9 @@ public abstract class IGL
 
   public abstract void clearScreen(float r, float g, float b, float a);
 
-  public void clearScreen(Color col)
+  public final void clearScreen(Color col)
   {
-	  clearScreen(col.getRed(), col.getGreen(), col.getBlue(), col.getAlpha());
+	clearScreen(col.getRed(), col.getGreen(), col.getBlue(), col.getAlpha());
   }
 
   public abstract void color(float r, float g, float b, float a);
@@ -42,6 +42,7 @@ public abstract class IGL
   {
 	color(col.getRed(), col.getGreen(), col.getBlue(), col.getAlpha());
   }
+
 
   public abstract void pushMatrix();
 
@@ -69,7 +70,7 @@ public abstract class IGL
 
   public abstract void lineWidth(float width);
 
-  public abstract void getError();
+  public abstract int getError();
 
   public abstract int uploadTexture(IImage image, int widthTexture, int heightTexture);
 
