@@ -56,7 +56,7 @@ public:
   
   bool onTouchEvent(const TouchEvent* touchEvent);
   
-  bool onResizeViewportEvent(int width, int height);
+  void onResizeViewportEvent(int width, int height);
   
   
 };

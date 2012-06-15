@@ -97,13 +97,13 @@
       comp->addRenderer(tr);
     }
     
-    /*
-    // dummy renderer with a simple box
-    DummyRenderer* dum = new DummyRenderer();
-    comp->addRenderer(dum);
-     */
+    if (true){
+      // dummy renderer with a simple box
+      DummyRenderer* dum = new DummyRenderer();
+      comp->addRenderer(dum);
+    }
     
-    if (true) {
+    if (false) {
       // simple planet renderer, with a basic world image
       Image_iOS *worldImage = new Image_iOS();
       NSString* path1 = [[NSBundle mainBundle] pathForResource:@"world" ofType:@"jpg"];
@@ -113,19 +113,21 @@
     }
     
     // marks renderer
-    Image_iOS *markImage = new Image_iOS();
-    NSString* path2 = [[NSBundle mainBundle] pathForResource:@"plane" ofType:@"png"];
-    markImage->loadFromFileName([path2 UTF8String]);
-
+    if (false){
+      Image_iOS *markImage = new Image_iOS();
+      NSString* path2 = [[NSBundle mainBundle] pathForResource:@"plane" ofType:@"png"];
+      markImage->loadFromFileName([path2 UTF8String]);
+      
+      
+      MarksRenderer* marks = new MarksRenderer();
+      Geodetic3D g(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0);
+      Mark* m = new Mark("Fuerteventura", "Description of Fuerteventura", markImage, g);
+      //m->addTouchListener(listener);
+      marks->addMark(m);
+      comp->addRenderer(marks);
+    }
     
-    MarksRenderer* marks = new MarksRenderer();
-    Geodetic3D g(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0);
-    Mark* m = new Mark("Fuerteventura", "Description of Fuerteventura", markImage, g);
-    //m->addTouchListener(listener);
-    marks->addMark(m);
-    comp->addRenderer(marks);
-
-    if (true) {
+    if (false) {
       // scheduler renderer
       EffectsScheduler* scheduler = new EffectsScheduler();
       scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(3)));
@@ -139,7 +141,8 @@
                                 Planet::createEarth(),
                                 comp,
                                 width, height,
-                                Color::fromRGB((float)0, (float)0.1, (float)0.2, (float)1)); 
+                                Color::fromRGB((float)0, (float)0.1, (float)0.2, (float)1),
+                                true);
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
@@ -184,7 +187,8 @@
 - (void)layoutSubviews {
   int w = [self frame].size.width;
   int h = [self frame].size.height;
-  printf("RESIZING CANVAS: %d, %d\n", w, h);
+  //printf("RESIZING CANVAS: %d, %d\n", w, h);
+  NSLog(@"ResizeViewportEvent: %dx%d", w, h);
   ((G3MWidget*)_widget)->onResizeViewportEvent(w,h);
   
   [_renderer resizeFromLayer:(CAEAGLLayer *) self.layer];

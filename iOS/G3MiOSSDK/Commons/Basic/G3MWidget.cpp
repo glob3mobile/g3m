@@ -8,6 +8,8 @@
 
 #include "G3MWidget.hpp"
 
+#include "ITimer.hpp"
+
 
 G3MWidget* G3MWidget::create(IFactory* factory,
                              ILogger *logger,
@@ -15,13 +17,14 @@ G3MWidget* G3MWidget::create(IFactory* factory,
                              const Planet* planet,
                              Renderer* renderer,
                              int width, int height,
-                             Color backgroundColor)
+                             Color backgroundColor,
+                             const bool logFPS)
 {
   if (logger != NULL) {
     logger->logInfo("Creating G3MWidget...");
   }
   
-  return new G3MWidget(factory, logger, gl, planet, renderer, width, height, backgroundColor);
+  return new G3MWidget(factory, logger, gl, planet, renderer, width, height, backgroundColor, logFPS);
 }
 
 G3MWidget::~G3MWidget()
@@ -35,12 +38,31 @@ G3MWidget::~G3MWidget()
 
 int G3MWidget::render()
 {
+  _timer->start();
+  _renderCounter++;
+  
   RenderContext rc(_factory, _logger, _planet, _gl, _camera);
   
   // Clear the scene
   _gl->clearScreen(_backgroundColor);
   
+  
   int timeToRedraw = _renderer->render(&rc);
+
+  
+  const TimeInterval elapsedTime = _timer->elapsedTime();
+  _totalRenderTime += elapsedTime.milliseconds();
+  
+  if ((_renderCounter % 60) == 0) {
+    if (_logFPS) {
+      const double averageTimePerRender = (double) _totalRenderTime / _renderCounter;
+      const double fps = 1000.0 / averageTimePerRender;
+      _logger->logInfo("FPS=%f" , fps);
+    }
+    
+    _renderCounter = 0;
+    _totalRenderTime = 0;
+  }
   
   return timeToRedraw;
 }

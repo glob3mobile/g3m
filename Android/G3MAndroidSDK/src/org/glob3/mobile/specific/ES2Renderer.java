@@ -7,11 +7,12 @@ import org.glob3.mobile.generated.G3MWidget;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.util.Log;
 
 public class ES2Renderer implements GLSurfaceView.Renderer {
 	
 	int _mProgram; //OPENGL PROGRAM
-	G3MWidget _widget;
+	final G3MWidget _widget;
 	
 	public ES2Renderer(G3MWidget widget)
 	{
@@ -36,9 +37,16 @@ public class ES2Renderer implements GLSurfaceView.Renderer {
 	}
 
 	@Override
-	public void onSurfaceChanged(GL10 arg0, int arg1, int arg2) {
-		// TODO Auto-generated method stub
+	public void onSurfaceChanged(GL10 arg0, int width, int height) {
 		
+	      GLES20.glViewport(0, 0, width, height);
+	      
+	      _widget.onResizeViewportEvent(width, height);
+
+	      GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
+	      GLES20.glFrontFace(GLES20.GL_CCW);
+	      GLES20.glEnable(GLES20.GL_CULL_FACE);
+	      GLES20.glCullFace(GLES20.GL_BACK);
 	}
 
 	@Override

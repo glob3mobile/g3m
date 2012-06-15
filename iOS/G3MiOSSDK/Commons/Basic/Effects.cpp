@@ -59,16 +59,20 @@ void EffectsScheduler::doOneCyle(const RenderContext *rc) {
 
 int EffectsScheduler::render(const RenderContext *rc) {
   doOneCyle(rc);
-  
-  return 99999;
+  if (_effectsRuns.size() == 0) {
+    return MAX_TIME_TO_RENDER;
+  }
+  else {
+    return 0;
+  }
 }
 
 bool EffectsScheduler::onTouchEvent(const TouchEvent* touchEvent) {
   return false;
 }
 
-bool EffectsScheduler::onResizeViewportEvent(int width, int height) {
-  return false;
+void EffectsScheduler::onResizeViewportEvent(int width, int height) {
+
 }
 
 void EffectsScheduler::startEffect(Effect* effect) {

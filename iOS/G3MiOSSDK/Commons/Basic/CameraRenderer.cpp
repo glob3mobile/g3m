@@ -30,14 +30,10 @@ int CameraRenderer::render(const RenderContext* rc)
   return 0;
 }
 
-bool CameraRenderer::onResizeViewportEvent(int width, int height)
-{
-  if (_camera != NULL)
-  {
+void CameraRenderer::onResizeViewportEvent(int width, int height) {
+  if (_camera != NULL) {
     _camera->resizeViewport(width, height);
-    return true;
-  } else 
-    return false;
+  }
 }
 
 void CameraRenderer::onDown(const TouchEvent& touchEvent)
@@ -135,8 +131,8 @@ Gesture CameraRenderer::getGesture(const TouchEvent& touchEvent) const
     
     //If both fingers go in the same direction we should rotate the camera
     if ( (pixel0.y() > prevPixel0.y() && pixel1.y() > prevPixel1.y()) ||
-         (pixel0.x() > prevPixel0.x() && pixel1.x() > prevPixel1.x()) ||
-         (pixel0.y() < prevPixel0.y() && pixel1.y() < prevPixel1.y()) ||
+        (pixel0.x() > prevPixel0.x() && pixel1.x() > prevPixel1.x()) ||
+        (pixel0.y() < prevPixel0.y() && pixel1.y() < prevPixel1.y()) ||
         (pixel0.x() < prevPixel0.x() && pixel1.x() < prevPixel1.x())) {
       return Rotate;
     }
@@ -145,7 +141,7 @@ Gesture CameraRenderer::getGesture(const TouchEvent& touchEvent) const
       //If fingers are diverging it is zoom
       return Zoom;
     }
- 
+    
   }
   return None;
 }
@@ -163,7 +159,7 @@ void CameraRenderer::makeRotate(const TouchEvent& touchEvent)
     Vector3D v(pixelCenter.x(), pixelCenter.y(), 0); 
     _initialPixel = v.asMutableVector3D(); //Storing starting pixel
   }
-
+  
   //Calculating the point we are going to rotate around
   Vector3D rotatingPoint = centerOfViewOnPlanet(_camera0);
   if (rotatingPoint.isNan()) return; //We don't rotate without a valid rotating point
@@ -172,7 +168,7 @@ void CameraRenderer::makeRotate(const TouchEvent& touchEvent)
   Vector3D camVec = _camera0.getPos().sub(_camera0.getCenter());
   Vector3D normal = _planet->geodeticSurfaceNormal(rotatingPoint);
   Vector3D horizontalAxis = normal.cross(camVec);
-
+  
   //Calculating the angle we have to rotate the camera vertically
   double distY = pixelCenter.y() - _initialPixel.y();
   double distX = pixelCenter.x() - _initialPixel.x();
@@ -184,7 +180,7 @@ void CameraRenderer::makeRotate(const TouchEvent& touchEvent)
   //Back-Up camera0
   Camera cameraAux(0,0);
   cameraAux.copyFrom(_camera0);
-
+  
   //Rotating vertically
   cameraAux.rotateWithAxisAndPoint(horizontalAxis, rotatingPoint, verticalAngle); //Up and down
   
@@ -194,7 +190,7 @@ void CameraRenderer::makeRotate(const TouchEvent& touchEvent)
   Vector3D center = centerOfViewOnPlanet(*_camera);
   
   if ((alpha.degrees() > 85.0) || center.isNan()){
-      cameraAux.copyFrom(_camera0); //We trash the vertical rotation
+    cameraAux.copyFrom(_camera0); //We trash the vertical rotation
   }
   
   //Rotating horizontally
@@ -202,7 +198,7 @@ void CameraRenderer::makeRotate(const TouchEvent& touchEvent)
   
   //Finally we copy the new camera
   _camera->copyFrom(cameraAux);
-
+  
 }
 
 Vector3D CameraRenderer::centerOfViewOnPlanet(const Camera& c) const

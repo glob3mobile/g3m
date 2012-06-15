@@ -18,11 +18,17 @@ import android.view.MotionEvent;
 
 public class G3MWidget_Android extends GLSurfaceView implements OnGestureListener {
 
-	final G3MWidget _widget;
-	final ES2Renderer _es2renderer;
+	G3MWidget _widget;
+	ES2Renderer _es2renderer;
 	
 	public G3MWidget_Android(Context context) {
 		super(context);
+
+	}
+	
+	protected void onSizeChanged (int w, int h, int oldw, int oldh)
+	{
+		super.onSizeChanged(w, h, oldw, oldh);
 		
 		int width = getWidth();
 		int height = getHeight();
@@ -57,6 +63,7 @@ public class G3MWidget_Android extends GLSurfaceView implements OnGestureListene
 	      setRenderer(_es2renderer);
 	      setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
 	}
+	
 
 	@Override
 	public boolean onDown(MotionEvent arg0) {

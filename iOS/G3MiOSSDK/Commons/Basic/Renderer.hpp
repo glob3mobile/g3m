@@ -13,6 +13,8 @@
 
 #include "TouchEvent.hpp"
 
+#define MAX_TIME_TO_RENDER 1000
+
 class Renderer {
 public:
   virtual void initialize(const InitializationContext* ic) = 0;
@@ -21,7 +23,7 @@ public:
   
   virtual bool onTouchEvent(const TouchEvent* touchEvent) = 0;
   
-  virtual bool onResizeViewportEvent(int width, int height) = 0;
+  virtual void onResizeViewportEvent(int width, int height) = 0;
   
   virtual ~Renderer() { };
 };

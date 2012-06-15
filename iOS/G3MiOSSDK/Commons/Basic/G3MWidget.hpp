@@ -24,7 +24,8 @@ public:
                            const Planet* planet,
                            Renderer* renderer,
                            int width, int height,
-                           Color backgroundColor);
+                           Color backgroundColor,
+                           const bool logFPS);
   
   ~G3MWidget();
   
@@ -46,20 +47,30 @@ private:
   Camera*       _camera;
   const Color   _backgroundColor;
   
+  ITimer*       _timer;
+  long          _renderCounter;
+  long          _totalRenderTime;
+  const bool    _logFPS;
+  
   G3MWidget(IFactory* factory,
             ILogger *logger,
             IGL* gl,
             const Planet* planet,
             Renderer* renderer,
             int width, int height,
-            Color backgroundColor):
+            Color backgroundColor,
+            const bool logFPS):
   _factory(factory),
   _logger(logger),
   _gl(gl),
   _planet(planet),
   _renderer(renderer),
   _camera(new Camera(width, height)),
-  _backgroundColor(backgroundColor)
+  _backgroundColor(backgroundColor),
+  _timer(factory->createTimer()),
+  _renderCounter(0),
+  _totalRenderTime(0),
+  _logFPS(logFPS)
   {
     InitializationContext ic(_factory, _logger, _planet);
     _renderer->initialize(&ic);

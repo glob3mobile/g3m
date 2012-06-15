@@ -128,11 +128,8 @@ void Camera::rotateWithAxis(const Vector3D& axis, const Angle& delta) {
 }
 
 void Camera::zoom(double factor) {
-  int __ask_JM_;
-//  if (factor != 1.0){
-  MutableVector3D w = _pos.sub(_center);
+  const MutableVector3D w = _pos.sub(_center);
   _pos = _center.add(w.times(factor));
-//  }
 }
 
 void Camera::pivotOnCenter(const Angle& a)

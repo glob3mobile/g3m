@@ -26,7 +26,7 @@ void CompositeRenderer::addRenderer(Renderer *renderer) {
 int CompositeRenderer::render(const RenderContext* rc) {
   //rc->getLogger()->logInfo("CompositeRenderer::render()");
   
-  int min = 9999;
+  int min = MAX_TIME_TO_RENDER;
   for (int i = 0; i < _renderers.size(); i++) {
     int x = _renderers[i]->render(rc);
     if (x < min) min = x; 
@@ -35,8 +35,8 @@ int CompositeRenderer::render(const RenderContext* rc) {
 }
 
 bool CompositeRenderer::onTouchEvent(const TouchEvent* touchEvent) {
-  for (int i = 0; i < _renderers.size(); i++) {
-    //THE EVENT IS PROCESSED ONLY BY THE FIRST RENDERER
+  // the events are processed bottom to top
+  for (int i = _renderers.size() - 1; i >= 0; i--) {
     if (_renderers[i]->onTouchEvent(touchEvent)) {
       return true;
     }
@@ -44,12 +44,10 @@ bool CompositeRenderer::onTouchEvent(const TouchEvent* touchEvent) {
   return false;
 }
 
-bool CompositeRenderer::onResizeViewportEvent(int width, int height)
+void CompositeRenderer::onResizeViewportEvent(int width, int height)
 {
-  bool res = false;
-  for (int i = 0; i < _renderers.size(); i++) {
-    //THE EVENT IS PROCESSED ONLY BY ALL RENDERERS
-    res = res | _renderers[i]->onResizeViewportEvent(width, height);
+  // the events are processed bottom to top
+  for (int i = _renderers.size() - 1; i >= 0; i--) {
+    _renderers[i]->onResizeViewportEvent(width, height);
   }
-  return res;
 }

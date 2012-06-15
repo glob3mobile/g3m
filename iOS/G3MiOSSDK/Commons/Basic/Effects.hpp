@@ -152,7 +152,7 @@ public:
   
   virtual bool onTouchEvent(const TouchEvent* touchEvent);
   
-  virtual bool onResizeViewportEvent(int width, int height);
+  virtual void onResizeViewportEvent(int width, int height);
   
   virtual ~EffectsScheduler() {
     _factory->deleteTimer(_timer);

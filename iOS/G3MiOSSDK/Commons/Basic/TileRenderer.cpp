@@ -51,7 +51,7 @@ int TileRenderer::render(const RenderContext* rc)
   for (int n=0; n<initialTiles.size(); n++) initialTiles[n]->render(rc);
   gl->disableVertices();
   
-  return 9999;
+  return MAX_TIME_TO_RENDER;
 }
 
 
