@@ -187,7 +187,6 @@
 - (void)layoutSubviews {
   int w = [self frame].size.width;
   int h = [self frame].size.height;
-  //printf("RESIZING CANVAS: %d, %d\n", w, h);
   NSLog(@"ResizeViewportEvent: %dx%d", w, h);
   ((G3MWidget*)_widget)->onResizeViewportEvent(w,h);
   
