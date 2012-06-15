@@ -70,6 +70,10 @@ public:
   
   
   void print() const;
+  
+  float getViewPortRatio() const {
+    return (float) _width / _height;
+  }
 
 private:
   int _width, _height;

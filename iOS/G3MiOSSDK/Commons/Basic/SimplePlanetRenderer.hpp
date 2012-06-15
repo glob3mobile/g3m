@@ -20,9 +20,9 @@ private:
   const IImage* _textureImage;
   int _textureID;
   
-  int _numIndex;
+  int _numIndexes;
   
-  unsigned char * _index;
+  unsigned char * _indexes;
   float * _vertices;
   float * _texCoors;
   

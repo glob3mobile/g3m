@@ -84,6 +84,16 @@ public:
   
   virtual void bindTexture(unsigned int n) = 0;
 
+  virtual void depthTest(bool b) = 0;
+  
+  virtual void blend(bool b) = 0;
+  
+  virtual void drawBillBoard(const unsigned int textureId,
+                             const float x, 
+                             const float y, 
+                             const float z,
+                             const float viewPortRatio) = 0;
+
 };
 
 

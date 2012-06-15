@@ -64,7 +64,14 @@ public:
   
   void bindTexture (unsigned int n);
   
+  void depthTest(bool b);
   
+  void blend(bool b);
+  
+  void drawBillBoard(const unsigned int textureId,
+                     const float x, const float y, const float z,
+                     const float viewPortRatio);
+
 private:
     // stack of ModelView matrices
     MutableMatrix44D _modelView;

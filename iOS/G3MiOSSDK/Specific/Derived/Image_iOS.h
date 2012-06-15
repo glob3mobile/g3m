@@ -13,12 +13,15 @@
 
 #include "IImage.hpp"
 
-class Image_iOS: public IImage
-{
+class Image_iOS: public IImage {
 private:
   UIImage * _image;
-public:
-  void loadFromFileName(std::string filename);
   
-  UIImage * getUIImage() const { return _image;}
+public:
+  void loadFromFileName(const std::string filename);
+  
+  UIImage* getUIImage() const {
+    return _image;
+  }
+  
 };

@@ -8,11 +8,12 @@
 
 #include "Image_iOS.h"
 
-void Image_iOS::loadFromFileName(std::string filename)
-{
+void Image_iOS::loadFromFileName(const std::string filename) {
   NSString *fn = [NSString stringWithCString:filename.c_str() encoding:[NSString defaultCStringEncoding]];
   _image = [UIImage imageWithContentsOfFile:fn];
-  int w = [_image size].width;
-  printf("Loaded Image %d\n", w);
+  printf("Loaded Image %s (%dx%d)\n",
+         filename.c_str(),
+         (int) [_image size].width,
+         (int) [_image size].height);
   
 }

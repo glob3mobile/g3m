@@ -11,32 +11,42 @@
 
 #include <string>
 #include "Geodetic3D.hpp"
+#include "Context.hpp"
 
 class Mark {
 private:
   const std::string _name;
   const std::string _description;
-  const std::string _imageFileName;
+  const IImage*     _textureImage;
   const Geodetic3D  _position;
+
+  int _textureId;
 
 public:
   Mark(const std::string name,
        const std::string description,
-       const std::string imageFileName,
+       const IImage*     textureImage,
        const Geodetic3D  position) :
   _name(name),
   _description(description),
-  _imageFileName(imageFileName),
-  _position(position)
+  _textureImage(textureImage),
+  _position(position),
+  _textureId(-1)
   {
     
   }
   
   ~Mark() {}
   
-  const std::string getName() {
+  const std::string getName() const {
     return _name;
   }
+  
+  const Geodetic3D getPosition() const {
+    return _position;
+  }
+  
+  void render(const RenderContext* rc, const Planet* planet);
   
 };
 
