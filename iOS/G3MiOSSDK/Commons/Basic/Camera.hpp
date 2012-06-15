@@ -11,20 +11,11 @@
 #define CAMERA
 
 #include "MutableVector3D.hpp"
-
 #include "Context.hpp"
 #include "IFactory.hpp"
-
 #include "Geodetic3D.hpp"
-
 #include "Vector2D.hpp"
-
 #include "MutableMatrix44D.hpp"
-
-#define AUTO_DRAG_FRICTION              0.985
-#define AUTO_DRAG_MIN                   1e-7
-#define AUTO_ZOOM_FRICTION              0.850
-#define AUTO_ZOOM_MIN                   1e-7
 
 
 /**
