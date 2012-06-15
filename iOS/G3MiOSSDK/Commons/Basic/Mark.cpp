@@ -12,12 +12,6 @@
 void Mark::render(const RenderContext* rc, const Planet* planet) {
   int __dgd_at_work;
 
-  IGL* gl = rc->getGL();
-  
-  if (_textureId < 1) {
-    _textureId = gl->uploadTexture(*_textureImage, 128, 128);
-  }
-  
   const Camera* camera = rc->getCamera();
   const Vector3D cameraPosition = camera->getPos();
 
@@ -29,13 +23,20 @@ void Mark::render(const RenderContext* rc, const Planet* planet) {
 
   
   if (distanceToCamera > minDist) {
-    rc->getLogger()->logInfo(" INVISIBLE >> %f %f", minDist, distanceToCamera);
+//    rc->getLogger()->logInfo(" INVISIBLE >> %f %f", minDist, distanceToCamera);
   }
   else {
-    rc->getLogger()->logInfo(" Visible   << %f %f", minDist, distanceToCamera);
+    IGL* gl = rc->getGL();
+    
+    if (_textureId < 1) {
+      _textureId = gl->uploadTexture(*_textureImage, 128, 128);
+      rc->getLogger()->logInfo("Loaded textureId=%i", _textureId);
+    }
+
+    
+//    rc->getLogger()->logInfo(" Visible   << %f %f", minDist, distanceToCamera);
     gl->drawBillBoard(_textureId,
-//                      (float) vec.x(), (float) vec.y(), (float) vec.z(),
-                      10000, 10000, 10000,
+                      (float) vec.x(), (float) vec.y(), (float) vec.z(),
                       camera->getViewPortRatio());
   }
   

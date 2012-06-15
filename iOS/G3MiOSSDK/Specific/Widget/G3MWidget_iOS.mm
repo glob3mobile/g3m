@@ -139,7 +139,8 @@
                                 Planet::createEarth(),
                                 comp,
                                 width, height,
-                                Color::fromRGB(0, 0.1, 0.2, 1)); 
+                                Color::fromRGB(0, 0.1, 0.2, 1),
+                                true); 
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);

@@ -36,7 +36,7 @@ public:
   
   void addRenderer(Renderer* renderer);
   
-  bool onResizeViewportEvent(int width, int height);
+  void onResizeViewportEvent(int width, int height);
 };
 
 #endif

@@ -42,9 +42,13 @@ public:
   
   int render(const RenderContext* rc);
   
-  bool onTouchEvent(const TouchEvent* touchEvent){ return false;}
+  bool onTouchEvent(const TouchEvent* touchEvent) {
+    return false;
+  }
   
-  bool onResizeViewportEvent(int width, int height){ return false;}
+  void onResizeViewportEvent(int width, int height) {
+    
+  }
   
   
 };

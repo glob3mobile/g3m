@@ -44,7 +44,7 @@ int MarksRenderer::render(const RenderContext* rc) {
   gl->blend(false);
   
   
-  return 9999;
+  return MAX_TIME_TO_RENDER;
 }
 
 
