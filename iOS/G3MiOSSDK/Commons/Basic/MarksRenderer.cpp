@@ -24,6 +24,9 @@ int MarksRenderer::render(const RenderContext* rc) {
   
   const Planet* planet = rc->getPlanet();
 
+  gl->enableVertices();
+  gl->enableTextures();
+
   gl->depthTest(false);
   gl->blend(true);
 
@@ -42,6 +45,9 @@ int MarksRenderer::render(const RenderContext* rc) {
   
   gl->depthTest(true);
   gl->blend(false);
+
+  gl->disableTextures();
+  gl->disableVertices();
   
   
   return MAX_TIME_TO_RENDER;
