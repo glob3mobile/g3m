@@ -8,7 +8,7 @@ set "commons=..\iOS\G3MiOSSDK\Commons"
 set "java_temp=java_temp"
 set "cpp_temp=c_temp"
 set "package_path=org.glob3.mobile.generated"
-set "android_project=..\Android\Generated"
+set "android_project=..\Android\G3MAndroidSDK\src\org\glob3\mobile\generated"
 rem *** PROYECTO WEBGL: DESCOMENTAR LA SIGUIENTE LINEA
 rem set "gwt_project=..\HTML5\Glob3WebGLSDK\org\glob3\mobile\generated"
 

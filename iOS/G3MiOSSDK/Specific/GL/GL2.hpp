@@ -56,7 +56,7 @@ public:
   
    void lineWidth(float width);
 
-  void getError();
+  int getError();
   
   int uploadTexture(const IImage& image, int widthTexture, int heightTexture);
   

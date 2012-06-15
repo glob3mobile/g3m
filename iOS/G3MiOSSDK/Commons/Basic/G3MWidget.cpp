@@ -39,9 +39,6 @@ int G3MWidget::render()
   
   // Clear the scene
   _gl->clearScreen(_backgroundColor);
-
-  int ___check_with_JM_and_Agustin;
-  _gl->enableVertices();
   
   int timeToRedraw = _renderer->render(&rc);
   

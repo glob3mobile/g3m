@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-#include "TileRenderer.h"
+#include "TileRenderer.hpp"
 
 
 TileRenderer::TileRenderer(int resolution):
@@ -46,7 +46,10 @@ bool TileRenderer::onTouchEvent(const TouchEvent* touchEvent){
 
 int TileRenderer::render(const RenderContext* rc)
 {
+  IGL *gl = rc->getGL();
+  gl->enableVertices();
   for (int n=0; n<initialTiles.size(); n++) initialTiles[n]->render(rc);
+  gl->disableVertices();
   
   return 9999;
 }

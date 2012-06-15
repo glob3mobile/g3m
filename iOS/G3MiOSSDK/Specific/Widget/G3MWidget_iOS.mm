@@ -18,7 +18,7 @@
 #include "GL2.hpp"
 
 #include "CameraRenderer.hpp"
-#include "TileRenderer.h"
+#include "TileRenderer.hpp"
 #include "DummyRenderer.hpp"
 #include "MarksRenderer.hpp"
 #include "Mark.hpp"
@@ -81,7 +81,8 @@
     IGL* gl  = new GL2();
     
     
-    // AGUSTIN NOTE: ALL OF THE FOLLOWING RENDERES MUST BE CREATED INSIDE COMMONS
+    // all the creation of renderers must be move to common source code, instead of specific
+    int __to_move_to_common_source_code;
     
     // composite renderer is the father of the rest of renderers
     CompositeRenderer* comp = new CompositeRenderer();
@@ -102,13 +103,14 @@
     comp->addRenderer(dum);
      */
     
-    // simple planet renderer, with a basic world image
-    Image_iOS *worldImage = new Image_iOS();
-    NSString* path1 = [[NSBundle mainBundle] pathForResource:@"world" ofType:@"jpg"];
-    worldImage->loadFromFileName([path1 UTF8String]);
-    SimplePlanetRenderer* spr = new SimplePlanetRenderer(worldImage);
-    comp->addRenderer(spr);
-
+    if (true) {
+      // simple planet renderer, with a basic world image
+      Image_iOS *worldImage = new Image_iOS();
+      NSString* path1 = [[NSBundle mainBundle] pathForResource:@"world" ofType:@"jpg"];
+      worldImage->loadFromFileName([path1 UTF8String]);
+      SimplePlanetRenderer* spr = new SimplePlanetRenderer(worldImage);
+      comp->addRenderer(spr);
+    }
     
     // marks renderer
     Image_iOS *markImage = new Image_iOS();
@@ -123,10 +125,12 @@
     marks->addMark(m);
     comp->addRenderer(marks);
 
-    // scheduler renderer
-    EffectsScheduler* scheduler = new EffectsScheduler();
-    scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(3)));
-    comp->addRenderer(scheduler);
+    if (true) {
+      // scheduler renderer
+      EffectsScheduler* scheduler = new EffectsScheduler();
+      scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(3)));
+      comp->addRenderer(scheduler);
+    }
     
     
     _widget = G3MWidget::create(factory,

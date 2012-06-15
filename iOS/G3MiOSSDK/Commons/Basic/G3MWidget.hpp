@@ -15,8 +15,6 @@
 #include "Camera.hpp"
 #include "Color.hpp"
 
-class Globe{};
-
 class G3MWidget {
 public:
   

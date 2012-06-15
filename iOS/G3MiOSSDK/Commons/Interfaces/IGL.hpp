@@ -34,11 +34,11 @@ public:
   
   virtual void clearScreen(float r, float g, float b, float a) = 0;
 
-  virtual void clearScreen(const Color& col) {
-      clearScreen(col.getRed(),
-                  col.getGreen(),
-                  col.getBlue(),
-                  col.getAlpha());
+  void clearScreen(const Color& col){
+    clearScreen(col.getRed(),
+                col.getGreen(),
+                col.getBlue(),
+                col.getAlpha());
   }
   
   virtual void color(float r, float g, float b, float a) = 0;
@@ -49,6 +49,7 @@ public:
           col.getBlue(),
           col.getAlpha());
   }
+
 
   virtual void pushMatrix() = 0;
   
@@ -76,7 +77,7 @@ public:
   
   virtual void lineWidth(float width) = 0;
 
-  virtual void getError() = 0;
+  virtual int getError() = 0;
   
   virtual int uploadTexture(const IImage& image, int widthTexture, int heightTexture) = 0;
   
