@@ -119,10 +119,22 @@
 
     
     MarksRenderer* marks = new MarksRenderer();
-    Geodetic3D g(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0);
-    Mark* m = new Mark("Fuerteventura", "Description of Fuerteventura", markImage, g);
-    //m->addTouchListener(listener);
-    marks->addMark(m);
+    
+    Mark* m1 = new Mark("Fuerteventura",
+                       "Description of Fuerteventura",
+                       markImage,
+                       Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0));
+    //m1->addTouchListener(listener);
+    marks->addMark(m1);
+
+    Mark* m2 = new Mark("Las Palmas",
+                        "Description of Las Palmas",
+                        markImage,
+                        Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0));
+    //m1->addTouchListener(listener);
+    marks->addMark(m2);
+
+    
     comp->addRenderer(marks);
 
     if (true) {

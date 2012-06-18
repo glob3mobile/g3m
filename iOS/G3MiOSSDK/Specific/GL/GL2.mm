@@ -177,28 +177,64 @@ int GL2::getError() {
 
 int GL2::uploadTexture(const IImage& image, int widthTexture, int heightTexture)
 {
+//  UIImage * im = ((Image_iOS&) image).getUIImage();
+//  
+//  int numComponents = 4;
+//  CGImageRef imageRef = [im CGImage];
+//  
+//  //Allocate texture data
+//  GLubyte* textureData = new GLubyte[widthTexture * heightTexture * numComponents];  
+//  
+//  //Creating Context
+//  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+//  NSUInteger bytesPerPixel = 4;
+//  NSUInteger bytesPerRow = bytesPerPixel * widthTexture;
+//  NSUInteger bitsPerComponent = 8;
+//  CGContextRef context = CGBitmapContextCreate(textureData, widthTexture, heightTexture,
+//                                               bitsPerComponent, bytesPerRow, colorSpace,
+//                                               kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+//  CGColorSpaceRelease(colorSpace);
+//  
+//  CGContextDrawImage(context, CGRectMake(0, 0, widthTexture, heightTexture), imageRef);
+//  CGContextRelease(context);
+//  
+//  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//
+//  GLuint textureID;    
+//  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+//  
+//  glGenTextures(1, &textureID);
+//  
+//  glBindTexture(GL_TEXTURE_2D, textureID);
+//  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+//  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+//  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+//  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+//  
+//  
+//  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, widthTexture, heightTexture, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureData); 
+//  
+//  return textureID;
+  
+  
   UIImage * im = ((Image_iOS&) image).getUIImage();
+
   
-  int numComponents = 4;
-  CGImageRef imageRef = [im CGImage];
-  
-  //Allocate texture data
-  GLubyte* textureData = new GLubyte[widthTexture * heightTexture * numComponents];  
-  
-  //Creating Context
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-  NSUInteger bytesPerPixel = 4;
-  NSUInteger bytesPerRow = bytesPerPixel * widthTexture;
-  NSUInteger bitsPerComponent = 8;
-  CGContextRef context = CGBitmapContextCreate(textureData, widthTexture, heightTexture,
-                                               bitsPerComponent, bytesPerRow, colorSpace,
-                                               kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
-  CGColorSpaceRelease(colorSpace);
+  void *imageData = malloc( heightTexture * widthTexture * 4 );
+  CGContextRef context = CGBitmapContextCreate(imageData,
+                                               widthTexture, heightTexture,
+                                               8, 4 * widthTexture,
+                                               colorSpace,
+                                               kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
+  CGColorSpaceRelease( colorSpace );
+  CGContextClearRect( context, CGRectMake( 0, 0, widthTexture, heightTexture ) );
+  CGContextTranslateCTM( context, 0, heightTexture - heightTexture );
+  CGContextDrawImage( context, CGRectMake( 0, 0, widthTexture, heightTexture ), im.CGImage );
   
-  CGContextDrawImage(context, CGRectMake(0, 0, widthTexture, heightTexture), imageRef);
-  CGContextRelease(context);
   
-  //NOW WE ARE CREATING A TRANSPARENT TEXTURE (4 BYTES DEPTH)
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  
   GLuint textureID;    
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
   
@@ -210,9 +246,12 @@ int GL2::uploadTexture(const IImage& image, int widthTexture, int heightTexture)
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
   
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, widthTexture, heightTexture, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
   
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, widthTexture, heightTexture, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureData); 
+  CGContextRelease(context);
   
+  free(imageData);
+
   return textureID;
 }
 
