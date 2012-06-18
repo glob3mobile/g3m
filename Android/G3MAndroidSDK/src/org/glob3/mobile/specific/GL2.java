@@ -17,7 +17,6 @@ import org.glob3.mobile.generated.MutableMatrix44D;
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
-import android.util.Log;
 
 
 public class GL2 extends IGL {
@@ -252,10 +251,8 @@ public class GL2 extends IGL {
 	
 	
 	@Override
-	public void getError() {
-		int todo_Check_this_with_Diego;
-		int err = GLES20.glGetError();
-		Log.d("GL", "Error uploading texture. glError: " + err);
+	public int getError() {
+		return GLES20.glGetError();
 	}
 	
 		

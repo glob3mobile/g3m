@@ -76,6 +76,8 @@ public class DummyRenderer extends Renderer
   
 	// obtaing gl object reference
 	IGL gl = rc.getGL();
+	
+	gl.enableVertices();
   
 	// insert pointers
 	gl.disableTextures();

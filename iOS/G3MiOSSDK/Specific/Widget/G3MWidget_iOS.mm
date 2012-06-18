@@ -97,11 +97,11 @@
       comp->addRenderer(tr);
     }
     
-    /*
-    // dummy renderer with a simple box
-    DummyRenderer* dum = new DummyRenderer();
-    comp->addRenderer(dum);
-     */
+    if (false){
+      // dummy renderer with a simple box
+      DummyRenderer* dum = new DummyRenderer();
+      comp->addRenderer(dum);
+    }
     
     if (true) {
       // simple planet renderer, with a basic world image
@@ -113,31 +113,30 @@
     }
     
     // marks renderer
-    Image_iOS *markImage = new Image_iOS();
-    NSString* path2 = [[NSBundle mainBundle] pathForResource:@"plane" ofType:@"png"];
-    markImage->loadFromFileName([path2 UTF8String]);
-
-    
-    MarksRenderer* marks = new MarksRenderer();
-    
-    Mark* m1 = new Mark("Fuerteventura",
-                       "Description of Fuerteventura",
-                       markImage,
-                       Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0));
-    //m1->addTouchListener(listener);
-    marks->addMark(m1);
-
-    Mark* m2 = new Mark("Las Palmas",
-                        "Description of Las Palmas",
-                        markImage,
-                        Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0));
-    //m1->addTouchListener(listener);
-    marks->addMark(m2);
-
-    
-    comp->addRenderer(marks);
-
-    if (true) {
+    if (true){
+      Image_iOS *markImage = new Image_iOS();
+      NSString* path2 = [[NSBundle mainBundle] pathForResource:@"plane" ofType:@"png"];
+      markImage->loadFromFileName([path2 UTF8String]);
+      
+      
+      MarksRenderer* marks = new MarksRenderer();
+      
+      Mark* m1 = new Mark("Fuerteventura",
+                          "Description of Fuerteventura",
+                          markImage,
+                          Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0));
+      //m1->addTouchListener(listener);
+      marks->addMark(m1);
+      
+      Mark* m2 = new Mark("Las Palmas",
+                          "Description of Las Palmas",
+                          markImage,
+                          Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0));
+      //m2->addTouchListener(listener);
+      marks->addMark(m2);
+      
+      comp->addRenderer(marks);
+      
       // scheduler renderer
       EffectsScheduler* scheduler = new EffectsScheduler();
       scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(3)));
@@ -151,9 +150,9 @@
                                 Planet::createEarth(),
                                 comp,
                                 width, height,
-                                Color::fromRGB(0, 0.1, 0.2, 1),
-                                true); 
-
+                                Color::fromRGB((float)0, (float)0.1, (float)0.2, (float)1),
+                                true);
+    
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     
