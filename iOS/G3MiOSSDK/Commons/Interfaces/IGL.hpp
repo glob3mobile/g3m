@@ -79,7 +79,7 @@ public:
 
   virtual int getError() = 0;
   
-  virtual int uploadTexture(const IImage& image, int widthTexture, int heightTexture) = 0;
+  virtual int uploadTexture(const IImage& image, int textureWidth, int textureHeight) = 0;
   
   virtual void setTextureCoordinates(int size, int stride, const float texcoord[]) = 0;
   
@@ -95,6 +95,8 @@ public:
                              const float z,
                              const float viewPortRatio) = 0;
 
+  virtual void deleteTexture(int glTextureId) = 0;
+  
 };
 
 

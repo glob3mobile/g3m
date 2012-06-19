@@ -8,11 +8,11 @@
 
 #include "SimplePlanetRenderer.hpp"
 
-SimplePlanetRenderer::SimplePlanetRenderer(const IImage* image):
+SimplePlanetRenderer::SimplePlanetRenderer(const std::string textureFilename):
 _latRes(16),//FOR NOW THEY MUST BE EQUAL
 _lonRes(16),
-_textureImage(image),
-_textureID(-1)
+_textureFilename(textureFilename),
+_textureId(-1)
 {
   _indexes = NULL;
   _vertices = NULL;
@@ -100,17 +100,22 @@ int SimplePlanetRenderer::render(const RenderContext* rc){
   // obtaing gl object reference
   IGL *gl = rc->getGL();
   
-  if (_textureImage != NULL && _textureID < 1)
-  {
-    _textureID = gl->uploadTexture(*_textureImage, 2048, 1024);
+  if (_textureId < 1) {
+    _textureId = rc->getTexturesHandler()->getTextureIdFromFileName(rc, _textureFilename, 2048, 1024);
   }
+  
+  if (_textureId < 1) {
+    rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
+    return MAX_TIME_TO_RENDER;
+  }
+
   
   // insert pointers
   gl->enableVertices();
   gl->enableTextures();
   gl->enableTexture2D();
   
-  gl->bindTexture(_textureID);
+  gl->bindTexture(_textureId);
   gl->vertexPointer(3, 0, _vertices);
   gl->setTextureCoordinates(2, 0, _texCoors); 
   
@@ -122,5 +127,5 @@ int SimplePlanetRenderer::render(const RenderContext* rc){
   gl->disableTextures();
   gl->disableVertices();
   
-  return 0;
+  return MAX_TIME_TO_RENDER;
 }

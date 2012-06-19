@@ -12,17 +12,43 @@
 #include "IFactory.hpp"
 
 #include "Timer_iOS.h"
-
+#include "Image_iOS.h"
 
 class Factory_iOS: public IFactory {
 public:
+  
   virtual ITimer* createTimer() const {
     return new Timer_iOS();
   }
   
-  virtual void deleteTimer(ITimer* timer) const {
-    delete ((Timer_iOS *) timer);
+  virtual void deleteTimer(const ITimer* timer) const {
+    delete timer;
   }
+  
+  
+  virtual IImage* createImageFromFileName(const std::string filename) const {
+    NSString *fn = [NSString stringWithCString:filename.c_str() encoding:[NSString defaultCStringEncoding]];
+    
+    UIImage* image = [UIImage imageNamed:fn];
+    if (!image) {
+      printf("Can't read image %s\n",
+             filename.c_str());
+      
+      return NULL;
+    }
+    
+//    printf("Read image %s (%dx%d)\n",
+//           filename.c_str(),
+//           (int) [image size].width,
+//           (int) [image size].height);
+    
+    return new Image_iOS(image);
+  }
+  
+  virtual void deleteImage(const IImage* image) const {
+    delete image;
+  }
+  
   
 };
 

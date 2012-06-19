@@ -28,6 +28,8 @@
 
 #include "Effects.hpp"
 
+#include <stdlib.h>
+
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
 @end
@@ -105,35 +107,44 @@
     
     if (true) {
       // simple planet renderer, with a basic world image
-      Image_iOS *worldImage = new Image_iOS();
-      NSString* path1 = [[NSBundle mainBundle] pathForResource:@"world" ofType:@"jpg"];
-      worldImage->loadFromFileName([path1 UTF8String]);
-      SimplePlanetRenderer* spr = new SimplePlanetRenderer(worldImage);
+      SimplePlanetRenderer* spr = new SimplePlanetRenderer("world.jpg");
       comp->addRenderer(spr);
     }
     
     // marks renderer
     if (true){
-      Image_iOS *markImage = new Image_iOS();
-      NSString* path2 = [[NSBundle mainBundle] pathForResource:@"plane" ofType:@"png"];
-      markImage->loadFromFileName([path2 UTF8String]);
+//      Image_iOS *markImage = new Image_iOS();
+//      NSString* path2 = [[NSBundle mainBundle] pathForResource:@"plane" ofType:@"png"];
+//      markImage->loadFromFileName([path2 UTF8String]);
       
+      std::string markTextureFilename = "plane.png";
       
       MarksRenderer* marks = new MarksRenderer();
       
       Mark* m1 = new Mark("Fuerteventura",
-                          "Description of Fuerteventura",
-                          markImage,
+                          markTextureFilename,
                           Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0));
       //m1->addTouchListener(listener);
       marks->addMark(m1);
       
       Mark* m2 = new Mark("Las Palmas",
-                          "Description of Las Palmas",
-                          markImage,
+                          markTextureFilename,
                           Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0));
       //m2->addTouchListener(listener);
       marks->addMark(m2);
+
+      for (int i = 0; i < 25; i++) {
+//        const Angle latitude = Angle::normalizedFromDegrees(28.05 + (arc4random() % 90) - 90);
+//        const Angle longitude = Angle::normalizedFromDegrees(-15.36 + (arc4random() % 180) - 90);
+        const Angle latitude = Angle::fromDegrees( 28.05 + (arc4random() % 45)  );
+        const Angle longitude = Angle::fromDegrees( -15.36 + (arc4random() % 45)  );
+        
+        marks->addMark(new Mark("Random",
+                                markTextureFilename,
+                                Geodetic3D(latitude, longitude, 0)
+                                ));
+      } 
+      
       
       comp->addRenderer(marks);
       
@@ -143,10 +154,12 @@
       comp->addRenderer(scheduler);
     }
     
+    TexturesHandler* texturesHandler = new TexturesHandler();
     
     _widget = G3MWidget::create(factory,
                                 logger,
                                 gl,
+                                texturesHandler,
                                 Planet::createEarth(),
                                 comp,
                                 width, height,

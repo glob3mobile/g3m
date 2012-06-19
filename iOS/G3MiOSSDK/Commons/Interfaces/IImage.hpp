@@ -11,8 +11,6 @@
 
 class IImage {
 public:
-  virtual void loadFromFileName(const std::string filename) = 0;
-  
   // a virtual destructor is needed for conversion to Java
   virtual ~IImage() {}
 };

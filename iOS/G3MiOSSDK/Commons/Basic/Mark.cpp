@@ -10,34 +10,37 @@
 #include "Camera.hpp"
 
 
-void Mark::render(const RenderContext* rc, const Planet* planet) {
+void Mark::render(const RenderContext* rc,
+                  const double minDistanceToCamera) {
   int __dgd_at_work;
   
   const Camera* camera = rc->getCamera();
-  const Vector3D cameraPosition = camera->getPos();
+  const Planet* planet = rc->getPlanet();
   
-  const Vector3D position = planet->toVector3D(_position);
-  const Vector3D markCameraVector = position.sub(cameraPosition);
+  const Vector3D cameraPosition = camera->getPos();
+  const Vector3D markPosition = planet->toVector3D(_position);
+  
+  const Vector3D markCameraVector = markPosition.sub(cameraPosition);
   const double distanceToCamera = markCameraVector.length();
   
-  const Vector3D radius = planet->getRadii();
-  const double minDist = (radius.x() + radius.y() + radius.z()) * 2;
-  
-  
-  if (distanceToCamera <= minDist || true) {
-    const Vector3D normal = planet->geodeticSurfaceNormal(position);
+  if (distanceToCamera <= minDistanceToCamera || true) {
+    const Vector3D normalAtMarkPosition = planet->geodeticSurfaceNormal(markPosition);
     
-    if (normal.angleBetween(markCameraVector).radians() > M_PI / 2) {
+    if (normalAtMarkPosition.angleBetween(markCameraVector).radians() > M_PI / 2) {
       IGL* gl = rc->getGL();
       
       if (_textureId < 1) {
-        _textureId = gl->uploadTexture(*_textureImage, 128, 128);
-        rc->getLogger()->logInfo("Loaded textureId=%i", _textureId);
+        _textureId = rc->getTexturesHandler()->getTextureIdFromFileName(rc, _textureFilename, 128, 128);
       }
       
-      //    rc->getLogger()->logInfo(" Visible   << %f %f", minDist, distanceToCamera);
+      if (_textureId < 1) {
+        rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
+        return;
+      }
+      
+//    rc->getLogger()->logInfo(" Visible   << %f %f", minDist, distanceToCamera);
       gl->drawBillBoard(_textureId,
-                        (float) position.x(), (float) position.y(), (float) position.z(),
+                        (float) markPosition.x(), (float) markPosition.y(), (float) markPosition.z(),
                         camera->getViewPortRatio());
     }
     

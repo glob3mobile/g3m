@@ -54,6 +54,7 @@
 		CC14B64E157D35C100793C92 /* IImage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC14B64C157D35C100793C92 /* IImage.hpp */; };
 		CF0C396A157F988100646A2F /* Mark.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0C3969157F988100646A2F /* Mark.cpp */; };
 		CF31CBF1158776130085E8F1 /* Effects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF31CBF0158776120085E8F1 /* Effects.cpp */; };
+		CF883B821590984900AEE39C /* TexturesHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF883B811590984900AEE39C /* TexturesHandler.cpp */; };
 		CFA3E7C9157E537B00DAABD6 /* MarksRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA3E7C8157E537B00DAABD6 /* MarksRenderer.cpp */; };
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
@@ -95,15 +96,15 @@
 		383BD3AA1577EE5A0012AC53 /* Vector3D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Vector3D.hpp; path = Commons/Geometry/Vector3D.hpp; sourceTree = "<group>"; };
 		383BD3B81577EE630012AC53 /* IFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IFactory.hpp; path = Commons/Interfaces/IFactory.hpp; sourceTree = "<group>"; };
 		383BD3B91577EE630012AC53 /* ILogger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = ILogger.hpp; path = Commons/Interfaces/ILogger.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		38D786E01587AC40003BBC75 /* TileRenderer.hpp */ = {isa = PBXFileReference; name = TileRenderer.hpp; path = Commons/Basic/TileRenderer.hpp; sourceTree = "<group>"; };
+		38D786E01587AC40003BBC75 /* TileRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TileRenderer.hpp; path = Commons/Basic/TileRenderer.hpp; sourceTree = "<group>"; };
 		38D786E21587ACA5003BBC75 /* TileRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileRenderer.cpp; path = Commons/Basic/TileRenderer.cpp; sourceTree = "<group>"; };
-		38D786E41587B3DD003BBC75 /* Tile.hpp */ = {isa = PBXFileReference; name = Tile.hpp; path = Commons/Basic/Tile.hpp; sourceTree = "<group>"; };
+		38D786E41587B3DD003BBC75 /* Tile.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Tile.hpp; path = Commons/Basic/Tile.hpp; sourceTree = "<group>"; };
 		38D786E51587B446003BBC75 /* Tile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Tile.cpp; path = Commons/Basic/Tile.cpp; sourceTree = "<group>"; };
 		38D786E71587B52F003BBC75 /* Sector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Sector.h; path = Commons/Geometry/Sector.h; sourceTree = "<group>"; };
 		38D787071588F886003BBC75 /* SimplePlanetRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SimplePlanetRenderer.cpp; path = Commons/Basic/SimplePlanetRenderer.cpp; sourceTree = "<group>"; };
 		38D787081588F886003BBC75 /* SimplePlanetRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SimplePlanetRenderer.hpp; path = Commons/Basic/SimplePlanetRenderer.hpp; sourceTree = "<group>"; };
 		CC14B637157D34C700793C92 /* GL2.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = GL2.mm; path = Specific/GL/GL2.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		CC14B638157D34C700793C92 /* GL2.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GL2.hpp; path = Specific/GL/GL2.hpp; sourceTree = "<group>"; };
+		CC14B638157D34C700793C92 /* GL2.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = GL2.hpp; path = Specific/GL/GL2.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CC14B63B157D354C00793C92 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = Camera.cpp; path = Commons/Basic/Camera.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CC14B63C157D354C00793C92 /* Camera.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Camera.hpp; path = Commons/Basic/Camera.hpp; sourceTree = "<group>"; };
 		CC14B63F157D356800793C92 /* CameraRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CameraRenderer.cpp; path = Commons/Basic/CameraRenderer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -118,6 +119,8 @@
 		CF31CBF0158776120085E8F1 /* Effects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Effects.cpp; path = Commons/Basic/Effects.cpp; sourceTree = "<group>"; };
 		CF31CBF215878AF90085E8F1 /* ITimer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ITimer.hpp; path = Commons/Interfaces/ITimer.hpp; sourceTree = "<group>"; };
 		CF31CBF315878BE40085E8F1 /* Timer_iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Timer_iOS.h; path = Specific/Derived/Timer_iOS.h; sourceTree = "<group>"; };
+		CF883B7F1590983B00AEE39C /* TexturesHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TexturesHandler.hpp; path = Commons/Basic/TexturesHandler.hpp; sourceTree = "<group>"; };
+		CF883B811590984900AEE39C /* TexturesHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = TexturesHandler.cpp; path = Commons/Basic/TexturesHandler.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFA3E7C7157E536900DAABD6 /* MarksRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MarksRenderer.hpp; path = Commons/Basic/MarksRenderer.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFA3E7C8157E537B00DAABD6 /* MarksRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MarksRenderer.cpp; path = Commons/Basic/MarksRenderer.cpp; sourceTree = "<group>"; };
 		CFF95F741588DF0A00B56E11 /* TimeInterval.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TimeInterval.hpp; path = Commons/Basic/TimeInterval.hpp; sourceTree = "<group>"; };
@@ -221,6 +224,8 @@
 				CF31CBF0158776120085E8F1 /* Effects.cpp */,
 				CFF95F741588DF0A00B56E11 /* TimeInterval.hpp */,
 				CFF95F761588E82200B56E11 /* Color.hpp */,
+				CF883B7F1590983B00AEE39C /* TexturesHandler.hpp */,
+				CF883B811590984900AEE39C /* TexturesHandler.cpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -428,6 +433,7 @@
 				CF31CBF1158776130085E8F1 /* Effects.cpp in Sources */,
 				D86DD8A61588945200E25609 /* Image_iOS.mm in Sources */,
 				38D787091588F886003BBC75 /* SimplePlanetRenderer.cpp in Sources */,
+				CF883B821590984900AEE39C /* TexturesHandler.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,6 +1,5 @@
 //
 //  Shader.vsh
-//  Prueba Opengl iPad
 //
 //  Created by Agustín Trujillo Pino on 12/01/11.
 //  Copyright 2011 Universidad de Las Palmas. All rights reserved.
@@ -17,17 +16,13 @@ uniform mat4 Modelview;
 uniform bool BillBoard;
 uniform float ViewPortRatio;
 
-void main()
-{
-    if (!BillBoard){
-        gl_Position = Projection * Modelview * Position;
-        TextureCoordOut = TextureCoord;
-    }else{
-        gl_Position = Projection * Modelview * Position;
-        gl_Position.x += (-0.05 + TextureCoord.x * 0.1)* gl_Position.w ;
-        gl_Position.y -= (-0.05+ TextureCoord.y *0.1)* gl_Position.w * ViewPortRatio;
-        
-        TextureCoordOut = TextureCoord;
-    
-    }
+void main() {
+  gl_Position = Projection * Modelview * Position;
+
+  if (BillBoard) {
+    gl_Position.x += (-0.05 + TextureCoord.x * 0.1) * gl_Position.w ;
+    gl_Position.y -= (-0.05 + TextureCoord.y * 0.1) * gl_Position.w * ViewPortRatio;
+  }
+
+  TextureCoordOut = TextureCoord;
 }

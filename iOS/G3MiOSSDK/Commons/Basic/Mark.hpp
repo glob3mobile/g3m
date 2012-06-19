@@ -16,20 +16,17 @@
 class Mark {
 private:
   const std::string _name;
-  const std::string _description;
-  const IImage*     _textureImage;
+  const std::string _textureFilename;
   const Geodetic3D  _position;
 
   int _textureId;
 
 public:
   Mark(const std::string name,
-       const std::string description,
-       const IImage*     textureImage,
+       const std::string textureFilename,
        const Geodetic3D  position) :
   _name(name),
-  _description(description),
-  _textureImage(textureImage),
+  _textureFilename(textureFilename),
   _position(position),
   _textureId(-1)
   {
@@ -46,7 +43,8 @@ public:
     return _position;
   }
   
-  void render(const RenderContext* rc, const Planet* planet);
+  void render(const RenderContext* rc,
+              const double minDistanceToCamera);
   
 };
 

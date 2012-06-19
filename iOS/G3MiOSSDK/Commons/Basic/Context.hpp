@@ -12,6 +12,8 @@
 #include "IFactory.hpp"
 #include "IGL.hpp"
 #include "Planet.hpp"
+#include "TexturesHandler.hpp"
+
 
 class Camera;
 
@@ -60,18 +62,21 @@ public:
 
 class RenderContext: public Context {
 private:
-  IGL*    _gl;
-  Camera* _camera;
+  IGL*             _gl;
+  Camera*          _camera;
+  TexturesHandler* _texturesHandler;
   
 public:
   RenderContext(IFactory *factory,
                 ILogger* logger,
                 const Planet* planet,
                 IGL *gl,
-                Camera* camera) :
+                Camera* camera,
+                TexturesHandler* texturesHandler) :
   Context(factory, logger, planet),
   _gl(gl),
-  _camera(camera) {
+  _camera(camera),
+  _texturesHandler(texturesHandler) {
     
   }
   
@@ -81,6 +86,10 @@ public:
   
   Camera* getCamera() const {
     return _camera;
+  }
+  
+  TexturesHandler* getTexturesHandler() const {
+    return _texturesHandler;
   }
 };
 
