@@ -23,7 +23,15 @@ public class G3MWidget_Android extends GLSurfaceView implements OnGestureListene
 	
 	public G3MWidget_Android(Context context) {
 		super(context);
-
+			
+		setEGLContextClientVersion(2); // OPENGL ES VERSION MUST BE SPECIFED
+		setEGLConfigChooser(true); //IT GIVES US A RGB DEPTH OF 8 BITS PER CHANNEL, HAVING TO FORCE PROPER BUFFER ALLOCATION
+		
+		//Detect Long-Press events
+		setLongClickable(true);
+		  
+		//Debug flags
+		setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
 	}
 	
 	protected void onSizeChanged (int w, int h, int oldw, int oldh)
@@ -35,10 +43,15 @@ public class G3MWidget_Android extends GLSurfaceView implements OnGestureListene
 		
 		//RENDERERS
 	    CompositeRenderer comp = new CompositeRenderer();
-	    DummyRenderer dummy = new DummyRenderer();
-	    comp.addRenderer(dummy);
+	    
+	    //Camera must be first
 	    CameraRenderer cr = new CameraRenderer();
 	    comp.addRenderer(cr);
+	    
+	    //Dummy cube
+	    DummyRenderer dummy = new DummyRenderer();
+	    comp.addRenderer(dummy);
+
 		
 	    IFactory factory = new Factory_Android();
 	    ILogger logger = new Logger_Android(LogLevel.ErrorLevel);
@@ -51,17 +64,13 @@ public class G3MWidget_Android extends GLSurfaceView implements OnGestureListene
                 comp,
                 width, height,
                 Color.fromRGB((float)0.0, (float)0.1, (float)0.2, (float)1.0)); 
-	 
-	      setEGLContextClientVersion(2); // OPENGL ES VERSION MUST BE SPECIFED
-	      setEGLConfigChooser(true); //IT GIVES US A RGB DEPTH OF 8 BITS PER CHANNEL, HAVING TO FORCE PROPER BUFFER ALLOCATION
-
-	      //DETECT LONG PRESS
-	      setLongClickable(true);
 
 	      //SETTING RENDERER
-	      _es2renderer = new ES2Renderer(_widget);
-	      setRenderer(_es2renderer);
-	      setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
+	      //_es2renderer = new ES2Renderer(_widget);
+	      //setRenderer(_es2renderer);
+	      
+	      GLES20TriangleRenderer r = new GLES20TriangleRenderer(this.getContext(), _widget);
+	      setRenderer(r);
 	}
 	
 

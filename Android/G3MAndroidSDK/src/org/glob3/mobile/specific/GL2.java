@@ -22,11 +22,11 @@ import android.opengl.GLUtils;
 public class GL2 extends IGL {
 
    // stack of ModelView matrices
-   MutableMatrix44D modelView   = new MutableMatrix44D();
-   List<MutableMatrix44D> MatrixStack = new LinkedList<MutableMatrix44D>();
-
-   int        numIndices  = 0;
-   ByteBuffer indices     = null;
+   MutableMatrix44D _modelView   = new MutableMatrix44D();
+   List<MutableMatrix44D> _matrixStack = new LinkedList<MutableMatrix44D>();
+   
+   public UniformsStruct getUniforms() { return Uniforms;}
+   public AttributesStruct getAtt() { return Attributes;}
 
    public class UniformsStruct {
       public int Projection;
@@ -134,16 +134,16 @@ public class GL2 extends IGL {
 	
 	@Override
 	public void pushMatrix() {
-	    MutableMatrix44D m = new MutableMatrix44D(modelView);
-	    MatrixStack.add(m);
+	    MutableMatrix44D m = new MutableMatrix44D(_modelView);
+	    _matrixStack.add(m);
 	}
 	
 	
 	@Override
 	public void popMatrix() {
-	    modelView = MatrixStack.remove(MatrixStack.size() - 1);
+	    _modelView = _matrixStack.remove(_matrixStack.size() - 1);
 	    float[] m = new float[16];
-	    modelView.copyToFloatMatrix(m);
+	    _modelView.copyToFloatMatrix(m);
 	    
 	    GLES20.glUniformMatrix4fv(Uniforms.Modelview, 1, false, m, 0);
 	}
@@ -153,7 +153,7 @@ public class GL2 extends IGL {
 	public void loadMatrixf(MutableMatrix44D m) {
 	    float[] mf = new float[16];
 	    m.copyToFloatMatrix(mf);
-	    modelView = new MutableMatrix44D(m); //STORING
+	    _modelView = new MutableMatrix44D(m); //STORING
 	    
 	    
 	    GLES20.glUniformMatrix4fv(Uniforms.Modelview, 1, false, mf, 0);
@@ -162,9 +162,9 @@ public class GL2 extends IGL {
 	
 	@Override
 	public void multMatrixf(MutableMatrix44D m) {
-		  MutableMatrix44D product = modelView.multMatrix(m);
+		  MutableMatrix44D product = _modelView.multMatrix(m);
 		  
-		  modelView = new MutableMatrix44D(product);
+		  _modelView = new MutableMatrix44D(product);
 		  
 		  float[] mf = new float[16];
 		  product.copyToFloatMatrix(mf);

@@ -7,44 +7,35 @@ import android.util.Log;
 public class GL2Shaders {
 
    private final static String _fragmentShader = "varying mediump vec2 TextureCoordOut;" +
-
-                                               "uniform sampler2D Sampler;" + "uniform bool EnableTexture;"
-                                                 + "uniform lowp vec4 FlatColor;" +
-
-                                                 "void main()" + "{" + "   if (EnableTexture)"
+                                               "uniform sampler2D Sampler;" + 
+                                               "uniform bool EnableTexture;" +
+                                               "uniform lowp vec4 FlatColor;" +
+                                                 "void main()" + "{" 
+                                                 + "   if (EnableTexture)"
                                                  + "       gl_FragColor = texture2D (Sampler, TextureCoordOut);" + "   else"
                                                  + "        gl_FragColor = FlatColor;" + "}";
 
 
    private final static String _vertexShader   = "attribute vec4 Position;"
                                                  + "attribute vec2 TextureCoord;"
-                                                 +
-
-                                                 "varying vec2 TextureCoordOut;"
-                                                 +
-
-                                                 "uniform mat4 Projection;"
+                                                 + "varying vec2 TextureCoordOut;"
+                                                 + "uniform mat4 Projection;"
                                                  + "uniform mat4 Modelview;"
-                                                 +
-
-                                                 "uniform bool BillBoard;"
+                                                 + "uniform bool BillBoard;"
                                                  + "uniform float ViewPortRatio;"
-                                                 +
-
-                                                 "void main()"
+                                                 + "void main()"
                                                  + "{"
                                                  + "   if (!BillBoard){"
+                                                // + "       gl_Position = Modelview * Position;"
                                                  + "       gl_Position = Projection * Modelview * Position;"
                                                  + "       TextureCoordOut = TextureCoord;"
                                                  + "   }else{"
                                                  + "       gl_Position = Projection * Modelview * Position;"
                                                  + "       gl_Position.x += (-0.05 + TextureCoord.x * 0.1)* gl_Position.w ;"
                                                  + "       gl_Position.y -= (-0.05+ TextureCoord.y *0.1)* gl_Position.w * ViewPortRatio;"
-                                                 +
-
-                                                 "      TextureCoordOut = TextureCoord;" +
-
-                                                 "   }" + "}";
+                                                 + "      TextureCoordOut = TextureCoord;"
+                                                 + "   }" 
+                                                 + "}";
 
 
    public static String getFragmentShader() {
@@ -71,6 +62,10 @@ public class GL2Shaders {
             GLES20.glDeleteShader(shader);
             shader = 0;
          }
+      } else{
+    	  int error = GLES20.glGetError();
+    	  Log.d("GL", "ERROR CREATING SHADER " + error);
+    	  
       }
       return shader;
    }

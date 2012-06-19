@@ -1,4 +1,6 @@
 package org.glob3.mobile.generated; 
+
+import android.opengl.Matrix;
 /*
  *  Camera.cpp
  *  Prueba Opengl iPad
@@ -50,7 +52,7 @@ public class Camera
 
   public Camera(int width, int height)
   {
-	  _pos = new MutableVector3D(63650000.0, 0.0, 0.0);
+	  _pos = new MutableVector3D(6365000.0, 0.0, 0.0);
 	  _center = new MutableVector3D(0.0, 0.0, 0.0);
 	  _up = new MutableVector3D(0.0, 0.0, 1.0);
 	resizeViewport(width, height);
@@ -92,7 +94,15 @@ public class Camera
   
 	// compute projection matrix
 	double ratioScreen = (double) _viewport[3] / _viewport[2];
-	_projection = MutableMatrix44D.createProjectionMatrix(-0.3 / ratioScreen * znear, 0.3 / ratioScreen * znear, -0.3 * znear, 0.3 * znear, znear, 10000 * znear);
+	
+	double left = -0.3 / ratioScreen * znear;
+	double right = 0.3 / ratioScreen * znear;
+	double bottom = -0.3 * znear;
+	double top = 0.3 * znear;
+	double far = 1000 * znear;
+	
+	
+	_projection = MutableMatrix44D.createProjectionMatrix(left, right, bottom, top, znear, far);
   
 	// obtaing gl object reference
 	IGL gl = rc.getGL();
@@ -100,6 +110,7 @@ public class Camera
   
 	// make the model
 	_model = MutableMatrix44D.createModelMatrix(_pos, _center, _up);
+	
 	gl.loadMatrixf(_model);
   }
 

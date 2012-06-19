@@ -150,6 +150,7 @@ public class DummyRenderer extends Renderer
 	}
   
 	gl.enableTextures();
+	gl.disableVertices();
   
 	return 9999;
   }

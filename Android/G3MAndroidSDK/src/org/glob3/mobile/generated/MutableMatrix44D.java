@@ -1,11 +1,6 @@
 package org.glob3.mobile.generated; 
-//
-//  Mat4.cpp
-//  G3MiOSSDK
-//
-//  Created by José Miguel S N on 06/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
-//
+
+import android.opengl.Matrix;
 
 //
 //  Mat4.hpp
@@ -233,19 +228,29 @@ public class MutableMatrix44D
 
   public static MutableMatrix44D createModelMatrix(MutableVector3D pos, MutableVector3D center, MutableVector3D up)
   {
-	MutableVector3D w = center.sub(pos).normalized();
+	/*MutableVector3D w = center.sub(pos).normalized();
 	double pe = w.dot(up);
 	MutableVector3D v = up.sub(w.times(pe)).normalized();
 	MutableVector3D u = w.cross(v);
 	double[] LA = { u.x(), v.x(), -w.x(), 0, u.y(), v.y(), -w.y(), 0, u.z(), v.z(), -w.z(), 0, -pos.dot(u), -pos.dot(v), pos.dot(w), 1};
   
 	MutableMatrix44D m = new MutableMatrix44D(LA);
+	*/
+	
+	float[] mf = new float[16];
+	Matrix.setLookAtM(mf , 0,
+			(float)pos.x(), (float)pos.y(), (float)pos.z(),
+			(float)center.x(), (float)center.y(), (float)center.z(),
+			(float)up.x(), (float)up.y(), (float)up.z());
+	
+	MutableMatrix44D m = new MutableMatrix44D(mf);
   
 	return m;
   }
 
   public static MutableMatrix44D createProjectionMatrix(double left, double right, double bottom, double top, double near, double far)
   {
+	/*  
 	// set frustum matrix in double
 	double rl = right - left;
 	double tb = top - bottom;
@@ -262,8 +267,16 @@ public class MutableMatrix44D
 	P[12] = P[13] = 0;
 	P[14] = -2 * far / fn * near;
 	P[15] = 0;
+	
+	MutableMatrix44D m = new MutableMatrix44D(P2);
+	return m;
+	*/
+	
+	//FIX IT USING SHARED CODE
+	float[] P2 = new float[16];
+    Matrix.frustumM(P2, 0, (float)left, (float)right, (float)bottom, (float)top, (float)near, (float) far);
   
-	MutableMatrix44D m = new MutableMatrix44D(P);
+	MutableMatrix44D m = new MutableMatrix44D(P2);
 	return m;
   }
 
