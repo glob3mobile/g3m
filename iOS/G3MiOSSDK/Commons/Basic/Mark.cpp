@@ -12,8 +12,6 @@
 
 void Mark::render(const RenderContext* rc,
                   const double minDistanceToCamera) {
-  int __dgd_at_work;
-  
   const Camera* camera = rc->getCamera();
   const Planet* planet = rc->getPlanet();
   

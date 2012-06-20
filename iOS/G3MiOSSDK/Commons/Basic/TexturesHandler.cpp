@@ -78,7 +78,6 @@ int TexturesHandler::getTextureId(const RenderContext* rc,
                                   const std::string &textureId,
                                   int textureWidth,
                                   int textureHeight) {
-  int ____DGD_at_work;
   
   TextureKey* key = new TextureKey(textureId, textureWidth, textureHeight);
   
