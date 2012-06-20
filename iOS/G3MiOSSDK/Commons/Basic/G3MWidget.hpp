@@ -21,6 +21,7 @@ public:
   static G3MWidget* create(IFactory* factory,
                            ILogger *logger,
                            IGL* gl,
+                           TexturesHandler* texturesHandler,
                            const Planet* planet,
                            Renderer* renderer,
                            int width, int height,
@@ -39,22 +40,24 @@ public:
   
   
 private:
-  IFactory*     _factory;
-  ILogger*      _logger;
-  IGL*          _gl;
-  const Planet* _planet;
-  Renderer*     _renderer;
-  Camera*       _camera;
-  const Color   _backgroundColor;
+  IFactory*        _factory;
+  ILogger*         _logger;
+  IGL*             _gl;
+  const Planet*    _planet;
+  Renderer*        _renderer;
+  Camera*          _camera;
+  TexturesHandler* _texturesHandler;
+  const Color      _backgroundColor;
   
-  ITimer*       _timer;
-  long          _renderCounter;
-  long          _totalRenderTime;
-  const bool    _logFPS;
+  ITimer*          _timer;
+  long             _renderCounter;
+  long             _totalRenderTime;
+  const bool       _logFPS;
   
   G3MWidget(IFactory* factory,
             ILogger *logger,
             IGL* gl,
+            TexturesHandler* texturesHandler,
             const Planet* planet,
             Renderer* renderer,
             int width, int height,
@@ -63,6 +66,7 @@ private:
   _factory(factory),
   _logger(logger),
   _gl(gl),
+  _texturesHandler(texturesHandler),
   _planet(planet),
   _renderer(renderer),
   _camera(new Camera(width, height)),

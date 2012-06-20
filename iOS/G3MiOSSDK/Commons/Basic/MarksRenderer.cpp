@@ -22,8 +22,6 @@ int MarksRenderer::render(const RenderContext* rc) {
   
   IGL* gl = rc->getGL();
   
-  const Planet* planet = rc->getPlanet();
-
   gl->enableVertices();
   gl->enableTextures();
 
@@ -35,12 +33,15 @@ int MarksRenderer::render(const RenderContext* rc) {
   //const Camera* camera = rc->getCamera();
   //const Vector3D cameraPosition = camera->getPos();
   
+  const Vector3D radius = rc->getPlanet()->getRadii();
+  const double minDistanceToCamera = (radius.x() + radius.y() + radius.z()) * 2;
+
   int marksSize = _marks.size();
   for (int i = 0; i < marksSize; i++) {
     Mark* mark = _marks[i];
     //rc->getLogger()->logInfo("Rendering Mark: \"%s\"", mark->getName().c_str());
-    
-    mark->render(rc, planet);
+
+    mark->render(rc, minDistanceToCamera);
   }
   
   gl->depthTest(true);

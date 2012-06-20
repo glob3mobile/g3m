@@ -58,7 +58,7 @@ public:
 
   int getError();
   
-  int uploadTexture(const IImage& image, int widthTexture, int heightTexture);
+  int uploadTexture(const IImage& image, int textureWidth, int textureHeight);
   
   void setTextureCoordinates(int size, int stride, const float texcoord[]);
   
@@ -71,6 +71,8 @@ public:
   void drawBillBoard(const unsigned int textureId,
                      const float x, const float y, const float z,
                      const float viewPortRatio);
+
+  void deleteTexture(int glTextureId);
 
 private:
     // stack of ModelView matrices

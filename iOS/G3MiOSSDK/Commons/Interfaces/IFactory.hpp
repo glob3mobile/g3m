@@ -13,13 +13,17 @@
 
 
 class ITimer;
-
+class IImage;
 
 class IFactory {
 public:
   virtual ITimer* createTimer() const = 0;
   
-  virtual void deleteTimer(ITimer* timer) const = 0;
+  virtual void deleteTimer(const ITimer* timer) const = 0;
+
+  virtual IImage* createImageFromFileName(const std::string filename) const = 0;
+
+  virtual void deleteImage(const IImage* image) const = 0;
 
   // a virtual destructor is needed for conversion to Java
   virtual ~IFactory() {}

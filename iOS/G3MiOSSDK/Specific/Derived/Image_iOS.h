@@ -7,6 +7,9 @@
 //
 
 
+#ifndef G3MiOSSDK_Image_iOS_h
+#define G3MiOSSDK_Image_iOS_h
+
 #import <UIKit/UIKit.h>
 
 #include <string>
@@ -15,13 +18,18 @@
 
 class Image_iOS: public IImage {
 private:
-  UIImage * _image;
+  UIImage* _image;
   
 public:
-  void loadFromFileName(const std::string filename);
+
+  Image_iOS(UIImage* image) : _image(image) {
+    
+  }
   
   UIImage* getUIImage() const {
     return _image;
   }
   
 };
+
+#endif
