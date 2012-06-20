@@ -1,13 +1,5 @@
 package org.glob3.mobile.generated; 
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-
-import org.glob3.mobile.specific.GL2;
-import org.glob3.mobile.specific.GL2.AttributesStruct;
-
-import android.opengl.GLES20;
 
 //
 //  G3MWidget.cpp

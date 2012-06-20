@@ -67,7 +67,7 @@ public:
                                             const MutableVector3D& up);
   
   static MutableMatrix44D createProjectionMatrix(double left, double right, double bottom, double top, 
-                                                 double near, double far);
+                                                 double znear, double zfar);
   
 };
 

@@ -1,6 +1,5 @@
 package org.glob3.mobile.generated; 
 
-import android.opengl.Matrix;
 
 //
 //  Mat4.hpp
@@ -235,16 +234,6 @@ public class MutableMatrix44D
 	double[] LA = { u.x(), v.x(), -w.x(), 0, u.y(), v.y(), -w.y(), 0, u.z(), v.z(), -w.z(), 0, -pos.dot(u), -pos.dot(v), pos.dot(w), 1};
   
 	MutableMatrix44D m = new MutableMatrix44D(LA);
-	
-	/*
-	float[] mf = new float[16];
-	Matrix.setLookAtM(mf , 0,
-			(float)pos.x(), (float)pos.y(), (float)pos.z(),
-			(float)center.x(), (float)center.y(), (float)center.z(),
-			(float)up.x(), (float)up.y(), (float)up.z());
-	
-	MutableMatrix44D m = new MutableMatrix44D(mf);
-  */
 	return m;
   }
 
@@ -269,15 +258,6 @@ public class MutableMatrix44D
 	
 	MutableMatrix44D m = new MutableMatrix44D(P);
 	return m;
-	
-	/*
-	//FIX IT USING SHARED CODE
-	float[] P2 = new float[16];
-    Matrix.frustumM(P2, 0, (float)left, (float)right, (float)bottom, (float)top, (float)near, (float) far);
-  
-	MutableMatrix44D m = new MutableMatrix44D(P2);
-	return m;
-	*/
   }
 
 }

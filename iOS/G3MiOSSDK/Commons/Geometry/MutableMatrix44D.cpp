@@ -194,21 +194,21 @@ MutableMatrix44D MutableMatrix44D::createModelMatrix(const MutableVector3D& pos,
   return m;
 }
 
-MutableMatrix44D MutableMatrix44D::createProjectionMatrix(double left, double right, double bottom, double top,double near, double far)
+MutableMatrix44D MutableMatrix44D::createProjectionMatrix(double left, double right, double bottom, double top,double znear, double zfar)
 {
   // set frustum matrix in double
-  double rl = right - left, tb = top - bottom, fn = far - near;
+  double rl = right - left, tb = top - bottom, fn = zfar - znear;
   double P[16];
-  P[0] = 2 * near / rl;
+  P[0] = 2 * znear / rl;
   P[1] = P[2] = P[3] = P[4] = 0;
-  P[5] = 2 * near / tb;
+  P[5] = 2 * znear / tb;
   P[6] = P[7] = 0;
   P[8] = (right + left) / rl;
   P[9] = (top + bottom) / tb;
-  P[10] = -(far + near) / fn;
+  P[10] = -(zfar + znear) / fn;
   P[11] = -1;
   P[12] = P[13] = 0;
-  P[14] = -2 * far / fn * near;
+  P[14] = -2 * zfar / fn * znear;
   P[15] = 0;
   
   MutableMatrix44D m(P);
