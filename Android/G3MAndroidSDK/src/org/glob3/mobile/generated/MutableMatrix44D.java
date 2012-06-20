@@ -228,15 +228,15 @@ public class MutableMatrix44D
 
   public static MutableMatrix44D createModelMatrix(MutableVector3D pos, MutableVector3D center, MutableVector3D up)
   {
-	/*MutableVector3D w = center.sub(pos).normalized();
+	MutableVector3D w = center.sub(pos).normalized();
 	double pe = w.dot(up);
 	MutableVector3D v = up.sub(w.times(pe)).normalized();
 	MutableVector3D u = w.cross(v);
 	double[] LA = { u.x(), v.x(), -w.x(), 0, u.y(), v.y(), -w.y(), 0, u.z(), v.z(), -w.z(), 0, -pos.dot(u), -pos.dot(v), pos.dot(w), 1};
   
 	MutableMatrix44D m = new MutableMatrix44D(LA);
-	*/
 	
+	/*
 	float[] mf = new float[16];
 	Matrix.setLookAtM(mf , 0,
 			(float)pos.x(), (float)pos.y(), (float)pos.z(),
@@ -244,17 +244,16 @@ public class MutableMatrix44D
 			(float)up.x(), (float)up.y(), (float)up.z());
 	
 	MutableMatrix44D m = new MutableMatrix44D(mf);
-  
+  */
 	return m;
   }
 
   public static MutableMatrix44D createProjectionMatrix(double left, double right, double bottom, double top, double near, double far)
   {
-	/*  
 	// set frustum matrix in double
 	double rl = right - left;
 	double tb = top - bottom;
-	double fn = - near;
+	double fn = far - near;
 	double[] P = new double[16];
 	P[0] = 2 * near / rl;
 	P[1] = P[2] = P[3] = P[4] = 0;
@@ -268,16 +267,17 @@ public class MutableMatrix44D
 	P[14] = -2 * far / fn * near;
 	P[15] = 0;
 	
-	MutableMatrix44D m = new MutableMatrix44D(P2);
+	MutableMatrix44D m = new MutableMatrix44D(P);
 	return m;
-	*/
 	
+	/*
 	//FIX IT USING SHARED CODE
 	float[] P2 = new float[16];
     Matrix.frustumM(P2, 0, (float)left, (float)right, (float)bottom, (float)top, (float)near, (float) far);
   
 	MutableMatrix44D m = new MutableMatrix44D(P2);
 	return m;
+	*/
   }
 
 }

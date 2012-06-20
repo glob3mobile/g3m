@@ -61,9 +61,6 @@ public class G3MWidget
 	return timeToRedraw;
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
-//  void onTouchEvent(const TouchEvent* event);
-
   public final void onResizeViewportEvent(int width, int height)
   {
 	_renderer.onResizeViewportEvent(width, height);
@@ -97,9 +94,10 @@ public class G3MWidget
 	InitializationContext ic = new InitializationContext(_factory, _logger, _planet);
 	_renderer.initialize(ic);
   }
+
+	public void onTouchEvent(TouchEvent myEvent)
+	{
+	  _renderer.onTouchEvent(myEvent);
+	}
+
 }
-//C++ TO JAVA CONVERTER TODO TASK: There are no simple equivalents to events in Java:
-//void G3MWidget::onTouchEvent(const TouchEvent* event)
-//{
-//  _renderer->onTouchEvent(event);
-//}

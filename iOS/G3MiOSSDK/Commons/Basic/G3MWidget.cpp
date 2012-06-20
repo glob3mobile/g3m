@@ -67,9 +67,9 @@ int G3MWidget::render()
   return timeToRedraw;
 }
 
-void G3MWidget::onTouchEvent(const TouchEvent* event)
+void G3MWidget::onTouchEvent(const TouchEvent* myEvent)
 {
-  _renderer->onTouchEvent(event);
+  _renderer->onTouchEvent(myEvent);
 }
 
 void G3MWidget::onResizeViewportEvent(int width, int height)

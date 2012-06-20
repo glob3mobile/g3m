@@ -31,7 +31,7 @@ public:
   
   int render();
   
-  void onTouchEvent(const TouchEvent* event);
+  void onTouchEvent(const TouchEvent* myEvent);
   
   void onResizeViewportEvent(int width, int height);
   

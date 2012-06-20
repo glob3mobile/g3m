@@ -10,11 +10,16 @@ import org.glob3.mobile.generated.IGL;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.Planet;
+import org.glob3.mobile.generated.Touch;
+import org.glob3.mobile.generated.TouchEvent;
+import org.glob3.mobile.generated.TouchEventType;
+import org.glob3.mobile.generated.Vector2D;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
+import android.view.MotionEvent.PointerCoords;
 
 public class G3MWidget_Android extends GLSurfaceView implements OnGestureListener {
 
@@ -51,7 +56,6 @@ public class G3MWidget_Android extends GLSurfaceView implements OnGestureListene
 	    //Dummy cube
 	    DummyRenderer dummy = new DummyRenderer();
 	    comp.addRenderer(dummy);
-
 		
 	    IFactory factory = new Factory_Android();
 	    ILogger logger = new Logger_Android(LogLevel.ErrorLevel);
@@ -65,18 +69,26 @@ public class G3MWidget_Android extends GLSurfaceView implements OnGestureListene
                 width, height,
                 Color.fromRGB((float)0.0, (float)0.1, (float)0.2, (float)1.0)); 
 
-	      //SETTING RENDERER
-	      //_es2renderer = new ES2Renderer(_widget);
-	      //setRenderer(_es2renderer);
-	      
-	      GLES20TriangleRenderer r = new GLES20TriangleRenderer(this.getContext(), _widget);
-	      setRenderer(r);
+	    //SETTING RENDERER
+	    _es2renderer = new ES2Renderer(this.getContext(), _widget);
+	    setRenderer(_es2renderer);
 	}
 	
 
 	@Override
-	public boolean onDown(MotionEvent arg0) {
-		// TODO Auto-generated method stub
+	public boolean onDown(MotionEvent event) {
+
+		  PointerCoords pc = new PointerCoords();
+		  event.getPointerCoords(0, pc);
+		  
+		  //TOUCH EVENT
+		  Vector2D pos = new Vector2D(pc.x, pc.y);
+		  Vector2D prevPos = new Vector2D(0.0,0.0);
+		  Touch t = new Touch(pos, prevPos);
+		  TouchEvent te = new TouchEvent(TouchEvent.create(TouchEventType.Down, t));
+		  
+		  _widget.onTouchEvent(te);
+		
 		return false;
 	}
 

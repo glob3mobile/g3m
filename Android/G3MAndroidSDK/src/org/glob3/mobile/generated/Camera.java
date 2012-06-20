@@ -52,7 +52,7 @@ public class Camera
 
   public Camera(int width, int height)
   {
-	  _pos = new MutableVector3D(6365000.0, 0.0, 0.0);
+	  _pos = new MutableVector3D(63650000.0, 0.0, 0.0);
 	  _center = new MutableVector3D(0.0, 0.0, 0.0);
 	  _up = new MutableVector3D(0.0, 0.0, 1.0);
 	resizeViewport(width, height);
@@ -99,7 +99,7 @@ public class Camera
 	double right = 0.3 / ratioScreen * znear;
 	double bottom = -0.3 * znear;
 	double top = 0.3 * znear;
-	double far = 1000 * znear;
+	double far = 10000 * znear;
 	
 	
 	_projection = MutableMatrix44D.createProjectionMatrix(left, right, bottom, top, znear, far);
@@ -111,6 +111,11 @@ public class Camera
 	// make the model
 	_model = MutableMatrix44D.createModelMatrix(_pos, _center, _up);
 	
+//	float [] M = new float[16];
+//	_model.copyToFloatMatrix(M);
+//	M[14] *= 10;
+//	_model = new MutableMatrix44D(M);
+//	
 	gl.loadMatrixf(_model);
   }
 
