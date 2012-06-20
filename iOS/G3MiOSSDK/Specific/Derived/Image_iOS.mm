@@ -6,5 +6,5 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#include "Image_iOS.h"
+#include "Image_iOS.hpp"
 

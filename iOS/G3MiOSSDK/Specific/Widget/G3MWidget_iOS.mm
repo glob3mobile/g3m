@@ -24,7 +24,7 @@
 #include "Mark.hpp"
 #include "SimplePlanetRenderer.hpp"
 
-#include "Image_iOS.h"
+#include "Image_iOS.hpp"
 
 #include "Effects.hpp"
 
