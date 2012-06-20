@@ -24,7 +24,7 @@
 #include "Mark.hpp"
 #include "SimplePlanetRenderer.hpp"
 
-#include "Image_iOS.h"
+#include "Image_iOS.hpp"
 
 #include "Effects.hpp"
 
@@ -113,42 +113,37 @@
     
     // marks renderer
     if (true){
-//      Image_iOS *markImage = new Image_iOS();
-//      NSString* path2 = [[NSBundle mainBundle] pathForResource:@"plane" ofType:@"png"];
-//      markImage->loadFromFileName([path2 UTF8String]);
-      
-      std::string markTextureFilename = "plane.png";
-      
       MarksRenderer* marks = new MarksRenderer();
+      comp->addRenderer(marks);
       
       Mark* m1 = new Mark("Fuerteventura",
-                          markTextureFilename,
+                          "plane.png",
                           Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0));
       //m1->addTouchListener(listener);
       marks->addMark(m1);
+
       
       Mark* m2 = new Mark("Las Palmas",
-                          markTextureFilename,
+                          "plane.png",
                           Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0));
       //m2->addTouchListener(listener);
       marks->addMark(m2);
-
-      for (int i = 0; i < 25; i++) {
-//        const Angle latitude = Angle::normalizedFromDegrees(28.05 + (arc4random() % 90) - 90);
-//        const Angle longitude = Angle::normalizedFromDegrees(-15.36 + (arc4random() % 180) - 90);
-        const Angle latitude = Angle::fromDegrees( 28.05 + (arc4random() % 45)  );
-        const Angle longitude = Angle::fromDegrees( -15.36 + (arc4random() % 45)  );
+      
+      
+      for (int i = 0; i < 1000; i++) {
+        const Angle latitude = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
+        const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
+        //NSLog(@"lat=%f, lon=%f", latitude.degrees(), longitude.degrees());
         
         marks->addMark(new Mark("Random",
-                                markTextureFilename,
+                                "mark.png",
                                 Geodetic3D(latitude, longitude, 0)
-                                ));
+                                )
+                       );
       } 
-      
-      
-      comp->addRenderer(marks);
-      
-      // scheduler renderer
+    }
+     
+    if (true) {
       EffectsScheduler* scheduler = new EffectsScheduler();
       scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(3)));
       comp->addRenderer(scheduler);

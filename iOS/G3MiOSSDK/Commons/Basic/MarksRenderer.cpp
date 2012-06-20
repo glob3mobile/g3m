@@ -28,11 +28,6 @@ int MarksRenderer::render(const RenderContext* rc) {
   gl->depthTest(false);
   gl->blend(true);
 
-  int __dgd_at_work;
-
-  //const Camera* camera = rc->getCamera();
-  //const Vector3D cameraPosition = camera->getPos();
-  
   const Vector3D radius = rc->getPlanet()->getRadii();
   const double minDistanceToCamera = (radius.x() + radius.y() + radius.z()) * 2;
 

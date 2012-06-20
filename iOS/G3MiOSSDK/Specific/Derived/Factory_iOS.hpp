@@ -11,8 +11,8 @@
 
 #include "IFactory.hpp"
 
-#include "Timer_iOS.h"
-#include "Image_iOS.h"
+#include "Timer_iOS.hpp"
+#include "Image_iOS.hpp"
 
 class Factory_iOS: public IFactory {
 public:

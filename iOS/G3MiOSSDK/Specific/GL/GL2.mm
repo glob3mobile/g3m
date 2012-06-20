@@ -11,7 +11,7 @@
 
 #include "GL2.hpp"
 
-#include "Image_iOS.h"
+#include "Image_iOS.hpp"
 
 
 /*
