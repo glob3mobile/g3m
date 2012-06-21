@@ -9,9 +9,11 @@ import org.glob3.mobile.generated.DummyRenderer;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IGL;
+import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.Planet;
+import org.glob3.mobile.generated.SimplePlanetRenderer;
 import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.TouchEventType;
@@ -42,9 +44,12 @@ public class G3MWidget_Android extends GLSurfaceView implements OnGestureListene
 		setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
 	}
 	
+	//The initialization of _widget occurs when the android widget is resized to the screen size
 	protected void onSizeChanged (int w, int h, int oldw, int oldh)
 	{
 		super.onSizeChanged(w, h, oldw, oldh);
+		
+		if (_widget != null) return; //No further initialization needed
 		
 		int width = getWidth();
 		int height = getHeight();

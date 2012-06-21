@@ -37,6 +37,8 @@ class ES2Renderer implements GLSurfaceView.Renderer {
         // Ignore the passed-in GL10 interface, and use the GLES20
         // class's static methods instead.
         GLES20.glViewport(0, 0, width, height);
+        
+        _widget.onResizeViewportEvent(width,height);
     }
 
     public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
