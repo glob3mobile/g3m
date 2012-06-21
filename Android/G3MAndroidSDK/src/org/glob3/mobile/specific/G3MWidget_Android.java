@@ -9,9 +9,11 @@ import org.glob3.mobile.generated.DummyRenderer;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IGL;
+import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.Planet;
+import org.glob3.mobile.generated.SimplePlanetRenderer;
 import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.TouchEventType;
@@ -69,6 +71,13 @@ public class G3MWidget_Android extends GLSurfaceView implements
 		// Dummy cube
 		DummyRenderer dummy = new DummyRenderer();
 		comp.addRenderer(dummy);
+		
+    	IImage im =  ((Factory_Android)factory).createImageFromFileName("world.jpg");
+    	
+        // simple planet renderer, with a basic world image
+        SimplePlanetRenderer spr = new SimplePlanetRenderer(im);
+        comp.addRenderer(spr);
+
 
 		ILogger logger = new Logger_Android(LogLevel.ErrorLevel);
 		IGL gl = new GL2();
@@ -153,6 +162,17 @@ public class G3MWidget_Android extends GLSurfaceView implements
 			Touch t = new Touch(pos, prevPos);
 			touchs.add(t);
 			pointersID.add(pointerID);
+		}
+		
+		//If a move event has not change the position of pointers we dismiss it
+		if (event.getAction() == MotionEvent.ACTION_MOVE){
+			double dist = 0;
+			for (int i = 0; i < touchs.size();i++){
+				Vector2D v= touchs.get(i).getPos().sub(touchs.get(i).getPrevPos());
+				dist += v.squaredLength();
+			}
+			if (dist == 0) 
+				return false;
 		}
 
 		TouchEventType type = TouchEventType.Down;

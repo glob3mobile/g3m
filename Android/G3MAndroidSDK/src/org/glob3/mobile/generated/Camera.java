@@ -9,6 +9,7 @@ import android.opengl.Matrix;
  *  Copyright 2011 Universidad de Las Palmas. All rights reserved.
  *
  */
+import android.util.Log;
 
 
 
@@ -256,6 +257,13 @@ public class Camera
 
   private void applyTransform(MutableMatrix44D M)
   {
+	  for(int i = 0; i < 16; i++) 
+		  if (Double.isNaN( M.get(i))){
+			  Log.d("CAM", "NAN " + i + M);
+			  return;
+		  }
+	  
+	  
 	_pos = _pos.applyTransform(M);
 	_center = _center.applyTransform(M);
 	_up = _up.applyTransform(M);
