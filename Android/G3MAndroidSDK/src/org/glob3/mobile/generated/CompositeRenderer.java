@@ -48,7 +48,7 @@ public class CompositeRenderer extends Renderer
   {
 	//rc->getLogger()->logInfo("CompositeRenderer::render()");
   
-	int min = MAX_TIME_TO_RENDER;
+	int min = DefineConstants.MAX_TIME_TO_RENDER;
 	for (int i = 0; i < _renderers.size(); i++)
 	{
 	  int x = _renderers.get(i).render(rc);

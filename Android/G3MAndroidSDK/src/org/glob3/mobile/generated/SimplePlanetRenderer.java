@@ -139,7 +139,7 @@ public class SimplePlanetRenderer extends Renderer
 	if (_textureId < 1)
 	{
 	  rc.getLogger().logError("Can't load file %s", _textureFilename);
-	  return MAX_TIME_TO_RENDER;
+	  return DefineConstants.MAX_TIME_TO_RENDER;
 	}
   
   
@@ -160,7 +160,7 @@ public class SimplePlanetRenderer extends Renderer
 	gl.disableTextures();
 	gl.disableVertices();
   
-	return MAX_TIME_TO_RENDER;
+	return DefineConstants.MAX_TIME_TO_RENDER;
   }
 
   public final boolean onTouchEvent(TouchEvent touchEvent)

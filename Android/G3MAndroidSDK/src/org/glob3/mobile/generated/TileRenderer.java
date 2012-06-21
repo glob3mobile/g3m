@@ -59,7 +59,7 @@ public class TileRenderer extends Renderer
 		initialTiles.get(n).render(rc);
 	gl.disableVertices();
   
-	return MAX_TIME_TO_RENDER;
+	return DefineConstants.MAX_TIME_TO_RENDER;
   }
 
   public final boolean onTouchEvent(TouchEvent touchEvent)

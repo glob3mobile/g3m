@@ -13,8 +13,6 @@
 
 #include "TouchEvent.hpp"
 
-#define MAX_TIME_TO_RENDER 1000
-
 class Renderer {
 public:
   virtual void initialize(const InitializationContext* ic) = 0;

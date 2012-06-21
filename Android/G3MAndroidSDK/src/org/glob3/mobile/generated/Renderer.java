@@ -10,8 +10,6 @@ package org.glob3.mobile.generated;
 
 
 
-//#define MAX_TIME_TO_RENDER 1000
-
 public abstract class Renderer
 {
   public abstract void initialize(InitializationContext ic);

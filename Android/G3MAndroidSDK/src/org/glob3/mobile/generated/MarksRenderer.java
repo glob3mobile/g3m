@@ -58,7 +58,7 @@ public class MarksRenderer extends Renderer
 	gl.disableVertices();
   
   
-	return MAX_TIME_TO_RENDER;
+	return DefineConstants.MAX_TIME_TO_RENDER;
   }
 
   public boolean onTouchEvent(TouchEvent touchEvent)
