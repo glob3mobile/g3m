@@ -10,6 +10,8 @@ package org.glob3.mobile.generated;
 
 
 
+//#define MAX_TIME_TO_RENDER 1000
+
 public abstract class Renderer
 {
   public abstract void initialize(InitializationContext ic);
@@ -18,7 +20,7 @@ public abstract class Renderer
 
   public abstract boolean onTouchEvent(TouchEvent touchEvent);
 
-  public abstract boolean onResizeViewportEvent(int width, int height);
+  public abstract void onResizeViewportEvent(int width, int height);
 
   public void dispose()
   {

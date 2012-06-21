@@ -8,10 +8,8 @@ package org.glob3.mobile.generated;
 //
 
 
-public abstract class IImage
+public class IImage
 {
-  public abstract void loadFromFileName(String filename);
-
   // a virtual destructor is needed for conversion to Java
   public void dispose()
   {

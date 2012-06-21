@@ -21,13 +21,12 @@ package org.glob3.mobile.generated;
 public class SimplePlanetRenderer extends Renderer
 {
 
+  private final String _textureFilename;
+  private int _textureId;
 
-  private final IImage _textureImage;
-  private int _textureID;
+  private int _numIndexes;
 
-  private int _numIndex;
-
-  private byte[] _index;
+  private byte[] _indexes;
   private float[] _vertices;
   private float[] _texCoors;
 
@@ -62,20 +61,20 @@ public class SimplePlanetRenderer extends Renderer
   {
 	int res = _lonRes;
   
-	_numIndex = 2 * (res - 1) * (res + 1);
-	_index = new byte[_numIndex];
+	_numIndexes = 2 * (res - 1) * (res + 1);
+	_indexes = new byte[_numIndexes];
   
 	int n = 0;
 	for (int j = 0; j < res - 1; j++)
 	{
 	  if (j > 0)
-		  _index[n++] = (byte)(j * res);
+		  _indexes[n++] = (byte)(j * res);
 	  for (int i = 0; i < res; i++)
 	  {
-		_index[n++] = (byte)(j * res + i);
-		_index[n++] = (byte)(j * res + i + res);
+		_indexes[n++] = (byte)(j * res + i);
+		_indexes[n++] = (byte)(j * res + i + res);
 	  }
-	  _index[n++] = (byte)(j * res + 2 * res - 1);
+	  _indexes[n++] = (byte)(j * res + 2 * res - 1);
 	}
   }
   private void createTextureCoordinates()
@@ -97,18 +96,18 @@ public class SimplePlanetRenderer extends Renderer
 	}
   }
 
-  public SimplePlanetRenderer(IImage image)
+  public SimplePlanetRenderer(String textureFilename)
   {
 	  _latRes = 16;
 	  _lonRes = 16;
-	  _textureImage = image;
-	  _textureID = -1;
-	_index = null;
+	  _textureFilename = textureFilename;
+	  _textureId = -1;
+	_indexes = null;
 	_vertices = null;
   }
   public void dispose()
   {
-	_index = null;
+	_indexes = null;
 	_vertices = null;
   }
 
@@ -132,39 +131,46 @@ public class SimplePlanetRenderer extends Renderer
 	// obtaing gl object reference
 	IGL gl = rc.getGL();
   
-	if (_textureImage != null && _textureID < 1)
+	if (_textureId < 1)
 	{
-	  _textureID = gl.uploadTexture(_textureImage, 2048, 1024);
+	  _textureId = rc.getTexturesHandler().getTextureIdFromFileName(rc, _textureFilename, 2048, 1024);
 	}
+  
+	if (_textureId < 1)
+	{
+	  rc.getLogger().logError("Can't load file %s", _textureFilename);
+	  return MAX_TIME_TO_RENDER;
+	}
+  
   
 	// insert pointers
 	gl.enableVertices();
 	gl.enableTextures();
 	gl.enableTexture2D();
   
-	gl.bindTexture(_textureID);
+	gl.bindTexture(_textureId);
 	gl.vertexPointer(3, 0, _vertices);
 	gl.setTextureCoordinates(2, 0, _texCoors);
   
 	// draw a red sphere
 	gl.color((float) 1, (float) 0, (float) 0, 1);
-	gl.drawTriangleStrip(_numIndex, _index);
+	gl.drawTriangleStrip(_numIndexes, _indexes);
   
 	gl.disableTexture2D();
 	gl.disableTextures();
 	gl.disableVertices();
   
-	return 0;
+	return MAX_TIME_TO_RENDER;
   }
 
   public final boolean onTouchEvent(TouchEvent touchEvent)
   {
-	  return false;
+	return false;
   }
 
-  public final boolean onResizeViewportEvent(int width, int height)
+  public final void onResizeViewportEvent(int width, int height)
   {
-	  return false;
+
   }
 
 

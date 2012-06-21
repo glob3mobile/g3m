@@ -31,17 +31,34 @@ public class MarksRenderer extends Renderer
   {
   //  rc.getLogger()->logInfo("MarksRenderer::render()");
   
-  //  IGL* gl = rc->getGL();
+	IGL gl = rc.getGL();
   
-  //  int __dgd_at_work;
-  //
-  //  int marksSize = _marks.size();
-  //  for (int i = 0; i < marksSize; i++) {
-  //    Mark* mark = _marks[i];
-  //    //rc->getLogger()->logInfo("Rendering Mark: \"%s\"", mark->getName().c_str());
-  //  }
+	gl.enableVertices();
+	gl.enableTextures();
   
-	return 9999;
+	gl.depthTest(false);
+	gl.blend(true);
+  
+	final Vector3D radius = rc.getPlanet().getRadii();
+	final double minDistanceToCamera = (radius.x() + radius.y() + radius.z()) * 2;
+  
+	int marksSize = _marks.size();
+	for (int i = 0; i < marksSize; i++)
+	{
+	  Mark mark = _marks.get(i);
+	  //rc->getLogger()->logInfo("Rendering Mark: \"%s\"", mark->getName().c_str());
+  
+	  mark.render(rc, minDistanceToCamera);
+	}
+  
+	gl.depthTest(true);
+	gl.blend(false);
+  
+	gl.disableTextures();
+	gl.disableVertices();
+  
+  
+	return MAX_TIME_TO_RENDER;
   }
 
   public boolean onTouchEvent(TouchEvent touchEvent)
@@ -64,9 +81,47 @@ public class MarksRenderer extends Renderer
 	_marks.add(mark);
   }
 
-  public final boolean onResizeViewportEvent(int width, int height)
+  public final void onResizeViewportEvent(int width, int height)
   {
-	  return false;
+
   }
 
 }
+//
+//int MarksRenderer::Render(RenderContext &rc) {
+//  // obtaing gl object reference
+//  IGL *gl = rc.GetGL();
+//  //Point3D po = View::GetInstance()->GetCamera()->GetPos();
+//  //Vector3D c(po.x, po.y, po.z); 
+//  Vector3D c = View::GetInstance()->GetCamera()->GetPos();
+//  
+//  gl->DepthTestEnabled(false);
+//  gl->BlendingEnabled(true);
+//  
+//  //DRAWING LOOP
+//  Ellipsoid *ellipsoid = SceneController::GetInstance()->getGlobe()->GetEllipsoid();
+//  Vector3D radius = ellipsoid->getRadii();
+//  double minDist = (radius.X + radius.Y + radius.Z) / 3;
+//  for (int i = 0; i < marks.markSet.size(); i++) {
+//    Mark *m = marks.markSet.at(i);
+//    
+//    Vector3D v = ellipsoid->ToVector3D(m->point);
+//    Vector3D normal = Ellipsoid::CentricSurfaceNormal(v);
+//    Vector3D vecCam = v.minus(c);
+//    
+//    int textureID = getMarkTexID(rc, m);
+//    
+//    // draw mark if close to the point and not eclipsed by the earth
+//    if (vecCam.Magnitude() < minDist && normal.AngleBetween(vecCam) > PI / 2) {
+//      gl->DrawBillBoard(textureID, (float) v.X, (float) v.Y, (float) v.Z);
+//      m->setVisible(true);
+//    } else
+//      m->setVisible(false);
+//  }
+//  
+//  gl->DepthTestEnabled(true);
+//  gl->BlendingEnabled(false);
+//  
+//  
+//  return 9999;
+//}	

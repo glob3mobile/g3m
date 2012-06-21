@@ -24,6 +24,8 @@ private:
   std::vector<TextureKey*> _textures;
   
 public:
+  int __Diego_destructor_must_delete_TextureKeys;
+  ~TexturesHandler() {}
   
   int getTextureIdFromFileName(const RenderContext* rc,
                                const std::string& filename,

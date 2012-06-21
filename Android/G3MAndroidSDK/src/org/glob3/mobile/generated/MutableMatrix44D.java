@@ -1,5 +1,11 @@
 package org.glob3.mobile.generated; 
-
+//
+//  Mat4.cpp
+//  G3MiOSSDK
+//
+//  Created by José Miguel S N on 06/06/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//
 
 //
 //  Mat4.hpp
@@ -234,28 +240,29 @@ public class MutableMatrix44D
 	double[] LA = { u.x(), v.x(), -w.x(), 0, u.y(), v.y(), -w.y(), 0, u.z(), v.z(), -w.z(), 0, -pos.dot(u), -pos.dot(v), pos.dot(w), 1};
   
 	MutableMatrix44D m = new MutableMatrix44D(LA);
+  
 	return m;
   }
 
-  public static MutableMatrix44D createProjectionMatrix(double left, double right, double bottom, double top, double near, double far)
+  public static MutableMatrix44D createProjectionMatrix(double left, double right, double bottom, double top, double znear, double zfar)
   {
 	// set frustum matrix in double
 	double rl = right - left;
 	double tb = top - bottom;
-	double fn = far - near;
+	double fn = zfar - znear;
 	double[] P = new double[16];
-	P[0] = 2 * near / rl;
+	P[0] = 2 * znear / rl;
 	P[1] = P[2] = P[3] = P[4] = 0;
-	P[5] = 2 * near / tb;
+	P[5] = 2 * znear / tb;
 	P[6] = P[7] = 0;
 	P[8] = (right + left) / rl;
 	P[9] = (top + bottom) / tb;
-	P[10] = -(far + near) / fn;
+	P[10] = -(zfar + znear) / fn;
 	P[11] = -1;
 	P[12] = P[13] = 0;
-	P[14] = -2 * far / fn * near;
+	P[14] = -2 * zfar / fn * znear;
 	P[15] = 0;
-	
+  
 	MutableMatrix44D m = new MutableMatrix44D(P);
 	return m;
   }

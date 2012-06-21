@@ -31,6 +31,8 @@ public:
     _glTextureId = -1;
   }
   
+  ~TextureKey() {}
+  
   void retain() {
     _referenceCounter++;
   }

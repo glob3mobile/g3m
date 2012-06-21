@@ -92,8 +92,14 @@ public class EffectsScheduler extends Renderer
   public int render(RenderContext rc)
   {
 	doOneCyle(rc);
-  
-	return 99999;
+	if (_effectsRuns.size() == 0)
+	{
+	  return MAX_TIME_TO_RENDER;
+	}
+	else
+	{
+	  return 0;
+	}
   }
 
   public boolean onTouchEvent(TouchEvent touchEvent)
@@ -101,9 +107,9 @@ public class EffectsScheduler extends Renderer
 	return false;
   }
 
-  public boolean onResizeViewportEvent(int width, int height)
+  public void onResizeViewportEvent(int width, int height)
   {
-	return false;
+  
   }
 
   public void dispose()

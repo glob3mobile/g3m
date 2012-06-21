@@ -198,7 +198,7 @@ public class CameraRenderer extends Renderer
   
 	if ((alpha.degrees() > 85.0) || center.isNan())
 	{
-		cameraAux.copyFrom(_camera0); //We trash the vertical rotation
+	  cameraAux.copyFrom(_camera0); //We trash the vertical rotation
 	}
   
 	//Rotating horizontally
@@ -262,15 +262,12 @@ public class CameraRenderer extends Renderer
 	return true;
   }
 
-  public final boolean onResizeViewportEvent(int width, int height)
+  public final void onResizeViewportEvent(int width, int height)
   {
 	if (_camera != null)
 	{
 	  _camera.resizeViewport(width, height);
-	  return true;
 	}
-	else
-	  return false;
   }
 
 
