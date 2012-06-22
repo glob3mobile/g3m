@@ -10,21 +10,65 @@
 #define G3MiOSSDK_Mat4_h
 
 class Vector3D;
-class Angle;
+//class Angle;
 class MutableVector3D;
 
+#include "Angle.hpp"
 
 // class to keep a 4x4 matrix
 class MutableMatrix44D {
 private:
   double _m[16];
-    
+  
   static bool invert_matrix(const double m[16], double out[16]);
   
   void transformPoint(double out[4], const double in[4]);
   
   
 public:
+  
+  static MutableMatrix44D identity() {
+    float I[16] = {
+      1, 0, 0, 0,
+      0, 1, 0, 0,
+      0, 0, 1, 0,
+      0, 0, 0, 1
+    };
+    return MutableMatrix44D(I);
+  }
+  
+  static MutableMatrix44D fromRotationX(const Angle& angle) {
+    double c = angle.cosinus();
+    double s = angle.sinus();
+    return MutableMatrix44D(1.0, 0.0, 0.0, 0.0,
+                            0.0,   c,  -s, 0.0,
+                            0.0,   s,   c, 0.0,
+                            0.0, 0.0, 0.0, 1.0);
+    
+  }
+  
+  static MutableMatrix44D fromRotationY(const Angle& angle) {
+    double c = angle.cosinus();
+    double s = angle.sinus();
+    return MutableMatrix44D(  c, 0.0,   s, 0.0,
+                            0.0, 1.0, 0.0, 0.0,
+                            -s, 0.0,   c, 0.0,
+                            0.0, 0.0, 0.0, 1.0);
+    
+  }
+  
+  static MutableMatrix44D fromRotationZ(const Angle& angle) {
+    double c = angle.cosinus();
+    double s = angle.sinus();
+    return MutableMatrix44D(  c,  -s, 0.0, 0.0,
+                              s,   c, 0.0, 0.0,
+                            0.0, 0.0, 1.0, 0.0,
+                            0.0, 0.0, 0.0, 1.0);
+  }
+  
+  static MutableMatrix44D fromTranslation(const MutableVector3D& translation);
+  
+  static MutableMatrix44D fromScale(const MutableVector3D& scale);
   
   MutableMatrix44D() {
     for (int i = 0; i < 16; i++) { _m[i] = 0.0;}
@@ -42,12 +86,37 @@ public:
     for (int i = 0; i < 16; i++) { _m[i] = M[i];}
   }
   
-  MutableMatrix44D multMatrix(const MutableMatrix44D& m) const;
+  MutableMatrix44D(double m11, double m12, double m13, double m14,
+                   double m21, double m22, double m23, double m24,
+                   double m31, double m32, double m33, double m34,
+                   double m41, double m42, double m43, double m44) {
+    _m[0]  = m11;
+    _m[1]  = m12;
+    _m[2]  = m13;
+    _m[3]  = m14;
+    
+    _m[4]  = m21;
+    _m[5]  = m22;
+    _m[6]  = m23;
+    _m[7]  = m24;
+    
+    _m[8]  = m31;
+    _m[9]  = m32;
+    _m[10] = m33;
+    _m[11] = m34;
+    
+    _m[12] = m41;
+    _m[13] = m42;
+    _m[14] = m43;
+    _m[15] = m44;
+  }
+  
+  MutableMatrix44D multiply(const MutableMatrix44D& m) const;
   
   MutableMatrix44D inverse() const;
   
   double get(int i) const { return _m[i];}
-    
+  
   //const double * getMatrix() const { return _m;}
   
   void copyToFloatMatrix(float M[16]) const { 

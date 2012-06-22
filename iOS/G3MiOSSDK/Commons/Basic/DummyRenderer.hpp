@@ -14,11 +14,11 @@
 class DummyRenderer: public Renderer {
 
 private:
-  int numIndices;
-  double halfSize;
+  int _numIndices;
+  double _halfSize;
   
-  unsigned char * index;
-  float * vertices;
+  unsigned char* _index;
+  float* _vertices;
 
 public:
   ~DummyRenderer();

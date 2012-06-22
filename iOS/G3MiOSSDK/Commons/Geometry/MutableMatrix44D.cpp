@@ -15,7 +15,7 @@
 #include "MutableVector3D.hpp"
 
 
-MutableMatrix44D MutableMatrix44D::multMatrix(const MutableMatrix44D& m) const {
+MutableMatrix44D MutableMatrix44D::multiply(const MutableMatrix44D& m) const {
   double R[16];
   for (int j = 0; j < 4; j++)
     for (int i = 0; i < 4; i++)
@@ -24,9 +24,7 @@ MutableMatrix44D MutableMatrix44D::multMatrix(const MutableMatrix44D& m) const {
       m.get(j * 4 + 2) * _m[8 + i] + 
       m.get(j * 4 + 3) * _m[12 + i];
   
-  MutableMatrix44D m2(R);
-  
-  return m2;
+  return MutableMatrix44D(R);
 }
 
 void MutableMatrix44D::print() const
@@ -213,5 +211,20 @@ MutableMatrix44D MutableMatrix44D::createProjectionMatrix(double left, double ri
   
   MutableMatrix44D m(P);
   return m;
+}
+
+MutableMatrix44D MutableMatrix44D::fromTranslation(const MutableVector3D& translation) {
+  return MutableMatrix44D(1.0, 0.0, 0.0, translation.x(),
+                          0.0, 1.0, 0.0, translation.y(),
+                          0.0, 0.0, 1.0, translation.z(),
+                          0.0, 0.0, 0.0, 1.0);
+}
+
+MutableMatrix44D MutableMatrix44D::fromScale(const MutableVector3D& scale) {
+  return MutableMatrix44D(scale.x(), 0.0, 0.0, 0,
+                          0.0, scale.y(), 0.0, 0,
+                          0.0, 0.0, scale.z(), 0,
+                          0.0, 0.0, 0.0, 1.0);
+
 }
 

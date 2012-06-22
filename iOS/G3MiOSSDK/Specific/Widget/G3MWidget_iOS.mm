@@ -21,12 +21,10 @@
 #include "TileRenderer.hpp"
 #include "DummyRenderer.hpp"
 #include "MarksRenderer.hpp"
-#include "Mark.hpp"
 #include "SimplePlanetRenderer.hpp"
-
-#include "Image_iOS.hpp"
-
 #include "Effects.hpp"
+#include "SceneGraphRenderer.hpp"
+#include "GLErrorRenderer.hpp"
 
 #include <stdlib.h>
 
@@ -130,7 +128,7 @@
       marks->addMark(m2);
       
       
-      for (int i = 0; i < 1000; i++) {
+      for (int i = 0; i < 500; i++) {
         const Angle latitude = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
         const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
         //NSLog(@"lat=%f, lon=%f", latitude.degrees(), longitude.degrees());
@@ -142,12 +140,22 @@
                        );
       } 
     }
-     
-    if (true) {
+    
+    if (false) {
       EffectsScheduler* scheduler = new EffectsScheduler();
       scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(3)));
       comp->addRenderer(scheduler);
     }
+    
+    if (false) {
+      SceneGraphRenderer* sgr = new SceneGraphRenderer();
+      SGCubeNode* cube = new SGCubeNode();
+//      cube->setScale(Vector3D(6378137.0, 6378137.0, 6378137.0));
+      sgr->getRootNode()->addChild(cube);
+      comp->addRenderer(sgr);
+    }
+    
+    comp->addRenderer(new GLErrorRenderer());
     
     TexturesHandler* texturesHandler = new TexturesHandler();
     

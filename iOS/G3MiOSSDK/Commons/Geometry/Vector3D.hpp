@@ -40,6 +40,10 @@ public:
   bool isNan() const {
     return isnan(_x*_y*_z);
   }
+
+  bool isZero() const {
+    return (_x == 0) && (_y == 0) && (_z == 0);
+  }
   
   Vector3D normalized() const;
     
