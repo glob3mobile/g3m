@@ -6,7 +6,9 @@ import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.CameraRenderer;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
+import org.glob3.mobile.generated.DummyEffect;
 import org.glob3.mobile.generated.DummyRenderer;
+import org.glob3.mobile.generated.EffectsScheduler;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.IFactory;
@@ -18,6 +20,7 @@ import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.SimplePlanetRenderer;
 import org.glob3.mobile.generated.TexturesHandler;
+import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.TouchEvent;
 
 import android.content.Context;
@@ -102,6 +105,12 @@ public class G3MWidget_Android extends GLSurfaceView implements
 						new Geodetic3D(latitude, longitude, 0)));
 			}
 		}
+		
+	    if (true) {
+	        EffectsScheduler scheduler = new EffectsScheduler();
+	        scheduler.startEffect(new DummyEffect(TimeInterval.fromSeconds(3)));
+	        comp.addRenderer(scheduler);
+	    }
 
 		ILogger logger = new Logger_Android(LogLevel.ErrorLevel);
 		IGL gl = new GL2();
