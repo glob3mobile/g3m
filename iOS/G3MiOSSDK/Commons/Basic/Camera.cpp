@@ -93,7 +93,7 @@ Vector3D Camera::pixel2Vector(const Vector2D& pixel) const {
   py = _viewport[3] - py;
   Vector3D pixel3D(px, py, 0);
   
-  MutableMatrix44D modelView = _projection.multMatrix(_model);
+  MutableMatrix44D modelView = _projection.multiply(_model);
   Vector3D obj = modelView.unproject(pixel3D, _viewport);
   if (obj.isNan()) return obj;
   
@@ -146,7 +146,7 @@ void Camera::rotateWithAxisAndPoint(const Vector3D& axis, const Vector3D& point,
   
   //MutableMatrix44D m = trans1.multMatrix(rot).multMatrix(trans2);
   
-  MutableMatrix44D m = trans2.multMatrix(rot).multMatrix(trans1);
+  MutableMatrix44D m = trans2.multiply(rot).multiply(trans1);
   
   //MutableMatrix44D m = trans1.multMatrix(trans2);
   
