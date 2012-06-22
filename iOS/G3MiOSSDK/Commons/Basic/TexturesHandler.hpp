@@ -14,14 +14,14 @@
 
 class IImage;
 class RenderContext;
-class TextureKey;
+class TextureHolder;
 
 
 
 
 class TexturesHandler {
 private:
-  std::vector<TextureKey*> _textures;
+  std::vector<TextureHolder*> _textureHolders;
   
 public:
   int __Diego_destructor_must_delete_TextureKeys;

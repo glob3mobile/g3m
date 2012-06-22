@@ -11,7 +11,7 @@
 #include "IImage.hpp"
 #include "Context.hpp"
 
-class TextureKey {
+class TextureHolder {
 public:
   const std::string _textureId;
   const int         _textureWidth;
@@ -20,9 +20,9 @@ public:
   
   long _referenceCounter;
   
-  TextureKey(const std::string textureId,
-             const int textureWidth,
-             const int textureHeight) :
+  TextureHolder(const std::string textureId,
+                const int textureWidth,
+                const int textureHeight) :
   _textureId(textureId),
   _textureWidth(textureWidth),
   _textureHeight(textureHeight)
@@ -31,7 +31,7 @@ public:
     _glTextureId = -1;
   }
   
-  ~TextureKey() {
+  ~TextureHolder() {
   }
   
   void retain() {
@@ -46,7 +46,7 @@ public:
     return _referenceCounter > 0;
   }
   
-  bool equalsTo(const TextureKey* other) {
+  bool equalsTo(const TextureHolder* other) {
     if (_textureWidth != other->_textureWidth) {
       return false;
     }
@@ -86,47 +86,47 @@ int TexturesHandler::getTextureId(const RenderContext* rc,
                                   int textureWidth,
                                   int textureHeight) {
   
-  TextureKey* key = new TextureKey(textureId, textureWidth, textureHeight);
+  TextureHolder* candidate = new TextureHolder(textureId, textureWidth, textureHeight);
   
-  for (int i = 0; i < _textures.size(); i++) {
-    TextureKey* each = _textures[i];
-    if (each->equalsTo(key)) {
-      each->retain();
-      delete key;
+  for (int i = 0; i < _textureHolders.size(); i++) {
+    TextureHolder* holder = _textureHolders[i];
+    if (holder->equalsTo(candidate)) {
+      holder->retain();
+      delete candidate;
       
-      return each->_glTextureId;
+      return holder->_glTextureId;
     }
   }
   
-  key->_glTextureId = rc->getGL()->uploadTexture(*image,
-                                                 textureWidth,
-                                                 textureHeight);
+  candidate->_glTextureId = rc->getGL()->uploadTexture(*image,
+                                                       textureWidth,
+                                                       textureHeight);
   
   rc->getLogger()->logInfo("Uploaded texture \"%s\" (%dx%d) to GPU with texId=%d" ,
                            textureId.c_str(),
                            textureWidth,
                            textureHeight,
-                           key->_glTextureId);
+                           candidate->_glTextureId);
   
-  _textures.push_back(key);
+  _textureHolders.push_back(candidate);
   
-  return key->_glTextureId;
+  return candidate->_glTextureId;
 }
 
 void TexturesHandler::takeTexture(const RenderContext* rc,
                                   int glTextureId) {
-  for (int i = 0; i < _textures.size(); i++) {
-    TextureKey* each = _textures[i];
+  for (int i = 0; i < _textureHolders.size(); i++) {
+    TextureHolder* holder = _textureHolders[i];
     
-    if (each->_glTextureId == glTextureId) {
-      each->release();
+    if (holder->_glTextureId == glTextureId) {
+      holder->release();
       
-      if (!each->isRetained()) {
-        _textures.erase(_textures.begin() + i);
+      if (!holder->isRetained()) {
+        _textureHolders.erase(_textureHolders.begin() + i);
         
-        rc->getGL()->deleteTexture(each->_glTextureId);
+        rc->getGL()->deleteTexture(holder->_glTextureId);
         
-        delete each;
+        delete holder;
       }
       
       return;
