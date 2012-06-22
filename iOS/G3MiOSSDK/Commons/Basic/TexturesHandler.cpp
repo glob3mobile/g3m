@@ -67,7 +67,7 @@ int TexturesHandler::getTextureIdFromFileName(const RenderContext* rc,
                                               const std::string &filename,
                                               int textureWidth,
                                               int textureHeight) {
-  IImage* image = rc->getFactory()->createImageFromFileName(filename);
+  const IImage* image = rc->getFactory()->createImageFromFileName(filename);
   
   const int texId = getTextureId(rc,
                                  image,
