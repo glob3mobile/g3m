@@ -128,7 +128,7 @@
       marks->addMark(m2);
       
       
-      for (int i = 0; i < 1000; i++) {
+      for (int i = 0; i < 500; i++) {
         const Angle latitude = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
         const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
         //NSLog(@"lat=%f, lon=%f", latitude.degrees(), longitude.degrees());
@@ -140,7 +140,7 @@
                        );
       } 
     }
-     
+    
     if (false) {
       EffectsScheduler* scheduler = new EffectsScheduler();
       scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(3)));
