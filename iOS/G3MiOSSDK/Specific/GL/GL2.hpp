@@ -67,9 +67,9 @@ public:
   void depthTest(bool b);
   
   void blend(bool b);
-  
+
   void drawBillBoard(const unsigned int textureId,
-                     const float x, const float y, const float z,
+                     const Vector3D& pos,
                      const float viewPortRatio);
 
   void deleteTexture(int glTextureId);

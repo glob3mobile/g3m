@@ -32,7 +32,7 @@ public class Factory_Android extends IFactory {
 		
 		final Bitmap bitmap;
 		try {
-			InputStream is = _context.getAssets().open("world.jpg");
+			InputStream is = _context.getAssets().open(filename);
 		    int size = is.available();
 			final byte[] imageData = new byte[size];
 			is.read(imageData);

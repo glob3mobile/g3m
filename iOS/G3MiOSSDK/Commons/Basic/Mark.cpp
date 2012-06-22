@@ -38,7 +38,7 @@ void Mark::render(const RenderContext* rc,
       
 //    rc->getLogger()->logInfo(" Visible   << %f %f", minDist, distanceToCamera);
       gl->drawBillBoard(_textureId,
-                        (float) markPosition.x(), (float) markPosition.y(), (float) markPosition.z(),
+                        markPosition,
                         camera->getViewPortRatio());
     }
     

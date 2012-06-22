@@ -12,6 +12,7 @@
 #include "GL2.hpp"
 
 #include "Image_iOS.hpp"
+#include "Vector3D.hpp"
 
 
 /*
@@ -282,15 +283,15 @@ void GL2::blend(bool b) {
 }
 
 void GL2::drawBillBoard(const unsigned int textureId,
-                        const float x, const float y, const float z,
+                        const Vector3D& pos,
                         const float viewPortRatio) {
   glUniform1i(Uniforms.BillBoard, true);
   
   const float vertex[] = {
-    x, y, z,
-    x, y, z,
-    x, y, z,
-    x, y, z
+    pos.x(), pos.y(), pos.z(),
+    pos.x(), pos.y(), pos.z(),
+    pos.x(), pos.y(), pos.z(),
+    pos.x(), pos.y(), pos.z()
   };
   
   glUniform1f(Uniforms.ViewPortRatio, viewPortRatio);

@@ -1,5 +1,7 @@
 package org.glob3.mobile.specific;
 
+import java.util.Random;
+
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.CameraRenderer;
 import org.glob3.mobile.generated.Color;
@@ -9,7 +11,6 @@ import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IGL;
-import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.Mark;
@@ -69,30 +70,47 @@ public class G3MWidget_Android extends GLSurfaceView implements
 		comp.addRenderer(cr);
 
 		// Dummy cube
-		DummyRenderer dummy = new DummyRenderer();
-		comp.addRenderer(dummy);
+		if (false){
+			DummyRenderer dummy = new DummyRenderer();
+			comp.addRenderer(dummy);
+		}
+
+		// simple planet renderer, with a basic world image
+		if (true){
+			SimplePlanetRenderer spr = new SimplePlanetRenderer("world.jpg");
+			comp.addRenderer(spr);
+		}
 
 		// marks renderer
-		MarksRenderer marks = new MarksRenderer();
-		comp.addRenderer(marks);
-		Mark m1 = new Mark("Fuerteventura", "plane.png", new Geodetic3D(
-				Angle.fromDegrees(28.05), Angle.fromDegrees(-14.36), 0));
-		marks.addMark(m1);
-		
-		// simple planet renderer, with a basic world image
-		SimplePlanetRenderer spr = new SimplePlanetRenderer("world.jpg");
-		comp.addRenderer(spr);
+		if (true){
+			MarksRenderer marks = new MarksRenderer();
+			comp.addRenderer(marks);
+			Mark m1 = new Mark("Fuerteventura", "plane.png", new Geodetic3D(
+					Angle.fromDegrees(28.05), Angle.fromDegrees(-14.36), 0));
+			marks.addMark(m1);
+	
+			Mark m2 = new Mark("Las Palmas", "plane.png", new Geodetic3D(
+					Angle.fromDegrees(28.05), Angle.fromDegrees(-15.36), 0));
+			marks.addMark(m2);
+	
+			Random r = new Random();
+			for (int i = 0; i < 1000; i++) {
+				Angle latitude = Angle.fromDegrees((int) (r.nextInt() % 180) - 90);
+				Angle longitude = Angle.fromDegrees((int) (r.nextInt() % 360) - 180);
+	
+				marks.addMark(new Mark("Random", "mark.png", 
+						new Geodetic3D(latitude, longitude, 0)));
+			}
+		}
 
 		ILogger logger = new Logger_Android(LogLevel.ErrorLevel);
 		IGL gl = new GL2();
-		
+
 		TexturesHandler texturesHandler = new TexturesHandler();
 
-		_widget = G3MWidget.create(factory, logger, 
-				gl, texturesHandler, Planet.createEarth(),comp, 
-				width, height, 
-				Color.fromRGB((float) 0.0, (float) 0.1, (float) 0.2, (float) 1.0),
-				true);
+		_widget = G3MWidget.create(factory, logger, gl, texturesHandler, Planet
+				.createEarth(), comp, width, height, Color.fromRGB((float) 0.0,
+				(float) 0.1, (float) 0.2, (float) 1.0), true);
 
 		// SETTING RENDERER
 		_es2renderer = new ES2Renderer(this.getContext(), _widget);
@@ -135,12 +153,12 @@ public class G3MWidget_Android extends GLSurfaceView implements
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
+
 	public boolean onTouchEvent(MotionEvent event) {
-		
+
 		final TouchEvent te = _motionEventProcessor.processEvent(event);
-		
-		if (te != null){
+
+		if (te != null) {
 			// SEND MESSAGE TO RENDER THREAD
 			queueEvent(new Runnable() {
 				@Override
@@ -149,7 +167,7 @@ public class G3MWidget_Android extends GLSurfaceView implements
 				}
 			});
 			return true;
-		} else{
+		} else {
 			return false;
 		}
 	}
