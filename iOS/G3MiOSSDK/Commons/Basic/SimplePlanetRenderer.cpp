@@ -12,35 +12,23 @@ SimplePlanetRenderer::SimplePlanetRenderer(const std::string textureFilename):
 _latRes(16),//FOR NOW THEY MUST BE EQUAL
 _lonRes(16),
 _textureFilename(textureFilename),
-_textureId(-1)
+_mesh(NULL)
 {
-  _indexes = NULL;
-  _vertices = NULL;
 }
 
 SimplePlanetRenderer::~SimplePlanetRenderer()
 {
-  delete[] _indexes;
-  delete[] _vertices;
+  delete _mesh;
 }
 
 void SimplePlanetRenderer::initialize(const InitializationContext* ic)
 {
-  if (ic == NULL) return;
-  const Planet *planet = ic->getPlanet();
-  
-  createVertices(*planet);
-  
-  createMeshIndex();
-  
-  createTextureCoordinates();
-  
 }
 
-void SimplePlanetRenderer::createVertices(const Planet& planet)
+float * SimplePlanetRenderer::createVertices(const Planet& planet)
 {
   //VERTICES
-  _vertices = new float[_latRes *_lonRes * 3];
+  float* _vertices = new float[_latRes *_lonRes * 3];
   
   double lonRes1 = (double) (_lonRes-1), latRes1 = (double) (_latRes-1);
   int p = 0;
@@ -56,16 +44,18 @@ void SimplePlanetRenderer::createVertices(const Planet& planet)
       _vertices[p++] = (float) v.z();
     }
   }
+  
+  return _vertices;
 }
 
 
 
-void SimplePlanetRenderer::createMeshIndex()
+unsigned char* SimplePlanetRenderer::createMeshIndex()
 {
   int res = _lonRes;
   
-  _numIndexes = 2 * (res - 1) * (res + 1);
-  _indexes = new unsigned char[_numIndexes];
+  int _numIndexes = 2 * (res - 1) * (res + 1);
+  unsigned char *_indexes = new unsigned char[_numIndexes];
   
   int n = 0;
   for (int j = 0; j < res - 1; j++) {
@@ -76,11 +66,13 @@ void SimplePlanetRenderer::createMeshIndex()
     }
     _indexes[n++] = (char) (j * res + 2 * res - 1);
   }
+  
+  return _indexes;
 }
 
-void SimplePlanetRenderer::createTextureCoordinates()
+float* SimplePlanetRenderer::createTextureCoordinates()
 {
-  _texCoors = new float[_latRes *_lonRes * 2];
+  float* _texCoors = new float[_latRes *_lonRes * 2];
   
   double lonRes1 = (double) (_lonRes-1), latRes1 = (double) (_latRes-1);
   int p = 0;
@@ -92,40 +84,38 @@ void SimplePlanetRenderer::createTextureCoordinates()
       _texCoors[p++] = (float) v;
     }
   }
+  
+  return _texCoors;
 }
 
 
 int SimplePlanetRenderer::render(const RenderContext* rc){
   
-  // obtaing gl object reference
-  IGL *gl = rc->getGL();
+  //GENERATING MESH
+  if (_mesh == NULL){
   
-  if (_textureId < 1) {
-    _textureId = rc->getTexturesHandler()->getTextureIdFromFileName(rc, _textureFilename, 2048, 1024);
+    int texID = rc->getTexturesHandler()->getTextureIdFromFileName(rc, _textureFilename, 2048, 1024);
+    
+    if (texID < 1) {
+      rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
+      return MAX_TIME_TO_RENDER;
+    }
+    
+    const Planet *planet = rc->getPlanet();
+    
+    float * ver = createVertices(*planet);
+    
+    int res = _lonRes;
+    int numIndexes = 2 * (res - 1) * (res + 1);
+    unsigned char * ind = createMeshIndex();
+    
+    float * texC = createTextureCoordinates();
+    
+    _mesh = new IndexedTriangleStripMesh(true, ver, ind, numIndexes, texID, texC);
+    
   }
   
-  if (_textureId < 1) {
-    rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
-    return MAX_TIME_TO_RENDER;
-  }
+  _mesh->render(rc);
 
-  
-  // insert pointers
-  gl->enableVertices();
-  gl->enableTextures();
-  gl->enableTexture2D();
-  
-  gl->bindTexture(_textureId);
-  gl->vertexPointer(3, 0, _vertices);
-  gl->setTextureCoordinates(2, 0, _texCoors); 
-  
-  // draw a red sphere
-  gl->color((float) 1, (float) 0, (float) 0, 1);
-  gl->drawTriangleStrip(_numIndexes, _indexes);
-  
-  gl->disableTexture2D();
-  gl->disableTextures();
-  gl->disableVertices();
-  
   return MAX_TIME_TO_RENDER;
 }

@@ -13,25 +13,22 @@
 
 #include "IImage.hpp"
 
+#include "IndexedTriangleStripMesh.hpp"
+
 class SimplePlanetRenderer: public Renderer {
 private:
   
   const std::string _textureFilename;
-  int _textureId;
-  
-  int _numIndexes;
-  
-  unsigned char * _indexes;
-  float * _vertices;
-  float * _texCoors;
   
   const int _latRes;
   const int _lonRes;
   
+  IndexedTriangleStripMesh * _mesh;
   
-  void createVertices(const Planet& planet);
-  void createMeshIndex();
-  void createTextureCoordinates();
+  
+  float * createVertices(const Planet& planet);
+  unsigned char * createMeshIndex();
+  float * createTextureCoordinates();
   
 public:
   SimplePlanetRenderer(const std::string textureFilename);

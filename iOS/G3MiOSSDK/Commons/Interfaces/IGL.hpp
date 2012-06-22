@@ -61,7 +61,7 @@ public:
   
   virtual void vertexPointer(int size, int stride, const float vertex[]) = 0;
   
-  virtual void drawTriangleStrip(int n, unsigned char i[]) = 0;
+  virtual void drawTriangleStrip(int n, const unsigned char i[]) = 0;
   
   virtual void drawLines(int n, unsigned char i[]) = 0; 
   

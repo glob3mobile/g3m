@@ -40,7 +40,7 @@ public:
   
    void vertexPointer(int size, int stride, const float vertex[]) ;
   
-   void drawTriangleStrip(int n, unsigned char *i) ;
+   void drawTriangleStrip(int n, const unsigned char *i) ;
   
    void drawLines(int n, unsigned char *i); 
    
