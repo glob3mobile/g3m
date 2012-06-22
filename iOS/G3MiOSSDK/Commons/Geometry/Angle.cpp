@@ -18,11 +18,16 @@ Angle Angle::clampedTo(const Angle& min,
   if (_degrees > max._degrees) {
     return max;
   }
-    
+  
   return *this;
 }
 
 Angle Angle::average(const Angle& a) const {
   Angle theSum = this->add(a);
   return theSum.times(0.5);
+}
+
+bool Angle::isBetween(const Angle& min,
+                      const Angle& max) const {
+  return (_degrees >= min._degrees) && (_degrees <= max._degrees);
 }

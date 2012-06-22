@@ -39,16 +39,11 @@ public:
   const Angle longitude() const {
     return _longitude;
   }
-
-  /*
-  bool closeTo(const Geodetic2D& other) const {
-    if (!_latitude.closeTo(other._latitude)) {
-      return false;
-    }
-    
-    return _longitude.closeTo(other._longitude);
-  }*/
-
+  
+  bool closeTo(const Geodetic2D& other) const;
+  
+  bool isBetween(const Geodetic2D& min, const Geodetic2D& max) const;
+  
 };
 
 

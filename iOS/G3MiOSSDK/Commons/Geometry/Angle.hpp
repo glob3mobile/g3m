@@ -93,6 +93,9 @@ public:
   
   Angle average(const Angle& a) const;
   
+  bool isBetween(const Angle& min,
+                 const Angle& max) const;
+  
 };
 
 

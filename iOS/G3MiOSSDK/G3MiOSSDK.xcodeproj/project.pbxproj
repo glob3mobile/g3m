@@ -57,6 +57,7 @@
 		CF883B821590984900AEE39C /* TexturesHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF883B811590984900AEE39C /* TexturesHandler.cpp */; };
 		CF883B871591FEBF00AEE39C /* SceneGraphRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF883B861591FEBF00AEE39C /* SceneGraphRenderer.cpp */; };
 		CF883B8A1592471600AEE39C /* GLErrorRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF883B891592471600AEE39C /* GLErrorRenderer.cpp */; };
+		CF883BCB1594B9A500AEE39C /* Sector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF883BCA1594B9A500AEE39C /* Sector.cpp */; };
 		CFA3E7C9157E537B00DAABD6 /* MarksRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA3E7C8157E537B00DAABD6 /* MarksRenderer.cpp */; };
 		D81FDA2D15949DED00A091E2 /* IndexedTriangleStripMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81FDA2C15949DED00A091E2 /* IndexedTriangleStripMesh.cpp */; };
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
@@ -103,7 +104,7 @@
 		38D786E21587ACA5003BBC75 /* TileRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileRenderer.cpp; path = Commons/Basic/TileRenderer.cpp; sourceTree = "<group>"; };
 		38D786E41587B3DD003BBC75 /* Tile.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Tile.hpp; path = Commons/Basic/Tile.hpp; sourceTree = "<group>"; };
 		38D786E51587B446003BBC75 /* Tile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Tile.cpp; path = Commons/Basic/Tile.cpp; sourceTree = "<group>"; };
-		38D786E71587B52F003BBC75 /* Sector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Sector.h; path = Commons/Geometry/Sector.h; sourceTree = "<group>"; };
+		38D786E71587B52F003BBC75 /* Sector.hpp */ = {isa = PBXFileReference; name = Sector.hpp; path = Commons/Geometry/Sector.hpp; sourceTree = "<group>"; };
 		38D787071588F886003BBC75 /* SimplePlanetRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SimplePlanetRenderer.cpp; path = Commons/Basic/SimplePlanetRenderer.cpp; sourceTree = "<group>"; };
 		38D787081588F886003BBC75 /* SimplePlanetRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SimplePlanetRenderer.hpp; path = Commons/Basic/SimplePlanetRenderer.hpp; sourceTree = "<group>"; };
 		CC14B637157D34C700793C92 /* GL2.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = GL2.mm; path = Specific/GL/GL2.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -128,11 +129,12 @@
 		CF883B861591FEBF00AEE39C /* SceneGraphRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SceneGraphRenderer.cpp; path = Commons/Basic/SceneGraphRenderer.cpp; sourceTree = "<group>"; };
 		CF883B881592470900AEE39C /* GLErrorRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GLErrorRenderer.hpp; path = Commons/Basic/GLErrorRenderer.hpp; sourceTree = "<group>"; };
 		CF883B891592471600AEE39C /* GLErrorRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLErrorRenderer.cpp; path = Commons/Basic/GLErrorRenderer.cpp; sourceTree = "<group>"; };
+		CF883BCA1594B9A500AEE39C /* Sector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sector.cpp; path = Commons/Geometry/Sector.cpp; sourceTree = "<group>"; };
 		CFA3E7C7157E536900DAABD6 /* MarksRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MarksRenderer.hpp; path = Commons/Basic/MarksRenderer.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFA3E7C8157E537B00DAABD6 /* MarksRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MarksRenderer.cpp; path = Commons/Basic/MarksRenderer.cpp; sourceTree = "<group>"; };
 		CFF95F741588DF0A00B56E11 /* TimeInterval.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TimeInterval.hpp; path = Commons/Basic/TimeInterval.hpp; sourceTree = "<group>"; };
 		CFF95F761588E82200B56E11 /* Color.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Color.hpp; path = Commons/Basic/Color.hpp; sourceTree = "<group>"; };
-		D81FDA2A15949DE400A091E2 /* IndexedTriangleStripMesh.hpp */ = {isa = PBXFileReference; path = IndexedTriangleStripMesh.hpp; sourceTree = "<group>"; };
+		D81FDA2A15949DE400A091E2 /* IndexedTriangleStripMesh.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IndexedTriangleStripMesh.hpp; sourceTree = "<group>"; };
 		D81FDA2C15949DED00A091E2 /* IndexedTriangleStripMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IndexedTriangleStripMesh.cpp; sourceTree = "<group>"; };
 		D8228EBC157F7F6100BBAF60 /* MutableMatrix44D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MutableMatrix44D.hpp; path = Commons/Geometry/MutableMatrix44D.hpp; sourceTree = "<group>"; };
 		D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = MutableMatrix44D.cpp; path = Commons/Geometry/MutableMatrix44D.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
@@ -265,7 +267,8 @@
 				383BD3AA1577EE5A0012AC53 /* Vector3D.hpp */,
 				D8228EBC157F7F6100BBAF60 /* MutableMatrix44D.hpp */,
 				D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */,
-				38D786E71587B52F003BBC75 /* Sector.h */,
+				38D786E71587B52F003BBC75 /* Sector.hpp */,
+				CF883BCA1594B9A500AEE39C /* Sector.cpp */,
 			);
 			name = Geometry;
 			sourceTree = "<group>";
@@ -452,6 +455,7 @@
 				D81FDA2D15949DED00A091E2 /* IndexedTriangleStripMesh.cpp in Sources */,
 				CF883B871591FEBF00AEE39C /* SceneGraphRenderer.cpp in Sources */,
 				CF883B8A1592471600AEE39C /* GLErrorRenderer.cpp in Sources */,
+				CF883BCB1594B9A500AEE39C /* Sector.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

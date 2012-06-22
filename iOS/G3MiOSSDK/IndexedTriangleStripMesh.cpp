@@ -78,7 +78,7 @@ _numIndex(indexes.size())
 
 IndexedTriangleStripMesh::IndexedTriangleStripMesh(bool owner, const float* vertices, 
                                                    const unsigned char* indexes, 
-                                                  const int numIndex, const int texID, 
+                                                   const int numIndex, const int texID, 
                                                    const float* texCoors, const float* normals):
 _owner(owner),
 _vertices(vertices),
@@ -139,20 +139,19 @@ _textureId(texID)
 
 void IndexedTriangleStripMesh::render(const RenderContext* rc) const
 {
-  
-  // obtaing gl object reference
   IGL *gl = rc->getGL();
   
-  // insert pointers
   gl->enableVertices();
   
-  if (_textureId > 0 && _texCoors != NULL){     //TEXTURED
+  const bool isTextured = (_textureId > 0) && (_texCoors != NULL);
+  if (isTextured) {
     gl->enableTextures();
     gl->enableTexture2D();
     
     gl->bindTexture(_textureId);
     gl->setTextureCoordinates(2, 0, _texCoors); 
-  } else {                                      //NOT TEXTURED
+  }
+  else {
     gl->color(_color);
   }
   
@@ -160,11 +159,10 @@ void IndexedTriangleStripMesh::render(const RenderContext* rc) const
   
   gl->drawTriangleStrip(_numIndex, _indexes);
   
-  if (_textureId > 1 && _texCoors != NULL){     //TEXTURED
+  if (isTextured) {
     gl->disableTexture2D();
     gl->disableTextures();
   }
   
   gl->disableVertices();
-  
 }

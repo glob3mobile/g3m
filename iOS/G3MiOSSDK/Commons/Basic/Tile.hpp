@@ -9,7 +9,7 @@
 #ifndef G3MiOSSDK_Tile_h
 #define G3MiOSSDK_Tile_h
 
-#include "Sector.h"
+#include "Sector.hpp"
 #include "Planet.hpp"
 #include "Context.hpp"
 #include "MutableVector3D.hpp"
@@ -17,7 +17,7 @@
 class Tile {
   
 public:
-  Tile(const Sector &bbox): BBox(bbox), vertices(NULL) {}
+  Tile(const Sector &bounds): _bounds(bounds), _vertices(NULL) {}
   ~Tile();
   
   void createVertices(const Planet *planet);
@@ -27,15 +27,15 @@ public:
   static void deleteIndices();
   
 private:
-  const Sector BBox;
-  float *vertices;
+  const Sector _bounds;
+  float *_vertices;
   
   static unsigned int _resolution;
   static bool _skirts;
-  static unsigned int numIndices, numBorderIndices, numInnerIndices;
-  static unsigned char *indices, *borderIndices, *innerIndices;
+  static unsigned int _numIndices, _numBorderIndices, _numInnerIndices;
+  static unsigned char *_indices, *_borderIndices, *_innerIndices;
   
-  MutableVector3D center;
+  MutableVector3D _center;
 
 
   

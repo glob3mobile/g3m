@@ -14,29 +14,28 @@
 #include "Vector3D.hpp"
 #include "Camera.hpp"
 
-unsigned int Tile::numIndices = 0;
-unsigned int Tile::numBorderIndices = 0;
-unsigned int Tile::numInnerIndices = 0;
-unsigned char * Tile::indices;
-unsigned char *Tile::borderIndices;
-unsigned char *Tile::innerIndices;
+unsigned int Tile::_numIndices = 0;
+unsigned int Tile::_numBorderIndices = 0;
+unsigned int Tile::_numInnerIndices = 0;
+unsigned char * Tile::_indices;
+unsigned char *Tile::_borderIndices;
+unsigned char *Tile::_innerIndices;
 unsigned int Tile::_resolution;
 bool Tile::_skirts;
 
 
 Tile::~Tile()
 {
-  if (vertices!=NULL) delete[] vertices;
+  if (_vertices!=NULL) delete[] _vertices;
 }
 
 
 void Tile::createVertices(const Planet *planet) 
 {
-  Angle maxLat = BBox.max().latitude(), minLat = BBox.min().latitude();
-  Angle minLon = BBox.min().longitude(), maxLon = BBox.max().longitude();
-  //Globe *globe = SceneController::GetInstance()->getGlobe();
-  //Ellipsoid *ellipsoid = globe->GetEllipsoid();
-  //bool skirts = globe->SkirtedTiles();
+  const Angle maxLat = _bounds.upper().latitude();
+  const Angle maxLon = _bounds.upper().longitude();
+  const Angle minLat = _bounds.lower().latitude();
+  const Angle minLon = _bounds.lower().longitude();
   
   int resol = _resolution;
   int resol2 = resol * resol;
@@ -52,8 +51,8 @@ void Tile::createVertices(const Planet *planet)
   if (_skirts) numVertices += 4 * resol - 4;
   
   // if first time for tile, alloc memory
-  if (vertices == NULL) {
-    vertices = new float[numVertices * 3];
+  if (_vertices == NULL) {
+    _vertices = new float[numVertices * 3];
     //textureCoor = new float[numVertices * 2];
   }
   
@@ -89,7 +88,7 @@ void Tile::createVertices(const Planet *planet)
   Angle lon = Angle::fromDegrees((minLon.degrees() + maxLon.degrees()) / 2);
   Geodetic3D g3(lat, lon, maxH);
   //Vector3D center = planet->toVector3D(g3);
-  center = planet->toVector3D(g3).asMutableVector3D();
+  _center = planet->toVector3D(g3).asMutableVector3D();
   
   // create a nxn mesh 
   unsigned int posV = 0;
@@ -97,9 +96,9 @@ void Tile::createVertices(const Planet *planet)
   for (int j = 0; j < resol; j++)
     for (int i = 0; i < resol; i++) {
       unsigned int pos = j * resol + i;
-      vertices[posV++] = (float) (x[pos] - center.x());
-      vertices[posV++] = (float) (y[pos] - center.y());
-      vertices[posV++] = (float) (z[pos] - center.z());
+      _vertices[posV++] = (float) (x[pos] - _center.x());
+      _vertices[posV++] = (float) (y[pos] - _center.y());
+      _vertices[posV++] = (float) (z[pos] - _center.z());
       //textureCoor[posT++] = u[pos];
       //textureCoor[posT++] = v[pos];
     }
@@ -110,9 +109,9 @@ void Tile::createVertices(const Planet *planet)
     // west side
     for (int j = 0; j < resol - 1; j++) {
       unsigned int pos = j * resol;
-      vertices[posV++] = (float) (x[pos] * sizeSkirt - center.x());
-      vertices[posV++] = (float) (y[pos] * sizeSkirt - center.y());
-      vertices[posV++] = (float) (z[pos] * sizeSkirt - center.z());
+      _vertices[posV++] = (float) (x[pos] * sizeSkirt - _center.x());
+      _vertices[posV++] = (float) (y[pos] * sizeSkirt - _center.y());
+      _vertices[posV++] = (float) (z[pos] * sizeSkirt - _center.z());
       //textureCoor[posT++] = u[pos];
       //textureCoor[posT++] = v[pos];
     }
@@ -120,9 +119,9 @@ void Tile::createVertices(const Planet *planet)
     // south side
     for (int i = 0; i < resol - 1; i++) {
       unsigned int pos = (resol - 1) * resol + i;
-      vertices[posV++] = (float) (x[pos] * sizeSkirt - center.x());
-      vertices[posV++] = (float) (y[pos] * sizeSkirt - center.y());
-      vertices[posV++] = (float) (z[pos] * sizeSkirt - center.z());
+      _vertices[posV++] = (float) (x[pos] * sizeSkirt - _center.x());
+      _vertices[posV++] = (float) (y[pos] * sizeSkirt - _center.y());
+      _vertices[posV++] = (float) (z[pos] * sizeSkirt - _center.z());
       //textureCoor[posT++] = u[pos];
       //textureCoor[posT++] = v[pos];
     }
@@ -130,9 +129,9 @@ void Tile::createVertices(const Planet *planet)
     // east side
     for (int j = resol - 1; j > 0; j--) {
       unsigned int pos = j * resol + resol - 1;
-      vertices[posV++] = (float) (x[pos] * sizeSkirt - center.x());
-      vertices[posV++] = (float) (y[pos] * sizeSkirt - center.y());
-      vertices[posV++] = (float) (z[pos] * sizeSkirt - center.z());
+      _vertices[posV++] = (float) (x[pos] * sizeSkirt - _center.x());
+      _vertices[posV++] = (float) (y[pos] * sizeSkirt - _center.y());
+      _vertices[posV++] = (float) (z[pos] * sizeSkirt - _center.z());
       //textureCoor[posT++] = u[pos];
       //textureCoor[posT++] = v[pos];
     }
@@ -140,9 +139,9 @@ void Tile::createVertices(const Planet *planet)
     // north side
     for (int i = resol - 1; i > 0; i--) {
       unsigned int pos = i;
-      vertices[posV++] = (float) (x[pos] * sizeSkirt - center.x());
-      vertices[posV++] = (float) (y[pos] * sizeSkirt - center.y());
-      vertices[posV++] = (float) (z[pos] * sizeSkirt - center.z());
+      _vertices[posV++] = (float) (x[pos] * sizeSkirt - _center.x());
+      _vertices[posV++] = (float) (y[pos] * sizeSkirt - _center.y());
+      _vertices[posV++] = (float) (z[pos] * sizeSkirt - _center.z());
       //textureCoor[posT++] = u[pos];
       //textureCoor[posT++] = v[pos];
     }
@@ -159,17 +158,17 @@ void Tile::createVertices(const Planet *planet)
 
 void Tile::deleteIndices()
 {
-  if (numIndices) {
-    delete[] indices;
-    numIndices = 0;
+  if (_numIndices) {
+    delete[] _indices;
+    _numIndices = 0;
   }
-  if (numInnerIndices) {
-    delete[] innerIndices;
-    numInnerIndices = 0;
+  if (_numInnerIndices) {
+    delete[] _innerIndices;
+    _numInnerIndices = 0;
   }
-  if (numBorderIndices) {
-    delete[] borderIndices;
-    numBorderIndices = 0;
+  if (_numBorderIndices) {
+    delete[] _borderIndices;
+    _numBorderIndices = 0;
   }
 }
 
@@ -180,84 +179,92 @@ void Tile::createIndices(unsigned int resol, bool skirts)
   _skirts = skirts;
   
   // alloc memory 
-  numIndices = (resol - 1) * (2 * resol + 2) - 1; //remove the first degenerated vertex
-  if (skirts) numIndices += 8 * resol - 4;
-  indices = new unsigned char[numIndices];
+  _numIndices = (resol - 1) * (2 * resol + 2) - 1; //remove the first degenerated vertex
+  if (skirts) _numIndices += 8 * resol - 4;
+  _indices = new unsigned char[_numIndices];
   
   // create indices vector for the mesh
   unsigned int posI = 0;
   for (int j = 0; j < resol - 1; j++) {
-    if (j > 0) indices[posI++] = (unsigned char) (j * resol);
+    if (j > 0) _indices[posI++] = (unsigned char) (j * resol);
     for (int i = 0; i < resol; i++) {
-      indices[posI++] = (unsigned char) (j * resol + i);
-      indices[posI++] = (unsigned char) (j * resol + i + resol);
+      _indices[posI++] = (unsigned char) (j * resol + i);
+      _indices[posI++] = (unsigned char) (j * resol + i + resol);
     }
-    indices[posI++] = (unsigned char) (j * resol + 2 * resol - 1);
+    _indices[posI++] = (unsigned char) (j * resol + 2 * resol - 1);
   }
   
   // create skirts 
   if (skirts) {
-    indices[posI++] = 0;
+    _indices[posI++] = 0;
     unsigned int posS = resol * resol;
     
     // west side
     for (int j = 0; j < resol - 1; j++) {
       unsigned int pos = j * resol;
-      indices[posI++] = (unsigned char) (pos);
-      indices[posI++] = (unsigned char) (posS++);
+      _indices[posI++] = (unsigned char) (pos);
+      _indices[posI++] = (unsigned char) (posS++);
     }
     
     // south side
     for (int i = 0; i < resol - 1; i++) {
       unsigned int pos = (resol - 1) * resol + i;
-      indices[posI++] = (unsigned char) pos;
-      indices[posI++] = (unsigned char) (posS++);
+      _indices[posI++] = (unsigned char) pos;
+      _indices[posI++] = (unsigned char) (posS++);
     }
     
     // east side
     for (int j = resol - 1; j > 0; j--) {
       unsigned int pos = j * resol + resol - 1;
-      indices[posI++] = (unsigned char) (pos);
-      indices[posI++] = (unsigned char) (posS++);
+      _indices[posI++] = (unsigned char) (pos);
+      _indices[posI++] = (unsigned char) (posS++);
     }
     
     // north side
     for (int i = resol - 1; i > 0; i--) {
       unsigned int pos = i;
-      indices[posI++] = (unsigned char) pos;
-      indices[posI++] = (unsigned char) (posS++);
+      _indices[posI++] = (unsigned char) pos;
+      _indices[posI++] = (unsigned char) (posS++);
     }
     
     // last triangles
-    indices[posI++] = (unsigned char) 0;
-    indices[posI++] = (unsigned char) (resol * resol);
-    indices[posI++] = (unsigned char) (resol * resol);
+    _indices[posI++] = (unsigned char) 0;
+    _indices[posI++] = (unsigned char) (resol * resol);
+    _indices[posI++] = (unsigned char) (resol * resol);
   }
   
   // create border indices (wireframe mode)
-  numBorderIndices = 4 * (resol - 1);
-  borderIndices = new unsigned char[numBorderIndices];
+  _numBorderIndices = 4 * (resol - 1);
+  _borderIndices = new unsigned char[_numBorderIndices];
   posI = 0;
-  for (int j = 0; j < resol - 1; j++) borderIndices[posI++] = (unsigned char) (j * resol);
-  for (int i = 0; i < resol - 1; i++) borderIndices[posI++] = (unsigned char) ((resol - 1) * resol + i);
-  for (int j = resol - 1; j > 0; j--) borderIndices[posI++] = (unsigned char) (j * resol + resol - 1);
-  for (int i = resol - 1; i > 0; i--) borderIndices[posI++] = (unsigned char) (i);
+  for (int j = 0; j < resol - 1; j++) {
+    _borderIndices[posI++] = (unsigned char) (j * resol);
+  }
+  for (int i = 0; i < resol - 1; i++) {
+    _borderIndices[posI++] = (unsigned char) ((resol - 1) * resol + i);
+  }
+  for (int j = resol - 1; j > 0; j--) {
+    _borderIndices[posI++] = (unsigned char) (j * resol + resol - 1);
+  }
+  for (int i = resol - 1; i > 0; i--) {
+    _borderIndices[posI++] = (unsigned char) (i);
+  }
   
   // create inner indices (wireframe mode)
-  numInnerIndices = numBorderIndices * (resol - 2);
-  innerIndices = new unsigned char[numInnerIndices];
+  _numInnerIndices = _numBorderIndices * (resol - 2);
+  _innerIndices = new unsigned char[_numInnerIndices];
   posI = 0;
   for (int j = 1; j < resol - 1; j++)
     for (int i = 0; i < resol - 1; i++) {
       int pos = j * resol + i;
-      innerIndices[posI++] = (unsigned char) pos;
-      innerIndices[posI++] = (unsigned char) (pos + 1);
+      _innerIndices[posI++] = (unsigned char) pos;
+      _innerIndices[posI++] = (unsigned char) (pos + 1);
     }
   for (int i = 1; i < resol - 1; i++)
     for (int j = 0; j < resol - 1; j++) {
       int pos = j * resol + i;
-      innerIndices[posI++] = (unsigned char) pos;
-      innerIndices[posI++] = (unsigned char) (pos + resol);
+      _innerIndices[posI++] = (unsigned char) pos;
+      _innerIndices[posI++] = (unsigned char) (pos + resol);
     }
 }
 
@@ -267,15 +274,15 @@ void Tile::render(const RenderContext* rc)
 {
   // obtain the gl object
   IGL *gl = rc->getGL();
-    
+  
   // translate model reference system to tile center
   gl->pushMatrix();
-  MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(center.asVector3D());
+  MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_center.asVector3D());
   gl->multMatrixf(T);
-
+  
   // set opengl texture and pointers
   //gl->BindTexture(idTexture);
-  gl->vertexPointer(3, 0, vertices);
+  gl->vertexPointer(3, 0, _vertices);
   //gl->TexCoordPointer(2, 0, textureCoor);
   gl->color(0.5f,0.5f,0.8f,1.0f);
   
@@ -284,7 +291,7 @@ void Tile::render(const RenderContext* rc)
     
     // draw solid mesh
     gl->enablePolygonOffset(5, 5);
-    gl->drawTriangleStrip(numIndices, indices);
+    gl->drawTriangleStrip(_numIndices, _indices);
     gl->disablePolygonOffset();
     
     // draw wireframe
@@ -292,17 +299,17 @@ void Tile::render(const RenderContext* rc)
     //gl->disableTextures();
     gl->lineWidth(1);
     gl->color(0.0f, 0.0f, 0.0f, 1.0f);
-    gl->drawLines(numInnerIndices, innerIndices);
+    gl->drawLines(_numInnerIndices, _innerIndices);
     gl->lineWidth(2);
     gl->color(1.0f, 0.0f, 0.0f, 1.0f);
-    gl->drawLineLoop(numBorderIndices, borderIndices);
+    gl->drawLineLoop(_numBorderIndices, _borderIndices);
     //gl->EnableTextures();
     //gl->EnableTexture2D();
     
   } else {
     
     // draw the mesh
-    gl->drawTriangleStrip(numIndices, indices);
+    gl->drawTriangleStrip(_numIndices, _indices);
   }
   
   // recover original model matrix
