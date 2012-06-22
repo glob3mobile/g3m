@@ -31,7 +31,8 @@ public:
     _glTextureId = -1;
   }
   
-  ~TextureKey() {}
+  ~TextureKey() {
+  }
   
   void retain() {
     _referenceCounter++;
@@ -68,11 +69,15 @@ int TexturesHandler::getTextureIdFromFileName(const RenderContext* rc,
                                               int textureHeight) {
   IImage* image = rc->getFactory()->createImageFromFileName(filename);
   
-  return getTextureId(rc,
-                      image,
-                      filename, // filename as the textureId
-                      textureWidth,
-                      textureHeight);
+  const int texId = getTextureId(rc,
+                                 image,
+                                 filename, // filename as the textureId
+                                 textureWidth,
+                                 textureHeight);
+  
+  delete image;
+  
+  return texId;;
 }
 
 int TexturesHandler::getTextureId(const RenderContext* rc,
@@ -87,6 +92,8 @@ int TexturesHandler::getTextureId(const RenderContext* rc,
     TextureKey* each = _textures[i];
     if (each->equalsTo(key)) {
       each->retain();
+      delete key;
+      
       return each->_glTextureId;
     }
   }
