@@ -14,6 +14,9 @@
 #include "Planet.hpp"
 #include "TexturesHandler.hpp"
 
+#define MAX_TIME_TO_RENDER 1000
+
+
 
 class Camera;
 

@@ -76,7 +76,7 @@ public class DummyRenderer extends Renderer
   
 	// obtaing gl object reference
 	IGL gl = rc.getGL();
-	
+  
 	gl.enableVertices();
   
 	// insert pointers
@@ -150,9 +150,8 @@ public class DummyRenderer extends Renderer
 	}
   
 	gl.enableTextures();
-	gl.disableVertices();
   
-	return 9999;
+	return DefineConstants.MAX_TIME_TO_RENDER;
   }
 
   public final boolean onTouchEvent(TouchEvent touchEvent)
@@ -160,10 +159,9 @@ public class DummyRenderer extends Renderer
 	return false;
   }
 
-  public final boolean onResizeViewportEvent(int width, int height)
+  public final void onResizeViewportEvent(int width, int height)
   {
-	  return false;
-  }
 
+  }
 
 }

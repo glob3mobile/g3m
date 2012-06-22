@@ -17,6 +17,10 @@ package org.glob3.mobile.generated;
 
 
 
+//#define MAX_TIME_TO_RENDER 1000
+
+
+
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Camera;
 

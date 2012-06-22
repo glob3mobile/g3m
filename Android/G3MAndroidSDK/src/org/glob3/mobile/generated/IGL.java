@@ -72,10 +72,18 @@ public abstract class IGL
 
   public abstract int getError();
 
-  public abstract int uploadTexture(IImage image, int widthTexture, int heightTexture);
+  public abstract int uploadTexture(IImage image, int textureWidth, int textureHeight);
 
   public abstract void setTextureCoordinates(int size, int stride, float[] texcoord);
 
   public abstract void bindTexture(int n);
+
+  public abstract void depthTest(boolean b);
+
+  public abstract void blend(boolean b);
+
+  public abstract void drawBillBoard(int textureId, float x, float y, float z, float viewPortRatio);
+
+  public abstract void deleteTexture(int glTextureId);
 
 }

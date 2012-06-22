@@ -1,6 +1,4 @@
 package org.glob3.mobile.generated; 
-
-import android.opengl.Matrix;
 /*
  *  Camera.cpp
  *  Prueba Opengl iPad
@@ -22,15 +20,6 @@ import android.opengl.Matrix;
  */
 
 
-
-
-
-
-
-//#define AUTO_DRAG_FRICTION 0.985
-//#define AUTO_DRAG_MIN 1e-7
-//#define AUTO_ZOOM_FRICTION 0.850
-//#define AUTO_ZOOM_MIN 1e-7
 
 
 /**
@@ -94,15 +83,7 @@ public class Camera
   
 	// compute projection matrix
 	double ratioScreen = (double) _viewport[3] / _viewport[2];
-	
-	double left = -0.3 / ratioScreen * znear;
-	double right = 0.3 / ratioScreen * znear;
-	double bottom = -0.3 * znear;
-	double top = 0.3 * znear;
-	double far = 10000 * znear;
-	
-	
-	_projection = MutableMatrix44D.createProjectionMatrix(left, right, bottom, top, znear, far);
+	_projection = MutableMatrix44D.createProjectionMatrix(-0.3 / ratioScreen * znear, 0.3 / ratioScreen * znear, -0.3 * znear, 0.3 * znear, znear, 10000 * znear);
   
 	// obtaing gl object reference
 	IGL gl = rc.getGL();
@@ -110,12 +91,6 @@ public class Camera
   
 	// make the model
 	_model = MutableMatrix44D.createModelMatrix(_pos, _center, _up);
-	
-//	float [] M = new float[16];
-//	_model.copyToFloatMatrix(M);
-//	M[14] *= 10;
-//	_model = new MutableMatrix44D(M);
-//	
 	gl.loadMatrixf(_model);
   }
 
@@ -193,11 +168,8 @@ public class Camera
   //Zoom
   public final void zoom(double factor)
   {
-	int __ask_JM_;
-  //  if (factor != 1.0){
-	MutableVector3D w = _pos.sub(_center);
+	final MutableVector3D w = _pos.sub(_center);
 	_pos = _center.add(w.times(factor));
-  //  }
   }
 
   //Pivot
@@ -240,6 +212,13 @@ public class Camera
 	for (int k = 0; k < 4; k++)
 		System.out.printf("%d ", _viewport[k]);
 	System.out.print("\n\n");
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: float getViewPortRatio() const
+  public final float getViewPortRatio()
+  {
+	return (float) _width / _height;
   }
 
   private int _width;

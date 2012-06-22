@@ -48,7 +48,7 @@ public class CompositeRenderer extends Renderer
   {
 	//rc->getLogger()->logInfo("CompositeRenderer::render()");
   
-	int min = 9999;
+	int min = DefineConstants.MAX_TIME_TO_RENDER;
 	for (int i = 0; i < _renderers.size(); i++)
 	{
 	  int x = _renderers.get(i).render(rc);
@@ -60,9 +60,9 @@ public class CompositeRenderer extends Renderer
 
   public final boolean onTouchEvent(TouchEvent touchEvent)
   {
-	for (int i = 0; i < _renderers.size(); i++)
+	// the events are processed bottom to top
+	for (int i = _renderers.size() - 1; i >= 0; i--)
 	{
-	  //THE EVENT IS PROCESSED ONLY BY THE FIRST RENDERER
 	  if (_renderers.get(i).onTouchEvent(touchEvent))
 	  {
 		return true;
@@ -80,14 +80,12 @@ public class CompositeRenderer extends Renderer
 	}
   }
 
-  public final boolean onResizeViewportEvent(int width, int height)
+  public final void onResizeViewportEvent(int width, int height)
   {
-	boolean res = false;
-	for (int i = 0; i < _renderers.size(); i++)
+	// the events are processed bottom to top
+	for (int i = _renderers.size() - 1; i >= 0; i--)
 	{
-	  //THE EVENT IS PROCESSED ONLY BY ALL RENDERERS
-	  res = res | _renderers.get(i).onResizeViewportEvent(width, height);
+	  _renderers.get(i).onResizeViewportEvent(width, height);
 	}
-	return res;
   }
 }

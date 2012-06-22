@@ -31,6 +31,8 @@ public:
     _glTextureId = -1;
   }
   
+  ~TextureKey() {}
+  
   void retain() {
     _referenceCounter++;
   }
@@ -93,7 +95,7 @@ int TexturesHandler::getTextureId(const RenderContext* rc,
                                                  textureWidth,
                                                  textureHeight);
   
-  rc->getLogger()->logInfo("Uploaded texture \"%s\" (%ix%i) to GPU with texId=%i" ,
+  rc->getLogger()->logInfo("Uploaded texture \"%s\" (%dx%d) to GPU with texId=%d" ,
                            textureId.c_str(),
                            textureWidth,
                            textureHeight,
