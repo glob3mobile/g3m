@@ -132,5 +132,10 @@ void TexturesHandler::takeTexture(const RenderContext* rc,
       return;
     }
   }
-  
+}
+
+TexturesHandler::~TexturesHandler() {
+  if (_textureHolders.size() > 0) {
+    printf("WARNING: The TexturesHandler is destroyed, but the inner textures were not released.\n"); 
+  }
 }
