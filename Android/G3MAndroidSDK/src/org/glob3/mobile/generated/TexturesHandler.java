@@ -60,7 +60,7 @@ public class TexturesHandler
   
 	key._glTextureId = rc.getGL().uploadTexture(image, textureWidth, textureHeight);
   
-	rc.getLogger().logInfo("Uploaded texture \"%s\" (%ix%i) to GPU with texId=%i", textureId, textureWidth, textureHeight, key._glTextureId);
+	rc.getLogger().logInfo("Uploaded texture \"%s\" (%dx%d) to GPU with texId=%d", textureId, textureWidth, textureHeight, key._glTextureId);
   
 	_textures.add(key);
   

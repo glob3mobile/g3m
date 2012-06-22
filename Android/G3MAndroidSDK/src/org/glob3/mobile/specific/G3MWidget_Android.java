@@ -16,6 +16,7 @@ import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.SimplePlanetRenderer;
+import org.glob3.mobile.generated.TexturesHandler;
 import org.glob3.mobile.generated.TouchEvent;
 
 import android.content.Context;
@@ -74,23 +75,24 @@ public class G3MWidget_Android extends GLSurfaceView implements
 		// marks renderer
 		MarksRenderer marks = new MarksRenderer();
 		comp.addRenderer(marks);
-
-		Mark m1 = new Mark("Fuerteventura", "", "plane.png", new Geodetic3D(
+		Mark m1 = new Mark("Fuerteventura", "plane.png", new Geodetic3D(
 				Angle.fromDegrees(28.05), Angle.fromDegrees(-14.36), 0));
 		marks.addMark(m1);
-
+		
 		// simple planet renderer, with a basic world image
-		IImage im = ((Factory_Android) factory)
-				.createImageFromFileName("world.jpg");
-		SimplePlanetRenderer spr = new SimplePlanetRenderer(im);
+		SimplePlanetRenderer spr = new SimplePlanetRenderer("world.jpg");
 		comp.addRenderer(spr);
 
 		ILogger logger = new Logger_Android(LogLevel.ErrorLevel);
 		IGL gl = new GL2();
+		
+		TexturesHandler texturesHandler = new TexturesHandler();
 
-		_widget = G3MWidget.create(factory, logger, gl, Planet.createEarth(),
-				comp, width, height, Color.fromRGB((float) 0.0, (float) 0.1,
-						(float) 0.2, (float) 1.0));
+		_widget = G3MWidget.create(factory, logger, 
+				gl, texturesHandler, Planet.createEarth(),comp, 
+				width, height, 
+				Color.fromRGB((float) 0.0, (float) 0.1, (float) 0.2, (float) 1.0),
+				true);
 
 		// SETTING RENDERER
 		_es2renderer = new ES2Renderer(this.getContext(), _widget);

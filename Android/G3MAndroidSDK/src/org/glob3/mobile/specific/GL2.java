@@ -294,5 +294,58 @@ public class GL2 extends IGL {
 	public void bindTexture(int n) {
 	    GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, n);
 	}
+	@Override
+	public void depthTest(boolean b) {
+		if (b) {
+			GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+		} else {
+			GLES20.glDisable(GLES20.GL_DEPTH_TEST);
+		}
+	}
+	@Override
+	public void blend(boolean b) {
+		if (b) {
+			GLES20.glEnable(GLES20.GL_BLEND);
+		} else {
+			GLES20.glDisable(GLES20.GL_BLEND);
+		}
+	}
+	@Override
+	public void drawBillBoard(int textureId, float x, float y, float z,
+			float viewPortRatio) {
+		GLES20.glUniform1i(Uniforms.BillBoard, 1); // DRAWING BILLBOARD
+
+		final float vertex[] = { x, y, z, x, y, z, x, y, z, x, y, z };
+
+		GLES20.glUniform1f(Uniforms.ViewPortRatio, viewPortRatio);
+
+		final float texcoord[] = { 0, 0, 0, 1, 1, 0, 1, 1 };
+
+		final FloatBuffer fbv = floatArrayToFloatBuffer(vertex);
+		final FloatBuffer fbt = floatArrayToFloatBuffer(texcoord);
+
+		GLES20.glDisable(GLES20.GL_DEPTH_TEST);
+
+		GLES20.glUniform1i(Uniforms.EnableTexture, 1);
+		GLES20.glUniform4f(Uniforms.FlatColor, 1.0f, 0.0f, 0.0f, 1.0f);
+
+		GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
+		GLES20.glVertexAttribPointer(Attributes.Position, 3, GLES20.GL_FLOAT,
+				false, 0, fbv);
+		GLES20.glVertexAttribPointer(Attributes.TextureCoord, 2,
+				GLES20.GL_FLOAT, false, 0, fbt);
+
+		GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
+
+		GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+
+		GLES20.glUniform1i(Uniforms.BillBoard, 0); // NOT DRAWING BILLBOARD
+		
+	}
+	@Override
+	public void deleteTexture(int glTextureId) {
+		int [] ts = { glTextureId};
+		GLES20.glDeleteTextures(1, ts, 0);
+	}
 
 }

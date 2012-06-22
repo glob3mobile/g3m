@@ -27,6 +27,7 @@ public class Factory_Android extends IFactory {
 	@Override
 	public void deleteTimer(ITimer timer) {}
 	
+	@Override
 	public IImage createImageFromFileName(String filename) {
 		
 		final Bitmap bitmap;
@@ -47,5 +48,8 @@ public class Factory_Android extends IFactory {
 			return null;
 		
 	}
+
+	@Override
+	public void deleteImage(IImage image) {}
 
 }
