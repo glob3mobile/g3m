@@ -14,14 +14,13 @@
 #include "Vector2D.hpp"
 #include "Vector3D.hpp"
 
-class IndexedTriangleStripMesh
-{
+class IndexedTriangleStripMesh {
   
   const unsigned char * _indexes;
   const float * _vertices;
   const int _numIndex;
   
-  const float * _texCoors;
+  const float * _texCoords;
   const float * _normals;
   const Color _color;
   const int _textureId;
@@ -32,23 +31,34 @@ public:
   ~IndexedTriangleStripMesh();
   
   //NOT TEXTURED
-  IndexedTriangleStripMesh(bool owner, const float* vertices, const unsigned char* indexes, const int numIndex, 
-                           const Color& color, const float* normals = NULL);
+  IndexedTriangleStripMesh(bool owner,
+                           const float* vertices,
+                           const unsigned char* indexes,
+                           const int numIndex, 
+                           const Color& color,
+                           const float* normals = NULL);
   
-  IndexedTriangleStripMesh(const std::vector<Vector3D>& vertices, const std::vector<unsigned char>& indexes,
-                           const Color& color, const std::vector<Vector3D>* normals = NULL);
+  IndexedTriangleStripMesh(const std::vector<Vector3D>& vertices,
+                           const std::vector<unsigned char>& indexes,
+                           const Color& color,
+                           const std::vector<Vector3D>* normals = NULL);
   
   //TEXTURED
-  IndexedTriangleStripMesh(bool owner, const float* vertices, const unsigned char* indexes, const int numIndex, 
-                           const int texID, const float* texCoors, const float* normals = NULL);
+  IndexedTriangleStripMesh(bool owner,
+                           const float* vertices,
+                           const unsigned char* indexes,
+                           const int numIndex, 
+                           const int texID,
+                           const float* texCoords,
+                           const float* normals = NULL);
   
-  IndexedTriangleStripMesh(const std::vector<Vector3D>& vertices, const std::vector<unsigned char>& indexes,
-                           const int texID, const std::vector<Vector2D>& texCoors, const std::vector<Vector3D>* normals = NULL);
+  IndexedTriangleStripMesh(const std::vector<Vector3D>& vertices,
+                           const std::vector<unsigned char>& indexes,
+                           const int texID,
+                           const std::vector<Vector2D>& texCoords,
+                           const std::vector<Vector3D>* normals = NULL);
   
   void render(const RenderContext* rc) const;
-  
-  
-  
   
 };
 

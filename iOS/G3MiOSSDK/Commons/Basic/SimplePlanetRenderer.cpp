@@ -72,7 +72,7 @@ unsigned char* SimplePlanetRenderer::createMeshIndex()
 
 float* SimplePlanetRenderer::createTextureCoordinates()
 {
-  float* _texCoors = new float[_latRes *_lonRes * 2];
+  float* _texCoords = new float[_latRes *_lonRes * 2];
   
   double lonRes1 = (double) (_lonRes-1), latRes1 = (double) (_latRes-1);
   int p = 0;
@@ -80,12 +80,12 @@ float* SimplePlanetRenderer::createTextureCoordinates()
     double u = (i / lonRes1);
     for (double j = 0.0; j < _latRes; j++) {
       double v = 1.0 - (j / latRes1);
-      _texCoors[p++] = (float) u;
-      _texCoors[p++] = (float) v;
+      _texCoords[p++] = (float) u;
+      _texCoords[p++] = (float) v;
     }
   }
   
-  return _texCoors;
+  return _texCoords;
 }
 
 
