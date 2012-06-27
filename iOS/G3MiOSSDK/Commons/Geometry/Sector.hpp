@@ -19,21 +19,20 @@ private:
   const Geodetic2D _lower;
   const Geodetic2D _upper;
   
+  const Angle _deltaLatitude;
+  const Angle _deltaLongitude;
+
+  
 public:
   
   Sector(const Geodetic2D& lower,
          const Geodetic2D& upper) :
-  _lower(lower), _upper(upper)
+  _lower(lower),
+  _upper(upper),
+  _deltaLatitude(upper.latitude().sub(lower.latitude())),
+  _deltaLongitude(upper.longitude().sub(lower.longitude()))
   {
   }
-  
-  
-  Sector(const Angle& lowerLat, const Angle& lowerLon, 
-         const Angle& upperLat, const Angle& upperLon) :
-  _lower(lowerLat, lowerLon), _upper(upperLat, upperLon)
-  {
-  }
-  
   
   const Geodetic2D lower() const {
     return _lower;
@@ -46,6 +45,14 @@ public:
   bool contains(const Geodetic2D& position) const;
   
   bool touchesWith(const Sector& that) const;
+  
+  Angle getDeltaLatitude() const {
+    return _deltaLatitude;
+  }
+  
+  Angle getDeltaLongitude() const {
+    return _deltaLongitude;
+  }
   
 };
 

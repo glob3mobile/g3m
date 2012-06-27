@@ -25,6 +25,7 @@
 #include "Effects.hpp"
 #include "SceneGraphRenderer.hpp"
 #include "GLErrorRenderer.hpp"
+#include "EllipsoidalTileTessellator.hpp"
 
 #include <stdlib.h>
 
@@ -92,8 +93,10 @@
     comp->addRenderer(cameraRenderer);
     
     // very basic tile renderer
-    if (false) {
-      TileRenderer* tr = new TileRenderer(12);
+    if (true) {
+      TileTessellator* tessellator = new EllipsoidalTileTessellator();
+      
+      TileRenderer* tr = new TileRenderer(tessellator);
       comp->addRenderer(tr);
     }
     
@@ -110,7 +113,7 @@
     }
     
     // marks renderer
-    if (true){
+    if (false){
       MarksRenderer* marks = new MarksRenderer();
       comp->addRenderer(marks);
       

@@ -9,12 +9,13 @@
 #ifndef G3MiOSSDK_IndexedTriangleStripMesh_h
 #define G3MiOSSDK_IndexedTriangleStripMesh_h
 
+#include "Mesh.hpp"
 #include "Color.hpp"
-#include "Context.hpp"
 #include "Vector2D.hpp"
 #include "Vector3D.hpp"
 
-class IndexedTriangleStripMesh {
+
+class IndexedTriangleStripMesh : public Mesh {
   
   const unsigned char * _indexes;
   const float * _vertices;
@@ -58,7 +59,7 @@ public:
                            const std::vector<Vector2D>& texCoords,
                            const std::vector<Vector3D>* normals = NULL);
   
-  void render(const RenderContext* rc) const;
+  virtual void render(const RenderContext* rc) const;
   
 };
 

@@ -10,28 +10,39 @@
 #define G3MiOSSDK_TileRenderer_h
 
 #include "Renderer.hpp"
-#include "Tile.hpp"
+
+class Tile;
+class TileTessellator;
+
 
 class TileRenderer: public Renderer {
-  
 private:
-  const int _resolution;
+  const TileTessellator* _tessellator;
+  std::vector<Tile*> _topTiles;
   
-  std::vector <Tile *> initialTiles;
-
+  void clearTopTiles();
+  void createTopTiles(const InitializationContext* ic);
   
 public:
-  TileRenderer(int resolution);
+  TileRenderer(const TileTessellator* tessellator) :
+  _tessellator(tessellator)
+  {
+    
+  }
+  
   ~TileRenderer();
   
   void initialize(const InitializationContext* ic);  
   
   int render(const RenderContext* rc);
   
-  bool onTouchEvent(const TouchEvent* touchEvent);
+  bool onTouchEvent(const TouchEvent* touchEvent) {
+    return false;
+  }
   
-  void onResizeViewportEvent(int width, int height) { }
-  
+  void onResizeViewportEvent(int width, int height) {
+    
+  }
   
 };
 
