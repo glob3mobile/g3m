@@ -188,7 +188,8 @@ int GL2::uploadTexture(const IImage& image, int textureWidth, int textureHeight)
   CGContextTranslateCTM( context, 0, textureHeight - textureHeight );
   CGContextDrawImage( context, CGRectMake( 0, 0, textureWidth, textureHeight ), im.CGImage );
   
-  
+  CGContextRelease(context);
+
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   
   GLuint textureID;    
@@ -203,8 +204,6 @@ int GL2::uploadTexture(const IImage& image, int textureWidth, int textureHeight)
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
   
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth, textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
-  
-  CGContextRelease(context);
   
   free(imageData);
   

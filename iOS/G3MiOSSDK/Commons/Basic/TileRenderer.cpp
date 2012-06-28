@@ -64,6 +64,7 @@ void TileRenderer::createTopLevelTiles(const InitializationContext* ic) {
     }
   }
   
+  ic->getLogger()->logInfo("Created %i top level tiles", _topLevelTiles.size());
 }
 
 void TileRenderer::initialize(const InitializationContext* ic)
