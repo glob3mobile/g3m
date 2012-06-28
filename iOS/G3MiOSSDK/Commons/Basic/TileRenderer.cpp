@@ -6,8 +6,6 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#include <iostream>
-
 #include "TileRenderer.hpp"
 #include "Tile.hpp"
 
@@ -32,7 +30,7 @@ void TileRenderer::createTopLevelTiles(const InitializationContext* ic) {
   
   const Sector topSector(Geodetic2D(Angle::fromDegrees(-90), Angle::fromDegrees(-180)),
                          Geodetic2D(Angle::fromDegrees(90), Angle::fromDegrees(180)));
-  const int K = 1;
+  const int K = 32;
   const int splitsByLatitude = 2 * K;
   const int splitsByLongitude = 4 * K;
   const int topLevel = 0;
@@ -73,6 +71,9 @@ void TileRenderer::initialize(const InitializationContext* ic) {
 }
 
 int TileRenderer::render(const RenderContext* rc) {
+  
+ // std::vector<Tile*> visibleTiles = getVisibleTiles(rc);
+  
   for (int i = 0; i < _topLevelTiles.size(); i++) {
     Tile* tile = _topLevelTiles[i];
     tile->render(rc, _tessellator);

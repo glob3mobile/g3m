@@ -32,6 +32,8 @@ private:
     return _mesh;
   }
   
+  bool isVisible(const RenderContext* rc);
+  
 public:
   Tile(const Sector& sector,
        int level,

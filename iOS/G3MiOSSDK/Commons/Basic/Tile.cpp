@@ -6,8 +6,6 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#include <iostream>
-
 #include "Tile.hpp"
 //#include "Angle.hpp"
 //#include "Geodetic3D.hpp"
@@ -25,14 +23,13 @@
 //unsigned int Tile::_resolution;
 //bool Tile::_skirts;
 
+//#include "Camera.hpp"
 
-Tile::~Tile()
-{
+Tile::~Tile() {
   //  if (_vertices!=NULL) delete[] _vertices;
   delete _mesh;
 }
 
-//
 //void Tile::createVertices(const Planet *planet) 
 //{
 //  const Angle maxLat = _bounds.upper().latitude();
@@ -158,7 +155,6 @@ Tile::~Tile()
 //  delete[] v;
 //}
 
-
 //void Tile::deleteIndices()
 //{
 //  if (_numIndices) {
@@ -271,8 +267,6 @@ Tile::~Tile()
 //    }
 //}
 
-
-
 //void Tile::render(const RenderContext* rc)
 //{
 //  // obtain the gl object
@@ -319,12 +313,22 @@ Tile::~Tile()
 //  gl->popMatrix();
 //}
 
+bool Tile::isVisible(const RenderContext *rc) {
+ 
+  return true;
+}
+
 void Tile::render(const RenderContext* rc,
                   const TileTessellator* tessellator) {
   int ___diego_at_work;
   
-  const Mesh* mesh = getMesh(rc, tessellator);
-  if (mesh != NULL) {
-    mesh->render(rc);
+//  Camera* camera = rc->getCamera();
+//  Vector3D pos = camera->getPos();
+  
+  if (isVisible(rc)) {
+    const Mesh* mesh = getMesh(rc, tessellator);
+    if (mesh != NULL) {
+      mesh->render(rc);
+    }
   }
 }

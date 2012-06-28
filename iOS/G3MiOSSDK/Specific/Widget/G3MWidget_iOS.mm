@@ -169,11 +169,13 @@
     
     TexturesHandler* texturesHandler = new TexturesHandler();
     
+    const Planet* planet = Planet::createEarth();
+    
     _widget = G3MWidget::create(factory,
                                 logger,
                                 gl,
                                 texturesHandler,
-                                Planet::createEarth(),
+                                planet, 
                                 comp,
                                 width, height,
                                 Color::fromRGB((float)0, (float)0.1, (float)0.2, (float)1),
