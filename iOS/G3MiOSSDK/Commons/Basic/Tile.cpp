@@ -323,7 +323,7 @@ void Tile::render(const RenderContext* rc,
                   const TileTessellator* tessellator) {
   int ___diego_at_work;
   
-  Mesh* mesh = getMesh(rc, tessellator);
+  const Mesh* mesh = getMesh(rc, tessellator);
   if (mesh != NULL) {
     mesh->render(rc);
   }

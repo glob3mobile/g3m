@@ -74,7 +74,7 @@ public:
   
   void deleteTexture(int glTextureId);
   
-  virtual void cullFace(bool b, CullFace face);
+  void cullFace(bool b, CullFace face);
   
 private:
   MutableMatrix44D            _modelView;

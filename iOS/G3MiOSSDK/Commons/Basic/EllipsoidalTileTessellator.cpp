@@ -50,11 +50,11 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
   indexes.push_back(2);
   indexes.push_back(3);
   
-  double r = (rand() % 100) / 100.0;
-  double g = (rand() % 100) / 100.0;
-  double b = (rand() % 100) / 100.0;
-  const Color color = Color::fromRGB(r, g, b, 1);
-  
+//  double r = (rand() % 100) / 100.0;
+//  double g = (rand() % 100) / 100.0;
+//  double b = (rand() % 100) / 100.0;
+//  const Color color = Color::fromRGB(r, g, b, 1);
+//  
 //  return new IndexedTriangleStripMesh(vertices, indexes, color);
   return new IndexedTriangleStripMesh(vertices, indexes, texID, texCoords);
 }

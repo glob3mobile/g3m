@@ -24,15 +24,6 @@ private:
   
   Mesh* _mesh;
   
-  //  float *_vertices;
-  //  
-  //  static unsigned int _resolution;
-  //  static bool _skirts;
-  //  static unsigned int _numIndices, _numBorderIndices, _numInnerIndices;
-  //  static unsigned char *_indices, *_borderIndices, *_innerIndices;
-  
-  //  MutableVector3D _center;
-  
   Mesh* getMesh(const RenderContext* rc,
                 const TileTessellator* tessellator) {
     if (_mesh == NULL) {
