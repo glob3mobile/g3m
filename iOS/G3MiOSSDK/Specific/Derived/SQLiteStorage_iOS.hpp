@@ -10,15 +10,13 @@
 #define G3MiOSSDK_SQLiteStorage_hpp
 
 #include "IStorage.hpp"
-#import <sqlite3.h>
+
 class SQLiteStorage_iOS: public IStorage {
 public:
-    void IFile* findFileFromFileName(const std::string filename) const {
-    }
+    virtual IFile* findFileFromFileName(const std::string filename) const;
     
 private:
-    void openConexion(){
-    }
-}
+    virtual void openConexion();
+};
 
 #endif

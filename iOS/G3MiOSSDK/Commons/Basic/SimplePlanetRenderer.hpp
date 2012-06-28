@@ -30,6 +30,8 @@ private:
   unsigned char * createMeshIndex();
   float * createTextureCoordinates();
   
+  bool initializeMesh(const RenderContext* rc);
+  
 public:
   SimplePlanetRenderer(const std::string textureFilename);
   ~SimplePlanetRenderer();

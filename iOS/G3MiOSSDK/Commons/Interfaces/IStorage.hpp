@@ -8,13 +8,20 @@
 
 #ifndef G3MiOSSDK_IStorage_hpp
 #define G3MiOSSDK_IStorage_hpp
+
+
+#include <string>
+using std::string;
+
+class IFile;
+
 class IStorage{
 public:
-    virtual FILE* findFileFromFileName(const std::string filename) const = 0;
+    virtual IFile* findFileFromFileName(const std::string filename) const = 0;
     
     // a virtual destructor is needed for conversion to Java
     virtual ~IStorage() {}
-}
+};
 
 
 #endif

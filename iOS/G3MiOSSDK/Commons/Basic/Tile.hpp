@@ -10,34 +10,76 @@
 #define G3MiOSSDK_Tile_h
 
 #include "Sector.hpp"
-#include "Planet.hpp"
-#include "Context.hpp"
-#include "MutableVector3D.hpp"
+
+class RenderContext;
+class Mesh;
+#include "TileTessellator.hpp"
 
 class Tile {
+private:
+  const Sector _sector;
+  const int    _level;
+  const int    _row;
+  const int    _column;
+  
+  Mesh* _mesh;
+  
+  //  float *_vertices;
+  //  
+  //  static unsigned int _resolution;
+  //  static bool _skirts;
+  //  static unsigned int _numIndices, _numBorderIndices, _numInnerIndices;
+  //  static unsigned char *_indices, *_borderIndices, *_innerIndices;
+  
+  //  MutableVector3D _center;
+  
+  Mesh* getMesh(const RenderContext* rc,
+                const TileTessellator* tessellator) {
+    if (_mesh == NULL) {
+      _mesh = tessellator->createMesh(rc, this);
+    }
+    return _mesh;
+  }
   
 public:
-  Tile(const Sector &bounds): _bounds(bounds), _vertices(NULL) {}
+  Tile(const Sector& sector,
+       int level,
+       int row,
+       int column):
+  _sector(sector),
+  _level(level),
+  _row(row),
+  _column(column),
+  _mesh(NULL)
+  {
+  }
+  
   ~Tile();
   
-  void createVertices(const Planet *planet);
-  void render(const RenderContext* rc);
+  //  void createVertices(const Planet *planet);
+  //  void render(const RenderContext* rc);
+  //  
+  //  static void createIndices(unsigned int resol, bool skirts);
+  //  static void deleteIndices();
   
-  static void createIndices(unsigned int resol, bool skirts);
-  static void deleteIndices();
+  Sector getSector() const {
+    return _sector;
+  }
   
-private:
-  const Sector _bounds;
-  float *_vertices;
+  int getLevel() const {
+    return _level;
+  }
   
-  static unsigned int _resolution;
-  static bool _skirts;
-  static unsigned int _numIndices, _numBorderIndices, _numInnerIndices;
-  static unsigned char *_indices, *_borderIndices, *_innerIndices;
+  int getRow() const {
+    return _row;
+  }
   
-  MutableVector3D _center;
-
-
+  int getColumn() const {
+    return _column;
+  }
+  
+  void render(const RenderContext* rc,
+              const TileTessellator* tessellator);
   
 };
 

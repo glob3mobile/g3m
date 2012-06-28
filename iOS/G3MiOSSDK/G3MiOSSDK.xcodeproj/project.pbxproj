@@ -59,6 +59,9 @@
 		CF883B871591FEBF00AEE39C /* SceneGraphRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF883B861591FEBF00AEE39C /* SceneGraphRenderer.cpp */; };
 		CF883B8A1592471600AEE39C /* GLErrorRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF883B891592471600AEE39C /* GLErrorRenderer.cpp */; };
 		CF883BCB1594B9A500AEE39C /* Sector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF883BCA1594B9A500AEE39C /* Sector.cpp */; };
+		CF9AEBBC159B3AC8004C3558 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9AEBBB159B3AC8004C3558 /* Mesh.cpp */; };
+		CF9AEBBF159B3BAF004C3558 /* TileTessellator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9AEBBE159B3BAF004C3558 /* TileTessellator.cpp */; };
+		CF9AEBC2159B3FEB004C3558 /* EllipsoidalTileTessellator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9AEBC1159B3FEA004C3558 /* EllipsoidalTileTessellator.cpp */; };
 		CFA3E7C9157E537B00DAABD6 /* MarksRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA3E7C8157E537B00DAABD6 /* MarksRenderer.cpp */; };
 		D81FDA2D15949DED00A091E2 /* IndexedTriangleStripMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81FDA2C15949DED00A091E2 /* IndexedTriangleStripMesh.cpp */; };
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
@@ -134,7 +137,13 @@
 		CF883B881592470900AEE39C /* GLErrorRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GLErrorRenderer.hpp; path = Commons/Basic/GLErrorRenderer.hpp; sourceTree = "<group>"; };
 		CF883B891592471600AEE39C /* GLErrorRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GLErrorRenderer.cpp; path = Commons/Basic/GLErrorRenderer.cpp; sourceTree = "<group>"; };
 		CF883BCA1594B9A500AEE39C /* Sector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sector.cpp; path = Commons/Geometry/Sector.cpp; sourceTree = "<group>"; };
-		CFA3E7C7157E536900DAABD6 /* MarksRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MarksRenderer.hpp; path = Commons/Basic/MarksRenderer.hpp; sourceTree = "<group>"; };
+		CF9AEBB9159B3AAA004C3558 /* Mesh.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Mesh.hpp; path = Commons/Basic/Mesh.hpp; sourceTree = "<group>"; };
+		CF9AEBBB159B3AC8004C3558 /* Mesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Mesh.cpp; path = Commons/Basic/Mesh.cpp; sourceTree = "<group>"; };
+		CF9AEBBD159B3B95004C3558 /* TileTessellator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TileTessellator.hpp; path = Commons/Basic/TileTessellator.hpp; sourceTree = "<group>"; };
+		CF9AEBBE159B3BAF004C3558 /* TileTessellator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileTessellator.cpp; path = Commons/Basic/TileTessellator.cpp; sourceTree = "<group>"; };
+		CF9AEBC0159B3FDD004C3558 /* EllipsoidalTileTessellator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = EllipsoidalTileTessellator.hpp; path = Commons/Basic/EllipsoidalTileTessellator.hpp; sourceTree = "<group>"; };
+		CF9AEBC1159B3FEA004C3558 /* EllipsoidalTileTessellator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EllipsoidalTileTessellator.cpp; path = Commons/Basic/EllipsoidalTileTessellator.cpp; sourceTree = "<group>"; };
+		CFA3E7C7157E536900DAABD6 /* MarksRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = MarksRenderer.hpp; path = Commons/Basic/MarksRenderer.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CFA3E7C8157E537B00DAABD6 /* MarksRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MarksRenderer.cpp; path = Commons/Basic/MarksRenderer.cpp; sourceTree = "<group>"; };
 		CFF95F741588DF0A00B56E11 /* TimeInterval.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TimeInterval.hpp; path = Commons/Basic/TimeInterval.hpp; sourceTree = "<group>"; };
 		CFF95F761588E82200B56E11 /* Color.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Color.hpp; path = Commons/Basic/Color.hpp; sourceTree = "<group>"; };
@@ -249,6 +258,12 @@
 				CF883B861591FEBF00AEE39C /* SceneGraphRenderer.cpp */,
 				CF883B881592470900AEE39C /* GLErrorRenderer.hpp */,
 				CF883B891592471600AEE39C /* GLErrorRenderer.cpp */,
+				CF9AEBB9159B3AAA004C3558 /* Mesh.hpp */,
+				CF9AEBBB159B3AC8004C3558 /* Mesh.cpp */,
+				CF9AEBBD159B3B95004C3558 /* TileTessellator.hpp */,
+				CF9AEBBE159B3BAF004C3558 /* TileTessellator.cpp */,
+				CF9AEBC0159B3FDD004C3558 /* EllipsoidalTileTessellator.hpp */,
+				CF9AEBC1159B3FEA004C3558 /* EllipsoidalTileTessellator.cpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -464,6 +479,9 @@
 				CF883B8A1592471600AEE39C /* GLErrorRenderer.cpp in Sources */,
 				CF883BCB1594B9A500AEE39C /* Sector.cpp in Sources */,
 				44EEB5DD1598C64C0086F243 /* SQLiteStorage_iOS.cpp in Sources */,
+				CF9AEBBC159B3AC8004C3558 /* Mesh.cpp in Sources */,
+				CF9AEBBF159B3BAF004C3558 /* TileTessellator.cpp in Sources */,
+				CF9AEBC2159B3FEB004C3558 /* EllipsoidalTileTessellator.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
