@@ -14,6 +14,7 @@
 
 class ITimer;
 class IImage;
+class INetwork;
 
 class IFactory {
 public:
@@ -24,6 +25,10 @@ public:
   virtual IImage* createImageFromFileName(const std::string filename) const = 0;
 
   virtual void deleteImage(const IImage* image) const = 0;
+  
+  virtual INetwork* createNetwork() const = 0;
+  
+  virtual void deletenetwork(const INetwork* image) const = 0;
 
   // a virtual destructor is needed for conversion to Java
   virtual ~IFactory() {}

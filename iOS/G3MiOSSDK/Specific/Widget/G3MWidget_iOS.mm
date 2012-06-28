@@ -27,6 +27,9 @@
 #include "GLErrorRenderer.hpp"
 #include "EllipsoidalTileTessellator.hpp"
 
+#include "DummyDownload.hpp"
+
+
 #include <stdlib.h>
 
 @interface G3MWidget_iOS ()
@@ -81,6 +84,10 @@
     ILogger *logger = new Logger_iOS(ErrorLevel);
     IGL* gl  = new GL2();
     
+    //Testing downloads
+    int test_download_code = 0;
+    DummyDownload dummyDownload(factory);
+    dummyDownload.run();
     
     // all the creation of renderers must be move to common source code, instead of specific
     int __to_move_to_common_source_code;
