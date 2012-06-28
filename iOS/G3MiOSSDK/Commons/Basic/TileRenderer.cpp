@@ -67,27 +67,16 @@ void TileRenderer::createTopLevelTiles(const InitializationContext* ic) {
   ic->getLogger()->logInfo("Created %i top level tiles", _topLevelTiles.size());
 }
 
-void TileRenderer::initialize(const InitializationContext* ic)
-{
+void TileRenderer::initialize(const InitializationContext* ic) {
   clearTopLevelTiles();
-  
   createTopLevelTiles(ic);
-}  
+}
 
-
-
-
-int TileRenderer::render(const RenderContext* rc)
-{
-//  IGL *gl = rc->getGL();
-//  gl->enableVertices();
-  
+int TileRenderer::render(const RenderContext* rc) {
   for (int i = 0; i < _topLevelTiles.size(); i++) {
     Tile* tile = _topLevelTiles[i];
     tile->render(rc, _tessellator);
   }
-  
-//  gl->disableVertices();
   
   return MAX_TIME_TO_RENDER;
 }

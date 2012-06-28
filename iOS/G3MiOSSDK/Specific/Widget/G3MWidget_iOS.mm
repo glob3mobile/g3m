@@ -107,7 +107,7 @@
       comp->addRenderer(tr);
     }
     
-    if (false){
+    if (false) {
       // dummy renderer with a simple box
       DummyRenderer* dum = new DummyRenderer();
       comp->addRenderer(dum);
@@ -120,7 +120,7 @@
     }
     
     // marks renderer
-    if (false){
+    if (false) {
       MarksRenderer* marks = new MarksRenderer();
       comp->addRenderer(marks);
       
