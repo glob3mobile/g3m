@@ -161,8 +161,6 @@
 		CFA3E7C8157E537B00DAABD6 /* MarksRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MarksRenderer.cpp; path = Commons/Basic/MarksRenderer.cpp; sourceTree = "<group>"; };
 		CFF95F741588DF0A00B56E11 /* TimeInterval.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TimeInterval.hpp; path = Commons/Basic/TimeInterval.hpp; sourceTree = "<group>"; };
 		CFF95F761588E82200B56E11 /* Color.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Color.hpp; path = Commons/Basic/Color.hpp; sourceTree = "<group>"; };
-		D81FDA2A15949DE400A091E2 /* IndexedTriangleStripMesh.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = IndexedTriangleStripMesh.hpp; sourceTree = "<group>"; };
-		D81FDA2C15949DED00A091E2 /* IndexedTriangleStripMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IndexedTriangleStripMesh.cpp; sourceTree = "<group>"; };
 		D8228EBC157F7F6100BBAF60 /* MutableMatrix44D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MutableMatrix44D.hpp; path = Commons/Geometry/MutableMatrix44D.hpp; sourceTree = "<group>"; };
 		D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = MutableMatrix44D.cpp; path = Commons/Geometry/MutableMatrix44D.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector3D.cpp; path = Commons/Geometry/MutableVector3D.cpp; sourceTree = "<group>"; };
@@ -219,16 +217,16 @@
 			children = (
 				D88C344F159C5A410044CED9 /* DataDownload.hpp */,
 				D88C3450159C5A410044CED9 /* DataDownload.mm */,
-				D88C3451159C5A410044CED9 /* NetworkPetition.hpp */,
-				D88C3452159C5A410044CED9 /* NetworkPetition.mm */,
-				D8D3BC8B159B11DA00738E37 /* Network_iOS.mm */,
-				D8D3BC8C159B11DA00738E37 /* Network_iOS.hpp */,
 				383BD3791577EDC00012AC53 /* Factory_iOS.hpp */,
-				383BD37A1577EDC00012AC53 /* Logger_iOS.cpp */,
-				383BD37B1577EDC00012AC53 /* Logger_iOS.hpp */,
-				CF31CBF315878BE40085E8F1 /* Timer_iOS.hpp */,
 				D86DD8A31588945200E25609 /* Image_iOS.hpp */,
 				D86DD8A41588945200E25609 /* Image_iOS.mm */,
+				383BD37A1577EDC00012AC53 /* Logger_iOS.cpp */,
+				383BD37B1577EDC00012AC53 /* Logger_iOS.hpp */,
+				D8D3BC8C159B11DA00738E37 /* Network_iOS.hpp */,
+				D8D3BC8B159B11DA00738E37 /* Network_iOS.mm */,
+				D88C3451159C5A410044CED9 /* NetworkPetition.hpp */,
+				D88C3452159C5A410044CED9 /* NetworkPetition.mm */,
+				CF31CBF315878BE40085E8F1 /* Timer_iOS.hpp */,
 			);
 			name = Derived;
 			sourceTree = "<group>";
@@ -258,49 +256,49 @@
 		383BD3891577EDF40012AC53 /* Basic */ = {
 			isa = PBXGroup;
 			children = (
-				D8AD76121599B68400A7D39A /* IndexedTriangleStripMesh.cpp */,
-				D8AD76131599B68400A7D39A /* IndexedTriangleStripMesh.hpp */,
-				38D787071588F886003BBC75 /* SimplePlanetRenderer.cpp */,
-				38D787081588F886003BBC75 /* SimplePlanetRenderer.hpp */,
-				CC14B643157D358100793C92 /* DummyRenderer.cpp */,
-				CC14B644157D358100793C92 /* DummyRenderer.hpp */,
-				CC14B63F157D356800793C92 /* CameraRenderer.cpp */,
-				CC14B640157D356800793C92 /* CameraRenderer.hpp */,
 				CC14B63B157D354C00793C92 /* Camera.cpp */,
 				CC14B63C157D354C00793C92 /* Camera.hpp */,
+				CC14B63F157D356800793C92 /* CameraRenderer.cpp */,
+				CC14B640157D356800793C92 /* CameraRenderer.hpp */,
+				CFF95F761588E82200B56E11 /* Color.hpp */,
 				383BD38C1577EE500012AC53 /* CompositeRenderer.cpp */,
 				383BD38D1577EE500012AC53 /* CompositeRenderer.hpp */,
 				383BD38E1577EE500012AC53 /* Context.cpp */,
 				383BD38F1577EE500012AC53 /* Context.hpp */,
+				CC14B643157D358100793C92 /* DummyRenderer.cpp */,
+				CC14B644157D358100793C92 /* DummyRenderer.hpp */,
+				CF31CBF0158776120085E8F1 /* Effects.cpp */,
+				CF31CBEE158776020085E8F1 /* Effects.hpp */,
+				CF9AEBC1159B3FEA004C3558 /* EllipsoidalTileTessellator.cpp */,
+				CF9AEBC0159B3FDD004C3558 /* EllipsoidalTileTessellator.hpp */,
 				383BD3901577EE500012AC53 /* G3MWidget.cpp */,
 				383BD3911577EE500012AC53 /* G3MWidget.hpp */,
+				CF883B891592471600AEE39C /* GLErrorRenderer.cpp */,
+				CF883B881592470900AEE39C /* GLErrorRenderer.hpp */,
+				D8AD76121599B68400A7D39A /* IndexedTriangleStripMesh.cpp */,
+				D8AD76131599B68400A7D39A /* IndexedTriangleStripMesh.hpp */,
+				CF0C3969157F988100646A2F /* Mark.cpp */,
+				CF0C3967157F987200646A2F /* Mark.hpp */,
+				CFA3E7C8157E537B00DAABD6 /* MarksRenderer.cpp */,
+				CFA3E7C7157E536900DAABD6 /* MarksRenderer.hpp */,
+				CF9AEBBB159B3AC8004C3558 /* Mesh.cpp */,
+				CF9AEBB9159B3AAA004C3558 /* Mesh.hpp */,
 				383BD3921577EE500012AC53 /* Renderer.hpp */,
+				CF883B861591FEBF00AEE39C /* SceneGraphRenderer.cpp */,
+				CF883B851591FEAF00AEE39C /* SceneGraphRenderer.hpp */,
+				38D787071588F886003BBC75 /* SimplePlanetRenderer.cpp */,
+				38D787081588F886003BBC75 /* SimplePlanetRenderer.hpp */,
+				CF883B811590984900AEE39C /* TexturesHandler.cpp */,
+				CF883B7F1590983B00AEE39C /* TexturesHandler.hpp */,
+				38D786E51587B446003BBC75 /* Tile.cpp */,
+				38D786E41587B3DD003BBC75 /* Tile.hpp */,
+				38D786E21587ACA5003BBC75 /* TileRenderer.cpp */,
+				38D786E01587AC40003BBC75 /* TileRenderer.hpp */,
+				CF9AEBBE159B3BAF004C3558 /* TileTessellator.cpp */,
+				CF9AEBBD159B3B95004C3558 /* TileTessellator.hpp */,
+				CFF95F741588DF0A00B56E11 /* TimeInterval.hpp */,
 				383BD3931577EE500012AC53 /* TouchEvent.cpp */,
 				383BD3941577EE500012AC53 /* TouchEvent.hpp */,
-				CFA3E7C7157E536900DAABD6 /* MarksRenderer.hpp */,
-				CFA3E7C8157E537B00DAABD6 /* MarksRenderer.cpp */,
-				CF0C3967157F987200646A2F /* Mark.hpp */,
-				CF0C3969157F988100646A2F /* Mark.cpp */,
-				38D786E01587AC40003BBC75 /* TileRenderer.hpp */,
-				38D786E21587ACA5003BBC75 /* TileRenderer.cpp */,
-				38D786E41587B3DD003BBC75 /* Tile.hpp */,
-				38D786E51587B446003BBC75 /* Tile.cpp */,
-				CF31CBEE158776020085E8F1 /* Effects.hpp */,
-				CF31CBF0158776120085E8F1 /* Effects.cpp */,
-				CFF95F741588DF0A00B56E11 /* TimeInterval.hpp */,
-				CFF95F761588E82200B56E11 /* Color.hpp */,
-				CF883B7F1590983B00AEE39C /* TexturesHandler.hpp */,
-				CF883B811590984900AEE39C /* TexturesHandler.cpp */,
-				CF883B851591FEAF00AEE39C /* SceneGraphRenderer.hpp */,
-				CF883B861591FEBF00AEE39C /* SceneGraphRenderer.cpp */,
-				CF883B881592470900AEE39C /* GLErrorRenderer.hpp */,
-				CF883B891592471600AEE39C /* GLErrorRenderer.cpp */,
-				CF9AEBB9159B3AAA004C3558 /* Mesh.hpp */,
-				CF9AEBBB159B3AC8004C3558 /* Mesh.cpp */,
-				CF9AEBBD159B3B95004C3558 /* TileTessellator.hpp */,
-				CF9AEBBE159B3BAF004C3558 /* TileTessellator.cpp */,
-				CF9AEBC0159B3FDD004C3558 /* EllipsoidalTileTessellator.hpp */,
-				CF9AEBC1159B3FEA004C3558 /* EllipsoidalTileTessellator.cpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -308,10 +306,6 @@
 		383BD38A1577EDFD0012AC53 /* Geometry */ = {
 			isa = PBXGroup;
 			children = (
-				CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */,
-				CF7A78EB159B9BE300074422 /* MutableVector2D.hpp */,
-				D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */,
-				D84D5A30157E0EAA000C5E35 /* MutableVector3D.hpp */,
 				383BD39E1577EE5A0012AC53 /* Angle.cpp */,
 				383BD39F1577EE5A0012AC53 /* Angle.hpp */,
 				383BD3A01577EE5A0012AC53 /* Ellipsoid.cpp */,
@@ -320,15 +314,19 @@
 				383BD3A31577EE5A0012AC53 /* Geodetic2D.hpp */,
 				383BD3A41577EE5A0012AC53 /* Geodetic3D.cpp */,
 				383BD3A51577EE5A0012AC53 /* Geodetic3D.hpp */,
+				D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */,
+				D8228EBC157F7F6100BBAF60 /* MutableMatrix44D.hpp */,
+				CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */,
+				CF7A78EB159B9BE300074422 /* MutableVector2D.hpp */,
+				D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */,
+				D84D5A30157E0EAA000C5E35 /* MutableVector3D.hpp */,
 				383BD3A61577EE5A0012AC53 /* Planet.hpp */,
+				CF883BCA1594B9A500AEE39C /* Sector.cpp */,
+				38D786E71587B52F003BBC75 /* Sector.hpp */,
 				383BD3A71577EE5A0012AC53 /* Vector2D.cpp */,
 				383BD3A81577EE5A0012AC53 /* Vector2D.hpp */,
 				383BD3A91577EE5A0012AC53 /* Vector3D.cpp */,
 				383BD3AA1577EE5A0012AC53 /* Vector3D.hpp */,
-				D8228EBC157F7F6100BBAF60 /* MutableMatrix44D.hpp */,
-				D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */,
-				38D786E71587B52F003BBC75 /* Sector.hpp */,
-				CF883BCA1594B9A500AEE39C /* Sector.cpp */,
 			);
 			name = Geometry;
 			sourceTree = "<group>";
@@ -336,11 +334,11 @@
 		383BD38B1577EE040012AC53 /* Interfaces */ = {
 			isa = PBXGroup;
 			children = (
-				D8D3BC89159B11D000738E37 /* INetwork.hpp */,
+				383BD3B81577EE630012AC53 /* IFactory.hpp */,
 				CC14B64B157D35C100793C92 /* IGL.hpp */,
 				CC14B64C157D35C100793C92 /* IImage.hpp */,
-				383BD3B81577EE630012AC53 /* IFactory.hpp */,
 				383BD3B91577EE630012AC53 /* ILogger.hpp */,
+				D8D3BC89159B11D000738E37 /* INetwork.hpp */,
 				CF31CBF215878AF90085E8F1 /* ITimer.hpp */,
 			);
 			name = Interfaces;
@@ -349,8 +347,8 @@
 		CC14B636157D34AB00793C92 /* GL */ = {
 			isa = PBXGroup;
 			children = (
-				CC14B637157D34C700793C92 /* GL2.mm */,
 				CC14B638157D34C700793C92 /* GL2.hpp */,
+				CC14B637157D34C700793C92 /* GL2.mm */,
 			);
 			name = GL;
 			sourceTree = "<group>";
@@ -358,15 +356,15 @@
 		D8AD760F1599B5B900A7D39A /* Downloader */ = {
 			isa = PBXGroup;
 			children = (
+				D8AD76261599B89000A7D39A /* Downloader.cpp */,
+				D8AD76161599B6B300A7D39A /* Downloader.hpp */,
 				D88C3449159C5A250044CED9 /* DummyDownload.cpp */,
 				D88C344A159C5A250044CED9 /* DummyDownload.hpp */,
-				D88C344B159C5A250044CED9 /* Storage.cpp */,
-				D8AD76261599B89000A7D39A /* Downloader.cpp */,
-				D8AD76271599B89000A7D39A /* Storage.hpp */,
-				D8AD76111599B61B00A7D39A /* IDownloadListener.hpp */,
-				D8AD76161599B6B300A7D39A /* Downloader.hpp */,
-				D8AD76231599B83300A7D39A /* FileSystemStorage.hpp */,
 				D8AD76241599B84F00A7D39A /* FileSystemStorage.cpp */,
+				D8AD76231599B83300A7D39A /* FileSystemStorage.hpp */,
+				D8AD76111599B61B00A7D39A /* IDownloadListener.hpp */,
+				D88C344B159C5A250044CED9 /* Storage.cpp */,
+				D8AD76271599B89000A7D39A /* Storage.hpp */,
 			);
 			name = Downloader;
 			sourceTree = "<group>";
