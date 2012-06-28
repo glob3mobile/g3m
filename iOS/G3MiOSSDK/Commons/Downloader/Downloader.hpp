@@ -16,15 +16,24 @@
 #include <string>
 #include <vector>
 
-struct Download{
-  std::string url;
-  int priority;
-  std::vector<IDownloadListener *> listeners;
+class Download{
+public:
+  std::string _url;
+  int _priority;
+  std::vector<IDownloadListener *> _listeners;
+  
+  Download(std::string& url, int priority, IDownloadListener* listener):
+  _url(url), _priority(priority)
+  {
+    _listeners.push_back(listener);
+  }
+  
+  void addListener(IDownloadListener* listener){ _listeners.push_back(listener);}
 };
 
 class Storage;
 
-class Downloader
+class Downloader: public IDownloadListener
 {
 private:
   const Storage* _storage;                  //CACHE
@@ -40,6 +49,10 @@ public:
   Downloader(Storage *storage, unsigned int maxSimultaneous, INetwork * const net);
   
   void request(std::string& urlOfFile, int priority, IDownloadListener *listener);
+  
+  void onDownload(const Response& e);
+  
+  void onError(const Response& e);
   
 };
 

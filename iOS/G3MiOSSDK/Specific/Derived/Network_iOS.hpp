@@ -20,12 +20,12 @@
 class Network_iOS: public INetwork
 {
 private:
-     id _networkPetition;     // pointer to the objective-C class
+  id _networkPetition;     // pointer to the objective-C class
 public:
   
   Network_iOS();
   
-  void request(std::string url, std::vector<IDownloadListener *>* dls);
+  void request(std::string url, IDownloadListener* dl);
   
 };
 

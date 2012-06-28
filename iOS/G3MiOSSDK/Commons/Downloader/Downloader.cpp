@@ -13,7 +13,7 @@
 #include "INetwork.hpp"
 
 Downloader::Downloader(Storage *storage, unsigned int maxSimultaneous, INetwork * const net):
-_storage(storage), _maxSimultaneous(maxSimultaneous), _network(net)
+_storage(storage), _maxSimultaneous(maxSimultaneous), _network(net), _simultaneousDownloads(0)
 {
 }
 
@@ -22,21 +22,18 @@ void Downloader::request(std::string& urlOfFile, int priority, IDownloadListener
   
   for (int i = 0; i < _petitions.size(); i++)
   {
-    if (urlOfFile == _petitions[i].url){ //IF WE FOUND THE SAME PETITION
+    if (urlOfFile == _petitions[i]._url){ //IF WE FOUND THE SAME PETITION
       
-      if (priority > _petitions[i].priority){ //MAX PRIORITY
-        _petitions[i].priority = priority;
+      if (priority > _petitions[i]._priority){ //MAX PRIORITY
+        _petitions[i]._priority = priority;
       }
-      _petitions[i].listeners.push_back(listener); //NEW LISTENER
+      _petitions[i].addListener(listener); //NEW LISTENER
       return;
     }
   }
   
   //NEW DOWNLOAD
-  Download d;
-  d.url = urlOfFile;
-  d.priority = priority;
-  d.listeners.push_back(listener);
+  Download d(urlOfFile, priority, listener);
   _petitions.push_back(d);
   
   //When a new petition comes, we try to throw a download
@@ -49,20 +46,57 @@ void Downloader::startDownload()
     
     //Selecting download
     int maxPrior = -99999999;
-    Download petition;
+    int downloadIndex = -1;
     for (int i = 0; i < _petitions.size(); i++)
     {
-      if (_petitions[i].priority > maxPrior){
-        maxPrior = _petitions[i].priority;
-        petition = _petitions[i];
+      if (_petitions[i]._priority > maxPrior){
+        maxPrior = _petitions[i]._priority;
+        downloadIndex = i;
       }
     }
+    if (downloadIndex < 0) return;
     
     //Downloading
-    std::vector<IDownloadListener *>* dls = &petition.listeners;
-    _network->request(petition.url, dls);
+    _network->request(_petitions[downloadIndex]._url, this);
     
     //One more in the net
     _simultaneousDownloads++;
+  }
+}
+
+void Downloader::onDownload(const Response& e)
+{
+  for (int i = 0; i < _petitions.size(); i++)
+  {
+    if (_petitions[i]._url == e.url.path) //RECEIVED RESPONSE
+    {
+      Download& pet = _petitions[i];
+      for (int j = 0; j < pet._listeners.size(); j++) {
+        pet._listeners[j]->onDownload(e);
+      }
+      
+      _petitions.erase(_petitions.begin() + i);
+      
+      return;
+    }
+  }
+  
+}
+
+void Downloader::onError(const Response& e)
+{
+  for (int i = 0; i < _petitions.size(); i++)
+  {
+    if (_petitions[i]._url == e.url.path) //RECEIVED RESPONSE
+    {
+      Download& pet = _petitions[i];
+      for (int j = 0; j < pet._listeners.size(); j++) {
+        pet._listeners[j]->onError(e);
+      }
+      
+      _petitions.erase(_petitions.begin() + i);
+      
+      return;
+    }
   }
 }

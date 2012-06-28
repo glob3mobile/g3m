@@ -12,9 +12,9 @@ Network_iOS::Network_iOS()
 {
 }
 
-void Network_iOS::request(std::string url, std::vector<IDownloadListener *>* dls)
+void Network_iOS::request(std::string url, IDownloadListener* dl)
 {
-  _networkPetition = [[NetworkPetition alloc] init:dls];
+  _networkPetition = [[NetworkPetition alloc] init:dl];
   
   [_networkPetition makeAsyncPetition: url.c_str()];   
 }

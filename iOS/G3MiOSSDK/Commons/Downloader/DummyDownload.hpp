@@ -35,11 +35,13 @@ public:
     
     _downloader->request(url, 10, this);
     
+    _downloader->request(url, 15, this);
+    
   }
   
   void onDownload(const Response& e)
   {
-    
+    printf("GETTING RESPONSE");
   }
   
   void onError(const Response& e)

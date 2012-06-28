@@ -80,6 +80,10 @@ public:
     return Angle(k * _degrees);
   }
   
+  Angle div(double k) const {
+    return Angle(_degrees / k);
+  }
+  
   bool greaterThan(const Angle& a) const {
     return (_degrees > a._degrees);
   }
@@ -92,6 +96,9 @@ public:
                   const Angle& max) const;  
   
   Angle average(const Angle& a) const;
+  
+  bool isBetween(const Angle& min,
+                 const Angle& max) const;
   
 };
 

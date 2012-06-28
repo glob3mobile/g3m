@@ -15,7 +15,7 @@ IndexedTriangleStripMesh::~IndexedTriangleStripMesh()
   if (_owner){
     delete[] _vertices;
     delete[] _indexes;
-    delete[] _texCoors;
+    delete[] _texCoords;
     if (_normals != NULL) delete[] _normals;
   }
 }
@@ -28,7 +28,7 @@ _owner(owner),
 _vertices(vertices),
 _indexes(indexes),
 _numIndex(numIndex),
-_texCoors(NULL),
+_texCoords(NULL),
 _color(color),
 _textureId(-1),
 _normals(normals)
@@ -40,7 +40,7 @@ IndexedTriangleStripMesh::IndexedTriangleStripMesh(const std::vector<Vector3D>& 
                                                    const Color& color, const std::vector<Vector3D>* normals):
 _owner(true),
 _color(color),
-_texCoors(NULL),
+_texCoords(NULL),
 _textureId(-1),
 _numIndex(indexes.size())
 {
@@ -78,13 +78,15 @@ _numIndex(indexes.size())
 
 IndexedTriangleStripMesh::IndexedTriangleStripMesh(bool owner, const float* vertices, 
                                                    const unsigned char* indexes, 
-                                                  const int numIndex, const int texID, 
-                                                   const float* texCoors, const float* normals):
+                                                   const int numIndex,
+                                                   const int texID, 
+                                                   const float* texCoords,
+                                                   const float* normals):
 _owner(owner),
 _vertices(vertices),
 _indexes(indexes),
 _numIndex(numIndex),
-_texCoors(texCoors),
+_texCoords(texCoords),
 _color( Color::fromRGB((float)0,(float)0,(float)0,(float)0) ),
 _textureId(texID),
 _normals(normals)
@@ -93,7 +95,8 @@ _normals(normals)
 
 IndexedTriangleStripMesh::IndexedTriangleStripMesh(const std::vector<Vector3D>& vertices, 
                                                    const std::vector<unsigned char>& indexes,
-                                                   const int texID, const std::vector<Vector2D>& texCoors, 
+                                                   const int texID,
+                                                   const std::vector<Vector2D>& texCoords, 
                                                    const std::vector<Vector3D>* normals):
 _owner(true),
 _numIndex(indexes.size()),
@@ -115,13 +118,13 @@ _textureId(texID)
   }
   _indexes = ind;
   
-  float * tc = new float[2* texCoors.size()];
+  float * tc = new float[2* texCoords.size()];
   p = 0;
   for (int i = 0; i < vertices.size(); i++) {
     tc[p++] = vertices[i].x();
     tc[p++] = vertices[i].y();
   }
-  _texCoors = tc;
+  _texCoords = tc;
   
   if (normals != NULL){
     float * norm = new float[3* vertices.size()];
@@ -139,32 +142,29 @@ _textureId(texID)
 
 void IndexedTriangleStripMesh::render(const RenderContext* rc) const
 {
-  
-  // obtaing gl object reference
   IGL *gl = rc->getGL();
   
-  // insert pointers
   gl->enableVertices();
   
-  if (_textureId > 0 && _texCoors != NULL){     //TEXTURED
+  const bool isTextured = (_textureId > 0) && (_texCoords != NULL);
+  if (isTextured) {
     gl->enableTextures();
     gl->enableTexture2D();
     
     gl->bindTexture(_textureId);
-    gl->setTextureCoordinates(2, 0, _texCoors); 
-  } else {                                      //NOT TEXTURED
+    gl->setTextureCoordinates(2, 0, _texCoords); 
+  }
+  else {
     gl->color(_color);
   }
   
   gl->vertexPointer(3, 0, _vertices);
-  
   gl->drawTriangleStrip(_numIndex, _indexes);
   
-  if (_textureId > 1 && _texCoors != NULL){     //TEXTURED
+  if (isTextured) {
     gl->disableTexture2D();
     gl->disableTextures();
   }
   
   gl->disableVertices();
-  
 }

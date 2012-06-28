@@ -23,99 +23,104 @@ SimplePlanetRenderer::~SimplePlanetRenderer()
 
 void SimplePlanetRenderer::initialize(const InitializationContext* ic)
 {
+
 }
 
 float * SimplePlanetRenderer::createVertices(const Planet& planet)
 {
   //VERTICES
-  float* _vertices = new float[_latRes *_lonRes * 3];
+  float* vertices = new float[_latRes *_lonRes * 3];
   
-  double lonRes1 = (double) (_lonRes-1), latRes1 = (double) (_latRes-1);
-  int p = 0;
+  const double lonRes1 = (double) (_lonRes-1);
+  const double latRes1 = (double) (_latRes-1);
+  int verticesIndex = 0;
   for(double i = 0.0; i < _lonRes; i++){
-    Angle lon = Angle::fromDegrees( (i * 360 / lonRes1) -180);
+    const Angle lon = Angle::fromDegrees( (i * 360 / lonRes1) -180);
     for (double j = 0.0; j < _latRes; j++) {
-      Angle lat = Angle::fromDegrees( (j * 180.0 / latRes1)  -90.0 );
-      Geodetic2D g(lat, lon);
+      const Angle lat = Angle::fromDegrees( (j * 180.0 / latRes1)  -90.0 );
+      const Geodetic2D g(lat, lon);
       
-      Vector3D v = planet.toVector3D(g);
-      _vertices[p++] = (float) v.x();//Vertices
-      _vertices[p++] = (float) v.y();
-      _vertices[p++] = (float) v.z();
+      const Vector3D v = planet.toVector3D(g);
+      vertices[verticesIndex++] = (float) v.x();//Vertices
+      vertices[verticesIndex++] = (float) v.y();
+      vertices[verticesIndex++] = (float) v.z();
     }
   }
   
-  return _vertices;
+  return vertices;
 }
 
 
 
 unsigned char* SimplePlanetRenderer::createMeshIndex()
 {
-  int res = _lonRes;
+  const int res = _lonRes;
   
-  int _numIndexes = 2 * (res - 1) * (res + 1);
-  unsigned char *_indexes = new unsigned char[_numIndexes];
+  const int numIndexes = 2 * (res - 1) * (res + 1);
+  unsigned char *indexes = new unsigned char[numIndexes];
   
   int n = 0;
   for (int j = 0; j < res - 1; j++) {
-    if (j > 0) _indexes[n++] = (char) (j * res);
+    if (j > 0) indexes[n++] = (char) (j * res);
     for (int i = 0; i < res; i++) {
-      _indexes[n++] = (char) (j * res + i);
-      _indexes[n++] = (char) (j * res + i + res);
+      indexes[n++] = (char) (j * res + i);
+      indexes[n++] = (char) (j * res + i + res);
     }
-    _indexes[n++] = (char) (j * res + 2 * res - 1);
+    indexes[n++] = (char) (j * res + 2 * res - 1);
   }
   
-  return _indexes;
+  return indexes;
 }
 
 float* SimplePlanetRenderer::createTextureCoordinates()
 {
-  float* _texCoors = new float[_latRes *_lonRes * 2];
+  float* texCoords = new float[_latRes *_lonRes * 2];
   
-  double lonRes1 = (double) (_lonRes-1), latRes1 = (double) (_latRes-1);
+  const double lonRes1 = (double) (_lonRes-1), latRes1 = (double) (_latRes-1);
   int p = 0;
   for(double i = 0.0; i < _lonRes; i++){
     double u = (i / lonRes1);
     for (double j = 0.0; j < _latRes; j++) {
-      double v = 1.0 - (j / latRes1);
-      _texCoors[p++] = (float) u;
-      _texCoors[p++] = (float) v;
+      const double v = 1.0 - (j / latRes1);
+      texCoords[p++] = (float) u;
+      texCoords[p++] = (float) v;
     }
   }
   
-  return _texCoors;
+  return texCoords;
 }
 
+bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
+  const int texID = rc->getTexturesHandler()->getTextureIdFromFileName(rc, _textureFilename, 2048, 1024);
+  
+  if (texID < 1) {
+    rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
+    return false;
+  }
+  
+  const Planet* planet = rc->getPlanet();
+  
+  float* ver = createVertices(*planet);
+  
+  const int res = _lonRes;
+  const int numIndexes = 2 * (res - 1) * (res + 1);
+  unsigned char * ind = createMeshIndex();
+  
+  float * texC = createTextureCoordinates();
+  
+  _mesh = new IndexedTriangleStripMesh(true, ver, ind, numIndexes, texID, texC);
+  
+  return true;
+}
 
 int SimplePlanetRenderer::render(const RenderContext* rc){
-  
-  //GENERATING MESH
   if (_mesh == NULL){
-  
-    int texID = rc->getTexturesHandler()->getTextureIdFromFileName(rc, _textureFilename, 2048, 1024);
-    
-    if (texID < 1) {
-      rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
+    if (!initializeMesh(rc)) {
       return MAX_TIME_TO_RENDER;
     }
-    
-    const Planet *planet = rc->getPlanet();
-    
-    float * ver = createVertices(*planet);
-    
-    int res = _lonRes;
-    int numIndexes = 2 * (res - 1) * (res + 1);
-    unsigned char * ind = createMeshIndex();
-    
-    float * texC = createTextureCoordinates();
-    
-    _mesh = new IndexedTriangleStripMesh(true, ver, ind, numIndexes, texID, texC);
-    
   }
   
   _mesh->render(rc);
-
+  
   return MAX_TIME_TO_RENDER;
 }

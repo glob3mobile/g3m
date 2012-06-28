@@ -11,26 +11,16 @@
 
 @implementation DataDownload
 
-@synthesize error = error_, downloadData = downloadData_; //image = image_;
+@synthesize error = error_, downloadData = downloadData_;
 
 #pragma mark -
 #pragma mark Initialization & Memory Management
 
-//- (id)init
-//{
-//    downloadData_ = nil;
-//    data_ = nil;
-//    connection_ = nil;
-//    connectionURL_ = nil;
-//	return [self initWithURLAndListener:nil, NULL];
-//}
-
-- (id)initWithURL:(NSURL *)url listener:(void*) dls;
+- (id)initWithURL:(NSURL *)url;
 {
 	NSParameterAssert( url );
 	if( (self = [super init]) ) {
 		connectionURL_ = [url copy];
-    _downloadListeners = dls;
 	}
 	return self;
 }
@@ -64,26 +54,6 @@
 	finished_  = YES;
 	[self didChangeValueForKey:@"isFinished"];
 	[self didChangeValueForKey:@"isExecuting"];
-  
-  //We call all listeners to tell them the download is finished
-  if (_downloadListeners != NULL)
-  {
-    std::vector<IDownloadListener *>& listeners = *(std::vector<IDownloadListener *>*)_downloadListeners;
-    
-    Response response;
-    
-    if ([self error] != nil){ //NO ERROR
-      for (int i = 0; i < listeners.size(); i++) {
-        listeners[i]->onDownload(response);
-      }
-    } else { //ERROR
-      unsigned int a = listeners.size();
-      for (int i = 0; i < listeners.size(); i++) {
-        listeners[i]->onError(response);
-      }
-    }
-  }
-  
 }
 
 - (void)start
@@ -174,6 +144,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
+  error_ = nil;
 	[self done];
 }
 

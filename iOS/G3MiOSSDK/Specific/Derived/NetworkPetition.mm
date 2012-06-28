@@ -13,13 +13,13 @@
 
 @implementation NetworkPetition
 
--(id)init: (void*) dls
+-(id)init: (void*) dl
 {	
 	networkQueue = nil;
 	currentOperation = nil;
   dataArrived = true;
   
-  _downloadListeners = dls; //Instanced that should be notified
+  _listener = dl; //Instanced that should be notified
   
 	return self;
 }
@@ -33,7 +33,7 @@
     if( currentOperation) [self releaseAsyncMemory];
     
     NSString *myurl = [NSString stringWithUTF8String:url];
-    currentOperation = [[DataDownload alloc] initWithURL:[NSURL URLWithString:myurl] listener:_downloadListeners];
+    currentOperation = [[DataDownload alloc] initWithURL:[NSURL URLWithString:myurl]];
     [currentOperation addObserver:self forKeyPath:@"isFinished" options:NSKeyValueObservingOptionNew context:NULL];
     [networkQueue addOperation:currentOperation];
     dataArrived = false;
@@ -44,15 +44,20 @@
 {
 	DataDownload* op = (DataDownload *)object;
 	[op removeObserver:self forKeyPath:@"isFinished"];
-    dataArrived = true;
-    
+  dataArrived = true;
+  
 	if( ![op error] ) {
-        downloadData = [op downloadData];
-        dataOK = true;
-	} 	else {
-        //printf ("error en observe value!!\n");
-        dataOK = false;
-    }
+    downloadData = [op downloadData];
+    dataOK = true;
+    
+    Response r;
+    ((IDownloadListener*)_listener)->onDownload(r);
+	} else {
+    dataOK = false;
+    
+    Response r;
+    ((IDownloadListener*)_listener)->onError(r);
+  }
 }
 
 

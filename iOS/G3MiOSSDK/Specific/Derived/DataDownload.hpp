@@ -22,13 +22,11 @@
 	NSURL*    connectionURL_;
 	NSURLConnection*  connection_;
 	NSMutableData*    data_;
-  
-  void * _downloadListeners;
 }
 
 @property(nonatomic,readonly) NSError* error;
 @property(nonatomic,readonly) NSData* downloadData;
 
-- (id)initWithURL:(NSURL *)url listener:(void*) dls;
+- (id)initWithURL:(NSURL *)url;
 
 @end

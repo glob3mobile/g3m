@@ -17,10 +17,10 @@
   bool dataArrived;
   bool dataOK;
   
-  void * _downloadListeners; //std::vector<IDownloadListener *>
+  void * _listener; 
 }
 
--(id)init: (void*) dls;
+-(id)init: (void*) dl;
 
 - (void) makeAsyncPetition: (const char *) url;
 - (void *) getData;

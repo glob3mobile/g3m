@@ -17,7 +17,7 @@
 class INetwork {
 public:
   
-  virtual void request(std::string url, std::vector<IDownloadListener *>* dls) = 0;  
+  virtual void request(std::string url, IDownloadListener* dl) = 0;  
   // a virtual destructor is needed for conversion to Java
   virtual ~INetwork() {}
 };
