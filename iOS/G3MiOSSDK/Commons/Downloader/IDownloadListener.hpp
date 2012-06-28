@@ -11,18 +11,7 @@
 
 #include <string>
 
-struct File{
-  std::string path;
-};
-
-struct Url{
-  std::string path;
-};
-
-struct Response{
-  File file;
-  Url url;
-};
+#include "Response.hpp"
 
 class IDownloadListener {
 public:

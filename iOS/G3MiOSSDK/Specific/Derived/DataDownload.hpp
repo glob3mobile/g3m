@@ -11,22 +11,24 @@
 @interface DataDownload : NSOperation
 {
 	// New Properties
-	NSError*  error_;
-  NSData* downloadData_;
+	NSError*  _error;
+  NSData* _downloadData;
 	
 	// In concurrent operations, we have to manage the operation's state
-	BOOL      executing_;
-	BOOL      finished_;
+	BOOL      _executing;
+	BOOL      _finished;
 	
 	// The actual NSURLConnection management
-	NSURL*    connectionURL_;
-	NSURLConnection*  connection_;
-	NSMutableData*    data_;
+	NSURL*    _connectionURL;
+	NSURLConnection*  _connection;
+	NSMutableData*    _data;
 }
 
 @property(nonatomic,readonly) NSError* error;
 @property(nonatomic,readonly) NSData* downloadData;
 
 - (id)initWithURL:(NSURL *)url;
+
+- (NSString*) getURL;
 
 @end

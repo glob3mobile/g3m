@@ -86,8 +86,8 @@
     
     //Testing downloads
     int test_download_code = 0;
-    DummyDownload dummyDownload(factory);
-    dummyDownload.run();
+    DummyDownload *dummyDownload = new DummyDownload(factory);
+    dummyDownload->run();
     
     // all the creation of renderers must be move to common source code, instead of specific
     int __to_move_to_common_source_code;

@@ -39,12 +39,16 @@ public:
     
   }
   
-  void onDownload(const Response& e)
+  void onDownload(const Response& response)
   {
-    printf("GETTING RESPONSE");
+    unsigned char *data = response.getData();
+    
+    std::string resp = (char*)data;
+    
+    printf("GETTING RESPONSE %s", resp.c_str());
   }
   
-  void onError(const Response& e)
+  void onError(const Response& response)
   {
     
   }

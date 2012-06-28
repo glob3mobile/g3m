@@ -11,7 +11,7 @@
 
 @implementation DataDownload
 
-@synthesize error = error_, downloadData = downloadData_;
+@synthesize error = _error, downloadData = _downloadData;
 
 #pragma mark -
 #pragma mark Initialization & Memory Management
@@ -20,14 +20,19 @@
 {
 	NSParameterAssert( url );
 	if( (self = [super init]) ) {
-		connectionURL_ = [url copy];
+		_connectionURL = [url copy];
 	}
 	return self;
 }
 
+- (NSString*) getURL
+{
+  return [_connectionURL absoluteString];
+}
+
 - (void)dealloc
 {
-	if( connection_ ) { [connection_ cancel];  }
+	if( _connection ) { [_connection cancel];  }
 }
 
 #pragma mark -
@@ -37,21 +42,21 @@
 // still exists and finishes up the operation.
 - (void)done
 {
-	if( connection_ ) {
-		[connection_ cancel];
-		connection_ = nil;
+	if( _connection ) {
+		[_connection cancel];
+		_connection = nil;
 	}
 	
-	if( data_ ) {
-    downloadData_ = [[NSData alloc] initWithData:data_];  
-		data_ = nil;
+	if( _data ) {
+    _downloadData = [[NSData alloc] initWithData: _data];  
+		_data = nil;
 	}
 	
 	// Alert anyone that we are finished
 	[self willChangeValueForKey:@"isExecuting"];
 	[self willChangeValueForKey:@"isFinished"];
-	executing_ = NO;
-	finished_  = YES;
+	_executing = NO;
+	_finished  = YES;
 	[self didChangeValueForKey:@"isFinished"];
 	[self didChangeValueForKey:@"isExecuting"];
 }
@@ -67,17 +72,17 @@
 	
 	
 	// Ensure this operation is not being restarted and that it has not been cancelled
-	if( finished_ || [self isCancelled] ) { [self done]; return; }
+	if( _finished || [self isCancelled] ) { [self done]; return; }
 	
 	// From this point on, the operation is officially executing--remember, isExecuting
 	// needs to be KVO compliant!
 	[self willChangeValueForKey:@"isExecuting"];
-	executing_ = YES;
+	_executing = YES;
 	[self didChangeValueForKey:@"isExecuting"];
 	
 	// Create the NSURLConnection--this could have been done in init, but we delayed
 	// until no in case the operation was never enqueued or was cancelled before starting
-	connection_ = [[NSURLConnection alloc] initWithRequest:[NSURLRequest requestWithURL:connectionURL_]
+	_connection = [[NSURLConnection alloc] initWithRequest:[NSURLRequest requestWithURL:_connectionURL]
 												  delegate:self];
 }
 
@@ -91,12 +96,12 @@
 
 - (BOOL)isExecuting
 {
-	return executing_;
+	return _executing;
 }
 
 - (BOOL)isFinished
 {
-	return finished_;
+	return _finished;
 }
 
 - (void)cancel
@@ -113,15 +118,15 @@
 // The connection failed
 - (void)connection:(NSURLConnection*)connection didFailWithError:(NSError*)error
 {
-	data_ = nil;
-	error_ = error;
+	_data = nil;
+	_error = error;
 	[self done];
 }
 
 // The connection received more data
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
-	[data_ appendData:data];
+	[_data appendData:data];
 }
 
 // Initial response
@@ -131,11 +136,11 @@
 	NSInteger statusCode = [httpResponse statusCode];
 	if( statusCode == 200 ) {
 		NSUInteger contentSize = [httpResponse expectedContentLength] > 0 ? [httpResponse expectedContentLength] : 0;
-		data_ = [[NSMutableData alloc] initWithCapacity:contentSize];
+		_data = [[NSMutableData alloc] initWithCapacity:contentSize];
 	} else {
 		NSString* statusError  = [NSString stringWithFormat:NSLocalizedString(@"HTTP Error: %ld", nil), statusCode];
 		NSDictionary* userInfo = [NSDictionary dictionaryWithObject:statusError forKey:NSLocalizedDescriptionKey];
-		error_ = [[NSError alloc] initWithDomain:@"ExampleOperationDomain"
+		_error = [[NSError alloc] initWithDomain:@"ExampleOperationDomain"
 											code:statusCode
 										userInfo:userInfo];
 		[self done];
@@ -144,7 +149,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-  error_ = nil;
+  _error = nil;
 	[self done];
 }
 
