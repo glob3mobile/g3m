@@ -36,6 +36,11 @@ G3MWidget* G3MWidget::create(IFactory* factory,
                        logFPS);
 }
 
+void G3MWidget::initializeGL() {
+  _gl->depthTest(true);
+  _gl->cullFace(true, BACK);
+}
+
 G3MWidget::~G3MWidget()
 {
   delete _renderer;

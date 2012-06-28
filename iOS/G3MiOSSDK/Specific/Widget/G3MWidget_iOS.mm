@@ -101,7 +101,7 @@
     
     // very basic tile renderer
     if (true) {
-      TileTessellator* tessellator = new EllipsoidalTileTessellator();
+      TileTessellator* tessellator = new EllipsoidalTileTessellator("world.jpg");
       
       TileRenderer* tr = new TileRenderer(tessellator);
       comp->addRenderer(tr);
@@ -113,7 +113,7 @@
       comp->addRenderer(dum);
     }
     
-    if (true) {
+    if (false) {
       // simple planet renderer, with a basic world image
       SimplePlanetRenderer* spr = new SimplePlanetRenderer("world.jpg");
       comp->addRenderer(spr);
@@ -178,9 +178,6 @@
                                 width, height,
                                 Color::fromRGB((float)0, (float)0.1, (float)0.2, (float)1),
                                 true);
-    
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
     
     // rest of initialization
     _animating = FALSE;

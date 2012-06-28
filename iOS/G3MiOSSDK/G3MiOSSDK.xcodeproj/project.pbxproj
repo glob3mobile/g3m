@@ -54,6 +54,8 @@
 		CC14B64E157D35C100793C92 /* IImage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC14B64C157D35C100793C92 /* IImage.hpp */; };
 		CF0C396A157F988100646A2F /* Mark.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0C3969157F988100646A2F /* Mark.cpp */; };
 		CF31CBF1158776130085E8F1 /* Effects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF31CBF0158776120085E8F1 /* Effects.cpp */; };
+		CF7A78EC159B9BE300074422 /* MutableVector2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */; };
+		CF7A78ED159B9BE300074422 /* MutableVector2D.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF7A78EB159B9BE300074422 /* MutableVector2D.hpp */; };
 		CF883B821590984900AEE39C /* TexturesHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF883B811590984900AEE39C /* TexturesHandler.cpp */; };
 		CF883B871591FEBF00AEE39C /* SceneGraphRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF883B861591FEBF00AEE39C /* SceneGraphRenderer.cpp */; };
 		CF883B8A1592471600AEE39C /* GLErrorRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF883B891592471600AEE39C /* GLErrorRenderer.cpp */; };
@@ -140,6 +142,8 @@
 		CF31CBF0158776120085E8F1 /* Effects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Effects.cpp; path = Commons/Basic/Effects.cpp; sourceTree = "<group>"; };
 		CF31CBF215878AF90085E8F1 /* ITimer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ITimer.hpp; path = Commons/Interfaces/ITimer.hpp; sourceTree = "<group>"; };
 		CF31CBF315878BE40085E8F1 /* Timer_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Timer_iOS.hpp; path = Specific/Derived/Timer_iOS.hpp; sourceTree = "<group>"; };
+		CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector2D.cpp; path = Commons/Geometry/MutableVector2D.cpp; sourceTree = "<group>"; };
+		CF7A78EB159B9BE300074422 /* MutableVector2D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MutableVector2D.hpp; path = Commons/Geometry/MutableVector2D.hpp; sourceTree = "<group>"; };
 		CF883B7F1590983B00AEE39C /* TexturesHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TexturesHandler.hpp; path = Commons/Basic/TexturesHandler.hpp; sourceTree = "<group>"; };
 		CF883B811590984900AEE39C /* TexturesHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = TexturesHandler.cpp; path = Commons/Basic/TexturesHandler.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF883B851591FEAF00AEE39C /* SceneGraphRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SceneGraphRenderer.hpp; path = Commons/Basic/SceneGraphRenderer.hpp; sourceTree = "<group>"; };
@@ -304,6 +308,8 @@
 		383BD38A1577EDFD0012AC53 /* Geometry */ = {
 			isa = PBXGroup;
 			children = (
+				CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */,
+				CF7A78EB159B9BE300074422 /* MutableVector2D.hpp */,
 				D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */,
 				D84D5A30157E0EAA000C5E35 /* MutableVector3D.hpp */,
 				383BD39E1577EE5A0012AC53 /* Angle.cpp */,
@@ -450,6 +456,7 @@
 				D88C344D159C5A250044CED9 /* DummyDownload.hpp in Headers */,
 				D88C3453159C5A410044CED9 /* DataDownload.hpp in Headers */,
 				D88C3455159C5A410044CED9 /* NetworkPetition.hpp in Headers */,
+				CF7A78ED159B9BE300074422 /* MutableVector2D.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -544,6 +551,7 @@
 				CF9AEBBC159B3AC8004C3558 /* Mesh.cpp in Sources */,
 				CF9AEBBF159B3BAF004C3558 /* TileTessellator.cpp in Sources */,
 				CF9AEBC2159B3FEB004C3558 /* EllipsoidalTileTessellator.cpp in Sources */,
+				CF7A78EC159B9BE300074422 /* MutableVector2D.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

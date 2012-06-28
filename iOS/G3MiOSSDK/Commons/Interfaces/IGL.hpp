@@ -15,6 +15,12 @@
 #include "MutableMatrix44D.hpp"
 #include "Color.hpp"
 
+enum CullFace {
+  FRONT,
+  BACK,
+  FRONT_AND_BACK
+};
+
 class IGL {
 public:
   
@@ -63,9 +69,9 @@ public:
   
   virtual void drawTriangleStrip(int n, const unsigned char i[]) = 0;
   
-  virtual void drawLines(int n, unsigned char i[]) = 0; 
+  virtual void drawLines(int n, const unsigned char i[]) = 0; 
   
-  virtual void drawLineLoop(int n, unsigned char i[]) = 0;
+  virtual void drawLineLoop(int n, const unsigned char i[]) = 0;
 
   virtual void setProjection(const MutableMatrix44D &projection) = 0;
   
@@ -95,6 +101,7 @@ public:
 
   virtual void deleteTexture(int glTextureId) = 0;
   
+  virtual void cullFace(bool b, CullFace face) = 0;
 };
 
 

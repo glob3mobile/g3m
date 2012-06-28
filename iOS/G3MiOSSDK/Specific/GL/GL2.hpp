@@ -11,51 +11,51 @@
 #include "MutableMatrix44D.hpp"
 
 class GL2: public IGL {
-
+  
 public:
   
-   void enableVertices() ;
+  void enableVertices() ;
   
-   void enableTextures() ;
+  void enableTextures() ;
   
-   void enableTexture2D() ;
+  void enableTexture2D() ;
   
-   void disableTexture2D() ;
+  void disableTexture2D() ;
   
-   void disableVertices() ;
+  void disableVertices() ;
   
-   void disableTextures() ;
+  void disableTextures() ;
   
-   void clearScreen(float r, float g, float b, float a) ;
+  void clearScreen(float r, float g, float b, float a) ;
   
-   void color(float r, float g, float b, float a) ;
+  void color(float r, float g, float b, float a) ;
   
-   void pushMatrix() ;
+  void pushMatrix() ;
   
-   void popMatrix() ;
+  void popMatrix() ;
   
-   void loadMatrixf(const MutableMatrix44D &m) ;
+  void loadMatrixf(const MutableMatrix44D &m) ;
   
-   void multMatrixf(const MutableMatrix44D &m) ;
+  void multMatrixf(const MutableMatrix44D &m) ;
   
-   void vertexPointer(int size, int stride, const float vertex[]) ;
+  void vertexPointer(int size, int stride, const float vertex[]) ;
   
-   void drawTriangleStrip(int n, const unsigned char *i) ;
+  void drawTriangleStrip(int n, const unsigned char *i) ;
   
-   void drawLines(int n, unsigned char *i); 
-   
-   void drawLineLoop(int n, unsigned char *i); 
+  void drawLines(int n, const unsigned char *i); 
   
-   void setProjection(const MutableMatrix44D &projection) ;
+  void drawLineLoop(int n, const unsigned char *i); 
   
-   void useProgram(unsigned int program) ;
+  void setProjection(const MutableMatrix44D &projection) ;
   
-   void enablePolygonOffset(float factor, float units) ;
+  void useProgram(unsigned int program) ;
   
-   void disablePolygonOffset() ;
+  void enablePolygonOffset(float factor, float units) ;
   
-   void lineWidth(float width);
-
+  void disablePolygonOffset() ;
+  
+  void lineWidth(float width);
+  
   int getError();
   
   int uploadTexture(const IImage& image, int textureWidth, int textureHeight);
@@ -67,16 +67,19 @@ public:
   void depthTest(bool b);
   
   void blend(bool b);
-
+  
   void drawBillBoard(const unsigned int textureId,
                      const Vector3D& pos,
                      const float viewPortRatio);
-
+  
   void deleteTexture(int glTextureId);
-
+  
+  virtual void cullFace(bool b, CullFace face);
+  
 private:
-    // stack of ModelView matrices
-    MutableMatrix44D _modelView;
-    std::list<MutableMatrix44D> _matrixStack;
+  MutableMatrix44D            _modelView;
+
+  // stack of ModelView matrices
+  std::list<MutableMatrix44D> _matrixStack;
 };
 
