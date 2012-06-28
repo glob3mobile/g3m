@@ -155,11 +155,11 @@ void GL2::drawTriangleStrip(int n, const unsigned char *i) {
   glDrawElements(GL_TRIANGLE_STRIP, n, GL_UNSIGNED_BYTE, i);
 }
 
-void GL2::drawLines(int n, unsigned char *i) {
+void GL2::drawLines(int n, const unsigned char *i) {
   glDrawElements(GL_LINES, n, GL_UNSIGNED_BYTE, i);
 }
 
-void GL2::drawLineLoop(int n, unsigned char *i) {
+void GL2::drawLineLoop(int n, const unsigned char *i) {
   glDrawElements(GL_LINE_LOOP, n, GL_UNSIGNED_BYTE, i);
 }
 
@@ -277,4 +277,30 @@ void GL2::drawBillBoard(const unsigned int textureId,
 void GL2::deleteTexture(int glTextureId) {
   unsigned int textures[] = {glTextureId};
   glDeleteTextures(1, textures);
+}
+
+void GL2::cullFace(bool b, CullFace face) {
+//  glEnable(GL_CULL_FACE);
+//  glCullFace(GL_FRONT);
+
+  if (b) {
+    glEnable(GL_CULL_FACE);  
+  }
+  else {
+    glDisable(GL_CULL_FACE);
+  }
+  
+  switch (face) {
+    case FRONT:
+      glCullFace(GL_FRONT);
+      break;
+    case BACK:
+      glCullFace(GL_BACK);
+      break;
+    case FRONT_AND_BACK:
+      glCullFace(GL_FRONT_AND_BACK);
+      break;
+    default:
+      break;
+  }
 }

@@ -42,6 +42,8 @@ public:
   
   Vector3D geodeticSurfaceNormal(const Geodetic3D& geodetic) const;
   
+  Vector3D geodeticSurfaceNormal(const Geodetic2D& geodetic) const;
+  
   std::vector<double> intersections(const Vector3D& origin,
                                     const Vector3D& direction) const;
   

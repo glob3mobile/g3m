@@ -13,25 +13,28 @@
 
 
 TileRenderer::~TileRenderer() {
-  clearTopTiles();
+  clearTopLevelTiles();
   
   delete _tessellator;
 }
 
-void TileRenderer::clearTopTiles() {
-  for (int i = 0; i < _topTiles.size(); i++) {
-    Tile* tile = _topTiles[i];
+void TileRenderer::clearTopLevelTiles() {
+  for (int i = 0; i < _topLevelTiles.size(); i++) {
+    Tile* tile = _topLevelTiles[i];
     delete tile;
   }
   
-  _topTiles.clear();
+  _topLevelTiles.clear();
 }
 
-void TileRenderer::createTopTiles(const InitializationContext* ic) {
+void TileRenderer::createTopLevelTiles(const InitializationContext* ic) {
+  int __diego_at_work;
+  
   const Sector topSector(Geodetic2D(Angle::fromDegrees(-90), Angle::fromDegrees(-180)),
                          Geodetic2D(Angle::fromDegrees(90), Angle::fromDegrees(180)));
-  const int splitsByLatitude = 2;
-  const int splitsByLongitude = 4;
+  const int K = 1;
+  const int splitsByLatitude = 2 * K;
+  const int splitsByLongitude = 4 * K;
   const int topLevel = 0;
   
   
@@ -52,18 +55,12 @@ void TileRenderer::createTopTiles(const InitializationContext* ic) {
       const Angle tileLonFrom = tileWidth.times(col).add(fromLongitude);
       const Angle tileLonTo = tileLonFrom.add(tileWidth);
       
-      //      ic->getLogger()->logInfo("row=%i, col=%i, from=(%f,%f) to=(%f, %f)",
-      //                               row, col,
-      //                               tileLatFrom.degrees(), tileLonFrom.degrees(),
-      //                               tileLatTo.degrees(), tileLonTo.degrees()
-      //                               );
-      
       const Geodetic2D tileLower(tileLatFrom, tileLonFrom);
       const Geodetic2D tileUpper(tileLatTo, tileLonTo);
       const Sector sector(tileLower, tileUpper);
       
       Tile* tile = new Tile(sector, topLevel, row, col);
-      _topTiles.push_back(tile);
+      _topLevelTiles.push_back(tile);
     }
   }
   
@@ -71,9 +68,9 @@ void TileRenderer::createTopTiles(const InitializationContext* ic) {
 
 void TileRenderer::initialize(const InitializationContext* ic)
 {
-  clearTopTiles();
+  clearTopLevelTiles();
   
-  createTopTiles(ic);
+  createTopLevelTiles(ic);
 }  
 
 
@@ -81,15 +78,15 @@ void TileRenderer::initialize(const InitializationContext* ic)
 
 int TileRenderer::render(const RenderContext* rc)
 {
-  IGL *gl = rc->getGL();
-  gl->enableVertices();
+//  IGL *gl = rc->getGL();
+//  gl->enableVertices();
   
-  for (int i = 0; i < _topTiles.size(); i++) {
-    Tile* tile = _topTiles[i];
+  for (int i = 0; i < _topLevelTiles.size(); i++) {
+    Tile* tile = _topLevelTiles[i];
     tile->render(rc, _tessellator);
   }
   
-  gl->disableVertices();
+//  gl->disableVertices();
   
   return MAX_TIME_TO_RENDER;
 }
