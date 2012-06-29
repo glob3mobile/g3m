@@ -86,7 +86,8 @@
     
     //Testing downloads
     int test_download_code = 0;
-    DummyDownload *dummyDownload = new DummyDownload(factory);
+    NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    DummyDownload *dummyDownload = new DummyDownload(factory, [documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding] );
     dummyDownload->run();
     
     // all the creation of renderers must be move to common source code, instead of specific

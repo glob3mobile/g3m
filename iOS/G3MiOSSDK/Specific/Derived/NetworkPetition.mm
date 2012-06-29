@@ -42,12 +42,15 @@
 	[op removeObserver:self forKeyPath:@"isFinished"];
   
 	if( ![op error] ) {
-    unsigned char *bytes = (unsigned char*)[[op downloadData] bytes];
+    unsigned char *bytes = (unsigned char*)[[[op downloadData] copy] bytes];
+    ByteBuffer bb(bytes, [[op downloadData] length]);
     
-    Response r("", [[op getURL] cStringUsingEncoding:NSUTF8StringEncoding] , bytes, [[op downloadData] length]);
+    Response r("", [[op getURL] cStringUsingEncoding:NSUTF8StringEncoding] , bb);
     ((IDownloadListener*)_listener)->onDownload(r);
 	} else {
-    Response r("", [[op getURL] cStringUsingEncoding:NSUTF8StringEncoding] , NULL, 0);
+    ByteBuffer bb(NULL, 0);
+    
+    Response r("", [[op getURL] cStringUsingEncoding:NSUTF8StringEncoding], bb);
     ((IDownloadListener*)_listener)->onError(r);
   }
 }

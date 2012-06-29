@@ -9,6 +9,8 @@
 #ifndef G3MiOSSDK_Response_h
 #define G3MiOSSDK_Response_h
 
+#include "ByteBuffer.hpp"
+
 
 class File{
   const std::string _path;
@@ -28,17 +30,14 @@ class Response{
 private:
   const File _file;
   const Url _url;
-  unsigned char * _data;
-  const int _dataLength;
+  ByteBuffer _data;
   
 public:
   
-  Response(std::string file, std::string url, unsigned char * data, int dataLength): _file(file), _url(url), _data(data), _dataLength(dataLength){}
+  Response(std::string file, std::string url, ByteBuffer data): _file(file), _url(url), _data(data){}
   
   Url getURL() const{ return _url;}
-  unsigned char* getData() const{ return _data;}
-  
-  ~Response(){ delete[] _data;}
+  ByteBuffer getByteBuffer() const{ return _data;}
 };
 
 #endif

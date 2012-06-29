@@ -18,14 +18,14 @@
 class DummyDownload: public IDownloadListener
 {
   
-  FileSystemStorage * _fss;
+  IStorage * _fss;
   Downloader * _downloader;
   
 public:
   
-  DummyDownload(IFactory *fac)
+  DummyDownload(IFactory *fac, const std::string& root)
   {
-    _fss = new FileSystemStorage();
+    _fss = new FileSystemStorage(root);
     _downloader = new Downloader(_fss, 5, fac->createNetwork());
   }
   
@@ -41,16 +41,14 @@ public:
   
   void onDownload(const Response& response)
   {
-    unsigned char *data = response.getData();
-    
+    const unsigned char *data = response.getByteBuffer().getData();
     std::string resp = (char*)data;
-    
-    printf("GETTING RESPONSE %s", resp.c_str());
+    printf("GETTING RESPONSE %s\n", resp.c_str());
   }
   
   void onError(const Response& response)
   {
-    
+    printf("GETTING ERROR IN URL: %s\n", response.getURL().getPath().c_str());
   }
   
 };
