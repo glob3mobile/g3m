@@ -85,9 +85,11 @@
     IGL* gl  = new GL2();
     
     //Testing downloads
-    int test_download_code = 0;
-    DummyDownload dummyDownload(factory);
-    dummyDownload.run();
+    if (false) {
+      int test_download_code = 0;
+      DummyDownload dummyDownload(factory);
+      dummyDownload.run();
+    }
     
     // all the creation of renderers must be move to common source code, instead of specific
     int __to_move_to_common_source_code;
@@ -145,9 +147,7 @@
         
         marks->addMark(new Mark("Random",
                                 "mark.png",
-                                Geodetic3D(latitude, longitude, 0)
-                                )
-                       );
+                                Geodetic3D(latitude, longitude, 0)));
       } 
     }
     

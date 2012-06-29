@@ -10,7 +10,6 @@
 
 #include "ITimer.hpp"
 
-
 G3MWidget* G3MWidget::create(IFactory* factory,
                              ILogger *logger,
                              IGL* gl,
@@ -19,8 +18,7 @@ G3MWidget* G3MWidget::create(IFactory* factory,
                              Renderer* renderer,
                              int width, int height,
                              Color backgroundColor,
-                             const bool logFPS)
-{
+                             const bool logFPS) {
   if (logger != NULL) {
     logger->logInfo("Creating G3MWidget...");
   }
@@ -41,17 +39,18 @@ void G3MWidget::initializeGL() {
   _gl->cullFace(true, BACK);
 }
 
-G3MWidget::~G3MWidget()
-{
-  delete _renderer;
-  delete _planet;
-  
+G3MWidget::~G3MWidget() { 
   delete _factory;
+  delete _logger;
   delete _gl;
+  delete _planet;
+  delete _renderer;
+  delete _camera;
+  delete _texturesHandler;
+  delete _timer;
 }
 
-int G3MWidget::render()
-{
+int G3MWidget::render() {
   _timer->start();
   _renderCounter++;
   
@@ -59,7 +58,6 @@ int G3MWidget::render()
   
   // Clear the scene
   _gl->clearScreen(_backgroundColor);
-  
   
   int timeToRedraw = _renderer->render(&rc);
 
@@ -81,12 +79,10 @@ int G3MWidget::render()
   return timeToRedraw;
 }
 
-void G3MWidget::onTouchEvent(const TouchEvent* myEvent)
-{
+void G3MWidget::onTouchEvent(const TouchEvent* myEvent) {
   _renderer->onTouchEvent(myEvent);
 }
 
-void G3MWidget::onResizeViewportEvent(int width, int height)
-{
+void G3MWidget::onResizeViewportEvent(int width, int height) {
   _renderer->onResizeViewportEvent(width, height);
 }
