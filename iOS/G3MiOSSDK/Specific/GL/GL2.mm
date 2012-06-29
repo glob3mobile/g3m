@@ -279,9 +279,6 @@ void GL2::deleteTexture(int glTextureId) {
 }
 
 void GL2::cullFace(bool b, CullFace face) {
-//  glEnable(GL_CULL_FACE);
-//  glCullFace(GL_FRONT);
-
   if (b) {
     glEnable(GL_CULL_FACE);  
   }
@@ -300,6 +297,7 @@ void GL2::cullFace(bool b, CullFace face) {
       glCullFace(GL_FRONT_AND_BACK);
       break;
     default:
+      int __throws_error;
       break;
   }
 }

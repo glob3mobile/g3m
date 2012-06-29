@@ -78,7 +78,6 @@ void Camera::draw(const RenderContext &rc) {
   double ratioScreen = (double) _viewport[3] / _viewport[2];
   _projection = MutableMatrix44D::createProjectionMatrix(-0.3 / ratioScreen * znear, 0.3 / ratioScreen * znear, -0.3 * znear, 0.3 * znear, znear, 10000 * znear);
   
-  // obtaing gl object reference
   IGL *gl = rc.getGL();
   gl->setProjection(_projection);
   

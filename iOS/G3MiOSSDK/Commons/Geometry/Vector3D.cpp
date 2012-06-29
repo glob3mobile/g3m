@@ -11,8 +11,7 @@
 #include "Angle.hpp"
 
 
-Vector3D Vector3D::normalized() const
-{
+Vector3D Vector3D::normalized() const {
     double d = length();
     return Vector3D(_x / d, _y /d, _z / d);
 }
@@ -21,23 +20,22 @@ Vector3D Vector3D::normalized() const
 Angle Vector3D::angleBetween(const Vector3D& other) const {
   Vector3D v1 = normalized();
   Vector3D v2 = other.normalized();
+
   double c = v1.dot(v2);
   if (c > 1.0) c = 1.0;
   else if (c < -1.0) c = -1.0;
   
-  Angle a = Angle::fromRadians(acos(c));
-  
-  return a;
+  return Angle::fromRadians(acos(c));
 }
 
 Vector3D Vector3D::rotateAroundAxis(const Vector3D& axis,
-                                    double theta) const {
+                                    Angle theta) const {
   const double u = axis.x();
   const double v = axis.y();
   const double w = axis.z();
   
-  const double cosTheta = cos(theta);
-  const double sinTheta = sin(theta);
+  const double cosTheta = theta.cosinus();
+  const double sinTheta = theta.sinus();
   
   const double ms = axis.squaredLength();
   const double m = sqrt(ms);
