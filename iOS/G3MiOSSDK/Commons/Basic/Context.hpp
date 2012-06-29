@@ -13,6 +13,7 @@
 #include "IGL.hpp"
 #include "Planet.hpp"
 #include "TexturesHandler.hpp"
+#include "SQLiteStorage_iOS.hpp"
 
 #define MAX_TIME_TO_RENDER 1000
 
@@ -25,6 +26,8 @@ protected:
   const IFactory * _factory;
   const ILogger*   _logger;
   const Planet*    _planet;
+  const IStorage* _storage;
+
 
   
   Context(const IFactory *factory,
@@ -32,8 +35,12 @@ protected:
           const Planet* planet) :
   _factory(factory),
   _logger(logger),
-  _planet(planet){
+  _planet(planet),_storage(new SQLiteStorage_iOS()){
     
+      
+      _storage->findFileFromFileName("ficheroprueba.pdf");
+      
+      
   }
   
 public:
@@ -49,6 +56,16 @@ public:
   const Planet* getPlanet() const {
     return _planet;
   }
+    
+    const IStorage* getStorage() const {
+        return _storage;
+    }
+    
+    /*
+    void setStorage(IStorage* storage){
+        _storage(storage);
+    }
+     */
   
 };
 
@@ -94,6 +111,8 @@ public:
   TexturesHandler* getTexturesHandler() const {
     return _texturesHandler;
   }
+    
+    
 };
 
 #endif

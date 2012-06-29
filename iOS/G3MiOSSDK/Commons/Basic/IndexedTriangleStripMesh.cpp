@@ -35,9 +35,10 @@ _normals(normals)
 {
 }
 
-IndexedTriangleStripMesh::IndexedTriangleStripMesh(const std::vector<Vector3D>& vertices, 
-                                                   const std::vector<unsigned char>& indexes,
-                                                   const Color& color, const std::vector<Vector3D>* normals):
+IndexedTriangleStripMesh::IndexedTriangleStripMesh(std::vector<MutableVector3D>& vertices, 
+                                                   std::vector<unsigned char>& indexes,
+                                                   const Color& color,
+                                                   std::vector<MutableVector3D>* normals):
 _owner(true),
 _color(color),
 _texCoords(NULL),
@@ -93,17 +94,17 @@ _normals(normals)
 {
 }
 
-IndexedTriangleStripMesh::IndexedTriangleStripMesh(const std::vector<Vector3D>& vertices, 
-                                                   const std::vector<unsigned char>& indexes,
+IndexedTriangleStripMesh::IndexedTriangleStripMesh(std::vector<MutableVector3D>& vertices, 
+                                                   std::vector<unsigned char>& indexes,
                                                    const int texID,
-                                                   const std::vector<Vector2D>& texCoords, 
-                                                   const std::vector<Vector3D>* normals):
+                                                   std::vector<MutableVector2D>& texCoords, 
+                                                   std::vector<MutableVector3D>* normals):
 _owner(true),
 _numIndex(indexes.size()),
 _color( Color::fromRGB((float)0,(float)0,(float)0,(float)0) ),
 _textureId(texID)
 {
-  float * vert = new float[3* vertices.size()];
+  float* vert = new float[3 * vertices.size()];
   int p = 0;
   for (int i = 0; i < vertices.size(); i++) {
     vert[p++] = vertices[i].x();
@@ -112,31 +113,33 @@ _textureId(texID)
   }
   _vertices = vert;
   
-  unsigned char * ind = new unsigned char[indexes.size()];
+  unsigned char* ind = new unsigned char[indexes.size()];
   for (int i = 0; i < indexes.size(); i++) {
     ind[i] = indexes[i];
   }
   _indexes = ind;
   
-  float * tc = new float[2* texCoords.size()];
+  float* tc = new float[2 * texCoords.size()];
   p = 0;
   for (int i = 0; i < vertices.size(); i++) {
-    tc[p++] = vertices[i].x();
-    tc[p++] = vertices[i].y();
+    tc[p++] = texCoords[i].x();
+    tc[p++] = texCoords[i].y();
   }
   _texCoords = tc;
   
-  if (normals != NULL){
-    float * norm = new float[3* vertices.size()];
+  if (normals == NULL) {
+    _normals = NULL;
+  }
+  else {
+    float* norm = new float[3 * vertices.size()];
     p = 0;
     for (int i = 0; i < vertices.size(); i++) {
       norm[p++] = (*normals)[i].x();
       norm[p++] = (*normals)[i].y();
       norm[p++] = (*normals)[i].z();
     }
+    
     _normals = norm;
-  } else {
-    _normals = NULL;
   }
 }
 

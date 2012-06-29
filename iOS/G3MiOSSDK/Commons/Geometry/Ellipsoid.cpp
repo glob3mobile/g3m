@@ -33,6 +33,13 @@ Vector3D Ellipsoid::geodeticSurfaceNormal(const Geodetic3D& geodetic) const {
                   geodetic.latitude().sinus());
 }
 
+Vector3D Ellipsoid::geodeticSurfaceNormal(const Geodetic2D& geodetic) const {
+  double cosLatitude = geodetic.latitude().cosinus();
+  
+  return Vector3D(cosLatitude * geodetic.longitude().cosinus(),
+                  cosLatitude * geodetic.longitude().sinus(),
+                  geodetic.latitude().sinus());
+}
 
 std::vector<double> Ellipsoid::intersections(const Vector3D& origin,
                                              const Vector3D& direction) const {

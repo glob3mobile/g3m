@@ -11,21 +11,25 @@
 
 #include "Mesh.hpp"
 #include "Color.hpp"
-#include "Vector2D.hpp"
-#include "Vector3D.hpp"
+#include "MutableVector2D.hpp"
+#include "MutableVector3D.hpp"
 
 
 class IndexedTriangleStripMesh : public Mesh {
+private:
+  const bool           _owner;
   
-  const unsigned char * _indexes;
-  const float * _vertices;
-  const int _numIndex;
+  const float*         _vertices;
   
-  const float * _texCoords;
-  const float * _normals;
-  const Color _color;
-  const int _textureId;
-  const bool _owner;
+  const unsigned char* _indexes;
+  const int            _numIndex;
+  
+  const float*         _normals;
+  
+  const Color          _color;
+  
+  const float*         _texCoords;
+  const int            _textureId;
   
 public:
   
@@ -39,10 +43,10 @@ public:
                            const Color& color,
                            const float* normals = NULL);
   
-  IndexedTriangleStripMesh(const std::vector<Vector3D>& vertices,
-                           const std::vector<unsigned char>& indexes,
+  IndexedTriangleStripMesh(std::vector<MutableVector3D>& vertices,
+                           std::vector<unsigned char>& indexes,
                            const Color& color,
-                           const std::vector<Vector3D>* normals = NULL);
+                           std::vector<MutableVector3D>* normals = NULL);
   
   //TEXTURED
   IndexedTriangleStripMesh(bool owner,
@@ -53,11 +57,11 @@ public:
                            const float* texCoords,
                            const float* normals = NULL);
   
-  IndexedTriangleStripMesh(const std::vector<Vector3D>& vertices,
-                           const std::vector<unsigned char>& indexes,
+  IndexedTriangleStripMesh(std::vector<MutableVector3D>& vertices,
+                           std::vector<unsigned char>& indexes,
                            const int texID,
-                           const std::vector<Vector2D>& texCoords,
-                           const std::vector<Vector3D>* normals = NULL);
+                           std::vector<MutableVector2D>& texCoords,
+                           std::vector<MutableVector3D>* normals = NULL);
   
   virtual void render(const RenderContext* rc) const;
   

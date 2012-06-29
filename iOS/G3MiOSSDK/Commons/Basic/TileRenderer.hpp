@@ -18,10 +18,10 @@ class TileTessellator;
 class TileRenderer: public Renderer {
 private:
   const TileTessellator* _tessellator;
-  std::vector<Tile*> _topTiles;
+  std::vector<Tile*>     _topLevelTiles;
   
-  void clearTopTiles();
-  void createTopTiles(const InitializationContext* ic);
+  void clearTopLevelTiles();
+  void createTopLevelTiles(const InitializationContext* ic);
   
 public:
   TileRenderer(const TileTessellator* tessellator) :

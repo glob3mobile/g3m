@@ -16,7 +16,8 @@ public:
     virtual IFile* findFileFromFileName(const std::string filename) const;
     
 private:
-    virtual void openConexion();
+    virtual void openConexion() const;
+    virtual void testConnection() const;
 };
 
 #endif

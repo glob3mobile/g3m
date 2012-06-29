@@ -36,7 +36,9 @@ public:
   
   void onResizeViewportEvent(int width, int height);
   
-  IGL * getGL() const{ return _gl; }
+  IGL* getGL() const {
+    return _gl;
+  }
   
   
 private:
@@ -53,6 +55,8 @@ private:
   long             _renderCounter;
   long             _totalRenderTime;
   const bool       _logFPS;
+  
+  void initializeGL();
   
   G3MWidget(IFactory* factory,
             ILogger *logger,
@@ -76,9 +80,12 @@ private:
   _totalRenderTime(0),
   _logFPS(logFPS)
   {
+    initializeGL();
+    
     InitializationContext ic(_factory, _logger, _planet);
     _renderer->initialize(&ic);
   }
+  
 };
 
 #endif

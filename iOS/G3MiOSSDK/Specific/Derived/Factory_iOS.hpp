@@ -13,6 +13,7 @@
 
 #include "Timer_iOS.hpp"
 #include "Image_iOS.hpp"
+#include "Network_iOS.hpp"
 
 class Factory_iOS: public IFactory {
 public:
@@ -47,6 +48,16 @@ public:
   
   virtual void deleteImage(const IImage* image) const {
     delete image;
+  }
+  
+  virtual INetwork* createNetwork() const
+  {
+    return new Network_iOS();
+  }
+  
+  virtual void deletenetwork(const INetwork* n) const 
+  {
+    delete n;
   }
   
   

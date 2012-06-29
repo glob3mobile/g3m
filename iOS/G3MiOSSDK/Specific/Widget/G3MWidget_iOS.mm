@@ -27,6 +27,9 @@
 #include "GLErrorRenderer.hpp"
 #include "EllipsoidalTileTessellator.hpp"
 
+#include "DummyDownload.hpp"
+
+
 #include <stdlib.h>
 
 @interface G3MWidget_iOS ()
@@ -81,6 +84,10 @@
     ILogger *logger = new Logger_iOS(ErrorLevel);
     IGL* gl  = new GL2();
     
+    //Testing downloads
+    int test_download_code = 0;
+    DummyDownload dummyDownload(factory);
+    dummyDownload.run();
     
     // all the creation of renderers must be move to common source code, instead of specific
     int __to_move_to_common_source_code;
@@ -94,7 +101,7 @@
     
     // very basic tile renderer
     if (true) {
-      TileTessellator* tessellator = new EllipsoidalTileTessellator();
+      TileTessellator* tessellator = new EllipsoidalTileTessellator("world.jpg");
       
       TileRenderer* tr = new TileRenderer(tessellator);
       comp->addRenderer(tr);
@@ -106,7 +113,7 @@
       comp->addRenderer(dum);
     }
     
-    if (true) {
+    if (false) {
       // simple planet renderer, with a basic world image
       SimplePlanetRenderer* spr = new SimplePlanetRenderer("world.jpg");
       comp->addRenderer(spr);
@@ -171,9 +178,6 @@
                                 width, height,
                                 Color::fromRGB((float)0, (float)0.1, (float)0.2, (float)1),
                                 true);
-    
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
     
     // rest of initialization
     _animating = FALSE;
