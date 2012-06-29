@@ -14,7 +14,9 @@ Network_iOS::Network_iOS()
 
 void Network_iOS::request(std::string url, IDownloadListener* dl)
 {
-  _networkPetition = [[NetworkPetition alloc] init:dl];
+  if (_networkQueue == NULL) _networkQueue = [[NetworkQueue alloc] init:dl];
   
-  [_networkPetition makeAsyncPetition: url.c_str()];   
+  [_networkQueue setListener:dl];
+  
+  [_networkQueue makeAsyncPetition: url.c_str()];   
 }

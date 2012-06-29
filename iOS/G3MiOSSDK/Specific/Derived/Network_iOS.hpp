@@ -13,14 +13,14 @@
 
 #include "IDownloadListener.hpp"
 
-#import "NetworkPetition.hpp"
+#import "NetworkQueue.hpp"
 
 #include <vector>
 
 class Network_iOS: public INetwork
 {
 private:
-  id _networkPetition;     // pointer to the objective-C class
+  id _networkQueue;     // pointer to the objective-C class
 public:
   
   Network_iOS();
