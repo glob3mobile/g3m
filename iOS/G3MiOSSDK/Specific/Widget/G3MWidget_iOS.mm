@@ -87,8 +87,8 @@
     //Testing downloads
     if (false) {
       int test_download_code = 0;
-      DummyDownload dummyDownload(factory);
-      dummyDownload.run();
+      DummyDownload *dummyDownload = new DummyDownload(factory);
+      dummyDownload->run();
     }
     
     // all the creation of renderers must be move to common source code, instead of specific
@@ -131,7 +131,7 @@
                           Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0));
       //m1->addTouchListener(listener);
       marks->addMark(m1);
-
+      
       
       Mark* m2 = new Mark("Las Palmas",
                           "plane.png",
@@ -160,7 +160,7 @@
     if (false) {
       SceneGraphRenderer* sgr = new SceneGraphRenderer();
       SGCubeNode* cube = new SGCubeNode();
-//      cube->setScale(Vector3D(6378137.0, 6378137.0, 6378137.0));
+      //      cube->setScale(Vector3D(6378137.0, 6378137.0, 6378137.0));
       sgr->getRootNode()->addChild(cube);
       comp->addRenderer(sgr);
     }

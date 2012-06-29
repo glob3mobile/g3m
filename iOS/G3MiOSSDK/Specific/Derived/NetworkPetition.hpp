@@ -11,23 +11,14 @@
 
 @interface NetworkPetition : NSObject {
 @private	
-	DataDownload* currentOperation;
-	NSOperationQueue* networkQueue;
-	NSData *downloadData;	
-  bool dataArrived;
-  bool dataOK;
-  
+	DataDownload* _currentOperation;
+	NSOperationQueue* _networkQueue;
   void * _listener; 
 }
 
 -(id)init: (void*) dl;
 
 - (void) makeAsyncPetition: (const char *) url;
-- (void *) getData;
-- (unsigned int) getDataLength;
-- (bool) isDataArrived;
-- (bool) isDataOK;
-//- (void) ReleaseData;
 
 @end
 

@@ -119,6 +119,7 @@
 		383BD3AA1577EE5A0012AC53 /* Vector3D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Vector3D.hpp; path = Commons/Geometry/Vector3D.hpp; sourceTree = "<group>"; };
 		383BD3B81577EE630012AC53 /* IFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IFactory.hpp; path = Commons/Interfaces/IFactory.hpp; sourceTree = "<group>"; };
 		383BD3B91577EE630012AC53 /* ILogger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = ILogger.hpp; path = Commons/Interfaces/ILogger.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		38589EBD159C91F700DCC302 /* Response.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Response.hpp; path = Commons/Downloader/Response.hpp; sourceTree = "<group>"; };
 		38D786E01587AC40003BBC75 /* TileRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TileRenderer.hpp; path = Commons/Basic/TileRenderer.hpp; sourceTree = "<group>"; };
 		38D786E21587ACA5003BBC75 /* TileRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileRenderer.cpp; path = Commons/Basic/TileRenderer.cpp; sourceTree = "<group>"; };
 		38D786E41587B3DD003BBC75 /* Tile.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Tile.hpp; path = Commons/Basic/Tile.hpp; sourceTree = "<group>"; };
@@ -365,6 +366,11 @@
 				D8AD76111599B61B00A7D39A /* IDownloadListener.hpp */,
 				D88C344B159C5A250044CED9 /* Storage.cpp */,
 				D8AD76271599B89000A7D39A /* Storage.hpp */,
+				D8AD76111599B61B00A7D39A /* IDownloadListener.hpp */,
+				D8AD76161599B6B300A7D39A /* Downloader.hpp */,
+				D8AD76231599B83300A7D39A /* FileSystemStorage.hpp */,
+				D8AD76241599B84F00A7D39A /* FileSystemStorage.cpp */,
+				38589EBD159C91F700DCC302 /* Response.hpp */,
 			);
 			name = Downloader;
 			sourceTree = "<group>";

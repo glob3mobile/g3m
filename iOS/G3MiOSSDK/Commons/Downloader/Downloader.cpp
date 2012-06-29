@@ -68,11 +68,13 @@ void Downloader::onDownload(const Response& e)
 {
   for (int i = 0; i < _petitions.size(); i++)
   {
-    if (_petitions[i]._url == e.url.path) //RECEIVED RESPONSE
+    if (_petitions[i]._url == e.getURL().getPath()) //RECEIVED RESPONSE
     {
       Download& pet = _petitions[i];
       for (int j = 0; j < pet._listeners.size(); j++) {
-        pet._listeners[j]->onDownload(e);
+        IDownloadListener *dl = pet._listeners[j];
+        
+        dl->onDownload(e);
       }
       
       _petitions.erase(_petitions.begin() + i);
@@ -87,7 +89,7 @@ void Downloader::onError(const Response& e)
 {
   for (int i = 0; i < _petitions.size(); i++)
   {
-    if (_petitions[i]._url == e.url.path) //RECEIVED RESPONSE
+    if (_petitions[i]._url == e.getURL().getPath()) //RECEIVED RESPONSE
     {
       Download& pet = _petitions[i];
       for (int j = 0; j < pet._listeners.size(); j++) {
