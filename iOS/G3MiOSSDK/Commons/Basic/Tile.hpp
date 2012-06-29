@@ -24,15 +24,10 @@ private:
   
   Mesh* _mesh;
   
-  Mesh* getMesh(const RenderContext* rc,
-                const TileTessellator* tessellator) {
-    if (_mesh == NULL) {
-      _mesh = tessellator->createMesh(rc, this);
-    }
-    return _mesh;
-  }
+  inline Mesh* getMesh(const RenderContext* rc,
+                       const TileTessellator* tessellator);
   
-  bool isVisible(const RenderContext* rc);
+  inline bool isVisible(const RenderContext* rc);
   
 public:
   Tile(const Sector& sector,
@@ -48,12 +43,7 @@ public:
   }
   
   ~Tile();
-  
-  //  void createVertices(const Planet *planet);
-  //  void render(const RenderContext* rc);
-  //  
-  //  static void createIndices(unsigned int resol, bool skirts);
-  //  static void deleteIndices();
+
   
   Sector getSector() const {
     return _sector;

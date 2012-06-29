@@ -7,12 +7,13 @@
 //
 
 #include "Tile.hpp"
+#include "Mesh.hpp"
+#include "Camera.hpp"
+
 //#include "Angle.hpp"
 //#include "Geodetic3D.hpp"
 //#include "Vector3D.hpp"
 //#include "Camera.hpp"
-
-#include "Mesh.hpp"
 
 //unsigned int Tile::_numIndices = 0;
 //unsigned int Tile::_numBorderIndices = 0;
@@ -23,7 +24,6 @@
 //unsigned int Tile::_resolution;
 //bool Tile::_skirts;
 
-//#include "Camera.hpp"
 
 Tile::~Tile() {
   //  if (_vertices!=NULL) delete[] _vertices;
@@ -313,6 +313,16 @@ Tile::~Tile() {
 //  gl->popMatrix();
 //}
 
+
+Mesh* Tile::getMesh(const RenderContext* rc,
+              const TileTessellator* tessellator) {
+  if (_mesh == NULL) {
+    _mesh = tessellator->createMesh(rc, this);
+  }
+  return _mesh;
+}
+
+
 bool Tile::isVisible(const RenderContext *rc) {
  
   return true;
@@ -322,8 +332,12 @@ void Tile::render(const RenderContext* rc,
                   const TileTessellator* tessellator) {
   int ___diego_at_work;
   
-//  Camera* camera = rc->getCamera();
-//  Vector3D pos = camera->getPos();
+  Camera* camera = rc->getCamera();
+  Vector3D pos = camera->getPos();
+  
+  double distance = pos.length();
+  
+//  rc->getLogger()->logInfo("distance to camera: %f", distance);
   
   if (isVisible(rc)) {
     const Mesh* mesh = getMesh(rc, tessellator);

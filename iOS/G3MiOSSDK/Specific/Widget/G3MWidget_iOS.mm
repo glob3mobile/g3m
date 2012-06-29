@@ -85,10 +85,12 @@
     IGL* gl  = new GL2();
     
     //Testing downloads
-    int test_download_code = 0;
-    NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    DummyDownload *dummyDownload = new DummyDownload(factory, [documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding] );
-    dummyDownload->run();
+    if (false) {
+      int test_download_code = 0;
+      NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+      DummyDownload *dummyDownload = new DummyDownload(factory, [documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding] );
+      dummyDownload->run();
+    }
     
     // all the creation of renderers must be move to common source code, instead of specific
     int __to_move_to_common_source_code;
@@ -130,7 +132,7 @@
                           Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0));
       //m1->addTouchListener(listener);
       marks->addMark(m1);
-
+      
       
       Mark* m2 = new Mark("Las Palmas",
                           "plane.png",
@@ -146,9 +148,7 @@
         
         marks->addMark(new Mark("Random",
                                 "mark.png",
-                                Geodetic3D(latitude, longitude, 0)
-                                )
-                       );
+                                Geodetic3D(latitude, longitude, 0)));
       } 
     }
     
@@ -161,7 +161,7 @@
     if (false) {
       SceneGraphRenderer* sgr = new SceneGraphRenderer();
       SGCubeNode* cube = new SGCubeNode();
-//      cube->setScale(Vector3D(6378137.0, 6378137.0, 6378137.0));
+      //      cube->setScale(Vector3D(6378137.0, 6378137.0, 6378137.0));
       sgr->getRootNode()->addChild(cube);
       comp->addRenderer(sgr);
     }
