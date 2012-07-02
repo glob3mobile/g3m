@@ -39,17 +39,23 @@ public:
   void run()
   {
     std::string url ="http://demo.cubewerx.com/demo/cubeserv/cubeserv.cgi?Request=GetCapabilities&SERVICE=WMS";
+    std::string url2 ="http://ovc.catastro.meh.es/Cartografia/WMS/ServidorWMS.aspx?request=capabilities";
     
     _downloader->request(url, 10, this);
+     
+    _downloader->request(url, 10, this);
     
-    _downloader->request(url, 15, this);
-    
+    _downloader->request(url2, 20, this);
+   
+    _downloader->request(".....", 15, this); //THIS SHOULD PRODUCE AN ERROR
+    _downloader->request(url, 30, this);
   }
   
   void onDownload(const Response& response)
   {
     const unsigned char *data = response.getByteBuffer().getData();
     std::string resp = (char*)data;
+    resp = resp.substr(0,10);
     printf("GETTING RESPONSE %s\n", resp.c_str());
   }
   

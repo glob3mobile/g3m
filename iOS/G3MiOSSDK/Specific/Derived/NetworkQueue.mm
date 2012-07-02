@@ -6,33 +6,36 @@
 //  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
-#import "NetworkPetition.hpp"
+#import "NetworkQueue.hpp"
 
 
 #include "IDownloadListener.hpp"
 
-@implementation NetworkPetition
+@implementation NetworkQueue
 
 -(id)init: (void*) dl
 {	
 	_networkQueue = nil;
-	_currentOperation = nil;
   _listener = dl; //Instance that should be notified
   
 	return self;
 }
 
+-(void)setListener: (void*) dl
+{
+  _listener = dl; //Instance that should be notified
+}
 
 - (void) makeAsyncPetition: (const char *) url
 {
     // activate network queue
     if (_networkQueue == nil) _networkQueue = [[NSOperationQueue alloc] init];
-    [_networkQueue setMaxConcurrentOperationCount:1];
+    [_networkQueue setMaxConcurrentOperationCount:10];
     
     NSString *myurl = [NSString stringWithUTF8String:url];
-    _currentOperation = [[DataDownload alloc] initWithURL:[NSURL URLWithString:myurl]];
-    [_currentOperation addObserver:self forKeyPath:@"isFinished" options:NSKeyValueObservingOptionNew context:NULL];
-    [_networkQueue addOperation:_currentOperation];
+    DataDownload* currentOperation = [[DataDownload alloc] initWithURL:[NSURL URLWithString:myurl]];
+    [currentOperation addObserver:self forKeyPath:@"isFinished" options:NSKeyValueObservingOptionNew context:NULL];
+    [_networkQueue addOperation: currentOperation];
 }
 
 
@@ -42,7 +45,9 @@
 	[op removeObserver:self forKeyPath:@"isFinished"];
   
 	if( ![op error] ) {
-    unsigned char *bytes = (unsigned char*)[[[op downloadData] copy] bytes];
+    int length = [[op downloadData] length];
+    unsigned char *bytes = new unsigned char[ length ] ;
+    [[op downloadData] getBytes:bytes length: length];
     ByteBuffer bb(bytes, [[op downloadData] length]);
     
     Response r("", [[op getURL] cStringUsingEncoding:NSUTF8StringEncoding] , bb);

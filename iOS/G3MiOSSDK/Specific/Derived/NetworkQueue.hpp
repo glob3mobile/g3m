@@ -1,5 +1,5 @@
 //
-//  NetworkPetition.h
+//  NetworkQueue.h
 //  Glob3 Mobile
 //
 //  Created by Agustín Trujillo Pino on 16/05/11.
@@ -9,14 +9,15 @@
 #include "DataDownload.hpp"
 
 
-@interface NetworkPetition : NSObject {
-@private	
-	DataDownload* _currentOperation;
+@interface NetworkQueue : NSObject {
+@private
 	NSOperationQueue* _networkQueue;
   void * _listener; 
 }
 
 -(id)init: (void*) dl;
+
+-(void)setListener: (void*) dl;
 
 - (void) makeAsyncPetition: (const char *) url;
 
