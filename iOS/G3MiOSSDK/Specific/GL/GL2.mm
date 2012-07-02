@@ -25,11 +25,16 @@ struct UniformsStruct {
   //FOR BILLBOARDING
   GLint BillBoard;
   GLint ViewPortRatio;
+  
+  //FOR FLAT COLOR MIXING
+  GLint FlatColorIntensity;
+  
 } Uniforms;
 
 struct AttributesStruct {
   GLint Position;
   GLint TextureCoord;
+  GLint Color;
 } Attributes;
 
 
@@ -40,6 +45,7 @@ void GL2::useProgram(unsigned int program) {
   // Extract the handles to attributes
   Attributes.Position = glGetAttribLocation(program, "Position");
   Attributes.TextureCoord = glGetAttribLocation(program, "TextureCoord");
+  Attributes.Color = glGetAttribLocation(program, "Color");
   
   // Extract the handles to uniforms
   Uniforms.Projection = glGetUniformLocation(program, "Projection");
@@ -52,6 +58,9 @@ void GL2::useProgram(unsigned int program) {
   Uniforms.BillBoard = glGetUniformLocation(program, "BillBoard");
   glUniform1i(Uniforms.BillBoard, false); //NOT DRAWING BILLBOARD
   Uniforms.ViewPortRatio = glGetUniformLocation(program, "ViewPortRatio");
+  
+  //FOR FLAT COLOR MIXING
+  Uniforms.FlatColorIntensity = glGetUniformLocation(program, "FlatColorIntensity");
 }
 
 void GL2::setProjection(const MutableMatrix44D &projection) {
@@ -97,6 +106,18 @@ void GL2::enableVertices() {
 
 void GL2::enableTextures() {
   glEnableVertexAttribArray(Attributes.TextureCoord);
+}
+
+void GL2::setFlatColorIntensity(float f)
+{
+  if (f > 1.0) f = 1.0;
+  else if (f < 0.0) f = 0.0;
+  glUniform1f(Uniforms.FlatColorIntensity, f);
+}
+
+void GL2::vertexColor(const float* const colors)
+{
+  glVertexAttribPointer(Attributes.Color, 4, GL_FLOAT, 0, 0, colors);
 }
 
 void GL2::enableTexture2D() {

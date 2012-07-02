@@ -20,6 +20,8 @@ public:
   
   void enableTexture2D() ;
   
+  void setFlatColorIntensity(float f);
+  
   void disableTexture2D() ;
   
   void disableVertices() ;
@@ -29,6 +31,8 @@ public:
   void clearScreen(float r, float g, float b, float a) ;
   
   void color(float r, float g, float b, float a) ;
+  
+  void vertexColor(const float* const colors);
   
   void pushMatrix() ;
   

@@ -85,7 +85,7 @@
     IGL* gl  = new GL2();
     
     //Testing downloads
-    if (true) {
+    if (false) {
       int test_download_code = 0;
       NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
       DummyDownload *dummyDownload = new DummyDownload(factory, [documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding] );
@@ -103,7 +103,7 @@
     comp->addRenderer(cameraRenderer);
     
     // very basic tile renderer
-    if (true) {
+    if (false) {
       TileTessellator* tessellator = new EllipsoidalTileTessellator("world.jpg");
       
       TileRenderer* tr = new TileRenderer(tessellator);
@@ -116,7 +116,7 @@
       comp->addRenderer(dum);
     }
     
-    if (false) {
+    if (true) {
       // simple planet renderer, with a basic world image
       SimplePlanetRenderer* spr = new SimplePlanetRenderer("world.jpg");
       comp->addRenderer(spr);

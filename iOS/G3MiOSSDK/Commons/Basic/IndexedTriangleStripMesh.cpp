@@ -35,6 +35,24 @@ _normals(normals)
 {
 }
 
+IndexedTriangleStripMesh::IndexedTriangleStripMesh(bool owner,
+                         const float* vertices,
+                         const unsigned char* indexes,
+                         const int numIndex,
+                         const float * colors,
+                         const float* normals):
+_owner(owner),
+_vertices(vertices),
+_indexes(indexes),
+_numIndex(numIndex),
+_texCoords(NULL),
+_color( Color::fromRGB((float)0,(float)0,(float)0,(float)0) ),
+_colors(colors),
+_textureId(-1),
+_normals(normals)
+{
+}
+
 IndexedTriangleStripMesh::IndexedTriangleStripMesh(std::vector<MutableVector3D>& vertices, 
                                                    std::vector<unsigned char>& indexes,
                                                    const Color& color,
@@ -91,6 +109,25 @@ _texCoords(texCoords),
 _color( Color::fromRGB((float)0,(float)0,(float)0,(float)0) ),
 _textureId(texID),
 _normals(normals)
+{
+}
+
+IndexedTriangleStripMesh::IndexedTriangleStripMesh(bool owner, const float* vertices, 
+                                                   const unsigned char* indexes, 
+                                                   const int numIndex,
+                                                   const float* colors,
+                                                   const int texID, 
+                                                   const float* texCoords,
+                                                   const float* normals):
+_owner(owner),
+_vertices(vertices),
+_indexes(indexes),
+_numIndex(numIndex),
+_texCoords(texCoords),
+_color( Color::fromRGB((float)0,(float)0,(float)0,(float)0) ),
+_textureId(texID),
+_normals(normals),
+_colors(colors)
 {
 }
 
@@ -160,6 +197,12 @@ void IndexedTriangleStripMesh::render(const RenderContext* rc) const
   else {
     gl->color(_color);
   }
+  
+  if (_colors != NULL) gl->vertexColor(_colors);
+  
+  
+ // gl->color(255.0, 0.0, 0.0, 1.0);
+  gl->setFlatColorIntensity(0.5);
   
   gl->vertexPointer(3, 0, _vertices);
   gl->drawTriangleStrip(_numIndex, _indexes);
