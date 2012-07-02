@@ -11,7 +11,8 @@
 
 
 #include "IDownloadListener.hpp"
-#include "IFactory.hpp"
+#include "INetwork.hpp"
+#include "IStorage.hpp"
 
 #include <string>
 #include <vector>
@@ -22,7 +23,7 @@ public:
   int _priority;
   std::vector<IDownloadListener *> _listeners;
   
-  Download(std::string& url, int priority, IDownloadListener* listener):
+  Download(const std::string& url, int priority, IDownloadListener* listener):
   _url(url), _priority(priority)
   {
     _listeners.push_back(listener);
@@ -31,12 +32,10 @@ public:
   void addListener(IDownloadListener* listener){ _listeners.push_back(listener);}
 };
 
-class Storage;
-
 class Downloader: public IDownloadListener
 {
 private:
-  const Storage* _storage;                  //CACHE
+  IStorage* const _storage;                  //CACHE
   const unsigned int _maxSimultaneous;      //MAX NUMBER OF SIMOULTANEOUS DOWNLOADS
   INetwork * const _network;
   
@@ -46,9 +45,9 @@ private:
   void startDownload();
   
 public:
-  Downloader(Storage *storage, unsigned int maxSimultaneous, INetwork * const net);
+  Downloader(IStorage *storage, unsigned int maxSimultaneous, INetwork * const net);
   
-  void request(std::string& urlOfFile, int priority, IDownloadListener *listener);
+  void request(const std::string& urlOfFile, int priority, IDownloadListener *listener);
   
   void onDownload(const Response& e);
   

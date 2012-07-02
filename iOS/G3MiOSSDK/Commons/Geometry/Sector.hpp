@@ -54,6 +54,23 @@ public:
     return _deltaLongitude;
   }
   
+  Geodetic2D getSW() const {
+    return _lower;
+  }
+  
+  Geodetic2D getNE() const {
+    return _upper;
+  }
+  
+  Geodetic2D getNW() const {
+    return Geodetic2D(_upper.latitude(), _lower.longitude());
+  }
+  
+  Geodetic2D getSE() const {
+    return Geodetic2D(_lower.latitude(), _upper.longitude());
+  }
+  
+  
 };
 
 

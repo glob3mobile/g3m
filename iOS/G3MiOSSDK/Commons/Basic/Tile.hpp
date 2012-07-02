@@ -24,22 +24,10 @@ private:
   
   Mesh* _mesh;
   
-  //  float *_vertices;
-  //  
-  //  static unsigned int _resolution;
-  //  static bool _skirts;
-  //  static unsigned int _numIndices, _numBorderIndices, _numInnerIndices;
-  //  static unsigned char *_indices, *_borderIndices, *_innerIndices;
+  inline Mesh* getMesh(const RenderContext* rc,
+                       const TileTessellator* tessellator);
   
-  //  MutableVector3D _center;
-  
-  Mesh* getMesh(const RenderContext* rc,
-                const TileTessellator* tessellator) {
-    if (_mesh == NULL) {
-      _mesh = tessellator->createMesh(rc, this);
-    }
-    return _mesh;
-  }
+  inline bool isVisible(const RenderContext* rc);
   
 public:
   Tile(const Sector& sector,
@@ -55,12 +43,7 @@ public:
   }
   
   ~Tile();
-  
-  //  void createVertices(const Planet *planet);
-  //  void render(const RenderContext* rc);
-  //  
-  //  static void createIndices(unsigned int resol, bool skirts);
-  //  static void deleteIndices();
+
   
   Sector getSector() const {
     return _sector;

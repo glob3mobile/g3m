@@ -34,9 +34,10 @@ void Camera::copyFrom(const Camera &c)
 
 
 Camera::Camera(int width, int height) :
-_pos(63650000.0, 0.0, 0.0),
-_center(0.0, 0.0, 0.0),
-_up(0.0, 0.0, 1.0)
+//_pos(63650000, 0, 0),
+_pos(6378137*5, 0, 0),
+_center(0, 0, 0),
+_up(0, 0, 1)
 {
   resizeViewport(width, height);
 }
@@ -78,7 +79,6 @@ void Camera::draw(const RenderContext &rc) {
   double ratioScreen = (double) _viewport[3] / _viewport[2];
   _projection = MutableMatrix44D::createProjectionMatrix(-0.3 / ratioScreen * znear, 0.3 / ratioScreen * znear, -0.3 * znear, 0.3 * znear, znear, 10000 * znear);
   
-  // obtaing gl object reference
   IGL *gl = rc.getGL();
   gl->setProjection(_projection);
   

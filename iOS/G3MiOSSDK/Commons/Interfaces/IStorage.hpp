@@ -1,27 +1,26 @@
 //
-//  IStorage.hpp
+//  Storage.h
 //  G3MiOSSDK
 //
-//  Created by Vidal Toboso on 25/06/12.
+//  Created by José Miguel S N on 26/06/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_IStorage_hpp
-#define G3MiOSSDK_IStorage_hpp
-
+#ifndef G3MiOSSDK_Storage_h
+#define G3MiOSSDK_Storage_h
 
 #include <string>
-using std::string;
 
-class IFile;
+#include "ByteBuffer.hpp"
 
-class IStorage{
+class IStorage
+{
 public:
-    virtual IFile* findFileFromFileName(const std::string filename) const = 0;
-    
-    // a virtual destructor is needed for conversion to Java
-    virtual ~IStorage() {}
+  virtual bool contains(std::string url) = 0;
+  
+  virtual void save(std::string url, const ByteBuffer& bb) = 0;
+  
+  virtual ByteBuffer getByteBuffer(std::string url) = 0;
 };
-
 
 #endif

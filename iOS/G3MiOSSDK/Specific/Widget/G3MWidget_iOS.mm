@@ -85,9 +85,18 @@
     IGL* gl  = new GL2();
     
     //Testing downloads
-    int test_download_code = 0;
-    DummyDownload dummyDownload(factory);
-    dummyDownload.run();
+    if (false) {
+      int test_download_code = 0;
+      NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+      DummyDownload *dummyDownload = new DummyDownload(factory, [documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding] );
+      dummyDownload->run();
+    }
+      
+      if(true){
+          int test_download_code = 0;
+          DummyDownload *dummyDownload = new DummyDownload(factory, "/Users/vidalete/repository/IGO-GIT-Repository/g3m/iOS/test.db", "file");
+          dummyDownload->run();
+      }
     
     // all the creation of renderers must be move to common source code, instead of specific
     int __to_move_to_common_source_code;
@@ -107,7 +116,7 @@
       comp->addRenderer(tr);
     }
     
-    if (false){
+    if (false) {
       // dummy renderer with a simple box
       DummyRenderer* dum = new DummyRenderer();
       comp->addRenderer(dum);
@@ -120,7 +129,7 @@
     }
     
     // marks renderer
-    if (false){
+    if (false) {
       MarksRenderer* marks = new MarksRenderer();
       comp->addRenderer(marks);
       
@@ -129,7 +138,7 @@
                           Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0));
       //m1->addTouchListener(listener);
       marks->addMark(m1);
-
+      
       
       Mark* m2 = new Mark("Las Palmas",
                           "plane.png",
@@ -145,9 +154,7 @@
         
         marks->addMark(new Mark("Random",
                                 "mark.png",
-                                Geodetic3D(latitude, longitude, 0)
-                                )
-                       );
+                                Geodetic3D(latitude, longitude, 0)));
       } 
     }
     
@@ -160,7 +167,7 @@
     if (false) {
       SceneGraphRenderer* sgr = new SceneGraphRenderer();
       SGCubeNode* cube = new SGCubeNode();
-//      cube->setScale(Vector3D(6378137.0, 6378137.0, 6378137.0));
+      //      cube->setScale(Vector3D(6378137.0, 6378137.0, 6378137.0));
       sgr->getRootNode()->addChild(cube);
       comp->addRenderer(sgr);
     }
@@ -169,11 +176,13 @@
     
     TexturesHandler* texturesHandler = new TexturesHandler();
     
+    const Planet* planet = Planet::createEarth();
+    
     _widget = G3MWidget::create(factory,
                                 logger,
                                 gl,
                                 texturesHandler,
-                                Planet::createEarth(),
+                                planet, 
                                 comp,
                                 width, height,
                                 Color::fromRGB((float)0, (float)0.1, (float)0.2, (float)1),

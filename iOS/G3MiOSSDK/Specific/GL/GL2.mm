@@ -15,7 +15,6 @@
 #include "Vector3D.hpp"
 
 
-
 struct UniformsStruct {
   GLuint Projection;
   GLuint Modelview;
@@ -32,8 +31,6 @@ struct AttributesStruct {
   GLint Position;
   GLint TextureCoord;
 } Attributes;
-
-
 
 
 void GL2::useProgram(unsigned int program) {
@@ -56,7 +53,6 @@ void GL2::useProgram(unsigned int program) {
   glUniform1i(Uniforms.BillBoard, false); //NOT DRAWING BILLBOARD
   Uniforms.ViewPortRatio = glGetUniformLocation(program, "ViewPortRatio");
 }
-
 
 void GL2::setProjection(const MutableMatrix44D &projection) {
   float M[16];
@@ -81,7 +77,6 @@ void GL2::multMatrixf(const MutableMatrix44D &m) {
   _modelView = product;
 }
 
-
 void GL2::popMatrix() {
   _modelView = _matrixStack.back();
   _matrixStack.pop_back();
@@ -96,42 +91,34 @@ void GL2::pushMatrix() {
   _matrixStack.push_back(_modelView);
 }
 
-
 void GL2::enableVertices() {
   glEnableVertexAttribArray(Attributes.Position);
 }
-
 
 void GL2::enableTextures() {
   glEnableVertexAttribArray(Attributes.TextureCoord);
 }
 
-
 void GL2::enableTexture2D() {
   glUniform1i(Uniforms.EnableTexture, true);
 }
-
 
 void GL2::disableTexture2D() {
   glUniform1i(Uniforms.EnableTexture, false);
 }
 
-
 void GL2::disableVertices() {
   glDisableVertexAttribArray(Attributes.Position);
 }
-
 
 void GL2::disableTextures() {
   glDisableVertexAttribArray(Attributes.TextureCoord);
 }
 
-
 void GL2::clearScreen(float r, float g, float b, float a) {
   glClearColor(r, g, b, a);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
-
 
 void GL2::color(float r, float g, float b, float a) {
   glUniform4f(Uniforms.FlatColor, r, g, b, a);
@@ -141,7 +128,6 @@ void GL2::enablePolygonOffset(float factor, float units) {
   glEnable(GL_POLYGON_OFFSET_FILL);
   glPolygonOffset(factor, units);
 }
-
 
 void GL2::disablePolygonOffset() {
   glDisable(GL_POLYGON_OFFSET_FILL);
@@ -210,13 +196,11 @@ int GL2::uploadTexture(const IImage& image, int textureWidth, int textureHeight)
   return textureID;
 }
 
-void GL2::setTextureCoordinates(int size, int stride, const float texcoord[])
-{
+void GL2::setTextureCoordinates(int size, int stride, const float texcoord[]) {
   glVertexAttribPointer(Attributes.TextureCoord, size, GL_FLOAT, 0, stride, (const void *) texcoord);
 }
 
-void GL2::bindTexture (unsigned int n)
-{
+void GL2::bindTexture (unsigned int n) {
   glBindTexture(GL_TEXTURE_2D, n);
 }
 
@@ -279,9 +263,6 @@ void GL2::deleteTexture(int glTextureId) {
 }
 
 void GL2::cullFace(bool b, CullFace face) {
-//  glEnable(GL_CULL_FACE);
-//  glCullFace(GL_FRONT);
-
   if (b) {
     glEnable(GL_CULL_FACE);  
   }
@@ -298,8 +279,6 @@ void GL2::cullFace(bool b, CullFace face) {
       break;
     case FRONT_AND_BACK:
       glCullFace(GL_FRONT_AND_BACK);
-      break;
-    default:
       break;
   }
 }

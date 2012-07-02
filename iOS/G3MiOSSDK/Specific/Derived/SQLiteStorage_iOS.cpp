@@ -12,41 +12,83 @@
 
 
 
-IFile* SQLiteStorage_iOS::findFileFromFileName(const std::string filename) const{
+/*IFile* SQLiteStorage_iOS::findFileFromFileName(const std::string filename) const{
     this->testConnection();
     this->openConexion();
     return NULL;}
-
-
-void SQLiteStorage_iOS::openConexion() const{
-    int rc;
-    sqlite3 *db;
+*/
+SQLiteStorage_iOS::SQLiteStorage_iOS(const std::string database, const std::string table)
+{
+    _database = database;
+    _table = table;
+    SQLiteStorage_iOS::checkDataBaseConnection();
+    SQLiteStorage_iOS::checkTableExist();
     
-    rc = sqlite3_open("/Users/vidalete/repository/IGO-GIT-Repository/g3m/iOS/test.db", &db);
-    if(SQLITE_OK != rc){
-        printf("Connection KO\n");
-        
+}
+
+bool SQLiteStorage_iOS::contains(std::string filename)
+{   ByteBuffer bb = SQLiteStorage_iOS::findFileFromFileName(filename);
+    if(bb.getDataLength() > 0){
+        return true;
+    }
+    return false;
+}
+
+void SQLiteStorage_iOS::save(std::string filename, const ByteBuffer& bb){
+    sqlite3 *db;
+    if(SQLITE_OK != sqlite3_open(_database.c_str(), &db)){
+        printf("Open Database For save KO\n");
     }else{
-        printf("Connection OK\n");
+        printf("Open Database For save OK\n");
         sqlite3_stmt *ppStmt;
-        char consulta[64];
+        char consulta[128];
         
-        strcpy(consulta, "SELECT rowId,* FROM file");
-        rc = sqlite3_prepare_v2(db, consulta, -1, &ppStmt, NULL);
-        if( rc!=SQLITE_OK ){
-            //std::cout << "Error: " << sqlite3_errmsg(db) << std::endl;
+        sprintf(consulta, "INSERT INTO %s (filename, file) VALUES (@filename, @file);", _table.c_str());
+        if (sqlite3_prepare_v2(db, consulta, -1, &ppStmt, NULL) != SQLITE_OK) {
+            return;
+        }
+        
+        if (ppStmt) {
+            sqlite3_bind_text(ppStmt, sqlite3_bind_parameter_index(ppStmt, "@filename"), filename.c_str(), -1, SQLITE_STATIC);
+            sqlite3_bind_blob(ppStmt, sqlite3_bind_parameter_index(ppStmt, "@file"), bb.getData(), bb.getDataLength(), SQLITE_TRANSIENT);
+            sqlite3_step(ppStmt);
+            sqlite3_finalize(ppStmt);
+        }
+    }
+    sqlite3_exec(db, "COMMIT", NULL, NULL, NULL);
+    sqlite3_close(db);
+}
+
+ByteBuffer SQLiteStorage_iOS::getByteBuffer(std::string filename)
+{
+    return SQLiteStorage_iOS::findFileFromFileName(filename);
+}
+
+
+
+ByteBuffer SQLiteStorage_iOS::findFileFromFileName(const std::string filename) const{
+    ByteBuffer bb(NULL, 0);
+    sqlite3 *db;
+    if(SQLITE_OK != sqlite3_open(_database.c_str(), &db)){
+        printf("Open Database KO\n");
+    }else{
+        printf("Open Database OK\n");
+        sqlite3_stmt *ppStmt;
+        char consulta[128];
+        
+        sprintf(consulta, "SELECT rowId,* FROM %s WHERE filename=@filename;", _table.c_str());
+        if( sqlite3_prepare_v2(db, consulta, -1, &ppStmt, NULL)!=SQLITE_OK ){
             printf ("\Error: %s ", sqlite3_errmsg(db));
         } else {
+            sqlite3_bind_text(ppStmt, sqlite3_bind_parameter_index(ppStmt, "@filename"), filename.c_str(), -1, SQLITE_STATIC);
             while(SQLITE_ROW == sqlite3_step(ppStmt)) {
                 printf ("\nID: %i ", sqlite3_column_int(ppStmt, 0));
                 printf ("\nFileName: %s ", sqlite3_column_text(ppStmt, 1));
                 printf ("\nFile (null):  ");
-
-                //printf((const char*)a);
-                                //std::cout << "ID:           " << sqlite3_column_int(ppStmt, 0) << std::endl;
-                //std::cout << "FileName:     " << a << std::endl;
-                //std::cout << "File (null):  " << sqlite3_column_blob(ppStmt, 2) << std::endl;
-                printf("jarjur\n");
+                const unsigned char *raw = (const unsigned char *)sqlite3_column_blob(ppStmt, 3);
+                int rawLen = sqlite3_column_bytes(ppStmt, 3);
+                
+                ByteBuffer bb(raw, rawLen);                
             }
             sqlite3_finalize(ppStmt);
         }
@@ -54,6 +96,42 @@ void SQLiteStorage_iOS::openConexion() const{
     }
     
     sqlite3_close(db);
+    return bb;
+}
+
+bool SQLiteStorage_iOS::checkDataBaseConnection() const{
+    sqlite3 *db;
+    bool ok = true;
+    if(SQLITE_OK != sqlite3_open(_database.c_str(), &db)){
+        printf("ERROR Opening Database %s \n", _database.c_str());
+        ok = false;
+    }else{
+        printf("Opening Database %s OK\n", _database.c_str());
+    }
+    sqlite3_close(db);
+    return ok;
+}
+
+bool SQLiteStorage_iOS::checkTableExist() const{
+    sqlite3 *db;
+    bool ok = true;
+    if(SQLITE_OK != sqlite3_open(_database.c_str(), &db)){
+        printf("ERROR Opening Database %s \n", _database.c_str());
+        ok = false;
+    }else{
+        char consulta[128];
+        sprintf(consulta, "SELECT COUNT(*) FROM %s;", _table.c_str());
+        if(SQLITE_OK != sqlite3_exec(db, consulta, 0, 0, 0)) {
+            printf("ERROR TABLE %s DON'T EXIST\n", _table.c_str());
+            ok = false;
+        }
+    }
+    if(ok){
+        printf("TABLE %s EXIST\n", _table.c_str());
+    }
+    
+    sqlite3_close(db);
+    return ok;
 }
 
 void SQLiteStorage_iOS::testConnection() const{

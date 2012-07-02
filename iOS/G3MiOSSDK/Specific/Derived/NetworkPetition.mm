@@ -15,11 +15,9 @@
 
 -(id)init: (void*) dl
 {	
-	networkQueue = nil;
-	currentOperation = nil;
-  dataArrived = true;
-  
-  _listener = dl; //Instanced that should be notified
+	_networkQueue = nil;
+	_currentOperation = nil;
+  _listener = dl; //Instance that should be notified
   
 	return self;
 }
@@ -28,15 +26,13 @@
 - (void) makeAsyncPetition: (const char *) url
 {
     // activate network queue
-    networkQueue = [[NSOperationQueue alloc] init];
-    [networkQueue setMaxConcurrentOperationCount:1];	
-    if( currentOperation) [self releaseAsyncMemory];
+    if (_networkQueue == nil) _networkQueue = [[NSOperationQueue alloc] init];
+    [_networkQueue setMaxConcurrentOperationCount:1];
     
     NSString *myurl = [NSString stringWithUTF8String:url];
-    currentOperation = [[DataDownload alloc] initWithURL:[NSURL URLWithString:myurl]];
-    [currentOperation addObserver:self forKeyPath:@"isFinished" options:NSKeyValueObservingOptionNew context:NULL];
-    [networkQueue addOperation:currentOperation];
-    dataArrived = false;
+    _currentOperation = [[DataDownload alloc] initWithURL:[NSURL URLWithString:myurl]];
+    [_currentOperation addObserver:self forKeyPath:@"isFinished" options:NSKeyValueObservingOptionNew context:NULL];
+    [_networkQueue addOperation:_currentOperation];
 }
 
 
@@ -44,70 +40,19 @@
 {
 	DataDownload* op = (DataDownload *)object;
 	[op removeObserver:self forKeyPath:@"isFinished"];
-  dataArrived = true;
   
 	if( ![op error] ) {
-    downloadData = [op downloadData];
-    dataOK = true;
+    unsigned char *bytes = (unsigned char*)[[[op downloadData] copy] bytes];
+    ByteBuffer bb(bytes, [[op downloadData] length]);
     
-    Response r;
+    Response r("", [[op getURL] cStringUsingEncoding:NSUTF8StringEncoding] , bb);
     ((IDownloadListener*)_listener)->onDownload(r);
 	} else {
-    dataOK = false;
+    ByteBuffer bb(NULL, 0);
     
-    Response r;
+    Response r("", [[op getURL] cStringUsingEncoding:NSUTF8StringEncoding], bb);
     ((IDownloadListener*)_listener)->onError(r);
   }
-}
-
-
-- (void) releaseAsyncMemory
-{	
-    if (!networkQueue)
-        printf ("networkQueue NULL!!\n");
-
-	int opCount = [[networkQueue operations] count];	
-	
-    // Release curren operation
-    if (currentOperation) {
-        if (opCount>0) [currentOperation removeObserver:self forKeyPath:@"isFinished"];
-        [currentOperation cancel];
-        currentOperation = nil;
-    }
-    
-	[networkQueue cancelAllOperations];
-}
-
-
-- (void) dealloc 
-{	
-	// free async memory
-	if (networkQueue) [self releaseAsyncMemory];
-}
-
-
-- (bool) isDataArrived
-{
-    return dataArrived;
-}
-
-
-- (bool) isDataOK
-{
-    return dataOK;
-}
-
-
--(void*) getData
-{
-//	return (void *) CFDataGetBytePtr((CFDataRef) downloadData);
-	return (void *) [downloadData bytes];
-}
-
-
--(unsigned int) getDataLength
-{
-    return [downloadData length];
 }
 
 

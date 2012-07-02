@@ -10,6 +10,7 @@
 #define G3MiOSSDK_DummyDownload_hpp
 
 #include "FileSystemStorage.hpp"
+#include "SQLiteStorage_iOS.hpp"
 #include "Downloader.hpp"
 #include "IDownloadListener.hpp"
 
@@ -18,16 +19,22 @@
 class DummyDownload: public IDownloadListener
 {
   
-  FileSystemStorage * _fss;
+  IStorage * _fss;
   Downloader * _downloader;
   
 public:
   
-  DummyDownload(IFactory *fac)
+  DummyDownload(IFactory *fac, const std::string& root)
   {
-    _fss = new FileSystemStorage();
+    _fss = new FileSystemStorage(root);
     _downloader = new Downloader(_fss, 5, fac->createNetwork());
   }
+    
+    DummyDownload(IFactory *fac, const std::string database, const std::string table)
+    {
+        _fss = new SQLiteStorage_iOS(database, table);
+        _downloader = new Downloader(_fss, 5, fac->createNetwork());
+    }
   
   void run()
   {
@@ -39,14 +46,16 @@ public:
     
   }
   
-  void onDownload(const Response& e)
+  void onDownload(const Response& response)
   {
-    printf("GETTING RESPONSE");
+    const unsigned char *data = response.getByteBuffer().getData();
+    std::string resp = (char*)data;
+    printf("GETTING RESPONSE %s\n", resp.c_str());
   }
   
-  void onError(const Response& e)
+  void onError(const Response& response)
   {
-    
+    printf("GETTING ERROR IN URL: %s\n", response.getURL().getPath().c_str());
   }
   
 };

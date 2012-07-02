@@ -21,10 +21,8 @@
 /**
  * Class to control the camera.
  */
-class Camera{
-  
+class Camera {
 public:
-  
   Camera(const Camera &c);
   
   Camera(int width, int height);
@@ -37,8 +35,8 @@ public:
   
   Vector3D pixel2Vector(const Vector2D& pixel) const;
   
-  int getWidth() const{ return _width; }
-  int getHeight() const{ return _height; }
+  int getWidth() const { return _width; }
+  int getHeight() const { return _height; }
   Vector3D getPos() const { return _pos.asVector3D(); }
   Vector3D getCenter() const { return _center.asVector3D(); }
   Vector3D getUp() const { return _up.asVector3D(); }
@@ -62,7 +60,7 @@ public:
   float getViewPortRatio() const {
     return (float) _width / _height;
   }
-
+  
 private:
   int _width, _height;
   

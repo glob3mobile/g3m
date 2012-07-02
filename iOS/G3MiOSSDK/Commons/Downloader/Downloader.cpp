@@ -8,22 +8,30 @@
 
 #include "Downloader.hpp"
 
-#include "Storage.hpp"
+#include "IStorage.hpp"
 
 #include "INetwork.hpp"
 
-Downloader::Downloader(Storage *storage, unsigned int maxSimultaneous, INetwork * const net):
+Downloader::Downloader(IStorage *storage, unsigned int maxSimultaneous, INetwork * const net):
 _storage(storage), _maxSimultaneous(maxSimultaneous), _network(net), _simultaneousDownloads(0)
 {
 }
 
-void Downloader::request(std::string& urlOfFile, int priority, IDownloadListener *listener)
+void Downloader::request(const std::string& urlOfFile, int priority, IDownloadListener *listener)
 {
   
+  //First we check in storage
+  if (_storage->contains(urlOfFile)){
+    ByteBuffer bb = _storage->getByteBuffer(urlOfFile);
+    Response r("",urlOfFile , bb);
+    listener->onDownload(r);
+    return;
+  }
+  
+  //We look for repeated petitions
   for (int i = 0; i < _petitions.size(); i++)
   {
     if (urlOfFile == _petitions[i]._url){ //IF WE FOUND THE SAME PETITION
-      
       if (priority > _petitions[i]._priority){ //MAX PRIORITY
         _petitions[i]._priority = priority;
       }
@@ -66,17 +74,20 @@ void Downloader::startDownload()
 
 void Downloader::onDownload(const Response& e)
 {
+  //Saving on storage
+  _storage->save(e.getURL().getPath(), e.getByteBuffer());
+  
   for (int i = 0; i < _petitions.size(); i++)
   {
-    if (_petitions[i]._url == e.url.path) //RECEIVED RESPONSE
+    if (_petitions[i]._url == e.getURL().getPath()) //RECEIVED RESPONSE
     {
       Download& pet = _petitions[i];
       for (int j = 0; j < pet._listeners.size(); j++) {
-        pet._listeners[j]->onDownload(e);
+        IDownloadListener *dl = pet._listeners[j];
+        
+        dl->onDownload(e);
       }
-      
       _petitions.erase(_petitions.begin() + i);
-      
       return;
     }
   }
@@ -87,7 +98,7 @@ void Downloader::onError(const Response& e)
 {
   for (int i = 0; i < _petitions.size(); i++)
   {
-    if (_petitions[i]._url == e.url.path) //RECEIVED RESPONSE
+    if (_petitions[i]._url == e.getURL().getPath()) //RECEIVED RESPONSE
     {
       Download& pet = _petitions[i];
       for (int j = 0; j < pet._listeners.size(); j++) {

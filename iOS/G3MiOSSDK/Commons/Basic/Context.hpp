@@ -26,8 +26,6 @@ protected:
   const IFactory * _factory;
   const ILogger*   _logger;
   const Planet*    _planet;
-  const IStorage* _storage;
-
 
   
   Context(const IFactory *factory,
@@ -35,12 +33,7 @@ protected:
           const Planet* planet) :
   _factory(factory),
   _logger(logger),
-  _planet(planet),_storage(new SQLiteStorage_iOS()){
-    
-      
-      _storage->findFileFromFileName("ficheroprueba.pdf");
-      
-      
+  _planet(planet){
   }
   
 public:
@@ -56,17 +49,6 @@ public:
   const Planet* getPlanet() const {
     return _planet;
   }
-    
-    const IStorage* getStorage() const {
-        return _storage;
-    }
-    
-    /*
-    void setStorage(IStorage* storage){
-        _storage(storage);
-    }
-     */
-  
 };
 
 
