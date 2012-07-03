@@ -108,16 +108,20 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   
   float * texC = createTextureCoordinates();
   
-  
-  float *colors = new float[res * res * 4];
-  for(int i = 0; i < res * res * 4; ){
-    colors[i++] = 1.0;
-    colors[i++] = 1.0;
+  //COLORS PER VERTEX
+  int numVertices = res * res * 4;
+  float *colors = new float[numVertices];
+  for(int i = 0; i < numVertices; ){
+    colors[i++] = ((float) i) / numVertices;
+    colors[i++] = 0.0;
     colors[i++] = 1.0;
     colors[i++] = 1.0;
   }
   
-  _mesh = new IndexedTriangleStripMesh(true, ver, ind, numIndexes, colors, texID, texC);
+  //FLAT COLOR
+  Color * flatColor = new Color( Color::fromRGB(1.0, 0.0, 0.0, 1.0) );
+  
+  _mesh = new IndexedTriangleStripMesh(true, ver, ind, numIndexes, flatColor, colors, texID, texC);
   
   return true;
 }

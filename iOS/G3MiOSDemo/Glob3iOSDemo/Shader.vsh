@@ -30,6 +30,6 @@ void main() {
   TextureCoordOut = TextureCoord;
   
   VertexColor = Color;
-  VertexColor = vec4(1.0, 1.0, 1.0, 1.0);
+  //VertexColor = vec4(1.0, 1.0, 1.0, 1.0);
   
 }

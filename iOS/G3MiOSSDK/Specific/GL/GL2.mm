@@ -26,8 +26,11 @@ struct UniformsStruct {
   GLint BillBoard;
   GLint ViewPortRatio;
   
-  //FOR FLAT COLOR MIXING
+  //FOR COLOR MIXING
   GLint FlatColorIntensity;
+  GLint EnableColorPerVertex;
+  GLint EnableFlatColor;
+  GLint ColorPerVertexIntensity;
   
 } Uniforms;
 
@@ -61,6 +64,9 @@ void GL2::useProgram(unsigned int program) {
   
   //FOR FLAT COLOR MIXING
   Uniforms.FlatColorIntensity = glGetUniformLocation(program, "FlatColorIntensity");
+  Uniforms.ColorPerVertexIntensity = glGetUniformLocation(program, "ColorPerVertexIntensity");
+  Uniforms.EnableColorPerVertex = glGetUniformLocation(program, "EnableColorPerVertex");
+  Uniforms.EnableFlatColor = glGetUniformLocation(program, "EnableFlatColor");
 }
 
 void GL2::setProjection(const MutableMatrix44D &projection) {
@@ -108,16 +114,31 @@ void GL2::enableTextures() {
   glEnableVertexAttribArray(Attributes.TextureCoord);
 }
 
-void GL2::setFlatColorIntensity(float f)
+void GL2::enableVertexColor(const float* const colors, float intensity)
 {
-  if (f > 1.0) f = 1.0;
-  else if (f < 0.0) f = 0.0;
-  glUniform1f(Uniforms.FlatColorIntensity, f);
+  if (colors != NULL){
+    glUniform1i(Uniforms.EnableColorPerVertex, true);
+    glEnableVertexAttribArray(Attributes.Color);
+    glVertexAttribPointer(Attributes.Color, 4, GL_FLOAT, 0, 0, colors);
+    glUniform1f(Uniforms.ColorPerVertexIntensity, intensity);
+  }
 }
 
-void GL2::vertexColor(const float* const colors)
+void GL2::enableVertexFlatColor(Color c, float intensity)
 {
-  glVertexAttribPointer(Attributes.Color, 4, GL_FLOAT, 0, 0, colors);
+    glUniform1i(Uniforms.EnableFlatColor, true);
+    glUniform4f(Uniforms.FlatColor, c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
+    glUniform1f(Uniforms.FlatColorIntensity, intensity);
+}
+
+void GL2::disableVertexColor()
+{
+  glUniform1i(Uniforms.EnableColorPerVertex, false);
+}
+
+void GL2::disableVertexFlatColor()
+{
+  glUniform1i(Uniforms.EnableFlatColor, false);
 }
 
 void GL2::enableTexture2D() {

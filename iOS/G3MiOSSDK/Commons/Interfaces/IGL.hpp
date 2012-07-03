@@ -30,7 +30,13 @@ public:
   
   virtual void enableTextures() = 0;
   
-  virtual void setFlatColorIntensity(float f) = 0;
+  virtual void enableVertexColor(const float* const colors, float intensity) = 0;
+  
+  virtual void enableVertexFlatColor(Color c, float intensity) = 0;
+  
+  virtual void disableVertexColor() = 0;
+  
+  virtual void disableVertexFlatColor() = 0;
   
   virtual void enableTexture2D() = 0;
   
@@ -57,9 +63,6 @@ public:
           col.getBlue(),
           col.getAlpha());
   }
-  
-  virtual void vertexColor(const float* const colors) = 0;
-
 
   virtual void pushMatrix() = 0;
   
