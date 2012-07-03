@@ -24,7 +24,7 @@ IndexedTriangleStripMesh::~IndexedTriangleStripMesh()
 
 IndexedTriangleStripMesh::IndexedTriangleStripMesh(bool owner,
                                                    const float* vertices,
-                                                   const unsigned char* indexes,
+                                                   const unsigned int* indexes,
                                                    const int numIndex, 
                                                    const Color* flatColor,
                                                    const float * colors,
@@ -41,7 +41,7 @@ _normals(normals)
 }
 
 IndexedTriangleStripMesh::IndexedTriangleStripMesh(std::vector<MutableVector3D>& vertices, 
-                                                   std::vector<unsigned char>& indexes,
+                                                   std::vector<unsigned int>& indexes,
                                                    const Color* flatColor,
                                                    std::vector<MutableVector3D>* normals):
 _owner(true),
@@ -60,7 +60,7 @@ _numIndex(indexes.size())
   }
   _vertices = vert;
   
-  unsigned char * ind = new unsigned char[indexes.size()];
+  unsigned int * ind = new unsigned int[indexes.size()];
   for (int i = 0; i < indexes.size(); i++) {
     ind[i] = indexes[i];
   }
@@ -84,7 +84,7 @@ _numIndex(indexes.size())
 
 IndexedTriangleStripMesh::IndexedTriangleStripMesh(bool owner,
                          const float* vertices,
-                         const unsigned char* indexes,
+                         const unsigned int* indexes,
                          const int numIndex,
                          const Color* flatColor,
                          const float * colors,
@@ -104,7 +104,7 @@ _colors(colors)
 }
 
 IndexedTriangleStripMesh::IndexedTriangleStripMesh(std::vector<MutableVector3D>& vertices, 
-                                                   std::vector<unsigned char>& indexes,
+                                                   std::vector<unsigned int>& indexes,
                                                    const int texID,
                                                    std::vector<MutableVector2D>& texCoords, 
                                                    std::vector<MutableVector3D>* normals):
@@ -122,7 +122,7 @@ _textureId(texID)
   }
   _vertices = vert;
   
-  unsigned char* ind = new unsigned char[indexes.size()];
+  unsigned int* ind = new unsigned int[indexes.size()];
   for (int i = 0; i < indexes.size(); i++) {
     ind[i] = indexes[i];
   }

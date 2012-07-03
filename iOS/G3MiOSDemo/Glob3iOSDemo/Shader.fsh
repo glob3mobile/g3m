@@ -38,6 +38,14 @@ void main() {
     
   }
   else {
-    gl_FragColor = FlatColor;
+    if (EnableColorPerVertex && !EnableFlatColor){
+      gl_FragColor = VertexColor;
+    } else
+    if (EnableColorPerVertex && EnableFlatColor){
+      gl_FragColor = mix( VertexColor,
+                        FlatColor,
+                        FlatColorIntensity);
+    } else
+      gl_FragColor = FlatColor;
   }
 }

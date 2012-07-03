@@ -19,7 +19,7 @@ void DummyRenderer::initialize(const InitializationContext* ic)
   int res = 12;
   _vertices = new float[res * res * 3];
   _numIndices = 2 * (res - 1) * (res + 1);
-  _index = new unsigned char[_numIndices];
+  _index = new unsigned int[_numIndices];
   
   // create vertices
   

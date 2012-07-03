@@ -50,11 +50,11 @@ public:
   
   void vertexPointer(int size, int stride, const float vertex[]) ;
   
-  void drawTriangleStrip(int n, const unsigned char *i) ;
+  void drawTriangleStrip(int n, const unsigned int i[]) ;
   
-  void drawLines(int n, const unsigned char *i); 
+  void drawLines(int n, const unsigned int *i); 
   
-  void drawLineLoop(int n, const unsigned char *i); 
+  void drawLineLoop(int n, const unsigned int *i); 
   
   void setProjection(const MutableMatrix44D &projection) ;
   

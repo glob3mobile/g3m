@@ -171,7 +171,7 @@ private:
   
   int _numIndices;
   
-  unsigned char* _index;
+  unsigned int* _index;
   float* _vertices;
   float _halfSize;
   

@@ -27,7 +27,7 @@ private:
   
   
   float * createVertices(const Planet& planet);
-  unsigned char * createMeshIndex();
+  unsigned int * createMeshIndex();
   float * createTextureCoordinates();
   
   bool initializeMesh(const RenderContext* rc);

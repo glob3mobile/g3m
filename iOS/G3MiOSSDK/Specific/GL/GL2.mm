@@ -179,15 +179,15 @@ void GL2::vertexPointer(int size, int stride, const float vertex[]) {
   glVertexAttribPointer(Attributes.Position, size, GL_FLOAT, 0, stride, (const void *) vertex);
 }
 
-void GL2::drawTriangleStrip(int n, const unsigned char *i) {
-  glDrawElements(GL_TRIANGLE_STRIP, n, GL_UNSIGNED_BYTE, i);
+void GL2::drawTriangleStrip(int n, const unsigned int i[]) {
+  glDrawElements(GL_TRIANGLE_STRIP, n, GL_UNSIGNED_INT, i);
 }
 
-void GL2::drawLines(int n, const unsigned char *i) {
+void GL2::drawLines(int n, const unsigned int *i) {
   glDrawElements(GL_LINES, n, GL_UNSIGNED_BYTE, i);
 }
 
-void GL2::drawLineLoop(int n, const unsigned char *i) {
+void GL2::drawLineLoop(int n, const unsigned int *i) {
   glDrawElements(GL_LINE_LOOP, n, GL_UNSIGNED_BYTE, i);
 }
 

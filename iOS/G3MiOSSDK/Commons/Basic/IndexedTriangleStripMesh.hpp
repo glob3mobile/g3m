@@ -21,7 +21,7 @@ private:
   
   const float*         _vertices;
   
-  const unsigned char* _indexes;
+  const unsigned int* _indexes;
   const int            _numIndex;
   
   const float*         _normals;
@@ -39,21 +39,21 @@ public:
   //NOT TEXTURED
   IndexedTriangleStripMesh(bool owner,
                            const float* vertices,
-                           const unsigned char* indexes,
+                           const unsigned int* indexes,
                            const int numIndex, 
                            const Color* flatColor,
                            const float * colors,
                            const float* normals = NULL);
   
   IndexedTriangleStripMesh(std::vector<MutableVector3D>& vertices,
-                           std::vector<unsigned char>& indexes,
+                           std::vector<unsigned int>& indexes,
                            const Color* flatColor,
                            std::vector<MutableVector3D>* normals = NULL);
   
   //TEXTURED
   IndexedTriangleStripMesh(bool owner,
                            const float* vertices,
-                           const unsigned char* indexes,
+                           const unsigned int* indexes,
                            const int numIndex,
                            const Color* flatColor,
                            const float * colors,
@@ -62,7 +62,7 @@ public:
                            const float* normals = NULL);
   
   IndexedTriangleStripMesh(std::vector<MutableVector3D>& vertices,
-                           std::vector<unsigned char>& indexes,
+                           std::vector<unsigned int>& indexes,
                            const int texID,
                            std::vector<MutableVector2D>& texCoords,
                            std::vector<MutableVector3D>* normals = NULL);
