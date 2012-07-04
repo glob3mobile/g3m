@@ -27,8 +27,10 @@ SQLiteStorage_iOS::SQLiteStorage_iOS(const std::string database, const std::stri
 }
 
 bool SQLiteStorage_iOS::contains(std::string filename)
-{   ByteBuffer bb = SQLiteStorage_iOS::findFileFromFileName(filename);
+{   
+    ByteBuffer bb = SQLiteStorage_iOS::findFileFromFileName(filename);
     if(bb.getDataLength() > 0){
+        printf("\nData: %s and DataLength:%i \n\n",bb.getData(),bb.getDataLength());
         return true;
     }
     return false;
@@ -44,13 +46,11 @@ void SQLiteStorage_iOS::save(std::string filename, const ByteBuffer& bb){
         char consulta[128];
         
         sprintf(consulta, "INSERT INTO %s (filename, file) VALUES (@filename, @file);", _table.c_str());
-        if (sqlite3_prepare_v2(db, consulta, -1, &ppStmt, NULL) != SQLITE_OK) {
-            return;
-        }
-        
-        if (ppStmt) {
+        if (sqlite3_prepare_v2(db, consulta, -1, &ppStmt, NULL) == SQLITE_OK) {
             sqlite3_bind_text(ppStmt, sqlite3_bind_parameter_index(ppStmt, "@filename"), filename.c_str(), -1, SQLITE_STATIC);
             sqlite3_bind_blob(ppStmt, sqlite3_bind_parameter_index(ppStmt, "@file"), bb.getData(), bb.getDataLength(), SQLITE_TRANSIENT);
+            std::string resp = (char*)bb.getData();
+            printf("\nFileName: %s;\nData: %s;\nDataLength:%i;\n\n",filename.c_str(), resp.c_str(), bb.getDataLength());
             sqlite3_step(ppStmt);
             sqlite3_finalize(ppStmt);
         }
@@ -67,16 +67,17 @@ ByteBuffer SQLiteStorage_iOS::getByteBuffer(std::string filename)
 
 
 ByteBuffer SQLiteStorage_iOS::findFileFromFileName(const std::string filename) const{
-    ByteBuffer bb(NULL, 0);
+    const unsigned char *raw = NULL;
+    int rawLen = 0;
     sqlite3 *db;
     if(SQLITE_OK != sqlite3_open(_database.c_str(), &db)){
-        printf("Open Database KO\n");
+        printf("Open Database for findFileFromFileName KO\n");
     }else{
-        printf("Open Database OK\n");
+        printf("Open Database for findFileFromFileName OK\n");
         sqlite3_stmt *ppStmt;
         char consulta[128];
         
-        sprintf(consulta, "SELECT rowId,* FROM %s WHERE filename=@filename;", _table.c_str());
+        sprintf(consulta, "SELECT rowId,filename,file FROM %s WHERE filename=@filename;", _table.c_str());
         if( sqlite3_prepare_v2(db, consulta, -1, &ppStmt, NULL)!=SQLITE_OK ){
             printf ("\Error: %s ", sqlite3_errmsg(db));
         } else {
@@ -85,18 +86,16 @@ ByteBuffer SQLiteStorage_iOS::findFileFromFileName(const std::string filename) c
                 printf ("\nID: %i ", sqlite3_column_int(ppStmt, 0));
                 printf ("\nFileName: %s ", sqlite3_column_text(ppStmt, 1));
                 printf ("\nFile (null):  ");
-                const unsigned char *raw = (const unsigned char *)sqlite3_column_blob(ppStmt, 3);
-                int rawLen = sqlite3_column_bytes(ppStmt, 3);
-                
-                ByteBuffer bb(raw, rawLen);                
+                raw = (const unsigned char *)sqlite3_column_blob(ppStmt, 2);
+                rawLen = sqlite3_column_bytes(ppStmt, 2);
             }
             sqlite3_finalize(ppStmt);
         }
 
     }
-    
+    sqlite3_exec(db, "COMMIT", NULL, NULL, NULL);
     sqlite3_close(db);
-    return bb;
+    return ByteBuffer(raw, rawLen);
 }
 
 bool SQLiteStorage_iOS::checkDataBaseConnection() const{

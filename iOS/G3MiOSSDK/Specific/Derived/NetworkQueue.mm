@@ -49,7 +49,8 @@
     unsigned char *bytes = new unsigned char[ length ] ;
     [[op downloadData] getBytes:bytes length: length];
     ByteBuffer bb(bytes, [[op downloadData] length]);
-    
+    std::string resp = (char*)bb.getData();
+    printf("\nData: %s;\n", resp.c_str());
     Response r("", [[op getURL] cStringUsingEncoding:NSUTF8StringEncoding] , bb);
     ((IDownloadListener*)_listener)->onDownload(r);
 	} else {

@@ -85,7 +85,7 @@
     IGL* gl  = new GL2();
     
     //Testing downloads
-    if (true) {
+    if (false) {
       int test_download_code = 0;
       NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
       DummyDownload *dummyDownload = new DummyDownload(factory, [documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding] );
