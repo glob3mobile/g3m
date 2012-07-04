@@ -25,11 +25,19 @@ struct UniformsStruct {
   //FOR BILLBOARDING
   GLint BillBoard;
   GLint ViewPortRatio;
+  
+  //FOR COLOR MIXING
+  GLint FlatColorIntensity;
+  GLint EnableColorPerVertex;
+  GLint EnableFlatColor;
+  GLint ColorPerVertexIntensity;
+  
 } Uniforms;
 
 struct AttributesStruct {
   GLint Position;
   GLint TextureCoord;
+  GLint Color;
 } Attributes;
 
 
@@ -40,6 +48,7 @@ void GL2::useProgram(unsigned int program) {
   // Extract the handles to attributes
   Attributes.Position = glGetAttribLocation(program, "Position");
   Attributes.TextureCoord = glGetAttribLocation(program, "TextureCoord");
+  Attributes.Color = glGetAttribLocation(program, "Color");
   
   // Extract the handles to uniforms
   Uniforms.Projection = glGetUniformLocation(program, "Projection");
@@ -52,6 +61,12 @@ void GL2::useProgram(unsigned int program) {
   Uniforms.BillBoard = glGetUniformLocation(program, "BillBoard");
   glUniform1i(Uniforms.BillBoard, false); //NOT DRAWING BILLBOARD
   Uniforms.ViewPortRatio = glGetUniformLocation(program, "ViewPortRatio");
+  
+  //FOR FLAT COLOR MIXING
+  Uniforms.FlatColorIntensity = glGetUniformLocation(program, "FlatColorIntensity");
+  Uniforms.ColorPerVertexIntensity = glGetUniformLocation(program, "ColorPerVertexIntensity");
+  Uniforms.EnableColorPerVertex = glGetUniformLocation(program, "EnableColorPerVertex");
+  Uniforms.EnableFlatColor = glGetUniformLocation(program, "EnableFlatColor");
 }
 
 void GL2::setProjection(const MutableMatrix44D &projection) {
@@ -99,6 +114,33 @@ void GL2::enableTextures() {
   glEnableVertexAttribArray(Attributes.TextureCoord);
 }
 
+void GL2::enableVertexColor(const float* const colors, float intensity)
+{
+  if (colors != NULL){
+    glUniform1i(Uniforms.EnableColorPerVertex, true);
+    glEnableVertexAttribArray(Attributes.Color);
+    glVertexAttribPointer(Attributes.Color, 4, GL_FLOAT, 0, 0, colors);
+    glUniform1f(Uniforms.ColorPerVertexIntensity, intensity);
+  }
+}
+
+void GL2::enableVertexFlatColor(Color c, float intensity)
+{
+    glUniform1i(Uniforms.EnableFlatColor, true);
+    glUniform4f(Uniforms.FlatColor, c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
+    glUniform1f(Uniforms.FlatColorIntensity, intensity);
+}
+
+void GL2::disableVertexColor()
+{
+  glUniform1i(Uniforms.EnableColorPerVertex, false);
+}
+
+void GL2::disableVertexFlatColor()
+{
+  glUniform1i(Uniforms.EnableFlatColor, false);
+}
+
 void GL2::enableTexture2D() {
   glUniform1i(Uniforms.EnableTexture, true);
 }
@@ -137,15 +179,15 @@ void GL2::vertexPointer(int size, int stride, const float vertex[]) {
   glVertexAttribPointer(Attributes.Position, size, GL_FLOAT, 0, stride, (const void *) vertex);
 }
 
-void GL2::drawTriangleStrip(int n, const unsigned char *i) {
-  glDrawElements(GL_TRIANGLE_STRIP, n, GL_UNSIGNED_BYTE, i);
+void GL2::drawTriangleStrip(int n, const unsigned int i[]) {
+  glDrawElements(GL_TRIANGLE_STRIP, n, GL_UNSIGNED_INT, i);
 }
 
-void GL2::drawLines(int n, const unsigned char *i) {
+void GL2::drawLines(int n, const unsigned int *i) {
   glDrawElements(GL_LINES, n, GL_UNSIGNED_BYTE, i);
 }
 
-void GL2::drawLineLoop(int n, const unsigned char *i) {
+void GL2::drawLineLoop(int n, const unsigned int *i) {
   glDrawElements(GL_LINE_LOOP, n, GL_UNSIGNED_BYTE, i);
 }
 

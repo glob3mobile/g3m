@@ -361,8 +361,8 @@
 		CC14B636157D34AB00793C92 /* GL */ = {
 			isa = PBXGroup;
 			children = (
-				CC14B638157D34C700793C92 /* GL2.hpp */,
 				CC14B637157D34C700793C92 /* GL2.mm */,
+				CC14B638157D34C700793C92 /* GL2.hpp */,
 			);
 			name = GL;
 			sourceTree = "<group>";

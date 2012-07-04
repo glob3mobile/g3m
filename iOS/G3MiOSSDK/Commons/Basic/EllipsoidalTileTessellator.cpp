@@ -35,7 +35,7 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
   addVertex(planet, &vertices, &texCoords, sector.getNW()); 
   addVertex(planet, &vertices, &texCoords, sector.getNE()); 
   
-  std::vector<unsigned char> indexes;
+  std::vector<unsigned int> indexes;
   indexes.push_back(0);
   indexes.push_back(1);
   indexes.push_back(2);

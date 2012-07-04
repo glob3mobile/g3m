@@ -7,6 +7,7 @@
 
 attribute vec4 Position;
 attribute vec2 TextureCoord;
+attribute vec4 Color;
 
 varying vec2 TextureCoordOut;
 
@@ -15,6 +16,8 @@ uniform mat4 Modelview;
 
 uniform bool BillBoard;
 uniform float ViewPortRatio;
+
+varying vec4 VertexColor;
 
 void main() {
   gl_Position = Projection * Modelview * Position;
@@ -25,4 +28,8 @@ void main() {
   }
 
   TextureCoordOut = TextureCoord;
+  
+  VertexColor = Color;
+  //VertexColor = vec4(1.0, 1.0, 1.0, 1.0);
+  
 }

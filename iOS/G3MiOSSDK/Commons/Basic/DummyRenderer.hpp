@@ -17,7 +17,7 @@ private:
   int _numIndices;
   double _halfSize;
   
-  unsigned char* _index;
+  unsigned int* _index;
   float* _vertices;
 
 public:

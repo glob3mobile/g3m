@@ -18,7 +18,13 @@ public:
   
   void enableTextures() ;
   
+  void verticesColors(bool v);
+  
   void enableTexture2D() ;
+  
+  void enableVertexFlatColor(Color c, float intensity);
+  
+  void disableVertexFlatColor();
   
   void disableTexture2D() ;
   
@@ -30,6 +36,10 @@ public:
   
   void color(float r, float g, float b, float a) ;
   
+  void enableVertexColor(const float* const colors, float intensity);
+  
+  void disableVertexColor();
+  
   void pushMatrix() ;
   
   void popMatrix() ;
@@ -40,11 +50,11 @@ public:
   
   void vertexPointer(int size, int stride, const float vertex[]) ;
   
-  void drawTriangleStrip(int n, const unsigned char *i) ;
+  void drawTriangleStrip(int n, const unsigned int i[]) ;
   
-  void drawLines(int n, const unsigned char *i); 
+  void drawLines(int n, const unsigned int *i); 
   
-  void drawLineLoop(int n, const unsigned char *i); 
+  void drawLineLoop(int n, const unsigned int *i); 
   
   void setProjection(const MutableMatrix44D &projection) ;
   

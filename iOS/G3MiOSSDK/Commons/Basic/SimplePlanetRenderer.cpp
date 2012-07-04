@@ -9,8 +9,8 @@
 #include "SimplePlanetRenderer.hpp"
 
 SimplePlanetRenderer::SimplePlanetRenderer(const std::string textureFilename):
-_latRes(16),//FOR NOW THEY MUST BE EQUAL
-_lonRes(16),
+_latRes(30),//FOR NOW THEY MUST BE EQUAL
+_lonRes(30),
 _textureFilename(textureFilename),
 _mesh(NULL)
 {
@@ -52,21 +52,21 @@ float * SimplePlanetRenderer::createVertices(const Planet& planet)
 
 
 
-unsigned char* SimplePlanetRenderer::createMeshIndex()
+unsigned int* SimplePlanetRenderer::createMeshIndex()
 {
-  const int res = _lonRes;
+  const unsigned int res = _lonRes;
   
-  const int numIndexes = 2 * (res - 1) * (res + 1);
-  unsigned char *indexes = new unsigned char[numIndexes];
+  const int numIndexes = (2 * (res - 1) * (res + 1)) -1;
+  unsigned int *indexes = new unsigned int[numIndexes];
   
-  int n = 0;
-  for (int j = 0; j < res - 1; j++) {
-    if (j > 0) indexes[n++] = (char) (j * res);
-    for (int i = 0; i < res; i++) {
-      indexes[n++] = (char) (j * res + i);
-      indexes[n++] = (char) (j * res + i + res);
+  unsigned int n = 0;
+  for (unsigned int j = 0; j < res - 1; j++) {
+    if (j > 0) indexes[n++] = (unsigned int) (j * res);
+    for (unsigned int i = 0; i < res; i++) {
+      indexes[n++] = (unsigned int) (j * res + i);
+      indexes[n++] = (unsigned int) (j * res + i + res);
     }
-    indexes[n++] = (char) (j * res + 2 * res - 1);
+    indexes[n++] = (unsigned int) (j * res + 2 * res - 1);
   }
   
   return indexes;
@@ -103,12 +103,25 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   float* ver = createVertices(*planet);
   
   const int res = _lonRes;
-  const int numIndexes = 2 * (res - 1) * (res + 1);
-  unsigned char * ind = createMeshIndex();
+  const int numIndexes = (2 * (res - 1) * (res + 1)) -1;
+  unsigned int * ind = createMeshIndex();
   
   float * texC = createTextureCoordinates();
   
-  _mesh = new IndexedTriangleStripMesh(true, ver, ind, numIndexes, texID, texC);
+  //COLORS PER VERTEX
+  int numVertices = res * res * 4;
+  float *colors = new float[numVertices];
+  for(int i = 0; i < numVertices; ){
+    colors[i++] = ((float) i) / numVertices;
+    colors[i++] = 0.0;
+    colors[i++] = 1.0;
+    colors[i++] = 1.0;
+  }
+  
+  //FLAT COLOR
+  Color * flatColor = new Color( Color::fromRGB(1.0, 0.0, 0.0, 1.0) );
+  
+  _mesh = new IndexedTriangleStripMesh(true, ver, ind, numIndexes, flatColor, colors, texID, texC);
   
   return true;
 }

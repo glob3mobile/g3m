@@ -17,30 +17,35 @@ IndexedTriangleStripMesh::~IndexedTriangleStripMesh()
     delete[] _indexes;
     delete[] _texCoords;
     if (_normals != NULL) delete[] _normals;
+    if (_colors != NULL) delete[] _colors;
+    if (_flatColor != NULL) delete _flatColor;
   }
 }
 
-IndexedTriangleStripMesh::IndexedTriangleStripMesh(bool owner, const float* vertices, 
-                                                   const unsigned char* indexes, const int numIndex, 
-                                                   const Color& color,
+IndexedTriangleStripMesh::IndexedTriangleStripMesh(bool owner,
+                                                   const float* vertices,
+                                                   const unsigned int* indexes,
+                                                   const int numIndex, 
+                                                   const Color* flatColor,
+                                                   const float * colors,
                                                    const float* normals):
 _owner(owner),
 _vertices(vertices),
 _indexes(indexes),
 _numIndex(numIndex),
 _texCoords(NULL),
-_color(color),
+_flatColor(flatColor),
 _textureId(-1),
 _normals(normals)
 {
 }
 
 IndexedTriangleStripMesh::IndexedTriangleStripMesh(std::vector<MutableVector3D>& vertices, 
-                                                   std::vector<unsigned char>& indexes,
-                                                   const Color& color,
+                                                   std::vector<unsigned int>& indexes,
+                                                   const Color* flatColor,
                                                    std::vector<MutableVector3D>* normals):
 _owner(true),
-_color(color),
+_flatColor(flatColor),
 _texCoords(NULL),
 _textureId(-1),
 _numIndex(indexes.size())
@@ -55,7 +60,7 @@ _numIndex(indexes.size())
   }
   _vertices = vert;
   
-  unsigned char * ind = new unsigned char[indexes.size()];
+  unsigned int * ind = new unsigned int[indexes.size()];
   for (int i = 0; i < indexes.size(); i++) {
     ind[i] = indexes[i];
   }
@@ -77,31 +82,35 @@ _numIndex(indexes.size())
   
 }
 
-IndexedTriangleStripMesh::IndexedTriangleStripMesh(bool owner, const float* vertices, 
-                                                   const unsigned char* indexes, 
-                                                   const int numIndex,
-                                                   const int texID, 
-                                                   const float* texCoords,
+IndexedTriangleStripMesh::IndexedTriangleStripMesh(bool owner,
+                         const float* vertices,
+                         const unsigned int* indexes,
+                         const int numIndex,
+                         const Color* flatColor,
+                         const float * colors,
+                         const int texID,
+                         const float* texCoords,
                                                    const float* normals):
 _owner(owner),
 _vertices(vertices),
 _indexes(indexes),
 _numIndex(numIndex),
 _texCoords(texCoords),
-_color( Color::fromRGB((float)0,(float)0,(float)0,(float)0) ),
+_flatColor(flatColor),
 _textureId(texID),
-_normals(normals)
+_normals(normals),
+_colors(colors)
 {
 }
 
 IndexedTriangleStripMesh::IndexedTriangleStripMesh(std::vector<MutableVector3D>& vertices, 
-                                                   std::vector<unsigned char>& indexes,
+                                                   std::vector<unsigned int>& indexes,
                                                    const int texID,
                                                    std::vector<MutableVector2D>& texCoords, 
                                                    std::vector<MutableVector3D>* normals):
 _owner(true),
 _numIndex(indexes.size()),
-_color( Color::fromRGB((float)0,(float)0,(float)0,(float)0) ),
+_flatColor( NULL ),
 _textureId(texID)
 {
   float* vert = new float[3 * vertices.size()];
@@ -113,7 +122,7 @@ _textureId(texID)
   }
   _vertices = vert;
   
-  unsigned char* ind = new unsigned char[indexes.size()];
+  unsigned int* ind = new unsigned int[indexes.size()];
   for (int i = 0; i < indexes.size(); i++) {
     ind[i] = indexes[i];
   }
@@ -157,9 +166,12 @@ void IndexedTriangleStripMesh::render(const RenderContext* rc) const
     gl->bindTexture(_textureId);
     gl->setTextureCoordinates(2, 0, _texCoords); 
   }
-  else {
-    gl->color(_color);
-  }
+  
+  if (_colors != NULL) gl->enableVertexColor(_colors, 0.5);
+  else gl->disableVertexColor();
+  
+  if (_flatColor != NULL) gl->enableVertexFlatColor(*_flatColor, 0.5);
+  else gl->disableVertexFlatColor();
   
   gl->vertexPointer(3, 0, _vertices);
   gl->drawTriangleStrip(_numIndex, _indexes);

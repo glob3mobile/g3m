@@ -30,6 +30,14 @@ public:
   
   virtual void enableTextures() = 0;
   
+  virtual void enableVertexColor(const float* const colors, float intensity) = 0;
+  
+  virtual void enableVertexFlatColor(Color c, float intensity) = 0;
+  
+  virtual void disableVertexColor() = 0;
+  
+  virtual void disableVertexFlatColor() = 0;
+  
   virtual void enableTexture2D() = 0;
   
   virtual void disableTexture2D() = 0;
@@ -56,7 +64,6 @@ public:
           col.getAlpha());
   }
 
-
   virtual void pushMatrix() = 0;
   
   virtual void popMatrix() = 0;
@@ -67,11 +74,11 @@ public:
   
   virtual void vertexPointer(int size, int stride, const float vertex[]) = 0;
   
-  virtual void drawTriangleStrip(int n, const unsigned char i[]) = 0;
+  virtual void drawTriangleStrip(int n, const unsigned int i[]) = 0;
   
-  virtual void drawLines(int n, const unsigned char i[]) = 0; 
+  virtual void drawLines(int n, const unsigned int i[]) = 0; 
   
-  virtual void drawLineLoop(int n, const unsigned char i[]) = 0;
+  virtual void drawLineLoop(int n, const unsigned int i[]) = 0;
 
   virtual void setProjection(const MutableMatrix44D &projection) = 0;
   
