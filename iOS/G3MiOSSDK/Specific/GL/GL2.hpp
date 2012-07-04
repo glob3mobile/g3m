@@ -40,6 +40,10 @@ public:
   
   void disableVertexColor();
   
+  void enableVertexNormal(const float* const normals);
+  
+  void disableVertexNormal();
+  
   void pushMatrix() ;
   
   void popMatrix() ;

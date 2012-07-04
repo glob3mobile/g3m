@@ -48,10 +48,13 @@
     int length = [[op downloadData] length];
     unsigned char *bytes = new unsigned char[ length ] ;
     [[op downloadData] getBytes:bytes length: length];
-    ByteBuffer bb(bytes, [[op downloadData] length]);
+    ByteBuffer bb(bytes, [[op downloadData] length]);  //CREATING BYTEBUFFER
     
     Response r("", [[op getURL] cStringUsingEncoding:NSUTF8StringEncoding] , bb);
     ((IDownloadListener*)_listener)->onDownload(r);
+    
+    //WE MUST DELETE THE BYTE BUFFER WE HAVE CREATED
+    delete [] bb.getData();
 	} else {
     ByteBuffer bb(NULL, 0);
     

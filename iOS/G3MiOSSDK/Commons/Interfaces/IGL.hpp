@@ -38,6 +38,10 @@ public:
   
   virtual void disableVertexFlatColor() = 0;
   
+  virtual void enableVertexNormal(const float* const normals) = 0;
+  
+  virtual void disableVertexNormal() = 0;
+  
   virtual void enableTexture2D() = 0;
   
   virtual void disableTexture2D() = 0;

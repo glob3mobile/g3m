@@ -38,7 +38,7 @@ void FileSystemStorage::save(std::string url, const ByteBuffer& bb){
   }
 }
 
-ByteBuffer FileSystemStorage::getByteBuffer(std::string url)
+ByteBuffer& FileSystemStorage::getByteBuffer(std::string url)
 {
   NSString *file = generateFileName(url);
   NSData *readData = [[NSData alloc] initWithContentsOfFile:file];

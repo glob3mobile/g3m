@@ -43,6 +43,7 @@ _normals(normals)
 IndexedTriangleStripMesh::IndexedTriangleStripMesh(std::vector<MutableVector3D>& vertices, 
                                                    std::vector<unsigned int>& indexes,
                                                    const Color* flatColor,
+                                                   std::vector<Color>* colors,
                                                    std::vector<MutableVector3D>* normals):
 _owner(true),
 _flatColor(flatColor),
@@ -79,6 +80,18 @@ _numIndex(indexes.size())
     _normals = NULL;
   }
   
+  if (colors != NULL)
+  {
+    float * vertexColor = new float[4* colors->size()];
+    for (int i = 0; i < colors->size(); i+=4){
+      vertexColor[i] = (*colors)[i].getRed();
+      vertexColor[i+1] = (*colors)[i].getGreen();
+      vertexColor[i+2] = (*colors)[i].getBlue();
+      vertexColor[i+3] = (*colors)[i].getAlpha();
+    }
+    _colors = vertexColor;
+  } else _colors = NULL;
+  
   
 }
 
@@ -106,11 +119,13 @@ _colors(colors)
 IndexedTriangleStripMesh::IndexedTriangleStripMesh(std::vector<MutableVector3D>& vertices, 
                                                    std::vector<unsigned int>& indexes,
                                                    const int texID,
-                                                   std::vector<MutableVector2D>& texCoords, 
+                                                   std::vector<MutableVector2D>& texCoords,
+                                                   const Color* flatColor,
+                                                   std::vector<Color>* colors,
                                                    std::vector<MutableVector3D>* normals):
 _owner(true),
 _numIndex(indexes.size()),
-_flatColor( NULL ),
+_flatColor( flatColor ),
 _textureId(texID)
 {
   float* vert = new float[3 * vertices.size()];
@@ -150,6 +165,18 @@ _textureId(texID)
     
     _normals = norm;
   }
+  
+  if (colors != NULL)
+  {
+    float * vertexColor = new float[4* colors->size()];
+    for (int i = 0; i < colors->size(); i+=4){
+      vertexColor[i] = (*colors)[i].getRed();
+      vertexColor[i+1] = (*colors)[i].getGreen();
+      vertexColor[i+2] = (*colors)[i].getBlue();
+      vertexColor[i+3] = (*colors)[i].getAlpha();
+    }
+    _colors = vertexColor;
+  } else _colors = NULL;
 }
 
 void IndexedTriangleStripMesh::render(const RenderContext* rc) const
@@ -172,6 +199,9 @@ void IndexedTriangleStripMesh::render(const RenderContext* rc) const
   
   if (_flatColor != NULL) gl->enableVertexFlatColor(*_flatColor, 0.5);
   else gl->disableVertexFlatColor();
+  
+  if (_normals != NULL) gl->enableVertexNormal(_normals);
+  else gl->disableVertexNormal();
   
   gl->vertexPointer(3, 0, _vertices);
   gl->drawTriangleStrip(_numIndex, _indexes);

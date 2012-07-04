@@ -48,6 +48,7 @@ public:
   IndexedTriangleStripMesh(std::vector<MutableVector3D>& vertices,
                            std::vector<unsigned int>& indexes,
                            const Color* flatColor,
+                           std::vector<Color>* colors = NULL,
                            std::vector<MutableVector3D>* normals = NULL);
   
   //TEXTURED
@@ -65,6 +66,8 @@ public:
                            std::vector<unsigned int>& indexes,
                            const int texID,
                            std::vector<MutableVector2D>& texCoords,
+                           const Color* flatColor = NULL,
+                           std::vector<Color>* colors = NULL,
                            std::vector<MutableVector3D>* normals = NULL);
   
   virtual void render(const RenderContext* rc) const;

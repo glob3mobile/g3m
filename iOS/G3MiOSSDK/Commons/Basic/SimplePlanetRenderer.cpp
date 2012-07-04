@@ -91,37 +91,58 @@ float* SimplePlanetRenderer::createTextureCoordinates()
 }
 
 bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
-  const int texID = rc->getTexturesHandler()->getTextureIdFromFileName(rc, _textureFilename, 2048, 1024);
-  
-  if (texID < 1) {
-    rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
-    return false;
-  }
+
   
   const Planet* planet = rc->getPlanet();
   
   float* ver = createVertices(*planet);
-  
   const int res = _lonRes;
   const int numIndexes = (2 * (res - 1) * (res + 1)) -1;
   unsigned int * ind = createMeshIndex();
   
-  float * texC = createTextureCoordinates();
+  //TEXTURED
+  int texID = 0;
+  float * texC = NULL;
+  if (true){
+    texID = rc->getTexturesHandler()->getTextureIdFromFileName(rc, _textureFilename, 2048, 1024);
+    if (texID < 1) {
+      rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
+      return false;
+    }
+    texC = createTextureCoordinates();
+  }
   
   //COLORS PER VERTEX
-  int numVertices = res * res * 4;
-  float *colors = new float[numVertices];
-  for(int i = 0; i < numVertices; ){
-    colors[i++] = ((float) i) / numVertices;
-    colors[i++] = 0.0;
-    colors[i++] = 1.0;
-    colors[i++] = 1.0;
+  float *colors = NULL;
+  if (true){
+    int numVertices = res * res * 4;
+    colors = new float[numVertices];
+    for(int i = 0; i < numVertices; ){
+      colors[i++] = ((float) i) / numVertices;
+      colors[i++] = 0.0;
+      colors[i++] = 1.0;
+      colors[i++] = 1.0;
+    }
   }
   
   //FLAT COLOR
-  Color * flatColor = new Color( Color::fromRGB(1.0, 0.0, 0.0, 1.0) );
+  Color * flatColor = NULL;
+  if (true){
+    flatColor = new Color( Color::fromRGB(1.0, 0.0, 0.0, 1.0) );
+  }
   
-  _mesh = new IndexedTriangleStripMesh(true, ver, ind, numIndexes, flatColor, colors, texID, texC);
+  float * normals = NULL;
+  if (true){
+    int numVertices = res * res * 3;
+    normals = new float[numVertices];
+    for(int i = 0; i < numVertices; ){
+      normals[i++] = 1.0;
+      normals[i++] = 1.0;
+      normals[i++] = 1.0;
+    }
+  }
+  
+  _mesh = new IndexedTriangleStripMesh(true, ver, ind, numIndexes, flatColor, colors, texID, texC, normals);
   
   return true;
 }

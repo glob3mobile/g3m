@@ -38,6 +38,7 @@ struct AttributesStruct {
   GLint Position;
   GLint TextureCoord;
   GLint Color;
+  GLint Normal;
 } Attributes;
 
 
@@ -49,6 +50,7 @@ void GL2::useProgram(unsigned int program) {
   Attributes.Position = glGetAttribLocation(program, "Position");
   Attributes.TextureCoord = glGetAttribLocation(program, "TextureCoord");
   Attributes.Color = glGetAttribLocation(program, "Color");
+  Attributes.Normal = glGetAttribLocation(program, "Normal");
   
   // Extract the handles to uniforms
   Uniforms.Projection = glGetUniformLocation(program, "Projection");
@@ -133,12 +135,26 @@ void GL2::enableVertexFlatColor(Color c, float intensity)
 
 void GL2::disableVertexColor()
 {
+  glDisableVertexAttribArray(Attributes.Color);
   glUniform1i(Uniforms.EnableColorPerVertex, false);
 }
 
 void GL2::disableVertexFlatColor()
 {
   glUniform1i(Uniforms.EnableFlatColor, false);
+}
+
+void GL2::enableVertexNormal(const float* const normals)
+{
+  if (normals != NULL){
+    glEnableVertexAttribArray(Attributes.Normal);
+    glVertexAttribPointer(Attributes.Normal, 3, GL_FLOAT, 0, 0, normals);
+  }
+}
+
+void GL2::disableVertexNormal()
+{
+  glDisableVertexAttribArray(Attributes.Normal);
 }
 
 void GL2::enableTexture2D() {
