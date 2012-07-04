@@ -50,6 +50,12 @@ public:
     _downloader->request(".....", 15, this); //THIS SHOULD PRODUCE AN ERROR
     _downloader->request(url, 30, this);
   }
+    
+    void runSqlite()
+    {
+        std::string path1 ="";
+        std::string path2 ="http://ovc.catastro.meh.es/Cartografia/WMS/ServidorWMS.aspx?request=capabilities";
+    }
   
   void onDownload(const Response& response)
   {

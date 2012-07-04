@@ -137,6 +137,8 @@
 		38D787071588F886003BBC75 /* SimplePlanetRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SimplePlanetRenderer.cpp; path = Commons/Basic/SimplePlanetRenderer.cpp; sourceTree = "<group>"; };
 		38D787081588F886003BBC75 /* SimplePlanetRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SimplePlanetRenderer.hpp; path = Commons/Basic/SimplePlanetRenderer.hpp; sourceTree = "<group>"; };
 		442DF0B6159898F80077EFB5 /* SQLiteStorage_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SQLiteStorage_iOS.hpp; path = Specific/Derived/SQLiteStorage_iOS.hpp; sourceTree = "<group>"; };
+		443BBC7915A43E6E00EAE280 /* Downloader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Downloader.hpp; path = ../../../aux/g3m/iOS/G3MiOSSDK/Commons/Downloader/Downloader.hpp; sourceTree = "<group>"; };
+		443BBC7A15A43E8700EAE280 /* IDownloadListener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IDownloadListener.hpp; path = ../../../aux/g3m/iOS/G3MiOSSDK/Commons/Downloader/IDownloadListener.hpp; sourceTree = "<group>"; };
 		44EEB5DC1598C64C0086F243 /* SQLiteStorage_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SQLiteStorage_iOS.cpp; path = Specific/Derived/SQLiteStorage_iOS.cpp; sourceTree = "<group>"; };
 		CC14B637157D34C700793C92 /* GL2.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = GL2.mm; path = Specific/GL/GL2.mm; sourceTree = "<group>"; };
 		CC14B638157D34C700793C92 /* GL2.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = GL2.hpp; path = Specific/GL/GL2.hpp; sourceTree = "<group>"; };
@@ -184,10 +186,8 @@
 		D88C344F159C5A410044CED9 /* DataDownload.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DataDownload.hpp; path = Specific/Derived/DataDownload.hpp; sourceTree = "<group>"; };
 		D88C3450159C5A410044CED9 /* DataDownload.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = DataDownload.mm; path = Specific/Derived/DataDownload.mm; sourceTree = "<group>"; };
 		D88C3451159C5A410044CED9 /* NetworkQueue.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NetworkQueue.hpp; path = Specific/Derived/NetworkQueue.hpp; sourceTree = "<group>"; };
-		D8AD76111599B61B00A7D39A /* IDownloadListener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IDownloadListener.hpp; path = Commons/Downloader/IDownloadListener.hpp; sourceTree = "<group>"; };
 		D8AD76121599B68400A7D39A /* IndexedTriangleStripMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IndexedTriangleStripMesh.cpp; path = Commons/Basic/IndexedTriangleStripMesh.cpp; sourceTree = "<group>"; };
 		D8AD76131599B68400A7D39A /* IndexedTriangleStripMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IndexedTriangleStripMesh.hpp; path = Commons/Basic/IndexedTriangleStripMesh.hpp; sourceTree = "<group>"; };
-		D8AD76161599B6B300A7D39A /* Downloader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Downloader.hpp; path = Commons/Downloader/Downloader.hpp; sourceTree = "<group>"; };
 		D8AD76261599B89000A7D39A /* Downloader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Downloader.cpp; path = Commons/Downloader/Downloader.cpp; sourceTree = "<group>"; };
 		D8D3BC89159B11D000738E37 /* INetwork.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = INetwork.hpp; path = Commons/Interfaces/INetwork.hpp; sourceTree = "<group>"; };
 		D8D3BC8B159B11DA00738E37 /* Network_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Network_iOS.mm; path = Specific/Derived/Network_iOS.mm; sourceTree = "<group>"; };
@@ -370,15 +370,13 @@
 		D8AD760F1599B5B900A7D39A /* Downloader */ = {
 			isa = PBXGroup;
 			children = (
+				443BBC7A15A43E8700EAE280 /* IDownloadListener.hpp */,
+				443BBC7915A43E6E00EAE280 /* Downloader.hpp */,
 				382D4B91159DC26000FE9296 /* ByteBuffer.hpp */,
 				382D4B92159DC26000FE9296 /* NullStorage.hpp */,
 				D8AD76261599B89000A7D39A /* Downloader.cpp */,
-				D8AD76161599B6B300A7D39A /* Downloader.hpp */,
 				D88C3449159C5A250044CED9 /* DummyDownload.mm */,
 				D88C344A159C5A250044CED9 /* DummyDownload.hpp */,
-				D8AD76111599B61B00A7D39A /* IDownloadListener.hpp */,
-				D8AD76111599B61B00A7D39A /* IDownloadListener.hpp */,
-				D8AD76161599B6B300A7D39A /* Downloader.hpp */,
 				38589EBD159C91F700DCC302 /* Response.hpp */,
 			);
 			name = Downloader;
