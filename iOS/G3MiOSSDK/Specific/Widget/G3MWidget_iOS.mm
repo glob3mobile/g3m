@@ -85,7 +85,7 @@
     IGL* gl  = new GL2();
     
     //Testing downloads
-    if (false) {
+    if (true) {
       int test_download_code = 0;
       NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
       DummyDownload *dummyDownload = new DummyDownload(factory, [documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding] );
@@ -95,7 +95,16 @@
       if(true){
           int test_download_code = 0;
           DummyDownload *dummyDownload = new DummyDownload(factory, "/Users/vidalete/repository/IGO-GIT-Repository/g3m/iOS/test.db", "file");
-          dummyDownload->run();
+          std::string path1 = "/Users/vidalete/Downloads/Tic2Vtwo.pdf";
+          std::string path2 = "/Users/vidalete/Downloads/Pantallazo.png";
+          
+          
+          
+          
+          dummyDownload->runSqlite(path2);
+          //dummyDownload->runSqlite(path2);
+          //dummyDownload->runSqlite(path1);
+          //dummyDownload->runSqlite(path1);
       }
     
     // all the creation of renderers must be move to common source code, instead of specific

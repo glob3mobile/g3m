@@ -8,6 +8,7 @@
 attribute vec4 Position;
 attribute vec2 TextureCoord;
 attribute vec4 Color;
+attribute vec3 Normal;
 
 varying vec2 TextureCoordOut;
 
@@ -30,6 +31,7 @@ void main() {
   TextureCoordOut = TextureCoord;
   
   VertexColor = Color;
-  //VertexColor = vec4(1.0, 1.0, 1.0, 1.0);
   
+      
+  vec3 x = Normal; //This line has been added to avoid compiler taking Normal variable away (Remove when Normal has been used)
 }

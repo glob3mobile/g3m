@@ -21,7 +21,7 @@ public:
   
   bool contains(std::string url);
   void save(std::string url, const ByteBuffer& bb);
-  ByteBuffer getByteBuffer(std::string url);
+  ByteBuffer& getByteBuffer(std::string url);
 };
 
 #endif

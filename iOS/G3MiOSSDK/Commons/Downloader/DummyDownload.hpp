@@ -16,6 +16,9 @@
 
 #include "IFactory.hpp"
 
+
+#include <fstream>
+
 class DummyDownload: public IDownloadListener
 {
   
@@ -51,10 +54,33 @@ public:
     _downloader->request(url, 30, this);
   }
     
-    void runSqlite()
+    void runSqlite(std::string path)
     {
-        std::string path1 ="";
-        std::string path2 ="http://ovc.catastro.meh.es/Cartografia/WMS/ServidorWMS.aspx?request=capabilities";
+        printf("\nFileName: %s;", path.c_str());
+        std::string root = "/Users/vidalete/Downloads/";
+        NSString *documentsDirectory = [NSString stringWithCString:root.c_str() 
+                                                    encoding:[NSString defaultCStringEncoding]];
+
+        FileSystemStorage * fssAux = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
+  
+        
+        
+        if (_fss->contains(path.c_str())){
+            ByteBuffer bb = _fss->getByteBuffer(path.c_str());
+            std::string resp = (char*)bb.getData();
+            printf("\nFileName: %s;\nData: %s;\nDataLength:%i;\n\n",path.c_str(), resp.c_str(), bb.getDataLength());
+            fssAux->save(path.c_str(), bb);
+            //WE MUST DELETE THE BYTE BUFFER WE HAVE CREATED
+            delete [] bb.getData();
+        }else{
+            ByteBuffer bb = fssAux->getByteBuffer(path);
+            if(bb.getData() != NULL){
+             _fss->save(path,bb); 
+            }
+            delete [] bb.getData();
+        }
+
+        delete fssAux;
     }
   
   void onDownload(const Response& response)

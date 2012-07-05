@@ -16,9 +16,7 @@ class ByteBuffer{
 public:
   
   ByteBuffer(  const unsigned char * const data, unsigned int dataLength) :_data(data), _dataLength(dataLength){};
-  ~ByteBuffer(){ 
-    if (_data != NULL) 
-      delete [] _data;
+  ~ByteBuffer(){ //ByteBuffer does not delete the data
   }
   
   const unsigned char * getData() const{ return _data;}

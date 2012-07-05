@@ -21,11 +21,11 @@ public:
     
     bool contains(std::string filename);
     void save(std::string filename, const ByteBuffer& bb);
-    ByteBuffer getByteBuffer(std::string filename);
+    ByteBuffer& getByteBuffer(std::string filename);
     
     
 private:
-    virtual ByteBuffer findFileFromFileName(const std::string filename) const;
+    virtual ByteBuffer& findFileFromFileName(const std::string filename);
     //virtual void openConexion() const;
     virtual void testConnection() const;
     virtual bool checkDataBaseConnection() const;

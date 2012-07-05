@@ -372,9 +372,9 @@
 			children = (
 				443BBC7A15A43E8700EAE280 /* IDownloadListener.hpp */,
 				443BBC7915A43E6E00EAE280 /* Downloader.hpp */,
+				D8AD76261599B89000A7D39A /* Downloader.cpp */,
 				382D4B91159DC26000FE9296 /* ByteBuffer.hpp */,
 				382D4B92159DC26000FE9296 /* NullStorage.hpp */,
-				D8AD76261599B89000A7D39A /* Downloader.cpp */,
 				D88C3449159C5A250044CED9 /* DummyDownload.mm */,
 				D88C344A159C5A250044CED9 /* DummyDownload.hpp */,
 				38589EBD159C91F700DCC302 /* Response.hpp */,
