@@ -50,15 +50,15 @@
     [[op downloadData] getBytes:bytes length: length];
     ByteBuffer bb(bytes, [[op downloadData] length]);  //CREATING BYTEBUFFER
     
-    Response r("", [[op getURL] cStringUsingEncoding:NSUTF8StringEncoding] , bb);
+    Response r([[op getURL] cStringUsingEncoding:NSUTF8StringEncoding] , bb);
     ((IDownloadListener*)_listener)->onDownload(r);
     
     //WE MUST DELETE THE BYTE BUFFER WE HAVE CREATED
-    delete [] bb.getData();
+    bb.release();
 	} else {
     ByteBuffer bb(NULL, 0);
     
-    Response r("", [[op getURL] cStringUsingEncoding:NSUTF8StringEncoding], bb);
+    Response r([[op getURL] cStringUsingEncoding:NSUTF8StringEncoding], bb);
     ((IDownloadListener*)_listener)->onError(r);
   }
 }
