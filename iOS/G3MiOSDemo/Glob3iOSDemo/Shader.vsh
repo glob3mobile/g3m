@@ -10,8 +10,6 @@ attribute vec2 TextureCoord;
 attribute vec4 Color;
 attribute vec3 Normal;
 
-varying vec2 TextureCoordOut;
-
 uniform mat4 Projection;
 uniform mat4 Modelview;
 
@@ -19,6 +17,13 @@ uniform bool BillBoard;
 uniform float ViewPortRatio;
 
 varying vec4 VertexColor;
+varying vec2 TextureCoordOut;
+
+/* //USEFUL VARIABLES FOR LIGHTING
+varying float DiffuseLighting;
+uniform vec3 LightDirection; // light direction in eye coords
+*/
+
 
 void main() {
   gl_Position = Projection * Modelview * Position;
@@ -31,7 +36,6 @@ void main() {
   TextureCoordOut = TextureCoord;
   
   VertexColor = Color;
-  
       
   vec3 x = Normal; //This line has been added to avoid compiler taking Normal variable away (Remove when Normal has been used)
 }

@@ -77,7 +77,7 @@ int TexturesHandler::getTextureIdFromFileName(const RenderContext* rc,
   
   delete image;
   
-  return texId;;
+  return texId;
 }
 
 int TexturesHandler::getTextureId(const RenderContext* rc,
