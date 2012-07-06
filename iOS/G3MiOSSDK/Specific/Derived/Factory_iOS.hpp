@@ -37,11 +37,18 @@ public:
       
       return NULL;
     }
+    return new Image_iOS(image);
+  }
+  
+  virtual IImage* createImageFromData(const ByteBuffer& bb) const {
     
-//    printf("Read image %s (%dx%d)\n",
-//           filename.c_str(),
-//           (int) [image size].width,
-//           (int) [image size].height);
+    NSData* data = [NSData dataWithBytes:bb.getData() length:bb.getDataLength()];
+    
+    UIImage* image = [UIImage imageWithData:data];
+    if (!image) {
+      printf("Can't read image\n");
+      return NULL;
+    }
     
     return new Image_iOS(image);
   }

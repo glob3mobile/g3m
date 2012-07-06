@@ -13,7 +13,7 @@
 
 #include "IImage.hpp"
 
-#include "IndexedTriangleStripMesh.hpp"
+#include "IndexedMesh.hpp"
 
 class SimplePlanetRenderer: public Renderer {
 private:
@@ -23,7 +23,7 @@ private:
   const int _latRes;
   const int _lonRes;
   
-  IndexedTriangleStripMesh * _mesh;
+  IndexedMesh * _mesh;
   
   
   float * createVertices(const Planet& planet);

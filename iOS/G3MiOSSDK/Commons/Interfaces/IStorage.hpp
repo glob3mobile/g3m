@@ -20,7 +20,7 @@ public:
   
   virtual void save(std::string url, const ByteBuffer& bb) = 0;
   
-  virtual ByteBuffer& getByteBuffer(std::string url) = 0;
+  virtual ByteBuffer getByteBuffer(std::string url) = 0;
 };
 
 #endif

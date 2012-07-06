@@ -17,10 +17,11 @@
     this->openConexion();
     return NULL;}
 */
-SQLiteStorage_iOS::SQLiteStorage_iOS(const std::string database, const std::string table)
+SQLiteStorage_iOS::SQLiteStorage_iOS(const std::string databaseName, const std::string table)
 {
-    _database = database;
+    _databaseName = databaseName;
     _table = table;
+    SQLiteStorage_iOS::createEditableCopyOfDatabaseIfNeeded();
     SQLiteStorage_iOS::checkDataBaseConnection();
     SQLiteStorage_iOS::checkTableExist();
     
@@ -38,7 +39,7 @@ bool SQLiteStorage_iOS::contains(std::string filename)
 
 void SQLiteStorage_iOS::save(std::string filename, const ByteBuffer& bb){
     sqlite3 *db;
-    if(SQLITE_OK != sqlite3_open(_database.c_str(), &db)){
+    if(SQLITE_OK != sqlite3_open(writableDBPath, &db)){
         printf("Open Database For save KO\n");
     }else{
         printf("Open Database For save OK\n");
@@ -64,18 +65,18 @@ void SQLiteStorage_iOS::save(std::string filename, const ByteBuffer& bb){
     sqlite3_close(db);
 }
 
-ByteBuffer& SQLiteStorage_iOS::getByteBuffer(std::string filename)
+ByteBuffer SQLiteStorage_iOS::getByteBuffer(std::string filename)
 {
     return SQLiteStorage_iOS::findFileFromFileName(filename);
 }
 
 
 
-ByteBuffer& SQLiteStorage_iOS::findFileFromFileName(const std::string filename) {
+ByteBuffer SQLiteStorage_iOS::findFileFromFileName(const std::string filename) {
     unsigned char *raw = NULL;
     int rawLen = 0;
     sqlite3 *db;
-    if(SQLITE_OK != sqlite3_open(_database.c_str(), &db)){
+    if(SQLITE_OK != sqlite3_open(writableDBPath, &db)){
         printf("Open Database for findFileFromFileName KO\n");
     }else{
         printf("Open Database for findFileFromFileName OK\n");
@@ -110,21 +111,43 @@ ByteBuffer& SQLiteStorage_iOS::findFileFromFileName(const std::string filename) 
 bool SQLiteStorage_iOS::checkDataBaseConnection() const{
     sqlite3 *db;
     bool ok = true;
-    if(SQLITE_OK != sqlite3_open(_database.c_str(), &db)){
-        printf("ERROR Opening Database %s \n", _database.c_str());
+    if(SQLITE_OK != sqlite3_open(writableDBPath, &db)){
+        printf("ERROR Opening Database %s \n", _databaseName.c_str());
         ok = false;
     }else{
-        printf("Opening Database %s OK\n", _database.c_str());
+        printf("Opening Database %s OK\n", _databaseName.c_str());
     }
     sqlite3_close(db);
     return ok;
 }
 
+
+void SQLiteStorage_iOS::createEditableCopyOfDatabaseIfNeeded() {
+    // First, test for existence.
+    const NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *database = [[NSString alloc] initWithCString:_databaseName.c_str() encoding:NSUTF8StringEncoding];
+    NSError *error;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *writableDBPathNS = [documentsDirectory stringByAppendingPathComponent:database];
+    writableDBPath = [writableDBPathNS cStringUsingEncoding:NSUTF8StringEncoding];
+    if ([fileManager fileExistsAtPath:writableDBPathNS]){
+        NSLog(@"Exist writable database file");
+        return;
+    }
+    // The writable database does not exist, so copy the default to the appropriate location.
+    NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:database];
+    if (![fileManager copyItemAtPath:defaultDBPath toPath:writableDBPathNS error:&error]) {
+        NSLog(@"Failed to create writable database file with message '%@'.", [error localizedDescription]);
+    }
+}
+
+
 bool SQLiteStorage_iOS::checkTableExist() const{
     sqlite3 *db;
     bool ok = true;
-    if(SQLITE_OK != sqlite3_open(_database.c_str(), &db)){
-        printf("ERROR Opening Database %s \n", _database.c_str());
+    if(SQLITE_OK != sqlite3_open(writableDBPath, &db)){
+        printf("ERROR Opening Database %s \n", _databaseName.c_str());
         ok = false;
     }else{
         char consulta[128];
@@ -146,7 +169,7 @@ void SQLiteStorage_iOS::testConnection() const{
     int rc;
     sqlite3 *db;
     
-    rc = sqlite3_open("/Users/vidalete/repository/IGO-GIT-Repository/g3m/iOS/test.db", &db);
+    rc = sqlite3_open(writableDBPath, &db);
     if(SQLITE_OK != rc){
         printf("Connection KO\n");
     }else{

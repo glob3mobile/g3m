@@ -13,14 +13,16 @@ class ByteBuffer{
   const unsigned char * const _data;
   const unsigned int _dataLength;
   
+  bool _hasBeenReleased;
+  
 public:
   
-  ByteBuffer(  const unsigned char * const data, unsigned int dataLength) :_data(data), _dataLength(dataLength){};
-  ~ByteBuffer(){ //ByteBuffer does not delete the data
-  }
+  ByteBuffer(  const unsigned char * const data, unsigned int dataLength) :_data(data), _dataLength(dataLength), _hasBeenReleased(false){};
   
-  const unsigned char * getData() const{ return _data;}
-  unsigned int getDataLength() const{ return _dataLength;}
+  const unsigned char * getData() const{ if (!_hasBeenReleased) return _data; else return NULL;}
+  unsigned int getDataLength() const{ if (!_hasBeenReleased) return _dataLength; else return 0;}
+  
+  void release(){ delete [] _data; _hasBeenReleased = true;}
 };
 
 #endif

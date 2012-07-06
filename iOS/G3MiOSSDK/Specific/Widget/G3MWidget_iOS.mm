@@ -97,7 +97,7 @@
           printf("\nDocument Directory: %s;", [documentsDirectory UTF8String]);
           
           int test_download_code = 0;
-          DummyDownload *dummyDownload = new DummyDownload(factory, "/Users/vidalete/repository/IGO-GIT-Repository/g3m/iOS/G3MiOSSDK/DBStorage/test.db", "file");
+          DummyDownload *dummyDownload = new DummyDownload(factory, "test.db", "file");
           std::string root = "/Users/vidalete/Downloads/";
           std::string path1 = "Tic2Vtwo.pdf";
           std::string path2 = "Pantallazo.png";

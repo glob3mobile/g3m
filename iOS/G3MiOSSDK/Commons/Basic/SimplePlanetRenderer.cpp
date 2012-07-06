@@ -118,7 +118,7 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
     int numVertices = res * res * 4;
     colors = new float[numVertices];
     for(int i = 0; i < numVertices; ){
-      colors[i++] = ((float) i) / numVertices;
+      colors[i++] =  0.5 + sinf( 2.0 * M_PI * ((float) i) / numVertices ) / 2.0;
       colors[i++] = 0.0;
       colors[i++] = 1.0;
       colors[i++] = 1.0;
@@ -128,7 +128,7 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   //FLAT COLOR
   Color * flatColor = NULL;
   if (true){
-    flatColor = new Color( Color::fromRGB(1.0, 0.0, 0.0, 1.0) );
+    flatColor = new Color( Color::fromRGB(0.0, 0.0, 1.0, 0.2) );
   }
   
   float * normals = NULL;
@@ -142,7 +142,7 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
     }
   }
   
-  _mesh = new IndexedTriangleStripMesh(true, ver, ind, numIndexes, flatColor, colors, texID, texC, normals);
+  _mesh = new IndexedMesh(true, TriangleStrip, ver, ind, numIndexes, flatColor, colors, texID, texC, normals);
   
   return true;
 }

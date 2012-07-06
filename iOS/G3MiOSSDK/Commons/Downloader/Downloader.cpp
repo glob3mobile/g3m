@@ -23,11 +23,11 @@ void Downloader::request(const std::string& urlOfFile, int priority, IDownloadLi
   //First we check in storage
   if (_storage->contains(urlOfFile)){
     ByteBuffer bb = _storage->getByteBuffer(urlOfFile);
-    Response r("",urlOfFile , bb);
+    Response r(urlOfFile , bb);
     listener->onDownload(r);
     
     //WE MUST DELETE THE BYTE BUFFER WE HAVE CREATED
-    delete [] bb.getData();
+    bb.release();
     
     return;
   }

@@ -44,11 +44,13 @@
 		383BD3B71577EE5A0012AC53 /* Vector3D.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 383BD3AA1577EE5A0012AC53 /* Vector3D.hpp */; };
 		383BD3BA1577EE630012AC53 /* IFactory.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 383BD3B81577EE630012AC53 /* IFactory.hpp */; };
 		383BD3BB1577EE630012AC53 /* ILogger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 383BD3B91577EE630012AC53 /* ILogger.hpp */; };
+		38568FB615A5B93B00A8F379 /* IndexedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 38568FB415A5B93A00A8F379 /* IndexedMesh.cpp */; };
+		38568FB715A5B93B00A8F379 /* IndexedMesh.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 38568FB515A5B93A00A8F379 /* IndexedMesh.hpp */; };
 		38D786E31587ACA6003BBC75 /* TileRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 38D786E21587ACA5003BBC75 /* TileRenderer.cpp */; };
 		38D786E61587B446003BBC75 /* Tile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 38D786E51587B446003BBC75 /* Tile.cpp */; };
 		38D787091588F886003BBC75 /* SimplePlanetRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 38D787071588F886003BBC75 /* SimplePlanetRenderer.cpp */; };
 		38D7870A1588F886003BBC75 /* SimplePlanetRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 38D787081588F886003BBC75 /* SimplePlanetRenderer.hpp */; };
-		44EEB5DD1598C64C0086F243 /* SQLiteStorage_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 44EEB5DC1598C64C0086F243 /* SQLiteStorage_iOS.cpp */; };
+		44EEB5DD1598C64C0086F243 /* SQLiteStorage_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 44EEB5DC1598C64C0086F243 /* SQLiteStorage_iOS.mm */; };
 		CC14B639157D34C700793C92 /* GL2.mm in Sources */ = {isa = PBXBuildFile; fileRef = CC14B637157D34C700793C92 /* GL2.mm */; };
 		CC14B63A157D34C700793C92 /* GL2.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC14B638157D34C700793C92 /* GL2.hpp */; };
 		CC14B63D157D354C00793C92 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC14B63B157D354C00793C92 /* Camera.cpp */; };
@@ -128,6 +130,8 @@
 		383BD3AA1577EE5A0012AC53 /* Vector3D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Vector3D.hpp; path = Commons/Geometry/Vector3D.hpp; sourceTree = "<group>"; };
 		383BD3B81577EE630012AC53 /* IFactory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IFactory.hpp; path = Commons/Interfaces/IFactory.hpp; sourceTree = "<group>"; };
 		383BD3B91577EE630012AC53 /* ILogger.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = ILogger.hpp; path = Commons/Interfaces/ILogger.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		38568FB415A5B93A00A8F379 /* IndexedMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IndexedMesh.cpp; path = Commons/Basic/IndexedMesh.cpp; sourceTree = "<group>"; };
+		38568FB515A5B93A00A8F379 /* IndexedMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IndexedMesh.hpp; path = Commons/Basic/IndexedMesh.hpp; sourceTree = "<group>"; };
 		38589EBD159C91F700DCC302 /* Response.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Response.hpp; path = Commons/Downloader/Response.hpp; sourceTree = "<group>"; };
 		38D786E01587AC40003BBC75 /* TileRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TileRenderer.hpp; path = Commons/Basic/TileRenderer.hpp; sourceTree = "<group>"; };
 		38D786E21587ACA5003BBC75 /* TileRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileRenderer.cpp; path = Commons/Basic/TileRenderer.cpp; sourceTree = "<group>"; };
@@ -140,7 +144,7 @@
 		443BBC7915A43E6E00EAE280 /* Downloader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Downloader.hpp; path = ../../../aux/g3m/iOS/G3MiOSSDK/Commons/Downloader/Downloader.hpp; sourceTree = "<group>"; };
 		443BBC7A15A43E8700EAE280 /* IDownloadListener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IDownloadListener.hpp; path = ../../../aux/g3m/iOS/G3MiOSSDK/Commons/Downloader/IDownloadListener.hpp; sourceTree = "<group>"; };
 		443BBC8115A59AC200EAE280 /* DBStorage */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DBStorage; sourceTree = "<group>"; };
-		44EEB5DC1598C64C0086F243 /* SQLiteStorage_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SQLiteStorage_iOS.cpp; path = Specific/Derived/SQLiteStorage_iOS.cpp; sourceTree = "<group>"; };
+		44EEB5DC1598C64C0086F243 /* SQLiteStorage_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SQLiteStorage_iOS.mm; path = Specific/Derived/SQLiteStorage_iOS.mm; sourceTree = "<group>"; };
 		CC14B637157D34C700793C92 /* GL2.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = GL2.mm; path = Specific/GL/GL2.mm; sourceTree = "<group>"; };
 		CC14B638157D34C700793C92 /* GL2.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = GL2.hpp; path = Specific/GL/GL2.hpp; sourceTree = "<group>"; };
 		CC14B63B157D354C00793C92 /* Camera.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = Camera.cpp; path = Commons/Basic/Camera.cpp; sourceTree = "<group>"; };
@@ -240,7 +244,7 @@
 				D86DD8A31588945200E25609 /* Image_iOS.hpp */,
 				D86DD8A41588945200E25609 /* Image_iOS.mm */,
 				442DF0B6159898F80077EFB5 /* SQLiteStorage_iOS.hpp */,
-				44EEB5DC1598C64C0086F243 /* SQLiteStorage_iOS.cpp */,
+				44EEB5DC1598C64C0086F243 /* SQLiteStorage_iOS.mm */,
 			);
 			name = Derived;
 			sourceTree = "<group>";
@@ -270,6 +274,8 @@
 		383BD3891577EDF40012AC53 /* Basic */ = {
 			isa = PBXGroup;
 			children = (
+				38568FB415A5B93A00A8F379 /* IndexedMesh.cpp */,
+				38568FB515A5B93A00A8F379 /* IndexedMesh.hpp */,
 				CC14B63B157D354C00793C92 /* Camera.cpp */,
 				CC14B63C157D354C00793C92 /* Camera.hpp */,
 				CC14B63F157D356800793C92 /* CameraRenderer.cpp */,
@@ -473,6 +479,7 @@
 				382D4B94159DC26000FE9296 /* NullStorage.hpp in Headers */,
 				382D4B96159DC26B00FE9296 /* IStorage.hpp in Headers */,
 				382D4B99159DC27800FE9296 /* FileSystemStorage.hpp in Headers */,
+				38568FB715A5B93B00A8F379 /* IndexedMesh.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -561,13 +568,14 @@
 				D88C344C159C5A250044CED9 /* DummyDownload.mm in Sources */,
 				D88C3454159C5A410044CED9 /* DataDownload.mm in Sources */,
 				CF883BCB1594B9A500AEE39C /* Sector.cpp in Sources */,
-				44EEB5DD1598C64C0086F243 /* SQLiteStorage_iOS.cpp in Sources */,
+				44EEB5DD1598C64C0086F243 /* SQLiteStorage_iOS.mm in Sources */,
 				CF9AEBBC159B3AC8004C3558 /* Mesh.cpp in Sources */,
 				CF9AEBBF159B3BAF004C3558 /* TileTessellator.cpp in Sources */,
 				CF9AEBC2159B3FEB004C3558 /* EllipsoidalTileTessellator.cpp in Sources */,
 				CF7A78EC159B9BE300074422 /* MutableVector2D.cpp in Sources */,
 				382D4B9A159DC27800FE9296 /* FileSystemStorage.mm in Sources */,
 				382D4B9C159DE56F00FE9296 /* NetworkQueue.mm in Sources */,
+				38568FB615A5B93B00A8F379 /* IndexedMesh.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
