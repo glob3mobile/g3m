@@ -72,19 +72,19 @@ public:
         
         
         if (_fss->contains(filename.c_str())){
-            ByteBuffer bb = _fss->getByteBuffer(filename.c_str());
-            std::string resp = (char*)bb.getData();
-            printf("\nFileName: %s;\nData: %s;\nDataLength:%i;\n\n",(root+filename).c_str(), resp.c_str(), bb.getDataLength());
-            fssAux->save(("_(1)" + filename).c_str(), bb);
-            //WE MUST DELETE THE BYTE BUFFER WE HAVE CREATED
-            delete [] bb.getData();
+          ByteBuffer bb = _fss->getByteBuffer(filename.c_str());
+          std::string resp = (char*)bb.getData();
+          printf("\nFileName: %s;\nData: %s;\nDataLength:%i;\n\n",(root+filename).c_str(), resp.c_str(), bb.getDataLength());
+          fssAux->save(("_(1)" + filename).c_str(), bb);
+          //WE MUST DELETE THE BYTE BUFFER WE HAVE CREATED
+          bb.release();
         }else{  
-            ByteBuffer bb = fssAux->getByteBuffer(filename);
-            if(bb.getData() != NULL){
-                fssAux->save(("_withoutsaveinsqlite_" + filename).c_str(), bb);
-                _fss->save(filename, bb); 
-            }
-            delete [] bb.getData();
+          ByteBuffer bb = fssAux->getByteBuffer(filename);
+          if(bb.getData() != NULL){
+            fssAux->save(("_withoutsaveinsqlite_" + filename).c_str(), bb);
+            _fss->save(filename, bb); 
+          }
+          bb.release();
         }
 
         delete fssAux;

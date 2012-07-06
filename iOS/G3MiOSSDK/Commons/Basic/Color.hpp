@@ -30,7 +30,7 @@ private:
   
 public:
   
-  static Color fromRGB(const float red,
+  static Color fromRGBA(const float red,
                        const float green,
                        const float blue,
                        const float alpha) {
@@ -38,11 +38,11 @@ public:
   }
   
   static Color black() {
-    return Color::fromRGB(0, 0, 0, 1);
+    return Color::fromRGBA(0, 0, 0, 1);
   }
   
   static Color white() {
-    return Color::fromRGB(1, 1, 1, 1);
+    return Color::fromRGBA(1, 1, 1, 1);
   }
   
   

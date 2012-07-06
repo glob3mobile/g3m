@@ -9,6 +9,8 @@
 #ifndef G3MiOSSDK_ByteBuffer_hpp
 #define G3MiOSSDK_ByteBuffer_hpp
 
+//THIS CLASS RECEIVES A REFERENCE TO A BYTE ARRAY PREVIOUSLY ALLOCATED
+//TO DELETE THE ARRAY CALL release()
 class ByteBuffer{
   const unsigned char * const _data;
   const unsigned int _dataLength;
@@ -22,7 +24,12 @@ public:
   const unsigned char * getData() const{ if (!_hasBeenReleased) return _data; else return NULL;}
   unsigned int getDataLength() const{ if (!_hasBeenReleased) return _dataLength; else return 0;}
   
-  void release(){ delete [] _data; _hasBeenReleased = true;}
+  void release(){ 
+    if (!_hasBeenReleased){
+      delete [] _data; 
+      _hasBeenReleased = true;
+    }
+  }
 };
 
 #endif

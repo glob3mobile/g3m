@@ -92,7 +92,7 @@
       dummyDownload->run();
     }
       
-      if(true){
+      if(false){
           NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
           printf("\nDocument Directory: %s;", [documentsDirectory UTF8String]);
           
@@ -203,7 +203,7 @@
                                 planet, 
                                 comp,
                                 width, height,
-                                Color::fromRGB((float)0, (float)0.1, (float)0.2, (float)1),
+                                Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
                                 true);
     
     // rest of initialization
