@@ -48,9 +48,14 @@ void SQLiteStorage_iOS::save(std::string filename, const ByteBuffer& bb){
         sprintf(consulta, "INSERT INTO %s (filename, file) VALUES (@filename, @file);", _table.c_str());
         if (sqlite3_prepare_v2(db, consulta, -1, &ppStmt, NULL) == SQLITE_OK) {
             sqlite3_bind_text(ppStmt, sqlite3_bind_parameter_index(ppStmt, "@filename"), filename.c_str(), -1, SQLITE_STATIC);
+            
+            for(int i = 0; i < bb.getDataLength(); i++){
+                printf("%c\n",bb.getData()[i]);
+            }
+            
             sqlite3_bind_blob(ppStmt, sqlite3_bind_parameter_index(ppStmt, "@file"), bb.getData(), bb.getDataLength(), SQLITE_TRANSIENT);
-            std::string resp = (char*)bb.getData();
-            printf("\nFileName: %s;\nData: %s;\nDataLength:%i;\n\n",filename.c_str(), resp.c_str(), bb.getDataLength());
+            //std::string resp = (char*)bb.getData();
+            //printf("\nFileName: %s;\nData: %s;\nDataLength:%i;\n\n",filename.c_str(), resp.c_str(), bb.getDataLength());
             sqlite3_step(ppStmt);
             sqlite3_finalize(ppStmt);
         }
@@ -96,6 +101,9 @@ ByteBuffer& SQLiteStorage_iOS::findFileFromFileName(const std::string filename) 
     sqlite3_exec(db, "COMMIT", NULL, NULL, NULL);
     sqlite3_close(db);
     ByteBuffer bb(raw, rawLen);
+    for(int i = 0; i < bb.getDataLength(); i++){
+        printf("%c\n",bb.getData()[i]);
+    }
     return bb;
 }
 

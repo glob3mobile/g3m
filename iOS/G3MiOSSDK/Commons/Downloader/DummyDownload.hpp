@@ -54,10 +54,9 @@ public:
     _downloader->request(url, 30, this);
   }
     
-    void runSqlite(std::string path)
+    void runSqlite(std::string root, std::string filename)
     {
-        printf("\nFileName: %s;", path.c_str());
-        std::string root = "/Users/vidalete/Downloads/";
+        printf("\nFileName: %s;", (root+filename).c_str());
         NSString *documentsDirectory = [NSString stringWithCString:root.c_str() 
                                                     encoding:[NSString defaultCStringEncoding]];
 
@@ -65,17 +64,18 @@ public:
   
         
         
-        if (_fss->contains(path.c_str())){
-            ByteBuffer bb = _fss->getByteBuffer(path.c_str());
+        if (_fss->contains(filename.c_str())){
+            ByteBuffer bb = _fss->getByteBuffer(filename.c_str());
             std::string resp = (char*)bb.getData();
-            printf("\nFileName: %s;\nData: %s;\nDataLength:%i;\n\n",path.c_str(), resp.c_str(), bb.getDataLength());
-            fssAux->save(path.c_str(), bb);
+            printf("\nFileName: %s;\nData: %s;\nDataLength:%i;\n\n",(root+filename).c_str(), resp.c_str(), bb.getDataLength());
+            fssAux->save(("_(1)" + filename).c_str(), bb);
             //WE MUST DELETE THE BYTE BUFFER WE HAVE CREATED
             delete [] bb.getData();
-        }else{
-            ByteBuffer bb = fssAux->getByteBuffer(path);
+        }else{  
+            ByteBuffer bb = fssAux->getByteBuffer(filename);
             if(bb.getData() != NULL){
-             _fss->save(path,bb); 
+                fssAux->save(("_withoutsaveinsqlite_" + filename).c_str(), bb);
+                _fss->save(filename, bb); 
             }
             delete [] bb.getData();
         }

@@ -93,15 +93,24 @@
     }
       
       if(true){
+          NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+          printf("\nDocument Directory: %s;", [documentsDirectory UTF8String]);
+          
           int test_download_code = 0;
-          DummyDownload *dummyDownload = new DummyDownload(factory, "/Users/vidalete/repository/IGO-GIT-Repository/g3m/iOS/test.db", "file");
-          std::string path1 = "/Users/vidalete/Downloads/Tic2Vtwo.pdf";
-          std::string path2 = "/Users/vidalete/Downloads/Pantallazo.png";
+          DummyDownload *dummyDownload = new DummyDownload(factory, "/Users/vidalete/repository/IGO-GIT-Repository/g3m/iOS/G3MiOSSDK/DBStorage/test.db", "file");
+          std::string root = "/Users/vidalete/Downloads/";
+          std::string path1 = "Tic2Vtwo.pdf";
+          std::string path2 = "Pantallazo.png";
+          std::string path3 = "blobtest.png";
+          
+          
+         
           
           
           
-          
-          dummyDownload->runSqlite(path2);
+          //dummyDownload->runSqlite(root, path1);
+          //dummyDownload->runSqlite(root, path2);
+          dummyDownload->runSqlite(root, path3);
           //dummyDownload->runSqlite(path2);
           //dummyDownload->runSqlite(path1);
           //dummyDownload->runSqlite(path1);

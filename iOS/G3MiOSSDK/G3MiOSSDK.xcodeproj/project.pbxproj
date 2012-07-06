@@ -139,6 +139,7 @@
 		442DF0B6159898F80077EFB5 /* SQLiteStorage_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SQLiteStorage_iOS.hpp; path = Specific/Derived/SQLiteStorage_iOS.hpp; sourceTree = "<group>"; };
 		443BBC7915A43E6E00EAE280 /* Downloader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Downloader.hpp; path = ../../../aux/g3m/iOS/G3MiOSSDK/Commons/Downloader/Downloader.hpp; sourceTree = "<group>"; };
 		443BBC7A15A43E8700EAE280 /* IDownloadListener.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IDownloadListener.hpp; path = ../../../aux/g3m/iOS/G3MiOSSDK/Commons/Downloader/IDownloadListener.hpp; sourceTree = "<group>"; };
+		443BBC8115A59AC200EAE280 /* DBStorage */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DBStorage; sourceTree = "<group>"; };
 		44EEB5DC1598C64C0086F243 /* SQLiteStorage_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SQLiteStorage_iOS.cpp; path = Specific/Derived/SQLiteStorage_iOS.cpp; sourceTree = "<group>"; };
 		CC14B637157D34C700793C92 /* GL2.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = GL2.mm; path = Specific/GL/GL2.mm; sourceTree = "<group>"; };
 		CC14B638157D34C700793C92 /* GL2.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = GL2.hpp; path = Specific/GL/GL2.hpp; sourceTree = "<group>"; };
@@ -385,6 +386,7 @@
 		D8EEF3AA1577924D003FEB5E = {
 			isa = PBXGroup;
 			children = (
+				443BBC8115A59AC200EAE280 /* DBStorage */,
 				383BD3881577EDE30012AC53 /* Commons */,
 				383BD3771577EDA20012AC53 /* Specific */,
 				D8EEF3BA1577924D003FEB5E /* G3MiOSSDK */,
