@@ -94,26 +94,60 @@
       
       if(false){
           NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-          printf("\nDocument Directory: %s;", [documentsDirectory UTF8String]);
-          
+          NSLog(@"\nDocument Directory: %s;", [documentsDirectory UTF8String]);
           int test_download_code = 0;
           DummyDownload *dummyDownload = new DummyDownload(factory, "test.db", "file");
-          std::string root = "/Users/vidalete/Downloads/";
-          std::string path1 = "Tic2Vtwo.pdf";
-          std::string path2 = "Pantallazo.png";
-          std::string path3 = "blobtest.png";
           
+          std::string directory = "";
+          std::string file1 = "";
+          std::string file2 = "";
+          std::string file3 = "";
           
-         
-          
-          
-          
-          //dummyDownload->runSqlite(root, path1);
-          //dummyDownload->runSqlite(root, path2);
-          dummyDownload->runSqlite(root, path3);
-          //dummyDownload->runSqlite(path2);
-          //dummyDownload->runSqlite(path1);
-          //dummyDownload->runSqlite(path1);
+          if(false){
+              directory = "/Users/vidalete/Downloads/";
+              file1 = "Tic2Vtwo.pdf";
+              file2 = "Pantallazo.png";
+              file3 = "blobtest.png";
+          }else{
+              directory = [documentsDirectory UTF8String];
+              file1 = "mark.png";
+              file2 = "world.jpg";
+              file3 = "plane.png";
+              
+              const NSFileManager *fileManager = [NSFileManager defaultManager];
+              NSError *error;
+              
+              NSString *writableDBPathNS = [documentsDirectory stringByAppendingPathComponent:[[NSString alloc] initWithCString:file1.c_str() encoding:NSUTF8StringEncoding]];
+              if (![fileManager fileExistsAtPath:writableDBPathNS]){
+                  // The writable database does not exist, so copy the default to the appropriate location.
+                  NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:[[NSString alloc] initWithCString:file1.c_str() encoding:NSUTF8StringEncoding]];
+                  if (![fileManager copyItemAtPath:defaultDBPath toPath:writableDBPathNS error:&error]) {
+                      NSLog(@"Failed to create writable file with message '%@'.", [error localizedDescription]);
+                  } 
+              }
+              
+              writableDBPathNS = [documentsDirectory stringByAppendingPathComponent:[[NSString alloc] initWithCString:file2.c_str() encoding:NSUTF8StringEncoding]];
+              if (![fileManager fileExistsAtPath:writableDBPathNS]){
+                  // The writable database does not exist, so copy the default to the appropriate location.
+                  NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:[[NSString alloc] initWithCString:file2.c_str() encoding:NSUTF8StringEncoding]];
+                  if (![fileManager copyItemAtPath:defaultDBPath toPath:writableDBPathNS error:&error]) {
+                      NSLog(@"Failed to create writable file with message '%@'.", [error localizedDescription]);
+                  } 
+              }
+              
+              writableDBPathNS = [documentsDirectory stringByAppendingPathComponent:[[NSString alloc] initWithCString:file3.c_str() encoding:NSUTF8StringEncoding]];
+              if (![fileManager fileExistsAtPath:writableDBPathNS]){
+                  // The writable database does not exist, so copy the default to the appropriate location.
+                  NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:[[NSString alloc] initWithCString:file3.c_str() encoding:NSUTF8StringEncoding]];
+                  if (![fileManager copyItemAtPath:defaultDBPath toPath:writableDBPathNS error:&error]) {
+                      NSLog(@"Failed to create writable file with message '%@'.", [error localizedDescription]);
+                  } 
+              }
+              
+          }
+          dummyDownload->runSqlite(directory, file1);
+          dummyDownload->runSqlite(directory, file2);
+          dummyDownload->runSqlite(directory, file3);
       }
     
     // all the creation of renderers must be move to common source code, instead of specific
