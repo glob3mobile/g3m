@@ -83,8 +83,6 @@
 		D88C3453159C5A410044CED9 /* DataDownload.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D88C344F159C5A410044CED9 /* DataDownload.hpp */; };
 		D88C3454159C5A410044CED9 /* DataDownload.mm in Sources */ = {isa = PBXBuildFile; fileRef = D88C3450159C5A410044CED9 /* DataDownload.mm */; };
 		D88C3455159C5A410044CED9 /* NetworkQueue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D88C3451159C5A410044CED9 /* NetworkQueue.hpp */; };
-		D8AD76141599B68400A7D39A /* IndexedTriangleStripMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8AD76121599B68400A7D39A /* IndexedTriangleStripMesh.cpp */; };
-		D8AD76151599B68400A7D39A /* IndexedTriangleStripMesh.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8AD76131599B68400A7D39A /* IndexedTriangleStripMesh.hpp */; };
 		D8AD76281599B89000A7D39A /* Downloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8AD76261599B89000A7D39A /* Downloader.cpp */; };
 		D8CD6F7915A6FFAC00279BE7 /* Downloader.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8CD6F7715A6FFAC00279BE7 /* Downloader.hpp */; };
 		D8CD6F7A15A6FFAC00279BE7 /* IDownloadListener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8CD6F7815A6FFAC00279BE7 /* IDownloadListener.hpp */; };
@@ -191,8 +189,6 @@
 		D88C344F159C5A410044CED9 /* DataDownload.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DataDownload.hpp; path = Specific/Derived/DataDownload.hpp; sourceTree = "<group>"; };
 		D88C3450159C5A410044CED9 /* DataDownload.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = DataDownload.mm; path = Specific/Derived/DataDownload.mm; sourceTree = "<group>"; };
 		D88C3451159C5A410044CED9 /* NetworkQueue.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NetworkQueue.hpp; path = Specific/Derived/NetworkQueue.hpp; sourceTree = "<group>"; };
-		D8AD76121599B68400A7D39A /* IndexedTriangleStripMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IndexedTriangleStripMesh.cpp; path = Commons/Basic/IndexedTriangleStripMesh.cpp; sourceTree = "<group>"; };
-		D8AD76131599B68400A7D39A /* IndexedTriangleStripMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IndexedTriangleStripMesh.hpp; path = Commons/Basic/IndexedTriangleStripMesh.hpp; sourceTree = "<group>"; };
 		D8AD76261599B89000A7D39A /* Downloader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Downloader.cpp; path = Commons/Downloader/Downloader.cpp; sourceTree = "<group>"; };
 		D8CD6F7715A6FFAC00279BE7 /* Downloader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Downloader.hpp; path = Commons/Downloader/Downloader.hpp; sourceTree = "<group>"; };
 		D8CD6F7815A6FFAC00279BE7 /* IDownloadListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IDownloadListener.hpp; path = Commons/Downloader/IDownloadListener.hpp; sourceTree = "<group>"; };
@@ -297,8 +293,6 @@
 				383BD3911577EE500012AC53 /* G3MWidget.hpp */,
 				CF883B891592471600AEE39C /* GLErrorRenderer.cpp */,
 				CF883B881592470900AEE39C /* GLErrorRenderer.hpp */,
-				D8AD76121599B68400A7D39A /* IndexedTriangleStripMesh.cpp */,
-				D8AD76131599B68400A7D39A /* IndexedTriangleStripMesh.hpp */,
 				CF0C3969157F988100646A2F /* Mark.cpp */,
 				CF0C3967157F987200646A2F /* Mark.hpp */,
 				CFA3E7C8157E537B00DAABD6 /* MarksRenderer.cpp */,
@@ -470,7 +464,6 @@
 				D84D5A32157E0EAA000C5E35 /* MutableVector3D.hpp in Headers */,
 				D86DD8A51588945200E25609 /* Image_iOS.hpp in Headers */,
 				38D7870A1588F886003BBC75 /* SimplePlanetRenderer.hpp in Headers */,
-				D8AD76151599B68400A7D39A /* IndexedTriangleStripMesh.hpp in Headers */,
 				D8D3BC8A159B11D000738E37 /* INetwork.hpp in Headers */,
 				D8D3BC8E159B11DA00738E37 /* Network_iOS.hpp in Headers */,
 				D88C344D159C5A250044CED9 /* DummyDownload.hpp in Headers */,
@@ -566,7 +559,6 @@
 				CF883B821590984900AEE39C /* TexturesHandler.cpp in Sources */,
 				CF883B871591FEBF00AEE39C /* SceneGraphRenderer.cpp in Sources */,
 				CF883B8A1592471600AEE39C /* GLErrorRenderer.cpp in Sources */,
-				D8AD76141599B68400A7D39A /* IndexedTriangleStripMesh.cpp in Sources */,
 				D8AD76281599B89000A7D39A /* Downloader.cpp in Sources */,
 				D8D3BC8D159B11DA00738E37 /* Network_iOS.mm in Sources */,
 				D88C344C159C5A250044CED9 /* DummyDownload.mm in Sources */,

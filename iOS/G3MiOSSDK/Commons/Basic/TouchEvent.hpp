@@ -36,27 +36,38 @@ enum TouchEventType {
   Down,
   Up,
   Move,
-  LongPress
+  LongPress,
+  Scroll
 };
 
 
 class TouchEvent {
 private:
+  
+  const bool _shiftPressed;
+  const bool _ctrlPressed;
+  const double _wheelDelta;
+  
   const TouchEventType              _eventType;
   const std::vector<const Touch*> _touchs;
   
   TouchEvent(const TouchEventType& type,
-             const std::vector<const Touch*> touchs): _eventType(type), _touchs(touchs) { 
+             const std::vector<const Touch*> touchs, bool shift, bool ctrl, double wheelDelta): _eventType(type), 
+            _touchs(touchs), _shiftPressed(shift), _ctrlPressed(ctrl), _wheelDelta(wheelDelta) { 
   }
   
 public:
-  TouchEvent(const TouchEvent& other): _eventType(other._eventType), _touchs(other._touchs) {
-    
-  }
+  TouchEvent(const TouchEvent& other): _eventType(other._eventType), _touchs(other._touchs), 
+  _shiftPressed(other._shiftPressed), _ctrlPressed(other._ctrlPressed), _wheelDelta(other._wheelDelta){}
   
   static TouchEvent create(const TouchEventType& type,
                            const std::vector<const Touch*> Touchs) {
-    return TouchEvent(type, Touchs);
+    return TouchEvent(type, Touchs, false, false, 0.0);
+  }
+  
+  static TouchEvent create(const TouchEventType& type,
+                           const std::vector<const Touch*> Touchs, bool shift, bool ctrl, double wheelDelta) {
+    return TouchEvent(type, Touchs, shift, ctrl, wheelDelta);
   }
   
   static TouchEvent create(const TouchEventType& type,
@@ -66,6 +77,13 @@ public:
     const std::vector<const Touch*> touchs(1, touch);
     
     return create(type, touchs);
+  }
+  
+  static TouchEvent create(const TouchEventType& type,
+                           const Touch* touch, bool shift, bool ctrl, double wheelDelta) {
+    const std::vector<const Touch*> touchs(1, touch);
+    
+    return create(type, touchs, shift, ctrl, wheelDelta);
   }
   
   TouchEventType getType() const {
