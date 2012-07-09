@@ -128,7 +128,7 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   //FLAT COLOR
   Color * flatColor = NULL;
   if (true){
-    flatColor = new Color( Color::fromRGB(0.0, 0.0, 1.0, 0.2) );
+    flatColor = new Color( Color::fromRGBA(0.0, 0.2, 0.0, 1.0) );
   }
   
   float * normals = NULL;
