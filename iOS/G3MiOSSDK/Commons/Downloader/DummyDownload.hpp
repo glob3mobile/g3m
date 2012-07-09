@@ -63,14 +63,11 @@ public:
     
     void runSqlite(std::string root, std::string filename)
     {
-        printf("\nFileName: %s;", (root+filename).c_str());
+        printf("\nFileName: %s;", filename.c_str());
         NSString *documentsDirectory = [NSString stringWithCString:root.c_str() 
                                                     encoding:[NSString defaultCStringEncoding]];
 
         FileSystemStorage * fssAux = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
-  
-        
-        
         if (_fss->contains(filename.c_str())){
             ByteBuffer bb = _fss->getByteBuffer(filename.c_str());
             std::string resp = (char*)bb.getData();

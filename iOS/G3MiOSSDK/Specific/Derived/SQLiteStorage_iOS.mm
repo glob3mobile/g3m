@@ -11,17 +11,12 @@
 #include <sqlite3.h>
 
 
-
-/*IFile* SQLiteStorage_iOS::findFileFromFileName(const std::string filename) const{
-    this->testConnection();
-    this->openConexion();
-    return NULL;}
-*/
 SQLiteStorage_iOS::SQLiteStorage_iOS(const std::string databaseName, const std::string table)
 {
     _databaseName = databaseName;
     _table = table;
     SQLiteStorage_iOS::createEditableCopyOfDatabaseIfNeeded();
+    SQLiteStorage_iOS::testConnection();
     SQLiteStorage_iOS::checkDataBaseConnection();
     SQLiteStorage_iOS::checkTableExist();
     
@@ -29,39 +24,56 @@ SQLiteStorage_iOS::SQLiteStorage_iOS(const std::string databaseName, const std::
 
 bool SQLiteStorage_iOS::contains(std::string filename)
 {   
-    ByteBuffer bb = SQLiteStorage_iOS::findFileFromFileName(filename);
-    if(bb.getDataLength() > 0){
-        printf("\nData: %s and DataLength:%i \n\n",bb.getData(),bb.getDataLength());
-        return true;
+    bool contain = false;
+    sqlite3 *db;
+    if(SQLITE_OK != sqlite3_open(writableDBPath, &db)){
+        NSLog(@"ERROR Opening Database For contains: %s.",sqlite3_errmsg(db));
+    }else{
+        sqlite3_stmt *ppStmt;
+        char consulta[128];
+        sprintf(consulta, "SELECT COUNT(*) FROM %s WHERE filename=@filename;", _table.c_str());
+        if( sqlite3_prepare_v2(db, consulta, -1, &ppStmt, NULL)!=SQLITE_OK ){
+            NSLog(@"Error: %s ", sqlite3_errmsg(db));
+        } else {
+            sqlite3_bind_text(ppStmt, sqlite3_bind_parameter_index(ppStmt, "@filename"), filename.c_str(), -1, SQLITE_STATIC);
+            if(SQLITE_ROW == sqlite3_step(ppStmt)){
+                int count = sqlite3_column_int(ppStmt, 0);
+                if(count > 0){
+                    contain = true;
+                }else{
+                    contain = false;
+                }
+            }
+        }
+        sqlite3_finalize(ppStmt);
+        sqlite3_close(db);
     }
-    return false;
+    return contain;
 }
 
 void SQLiteStorage_iOS::save(std::string filename, const ByteBuffer& bb){
     sqlite3 *db;
     if(SQLITE_OK != sqlite3_open(writableDBPath, &db)){
-        printf("Open Database For save KO\n");
+        NSLog(@"ERROR Opening Database For save: %s.",sqlite3_errmsg(db));
     }else{
-        printf("Open Database For save OK\n");
         sqlite3_stmt *ppStmt;
         char consulta[128];
-        
+        sqlite3_exec(db, "BEGIN", 0, 0, 0);
         sprintf(consulta, "INSERT INTO %s (filename, file) VALUES (@filename, @file);", _table.c_str());
         if (sqlite3_prepare_v2(db, consulta, -1, &ppStmt, NULL) == SQLITE_OK) {
-            sqlite3_bind_text(ppStmt, sqlite3_bind_parameter_index(ppStmt, "@filename"), filename.c_str(), -1, SQLITE_STATIC);
-            
-            for(int i = 0; i < bb.getDataLength(); i++){
-                printf("%c\n",bb.getData()[i]);
-            }
-            
+            sqlite3_bind_text(ppStmt, sqlite3_bind_parameter_index(ppStmt, "@filename"), filename.c_str(), -1, SQLITE_TRANSIENT);
             sqlite3_bind_blob(ppStmt, sqlite3_bind_parameter_index(ppStmt, "@file"), bb.getData(), bb.getDataLength(), SQLITE_TRANSIENT);
-            //std::string resp = (char*)bb.getData();
-            //printf("\nFileName: %s;\nData: %s;\nDataLength:%i;\n\n",filename.c_str(), resp.c_str(), bb.getDataLength());
-            sqlite3_step(ppStmt);
-            sqlite3_finalize(ppStmt);
+            //sqlite3_step(ppStmt);
+            if(SQLITE_DONE != sqlite3_step(ppStmt)) {
+                NSLog(@"Error: %s ", sqlite3_errmsg(db));
+            }
+
+            if(SQLITE_OK != sqlite3_finalize(ppStmt)){
+                NSLog(@"Error in finalize: %s ", sqlite3_errmsg(db));
+            }
         }
+        sqlite3_exec(db, "END", 0, 0, 0);
     }
-    sqlite3_exec(db, "COMMIT", NULL, NULL, NULL);
     sqlite3_close(db);
 }
 
@@ -73,40 +85,59 @@ ByteBuffer SQLiteStorage_iOS::getByteBuffer(std::string filename)
 
 
 ByteBuffer SQLiteStorage_iOS::findFileFromFileName(const std::string filename) {
-    unsigned char *raw = NULL;
+    unsigned char *raw = NULL, *myRaw = NULL;
     int rawLen = 0;
     sqlite3 *db;
     if(SQLITE_OK != sqlite3_open(writableDBPath, &db)){
-        printf("Open Database for findFileFromFileName KO\n");
+        NSLog(@"ERROR Opening Database For findFileFromFileName: %s.",sqlite3_errmsg(db));
     }else{
-        printf("Open Database for findFileFromFileName OK\n");
         sqlite3_stmt *ppStmt;
         char consulta[128];
         
         sprintf(consulta, "SELECT rowId,filename,file FROM %s WHERE filename=@filename;", _table.c_str());
         if( sqlite3_prepare_v2(db, consulta, -1, &ppStmt, NULL)!=SQLITE_OK ){
-            printf ("\Error: %s ", sqlite3_errmsg(db));
+            NSLog(@"ERROR sqlite3_prepare_v2 For findFileFromFileName: %s.",sqlite3_errmsg(db));
         } else {
             sqlite3_bind_text(ppStmt, sqlite3_bind_parameter_index(ppStmt, "@filename"), filename.c_str(), -1, SQLITE_STATIC);
             while(SQLITE_ROW == sqlite3_step(ppStmt)) {
-                printf ("\nID: %i ", sqlite3_column_int(ppStmt, 0));
-                printf ("\nFileName: %s ", sqlite3_column_text(ppStmt, 1));
-                printf ("\nFile (null):  ");
                 raw = (unsigned char *)sqlite3_column_blob(ppStmt, 2);
                 rawLen = sqlite3_column_bytes(ppStmt, 2);
+                myRaw = new unsigned char[rawLen];
+                for (int i = 0; i < rawLen; i++) {
+                    myRaw[i] = raw[i];
+                }
             }
             sqlite3_finalize(ppStmt);
         }
-
     }
     sqlite3_exec(db, "COMMIT", NULL, NULL, NULL);
     sqlite3_close(db);
-    ByteBuffer bb(raw, rawLen);
-    for(int i = 0; i < bb.getDataLength(); i++){
-        printf("%c\n",bb.getData()[i]);
-    }
+    ByteBuffer bb(myRaw, rawLen);
     return bb;
 }
+
+void SQLiteStorage_iOS::createEditableCopyOfDatabaseIfNeeded() {
+    // First, test for existence.
+    const NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *database = [[NSString alloc] initWithCString:_databaseName.c_str() encoding:NSUTF8StringEncoding];
+    NSError *error;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *writableDBPathNS = [documentsDirectory stringByAppendingPathComponent:database];
+    writableDBPath = [writableDBPathNS cStringUsingEncoding:NSUTF8StringEncoding];
+    NSLog(@"writableDBPath: %s ", writableDBPath);
+    if (![fileManager fileExistsAtPath:writableDBPathNS]){
+        NSLog(@"Writable database file NOT exist");
+        // The writable database does not exist, so copy the default to the appropriate location.
+        NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:database];
+        if (![fileManager copyItemAtPath:defaultDBPath toPath:writableDBPathNS error:&error]) {
+            NSLog(@"Failed to create writable database file with message '%@'.", [error localizedDescription]);
+        }
+    }else{
+        NSLog(@"Writable database file exist");
+    }
+}
+
 
 bool SQLiteStorage_iOS::checkDataBaseConnection() const{
     sqlite3 *db;
@@ -120,28 +151,6 @@ bool SQLiteStorage_iOS::checkDataBaseConnection() const{
     sqlite3_close(db);
     return ok;
 }
-
-
-void SQLiteStorage_iOS::createEditableCopyOfDatabaseIfNeeded() {
-    // First, test for existence.
-    const NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSString *database = [[NSString alloc] initWithCString:_databaseName.c_str() encoding:NSUTF8StringEncoding];
-    NSError *error;
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *writableDBPathNS = [documentsDirectory stringByAppendingPathComponent:database];
-    writableDBPath = [writableDBPathNS cStringUsingEncoding:NSUTF8StringEncoding];
-    if ([fileManager fileExistsAtPath:writableDBPathNS]){
-        NSLog(@"Exist writable database file");
-        return;
-    }
-    // The writable database does not exist, so copy the default to the appropriate location.
-    NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:database];
-    if (![fileManager copyItemAtPath:defaultDBPath toPath:writableDBPathNS error:&error]) {
-        NSLog(@"Failed to create writable database file with message '%@'.", [error localizedDescription]);
-    }
-}
-
 
 bool SQLiteStorage_iOS::checkTableExist() const{
     sqlite3 *db;
@@ -166,59 +175,53 @@ bool SQLiteStorage_iOS::checkTableExist() const{
 }
 
 void SQLiteStorage_iOS::testConnection() const{
-    int rc;
     sqlite3 *db;
-    
-    rc = sqlite3_open(writableDBPath, &db);
-    if(SQLITE_OK != rc){
+    if(SQLITE_OK != sqlite3_open(writableDBPath, &db)){
         printf("Connection KO\n");
     }else{
 
-    const char *pSQL[6];
+        const char *pSQL[6];
     
-    // Create a new myTable in database
-    pSQL[0] = "create table myTable (FirstName varchar(30), LastName varchar(30), Age smallint)";
+        // Create a new myTable in database
+        pSQL[0] = "create table myTable (FirstName varchar(30), LastName varchar(30), Age smallint)";
     
-    // Insert first data item into myTable
-    pSQL[1] = "insert into myTable (FirstName, LastName, Age) values ('Woody', 'Alan', 45)";
+        // Insert first data item into myTable
+        pSQL[1] = "insert into myTable (FirstName, LastName, Age) values ('Woody', 'Alan', 45)";
     
-    // Insert second data item into myTable
-    pSQL[2] = "insert into myTable (FirstName, LastName, Age) values ('Micheal', 'Bay', 38)";
+        // Insert second data item into myTable
+        pSQL[2] = "insert into myTable (FirstName, LastName, Age) values ('Micheal', 'Bay', 38)";
     
-    // Select all data in myTable
-    pSQL[3] = "select * from myTable";
+        // Select all data in myTable
+        pSQL[3] = "select * from myTable";
     
-    // Remove all data in myTable
-    pSQL[4] = "delete from myTable";
+        // Remove all data in myTable
+        pSQL[4] = "delete from myTable";
     
-    // Drop the table from database
-    pSQL[5] = "drop table myTable";
+        // Drop the table from database
+        pSQL[5] = "drop table myTable";
     
-    // execute all the sql statements
-    for(int i = 0; i < 6; i++)
-    {
-        rc = sqlite3_exec(db, pSQL[i], 0, 0, 0);
-        if( rc!=SQLITE_OK ){
-            printf ("\Error: %s ", sqlite3_errmsg(db));
-            break; // break the loop if error occur
-        }else if(i == 3){
-            sqlite3_stmt *ppStmt;
-            char consulta[64];
-            strcpy(consulta, "select rowId,* from myTable;");
-            rc = sqlite3_prepare_v2(db, consulta, -1, &ppStmt, NULL);
-            if( rc!=SQLITE_OK ){
+        // execute all the sql statements
+        for(int i = 0; i < 6; i++){
+            if ( sqlite3_exec(db, pSQL[i], 0, 0, 0)!=SQLITE_OK ){
                 printf ("\Error: %s ", sqlite3_errmsg(db));
-            } else {
-                while(SQLITE_ROW == sqlite3_step(ppStmt)) {
-                    printf ("\nID: %i ", sqlite3_column_int(ppStmt, 0));
-                    printf ("\nFirstName: %s ", sqlite3_column_text(ppStmt, 1));
-                    printf ("\nLastName: %s ", sqlite3_column_text(ppStmt, 2));
-                    printf ("\nAge: %i ", sqlite3_column_int(ppStmt, 3));
+                break; // break the loop if error occur
+            } else if (i == 3){
+                sqlite3_stmt *ppStmt;
+                char consulta[64];
+                strcpy(consulta, "select rowId,* from myTable;");
+                if( sqlite3_prepare_v2(db, consulta, -1, &ppStmt, NULL)!=SQLITE_OK ){
+                    printf ("\Error: %s ", sqlite3_errmsg(db));
+                } else {
+                    while(SQLITE_ROW == sqlite3_step(ppStmt)) {
+                        printf ("\nID: %i ", sqlite3_column_int(ppStmt, 0));
+                        printf ("\nFirstName: %s ", sqlite3_column_text(ppStmt, 1));
+                        printf ("\nLastName: %s ", sqlite3_column_text(ppStmt, 2));
+                        printf ("\nAge: %i ", sqlite3_column_int(ppStmt, 3));
+                    }
                 }
                 sqlite3_finalize(ppStmt);
             }
-
         }
-    }
+        sqlite3_close(db);
     }
 }
