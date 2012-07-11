@@ -36,11 +36,11 @@ public:
   
   void color(float r, float g, float b, float a) ;
   
-  void enableVertexColor(const float* const colors, float intensity);
+  void enableVertexColor(float const colors[], float intensity);
   
   void disableVertexColor();
   
-  void enableVertexNormal(const float* const normals);
+  void enableVertexNormal(float const normals[]);
   
   void disableVertexNormal();
   

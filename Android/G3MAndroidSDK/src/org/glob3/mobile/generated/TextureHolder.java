@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class TextureKey
+public class TextureHolder
 {
   public final String _textureId;
   public final int _textureWidth;
@@ -8,7 +8,7 @@ public class TextureKey
 
   public int _referenceCounter;
 
-  public TextureKey(String textureId, int textureWidth, int textureHeight)
+  public TextureHolder(String textureId, int textureWidth, int textureHeight)
   {
 	  _textureId = textureId;
 	  _textureWidth = textureWidth;
@@ -36,7 +36,7 @@ public class TextureKey
 	return _referenceCounter > 0;
   }
 
-  public final boolean equalsTo(TextureKey other)
+  public final boolean equalsTo(TextureHolder other)
   {
 	if (_textureWidth != other._textureWidth)
 	{

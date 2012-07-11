@@ -9,10 +9,11 @@
 #ifndef G3MiOSSDK_NullStorage_hpp
 #define G3MiOSSDK_NullStorage_hpp
 
-#include "Storage.hpp"
+#include "IStorage.hpp"
 
-class NullStorage: public Storage
+class NullStorage: public IStorage
 {
+public:
   bool contains(std::string url){ return false;}
   
   void save(std::string url, const ByteBuffer& bb){};

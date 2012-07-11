@@ -32,11 +32,16 @@ public class G3MWidget
 
   public void dispose()
   {
-	_renderer = null;
-	_planet = null;
-  
 	_factory = null;
+	_logger = null;
 	_gl = null;
+	_planet = null;
+	_renderer = null;
+	if (_camera != null)
+		_camera.dispose();
+	if (_texturesHandler != null)
+		_texturesHandler.dispose();
+	_timer = null;
   }
 
   public final int render()
@@ -48,7 +53,6 @@ public class G3MWidget
   
 	// Clear the scene
 	_gl.clearScreen(_backgroundColor);
-  
   
 	int timeToRedraw = _renderer.render(rc);
   
@@ -83,10 +87,10 @@ public class G3MWidget
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: IGL * getGL() const
+//ORIGINAL LINE: IGL* getGL() const
   public final IGL getGL()
   {
-	  return _gl;
+	return _gl;
   }
 
 
@@ -104,6 +108,12 @@ public class G3MWidget
   private int _totalRenderTime;
   private final boolean _logFPS;
 
+  private void initializeGL()
+  {
+	_gl.depth(true);
+	_gl.cullFace(true, CullFace.BACK);
+  }
+
   private G3MWidget(IFactory factory, ILogger logger, IGL gl, TexturesHandler texturesHandler, Planet planet, Renderer renderer, int width, int height, Color backgroundColor, boolean logFPS)
   {
 	  _factory = factory;
@@ -118,7 +128,10 @@ public class G3MWidget
 	  _renderCounter = 0;
 	  _totalRenderTime = 0;
 	  _logFPS = logFPS;
+	initializeGL();
+
 	InitializationContext ic = new InitializationContext(_factory, _logger, _planet);
 	_renderer.initialize(ic);
   }
+
 }

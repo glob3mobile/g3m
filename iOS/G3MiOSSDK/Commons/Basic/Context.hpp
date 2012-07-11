@@ -13,7 +13,6 @@
 #include "IGL.hpp"
 #include "Planet.hpp"
 #include "TexturesHandler.hpp"
-#include "SQLiteStorage_iOS.hpp"
 
 #define MAX_TIME_TO_RENDER 1000
 

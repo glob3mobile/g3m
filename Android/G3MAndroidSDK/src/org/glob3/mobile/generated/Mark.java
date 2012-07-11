@@ -83,7 +83,7 @@ public class Mark
 		}
   
   //    rc->getLogger()->logInfo(" Visible   << %f %f", minDist, distanceToCamera);
-		gl.drawBillBoard(_textureId, (float) markPosition.x(), (float) markPosition.y(), (float) markPosition.z(), camera.getViewPortRatio());
+		gl.drawBillBoard(_textureId, markPosition, camera.getViewPortRatio());
 	  }
   
 	}

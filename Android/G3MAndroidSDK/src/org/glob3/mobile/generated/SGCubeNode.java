@@ -1,38 +1,23 @@
 package org.glob3.mobile.generated; 
-//
-//  DummyRenderer.cpp
-//  Glob3 Mobile
-//
-//  Created by Agustín Trujillo Pino on 02/05/11.
-//  Copyright 2011 Universidad de Las Palmas. All rights reserved.
-//
-
-//
-//  DummyRenderer.hpp
-//  Glob3 Mobile
-//
-//  Created by Agustín Trujillo Pino on 02/05/11.
-//  Copyright 2011 Universidad de Las Palmas. All rights reserved.
-//
-
-
-
-public class DummyRenderer extends Renderer
+public class SGCubeNode extends SGGLeafNode
 {
+  private boolean _initializedGL;
 
   private int _numIndices;
-  private double _halfSize;
 
   private int[] _index;
   private float[] _vertices;
+  private float _halfSize;
 
-  public void dispose()
+
+  public SGCubeNode()
   {
-	_index = null;
-	_vertices = null;
+	  _initializedGL = false;
+	  _halfSize = 0.5F;
+
   }
 
-  public final void initialize(InitializationContext ic)
+  public final void initialize(RenderContext rc)
   {
 	int res = 12;
 	_vertices = new float[res * res * 3];
@@ -41,10 +26,10 @@ public class DummyRenderer extends Renderer
   
 	// create vertices
   
-	if (ic != null && ic.getPlanet() != null)
-	  _halfSize = ic.getPlanet().getRadii().x() / 2.0;
-	else
-	  _halfSize = 7e6;
+  //  if (ic != NULL && ic->getPlanet() != NULL)
+  //    _halfSize = ic->getPlanet()->getRadii().x() / 2.0;
+  //  else
+  //  _halfSize = 7e6;
   
 	int n = 0;
 	for (int j = 0; j < res; j++)
@@ -71,11 +56,42 @@ public class DummyRenderer extends Renderer
 	}
   }
 
-  public final int render(RenderContext rc)
+  public int rawRender(RenderContext rc)
   {
-  
-	// obtaing gl object reference
 	IGL gl = rc.getGL();
+  
+	if (!_initializedGL)
+	{
+	  initialize(rc);
+	  _initializedGL = true;
+	}
+  
+  
+  
+  //  gl->depthTest(true);
+  //
+  //  gl->enableVertices();
+  //
+  //  // insert pointers
+  //  gl->disableTextures();
+  //  gl->vertexPointer(3, 0, _vertices);
+  //
+  //  {
+  //    // draw a red square
+  //    gl->color((float) 1, (float) 0, (float) 0, 1);
+  ////    gl->pushMatrix();
+  ////    MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(Vector3D(_halfSize,0,0));
+  ////    gl->multMatrixf(T);
+  //    gl->drawTriangleStrip(_numIndices, _index);
+  ////    gl->popMatrix();
+  //  }
+  //
+  //
+  //  gl->depthTest(false);
+  //
+  //  int __complete_cube;
+  
+  
   
 	gl.enableVertices();
   
@@ -87,7 +103,6 @@ public class DummyRenderer extends Renderer
 	  // draw a red square
 	  gl.color((float) 1, (float) 0, (float) 0, 1);
 	  gl.pushMatrix();
-	  //MutableMatrix44D T = GLU::translationMatrix(Vector3D(halfSize,0,0));
 	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(_halfSize,0,0));
 	  gl.multMatrixf(T);
 	  gl.drawTriangleStrip(_numIndices, _index);
@@ -151,17 +166,8 @@ public class DummyRenderer extends Renderer
   
 	gl.enableTextures();
   
+  
+  
 	return DefineConstants.MAX_TIME_TO_RENDER;
   }
-
-  public final boolean onTouchEvent(TouchEvent touchEvent)
-  {
-	return false;
-  }
-
-  public final void onResizeViewportEvent(int width, int height)
-  {
-
-  }
-
 }

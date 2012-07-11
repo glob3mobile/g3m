@@ -18,7 +18,8 @@ class ByteBuffer{
   bool _hasBeenReleased;
   
 public:
-  
+  ByteBuffer(const ByteBuffer& bb) :_data(bb._data), _dataLength(bb._dataLength), _hasBeenReleased(bb._hasBeenReleased){};
+  ByteBuffer() :_data(NULL), _dataLength(0), _hasBeenReleased(true){};
   ByteBuffer(  const unsigned char * const data, unsigned int dataLength) :_data(data), _dataLength(dataLength), _hasBeenReleased(false){};
   
   const unsigned char * getData() const{ if (!_hasBeenReleased) return _data; else return NULL;}
@@ -26,7 +27,9 @@ public:
   
   void release(){ 
     if (!_hasBeenReleased){
-      delete [] _data; 
+#ifdef C_CODE
+      delete [] _data;
+#endif
       _hasBeenReleased = true;
     }
   }

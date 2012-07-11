@@ -7,7 +7,6 @@ package org.glob3.mobile.generated;
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-
 //
 //  Tile.h
 //  G3MiOSSDK
@@ -18,341 +17,400 @@ package org.glob3.mobile.generated;
 
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class RenderContext;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class Mesh;
+
 public class Tile
 {
+  private final Sector _sector ;
+  private final int _level;
+  private final int _row;
+  private final int _column;
 
-  public Tile(Sector bbox)
+  private Mesh _mesh;
+
+
+  //void Tile::createVertices(const Planet *planet) 
+  //{
+  //  const Angle maxLat = _bounds.upper().latitude();
+  //  const Angle maxLon = _bounds.upper().longitude();
+  //  const Angle minLat = _bounds.lower().latitude();
+  //  const Angle minLon = _bounds.lower().longitude();
+  //  
+  //  int resol = _resolution;
+  //  int resol2 = resol * resol;
+  //  int n1 = _resolution - 1;
+  //  //double exag = globe->GetExagElevFactor();
+  //  double maxH = 0, H;
+  //  Angle latSize = maxLat.sub(minLat);
+  //  Angle lonSize = maxLon.sub(minLon);
+  //  const double sizeSkirt = 0.95;
+  //  
+  //  // compute number of vertices in the mesh (there are less vertices if the tiles touches one of the poles) 
+  //  unsigned int numVertices = resol2;
+  //  if (_skirts) numVertices += 4 * resol - 4;
+  //  
+  //  // if first time for tile, alloc memory
+  //  if (_vertices == NULL) {
+  //    _vertices = new float[numVertices * 3];
+  //    //textureCoor = new float[numVertices * 2];
+  //  }
+  //  
+  //  // alloc temp memory to create a matrix of coordinates
+  //  double *x = new double[resol2];
+  //  double *y = new double [resol2];
+  //  double *z = new double [resol2];
+  //  float *u = new float[resol2];
+  //  float *v = new float [resol2];
+  //  
+  //  // create mesh coordinates
+  //  for (int j = 0; j < resol; j++)
+  //    for (int i = 0; i < resol; i++) {
+  //      unsigned int pos = j * resol + i;
+  //      //H = (elev != NULL) ? elev[pos] * exag : 0;
+  //      H = 0.0;
+  //      if (H > maxH) maxH = H;
+  //      //lat = (maxLat.value - latSize.value*j/n1);
+  //      //lon = (minLon.value + lonSize.value*i/n1);
+  //      Angle lat = Angle::fromDegrees((maxLat.degrees() - latSize.degrees() * j / n1));
+  //      Angle lon = Angle::fromDegrees((minLon.degrees() + lonSize.degrees() * i / n1));
+  //      Geodetic3D g3(lat, lon, H);
+  //      Vector3D P = planet->toVector3D(g3);
+  //      x[pos] = P.x();
+  //      y[pos] = P.y();
+  //      z[pos] = P.z();
+  //      u[pos] = (float) i / n1;
+  //      v[pos] = (float) j / n1;
+  //    }
+  //  
+  //  // compute center of tile
+  //  Angle lat = Angle::fromDegrees((minLat.degrees() + maxLat.degrees()) / 2);
+  //  Angle lon = Angle::fromDegrees((minLon.degrees() + maxLon.degrees()) / 2);
+  //  Geodetic3D g3(lat, lon, maxH);
+  //  //Vector3D center = planet->toVector3D(g3);
+  //  _center = planet->toVector3D(g3).asMutableVector3D();
+  //  
+  //  // create a nxn mesh 
+  //  unsigned int posV = 0;
+  //  //unsigned int posT = 0;
+  //  for (int j = 0; j < resol; j++)
+  //    for (int i = 0; i < resol; i++) {
+  //      unsigned int pos = j * resol + i;
+  //      _vertices[posV++] = (float) (x[pos] - _center.x());
+  //      _vertices[posV++] = (float) (y[pos] - _center.y());
+  //      _vertices[posV++] = (float) (z[pos] - _center.z());
+  //      //textureCoor[posT++] = u[pos];
+  //      //textureCoor[posT++] = v[pos];
+  //    }
+  //  
+  //  // create skirts 
+  //  if (_skirts) {
+  //    
+  //    // west side
+  //    for (int j = 0; j < resol - 1; j++) {
+  //      unsigned int pos = j * resol;
+  //      _vertices[posV++] = (float) (x[pos] * sizeSkirt - _center.x());
+  //      _vertices[posV++] = (float) (y[pos] * sizeSkirt - _center.y());
+  //      _vertices[posV++] = (float) (z[pos] * sizeSkirt - _center.z());
+  //      //textureCoor[posT++] = u[pos];
+  //      //textureCoor[posT++] = v[pos];
+  //    }
+  //    
+  //    // south side
+  //    for (int i = 0; i < resol - 1; i++) {
+  //      unsigned int pos = (resol - 1) * resol + i;
+  //      _vertices[posV++] = (float) (x[pos] * sizeSkirt - _center.x());
+  //      _vertices[posV++] = (float) (y[pos] * sizeSkirt - _center.y());
+  //      _vertices[posV++] = (float) (z[pos] * sizeSkirt - _center.z());
+  //      //textureCoor[posT++] = u[pos];
+  //      //textureCoor[posT++] = v[pos];
+  //    }
+  //    
+  //    // east side
+  //    for (int j = resol - 1; j > 0; j--) {
+  //      unsigned int pos = j * resol + resol - 1;
+  //      _vertices[posV++] = (float) (x[pos] * sizeSkirt - _center.x());
+  //      _vertices[posV++] = (float) (y[pos] * sizeSkirt - _center.y());
+  //      _vertices[posV++] = (float) (z[pos] * sizeSkirt - _center.z());
+  //      //textureCoor[posT++] = u[pos];
+  //      //textureCoor[posT++] = v[pos];
+  //    }
+  //    
+  //    // north side
+  //    for (int i = resol - 1; i > 0; i--) {
+  //      unsigned int pos = i;
+  //      _vertices[posV++] = (float) (x[pos] * sizeSkirt - _center.x());
+  //      _vertices[posV++] = (float) (y[pos] * sizeSkirt - _center.y());
+  //      _vertices[posV++] = (float) (z[pos] * sizeSkirt - _center.z());
+  //      //textureCoor[posT++] = u[pos];
+  //      //textureCoor[posT++] = v[pos];
+  //    }
+  //  }
+  //  
+  //  // free temp memory
+  //  delete[] x;
+  //  delete[] y;
+  //  delete[] z;
+  //  delete[] u;
+  //  delete[] v;
+  //}
+  
+  //void Tile::deleteIndices()
+  //{
+  //  if (_numIndices) {
+  //    delete[] _indices;
+  //    _numIndices = 0;
+  //  }
+  //  if (_numInnerIndices) {
+  //    delete[] _innerIndices;
+  //    _numInnerIndices = 0;
+  //  }
+  //  if (_numBorderIndices) {
+  //    delete[] _borderIndices;
+  //    _numBorderIndices = 0;
+  //  }
+  //}
+  
+  
+  //void Tile::createIndices(unsigned int resol, bool skirts) 
+  //{
+  //  _resolution = resol;
+  //  _skirts = skirts;
+  //  
+  //  // alloc memory 
+  //  _numIndices = (resol - 1) * (2 * resol + 2) - 1; //remove the first degenerated vertex
+  //  if (skirts) _numIndices += 8 * resol - 4;
+  //  _indices = new unsigned char[_numIndices];
+  //  
+  //  // create indices vector for the mesh
+  //  unsigned int posI = 0;
+  //  for (int j = 0; j < resol - 1; j++) {
+  //    if (j > 0) _indices[posI++] = (unsigned char) (j * resol);
+  //    for (int i = 0; i < resol; i++) {
+  //      _indices[posI++] = (unsigned char) (j * resol + i);
+  //      _indices[posI++] = (unsigned char) (j * resol + i + resol);
+  //    }
+  //    _indices[posI++] = (unsigned char) (j * resol + 2 * resol - 1);
+  //  }
+  //  
+  //  // create skirts 
+  //  if (skirts) {
+  //    _indices[posI++] = 0;
+  //    unsigned int posS = resol * resol;
+  //    
+  //    // west side
+  //    for (int j = 0; j < resol - 1; j++) {
+  //      unsigned int pos = j * resol;
+  //      _indices[posI++] = (unsigned char) (pos);
+  //      _indices[posI++] = (unsigned char) (posS++);
+  //    }
+  //    
+  //    // south side
+  //    for (int i = 0; i < resol - 1; i++) {
+  //      unsigned int pos = (resol - 1) * resol + i;
+  //      _indices[posI++] = (unsigned char) pos;
+  //      _indices[posI++] = (unsigned char) (posS++);
+  //    }
+  //    
+  //    // east side
+  //    for (int j = resol - 1; j > 0; j--) {
+  //      unsigned int pos = j * resol + resol - 1;
+  //      _indices[posI++] = (unsigned char) (pos);
+  //      _indices[posI++] = (unsigned char) (posS++);
+  //    }
+  //    
+  //    // north side
+  //    for (int i = resol - 1; i > 0; i--) {
+  //      unsigned int pos = i;
+  //      _indices[posI++] = (unsigned char) pos;
+  //      _indices[posI++] = (unsigned char) (posS++);
+  //    }
+  //    
+  //    // last triangles
+  //    _indices[posI++] = (unsigned char) 0;
+  //    _indices[posI++] = (unsigned char) (resol * resol);
+  //    _indices[posI++] = (unsigned char) (resol * resol);
+  //  }
+  //  
+  //  // create border indices (wireframe mode)
+  //  _numBorderIndices = 4 * (resol - 1);
+  //  _borderIndices = new unsigned char[_numBorderIndices];
+  //  posI = 0;
+  //  for (int j = 0; j < resol - 1; j++) {
+  //    _borderIndices[posI++] = (unsigned char) (j * resol);
+  //  }
+  //  for (int i = 0; i < resol - 1; i++) {
+  //    _borderIndices[posI++] = (unsigned char) ((resol - 1) * resol + i);
+  //  }
+  //  for (int j = resol - 1; j > 0; j--) {
+  //    _borderIndices[posI++] = (unsigned char) (j * resol + resol - 1);
+  //  }
+  //  for (int i = resol - 1; i > 0; i--) {
+  //    _borderIndices[posI++] = (unsigned char) (i);
+  //  }
+  //  
+  //  // create inner indices (wireframe mode)
+  //  _numInnerIndices = _numBorderIndices * (resol - 2);
+  //  _innerIndices = new unsigned char[_numInnerIndices];
+  //  posI = 0;
+  //  for (int j = 1; j < resol - 1; j++)
+  //    for (int i = 0; i < resol - 1; i++) {
+  //      int pos = j * resol + i;
+  //      _innerIndices[posI++] = (unsigned char) pos;
+  //      _innerIndices[posI++] = (unsigned char) (pos + 1);
+  //    }
+  //  for (int i = 1; i < resol - 1; i++)
+  //    for (int j = 0; j < resol - 1; j++) {
+  //      int pos = j * resol + i;
+  //      _innerIndices[posI++] = (unsigned char) pos;
+  //      _innerIndices[posI++] = (unsigned char) (pos + resol);
+  //    }
+  //}
+  
+  //void Tile::render(const RenderContext* rc)
+  //{
+  //  // obtain the gl object
+  //  IGL *gl = rc->getGL();
+  //  
+  //  // translate model reference system to tile center
+  //  gl->pushMatrix();
+  //  MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_center.asVector3D());
+  //  gl->multMatrixf(T);
+  //  
+  //  // set opengl texture and pointers
+  //  //gl->BindTexture(idTexture);
+  //  gl->vertexPointer(3, 0, _vertices);
+  //  //gl->TexCoordPointer(2, 0, textureCoor);
+  //  gl->color(0.5f,0.5f,0.8f,1.0f);
+  //  
+  //  // draw tile geometry
+  //  if (true /*g->GetWireframe()*/) {
+  //    
+  //    // draw solid mesh
+  //    gl->enablePolygonOffset(5, 5);
+  //    gl->drawTriangleStrip(_numIndices, _indices);
+  //    gl->disablePolygonOffset();
+  //    
+  //    // draw wireframe
+  //    //gl->disableTexture2D();
+  //    //gl->disableTextures();
+  //    gl->lineWidth(1);
+  //    gl->color(0.0f, 0.0f, 0.0f, 1.0f);
+  //    gl->drawLines(_numInnerIndices, _innerIndices);
+  //    gl->lineWidth(2);
+  //    gl->color(1.0f, 0.0f, 0.0f, 1.0f);
+  //    gl->drawLineLoop(_numBorderIndices, _borderIndices);
+  //    //gl->EnableTextures();
+  //    //gl->EnableTexture2D();
+  //    
+  //  } else {
+  //    
+  //    // draw the mesh
+  //    gl->drawTriangleStrip(_numIndices, _indices);
+  //  }
+  //  
+  //  // recover original model matrix
+  //  gl->popMatrix();
+  //}
+  
+  
+  private Mesh getMesh(RenderContext rc, TileTessellator tessellator)
   {
-	  BBox = bbox;
-	  vertices = null;
+	if (_mesh == null)
+	{
+	  _mesh = tessellator.createMesh(rc, this);
+	}
+	return _mesh;
   }
+
+  private boolean isVisible(RenderContext rc)
+  {
+  
+	return true;
+  }
+
+  public Tile(Sector sector, int level, int row, int column)
+  {
+	  _sector = new Sector(sector);
+	  _level = level;
+	  _row = row;
+	  _column = column;
+	  _mesh = null;
+  }
+
+
+  ///#include "Angle.hpp"
+  ///#include "Geodetic3D.hpp"
+  ///#include "Vector3D.hpp"
+  ///#include "Camera.hpp"
+  
+  //unsigned int Tile::_numIndices = 0;
+  //unsigned int Tile::_numBorderIndices = 0;
+  //unsigned int Tile::_numInnerIndices = 0;
+  //unsigned char * Tile::_indices;
+  //unsigned char *Tile::_borderIndices;
+  //unsigned char *Tile::_innerIndices;
+  //unsigned int Tile::_resolution;
+  //bool Tile::_skirts;
+  
+  
   public void dispose()
   {
-	if (vertices!=null)
-		vertices = null;
+	//  if (_vertices!=NULL) delete[] _vertices;
+	if (_mesh != null)
+		_mesh.dispose();
   }
 
-  public final void createVertices(Planet planet)
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Sector getSector() const
+  public final Sector getSector()
   {
-	Angle maxLat = BBox.max().latitude();
-	Angle minLat = BBox.min().latitude();
-	Angle minLon = BBox.min().longitude();
-	Angle maxLon = BBox.max().longitude();
-	//Globe *globe = SceneController::GetInstance()->getGlobe();
-	//Ellipsoid *ellipsoid = globe->GetEllipsoid();
-	//bool skirts = globe->SkirtedTiles();
-  
-	int resol = _resolution;
-	int resol2 = resol * resol;
-	int n1 = _resolution - 1;
-	//double exag = globe->GetExagElevFactor();
-	double maxH = 0;
-	double H;
-	Angle latSize = maxLat.sub(minLat);
-	Angle lonSize = maxLon.sub(minLon);
-	final double sizeSkirt = 0.95;
-  
-	// compute number of vertices in the mesh (there are less vertices if the tiles touches one of the poles)
-	int numVertices = resol2;
-	if (_skirts)
-		numVertices += 4 * resol - 4;
-  
-	// if first time for tile, alloc memory
-	if (vertices == null)
-	{
-	  vertices = new float[numVertices * 3];
-	  //textureCoor = new float[numVertices * 2];
-	}
-  
-	// alloc temp memory to create a matrix of coordinates
-	double []x = new double[resol2];
-	double []y = new double [resol2];
-	double []z = new double [resol2];
-	float[] u = new float[resol2];
-	float[] v = new float [resol2];
-  
-	// create mesh coordinates
-	for (int j = 0; j < resol; j++)
-	  for (int i = 0; i < resol; i++)
-	  {
-		int pos = j * resol + i;
-		//H = (elev != NULL) ? elev[pos] * exag : 0;
-		H = 0.0;
-		if (H > maxH)
-			maxH = H;
-		//lat = (maxLat.value - latSize.value*j/n1);
-		//lon = (minLon.value + lonSize.value*i/n1);
-		Angle lat = Angle.fromDegrees((maxLat.degrees() - latSize.degrees() * j / n1));
-		Angle lon = Angle.fromDegrees((minLon.degrees() + lonSize.degrees() * i / n1));
-		Geodetic3D g3 = new Geodetic3D(lat, lon, H);
-		Vector3D P = planet.toVector3D(g3);
-		x[pos] = P.x();
-		y[pos] = P.y();
-		z[pos] = P.z();
-		u[pos] = (float) i / n1;
-		v[pos] = (float) j / n1;
-	  }
-  
-	// compute center of tile
-	Angle lat = Angle.fromDegrees((minLat.degrees() + maxLat.degrees()) / 2);
-	Angle lon = Angle.fromDegrees((minLon.degrees() + maxLon.degrees()) / 2);
-	Geodetic3D g3 = new Geodetic3D(lat, lon, maxH);
-	//Vector3D center = planet->toVector3D(g3);
-	center = planet.toVector3D(g3).asMutableVector3D();
-  
-	// create a nxn mesh
-	int posV = 0;
-	//unsigned int posT = 0;
-	for (int j = 0; j < resol; j++)
-	  for (int i = 0; i < resol; i++)
-	  {
-		int pos = j * resol + i;
-		vertices[posV++] = (float)(x[pos] - center.x());
-		vertices[posV++] = (float)(y[pos] - center.y());
-		vertices[posV++] = (float)(z[pos] - center.z());
-		//textureCoor[posT++] = u[pos];
-		//textureCoor[posT++] = v[pos];
-	  }
-  
-	// create skirts
-	if (_skirts)
-	{
-  
-	  // west side
-	  for (int j = 0; j < resol - 1; j++)
-	  {
-		int pos = j * resol;
-		vertices[posV++] = (float)(x[pos] * sizeSkirt - center.x());
-		vertices[posV++] = (float)(y[pos] * sizeSkirt - center.y());
-		vertices[posV++] = (float)(z[pos] * sizeSkirt - center.z());
-		//textureCoor[posT++] = u[pos];
-		//textureCoor[posT++] = v[pos];
-	  }
-  
-	  // south side
-	  for (int i = 0; i < resol - 1; i++)
-	  {
-		int pos = (resol - 1) * resol + i;
-		vertices[posV++] = (float)(x[pos] * sizeSkirt - center.x());
-		vertices[posV++] = (float)(y[pos] * sizeSkirt - center.y());
-		vertices[posV++] = (float)(z[pos] * sizeSkirt - center.z());
-		//textureCoor[posT++] = u[pos];
-		//textureCoor[posT++] = v[pos];
-	  }
-  
-	  // east side
-	  for (int j = resol - 1; j > 0; j--)
-	  {
-		int pos = j * resol + resol - 1;
-		vertices[posV++] = (float)(x[pos] * sizeSkirt - center.x());
-		vertices[posV++] = (float)(y[pos] * sizeSkirt - center.y());
-		vertices[posV++] = (float)(z[pos] * sizeSkirt - center.z());
-		//textureCoor[posT++] = u[pos];
-		//textureCoor[posT++] = v[pos];
-	  }
-  
-	  // north side
-	  for (int i = resol - 1; i > 0; i--)
-	  {
-		int pos = i;
-		vertices[posV++] = (float)(x[pos] * sizeSkirt - center.x());
-		vertices[posV++] = (float)(y[pos] * sizeSkirt - center.y());
-		vertices[posV++] = (float)(z[pos] * sizeSkirt - center.z());
-		//textureCoor[posT++] = u[pos];
-		//textureCoor[posT++] = v[pos];
-	  }
-	}
-  
-	// free temp memory
-	x = null;
-	y = null;
-	z = null;
-	u = null;
-	v = null;
+	return _sector;
   }
-  public final void render(RenderContext rc)
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: int getLevel() const
+  public final int getLevel()
   {
-	// obtain the gl object
-	IGL gl = rc.getGL();
-  
-	// translate model reference system to tile center
-	gl.pushMatrix();
-	MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(center.asVector3D());
-	gl.multMatrixf(T);
-  
-	// set opengl texture and pointers
-	//gl->BindTexture(idTexture);
-	gl.vertexPointer(3, 0, vertices);
-	//gl->TexCoordPointer(2, 0, textureCoor);
-	gl.color(0.5f,0.5f,0.8f,1.0f);
-  
-	// draw tile geometry
-	if (true) //g->GetWireframe()
-	{
-  
-	  // draw solid mesh
-	  gl.enablePolygonOffset(5, 5);
-	  gl.drawTriangleStrip(numIndices, indices);
-	  gl.disablePolygonOffset();
-  
-	  // draw wireframe
-	  //gl->disableTexture2D();
-	  //gl->disableTextures();
-	  gl.lineWidth(1);
-	  gl.color(0.0f, 0.0f, 0.0f, 1.0f);
-	  gl.drawLines(numInnerIndices, innerIndices);
-	  gl.lineWidth(2);
-	  gl.color(1.0f, 0.0f, 0.0f, 1.0f);
-	  gl.drawLineLoop(numBorderIndices, borderIndices);
-	  //gl->EnableTextures();
-	  //gl->EnableTexture2D();
-  
-	}
-	else
-	{
-  
-	  // draw the mesh
-	  gl.drawTriangleStrip(numIndices, indices);
-	}
-  
-	// recover original model matrix
-	gl.popMatrix();
+	return _level;
   }
 
-  public static void createIndices(int resol, boolean skirts)
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: int getRow() const
+  public final int getRow()
   {
-	_resolution = resol;
-	_skirts = skirts;
-  
-	// alloc memory
-	numIndices = (resol - 1) * (2 * resol + 2) - 1; //remove the first degenerated vertex
-	if (skirts)
-		numIndices += 8 * resol - 4;
-	indices = new byte[numIndices];
-  
-	// create indices vector for the mesh
-	int posI = 0;
-	for (int j = 0; j < resol - 1; j++)
-	{
-	  if (j > 0)
-		  indices[posI++] = (byte)(j * resol);
-	  for (int i = 0; i < resol; i++)
-	  {
-		indices[posI++] = (byte)(j * resol + i);
-		indices[posI++] = (byte)(j * resol + i + resol);
-	  }
-	  indices[posI++] = (byte)(j * resol + 2 * resol - 1);
-	}
-  
-	// create skirts
-	if (skirts)
-	{
-	  indices[posI++] = 0;
-	  int posS = resol * resol;
-  
-	  // west side
-	  for (int j = 0; j < resol - 1; j++)
-	  {
-		int pos = j * resol;
-		indices[posI++] = (byte)(pos);
-		indices[posI++] = (byte)(posS++);
-	  }
-  
-	  // south side
-	  for (int i = 0; i < resol - 1; i++)
-	  {
-		int pos = (resol - 1) * resol + i;
-		indices[posI++] = (byte) pos;
-		indices[posI++] = (byte)(posS++);
-	  }
-  
-	  // east side
-	  for (int j = resol - 1; j > 0; j--)
-	  {
-		int pos = j * resol + resol - 1;
-		indices[posI++] = (byte)(pos);
-		indices[posI++] = (byte)(posS++);
-	  }
-  
-	  // north side
-	  for (int i = resol - 1; i > 0; i--)
-	  {
-		int pos = i;
-		indices[posI++] = (byte) pos;
-		indices[posI++] = (byte)(posS++);
-	  }
-  
-	  // last triangles
-	  indices[posI++] = (byte) 0;
-	  indices[posI++] = (byte)(resol * resol);
-	  indices[posI++] = (byte)(resol * resol);
-	}
-  
-	// create border indices (wireframe mode)
-	numBorderIndices = 4 * (resol - 1);
-	borderIndices = new byte[numBorderIndices];
-	posI = 0;
-	for (int j = 0; j < resol - 1; j++)
-		borderIndices[posI++] = (byte)(j * resol);
-	for (int i = 0; i < resol - 1; i++)
-		borderIndices[posI++] = (byte)((resol - 1) * resol + i);
-	for (int j = resol - 1; j > 0; j--)
-		borderIndices[posI++] = (byte)(j * resol + resol - 1);
-	for (int i = resol - 1; i > 0; i--)
-		borderIndices[posI++] = (byte)(i);
-  
-	// create inner indices (wireframe mode)
-	numInnerIndices = numBorderIndices * (resol - 2);
-	innerIndices = new byte[numInnerIndices];
-	posI = 0;
-	for (int j = 1; j < resol - 1; j++)
-	  for (int i = 0; i < resol - 1; i++)
-	  {
-		int pos = j * resol + i;
-		innerIndices[posI++] = (byte) pos;
-		innerIndices[posI++] = (byte)(pos + 1);
-	  }
-	for (int i = 1; i < resol - 1; i++)
-	  for (int j = 0; j < resol - 1; j++)
-	  {
-		int pos = j * resol + i;
-		innerIndices[posI++] = (byte) pos;
-		innerIndices[posI++] = (byte)(pos + resol);
-	  }
+	return _row;
   }
-  public static void deleteIndices()
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: int getColumn() const
+  public final int getColumn()
   {
-	if (numIndices != 0)
-	{
-	  indices = null;
-	  numIndices = 0;
-	}
-	if (numInnerIndices != 0)
-	{
-	  innerIndices = null;
-	  numInnerIndices = 0;
-	}
-	if (numBorderIndices != 0)
-	{
-	  borderIndices = null;
-	  numBorderIndices = 0;
-	}
+	return _column;
   }
 
-  private final Sector BBox ;
-  private float[]vertices;
-
-  private static int _resolution;
-  private static boolean _skirts;
-  private static int numIndices;
-  private static int numBorderIndices = 0;
-  private static int numInnerIndices = 0;
-  private static byte[]indices;
-  private static byte[]borderIndices;
-  private static byte[]innerIndices;
-
-  private MutableVector3D center = new MutableVector3D();
-
-
+  public final void render(RenderContext rc, TileTessellator tessellator)
+  {
+	int ___diego_at_work;
+  
+	Camera camera = rc.getCamera();
+	Vector3D pos = camera.getPos();
+  
+	double distance = pos.length();
+  
+  //  rc->getLogger()->logInfo("distance to camera: %f", distance);
+  
+	if (isVisible(rc))
+	{
+	  final Mesh mesh = getMesh(rc, tessellator);
+	  if (mesh != null)
+	  {
+		mesh.render(rc);
+	  }
+	}
+  }
 
 }

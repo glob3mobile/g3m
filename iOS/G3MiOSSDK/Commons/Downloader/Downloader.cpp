@@ -91,7 +91,12 @@ void Downloader::onDownload(const Response& e)
         
         dl->onDownload(e);
       }
+#ifdef C_CODE
       _petitions.erase(_petitions.begin() + i);
+#endif
+#ifdef JAVA_CODE
+      _petitions.remove(i);
+#endif
       return;
     }
   }
@@ -108,9 +113,12 @@ void Downloader::onError(const Response& e)
       for (int j = 0; j < pet._listeners.size(); j++) {
         pet._listeners[j]->onError(e);
       }
-      
+#ifdef C_CODE
       _petitions.erase(_petitions.begin() + i);
-      
+#endif
+#ifdef JAVA_CODE
+      _petitions.remove(i);
+#endif
       return;
     }
   }

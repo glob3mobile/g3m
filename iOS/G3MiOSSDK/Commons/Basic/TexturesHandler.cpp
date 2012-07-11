@@ -122,7 +122,12 @@ void TexturesHandler::takeTexture(const RenderContext* rc,
       holder->release();
       
       if (!holder->isRetained()) {
+#ifdef C_CODE
         _textureHolders.erase(_textureHolders.begin() + i);
+#endif
+#ifdef JAVA_CODE
+        _textureHolders.remove(i);
+#endif
         
         rc->getGL()->deleteTexture(holder->_glTextureId);
         
