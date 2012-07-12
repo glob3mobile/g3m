@@ -21,6 +21,9 @@ public:
                           const Tile* tile,
                           Mesh* mesh) const = 0;
   
+  virtual ~TileTexturizer() {
+    
+  }
 };
 
 #endif
