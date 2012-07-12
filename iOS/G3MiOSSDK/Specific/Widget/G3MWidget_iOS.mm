@@ -31,7 +31,7 @@
 #include "SQLiteStorage_iOS.hpp"
 #include "FileSystemStorage.hpp"
 #include "NullStorage.hpp"
-
+#include "SimpleTileTexturizer.hpp"
 
 #include <stdlib.h>
 
@@ -88,7 +88,7 @@
     IGL* gl  = new GL2();
     
     //Testing downloads
-    if (true) {
+    if (false) {
       int test_download_code = 0;
       NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
       
@@ -97,70 +97,70 @@
       DummyDownload *dummyDownload = new DummyDownload(factory, fss );
       dummyDownload->run();
     }
+    
+    if (false){
+      NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+      NSLog(@"\nDocument Directory: %s;", [documentsDirectory UTF8String]);
+      int test_download_code = 0;
+      
+      SQLiteStorage_iOS *sql = new SQLiteStorage_iOS("test.db", "file");
+      DummyDownload *dummyDownload = new DummyDownload(factory, sql);
+      
+      std::string directory = "";
+      std::string file1 = "";
+      std::string file2 = "";
+      std::string file3 = "";
       
       if(false){
-          NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-          NSLog(@"\nDocument Directory: %s;", [documentsDirectory UTF8String]);
-          int test_download_code = 0;
+        directory = "/Users/vidalete/Downloads/";
+        file1 = "Tic2Vtwo.pdf";
+        file2 = "Pantallazo.png";
+        file3 = "blobtest.png";
+      }else{
+        directory = [documentsDirectory UTF8String];
+        file1 = "mark.png";
+        file2 = "world.jpg";
+        file3 = "plane.png";
         
-       SQLiteStorage_iOS *sql = new SQLiteStorage_iOS("test.db", "file");
-          DummyDownload *dummyDownload = new DummyDownload(factory, sql);
-          
-          std::string directory = "";
-          std::string file1 = "";
-          std::string file2 = "";
-          std::string file3 = "";
-          
-          if(false){
-              directory = "/Users/vidalete/Downloads/";
-              file1 = "Tic2Vtwo.pdf";
-              file2 = "Pantallazo.png";
-              file3 = "blobtest.png";
-          }else{
-              directory = [documentsDirectory UTF8String];
-              file1 = "mark.png";
-              file2 = "world.jpg";
-              file3 = "plane.png";
-              
-              const NSFileManager *fileManager = [NSFileManager defaultManager];
-              NSError *error;
-              
-              NSString *writableDBPathNS = [documentsDirectory stringByAppendingPathComponent:[[NSString alloc] initWithCString:file1.c_str() encoding:NSUTF8StringEncoding]];
-              if (![fileManager fileExistsAtPath:writableDBPathNS]){
-                  // The writable database does not exist, so copy the default to the appropriate location.
-                  NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:[[NSString alloc] initWithCString:file1.c_str() encoding:NSUTF8StringEncoding]];
-                  if (![fileManager copyItemAtPath:defaultDBPath toPath:writableDBPathNS error:&error]) {
-                      NSLog(@"Failed to create writable file with message '%@'.", [error localizedDescription]);
-                  } 
-              }
-              
-              writableDBPathNS = [documentsDirectory stringByAppendingPathComponent:[[NSString alloc] initWithCString:file2.c_str() encoding:NSUTF8StringEncoding]];
-              if (![fileManager fileExistsAtPath:writableDBPathNS]){
-                  // The writable database does not exist, so copy the default to the appropriate location.
-                  NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:[[NSString alloc] initWithCString:file2.c_str() encoding:NSUTF8StringEncoding]];
-                  if (![fileManager copyItemAtPath:defaultDBPath toPath:writableDBPathNS error:&error]) {
-                      NSLog(@"Failed to create writable file with message '%@'.", [error localizedDescription]);
-                  } 
-              }
-              
-              writableDBPathNS = [documentsDirectory stringByAppendingPathComponent:[[NSString alloc] initWithCString:file3.c_str() encoding:NSUTF8StringEncoding]];
-              if (![fileManager fileExistsAtPath:writableDBPathNS]){
-                  // The writable database does not exist, so copy the default to the appropriate location.
-                  NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:[[NSString alloc] initWithCString:file3.c_str() encoding:NSUTF8StringEncoding]];
-                  if (![fileManager copyItemAtPath:defaultDBPath toPath:writableDBPathNS error:&error]) {
-                      NSLog(@"Failed to create writable file with message '%@'.", [error localizedDescription]);
-                  } 
-              }
-              
-          }
+        const NSFileManager *fileManager = [NSFileManager defaultManager];
+        NSError *error;
         
+        NSString *writableDBPathNS = [documentsDirectory stringByAppendingPathComponent:[[NSString alloc] initWithCString:file1.c_str() encoding:NSUTF8StringEncoding]];
+        if (![fileManager fileExistsAtPath:writableDBPathNS]){
+          // The writable database does not exist, so copy the default to the appropriate location.
+          NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:[[NSString alloc] initWithCString:file1.c_str() encoding:NSUTF8StringEncoding]];
+          if (![fileManager copyItemAtPath:defaultDBPath toPath:writableDBPathNS error:&error]) {
+            NSLog(@"Failed to create writable file with message '%@'.", [error localizedDescription]);
+          } 
+        }
         
-        FileSystemStorage * fssAux = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
+        writableDBPathNS = [documentsDirectory stringByAppendingPathComponent:[[NSString alloc] initWithCString:file2.c_str() encoding:NSUTF8StringEncoding]];
+        if (![fileManager fileExistsAtPath:writableDBPathNS]){
+          // The writable database does not exist, so copy the default to the appropriate location.
+          NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:[[NSString alloc] initWithCString:file2.c_str() encoding:NSUTF8StringEncoding]];
+          if (![fileManager copyItemAtPath:defaultDBPath toPath:writableDBPathNS error:&error]) {
+            NSLog(@"Failed to create writable file with message '%@'.", [error localizedDescription]);
+          } 
+        }
         
-          dummyDownload->runSqlite(directory, file1, fssAux);
-          dummyDownload->runSqlite(directory, file2, fssAux);
-          dummyDownload->runSqlite(directory, file3, fssAux);
+        writableDBPathNS = [documentsDirectory stringByAppendingPathComponent:[[NSString alloc] initWithCString:file3.c_str() encoding:NSUTF8StringEncoding]];
+        if (![fileManager fileExistsAtPath:writableDBPathNS]){
+          // The writable database does not exist, so copy the default to the appropriate location.
+          NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:[[NSString alloc] initWithCString:file3.c_str() encoding:NSUTF8StringEncoding]];
+          if (![fileManager copyItemAtPath:defaultDBPath toPath:writableDBPathNS error:&error]) {
+            NSLog(@"Failed to create writable file with message '%@'.", [error localizedDescription]);
+          } 
+        }
+        
       }
+      
+      
+      FileSystemStorage * fssAux = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
+      
+      dummyDownload->runSqlite(directory, file1, fssAux);
+      dummyDownload->runSqlite(directory, file2, fssAux);
+      dummyDownload->runSqlite(directory, file3, fssAux);
+    }
     
     // all the creation of renderers must be move to common source code, instead of specific
     int __to_move_to_common_source_code;
@@ -173,10 +173,11 @@
     comp->addRenderer(cameraRenderer);
     
     // very basic tile renderer
-    if (false) {
+    if (true) {
       TileTessellator* tessellator = new EllipsoidalTileTessellator("world.jpg");
+      TileTexturizer* texturizer = new SimpleTileTexturizer();
       
-      TileRenderer* tr = new TileRenderer(tessellator);
+      TileRenderer* tr = new TileRenderer(tessellator, texturizer);
       comp->addRenderer(tr);
     }
     
@@ -186,7 +187,7 @@
       comp->addRenderer(dum);
     }
     
-    if (true) {
+    if (false) {
       // simple planet renderer, with a basic world image
       SimplePlanetRenderer* spr = new SimplePlanetRenderer("world.jpg");
       comp->addRenderer(spr);

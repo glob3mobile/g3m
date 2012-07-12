@@ -76,7 +76,7 @@ int TileRenderer::render(const RenderContext* rc) {
   
   for (int i = 0; i < _topLevelTiles.size(); i++) {
     Tile* tile = _topLevelTiles[i];
-    tile->render(rc, _tessellator);
+    tile->render(rc, _tessellator, _texturizer);
   }
   
   return MAX_TIME_TO_RENDER;
