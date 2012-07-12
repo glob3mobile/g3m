@@ -200,11 +200,11 @@ void GL2::drawTriangleStrip(int n, const unsigned int i[]) {
 }
 
 void GL2::drawLines(int n, const unsigned int *i) {
-  glDrawElements(GL_LINES, n, GL_UNSIGNED_BYTE, i);
+  glDrawElements(GL_LINES, n, GL_UNSIGNED_INT, i);
 }
 
 void GL2::drawLineLoop(int n, const unsigned int *i) {
-  glDrawElements(GL_LINE_LOOP, n, GL_UNSIGNED_BYTE, i);
+  glDrawElements(GL_LINE_LOOP, n, GL_UNSIGNED_INT, i);
 }
 
 void GL2::lineWidth(float width) {

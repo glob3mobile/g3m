@@ -60,8 +60,8 @@ public:
   
   virtual ~EllipsoidalTileTessellator() { }
   
-  virtual Mesh* createMesh(const RenderContext* rc,
-                           const Tile* tile) const;
+  virtual Mesh* createMesh(const RenderContext* rc, const Tile* tile) const;
+  virtual Mesh* createDebugMesh(const RenderContext* rc, const Tile* tile) const;
 };
 
 #endif

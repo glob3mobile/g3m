@@ -33,7 +33,7 @@ void TileRenderer::createTopLevelTiles(const InitializationContext* ic) {
   
   const Sector topSector(Geodetic2D(Angle::fromDegrees(-90), Angle::fromDegrees(-180)),
                          Geodetic2D(Angle::fromDegrees(90), Angle::fromDegrees(180)));
-  const int K = 1;
+  const int K = 2;
   const int splitsByLatitude = 2 * K;
   const int splitsByLongitude = 4 * K;
   const int topLevel = 0;

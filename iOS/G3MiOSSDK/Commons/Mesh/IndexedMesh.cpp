@@ -132,8 +132,10 @@ void IndexedMesh::render(const RenderContext* rc) const
       break;
     case Lines:
       gl->drawLines(_numIndex, _indexes);
+      break;
     case LineLoop:
       gl->drawLineLoop(_numIndex, _indexes);
+      break;
     default:
       break;
   }

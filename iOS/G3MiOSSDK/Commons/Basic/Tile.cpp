@@ -20,7 +20,7 @@ Tile::~Tile() {
 Mesh* Tile::getMesh(const RenderContext* rc,
                     const TileTessellator* tessellator) {
   if (_mesh == NULL) {
-    _mesh = tessellator->createMesh(rc, this);
+    _mesh = tessellator->createDebugMesh(rc, this);
   }
   return _mesh;
 }

@@ -15,10 +15,8 @@
 #include "TexturedMesh.hpp"
 
 
-Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
-                                                const Tile* tile) const {
-  int ___agustin_at_work;
-  
+Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc, const Tile* tile) const 
+{  
   const int texID = rc->getTexturesHandler()->getTextureIdFromFileName(rc, _textureFilename, 2048, 1024);
   
   if (texID < 1) {
@@ -91,8 +89,51 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
     indices.push_back(_resolution*_resolution);
   }
   
-  
   // create TexturedMesh
   return new TexturedMesh(new IndexedMesh(vertices, TriangleStrip, indices, NULL), true, new TextureMapping(texID, texCoords)); 
-  
 }
+
+
+Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc, const Tile* tile) const 
+{
+  int ___agustin_at_work;
+    
+  const Sector sector = tile->getSector();
+  const Planet* planet = rc->getPlanet();
+  
+  // create vectors
+  std::vector<MutableVector3D> vertices;
+  std::vector<MutableVector2D> texCoords;
+  std::vector<unsigned int> indices;
+  unsigned int resol_1 = _resolution - 1;  
+  unsigned int posS = 0;
+  
+  // west side
+  for (unsigned int j=0; j<resol_1; j++) {
+    addVertex(planet, &vertices, &texCoords, sector.getInnerPoint(0.0, (double)j/resol_1));
+    indices.push_back(posS++);
+  }
+ 
+  // south side
+  for (unsigned int i=0; i<resol_1; i++) {
+    addVertex(planet, &vertices, &texCoords, sector.getInnerPoint((double)i/resol_1, 1.0));
+    indices.push_back(posS++);
+  }
+  
+  // east side
+  for (unsigned int j=resol_1; j>0; j--) {
+    addVertex(planet, &vertices, &texCoords, sector.getInnerPoint(1.0, (double)j/resol_1));
+    indices.push_back(posS++);
+  }
+  
+  // north side
+  for (unsigned int i=resol_1; i>0; i--) {
+    addVertex(planet, &vertices, &texCoords, sector.getInnerPoint((double)i/resol_1, 0.0));
+    indices.push_back(posS++);
+  }
+
+  // create TexturedMesh
+  Color *color = new Color(Color::fromRGBA(1.0, 1.0, 0.0, 1.0));
+  return new IndexedMesh(vertices, LineLoop, indices, color); 
+}
+
