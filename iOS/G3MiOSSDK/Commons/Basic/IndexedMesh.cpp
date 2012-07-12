@@ -12,6 +12,8 @@
 
 IndexedMesh::~IndexedMesh()
 {
+#ifdef C_CODE
+  
   if (_owner){
     delete[] _vertices;
     delete[] _indexes;
@@ -20,6 +22,8 @@ IndexedMesh::~IndexedMesh()
     if (_colors != NULL) delete[] _colors;
     if (_flatColor != NULL) delete _flatColor;
   }
+  
+#endif
 }
 
 IndexedMesh::IndexedMesh(bool owner,

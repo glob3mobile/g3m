@@ -116,7 +116,7 @@ void GL2::enableTextures() {
   glEnableVertexAttribArray(Attributes.TextureCoord);
 }
 
-void GL2::enableVertexColor(const float* const colors, float intensity)
+void GL2::enableVertexColor(float const colors[], float intensity)
 {
   if (colors != NULL){
     glUniform1i(Uniforms.EnableColorPerVertex, true);
@@ -144,7 +144,7 @@ void GL2::disableVertexFlatColor()
   glUniform1i(Uniforms.EnableFlatColor, false);
 }
 
-void GL2::enableVertexNormal(const float* const normals)
+void GL2::enableVertexNormal(float const normals[])
 {
   if (normals != NULL){
     glEnableVertexAttribArray(Attributes.Normal);

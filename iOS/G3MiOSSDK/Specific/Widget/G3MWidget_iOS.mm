@@ -28,6 +28,9 @@
 #include "EllipsoidalTileTessellator.hpp"
 
 #include "DummyDownload.hpp"
+#include "SQLiteStorage_iOS.hpp"
+#include "FileSystemStorage.hpp"
+#include "NullStorage.hpp"
 
 
 #include <stdlib.h>
@@ -88,7 +91,10 @@
     if (true) {
       int test_download_code = 0;
       NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-      DummyDownload *dummyDownload = new DummyDownload(factory, [documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding] );
+      
+      FileSystemStorage * fss = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
+      
+      DummyDownload *dummyDownload = new DummyDownload(factory, fss );
       dummyDownload->run();
     }
       
@@ -96,7 +102,9 @@
           NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
           NSLog(@"\nDocument Directory: %s;", [documentsDirectory UTF8String]);
           int test_download_code = 0;
-          DummyDownload *dummyDownload = new DummyDownload(factory, "test.db", "file");
+        
+       SQLiteStorage_iOS *sql = new SQLiteStorage_iOS("test.db", "file");
+          DummyDownload *dummyDownload = new DummyDownload(factory, sql);
           
           std::string directory = "";
           std::string file1 = "";
@@ -145,9 +153,13 @@
               }
               
           }
-          dummyDownload->runSqlite(directory, file1);
-          dummyDownload->runSqlite(directory, file2);
-          dummyDownload->runSqlite(directory, file3);
+        
+        
+        FileSystemStorage * fssAux = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
+        
+          dummyDownload->runSqlite(directory, file1, fssAux);
+          dummyDownload->runSqlite(directory, file2, fssAux);
+          dummyDownload->runSqlite(directory, file3, fssAux);
       }
     
     // all the creation of renderers must be move to common source code, instead of specific

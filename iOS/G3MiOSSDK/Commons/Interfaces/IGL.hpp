@@ -30,7 +30,7 @@ public:
   
   virtual void enableTextures() = 0;
   
-  virtual void enableVertexColor(const float* const colors, float intensity) = 0;
+  virtual void enableVertexColor(float const colors[], float intensity) = 0;
   
   virtual void enableVertexFlatColor(Color c, float intensity) = 0;
   
@@ -38,7 +38,7 @@ public:
   
   virtual void disableVertexFlatColor() = 0;
   
-  virtual void enableVertexNormal(const float* const normals) = 0;
+  virtual void enableVertexNormal(float const normals[]) = 0;
   
   virtual void disableVertexNormal() = 0;
   

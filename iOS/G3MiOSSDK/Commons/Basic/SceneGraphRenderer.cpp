@@ -151,7 +151,12 @@ void SGGGroupNode::addChild(SGNode *node)  {
 }
 
 void SGGGroupNode::removeChild(const int index) {
+#ifdef C_CODE
   _children.erase(_children.begin() + index);
+#endif
+#ifdef JAVA_CODE
+  _children.remove(index);
+#endif
 }
 
 void SGGGroupNode::removeChild(const SGNode* nodeToRemove) {

@@ -14,13 +14,14 @@
 class Url{
   const std::string _path;
 public:  
+  Url(): _path(""){};
   Url(std::string f): _path(f){};
   std::string getPath() const{ return _path;}
 };
 
 class Response{
 private:
-  const Url _url;
+  Url _url;
   ByteBuffer _data;
   
 public:

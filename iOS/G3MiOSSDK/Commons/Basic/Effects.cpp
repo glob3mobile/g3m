@@ -34,7 +34,12 @@ void EffectsScheduler::processFinishedEffects(const RenderContext *rc,
     const int indexToRemove = indicesToRemove[i];
     delete _effectsRuns[indexToRemove];
     
+#ifdef C_CODE
     _effectsRuns.erase(_effectsRuns.begin() + indexToRemove);
+#endif
+#ifdef JAVA_CODE
+    _effectsRuns.remove(indexToRemove);
+#endif
   }
 }
 

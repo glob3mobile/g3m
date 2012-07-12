@@ -27,6 +27,7 @@ public:
   Camera(const Camera &c);
   
   Camera(int width, int height);
+  ~Camera(){}
   
   void copyFrom(const Camera &c);
   

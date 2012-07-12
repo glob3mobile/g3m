@@ -71,6 +71,13 @@ public class MutableVector3D
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isZero() const
+  public final boolean isZero()
+  {
+	return (_x == 0) && (_y == 0) && (_z == 0);
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: void print() const
   public final void print()
   {

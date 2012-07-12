@@ -34,6 +34,14 @@ public:
   {
   }
   
+  Sector(const Sector& s) :
+  _lower(s._lower),
+  _upper(s._upper),
+  _deltaLatitude(s._deltaLatitude),
+  _deltaLongitude(s._deltaLongitude)
+  {
+  }
+  
   const Geodetic2D lower() const {
     return _lower;
   }

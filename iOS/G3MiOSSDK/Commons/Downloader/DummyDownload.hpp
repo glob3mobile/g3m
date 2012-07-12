@@ -9,11 +9,9 @@
 #ifndef G3MiOSSDK_DummyDownload_hpp
 #define G3MiOSSDK_DummyDownload_hpp
 
-#include "FileSystemStorage.hpp"
-#include "SQLiteStorage_iOS.hpp"
 #include "Downloader.hpp"
 #include "IDownloadListener.hpp"
-
+#include "IStorage.hpp"
 #include "IFactory.hpp"
 
 
@@ -28,17 +26,10 @@ class DummyDownload: public IDownloadListener
   
 public:
   
-  DummyDownload(IFactory *fac, const std::string& root): _factory(fac)
+  DummyDownload(IFactory *fac, IStorage* storage): _factory(fac), _fss(storage)
   {
-    _fss = new FileSystemStorage(root);
     _downloader = new Downloader(_fss, 5, fac->createNetwork());
   }
-    
-    DummyDownload(IFactory *fac, const std::string databaseName, const std::string table)
-    {
-        _fss = new SQLiteStorage_iOS(databaseName, table);
-        _downloader = new Downloader(_fss, 5, fac->createNetwork());
-    }
   
   void run()
   {
@@ -61,13 +52,9 @@ public:
     _downloader->request(urlPNG, 60, this);
   }
     
-    void runSqlite(std::string root, std::string filename)
+    void runSqlite(std::string root, std::string filename, IStorage * fssAux)
     {
         printf("\nFileName: %s;", filename.c_str());
-        NSString *documentsDirectory = [NSString stringWithCString:root.c_str() 
-                                                    encoding:[NSString defaultCStringEncoding]];
-
-        FileSystemStorage * fssAux = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
         if (_fss->contains(filename.c_str())){
           ByteBuffer bb = _fss->getByteBuffer(filename.c_str());
           std::string resp = (char*)bb.getData();
@@ -83,8 +70,6 @@ public:
           }
           bb.release();
         }
-
-        delete fssAux;
     }
   
   void onDownload(const Response& response)

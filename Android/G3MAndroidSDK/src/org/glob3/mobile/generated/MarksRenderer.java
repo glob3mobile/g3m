@@ -36,7 +36,7 @@ public class MarksRenderer extends Renderer
 	gl.enableVertices();
 	gl.enableTextures();
   
-	gl.depthTest(false);
+	gl.depth(false);
 	gl.blend(true);
   
 	final Vector3D radius = rc.getPlanet().getRadii();
@@ -51,7 +51,7 @@ public class MarksRenderer extends Renderer
 	  mark.render(rc, minDistanceToCamera);
 	}
   
-	gl.depthTest(true);
+	gl.depth(true);
 	gl.blend(false);
   
 	gl.disableTextures();

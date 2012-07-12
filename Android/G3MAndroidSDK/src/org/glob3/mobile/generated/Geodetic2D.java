@@ -57,13 +57,23 @@ public class Geodetic2D
 	return _longitude;
   }
 
-  /*
-  bool closeTo(const Geodetic2D& other) const {
-	if (!_latitude.closeTo(other._latitude)) {
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean closeTo(const Geodetic2D &other) const
+  public final boolean closeTo(Geodetic2D other)
+  {
+	if (!_latitude.closeTo(other._latitude))
+	{
 	  return false;
 	}
-    
+  
 	return _longitude.closeTo(other._longitude);
-  }*/
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isBetween(const Geodetic2D& min, const Geodetic2D& max) const
+  public final boolean isBetween(Geodetic2D min, Geodetic2D max)
+  {
+	return _latitude.isBetween(min.latitude(), max.latitude()) && _longitude.isBetween(min.longitude(), max.longitude());
+  }
 
 }

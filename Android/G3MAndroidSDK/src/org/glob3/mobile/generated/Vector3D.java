@@ -57,6 +57,13 @@ public class Vector3D
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isZero() const
+  public final boolean isZero()
+  {
+	return (_x == 0) && (_y == 0) && (_z == 0);
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Vector3D normalized() const
   public final Vector3D normalized()
   {
@@ -140,27 +147,26 @@ public class Vector3D
   {
 	Vector3D v1 = normalized();
 	Vector3D v2 = other.normalized();
+  
 	double c = v1.dot(v2);
 	if (c > 1.0)
 		c = 1.0;
 	else if (c < -1.0)
 		c = -1.0;
   
-	Angle a = Angle.fromRadians(Math.acos(c));
-  
-	return a;
+	return Angle.fromRadians(Math.acos(c));
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Vector3D rotateAroundAxis(const Vector3D& axis, double theta) const
-  public final Vector3D rotateAroundAxis(Vector3D axis, double theta)
+//ORIGINAL LINE: Vector3D rotateAroundAxis(const Vector3D& axis, Angle theta) const
+  public final Vector3D rotateAroundAxis(Vector3D axis, Angle theta)
   {
 	final double u = axis.x();
 	final double v = axis.y();
 	final double w = axis.z();
   
-	final double cosTheta = Math.cos(theta);
-	final double sinTheta = Math.sin(theta);
+	final double cosTheta = theta.cosinus();
+	final double sinTheta = theta.sinus();
   
 	final double ms = axis.squaredLength();
 	final double m = Math.sqrt(ms);
