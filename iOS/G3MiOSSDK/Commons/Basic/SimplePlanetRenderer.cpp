@@ -144,7 +144,8 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
     }
   }
   
-  _mesh = new IndexedMesh(true, TriangleStrip, ver, ind, numIndexes, flatColor, colors, texID, texC, normals);
+  _mesh = new TexturedMesh(new IndexedMesh(true, TriangleStrip, ver, ind, numIndexes, flatColor, colors, normals),
+                           new TextureMapping(texID, texC));
   
   return true;
 }

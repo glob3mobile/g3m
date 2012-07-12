@@ -15,8 +15,10 @@ void TexturedMesh::render(const RenderContext* rc) const
   gl->enableTextures();
   gl->enableTexture2D();
   
-  gl->bindTexture(_texMap->getID());
-  gl->setTextureCoordinates(2, 0, _texMap->getCoords()); 
+//  gl->bindTexture(_textureMapping->getID());
+//  gl->setTextureCoordinates(2, 0, _textureMapping->getCoords());
+  
+  _textureMapping->bind(rc);
   
   _mesh->render(rc);
   
