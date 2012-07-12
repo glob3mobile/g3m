@@ -9,27 +9,43 @@
 #ifndef G3MiOSSDK_TextureMapping_hpp
 #define G3MiOSSDK_TextureMapping_hpp
 
+#include "MutableVector2D.hpp"
 #include <vector>
 
-#include "MutableVector2D.hpp"
+class RenderContext;
 
 
 class TextureMapping
 {
 private:
-  const float const *         _texCoords;
-  const int            _textureId;
+  const int          _textureId;
+  const float const* _texCoords;
   
 public:
-  TextureMapping(int tID, float tC[]): _texCoords(tC), _textureId(tID){}
   
-  TextureMapping(int tID, std::vector<MutableVector2D> texCoords);
+  TextureMapping(int textureId,
+                 float texCoords[]) :
+  _textureId(textureId),
+  _texCoords(texCoords)
+  {
+  }
   
-  ~TextureMapping(){ delete[] _texCoords;}
+  TextureMapping(int textureId,
+                 std::vector<MutableVector2D> texCoords);
   
-  int getID() const { return _textureId;}
-  const float* getCoords() const { return _texCoords;}
+  ~TextureMapping() {
+    delete[] _texCoords;
+  }
   
+  int getTextureId() const {
+    return _textureId;
+  }
+  
+  const float* getTexCoords() const {
+    return _texCoords;
+  }
+  
+  void bind(const RenderContext* rc) const;  
 };
 
 #endif

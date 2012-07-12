@@ -16,16 +16,27 @@
 class TexturedMesh: public Mesh
 {
 private:
-  const Mesh* _mesh;
-  const TextureMapping* _texMap;
+  const Mesh*           _mesh;
+  const TextureMapping* _textureMapping;
+  const bool            _ownedMesh;
   
 public:
   
-  TexturedMesh(const Mesh* mesh, const TextureMapping* tm): _mesh(mesh), _texMap(tm){}
+  TexturedMesh(const Mesh* mesh,
+               bool ownedMesh,
+               const TextureMapping* textureMapping) :
+  _mesh(mesh),
+  _ownedMesh(ownedMesh),
+  _textureMapping(textureMapping)
+  {
+    
+  }
   
   ~TexturedMesh(){
-    delete _mesh;
-    delete _texMap;
+    if (_ownedMesh) {
+      delete _mesh;
+    }
+    delete _textureMapping;
   }
   
   void render(const RenderContext* rc) const;

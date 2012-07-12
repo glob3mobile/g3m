@@ -21,31 +21,39 @@ uniform mediump float ColorPerVertexIntensity;
 void main() {
   
   if (EnableTexture) {
-  
     gl_FragColor = texture2D(Sampler, TextureCoordOut);
-    
-    if (EnableColorPerVertex){
+
+    if (EnableFlatColor || EnableColorPerVertex){
+
+      lowp vec4 color;
+      if (EnableFlatColor){
+        color = FlatColor;
+        if (EnableColorPerVertex)
+        {
+          color = color * VertexColor;
+        }
+      } else{
+        color = VertexColor;
+      }
+      
+      lowp float intensity = (FlatColorIntensity + ColorPerVertexIntensity) / 2.0;
       gl_FragColor = mix( gl_FragColor,
                         VertexColor,
-                        ColorPerVertexIntensity);
+                        intensity);
     }
-    
-    if (EnableFlatColor){
-      gl_FragColor = mix( gl_FragColor,
-                        FlatColor,
-                        FlatColorIntensity);
-    }
-    
   }
   else {
-    if (EnableColorPerVertex && !EnableFlatColor){
+  
+    if (EnableColorPerVertex){
       gl_FragColor = VertexColor;
-    } else
-    if (EnableColorPerVertex && EnableFlatColor){
-      gl_FragColor = mix( VertexColor,
-                        FlatColor,
-                        FlatColorIntensity);
-    } else
-      gl_FragColor = FlatColor;
+      if (EnableFlatColor)
+      {
+        gl_FragColor = gl_FragColor * FlatColor;
+      }
+    } else{
+        gl_FragColor = FlatColor;
+    }
+  
   }
+  
 }

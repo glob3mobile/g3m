@@ -9,11 +9,14 @@
 #include "TileRenderer.hpp"
 #include "Tile.hpp"
 
+#include "TileTessellator.hpp"
+#include "TileTexturizer.hpp"
 
 TileRenderer::~TileRenderer() {
   clearTopLevelTiles();
   
   delete _tessellator;
+  delete _texturizer;
 }
 
 void TileRenderer::clearTopLevelTiles() {

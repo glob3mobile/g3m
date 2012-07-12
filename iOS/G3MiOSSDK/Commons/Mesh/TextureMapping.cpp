@@ -2,24 +2,30 @@
 //  TextureMapping.cpp
 //  G3MiOSSDK
 //
-//  Created by Agustín Trujillo Pino on 12/07/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
+//  Created by Diego Gomez Deck on 12/07/12.
+//  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
-
-#include <iostream>
 
 #include "TextureMapping.hpp"
 
+#include "Context.hpp"
 
-TextureMapping::TextureMapping(int tID, std::vector<MutableVector2D> texCoords): _textureId(tID)
+
+TextureMapping::TextureMapping(int textureId, std::vector<MutableVector2D> texCoords) :
+_textureId(textureId)
 {
-  float *tC = new float[3* texCoords.size()];
+  float* texCoordsA = new float[2 * texCoords.size()];
   int p = 0;
   for (int i = 0; i < texCoords.size(); i++) {
-    tC[p++] = texCoords[i].x();
-    tC[p++] = texCoords[i].y();
+    texCoordsA[p++] = texCoords[i].x();
+    texCoordsA[p++] = texCoords[i].y();
   }
+  _texCoords = texCoordsA;
+}
+
+void TextureMapping::bind(const RenderContext* rc) const {
+  IGL *gl = rc->getGL();
   
-  _texCoords = tC;
-  
+  gl->bindTexture(_textureId);
+  gl->setTextureCoordinates(2, 0, _texCoords);
 }

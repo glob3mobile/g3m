@@ -130,7 +130,7 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   //FLAT COLOR
   Color * flatColor = NULL;
   if (true){
-    flatColor = new Color( Color::fromRGBA(0.0, 0.2, 0.0, 1.0) );
+    flatColor = new Color( Color::fromRGBA(0.0, 1.0, 0.0, 1.0) );
   }
   
   float * normals = NULL;
@@ -144,7 +144,9 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
     }
   }
   
-  _mesh = new IndexedMesh(true, TriangleStrip, ver, ind, numIndexes, flatColor, colors, texID, texC, normals);
+  IndexedMesh * im = new IndexedMesh(true, TriangleStrip, ver, ind, numIndexes, flatColor, colors, 0.5, normals);
+  
+  _mesh = new TexturedMesh(im, true, new TextureMapping(texID, texC));
   
   return true;
 }
