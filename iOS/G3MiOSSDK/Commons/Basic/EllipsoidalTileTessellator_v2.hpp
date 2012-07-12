@@ -27,7 +27,7 @@ private:
   static void addVertex(const Planet* planet,
                         std::vector<MutableVector3D>* vertices,
                         std::vector<MutableVector2D>* texCoords,
-                        const Geodetic2D& g) {
+                        const Geodetic3D& g) {
     vertices->push_back( planet->toVector3D(g).asMutableVector3D() );
     
     
@@ -42,6 +42,14 @@ private:
     MutableVector2D texCoord(s, 1-t);
     texCoords->push_back(texCoord);
   }
+  
+  static void addVertex(const Planet* planet,
+                        std::vector<MutableVector3D>* vertices,
+                        std::vector<MutableVector2D>* texCoords,
+                        const Geodetic2D& g) {
+    addVertex(planet, vertices, texCoords, Geodetic3D(g, 0.0));
+  }
+
   
 public:
   EllipsoidalTileTessellator_v2(const std::string textureFilename, const unsigned int resolution, const bool skirted) :
