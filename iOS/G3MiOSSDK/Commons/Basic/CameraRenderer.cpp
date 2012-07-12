@@ -19,7 +19,9 @@ _initialPixel(0,0,0)
 {
 }
 
-void CameraRenderer::initialize(const InitializationContext* ic){}
+void CameraRenderer::initialize(const InitializationContext* ic){
+  _logger = ic->getLogger();
+}
 
 int CameraRenderer::render(const RenderContext* rc)
 {
@@ -175,7 +177,7 @@ void CameraRenderer::makeRotate(const TouchEvent& touchEvent)
   Angle verticalAngle = Angle::fromDegrees( (distY / (double)_camera0.getHeight()) * 180.0 );
   Angle horizontalAngle = Angle::fromDegrees( (distX / (double)_camera0.getWidth()) * 360.0 );
   
-  printf("ROTATING V=%f H=%f\n", verticalAngle.degrees(), horizontalAngle.degrees());
+  _logger->logInfo("ROTATING V=%f H=%f\n", verticalAngle.degrees(), horizontalAngle.degrees());
   
   //Back-Up camera0
   Camera cameraAux(0,0);

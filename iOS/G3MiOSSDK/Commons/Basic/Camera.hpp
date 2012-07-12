@@ -16,6 +16,7 @@
 #include "Geodetic3D.hpp"
 #include "Vector2D.hpp"
 #include "MutableMatrix44D.hpp"
+#include "ILogger.hpp"
 
 
 /**
@@ -72,6 +73,8 @@ private:
   MutableVector3D _pos;             // position
   MutableVector3D _center;          // center of view
   MutableVector3D _up;              // vertical vector
+  
+  const ILogger * _logger;
   
   void applyTransform(const MutableMatrix44D& mat);
   

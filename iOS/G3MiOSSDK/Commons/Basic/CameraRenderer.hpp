@@ -25,6 +25,8 @@ class CameraRenderer: public Renderer
 {
 private:
   
+  const ILogger * _logger; //Log
+  
   Camera * _camera;   //Camera used at current frame
   const Planet * _planet;   //Planet
   
