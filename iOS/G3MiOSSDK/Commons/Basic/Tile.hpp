@@ -32,7 +32,10 @@ private:
                        const TileTessellator* tessellator);
   
   inline bool isVisible(const RenderContext* rc);
+  inline bool hasEnoughDetail(const RenderContext* rc);
   
+  std::vector<Tile*> createSubTiles();
+
 public:
   Tile(const Sector& sector,
        int level,

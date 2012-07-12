@@ -40,6 +40,11 @@ public:
     return Angle::fromDegrees(NAN);
   }
   
+  static Angle midAngle(const Angle& angle1, const Angle& angle2) {
+    return Angle::fromDegrees((angle1.degrees() + angle2.degrees()) / 2);
+  }
+
+  
   bool isNan() const {
     return isnan(_degrees);
   }
