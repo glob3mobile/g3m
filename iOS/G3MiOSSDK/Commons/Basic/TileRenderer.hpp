@@ -13,19 +13,23 @@
 
 class Tile;
 class TileTessellator;
+class TileTexturizer;
 
 
 class TileRenderer: public Renderer {
 private:
   const TileTessellator* _tessellator;
+  const TileTexturizer*  _texturizer;
   std::vector<Tile*>     _topLevelTiles;
   
   void clearTopLevelTiles();
   void createTopLevelTiles(const InitializationContext* ic);
   
 public:
-  TileRenderer(const TileTessellator* tessellator) :
-  _tessellator(tessellator)
+  TileRenderer(const TileTessellator* tessellator,
+               const TileTexturizer*  texturizer) :
+  _tessellator(tessellator),
+  _texturizer(texturizer)
   {
     
   }

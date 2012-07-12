@@ -13,7 +13,9 @@
 
 class RenderContext;
 class Mesh;
-#include "TileTessellator.hpp"
+//#include "TileTessellator.hpp"
+class TileTessellator;
+class TileTexturizer;
 
 class Tile {
 private:
@@ -21,6 +23,8 @@ private:
   const int    _level;
   const int    _row;
   const int    _column;
+  
+  bool _textureSolved;
   
   Mesh* _mesh;
   
@@ -38,7 +42,8 @@ public:
   _level(level),
   _row(row),
   _column(column),
-  _mesh(NULL)
+  _mesh(NULL),
+  _textureSolved(false)
   {
   }
   
@@ -60,9 +65,19 @@ public:
   int getColumn() const {
     return _column;
   }
+
+  
+  void setTextureSolved(bool textureSolved) {
+    _textureSolved = textureSolved;
+  }
+  
+  bool isTextureSolved() const {
+    return _textureSolved;
+  }
   
   void render(const RenderContext* rc,
-              const TileTessellator* tessellator);
+              const TileTessellator* tessellator,
+              const TileTexturizer* texturizer);
   
 };
 

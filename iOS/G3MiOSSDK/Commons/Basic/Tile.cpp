@@ -10,6 +10,9 @@
 #include "Mesh.hpp"
 #include "Camera.hpp"
 
+#include "TileTessellator.hpp"
+#include "TileTexturizer.hpp"
+
 //#include "Angle.hpp"
 //#include "Geodetic3D.hpp"
 //#include "Vector3D.hpp"
@@ -315,7 +318,7 @@ Tile::~Tile() {
 
 
 Mesh* Tile::getMesh(const RenderContext* rc,
-              const TileTessellator* tessellator) {
+                    const TileTessellator* tessellator) {
   if (_mesh == NULL) {
     _mesh = tessellator->createMesh(rc, this);
   }
@@ -324,25 +327,32 @@ Mesh* Tile::getMesh(const RenderContext* rc,
 
 
 bool Tile::isVisible(const RenderContext *rc) {
- 
+  
   return true;
 }
 
 void Tile::render(const RenderContext* rc,
-                  const TileTessellator* tessellator) {
+                  const TileTessellator* tessellator,
+                  const TileTexturizer* texturizer) {
   int ___diego_at_work;
   
-  Camera* camera = rc->getCamera();
-  Vector3D pos = camera->getPos();
-  
-  double distance = pos.length();
-  
-//  rc->getLogger()->logInfo("distance to camera: %f", distance);
+  //  Camera* camera = rc->getCamera();
+  //  Vector3D pos = camera->getPos();
+  //
+  //  double distance = pos.length();
+  //
+  //  rc->getLogger()->logInfo("distance to camera: %f", distance);
   
   if (isVisible(rc)) {
-    const Mesh* mesh = getMesh(rc, tessellator);
+    Mesh* mesh = getMesh(rc, tessellator);
     if (mesh != NULL) {
-      mesh->render(rc);
+      if (!isTextureSolved()) {
+        mesh = texturizer->texturize(rc, this, mesh);
+      }
+      
+      if (mesh != NULL) {
+        mesh->render(rc);
+      }
     }
   }
 }
