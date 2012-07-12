@@ -1,4 +1,15 @@
 package org.glob3.mobile.generated; 
+//
+//  IGL.h
+//  G3MiOSSDK
+//
+//  Created by José Miguel S N on 01/06/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//
+
+
+
+
 public abstract class IGL
 {
 
@@ -9,18 +20,6 @@ public abstract class IGL
   public abstract void enableVertices();
 
   public abstract void enableTextures();
-
-  public abstract void enableVertexColor(float[] colors, float intensity);
-
-  public abstract void enableVertexFlatColor(Color c, float intensity);
-
-  public abstract void disableVertexColor();
-
-  public abstract void disableVertexFlatColor();
-
-  public abstract void enableVertexNormal(float[] normals);
-
-  public abstract void disableVertexNormal();
 
   public abstract void enableTexture2D();
 
@@ -44,6 +43,7 @@ public abstract class IGL
 	color(col.getRed(), col.getGreen(), col.getBlue(), col.getAlpha());
   }
 
+
   public abstract void pushMatrix();
 
   public abstract void popMatrix();
@@ -54,11 +54,11 @@ public abstract class IGL
 
   public abstract void vertexPointer(int size, int stride, float[] vertex);
 
-  public abstract void drawTriangleStrip(int n, int[] i);
+  public abstract void drawTriangleStrip(int n, byte[] i);
 
-  public abstract void drawLines(int n, int[] i);
+  public abstract void drawLines(int n, byte[] i);
 
-  public abstract void drawLineLoop(int n, int[] i);
+  public abstract void drawLineLoop(int n, byte[] i);
 
   public abstract void setProjection(MutableMatrix44D projection);
 
@@ -78,13 +78,12 @@ public abstract class IGL
 
   public abstract void bindTexture(int n);
 
-  public abstract void depth(boolean b);
+  public abstract void depthTest(boolean b);
 
   public abstract void blend(boolean b);
 
-  public abstract void drawBillBoard(int textureId, Vector3D pos, float viewPortRatio);
+  public abstract void drawBillBoard(int textureId, float x, float y, float z, float viewPortRatio);
 
   public abstract void deleteTexture(int glTextureId);
 
-  public abstract void cullFace(boolean b, CullFace face);
 }

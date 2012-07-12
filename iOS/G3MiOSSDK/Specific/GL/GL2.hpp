@@ -14,7 +14,7 @@ class GL2: public IGL {
   
 public:
   
-  void enableVertices() ;
+  void enableVerticesPosition() ;
   
   void enableTextures() ;
   
@@ -28,7 +28,7 @@ public:
   
   void disableTexture2D() ;
   
-  void disableVertices() ;
+  void disableVerticesPosition() ;
   
   void disableTextures() ;
   

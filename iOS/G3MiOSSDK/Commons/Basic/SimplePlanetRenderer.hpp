@@ -14,6 +14,7 @@
 #include "IImage.hpp"
 
 #include "IndexedMesh.hpp"
+#include "TexturedMesh.hpp"
 
 class SimplePlanetRenderer: public Renderer {
 private:
@@ -23,7 +24,7 @@ private:
   const int _latRes;
   const int _lonRes;
   
-  IndexedMesh * _mesh;
+  Mesh * _mesh;
   
   
   float * createVertices(const Planet& planet);

@@ -108,7 +108,7 @@ void GL2::pushMatrix() {
   _matrixStack.push_back(_modelView);
 }
 
-void GL2::enableVertices() {
+void GL2::enableVerticesPosition() {
   glEnableVertexAttribArray(Attributes.Position);
 }
 
@@ -165,7 +165,7 @@ void GL2::disableTexture2D() {
   glUniform1i(Uniforms.EnableTexture, false);
 }
 
-void GL2::disableVertices() {
+void GL2::disableVerticesPosition() {
   glDisableVertexAttribArray(Attributes.Position);
 }
 

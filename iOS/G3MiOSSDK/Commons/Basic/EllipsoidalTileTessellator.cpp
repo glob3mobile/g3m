@@ -47,5 +47,5 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
 //  const Color color = Color::fromRGB(r, g, b, 1);
 //  
 //  return new IndexedTriangleStripMesh(vertices, indexes, color);
-  return new IndexedMesh(vertices, TriangleStrip, indexes, texID, texCoords);
+  return new IndexedMesh(vertices, TriangleStrip, indexes, NULL/*, texID, texCoords*/);
 }

@@ -59,7 +59,7 @@ int DummyRenderer::render(const RenderContext* rc)
   // obtaing gl object reference
   IGL *gl = rc->getGL();
   
-  gl->enableVertices();
+  gl->enableVerticesPosition();
   
   // insert pointers
   gl->disableTextures();

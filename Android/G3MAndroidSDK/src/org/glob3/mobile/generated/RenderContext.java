@@ -34,6 +34,4 @@ public class RenderContext extends Context
   {
 	return _texturesHandler;
   }
-
-
 }
