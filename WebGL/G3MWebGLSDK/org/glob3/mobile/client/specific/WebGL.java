@@ -15,13 +15,10 @@ public class WebGL {
 	public static List<JavaScriptObject> programList;
 
 	public static native void jsInitGL(JavaScriptObject canvas) /*-{
-		try {
-			$wnd.gl = canvas.getContext("experimental-webgl");
-			$wnd.gl.viewportWidth = canvas.width;
-			$wnd.gl.viewportHeight = canvas.height;
-		} catch (e) {
-
-		}
+		
+		$wnd.gl = canvas.getContext("experimental-webgl");
+		$wnd.gl.viewportWidth = canvas.width;
+		$wnd.gl.viewportHeight = canvas.height;
 		if (!$wnd.gl) {
 			alert("Could not initialise WebGL");
 		}
@@ -1120,7 +1117,7 @@ public class WebGL {
 			alert("Error: " + $wnd.gl.getShaderInfoLog(shader));
 			return null;
 		}
-
+		
 		return shader;
 	}-*/;
 
@@ -1203,6 +1200,10 @@ public class WebGL {
 		$wnd.vertexBuffer = $wnd.gl.createBuffer();
 		$wnd.texBuffer = $wnd.gl.createBuffer();
 		$wnd.vertexIndexBuffer = $wnd.gl.createBuffer();
+		
+		
+		console.log("PROGRAM CREATED ");
+		console.log(newProgram);
 
 		return newProgram;
 
@@ -1367,6 +1368,9 @@ public class WebGL {
 
 	public static native void jsIdentity() /*-{
 		$wnd.mat4.identity($wnd.mvMatrix);
+		
+		console.log($wnd.shaderProgram.Modelview);
+		
 		$wnd.gl.uniformMatrix4fv($wnd.shaderProgram.Modelview, false,
 				$wnd.mvMatrix);
 	}-*/;

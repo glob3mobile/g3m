@@ -40,7 +40,6 @@ public class GL_WebGL
       WebGL.loadGlobalVars();
       CreateProgram();
       WebGL.jsEnable3D();
-
       WebGL.jsIdentity();
    }
 
