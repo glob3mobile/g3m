@@ -9,6 +9,11 @@
 #ifndef G3MiOSSDK_TextureMapping_hpp
 #define G3MiOSSDK_TextureMapping_hpp
 
+#include <vector>
+
+#include "MutableVector2D.hpp"
+
+
 class TextureMapping
 {
 private:
@@ -17,6 +22,8 @@ private:
   
 public:
   TextureMapping(int tID, float tC[]): _texCoords(tC), _textureId(tID){}
+  
+  TextureMapping(int tID, std::vector<MutableVector2D> texCoords);
   
   ~TextureMapping(){ delete[] _texCoords;}
   
