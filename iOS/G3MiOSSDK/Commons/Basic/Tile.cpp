@@ -20,7 +20,7 @@ Tile::~Tile() {
 Mesh* Tile::getMesh(const RenderContext* rc,
                     const TileTessellator* tessellator) {
   if (_mesh == NULL) {
-    _mesh = tessellator->createDebugMesh(rc, this);
+    _mesh = (_wireframe)? tessellator->createDebugMesh(rc, this) : tessellator->createMesh(rc, this);
   }
   return _mesh;
 }
@@ -92,10 +92,10 @@ std::vector<Tile*> Tile::createSubTiles() {
   const int nextLevel = getLevel() + 1;
   
   std::vector<Tile*> subTiles(4);
-  subTiles[0] = new Tile(Sector(Geodetic2D(p0, t0), Geodetic2D(p1, t1)), nextLevel, 2 * row, 2 * col);
-  subTiles[1] = new Tile(Sector(Geodetic2D(p0, t1), Geodetic2D(p1, t2)), nextLevel, 2 * row, 2 * col + 1);
-  subTiles[2] = new Tile(Sector(Geodetic2D(p1, t0), Geodetic2D(p2, t1)), nextLevel, 2 * row + 1, 2 * col);
-  subTiles[3] = new Tile(Sector(Geodetic2D(p1, t1), Geodetic2D(p2, t2)), nextLevel, 2 * row + 1, 2 * col + 1);
+  subTiles[0] = new Tile(Sector(Geodetic2D(p0, t0), Geodetic2D(p1, t1)), nextLevel, 2 * row, 2 * col, _wireframe);
+  subTiles[1] = new Tile(Sector(Geodetic2D(p0, t1), Geodetic2D(p1, t2)), nextLevel, 2 * row, 2 * col + 1, _wireframe);
+  subTiles[2] = new Tile(Sector(Geodetic2D(p1, t0), Geodetic2D(p2, t1)), nextLevel, 2 * row + 1, 2 * col, _wireframe);
+  subTiles[3] = new Tile(Sector(Geodetic2D(p1, t1), Geodetic2D(p2, t2)), nextLevel, 2 * row + 1, 2 * col + 1, _wireframe);
   
   return subTiles;
 }

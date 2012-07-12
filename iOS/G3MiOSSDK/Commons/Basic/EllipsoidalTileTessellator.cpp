@@ -133,7 +133,7 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc, const
   }
 
   // create TexturedMesh
-  Color *color = new Color(Color::fromRGBA(1.0, 1.0, 0.0, 1.0));
+  Color *color = new Color(Color::fromRGBA(1.0, 0.0, 0.0, 1.0));
   return new IndexedMesh(vertices, LineLoop, indices, color); 
 }
 
