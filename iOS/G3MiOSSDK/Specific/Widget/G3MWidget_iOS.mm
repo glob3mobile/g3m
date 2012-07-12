@@ -174,7 +174,7 @@
     
     // very basic tile renderer
     if (true) {
-      TileTessellator* tessellator = new EllipsoidalTileTessellator_v2("world.jpg");
+      TileTessellator* tessellator = new EllipsoidalTileTessellator_v2("world.jpg", 12, true);
       TileTexturizer* texturizer = new SimpleTileTexturizer();
       
       TileRenderer* tr = new TileRenderer(tessellator, texturizer);

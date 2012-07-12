@@ -21,6 +21,8 @@ class EllipsoidalTileTessellator_v2 : public TileTessellator {
 private:
   
   const std::string _textureFilename;
+  const unsigned int _resolution;
+  const bool _skirted;
   
   static void addVertex(const Planet* planet,
                         std::vector<MutableVector3D>* vertices,
@@ -39,12 +41,11 @@ private:
     
     MutableVector2D texCoord(s, 1-t);
     texCoords->push_back(texCoord);
-    
   }
   
 public:
-  EllipsoidalTileTessellator_v2(const std::string textureFilename) :
-  _textureFilename(textureFilename)
+  EllipsoidalTileTessellator_v2(const std::string textureFilename, const unsigned int resolution, const bool skirted) :
+  _textureFilename(textureFilename), _resolution(resolution), _skirted(skirted)
   {
     
   }

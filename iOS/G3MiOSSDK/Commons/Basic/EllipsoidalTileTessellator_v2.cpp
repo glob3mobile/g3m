@@ -18,7 +18,7 @@
 
 Mesh* EllipsoidalTileTessellator_v2::createMesh(const RenderContext* rc,
                                              const Tile* tile) const {
-  int ___diego_at_work;
+  int ___agustin_at_work;
   
   const int texID = rc->getTexturesHandler()->getTextureIdFromFileName(rc, _textureFilename, 2048, 1024);
   
@@ -30,28 +30,27 @@ Mesh* EllipsoidalTileTessellator_v2::createMesh(const RenderContext* rc,
   const Sector sector = tile->getSector();
   const Planet* planet = rc->getPlanet();
 
+  // create vertices coordinates
   std::vector<MutableVector3D> vertices;
   std::vector<MutableVector2D> texCoords;
-  addVertex(planet, &vertices, &texCoords, sector.getInnerPoint(0, 0)); 
-  addVertex(planet, &vertices, &texCoords, sector.getInnerPoint(0, 1)); 
-  addVertex(planet, &vertices, &texCoords, sector.getInnerPoint(1, 0));   
-  addVertex(planet, &vertices, &texCoords, sector.getInnerPoint(1, 1));
+  unsigned int resol_1 = _resolution - 1;
+  for (unsigned int j=0; j<_resolution; j++)
+    for (unsigned int i=0; i<_resolution; i++) {
+      addVertex(planet, &vertices, &texCoords, sector.getInnerPoint((double)i/resol_1, (double)j/resol_1));
+  }
   
-  std::vector<unsigned int> indexes;
-  indexes.push_back(0);
-  indexes.push_back(1);
-  indexes.push_back(2);
-  indexes.push_back(3);
-  
-//  double r = (rand() % 100) / 100.0;
-//  double g = (rand() % 100) / 100.0;
-//  double b = (rand() % 100) / 100.0;
-//  const Color color = Color::fromRGB(r, g, b, 1);
-//  
-//  return new IndexedTriangleStripMesh(vertices, indexes, color);
-//  return new IndexedMesh(vertices, TriangleStrip, indexes, NULL/*, texID, texCoords*/);
-  
-  
-  return new TexturedMesh(new IndexedMesh(vertices, TriangleStrip, indexes, NULL), new TextureMapping(texID, texCoords)); 
+  // create indices
+  std::vector<unsigned int> indices;
+  for (unsigned int j=0; j<resol_1; j++) {
+    if (j>0) indices.push_back(j*_resolution);
+    for (unsigned int i=0; i<_resolution; i++) {
+      indices.push_back(j*_resolution + i);
+      indices.push_back(j*_resolution + i + _resolution);
+    }
+    indices.push_back(j*_resolution + 2*_resolution - 1);
+  }
+
+  // create TexturedMesh
+  return new TexturedMesh(new IndexedMesh(vertices, TriangleStrip, indices, NULL), new TextureMapping(texID, texCoords)); 
   
 }
