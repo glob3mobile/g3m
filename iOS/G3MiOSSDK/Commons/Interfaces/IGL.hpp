@@ -26,7 +26,7 @@ public:
   
   virtual ~IGL() {};
   
-  virtual void enableVertices() = 0;
+  virtual void enableVerticesPosition() = 0;
   
   virtual void enableTextures() = 0;
   
@@ -46,7 +46,7 @@ public:
   
   virtual void disableTexture2D() = 0;
   
-  virtual void disableVertices() = 0;
+  virtual void disableVerticesPosition() = 0;
   
   virtual void disableTextures() = 0;
   

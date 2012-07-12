@@ -22,85 +22,76 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class RenderContext;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class TextureHolder;
+//class TextureKey;
 
 
 
 
 public class TexturesHandler
 {
-  private java.util.ArrayList<TextureHolder> _textureHolders = new java.util.ArrayList<TextureHolder>();
+  private java.util.ArrayList<TextureKey> _textures = new java.util.ArrayList<TextureKey>();
 
+  public int __Diego_destructor_must_delete_TextureKeys;
   public void dispose()
   {
-	if (_textureHolders.size() > 0)
-	{
-	  System.out.print("WARNING: The TexturesHandler is destroyed, but the inner textures were not released.\n");
-	}
   }
 
   public final int getTextureIdFromFileName(RenderContext rc, String filename, int textureWidth, int textureHeight)
   {
-	final IImage image = rc.getFactory().createImageFromFileName(filename);
+	IImage image = rc.getFactory().createImageFromFileName(filename);
   
-	final int texId = getTextureId(rc, image, filename, textureWidth, textureHeight); // filename as the textureId
-  
-	if (image != null)
-		image.dispose();
-  
-	return texId;
+	return getTextureId(rc, image, filename, textureWidth, textureHeight); // filename as the textureId
   }
 
   public final int getTextureId(RenderContext rc, IImage image, String textureId, int textureWidth, int textureHeight)
   {
   
-	TextureHolder candidate = new TextureHolder(textureId, textureWidth, textureHeight);
+	TextureKey key = new TextureKey(textureId, textureWidth, textureHeight);
   
-	for (int i = 0; i < _textureHolders.size(); i++)
+	for (int i = 0; i < _textures.size(); i++)
 	{
-	  TextureHolder holder = _textureHolders.get(i);
-	  if (holder.equalsTo(candidate))
+	  TextureKey each = _textures.get(i);
+	  if (each.equalsTo(key))
 	  {
-		holder.retain();
-		if (candidate != null)
-			candidate.dispose();
-  
-		return holder._glTextureId;
+		each.retain();
+		return each._glTextureId;
 	  }
 	}
   
-	candidate._glTextureId = rc.getGL().uploadTexture(image, textureWidth, textureHeight);
+	key._glTextureId = rc.getGL().uploadTexture(image, textureWidth, textureHeight);
   
-	rc.getLogger().logInfo("Uploaded texture \"%s\" (%dx%d) to GPU with texId=%d", textureId, textureWidth, textureHeight, candidate._glTextureId);
+	rc.getLogger().logInfo("Uploaded texture \"%s\" (%dx%d) to GPU with texId=%d", textureId, textureWidth, textureHeight, key._glTextureId);
   
-	_textureHolders.add(candidate);
+	_textures.add(key);
   
-	return candidate._glTextureId;
+	return key._glTextureId;
   }
 
   public final void takeTexture(RenderContext rc, int glTextureId)
   {
-	for (int i = 0; i < _textureHolders.size(); i++)
+	for (int i = 0; i < _textures.size(); i++)
 	{
-	  TextureHolder holder = _textureHolders.get(i);
+	  TextureKey each = _textures.get(i);
   
-	  if (holder._glTextureId == glTextureId)
+	  if (each._glTextureId == glTextureId)
 	  {
-		holder.release();
+		each.release();
   
-		if (!holder.isRetained())
+		if (!each.isRetained())
 		{
-  		_textureHolders.remove(i);
+//C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'erase' method in Java:
+		  _textures.remove(i);
   
-		  rc.getGL().deleteTexture(holder._glTextureId);
+		  rc.getGL().deleteTexture(each._glTextureId);
   
-		  if (holder != null)
-			  holder.dispose();
+		  if (each != null)
+			  each.dispose();
 		}
   
 		return;
 	  }
 	}
+  
   }
 
 }

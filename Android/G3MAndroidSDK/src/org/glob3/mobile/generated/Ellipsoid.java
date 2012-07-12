@@ -68,15 +68,6 @@ public class Ellipsoid
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Vector3D geodeticSurfaceNormal(const Geodetic2D& geodetic) const
-  public final Vector3D geodeticSurfaceNormal(Geodetic2D geodetic)
-  {
-	double cosLatitude = geodetic.latitude().cosinus();
-  
-	return new Vector3D(cosLatitude * geodetic.longitude().cosinus(), cosLatitude * geodetic.longitude().sinus(), geodetic.latitude().sinus());
-  }
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: java.util.ArrayList<double> intersections(const Vector3D& origin, const Vector3D& direction) const
   public final java.util.ArrayList<Double> intersections(Vector3D origin, Vector3D direction)
   {
@@ -254,7 +245,7 @@ public class Ellipsoid
 	{
 	  double phi = (i * granularity);
   
-	  positions.addLast(scaleToGeocentricSurface(start.rotateAroundAxis(normal, Angle.fromRadians(phi))));
+	  positions.addLast(scaleToGeocentricSurface(start.rotateAroundAxis(normal, phi)));
 	}
   
 	positions.addLast(stop);

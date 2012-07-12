@@ -256,7 +256,7 @@ int SGCubeNode::rawRender(const RenderContext *rc) {
   
   
   
-  gl->enableVertices();
+  gl->enableVerticesPosition();
   
   // insert pointers
   gl->disableTextures();

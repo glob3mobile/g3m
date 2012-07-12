@@ -122,13 +122,6 @@ public class Angle
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Angle div(double k) const
-  public final Angle div(double k)
-  {
-	return new Angle(_degrees / k);
-  }
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: boolean greaterThan(const Angle& a) const
   public final boolean greaterThan(Angle a)
   {
@@ -165,13 +158,6 @@ public class Angle
   {
 	Angle theSum = this.add(a);
 	return theSum.times(0.5);
-  }
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isBetween(const Angle& min, const Angle& max) const
-  public final boolean isBetween(Angle min, Angle max)
-  {
-	return (_degrees >= min._degrees) && (_degrees <= max._degrees);
   }
 
 }

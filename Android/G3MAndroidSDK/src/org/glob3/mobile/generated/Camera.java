@@ -27,6 +27,8 @@ package org.glob3.mobile.generated;
  */
 public class Camera
 {
+
+
   public Camera(Camera c)
   {
 	  _pos = new MutableVector3D(c._pos);
@@ -38,15 +40,11 @@ public class Camera
   }
 
   public Camera(int width, int height)
-  //_pos(63650000, 0, 0),
   {
-	  _pos = new MutableVector3D(6378137 *5, 0, 0);
-	  _center = new MutableVector3D(0, 0, 0);
-	  _up = new MutableVector3D(0, 0, 1);
+	  _pos = new MutableVector3D(63650000.0, 0.0, 0.0);
+	  _center = new MutableVector3D(0.0, 0.0, 0.0);
+	  _up = new MutableVector3D(0.0, 0.0, 1.0);
 	resizeViewport(width, height);
-  }
-  public void dispose()
-  {
   }
 
   public final void copyFrom(Camera c)
@@ -87,6 +85,7 @@ public class Camera
 	double ratioScreen = (double) _viewport[3] / _viewport[2];
 	_projection = MutableMatrix44D.createProjectionMatrix(-0.3 / ratioScreen * znear, 0.3 / ratioScreen * znear, -0.3 * znear, 0.3 * znear, znear, 10000 * znear);
   
+	// obtaing gl object reference
 	IGL gl = rc.getGL();
 	gl.setProjection(_projection);
   
@@ -104,7 +103,7 @@ public class Camera
 	py = _viewport[3] - py;
 	Vector3D pixel3D = new Vector3D(px, py, 0);
   
-	MutableMatrix44D modelView = _projection.multiply(_model);
+	MutableMatrix44D modelView = _projection.multMatrix(_model);
 	Vector3D obj = modelView.unproject(pixel3D, _viewport);
 	if (obj.isNan())
 		return obj;
@@ -189,7 +188,7 @@ public class Camera
   
 	//MutableMatrix44D m = trans1.multMatrix(rot).multMatrix(trans2);
   
-	MutableMatrix44D m = trans2.multiply(rot).multiply(trans1);
+	MutableMatrix44D m = trans2.multMatrix(rot).multMatrix(trans1);
   
 	//MutableMatrix44D m = trans1.multMatrix(trans2);
   

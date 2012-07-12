@@ -15,6 +15,9 @@ class MutableVector3D;
 
 #include "Angle.hpp"
 
+#include "ILogger.hpp"
+#include <string>
+
 // class to keep a 4x4 matrix
 class MutableMatrix44D {
 private:
@@ -123,7 +126,7 @@ public:
     for (int i = 0; i < 16; i++) { M[i] = (float) _m[i];}
   }
   
-  void print() const;
+  void print(const std::string& name, const ILogger* log) const;
   
   Vector3D unproject(const Vector3D& pixel3D, const int viewport[4]) const;
   

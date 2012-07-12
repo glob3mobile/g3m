@@ -22,7 +22,7 @@ int MarksRenderer::render(const RenderContext* rc) {
   
   IGL* gl = rc->getGL();
   
-  gl->enableVertices();
+  gl->enableVerticesPosition();
   gl->enableTextures();
 
   gl->depthTest(false);
@@ -43,7 +43,7 @@ int MarksRenderer::render(const RenderContext* rc) {
   gl->blend(false);
 
   gl->disableTextures();
-  gl->disableVertices();
+  gl->disableVerticesPosition();
   
   
   return MAX_TIME_TO_RENDER;

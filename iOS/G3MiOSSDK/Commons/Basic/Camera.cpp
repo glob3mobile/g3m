@@ -18,7 +18,8 @@ _pos(c._pos),
 _center(c._center),
 _up(c._up),
 _model(c._model),
-_projection(c._projection)
+_projection(c._projection),
+_logger(NULL)
 {
   resizeViewport(c.getWidth(), c.getHeight());
 }
@@ -30,14 +31,15 @@ void Camera::copyFrom(const Camera &c)
   _up = c._up;
   _model = c._model;
   _projection =c._projection;
+  _logger = c._logger;
 }
 
 
 Camera::Camera(int width, int height) :
-//_pos(63650000, 0, 0),
 _pos(6378137*5, 0, 0),
 _center(0, 0, 0),
-_up(0, 0, 1)
+_up(0, 0, 1),
+_logger(NULL)
 {
   resizeViewport(width, height);
 }
@@ -53,18 +55,17 @@ void Camera::resizeViewport(int width, int height) {
 
 void Camera::print() const
 {
-  printf("MODEL: \n"); 
-  _model.print();
-  printf("\n");
-  printf("PROJECTION: \n");
-  _projection.print();
-  printf("\n");
-  printf("VIEWPORT: \n");
-  for (int k = 0; k < 4; k++) printf("%d ",  _viewport[k] );
-  printf("\n\n");
+  if (_logger != NULL){ 
+  _model.print("MODEL", _logger);
+  _projection.print("PROJECTION", _logger);
+  _logger->logInfo("VIEWPORT: %d, %d, %d, %d\n",  _viewport[0] ,  _viewport[1] ,  _viewport[2] ,  _viewport[3] );
+  }
 }
 
 void Camera::draw(const RenderContext &rc) {
+  
+  _logger = rc.getLogger();
+  
   double znear;
   
   double height = _pos.length();

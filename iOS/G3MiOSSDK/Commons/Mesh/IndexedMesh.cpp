@@ -195,7 +195,7 @@ void IndexedMesh::render(const RenderContext* rc) const
 {
   IGL *gl = rc->getGL();
   
-  gl->enableVertices();
+  gl->enableVerticesPosition();
   
   const bool isTextured = (_textureId > 0) && (_texCoords != NULL);
   if (isTextured) {
@@ -234,5 +234,5 @@ void IndexedMesh::render(const RenderContext* rc) const
     gl->disableTextures();
   }
   
-  gl->disableVertices();
+  gl->disableVerticesPosition();
 }

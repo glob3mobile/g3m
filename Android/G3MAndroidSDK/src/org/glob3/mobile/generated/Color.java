@@ -25,19 +25,19 @@ public class Color
   }
 
 
-  public static Color fromRGBA(float red, float green, float blue, float alpha)
+  public static Color fromRGB(float red, float green, float blue, float alpha)
   {
 	return new Color(red, green, blue, alpha);
   }
 
   public static Color black()
   {
-	return Color.fromRGBA(0, 0, 0, 1);
+	return Color.fromRGB(0, 0, 0, 1);
   }
 
   public static Color white()
   {
-	return Color.fromRGBA(1, 1, 1, 1);
+	return Color.fromRGB(1, 1, 1, 1);
   }
 
 

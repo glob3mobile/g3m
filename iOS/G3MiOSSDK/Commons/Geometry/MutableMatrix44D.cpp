@@ -27,11 +27,12 @@ MutableMatrix44D MutableMatrix44D::multiply(const MutableMatrix44D& m) const {
   return MutableMatrix44D(R);
 }
 
-void MutableMatrix44D::print() const
+void MutableMatrix44D::print(const std::string& name, const ILogger* log) const
 {
+  log->logInfo("MATRIX %s:\n", name.c_str());
   for (int j = 0; j < 4; j++)
-    printf("%.2f  %.2f %.2f %.2f\n", _m[j * 4], _m[j * 4 + 1],_m[j * 4 + 2], _m[j * 4 + 3] );
-  
+    log->logInfo("%.2f  %.2f %.2f %.2f\n", _m[j * 4], _m[j * 4 + 1],_m[j * 4 + 2], _m[j * 4 + 3] ); 
+  log->logInfo("\n"); 
 }
 
 
