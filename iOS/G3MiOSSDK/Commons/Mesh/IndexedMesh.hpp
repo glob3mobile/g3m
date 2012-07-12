@@ -37,6 +37,7 @@ private:
   
   const Color *        _flatColor;
   const float *        _colors;
+  const float          _colorsIntensity;
   
 public:
   
@@ -48,15 +49,17 @@ public:
               const float* vertices,
               const unsigned int* indexes,
               const int numIndex, 
-              const Color* flatColor,
-              const float * colors,
+              const Color* flatColor = NULL,
+              const float * colors = NULL,
+              const float colorsIntensity = 0.0,
               const float* normals = NULL);
   
   IndexedMesh(std::vector<MutableVector3D>& vertices,
               const GLPrimitive primitive,
               std::vector<unsigned int>& indexes,
-              const Color* flatColor,
+              const Color* flatColor = NULL,
               std::vector<Color>* colors = NULL,
+              const float colorsIntensity = 0.0,
               std::vector<MutableVector3D>* normals = NULL);
   
   virtual void render(const RenderContext* rc) const;

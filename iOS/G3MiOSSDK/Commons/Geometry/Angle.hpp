@@ -100,8 +100,10 @@ public:
   Angle clampedTo(const Angle& min,
                   const Angle& max) const;  
   
-  Angle average(const Angle& a) const;
+  //Angle average(const Angle& a) const;
   
+  Angle average(const double t, const Angle& a) const;
+    
   bool isBetween(const Angle& min,
                  const Angle& max) const;
   

@@ -11,8 +11,8 @@
 #include "Tile.hpp"
 #include "Context.hpp"
 #include "IndexedMesh.hpp"
-#include "TexturedMesh.hpp"
 #include "TextureMapping.hpp"
+#include "TexturedMesh.hpp"
 
 //#include "math.h"
 

@@ -31,7 +31,8 @@ IndexedMesh::IndexedMesh(bool owner,
                          const unsigned int* indexes,
                          const int numIndex, 
                          const Color* flatColor,
-                         const float * colors,
+                         const float* colors,
+                         const float colorsIntensity,
                          const float* normals):
 _owner(owner),
 _primitive(primitive),
@@ -39,6 +40,8 @@ _vertices(vertices),
 _indexes(indexes),
 _numIndex(numIndex),
 _flatColor(flatColor),
+_colors(colors),
+_colorsIntensity(colorsIntensity), 
 _normals(normals)
 {
 }
@@ -48,11 +51,13 @@ IndexedMesh::IndexedMesh(std::vector<MutableVector3D>& vertices,
                          std::vector<unsigned int>& indexes,
                          const Color* flatColor,
                          std::vector<Color>* colors,
+                         const float colorsIntensity,
                          std::vector<MutableVector3D>* normals):
 _owner(true),
 _primitive(primitive),
 _flatColor(flatColor),
-_numIndex(indexes.size())
+_numIndex(indexes.size()),
+_colorsIntensity(colorsIntensity)
 {
   float * vert = new float[3* vertices.size()];
   int p = 0;
@@ -105,12 +110,12 @@ void IndexedMesh::render(const RenderContext* rc) const
   gl->enableVerticesPosition();
   
   if (_colors != NULL)
-    gl->enableVertexColor(_colors, 0.5);
+    gl->enableVertexColor(_colors, _colorsIntensity);
   else
     gl->disableVertexColor();
   
   if (_flatColor != NULL)
-    gl->enableVertexFlatColor(*_flatColor, 0.5);
+    gl->enableVertexFlatColor(*_flatColor, _colorsIntensity);
   else
     gl->disableVertexFlatColor();
   

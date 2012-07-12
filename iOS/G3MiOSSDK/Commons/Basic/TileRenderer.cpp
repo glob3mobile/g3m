@@ -75,7 +75,7 @@ void TileRenderer::initialize(const InitializationContext* ic) {
 
 int TileRenderer::render(const RenderContext* rc) {
   
- // std::vector<Tile*> visibleTiles = getVisibleTiles(rc);
+  // std::vector<Tile*> visibleTiles = getVisibleTiles(rc);
   
   for (int i = 0; i < _topLevelTiles.size(); i++) {
     Tile* tile = _topLevelTiles[i];

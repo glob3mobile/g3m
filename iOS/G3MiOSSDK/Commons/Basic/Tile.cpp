@@ -32,7 +32,7 @@ bool Tile::isVisible(const RenderContext *rc) {
 
 bool Tile::hasEnoughDetail(const RenderContext *rc) {
   
-  return _level >= 1;
+  return _level >= 0;
 }
 
 void Tile::render(const RenderContext* rc,

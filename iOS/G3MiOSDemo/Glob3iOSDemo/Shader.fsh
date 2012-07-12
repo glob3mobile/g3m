@@ -22,33 +22,38 @@ void main() {
   
   if (EnableTexture) {
     gl_FragColor = texture2D(Sampler, TextureCoordOut);
-    
-    if (EnableColorPerVertex){
-      gl_FragColor = mix(gl_FragColor,
-                         VertexColor,
-                         ColorPerVertexIntensity);
-    }
-    
-    if (EnableFlatColor) {
-      gl_FragColor = mix(gl_FragColor,
-                         FlatColor,
-                         FlatColorIntensity);
+
+    if (EnableFlatColor || EnableColorPerVertex){
+
+      lowp vec4 color;
+      if (EnableFlatColor){
+        color = FlatColor;
+        if (EnableColorPerVertex)
+        {
+          color = color * VertexColor;
+        }
+      } else{
+        color = VertexColor;
+      }
+      
+      lowp float intensity = (FlatColorIntensity + ColorPerVertexIntensity) / 2.0;
+      gl_FragColor = mix( gl_FragColor,
+                        VertexColor,
+                        intensity);
     }
   }
   else {
-    if (EnableColorPerVertex && !EnableFlatColor){
+  
+    if (EnableColorPerVertex){
       gl_FragColor = VertexColor;
-    }
-    else {
-      if (EnableColorPerVertex && EnableFlatColor){
-        gl_FragColor = mix(VertexColor,
-                           FlatColor,
-                           FlatColorIntensity);
+      if (EnableFlatColor)
+      {
+        gl_FragColor = gl_FragColor * FlatColor;
       }
-      else {
+    } else{
         gl_FragColor = FlatColor;
-      }
     }
+  
   }
   
 }
