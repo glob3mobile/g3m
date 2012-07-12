@@ -78,6 +78,7 @@ public:
     return Geodetic2D(_lower.latitude(), _upper.longitude());
   }
   
+  Geodetic2D getInnerPoint(double u, double v) const;
   
 };
 

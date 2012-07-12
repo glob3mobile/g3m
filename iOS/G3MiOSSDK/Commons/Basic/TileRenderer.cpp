@@ -30,7 +30,7 @@ void TileRenderer::createTopLevelTiles(const InitializationContext* ic) {
   
   const Sector topSector(Geodetic2D(Angle::fromDegrees(-90), Angle::fromDegrees(-180)),
                          Geodetic2D(Angle::fromDegrees(90), Angle::fromDegrees(180)));
-  const int K = 4;
+  const int K = 2;
   const int splitsByLatitude = 2 * K;
   const int splitsByLongitude = 4 * K;
   const int topLevel = 0;
@@ -45,11 +45,13 @@ void TileRenderer::createTopLevelTiles(const InitializationContext* ic) {
   const Angle tileHeight = deltaLan.div(splitsByLatitude);
   const Angle tileWidth = deltaLon.div(splitsByLongitude);
   
-  for (int row = 0; row < splitsByLatitude; row++) {
+//  for (int row = 0; row < splitsByLatitude; row++) {
+  for (int row = K; row < K+1; row++) {
     const Angle tileLatFrom = tileHeight.times(row).add(fromLatitude);
     const Angle tileLatTo = tileLatFrom.add(tileHeight);
     
-    for (int col = 0; col < splitsByLongitude; col++) {
+    //for (int col = 0; col < splitsByLongitude; col++) {
+    for (int col = 2*K-1; col < 2*K; col++) {
       const Angle tileLonFrom = tileWidth.times(col).add(fromLongitude);
       const Angle tileLonTo = tileLonFrom.add(tileWidth);
       
