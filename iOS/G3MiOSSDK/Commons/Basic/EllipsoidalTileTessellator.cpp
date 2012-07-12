@@ -2,7 +2,7 @@
 //  EllipsoidalTileTessellator.cpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 27/06/12.
+//  Created by Agustin Trujillo Pino on 12/07/12.
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
@@ -14,11 +14,10 @@
 #include "TextureMapping.hpp"
 #include "TexturedMesh.hpp"
 
-//#include "math.h"
 
 Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
-                                             const Tile* tile) const {
-  int ___diego_at_work;
+                                                const Tile* tile) const {
+  int ___agustin_at_work;
   
   const int texID = rc->getTexturesHandler()->getTextureIdFromFileName(rc, _textureFilename, 2048, 1024);
   
@@ -26,31 +25,74 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
     rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
     return NULL;
   }
-
+  
   const Sector sector = tile->getSector();
   const Planet* planet = rc->getPlanet();
-
+  
+  // create vertices coordinates
   std::vector<MutableVector3D> vertices;
   std::vector<MutableVector2D> texCoords;
-  addVertex(planet, &vertices, &texCoords, sector.getSW()); 
-  addVertex(planet, &vertices, &texCoords, sector.getSE()); 
-  addVertex(planet, &vertices, &texCoords, sector.getNW()); 
-  addVertex(planet, &vertices, &texCoords, sector.getNE()); 
+  unsigned int resol_1 = _resolution - 1;
+  for (unsigned int j=0; j<_resolution; j++)
+    for (unsigned int i=0; i<_resolution; i++) 
+      addVertex(planet, &vertices, &texCoords, sector.getInnerPoint((double)i/resol_1, (double)j/resol_1));
   
-  std::vector<unsigned int> indexes;
-  indexes.push_back(0);
-  indexes.push_back(1);
-  indexes.push_back(2);
-  indexes.push_back(3);
+  // create indices
+  std::vector<unsigned int> indices;
+  for (unsigned int j=0; j<resol_1; j++) {
+    if (j>0) indices.push_back(j*_resolution);
+    for (unsigned int i = 0; i < _resolution; i++) {
+      indices.push_back(j*_resolution + i);
+      indices.push_back(j*_resolution + i + _resolution);
+    }
+    indices.push_back(j*_resolution + 2*_resolution - 1);
+  }
   
-//  double r = (rand() % 100) / 100.0;
-//  double g = (rand() % 100) / 100.0;
-//  double b = (rand() % 100) / 100.0;
-//  const Color color = Color::fromRGB(r, g, b, 1);
-//  
-//  return new IndexedTriangleStripMesh(vertices, indexes, color);
-//  return new IndexedMesh(vertices, TriangleStrip, indexes, NULL/*, texID, texCoords*/);
-  return new TexturedMesh(new IndexedMesh(vertices, TriangleStrip, indexes, NULL),
-                          true,
-                          new TextureMapping(texID, texCoords));
+  // create skirts
+  const double skirtHeight = 5e5;
+  if (_skirted) {
+    indices.push_back(0);
+    unsigned int posS = _resolution * _resolution;
+    
+    // west side
+    for (unsigned int j=0; j<resol_1; j++) {
+      Geodetic3D g(sector.getInnerPoint(0.0, (double)j/resol_1), -skirtHeight);
+      addVertex(planet, &vertices, &texCoords, g);
+      indices.push_back(j*_resolution);
+      indices.push_back(posS++);
+    }
+    
+    // south side
+    for (unsigned int i=0; i<resol_1; i++) {
+      Geodetic3D g(sector.getInnerPoint((double)i/resol_1, 1.0), -skirtHeight);
+      addVertex(planet, &vertices, &texCoords, g);
+      indices.push_back(resol_1*_resolution + i);
+      indices.push_back(posS++);
+    }
+    
+    // east side
+    for (unsigned int j=resol_1; j>0; j--) {
+      Geodetic3D g(sector.getInnerPoint(1.0, (double)j/resol_1), -skirtHeight);
+      addVertex(planet, &vertices, &texCoords, g);
+      indices.push_back(j*_resolution + resol_1);
+      indices.push_back(posS++);
+    }
+    
+    // north side
+    for (unsigned int i=resol_1; i>0; i--) {
+      Geodetic3D g(sector.getInnerPoint((double)i/resol_1, 0.0), -skirtHeight);
+      addVertex(planet, &vertices, &texCoords, g);
+      indices.push_back(i);
+      indices.push_back(posS++);
+    }
+    
+    // last triangles
+    indices.push_back(0);
+    indices.push_back(_resolution*_resolution);
+  }
+  
+  
+  // create TexturedMesh
+  return new TexturedMesh(new IndexedMesh(vertices, TriangleStrip, indices, NULL), true, new TextureMapping(texID, texCoords)); 
+  
 }

@@ -25,7 +25,7 @@
 #include "Effects.hpp"
 #include "SceneGraphRenderer.hpp"
 #include "GLErrorRenderer.hpp"
-#include "EllipsoidalTileTessellator_v2.hpp"
+#include "EllipsoidalTileTessellator.hpp"
 
 #include "DummyDownload.hpp"
 #include "SQLiteStorage_iOS.hpp"
@@ -174,7 +174,7 @@
     
     // very basic tile renderer
     if (true) {
-      TileTessellator* tessellator = new EllipsoidalTileTessellator_v2("world.jpg", 12, true);
+      TileTessellator* tessellator = new EllipsoidalTileTessellator("world.jpg", 16, true);
       TileTexturizer* texturizer = new SimpleTileTexturizer();
       
       TileRenderer* tr = new TileRenderer(tessellator, texturizer);
