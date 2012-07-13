@@ -180,8 +180,8 @@
       TileRenderer* tr1 = new TileRenderer(tessellator, texturizer, false);
       comp->addRenderer(tr1);
       
-      TileRenderer* tr2 = new TileRenderer(tessellator, texturizer, true);
-      comp->addRenderer(tr2);
+//      TileRenderer* tr2 = new TileRenderer(tessellator, texturizer, true);
+//      comp->addRenderer(tr2);
     }
     
     if (false) {
