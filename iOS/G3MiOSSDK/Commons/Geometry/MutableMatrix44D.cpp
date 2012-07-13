@@ -17,12 +17,11 @@
 
 MutableMatrix44D MutableMatrix44D::multiply(const MutableMatrix44D& m) const {
   double R[16];
-  for (int j = 0; j < 4; j++)
-    for (int i = 0; i < 4; i++)
-      R[j * 4 + i] = m.get(j * 4) * _m[i] + 
-      m.get(j * 4 + 1) * _m[4 + i] + 
-      m.get(j * 4 + 2) * _m[8 + i] + 
-      m.get(j * 4 + 3) * _m[12 + i];
+  for (int j = 0; j < 4; j++) {
+    for (int i = 0; i < 4; i++) {
+      R[j * 4 + i] = m.get(j * 4) * _m[i] + m.get(j * 4 + 1) * _m[4 + i] + m.get(j * 4 + 2) * _m[8 + i] + m.get(j * 4 + 3) * _m[12 + i];
+    }
+  }
   
   return MutableMatrix44D(R);
 }
@@ -30,8 +29,9 @@ MutableMatrix44D MutableMatrix44D::multiply(const MutableMatrix44D& m) const {
 void MutableMatrix44D::print(const std::string& name, const ILogger* log) const
 {
   log->logInfo("MATRIX %s:\n", name.c_str());
-  for (int j = 0; j < 4; j++)
-    log->logInfo("%.2f  %.2f %.2f %.2f\n", _m[j * 4], _m[j * 4 + 1],_m[j * 4 + 2], _m[j * 4 + 3] ); 
+  for (int j = 0; j < 4; j++) {
+    log->logInfo("%.2f  %.2f %.2f %.2f\n", _m[j * 4], _m[j * 4 + 1],_m[j * 4 + 2], _m[j * 4 + 3] );
+  }
   log->logInfo("\n"); 
 }
 
@@ -197,7 +197,7 @@ MutableMatrix44D MutableMatrix44D::createProjectionMatrix(double left, double ri
   const double rl = right - left;
   const double tb = top - bottom;
   const double fn = zfar - znear;
-
+  
   double P[16];
   P[0] = 2 * znear / rl;
   P[1] = P[2] = P[3] = P[4] = 0;
@@ -226,6 +226,6 @@ MutableMatrix44D MutableMatrix44D::fromScale(const MutableVector3D& scale) {
                           0.0, scale.y(), 0.0, 0,
                           0.0, 0.0, scale.z(), 0,
                           0.0, 0.0, 0.0, 1.0);
-
+  
 }
 
