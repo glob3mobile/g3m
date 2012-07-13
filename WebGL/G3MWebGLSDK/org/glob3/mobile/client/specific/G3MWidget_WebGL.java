@@ -127,7 +127,7 @@ public class G3MWidget_WebGL
                writeOnCanvas("execute " + te.getNumTouch() + ": " + te.getType().toString() + " " + te.getTouch(0).getPos().x()
                              + " " + te.getTouch(0).getPos().y());
                // TODO: uncomment next line when _widget is properly created
-               // _widget.onTouchEvent(te);
+               _widget.onTouchEvent(te);
             }
          });
       }

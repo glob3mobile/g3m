@@ -93,7 +93,7 @@ public class DummyRenderer extends Renderer
 	  gl.drawTriangleStrip(numIndices, index);
 	  gl.popMatrix();
 	}
-  
+
 	{
 	  // draw a green square
 	  gl.color((float) 0, (float) 1, (float) 0, 1);
@@ -104,7 +104,7 @@ public class DummyRenderer extends Renderer
 	  gl.drawTriangleStrip(numIndices, index);
 	  gl.popMatrix();
 	}
-  
+	 
 	{
 	  // draw a blue square
 	  gl.color((float) 0, (float) 0, (float) 1, 1);
