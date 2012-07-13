@@ -32,8 +32,8 @@ private:
                        const TileTessellator* tessellator);
   
   inline bool isVisible(const RenderContext* rc);
-  inline bool hasEnoughDetail(const RenderContext* rc,
-                              double distanceToCamera);
+  inline bool meetsRenderCriteria(const RenderContext* rc,
+                                  double distanceToCamera);
   
   inline std::vector<Tile*> createSubTiles();
   
@@ -49,14 +49,6 @@ private:
   
   Tile* getFallbackTextureTile() const {
     return _fallbackTextureTile;
-  }
-  
-  Tile* getFallbackTextureTileForSubtiles() {
-    if (isTextureSolved()) {
-      return this;
-    }
-    
-    return getFallbackTextureTile();
   }
   
 public:

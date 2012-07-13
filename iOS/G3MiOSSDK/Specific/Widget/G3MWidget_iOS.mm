@@ -162,6 +162,8 @@
       dummyDownload->runSqlite(directory, file3, fssAux);
     }
     
+    
+    
     // all the creation of renderers must be move to common source code, instead of specific
     int __to_move_to_common_source_code;
     
@@ -174,13 +176,18 @@
     
     // very basic tile renderer
     if (true) {
-//      TileTessellator* tessellator = new EllipsoidalTileTessellator("world.jpg", 16, true);
       TileTexturizer* texturizer = new SimpleTileTexturizer();
       
-      TileRenderer* tr1 = new TileRenderer(new EllipsoidalTileTessellator("world.jpg", 16, true, false), texturizer);
+      TileParameters* parameters = TileParameters::createDefault();
+      
+      TileRenderer* tr1 = new TileRenderer(EllipsoidalTileTessellator::create("world.jpg", 16, true),
+                                           texturizer,
+                                           parameters);
       comp->addRenderer(tr1);
       
-      TileRenderer* tr2 = new TileRenderer(new EllipsoidalTileTessellator("world.jpg", 16, true, true), texturizer);
+      TileRenderer* tr2 = new TileRenderer(EllipsoidalTileTessellator::createForDebug(16),
+                                           texturizer,
+                                           parameters);
       comp->addRenderer(tr2);
     }
     
@@ -235,7 +242,7 @@
     if (false) {
       SceneGraphRenderer* sgr = new SceneGraphRenderer();
       SGCubeNode* cube = new SGCubeNode();
-      //      cube->setScale(Vector3D(6378137.0, 6378137.0, 6378137.0));
+      // cube->setScale(Vector3D(6378137.0, 6378137.0, 6378137.0));
       sgr->getRootNode()->addChild(cube);
       comp->addRenderer(sgr);
     }
@@ -255,6 +262,8 @@
                                 width, height,
                                 Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
                                 true);
+    
+    
     
     // rest of initialization
     _animating = FALSE;

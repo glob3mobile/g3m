@@ -19,6 +19,7 @@ TileRenderer::~TileRenderer() {
   
   delete _tessellator;
   delete _texturizer;
+  delete _parameters;
 }
 
 void TileRenderer::clearTopLevelTiles() {
@@ -31,30 +32,20 @@ void TileRenderer::clearTopLevelTiles() {
 }
 
 void TileRenderer::createTopLevelTiles(const InitializationContext* ic) {
-  int __diego_at_work;
+  const Angle fromLatitude  = _parameters->_topSector.lower().latitude();
+  const Angle fromLongitude = _parameters->_topSector.lower().longitude();
   
-  const Sector topSector(Geodetic2D(Angle::fromDegrees(-90), Angle::fromDegrees(-180)),
-                         Geodetic2D(Angle::fromDegrees(90), Angle::fromDegrees(180)));
-  const int K = 1;
-  const int splitsByLatitude = 2 * K;
-  const int splitsByLongitude = 4 * K;
-  const int topLevel = 0;
+  const Angle deltaLan = _parameters->_topSector.getDeltaLatitude();
+  const Angle deltaLon = _parameters->_topSector.getDeltaLongitude();
   
+  const Angle tileHeight = deltaLan.div(_parameters->_splitsByLatitude);
+  const Angle tileWidth = deltaLon.div(_parameters->_splitsByLongitude);
   
-  const Angle fromLatitude = topSector.lower().latitude();
-  const Angle fromLongitude = topSector.lower().longitude();
-  
-  const Angle deltaLan = topSector.getDeltaLatitude();
-  const Angle deltaLon = topSector.getDeltaLongitude();
-  
-  const Angle tileHeight = deltaLan.div(splitsByLatitude);
-  const Angle tileWidth = deltaLon.div(splitsByLongitude);
-  
-  for (int row = 0; row < splitsByLatitude; row++) {
+  for (int row = 0; row < _parameters->_splitsByLatitude; row++) {
     const Angle tileLatFrom = tileHeight.times(row).add(fromLatitude);
     const Angle tileLatTo = tileLatFrom.add(tileHeight);
     
-    for (int col = 0; col < splitsByLongitude; col++) {
+    for (int col = 0; col < _parameters->_splitsByLongitude; col++) {
       const Angle tileLonFrom = tileWidth.times(col).add(fromLongitude);
       const Angle tileLonTo = tileLonFrom.add(tileWidth);
       
@@ -62,7 +53,7 @@ void TileRenderer::createTopLevelTiles(const InitializationContext* ic) {
       const Geodetic2D tileUpper(tileLatTo, tileLonTo);
       const Sector sector(tileLower, tileUpper);
       
-      Tile* tile = new Tile(sector, topLevel, row, col, NULL);
+      Tile* tile = new Tile(sector, _parameters->_topLevel, row, col, NULL);
       _topLevelTiles.push_back(tile);
     }
   }

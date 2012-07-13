@@ -54,7 +54,6 @@ private:
   Mesh* createDebugMesh(const RenderContext* rc,
                         const Tile* tile) const;
   
-public:
   EllipsoidalTileTessellator(const std::string textureFilename,
                              const unsigned int resolution,
                              const bool skirted,
@@ -67,10 +66,22 @@ public:
     
   }
   
+public:
+  static EllipsoidalTileTessellator* create(const std::string textureFilename,
+                                            const unsigned int resolution,
+                                            const bool skirted) {
+    return new EllipsoidalTileTessellator(textureFilename, resolution, skirted, false);
+  }
+  
+  static EllipsoidalTileTessellator* createForDebug(const unsigned int resolution) {
+    return new EllipsoidalTileTessellator("", resolution, true, true);
+  }
+  
   virtual ~EllipsoidalTileTessellator() { }
   
   virtual Mesh* createMesh(const RenderContext* rc,
                            const Tile* tile) const;
+  
 };
 
 #endif

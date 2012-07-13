@@ -30,8 +30,9 @@ bool Tile::isVisible(const RenderContext *rc) {
   return true;
 }
 
-bool Tile::hasEnoughDetail(const RenderContext *rc,
-                           double distanceToCamera) {
+bool Tile::meetsRenderCriteria(const RenderContext *rc,
+                               double distanceToCamera) {
+  
 //  31890685.000000
 //   7083288.848839
   
@@ -68,7 +69,7 @@ void Tile::render(const RenderContext* rc,
   int ___diego_at_work;
   
   if (isVisible(rc)) {
-    if (hasEnoughDetail(rc, distanceToCamera)) {
+    if (meetsRenderCriteria(rc, distanceToCamera)) {
       rawRender(rc, tessellator, texturizer);
     }
     else {
@@ -96,20 +97,13 @@ std::vector<Tile*> Tile::createSubTiles() {
   const Angle lon1 = Angle::midAngle(lon0, lon2);
   
   const int nextLevel = _level + 1;
-  Tile* fallback = getFallbackTextureTileForSubtiles();
-
+  Tile* fallback = isTextureSolved() ? this : getFallbackTextureTile();
+  
   std::vector<Tile*> subTiles(4);
   subTiles[0] = new Tile(Sector(Geodetic2D(lat0, lon0), Geodetic2D(lat1, lon1)), nextLevel, 2 * _row    , 2 * _column    , fallback);
   subTiles[1] = new Tile(Sector(Geodetic2D(lat0, lon1), Geodetic2D(lat1, lon2)), nextLevel, 2 * _row    , 2 * _column + 1, fallback);
   subTiles[2] = new Tile(Sector(Geodetic2D(lat1, lon0), Geodetic2D(lat2, lon1)), nextLevel, 2 * _row + 1, 2 * _column    , fallback);
   subTiles[3] = new Tile(Sector(Geodetic2D(lat1, lon1), Geodetic2D(lat2, lon2)), nextLevel, 2 * _row + 1, 2 * _column + 1, fallback);
-  
-//  Tile* fallbackTextureTile = getFallbackTextureTileForSubtiles();
-//  if (fallbackTextureTile != NULL) {
-//    for (int i = 0; i < subTiles.size(); i++) {
-//      subTiles[i]->setFallbackTextureTile(fallbackTextureTile);
-//    }
-//  }
   
   return subTiles;
 }

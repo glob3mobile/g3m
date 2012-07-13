@@ -42,6 +42,11 @@ public:
   {
   }
   
+  static Sector fullSphere() {
+    return Sector(Geodetic2D(Angle::fromDegrees(-90), Angle::fromDegrees(-180)),
+                  Geodetic2D(Angle::fromDegrees(90), Angle::fromDegrees(180)));
+  }
+  
   const Geodetic2D lower() const {
     return _lower;
   }
