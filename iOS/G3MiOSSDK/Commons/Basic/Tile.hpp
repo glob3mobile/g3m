@@ -25,6 +25,7 @@ private:
   const int    _column;
   
   bool _textureSolved;
+  bool _wireframe;
   
   Mesh* _mesh;
   
@@ -32,18 +33,23 @@ private:
                        const TileTessellator* tessellator);
   
   inline bool isVisible(const RenderContext* rc);
+  inline bool hasEnoughDetail(const RenderContext* rc);
   
+  std::vector<Tile*> createSubTiles();
+
 public:
   Tile(const Sector& sector,
        int level,
        int row,
-       int column):
+       int column,
+       bool wireframe):
   _sector(sector),
   _level(level),
   _row(row),
   _column(column),
   _mesh(NULL),
-  _textureSolved(false)
+  _textureSolved(false),
+  _wireframe(wireframe)
   {
   }
   

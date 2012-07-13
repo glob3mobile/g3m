@@ -22,10 +22,18 @@ Angle Angle::clampedTo(const Angle& min,
   return *this;
 }
 
-Angle Angle::average(const Angle& a) const {
+/*Angle Angle::average(const Angle& a) const {
   Angle theSum = this->add(a);
   return theSum.times(0.5);
+}*/
+
+
+Angle Angle::average(const double t, const Angle& a) const
+{
+  Angle dif = a.sub(*this);
+  return this->add(dif.times(t));
 }
+
 
 bool Angle::isBetween(const Angle& min,
                       const Angle& max) const {

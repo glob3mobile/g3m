@@ -173,12 +173,15 @@
     comp->addRenderer(cameraRenderer);
     
     // very basic tile renderer
-    if (false) {
-      TileTessellator* tessellator = new EllipsoidalTileTessellator("world.jpg");
+    if (true) {
+      TileTessellator* tessellator = new EllipsoidalTileTessellator("world.jpg", 16, true);
       TileTexturizer* texturizer = new SimpleTileTexturizer();
       
-      TileRenderer* tr = new TileRenderer(tessellator, texturizer);
-      comp->addRenderer(tr);
+      TileRenderer* tr1 = new TileRenderer(tessellator, texturizer, false);
+      comp->addRenderer(tr1);
+      
+      TileRenderer* tr2 = new TileRenderer(tessellator, texturizer, true);
+      comp->addRenderer(tr2);
     }
     
     if (false) {
@@ -187,7 +190,7 @@
       comp->addRenderer(dum);
     }
     
-    if (true) {
+    if (false) {
       // simple planet renderer, with a basic world image
       SimplePlanetRenderer* spr = new SimplePlanetRenderer("world.jpg");
       comp->addRenderer(spr);

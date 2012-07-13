@@ -31,7 +31,7 @@ IndexedMesh::IndexedMesh(bool owner,
                          const unsigned int* indexes,
                          const int numIndex, 
                          const Color* flatColor,
-                         const float * colors,
+                         const float* colors,
                          const float colorsIntensity,
                          const float* normals):
 _owner(owner),
@@ -132,8 +132,10 @@ void IndexedMesh::render(const RenderContext* rc) const
       break;
     case Lines:
       gl->drawLines(_numIndex, _indexes);
+      break;
     case LineLoop:
       gl->drawLineLoop(_numIndex, _indexes);
+      break;
     default:
       break;
   }
