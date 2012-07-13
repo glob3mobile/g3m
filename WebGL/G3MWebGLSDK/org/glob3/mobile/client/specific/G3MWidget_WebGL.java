@@ -66,6 +66,7 @@ public class G3MWidget_WebGL
       });
 
       onSizeChanged(Window.getClientWidth(), Window.getClientHeight());
+      
    }
 
 
@@ -104,6 +105,9 @@ public class G3MWidget_WebGL
       _widget = G3MWidget.create(factory, logger, gl, texturesHandler, Planet.createEarth(), comp,
                _canvas.getCoordinateSpaceWidth(), _canvas.getCoordinateSpaceHeight(),
                Color.fromRGB((float) 0.0, (float) 0.1, (float) 0.2, (float) 1.0), true);
+      
+      //CALLING widget.render()
+      startRender(this);
    }
 
 
@@ -140,4 +144,16 @@ public class G3MWidget_WebGL
       _canvas.getContext2d().fillText(msg, 25, line);
       line = line + 15;
    }
+   
+   private void renderWidget(){
+	   _widget.render();
+   }
+   
+   private native void startRender(G3MWidget_WebGL instance) /*-{
+   	var tick = function() {
+   		$wnd.requestAnimFrame(tick);
+   		$entry(instance.@org.glob3.mobile.client.specific.G3MWidget_WebGL::renderWidget()());
+   	};
+   	tick();
+   }-*/;
 }

@@ -40,6 +40,7 @@ public class GL_WebGL
       WebGL.loadGlobalVars();
       CreateProgram();
       WebGL.jsEnable3D();
+      WebGL.jsUseProgram();  //USING SHADING PROGRAM
       WebGL.jsIdentity();
    }
 
