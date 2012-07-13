@@ -35,45 +35,43 @@ bool Tile::hasEnoughDetail(const RenderContext *rc) {
   return _level >= 0;
 }
 
+void Tile::rawRender(const RenderContext *rc,
+                     const TileTessellator *tessellator,
+                     const TileTexturizer *texturizer) {
+  Mesh* mesh = getMesh(rc, tessellator);
+  
+  if (mesh != NULL) {
+    if (!isTextureSolved()) {
+      mesh = texturizer->texturize(rc, this, mesh);
+    }
+    
+    if (mesh != NULL) {
+      mesh->render(rc);
+    }
+  }
+}
+
 void Tile::render(const RenderContext* rc,
                   const TileTessellator* tessellator,
-                  const TileTexturizer* texturizer) {
+                  const TileTexturizer* texturizer,
+                  double distanceToCamera) {
   int ___diego_at_work;
-  
-  //  Camera* camera = rc->getCamera();
-  //  Vector3D pos = camera->getPos();
-  //
-  //  double distance = pos.length();
-  //
-  //  rc->getLogger()->logInfo("distance to camera: %f", distance);
   
   if (isVisible(rc)) {
     if (hasEnoughDetail(rc)) {
-      Mesh* mesh = getMesh(rc, tessellator);
-      if (mesh != NULL) {
-        if (!isTextureSolved()) {
-          mesh = texturizer->texturize(rc, this, mesh);
-        }
-        
-        if (mesh != NULL) {
-          mesh->render(rc);
-        }
-      }
+      rawRender(rc, tessellator, texturizer);
     }
     else {
       std::vector<Tile*> subTiles = createSubTiles();
       for (int i = 0; i < subTiles.size(); i++) {
         Tile* subTile = subTiles[i];
-        subTile->render(rc,
-                        tessellator,
-                        texturizer);
+        subTile->render(rc, tessellator, texturizer, distanceToCamera);
         
         delete subTile;
       }
     }
   }
 }
-
 
 std::vector<Tile*> Tile::createSubTiles() {
   const Geodetic2D lower = getSector().lower();

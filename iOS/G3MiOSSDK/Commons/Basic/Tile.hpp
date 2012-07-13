@@ -35,8 +35,12 @@ private:
   inline bool isVisible(const RenderContext* rc);
   inline bool hasEnoughDetail(const RenderContext* rc);
   
-  std::vector<Tile*> createSubTiles();
-
+  inline std::vector<Tile*> createSubTiles();
+  
+  inline void rawRender(const RenderContext* rc,
+                        const TileTessellator* tessellator,
+                        const TileTexturizer* texturizer);
+  
 public:
   Tile(const Sector& sector,
        int level,
@@ -54,7 +58,7 @@ public:
   }
   
   ~Tile();
-
+  
   
   Sector getSector() const {
     return _sector;
@@ -71,7 +75,7 @@ public:
   int getColumn() const {
     return _column;
   }
-
+  
   
   void setTextureSolved(bool textureSolved) {
     _textureSolved = textureSolved;
@@ -83,7 +87,8 @@ public:
   
   void render(const RenderContext* rc,
               const TileTessellator* tessellator,
-              const TileTexturizer* texturizer);
+              const TileTexturizer* texturizer,
+              double distanceToCamera);
   
 };
 
