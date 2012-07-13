@@ -177,24 +177,27 @@ MutableMatrix44D MutableMatrix44D::createRotationMatrix(const Angle& angle, cons
 MutableMatrix44D MutableMatrix44D::createModelMatrix(const MutableVector3D& pos,
                                                      const MutableVector3D& center,
                                                      const MutableVector3D& up) {
-  MutableVector3D w = center.sub(pos).normalized();
-  double pe = w.dot(up);
-  MutableVector3D v = up.sub(w.times(pe)).normalized();
-  MutableVector3D u = w.cross(v);
-  double LA[16] = {
+  const MutableVector3D w = center.sub(pos).normalized();
+  const double pe = w.dot(up);
+  const MutableVector3D v = up.sub(w.times(pe)).normalized();
+  const MutableVector3D u = w.cross(v);
+  const double LA[16] = {
     u.x(), v.x(), -w.x(), 0,
     u.y(), v.y(), -w.y(), 0,
     u.z(), v.z(), -w.z(), 0,
     -pos.dot(u), -pos.dot(v), pos.dot(w), 1
   };
-  
   return MutableMatrix44D(LA);
 }
 
-MutableMatrix44D MutableMatrix44D::createProjectionMatrix(double left, double right, double bottom, double top,double znear, double zfar)
-{
+MutableMatrix44D MutableMatrix44D::createProjectionMatrix(double left, double right,
+                                                          double bottom, double top,
+                                                          double znear, double zfar) {
   // set frustum matrix in double
-  double rl = right - left, tb = top - bottom, fn = zfar - znear;
+  const double rl = right - left;
+  const double tb = top - bottom;
+  const double fn = zfar - znear;
+
   double P[16];
   P[0] = 2 * znear / rl;
   P[1] = P[2] = P[3] = P[4] = 0;

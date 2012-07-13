@@ -74,19 +74,27 @@ public:
   static MutableMatrix44D fromScale(const MutableVector3D& scale);
   
   MutableMatrix44D() {
-    for (int i = 0; i < 16; i++) { _m[i] = 0.0;}
+    for (int i = 0; i < 16; i++) {
+      _m[i] = 0.0;
+    }
   }
   
   MutableMatrix44D(const MutableMatrix44D &m){
-    for (int i = 0; i < 16; i++) { _m[i] = m._m[i];}
+    for (int i = 0; i < 16; i++) {
+      _m[i] = m._m[i];
+    }
   }
   
   MutableMatrix44D(const double M[16]){
-    for (int i = 0; i < 16; i++) { _m[i] = M[i];}
+    for (int i = 0; i < 16; i++) {
+      _m[i] = M[i];
+    }
   }
   
   MutableMatrix44D(const float M[16]){
-    for (int i = 0; i < 16; i++) { _m[i] = M[i];}
+    for (int i = 0; i < 16; i++) {
+      _m[i] = M[i];
+    }
   }
   
   MutableMatrix44D(double m11, double m12, double m13, double m14,
@@ -118,12 +126,16 @@ public:
   
   MutableMatrix44D inverse() const;
   
-  double get(int i) const { return _m[i];}
+  double get(int i) const {
+    return _m[i];
+  }
   
   //const double * getMatrix() const { return _m;}
   
   void copyToFloatMatrix(float M[16]) const { 
-    for (int i = 0; i < 16; i++) { M[i] = (float) _m[i];}
+    for (int i = 0; i < 16; i++) {
+      M[i] = (float) _m[i];
+    }
   }
   
   void print(const std::string& name, const ILogger* log) const;
@@ -138,7 +150,8 @@ public:
                                             const MutableVector3D& center,
                                             const MutableVector3D& up);
   
-  static MutableMatrix44D createProjectionMatrix(double left, double right, double bottom, double top, 
+  static MutableMatrix44D createProjectionMatrix(double left, double right,
+                                                 double bottom, double top,
                                                  double znear, double zfar);
   
 };

@@ -63,7 +63,6 @@ void Camera::print() const
 }
 
 void Camera::draw(const RenderContext &rc) {
-  
   _logger = rc.getLogger();
   
   double znear;
@@ -78,7 +77,12 @@ void Camera::draw(const RenderContext &rc) {
   
   // compute projection matrix
   double ratioScreen = (double) _viewport[3] / _viewport[2];
-  _projection = MutableMatrix44D::createProjectionMatrix(-0.3 / ratioScreen * znear, 0.3 / ratioScreen * znear, -0.3 * znear, 0.3 * znear, znear, 10000 * znear);
+  _projection = MutableMatrix44D::createProjectionMatrix(-0.3 / ratioScreen * znear,
+                                                         0.3 / ratioScreen * znear,
+                                                         -0.3 * znear,
+                                                         0.3 * znear,
+                                                         znear,
+                                                         10000 * znear);
   
   IGL *gl = rc.getGL();
   gl->setProjection(_projection);
