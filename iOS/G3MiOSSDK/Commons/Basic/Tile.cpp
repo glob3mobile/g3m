@@ -30,7 +30,8 @@ bool Tile::isVisible(const RenderContext *rc) {
   return true;
 }
 
-bool Tile::hasEnoughDetail(const RenderContext *rc) {
+bool Tile::hasEnoughDetail(const RenderContext *rc,
+                           double distanceToCamera) {
   
   return _level >= 0;
 }
@@ -58,7 +59,7 @@ void Tile::render(const RenderContext* rc,
   int ___diego_at_work;
   
   if (isVisible(rc)) {
-    if (hasEnoughDetail(rc)) {
+    if (hasEnoughDetail(rc, distanceToCamera)) {
       rawRender(rc, tessellator, texturizer);
     }
     else {
@@ -94,6 +95,14 @@ std::vector<Tile*> Tile::createSubTiles() {
   subTiles[1] = new Tile(Sector(Geodetic2D(p0, t1), Geodetic2D(p1, t2)), nextLevel, 2 * row, 2 * col + 1, _wireframe);
   subTiles[2] = new Tile(Sector(Geodetic2D(p1, t0), Geodetic2D(p2, t1)), nextLevel, 2 * row + 1, 2 * col, _wireframe);
   subTiles[3] = new Tile(Sector(Geodetic2D(p1, t1), Geodetic2D(p2, t2)), nextLevel, 2 * row + 1, 2 * col + 1, _wireframe);
+  
+  
+  Tile* fallbackTextureTile = getFallbackTextureTileForSubtiles();
+  if (fallbackTextureTile != NULL) {
+    for (int i = 0; i < subTiles.size(); i++) {
+      subTiles[i]->setFallbackTextureTile(fallbackTextureTile);
+    }
+  }
   
   return subTiles;
 }

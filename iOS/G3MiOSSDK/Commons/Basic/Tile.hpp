@@ -33,13 +33,36 @@ private:
                        const TileTessellator* tessellator);
   
   inline bool isVisible(const RenderContext* rc);
-  inline bool hasEnoughDetail(const RenderContext* rc);
+  inline bool hasEnoughDetail(const RenderContext* rc,
+                              double distanceToCamera);
   
   inline std::vector<Tile*> createSubTiles();
   
   inline void rawRender(const RenderContext* rc,
                         const TileTessellator* tessellator,
                         const TileTexturizer* texturizer);
+  
+  Tile* _fallbackTextureTile;
+  
+  bool hasFallbackTextureTile() const {
+    return (_fallbackTextureTile != NULL);
+  }
+  
+  Tile* getFallbackTextureTile() const {
+    return _fallbackTextureTile;
+  }
+  
+  void setFallbackTextureTile(Tile* fallbackTextureTile) {
+    _fallbackTextureTile = fallbackTextureTile;
+  }
+  
+  Tile* getFallbackTextureTileForSubtiles() {
+    if (isTextureSolved()) {
+      return this;
+    }
+    
+    return getFallbackTextureTile();
+  }
   
 public:
   Tile(const Sector& sector,
@@ -53,7 +76,8 @@ public:
   _column(column),
   _mesh(NULL),
   _textureSolved(false),
-  _wireframe(wireframe)
+  _wireframe(wireframe),
+  _fallbackTextureTile(NULL)
   {
   }
   
