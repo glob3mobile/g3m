@@ -1229,17 +1229,11 @@ public class WebGL {
 		$wnd.gl.uniform1i($wnd.shaderProgram.EnableTexture, 1);
 	}-*/;
 
-	public static native void jsDisableTexture2D(/*
-												 * JavaScriptObject
-												 * currentProgram
-												 */) /*-{
+	public static native void jsDisableTexture2D() /*-{
 		$wnd.gl.uniform1i($wnd.shaderProgram.EnableTexture, 0);
 	}-*/;
 
-	public static native void jsDisableVertices(/*
-												 * JavaScriptObject
-												 * currentProgram
-												 */) /*-{
+	public static native void jsDisableVertices() /*-{
 		$wnd.gl.disableVertexAttribArray($wnd.shaderProgram.Position);
 	}-*/;
 
@@ -1365,26 +1359,18 @@ public class WebGL {
 		$wnd.gl.uniformMatrix4fv($wnd.shaderProgram.Modelview, false,
 				$wnd.mvMatrix);
 	}-*/;
+	
+	public static native void jsMultiplyModelViewMatrix(JsArrayNumber matrix) /*-{
+		var mvCopy = $wnd.mvMatrix;
+		$wnd.mat4.multiply(mvCopy, matrix, $wnd.mvMatrix);
+		$wnd.gl.uniformMatrix4fv($wnd.shaderProgram.Modelview, false, $wnd.mvMatrix);
+	}-*/;
 
 	public static native void jsIdentity() /*-{
 		$wnd.mat4.identity($wnd.mvMatrix);
 		
 		console.log($wnd.shaderProgram.Modelview);
 		
-		$wnd.gl.uniformMatrix4fv($wnd.shaderProgram.Modelview, false,
-				$wnd.mvMatrix);
-	}-*/;
-
-	public static native void jsRotate(float rotX, float rotY) /*-{
-		$wnd.mat4.rotate($wnd.mvMatrix, rotX, [ 1, 0, 0 ]);
-		$wnd.mat4.rotate($wnd.mvMatrix, rotY, [ 0, 1, 0 ]);
-		$wnd.gl.uniformMatrix4fv($wnd.shaderProgram.Modelview, false,
-				$wnd.mvMatrix);
-	}-*/;
-
-	public static native void jsScale(float scaleFactor) /*-{
-		$wnd.mat4.scale($wnd.mvMatrix,
-				[ scaleFactor, scaleFactor, scaleFactor ]);
 		$wnd.gl.uniformMatrix4fv($wnd.shaderProgram.Modelview, false,
 				$wnd.mvMatrix);
 	}-*/;
@@ -1488,6 +1474,43 @@ public class WebGL {
 		return idTexture;
 
 	}-*/;
+	
+	public static native int jsUploadTexture2(JavaScriptObject texture) /*-{
+		var i = 0, idTexture = 0;
+		var assignedPosition = false;
+		for (i; i < $wnd.maxGPUTextures; i++) {
+			if ($wnd.textureStack[i] == null) {
+				$wnd.textureStack[i] = texture;
+				idTexture = i + 1;
+				$wnd.numFreeTexIds--;
+				assignedPosition = true;
+				break;
+			}
+		}
+		if (assignedPosition == false)
+			return 0;
+		var magFilter = $wnd.gl.LINEAR;
+		var minFilter = $wnd.gl.LINEAR;
+		$wnd.gl.bindTexture($wnd.gl.TEXTURE_2D, texture);
+	
+		$wnd.gl.texImage2D($wnd.gl.TEXTURE_2D, 0, $wnd.gl.RGBA, $wnd.gl.RGBA,
+				$wnd.gl.UNSIGNED_BYTE, texture.image);
+	
+		$wnd.gl.texParameteri($wnd.gl.TEXTURE_2D, $wnd.gl.TEXTURE_MAG_FILTER,
+				magFilter);
+		$wnd.gl.texParameteri($wnd.gl.TEXTURE_2D, $wnd.gl.TEXTURE_MIN_FILTER,
+				minFilter);
+		$wnd.gl.texParameteri($wnd.gl.TEXTURE_2D, $wnd.gl.TEXTURE_WRAP_S,
+				$wnd.gl.CLAMP_TO_EDGE);
+		$wnd.gl.texParameteri($wnd.gl.TEXTURE_2D, $wnd.gl.TEXTURE_WRAP_T,
+				$wnd.gl.CLAMP_TO_EDGE);
+		$wnd.gl.generateMipmap($wnd.gl.TEXTURE_2D);
+		$wnd.gl.bindTexture($wnd.gl.TEXTURE_2D, null);
+	
+		return idTexture;
+	
+	}-*/;
+	
 
 	public static native int jsUploadMultipleTextures(
 			JsArray<JavaScriptObject> images) /*-{

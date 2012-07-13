@@ -134,7 +134,6 @@ public class GL_WebGL
 
    @Override
    public void loadMatrixf(final MutableMatrix44D m) {
-
       _modelView = m; // SAVING MODELVIEW
 
       final JsArrayNumber arrayJs = (JsArrayNumber) JsArrayNumber.createArray();
@@ -147,15 +146,11 @@ public class GL_WebGL
 
    @Override
    public void multMatrixf(final MutableMatrix44D m) {
-      final MutableMatrix44D product = _modelView.multMatrix(m);
-
-      _modelView = new MutableMatrix44D(product);
-
-      final JsArrayNumber arrayJs = (JsArrayNumber) JsArrayNumber.createArray();
-      for (int i = 0; i < 16; i++) {
-         arrayJs.push((float) _modelView.get(i));
-      }
-      WebGL.jsLoadMatrixf(arrayJs);
+	   final JsArrayNumber arrayJs = (JsArrayNumber) JsArrayNumber.createArray();
+	      for (int i = 0; i < 16; i++) {
+	         arrayJs.push((float) m.get(i));
+	      }
+      WebGL.jsMultiplyModelViewMatrix(arrayJs);
    }
 
 
