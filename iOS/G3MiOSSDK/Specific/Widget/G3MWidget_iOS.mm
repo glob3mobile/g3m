@@ -197,7 +197,7 @@
     }
     
     // marks renderer
-    if (true) {
+    if (false) {
       MarksRenderer* marks = new MarksRenderer();
       comp->addRenderer(marks);
       
