@@ -25,15 +25,11 @@ private:
   void clearTopLevelTiles();
   void createTopLevelTiles(const InitializationContext* ic);
   
-  const bool _wireframe;
-  
 public:
   TileRenderer(const TileTessellator* tessellator,
-               const TileTexturizer*  texturizer,
-               const bool wireframe) :
+               const TileTexturizer*  texturizer) :
   _tessellator(tessellator),
-  _texturizer(texturizer),
-  _wireframe(wireframe)
+  _texturizer(texturizer)
   {
     
   }

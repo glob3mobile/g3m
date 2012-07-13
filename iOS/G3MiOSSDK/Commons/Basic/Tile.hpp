@@ -25,7 +25,6 @@ private:
   const int    _column;
   
   bool _textureSolved;
-  bool _wireframe;
   
   Mesh* _mesh;
   
@@ -52,10 +51,6 @@ private:
     return _fallbackTextureTile;
   }
   
-  void setFallbackTextureTile(Tile* fallbackTextureTile) {
-    _fallbackTextureTile = fallbackTextureTile;
-  }
-  
   Tile* getFallbackTextureTileForSubtiles() {
     if (isTextureSolved()) {
       return this;
@@ -69,15 +64,14 @@ public:
        int level,
        int row,
        int column,
-       bool wireframe):
+       Tile* fallbackTextureTile):
   _sector(sector),
   _level(level),
   _row(row),
   _column(column),
   _mesh(NULL),
   _textureSolved(false),
-  _wireframe(wireframe),
-  _fallbackTextureTile(NULL)
+  _fallbackTextureTile(fallbackTextureTile)
   {
   }
   

@@ -174,13 +174,13 @@
     
     // very basic tile renderer
     if (true) {
-      TileTessellator* tessellator = new EllipsoidalTileTessellator("world.jpg", 16, true);
+//      TileTessellator* tessellator = new EllipsoidalTileTessellator("world.jpg", 16, true);
       TileTexturizer* texturizer = new SimpleTileTexturizer();
       
-      TileRenderer* tr1 = new TileRenderer(tessellator, texturizer, false);
+      TileRenderer* tr1 = new TileRenderer(new EllipsoidalTileTessellator("world.jpg", 16, true, false), texturizer);
       comp->addRenderer(tr1);
       
-      TileRenderer* tr2 = new TileRenderer(tessellator, texturizer, true);
+      TileRenderer* tr2 = new TileRenderer(new EllipsoidalTileTessellator("world.jpg", 16, true, true), texturizer);
       comp->addRenderer(tr2);
     }
     

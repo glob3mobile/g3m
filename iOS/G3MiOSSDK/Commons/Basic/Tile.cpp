@@ -20,7 +20,7 @@ Tile::~Tile() {
 Mesh* Tile::getMesh(const RenderContext* rc,
                     const TileTessellator* tessellator) {
   if (_mesh == NULL) {
-    _mesh = (_wireframe)? tessellator->createDebugMesh(rc, this) : tessellator->createMesh(rc, this);
+    _mesh = tessellator->createMesh(rc, this);
   }
   return _mesh;
 }
@@ -32,6 +32,15 @@ bool Tile::isVisible(const RenderContext *rc) {
 
 bool Tile::hasEnoughDetail(const RenderContext *rc,
                            double distanceToCamera) {
+//  31890685.000000
+//   7083288.848839
+  
+//  const Vector3D radii = rc->getPlanet()->getRadii();
+//  const double rad = (radii.x() + radii.y() + radii.z()) / 3;
+//  
+//  const double ratio = (distanceToCamera - rad) / rad;
+//  
+//  rc->getLogger()->logInfo("Distance to camera: %f - %f", distanceToCamera, ratio);
   
   return _level >= 0;
 }
@@ -75,34 +84,32 @@ void Tile::render(const RenderContext* rc,
 }
 
 std::vector<Tile*> Tile::createSubTiles() {
-  const Geodetic2D lower = getSector().lower();
-  const Geodetic2D upper = getSector().upper();
+  const Geodetic2D lower = _sector.lower();
+  const Geodetic2D upper = _sector.upper();
   
-  const Angle p0 = lower.latitude();
-  const Angle p2 = upper.latitude();
-  const Angle p1 = Angle::midAngle(p0, p2);
+  const Angle lat0 = lower.latitude();
+  const Angle lat2 = upper.latitude();
+  const Angle lat1 = Angle::midAngle(lat0, lat2);
   
-  const Angle t0 = lower.longitude();
-  const Angle t2 = upper.longitude();
-  const Angle t1 = Angle::midAngle(t0, t2);
+  const Angle lon0 = lower.longitude();
+  const Angle lon2 = upper.longitude();
+  const Angle lon1 = Angle::midAngle(lon0, lon2);
   
-  const int row = getRow();
-  const int col = getColumn();
-  const int nextLevel = getLevel() + 1;
-  
+  const int nextLevel = _level + 1;
+  Tile* fallback = getFallbackTextureTileForSubtiles();
+
   std::vector<Tile*> subTiles(4);
-  subTiles[0] = new Tile(Sector(Geodetic2D(p0, t0), Geodetic2D(p1, t1)), nextLevel, 2 * row, 2 * col, _wireframe);
-  subTiles[1] = new Tile(Sector(Geodetic2D(p0, t1), Geodetic2D(p1, t2)), nextLevel, 2 * row, 2 * col + 1, _wireframe);
-  subTiles[2] = new Tile(Sector(Geodetic2D(p1, t0), Geodetic2D(p2, t1)), nextLevel, 2 * row + 1, 2 * col, _wireframe);
-  subTiles[3] = new Tile(Sector(Geodetic2D(p1, t1), Geodetic2D(p2, t2)), nextLevel, 2 * row + 1, 2 * col + 1, _wireframe);
+  subTiles[0] = new Tile(Sector(Geodetic2D(lat0, lon0), Geodetic2D(lat1, lon1)), nextLevel, 2 * _row    , 2 * _column    , fallback);
+  subTiles[1] = new Tile(Sector(Geodetic2D(lat0, lon1), Geodetic2D(lat1, lon2)), nextLevel, 2 * _row    , 2 * _column + 1, fallback);
+  subTiles[2] = new Tile(Sector(Geodetic2D(lat1, lon0), Geodetic2D(lat2, lon1)), nextLevel, 2 * _row + 1, 2 * _column    , fallback);
+  subTiles[3] = new Tile(Sector(Geodetic2D(lat1, lon1), Geodetic2D(lat2, lon2)), nextLevel, 2 * _row + 1, 2 * _column + 1, fallback);
   
-  
-  Tile* fallbackTextureTile = getFallbackTextureTileForSubtiles();
-  if (fallbackTextureTile != NULL) {
-    for (int i = 0; i < subTiles.size(); i++) {
-      subTiles[i]->setFallbackTextureTile(fallbackTextureTile);
-    }
-  }
+//  Tile* fallbackTextureTile = getFallbackTextureTileForSubtiles();
+//  if (fallbackTextureTile != NULL) {
+//    for (int i = 0; i < subTiles.size(); i++) {
+//      subTiles[i]->setFallbackTextureTile(fallbackTextureTile);
+//    }
+//  }
   
   return subTiles;
 }

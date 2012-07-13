@@ -15,8 +15,13 @@
 #include "TexturedMesh.hpp"
 
 
-Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc, const Tile* tile) const 
-{  
+Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
+                                             const Tile* tile) const {
+  if (_debugMode) {
+    return createDebugMesh(rc, tile);
+  }
+  
+  
   const int texID = rc->getTexturesHandler()->getTextureIdFromFileName(rc, _textureFilename, 2048, 1024);
   
   if (texID < 1) {
@@ -31,14 +36,18 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc, const Tile
   std::vector<MutableVector3D> vertices;
   std::vector<MutableVector2D> texCoords;
   unsigned int resol_1 = _resolution - 1;
-  for (unsigned int j=0; j<_resolution; j++)
-    for (unsigned int i=0; i<_resolution; i++) 
+  for (unsigned int j=0; j<_resolution; j++) {
+    for (unsigned int i=0; i<_resolution; i++) {
       addVertex(planet, &vertices, &texCoords, sector.getInnerPoint((double)i/resol_1, (double)j/resol_1));
+    }
+  }
   
   // create indices
   std::vector<unsigned int> indices;
   for (unsigned int j=0; j<resol_1; j++) {
-    if (j>0) indices.push_back(j*_resolution);
+    if (j > 0) {
+      indices.push_back(j*_resolution);
+    }
     for (unsigned int i = 0; i < _resolution; i++) {
       indices.push_back(j*_resolution + i);
       indices.push_back(j*_resolution + i + _resolution);
@@ -90,11 +99,14 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc, const Tile
   }
   
   // create TexturedMesh
-  return new TexturedMesh(new IndexedMesh(vertices, TriangleStrip, indices, NULL), true, new TextureMapping(texID, texCoords)); 
+  return new TexturedMesh(new IndexedMesh(vertices, TriangleStrip, indices, NULL),
+                          true,
+                          new TextureMapping(texID, texCoords)); 
 }
 
 
-Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc, const Tile* tile) const 
+Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
+                                                  const Tile* tile) const 
 {
   int ___agustin_at_work;
     

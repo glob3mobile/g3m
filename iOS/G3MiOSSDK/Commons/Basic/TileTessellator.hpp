@@ -18,7 +18,9 @@ public:
   virtual ~TileTessellator() { };
   
   virtual Mesh* createMesh(const RenderContext* rc, const Tile* tile) const = 0;
-  virtual Mesh* createDebugMesh(const RenderContext* rc, const Tile* tile) const = 0;
+  
+//  virtual Mesh* createDebugMesh(const RenderContext* rc, const Tile* tile) const = 0;
+  
 };
 
 
