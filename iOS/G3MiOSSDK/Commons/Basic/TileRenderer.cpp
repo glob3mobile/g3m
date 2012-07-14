@@ -67,22 +67,12 @@ void TileRenderer::initialize(const InitializationContext* ic) {
 }
 
 int TileRenderer::render(const RenderContext* rc) {
-  
-  // std::vector<Tile*> visibleTiles = getVisibleTiles(rc);
-  
-  Camera* camera = rc->getCamera();
-  Vector3D pos = camera->getPos();
-  
-  double distanceToCamera = pos.length();
-//  rc->getLogger()->logInfo("Distance to camera: %f", distanceToCamera);
-  
-  
   IGL *gl = rc->getGL();
   gl->enablePolygonOffset(5, 5);
   
   for (int i = 0; i < _topLevelTiles.size(); i++) {
     Tile* tile = _topLevelTiles[i];
-    tile->render(rc, _tessellator, _texturizer, distanceToCamera);
+    tile->render(rc, _tessellator, _texturizer, _parameters);
   }
   
   gl->disablePolygonOffset();

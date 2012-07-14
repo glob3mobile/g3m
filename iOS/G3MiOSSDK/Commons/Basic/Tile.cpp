@@ -12,6 +12,8 @@
 
 #include "TileTessellator.hpp"
 #include "TileTexturizer.hpp"
+#include "TileRenderer.hpp"
+
 
 Tile::~Tile() {
   delete _mesh;
@@ -26,12 +28,18 @@ Mesh* Tile::getMesh(const RenderContext* rc,
 }
 
 bool Tile::isVisible(const RenderContext *rc) {
+  // TODO: check collition with frustum
+  // TODO: check for tiles backfacing to the camera
   
   return true;
 }
 
 bool Tile::meetsRenderCriteria(const RenderContext *rc,
-                               double distanceToCamera) {
+                               const TileParameters* parameters) {
+  
+  if (_level >= parameters->_maxLevel) {
+    return true;
+  }
   
 //  31890685.000000
 //   7083288.848839
@@ -42,6 +50,11 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
 //  const double ratio = (distanceToCamera - rad) / rad;
 //  
 //  rc->getLogger()->logInfo("Distance to camera: %f - %f", distanceToCamera, ratio);
+  
+//  const Vector3D center = rc->getPlanet()->toVector3D(_sector.getCenter());
+//  
+//  const double distanceToCamera = rc->getCamera()->getPos().sub(center).length();
+//  rc->getLogger()->logInfo("Distance to camera: %f", distanceToCamera);
   
   return _level >= 0;
 }
@@ -65,18 +78,18 @@ void Tile::rawRender(const RenderContext *rc,
 void Tile::render(const RenderContext* rc,
                   const TileTessellator* tessellator,
                   const TileTexturizer* texturizer,
-                  double distanceToCamera) {
+                  const TileParameters* parameters) {
   int ___diego_at_work;
   
   if (isVisible(rc)) {
-    if (meetsRenderCriteria(rc, distanceToCamera)) {
+    if (meetsRenderCriteria(rc, parameters)) {
       rawRender(rc, tessellator, texturizer);
     }
     else {
       std::vector<Tile*> subTiles = createSubTiles();
       for (int i = 0; i < subTiles.size(); i++) {
         Tile* subTile = subTiles[i];
-        subTile->render(rc, tessellator, texturizer, distanceToCamera);
+        subTile->render(rc, tessellator, texturizer, parameters);
         
         delete subTile;
       }
@@ -97,7 +110,7 @@ std::vector<Tile*> Tile::createSubTiles() {
   const Angle lon1 = Angle::midAngle(lon0, lon2);
   
   const int nextLevel = _level + 1;
-  Tile* fallback = isTextureSolved() ? this : getFallbackTextureTile();
+  Tile* fallback = isTextureSolved() ? this : _fallbackTextureTile;
   
   std::vector<Tile*> subTiles(4);
   subTiles[0] = new Tile(Sector(Geodetic2D(lat0, lon0), Geodetic2D(lat1, lon1)), nextLevel, 2 * _row    , 2 * _column    , fallback);

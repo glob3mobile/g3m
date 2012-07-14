@@ -16,6 +16,7 @@ class Mesh;
 //#include "TileTessellator.hpp"
 class TileTessellator;
 class TileTexturizer;
+class TileParameters;
 
 class Tile {
 private:
@@ -23,34 +24,24 @@ private:
   const int    _level;
   const int    _row;
   const int    _column;
-  
-  bool _textureSolved;
-  
+
   Mesh* _mesh;
+  Tile* _fallbackTextureTile;
+  bool _textureSolved;
   
   inline Mesh* getMesh(const RenderContext* rc,
                        const TileTessellator* tessellator);
   
   inline bool isVisible(const RenderContext* rc);
   inline bool meetsRenderCriteria(const RenderContext* rc,
-                                  double distanceToCamera);
+                                  const TileParameters* parameters);
   
   inline std::vector<Tile*> createSubTiles();
   
   inline void rawRender(const RenderContext* rc,
                         const TileTessellator* tessellator,
                         const TileTexturizer* texturizer);
-  
-  Tile* _fallbackTextureTile;
-  
-  bool hasFallbackTextureTile() const {
-    return (_fallbackTextureTile != NULL);
-  }
-  
-  Tile* getFallbackTextureTile() const {
-    return _fallbackTextureTile;
-  }
-  
+
 public:
   Tile(const Sector& sector,
        int level,
@@ -98,7 +89,7 @@ public:
   void render(const RenderContext* rc,
               const TileTessellator* tessellator,
               const TileTexturizer* texturizer,
-              double distanceToCamera);
+              const TileParameters* parameters);
   
 };
 

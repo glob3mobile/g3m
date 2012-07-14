@@ -24,16 +24,19 @@ public:
   const int    _splitsByLatitude;
   const int    _splitsByLongitude;
   const int    _topLevel;
+  const int    _maxLevel;
 
 
   TileParameters(const Sector topSector,
                  const int    splitsByLatitude,
                  const int    splitsByLongitude,
-                 const int    topLevel) :
+                 const int    topLevel,
+                 const int    maxLevel) :
   _topSector(topSector),
   _splitsByLatitude(splitsByLatitude),
   _splitsByLongitude(splitsByLongitude),
-  _topLevel(topLevel)
+  _topLevel(topLevel),
+  _maxLevel(maxLevel)
   {
     
   }
@@ -43,11 +46,13 @@ public:
     const int splitsByLatitude = 2 * K;
     const int splitsByLongitude = 4 * K;
     const int topLevel = 0;
+    const int maxLevel = 8;
     
     return new TileParameters(Sector::fullSphere(),
                               splitsByLatitude,
                               splitsByLongitude,
-                              topLevel);
+                              topLevel,
+                              maxLevel);
   }
 };
 
