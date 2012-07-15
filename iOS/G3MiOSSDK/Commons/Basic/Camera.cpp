@@ -101,17 +101,11 @@ void Camera::draw(const RenderContext &rc) {
   gl->loadMatrixf(_model);
   
   // compute new frustum
-  int __agustin_at_work; // only create frustum when camera has changed!
+  // TODO: only create frustum when camera has changed!
   if (_frustum) delete _frustum;
   _frustum = new Frustum(left, right, bottom, top, znear, zfar, 
                          _pos.asVector3D(), _center.asVector3D(), _up.asVector3D(), 
                          _model.transpose());
-  
-  
-  if (_frustum->isInside(Vector3D(_pos.x()-znear,left+0.1,top-0.1)))
-    printf ("punto dentro\n");
-  else 
-    printf ("punto fuera\n");
 }
 
 
