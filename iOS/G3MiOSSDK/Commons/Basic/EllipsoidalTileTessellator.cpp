@@ -107,9 +107,7 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
 
 Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
                                                   const Tile* tile) const 
-{
-  int ___agustin_at_work;
-    
+{    
   const Sector sector = tile->getSector();
   const Planet* planet = rc->getPlanet();
   
