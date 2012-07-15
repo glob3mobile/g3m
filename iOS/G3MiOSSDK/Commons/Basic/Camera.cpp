@@ -102,6 +102,12 @@ void Camera::draw(const RenderContext &rc) {
   _frustum = new Frustum(left, right, bottom, top, znear, zfar, 
                          _pos.asVector3D(), _center.asVector3D(), _up.asVector3D(), 
                          _model.transpose());
+  
+  
+  if (_frustum->isInside(Vector3D(_pos.x()-znear,left-10,top)))
+    printf ("punto dentro\n");
+  else 
+    printf ("punto fuera\n");
 }
 
 

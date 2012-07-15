@@ -30,6 +30,10 @@ public:
   
   Plane applyTransform(const MutableMatrix44D& M);
   
+  double evaluate(Vector3D point) {
+    return point.dot(_normal) + _d;
+  }
+  
 private:
   Vector3D _normal;
   double _d;

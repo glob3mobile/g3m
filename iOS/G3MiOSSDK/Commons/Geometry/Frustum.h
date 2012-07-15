@@ -35,8 +35,10 @@ public:
                  Vector3D(right, top, -znear), 
                  Vector3D(left, top, -znear)).applyTransform(modelTranspose)),
   nearPlane(Plane(Vector3D(0.0, 0.0, 1.0), znear).applyTransform(modelTranspose)),
-  farPlane(Plane(Vector3D(0.0, 0.0, -1.0), zfar).applyTransform(modelTranspose))
+  farPlane(Plane(Vector3D(0.0, 0.0, -1.0), -zfar).applyTransform(modelTranspose))
   {}
+  
+  bool isInside(Vector3D point);
   
   
 private:
