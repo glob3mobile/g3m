@@ -12,6 +12,8 @@
 #include <string.h>
 
 #include "Camera.hpp"
+#include "Plane.h"
+
 
 Camera::Camera(const Camera &c):
 _pos(c._pos),
@@ -75,21 +77,98 @@ void Camera::draw(const RenderContext &rc) {
   else
     znear = 19.095;
   
-  // compute projection matrix
+  // compute frustum numbers
   double ratioScreen = (double) _viewport[3] / _viewport[2];
-  _projection = MutableMatrix44D::createProjectionMatrix(-0.3 / ratioScreen * znear,
-                                                         0.3 / ratioScreen * znear,
-                                                         -0.3 * znear,
-                                                         0.3 * znear,
-                                                         znear,
-                                                         10000 * znear);
+  double right = 0.3 / ratioScreen * znear;
+  double left = -right;
+  double top = 0.3 * znear;
+  double bottom = -top;
+  double zfar = 10000 * znear;
+  Vector3D origin(0.0 ,0.0, 0.0);
+  Vector3D topLeft(left, top, -znear);
+  Vector3D topRight(right, top, -znear);
+  Vector3D bottomLeft(left, bottom, -znear);
+  Vector3D bottomRight(right, bottom, -znear);
+  
+  // compute projection matrix
+  _projection = MutableMatrix44D::createProjectionMatrix(left, right, bottom, top, znear, zfar);
   
   IGL *gl = rc.getGL();
   gl->setProjection(_projection);
   
   // make the model
   _model = MutableMatrix44D::createModelMatrix(_pos, _center, _up);
+    
+  printf ("matriz de proyección:\n");
+  for (int j=0; j<4; j++) {
+    for (int i=0; i<4; i++) {
+      printf ("%f  ", _projection.get(j*4+i));
+    }
+    printf ("\n");
+  }
+  
+  printf ("matriz de modelado:\n");
+    for (int j=0; j<4; j++) {
+      for (int i=0; i<4; i++) {
+        printf ("%f  ", _model.get(j*4+i));
+      }
+      printf ("\n");
+    }  
+  
   gl->loadMatrixf(_model);
+  
+  
+  MutableMatrix44D modelInverse = _model.inverse();
+  Vector3D originTransformed = origin.applyTransform(modelInverse);
+  Vector3D topLeftTransformed = topLeft.applyTransform(modelInverse);
+  /*Vector3D topRightTransformed = topRight.applyTransform(modelInverse);
+  Vector3D bottomLeftTransformed = bottomLeft.applyTransform(modelInverse);
+  Vector3D bottomRightTransformed = bottomRight.applyTransform(modelInverse);
+  
+  // compute frustum planes
+  Plane leftPlane(originTransformed, topLeftTransformed, bottomLeftTransformed);
+  Plane bottomPlane(originTransformed, bottomLeftTransformed, bottomRightTransformed);
+  Plane rightPlane(originTransformed, bottomRightTransformed, topRightTransformed);
+  Plane topPlane(originTransformed, topRightTransformed, topLeftTransformed);
+  Plane nearPlane(Vector3D(1.0,0.0,0.0), znear);  
+  Plane farPlane(Vector3D(-1.0,0.0,0.0), zfar);  */
+  
+  
+  printf ("matriz de modelado inversa:\n");
+  for (int j=0; j<4; j++) {
+    for (int i=0; i<4; i++) {
+      printf ("%f  ", modelInverse.get(j*4+i));
+    }
+    printf ("\n");
+  }  
+
+  
+  Vector3D kk = topLeft.applyTransform(modelInverse);
+  printf ("punto topleft original: %f %f %f\n", topLeft.x(), topLeft.y(), topLeft.z());
+  printf ("punto topleft transformado: %f %f %f\n", kk.x(), kk.y(), kk.z());
+  
+  
+  // compute frustum planes
+  MutableMatrix44D Q = _model.transpose();
+  
+  
+  printf ("matriz Q:\n");
+  for (int j=0; j<4; j++) {
+    for (int i=0; i<4; i++) {
+      printf ("%f  ", Q.get(j*4+i));
+    }
+    printf ("\n");
+  }  
+  
+  Plane leftPlane = Plane(origin, topLeft, bottomLeft).applyTransform(Q);
+  Plane bottomPlane = Plane(origin, bottomLeft, bottomRight).applyTransform(Q);
+  Plane rightPlane = Plane(origin, bottomRight, topRight).applyTransform(Q);
+  Plane topPlane = Plane(origin, topRight, topLeft).applyTransform(Q);
+  Plane nearPlane = Plane(Vector3D(0.0,0.0,1.0), znear).applyTransform(Q);
+  Plane farPlane = Plane(Vector3D(0.0,0.0,-1.0), zfar).applyTransform(Q);
+  
+
+  
 }
 
 Vector3D Camera::pixel2Vector(const Vector2D& pixel) const {

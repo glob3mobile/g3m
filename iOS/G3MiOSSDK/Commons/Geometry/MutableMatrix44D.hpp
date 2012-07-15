@@ -126,6 +126,8 @@ public:
   
   MutableMatrix44D inverse() const;
   
+  MutableMatrix44D transpose() const;
+  
   double get(int i) const {
     return _m[i];
   }
