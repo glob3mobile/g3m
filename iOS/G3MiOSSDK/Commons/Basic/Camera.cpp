@@ -69,23 +69,27 @@ void Camera::print() const
 void Camera::draw(const RenderContext &rc) {
   _logger = rc.getLogger();
   
+  // compute znear value
   double znear;
-  
-  double height = _pos.length();
-  
-  if (height > 1273000.0) znear = 636500.0;
-  else if (height > 12730.0) znear = 6365.0;
-  else if (height > 3182.5) znear = 63.65;
+  double maxR = rc.getPlanet()->getRadii().x();
+  double distToOrigin = _pos.length();
+  double height = distToOrigin - maxR;  
+  if (height > maxR/5.0) znear = maxR/10.0;
+  else if (height > maxR/500.0) znear = maxR/1e3;
+  else if (height > maxR/2000.0) znear = maxR/1e5;
   else
-    znear = 19.095;
+    znear = maxR / 1e6 * 3;
   
-  // compute frustum numbers
+  // compute zfar value
+  double zfar = 10000 * znear;
+  if (zfar>distToOrigin) zfar=distToOrigin;
+  
+  // compute rest of frustum numbers
   double ratioScreen = (double) _viewport[3] / _viewport[2];
   double right = 0.3 / ratioScreen * znear;
   double left = -right;
   double top = 0.3 * znear;
   double bottom = -top;
-  double zfar = 10000 * znear;
   
   // compute projection matrix
   _projection = MutableMatrix44D::createProjectionMatrix(left, right, bottom, top, znear, zfar);
@@ -104,7 +108,7 @@ void Camera::draw(const RenderContext &rc) {
                          _model.transpose());
   
   
-  if (_frustum->isInside(Vector3D(_pos.x()-znear,left-10,top)))
+  if (_frustum->isInside(Vector3D(_pos.x()-znear,left+0.1,top-0.1)))
     printf ("punto dentro\n");
   else 
     printf ("punto fuera\n");
