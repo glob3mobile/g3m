@@ -12,27 +12,32 @@
 //THIS CLASS RECEIVES A REFERENCE TO A BYTE ARRAY PREVIOUSLY ALLOCATED
 //TO DELETE THE ARRAY CALL release()
 class ByteBuffer{
-  const unsigned char * const _data;
-  const unsigned int _dataLength;
-  
-  bool _hasBeenReleased;
-  
+  unsigned char * _data;
+  unsigned int _dataLength;
 public:
-  ByteBuffer(const ByteBuffer& bb) :_data(bb._data), _dataLength(bb._dataLength), _hasBeenReleased(bb._hasBeenReleased){};
-  ByteBuffer() :_data(NULL), _dataLength(0), _hasBeenReleased(true){};
-  ByteBuffer(  const unsigned char * const data, unsigned int dataLength) :_data(data), _dataLength(dataLength), _hasBeenReleased(false){};
   
-  const unsigned char * getData() const{ if (!_hasBeenReleased) return _data; else return NULL;}
-  unsigned int getDataLength() const{ if (!_hasBeenReleased) return _dataLength; else return 0;}
-  
-  void release(){ 
-    if (!_hasBeenReleased){
-#ifdef C_CODE
-      delete [] _data;
-#endif
-      _hasBeenReleased = true;
+  //CopyData
+  ByteBuffer(const ByteBuffer& bb):_data(new unsigned char[bb._dataLength]), _dataLength(bb._dataLength){
+    for(int i = 0; i < bb._dataLength; i++){ 
+      _data[i] = bb._data[i];
     }
+  };
+  
+  ~ByteBuffer(){
+#ifdef C_CODE
+    delete [] _data;
+#endif
   }
+  
+  
+  
+  
+  ByteBuffer() :_data(NULL), _dataLength(0){};
+  ByteBuffer( unsigned char * const data, unsigned int dataLength) :_data(data), _dataLength(dataLength){};
+  
+  unsigned char * getData() const{return _data;}
+  unsigned int getDataLength() const{return _dataLength;}
+  
 };
 
 #endif

@@ -23,7 +23,7 @@ private:
   //Angle() : _degrees(0) { }
   
 public:
-    
+  
   static Angle fromDegrees(const double degrees) {
     return Angle(degrees);
   }

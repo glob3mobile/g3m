@@ -97,9 +97,9 @@ public class G3MWidget_WebGL
       }
       
       if (true){
-    	  final SimplePlanetRenderer spr = new SimplePlanetRenderer("world.jpg");
+    	  //final SimplePlanetRenderer spr = new SimplePlanetRenderer("world.jpg");
     	  
-    	  //final SimplePlanetRenderer spr = new SimplePlanetRenderer("http://www.arkive.org/images/browse/world-map.jpg");
+    	  final SimplePlanetRenderer spr = new SimplePlanetRenderer("http://www.arkive.org/images/browse/world-map.jpg");
     	  comp.addRenderer(spr);
       }
 

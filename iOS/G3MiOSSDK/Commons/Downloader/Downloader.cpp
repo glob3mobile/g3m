@@ -25,10 +25,6 @@ void Downloader::request(const std::string& urlOfFile, int priority, IDownloadLi
     ByteBuffer bb = _storage->getByteBuffer(urlOfFile);
     Response r(urlOfFile , bb);
     listener->onDownload(r);
-    
-    //WE MUST DELETE THE BYTE BUFFER WE HAVE CREATED
-    bb.release();
-    
     return;
   }
   
