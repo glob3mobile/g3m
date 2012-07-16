@@ -29,14 +29,9 @@ Mesh* Tile::getMesh(const RenderContext* rc,
   return _mesh;
 }
 
-bool Tile::isVisible(const RenderContext *rc) {
-
-  int __agustin_at_work;
-  
-  // compute central point
-  Vector3D center = rc->getPlanet()->toVector3D(_sector.getCenter());
-  
-  return rc->getCamera()->getFrustum()->contains(center);
+bool Tile::isVisible(const RenderContext *rc, const TileTessellator *tessellator) 
+{
+  return getMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->getFrustum());
 }
 
 bool Tile::meetsRenderCriteria(const RenderContext *rc,
@@ -86,7 +81,7 @@ void Tile::render(const RenderContext* rc,
                   const TileParameters* parameters) {
   int ___diego_at_work;
   
-  if (isVisible(rc)) {
+  if (isVisible(rc, tessellator)) {
     if (meetsRenderCriteria(rc, parameters)) {
       rawRender(rc, tessellator, texturizer);
     }

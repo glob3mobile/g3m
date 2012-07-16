@@ -40,6 +40,9 @@ public:
   }
   
   void render(const RenderContext* rc) const;
+
+  Extent *getExtent()  const { return _mesh->getExtent(); }
+
 };
 
 #endif

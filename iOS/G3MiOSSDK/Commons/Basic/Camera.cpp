@@ -107,6 +107,37 @@ void Camera::draw(const RenderContext &rc) {
     delete _frustum;
   }
   _frustum = new Frustum(left/2, right/2, bottom/2, top/2, znear, zfar, _model.transpose());
+  
+  // TEMP TEST
+  Vector3D p0(Vector3D(left/2, top/2, -znear-10).applyTransform(_model.inverse(), 1));
+  Vector3D p1(Vector3D(left/2, bottom/2, -znear-10).applyTransform(_model.inverse(), 1));
+  Vector3D p2(Vector3D(right/2, bottom/2, -znear-10).applyTransform(_model.inverse(), 1));
+  Vector3D p3(Vector3D(right/2, top/2, -znear-10).applyTransform(_model.inverse(), 1));
+  
+  float vertices[] = {
+    p0.x(), p0.y(), p0.z(),
+    p1.x(), p1.y(), p1.z(),
+    p2.x(), p2.y(), p2.z(),
+    p3.x(), p3.y(), p3.z(),    
+  };
+  unsigned int indices[] = {0,1,2,3};
+  
+  gl->enableVerticesPosition();
+  gl->vertexPointer(3, 0, vertices);
+  
+  {
+    // draw a red square
+    gl->color((float) 1, (float) 1, (float) 1, 1);
+    gl->lineWidth(5);
+    gl->pushMatrix();
+    //MutableMatrix44D T = GLU::translationMatrix(Vector3D(halfSize,0,0));
+    //MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(Vector3D(_halfSize,0,0));
+    //gl->multMatrixf(T);
+    gl->drawLineLoop(4, indices);
+    gl->popMatrix();
+    gl->lineWidth(1);
+  }
+
 }
 
 

@@ -11,6 +11,7 @@
 
 #include "Extent.h"
 #include "Vector3D.hpp"
+#include "Frustum.h"
 
 
 class Box: public Extent {
@@ -21,7 +22,12 @@ public:
   _max(max)
   {}
   
-  bool touches(const Frustum *frustum) const {return true;};
+  bool touches(const Frustum *frustum) const {
+    return frustum->touchesWithBox(this);
+  };
+  
+  Vector3D getMin() const { return _min; }
+  Vector3D getMax() const { return _max; }
   
 private:
   Vector3D _min, _max;

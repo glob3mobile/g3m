@@ -13,6 +13,7 @@
 #include "MutableMatrix44D.hpp"
 #include "Plane.h"
 
+class Box;
 
 class Frustum {
   
@@ -35,7 +36,9 @@ public:
   _farPlane(Plane(Vector3D(0.0, 0.0, -1.0), -zfar).applyTransform(modelTranspose))
   {}
   
-  bool contains(const Vector3D &point);
+  bool contains(const Vector3D& point) const;
+  
+  bool touchesWithBox(const Box *box) const;
   
   
 private:

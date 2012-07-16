@@ -9,6 +9,8 @@
 #include <stdlib.h>
 
 #include "IndexedMesh.hpp"
+#include "Box.h"
+
 
 IndexedMesh::~IndexedMesh()
 {
@@ -22,11 +24,14 @@ IndexedMesh::~IndexedMesh()
     if (_flatColor != NULL) delete _flatColor;
   }
   
+  if (_extent) delete _extent;
+  
 #endif
 }
 
 IndexedMesh::IndexedMesh(bool owner,
                          const GLPrimitive primitive,
+                         const unsigned int numVertices,
                          const float* vertices,
                          const unsigned int* indexes,
                          const int numIndex, 
@@ -36,15 +41,18 @@ IndexedMesh::IndexedMesh(bool owner,
                          const float* normals):
 _owner(owner),
 _primitive(primitive),
+_numVertices(numVertices),
 _vertices(vertices),
 _indexes(indexes),
 _numIndex(numIndex),
 _flatColor(flatColor),
 _colors(colors),
 _colorsIntensity(colorsIntensity), 
-_normals(normals)
+_normals(normals),
+_extent(NULL)
 {
 }
+
 
 IndexedMesh::IndexedMesh(std::vector<MutableVector3D>& vertices, 
                          const GLPrimitive primitive,
@@ -55,9 +63,11 @@ IndexedMesh::IndexedMesh(std::vector<MutableVector3D>& vertices,
                          std::vector<MutableVector3D>* normals):
 _owner(true),
 _primitive(primitive),
+_numVertices(vertices.size()),
 _flatColor(flatColor),
 _numIndex(indexes.size()),
-_colorsIntensity(colorsIntensity)
+_colorsIntensity(colorsIntensity),
+_extent(NULL)
 {
   float * vert = new float[3* vertices.size()];
   int p = 0;
@@ -141,4 +151,30 @@ void IndexedMesh::render(const RenderContext* rc) const
   }
   
   gl->disableVerticesPosition();
+}
+
+
+void IndexedMesh::computeExtent() const
+{
+  double minx=1e10, miny=1e10, minz=1e10;
+  double maxx=-1e10, maxy=-1e10, maxz=-1e10;
+  
+  for (unsigned int n=0; n<3*_numVertices; n+=3) {
+    if (_vertices[n]<minx) minx = _vertices[n];
+    if (_vertices[n]>maxx) maxx = _vertices[n];
+    if (_vertices[n+1]<miny) miny = _vertices[n+1];
+    if (_vertices[n+1]>maxy) maxy = _vertices[n+1];
+    if (_vertices[n+2]<minz) minz = _vertices[n+2];
+    if (_vertices[n+2]>maxz) maxz = _vertices[n+2];
+  }
+  
+  if (_extent) delete _extent;
+  _extent = new Box(Vector3D(minx, miny, minz), Vector3D(maxx, maxy, maxz));
+}
+
+
+Extent *IndexedMesh::getExtent() const
+{
+  if (_extent==NULL) computeExtent();
+  return _extent;
 }

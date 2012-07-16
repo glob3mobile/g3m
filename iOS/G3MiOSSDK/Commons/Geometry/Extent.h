@@ -9,7 +9,8 @@
 #ifndef G3MiOSSDK_Extent_h
 #define G3MiOSSDK_Extent_h
 
-#include "Frustum.h"
+//#include "Frustum.h"
+class Frustum;
 
 class Extent {
 public:

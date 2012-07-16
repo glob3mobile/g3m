@@ -68,6 +68,7 @@ void TileRenderer::initialize(const InitializationContext* ic) {
 
 int TileRenderer::render(const RenderContext* rc) {
   IGL *gl = rc->getGL();
+  
   gl->enablePolygonOffset(5, 5);
   
   for (int i = 0; i < _topLevelTiles.size(); i++) {

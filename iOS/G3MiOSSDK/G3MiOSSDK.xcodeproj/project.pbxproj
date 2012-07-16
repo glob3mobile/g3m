@@ -401,8 +401,8 @@
 		D8A5601915AEF47300035086 /* Mesh */ = {
 			isa = PBXGroup;
 			children = (
-				D8A5601B15AEF64E00035086 /* IndexedMesh.cpp */,
 				D8A5601C15AEF64E00035086 /* IndexedMesh.hpp */,
+				D8A5601B15AEF64E00035086 /* IndexedMesh.cpp */,
 				D8A5601D15AEF64E00035086 /* Mesh.cpp */,
 				D8A5601E15AEF64E00035086 /* Mesh.hpp */,
 				D8A5602315AEF69200035086 /* TexturedMesh.hpp */,

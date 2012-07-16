@@ -56,7 +56,7 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
   }
   
   // create skirts
-  const double skirtHeight = 5e5;
+  const double skirtHeight = 1e5;
   if (_skirted) {
     indices.push_back(0);
     unsigned int posS = _resolution * _resolution;
@@ -100,8 +100,7 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
   
   // create TexturedMesh
   return new TexturedMesh(new IndexedMesh(vertices, TriangleStrip, indices, NULL),
-                          true,
-                          new TextureMapping(texID, texCoords)); 
+                          true, new TextureMapping(texID, texCoords)); 
 }
 
 

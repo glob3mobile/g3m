@@ -35,7 +35,7 @@ private:
   inline Mesh* getMesh(const RenderContext* rc,
                        const TileTessellator* tessellator);
   
-  inline bool isVisible(const RenderContext* rc);
+  inline bool isVisible(const RenderContext* rc, const TileTessellator *tessellator);
   inline bool meetsRenderCriteria(const RenderContext* rc,
                                   const TileParameters* parameters);
   
