@@ -11,7 +11,7 @@
 #include "Camera.hpp"
 
 CameraRenderer::CameraRenderer():
-_camera0(0,0),
+_camera0(NULL, 0,0),
 _initialPoint(0,0,0),
 _currentGesture(None),
 _camera(NULL),
@@ -47,7 +47,7 @@ void CameraRenderer::onDown(const TouchEvent& touchEvent)
   //Initial Point for Dragging
   Vector2D pixel = touchEvent.getTouch(0)->getPos();
   Vector3D ray = _camera0.pixel2Vector(pixel);
-  _initialPoint = _planet->closestIntersection(_camera0.getPos(), ray).asMutableVector3D();
+  _initialPoint = _planet->closestIntersection(_camera0.getPosition(), ray).asMutableVector3D();
   _currentGesture = Drag; //Dragging
 }
 
@@ -57,7 +57,7 @@ void CameraRenderer::makeDrag(const TouchEvent& touchEvent)
   { 
     Vector2D pixel = touchEvent.getTouch(0)->getPos();
     Vector3D ray = _camera0.pixel2Vector(pixel);
-    Vector3D pos = _camera0.getPos();
+    Vector3D pos = _camera0.getPosition();
     
     MutableVector3D finalPoint = _planet->closestIntersection(pos, ray).asMutableVector3D();
     if (finalPoint.isNan()){ //INVALID FINAL POINT
@@ -76,11 +76,11 @@ void CameraRenderer::makeZoom(const TouchEvent& touchEvent)
   Vector2D pixelCenter = pixel0.add(pixel1).div(2.0);
   
   Vector3D ray = _camera0.pixel2Vector(pixelCenter);
-  _initialPoint = _planet->closestIntersection(_camera0.getPos(), ray).asMutableVector3D();
+  _initialPoint = _planet->closestIntersection(_camera0.getPosition(), ray).asMutableVector3D();
   
   Vector2D centerOfViewport(_camera0.getWidth() / 2, _camera0.getHeight() / 2);
   Vector3D ray2 = _camera0.pixel2Vector(centerOfViewport);
-  Vector3D pointInCenterOfView = _planet->closestIntersection(_camera0.getPos(), ray2);
+  Vector3D pointInCenterOfView = _planet->closestIntersection(_camera0.getPosition(), ray2);
   
   //IF CENTER PIXEL INTERSECTS THE PLANET
   if (!_initialPoint.isNan()){
@@ -167,7 +167,7 @@ void CameraRenderer::makeRotate(const TouchEvent& touchEvent)
   if (rotatingPoint.isNan()) return; //We don't rotate without a valid rotating point
   
   //Rotating axis
-  Vector3D camVec = _camera0.getPos().sub(_camera0.getCenter());
+  Vector3D camVec = _camera0.getPosition().sub(_camera0.getCenter());
   Vector3D normal = _planet->geodeticSurfaceNormal(rotatingPoint);
   Vector3D horizontalAxis = normal.cross(camVec);
   
@@ -180,14 +180,13 @@ void CameraRenderer::makeRotate(const TouchEvent& touchEvent)
   _logger->logInfo("ROTATING V=%f H=%f\n", verticalAngle.degrees(), horizontalAngle.degrees());
   
   //Back-Up camera0
-  Camera cameraAux(0,0);
-  cameraAux.copyFrom(_camera0);
+  Camera cameraAux(_camera0);
   
   //Rotating vertically
   cameraAux.rotateWithAxisAndPoint(horizontalAxis, rotatingPoint, verticalAngle); //Up and down
   
   //Check if the view isn't too low
-  Vector3D vCamAux = cameraAux.getPos().sub(cameraAux.getCenter());
+  Vector3D vCamAux = cameraAux.getPosition().sub(cameraAux.getCenter());
   Angle alpha = vCamAux.angleBetween(normal);
   Vector3D center = centerOfViewOnPlanet(*_camera);
   
@@ -207,7 +206,7 @@ Vector3D CameraRenderer::centerOfViewOnPlanet(const Camera& c) const
 {
   Vector2D centerViewport(c.getWidth() /2, c.getHeight() /2);
   Vector3D rayCV = c.pixel2Vector(centerViewport);
-  Vector3D center = _planet->closestIntersection(c.getPos(), rayCV);
+  Vector3D center = _planet->closestIntersection(c.getPosition(), rayCV);
   
   return center;
 }

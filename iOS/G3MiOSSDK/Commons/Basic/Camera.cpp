@@ -16,35 +16,31 @@
 
 
 Camera::Camera(const Camera &c):
-_pos(c._pos),
+_position(c._position),
 _center(c._center),
 _up(c._up),
-_model(c._model),
-_projection(c._projection),
+_modelMatrix(c._modelMatrix),
+_projectionMatrix(c._projectionMatrix),
 _logger(NULL),
-_frustum(NULL)
-{
+_frustum(NULL) {
   resizeViewport(c.getWidth(), c.getHeight());
 }
 
-void Camera::copyFrom(const Camera &c)
-{
-  _pos = c._pos;
+void Camera::copyFrom(const Camera &c) {
+  _position = c._position;
   _center = c._center;
   _up = c._up;
-  _model = c._model;
-  _projection =c._projection;
+  _modelMatrix = c._modelMatrix;
+  _projectionMatrix = c._projectionMatrix;
   _logger = c._logger;
 }
 
-
-Camera::Camera(int width, int height) :
-_pos(6378137*5, 0, 0),
+Camera::Camera(const Planet* planet, int width, int height) :
+_position((planet == NULL) ? 0 : planet->getRadii().maxAxis() * 5, 0, 0),
 _center(0, 0, 0),
 _up(0, 0, 1),
 _logger(NULL),
-_frustum(NULL)
-{
+_frustum(NULL) {
   resizeViewport(width, height);
 }
 
@@ -52,127 +48,117 @@ void Camera::resizeViewport(int width, int height) {
   _width = width;
   _height = height;
   
-  _viewport[0] = _viewport[1] = 0;
-  _viewport[2] = width;
-  _viewport[3] = height;
+  cleanCaches();
 }
 
-void Camera::print() const
-{
+void Camera::print() const {
   if (_logger != NULL){ 
-    _model.print("MODEL", _logger);
-    _projection.print("PROJECTION", _logger);
-    _logger->logInfo("VIEWPORT: %d, %d, %d, %d\n",  _viewport[0] ,  _viewport[1] ,  _viewport[2] ,  _viewport[3] );
+    _modelMatrix.print("MODEL", _logger);
+    _projectionMatrix.print("PROJECTION", _logger);
+    _logger->logInfo("Width: %d, Height %d\n", 
+                     _width,
+                     _height);
   }
 }
 
 void Camera::draw(const RenderContext &rc) {
   _logger = rc.getLogger();
   
-  // compute znear value
-  double znear;
-  double maxR = rc.getPlanet()->getRadii().x();
-  double distToOrigin = _pos.length();
-  double height = distToOrigin - maxR;  
-  if (height > maxR/5.0) znear = maxR/10.0;
-  else if (height > maxR/500.0) znear = maxR/1e3;
-  else if (height > maxR/2000.0) znear = maxR/1e5;
-  else
-    znear = maxR / 1e6 * 3;
-  
-  // compute zfar value
-  double zfar = 10000 * znear;
-  if (zfar>distToOrigin) zfar=distToOrigin;
-  
-  // compute rest of frustum numbers
-  double ratioScreen = (double) _viewport[3] / _viewport[2];
-  double right = 0.3 / ratioScreen * znear;
-  double left = -right;
-  double top = 0.3 * znear;
-  double bottom = -top;
+  const FrustumData data = calculateFrustumData(rc);
   
   // TODO: create frustum, projection matrix and model matrix only when camera has changed!
   
   // compute projection matrix
-  _projection = MutableMatrix44D::createProjectionMatrix(left, right, bottom, top, znear, zfar);
+  _projectionMatrix = MutableMatrix44D::createProjectionMatrix(data._left, data._right,
+                                                               data._bottom, data._top,
+                                                               data._znear, data._zfar);
   IGL *gl = rc.getGL();
-  gl->setProjection(_projection);
+  gl->setProjection(_projectionMatrix);
   
   // compute model matrix
-  _model = MutableMatrix44D::createModelMatrix(_pos, _center, _up);
-  gl->loadMatrixf(_model);
+  _modelMatrix = MutableMatrix44D::createModelMatrix(_position, _center, _up);
+  gl->loadMatrixf(_modelMatrix);
   
   // compute new frustum
-  if (_frustum) {
+  if (_frustum != NULL) {
     delete _frustum;
   }
-  _frustum = new Frustum(left, right, bottom, top, znear, zfar, 
-                         _model.transpose());
+  _frustum = new Frustum(data._left, data._right,
+                         data._bottom, data._top,
+                         data._znear, data._zfar);
+}
+
+Frustum Camera::getFrustumInModelCoordinates() const {
+  return _frustum->applyTransform(_modelMatrix.transpose());
 }
 
 
 Vector3D Camera::pixel2Vector(const Vector2D& pixel) const {
-  double py = (int) pixel.y();
-  double px = (int) pixel.x();
-  py = _viewport[3] - py;
-  Vector3D pixel3D(px, py, 0);
+  const double px = (int) pixel.x();
+  const double py = _height - (int) pixel.y();
+  const Vector3D pixel3D(px, py, 0);
   
-  MutableMatrix44D modelView = _projection.multiply(_model);
-  Vector3D obj = modelView.unproject(pixel3D, _viewport);
-  if (obj.isNan()) return obj;
+  const MutableMatrix44D modelViewMatrix = _projectionMatrix.multiply(_modelMatrix);
   
-  Vector3D v = obj.sub(_pos.asVector3D());
-  return v;
+  const int viewport[4] = {
+    0, 0,
+    _width, _height
+  };
+  
+  const Vector3D obj = modelViewMatrix.unproject(pixel3D, viewport);
+  if (obj.isNan()) {
+    return obj; 
+  }
+  
+  return obj.sub(_position.asVector3D());
 }
 
-void Camera::applyTransform(const MutableMatrix44D& M)
-{
-  _pos = _pos.applyTransform(M, 1.0);
+void Camera::applyTransform(const MutableMatrix44D& M) {
+  _position = _position.applyTransform(M, 1.0);
   _center = _center.applyTransform(M, 1.0);
   _up = _up.applyTransform(M, 0.0);
+  
+  cleanCaches();
 }
 
 void Camera::dragCamera(const Vector3D& p0, const Vector3D& p1) {
   // compute the rotation axe
-  Vector3D rotationAxis = p0.cross(p1);
+  const Vector3D rotationAxis = p0.cross(p1);
   
   // compute the angle
-  Angle rotationDelta = Angle::fromRadians( - acos(p0.normalized().dot(p1.normalized())) );
+  const Angle rotationDelta = Angle::fromRadians( - acos(p0.normalized().dot(p1.normalized())) );
   
   //if (isnan(rotationDelta.radians())) return;
-  if (rotationDelta.isNan()) return;
+  if (rotationDelta.isNan()) {
+    return; 
+  }
   
   rotateWithAxis(rotationAxis, rotationDelta);
 }
 
 void Camera::rotateWithAxis(const Vector3D& axis, const Angle& delta) {
   // update the camera
-  MutableMatrix44D rot = MutableMatrix44D::createRotationMatrix(delta, axis);  
-  applyTransform(rot);
+  applyTransform(MutableMatrix44D::createRotationMatrix(delta, axis));
 }
 
 void Camera::zoom(double factor) {
-  const MutableVector3D w = _pos.sub(_center);
-  _pos = _center.add(w.times(factor));
+  const MutableVector3D w = _position.sub(_center);
+  _position = _center.add(w.times(factor));
+  
+  cleanCaches();
 }
 
-void Camera::pivotOnCenter(const Angle& a)
-{
-  Vector3D rotationAxis = _pos.sub(_center).asVector3D();
+void Camera::pivotOnCenter(const Angle& a) {
+  const Vector3D rotationAxis = _position.sub(_center).asVector3D();
   rotateWithAxis(rotationAxis, a);
 }
 
-void Camera::rotateWithAxisAndPoint(const Vector3D& axis, const Vector3D& point, const Angle& delta)
-{
-  MutableMatrix44D trans1 = MutableMatrix44D::createTranslationMatrix(point.times(-1.0));
-  MutableMatrix44D rot = MutableMatrix44D::createRotationMatrix(delta, axis);
-  MutableMatrix44D trans2 = MutableMatrix44D::createTranslationMatrix(point);
+void Camera::rotateWithAxisAndPoint(const Vector3D& axis, const Vector3D& point, const Angle& delta) {
+  const MutableMatrix44D trans1 = MutableMatrix44D::createTranslationMatrix(point.times(-1.0));
+  const MutableMatrix44D rot = MutableMatrix44D::createRotationMatrix(delta, axis);
+  const MutableMatrix44D trans2 = MutableMatrix44D::createTranslationMatrix(point);
   
-  //MutableMatrix44D m = trans1.multMatrix(rot).multMatrix(trans2);
-  
-  MutableMatrix44D m = trans2.multiply(rot).multiply(trans1);
-  
-  //MutableMatrix44D m = trans1.multMatrix(trans2);
+  const MutableMatrix44D m = trans2.multiply(rot).multiply(trans1);
   
   //m.print();
   

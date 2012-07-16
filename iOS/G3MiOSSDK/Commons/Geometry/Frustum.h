@@ -15,29 +15,6 @@
 
 
 class Frustum {
-  
-public:
-  Frustum(double left, double right, double bottom, double top, double znear, double zfar,
-          const MutableMatrix44D& modelTranspose):
-  _leftPlane(Plane(Vector3D(0.0, 0.0, 0.0), 
-                   Vector3D(left, top, -znear), 
-                   Vector3D(left, bottom, -znear)).applyTransform(modelTranspose)),
-  _bottomPlane(Plane(Vector3D(0.0, 0.0, 0.0), 
-                     Vector3D(left, bottom, -znear), 
-                     Vector3D(right, bottom, -znear)).applyTransform(modelTranspose)),
-  _rightPlane(Plane(Vector3D(0.0 ,0.0, 0.0), 
-                    Vector3D(right, bottom, -znear), 
-                    Vector3D(right, top, -znear)).applyTransform(modelTranspose)),
-  _topPlane(Plane(Vector3D(0.0 ,0.0, 0.0), 
-                  Vector3D(right, top, -znear), 
-                  Vector3D(left, top, -znear)).applyTransform(modelTranspose)),
-  _nearPlane(Plane(Vector3D(0.0, 0.0, 1.0), znear).applyTransform(modelTranspose)),
-  _farPlane(Plane(Vector3D(0.0, 0.0, -1.0), -zfar).applyTransform(modelTranspose))
-  {}
-  
-  bool contains(const Vector3D &point);
-  
-  
 private:
   const Plane _leftPlane;
   const Plane _rightPlane;
@@ -45,6 +22,55 @@ private:
   const Plane _topPlane;
   const Plane _nearPlane;
   const Plane _farPlane;
+  
+  Frustum(const Plane& leftPlane,
+          const Plane& rightPlane,
+          const Plane& bottomPlane,
+          const Plane& topPlane,
+          const Plane& nearPlane,
+          const Plane& farPlane) :
+  _leftPlane(leftPlane),
+  _rightPlane(rightPlane),
+  _bottomPlane(bottomPlane),
+  _topPlane(topPlane),
+  _nearPlane(nearPlane),
+  _farPlane(farPlane)
+  {
+    
+  }
+  
+public:
+  Frustum(double left, double right,
+          double bottom, double top,
+          double znear, double zfar):
+  _leftPlane(Plane(Vector3D(0, 0, 0), 
+                   Vector3D(left, top, -znear), 
+                   Vector3D(left, bottom, -znear))),
+  _bottomPlane(Plane(Vector3D(0, 0, 0), 
+                     Vector3D(left, bottom, -znear), 
+                     Vector3D(right, bottom, -znear))),
+  _rightPlane(Plane(Vector3D(0, 0, 0), 
+                    Vector3D(right, bottom, -znear), 
+                    Vector3D(right, top, -znear))),
+  _topPlane(Plane(Vector3D(0, 0, 0), 
+                  Vector3D(right, top, -znear), 
+                  Vector3D(left, top, -znear))),
+  _nearPlane(Plane(Vector3D(0, 0, 1), znear)),
+  _farPlane(Plane(Vector3D(0, 0, -1), -zfar))
+  {
+  }
+  
+  bool contains(const Vector3D &point);
+  
+  
+  Frustum applyTransform(const MutableMatrix44D& matrix) const {
+    return Frustum(_leftPlane.applyTransform(matrix),
+                   _rightPlane.applyTransform(matrix),
+                   _bottomPlane.applyTransform(matrix),
+                   _topPlane.applyTransform(matrix),
+                   _nearPlane.applyTransform(matrix),
+                   _farPlane.applyTransform(matrix));
+  }
 };
 
 
