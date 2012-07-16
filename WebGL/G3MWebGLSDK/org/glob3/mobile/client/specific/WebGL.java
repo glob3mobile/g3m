@@ -1440,6 +1440,7 @@ public class WebGL {
 	}-*/;
 
 	public static native int jsUploadTexture(JavaScriptObject texture) /*-{
+		debugger;
 		var i = 0, idTexture = 0;
 		var assignedPosition = false;
 		for (i; i < $wnd.maxGPUTextures; i++) {
@@ -1457,58 +1458,17 @@ public class WebGL {
 		var minFilter = $wnd.gl.LINEAR;
 		$wnd.gl.bindTexture($wnd.gl.TEXTURE_2D, texture);
 
-		$wnd.gl.texImage2D($wnd.gl.TEXTURE_2D, 0, $wnd.gl.RGBA, $wnd.gl.RGBA,
-				$wnd.gl.UNSIGNED_BYTE, texture.image);
+		$wnd.gl.texImage2D($wnd.gl.TEXTURE_2D, 0, $wnd.gl.RGBA, $wnd.gl.RGBA, $wnd.gl.UNSIGNED_BYTE, texture.image);
 
-		$wnd.gl.texParameteri($wnd.gl.TEXTURE_2D, $wnd.gl.TEXTURE_MAG_FILTER,
-				magFilter);
-		$wnd.gl.texParameteri($wnd.gl.TEXTURE_2D, $wnd.gl.TEXTURE_MIN_FILTER,
-				minFilter);
-		$wnd.gl.texParameteri($wnd.gl.TEXTURE_2D, $wnd.gl.TEXTURE_WRAP_S,
-				$wnd.gl.CLAMP_TO_EDGE);
-		$wnd.gl.texParameteri($wnd.gl.TEXTURE_2D, $wnd.gl.TEXTURE_WRAP_T,
-				$wnd.gl.CLAMP_TO_EDGE);
+		$wnd.gl.texParameteri($wnd.gl.TEXTURE_2D, $wnd.gl.TEXTURE_MAG_FILTER, magFilter);
+		$wnd.gl.texParameteri($wnd.gl.TEXTURE_2D, $wnd.gl.TEXTURE_MIN_FILTER, minFilter);
+		$wnd.gl.texParameteri($wnd.gl.TEXTURE_2D, $wnd.gl.TEXTURE_WRAP_S, $wnd.gl.CLAMP_TO_EDGE);
+		$wnd.gl.texParameteri($wnd.gl.TEXTURE_2D, $wnd.gl.TEXTURE_WRAP_T, $wnd.gl.CLAMP_TO_EDGE);
 		$wnd.gl.generateMipmap($wnd.gl.TEXTURE_2D);
 		$wnd.gl.bindTexture($wnd.gl.TEXTURE_2D, null);
 
 		return idTexture;
 
-	}-*/;
-	
-	public static native int jsUploadTexture2(JavaScriptObject texture) /*-{
-		var i = 0, idTexture = 0;
-		var assignedPosition = false;
-		for (i; i < $wnd.maxGPUTextures; i++) {
-			if ($wnd.textureStack[i] == null) {
-				$wnd.textureStack[i] = texture;
-				idTexture = i + 1;
-				$wnd.numFreeTexIds--;
-				assignedPosition = true;
-				break;
-			}
-		}
-		if (assignedPosition == false)
-			return 0;
-		var magFilter = $wnd.gl.LINEAR;
-		var minFilter = $wnd.gl.LINEAR;
-		$wnd.gl.bindTexture($wnd.gl.TEXTURE_2D, texture);
-	
-		$wnd.gl.texImage2D($wnd.gl.TEXTURE_2D, 0, $wnd.gl.RGBA, $wnd.gl.RGBA,
-				$wnd.gl.UNSIGNED_BYTE, texture.image);
-	
-		$wnd.gl.texParameteri($wnd.gl.TEXTURE_2D, $wnd.gl.TEXTURE_MAG_FILTER,
-				magFilter);
-		$wnd.gl.texParameteri($wnd.gl.TEXTURE_2D, $wnd.gl.TEXTURE_MIN_FILTER,
-				minFilter);
-		$wnd.gl.texParameteri($wnd.gl.TEXTURE_2D, $wnd.gl.TEXTURE_WRAP_S,
-				$wnd.gl.CLAMP_TO_EDGE);
-		$wnd.gl.texParameteri($wnd.gl.TEXTURE_2D, $wnd.gl.TEXTURE_WRAP_T,
-				$wnd.gl.CLAMP_TO_EDGE);
-		$wnd.gl.generateMipmap($wnd.gl.TEXTURE_2D);
-		$wnd.gl.bindTexture($wnd.gl.TEXTURE_2D, null);
-	
-		return idTexture;
-	
 	}-*/;
 	
 

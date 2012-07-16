@@ -28,15 +28,15 @@ public class Factory_WebGL
 
    @Override
    public IImage createImageFromFileName(final String filename) {
-      final Image image = new Image(filename);
+	   
+	   Image_WebGL im = new Image_WebGL();
+	   im.loadFromURL(filename);
+	   
+	   //while(!im.isLoadedFromURL()){
+		   //WAIT UNTIL LOADED
+	   //}
 
-      //      image.addLoadHandler(new LoadHandler() {
-      //         public void onLoad(LoadEvent event) {
-      //            context.drawImage(ImageElement.as(image.getElement()), 0, 0);
-      //          }
-      //        });
-
-      return new Image_WebGL(image);
+      return im;
    }
 
 
