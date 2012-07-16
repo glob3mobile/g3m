@@ -42,7 +42,7 @@ public:
   }
   
   static TileParameters* createDefault() {
-    const int K = 1;
+    const int K = 10;
     const int splitsByLatitude = 2 * K;
     const int splitsByLongitude = 4 * K;
     const int topLevel = 0;

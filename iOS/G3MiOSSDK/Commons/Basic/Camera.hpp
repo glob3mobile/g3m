@@ -68,6 +68,8 @@ public:
     return (float) _width / _height;
   }
   
+  Frustum *getFrustum() { return _frustum; }
+  
 private:
   int _width, _height;
   

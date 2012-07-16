@@ -28,10 +28,13 @@ Mesh* Tile::getMesh(const RenderContext* rc,
 }
 
 bool Tile::isVisible(const RenderContext *rc) {
-  // TODO: check collition with frustum
-  // TODO: check for tiles backfacing to the camera
+
+  int __agustin_at_work;
   
-  return true;
+  // compute central point
+  Vector3D center = rc->getPlanet()->toVector3D(_sector.getCenter());
+  
+  return rc->getCamera()->getFrustum()->isInside(center);
 }
 
 bool Tile::meetsRenderCriteria(const RenderContext *rc,
