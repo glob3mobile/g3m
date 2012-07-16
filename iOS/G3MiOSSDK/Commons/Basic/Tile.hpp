@@ -10,6 +10,7 @@
 #define G3MiOSSDK_Tile_h
 
 #include "Sector.hpp"
+#include "Box.h"
 
 class RenderContext;
 class Mesh;
@@ -28,6 +29,8 @@ private:
   Mesh* _mesh;
   Tile* _fallbackTextureTile;
   bool _textureSolved;
+
+  Box *_bbox;
   
   inline Mesh* getMesh(const RenderContext* rc,
                        const TileTessellator* tessellator);
@@ -60,7 +63,8 @@ public:
   _column(column),
   _mesh(NULL),
   _textureSolved(false),
-  _fallbackTextureTile(fallbackTextureTile)
+  _fallbackTextureTile(fallbackTextureTile),
+  _bbox(NULL)
   {
   }
   

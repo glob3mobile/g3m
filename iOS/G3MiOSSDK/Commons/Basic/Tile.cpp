@@ -16,8 +16,10 @@
 
 
 Tile::~Tile() {
-  delete _mesh;
+  if (_mesh) delete _mesh;
+  if (_bbox) delete _bbox;
 }
+
 
 Mesh* Tile::getMesh(const RenderContext* rc,
                     const TileTessellator* tessellator) {
@@ -34,7 +36,7 @@ bool Tile::isVisible(const RenderContext *rc) {
   // compute central point
   Vector3D center = rc->getPlanet()->toVector3D(_sector.getCenter());
   
-  return rc->getCamera()->getFrustum()->isInside(center);
+  return rc->getCamera()->getFrustum()->contains(center);
 }
 
 bool Tile::meetsRenderCriteria(const RenderContext *rc,
