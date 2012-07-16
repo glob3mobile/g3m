@@ -60,9 +60,9 @@ void Camera::resizeViewport(int width, int height) {
 void Camera::print() const
 {
   if (_logger != NULL){ 
-  _model.print("MODEL", _logger);
-  _projection.print("PROJECTION", _logger);
-  _logger->logInfo("VIEWPORT: %d, %d, %d, %d\n",  _viewport[0] ,  _viewport[1] ,  _viewport[2] ,  _viewport[3] );
+    _model.print("MODEL", _logger);
+    _projection.print("PROJECTION", _logger);
+    _logger->logInfo("VIEWPORT: %d, %d, %d, %d\n",  _viewport[0] ,  _viewport[1] ,  _viewport[2] ,  _viewport[3] );
   }
 }
 
@@ -91,6 +91,8 @@ void Camera::draw(const RenderContext &rc) {
   double top = 0.3 * znear;
   double bottom = -top;
   
+  // TODO: create frustum, projection matrix and model matrix only when camera has changed!
+  
   // compute projection matrix
   _projection = MutableMatrix44D::createProjectionMatrix(left, right, bottom, top, znear, zfar);
   IGL *gl = rc.getGL();
@@ -101,8 +103,9 @@ void Camera::draw(const RenderContext &rc) {
   gl->loadMatrixf(_model);
   
   // compute new frustum
-  // TODO: only create frustum when camera has changed!
-  if (_frustum) delete _frustum;
+  if (_frustum) {
+    delete _frustum;
+  }
   _frustum = new Frustum(left, right, bottom, top, znear, zfar, 
                          _pos.asVector3D(), _center.asVector3D(), _up.asVector3D(), 
                          _model.transpose());

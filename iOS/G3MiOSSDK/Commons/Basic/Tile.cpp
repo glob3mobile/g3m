@@ -97,6 +97,19 @@ void Tile::render(const RenderContext* rc,
   }
 }
 
+Tile* Tile::createSubTile(const Angle& lowerLat, const Angle& lowerLon,
+                          const Angle& upperLat, const Angle& upperLon,
+                          const int level,
+                          const int row, const int column,
+                          Tile* fallbackTextureTile) {
+//  TileKey key(level, row, column);
+  
+  return new Tile(Sector(Geodetic2D(lowerLat, lowerLon), Geodetic2D(upperLat, upperLon)),
+                  level,
+                  row, column,
+                  fallbackTextureTile);
+}
+
 std::vector<Tile*> Tile::createSubTiles() {
   const Geodetic2D lower = _sector.lower();
   const Geodetic2D upper = _sector.upper();
@@ -110,13 +123,13 @@ std::vector<Tile*> Tile::createSubTiles() {
   const Angle lon1 = Angle::midAngle(lon0, lon2);
   
   const int nextLevel = _level + 1;
-  Tile* fallback = isTextureSolved() ? this : _fallbackTextureTile;
+  Tile* fallbackTextureTile = isTextureSolved() ? this : _fallbackTextureTile;
   
   std::vector<Tile*> subTiles(4);
-  subTiles[0] = new Tile(Sector(Geodetic2D(lat0, lon0), Geodetic2D(lat1, lon1)), nextLevel, 2 * _row    , 2 * _column    , fallback);
-  subTiles[1] = new Tile(Sector(Geodetic2D(lat0, lon1), Geodetic2D(lat1, lon2)), nextLevel, 2 * _row    , 2 * _column + 1, fallback);
-  subTiles[2] = new Tile(Sector(Geodetic2D(lat1, lon0), Geodetic2D(lat2, lon1)), nextLevel, 2 * _row + 1, 2 * _column    , fallback);
-  subTiles[3] = new Tile(Sector(Geodetic2D(lat1, lon1), Geodetic2D(lat2, lon2)), nextLevel, 2 * _row + 1, 2 * _column + 1, fallback);
+  subTiles[0] = createSubTile(lat0, lon0, lat1, lon1, nextLevel, 2 * _row    , 2 * _column    , fallbackTextureTile);
+  subTiles[1] = createSubTile(lat0, lon1, lat1, lon2, nextLevel, 2 * _row    , 2 * _column + 1, fallbackTextureTile);
+  subTiles[2] = createSubTile(lat1, lon0, lat2, lon1, nextLevel, 2 * _row + 1, 2 * _column    , fallbackTextureTile);
+  subTiles[3] = createSubTile(lat1, lon1, lat2, lon2, nextLevel, 2 * _row + 1, 2 * _column + 1, fallbackTextureTile);
   
   return subTiles;
 }

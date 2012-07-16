@@ -41,7 +41,13 @@ private:
   inline void rawRender(const RenderContext* rc,
                         const TileTessellator* tessellator,
                         const TileTexturizer* texturizer);
-
+  
+  inline Tile* createSubTile(const Angle& lowerLat, const Angle& lowerLon,
+                             const Angle& upperLat, const Angle& upperLon,
+                             const int level,
+                             const int row, const int column,
+                             Tile* fallbackTextureTile);
+  
 public:
   Tile(const Sector& sector,
        int level,

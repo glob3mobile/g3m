@@ -28,7 +28,11 @@ public:
   Camera(const Camera &c);
   
   Camera(int width, int height);
-  ~Camera(){}
+  ~Camera() {
+    if (_frustum) {
+      delete _frustum;
+    }
+  }
   
   void copyFrom(const Camera &c);
   
