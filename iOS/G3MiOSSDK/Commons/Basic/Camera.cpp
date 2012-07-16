@@ -68,7 +68,7 @@ void Camera::print() const {
   }
 }
 
-void Camera::draw(const RenderContext &rc) {
+void Camera::render(const RenderContext &rc) {
   _logger = rc.getLogger();
   
   const FrustumData data = calculateFrustumData(rc);
