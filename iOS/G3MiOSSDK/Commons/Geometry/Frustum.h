@@ -82,6 +82,16 @@ public:
                    _nearPlane.transformedBy(matrix),
                    _farPlane.transformedBy(matrix));
   }
+  
+  
+  Frustum* transformedBy_P(const MutableMatrix44D& matrix) const {
+    return new Frustum(_leftPlane.transformedBy(matrix),
+                       _rightPlane.transformedBy(matrix),
+                       _bottomPlane.transformedBy(matrix),
+                       _topPlane.transformedBy(matrix),
+                       _nearPlane.transformedBy(matrix),
+                       _farPlane.transformedBy(matrix));
+  }
 };
 
 

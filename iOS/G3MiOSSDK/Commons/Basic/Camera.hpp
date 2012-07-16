@@ -62,6 +62,10 @@ public:
     if (_frustum != NULL) {
       delete _frustum;
     }
+    
+    if (_frustumInModelCoordinates != NULL) {
+      delete _frustumInModelCoordinates;
+    }
   }
   
   void copyFrom(const Camera &c);
@@ -98,8 +102,21 @@ public:
   
   void print() const;
   
-  Frustum getFrustumInModelCoordinates();
+  const Frustum* const getFrustumInModelCoordinates();
   
+  void calculateCachedValues(const RenderContext &rc);
+  
+  void cleanCachedValues() {
+    _dirtyCachedValues = true;
+//    if (_frustum != NULL) {
+//      delete _frustum;
+//      _frustum = NULL;
+//    }
+    if (_frustumInModelCoordinates != NULL) {
+      delete _frustumInModelCoordinates;
+      _frustumInModelCoordinates = NULL;
+    }
+  }
   
 private:
   int _width;
@@ -113,18 +130,13 @@ private:
   MutableVector3D _up;                 // vertical vector
   
   Frustum* _frustum;
+  Frustum* _frustumInModelCoordinates;
   
   const ILogger* _logger;
   
   void applyTransform(const MutableMatrix44D& mat);
   
-  
-  void cleanCaches() {
-    if (_frustum != NULL) {
-      delete _frustum;
-      _frustum = NULL;
-    }
-  }
+  bool _dirtyCachedValues;
   
   
   FrustumData calculateFrustumData(const RenderContext &rc) {

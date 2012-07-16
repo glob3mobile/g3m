@@ -24,15 +24,16 @@ _position(that._position),
 _center(that._center),
 _up(that._up),
 _frustum((that._frustum == NULL) ? NULL : new Frustum(*that._frustum)),
-_logger(that._logger)
+_logger(that._logger),
+_dirtyCachedValues(that._dirtyCachedValues)
 {
-  cleanCaches();
+  cleanCachedValues();
 }
 
 void Camera::copyFrom(const Camera &that) {
   _width  = that._width;
   _height = that._height;
-
+  
   _modelMatrix      = that._modelMatrix;
   _projectionMatrix = that._projectionMatrix;
   
@@ -41,10 +42,12 @@ void Camera::copyFrom(const Camera &that) {
   _up       = that._up;
   
   _frustum = (that._frustum == NULL) ? NULL : new Frustum(*that._frustum);
-
+  
+  _dirtyCachedValues = that._dirtyCachedValues;
+  
   _logger = that._logger;
   
-  cleanCaches();
+  cleanCachedValues();
 }
 
 Camera::Camera(const Planet* planet,
@@ -53,7 +56,9 @@ _position((planet == NULL) ? 0 : planet->getRadii().maxAxis() * 5, 0, 0),
 _center(0, 0, 0),
 _up(0, 0, 1),
 _logger(NULL),
-_frustum(NULL) {
+_frustum(NULL),
+_dirtyCachedValues(true)
+{
   resizeViewport(width, height);
 }
 
@@ -61,7 +66,7 @@ void Camera::resizeViewport(int width, int height) {
   _width = width;
   _height = height;
   
-  cleanCaches();
+  cleanCachedValues();
 }
 
 void Camera::print() const {
@@ -72,35 +77,44 @@ void Camera::print() const {
   }
 }
 
-void Camera::render(const RenderContext &rc) {
-  _logger = rc.getLogger();
-  
-  // TODO: create frustum, projection matrix and model matrix only when camera has changed!
-
+void Camera::calculateCachedValues(const RenderContext &rc) {
   const FrustumData data = calculateFrustumData(rc);
-
-  // compute projection matrix
+  
   _projectionMatrix = MutableMatrix44D::createProjectionMatrix(data._left, data._right,
                                                                data._bottom, data._top,
                                                                data._znear, data._zfar);
-  IGL *gl = rc.getGL();
-  gl->setProjection(_projectionMatrix);
   
-  // compute model matrix
   _modelMatrix = MutableMatrix44D::createModelMatrix(_position, _center, _up);
-  gl->loadMatrixf(_modelMatrix);
   
-  // compute new frustum
+  
   if (_frustum != NULL) {
     delete _frustum;
   }
   _frustum = new Frustum(data._left, data._right,
                          data._bottom, data._top,
                          data._znear, data._zfar);
+
+  if (_frustumInModelCoordinates != NULL) {
+    delete _frustumInModelCoordinates;
+  }
+  _frustumInModelCoordinates = _frustum->transformedBy_P(_modelMatrix.transpose());
 }
 
-Frustum Camera::getFrustumInModelCoordinates() {
-  return _frustum->transformedBy(_modelMatrix.transpose());
+void Camera::render(const RenderContext &rc) {
+  _logger = rc.getLogger();
+  
+  if (_dirtyCachedValues) {
+    calculateCachedValues(rc);
+    _dirtyCachedValues = false;
+  }
+  
+  IGL *gl = rc.getGL();
+  gl->setProjection(_projectionMatrix);
+  gl->loadMatrixf(_modelMatrix);
+}
+
+const Frustum* const Camera::getFrustumInModelCoordinates() {
+  return _frustumInModelCoordinates;
 }
 
 
@@ -129,7 +143,7 @@ void Camera::applyTransform(const MutableMatrix44D& M) {
   _center   = _center.transformedBy(M, 1.0);
   _up       = _up.transformedBy(M, 0.0);
   
-  cleanCaches();
+  cleanCachedValues();
 }
 
 void Camera::dragCamera(const Vector3D& p0, const Vector3D& p1) {
@@ -155,7 +169,7 @@ void Camera::zoom(double factor) {
   const MutableVector3D w = _position.sub(_center);
   _position = _center.add(w.times(factor));
   
-  cleanCaches();
+  cleanCachedValues();
 }
 
 void Camera::pivotOnCenter(const Angle& a) {
