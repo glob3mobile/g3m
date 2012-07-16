@@ -18,32 +18,33 @@ class Frustum {
   
 public:
   Frustum(double left, double right, double bottom, double top, double znear, double zfar,
-          Vector3D position, Vector3D center, Vector3D up, MutableMatrix44D modelTranspose):
-  _position(position), 
-  _center(center),
-  _up(up), 
-  leftPlane(Plane(Vector3D(0.0, 0.0, 0.0), 
-                  Vector3D(left, top, -znear), 
-                  Vector3D(left, bottom, -znear)).applyTransform(modelTranspose)),
-  bottomPlane(Plane(Vector3D(0.0, 0.0, 0.0), 
-                    Vector3D(left, bottom, -znear), 
-                    Vector3D(right, bottom, -znear)).applyTransform(modelTranspose)),
-  rightPlane(Plane(Vector3D(0.0 ,0.0, 0.0), 
-                   Vector3D(right, bottom, -znear), 
-                   Vector3D(right, top, -znear)).applyTransform(modelTranspose)),
-  topPlane(Plane(Vector3D(0.0 ,0.0, 0.0), 
-                 Vector3D(right, top, -znear), 
-                 Vector3D(left, top, -znear)).applyTransform(modelTranspose)),
-  nearPlane(Plane(Vector3D(0.0, 0.0, 1.0), znear).applyTransform(modelTranspose)),
-  farPlane(Plane(Vector3D(0.0, 0.0, -1.0), -zfar).applyTransform(modelTranspose))
+          const MutableMatrix44D& modelTranspose):
+  _leftPlane(Plane(Vector3D(0.0, 0.0, 0.0), 
+                   Vector3D(left, top, -znear), 
+                   Vector3D(left, bottom, -znear)).applyTransform(modelTranspose)),
+  _bottomPlane(Plane(Vector3D(0.0, 0.0, 0.0), 
+                     Vector3D(left, bottom, -znear), 
+                     Vector3D(right, bottom, -znear)).applyTransform(modelTranspose)),
+  _rightPlane(Plane(Vector3D(0.0 ,0.0, 0.0), 
+                    Vector3D(right, bottom, -znear), 
+                    Vector3D(right, top, -znear)).applyTransform(modelTranspose)),
+  _topPlane(Plane(Vector3D(0.0 ,0.0, 0.0), 
+                  Vector3D(right, top, -znear), 
+                  Vector3D(left, top, -znear)).applyTransform(modelTranspose)),
+  _nearPlane(Plane(Vector3D(0.0, 0.0, 1.0), znear).applyTransform(modelTranspose)),
+  _farPlane(Plane(Vector3D(0.0, 0.0, -1.0), -zfar).applyTransform(modelTranspose))
   {}
   
-  bool isInside(Vector3D point);
+  bool contains(const Vector3D &point);
   
   
 private:
-  Vector3D _position, _center, _up;
-  Plane leftPlane, rightPlane, bottomPlane, topPlane, nearPlane, farPlane;
+  const Plane _leftPlane;
+  const Plane _rightPlane;
+  const Plane _bottomPlane;
+  const Plane _topPlane;
+  const Plane _nearPlane;
+  const Plane _farPlane;
 };
 
 

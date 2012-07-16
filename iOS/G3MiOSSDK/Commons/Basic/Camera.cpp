@@ -107,7 +107,6 @@ void Camera::draw(const RenderContext &rc) {
     delete _frustum;
   }
   _frustum = new Frustum(left, right, bottom, top, znear, zfar, 
-                         _pos.asVector3D(), _center.asVector3D(), _up.asVector3D(), 
                          _model.transpose());
 }
 

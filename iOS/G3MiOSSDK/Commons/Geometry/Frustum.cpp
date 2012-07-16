@@ -11,13 +11,12 @@
 #include "Frustum.h"
 
 
-bool Frustum::isInside(Vector3D point)
-{
-  if (leftPlane.evaluate(point)>0) return false;
-  if (rightPlane.evaluate(point)>0) return false;
-  if (bottomPlane.evaluate(point)>0) return false;
-  if (topPlane.evaluate(point)>0) return false;
-  if (nearPlane.evaluate(point)>0) return false;
-  if (farPlane.evaluate(point)>0) return false;
+bool Frustum::contains(const Vector3D& point) {
+  if (_leftPlane.evaluate(point)   > 0) return false;
+  if (_rightPlane.evaluate(point)  > 0) return false;
+  if (_bottomPlane.evaluate(point) > 0) return false;
+  if (_topPlane.evaluate(point)    > 0) return false;
+  if (_nearPlane.evaluate(point)   > 0) return false;
+  if (_farPlane.evaluate(point)    > 0) return false;
   return true;
 }
