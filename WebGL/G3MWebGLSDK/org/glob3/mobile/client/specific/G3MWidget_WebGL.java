@@ -12,6 +12,7 @@ import org.glob3.mobile.client.generated.IGL;
 import org.glob3.mobile.client.generated.ILogger;
 import org.glob3.mobile.client.generated.LogLevel;
 import org.glob3.mobile.client.generated.Planet;
+import org.glob3.mobile.client.generated.SimplePlanetRenderer;
 import org.glob3.mobile.client.generated.TexturesHandler;
 import org.glob3.mobile.client.generated.TouchEvent;
 
@@ -93,6 +94,13 @@ public class G3MWidget_WebGL
       if (true) {
          final DummyRenderer dr = new DummyRenderer();
          comp.addRenderer(dr);
+      }
+      
+      if (true){
+    	  final SimplePlanetRenderer spr = new SimplePlanetRenderer("world.jpg");
+    	  
+    	  //final SimplePlanetRenderer spr = new SimplePlanetRenderer("http://www.arkive.org/images/browse/world-map.jpg");
+    	  comp.addRenderer(spr);
       }
 
       // Logger
