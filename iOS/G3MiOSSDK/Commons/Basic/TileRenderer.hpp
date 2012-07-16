@@ -16,27 +16,112 @@ class TileTessellator;
 class TileTexturizer;
 
 #include "Sector.hpp"
+#include <vector>
+
+#include "Tile.hpp"
+
+class TileCacheEntry {
+public:
+  Tile* _tile;
+  long  _timestamp;
+  
+  TileCacheEntry(Tile* tile,
+                 long  timestamp) :
+  _tile(tile),
+  _timestamp(timestamp)
+  {
+    
+  }
+  
+  ~TileCacheEntry() {
+    if (_tile != NULL) {
+      delete _tile;
+    }
+  }
+};
+
+
+class TilesCache {
+private:
+  const int                    _maxElements;
+  std::vector<TileCacheEntry*> _entries;
+  
+  long _counter;
+  
+public:
+  TilesCache(int maxElements) :
+  _maxElements(maxElements),
+  _counter(0)
+  {
+    
+  }
+  
+  Tile* getTile(const int level,
+                const int row, const int column) {
+    
+    for (int i = 0; i < _entries.size(); i++) {
+      TileCacheEntry* entry = _entries[i];
+      Tile* tile = entry->_tile;
+      
+      if ((tile->getLevel()  == level ) &&
+          (tile->getRow()    == row   ) &&
+          (tile->getColumn() == column)) {
+        entry->_timestamp = ++_counter;
+        
+        return tile;
+      }
+    }
+    
+    return NULL;
+  }
+  
+  
+  void putTile(Tile* tile) {
+    TileCacheEntry* newEntry = new TileCacheEntry(tile, ++_counter);
+    
+    if (_entries.size() < _maxElements) {
+      _entries.push_back(newEntry);
+    }
+    else {
+      int loserI = 0;
+      TileCacheEntry* loserEntry = _entries[0];
+      
+      for (int i = 1; i < _entries.size(); i++) {
+        TileCacheEntry* entry = _entries[i];
+        if (entry->_timestamp < loserEntry->_timestamp) {
+          loserEntry = entry;
+          loserI = i;
+        }
+      }
+      
+      _entries[loserI] = newEntry;
+      delete loserEntry;
+    }
+  }
+};
+
 
 class TileParameters {
-
 public:
   const Sector _topSector;
   const int    _splitsByLatitude;
   const int    _splitsByLongitude;
   const int    _topLevel;
   const int    _maxLevel;
-
-
+  const int    _maxTilesInCache;
+  
   TileParameters(const Sector topSector,
                  const int    splitsByLatitude,
                  const int    splitsByLongitude,
                  const int    topLevel,
-                 const int    maxLevel) :
+                 const int    maxLevel,
+                 const int    maxTilesInCache) :
   _topSector(topSector),
   _splitsByLatitude(splitsByLatitude),
   _splitsByLongitude(splitsByLongitude),
   _topLevel(topLevel),
-  _maxLevel(maxLevel)
+  _maxLevel(maxLevel),
+  _maxTilesInCache(maxTilesInCache)
   {
     
   }
@@ -47,12 +132,14 @@ public:
     const int splitsByLongitude = 4 * K;
     const int topLevel = 0;
     const int maxLevel = 8;
+    const int maxTilesInCache = 100;
     
     return new TileParameters(Sector::fullSphere(),
                               splitsByLatitude,
                               splitsByLongitude,
                               topLevel,
-                              maxLevel);
+                              maxLevel,
+                              maxTilesInCache);
   }
 };
 
@@ -62,6 +149,7 @@ private:
   const TileTessellator* _tessellator;
   const TileTexturizer*  _texturizer;
   const TileParameters*  _parameters;
+  TilesCache*            _tilesCache;
   
   std::vector<Tile*>     _topLevelTiles;
   
@@ -74,7 +162,8 @@ public:
                const TileParameters* parameters) :
   _tessellator(tessellator),
   _texturizer(texturizer),
-  _parameters(parameters)
+  _parameters(parameters),
+  _tilesCache(new TilesCache(parameters->_maxTilesInCache))
   {
     
   }

@@ -53,7 +53,22 @@ public:
  */
 class Camera {
 public:
-  Camera(const Camera &c);
+  Camera(const Camera &that):
+  _width(that._width),
+  _height(that._height),
+  _modelMatrix(that._modelMatrix),
+  _projectionMatrix(that._projectionMatrix),
+  _position(that._position),
+  _center(that._center),
+  _up(that._up),
+  _frustum((that._frustum == NULL) ? NULL : new Frustum(*that._frustum)),
+  _frustumInModelCoordinates((that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates)),
+  _logger(that._logger),
+  _dirtyCachedValues(that._dirtyCachedValues)
+  {
+    cleanCachedValues();
+  }
+  
   
   Camera(const Planet* planet,
          int width, int height);
@@ -78,7 +93,7 @@ public:
   
   int getWidth() const { return _width; }
   int getHeight() const { return _height; }
-
+  
   float getViewPortRatio() const {
     return (float) _width / _height;
   }
@@ -104,19 +119,6 @@ public:
   
   const Frustum* const getFrustumInModelCoordinates();
   
-  void calculateCachedValues(const RenderContext &rc);
-  
-  void cleanCachedValues() {
-    _dirtyCachedValues = true;
-//    if (_frustum != NULL) {
-//      delete _frustum;
-//      _frustum = NULL;
-//    }
-    if (_frustumInModelCoordinates != NULL) {
-      delete _frustumInModelCoordinates;
-      _frustumInModelCoordinates = NULL;
-    }
-  }
   
 private:
   int _width;
@@ -174,6 +176,20 @@ private:
     return FrustumData(left, right,
                        bottom, top,
                        znear, zfar);
+  }
+  
+  void calculateCachedValues(const RenderContext &rc);
+  
+  void cleanCachedValues() {
+    _dirtyCachedValues = true;
+    //    if (_frustum != NULL) {
+    //      delete _frustum;
+    //      _frustum = NULL;
+    //    }
+    if (_frustumInModelCoordinates != NULL) {
+      delete _frustumInModelCoordinates;
+      _frustumInModelCoordinates = NULL;
+    }
   }
   
   

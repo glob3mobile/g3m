@@ -15,21 +15,6 @@
 #include "Plane.h"
 
 
-Camera::Camera(const Camera &that):
-_width(that._width),
-_height(that._height),
-_modelMatrix(that._modelMatrix),
-_projectionMatrix(that._projectionMatrix),
-_position(that._position),
-_center(that._center),
-_up(that._up),
-_frustum((that._frustum == NULL) ? NULL : new Frustum(*that._frustum)),
-_logger(that._logger),
-_dirtyCachedValues(that._dirtyCachedValues)
-{
-  cleanCachedValues();
-}
-
 void Camera::copyFrom(const Camera &that) {
   _width  = that._width;
   _height = that._height;
@@ -42,6 +27,7 @@ void Camera::copyFrom(const Camera &that) {
   _up       = that._up;
   
   _frustum = (that._frustum == NULL) ? NULL : new Frustum(*that._frustum);
+  _frustumInModelCoordinates = (that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates);
   
   _dirtyCachedValues = that._dirtyCachedValues;
   
@@ -94,10 +80,12 @@ void Camera::calculateCachedValues(const RenderContext &rc) {
                          data._bottom, data._top,
                          data._znear, data._zfar);
 
+  
   if (_frustumInModelCoordinates != NULL) {
     delete _frustumInModelCoordinates;
   }
   _frustumInModelCoordinates = _frustum->transformedBy_P(_modelMatrix.transpose());
+  
 }
 
 void Camera::render(const RenderContext &rc) {
@@ -117,10 +105,9 @@ const Frustum* const Camera::getFrustumInModelCoordinates() {
   return _frustumInModelCoordinates;
 }
 
-
 Vector3D Camera::pixel2Vector(const Vector2D& pixel) const {
-  const double px = (int) pixel.x();
-  const double py = _height - (int) pixel.y();
+  const int px = (int) pixel.x();
+  const int py = _height - (int) pixel.y();
   const Vector3D pixel3D(px, py, 0);
   
   const MutableMatrix44D modelViewMatrix = _projectionMatrix.multiply(_modelMatrix);
@@ -161,7 +148,6 @@ void Camera::dragCamera(const Vector3D& p0, const Vector3D& p1) {
 }
 
 void Camera::rotateWithAxis(const Vector3D& axis, const Angle& delta) {
-  // update the camera
   applyTransform(MutableMatrix44D::createRotationMatrix(delta, axis));
 }
 

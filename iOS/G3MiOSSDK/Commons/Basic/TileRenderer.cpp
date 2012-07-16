@@ -20,6 +20,7 @@ TileRenderer::~TileRenderer() {
   delete _tessellator;
   delete _texturizer;
   delete _parameters;
+  delete _tilesCache;
 }
 
 void TileRenderer::clearTopLevelTiles() {
@@ -72,7 +73,7 @@ int TileRenderer::render(const RenderContext* rc) {
   
   for (int i = 0; i < _topLevelTiles.size(); i++) {
     Tile* tile = _topLevelTiles[i];
-    tile->render(rc, _tessellator, _texturizer, _parameters);
+    tile->render(rc, _tessellator, _texturizer, _parameters, _tilesCache);
   }
   
   gl->disablePolygonOffset();
