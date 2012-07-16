@@ -49,8 +49,9 @@ Mesh* SimpleTileTexturizer::texturize(const RenderContext* rc,
         const ByteBuffer& bb = _tilePetitions[i].getPetitions()[0].getByteBuffer();
         IImage *im = rc->getFactory()->createImageFromData(bb);
         
+        const std::string& url = _tilePetitions[i].getPetitions()[0].getURL();
         int __JM_at_work;        
-        int texID = rc->getTexturesHandler()->getTextureId(rc, im, "...", 256, 256);
+        int texID = rc->getTexturesHandler()->getTextureId(rc, im, url, 256, 256);
         
         
       } else{
