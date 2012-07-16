@@ -16,6 +16,7 @@ class Mesh;
 //#include "TileTessellator.hpp"
 class TileTessellator;
 class TileTexturizer;
+class TileParameters;
 
 class Tile {
 private:
@@ -23,38 +24,42 @@ private:
   const int    _level;
   const int    _row;
   const int    _column;
-  
-  bool _textureSolved;
-  bool _wireframe;
-  
+
   Mesh* _mesh;
+  Tile* _fallbackTextureTile;
+  bool _textureSolved;
   
   inline Mesh* getMesh(const RenderContext* rc,
                        const TileTessellator* tessellator);
   
   inline bool isVisible(const RenderContext* rc);
-  inline bool hasEnoughDetail(const RenderContext* rc);
+  inline bool meetsRenderCriteria(const RenderContext* rc,
+                                  const TileParameters* parameters);
   
-  std::vector<Tile*> createSubTiles();
+  inline std::vector<Tile*> createSubTiles();
+  
+  inline void rawRender(const RenderContext* rc,
+                        const TileTessellator* tessellator,
+                        const TileTexturizer* texturizer);
 
 public:
   Tile(const Sector& sector,
        int level,
        int row,
        int column,
-       bool wireframe):
+       Tile* fallbackTextureTile):
   _sector(sector),
   _level(level),
   _row(row),
   _column(column),
   _mesh(NULL),
   _textureSolved(false),
-  _wireframe(wireframe)
+  _fallbackTextureTile(fallbackTextureTile)
   {
   }
   
   ~Tile();
-
+  
   
   Sector getSector() const {
     return _sector;
@@ -71,7 +76,7 @@ public:
   int getColumn() const {
     return _column;
   }
-
+  
   
   void setTextureSolved(bool textureSolved) {
     _textureSolved = textureSolved;
@@ -83,7 +88,8 @@ public:
   
   void render(const RenderContext* rc,
               const TileTessellator* tessellator,
-              const TileTexturizer* texturizer);
+              const TileTexturizer* texturizer,
+              const TileParameters* parameters);
   
 };
 

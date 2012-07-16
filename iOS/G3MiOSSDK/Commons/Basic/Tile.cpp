@@ -12,6 +12,8 @@
 
 #include "TileTessellator.hpp"
 #include "TileTexturizer.hpp"
+#include "TileRenderer.hpp"
+
 
 Tile::~Tile() {
   delete _mesh;
@@ -20,53 +22,74 @@ Tile::~Tile() {
 Mesh* Tile::getMesh(const RenderContext* rc,
                     const TileTessellator* tessellator) {
   if (_mesh == NULL) {
-    _mesh = (_wireframe)? tessellator->createDebugMesh(rc, this) : tessellator->createMesh(rc, this);
+    _mesh = tessellator->createMesh(rc, this);
   }
   return _mesh;
 }
 
 bool Tile::isVisible(const RenderContext *rc) {
+  // TODO: check collition with frustum
+  // TODO: check for tiles backfacing to the camera
   
   return true;
 }
 
-bool Tile::hasEnoughDetail(const RenderContext *rc) {
+bool Tile::meetsRenderCriteria(const RenderContext *rc,
+                               const TileParameters* parameters) {
+  
+  if (_level >= parameters->_maxLevel) {
+    return true;
+  }
+  
+//  31890685.000000
+//   7083288.848839
+  
+//  const Vector3D radii = rc->getPlanet()->getRadii();
+//  const double rad = (radii.x() + radii.y() + radii.z()) / 3;
+//  
+//  const double ratio = (distanceToCamera - rad) / rad;
+//  
+//  rc->getLogger()->logInfo("Distance to camera: %f - %f", distanceToCamera, ratio);
+  
+//  const Vector3D center = rc->getPlanet()->toVector3D(_sector.getCenter());
+//  
+//  const double distanceToCamera = rc->getCamera()->getPos().sub(center).length();
+//  rc->getLogger()->logInfo("Distance to camera: %f", distanceToCamera);
   
   return _level >= 0;
 }
 
+void Tile::rawRender(const RenderContext *rc,
+                     const TileTessellator *tessellator,
+                     const TileTexturizer *texturizer) {
+  Mesh* mesh = getMesh(rc, tessellator);
+  
+  if (mesh != NULL) {
+    if (!isTextureSolved()) {
+      mesh = texturizer->texturize(rc, this, mesh);
+    }
+    
+    if (mesh != NULL) {
+      mesh->render(rc);
+    }
+  }
+}
+
 void Tile::render(const RenderContext* rc,
                   const TileTessellator* tessellator,
-                  const TileTexturizer* texturizer) {
+                  const TileTexturizer* texturizer,
+                  const TileParameters* parameters) {
   int ___diego_at_work;
   
-  //  Camera* camera = rc->getCamera();
-  //  Vector3D pos = camera->getPos();
-  //
-  //  double distance = pos.length();
-  //
-  //  rc->getLogger()->logInfo("distance to camera: %f", distance);
-  
   if (isVisible(rc)) {
-    if (hasEnoughDetail(rc)) {
-      Mesh* mesh = getMesh(rc, tessellator);
-      if (mesh != NULL) {
-        if (!isTextureSolved()) {
-          mesh = texturizer->texturize(rc, this, mesh);
-        }
-        
-        if (mesh != NULL) {
-          mesh->render(rc);
-        }
-      }
+    if (meetsRenderCriteria(rc, parameters)) {
+      rawRender(rc, tessellator, texturizer);
     }
     else {
       std::vector<Tile*> subTiles = createSubTiles();
       for (int i = 0; i < subTiles.size(); i++) {
         Tile* subTile = subTiles[i];
-        subTile->render(rc,
-                        tessellator,
-                        texturizer);
+        subTile->render(rc, tessellator, texturizer, parameters);
         
         delete subTile;
       }
@@ -74,28 +97,26 @@ void Tile::render(const RenderContext* rc,
   }
 }
 
-
 std::vector<Tile*> Tile::createSubTiles() {
-  const Geodetic2D lower = getSector().lower();
-  const Geodetic2D upper = getSector().upper();
+  const Geodetic2D lower = _sector.lower();
+  const Geodetic2D upper = _sector.upper();
   
-  const Angle p0 = lower.latitude();
-  const Angle p2 = upper.latitude();
-  const Angle p1 = Angle::midAngle(p0, p2);
+  const Angle lat0 = lower.latitude();
+  const Angle lat2 = upper.latitude();
+  const Angle lat1 = Angle::midAngle(lat0, lat2);
   
-  const Angle t0 = lower.longitude();
-  const Angle t2 = upper.longitude();
-  const Angle t1 = Angle::midAngle(t0, t2);
+  const Angle lon0 = lower.longitude();
+  const Angle lon2 = upper.longitude();
+  const Angle lon1 = Angle::midAngle(lon0, lon2);
   
-  const int row = getRow();
-  const int col = getColumn();
-  const int nextLevel = getLevel() + 1;
+  const int nextLevel = _level + 1;
+  Tile* fallback = isTextureSolved() ? this : _fallbackTextureTile;
   
   std::vector<Tile*> subTiles(4);
-  subTiles[0] = new Tile(Sector(Geodetic2D(p0, t0), Geodetic2D(p1, t1)), nextLevel, 2 * row, 2 * col, _wireframe);
-  subTiles[1] = new Tile(Sector(Geodetic2D(p0, t1), Geodetic2D(p1, t2)), nextLevel, 2 * row, 2 * col + 1, _wireframe);
-  subTiles[2] = new Tile(Sector(Geodetic2D(p1, t0), Geodetic2D(p2, t1)), nextLevel, 2 * row + 1, 2 * col, _wireframe);
-  subTiles[3] = new Tile(Sector(Geodetic2D(p1, t1), Geodetic2D(p2, t2)), nextLevel, 2 * row + 1, 2 * col + 1, _wireframe);
+  subTiles[0] = new Tile(Sector(Geodetic2D(lat0, lon0), Geodetic2D(lat1, lon1)), nextLevel, 2 * _row    , 2 * _column    , fallback);
+  subTiles[1] = new Tile(Sector(Geodetic2D(lat0, lon1), Geodetic2D(lat1, lon2)), nextLevel, 2 * _row    , 2 * _column + 1, fallback);
+  subTiles[2] = new Tile(Sector(Geodetic2D(lat1, lon0), Geodetic2D(lat2, lon1)), nextLevel, 2 * _row + 1, 2 * _column    , fallback);
+  subTiles[3] = new Tile(Sector(Geodetic2D(lat1, lon1), Geodetic2D(lat2, lon2)), nextLevel, 2 * _row + 1, 2 * _column + 1, fallback);
   
   return subTiles;
 }

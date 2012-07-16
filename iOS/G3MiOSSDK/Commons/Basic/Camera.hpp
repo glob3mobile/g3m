@@ -17,6 +17,7 @@
 #include "Vector2D.hpp"
 #include "MutableMatrix44D.hpp"
 #include "ILogger.hpp"
+#include "Frustum.h"
 
 
 /**
@@ -75,10 +76,12 @@ private:
   MutableVector3D _center;          // center of view
   MutableVector3D _up;              // vertical vector
   
+  Frustum *_frustum;
+  
   const ILogger * _logger;
   
   void applyTransform(const MutableMatrix44D& mat);
-  
+    
 };
 
 #endif

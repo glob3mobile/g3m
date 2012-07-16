@@ -12,6 +12,8 @@
 #include <string.h>
 
 #include "Camera.hpp"
+#include "Plane.h"
+
 
 Camera::Camera(const Camera &c):
 _pos(c._pos),
@@ -19,7 +21,8 @@ _center(c._center),
 _up(c._up),
 _model(c._model),
 _projection(c._projection),
-_logger(NULL)
+_logger(NULL),
+_frustum(NULL)
 {
   resizeViewport(c.getWidth(), c.getHeight());
 }
@@ -39,7 +42,8 @@ Camera::Camera(int width, int height) :
 _pos(6378137*5, 0, 0),
 _center(0, 0, 0),
 _up(0, 0, 1),
-_logger(NULL)
+_logger(NULL),
+_frustum(NULL)
 {
   resizeViewport(width, height);
 }
@@ -63,30 +67,47 @@ void Camera::print() const
 }
 
 void Camera::draw(const RenderContext &rc) {
-  
   _logger = rc.getLogger();
   
+  // compute znear value
   double znear;
-  
-  double height = _pos.length();
-  
-  if (height > 1273000.0) znear = 636500.0;
-  else if (height > 12730.0) znear = 6365.0;
-  else if (height > 3182.5) znear = 63.65;
+  double maxR = rc.getPlanet()->getRadii().x();
+  double distToOrigin = _pos.length();
+  double height = distToOrigin - maxR;  
+  if (height > maxR/5.0) znear = maxR/10.0;
+  else if (height > maxR/500.0) znear = maxR/1e3;
+  else if (height > maxR/2000.0) znear = maxR/1e5;
   else
-    znear = 19.095;
+    znear = maxR / 1e6 * 3;
+  
+  // compute zfar value
+  double zfar = 10000 * znear;
+  if (zfar>distToOrigin) zfar=distToOrigin;
+  
+  // compute rest of frustum numbers
+  double ratioScreen = (double) _viewport[3] / _viewport[2];
+  double right = 0.3 / ratioScreen * znear;
+  double left = -right;
+  double top = 0.3 * znear;
+  double bottom = -top;
   
   // compute projection matrix
-  double ratioScreen = (double) _viewport[3] / _viewport[2];
-  _projection = MutableMatrix44D::createProjectionMatrix(-0.3 / ratioScreen * znear, 0.3 / ratioScreen * znear, -0.3 * znear, 0.3 * znear, znear, 10000 * znear);
-  
+  _projection = MutableMatrix44D::createProjectionMatrix(left, right, bottom, top, znear, zfar);
   IGL *gl = rc.getGL();
   gl->setProjection(_projection);
   
-  // make the model
+  // compute model matrix
   _model = MutableMatrix44D::createModelMatrix(_pos, _center, _up);
   gl->loadMatrixf(_model);
+  
+  // compute new frustum
+  // TODO: only create frustum when camera has changed!
+  if (_frustum) delete _frustum;
+  _frustum = new Frustum(left, right, bottom, top, znear, zfar, 
+                         _pos.asVector3D(), _center.asVector3D(), _up.asVector3D(), 
+                         _model.transpose());
 }
+
 
 Vector3D Camera::pixel2Vector(const Vector2D& pixel) const {
   double py = (int) pixel.y();
@@ -104,9 +125,9 @@ Vector3D Camera::pixel2Vector(const Vector2D& pixel) const {
 
 void Camera::applyTransform(const MutableMatrix44D& M)
 {
-  _pos = _pos.applyTransform(M);
-  _center = _center.applyTransform(M);
-  _up = _up.applyTransform(M);
+  _pos = _pos.applyTransform(M, 1.0);
+  _center = _center.applyTransform(M, 1.0);
+  _up = _up.applyTransform(M, 0.0);
 }
 
 void Camera::dragCamera(const Vector3D& p0, const Vector3D& p1) {

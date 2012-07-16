@@ -42,6 +42,11 @@ public:
   {
   }
   
+  static Sector fullSphere() {
+    return Sector(Geodetic2D(Angle::fromDegrees(-90), Angle::fromDegrees(-180)),
+                  Geodetic2D(Angle::fromDegrees(90), Angle::fromDegrees(180)));
+  }
+  
   const Geodetic2D lower() const {
     return _lower;
   }
@@ -76,6 +81,11 @@ public:
   
   Geodetic2D getSE() const {
     return Geodetic2D(_lower.latitude(), _upper.longitude());
+  }
+
+  Geodetic2D getCenter() const {
+    return Geodetic2D(Angle::midAngle(_lower.latitude(), _upper.latitude()),
+                      Angle::midAngle(_lower.longitude(), _upper.longitude()));
   }
   
   Geodetic2D getInnerPoint(double u, double v) const;
