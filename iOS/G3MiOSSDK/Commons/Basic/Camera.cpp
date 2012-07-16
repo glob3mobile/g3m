@@ -21,9 +21,12 @@ _center(c._center),
 _up(c._up),
 _modelMatrix(c._modelMatrix),
 _projectionMatrix(c._projectionMatrix),
-_logger(NULL),
-_frustum(NULL) {
-  resizeViewport(c.getWidth(), c.getHeight());
+_logger(c._logger),
+_frustum(c._frustum),
+_width(c._width),
+_height(c._height)
+{
+  cleanCaches();
 }
 
 void Camera::copyFrom(const Camera &c) {
@@ -33,6 +36,10 @@ void Camera::copyFrom(const Camera &c) {
   _modelMatrix = c._modelMatrix;
   _projectionMatrix = c._projectionMatrix;
   _logger = c._logger;
+  
+  _frustum = c._frustum;
+  
+  cleanCaches();
 }
 
 Camera::Camera(const Planet* planet, int width, int height) :
