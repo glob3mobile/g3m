@@ -14,6 +14,7 @@
 #include "IFactory.hpp"
 #include "Camera.hpp"
 #include "Color.hpp"
+#include "Downloader.hpp"
 
 class G3MWidget {
 public:
@@ -22,6 +23,7 @@ public:
                            ILogger *logger,
                            IGL* gl,
                            TexturesHandler* texturesHandler,
+                           Downloader * downloader,
                            const Planet* planet,
                            Renderer* renderer,
                            int width, int height,
@@ -48,6 +50,7 @@ private:
   const Planet*    _planet;
   Renderer*        _renderer;
   Camera*          _camera;
+  Downloader*      _downloader;
   TexturesHandler* _texturesHandler;
   const Color      _backgroundColor;
   
@@ -62,6 +65,7 @@ private:
             ILogger *logger,
             IGL* gl,
             TexturesHandler* texturesHandler,
+            Downloader* downloader,
             const Planet* planet,
             Renderer* renderer,
             int width, int height,
@@ -78,11 +82,12 @@ private:
   _timer(factory->createTimer()),
   _renderCounter(0),
   _totalRenderTime(0),
-  _logFPS(logFPS)
+  _logFPS(logFPS),
+  _downloader(downloader)
   {
     initializeGL();
     
-    InitializationContext ic(_factory, _logger, _planet);
+    InitializationContext ic(_factory, _logger, _planet, _downloader);
     _renderer->initialize(&ic);
   }
   

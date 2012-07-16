@@ -253,10 +253,17 @@
     
     const Planet* planet = Planet::createEarth();
     
+    NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    
+    //STORAGE
+    FileSystemStorage * fss = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
+    Downloader* downloader = new Downloader(fss, 5, factory->createNetwork());
+    
     _widget = G3MWidget::create(factory,
                                 logger,
                                 gl,
                                 texturesHandler,
+                                downloader,
                                 planet, 
                                 comp,
                                 width, height,

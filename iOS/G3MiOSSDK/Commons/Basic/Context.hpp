@@ -13,6 +13,7 @@
 #include "IGL.hpp"
 #include "Planet.hpp"
 #include "TexturesHandler.hpp"
+#include "Downloader.hpp"
 
 #define MAX_TIME_TO_RENDER 1000
 
@@ -25,14 +26,17 @@ protected:
   const IFactory * _factory;
   const ILogger*   _logger;
   const Planet*    _planet;
+  Downloader* const _downloader;
 
   
   Context(const IFactory *factory,
           const ILogger* logger,
-          const Planet* planet) :
+          const Planet* planet,
+          Downloader* const downloader) :
   _factory(factory),
   _logger(logger),
-  _planet(planet){
+  _planet(planet),
+  _downloader(downloader){
   }
   
 public:
@@ -48,6 +52,10 @@ public:
   const Planet* getPlanet() const {
     return _planet;
   }
+  
+  Downloader* const getDownloader() const {
+    return _downloader;
+  }
 };
 
 
@@ -55,8 +63,9 @@ class InitializationContext: public Context {
 public:
   InitializationContext(IFactory *factory,
                         ILogger* logger,
-                        const Planet* planet) :
-  Context(factory, logger, planet) {
+                        const Planet* planet,
+                        Downloader* const downloader) :
+  Context(factory, logger, planet, downloader) {
   }
 };
 
@@ -73,8 +82,9 @@ public:
                 const Planet* planet,
                 IGL *gl,
                 Camera* camera,
-                TexturesHandler* texturesHandler) :
-  Context(factory, logger, planet),
+                TexturesHandler* texturesHandler,
+                Downloader* const downloader) :
+  Context(factory, logger, planet, downloader),
   _gl(gl),
   _camera(camera),
   _texturesHandler(texturesHandler) {

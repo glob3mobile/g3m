@@ -25,18 +25,21 @@ public class Factory_WebGL
 
    }
 
+   boolean first = true;
 
    @Override
    public IImage createImageFromFileName(final String filename) {
-	   
+	   if (first){
 	   Image_WebGL im = new Image_WebGL();
 	   im.loadFromURL(filename);
+	   first = false;
 	   
-	   //while(!im.isLoadedFromURL()){
+	   while(!im.isLoadedFromURL()){
 		   //WAIT UNTIL LOADED
-	   //}
+	   }
 
       return im;
+	   } return null;
    }
 
 

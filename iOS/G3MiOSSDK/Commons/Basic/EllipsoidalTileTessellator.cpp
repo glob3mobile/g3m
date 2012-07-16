@@ -98,6 +98,8 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
     indices.push_back(_resolution*_resolution);
   }
   
+  int __todo_JM_return_IndexedMesh;
+  
   // create TexturedMesh
   return new TexturedMesh(new IndexedMesh(vertices, TriangleStrip, indices, NULL),
                           true,
