@@ -40,6 +40,17 @@ private:
   }
   
 public:
+  Frustum(const Frustum& that) :
+  _leftPlane(that._leftPlane),
+  _rightPlane(that._rightPlane),
+  _bottomPlane(that._bottomPlane),
+  _topPlane(that._topPlane),
+  _nearPlane(that._nearPlane),
+  _farPlane(that._farPlane)
+  {
+    
+  }
+  
   Frustum(double left, double right,
           double bottom, double top,
           double znear, double zfar):
@@ -63,13 +74,13 @@ public:
   bool contains(const Vector3D &point);
   
   
-  Frustum applyTransform(const MutableMatrix44D& matrix) const {
-    return Frustum(_leftPlane.applyTransform(matrix),
-                   _rightPlane.applyTransform(matrix),
-                   _bottomPlane.applyTransform(matrix),
-                   _topPlane.applyTransform(matrix),
-                   _nearPlane.applyTransform(matrix),
-                   _farPlane.applyTransform(matrix));
+  Frustum transformedBy(const MutableMatrix44D& matrix) const {
+    return Frustum(_leftPlane.transformedBy(matrix),
+                   _rightPlane.transformedBy(matrix),
+                   _bottomPlane.transformedBy(matrix),
+                   _topPlane.transformedBy(matrix),
+                   _nearPlane.transformedBy(matrix),
+                   _farPlane.transformedBy(matrix));
   }
 };
 

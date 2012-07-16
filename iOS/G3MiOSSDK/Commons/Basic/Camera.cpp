@@ -15,34 +15,40 @@
 #include "Plane.h"
 
 
-Camera::Camera(const Camera &c):
-_position(c._position),
-_center(c._center),
-_up(c._up),
-_modelMatrix(c._modelMatrix),
-_projectionMatrix(c._projectionMatrix),
-_logger(c._logger),
-_frustum(c._frustum),
-_width(c._width),
-_height(c._height)
+Camera::Camera(const Camera &that):
+_width(that._width),
+_height(that._height),
+_modelMatrix(that._modelMatrix),
+_projectionMatrix(that._projectionMatrix),
+_position(that._position),
+_center(that._center),
+_up(that._up),
+_frustum((that._frustum == NULL) ? NULL : new Frustum(*that._frustum)),
+_logger(that._logger)
 {
   cleanCaches();
 }
 
-void Camera::copyFrom(const Camera &c) {
-  _position = c._position;
-  _center = c._center;
-  _up = c._up;
-  _modelMatrix = c._modelMatrix;
-  _projectionMatrix = c._projectionMatrix;
-  _logger = c._logger;
+void Camera::copyFrom(const Camera &that) {
+  _width  = that._width;
+  _height = that._height;
+
+  _modelMatrix      = that._modelMatrix;
+  _projectionMatrix = that._projectionMatrix;
   
-  _frustum = c._frustum;
+  _position = that._position;
+  _center   = that._center;
+  _up       = that._up;
+  
+  _frustum = (that._frustum == NULL) ? NULL : new Frustum(*that._frustum);
+
+  _logger = that._logger;
   
   cleanCaches();
 }
 
-Camera::Camera(const Planet* planet, int width, int height) :
+Camera::Camera(const Planet* planet,
+               int width, int height) :
 _position((planet == NULL) ? 0 : planet->getRadii().maxAxis() * 5, 0, 0),
 _center(0, 0, 0),
 _up(0, 0, 1),
@@ -60,21 +66,19 @@ void Camera::resizeViewport(int width, int height) {
 
 void Camera::print() const {
   if (_logger != NULL){ 
-    _modelMatrix.print("MODEL", _logger);
-    _projectionMatrix.print("PROJECTION", _logger);
-    _logger->logInfo("Width: %d, Height %d\n", 
-                     _width,
-                     _height);
+    _modelMatrix.print("Model Matrix", _logger);
+    _projectionMatrix.print("Projection Matrix", _logger);
+    _logger->logInfo("Width: %d, Height %d\n", _width, _height);
   }
 }
 
 void Camera::render(const RenderContext &rc) {
   _logger = rc.getLogger();
   
-  const FrustumData data = calculateFrustumData(rc);
-  
   // TODO: create frustum, projection matrix and model matrix only when camera has changed!
-  
+
+  const FrustumData data = calculateFrustumData(rc);
+
   // compute projection matrix
   _projectionMatrix = MutableMatrix44D::createProjectionMatrix(data._left, data._right,
                                                                data._bottom, data._top,
@@ -95,8 +99,8 @@ void Camera::render(const RenderContext &rc) {
                          data._znear, data._zfar);
 }
 
-Frustum Camera::getFrustumInModelCoordinates() const {
-  return _frustum->applyTransform(_modelMatrix.transpose());
+Frustum Camera::getFrustumInModelCoordinates() {
+  return _frustum->transformedBy(_modelMatrix.transpose());
 }
 
 
@@ -121,9 +125,9 @@ Vector3D Camera::pixel2Vector(const Vector2D& pixel) const {
 }
 
 void Camera::applyTransform(const MutableMatrix44D& M) {
-  _position = _position.applyTransform(M, 1.0);
-  _center = _center.applyTransform(M, 1.0);
-  _up = _up.applyTransform(M, 0.0);
+  _position = _position.transformedBy(M, 1.0);
+  _center   = _center.transformedBy(M, 1.0);
+  _up       = _up.transformedBy(M, 0.0);
   
   cleanCaches();
 }
@@ -135,7 +139,6 @@ void Camera::dragCamera(const Vector3D& p0, const Vector3D& p1) {
   // compute the angle
   const Angle rotationDelta = Angle::fromRadians( - acos(p0.normalized().dot(p1.normalized())) );
   
-  //if (isnan(rotationDelta.radians())) return;
   if (rotationDelta.isNan()) {
     return; 
   }
@@ -162,10 +165,10 @@ void Camera::pivotOnCenter(const Angle& a) {
 
 void Camera::rotateWithAxisAndPoint(const Vector3D& axis, const Vector3D& point, const Angle& delta) {
   const MutableMatrix44D trans1 = MutableMatrix44D::createTranslationMatrix(point.times(-1.0));
-  const MutableMatrix44D rot = MutableMatrix44D::createRotationMatrix(delta, axis);
+  const MutableMatrix44D rotation = MutableMatrix44D::createRotationMatrix(delta, axis);
   const MutableMatrix44D trans2 = MutableMatrix44D::createTranslationMatrix(point);
   
-  const MutableMatrix44D m = trans2.multiply(rot).multiply(trans1);
+  const MutableMatrix44D m = trans2.multiply(rotation).multiply(trans1);
   
   //m.print();
   

@@ -23,12 +23,11 @@ void CameraRenderer::initialize(const InitializationContext* ic){
   _logger = ic->getLogger();
 }
 
-int CameraRenderer::render(const RenderContext* rc)
-{
+int CameraRenderer::render(const RenderContext* rc) {
   _camera = rc->getCamera(); //Saving camera reference 
   _planet = rc->getPlanet();
   
-  rc->getCamera()->render(*rc);
+  _camera->render(*rc);
   
   return MAX_TIME_TO_RENDER;
 }
@@ -39,8 +38,7 @@ void CameraRenderer::onResizeViewportEvent(int width, int height) {
   }
 }
 
-void CameraRenderer::onDown(const TouchEvent& touchEvent)
-{
+void CameraRenderer::onDown(const TouchEvent& touchEvent) {
   //Saving Camera0
   _camera0 = Camera(*_camera);
   

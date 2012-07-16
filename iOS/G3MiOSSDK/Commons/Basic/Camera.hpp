@@ -55,7 +55,8 @@ class Camera {
 public:
   Camera(const Camera &c);
   
-  Camera(const Planet* planet, int width, int height);
+  Camera(const Planet* planet,
+         int width, int height);
   
   ~Camera() {
     if (_frustum != NULL) {
@@ -97,9 +98,7 @@ public:
   
   void print() const;
   
-  
-  
-  Frustum getFrustumInModelCoordinates() const;
+  Frustum getFrustumInModelCoordinates();
   
   
 private:
