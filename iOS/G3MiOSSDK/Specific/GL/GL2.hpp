@@ -72,7 +72,7 @@ public:
   
   int getError();
   
-  int uploadTexture(const IImage& image, int textureWidth, int textureHeight);
+  int uploadTexture(const IImage* image, int textureWidth, int textureHeight);
   
   void setTextureCoordinates(int size, int stride, const float texcoord[]);
   

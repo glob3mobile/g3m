@@ -64,6 +64,7 @@ public:
   _frustum((that._frustum == NULL) ? NULL : new Frustum(*that._frustum)),
   _frustumInModelCoordinates((that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates)),
   _halfFrustumInModelCoordinates((that._halfFrustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._halfFrustumInModelCoordinates)),
+  _halfFrustum((that._halfFrustum == NULL) ? NULL : new Frustum(*that._halfFrustum)),
   _logger(that._logger),
   _dirtyCachedValues(that._dirtyCachedValues)
   {
@@ -82,7 +83,16 @@ public:
     if (_frustumInModelCoordinates != NULL) {
       delete _frustumInModelCoordinates;
     }
-  }
+
+    if (_halfFrustum != NULL) {
+      delete _halfFrustum;
+    }
+    
+    if (_halfFrustumInModelCoordinates != NULL) {
+      delete _halfFrustumInModelCoordinates;
+    }
+
+}
   
   void copyFrom(const Camera &c);
   

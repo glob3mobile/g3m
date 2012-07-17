@@ -215,9 +215,9 @@ int GL2::getError() {
   return glGetError();
 }
 
-int GL2::uploadTexture(const IImage& image, int textureWidth, int textureHeight)
+int GL2::uploadTexture(const IImage* image, int textureWidth, int textureHeight)
 {
-  UIImage * im = ((Image_iOS&) image).getUIImage();
+  UIImage * im = ((Image_iOS*) image)->getUIImage();
   
   
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();

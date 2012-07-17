@@ -26,6 +26,12 @@ void Camera::copyFrom(const Camera &that) {
   _center   = that._center;
   _up       = that._up;
   
+  if (_frustum != NULL) {
+    delete _frustum;
+  }
+  if (_frustumInModelCoordinates != NULL) {
+    delete _frustumInModelCoordinates;
+  }
   _frustum = (that._frustum == NULL) ? NULL : new Frustum(*that._frustum);
   _frustumInModelCoordinates = (that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates);
   
@@ -45,7 +51,8 @@ _logger(NULL),
 _frustum(NULL),
 _dirtyCachedValues(true),
 _frustumInModelCoordinates(NULL),
-_halfFrustumInModelCoordinates(NULL)
+_halfFrustumInModelCoordinates(NULL),
+_halfFrustum(NULL)
 {
   resizeViewport(width, height);
 }
@@ -88,7 +95,9 @@ void Camera::calculateCachedValues(const RenderContext &rc) {
   }
   _frustumInModelCoordinates = _frustum->transformedBy_P(_modelMatrix.transpose());
   
-  
+  if (_halfFrustum != NULL) {
+    delete _halfFrustum;
+  }
   _halfFrustum =  new Frustum(data._left/2, data._right/2,
                               data._bottom/2, data._top/2,
                               data._znear, data._zfar);
@@ -113,29 +122,31 @@ void Camera::render(const RenderContext &rc) {
   gl->loadMatrixf(_modelMatrix);
   
   
+  
   // TEMP: TEST TO SEE HALF SIZE FRUSTUM CLIPPING 
   {
     FrustumData data2 = calculateHalfFrustumData(rc);
     Vector3D p0(Vector3D(data2._left, data2._top, -data2._znear-10).transformedBy(_modelMatrix.inverse(), 1));
-     Vector3D p1(Vector3D(data2._left, data2._bottom, -data2._znear-10).transformedBy(_modelMatrix.inverse(), 1));
-     Vector3D p2(Vector3D(data2._right, data2._bottom, -data2._znear-10).transformedBy(_modelMatrix.inverse(), 1));
-     Vector3D p3(Vector3D(data2._right, data2._top, -data2._znear-10).transformedBy(_modelMatrix.inverse(), 1));
+    Vector3D p1(Vector3D(data2._left, data2._bottom, -data2._znear-10).transformedBy(_modelMatrix.inverse(), 1));
+    Vector3D p2(Vector3D(data2._right, data2._bottom, -data2._znear-10).transformedBy(_modelMatrix.inverse(), 1));
+    Vector3D p3(Vector3D(data2._right, data2._top, -data2._znear-10).transformedBy(_modelMatrix.inverse(), 1));
     
-    float vertices[] = {
+    const float vertices[] = {
       p0.x(), p0.y(), p0.z(),
       p1.x(), p1.y(), p1.z(),
       p2.x(), p2.y(), p2.z(),
       p3.x(), p3.y(), p3.z(),    
     };
-    unsigned int indices[] = {0,1,2,3};
+    unsigned int indices[] = {0, 1, 2, 3};
     
     IGL *gl = rc.getGL();
     gl->enableVerticesPosition();
     gl->vertexPointer(3, 0, vertices);
-    gl->color((float) 1, (float) 1, (float) 1, 1);
-    gl->lineWidth(5);
+    gl->color(1, 0, 1, 1);
+    gl->lineWidth(2);
     gl->drawLineLoop(4, indices);
     gl->lineWidth(1);
+    gl->color(1, 1, 1, 1);
   }
   
 

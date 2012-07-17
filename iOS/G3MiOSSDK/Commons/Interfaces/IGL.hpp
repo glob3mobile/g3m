@@ -96,7 +96,7 @@ public:
 
   virtual int getError() = 0;
   
-  virtual int uploadTexture(const IImage& image, int textureWidth, int textureHeight) = 0;
+  virtual int uploadTexture(const IImage* image, int textureWidth, int textureHeight) = 0;
   
   virtual void setTextureCoordinates(int size, int stride, const float texcoord[]) = 0;
   

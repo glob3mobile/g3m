@@ -98,7 +98,7 @@ int TexturesHandler::getTextureId(const RenderContext* rc,
     }
   }
   
-  candidate->_glTextureId = rc->getGL()->uploadTexture(*image,
+  candidate->_glTextureId = rc->getGL()->uploadTexture(image,
                                                        textureWidth,
                                                        textureHeight);
   

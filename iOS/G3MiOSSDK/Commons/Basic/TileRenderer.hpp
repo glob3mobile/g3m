@@ -46,12 +46,12 @@ private:
   const int                    _maxElements;
   std::vector<TileCacheEntry*> _entries;
   
-  long _counter;
+  long _tsCounter;
   
 public:
   TilesCache(int maxElements) :
   _maxElements(maxElements),
-  _counter(0)
+  _tsCounter(0)
   {
     
   }
@@ -59,14 +59,15 @@ public:
   Tile* getTile(const int level,
                 const int row, const int column) {
     
-    for (int i = 0; i < _entries.size(); i++) {
+    const int entriesSize = _entries.size();
+    for (int i = 0; i < entriesSize; i++) {
       TileCacheEntry* entry = _entries[i];
       Tile* tile = entry->_tile;
       
       if ((tile->getLevel()  == level ) &&
           (tile->getRow()    == row   ) &&
           (tile->getColumn() == column)) {
-        entry->_timestamp = ++_counter;
+        entry->_timestamp = _tsCounter++;
         
         return tile;
       }
@@ -75,18 +76,18 @@ public:
     return NULL;
   }
   
-  
   void putTile(Tile* tile) {
-    TileCacheEntry* newEntry = new TileCacheEntry(tile, ++_counter);
+    TileCacheEntry* newEntry = new TileCacheEntry(tile, _tsCounter++);
     
-    if (_entries.size() < _maxElements) {
+    const int entriesSize = _entries.size();
+    if (entriesSize < _maxElements) {
       _entries.push_back(newEntry);
     }
     else {
       int loserI = 0;
       TileCacheEntry* loserEntry = _entries[0];
       
-      for (int i = 1; i < _entries.size(); i++) {
+      for (int i = 1; i < entriesSize; i++) {
         TileCacheEntry* entry = _entries[i];
         if (entry->_timestamp < loserEntry->_timestamp) {
           loserEntry = entry;
@@ -132,7 +133,7 @@ public:
     const int splitsByLongitude = 4 * K;
     const int topLevel = 0;
     const int maxLevel = 8;
-    const int maxTilesInCache = 32;
+    const int maxTilesInCache = 128;
     
     return new TileParameters(Sector::fullSphere(),
                               splitsByLatitude,
@@ -158,7 +159,7 @@ private:
   
 public:
   TileRenderer(const TileTessellator* tessellator,
-              TileTexturizer*  texturizer,
+               TileTexturizer*  texturizer,
                const TileParameters* parameters) :
   _tessellator(tessellator),
   _texturizer(texturizer),
