@@ -132,7 +132,7 @@ public:
     const int splitsByLongitude = 4 * K;
     const int topLevel = 0;
     const int maxLevel = 8;
-    const int maxTilesInCache = 100;
+    const int maxTilesInCache = 32;
     
     return new TileParameters(Sector::fullSphere(),
                               splitsByLatitude,

@@ -23,7 +23,7 @@ public:
   _upper(upper)
   {}
   
-  bool touches(const Frustum *frustum) const {
+  bool touches(const Frustum* frustum) const {
     return frustum->touchesWithBox(this);
   };
   
