@@ -34,8 +34,8 @@ std::vector<MutableVector2D> SimpleTileTexturizer::createTextureCoordinates() co
   for(double i = 0.0; i < _resolution; i++){
     double u = (i / lonRes1);
     for (double j = 0.0; j < _resolution; j++) {
-      const double v = 1.0 - (j / latRes1);
-      MutableVector2D v2d(u,v);
+      const double v = (j / latRes1);
+      MutableVector2D v2d(v,u);
       texCoor.push_back(v2d);
     }
   }
