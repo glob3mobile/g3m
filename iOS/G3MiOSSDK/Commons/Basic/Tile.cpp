@@ -49,7 +49,8 @@ Mesh* Tile::getTessellatorMesh(const RenderContext* rc,
   return _tessellatorMesh;
 }
 
-bool Tile::isVisible(const RenderContext *rc, const TileTessellator *tessellator) {
+bool Tile::isVisible(const RenderContext *rc,
+                     const TileTessellator *tessellator) {
 //  return getTessellatorMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->getFrustumInModelCoordinates());
   return getTessellatorMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->_halfFrustumInModelCoordinates);
 }
@@ -147,7 +148,7 @@ void Tile::render(const RenderContext* rc,
     }
     else {
       std::vector<Tile*>* subTiles = getSubTiles();
-      for (int i = 0; i < subTiles->size(); i++) {
+      for (int i = 0; i < 4 /* subTiles->size() */; i++) {
         Tile* subTile = subTiles->at(i);
         subTile->render(rc, tessellator, texturizer, parameters);
       }
