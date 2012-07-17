@@ -32,8 +32,6 @@ private:
 
   Tile* _fallbackTextureTile;
   bool _textureSolved;
-
-  Box *_bbox;
   
   inline Mesh* getMesh(const RenderContext* rc,
                        const TileTessellator* tessellator);
@@ -70,8 +68,7 @@ public:
   _tessellatorMesh(NULL),
   _texturizerMesh(NULL),
   _textureSolved(false),
-  _fallbackTextureTile(fallbackTextureTile),
-  _bbox(NULL)
+  _fallbackTextureTile(fallbackTextureTile)
   {
   }
   

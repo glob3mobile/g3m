@@ -23,10 +23,6 @@ Tile::~Tile() {
   if (_texturizerMesh != NULL) {
     delete _texturizerMesh; 
   }
-  
-  if (_bbox != NULL) {
-   delete _bbox; 
-  }
 }
 
 
@@ -46,6 +42,13 @@ bool Tile::isVisible(const RenderContext *rc, const TileTessellator *tessellator
 
 bool Tile::meetsRenderCriteria(const RenderContext *rc,
                                const TileParameters* parameters) {
+  
+  int __agustin_at_work;
+  
+  unsigned int projectedSize = _tessellatorMesh->getExtent()->projectedSize(rc);
+  
+  
+  
   
   if (_level >= parameters->_maxLevel) {
     return true;

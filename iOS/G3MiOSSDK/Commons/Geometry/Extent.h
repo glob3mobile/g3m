@@ -9,7 +9,8 @@
 #ifndef G3MiOSSDK_Extent_h
 #define G3MiOSSDK_Extent_h
 
-//#include "Frustum.h"
+#include "Context.hpp"
+
 class Frustum;
 
 class Extent {
@@ -17,7 +18,7 @@ public:
   virtual ~Extent() { }
   
   virtual bool touches(const Frustum *frustum) const = 0;
-  //virtual projectedSize(const RenderContext* rc) const = 0;
+  virtual unsigned int projectedSize(const RenderContext* rc) const = 0;
 };
 
 
