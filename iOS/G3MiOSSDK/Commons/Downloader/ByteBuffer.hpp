@@ -17,7 +17,8 @@ class ByteBuffer{
 public:
   
   //CopyData
-  ByteBuffer(const ByteBuffer& bb):_data(new unsigned char[bb._dataLength]), _dataLength(bb._dataLength){
+  ByteBuffer(const ByteBuffer& bb): _dataLength(bb._dataLength){
+    _data = new unsigned char[bb._dataLength];
     for(int i = 0; i < bb._dataLength; i++){ 
       _data[i] = bb._data[i];
     }
@@ -25,7 +26,7 @@ public:
   
   ~ByteBuffer(){
 #ifdef C_CODE
-    delete [] _data;
+    if (_data != NULL) delete [] _data;
 #endif
   }
   

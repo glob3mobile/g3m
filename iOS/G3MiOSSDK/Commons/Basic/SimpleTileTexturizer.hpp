@@ -12,6 +12,7 @@
 #include "TileTexturizer.hpp"
 
 #include "IDownloadListener.hpp"
+#include "MutableVector2D.hpp"
 
 
 #include <string>
@@ -24,8 +25,7 @@ class Petition{
   
   double _minLat, _minLon, _maxLat, _maxLon; //Degrees
   std::string _url;
-  bool _arrived;
-  ByteBuffer _bb;
+  ByteBuffer* _bb;
   
 public:
   
@@ -34,14 +34,14 @@ public:
   _minLon(s.lower().longitude().degrees()),
   _maxLat(s.upper().latitude().degrees()),
   _maxLon(s.upper().longitude().degrees()),
-  _arrived(false)
+  _bb(NULL)
   {}
   
   std::string getURL() const { return _url;}
   
-  bool isArrived() const { return _arrived;}
-  void setByteBuffer(const ByteBuffer& bb) { _bb = bb; _arrived = true;}
-  const ByteBuffer& getByteBuffer() const { return _bb;}
+  bool isArrived() const{ return _bb != NULL;}
+  void setByteBuffer(ByteBuffer* bb) { _bb = bb;}
+  const ByteBuffer* getByteBuffer() const { return _bb;}
   
 };
 class TilePetitions{
@@ -77,12 +77,24 @@ private:
   
   std::vector<TilePetitions> _tilePetitions;
   
-  TilePetitions getTilePetitions(const Tile* tile) const;
+  TilePetitions registerTilePetitions(const Tile* tile);
+  
+  std::vector<MutableVector2D> SimpleTileTexturizer::createTextureCoordinates() const;
+  
+  
+  Mesh* getMesh(const RenderContext* rc,
+                const Tile* tile,
+                Mesh* mesh);
+  
+  const int _resolution;
   
 public:
+  
+  SimpleTileTexturizer(int resolution): _resolution(resolution){}
+  
   virtual Mesh* texturize(const RenderContext* rc,
                           const Tile* tile,
-                          Mesh* mesh) const;
+                          Mesh* mesh);
   
   void onDownload(const Response &response); 
   void onError(const Response& e);

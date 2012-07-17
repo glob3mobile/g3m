@@ -100,10 +100,12 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
   
   int __todo_JM_return_IndexedMesh;
   
+  //return new IndexedMesh(vertices, TriangleStrip, indices, NULL);
+  
   // create TexturedMesh
   return new TexturedMesh(new IndexedMesh(vertices, TriangleStrip, indices, NULL),
-                          true,
-                          new TextureMapping(texID, texCoords)); 
+                        true,
+                        new TextureMapping(texID, texCoords)); 
 }
 
 

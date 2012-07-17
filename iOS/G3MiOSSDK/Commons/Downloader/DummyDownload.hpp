@@ -75,13 +75,13 @@ public:
     if (response.getURL().getPath() == urlPNG)
     {
       //DECOMPRESSING PNG IMAGE
-      IImage* image = _factory->createImageFromData(response.getByteBuffer());
+      IImage* image = _factory->createImageFromData(*response.getByteBuffer());
       if (image != NULL){
         printf("Image PNG readed");
       }
     } else{
       
-      const unsigned char *data = response.getByteBuffer().getData();
+      const unsigned char *data = response.getByteBuffer()->getData();
       std::string resp = (char*)data;
       resp = resp.substr(0,10);
       printf("GETTING RESPONSE %s\n", resp.c_str());

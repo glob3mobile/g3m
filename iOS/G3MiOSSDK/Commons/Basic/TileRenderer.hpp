@@ -60,7 +60,7 @@ public:
 class TileRenderer: public Renderer {
 private:
   const TileTessellator* _tessellator;
-  const TileTexturizer*  _texturizer;
+  TileTexturizer*  _texturizer;
   const TileParameters*  _parameters;
   
   std::vector<Tile*>     _topLevelTiles;
@@ -70,7 +70,7 @@ private:
   
 public:
   TileRenderer(const TileTessellator* tessellator,
-               const TileTexturizer*  texturizer,
+              TileTexturizer*  texturizer,
                const TileParameters* parameters) :
   _tessellator(tessellator),
   _texturizer(texturizer),
