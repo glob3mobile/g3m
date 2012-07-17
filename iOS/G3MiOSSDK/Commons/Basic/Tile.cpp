@@ -56,7 +56,7 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
 //  const double distanceToCamera = rc->getCamera()->getPos().sub(center).length();
 //  rc->getLogger()->logInfo("Distance to camera: %f", distanceToCamera);
   
-  return _level >= 0;
+  return _level >= 1;
 }
 
 void Tile::rawRender(const RenderContext *rc,
@@ -65,8 +65,11 @@ void Tile::rawRender(const RenderContext *rc,
   Mesh* mesh = getMesh(rc, tessellator);
   
   if (mesh != NULL) {
-    if (!isTextureSolved()) {
-      mesh = texturizer->texturize(rc, this, mesh);
+    if (false) {
+      int ____JM___look_here;
+      if (!isTextureSolved()) {
+        mesh = texturizer->texturize(rc, this, mesh);
+      }
     }
     
     if (mesh != NULL) {
@@ -78,7 +81,8 @@ void Tile::rawRender(const RenderContext *rc,
 void Tile::render(const RenderContext* rc,
                   const TileTessellator* tessellator,
                   TileTexturizer* texturizer,
-                  const TileParameters* parameters) {
+                  const TileParameters* parameters,
+                  TilesCache* tilesCache) {
   int ___diego_at_work;
   
   if (isVisible(rc)) {
@@ -86,31 +90,40 @@ void Tile::render(const RenderContext* rc,
       rawRender(rc, tessellator, texturizer);
     }
     else {
-      std::vector<Tile*> subTiles = createSubTiles();
+      std::vector<Tile*> subTiles = createSubTiles(tilesCache);
       for (int i = 0; i < subTiles.size(); i++) {
         Tile* subTile = subTiles[i];
-        subTile->render(rc, tessellator, texturizer, parameters);
+        subTile->render(rc, tessellator, texturizer, parameters, tilesCache);
         
-        delete subTile;
+//        delete subTile;
       }
     }
   }
 }
 
-Tile* Tile::createSubTile(const Angle& lowerLat, const Angle& lowerLon,
+Tile* Tile::createSubTile(TilesCache* tilesCache,
+                          const Angle& lowerLat, const Angle& lowerLon,
                           const Angle& upperLat, const Angle& upperLon,
                           const int level,
                           const int row, const int column,
                           Tile* fallbackTextureTile) {
-//  TileKey key(level, row, column);
   
-  return new Tile(Sector(Geodetic2D(lowerLat, lowerLon), Geodetic2D(upperLat, upperLon)),
+  Tile* tile = tilesCache->getTile(level, row, column);
+  if (tile != NULL) {
+    return tile;
+  }
+  
+  tile = new Tile(Sector(Geodetic2D(lowerLat, lowerLon), Geodetic2D(upperLat, upperLon)),
                   level,
                   row, column,
                   fallbackTextureTile);
+  
+  tilesCache->putTile(tile);
+  
+  return tile;
 }
 
-std::vector<Tile*> Tile::createSubTiles() {
+std::vector<Tile*> Tile::createSubTiles(TilesCache* tilesCache) {
   const Geodetic2D lower = _sector.lower();
   const Geodetic2D upper = _sector.upper();
   
@@ -126,10 +139,10 @@ std::vector<Tile*> Tile::createSubTiles() {
   Tile* fallbackTextureTile = isTextureSolved() ? this : _fallbackTextureTile;
   
   std::vector<Tile*> subTiles(4);
-  subTiles[0] = createSubTile(lat0, lon0, lat1, lon1, nextLevel, 2 * _row    , 2 * _column    , fallbackTextureTile);
-  subTiles[1] = createSubTile(lat0, lon1, lat1, lon2, nextLevel, 2 * _row    , 2 * _column + 1, fallbackTextureTile);
-  subTiles[2] = createSubTile(lat1, lon0, lat2, lon1, nextLevel, 2 * _row + 1, 2 * _column    , fallbackTextureTile);
-  subTiles[3] = createSubTile(lat1, lon1, lat2, lon2, nextLevel, 2 * _row + 1, 2 * _column + 1, fallbackTextureTile);
+  subTiles[0] = createSubTile(tilesCache, lat0, lon0, lat1, lon1, nextLevel, 2 * _row    , 2 * _column    , fallbackTextureTile);
+  subTiles[1] = createSubTile(tilesCache, lat0, lon1, lat1, lon2, nextLevel, 2 * _row    , 2 * _column + 1, fallbackTextureTile);
+  subTiles[2] = createSubTile(tilesCache, lat1, lon0, lat2, lon1, nextLevel, 2 * _row + 1, 2 * _column    , fallbackTextureTile);
+  subTiles[3] = createSubTile(tilesCache, lat1, lon1, lat2, lon2, nextLevel, 2 * _row + 1, 2 * _column + 1, fallbackTextureTile);
   
   return subTiles;
 }

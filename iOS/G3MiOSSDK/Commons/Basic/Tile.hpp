@@ -13,10 +13,11 @@
 
 class RenderContext;
 class Mesh;
-//#include "TileTessellator.hpp"
 class TileTessellator;
 class TileTexturizer;
 class TileParameters;
+class TilesCache;
+
 
 class Tile {
 private:
@@ -36,13 +37,14 @@ private:
   inline bool meetsRenderCriteria(const RenderContext* rc,
                                   const TileParameters* parameters);
   
-  inline std::vector<Tile*> createSubTiles();
+  inline std::vector<Tile*> createSubTiles(TilesCache* tilesCache);
   
   inline void rawRender(const RenderContext* rc,
                         const TileTessellator* tessellator,
                         TileTexturizer* texturizer);
   
-  inline Tile* createSubTile(const Angle& lowerLat, const Angle& lowerLon,
+  inline Tile* createSubTile(TilesCache* tilesCache,
+                             const Angle& lowerLat, const Angle& lowerLon,
                              const Angle& upperLat, const Angle& upperLon,
                              const int level,
                              const int row, const int column,
@@ -95,7 +97,8 @@ public:
   void render(const RenderContext* rc,
               const TileTessellator* tessellator,
               TileTexturizer* texturizer,
-              const TileParameters* parameters);
+              const TileParameters* parameters,
+              TilesCache* tilesCache);
   
 };
 

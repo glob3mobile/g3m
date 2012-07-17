@@ -25,10 +25,10 @@ class CameraRenderer: public Renderer
 {
 private:
   
-  const ILogger * _logger; //Log
+  const ILogger * _logger;
   
-  Camera * _camera;   //Camera used at current frame
-  const Planet * _planet;   //Planet
+  Camera* _camera;         // Camera used at current frame
+  const Planet* _planet;
   
   Camera _camera0;                //Initial Camera saved on Down event
   MutableVector3D _initialPoint;  //Initial point at dragging

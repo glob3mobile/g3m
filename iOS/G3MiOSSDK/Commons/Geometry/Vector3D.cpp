@@ -12,15 +12,15 @@
 
 
 Vector3D Vector3D::normalized() const {
-    double d = length();
-    return Vector3D(_x / d, _y /d, _z / d);
+  double d = length();
+  return Vector3D(_x / d, _y /d, _z / d);
 }
 
 
 Angle Vector3D::angleBetween(const Vector3D& other) const {
   Vector3D v1 = normalized();
   Vector3D v2 = other.normalized();
-
+  
   double c = v1.dot(v2);
   if (c > 1.0) c = 1.0;
   else if (c < -1.0) c = -1.0;
@@ -53,6 +53,19 @@ Vector3D Vector3D::rotateAroundAxis(const Vector3D& axis,
                    (((_z * (u * u + v * v)) - (w * (u * _x + v * _y))) * cosTheta) +
                    (m * (-(v * _x) + (u * _y)) * sinTheta)) / ms);
 }
+
+double Vector3D::maxAxis() const {
+  if (_x >= _y && _x >= _z) {
+    return _x;
+  }
+  else if (_y >= _z) {
+    return _y;
+  }
+  else {
+    return _z;
+  }
+}
+
 
 MutableVector3D Vector3D::asMutableVector3D() const {
   return MutableVector3D(_x, _y, _z);

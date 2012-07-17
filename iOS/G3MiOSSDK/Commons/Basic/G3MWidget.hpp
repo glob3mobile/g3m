@@ -77,7 +77,7 @@ private:
   _texturesHandler(texturesHandler),
   _planet(planet),
   _renderer(renderer),
-  _camera(new Camera(width, height)),
+  _camera(new Camera(planet, width, height)),
   _backgroundColor(backgroundColor),
   _timer(factory->createTimer()),
   _renderCounter(0),
