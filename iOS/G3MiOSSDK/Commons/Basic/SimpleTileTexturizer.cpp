@@ -12,16 +12,17 @@
 #include "TextureMapping.hpp"
 #include "TexturedMesh.hpp"
 
+#include "TilePetitions.hpp"
 
-TilePetitions SimpleTileTexturizer::registerTilePetitions(const Tile* tile)
+
+TilePetitions* SimpleTileTexturizer::getTilePetitions(const Tile* tile)
 {
   
   std::string url = "http://www.arkive.org/images/browse/world-map.jpg"; //FIXED
 
   //SAVING PETITION
-  TilePetitions tt(tile);
-  tt.add(url, tile->getSector());
-  _tilePetitions.push_back(tt);
+  TilePetitions *tt = new TilePetitions(tile->getLevel(), tile->getRow(), tile->getColumn(), this);
+  tt->add(url, tile->getSector());
   
   return tt;
 }
@@ -43,34 +44,22 @@ std::vector<MutableVector2D> SimpleTileTexturizer::createTextureCoordinates() co
   return texCoor;
 }
 
-Mesh* SimpleTileTexturizer::getMesh(const RenderContext* rc,
-                                    Tile* tile,
-                                    Mesh* mesh) {
+Mesh* SimpleTileTexturizer::getMesh(Tile* tile, Mesh* mesh)
+{
   
-  //CHECKING IF THE TILE IS COMPLETED
-  for (int i = 0; i < _tilePetitions.size(); i++) { //EACH TILE
-    if (_tilePetitions[i].getTile()== tile) {
+  //THE TEXTURE HAS BEEN LOADED
+  for (int i = 0; i < _finishedTiles.size(); i++) {
+    FinishedTile& ft = _finishedTiles[i];
+    if (tile->getLevel() == ft._level &&
+        tile->getRow() == ft._row &&
+        tile->getColumn() == ft._column){
       
-      if (_tilePetitions[i].allFinished()) {
-        int __JM_at_work; //MIX TEXTURES
-        
-        //TAKING JUST FIRST!!!
-        const ByteBuffer* bb = _tilePetitions[i].getPetition(0).getByteBuffer();
-        IImage *im = rc->getFactory()->createImageFromData(*bb);
-        
-        const std::string& url = _tilePetitions[i].getPetition(0).getURL();   
-        int texID = rc->getTexturesHandler()->getTextureId(rc, im, url, 256, 256);
-        
-        //RELEASING MEMORY
-        _tilePetitions.erase(_tilePetitions.begin() + i);
-        rc->getFactory()->deleteImage(im);
-        
-        //Texture Solved
-        tile->setTextureSolved(true);
-        
-        TextureMapping * tMap = new TextureMapping(texID, createTextureCoordinates());
-        return new TexturedMesh(mesh, false, tMap);
-      }
+      
+      //Texture Solved
+      tile->setTextureSolved(true);
+      
+      TextureMapping * tMap = new TextureMapping(ft._texID, createTextureCoordinates());
+      return new TexturedMesh(mesh, false, tMap);
     }
   }
   
@@ -82,40 +71,43 @@ Mesh* SimpleTileTexturizer::texturize(const RenderContext* rc,
                                       Mesh* mesh,
                                       Mesh* previousMesh) {
   
-  int _todo;
-  //return mesh; //UNTIL IS FINISHED
+  _rc = rc; //STORING CONTEXT
+  
+  Mesh* texMesh = getMesh(tile, mesh);
+  if (texMesh != NULL) return texMesh;
   
   //THROWING AND CREATING THE PETITIONS
   int priority = 10;
-  TilePetitions tp = registerTilePetitions(tile);
+  TilePetitions *tp = getTilePetitions(tile);
   Downloader* d = rc->getDownloader();
-  for (int i = 0; i < tp.getNumPetitions(); i++) {
-    const std::string& url = tp.getPetition(i).getURL();
-    d->request(url, priority, (IDownloadListener*) this);
+  for (int i = 0; i < tp->getNumPetitions(); i++) {
+    const std::string& url = tp->getPetition(i).getURL();
+    d->request(url, priority, tp);
   }
   
-  return getMesh(rc, tile, mesh);
+  return NULL;
 }
 
-void SimpleTileTexturizer::onDownload(const Response &response){
-  
-  std::string url = response.getURL().getPath();
-  for (int i = 0; i < _tilePetitions.size(); i++) { //EACH TILE
-    
-    for (int j = 0; j < _tilePetitions[i].getNumPetitions(); j++) {
-      if (_tilePetitions[i].getPetition(j).getURL() == url)
-      {
-        ByteBuffer *bb = new ByteBuffer(*response.getByteBuffer());
-        
-        //STORING PIXEL DATA FOR RECEIVED URL
-        _tilePetitions[i].getPetition(j).setByteBuffer(bb);
-      }
-    }
-  }
-}
-
-
-void SimpleTileTexturizer::onError(const Response& e)
+void SimpleTileTexturizer::onTilePetitionsFinished(TilePetitions * tp)
 {
+  //TAKING JUST FIRST!!!
+  const ByteBuffer* bb = tp->getPetition(0).getByteBuffer();
+  IImage *im = _rc->getFactory()->createImageFromData(*bb);
   
+  const std::string& url = tp->getPetition(0).getURL();   
+  int texID = _rc->getTexturesHandler()->getTextureId(_rc, im, url, 256, 256);
+  
+  //RELEASING MEMORY
+  _rc->getFactory()->deleteImage(im);
+
+  //Tile finished
+  FinishedTile ft;
+  ft._column = tp->getColumn();
+  ft._level = tp->getLevel();
+  ft._row = tp->getRow();
+  ft._texID = texID;
+  _finishedTiles.push_back(ft);
+  
+  printf("%d, %d, %d\n", ft._level, ft._row, ft._level);
+
 }
