@@ -92,6 +92,7 @@
 		D8A5602115AEF64E00035086 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A5601D15AEF64E00035086 /* Mesh.cpp */; };
 		D8A5602215AEF64E00035086 /* Mesh.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8A5601E15AEF64E00035086 /* Mesh.hpp */; };
 		D8AD76281599B89000A7D39A /* Downloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8AD76261599B89000A7D39A /* Downloader.cpp */; };
+		D8C874C015B5C5AE00F19859 /* TilePetitions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8C874BF15B5C5AE00F19859 /* TilePetitions.cpp */; };
 		D8CD6F7915A6FFAC00279BE7 /* Downloader.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8CD6F7715A6FFAC00279BE7 /* Downloader.hpp */; };
 		D8CD6F7A15A6FFAC00279BE7 /* IDownloadListener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8CD6F7815A6FFAC00279BE7 /* IDownloadListener.hpp */; };
 		D8D3BC8A159B11D000738E37 /* INetwork.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8D3BC89159B11D000738E37 /* INetwork.hpp */; };
@@ -212,6 +213,8 @@
 		D8A5601E15AEF64E00035086 /* Mesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Mesh.hpp; path = Commons/Mesh/Mesh.hpp; sourceTree = "<group>"; };
 		D8A5602315AEF69200035086 /* TexturedMesh.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TexturedMesh.hpp; path = Commons/Mesh/TexturedMesh.hpp; sourceTree = "<group>"; };
 		D8AD76261599B89000A7D39A /* Downloader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Downloader.cpp; path = Commons/Downloader/Downloader.cpp; sourceTree = "<group>"; };
+		D8C874BE15B5C58D00F19859 /* TilePetitions.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TilePetitions.hpp; path = Commons/Basic/TilePetitions.hpp; sourceTree = "<group>"; };
+		D8C874BF15B5C5AE00F19859 /* TilePetitions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TilePetitions.cpp; path = Commons/Basic/TilePetitions.cpp; sourceTree = "<group>"; };
 		D8CD6F7715A6FFAC00279BE7 /* Downloader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Downloader.hpp; path = Commons/Downloader/Downloader.hpp; sourceTree = "<group>"; };
 		D8CD6F7815A6FFAC00279BE7 /* IDownloadListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IDownloadListener.hpp; path = Commons/Downloader/IDownloadListener.hpp; sourceTree = "<group>"; };
 		D8D3BC89159B11D000738E37 /* INetwork.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = INetwork.hpp; path = Commons/Interfaces/INetwork.hpp; sourceTree = "<group>"; };
@@ -338,6 +341,8 @@
 				CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */,
 				CF8D0BFF15AF0E98005B5433 /* SimpleTileTexturizer.hpp */,
 				CF8D0C0015AF0EAB005B5433 /* SimpleTileTexturizer.cpp */,
+				D8C874BE15B5C58D00F19859 /* TilePetitions.hpp */,
+				D8C874BF15B5C5AE00F19859 /* TilePetitions.cpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -624,6 +629,7 @@
 				CC41E3A015B1FD5B00B5581C /* Plane.cpp in Sources */,
 				CC41E3B615B32DFB00B5581C /* Frustum.cpp in Sources */,
 				CCB2565015B5A33A00079B96 /* TexturedMesh.cpp in Sources */,
+				D8C874C015B5C5AE00F19859 /* TilePetitions.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
