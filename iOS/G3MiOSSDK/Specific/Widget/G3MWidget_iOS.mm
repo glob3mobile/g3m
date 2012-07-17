@@ -207,7 +207,7 @@
     }
     
     // marks renderer
-    if (false) {
+    if (true) {
       MarksRenderer* marks = new MarksRenderer();
       comp->addRenderer(marks);
       
@@ -224,16 +224,17 @@
       //m2->addTouchListener(listener);
       marks->addMark(m2);
       
-      
-      for (int i = 0; i < 500; i++) {
-        const Angle latitude = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
-        const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
-        //NSLog(@"lat=%f, lon=%f", latitude.degrees(), longitude.degrees());
-        
-        marks->addMark(new Mark("Random",
-                                "mark.png",
-                                Geodetic3D(latitude, longitude, 0)));
-      } 
+      if (false) {
+        for (int i = 0; i < 500; i++) {
+          const Angle latitude = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
+          const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
+          //NSLog(@"lat=%f, lon=%f", latitude.degrees(), longitude.degrees());
+          
+          marks->addMark(new Mark("Random",
+                                  "mark.png",
+                                  Geodetic3D(latitude, longitude, 0)));
+        } 
+      }
     }
     
     if (false) {
