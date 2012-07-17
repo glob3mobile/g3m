@@ -46,6 +46,8 @@ public:
   const ByteBuffer* getByteBuffer() const { return _bb;}
   
 };
+
+
 class TilePetitions{
   const Tile * _tile;
   std::vector<Petition> _petitions;

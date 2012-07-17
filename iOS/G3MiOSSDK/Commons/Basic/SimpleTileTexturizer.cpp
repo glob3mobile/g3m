@@ -44,17 +44,15 @@ std::vector<MutableVector2D> SimpleTileTexturizer::createTextureCoordinates() co
 }
 
 Mesh* SimpleTileTexturizer::getMesh(const RenderContext* rc,
-              Tile* tile,
-              Mesh* mesh)
-{
-    
+                                    Tile* tile,
+                                    Mesh* mesh) {
+  
   //CHECKING IF THE TILE IS COMPLETED
   for (int i = 0; i < _tilePetitions.size(); i++) { //EACH TILE
-    if (_tilePetitions[i].getTile()== tile){
+    if (_tilePetitions[i].getTile()== tile) {
       
-      if (_tilePetitions[i].allFinished())
-      {
-          int __JM_at_work; //MIX TEXTURES
+      if (_tilePetitions[i].allFinished()) {
+        int __JM_at_work; //MIX TEXTURES
         
         //TAKING JUST FIRST!!!
         const ByteBuffer* bb = _tilePetitions[i].getPetition(0).getByteBuffer();
@@ -72,14 +70,11 @@ Mesh* SimpleTileTexturizer::getMesh(const RenderContext* rc,
         
         TextureMapping * tMap = new TextureMapping(texID, createTextureCoordinates());
         return new TexturedMesh(mesh, false, tMap);
-        
-      } else{
-        //NOT ALL IMAGES ARE DOWNLOADED
-        return mesh;
       }
-      
     }
   }
+  
+  return NULL;
 }
 
 Mesh* SimpleTileTexturizer::texturize(const RenderContext* rc,

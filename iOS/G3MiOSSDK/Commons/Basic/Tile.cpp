@@ -71,9 +71,9 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
 
 void Tile::rawRender(const RenderContext *rc,
                      const TileTessellator *tessellator,
-                    TileTexturizer *texturizer) {
+                     TileTexturizer *texturizer) {
   Mesh* mesh = getMesh(rc, tessellator);
-
+  
   if (mesh != NULL) {
 //    if (!isTextureSolved()) {
 //      mesh = texturizer->texturize(rc, this, mesh);
@@ -110,8 +110,6 @@ void Tile::render(const RenderContext* rc,
       for (int i = 0; i < subTiles.size(); i++) {
         Tile* subTile = subTiles[i];
         subTile->render(rc, tessellator, texturizer, parameters, tilesCache);
-        
-//        delete subTile;
       }
     }
   }

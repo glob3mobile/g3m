@@ -46,19 +46,27 @@ public:
     return _referenceCounter > 0;
   }
   
-  bool equalsTo(const TextureHolder* other) {
-    if (_textureWidth != other->_textureWidth) {
+  bool equalsTo(const std::string textureId,
+                const int textureWidth,
+                const int textureHeight) {
+    if (_textureWidth != textureWidth) {
       return false;
     }
-    if (_textureHeight != other->_textureHeight) {
+    if (_textureHeight != textureHeight) {
       return false;
     }
     
-    if (_textureId.compare(other->_textureId) != 0) {
+    if (_textureId.compare(textureId) != 0) {
       return false;
     }
     
     return true;
+  }
+  
+  bool equalsTo(const TextureHolder* other) {
+    return equalsTo(other->_textureId,
+                    other->_textureWidth,
+                    other->_textureHeight);
   }
 };
 
@@ -80,37 +88,49 @@ int TexturesHandler::getTextureIdFromFileName(const RenderContext* rc,
   return texId;
 }
 
+int TexturesHandler::getTextureIdIfAvailable(const std::string &textureId,
+                                             int textureWidth,
+                                             int textureHeight) {
+  for (int i = 0; i < _textureHolders.size(); i++) {
+    TextureHolder* holder = _textureHolders[i];
+    if (holder->equalsTo(textureId, textureWidth, textureHeight)) {
+      holder->retain();
+      
+      return holder->_glTextureId;
+    }
+  }
+  
+  return -1;
+}
+
 int TexturesHandler::getTextureId(const RenderContext* rc,
                                   const IImage *image, 
                                   const std::string &textureId,
                                   int textureWidth,
                                   int textureHeight) {
   
-  TextureHolder* candidate = new TextureHolder(textureId, textureWidth, textureHeight);
-  
   for (int i = 0; i < _textureHolders.size(); i++) {
     TextureHolder* holder = _textureHolders[i];
-    if (holder->equalsTo(candidate)) {
+    if (holder->equalsTo(textureId, textureWidth, textureHeight)) {
       holder->retain();
-      delete candidate;
       
       return holder->_glTextureId;
     }
   }
   
-  candidate->_glTextureId = rc->getGL()->uploadTexture(image,
-                                                       textureWidth,
-                                                       textureHeight);
+  TextureHolder* holder = new TextureHolder(textureId, textureWidth, textureHeight);
+  
+  holder->_glTextureId = rc->getGL()->uploadTexture(image, textureWidth, textureHeight);
   
   rc->getLogger()->logInfo("Uploaded texture \"%s\" (%dx%d) to GPU with texId=%d" ,
                            textureId.c_str(),
                            textureWidth,
                            textureHeight,
-                           candidate->_glTextureId);
+                           holder->_glTextureId);
   
-  _textureHolders.push_back(candidate);
+  _textureHolders.push_back(holder);
   
-  return candidate->_glTextureId;
+  return holder->_glTextureId;
 }
 
 void TexturesHandler::takeTexture(const RenderContext* rc,
