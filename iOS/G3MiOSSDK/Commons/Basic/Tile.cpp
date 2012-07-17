@@ -16,17 +16,26 @@
 
 
 Tile::~Tile() {
-  if (_mesh) delete _mesh;
-  if (_bbox) delete _bbox;
+  if (_tessellatorMesh != NULL) {
+    delete _tessellatorMesh; 
+  }
+  
+  if (_texturizerMesh != NULL) {
+    delete _texturizerMesh; 
+  }
+  
+  if (_bbox != NULL) {
+   delete _bbox; 
+  }
 }
 
 
 Mesh* Tile::getMesh(const RenderContext* rc,
                     const TileTessellator* tessellator) {
-  if (_mesh == NULL) {
-    _mesh = tessellator->createMesh(rc, this);
+  if (_tessellatorMesh == NULL) {
+    _tessellatorMesh = tessellator->createMesh(rc, this);
   }
-  return _mesh;
+  return _tessellatorMesh;
 }
 
 bool Tile::isVisible(const RenderContext *rc, const TileTessellator *tessellator) 
@@ -66,12 +75,21 @@ void Tile::rawRender(const RenderContext *rc,
   Mesh* mesh = getMesh(rc, tessellator);
 
   if (mesh != NULL) {
-    if (!isTextureSolved()) {
-      mesh = texturizer->texturize(rc, this, mesh);
+//    if (!isTextureSolved()) {
+//      mesh = texturizer->texturize(rc, this, mesh);
+//    }
+    
+    if (!isTextureSolved() || _texturizerMesh == NULL) {
+      _texturizerMesh = texturizer->texturize(rc, this, mesh, _texturizerMesh);
     }
     
-    if (mesh != NULL) {
-      mesh->render(rc);
+    if (_texturizerMesh != NULL) {
+      _texturizerMesh->render(rc);
+    }
+    else {
+      if (mesh != NULL) {
+        mesh->render(rc);
+      }
     }
   }
 }

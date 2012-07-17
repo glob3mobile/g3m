@@ -27,7 +27,9 @@ private:
   const int    _row;
   const int    _column;
 
-  Mesh* _mesh;
+  Mesh* _tessellatorMesh;
+  Mesh* _texturizerMesh;
+
   Tile* _fallbackTextureTile;
   bool _textureSolved;
 
@@ -65,7 +67,8 @@ public:
   _level(level),
   _row(row),
   _column(column),
-  _mesh(NULL),
+  _tessellatorMesh(NULL),
+  _texturizerMesh(NULL),
   _textureSolved(false),
   _fallbackTextureTile(fallbackTextureTile),
   _bbox(NULL)

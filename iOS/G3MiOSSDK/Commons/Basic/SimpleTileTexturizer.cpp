@@ -71,7 +71,7 @@ Mesh* SimpleTileTexturizer::getMesh(const RenderContext* rc,
         tile->setTextureSolved(true);
         
         TextureMapping * tMap = new TextureMapping(texID, createTextureCoordinates());
-        return new TexturedMesh(mesh, true, tMap);
+        return new TexturedMesh(mesh, false, tMap);
         
       } else{
         //NOT ALL IMAGES ARE DOWNLOADED
@@ -84,7 +84,8 @@ Mesh* SimpleTileTexturizer::getMesh(const RenderContext* rc,
 
 Mesh* SimpleTileTexturizer::texturize(const RenderContext* rc,
                                       Tile* tile,
-                                      Mesh* mesh) {
+                                      Mesh* mesh,
+                                      Mesh* previousMesh) {
   
   int _todo;
   //return mesh; //UNTIL IS FINISHED

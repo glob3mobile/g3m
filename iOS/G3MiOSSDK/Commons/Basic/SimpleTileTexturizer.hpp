@@ -97,7 +97,8 @@ public:
   
   virtual Mesh* texturize(const RenderContext* rc,
                           Tile* tile,
-                          Mesh* mesh);
+                          Mesh* mesh,
+                          Mesh* previousMesh);
   
   void onDownload(const Response &response); 
   void onError(const Response& e);
