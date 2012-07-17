@@ -37,6 +37,8 @@ public:
   _bb(NULL)
   {}
   
+  ~Petition(){ if (_bb != NULL) delete _bb;}
+  
   std::string getURL() const { return _url;}
   
   bool isArrived() const{ return _bb != NULL;}
@@ -58,7 +60,8 @@ public:
   }
   
   const Tile * getTile() const { return _tile;}
-  std::vector<Petition> getPetitions() const{ return _petitions;}
+  Petition& getPetition(int i) { return _petitions[i];}
+  int getNumPetitions() { return _petitions.size();}
   
   bool allFinished() const{ 
     for (int i = 0; i < _petitions.size(); i++) {
@@ -83,7 +86,7 @@ private:
   
   
   Mesh* getMesh(const RenderContext* rc,
-                const Tile* tile,
+                Tile* tile,
                 Mesh* mesh);
   
   const int _resolution;
@@ -93,7 +96,7 @@ public:
   SimpleTileTexturizer(int resolution): _resolution(resolution){}
   
   virtual Mesh* texturize(const RenderContext* rc,
-                          const Tile* tile,
+                          Tile* tile,
                           Mesh* mesh);
   
   void onDownload(const Response &response); 

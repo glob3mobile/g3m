@@ -64,13 +64,10 @@ void Tile::rawRender(const RenderContext *rc,
                      const TileTessellator *tessellator,
                     TileTexturizer *texturizer) {
   Mesh* mesh = getMesh(rc, tessellator);
-  
+
   if (mesh != NULL) {
-    if (false) {
-      int ____JM___look_here;
-      if (!isTextureSolved()) {
-        mesh = texturizer->texturize(rc, this, mesh);
-      }
+    if (!isTextureSolved()) {
+      mesh = texturizer->texturize(rc, this, mesh);
     }
     
     if (mesh != NULL) {
