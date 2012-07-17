@@ -32,6 +32,8 @@ std::vector<Vector3D> Box::getCorners() const
 
 unsigned int Box::projectedSize(const RenderContext* rc) const
 {
+  int __agustin_at_work;
+
   std::vector<Vector3D> corners = getCorners();
   
   Vector2D pixel = rc->getCamera()->point2Pixel(corners[0]);
