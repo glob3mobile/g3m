@@ -11,6 +11,7 @@
 #include <stdio.h>
 
 #include "Vector3D.hpp"
+#include "Vector2D.hpp"
 #include "Angle.hpp"
 #include "MutableVector3D.hpp"
 
@@ -111,7 +112,7 @@ MutableMatrix44D MutableMatrix44D::transpose() const
 }
 
 
-void MutableMatrix44D::transformPoint(double out[4], const double in[4]) {
+void MutableMatrix44D::transformPoint(double out[4], const double in[4]) const {
 #define M(row,col)  _m[col*4+row]
   out[0] =
   M(0, 0) * in[0] + M(0, 1) * in[1] + M(0, 2) * in[2] + M(0, 3) * in[3];
@@ -156,6 +157,32 @@ Vector3D MutableMatrix44D::unproject(const Vector3D& pixel3D, const int viewport
   
   return Vector3D(objx, objy, objz);
 }
+
+
+Vector2D MutableMatrix44D::project(const Vector3D& point, const int viewport[4]) const
+{
+  double in[4], out[4];
+  
+  in[0] = point.x();
+  in[1] = point.y();
+  in[2] = point.z();
+  in[3] = 1.0f;
+  transformPoint(out, in);
+  if (out[3] == 0.0f)
+    return Vector2D::nan();
+  
+  out[0] /= out[3];
+  out[1] /= out[3];
+  out[2] /= out[3];
+  
+  double winx = viewport[0] + (1.0f + out[0]) * viewport[2] / 2.0f;
+  double winy = viewport[1] + (1.0f + out[1]) * viewport[3] / 2.0f;
+  //double winz = (1.0f + in[2]) / 2.0f;
+  return Vector2D(winx, winy);
+}
+
+
+
 
 MutableMatrix44D MutableMatrix44D::createTranslationMatrix(const Vector3D& t) {
   const double T[16] = {

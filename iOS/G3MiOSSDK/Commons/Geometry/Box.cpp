@@ -9,6 +9,7 @@
 #include <iostream>
 
 #include "Box.h"
+#include "Camera.hpp"
 
 
 std::vector<Vector3D> Box::getCorners() const
@@ -32,5 +33,10 @@ std::vector<Vector3D> Box::getCorners() const
 unsigned int Box::projectedSize(const RenderContext* rc) const
 {
   std::vector<Vector3D> corners = getCorners();
+  
+  Vector2D pixel = rc->getCamera()->point2Pixel(corners[0]);
+  printf ("pixel %f %f\n", pixel.x(), pixel.y());
+  
+  
   return 200;
 }

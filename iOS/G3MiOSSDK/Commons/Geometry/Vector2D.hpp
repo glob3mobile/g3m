@@ -85,6 +85,11 @@ public:
     return _y;
   }
   
+  static Vector2D nan() {
+    return Vector2D(NAN, NAN);
+  }
+
+  
 };
 
 

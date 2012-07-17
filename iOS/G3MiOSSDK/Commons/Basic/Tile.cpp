@@ -36,8 +36,8 @@ Mesh* Tile::getMesh(const RenderContext* rc,
 
 bool Tile::isVisible(const RenderContext *rc, const TileTessellator *tessellator) 
 {
-  //return getMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->getFrustumInModelCoordinates());
-  return getMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->_halfFrustumInModelCoordinates);
+  return getMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->getFrustumInModelCoordinates());
+  //return getMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->_halfFrustumInModelCoordinates);
 }
 
 bool Tile::meetsRenderCriteria(const RenderContext *rc,
@@ -45,7 +45,9 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
   
   int __agustin_at_work;
   
-  unsigned int projectedSize = _tessellatorMesh->getExtent()->projectedSize(rc);
+  if (_level==2 && _sector.contains(Geodetic2D(Angle::fromDegrees(0.1), Angle::fromDegrees(0.1)))) {
+    unsigned int projectedSize = _tessellatorMesh->getExtent()->projectedSize(rc);
+  }
   
   
   

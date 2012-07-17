@@ -102,6 +102,8 @@ public:
   
   Vector3D pixel2Vector(const Vector2D& pixel) const;
   
+  Vector2D point2Pixel(const Vector3D& point) const;
+  
   int getWidth() const { return _width; }
   int getHeight() const { return _height; }
   
