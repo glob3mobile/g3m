@@ -72,12 +72,21 @@ int TileRenderer::render(const RenderContext* rc) {
   
   gl->enablePolygonOffset(5, 5);
   
-  for (int i = 0; i < _topLevelTiles.size(); i++) {
+  std::vector<TileKey*> renderedTiles;
+  
+  const int topLevelTilesSize = _topLevelTiles.size();
+  for (int i = 0; i < topLevelTilesSize; i++) {
     Tile* tile = _topLevelTiles[i];
-    tile->render(rc, _tessellator, _texturizer, _parameters, _tilesCache);
+    tile->render(rc, _tessellator, _texturizer, _parameters, _tilesCache, &renderedTiles);
   }
   
   gl->disablePolygonOffset();
+  
+//  rc->getLogger()->logInfo("Rendered %d tiles" , renderedTiles.size());
+  
+  for (int i = 0; i < renderedTiles.size(); i++) {
+    delete renderedTiles[i];
+  }
   
   return MAX_TIME_TO_RENDER;
 }

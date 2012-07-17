@@ -19,6 +19,32 @@ class TileTexturizer;
 class TileParameters;
 class TilesCache;
 
+class TileKey {
+public:
+  const int _level;
+  const int _row;
+  const int _column;
+  
+  TileKey(const int level,
+          const int row,
+          const int column) :
+  _level(level),
+  _row(row),
+  _column(column)
+  {
+    
+  }
+  
+  TileKey(const TileKey& that):
+  _level(that._level),
+  _row(that._row),
+  _column(that._column)
+  {
+    
+  }
+  
+};
+
 
 class Tile {
 private:
@@ -107,7 +133,8 @@ public:
               const TileTessellator* tessellator,
               TileTexturizer* texturizer,
               const TileParameters* parameters,
-              TilesCache* tilesCache);
+              TilesCache* tilesCache,
+              std::vector<TileKey*>* renderedTiles);
   
 };
 
