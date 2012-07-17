@@ -10,6 +10,7 @@
 #define G3MiOSSDK_Mat4_h
 
 class Vector3D;
+class Vector2D;
 //class Angle;
 class MutableVector3D;
 
@@ -25,7 +26,7 @@ private:
   
   static bool invert_matrix(const double m[16], double out[16]);
   
-  void transformPoint(double out[4], const double in[4]);
+  void transformPoint(double out[4], const double in[4]) const;
   
   
 public:
@@ -143,6 +144,8 @@ public:
   void print(const std::string& name, const ILogger* log) const;
   
   Vector3D unproject(const Vector3D& pixel3D, const int viewport[4]) const;
+  
+  Vector2D project(const Vector3D& point, const int viewport[4]) const;
   
   static MutableMatrix44D createTranslationMatrix(const Vector3D& t);
   

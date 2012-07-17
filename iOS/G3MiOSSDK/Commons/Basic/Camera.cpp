@@ -125,11 +125,11 @@ void Camera::render(const RenderContext &rc) {
   
   // TEMP: TEST TO SEE HALF SIZE FRUSTUM CLIPPING 
   {
-    FrustumData data2 = calculateHalfFrustumData(rc);
-    Vector3D p0(Vector3D(data2._left, data2._top, -data2._znear-10).transformedBy(_modelMatrix.inverse(), 1));
-    Vector3D p1(Vector3D(data2._left, data2._bottom, -data2._znear-10).transformedBy(_modelMatrix.inverse(), 1));
-    Vector3D p2(Vector3D(data2._right, data2._bottom, -data2._znear-10).transformedBy(_modelMatrix.inverse(), 1));
-    Vector3D p3(Vector3D(data2._right, data2._top, -data2._znear-10).transformedBy(_modelMatrix.inverse(), 1));
+    FrustumData data = calculateFrustumData(rc);
+    Vector3D p0(Vector3D(data._left/2, data._top/2, -data._znear-10).transformedBy(_modelMatrix.inverse(), 1));
+    Vector3D p1(Vector3D(data._left/2, data._bottom/2, -data._znear-10).transformedBy(_modelMatrix.inverse(), 1));
+    Vector3D p2(Vector3D(data._right/2, data._bottom/2, -data._znear-10).transformedBy(_modelMatrix.inverse(), 1));
+    Vector3D p3(Vector3D(data._right/2, data._top/2, -data._znear-10).transformedBy(_modelMatrix.inverse(), 1));
     
     const float vertices[] = {
       p0.x(), p0.y(), p0.z(),
@@ -175,6 +175,15 @@ Vector3D Camera::pixel2Vector(const Vector2D& pixel) const {
   
   return obj.sub(_position.asVector3D());
 }
+
+
+Vector2D Camera::point2Pixel(const Vector3D& point) const
+{
+  const MutableMatrix44D modelViewMatrix = _projectionMatrix.multiply(_modelMatrix);
+  const int viewport[4] = { 0, 0, _width, _height };
+  return modelViewMatrix.project(point, viewport);
+}
+
 
 void Camera::applyTransform(const MutableMatrix44D& M) {
   _position = _position.transformedBy(M, 1.0);

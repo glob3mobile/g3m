@@ -26,10 +26,6 @@ Tile::~Tile() {
   if (_texturizerMesh != NULL) {
     delete _texturizerMesh; 
   }
-  
-  if (_bbox != NULL) {
-   delete _bbox; 
-  }
 }
 
 
@@ -41,14 +37,22 @@ Mesh* Tile::getTessellatorMesh(const RenderContext* rc,
   return _tessellatorMesh;
 }
 
-bool Tile::isVisible(const RenderContext *rc, const TileTessellator *tessellator) 
-{
-  //return getMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->getFrustumInModelCoordinates());
+bool Tile::isVisible(const RenderContext *rc, const TileTessellator *tessellator) {
+//  return getTessellatorMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->getFrustumInModelCoordinates());
   return getTessellatorMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->_halfFrustumInModelCoordinates);
 }
 
 bool Tile::meetsRenderCriteria(const RenderContext *rc,
                                const TileParameters* parameters) {
+  
+  int __agustin_at_work;
+  
+  if (_level==2 && _sector.contains(Geodetic2D(Angle::fromDegrees(0.1), Angle::fromDegrees(0.1)))) {
+    unsigned int projectedSize = _tessellatorMesh->getExtent()->projectedSize(rc);
+  }
+  
+  
+  
   
   if (_level >= parameters->_maxLevel) {
     return true;

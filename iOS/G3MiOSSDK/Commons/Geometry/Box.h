@@ -13,6 +13,8 @@
 #include "Vector3D.hpp"
 #include "Frustum.h"
 
+#include <vector>
+
 
 class Box: public Extent {
   
@@ -29,6 +31,10 @@ public:
   
   Vector3D getLower() const { return _lower; }
   Vector3D getUpper() const { return _upper; }
+  std::vector<Vector3D> getCorners() const;
+  
+  unsigned int projectedSize(const RenderContext* rc) const;
+
   
 private:
   const Vector3D _lower;

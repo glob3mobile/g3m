@@ -102,6 +102,8 @@ public:
   
   Vector3D pixel2Vector(const Vector2D& pixel) const;
   
+  Vector2D point2Pixel(const Vector3D& point) const;
+  
   int getWidth() const { return _width; }
   int getHeight() const { return _height; }
   
@@ -196,43 +198,6 @@ private:
                        znear, zfar);
   }
   
-  
-  FrustumData calculateHalfFrustumData(const RenderContext &rc) {
-    // compute znear value
-    const double maxR = rc.getPlanet()->getRadii().maxAxis();
-    const double distToOrigin = _position.length();
-    const double height = distToOrigin - maxR;  
-    double znear;
-    if (height > maxR/5) {
-      znear = maxR / 10; 
-    }
-    else if (height > maxR/500) {
-      znear = maxR / 1e3;
-    }
-    else if (height > maxR/2000) {
-      znear = maxR / 1e5;
-    }
-    else {
-      znear = maxR / 1e6 * 3;
-    }
-    
-    // compute zfar value
-    double zfar = 10000 * znear;
-    if (zfar > distToOrigin) {
-      zfar = distToOrigin; 
-    }
-    
-    // compute rest of frustum numbers
-    const double ratioScreen = (double) _height / _width;
-    const double right = 0.3 / ratioScreen * znear;
-    const double left = -right;
-    const double top = 0.3 * znear;
-    const double bottom = -top;
-    
-    return FrustumData(left/2, right/2,
-                       bottom/2, top/2,
-                       znear, zfar);
-  }
   
   void calculateCachedValues(const RenderContext &rc);
   
