@@ -63,6 +63,7 @@ public:
   _up(that._up),
   _frustum((that._frustum == NULL) ? NULL : new Frustum(*that._frustum)),
   _frustumInModelCoordinates((that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates)),
+  _halfFrustumInModelCoordinates((that._halfFrustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._halfFrustumInModelCoordinates)),
   _logger(that._logger),
   _dirtyCachedValues(that._dirtyCachedValues)
   {

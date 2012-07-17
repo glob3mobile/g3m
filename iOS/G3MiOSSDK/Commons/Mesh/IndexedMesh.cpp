@@ -24,7 +24,7 @@ IndexedMesh::~IndexedMesh()
     if (_flatColor != NULL) delete _flatColor;
   }
   
-  if (_extent) delete _extent;
+  if (_extent != NULL) delete _extent;
   
 #endif
 }
@@ -168,7 +168,7 @@ void IndexedMesh::computeExtent() const
     if (_vertices[n+2]>maxz) maxz = _vertices[n+2];
   }
   
-  if (_extent) delete _extent;
+  if (_extent != NULL) delete _extent;
   _extent = new Box(Vector3D(minx, miny, minz), Vector3D(maxx, maxy, maxz));
 }
 

@@ -127,12 +127,12 @@ public:
   }
   
   static TileParameters* createDefault() {
-    const int K = 6;
+    const int K = 1;
     const int splitsByLatitude = 2 * K;
     const int splitsByLongitude = 4 * K;
     const int topLevel = 0;
     const int maxLevel = 8;
-    const int maxTilesInCache = 100;
+    const int maxTilesInCache = 32;
     
     return new TileParameters(Sector::fullSphere(),
                               splitsByLatitude,
