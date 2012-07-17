@@ -60,7 +60,6 @@ Mesh* SimpleTileTexturizer::getMesh(Tile* tile, Mesh* mesh)
       
       TextureMapping * tMap = new TextureMapping(ft._texID, createTextureCoordinates());
       return new TexturedMesh(mesh, false, tMap);
-      
     }
   }
   

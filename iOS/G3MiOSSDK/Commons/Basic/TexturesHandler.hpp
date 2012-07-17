@@ -36,6 +36,12 @@ public:
                    const std::string& textureId,
                    int textureWidth,
                    int textureHeight);
+
+  
+  int getTextureIdIfAvailable(const std::string& textureId,
+                              int textureWidth,
+                              int textureHeight);
+  
   
   void takeTexture(const RenderContext* rc,
                    int glTextureId);
