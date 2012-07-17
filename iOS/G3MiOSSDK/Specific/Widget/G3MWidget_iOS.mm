@@ -189,7 +189,7 @@
       comp->addRenderer(tr1);
       
       TileRenderer* tr2 = new TileRenderer(EllipsoidalTileTessellator::createForDebug(tileResolution),
-                                           texturizer,
+                                           NULL,
                                            parameters);
       comp->addRenderer(tr2);
     }

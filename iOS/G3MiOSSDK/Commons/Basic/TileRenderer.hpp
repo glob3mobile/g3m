@@ -20,51 +20,52 @@ class TileTexturizer;
 
 #include "Tile.hpp"
 
-class TileCacheEntry {
-public:
-  Tile* _tile;
-  long  _timestamp;
-  
-  TileCacheEntry(Tile* tile,
-                 long  timestamp) :
-  _tile(tile),
-  _timestamp(timestamp)
-  {
-    
-  }
-  
-  ~TileCacheEntry() {
-    if (_tile != NULL) {
-      delete _tile;
-    }
-  }
-};
 
-class TileRenderer;
-
-class TilesCache {
-private:
-  TileRenderer*                _tileRenderer;
-  const int                    _maxElements;
-  std::vector<TileCacheEntry*> _entries;
-  
-  long _tsCounter;
-  
-public:
-  TilesCache(TileRenderer* tileRenderer, int maxElements) :
-  _tileRenderer(tileRenderer),
-  _maxElements(maxElements),
-  _tsCounter(0)
-  {
-    
-  }
-  
-  Tile* getTile(const int level,
-                const int row, const int column);
-  
-  void putTile(Tile* tile);
-
-};
+//class TileCacheEntry {
+//public:
+//  Tile* _tile;
+//  long  _timestamp;
+//  
+//  TileCacheEntry(Tile* tile,
+//                 long  timestamp) :
+//  _tile(tile),
+//  _timestamp(timestamp)
+//  {
+//    
+//  }
+//  
+//  ~TileCacheEntry() {
+//    if (_tile != NULL) {
+//      delete _tile;
+//    }
+//  }
+//};
+//
+//class TileRenderer;
+//
+//class TilesCache {
+//private:
+//  TileRenderer*                _tileRenderer;
+//  const int                    _maxElements;
+//  std::vector<TileCacheEntry*> _entries;
+//  
+//  long _tsCounter;
+//  
+//public:
+//  TilesCache(TileRenderer* tileRenderer, int maxElements) :
+//  _tileRenderer(tileRenderer),
+//  _maxElements(maxElements),
+//  _tsCounter(0)
+//  {
+//    
+//  }
+//  
+//  Tile* getTile(const int level,
+//                const int row, const int column);
+//  
+//  void putTile(Tile* tile);
+//
+//};
 
 
 class TileParameters {
@@ -74,20 +75,17 @@ public:
   const int    _splitsByLongitude;
   const int    _topLevel;
   const int    _maxLevel;
-  const int    _maxTilesInCache;
   
   TileParameters(const Sector topSector,
                  const int    splitsByLatitude,
                  const int    splitsByLongitude,
                  const int    topLevel,
-                 const int    maxLevel,
-                 const int    maxTilesInCache) :
+                 const int    maxLevel) :
   _topSector(topSector),
   _splitsByLatitude(splitsByLatitude),
   _splitsByLongitude(splitsByLongitude),
   _topLevel(topLevel),
-  _maxLevel(maxLevel),
-  _maxTilesInCache(maxTilesInCache)
+  _maxLevel(maxLevel)
   {
     
   }
@@ -98,14 +96,12 @@ public:
     const int splitsByLongitude = 4 * K;
     const int topLevel = 0;
     const int maxLevel = 8;
-    const int maxTilesInCache = 128;
     
     return new TileParameters(Sector::fullSphere(),
                               splitsByLatitude,
                               splitsByLongitude,
                               topLevel,
-                              maxLevel,
-                              maxTilesInCache);
+                              maxLevel);
   }
 };
 
@@ -115,7 +111,6 @@ private:
   const TileTessellator* _tessellator;
   TileTexturizer*  _texturizer;
   const TileParameters*  _parameters;
-  TilesCache*            _tilesCache;
   
   std::vector<Tile*>     _topLevelTiles;
   
@@ -128,8 +123,7 @@ public:
                const TileParameters* parameters) :
   _tessellator(tessellator),
   _texturizer(texturizer),
-  _parameters(parameters),
-  _tilesCache(new TilesCache(this, parameters->_maxTilesInCache))
+  _parameters(parameters)
   {
     
   }
@@ -147,8 +141,6 @@ public:
   void onResizeViewportEvent(int width, int height) {
     
   }
-  
-  void tileDeleted(Tile* tile);
   
 };
 

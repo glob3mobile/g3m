@@ -17,7 +17,6 @@ class Mesh;
 class TileTessellator;
 class TileTexturizer;
 class TileParameters;
-class TilesCache;
 
 //class TileKey {
 //public:
@@ -68,23 +67,20 @@ private:
   inline bool meetsRenderCriteria(const RenderContext* rc,
                                   const TileParameters* parameters);
   
-  inline std::vector<Tile*>* createSubTiles(TilesCache* tilesCache,
-                                            bool useCache);
+  inline std::vector<Tile*>* createSubTiles();
   
   inline void rawRender(const RenderContext* rc,
                         const TileTessellator* tessellator,
                         TileTexturizer* texturizer);
   
-  inline Tile* createSubTile(TilesCache* tilesCache,
-                             const Angle& lowerLat, const Angle& lowerLon,
+  inline Tile* createSubTile(const Angle& lowerLat, const Angle& lowerLon,
                              const Angle& upperLat, const Angle& upperLon,
                              const int level,
                              const int row, const int column,
-                             Tile* fallbackTextureTile,
-                             bool useCache);
+                             Tile* fallbackTextureTile);
   
   std::vector<Tile*>* _subtiles;
-  inline std::vector<Tile*>* getSubTiles(TilesCache *tilesCache);
+  inline std::vector<Tile*>* getSubTiles();
 
   inline void prune();
   
@@ -102,7 +98,6 @@ public:
   _texturizerMesh(NULL),
   _textureSolved(false),
   _fallbackTextureTile(fallbackTextureTile),
-//  _bbox(NULL),
   _subtiles(NULL)
   {
   }
@@ -141,8 +136,7 @@ public:
   void render(const RenderContext* rc,
               const TileTessellator* tessellator,
               TileTexturizer* texturizer,
-              const TileParameters* parameters,
-              TilesCache* tilesCache);
+              const TileParameters* parameters);
   
 };
 

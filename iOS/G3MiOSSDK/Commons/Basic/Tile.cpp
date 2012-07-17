@@ -16,7 +16,6 @@
 
 
 Tile::~Tile() {
-  
   prune();
 
   if (_tessellatorMesh != NULL) {
@@ -82,23 +81,28 @@ void Tile::rawRender(const RenderContext *rc,
   Mesh* tessellatorMesh = getTessellatorMesh(rc, tessellator);
   
   if (tessellatorMesh != NULL) {
-    
-    if (!isTextureSolved() || _texturizerMesh == NULL) {
-      _texturizerMesh = texturizer->texturize(rc, this, tessellatorMesh, _texturizerMesh);
-    }
-    
-    if (_texturizerMesh != NULL) {
-      _texturizerMesh->render(rc);
-    }
-    else {
+    if (texturizer == NULL) {
       tessellatorMesh->render(rc);
     }
+    else {
+      if (!isTextureSolved() || _texturizerMesh == NULL) {
+        _texturizerMesh = texturizer->texturize(rc, this, tessellatorMesh, _texturizerMesh);
+      }
+      
+      if (_texturizerMesh != NULL) {
+        _texturizerMesh->render(rc);
+      }
+      else {
+        tessellatorMesh->render(rc);
+      }
+    }
   }
+  
 }
 
-std::vector<Tile*>* Tile::getSubTiles(TilesCache *tilesCache) {
+std::vector<Tile*>* Tile::getSubTiles() {
   if (_subtiles == NULL) {
-    _subtiles = createSubTiles(tilesCache, false);
+    _subtiles = createSubTiles();
   }
   return _subtiles;
 }
@@ -120,8 +124,7 @@ void Tile::prune() {
 void Tile::render(const RenderContext* rc,
                   const TileTessellator* tessellator,
                   TileTexturizer* texturizer,
-                  const TileParameters* parameters,
-                  TilesCache* tilesCache) {
+                  const TileParameters* parameters) {
   int ___diego_at_work;
   
   if (isVisible(rc, tessellator)) {
@@ -129,17 +132,11 @@ void Tile::render(const RenderContext* rc,
       rawRender(rc, tessellator, texturizer);
     }
     else {
-//      std::vector<Tile*> subTiles = createSubTiles(tilesCache);
-//      for (int i = 0; i < subTiles.size(); i++) {
-//        Tile* subTile = subTiles[i];
-//        subTile->render(rc, tessellator, texturizer, parameters, tilesCache);
-//      }
-      std::vector<Tile*>* subTiles = getSubTiles(tilesCache);
+      std::vector<Tile*>* subTiles = getSubTiles();
       for (int i = 0; i < subTiles->size(); i++) {
         Tile* subTile = subTiles->at(i);
-        subTile->render(rc, tessellator, texturizer, parameters, tilesCache);
+        subTile->render(rc, tessellator, texturizer, parameters);
       }
-
     }
   }
   else {
@@ -147,39 +144,18 @@ void Tile::render(const RenderContext* rc,
   }
 }
 
-Tile* Tile::createSubTile(TilesCache* tilesCache,
-                          const Angle& lowerLat, const Angle& lowerLon,
+Tile* Tile::createSubTile(const Angle& lowerLat, const Angle& lowerLon,
                           const Angle& upperLat, const Angle& upperLon,
                           const int level,
                           const int row, const int column,
-                          Tile* fallbackTextureTile,
-                          bool useCache) {
-  
-  if (!useCache) {
-    return new Tile(Sector(Geodetic2D(lowerLat, lowerLon), Geodetic2D(upperLat, upperLon)),
-                    level,
-                    row, column,
-                    fallbackTextureTile);
-  }
-  
-  Tile* tile = tilesCache->getTile(level, row, column);
-  if (tile == NULL) {
-    tile = new Tile(Sector(Geodetic2D(lowerLat, lowerLon), Geodetic2D(upperLat, upperLon)),
-                    level,
-                    row, column,
-                    fallbackTextureTile);
-    
-    tilesCache->putTile(tile);
-  }
-  else {
-    tile->setFallbackTextureTile(fallbackTextureTile);
-  }
-  
-  return tile;
+                          Tile* fallbackTextureTile) {
+  return new Tile(Sector(Geodetic2D(lowerLat, lowerLon), Geodetic2D(upperLat, upperLon)),
+                  level,
+                  row, column,
+                  fallbackTextureTile);
 }
 
-std::vector<Tile*>* Tile::createSubTiles(TilesCache* tilesCache,
-                                         bool useCache) {
+std::vector<Tile*>* Tile::createSubTiles() {
   const Geodetic2D lower = _sector.lower();
   const Geodetic2D upper = _sector.upper();
   
@@ -190,85 +166,34 @@ std::vector<Tile*>* Tile::createSubTiles(TilesCache* tilesCache,
   
   Tile* fallbackTextureTile = isTextureSolved() ? this : _fallbackTextureTile;
   
-//  std::vector<Tile*> subTiles(4);
-//  subTiles[0] = createSubTile(tilesCache,
-//                              lower.latitude(), lower.longitude(),
-//                              midLat, midLon,
-//                              nextLevel,
-//                              2 * _row,
-//                              2 * _column,
-//                              fallbackTextureTile,
-//                              useCache);
-//  
-//  subTiles[1] = createSubTile(tilesCache,
-//                              lower.latitude(), midLon,
-//                              midLat, upper.longitude(),
-//                              nextLevel,
-//                              2 * _row,
-//                              2 * _column + 1,
-//                              fallbackTextureTile,
-//                              useCache);
-//  
-//  subTiles[2] = createSubTile(tilesCache,
-//                              midLat, lower.longitude(),
-//                              upper.latitude(), midLon,
-//                              nextLevel,
-//                              2 * _row + 1,
-//                              2 * _column,
-//                              fallbackTextureTile,
-//                              useCache);
-//  
-//  subTiles[3] = createSubTile(tilesCache,
-//                              midLat, midLon,
-//                              upper.latitude(), upper.longitude(),
-//                              nextLevel,
-//                              2 * _row + 1,
-//                              2 * _column + 1,
-//                              fallbackTextureTile,
-//                              useCache);
-//  
-//  return subTiles;
-  
-  
   std::vector<Tile*>* subTiles = new std::vector<Tile*>();
-  subTiles->push_back( createSubTile(tilesCache,
-                                     lower.latitude(), lower.longitude(),
+  subTiles->push_back( createSubTile(lower.latitude(), lower.longitude(),
                                      midLat, midLon,
                                      nextLevel,
                                      2 * _row,
                                      2 * _column,
-                                     fallbackTextureTile,
-                                     useCache) );
+                                     fallbackTextureTile) );
   
-  subTiles->push_back( createSubTile(tilesCache,
-                                     lower.latitude(), midLon,
+  subTiles->push_back( createSubTile(lower.latitude(), midLon,
                                      midLat, upper.longitude(),
                                      nextLevel,
                                      2 * _row,
                                      2 * _column + 1,
-                                     fallbackTextureTile,
-                                     useCache) );
+                                     fallbackTextureTile) );
   
-  subTiles->push_back( createSubTile(tilesCache,
-                                     midLat, lower.longitude(),
+  subTiles->push_back( createSubTile(midLat, lower.longitude(),
                                      upper.latitude(), midLon,
                                      nextLevel,
                                      2 * _row + 1,
                                      2 * _column,
-                                     fallbackTextureTile,
-                                     useCache) );
+                                     fallbackTextureTile) );
   
-  subTiles->push_back( createSubTile(tilesCache,
-                                     midLat, midLon,
+  subTiles->push_back( createSubTile(midLat, midLon,
                                      upper.latitude(), upper.longitude(),
                                      nextLevel,
                                      2 * _row + 1,
                                      2 * _column + 1,
-                                     fallbackTextureTile,
-                                     useCache) );
+                                     fallbackTextureTile) );
   
   return subTiles;
-
-  
-  
 }
