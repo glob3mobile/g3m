@@ -21,15 +21,15 @@ public:
 
 class Response{
 private:
-  Url _url;
-  ByteBuffer _data;
+  const Url _url;
+  const ByteBuffer *_data;
   
 public:
   
-  Response(std::string url, ByteBuffer data): _url(url), _data(data){}
+  Response(std::string url, ByteBuffer* data): _url(url), _data(data){}
   
   Url getURL() const{ return _url;}
-  ByteBuffer getByteBuffer() const{ return _data;}
+  const ByteBuffer* getByteBuffer() const{ return _data;}
 };
 
 #endif

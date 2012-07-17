@@ -176,7 +176,10 @@
     
     // very basic tile renderer
     if (true) {
-      TileTexturizer* texturizer = new SimpleTileTexturizer();
+      
+      int tileResolution = 16;
+      
+      TileTexturizer* texturizer = new SimpleTileTexturizer(tileResolution);
       
       TileParameters* parameters = TileParameters::createDefault();
       
@@ -185,7 +188,7 @@
                                            parameters);
       comp->addRenderer(tr1);
       
-      TileRenderer* tr2 = new TileRenderer(EllipsoidalTileTessellator::createForDebug(16),
+      TileRenderer* tr2 = new TileRenderer(EllipsoidalTileTessellator::createForDebug(tileResolution),
                                            texturizer,
                                            parameters);
       comp->addRenderer(tr2);

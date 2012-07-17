@@ -23,7 +23,7 @@ void Downloader::request(const std::string& urlOfFile, int priority, IDownloadLi
   //First we check in storage
   if (_storage->contains(urlOfFile)){
     ByteBuffer bb = _storage->getByteBuffer(urlOfFile);
-    Response r(urlOfFile , bb);
+    Response r(urlOfFile , &bb);
     listener->onDownload(r);
     return;
   }
@@ -75,7 +75,7 @@ void Downloader::startDownload()
 void Downloader::onDownload(const Response& e)
 {
   //Saving on storage
-  _storage->save(e.getURL().getPath(), e.getByteBuffer());
+  _storage->save(e.getURL().getPath(), *e.getByteBuffer());
   
   for (int i = 0; i < _petitions.size(); i++)
   {

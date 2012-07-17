@@ -127,7 +127,7 @@ public:
   }
   
   static TileParameters* createDefault() {
-    const int K = 5;
+    const int K = 6;
     const int splitsByLatitude = 2 * K;
     const int splitsByLongitude = 4 * K;
     const int topLevel = 0;
@@ -147,7 +147,7 @@ public:
 class TileRenderer: public Renderer {
 private:
   const TileTessellator* _tessellator;
-  const TileTexturizer*  _texturizer;
+  TileTexturizer*  _texturizer;
   const TileParameters*  _parameters;
   TilesCache*            _tilesCache;
   
@@ -158,7 +158,7 @@ private:
   
 public:
   TileRenderer(const TileTessellator* tessellator,
-               const TileTexturizer*  texturizer,
+              TileTexturizer*  texturizer,
                const TileParameters* parameters) :
   _tessellator(tessellator),
   _texturizer(texturizer),

@@ -43,7 +43,8 @@ _center(0, 0, 0),
 _up(0, 0, 1),
 _logger(NULL),
 _frustum(NULL),
-_dirtyCachedValues(true)
+_dirtyCachedValues(true),
+_frustumInModelCoordinates(NULL)
 {
   resizeViewport(width, height);
 }

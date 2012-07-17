@@ -62,7 +62,7 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
 
 void Tile::rawRender(const RenderContext *rc,
                      const TileTessellator *tessellator,
-                     const TileTexturizer *texturizer) {
+                    TileTexturizer *texturizer) {
   Mesh* mesh = getMesh(rc, tessellator);
   
   if (mesh != NULL) {
@@ -81,7 +81,7 @@ void Tile::rawRender(const RenderContext *rc,
 
 void Tile::render(const RenderContext* rc,
                   const TileTessellator* tessellator,
-                  const TileTexturizer* texturizer,
+                  TileTexturizer* texturizer,
                   const TileParameters* parameters,
                   TilesCache* tilesCache) {
   int ___diego_at_work;
