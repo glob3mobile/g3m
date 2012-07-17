@@ -16,8 +16,10 @@
 
 
 Tile::~Tile() {
-  delete _mesh;
+  if (_mesh) delete _mesh;
+  if (_bbox) delete _bbox;
 }
+
 
 Mesh* Tile::getMesh(const RenderContext* rc,
                     const TileTessellator* tessellator) {
@@ -27,11 +29,10 @@ Mesh* Tile::getMesh(const RenderContext* rc,
   return _mesh;
 }
 
-bool Tile::isVisible(const RenderContext *rc) {
-  // TODO: check collition with frustum
-  // TODO: check for tiles backfacing to the camera
-  
-  return true;
+bool Tile::isVisible(const RenderContext *rc, const TileTessellator *tessellator) 
+{
+  //return getMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->getFrustumInModelCoordinates());
+  return getMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->_halfFrustumInModelCoordinates);
 }
 
 bool Tile::meetsRenderCriteria(const RenderContext *rc,
@@ -63,13 +64,10 @@ void Tile::rawRender(const RenderContext *rc,
                      const TileTessellator *tessellator,
                     TileTexturizer *texturizer) {
   Mesh* mesh = getMesh(rc, tessellator);
-  
+
   if (mesh != NULL) {
-    if (false) {
-      int ____JM___look_here;
-      if (!isTextureSolved()) {
-        mesh = texturizer->texturize(rc, this, mesh);
-      }
+    if (!isTextureSolved()) {
+      mesh = texturizer->texturize(rc, this, mesh);
     }
     
     if (mesh != NULL) {
@@ -85,7 +83,7 @@ void Tile::render(const RenderContext* rc,
                   TilesCache* tilesCache) {
   int ___diego_at_work;
   
-  if (isVisible(rc)) {
+  if (isVisible(rc, tessellator)) {
     if (meetsRenderCriteria(rc, parameters)) {
       rawRender(rc, tessellator, texturizer);
     }

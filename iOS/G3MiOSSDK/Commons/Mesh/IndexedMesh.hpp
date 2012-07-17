@@ -29,6 +29,7 @@ private:
   const GLPrimitive    _primitive; 
   
   const float*         _vertices;
+  const unsigned int   _numVertices;
   
   const unsigned int*  _indexes;
   const int            _numIndex;
@@ -39,6 +40,10 @@ private:
   const float *        _colors;
   const float          _colorsIntensity;
   
+  mutable Extent *     _extent;
+  
+  void computeExtent() const;
+  
 public:
   
   ~IndexedMesh();
@@ -46,6 +51,7 @@ public:
   
   IndexedMesh(bool owner,
               const GLPrimitive primitive,
+              const unsigned int numVertices,
               const float* vertices,
               const unsigned int* indexes,
               const int numIndex, 
@@ -63,6 +69,9 @@ public:
               std::vector<MutableVector3D>* normals = NULL);
   
   virtual void render(const RenderContext* rc) const;
+  
+  Extent *getExtent() const;
+
   
 };
 

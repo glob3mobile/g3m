@@ -44,7 +44,8 @@ _up(0, 0, 1),
 _logger(NULL),
 _frustum(NULL),
 _dirtyCachedValues(true),
-_frustumInModelCoordinates(NULL)
+_frustumInModelCoordinates(NULL),
+_halfFrustumInModelCoordinates(NULL)
 {
   resizeViewport(width, height);
 }
@@ -77,16 +78,26 @@ void Camera::calculateCachedValues(const RenderContext &rc) {
   if (_frustum != NULL) {
     delete _frustum;
   }
+  
   _frustum = new Frustum(data._left, data._right,
                          data._bottom, data._top,
                          data._znear, data._zfar);
-
   
   if (_frustumInModelCoordinates != NULL) {
     delete _frustumInModelCoordinates;
   }
   _frustumInModelCoordinates = _frustum->transformedBy_P(_modelMatrix.transpose());
   
+  
+  _halfFrustum =  new Frustum(data._left/2, data._right/2,
+                              data._bottom/2, data._top/2,
+                              data._znear, data._zfar);
+  if (_halfFrustumInModelCoordinates != NULL) {
+    delete _halfFrustumInModelCoordinates;
+  }
+  _halfFrustumInModelCoordinates = _halfFrustum->transformedBy_P(_modelMatrix.transpose());
+
+
 }
 
 void Camera::render(const RenderContext &rc) {
@@ -100,6 +111,34 @@ void Camera::render(const RenderContext &rc) {
   IGL *gl = rc.getGL();
   gl->setProjection(_projectionMatrix);
   gl->loadMatrixf(_modelMatrix);
+  
+  
+  // TEMP: TEST TO SEE HALF SIZE FRUSTUM CLIPPING 
+  {
+    FrustumData data2 = calculateHalfFrustumData(rc);
+    Vector3D p0(Vector3D(data2._left, data2._top, -data2._znear-10).transformedBy(_modelMatrix.inverse(), 1));
+     Vector3D p1(Vector3D(data2._left, data2._bottom, -data2._znear-10).transformedBy(_modelMatrix.inverse(), 1));
+     Vector3D p2(Vector3D(data2._right, data2._bottom, -data2._znear-10).transformedBy(_modelMatrix.inverse(), 1));
+     Vector3D p3(Vector3D(data2._right, data2._top, -data2._znear-10).transformedBy(_modelMatrix.inverse(), 1));
+    
+    float vertices[] = {
+      p0.x(), p0.y(), p0.z(),
+      p1.x(), p1.y(), p1.z(),
+      p2.x(), p2.y(), p2.z(),
+      p3.x(), p3.y(), p3.z(),    
+    };
+    unsigned int indices[] = {0,1,2,3};
+    
+    IGL *gl = rc.getGL();
+    gl->enableVerticesPosition();
+    gl->vertexPointer(3, 0, vertices);
+    gl->color((float) 1, (float) 1, (float) 1, 1);
+    gl->lineWidth(5);
+    gl->drawLineLoop(4, indices);
+    gl->lineWidth(1);
+  }
+  
+
 }
 
 const Frustum* const Camera::getFrustumInModelCoordinates() {

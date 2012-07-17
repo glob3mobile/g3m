@@ -13,6 +13,7 @@
 #include "MutableMatrix44D.hpp"
 #include "Plane.h"
 
+class Box;
 
 class Frustum {
 private:
@@ -71,7 +72,9 @@ public:
   {
   }
   
-  bool contains(const Vector3D &point);
+  bool contains(const Vector3D& point) const;
+  
+  bool touchesWithBox(const Box *box) const;
   
   
   Frustum transformedBy(const MutableMatrix44D& matrix) const {
