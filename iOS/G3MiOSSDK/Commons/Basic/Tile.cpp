@@ -103,18 +103,21 @@ void Tile::render(const RenderContext* rc,
                   const TileTessellator* tessellator,
                   TileTexturizer* texturizer,
                   const TileParameters* parameters,
-                  TilesCache* tilesCache) {
+                  TilesCache* tilesCache,
+                  std::vector<TileKey*> *renderedTiles) {
   int ___diego_at_work;
   
   if (isVisible(rc, tessellator)) {
     if (meetsRenderCriteria(rc, parameters)) {
       rawRender(rc, tessellator, texturizer);
+      
+      renderedTiles->push_back(new TileKey(getLevel(), getRow(), getColumn()) );
     }
     else {
       std::vector<Tile*> subTiles = createSubTiles(tilesCache);
       for (int i = 0; i < subTiles.size(); i++) {
         Tile* subTile = subTiles[i];
-        subTile->render(rc, tessellator, texturizer, parameters, tilesCache);
+        subTile->render(rc, tessellator, texturizer, parameters, tilesCache, renderedTiles);
       }
     }
   }

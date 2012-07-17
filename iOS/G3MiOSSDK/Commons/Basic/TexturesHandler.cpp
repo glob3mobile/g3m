@@ -46,9 +46,9 @@ public:
     return _referenceCounter > 0;
   }
   
-  bool equalsTo(const std::string textureId,
-                const int textureWidth,
-                const int textureHeight) {
+  bool hasKey(const std::string textureId,
+              const int textureWidth,
+              const int textureHeight) {
     if (_textureWidth != textureWidth) {
       return false;
     }
@@ -61,12 +61,6 @@ public:
     }
     
     return true;
-  }
-  
-  bool equalsTo(const TextureHolder* other) {
-    return equalsTo(other->_textureId,
-                    other->_textureWidth,
-                    other->_textureHeight);
   }
 };
 
@@ -93,7 +87,7 @@ int TexturesHandler::getTextureIdIfAvailable(const std::string &textureId,
                                              int textureHeight) {
   for (int i = 0; i < _textureHolders.size(); i++) {
     TextureHolder* holder = _textureHolders[i];
-    if (holder->equalsTo(textureId, textureWidth, textureHeight)) {
+    if (holder->hasKey(textureId, textureWidth, textureHeight)) {
       holder->retain();
       
       return holder->_glTextureId;
@@ -109,14 +103,11 @@ int TexturesHandler::getTextureId(const RenderContext* rc,
                                   int textureWidth,
                                   int textureHeight) {
   
-  for (int i = 0; i < _textureHolders.size(); i++) {
-    TextureHolder* holder = _textureHolders[i];
-    if (holder->equalsTo(textureId, textureWidth, textureHeight)) {
-      holder->retain();
-      
-      return holder->_glTextureId;
-    }
+  int previousId = getTextureIdIfAvailable(textureId, textureWidth, textureHeight);
+  if (previousId >= 0) {
+    return previousId;
   }
+
   
   TextureHolder* holder = new TextureHolder(textureId, textureWidth, textureHeight);
   
