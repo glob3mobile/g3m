@@ -40,13 +40,13 @@ public:
   bool isNan() const {
     return isnan(_x*_y*_z);
   }
-
+  
   bool isZero() const {
     return (_x == 0) && (_y == 0) && (_z == 0);
   }
   
   Vector3D normalized() const;
-    
+  
   double length() const {
     return sqrt(squaredLength());
   }
@@ -102,7 +102,7 @@ public:
   }
   
   Angle angleBetween(const Vector3D& other) const;
-    
+  
   Vector3D rotateAroundAxis(const Vector3D& axis, Angle theta) const;
   
   double x() const {
@@ -117,18 +117,15 @@ public:
     return _z;
   }
   
-  Vector3D applyTransform(const MutableMatrix44D &m, const double homogeneus) const
-  {
-    //const double * M = m.getMatrix();
-    
-    Vector3D v(_x * m.get(0) + _y * m.get(4) + _z * m.get(8) + homogeneus * m.get(12),
-               _x * m.get(1) + _y * m.get(5) + _z * m.get(9) + homogeneus * m.get(13),
-               _x * m.get(2) + _y * m.get(6) + _z * m.get(10) + homogeneus * m.get(14));
-        
-    return v;
+  Vector3D transformedBy(const MutableMatrix44D &m, const double homogeneus) const {
+    return Vector3D(_x * m.get(0) + _y * m.get(4) + _z * m.get(8) + homogeneus * m.get(12),
+                    _x * m.get(1) + _y * m.get(5) + _z * m.get(9) + homogeneus * m.get(13),
+                    _x * m.get(2) + _y * m.get(6) + _z * m.get(10) + homogeneus * m.get(14));
   }
   
   MutableVector3D asMutableVector3D() const;
+  
+  double maxAxis() const;
   
 };
 

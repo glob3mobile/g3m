@@ -14,6 +14,7 @@ G3MWidget* G3MWidget::create(IFactory* factory,
                              ILogger *logger,
                              IGL* gl,
                              TexturesHandler* texturesHandler,
+                             Downloader* downloader,
                              const Planet* planet,
                              Renderer* renderer,
                              int width, int height,
@@ -27,6 +28,7 @@ G3MWidget* G3MWidget::create(IFactory* factory,
                        logger,
                        gl,
                        texturesHandler,
+                       downloader,
                        planet,
                        renderer,
                        width, height,
@@ -59,7 +61,7 @@ int G3MWidget::render() {
   _timer->start();
   _renderCounter++;
   
-  RenderContext rc(_factory, _logger, _planet, _gl, _camera, _texturesHandler);
+  RenderContext rc(_factory, _logger, _planet, _gl, _camera, _texturesHandler, _downloader);
   
   // Clear the scene
   _gl->clearScreen(_backgroundColor);

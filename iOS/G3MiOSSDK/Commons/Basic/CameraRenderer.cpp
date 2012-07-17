@@ -11,7 +11,7 @@
 #include "Camera.hpp"
 
 CameraRenderer::CameraRenderer():
-_camera0(0,0),
+_camera0(NULL, 0,0),
 _initialPoint(0,0,0),
 _currentGesture(None),
 _camera(NULL),
@@ -23,13 +23,13 @@ void CameraRenderer::initialize(const InitializationContext* ic){
   _logger = ic->getLogger();
 }
 
-int CameraRenderer::render(const RenderContext* rc)
-{
+int CameraRenderer::render(const RenderContext* rc) {
   _camera = rc->getCamera(); //Saving camera reference 
   _planet = rc->getPlanet();
   
-  rc->getCamera()->draw(*rc);   //We "draw" the camera with IGL
-  return 0;
+  _camera->render(*rc);
+  
+  return MAX_TIME_TO_RENDER;
 }
 
 void CameraRenderer::onResizeViewportEvent(int width, int height) {
@@ -38,29 +38,28 @@ void CameraRenderer::onResizeViewportEvent(int width, int height) {
   }
 }
 
-void CameraRenderer::onDown(const TouchEvent& touchEvent)
-{
+void CameraRenderer::onDown(const TouchEvent& touchEvent) {
   //Saving Camera0
-  Camera c(*_camera);
-  _camera0 = c;
+  _camera0 = Camera(*_camera);
   
   //Initial Point for Dragging
-  Vector2D pixel = touchEvent.getTouch(0)->getPos();
-  Vector3D ray = _camera0.pixel2Vector(pixel);
-  _initialPoint = _planet->closestIntersection(_camera0.getPos(), ray).asMutableVector3D();
+  const Vector2D pixel = touchEvent.getTouch(0)->getPos();
+  const Vector3D ray = _camera0.pixel2Vector(pixel);
+  _initialPoint = _planet->closestIntersection(_camera0.getPosition(), ray).asMutableVector3D();
   _currentGesture = Drag; //Dragging
 }
 
-void CameraRenderer::makeDrag(const TouchEvent& touchEvent)
-{
-  if (!_initialPoint.isNan()) //VALID INITIAL POINT
-  { 
-    Vector2D pixel = touchEvent.getTouch(0)->getPos();
-    Vector3D ray = _camera0.pixel2Vector(pixel);
-    Vector3D pos = _camera0.getPos();
+void CameraRenderer::makeDrag(const TouchEvent& touchEvent) {
+  if (!_initialPoint.isNan()) { 
+    //VALID INITIAL POINT
+    
+    const Vector2D pixel = touchEvent.getTouch(0)->getPos();
+    const Vector3D ray = _camera0.pixel2Vector(pixel);
+    const Vector3D pos = _camera0.getPosition();
     
     MutableVector3D finalPoint = _planet->closestIntersection(pos, ray).asMutableVector3D();
-    if (finalPoint.isNan()){ //INVALID FINAL POINT
+    if (finalPoint.isNan()) {
+      //INVALID FINAL POINT
       finalPoint = _planet->closestPointToSphere(pos, ray).asMutableVector3D();
     }
     
@@ -69,36 +68,33 @@ void CameraRenderer::makeDrag(const TouchEvent& touchEvent)
   }
 }
 
-void CameraRenderer::makeZoom(const TouchEvent& touchEvent)
-{
-  Vector2D pixel0 = touchEvent.getTouch(0)->getPos();
-  Vector2D pixel1 = touchEvent.getTouch(1)->getPos();
-  Vector2D pixelCenter = pixel0.add(pixel1).div(2.0);
+void CameraRenderer::makeZoom(const TouchEvent& touchEvent) {
+  const Vector2D pixel0 = touchEvent.getTouch(0)->getPos();
+  const Vector2D pixel1 = touchEvent.getTouch(1)->getPos();
+  const Vector2D pixelCenter = pixel0.add(pixel1).div(2.0);
   
-  Vector3D ray = _camera0.pixel2Vector(pixelCenter);
-  _initialPoint = _planet->closestIntersection(_camera0.getPos(), ray).asMutableVector3D();
+  const Vector3D ray = _camera0.pixel2Vector(pixelCenter);
+  _initialPoint = _planet->closestIntersection(_camera0.getPosition(), ray).asMutableVector3D();
   
-  Vector2D centerOfViewport(_camera0.getWidth() / 2, _camera0.getHeight() / 2);
-  Vector3D ray2 = _camera0.pixel2Vector(centerOfViewport);
-  Vector3D pointInCenterOfView = _planet->closestIntersection(_camera0.getPos(), ray2);
+  const Vector2D centerOfViewport(_camera0.getWidth() / 2, _camera0.getHeight() / 2);
+  const Vector3D ray2 = _camera0.pixel2Vector(centerOfViewport);
+  const Vector3D pointInCenterOfView = _planet->closestIntersection(_camera0.getPosition(), ray2);
   
   //IF CENTER PIXEL INTERSECTS THE PLANET
   if (!_initialPoint.isNan()){
-    
     //IF THE CENTER OF THE VIEW INTERSECTS THE PLANET
     if (!pointInCenterOfView.isNan()){
+      const Vector2D prevPixel0 = touchEvent.getTouch(0)->getPrevPos();
+      const Vector2D prevPixel1 = touchEvent.getTouch(1)->getPrevPos();
       
-      Vector2D prevPixel0 = touchEvent.getTouch(0)->getPrevPos();
-      Vector2D prevPixel1 = touchEvent.getTouch(1)->getPrevPos();
+      const double dist = pixel0.sub(pixel1).length();
+      const double prevDist = prevPixel0.sub(prevPixel1).length();
       
-      double dist = pixel0.sub(pixel1).length();
-      double prevDist = prevPixel0.sub(prevPixel1).length();
+      const Vector2D pixelDelta = pixel1.sub(pixel0);
+      const Vector2D prevPixelDelta = prevPixel1.sub(prevPixel0);
       
-      Vector2D pixelDelta = pixel1.sub(pixel0);
-      Vector2D prevPixelDelta = prevPixel1.sub(prevPixel0);
-      
-      Angle angle = pixelDelta.angle();
-      Angle prevAngle = prevPixelDelta.angle();
+      const Angle angle = pixelDelta.angle();
+      const Angle prevAngle = prevPixelDelta.angle();
       
       //We rotate and zoom the camera with the same gesture
       _camera->zoom(prevDist /dist);
@@ -107,15 +103,16 @@ void CameraRenderer::makeZoom(const TouchEvent& touchEvent)
   }
 }
 
-Gesture CameraRenderer::getGesture(const TouchEvent& touchEvent) const
-{
+Gesture CameraRenderer::getGesture(const TouchEvent& touchEvent) const {
   int n = touchEvent.getNumTouch();
-  if (n == 1){
+  if (n == 1) {
     //Dragging
-    if (_currentGesture == Drag) 
+    if (_currentGesture == Drag) {
       return Drag;
-    else 
+    }
+    else {
       return None;
+    }
   }
   
   if (n== 2){
@@ -125,11 +122,11 @@ Gesture CameraRenderer::getGesture(const TouchEvent& touchEvent) const
     if (_currentGesture == Rotate) return Rotate;
     
     //We have to fingers and the previous event was Drag
-    Vector2D pixel0 = touchEvent.getTouch(0)->getPos();
-    Vector2D pixel1 = touchEvent.getTouch(1)->getPos();
+    const Vector2D pixel0 = touchEvent.getTouch(0)->getPos();
+    const Vector2D pixel1 = touchEvent.getTouch(1)->getPos();
     
-    Vector2D prevPixel0 = touchEvent.getTouch(0)->getPrevPos();
-    Vector2D prevPixel1 = touchEvent.getTouch(1)->getPrevPos();
+    const Vector2D prevPixel0 = touchEvent.getTouch(0)->getPrevPos();
+    const Vector2D prevPixel1 = touchEvent.getTouch(1)->getPrevPos();
     
     //If both fingers go in the same direction we should rotate the camera
     if ( (pixel0.y() > prevPixel0.y() && pixel1.y() > prevPixel1.y()) ||
@@ -139,7 +136,6 @@ Gesture CameraRenderer::getGesture(const TouchEvent& touchEvent) const
       return Rotate;
     }
     else {
-      
       //If fingers are diverging it is zoom
       return Zoom;
     }
@@ -148,46 +144,46 @@ Gesture CameraRenderer::getGesture(const TouchEvent& touchEvent) const
   return None;
 }
 
-void CameraRenderer::makeRotate(const TouchEvent& touchEvent)
-{
+void CameraRenderer::makeRotate(const TouchEvent& touchEvent) {
   int todo_JM_there_is_a_bug;
   
-  Vector2D pixel0 = touchEvent.getTouch(0)->getPos();
-  Vector2D pixel1 = touchEvent.getTouch(1)->getPos();
-  Vector2D pixelCenter = pixel0.add(pixel1).div(2.0);
+  const Vector2D pixel0 = touchEvent.getTouch(0)->getPos();
+  const Vector2D pixel1 = touchEvent.getTouch(1)->getPos();
+  const Vector2D pixelCenter = pixel0.add(pixel1).div(2.0);
   
   //The gesture is starting
   if (_initialPixel.isNan()){
-    Vector3D v(pixelCenter.x(), pixelCenter.y(), 0); 
-    _initialPixel = v.asMutableVector3D(); //Storing starting pixel
+     //Storing starting pixel
+    _initialPixel = Vector3D(pixelCenter.x(), pixelCenter.y(), 0).asMutableVector3D();
   }
   
   //Calculating the point we are going to rotate around
-  Vector3D rotatingPoint = centerOfViewOnPlanet(_camera0);
-  if (rotatingPoint.isNan()) return; //We don't rotate without a valid rotating point
+  const Vector3D rotatingPoint = centerOfViewOnPlanet(_camera0);
+  if (rotatingPoint.isNan()) {
+    return; //We don't rotate without a valid rotating point
+  }
   
   //Rotating axis
-  Vector3D camVec = _camera0.getPos().sub(_camera0.getCenter());
-  Vector3D normal = _planet->geodeticSurfaceNormal(rotatingPoint);
-  Vector3D horizontalAxis = normal.cross(camVec);
+  const Vector3D camVec = _camera0.getPosition().sub(_camera0.getCenter());
+  const Vector3D normal = _planet->geodeticSurfaceNormal(rotatingPoint);
+  const Vector3D horizontalAxis = normal.cross(camVec);
   
   //Calculating the angle we have to rotate the camera vertically
   double distY = pixelCenter.y() - _initialPixel.y();
   double distX = pixelCenter.x() - _initialPixel.x();
-  Angle verticalAngle = Angle::fromDegrees( (distY / (double)_camera0.getHeight()) * 180.0 );
-  Angle horizontalAngle = Angle::fromDegrees( (distX / (double)_camera0.getWidth()) * 360.0 );
+  const Angle verticalAngle = Angle::fromDegrees( (distY / (double)_camera0.getHeight()) * 180.0 );
+  const Angle horizontalAngle = Angle::fromDegrees( (distX / (double)_camera0.getWidth()) * 360.0 );
   
   _logger->logInfo("ROTATING V=%f H=%f\n", verticalAngle.degrees(), horizontalAngle.degrees());
   
   //Back-Up camera0
-  Camera cameraAux(0,0);
-  cameraAux.copyFrom(_camera0);
+  Camera cameraAux(_camera0);
   
   //Rotating vertically
   cameraAux.rotateWithAxisAndPoint(horizontalAxis, rotatingPoint, verticalAngle); //Up and down
   
   //Check if the view isn't too low
-  Vector3D vCamAux = cameraAux.getPos().sub(cameraAux.getCenter());
+  Vector3D vCamAux = cameraAux.getPosition().sub(cameraAux.getCenter());
   Angle alpha = vCamAux.angleBetween(normal);
   Vector3D center = centerOfViewOnPlanet(*_camera);
   
@@ -200,21 +196,18 @@ void CameraRenderer::makeRotate(const TouchEvent& touchEvent)
   
   //Finally we copy the new camera
   _camera->copyFrom(cameraAux);
-  
 }
 
 Vector3D CameraRenderer::centerOfViewOnPlanet(const Camera& c) const
 {
-  Vector2D centerViewport(c.getWidth() /2, c.getHeight() /2);
-  Vector3D rayCV = c.pixel2Vector(centerViewport);
-  Vector3D center = _planet->closestIntersection(c.getPos(), rayCV);
+  const Vector2D centerViewport(c.getWidth() / 2, c.getHeight() / 2);
+  const Vector3D rayCV = c.pixel2Vector(centerViewport);
   
-  return center;
+  return _planet->closestIntersection(c.getPosition(), rayCV);
 }
 
 
-void CameraRenderer::onMove(const TouchEvent& touchEvent)
-{
+void CameraRenderer::onMove(const TouchEvent& touchEvent) {
   _currentGesture = getGesture(touchEvent);
   
   switch (_currentGesture) {
@@ -232,14 +225,12 @@ void CameraRenderer::onMove(const TouchEvent& touchEvent)
   }
 }
 
-void CameraRenderer::onUp(const TouchEvent& touchEvent)
-{
+void CameraRenderer::onUp(const TouchEvent& touchEvent) {
   _currentGesture = None;
   _initialPixel = Vector3D::nan().asMutableVector3D();
 }
 
-bool CameraRenderer::onTouchEvent(const TouchEvent* touchEvent)
-{
+bool CameraRenderer::onTouchEvent(const TouchEvent* touchEvent) {
   switch (touchEvent->getType()) {
     case Down:
       onDown(*touchEvent);

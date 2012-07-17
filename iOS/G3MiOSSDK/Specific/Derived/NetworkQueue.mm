@@ -53,9 +53,6 @@
     printf("\nData: %s;\n", resp.c_str());
     Response r([[op getURL] cStringUsingEncoding:NSUTF8StringEncoding] , bb);
     ((IDownloadListener*)_listener)->onDownload(r);
-    
-    //WE MUST DELETE THE BYTE BUFFER WE HAVE CREATED
-    bb.release();
 	} else {
     ByteBuffer bb(NULL, 0);
     
