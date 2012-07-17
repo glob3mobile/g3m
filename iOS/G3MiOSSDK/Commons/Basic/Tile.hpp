@@ -80,6 +80,7 @@ private:
                              Tile* fallbackTextureTile);
   
   std::vector<Tile*>* _subtiles;
+
   inline std::vector<Tile*>* getSubTiles();
 
   inline void prune();
@@ -121,9 +122,7 @@ public:
     return _column;
   }
   
-  void setTextureSolved(bool textureSolved) {
-    _textureSolved = textureSolved;
-  }
+  void setTextureSolved(bool textureSolved);
   
   bool isTextureSolved() const {
     return _textureSolved;

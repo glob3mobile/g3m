@@ -27,6 +27,19 @@ Tile::~Tile() {
   }
 }
 
+void Tile::setTextureSolved(bool textureSolved) {
+  _textureSolved = textureSolved;
+  
+  if (textureSolved) {
+    if (_subtiles != NULL) {
+      for (int i = 0; i < _subtiles->size(); i++) {
+        Tile* subtile = _subtiles->at(i);
+        subtile->setFallbackTextureTile(this);
+      }
+    }
+  }
+}
+
 
 Mesh* Tile::getTessellatorMesh(const RenderContext* rc,
                                const TileTessellator* tessellator) {
@@ -78,6 +91,7 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
 void Tile::rawRender(const RenderContext *rc,
                      const TileTessellator *tessellator,
                      TileTexturizer *texturizer) {
+  
   Mesh* tessellatorMesh = getTessellatorMesh(rc, tessellator);
   
   if (tessellatorMesh != NULL) {
