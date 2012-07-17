@@ -57,7 +57,7 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
 //  const double distanceToCamera = rc->getCamera()->getPos().sub(center).length();
 //  rc->getLogger()->logInfo("Distance to camera: %f", distanceToCamera);
   
-  return _level >= 1;
+  return _level >= 2;
 }
 
 void Tile::rawRender(const RenderContext *rc,

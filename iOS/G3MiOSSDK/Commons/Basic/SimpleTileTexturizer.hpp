@@ -79,7 +79,7 @@ private:
   
   TilePetitions registerTilePetitions(const Tile* tile);
   
-  std::vector<MutableVector2D> SimpleTileTexturizer::createTextureCoordinates() const;
+  std::vector<MutableVector2D> createTextureCoordinates() const;
   
   
   Mesh* getMesh(const RenderContext* rc,

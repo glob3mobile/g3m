@@ -17,21 +17,22 @@
 class Box: public Extent {
   
 public:
-  Box(const Vector3D& min, const Vector3D& max):
-  _min(min),
-  _max(max)
+  Box(const Vector3D& lower,
+      const Vector3D& upper):
+  _lower(lower),
+  _upper(upper)
   {}
   
   bool touches(const Frustum *frustum) const {
     return frustum->touchesWithBox(this);
   };
   
-  Vector3D getMin() const { return _min; }
-  Vector3D getMax() const { return _max; }
+  Vector3D getLower() const { return _lower; }
+  Vector3D getUpper() const { return _upper; }
   
 private:
-  Vector3D _min, _max;
-  
+  const Vector3D _lower;
+  const Vector3D _upper;
 };
 
 #endif
