@@ -40,16 +40,19 @@ public:
   }
 };
 
+class TileRenderer;
 
 class TilesCache {
 private:
+  TileRenderer*                _tileRenderer;
   const int                    _maxElements;
   std::vector<TileCacheEntry*> _entries;
   
   long _tsCounter;
   
 public:
-  TilesCache(int maxElements) :
+  TilesCache(TileRenderer* tileRenderer, int maxElements) :
+  _tileRenderer(tileRenderer),
   _maxElements(maxElements),
   _tsCounter(0)
   {
@@ -57,48 +60,10 @@ public:
   }
   
   Tile* getTile(const int level,
-                const int row, const int column) {
-    
-    const int entriesSize = _entries.size();
-    for (int i = 0; i < entriesSize; i++) {
-      TileCacheEntry* entry = _entries[i];
-      Tile* tile = entry->_tile;
-      
-      if ((tile->getLevel()  == level ) &&
-          (tile->getRow()    == row   ) &&
-          (tile->getColumn() == column)) {
-        entry->_timestamp = _tsCounter++;
-        
-        return tile;
-      }
-    }
-    
-    return NULL;
-  }
+                const int row, const int column);
   
-  void putTile(Tile* tile) {
-    TileCacheEntry* newEntry = new TileCacheEntry(tile, _tsCounter++);
-    
-    const int entriesSize = _entries.size();
-    if (entriesSize < _maxElements) {
-      _entries.push_back(newEntry);
-    }
-    else {
-      int loserI = 0;
-      TileCacheEntry* loserEntry = _entries[0];
-      
-      for (int i = 1; i < entriesSize; i++) {
-        TileCacheEntry* entry = _entries[i];
-        if (entry->_timestamp < loserEntry->_timestamp) {
-          loserEntry = entry;
-          loserI = i;
-        }
-      }
-      
-      _entries[loserI] = newEntry;
-      delete loserEntry;
-    }
-  }
+  void putTile(Tile* tile);
+
 };
 
 
@@ -164,7 +129,7 @@ public:
   _tessellator(tessellator),
   _texturizer(texturizer),
   _parameters(parameters),
-  _tilesCache(new TilesCache(parameters->_maxTilesInCache))
+  _tilesCache(new TilesCache(this, parameters->_maxTilesInCache))
   {
     
   }
@@ -182,6 +147,8 @@ public:
   void onResizeViewportEvent(int width, int height) {
     
   }
+  
+  void tileDeleted(Tile* tile);
   
 };
 

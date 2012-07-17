@@ -14,6 +14,56 @@
 #include "Camera.hpp"
 
 
+Tile* TilesCache::getTile(const int level,
+                          const int row, const int column) {
+  
+  const int entriesSize = _entries.size();
+  for (int i = 0; i < entriesSize; i++) {
+    TileCacheEntry* entry = _entries[i];
+    Tile* tile = entry->_tile;
+    
+    if ((tile->getLevel()  == level ) &&
+        (tile->getRow()    == row   ) &&
+        (tile->getColumn() == column)) {
+      entry->_timestamp = _tsCounter++;
+      
+      return tile;
+    }
+  }
+  
+  return NULL;
+}
+
+
+void TilesCache::putTile(Tile* tile) {
+  TileCacheEntry* newEntry = new TileCacheEntry(tile, _tsCounter++);
+  
+  const int entriesSize = _entries.size();
+  if (entriesSize < _maxElements) {
+    _entries.push_back(newEntry);
+  }
+  else {
+    int loserI = 0;
+    TileCacheEntry* loserEntry = _entries[0];
+    
+    for (int i = 1; i < entriesSize; i++) {
+      TileCacheEntry* entry = _entries[i];
+      if (entry->_timestamp < loserEntry->_timestamp) {
+        loserEntry = entry;
+        loserI = i;
+      }
+    }
+    
+    _entries[loserI] = newEntry;
+    
+    _tileRenderer->tileDeleted(loserEntry->_tile);
+    
+    delete loserEntry;
+  }
+}
+
+
+
 TileRenderer::~TileRenderer() {
   clearTopLevelTiles();
   
@@ -67,26 +117,25 @@ void TileRenderer::initialize(const InitializationContext* ic) {
   createTopLevelTiles(ic);
 }
 
+
 int TileRenderer::render(const RenderContext* rc) {
   IGL *gl = rc->getGL();
   
   gl->enablePolygonOffset(5, 5);
-  
-  std::vector<TileKey*> renderedTiles;
+
+  int ___dgd_at_work;
   
   const int topLevelTilesSize = _topLevelTiles.size();
   for (int i = 0; i < topLevelTilesSize; i++) {
     Tile* tile = _topLevelTiles[i];
-    tile->render(rc, _tessellator, _texturizer, _parameters, _tilesCache, &renderedTiles);
+    tile->render(rc, _tessellator, _texturizer, _parameters, _tilesCache);
   }
   
   gl->disablePolygonOffset();
   
-//  rc->getLogger()->logInfo("Rendered %d tiles" , renderedTiles.size());
-  
-  for (int i = 0; i < renderedTiles.size(); i++) {
-    delete renderedTiles[i];
-  }
-  
   return MAX_TIME_TO_RENDER;
+}
+
+void TileRenderer::tileDeleted(Tile* tile) {
+  
 }

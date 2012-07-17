@@ -44,7 +44,7 @@ std::vector<MutableVector2D> SimpleTileTexturizer::createTextureCoordinates() co
   return texCoor;
 }
 
-Mesh* SimpleTileTexturizer::getMesh(Tile* tile, Mesh* mesh)
+Mesh* SimpleTileTexturizer::getMesh(Tile* tile, Mesh* tessellatorMesh)
 {
   
   //THE TEXTURE HAS BEEN LOADED
@@ -59,7 +59,7 @@ Mesh* SimpleTileTexturizer::getMesh(Tile* tile, Mesh* mesh)
       tile->setTextureSolved(true);
       
       TextureMapping * tMap = new TextureMapping(ft._texID, createTextureCoordinates());
-      return new TexturedMesh(mesh, false, tMap);
+      return new TexturedMesh(tessellatorMesh, false, tMap);
     }
   }
   
@@ -68,12 +68,12 @@ Mesh* SimpleTileTexturizer::getMesh(Tile* tile, Mesh* mesh)
 
 Mesh* SimpleTileTexturizer::texturize(const RenderContext* rc,
                                       Tile* tile,
-                                      Mesh* mesh,
+                                      Mesh* tessellatorMesh,
                                       Mesh* previousMesh) {
   
   _rc = rc; //STORING CONTEXT
   
-  Mesh* texMesh = getMesh(tile, mesh);
+  Mesh* texMesh = getMesh(tile, tessellatorMesh);
   if (texMesh != NULL) return texMesh;
   
   //THROWING AND CREATING THE PETITIONS

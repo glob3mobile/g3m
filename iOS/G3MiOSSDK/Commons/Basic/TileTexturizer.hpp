@@ -19,7 +19,7 @@ class TileTexturizer {
 public:
   virtual Mesh* texturize(const RenderContext* rc,
                           Tile* tile,
-                          Mesh* mesh,
+                          Mesh* tessellatorMesh,
                           Mesh* previousMesh) = 0;
   
   virtual ~TileTexturizer() {
