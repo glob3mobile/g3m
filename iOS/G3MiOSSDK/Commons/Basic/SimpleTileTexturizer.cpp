@@ -21,7 +21,7 @@ TilePetitions* SimpleTileTexturizer::getTilePetitions(const Tile* tile)
   std::string url = "http://www.arkive.org/images/browse/world-map.jpg"; //FIXED
 
   //SAVING PETITION
-  TilePetitions *tt = new TilePetitions(tile->getLevel(), tile->getRow(), tile->getRow(), this);
+  TilePetitions *tt = new TilePetitions(tile->getLevel(), tile->getRow(), tile->getColumn(), this);
   tt->add(url, tile->getSector());
   
   return tt;
@@ -53,14 +53,18 @@ Mesh* SimpleTileTexturizer::getMesh(Tile* tile, Mesh* mesh)
     if (tile->getLevel() == ft._level &&
         tile->getRow() == ft._row &&
         tile->getColumn() == ft._column){
-
+      
+      
+      //Texture Solved
+      tile->setTextureSolved(true);
+      
       TextureMapping * tMap = new TextureMapping(ft._texID, createTextureCoordinates());
       return new TexturedMesh(mesh, false, tMap);
       
     }
   }
   
-  return mesh;
+  return NULL;
 }
 
 Mesh* SimpleTileTexturizer::texturize(const RenderContext* rc,
@@ -69,6 +73,9 @@ Mesh* SimpleTileTexturizer::texturize(const RenderContext* rc,
                                       Mesh* previousMesh) {
   
   _rc = rc; //STORING CONTEXT
+  
+  Mesh* texMesh = getMesh(tile, mesh);
+  if (texMesh != NULL) return texMesh;
   
   //THROWING AND CREATING THE PETITIONS
   int priority = 10;
@@ -79,7 +86,7 @@ Mesh* SimpleTileTexturizer::texturize(const RenderContext* rc,
     d->request(url, priority, tp);
   }
   
-  return getMesh(tile, mesh);
+  return NULL;
 }
 
 void SimpleTileTexturizer::onTilePetitionsFinished(TilePetitions * tp)
@@ -93,13 +100,7 @@ void SimpleTileTexturizer::onTilePetitionsFinished(TilePetitions * tp)
   
   //RELEASING MEMORY
   _rc->getFactory()->deleteImage(im);
-  
-  
-  Tile* tile = NULL; //.....
-  
-  //Texture Solved
-  tile->setTextureSolved(true);
-  
+
   //Tile finished
   FinishedTile ft;
   ft._column = tp->getColumn();
@@ -107,5 +108,7 @@ void SimpleTileTexturizer::onTilePetitionsFinished(TilePetitions * tp)
   ft._row = tp->getRow();
   ft._texID = texID;
   _finishedTiles.push_back(ft);
+  
+  printf("%d, %d, %d\n", ft._level, ft._row, ft._level);
 
 }
