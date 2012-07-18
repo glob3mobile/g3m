@@ -192,12 +192,14 @@
       
       TileRenderer* tr1 = new TileRenderer(EllipsoidalTileTessellator::create("world.jpg", parameters->_tileResolution, true),
                                            texturizer,
-                                           parameters);
+                                           parameters,
+                                           true);
       comp->addRenderer(tr1);
       
       TileRenderer* tr2 = new TileRenderer(EllipsoidalTileTessellator::createForDebug(parameters->_tileResolution),
                                            NULL,
-                                           parameters);
+                                           parameters,
+                                           false);
       comp->addRenderer(tr2);
     }
     

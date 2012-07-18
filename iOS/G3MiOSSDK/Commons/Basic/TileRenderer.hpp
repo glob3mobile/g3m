@@ -68,6 +68,7 @@ class TileTexturizer;
 //};
 
 
+
 class TileParameters {
 public:
   const Sector _topSector;
@@ -121,11 +122,47 @@ public:
 };
 
 
+class TilesStatistics {
+private:
+  long _counter;
+  int _minLevel;
+  int _maxLevel;
+  
+public:
+  TilesStatistics(const TileParameters* parameters) :
+  _counter(0),
+  _minLevel(parameters->_maxLevel + 1),
+  _maxLevel(parameters->_topLevel - 1)
+  {
+    
+  }
+  
+  void computeTile(Tile* tile) {
+    _counter++;
+    
+    int level = tile->getLevel();
+    if (level < _minLevel) {
+      _minLevel = level;
+    }
+    if (level > _maxLevel) {
+      _maxLevel = level;
+    }
+  }
+  
+  void log(const ILogger* logger) const {
+    logger->logInfo("Rendered %d tiles. Levels: %d-%d" , _counter, _minLevel, _maxLevel);
+  }
+  
+  
+};
+
+
 class TileRenderer: public Renderer {
 private:
   const TileTessellator* _tessellator;
-  TileTexturizer*  _texturizer;
+  TileTexturizer*        _texturizer;
   const TileParameters*  _parameters;
+  const bool             _showStatistics;
   
   std::vector<Tile*>     _topLevelTiles;
   
@@ -135,10 +172,12 @@ private:
 public:
   TileRenderer(const TileTessellator* tessellator,
                TileTexturizer*  texturizer,
-               const TileParameters* parameters) :
+               const TileParameters* parameters,
+               bool showStatistics) :
   _tessellator(tessellator),
   _texturizer(texturizer),
-  _parameters(parameters)
+  _parameters(parameters),
+  _showStatistics(showStatistics)
   {
     
   }

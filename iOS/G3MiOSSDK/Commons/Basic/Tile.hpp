@@ -44,6 +44,7 @@ class TileParameters;
 //  
 //};
 
+class TilesStatistics;
 
 class Tile {
 private:
@@ -134,7 +135,8 @@ public:
   void render(const RenderContext* rc,
               const TileTessellator* tessellator,
               TileTexturizer* texturizer,
-              const TileParameters* parameters);
+              const TileParameters* parameters,
+              TilesStatistics* statistics);
   
 };
 
