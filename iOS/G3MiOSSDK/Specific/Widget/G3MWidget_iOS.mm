@@ -180,7 +180,7 @@
       TileParameters* parameters = TileParameters::createDefault(true);
       
       TileTexturizer* texturizer = NULL;
-      if (true) {
+      if (false) {
         texturizer = new SimpleTileTexturizer(parameters); //WMS
       }
       else {
