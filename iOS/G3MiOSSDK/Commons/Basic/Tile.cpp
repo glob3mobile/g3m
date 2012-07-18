@@ -18,6 +18,10 @@
 Tile::~Tile() {
   prune(NULL);
   
+  if (_debugMesh != NULL) {
+    delete _debugMesh;
+  }
+  
   if (_tessellatorMesh != NULL) {
     delete _tessellatorMesh; 
   }
@@ -61,6 +65,16 @@ Mesh* Tile::getTessellatorMesh(const RenderContext* rc,
   return _tessellatorMesh;
 }
 
+
+Mesh* Tile::getDebugMesh(const RenderContext* rc,
+                         const TileTessellator* tessellator) {
+  if (_debugMesh == NULL) {
+    _debugMesh = tessellator->createDebugMesh(rc, this);
+  }
+  return _debugMesh;
+}
+
+
 bool Tile::isVisible(const RenderContext *rc,
                      const TileTessellator *tessellator) {
   
@@ -82,14 +96,16 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
   }
   
   
-  int projectedSize = getTessellatorMesh(rc, tessellator)->getExtent()->squaredProjectedArea(rc);
-  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
-    return true;
-  }
-//  double t = getTessellatorMesh(rc, tessellator)->getExtent()->projectedExtent(rc).maxAxis();
-//  if (t <= ((parameters->_tileTextureWidth + parameters->_tileTextureHeight) / 2)) {
+//  int projectedSize = getTessellatorMesh(rc, tessellator)->getExtent()->squaredProjectedArea(rc);
+//  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
 //    return true;
 //  }
+  const Vector2D extent = getTessellatorMesh(rc, tessellator)->getExtent()->projectedExtent(rc);
+  const double t = extent.maxAxis();
+//  const double t = (extent.x() + extent.y()) / 2;
+  if (t <= ((parameters->_tileTextureWidth + parameters->_tileTextureHeight) / 2.0 * 1.5)) {
+    return true;
+  }
 
   
   return false;
@@ -121,6 +137,14 @@ void Tile::rawRender(const RenderContext *rc,
   
 }
 
+void Tile::debugRender(const RenderContext* rc,
+                       const TileTessellator* tessellator) {
+  Mesh* debugMesh = getDebugMesh(rc, tessellator);
+  if (debugMesh != NULL) {
+    debugMesh->render(rc);
+  }
+}
+
 std::vector<Tile*>* Tile::getSubTiles() {
   if (_subtiles == NULL) {
     _subtiles = createSubTiles();
@@ -144,6 +168,7 @@ void Tile::prune(TileTexturizer* texturizer) {
     
     delete _subtiles;
     _subtiles = NULL;
+    
   }
 }
 
@@ -155,6 +180,9 @@ void Tile::render(const RenderContext* rc,
   if (isVisible(rc, tessellator)) {
     if (meetsRenderCriteria(rc, tessellator, parameters)) {
       rawRender(rc, tessellator, texturizer);
+      if (parameters->_renderDebug) {
+        debugRender(rc, tessellator);
+      }
       prune(texturizer);
       
       statistics->computeTile(this);

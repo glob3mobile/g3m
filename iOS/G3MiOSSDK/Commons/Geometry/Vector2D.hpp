@@ -92,6 +92,10 @@ public:
   double maxAxis() const {
     return (_x >= _y) ? _x : _y;
   }
+  
+  double minAxis() const {
+    return (_x <= _y) ? _x : _y;
+  }
 
   
 };

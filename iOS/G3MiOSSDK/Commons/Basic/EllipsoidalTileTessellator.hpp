@@ -22,7 +22,6 @@ private:
   
   const unsigned int _resolution;
   const bool         _skirted;
-  const bool         _debugMode;
   
   static void addVertex(const Planet* planet,
                         std::vector<MutableVector3D>* vertices,
@@ -39,24 +38,14 @@ private:
   Mesh* createDebugMesh(const RenderContext* rc,
                         const Tile* tile) const;
   
-  EllipsoidalTileTessellator(const unsigned int resolution,
-                             const bool skirted,
-                             const bool debugMode) :
-  _resolution(resolution),
-  _skirted(skirted),
-  _debugMode(debugMode)
-  {
-    
-  }
   
 public:
-  static EllipsoidalTileTessellator* create(const unsigned int resolution,
-                                            const bool skirted) {
-    return new EllipsoidalTileTessellator(resolution, skirted, false);
-  }
-  
-  static EllipsoidalTileTessellator* createForDebug(const unsigned int resolution) {
-    return new EllipsoidalTileTessellator(resolution, true, true);
+  EllipsoidalTileTessellator(const unsigned int resolution,
+                             const bool skirted) :
+  _resolution(resolution),
+  _skirted(skirted)
+  {
+    
   }
   
   virtual ~EllipsoidalTileTessellator() { }

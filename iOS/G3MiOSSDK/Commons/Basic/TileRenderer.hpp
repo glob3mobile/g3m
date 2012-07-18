@@ -79,6 +79,7 @@ public:
   const int    _tileTextureHeight;
   const int    _tileTextureWidth;
   const int    _tileResolution;
+  const bool   _renderDebug;
   
   TileParameters(const Sector topSector,
                  const int    splitsByLatitude,
@@ -87,7 +88,8 @@ public:
                  const int    maxLevel,
                  const int    tileTextureHeight,
                  const int    tileTextureWidth,
-                 const int    tileResolution) :
+                 const int    tileResolution,
+                 const bool   renderDebug) :
   _topSector(topSector),
   _splitsByLatitude(splitsByLatitude),
   _splitsByLongitude(splitsByLongitude),
@@ -95,12 +97,13 @@ public:
   _maxLevel(maxLevel),
   _tileTextureHeight(tileTextureHeight),
   _tileTextureWidth(tileTextureWidth),
-  _tileResolution(tileResolution)
+  _tileResolution(tileResolution),
+  _renderDebug(renderDebug)
   {
     
   }
   
-  static TileParameters* createDefault() {
+  static TileParameters* createDefault(const bool renderDebug) {
     const int K = 1;
     const int splitsByLatitude = 2 * K;
     const int splitsByLongitude = 4 * K;
@@ -117,7 +120,8 @@ public:
                               maxLevel,
                               tileTextureHeight,
                               tileTextureWidth,
-                              tRes);
+                              tRes,
+                              renderDebug);
   }
 };
 

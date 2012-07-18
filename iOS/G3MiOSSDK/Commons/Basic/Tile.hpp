@@ -54,6 +54,7 @@ private:
   const int    _column;
 
   Mesh* _tessellatorMesh;
+  Mesh* _debugMesh;
   Mesh* _texturizerMesh;
 
   Tile* _fallbackTextureTile;
@@ -62,6 +63,9 @@ private:
   inline Mesh* getTessellatorMesh(const RenderContext* rc,
                                   const TileTessellator* tessellator);
   
+  Mesh* getDebugMesh(const RenderContext* rc,
+                     const TileTessellator* tessellator);
+
   inline bool isVisible(const RenderContext* rc,
                         const TileTessellator *tessellator);
   
@@ -75,6 +79,9 @@ private:
                         const TileTessellator* tessellator,
                         TileTexturizer* texturizer);
   
+  void debugRender(const RenderContext* rc,
+                   const TileTessellator* tessellator);
+
   inline Tile* createSubTile(const Angle& lowerLat, const Angle& lowerLon,
                              const Angle& upperLat, const Angle& upperLon,
                              const int level,
@@ -98,6 +105,7 @@ public:
   _row(row),
   _column(column),
   _tessellatorMesh(NULL),
+  _debugMesh(NULL),
   _texturizerMesh(NULL),
   _textureSolved(false),
   _fallbackTextureTile(fallbackTextureTile),

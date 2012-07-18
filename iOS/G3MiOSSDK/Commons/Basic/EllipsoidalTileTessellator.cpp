@@ -17,10 +17,7 @@
 
 Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
                                              const Tile* tile) const {
-  if (_debugMode) {
-    return createDebugMesh(rc, tile);
-  }
-  
+    
   const Sector sector = tile->getSector();
   const Planet* planet = rc->getPlanet();
   
@@ -52,7 +49,7 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
     // compute skirt height
     Vector3D sw = planet->toVector3D(sector.getSW());
     Vector3D nw = planet->toVector3D(sector.getNW());
-    double skirtHeight = nw.sub(sw).length() * 0.1;      
+    double skirtHeight = nw.sub(sw).length() * 0.05;      
     
     indices.push_back(0);
     unsigned int posS = _resolution * _resolution;
