@@ -72,8 +72,6 @@ int TileRenderer::render(const RenderContext* rc) {
   
   gl->enablePolygonOffset(5, 5);
 
-  int ___dgd_at_work;
-  
   const int topLevelTilesSize = _topLevelTiles.size();
   for (int i = 0; i < topLevelTilesSize; i++) {
     Tile* tile = _topLevelTiles[i];

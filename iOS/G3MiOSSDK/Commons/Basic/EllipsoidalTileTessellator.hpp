@@ -32,16 +32,16 @@ private:
     
     vertices->push_back( planet->toVector3D(g).asMutableVector3D() );
     
-    
-    const Vector3D n = planet->geodeticSurfaceNormal(g);
-    
-    const double s = atan2(n.y(), n.x()) / (M_PI * 2) + 0.5;
-    const double t = asin(n.z()) / M_PI + 0.5;
-    
-    // const double s = (g.longitude().degrees() + 180) / 360;
-    // const double t = (g.latitude().degrees() + 90) / 180;
-    
-    texCoords->push_back(MutableVector2D(s, 1-t));
+    if (texCoords != NULL) {
+      const Vector3D n = planet->geodeticSurfaceNormal(g);
+      
+      const double s = atan2(n.y(), n.x()) / (M_PI * 2) + 0.5;
+      const double t = asin(n.z()) / M_PI + 0.5;
+      // const double s = (g.longitude().degrees() + 180) / 360;
+      // const double t = (g.latitude().degrees() + 90) / 180;
+      
+      texCoords->push_back(MutableVector2D(s, 1-t));
+    }
   }
   
   static void addVertex(const Planet* planet,

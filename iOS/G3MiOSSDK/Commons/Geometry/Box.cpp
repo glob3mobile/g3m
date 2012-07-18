@@ -25,17 +25,13 @@ std::vector<Vector3D> Box::getCorners() const
     Vector3D(_upper.x(), _upper.y(), _upper.z())
   };
   
-  std::vector<Vector3D> corners (c, c+8);
-  return corners;
+  return std::vector<Vector3D>(c, c+8);
 }
 
 
-int Box::projectedSize(const RenderContext* rc) const
-{
-  int __agustin_at_work;
-
+int Box::squaredProjectedSize(const RenderContext* rc) const {
   std::vector<Vector3D> corners = getCorners();
-
+  
   double lowerX = 1E7;
   double lowerY = 1E7;
   double upperX = -1E7;
@@ -43,7 +39,7 @@ int Box::projectedSize(const RenderContext* rc) const
   
   const int cornersSize = corners.size();
   for (int i = 0; i < cornersSize; i++) {
-    Vector2D pixel = rc->getCamera()->point2Pixel(corners[i]);
+    const Vector2D pixel = rc->getCamera()->point2Pixel(corners[i]);
     
     const double x = pixel.x();
     const double y = pixel.y();
@@ -55,14 +51,8 @@ int Box::projectedSize(const RenderContext* rc) const
     if (y > upperY) { upperY = y; }
   }
   
-  double width = upperX - lowerX;
-  double height = upperY - lowerY;
-
-  return sqrt(width * height);
+  const double width = upperX - lowerX;
+  const double height = upperY - lowerY;
   
-//  Vector2D pixel = rc->getCamera()->point2Pixel(corners[0]);
-//  //printf ("pixel %f %f\n", pixel.x(), pixel.y());
-//  
-//  
-//  return 200;
+  return (width * height);
 }

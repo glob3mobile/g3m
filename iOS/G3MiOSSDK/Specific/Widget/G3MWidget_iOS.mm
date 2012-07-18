@@ -188,10 +188,10 @@
                                            parameters);
       comp->addRenderer(tr1);
       
-      TileRenderer* tr2 = new TileRenderer(EllipsoidalTileTessellator::createForDebug(tileResolution),
-                                           NULL,
-                                           parameters);
-      comp->addRenderer(tr2);
+//      TileRenderer* tr2 = new TileRenderer(EllipsoidalTileTessellator::createForDebug(tileResolution),
+//                                           NULL,
+//                                           parameters);
+//      comp->addRenderer(tr2);
     }
     
     if (false) {

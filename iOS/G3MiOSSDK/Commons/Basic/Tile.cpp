@@ -72,45 +72,19 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
                                const TileParameters* parameters) {
   
   int __agustin_at_work;
-
+  
+  
   if (_level >= parameters->_maxLevel) {
     return true;
   }
-
-  unsigned int projectedSize = getTessellatorMesh(rc, tessellator)->getExtent()->projectedSize(rc);
   
-  rc->getLogger()->logInfo("ProjectedSize=%d", projectedSize);
-  if (projectedSize <= 256) {
+  
+  int projectedSize = getTessellatorMesh(rc, tessellator)->getExtent()->squaredProjectedSize(rc);
+  if (projectedSize <= (256 * 256)) {
     return true;
   }
   
-//  if (_level==2 && _sector.contains(Geodetic2D(Angle::fromDegrees(0.1), Angle::fromDegrees(0.1)))) {
-//    
-//    unsigned int projectedSize = getTessellatorMesh(rc, tessellator)->getExtent()->projectedSize(rc);
-//    
-//    rc->getLogger()->logInfo("ProjectedSize=%d", projectedSize);
-//  }
   
-  
-  
-  
-  
-  //  31890685.000000
-  //   7083288.848839
-  
-  //  const Vector3D radii = rc->getPlanet()->getRadii();
-  //  const double rad = (radii.x() + radii.y() + radii.z()) / 3;
-  //  
-  //  const double ratio = (distanceToCamera - rad) / rad;
-  //  
-  //  rc->getLogger()->logInfo("Distance to camera: %f - %f", distanceToCamera, ratio);
-  
-  //  const Vector3D center = rc->getPlanet()->toVector3D(_sector.getCenter());
-  //  
-  //  const double distanceToCamera = rc->getCamera()->getPos().sub(center).length();
-  //  rc->getLogger()->logInfo("Distance to camera: %f", distanceToCamera);
-  
-//  return _level >= 2;
   return false;
 }
 
@@ -168,8 +142,6 @@ void Tile::render(const RenderContext* rc,
                   const TileTessellator* tessellator,
                   TileTexturizer* texturizer,
                   const TileParameters* parameters) {
-  int ___diego_at_work;
-  
   if (isVisible(rc, tessellator)) {
     if (meetsRenderCriteria(rc, tessellator, parameters)) {
       rawRender(rc, tessellator, texturizer);

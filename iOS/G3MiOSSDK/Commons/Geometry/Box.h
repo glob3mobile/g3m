@@ -33,7 +33,8 @@ public:
   Vector3D getUpper() const { return _upper; }
   std::vector<Vector3D> getCorners() const;
   
-  int projectedSize(const RenderContext* rc) const;
+//  int projectedSize(const RenderContext* rc) const;
+  int squaredProjectedSize(const RenderContext* rc) const;
 
   
 private:
