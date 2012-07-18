@@ -29,8 +29,8 @@ std::vector<Vector3D> Box::getCorners() const
 }
 
 
-int Box::squaredProjectedSize(const RenderContext* rc) const {
-  std::vector<Vector3D> corners = getCorners();
+int Box::squaredProjectedArea(const RenderContext* rc) const {
+  const std::vector<Vector3D> corners = getCorners();
   
   double lowerX = 1E7;
   double lowerY = 1E7;
