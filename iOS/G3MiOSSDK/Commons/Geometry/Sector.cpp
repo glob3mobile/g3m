@@ -7,6 +7,8 @@
 //
 
 #include "Sector.hpp"
+#include "Camera.hpp"
+#include "Planet.hpp"
 
 
 bool Sector::contains(const Geodetic2D &position) const {
@@ -44,4 +46,21 @@ Geodetic2D Sector::getInnerPoint(double u, double v) const
   Angle lat = _lower.latitude().average(1-v, _upper.latitude());
   Angle lon = _lower.longitude().average(u, _upper.longitude());
   return Geodetic2D(lat, lon);
+}
+
+
+bool Sector::isBackOriented(const RenderContext *rc) const
+{
+  Vector3D position = rc->getCamera()->getPosition();
+  Geodetic2D corners[5] = { getNE(), getNW(), getSW(), getSE(), getCenter()};
+  const Planet *planet = rc->getPlanet();
+  
+  for (unsigned int i=0; i<5; i++) {
+    Vector3D normal = planet->geodeticSurfaceNormal(corners[i]);
+    Vector3D view = position.sub(planet->toVector3D(corners[i]));
+    double dot = normal.dot(view);
+    if (dot>0) return false;
+  }
+  
+  return true;
 }
