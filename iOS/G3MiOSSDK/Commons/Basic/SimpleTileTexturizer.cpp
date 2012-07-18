@@ -46,24 +46,32 @@ std::vector<MutableVector2D> SimpleTileTexturizer::createTextureCoordinates() co
 
 Mesh* SimpleTileTexturizer::getMesh(Tile* tile, Mesh* tessellatorMesh)
 {
-  
-  //THE TEXTURE HAS BEEN LOADED
-  for (int i = 0; i < _finishedTiles.size(); i++) {
-    FinishedTile& ft = _finishedTiles[i];
-    if (tile->getLevel() == ft._level &&
-        tile->getRow() == ft._row &&
-        tile->getColumn() == ft._column){
-      
-      
-      //Texture Solved
-      tile->setTextureSolved(true);
-      
-      TextureMapping * tMap = new TextureMapping(ft._texID, createTextureCoordinates());
-      return new TexturedMesh(tessellatorMesh, false, tMap);
+  bool dummy = true;
+  if (dummy){
+    //CHESSBOARD TEXTURE
+    int texID = _rc->getTexturesHandler()->getTextureIdFromFileName(_rc, "NoImage.jpg", 256, 256);
+    TextureMapping * tMap = new TextureMapping(texID, createTextureCoordinates());
+    return new TexturedMesh(tessellatorMesh, false, tMap);
+    
+  } else{
+    //THE TEXTURE HAS BEEN LOADED
+    for (int i = 0; i < _finishedTiles.size(); i++) {
+      FinishedTile& ft = _finishedTiles[i];
+      if (tile->getLevel() == ft._level &&
+          tile->getRow() == ft._row &&
+          tile->getColumn() == ft._column){
+        
+        
+        //Texture Solved
+        tile->setTextureSolved(true);
+        
+        TextureMapping * tMap = new TextureMapping(ft._texID, createTextureCoordinates());
+        return new TexturedMesh(tessellatorMesh, false, tMap);
+      }
     }
+    
+    return NULL;
   }
-  
-  return NULL;
 }
 
 Mesh* SimpleTileTexturizer::texturize(const RenderContext* rc,
@@ -85,7 +93,7 @@ Mesh* SimpleTileTexturizer::texturize(const RenderContext* rc,
     d->request(url, priority, tp);
   }
   
-  return NULL;
+  return getMesh(tile, tessellatorMesh);
 }
 
 void SimpleTileTexturizer::onTilePetitionsFinished(TilePetitions * tp)

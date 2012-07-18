@@ -12,6 +12,7 @@
 		44F44D0515A6CCC40071595E /* test.db in Resources */ = {isa = PBXBuildFile; fileRef = 44F44D0415A6CCC40071595E /* test.db */; };
 		CF883B841591053100AEE39C /* mark.png in Resources */ = {isa = PBXBuildFile; fileRef = CF883B831591053100AEE39C /* mark.png */; };
 		CFF95F7D158A748F00B56E11 /* plane.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF95F7C158A748F00B56E11 /* plane.png */; };
+		D816E7A315B6C478004FA4D6 /* NoImage.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D816E7A215B6C478004FA4D6 /* NoImage.jpg */; };
 		D8E93BE01588A171009D497C /* world.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D8E93BDF1588A171009D497C /* world.jpg */; };
 		D8EEF38B1577920B003FEB5E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF38A1577920B003FEB5E /* UIKit.framework */; };
 		D8EEF38D1577920B003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF38C1577920B003FEB5E /* Foundation.framework */; };
@@ -53,6 +54,7 @@
 		44F44D0415A6CCC40071595E /* test.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = test.db; path = ../../G3MiOSSDK/DBStorage/test.db; sourceTree = "<group>"; };
 		CF883B831591053100AEE39C /* mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mark.png; sourceTree = "<group>"; };
 		CFF95F7C158A748F00B56E11 /* plane.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plane.png; sourceTree = "<group>"; };
+		D816E7A215B6C478004FA4D6 /* NoImage.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = NoImage.jpg; sourceTree = "<group>"; };
 		D8E93BDF1588A171009D497C /* world.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = world.jpg; sourceTree = "<group>"; };
 		D8EEF3861577920B003FEB5E /* G3MiOSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = G3MiOSDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8EEF38A1577920B003FEB5E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -168,6 +170,7 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D816E7A215B6C478004FA4D6 /* NoImage.jpg */,
 				44F44D0415A6CCC40071595E /* test.db */,
 				CF883B831591053100AEE39C /* mark.png */,
 				CFF95F7C158A748F00B56E11 /* plane.png */,
@@ -254,6 +257,7 @@
 				CFF95F7D158A748F00B56E11 /* plane.png in Resources */,
 				CF883B841591053100AEE39C /* mark.png in Resources */,
 				44F44D0515A6CCC40071595E /* test.db in Resources */,
+				D816E7A315B6C478004FA4D6 /* NoImage.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
