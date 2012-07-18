@@ -159,7 +159,7 @@ const Frustum* const Camera::getFrustumInModelCoordinates() {
   return _frustumInModelCoordinates;
 }
 
-Vector3D Camera::pixel2Vector(const Vector2D& pixel) const {
+Vector3D Camera::pixel2Ray(const Vector2D& pixel) const {
   const int px = (int) pixel.x();
   const int py = _height - (int) pixel.y();
   const Vector3D pixel3D(px, py, 0);

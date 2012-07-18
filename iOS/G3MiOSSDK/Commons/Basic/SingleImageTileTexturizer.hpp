@@ -24,7 +24,7 @@ private:
   int _texID;
   IImage * const _image;
   
-  std::vector<MutableVector2D> createTextureCoordinates(const RenderContext* rc, Tile* t) const;
+  std::vector<MutableVector2D> createTextureCoordinates(const RenderContext* rc, Mesh* mesh) const;
   
 public:
   
@@ -38,7 +38,7 @@ public:
   ~SingleImageTileTexturizer() {
     if (_texID > -1){
       if (_renderContext != NULL) {
-        _renderContext->getTexturesHandler()->takeTexture(_renderContext, _texID);
+        _renderContext->getTexturesHandler()->takeTexture(_texID);
       }
     }
   }

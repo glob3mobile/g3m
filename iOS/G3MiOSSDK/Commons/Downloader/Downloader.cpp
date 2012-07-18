@@ -119,3 +119,15 @@ void Downloader::onError(const Response& e)
     }
   }
 }
+
+bool Downloader::isListener(IDownloadListener* listener) const
+{
+  for (int i = 0; i < _petitions.size(); i++)
+  {
+    const Download& pet = _petitions[i];
+    for (int j = 0; j < pet._listeners.size(); j++) {
+      if (pet._listeners[j] == listener) return true;
+    }
+  }
+  return false;
+}

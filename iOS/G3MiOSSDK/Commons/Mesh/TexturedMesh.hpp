@@ -47,6 +47,9 @@ public:
   void render(const RenderContext* rc) const;
 
   Extent *getExtent()  const { return _mesh->getExtent(); }
+  
+  int getVertexCount() const { return _mesh->getVertexCount(); }
+  const float* getVertex() const { return _mesh->getVertex();}
 
 };
 

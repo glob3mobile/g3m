@@ -24,31 +24,57 @@
 
 
 class TilePetitions;
+class WMSLayer;
 
-struct FinishedTile{
+struct RequestedTile{
   int   _level;
   int   _row;
   int   _column;
-  int   _texID;
+  int   _texID;  //-1 means no response yet
 };
 
 class SimpleTileTexturizer : public TileTexturizer {
 private:
   
-  const RenderContext* _rc;
-  std::vector<FinishedTile> _finishedTiles;
+  const IFactory* _factory;
+  TexturesHandler* _texHandler;
+  
+  std::vector<RequestedTile> _requestedTiles;
   const TileParameters *_parameters;
+  
+  WMSLayer* _layer;
   
   TilePetitions* getTilePetitions(const Tile* tile);
   
   std::vector<MutableVector2D> createTextureCoordinates() const;
+  
+  void registerNewRequest(int level, int row, int column){
+    //Tile finished
+    RequestedTile ft;
+    ft._column = column;
+    ft._level = level;
+    ft._row = row;
+    ft._texID = -1;
+    _requestedTiles.push_back(ft);
+  }
+  
+  RequestedTile* getRequestTex(int level, int row, int column){
+    for (int i = 0; i < _requestedTiles.size(); i++) {
+      RequestedTile& ft = _requestedTiles[i];
+      if (level == ft._level && row == ft._row && column == ft._column){
+        return &ft;
+      }
+    }
+    return NULL;
+  }
+  
   
   
   Mesh* getMesh(Tile* tile, Mesh* mesh);
   
 public:
   
-  SimpleTileTexturizer(const TileParameters *par):_parameters(par){}
+  SimpleTileTexturizer(const TileParameters *par):_parameters(par), _layer(NULL){}
   
   Mesh* texturize(const RenderContext* rc,
                           Tile* tile,

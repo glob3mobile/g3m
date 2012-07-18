@@ -8,7 +8,7 @@
 
 #include "WMSLayer.hpp"
 
-std::string WMSLayer::getRequest(const Sector& sector, int texWidth, int texHeight) const
+std::string WMSLayer::getRequest(const Sector& sector, int width, int height) const
 {
   if (!_bbox.contains(sector)) return "COOR. ERROR";
 
@@ -52,18 +52,14 @@ std::string WMSLayer::getRequest(const Sector& sector, int texWidth, int texHeig
   //ASKING TRANSPARENCY
   req += "&TRANSPARENT=TRUE";
 
-	//Texture Size
+	//Texture Size and BBOX
   char buffer[100];
-  sprintf(buffer, "&WIDTH=%d&HEIGHT=%d", texWidth, texHeight);
+  sprintf(buffer, "&WIDTH=%d&HEIGHT=%d&BBOX=%f,%f,%f,%f", width, height, sector.lower().longitude().degrees(), 
+          sector.lower().latitude().degrees(), 
+          sector.upper().longitude().degrees(), 
+          sector.upper().latitude().degrees());
   req += buffer;
-  
-	//BBOX
-  req += sprintf(buffer, "&BBOX=%f,%f,%f,%f", sector.lower().longitude().degrees(), 
-                                              sector.lower().latitude().degrees(), 
-                                              sector.upper().longitude().degrees(), 
-                                              sector.upper().latitude().degrees());
-  req += buffer;
-  
+
   if (_serverVersion == "1.3.0")
   {
     req += "&CRS=EPSG:4326";

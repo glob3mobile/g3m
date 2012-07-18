@@ -53,6 +53,8 @@ public:
   
   void onError(const Response& e);
   
+  bool isListener(IDownloadListener* listener) const;
+  
 };
 
 #endif

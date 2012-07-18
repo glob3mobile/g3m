@@ -100,7 +100,7 @@ public:
   
   void render(const RenderContext &rc);
   
-  Vector3D pixel2Vector(const Vector2D& pixel) const;
+  Vector3D pixel2Ray(const Vector2D& pixel) const;
   
   Vector2D point2Pixel(const Vector3D& point) const;
   
