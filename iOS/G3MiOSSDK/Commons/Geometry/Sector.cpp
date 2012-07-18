@@ -43,8 +43,8 @@ Geodetic2D Sector::getInnerPoint(double u, double v) const
 // (u,v) are similar to texture coordinates inside the Sector
 // (u,v)=(0,0) in NW point, and (1,1) in SE point
 {
-  Angle lat = _lower.latitude().average(1-v, _upper.latitude());
-  Angle lon = _lower.longitude().average(u, _upper.longitude());
+  const Angle lat = _lower.latitude().average(1-v, _upper.latitude());
+  const Angle lon = _lower.longitude().average(u, _upper.longitude());
   return Geodetic2D(lat, lon);
 }
 

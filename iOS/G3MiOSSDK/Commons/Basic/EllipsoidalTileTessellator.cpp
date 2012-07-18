@@ -22,25 +22,15 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
   }
   
   
-  const int texID = rc->getTexturesHandler()->getTextureIdFromFileName(rc, _textureFilename, 2048, 1024);
-  
-  if (texID < 1) {
-    rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
-    return NULL;
-  }
-  
   const Sector sector = tile->getSector();
   const Planet* planet = rc->getPlanet();
   
   // create vertices coordinates
   std::vector<MutableVector3D> vertices;
-//  std::vector<MutableVector2D> texCoordsStack;
-//  std::vector<MutableVector2D>* texCoords = &texCoordsStack;
-  std::vector<MutableVector2D>* texCoords = NULL;
   unsigned int resol_1 = _resolution - 1;
   for (unsigned int j=0; j<_resolution; j++) {
     for (unsigned int i=0; i<_resolution; i++) {
-      addVertex(planet, &vertices, texCoords, sector.getInnerPoint((double)i/resol_1, (double)j/resol_1));
+      addVertex(planet, &vertices, sector.getInnerPoint((double)i/resol_1, (double)j/resol_1));
     }
   }
   
@@ -66,7 +56,7 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
     // west side
     for (unsigned int j=0; j<resol_1; j++) {
       Geodetic3D g(sector.getInnerPoint(0.0, (double)j/resol_1), -skirtHeight);
-      addVertex(planet, &vertices, texCoords, g);
+      addVertex(planet, &vertices, g);
       indices.push_back(j*_resolution);
       indices.push_back(posS++);
     }
@@ -74,7 +64,7 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
     // south side
     for (unsigned int i=0; i<resol_1; i++) {
       Geodetic3D g(sector.getInnerPoint((double)i/resol_1, 1.0), -skirtHeight);
-      addVertex(planet, &vertices, texCoords, g);
+      addVertex(planet, &vertices, g);
       indices.push_back(resol_1*_resolution + i);
       indices.push_back(posS++);
     }
@@ -82,7 +72,7 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
     // east side
     for (unsigned int j=resol_1; j>0; j--) {
       Geodetic3D g(sector.getInnerPoint(1.0, (double)j/resol_1), -skirtHeight);
-      addVertex(planet, &vertices, texCoords, g);
+      addVertex(planet, &vertices, g);
       indices.push_back(j*_resolution + resol_1);
       indices.push_back(posS++);
     }
@@ -90,7 +80,7 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
     // north side
     for (unsigned int i=resol_1; i>0; i--) {
       Geodetic3D g(sector.getInnerPoint((double)i/resol_1, 0.0), -skirtHeight);
-      addVertex(planet, &vertices, texCoords, g);
+      addVertex(planet, &vertices, g);
       indices.push_back(i);
       indices.push_back(posS++);
     }
@@ -119,25 +109,25 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
   
   // west side
   for (unsigned int j=0; j<resol_1; j++) {
-    addVertex(planet, &vertices, &texCoords, sector.getInnerPoint(0.0, (double)j/resol_1));
+    addVertex(planet, &vertices, sector.getInnerPoint(0.0, (double)j/resol_1));
     indices.push_back(posS++);
   }
  
   // south side
   for (unsigned int i=0; i<resol_1; i++) {
-    addVertex(planet, &vertices, &texCoords, sector.getInnerPoint((double)i/resol_1, 1.0));
+    addVertex(planet, &vertices, sector.getInnerPoint((double)i/resol_1, 1.0));
     indices.push_back(posS++);
   }
   
   // east side
   for (unsigned int j=resol_1; j>0; j--) {
-    addVertex(planet, &vertices, &texCoords, sector.getInnerPoint(1.0, (double)j/resol_1));
+    addVertex(planet, &vertices, sector.getInnerPoint(1.0, (double)j/resol_1));
     indices.push_back(posS++);
   }
   
   // north side
   for (unsigned int i=resol_1; i>0; i--) {
-    addVertex(planet, &vertices, &texCoords, sector.getInnerPoint((double)i/resol_1, 0.0));
+    addVertex(planet, &vertices, sector.getInnerPoint((double)i/resol_1, 0.0));
     indices.push_back(posS++);
   }
 
