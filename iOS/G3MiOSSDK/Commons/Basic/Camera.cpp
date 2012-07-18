@@ -124,7 +124,7 @@ void Camera::render(const RenderContext &rc) {
   
   
   // TEMP: TEST TO SEE HALF SIZE FRUSTUM CLIPPING 
-  {
+  if (true) {
     FrustumData data = calculateFrustumData(rc);
     Vector3D p0(Vector3D(data._left/2, data._top/2, -data._znear-10).transformedBy(_modelMatrix.inverse(), 1));
     Vector3D p1(Vector3D(data._left/2, data._bottom/2, -data._znear-10).transformedBy(_modelMatrix.inverse(), 1));
@@ -142,9 +142,10 @@ void Camera::render(const RenderContext &rc) {
     IGL *gl = rc.getGL();
     gl->enableVerticesPosition();
     gl->vertexPointer(3, 0, vertices);
-    gl->color(1, 0, 1, 1);
     gl->lineWidth(2);
+    gl->color(1, 0, 1, 1);
     gl->drawLineLoop(4, indices);
+    
     gl->lineWidth(1);
     gl->color(1, 1, 1, 1);
   }
@@ -176,14 +177,12 @@ Vector3D Camera::pixel2Vector(const Vector2D& pixel) const {
   return obj.sub(_position.asVector3D());
 }
 
-
 Vector2D Camera::point2Pixel(const Vector3D& point) const
 {
   const MutableMatrix44D modelViewMatrix = _projectionMatrix.multiply(_modelMatrix);
   const int viewport[4] = { 0, 0, _width, _height };
   return modelViewMatrix.project(point, viewport);
 }
-
 
 void Camera::applyTransform(const MutableMatrix44D& M) {
   _position = _position.transformedBy(M, 1.0);
