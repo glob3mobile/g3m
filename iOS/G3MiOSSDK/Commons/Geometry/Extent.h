@@ -19,11 +19,15 @@ public:
   
   virtual bool touches(const Frustum *frustum) const = 0;
   
-  virtual int projectedArea(const RenderContext* rc) const {
+  
+  virtual double projectedArea(const RenderContext* rc) const {
     return sqrt(squaredProjectedArea(rc));
   }
 
-  virtual int squaredProjectedArea(const RenderContext* rc) const = 0;
+  virtual double squaredProjectedArea(const RenderContext* rc) const = 0;
+  
+  virtual Vector2D projectedExtent(const RenderContext* rc) const = 0;
+
 };
 
 

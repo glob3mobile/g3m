@@ -28,8 +28,7 @@ std::vector<Vector3D> Box::getCorners() const
   return std::vector<Vector3D>(c, c+8);
 }
 
-
-int Box::squaredProjectedArea(const RenderContext* rc) const {
+Vector2D Box::projectedExtent(const RenderContext *rc) const {
   const std::vector<Vector3D> corners = getCorners();
   
   double lowerX = 1E7;
@@ -54,5 +53,10 @@ int Box::squaredProjectedArea(const RenderContext* rc) const {
   const double width = upperX - lowerX;
   const double height = upperY - lowerY;
   
-  return (width * height);
+  return Vector2D(width, height);
+}
+
+double Box::squaredProjectedArea(const RenderContext* rc) const {
+  const Vector2D extent = projectedExtent(rc);
+  return extent.x() * extent.y();
 }

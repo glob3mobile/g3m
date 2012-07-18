@@ -15,6 +15,8 @@
 
 #include <vector>
 
+class Vector2D;
+
 
 class Box: public Extent {
   
@@ -34,7 +36,8 @@ public:
   
   inline std::vector<Vector3D> getCorners() const;
   
-  int squaredProjectedArea(const RenderContext* rc) const;
+  double squaredProjectedArea(const RenderContext* rc) const;
+  Vector2D projectedExtent(const RenderContext* rc) const;
 
   
 private:
