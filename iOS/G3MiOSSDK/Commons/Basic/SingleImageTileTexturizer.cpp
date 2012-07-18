@@ -12,17 +12,14 @@
 #include "TexturedMesh.hpp"
 
 
-std::vector<MutableVector2D> SingleImageTileTexturizer::createTextureCoordinates(const RenderContext* rc, Tile* t) const
-{
+std::vector<MutableVector2D> SingleImageTileTexturizer::createTextureCoordinates(const RenderContext* rc, Tile* t) const {
   std::vector<MutableVector2D> texCoors;
-  int resol = _parameters->_tileResolution;
-  unsigned int resol_1 = resol - 1;
+  const int resol = _parameters->_tileResolution;
+  const int resol_1 = resol - 1;
   
-  
-  for (unsigned int j=0; j<resol; j++) {
-    for (unsigned int i=0; i<resol; i++) {
-      
-      Geodetic2D g = t->getSector().getInnerPoint((double)i/resol_1, (double)j/resol_1);
+  for (int j=0; j<resol; j++) {
+    for (int i=0; i<resol; i++) {
+      const Geodetic2D g = t->getSector().getInnerPoint((double)i/resol_1, (double)j/resol_1);
       
       const Vector3D n = rc->getPlanet()->geodeticSurfaceNormal(g);
       
@@ -37,23 +34,28 @@ std::vector<MutableVector2D> SingleImageTileTexturizer::createTextureCoordinates
 }
 
 Mesh* SingleImageTileTexturizer::texturize(const RenderContext* rc,
-                Tile* tile,
-                Mesh* mesh,
-                Mesh* previousMesh)
-{
-  if (_texID < 0){
+                                           Tile* tile,
+                                           Mesh* mesh,
+                                           Mesh* previousMesh) {
+  _renderContext = rc; //SAVING CONTEXT
+  
+  if (_texID < 0) {
+    _texID = rc->getTexturesHandler()->getTextureId(rc,
+                                                    _image,
+                                                    "SINGLE_IMAGE_TEX",
+                                                    _image->getWidth(),
+                                                    _image->getHeight());
     
-    int texWidth = _parameters->_splitsByLongitude * _parameters->_tileTextureWidth;
-    int texHeight = _parameters->_splitsByLatitude * _parameters->_tileTextureHeight;
+    if (_texID < 0) {
+      rc->getLogger()->logError("Can't upload texture to GPU");
+      return NULL;
+    }
     
-    _texID = rc->getTexturesHandler()->getTextureId(rc, _image, "SINGLE_IMAGE_TEX", texWidth, texHeight);
     rc->getFactory()->deleteImage(_image);
   }
   
-  _renderContext = rc; //SAVING CONTEXT
+  const TextureMapping* texMap = new TextureMapping( _texID, createTextureCoordinates(rc, tile) );
   
-  TextureMapping* texMap = new TextureMapping(_texID, createTextureCoordinates(rc, tile) );
-                                              
   if (previousMesh != NULL) delete previousMesh;
   
   tile->setTextureSolved(true);
@@ -61,6 +63,6 @@ Mesh* SingleImageTileTexturizer::texturize(const RenderContext* rc,
   return new TexturedMesh(mesh, false, texMap, true);
 }
 
-void SingleImageTileTexturizer::tileToBeDeleted(Tile* tile){
+void SingleImageTileTexturizer::tileToBeDeleted(Tile* tile) {
   
 }

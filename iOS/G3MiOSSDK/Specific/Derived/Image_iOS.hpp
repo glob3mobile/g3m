@@ -30,6 +30,14 @@ public:
     return _image;
   }
   
+  int getWidth() const {
+    return (_image == NULL) ? 0 : _image.size.width;
+  }
+  
+  int getHeight() const {
+    return (_image == NULL) ? 0 : _image.size.height;
+  }
+
 };
 
 #endif

@@ -28,12 +28,18 @@ private:
   
 public:
   
-  SingleImageTileTexturizer(TileParameters * const par, IImage *image):
-  _texID(-1), _image(image), _parameters(par){
+  SingleImageTileTexturizer(TileParameters * const par, IImage *image) :
+  _texID(-1),
+  _image(image),
+  _parameters(par),
+  _renderContext(NULL) {
   }
-  ~SingleImageTileTexturizer(){
+  
+  ~SingleImageTileTexturizer() {
     if (_texID > -1){
-      _renderContext->getTexturesHandler()->takeTexture(_renderContext, _texID);
+      if (_renderContext != NULL) {
+        _renderContext->getTexturesHandler()->takeTexture(_renderContext, _texID);
+      }
     }
   }
   
