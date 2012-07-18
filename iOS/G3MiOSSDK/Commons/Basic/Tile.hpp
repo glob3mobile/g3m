@@ -128,9 +128,7 @@ public:
     return _textureSolved;
   }
   
-  void setFallbackTextureTile(Tile* fallbackTextureTile) {
-    _fallbackTextureTile = fallbackTextureTile;
-  }
+  void setFallbackTextureTile(Tile* fallbackTextureTile);
   
   void render(const RenderContext* rc,
               const TileTessellator* tessellator,

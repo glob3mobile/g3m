@@ -40,6 +40,20 @@ void Tile::setTextureSolved(bool textureSolved) {
   }
 }
 
+void Tile::setFallbackTextureTile(Tile* fallbackTextureTile) {
+  _fallbackTextureTile = fallbackTextureTile;
+  
+  if (_subtiles != NULL) {
+    if (!isTextureSolved()) {
+      for (int i = 0; i < _subtiles->size(); i++) {
+        Tile* subtile = _subtiles->at(i);
+        subtile->setFallbackTextureTile(fallbackTextureTile);
+      }
+    }
+  }
+}
+
+
 
 Mesh* Tile::getTessellatorMesh(const RenderContext* rc,
                                const TileTessellator* tessellator) {

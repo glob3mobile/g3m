@@ -18,7 +18,6 @@ class TextureHolder;
 
 
 
-
 class TexturesHandler {
 private:
   std::vector<TextureHolder*> _textureHolders;
