@@ -16,8 +16,8 @@
 
 
 Tile::~Tile() {
-  prune();
-
+  prune(NULL);
+  
   if (_tessellatorMesh != NULL) {
     delete _tessellatorMesh; 
   }
@@ -40,6 +40,20 @@ void Tile::setTextureSolved(bool textureSolved) {
   }
 }
 
+void Tile::setFallbackTextureTile(Tile* fallbackTextureTile) {
+  _fallbackTextureTile = fallbackTextureTile;
+  
+  if (_subtiles != NULL) {
+    if (!isTextureSolved()) {
+      for (int i = 0; i < _subtiles->size(); i++) {
+        Tile* subtile = _subtiles->at(i);
+        subtile->setFallbackTextureTile(fallbackTextureTile);
+      }
+    }
+  }
+}
+
+
 
 Mesh* Tile::getTessellatorMesh(const RenderContext* rc,
                                const TileTessellator* tessellator) {
@@ -51,7 +65,7 @@ Mesh* Tile::getTessellatorMesh(const RenderContext* rc,
 
 bool Tile::isVisible(const RenderContext *rc,
                      const TileTessellator *tessellator) {
-//  return getTessellatorMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->getFrustumInModelCoordinates());
+  //  return getTessellatorMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->getFrustumInModelCoordinates());
   return getTessellatorMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->_halfFrustumInModelCoordinates);
 }
 
@@ -71,20 +85,20 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
     return true;
   }
   
-//  31890685.000000
-//   7083288.848839
+  //  31890685.000000
+  //   7083288.848839
   
-//  const Vector3D radii = rc->getPlanet()->getRadii();
-//  const double rad = (radii.x() + radii.y() + radii.z()) / 3;
-//  
-//  const double ratio = (distanceToCamera - rad) / rad;
-//  
-//  rc->getLogger()->logInfo("Distance to camera: %f - %f", distanceToCamera, ratio);
+  //  const Vector3D radii = rc->getPlanet()->getRadii();
+  //  const double rad = (radii.x() + radii.y() + radii.z()) / 3;
+  //  
+  //  const double ratio = (distanceToCamera - rad) / rad;
+  //  
+  //  rc->getLogger()->logInfo("Distance to camera: %f - %f", distanceToCamera, ratio);
   
-//  const Vector3D center = rc->getPlanet()->toVector3D(_sector.getCenter());
-//  
-//  const double distanceToCamera = rc->getCamera()->getPos().sub(center).length();
-//  rc->getLogger()->logInfo("Distance to camera: %f", distanceToCamera);
+  //  const Vector3D center = rc->getPlanet()->toVector3D(_sector.getCenter());
+  //  
+  //  const double distanceToCamera = rc->getCamera()->getPos().sub(center).length();
+  //  rc->getLogger()->logInfo("Distance to camera: %f", distanceToCamera);
   
   return _level >= 2;
 }
@@ -122,12 +136,15 @@ std::vector<Tile*>* Tile::getSubTiles() {
   return _subtiles;
 }
 
-void Tile::prune() {
+void Tile::prune(TileTexturizer* texturizer) {
   if (_subtiles != NULL) {
     for (int i = 0; i < _subtiles->size(); i++) {
       Tile* subtile = _subtiles->at(i);
       
-      subtile->prune();
+      subtile->prune(texturizer);
+      if (texturizer != NULL) {
+        texturizer->tileToBeDeleted(subtile);
+      }
       delete subtile;
     }
     
@@ -155,7 +172,7 @@ void Tile::render(const RenderContext* rc,
     }
   }
   else {
-    prune();
+    prune(texturizer);
   }
 }
 

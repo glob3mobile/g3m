@@ -83,7 +83,7 @@ private:
 
   inline std::vector<Tile*>* getSubTiles();
 
-  inline void prune();
+  inline void prune(TileTexturizer* texturizer);
   
 public:
   Tile(const Sector& sector,
@@ -128,9 +128,7 @@ public:
     return _textureSolved;
   }
   
-  void setFallbackTextureTile(Tile* fallbackTextureTile) {
-    _fallbackTextureTile = fallbackTextureTile;
-  }
+  void setFallbackTextureTile(Tile* fallbackTextureTile);
   
   void render(const RenderContext* rc,
               const TileTessellator* tessellator,

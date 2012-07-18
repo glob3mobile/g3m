@@ -30,7 +30,7 @@ struct FinishedTile{
   int   _texID;
 };
 
-class SimpleTileTexturizer : public TileTexturizer{
+class SimpleTileTexturizer : public TileTexturizer {
 private:
   
   const RenderContext* _rc;
@@ -56,6 +56,8 @@ public:
                           Mesh* previousMesh);
   
   void onTilePetitionsFinished(TilePetitions * tp);
+  
+  void tileToBeDeleted(Tile* tile);
   
 };
 
