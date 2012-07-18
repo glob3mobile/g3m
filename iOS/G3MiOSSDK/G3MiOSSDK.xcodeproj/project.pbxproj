@@ -304,8 +304,6 @@
 		383BD3891577EDF40012AC53 /* Basic */ = {
 			isa = PBXGroup;
 			children = (
-				D816E7A815B6C9B1004FA4D6 /* SingleImageTileTexturizer.cpp */,
-				D816E7A915B6C9B1004FA4D6 /* SingleImageTileTexturizer.hpp */,
 				CC14B63B157D354C00793C92 /* Camera.cpp */,
 				CC14B63C157D354C00793C92 /* Camera.hpp */,
 				CC14B63F157D356800793C92 /* CameraRenderer.cpp */,
@@ -334,23 +332,25 @@
 				CF883B851591FEAF00AEE39C /* SceneGraphRenderer.hpp */,
 				38D787071588F886003BBC75 /* SimplePlanetRenderer.cpp */,
 				38D787081588F886003BBC75 /* SimplePlanetRenderer.hpp */,
+				CF8D0C0015AF0EAB005B5433 /* SimpleTileTexturizer.cpp */,
+				CF8D0BFF15AF0E98005B5433 /* SimpleTileTexturizer.hpp */,
+				D816E7A815B6C9B1004FA4D6 /* SingleImageTileTexturizer.cpp */,
+				D816E7A915B6C9B1004FA4D6 /* SingleImageTileTexturizer.hpp */,
 				CF883B811590984900AEE39C /* TexturesHandler.cpp */,
 				CF883B7F1590983B00AEE39C /* TexturesHandler.hpp */,
 				38D786E51587B446003BBC75 /* Tile.cpp */,
 				38D786E41587B3DD003BBC75 /* Tile.hpp */,
+				D8C874BF15B5C5AE00F19859 /* TilePetitions.cpp */,
+				D8C874BE15B5C58D00F19859 /* TilePetitions.hpp */,
 				38D786E21587ACA5003BBC75 /* TileRenderer.cpp */,
 				38D786E01587AC40003BBC75 /* TileRenderer.hpp */,
 				CF9AEBBE159B3BAF004C3558 /* TileTessellator.cpp */,
 				CF9AEBBD159B3B95004C3558 /* TileTessellator.hpp */,
+				CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */,
+				CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */,
 				CFF95F741588DF0A00B56E11 /* TimeInterval.hpp */,
 				383BD3931577EE500012AC53 /* TouchEvent.cpp */,
 				383BD3941577EE500012AC53 /* TouchEvent.hpp */,
-				CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */,
-				CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */,
-				CF8D0BFF15AF0E98005B5433 /* SimpleTileTexturizer.hpp */,
-				CF8D0C0015AF0EAB005B5433 /* SimpleTileTexturizer.cpp */,
-				D8C874BE15B5C58D00F19859 /* TilePetitions.hpp */,
-				D8C874BF15B5C5AE00F19859 /* TilePetitions.cpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -360,13 +360,13 @@
 			children = (
 				383BD39E1577EE5A0012AC53 /* Angle.cpp */,
 				383BD39F1577EE5A0012AC53 /* Angle.hpp */,
-				CC41E3CB15B4651700B5581C /* Box.h */,
 				CCB2566315B5F58500079B96 /* Box.cpp */,
+				CC41E3CB15B4651700B5581C /* Box.h */,
 				383BD3A01577EE5A0012AC53 /* Ellipsoid.cpp */,
 				383BD3A11577EE5A0012AC53 /* Ellipsoid.hpp */,
 				CC41E3C915B4649800B5581C /* Extent.h */,
-				CC41E3B315B32D2E00B5581C /* Frustum.h */,
 				CC41E3B515B32DFB00B5581C /* Frustum.cpp */,
+				CC41E3B315B32D2E00B5581C /* Frustum.h */,
 				383BD3A21577EE5A0012AC53 /* Geodetic2D.cpp */,
 				383BD3A31577EE5A0012AC53 /* Geodetic2D.hpp */,
 				383BD3A41577EE5A0012AC53 /* Geodetic3D.cpp */,
@@ -377,8 +377,8 @@
 				CF7A78EB159B9BE300074422 /* MutableVector2D.hpp */,
 				D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */,
 				D84D5A30157E0EAA000C5E35 /* MutableVector3D.hpp */,
-				CC41E39D15B1FD1300B5581C /* Plane.h */,
 				CC41E39F15B1FD5B00B5581C /* Plane.cpp */,
+				CC41E39D15B1FD1300B5581C /* Plane.h */,
 				383BD3A61577EE5A0012AC53 /* Planet.hpp */,
 				CF883BCA1594B9A500AEE39C /* Sector.cpp */,
 				38D786E71587B52F003BBC75 /* Sector.hpp */,
@@ -393,12 +393,12 @@
 		383BD38B1577EE040012AC53 /* Interfaces */ = {
 			isa = PBXGroup;
 			children = (
-				382D4B95159DC26B00FE9296 /* IStorage.hpp */,
 				383BD3B81577EE630012AC53 /* IFactory.hpp */,
 				CC14B64B157D35C100793C92 /* IGL.hpp */,
 				CC14B64C157D35C100793C92 /* IImage.hpp */,
 				383BD3B91577EE630012AC53 /* ILogger.hpp */,
 				D8D3BC89159B11D000738E37 /* INetwork.hpp */,
+				382D4B95159DC26B00FE9296 /* IStorage.hpp */,
 				CF31CBF215878AF90085E8F1 /* ITimer.hpp */,
 			);
 			name = Interfaces;
@@ -416,14 +416,14 @@
 		D8A5601915AEF47300035086 /* Mesh */ = {
 			isa = PBXGroup;
 			children = (
-				CCB2564F15B5A33A00079B96 /* TexturedMesh.cpp */,
-				D8A5601C15AEF64E00035086 /* IndexedMesh.hpp */,
 				D8A5601B15AEF64E00035086 /* IndexedMesh.cpp */,
+				D8A5601C15AEF64E00035086 /* IndexedMesh.hpp */,
 				D8A5601D15AEF64E00035086 /* Mesh.cpp */,
 				D8A5601E15AEF64E00035086 /* Mesh.hpp */,
+				CCB2564F15B5A33A00079B96 /* TexturedMesh.cpp */,
 				D8A5602315AEF69200035086 /* TexturedMesh.hpp */,
-				CCB2564D15B5A30900079B96 /* TextureMapping.hpp */,
 				CC96079115AF23F600D438D4 /* TextureMapping.cpp */,
+				CCB2564D15B5A30900079B96 /* TextureMapping.hpp */,
 			);
 			name = Mesh;
 			sourceTree = "<group>";
@@ -431,13 +431,13 @@
 		D8AD760F1599B5B900A7D39A /* Downloader */ = {
 			isa = PBXGroup;
 			children = (
-				D8CD6F7715A6FFAC00279BE7 /* Downloader.hpp */,
-				D8CD6F7815A6FFAC00279BE7 /* IDownloadListener.hpp */,
-				D8AD76261599B89000A7D39A /* Downloader.cpp */,
 				382D4B91159DC26000FE9296 /* ByteBuffer.hpp */,
-				382D4B92159DC26000FE9296 /* NullStorage.hpp */,
-				D88C3449159C5A250044CED9 /* DummyDownload.mm */,
+				D8AD76261599B89000A7D39A /* Downloader.cpp */,
+				D8CD6F7715A6FFAC00279BE7 /* Downloader.hpp */,
 				D88C344A159C5A250044CED9 /* DummyDownload.hpp */,
+				D88C3449159C5A250044CED9 /* DummyDownload.mm */,
+				D8CD6F7815A6FFAC00279BE7 /* IDownloadListener.hpp */,
+				382D4B92159DC26000FE9296 /* NullStorage.hpp */,
 				38589EBD159C91F700DCC302 /* Response.hpp */,
 			);
 			name = Downloader;
