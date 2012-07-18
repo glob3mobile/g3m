@@ -78,6 +78,8 @@
 		CF9AEBBF159B3BAF004C3558 /* TileTessellator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9AEBBE159B3BAF004C3558 /* TileTessellator.cpp */; };
 		CF9AEBC2159B3FEB004C3558 /* EllipsoidalTileTessellator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9AEBC1159B3FEA004C3558 /* EllipsoidalTileTessellator.cpp */; };
 		CFA3E7C9157E537B00DAABD6 /* MarksRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA3E7C8157E537B00DAABD6 /* MarksRenderer.cpp */; };
+		D816E7AA15B6C9B2004FA4D6 /* SingleImageTileTexturizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D816E7A815B6C9B1004FA4D6 /* SingleImageTileTexturizer.cpp */; };
+		D816E7AB15B6C9B2004FA4D6 /* SingleImageTileTexturizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D816E7A915B6C9B1004FA4D6 /* SingleImageTileTexturizer.hpp */; };
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
 		D84D5A32157E0EAA000C5E35 /* MutableVector3D.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D84D5A30157E0EAA000C5E35 /* MutableVector3D.hpp */; };
@@ -198,6 +200,8 @@
 		CFA3E7C8157E537B00DAABD6 /* MarksRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MarksRenderer.cpp; path = Commons/Basic/MarksRenderer.cpp; sourceTree = "<group>"; };
 		CFF95F741588DF0A00B56E11 /* TimeInterval.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TimeInterval.hpp; path = Commons/Basic/TimeInterval.hpp; sourceTree = "<group>"; };
 		CFF95F761588E82200B56E11 /* Color.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Color.hpp; path = Commons/Basic/Color.hpp; sourceTree = "<group>"; };
+		D816E7A815B6C9B1004FA4D6 /* SingleImageTileTexturizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SingleImageTileTexturizer.cpp; path = Commons/Basic/SingleImageTileTexturizer.cpp; sourceTree = "<group>"; };
+		D816E7A915B6C9B1004FA4D6 /* SingleImageTileTexturizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SingleImageTileTexturizer.hpp; path = Commons/Basic/SingleImageTileTexturizer.hpp; sourceTree = "<group>"; };
 		D8228EBC157F7F6100BBAF60 /* MutableMatrix44D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MutableMatrix44D.hpp; path = Commons/Geometry/MutableMatrix44D.hpp; sourceTree = "<group>"; };
 		D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = MutableMatrix44D.cpp; path = Commons/Geometry/MutableMatrix44D.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector3D.cpp; path = Commons/Geometry/MutableVector3D.cpp; sourceTree = "<group>"; };
@@ -300,6 +304,8 @@
 		383BD3891577EDF40012AC53 /* Basic */ = {
 			isa = PBXGroup;
 			children = (
+				D816E7A815B6C9B1004FA4D6 /* SingleImageTileTexturizer.cpp */,
+				D816E7A915B6C9B1004FA4D6 /* SingleImageTileTexturizer.hpp */,
 				CC14B63B157D354C00793C92 /* Camera.cpp */,
 				CC14B63C157D354C00793C92 /* Camera.hpp */,
 				CC14B63F157D356800793C92 /* CameraRenderer.cpp */,
@@ -531,6 +537,7 @@
 				D8A5602015AEF64E00035086 /* IndexedMesh.hpp in Headers */,
 				D8A5602215AEF64E00035086 /* Mesh.hpp in Headers */,
 				CCB2564E15B5A30900079B96 /* TextureMapping.hpp in Headers */,
+				D816E7AB15B6C9B2004FA4D6 /* SingleImageTileTexturizer.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -634,6 +641,7 @@
 				CCB2565015B5A33A00079B96 /* TexturedMesh.cpp in Sources */,
 				D8C874C015B5C5AE00F19859 /* TilePetitions.cpp in Sources */,
 				CCB2566415B5F58500079B96 /* Box.cpp in Sources */,
+				D816E7AA15B6C9B2004FA4D6 /* SingleImageTileTexturizer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

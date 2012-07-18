@@ -105,7 +105,7 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
   
   return new TexturedMesh(new IndexedMesh(vertices, TriangleStrip, indices, NULL),
                         true,
-                        new TextureMapping(texID, texCoords)); 
+                        new TextureMapping(texID, texCoords), true); 
     
   }
   else {

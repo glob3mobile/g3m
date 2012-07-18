@@ -51,7 +51,7 @@ Mesh* SimpleTileTexturizer::getMesh(Tile* tile, Mesh* tessellatorMesh)
     //CHESSBOARD TEXTURE
     int texID = _rc->getTexturesHandler()->getTextureIdFromFileName(_rc, "NoImage.jpg", 256, 256);
     TextureMapping * tMap = new TextureMapping(texID, createTextureCoordinates());
-    return new TexturedMesh(tessellatorMesh, false, tMap);
+    return new TexturedMesh(tessellatorMesh, false, tMap, true);
     
   } else{
     //THE TEXTURE HAS BEEN LOADED
@@ -66,7 +66,7 @@ Mesh* SimpleTileTexturizer::getMesh(Tile* tile, Mesh* tessellatorMesh)
         tile->setTextureSolved(true);
         
         TextureMapping * tMap = new TextureMapping(ft._texID, createTextureCoordinates());
-        return new TexturedMesh(tessellatorMesh, false, tMap);
+        return new TexturedMesh(tessellatorMesh, false, tMap, true);
       }
     }
     
@@ -82,7 +82,10 @@ Mesh* SimpleTileTexturizer::texturize(const RenderContext* rc,
   _rc = rc; //STORING CONTEXT
   
   Mesh* texMesh = getMesh(tile, tessellatorMesh);
-  if (texMesh != NULL) return texMesh;
+  if (texMesh != NULL){
+    delete previousMesh;
+    return texMesh;
+  }
   
   //THROWING AND CREATING THE PETITIONS
   int priority = 10;
@@ -93,7 +96,14 @@ Mesh* SimpleTileTexturizer::texturize(const RenderContext* rc,
     d->request(url, priority, tp);
   }
   
-  return getMesh(tile, tessellatorMesh);
+  //WE TRY AGAIN IN CASE PETITIONS WERE ATTENDED QUICKLY
+  texMesh = getMesh(tile, tessellatorMesh);
+  if (texMesh != NULL){
+    delete previousMesh;
+    return texMesh;
+  }
+  
+  return NULL;
 }
 
 void SimpleTileTexturizer::onTilePetitionsFinished(TilePetitions * tp)
