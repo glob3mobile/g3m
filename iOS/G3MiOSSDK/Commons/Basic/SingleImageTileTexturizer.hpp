@@ -11,6 +11,7 @@
 
 #include "TileTexturizer.hpp"
 #include "MutableVector2D.hpp"
+#include "TileRenderer.hpp"
 #include "Mesh.hpp"
 
 #include <vector>
@@ -18,18 +19,23 @@
 class SingleImageTileTexturizer : public TileTexturizer {
 private:
   
-  const RenderContext* _rc;
-  
-  std::vector<MutableVector2D> createTextureCoordinates() const;
-
-  const int _resolution;
-  
+  const RenderContext* _renderContext;
+  TileParameters* const _parameters;  
   int _texID;
+  IImage * const _image;
+  
+  std::vector<MutableVector2D> createTextureCoordinates(const RenderContext* rc, Tile* t) const;
   
 public:
   
-  SingleImageTileTexturizer(int resolution, const IImage &image): _resolution(resolution),
-  _texID(0){}
+  SingleImageTileTexturizer(TileParameters * const par, IImage *image):
+  _texID(-1), _image(image), _parameters(par){
+  }
+  ~SingleImageTileTexturizer(){
+    if (_texID > -1){
+      _renderContext->getTexturesHandler()->takeTexture(_renderContext, _texID);
+    }
+  }
   
   Mesh* texturize(const RenderContext* rc,
                   Tile* tile,
