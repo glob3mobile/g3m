@@ -31,10 +31,10 @@ public:
   
   Vector3D getLower() const { return _lower; }
   Vector3D getUpper() const { return _upper; }
-  std::vector<Vector3D> getCorners() const;
   
-//  int projectedSize(const RenderContext* rc) const;
-  int squaredProjectedSize(const RenderContext* rc) const;
+  inline std::vector<Vector3D> getCorners() const;
+  
+  int squaredProjectedArea(const RenderContext* rc) const;
 
   
 private:

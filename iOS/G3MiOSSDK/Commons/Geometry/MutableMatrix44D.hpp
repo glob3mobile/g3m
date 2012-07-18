@@ -125,9 +125,9 @@ public:
   
   MutableMatrix44D multiply(const MutableMatrix44D& m) const;
   
-  MutableMatrix44D inverse() const;
+  MutableMatrix44D inversed() const;
   
-  MutableMatrix44D transpose() const;
+  MutableMatrix44D transposed() const;
   
   double get(int i) const {
     return _m[i];

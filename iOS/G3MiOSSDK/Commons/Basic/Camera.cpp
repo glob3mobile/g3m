@@ -85,7 +85,6 @@ void Camera::calculateCachedValues(const RenderContext &rc) {
   if (_frustum != NULL) {
     delete _frustum;
   }
-  
   _frustum = new Frustum(data._left, data._right,
                          data._bottom, data._top,
                          data._znear, data._zfar);
@@ -93,7 +92,7 @@ void Camera::calculateCachedValues(const RenderContext &rc) {
   if (_frustumInModelCoordinates != NULL) {
     delete _frustumInModelCoordinates;
   }
-  _frustumInModelCoordinates = _frustum->transformedBy_P(_modelMatrix.transpose());
+  _frustumInModelCoordinates = _frustum->transformedBy_P(_modelMatrix.transposed());
   
   if (_halfFrustum != NULL) {
     delete _halfFrustum;
@@ -101,10 +100,11 @@ void Camera::calculateCachedValues(const RenderContext &rc) {
   _halfFrustum =  new Frustum(data._left/2, data._right/2,
                               data._bottom/2, data._top/2,
                               data._znear, data._zfar);
+  
   if (_halfFrustumInModelCoordinates != NULL) {
     delete _halfFrustumInModelCoordinates;
   }
-  _halfFrustumInModelCoordinates = _halfFrustum->transformedBy_P(_modelMatrix.transpose());
+  _halfFrustumInModelCoordinates = _halfFrustum->transformedBy_P(_modelMatrix.transposed());
 
 
 }
@@ -125,11 +125,13 @@ void Camera::render(const RenderContext &rc) {
   
   // TEMP: TEST TO SEE HALF SIZE FRUSTUM CLIPPING 
   if (true) {
+    const MutableMatrix44D inversed = _modelMatrix.inversed();
+    
     FrustumData data = calculateFrustumData(rc);
-    Vector3D p0(Vector3D(data._left/2, data._top/2, -data._znear-10).transformedBy(_modelMatrix.inverse(), 1));
-    Vector3D p1(Vector3D(data._left/2, data._bottom/2, -data._znear-10).transformedBy(_modelMatrix.inverse(), 1));
-    Vector3D p2(Vector3D(data._right/2, data._bottom/2, -data._znear-10).transformedBy(_modelMatrix.inverse(), 1));
-    Vector3D p3(Vector3D(data._right/2, data._top/2, -data._znear-10).transformedBy(_modelMatrix.inverse(), 1));
+    Vector3D p0(Vector3D(data._left/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
+    Vector3D p1(Vector3D(data._left/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
+    Vector3D p2(Vector3D(data._right/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
+    Vector3D p3(Vector3D(data._right/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
     
     const float vertices[] = {
       p0.x(), p0.y(), p0.z(),

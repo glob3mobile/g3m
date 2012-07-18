@@ -19,11 +19,11 @@ public:
   
   virtual bool touches(const Frustum *frustum) const = 0;
   
-  virtual int projectedSize(const RenderContext* rc) const {
-    return sqrt(squaredProjectedSize(rc));
+  virtual int projectedArea(const RenderContext* rc) const {
+    return sqrt(squaredProjectedArea(rc));
   }
 
-  virtual int squaredProjectedSize(const RenderContext* rc) const = 0;
+  virtual int squaredProjectedArea(const RenderContext* rc) const = 0;
 };
 
 

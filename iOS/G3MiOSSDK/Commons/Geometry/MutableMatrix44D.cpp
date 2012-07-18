@@ -93,7 +93,7 @@ bool MutableMatrix44D::invert_matrix(const double m[16], double out[16]) {
   return true;
 }
 
-MutableMatrix44D MutableMatrix44D::inverse() const
+MutableMatrix44D MutableMatrix44D::inversed() const
 {
   double out[16];
   invert_matrix(_m, out);
@@ -102,7 +102,7 @@ MutableMatrix44D MutableMatrix44D::inverse() const
 }
 
 
-MutableMatrix44D MutableMatrix44D::transpose() const
+MutableMatrix44D MutableMatrix44D::transposed() const
 {
   MutableMatrix44D T(_m[0], _m[4], _m[8], _m[12],
                      _m[1], _m[5], _m[9], _m[13], 
@@ -144,7 +144,7 @@ Vector3D MutableMatrix44D::unproject(const Vector3D& pixel3D, const int viewport
   in[3] = 1.0;
   
   /* calcul transformation inverse */
-  MutableMatrix44D m = this->inverse();
+  MutableMatrix44D m = this->inversed();
   
   /* d'ou les coordonnees objets */
   m.transformPoint(out, in);
