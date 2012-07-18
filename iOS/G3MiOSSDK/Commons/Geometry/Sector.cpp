@@ -13,6 +13,11 @@ bool Sector::contains(const Geodetic2D &position) const {
   return position.isBetween(_lower, _upper);
 }
 
+bool Sector::contains(const Sector &s) const
+{
+  return contains(s.upper()) && contains(s.lower());
+}
+
 bool Sector::touchesWith(const Sector &that) const {
   // from Real-Time Collision Detection - Christer Ericson
   //   page 79
