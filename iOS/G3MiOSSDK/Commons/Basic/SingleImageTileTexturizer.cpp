@@ -12,22 +12,21 @@
 #include "TexturedMesh.hpp"
 
 
-std::vector<MutableVector2D> SingleImageTileTexturizer::createTextureCoordinates(const RenderContext* rc, Tile* t) const {
+std::vector<MutableVector2D> SingleImageTileTexturizer::createTextureCoordinates(const RenderContext* rc, Mesh* mesh) const {
   std::vector<MutableVector2D> texCoors;
-  const int resol = _parameters->_tileResolution;
-  const int resol_1 = resol - 1;
+  const float* vertex = mesh->getVertex();
   
-  for (int j=0; j<resol; j++) {
-    for (int i=0; i<resol; i++) {
-      const Geodetic2D g = t->getSector().getInnerPoint((double)i/resol_1, (double)j/resol_1);
-      
-      const Vector3D n = rc->getPlanet()->geodeticSurfaceNormal(g);
-      
-      const double s = atan2(n.y(), n.x()) / (M_PI * 2) + 0.5;
-      const double t = asin(n.z()) / M_PI + 0.5;
-      
-      texCoors.push_back(MutableVector2D(s, 1-t));
-    }
+  for (int i = 0; i < mesh->getVertexCount(); i++) {
+    
+    Vector3D pos(vertex[i*3], vertex[i*3+1], vertex[i*3+2]);
+    
+    const Geodetic2D g = rc->getPlanet()->toGeodetic2D(pos);
+    const Vector3D n = rc->getPlanet()->geodeticSurfaceNormal(g);
+    
+    const double s = atan2(n.y(), n.x()) / (M_PI * 2) + 0.5;
+    const double t = asin(n.z()) / M_PI + 0.5;
+    
+    texCoors.push_back(MutableVector2D(s, 1-t));
   }
   
   return texCoors;
@@ -40,8 +39,7 @@ Mesh* SingleImageTileTexturizer::texturize(const RenderContext* rc,
   _renderContext = rc; //SAVING CONTEXT
   
   if (_texID < 0) {
-    _texID = rc->getTexturesHandler()->getTextureId(rc,
-                                                    _image,
+    _texID = rc->getTexturesHandler()->getTextureId(_image,
                                                     "SINGLE_IMAGE_TEX",
                                                     _image->getWidth(),
                                                     _image->getHeight());
@@ -54,7 +52,7 @@ Mesh* SingleImageTileTexturizer::texturize(const RenderContext* rc,
     rc->getFactory()->deleteImage(_image);
   }
   
-  const TextureMapping* texMap = new TextureMapping( _texID, createTextureCoordinates(rc, tile) );
+  const TextureMapping* texMap = new TextureMapping( _texID, createTextureCoordinates(rc, mesh) );
   
   if (previousMesh != NULL) delete previousMesh;
   

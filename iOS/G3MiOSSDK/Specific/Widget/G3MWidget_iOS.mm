@@ -262,7 +262,7 @@
     
     comp->addRenderer(new GLErrorRenderer());
     
-    TexturesHandler* texturesHandler = new TexturesHandler();
+    TexturesHandler* texturesHandler = new TexturesHandler(gl, factory);
     
     const Planet* planet = Planet::createEarth();
     

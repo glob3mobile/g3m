@@ -22,7 +22,7 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
   }
   
   
-  const int texID = rc->getTexturesHandler()->getTextureIdFromFileName(rc, _textureFilename, 2048, 1024);
+  const int texID = rc->getTexturesHandler()->getTextureIdFromFileName(_textureFilename, 2048, 1024);
   
   if (texID < 1) {
     rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());

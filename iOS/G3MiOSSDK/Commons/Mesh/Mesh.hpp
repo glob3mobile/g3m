@@ -17,6 +17,9 @@ class Mesh {
 public:
   virtual ~Mesh() { }
   
+  virtual int getVertexCount() const = 0;
+  virtual const float* getVertex() const = 0;
+  
   virtual void render(const RenderContext* rc) const = 0;
   virtual Extent *getExtent() const = 0;
 };
