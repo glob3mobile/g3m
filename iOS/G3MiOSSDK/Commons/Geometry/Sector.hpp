@@ -12,6 +12,7 @@
 #include <vector>
 
 #include "Geodetic2D.hpp"
+#include "Context.hpp"
 
 class Sector {
   
@@ -91,6 +92,10 @@ public:
   }
   
   Geodetic2D getInnerPoint(double u, double v) const;
+  // (u,v) are similar to texture coordinates inside the Sector
+  // (u,v)=(0,0) in NW point, and (1,1) in SE point
+  
+  bool isBackOriented(const RenderContext *rc) const;
   
 };
 

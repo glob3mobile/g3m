@@ -27,6 +27,8 @@ std::vector<MutableVector2D> SingleImageTileTexturizer::createTextureCoordinates
       const double t = asin(n.z()) / M_PI + 0.5;
       
       texCoors.push_back(MutableVector2D(s, 1-t));
+      
+      
     }
   }
   

@@ -64,8 +64,8 @@ Mesh* Tile::getTessellatorMesh(const RenderContext* rc,
 bool Tile::isVisible(const RenderContext *rc,
                      const TileTessellator *tessellator) {
   
-  
-  
+  if (_sector.isBackOriented(rc)) return false;
+    
   return getTessellatorMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->getFrustumInModelCoordinates());
 //  return getTessellatorMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->_halfFrustumInModelCoordinates);
 }
