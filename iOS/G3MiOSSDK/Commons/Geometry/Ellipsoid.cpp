@@ -95,22 +95,22 @@ std::vector<double> Ellipsoid::intersections(const Vector3D& origin,
 
 
 Vector3D Ellipsoid::toVector3D(const Geodetic3D& geodetic) const {
-  Vector3D n = geodeticSurfaceNormal(geodetic);
-  Vector3D k = _radiiSquared.times(n);
-  double gamma = sqrt((k.x() * n.x()) +
-                      (k.y() * n.y()) +
-                      (k.z() * n.z()));
+  const Vector3D n = geodeticSurfaceNormal(geodetic);
+  const Vector3D k = _radiiSquared.times(n);
+  const double gamma = sqrt((k.x() * n.x()) +
+                            (k.y() * n.y()) +
+                            (k.z() * n.z()));
   
-  Vector3D rSurface = k.div(gamma);
+  const Vector3D rSurface = k.div(gamma);
   return rSurface.add(n.times(geodetic.height()));
 }
 
 
 Geodetic2D Ellipsoid::toGeodetic2D(const Vector3D& positionOnEllipsoid) const {
-  Vector3D n = geodeticSurfaceNormal(positionOnEllipsoid);
+  const Vector3D n = geodeticSurfaceNormal(positionOnEllipsoid);
   
-  return Geodetic2D(Angle::fromDegrees(asin(n.z() / n.length()) * 180 / M_PI),
-                    Angle::fromDegrees(atan2(n.y(), n.x()) * 180 / M_PI));;
+  return Geodetic2D(Angle::fromRadians(asin(n.z())),
+                    Angle::fromRadians(atan2(n.y(), n.x())));;
 }
 
 

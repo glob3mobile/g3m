@@ -70,10 +70,9 @@ void TileRenderer::initialize(const InitializationContext* ic) {
 int TileRenderer::render(const RenderContext* rc) {
   TilesStatistics statistics(_parameters);
   
-  
   IGL *gl = rc->getGL();
   
-  gl->enablePolygonOffset(5, 5);
+  gl->enablePolygonOffset(1, 1);
 
   const int topLevelTilesSize = _topLevelTiles.size();
   for (int i = 0; i < topLevelTilesSize; i++) {
@@ -82,7 +81,10 @@ int TileRenderer::render(const RenderContext* rc) {
   }
   
   if (_showStatistics) {
-    statistics.log(rc->getLogger());
+    if (!_lastStatistics.equalsTo(statistics)) {
+      _lastStatistics  = statistics;
+      statistics.log(rc->getLogger());
+    }
   }
   
   gl->disablePolygonOffset();

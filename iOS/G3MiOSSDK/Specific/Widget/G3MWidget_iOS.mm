@@ -181,16 +181,16 @@
       TileParameters* parameters = TileParameters::createDefault();
       
       TileTexturizer* texturizer = NULL;
-      if (false){
+      if (false) {
         texturizer = new SimpleTileTexturizer(parameters); //WMS
-      } else {
+      }
+      else {
         //SINGLE IMAGE
         IImage *singleWorldImage = factory->createImageFromFileName("world.jpg");
         texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
       }
-        
-      
-      TileRenderer* tr1 = new TileRenderer(EllipsoidalTileTessellator::create("world.jpg", parameters->_tileResolution, true),
+
+      TileRenderer* tr1 = new TileRenderer(EllipsoidalTileTessellator::create(parameters->_tileResolution, true),
                                            texturizer,
                                            parameters,
                                            true);
