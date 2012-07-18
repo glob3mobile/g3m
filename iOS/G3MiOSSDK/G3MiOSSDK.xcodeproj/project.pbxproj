@@ -80,6 +80,7 @@
 		CFA3E7C9157E537B00DAABD6 /* MarksRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA3E7C8157E537B00DAABD6 /* MarksRenderer.cpp */; };
 		D816E7AA15B6C9B2004FA4D6 /* SingleImageTileTexturizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D816E7A815B6C9B1004FA4D6 /* SingleImageTileTexturizer.cpp */; };
 		D816E7AB15B6C9B2004FA4D6 /* SingleImageTileTexturizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D816E7A915B6C9B1004FA4D6 /* SingleImageTileTexturizer.hpp */; };
+		D816E7AE15B6EFA4004FA4D6 /* WMSLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D816E7AD15B6EFA4004FA4D6 /* WMSLayer.cpp */; };
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
 		D84D5A32157E0EAA000C5E35 /* MutableVector3D.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D84D5A30157E0EAA000C5E35 /* MutableVector3D.hpp */; };
@@ -202,6 +203,8 @@
 		CFF95F761588E82200B56E11 /* Color.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Color.hpp; path = Commons/Basic/Color.hpp; sourceTree = "<group>"; };
 		D816E7A815B6C9B1004FA4D6 /* SingleImageTileTexturizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SingleImageTileTexturizer.cpp; path = Commons/Basic/SingleImageTileTexturizer.cpp; sourceTree = "<group>"; };
 		D816E7A915B6C9B1004FA4D6 /* SingleImageTileTexturizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SingleImageTileTexturizer.hpp; path = Commons/Basic/SingleImageTileTexturizer.hpp; sourceTree = "<group>"; };
+		D816E7AC15B6EF95004FA4D6 /* WMSLayer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = WMSLayer.hpp; path = Commons/Basic/WMSLayer.hpp; sourceTree = "<group>"; };
+		D816E7AD15B6EFA4004FA4D6 /* WMSLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WMSLayer.cpp; path = Commons/Basic/WMSLayer.cpp; sourceTree = "<group>"; };
 		D8228EBC157F7F6100BBAF60 /* MutableMatrix44D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MutableMatrix44D.hpp; path = Commons/Geometry/MutableMatrix44D.hpp; sourceTree = "<group>"; };
 		D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = MutableMatrix44D.cpp; path = Commons/Geometry/MutableMatrix44D.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector3D.cpp; path = Commons/Geometry/MutableVector3D.cpp; sourceTree = "<group>"; };
@@ -351,6 +354,8 @@
 				CF8D0C0015AF0EAB005B5433 /* SimpleTileTexturizer.cpp */,
 				D8C874BE15B5C58D00F19859 /* TilePetitions.hpp */,
 				D8C874BF15B5C5AE00F19859 /* TilePetitions.cpp */,
+				D816E7AC15B6EF95004FA4D6 /* WMSLayer.hpp */,
+				D816E7AD15B6EFA4004FA4D6 /* WMSLayer.cpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -642,6 +647,7 @@
 				D8C874C015B5C5AE00F19859 /* TilePetitions.cpp in Sources */,
 				CCB2566415B5F58500079B96 /* Box.cpp in Sources */,
 				D816E7AA15B6C9B2004FA4D6 /* SingleImageTileTexturizer.cpp in Sources */,
+				D816E7AE15B6EFA4004FA4D6 /* WMSLayer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

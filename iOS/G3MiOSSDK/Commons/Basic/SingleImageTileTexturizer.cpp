@@ -56,6 +56,8 @@ Mesh* SingleImageTileTexturizer::texturize(const RenderContext* rc,
                                               
   if (previousMesh != NULL) delete previousMesh;
   
+  tile->setTextureSolved(true);
+  
   return new TexturedMesh(mesh, false, texMap, true);
 }
 
