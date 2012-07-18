@@ -7,3 +7,21 @@
 //
 
 #include "SingleImageTileTexturizer.hpp"
+
+
+std::vector<MutableVector2D> SingleImageTileTexturizer::createTextureCoordinates() const
+{
+  
+}
+
+Mesh* SingleImageTileTexturizer::texturize(const RenderContext* rc,
+                Tile* tile,
+                Mesh* mesh,
+                Mesh* previousMesh)
+{
+  
+}
+
+void SingleImageTileTexturizer::tileToBeDeleted(Tile* tile){
+  
+}

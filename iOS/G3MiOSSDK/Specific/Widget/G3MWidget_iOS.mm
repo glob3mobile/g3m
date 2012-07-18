@@ -177,18 +177,15 @@
     // very basic tile renderer
     if (true) {
       
-      int tileResolution = 16;
-      
-      TileTexturizer* texturizer = new SimpleTileTexturizer(tileResolution);
-      
       TileParameters* parameters = TileParameters::createDefault();
+      TileTexturizer* texturizer = new SimpleTileTexturizer(parameters);
       
-      TileRenderer* tr1 = new TileRenderer(EllipsoidalTileTessellator::create("world.jpg", 16, true),
+      TileRenderer* tr1 = new TileRenderer(EllipsoidalTileTessellator::create("world.jpg", parameters->_tileResolution, true),
                                            texturizer,
                                            parameters);
       comp->addRenderer(tr1);
       
-      TileRenderer* tr2 = new TileRenderer(EllipsoidalTileTessellator::createForDebug(tileResolution),
+      TileRenderer* tr2 = new TileRenderer(EllipsoidalTileTessellator::createForDebug(parameters->_tileResolution),
                                            NULL,
                                            parameters);
       comp->addRenderer(tr2);

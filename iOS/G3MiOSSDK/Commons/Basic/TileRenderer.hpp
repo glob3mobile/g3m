@@ -75,17 +75,26 @@ public:
   const int    _splitsByLongitude;
   const int    _topLevel;
   const int    _maxLevel;
+  const int    _tileTextureHeight;
+  const int    _tileTextureWidth;
+  const int    _tileResolution;
   
   TileParameters(const Sector topSector,
                  const int    splitsByLatitude,
                  const int    splitsByLongitude,
                  const int    topLevel,
-                 const int    maxLevel) :
+                 const int    maxLevel,
+                 const int    tileTextureHeight,
+                 const int    tileTextureWidth,
+                 const int    tileResolution) :
   _topSector(topSector),
   _splitsByLatitude(splitsByLatitude),
   _splitsByLongitude(splitsByLongitude),
   _topLevel(topLevel),
-  _maxLevel(maxLevel)
+  _maxLevel(maxLevel),
+  _tileTextureHeight(tileTextureHeight),
+  _tileTextureWidth(tileTextureWidth),
+  _tileResolution(tileResolution)
   {
     
   }
@@ -96,12 +105,18 @@ public:
     const int splitsByLongitude = 4 * K;
     const int topLevel = 0;
     const int maxLevel = 8;
+    const int tileTextureHeight = 256;
+    const int tileTextureWidth = 256;
+    const int tRes = 16;
     
     return new TileParameters(Sector::fullSphere(),
                               splitsByLatitude,
                               splitsByLongitude,
                               topLevel,
-                              maxLevel);
+                              maxLevel,
+                              tileTextureHeight,
+                              tileTextureWidth,
+                              tRes);
   }
 };
 

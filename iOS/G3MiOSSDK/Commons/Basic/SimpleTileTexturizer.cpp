@@ -30,11 +30,13 @@ TilePetitions* SimpleTileTexturizer::getTilePetitions(const Tile* tile)
 std::vector<MutableVector2D> SimpleTileTexturizer::createTextureCoordinates() const
 {
   std::vector<MutableVector2D> texCoor;
+  
+  int res = _parameters->_tileResolution;
 
-  const double lonRes1 = (double) (_resolution-1), latRes1 = (double) (_resolution-1);
-  for(double i = 0.0; i < _resolution; i++){
+  const double lonRes1 = (double) (res -1), latRes1 = (double) (res-1);
+  for(double i = 0.0; i < res; i++){
     double u = (i / lonRes1);
-    for (double j = 0.0; j < _resolution; j++) {
+    for (double j = 0.0; j < res; j++) {
       const double v = (j / latRes1);
       MutableVector2D v2d(v,u);
       texCoor.push_back(v2d);
@@ -49,7 +51,7 @@ Mesh* SimpleTileTexturizer::getMesh(Tile* tile, Mesh* tessellatorMesh)
   bool dummy = true;
   if (dummy){
     //CHESSBOARD TEXTURE
-    int texID = _rc->getTexturesHandler()->getTextureIdFromFileName(_rc, "NoImage.jpg", 256, 256);
+    int texID = _rc->getTexturesHandler()->getTextureIdFromFileName(_rc, "NoImage.jpg", _parameters->_tileTextureWidth, _parameters->_tileTextureHeight);
     TextureMapping * tMap = new TextureMapping(texID, createTextureCoordinates());
     return new TexturedMesh(tessellatorMesh, false, tMap, true);
     
@@ -113,7 +115,7 @@ void SimpleTileTexturizer::onTilePetitionsFinished(TilePetitions * tp)
   IImage *im = _rc->getFactory()->createImageFromData(*bb);
   
   const std::string& url = tp->getPetition(0).getURL();   
-  int texID = _rc->getTexturesHandler()->getTextureId(_rc, im, url, 256, 256);
+  int texID = _rc->getTexturesHandler()->getTextureId(_rc, im, url, _parameters->_tileTextureWidth, _parameters->_tileTextureHeight);
   
   //RELEASING MEMORY
   _rc->getFactory()->deleteImage(im);

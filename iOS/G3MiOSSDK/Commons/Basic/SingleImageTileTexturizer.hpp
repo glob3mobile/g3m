@@ -24,9 +24,12 @@ private:
 
   const int _resolution;
   
+  int _texID;
+  
 public:
   
-  SingleImageTileTexturizer(int resolution): _resolution(resolution){}
+  SingleImageTileTexturizer(int resolution, const IImage &image): _resolution(resolution),
+  _texID(0){}
   
   Mesh* texturize(const RenderContext* rc,
                   Tile* tile,
