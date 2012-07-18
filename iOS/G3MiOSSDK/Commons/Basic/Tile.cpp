@@ -68,8 +68,8 @@ bool Tile::isVisible(const RenderContext *rc,
     return false; 
   }
   
-//  return getTessellatorMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->getFrustumInModelCoordinates());
-  return getTessellatorMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->_halfFrustumInModelCoordinates);
+  return getTessellatorMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->getFrustumInModelCoordinates());
+//  return getTessellatorMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->_halfFrustumInModelCoordinates);
 }
 
 bool Tile::meetsRenderCriteria(const RenderContext *rc,
@@ -83,7 +83,7 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
   
   
   int projectedSize = getTessellatorMesh(rc, tessellator)->getExtent()->squaredProjectedArea(rc);
-  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight)) {
+  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
     return true;
   }
 //  double t = getTessellatorMesh(rc, tessellator)->getExtent()->projectedExtent(rc).maxAxis();

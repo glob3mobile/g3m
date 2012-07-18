@@ -124,7 +124,7 @@ void Camera::render(const RenderContext &rc) {
   
   
   // TEMP: TEST TO SEE HALF SIZE FRUSTUM CLIPPING 
-  if (true) {
+  if (false) {
     const MutableMatrix44D inversed = _modelMatrix.inversed();
     
     FrustumData data = calculateFrustumData(rc);
