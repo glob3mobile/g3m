@@ -19,15 +19,18 @@ private:
   const Mesh*           _mesh;
   const TextureMapping* _textureMapping;
   const bool            _ownedMesh;
+  const bool            _ownedTexMapping;
   
 public:
   
   TexturedMesh(const Mesh* mesh,
                bool ownedMesh,
-               const TextureMapping* textureMapping) :
+               const TextureMapping* textureMapping,
+               bool ownedTexMapping) :
   _mesh(mesh),
   _ownedMesh(ownedMesh),
-  _textureMapping(textureMapping)
+  _textureMapping(textureMapping),
+  _ownedTexMapping(ownedTexMapping)
   {
     
   }
@@ -36,7 +39,9 @@ public:
     if (_ownedMesh) {
       delete _mesh;
     }
-    delete _textureMapping;
+    if (_ownedTexMapping){
+      delete _textureMapping;
+    }
   }
   
   void render(const RenderContext* rc) const;
