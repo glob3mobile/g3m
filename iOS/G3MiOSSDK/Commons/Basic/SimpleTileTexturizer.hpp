@@ -50,7 +50,7 @@ public:
   
   SimpleTileTexturizer(int resolution): _resolution(resolution){}
   
-  virtual Mesh* texturize(const RenderContext* rc,
+  Mesh* texturize(const RenderContext* rc,
                           Tile* tile,
                           Mesh* mesh,
                           Mesh* previousMesh);

@@ -115,11 +115,22 @@ void SimpleTileTexturizer::onTilePetitionsFinished(TilePetitions * tp)
   ft._row = tp->getRow();
   ft._texID = texID;
   _finishedTiles.push_back(ft);
-  
-  printf("%d, %d, %d\n", ft._level, ft._row, ft._level);
-
 }
 
 void SimpleTileTexturizer::tileToBeDeleted(Tile* tile) {
-  int ___JM_look_at_here;  
+  int index = -1;
+  for (int i = 0; i < _finishedTiles.size(); i++) {
+    FinishedTile& ft = _finishedTiles[i];
+    if (tile->getLevel() == ft._level &&
+        tile->getRow() == ft._row &&
+        tile->getColumn() == ft._column){
+      index = i;
+      break;
+    }
+  }
+  
+  if (index > -1){
+    _rc->getTexturesHandler()->takeTexture(_rc, _finishedTiles[index]._texID);
+    _finishedTiles.erase(_finishedTiles.begin()+index);
+  }
 }
