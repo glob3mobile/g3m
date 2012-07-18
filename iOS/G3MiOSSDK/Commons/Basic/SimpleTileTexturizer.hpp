@@ -20,6 +20,8 @@
 
 #include "Tile.hpp"
 #include "IFactory.hpp"
+#include "TileRenderer.hpp"
+
 
 class TilePetitions;
 
@@ -34,8 +36,8 @@ class SimpleTileTexturizer : public TileTexturizer {
 private:
   
   const RenderContext* _rc;
-  
   std::vector<FinishedTile> _finishedTiles;
+  const TileParameters *_parameters;
   
   TilePetitions* getTilePetitions(const Tile* tile);
   
@@ -44,11 +46,9 @@ private:
   
   Mesh* getMesh(Tile* tile, Mesh* mesh);
   
-  const int _resolution;
-  
 public:
   
-  SimpleTileTexturizer(int resolution): _resolution(resolution){}
+  SimpleTileTexturizer(const TileParameters *par):_parameters(par){}
   
   Mesh* texturize(const RenderContext* rc,
                           Tile* tile,
