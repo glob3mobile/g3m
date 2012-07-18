@@ -12,15 +12,13 @@
 #include "TexturedMesh.hpp"
 
 
-std::vector<MutableVector2D> SingleImageTileTexturizer::createTextureCoordinates(const RenderContext* rc, Tile* t) const
-{
+std::vector<MutableVector2D> SingleImageTileTexturizer::createTextureCoordinates(const RenderContext* rc, Tile* t) const {
   std::vector<MutableVector2D> texCoors;
   const int resol = _parameters->_tileResolution;
   const int resol_1 = resol - 1;
   
-  
-  for (unsigned int j=0; j<resol; j++) {
-    for (unsigned int i=0; i<resol; i++) {
+  for (int j=0; j<resol; j++) {
+    for (int i=0; i<resol; i++) {
       const Geodetic2D g = t->getSector().getInnerPoint((double)i/resol_1, (double)j/resol_1);
       
       const Vector3D n = rc->getPlanet()->geodeticSurfaceNormal(g);
@@ -65,6 +63,6 @@ Mesh* SingleImageTileTexturizer::texturize(const RenderContext* rc,
   return new TexturedMesh(mesh, false, texMap, true);
 }
 
-void SingleImageTileTexturizer::tileToBeDeleted(Tile* tile){
+void SingleImageTileTexturizer::tileToBeDeleted(Tile* tile) {
   
 }
