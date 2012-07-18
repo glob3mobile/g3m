@@ -37,12 +37,12 @@ std::vector<MutableVector2D> SingleImageTileTexturizer::createTextureCoordinates
 }
 
 Mesh* SingleImageTileTexturizer::texturize(const RenderContext* rc,
-                Tile* tile,
-                Mesh* mesh,
-                Mesh* previousMesh)
-{
-  if (_texID < 0){
-    
+                                           Tile* tile,
+                                           Mesh* mesh,
+                                           Mesh* previousMesh) {
+  _renderContext = rc; //SAVING CONTEXT
+
+  if (_texID < 0) {
     int texWidth = _parameters->_splitsByLongitude * _parameters->_tileTextureWidth;
     int texHeight = _parameters->_splitsByLatitude * _parameters->_tileTextureHeight;
     
@@ -50,11 +50,11 @@ Mesh* SingleImageTileTexturizer::texturize(const RenderContext* rc,
     rc->getFactory()->deleteImage(_image);
   }
   
-  _renderContext = rc; //SAVING CONTEXT
+  TextureMapping* texMap = new TextureMapping( _texID, createTextureCoordinates(rc, tile) );
   
-  TextureMapping* texMap = new TextureMapping(_texID, createTextureCoordinates(rc, tile) );
-                                              
   if (previousMesh != NULL) delete previousMesh;
+  
+  tile->setTextureSolved(true);
   
   return new TexturedMesh(mesh, false, texMap, true);
 }
