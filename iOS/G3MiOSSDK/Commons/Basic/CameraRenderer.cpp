@@ -44,7 +44,7 @@ void CameraRenderer::onDown(const TouchEvent& touchEvent) {
   
   //Initial Point for Dragging
   const Vector2D pixel = touchEvent.getTouch(0)->getPos();
-  const Vector3D ray = _camera0.pixel2Vector(pixel);
+  const Vector3D ray = _camera0.pixel2Ray(pixel);
   _initialPoint = _planet->closestIntersection(_camera0.getPosition(), ray).asMutableVector3D();
   _currentGesture = Drag; //Dragging
 }
@@ -54,7 +54,7 @@ void CameraRenderer::makeDrag(const TouchEvent& touchEvent) {
     //VALID INITIAL POINT
     
     const Vector2D pixel = touchEvent.getTouch(0)->getPos();
-    const Vector3D ray = _camera0.pixel2Vector(pixel);
+    const Vector3D ray = _camera0.pixel2Ray(pixel);
     const Vector3D pos = _camera0.getPosition();
     
     MutableVector3D finalPoint = _planet->closestIntersection(pos, ray).asMutableVector3D();
@@ -73,11 +73,11 @@ void CameraRenderer::makeZoom(const TouchEvent& touchEvent) {
   const Vector2D pixel1 = touchEvent.getTouch(1)->getPos();
   const Vector2D pixelCenter = pixel0.add(pixel1).div(2.0);
   
-  const Vector3D ray = _camera0.pixel2Vector(pixelCenter);
+  const Vector3D ray = _camera0.pixel2Ray(pixelCenter);
   _initialPoint = _planet->closestIntersection(_camera0.getPosition(), ray).asMutableVector3D();
   
   const Vector2D centerOfViewport(_camera0.getWidth() / 2, _camera0.getHeight() / 2);
-  const Vector3D ray2 = _camera0.pixel2Vector(centerOfViewport);
+  const Vector3D ray2 = _camera0.pixel2Ray(centerOfViewport);
   const Vector3D pointInCenterOfView = _planet->closestIntersection(_camera0.getPosition(), ray2);
   
   //IF CENTER PIXEL INTERSECTS THE PLANET
@@ -201,7 +201,7 @@ void CameraRenderer::makeRotate(const TouchEvent& touchEvent) {
 Vector3D CameraRenderer::centerOfViewOnPlanet(const Camera& c) const
 {
   const Vector2D centerViewport(c.getWidth() / 2, c.getHeight() / 2);
-  const Vector3D rayCV = c.pixel2Vector(centerViewport);
+  const Vector3D rayCV = c.pixel2Ray(centerViewport);
   
   return _planet->closestIntersection(c.getPosition(), rayCV);
 }

@@ -68,7 +68,7 @@ bool Tile::isVisible(const RenderContext *rc,
     return false; 
   }
   
-//  return getTessellatorMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->getFrustumInModelCoordinates());
+  //return getTessellatorMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->getFrustumInModelCoordinates());
   return getTessellatorMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->_halfFrustumInModelCoordinates);
 }
 
