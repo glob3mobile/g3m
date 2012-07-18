@@ -15,14 +15,13 @@
 std::vector<MutableVector2D> SingleImageTileTexturizer::createTextureCoordinates(const RenderContext* rc, Tile* t) const
 {
   std::vector<MutableVector2D> texCoors;
-  int resol = _parameters->_tileResolution;
-  unsigned int resol_1 = resol - 1;
+  const int resol = _parameters->_tileResolution;
+  const int resol_1 = resol - 1;
   
   
   for (unsigned int j=0; j<resol; j++) {
     for (unsigned int i=0; i<resol; i++) {
-      
-      Geodetic2D g = t->getSector().getInnerPoint((double)i/resol_1, (double)j/resol_1);
+      const Geodetic2D g = t->getSector().getInnerPoint((double)i/resol_1, (double)j/resol_1);
       
       const Vector3D n = rc->getPlanet()->geodeticSurfaceNormal(g);
       
@@ -41,16 +40,23 @@ Mesh* SingleImageTileTexturizer::texturize(const RenderContext* rc,
                                            Mesh* mesh,
                                            Mesh* previousMesh) {
   _renderContext = rc; //SAVING CONTEXT
-
+  
   if (_texID < 0) {
-    int texWidth = _parameters->_splitsByLongitude * _parameters->_tileTextureWidth;
-    int texHeight = _parameters->_splitsByLatitude * _parameters->_tileTextureHeight;
+    _texID = rc->getTexturesHandler()->getTextureId(rc,
+                                                    _image,
+                                                    "SINGLE_IMAGE_TEX",
+                                                    _image->getWidth(),
+                                                    _image->getHeight());
     
-    _texID = rc->getTexturesHandler()->getTextureId(rc, _image, "SINGLE_IMAGE_TEX", texWidth, texHeight);
+    if (_texID < 0) {
+      rc->getLogger()->logError("Can't upload texture to GPU");
+      return NULL;
+    }
+    
     rc->getFactory()->deleteImage(_image);
   }
   
-  TextureMapping* texMap = new TextureMapping( _texID, createTextureCoordinates(rc, tile) );
+  const TextureMapping* texMap = new TextureMapping( _texID, createTextureCoordinates(rc, tile) );
   
   if (previousMesh != NULL) delete previousMesh;
   
