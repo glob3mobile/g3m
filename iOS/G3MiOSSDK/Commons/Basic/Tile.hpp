@@ -65,6 +65,7 @@ private:
                         const TileTessellator *tessellator);
   
   inline bool meetsRenderCriteria(const RenderContext* rc,
+                                  const TileTessellator *tessellator,
                                   const TileParameters* parameters);
   
   inline std::vector<Tile*>* createSubTiles();

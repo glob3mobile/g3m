@@ -39,8 +39,8 @@ public:
   
   MutableVector3D normalized() const;
   
-  static Vector3D nan() {
-    return Vector3D(NAN, NAN, NAN);
+  static MutableVector3D nan() {
+    return MutableVector3D(NAN, NAN, NAN);
   }
   
   bool isNan() const {

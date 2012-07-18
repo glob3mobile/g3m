@@ -18,7 +18,7 @@ public:
   virtual ~Extent() { }
   
   virtual bool touches(const Frustum *frustum) const = 0;
-  virtual unsigned int projectedSize(const RenderContext* rc) const = 0;
+  virtual int projectedSize(const RenderContext* rc) const = 0;
 };
 
 
