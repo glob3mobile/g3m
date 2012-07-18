@@ -32,6 +32,7 @@
 #include "FileSystemStorage.hpp"
 #include "NullStorage.hpp"
 #include "SimpleTileTexturizer.hpp"
+#include "SingleImageTileTexturizer.hpp"
 
 #include <stdlib.h>
 
@@ -178,7 +179,16 @@
     if (true) {
       
       TileParameters* parameters = TileParameters::createDefault();
-      TileTexturizer* texturizer = new SimpleTileTexturizer(parameters);
+      
+      TileTexturizer* texturizer = NULL;
+      if (false){
+        texturizer = new SimpleTileTexturizer(parameters); //WMS
+      } else {
+        //SINGLE IMAGE
+        IImage *singleWorldImage = factory->createImageFromFileName("world.jpg");
+        texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
+      }
+        
       
       TileRenderer* tr1 = new TileRenderer(EllipsoidalTileTessellator::create("world.jpg", parameters->_tileResolution, true),
                                            texturizer,
