@@ -71,8 +71,6 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
                                const TileTessellator *tessellator,
                                const TileParameters* parameters) {
   
-  int __agustin_at_work;
-  
   
   if (_level >= parameters->_maxLevel) {
     return true;
