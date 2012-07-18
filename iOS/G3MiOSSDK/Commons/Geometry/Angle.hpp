@@ -20,7 +20,6 @@ private:
   const double _degrees;
   
   Angle(const double degrees) : _degrees(degrees) {  }
-  //Angle() : _degrees(0) { }
   
 public:
   
@@ -99,8 +98,6 @@ public:
   
   Angle clampedTo(const Angle& min,
                   const Angle& max) const;  
-  
-  //Angle average(const Angle& a) const;
   
   Angle average(const double t, const Angle& a) const;
     

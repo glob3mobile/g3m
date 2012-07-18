@@ -153,6 +153,19 @@ public:
     logger->logInfo("Rendered %d tiles. Levels: %d-%d" , _counter, _minLevel, _maxLevel);
   }
   
+  bool equalsTo(const TilesStatistics& that) const {
+    if (_counter != that._counter) {
+      return false;
+    }
+    if (_minLevel != that._minLevel) {
+      return false;
+    }
+    if (_maxLevel != that._maxLevel) {
+      return false;
+    }
+    
+    return true;
+  }
   
 };
 
@@ -169,6 +182,8 @@ private:
   void clearTopLevelTiles();
   void createTopLevelTiles(const InitializationContext* ic);
   
+  TilesStatistics _lastStatistics;
+  
 public:
   TileRenderer(const TileTessellator* tessellator,
                TileTexturizer*  texturizer,
@@ -177,7 +192,8 @@ public:
   _tessellator(tessellator),
   _texturizer(texturizer),
   _parameters(parameters),
-  _showStatistics(showStatistics)
+  _showStatistics(showStatistics),
+  _lastStatistics(parameters)
   {
     
   }

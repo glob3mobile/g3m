@@ -80,11 +80,15 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
   }
   
   
-  int projectedSize = getTessellatorMesh(rc, tessellator)->getExtent()->squaredProjectedArea(rc);
-  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight)) {
+//  int projectedSize = getTessellatorMesh(rc, tessellator)->getExtent()->squaredProjectedArea(rc);
+//  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight)) {
+//    return true;
+//  }
+  double t = getTessellatorMesh(rc, tessellator)->getExtent()->projectedExtent(rc).maxAxis();
+  if (t <= ((parameters->_tileTextureWidth + parameters->_tileTextureHeight) / 2)) {
     return true;
   }
-  
+
   
   return false;
 }
@@ -124,7 +128,9 @@ std::vector<Tile*>* Tile::getSubTiles() {
 
 void Tile::prune(TileTexturizer* texturizer) {
   if (_subtiles != NULL) {
-    for (int i = 0; i < _subtiles->size(); i++) {
+    
+    const int subtilesSize = _subtiles->size();
+    for (int i = 0; i < subtilesSize; i++) {
       Tile* subtile = _subtiles->at(i);
       
       subtile->prune(texturizer);

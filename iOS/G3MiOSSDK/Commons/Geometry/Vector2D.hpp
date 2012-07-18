@@ -88,6 +88,10 @@ public:
   static Vector2D nan() {
     return Vector2D(NAN, NAN);
   }
+  
+  double maxAxis() const {
+    return (_x >= _y) ? _x : _y;
+  }
 
   
 };
