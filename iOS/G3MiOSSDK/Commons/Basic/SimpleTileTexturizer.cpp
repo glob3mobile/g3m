@@ -111,3 +111,7 @@ void SimpleTileTexturizer::onTilePetitionsFinished(TilePetitions * tp)
   printf("%d, %d, %d\n", ft._level, ft._row, ft._level);
 
 }
+
+void SimpleTileTexturizer::tileToBeDeleted(Tile* tile) {
+  int ___JM_look_at_here;  
+}

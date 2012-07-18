@@ -83,7 +83,7 @@ private:
 
   inline std::vector<Tile*>* getSubTiles();
 
-  inline void prune();
+  inline void prune(TileTexturizer* texturizer);
   
 public:
   Tile(const Sector& sector,

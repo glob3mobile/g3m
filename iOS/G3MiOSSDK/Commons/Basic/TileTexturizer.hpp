@@ -22,6 +22,8 @@ public:
                           Mesh* tessellatorMesh,
                           Mesh* previousMesh) = 0;
   
+  virtual void tileToBeDeleted(Tile* tile) = 0;
+  
   virtual ~TileTexturizer() {
     
   }
