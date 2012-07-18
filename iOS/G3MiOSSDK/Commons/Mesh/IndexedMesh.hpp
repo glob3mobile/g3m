@@ -71,6 +71,15 @@ public:
   virtual void render(const RenderContext* rc) const;
   
   Extent *getExtent() const;
+  
+  int getVertexCount() const{
+    return _numIndex;
+  }
+  
+  const float* getVertex() const
+  {
+    return _vertices;
+  }
 
   
 };

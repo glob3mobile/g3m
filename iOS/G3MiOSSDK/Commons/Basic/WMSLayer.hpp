@@ -39,7 +39,7 @@ public:
   {
   }
   
-  std::string getRequest(const Sector& sector, int texWidth, int texHeight) const;
+  std::string getRequest(const Sector& sector, int width, int height) const;
   
 };
 

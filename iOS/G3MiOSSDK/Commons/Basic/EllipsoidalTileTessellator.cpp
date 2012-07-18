@@ -21,7 +21,6 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
     return createDebugMesh(rc, tile);
   }
   
-  
   const Sector sector = tile->getSector();
   const Planet* planet = rc->getPlanet();
   

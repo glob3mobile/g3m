@@ -28,7 +28,7 @@ void Mark::render(const RenderContext* rc,
       IGL* gl = rc->getGL();
       
       if (_textureId < 1) {
-        _textureId = rc->getTexturesHandler()->getTextureIdFromFileName(rc, _textureFilename, 128, 128);
+        _textureId = rc->getTexturesHandler()->getTextureIdFromFileName(_textureFilename, 128, 128);
       }
       
       if (_textureId < 1) {

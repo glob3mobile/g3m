@@ -12,9 +12,12 @@
 #include <string>
 #include <vector>
 
+
 class IImage;
 class RenderContext;
 class TextureHolder;
+class IGL;
+class IFactory;
 
 
 
@@ -22,16 +25,20 @@ class TexturesHandler {
 private:
   std::vector<TextureHolder*> _textureHolders;
   
+  IGL * const _gl;
+  const IFactory * const _factory;
+  
 public:
+  
+  TexturesHandler(IGL* const  gl, const IFactory const * factory): _gl(gl), _factory(factory){}
+  
   ~TexturesHandler();
   
-  int getTextureIdFromFileName(const RenderContext* rc,
-                               const std::string& filename,
+  int getTextureIdFromFileName(const std::string& filename,
                                int textureWidth,
                                int textureHeight);
   
-  int getTextureId(const RenderContext* rc,
-                   const IImage* image,
+  int getTextureId(const IImage* image,
                    const std::string& textureId,
                    int textureWidth,
                    int textureHeight);
@@ -42,8 +49,7 @@ public:
                               int textureHeight);
   
   
-  void takeTexture(const RenderContext* rc,
-                   int glTextureId);
+  void takeTexture(int glTextureId);
   
 };
 

@@ -11,6 +11,7 @@
 #include "IImage.hpp"
 #include "Context.hpp"
 
+
 class TextureHolder {
 public:
   const std::string _textureId;
@@ -65,14 +66,12 @@ public:
 };
 
 
-int TexturesHandler::getTextureIdFromFileName(const RenderContext* rc,
-                                              const std::string &filename,
+int TexturesHandler::getTextureIdFromFileName(const std::string &filename,
                                               int textureWidth,
                                               int textureHeight) {
-  const IImage* image = rc->getFactory()->createImageFromFileName(filename);
+  const IImage* image = _factory->createImageFromFileName(filename);
   
-  const int texId = getTextureId(rc,
-                                 image,
+  const int texId = getTextureId(image,
                                  filename, // filename as the textureId
                                  textureWidth,
                                  textureHeight);
@@ -97,8 +96,7 @@ int TexturesHandler::getTextureIdIfAvailable(const std::string &textureId,
   return -1;
 }
 
-int TexturesHandler::getTextureId(const RenderContext* rc,
-                                  const IImage *image, 
+int TexturesHandler::getTextureId(const IImage *image, 
                                   const std::string &textureId,
                                   int textureWidth,
                                   int textureHeight) {
@@ -111,21 +109,23 @@ int TexturesHandler::getTextureId(const RenderContext* rc,
   
   TextureHolder* holder = new TextureHolder(textureId, textureWidth, textureHeight);
   
-  holder->_glTextureId = rc->getGL()->uploadTexture(image, textureWidth, textureHeight);
+  holder->_glTextureId = _gl->uploadTexture(image, textureWidth, textureHeight);
   
+  int _todo_Diego_mira_LOGS;
+  /*
   rc->getLogger()->logInfo("Uploaded texture \"%s\" (%dx%d) to GPU with texId=%d" ,
                            textureId.c_str(),
                            textureWidth,
                            textureHeight,
                            holder->_glTextureId);
+   */
   
   _textureHolders.push_back(holder);
   
   return holder->_glTextureId;
 }
 
-void TexturesHandler::takeTexture(const RenderContext* rc,
-                                  int glTextureId) {
+void TexturesHandler::takeTexture(int glTextureId) {
   for (int i = 0; i < _textureHolders.size(); i++) {
     TextureHolder* holder = _textureHolders[i];
     
@@ -140,7 +140,7 @@ void TexturesHandler::takeTexture(const RenderContext* rc,
         _textureHolders.remove(i);
 #endif
         
-        rc->getGL()->deleteTexture(holder->_glTextureId);
+        _gl->deleteTexture(holder->_glTextureId);
         
         delete holder;
       }
