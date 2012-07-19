@@ -22,9 +22,9 @@ _textureId(textureId)
   }
   _texCoords = texCoordsA;
   
-  MutableVector2D t(0, 0);
+  MutableVector2D t(0.0, 0.0);
   _translation = t;
-  MutableVector2D s(1, 1);
+  MutableVector2D s(1.0, 1.0);
   _scale = s;
 }
 
