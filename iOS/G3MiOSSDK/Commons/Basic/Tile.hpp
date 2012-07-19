@@ -60,6 +60,8 @@ private:
   Tile* _fallbackTextureTile;
   bool _textureSolved;
   
+  int _texturedCounter;
+  
   inline Mesh* getTessellatorMesh(const RenderContext* rc,
                                   const TileTessellator* tessellator);
   
@@ -110,7 +112,8 @@ public:
   _texturizerMesh(NULL),
   _textureSolved(false),
   _fallbackTextureTile(fallbackTextureTile),
-  _subtiles(NULL)
+  _subtiles(NULL),
+  _texturedCounter(0)
   {
   }
   
