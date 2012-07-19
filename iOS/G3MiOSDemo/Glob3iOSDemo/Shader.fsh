@@ -26,7 +26,6 @@ void main() {
     gl_FragColor = texture2D(Sampler, TextureCoordOut * ScaleTexCoord + TranslationTexCoord);
 
     if (EnableFlatColor || EnableColorPerVertex){
-
       lowp vec4 color;
       if (EnableFlatColor) {
         color = FlatColor;

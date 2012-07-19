@@ -14,6 +14,7 @@
 #include "IImage.hpp"
 #include "MutableMatrix44D.hpp"
 #include "Color.hpp"
+#include "MutableVector2D.hpp"
 
 enum CullFace {
   FRONT,
@@ -49,7 +50,7 @@ public:
   virtual void disableVerticesPosition() = 0;
   
   virtual void disableTextures() = 0;
-  
+
   virtual void clearScreen(float r, float g, float b, float a) = 0;
 
   void clearScreen(const Color& col){
