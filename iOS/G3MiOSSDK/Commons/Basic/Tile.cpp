@@ -107,9 +107,9 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
 //    return true;
 //  }
   const Vector2D extent = getTessellatorMesh(rc, tessellator)->getExtent()->projectedExtent(rc);
-//  const double t = extent.maxAxis();
-  const double t = (extent.x() + extent.y()) / 2;
-  if (t <= ((parameters->_tileTextureWidth + parameters->_tileTextureHeight) / 2.0 * 1.5)) {
+  const double t = extent.maxAxis();
+//  const double t = (extent.x() + extent.y()) / 2;
+  if (t <= ((parameters->_tileTextureWidth + parameters->_tileTextureHeight) / 2)) {
     return true;
   }
 
@@ -189,6 +189,7 @@ void Tile::render(const RenderContext* rc,
       if (parameters->_renderDebug) {
         debugRender(rc, tessellator);
       }
+      
       prune(texturizer);
       
       statistics->computeTile(this);
