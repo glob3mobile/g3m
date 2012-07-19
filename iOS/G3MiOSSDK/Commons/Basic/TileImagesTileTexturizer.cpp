@@ -42,26 +42,26 @@ TilePetitions* TileImagesTileTexturizer::getTilePetitions(const Tile* tile)
   return tt;
 }
 
-std::vector<MutableVector2D> TileImagesTileTexturizer::createNewTextureCoordinates() const
+std::vector<MutableVector2D> TileImagesTileTexturizer::createNewTextureCoordinates(const Planet* planet,
+                                                                                   Tile* tile,
+                                                                                   Mesh* tessellatorMesh) const
 {
   std::vector<MutableVector2D> texCoor;
   
-  int res = _parameters->_tileResolution;
-
-  const double lonRes1 = (double) (res -1), latRes1 = (double) (res-1);
-  for(double i = 0.0; i < res; i++){
-    double u = (i / lonRes1);
-    for (double j = 0.0; j < res; j++) {
-      const double v = (j / latRes1);
-      MutableVector2D v2d(v,u);
-      texCoor.push_back(v2d);
-    }
+  const Sector sector = tile->getSector();
+  
+  for (int i = 0; i < tessellatorMesh->getVertexCount(); i++) {
+    const Vector3D vertex = tessellatorMesh->getVertex(i);
+    const Geodetic3D pos = planet->toGeodetic3D(vertex);
+    const Vector2D v2d = sector.getUVCoordinates( Geodetic2D(pos.latitude(), pos.longitude()) );
+    texCoor.push_back(v2d.asMutableVector2D());
   }
   
   return texCoor;
 }
 
-Mesh* TileImagesTileTexturizer::getMesh(Tile* tile,
+Mesh* TileImagesTileTexturizer::getMesh(const Planet* planet,
+                                        Tile* tile,
                                         Mesh* tessellatorMesh,
                                         Mesh* previousMesh)
 {
@@ -70,27 +70,31 @@ Mesh* TileImagesTileTexturizer::getMesh(Tile* tile,
   //CHECKING IF TILE HAS BEEN REQUESTED ALREADY WITHOUT RESPONSE
   if (!isTextureAvailable(tile)){
     //FALLBACK TEXTURE
-    mesh = getFallBackTexturedMesh(tile, tessellatorMesh);
+    mesh = getFallBackTexturedMesh(planet, tile, tessellatorMesh);
   } else{
     //NEW MESH IF TEXTURE HAS ARRIVED
-    mesh = getNewTextureMesh(tile, tessellatorMesh);
+    mesh = getNewTextureMesh(planet, tile, tessellatorMesh);
   }
   return mesh;
 }
 
-Mesh* TileImagesTileTexturizer::getNewTextureMesh(Tile* tile, Mesh* tessellatorMesh)
+Mesh* TileImagesTileTexturizer::getNewTextureMesh(const Planet* planet,
+                                                  Tile* tile,
+                                                  Mesh* tessellatorMesh)
 {
     //THE TEXTURE HAS BEEN LOADED???
     RequestedTile* ft = getRequestTile(tile->getLevel(), tile->getRow(), tile->getColumn());
-    if (ft != NULL && ft->_texID > -1){ //Texture already solved
+    if (ft != NULL && ft->_texID > -1) { // Texture already solved
         tile->setTextureSolved(true);
-        TextureMapping * tMap = new TextureMapping(ft->_texID, createNewTextureCoordinates());
+        TextureMapping * tMap = new TextureMapping(ft->_texID, createNewTextureCoordinates(planet, tile, tessellatorMesh));
         return new TexturedMesh(tessellatorMesh, false, tMap, true);
     }
     return NULL;
 }
 
-Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile, Mesh* tesellatorMesh)
+Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(const Planet* planet,
+                                                        Tile* tile,
+                                                        Mesh* tessellatorMesh)
 {
   int texID = -1;
   Tile* fbTile = tile->getFallbackTextureTile();
@@ -108,8 +112,8 @@ Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile, Mesh* tesell
   }
   
   if (texID > -1){
-    TextureMapping * tMap = new TextureMapping(texID, createNewTextureCoordinates());
-    return new TexturedMesh(tesellatorMesh, false, tMap, true);
+    TextureMapping * tMap = new TextureMapping(texID, createNewTextureCoordinates(planet, tile, tessellatorMesh));
+    return new TexturedMesh(tessellatorMesh, false, tMap, true);
   }
   
   return NULL;
@@ -138,15 +142,18 @@ void TileImagesTileTexturizer::registerNewRequest(Tile *tile){
 }
 
 Mesh* TileImagesTileTexturizer::texturize(const RenderContext* rc,
-                                      Tile* tile,
-                                      Mesh* tessellatorMesh,
-                                      Mesh* previousMesh) {
+                                          Tile* tile,
+                                          Mesh* tessellatorMesh,
+                                          Mesh* previousMesh) {
+  
+  const Planet* planet = rc->getPlanet();
+  
   bool dummy = false;
   if (dummy){
     //CHESSBOARD TEXTURE
     int texID = rc->getTexturesHandler()->getTextureIdFromFileName("NoImage.jpg", _parameters->_tileTextureWidth, _parameters->_tileTextureHeight);
     if (previousMesh != NULL) delete previousMesh;
-    TextureMapping * tMap = new TextureMapping(texID, createNewTextureCoordinates());
+    TextureMapping * tMap = new TextureMapping(texID, createNewTextureCoordinates(planet, tile, tessellatorMesh));
     return new TexturedMesh(tessellatorMesh, false, tMap, true);
   }
   
@@ -154,19 +161,19 @@ Mesh* TileImagesTileTexturizer::texturize(const RenderContext* rc,
   _factory = rc->getFactory();
   _texHandler = rc->getTexturesHandler();
   _downloader = rc->getDownloader();
-
+  
   Mesh *mesh = NULL;
   if (isTextureAvailable(tile)){
-    mesh = getMesh(tile, tessellatorMesh, previousMesh);
+    mesh = getMesh(planet, tile, tessellatorMesh, previousMesh);
   } else{
     
     if (!isTextureRequested(tile)){
       //REGISTERING PETITION AND SENDING TO THE NET
       registerNewRequest(tile);
     }
-    mesh = getMesh(tile, tessellatorMesh, previousMesh);
+    mesh = getMesh(planet, tile, tessellatorMesh, previousMesh);
   }
-
+  
   if (mesh != NULL && previousMesh != NULL)
   {
     delete previousMesh;
@@ -223,4 +230,12 @@ void TileImagesTileTexturizer::tileToBeDeleted(Tile* tile) {
     
     _requestedTiles.erase(_requestedTiles.begin()+index);
   }
+}
+
+bool TileImagesTileTexturizer::tileMeetsRenderCriteria(Tile* tile) {
+  return false;
+}
+
+void TileImagesTileTexturizer::justCreatedTopTile(Tile *tile) {
+  
 }

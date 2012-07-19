@@ -88,11 +88,19 @@ bool Tile::isVisible(const RenderContext *rc,
 
 bool Tile::meetsRenderCriteria(const RenderContext *rc,
                                const TileTessellator *tessellator,
+                               TileTexturizer *texturizer,
                                const TileParameters* parameters) {
   
   
   if (_level >= parameters->_maxLevel) {
     return true;
+  }
+
+  int __diego_at_work;
+  if (texturizer != NULL) {
+    if (texturizer->tileMeetsRenderCriteria(this)) {
+      return true;
+    }
   }
   
   
@@ -178,7 +186,7 @@ void Tile::render(const RenderContext* rc,
                   const TileParameters* parameters,
                   TilesStatistics* statistics) {
   if (isVisible(rc, tessellator)) {
-    if (meetsRenderCriteria(rc, tessellator, parameters)) {
+    if (meetsRenderCriteria(rc, tessellator, texturizer, parameters)) {
       rawRender(rc, tessellator, texturizer);
       if (parameters->_renderDebug) {
         debugRender(rc, tessellator);

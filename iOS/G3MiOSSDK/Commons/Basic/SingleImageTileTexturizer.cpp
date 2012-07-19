@@ -63,3 +63,11 @@ Mesh* SingleImageTileTexturizer::texturize(const RenderContext* rc,
 void SingleImageTileTexturizer::tileToBeDeleted(Tile* tile) {
   
 }
+
+bool SingleImageTileTexturizer::tileMeetsRenderCriteria(Tile* tile) {
+  return false;
+}
+
+void SingleImageTileTexturizer::justCreatedTopTile(Tile *tile) {
+  
+}
