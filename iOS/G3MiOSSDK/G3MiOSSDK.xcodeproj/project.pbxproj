@@ -74,7 +74,7 @@
 		CF883B8A1592471600AEE39C /* GLErrorRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF883B891592471600AEE39C /* GLErrorRenderer.cpp */; };
 		CF883BCB1594B9A500AEE39C /* Sector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF883BCA1594B9A500AEE39C /* Sector.cpp */; };
 		CF8D0BFE15AF0D32005B5433 /* TileTexturizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */; };
-		CF8D0C0115AF0EAB005B5433 /* SimpleTileTexturizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8D0C0015AF0EAB005B5433 /* SimpleTileTexturizer.cpp */; };
+		CF8D0C0115AF0EAB005B5433 /* TileImagesTileTexturizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8D0C0015AF0EAB005B5433 /* TileImagesTileTexturizer.cpp */; };
 		CF9AEBBF159B3BAF004C3558 /* TileTessellator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9AEBBE159B3BAF004C3558 /* TileTessellator.cpp */; };
 		CF9AEBC2159B3FEB004C3558 /* EllipsoidalTileTessellator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9AEBC1159B3FEA004C3558 /* EllipsoidalTileTessellator.cpp */; };
 		CFA3E7C9157E537B00DAABD6 /* MarksRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA3E7C8157E537B00DAABD6 /* MarksRenderer.cpp */; };
@@ -191,8 +191,8 @@
 		CF883BCA1594B9A500AEE39C /* Sector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sector.cpp; path = Commons/Geometry/Sector.cpp; sourceTree = "<group>"; };
 		CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TileTexturizer.hpp; path = Commons/Basic/TileTexturizer.hpp; sourceTree = "<group>"; };
 		CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileTexturizer.cpp; path = Commons/Basic/TileTexturizer.cpp; sourceTree = "<group>"; };
-		CF8D0BFF15AF0E98005B5433 /* SimpleTileTexturizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SimpleTileTexturizer.hpp; path = Commons/Basic/SimpleTileTexturizer.hpp; sourceTree = "<group>"; };
-		CF8D0C0015AF0EAB005B5433 /* SimpleTileTexturizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SimpleTileTexturizer.cpp; path = Commons/Basic/SimpleTileTexturizer.cpp; sourceTree = "<group>"; };
+		CF8D0BFF15AF0E98005B5433 /* TileImagesTileTexturizer.hpp */ = {isa = PBXFileReference; name = TileImagesTileTexturizer.hpp; path = Commons/Basic/TileImagesTileTexturizer.hpp; sourceTree = "<group>"; };
+		CF8D0C0015AF0EAB005B5433 /* TileImagesTileTexturizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileImagesTileTexturizer.cpp; path = Commons/Basic/TileImagesTileTexturizer.cpp; sourceTree = "<group>"; };
 		CF9AEBBD159B3B95004C3558 /* TileTessellator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TileTessellator.hpp; path = Commons/Basic/TileTessellator.hpp; sourceTree = "<group>"; };
 		CF9AEBBE159B3BAF004C3558 /* TileTessellator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileTessellator.cpp; path = Commons/Basic/TileTessellator.cpp; sourceTree = "<group>"; };
 		CF9AEBC0159B3FDD004C3558 /* EllipsoidalTileTessellator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = EllipsoidalTileTessellator.hpp; path = Commons/Basic/EllipsoidalTileTessellator.hpp; sourceTree = "<group>"; };
@@ -335,8 +335,8 @@
 				CF883B851591FEAF00AEE39C /* SceneGraphRenderer.hpp */,
 				38D787071588F886003BBC75 /* SimplePlanetRenderer.cpp */,
 				38D787081588F886003BBC75 /* SimplePlanetRenderer.hpp */,
-				CF8D0C0015AF0EAB005B5433 /* SimpleTileTexturizer.cpp */,
-				CF8D0BFF15AF0E98005B5433 /* SimpleTileTexturizer.hpp */,
+				CF8D0C0015AF0EAB005B5433 /* TileImagesTileTexturizer.cpp */,
+				CF8D0BFF15AF0E98005B5433 /* TileImagesTileTexturizer.hpp */,
 				D816E7A815B6C9B1004FA4D6 /* SingleImageTileTexturizer.cpp */,
 				D816E7A915B6C9B1004FA4D6 /* SingleImageTileTexturizer.hpp */,
 				CF883B811590984900AEE39C /* TexturesHandler.cpp */,
@@ -356,8 +356,8 @@
 				383BD3941577EE500012AC53 /* TouchEvent.hpp */,
 				CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */,
 				CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */,
-				CF8D0BFF15AF0E98005B5433 /* SimpleTileTexturizer.hpp */,
-				CF8D0C0015AF0EAB005B5433 /* SimpleTileTexturizer.cpp */,
+				CF8D0BFF15AF0E98005B5433 /* TileImagesTileTexturizer.hpp */,
+				CF8D0C0015AF0EAB005B5433 /* TileImagesTileTexturizer.cpp */,
 				D8C874BE15B5C58D00F19859 /* TilePetitions.hpp */,
 				D8C874BF15B5C5AE00F19859 /* TilePetitions.cpp */,
 				D816E7AC15B6EF95004FA4D6 /* WMSLayer.hpp */,
@@ -643,7 +643,7 @@
 				382D4B9A159DC27800FE9296 /* FileSystemStorage.mm in Sources */,
 				382D4B9C159DE56F00FE9296 /* NetworkQueue.mm in Sources */,
 				CF8D0BFE15AF0D32005B5433 /* TileTexturizer.cpp in Sources */,
-				CF8D0C0115AF0EAB005B5433 /* SimpleTileTexturizer.cpp in Sources */,
+				CF8D0C0115AF0EAB005B5433 /* TileImagesTileTexturizer.cpp in Sources */,
 				D8A5601F15AEF64E00035086 /* IndexedMesh.cpp in Sources */,
 				D8A5602115AEF64E00035086 /* Mesh.cpp in Sources */,
 				CC96079215AF23F600D438D4 /* TextureMapping.cpp in Sources */,
