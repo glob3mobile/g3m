@@ -68,6 +68,12 @@ private:
     return !(ft == NULL || ft->_texID < 0);
   }
   
+  bool isTextureRequested(Tile* tile)
+  {
+    RequestedTile* ft = getRequestTile(tile->getLevel(), tile->getRow(), tile->getColumn());
+    return ft != NULL;
+  }
+  
   Mesh* getFallBackTexturedMesh(Tile* tile, Mesh* tesellatorMesh);
   
   Mesh* getNewTextureMesh(Tile* tile, Mesh* mesh);

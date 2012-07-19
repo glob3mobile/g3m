@@ -155,13 +155,12 @@ Mesh* TileImagesTileTexturizer::texturize(const RenderContext* rc,
   _texHandler = rc->getTexturesHandler();
   _downloader = rc->getDownloader();
 
-  bool texWasAvailable = isTextureAvailable(tile);
-  
-  Mesh *mesh = getMesh(tile, tessellatorMesh, previousMesh);
-
-  if (!texWasAvailable){
-    RequestedTile* ft = getRequestTile(tile->getLevel(), tile->getRow(), tile->getColumn());
-    if (ft == NULL){
+  Mesh *mesh = NULL;
+  if (isTextureAvailable(tile)){
+    mesh = getMesh(tile, tessellatorMesh, previousMesh);
+  } else{
+    
+    if (!isTextureRequested(tile)){
       //REGISTERING PETITION AND SENDING TO THE NET
       registerNewRequest(tile);
     }
