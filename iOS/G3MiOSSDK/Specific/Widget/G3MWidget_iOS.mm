@@ -31,7 +31,7 @@
 #include "SQLiteStorage_iOS.hpp"
 #include "FileSystemStorage.hpp"
 #include "NullStorage.hpp"
-#include "SimpleTileTexturizer.hpp"
+#include "TileImagesTileTexturizer.hpp"
 #include "SingleImageTileTexturizer.hpp"
 
 #include <stdlib.h>
@@ -181,7 +181,7 @@
       
       TileTexturizer* texturizer = NULL;
       if (true) {
-        texturizer = new SimpleTileTexturizer(parameters); //WMS
+        texturizer = new TileImagesTileTexturizer(parameters); //WMS
       }
       else {
         //SINGLE IMAGE

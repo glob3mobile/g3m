@@ -1,13 +1,13 @@
 //
-//  SimpleTileTexturizer.hpp
+//  TileImagesTileTexturizer.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 12/07/12.
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_SimpleTileTexturizer_hpp
-#define G3MiOSSDK_SimpleTileTexturizer_hpp
+#ifndef G3MiOSSDK_TileImagesTileTexturizer_hpp
+#define G3MiOSSDK_TileImagesTileTexturizer_hpp
 
 #include "TileTexturizer.hpp"
 
@@ -34,7 +34,7 @@ struct RequestedTile{
   std::vector<long> _downloads;
 };
 
-class SimpleTileTexturizer : public TileTexturizer {
+class TileImagesTileTexturizer : public TileTexturizer {
 private:
   
   const IFactory* _factory;
@@ -48,7 +48,7 @@ private:
   
   TilePetitions* getTilePetitions(const Tile* tile);
   
-  std::vector<MutableVector2D> createTextureCoordinates() const;
+  std::vector<MutableVector2D> createNewTextureCoordinates() const;
   
   void registerNewRequest(Tile* tile);
   
@@ -62,13 +62,29 @@ private:
     return NULL;
   }
   
+  bool isTextureAvailable(Tile* tile)
+  {
+    RequestedTile* ft = getRequestTile(tile->getLevel(), tile->getRow(), tile->getColumn());
+    return !(ft == NULL || ft->_texID < 0);
+  }
   
+  bool isTextureRequested(Tile* tile)
+  {
+    RequestedTile* ft = getRequestTile(tile->getLevel(), tile->getRow(), tile->getColumn());
+    return ft != NULL;
+  }
   
-  Mesh* getMesh(Tile* tile, Mesh* mesh);
+  Mesh* getFallBackTexturedMesh(Tile* tile, Mesh* tesellatorMesh);
+  
+  Mesh* getNewTextureMesh(Tile* tile, Mesh* mesh);
+  
+  Mesh* getMesh(Tile* tile,
+                Mesh* tessellatorMesh,
+                Mesh* previousMesh);
   
 public:
   
-  SimpleTileTexturizer(const TileParameters *par):_parameters(par), _layer(NULL){}
+  TileImagesTileTexturizer(const TileParameters *par):_parameters(par), _layer(NULL){}
   
   Mesh* texturize(const RenderContext* rc,
                           Tile* tile,

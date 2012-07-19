@@ -140,6 +140,8 @@ public:
   
   void setFallbackTextureTile(Tile* fallbackTextureTile);
   
+  Tile* getFallbackTextureTile() const { return _fallbackTextureTile;}
+  
   void render(const RenderContext* rc,
               const TileTessellator* tessellator,
               TileTexturizer* texturizer,
