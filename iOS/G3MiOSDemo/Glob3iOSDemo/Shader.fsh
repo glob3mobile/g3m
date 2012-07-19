@@ -18,10 +18,17 @@ uniform bool EnableFlatColor;
 uniform mediump float FlatColorIntensity;
 uniform mediump float ColorPerVertexIntensity;
 
+uniform mediump vec2 TexCoordTranslation;
+uniform mediump vec2 TexCoordScale;
+
 void main() {
   
   if (EnableTexture) {
-    gl_FragColor = texture2D(Sampler, TextureCoordOut);
+    
+    mediump vec2 texCoord = TextureCoordOut * TexCoordScale;
+    texCoord += TexCoordTranslation;
+    
+    gl_FragColor = texture2D(Sampler, texCoord);
 
     if (EnableFlatColor || EnableColorPerVertex){
 

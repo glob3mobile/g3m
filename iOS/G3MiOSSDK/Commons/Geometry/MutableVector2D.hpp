@@ -19,6 +19,8 @@ private:
   double _y;
   
 public:
+  
+  MutableVector2D(): _x(0.0), _y(0.0) {}
 
   
   MutableVector2D(const double x,

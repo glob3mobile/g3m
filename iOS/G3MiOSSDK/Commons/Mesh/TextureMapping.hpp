@@ -20,6 +20,7 @@ class TextureMapping
 private:
   const int          _textureId;
   const float const* _texCoords;
+  MutableVector2D    _translation, _scale;
   
 public:
   
@@ -28,10 +29,19 @@ public:
   _textureId(textureId),
   _texCoords(texCoords)
   {
+    MutableVector2D t(0, 0);
+    _translation = t;
+    MutableVector2D s(1, 1);
+    _scale = s;
   }
   
   TextureMapping(int textureId,
                  std::vector<MutableVector2D> texCoords);
+  
+  void translateAndScale(const MutableVector2D& trans, const MutableVector2D& scale){
+    _translation = trans;
+    _scale = scale;
+  }
   
   ~TextureMapping() {
     delete[] _texCoords;

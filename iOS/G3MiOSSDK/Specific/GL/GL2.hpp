@@ -90,6 +90,8 @@ public:
   
   void cullFace(bool b, CullFace face);
   
+  void translateAndScaleTexCoords(const MutableVector2D& trans, const MutableVector2D& scale);
+  
 private:
   MutableMatrix44D            _modelView;
 

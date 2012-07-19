@@ -32,6 +32,10 @@ struct UniformsStruct {
   GLint EnableFlatColor;
   GLint ColorPerVertexIntensity;
   
+  //Textures
+  GLint TexCoordTranslation;
+  GLint TexCoordScale;
+  
 } Uniforms;
 
 struct AttributesStruct {
@@ -69,6 +73,10 @@ void GL2::useProgram(unsigned int program) {
   Uniforms.ColorPerVertexIntensity = glGetUniformLocation(program, "ColorPerVertexIntensity");
   Uniforms.EnableColorPerVertex = glGetUniformLocation(program, "EnableColorPerVertex");
   Uniforms.EnableFlatColor = glGetUniformLocation(program, "EnableFlatColor");
+  
+  //TEXTURES
+  Uniforms.TexCoordTranslation = glGetUniformLocation(program, "TexCoordTranslation");
+  Uniforms.TexCoordScale = glGetUniformLocation(program, "TexCoordScale");
 }
 
 void GL2::setProjection(const MutableMatrix44D &projection) {
@@ -339,4 +347,9 @@ void GL2::cullFace(bool b, CullFace face) {
       glCullFace(GL_FRONT_AND_BACK);
       break;
   }
+}
+
+void GL2::translateAndScaleTexCoords(const MutableVector2D& trans, const MutableVector2D& scale){
+  glUniform2f(Uniforms.TexCoordTranslation, trans.x(), trans.y());
+  glUniform2f(Uniforms.TexCoordScale, scale.x(), scale.y());
 }

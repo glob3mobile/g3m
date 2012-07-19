@@ -21,10 +21,17 @@ _textureId(textureId)
     texCoordsA[p++] = texCoords[i].y();
   }
   _texCoords = texCoordsA;
+  
+  MutableVector2D t(0, 0);
+  _translation = t;
+  MutableVector2D s(1, 1);
+  _scale = s;
 }
 
 void TextureMapping::bind(const RenderContext* rc) const {
   IGL *gl = rc->getGL();
+  
+  gl->translateAndScaleTexCoords(_translation, _scale);
   
   gl->bindTexture(_textureId);
   gl->setTextureCoordinates(2, 0, _texCoords);
