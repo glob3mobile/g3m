@@ -109,27 +109,36 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
   unsigned int resol_1 = _resolution - 1;  
   unsigned int posS = 0;
   
+  // compute offset for vertices
+  Vector3D sw = planet->toVector3D(sector.getSW());
+  Vector3D nw = planet->toVector3D(sector.getNW());
+  double offset = nw.sub(sw).length() * 1e-3;
+
   // west side
   for (unsigned int j=0; j<resol_1; j++) {
-    addVertex(planet, &vertices, sector.getInnerPoint(0.0, (double)j/resol_1));
+    Geodetic3D g(sector.getInnerPoint(0.0, (double)j/resol_1), offset); 
+    addVertex(planet, &vertices, g);
     indices.push_back(posS++);
   }
  
   // south side
   for (unsigned int i=0; i<resol_1; i++) {
-    addVertex(planet, &vertices, sector.getInnerPoint((double)i/resol_1, 1.0));
+    Geodetic3D g(sector.getInnerPoint((double)i/resol_1, 1.0), offset);
+    addVertex(planet, &vertices, g);
     indices.push_back(posS++);
   }
   
   // east side
   for (unsigned int j=resol_1; j>0; j--) {
-    addVertex(planet, &vertices, sector.getInnerPoint(1.0, (double)j/resol_1));
+    Geodetic3D g(sector.getInnerPoint(1.0, (double)j/resol_1), offset);
+    addVertex(planet, &vertices, g);
     indices.push_back(posS++);
   }
   
   // north side
   for (unsigned int i=resol_1; i>0; i--) {
-    addVertex(planet, &vertices, sector.getInnerPoint((double)i/resol_1, 0.0));
+    Geodetic3D g(sector.getInnerPoint((double)i/resol_1, 0.0), offset);
+    addVertex(planet, &vertices, g);
     indices.push_back(posS++);
   }
 
