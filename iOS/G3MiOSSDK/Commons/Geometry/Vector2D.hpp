@@ -13,6 +13,8 @@
 
 #include "Angle.hpp"
 
+class MutableVector2D;
+
 class Vector2D {
 private:
   const double _x;
@@ -96,6 +98,8 @@ public:
   double minAxis() const {
     return (_x <= _y) ? _x : _y;
   }
+  
+  MutableVector2D asMutableVector2D() const;
 
   
 };

@@ -181,6 +181,7 @@ private:
   TileTexturizer*        _texturizer;
   const TileParameters*  _parameters;
   const bool             _showStatistics;
+  bool                   _topTilesJustCreated;
   
   std::vector<Tile*>     _topLevelTiles;
   
@@ -198,7 +199,8 @@ public:
   _texturizer(texturizer),
   _parameters(parameters),
   _showStatistics(showStatistics),
-  _lastStatistics(parameters)
+  _lastStatistics(parameters),
+  _topTilesJustCreated(false)
   {
     
   }

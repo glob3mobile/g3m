@@ -59,6 +59,8 @@ void TileRenderer::createTopLevelTiles(const InitializationContext* ic) {
   }
   
   ic->getLogger()->logInfo("Created %i top level tiles", _topLevelTiles.size());
+  
+  _topTilesJustCreated = true;
 }
 
 void TileRenderer::initialize(const InitializationContext* ic) {
@@ -69,8 +71,19 @@ void TileRenderer::initialize(const InitializationContext* ic) {
 
 int TileRenderer::render(const RenderContext* rc) {
   TilesStatistics statistics(_parameters);
-    
+  
   const int topLevelTilesSize = _topLevelTiles.size();
+
+  if (_topTilesJustCreated) {
+    if (_texturizer != NULL) {
+      for (int i = 0; i < topLevelTilesSize; i++) {
+        Tile* tile = _topLevelTiles[i];
+        _texturizer->justCreatedTopTile(tile);
+      }
+    }
+    _topTilesJustCreated = false;
+  }
+    
   for (int i = 0; i < topLevelTilesSize; i++) {
     Tile* tile = _topLevelTiles[i];
     tile->render(rc, _tessellator, _texturizer, _parameters, &statistics);

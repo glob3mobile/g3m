@@ -27,15 +27,15 @@ uniform vec3 LightDirection; // light direction in eye coords
 
 void main() {
   gl_Position = Projection * Modelview * Position;
-
+  
   if (BillBoard) {
-    gl_Position.x += (-0.05 + TextureCoord.x * 0.1) * gl_Position.w ;
+    gl_Position.x += (-0.05 + TextureCoord.x * 0.1) * gl_Position.w;
     gl_Position.y -= (-0.05 + TextureCoord.y * 0.1) * gl_Position.w * ViewPortRatio;
   }
-
+  
   TextureCoordOut = TextureCoord;
   
   VertexColor = Color;
-      
+  
   vec3 x = Normal; //This line has been added to avoid compiler taking Normal variable away (Remove when Normal has been used)
 }

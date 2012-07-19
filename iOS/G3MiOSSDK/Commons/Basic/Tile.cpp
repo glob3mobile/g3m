@@ -97,11 +97,11 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
   }
 
   int __diego_at_work;
-//  if (texturizer != NULL) {
-//    if (texturizer->tileMeetsRenderCriteria(this)) {
-//      return true;
-//    }
-//  }
+  if (texturizer != NULL) {
+    if (texturizer->tileMeetsRenderCriteria(this)) {
+      return true;
+    }
+  }
   
   
 //  int projectedSize = getTessellatorMesh(rc, tessellator)->getExtent()->squaredProjectedArea(rc);

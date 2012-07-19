@@ -27,6 +27,11 @@ public:
   virtual ~TileTexturizer() {
     
   }
+  
+  
+  virtual bool tileMeetsRenderCriteria(Tile* tile) = 0;
+  
+  virtual void justCreatedTopTile(Tile* tile) = 0;
 };
 
 #endif
