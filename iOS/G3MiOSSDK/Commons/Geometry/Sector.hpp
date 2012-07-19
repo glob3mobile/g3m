@@ -43,7 +43,7 @@ public:
   {
   }
   
-  bool contains(const Sector& s) const;
+  bool fullContains(const Sector& s) const;
   
   static Sector fullSphere() {
     return Sector(Geodetic2D(Angle::fromDegrees(-90), Angle::fromDegrees(-180)),
@@ -91,8 +91,8 @@ public:
                       Angle::midAngle(_lower.longitude(), _upper.longitude()));
   }
   
-  Angle getWidth() const { return _upper.longitude().sub(_lower.longitude()); }
-  Angle getHeight() const { return _upper.latitude().sub(_lower.latitude()); }
+//  Angle getWidth() const { return _upper.longitude().sub(_lower.longitude()); }
+//  Angle getHeight() const { return _upper.latitude().sub(_lower.latitude()); }
   
   Geodetic2D getInnerPoint(double u, double v) const;
   // (u,v) are similar to texture coordinates inside the Sector

@@ -96,21 +96,19 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
     return true;
   }
 
-  int __diego_at_work;
   if (texturizer != NULL) {
     if (texturizer->tileMeetsRenderCriteria(this)) {
       return true;
     }
   }
   
-  
 //  int projectedSize = getTessellatorMesh(rc, tessellator)->getExtent()->squaredProjectedArea(rc);
 //  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
 //    return true;
 //  }
   const Vector2D extent = getTessellatorMesh(rc, tessellator)->getExtent()->projectedExtent(rc);
-  const double t = extent.maxAxis();
-//  const double t = (extent.x() + extent.y()) / 2;
+//  const double t = extent.maxAxis();
+  const double t = (extent.x() + extent.y()) / 2;
   if (t <= ((parameters->_tileTextureWidth + parameters->_tileTextureHeight) / 2.0 * 1.5)) {
     return true;
   }

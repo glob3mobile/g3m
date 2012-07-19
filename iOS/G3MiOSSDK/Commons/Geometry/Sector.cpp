@@ -15,7 +15,7 @@ bool Sector::contains(const Geodetic2D &position) const {
   return position.isBetween(_lower, _upper);
 }
 
-bool Sector::contains(const Sector &s) const
+bool Sector::fullContains(const Sector &s) const
 {
   return contains(s.upper()) && contains(s.lower());
 }
@@ -49,24 +49,22 @@ Geodetic2D Sector::getInnerPoint(double u, double v) const
 }
 
 
-Vector2D Sector::getUVCoordinates(Geodetic2D point) const
-{
-  double u = point.longitude().sub(_lower.longitude()).radians() / getWidth().radians();
-  double v = _upper.latitude().sub(point.latitude()).radians() / getHeight().radians();
+Vector2D Sector::getUVCoordinates(Geodetic2D point) const {
+  const double u = point.longitude().sub(_lower.longitude()).div(getDeltaLatitude());
+  const double v = _upper.latitude().sub(point.latitude()).div(getDeltaLongitude());
   return Vector2D(u, v);
 }
 
 
-bool Sector::isBackOriented(const RenderContext *rc) const
-{
-  Vector3D position = rc->getCamera()->getPosition();
-  Geodetic2D corners[5] = { getNE(), getNW(), getSW(), getSE(), getCenter()};
+bool Sector::isBackOriented(const RenderContext *rc) const {
+  const Vector3D position = rc->getCamera()->getPosition();
+  const Geodetic2D corners[5] = { getNE(), getNW(), getSW(), getSE(), getCenter()};
   const Planet *planet = rc->getPlanet();
   
   for (unsigned int i=0; i<5; i++) {
-    Vector3D normal = planet->geodeticSurfaceNormal(corners[i]);
-    Vector3D view = position.sub(planet->toVector3D(corners[i]));
-    double dot = normal.dot(view);
+    const Vector3D normal = planet->geodeticSurfaceNormal(corners[i]);
+    const Vector3D view = position.sub(planet->toVector3D(corners[i]));
+    const double dot = normal.dot(view);
     if (dot>0) return false;
   }
   
