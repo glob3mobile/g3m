@@ -22,8 +22,7 @@ Angle Angle::clampedTo(const Angle& min,
   return *this;
 }
 
-Angle Angle::average(const double t, const Angle& a) const
-{
+Angle Angle::average(const double t, const Angle& a) const {
   const Angle dif = a.sub(*this);
   return this->add(dif.times(t));
 }

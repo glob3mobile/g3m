@@ -107,9 +107,9 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
 //    return true;
 //  }
   const Vector2D extent = getTessellatorMesh(rc, tessellator)->getExtent()->projectedExtent(rc);
-  const double t = extent.maxAxis();
-//  const double t = (extent.x() + extent.y()) / 2;
-  if (t <= ((parameters->_tileTextureWidth + parameters->_tileTextureHeight) / 2)) {
+//  const double t = extent.maxAxis();
+  const double t = (extent.x() + extent.y()) / 2;
+  if (t <= ((parameters->_tileTextureWidth + parameters->_tileTextureHeight) / 2 * 1.5)) {
     return true;
   }
 

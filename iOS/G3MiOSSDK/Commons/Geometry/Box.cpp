@@ -33,8 +33,10 @@ Vector2D Box::projectedExtent(const RenderContext *rc) const {
 
   const Vector2D pixel0 = rc->getCamera()->point2Pixel(corners[0]);
 
-  double lowerX, upperX = pixel0.x();
-  double lowerY, upperY = pixel0.y();
+  double lowerX = pixel0.x();
+  double upperX = pixel0.x();
+  double lowerY = pixel0.y();
+  double upperY = pixel0.y();
   
   const int cornersSize = corners.size();
   for (int i = 1; i < cornersSize; i++) {
