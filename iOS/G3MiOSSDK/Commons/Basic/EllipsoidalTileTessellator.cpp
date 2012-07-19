@@ -92,7 +92,8 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
   }
 
   Color *color = new Color(Color::fromRGBA(1.0, 1.0, 1.0, 1.0));
-  return new IndexedMesh(vertices, TriangleStrip, indices, color);
+  Vector3D center = planet->toVector3D(sector.getCenter());
+  return new IndexedMesh(vertices, TriangleStrip, GivenCenter, center, indices, color);
 }
 
 
@@ -144,6 +145,7 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
 
   // create TexturedMesh
   Color *color = new Color(Color::fromRGBA(1.0, 0.0, 0.0, 1.0));
-  return new IndexedMesh(vertices, LineLoop, indices, color); 
+  Vector3D center = planet->toVector3D(sector.getCenter());
+  return new IndexedMesh(vertices, LineLoop, GivenCenter, center, indices, color); 
 }
 

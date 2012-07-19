@@ -31,6 +31,8 @@ IndexedMesh::~IndexedMesh()
 
 IndexedMesh::IndexedMesh(bool owner,
                          const GLPrimitive primitive,
+                         CenterStrategy strategy,
+                         Vector3D center,
                          const unsigned int numVertices,
                          const float* vertices,
                          const unsigned int* indexes,
@@ -49,13 +51,19 @@ _flatColor(flatColor),
 _colors(colors),
 _colorsIntensity(colorsIntensity), 
 _normals(normals),
-_extent(NULL)
+_extent(NULL),
+_centerStrategy(strategy),
+_center(center)
 {
+  if (strategy!=NoCenter) 
+    printf ("IndexedMesh array constructor: this center Strategy is not yet implemented\n");
 }
 
 
 IndexedMesh::IndexedMesh(std::vector<MutableVector3D>& vertices, 
                          const GLPrimitive primitive,
+                         CenterStrategy strategy,
+                         Vector3D center,                         
                          std::vector<unsigned int>& indexes,
                          const Color* flatColor,
                          std::vector<Color>* colors,
@@ -67,15 +75,34 @@ _numVertices(vertices.size()),
 _flatColor(flatColor),
 _numIndex(indexes.size()),
 _colorsIntensity(colorsIntensity),
-_extent(NULL)
+_extent(NULL),
+_centerStrategy(strategy),
+_center(center)
 {
   float * vert = new float[3* vertices.size()];
   int p = 0;
-  for (int i = 0; i < vertices.size(); i++) {
-    vert[p++] = vertices[i].x();
-    vert[p++] = vertices[i].y();
-    vert[p++] = vertices[i].z();
+  
+  switch (strategy) {
+    case NoCenter:
+      for (int i = 0; i < vertices.size(); i++) {
+        vert[p++] = vertices[i].x();
+        vert[p++] = vertices[i].y();
+        vert[p++] = vertices[i].z();
+      }      
+      break;
+      
+    case GivenCenter:
+      for (int i = 0; i < vertices.size(); i++) {
+        vert[p++] = vertices[i].x() - center.x();
+        vert[p++] = vertices[i].y() - center.y();
+        vert[p++] = vertices[i].z() - center.z();
+      }      
+      break;
+      
+    default:
+      printf ("IndexedMesh vector constructor: this center Strategy is not yet implemented\n");
   }
+  
   _vertices = vert;
   
   unsigned int * ind = new unsigned int[indexes.size()];
@@ -136,6 +163,12 @@ void IndexedMesh::render(const RenderContext* rc) const
   
   gl->vertexPointer(3, 0, _vertices);
   
+  if (_centerStrategy!=NoCenter) {
+    gl->pushMatrix();
+    MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_center);
+    gl->multMatrixf(T);
+  }
+  
   switch (_primitive) {
     case TriangleStrip:
       gl->drawTriangleStrip(_numIndex, _indexes);
@@ -149,6 +182,10 @@ void IndexedMesh::render(const RenderContext* rc) const
     default:
       break;
   }
+  
+  if (_centerStrategy!=NoCenter) 
+    gl->popMatrix();
+    
   
   gl->disableVerticesPosition();
 }
