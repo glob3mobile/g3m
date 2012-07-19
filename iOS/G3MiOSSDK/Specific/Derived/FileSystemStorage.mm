@@ -63,7 +63,7 @@ NSString* FileSystemStorage::generateFileName(const std::string& url)
   file = [file stringByReplacingOccurrencesOfString:@"/" withString:@"_"];
   file = [_root stringByAppendingPathComponent:file];
   
-  NSLog(@"%@", file);
+  //NSLog(@"%@", file);
   
   return file;
 }

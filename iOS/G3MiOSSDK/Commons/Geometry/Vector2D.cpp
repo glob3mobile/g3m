@@ -7,3 +7,10 @@
 //
 
 #include "Vector2D.hpp"
+
+#include "MutableVector2D.hpp"
+
+
+MutableVector2D Vector2D::asMutableVector2D() const {
+  return MutableVector2D(_x, _y);
+}

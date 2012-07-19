@@ -50,6 +50,10 @@ public:
   
   void tileToBeDeleted(Tile* tile);
   
+  bool tileMeetsRenderCriteria(Tile* tile);
+
+  void justCreatedTopTile(Tile* tile);
+
 };
 
 

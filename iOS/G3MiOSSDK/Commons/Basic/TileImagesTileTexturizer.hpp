@@ -48,14 +48,18 @@ private:
   
   TilePetitions* getTilePetitions(const Tile* tile);
   
-  std::vector<MutableVector2D> createNewTextureCoordinates() const;
+  std::vector<MutableVector2D> createNewTextureCoordinates(const Planet* planet,
+                                                           Tile* tile,
+                                                           Mesh* tessellatorMesh) const;
   
   void registerNewRequest(Tile* tile);
   
   RequestedTile* getRequestTile(int level, int row, int column){
     for (int i = 0; i < _requestedTiles.size(); i++) {
       RequestedTile& ft = _requestedTiles[i];
-      if (level == ft._level && row == ft._row && column == ft._column){
+      if ((level  == ft._level) &&
+          (row    == ft._row)   &&
+          (column == ft._column)){
         return &ft;
       }
     }
@@ -74,11 +78,16 @@ private:
     return ft != NULL;
   }
   
-  Mesh* getFallBackTexturedMesh(Tile* tile, Mesh* tesellatorMesh);
+  Mesh* getFallBackTexturedMesh(const Planet* planet,
+                                Tile* tile,
+                                Mesh* tessellatorMesh);
   
-  Mesh* getNewTextureMesh(Tile* tile, Mesh* mesh);
+  Mesh* getNewTextureMesh(const Planet* planet,
+                          Tile* tile,
+                          Mesh* mesh);
   
-  Mesh* getMesh(Tile* tile,
+  Mesh* getMesh(const Planet* planet,
+                Tile* tile,
                 Mesh* tessellatorMesh,
                 Mesh* previousMesh);
   
@@ -87,14 +96,18 @@ public:
   TileImagesTileTexturizer(const TileParameters *par):_parameters(par), _layer(NULL){}
   
   Mesh* texturize(const RenderContext* rc,
-                          Tile* tile,
-                          Mesh* mesh,
-                          Mesh* previousMesh);
+                  Tile* tile,
+                  Mesh* mesh,
+                  Mesh* previousMesh);
   
   void onTilePetitionsFinished(TilePetitions * tp);
   
   void tileToBeDeleted(Tile* tile);
   
+  bool tileMeetsRenderCriteria(Tile* tile);
+  
+  void justCreatedTopTile(Tile* tile);
+
 };
 
 #endif
