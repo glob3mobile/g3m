@@ -196,15 +196,16 @@ void IndexedMesh::computeExtent() const
   double minx=1e10, miny=1e10, minz=1e10;
   double maxx=-1e10, maxy=-1e10, maxz=-1e10;
   
-  for (unsigned int n=0; n<3*_numVertices; n+=3) {
-    if (_vertices[n]   < minx) minx = _vertices[n];
-    if (_vertices[n]   > maxx) maxx = _vertices[n];
-    if (_vertices[n+1] < miny) miny = _vertices[n+1];
-    if (_vertices[n+1] > maxy) maxy = _vertices[n+1];
-    if (_vertices[n+2] < minz) minz = _vertices[n+2];
-    if (_vertices[n+2] > maxz) maxz = _vertices[n+2];
+  for (unsigned int n=0; n<_numVertices; n++) {
+    Vector3D vertex = getVertex(n);
+    if (vertex.x() < minx) minx = vertex.x();
+    if (vertex.x() > maxx) maxx = vertex.x();
+    if (vertex.y() < miny) miny = vertex.y();
+    if (vertex.y() > maxy) maxy = vertex.y();
+    if (vertex.z() < minz) minz = vertex.z();
+    if (vertex.z() > maxz) maxz = vertex.z();
   }
-  
+    
   if (_extent != NULL) delete _extent;
   _extent = new Box(Vector3D(minx, miny, minz), Vector3D(maxx, maxy, maxz));
 }

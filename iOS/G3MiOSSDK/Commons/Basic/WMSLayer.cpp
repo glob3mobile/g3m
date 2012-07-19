@@ -10,7 +10,7 @@
 
 std::string WMSLayer::getRequest(const Sector& sector, int width, int height) const
 {
-  if (!_bbox.contains(sector)) return "COOR. ERROR";
+  if (!_bbox.fullContains(sector)) return "COOR. ERROR";
 
 	//Server name
   std::string req = _serverURL;

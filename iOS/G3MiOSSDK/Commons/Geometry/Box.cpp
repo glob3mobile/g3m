@@ -30,14 +30,14 @@ std::vector<Vector3D> Box::getCorners() const
 
 Vector2D Box::projectedExtent(const RenderContext *rc) const {
   const std::vector<Vector3D> corners = getCorners();
-  
-  double lowerX = 1E7;
-  double lowerY = 1E7;
-  double upperX = -1E7;
-  double upperY = -1E7;
+
+  const Vector2D pixel0 = rc->getCamera()->point2Pixel(corners[0]);
+
+  double lowerX, upperX = pixel0.x();
+  double lowerY, upperY = pixel0.y();
   
   const int cornersSize = corners.size();
-  for (int i = 0; i < cornersSize; i++) {
+  for (int i = 1; i < cornersSize; i++) {
     const Vector2D pixel = rc->getCamera()->point2Pixel(corners[i]);
     
     const double x = pixel.x();
