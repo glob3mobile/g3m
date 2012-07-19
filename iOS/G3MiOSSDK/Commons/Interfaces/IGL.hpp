@@ -113,6 +113,9 @@ public:
   virtual void deleteTexture(int glTextureId) = 0;
   
   virtual void cullFace(bool b, CullFace face) = 0;
+  
+  virtual void transformTexCoords(const Vector2D& scale, const Vector2D& translation) = 0;
+
 };
 
 
