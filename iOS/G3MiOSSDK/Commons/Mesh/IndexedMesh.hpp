@@ -86,15 +86,15 @@ public:
   
   Extent *getExtent() const;
   
-  int getVertexCount() const{
+  int getVertexCount() const {
     return _numVertices;
   }
   
-  const Vector3D getVertex(int i) const
-  {
+  const Vector3D getVertex(int i) const {
     int p = i * 3;
-    Vector3D v(_vertices[p], _vertices[p+1], _vertices[p+2]); 
-    return v;
+    return Vector3D(_vertices[p  ] + _center.x(),
+                    _vertices[p+1] + _center.y(),
+                    _vertices[p+2] + _center.z()); ;
   }
 
   
