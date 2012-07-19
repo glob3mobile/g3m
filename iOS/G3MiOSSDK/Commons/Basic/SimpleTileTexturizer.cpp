@@ -87,13 +87,14 @@ void SimpleTileTexturizer::registerNewRequest(Tile *tile){
   int priority = tile->getLevel(); //DOWNLOAD PRIORITY SET TO TILE LEVEL
   TilePetitions *tp = getTilePetitions(tile);
   
+  _requestedTiles.push_back(ft); //STORED
+  
+  RequestedTile& ft2 = _requestedTiles[ _requestedTiles.size() -1 ]; //GETTING VECTOR INSTANCE
   for (int i = 0; i < tp->getNumPetitions(); i++) {
     const std::string& url = tp->getPetition(i).getURL();
     long id = _downloader->request(url, priority, tp);
-    ft._downloads.push_back(id);
+    ft2._downloads.push_back(id);
   }
-  
-  _requestedTiles.push_back(ft); //STORED
 }
 
 Mesh* SimpleTileTexturizer::texturize(const RenderContext* rc,
