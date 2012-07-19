@@ -68,7 +68,7 @@ void TileImagesTileTexturizer::translateAndScaleFallBackTex(Tile* tile, Tile* fa
   if (levelDelta <= 0) return;
   
   int twoToTheN = pow(2, levelDelta);
-  double oneOverTwoToTheN = 1 / twoToTheN;
+  double oneOverTwoToTheN = 1.0 / twoToTheN;
     
   double sShift = oneOverTwoToTheN * (tile->getColumn() % twoToTheN);
   double tShift = oneOverTwoToTheN * (tile->getRow() % twoToTheN);
@@ -132,6 +132,9 @@ Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(const Planet* planet,
   
   if (texID > -1){
     TextureMapping * tMap = new TextureMapping(texID, createNewTextureCoordinates(planet, tile, tessellatorMesh));
+    
+    translateAndScaleFallBackTex(tile, fbTile, tMap);
+    
     return new TexturedMesh(tessellatorMesh, false, tMap, true);
   }
   
