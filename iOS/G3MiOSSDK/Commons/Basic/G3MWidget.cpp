@@ -57,6 +57,14 @@ G3MWidget::~G3MWidget() {
   delete _timer;
 }
 
+void G3MWidget::onTouchEvent(const TouchEvent* myEvent) {
+  _renderer->onTouchEvent(myEvent);
+}
+
+void G3MWidget::onResizeViewportEvent(int width, int height) {
+  _renderer->onResizeViewportEvent(width, height);
+}
+
 int G3MWidget::render() {
   _timer->start();
   _renderCounter++;
@@ -70,6 +78,9 @@ int G3MWidget::render() {
 
   
   const TimeInterval elapsedTime = _timer->elapsedTime();
+  if (elapsedTime.milliseconds() > 40) {
+    _logger->logWarning("Frame took too much time: %dms" , elapsedTime.milliseconds());
+  }
   _totalRenderTime += elapsedTime.milliseconds();
   
   if ((_renderCounter % 60) == 0) {
@@ -84,12 +95,4 @@ int G3MWidget::render() {
   }
   
   return timeToRedraw;
-}
-
-void G3MWidget::onTouchEvent(const TouchEvent* myEvent) {
-  _renderer->onTouchEvent(myEvent);
-}
-
-void G3MWidget::onResizeViewportEvent(int width, int height) {
-  _renderer->onResizeViewportEvent(width, height);
 }

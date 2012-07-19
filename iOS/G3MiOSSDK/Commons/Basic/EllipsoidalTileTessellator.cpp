@@ -49,7 +49,7 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
     // compute skirt height
     Vector3D sw = planet->toVector3D(sector.getSW());
     Vector3D nw = planet->toVector3D(sector.getNW());
-    double skirtHeight = nw.sub(sw).length() * 0.05;      
+    double skirtHeight = nw.sub(sw).length() * 0.05;
     
     indices.push_back(0);
     unsigned int posS = _resolution * _resolution;
@@ -90,8 +90,9 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
     indices.push_back(0);
     indices.push_back(_resolution*_resolution);
   }
-  
-  return new IndexedMesh(vertices, TriangleStrip, indices, NULL);
+
+  Color *color = new Color(Color::fromRGBA(1.0, 1.0, 1.0, 1.0));
+  return new IndexedMesh(vertices, TriangleStrip, indices, color);
 }
 
 
