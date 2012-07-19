@@ -179,17 +179,10 @@ void Tile::render(const RenderContext* rc,
                   TilesStatistics* statistics) {
   if (isVisible(rc, tessellator)) {
     if (meetsRenderCriteria(rc, tessellator, parameters)) {
-      IGL *gl = rc->getGL();
+      rawRender(rc, tessellator, texturizer);
       if (parameters->_renderDebug) {
-        gl->enablePolygonOffset(1, 1);
-        rawRender(rc, tessellator, texturizer);
-        gl->disablePolygonOffset();
         debugRender(rc, tessellator);
       }
-      else {
-        rawRender(rc, tessellator, texturizer);
-      }
-      
       prune(texturizer);
       
       statistics->computeTile(this);
