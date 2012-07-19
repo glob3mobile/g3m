@@ -12,7 +12,7 @@
 #include "TileTessellator.hpp"
 #include "TileTexturizer.hpp"
 #include "Camera.hpp"
-
+#include "ITimer.hpp"
 
 TileRenderer::~TileRenderer() {
   clearTopLevelTiles();
@@ -66,10 +66,14 @@ void TileRenderer::createTopLevelTiles(const InitializationContext* ic) {
 void TileRenderer::initialize(const InitializationContext* ic) {
   clearTopLevelTiles();
   createTopLevelTiles(ic);
+  
+  _timer = ic->getFactory()->createTimer();
 }
 
 
 int TileRenderer::render(const RenderContext* rc) {
+  _timer->start();
+
   TilesStatistics statistics(_parameters);
   
   const int topLevelTilesSize = _topLevelTiles.size();

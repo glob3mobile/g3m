@@ -80,8 +80,7 @@ std::vector<MutableVector2D> TileImagesTileTexturizer::createNewTextureCoordinat
 //}
 
 void TileImagesTileTexturizer::translateAndScaleFallBackTex(Tile* tile, Tile* fallbackTile, 
-                                                            TextureMapping* tmap) const
-{
+                                                            TextureMapping* tmap) const {
   
   int levelDelta = tile->getLevel() - fallbackTile->getLevel();
   if (levelDelta <= 0) return;
@@ -97,8 +96,7 @@ void TileImagesTileTexturizer::translateAndScaleFallBackTex(Tile* tile, Tile* fa
 Mesh* TileImagesTileTexturizer::getMesh(const Planet* planet,
                                         Tile* tile,
                                         Mesh* tessellatorMesh,
-                                        Mesh* previousMesh)
-{
+                                        Mesh* previousMesh) {
   Mesh* mesh = NULL;
   
   //CHECKING IF TILE HAS BEEN REQUESTED ALREADY WITHOUT RESPONSE
@@ -114,8 +112,7 @@ Mesh* TileImagesTileTexturizer::getMesh(const Planet* planet,
 
 Mesh* TileImagesTileTexturizer::getNewTextureMesh(const Planet* planet,
                                                   Tile* tile,
-                                                  Mesh* tessellatorMesh)
-{
+                                                  Mesh* tessellatorMesh) {
     //THE TEXTURE HAS BEEN LOADED???
     RequestedTile* ft = getRequestTile(tile->getLevel(), tile->getRow(), tile->getColumn());
     if (ft != NULL && ft->_texID > -1) { // Texture already solved
@@ -128,24 +125,24 @@ Mesh* TileImagesTileTexturizer::getNewTextureMesh(const Planet* planet,
 
 Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(const Planet* planet,
                                                         Tile* tile,
-                                                        Mesh* tessellatorMesh)
-{
+                                                        Mesh* tessellatorMesh) {
   int texID = -1;
   Tile* fbTile = tile->getFallbackTextureTile();
-  if (fbTile != NULL){
+  if (fbTile != NULL) {
     RequestedTile* ft = getRequestTile(fbTile->getLevel(), fbTile->getRow(), fbTile->getColumn());
-    if (ft != NULL){
+    if (ft != NULL) {
       texID = ft->_texID;
-    } else{
+    }
+    else {
       registerNewRequest(fbTile);
       ft = getRequestTile(fbTile->getLevel(), fbTile->getRow(), fbTile->getColumn());
-      if (ft != NULL){
+      if (ft != NULL) {
         texID = ft->_texID;
       }
     }
   }
   
-  if (texID > -1){
+  if (texID > -1) {
     TextureMapping * tMap = new TextureMapping(texID, createNewTextureCoordinates(planet, tile, tessellatorMesh));
     
     translateAndScaleFallBackTex(tile, fbTile, tMap);

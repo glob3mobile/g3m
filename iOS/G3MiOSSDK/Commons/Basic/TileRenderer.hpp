@@ -185,6 +185,8 @@ private:
   
   std::vector<Tile*>     _topLevelTiles;
   
+  ITimer* _timer;
+  
   void clearTopLevelTiles();
   void createTopLevelTiles(const InitializationContext* ic);
   
@@ -200,7 +202,8 @@ public:
   _parameters(parameters),
   _showStatistics(showStatistics),
   _lastStatistics(parameters),
-  _topTilesJustCreated(false)
+  _topTilesJustCreated(false),
+  _timer(NULL)
   {
     
   }

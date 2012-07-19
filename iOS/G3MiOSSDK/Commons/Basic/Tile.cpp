@@ -14,7 +14,6 @@
 #include "TileTexturizer.hpp"
 #include "TileRenderer.hpp"
 
-
 Tile::~Tile() {
   prune(NULL);
   
@@ -95,6 +94,10 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
   if (_level >= parameters->_maxLevel) {
     return true;
   }
+  
+//  if ( timer->elapsedTime().milliseconds() > 100 ) {
+//    return true;
+//  }
 
   if (texturizer != NULL) {
     if (texturizer->tileMeetsRenderCriteria(this)) {
