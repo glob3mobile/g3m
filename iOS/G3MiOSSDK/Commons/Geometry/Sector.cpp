@@ -49,6 +49,14 @@ Geodetic2D Sector::getInnerPoint(double u, double v) const
 }
 
 
+Vector2D Sector::getUVCoordinates(Geodetic2D point) const
+{
+  double u = point.longitude().sub(_lower.longitude()).radians() / getWidth().radians();
+  double v = _upper.latitude().sub(point.latitude()).radians() / getHeight().radians();
+  return Vector2D(u, v);
+}
+
+
 bool Sector::isBackOriented(const RenderContext *rc) const
 {
   Vector3D position = rc->getCamera()->getPosition();
