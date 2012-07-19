@@ -91,9 +91,14 @@ public:
                       Angle::midAngle(_lower.longitude(), _upper.longitude()));
   }
   
+  Angle getWidth() const { return _upper.longitude().sub(_lower.longitude()); }
+  Angle getHeight() const { return _upper.latitude().sub(_lower.latitude()); }
+  
   Geodetic2D getInnerPoint(double u, double v) const;
   // (u,v) are similar to texture coordinates inside the Sector
   // (u,v)=(0,0) in NW point, and (1,1) in SE point
+  
+  Vector2D getUVCoordinates(Geodetic2D point) const;
   
   bool isBackOriented(const RenderContext *rc) const;
   
