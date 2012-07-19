@@ -6,6 +6,7 @@
 //
 
 varying mediump vec2 TextureCoordOut;
+uniform mediump vec2 TranslationTexCoord;
 
 varying mediump vec4 VertexColor;
 
@@ -21,7 +22,7 @@ uniform mediump float ColorPerVertexIntensity;
 void main() {
   
   if (EnableTexture) {
-    gl_FragColor = texture2D(Sampler, TextureCoordOut);
+    gl_FragColor = texture2D(Sampler, TextureCoordOut+TranslationTexCoord);
 
     if (EnableFlatColor || EnableColorPerVertex){
 

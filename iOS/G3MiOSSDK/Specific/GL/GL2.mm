@@ -21,6 +21,7 @@ struct UniformsStruct {
   GLint Sampler;
   GLint EnableTexture;
   GLint FlatColor;
+  GLint TranslationTexCoord;
   
   //FOR BILLBOARDING
   GLint BillBoard;
@@ -58,6 +59,8 @@ void GL2::useProgram(unsigned int program) {
   Uniforms.Sampler = glGetUniformLocation(program, "Sampler");
   Uniforms.EnableTexture = glGetUniformLocation(program, "EnableTexture");
   Uniforms.FlatColor = glGetUniformLocation(program, "FlatColor");
+  Uniforms.TranslationTexCoord = glGetAttribLocation(program, "TranslationTexCoord");
+  glUniform2f(Uniforms.TranslationTexCoord, 0, 0);
   
   //BILLBOARDS
   Uniforms.BillBoard = glGetUniformLocation(program, "BillBoard");
