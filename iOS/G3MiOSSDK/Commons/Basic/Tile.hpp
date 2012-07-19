@@ -71,6 +71,7 @@ private:
   
   inline bool meetsRenderCriteria(const RenderContext* rc,
                                   const TileTessellator *tessellator,
+                                  TileTexturizer *texturizer,
                                   const TileParameters* parameters);
   
   inline std::vector<Tile*>* createSubTiles();
