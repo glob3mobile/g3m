@@ -12,12 +12,14 @@
 
 #include "INetwork.hpp"
 
+long Download::_currentID = 0;
+
 Downloader::Downloader(IStorage *storage, unsigned int maxSimultaneous, INetwork * const net):
 _storage(storage), _maxSimultaneous(maxSimultaneous), _network(net), _simultaneousDownloads(0)
 {
 }
 
-void Downloader::request(const std::string& urlOfFile, int priority, IDownloadListener *listener)
+long Downloader::request(const std::string& urlOfFile, int priority, IDownloadListener *listener)
 {
   
   //First we check in storage
@@ -25,9 +27,10 @@ void Downloader::request(const std::string& urlOfFile, int priority, IDownloadLi
     ByteBuffer bb = _storage->getByteBuffer(urlOfFile);
     Response r(urlOfFile , &bb);
     listener->onDownload(r);
-    return;
+    return -1;
   }
   
+  long currentID = -1;
   //We look for repeated petitions
   for (int i = 0; i < _petitions.size(); i++)
   {
@@ -35,21 +38,21 @@ void Downloader::request(const std::string& urlOfFile, int priority, IDownloadLi
       if (priority > _petitions[i]._priority){ //MAX PRIORITY
         _petitions[i]._priority = priority;
       }
-      
-      if (!_petitions[i].isListener(listener)){
-        _petitions[i].addListener(listener); //NEW LISTENER
-      }
-      
-      return;
+      currentID = _petitions[i].addListener(listener); //NEW LISTENER
     }
   }
   
-  //NEW DOWNLOAD
-  Download d(urlOfFile, priority, listener);
-  _petitions.push_back(d);
+  if (currentID == -1){
+    //NEW DOWNLOAD
+    Download d(urlOfFile, priority);
+    currentID = d.addListener(listener);
+    _petitions.push_back(d);
+  }
   
   //When a new petition comes, we try to throw a download
   startDownload();
+  
+  return currentID;
 }
 
 void Downloader::startDownload()
@@ -87,7 +90,7 @@ void Downloader::onDownload(const Response& e)
     {
       Download& pet = _petitions[i];
       for (int j = 0; j < pet._listeners.size(); j++) {
-        IDownloadListener *dl = pet._listeners[j];
+        IDownloadListener *dl = pet._listeners[j]._listener;
         
         dl->onDownload(e);
       }
@@ -115,7 +118,7 @@ void Downloader::onError(const Response& e)
     {
       Download& pet = _petitions[i];
       for (int j = 0; j < pet._listeners.size(); j++) {
-        pet._listeners[j]->onError(e);
+        pet._listeners[j]._listener->onError(e);
       }
 #ifdef C_CODE
       _petitions.erase(_petitions.begin() + i);
@@ -132,13 +135,15 @@ void Downloader::onError(const Response& e)
   startDownload();          //CHECK IF WE CAN THROW A NEW PETITION TO THE NET
 }
 
-bool Downloader::isListener(IDownloadListener* listener) const
+void Downloader::cancelRequest(long id)
 {
   for (int i = 0; i < _petitions.size(); i++)
   {
-    if (_petitions[i].isListener(listener)){
-      return true;
+    if (_petitions[i].cancel(id)){
+      if (_petitions[i]._listeners.size() < 1){
+        _petitions.erase(_petitions.begin() + i);
+      }
+      break;
     }
   }
-  return false;
 }

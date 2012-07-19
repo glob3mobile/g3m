@@ -96,6 +96,10 @@ public:
     printf("GETTING ERROR IN URL: %s\n", response.getURL().getPath().c_str());
   }
   
+  void onCancel(const std::string& url){
+    printf("GETTING CANCELR IN URL: %s\n", url.c_str());
+  }
+  
 };
 
 #endif

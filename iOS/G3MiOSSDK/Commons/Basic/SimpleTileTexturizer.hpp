@@ -31,6 +31,7 @@ struct RequestedTile{
   int   _row;
   int   _column;
   int   _texID;  //-1 means no response yet
+  std::vector<long> _downloads;
 };
 
 class SimpleTileTexturizer : public TileTexturizer {
@@ -38,6 +39,7 @@ private:
   
   const IFactory* _factory;
   TexturesHandler* _texHandler;
+  Downloader * _downloader;
   
   std::vector<RequestedTile> _requestedTiles;
   const TileParameters *_parameters;
@@ -48,17 +50,9 @@ private:
   
   std::vector<MutableVector2D> createTextureCoordinates() const;
   
-  void registerNewRequest(int level, int row, int column){
-    //Tile finished
-    RequestedTile ft;
-    ft._column = column;
-    ft._level = level;
-    ft._row = row;
-    ft._texID = -1;
-    _requestedTiles.push_back(ft);
-  }
+  void registerNewRequest(Tile* tile);
   
-  RequestedTile* getRequestTex(int level, int row, int column){
+  RequestedTile* getRequestTile(int level, int row, int column){
     for (int i = 0; i < _requestedTiles.size(); i++) {
       RequestedTile& ft = _requestedTiles[i];
       if (level == ft._level && row == ft._row && column == ft._column){

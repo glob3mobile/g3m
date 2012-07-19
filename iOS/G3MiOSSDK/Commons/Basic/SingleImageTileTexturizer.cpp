@@ -14,11 +14,10 @@
 
 std::vector<MutableVector2D> SingleImageTileTexturizer::createTextureCoordinates(const RenderContext* rc, Mesh* mesh) const {
   std::vector<MutableVector2D> texCoors;
-  const float* vertex = mesh->getVertex();
 
   for (int i = 0; i < mesh->getVertexCount(); i++) {
     
-    Vector3D pos(vertex[i*3], vertex[i*3+1], vertex[i*3+2]);
+    Vector3D pos = mesh->getVertex(i);
     
     const Geodetic2D g = rc->getPlanet()->toGeodetic2D(pos);
     const Vector3D n = rc->getPlanet()->geodeticSurfaceNormal(g);

@@ -95,6 +95,8 @@ public:
   void onDownload(const Response &response); 
   void onError(const Response& e);
   
+  void onCancel(const std::string& url);
+  
 };
 
 #endif

@@ -18,30 +18,37 @@
 #include <vector>
 
 class Download{
+  
+  static long _currentID;
+  
 public:
   std::string _url;
   int _priority;
-  std::vector<IDownloadListener *> _listeners;
+  struct ListenerID{long _id; IDownloadListener * _listener;};
+  std::vector<ListenerID> _listeners;
   
-  Download(const std::string& url, int priority, IDownloadListener* listener):
-  _url(url), _priority(priority)
+  Download(const std::string& url, int priority): _url(url), _priority(priority)
   {
-    _listeners.push_back(listener);
   }
-  
-  bool isListener(IDownloadListener* listener) const
+
+  bool cancel(long id)
   {
     for (int j = 0; j < _listeners.size(); j++) {
-      if (_listeners[j] == listener){
+      if (_listeners[j]._id == id){
+        _listeners[j]._listener->onCancel(_url); //CANCELING OPERATION
+        _listeners.erase(_listeners.begin() + j);
         return true;
       }
-    } 
+    }
     return false;
   }
   
-  void addListener(IDownloadListener* listener){ 
-    
-    _listeners.push_back(listener);
+  long addListener(IDownloadListener* listener){ 
+    ListenerID lid; 
+    lid._listener = listener; 
+    lid._id = _currentID++;
+    _listeners.push_back(lid);
+    return lid._id;
   }
 };
 
@@ -60,13 +67,17 @@ private:
 public:
   Downloader(IStorage *storage, unsigned int maxSimultaneous, INetwork * const net);
   
-  void request(const std::string& urlOfFile, int priority, IDownloadListener *listener);
+  long request(const std::string& urlOfFile, int priority, IDownloadListener *listener);
   
   void onDownload(const Response& e);
   
   void onError(const Response& e);
   
-  bool isListener(IDownloadListener* listener) const;
+  void onCancel(const std::string& url){}
+  
+//  bool isListener(IDownloadListener* listener) const;
+  
+  void cancelRequest(long id);
   
 };
 

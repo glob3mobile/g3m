@@ -65,7 +65,7 @@ Mesh* SimpleTileTexturizer::getMesh(Tile* tile, Mesh* tessellatorMesh)
 {
 
     //THE TEXTURE HAS BEEN LOADED???
-    RequestedTile* ft = getRequestTex(tile->getLevel(), tile->getRow(), tile->getColumn());
+    RequestedTile* ft = getRequestTile(tile->getLevel(), tile->getRow(), tile->getColumn());
     if (ft != NULL && ft->_texID > -1){ //Texture already solved
         tile->setTextureSolved(true);
         TextureMapping * tMap = new TextureMapping(ft->_texID, createTextureCoordinates());
@@ -75,11 +75,31 @@ Mesh* SimpleTileTexturizer::getMesh(Tile* tile, Mesh* tessellatorMesh)
     return NULL;
 }
 
+void SimpleTileTexturizer::registerNewRequest(Tile *tile){
+  //Tile finished
+  RequestedTile ft;
+  ft._column = tile->getColumn();
+  ft._level = tile->getLevel();
+  ft._row = tile->getRow();
+  ft._texID = -1;
+  
+  //THROWING THE PETITIONS
+  int priority = tile->getLevel(); //DOWNLOAD PRIORITY SET TO TILE LEVEL
+  TilePetitions *tp = getTilePetitions(tile);
+  
+  for (int i = 0; i < tp->getNumPetitions(); i++) {
+    const std::string& url = tp->getPetition(i).getURL();
+    long id = _downloader->request(url, priority, tp);
+    ft._downloads.push_back(id);
+  }
+  
+  _requestedTiles.push_back(ft); //STORED
+}
+
 Mesh* SimpleTileTexturizer::texturize(const RenderContext* rc,
                                       Tile* tile,
                                       Mesh* tessellatorMesh,
                                       Mesh* previousMesh) {
-  int __todo_JM_con_wms_falla;
   bool dummy = false;
   if (dummy){
     //CHESSBOARD TEXTURE
@@ -92,9 +112,10 @@ Mesh* SimpleTileTexturizer::texturize(const RenderContext* rc,
   //STORING CONTEXT
   _factory = rc->getFactory();
   _texHandler = rc->getTexturesHandler();
+  _downloader = rc->getDownloader();
   
   //CHECKING IF TILE HAS BEEN REQUESTED ALREADY WITHOUT RESPONSE
-  RequestedTile* ft = getRequestTex(tile->getLevel(), tile->getRow(), tile->getColumn());
+  RequestedTile* ft = getRequestTile(tile->getLevel(), tile->getRow(), tile->getColumn());
   if (ft != NULL && ft->_texID < 0){
     return previousMesh;
   }
@@ -105,18 +126,9 @@ Mesh* SimpleTileTexturizer::texturize(const RenderContext* rc,
     return texMesh;
   }
   
-  //REGISTERING PETITION
-  registerNewRequest(tile->getLevel(), tile->getRow(), tile->getColumn());
-  
-  //THROWING AND CREATING THE PETITIONS
-  int priority = 10;
-  TilePetitions *tp = getTilePetitions(tile);
-  Downloader* d = rc->getDownloader();
-  for (int i = 0; i < tp->getNumPetitions(); i++) {
-    const std::string& url = tp->getPetition(i).getURL();
-    d->request(url, priority, tp);
-  }
-  
+  //REGISTERING PETITION AND SENDING TO THE NET
+  registerNewRequest(tile);
+
   //WE TRY AGAIN IN CASE PETITIONS WERE ATTENDED QUICKLY
   texMesh = getMesh(tile, tessellatorMesh);
   if (texMesh != NULL){
@@ -130,7 +142,7 @@ Mesh* SimpleTileTexturizer::texturize(const RenderContext* rc,
 void SimpleTileTexturizer::onTilePetitionsFinished(TilePetitions * tp)
 {
   //Tile finished
-  RequestedTile *rt = getRequestTex(tp->getLevel(), tp->getRow(), tp->getColumn());
+  RequestedTile *rt = getRequestTile(tp->getLevel(), tp->getRow(), tp->getColumn());
   if (rt != NULL){ //If null means the tile is no longer visible
     
     //TAKING JUST FIRST!!!
@@ -162,7 +174,17 @@ void SimpleTileTexturizer::tileToBeDeleted(Tile* tile) {
   }
   
   if (index > -1){
-    _texHandler->takeTexture(_requestedTiles[index]._texID);
+    RequestedTile& rt = _requestedTiles[index];
+    //DELETING TEXTURE
+    if (_requestedTiles[index]._texID > -1){
+      _texHandler->takeTexture(rt._texID);
+    }
+    
+    //CANCELING PETITIONS
+    for(int i = 0; i < _requestedTiles[index]._downloads.size(); i++){
+      _downloader->cancelRequest( rt._downloads[i] );
+    }
+    
     _requestedTiles.erase(_requestedTiles.begin()+index);
   }
 }

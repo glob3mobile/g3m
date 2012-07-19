@@ -17,6 +17,7 @@ class IDownloadListener {
 public:
   virtual void onDownload(const Response &response) = 0; 
   virtual void onError(const Response& e) = 0;
+  virtual void onCancel(const std::string& url) = 0;
 };
 
 #endif

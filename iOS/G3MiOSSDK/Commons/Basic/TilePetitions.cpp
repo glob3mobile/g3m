@@ -50,3 +50,10 @@ bool TilePetitions::allFinished() const{
   }
   return true;
 }
+
+void TilePetitions::onCancel(const std::string& url){
+  _nErrors++;
+  if (_nDownloads + _nErrors == _petitions.size()){
+    delete this;
+  }
+}

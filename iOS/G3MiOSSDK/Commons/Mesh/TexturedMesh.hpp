@@ -49,7 +49,7 @@ public:
   Extent *getExtent()  const { return _mesh->getExtent(); }
   
   int getVertexCount() const { return _mesh->getVertexCount(); }
-  const float* getVertex() const { return _mesh->getVertex();}
+  const Vector3D getVertex(int i) const { return _mesh->getVertex(i);}
 
 };
 
