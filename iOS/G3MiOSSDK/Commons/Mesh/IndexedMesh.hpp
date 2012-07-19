@@ -21,6 +21,13 @@ enum GLPrimitive {
   LineLoop
 };
 
+enum CenterStrategy {
+  NoCenter,
+  AveragedVertex,
+  FirstVertex,
+  GivenCenter
+};
+
 
 class IndexedMesh : public Mesh {
 private:
@@ -44,6 +51,9 @@ private:
   
   void computeExtent() const;
   
+  CenterStrategy       _centerStrategy;
+  Vector3D             _center;
+  
 public:
   
   ~IndexedMesh();
@@ -51,6 +61,8 @@ public:
   
   IndexedMesh(bool owner,
               const GLPrimitive primitive,
+              CenterStrategy strategy,
+              Vector3D center,
               const unsigned int numVertices,
               const float* vertices,
               const unsigned int* indexes,
@@ -62,6 +74,8 @@ public:
   
   IndexedMesh(std::vector<MutableVector3D>& vertices,
               const GLPrimitive primitive,
+              CenterStrategy strategy,
+              Vector3D center,
               std::vector<unsigned int>& indexes,
               const Color* flatColor = NULL,
               std::vector<Color>* colors = NULL,
