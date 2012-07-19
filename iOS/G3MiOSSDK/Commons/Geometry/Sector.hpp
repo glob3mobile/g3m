@@ -43,6 +43,23 @@ public:
   {
   }
   
+  Vector2D getScaleFactor(const Sector& s)
+  {
+    double u = _deltaLatitude.div(s._deltaLatitude);
+    double v = _deltaLongitude.div(s._deltaLongitude);
+    Vector2D scale(u,v);
+    return scale;
+  }
+  
+  Vector2D getTranslationFactor(const Sector& s)
+  {
+    double diff = _deltaLongitude.div(s._deltaLongitude);
+    Vector2D uv = s.getUVCoordinates(_lower);
+    
+    Vector2D trans(uv.x(), uv.y()- diff);
+    return trans;
+  }
+  
   bool contains(const Sector& s) const;
   
   static Sector fullSphere() {

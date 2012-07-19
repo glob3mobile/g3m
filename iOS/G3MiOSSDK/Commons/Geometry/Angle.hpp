@@ -88,6 +88,10 @@ public:
     return Angle(_degrees / k);
   }
   
+  double div(const Angle& k) const {
+    return _degrees / k._degrees;
+  }
+  
   bool greaterThan(const Angle& a) const {
     return (_degrees > a._degrees);
   }
