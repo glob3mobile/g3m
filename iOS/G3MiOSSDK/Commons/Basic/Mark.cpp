@@ -27,6 +27,10 @@ void Mark::render(const RenderContext* rc,
     if (normalAtMarkPosition.angleBetween(markCameraVector).radians() > M_PI / 2) {
       IGL* gl = rc->getGL();
       
+      Vector2D tr(0.0,0.0);
+      Vector2D scale(1.0,1.0);
+      gl->transformTexCoords(scale, tr);
+      
       if (_textureId < 1) {
         _textureId = rc->getTexturesHandler()->getTextureIdFromFileName(_textureFilename, 128, 128);
       }

@@ -89,9 +89,8 @@ public:
   void deleteTexture(int glTextureId);
   
   void cullFace(bool b, CullFace face);
-  
-  void transformTexCoords(const Vector2D& scale, const Vector2D& translation);
 
+  void transformTexCoords(const Vector2D& scale, const Vector2D& translation);
   
 private:
   MutableMatrix44D            _modelView;

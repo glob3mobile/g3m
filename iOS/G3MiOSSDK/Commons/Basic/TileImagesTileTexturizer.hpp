@@ -21,6 +21,7 @@
 #include "Tile.hpp"
 #include "IFactory.hpp"
 #include "TileRenderer.hpp"
+#include "TextureMapping.hpp"
 
 
 class TilePetitions;
@@ -51,6 +52,8 @@ private:
   std::vector<MutableVector2D> createNewTextureCoordinates(const Planet* planet,
                                                            Tile* tile,
                                                            Mesh* tessellatorMesh) const;
+  
+  void translateAndScaleFallBackTex(Tile* tile, Tile* fallbackTile, TextureMapping* tmap) const;
   
   void registerNewRequest(Tile* tile);
   
