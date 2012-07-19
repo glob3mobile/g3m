@@ -13,6 +13,7 @@
 
 #include "Image_iOS.hpp"
 #include "Vector3D.hpp"
+#include "Vector2D.hpp"
 
 
 struct UniformsStruct {
@@ -21,6 +22,8 @@ struct UniformsStruct {
   GLint Sampler;
   GLint EnableTexture;
   GLint FlatColor;
+  GLint TranslationTexCoord;
+  GLint ScaleTexCoord;
   
   //FOR BILLBOARDING
   GLint BillBoard;
@@ -31,10 +34,6 @@ struct UniformsStruct {
   GLint EnableColorPerVertex;
   GLint EnableFlatColor;
   GLint ColorPerVertexIntensity;
-  
-  //Textures
-  GLint TexCoordTranslation;
-  GLint TexCoordScale;
   
 } Uniforms;
 
@@ -62,6 +61,10 @@ void GL2::useProgram(unsigned int program) {
   Uniforms.Sampler = glGetUniformLocation(program, "Sampler");
   Uniforms.EnableTexture = glGetUniformLocation(program, "EnableTexture");
   Uniforms.FlatColor = glGetUniformLocation(program, "FlatColor");
+  Uniforms.TranslationTexCoord = glGetUniformLocation(program, "TranslationTexCoord");
+  glUniform2f(Uniforms.TranslationTexCoord, 0, 0);
+  Uniforms.ScaleTexCoord = glGetUniformLocation(program, "ScaleTexCoord");
+  glUniform2f(Uniforms.ScaleTexCoord, 1, 1);
   
   //BILLBOARDS
   Uniforms.BillBoard = glGetUniformLocation(program, "BillBoard");
@@ -73,10 +76,6 @@ void GL2::useProgram(unsigned int program) {
   Uniforms.ColorPerVertexIntensity = glGetUniformLocation(program, "ColorPerVertexIntensity");
   Uniforms.EnableColorPerVertex = glGetUniformLocation(program, "EnableColorPerVertex");
   Uniforms.EnableFlatColor = glGetUniformLocation(program, "EnableFlatColor");
-  
-  //TEXTURES
-  Uniforms.TexCoordTranslation = glGetUniformLocation(program, "TexCoordTranslation");
-  Uniforms.TexCoordScale = glGetUniformLocation(program, "TexCoordScale");
 }
 
 void GL2::setProjection(const MutableMatrix44D &projection) {
@@ -188,6 +187,12 @@ void GL2::clearScreen(float r, float g, float b, float a) {
 
 void GL2::color(float r, float g, float b, float a) {
   glUniform4f(Uniforms.FlatColor, r, g, b, a);
+}
+
+void GL2::transformTexCoords(const Vector2D& scale, const Vector2D& translation)
+{
+  glUniform2f(Uniforms.ScaleTexCoord, scale.x(), scale.y());
+  glUniform2f(Uniforms.TranslationTexCoord, translation.x(), translation.y());
 }
 
 void GL2::enablePolygonOffset(float factor, float units) {
@@ -347,9 +352,4 @@ void GL2::cullFace(bool b, CullFace face) {
       glCullFace(GL_FRONT_AND_BACK);
       break;
   }
-}
-
-void GL2::translateAndScaleTexCoords(const MutableVector2D& trans, const MutableVector2D& scale){
-  glUniform2f(Uniforms.TexCoordTranslation, trans.x(), trans.y());
-  glUniform2f(Uniforms.TexCoordScale, scale.x(), scale.y());
 }

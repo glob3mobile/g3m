@@ -60,6 +60,25 @@ std::vector<MutableVector2D> TileImagesTileTexturizer::createNewTextureCoordinat
   return texCoor;
 }
 
+void TileImagesTileTexturizer::translateAndScaleFallBackTex(Tile* tile, Tile* fallbackTile, 
+                                                            TextureMapping* tmap) const
+{
+
+  int levelDelta = tile->getLevel() - fallbackTile->getLevel();
+  if (levelDelta <= 0) return;
+  
+  int twoToTheN = pow(2, levelDelta);
+  double oneOverTwoToTheN = 1 / twoToTheN;
+    
+  double sShift = oneOverTwoToTheN * (tile->getColumn() % twoToTheN);
+  double tShift = oneOverTwoToTheN * (tile->getRow() % twoToTheN);
+  
+  MutableVector2D trans(sShift, tShift);
+  MutableVector2D scale(oneOverTwoToTheN, oneOverTwoToTheN);
+  
+  tmap->translateAndScale(trans, scale);
+}
+
 Mesh* TileImagesTileTexturizer::getMesh(const Planet* planet,
                                         Tile* tile,
                                         Mesh* tessellatorMesh,

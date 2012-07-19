@@ -31,7 +31,7 @@ _textureId(textureId)
 void TextureMapping::bind(const RenderContext* rc) const {
   IGL *gl = rc->getGL();
   
-  gl->translateAndScaleTexCoords(_translation, _scale);
+  gl->transformTexCoords( _scale.asVector2D(), _translation.asVector2D());
   
   gl->bindTexture(_textureId);
   gl->setTextureCoordinates(2, 0, _texCoords);

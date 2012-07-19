@@ -50,9 +50,7 @@ public:
   virtual void disableVerticesPosition() = 0;
   
   virtual void disableTextures() = 0;
-  
-  virtual void translateAndScaleTexCoords(const MutableVector2D& trans, const MutableVector2D& scale) = 0;
-  
+
   virtual void clearScreen(float r, float g, float b, float a) = 0;
 
   void clearScreen(const Color& col){
@@ -116,6 +114,9 @@ public:
   virtual void deleteTexture(int glTextureId) = 0;
   
   virtual void cullFace(bool b, CullFace face) = 0;
+  
+  virtual void transformTexCoords(const Vector2D& scale, const Vector2D& translation) = 0;
+
 };
 
 

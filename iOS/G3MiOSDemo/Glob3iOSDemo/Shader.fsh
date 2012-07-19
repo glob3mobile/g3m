@@ -6,6 +6,8 @@
 //
 
 varying mediump vec2 TextureCoordOut;
+uniform mediump vec2 TranslationTexCoord;
+uniform mediump vec2 ScaleTexCoord;
 
 varying mediump vec4 VertexColor;
 
@@ -18,17 +20,10 @@ uniform bool EnableFlatColor;
 uniform mediump float FlatColorIntensity;
 uniform mediump float ColorPerVertexIntensity;
 
-uniform mediump vec2 TexCoordTranslation;
-uniform mediump vec2 TexCoordScale;
-
 void main() {
   
   if (EnableTexture) {
-    
-    mediump vec2 texCoord = TextureCoordOut * TexCoordScale;
-    texCoord += TexCoordTranslation;
-    
-    gl_FragColor = texture2D(Sampler, texCoord);
+    gl_FragColor = texture2D(Sampler, TextureCoordOut * ScaleTexCoord + TranslationTexCoord);
 
     if (EnableFlatColor || EnableColorPerVertex){
       lowp vec4 color;

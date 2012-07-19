@@ -12,6 +12,7 @@
 #include <math.h>
 
 #include "Angle.hpp"
+#include "Vector2D.hpp"
 
 class MutableVector2D {
 private:
@@ -21,8 +22,12 @@ private:
 public:
   
   MutableVector2D(): _x(0.0), _y(0.0) {}
-
   
+  Vector2D asVector2D() const{ 
+    Vector2D v(_x, _y);
+    return v;
+  }
+
   MutableVector2D(const double x,
                   const double y): _x(x), _y(y) {
     
