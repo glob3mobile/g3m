@@ -33,7 +33,7 @@ TilePetitions* SimpleTileTexturizer::getTilePetitions(const Tile* tile)
                                        _parameters->_tileTextureWidth, 
                                        _parameters->_tileTextureHeight);
   
-  printf("PET: %s\n",url.c_str());
+  //printf("PET: %s\n",url.c_str());
   
   //SAVING PETITION
   TilePetitions *tt = new TilePetitions(tile->getLevel(), tile->getRow(), tile->getColumn(), this);
@@ -80,7 +80,7 @@ Mesh* SimpleTileTexturizer::texturize(const RenderContext* rc,
                                       Mesh* tessellatorMesh,
                                       Mesh* previousMesh) {
   int __todo_JM_con_wms_falla;
-  bool dummy = true;
+  bool dummy = false;
   if (dummy){
     //CHESSBOARD TEXTURE
     int texID = rc->getTexturesHandler()->getTextureIdFromFileName("NoImage.jpg", _parameters->_tileTextureWidth, _parameters->_tileTextureHeight);
@@ -129,23 +129,24 @@ Mesh* SimpleTileTexturizer::texturize(const RenderContext* rc,
 
 void SimpleTileTexturizer::onTilePetitionsFinished(TilePetitions * tp)
 {
-  //TAKING JUST FIRST!!!
-  const ByteBuffer* bb = tp->getPetition(0).getByteBuffer();
-  IImage *im = _factory->createImageFromData(*bb);
-  
-  const std::string& url = tp->getPetition(0).getURL();   
-  int texID = _texHandler->getTextureId(im, url, 
-                                        _parameters->_tileTextureWidth, _parameters->_tileTextureHeight);
-  
-  //RELEASING MEMORY
-  _factory->deleteImage(im);
-
   //Tile finished
   RequestedTile *rt = getRequestTex(tp->getLevel(), tp->getRow(), tp->getColumn());
-  if (rt == NULL){
-    printf("RESOLVING UNREGISTERED TILE!!!");
-  }  
-  rt->_texID = texID;
+  if (rt != NULL){ //If null means the tile is no longer visible
+    
+    //TAKING JUST FIRST!!!
+    const ByteBuffer* bb = tp->getPetition(0).getByteBuffer();
+    IImage *im = _factory->createImageFromData(*bb);
+    
+    const std::string& url = tp->getPetition(0).getURL();   
+    int texID = _texHandler->getTextureId(im, url, 
+                                          _parameters->_tileTextureWidth, _parameters->_tileTextureHeight);
+    
+    //RELEASING MEMORY
+    _factory->deleteImage(im);
+    
+    //Texture
+    rt->_texID = texID;
+  }
 }
 
 void SimpleTileTexturizer::tileToBeDeleted(Tile* tile) {

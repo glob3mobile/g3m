@@ -35,7 +35,11 @@ void Downloader::request(const std::string& urlOfFile, int priority, IDownloadLi
       if (priority > _petitions[i]._priority){ //MAX PRIORITY
         _petitions[i]._priority = priority;
       }
-      _petitions[i].addListener(listener); //NEW LISTENER
+      
+      if (!_petitions[i].isListener(listener)){
+        _petitions[i].addListener(listener); //NEW LISTENER
+      }
+      
       return;
     }
   }
@@ -93,10 +97,14 @@ void Downloader::onDownload(const Response& e)
 #ifdef JAVA_CODE
       _petitions.remove(i);
 #endif
-      return;
+      
+      break;
     }
   }
   
+  //One less in the net
+  _simultaneousDownloads--;
+  startDownload();          //CHECK IF WE CAN THROW A NEW PETITION TO THE NET
 }
 
 void Downloader::onError(const Response& e)
@@ -118,15 +126,18 @@ void Downloader::onError(const Response& e)
       return;
     }
   }
+  
+  //One less in the net
+  _simultaneousDownloads--;
+  startDownload();          //CHECK IF WE CAN THROW A NEW PETITION TO THE NET
 }
 
 bool Downloader::isListener(IDownloadListener* listener) const
 {
   for (int i = 0; i < _petitions.size(); i++)
   {
-    const Download& pet = _petitions[i];
-    for (int j = 0; j < pet._listeners.size(); j++) {
-      if (pet._listeners[j] == listener) return true;
+    if (_petitions[i].isListener(listener)){
+      return true;
     }
   }
   return false;

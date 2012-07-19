@@ -29,7 +29,20 @@ public:
     _listeners.push_back(listener);
   }
   
-  void addListener(IDownloadListener* listener){ _listeners.push_back(listener);}
+  bool isListener(IDownloadListener* listener) const
+  {
+    for (int j = 0; j < _listeners.size(); j++) {
+      if (_listeners[j] == listener){
+        return true;
+      }
+    } 
+    return false;
+  }
+  
+  void addListener(IDownloadListener* listener){ 
+    
+    _listeners.push_back(listener);
+  }
 };
 
 class Downloader: public IDownloadListener

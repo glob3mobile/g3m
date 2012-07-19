@@ -30,7 +30,7 @@
 {
     // activate network queue
     if (_networkQueue == nil) _networkQueue = [[NSOperationQueue alloc] init];
-    [_networkQueue setMaxConcurrentOperationCount:10];
+    [_networkQueue setMaxConcurrentOperationCount:1000];
     
     NSString *myurl = [NSString stringWithUTF8String:url];
     DataDownload* currentOperation = [[DataDownload alloc] initWithURL:[NSURL URLWithString:myurl]];
@@ -50,7 +50,7 @@
     [[op downloadData] getBytes:bytes length: length];
     ByteBuffer bb(bytes, [[op downloadData] length]);  //CREATING BYTEBUFFER
     std::string resp = (char*)bb.getData();
-    printf("\nData: %s;\n", resp.c_str());
+    //printf("\nData: %s;\n", resp.c_str());
     Response r([[op getURL] cStringUsingEncoding:NSUTF8StringEncoding] , &bb);
     ((IDownloadListener*)_listener)->onDownload(r);
 	} else {
