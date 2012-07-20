@@ -9,8 +9,7 @@
 #include "BusyRenderer.hpp"
 
 int BusyRenderer::render(const RenderContext* rc) {
-  int ____XXXX;
-  
+  int __todo_render_a_busy_wheel;
   
   return MAX_TIME_TO_RENDER;
 }

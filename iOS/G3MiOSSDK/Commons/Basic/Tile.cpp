@@ -93,7 +93,6 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
   if (t <= ((parameters->_tileTextureWidth + parameters->_tileTextureHeight) / 2 * 1.5)) {
     return true;
   }
-
   
   return false;
 }
@@ -110,7 +109,7 @@ void Tile::rawRender(const RenderContext *rc,
     }
     else {
       if (!isTextureSolved() || _texturizerMesh == NULL) {
-        if ((_texturedCounter++ % 10) == 0) {
+        if ((_texturedCounter++ % 25) == 0) {
           _texturizerMesh = texturizer->texturize(rc, this, tessellatorMesh, _texturizerMesh);
           _texturedCounter = 0;
         }
