@@ -32,28 +32,6 @@ Tile::~Tile() {
 
 void Tile::setTextureSolved(bool textureSolved) {
   _textureSolved = textureSolved;
-  
-  if (textureSolved) {
-    if (_subtiles != NULL) {
-      for (int i = 0; i < _subtiles->size(); i++) {
-        Tile* subtile = _subtiles->at(i);
-        subtile->setFallbackTextureTile(this);
-      }
-    }
-  }
-}
-
-void Tile::setFallbackTextureTile(Tile* fallbackTextureTile) {
-  _fallbackTextureTile = fallbackTextureTile;
-  
-  if (_subtiles != NULL) {
-    if (!isTextureSolved()) {
-      for (int i = 0; i < _subtiles->size(); i++) {
-        Tile* subtile = _subtiles->at(i);
-        subtile->setFallbackTextureTile(fallbackTextureTile);
-      }
-    }
-  }
 }
 
 Mesh* Tile::getTessellatorMesh(const RenderContext* rc,
@@ -217,12 +195,11 @@ void Tile::render(const RenderContext* rc,
 Tile* Tile::createSubTile(const Angle& lowerLat, const Angle& lowerLon,
                           const Angle& upperLat, const Angle& upperLon,
                           const int level,
-                          const int row, const int column,
-                          Tile* fallbackTextureTile) {
-  return new Tile(Sector(Geodetic2D(lowerLat, lowerLon), Geodetic2D(upperLat, upperLon)),
+                          const int row, const int column) {
+  return new Tile(this,
+                  Sector(Geodetic2D(lowerLat, lowerLon), Geodetic2D(upperLat, upperLon)),
                   level,
-                  row, column,
-                  fallbackTextureTile);
+                  row, column);
 }
 
 std::vector<Tile*>* Tile::createSubTiles() {
@@ -234,36 +211,32 @@ std::vector<Tile*>* Tile::createSubTiles() {
   
   const int nextLevel = _level + 1;
   
-  Tile* fallbackTextureTile = isTextureSolved() ? this : _fallbackTextureTile;
+//  Tile* fallbackTextureTile = isTextureSolved() ? this : _fallbackTextureTile;
   
   std::vector<Tile*>* subTiles = new std::vector<Tile*>();
   subTiles->push_back( createSubTile(lower.latitude(), lower.longitude(),
                                      midLat, midLon,
                                      nextLevel,
                                      2 * _row,
-                                     2 * _column,
-                                     fallbackTextureTile) );
+                                     2 * _column ) );
   
   subTiles->push_back( createSubTile(lower.latitude(), midLon,
                                      midLat, upper.longitude(),
                                      nextLevel,
                                      2 * _row,
-                                     2 * _column + 1,
-                                     fallbackTextureTile) );
+                                     2 * _column + 1 ) );
   
   subTiles->push_back( createSubTile(midLat, lower.longitude(),
                                      upper.latitude(), midLon,
                                      nextLevel,
                                      2 * _row + 1,
-                                     2 * _column,
-                                     fallbackTextureTile) );
+                                     2 * _column ) );
   
   subTiles->push_back( createSubTile(midLat, midLon,
                                      upper.latitude(), upper.longitude(),
                                      nextLevel,
                                      2 * _row + 1,
-                                     2 * _column + 1,
-                                     fallbackTextureTile) );
+                                     2 * _column + 1) );
   
   return subTiles;
 }

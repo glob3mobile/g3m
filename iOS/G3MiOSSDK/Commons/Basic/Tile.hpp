@@ -57,7 +57,7 @@ private:
   Mesh* _debugMesh;
   Mesh* _texturizerMesh;
 
-  Tile* _fallbackTextureTile;
+  Tile* _parent;
   bool _textureSolved;
   
   int _texturedCounter;
@@ -88,8 +88,7 @@ private:
   inline Tile* createSubTile(const Angle& lowerLat, const Angle& lowerLon,
                              const Angle& upperLat, const Angle& upperLon,
                              const int level,
-                             const int row, const int column,
-                             Tile* fallbackTextureTile);
+                             const int row, const int column);
   
   std::vector<Tile*>* _subtiles;
 
@@ -98,11 +97,12 @@ private:
   inline void prune(TileTexturizer* texturizer);
   
 public:
-  Tile(const Sector& sector,
+  Tile(Tile* parent,
+       const Sector& sector,
        int level,
        int row,
-       int column,
-       Tile* fallbackTextureTile):
+       int column):
+  _parent(parent),
   _sector(sector),
   _level(level),
   _row(row),
@@ -111,7 +111,6 @@ public:
   _debugMesh(NULL),
   _texturizerMesh(NULL),
   _textureSolved(false),
-  _fallbackTextureTile(fallbackTextureTile),
   _subtiles(NULL),
   _texturedCounter(0)
   {
@@ -142,9 +141,7 @@ public:
     return _textureSolved;
   }
   
-  void setFallbackTextureTile(Tile* fallbackTextureTile);
-  
-  Tile* getFallbackTextureTile() const { return _fallbackTextureTile;}
+  Tile* getParent() const { return _parent; }
   
   void render(const RenderContext* rc,
               const TileTessellator* tessellator,
