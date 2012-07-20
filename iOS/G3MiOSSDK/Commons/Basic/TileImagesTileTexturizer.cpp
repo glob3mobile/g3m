@@ -109,26 +109,29 @@ Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(const Planet* planet,
                                                         Tile* tile,
                                                         Mesh* tessellatorMesh) {
   int texID = -1;
-  Tile* fbTile = tile->getFallbackTextureTile();
-  if (fbTile != NULL) {
-    RequestedTile* ft = getRequestTile(fbTile->getLevel(), fbTile->getRow(), fbTile->getColumn());
-    if (ft != NULL) {
-      texID = ft->_texID;
-    }
-    else {
-      registerNewRequest(fbTile);
-      ft = getRequestTile(fbTile->getLevel(), fbTile->getRow(), fbTile->getColumn());
+  Tile* fbTile = tile;
+  while (fbTile != NULL && texID < 0) {
+    fbTile = fbTile->getParent();       //TRYING TO CREATE FALLBACK TEXTURE FROM ANTECESOR
+    
+    if (fbTile != NULL) {
+      RequestedTile* ft = getRequestTile(fbTile->getLevel(), fbTile->getRow(), fbTile->getColumn());
       if (ft != NULL) {
         texID = ft->_texID;
+      }
+      else {
+        registerNewRequest(fbTile);
+        ft = getRequestTile(fbTile->getLevel(), fbTile->getRow(), fbTile->getColumn());
+        if (ft != NULL) {
+          texID = ft->_texID;
+        }
       }
     }
   }
   
+  //CREATING MESH
   if (texID > -1) {
     TextureMapping * tMap = new TextureMapping(texID, createNewTextureCoordinates(planet, tile, tessellatorMesh));
-    
     translateAndScaleFallBackTex(tile, fbTile, tMap);
-    
     return new TexturedMesh(tessellatorMesh, false, tMap, true);
   }
   
