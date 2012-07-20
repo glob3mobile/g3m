@@ -46,8 +46,8 @@ std::string WMSLayer::getRequest(const Sector& sector, int width, int height) co
 	else req += "&SRS=EPSG:4326";
   
   //Style
-  if (_style != "") req += "&styles=" + _style;
-	else req += "&style=";
+  if (_style != "") req += "&STYLES=" + _style;
+	else req += "&STYLES=";
   
   //ASKING TRANSPARENCY
   req += "&TRANSPARENT=TRUE";

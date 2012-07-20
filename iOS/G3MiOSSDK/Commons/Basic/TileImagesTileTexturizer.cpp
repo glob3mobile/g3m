@@ -23,17 +23,18 @@ TilePetitions* TileImagesTileTexturizer::getTilePetitions(const Tile* tile)
   //CREATE LAYER
   if (_layer == NULL){
     Sector sector = Sector::fullSphere();
-    _layer = new WMSLayer("Foundation.ETOPO2", "http://demo.cubewerx.com/demo/cubeserv/cubeserv.cgi?", 
-                          "1.1.1", "image/jpeg", sector, "EPSG:4326", "");
+    //_layer = new WMSLayer("Foundation.ETOPO2", "http://demo.cubewerx.com/demo/cubeserv/cubeserv.cgi?", 
+    //                      "1.1.1", "image/jpeg", sector, "EPSG:4326", "");
+    
+    _layer = new WMSLayer("bmng200405", "http://www.nasa.network.com/wms?", 
+                          "1.3", "image/jpeg", sector, "EPSG:4326", "");
   }
-  
-  //std::string url = "http://www.arkive.org/images/browse/world-map.jpg"; //FIXED
-  
+
   std::string url = _layer->getRequest(tile->getSector(), 
                                        _parameters->_tileTextureWidth, 
                                        _parameters->_tileTextureHeight);
   
-  //printf("PET: %s\n",url.c_str());
+  printf("PET: %s\n",url.c_str());
   
   //SAVING PETITION
   TilePetitions *tt = new TilePetitions(tile->getLevel(), tile->getRow(), tile->getColumn(), this);
@@ -59,25 +60,6 @@ std::vector<MutableVector2D> TileImagesTileTexturizer::createNewTextureCoordinat
   
   return texCoor;
 }
-
-//void TileImagesTileTexturizer::translateAndScaleFallBackTex(Tile* tile, Tile* fallbackTile, 
-//                                                            TextureMapping* tmap) const
-//{
-//
-//  int levelDelta = tile->getLevel() - fallbackTile->getLevel();
-//  if (levelDelta <= 0) return;
-//  
-//  int twoToTheN = pow(2, levelDelta);
-//  double oneOverTwoToTheN = 1.0 / twoToTheN;
-//    
-//  double sShift = oneOverTwoToTheN * (tile->getColumn() % twoToTheN);
-//  double tShift = oneOverTwoToTheN * (tile->getRow() % twoToTheN);
-//  
-//  MutableVector2D trans(sShift, tShift);
-//  MutableVector2D scale(oneOverTwoToTheN, oneOverTwoToTheN);
-//  
-//  tmap->translateAndScale(trans, scale);
-//}
 
 void TileImagesTileTexturizer::translateAndScaleFallBackTex(Tile* tile, Tile* fallbackTile, 
                                                             TextureMapping* tmap) const {
