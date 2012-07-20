@@ -175,13 +175,18 @@
     CameraRenderer *cameraRenderer = new CameraRenderer();
     comp->addRenderer(cameraRenderer);
     
+    //STORAGE
+    NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    FileSystemStorage * fss = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
+    Downloader* downloader = new Downloader(fss, 5, factory->createNetwork());
+    
     // very basic tile renderer
     if (true) {
       TileParameters* parameters = TileParameters::createDefault(true);
       
       TileTexturizer* texturizer = NULL;
       if (true) {
-        texturizer = new TileImagesTileTexturizer(parameters); //WMS
+        texturizer = new TileImagesTileTexturizer(parameters, downloader); //WMS
       }
       else {
         //SINGLE IMAGE
@@ -258,13 +263,10 @@
     TexturesHandler* texturesHandler = new TexturesHandler(gl, factory);
     
     const Planet* planet = Planet::createEarth();
+
     
-    NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    
-    //STORAGE
-    FileSystemStorage * fss = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
-    Downloader* downloader = new Downloader(fss, 5, factory->createNetwork());
-    
+
+
     _widget = G3MWidget::create(factory,
                                 logger,
                                 gl,

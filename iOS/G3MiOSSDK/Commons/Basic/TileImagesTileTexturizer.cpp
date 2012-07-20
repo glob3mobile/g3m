@@ -34,7 +34,7 @@ TilePetitions* TileImagesTileTexturizer::getTilePetitions(const Tile* tile)
                                        _parameters->_tileTextureWidth, 
                                        _parameters->_tileTextureHeight);
   
-  printf("PET: %s\n",url.c_str());
+  //printf("PET: %s\n",url.c_str());
   
   //SAVING PETITION
   TilePetitions *tt = new TilePetitions(tile->getLevel(), tile->getRow(), tile->getColumn(), this);
@@ -256,5 +256,13 @@ bool TileImagesTileTexturizer::tileMeetsRenderCriteria(Tile* tile) {
 }
 
 void TileImagesTileTexturizer::justCreatedTopTile(Tile *tile) {
+  
+  TilePetitions *tp = getTilePetitions(tile);
+  
+  for (int i = 0; i < tp->getNumPetitions(); i++) {
+    const std::string& url = tp->getPetition(i).getURL();
+    _downloader->request(url, 99999, NULL);
+  }
+  
   
 }

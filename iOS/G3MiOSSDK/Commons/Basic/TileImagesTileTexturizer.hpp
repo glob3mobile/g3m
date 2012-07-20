@@ -96,7 +96,7 @@ private:
   
 public:
   
-  TileImagesTileTexturizer(const TileParameters *par):_parameters(par), _layer(NULL){}
+  TileImagesTileTexturizer(const TileParameters *par, Downloader* down):_parameters(par), _layer(NULL), _downloader(down){}
   
   Mesh* texturize(const RenderContext* rc,
                   Tile* tile,

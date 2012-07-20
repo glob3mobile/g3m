@@ -26,7 +26,9 @@ long Downloader::request(const std::string& urlOfFile, int priority, IDownloadLi
   if (_storage->contains(urlOfFile)){
     ByteBuffer bb = _storage->getByteBuffer(urlOfFile);
     Response r(urlOfFile , &bb);
-    listener->onDownload(r);
+    if (listener != NULL){
+      listener->onDownload(r); 
+    }
     return -1;
   }
   
@@ -91,8 +93,9 @@ void Downloader::onDownload(const Response& e)
       Download& pet = _petitions[i];
       for (int j = 0; j < pet._listeners.size(); j++) {
         IDownloadListener *dl = pet._listeners[j]._listener;
-        
-        dl->onDownload(e);
+        if (dl != NULL){
+          dl->onDownload(e);
+        }
       }
 #ifdef C_CODE
       _petitions.erase(_petitions.begin() + i);
@@ -118,7 +121,10 @@ void Downloader::onError(const Response& e)
     {
       Download& pet = _petitions[i];
       for (int j = 0; j < pet._listeners.size(); j++) {
-        pet._listeners[j]._listener->onError(e);
+        IDownloadListener *dl = pet._listeners[j]._listener;
+        if (dl != NULL){
+          dl->onError(e);
+        }
       }
 #ifdef C_CODE
       _petitions.erase(_petitions.begin() + i);
