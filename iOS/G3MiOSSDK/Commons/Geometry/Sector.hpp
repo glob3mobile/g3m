@@ -115,7 +115,7 @@ public:
   // (u,v) are similar to texture coordinates inside the Sector
   // (u,v)=(0,0) in NW point, and (1,1) in SE point
   
-  Vector2D getUVCoordinates(Geodetic2D point) const;
+  Vector2D getUVCoordinates(const Geodetic2D& point) const;
   
   bool isBackOriented(const RenderContext *rc) const;
   

@@ -102,3 +102,8 @@ int TileRenderer::render(const RenderContext* rc) {
     
   return MAX_TIME_TO_RENDER;
 }
+
+bool TileRenderer::isReadyToRender(const RenderContext *rc) {
+  int ___check_for_level_0_loaded;
+  return true;
+}

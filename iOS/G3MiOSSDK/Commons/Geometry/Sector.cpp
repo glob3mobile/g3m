@@ -49,9 +49,9 @@ Geodetic2D Sector::getInnerPoint(double u, double v) const
 }
 
 
-Vector2D Sector::getUVCoordinates(Geodetic2D point) const {
-  const double u = point.longitude().sub(_lower.longitude()).div(getDeltaLatitude());
-  const double v = _upper.latitude().sub(point.latitude()).div(getDeltaLongitude());
+Vector2D Sector::getUVCoordinates(const Geodetic2D& point) const {
+  const double u = point.longitude().sub(_lower.longitude()).div(getDeltaLongitude());
+  const double v = _upper.latitude().sub(point.latitude()).div(getDeltaLatitude());
   return Vector2D(u, v);
 }
 

@@ -23,7 +23,11 @@ public:
   virtual ~GLErrorRenderer();
   
   void onResizeViewportEvent(int width, int height);
-
+  
+  bool isReadyToRender(const RenderContext* rc) {
+    return true;
+  }
+  
 };
 
 #endif

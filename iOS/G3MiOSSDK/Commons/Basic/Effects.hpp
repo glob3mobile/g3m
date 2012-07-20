@@ -164,6 +164,12 @@ public:
   };
   
   void startEffect(Effect* effect);
+  
+  
+  bool isReadyToRender(const RenderContext* rc) {
+    return true;
+  }
+
 };
 
 
@@ -190,7 +196,7 @@ public:
                     const TimeInterval& now) {
     EffectWithDuration::stop(rc, now);
   }
-  
+
 };
 
 
