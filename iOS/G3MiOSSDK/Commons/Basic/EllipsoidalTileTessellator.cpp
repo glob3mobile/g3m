@@ -91,7 +91,8 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
     indices.push_back(_resolution*_resolution);
   }
 
-  Color *color = new Color(Color::fromRGBA(1.0, 1.0, 1.0, 1.0));
+//  Color *color = new Color(Color::fromRGBA(1.0, 1.0, 1.0, 1.0));
+  Color *color = new Color(Color::fromRGBA(0.1, 0.1, 0.1, 1.0));
   Vector3D center = planet->toVector3D(sector.getCenter());
   return new IndexedMesh(vertices, TriangleStrip, GivenCenter, center, indices, color);
 }
@@ -99,7 +100,7 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
 
 Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
                                                   const Tile* tile) const 
-{    
+{
   const Sector sector = tile->getSector();
   const Planet* planet = rc->getPlanet();
   

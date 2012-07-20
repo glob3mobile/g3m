@@ -132,7 +132,7 @@ void Tile::rawRender(const RenderContext *rc,
     }
     else {
       if (!isTextureSolved() || _texturizerMesh == NULL) {
-        if ((_texturedCounter++ % 5) == 0) {
+        if ((_texturedCounter++ % 10) == 0) {
           _texturizerMesh = texturizer->texturize(rc, this, tessellatorMesh, _texturizerMesh);
           _texturedCounter = 0;
         }

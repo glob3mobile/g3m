@@ -189,7 +189,7 @@
         texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
       }
       
-      TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
+      TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, false),
                                           texturizer,
                                           parameters,
                                           true);
