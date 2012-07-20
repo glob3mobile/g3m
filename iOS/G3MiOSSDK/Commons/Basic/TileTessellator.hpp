@@ -17,6 +17,8 @@ class TileTessellator {
 public:
   virtual ~TileTessellator() { };
   
+  virtual bool isReadyToRender(const RenderContext *rc) const = 0;
+  
   virtual Mesh* createMesh(const RenderContext* rc, const Tile* tile) const = 0;
   
   virtual Mesh* createDebugMesh(const RenderContext* rc, const Tile* tile) const = 0;

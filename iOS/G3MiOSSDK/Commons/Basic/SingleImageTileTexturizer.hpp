@@ -53,6 +53,10 @@ public:
   bool tileMeetsRenderCriteria(Tile* tile);
 
   void justCreatedTopTile(Tile* tile);
+  
+  bool isReadyToRender(const RenderContext *rc) {
+    return true;
+  }
 
 };
 

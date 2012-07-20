@@ -70,6 +70,21 @@ void TileRenderer::initialize(const InitializationContext* ic) {
   _timer = ic->getFactory()->createTimer();
 }
 
+bool TileRenderer::isReadyToRender(const RenderContext *rc) {
+  if (_tessellator != NULL) {
+    if (!_tessellator->isReadyToRender(rc)) {
+      return false;
+    }
+  }
+  
+  if (_texturizer != NULL) {
+    if (!_texturizer->isReadyToRender(rc)) {
+      return false;
+    }
+  }
+  
+  return true;
+}
 
 int TileRenderer::render(const RenderContext* rc) {
   _timer->start();
@@ -101,9 +116,4 @@ int TileRenderer::render(const RenderContext* rc) {
   }
     
   return MAX_TIME_TO_RENDER;
-}
-
-bool TileRenderer::isReadyToRender(const RenderContext *rc) {
-  int ___check_for_level_0_loaded;
-  return true;
 }

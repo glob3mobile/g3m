@@ -32,6 +32,9 @@ public:
   virtual bool tileMeetsRenderCriteria(Tile* tile) = 0;
   
   virtual void justCreatedTopTile(Tile* tile) = 0;
+  
+  virtual bool isReadyToRender(const RenderContext *rc) = 0;
+
 };
 
 #endif

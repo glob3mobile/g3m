@@ -96,7 +96,12 @@ private:
   
 public:
   
-  TileImagesTileTexturizer(const TileParameters *par, Downloader* down):_parameters(par), _layer(NULL), _downloader(down){}
+  TileImagesTileTexturizer(const TileParameters* parameters,
+                           Downloader* downloader) : 
+  _parameters(parameters),
+  _layer(NULL),
+  _downloader(downloader) {
+  }
   
   Mesh* texturize(const RenderContext* rc,
                   Tile* tile,
@@ -110,6 +115,9 @@ public:
   bool tileMeetsRenderCriteria(Tile* tile);
   
   void justCreatedTopTile(Tile* tile);
+  
+  bool isReadyToRender(const RenderContext *rc);
+
 
 };
 

@@ -264,5 +264,10 @@ void TileImagesTileTexturizer::justCreatedTopTile(Tile *tile) {
     _downloader->request(url, 99999, NULL);
   }
   
-  
+}
+
+bool TileImagesTileTexturizer::isReadyToRender(const RenderContext *rc) {
+  int ___check_for_level_0_loaded;
+
+  return true;
 }
