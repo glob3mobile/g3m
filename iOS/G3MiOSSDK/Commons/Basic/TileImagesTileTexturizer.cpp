@@ -11,12 +11,10 @@
 #include "Context.hpp"
 #include "TextureMapping.hpp"
 #include "TexturedMesh.hpp"
-
 #include "TilePetitions.hpp"
-
 #include "WMSLayer.hpp"
-
 #include "TileTessellator.hpp"
+#include "ITimer.hpp"
 
 
 TilePetitions* TileImagesTileTexturizer::getTilePetitions(const Tile* tile)
@@ -72,7 +70,7 @@ Mesh* TileImagesTileTexturizer::getMesh(Tile* tile,
                                         const TileTessellator* tessellator,
                                         Mesh* tessellatorMesh,
                                         Mesh* previousMesh) {
-  
+
   if (isTextureAvailable(tile)) {
     return getNewTextureMesh(tile, tessellator, tessellatorMesh);
   }
@@ -150,7 +148,8 @@ Mesh* TileImagesTileTexturizer::texturize(const RenderContext* rc,
                                           Tile* tile,
                                           const TileTessellator* tessellator,
                                           Mesh* tessellatorMesh,
-                                          Mesh* previousMesh) {
+                                          Mesh* previousMesh,
+                                          ITimer* timer) {
   
   bool dummy = false;
   if (dummy){
@@ -162,19 +161,27 @@ Mesh* TileImagesTileTexturizer::texturize(const RenderContext* rc,
   }
   
   //STORING CONTEXT
-  _factory = rc->getFactory();
+  _factory    = rc->getFactory();
   _texHandler = rc->getTexturesHandler();
   _downloader = rc->getDownloader();
   
-  Mesh *mesh = NULL;
+  if (timer != NULL) {
+    int __TODO_tune_TEXTURIZER_render_budget;
+    if ( timer->elapsedTime().milliseconds() > 20 ) {
+      return getFallBackTexturedMesh(tile, tessellator, tessellatorMesh);
+    }
+  }
+
+  
+  
   if (!isTextureAvailable(tile)) {
     if (!isTextureRequested(tile)) {
       //REGISTERING PETITION AND SENDING TO THE NET
       registerNewRequest(tile);
     }
   }
-  mesh = getMesh(tile, tessellator, tessellatorMesh, previousMesh);
   
+  Mesh *mesh = getMesh(tile, tessellator, tessellatorMesh, previousMesh);
   if (mesh != NULL && previousMesh != NULL) {
     delete previousMesh;
   }
@@ -186,15 +193,17 @@ void TileImagesTileTexturizer::onTilePetitionsFinished(TilePetitions * tp)
 {
   //Tile finished
   RequestedTile *rt = getRequestTile(tp->getLevel(), tp->getRow(), tp->getColumn());
-  if (rt != NULL){ //If null means the tile is no longer visible
+  if (rt != NULL) { //If null means the tile is no longer visible
     
     //TAKING JUST FIRST!!!
     const ByteBuffer* bb = tp->getPetition(0).getByteBuffer();
     IImage *im = _factory->createImageFromData(*bb);
     
     const std::string& url = tp->getPetition(0).getURL();   
-    int texID = _texHandler->getTextureId(im, url, 
-                                          _parameters->_tileTextureWidth, _parameters->_tileTextureHeight);
+    int texID = _texHandler->getTextureId(im,
+                                          url, 
+                                          _parameters->_tileTextureWidth,
+                                          _parameters->_tileTextureHeight);
     
     //RELEASING MEMORY
     _factory->deleteImage(im);

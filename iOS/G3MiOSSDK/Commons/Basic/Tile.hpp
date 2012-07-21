@@ -82,7 +82,8 @@ private:
   
   inline void rawRender(const RenderContext* rc,
                         const TileTessellator* tessellator,
-                        TileTexturizer* texturizer);
+                        TileTexturizer* texturizer,
+                        ITimer* timer);
   
   void debugRender(const RenderContext* rc,
                    const TileTessellator* tessellator);

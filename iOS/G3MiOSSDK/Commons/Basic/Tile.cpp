@@ -78,11 +78,11 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
   }
   
   int __TODO_tune_render_budget;
-  if (timer != NULL) {
-    if ( timer->elapsedTime().milliseconds() > 33 ) {
-      return true;
-    }
-  }
+//  if (timer != NULL) {
+//    if ( timer->elapsedTime().milliseconds() > 50 ) {
+//      return true;
+//    }
+//  }
 
   if (texturizer != NULL) {
     if (texturizer->tileMeetsRenderCriteria(this)) {
@@ -106,7 +106,8 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
 
 void Tile::rawRender(const RenderContext *rc,
                      const TileTessellator *tessellator,
-                     TileTexturizer *texturizer) {
+                     TileTexturizer *texturizer,
+                     ITimer* timer) {
   
   Mesh* tessellatorMesh = getTessellatorMesh(rc, tessellator);
   
@@ -117,8 +118,8 @@ void Tile::rawRender(const RenderContext *rc,
     else {
       if (!isTextureSolved() || _texturizerMesh == NULL) {
         int __TODO_tune_render_budget;
-        if ((_texturedCounter++ % 20) == 0) {
-          _texturizerMesh = texturizer->texturize(rc, this, tessellator, tessellatorMesh, _texturizerMesh);
+        if ((_texturedCounter++ % 25) == 0) {
+          _texturizerMesh = texturizer->texturize(rc, this, tessellator, tessellatorMesh, _texturizerMesh, timer);
           _texturedCounter = 0;
         }
       }
@@ -178,7 +179,7 @@ void Tile::render(const RenderContext* rc,
                   ITimer* timer) {
   if (isVisible(rc, tessellator)) {
     if (meetsRenderCriteria(rc, tessellator, texturizer, parameters, timer)) {
-      rawRender(rc, tessellator, texturizer);
+      rawRender(rc, tessellator, texturizer, timer);
       if (parameters->_renderDebug) {
         debugRender(rc, tessellator);
       }

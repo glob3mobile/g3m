@@ -47,7 +47,8 @@ public:
                   Tile* tile,
                   const TileTessellator* tessellator,
                   Mesh* mesh,
-                  Mesh* previousMesh);
+                  Mesh* previousMesh,
+                  ITimer* timer);
   
   void tileToBeDeleted(Tile* tile);
   
