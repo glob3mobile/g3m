@@ -193,8 +193,8 @@ void Tile::render(const RenderContext* rc,
       const int subTilesSize = subTiles->size();
       for (int i = 0; i < subTilesSize; i++) {
         Tile* subTile = subTiles->at(i);
-//        subTile->render(rc, tessellator, texturizer, parameters, statistics, toVisitInNextIteration, timer);
-        toVisitInNextIteration->push_back(subTile);
+        subTile->render(rc, tessellator, texturizer, parameters, statistics, toVisitInNextIteration, timer);
+//        toVisitInNextIteration->push_back(subTile);
       }
     }
   }

@@ -195,10 +195,11 @@
         texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
       }
       
+      const bool showStatistics = false;
       TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
                                           texturizer,
                                           parameters,
-                                          true);
+                                          showStatistics);
       comp->addRenderer(tr);
     }
     
