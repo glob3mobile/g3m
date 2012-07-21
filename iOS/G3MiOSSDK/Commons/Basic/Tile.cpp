@@ -14,6 +14,9 @@
 #include "TileTexturizer.hpp"
 #include "TileRenderer.hpp"
 
+#include "ITimer.hpp"
+
+
 Tile::~Tile() {
   prune(NULL);
   
@@ -66,16 +69,18 @@ bool Tile::isVisible(const RenderContext *rc,
 bool Tile::meetsRenderCriteria(const RenderContext *rc,
                                const TileTessellator *tessellator,
                                TileTexturizer *texturizer,
-                               const TileParameters* parameters) {
+                               const TileParameters* parameters,
+                               ITimer* timer) {
   
   
   if (_level >= parameters->_maxLevel) {
     return true;
   }
   
-//  if ( timer->elapsedTime().milliseconds() > 100 ) {
-//    return true;
-//  }
+  int __TODO_tune_render_budget;
+  if ( timer->elapsedTime().milliseconds() > 10 ) {
+    return true;
+  }
 
   if (texturizer != NULL) {
     if (texturizer->tileMeetsRenderCriteria(this)) {
@@ -109,6 +114,7 @@ void Tile::rawRender(const RenderContext *rc,
     }
     else {
       if (!isTextureSolved() || _texturizerMesh == NULL) {
+        int __TODO_tune_render_budget;
         if ((_texturedCounter++ % 25) == 0) {
           _texturizerMesh = texturizer->texturize(rc, this, tessellatorMesh, _texturizerMesh);
           _texturedCounter = 0;
@@ -165,9 +171,11 @@ void Tile::render(const RenderContext* rc,
                   const TileTessellator* tessellator,
                   TileTexturizer* texturizer,
                   const TileParameters* parameters,
-                  TilesStatistics* statistics) {
+                  TilesStatistics* statistics,
+                  std::vector<Tile*>* toVisitInNextIteration,
+                  ITimer* timer) {
   if (isVisible(rc, tessellator)) {
-    if (meetsRenderCriteria(rc, tessellator, texturizer, parameters)) {
+    if (meetsRenderCriteria(rc, tessellator, texturizer, parameters, timer)) {
       rawRender(rc, tessellator, texturizer);
       if (parameters->_renderDebug) {
         debugRender(rc, tessellator);
@@ -182,7 +190,8 @@ void Tile::render(const RenderContext* rc,
       const int subTilesSize = subTiles->size();
       for (int i = 0; i < subTilesSize; i++) {
         Tile* subTile = subTiles->at(i);
-        subTile->render(rc, tessellator, texturizer, parameters, statistics);
+//        subTile->render(rc, tessellator, texturizer, parameters, statistics, toVisitInNextIteration, timer);
+        toVisitInNextIteration->push_back(subTile);
       }
     }
   }
@@ -209,8 +218,6 @@ std::vector<Tile*>* Tile::createSubTiles() {
   const Angle midLon = Angle::midAngle(lower.longitude(), upper.longitude());
   
   const int nextLevel = _level + 1;
-  
-//  Tile* fallbackTextureTile = isTextureSolved() ? this : _fallbackTextureTile;
   
   std::vector<Tile*>* subTiles = new std::vector<Tile*>();
   subTiles->push_back( createSubTile(lower.latitude(), lower.longitude(),

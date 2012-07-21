@@ -10,7 +10,7 @@
 
 void TilePetitions::onDownload(const Response &response)
 {
-  _nDownloads++;
+  _downloadsCounter++;
   
   std::string url = response.getURL().getPath();
   
@@ -28,7 +28,7 @@ void TilePetitions::onDownload(const Response &response)
     _texturizer->onTilePetitionsFinished(this);
   }
   
-  if (_nDownloads + _nErrors == _petitions.size()){
+  if (_downloadsCounter + _errorsCounter == _petitions.size()){
     delete this;
   }
 }
@@ -36,8 +36,8 @@ void TilePetitions::onDownload(const Response &response)
 
 void TilePetitions::onError(const Response& e)
 {
-  _nErrors++;
-  if (_nDownloads + _nErrors == _petitions.size()){
+  _errorsCounter++;
+  if (_downloadsCounter + _errorsCounter == _petitions.size()){
     delete this;
   }
 }
@@ -52,8 +52,8 @@ bool TilePetitions::allFinished() const{
 }
 
 void TilePetitions::onCancel(const std::string& url){
-  _nErrors++;
-  if (_nDownloads + _nErrors == _petitions.size()){
+  _errorsCounter++;
+  if (_downloadsCounter + _errorsCounter == _petitions.size()){
     delete this;
   }
 }

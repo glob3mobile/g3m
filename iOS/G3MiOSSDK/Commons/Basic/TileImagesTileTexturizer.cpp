@@ -267,7 +267,7 @@ void TileImagesTileTexturizer::justCreatedTopTile(Tile *tile) {
 }
 
 bool TileImagesTileTexturizer::isReadyToRender(const RenderContext *rc) {
-  int ___check_for_level_0_loaded;
+  int __TODO_check_for_level_0_loaded;
 
   return true;
 }
