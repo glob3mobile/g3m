@@ -47,11 +47,11 @@ private:
   
   WMSLayer* _layer;
   
+  mutable std::vector<MutableVector2D>* _texCoordsCache;
+  
   TilePetitions* getTilePetitions(const Tile* tile);
   
-  std::vector<MutableVector2D> createNewTextureCoordinates(const Planet* planet,
-                                                           Tile* tile,
-                                                           Mesh* tessellatorMesh) const;
+  std::vector<MutableVector2D> getTextureCoordinates(const TileTessellator* tessellator) const;
   
   void translateAndScaleFallBackTex(Tile* tile, Tile* fallbackTile, TextureMapping* tmap) const;
   
@@ -81,16 +81,16 @@ private:
     return ft != NULL;
   }
   
-  Mesh* getFallBackTexturedMesh(const Planet* planet,
-                                Tile* tile,
+  Mesh* getFallBackTexturedMesh(Tile* tile,
+                                const TileTessellator* tessellator,
                                 Mesh* tessellatorMesh);
   
-  Mesh* getNewTextureMesh(const Planet* planet,
-                          Tile* tile,
+  Mesh* getNewTextureMesh(Tile* tile,
+                          const TileTessellator* tessellator,
                           Mesh* mesh);
   
-  Mesh* getMesh(const Planet* planet,
-                Tile* tile,
+  Mesh* getMesh(Tile* tile,
+                const TileTessellator* tessellator,
                 Mesh* tessellatorMesh,
                 Mesh* previousMesh);
   
@@ -100,11 +100,19 @@ public:
                            Downloader* downloader) : 
   _parameters(parameters),
   _layer(NULL),
-  _downloader(downloader) {
+  _downloader(downloader),
+  _texCoordsCache(NULL) {
+  }
+  
+  ~TileImagesTileTexturizer() {
+    if (_texCoordsCache != NULL) {
+      delete _texCoordsCache;
+    }
   }
   
   Mesh* texturize(const RenderContext* rc,
                   Tile* tile,
+                  const TileTessellator* tessellator,
                   Mesh* mesh,
                   Mesh* previousMesh);
   

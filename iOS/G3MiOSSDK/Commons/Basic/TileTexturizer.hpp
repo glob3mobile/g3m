@@ -12,13 +12,14 @@
 class Mesh;
 class RenderContext;
 class Tile;
-
+class TileTessellator;
 
 class TileTexturizer {
   
 public:
   virtual Mesh* texturize(const RenderContext* rc,
                           Tile* tile,
+                          const TileTessellator* tessellator,
                           Mesh* tessellatorMesh,
                           Mesh* previousMesh) = 0;
   
