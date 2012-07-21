@@ -106,12 +106,7 @@ int TileRenderer::render(const RenderContext* rc) {
   }
   
   std::vector<Tile*> toVisit(_topLevelTiles);
-//  int iterationCount = 0;
   while (toVisit.size() > 0) {
-//    iterationCount++;
-    
-   // rc->getLogger()->logInfo("TileRenderer, iteration #%d, visiting %d tiles" , iterationCount, toVisit.size());
-    
     std::vector<Tile*> toVisitInNextIteration;
     
     for (int i = 0; i < toVisit.size(); i++) {
