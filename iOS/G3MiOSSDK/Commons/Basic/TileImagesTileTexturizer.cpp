@@ -20,7 +20,7 @@
 TilePetitions* TileImagesTileTexturizer::getTilePetitions(const Tile* tile)
 {
   //CREATE LAYER
-  if (_layer == NULL){
+  if (_layer == NULL) {
     Sector sector = Sector::fullSphere();
     //_layer = new WMSLayer("Foundation.ETOPO2", "http://demo.cubewerx.com/demo/cubeserv/cubeserv.cgi?", 
     //                      "1.1.1", "image/jpeg", sector, "EPSG:4326", "");
@@ -28,7 +28,7 @@ TilePetitions* TileImagesTileTexturizer::getTilePetitions(const Tile* tile)
     _layer = new WMSLayer("bmng200405", "http://www.nasa.network.com/wms?", 
                           "1.3", "image/jpeg", sector, "EPSG:4326", "");
   }
-
+  
   std::string url = _layer->getRequest(tile->getSector(), 
                                        _parameters->_tileTextureWidth, 
                                        _parameters->_tileTextureHeight);
