@@ -35,6 +35,8 @@
 #include "SingleImageTileTexturizer.hpp"
 #include "BusyRenderer.hpp"
 #include "CPUTextureBuilder.hpp"
+#include "LayerSet.hpp"
+#include "WMSLayer.hpp"
 
 #include <stdlib.h>
 
@@ -182,13 +184,20 @@
     FileSystemStorage * fss = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
     Downloader* downloader = new Downloader(fss, 5, factory->createNetwork());
     
+    LayerSet* layerSet = new LayerSet();
+    Sector sector = Sector::fullSphere();
+    WMSLayer* layer = new WMSLayer("bmng200405", "http://www.nasa.network.com/wms?", 
+                          "1.3", "image/jpeg", sector, "EPSG:4326", "");
+    
+    layerSet->add(layer);
+    
     // very basic tile renderer
     if (true) {
       TileParameters* parameters = TileParameters::createDefault(true);
       
       TileTexturizer* texturizer = NULL;
       if (true) {
-        texturizer = new TileImagesTileTexturizer(parameters, downloader); //WMS
+        texturizer = new TileImagesTileTexturizer(parameters, downloader, layerSet); //WMS
       }
       else {
         //SINGLE IMAGE

@@ -18,47 +18,14 @@
 
 
 TilePetitions* TileImagesTileTexturizer::getTilePetitions(const Tile* tile)
-{
-  //CREATE LAYER
-  if (_layer == NULL){
-    Sector sector = Sector::fullSphere();
-    //_layer = new WMSLayer("Foundation.ETOPO2", "http://demo.cubewerx.com/demo/cubeserv/cubeserv.cgi?", 
-    //                      "1.1.1", "image/jpeg", sector, "EPSG:4326", "");
-    
-    _layer = new WMSLayer("bmng200405", "http://www.nasa.network.com/wms?", 
-                          "1.3", "image/jpeg", sector, "EPSG:4326", "");
-  }
-
-  std::string url = _layer->getRequest(tile->getSector(), 
-                                       _parameters->_tileTextureWidth, 
-                                       _parameters->_tileTextureHeight);
+{  
+  TilePetitions *tt = _layerSet->createTilePetitions(tile, 
+                                             _parameters->_tileTextureWidth, 
+                                             _parameters->_tileTextureHeight);
   
-  //printf("PET: %s\n",url.c_str());
-  
-  //SAVING PETITION
-  TilePetitions *tt = new TilePetitions(tile->getLevel(), tile->getRow(), tile->getColumn(), this);
-  tt->add(url, tile->getSector());
-  
-  printf("URL: %s\n", url.c_str() );
-  
+  tt->notify(this);
   return tt;
 }
-
-//std::vector<MutableVector2D> TileImagesTileTexturizer::createNewTextureCoordinates(const Planet* planet,
-//                                                                                   Tile* tile,
-//                                                                                   Mesh* tessellatorMesh) const
-//{
-//  std::vector<MutableVector2D> texCoor;
-//  const Sector sector = tile->getSector();
-// 
-//  for (int i = 0; i < tessellatorMesh->getVertexCount(); i++) {
-//    const Vector3D vertex = tessellatorMesh->getVertex(i);
-//    const Geodetic2D pos = planet->toGeodetic2D(vertex);
-//    const Vector2D v2d = sector.getUVCoordinates(pos);
-//
-//    texCoor.push_back(v2d.asMutableVector2D());
-//  }
-//}
 
 std::vector<MutableVector2D> TileImagesTileTexturizer::getTextureCoordinates(const TileTessellator* tessellator) const {
   if (_texCoordsCache == NULL) {
@@ -71,12 +38,6 @@ std::vector<MutableVector2D> TileImagesTileTexturizer::getTextureCoordinates(con
 void TileImagesTileTexturizer::translateAndScaleFallBackTex(Tile* tile,
                                                             Tile* fallbackTile, 
                                                             TextureMapping* tmap) const {
-  
-//  const int levelDelta = tile->getLevel() - fallbackTile->getLevel();
-//  if (levelDelta <= 0) {
-//    return; 
-//  }
-  
   const Sector tileSector         = tile->getSector();
   const Sector fallbackTileSector = fallbackTile->getSector();
   
@@ -223,6 +184,7 @@ void TileImagesTileTexturizer::onTilePetitionsFinished(TilePetitions * tp)
       images.push_back(im);
     }
     
+    //Creating the texture
     const std::string& url = tp->getPetitionsID();  
     int texID = _texHandler->getTextureId(images,
                                           url, 

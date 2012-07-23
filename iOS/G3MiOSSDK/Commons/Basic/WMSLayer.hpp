@@ -9,11 +9,9 @@
 #ifndef G3MiOSSDK_WMSLayer_hpp
 #define G3MiOSSDK_WMSLayer_hpp
 
-#include "Sector.hpp"
+#include "Layer.hpp"
 
-#include <string>
-
-class WMSLayer{
+class WMSLayer: public Layer{
   
   const std::string   _name;
   const std::string   _format;
@@ -37,6 +35,10 @@ public:
   _serverURL(serverURL),
   _serverVersion(serverVer)
   {
+  }
+  
+  bool fullContains(const Sector& s) const{
+    return _bbox.fullContains(s);
   }
   
   std::string getRequest(const Sector& sector, int width, int height) const;
