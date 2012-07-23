@@ -24,6 +24,9 @@ public:
   static Geodetic2D zero() {
     return Geodetic2D(Angle::zero(), Angle::zero());
   }
+  static Geodetic2D fromDegrees(double lat, double lon) {
+    return Geodetic2D(Angle::fromDegrees(lat), Angle::fromDegrees(lon));
+  }
   
   Geodetic2D(const Angle& latitude,
              const Angle& longitude): _latitude(latitude), _longitude(longitude) {

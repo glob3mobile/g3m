@@ -43,6 +43,13 @@ public:
   {
   }
   
+  static Sector fromDegrees(double minLat, double minLon, double maxLat, double maxLon){
+    Geodetic2D lower(Angle::fromDegrees(minLat), Angle::fromDegrees(minLon));
+    Geodetic2D upper(Angle::fromDegrees(maxLat), Angle::fromDegrees(maxLon));
+    Sector s(lower, upper);
+    return s;
+  }
+  
   Vector2D getScaleFactor(const Sector& s)
   {
     double u = _deltaLatitude.div(s._deltaLatitude);
@@ -76,6 +83,12 @@ public:
   }
   
   bool contains(const Geodetic2D& position) const;
+  
+  bool contains(const Geodetic3D& position) const
+  {
+    return contains(position.asGeodetic2D());
+  }
+  
   
   bool touchesWith(const Sector& that) const;
   

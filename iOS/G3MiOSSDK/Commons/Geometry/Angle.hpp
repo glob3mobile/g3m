@@ -11,7 +11,8 @@
 
 #include <math.h>
 
-#define THRESHOLD     1e-5
+#define THRESHOLD               1e-5
+#define ISBETWEEN_THRESHOLD     1e-2
 
 
 

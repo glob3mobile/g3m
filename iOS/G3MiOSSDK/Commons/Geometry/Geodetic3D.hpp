@@ -28,6 +28,10 @@ public:
     return Geodetic3D(Angle::zero(), Angle::zero(), 0);
   }
   
+  static Geodetic3D fromDegrees(double lat, double lon, double height) {
+    return Geodetic3D(Angle::fromDegrees(lat), Angle::fromDegrees(lon), height);
+  }
+  
   Geodetic3D(const Angle& latitude,
              const Angle& longitude,
              const double height): _latitude(latitude), _longitude(longitude), _height(height) {

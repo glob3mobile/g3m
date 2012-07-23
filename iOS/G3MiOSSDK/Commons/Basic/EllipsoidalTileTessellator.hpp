@@ -22,7 +22,7 @@ private:
   
   const unsigned int _resolution;
   const bool         _skirted;
-  
+
   static void addVertex(const Planet* planet,
                         std::vector<MutableVector3D>* vertices,
                         const Geodetic3D& g) {

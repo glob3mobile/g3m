@@ -48,13 +48,13 @@ std::vector<MutableVector2D> TileImagesTileTexturizer::createNewTextureCoordinat
                                                                                    Mesh* tessellatorMesh) const
 {
   std::vector<MutableVector2D> texCoor;
-  
   const Sector sector = tile->getSector();
-  
+ 
   for (int i = 0; i < tessellatorMesh->getVertexCount(); i++) {
     const Vector3D vertex = tessellatorMesh->getVertex(i);
-    const Geodetic3D pos = planet->toGeodetic3D(vertex);
-    const Vector2D v2d = sector.getUVCoordinates( Geodetic2D(pos.latitude(), pos.longitude()) );
+    const Geodetic2D pos = planet->toGeodetic2D(vertex);
+    const Vector2D v2d = sector.getUVCoordinates(pos);
+
     texCoor.push_back(v2d.asMutableVector2D());
   }
   
