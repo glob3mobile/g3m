@@ -189,7 +189,6 @@ public:
     const double percent = pace( percentDone(now) );
     
     rc->getCamera()->zoom(1 - (percent / 25));
-//    rc->getCamera()->pivotOnCenter(Angle::fromDegrees(1));
   }
   
   virtual void stop(const RenderContext *rc,
