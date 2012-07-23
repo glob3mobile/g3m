@@ -22,6 +22,7 @@
 #include "IFactory.hpp"
 #include "TileRenderer.hpp"
 #include "TextureMapping.hpp"
+#include "LayerSet.hpp"
 
 
 class TilePetitions;
@@ -46,6 +47,7 @@ private:
   const TileParameters *_parameters;
   
   WMSLayer* _layer;
+  LayerSet * _layerSet;
   
   mutable std::vector<MutableVector2D>* _texCoordsCache;
   
@@ -97,11 +99,13 @@ private:
 public:
   
   TileImagesTileTexturizer(const TileParameters* parameters,
-                           Downloader* downloader) : 
+                           Downloader* downloader,
+                           LayerSet* layerSet) : 
   _parameters(parameters),
   _layer(NULL),
   _downloader(downloader),
-  _texCoordsCache(NULL) {
+  _texCoordsCache(NULL),
+  _layerSet(layerSet){
   }
   
   ~TileImagesTileTexturizer() {

@@ -105,6 +105,7 @@
 		D8D3BC8E159B11DA00738E37 /* Network_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8D3BC8C159B11DA00738E37 /* Network_iOS.hpp */; };
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; };
 		D8F5E9F315BD613900F04492 /* CPUTextureBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F5E9F215BD613900F04492 /* CPUTextureBuilder.cpp */; };
+		D8F5E9F615BD83B700F04492 /* LayerSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F5E9F515BD83B600F04492 /* LayerSet.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -239,6 +240,9 @@
 		D8F5E9EF15BD5F7E00F04492 /* TextureBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = TextureBuilder.hpp; sourceTree = "<group>"; };
 		D8F5E9F115BD60F400F04492 /* CPUTextureBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = CPUTextureBuilder.hpp; sourceTree = "<group>"; };
 		D8F5E9F215BD613900F04492 /* CPUTextureBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CPUTextureBuilder.cpp; sourceTree = "<group>"; };
+		D8F5E9F415BD835A00F04492 /* LayerSet.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = LayerSet.hpp; sourceTree = "<group>"; };
+		D8F5E9F515BD83B600F04492 /* LayerSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayerSet.cpp; sourceTree = "<group>"; };
+		D8F5E9F715BD83DB00F04492 /* Layer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Layer.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -374,6 +378,9 @@
 				D8F5E9EF15BD5F7E00F04492 /* TextureBuilder.hpp */,
 				D8F5E9F115BD60F400F04492 /* CPUTextureBuilder.hpp */,
 				D8F5E9F215BD613900F04492 /* CPUTextureBuilder.cpp */,
+				D8F5E9F415BD835A00F04492 /* LayerSet.hpp */,
+				D8F5E9F515BD83B600F04492 /* LayerSet.cpp */,
+				D8F5E9F715BD83DB00F04492 /* Layer.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -668,6 +675,7 @@
 				D816E7AE15B6EFA4004FA4D6 /* WMSLayer.cpp in Sources */,
 				CFCA33D615B9A1CC00F00B3A /* BusyRenderer.cpp in Sources */,
 				D8F5E9F315BD613900F04492 /* CPUTextureBuilder.cpp in Sources */,
+				D8F5E9F615BD83B700F04492 /* LayerSet.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -12,14 +12,14 @@
 #include "IDownloadListener.hpp"
 #include "MutableVector2D.hpp"
 #include "TileRenderer.hpp"
-#include "TileImagesTileTexturizer.hpp"
-
 
 #include <string>
 #include <vector>
 
 #include "Tile.hpp"
 #include "IFactory.hpp"
+
+class TileImagesTileTexturizer;
 
 class Petition{
   
@@ -53,7 +53,7 @@ class TilePetitions: public IDownloadListener{
   const int    _row;
   const int    _column;
   
-  TileImagesTileTexturizer* const _texturizer;
+  TileImagesTileTexturizer* _texturizer;
   std::vector<Petition> _petitions;
   
   int _downloadsCounter;
@@ -74,6 +74,11 @@ public:
   _downloadsCounter(0),
   _errorsCounter(0)
   {
+  }
+  
+  void notify(TileImagesTileTexturizer* texturizer)
+  {
+    _texturizer = texturizer;
   }
   
   int getLevel() const {

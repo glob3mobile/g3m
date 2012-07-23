@@ -8,6 +8,8 @@
 
 #include "TilePetitions.hpp"
 
+#include "TileImagesTileTexturizer.hpp"
+
 void TilePetitions::onDownload(const Response &response)
 {
   _downloadsCounter++;
@@ -23,7 +25,7 @@ void TilePetitions::onDownload(const Response &response)
     }
   }
   
-  if (allFinished())
+  if (_texturizer != NULL && allFinished())
   {
     _texturizer->onTilePetitionsFinished(this);
   }
