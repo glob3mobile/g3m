@@ -16,7 +16,7 @@ class Layer{
 
 public:
   
-  ~Layer(){};
+  virtual ~Layer(){};
   
   virtual bool fullContains(const Sector& s) const = 0;
 
