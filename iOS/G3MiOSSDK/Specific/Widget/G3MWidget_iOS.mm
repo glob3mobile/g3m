@@ -261,7 +261,7 @@
       comp->addRenderer(sgr);
     }
     
-    comp->addRenderer(new GLErrorRenderer());
+//    comp->addRenderer(new GLErrorRenderer());
     
     
     TextureBuilder* texBuilder = new CPUTextureBuilder();

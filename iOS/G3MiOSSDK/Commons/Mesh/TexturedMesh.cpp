@@ -14,7 +14,7 @@ void TexturedMesh::render(const RenderContext* rc) const
   
   gl->enableTextures();
   gl->enableTexture2D();
-
+  
   _textureMapping->bind(rc);
   
   _mesh->render(rc);

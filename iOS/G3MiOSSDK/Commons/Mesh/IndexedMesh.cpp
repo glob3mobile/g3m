@@ -140,8 +140,7 @@ _center(center)
   }
 }
 
-void IndexedMesh::render(const RenderContext* rc) const
-{
+void IndexedMesh::render(const RenderContext* rc) const {
   IGL *gl = rc->getGL();
   
   gl->enableVerticesPosition();
@@ -183,36 +182,42 @@ void IndexedMesh::render(const RenderContext* rc) const
       break;
   }
   
-  if (_centerStrategy!=NoCenter) 
+  if (_centerStrategy!=NoCenter) {
     gl->popMatrix();
-    
+  }
   
   gl->disableVerticesPosition();
 }
 
 
-void IndexedMesh::computeExtent() const
-{
+Extent* IndexedMesh::computeExtent() const {
   double minx=1e10, miny=1e10, minz=1e10;
   double maxx=-1e10, maxy=-1e10, maxz=-1e10;
   
-  for (unsigned int n=0; n<_numVertices; n++) {
-    Vector3D vertex = getVertex(n);
-    if (vertex.x() < minx) minx = vertex.x();
-    if (vertex.x() > maxx) maxx = vertex.x();
-    if (vertex.y() < miny) miny = vertex.y();
-    if (vertex.y() > maxy) maxy = vertex.y();
-    if (vertex.z() < minz) minz = vertex.z();
-    if (vertex.z() > maxz) maxz = vertex.z();
-  }
+  for (int i=0; i < _numVertices; i++) {
+    const int p = i * 3;
     
-  if (_extent != NULL) delete _extent;
-  _extent = new Box(Vector3D(minx, miny, minz), Vector3D(maxx, maxy, maxz));
+    const double x = _vertices[p  ] + _center.x();
+    const double y = _vertices[p+1] + _center.y();
+    const double z = _vertices[p+2] + _center.z();
+    
+    if (x < minx) minx = x;
+    if (x > maxx) maxx = x;
+
+    if (y < miny) miny = y;
+    if (y > maxy) maxy = y;
+    
+    if (z < minz) minz = z;
+    if (z > maxz) maxz = z;
+  }
+  
+  return new Box(Vector3D(minx, miny, minz), Vector3D(maxx, maxy, maxz));
 }
 
 
-Extent *IndexedMesh::getExtent() const
-{
-  if (_extent==NULL) computeExtent();
+Extent* IndexedMesh::getExtent() const {
+  if (_extent == NULL) {
+    _extent = computeExtent(); 
+  }
   return _extent;
 }

@@ -72,7 +72,6 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
                                const TileParameters* parameters,
                                ITimer* timer) {
   
-  
   if (_level >= parameters->_maxLevel) {
     return true;
   }
@@ -146,6 +145,7 @@ void Tile::debugRender(const RenderContext* rc,
 std::vector<Tile*>* Tile::getSubTiles() {
   if (_subtiles == NULL) {
     _subtiles = createSubTiles();
+    _justCreatedSubtiles = true;
   }
   return _subtiles;
 }
@@ -176,9 +176,10 @@ void Tile::render(const RenderContext* rc,
                   const TileParameters* parameters,
                   TilesStatistics* statistics,
                   std::vector<Tile*>* toVisitInNextIteration,
-                  ITimer* timer) {
+                  ITimer* timer,
+                  bool justCreated) {
   if (isVisible(rc, tessellator)) {
-    if (meetsRenderCriteria(rc, tessellator, texturizer, parameters, timer)) {
+    if (justCreated || meetsRenderCriteria(rc, tessellator, texturizer, parameters, timer)) {
       rawRender(rc, tessellator, texturizer, timer);
       if (parameters->_renderDebug) {
         debugRender(rc, tessellator);
@@ -193,9 +194,10 @@ void Tile::render(const RenderContext* rc,
       const int subTilesSize = subTiles->size();
       for (int i = 0; i < subTilesSize; i++) {
         Tile* subTile = subTiles->at(i);
-        subTile->render(rc, tessellator, texturizer, parameters, statistics, toVisitInNextIteration, timer);
+        subTile->render(rc, tessellator, texturizer, parameters, statistics, toVisitInNextIteration, timer, _justCreatedSubtiles);
 //        toVisitInNextIteration->push_back(subTile);
       }
+      _justCreatedSubtiles = false;
     }
   }
   else {
