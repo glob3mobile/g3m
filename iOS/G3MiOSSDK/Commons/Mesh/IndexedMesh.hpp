@@ -49,7 +49,7 @@ private:
   
   mutable Extent *     _extent;
   
-  void computeExtent() const;
+  Extent* computeExtent() const;
   
   CenterStrategy       _centerStrategy;
   Vector3D             _center;

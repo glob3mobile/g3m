@@ -11,8 +11,36 @@
 #include "MutableMatrix44D.hpp"
 
 class GL2: public IGL {
+private:
+  MutableMatrix44D            _modelView;
+  
+  // stack of ModelView matrices
+  std::list<MutableMatrix44D> _matrixStack;
+  
+  // state handling
+  bool _enableTextures;
+  bool _enableTexture2D;
+  bool _enableVertexColor;
+  bool _enableVertexNormal;
+  bool _enableVerticesPosition;
+  bool _enableFlatColor;
+  bool _depthTest;
+  bool _blend;
   
 public:
+  
+  GL2() :
+  _enableTextures(false),
+  _enableTexture2D(false),
+  _enableVertexColor(false),
+  _enableVertexNormal(false),
+  _enableVerticesPosition(false),
+  _enableFlatColor(false),
+  _depthTest(false),
+  _blend(false)
+  {
+    
+  }
   
   void enableVerticesPosition() ;
   
@@ -22,7 +50,8 @@ public:
   
   void enableTexture2D() ;
   
-  void enableVertexFlatColor(Color c, float intensity);
+  void enableVertexFlatColor(const Color& color,
+                             float intensity);
   
   void disableVertexFlatColor();
   
@@ -91,11 +120,6 @@ public:
   void cullFace(bool b, CullFace face);
 
   void transformTexCoords(const Vector2D& scale, const Vector2D& translation);
-  
-private:
-  MutableMatrix44D            _modelView;
 
-  // stack of ModelView matrices
-  std::list<MutableMatrix44D> _matrixStack;
 };
 

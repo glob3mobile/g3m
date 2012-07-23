@@ -111,7 +111,7 @@ int TileRenderer::render(const RenderContext* rc) {
     
     for (int i = 0; i < toVisit.size(); i++) {
       Tile* tile = toVisit[i];
-      tile->render(rc, _tessellator, _texturizer, _parameters, &statistics, &toVisitInNextIteration, _timer);
+      tile->render(rc, _tessellator, _texturizer, _parameters, &statistics, &toVisitInNextIteration, _timer, false);
     }
     
     toVisit = toVisitInNextIteration;

@@ -29,10 +29,8 @@ public:
   _textureId(textureId),
   _texCoords(texCoords)
   {
-    MutableVector2D t(0, 0);
-    _translation = t;
-    MutableVector2D s(1, 1);
-    _scale = s;
+    _translation = MutableVector2D(0, 0);
+    _scale       = MutableVector2D(1, 1);
   }
   
   TextureMapping(int textureId,

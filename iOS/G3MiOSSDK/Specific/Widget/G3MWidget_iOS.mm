@@ -260,7 +260,7 @@
       comp->addRenderer(sgr);
     }
     
-    comp->addRenderer(new GLErrorRenderer());
+//    comp->addRenderer(new GLErrorRenderer());
     
     TexturesHandler* texturesHandler = new TexturesHandler(gl, factory);
     

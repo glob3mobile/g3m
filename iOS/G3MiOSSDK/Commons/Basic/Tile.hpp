@@ -63,6 +63,8 @@ private:
 
   int _texturedCounter;
   
+  bool _justCreatedSubtiles;
+  
   inline Mesh* getTessellatorMesh(const RenderContext* rc,
                                   const TileTessellator* tessellator);
   
@@ -116,7 +118,8 @@ public:
   _texturizerMesh(NULL),
   _textureSolved(false),
   _subtiles(NULL),
-  _texturedCounter(0)
+  _texturedCounter(0),
+  _justCreatedSubtiles(false)
   {
   }
   
@@ -153,7 +156,8 @@ public:
               const TileParameters* parameters,
               TilesStatistics* statistics,
               std::vector<Tile*>* toVisitInNextIteration,
-              ITimer* timer);
+              ITimer* timer,
+              bool justCreated);
   
 };
 

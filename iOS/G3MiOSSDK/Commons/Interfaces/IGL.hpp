@@ -33,7 +33,7 @@ public:
   
   virtual void enableVertexColor(float const colors[], float intensity) = 0;
   
-  virtual void enableVertexFlatColor(Color c, float intensity) = 0;
+  virtual void enableVertexFlatColor(const Color& c, float intensity) = 0;
   
   virtual void disableVertexColor() = 0;
   

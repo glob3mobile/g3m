@@ -115,71 +115,6 @@ void GL2::pushMatrix() {
   _matrixStack.push_back(_modelView);
 }
 
-void GL2::enableVerticesPosition() {
-  glEnableVertexAttribArray(Attributes.Position);
-}
-
-void GL2::enableTextures() {
-  glEnableVertexAttribArray(Attributes.TextureCoord);
-}
-
-void GL2::enableVertexColor(float const colors[], float intensity)
-{
-  if (colors != NULL){
-    glUniform1i(Uniforms.EnableColorPerVertex, true);
-    glEnableVertexAttribArray(Attributes.Color);
-    glVertexAttribPointer(Attributes.Color, 4, GL_FLOAT, 0, 0, colors);
-    glUniform1f(Uniforms.ColorPerVertexIntensity, intensity);
-  }
-}
-
-void GL2::enableVertexFlatColor(Color c, float intensity)
-{
-    glUniform1i(Uniforms.EnableFlatColor, true);
-    glUniform4f(Uniforms.FlatColor, c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
-    glUniform1f(Uniforms.FlatColorIntensity, intensity);
-}
-
-void GL2::disableVertexColor()
-{
-  glDisableVertexAttribArray(Attributes.Color);
-  glUniform1i(Uniforms.EnableColorPerVertex, false);
-}
-
-void GL2::disableVertexFlatColor()
-{
-  glUniform1i(Uniforms.EnableFlatColor, false);
-}
-
-void GL2::enableVertexNormal(float const normals[])
-{
-  if (normals != NULL){
-    glEnableVertexAttribArray(Attributes.Normal);
-    glVertexAttribPointer(Attributes.Normal, 3, GL_FLOAT, 0, 0, normals);
-  }
-}
-
-void GL2::disableVertexNormal()
-{
-  glDisableVertexAttribArray(Attributes.Normal);
-}
-
-void GL2::enableTexture2D() {
-  glUniform1i(Uniforms.EnableTexture, true);
-}
-
-void GL2::disableTexture2D() {
-  glUniform1i(Uniforms.EnableTexture, false);
-}
-
-void GL2::disableVerticesPosition() {
-  glDisableVertexAttribArray(Attributes.Position);
-}
-
-void GL2::disableTextures() {
-  glDisableVertexAttribArray(Attributes.TextureCoord);
-}
-
 void GL2::clearScreen(float r, float g, float b, float a) {
   glClearColor(r, g, b, a);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -271,24 +206,8 @@ void GL2::setTextureCoordinates(int size, int stride, const float texcoord[]) {
   glVertexAttribPointer(Attributes.TextureCoord, size, GL_FLOAT, 0, stride, (const void *) texcoord);
 }
 
-void GL2::bindTexture (unsigned int n) {
+void GL2::bindTexture(unsigned int n) {
   glBindTexture(GL_TEXTURE_2D, n);
-}
-
-void GL2::depthTest(bool b) {
-  if (b) {
-    glEnable(GL_DEPTH_TEST);
-  } else {
-    glDisable(GL_DEPTH_TEST);
-  }
-}
-
-void GL2::blend(bool b) {
-  if (b) {
-    glEnable(GL_BLEND);
-  } else {
-    glDisable(GL_BLEND);
-  }
 }
 
 void GL2::drawBillBoard(const unsigned int textureId,
@@ -312,7 +231,8 @@ void GL2::drawBillBoard(const unsigned int textureId,
     0, 0
   };
   
-  glDisable(GL_DEPTH_TEST);
+//  glDisable(GL_DEPTH_TEST);
+  depthTest(false);
   
   glUniform1i(Uniforms.EnableTexture, true);
   glUniform4f(Uniforms.FlatColor, 1.0, 0.0, 0.0, 1);
@@ -323,7 +243,8 @@ void GL2::drawBillBoard(const unsigned int textureId,
   
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
   
-  glEnable(GL_DEPTH_TEST);
+//  glEnable(GL_DEPTH_TEST);
+  depthTest(true);
   
   glUniform1i(Uniforms.BillBoard, false); //NOT DRAWING BILLBOARD
 }
@@ -331,6 +252,130 @@ void GL2::drawBillBoard(const unsigned int textureId,
 void GL2::deleteTexture(int glTextureId) {
   unsigned int textures[] = {glTextureId};
   glDeleteTextures(1, textures);
+}
+
+
+// state handling
+void GL2::enableTextures() {
+  if (!_enableTextures) {
+    glEnableVertexAttribArray(Attributes.TextureCoord);
+    _enableTextures = true;
+  }
+}
+
+void GL2::disableTextures() {
+  if (_enableTextures) {
+    glDisableVertexAttribArray(Attributes.TextureCoord);
+    _enableTextures = false;
+  }
+}
+
+void GL2::enableTexture2D() {
+  if (!_enableTexture2D) {
+    glUniform1i(Uniforms.EnableTexture, true);
+    _enableTexture2D = true;
+  }
+}
+
+void GL2::disableTexture2D() {
+  if (_enableTexture2D) {
+    glUniform1i(Uniforms.EnableTexture, false);
+    _enableTexture2D = false;
+  }
+}
+
+void GL2::enableVertexColor(float const colors[], float intensity) {
+//  if (colors != NULL) {
+  if (!_enableVertexColor) {
+    glUniform1i(Uniforms.EnableColorPerVertex, true);
+    glEnableVertexAttribArray(Attributes.Color);
+    glVertexAttribPointer(Attributes.Color, 4, GL_FLOAT, 0, 0, colors);
+    glUniform1f(Uniforms.ColorPerVertexIntensity, intensity);
+    _enableVertexColor = true;
+  }
+//  }
+}
+
+void GL2::disableVertexColor() {
+  if (_enableVertexColor) {
+    glDisableVertexAttribArray(Attributes.Color);
+    glUniform1i(Uniforms.EnableColorPerVertex, false);
+    _enableVertexColor = false;
+  }
+}
+
+
+void GL2::enableVertexNormal(float const normals[]) {
+//  if (normals != NULL) {
+  if (!_enableVertexNormal) {
+    glEnableVertexAttribArray(Attributes.Normal);
+    glVertexAttribPointer(Attributes.Normal, 3, GL_FLOAT, 0, 0, normals);
+    _enableVertexNormal = true;
+  }
+//  }
+}
+
+void GL2::disableVertexNormal() {
+  if (_enableVertexNormal) {
+    glDisableVertexAttribArray(Attributes.Normal);
+    _enableVertexNormal = false;
+  }
+}
+
+
+void GL2::enableVerticesPosition() {
+  if (!_enableVerticesPosition) {
+    glEnableVertexAttribArray(Attributes.Position);
+    _enableVerticesPosition = true;
+  }
+}
+
+void GL2::disableVerticesPosition() {
+  if (_enableVerticesPosition) {
+    glDisableVertexAttribArray(Attributes.Position);
+    _enableVerticesPosition = false;
+  }
+}
+
+void GL2::enableVertexFlatColor(const Color& c,
+                                float intensity) {
+  if (!_enableFlatColor) {
+    glUniform1i(Uniforms.EnableFlatColor, true);
+    _enableFlatColor = true;
+  }
+  glUniform4f(Uniforms.FlatColor, c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
+  glUniform1f(Uniforms.FlatColorIntensity, intensity);
+}
+
+void GL2::disableVertexFlatColor() {
+  if (_enableFlatColor) {
+    glUniform1i(Uniforms.EnableFlatColor, false);
+    _enableFlatColor = false;
+  }
+}
+
+void GL2::depthTest(bool b) {
+  if (_depthTest != b) {
+    if (b) {
+      glEnable(GL_DEPTH_TEST);
+    }
+    else {
+      glDisable(GL_DEPTH_TEST);
+    }
+    _depthTest = b;
+  }
+}
+
+void GL2::blend(bool b) {
+  if (_blend != b) {
+    if (b) {
+      glEnable(GL_BLEND);
+    }
+    else {
+      glDisable(GL_BLEND);
+    }
+    _blend = b;
+  }
 }
 
 void GL2::cullFace(bool b, CullFace face) {
