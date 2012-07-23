@@ -96,33 +96,40 @@ int TexturesHandler::getTextureIdIfAvailable(const std::string &textureId,
   return -1;
 }
 
-int TexturesHandler::getTextureId(const IImage *image, 
-                                  const std::string &textureId,
-                                  int textureWidth,
-                                  int textureHeight) {
-  
+int TexturesHandler::getTextureId(const std::vector<const IImage*>& images,
+                 const std::string& textureId,
+                 int textureWidth,
+                 int textureHeight)
+{
   int previousId = getTextureIdIfAvailable(textureId, textureWidth, textureHeight);
   if (previousId >= 0) {
     return previousId;
   }
-
   
   TextureHolder* holder = new TextureHolder(textureId, textureWidth, textureHeight);
-  
-  holder->_glTextureId = _gl->uploadTexture(image, textureWidth, textureHeight);
-  
+  holder->_glTextureId = _texBuilder->createTextureFromImages(_gl, images, textureWidth, textureHeight);
   int _todo_Diego_mira_LOGS;
   /*
-  rc->getLogger()->logInfo("Uploaded texture \"%s\" (%dx%d) to GPU with texId=%d" ,
-                           textureId.c_str(),
-                           textureWidth,
-                           textureHeight,
-                           holder->_glTextureId);
+   rc->getLogger()->logInfo("Uploaded texture \"%s\" (%dx%d) to GPU with texId=%d" ,
+   textureId.c_str(),
+   textureWidth,
+   textureHeight,
+   holder->_glTextureId);
    */
   
   _textureHolders.push_back(holder);
   
   return holder->_glTextureId;
+}
+
+int TexturesHandler::getTextureId(const IImage *image, 
+                                  const std::string &textureId,
+                                  int textureWidth,
+                                  int textureHeight) {
+  
+  std::vector<const IImage*> images;
+  images.push_back(image);
+  return getTextureId(images, textureId, textureWidth, textureHeight);
 }
 
 void TexturesHandler::takeTexture(int glTextureId) {

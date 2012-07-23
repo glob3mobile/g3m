@@ -222,6 +222,8 @@ public:
     
   }
   
+  bool isReadyToRender(const RenderContext* rc);
+  
 };
 
 

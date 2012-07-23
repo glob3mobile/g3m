@@ -37,6 +37,8 @@ public:
   int getHeight() const {
     return (_image == NULL) ? 0 : _image.size.height;
   }
+  
+  IImage* combineWith(const IImage& transparent, int width, int height) const;
 
 };
 

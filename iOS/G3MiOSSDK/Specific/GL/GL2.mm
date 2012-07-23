@@ -234,7 +234,10 @@ int GL2::uploadTexture(const IImage* image, int textureWidth, int textureHeight)
   
   
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-  void *imageData = malloc( textureHeight * textureWidth * 4 );
+  //void *imageData = malloc( textureHeight * textureWidth * 4 );
+  
+  void *imageData = new unsigned char[textureHeight * textureWidth * 4 ];
+  
   CGContextRef context = CGBitmapContextCreate(imageData,
                                                textureWidth, textureHeight,
                                                8, 4 * textureWidth,
@@ -242,7 +245,7 @@ int GL2::uploadTexture(const IImage* image, int textureWidth, int textureHeight)
                                                kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
   CGColorSpaceRelease( colorSpace );
   CGContextClearRect( context, CGRectMake( 0, 0, textureWidth, textureHeight ) );
-  CGContextTranslateCTM( context, 0, textureHeight - textureHeight );
+  //CGContextTranslateCTM( context, 0, textureHeight - textureHeight );
   CGContextDrawImage( context, CGRectMake( 0, 0, textureWidth, textureHeight ), im.CGImage );
   
   CGContextRelease(context);

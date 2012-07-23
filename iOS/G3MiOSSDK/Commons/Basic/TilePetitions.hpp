@@ -56,18 +56,25 @@ class TilePetitions: public IDownloadListener{
   TileImagesTileTexturizer* const _texturizer;
   std::vector<Petition> _petitions;
   
-  int _nDownloads, _nErrors;
+  int _downloadsCounter;
+  int _errorsCounter;
+  
+  TilePetitions(const TilePetitions& that);
   
 public:
   
-  //TilePetitions(): _tileKey(""), _texturizer(NULL){}
-  
-  
-  
-  TilePetitions(  const int    l,
-                const int    r,
-                const int    c, TileImagesTileTexturizer* const tt):
-  _level(l), _row(r), _column(c), _texturizer(tt), _nDownloads(0), _nErrors(0){}
+  TilePetitions(const int level,
+                const int row,
+                const int column,
+                TileImagesTileTexturizer* const texturizer):
+  _level(level),
+  _row(row),
+  _column(column),
+  _texturizer(texturizer),
+  _downloadsCounter(0),
+  _errorsCounter(0)
+  {
+  }
   
   int getLevel() const {
     return _level;
@@ -86,6 +93,8 @@ public:
     Petition p(s, url);
     _petitions.push_back(p);
   }
+  
+  std::string getPetitionsID() const;
 
   Petition& getPetition(int i) { return _petitions[i];}
   int getNumPetitions() { return _petitions.size();}

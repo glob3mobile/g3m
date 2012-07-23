@@ -38,9 +38,10 @@ public:
   TextureMapping(int textureId,
                  std::vector<MutableVector2D> texCoords);
   
-  void translateAndScale(const MutableVector2D& trans, const MutableVector2D& scale){
-    _translation = trans;
-    _scale = scale;
+  void setTranslationAndScale(const Vector2D& translation,
+                              const Vector2D& scale){
+    _translation = translation.asMutableVector2D();
+    _scale       = scale.asMutableVector2D();
   }
   
   ~TextureMapping() {

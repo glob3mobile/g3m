@@ -18,6 +18,8 @@ public:
   virtual int getWidth() const = 0;
   virtual int getHeight() const = 0;
   
+  virtual IImage* combineWith(const IImage& transparent, int width, int height) const = 0;
+  
 };
 
 #endif

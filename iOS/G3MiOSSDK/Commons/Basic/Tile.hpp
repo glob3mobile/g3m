@@ -59,7 +59,8 @@ private:
 
   Tile* _parent;
   bool _textureSolved;
-  
+  std::vector<Tile*>* _subtiles;
+
   int _texturedCounter;
   
   inline Mesh* getTessellatorMesh(const RenderContext* rc,
@@ -74,13 +75,15 @@ private:
   inline bool meetsRenderCriteria(const RenderContext* rc,
                                   const TileTessellator *tessellator,
                                   TileTexturizer *texturizer,
-                                  const TileParameters* parameters);
+                                  const TileParameters* parameters,
+                                  ITimer* timer);
   
   inline std::vector<Tile*>* createSubTiles();
   
   inline void rawRender(const RenderContext* rc,
                         const TileTessellator* tessellator,
-                        TileTexturizer* texturizer);
+                        TileTexturizer* texturizer,
+                        ITimer* timer);
   
   void debugRender(const RenderContext* rc,
                    const TileTessellator* tessellator);
@@ -90,11 +93,12 @@ private:
                              const int level,
                              const int row, const int column);
   
-  std::vector<Tile*>* _subtiles;
 
   inline std::vector<Tile*>* getSubTiles();
 
   inline void prune(TileTexturizer* texturizer);
+  
+  Tile(const Tile& that);
   
 public:
   Tile(Tile* parent,
@@ -147,7 +151,9 @@ public:
               const TileTessellator* tessellator,
               TileTexturizer* texturizer,
               const TileParameters* parameters,
-              TilesStatistics* statistics);
+              TilesStatistics* statistics,
+              std::vector<Tile*>* toVisitInNextIteration,
+              ITimer* timer);
   
 };
 

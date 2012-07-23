@@ -20,6 +20,8 @@ TileRenderer::~TileRenderer() {
   delete _tessellator;
   delete _texturizer;
   delete _parameters;
+
+  delete _timer;
 }
 
 void TileRenderer::clearTopLevelTiles() {
@@ -70,6 +72,21 @@ void TileRenderer::initialize(const InitializationContext* ic) {
   _timer = ic->getFactory()->createTimer();
 }
 
+bool TileRenderer::isReadyToRender(const RenderContext *rc) {
+  if (_tessellator != NULL) {
+    if (!_tessellator->isReadyToRender(rc)) {
+      return false;
+    }
+  }
+  
+  if (_texturizer != NULL) {
+    if (!_texturizer->isReadyToRender(rc)) {
+      return false;
+    }
+  }
+  
+  return true;
+}
 
 int TileRenderer::render(const RenderContext* rc) {
   _timer->start();
@@ -87,11 +104,24 @@ int TileRenderer::render(const RenderContext* rc) {
     }
     _topTilesJustCreated = false;
   }
+  
+  std::vector<Tile*> toVisit(_topLevelTiles);
+  while (toVisit.size() > 0) {
+    std::vector<Tile*> toVisitInNextIteration;
     
-  for (int i = 0; i < topLevelTilesSize; i++) {
-    Tile* tile = _topLevelTiles[i];
-    tile->render(rc, _tessellator, _texturizer, _parameters, &statistics);
+    for (int i = 0; i < toVisit.size(); i++) {
+      Tile* tile = toVisit[i];
+      tile->render(rc, _tessellator, _texturizer, _parameters, &statistics, &toVisitInNextIteration, _timer);
+    }
+    
+    toVisit = toVisitInNextIteration;
+    toVisitInNextIteration.clear();
   }
+
+//  for (int i = 0; i < topLevelTilesSize; i++) {
+//    Tile* tile = _topLevelTiles[i];
+//    tile->render(rc, _tessellator, _texturizer, _parameters, &statistics, NULL, _timer);
+//  }
   
   if (_showStatistics) {
     if (!_lastStatistics.equalsTo(statistics)) {

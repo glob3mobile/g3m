@@ -8,7 +8,8 @@
 
 #include "Geodetic2D.hpp"
 
-bool Geodetic2D::isBetween(const Geodetic2D& min, const Geodetic2D& max) const {
+bool Geodetic2D::isBetween(const Geodetic2D& min,
+                           const Geodetic2D& max) const {
   return
   _latitude.isBetween(min.latitude(), max.latitude()) &&
   _longitude.isBetween(min.longitude(), max.longitude());

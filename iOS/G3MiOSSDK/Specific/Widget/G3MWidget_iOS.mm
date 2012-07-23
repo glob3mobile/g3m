@@ -33,6 +33,8 @@
 #include "NullStorage.hpp"
 #include "TileImagesTileTexturizer.hpp"
 #include "SingleImageTileTexturizer.hpp"
+#include "BusyRenderer.hpp"
+#include "CPUTextureBuilder.hpp"
 
 #include <stdlib.h>
 
@@ -193,11 +195,12 @@
         IImage *singleWorldImage = factory->createImageFromFileName("world.jpg");
         texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
       }
-      
+
+      const bool showStatistics = false;
       TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
                                           texturizer,
                                           parameters,
-                                          true);
+                                          showStatistics);
       comp->addRenderer(tr);
     }
     
@@ -260,12 +263,13 @@
     
     comp->addRenderer(new GLErrorRenderer());
     
-    TexturesHandler* texturesHandler = new TexturesHandler(gl, factory);
+    
+    TextureBuilder* texBuilder = new CPUTextureBuilder();
+    TexturesHandler* texturesHandler = new TexturesHandler(gl, factory, texBuilder);
     
     const Planet* planet = Planet::createEarth();
 
-    
-
+    Renderer* busyRenderer = new BusyRenderer();
 
     _widget = G3MWidget::create(factory,
                                 logger,
@@ -274,10 +278,10 @@
                                 downloader,
                                 planet, 
                                 comp,
+                                busyRenderer,
                                 width, height,
                                 Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
                                 true);
-    
     
     
     // rest of initialization

@@ -49,8 +49,8 @@ public:
     Sector s(lower, upper);
     return s;
   }
-  
-  Vector2D getScaleFactor(const Sector& s)
+
+  Vector2D getScaleFactor(const Sector& s) const
   {
     double u = _deltaLatitude.div(s._deltaLatitude);
     double v = _deltaLongitude.div(s._deltaLongitude);
@@ -58,7 +58,7 @@ public:
     return scale;
   }
   
-  Vector2D getTranslationFactor(const Sector& s)
+  Vector2D getTranslationFactor(const Sector& s) const
   {
     double diff = _deltaLongitude.div(s._deltaLongitude);
     Vector2D uv = s.getUVCoordinates(_lower);
@@ -68,6 +68,8 @@ public:
   }
   
   bool fullContains(const Sector& s) const;
+  
+
   
   static Sector fullSphere() {
     return Sector(Geodetic2D(Angle::fromDegrees(-90), Angle::fromDegrees(-180)),
@@ -121,14 +123,20 @@ public:
                       Angle::midAngle(_lower.longitude(), _upper.longitude()));
   }
   
-//  Angle getWidth() const { return _upper.longitude().sub(_lower.longitude()); }
-//  Angle getHeight() const { return _upper.latitude().sub(_lower.latitude()); }
-  
-  Geodetic2D getInnerPoint(double u, double v) const;
   // (u,v) are similar to texture coordinates inside the Sector
   // (u,v)=(0,0) in NW point, and (1,1) in SE point
+  Geodetic2D getInnerPoint(double u, double v) const;
   
-  Vector2D getUVCoordinates(Geodetic2D point) const;
+  Vector2D getUVCoordinates(const Geodetic2D& point) const {
+    return getUVCoordinates(point.latitude(), point.longitude());
+  }
+
+  Vector2D getUVCoordinates(const Angle& latitude,
+                            const Angle& longitude) const {
+    const double u = longitude.sub(_lower.longitude()).div(getDeltaLongitude());
+    const double v = _upper.latitude().sub(latitude).div(getDeltaLatitude());
+    return Vector2D(u, v);
+  }
   
   bool isBackOriented(const RenderContext *rc) const;
   

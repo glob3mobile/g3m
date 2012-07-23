@@ -214,6 +214,10 @@ public:
   
   virtual ~SceneGraphRenderer() { }
   
+  bool isReadyToRender(const RenderContext* rc) {
+    return true;
+  }
+
 };
 
 

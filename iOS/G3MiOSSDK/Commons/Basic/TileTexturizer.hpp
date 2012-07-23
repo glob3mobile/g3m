@@ -12,15 +12,18 @@
 class Mesh;
 class RenderContext;
 class Tile;
-
+class TileTessellator;
+class ITimer;
 
 class TileTexturizer {
   
 public:
   virtual Mesh* texturize(const RenderContext* rc,
                           Tile* tile,
+                          const TileTessellator* tessellator,
                           Mesh* tessellatorMesh,
-                          Mesh* previousMesh) = 0;
+                          Mesh* previousMesh,
+                          ITimer* timer) = 0;
   
   virtual void tileToBeDeleted(Tile* tile) = 0;
   
@@ -32,6 +35,9 @@ public:
   virtual bool tileMeetsRenderCriteria(Tile* tile) = 0;
   
   virtual void justCreatedTopTile(Tile* tile) = 0;
+  
+  virtual bool isReadyToRender(const RenderContext *rc) = 0;
+
 };
 
 #endif

@@ -53,6 +53,13 @@ public:
   virtual Mesh* createMesh(const RenderContext* rc,
                            const Tile* tile) const;
   
+  bool isReadyToRender(const RenderContext *rc) const {
+    return true;
+  }
+  
+  virtual std::vector<MutableVector2D>* createUnitTextCoords() const;
+
+
 };
 
 #endif

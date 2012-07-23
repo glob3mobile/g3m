@@ -10,6 +10,7 @@
 
 #include "ITimer.hpp"
 
+
 G3MWidget* G3MWidget::create(IFactory* factory,
                              ILogger *logger,
                              IGL* gl,
@@ -17,6 +18,7 @@ G3MWidget* G3MWidget::create(IFactory* factory,
                              Downloader* downloader,
                              const Planet* planet,
                              Renderer* renderer,
+                             Renderer* busyRenderer,
                              int width, int height,
                              Color backgroundColor,
                              const bool logFPS) {
@@ -31,6 +33,7 @@ G3MWidget* G3MWidget::create(IFactory* factory,
                        downloader,
                        planet,
                        renderer,
+                       busyRenderer,
                        width, height,
                        backgroundColor,
                        logFPS);
@@ -58,11 +61,15 @@ G3MWidget::~G3MWidget() {
 }
 
 void G3MWidget::onTouchEvent(const TouchEvent* myEvent) {
-  _renderer->onTouchEvent(myEvent);
+  if (_rendererReady) {
+    _renderer->onTouchEvent(myEvent);
+  }
 }
 
 void G3MWidget::onResizeViewportEvent(int width, int height) {
-  _renderer->onResizeViewportEvent(width, height);
+  if (_rendererReady) {
+    _renderer->onResizeViewportEvent(width, height);
+  }
 }
 
 int G3MWidget::render() {
@@ -71,14 +78,16 @@ int G3MWidget::render() {
   
   RenderContext rc(_factory, _logger, _planet, _gl, _camera, _texturesHandler, _downloader);
   
+  _rendererReady = _renderer->isReadyToRender(&rc);
+  Renderer* selectedRenderer = _rendererReady ? _renderer : _busyRenderer;
+
   // Clear the scene
   _gl->clearScreen(_backgroundColor);
   
-  int timeToRedraw = _renderer->render(&rc);
-
+  int timeToRedraw = selectedRenderer->render(&rc);
   
   const TimeInterval elapsedTime = _timer->elapsedTime();
-  if (elapsedTime.milliseconds() > 50) {
+  if (elapsedTime.milliseconds() > 100) {
     _logger->logWarning("Frame took too much time: %dms" , elapsedTime.milliseconds());
   }
   _totalRenderTime += elapsedTime.milliseconds();
@@ -95,4 +104,5 @@ int G3MWidget::render() {
   }
   
   return timeToRedraw;
+
 }

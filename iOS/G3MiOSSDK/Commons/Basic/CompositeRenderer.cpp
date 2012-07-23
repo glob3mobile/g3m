@@ -51,3 +51,13 @@ void CompositeRenderer::onResizeViewportEvent(int width, int height)
     _renderers[i]->onResizeViewportEvent(width, height);
   }
 }
+
+bool CompositeRenderer::isReadyToRender(const RenderContext *rc) {
+  for (int i = 0; i < _renderers.size(); i++) {
+    if (!_renderers[i]->isReadyToRender(rc)) {
+      return false;
+    }
+  }
+  
+  return true;
+}

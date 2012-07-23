@@ -98,6 +98,65 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
 }
 
 
+std::vector<MutableVector2D>* EllipsoidalTileTessellator::createUnitTextCoords() const {
+  
+  std::vector<MutableVector2D>* textCoords = new std::vector<MutableVector2D>();
+  
+  const int n = _resolution;
+  
+  float* u = new float[n*n];
+  float* v = new float[n*n];
+  
+  for (int j=0; j<n; j++) {
+    for (int i=0; i<n; i++) {
+      unsigned int pos = j*n + i;
+      u[pos] = (float) i / (n-1);
+      v[pos] = (float) j / (n-1);	
+    }
+  }
+  
+  for (int j=0; j<n; j++) {
+    for (int i=0; i<n; i++) {
+      unsigned int pos = j*n + i;
+      textCoords->push_back(MutableVector2D(u[pos], v[pos]));
+    }
+  }
+  
+  // create skirts 
+  if (_skirted) {
+    // west side
+    for (int j=0; j<n-1; j++) {
+      unsigned int pos = j*n;
+      textCoords->push_back(MutableVector2D(u[pos], v[pos]));
+    }
+    
+    // south side
+    for (int i=0; i<n-1; i++) {
+      unsigned int pos = (n-1)*n + i;
+      textCoords->push_back(MutableVector2D(u[pos], v[pos]));
+    }
+    
+    // east side
+    for (int j=n-1; j>0; j--) {
+      unsigned int pos = j*n + n - 1;
+      textCoords->push_back(MutableVector2D(u[pos], v[pos]));
+    }
+    
+    // north side
+    for (int i=n-1; i>0; i--) {
+      unsigned int pos = i;
+      textCoords->push_back(MutableVector2D(u[pos], v[pos]));
+    }
+  }
+  
+  // free temp memory
+  delete[] u;
+  delete[] v;
+  
+  return textCoords;
+}
+
+
 Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
                                                   const Tile* tile) const 
 {

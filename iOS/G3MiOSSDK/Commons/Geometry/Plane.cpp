@@ -6,11 +6,7 @@
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
-#include <iostream>
-
 #include "Plane.h"
-
-
 
 Plane Plane::transformedBy(const MutableMatrix44D& M) const
 {

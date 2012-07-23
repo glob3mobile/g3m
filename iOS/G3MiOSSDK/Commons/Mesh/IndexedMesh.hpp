@@ -91,7 +91,7 @@ public:
   }
   
   const Vector3D getVertex(int i) const {
-    int p = i * 3;
+    const int p = i * 3;
     return Vector3D(_vertices[p  ] + _center.x(),
                     _vertices[p+1] + _center.y(),
                     _vertices[p+2] + _center.z());

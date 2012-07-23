@@ -11,6 +11,7 @@
 
 #include <string>
 #include <vector>
+#include "TextureBuilder.hpp"
 
 
 class IImage;
@@ -27,16 +28,23 @@ private:
   
   IGL * const _gl;
   const IFactory * const _factory;
+  const TextureBuilder* _texBuilder;
   
 public:
   
-  TexturesHandler(IGL* const  gl, const IFactory const * factory): _gl(gl), _factory(factory){}
+  TexturesHandler(IGL* const  gl, const IFactory const * factory, const TextureBuilder* texBuilder): 
+  _gl(gl), _factory(factory), _texBuilder(texBuilder){}
   
   ~TexturesHandler();
   
   int getTextureIdFromFileName(const std::string& filename,
                                int textureWidth,
                                int textureHeight);
+  
+  int getTextureId(const std::vector<const IImage*>& images,
+                   const std::string& textureId,
+                   int textureWidth,
+                   int textureHeight);
   
   int getTextureId(const IImage* image,
                    const std::string& textureId,

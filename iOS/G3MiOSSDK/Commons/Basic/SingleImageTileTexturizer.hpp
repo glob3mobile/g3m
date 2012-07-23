@@ -45,14 +45,20 @@ public:
   
   Mesh* texturize(const RenderContext* rc,
                   Tile* tile,
+                  const TileTessellator* tessellator,
                   Mesh* mesh,
-                  Mesh* previousMesh);
+                  Mesh* previousMesh,
+                  ITimer* timer);
   
   void tileToBeDeleted(Tile* tile);
   
   bool tileMeetsRenderCriteria(Tile* tile);
 
   void justCreatedTopTile(Tile* tile);
+  
+  bool isReadyToRender(const RenderContext *rc) {
+    return true;
+  }
 
 };
 
