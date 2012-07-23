@@ -188,7 +188,7 @@ public:
                       const TimeInterval& now) {
     const double percent = pace( percentDone(now) );
     
-    rc->getCamera()->zoom(1 - (percent / 50));
+    rc->getCamera()->zoom(1 - (percent / 25));
 //    rc->getCamera()->pivotOnCenter(Angle::fromDegrees(1));
   }
   

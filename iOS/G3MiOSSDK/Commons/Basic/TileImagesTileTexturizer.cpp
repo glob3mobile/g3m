@@ -215,20 +215,21 @@ void TileImagesTileTexturizer::tileToBeDeleted(Tile* tile) {
   if (index > -1){
     RequestedTile& rt = _requestedTiles[index];
     //DELETING TEXTURE
-    if (_requestedTiles[index]._texID > -1){
+    if (rt._texID > -1) {
       _texHandler->takeTexture(rt._texID);
     }
     
     //CANCELING PETITIONS
-    for(int i = 0; i < _requestedTiles[index]._downloads.size(); i++){
+    for (int i = 0; i < rt._downloads.size(); i++) {
       _downloader->cancelRequest( rt._downloads[i] );
     }
     
-    _requestedTiles.erase(_requestedTiles.begin()+index);
+    _requestedTiles.erase( _requestedTiles.begin() + index );
   }
 }
 
 bool TileImagesTileTexturizer::tileMeetsRenderCriteria(Tile* tile) {
+  // TODO: compare tile->level with maxLevel in WMS-layer definition
   return false;
 }
 

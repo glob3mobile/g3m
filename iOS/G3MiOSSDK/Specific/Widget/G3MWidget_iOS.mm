@@ -193,7 +193,7 @@
     
     // very basic tile renderer
     if (true) {
-      TileParameters* parameters = TileParameters::createDefault(true);
+      TileParameters* parameters = TileParameters::createDefault(false);
       
       TileTexturizer* texturizer = NULL;
       if (true) {
@@ -258,7 +258,7 @@
     
     if (false) {
       EffectsScheduler* scheduler = new EffectsScheduler();
-      scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(3)));
+      scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(4)));
       comp->addRenderer(scheduler);
     }
     
