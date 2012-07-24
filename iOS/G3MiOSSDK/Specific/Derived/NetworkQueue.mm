@@ -28,18 +28,26 @@
 
 - (void) makeAsyncPetition: (const char *) url
 {
-    // activate network queue
-    if (_networkQueue == nil) _networkQueue = [[NSOperationQueue alloc] init];
-    [_networkQueue setMaxConcurrentOperationCount:1000];
-    
-    NSString *myurl = [NSString stringWithUTF8String:url];
-    DataDownload* currentOperation = [[DataDownload alloc] initWithURL:[NSURL URLWithString:myurl]];
-    [currentOperation addObserver:self forKeyPath:@"isFinished" options:NSKeyValueObservingOptionNew context:NULL];
-    [_networkQueue addOperation: currentOperation];
+  // activate network queue
+  if (_networkQueue == nil) {
+    _networkQueue = [[NSOperationQueue alloc] init];
+  }
+  [_networkQueue setMaxConcurrentOperationCount:1000];
+  
+  NSString *myurl = [NSString stringWithUTF8String:url];
+  DataDownload* currentOperation = [[DataDownload alloc] initWithURL:[NSURL URLWithString:myurl]];
+  [currentOperation addObserver:self
+                     forKeyPath:@"isFinished"
+                        options:NSKeyValueObservingOptionNew
+                        context:NULL];
+  [_networkQueue addOperation: currentOperation];
 }
 
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+- (void)observeValueForKeyPath:(NSString *)keyPath
+                      ofObject:(id)object
+                        change:(NSDictionary *)change
+                       context:(void *)context
 {
 	DataDownload* op = (DataDownload *)object;
 	[op removeObserver:self forKeyPath:@"isFinished"];
@@ -53,7 +61,8 @@
     //printf("\nData: %s;\n", resp.c_str());
     Response r([[op getURL] cStringUsingEncoding:NSUTF8StringEncoding] , &bb);
     ((IDownloadListener*)_listener)->onDownload(r);
-	} else {
+	}
+  else {
     ByteBuffer bb(NULL, 0);
     Response r([[op getURL] cStringUsingEncoding:NSUTF8StringEncoding], &bb);
     ((IDownloadListener*)_listener)->onError(r);

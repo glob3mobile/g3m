@@ -228,17 +228,14 @@ double Ellipsoid::computePreciseLatLonDistance(const Geodetic2D& g1,
                                                const Geodetic2D& g2) const {
   const Vector3D radius = _radii;
   double R = (radius.x() + radius.y() + radius.z()) / 3;
-  //double medLat = BBox.getMidLatitude().degrees();
-  //double medLon = BBox.getMidLongitude().degrees();
   double medLat = g1.latitude().degrees();
   double medLon = g1.longitude().degrees();
   
   // spheric distance from P to Q
   // this is the right form, but it's the most complex
   // theres is a minimum error considering sphere instead of ellipsoid
-  //double latP=lat/180*PI, lonP=lon/180*PI;
-  //double latP=g.latitude()/180*PI, lonP=g.longitude()/180*PI;
-  double latP = g2.latitude().radians(), lonP = g2.longitude().radians();
+  double latP = g2.latitude().radians();
+  double lonP = g2.longitude().radians();
   double latQ = medLat / 180 * M_PI, lonQ = medLon / 180 * M_PI;
   double coslatP = cos(latP), sinlatP = sin(latP);
   double coslonP = cos(lonP), sinlonP = sin(lonP);
@@ -254,8 +251,7 @@ double Ellipsoid::computeFastLatLonDistance(const Geodetic2D& g1,
                                             const Geodetic2D& g2) const {
   const Vector3D radius = _radii;
   double R = (radius.x() + radius.y() + radius.z()) / 3;
-  //double medLat = BBox.getMidLatitude().degrees();
-  //double medLon = BBox.getMidLongitude().degrees();
+
   double medLat = g1.latitude().degrees();
   double medLon = g1.longitude().degrees();
   

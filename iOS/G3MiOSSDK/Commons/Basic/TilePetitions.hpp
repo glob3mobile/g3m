@@ -21,15 +21,16 @@
 
 class TileImagesTileTexturizer;
 
-class Petition{
+class Petition {
   
   double _minLat, _minLon, _maxLat, _maxLon; //Degrees
   std::string _url;
   ByteBuffer* _bb;
-  
+
 public:
   
-  Petition(Sector s, std::string url): _url(url), 
+  Petition(const Sector s, std::string url) :
+  _url(url), 
   _minLat(s.lower().latitude().degrees()),
   _minLon(s.lower().longitude().degrees()),
   _maxLat(s.upper().latitude().degrees()),
@@ -37,18 +38,18 @@ public:
   _bb(NULL)
   {}
   
-  ~Petition(){ if (_bb != NULL) delete _bb;}
+  ~Petition() { if (_bb != NULL) delete _bb; }
   
-  std::string getURL() const { return _url;}
-  Sector getSector() const { return Sector::fromDegrees(_minLat, _minLon, _maxLat, _maxLon);}
+  std::string getURL() const { return _url; }
+  Sector getSector() const { return Sector::fromDegrees(_minLat, _minLon, _maxLat, _maxLon); }
   
-  bool isArrived() const{ return _bb != NULL;}
-  void setByteBuffer(ByteBuffer* bb) { _bb = bb;}
-  const ByteBuffer* getByteBuffer() const { return _bb;}
+  bool isArrived() const{ return _bb != NULL; }
+  void setByteBuffer(ByteBuffer* bb) { _bb = bb; }
+  const ByteBuffer* getByteBuffer() const { return _bb; }
 };
 
 
-class TilePetitions: public IDownloadListener{
+class TilePetitions: public IDownloadListener {
   
   const int    _level;
   const int    _row;
