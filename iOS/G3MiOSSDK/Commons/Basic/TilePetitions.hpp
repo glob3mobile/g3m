@@ -23,27 +23,46 @@ class TileImagesTileTexturizer;
 
 class Petition {
   const std::string _url;
-  const Sector *_sector;
-  ByteBuffer* _bb;
+  const Sector      _sector;
+  ByteBuffer*       _bb;
 
+  Petition& operator=(const Petition& that);
+  Petition(const Petition& that);
+  
 public:
   
-  Petition(Sector s, std::string url): _url(url), 
-  _sector(new Sector(s)),
+  Petition(const Sector& sector,
+           std::string url):
+  _sector(sector),
+  _url(url), 
   _bb(NULL)
-  {}
+  {
+  }
   
   ~Petition(){ 
-    delete _sector;
     if (_bb != NULL) delete _bb;
   }
   
-  std::string getURL() const { return _url;}
-  Sector getSector() const { return *_sector;}
+  std::string getURL() const {
+    return _url;
+  }
   
-  bool isArrived() const{ return _bb != NULL; }
-  void setByteBuffer(ByteBuffer* bb) { _bb = bb; }
-  const ByteBuffer* getByteBuffer() const { return _bb; }
+  Sector getSector() const {
+    return _sector;
+  }
+  
+  bool isArrived() const {
+    return _bb != NULL;
+  }
+  
+  void setByteBuffer(ByteBuffer* bb) {
+    if (_bb != NULL) delete _bb;
+    _bb = bb;
+  }
+
+  const ByteBuffer* getByteBuffer() const {
+    return _bb;
+  }
 };
 
 
