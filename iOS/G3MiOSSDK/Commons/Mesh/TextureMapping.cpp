@@ -22,10 +22,8 @@ _textureId(textureId)
   }
   _texCoords = texCoordsA;
   
-  MutableVector2D t(0.0, 0.0);
-  _translation = t;
-  MutableVector2D s(1.0, 1.0);
-  _scale = s;
+  _translation = MutableVector2D(0.0, 0.0);
+  _scale       = MutableVector2D(1.0, 1.0);
 }
 
 void TextureMapping::bind(const RenderContext* rc) const {

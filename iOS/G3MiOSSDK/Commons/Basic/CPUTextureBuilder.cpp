@@ -9,20 +9,19 @@
 #include "CPUTextureBuilder.hpp"
 
 int CPUTextureBuilder::createTextureFromImages(IGL * gl, 
-                                               const std::vector<const IImage*>& vImages, 
-                                               int width, int height) const
-{
-  if (vImages.size() > 0){
-  
-    const IImage* im = vImages[0];
-    for (int i = 1; i < vImages.size(); i++) {
-      const IImage* imTrans = vImages[i];
+                                               const std::vector<const IImage*>& images,
+                                               int width, int height) const {
+  const int imagesSize = images.size();
+  if (imagesSize > 0) {
+    const IImage* im = images[0];
+    for (int i = 1; i < imagesSize; i++) {
+      const IImage* imTrans = images[i];
       im = im->combineWith(*imTrans, width, height);
     }
     
     return gl->uploadTexture(im, width, height);
-    
-  } else{
+  }
+  else {
     return -1;
   }
 }

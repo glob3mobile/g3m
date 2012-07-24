@@ -124,7 +124,8 @@ void GL2::color(float r, float g, float b, float a) {
   glUniform4f(Uniforms.FlatColor, r, g, b, a);
 }
 
-void GL2::transformTexCoords(const Vector2D& scale, const Vector2D& translation)
+void GL2::transformTexCoords(const Vector2D& scale,
+                             const Vector2D& translation)
 {
   glUniform2f(Uniforms.ScaleTexCoord, scale.x(), scale.y());
   glUniform2f(Uniforms.TranslationTexCoord, translation.x(), translation.y());
@@ -143,7 +144,7 @@ void GL2::vertexPointer(int size, int stride, const float vertex[]) {
   glVertexAttribPointer(Attributes.Position, size, GL_FLOAT, 0, stride, (const void *) vertex);
 }
 
-void GL2::drawTriangleStrip(int n, const unsigned int i[]) {
+void GL2::drawTriangleStrip(int n, const unsigned int* i) {
   glDrawElements(GL_TRIANGLE_STRIP, n, GL_UNSIGNED_INT, i);
 }
 
