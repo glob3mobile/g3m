@@ -19,10 +19,6 @@ TilePetitions* LayerSet::createTilePetitions(const Tile& tile, int width, int he
       std::vector<Petition> pet = layer->getTilePetitions(tile, width, height);
       
       tt->add(pet);
-      
-      if (tt->getNumPetitions() > 2){
-        int a = 0; a++;
-      }
     }
   }
   return tt;

@@ -94,6 +94,7 @@
 		D87EC5CE15BEB31000E38C36 /* CPUTextureBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EC5CB15BEB31000E38C36 /* CPUTextureBuilder.cpp */; };
 		D87EC5CF15BEB31000E38C36 /* CPUTextureBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D87EC5CC15BEB31000E38C36 /* CPUTextureBuilder.hpp */; };
 		D87EC5D015BEB31000E38C36 /* TextureBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D87EC5CD15BEB31000E38C36 /* TextureBuilder.hpp */; };
+		D87EC5D315BEC73500E38C36 /* Rectangle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D87EC5D215BEC73400E38C36 /* Rectangle.hpp */; };
 		D88C344C159C5A250044CED9 /* DummyDownload.mm in Sources */ = {isa = PBXBuildFile; fileRef = D88C3449159C5A250044CED9 /* DummyDownload.mm */; };
 		D88C344D159C5A250044CED9 /* DummyDownload.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D88C344A159C5A250044CED9 /* DummyDownload.hpp */; };
 		D88C3453159C5A410044CED9 /* DataDownload.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D88C344F159C5A410044CED9 /* DataDownload.hpp */; };
@@ -227,6 +228,7 @@
 		D87EC5CB15BEB31000E38C36 /* CPUTextureBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CPUTextureBuilder.cpp; path = Commons/Basic/CPUTextureBuilder.cpp; sourceTree = "<group>"; };
 		D87EC5CC15BEB31000E38C36 /* CPUTextureBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CPUTextureBuilder.hpp; path = Commons/Basic/CPUTextureBuilder.hpp; sourceTree = "<group>"; };
 		D87EC5CD15BEB31000E38C36 /* TextureBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TextureBuilder.hpp; path = Commons/Basic/TextureBuilder.hpp; sourceTree = "<group>"; };
+		D87EC5D215BEC73400E38C36 /* Rectangle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Rectangle.hpp; path = Commons/Geometry/Rectangle.hpp; sourceTree = "<group>"; };
 		D88C3449159C5A250044CED9 /* DummyDownload.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = DummyDownload.mm; path = Commons/Downloader/DummyDownload.mm; sourceTree = "<group>"; };
 		D88C344A159C5A250044CED9 /* DummyDownload.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DummyDownload.hpp; path = Commons/Downloader/DummyDownload.hpp; sourceTree = "<group>"; };
 		D88C344F159C5A410044CED9 /* DataDownload.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DataDownload.hpp; path = Specific/Derived/DataDownload.hpp; sourceTree = "<group>"; };
@@ -389,6 +391,7 @@
 		383BD38A1577EDFD0012AC53 /* Geometry */ = {
 			isa = PBXGroup;
 			children = (
+				D87EC5D215BEC73400E38C36 /* Rectangle.hpp */,
 				383BD39E1577EE5A0012AC53 /* Angle.cpp */,
 				383BD39F1577EE5A0012AC53 /* Angle.hpp */,
 				CCB2566315B5F58500079B96 /* Box.cpp */,
@@ -587,6 +590,7 @@
 				D87EC5CA15BEB12F00E38C36 /* WMSLayer.hpp in Headers */,
 				D87EC5CF15BEB31000E38C36 /* CPUTextureBuilder.hpp in Headers */,
 				D87EC5D015BEB31000E38C36 /* TextureBuilder.hpp in Headers */,
+				D87EC5D315BEC73500E38C36 /* Rectangle.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

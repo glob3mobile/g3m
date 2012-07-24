@@ -189,12 +189,16 @@
     WMSLayer* layer = new WMSLayer("bmng200405", "http://www.nasa.network.com/wms?", 
                           "1.3", "image/jpeg", Sector::fullSphere(), "EPSG:4326", "");
     
-    //WMSLayer *wmsl = new WMSLayer("test:contourGSLA","http://imos2.ersa.edu.au/geo2/test/wms","1.1.1", "image/png", Sector::fromDegrees(-60, 57, -10, -180), "EPSG:4326", "sla_test");
+//    WMSLayer *wmsl = new WMSLayer("test:contourGSLA","http://imos2.ersa.edu.au/geo2/test/wms","1.1.1",
+//                                  "image/png",
+//                                  Sector::fromDegrees(-60, 57, -10, -180), 
+//                                  "EPSG:4326", "sla_test");
     
     WMSLayer *wmsl = new WMSLayer("VIAS",
                                   "http://idecan2.grafcan.es/ServicioWMS/Callejero",
                                   "1.1.0", "image/gif", 
-                                  Sector::fromDegrees(27.6357, -18.1911, 29.2347, -13.4217),
+                                  Sector::fullSphere(),
+                                  //Sector::fromDegrees(27.6357, -18.1911, 29.2347, -13.4217),
                                   "EPSG:4326", "");
     
     layerSet->add(layer);

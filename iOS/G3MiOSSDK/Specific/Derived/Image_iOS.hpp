@@ -26,6 +26,8 @@ public:
     
   }
   
+  Image_iOS(int width, int height);
+  
   UIImage* getUIImage() const {
     return _image;
   }
@@ -39,7 +41,8 @@ public:
   }
   
   IImage* combineWith(const IImage& transparent, int width, int height) const;
-
+  
+  void combineWith(const IImage& other, const Rectangle& rect, int width, int height);
 };
 
 #endif

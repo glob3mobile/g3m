@@ -180,9 +180,11 @@ void TileImagesTileTexturizer::onTilePetitionsFinished(TilePetitions * tp)
     for (int i = 0; i < tp->getNumPetitions(); i++) {
       const ByteBuffer* bb = tp->getPetition(i).getByteBuffer();
       IImage *im = _factory->createImageFromData(*bb);
-      images.push_back(im);
+      if (im != NULL) {
+        images.push_back(im);
+      }
     }
-    
+
     //Creating the texture
     const std::string& url = tp->getPetitionsID();  
     int texID = _texHandler->getTextureId(images,

@@ -9,16 +9,20 @@
 #ifndef G3MiOSSDK_IImage_h
 #define G3MiOSSDK_IImage_h
 
+#include <vector>
+#include "Rectangle.hpp"
+
 class IImage {
 public:
   // a virtual destructor is needed for conversion to Java
   virtual ~IImage() {}
   
-  
   virtual int getWidth() const = 0;
   virtual int getHeight() const = 0;
   
   virtual IImage* combineWith(const IImage& transparent, int width, int height) const = 0;
+  
+  virtual void combineWith(const IImage& other, const Rectangle& rect, int width, int height) = 0;
   
 };
 
