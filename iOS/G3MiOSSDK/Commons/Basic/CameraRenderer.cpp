@@ -26,8 +26,26 @@ void CameraRenderer::initialize(const InitializationContext* ic){
 int CameraRenderer::render(const RenderContext* rc) {
   _camera = rc->getCamera(); //Saving camera reference 
   _planet = rc->getPlanet();
+  gl = rc->getGL();
   
   _camera->render(*rc);
+  
+  // TEMP TO DRAW A POINT WHERE USER PRESS
+  if (_currentGesture==Drag) {
+    float vertices[] = { 0,0,0};
+    unsigned int indices[] = {0,1};
+    gl->enableVerticesPosition();
+    gl->disableTexture2D();
+    gl->disableTextures();
+    gl->vertexPointer(3, 0, vertices);
+    gl->color((float) 1, (float) 1, (float) 1, 1);
+    gl->pushMatrix();
+    MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D().times(1.0001));
+    gl->multMatrixf(T);
+    gl->drawPoints(2, indices);
+    gl->popMatrix();
+  }
+
   
   return MAX_TIME_TO_RENDER;
 }

@@ -156,6 +156,12 @@ void GL2::drawLineLoop(int n, const unsigned int *i) {
   glDrawElements(GL_LINE_LOOP, n, GL_UNSIGNED_INT, i);
 }
 
+void GL2::drawPoints(int n, const unsigned int *i)
+{
+  glDrawElements(GL_POINTS, n, GL_UNSIGNED_INT, i);
+}
+
+
 void GL2::lineWidth(float width) {
   glLineWidth(width);
 }
@@ -235,10 +241,9 @@ void GL2::drawBillBoard(const unsigned int textureId,
     0, 0
   };
   
-//  glDisable(GL_DEPTH_TEST);
   depthTest(false);
   
-  glUniform1i(Uniforms.EnableTexture, true);
+  enableTexture2D();
   glUniform4f(Uniforms.FlatColor, 1.0, 0.0, 0.0, 1);
   
   glBindTexture(GL_TEXTURE_2D, textureId);
@@ -247,7 +252,6 @@ void GL2::drawBillBoard(const unsigned int textureId,
   
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
   
-//  glEnable(GL_DEPTH_TEST);
   depthTest(true);
   
   glUniform1i(Uniforms.BillBoard, false); //NOT DRAWING BILLBOARD

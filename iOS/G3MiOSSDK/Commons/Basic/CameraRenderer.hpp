@@ -29,6 +29,7 @@ private:
   
   Camera* _camera;         // Camera used at current frame
   const Planet* _planet;
+  IGL *gl;
   
   Camera _camera0;                //Initial Camera saved on Down event
   MutableVector3D _initialPoint;  //Initial point at dragging

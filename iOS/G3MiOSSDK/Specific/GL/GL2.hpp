@@ -89,6 +89,8 @@ public:
   
   void drawLineLoop(int n, const unsigned int *i); 
   
+  void drawPoints(int n, const unsigned int *i);
+  
   void setProjection(const MutableMatrix44D &projection) ;
   
   void useProgram(unsigned int program) ;
