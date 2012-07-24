@@ -19,9 +19,9 @@ class SQLiteStorage_iOS: public IStorage
 public:
     SQLiteStorage_iOS(const std::string databaseName, const std::string table);
     
-    bool contains(std::string filename);
-    void save(std::string filename, const ByteBuffer& bb);
-    ByteBuffer getByteBuffer(std::string filename);
+    bool contains(const std::string filename);
+    void save(const std::string filename, const ByteBuffer& bb);
+    ByteBuffer getByteBuffer(const std::string filename);
     
     
 private:

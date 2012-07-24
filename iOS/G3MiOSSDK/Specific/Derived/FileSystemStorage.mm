@@ -43,17 +43,16 @@ ByteBuffer FileSystemStorage::getByteBuffer(std::string url)
   NSString *file = generateFileName(url);
   NSData *readData = [[NSData alloc] initWithContentsOfFile:file];
   
-  if (readData == nil) 
-  {
-    ByteBuffer bb(NULL, 0);
-    return bb;
+  if (readData == nil) {
+    return ByteBuffer(NULL, 0);
   }
   
-  unsigned char * data = new unsigned char[ [readData length] ];
-  [readData getBytes:data length:[readData length] ];
-  ByteBuffer bb(data , [readData length]);
+  NSUInteger length = [readData length];
   
-  return bb;
+  unsigned char* data = new unsigned char[length];
+  [readData getBytes:data length:length ];
+  
+  return ByteBuffer(data, length);
 }
 
 
