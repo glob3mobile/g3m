@@ -40,9 +40,9 @@ int CameraRenderer::render(const RenderContext* rc) {
     gl->vertexPointer(3, 0, vertices);
     gl->color((float) 1, (float) 1, (float) 1, 1);
     gl->pushMatrix();
-    MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D().times(1.0001));
+    MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D().times(1.01));
     gl->multMatrixf(T);
-    gl->drawPoints(2, indices);
+    gl->drawPoints(1, indices);
     gl->popMatrix();
   }
 
