@@ -22,25 +22,25 @@
 class TileImagesTileTexturizer;
 
 class Petition{
-  
-  double _minLat, _minLon, _maxLat, _maxLon; //Degrees
-  std::string _url;
+
+  const std::string _url;
+  const Sector *_sector;
   ByteBuffer* _bb;
   
 public:
   
   Petition(Sector s, std::string url): _url(url), 
-  _minLat(s.lower().latitude().degrees()),
-  _minLon(s.lower().longitude().degrees()),
-  _maxLat(s.upper().latitude().degrees()),
-  _maxLon(s.upper().longitude().degrees()),
+  _sector(new Sector(s)),
   _bb(NULL)
   {}
   
-  ~Petition(){ if (_bb != NULL) delete _bb;}
+  ~Petition(){ 
+    delete _sector;
+    if (_bb != NULL) delete _bb;
+  }
   
   std::string getURL() const { return _url;}
-  Sector getSector() const { return Sector::fromDegrees(_minLat, _minLon, _maxLat, _maxLon);}
+  Sector getSector() const { return *_sector;}
   
   bool isArrived() const{ return _bb != NULL;}
   void setByteBuffer(ByteBuffer* bb) { _bb = bb;}
@@ -53,28 +53,47 @@ class TilePetitions: public IDownloadListener{
   const int    _level;
   const int    _row;
   const int    _column;
+  const Sector _tileSector;
   
   TileImagesTileTexturizer* _texturizer;
-  std::vector<Petition> _petitions;
+  std::vector<Petition*> _petitions;
   
   int _downloadsCounter;
   int _errorsCounter;
   
   TilePetitions(const TilePetitions& that);
   
+  void tryToDeleteMyself()
+  {
+    if (_downloadsCounter + _errorsCounter == _petitions.size()){
+      delete this;
+    }
+  }
+  
 public:
   
   TilePetitions(const int level,
                 const int row,
                 const int column,
+                const Sector sector,
+                const std::vector<Petition*>& petitions,
                 TileImagesTileTexturizer* const texturizer):
   _level(level),
   _row(row),
   _column(column),
   _texturizer(texturizer),
+  _tileSector(sector),
   _downloadsCounter(0),
-  _errorsCounter(0)
+  _errorsCounter(0),
+  _petitions(petitions)
   {
+  }
+  
+  ~TilePetitions()
+  {
+    for (int i = 0; i < _petitions.size(); i++) {
+      delete _petitions[i];
+    }
   }
   
   void notify(TileImagesTileTexturizer* texturizer)
@@ -94,21 +113,13 @@ public:
     return _column;
   }
   
-  
-  void add(const std::string& url, const Sector& s){
-    Petition p(s, url);
-    _petitions.push_back(p);
+  Sector getSector() const{ 
+    return _tileSector;
   }
-  
-  void add(const std::vector<Petition>& pet){
-    for (int i = 0; i < pet.size(); i++) {
-      add(pet[i].getURL(), pet[i].getSector());
-    }
-  }
-  
+
   std::string getPetitionsID() const;
 
-  Petition& getPetition(int i) { return _petitions[i];}
+  Petition* getPetition(int i) { return _petitions[i];}
   int getNumPetitions() { return _petitions.size();}
   
   bool allFinished() const;

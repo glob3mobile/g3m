@@ -27,6 +27,8 @@ public:
   virtual IImage* createImageFromFileName(const std::string filename) const = 0;
   
   virtual IImage* createImageFromData(const ByteBuffer& bb) const = 0;
+  
+  virtual IImage* createImageFromSize(int width, int height) const = 0;
 
   virtual void deleteImage(const IImage* image) const = 0;
   

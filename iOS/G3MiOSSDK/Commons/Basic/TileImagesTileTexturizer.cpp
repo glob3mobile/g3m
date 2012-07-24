@@ -18,12 +18,15 @@
 
 
 TilePetitions* TileImagesTileTexturizer::getTilePetitions(const Tile* tile) {  
-  TilePetitions *tt = _layerSet->createTilePetitions(*tile, 
+  std::vector<Petition*> pet = _layerSet->createTilePetitions(*tile, 
                                                      _parameters->_tileTextureWidth, 
                                                      _parameters->_tileTextureHeight);
   
-  tt->notify(this);
-  return tt;
+  TilePetitions* tp = new TilePetitions(tile->getLevel(), tile->getRow(), tile->getColumn(), tile->getSector(), 
+                                        pet, this);
+  
+  
+  return tp;
 }
 
 std::vector<MutableVector2D> TileImagesTileTexturizer::getTextureCoordinates(const TileTessellator* tessellator) const {
@@ -116,9 +119,9 @@ void TileImagesTileTexturizer::registerNewRequest(Tile *tile){
   
   RequestedTile& ft2 = _requestedTiles[ _requestedTiles.size() -1 ]; //GETTING VECTOR INSTANCE
   for (int i = 0; i < tp->getNumPetitions(); i++) {
-    Petition pet = tp->getPetition(i);
+    Petition* pet = tp->getPetition(i);
     
-    const std::string& url = pet.getURL();
+    const std::string& url = pet->getURL();
     long id = _downloader->request(url, priority, tp);
     ft2._downloads.push_back(id);
   }
@@ -178,7 +181,7 @@ void TileImagesTileTexturizer::onTilePetitionsFinished(TilePetitions * tp)
     //Creating images (opaque one must be the first)
     std::vector<const IImage*> images;
     for (int i = 0; i < tp->getNumPetitions(); i++) {
-      const ByteBuffer* bb = tp->getPetition(i).getByteBuffer();
+      const ByteBuffer* bb = tp->getPetition(i)->getByteBuffer();
       IImage *im = _factory->createImageFromData(*bb);
       if (im != NULL) {
         images.push_back(im);
@@ -240,7 +243,7 @@ void TileImagesTileTexturizer::justCreatedTopTile(Tile *tile) {
   TilePetitions *tp = getTilePetitions(tile);
   
   for (int i = 0; i < tp->getNumPetitions(); i++) {
-    const std::string& url = tp->getPetition(i).getURL();
+    const std::string& url = tp->getPetition(i)->getURL();
     _downloader->request(url, 99999, NULL);
   }
   
@@ -250,4 +253,10 @@ bool TileImagesTileTexturizer::isReadyToRender(const RenderContext *rc) {
   int __TODO_check_for_level_0_loaded;
 
   return true;
+}
+
+Rectangle TileImagesTileTexturizer::getImageRectangleInTexture(const Sector& wholeSector, 
+                                     const Sector& imageSector) const
+{
+  
 }

@@ -42,7 +42,7 @@ public:
   
   IImage* combineWith(const IImage& transparent, int width, int height) const;
   
-  void combineWith(const IImage& other, const Rectangle& rect, int width, int height);
+  IImage* combineWith(const IImage& other, const Rectangle& rect, int width, int height) const;
 };
 
 #endif

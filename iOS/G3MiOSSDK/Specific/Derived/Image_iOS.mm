@@ -54,7 +54,7 @@ IImage* Image_iOS::combineWith(const IImage& transparent, int width, int height)
   return new Image_iOS(img);
 }
 
-void Image_iOS::combineWith(const IImage& other, const Rectangle& rect, int width, int height)
+IImage* Image_iOS::combineWith(const IImage& other, const Rectangle& rect, int width, int height) const
 {
   UIImage* otherIm = ((Image_iOS&)other).getUIImage();
   
@@ -72,11 +72,12 @@ void Image_iOS::combineWith(const IImage& other, const Rectangle& rect, int widt
   //We draw the images one over the other
   CGContextDrawImage( context, CGRectMake( 0, 0, width, height ), _image.CGImage );
   CGContextDrawImage( context, CGRectMake( rect._x, rect._y, rect._width, rect._height ), otherIm.CGImage );
-  
-  CGImageRef imgRef = CGBitmapContextCreateImage(context);
-  
+
   //SAVING IMAGE
-  _image = [UIImage imageWithCGImage:imgRef];
+  CGImageRef imgRef = CGBitmapContextCreateImage(context);
+  UIImage* img = [UIImage imageWithCGImage:imgRef];
   CGImageRelease(imgRef);
   CGContextRelease(context);
+  
+  return new Image_iOS(img);
 }

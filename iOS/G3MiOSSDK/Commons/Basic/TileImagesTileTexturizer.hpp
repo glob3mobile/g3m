@@ -96,6 +96,9 @@ private:
                 Mesh* tessellatorMesh,
                 Mesh* previousMesh);
   
+  Rectangle getImageRectangleInTexture(const Sector& wholeSector, 
+                                       const Sector& imageSector) const;
+  
 public:
   
   TileImagesTileTexturizer(const TileParameters* parameters,

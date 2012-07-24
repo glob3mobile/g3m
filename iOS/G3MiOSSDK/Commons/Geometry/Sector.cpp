@@ -64,3 +64,13 @@ bool Sector::isBackOriented(const RenderContext *rc) const {
   
   return true;
 }
+
+Sector Sector::intersection(const Sector& s) const{
+  double lowerLat;
+  if (lower().latitude().degrees() > s.lower().latitude().degrees()){
+    lowerLat = lower().latitude().degrees();
+  } else{
+    lowerLat = s.lower().latitude().degrees();
+  }
+  
+}

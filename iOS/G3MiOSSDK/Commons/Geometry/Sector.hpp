@@ -69,7 +69,7 @@ public:
   
   bool fullContains(const Sector& s) const;
   
-
+  Sector intersection(const Sector& s) const;
   
   static Sector fullSphere() {
     return Sector(Geodetic2D(Angle::fromDegrees(-90), Angle::fromDegrees(-180)),

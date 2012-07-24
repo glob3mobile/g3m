@@ -26,6 +26,10 @@ public:
     delete timer;
   }
   
+  IImage* createImageFromSize(int width, int height) const
+  {
+    return new Image_iOS(width, height);
+  }
   
   virtual IImage* createImageFromFileName(const std::string filename) const {
     NSString *fn = [NSString stringWithCString:filename.c_str() encoding:[NSString defaultCStringEncoding]];
