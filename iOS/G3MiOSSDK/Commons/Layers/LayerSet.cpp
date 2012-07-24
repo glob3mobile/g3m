@@ -8,21 +8,21 @@
 
 #include "LayerSet.hpp"
 
-TilePetitions* LayerSet::createTilePetitions(const Tile& tile, int width, int height) const
+std::vector<Petition*> LayerSet::createTilePetitions(const Tile& tile, int width, int height) const
 {
-  TilePetitions *tt = new TilePetitions(tile.getLevel(), tile.getRow(), tile.getColumn(), NULL);
+  std::vector<Petition*> petitions;
   
   const Sector tileSector = tile.getSector();
   
   for (int i = 0; i < _layers.size(); i++) {
     Layer* layer = _layers[i];
-    
     if (layer->fullContains(tileSector)){
-      std::vector<Petition> pet = layer->getTilePetitions(tile, width, height);
-      
-      tt->add(pet);
+      std::vector<Petition*> pet = layer->getTilePetitions(tile, width, height);
+      for (int i = 0; i < pet.size(); i++) {
+        petitions.push_back(pet[i]);
+      }
     }
   }
   
-  return tt;
+  return petitions;
 }

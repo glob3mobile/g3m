@@ -85,6 +85,8 @@ public:
   
   virtual void drawLineLoop(int n, const unsigned int* i) = 0;
 
+  virtual void drawPoints(int n, const unsigned int *i) = 0;
+
   virtual void setProjection(const MutableMatrix44D &projection) = 0;
   
   virtual void useProgram(unsigned int program) = 0;

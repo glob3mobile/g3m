@@ -8,9 +8,9 @@
 
 #include "WMSLayer.hpp"
 
-std::vector<Petition> WMSLayer::getTilePetitions(const Tile& tile, int width, int height) const
+std::vector<Petition*> WMSLayer::getTilePetitions(const Tile& tile, int width, int height) const
 {
-  std::vector<Petition> vPetitions;
+  std::vector<Petition*> vPetitions;
   
   if (!_bbox.fullContains(tile.getSector())) {
     return vPetitions;
@@ -76,7 +76,7 @@ std::vector<Petition> WMSLayer::getTilePetitions(const Tile& tile, int width, in
     req += "&CRS=EPSG:4326";
   }
   
-  Petition pet(sector, req);
+  Petition *pet = new Petition(sector, req);
   vPetitions.push_back(pet);
   
 	return vPetitions;

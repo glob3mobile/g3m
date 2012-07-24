@@ -44,9 +44,9 @@
 }
 
 
-- (void)observeValueForKeyPath:(NSString *)keyPath
-                      ofObject:(id)object
-                        change:(NSDictionary *)change
+- (void)observeValueForKeyPath:(NSString *)keyPath 
+                      ofObject:(id)object 
+                        change:(NSDictionary *)change 
                        context:(void *)context
 {
 	DataDownload* op = (DataDownload *)object;

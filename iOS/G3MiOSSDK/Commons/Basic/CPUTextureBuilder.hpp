@@ -15,6 +15,11 @@ class CPUTextureBuilder:public TextureBuilder
 {
 public:
   int createTextureFromImages(IGL * gl, const std::vector<const IImage*>& vImages, int width, int height) const;
+  
+  int createTextureFromImages(IGL * gl, const IFactory* factory,
+                              const std::vector<const IImage*>& vImages, 
+                              const std::vector<Rectangle>& vRectangles, 
+                              int width, int height) const;
 };
 
 #endif

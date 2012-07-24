@@ -9,19 +9,50 @@
 #include "CPUTextureBuilder.hpp"
 
 int CPUTextureBuilder::createTextureFromImages(IGL * gl, 
-                                               const std::vector<const IImage*>& images,
-                                               int width, int height) const {
-  const int imagesSize = images.size();
-  if (imagesSize > 0) {
-    const IImage* im = images[0];
-    for (int i = 1; i < imagesSize; i++) {
-      const IImage* imTrans = images[i];
-      im = im->combineWith(*imTrans, width, height);
+                                               const std::vector<const IImage*>& vImages, 
+                                               int width, int height) const
+{
+  if (vImages.size() > 0){
+  
+    const IImage* im = vImages[0], *im2 = NULL;
+    for (int i = 1; i < vImages.size(); i++) {
+      const IImage* imTrans = vImages[i];
+      im2 = im->combineWith(*imTrans, width, height);
+      if (i > 1) delete im;
+      im = im2;
     }
     
-    return gl->uploadTexture(im, width, height);
-  }
-  else {
+    int texID = gl->uploadTexture(im, width, height);
+    
+    if (1 < vImages.size()){
+      delete im;
+    }
+    return texID;
+  } else{
     return -1;
   }
+}
+
+int CPUTextureBuilder::createTextureFromImages(IGL * gl, const IFactory* factory,
+                            const std::vector<const IImage*>& vImages, 
+                            const std::vector<Rectangle>& vRectangles, 
+                            int width, int height) const
+{
+  
+  int todo_JM;
+  const IImage* base;
+  if (vRectangles[0]._width == width && vRectangles[0]._height == height){
+    base = vImages[0];
+  } else{
+    base = factory->createImageFromSize(width, height);
+  }
+  
+  for (int i = 1; i < vImages.size(); i++) {
+    IImage* im2 = base->combineWith(*vImages[i], vRectangles[i], width, height);
+    delete base;
+    base = im2;
+  }
+  
+  return todo_JM;
+
 }

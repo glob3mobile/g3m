@@ -17,11 +17,11 @@ void TilePetitions::onDownload(const Response &response)
   std::string url = response.getURL().getPath();
   
   for (int j = 0; j < _petitions.size(); j++) {
-    if (_petitions[j].getURL() == url)
+    if (_petitions[j]->getURL() == url)
     {
       //STORING PIXEL DATA FOR RECEIVED URL
       ByteBuffer *bb = new ByteBuffer(*response.getByteBuffer());
-      _petitions[j].setByteBuffer(bb);
+      _petitions[j]->setByteBuffer(bb);
     }
   }
   
@@ -29,22 +29,18 @@ void TilePetitions::onDownload(const Response &response)
     _texturizer->onTilePetitionsFinished(this);
   }
   
-  if (_downloadsCounter + _errorsCounter == _petitions.size()) {
-    delete this;
-  }
+  tryToDeleteMyself();
 }
 
 
 void TilePetitions::onError(const Response& e) {
   _errorsCounter++;
-  if (_downloadsCounter + _errorsCounter == _petitions.size()){
-    delete this;
-  }
+  tryToDeleteMyself();
 }
 
 bool TilePetitions::allFinished() const {
   for (int i = 0; i < _petitions.size(); i++) {
-    if (!_petitions[i].isArrived()){
+    if (!_petitions[i]->isArrived()){
       return false;
     }
   }
@@ -53,9 +49,7 @@ bool TilePetitions::allFinished() const {
 
 void TilePetitions::onCancel(const std::string& url){
   _errorsCounter++;
-  if (_downloadsCounter + _errorsCounter == _petitions.size()){
-    delete this;
-  }
+  tryToDeleteMyself();
 }
 
 std::string TilePetitions::getPetitionsID() const
@@ -65,7 +59,7 @@ std::string TilePetitions::getPetitionsID() const
     if (j > 0){
       id += "__";
     }
-    id += _petitions[j].getURL();
+    id += _petitions[j]->getURL();
   }
   return id;
 }

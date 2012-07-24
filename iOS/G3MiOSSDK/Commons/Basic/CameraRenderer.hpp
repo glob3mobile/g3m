@@ -29,10 +29,12 @@ private:
   
   Camera* _camera;         // Camera used at current frame
   const Planet* _planet;
+  IGL *gl;
   
   Camera _camera0;                //Initial Camera saved on Down event
   MutableVector3D _initialPoint;  //Initial point at dragging
   MutableVector3D _initialPixel;  //Initial pixel at start of gesture
+  double _initialFingerSeparation;
   
   Gesture _currentGesture;        //Gesture the user is making at the moment
   
@@ -40,13 +42,15 @@ private:
   void onMove(const TouchEvent& touchEvent);
   void onUp(const TouchEvent& touchEvent);
   
-  Gesture getGesture(const TouchEvent& touchEvent) const;
+  Gesture getGesture(const TouchEvent& touchEvent);
   
   void makeDrag(const TouchEvent& touchEvent);
   void makeZoom(const TouchEvent& touchEvent);
+  void makeDoubleDrag(const TouchEvent& touchEvent);
   void makeRotate(const TouchEvent& touchEvent);
   
   Vector3D centerOfViewOnPlanet(const Camera& c) const;
+  
   
 public:
   

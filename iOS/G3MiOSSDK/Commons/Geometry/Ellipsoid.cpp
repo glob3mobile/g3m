@@ -193,6 +193,17 @@ Vector3D Ellipsoid::scaleToGeocentricSurface(const Vector3D& position) const {
 }
 
 
+Geodetic2D Ellipsoid::getMidPoint (const Geodetic2D& P0, const Geodetic2D& P1) const
+{
+  Vector3D v0 = toVector3D(P0);
+  Vector3D v1 = toVector3D(P1);
+  Vector3D normal = v0.cross(v1).normalized();
+  Angle theta = v0.angleBetween(v1);
+  Vector3D midPoint = scaleToGeocentricSurface(v0.rotateAroundAxis(normal, theta.times(0.5)));
+  return toGeodetic2D(midPoint);                                             
+}
+
+
 std::list<Vector3D> Ellipsoid::computeCurve(const Vector3D& start,
                                             const Vector3D& stop,
                                             double granularity) const {
