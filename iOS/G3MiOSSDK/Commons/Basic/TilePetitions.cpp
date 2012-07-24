@@ -25,26 +25,24 @@ void TilePetitions::onDownload(const Response &response)
     }
   }
   
-  if (_texturizer != NULL && allFinished())
-  {
+  if (_texturizer != NULL && allFinished()) {
     _texturizer->onTilePetitionsFinished(this);
   }
   
-  if (_downloadsCounter + _errorsCounter == _petitions.size()){
+  if (_downloadsCounter + _errorsCounter == _petitions.size()) {
     delete this;
   }
 }
 
 
-void TilePetitions::onError(const Response& e)
-{
+void TilePetitions::onError(const Response& e) {
   _errorsCounter++;
   if (_downloadsCounter + _errorsCounter == _petitions.size()){
     delete this;
   }
 }
 
-bool TilePetitions::allFinished() const{ 
+bool TilePetitions::allFinished() const {
   for (int i = 0; i < _petitions.size(); i++) {
     if (!_petitions[i].isArrived()){
       return false;

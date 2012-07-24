@@ -195,7 +195,7 @@
     
     // very basic tile renderer
     if (true) {
-      TileParameters* parameters = TileParameters::createDefault(true);
+      TileParameters* parameters = TileParameters::createDefault(false);
       
       TileTexturizer* texturizer = NULL;
       if (true) {
@@ -260,7 +260,7 @@
     
     if (false) {
       EffectsScheduler* scheduler = new EffectsScheduler();
-      scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(3)));
+      scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(4)));
       comp->addRenderer(scheduler);
     }
     
@@ -402,34 +402,31 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
   UITouch *touch = [touches anyObject];
-  CGPoint current = [touch locationInView:self];
+  CGPoint current  = [touch locationInView:self];
   CGPoint previous = [touch previousLocationInView:self];
   
   //TOUCH EVENT
-  Vector2D pos(current.x, current.y);
-  Vector2D prevPos(previous.x, previous.y);
-  TouchEvent te(TouchEvent::create(Down, new Touch(pos, prevPos)));
+  TouchEvent te( TouchEvent::create(Down,
+                                    new Touch(Vector2D(current.x, current.y),
+                                              Vector2D(previous.x, previous.y))) );
   
   ((G3MWidget*)[self widget])->onTouchEvent(&te);
 }
 
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-  NSSet *allTouches = [event allTouches];
-  
+  NSArray *allTouches = [[event allTouches] allObjects];
   NSUInteger pointersCount = [allTouches count];
   
   std::vector<const Touch*> pointers = std::vector<const Touch*>();
   
-  for (int n = 0; n < pointersCount; n++) {
-    UITouch *touch = [[allTouches allObjects] objectAtIndex:n];
-    CGPoint previous = [touch previousLocationInView:self];
-    CGPoint current = [touch locationInView:self];
+  for (int i = 0; i < pointersCount; i++) {
+    UITouch *touch = [allTouches objectAtIndex: i];
     
-    //1 POINTER
-    Vector2D pos(current.x, current.y);
-    Vector2D prevPos(previous.x, previous.y);
-    Touch *to = new Touch(pos, prevPos);
+    CGPoint previous = [touch previousLocationInView:self];
+    CGPoint current  = [touch locationInView:self];
+    Touch *to = new Touch(Vector2D(current.x, current.y), 
+                          Vector2D(previous.x, previous.y));
     
     pointers.push_back(to);
   }
@@ -447,9 +444,9 @@
   CGPoint previous = [touch previousLocationInView:self];
   
   //TOUCH EVENT
-  Vector2D pos(current.x, current.y);
-  Vector2D prevPos(previous.x, previous.y);
-  TouchEvent te( TouchEvent::create(Up, new Touch(pos, prevPos)));
+  TouchEvent te( TouchEvent::create(Up,
+                                    new Touch(Vector2D(current.x, current.y), 
+                                              Vector2D(previous.x, previous.y))) );
   
   ((G3MWidget*)[self widget])->onTouchEvent(&te);
 }

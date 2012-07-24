@@ -132,17 +132,27 @@ private:
   long _counter;
   int _minLevel;
   int _maxLevel;
+  int _splitsCountInFrame;
   
 public:
   TilesStatistics(const TileParameters* parameters) :
   _counter(0),
   _minLevel(parameters->_maxLevel + 1),
-  _maxLevel(parameters->_topLevel - 1)
+  _maxLevel(parameters->_topLevel - 1),
+  _splitsCountInFrame(0)
   {
     
   }
   
-  void computeTile(Tile* tile) {
+  int getSplitsCountInFrame() const {
+    return _splitsCountInFrame;
+  }
+  
+  void computeSplit() {
+    _splitsCountInFrame++;
+  }
+  
+  void computeTileRender(Tile* tile) {
     _counter++;
     
     int level = tile->getLevel();

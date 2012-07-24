@@ -93,10 +93,11 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
 //  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
 //    return true;
 //  }
+  
   const Vector2D extent = getTessellatorMesh(rc, tessellator)->getExtent()->projectedExtent(rc);
-//  const double t = extent.maxAxis();
-  const double t = (extent.x() + extent.y()) / 2;
-  if (t <= ((parameters->_tileTextureWidth + parameters->_tileTextureHeight) / 2 * 1.75)) {
+//  const double t = extent.maxAxis() * 2;
+  const double t = (extent.x() + extent.y());
+  if ( t <= ((parameters->_tileTextureWidth + parameters->_tileTextureHeight) * 1.75) ) {
     return true;
   }
   
@@ -179,7 +180,9 @@ void Tile::render(const RenderContext* rc,
                   ITimer* timer,
                   bool justCreated) {
   if (isVisible(rc, tessellator)) {
-    if (justCreated || meetsRenderCriteria(rc, tessellator, texturizer, parameters, timer)) {
+    if ( //justCreated                              ||
+        statistics->getSplitsCountInFrame() > 1  ||
+        meetsRenderCriteria(rc, tessellator, texturizer, parameters, timer)) {
       rawRender(rc, tessellator, texturizer, timer);
       if (parameters->_renderDebug) {
         debugRender(rc, tessellator);
@@ -187,15 +190,18 @@ void Tile::render(const RenderContext* rc,
       
       prune(texturizer);
       
-      statistics->computeTile(this);
+      statistics->computeTileRender(this);
     }
     else {
       std::vector<Tile*>* subTiles = getSubTiles();
       const int subTilesSize = subTiles->size();
       for (int i = 0; i < subTilesSize; i++) {
         Tile* subTile = subTiles->at(i);
-        subTile->render(rc, tessellator, texturizer, parameters, statistics, toVisitInNextIteration, timer, _justCreatedSubtiles);
-//        toVisitInNextIteration->push_back(subTile);
+//        subTile->render(rc, tessellator, texturizer, parameters, statistics, toVisitInNextIteration, timer, _justCreatedSubtiles);
+        toVisitInNextIteration->push_back(subTile);
+      }
+      if (_justCreatedSubtiles) {
+        statistics->computeSplit();
       }
       _justCreatedSubtiles = false;
     }
