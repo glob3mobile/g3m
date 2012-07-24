@@ -117,8 +117,9 @@ public:
   
   //Dragging camera
   void dragCamera(const Vector3D& p0, const Vector3D& p1);
-  void dragCameraWith2Fingers(const Vector3D& initialPoint, const Vector3D& centerPoint, const Vector3D& finalPoint);
+  void dragCameraWith2Fingers(const Vector3D& initialPoint, const Vector3D& centerPoint, const Vector3D& finalPoint, double factor);
   void rotateWithAxis(const Vector3D& axis, const Angle& delta);
+  void moveForward(double d);
   
   //Zoom
   void zoom(double factor);
