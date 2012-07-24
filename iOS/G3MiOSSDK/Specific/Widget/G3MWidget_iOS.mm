@@ -185,11 +185,13 @@
     Downloader* downloader = new Downloader(fss, 5, factory->createNetwork());
     
     LayerSet* layerSet = new LayerSet();
-    Sector sector = Sector::fullSphere();
     WMSLayer* layer = new WMSLayer("bmng200405", "http://www.nasa.network.com/wms?", 
-                          "1.3", "image/jpeg", sector, "EPSG:4326", "");
+                          "1.3", "image/jpeg", Sector::fullSphere(), "EPSG:4326", "");
+    
+    WMSLayer *wmsl = new WMSLayer("test:contourGSLA","http://imos2.ersa.edu.au/geo2/test/wms","1.1.1", "image/png", Sector::fromDegrees(-60, 57, -10, -180), "EPSG:4326", "sla_test");
     
     layerSet->add(layer);
+    layerSet->add(wmsl);
     
     // very basic tile renderer
     if (true) {

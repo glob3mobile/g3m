@@ -22,8 +22,6 @@ TilePetitions* LayerSet::createTilePetitions(const Tile* tile, int width, int he
       
       tt->add(url, tile->getSector());
     }
-    
   }
   return tt;
-  
 }
