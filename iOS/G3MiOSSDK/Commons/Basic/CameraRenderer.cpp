@@ -31,7 +31,7 @@ int CameraRenderer::render(const RenderContext* rc) {
   _camera->render(*rc);
   
   // TEMP TO DRAW A POINT WHERE USER PRESS
-  if (_currentGesture==Drag) {
+  if (_currentGesture==Zoom) {
     float vertices[] = { 0,0,0};
     unsigned int indices[] = {0,1};
     gl->enableVerticesPosition();
@@ -44,6 +44,9 @@ int CameraRenderer::render(const RenderContext* rc) {
     gl->multMatrixf(T);
     gl->drawPoints(1, indices);
     gl->popMatrix();
+    
+    Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
+    //printf ("zoom with initial point = (%f, %f)\n", g.latitude().degrees(), g.longitude().degrees());
   }
 
   
@@ -60,9 +63,10 @@ void CameraRenderer::onDown(const TouchEvent& touchEvent) {
   //Saving Camera0
   _camera0 = Camera(*_camera);
   
-  //Initial Point for Dragging
-  const Vector2D pixel = touchEvent.getTouch(0)->getPos();
-  const Vector3D ray = _camera0.pixel2Ray(pixel);
+  //Initial Point for interaction
+  MutableVector2D pixel = touchEvent.getTouch(0)->getPos().asMutableVector2D();
+      
+  const Vector3D ray = _camera0.pixel2Ray(pixel.asVector2D());
   _initialPoint = _planet->closestIntersection(_camera0.getPosition(), ray).asMutableVector3D();
   _currentGesture = Drag; //Dragging
 }
@@ -86,6 +90,34 @@ void CameraRenderer::makeDrag(const TouchEvent& touchEvent) {
   }
 }
 
+void CameraRenderer::makeZoom(const TouchEvent& touchEvent) {
+  if (!_initialPoint.isNan()) {
+    
+    // compute mid 3D point between both fingers
+    MutableVector2D pixel0 = touchEvent.getTouch(0)->getPos().asMutableVector2D();
+    Vector3D ray0 = _camera0.pixel2Ray(pixel0.asVector2D());
+    Vector3D P0 = _planet->closestIntersection(_camera0.getPosition(), ray0);
+    MutableVector2D pixel1 = touchEvent.getTouch(1)->getPos().asMutableVector2D();
+    Vector3D ray1 = _camera0.pixel2Ray(pixel1.asVector2D());
+    Vector3D P1 = _planet->closestIntersection(_camera0.getPosition(), ray1);
+    Geodetic2D g = _planet->getMidPoint(_planet->toGeodetic2D(P0), _planet->toGeodetic2D(P1));
+    Vector3D finalPoint = _planet->toVector3D(g);
+    
+    // compute 3D point of view center
+    MutableVector2D centerPixel(_camera->getWidth()*0.5, _camera->getHeight()*0.5);
+    Vector3D centerRay = _camera0.pixel2Ray(centerPixel.asVector2D());
+    Vector3D centerP = _planet->closestIntersection(_camera0.getPosition(), centerRay);
+    
+    if (finalPoint.isNan()) {
+      printf ("**** ZOOM: final point is nan\n");
+      return;
+    }
+    _camera->copyFrom(_camera0);
+    _camera->dragCameraWith2Fingers(_initialPoint.asVector3D(), centerP, finalPoint);
+  }
+}
+
+/*
 void CameraRenderer::makeZoom(const TouchEvent& touchEvent) {
   const Vector2D pixel0 = touchEvent.getTouch(0)->getPos();
   const Vector2D pixel1 = touchEvent.getTouch(1)->getPos();
@@ -120,8 +152,10 @@ void CameraRenderer::makeZoom(const TouchEvent& touchEvent) {
     }
   }
 }
+*/
 
-Gesture CameraRenderer::getGesture(const TouchEvent& touchEvent) const {
+
+Gesture CameraRenderer::getGesture(const TouchEvent& touchEvent) {
   int n = touchEvent.getNumTouch();
   if (n == 1) {
     //Dragging
@@ -135,7 +169,23 @@ Gesture CameraRenderer::getGesture(const TouchEvent& touchEvent) const {
   
   if (n== 2){
     
-    //If the gesture is set we don't have to change it
+    // if it's the first movement, init zoom with the middle 3D point
+    if (_currentGesture != Zoom) {
+      MutableVector2D pixel0 = touchEvent.getTouch(0)->getPos().asMutableVector2D();
+      Vector3D ray0 = _camera0.pixel2Ray(pixel0.asVector2D());
+      Vector3D P0 = _planet->closestIntersection(_camera0.getPosition(), ray0);
+      MutableVector2D pixel1 = touchEvent.getTouch(1)->getPos().asMutableVector2D();
+      Vector3D ray1 = _camera0.pixel2Ray(pixel1.asVector2D());
+      Vector3D P1 = _planet->closestIntersection(_camera0.getPosition(), ray1);
+      Geodetic2D g = _planet->getMidPoint(_planet->toGeodetic2D(P0), _planet->toGeodetic2D(P1));
+      _initialPoint = _planet->toVector3D(g).asMutableVector3D();
+      //printf ("starting zoom with initial point %f %f %f \n", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());      
+    }
+    return Zoom;
+    
+    
+    
+/*    //If the gesture is set we don't have to change it
     if (_currentGesture == Zoom) return Zoom;
     if (_currentGesture == Rotate) return Rotate;
     
@@ -157,7 +207,7 @@ Gesture CameraRenderer::getGesture(const TouchEvent& touchEvent) const {
       //If fingers are diverging it is zoom
       return Zoom;
     }
-    
+    */
   }
   return None;
 }

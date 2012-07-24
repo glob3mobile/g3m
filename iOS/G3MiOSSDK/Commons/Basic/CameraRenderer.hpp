@@ -41,13 +41,14 @@ private:
   void onMove(const TouchEvent& touchEvent);
   void onUp(const TouchEvent& touchEvent);
   
-  Gesture getGesture(const TouchEvent& touchEvent) const;
+  Gesture getGesture(const TouchEvent& touchEvent);
   
   void makeDrag(const TouchEvent& touchEvent);
   void makeZoom(const TouchEvent& touchEvent);
   void makeRotate(const TouchEvent& touchEvent);
   
   Vector3D centerOfViewOnPlanet(const Camera& c) const;
+  
   
 public:
   
