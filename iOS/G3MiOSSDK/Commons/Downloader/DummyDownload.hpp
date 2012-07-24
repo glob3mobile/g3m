@@ -58,7 +58,7 @@ public:
         if (_fss->contains(filename.c_str())){
           ByteBuffer bb = _fss->getByteBuffer(filename.c_str());
           std::string resp = (char*)bb.getData();
-          printf("\nFileName: %s;\nData: %s;\nDataLength:%i;\n\n",(root+filename).c_str(), resp.c_str(), bb.getDataLength());
+          printf("\nFileName: %s;\nData: %s;\nDataLength:%i;\n\n",(root+filename).c_str(), resp.c_str(), bb.getLength());
           fssAux->save(("_(1)" + filename).c_str(), bb);
         }else{  
           ByteBuffer bb = fssAux->getByteBuffer(filename);

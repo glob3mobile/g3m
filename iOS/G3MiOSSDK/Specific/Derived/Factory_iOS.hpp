@@ -46,7 +46,7 @@ public:
   
   virtual IImage* createImageFromData(const ByteBuffer& bb) const {
     
-    NSData* data = [NSData dataWithBytes:bb.getData() length:bb.getDataLength()];
+    NSData* data = [NSData dataWithBytes:bb.getData() length:bb.getLength()];
     
     UIImage* image = [UIImage imageWithData:data];
     if (!image) {

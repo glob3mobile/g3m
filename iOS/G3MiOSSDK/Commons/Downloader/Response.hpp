@@ -11,25 +11,53 @@
 
 #include "ByteBuffer.hpp"
 
-class Url{
+class Url {
   const std::string _path;
+
+  Url& operator=(const Url& that);
+
 public:  
-  Url(): _path(""){};
-  Url(std::string f): _path(f){};
-  std::string getPath() const{ return _path;}
+  Url():
+  _path("")
+  {
+  };
+  
+  Url(std::string f):
+  _path(f)
+  {
+  };
+  
+  std::string getPath() const {
+    return _path;
+  }
 };
 
-class Response{
+
+class Response {
 private:
-  const Url _url;
-  const ByteBuffer *_data;
+  const Url         _url;
+  const ByteBuffer* _data;
+  
+  Response& operator=(const Response& that);
+
+  Response(const Response& that);
   
 public:
   
-  Response(std::string url, ByteBuffer* data): _url(url), _data(data){}
+  Response(std::string url, ByteBuffer* data):
+  _url(url),
+  _data(data)
+  {
+  }
   
-  Url getURL() const{ return _url;}
-  const ByteBuffer* getByteBuffer() const{ return _data;}
+  Url getURL() const {
+    return _url;
+  }
+  
+  const ByteBuffer* getByteBuffer() const {
+    return _data;
+  }
+  
 };
 
 #endif

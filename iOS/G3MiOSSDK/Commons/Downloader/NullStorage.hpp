@@ -14,11 +14,18 @@
 class NullStorage: public IStorage
 {
 public:
-  bool contains(std::string url){ return false;}
+  bool contains(const std::string url) {
+    return false;
+  }
   
-  void save(std::string url, const ByteBuffer& bb){};
+  void save(const std::string url,
+            const ByteBuffer& bb) {
+  };
   
-  ByteBuffer getByteBuffer(std::string url){ ByteBuffer bb(NULL,0); return bb;}
+  ByteBuffer getByteBuffer(const std::string url){
+    ByteBuffer bb(NULL,0);
+    return bb;
+  }
 };
 
 

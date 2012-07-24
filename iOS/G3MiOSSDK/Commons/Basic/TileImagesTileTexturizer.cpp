@@ -258,5 +258,7 @@ bool TileImagesTileTexturizer::isReadyToRender(const RenderContext *rc) {
 Rectangle TileImagesTileTexturizer::getImageRectangleInTexture(const Sector& wholeSector, 
                                      const Sector& imageSector) const
 {
-  
+  int _job_for_JM;
+  Rectangle r(0,0,0,0);
+  return r;
 }
