@@ -70,9 +70,13 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
                                const TileTessellator *tessellator,
                                TileTexturizer *texturizer,
                                const TileParameters* parameters,
-                               ITimer* timer) {
-  
+                               ITimer* timer,
+                               TilesStatistics* statistics) {
   if (_level >= parameters->_maxLevel) {
+    return true;
+  }
+
+  if (statistics->getSplitsCountInFrame() > 1) {
     return true;
   }
   
@@ -177,27 +181,24 @@ void Tile::render(const RenderContext* rc,
                   const TileParameters* parameters,
                   TilesStatistics* statistics,
                   std::vector<Tile*>* toVisitInNextIteration,
-                  ITimer* timer,
-                  bool justCreated) {
+                  ITimer* timer) {
   if (isVisible(rc, tessellator)) {
-    if ( //justCreated                              ||
-        statistics->getSplitsCountInFrame() > 1  ||
-        meetsRenderCriteria(rc, tessellator, texturizer, parameters, timer)) {
+    if (meetsRenderCriteria(rc, tessellator, texturizer, parameters, timer, statistics)) {
       rawRender(rc, tessellator, texturizer, timer);
       if (parameters->_renderDebug) {
         debugRender(rc, tessellator);
       }
       
-      prune(texturizer);
-      
       statistics->computeTileRender(this);
+      
+      prune(texturizer);
     }
     else {
       std::vector<Tile*>* subTiles = getSubTiles();
       const int subTilesSize = subTiles->size();
       for (int i = 0; i < subTilesSize; i++) {
         Tile* subTile = subTiles->at(i);
-//        subTile->render(rc, tessellator, texturizer, parameters, statistics, toVisitInNextIteration, timer, _justCreatedSubtiles);
+        // subTile->render(rc, tessellator, texturizer, parameters, statistics, toVisitInNextIteration, timer);
         toVisitInNextIteration->push_back(subTile);
       }
       if (_justCreatedSubtiles) {

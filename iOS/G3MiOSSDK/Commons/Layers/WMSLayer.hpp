@@ -46,7 +46,7 @@ public:
     return _bbox.fullContains(s);
   }
   
-  std::vector<Petition> getTilePetitions(const Tile& tile, int width, int height) const;
+  std::vector<Petition*> getTilePetitions(const Tile& tile, int width, int height) const;
   
 };
 

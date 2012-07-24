@@ -23,6 +23,11 @@ private:
   Angle(const double degrees) : _degrees(degrees) {  }
   
 public:
+  static Angle lerp(const Angle& start,
+                    const Angle& end,
+                    float percent) {
+    return start.add(end.sub(start).times(percent));
+  }
   
   static Angle fromDegrees(const double degrees) {
     return Angle(degrees);
@@ -104,12 +109,9 @@ public:
   Angle clampedTo(const Angle& min,
                   const Angle& max) const;  
   
-  Angle average(const double t, const Angle& a) const;
-    
   bool isBetween(const Angle& min,
                  const Angle& max) const;
   
 };
-
 
 #endif

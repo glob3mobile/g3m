@@ -11,12 +11,18 @@
 
 #include "IImage.hpp"
 #include "IGL.hpp"
+#include "IFactory.hpp"
 #include <vector>
 
 class TextureBuilder
 {
 public:
   virtual int createTextureFromImages(IGL * gl, const std::vector<const IImage*>& vImages, int width, int height) const = 0;
+  
+  virtual int createTextureFromImages(IGL * gl, const IFactory* factory,
+                              const std::vector<const IImage*>& vImages, 
+                              const std::vector<Rectangle>& vRectangles, 
+                              int width, int height) const = 0;
 };
 
 

@@ -15,8 +15,7 @@ bool Sector::contains(const Geodetic2D &position) const {
   return position.isBetween(_lower, _upper);
 }
 
-bool Sector::fullContains(const Sector &s) const
-{
+bool Sector::fullContains(const Sector &s) const {
   return contains(s.upper()) && contains(s.lower());
 }
 
@@ -40,10 +39,9 @@ bool Sector::touchesWith(const Sector &that) const {
 
 // (u,v) are similar to texture coordinates inside the Sector
 // (u,v)=(0,0) in NW point, and (1,1) in SE point
-Geodetic2D Sector::getInnerPoint(double u, double v) const 
-{
-  const Angle lat = _lower.latitude().average(1-v, _upper.latitude());
-  const Angle lon = _lower.longitude().average(u, _upper.longitude());
+Geodetic2D Sector::getInnerPoint(double u, double v) const {
+  const Angle lat = Angle::lerp(_lower.latitude(),  _upper.latitude(), 1-v);
+  const Angle lon = Angle::lerp(_lower.longitude(), _upper.longitude(), u);
   return Geodetic2D(lat, lon);
 }
 
@@ -51,10 +49,19 @@ bool Sector::isBackOriented(const RenderContext *rc) const {
   const Vector3D cameraPosition = rc->getCamera()->getPosition();
   const Planet*  planet         = rc->getPlanet();
   
-  const Geodetic2D corners[5] = { getNE(), getNW(), getSW(), getSE(), getCenter() };
+  const Geodetic2D corners[5] = { 
+    getNE(),
+    getNW(),
+    getSW(),
+    getSE(),
+    getCenter()
+  };
+  
   for (unsigned int i = 0; i < 5; i++) {
-    const Vector3D normal = planet->geodeticSurfaceNormal(corners[i]);
-    const Vector3D view   = cameraPosition.sub(planet->toVector3D(corners[i]));
+    const Geodetic2D corner = corners[i];
+    
+    const Vector3D normal = planet->geodeticSurfaceNormal(corner);
+    const Vector3D view   = cameraPosition.sub(planet->toVector3D(corner));
     
     const double dot = normal.dot(view);
     if (dot > 0) {
@@ -63,4 +70,15 @@ bool Sector::isBackOriented(const RenderContext *rc) const {
   }
   
   return true;
+}
+
+Sector Sector::intersection(const Sector& s) const{
+  double lowerLat;
+  if (lower().latitude().degrees() > s.lower().latitude().degrees()){
+    lowerLat = lower().latitude().degrees();
+  } else{
+    lowerLat = s.lower().latitude().degrees();
+  }
+  int todo_JM;
+  return Sector::fullSphere();
 }

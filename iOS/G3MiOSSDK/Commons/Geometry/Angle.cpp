@@ -22,12 +22,7 @@ Angle Angle::clampedTo(const Angle& min,
   return *this;
 }
 
-Angle Angle::average(const double t, const Angle& a) const {
-  const Angle dif = a.sub(*this);
-  return this->add(dif.times(t));
-}
-
 bool Angle::isBetween(const Angle& min,
                       const Angle& max) const {
-  return (_degrees + ISBETWEEN_THRESHOLD>= min._degrees) && (_degrees - ISBETWEEN_THRESHOLD<= max._degrees);
+  return (_degrees + ISBETWEEN_THRESHOLD >= min._degrees) && (_degrees - ISBETWEEN_THRESHOLD <= max._degrees);
 }

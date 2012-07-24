@@ -19,9 +19,11 @@ public:
   
   FileSystemStorage(const std::string& root);
   
-  bool contains(std::string url);
-  void save(std::string url, const ByteBuffer& bb);
-  ByteBuffer getByteBuffer(std::string url);
+  bool contains(const std::string url);
+  void save(const std::string url,
+            const ByteBuffer& bb);
+  
+  ByteBuffer getByteBuffer(const std::string url);
 };
 
 #endif
