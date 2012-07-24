@@ -24,7 +24,7 @@ public:
     const unsigned int l = bb._dataLength;
     _data = new unsigned char[l];
     
-//    for(int i = 0; i < l; i++){ 
+//    for(int i = 0; i < l; i++) {
 //      _data[i] = bb._data[i];
 //    }
     memcpy(_data, bb._data, l * sizeof(unsigned char));

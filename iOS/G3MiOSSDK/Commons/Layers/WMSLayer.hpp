@@ -11,7 +11,7 @@
 
 #include "Layer.hpp"
 
-class WMSLayer: public Layer{
+class WMSLayer: public Layer {
   
   const std::string   _name;
   const std::string   _format;
@@ -25,8 +25,13 @@ class WMSLayer: public Layer{
   
 public:
   
-  WMSLayer(const std::string& name, const std::string& serverURL, const std::string& serverVer, 
-           const std::string& format, const Sector& bbox, const std::string srs, const std::string& style):
+  WMSLayer(const std::string& name,
+           const std::string& serverURL,
+           const std::string& serverVer, 
+           const std::string& format,
+           const Sector& bbox,
+           const std::string srs,
+           const std::string& style):
   _name(name),
   _format(format),
   _style(style),
@@ -37,7 +42,7 @@ public:
   {
   }
   
-  bool fullContains(const Sector& s) const{
+  bool fullContains(const Sector& s) const {
     return _bbox.fullContains(s);
   }
   
