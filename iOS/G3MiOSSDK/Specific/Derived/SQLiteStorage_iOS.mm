@@ -61,7 +61,7 @@ void SQLiteStorage_iOS::save(std::string filename, const ByteBuffer& bb){
         sprintf(consulta, "INSERT INTO %s (filename, file) VALUES (@filename, @file);", _table.c_str());
         if (sqlite3_prepare_v2(db, consulta, -1, &ppStmt, NULL) == SQLITE_OK) {
             sqlite3_bind_text(ppStmt, sqlite3_bind_parameter_index(ppStmt, "@filename"), filename.c_str(), -1, SQLITE_TRANSIENT);
-            sqlite3_bind_blob(ppStmt, sqlite3_bind_parameter_index(ppStmt, "@file"), bb.getData(), bb.getDataLength(), SQLITE_TRANSIENT);
+            sqlite3_bind_blob(ppStmt, sqlite3_bind_parameter_index(ppStmt, "@file"), bb.getData(), bb.getLength(), SQLITE_TRANSIENT);
             //sqlite3_step(ppStmt);
             if(SQLITE_DONE != sqlite3_step(ppStmt)) {
                 NSLog(@"Error: %s ", sqlite3_errmsg(db));

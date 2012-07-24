@@ -24,7 +24,7 @@ void FileSystemStorage::save(std::string url, const ByteBuffer& bb){
   
   NSString *fullPath = generateFileName(url); 	
   NSFileManager *fm = [NSFileManager defaultManager];
-  NSData *writeData = [[NSData alloc] initWithBytes: bb.getData() length:bb.getDataLength()];
+  NSData *writeData = [[NSData alloc] initWithBytes: bb.getData() length:bb.getLength()];
   
   if (![fm createFileAtPath:fullPath contents:writeData attributes:nil])
   {

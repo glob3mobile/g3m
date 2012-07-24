@@ -9,28 +9,26 @@
 #ifndef G3MiOSSDK_ByteBuffer_hpp
 #define G3MiOSSDK_ByteBuffer_hpp
 
-//THIS CLASS RECEIVES A REFERENCE TO A BYTE ARRAY PREVIOUSLY ALLOCATED
-//TO DELETE THE ARRAY CALL release()
 class ByteBuffer{
-  unsigned char*    _data;
-  const int _dataLength;
+  unsigned char* _data;
+  const int      _length;
   
 public:
   ByteBuffer(unsigned char* const data,
              int dataLength) :
   _data(data),
-  _dataLength(dataLength)
+  _length(dataLength)
   {
   };
 
   ByteBuffer(const ByteBuffer& bb) :
-  _dataLength(bb._dataLength),
-  _data(new unsigned char[bb._dataLength])
+  _length(bb._length),
+  _data(new unsigned char[bb._length])
   {
     //    for(int i = 0; i < l; i++) {
     //      _data[i] = bb._data[i];
     //    }
-    memcpy(_data, bb._data, _dataLength * sizeof(unsigned char));
+    memcpy(_data, bb._data, _length * sizeof(unsigned char));
   };
   
   ~ByteBuffer(){
@@ -43,8 +41,8 @@ public:
     return _data;
   }
   
-  int getDataLength() const{
-    return _dataLength;
+  int getLength() const{
+    return _length;
   }
   
 };
