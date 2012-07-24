@@ -8,9 +8,11 @@
 
 #include "WMSLayer.hpp"
 
-std::string WMSLayer::getRequest(const Sector& sector, int width, int height) const
+std::vector<Petition> WMSLayer::getTilePetitions(const Tile& tile, int width, int height) const
 {
-  if (!_bbox.fullContains(sector)) return "COOR. ERROR";
+  std::vector<Petition> vPetitions;
+  
+  if (!_bbox.fullContains(tile.getSector())) return vPetitions;
 
 	//Server name
   std::string req = _serverURL;
@@ -54,7 +56,9 @@ std::string WMSLayer::getRequest(const Sector& sector, int width, int height) co
 
 	//Texture Size and BBOX
   char buffer[100];
-  sprintf(buffer, "&WIDTH=%d&HEIGHT=%d&BBOX=%f,%f,%f,%f", width, height, sector.lower().longitude().degrees(), 
+  Sector sector = tile.getSector();
+  sprintf(buffer, "&WIDTH=%d&HEIGHT=%d&BBOX=%f,%f,%f,%f", width, height, 
+          sector.lower().longitude().degrees(), 
           sector.lower().latitude().degrees(), 
           sector.upper().longitude().degrees(), 
           sector.upper().latitude().degrees());
@@ -65,5 +69,9 @@ std::string WMSLayer::getRequest(const Sector& sector, int width, int height) co
     req += "&CRS=EPSG:4326";
   }
   
-	return req;
+  
+  Petition pet(sector, req);
+  vPetitions.push_back(pet);
+  
+	return vPetitions;
 }

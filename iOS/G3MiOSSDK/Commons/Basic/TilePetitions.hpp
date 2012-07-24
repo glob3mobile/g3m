@@ -40,6 +40,7 @@ public:
   ~Petition(){ if (_bb != NULL) delete _bb;}
   
   std::string getURL() const { return _url;}
+  Sector getSector() const { return Sector::fromDegrees(_minLat, _minLon, _maxLat, _maxLon);}
   
   bool isArrived() const{ return _bb != NULL;}
   void setByteBuffer(ByteBuffer* bb) { _bb = bb;}
@@ -97,6 +98,12 @@ public:
   void add(const std::string& url, const Sector& s){
     Petition p(s, url);
     _petitions.push_back(p);
+  }
+  
+  void add(const std::vector<Petition>& pet){
+    for (int i = 0; i < pet.size(); i++) {
+      add(pet[i].getURL(), pet[i].getSector());
+    }
   }
   
   std::string getPetitionsID() const;

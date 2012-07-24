@@ -31,7 +31,7 @@ public:
     _layers.push_back(l);
   }
   
-  TilePetitions* createTilePetitions(const Tile* tile, int width, int height) const;
+  TilePetitions* createTilePetitions(const Tile& tile, int width, int height) const;
   
   
 };

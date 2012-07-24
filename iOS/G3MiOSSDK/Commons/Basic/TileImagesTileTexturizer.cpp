@@ -18,7 +18,7 @@
 
 
 TilePetitions* TileImagesTileTexturizer::getTilePetitions(const Tile* tile) {  
-  TilePetitions *tt = _layerSet->createTilePetitions(tile, 
+  TilePetitions *tt = _layerSet->createTilePetitions(*tile, 
                                                      _parameters->_tileTextureWidth, 
                                                      _parameters->_tileTextureHeight);
   

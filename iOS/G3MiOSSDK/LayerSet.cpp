@@ -8,19 +8,17 @@
 
 #include "LayerSet.hpp"
 
-TilePetitions* LayerSet::createTilePetitions(const Tile* tile, int width, int height) const
+TilePetitions* LayerSet::createTilePetitions(const Tile& tile, int width, int height) const
 {
-  TilePetitions *tt = new TilePetitions(tile->getLevel(), tile->getRow(), tile->getColumn(), NULL);
+  TilePetitions *tt = new TilePetitions(tile.getLevel(), tile.getRow(), tile.getColumn(), NULL);
   
   for (int i = 0; i < _layers.size(); i++) {
     Layer* layer = _layers[i];
     
-    if (layer->fullContains(tile->getSector())){
-      std::string url = layer->getRequest(tile->getSector(), 
-                                           width, 
-                                           height);
+    if (layer->fullContains(tile.getSector())){
+      std::vector<Petition> pet = layer->getTilePetitions(tile, width, height);
       
-      tt->add(url, tile->getSector());
+      tt->add(pet);
     }
   }
   return tt;
