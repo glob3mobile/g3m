@@ -413,53 +413,55 @@
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
   UITouch *touch = [touches anyObject];
+  
   CGPoint current  = [touch locationInView:self];
   CGPoint previous = [touch previousLocationInView:self];
   
-  //TOUCH EVENT
-  TouchEvent te( TouchEvent::create(Down,
-                                    new Touch(Vector2D(current.x, current.y),
-                                              Vector2D(previous.x, previous.y))) );
+  TouchEvent* te = TouchEvent::create(Down,
+                                      new Touch(Vector2D(current.x, current.y),
+                                                Vector2D(previous.x, previous.y)));
   
-  ((G3MWidget*)[self widget])->onTouchEvent(&te);
+  ((G3MWidget*)[self widget])->onTouchEvent(te);
+  
+  delete te;
 }
-
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-  NSArray *allTouches = [[event allTouches] allObjects];
-  NSUInteger pointersCount = [allTouches count];
+  NSSet *allTouches = [event allTouches];
   
   std::vector<const Touch*> pointers = std::vector<const Touch*>();
+ // pointers.reserve([allTouches count]);
   
-  for (int i = 0; i < pointersCount; i++) {
-    UITouch *touch = [allTouches objectAtIndex: i];
-    
-    CGPoint previous = [touch previousLocationInView:self];
+  NSEnumerator *enumerator = [allTouches objectEnumerator];
+  UITouch *touch = nil;
+  while ((touch = [enumerator nextObject])) {
     CGPoint current  = [touch locationInView:self];
-    Touch *to = new Touch(Vector2D(current.x, current.y), 
-                          Vector2D(previous.x, previous.y));
+    CGPoint previous = [touch previousLocationInView:self];
     
-    pointers.push_back(to);
+    Touch *touch = new Touch(Vector2D(current.x, current.y), 
+                             Vector2D(previous.x, previous.y));
+    
+    pointers.push_back(touch);
   }
   
-  //TOUCH EVENT
-  TouchEvent te( TouchEvent::create(Move, pointers) );
-  
-  ((G3MWidget*)[self widget])->onTouchEvent(&te);
+  TouchEvent* te = TouchEvent::create(Move, pointers);
+  ((G3MWidget*)[self widget])->onTouchEvent(te);
+  delete te;
 }
-
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
   UITouch *touch = [touches anyObject];
+  
   CGPoint current = [touch locationInView:self];
   CGPoint previous = [touch previousLocationInView:self];
   
-  //TOUCH EVENT
-  TouchEvent te( TouchEvent::create(Up,
-                                    new Touch(Vector2D(current.x, current.y), 
-                                              Vector2D(previous.x, previous.y))) );
+  TouchEvent* te = TouchEvent::create(Up,
+                                      new Touch(Vector2D(current.x, current.y), 
+                                                Vector2D(previous.x, previous.y)));
   
-  ((G3MWidget*)[self widget])->onTouchEvent(&te);
+  ((G3MWidget*)[self widget])->onTouchEvent(te);
+  
+  delete te;
 }
 
 - (void)dealloc {
