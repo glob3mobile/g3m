@@ -24,18 +24,11 @@ void TilePetitions::onDownload(const Response &response)
       _petitions[j]->setByteBuffer(bb);
     }
   }
-  
-  if (_texturizer != NULL && allFinished()) {
-    _texturizer->onTilePetitionsFinished(this);
-  }
-  
-  tryToDeleteMyself();
 }
 
 
 void TilePetitions::onError(const Response& e) {
   _errorsCounter++;
-  tryToDeleteMyself();
 }
 
 bool TilePetitions::allFinished() const {
@@ -49,7 +42,6 @@ bool TilePetitions::allFinished() const {
 
 void TilePetitions::onCancel(const std::string& url){
   _errorsCounter++;
-  tryToDeleteMyself();
 }
 
 std::string TilePetitions::getPetitionsID() const
@@ -63,3 +55,62 @@ std::string TilePetitions::getPetitionsID() const
   }
   return id;
 }
+
+void TilePetitions::requestToNet(Downloader& downloader, int priority)
+{
+  for (int i = 0; i < getNumPetitions(); i++) {
+    Petition* pet = getPetition(i);
+    const std::string& url = pet->getURL();
+    long id = downloader.request(url, priority, this);
+    pet->setDownloadID(id);
+  }
+}
+
+void TilePetitions::requestToCache(Downloader& downloader)
+{
+  for (int i = 0; i < getNumPetitions(); i++) {
+    Petition* pet = getPetition(i);
+    const std::string& url = pet->getURL();
+    ByteBuffer* bb = downloader.getByteBufferFromCache(url);
+    if (bb != NULL){
+      pet->setByteBuffer(bb);
+    }
+  }
+}
+
+void TilePetitions::cancelPetitions(Downloader& downloader)
+{
+  for (int i = 0; i < _petitions.size(); i++) {
+    long id = _petitions[i]->getDownloadID();
+    if (id > -1) downloader.cancelRequest(id);
+  }
+}
+
+void TilePetitions::createTexture(TexturesHandler* texHandler, const IFactory* factory, int width, int height)
+{
+  if (allFinished())
+  {
+    //Creating images (opaque one must be the first)
+    std::vector<const IImage*> images;
+    for (int i = 0; i < getNumPetitions(); i++) {
+      const ByteBuffer* bb = getPetition(i)->getByteBuffer();
+      IImage *im = factory->createImageFromData(*bb);
+      if (im != NULL) {
+        images.push_back(im);
+      }
+    }
+    
+    //Creating the texture
+    const std::string& url = getPetitionsID();  
+    _texID = texHandler->getTextureId(images, url, width, height);
+    
+    //RELEASING MEMORY
+    for (int i = 0; i < _petitions.size(); i++) {
+      _petitions[i]->releaseData();
+    }
+    for (int i = 0; i < images.size(); i++) {
+      factory->deleteImage(images[i]);
+    }
+  }
+}
+

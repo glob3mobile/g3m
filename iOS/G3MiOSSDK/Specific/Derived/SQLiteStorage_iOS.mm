@@ -76,14 +76,14 @@ void SQLiteStorage_iOS::save(std::string filename, const ByteBuffer& bb){
     sqlite3_close(db);
 }
 
-ByteBuffer SQLiteStorage_iOS::getByteBuffer(std::string filename)
+ByteBuffer* SQLiteStorage_iOS::getByteBuffer(std::string filename)
 {
     return SQLiteStorage_iOS::findFileFromFileName(filename);
 }
 
 
 
-ByteBuffer SQLiteStorage_iOS::findFileFromFileName(const std::string filename) {
+ByteBuffer* SQLiteStorage_iOS::findFileFromFileName(const std::string filename) {
     unsigned char *raw = NULL, *myRaw = NULL;
     int rawLen = 0;
     sqlite3 *db;
@@ -111,7 +111,7 @@ ByteBuffer SQLiteStorage_iOS::findFileFromFileName(const std::string filename) {
     }
     sqlite3_exec(db, "COMMIT", NULL, NULL, NULL);
     sqlite3_close(db);
-    ByteBuffer bb(myRaw, rawLen);
+    ByteBuffer *bb = new ByteBuffer(myRaw, rawLen);
     return bb;
 }
 

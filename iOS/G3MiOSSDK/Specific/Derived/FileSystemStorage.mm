@@ -38,13 +38,13 @@ void FileSystemStorage::save(std::string url, const ByteBuffer& bb){
   }
 }
 
-ByteBuffer FileSystemStorage::getByteBuffer(std::string url)
+ByteBuffer* FileSystemStorage::getByteBuffer(std::string url)
 {
   NSString *file = generateFileName(url);
   NSData *readData = [[NSData alloc] initWithContentsOfFile:file];
   
   if (readData == nil) {
-    return ByteBuffer(NULL, 0);
+    return NULL;
   }
   
   NSUInteger length = [readData length];
@@ -52,7 +52,7 @@ ByteBuffer FileSystemStorage::getByteBuffer(std::string url)
   unsigned char* data = new unsigned char[length];
   [readData getBytes:data length:length ];
   
-  return ByteBuffer(data, length);
+  return new ByteBuffer(data, length);
 }
 
 

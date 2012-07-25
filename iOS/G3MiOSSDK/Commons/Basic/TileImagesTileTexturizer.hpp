@@ -28,14 +28,6 @@
 class TilePetitions;
 class WMSLayer;
 
-struct RequestedTile{
-  int   _level;
-  int   _row;
-  int   _column;
-  int   _texID;  //-1 means no response yet
-  std::vector<long> _downloads;
-};
-
 class TileImagesTileTexturizer : public TileTexturizer {
 private:
   
@@ -43,7 +35,7 @@ private:
   TexturesHandler* _texHandler;
   Downloader * _downloader;
   
-  std::vector<RequestedTile> _requestedTiles;
+  std::vector<TilePetitions*> _tilePetitions;
   const TileParameters *_parameters;
   
   WMSLayer* _layer;
@@ -51,7 +43,7 @@ private:
   
   mutable std::vector<MutableVector2D>* _texCoordsCache;
   
-  TilePetitions* getTilePetitions(const Tile* tile);
+  TilePetitions* createTilePetitions(const Tile* tile);
   
   std::vector<MutableVector2D> getTextureCoordinates(const TileTessellator* tessellator) const;
   
@@ -59,29 +51,10 @@ private:
   
   void registerNewRequest(Tile* tile);
   
-  RequestedTile* getRequestTile(int level, int row, int column){
-    for (int i = 0; i < _requestedTiles.size(); i++) {
-      RequestedTile& ft = _requestedTiles[i];
-      if ((level  == ft._level) &&
-          (row    == ft._row)   &&
-          (column == ft._column)){
-        return &ft;
-      }
-    }
-    return NULL;
-  }
+  int getTexture(Tile* tile);
   
-  bool isTextureAvailable(Tile* tile)
-  {
-    RequestedTile* ft = getRequestTile(tile->getLevel(), tile->getRow(), tile->getColumn());
-    return !(ft == NULL || ft->_texID < 0);
-  }
-  
-  bool isTextureRequested(Tile* tile)
-  {
-    RequestedTile* ft = getRequestTile(tile->getLevel(), tile->getRow(), tile->getColumn());
-    return ft != NULL;
-  }
+  TilePetitions* getRegisteredTilePetitions(Tile* tile) const;
+  void removeRegisteredTilePetitions(Tile* tile);
   
   Mesh* getFallBackTexturedMesh(Tile* tile,
                                 const TileTessellator* tessellator,
@@ -91,13 +64,9 @@ private:
                           const TileTessellator* tessellator,
                           Mesh* mesh);
   
-  Mesh* getMesh(Tile* tile,
-                const TileTessellator* tessellator,
-                Mesh* tessellatorMesh,
-                Mesh* previousMesh);
-  
   Rectangle getImageRectangleInTexture(const Sector& wholeSector, 
-                                       const Sector& imageSector) const;
+                                       const Sector& imageSector,
+                                       int texWidth, int texHeight) const;
   
 public:
   
@@ -123,8 +92,6 @@ public:
                   Mesh* mesh,
                   Mesh* previousMesh,
                   ITimer* timer);
-  
-  void onTilePetitionsFinished(TilePetitions * tp);
   
   void tileToBeDeleted(Tile* tile);
   

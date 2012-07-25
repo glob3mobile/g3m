@@ -187,7 +187,7 @@
     //LAYERS
     LayerSet* layerSet = new LayerSet();
     WMSLayer* layer = new WMSLayer("bmng200405", "http://www.nasa.network.com/wms?", 
-                          "1.3", "image/jpeg", Sector::fullSphere(), "EPSG:4326", "");
+                                   "1.3", "image/jpeg", Sector::fullSphere(), "EPSG:4326", "");
     
 //    WMSLayer *wmsl = new WMSLayer("test:contourGSLA","http://imos2.ersa.edu.au/geo2/test/wms","1.1.1",
 //                                  "image/png",
@@ -197,7 +197,7 @@
     WMSLayer *wmsl = new WMSLayer("VIAS",
                                   "http://idecan2.grafcan.es/ServicioWMS/Callejero",
                                   "1.1.0", "image/gif", 
-                                  Sector::fullSphere(),
+                                  Sector::fromDegrees(22.5,-22.5, 33.75, -11.25),
                                   //Sector::fromDegrees(27.6357, -18.1911, 29.2347, -13.4217),
                                   "EPSG:4326", "");
     

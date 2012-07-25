@@ -26,24 +26,33 @@ class Petition{
   const std::string _url;
   const Sector *_sector;
   ByteBuffer* _bb;
+  long _downloadID;
   
 public:
   
   Petition(Sector s, std::string url): _url(url), 
   _sector(new Sector(s)),
-  _bb(NULL)
+  _bb(NULL),
+  _downloadID(-1)
   {}
   
   ~Petition(){ 
     delete _sector;
+    releaseData();
+  }
+  
+  void releaseData(){ 
     if (_bb != NULL) delete _bb;
+    _bb = NULL;
   }
   
   std::string getURL() const { return _url;}
   Sector getSector() const { return *_sector;}
+  long getDownloadID() const { return _downloadID;}
   
   bool isArrived() const{ return _bb != NULL;}
   void setByteBuffer(ByteBuffer* bb) { _bb = bb;}
+  void setDownloadID(long id){ _downloadID = id;}
   const ByteBuffer* getByteBuffer() const { return _bb;}
 };
 
@@ -54,21 +63,15 @@ class TilePetitions: public IDownloadListener{
   const int    _row;
   const int    _column;
   const Sector _tileSector;
-  
-  TileImagesTileTexturizer* _texturizer;
+
   std::vector<Petition*> _petitions;
+  
+  int _texID;      //TEXTURE ID ONCE IS FINISHED
   
   int _downloadsCounter;
   int _errorsCounter;
   
   TilePetitions(const TilePetitions& that);
-  
-  void tryToDeleteMyself()
-  {
-    if (_downloadsCounter + _errorsCounter == _petitions.size()){
-      delete this;
-    }
-  }
   
 public:
   
@@ -76,16 +79,15 @@ public:
                 const int row,
                 const int column,
                 const Sector sector,
-                const std::vector<Petition*>& petitions,
-                TileImagesTileTexturizer* const texturizer):
+                const std::vector<Petition*>& petitions):
   _level(level),
   _row(row),
   _column(column),
-  _texturizer(texturizer),
   _tileSector(sector),
   _downloadsCounter(0),
   _errorsCounter(0),
-  _petitions(petitions)
+  _petitions(petitions),
+  _texID(-1)
   {
   }
   
@@ -96,10 +98,9 @@ public:
     }
   }
   
-  void notify(TileImagesTileTexturizer* texturizer)
-  {
-    _texturizer = texturizer;
-  }
+  void requestToNet(Downloader& downloader, int priority);
+  void requestToCache(Downloader& downloader);
+  void cancelPetitions(Downloader& downloader);
   
   int getLevel() const {
     return _level;
@@ -116,6 +117,10 @@ public:
   Sector getSector() const{ 
     return _tileSector;
   }
+  
+  void createTexture(TexturesHandler* texHandler, const IFactory* factory, int width, int height);
+  
+  int getTexID() const{ return _texID;}
 
   std::string getPetitionsID() const;
 
