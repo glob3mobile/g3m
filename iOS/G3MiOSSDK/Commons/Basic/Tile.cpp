@@ -86,7 +86,7 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
   
   int __TODO_tune_render_budget;
   if (timer != NULL) {
-    if ( timer->elapsedTime().milliseconds() > 33 ) {
+    if ( timer->elapsedTime().milliseconds() > 20 ) {
       return true;
     }
   }
