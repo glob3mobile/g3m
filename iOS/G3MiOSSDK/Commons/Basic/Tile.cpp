@@ -86,7 +86,7 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
   
   int __TODO_tune_render_budget;
   if (timer != NULL) {
-    if ( timer->elapsedTime().milliseconds() > 20 ) {
+    if ( timer->elapsedTime().milliseconds() > 15 ) {
       return true;
     }
   }
@@ -131,7 +131,7 @@ void Tile::rawRender(const RenderContext *rc,
         int __TODO_tune_render_budget;
 
         if (_texturizerTimer == NULL ||
-            _texturizerTimer->elapsedTime().milliseconds() > 25) {
+            _texturizerTimer->elapsedTime().milliseconds() > 50) {
           
           _texturizerMesh = texturizer->texturize(rc, this, tessellator, tessellatorMesh, _texturizerMesh, timer);
 

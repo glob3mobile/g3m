@@ -209,7 +209,7 @@
       TileParameters* parameters = TileParameters::createDefault(true);
       
       TileTexturizer* texturizer = NULL;
-      if (false) {
+      if (true) {
         texturizer = new TileImagesTileTexturizer(parameters, downloader, layerSet); //WMS
       }
       else {

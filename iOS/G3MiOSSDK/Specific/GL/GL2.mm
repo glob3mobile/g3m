@@ -186,7 +186,7 @@ int GL2::uploadTexture(const IImage* image, int textureWidth, int textureHeight)
                                                colorSpace,
                                                kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
   CGColorSpaceRelease( colorSpace );
-  CGContextClearRect( context, CGRectMake( 0, 0, textureWidth, textureHeight ) );
+  //CGContextClearRect( context, CGRectMake( 0, 0, textureWidth, textureHeight ) );
   //CGContextTranslateCTM( context, 0, textureHeight - textureHeight );
   CGContextDrawImage( context, CGRectMake( 0, 0, textureWidth, textureHeight ), im.CGImage );
   
@@ -241,7 +241,7 @@ void GL2::drawBillBoard(const unsigned int textureId,
     0, 0
   };
   
-  depthTest(false);
+  disableDepthTest();
   
   enableTexture2D();
   glUniform4f(Uniforms.FlatColor, 1.0, 0.0, 0.0, 1);
@@ -252,7 +252,7 @@ void GL2::drawBillBoard(const unsigned int textureId,
   
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
   
-  depthTest(true);
+  enableDepthTest();
   
   glUniform1i(Uniforms.BillBoard, false); //NOT DRAWING BILLBOARD
 }
@@ -362,30 +362,66 @@ void GL2::disableVertexFlatColor() {
   }
 }
 
-void GL2::depthTest(bool b) {
-  if (_depthTest != b) {
-    if (b) {
-      glEnable(GL_DEPTH_TEST);
-    }
-    else {
-      glDisable(GL_DEPTH_TEST);
-    }
-    _depthTest = b;
+void GL2::enableDepthTest() {
+  if (!_enableDepthTest) {
+    glEnable(GL_DEPTH_TEST);
+    _enableDepthTest = true;
   }
 }
 
-void GL2::blend(bool b) {
-  if (_blend != b) {
-    if (b) {
-      glEnable(GL_BLEND);
-    }
-    else {
-      glDisable(GL_BLEND);
-    }
-    _blend = b;
+void GL2::disableDepthTest() {
+  if (_enableDepthTest) {
+    glDisable(GL_DEPTH_TEST);
+    _enableDepthTest = false;
   }
 }
 
+void GL2::enableBlend() {
+  if (!_enableBlend) {
+    glEnable(GL_BLEND);
+    _enableBlend = true;
+  }
+}
+
+void GL2::disableBlend() {
+  if (_enableBlend) {
+    glDisable(GL_BLEND);
+    _enableBlend = false;
+  }
+
+}
+
+void GL2::enableCullFace(CullFace face) {
+  if (!_enableCullFace) {
+    glEnable(GL_CULL_FACE);  
+    _enableCullFace = true;
+  }
+  
+  if (_cullFace_face != face) {
+    switch (face) {
+      case FRONT:
+        glCullFace(GL_FRONT);
+        break;
+      case BACK:
+        glCullFace(GL_BACK);
+        break;
+      case FRONT_AND_BACK:
+        glCullFace(GL_FRONT_AND_BACK);
+        break;
+    }
+    
+    _cullFace_face = face;
+  }
+}
+
+void GL2::disableCullFace() {
+  if (_enableCullFace) {
+    glDisable(GL_CULL_FACE);
+    _enableCullFace = false;
+  }
+}
+
+/*
 void GL2::cullFace(bool b, CullFace face) {
   if (b) {
     glEnable(GL_CULL_FACE);  
@@ -406,3 +442,4 @@ void GL2::cullFace(bool b, CullFace face) {
       break;
   }
 }
+*/
