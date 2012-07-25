@@ -35,6 +35,7 @@ private:
   MutableVector3D _initialPoint;  //Initial point at dragging
   MutableVector3D _initialPixel;  //Initial pixel at start of gesture
   double _initialFingerSeparation;
+  double _initialFingerInclination;
   
   Gesture _currentGesture;        //Gesture the user is making at the moment
   

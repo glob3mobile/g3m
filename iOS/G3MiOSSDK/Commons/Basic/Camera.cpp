@@ -175,7 +175,7 @@ Vector3D Camera::pixel2Ray(const Vector2D& pixel) const {
   if (obj.isNan()) {
     return obj; 
   }
-  
+    
   return obj.sub(_position.asVector3D());
 }
 
@@ -206,33 +206,6 @@ void Camera::dragCamera(const Vector3D& p0, const Vector3D& p1) {
   }
   
   rotateWithAxis(rotationAxis, rotationDelta);
-}
-
-void Camera::dragCameraWith2Fingers(const Vector3D& initialPoint, const Vector3D& centerPoint, const Vector3D& finalPoint, double factor)
-{  
-  int __agustin_at_work;
-
-  // rotate globe from initialPoint to centerPoing
-  {
-    const Vector3D rotationAxis = initialPoint.cross(centerPoint);
-    const Angle rotationDelta = Angle::fromRadians( - acos(initialPoint.normalized().dot(centerPoint.normalized())) );
-    if (rotationDelta.isNan()) return; 
-    rotateWithAxis(rotationAxis, rotationDelta);  
-  }
-  
-  // move the camara 
-  {
-    double distance = getPosition().sub(centerPoint).length();
-    moveForward(distance*(factor-1)/factor);
-  }
-  
-  // rotate globe from centerPoint to finalPoint
-  {
-    const Vector3D rotationAxis = centerPoint.cross(finalPoint);
-    const Angle rotationDelta = Angle::fromRadians( - acos(centerPoint.normalized().dot(finalPoint.normalized())) );
-    if (rotationDelta.isNan()) return; 
-    rotateWithAxis(rotationAxis, rotationDelta);  
-  }
 }
 
 
