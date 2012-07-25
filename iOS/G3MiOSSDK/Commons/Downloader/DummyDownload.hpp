@@ -56,16 +56,18 @@ public:
     {
         printf("\nFileName: %s;", filename.c_str());
         if (_fss->contains(filename.c_str())){
-          ByteBuffer bb = _fss->getByteBuffer(filename.c_str());
-          std::string resp = (char*)bb.getData();
-          printf("\nFileName: %s;\nData: %s;\nDataLength:%i;\n\n",(root+filename).c_str(), resp.c_str(), bb.getLength());
-          fssAux->save(("_(1)" + filename).c_str(), bb);
+          ByteBuffer *bb = _fss->getByteBuffer(filename.c_str());
+          std::string resp = (char*)bb->getData();
+          printf("\nFileName: %s;\nData: %s;\nDataLength:%i;\n\n",(root+filename).c_str(), resp.c_str(), bb->getLength());
+          fssAux->save(("_(1)" + filename).c_str(), *bb);
+          delete bb;
         }else{  
-          ByteBuffer bb = fssAux->getByteBuffer(filename);
-          if(bb.getData() != NULL){
-            fssAux->save(("_withoutsaveinsqlite_" + filename).c_str(), bb);
-            _fss->save(filename, bb); 
+          ByteBuffer *bb = fssAux->getByteBuffer(filename);
+          if(bb->getData() != NULL){
+            fssAux->save(("_withoutsaveinsqlite_" + filename).c_str(), *bb);
+            _fss->save(filename, *bb); 
           }
+          delete bb;
         }
     }
   

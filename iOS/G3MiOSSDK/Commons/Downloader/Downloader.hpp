@@ -72,6 +72,8 @@ private:
 public:
   Downloader(IStorage *storage, unsigned int maxSimultaneous, INetwork * const net);
   
+  ByteBuffer* getByteBufferFromCache(const std::string& urlOfFile) const;
+  
   long request(const std::string& urlOfFile, int priority, IDownloadListener *listener);
   
   void onDownload(const Response& e);

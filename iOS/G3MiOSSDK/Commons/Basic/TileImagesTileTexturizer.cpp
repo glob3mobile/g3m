@@ -17,15 +17,14 @@
 #include "ITimer.hpp"
 
 
-TilePetitions* TileImagesTileTexturizer::getTilePetitions(const Tile* tile) {  
+TilePetitions* TileImagesTileTexturizer::createTilePetitions(const Tile* tile) {  
   std::vector<Petition*> pet = _layerSet->createTilePetitions(*tile, 
-                                                     _parameters->_tileTextureWidth, 
-                                                     _parameters->_tileTextureHeight);
+                                                              _parameters->_tileTextureWidth, 
+                                                              _parameters->_tileTextureHeight);
   
-  TilePetitions* tp = new TilePetitions(tile->getLevel(), tile->getRow(), tile->getColumn(), tile->getSector(), 
-                                        pet, this);
-  
-  
+  TilePetitions* tp = new TilePetitions(tile->getLevel(), tile->getRow(), 
+                                        tile->getColumn(), tile->getSector(), 
+                                        pet);
   return tp;
 }
 
@@ -47,50 +46,40 @@ void TileImagesTileTexturizer::translateAndScaleFallBackTex(Tile* tile,
                                tileSector.getScaleFactor(fallbackTileSector));
 }
 
-Mesh* TileImagesTileTexturizer::getMesh(Tile* tile,
-                                        const TileTessellator* tessellator,
-                                        Mesh* tessellatorMesh,
-                                        Mesh* previousMesh) {
-
-  if (isTextureAvailable(tile)) {
-    return getNewTextureMesh(tile, tessellator, tessellatorMesh);
-  }
-  else {
-    return getFallBackTexturedMesh(tile, tessellator, tessellatorMesh);
-  }
-}
-
 Mesh* TileImagesTileTexturizer::getNewTextureMesh(Tile* tile,
                                                   const TileTessellator* tessellator,
                                                   Mesh* tessellatorMesh) {
-    //THE TEXTURE HAS BEEN LOADED???
-    RequestedTile* ft = getRequestTile(tile->getLevel(), tile->getRow(), tile->getColumn());
-    if (ft != NULL && ft->_texID > -1) { // Texture already solved
-        tile->setTextureSolved(true);
-        TextureMapping * tMap = new TextureMapping(ft->_texID, getTextureCoordinates(tessellator));
-        return new TexturedMesh(tessellatorMesh, false, tMap, true);
-    }
+  //THE TEXTURE HAS BEEN LOADED???
+  int texID = getTexture(tile);
+  if (texID > -1){
+    tile->setTextureSolved(true);
+    TextureMapping * tMap = new TextureMapping(texID, getTextureCoordinates(tessellator));
+    return new TexturedMesh(tessellatorMesh, false, tMap, true);
+  } else{
     return NULL;
+  }
 }
 
 Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
                                                         const TileTessellator* tessellator,
                                                         Mesh* tessellatorMesh) {
   int texID = -1;
-  Tile* fbTile = tile;
+  Tile* fbTile = tile->getParent();
   while (fbTile != NULL && texID < 0) {
-    fbTile = fbTile->getParent();       //TRYING TO CREATE FALLBACK TEXTURE FROM ANTECESOR
     
-    if (fbTile != NULL) {
-      RequestedTile* ft = getRequestTile(fbTile->getLevel(), fbTile->getRow(), fbTile->getColumn());
-      if (ft == NULL) {
-        registerNewRequest(fbTile);
-        ft = getRequestTile(fbTile->getLevel(), fbTile->getRow(), fbTile->getColumn());
-      }
-      if (ft != NULL) {
-        texID = ft->_texID;
-      }
+    TilePetitions* tp = createTilePetitions(fbTile);
+    tp->requestToCache(*_downloader);
+    if (tp->allFinished()){
+      tp->createTexture(_texHandler, _factory, 
+                        _parameters->_tileTextureWidth, _parameters->_tileTextureHeight);
+      texID = tp->getTexID();
     }
+    
+    //We do no store the petitions
+    delete tp;
+    
+    if (texID > -1) break;
+    fbTile = fbTile->getParent();       //TRYING TO CREATE FALLBACK TEXTURE FROM ANTECESOR
   }
   
   //CREATING MESH
@@ -104,26 +93,13 @@ Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
 }
 
 void TileImagesTileTexturizer::registerNewRequest(Tile *tile){
-  //Tile finished
-  RequestedTile ft;
-  ft._column = tile->getColumn();
-  ft._level = tile->getLevel();
-  ft._row = tile->getRow();
-  ft._texID = -1;
   
-  //THROWING THE PETITIONS
-  int priority = tile->getLevel(); //DOWNLOAD PRIORITY SET TO TILE LEVEL
-  TilePetitions *tp = getTilePetitions(tile);
-  
-  _requestedTiles.push_back(ft); //STORED
-  
-  RequestedTile& ft2 = _requestedTiles[ _requestedTiles.size() -1 ]; //GETTING VECTOR INSTANCE
-  for (int i = 0; i < tp->getNumPetitions(); i++) {
-    Petition* pet = tp->getPetition(i);
+  if (getRegisteredTilePetitions(tile) == NULL){ //NOT YET REQUESTED
     
-    const std::string& url = pet->getURL();
-    long id = _downloader->request(url, priority, tp);
-    ft2._downloads.push_back(id);
+    int priority = tile->getLevel(); //DOWNLOAD PRIORITY SET TO TILE LEVEL
+    TilePetitions *tp = createTilePetitions(tile);
+    _tilePetitions.push_back(tp); //STORED
+    tp->requestToNet(*_downloader, priority);
   }
 }
 
@@ -133,20 +109,12 @@ Mesh* TileImagesTileTexturizer::texturize(const RenderContext* rc,
                                           Mesh* tessellatorMesh,
                                           Mesh* previousMesh,
                                           ITimer* timer) {
-  
-  const bool dummy = false;
-  if (dummy){
-    //CHESSBOARD TEXTURE
-    int texID = rc->getTexturesHandler()->getTextureIdFromFileName("NoImage.jpg", _parameters->_tileTextureWidth, _parameters->_tileTextureHeight);
-    if (previousMesh != NULL) delete previousMesh;
-    TextureMapping * tMap = new TextureMapping(texID, getTextureCoordinates(tessellator));
-    return new TexturedMesh(tessellatorMesh, false, tMap, true);
-  }
-  
   //STORING CONTEXT
   _factory    = rc->getFactory();
   _texHandler = rc->getTexturesHandler();
   _downloader = rc->getDownloader();
+  
+  //printf("TP SIZE: %lu\n", _tilePetitions.size());
   
   if (timer != NULL) {
     int __TODO_tune_TEXTURIZER_render_budget;
@@ -154,17 +122,20 @@ Mesh* TileImagesTileTexturizer::texturize(const RenderContext* rc,
       return getFallBackTexturedMesh(tile, tessellator, tessellatorMesh);
     }
   }
-
   
-  
-  if (!isTextureAvailable(tile)) {
-    if (!isTextureRequested(tile)) {
-      //REGISTERING PETITION AND SENDING TO THE NET
-      registerNewRequest(tile);
-    }
+  Mesh* mesh = getNewTextureMesh(tile, tessellator, tessellatorMesh);
+  if (mesh == NULL){
+    //REGISTERING PETITION AND SENDING TO THE NET IF NEEDED
+    registerNewRequest(tile);
+    mesh = getNewTextureMesh(tile, tessellator, tessellatorMesh);
   }
   
-  Mesh *mesh = getMesh(tile, tessellator, tessellatorMesh, previousMesh);
+  //If we can't get a new TexturedMesh we try to get a FallBack Mesh
+  if (mesh == NULL){
+    mesh = getFallBackTexturedMesh(tile, tessellator, tessellatorMesh);
+  }
+  
+  //If a new mesh has been produced we delete the previous one
   if (mesh != NULL && previousMesh != NULL) {
     delete previousMesh;
   }
@@ -172,65 +143,21 @@ Mesh* TileImagesTileTexturizer::texturize(const RenderContext* rc,
   return mesh;
 }
 
-void TileImagesTileTexturizer::onTilePetitionsFinished(TilePetitions * tp)
-{
-  //Tile finished
-  RequestedTile *rt = getRequestTile(tp->getLevel(), tp->getRow(), tp->getColumn());
-  if (rt != NULL) { //If null means the tile is no longer visible
-    
-    //Creating images (opaque one must be the first)
-    std::vector<const IImage*> images;
-    for (int i = 0; i < tp->getNumPetitions(); i++) {
-      const ByteBuffer* bb = tp->getPetition(i)->getByteBuffer();
-      IImage *im = _factory->createImageFromData(*bb);
-      if (im != NULL) {
-        images.push_back(im);
-      }
-    }
-
-    //Creating the texture
-    const std::string& url = tp->getPetitionsID();  
-    int texID = _texHandler->getTextureId(images,
-                                          url, 
-                                          _parameters->_tileTextureWidth,
-                                          _parameters->_tileTextureHeight);
-    
-    //RELEASING MEMORY
-    for (int i = 0; i < images.size(); i++) {
-      _factory->deleteImage(images[i]);
-    }
-
-    //Texture
-    rt->_texID = texID;
-  }
-}
-
 void TileImagesTileTexturizer::tileToBeDeleted(Tile* tile) {
-  int index = -1;
-  for (int i = 0; i < _requestedTiles.size(); i++) {
-    RequestedTile& ft = _requestedTiles[i];
-    if (tile->getLevel() == ft._level &&
-        tile->getRow() == ft._row &&
-        tile->getColumn() == ft._column){
-      index = i;
-      break;
+  
+  TilePetitions* tp = getRegisteredTilePetitions(tile);
+  
+  if (tp != NULL){
+    if (tp->getTexID() > -1){
+      _texHandler->takeTexture(tp->getTexID());
     }
+    
+    tp->cancelPetitions(*_downloader);
+    
+    removeRegisteredTilePetitions(tile);
   }
   
-  if (index > -1){
-    RequestedTile& rt = _requestedTiles[index];
-    //DELETING TEXTURE
-    if (rt._texID > -1) {
-      _texHandler->takeTexture(rt._texID);
-    }
-    
-    //CANCELING PETITIONS
-    for (int i = 0; i < rt._downloads.size(); i++) {
-      _downloader->cancelRequest( rt._downloads[i] );
-    }
-    
-    _requestedTiles.erase( _requestedTiles.begin() + index );
-  }
+  
 }
 
 bool TileImagesTileTexturizer::tileMeetsRenderCriteria(Tile* tile) {
@@ -239,26 +166,75 @@ bool TileImagesTileTexturizer::tileMeetsRenderCriteria(Tile* tile) {
 }
 
 void TileImagesTileTexturizer::justCreatedTopTile(Tile *tile) {
-  
-  TilePetitions *tp = getTilePetitions(tile);
-  
-  for (int i = 0; i < tp->getNumPetitions(); i++) {
-    const std::string& url = tp->getPetition(i)->getURL();
-    _downloader->request(url, 99999, NULL);
-  }
-  
+  registerNewRequest(tile);
 }
 
 bool TileImagesTileTexturizer::isReadyToRender(const RenderContext *rc) {
   int __TODO_check_for_level_0_loaded;
-
+  
   return true;
 }
 
 Rectangle TileImagesTileTexturizer::getImageRectangleInTexture(const Sector& wholeSector, 
-                                     const Sector& imageSector) const
+                                                               const Sector& imageSector,
+                                                               int texWidth, int texHeight) const
 {
-  int _job_for_JM;
-  Rectangle r(0,0,0,0);
+  Vector2D pos = wholeSector.getUVCoordinates(imageSector.lower().latitude(), imageSector.lower().longitude());
+  
+  double width = wholeSector.getDeltaLongitude().degrees() / imageSector.getDeltaLongitude().degrees();
+  double height = wholeSector.getDeltaLatitude().degrees() / imageSector.getDeltaLatitude().degrees();
+  
+  
+  
+  Rectangle r(pos.x() * texWidth, pos.y() * texHeight, width * texWidth, height * texHeight);
   return r;
+}
+
+TilePetitions* TileImagesTileTexturizer::getRegisteredTilePetitions(Tile* tile) const
+{
+  TilePetitions* tp = NULL;
+  for (int i = 0; i < _tilePetitions.size(); i++) {
+    tp = _tilePetitions[i];
+    if (tile->getLevel() == tp->getLevel() &&
+        tile->getRow() == tp->getRow() &&
+        tile->getColumn() == tp->getColumn()){
+      return tp;
+    }
+  }
+  return NULL;
+}
+
+void TileImagesTileTexturizer::removeRegisteredTilePetitions(Tile* tile)
+{
+  TilePetitions* tp = NULL;
+  for (int i = 0; i < _tilePetitions.size(); i++) {
+    tp = _tilePetitions[i];
+    if (tile->getLevel() == tp->getLevel() &&
+        tile->getRow() == tp->getRow() &&
+        tile->getColumn() == tp->getColumn()){
+      _tilePetitions.erase(_tilePetitions.begin() + i);
+      delete tp;
+      break;
+    }
+  }
+}
+
+int TileImagesTileTexturizer::getTexture(Tile* tile)
+{
+  TilePetitions* tp = getRegisteredTilePetitions(tile);
+  
+  if (tp!= NULL) {
+    
+    if (tp->getTexID() > -1){
+      return tp->getTexID();
+    } else{
+      if (tp->allFinished()){
+        tp->createTexture(_texHandler, _factory, 
+                          _parameters->_tileTextureWidth, _parameters->_tileTextureHeight);
+        return tp->getTexID();
+      }
+    }
+  }
+  
+  return -1;
 }

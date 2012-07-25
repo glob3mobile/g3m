@@ -21,7 +21,7 @@ public:
     
     bool contains(const std::string filename);
     void save(const std::string filename, const ByteBuffer& bb);
-    ByteBuffer getByteBuffer(const std::string filename);
+    ByteBuffer* getByteBuffer(const std::string filename);
     
     
 private:
@@ -33,7 +33,7 @@ private:
      If no, then you copy the SQLite file there - to make it writable.
      */
     virtual void createEditableCopyOfDatabaseIfNeeded();
-    virtual ByteBuffer findFileFromFileName(const std::string filename);
+    virtual ByteBuffer* findFileFromFileName(const std::string filename);
     virtual void testConnection() const;
     virtual bool checkDataBaseConnection() const;
     virtual bool checkTableExist() const;
