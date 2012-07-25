@@ -31,7 +31,7 @@ int CameraRenderer::render(const RenderContext* rc) {
   _camera->render(*rc);
   
   // TEMP TO DRAW A POINT WHERE USER PRESS
-  if (false) if (_currentGesture==Zoom) {
+  if (true) if (_currentGesture==Zoom) {
     float vertices[] = { 0,0,0};
     unsigned int indices[] = {0,1};
     gl->enableVerticesPosition();
@@ -96,28 +96,111 @@ void CameraRenderer::makeDoubleDrag(const TouchEvent& touchEvent) {
   
   if (!_initialPoint.isNan()) {
     
-    // compute mid 3D point between both fingers
-    MutableVector2D pixel0 = touchEvent.getTouch(0)->getPos().asMutableVector2D();
+  /*  MutableVector2D pixel0 = touchEvent.getTouch(0)->getPos().asMutableVector2D();
+    MutableVector2D pixel1 = touchEvent.getTouch(1)->getPos().asMutableVector2D();
+    double finalFingerSeparation = pixel1.sub(pixel0).length();
+    double factor = finalFingerSeparation/_initialFingerSeparation;
+
+    
+    // compute mid 3D point between both fingers    
+    double x0 = (pixel0.x()-_camera0.getWidth())*factor+_camera->getWidth();
+    pixel0 = MutableVector2D(x0, pixel0.y());
+
     Vector3D ray0 = _camera0.pixel2Ray(pixel0.asVector2D());
     Vector3D P0 = _planet->closestIntersection(_camera0.getPosition(), ray0);
-    MutableVector2D pixel1 = touchEvent.getTouch(1)->getPos().asMutableVector2D();
+
+    
+    double x1 = (pixel1.x()-_camera0.getWidth())*factor+_camera->getWidth();
+    pixel1 = MutableVector2D(x1, pixel1.y());
+
+    
     Vector3D ray1 = _camera0.pixel2Ray(pixel1.asVector2D());
     Vector3D P1 = _planet->closestIntersection(_camera0.getPosition(), ray1);
+    
     Geodetic2D g = _planet->getMidPoint(_planet->toGeodetic2D(P0), _planet->toGeodetic2D(P1));
-    Vector3D finalPoint = _planet->toVector3D(g);
+    Vector3D finalPoint = _planet->toVector3D(g);*/
+    
+    Vector2D pixel0 = touchEvent.getTouch(0)->getPos();
+    Vector2D pixel1 = touchEvent.getTouch(1)->getPos();
     double finalFingerSeparation = pixel1.sub(pixel0).length();
+    double factor = finalFingerSeparation/_initialFingerSeparation;
+    
+    Vector2D averagePixel = pixel0.add(pixel1).div(2);
+    Vector3D ray = _camera0.pixel2Ray(averagePixel);
+    Vector3D finalPoint = _planet->closestIntersection(_camera0.getPosition(), ray);
+
     
     // compute 3D point of view center
-    MutableVector2D centerPixel(_camera->getWidth()*0.5, _camera->getHeight()*0.5);
-    Vector3D centerRay = _camera0.pixel2Ray(centerPixel.asVector2D());
-    Vector3D centerP = _planet->closestIntersection(_camera0.getPosition(), centerRay);
+    Vector2D centerPixel(_camera->getWidth()*0.5, _camera->getHeight()*0.5);
+    Vector3D centerRay = _camera0.pixel2Ray(centerPixel);
+    Vector3D centerPoint = _planet->closestIntersection(_camera0.getPosition(), centerRay);
     
-    if (finalPoint.isNan()) {
-      printf ("**** ZOOM: final point is nan\n");
-      return;
-    }
     _camera->copyFrom(_camera0);
-    _camera->dragCameraWith2Fingers(_initialPoint.asVector3D(), centerP, finalPoint, finalFingerSeparation/_initialFingerSeparation);
+    //_camera->dragCameraWith2Fingers(_initialPoint.asVector3D(), centerP, finalPoint, finalFingerSeparation/_initialFingerSeparation);
+    
+    Vector3D initialPoint = _initialPoint.asVector3D();
+    
+    // rotate globe from initialPoint to centerPoing
+    {
+      const Vector3D rotationAxis = initialPoint.cross(centerPoint);
+      const Angle rotationDelta = Angle::fromRadians( - acos(initialPoint.normalized().dot(centerPoint.normalized())) );
+      if (rotationDelta.isNan()) return; 
+      _camera->rotateWithAxis(rotationAxis, rotationDelta);  
+    }
+    
+    // move the camara 
+    {
+      double distance = _camera->getPosition().sub(centerPoint).length();
+      _camera->moveForward(distance*(factor-1)/factor);
+    }
+    
+    // detect new final point
+    {
+      _camera->updateModelMatrix();
+      
+      // compute 3D point of view center
+      Vector2D centerPixel(_camera->getWidth()*0.5, _camera->getHeight()*0.5);
+      Vector3D centerRay = _camera->pixel2Ray(centerPixel);
+      Vector3D centerPoint = _planet->closestIntersection(_camera->getPosition(), centerRay);
+      
+      Vector2D averagePixel = pixel0.add(pixel1).div(2);
+      Vector3D ray = _camera->pixel2Ray(averagePixel);
+      Vector3D finalPoint = _planet->closestIntersection(_camera->getPosition(), ray);
+
+     
+      
+ /*     MutableVector2D pixel0 = touchEvent.getTouch(0)->getPos().asMutableVector2D();
+      
+    //  double x0 = (pixel0.x()-_camera0.getWidth())*factor+_camera->getWidth();
+    //  pixel0 = MutableVector2D(x0, pixel0.y());
+      
+      
+      
+      Vector3D ray0 = _camera0.pixel2Ray(pixel0.asVector2D());
+      Vector3D P0 = _planet->closestIntersection(_camera0.getPosition(), ray0);
+      MutableVector2D pixel1 = touchEvent.getTouch(1)->getPos().asMutableVector2D();
+      
+     // double x1 = (pixel1.x()-_camera0.getWidth())*factor+_camera->getWidth();
+     // pixel1 = MutableVector2D(x1, pixel1.y());
+
+      
+      Vector3D ray1 = _camera0.pixel2Ray(pixel1.asVector2D());
+      Vector3D P1 = _planet->closestIntersection(_camera0.getPosition(), ray1);
+      Geodetic2D g = _planet->getMidPoint(_planet->toGeodetic2D(P0), _planet->toGeodetic2D(P1));
+      Vector3D finalPoint = _planet->toVector3D(g);
+      
+      printf ("final poin = %f %f %f ----- final point old = %f %f %f\n", 
+              finalPoint.x(), finalPoint.y(), finalPoint.z(), 
+              finalPoint_old.x(), finalPoint_old.y(), finalPoint_old.z());
+      
+      */
+      // rotate globe from centerPoint to finalPoint
+      const Vector3D rotationAxis = centerPoint.cross(finalPoint);
+      const Angle rotationDelta = Angle::fromRadians( - acos(centerPoint.normalized().dot(finalPoint.normalized())) );
+      if (rotationDelta.isNan()) return; 
+      _camera->rotateWithAxis(rotationAxis, rotationDelta);  
+    }
+
   }
 }
 
@@ -175,16 +258,26 @@ Gesture CameraRenderer::getGesture(const TouchEvent& touchEvent) {
     
     // if it's the first movement, init zoom with the middle 3D point
     if (_currentGesture != Zoom) {
-      MutableVector2D pixel0 = touchEvent.getTouch(0)->getPos().asMutableVector2D();
+      /*
+       // middle point in 3D
+       MutableVector2D pixel0 = touchEvent.getTouch(0)->getPos().asMutableVector2D();
       Vector3D ray0 = _camera0.pixel2Ray(pixel0.asVector2D());
       Vector3D P0 = _planet->closestIntersection(_camera0.getPosition(), ray0);
       MutableVector2D pixel1 = touchEvent.getTouch(1)->getPos().asMutableVector2D();
       Vector3D ray1 = _camera0.pixel2Ray(pixel1.asVector2D());
       Vector3D P1 = _planet->closestIntersection(_camera0.getPosition(), ray1);
       Geodetic2D g = _planet->getMidPoint(_planet->toGeodetic2D(P0), _planet->toGeodetic2D(P1));
-      _initialPoint = _planet->toVector3D(g).asMutableVector3D();
+      _initialPoint = _planet->toVector3D(g).asMutableVector3D();*/
+      
+      Vector2D pixel0 = touchEvent.getTouch(0)->getPos();
+      Vector2D pixel1 = touchEvent.getTouch(1)->getPos();
+      Vector2D averagePixel = pixel0.add(pixel1).div(2);
+      Vector3D ray = _camera0.pixel2Ray(averagePixel);
+      _initialPoint = _planet->closestIntersection(_camera0.getPosition(), ray).asMutableVector3D();
       _initialFingerSeparation = pixel1.sub(pixel0).length();
-      //printf ("starting zoom with initial point %f %f %f \n", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());      
+      
+       Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
+      printf ("initial point %f %f\n", g.latitude().degrees(), g.longitude().degrees());
     }
     return Zoom;
     
@@ -288,8 +381,8 @@ void CameraRenderer::onMove(const TouchEvent& touchEvent) {
       makeDrag(touchEvent);
       break;
     case Zoom:
-      makeZoom(touchEvent);
-      //makeDoubleDrag(touchEvent);
+      //makeZoom(touchEvent);
+      makeDoubleDrag(touchEvent);
       break;
     case Rotate:
       makeRotate(touchEvent);

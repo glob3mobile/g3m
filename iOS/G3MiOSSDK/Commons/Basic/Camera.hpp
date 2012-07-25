@@ -140,6 +140,8 @@ public:
   Frustum* _halfFrustum;               // ONLY FOR DEBUG
   Frustum* _halfFrustumInModelCoordinates;
 
+  int __to_ask_diego;
+  void updateModelMatrix() { _modelMatrix = MutableMatrix44D::createModelMatrix(_position, _center, _up); }
     
 private:
   int _width;

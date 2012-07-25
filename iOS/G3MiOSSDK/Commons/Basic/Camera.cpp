@@ -175,7 +175,7 @@ Vector3D Camera::pixel2Ray(const Vector2D& pixel) const {
   if (obj.isNan()) {
     return obj; 
   }
-  
+    
   return obj.sub(_position.asVector3D());
 }
 
