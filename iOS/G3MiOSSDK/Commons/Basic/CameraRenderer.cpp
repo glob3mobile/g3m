@@ -154,6 +154,9 @@ void CameraRenderer::makeDoubleDrag(const TouchEvent& touchEvent) {
     {
       double distance = _camera->getPosition().sub(centerPoint).length();
       _camera->moveForward(distance*(factor-1)/factor);
+      
+      Geodetic3D g = _planet->toGeodetic3D(_camera->getPosition());
+      printf ("camera height = %f\n", g.height());
     }
     
     // rotate the camera
