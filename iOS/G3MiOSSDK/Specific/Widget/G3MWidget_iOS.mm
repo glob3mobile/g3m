@@ -287,7 +287,7 @@
     
     
     TextureBuilder* texBuilder = new CPUTextureBuilder();
-    TexturesHandler* texturesHandler = new TexturesHandler(gl, factory, texBuilder);
+    TexturesHandler* texturesHandler = new TexturesHandler(gl, factory, texBuilder, false);
     
     const Planet* planet = Planet::createEarth();
 
@@ -339,7 +339,7 @@
 
 - (void)drawView:(id)sender {
   if (_animating) {
-    int timeToRedraw = [_renderer render: [self widget]];
+    /*int timeToRedraw = */[_renderer render: [self widget]];
   }
 }
 

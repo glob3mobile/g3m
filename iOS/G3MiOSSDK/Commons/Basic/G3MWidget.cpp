@@ -26,6 +26,8 @@ G3MWidget* G3MWidget::create(IFactory* factory,
     logger->logInfo("Creating G3MWidget...");
   }
   
+  ILogger::setInstance(logger);
+  
   return new G3MWidget(factory,
                        logger,
                        gl,

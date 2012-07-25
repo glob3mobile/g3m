@@ -124,14 +124,14 @@ Mesh* TileImagesTileTexturizer::texturize(const RenderContext* rc,
   }
   
   Mesh* mesh = getNewTextureMesh(tile, tessellator, tessellatorMesh);
-  if (mesh == NULL){
+  if (mesh == NULL) {
     //REGISTERING PETITION AND SENDING TO THE NET IF NEEDED
     registerNewRequest(tile);
     mesh = getNewTextureMesh(tile, tessellator, tessellatorMesh);
   }
   
   //If we can't get a new TexturedMesh we try to get a FallBack Mesh
-  if (mesh == NULL){
+  if (mesh == NULL) {
     mesh = getFallBackTexturedMesh(tile, tessellator, tessellatorMesh);
   }
   

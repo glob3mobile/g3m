@@ -86,7 +86,7 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
   
   int __TODO_tune_render_budget;
   if (timer != NULL) {
-    if ( timer->elapsedTime().milliseconds() > 50 ) {
+    if ( timer->elapsedTime().milliseconds() > 33 ) {
       return true;
     }
   }
@@ -103,8 +103,8 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
 //  }
   
   const Vector2D extent = getTessellatorMesh(rc, tessellator)->getExtent()->projectedExtent(rc);
-  const double t = extent.maxAxis() * 2;
-//  const double t = (extent.x() + extent.y());
+//  const double t = extent.maxAxis() * 2;
+  const double t = (extent.x() + extent.y());
   if ( t <= ((parameters->_tileTextureWidth + parameters->_tileTextureHeight) * 1.75) ) {
     return true;
   }

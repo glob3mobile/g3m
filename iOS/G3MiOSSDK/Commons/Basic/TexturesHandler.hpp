@@ -30,10 +30,20 @@ private:
   const IFactory * const _factory;
   const TextureBuilder* _texBuilder;
   
+  const bool _verbose;
+  
 public:
   
-  TexturesHandler(IGL* const  gl, const IFactory const * factory, const TextureBuilder* texBuilder): 
-  _gl(gl), _factory(factory), _texBuilder(texBuilder){}
+  TexturesHandler(IGL* const  gl,
+                  const IFactory const * factory,
+                  const TextureBuilder* texBuilder,
+                  bool verbose): 
+  _gl(gl),
+  _factory(factory),
+  _texBuilder(texBuilder),
+  _verbose(verbose)
+  {
+  }
   
   ~TexturesHandler();
   
