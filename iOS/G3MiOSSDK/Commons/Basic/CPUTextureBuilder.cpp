@@ -34,9 +34,9 @@ int CPUTextureBuilder::createTextureFromImages(IGL * gl,
 }
 
 int CPUTextureBuilder::createTextureFromImages(IGL * gl, const IFactory* factory,
-                            const std::vector<const IImage*>& vImages, 
-                            const std::vector<Rectangle>& vRectangles, 
-                            int width, int height) const
+                                               const std::vector<const IImage*>& vImages, 
+                                               const std::vector<Rectangle>& vRectangles, 
+                                               int width, int height) const
 {
   
   int todo_JM;

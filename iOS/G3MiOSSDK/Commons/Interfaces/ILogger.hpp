@@ -26,7 +26,21 @@ protected:
   
   ILogger(const LogLevel level): _level(level) {}
 
+  static ILogger* _instance;
+
 public:
+  static void setInstance(ILogger* logger) {
+    if (_instance != NULL) {
+      printf("Warning, ILooger instance set two times\n");
+    }
+    _instance = logger;
+  }
+  
+  static ILogger* instance() {
+    return _instance;
+  }
+  
+  
   virtual void logInfo(const std::string x, ...) const = 0;
   virtual void logWarning(const std::string x, ...) const = 0;
   virtual void logError(const std::string x, ...) const = 0;

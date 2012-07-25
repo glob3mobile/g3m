@@ -106,7 +106,21 @@ int TileRenderer::render(const RenderContext* rc) {
   }
   
   std::vector<Tile*> toVisit(_topLevelTiles);
+//  std::list<Tile*> toVisit;
+//  for (int i = 0; i < topLevelTilesSize; i++) {
+//    toVisit.push_back(_topLevelTiles[i]);
+//  }
+  
   while (toVisit.size() > 0) {
+//    std::list<Tile*> toVisitInNextIteration;
+//    
+//    for(std::list<Tile*>::iterator iterator = toVisit.begin(); 
+//        iterator != toVisit.end();
+//        iterator++) {
+//      Tile* tile = *iterator;
+//      tile->render(rc, _tessellator, _texturizer, _parameters, &statistics, &toVisitInNextIteration, _timer);
+//    }
+    
     std::vector<Tile*> toVisitInNextIteration;
     
     for (int i = 0; i < toVisit.size(); i++) {
