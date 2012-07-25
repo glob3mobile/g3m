@@ -186,7 +186,7 @@ int GL2::uploadTexture(const IImage* image, int textureWidth, int textureHeight)
                                                colorSpace,
                                                kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
   CGColorSpaceRelease( colorSpace );
-  //CGContextClearRect( context, CGRectMake( 0, 0, textureWidth, textureHeight ) );
+  CGContextClearRect( context, CGRectMake( 0, 0, textureWidth, textureHeight ) );
   //CGContextTranslateCTM( context, 0, textureHeight - textureHeight );
   CGContextDrawImage( context, CGRectMake( 0, 0, textureWidth, textureHeight ), im.CGImage );
   
