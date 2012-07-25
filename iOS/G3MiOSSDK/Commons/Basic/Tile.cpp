@@ -85,11 +85,11 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
   }
   
   int __TODO_tune_render_budget;
-//  if (timer != NULL) {
-//    if ( timer->elapsedTime().milliseconds() > 50 ) {
-//      return true;
-//    }
-//  }
+  if (timer != NULL) {
+    if ( timer->elapsedTime().milliseconds() > 50 ) {
+      return true;
+    }
+  }
 
   if (texturizer != NULL) {
     if (texturizer->tileMeetsRenderCriteria(this)) {
