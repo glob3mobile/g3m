@@ -62,8 +62,10 @@ private:
   std::vector<Tile*>* _subtiles;
 
   int _texturedCounter;
+  ITimer* _texturizerTimer;
   
   bool _justCreatedSubtiles;
+  
   
   inline Mesh* getTessellatorMesh(const RenderContext* rc,
                                   const TileTessellator* tessellator);
@@ -120,7 +122,8 @@ public:
   _textureSolved(false),
   _subtiles(NULL),
   _texturedCounter(0),
-  _justCreatedSubtiles(false)
+  _justCreatedSubtiles(false),
+  _texturizerTimer(NULL)
   {
   }
   

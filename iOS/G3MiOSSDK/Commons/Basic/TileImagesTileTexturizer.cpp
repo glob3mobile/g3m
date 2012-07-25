@@ -134,7 +134,7 @@ Mesh* TileImagesTileTexturizer::texturize(const RenderContext* rc,
                                           Mesh* previousMesh,
                                           ITimer* timer) {
   
-  bool dummy = false;
+  const bool dummy = false;
   if (dummy){
     //CHESSBOARD TEXTURE
     int texID = rc->getTexturesHandler()->getTextureIdFromFileName("NoImage.jpg", _parameters->_tileTextureWidth, _parameters->_tileTextureHeight);
