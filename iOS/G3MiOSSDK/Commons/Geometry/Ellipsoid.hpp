@@ -65,6 +65,9 @@ public:
                                    const Vector3D& stop,
                                    double granularity) const;
   
+  Geodetic2D getMidPoint (const Geodetic2D& P0, const Geodetic2D& P1) const;
+
+  
   double computePreciseLatLonDistance(const Geodetic2D& g1,
                                       const Geodetic2D& g2) const;
   

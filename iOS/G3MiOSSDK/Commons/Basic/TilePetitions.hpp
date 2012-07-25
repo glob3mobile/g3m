@@ -21,8 +21,7 @@
 
 class TileImagesTileTexturizer;
 
-class Petition{
-
+class Petition {
   const std::string _url;
   const Sector *_sector;
   ByteBuffer* _bb;
@@ -46,18 +45,38 @@ public:
     _bb = NULL;
   }
   
-  std::string getURL() const { return _url;}
-  Sector getSector() const { return *_sector;}
-  long getDownloadID() const { return _downloadID;}
+  long getDownloadID() const {
+    return _downloadID;
+  }
   
-  bool isArrived() const{ return _bb != NULL;}
-  void setByteBuffer(ByteBuffer* bb) { _bb = bb;}
-  void setDownloadID(long id){ _downloadID = id;}
-  const ByteBuffer* getByteBuffer() const { return _bb;}
+  bool isArrived() const{ 
+    return _bb != NULL;
+  }
+  
+  void setDownloadID(long id){
+    _downloadID = id;
+  }
+
+  std::string getURL() const {
+    return _url;
+  }
+  
+  Sector getSector() const {
+    return *_sector;
+  }
+  
+  void setByteBuffer(ByteBuffer* bb) {
+    if (_bb != NULL) delete _bb;
+    _bb = bb;
+  }
+
+  const ByteBuffer* getByteBuffer() const {
+    return _bb;
+  }
 };
 
 
-class TilePetitions: public IDownloadListener{
+class TilePetitions: public IDownloadListener {
   
   const int    _level;
   const int    _row;
@@ -72,7 +91,6 @@ class TilePetitions: public IDownloadListener{
   int _errorsCounter;
   
   TilePetitions(const TilePetitions& that);
-  
 public:
   
   TilePetitions(const int level,

@@ -20,6 +20,10 @@
 Tile::~Tile() {
   prune(NULL);
   
+  if (_texturizerTimer != NULL) {
+    delete _texturizerTimer;
+  }
+  
   if (_debugMesh != NULL) {
     delete _debugMesh;
   }
@@ -99,8 +103,8 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
 //  }
   
   const Vector2D extent = getTessellatorMesh(rc, tessellator)->getExtent()->projectedExtent(rc);
-//  const double t = extent.maxAxis() * 2;
-  const double t = (extent.x() + extent.y());
+  const double t = extent.maxAxis() * 2;
+//  const double t = (extent.x() + extent.y());
   if ( t <= ((parameters->_tileTextureWidth + parameters->_tileTextureHeight) * 1.75) ) {
     return true;
   }
@@ -120,12 +124,34 @@ void Tile::rawRender(const RenderContext *rc,
       tessellatorMesh->render(rc);
     }
     else {
-      if (!isTextureSolved() || _texturizerMesh == NULL) {
+      if (!isTextureSolved() ||
+          (_texturizerMesh == NULL) ||
+          (_texturizerTimer == NULL)) {
+        
         int __TODO_tune_render_budget;
-        if ((_texturedCounter++ % 25) == 0) {
+
+        if (_texturizerTimer == NULL ||
+            _texturizerTimer->elapsedTime().milliseconds() > 25) {
+          
           _texturizerMesh = texturizer->texturize(rc, this, tessellator, tessellatorMesh, _texturizerMesh, timer);
-          _texturedCounter = 0;
+
+          if (_texturizerTimer == NULL) {
+            _texturizerTimer = rc->getFactory()->createTimer();
+          }
+          else {
+            _texturizerTimer->start();
+          }
         }
+        
+//        if ((_texturedCounter++ % 25) == 0) {
+//          _texturizerMesh = texturizer->texturize(rc, this, tessellator, tessellatorMesh, _texturizerMesh, timer);
+//          _texturedCounter = 0;
+//        }
+      }
+
+      if ((_texturizerTimer != NULL) && isTextureSolved()) {
+        delete _texturizerTimer;
+        _texturizerTimer = NULL;
       }
       
       if (_texturizerMesh != NULL) {

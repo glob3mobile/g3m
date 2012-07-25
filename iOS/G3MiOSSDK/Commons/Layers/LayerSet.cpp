@@ -12,9 +12,11 @@ std::vector<Petition*> LayerSet::createTilePetitions(const Tile& tile, int width
 {
   std::vector<Petition*> petitions;
   
+  const Sector tileSector = tile.getSector();
+  
   for (int i = 0; i < _layers.size(); i++) {
     Layer* layer = _layers[i];
-    if (layer->fullContains(tile.getSector())){
+    if (layer->fullContains(tileSector)){
       std::vector<Petition*> pet = layer->getTilePetitions(tile, width, height);
       for (int i = 0; i < pet.size(); i++) {
         petitions.push_back(pet[i]);

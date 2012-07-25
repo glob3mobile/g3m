@@ -37,5 +37,7 @@ void main() {
   
   VertexColor = Color;
   
+  gl_PointSize = 10.0;
+  
   vec3 x = Normal; //This line has been added to avoid compiler taking Normal variable away (Remove when Normal has been used)
 }

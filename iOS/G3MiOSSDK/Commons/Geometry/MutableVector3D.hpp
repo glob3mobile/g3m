@@ -44,7 +44,10 @@ public:
   }
   
   bool isNan() const {
-    return isnan(_x*_y*_z);
+    if (isnan(_x)) printf ("*** LA X ES NAN\n");
+    if (isnan(_y)) printf ("*** LA Y ES NAN\n");
+    if (isnan(_z)) printf ("*** LA Z ES NAN\n");
+    if (isnan(_x) || isnan(_y) || isnan(_z)) return true; else return false;
   }
   
   bool isZero() const {

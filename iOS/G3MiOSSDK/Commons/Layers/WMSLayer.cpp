@@ -12,8 +12,10 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const Tile& tile, int width, i
 {
   std::vector<Petition*> vPetitions;
   
-  if (!_bbox.fullContains(tile.getSector())) return vPetitions;
-
+  if (!_bbox.fullContains(tile.getSector())) {
+    return vPetitions;
+  }
+  
 	//Server name
   std::string req = _serverURL;
 	if (req[req.size()-1] != '?') {
@@ -44,31 +46,35 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const Tile& tile, int width, i
 	req += "&FORMAT=" + this->_format;
 	
 	//Ref. system
-  if (_srs != "") req += "&SRS=" + _srs;
-	else req += "&SRS=EPSG:4326";
+  if (_srs != "")
+    req += "&SRS=" + _srs;
+	else
+    req += "&SRS=EPSG:4326";
   
   //Style
-  if (_style != "") req += "&STYLES=" + _style;
-	else req += "&STYLES=";
+  if (_style != "")
+    req += "&STYLES=" + _style;
+	else
+    req += "&STYLES=";
   
   //ASKING TRANSPARENCY
   req += "&TRANSPARENT=TRUE";
-
+  
 	//Texture Size and BBOX
   char buffer[100];
   Sector sector = tile.getSector();
-  sprintf(buffer, "&WIDTH=%d&HEIGHT=%d&BBOX=%f,%f,%f,%f", width, height, 
+  sprintf(buffer,
+          "&WIDTH=%d&HEIGHT=%d&BBOX=%f,%f,%f,%f",
+          width, height, 
           sector.lower().longitude().degrees(), 
           sector.lower().latitude().degrees(), 
           sector.upper().longitude().degrees(), 
           sector.upper().latitude().degrees());
   req += buffer;
-
-  if (_serverVersion == "1.3.0")
-  {
+  
+  if (_serverVersion == "1.3.0") {
     req += "&CRS=EPSG:4326";
   }
-  
   
   Petition *pet = new Petition(sector, req);
   vPetitions.push_back(pet);
