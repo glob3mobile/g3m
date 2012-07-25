@@ -122,7 +122,9 @@ void CameraRenderer::makeDoubleDrag(const TouchEvent& touchEvent) {
     
     Vector2D pixel0 = touchEvent.getTouch(0)->getPos();
     Vector2D pixel1 = touchEvent.getTouch(1)->getPos();
-    double finalFingerSeparation = pixel1.sub(pixel0).length();
+    Vector2D difPixel = pixel1.sub(pixel0);
+    double finalFingerSeparation = difPixel.length();
+    double angle = difPixel.orientation().radians() - _initialFingerInclination;
     double factor = finalFingerSeparation/_initialFingerSeparation;
     
     Vector2D averagePixel = pixel0.add(pixel1).div(2);
@@ -152,6 +154,11 @@ void CameraRenderer::makeDoubleDrag(const TouchEvent& touchEvent) {
     {
       double distance = _camera->getPosition().sub(centerPoint).length();
       _camera->moveForward(distance*(factor-1)/factor);
+    }
+    
+    // rotate the camera
+    {
+      _camera->rotateWithAxis(_camera->getCenter().sub(_camera->getPosition()), Angle::fromRadians(-angle));
     }
     
     // detect new final point
@@ -274,10 +281,10 @@ Gesture CameraRenderer::getGesture(const TouchEvent& touchEvent) {
       Vector2D averagePixel = pixel0.add(pixel1).div(2);
       Vector3D ray = _camera0.pixel2Ray(averagePixel);
       _initialPoint = _planet->closestIntersection(_camera0.getPosition(), ray).asMutableVector3D();
-      _initialFingerSeparation = pixel1.sub(pixel0).length();
+      Vector2D difPixel = pixel1.sub(pixel0);
+      _initialFingerSeparation = difPixel.length();
+      _initialFingerInclination = difPixel.orientation().radians();
       
-       Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
-      printf ("initial point %f %f\n", g.latitude().degrees(), g.longitude().degrees());
     }
     return Zoom;
     
