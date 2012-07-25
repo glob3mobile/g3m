@@ -81,6 +81,8 @@ class TilePetitions: public IDownloadListener {
   
   TilePetitions(const TilePetitions& that);
   
+  TilePetitions operator=(const TilePetitions& that);
+  
   void tryToDeleteMyself()
   {
     if (_downloadsCounter + _errorsCounter == _petitions.size()){
