@@ -136,9 +136,25 @@ public:
   //const double * getMatrix() const { return _m;}
   
   void copyToFloatMatrix(float M[16]) const { 
-    for (int i = 0; i < 16; i++) {
-      M[i] = (float) _m[i];
-    }
+//    for (int i = 0; i < 16; i++) {
+//      M[i] = (float) _m[i];
+//    }
+    M[ 0] = (float) _m[ 0];
+    M[ 1] = (float) _m[ 1];
+    M[ 2] = (float) _m[ 2];
+    M[ 3] = (float) _m[ 3];
+    M[ 4] = (float) _m[ 4];
+    M[ 5] = (float) _m[ 5];
+    M[ 6] = (float) _m[ 6];
+    M[ 7] = (float) _m[ 7];
+    M[ 8] = (float) _m[ 8];
+    M[ 9] = (float) _m[ 9];
+    M[10] = (float) _m[10];
+    M[11] = (float) _m[11];
+    M[12] = (float) _m[12];
+    M[13] = (float) _m[13];
+    M[14] = (float) _m[14];
+    M[15] = (float) _m[15];
   }
   
   void print(const std::string& name, const ILogger* log) const;

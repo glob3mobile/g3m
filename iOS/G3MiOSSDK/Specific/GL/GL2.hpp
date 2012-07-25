@@ -30,6 +30,8 @@ private:
   bool _enableCullFace;
   CullFace _cullFace_face;
   
+  inline void loadModelView();
+  
 public:
   
   GL2() :
@@ -55,7 +57,7 @@ public:
   
   void enableTexture2D() ;
   
-  void enableVertexFlatColor(const Color& color,
+  void enableVertexFlatColor(float r, float g, float b, float a,
                              float intensity);
   
   void disableVertexFlatColor();

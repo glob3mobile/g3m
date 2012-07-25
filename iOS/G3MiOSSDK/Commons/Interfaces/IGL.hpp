@@ -36,7 +36,12 @@ public:
   virtual void enableVertexColor(float const colors[], float intensity) = 0;
   virtual void disableVertexColor() = 0;
 
-  virtual void enableVertexFlatColor(const Color& c, float intensity) = 0;
+  void enableVertexFlatColor(const Color& c, float intensity) {
+    enableVertexFlatColor(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha(), intensity);
+  }
+  
+  virtual void enableVertexFlatColor(float r, float g, float b, float a, float intensity) = 0;
+  
   virtual void disableVertexFlatColor() = 0;
   
   virtual void enableVertexNormal(float const normals[]) = 0;

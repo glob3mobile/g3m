@@ -78,37 +78,35 @@ void GL2::useProgram(unsigned int program) {
   Uniforms.EnableFlatColor         = glGetUniformLocation(program, "EnableFlatColor");
 }
 
+void GL2::loadModelView() {
+  float M[16];
+  _modelView.copyToFloatMatrix(M);
+  glUniformMatrix4fv(Uniforms.Modelview, 1, 0, M);
+}
+
 void GL2::setProjection(const MutableMatrix44D &projection) {
   float M[16];
   projection.copyToFloatMatrix(M);
   glUniformMatrix4fv(Uniforms.Projection, 1, 0, M);
 }
 
-void GL2::loadMatrixf(const MutableMatrix44D &m) {
-  float M[16];
-  m.copyToFloatMatrix(M);
-  
-  glUniformMatrix4fv(Uniforms.Modelview, 1, 0, M);
-  _modelView = m;
+void GL2::loadMatrixf(const MutableMatrix44D &modelView) {
+  _modelView = modelView;
+
+  loadModelView();
 }
 
 void GL2::multMatrixf(const MutableMatrix44D &m) {
-  MutableMatrix44D product = _modelView.multiply(m);
-  
-  float M[16];
-  product.copyToFloatMatrix(M);
-  glUniformMatrix4fv(Uniforms.Modelview, 1, 0, M);
-  _modelView = product;
+  _modelView = _modelView.multiply(m);
+
+  loadModelView();
 }
 
 void GL2::popMatrix() {
   _modelView = _matrixStack.back();
   _matrixStack.pop_back();
   
-  float M[16];
-  _modelView.copyToFloatMatrix(M);
-  
-  glUniformMatrix4fv(Uniforms.Modelview, 1, 0, M);
+  loadModelView();
 }
 
 void GL2::pushMatrix() {
@@ -125,8 +123,7 @@ void GL2::color(float r, float g, float b, float a) {
 }
 
 void GL2::transformTexCoords(const Vector2D& scale,
-                             const Vector2D& translation)
-{
+                             const Vector2D& translation) {
   glUniform2f(Uniforms.ScaleTexCoord, scale.x(), scale.y());
   glUniform2f(Uniforms.TranslationTexCoord, translation.x(), translation.y());
 }
@@ -156,11 +153,9 @@ void GL2::drawLineLoop(int n, const unsigned int *i) {
   glDrawElements(GL_LINE_LOOP, n, GL_UNSIGNED_INT, i);
 }
 
-void GL2::drawPoints(int n, const unsigned int *i)
-{
+void GL2::drawPoints(int n, const unsigned int *i) {
   glDrawElements(GL_POINTS, n, GL_UNSIGNED_INT, i);
 }
-
 
 void GL2::lineWidth(float width) {
   glLineWidth(width);
@@ -222,16 +217,12 @@ void GL2::bindTexture(unsigned int n) {
 void GL2::drawBillBoard(const unsigned int textureId,
                         const Vector3D& pos,
                         const float viewPortRatio) {
-  glUniform1i(Uniforms.BillBoard, true);
-  
   const float vertex[] = {
     pos.x(), pos.y(), pos.z(),
     pos.x(), pos.y(), pos.z(),
     pos.x(), pos.y(), pos.z(),
     pos.x(), pos.y(), pos.z()
   };
-  
-  glUniform1f(Uniforms.ViewPortRatio, viewPortRatio);
   
   const static float texcoord[] = {
     1, 1,
@@ -240,27 +231,31 @@ void GL2::drawBillBoard(const unsigned int textureId,
     0, 0
   };
   
-//  disableDepthTest();
+  glUniform1i(Uniforms.BillBoard, true);
+  
+  glUniform1f(Uniforms.ViewPortRatio, viewPortRatio);
+  
+  disableDepthTest();
   
   enableTexture2D();
-  glUniform4f(Uniforms.FlatColor, 1.0, 0.0, 0.0, 1);
+  color(1, 1, 1, 1);
   
-  glBindTexture(GL_TEXTURE_2D, textureId);
-  glVertexAttribPointer(Attributes.Position, 3, GL_FLOAT, 0, 0, (const void *) vertex);
-  glVertexAttribPointer(Attributes.TextureCoord, 2, GL_FLOAT, 0, 0, (const void *) texcoord);
+  bindTexture(textureId);
+
+  vertexPointer(3, 0, vertex);
+  setTextureCoordinates(2, 0, texcoord);
   
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
   
-//  enableDepthTest();
+  enableDepthTest();
   
-  glUniform1i(Uniforms.BillBoard, false); //NOT DRAWING BILLBOARD
+  glUniform1i(Uniforms.BillBoard, false);
 }
 
 void GL2::deleteTexture(int glTextureId) {
-  unsigned int textures[] = {glTextureId};
+  unsigned int textures[] = { glTextureId };
   glDeleteTextures(1, textures);
 }
-
 
 // state handling
 void GL2::enableTextures() {
@@ -311,7 +306,6 @@ void GL2::disableVertexColor() {
   }
 }
 
-
 void GL2::enableVertexNormal(float const normals[]) {
 //  if (normals != NULL) {
   if (!_enableVertexNormal) {
@@ -329,7 +323,6 @@ void GL2::disableVertexNormal() {
   }
 }
 
-
 void GL2::enableVerticesPosition() {
   if (!_enableVerticesPosition) {
     glEnableVertexAttribArray(Attributes.Position);
@@ -344,13 +337,13 @@ void GL2::disableVerticesPosition() {
   }
 }
 
-void GL2::enableVertexFlatColor(const Color& c,
+void GL2::enableVertexFlatColor(float r, float g, float b, float a,
                                 float intensity) {
   if (!_enableFlatColor) {
     glUniform1i(Uniforms.EnableFlatColor, true);
     _enableFlatColor = true;
   }
-  glUniform4f(Uniforms.FlatColor, c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
+  glUniform4f(Uniforms.FlatColor, r, g, b, a);
   glUniform1f(Uniforms.FlatColorIntensity, intensity);
 }
 
