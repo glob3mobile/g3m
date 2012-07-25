@@ -126,7 +126,6 @@ public:
   
   void deleteTexture(int glTextureId);
   
-//  void cullFace(bool b, CullFace face);
   void enableCullFace(CullFace face);
   void disableCullFace();
 

@@ -34,8 +34,8 @@ struct UniformsStruct {
   GLint EnableColorPerVertex;
   GLint EnableFlatColor;
   GLint ColorPerVertexIntensity;
-  
 } Uniforms;
+
 
 struct AttributesStruct {
   GLint Position;
@@ -50,32 +50,32 @@ void GL2::useProgram(unsigned int program) {
   glUseProgram(program);
   
   // Extract the handles to attributes
-  Attributes.Position = glGetAttribLocation(program, "Position");
+  Attributes.Position     = glGetAttribLocation(program, "Position");
   Attributes.TextureCoord = glGetAttribLocation(program, "TextureCoord");
-  Attributes.Color = glGetAttribLocation(program, "Color");
-  Attributes.Normal = glGetAttribLocation(program, "Normal");
+  Attributes.Color        = glGetAttribLocation(program, "Color");
+  Attributes.Normal       = glGetAttribLocation(program, "Normal");
   
   // Extract the handles to uniforms
-  Uniforms.Projection = glGetUniformLocation(program, "Projection");
-  Uniforms.Modelview = glGetUniformLocation(program, "Modelview");
-  Uniforms.Sampler = glGetUniformLocation(program, "Sampler");
-  Uniforms.EnableTexture = glGetUniformLocation(program, "EnableTexture");
-  Uniforms.FlatColor = glGetUniformLocation(program, "FlatColor");
+  Uniforms.Projection          = glGetUniformLocation(program, "Projection");
+  Uniforms.Modelview           = glGetUniformLocation(program, "Modelview");
+  Uniforms.Sampler             = glGetUniformLocation(program, "Sampler");
+  Uniforms.EnableTexture       = glGetUniformLocation(program, "EnableTexture");
+  Uniforms.FlatColor           = glGetUniformLocation(program, "FlatColor");
   Uniforms.TranslationTexCoord = glGetUniformLocation(program, "TranslationTexCoord");
+  Uniforms.ScaleTexCoord       = glGetUniformLocation(program, "ScaleTexCoord");
   glUniform2f(Uniforms.TranslationTexCoord, 0, 0);
-  Uniforms.ScaleTexCoord = glGetUniformLocation(program, "ScaleTexCoord");
   glUniform2f(Uniforms.ScaleTexCoord, 1, 1);
   
   //BILLBOARDS
-  Uniforms.BillBoard = glGetUniformLocation(program, "BillBoard");
-  glUniform1i(Uniforms.BillBoard, false); //NOT DRAWING BILLBOARD
+  Uniforms.BillBoard     = glGetUniformLocation(program, "BillBoard");
   Uniforms.ViewPortRatio = glGetUniformLocation(program, "ViewPortRatio");
+  glUniform1i(Uniforms.BillBoard, false); //NOT DRAWING BILLBOARD
   
   //FOR FLAT COLOR MIXING
-  Uniforms.FlatColorIntensity = glGetUniformLocation(program, "FlatColorIntensity");
+  Uniforms.FlatColorIntensity      = glGetUniformLocation(program, "FlatColorIntensity");
   Uniforms.ColorPerVertexIntensity = glGetUniformLocation(program, "ColorPerVertexIntensity");
-  Uniforms.EnableColorPerVertex = glGetUniformLocation(program, "EnableColorPerVertex");
-  Uniforms.EnableFlatColor = glGetUniformLocation(program, "EnableFlatColor");
+  Uniforms.EnableColorPerVertex    = glGetUniformLocation(program, "EnableColorPerVertex");
+  Uniforms.EnableFlatColor         = glGetUniformLocation(program, "EnableFlatColor");
 }
 
 void GL2::setProjection(const MutableMatrix44D &projection) {
@@ -170,8 +170,7 @@ int GL2::getError() {
   return glGetError();
 }
 
-int GL2::uploadTexture(const IImage* image, int textureWidth, int textureHeight)
-{
+int GL2::uploadTexture(const IImage* image, int textureWidth, int textureHeight) {
   UIImage * im = ((Image_iOS*) image)->getUIImage();
   
   
@@ -241,7 +240,7 @@ void GL2::drawBillBoard(const unsigned int textureId,
     0, 0
   };
   
-  disableDepthTest();
+//  disableDepthTest();
   
   enableTexture2D();
   glUniform4f(Uniforms.FlatColor, 1.0, 0.0, 0.0, 1);
@@ -252,7 +251,7 @@ void GL2::drawBillBoard(const unsigned int textureId,
   
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
   
-  enableDepthTest();
+//  enableDepthTest();
   
   glUniform1i(Uniforms.BillBoard, false); //NOT DRAWING BILLBOARD
 }
@@ -420,26 +419,3 @@ void GL2::disableCullFace() {
     _enableCullFace = false;
   }
 }
-
-/*
-void GL2::cullFace(bool b, CullFace face) {
-  if (b) {
-    glEnable(GL_CULL_FACE);  
-  }
-  else {
-    glDisable(GL_CULL_FACE);
-  }
-  
-  switch (face) {
-    case FRONT:
-      glCullFace(GL_FRONT);
-      break;
-    case BACK:
-      glCullFace(GL_BACK);
-      break;
-    case FRONT_AND_BACK:
-      glCullFace(GL_FRONT_AND_BACK);
-      break;
-  }
-}
-*/
