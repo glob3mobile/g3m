@@ -23,6 +23,9 @@ public:
                               const std::vector<const IImage*>& vImages, 
                               const std::vector<const Rectangle*>& vRectangles, 
                               int width, int height) const = 0;
+  
+  
+  virtual ~TextureBuilder() {} 
 };
 
 

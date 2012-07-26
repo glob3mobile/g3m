@@ -78,6 +78,8 @@
 		CF9AEBC2159B3FEB004C3558 /* EllipsoidalTileTessellator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9AEBC1159B3FEA004C3558 /* EllipsoidalTileTessellator.cpp */; };
 		CFA3E7C9157E537B00DAABD6 /* MarksRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA3E7C8157E537B00DAABD6 /* MarksRenderer.cpp */; };
 		CFCA33D615B9A1CC00F00B3A /* BusyRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCA33D515B9A1CC00F00B3A /* BusyRenderer.cpp */; };
+		CFF0999B15C18AAD005EAF12 /* TileTexturizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */; };
+		CFF0999C15C18AAD005EAF12 /* TilePetitions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8C874BE15B5C58D00F19859 /* TilePetitions.hpp */; };
 		D816E7AA15B6C9B2004FA4D6 /* SingleImageTileTexturizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D816E7A815B6C9B1004FA4D6 /* SingleImageTileTexturizer.cpp */; };
 		D816E7AB15B6C9B2004FA4D6 /* SingleImageTileTexturizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D816E7A915B6C9B1004FA4D6 /* SingleImageTileTexturizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
@@ -112,8 +114,6 @@
 		D88B5E1B15C15C180083A43F /* TileRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 38D786E01587AC40003BBC75 /* TileRenderer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D88B5E1C15C15C180083A43F /* TileTessellator.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF9AEBBD159B3B95004C3558 /* TileTessellator.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D88B5E1E15C15C180083A43F /* TimeInterval.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFF95F741588DF0A00B56E11 /* TimeInterval.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		D88B5E1F15C15C180083A43F /* TileTexturizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		D88B5E2015C15C180083A43F /* TilePetitions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8C874BE15B5C58D00F19859 /* TilePetitions.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D88B5E2115C15C180083A43F /* MutableMatrix44D.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8228EBC157F7F6100BBAF60 /* MutableMatrix44D.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D88B5E2215C15C180083A43F /* ITimer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF31CBF215878AF90085E8F1 /* ITimer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D88B5E2315C15C180083A43F /* Timer_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF31CBF315878BE40085E8F1 /* Timer_iOS.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -631,10 +631,10 @@
 				D88B5E1715C15C180083A43F /* SceneGraphRenderer.hpp in Headers */,
 				D88B5E1815C15C180083A43F /* TexturesHandler.hpp in Headers */,
 				D88B5E1915C15C180083A43F /* Tile.hpp in Headers */,
-				D88B5E2015C15C180083A43F /* TilePetitions.hpp in Headers */,
+				CFF0999C15C18AAD005EAF12 /* TilePetitions.hpp in Headers */,
 				D88B5E1B15C15C180083A43F /* TileRenderer.hpp in Headers */,
 				D88B5E1C15C15C180083A43F /* TileTessellator.hpp in Headers */,
-				D88B5E1F15C15C180083A43F /* TileTexturizer.hpp in Headers */,
+				CFF0999B15C18AAD005EAF12 /* TileTexturizer.hpp in Headers */,
 				D88B5E1E15C15C180083A43F /* TimeInterval.hpp in Headers */,
 				D88B5E2115C15C180083A43F /* MutableMatrix44D.hpp in Headers */,
 				D88B5E2215C15C180083A43F /* ITimer.hpp in Headers */,
@@ -645,8 +645,6 @@
 				D88B5E2615C15C850083A43F /* Extent.h in Headers */,
 				D88B5E2715C15C850083A43F /* Frustum.h in Headers */,
 				D88B5E2815C15C850083A43F /* Plane.h in Headers */,
-				D88B5E1F15C15C180083A43F /* TileTexturizer.hpp in Headers */,
-				D88B5E2015C15C180083A43F /* TilePetitions.hpp in Headers */,
 				D88B5E5215C162AF0083A43F /* G3MWidget.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -677,7 +675,7 @@
 		D8EEF3AC1577924D003FEB5E /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 			};
 			buildConfigurationList = D8EEF3AF1577924D003FEB5E /* Build configuration list for PBXProject "G3MiOSSDK" */;
 			compatibilityVersion = "Xcode 3.2";
