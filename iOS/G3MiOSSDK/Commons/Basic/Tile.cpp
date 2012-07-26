@@ -222,16 +222,17 @@ void Tile::render(const RenderContext* rc,
     }
     else {
       std::vector<Tile*>* subTiles = getSubTiles();
+      if (_justCreatedSubtiles) {
+        statistics->computeSplit();
+        _justCreatedSubtiles = false;
+      }
+
       const int subTilesSize = subTiles->size();
       for (int i = 0; i < subTilesSize; i++) {
         Tile* subTile = subTiles->at(i);
         // subTile->render(rc, tessellator, texturizer, parameters, statistics, toVisitInNextIteration, timer);
         toVisitInNextIteration->push_back(subTile);
       }
-      if (_justCreatedSubtiles) {
-        statistics->computeSplit();
-      }
-      _justCreatedSubtiles = false;
     }
   }
   else {

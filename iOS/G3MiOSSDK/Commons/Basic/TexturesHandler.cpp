@@ -138,7 +138,6 @@ int TexturesHandler::getTextureId(const std::vector<const IImage*>& images,
   
   TextureHolder* holder = new TextureHolder(textureId, textureWidth, textureHeight);
   holder->_glTextureId = _texBuilder->createTextureFromImages(_gl, images, textureWidth, textureHeight);
-  int _todo_Diego_mira_LOGS;
   /*
    rc->getLogger()->logInfo("Uploaded texture \"%s\" (%dx%d) to GPU with texId=%d" ,
    textureId.c_str(),
