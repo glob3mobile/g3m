@@ -35,20 +35,20 @@ int CPUTextureBuilder::createTextureFromImages(IGL * gl,
 
 int CPUTextureBuilder::createTextureFromImages(IGL * gl, const IFactory* factory,
                             const std::vector<const IImage*>& vImages, 
-                            const std::vector<Rectangle>& vRectangles, 
+                            const std::vector<const Rectangle*>& vRectangles, 
                             int width, int height) const
 {
   
   int todo_JM;
   const IImage* base;
-  if (vRectangles[0]._width == width && vRectangles[0]._height == height){
+  if (vRectangles[0]->_width == width && vRectangles[0]->_height == height){
     base = vImages[0];
   } else{
     base = factory->createImageFromSize(width, height);
   }
   
   for (int i = 1; i < vImages.size(); i++) {
-    IImage* im2 = base->combineWith(*vImages[i], vRectangles[i], width, height);
+    IImage* im2 = base->combineWith(*vImages[i], *vRectangles[i], width, height);
     delete base;
     base = im2;
   }

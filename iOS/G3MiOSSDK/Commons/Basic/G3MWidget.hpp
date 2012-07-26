@@ -43,6 +43,10 @@ public:
     return _gl;
   }
   
+  Camera* getCamera() const {
+    return _camera;
+  }
+  
   
 private:
   IFactory*        _factory;
@@ -96,6 +100,11 @@ private:
     
     InitializationContext ic(_factory, _logger, _planet, _downloader);
     _renderer->initialize(&ic);
+  }
+  
+  void initializeDefault()
+  {
+    
   }
   
 };

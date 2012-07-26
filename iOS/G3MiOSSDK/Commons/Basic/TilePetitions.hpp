@@ -91,6 +91,11 @@ class TilePetitions: public IDownloadListener {
   int _errorsCounter;
   
   TilePetitions(const TilePetitions& that);
+  
+  Rectangle* getImageRectangleInTexture(const Sector& wholeSector, 
+                                       const Sector& imageSector,
+                                       int texWidth, int texHeight) const;
+  
 public:
   
   TilePetitions(const int level,

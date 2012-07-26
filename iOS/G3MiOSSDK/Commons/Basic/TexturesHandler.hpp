@@ -46,6 +46,12 @@ public:
                    int textureWidth,
                    int textureHeight);
   
+  int getTextureId(const std::vector<const IImage*>& images,
+                   const std::vector<const Rectangle*>& rectangles,
+                   const std::string& textureId,
+                   int textureWidth,
+                   int textureHeight);
+  
   int getTextureId(const IImage* image,
                    const std::string& textureId,
                    int textureWidth,

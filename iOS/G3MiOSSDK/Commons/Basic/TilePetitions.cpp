@@ -86,17 +86,35 @@ void TilePetitions::cancelPetitions(Downloader& downloader)
   }
 }
 
+Rectangle* TilePetitions::getImageRectangleInTexture(const Sector& wholeSector, 
+                                                               const Sector& imageSector,
+                                                               int texWidth, int texHeight) const
+{
+  Vector2D pos = wholeSector.getUVCoordinates(imageSector.lower().latitude(), imageSector.lower().longitude());
+  
+  double width = wholeSector.getDeltaLongitude().degrees() / imageSector.getDeltaLongitude().degrees();
+  double height = wholeSector.getDeltaLatitude().degrees() / imageSector.getDeltaLatitude().degrees();
+  
+  
+  
+  Rectangle* r = new Rectangle(pos.x() * texWidth, pos.y() * texHeight, width * texWidth, height * texHeight);
+  return r;
+}
+
 void TilePetitions::createTexture(TexturesHandler* texHandler, const IFactory* factory, int width, int height)
 {
   if (allFinished())
   {
     //Creating images (opaque one must be the first)
     std::vector<const IImage*> images;
+    std::vector<Rectangle*> rectangles;
     for (int i = 0; i < getNumPetitions(); i++) {
       const ByteBuffer* bb = getPetition(i)->getByteBuffer();
       IImage *im = factory->createImageFromData(*bb);
       if (im != NULL) {
         images.push_back(im);
+        Rectangle* rec = getImageRectangleInTexture(_tileSector, getPetition(i)->getSector(), width, height);
+        rectangles.push_back(rec);
       }
     }
     
@@ -110,6 +128,9 @@ void TilePetitions::createTexture(TexturesHandler* texHandler, const IFactory* f
     }
     for (int i = 0; i < images.size(); i++) {
       factory->deleteImage(images[i]);
+    }
+    for (int i = 0; i < rectangles.size(); i++) {
+      delete rectangles[i];
     }
   }
 }

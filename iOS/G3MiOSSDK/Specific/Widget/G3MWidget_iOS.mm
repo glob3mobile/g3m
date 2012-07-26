@@ -87,6 +87,9 @@
     int width = [self frame].size.width;
     int height = [self frame].size.height;
     
+    int todo_remove_bool_csiro;
+    bool csiro = true;
+    
     
     IFactory *factory = new Factory_iOS();
     ILogger *logger = new Logger_iOS(ErrorLevel);
@@ -186,23 +189,28 @@
     
     //LAYERS
     LayerSet* layerSet = new LayerSet();
-    WMSLayer* layer = new WMSLayer("bmng200405", "http://www.nasa.network.com/wms?", 
-                                   "1.3", "image/jpeg", Sector::fullSphere(), "EPSG:4326", "");
-    
-//    WMSLayer *wmsl = new WMSLayer("test:contourGSLA","http://imos2.ersa.edu.au/geo2/test/wms","1.1.1",
-//                                  "image/png",
-//                                  Sector::fromDegrees(-60, 57, -10, -180), 
-//                                  "EPSG:4326", "sla_test");
-    
-    WMSLayer *wmsl = new WMSLayer("VIAS",
+    WMSLayer* baseLayer = new WMSLayer("bmng200405", "http://www.nasa.network.com/wms?", 
+                                       "1.3", "image/jpeg", Sector::fullSphere(), "EPSG:4326", "");
+    layerSet->add(baseLayer);
+
+    if (!csiro){
+      WMSLayer *wmsl = new WMSLayer("VIAS",
                                   "http://idecan2.grafcan.es/ServicioWMS/Callejero",
                                   "1.1.0", "image/gif", 
                                   Sector::fromDegrees(22.5,-22.5, 33.75, -11.25),
-                                  //Sector::fromDegrees(27.6357, -18.1911, 29.2347, -13.4217),
                                   "EPSG:4326", "");
     
-    layerSet->add(layer);
-    layerSet->add(wmsl);
+      layerSet->add(wmsl);
+    } else{
+      
+      Sector s = Sector::fromDegrees(-60, 57, -10, -180);
+      WMSLayer *wmsl = new WMSLayer("test:contourGSLA","http://imos2.ersa.edu.au/geo2/test/wms","1.1.1", "image/png", s, "EPSG:4326", "sla_test");
+      
+      WMSLayer *wms_sst = new WMSLayer("sea_surface_temperature","http://opendap-vpac.arcs.org.au/thredds/wms/IMOS/SRS/GHRSST-SSTsubskin/2012/20120626-ABOM-L3P_GHRSST-SSTsubskin-AVHRR_MOSAIC_01km-AO_DAAC-v01-fv01_0.nc?","1.3.0", "image/png", s, "EPSG:4326&COLORSCALERANGE=273.8%2C302.8&NUMCOLORBANDS=50&LOGSCALE=false", "boxfill%2Fsst_36");
+      
+      layerSet->add(wmsl);
+      layerSet->add(wms_sst);
+    }
     
     // very basic tile renderer
     if (true) {
@@ -239,7 +247,7 @@
     }
     
     // marks renderer
-    if (true) {
+    if (!csiro) {
       MarksRenderer* marks = new MarksRenderer();
       comp->addRenderer(marks);
       
@@ -304,6 +312,11 @@
                                 width, height,
                                 Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
                                 true);
+    
+    if (csiro){
+      Geodetic3D australia = Geodetic3D::fromDegrees(-26.91, 133.94, 1.1e7);
+      ((G3MWidget*)_widget)->getCamera()->setPosition(*planet, australia);
+    }
     
     
     // rest of initialization

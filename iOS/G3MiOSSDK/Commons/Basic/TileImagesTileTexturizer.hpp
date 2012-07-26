@@ -36,6 +36,8 @@ private:
   Downloader * _downloader;
   
   std::vector<TilePetitions*> _tilePetitions;
+  std::vector<TilePetitions*> _tilePetitionsTopTile;
+  
   const TileParameters *_parameters;
   
   WMSLayer* _layer;
@@ -58,15 +60,13 @@ private:
   
   Mesh* getFallBackTexturedMesh(Tile* tile,
                                 const TileTessellator* tessellator,
-                                Mesh* tessellatorMesh);
+                                Mesh* tessellatorMesh,
+                                Mesh* previousMesh);
   
   Mesh* getNewTextureMesh(Tile* tile,
                           const TileTessellator* tessellator,
-                          Mesh* mesh);
-  
-  Rectangle getImageRectangleInTexture(const Sector& wholeSector, 
-                                       const Sector& imageSector,
-                                       int texWidth, int texHeight) const;
+                          Mesh* mesh,
+                          Mesh* previousMesh);
   
 public:
   

@@ -17,6 +17,11 @@ public:
   Rectangle(double x, double y, double width, double height): 
   _x(x), _y(y), _width(width), _height(height){}
   
+  Rectangle(const Rectangle& rec):
+  _x(rec._x), _y(rec._y), _width(rec._width), _height(rec._height){}
+  
+  
+  
 };
 
 #endif

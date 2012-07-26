@@ -21,7 +21,7 @@ public:
   
   virtual int createTextureFromImages(IGL * gl, const IFactory* factory,
                               const std::vector<const IImage*>& vImages, 
-                              const std::vector<Rectangle>& vRectangles, 
+                              const std::vector<const Rectangle*>& vRectangles, 
                               int width, int height) const = 0;
 };
 

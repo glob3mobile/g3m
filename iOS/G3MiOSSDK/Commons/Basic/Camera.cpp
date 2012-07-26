@@ -270,3 +270,8 @@ void Camera::rotateWithAxisAndPoint(const Vector3D& axis, const Vector3D& point,
   
   applyTransform(m);
 }
+
+void Camera::setPosition(const Planet& planet, const Geodetic3D& g3d)
+{
+  _position = planet.toVector3D(g3d).asMutableVector3D();
+}

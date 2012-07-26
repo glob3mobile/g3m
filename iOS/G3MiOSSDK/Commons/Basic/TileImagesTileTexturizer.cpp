@@ -48,13 +48,16 @@ void TileImagesTileTexturizer::translateAndScaleFallBackTex(Tile* tile,
 
 Mesh* TileImagesTileTexturizer::getNewTextureMesh(Tile* tile,
                                                   const TileTessellator* tessellator,
-                                                  Mesh* tessellatorMesh) {
+                                                  Mesh* tessellatorMesh,
+                                                  Mesh* previousMesh) {
   //THE TEXTURE HAS BEEN LOADED???
   int texID = getTexture(tile);
   if (texID > -1){
     tile->setTextureSolved(true);
     TextureMapping * tMap = new TextureMapping(texID, getTextureCoordinates(tessellator));
-    return new TexturedMesh(tessellatorMesh, false, tMap, true);
+    TexturedMesh* texMesh = new TexturedMesh(tessellatorMesh, false, tMap, true);
+    delete previousMesh;   //If a new mesh has been produced we delete the previous one
+    return texMesh;
   } else{
     return NULL;
   }
@@ -62,7 +65,8 @@ Mesh* TileImagesTileTexturizer::getNewTextureMesh(Tile* tile,
 
 Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
                                                         const TileTessellator* tessellator,
-                                                        Mesh* tessellatorMesh) {
+                                                        Mesh* tessellatorMesh,
+                                                        Mesh* previousMesh) {
   int texID = -1;
   Tile* fbTile = tile->getParent();
   while (fbTile != NULL && texID < 0) {
@@ -86,7 +90,9 @@ Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
   if (texID > -1) {
     TextureMapping * tMap = new TextureMapping(texID, getTextureCoordinates(tessellator));
     translateAndScaleFallBackTex(tile, fbTile, tMap);
-    return new TexturedMesh(tessellatorMesh, false, tMap, true);
+    TexturedMesh* texMesh = new TexturedMesh(tessellatorMesh, false, tMap, true);
+    delete previousMesh;   //If a new mesh has been produced we delete the previous one
+    return texMesh;
   }
   
   return NULL;
@@ -119,25 +125,20 @@ Mesh* TileImagesTileTexturizer::texturize(const RenderContext* rc,
   if (timer != NULL) {
     int __TODO_tune_TEXTURIZER_render_budget;
     if ( timer->elapsedTime().milliseconds() > 20 ) {
-      return getFallBackTexturedMesh(tile, tessellator, tessellatorMesh);
+      return getFallBackTexturedMesh(tile, tessellator, tessellatorMesh, previousMesh);
     }
   }
   
-  Mesh* mesh = getNewTextureMesh(tile, tessellator, tessellatorMesh);
+  Mesh* mesh = getNewTextureMesh(tile, tessellator, tessellatorMesh, previousMesh);
   if (mesh == NULL){
     //REGISTERING PETITION AND SENDING TO THE NET IF NEEDED
     registerNewRequest(tile);
-    mesh = getNewTextureMesh(tile, tessellator, tessellatorMesh);
-  }
-  
-  //If we can't get a new TexturedMesh we try to get a FallBack Mesh
-  if (mesh == NULL){
-    mesh = getFallBackTexturedMesh(tile, tessellator, tessellatorMesh);
-  }
-  
-  //If a new mesh has been produced we delete the previous one
-  if (mesh != NULL && previousMesh != NULL) {
-    delete previousMesh;
+    mesh = getNewTextureMesh(tile, tessellator, tessellatorMesh, previousMesh);
+    
+    //If we still can't get a new TexturedMesh we try to get a FallBack Mesh
+    if (mesh == NULL){
+      mesh = getFallBackTexturedMesh(tile, tessellator, tessellatorMesh, previousMesh);
+    }
   }
   
   return mesh;
@@ -166,29 +167,26 @@ bool TileImagesTileTexturizer::tileMeetsRenderCriteria(Tile* tile) {
 }
 
 void TileImagesTileTexturizer::justCreatedTopTile(Tile *tile) {
-  registerNewRequest(tile);
+  int priority = 9999; //MAX PRIORITY
+  TilePetitions *tp = createTilePetitions(tile);
+  _tilePetitionsTopTile.push_back(tp); //STORED
+  _tilePetitions.push_back(tp);
+  tp->requestToNet(*_downloader, priority);
 }
 
 bool TileImagesTileTexturizer::isReadyToRender(const RenderContext *rc) {
-  int __TODO_check_for_level_0_loaded;
+  int todo_JM; 
+//  for (int i = 0; i < _tilePetitionsTopTile.size(); i++) {
+//    if (!_tilePetitionsTopTile[i]->allFinished()) {
+//      return false;
+//    }
+//  }
+//  _tilePetitionsTopTile.clear();
   
   return true;
 }
 
-Rectangle TileImagesTileTexturizer::getImageRectangleInTexture(const Sector& wholeSector, 
-                                                               const Sector& imageSector,
-                                                               int texWidth, int texHeight) const
-{
-  Vector2D pos = wholeSector.getUVCoordinates(imageSector.lower().latitude(), imageSector.lower().longitude());
-  
-  double width = wholeSector.getDeltaLongitude().degrees() / imageSector.getDeltaLongitude().degrees();
-  double height = wholeSector.getDeltaLatitude().degrees() / imageSector.getDeltaLatitude().degrees();
-  
-  
-  
-  Rectangle r(pos.x() * texWidth, pos.y() * texHeight, width * texWidth, height * texHeight);
-  return r;
-}
+
 
 TilePetitions* TileImagesTileTexturizer::getRegisteredTilePetitions(Tile* tile) const
 {

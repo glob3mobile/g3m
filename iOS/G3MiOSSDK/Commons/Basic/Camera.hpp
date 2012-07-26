@@ -134,6 +134,8 @@ public:
   
   const Frustum* const getFrustumInModelCoordinates();
   
+  void setPosition(const Planet& planet, const Geodetic3D& g3d);
+  
   
   int __temporal_test_for_clipping;
   // TEMP TEST
@@ -214,8 +216,6 @@ private:
       _frustumInModelCoordinates = NULL;
     }
   }
-  
-  
 };
 
 #endif
