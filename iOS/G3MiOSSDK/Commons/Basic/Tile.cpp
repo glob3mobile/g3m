@@ -62,9 +62,10 @@ Mesh* Tile::getDebugMesh(const RenderContext* rc,
 bool Tile::isVisible(const RenderContext *rc,
                      const TileTessellator *tessellator) {
   
-  if (_sector.isBackOriented(rc)) {
-    return false; 
-  }
+  // DGD: Sector::isBackOriented doesn't work
+  //  if (_sector.isBackOriented(rc)) {
+  //    return false; 
+  //  }
   
   return getTessellatorMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->getFrustumInModelCoordinates());
 //  return getTessellatorMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->_halfFrustumInModelCoordinates);
@@ -85,11 +86,11 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
   }
   
   int __TODO_tune_render_budget;
-  if (timer != NULL) {
-    if ( timer->elapsedTime().milliseconds() > 15 ) {
-      return true;
-    }
-  }
+//  if (timer != NULL) {
+//    if ( timer->elapsedTime().milliseconds() > 50 ) {
+//      return true;
+//    }
+//  }
 
   if (texturizer != NULL) {
     if (texturizer->tileMeetsRenderCriteria(this)) {
@@ -131,7 +132,7 @@ void Tile::rawRender(const RenderContext *rc,
         int __TODO_tune_render_budget;
 
         if (_texturizerTimer == NULL ||
-            _texturizerTimer->elapsedTime().milliseconds() > 50) {
+            _texturizerTimer->elapsedTime().milliseconds() > 75) {
           
           _texturizerMesh = texturizer->texturize(rc, this, tessellator, tessellatorMesh, _texturizerMesh, timer);
 

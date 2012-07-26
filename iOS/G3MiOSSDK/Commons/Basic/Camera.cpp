@@ -72,7 +72,7 @@ void Camera::print() const {
   }
 }
 
-void Camera::calculateCachedValues(const RenderContext &rc) {
+void Camera::calculateCachedValues(const RenderContext *rc) {
   const FrustumData data = calculateFrustumData(rc);
   
   _projectionMatrix = MutableMatrix44D::createProjectionMatrix(data._left, data._right,
@@ -109,15 +109,15 @@ void Camera::calculateCachedValues(const RenderContext &rc) {
 
 }
 
-void Camera::render(const RenderContext &rc) {
-  _logger = rc.getLogger();
+void Camera::render(const RenderContext* rc) {
+  _logger = rc->getLogger();
   
   if (_dirtyCachedValues) {
     calculateCachedValues(rc);
     _dirtyCachedValues = false;
   }
   
-  IGL *gl = rc.getGL();
+  IGL *gl = rc->getGL();
   gl->setProjection(_projectionMatrix);
   gl->loadMatrixf(_modelMatrix);
   
@@ -141,7 +141,7 @@ void Camera::render(const RenderContext &rc) {
     };
     unsigned int indices[] = {0, 1, 2, 3};
     
-    IGL *gl = rc.getGL();
+//    IGL *gl = rc.getGL();
     gl->enableVerticesPosition();
     gl->vertexPointer(3, 0, vertices);
     gl->lineWidth(2);

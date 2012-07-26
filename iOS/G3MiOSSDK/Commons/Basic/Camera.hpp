@@ -98,7 +98,7 @@ public:
   
   void resizeViewport(int width, int height);
   
-  void render(const RenderContext &rc);
+  void render(const RenderContext* rc);
   
   Vector3D pixel2Ray(const Vector2D& pixel) const;
   
@@ -166,29 +166,44 @@ private:
   bool _dirtyCachedValues;
   
   
-  FrustumData calculateFrustumData(const RenderContext &rc) {
+  FrustumData calculateFrustumData(const RenderContext* rc) {
     // compute znear value
-    const double maxR = rc.getPlanet()->getRadii().maxAxis();
-    const double distToOrigin = _position.length();
-    const double height = distToOrigin - maxR;  
+    const double maxRadius = rc->getPlanet()->getRadii().maxAxis();
+    const double distanceToPlanetCenter = _position.length();
+    const double distanceToSurface = distanceToPlanetCenter - maxRadius;  
+    
+//    double znear;
+//    if (distanceToSurface > maxRadius/5) {
+//      znear = maxRadius / 10; 
+//    }
+//    else if (distanceToSurface > maxRadius/500) {
+//      znear = maxRadius / 1e3;
+//    }
+//    else if (distanceToSurface > maxRadius/2000) {
+//      znear = maxRadius / 1e5;
+//    }
+//    else {
+//      znear = maxRadius / 1e6 * 3;
+//    }
+
     double znear;
-    if (height > maxR/5) {
-      znear = maxR / 10; 
+    if (distanceToSurface > maxRadius/5) {
+      znear = maxRadius / 10; 
     }
-    else if (height > maxR/500) {
-      znear = maxR / 1e3;
+    else if (distanceToSurface > maxRadius/500) {
+      znear = maxRadius / 1e4;
     }
-    else if (height > maxR/2000) {
-      znear = maxR / 1e5;
+    else if (distanceToSurface > maxRadius/2000) {
+      znear = maxRadius / 1e5;
     }
     else {
-      znear = maxR / 1e6 * 3;
+      znear = maxRadius / 1e6 * 3;
     }
-    
+
     // compute zfar value
     double zfar = 10000 * znear;
-    if (zfar > distToOrigin) {
-      zfar = distToOrigin; 
+    if (zfar > distanceToPlanetCenter) {
+      zfar = distanceToPlanetCenter; 
     }
     
     // compute rest of frustum numbers
@@ -204,7 +219,7 @@ private:
   }
   
   
-  void calculateCachedValues(const RenderContext &rc);
+  void calculateCachedValues(const RenderContext* rc);
   
   void cleanCachedValues() {
     _dirtyCachedValues = true;

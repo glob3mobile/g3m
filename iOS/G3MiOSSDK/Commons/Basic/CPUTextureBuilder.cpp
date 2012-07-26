@@ -10,10 +10,9 @@
 
 int CPUTextureBuilder::createTextureFromImages(IGL * gl, 
                                                const std::vector<const IImage*>& vImages, 
-                                               int width, int height) const
-{
+                                               int width, int height) const {
   if (vImages.size() > 0){
-  
+    
     const IImage* im = vImages[0], *im2 = NULL;
     for (int i = 1; i < vImages.size(); i++) {
       const IImage* imTrans = vImages[i];
@@ -34,10 +33,9 @@ int CPUTextureBuilder::createTextureFromImages(IGL * gl,
 }
 
 int CPUTextureBuilder::createTextureFromImages(IGL * gl, const IFactory* factory,
-                            const std::vector<const IImage*>& vImages, 
-                            const std::vector<const Rectangle*>& vRectangles, 
-                            int width, int height) const
-{
+                                               const std::vector<const IImage*>& vImages, 
+                                               const std::vector<const Rectangle*>& vRectangles, 
+                                               int width, int height) const {
   
   int todo_JM;
   const IImage* base;
@@ -54,5 +52,5 @@ int CPUTextureBuilder::createTextureFromImages(IGL * gl, const IFactory* factory
   }
   
   return todo_JM;
-
+  
 }

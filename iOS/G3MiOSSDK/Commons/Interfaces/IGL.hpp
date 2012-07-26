@@ -100,7 +100,6 @@ public:
   
   virtual void useProgram(unsigned int program) = 0;
   
-  
   virtual void lineWidth(float width) = 0;
 
   virtual int getError() = 0;

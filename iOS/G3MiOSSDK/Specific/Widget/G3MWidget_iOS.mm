@@ -168,7 +168,6 @@
   
   //Testing downloads
   if (false) {
-    int test_download_code = 0;
     NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     
     FileSystemStorage * fss = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
@@ -180,7 +179,6 @@
   if (false){
     NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     NSLog(@"\nDocument Directory: %s;", [documentsDirectory UTF8String]);
-    int test_download_code = 0;
     
     SQLiteStorage_iOS *sql = new SQLiteStorage_iOS("test.db", "file");
     DummyDownload *dummyDownload = new DummyDownload(factory, sql);
@@ -269,7 +267,7 @@
   
   // very basic tile renderer
   if (true) {
-    TileParameters* parameters = TileParameters::createDefault(true);
+    TileParameters* parameters = TileParameters::createDefault(false);
     
     TileTexturizer* texturizer = NULL;
     if (true) {
@@ -393,7 +391,7 @@
     // all the creation of renderers must be move to common source code, instead of specific
     int __to_move_to_common_source_code;
     
-    bool csiro = true;
+    bool csiro = false;
     if (csiro){
       [self initWidgetCSIRO];
     } else{

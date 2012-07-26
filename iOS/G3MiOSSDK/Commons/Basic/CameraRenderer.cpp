@@ -28,7 +28,7 @@ int CameraRenderer::render(const RenderContext* rc) {
   _planet = rc->getPlanet();
   gl = rc->getGL();
   
-  _camera->render(*rc);
+  _camera->render(rc);
   
   // TEMP TO DRAW A POINT WHERE USER PRESS
   if (true) if (_currentGesture==Zoom) {
