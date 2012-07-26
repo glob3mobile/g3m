@@ -28,28 +28,40 @@ public:
   virtual ~IGL() {};
   
   virtual void enableVerticesPosition() = 0;
-  
+  virtual void disableVerticesPosition() = 0;
+
   virtual void enableTextures() = 0;
+  virtual void disableTextures() = 0;
   
   virtual void enableVertexColor(float const colors[], float intensity) = 0;
-  
-  virtual void enableVertexFlatColor(const Color& c, float intensity) = 0;
-  
   virtual void disableVertexColor() = 0;
+
+  void enableVertexFlatColor(const Color& c, float intensity) {
+    enableVertexFlatColor(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha(), intensity);
+  }
+  
+  virtual void enableVertexFlatColor(float r, float g, float b, float a, float intensity) = 0;
   
   virtual void disableVertexFlatColor() = 0;
   
   virtual void enableVertexNormal(float const normals[]) = 0;
-  
   virtual void disableVertexNormal() = 0;
   
   virtual void enableTexture2D() = 0;
-  
   virtual void disableTexture2D() = 0;
   
-  virtual void disableVerticesPosition() = 0;
+  virtual void enablePolygonOffset(float factor, float units) = 0;
+  virtual void disablePolygonOffset() = 0;
   
-  virtual void disableTextures() = 0;
+  virtual void enableDepthTest() = 0;
+  virtual void disableDepthTest() = 0;
+
+  virtual void enableBlend() = 0;
+  virtual void disableBlend() = 0;
+  
+  virtual void enableCullFace(CullFace face) = 0;
+  virtual void disableCullFace() = 0;
+  
 
   virtual void clearScreen(float r, float g, float b, float a) = 0;
 
@@ -80,20 +92,14 @@ public:
   virtual void vertexPointer(int size, int stride, const float vertex[]) = 0;
   
   virtual void drawTriangleStrip(int n, const unsigned int* i) = 0;
-  
   virtual void drawLines(int n, const unsigned int* i) = 0; 
-  
   virtual void drawLineLoop(int n, const unsigned int* i) = 0;
-
   virtual void drawPoints(int n, const unsigned int *i) = 0;
-
+  
   virtual void setProjection(const MutableMatrix44D &projection) = 0;
   
   virtual void useProgram(unsigned int program) = 0;
   
-  virtual void enablePolygonOffset(float factor, float units) = 0;
-  
-  virtual void disablePolygonOffset() = 0;
   
   virtual void lineWidth(float width) = 0;
 
@@ -105,17 +111,11 @@ public:
   
   virtual void bindTexture(unsigned int n) = 0;
 
-  virtual void depthTest(bool b) = 0;
-  
-  virtual void blend(bool b) = 0;
-  
   virtual void drawBillBoard(const unsigned int textureId,
                              const Vector3D& pos,
                              const float viewPortRatio) = 0;
 
   virtual void deleteTexture(int glTextureId) = 0;
-  
-  virtual void cullFace(bool b, CullFace face) = 0;
   
   virtual void transformTexCoords(const Vector2D& scale, const Vector2D& translation) = 0;
 

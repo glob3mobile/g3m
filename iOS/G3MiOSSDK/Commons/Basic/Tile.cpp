@@ -85,11 +85,11 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
   }
   
   int __TODO_tune_render_budget;
-//  if (timer != NULL) {
-//    if ( timer->elapsedTime().milliseconds() > 50 ) {
-//      return true;
-//    }
-//  }
+  if (timer != NULL) {
+    if ( timer->elapsedTime().milliseconds() > 15 ) {
+      return true;
+    }
+  }
 
   if (texturizer != NULL) {
     if (texturizer->tileMeetsRenderCriteria(this)) {
@@ -103,8 +103,8 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
 //  }
   
   const Vector2D extent = getTessellatorMesh(rc, tessellator)->getExtent()->projectedExtent(rc);
-  const double t = extent.maxAxis() * 2;
-//  const double t = (extent.x() + extent.y());
+//  const double t = extent.maxAxis() * 2;
+  const double t = (extent.x() + extent.y());
   if ( t <= ((parameters->_tileTextureWidth + parameters->_tileTextureHeight) * 1.75) ) {
     return true;
   }
@@ -131,7 +131,7 @@ void Tile::rawRender(const RenderContext *rc,
         int __TODO_tune_render_budget;
 
         if (_texturizerTimer == NULL ||
-            _texturizerTimer->elapsedTime().milliseconds() > 25) {
+            _texturizerTimer->elapsedTime().milliseconds() > 50) {
           
           _texturizerMesh = texturizer->texturize(rc, this, tessellator, tessellatorMesh, _texturizerMesh, timer);
 

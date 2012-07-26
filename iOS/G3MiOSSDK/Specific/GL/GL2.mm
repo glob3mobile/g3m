@@ -34,8 +34,8 @@ struct UniformsStruct {
   GLint EnableColorPerVertex;
   GLint EnableFlatColor;
   GLint ColorPerVertexIntensity;
-  
 } Uniforms;
+
 
 struct AttributesStruct {
   GLint Position;
@@ -50,32 +50,38 @@ void GL2::useProgram(unsigned int program) {
   glUseProgram(program);
   
   // Extract the handles to attributes
-  Attributes.Position = glGetAttribLocation(program, "Position");
+  Attributes.Position     = glGetAttribLocation(program, "Position");
   Attributes.TextureCoord = glGetAttribLocation(program, "TextureCoord");
-  Attributes.Color = glGetAttribLocation(program, "Color");
-  Attributes.Normal = glGetAttribLocation(program, "Normal");
+  Attributes.Color        = glGetAttribLocation(program, "Color");
+  Attributes.Normal       = glGetAttribLocation(program, "Normal");
   
   // Extract the handles to uniforms
-  Uniforms.Projection = glGetUniformLocation(program, "Projection");
-  Uniforms.Modelview = glGetUniformLocation(program, "Modelview");
-  Uniforms.Sampler = glGetUniformLocation(program, "Sampler");
-  Uniforms.EnableTexture = glGetUniformLocation(program, "EnableTexture");
-  Uniforms.FlatColor = glGetUniformLocation(program, "FlatColor");
+  Uniforms.Projection          = glGetUniformLocation(program, "Projection");
+  Uniforms.Modelview           = glGetUniformLocation(program, "Modelview");
+  Uniforms.Sampler             = glGetUniformLocation(program, "Sampler");
+  Uniforms.EnableTexture       = glGetUniformLocation(program, "EnableTexture");
+  Uniforms.FlatColor           = glGetUniformLocation(program, "FlatColor");
   Uniforms.TranslationTexCoord = glGetUniformLocation(program, "TranslationTexCoord");
+  Uniforms.ScaleTexCoord       = glGetUniformLocation(program, "ScaleTexCoord");
   glUniform2f(Uniforms.TranslationTexCoord, 0, 0);
-  Uniforms.ScaleTexCoord = glGetUniformLocation(program, "ScaleTexCoord");
   glUniform2f(Uniforms.ScaleTexCoord, 1, 1);
   
   //BILLBOARDS
-  Uniforms.BillBoard = glGetUniformLocation(program, "BillBoard");
-  glUniform1i(Uniforms.BillBoard, false); //NOT DRAWING BILLBOARD
+  Uniforms.BillBoard     = glGetUniformLocation(program, "BillBoard");
   Uniforms.ViewPortRatio = glGetUniformLocation(program, "ViewPortRatio");
+  glUniform1i(Uniforms.BillBoard, false); //NOT DRAWING BILLBOARD
   
   //FOR FLAT COLOR MIXING
-  Uniforms.FlatColorIntensity = glGetUniformLocation(program, "FlatColorIntensity");
+  Uniforms.FlatColorIntensity      = glGetUniformLocation(program, "FlatColorIntensity");
   Uniforms.ColorPerVertexIntensity = glGetUniformLocation(program, "ColorPerVertexIntensity");
-  Uniforms.EnableColorPerVertex = glGetUniformLocation(program, "EnableColorPerVertex");
-  Uniforms.EnableFlatColor = glGetUniformLocation(program, "EnableFlatColor");
+  Uniforms.EnableColorPerVertex    = glGetUniformLocation(program, "EnableColorPerVertex");
+  Uniforms.EnableFlatColor         = glGetUniformLocation(program, "EnableFlatColor");
+}
+
+void GL2::loadModelView() {
+  float M[16];
+  _modelView.copyToFloatMatrix(M);
+  glUniformMatrix4fv(Uniforms.Modelview, 1, 0, M);
 }
 
 void GL2::setProjection(const MutableMatrix44D &projection) {
@@ -84,31 +90,23 @@ void GL2::setProjection(const MutableMatrix44D &projection) {
   glUniformMatrix4fv(Uniforms.Projection, 1, 0, M);
 }
 
-void GL2::loadMatrixf(const MutableMatrix44D &m) {
-  float M[16];
-  m.copyToFloatMatrix(M);
-  
-  glUniformMatrix4fv(Uniforms.Modelview, 1, 0, M);
-  _modelView = m;
+void GL2::loadMatrixf(const MutableMatrix44D &modelView) {
+  _modelView = modelView;
+
+  loadModelView();
 }
 
 void GL2::multMatrixf(const MutableMatrix44D &m) {
-  MutableMatrix44D product = _modelView.multiply(m);
-  
-  float M[16];
-  product.copyToFloatMatrix(M);
-  glUniformMatrix4fv(Uniforms.Modelview, 1, 0, M);
-  _modelView = product;
+  _modelView = _modelView.multiply(m);
+
+  loadModelView();
 }
 
 void GL2::popMatrix() {
   _modelView = _matrixStack.back();
   _matrixStack.pop_back();
   
-  float M[16];
-  _modelView.copyToFloatMatrix(M);
-  
-  glUniformMatrix4fv(Uniforms.Modelview, 1, 0, M);
+  loadModelView();
 }
 
 void GL2::pushMatrix() {
@@ -125,8 +123,7 @@ void GL2::color(float r, float g, float b, float a) {
 }
 
 void GL2::transformTexCoords(const Vector2D& scale,
-                             const Vector2D& translation)
-{
+                             const Vector2D& translation) {
   glUniform2f(Uniforms.ScaleTexCoord, scale.x(), scale.y());
   glUniform2f(Uniforms.TranslationTexCoord, translation.x(), translation.y());
 }
@@ -156,11 +153,9 @@ void GL2::drawLineLoop(int n, const unsigned int *i) {
   glDrawElements(GL_LINE_LOOP, n, GL_UNSIGNED_INT, i);
 }
 
-void GL2::drawPoints(int n, const unsigned int *i)
-{
+void GL2::drawPoints(int n, const unsigned int *i) {
   glDrawElements(GL_POINTS, n, GL_UNSIGNED_INT, i);
 }
-
 
 void GL2::lineWidth(float width) {
   glLineWidth(width);
@@ -170,8 +165,7 @@ int GL2::getError() {
   return glGetError();
 }
 
-int GL2::uploadTexture(const IImage* image, int textureWidth, int textureHeight)
-{
+int GL2::uploadTexture(const IImage* image, int textureWidth, int textureHeight) {
   UIImage * im = ((Image_iOS*) image)->getUIImage();
   
   
@@ -223,16 +217,12 @@ void GL2::bindTexture(unsigned int n) {
 void GL2::drawBillBoard(const unsigned int textureId,
                         const Vector3D& pos,
                         const float viewPortRatio) {
-  glUniform1i(Uniforms.BillBoard, true);
-  
   const float vertex[] = {
     pos.x(), pos.y(), pos.z(),
     pos.x(), pos.y(), pos.z(),
     pos.x(), pos.y(), pos.z(),
     pos.x(), pos.y(), pos.z()
   };
-  
-  glUniform1f(Uniforms.ViewPortRatio, viewPortRatio);
   
   const static float texcoord[] = {
     1, 1,
@@ -241,27 +231,31 @@ void GL2::drawBillBoard(const unsigned int textureId,
     0, 0
   };
   
-  depthTest(false);
+  glUniform1i(Uniforms.BillBoard, true);
+  
+  glUniform1f(Uniforms.ViewPortRatio, viewPortRatio);
+  
+  disableDepthTest();
   
   enableTexture2D();
-  glUniform4f(Uniforms.FlatColor, 1.0, 0.0, 0.0, 1);
+  color(1, 1, 1, 1);
   
-  glBindTexture(GL_TEXTURE_2D, textureId);
-  glVertexAttribPointer(Attributes.Position, 3, GL_FLOAT, 0, 0, (const void *) vertex);
-  glVertexAttribPointer(Attributes.TextureCoord, 2, GL_FLOAT, 0, 0, (const void *) texcoord);
+  bindTexture(textureId);
+
+  vertexPointer(3, 0, vertex);
+  setTextureCoordinates(2, 0, texcoord);
   
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
   
-  depthTest(true);
+  enableDepthTest();
   
-  glUniform1i(Uniforms.BillBoard, false); //NOT DRAWING BILLBOARD
+  glUniform1i(Uniforms.BillBoard, false);
 }
 
 void GL2::deleteTexture(int glTextureId) {
-  unsigned int textures[] = {glTextureId};
+  unsigned int textures[] = { glTextureId };
   glDeleteTextures(1, textures);
 }
-
 
 // state handling
 void GL2::enableTextures() {
@@ -312,7 +306,6 @@ void GL2::disableVertexColor() {
   }
 }
 
-
 void GL2::enableVertexNormal(float const normals[]) {
 //  if (normals != NULL) {
   if (!_enableVertexNormal) {
@@ -330,7 +323,6 @@ void GL2::disableVertexNormal() {
   }
 }
 
-
 void GL2::enableVerticesPosition() {
   if (!_enableVerticesPosition) {
     glEnableVertexAttribArray(Attributes.Position);
@@ -345,13 +337,13 @@ void GL2::disableVerticesPosition() {
   }
 }
 
-void GL2::enableVertexFlatColor(const Color& c,
+void GL2::enableVertexFlatColor(float r, float g, float b, float a,
                                 float intensity) {
   if (!_enableFlatColor) {
     glUniform1i(Uniforms.EnableFlatColor, true);
     _enableFlatColor = true;
   }
-  glUniform4f(Uniforms.FlatColor, c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
+  glUniform4f(Uniforms.FlatColor, r, g, b, a);
   glUniform1f(Uniforms.FlatColorIntensity, intensity);
 }
 
@@ -362,47 +354,61 @@ void GL2::disableVertexFlatColor() {
   }
 }
 
-void GL2::depthTest(bool b) {
-  if (_depthTest != b) {
-    if (b) {
-      glEnable(GL_DEPTH_TEST);
-    }
-    else {
-      glDisable(GL_DEPTH_TEST);
-    }
-    _depthTest = b;
+void GL2::enableDepthTest() {
+  if (!_enableDepthTest) {
+    glEnable(GL_DEPTH_TEST);
+    _enableDepthTest = true;
   }
 }
 
-void GL2::blend(bool b) {
-  if (_blend != b) {
-    if (b) {
-      glEnable(GL_BLEND);
-    }
-    else {
-      glDisable(GL_BLEND);
-    }
-    _blend = b;
+void GL2::disableDepthTest() {
+  if (_enableDepthTest) {
+    glDisable(GL_DEPTH_TEST);
+    _enableDepthTest = false;
   }
 }
 
-void GL2::cullFace(bool b, CullFace face) {
-  if (b) {
+void GL2::enableBlend() {
+  if (!_enableBlend) {
+    glEnable(GL_BLEND);
+    _enableBlend = true;
+  }
+}
+
+void GL2::disableBlend() {
+  if (_enableBlend) {
+    glDisable(GL_BLEND);
+    _enableBlend = false;
+  }
+
+}
+
+void GL2::enableCullFace(CullFace face) {
+  if (!_enableCullFace) {
     glEnable(GL_CULL_FACE);  
-  }
-  else {
-    glDisable(GL_CULL_FACE);
+    _enableCullFace = true;
   }
   
-  switch (face) {
-    case FRONT:
-      glCullFace(GL_FRONT);
-      break;
-    case BACK:
-      glCullFace(GL_BACK);
-      break;
-    case FRONT_AND_BACK:
-      glCullFace(GL_FRONT_AND_BACK);
-      break;
+  if (_cullFace_face != face) {
+    switch (face) {
+      case FRONT:
+        glCullFace(GL_FRONT);
+        break;
+      case BACK:
+        glCullFace(GL_BACK);
+        break;
+      case FRONT_AND_BACK:
+        glCullFace(GL_FRONT_AND_BACK);
+        break;
+    }
+    
+    _cullFace_face = face;
+  }
+}
+
+void GL2::disableCullFace() {
+  if (_enableCullFace) {
+    glDisable(GL_CULL_FACE);
+    _enableCullFace = false;
   }
 }

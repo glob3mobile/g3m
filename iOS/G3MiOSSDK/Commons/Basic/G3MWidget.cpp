@@ -26,6 +26,8 @@ G3MWidget* G3MWidget::create(IFactory* factory,
     logger->logInfo("Creating G3MWidget...");
   }
   
+  ILogger::setInstance(logger);
+  
   return new G3MWidget(factory,
                        logger,
                        gl,
@@ -40,12 +42,12 @@ G3MWidget* G3MWidget::create(IFactory* factory,
 }
 
 void G3MWidget::initializeGL() {
-  _gl->depthTest(true);
+  _gl->enableDepthTest();
 #ifdef C_CODE
-  _gl->cullFace(true, BACK);
+  _gl->enableCullFace(BACK);
 #endif
 #ifdef JAVA_CODE
-  _gl.cullFace(true, CullFace.BACK);
+  _gl.enableCullFace(CullFace.BACK);
 #endif
 }
 

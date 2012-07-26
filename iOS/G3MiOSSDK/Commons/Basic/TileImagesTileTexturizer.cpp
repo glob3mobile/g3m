@@ -22,10 +22,11 @@ TilePetitions* TileImagesTileTexturizer::createTilePetitions(const Tile* tile) {
                                                               _parameters->_tileTextureWidth, 
                                                               _parameters->_tileTextureHeight);
   
-  TilePetitions* tp = new TilePetitions(tile->getLevel(), tile->getRow(), 
-                                        tile->getColumn(), tile->getSector(), 
-                                        pet);
-  return tp;
+  return new TilePetitions(tile->getLevel(),
+                           tile->getRow(),
+                           tile->getColumn(),
+                           tile->getSector(),
+                           pet);
 }
 
 std::vector<MutableVector2D> TileImagesTileTexturizer::getTextureCoordinates(const TileTessellator* tessellator) const {
@@ -52,7 +53,7 @@ Mesh* TileImagesTileTexturizer::getNewTextureMesh(Tile* tile,
                                                   Mesh* previousMesh) {
   //THE TEXTURE HAS BEEN LOADED???
   int texID = getTexture(tile);
-  if (texID > -1){
+  if (texID > -1) {
     tile->setTextureSolved(true);
     TextureMapping * tMap = new TextureMapping(texID, getTextureCoordinates(tessellator));
     TexturedMesh* texMesh = new TexturedMesh(tessellatorMesh, false, tMap, true);
@@ -88,7 +89,7 @@ Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
   
   //CREATING MESH
   if (texID > -1) {
-    TextureMapping * tMap = new TextureMapping(texID, getTextureCoordinates(tessellator));
+    TextureMapping* tMap = new TextureMapping(texID, getTextureCoordinates(tessellator));
     translateAndScaleFallBackTex(tile, fbTile, tMap);
     TexturedMesh* texMesh = new TexturedMesh(tessellatorMesh, false, tMap, true);
     delete previousMesh;   //If a new mesh has been produced we delete the previous one
@@ -99,9 +100,7 @@ Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
 }
 
 void TileImagesTileTexturizer::registerNewRequest(Tile *tile){
-  
-  if (getRegisteredTilePetitions(tile) == NULL){ //NOT YET REQUESTED
-    
+  if (getRegisteredTilePetitions(tile) == NULL) { //NOT YET REQUESTED
     int priority = tile->getLevel(); //DOWNLOAD PRIORITY SET TO TILE LEVEL
     TilePetitions *tp = createTilePetitions(tile);
     _tilePetitions.push_back(tp); //STORED
@@ -190,11 +189,10 @@ bool TileImagesTileTexturizer::isReadyToRender(const RenderContext *rc) {
 
 TilePetitions* TileImagesTileTexturizer::getRegisteredTilePetitions(Tile* tile) const
 {
-  TilePetitions* tp = NULL;
   for (int i = 0; i < _tilePetitions.size(); i++) {
-    tp = _tilePetitions[i];
-    if (tile->getLevel() == tp->getLevel() &&
-        tile->getRow() == tp->getRow() &&
+    TilePetitions* tp = _tilePetitions[i];
+    if (tile->getLevel()  == tp->getLevel() &&
+        tile->getRow()    == tp->getRow()   &&
         tile->getColumn() == tp->getColumn()){
       return tp;
     }
@@ -207,8 +205,8 @@ void TileImagesTileTexturizer::removeRegisteredTilePetitions(Tile* tile)
   TilePetitions* tp = NULL;
   for (int i = 0; i < _tilePetitions.size(); i++) {
     tp = _tilePetitions[i];
-    if (tile->getLevel() == tp->getLevel() &&
-        tile->getRow() == tp->getRow() &&
+    if (tile->getLevel()  == tp->getLevel() &&
+        tile->getRow()    == tp->getRow()   &&
         tile->getColumn() == tp->getColumn()){
       _tilePetitions.erase(_tilePetitions.begin() + i);
       delete tp;

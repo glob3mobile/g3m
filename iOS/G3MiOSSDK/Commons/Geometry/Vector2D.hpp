@@ -40,6 +40,8 @@ public:
     return sqrt(squaredLength());
   }
   
+  Angle orientation() const { return Angle::fromRadians(atan2(_y, _x)); }
+  
   double squaredLength() const {
     return _x * _x + _y * _y ;
   }

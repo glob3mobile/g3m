@@ -24,8 +24,13 @@ private:
   bool _enableVertexNormal;
   bool _enableVerticesPosition;
   bool _enableFlatColor;
-  bool _depthTest;
-  bool _blend;
+  bool _enableDepthTest;
+  bool _enableBlend;
+  
+  bool _enableCullFace;
+  CullFace _cullFace_face;
+  
+  inline void loadModelView();
   
 public:
   
@@ -36,8 +41,10 @@ public:
   _enableVertexNormal(false),
   _enableVerticesPosition(false),
   _enableFlatColor(false),
-  _depthTest(false),
-  _blend(false)
+  _enableBlend(false),
+  _enableDepthTest(false),
+  _enableCullFace(false),
+  _cullFace_face(BACK)
   {
     
   }
@@ -50,7 +57,7 @@ public:
   
   void enableTexture2D() ;
   
-  void enableVertexFlatColor(const Color& color,
+  void enableVertexFlatColor(float r, float g, float b, float a,
                              float intensity);
   
   void disableVertexFlatColor();
@@ -109,9 +116,11 @@ public:
   
   void bindTexture (unsigned int n);
   
-  void depthTest(bool b);
+  void enableDepthTest();
+  void disableDepthTest();
   
-  void blend(bool b);
+  void enableBlend();
+  void disableBlend();
   
   void drawBillBoard(const unsigned int textureId,
                      const Vector3D& pos,
@@ -119,7 +128,8 @@ public:
   
   void deleteTexture(int glTextureId);
   
-  void cullFace(bool b, CullFace face);
+  void enableCullFace(CullFace face);
+  void disableCullFace();
 
   void transformTexCoords(const Vector2D& scale, const Vector2D& translation);
 
