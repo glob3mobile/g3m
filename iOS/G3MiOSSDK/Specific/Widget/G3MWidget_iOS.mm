@@ -61,6 +61,312 @@
   return [CAEAGLLayer class];
 }
 
+- (void) initWidgetCSIRO
+{
+  // create GLOB3M WIDGET
+  int width = [self frame].size.width;
+  int height = [self frame].size.height;
+
+  IFactory *factory = new Factory_iOS();
+  ILogger *logger = new Logger_iOS(ErrorLevel);
+  IGL* gl  = new GL2();
+
+  // composite renderer is the father of the rest of renderers
+  CompositeRenderer* comp = new CompositeRenderer();
+  
+  // camera renderer
+  CameraRenderer *cameraRenderer = new CameraRenderer();
+  comp->addRenderer(cameraRenderer);
+  
+  //STORAGE
+  NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+  FileSystemStorage * fss = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
+  Downloader* downloader = new Downloader(fss, 5, factory->createNetwork());
+  
+  //LAYERS
+  LayerSet* layerSet = new LayerSet();
+  WMSLayer* baseLayer = new WMSLayer("bmng200405", "http://www.nasa.network.com/wms?", 
+                                     "1.3", "image/jpeg", Sector::fullSphere(), "EPSG:4326", "");
+  layerSet->add(baseLayer);
+
+  Sector s = Sector::fromDegrees(-60, 57, -10, -180);
+  WMSLayer *wmsl = new WMSLayer("test:contourGSLA","http://imos2.ersa.edu.au/geo2/test/wms","1.1.1", "image/png", s, "EPSG:4326", "sla_test");
+    
+  WMSLayer *wms_sst = new WMSLayer("sea_surface_temperature","http://opendap-vpac.arcs.org.au/thredds/wms/IMOS/SRS/GHRSST-SSTsubskin/2012/20120626-ABOM-L3P_GHRSST-SSTsubskin-AVHRR_MOSAIC_01km-AO_DAAC-v01-fv01_0.nc?","1.3.0", "image/png", s, "EPSG:4326&COLORSCALERANGE=273.8%2C302.8&NUMCOLORBANDS=50&LOGSCALE=false", "boxfill%2Fsst_36");
+    
+  layerSet->add(wmsl);
+  layerSet->add(wms_sst);
+  
+  // very basic tile renderer
+  if (true) {
+    TileParameters* parameters = TileParameters::createDefault(true);
+    
+    TileTexturizer* texturizer = NULL;
+    if (true) {
+      texturizer = new TileImagesTileTexturizer(parameters, downloader, layerSet); //WMS
+    }
+    else {
+      //SINGLE IMAGE
+      IImage *singleWorldImage = factory->createImageFromFileName("world.jpg");
+      texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
+    }
+    
+    const bool showStatistics = false;
+    TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
+                                        texturizer,
+                                        parameters,
+                                        showStatistics);
+    comp->addRenderer(tr);
+  }
+  
+  if (false) {
+    // dummy renderer with a simple box
+    DummyRenderer* dum = new DummyRenderer();
+    comp->addRenderer(dum);
+  }
+  
+  if (false) {
+    // simple planet renderer, with a basic world image
+    SimplePlanetRenderer* spr = new SimplePlanetRenderer("world.jpg");
+    comp->addRenderer(spr);
+  }
+
+  TextureBuilder* texBuilder = new CPUTextureBuilder();
+  TexturesHandler* texturesHandler = new TexturesHandler(gl, factory, texBuilder, false);
+  
+  const Planet* planet = Planet::createEarth();
+  
+  Renderer* busyRenderer = new BusyRenderer();
+  
+  _widget = G3MWidget::create(factory,
+                              logger,
+                              gl,
+                              texturesHandler,
+                              downloader,
+                              planet, 
+                              comp,
+                              busyRenderer,
+                              width, height,
+                              Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
+                              true);
+  
+  Geodetic3D australia = Geodetic3D::fromDegrees(-26.91, 133.94, 1.1e7);
+  ((G3MWidget*)_widget)->getCamera()->setPosition(*planet, australia);
+
+}
+
+- (void) initWidgetDemo
+{
+  
+  // create GLOB3M WIDGET
+  int width = [self frame].size.width;
+  int height = [self frame].size.height;
+
+  IFactory *factory = new Factory_iOS();
+  ILogger *logger = new Logger_iOS(ErrorLevel);
+  IGL* gl  = new GL2();
+  
+  //Testing downloads
+  if (false) {
+    int test_download_code = 0;
+    NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    
+    FileSystemStorage * fss = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
+    
+    DummyDownload *dummyDownload = new DummyDownload(factory, fss );
+    dummyDownload->run();
+  }
+  
+  if (false){
+    NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSLog(@"\nDocument Directory: %s;", [documentsDirectory UTF8String]);
+    int test_download_code = 0;
+    
+    SQLiteStorage_iOS *sql = new SQLiteStorage_iOS("test.db", "file");
+    DummyDownload *dummyDownload = new DummyDownload(factory, sql);
+    
+    std::string directory = "";
+    std::string file1 = "";
+    std::string file2 = "";
+    std::string file3 = "";
+    
+    if(false){
+      directory = "/Users/vidalete/Downloads/";
+      file1 = "Tic2Vtwo.pdf";
+      file2 = "Pantallazo.png";
+      file3 = "blobtest.png";
+    }else{
+      directory = [documentsDirectory UTF8String];
+      file1 = "mark.png";
+      file2 = "world.jpg";
+      file3 = "plane.png";
+      
+      const NSFileManager *fileManager = [NSFileManager defaultManager];
+      NSError *error;
+      
+      NSString *writableDBPathNS = [documentsDirectory stringByAppendingPathComponent:[[NSString alloc] initWithCString:file1.c_str() encoding:NSUTF8StringEncoding]];
+      if (![fileManager fileExistsAtPath:writableDBPathNS]){
+        // The writable database does not exist, so copy the default to the appropriate location.
+        NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:[[NSString alloc] initWithCString:file1.c_str() encoding:NSUTF8StringEncoding]];
+        if (![fileManager copyItemAtPath:defaultDBPath toPath:writableDBPathNS error:&error]) {
+          NSLog(@"Failed to create writable file with message '%@'.", [error localizedDescription]);
+        } 
+      }
+      
+      writableDBPathNS = [documentsDirectory stringByAppendingPathComponent:[[NSString alloc] initWithCString:file2.c_str() encoding:NSUTF8StringEncoding]];
+      if (![fileManager fileExistsAtPath:writableDBPathNS]){
+        // The writable database does not exist, so copy the default to the appropriate location.
+        NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:[[NSString alloc] initWithCString:file2.c_str() encoding:NSUTF8StringEncoding]];
+        if (![fileManager copyItemAtPath:defaultDBPath toPath:writableDBPathNS error:&error]) {
+          NSLog(@"Failed to create writable file with message '%@'.", [error localizedDescription]);
+        } 
+      }
+      
+      writableDBPathNS = [documentsDirectory stringByAppendingPathComponent:[[NSString alloc] initWithCString:file3.c_str() encoding:NSUTF8StringEncoding]];
+      if (![fileManager fileExistsAtPath:writableDBPathNS]){
+        // The writable database does not exist, so copy the default to the appropriate location.
+        NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:[[NSString alloc] initWithCString:file3.c_str() encoding:NSUTF8StringEncoding]];
+        if (![fileManager copyItemAtPath:defaultDBPath toPath:writableDBPathNS error:&error]) {
+          NSLog(@"Failed to create writable file with message '%@'.", [error localizedDescription]);
+        } 
+      }
+      
+    }
+    
+    
+    FileSystemStorage * fssAux = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
+    
+    dummyDownload->runSqlite(directory, file1, fssAux);
+    dummyDownload->runSqlite(directory, file2, fssAux);
+    dummyDownload->runSqlite(directory, file3, fssAux);
+  }
+
+  // composite renderer is the father of the rest of renderers
+  CompositeRenderer* comp = new CompositeRenderer();
+  
+  // camera renderer
+  CameraRenderer *cameraRenderer = new CameraRenderer();
+  comp->addRenderer(cameraRenderer);
+  
+  //STORAGE
+  NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+  FileSystemStorage * fss = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
+  Downloader* downloader = new Downloader(fss, 5, factory->createNetwork());
+  
+  //LAYERS
+  LayerSet* layerSet = new LayerSet();
+  WMSLayer* baseLayer = new WMSLayer("bmng200405", "http://www.nasa.network.com/wms?", 
+                                     "1.3", "image/jpeg", Sector::fullSphere(), "EPSG:4326", "");
+  layerSet->add(baseLayer);
+  
+  WMSLayer *wmsl = new WMSLayer("VIAS",
+                                "http://idecan2.grafcan.es/ServicioWMS/Callejero",
+                                "1.1.0", "image/gif", 
+                                Sector::fromDegrees(22.5,-22.5, 33.75, -11.25),
+                                "EPSG:4326", "");
+  
+  layerSet->add(wmsl);
+  
+  // very basic tile renderer
+  if (true) {
+    TileParameters* parameters = TileParameters::createDefault(true);
+    
+    TileTexturizer* texturizer = NULL;
+    if (true) {
+      texturizer = new TileImagesTileTexturizer(parameters, downloader, layerSet); //WMS
+    }
+    else {
+      //SINGLE IMAGE
+      IImage *singleWorldImage = factory->createImageFromFileName("world.jpg");
+      texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
+    }
+    
+    const bool showStatistics = false;
+    TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
+                                        texturizer,
+                                        parameters,
+                                        showStatistics);
+    comp->addRenderer(tr);
+  }
+  
+  if (false) {
+    // dummy renderer with a simple box
+    DummyRenderer* dum = new DummyRenderer();
+    comp->addRenderer(dum);
+  }
+  
+  if (false) {
+    // simple planet renderer, with a basic world image
+    SimplePlanetRenderer* spr = new SimplePlanetRenderer("world.jpg");
+    comp->addRenderer(spr);
+  }
+  
+  // marks renderer
+  MarksRenderer* marks = new MarksRenderer();
+  comp->addRenderer(marks);
+  
+  Mark* m1 = new Mark("Fuerteventura",
+                      "plane.png",
+                      Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0));
+  //m1->addTouchListener(listener);
+  marks->addMark(m1);
+  
+  
+  Mark* m2 = new Mark("Las Palmas",
+                      "plane.png",
+                      Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0));
+  //m2->addTouchListener(listener);
+  marks->addMark(m2);
+  
+  if (false) {
+    for (int i = 0; i < 500; i++) {
+      const Angle latitude = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
+      const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
+      //NSLog(@"lat=%f, lon=%f", latitude.degrees(), longitude.degrees());
+      
+      marks->addMark(new Mark("Random",
+                              "mark.png",
+                              Geodetic3D(latitude, longitude, 0)));
+    } 
+  }
+  
+  if (false) {
+    EffectsScheduler* scheduler = new EffectsScheduler();
+    scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(4)));
+    comp->addRenderer(scheduler);
+  }
+  
+  if (false) {
+    SceneGraphRenderer* sgr = new SceneGraphRenderer();
+    SGCubeNode* cube = new SGCubeNode();
+    // cube->setScale(Vector3D(6378137.0, 6378137.0, 6378137.0));
+    sgr->getRootNode()->addChild(cube);
+    comp->addRenderer(sgr);
+  }
+  
+  //    comp->addRenderer(new GLErrorRenderer());
+  
+  
+  TextureBuilder* texBuilder = new CPUTextureBuilder();
+  TexturesHandler* texturesHandler = new TexturesHandler(gl, factory, texBuilder, false);
+  
+  const Planet* planet = Planet::createEarth();
+  
+  Renderer* busyRenderer = new BusyRenderer();
+  
+  _widget = G3MWidget::create(factory,
+                              logger,
+                              gl,
+                              texturesHandler,
+                              downloader,
+                              planet, 
+                              comp,
+                              busyRenderer,
+                              width, height,
+                              Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
+                              true);
+}
+
 //The EAGL view is stored in the nib file. When it's unarchived it's sent -initWithCoder:
 - (id)initWithCoder:(NSCoder *)coder {
   self = [super initWithCoder:coder];
@@ -83,241 +389,16 @@
       glver = OpenGL_2;
     }
     
-    // create GLOB3M WIDGET
-    int width = [self frame].size.width;
-    int height = [self frame].size.height;
-    
-    int todo_remove_bool_csiro;
-    bool csiro = true;
-    
-    
-    IFactory *factory = new Factory_iOS();
-    ILogger *logger = new Logger_iOS(ErrorLevel);
-    IGL* gl  = new GL2();
-    
-    //Testing downloads
-    if (false) {
-      int test_download_code = 0;
-      NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-      
-      FileSystemStorage * fss = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
-      
-      DummyDownload *dummyDownload = new DummyDownload(factory, fss );
-      dummyDownload->run();
-    }
-    
-    if (false){
-      NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-      NSLog(@"\nDocument Directory: %s;", [documentsDirectory UTF8String]);
-      int test_download_code = 0;
-      
-      SQLiteStorage_iOS *sql = new SQLiteStorage_iOS("test.db", "file");
-      DummyDownload *dummyDownload = new DummyDownload(factory, sql);
-      
-      std::string directory = "";
-      std::string file1 = "";
-      std::string file2 = "";
-      std::string file3 = "";
-      
-      if(false){
-        directory = "/Users/vidalete/Downloads/";
-        file1 = "Tic2Vtwo.pdf";
-        file2 = "Pantallazo.png";
-        file3 = "blobtest.png";
-      }else{
-        directory = [documentsDirectory UTF8String];
-        file1 = "mark.png";
-        file2 = "world.jpg";
-        file3 = "plane.png";
-        
-        const NSFileManager *fileManager = [NSFileManager defaultManager];
-        NSError *error;
-        
-        NSString *writableDBPathNS = [documentsDirectory stringByAppendingPathComponent:[[NSString alloc] initWithCString:file1.c_str() encoding:NSUTF8StringEncoding]];
-        if (![fileManager fileExistsAtPath:writableDBPathNS]){
-          // The writable database does not exist, so copy the default to the appropriate location.
-          NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:[[NSString alloc] initWithCString:file1.c_str() encoding:NSUTF8StringEncoding]];
-          if (![fileManager copyItemAtPath:defaultDBPath toPath:writableDBPathNS error:&error]) {
-            NSLog(@"Failed to create writable file with message '%@'.", [error localizedDescription]);
-          } 
-        }
-        
-        writableDBPathNS = [documentsDirectory stringByAppendingPathComponent:[[NSString alloc] initWithCString:file2.c_str() encoding:NSUTF8StringEncoding]];
-        if (![fileManager fileExistsAtPath:writableDBPathNS]){
-          // The writable database does not exist, so copy the default to the appropriate location.
-          NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:[[NSString alloc] initWithCString:file2.c_str() encoding:NSUTF8StringEncoding]];
-          if (![fileManager copyItemAtPath:defaultDBPath toPath:writableDBPathNS error:&error]) {
-            NSLog(@"Failed to create writable file with message '%@'.", [error localizedDescription]);
-          } 
-        }
-        
-        writableDBPathNS = [documentsDirectory stringByAppendingPathComponent:[[NSString alloc] initWithCString:file3.c_str() encoding:NSUTF8StringEncoding]];
-        if (![fileManager fileExistsAtPath:writableDBPathNS]){
-          // The writable database does not exist, so copy the default to the appropriate location.
-          NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:[[NSString alloc] initWithCString:file3.c_str() encoding:NSUTF8StringEncoding]];
-          if (![fileManager copyItemAtPath:defaultDBPath toPath:writableDBPathNS error:&error]) {
-            NSLog(@"Failed to create writable file with message '%@'.", [error localizedDescription]);
-          } 
-        }
-        
-      }
-      
-      
-      FileSystemStorage * fssAux = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
-      
-      dummyDownload->runSqlite(directory, file1, fssAux);
-      dummyDownload->runSqlite(directory, file2, fssAux);
-      dummyDownload->runSqlite(directory, file3, fssAux);
-    }
-    
-    
     
     // all the creation of renderers must be move to common source code, instead of specific
     int __to_move_to_common_source_code;
     
-    // composite renderer is the father of the rest of renderers
-    CompositeRenderer* comp = new CompositeRenderer();
-    
-    // camera renderer
-    CameraRenderer *cameraRenderer = new CameraRenderer();
-    comp->addRenderer(cameraRenderer);
-    
-    //STORAGE
-    NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    FileSystemStorage * fss = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
-    Downloader* downloader = new Downloader(fss, 5, factory->createNetwork());
-    
-    //LAYERS
-    LayerSet* layerSet = new LayerSet();
-    WMSLayer* baseLayer = new WMSLayer("bmng200405", "http://www.nasa.network.com/wms?", 
-                                       "1.3", "image/jpeg", Sector::fullSphere(), "EPSG:4326", "");
-    layerSet->add(baseLayer);
-
-    if (!csiro){
-      WMSLayer *wmsl = new WMSLayer("VIAS",
-                                  "http://idecan2.grafcan.es/ServicioWMS/Callejero",
-                                  "1.1.0", "image/gif", 
-                                  Sector::fromDegrees(22.5,-22.5, 33.75, -11.25),
-                                  "EPSG:4326", "");
-    
-      layerSet->add(wmsl);
-    } else{
-      
-      Sector s = Sector::fromDegrees(-60, 57, -10, -180);
-      WMSLayer *wmsl = new WMSLayer("test:contourGSLA","http://imos2.ersa.edu.au/geo2/test/wms","1.1.1", "image/png", s, "EPSG:4326", "sla_test");
-      
-      WMSLayer *wms_sst = new WMSLayer("sea_surface_temperature","http://opendap-vpac.arcs.org.au/thredds/wms/IMOS/SRS/GHRSST-SSTsubskin/2012/20120626-ABOM-L3P_GHRSST-SSTsubskin-AVHRR_MOSAIC_01km-AO_DAAC-v01-fv01_0.nc?","1.3.0", "image/png", s, "EPSG:4326&COLORSCALERANGE=273.8%2C302.8&NUMCOLORBANDS=50&LOGSCALE=false", "boxfill%2Fsst_36");
-      
-      layerSet->add(wmsl);
-      layerSet->add(wms_sst);
-    }
-    
-    // very basic tile renderer
-    if (true) {
-      TileParameters* parameters = TileParameters::createDefault(true);
-      
-      TileTexturizer* texturizer = NULL;
-      if (true) {
-        texturizer = new TileImagesTileTexturizer(parameters, downloader, layerSet); //WMS
-      }
-      else {
-        //SINGLE IMAGE
-        IImage *singleWorldImage = factory->createImageFromFileName("world.jpg");
-        texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
-      }
-
-      const bool showStatistics = false;
-      TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
-                                          texturizer,
-                                          parameters,
-                                          showStatistics);
-      comp->addRenderer(tr);
-    }
-    
-    if (false) {
-      // dummy renderer with a simple box
-      DummyRenderer* dum = new DummyRenderer();
-      comp->addRenderer(dum);
-    }
-    
-    if (false) {
-      // simple planet renderer, with a basic world image
-      SimplePlanetRenderer* spr = new SimplePlanetRenderer("world.jpg");
-      comp->addRenderer(spr);
-    }
-    
-    // marks renderer
-    if (!csiro) {
-      MarksRenderer* marks = new MarksRenderer();
-      comp->addRenderer(marks);
-      
-      Mark* m1 = new Mark("Fuerteventura",
-                          "plane.png",
-                          Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0));
-      //m1->addTouchListener(listener);
-      marks->addMark(m1);
-      
-      
-      Mark* m2 = new Mark("Las Palmas",
-                          "plane.png",
-                          Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0));
-      //m2->addTouchListener(listener);
-      marks->addMark(m2);
-      
-      if (false) {
-        for (int i = 0; i < 500; i++) {
-          const Angle latitude = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
-          const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
-          //NSLog(@"lat=%f, lon=%f", latitude.degrees(), longitude.degrees());
-          
-          marks->addMark(new Mark("Random",
-                                  "mark.png",
-                                  Geodetic3D(latitude, longitude, 0)));
-        } 
-      }
-    }
-    
-    if (false) {
-      EffectsScheduler* scheduler = new EffectsScheduler();
-      scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(4)));
-      comp->addRenderer(scheduler);
-    }
-    
-    if (false) {
-      SceneGraphRenderer* sgr = new SceneGraphRenderer();
-      SGCubeNode* cube = new SGCubeNode();
-      // cube->setScale(Vector3D(6378137.0, 6378137.0, 6378137.0));
-      sgr->getRootNode()->addChild(cube);
-      comp->addRenderer(sgr);
-    }
-    
-//    comp->addRenderer(new GLErrorRenderer());
-    
-    
-    TextureBuilder* texBuilder = new CPUTextureBuilder();
-    TexturesHandler* texturesHandler = new TexturesHandler(gl, factory, texBuilder, false);
-    
-    const Planet* planet = Planet::createEarth();
-
-    Renderer* busyRenderer = new BusyRenderer();
-
-    _widget = G3MWidget::create(factory,
-                                logger,
-                                gl,
-                                texturesHandler,
-                                downloader,
-                                planet, 
-                                comp,
-                                busyRenderer,
-                                width, height,
-                                Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
-                                true);
-    
+    bool csiro = true;
     if (csiro){
-      Geodetic3D australia = Geodetic3D::fromDegrees(-26.91, 133.94, 1.1e7);
-      ((G3MWidget*)_widget)->getCamera()->setPosition(*planet, australia);
+      [self initWidgetCSIRO];
+    } else{
+      [self initWidgetDemo];
     }
-    
     
     // rest of initialization
     _animating = FALSE;
