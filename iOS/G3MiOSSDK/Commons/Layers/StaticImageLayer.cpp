@@ -31,7 +31,7 @@ std::vector<Petition*> StaticImageLayer::getTilePetitions(const Tile& tile, int 
   if (_storage != NULL)
   {
     if (_storage->contains(id)){
-      ByteBuffer* bb = _storage->getByteBuffer(id);
+      ByteBuffer* bb = _storage->read(id);
       pet->setByteBuffer(bb);        //FILLING DATA
       res.push_back(pet);
       return res;
