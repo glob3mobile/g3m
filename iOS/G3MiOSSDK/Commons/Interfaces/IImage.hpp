@@ -11,6 +11,7 @@
 
 #include <vector>
 #include "Rectangle.hpp"
+#include "ByteBuffer.hpp"
 
 class IImage {
 public:
@@ -23,6 +24,10 @@ public:
   virtual IImage* combineWith(const IImage& transparent, int width, int height) const = 0;
   
   virtual IImage* combineWith(const IImage& other, const Rectangle& rect, int width, int height) const = 0;
+  
+  virtual IImage* subImage(const Rectangle& rect) const = 0;
+  
+  virtual ByteBuffer* getEncodedImage() const = 0;
   
 };
 

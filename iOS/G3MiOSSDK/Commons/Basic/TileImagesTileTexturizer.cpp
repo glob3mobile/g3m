@@ -21,6 +21,11 @@ TilePetitions* TileImagesTileTexturizer::createTilePetitions(const Tile* tile) {
   std::vector<Petition*> pet = _layerSet->createTilePetitions(*tile, 
                                                               _parameters->_tileTextureWidth, 
                                                               _parameters->_tileTextureHeight);
+  if (pet.size() > 1){
+  for (int i = 0; i < pet.size(); i++) {
+    printf("%s\n", pet[i]->getURL().c_str());
+  }
+  }
   
   return new TilePetitions(tile->getLevel(),
                            tile->getRow(),

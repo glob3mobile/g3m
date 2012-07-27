@@ -139,6 +139,7 @@
 		D8D3BC8A159B11D000738E37 /* INetwork.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8D3BC89159B11D000738E37 /* INetwork.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8D3BC8D159B11DA00738E37 /* Network_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = D8D3BC8B159B11DA00738E37 /* Network_iOS.mm */; };
 		D8D3BC8E159B11DA00738E37 /* Network_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8D3BC8C159B11DA00738E37 /* Network_iOS.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		D8E0EC1515C1B1CD0010A68A /* StaticImageLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8E0EC1415C1B1CD0010A68A /* StaticImageLayer.cpp */; };
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
@@ -276,6 +277,8 @@
 		D8D3BC89159B11D000738E37 /* INetwork.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = INetwork.hpp; path = Commons/Interfaces/INetwork.hpp; sourceTree = "<group>"; };
 		D8D3BC8B159B11DA00738E37 /* Network_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Network_iOS.mm; path = Specific/Derived/Network_iOS.mm; sourceTree = "<group>"; };
 		D8D3BC8C159B11DA00738E37 /* Network_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Network_iOS.hpp; path = Specific/Derived/Network_iOS.hpp; sourceTree = "<group>"; };
+		D8E0EC1215C1B1BB0010A68A /* StaticImageLayer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StaticImageLayer.hpp; sourceTree = "<group>"; };
+		D8E0EC1415C1B1CD0010A68A /* StaticImageLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StaticImageLayer.cpp; sourceTree = "<group>"; };
 		D8EEF3B51577924D003FEB5E /* libG3MiOSSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libG3MiOSSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8EEF3B81577924D003FEB5E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D8EEF3BC1577924D003FEB5E /* G3MiOSSDK-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "G3MiOSSDK-Prefix.pch"; sourceTree = "<group>"; };
@@ -483,6 +486,8 @@
 				D87EC5C315BEB12F00E38C36 /* LayerSet.hpp */,
 				D87EC5C415BEB12F00E38C36 /* WMSLayer.cpp */,
 				D87EC5C515BEB12F00E38C36 /* WMSLayer.hpp */,
+				D8E0EC1215C1B1BB0010A68A /* StaticImageLayer.hpp */,
+				D8E0EC1415C1B1CD0010A68A /* StaticImageLayer.cpp */,
 			);
 			name = Layers;
 			path = Commons/Layers;
@@ -755,6 +760,7 @@
 				D87EC5CE15BEB31000E38C36 /* CPUTextureBuilder.cpp in Sources */,
 				D88B5DF515C150A10083A43F /* TileImagesTileTexturizer.cpp in Sources */,
 				CF59DF8F15C04AFC002173EC /* ILogger.cpp in Sources */,
+				D8E0EC1515C1B1CD0010A68A /* StaticImageLayer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -60,9 +60,11 @@ void TilePetitions::requestToNet(Downloader& downloader, int priority)
 {
   for (int i = 0; i < getNumPetitions(); i++) {
     Petition* pet = getPetition(i);
-    const std::string& url = pet->getURL();
-    long id = downloader.request(url, priority, this);
-    pet->setDownloadID(id);
+    if (!pet->isArrived()) {
+      const std::string& url = pet->getURL();
+      long id = downloader.request(url, priority, this);
+      pet->setDownloadID(id);
+    }
   }
 }
 
@@ -70,10 +72,12 @@ void TilePetitions::requestToCache(Downloader& downloader)
 {
   for (int i = 0; i < getNumPetitions(); i++) {
     Petition* pet = getPetition(i);
-    const std::string& url = pet->getURL();
-    ByteBuffer* bb = downloader.getByteBufferFromCache(url);
-    if (bb != NULL){
-      pet->setByteBuffer(bb);
+    if (!pet->isArrived()) {
+      const std::string& url = pet->getURL();
+      ByteBuffer* bb = downloader.getByteBufferFromCache(url);
+      if (bb != NULL){
+        pet->setByteBuffer(bb);
+      }
     }
   }
 }

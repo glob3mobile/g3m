@@ -81,3 +81,27 @@ IImage* Image_iOS::combineWith(const IImage& other, const Rectangle& rect, int w
   
   return new Image_iOS(img);
 }
+
+IImage* Image_iOS::subImage(const Rectangle& rect) const
+{
+  CGRect cropRect = CGRectMake(rect._x, rect._y, rect._width, rect._height);
+  
+  //Cropping image
+  CGImageRef imageRef = CGImageCreateWithImageInRect([this->_image CGImage], cropRect);
+  
+  Image_iOS* image = new Image_iOS([UIImage imageWithCGImage:imageRef]); //Create IImage
+
+  CGImageRelease(imageRef);
+  return image;
+}
+
+ByteBuffer* Image_iOS::getEncodedImage() const
+{
+  NSData* readData = UIImagePNGRepresentation(_image);
+  NSUInteger length = [readData length];
+  
+  unsigned char* data = new unsigned char[length];
+  [readData getBytes:data length:length ];
+  
+  return new ByteBuffer(data, length);
+}

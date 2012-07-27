@@ -37,6 +37,7 @@
 #include "CPUTextureBuilder.hpp"
 #include "LayerSet.hpp"
 #include "WMSLayer.hpp"
+#include "StaticImageLayer.hpp"
 
 #include <stdlib.h>
 
@@ -90,12 +91,24 @@
   layerSet->add(baseLayer);
 
   Sector s = Sector::fromDegrees(-60, 57, -10, -180);
+  //Sector s = Sector::fullSphere();
   WMSLayer *wmsl = new WMSLayer("test:contourGSLA","http://imos2.ersa.edu.au/geo2/test/wms","1.1.1", "image/png", s, "EPSG:4326", "sla_test");
     
   WMSLayer *wms_sst = new WMSLayer("sea_surface_temperature","http://opendap-vpac.arcs.org.au/thredds/wms/IMOS/SRS/GHRSST-SSTsubskin/2012/20120626-ABOM-L3P_GHRSST-SSTsubskin-AVHRR_MOSAIC_01km-AO_DAAC-v01-fv01_0.nc?","1.3.0", "image/png", s, "EPSG:4326&COLORSCALERANGE=273.8%2C302.8&NUMCOLORBANDS=50&LOGSCALE=false", "boxfill%2Fsst_36");
-    
+  
   layerSet->add(wmsl);
   layerSet->add(wms_sst);
+  
+  int testing_SIL;
+  if (true){
+    
+    IImage *image = factory->createImageFromFileName("plane.png");
+    StaticImageLayer * imageLayer = new StaticImageLayer("SIL",
+                                                         image,
+                                                         Sector::fromDegrees(22.5,-22.5, 33.75, -11.25), 
+                                                         fss);
+    layerSet->add(imageLayer);
+  }
   
   // very basic tile renderer
   if (true) {
@@ -391,7 +404,7 @@
     // all the creation of renderers must be move to common source code, instead of specific
     int __to_move_to_common_source_code;
     
-    bool csiro = false;
+    bool csiro = true;
     if (csiro){
       [self initWidgetCSIRO];
     } else{
