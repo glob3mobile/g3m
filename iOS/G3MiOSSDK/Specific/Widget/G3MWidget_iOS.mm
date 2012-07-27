@@ -279,7 +279,7 @@
   
   // very basic tile renderer
   if (true) {
-    TileParameters* parameters = TileParameters::createDefault(false);
+    TileParameters* parameters = TileParameters::createDefault(true);
     
     TileTexturizer* texturizer = NULL;
     if (true) {

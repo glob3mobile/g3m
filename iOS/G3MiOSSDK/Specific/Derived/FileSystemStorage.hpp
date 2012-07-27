@@ -23,7 +23,7 @@ public:
   void save(const std::string url,
             const ByteBuffer& bb);
   
-  ByteBuffer* getByteBuffer(const std::string url);
+  ByteBuffer* read(const std::string url);
 };
 
 #endif

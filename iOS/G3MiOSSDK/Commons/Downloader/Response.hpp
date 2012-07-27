@@ -39,7 +39,7 @@ private:
   const ByteBuffer* _data;
   
   Response& operator=(const Response& that);
-
+  
   Response(const Response& that);
   
 public:

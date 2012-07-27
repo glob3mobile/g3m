@@ -25,7 +25,7 @@ bool SQLiteStorage_iOS::contains(std::string filename)
 {   
     bool contain = false;
     sqlite3 *db;
-    if(SQLITE_OK != sqlite3_open(writableDBPath, &db)){
+    if(SQLITE_OK != sqlite3_open(_writableDBPath, &db)){
         NSLog(@"ERROR Opening Database For contains: %s.",sqlite3_errmsg(db));
     }else{
         sqlite3_stmt *ppStmt;
@@ -52,7 +52,7 @@ bool SQLiteStorage_iOS::contains(std::string filename)
 
 void SQLiteStorage_iOS::save(std::string filename, const ByteBuffer& bb){
     sqlite3 *db;
-    if(SQLITE_OK != sqlite3_open(writableDBPath, &db)){
+    if(SQLITE_OK != sqlite3_open(_writableDBPath, &db)){
         NSLog(@"ERROR Opening Database For save: %s.",sqlite3_errmsg(db));
     }else{
         sqlite3_stmt *ppStmt;
@@ -76,7 +76,7 @@ void SQLiteStorage_iOS::save(std::string filename, const ByteBuffer& bb){
     sqlite3_close(db);
 }
 
-ByteBuffer* SQLiteStorage_iOS::getByteBuffer(std::string filename)
+ByteBuffer* SQLiteStorage_iOS::read(std::string filename)
 {
     return SQLiteStorage_iOS::findFileFromFileName(filename);
 }
@@ -87,7 +87,7 @@ ByteBuffer* SQLiteStorage_iOS::findFileFromFileName(const std::string filename) 
     unsigned char *raw = NULL, *myRaw = NULL;
     int rawLen = 0;
     sqlite3 *db;
-    if(SQLITE_OK != sqlite3_open(writableDBPath, &db)){
+    if(SQLITE_OK != sqlite3_open(_writableDBPath, &db)){
         NSLog(@"ERROR Opening Database For findFileFromFileName: %s.",sqlite3_errmsg(db));
     }else{
         sqlite3_stmt *ppStmt;
@@ -123,8 +123,8 @@ void SQLiteStorage_iOS::createEditableCopyOfDatabaseIfNeeded() {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *writableDBPathNS = [documentsDirectory stringByAppendingPathComponent:database];
-    writableDBPath = [writableDBPathNS cStringUsingEncoding:NSUTF8StringEncoding];
-    NSLog(@"writableDBPath: %s ", writableDBPath);
+    _writableDBPath = [writableDBPathNS cStringUsingEncoding:NSUTF8StringEncoding];
+    NSLog(@"writableDBPath: %s ", _writableDBPath);
     if (![fileManager fileExistsAtPath:writableDBPathNS]){
         NSLog(@"Writable database file NOT exist");
         // The writable database does not exist, so copy the default to the appropriate location.
@@ -141,7 +141,7 @@ void SQLiteStorage_iOS::createEditableCopyOfDatabaseIfNeeded() {
 bool SQLiteStorage_iOS::checkDataBaseConnection() const{
     sqlite3 *db;
     bool ok = true;
-    if(SQLITE_OK != sqlite3_open(writableDBPath, &db)){
+    if(SQLITE_OK != sqlite3_open(_writableDBPath, &db)){
         printf("ERROR Opening Database %s \n", _databaseName.c_str());
         ok = false;
     }else{
@@ -154,7 +154,7 @@ bool SQLiteStorage_iOS::checkDataBaseConnection() const{
 bool SQLiteStorage_iOS::checkTableExist() const{
     sqlite3 *db;
     bool ok = true;
-    if(SQLITE_OK != sqlite3_open(writableDBPath, &db)){
+    if(SQLITE_OK != sqlite3_open(_writableDBPath, &db)){
         printf("ERROR Opening Database %s \n", _databaseName.c_str());
         ok = false;
     }else{
@@ -175,7 +175,7 @@ bool SQLiteStorage_iOS::checkTableExist() const{
 
 void SQLiteStorage_iOS::testConnection() const{
     sqlite3 *db;
-    if(SQLITE_OK != sqlite3_open(writableDBPath, &db)){
+    if(SQLITE_OK != sqlite3_open(_writableDBPath, &db)){
         printf("Connection KO\n");
     }else{
 

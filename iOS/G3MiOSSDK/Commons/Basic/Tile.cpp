@@ -49,7 +49,6 @@ Mesh* Tile::getTessellatorMesh(const RenderContext* rc,
   return _tessellatorMesh;
 }
 
-
 Mesh* Tile::getDebugMesh(const RenderContext* rc,
                          const TileTessellator* tessellator) {
   if (_debugMesh == NULL) {
@@ -57,7 +56,6 @@ Mesh* Tile::getDebugMesh(const RenderContext* rc,
   }
   return _debugMesh;
 }
-
 
 bool Tile::isVisible(const RenderContext *rc,
                      const TileTessellator *tessellator) {
@@ -81,10 +79,6 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
     return true;
   }
 
-  if (statistics->getSplitsCountInFrame() > 1) {
-    return true;
-  }
-  
   int __TODO_tune_render_budget;
 //  if (timer != NULL) {
 //    if ( timer->elapsedTime().milliseconds() > 50 ) {
@@ -108,6 +102,13 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
   const double t = (extent.x() + extent.y());
   if ( t <= ((parameters->_tileTextureWidth + parameters->_tileTextureHeight) * 1.75) ) {
     return true;
+  }
+  
+  if (_subtiles == NULL) { // the tile needs to create the subtiles
+//    if (statistics->getSplitsCountInFrame() > 1) { // there are not more budget to spend
+    if ( timer->elapsedTime().milliseconds() > 5 ) { // there are not more budget to spend
+      return true;
+    }
   }
   
   return false;
@@ -222,16 +223,17 @@ void Tile::render(const RenderContext* rc,
     }
     else {
       std::vector<Tile*>* subTiles = getSubTiles();
+      if (_justCreatedSubtiles) {
+        statistics->computeSplit();
+        _justCreatedSubtiles = false;
+      }
+
       const int subTilesSize = subTiles->size();
       for (int i = 0; i < subTilesSize; i++) {
         Tile* subTile = subTiles->at(i);
         // subTile->render(rc, tessellator, texturizer, parameters, statistics, toVisitInNextIteration, timer);
         toVisitInNextIteration->push_back(subTile);
       }
-      if (_justCreatedSubtiles) {
-        statistics->computeSplit();
-      }
-      _justCreatedSubtiles = false;
     }
   }
   else {
