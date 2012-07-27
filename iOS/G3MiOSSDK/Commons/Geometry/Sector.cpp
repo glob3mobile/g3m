@@ -45,32 +45,28 @@ Geodetic2D Sector::getInnerPoint(double u, double v) const {
   return Geodetic2D(lat, lon);
 }
 
-bool Sector::isBackOriented(const RenderContext *rc) const {
-  const Vector3D cameraPosition = rc->getCamera()->getPosition();
-  const Planet*  planet         = rc->getPlanet();
+
+bool Sector::isBackOriented(const RenderContext *rc) const
+{
+  const Camera* camera = rc->getCamera();
+  const Planet* planet = rc->getPlanet();
   
-  const Geodetic2D corners[5] = { 
-    getNE(),
-    getNW(),
-    getSW(),
-    getSE(),
-    getCenter()
-  };
+  // computer center view point
+  Vector2D centerPixel(camera->getWidth()*0.5, camera->getHeight()*0.5);
+  Vector3D centerRay = camera->pixel2Ray(centerPixel);
+  Vector3D centerPoint = planet->closestIntersection(camera->getPosition(), centerRay);
+  Geodetic2D center = planet->toGeodetic2D(centerPoint);
+
+  // compute sector point nearest to centerPoint
+  Geodetic2D point = this->getClosestPoint(center);
   
-  for (unsigned int i = 0; i < 5; i++) {
-    const Geodetic2D corner = corners[i];
-    
-    const Vector3D normal = planet->geodeticSurfaceNormal(corner);
-    const Vector3D view   = cameraPosition.sub(planet->toVector3D(corner));
-    
-    const double dot = normal.dot(view);
-    if (dot > 0) {
-      return false;
-    }
-  }
-  
-  return true;
+  // compute angle between normals
+  Vector3D normal = planet->geodeticSurfaceNormal(point);
+  Vector3D view   = camera->getPosition().sub(centerPoint);
+  double dot = normal.dot(view);
+  return (dot<0)? true : false;  
 }
+
 
 Sector Sector::intersection(const Sector& s) const{
   double lowerLat;
@@ -82,3 +78,12 @@ Sector Sector::intersection(const Sector& s) const{
   int todo_JM;
   return Sector::fullSphere();
 }
+
+
+Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const
+{
+  Angle lat = pos.latitude().nearestAngleInInterval(_lower.latitude(), _upper.latitude());
+  Angle lon = pos.longitude().nearestAngleInInterval(_lower.longitude(), _upper.longitude());
+  return Geodetic2D(lat, lon);
+}
+

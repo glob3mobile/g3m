@@ -205,7 +205,7 @@ private:
     if (zfar > distanceToPlanetCenter) {
       zfar = distanceToPlanetCenter; 
     }
-    
+        
     // compute rest of frustum numbers
     const double ratioScreen = (double) _height / _width;
     const double right = 0.3 / ratioScreen * znear;

@@ -160,6 +160,8 @@ public:
   
   bool isBackOriented(const RenderContext *rc) const;
   
+  Geodetic2D getClosestPoint(const Geodetic2D& pos) const;
+  
 };
 
 
