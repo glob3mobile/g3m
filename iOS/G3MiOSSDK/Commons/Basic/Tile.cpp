@@ -104,8 +104,8 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
     return true;
   }
   
-  if (statistics->getSplitsCountInFrame() > 1) {
-    if (_subtiles == NULL) {
+  if (_subtiles == NULL) { // the tile needs to create the subtiles
+    if (statistics->getSplitsCountInFrame() > 1) { // there are not more budget to spend
       return true;
     }
   }
