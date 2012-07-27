@@ -510,7 +510,6 @@
   }
 }
 
-
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
   UITouch *touch = [touches anyObject];
   
@@ -530,7 +529,6 @@
   NSSet *allTouches = [event allTouches];
   
   std::vector<const Touch*> pointers = std::vector<const Touch*>();
- // pointers.reserve([allTouches count]);
   
   NSEnumerator *enumerator = [allTouches objectEnumerator];
   UITouch *touch = nil;

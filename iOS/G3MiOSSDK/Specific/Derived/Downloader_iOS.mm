@@ -8,6 +8,10 @@
 
 #include "Downloader_iOS.hpp"
 
+Downloader_iOS::Downloader_iOS() {
+  
+}
+
 void Downloader_iOS::cancelRequest(long requestId) {
   int __TODO_new_downloader;
 }

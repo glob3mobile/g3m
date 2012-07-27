@@ -14,6 +14,8 @@
 class Downloader_iOS : public IDownloader {
 public:
   
+  Downloader_iOS();
+  
   long request(const URL& url,
                long priority,
                IDownloadListener* listener);
