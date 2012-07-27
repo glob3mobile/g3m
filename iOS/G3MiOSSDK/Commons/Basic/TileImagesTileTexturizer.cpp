@@ -179,13 +179,15 @@ void TileImagesTileTexturizer::justCreatedTopTile(Tile *tile) {
 }
 
 bool TileImagesTileTexturizer::isReadyToRender(const RenderContext *rc) {
-  int todo_JM; 
+  int todo_JM;
 //  for (int i = 0; i < _tilePetitionsTopTile.size(); i++) {
 //    if (!_tilePetitionsTopTile[i]->allFinished()) {
 //      return false;
 //    }
 //  }
-//  _tilePetitionsTopTile.clear();
+//  if (_tilePetitionsTopTile.size() > 0) {
+//    _tilePetitionsTopTile.clear();
+//  }
   
   return true;
 }

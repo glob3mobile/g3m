@@ -37,6 +37,16 @@ public:
     return Angle::fromDegrees(radians / M_PI * 180.0);
   }
   
+  static Angle getMin(const Angle& a1, const Angle& a2) {
+    if (a1._degrees < a2._degrees) return a1;
+    else return a2;
+  }
+  
+  static Angle getMax(const Angle& a1, const Angle& a2) {
+    if (a1._degrees > a2._degrees) return a1;
+    else return a2;
+  }
+  
   static Angle zero() {
     return Angle::fromDegrees(0);
   }
