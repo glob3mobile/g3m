@@ -17,5 +17,8 @@ long Downloader_iOS::request(const URL &url,
                              IDownloadListener *listener) {
   int __TODO_new_downloader;
   
+  
+ // [NSURLConnection connectionWithRequest:request delegate:self];
+  
   return -1;
 }

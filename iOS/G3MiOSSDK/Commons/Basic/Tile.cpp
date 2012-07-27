@@ -126,16 +126,23 @@ void Tile::rawRender(const RenderContext *rc,
       tessellatorMesh->render(rc);
     }
     else {
-      if (!isTextureSolved() ||
-          (_texturizerMesh == NULL) ||
-          (_texturizerTimer == NULL)) {
-        
+      
+      const bool needsToCallTexturizer = (!isTextureSolved()         ||
+                                          (_texturizerMesh  == NULL) ||
+                                          (_texturizerTimer == NULL) );
+      
+      if (needsToCallTexturizer) {
         int __TODO_tune_render_budget;
 
         if (_texturizerTimer == NULL ||
             _texturizerTimer->elapsedTime().milliseconds() > 100) {
           
-          _texturizerMesh = texturizer->texturize(rc, this, tessellator, tessellatorMesh, _texturizerMesh, timer);
+          _texturizerMesh = texturizer->texturize(rc,
+                                                  this,
+                                                  tessellator,
+                                                  tessellatorMesh,
+                                                  _texturizerMesh,
+                                                  timer);
 
           if (_texturizerTimer == NULL) {
             _texturizerTimer = rc->getFactory()->createTimer();
