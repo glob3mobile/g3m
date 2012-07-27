@@ -56,6 +56,7 @@ std::vector<Petition*> StaticImageLayer::getTilePetitions(const Tile& tile, int 
   
   ByteBuffer* bb = subImage->getEncodedImage(); //Image Encoding PNG
   pet->setByteBuffer(bb);        //FILLING DATA
+  delete subImage;
 
   res.push_back(pet);
   
