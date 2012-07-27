@@ -21,7 +21,7 @@ public:
   virtual void save(const std::string url,
                     const ByteBuffer& bb) = 0;
   
-  virtual ByteBuffer* getByteBuffer(const std::string url) = 0;
+  virtual ByteBuffer* read(const std::string url) = 0;
 };
 
 #endif

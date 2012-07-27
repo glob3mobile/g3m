@@ -32,8 +32,8 @@
   if (_networkQueue == nil) {
     _networkQueue = [[NSOperationQueue alloc] init];
   }
-  //[_networkQueue setMaxConcurrentOperationCount:1000];
-  [_networkQueue setMaxConcurrentOperationCount:8];
+//  [_networkQueue setMaxConcurrentOperationCount:1000];
+  [_networkQueue setMaxConcurrentOperationCount:16];
   
   NSString *myurl = [NSString stringWithUTF8String:url];
   DataDownload* currentOperation = [[DataDownload alloc] initWithURL:[NSURL URLWithString:myurl]];
@@ -53,20 +53,22 @@
 	DataDownload* op = (DataDownload *)object;
 	[op removeObserver:self forKeyPath:@"isFinished"];
   
-	if( ![op error] ) {
-    int length = [[op downloadData] length];
-    unsigned char *bytes = new unsigned char[ length ] ;
-    [[op downloadData] getBytes:bytes length: length];
-    ByteBuffer bb(bytes, [[op downloadData] length]);  //CREATING BYTEBUFFER
-    std::string resp = (char*)bb.getData();
-    //printf("\nData: %s;\n", resp.c_str());
-    Response r([[op getURL] cStringUsingEncoding:NSUTF8StringEncoding] , &bb);
-    ((IDownloadListener*)_listener)->onDownload(r);
-	}
-  else {
+	if ( [op error] ) {
     ByteBuffer bb(NULL, 0);
     Response r([[op getURL] cStringUsingEncoding:NSUTF8StringEncoding], &bb);
     ((IDownloadListener*)_listener)->onError(r);
+	}
+  else {
+    NSData* data = [op downloadData];
+    int length = [data length];
+    unsigned char *bytes = new unsigned char[ length ] ;
+    [data getBytes:bytes length: length];
+    
+    ByteBuffer bb(bytes, length);
+    //std::string resp = (char*)bb.getData();
+    //printf("\nData: %s;\n", resp.c_str());
+    Response r([[op getURL] cStringUsingEncoding:NSUTF8StringEncoding] , &bb);
+    ((IDownloadListener*)_listener)->onDownload(r);
   }
 }
 

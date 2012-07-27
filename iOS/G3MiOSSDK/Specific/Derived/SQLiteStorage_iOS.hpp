@@ -13,15 +13,16 @@
 
 class SQLiteStorage_iOS: public IStorage
 {
-    const char *writableDBPath;
+    const char *_writableDBPath;
     std::string _databaseName;
     std::string _table;
+  
 public:
     SQLiteStorage_iOS(const std::string databaseName, const std::string table);
     
     bool contains(const std::string filename);
     void save(const std::string filename, const ByteBuffer& bb);
-    ByteBuffer* getByteBuffer(const std::string filename);
+    ByteBuffer* read(const std::string filename);
     
     
 private:

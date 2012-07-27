@@ -92,7 +92,7 @@ public:
       delete _halfFrustumInModelCoordinates;
     }
 
-}
+  }
   
   void copyFrom(const Camera &c);
   

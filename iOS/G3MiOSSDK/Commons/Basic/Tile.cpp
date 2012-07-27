@@ -49,7 +49,6 @@ Mesh* Tile::getTessellatorMesh(const RenderContext* rc,
   return _tessellatorMesh;
 }
 
-
 Mesh* Tile::getDebugMesh(const RenderContext* rc,
                          const TileTessellator* tessellator) {
   if (_debugMesh == NULL) {
@@ -57,7 +56,6 @@ Mesh* Tile::getDebugMesh(const RenderContext* rc,
   }
   return _debugMesh;
 }
-
 
 bool Tile::isVisible(const RenderContext *rc,
                      const TileTessellator *tessellator) {
