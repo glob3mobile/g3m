@@ -128,9 +128,9 @@ Mesh* TileImagesTileTexturizer::texturize(const RenderContext* rc,
   
   if (timer != NULL) {
     int __TODO_tune_TEXTURIZER_render_budget;
-    if ( timer->elapsedTime().milliseconds() > 50 ) {
-      return getFallBackTexturedMesh(tile, tessellator, tessellatorMesh, previousMesh);
-    }
+//    if ( timer->elapsedTime().milliseconds() > 50 ) {
+//      return getFallBackTexturedMesh(tile, tessellator, tessellatorMesh, previousMesh);
+//    }
   }
   
   Mesh* mesh = getNewTextureMesh(tile, tessellator, tessellatorMesh, previousMesh);
