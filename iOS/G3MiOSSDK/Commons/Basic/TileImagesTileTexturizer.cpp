@@ -128,9 +128,9 @@ Mesh* TileImagesTileTexturizer::texturize(const RenderContext* rc,
   
   if (timer != NULL) {
     int __TODO_tune_TEXTURIZER_render_budget;
-    if ( timer->elapsedTime().milliseconds() > 50 ) {
-      return getFallBackTexturedMesh(tile, tessellator, tessellatorMesh, previousMesh);
-    }
+//    if ( timer->elapsedTime().milliseconds() > 50 ) {
+//      return getFallBackTexturedMesh(tile, tessellator, tessellatorMesh, previousMesh);
+//    }
   }
   
   Mesh* mesh = getNewTextureMesh(tile, tessellator, tessellatorMesh, previousMesh);
@@ -179,13 +179,15 @@ void TileImagesTileTexturizer::justCreatedTopTile(Tile *tile) {
 }
 
 bool TileImagesTileTexturizer::isReadyToRender(const RenderContext *rc) {
-  int todo_JM; 
+  int todo_JM;
 //  for (int i = 0; i < _tilePetitionsTopTile.size(); i++) {
 //    if (!_tilePetitionsTopTile[i]->allFinished()) {
 //      return false;
 //    }
 //  }
-//  _tilePetitionsTopTile.clear();
+//  if (_tilePetitionsTopTile.size() > 0) {
+//    _tilePetitionsTopTile.clear();
+//  }
   
   return true;
 }

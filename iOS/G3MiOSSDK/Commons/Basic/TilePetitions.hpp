@@ -96,6 +96,10 @@ class TilePetitions: public IDownloadListener {
                                        const Sector& imageSector,
                                        int texWidth, int texHeight) const;
   
+  Petition* getPetition(int i) { return _petitions[i];}
+  
+  int getNumPetitions() { return _petitions.size();}
+  
 public:
   
   TilePetitions(const int level,
@@ -146,15 +150,11 @@ public:
   int getTexID() const{ return _texID;}
 
   std::string getPetitionsID() const;
-
-  Petition* getPetition(int i) { return _petitions[i];}
-  int getNumPetitions() { return _petitions.size();}
   
   bool allFinished() const;
   
   void onDownload(const Response &response); 
   void onError(const Response& e);
-  
   void onCancel(const URL& url);
   
 };

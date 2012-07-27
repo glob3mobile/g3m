@@ -19,6 +19,7 @@ std::vector<Petition*> StaticImageLayer::getTilePetitions(const Tile& tile, int 
   
   
   Sector imageSector = tile.getSector();
+  int ____REMOVE_THIS_use_std_string;
   char id[200];
   sprintf(id, "%s_%f_%f_%f_%f", _layerID.c_str(), 
           imageSector.lower().latitude().degrees(),
@@ -55,6 +56,7 @@ std::vector<Petition*> StaticImageLayer::getTilePetitions(const Tile& tile, int 
   
   ByteBuffer* bb = subImage->getEncodedImage(); //Image Encoding PNG
   pet->setByteBuffer(bb);        //FILLING DATA
+  delete subImage;
 
   res.push_back(pet);
   

@@ -128,21 +128,21 @@ int TexturesHandler::getTextureId(const std::vector<const IImage*>& images,
                  int textureWidth,
                  int textureHeight)
 {
-  int todo_JM;
   int previousId = getTextureIdIfAvailable(textureId, textureWidth, textureHeight);
   if (previousId >= 0) {
     return previousId;
   }
   
   TextureHolder* holder = new TextureHolder(textureId, textureWidth, textureHeight);
-  holder->_glTextureId = _texBuilder->createTextureFromImages(_gl, images, textureWidth, textureHeight);
-  /*
-   rc->getLogger()->logInfo("Uploaded texture \"%s\" (%dx%d) to GPU with texId=%d" ,
-   textureId.c_str(),
-   textureWidth,
-   textureHeight,
-   holder->_glTextureId);
-   */
+  holder->_glTextureId = _texBuilder->createTextureFromImages(_gl, _factory, images, rectangles, textureWidth, textureHeight);
+  
+  if (_verbose) {
+    ILogger::instance()->logInfo("Uploaded texture \"%s\" (%dx%d) to GPU with texId=%d" ,
+                                 textureId.c_str(),
+                                 textureWidth,
+                                 textureHeight,
+                                 holder->_glTextureId);
+  }
   
   _textureHolders.push_back(holder);
   

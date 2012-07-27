@@ -9,13 +9,16 @@
 #include "Downloader_iOS.hpp"
 
 void Downloader_iOS::cancelRequest(long requestId) {
-  int ____NEW_DOWNLOADER;
+  int __TODO_new_downloader;
 }
 
 long Downloader_iOS::request(const URL &url,
                              long priority,
                              IDownloadListener *listener) {
-  int ____NEW_DOWNLOADER;
+  int __TODO_new_downloader;
+  
+  
+ // [NSURLConnection connectionWithRequest:request delegate:self];
   
   return -1;
 }

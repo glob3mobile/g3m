@@ -60,4 +60,8 @@ enum GL_version {
 
 - (void)drawView:(id)sender;
 
+- (void) initWidgetCSIRO;
+
+- (void) initWidgetDemo;
+
 @end

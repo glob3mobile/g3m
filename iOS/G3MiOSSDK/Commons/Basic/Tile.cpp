@@ -78,35 +78,35 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
   if (_level >= parameters->_maxLevel) {
     return true;
   }
-
+  
   int __TODO_tune_render_budget;
 //  if (timer != NULL) {
 //    if ( timer->elapsedTime().milliseconds() > 50 ) {
 //      return true;
 //    }
 //  }
-
+  
   if (texturizer != NULL) {
     if (texturizer->tileMeetsRenderCriteria(this)) {
       return true;
     }
   }
   
+  
 //  int projectedSize = getTessellatorMesh(rc, tessellator)->getExtent()->squaredProjectedArea(rc);
 //  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
 //    return true;
 //  }
-  
   const Vector2D extent = getTessellatorMesh(rc, tessellator)->getExtent()->projectedExtent(rc);
-//  const double t = extent.maxAxis() * 2;
+  //const double t = extent.maxAxis() * 2;
   const double t = (extent.x() + extent.y());
   if ( t <= ((parameters->_tileTextureWidth + parameters->_tileTextureHeight) * 1.75) ) {
     return true;
   }
+
   
   if (_subtiles == NULL) { // the tile needs to create the subtiles
     if (statistics->getSplitsCountInFrame() > 1) { // there are not more budget to spend
-//    if ( timer->elapsedTime().milliseconds() > 5 ) { // there are not more budget to spend
       return true;
     }
   }
@@ -126,16 +126,23 @@ void Tile::rawRender(const RenderContext *rc,
       tessellatorMesh->render(rc);
     }
     else {
-      if (!isTextureSolved() ||
-          (_texturizerMesh == NULL) ||
-          (_texturizerTimer == NULL)) {
-        
+      
+      const bool needsToCallTexturizer = (!isTextureSolved()         ||
+                                          (_texturizerMesh  == NULL) ||
+                                          (_texturizerTimer == NULL) );
+      
+      if (needsToCallTexturizer) {
         int __TODO_tune_render_budget;
 
         if (_texturizerTimer == NULL ||
-            _texturizerTimer->elapsedTime().milliseconds() > 75) {
+            _texturizerTimer->elapsedTime().milliseconds() > 100) {
           
-          _texturizerMesh = texturizer->texturize(rc, this, tessellator, tessellatorMesh, _texturizerMesh, timer);
+          _texturizerMesh = texturizer->texturize(rc,
+                                                  this,
+                                                  tessellator,
+                                                  tessellatorMesh,
+                                                  _texturizerMesh,
+                                                  timer);
 
           if (_texturizerTimer == NULL) {
             _texturizerTimer = rc->getFactory()->createTimer();
