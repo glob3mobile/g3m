@@ -61,12 +61,6 @@ private:
   _ctrlPressed(ctrl),
   _wheelDelta(wheelDelta)
   {
-    if (_touchs.size()==2)
-      printf ("creando touchevents. touch0=%.0f,%.0f-->%.0f,%.0f.   touch1=%.0f,%.0f-->%.0f,%.0f\n",
-              _touchs[0]->getPrevPos().x(), touchs[0]->getPrevPos().y(),
-              _touchs[0]->getPos().x(), touchs[0]->getPos().y(),
-              _touchs[1]->getPrevPos().x(), touchs[1]->getPrevPos().y(),
-              _touchs[1]->getPos().x(), touchs[1]->getPos().y());
   }
   
 public:

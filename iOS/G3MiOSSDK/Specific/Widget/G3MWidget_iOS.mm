@@ -563,7 +563,6 @@
     pointers.push_back(touch);
   }
   
-  printf ("** touch began %d fingers\n", pointers.size());
   if (lastTouchEvent!=NULL) {
     delete lastTouchEvent;
   }
@@ -590,8 +589,6 @@
     
     pointers.push_back(touch);
   }
-  
-  printf ("------- touch move %d fingers\n", pointers.size());
   
   // test if finger orders are the same that in the previous gesture
   if (lastTouchEvent!=NULL) {
@@ -664,7 +661,6 @@
     pointers.push_back(touch);
   }
   
-  printf ("------- touch end %d fingers\n", pointers.size());
   if (lastTouchEvent!=NULL) {
     delete lastTouchEvent;
   }
