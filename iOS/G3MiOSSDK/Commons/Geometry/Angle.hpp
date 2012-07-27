@@ -122,6 +122,10 @@ public:
   bool isBetween(const Angle& min,
                  const Angle& max) const;
   
+  Angle nearestAngleInInterval(const Angle& min, const Angle& max) const;
+  
+  Angle distanceTo(const Angle& other) const;
+  
 };
 
 #endif

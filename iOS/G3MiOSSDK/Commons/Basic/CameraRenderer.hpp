@@ -17,7 +17,8 @@ enum Gesture {
   None,                   // used only for animation, not for gesture
   Drag,
   Zoom,
-  Rotate
+  Rotate,
+  DoubleDrag
 };
 
 

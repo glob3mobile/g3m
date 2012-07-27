@@ -9,7 +9,10 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 
+#import "TouchEvent.hpp"
+
 @class ES2Renderer;
+
 
 // opengl versions value
 enum GL_version {
@@ -37,6 +40,8 @@ enum GL_version {
     //BOOL multipleTouchEnabled;
 
     enum GL_version glver;
+  
+  TouchEvent *lastTouchEvent;
 }
 
 @property(readonly, nonatomic, getter=isAnimating) BOOL animating;

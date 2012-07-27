@@ -26,3 +26,24 @@ bool Angle::isBetween(const Angle& min,
                       const Angle& max) const {
   return (_degrees + ISBETWEEN_THRESHOLD >= min._degrees) && (_degrees - ISBETWEEN_THRESHOLD <= max._degrees);
 }
+
+
+Angle Angle::distanceTo(const Angle& other) const
+{
+  double dif = fabs(_degrees - other._degrees);
+  if (dif > 180) dif = 360 - dif;
+  return Angle::fromDegrees(dif);
+}
+
+
+Angle Angle::nearestAngleInInterval(const Angle& min, const Angle& max) const
+{
+  // it the interval contains the angle, return this value
+  if (this->greaterThan(min) && this->lowerThan(max))
+    return (*this);
+  
+  // look for the extreme closest to the angle
+  Angle dif0 = this->distanceTo(min);
+  Angle dif1 = this->distanceTo(max);
+  return (dif0.lowerThan(dif1))? min : max;
+}

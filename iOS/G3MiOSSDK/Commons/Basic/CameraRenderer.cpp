@@ -64,12 +64,43 @@ void CameraRenderer::onDown(const TouchEvent& touchEvent) {
   //Saving Camera0
   _camera0 = Camera(*_camera);
   
-  //Initial Point for interaction
-  MutableVector2D pixel = touchEvent.getTouch(0)->getPos().asMutableVector2D();
+  // depending on the number of fingers, the gesture is different
+  switch (touchEvent.getTouchCount()) {
+    
+    case 1: {
+      // dragging
+      MutableVector2D pixel = touchEvent.getTouch(0)->getPos().asMutableVector2D();
+      const Vector3D ray = _camera0.pixel2Ray(pixel.asVector2D());
+      _initialPoint = _planet->closestIntersection(_camera0.getPosition(), ray).asMutableVector3D();
+      _currentGesture = Drag; //Dragging
+      break;
+    }
       
-  const Vector3D ray = _camera0.pixel2Ray(pixel.asVector2D());
-  _initialPoint = _planet->closestIntersection(_camera0.getPosition(), ray).asMutableVector3D();
-  _currentGesture = Drag; //Dragging
+    case 2: {
+      // double dragging
+      Vector2D pixel0 = touchEvent.getTouch(0)->getPos();
+      Vector2D pixel1 = touchEvent.getTouch(1)->getPos();
+      
+      // middle point in 3D
+      Vector3D ray0 = _camera0.pixel2Ray(pixel0);
+      Vector3D P0 = _planet->closestIntersection(_camera0.getPosition(), ray0);
+      Vector3D ray1 = _camera0.pixel2Ray(pixel1);
+      Vector3D P1 = _planet->closestIntersection(_camera0.getPosition(), ray1);
+      Geodetic2D g = _planet->getMidPoint(_planet->toGeodetic2D(P0), _planet->toGeodetic2D(P1));
+      _initialPoint = _planet->toVector3D(g).asMutableVector3D();
+      
+      // fingers difference
+      Vector2D difPixel = pixel1.sub(pixel0);
+      _initialFingerSeparation = difPixel.length();
+      _initialFingerInclination = difPixel.orientation().radians();
+      _currentGesture = DoubleDrag;
+      break;
+    }
+      
+    default:
+      break;
+  }
+  
 }
 
 void CameraRenderer::makeDrag(const TouchEvent& touchEvent) {
@@ -125,9 +156,6 @@ void CameraRenderer::makeDoubleDrag(const TouchEvent& touchEvent) {
     {
       double distance = _camera->getPosition().sub(centerPoint).length();
       _camera->moveForward(distance*(factor-1)/factor);
-      
-//      Geodetic3D g = _planet->toGeodetic3D(_camera->getPosition());
-//      printf ("camera height = %f\n", g.height());
     }
     
     // rotate the camera
@@ -220,6 +248,16 @@ Gesture CameraRenderer::getGesture(const TouchEvent& touchEvent) {
   
   if (n== 2){
     
+    //Dragging
+    if (_currentGesture == DoubleDrag) {
+      return DoubleDrag;
+    }
+    else {
+      return None;
+    }
+
+    
+/*    
     // if it's the first movement, init zoom with the middle 3D point
     if (_currentGesture != Zoom) {
       Vector2D pixel0 = touchEvent.getTouch(0)->getPos();
@@ -232,13 +270,7 @@ Gesture CameraRenderer::getGesture(const TouchEvent& touchEvent) {
       Vector3D P1 = _planet->closestIntersection(_camera0.getPosition(), ray1);
       Geodetic2D g = _planet->getMidPoint(_planet->toGeodetic2D(P0), _planet->toGeodetic2D(P1));
       _initialPoint = _planet->toVector3D(g).asMutableVector3D();
-      
-      /*
-      // middle point in 2D
-      Vector2D averagePixel = pixel0.add(pixel1).div(2);
-      Vector3D ray = _camera0.pixel2Ray(averagePixel);
-      _initialPoint = _planet->closestIntersection(_camera0.getPosition(), ray).asMutableVector3D();*/
-      
+            
       Vector2D difPixel = pixel1.sub(pixel0);
       _initialFingerSeparation = difPixel.length();
       _initialFingerInclination = difPixel.orientation().radians();
@@ -246,7 +278,7 @@ Gesture CameraRenderer::getGesture(const TouchEvent& touchEvent) {
     }
     return Zoom;
     
-    
+ */   
     
 /*    //If the gesture is set we don't have to change it
     if (_currentGesture == Zoom) return Zoom;
@@ -347,6 +379,8 @@ void CameraRenderer::onMove(const TouchEvent& touchEvent) {
       break;
     case Zoom:
       //makeZoom(touchEvent);
+      break;
+    case DoubleDrag:
       makeDoubleDrag(touchEvent);
       break;
     case Rotate:

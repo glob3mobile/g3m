@@ -61,7 +61,6 @@ private:
   _ctrlPressed(ctrl),
   _wheelDelta(wheelDelta)
   {
-    
   }
   
 public:
@@ -118,7 +117,7 @@ public:
   }
   
   ~TouchEvent() {
-    for (int i = 0; i < _touchs.size(); i++) {
+    for (unsigned int i = 0; i < _touchs.size(); i++) {
       delete _touchs[i];
     }
   }
