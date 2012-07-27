@@ -79,10 +79,6 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
     return true;
   }
 
-  if (statistics->getSplitsCountInFrame() > 1) {
-    return true;
-  }
-  
   int __TODO_tune_render_budget;
 //  if (timer != NULL) {
 //    if ( timer->elapsedTime().milliseconds() > 50 ) {
@@ -106,6 +102,12 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
   const double t = (extent.x() + extent.y());
   if ( t <= ((parameters->_tileTextureWidth + parameters->_tileTextureHeight) * 1.75) ) {
     return true;
+  }
+  
+  if (statistics->getSplitsCountInFrame() > 1) {
+    if (_subtiles == NULL) {
+      return true;
+    }
   }
   
   return false;
