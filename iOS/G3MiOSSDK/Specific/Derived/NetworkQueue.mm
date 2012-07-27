@@ -55,7 +55,7 @@
   
 	if ( [op error] ) {
     ByteBuffer bb(NULL, 0);
-    Response r([[op getURL] cStringUsingEncoding:NSUTF8StringEncoding], &bb);
+    Response r(URL( [[op getURL] cStringUsingEncoding:NSUTF8StringEncoding] ), &bb);
     ((IDownloadListener*)_listener)->onError(r);
 	}
   else {
@@ -67,7 +67,7 @@
     ByteBuffer bb(bytes, length);
     //std::string resp = (char*)bb.getData();
     //printf("\nData: %s;\n", resp.c_str());
-    Response r([[op getURL] cStringUsingEncoding:NSUTF8StringEncoding] , &bb);
+    Response r(URL( [[op getURL] cStringUsingEncoding:NSUTF8StringEncoding] ), &bb);
     ((IDownloadListener*)_listener)->onDownload(r);
   }
 }

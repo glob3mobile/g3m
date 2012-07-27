@@ -11,17 +11,19 @@
 #include "ITimer.hpp"
 
 
-G3MWidget* G3MWidget::create(IFactory* factory,
-                             ILogger *logger,
-                             IGL* gl,
+G3MWidget* G3MWidget::create(IFactory*        factory,
+                             ILogger*         logger,
+                             IGL*             gl,
                              TexturesHandler* texturesHandler,
-                             Downloader* downloader,
-                             const Planet* planet,
-                             Renderer* renderer,
-                             Renderer* busyRenderer,
-                             int width, int height,
-                             Color backgroundColor,
-                             const bool logFPS) {
+                             Downloader *     downloaderOLD,
+                             IDownloader*     downloader,
+                             const Planet*    planet,
+                             Renderer*        renderer,
+                             Renderer*        busyRenderer,
+                             int              width,
+                             int              height,
+                             Color             backgroundColor,
+                             const bool       logFPS) {
   if (logger != NULL) {
     logger->logInfo("Creating G3MWidget...");
   }
@@ -32,6 +34,7 @@ G3MWidget* G3MWidget::create(IFactory* factory,
                        logger,
                        gl,
                        texturesHandler,
+                       downloaderOLD,
                        downloader,
                        planet,
                        renderer,
@@ -60,6 +63,8 @@ G3MWidget::~G3MWidget() {
   delete _camera;
   delete _texturesHandler;
   delete _timer;
+  delete _downloaderOLD;
+  delete _downloader;
 }
 
 void G3MWidget::onTouchEvent(const TouchEvent* myEvent) {
@@ -78,7 +83,7 @@ int G3MWidget::render() {
   _timer->start();
   _renderCounter++;
   
-  RenderContext rc(_factory, _logger, _planet, _gl, _camera, _texturesHandler, _downloader);
+  RenderContext rc(_factory, _logger, _planet, _gl, _camera, _texturesHandler, _downloaderOLD, _downloader);
   
   _rendererReady = _renderer->isReadyToRender(&rc);
   Renderer* selectedRenderer = _rendererReady ? _renderer : _busyRenderer;

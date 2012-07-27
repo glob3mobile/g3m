@@ -39,6 +39,8 @@
 #include "WMSLayer.hpp"
 #include "StaticImageLayer.hpp"
 
+#include "Downloader_iOS.hpp"
+
 #include <stdlib.h>
 
 @interface G3MWidget_iOS ()
@@ -82,8 +84,9 @@
   //STORAGE
   NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
   FileSystemStorage * fss = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
-  Downloader* downloader = new Downloader(fss, 5, factory->createNetwork());
-  
+  Downloader* downloaderOLD = new Downloader(fss, 5, factory->createNetwork());
+  IDownloader* downloader = new Downloader_iOS();
+
   //LAYERS
   LayerSet* layerSet = new LayerSet();
   WMSLayer* baseLayer = new WMSLayer("bmng200405", "http://www.nasa.network.com/wms?", 
@@ -100,7 +103,7 @@
   //layerSet->add(wms_sst);
   
   int testing_SIL;
-  if (true){
+  if (false){
     IImage *image = factory->createImageFromFileName("20120720_cintp1.png");
     StaticImageLayer * imageLayer = new StaticImageLayer("SIL",
                                                          image,
@@ -115,7 +118,7 @@
     
     TileTexturizer* texturizer = NULL;
     if (true) {
-      texturizer = new TileImagesTileTexturizer(parameters, downloader, layerSet); //WMS
+      texturizer = new TileImagesTileTexturizer(parameters, downloaderOLD, layerSet); //WMS
     }
     else {
       //SINGLE IMAGE
@@ -150,10 +153,12 @@
   
   Renderer* busyRenderer = new BusyRenderer();
   
+  
   _widget = G3MWidget::create(factory,
                               logger,
                               gl,
                               texturesHandler,
+                              downloaderOLD,
                               downloader,
                               planet, 
                               comp,
@@ -261,8 +266,9 @@
   //STORAGE
   NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
   FileSystemStorage * fss = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
-  Downloader* downloader = new Downloader(fss, 5, factory->createNetwork());
-  
+  Downloader* downloaderOLD = new Downloader(fss, 5, factory->createNetwork());
+  IDownloader* downloader = new Downloader_iOS();
+
   //LAYERS
   LayerSet* layerSet = new LayerSet();
   WMSLayer* baseLayer = new WMSLayer("bmng200405", "http://www.nasa.network.com/wms?", 
@@ -283,7 +289,7 @@
     
     TileTexturizer* texturizer = NULL;
     if (true) {
-      texturizer = new TileImagesTileTexturizer(parameters, downloader, layerSet); //WMS
+      texturizer = new TileImagesTileTexturizer(parameters, downloaderOLD, layerSet); //WMS
     }
     else {
       //SINGLE IMAGE
@@ -363,11 +369,13 @@
   const Planet* planet = Planet::createEarth();
   
   Renderer* busyRenderer = new BusyRenderer();
-  
+
+
   _widget = G3MWidget::create(factory,
                               logger,
                               gl,
                               texturesHandler,
+                              downloaderOLD,
                               downloader,
                               planet, 
                               comp,
@@ -403,7 +411,7 @@
     // all the creation of renderers must be move to common source code, instead of specific
     int __to_move_to_common_source_code;
     
-    bool csiro = true;
+    bool csiro = false;
     if (csiro){
       [self initWidgetCSIRO];
     } else{

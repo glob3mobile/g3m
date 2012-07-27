@@ -9,33 +9,12 @@
 #ifndef G3MiOSSDK_Response_h
 #define G3MiOSSDK_Response_h
 
+#include "URL.hpp"
 #include "ByteBuffer.hpp"
-
-class Url {
-  const std::string _path;
-
-  Url& operator=(const Url& that);
-
-public:  
-  Url():
-  _path("")
-  {
-  };
-  
-  Url(std::string f):
-  _path(f)
-  {
-  };
-  
-  std::string getPath() const {
-    return _path;
-  }
-};
-
 
 class Response {
 private:
-  const Url         _url;
+  const URL         _url;
   const ByteBuffer* _data;
   
   Response& operator=(const Response& that);
@@ -44,13 +23,14 @@ private:
   
 public:
   
-  Response(std::string url, ByteBuffer* data):
+  Response(const URL& url,
+           ByteBuffer* data):
   _url(url),
   _data(data)
   {
   }
   
-  Url getURL() const {
+  URL getURL() const {
     return _url;
   }
   

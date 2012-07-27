@@ -17,7 +17,7 @@
 
 #define MAX_TIME_TO_RENDER 1000
 
-
+#include "IDownloader.hpp"
 
 class Camera;
 
@@ -26,17 +26,21 @@ protected:
   const IFactory * _factory;
   const ILogger*   _logger;
   const Planet*    _planet;
-  Downloader* const _downloader;
+  const IDownloader* _downloader;
+
+  Downloader* const _downloaderOLD;
 
   
   Context(const IFactory *factory,
           const ILogger* logger,
           const Planet* planet,
-          Downloader* const downloader) :
+          Downloader* const downloaderOLD,
+          IDownloader* downloader) :
   _factory(factory),
   _logger(logger),
   _planet(planet),
-  _downloader(downloader){
+  _downloader(downloader),
+  _downloaderOLD(downloaderOLD){
   }
   
 public:
@@ -53,7 +57,11 @@ public:
     return _planet;
   }
   
-  Downloader* const getDownloader() const {
+  Downloader* const getDownloaderOLD() const {
+    return _downloaderOLD;
+  }
+
+  const IDownloader* getDownloader() const {
     return _downloader;
   }
 };
@@ -64,8 +72,9 @@ public:
   InitializationContext(IFactory *factory,
                         ILogger* logger,
                         const Planet* planet,
-                        Downloader* const downloader) :
-  Context(factory, logger, planet, downloader) {
+                        Downloader* const downloaderOLD,
+                        IDownloader* downloader) :
+  Context(factory, logger, planet, downloaderOLD, downloader) {
   }
 };
 
@@ -83,8 +92,9 @@ public:
                 IGL *gl,
                 Camera* camera,
                 TexturesHandler* texturesHandler,
-                Downloader* const downloader) :
-  Context(factory, logger, planet, downloader),
+                Downloader* const downloaderOLD,
+                IDownloader* downloader) :
+  Context(factory, logger, planet, downloaderOLD, downloader),
   _gl(gl),
   _camera(camera),
   _texturesHandler(texturesHandler) {

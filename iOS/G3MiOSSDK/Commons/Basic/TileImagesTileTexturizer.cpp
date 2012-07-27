@@ -21,11 +21,11 @@ TilePetitions* TileImagesTileTexturizer::createTilePetitions(const Tile* tile) {
   std::vector<Petition*> pet = _layerSet->createTilePetitions(*tile, 
                                                               _parameters->_tileTextureWidth, 
                                                               _parameters->_tileTextureHeight);
-  if (pet.size() > 1){
-  for (int i = 0; i < pet.size(); i++) {
-    printf("%s\n", pet[i]->getURL().c_str());
-  }
-  }
+//  if (pet.size() > 1){
+//    for (int i = 0; i < pet.size(); i++) {
+//      printf("%s\n", pet[i]->getURL().c_str());
+//    }
+//  }
   
   return new TilePetitions(tile->getLevel(),
                            tile->getRow(),
@@ -122,15 +122,15 @@ Mesh* TileImagesTileTexturizer::texturize(const RenderContext* rc,
   //STORING CONTEXT
   _factory    = rc->getFactory();
   _texHandler = rc->getTexturesHandler();
-  _downloader = rc->getDownloader();
+  _downloader = rc->getDownloaderOLD();
   
   //printf("TP SIZE: %lu\n", _tilePetitions.size());
   
   if (timer != NULL) {
     int __TODO_tune_TEXTURIZER_render_budget;
-//    if ( timer->elapsedTime().milliseconds() > 25 ) {
-//      return getFallBackTexturedMesh(tile, tessellator, tessellatorMesh, previousMesh);
-//    }
+    if ( timer->elapsedTime().milliseconds() > 50 ) {
+      return getFallBackTexturedMesh(tile, tessellator, tessellatorMesh, previousMesh);
+    }
   }
   
   Mesh* mesh = getNewTextureMesh(tile, tessellator, tessellatorMesh, previousMesh);

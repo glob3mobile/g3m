@@ -19,17 +19,19 @@
 class G3MWidget {
 public:
   
-  static G3MWidget* create(IFactory* factory,
-                           ILogger *logger,
-                           IGL* gl,
+  static G3MWidget* create(IFactory*        factory,
+                           ILogger*         logger,
+                           IGL*             gl,
                            TexturesHandler* texturesHandler,
-                           Downloader * downloader,
-                           const Planet* planet,
-                           Renderer* renderer,
-                           Renderer* busyRenderer,
-                           int width, int height,
-                           Color backgroundColor,
-                           const bool logFPS);
+                           Downloader *     downloaderOLD,
+                           IDownloader*     downloader,
+                           const Planet*    planet,
+                           Renderer*        renderer,
+                           Renderer*        busyRenderer,
+                           int              width,
+                           int              height,
+                           Color             backgroundColor,
+                           const bool       logFPS);
   
   ~G3MWidget();
   
@@ -56,7 +58,8 @@ private:
   Renderer*        _renderer;
   Renderer*        _busyRenderer;
   Camera*          _camera;
-  Downloader*      _downloader;
+  Downloader*      _downloaderOLD;
+  IDownloader*     _downloader;
   TexturesHandler* _texturesHandler;
   const Color      _backgroundColor;
   
@@ -69,17 +72,19 @@ private:
   
   void initializeGL();
   
-  G3MWidget(IFactory* factory,
-            ILogger *logger,
-            IGL* gl,
+  G3MWidget(IFactory*        factory,
+            ILogger*         logger,
+            IGL*             gl,
             TexturesHandler* texturesHandler,
-            Downloader* downloader,
-            const Planet* planet,
-            Renderer* renderer,
-            Renderer* busyRenderer,
-            int width, int height,
-            Color backgroundColor,
-            const bool logFPS):
+            Downloader*      downloaderOLD,
+            IDownloader*     downloader,
+            const Planet*    planet,
+            Renderer*        renderer,
+            Renderer*        busyRenderer,
+            int              width,
+            int              height,
+            Color            backgroundColor,
+            const bool       logFPS):
   _factory(factory),
   _logger(logger),
   _gl(gl),
@@ -93,12 +98,13 @@ private:
   _renderCounter(0),
   _totalRenderTime(0),
   _logFPS(logFPS),
+  _downloaderOLD(downloaderOLD),
   _downloader(downloader),
   _rendererReady(false) // false until first call to G3MWidget::render()
   {
     initializeGL();
     
-    InitializationContext ic(_factory, _logger, _planet, _downloader);
+    InitializationContext ic(_factory, _logger, _planet, _downloaderOLD, _downloader);
     _renderer->initialize(&ic);
   }
   

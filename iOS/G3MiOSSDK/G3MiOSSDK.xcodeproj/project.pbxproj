@@ -80,6 +80,9 @@
 		CFCA33D615B9A1CC00F00B3A /* BusyRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCA33D515B9A1CC00F00B3A /* BusyRenderer.cpp */; };
 		CFF0999B15C18AAD005EAF12 /* TileTexturizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */; };
 		CFF0999C15C18AAD005EAF12 /* TilePetitions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8C874BE15B5C58D00F19859 /* TilePetitions.hpp */; };
+		CFFEC11E15C2E645003FA986 /* IDownloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC11D15C2E645003FA986 /* IDownloader.cpp */; };
+		CFFEC12315C2EA5F003FA986 /* Downloader_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12215C2EA5F003FA986 /* Downloader_iOS.mm */; };
+		CFFEC12615C2EBA6003FA986 /* URL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12515C2EBA6003FA986 /* URL.cpp */; };
 		D816E7AA15B6C9B2004FA4D6 /* SingleImageTileTexturizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D816E7A815B6C9B1004FA4D6 /* SingleImageTileTexturizer.cpp */; };
 		D816E7AB15B6C9B2004FA4D6 /* SingleImageTileTexturizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D816E7A915B6C9B1004FA4D6 /* SingleImageTileTexturizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
@@ -239,6 +242,12 @@
 		CFCA33D515B9A1CC00F00B3A /* BusyRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BusyRenderer.cpp; path = Commons/Basic/BusyRenderer.cpp; sourceTree = "<group>"; };
 		CFF95F741588DF0A00B56E11 /* TimeInterval.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TimeInterval.hpp; path = Commons/Basic/TimeInterval.hpp; sourceTree = "<group>"; };
 		CFF95F761588E82200B56E11 /* Color.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Color.hpp; path = Commons/Basic/Color.hpp; sourceTree = "<group>"; };
+		CFFEC11B15C2E636003FA986 /* IDownloader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IDownloader.hpp; path = Commons/Interfaces/IDownloader.hpp; sourceTree = "<group>"; };
+		CFFEC11D15C2E645003FA986 /* IDownloader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IDownloader.cpp; path = Commons/Interfaces/IDownloader.cpp; sourceTree = "<group>"; };
+		CFFEC11F15C2E9B0003FA986 /* Downloader_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Downloader_iOS.hpp; path = Specific/Derived/Downloader_iOS.hpp; sourceTree = "<group>"; };
+		CFFEC12215C2EA5F003FA986 /* Downloader_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Downloader_iOS.mm; path = Specific/Derived/Downloader_iOS.mm; sourceTree = "<group>"; };
+		CFFEC12415C2EB96003FA986 /* URL.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = URL.hpp; path = Commons/Basic/URL.hpp; sourceTree = "<group>"; };
+		CFFEC12515C2EBA6003FA986 /* URL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = URL.cpp; path = Commons/Basic/URL.cpp; sourceTree = "<group>"; };
 		D816E7A815B6C9B1004FA4D6 /* SingleImageTileTexturizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SingleImageTileTexturizer.cpp; path = Commons/Basic/SingleImageTileTexturizer.cpp; sourceTree = "<group>"; };
 		D816E7A915B6C9B1004FA4D6 /* SingleImageTileTexturizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SingleImageTileTexturizer.hpp; path = Commons/Basic/SingleImageTileTexturizer.hpp; sourceTree = "<group>"; };
 		D8228EBC157F7F6100BBAF60 /* MutableMatrix44D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MutableMatrix44D.hpp; path = Commons/Geometry/MutableMatrix44D.hpp; sourceTree = "<group>"; };
@@ -309,12 +318,13 @@
 		383BD3781577EDAC0012AC53 /* Derived */ = {
 			isa = PBXGroup;
 			children = (
-				382D4B9B159DE56F00FE9296 /* NetworkQueue.mm */,
-				382D4B97159DC27700FE9296 /* FileSystemStorage.hpp */,
-				382D4B98159DC27800FE9296 /* FileSystemStorage.mm */,
 				D88C344F159C5A410044CED9 /* DataDownload.hpp */,
 				D88C3450159C5A410044CED9 /* DataDownload.mm */,
+				CFFEC11F15C2E9B0003FA986 /* Downloader_iOS.hpp */,
+				CFFEC12215C2EA5F003FA986 /* Downloader_iOS.mm */,
 				383BD3791577EDC00012AC53 /* Factory_iOS.hpp */,
+				382D4B97159DC27700FE9296 /* FileSystemStorage.hpp */,
+				382D4B98159DC27800FE9296 /* FileSystemStorage.mm */,
 				D86DD8A31588945200E25609 /* Image_iOS.hpp */,
 				D86DD8A41588945200E25609 /* Image_iOS.mm */,
 				383BD37A1577EDC00012AC53 /* Logger_iOS.cpp */,
@@ -322,11 +332,12 @@
 				D8D3BC8C159B11DA00738E37 /* Network_iOS.hpp */,
 				D8D3BC8B159B11DA00738E37 /* Network_iOS.mm */,
 				D88C3451159C5A410044CED9 /* NetworkQueue.hpp */,
+				382D4B9B159DE56F00FE9296 /* NetworkQueue.mm */,
+				442DF0B6159898F80077EFB5 /* SQLiteStorage_iOS.hpp */,
+				44EEB5DC1598C64C0086F243 /* SQLiteStorage_iOS.mm */,
 				CF31CBF315878BE40085E8F1 /* Timer_iOS.hpp */,
 				D86DD8A31588945200E25609 /* Image_iOS.hpp */,
 				D86DD8A41588945200E25609 /* Image_iOS.mm */,
-				442DF0B6159898F80077EFB5 /* SQLiteStorage_iOS.hpp */,
-				44EEB5DC1598C64C0086F243 /* SQLiteStorage_iOS.mm */,
 			);
 			name = Derived;
 			sourceTree = "<group>";
@@ -358,12 +369,6 @@
 		383BD3891577EDF40012AC53 /* Basic */ = {
 			isa = PBXGroup;
 			children = (
-				D88B5E5115C162AF0083A43F /* G3MWidget.hpp */,
-				D88B5DF315C150A10083A43F /* TileImagesTileTexturizer.cpp */,
-				D88B5DF415C150A10083A43F /* TileImagesTileTexturizer.hpp */,
-				D87EC5CB15BEB31000E38C36 /* CPUTextureBuilder.cpp */,
-				D87EC5CC15BEB31000E38C36 /* CPUTextureBuilder.hpp */,
-				D87EC5CD15BEB31000E38C36 /* TextureBuilder.hpp */,
 				CFCA33D515B9A1CC00F00B3A /* BusyRenderer.cpp */,
 				CFCA33D315B9A1BF00F00B3A /* BusyRenderer.hpp */,
 				CC14B63B157D354C00793C92 /* Camera.cpp */,
@@ -375,6 +380,8 @@
 				383BD38D1577EE500012AC53 /* CompositeRenderer.hpp */,
 				383BD38E1577EE500012AC53 /* Context.cpp */,
 				383BD38F1577EE500012AC53 /* Context.hpp */,
+				D87EC5CB15BEB31000E38C36 /* CPUTextureBuilder.cpp */,
+				D87EC5CC15BEB31000E38C36 /* CPUTextureBuilder.hpp */,
 				CC14B643157D358100793C92 /* DummyRenderer.cpp */,
 				CC14B644157D358100793C92 /* DummyRenderer.hpp */,
 				CF31CBF0158776120085E8F1 /* Effects.cpp */,
@@ -382,6 +389,7 @@
 				CF9AEBC1159B3FEA004C3558 /* EllipsoidalTileTessellator.cpp */,
 				CF9AEBC0159B3FDD004C3558 /* EllipsoidalTileTessellator.hpp */,
 				383BD3901577EE500012AC53 /* G3MWidget.cpp */,
+				D88B5E5115C162AF0083A43F /* G3MWidget.hpp */,
 				CF883B891592471600AEE39C /* GLErrorRenderer.cpp */,
 				CF883B881592470900AEE39C /* GLErrorRenderer.hpp */,
 				CF0C3969157F988100646A2F /* Mark.cpp */,
@@ -395,10 +403,13 @@
 				38D787081588F886003BBC75 /* SimplePlanetRenderer.hpp */,
 				D816E7A815B6C9B1004FA4D6 /* SingleImageTileTexturizer.cpp */,
 				D816E7A915B6C9B1004FA4D6 /* SingleImageTileTexturizer.hpp */,
+				D87EC5CD15BEB31000E38C36 /* TextureBuilder.hpp */,
 				CF883B811590984900AEE39C /* TexturesHandler.cpp */,
 				CF883B7F1590983B00AEE39C /* TexturesHandler.hpp */,
 				38D786E51587B446003BBC75 /* Tile.cpp */,
 				38D786E41587B3DD003BBC75 /* Tile.hpp */,
+				D88B5DF315C150A10083A43F /* TileImagesTileTexturizer.cpp */,
+				D88B5DF415C150A10083A43F /* TileImagesTileTexturizer.hpp */,
 				D8C874BF15B5C5AE00F19859 /* TilePetitions.cpp */,
 				D8C874BE15B5C58D00F19859 /* TilePetitions.hpp */,
 				38D786E21587ACA5003BBC75 /* TileRenderer.cpp */,
@@ -414,6 +425,8 @@
 				CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */,
 				D8C874BE15B5C58D00F19859 /* TilePetitions.hpp */,
 				D8C874BF15B5C5AE00F19859 /* TilePetitions.cpp */,
+				CFFEC12415C2EB96003FA986 /* URL.hpp */,
+				CFFEC12515C2EBA6003FA986 /* URL.cpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -457,6 +470,8 @@
 		383BD38B1577EE040012AC53 /* Interfaces */ = {
 			isa = PBXGroup;
 			children = (
+				CFFEC11D15C2E645003FA986 /* IDownloader.cpp */,
+				CFFEC11B15C2E636003FA986 /* IDownloader.hpp */,
 				383BD3B81577EE630012AC53 /* IFactory.hpp */,
 				CC14B64B157D35C100793C92 /* IGL.hpp */,
 				CC14B64C157D35C100793C92 /* IImage.hpp */,
@@ -761,6 +776,9 @@
 				D88B5DF515C150A10083A43F /* TileImagesTileTexturizer.cpp in Sources */,
 				CF59DF8F15C04AFC002173EC /* ILogger.cpp in Sources */,
 				D8E0EC1515C1B1CD0010A68A /* StaticImageLayer.cpp in Sources */,
+				CFFEC11E15C2E645003FA986 /* IDownloader.cpp in Sources */,
+				CFFEC12315C2EA5F003FA986 /* Downloader_iOS.mm in Sources */,
+				CFFEC12615C2EBA6003FA986 /* URL.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
