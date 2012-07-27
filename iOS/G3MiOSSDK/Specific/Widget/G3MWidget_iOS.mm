@@ -407,6 +407,7 @@
       glver = OpenGL_2;
     }
     
+    lastTouchEvent = NULL;
     
     // all the creation of renderers must be move to common source code, instead of specific
     int __to_move_to_common_source_code;
@@ -522,8 +523,11 @@
   }
 }
 
-
+/*
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+  
+  printf ("----------------- touch began\n");
+  
   UITouch *touch = [touches anyObject];
   
   CGPoint current  = [touch locationInView:self];
@@ -536,10 +540,41 @@
   ((G3MWidget*)[self widget])->onTouchEvent(te);
   
   delete te;
+}*/
+
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+  
+  //NSSet *allTouches = [event allTouches];
+  NSSet *allTouches = [event touchesForView:self];
+  
+  std::vector<const Touch*> pointers = std::vector<const Touch*>();
+  // pointers.reserve([allTouches count]);
+  
+  NSEnumerator *enumerator = [allTouches objectEnumerator];
+  UITouch *touch = nil;
+  while ((touch = [enumerator nextObject])) {
+    CGPoint current  = [touch locationInView:self];
+    CGPoint previous = [touch previousLocationInView:self];
+    
+    Touch *touch = new Touch(Vector2D(current.x, current.y), 
+                             Vector2D(previous.x, previous.y));
+    
+    pointers.push_back(touch);
+  }
+  
+  printf ("** touch began %d fingers\n", pointers.size());
+  if (lastTouchEvent!=NULL) {
+    delete lastTouchEvent;
+  }
+  lastTouchEvent = TouchEvent::create(Down, pointers);
+  ((G3MWidget*)[self widget])->onTouchEvent(lastTouchEvent);
 }
 
+
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-  NSSet *allTouches = [event allTouches];
+  //NSSet *allTouches = [event allTouches];
+  NSSet *allTouches = [event touchesForView:self];
   
   std::vector<const Touch*> pointers = std::vector<const Touch*>();
  // pointers.reserve([allTouches count]);
@@ -556,12 +591,45 @@
     pointers.push_back(touch);
   }
   
-  TouchEvent* te = TouchEvent::create(Move, pointers);
-  ((G3MWidget*)[self widget])->onTouchEvent(te);
-  delete te;
+  printf ("------- touch move %d fingers\n", pointers.size());
+  
+  // test if finger orders are the same that in the previous gesture
+  if (lastTouchEvent!=NULL) {
+    if (pointers.size()==2 && lastTouchEvent->getTouchCount()==2) {
+      Vector2D current0 = pointers[0]->getPrevPos();
+      Vector2D last0 = lastTouchEvent->getTouch(0)->getPos();
+      Vector2D last1 = lastTouchEvent->getTouch(1)->getPos();
+      delete lastTouchEvent;
+      double dist0 = current0.sub(last0).squaredLength();
+      double dist1 = current0.sub(last1).squaredLength();
+      
+      // swap finger order
+      if (dist1<dist0) {
+        std::vector<const Touch*> swappedPointers = std::vector<const Touch*>();
+        swappedPointers.push_back(pointers[1]);
+        swappedPointers.push_back(pointers[0]);
+        lastTouchEvent = TouchEvent::create(Move, swappedPointers);
+      } else {
+        lastTouchEvent = TouchEvent::create(Move, pointers);
+      }
+    } else {
+      delete lastTouchEvent;
+      lastTouchEvent = TouchEvent::create(Move, pointers);
+    }
+  } else {
+    lastTouchEvent = TouchEvent::create(Move, pointers);
+  }
+  
+  ((G3MWidget*)[self widget])->onTouchEvent(lastTouchEvent);
 }
 
+
+/*
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+  printf ("----------------- touch end\n");
+
+  
+  
   UITouch *touch = [touches anyObject];
   
   CGPoint current = [touch locationInView:self];
@@ -574,9 +642,42 @@
   ((G3MWidget*)[self widget])->onTouchEvent(te);
   
   delete te;
+}*/
+
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+  //NSSet *allTouches = [event allTouches];
+  NSSet *allTouches = [event touchesForView:self];
+  
+  std::vector<const Touch*> pointers = std::vector<const Touch*>();
+  // pointers.reserve([allTouches count]);
+  
+  NSEnumerator *enumerator = [allTouches objectEnumerator];
+  UITouch *touch = nil;
+  while ((touch = [enumerator nextObject])) {
+    CGPoint current  = [touch locationInView:self];
+    CGPoint previous = [touch previousLocationInView:self];
+    
+    Touch *touch = new Touch(Vector2D(current.x, current.y), 
+                             Vector2D(previous.x, previous.y));
+    
+    pointers.push_back(touch);
+  }
+  
+  printf ("------- touch end %d fingers\n", pointers.size());
+  if (lastTouchEvent!=NULL) {
+    delete lastTouchEvent;
+  }
+  lastTouchEvent = TouchEvent::create(Up, pointers);
+  ((G3MWidget*)[self widget])->onTouchEvent(lastTouchEvent);
 }
 
+
 - (void)dealloc {
+  if (lastTouchEvent!=NULL) {
+    delete lastTouchEvent;
+  }
+
 }
 
 @end

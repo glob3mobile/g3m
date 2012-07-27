@@ -125,14 +125,15 @@ void CameraRenderer::makeDoubleDrag(const TouchEvent& touchEvent) {
     {
       double distance = _camera->getPosition().sub(centerPoint).length();
       _camera->moveForward(distance*(factor-1)/factor);
-      
-//      Geodetic3D g = _planet->toGeodetic3D(_camera->getPosition());
-//      printf ("camera height = %f\n", g.height());
     }
     
     // rotate the camera
     {
       _camera->rotateWithAxis(_camera->getCenter().sub(_camera->getPosition()), Angle::fromRadians(-angle));
+      printf ("rotando %f grados. ori inicial=%f  ori final=%f  pixel0=(%.0f,%0.f)  pixel1=(%.0f,%.0f)\n", 
+              angle/M_PI*180, _initialFingerInclination/M_PI*180, difPixel.orientation().degrees(),
+              pixel0.x(), pixel0.y(), pixel1.x(), pixel1.y());
+      
     }
     
     // detect new final point
