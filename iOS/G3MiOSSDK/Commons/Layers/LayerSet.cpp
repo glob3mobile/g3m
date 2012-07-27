@@ -14,6 +14,10 @@ std::vector<Petition*> LayerSet::createTilePetitions(const Tile& tile, int width
   
   const Sector tileSector = tile.getSector();
   
+  if (tileSector.getDeltaLatitude().degrees() < 45){
+    int a = 0; a++;
+  }
+  
   for (int i = 0; i < _layers.size(); i++) {
     Layer* layer = _layers[i];
     if (layer->fullContains(tileSector)){
