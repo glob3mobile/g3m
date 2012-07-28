@@ -30,7 +30,7 @@ private:
   
   IGL *gl;
           
-  void makeRotate(const TouchEvent& touchEvent);
+ // void makeRotate(const TouchEvent& touchEvent);
     
 
 protected:
@@ -42,7 +42,7 @@ protected:
   MutableVector3D _initialPoint;  //Initial point at dragging
   MutableVector3D _initialPixel;  //Initial pixel at start of gesture
 
-  Gesture _currentGesture;        //Gesture the user is making at the moment
+  static Gesture _currentGesture;        //Gesture the user is making at the moment
 
   double _initialFingerSeparation;
   double _initialFingerInclination;

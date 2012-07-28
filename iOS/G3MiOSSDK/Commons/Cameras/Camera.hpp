@@ -145,6 +145,11 @@ public:
   void updateModelMatrix() { _modelMatrix = MutableMatrix44D::createModelMatrix(_position, _center, _up); }
   
   Vector3D centerOfViewOnPlanet(const Planet *planet) const;
+  
+  Vector3D getHorizontalVector() const;
+  
+  void applyTransform(const MutableMatrix44D& mat);
+
     
 private:
   int _width;
@@ -163,7 +168,6 @@ private:
   
   const ILogger* _logger;
   
-  void applyTransform(const MutableMatrix44D& mat);
   
   bool _dirtyCachedValues;
   

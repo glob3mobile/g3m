@@ -10,10 +10,12 @@
 
 #include "Camera.hpp"
 
+Gesture CameraRenderer::_currentGesture = None;
+
+
 CameraRenderer::CameraRenderer():
 _camera0(NULL, 0,0),
 _initialPoint(0,0,0),
-_currentGesture(None),
 _camera(NULL),
 _initialPixel(0,0,0)
 {
@@ -138,6 +140,7 @@ Gesture CameraRenderer::getGesture(const TouchEvent& touchEvent) {
   //return None;
 }
 
+/*
 void CameraRenderer::makeRotate(const TouchEvent& touchEvent) {
   int todo_JM_there_is_a_bug;
   
@@ -190,5 +193,5 @@ void CameraRenderer::makeRotate(const TouchEvent& touchEvent) {
   
   //Finally we copy the new camera
   _camera->copyFrom(cameraAux);
-}
+}*/
 

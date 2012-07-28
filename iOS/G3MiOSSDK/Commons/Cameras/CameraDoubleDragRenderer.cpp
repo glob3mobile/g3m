@@ -54,12 +54,14 @@ void CameraDoubleDragRenderer::onDown(const TouchEvent& touchEvent)
   Vector2D difPixel = pixel1.sub(pixel0);
   _initialFingerSeparation = difPixel.length();
   _initialFingerInclination = difPixel.orientation().radians();
+  
+  printf ("donw 2 finger\n");
 }
 
 
 void CameraDoubleDragRenderer::onMove(const TouchEvent& touchEvent) 
 {
-  _currentGesture = getGesture(touchEvent);
+  //_currentGesture = getGesture(touchEvent);
   if (_currentGesture!=DoubleDrag) return;
   if (_initialPoint.isNan()) return;
     
@@ -120,6 +122,8 @@ void CameraDoubleDragRenderer::onMove(const TouchEvent& touchEvent)
     if (rotationDelta.isNan()) return; 
     _camera->rotateWithAxis(rotationAxis, rotationDelta);  
   }
+  
+  printf ("moving 2 fingers\n");
 }
 
 
@@ -127,6 +131,8 @@ void CameraDoubleDragRenderer::onUp(const TouchEvent& touchEvent)
 {
   _currentGesture = None;
   _initialPixel = Vector3D::nan().asMutableVector3D();
+  
+  printf ("end 2 fingers.  gesture=%d\n", _currentGesture);
 }
 
 
