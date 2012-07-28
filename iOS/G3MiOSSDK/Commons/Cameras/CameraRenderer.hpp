@@ -29,18 +29,7 @@ private:
   const ILogger * _logger;
   
   IGL *gl;
-  
-  MutableVector3D _initialPixel;  //Initial pixel at start of gesture
-    
-  virtual void onDown(const TouchEvent& touchEvent) = 0;
-  void onMove(const TouchEvent& touchEvent);
-  void onUp(const TouchEvent& touchEvent);
-  
-  Gesture getGesture(const TouchEvent& touchEvent);
-  
-  void makeDrag(const TouchEvent& touchEvent);
-  void makeZoom(const TouchEvent& touchEvent);
-  void makeDoubleDrag(const TouchEvent& touchEvent);
+          
   void makeRotate(const TouchEvent& touchEvent);
   
   Vector3D centerOfViewOnPlanet(const Camera& c) const;
@@ -53,11 +42,15 @@ protected:
   Camera* _camera;         // Camera used at current frame
   
   MutableVector3D _initialPoint;  //Initial point at dragging
+  MutableVector3D _initialPixel;  //Initial pixel at start of gesture
 
   Gesture _currentGesture;        //Gesture the user is making at the moment
 
   double _initialFingerSeparation;
   double _initialFingerInclination;
+  
+  Gesture getGesture(const TouchEvent& touchEvent);
+
 
   
 public:
@@ -68,7 +61,7 @@ public:
   
   int render(const RenderContext* rc);
   
-  bool onTouchEvent(const TouchEvent* touchEvent);
+  virtual bool onTouchEvent(const TouchEvent* touchEvent) = 0;
   
   void onResizeViewportEvent(int width, int height);
   

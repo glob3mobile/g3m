@@ -62,6 +62,7 @@
 		CC596F2515C46D4F008FC230 /* CameraDoubleDragRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = CC596F1F15C46D4F008FC230 /* CameraDoubleDragRenderer.h */; };
 		CC596F2615C46D4F008FC230 /* CameraRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F2015C46D4F008FC230 /* CameraRenderer.cpp */; };
 		CC596F2715C46D4F008FC230 /* CameraRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC596F2115C46D4F008FC230 /* CameraRenderer.hpp */; };
+		CC596F2A15C46DE2008FC230 /* CameraSimpleDragRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F2915C46DE2008FC230 /* CameraSimpleDragRenderer.cpp */; };
 		CC96079215AF23F600D438D4 /* TextureMapping.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC96079115AF23F600D438D4 /* TextureMapping.cpp */; };
 		CCB2564E15B5A30900079B96 /* TextureMapping.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCB2564D15B5A30900079B96 /* TextureMapping.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CCB2565015B5A33A00079B96 /* TexturedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCB2564F15B5A33A00079B96 /* TexturedMesh.cpp */; };
@@ -214,6 +215,8 @@
 		CC596F1F15C46D4F008FC230 /* CameraDoubleDragRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CameraDoubleDragRenderer.h; path = Commons/Cameras/CameraDoubleDragRenderer.h; sourceTree = "<group>"; };
 		CC596F2015C46D4F008FC230 /* CameraRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CameraRenderer.cpp; path = Commons/Cameras/CameraRenderer.cpp; sourceTree = "<group>"; };
 		CC596F2115C46D4F008FC230 /* CameraRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CameraRenderer.hpp; path = Commons/Cameras/CameraRenderer.hpp; sourceTree = "<group>"; };
+		CC596F2815C46DAB008FC230 /* CameraSimpleDragRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CameraSimpleDragRenderer.h; path = Commons/Cameras/CameraSimpleDragRenderer.h; sourceTree = "<group>"; };
+		CC596F2915C46DE2008FC230 /* CameraSimpleDragRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CameraSimpleDragRenderer.cpp; path = Commons/Cameras/CameraSimpleDragRenderer.cpp; sourceTree = "<group>"; };
 		CC96079115AF23F600D438D4 /* TextureMapping.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextureMapping.cpp; path = Commons/Mesh/TextureMapping.cpp; sourceTree = "<group>"; };
 		CCB2564D15B5A30900079B96 /* TextureMapping.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TextureMapping.hpp; path = Commons/Mesh/TextureMapping.hpp; sourceTree = "<group>"; };
 		CCB2564F15B5A33A00079B96 /* TexturedMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TexturedMesh.cpp; path = Commons/Mesh/TexturedMesh.cpp; sourceTree = "<group>"; };
@@ -503,6 +506,8 @@
 				CC596F1F15C46D4F008FC230 /* CameraDoubleDragRenderer.h */,
 				CC596F2015C46D4F008FC230 /* CameraRenderer.cpp */,
 				CC596F2115C46D4F008FC230 /* CameraRenderer.hpp */,
+				CC596F2815C46DAB008FC230 /* CameraSimpleDragRenderer.h */,
+				CC596F2915C46DE2008FC230 /* CameraSimpleDragRenderer.cpp */,
 			);
 			name = Cameras;
 			sourceTree = "<group>";
@@ -795,6 +800,7 @@
 				CC596F2215C46D4F008FC230 /* Camera.cpp in Sources */,
 				CC596F2415C46D4F008FC230 /* CameraDoubleDragRenderer.cpp in Sources */,
 				CC596F2615C46D4F008FC230 /* CameraRenderer.cpp in Sources */,
+				CC596F2A15C46DE2008FC230 /* CameraSimpleDragRenderer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
