@@ -33,7 +33,7 @@
     _networkQueue = [[NSOperationQueue alloc] init];
   }
 //  [_networkQueue setMaxConcurrentOperationCount:1000];
-  [_networkQueue setMaxConcurrentOperationCount:16];
+  [_networkQueue setMaxConcurrentOperationCount:500];
   
   NSString *myurl = [NSString stringWithUTF8String:url];
   DataDownload* currentOperation = [[DataDownload alloc] initWithURL:[NSURL URLWithString:myurl]];
