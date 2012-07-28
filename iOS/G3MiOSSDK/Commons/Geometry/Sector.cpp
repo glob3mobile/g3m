@@ -45,47 +45,40 @@ Geodetic2D Sector::getInnerPoint(double u, double v) const {
   return Geodetic2D(lat, lon);
 }
 
-
-bool Sector::isBackOriented(const RenderContext *rc) const
-{
+bool Sector::isBackOriented(const RenderContext *rc) const {
   const Camera* camera = rc->getCamera();
   const Planet* planet = rc->getPlanet();
   
   // computer center view point
-  Vector2D centerPixel(camera->getWidth()*0.5, camera->getHeight()*0.5);
-  Vector3D centerRay = camera->pixel2Ray(centerPixel);
-  Vector3D centerPoint = planet->closestIntersection(camera->getPosition(), centerRay);
-  Geodetic2D center = planet->toGeodetic2D(centerPoint);
-
+  const Vector2D centerPixel(camera->getWidth()*0.5, camera->getHeight()*0.5);
+  const Vector3D centerRay = camera->pixel2Ray(centerPixel);
+  const Vector3D centerPoint = planet->closestIntersection(camera->getPosition(), centerRay);
+  const Geodetic2D center = planet->toGeodetic2D(centerPoint);
+  
   // compute sector point nearest to centerPoint
-  Geodetic2D point = this->getClosestPoint(center);
+  const Geodetic2D point = getClosestPoint(center);
   
   // compute angle between normals
-  Vector3D normal = planet->geodeticSurfaceNormal(point);
-  Vector3D view   = camera->getPosition().sub(centerPoint);
-  double dot = normal.dot(view);
-  return (dot<0)? true : false;  
+  const Vector3D normal = planet->geodeticSurfaceNormal(point);
+  const Vector3D view   = camera->getPosition().sub(centerPoint);
+  const double dot = normal.dot(view);
+  return (dot < 0) ? true : false;  
 }
 
-
-Sector Sector::intersection(const Sector& s) const{
+Sector Sector::intersection(const Sector& s) const {
+  const Angle lowLat = Angle::getMax(lower().latitude(), s.lower().latitude());
+  const Angle lowLon = Angle::getMax(lower().longitude(), s.lower().longitude());
+  const Geodetic2D low(lowLat, lowLon);
   
-  Angle lowLat = Angle::getMax(lower().latitude(), s.lower().latitude());
-  Angle lowLon = Angle::getMax(lower().longitude(), s.lower().longitude());
-  Geodetic2D low(lowLat, lowLon);
-  
-  Angle upLat = Angle::getMin(lower().latitude(), s.lower().latitude());
-  Angle upLon = Angle::getMin(lower().longitude(), s.lower().longitude());
-  Geodetic2D up(upLat, upLon);
+  const Angle upLat = Angle::getMin(lower().latitude(), s.lower().latitude());
+  const Angle upLon = Angle::getMin(lower().longitude(), s.lower().longitude());
+  const Geodetic2D up(upLat, upLon);
   
   return Sector(low, up);
 }
 
-
-Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const
-{
-  Angle lat = pos.latitude().nearestAngleInInterval(_lower.latitude(), _upper.latitude());
-  Angle lon = pos.longitude().nearestAngleInInterval(_lower.longitude(), _upper.longitude());
+Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const {
+  const Angle lat = pos.latitude().nearestAngleInInterval(_lower.latitude(), _upper.latitude());
+  const Angle lon = pos.longitude().nearestAngleInInterval(_lower.longitude(), _upper.longitude());
   return Geodetic2D(lat, lon);
 }
-
