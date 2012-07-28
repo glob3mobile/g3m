@@ -36,14 +36,15 @@ Angle Angle::distanceTo(const Angle& other) const
 }
 
 
-Angle Angle::nearestAngleInInterval(const Angle& min, const Angle& max) const
-{
+Angle Angle::nearestAngleInInterval(const Angle& min,
+                                    const Angle& max) const {
   // it the interval contains the angle, return this value
-  if (this->greaterThan(min) && this->lowerThan(max))
+  if (greaterThan(min) && lowerThan(max)) {
     return (*this);
+  }
   
   // look for the extreme closest to the angle
-  Angle dif0 = this->distanceTo(min);
-  Angle dif1 = this->distanceTo(max);
+  const Angle dif0 = distanceTo(min);
+  const Angle dif1 = distanceTo(max);
   return (dif0.lowerThan(dif1))? min : max;
 }
