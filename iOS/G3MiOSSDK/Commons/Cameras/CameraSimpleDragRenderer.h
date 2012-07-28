@@ -22,8 +22,6 @@ private:
   void onDown(const TouchEvent& touchEvent);
   void onMove(const TouchEvent& touchEvent);
   void onUp(const TouchEvent& touchEvent);
-
-  void makeDrag(const TouchEvent& touchEvent);
   
 };
 

@@ -31,9 +31,7 @@ private:
   IGL *gl;
           
   void makeRotate(const TouchEvent& touchEvent);
-  
-  Vector3D centerOfViewOnPlanet(const Camera& c) const;
-  
+    
 
 protected:
   const Planet* _planet;

@@ -143,6 +143,8 @@ public:
 
   int __to_ask_diego;
   void updateModelMatrix() { _modelMatrix = MutableMatrix44D::createModelMatrix(_position, _center, _up); }
+  
+  Vector3D centerOfViewOnPlanet(const Planet *planet) const;
     
 private:
   int _width;

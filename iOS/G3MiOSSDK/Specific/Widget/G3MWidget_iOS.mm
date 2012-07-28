@@ -19,6 +19,8 @@
 
 #include "CameraSimpleDragRenderer.h"
 #include "CameraDoubleDragRenderer.h"
+#include "CameraRotationRenderer.h"
+
 #include "TileRenderer.hpp"
 #include "DummyRenderer.hpp"
 #include "MarksRenderer.hpp"
@@ -83,6 +85,8 @@
   cameraRenderer = new CameraSimpleDragRenderer();
   comp->addRenderer(cameraRenderer);
   cameraRenderer = new CameraDoubleDragRenderer();
+  comp->addRenderer(cameraRenderer);
+  cameraRenderer = new CameraRotationRenderer();
   comp->addRenderer(cameraRenderer);
   
   //STORAGE
@@ -267,6 +271,8 @@
   cameraRenderer = new CameraSimpleDragRenderer();
   comp->addRenderer(cameraRenderer);
   cameraRenderer = new CameraDoubleDragRenderer();
+  comp->addRenderer(cameraRenderer);
+  cameraRenderer = new CameraRotationRenderer();
   comp->addRenderer(cameraRenderer);
   
   //STORAGE

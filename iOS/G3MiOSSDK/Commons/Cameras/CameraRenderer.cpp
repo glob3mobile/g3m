@@ -62,6 +62,10 @@ void CameraRenderer::onResizeViewportEvent(int width, int height) {
 
 
 Gesture CameraRenderer::getGesture(const TouchEvent& touchEvent) {
+  
+  return _currentGesture;
+  
+  /*
   int n = touchEvent.getTouchCount();
   if (n == 1) {
     //Dragging
@@ -82,7 +86,7 @@ Gesture CameraRenderer::getGesture(const TouchEvent& touchEvent) {
     else {
       return None;
     }
-
+*/
     
 /*    
     // if it's the first movement, init zoom with the middle 3D point
@@ -130,8 +134,8 @@ Gesture CameraRenderer::getGesture(const TouchEvent& touchEvent) {
       return Zoom;
     }
     */
-  }
-  return None;
+  //}
+  //return None;
 }
 
 void CameraRenderer::makeRotate(const TouchEvent& touchEvent) {
@@ -148,7 +152,7 @@ void CameraRenderer::makeRotate(const TouchEvent& touchEvent) {
   }
   
   //Calculating the point we are going to rotate around
-  const Vector3D rotatingPoint = centerOfViewOnPlanet(_camera0);
+  const Vector3D rotatingPoint = _camera0.centerOfViewOnPlanet(_planet);
   if (rotatingPoint.isNan()) {
     return; //We don't rotate without a valid rotating point
   }
@@ -175,7 +179,7 @@ void CameraRenderer::makeRotate(const TouchEvent& touchEvent) {
   //Check if the view isn't too low
   Vector3D vCamAux = cameraAux.getPosition().sub(cameraAux.getCenter());
   Angle alpha = vCamAux.angleBetween(normal);
-  Vector3D center = centerOfViewOnPlanet(*_camera);
+  Vector3D center = _camera->centerOfViewOnPlanet(_planet);
   
   if ((alpha.degrees() > 85.0) || center.isNan()){
     cameraAux.copyFrom(_camera0); //We trash the vertical rotation
@@ -186,13 +190,5 @@ void CameraRenderer::makeRotate(const TouchEvent& touchEvent) {
   
   //Finally we copy the new camera
   _camera->copyFrom(cameraAux);
-}
-
-Vector3D CameraRenderer::centerOfViewOnPlanet(const Camera& c) const
-{
-  const Vector2D centerViewport(c.getWidth()*0.5, c.getHeight()*0.5);
-  const Vector3D rayCV = c.pixel2Ray(centerViewport);
-  
-  return _planet->closestIntersection(c.getPosition(), rayCV);
 }
 
