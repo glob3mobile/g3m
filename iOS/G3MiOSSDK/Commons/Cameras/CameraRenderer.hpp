@@ -28,19 +28,11 @@ private:
   
   const ILogger * _logger;
   
-  Camera* _camera;         // Camera used at current frame
-  const Planet* _planet;
   IGL *gl;
   
-  Camera _camera0;                //Initial Camera saved on Down event
-  MutableVector3D _initialPoint;  //Initial point at dragging
   MutableVector3D _initialPixel;  //Initial pixel at start of gesture
-  double _initialFingerSeparation;
-  double _initialFingerInclination;
-  
-  Gesture _currentGesture;        //Gesture the user is making at the moment
-  
-  void onDown(const TouchEvent& touchEvent);
+    
+  virtual void onDown(const TouchEvent& touchEvent) = 0;
   void onMove(const TouchEvent& touchEvent);
   void onUp(const TouchEvent& touchEvent);
   
@@ -53,6 +45,20 @@ private:
   
   Vector3D centerOfViewOnPlanet(const Camera& c) const;
   
+
+protected:
+  const Planet* _planet;
+
+  Camera _camera0;                //Initial Camera saved on Down event
+  Camera* _camera;         // Camera used at current frame
+  
+  MutableVector3D _initialPoint;  //Initial point at dragging
+
+  Gesture _currentGesture;        //Gesture the user is making at the moment
+
+  double _initialFingerSeparation;
+  double _initialFingerInclination;
+
   
 public:
   

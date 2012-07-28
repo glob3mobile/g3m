@@ -17,7 +17,8 @@
 #include "Factory_iOS.hpp"
 #include "GL2.hpp"
 
-#include "CameraRenderer.hpp"
+//#include "CameraRenderer.hpp"
+#include "CameraDoubleDragRenderer.h"
 #include "TileRenderer.hpp"
 #include "DummyRenderer.hpp"
 #include "MarksRenderer.hpp"
@@ -78,7 +79,8 @@
   CompositeRenderer* comp = new CompositeRenderer();
   
   // camera renderer
-  CameraRenderer *cameraRenderer = new CameraRenderer();
+  //CameraRenderer *cameraRenderer = new CameraRenderer();
+  CameraRenderer *cameraRenderer = new CameraDoubleDragRenderer();
   comp->addRenderer(cameraRenderer);
   
   //STORAGE
@@ -259,7 +261,8 @@
   CompositeRenderer* comp = new CompositeRenderer();
   
   // camera renderer
-  CameraRenderer *cameraRenderer = new CameraRenderer();
+  //CameraRenderer *cameraRenderer = new CameraRenderer();
+  CameraRenderer *cameraRenderer = new CameraDoubleDragRenderer();
   comp->addRenderer(cameraRenderer);
   
   //STORAGE
