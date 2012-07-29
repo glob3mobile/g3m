@@ -9,6 +9,9 @@
 #include "CameraRenderer.hpp"
 
 #include "Camera.hpp"
+#include "Context.hpp"
+#include "IGL.hpp"
+#include "TouchEvent.hpp"
 
 CameraRenderer::CameraRenderer():
 _camera0(NULL, 0,0),

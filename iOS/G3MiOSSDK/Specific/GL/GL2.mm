@@ -124,8 +124,12 @@ void GL2::color(float r, float g, float b, float a) {
 
 void GL2::transformTexCoords(const Vector2D& scale,
                              const Vector2D& translation) {
-  glUniform2f(Uniforms.ScaleTexCoord, scale.x(), scale.y());
-  glUniform2f(Uniforms.TranslationTexCoord, translation.x(), translation.y());
+  glUniform2f(Uniforms.ScaleTexCoord,
+              (float) scale.x(),
+              (float) scale.y());
+  glUniform2f(Uniforms.TranslationTexCoord,
+              (float) translation.x(),
+              (float) translation.y());
 }
 
 void GL2::enablePolygonOffset(float factor, float units) {
@@ -218,10 +222,10 @@ void GL2::drawBillBoard(const unsigned int textureId,
                         const Vector3D& pos,
                         const float viewPortRatio) {
   const float vertex[] = {
-    pos.x(), pos.y(), pos.z(),
-    pos.x(), pos.y(), pos.z(),
-    pos.x(), pos.y(), pos.z(),
-    pos.x(), pos.y(), pos.z()
+    (float) pos.x(), (float) pos.y(), (float) pos.z(),
+    (float) pos.x(), (float) pos.y(), (float) pos.z(),
+    (float) pos.x(), (float) pos.y(), (float) pos.z(),
+    (float) pos.x(), (float) pos.y(), (float) pos.z()
   };
   
   const static float texcoord[] = {

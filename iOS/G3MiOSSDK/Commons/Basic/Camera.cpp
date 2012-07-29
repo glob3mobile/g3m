@@ -12,7 +12,7 @@
 #include <string.h>
 
 #include "Camera.hpp"
-#include "Plane.h"
+#include "Plane.hpp"
 
 
 void Camera::copyFrom(const Camera &that) {
@@ -134,10 +134,10 @@ void Camera::render(const RenderContext* rc) {
     Vector3D p3(Vector3D(data._right/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
     
     const float vertices[] = {
-      p0.x(), p0.y(), p0.z(),
-      p1.x(), p1.y(), p1.z(),
-      p2.x(), p2.y(), p2.z(),
-      p3.x(), p3.y(), p3.z(),    
+      (float) p0.x(), (float) p0.y(), (float) p0.z(),
+      (float) p1.x(), (float) p1.y(), (float) p1.z(),
+      (float) p2.x(), (float) p2.y(), (float) p2.z(),
+      (float) p3.x(), (float) p3.y(), (float) p3.z(),    
     };
     unsigned int indices[] = {0, 1, 2, 3};
     

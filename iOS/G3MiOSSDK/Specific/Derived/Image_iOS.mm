@@ -71,7 +71,11 @@ IImage* Image_iOS::combineWith(const IImage& other, const Rectangle& rect, int w
   
   //We draw the images one over the other
   CGContextDrawImage( context, CGRectMake( 0, 0, width, height ), _image.CGImage );
-  CGContextDrawImage( context, CGRectMake( rect._x, rect._y, rect._width, rect._height ), otherIm.CGImage );
+  CGContextDrawImage( context, CGRectMake((float) rect._x,
+                                          (float) rect._y,
+                                          (float) rect._width,
+                                          (float) rect._height ),
+                     otherIm.CGImage );
 
   //SAVING IMAGE
   CGImageRef imgRef = CGBitmapContextCreateImage(context);
@@ -84,7 +88,10 @@ IImage* Image_iOS::combineWith(const IImage& other, const Rectangle& rect, int w
 
 IImage* Image_iOS::subImage(const Rectangle& rect) const
 {
-  CGRect cropRect = CGRectMake(rect._x, rect._y, rect._width, rect._height);
+  CGRect cropRect = CGRectMake((float) rect._x,
+                               (float) rect._y,
+                               (float) rect._width,
+                               (float) rect._height);
   
   //Cropping image
   CGImageRef imageRef = CGImageCreateWithImageInRect([this->_image CGImage], cropRect);

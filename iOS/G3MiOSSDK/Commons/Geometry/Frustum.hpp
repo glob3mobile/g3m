@@ -11,7 +11,7 @@
 
 #include "Vector3D.hpp"
 #include "MutableMatrix44D.hpp"
-#include "Plane.h"
+#include "Plane.hpp"
 
 class Box;
 

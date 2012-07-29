@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
-#include "Frustum.h"
-#include "Box.h"
+#include "Frustum.hpp"
+#include "Box.hpp"
 
 
 bool Frustum::contains(const Vector3D& point) const {

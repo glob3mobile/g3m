@@ -8,6 +8,10 @@
 
 #include "GLErrorRenderer.hpp"
 
+#include "Context.hpp"
+#include "IGL.hpp"
+
+
 void GLErrorRenderer::initialize(const InitializationContext* ic) {
   
 }

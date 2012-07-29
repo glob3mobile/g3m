@@ -9,9 +9,9 @@
 #ifndef G3MiOSSDK_Box_h
 #define G3MiOSSDK_Box_h
 
-#include "Extent.h"
+#include "Extent.hpp"
 #include "Vector3D.hpp"
-#include "Frustum.h"
+#include "Frustum.hpp"
 
 #include <vector>
 

@@ -17,7 +17,7 @@
 #include "Geodetic3D.hpp"
 #include "Vector2D.hpp"
 #include "MutableMatrix44D.hpp"
-#include "Frustum.h"
+#include "Frustum.hpp"
 
 //#include "ILogger.hpp"
 class ILogger;

@@ -13,6 +13,11 @@
 #include "MutableMatrix44D.hpp"
 #include "MutableVector3D.hpp"
 
+#include <vector>
+#include "Context.hpp"
+#include "IGL.hpp"
+
+
 class SGGGroupNode;
 
 class SGNode {
@@ -75,6 +80,8 @@ public:
   void setRoll(const Angle& roll);
   
   virtual int render(const RenderContext *rc) = 0;
+  
+  virtual ~SGNode() {}
 };
 
 

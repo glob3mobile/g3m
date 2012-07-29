@@ -10,7 +10,7 @@
 #define G3MiOSSDK_Mesh_hpp
 
 #include "Context.hpp"
-#include "Extent.h"
+#include "Extent.hpp"
 
 
 class Mesh {

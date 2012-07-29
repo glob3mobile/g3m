@@ -67,8 +67,8 @@
 - (void) initWidgetCSIRO
 {
   // create GLOB3M WIDGET
-  int width = [self frame].size.width;
-  int height = [self frame].size.height;
+  int width = (int) [self frame].size.width;
+  int height = (int) [self frame].size.height;
 
   IFactory *factory = new Factory_iOS();
   ILogger *logger = new Logger_iOS(ErrorLevel);
@@ -175,8 +175,8 @@
 {
   
   // create GLOB3M WIDGET
-  int width = [self frame].size.width;
-  int height = [self frame].size.height;
+  int width = (int) [self frame].size.width;
+  int height = (int) [self frame].size.height;
 
   IFactory *factory = new Factory_iOS();
   ILogger *logger = new Logger_iOS(ErrorLevel);
@@ -456,8 +456,8 @@
 }
 
 - (void)layoutSubviews {
-  int w = [self frame].size.width;
-  int h = [self frame].size.height;
+  int w = (int) [self frame].size.width;
+  int h = (int) [self frame].size.height;
   NSLog(@"ResizeViewportEvent: %dx%d", w, h);
   ((G3MWidget*)_widget)->onResizeViewportEvent(w,h);
   

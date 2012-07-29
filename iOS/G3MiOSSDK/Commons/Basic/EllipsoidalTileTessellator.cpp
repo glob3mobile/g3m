@@ -92,7 +92,7 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
   }
 
 //  const Color *color = new Color(Color::fromRGBA(1.0, 1.0, 1.0, 1.0));
-  const Color *color = new Color(Color::fromRGBA(0.1, 0.1, 0.1, 1.0));
+  const Color *color = new Color(Color::fromRGBA((float) 0.1, (float) 0.1, (float) 0.1, (float) 1.0));
   const Vector3D center = planet->toVector3D(sector.getCenter());
   return new IndexedMesh(vertices, TriangleStrip, GivenCenter, center, indices, color);
 }

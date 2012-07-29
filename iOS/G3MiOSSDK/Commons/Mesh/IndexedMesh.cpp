@@ -9,7 +9,7 @@
 #include <stdlib.h>
 
 #include "IndexedMesh.hpp"
-#include "Box.h"
+#include "Box.hpp"
 
 
 IndexedMesh::~IndexedMesh()
@@ -85,17 +85,17 @@ _center(center)
   switch (strategy) {
     case NoCenter:
       for (int i = 0; i < vertices.size(); i++) {
-        vert[p++] = vertices[i].x();
-        vert[p++] = vertices[i].y();
-        vert[p++] = vertices[i].z();
+        vert[p++] = (float) vertices[i].x();
+        vert[p++] = (float) vertices[i].y();
+        vert[p++] = (float) vertices[i].z();
       }      
       break;
       
     case GivenCenter:
       for (int i = 0; i < vertices.size(); i++) {
-        vert[p++] = vertices[i].x() - center.x();
-        vert[p++] = vertices[i].y() - center.y();
-        vert[p++] = vertices[i].z() - center.z();
+        vert[p++] = (float) (vertices[i].x() - center.x());
+        vert[p++] = (float) (vertices[i].y() - center.y());
+        vert[p++] = (float) (vertices[i].z() - center.z());
       }      
       break;
       
@@ -115,9 +115,9 @@ _center(center)
     float * norm = new float[3* vertices.size()];
     p = 0;
     for (int i = 0; i < vertices.size(); i++) {
-      norm[p++] = (*normals)[i].x();
-      norm[p++] = (*normals)[i].y();
-      norm[p++] = (*normals)[i].z();
+      norm[p++] = (float) (*normals)[i].x();
+      norm[p++] = (float) (*normals)[i].y();
+      norm[p++] = (float) (*normals)[i].z();
     }
     _normals = norm;
   }

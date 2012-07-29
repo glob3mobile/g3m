@@ -10,7 +10,7 @@
 #define G3MiOSSDK_Tile_h
 
 #include "Sector.hpp"
-#include "Box.h"
+#include "Box.hpp"
 
 class RenderContext;
 class Mesh;

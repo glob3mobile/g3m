@@ -33,11 +33,11 @@ public:
   }
   
   int getWidth() const {
-    return (_image == NULL) ? 0 : _image.size.width;
+    return (_image == NULL) ? 0 : (int) _image.size.width;
   }
   
   int getHeight() const {
-    return (_image == NULL) ? 0 : _image.size.height;
+    return (_image == NULL) ? 0 : (int) _image.size.height;
   }
   
   IImage* combineWith(const IImage& transparent, int width, int height) const;

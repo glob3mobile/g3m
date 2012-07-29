@@ -15,7 +15,6 @@
 #include "TexturesHandler.hpp"
 #include "Downloader.hpp"
 
-#define MAX_TIME_TO_RENDER 1000
 
 #include "IDownloader.hpp"
 
