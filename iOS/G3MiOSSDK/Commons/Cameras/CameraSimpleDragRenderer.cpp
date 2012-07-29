@@ -43,7 +43,7 @@ void CameraSimpleDragRenderer::onDown(const TouchEvent& touchEvent)
   const Vector3D ray = _camera0.pixel2Ray(pixel.asVector2D());
   _initialPoint = _planet->closestIntersection(_camera0.getPosition(), ray).asMutableVector3D();
   
-  printf ("down 1 finger\n");
+  //printf ("down 1 finger\n");
 }
 
 
@@ -66,7 +66,7 @@ void CameraSimpleDragRenderer::onMove(const TouchEvent& touchEvent)
   _camera->copyFrom(_camera0);
   _camera->dragCamera(_initialPoint.asVector3D(), finalPoint.asVector3D());
   
-  printf ("Moving 1 finger.  gesture=%d\n", _currentGesture);
+  //printf ("Moving 1 finger.  gesture=%d\n", _currentGesture);
 }
 
 
@@ -75,7 +75,7 @@ void CameraSimpleDragRenderer::onUp(const TouchEvent& touchEvent)
   _currentGesture = None;
   _initialPixel = Vector3D::nan().asMutableVector3D();
   
-  printf ("end 1 finger\n");
+  //printf ("end 1 finger\n");
 }
 
 

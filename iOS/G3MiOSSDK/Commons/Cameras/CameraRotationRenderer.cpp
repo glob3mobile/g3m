@@ -57,6 +57,10 @@ void CameraRotationRenderer::onDown(const TouchEvent& touchEvent)
 
 void CameraRotationRenderer::onMove(const TouchEvent& touchEvent) 
 {
+  int __agustin_at_work;
+  
+  return;
+  
   //_currentGesture = getGesture(touchEvent);
   if (_currentGesture!=Rotate) return;
   

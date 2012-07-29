@@ -17,8 +17,8 @@ _textureId(textureId)
   float* texCoordsA = new float[2 * texCoords.size()];
   int p = 0;
   for (int i = 0; i < texCoords.size(); i++) {
-    texCoordsA[p++] = texCoords[i].x();
-    texCoordsA[p++] = texCoords[i].y();
+    texCoordsA[p++] = (float) texCoords[i].x();
+    texCoordsA[p++] = (float) texCoords[i].y();
   }
   _texCoords = texCoordsA;
   

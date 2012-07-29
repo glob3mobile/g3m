@@ -76,7 +76,7 @@ public:
   
   ByteBuffer* getByteBufferFromCache(const std::string& urlOfFile) const;
   
-  long request(const URL& urlOfFile, int priority, IDownloadListener *listener);
+  long request(const URL& urlOfFile, int priority, IDownloadListener* listener);
   
   void onDownload(const Response& e);
   

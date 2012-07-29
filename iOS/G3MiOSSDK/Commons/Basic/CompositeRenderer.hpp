@@ -10,7 +10,6 @@
 #define G3MiOSSDK_CompositeRenderer_h
 
 #include "Renderer.hpp"
-
 #include <vector>
 
 class CompositeRenderer: public Renderer

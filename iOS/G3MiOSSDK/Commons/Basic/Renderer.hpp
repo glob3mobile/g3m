@@ -9,9 +9,11 @@
 #ifndef G3MiOSSDK_IRenderer_h
 #define G3MiOSSDK_IRenderer_h
 
-#include "Context.hpp"
+#define MAX_TIME_TO_RENDER 1000
 
-#include "TouchEvent.hpp"
+class TouchEvent;
+class InitializationContext;
+class RenderContext;
 
 class Renderer {
 public:

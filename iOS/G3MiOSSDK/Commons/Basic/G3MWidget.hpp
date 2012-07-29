@@ -9,12 +9,19 @@
 #ifndef G3MiOSSDK_G3MWidget_h
 #define G3MiOSSDK_G3MWidget_h
 
-#include "Renderer.hpp"
-#include "Planet.hpp"
-#include "IFactory.hpp"
-#include "Camera.hpp"
+class Renderer;
+class TouchEvent;
+class Planet;
+class ILogger;
+class IFactory;
+class IGL;
+class TexturesHandler;
+class Downloader;
+class IDownloader;
+class Camera;
+class ITimer;
 #include "Color.hpp"
-#include "Downloader.hpp"
+
 
 class G3MWidget {
 public:
@@ -30,7 +37,7 @@ public:
                            Renderer*        busyRenderer,
                            int              width,
                            int              height,
-                           Color             backgroundColor,
+                           Color            backgroundColor,
                            const bool       logFPS);
   
   ~G3MWidget();
@@ -84,29 +91,7 @@ private:
             int              width,
             int              height,
             Color            backgroundColor,
-            const bool       logFPS):
-  _factory(factory),
-  _logger(logger),
-  _gl(gl),
-  _texturesHandler(texturesHandler),
-  _planet(planet),
-  _renderer(renderer),
-  _busyRenderer(busyRenderer),
-  _camera(new Camera(planet, width, height)),
-  _backgroundColor(backgroundColor),
-  _timer(factory->createTimer()),
-  _renderCounter(0),
-  _totalRenderTime(0),
-  _logFPS(logFPS),
-  _downloaderOLD(downloaderOLD),
-  _downloader(downloader),
-  _rendererReady(false) // false until first call to G3MWidget::render()
-  {
-    initializeGL();
-    
-    InitializationContext ic(_factory, _logger, _planet, _downloaderOLD, _downloader);
-    _renderer->initialize(&ic);
-  }
+            const bool       logFPS);
   
   void initializeDefault()
   {

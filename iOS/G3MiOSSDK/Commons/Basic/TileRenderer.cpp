@@ -21,7 +21,8 @@ TileRenderer::~TileRenderer() {
   delete _texturizer;
   delete _parameters;
 
-  delete _timer;
+  delete _frameTimer;
+  delete _lastSplitTimer;
 }
 
 void TileRenderer::clearTopLevelTiles() {
@@ -69,7 +70,8 @@ void TileRenderer::initialize(const InitializationContext* ic) {
   clearTopLevelTiles();
   createTopLevelTiles(ic);
   
-  _timer = ic->getFactory()->createTimer();
+  _frameTimer     = ic->getFactory()->createTimer();
+  _lastSplitTimer = ic->getFactory()->createTimer();
 }
 
 bool TileRenderer::isReadyToRender(const RenderContext *rc) {
@@ -89,7 +91,7 @@ bool TileRenderer::isReadyToRender(const RenderContext *rc) {
 }
 
 int TileRenderer::render(const RenderContext* rc) {
-  _timer->start();
+  _frameTimer->start();
 
   TilesStatistics statistics(_parameters);
   
@@ -113,7 +115,14 @@ int TileRenderer::render(const RenderContext* rc) {
   
     for (int i = 0; i < toVisit.size(); i++) {
       Tile* tile = toVisit[i];
-      tile->render(rc, _tessellator, _texturizer, _parameters, &statistics, &toVisitInNextIteration, _timer);
+      tile->render(rc,
+                   _tessellator,
+                   _texturizer,
+                   _parameters,
+                   &statistics,
+                   &toVisitInNextIteration,
+                   _frameTimer,
+                   _lastSplitTimer);
     }
     
     toVisit = toVisitInNextIteration;

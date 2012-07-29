@@ -22,6 +22,9 @@ public:
                     const ByteBuffer& bb) = 0;
   
   virtual ByteBuffer* read(const std::string url) = 0;
+  
+  virtual ~IStorage() {}
+
 };
 
 #endif

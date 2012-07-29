@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
-#include "Box.h"
+#include "Box.hpp"
 #include "Camera.hpp"
 
 

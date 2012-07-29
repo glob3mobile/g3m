@@ -12,6 +12,13 @@
 #include "Renderer.hpp"
 
 #include "Camera.hpp"
+class Planet;
+class IGL;
+class ILogger;
+#include "MutableVector3D.hpp"
+#include "Vector3D.hpp"
+#include "TouchEvent.hpp"
+
 
 enum Gesture {
   None,                   // used only for animation, not for gesture

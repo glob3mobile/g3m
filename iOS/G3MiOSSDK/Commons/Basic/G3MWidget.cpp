@@ -9,7 +9,45 @@
 #include "G3MWidget.hpp"
 
 #include "ITimer.hpp"
+#include "Renderer.hpp"
+#include "Camera.hpp"
 
+
+G3MWidget::G3MWidget(IFactory*        factory,
+                     ILogger*         logger,
+                     IGL*             gl,
+                     TexturesHandler* texturesHandler,
+                     Downloader*      downloaderOLD,
+                     IDownloader*     downloader,
+                     const Planet*    planet,
+                     Renderer*        renderer,
+                     Renderer*        busyRenderer,
+                     int              width,
+                     int              height,
+                     Color            backgroundColor,
+                     const bool       logFPS):
+_factory(factory),
+_logger(logger),
+_gl(gl),
+_texturesHandler(texturesHandler),
+_planet(planet),
+_renderer(renderer),
+_busyRenderer(busyRenderer),
+_camera(new Camera(planet, width, height)),
+_backgroundColor(backgroundColor),
+_timer(factory->createTimer()),
+_renderCounter(0),
+_totalRenderTime(0),
+_logFPS(logFPS),
+_downloaderOLD(downloaderOLD),
+_downloader(downloader),
+_rendererReady(false) // false until first call to G3MWidget::render()
+{
+  initializeGL();
+  
+  InitializationContext ic(_factory, _logger, _planet, _downloaderOLD, _downloader);
+  _renderer->initialize(&ic);
+}
 
 G3MWidget* G3MWidget::create(IFactory*        factory,
                              ILogger*         logger,

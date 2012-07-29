@@ -70,8 +70,8 @@
 - (void) initWidgetCSIRO
 {
   // create GLOB3M WIDGET
-  int width = [self frame].size.width;
-  int height = [self frame].size.height;
+  int width = (int) [self frame].size.width;
+  int height = (int) [self frame].size.height;
 
   IFactory *factory = new Factory_iOS();
   ILogger *logger = new Logger_iOS(ErrorLevel);
@@ -93,7 +93,9 @@
   NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
   FileSystemStorage * fss = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
   Downloader* downloaderOLD = new Downloader(fss, 5, factory->createNetwork());
-  IDownloader* downloader = new Downloader_iOS();
+  IDownloader* downloader = new Downloader_iOS(1,
+                                               64,
+                                               ".G3M_Cache");
 
   //LAYERS
   LayerSet* layerSet = new LayerSet();
@@ -183,8 +185,8 @@
 {
   
   // create GLOB3M WIDGET
-  int width = [self frame].size.width;
-  int height = [self frame].size.height;
+  int width = (int) [self frame].size.width;
+  int height = (int) [self frame].size.height;
 
   IFactory *factory = new Factory_iOS();
   ILogger *logger = new Logger_iOS(ErrorLevel);
@@ -279,7 +281,9 @@
   NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
   FileSystemStorage * fss = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
   Downloader* downloaderOLD = new Downloader(fss, 5, factory->createNetwork());
-  IDownloader* downloader = new Downloader_iOS();
+  IDownloader* downloader = new Downloader_iOS(1,
+                                               64,
+                                               ".G3M_Cache");
 
   //LAYERS
   LayerSet* layerSet = new LayerSet();
@@ -469,8 +473,8 @@
 }
 
 - (void)layoutSubviews {
-  int w = [self frame].size.width;
-  int h = [self frame].size.height;
+  int w = (int) [self frame].size.width;
+  int h = (int) [self frame].size.height;
   NSLog(@"ResizeViewportEvent: %dx%d", w, h);
   ((G3MWidget*)_widget)->onResizeViewportEvent(w,h);
   

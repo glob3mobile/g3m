@@ -8,6 +8,9 @@
 
 #include "DummyRenderer.hpp"
 
+#include "Context.hpp"
+#include "IGL.hpp"
+
 DummyRenderer::~DummyRenderer()
 {
   delete[] _index;
