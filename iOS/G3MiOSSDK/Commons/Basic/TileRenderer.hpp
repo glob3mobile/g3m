@@ -195,7 +195,8 @@ private:
   
   std::vector<Tile*>     _topLevelTiles;
   
-  ITimer* _timer;
+  ITimer* _frameTimer;     // timer started at the start of each frame rendering
+  ITimer* _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
   
   void clearTopLevelTiles();
   void createTopLevelTiles(const InitializationContext* ic);
@@ -213,7 +214,8 @@ public:
   _showStatistics(showStatistics),
   _lastStatistics(parameters),
   _topTilesJustCreated(false),
-  _timer(NULL)
+  _frameTimer(NULL),
+  _lastSplitTimer(NULL)
   {
     
   }

@@ -73,13 +73,13 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
                                const TileTessellator *tessellator,
                                TileTexturizer *texturizer,
                                const TileParameters* parameters,
-                               ITimer* timer,
+                               ITimer* frameTimer,
+                               ITimer* lastSplitTimer,
                                TilesStatistics* statistics) {
   if (_level >= parameters->_maxLevel) {
     return true;
   }
   
-  int __TODO_tune_render_budget;
 //  if (timer != NULL) {
 //    if ( timer->elapsedTime().milliseconds() > 50 ) {
 //      return true;
@@ -105,8 +105,13 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
   }
 
   
+  int __TODO_tune_render_budget;
   if (_subtiles == NULL) { // the tile needs to create the subtiles
     if (statistics->getSplitsCountInFrame() > 1) { // there are not more budget to spend
+      return true;
+    }
+    
+    if (lastSplitTimer->elapsedTime().milliseconds() < 35) { // there are not more budget to spend
       return true;
     }
   }
@@ -117,7 +122,7 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
 void Tile::rawRender(const RenderContext *rc,
                      const TileTessellator *tessellator,
                      TileTexturizer *texturizer,
-                     ITimer* timer) {
+                     ITimer* frameTimer) {
   
   Mesh* tessellatorMesh = getTessellatorMesh(rc, tessellator);
   
@@ -142,7 +147,7 @@ void Tile::rawRender(const RenderContext *rc,
                                                   tessellator,
                                                   tessellatorMesh,
                                                   _texturizerMesh,
-                                                  timer);
+                                                  frameTimer);
 
           if (_texturizerTimer == NULL) {
             _texturizerTimer = rc->getFactory()->createTimer();
@@ -216,10 +221,11 @@ void Tile::render(const RenderContext* rc,
                   const TileParameters* parameters,
                   TilesStatistics* statistics,
                   std::vector<Tile*>* toVisitInNextIteration,
-                  ITimer* timer) {
+                  ITimer* frameTimer,
+                  ITimer* lastSplitTimer) {
   if (isVisible(rc, tessellator)) {
-    if (meetsRenderCriteria(rc, tessellator, texturizer, parameters, timer, statistics)) {
-      rawRender(rc, tessellator, texturizer, timer);
+    if (meetsRenderCriteria(rc, tessellator, texturizer, parameters, frameTimer, lastSplitTimer, statistics)) {
+      rawRender(rc, tessellator, texturizer, frameTimer);
       if (parameters->_renderDebug) {
         debugRender(rc, tessellator);
       }
@@ -231,6 +237,7 @@ void Tile::render(const RenderContext* rc,
     else {
       std::vector<Tile*>* subTiles = getSubTiles();
       if (_justCreatedSubtiles) {
+        lastSplitTimer->start();
         statistics->computeSplit();
         _justCreatedSubtiles = false;
       }

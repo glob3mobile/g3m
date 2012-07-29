@@ -80,7 +80,8 @@ private:
                                   const TileTessellator *tessellator,
                                   TileTexturizer *texturizer,
                                   const TileParameters* parameters,
-                                  ITimer* timer,
+                                  ITimer* frameTimer,
+                                  ITimer* lastSplitTimer,
                                   TilesStatistics* statistics);
   
   inline std::vector<Tile*>* createSubTiles();
@@ -160,7 +161,8 @@ public:
               const TileParameters* parameters,
               TilesStatistics* statistics,
               std::vector<Tile*>* toVisitInNextIteration,
-              ITimer* timer);
+              ITimer* frameTimer,
+              ITimer* lastSplitTimer);
   
 };
 
