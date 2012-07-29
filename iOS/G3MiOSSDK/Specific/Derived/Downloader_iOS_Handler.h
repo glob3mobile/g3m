@@ -10,6 +10,22 @@
 
 #import "Downloader_iOS_Listener.h"
 
+
+@interface ListenerEntry : NSObject
+{
+  Downloader_iOS_Listener* _listener;
+  long                     _requestId;
+}
+
++(id) entryWithListener: (Downloader_iOS_Listener*) listener
+              requestId: (long) requestId;
+
+-(id) initWithListener: (Downloader_iOS_Listener*) listener
+             requestId: (long) requestId;
+
+@end
+
+
 @interface Downloader_iOS_Handler : NSObject<NSURLConnectionDelegate>
 {
   NSMutableArray* _listeners;
@@ -17,11 +33,13 @@
   NSURL*          _url;
 }
 
-- (id) initWithListener: (Downloader_iOS_Listener*) listener
-               priority: (long) priority
-                    url: (NSURL*) url;
+- (id) initWithUrl: (NSURL*) nsURL
+          listener: (Downloader_iOS_Listener*) listener
+          priority: (long) priority
+         requestId: (long) requestId;
 
-- (long) addListener: (Downloader_iOS_Listener*) listener
-            priority: (long) priority;
+- (void) addListener: (Downloader_iOS_Listener*) listener
+            priority: (long) priority
+           requestId: (long) requestId;
 
 @end

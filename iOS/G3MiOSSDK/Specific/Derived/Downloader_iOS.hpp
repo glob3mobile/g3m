@@ -14,10 +14,18 @@
 class Downloader_iOS : public IDownloader {
 private:
   NSMutableDictionary* _downloadingHandlers;
+  long                 _requestIdCounter;
+  
+  NSString* toNSString(const std::string& cppStr) const {
+    return [NSString stringWithCString:cppStr.c_str()
+                              encoding:[NSString defaultCStringEncoding]];
+  }
   
 public:
   
-  Downloader_iOS();
+  Downloader_iOS(int memoryCapacity,
+                 int diskCapacity,
+                 std::string diskPath);
   
   long request(const URL& url,
                long priority,

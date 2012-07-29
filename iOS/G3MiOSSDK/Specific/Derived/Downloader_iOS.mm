@@ -11,8 +11,19 @@
 #import "Downloader_iOS_Handler.h"
 
 
-Downloader_iOS::Downloader_iOS() {
+Downloader_iOS::Downloader_iOS(int memoryCapacity,
+                               int diskCapacity,
+                               std::string diskPath) :
+_requestIdCounter(0)
+{
   _downloadingHandlers = [NSMutableDictionary dictionary];
+  
+  
+  NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity: memoryCapacity
+                                                          diskCapacity: diskCapacity
+                                                              diskPath: toNSString(diskPath)];
+  [NSURLCache setSharedURLCache:sharedCache];
+  
 }
 
 void Downloader_iOS::cancelRequest(long requestId) {
@@ -24,26 +35,28 @@ long Downloader_iOS::request(const URL &url,
                              IDownloadListener* cppListener) {
   int __TODO_new_downloader;
   
+  const long requestId = _requestIdCounter++;
   
-//  NSURL* nsURL = [NSURL URLWithString:[NSString stringWithCString: url.getPath().c_str()
-//                                                         encoding: [NSString defaultCStringEncoding]]];
-//  
-//  Downloader_iOS_Listener* iosListener = [[Downloader_iOS_Listener alloc] initWithCPPListener: cppListener];
-//  
-//  Downloader_iOS_Handler* handler = [_downloadingHandlers objectForKey: nsURL];
-//  if (handler) {
-//    return [handler addListener: iosListener
-//                       priority: priority];
-//  }
-//  else {
-//    handler = [[Downloader_iOS_Handler alloc] initWithListener: iosListener
-//                                                      priority: priority
-//                                                           url: nsURL];
-//    [_downloadingHandlers setObject: handler
-//                             forKey: nsURL];
-//    
-//    return [handler firstListenerRequestId];
-//  }
+  NSURL* nsURL = [NSURL URLWithString: toNSString(url.getPath())];
+  
+  Downloader_iOS_Listener* iosListener = [[Downloader_iOS_Listener alloc] initWithCPPListener: cppListener];
+  
+  Downloader_iOS_Handler* handler = [_downloadingHandlers objectForKey: nsURL];
+  if (handler) {
+    [handler addListener: iosListener
+                priority: priority
+               requestId: requestId];
+  }
+  else {
+    handler = [[Downloader_iOS_Handler alloc] initWithUrl: nsURL
+                                                 listener: iosListener
+                                                 priority: priority
+                                                requestId: requestId];
+    [_downloadingHandlers setObject: handler
+                             forKey: nsURL];
+  }
+  
+  return requestId;
   
   
   //    NSURLRequest *request = [NSURLRequest requestWithURL:nsURL

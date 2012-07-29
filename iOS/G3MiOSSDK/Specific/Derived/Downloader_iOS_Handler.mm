@@ -8,25 +8,57 @@
 
 #import "Downloader_iOS_Handler.h"
 
-@implementation Downloader_iOS_Handler
+@implementation ListenerEntry
 
-- (id) initWithListener: (Downloader_iOS_Listener*) listener
-               priority: (long) priority
-                    url: (NSURL*) nsURL
++(id) entryWithListener: (Downloader_iOS_Listener*) listener
+              requestId: (long) requestId
+{
+    return [[ListenerEntry alloc] initWithListener: listener
+                                         requestId: requestId];
+}
+
+-(id) initWithListener: (Downloader_iOS_Listener*) listener
+             requestId: (long) requestId
 {
   self = [super init];
   if (self) {
-    _listeners = [NSMutableArray arrayWithObject:listener];
-    _priority  = priority;
-    _url       = nsURL;
+    _listener  = listener;
+    _requestId = requestId;
   }
   return self;
 }
 
-- (long) addListener: (Downloader_iOS_Listener*) listener
-            priority: (long) priority
+
+@end
+
+
+@implementation Downloader_iOS_Handler
+
+- (id) initWithUrl: (NSURL*) nsURL
+          listener: (Downloader_iOS_Listener*) listener
+          priority: (long) priority
+         requestId: (long) requestId
 {
-  [_listeners addObject:listener];
+  self = [super init];
+  if (self) {
+    _url       = nsURL;
+    _priority  = priority;
+
+    ListenerEntry* entry = [ListenerEntry entryWithListener: listener
+                                                  requestId: requestId];
+    _listeners = [NSMutableArray arrayWithObject:entry];
+  }
+  return self;
+}
+
+- (void) addListener: (Downloader_iOS_Listener*) listener
+            priority: (long) priority
+           requestId: (long) requestId
+{
+  ListenerEntry* entry = [ListenerEntry entryWithListener: listener
+                                                requestId: requestId];
+  [_listeners addObject:entry];
+
   if (priority > _priority) {
     _priority = priority;
   }
