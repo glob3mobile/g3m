@@ -12,6 +12,9 @@
 #include "IDownloader.hpp"
 
 class Downloader_iOS : public IDownloader {
+private:
+  NSMutableDictionary* _downloadingHandlers;
+  
 public:
   
   Downloader_iOS();

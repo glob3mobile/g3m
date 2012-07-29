@@ -8,8 +8,11 @@
 
 #include "Downloader_iOS.hpp"
 
+#import "Downloader_iOS_Handler.h"
+
+
 Downloader_iOS::Downloader_iOS() {
-  
+  _downloadingHandlers = [NSMutableDictionary dictionary];
 }
 
 void Downloader_iOS::cancelRequest(long requestId) {
@@ -18,11 +21,45 @@ void Downloader_iOS::cancelRequest(long requestId) {
 
 long Downloader_iOS::request(const URL &url,
                              long priority,
-                             IDownloadListener *listener) {
+                             IDownloadListener* cppListener) {
   int __TODO_new_downloader;
   
   
- // [NSURLConnection connectionWithRequest:request delegate:self];
+//  NSURL* nsURL = [NSURL URLWithString:[NSString stringWithCString: url.getPath().c_str()
+//                                                         encoding: [NSString defaultCStringEncoding]]];
+//  
+//  Downloader_iOS_Listener* iosListener = [[Downloader_iOS_Listener alloc] initWithCPPListener: cppListener];
+//  
+//  Downloader_iOS_Handler* handler = [_downloadingHandlers objectForKey: nsURL];
+//  if (handler) {
+//    return [handler addListener: iosListener
+//                       priority: priority];
+//  }
+//  else {
+//    handler = [[Downloader_iOS_Handler alloc] initWithListener: iosListener
+//                                                      priority: priority
+//                                                           url: nsURL];
+//    [_downloadingHandlers setObject: handler
+//                             forKey: nsURL];
+//    
+//    return [handler firstListenerRequestId];
+//  }
   
-  return -1;
+  
+  //    NSURLRequest *request = [NSURLRequest requestWithURL:nsURL
+  //                                             cachePolicy:NSURLRequestUseProtocolCachePolicy
+  //                                         timeoutInterval:60.0];
+  //    
+  //    // create the connection with the request
+  //    // and start loading the data
+  //    NSURLConnection *connection=[[NSURLConnection alloc] initWithRequest: request
+  //                                                                delegate: handler];
+  //    if (connection) {
+  //      // Create the NSMutableData to hold the received data.
+  //      // receivedData is an instance variable declared elsewhere.
+  //      receivedData = [NSMutableData data];
+  //    } else {
+  //      // Inform the user that the connection failed.
+  //    }
+  
 }

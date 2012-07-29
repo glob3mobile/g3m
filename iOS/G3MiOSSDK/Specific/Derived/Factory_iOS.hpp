@@ -32,7 +32,8 @@ public:
   }
   
   virtual IImage* createImageFromFileName(const std::string filename) const {
-    NSString *fn = [NSString stringWithCString:filename.c_str() encoding:[NSString defaultCStringEncoding]];
+    NSString *fn = [NSString stringWithCString:filename.c_str()
+                                      encoding:[NSString defaultCStringEncoding]];
     
     UIImage* image = [UIImage imageNamed:fn];
     if (!image) {

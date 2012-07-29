@@ -10,15 +10,17 @@
 #ifndef CAMERA
 #define CAMERA
 
+#include "Planet.hpp"
 #include "MutableVector3D.hpp"
 #include "Context.hpp"
 #include "IFactory.hpp"
 #include "Geodetic3D.hpp"
 #include "Vector2D.hpp"
 #include "MutableMatrix44D.hpp"
-#include "ILogger.hpp"
 #include "Frustum.h"
 
+//#include "ILogger.hpp"
+class ILogger;
 
 
 class FrustumData {
