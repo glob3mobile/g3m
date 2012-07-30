@@ -164,7 +164,7 @@ public:
               std::vector<Tile*>* toVisitInNextIteration,
               ITimer* frameTimer,
               ITimer* lastSplitTimer);
-  
+    
 };
 
 #endif
