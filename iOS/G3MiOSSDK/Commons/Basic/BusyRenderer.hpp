@@ -12,6 +12,7 @@
 #include "Renderer.hpp"
 
 class BusyRenderer : public Renderer {
+public:
   void initialize(const InitializationContext* ic) {
     
   }
