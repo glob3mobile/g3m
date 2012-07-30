@@ -205,23 +205,27 @@ private:
   TilesStatistics _lastStatistics;
   
   
-  class TileComparison {
+  class DistanceToCenterTileComparison {
   private:
-    const Camera*       _camera;
-    const Planet*       _planet;
+    const Camera* _camera;
+    const Planet* _planet;
     
   public:
-    TileComparison(const Camera *camera, const Planet *planet):
+    DistanceToCenterTileComparison(const Camera *camera,
+                                   const Planet *planet):
     _camera(camera),
     _planet(planet)
     {}
     
-    inline bool operator() (const Tile *t1, const Tile *t2) const {
-      Vector3D cameraPos = _camera->getPosition();
-      Vector3D center1 = _planet->toVector3D(t1->getSector().getCenter());
-      double dist1 = center1.sub(cameraPos).squaredLength();
-      Vector3D center2 = _planet->toVector3D(t2->getSector().getCenter());
-      double dist2 = center2.sub(cameraPos).squaredLength();
+    inline bool operator()(const Tile *t1,
+                           const Tile *t2) const {
+      const Vector3D cameraPos = _camera->getPosition();
+      
+      const Vector3D center1 = _planet->toVector3D(t1->getSector().getCenter());
+      const Vector3D center2 = _planet->toVector3D(t2->getSector().getCenter());
+      
+      const double dist1 = center1.sub(cameraPos).squaredLength();
+      const double dist2 = center2.sub(cameraPos).squaredLength();
       return (dist1 < dist2);
     }
   };
