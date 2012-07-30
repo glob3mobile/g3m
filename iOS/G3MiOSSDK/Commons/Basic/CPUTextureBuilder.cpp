@@ -37,7 +37,7 @@ int CPUTextureBuilder::createTextureFromImages(IGL * gl, const IFactory* factory
                                                const std::vector<const Rectangle*>& vRectangles, 
                                                int width, int height) const {
   
-  int todo_JM;
+  int todo_JM = 0;
   const IImage* base;
   if (vRectangles[0]->_width == width && vRectangles[0]->_height == height){
     base = vImages[0];
