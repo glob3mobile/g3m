@@ -49,18 +49,13 @@ bool Sector::isBackOriented(const RenderContext *rc) const {
   const Camera* camera = rc->getCamera();
   const Planet* planet = rc->getPlanet();
   
-  // computer center view point
-  const Vector2D centerPixel(camera->getWidth()*0.5, camera->getHeight()*0.5);
-  const Vector3D centerRay = camera->pixel2Ray(centerPixel);
-  const Vector3D centerPoint = planet->closestIntersection(camera->getPosition(), centerRay);
-  const Geodetic2D center = planet->toGeodetic2D(centerPoint);
-  
   // compute sector point nearest to centerPoint
+  const Geodetic2D center = camera->getCenterOfView().asGeodetic2D();
   const Geodetic2D point = getClosestPoint(center);
   
   // compute angle between normals
   const Vector3D normal = planet->geodeticSurfaceNormal(point);
-  const Vector3D view   = camera->getPosition().sub(centerPoint);
+  const Vector3D view   = camera->getViewDirection().times(-1);
   const double dot = normal.dot(view);
   return (dot < 0) ? true : false;  
 }
