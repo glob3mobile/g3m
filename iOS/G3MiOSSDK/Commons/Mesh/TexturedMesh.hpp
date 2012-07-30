@@ -10,8 +10,8 @@
 #define G3MiOSSDK_TexturedMesh_hpp
 
 #include "Mesh.hpp"
-
 #include "TextureMapping.hpp"
+#include "Vector3D.hpp"
 
 class TexturedMesh: public Mesh
 {

@@ -10,6 +10,8 @@
 
 #include "Context.hpp"
 #include "IGL.hpp"
+#include "Planet.hpp"
+#include "Vector3D.hpp"
 
 DummyRenderer::~DummyRenderer()
 {

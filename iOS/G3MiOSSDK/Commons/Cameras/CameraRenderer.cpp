@@ -9,6 +9,7 @@
 #include "CameraRenderer.hpp"
 
 #include "Camera.hpp"
+#include "IGL.hpp"
 
 Gesture CameraRenderer::_currentGesture = None;
 

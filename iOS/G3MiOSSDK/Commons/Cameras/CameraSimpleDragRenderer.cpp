@@ -9,6 +9,7 @@
 #include <iostream>
 
 #include "CameraSimpleDragRenderer.h"
+#include "MutableVector2D.hpp"
 
 
 bool CameraSimpleDragRenderer::onTouchEvent(const TouchEvent* touchEvent) 

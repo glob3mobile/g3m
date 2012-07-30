@@ -13,6 +13,7 @@
 
 #include "Camera.hpp"
 #include "Plane.hpp"
+#include "IGL.hpp"
 
 
 void Camera::copyFrom(const Camera &that) {

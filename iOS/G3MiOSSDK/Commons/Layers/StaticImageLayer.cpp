@@ -10,6 +10,9 @@
 
 #include <sstream>
 
+#include "IStorage.hpp"
+
+#include "Tile.hpp"
 
 std::vector<Petition*> StaticImageLayer::getTilePetitions(const Tile& tile, int width, int height) const
 {

@@ -8,6 +8,8 @@
 
 #include "TexturedMesh.hpp"
 
+#include "IGL.hpp"
+
 void TexturedMesh::render(const RenderContext* rc) const
 {
   IGL *gl = rc->getGL();

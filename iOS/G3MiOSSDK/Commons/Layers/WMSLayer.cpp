@@ -10,6 +10,8 @@
 
 #include <sstream>
 
+#include "Tile.hpp"
+
 std::vector<Petition*> WMSLayer::getTilePetitions(const Tile& tile, int width, int height) const
 {
   std::vector<Petition*> vPetitions;

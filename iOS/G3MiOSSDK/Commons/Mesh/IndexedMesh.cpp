@@ -10,6 +10,7 @@
 
 #include "IndexedMesh.hpp"
 #include "Box.hpp"
+#include "IGL.hpp"
 
 
 IndexedMesh::~IndexedMesh()

@@ -14,6 +14,9 @@
 #include "TileRenderer.hpp"
 #include "Mesh.hpp"
 
+#include "IImage.hpp"
+#include "TexturesHandler.hpp"
+
 #include <vector>
 
 class SingleImageTileTexturizer : public TileTexturizer {

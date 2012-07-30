@@ -11,6 +11,10 @@
 #include "ITimer.hpp"
 #include "Renderer.hpp"
 #include "Camera.hpp"
+#include "IGL.hpp"
+#include "TexturesHandler.cpp"
+#include "Downloader.hpp"
+#include "IDownloader.hpp"
 
 
 G3MWidget::G3MWidget(IFactory*        factory,

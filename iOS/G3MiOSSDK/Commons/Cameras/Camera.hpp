@@ -19,7 +19,6 @@
 #include "MutableMatrix44D.hpp"
 #include "Frustum.hpp"
 
-//#include "ILogger.hpp"
 class ILogger;
 
 

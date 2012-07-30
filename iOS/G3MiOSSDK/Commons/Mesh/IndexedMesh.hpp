@@ -14,6 +14,8 @@
 #include "MutableVector2D.hpp"
 #include "MutableVector3D.hpp"
 
+#include <vector>
+
 
 enum GLPrimitive {
   TriangleStrip,
