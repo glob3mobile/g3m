@@ -82,6 +82,12 @@ void Camera::calculateCachedValues(const RenderContext *rc) {
   
   _modelMatrix = MutableMatrix44D::createModelMatrix(_position, _center, _up);
   
+  // compute center of view on planet
+  if (_centerOfView) delete _centerOfView;
+  const Planet *planet = rc->getPlanet();
+  Vector3D centerV = centerOfViewOnPlanet(planet);
+  Geodetic3D centerG = planet->toGeodetic3D(centerV);
+  _centerOfView = new Geodetic3D(centerG);
   
   if (_frustum != NULL) {
     delete _frustum;
@@ -253,9 +259,8 @@ void Camera::setPosition(const Planet& planet, const Geodetic3D& g3d)
 
 Vector3D Camera::centerOfViewOnPlanet(const Planet *planet) const
 {
-  Vector2D centerViewport(_width*0.5, _height*0.5);
-  Vector3D rayCV = pixel2Ray(centerViewport);
-  return planet->closestIntersection(_position.asVector3D(), rayCV);
+  Vector3D ray = _center.sub(_position).asVector3D();
+  return planet->closestIntersection(_position.asVector3D(), ray);
 }
 
 

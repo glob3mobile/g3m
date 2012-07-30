@@ -75,9 +75,7 @@ void CameraDoubleDragRenderer::onMove(const TouchEvent& touchEvent)
   _camera->copyFrom(_camera0);
   
   // computer center view point
-  Vector2D centerPixel(_camera->getWidth()*0.5, _camera->getHeight()*0.5);
-  Vector3D centerRay = _camera->pixel2Ray(centerPixel);
-  Vector3D centerPoint = _planet->closestIntersection(_camera->getPosition(), centerRay);
+  Vector3D centerPoint = _camera->centerOfViewOnPlanet(_planet);
   
   // rotate globe from initialPoint to centerPoing
   {
@@ -101,12 +99,9 @@ void CameraDoubleDragRenderer::onMove(const TouchEvent& touchEvent)
   
   // detect new final point
   {
-    _camera->updateModelMatrix();
-    
     // compute 3D point of view center
-    Vector2D centerPixel(_camera->getWidth()*0.5, _camera->getHeight()*0.5);
-    Vector3D centerRay = _camera->pixel2Ray(centerPixel);
-    Vector3D centerPoint = _planet->closestIntersection(_camera->getPosition(), centerRay);
+    _camera->updateModelMatrix();
+    Vector3D centerPoint = _camera->centerOfViewOnPlanet(_planet);
     
     // middle point in 3D
     Vector3D ray0 = _camera->pixel2Ray(pixel0);
