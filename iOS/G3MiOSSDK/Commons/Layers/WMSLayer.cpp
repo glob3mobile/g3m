@@ -8,6 +8,8 @@
 
 #include "WMSLayer.hpp"
 
+#include <sstream>
+
 std::vector<Petition*> WMSLayer::getTilePetitions(const Tile& tile, int width, int height) const
 {
   std::vector<Petition*> vPetitions;
@@ -59,18 +61,16 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const Tile& tile, int width, i
   
   //ASKING TRANSPARENCY
   req += "&TRANSPARENT=TRUE";
+
+  Sector sector = tile.getSector();
   
 	//Texture Size and BBOX
-  char buffer[100];
-  Sector sector = tile.getSector();
-  sprintf(buffer,
-          "&WIDTH=%d&HEIGHT=%d&BBOX=%f,%f,%f,%f",
-          width, height, 
-          sector.lower().longitude().degrees(), 
-          sector.lower().latitude().degrees(), 
-          sector.upper().longitude().degrees(), 
-          sector.upper().latitude().degrees());
-  req += buffer;
+  std::ostringstream oss;
+  oss << "&WIDTH=" << width << "&HEIGHT=" << height;
+  oss << "&BBOX=" << sector.lower().longitude().degrees() << "," << sector.lower().latitude().degrees();
+  oss << "," << sector.upper().longitude().degrees() << "," << sector.upper().latitude().degrees();
+  std::string sizeAndBBox = oss.str();
+  req += oss.str();
   
   if (_serverVersion == "1.3.0") {
     req += "&CRS=EPSG:4326";

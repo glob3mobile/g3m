@@ -8,6 +8,9 @@
 
 #include "StaticImageLayer.hpp"
 
+#include <sstream>
+
+
 std::vector<Petition*> StaticImageLayer::getTilePetitions(const Tile& tile, int width, int height) const
 {
   std::vector<Petition*> res;
@@ -16,16 +19,14 @@ std::vector<Petition*> StaticImageLayer::getTilePetitions(const Tile& tile, int 
     return res;
   }
   
-  
-  
   Sector imageSector = tile.getSector();
-  int ____REMOVE_THIS_use_std_string;
-  char id[200];
-  sprintf(id, "%s_%f_%f_%f_%f", _layerID.c_str(), 
-          imageSector.lower().latitude().degrees(),
-          imageSector.lower().longitude().degrees(),
-          imageSector.upper().latitude().degrees(),
-          imageSector.upper().longitude().degrees());
+  
+  //CREATING ID FOR PETITION
+  std::ostringstream oss;
+  oss << _layerID << "_" << imageSector.lower().latitude().degrees() << "_";
+  oss << imageSector.lower().longitude().degrees() << "_" << imageSector.upper().latitude().degrees();
+  oss << "_" << imageSector.upper().longitude().degrees();
+  std::string id = oss.str();
   
   Petition *pet = new Petition(tile.getSector(), id);
 
@@ -39,9 +40,6 @@ std::vector<Petition*> StaticImageLayer::getTilePetitions(const Tile& tile, int 
     }
   }
   
-  
-
-  
   double widthUV = imageSector.getDeltaLongitude().degrees() / _bbox.getDeltaLongitude().degrees();
   double heightUV = imageSector.getDeltaLatitude().degrees() / _bbox.getDeltaLatitude().degrees();
   
@@ -49,8 +47,6 @@ std::vector<Petition*> StaticImageLayer::getTilePetitions(const Tile& tile, int 
   Vector2D pos(p.x(), p.y() - heightUV);
   
   Rectangle r(pos.x() * _image->getWidth(), pos.y() * _image->getHeight(), widthUV * _image->getWidth(), heightUV * _image->getHeight());
-  
-  Rectangle r2(0, 0, 0.5 * _image->getWidth(), 0.5 * _image->getHeight());
   
   IImage* subImage = _image->subImage(r);
   
