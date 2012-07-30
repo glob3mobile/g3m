@@ -10,14 +10,14 @@
 #define G3MiOSSDK_CameraRenderer_h
 
 #include "Renderer.hpp"
-
 #include "Camera.hpp"
-class Planet;
-class IGL;
-class ILogger;
 #include "MutableVector3D.hpp"
 #include "Vector3D.hpp"
 #include "TouchEvent.hpp"
+
+class Planet;
+class IGL;
+class ILogger;
 
 
 enum Gesture {

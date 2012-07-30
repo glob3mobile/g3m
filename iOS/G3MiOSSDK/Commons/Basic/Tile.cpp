@@ -133,8 +133,9 @@ void Tile::rawRender(const RenderContext *rc,
     else {
       
       const bool needsToCallTexturizer = (!isTextureSolved()         ||
-                                          (_texturizerMesh  == NULL) ||
-                                          (_texturizerTimer == NULL) );
+                                          (_texturizerMesh  == NULL) );
+                                        //  ||
+                                        //  (_texturizerTimer == NULL) );
       
       if (needsToCallTexturizer) {
         int __TODO_tune_render_budget;

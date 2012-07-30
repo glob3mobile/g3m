@@ -11,6 +11,9 @@
 
 #include "Layer.hpp"
 #include "Sector.hpp"
+#include "IImage.hpp"
+
+class IStorage;
 
 class StaticImageLayer: public Layer
 {

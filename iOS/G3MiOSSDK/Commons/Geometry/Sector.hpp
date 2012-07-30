@@ -13,6 +13,9 @@
 
 #include "Geodetic2D.hpp"
 #include "Context.hpp"
+#include "Vector2D.hpp"
+#include "Geodetic3D.hpp"
+
 
 class Sector {
   

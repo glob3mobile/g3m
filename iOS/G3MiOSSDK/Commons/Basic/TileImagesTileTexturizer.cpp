@@ -15,6 +15,7 @@
 #include "WMSLayer.hpp"
 #include "TileTessellator.hpp"
 #include "ITimer.hpp"
+#include "TexturesHandler.hpp"
 
 
 TilePetitions* TileImagesTileTexturizer::createTilePetitions(const Tile* tile) {  
@@ -60,6 +61,9 @@ Mesh* TileImagesTileTexturizer::getNewTextureMesh(Tile* tile,
   int texID = getTexture(tile);
   if (texID > -1) {
     tile->setTextureSolved(true);
+    
+    //printf("TEXTURIZED %d, %d, %d\n", tile->getLevel(), tile->getRow(), tile->getColumn());
+    
     TextureMapping * tMap = new TextureMapping(texID, getTextureCoordinates(tessellator));
     TexturedMesh* texMesh = new TexturedMesh(tessellatorMesh, false, tMap, true);
     delete previousMesh;   //If a new mesh has been produced we delete the previous one

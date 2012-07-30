@@ -8,6 +8,10 @@
 
 #include "SimplePlanetRenderer.hpp"
 
+#include "Geodetic2D.hpp"
+#include "Planet.hpp"
+#include "TexturesHandler.hpp"
+
 SimplePlanetRenderer::SimplePlanetRenderer(const std::string textureFilename):
 _latRes(30),//FOR NOW THEY MUST BE EQUAL
 _lonRes(30),

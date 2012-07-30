@@ -139,7 +139,7 @@ void Downloader::onError(const Response& e)
 #ifdef JAVA_CODE
       _petitions.remove(i);
 #endif
-      return;
+      break;
     }
   }
   

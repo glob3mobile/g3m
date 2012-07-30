@@ -9,6 +9,7 @@
 #include "TextureMapping.hpp"
 
 #include "Context.hpp"
+#include "IGL.hpp"
 
 
 TextureMapping::TextureMapping(int textureId, std::vector<MutableVector2D> texCoords) :

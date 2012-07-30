@@ -12,6 +12,7 @@
 #include "Context.hpp"
 #include "Extent.hpp"
 
+class Vector3D;
 
 class Mesh {
 public:

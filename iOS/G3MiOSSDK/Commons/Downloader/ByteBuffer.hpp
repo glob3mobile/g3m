@@ -25,9 +25,6 @@ public:
   _length(bb._length),
   _data(new unsigned char[bb._length])
   {
-    //    for(int i = 0; i < l; i++) {
-    //      _data[i] = bb._data[i];
-    //    }
     memcpy(_data, bb._data, _length * sizeof(unsigned char));
   };
   

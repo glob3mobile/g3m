@@ -9,16 +9,15 @@
 #ifndef G3MiOSSDK_InitializationContext_h
 #define G3MiOSSDK_InitializationContext_h
 
-#include "IFactory.hpp"
-#include "IGL.hpp"
-#include "Planet.hpp"
-#include "TexturesHandler.hpp"
-#include "Downloader.hpp"
 
-
-#include "IDownloader.hpp"
-
+class IFactory;
 class Camera;
+class Planet;
+class TexturesHandler;
+class IDownloader;
+class Downloader;
+class ILogger;
+class IGL;
 
 class Context {
 protected:
