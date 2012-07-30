@@ -174,14 +174,14 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
   const Vector3D sw = planet->toVector3D(sector.getSW());
   const Vector3D nw = planet->toVector3D(sector.getNW());
   const double offset = nw.sub(sw).length() * 1e-3;
-
+  
   // west side
   for (unsigned int j=0; j<resol_1; j++) {
     const Geodetic3D g(sector.getInnerPoint(0.0, (double)j/resol_1), offset); 
     addVertex(planet, &vertices, g);
     indices.push_back(posS++);
   }
- 
+  
   // south side
   for (unsigned int i=0; i<resol_1; i++) {
     const Geodetic3D g(sector.getInnerPoint((double)i/resol_1, 1.0), offset);
@@ -202,9 +202,9 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
     addVertex(planet, &vertices, g);
     indices.push_back(posS++);
   }
-
+  
   // create TexturedMesh
-  const Color *color = new Color(Color::fromRGBA(1.0, 0.0, 0.0, 1.0));
+  const Color *color = new Color(Color::fromRGBA((float) 1.0, (float) 0.0, (float) 0.0, (float) 1.0));
   const Vector3D center = planet->toVector3D(sector.getCenter());
   return new IndexedMesh(vertices, LineLoop, GivenCenter, center, indices, color); 
 }

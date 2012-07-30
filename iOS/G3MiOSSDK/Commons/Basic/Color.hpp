@@ -15,7 +15,7 @@ private:
   const float _green;
   const float _blue;
   const float _alpha;
-
+  
   Color(const float red,
         const float green,
         const float blue,
@@ -31,9 +31,9 @@ private:
 public:
   
   static Color fromRGBA(const float red,
-                       const float green,
-                       const float blue,
-                       const float alpha) {
+                        const float green,
+                        const float blue,
+                        const float alpha) {
     return Color(red, green, blue, alpha);
   }
   
