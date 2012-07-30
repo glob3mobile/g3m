@@ -252,9 +252,8 @@ void Camera::setPosition(const Planet& planet, const Geodetic3D& g3d)
 
 Vector3D Camera::centerOfViewOnPlanet(const Planet *planet) const
 {
-  Vector2D centerViewport(_width*0.5, _height*0.5);
-  Vector3D rayCV = pixel2Ray(centerViewport);
-  return planet->closestIntersection(_position.asVector3D(), rayCV);
+  Vector3D ray = _center.sub(_position).asVector3D();
+  return planet->closestIntersection(_position.asVector3D(), ray);
 }
 
 
