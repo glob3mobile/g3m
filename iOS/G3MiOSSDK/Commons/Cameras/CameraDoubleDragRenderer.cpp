@@ -131,5 +131,3 @@ void CameraDoubleDragRenderer::onUp(const TouchEvent& touchEvent)
 }
 
 
-
-
