@@ -28,7 +28,12 @@ public:
     //    for(int i = 0; i < l; i++) {
     //      _data[i] = bb._data[i];
     //    }
+#ifdef C_CODE
     memcpy(_data, bb._data, _length * sizeof(unsigned char));
+#endif
+#ifdef JAVA_CODE
+      System.arraycopy(bb._data, 0, _data, 0, _length);
+#endif
   };
   
   ~ByteBuffer(){

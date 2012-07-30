@@ -78,6 +78,7 @@ public:
          int width, int height);
   
   ~Camera() {
+#ifdef C_CODE
     if (_frustum != NULL) {
       delete _frustum;
     }
@@ -93,7 +94,7 @@ public:
     if (_halfFrustumInModelCoordinates != NULL) {
       delete _halfFrustumInModelCoordinates;
     }
-
+#endif
   }
   
   void copyFrom(const Camera &c);
@@ -236,7 +237,9 @@ private:
     //      _frustum = NULL;
     //    }
     if (_frustumInModelCoordinates != NULL) {
+#ifdef C_CODE
       delete _frustumInModelCoordinates;
+#endif
       _frustumInModelCoordinates = NULL;
     }
   }

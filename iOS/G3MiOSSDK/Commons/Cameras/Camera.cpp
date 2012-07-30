@@ -26,12 +26,16 @@ void Camera::copyFrom(const Camera &that) {
   _center   = that._center;
   _up       = that._up;
   
+#ifdef C_CODE
   if (_frustum != NULL) {
     delete _frustum;
   }
+#endif
+#ifdef C_CODE
   if (_frustumInModelCoordinates != NULL) {
     delete _frustumInModelCoordinates;
   }
+#endif
   _frustum = (that._frustum == NULL) ? NULL : new Frustum(*that._frustum);
   _frustumInModelCoordinates = (that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates);
   
@@ -81,29 +85,36 @@ void Camera::calculateCachedValues(const RenderContext *rc) {
   
   _modelMatrix = MutableMatrix44D::createModelMatrix(_position, _center, _up);
   
-  
+#ifdef C_CODE  
   if (_frustum != NULL) {
     delete _frustum;
   }
+#endif
   _frustum = new Frustum(data._left, data._right,
                          data._bottom, data._top,
                          data._znear, data._zfar);
-  
+
+#ifdef C_CODE    
   if (_frustumInModelCoordinates != NULL) {
     delete _frustumInModelCoordinates;
   }
+#endif
   _frustumInModelCoordinates = _frustum->transformedBy_P(_modelMatrix.transposed());
-  
+
+#ifdef C_CODE    
   if (_halfFrustum != NULL) {
     delete _halfFrustum;
   }
+#endif
   _halfFrustum =  new Frustum(data._left/2, data._right/2,
                               data._bottom/2, data._top/2,
                               data._znear, data._zfar);
   
+#ifdef C_CODE
   if (_halfFrustumInModelCoordinates != NULL) {
     delete _halfFrustumInModelCoordinates;
   }
+#endif
   _halfFrustumInModelCoordinates = _halfFrustum->transformedBy_P(_modelMatrix.transposed());
 
 

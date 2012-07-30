@@ -20,7 +20,12 @@ void TilePetitions::onDownload(const Response &response)
     if (_petitions[j]->getURL() == url)
     {
       //STORING PIXEL DATA FOR RECEIVED URL
+#ifdef C_CODE
       ByteBuffer *bb = new ByteBuffer(*response.getByteBuffer());
+#endif
+#ifdef JAVA_CODE
+        ByteBuffer bb = new ByteBuffer(response.getByteBuffer());
+#endif
       _petitions[j]->setByteBuffer(bb);
     }
   }

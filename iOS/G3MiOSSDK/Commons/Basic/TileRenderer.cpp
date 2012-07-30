@@ -17,18 +17,22 @@
 TileRenderer::~TileRenderer() {
   clearTopLevelTiles();
   
+#ifdef C_CODE
   delete _tessellator;
   delete _texturizer;
   delete _parameters;
 
   delete _frameTimer;
   delete _lastSplitTimer;
+#endif
 }
 
 void TileRenderer::clearTopLevelTiles() {
   for (int i = 0; i < _topLevelTiles.size(); i++) {
     Tile* tile = _topLevelTiles[i];
+#ifdef C_CODE
     delete tile;
+#endif
   }
   
   _topLevelTiles.clear();

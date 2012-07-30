@@ -46,7 +46,12 @@ int CPUTextureBuilder::createTextureFromImages(IGL * gl, const IFactory* factory
   }
   
   for (int i = 1; i < vImages.size(); i++) {
-    IImage* im2 = base->combineWith(*vImages[i], *vRectangles[i], width, height);
+#ifdef C_CODE
+      IImage* im2 = base->combineWith(*vImages[i], *vRectangles[i], width, height);
+#endif
+#ifdef JAVA_CODE
+      IImage im2 = base.combineWith(vImages.get(i), vRectangles.get(i), width, height);
+#endif
     delete base;
     base = im2;
   }

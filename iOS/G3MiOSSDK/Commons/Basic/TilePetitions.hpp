@@ -35,8 +35,10 @@ public:
   _downloadID(-1)
   {}
   
-  ~Petition(){ 
+  ~Petition(){
+#ifdef C_CODE
     delete _sector;
+#endif
     releaseData();
   }
   

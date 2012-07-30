@@ -91,7 +91,12 @@ void Downloader::startDownload()
 void Downloader::onDownload(const Response& e)
 {
   //Saving on storage
+#ifdef C_CODE
   _storage->save(e.getURL().getPath(), *e.getByteBuffer());
+#endif
+#ifdef JAVA_CODE
+    _storage.save(e.getURL().getPath(), e.getByteBuffer());
+#endif
   
   for (int i = 0; i < _petitions.size(); i++)
   {
