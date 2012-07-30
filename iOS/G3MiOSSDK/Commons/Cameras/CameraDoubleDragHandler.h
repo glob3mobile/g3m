@@ -18,6 +18,8 @@ class CameraDoubleDragHandler: public CameraHandler {
 public:
   bool onTouchEvent(const TouchEvent* touchEvent);
   int render(const RenderContext* rc);
+  void initialize(const InitializationContext* ic) {}  
+  void onResizeViewportEvent(int width, int height) {}
   
 private:
   void onDown(const TouchEvent& touchEvent);

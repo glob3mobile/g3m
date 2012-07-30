@@ -31,19 +31,14 @@ enum Gesture {
 
 class CameraHandler: public Renderer
 {
-private:
-  
-  const ILogger * _logger;
-  
-  // void makeRotate(const TouchEvent& touchEvent);
-  
   
 protected:
-  const Planet* _planet;
-  IGL *gl;
+  static const Planet* _planet;
+  static const ILogger * _logger;
+  static IGL *gl;
   
-  Camera _camera0;                //Initial Camera saved on Down event
-  Camera* _camera;         // Camera used at current frame
+  static Camera _camera0;                //Initial Camera saved on Down event
+  static Camera* _camera;         // Camera used at current frame
   
   MutableVector3D _initialPoint;  //Initial point at dragging
   MutableVector3D _initialPixel;  //Initial pixel at start of gesture
@@ -52,22 +47,23 @@ protected:
   
   double _initialFingerSeparation;
   double _initialFingerInclination;
-  
-  Gesture getGesture(const TouchEvent& touchEvent);
-  
-  
+    
   
 public:
   
-  CameraHandler();
+  CameraHandler():
+  _initialPoint(0,0,0),
+  _initialPixel(0,0,0)
+  {
+  }
   
-  void initialize(const InitializationContext* ic);  
+  virtual void initialize(const InitializationContext* ic) = 0;  
   
   virtual int render(const RenderContext* rc) = 0;
   
   virtual bool onTouchEvent(const TouchEvent* touchEvent) = 0;
   
-  void onResizeViewportEvent(int width, int height);
+  virtual void onResizeViewportEvent(int width, int height) = 0;
   
   bool isReadyToRender(const RenderContext* rc) {
     return true;

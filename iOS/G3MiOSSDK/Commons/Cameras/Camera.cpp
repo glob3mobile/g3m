@@ -53,7 +53,8 @@ _frustum(NULL),
 _dirtyCachedValues(true),
 _frustumInModelCoordinates(NULL),
 _halfFrustumInModelCoordinates(NULL),
-_halfFrustum(NULL)
+_halfFrustum(NULL),
+_centerOfView(NULL)
 {
   resizeViewport(width, height);
 }

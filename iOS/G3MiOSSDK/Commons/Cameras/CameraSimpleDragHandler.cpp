@@ -80,12 +80,6 @@ void CameraSimpleDragHandler::onUp(const TouchEvent& touchEvent)
 }
 
 int CameraSimpleDragHandler::render(const RenderContext* rc) {
-  _camera = rc->getCamera(); //Saving camera reference 
-  _planet = rc->getPlanet();
-  gl = rc->getGL();
-  
-  _camera->render(rc);
-  
   return MAX_TIME_TO_RENDER;
 }
 

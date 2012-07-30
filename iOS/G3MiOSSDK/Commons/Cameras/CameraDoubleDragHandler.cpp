@@ -133,14 +133,8 @@ void CameraDoubleDragHandler::onUp(const TouchEvent& touchEvent)
 
 
 int CameraDoubleDragHandler::render(const RenderContext* rc) {
-  _camera = rc->getCamera(); //Saving camera reference 
-  _planet = rc->getPlanet();
-  gl = rc->getGL();
-  
-  _camera->render(rc);
-  
   // TEMP TO DRAW A POINT WHERE USER PRESS
-  if (true) {
+  if (false) {
     if (_currentGesture == DoubleDrag) {
       float vertices[] = { 0,0,0};
       unsigned int indices[] = {0};

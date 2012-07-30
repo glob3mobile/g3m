@@ -17,6 +17,7 @@
 #include "Factory_iOS.hpp"
 #include "GL2.hpp"
 
+#include "CameraRenderer.hpp"
 #include "CameraSimpleDragHandler.h"
 #include "CameraDoubleDragHandler.h"
 #include "CameraRotationHandler.h"
@@ -80,8 +81,10 @@
   // composite renderer is the father of the rest of renderers
   CompositeRenderer* comp = new CompositeRenderer();
   
-  // camera rendererers
+  // camera renderer and handlers
   CameraHandler *cameraHandler;
+  cameraHandler = new CameraRenderer();
+  comp->addRenderer(cameraHandler);
   cameraHandler = new CameraSimpleDragHandler();
   comp->addRenderer(cameraHandler);
   cameraHandler = new CameraDoubleDragHandler();
@@ -268,8 +271,10 @@
   // composite renderer is the father of the rest of renderers
   CompositeRenderer* comp = new CompositeRenderer();
   
-  // camera rendererers
+  // camera renderer and handlers
   CameraHandler *cameraHandler;
+  cameraHandler = new CameraRenderer();
+  comp->addRenderer(cameraHandler);
   cameraHandler = new CameraSimpleDragHandler();
   comp->addRenderer(cameraHandler);
   cameraHandler = new CameraDoubleDragHandler();
