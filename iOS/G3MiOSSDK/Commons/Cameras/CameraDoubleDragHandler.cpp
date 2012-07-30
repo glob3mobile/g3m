@@ -8,10 +8,11 @@
 
 #include <iostream>
 
-#include "CameraDoubleDragRenderer.h"
+#include "CameraDoubleDragHandler.h"
+#include "IGL.hpp"
 
 
-bool CameraDoubleDragRenderer::onTouchEvent(const TouchEvent* touchEvent) 
+bool CameraDoubleDragHandler::onTouchEvent(const TouchEvent* touchEvent) 
 {
   // only one finger needed
   if (touchEvent->getTouchCount()!=2) return false;
@@ -33,7 +34,7 @@ bool CameraDoubleDragRenderer::onTouchEvent(const TouchEvent* touchEvent)
 }
 
 
-void CameraDoubleDragRenderer::onDown(const TouchEvent& touchEvent) 
+void CameraDoubleDragHandler::onDown(const TouchEvent& touchEvent) 
 {
   _camera0 = Camera(*_camera);
   _currentGesture = DoubleDrag;  
@@ -59,7 +60,7 @@ void CameraDoubleDragRenderer::onDown(const TouchEvent& touchEvent)
 }
 
 
-void CameraDoubleDragRenderer::onMove(const TouchEvent& touchEvent) 
+void CameraDoubleDragHandler::onMove(const TouchEvent& touchEvent) 
 {
   //_currentGesture = getGesture(touchEvent);
   if (_currentGesture!=DoubleDrag) return;
@@ -122,7 +123,7 @@ void CameraDoubleDragRenderer::onMove(const TouchEvent& touchEvent)
 }
 
 
-void CameraDoubleDragRenderer::onUp(const TouchEvent& touchEvent) 
+void CameraDoubleDragHandler::onUp(const TouchEvent& touchEvent) 
 {
   _currentGesture = None;
   _initialPixel = Vector3D::nan().asMutableVector3D();
@@ -131,5 +132,34 @@ void CameraDoubleDragRenderer::onUp(const TouchEvent& touchEvent)
 }
 
 
+int CameraDoubleDragHandler::render(const RenderContext* rc) {
+  _camera = rc->getCamera(); //Saving camera reference 
+  _planet = rc->getPlanet();
+  gl = rc->getGL();
+  
+  _camera->render(rc);
+  
+  // TEMP TO DRAW A POINT WHERE USER PRESS
+  if (true) {
+    if (_currentGesture == DoubleDrag) {
+      float vertices[] = { 0,0,0};
+      unsigned int indices[] = {0};
+      gl->enableVerticesPosition();
+      gl->disableTexture2D();
+      gl->disableTextures();
+      gl->vertexPointer(3, 0, vertices);
+      gl->color((float) 1, (float) 1, (float) 1, 1);
+      gl->pushMatrix();
+      MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D().times(1.01));
+      gl->multMatrixf(T);
+      gl->drawPoints(1, indices);
+      gl->popMatrix();
+      //Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
+      //printf ("zoom with initial point = (%f, %f)\n", g.latitude().degrees(), g.longitude().degrees());
+    }
+  }
+  
+  return MAX_TIME_TO_RENDER;
+}
 
 

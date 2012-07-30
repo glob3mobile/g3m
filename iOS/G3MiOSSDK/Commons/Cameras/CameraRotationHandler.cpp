@@ -1,5 +1,5 @@
 //
-//  CameraRotationRenderer.cpp
+//  CameraRotationHandler.cpp
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 28/07/12.
@@ -8,10 +8,11 @@
 
 #include <iostream>
 
-#include "CameraRotationRenderer.h"
+#include "CameraRotationHandler.h"
+#include "IGL.hpp"
 
 
-bool CameraRotationRenderer::onTouchEvent(const TouchEvent* touchEvent) 
+bool CameraRotationHandler::onTouchEvent(const TouchEvent* touchEvent) 
 {
   // only one finger needed
   if (touchEvent->getTouchCount()!=3) return false;
@@ -33,7 +34,7 @@ bool CameraRotationRenderer::onTouchEvent(const TouchEvent* touchEvent)
 }
 
 
-void CameraRotationRenderer::onDown(const TouchEvent& touchEvent) 
+void CameraRotationHandler::onDown(const TouchEvent& touchEvent) 
 {  
   _camera0 = Camera(*_camera);
   _currentGesture = Rotate;
@@ -55,12 +56,10 @@ void CameraRotationRenderer::onDown(const TouchEvent& touchEvent)
 }
 
 
-void CameraRotationRenderer::onMove(const TouchEvent& touchEvent) 
+void CameraRotationHandler::onMove(const TouchEvent& touchEvent) 
 {
   int __agustin_at_work;
-  
-  return;
-  
+    
   //_currentGesture = getGesture(touchEvent);
   if (_currentGesture!=Rotate) return;
   
@@ -76,15 +75,17 @@ void CameraRotationRenderer::onMove(const TouchEvent& touchEvent)
   Vector2D p2 = touchEvent.getTouch(2)->getPrevPos();
   Vector2D pm = p0.add(p1).add(p2).div(3);
   
-/*  // rotate less than 90 degrees or more than 180 is not allowed
+  // rotate less than 90 degrees or more than 180 is not allowed
   Vector3D normal = _planet->geodeticSurfaceNormal(_initialPoint.asVector3D());
   Vector3D po = _initialPoint.sub(_camera0.getPosition().asMutableVector3D()).asVector3D();
   double pe = normal.normalized().dot(po.normalized());
   if (pe < -1) pe = -1.0;
   if (pe > 1) pe = 1.0;
   double ang = acos(pe) * 180 / M_PI - (cm.y() - pm.y()) * 0.25;
+  printf ("ang=%f\n", ang);
   
-  // don't allow a minimum height above ground
+  
+/*  // don't allow a minimum height above ground
   if (cm.y() < lastYValid && ang < 179) lastYValid = cm.y();
   //double height = GetPosGeo3D().height();
   //if (py > lastYValid && ang > 100 && height > MIN_CAMERA_HEIGHT * 0.25) lastYValid = py;
@@ -110,10 +111,41 @@ void CameraRotationRenderer::onMove(const TouchEvent& touchEvent)
 }
 
 
-void CameraRotationRenderer::onUp(const TouchEvent& touchEvent) 
+void CameraRotationHandler::onUp(const TouchEvent& touchEvent) 
 {
   _currentGesture = None;
   _initialPixel = Vector3D::nan().asMutableVector3D();
   printf ("end rotation\n");
+}
+
+
+int CameraRotationHandler::render(const RenderContext* rc) {
+  _camera = rc->getCamera(); //Saving camera reference 
+  _planet = rc->getPlanet();
+  gl = rc->getGL();
+  
+  _camera->render(rc);
+  
+  // TEMP TO DRAW A POINT WHERE USER PRESS
+  if (true) {
+    if (_currentGesture == Rotate) {
+      float vertices[] = { 0,0,0};
+      unsigned int indices[] = {0};
+      gl->enableVerticesPosition();
+      gl->disableTexture2D();
+      gl->disableTextures();
+      gl->vertexPointer(3, 0, vertices);
+      gl->color((float) 1, (float) 1, (float) 0, 1);
+      gl->pushMatrix();
+      MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D().times(1.01));
+      gl->multMatrixf(T);
+      gl->drawPoints(1, indices);
+      gl->popMatrix();
+      //Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
+      //printf ("zoom with initial point = (%f, %f)\n", g.latitude().degrees(), g.longitude().degrees());
+    }
+  }
+  
+  return MAX_TIME_TO_RENDER;
 }
 

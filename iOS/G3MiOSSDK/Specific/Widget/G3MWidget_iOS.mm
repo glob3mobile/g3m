@@ -17,9 +17,9 @@
 #include "Factory_iOS.hpp"
 #include "GL2.hpp"
 
-#include "CameraSimpleDragRenderer.h"
-#include "CameraDoubleDragRenderer.h"
-#include "CameraRotationRenderer.h"
+#include "CameraSimpleDragHandler.h"
+#include "CameraDoubleDragHandler.h"
+#include "CameraRotationHandler.h"
 
 #include "TileRenderer.hpp"
 #include "DummyRenderer.hpp"
@@ -81,13 +81,13 @@
   CompositeRenderer* comp = new CompositeRenderer();
   
   // camera rendererers
-  CameraRenderer *cameraRenderer;
-  cameraRenderer = new CameraSimpleDragRenderer();
-  comp->addRenderer(cameraRenderer);
-  cameraRenderer = new CameraDoubleDragRenderer();
-  comp->addRenderer(cameraRenderer);
-  cameraRenderer = new CameraRotationRenderer();
-  comp->addRenderer(cameraRenderer);
+  CameraHandler *cameraHandler;
+  cameraHandler = new CameraSimpleDragHandler();
+  comp->addRenderer(cameraHandler);
+  cameraHandler = new CameraDoubleDragHandler();
+  comp->addRenderer(cameraHandler);
+  cameraHandler = new CameraRotationHandler();
+  comp->addRenderer(cameraHandler);
   
   //STORAGE
   NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
@@ -269,13 +269,13 @@
   CompositeRenderer* comp = new CompositeRenderer();
   
   // camera rendererers
-  CameraRenderer *cameraRenderer;
-  cameraRenderer = new CameraSimpleDragRenderer();
-  comp->addRenderer(cameraRenderer);
-  cameraRenderer = new CameraDoubleDragRenderer();
-  comp->addRenderer(cameraRenderer);
-  cameraRenderer = new CameraRotationRenderer();
-  comp->addRenderer(cameraRenderer);
+  CameraHandler *cameraHandler;
+  cameraHandler = new CameraSimpleDragHandler();
+  comp->addRenderer(cameraHandler);
+  cameraHandler = new CameraDoubleDragHandler();
+  comp->addRenderer(cameraHandler);
+  cameraHandler = new CameraRotationHandler();
+  comp->addRenderer(cameraHandler);
   
   //STORAGE
   NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];

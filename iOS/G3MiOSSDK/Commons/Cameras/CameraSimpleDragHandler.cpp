@@ -1,5 +1,5 @@
 //
-//  CameraSimpleDragRenderer.cpp
+//  CameraSimpleDragHandler.cpp
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 28/07/12.
@@ -8,11 +8,11 @@
 
 #include <iostream>
 
-#include "CameraSimpleDragRenderer.h"
+#include "CameraSimpleDragHandler.h"
 #include "MutableVector2D.hpp"
 
 
-bool CameraSimpleDragRenderer::onTouchEvent(const TouchEvent* touchEvent) 
+bool CameraSimpleDragHandler::onTouchEvent(const TouchEvent* touchEvent) 
 {
   // only one finger needed
   if (touchEvent->getTouchCount()!=1) return false;
@@ -34,7 +34,7 @@ bool CameraSimpleDragRenderer::onTouchEvent(const TouchEvent* touchEvent)
 }
 
 
-void CameraSimpleDragRenderer::onDown(const TouchEvent& touchEvent) 
+void CameraSimpleDragHandler::onDown(const TouchEvent& touchEvent) 
 {  
   _camera0 = Camera(*_camera);
   _currentGesture = Drag; 
@@ -48,7 +48,7 @@ void CameraSimpleDragRenderer::onDown(const TouchEvent& touchEvent)
 }
 
 
-void CameraSimpleDragRenderer::onMove(const TouchEvent& touchEvent) 
+void CameraSimpleDragHandler::onMove(const TouchEvent& touchEvent) 
 {
   //_currentGesture = getGesture(touchEvent);
   if (_currentGesture!=Drag) return;
@@ -71,12 +71,22 @@ void CameraSimpleDragRenderer::onMove(const TouchEvent& touchEvent)
 }
 
 
-void CameraSimpleDragRenderer::onUp(const TouchEvent& touchEvent) 
+void CameraSimpleDragHandler::onUp(const TouchEvent& touchEvent) 
 {
   _currentGesture = None;
   _initialPixel = Vector3D::nan().asMutableVector3D();
   
   //printf ("end 1 finger\n");
+}
+
+int CameraSimpleDragHandler::render(const RenderContext* rc) {
+  _camera = rc->getCamera(); //Saving camera reference 
+  _planet = rc->getPlanet();
+  gl = rc->getGL();
+  
+  _camera->render(rc);
+  
+  return MAX_TIME_TO_RENDER;
 }
 
 
