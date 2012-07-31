@@ -429,17 +429,7 @@
     }
     
     lastTouchEvent = NULL;
-    
-    // all the creation of renderers must be move to common source code, instead of specific
-    int __to_move_to_common_source_code;
-    
-    bool csiro = false;
-    if (csiro){
-      [self initWidgetCSIRO];
-    } else{
-      [self initWidgetDemo];
-    }
-    
+
     // rest of initialization
     _animating = FALSE;
     _displayLinkSupported = FALSE;
