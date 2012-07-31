@@ -59,7 +59,7 @@ void CameraRotationHandler::onDown(const TouchEvent& touchEvent)
 void CameraRotationHandler::onMove(const TouchEvent& touchEvent) 
 {
   int __agustin_at_work;
-  return;
+  //return;
       
   //_currentGesture = getGesture(touchEvent);
   if (_currentGesture!=Rotate) return;
@@ -120,7 +120,7 @@ void CameraRotationHandler::onMove(const TouchEvent& touchEvent)
     //_camera->copyFrom(_camera0);
     //_camera->applyTransform(M);
     _camera->copyFrom(tempCamera);
-    printf ("rotating from %.0f to %.0f.  Angle=%.1f\n", lastYValid, cm.y(), angleDelta.degrees());
+    printf ("rotating from %.0f to %.0f.  Angle=%.1f\n", lastYValid, cm.y(), finalAngle.degrees());
   } 
 }
 
@@ -146,7 +146,7 @@ int CameraRotationHandler::render(const RenderContext* rc) {
       gl->color((float) 1, (float) 1, (float) 0, 1);
       gl->pointSize(10);
       gl->pushMatrix();
-      MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D().times(1.0001));
+      MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D());
       gl->multMatrixf(T);
       gl->drawPoints(1, indices);
       gl->popMatrix();

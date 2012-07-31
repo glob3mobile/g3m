@@ -82,7 +82,7 @@ void CameraSimpleDragHandler::onUp(const TouchEvent& touchEvent)
 
 int CameraSimpleDragHandler::render(const RenderContext* rc) {
   // TEMP TO DRAW A POINT WHERE USER PRESS
-  if (false) {
+  if (true) {
     if (_currentGesture == Drag) {
       float vertices[] = { 0,0,0};
       unsigned int indices[] = {0};
@@ -98,7 +98,7 @@ int CameraSimpleDragHandler::render(const RenderContext* rc) {
       printf ("altura camara = %f\n", height);
                                          
       
-      MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D().times(1.0001));
+      MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D());
       gl->multMatrixf(T);
       gl->drawPoints(1, indices);
       gl->popMatrix();

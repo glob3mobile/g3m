@@ -191,7 +191,8 @@ Vector2D Camera::point2Pixel(const Vector3D& point) const
 {
   const MutableMatrix44D modelViewMatrix = _projectionMatrix.multiply(_modelMatrix);
   const int viewport[4] = { 0, 0, _width, _height };
-  return modelViewMatrix.project(point, viewport);
+  Vector2D p = modelViewMatrix.project(point, viewport);
+  return Vector2D(p.x(), _height-p.y());
 }
 
 void Camera::applyTransform(const MutableMatrix44D& M) {
