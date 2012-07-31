@@ -28,7 +28,7 @@ private:
   
   NSString* toNSString(const std::string& cppStr) const {
     return [ NSString stringWithCString: cppStr.c_str()
-                               encoding: [NSString defaultCStringEncoding] ];
+                               encoding: NSUTF8StringEncoding ];
   }
   
 public:
