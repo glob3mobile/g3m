@@ -100,12 +100,16 @@ G3MWidget::~G3MWidget() {
   delete _factory;
   delete _logger;
   delete _gl;
+#ifdef C_CODE
   delete _planet;
+#endif
   delete _renderer;
   delete _camera;
   delete _texturesHandler;
   delete _timer;
+#ifdef C_CODE
   delete _downloaderOLD;
+#endif
   delete _downloader;
 }
 
