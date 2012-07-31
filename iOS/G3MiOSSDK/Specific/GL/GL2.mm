@@ -15,6 +15,8 @@
 #include "Vector3D.hpp"
 #include "Vector2D.hpp"
 
+#include "NativeGL2_iOS.hpp"
+
 
 struct UniformsStruct {
   GLuint  Projection;

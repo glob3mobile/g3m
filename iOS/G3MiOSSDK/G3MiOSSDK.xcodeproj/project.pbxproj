@@ -223,9 +223,9 @@
 		CC596F1F15C46D4F008FC230 /* CameraDoubleDragHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CameraDoubleDragHandler.h; path = Commons/Cameras/CameraDoubleDragHandler.h; sourceTree = "<group>"; };
 		CC596F2015C46D4F008FC230 /* CameraRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CameraRenderer.cpp; path = Commons/Cameras/CameraRenderer.cpp; sourceTree = "<group>"; };
 		CC596F2115C46D4F008FC230 /* CameraRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CameraRenderer.hpp; path = Commons/Cameras/CameraRenderer.hpp; sourceTree = "<group>"; };
-		CC596F2815C46DAB008FC230 /* CameraSimpleDragHandler.h */ = {isa = PBXFileReference; name = CameraSimpleDragHandler.h; path = Commons/Cameras/CameraSimpleDragHandler.h; sourceTree = "<group>"; };
+		CC596F2815C46DAB008FC230 /* CameraSimpleDragHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CameraSimpleDragHandler.h; path = Commons/Cameras/CameraSimpleDragHandler.h; sourceTree = "<group>"; };
 		CC596F2915C46DE2008FC230 /* CameraSimpleDragHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CameraSimpleDragHandler.cpp; path = Commons/Cameras/CameraSimpleDragHandler.cpp; sourceTree = "<group>"; };
-		CC596F2B15C472BA008FC230 /* CameraRotationHandler.h */ = {isa = PBXFileReference; name = CameraRotationHandler.h; path = Commons/Cameras/CameraRotationHandler.h; sourceTree = "<group>"; };
+		CC596F2B15C472BA008FC230 /* CameraRotationHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CameraRotationHandler.h; path = Commons/Cameras/CameraRotationHandler.h; sourceTree = "<group>"; };
 		CC596F2C15C472EF008FC230 /* CameraRotationHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CameraRotationHandler.cpp; path = Commons/Cameras/CameraRotationHandler.cpp; sourceTree = "<group>"; };
 		CC96079115AF23F600D438D4 /* TextureMapping.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextureMapping.cpp; path = Commons/Mesh/TextureMapping.cpp; sourceTree = "<group>"; };
 		CCB2564D15B5A30900079B96 /* TextureMapping.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TextureMapping.hpp; path = Commons/Mesh/TextureMapping.hpp; sourceTree = "<group>"; };
@@ -294,6 +294,8 @@
 		D88C344F159C5A410044CED9 /* DataDownload.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DataDownload.hpp; path = Specific/Derived/DataDownload.hpp; sourceTree = "<group>"; };
 		D88C3450159C5A410044CED9 /* DataDownload.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = DataDownload.mm; path = Specific/Derived/DataDownload.mm; sourceTree = "<group>"; };
 		D88C3451159C5A410044CED9 /* NetworkQueue.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NetworkQueue.hpp; path = Specific/Derived/NetworkQueue.hpp; sourceTree = "<group>"; };
+		D8A415F515C7F085005010E6 /* INativeGL.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = INativeGL.hpp; path = Specific/GL/INativeGL.hpp; sourceTree = "<group>"; };
+		D8A415F715C7F0C4005010E6 /* NativeGL2_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NativeGL2_iOS.hpp; sourceTree = "<group>"; };
 		D8A5601B15AEF64E00035086 /* IndexedMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IndexedMesh.cpp; path = Commons/Mesh/IndexedMesh.cpp; sourceTree = "<group>"; };
 		D8A5601C15AEF64E00035086 /* IndexedMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IndexedMesh.hpp; path = Commons/Mesh/IndexedMesh.hpp; sourceTree = "<group>"; };
 		D8A5601D15AEF64E00035086 /* Mesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Mesh.cpp; path = Commons/Mesh/Mesh.cpp; sourceTree = "<group>"; };
@@ -511,6 +513,8 @@
 			children = (
 				CC14B637157D34C700793C92 /* GL2.mm */,
 				CC14B638157D34C700793C92 /* GL2.hpp */,
+				D8A415F515C7F085005010E6 /* INativeGL.hpp */,
+				D8A415F715C7F0C4005010E6 /* NativeGL2_iOS.hpp */,
 			);
 			name = GL;
 			sourceTree = "<group>";
