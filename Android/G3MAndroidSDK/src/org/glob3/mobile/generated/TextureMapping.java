@@ -61,7 +61,6 @@ public class TextureMapping
 
   public void dispose()
   {
-	_texCoords = null;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
