@@ -59,7 +59,7 @@ public class CPUTextureBuilder extends TextureBuilder
   {
   
 	int todo_JM = 0;
-	final IImage base;
+	IImage base;
 	if (vRectangles.get(0)._width == width && vRectangles.get(0)._height == height)
 	{
 	  base = vImages.get(0);

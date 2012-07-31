@@ -63,8 +63,6 @@ public class G3MWidget
 		_logger.dispose();
 	if (_gl != null)
 		_gl.dispose();
-	if (_planet != null)
-		_planet.dispose();
 	if (_renderer != null)
 		_renderer.dispose();
 	if (_camera != null)
@@ -73,8 +71,6 @@ public class G3MWidget
 		_texturesHandler.dispose();
 	if (_timer != null)
 		_timer.dispose();
-	if (_downloaderOLD != null)
-		_downloaderOLD.dispose();
 	if (_downloader != null)
 		_downloader.dispose();
   }
