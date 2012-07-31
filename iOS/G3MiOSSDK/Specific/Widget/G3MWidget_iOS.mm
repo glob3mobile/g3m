@@ -96,9 +96,10 @@
   NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
   FileSystemStorage * fss = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
   Downloader* downloaderOLD = new Downloader(fss, 5, factory->createNetwork());
-  IDownloader* downloader = new Downloader_iOS(1,
-                                               64,
-                                               ".G3M_Cache");
+  IDownloader* downloader = new Downloader_iOS(1 * 1024 * 1024,
+                                               64 * 1024 * 1024,
+                                               ".G3M_Cache",
+                                               8);
 
   //LAYERS
   LayerSet* layerSet = new LayerSet();
@@ -286,9 +287,10 @@
   NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
   FileSystemStorage * fss = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
   Downloader* downloaderOLD = new Downloader(fss, 5, factory->createNetwork());
-  IDownloader* downloader = new Downloader_iOS(1,
-                                               64,
-                                               ".G3M_Cache");
+  IDownloader* downloader = new Downloader_iOS(1 * 1024 * 1024,
+                                               64 * 1024 * 1024,
+                                               ".G3M_Cache",
+                                               8);
 
   //LAYERS
   LayerSet* layerSet = new LayerSet();

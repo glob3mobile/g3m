@@ -72,6 +72,8 @@
 		CF0C396A157F988100646A2F /* Mark.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0C3969157F988100646A2F /* Mark.cpp */; };
 		CF31CBF1158776130085E8F1 /* Effects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF31CBF0158776120085E8F1 /* Effects.cpp */; };
 		CF59DF8F15C04AFC002173EC /* ILogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF59DF8E15C04AFC002173EC /* ILogger.cpp */; };
+		CF6D404715C8278C008D8D78 /* Downloader_iOS_WorkerThread.h in Headers */ = {isa = PBXBuildFile; fileRef = CF6D404515C8278C008D8D78 /* Downloader_iOS_WorkerThread.h */; };
+		CF6D404815C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF6D404615C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm */; };
 		CF7A78EC159B9BE300074422 /* MutableVector2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */; };
 		CF7A78ED159B9BE300074422 /* MutableVector2D.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF7A78EB159B9BE300074422 /* MutableVector2D.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF883B821590984900AEE39C /* TexturesHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF883B811590984900AEE39C /* TexturesHandler.cpp */; };
@@ -238,6 +240,8 @@
 		CF31CBF215878AF90085E8F1 /* ITimer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ITimer.hpp; path = Commons/Interfaces/ITimer.hpp; sourceTree = "<group>"; };
 		CF31CBF315878BE40085E8F1 /* Timer_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Timer_iOS.hpp; path = Specific/Derived/Timer_iOS.hpp; sourceTree = "<group>"; };
 		CF59DF8E15C04AFC002173EC /* ILogger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ILogger.cpp; path = Commons/Interfaces/ILogger.cpp; sourceTree = "<group>"; };
+		CF6D404515C8278C008D8D78 /* Downloader_iOS_WorkerThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Downloader_iOS_WorkerThread.h; path = Specific/Derived/Downloader_iOS_WorkerThread.h; sourceTree = "<group>"; };
+		CF6D404615C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Downloader_iOS_WorkerThread.mm; path = Specific/Derived/Downloader_iOS_WorkerThread.mm; sourceTree = "<group>"; };
 		CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector2D.cpp; path = Commons/Geometry/MutableVector2D.cpp; sourceTree = "<group>"; };
 		CF7A78EB159B9BE300074422 /* MutableVector2D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MutableVector2D.hpp; path = Commons/Geometry/MutableVector2D.hpp; sourceTree = "<group>"; };
 		CF883B7F1590983B00AEE39C /* TexturesHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TexturesHandler.hpp; path = Commons/Basic/TexturesHandler.hpp; sourceTree = "<group>"; };
@@ -349,6 +353,8 @@
 				CF8A234D15C4306800FD56C9 /* Downloader_iOS_Handler.mm */,
 				CF8A235115C4340900FD56C9 /* Downloader_iOS_Listener.h */,
 				CF8A235215C4340900FD56C9 /* Downloader_iOS_Listener.mm */,
+				CF6D404515C8278C008D8D78 /* Downloader_iOS_WorkerThread.h */,
+				CF6D404615C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm */,
 				383BD3791577EDC00012AC53 /* Factory_iOS.hpp */,
 				382D4B97159DC27700FE9296 /* FileSystemStorage.hpp */,
 				382D4B98159DC27800FE9296 /* FileSystemStorage.mm */,
@@ -714,6 +720,7 @@
 				CC596F2715C46D4F008FC230 /* CameraRenderer.hpp in Headers */,
 				CF8A234E15C4306800FD56C9 /* Downloader_iOS_Handler.h in Headers */,
 				CF8A235315C4340900FD56C9 /* Downloader_iOS_Listener.h in Headers */,
+				CF6D404715C8278C008D8D78 /* Downloader_iOS_WorkerThread.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -833,6 +840,7 @@
 				CF8A234F15C4306800FD56C9 /* Downloader_iOS_Handler.mm in Sources */,
 				CF8A235415C4340900FD56C9 /* Downloader_iOS_Listener.mm in Sources */,
 				385827FE15C6FACE00B3E68B /* CameraHandler.cpp in Sources */,
+				CF6D404815C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
