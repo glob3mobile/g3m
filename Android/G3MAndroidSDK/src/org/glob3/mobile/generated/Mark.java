@@ -57,7 +57,7 @@ public class Mark
 	final Camera camera = rc.getCamera();
 	final Planet planet = rc.getPlanet();
   
-	final Vector3D cameraPosition = camera.getPos();
+	final Vector3D cameraPosition = camera.getPosition();
 	final Vector3D markPosition = planet.toVector3D(_position);
   
 	final Vector3D markCameraVector = markPosition.sub(cameraPosition);
@@ -71,9 +71,13 @@ public class Mark
 	  {
 		IGL gl = rc.getGL();
   
+		Vector2D tr = new Vector2D(0.0,0.0);
+		Vector2D scale = new Vector2D(1.0,1.0);
+		gl.transformTexCoords(scale, tr);
+  
 		if (_textureId < 1)
 		{
-		  _textureId = rc.getTexturesHandler().getTextureIdFromFileName(rc, _textureFilename, 128, 128);
+		  _textureId = rc.getTexturesHandler().getTextureIdFromFileName(_textureFilename, 128, 128);
 		}
   
 		if (_textureId < 1)
@@ -83,7 +87,7 @@ public class Mark
 		}
   
   //    rc->getLogger()->logInfo(" Visible   << %f %f", minDist, distanceToCamera);
-		gl.drawBillBoard(_textureId, (float) markPosition.x(), (float) markPosition.y(), (float) markPosition.z(), camera.getViewPortRatio());
+		gl.drawBillBoard(_textureId, markPosition, camera.getViewPortRatio());
 	  }
   
 	}

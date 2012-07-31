@@ -33,6 +33,11 @@ public class Geodetic3D
 	return new Geodetic3D(Angle.zero(), Angle.zero(), 0);
   }
 
+  public static Geodetic3D fromDegrees(double lat, double lon, double height)
+  {
+	return new Geodetic3D(Angle.fromDegrees(lat), Angle.fromDegrees(lon), height);
+  }
+
   public Geodetic3D(Angle latitude, Angle longitude, double height)
   {
 	  _latitude = new Angle(latitude);

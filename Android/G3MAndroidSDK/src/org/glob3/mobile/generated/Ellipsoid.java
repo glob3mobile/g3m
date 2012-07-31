@@ -68,6 +68,15 @@ public class Ellipsoid
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector3D geodeticSurfaceNormal(const Geodetic2D& geodetic) const
+  public final Vector3D geodeticSurfaceNormal(Geodetic2D geodetic)
+  {
+	double cosLatitude = geodetic.latitude().cosinus();
+  
+	return new Vector3D(cosLatitude * geodetic.longitude().cosinus(), cosLatitude * geodetic.longitude().sinus(), geodetic.latitude().sinus());
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: java.util.ArrayList<double> intersections(const Vector3D& origin, const Vector3D& direction) const
   public final java.util.ArrayList<Double> intersections(Vector3D origin, Vector3D direction)
   {
@@ -122,11 +131,11 @@ public class Ellipsoid
 //ORIGINAL LINE: Vector3D toVector3D(const Geodetic3D& geodetic) const
   public final Vector3D toVector3D(Geodetic3D geodetic)
   {
-	Vector3D n = geodeticSurfaceNormal(geodetic);
-	Vector3D k = _radiiSquared.times(n);
-	double gamma = Math.sqrt((k.x() * n.x()) + (k.y() * n.y()) + (k.z() * n.z()));
+	final Vector3D n = geodeticSurfaceNormal(geodetic);
+	final Vector3D k = _radiiSquared.times(n);
+	final double gamma = Math.sqrt((k.x() * n.x()) + (k.y() * n.y()) + (k.z() * n.z()));
   
-	Vector3D rSurface = k.div(gamma);
+	final Vector3D rSurface = k.div(gamma);
 	return rSurface.add(n.times(geodetic.height()));
   }
 
@@ -141,9 +150,9 @@ public class Ellipsoid
 //ORIGINAL LINE: Geodetic2D toGeodetic2D(const Vector3D& positionOnEllipsoid) const
   public final Geodetic2D toGeodetic2D(Vector3D positionOnEllipsoid)
   {
-	Vector3D n = geodeticSurfaceNormal(positionOnEllipsoid);
+	final Vector3D n = geodeticSurfaceNormal(positionOnEllipsoid);
   
-	return new Geodetic2D(Angle.fromDegrees(Math.asin(n.z() / n.length()) * 180 / Math.PI), Angle.fromDegrees(Math.atan2(n.y(), n.x()) * 180 / Math.PI));
+	return new Geodetic2D(Angle.fromRadians(Math.asin(n.z())), Angle.fromRadians(Math.atan2(n.y(), n.x())));
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -245,13 +254,26 @@ public class Ellipsoid
 	{
 	  double phi = (i * granularity);
   
-	  positions.addLast(scaleToGeocentricSurface(start.rotateAroundAxis(normal, phi)));
+	  positions.addLast(scaleToGeocentricSurface(start.rotateAroundAxis(normal, Angle.fromRadians(phi))));
 	}
   
 	positions.addLast(stop);
   
 	return positions;
   }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Geodetic2D getMidPoint (const Geodetic2D& P0, const Geodetic2D& P1) const
+  public final Geodetic2D getMidPoint (Geodetic2D P0, Geodetic2D P1)
+  {
+	Vector3D v0 = toVector3D(P0);
+	Vector3D v1 = toVector3D(P1);
+	Vector3D normal = v0.cross(v1).normalized();
+	Angle theta = v0.angleBetween(v1);
+	Vector3D midPoint = scaleToGeocentricSurface(v0.rotateAroundAxis(normal, theta.times(0.5)));
+	return toGeodetic2D(midPoint);
+  }
+
 
 
   // compute distance from two points
@@ -261,16 +283,12 @@ public class Ellipsoid
   {
 	final Vector3D radius = _radii;
 	double R = (radius.x() + radius.y() + radius.z()) / 3;
-	//double medLat = BBox.getMidLatitude().degrees();
-	//double medLon = BBox.getMidLongitude().degrees();
 	double medLat = g1.latitude().degrees();
 	double medLon = g1.longitude().degrees();
   
 	// spheric distance from P to Q
 	// this is the right form, but it's the most complex
 	// theres is a minimum error considering sphere instead of ellipsoid
-	//double latP=lat/180*PI, lonP=lon/180*PI;
-	//double latP=g.latitude()/180*PI, lonP=g.longitude()/180*PI;
 	double latP = g2.latitude().radians();
 	double lonP = g2.longitude().radians();
 	double latQ = medLat / 180 * Math.PI;
@@ -295,8 +313,7 @@ public class Ellipsoid
   {
 	final Vector3D radius = _radii;
 	double R = (radius.x() + radius.y() + radius.z()) / 3;
-	//double medLat = BBox.getMidLatitude().degrees();
-	//double medLon = BBox.getMidLongitude().degrees();
+  
 	double medLat = g1.latitude().degrees();
 	double medLon = g1.longitude().degrees();
   

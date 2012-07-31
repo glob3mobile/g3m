@@ -16,11 +16,11 @@ public class Planet extends Ellipsoid
   private String _name;
 
 
-	public Planet(String name, Vector3D radii)
-	{
-		super(radii);
-		_name = name;
-	}
+  public Planet(String name, Vector3D radii)
+  {
+	  super(radii);
+	  _name = name;
+  }
 
   public static Planet createEarth()
   {

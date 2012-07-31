@@ -18,6 +18,7 @@ package org.glob3.mobile.generated;
 
 
 //#define THRESHOLD 1e-5
+//#define ISBETWEEN_THRESHOLD 1e-2
 
 
 
@@ -29,8 +30,11 @@ public class Angle
   {
 	  _degrees = degrees;
   }
-  //Angle() : _degrees(0) { }
 
+  public static Angle lerp(Angle start, Angle end, float percent)
+  {
+	return start.add(end.sub(start).times(percent));
+  }
 
   public static Angle fromDegrees(double degrees)
   {
@@ -42,6 +46,22 @@ public class Angle
 	return Angle.fromDegrees(radians / Math.PI * 180.0);
   }
 
+  public static Angle getMin(Angle a1, Angle a2)
+  {
+	if (a1._degrees < a2._degrees)
+		return a1;
+	else
+		return a2;
+  }
+
+  public static Angle getMax(Angle a1, Angle a2)
+  {
+	if (a1._degrees > a2._degrees)
+		return a1;
+	else
+		return a2;
+  }
+
   public static Angle zero()
   {
 	return Angle.fromDegrees(0);
@@ -51,6 +71,12 @@ public class Angle
   {
 	return Angle.fromDegrees(Double.NaN);
   }
+
+  public static Angle midAngle(Angle angle1, Angle angle2)
+  {
+	return Angle.fromDegrees((angle1.degrees() + angle2.degrees()) / 2);
+  }
+
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: boolean isNan() const
@@ -122,6 +148,20 @@ public class Angle
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Angle div(double k) const
+  public final Angle div(double k)
+  {
+	return new Angle(_degrees / k);
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: double div(const Angle& k) const
+  public final double div(Angle k)
+  {
+	return _degrees / k._degrees;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: boolean greaterThan(const Angle& a) const
   public final boolean greaterThan(Angle a)
   {
@@ -153,11 +193,36 @@ public class Angle
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Angle average(const Angle& a) const
-  public final Angle average(Angle a)
+//ORIGINAL LINE: boolean isBetween(const Angle& min, const Angle& max) const
+  public final boolean isBetween(Angle min, Angle max)
   {
-	Angle theSum = this.add(a);
-	return theSum.times(0.5);
+	return (_degrees + DefineConstants.ISBETWEEN_THRESHOLD >= min._degrees) && (_degrees - DefineConstants.ISBETWEEN_THRESHOLD <= max._degrees);
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Angle nearestAngleInInterval(const Angle& min, const Angle& max) const
+  public final Angle nearestAngleInInterval(Angle min, Angle max)
+  {
+	// it the interval contains the angle, return this value
+	if (greaterThan(min) && lowerThan(max))
+	{
+	  return (this);
+	}
+  
+	// look for the extreme closest to the angle
+	final Angle dif0 = distanceTo(min);
+	final Angle dif1 = distanceTo(max);
+	return (dif0.lowerThan(dif1))? min : max;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Angle distanceTo(const Angle& other) const
+  public final Angle distanceTo(Angle other)
+  {
+	double dif = Math.abs(_degrees - other._degrees);
+	if (dif > 180)
+		dif = 360 - dif;
+	return Angle.fromDegrees(dif);
   }
 
 }

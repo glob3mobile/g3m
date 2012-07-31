@@ -8,11 +8,20 @@ package org.glob3.mobile.generated;
 //
 
 
+//#define MAX_TIME_TO_RENDER 1000
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class TouchEvent;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class InitializationContext;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class RenderContext;
 
 public abstract class Renderer
 {
   public abstract void initialize(InitializationContext ic);
+
+  public abstract boolean isReadyToRender(RenderContext rc);
 
   public abstract int render(RenderContext rc);
 

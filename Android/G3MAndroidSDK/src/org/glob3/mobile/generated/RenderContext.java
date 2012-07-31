@@ -5,9 +5,9 @@ public class RenderContext extends Context
   private Camera _camera;
   private TexturesHandler _texturesHandler;
 
-  public RenderContext(IFactory factory, ILogger logger, Planet planet, IGL gl, Camera camera, TexturesHandler texturesHandler)
+  public RenderContext(IFactory factory, ILogger logger, Planet planet, IGL gl, Camera camera, TexturesHandler texturesHandler, Downloader downloaderOLD, IDownloader downloader)
   {
-	  super(factory, logger, planet);
+	  super(factory, logger, planet, downloaderOLD, downloader);
 	  _gl = gl;
 	  _camera = camera;
 	  _texturesHandler = texturesHandler;
@@ -34,4 +34,6 @@ public class RenderContext extends Context
   {
 	return _texturesHandler;
   }
+
+
 }

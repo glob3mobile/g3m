@@ -17,26 +17,40 @@ package org.glob3.mobile.generated;
 
 
 
-//#define MAX_TIME_TO_RENDER 1000
-
-
-
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IFactory;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Camera;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class Planet;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class TexturesHandler;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IDownloader;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class Downloader;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class ILogger;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IGL;
 
 public class Context
 {
   protected final IFactory _factory;
   protected final ILogger _logger;
   protected final Planet _planet;
+  protected final IDownloader _downloader;
+
+  protected final Downloader _downloaderOLD;
 
 
-  protected Context(IFactory factory, ILogger logger, Planet planet)
+  protected Context(IFactory factory, ILogger logger, Planet planet, Downloader downloaderOLD, IDownloader downloader)
   {
 	  _factory = factory;
 	  _logger = logger;
 	  _planet = planet;
-
+	  _downloader = downloader;
+	  _downloaderOLD = downloaderOLD;
   }
 
 
@@ -61,4 +75,17 @@ public class Context
 	return _planet;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Downloader* const getDownloaderOLD() const
+  public final Downloader getDownloaderOLD()
+  {
+	return _downloaderOLD;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const IDownloader* getDownloader() const
+  public final IDownloader getDownloader()
+  {
+	return _downloader;
+  }
 }

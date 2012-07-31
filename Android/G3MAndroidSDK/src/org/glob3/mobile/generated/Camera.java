@@ -1,59 +1,69 @@
 package org.glob3.mobile.generated; 
-/*
- *  Camera.cpp
- *  Prueba Opengl iPad
- *
- *  Created by AgustÃ­n Trujillo Pino on 24/01/11.
- *  Copyright 2011 Universidad de Las Palmas. All rights reserved.
- *
- */
-
-
-
-/*
- *  Camera.hpp
- *  Prueba Opengl iPad
- *
- *  Created by Agustín Trujillo Pino on 24/01/11.
- *  Copyright 2011 Universidad de Las Palmas. All rights reserved.
- *
- */
-
-
-
-
 /**
  * Class to control the camera.
  */
 public class Camera
 {
-
-
-  public Camera(Camera c)
+  public Camera(Camera that)
   {
-	  _pos = new MutableVector3D(c._pos);
-	  _center = new MutableVector3D(c._center);
-	  _up = new MutableVector3D(c._up);
-	  _model = new MutableMatrix44D(c._model);
-	  _projection = new MutableMatrix44D(c._projection);
-	resizeViewport(c.getWidth(), c.getHeight());
+	  _width = that._width;
+	  _height = that._height;
+	  _modelMatrix = new MutableMatrix44D(that._modelMatrix);
+	  _projectionMatrix = new MutableMatrix44D(that._projectionMatrix);
+	  _position = new MutableVector3D(that._position);
+	  _center = new MutableVector3D(that._center);
+	  _up = new MutableVector3D(that._up);
+	  _centerOfView = null;
+	  _frustum = (that._frustum == null) ? null : new Frustum(that._frustum);
+	  _frustumInModelCoordinates = (that._frustumInModelCoordinates == null) ? null : new Frustum(that._frustumInModelCoordinates);
+	  _halfFrustumInModelCoordinates = (that._halfFrustumInModelCoordinates == null) ? null : new Frustum(that._halfFrustumInModelCoordinates);
+	  _halfFrustum = (that._halfFrustum == null) ? null : new Frustum(that._halfFrustum);
+	  _logger = that._logger;
+	  _dirtyCachedValues = that._dirtyCachedValues;
+	cleanCachedValues();
   }
 
-  public Camera(int width, int height)
+
+  public Camera(Planet planet, int width, int height)
   {
-	  _pos = new MutableVector3D(63650000.0, 0.0, 0.0);
-	  _center = new MutableVector3D(0.0, 0.0, 0.0);
-	  _up = new MutableVector3D(0.0, 0.0, 1.0);
+	  _position = new MutableVector3D((planet == null) ? 0 : planet.getRadii().maxAxis() * 5, 0, 0);
+	  _center = new MutableVector3D(0, 0, 0);
+	  _up = new MutableVector3D(0, 0, 1);
+	  _logger = null;
+	  _frustum = null;
+	  _dirtyCachedValues = true;
+	  _frustumInModelCoordinates = null;
+	  _halfFrustumInModelCoordinates = null;
+	  _halfFrustum = null;
+	  _centerOfView = null;
 	resizeViewport(width, height);
   }
 
-  public final void copyFrom(Camera c)
+  public void dispose()
   {
-	_pos = c._pos;
-	_center = c._center;
-	_up = c._up;
-	_model = c._model;
-	_projection = c._projection;
+
+  }
+
+  public final void copyFrom(Camera that)
+  {
+	_width = that._width;
+	_height = that._height;
+  
+	_modelMatrix = that._modelMatrix;
+	_projectionMatrix = that._projectionMatrix;
+  
+	_position = that._position;
+	_center = that._center;
+	_up = that._up;
+  
+	_frustum = (that._frustum == null) ? null : new Frustum(that._frustum);
+	_frustumInModelCoordinates = (that._frustumInModelCoordinates == null) ? null : new Frustum(that._frustumInModelCoordinates);
+  
+	_dirtyCachedValues = that._dirtyCachedValues;
+  
+	_logger = that._logger;
+  
+	cleanCachedValues();
   }
 
   public final void resizeViewport(int width, int height)
@@ -61,55 +71,81 @@ public class Camera
 	_width = width;
 	_height = height;
   
-	_viewport[0] = _viewport[1] = 0;
-	_viewport[2] = width;
-	_viewport[3] = height;
+	cleanCachedValues();
   }
 
-  public final void draw(RenderContext rc)
+  public final void render(RenderContext rc)
   {
-	double znear;
+	_logger = rc.getLogger();
   
-	double height = _pos.length();
+	if (_dirtyCachedValues)
+	{
+	  calculateCachedValues(rc);
+	  _dirtyCachedValues = false;
+	}
   
-	if (height > 1273000.0)
-		znear = 636500.0;
-	else if (height > 12730.0)
-		znear = 6365.0;
-	else if (height > 3182.5)
-		znear = 63.65;
-	else
-	  znear = 19.095;
-  
-	// compute projection matrix
-	double ratioScreen = (double) _viewport[3] / _viewport[2];
-	_projection = MutableMatrix44D.createProjectionMatrix(-0.3 / ratioScreen * znear, 0.3 / ratioScreen * znear, -0.3 * znear, 0.3 * znear, znear, 10000 * znear);
-  
-	// obtaing gl object reference
 	IGL gl = rc.getGL();
-	gl.setProjection(_projection);
+	gl.setProjection(_projectionMatrix);
+	gl.loadMatrixf(_modelMatrix);
   
-	// make the model
-	_model = MutableMatrix44D.createModelMatrix(_pos, _center, _up);
-	gl.loadMatrixf(_model);
+  
+  
+	// TEMP: TEST TO SEE HALF SIZE FRUSTUM CLIPPING
+	if (false)
+	{
+	  final MutableMatrix44D inversed = _modelMatrix.inversed();
+  
+	  FrustumData data = calculateFrustumData(rc);
+	  Vector3D p0 = new Vector3D(new Vector3D(data._left/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
+	  Vector3D p1 = new Vector3D(new Vector3D(data._left/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
+	  Vector3D p2 = new Vector3D(new Vector3D(data._right/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
+	  Vector3D p3 = new Vector3D(new Vector3D(data._right/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
+  
+	  float[] vertices = { (float) p0.x(), (float) p0.y(), (float) p0.z(), (float) p1.x(), (float) p1.y(), (float) p1.z(), (float) p2.x(), (float) p2.y(), (float) p2.z(), (float) p3.x(), (float) p3.y(), (float) p3.z()};
+	  int[] indices = {0, 1, 2, 3};
+  
+  //    IGL *gl = rc.getGL();
+	  gl.enableVerticesPosition();
+	  gl.vertexPointer(3, 0, vertices);
+	  gl.lineWidth(2);
+	  gl.color(1, 0, 1, 1);
+	  gl.drawLineLoop(4, indices);
+  
+	  gl.lineWidth(1);
+	  gl.color(1, 1, 1, 1);
+	}
+  
+  
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Vector3D pixel2Vector(const Vector2D& pixel) const
-  public final Vector3D pixel2Vector(Vector2D pixel)
+//ORIGINAL LINE: Vector3D pixel2Ray(const Vector2D& pixel) const
+  public final Vector3D pixel2Ray(Vector2D pixel)
   {
-	double py = (int) pixel.y();
-	double px = (int) pixel.x();
-	py = _viewport[3] - py;
-	Vector3D pixel3D = new Vector3D(px, py, 0);
+	final int px = (int) pixel.x();
+	final int py = _height - (int) pixel.y();
+	final Vector3D pixel3D = new Vector3D(px, py, 0);
   
-	MutableMatrix44D modelView = _projection.multMatrix(_model);
-	Vector3D obj = modelView.unproject(pixel3D, _viewport);
+	final MutableMatrix44D modelViewMatrix = _projectionMatrix.multiply(_modelMatrix);
+  
+	int[] viewport = { 0, 0, _width, _height };
+  
+	final Vector3D obj = modelViewMatrix.unproject(pixel3D, viewport);
 	if (obj.isNan())
-		return obj;
+	{
+	  return obj;
+	}
   
-	Vector3D v = obj.sub(_pos.asVector3D());
-	return v;
+	return obj.sub(_position.asVector3D());
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector2D point2Pixel(const Vector3D& point) const
+  public final Vector2D point2Pixel(Vector3D point)
+  {
+	final MutableMatrix44D modelViewMatrix = _projectionMatrix.multiply(_modelMatrix);
+	int[] viewport = { 0, 0, _width, _height };
+	return modelViewMatrix.project(point, viewport);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -124,11 +160,19 @@ public class Camera
   {
 	  return _height;
   }
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Vector3D getPos() const
-  public final Vector3D getPos()
+//ORIGINAL LINE: float getViewPortRatio() const
+  public final float getViewPortRatio()
   {
-	  return _pos.asVector3D();
+	return (float) _width / _height;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector3D getPosition() const
+  public final Vector3D getPosition()
+  {
+	  return _position.asVector3D();
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Vector3D getCenter() const
@@ -142,102 +186,252 @@ public class Camera
   {
 	  return _up.asVector3D();
   }
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Geodetic3D getCenterOfView() const
+  public final Geodetic3D getCenterOfView()
+  {
+	  return _centerOfView;
+  }
 
   //Dragging camera
   public final void dragCamera(Vector3D p0, Vector3D p1)
   {
 	// compute the rotation axe
-	Vector3D rotationAxis = p0.cross(p1);
+	final Vector3D rotationAxis = p0.cross(p1);
   
 	// compute the angle
-	Angle rotationDelta = Angle.fromRadians(- Math.acos(p0.normalized().dot(p1.normalized())));
+	final Angle rotationDelta = Angle.fromRadians(- Math.acos(p0.normalized().dot(p1.normalized())));
   
-	//if (isnan(rotationDelta.radians())) return;
 	if (rotationDelta.isNan())
-		return;
+	{
+	  return;
+	}
   
 	rotateWithAxis(rotationAxis, rotationDelta);
   }
   public final void rotateWithAxis(Vector3D axis, Angle delta)
   {
-	// update the camera
-	MutableMatrix44D rot = MutableMatrix44D.createRotationMatrix(delta, axis);
-	applyTransform(rot);
+	applyTransform(MutableMatrix44D.createRotationMatrix(delta, axis));
+  }
+  public final void moveForward(double d)
+  {
+	Vector3D view = _center.sub(_position).normalized().asVector3D();
+	applyTransform(MutableMatrix44D.createTranslationMatrix(view.times(d)));
   }
 
   //Zoom
   public final void zoom(double factor)
   {
-	final MutableVector3D w = _pos.sub(_center);
-	_pos = _center.add(w.times(factor));
+	final MutableVector3D w = _position.sub(_center);
+	_position = _center.add(w.times(factor));
+  
+	cleanCachedValues();
   }
 
   //Pivot
   public final void pivotOnCenter(Angle a)
   {
-	Vector3D rotationAxis = _pos.sub(_center).asVector3D();
+	final Vector3D rotationAxis = _position.sub(_center).asVector3D();
 	rotateWithAxis(rotationAxis, a);
   }
 
   //Rotate
   public final void rotateWithAxisAndPoint(Vector3D axis, Vector3D point, Angle delta)
   {
-	MutableMatrix44D trans1 = MutableMatrix44D.createTranslationMatrix(point.times(-1.0));
-	MutableMatrix44D rot = MutableMatrix44D.createRotationMatrix(delta, axis);
-	MutableMatrix44D trans2 = MutableMatrix44D.createTranslationMatrix(point);
+	final MutableMatrix44D trans1 = MutableMatrix44D.createTranslationMatrix(point.times(-1.0));
+	final MutableMatrix44D rotation = MutableMatrix44D.createRotationMatrix(delta, axis);
+	final MutableMatrix44D trans2 = MutableMatrix44D.createTranslationMatrix(point);
   
-	//MutableMatrix44D m = trans1.multMatrix(rot).multMatrix(trans2);
-  
-	MutableMatrix44D m = trans2.multMatrix(rot).multMatrix(trans1);
-  
-	//MutableMatrix44D m = trans1.multMatrix(trans2);
+	final MutableMatrix44D m = trans2.multiply(rotation).multiply(trans1);
   
 	//m.print();
   
 	applyTransform(m);
   }
 
-
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: void print() const
   public final void print()
   {
-	System.out.print("MODEL: \n");
-	_model.print();
-	System.out.print("\n");
-	System.out.print("PROJECTION: \n");
-	_projection.print();
-	System.out.print("\n");
-	System.out.print("VIEWPORT: \n");
-	for (int k = 0; k < 4; k++)
-		System.out.printf("%d ", _viewport[k]);
-	System.out.print("\n\n");
+	if (_logger != null)
+	{
+	  _modelMatrix.print("Model Matrix", _logger);
+	  _projectionMatrix.print("Projection Matrix", _logger);
+	  _logger.logInfo("Width: %d, Height %d\n", _width, _height);
+	}
+  }
+
+  public final Frustum getFrustumInModelCoordinates()
+  {
+	return _frustumInModelCoordinates;
+  }
+
+  public final void setPosition(Planet planet, Geodetic3D g3d)
+  {
+	_position = planet.toVector3D(g3d).asMutableVector3D();
+  }
+
+
+  public int __temporal__for_clipping;
+  // TEMP TEST
+  public Frustum _halfFrustum; // ONLY FOR DEBUG
+  public Frustum _halfFrustumInModelCoordinates;
+
+  public int __to_ask_diego;
+  public final void updateModelMatrix()
+  {
+	  _modelMatrix = MutableMatrix44D.createModelMatrix(_position, _center, _up);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: float getViewPortRatio() const
-  public final float getViewPortRatio()
+//ORIGINAL LINE: Vector3D centerOfViewOnPlanet(const Planet *planet) const
+  public final Vector3D centerOfViewOnPlanet(Planet planet)
   {
-	return (float) _width / _height;
+	Vector3D ray = _center.sub(_position).asVector3D();
+	return planet.closestIntersection(_position.asVector3D(), ray);
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector3D getHorizontalVector() const
+  public final Vector3D getHorizontalVector()
+  {
+	MutableMatrix44D M = MutableMatrix44D.createModelMatrix(_position, _center, _up);
+	return new Vector3D(M.get(0), M.get(4), M.get(8));
+  }
+
+  public final void applyTransform(MutableMatrix44D M)
+  {
+	_position = _position.transformedBy(M, 1.0);
+	_center = _center.transformedBy(M, 1.0);
+	_up = _up.transformedBy(M, 0.0);
+  
+	cleanCachedValues();
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector3D getViewDirection() const
+  public final Vector3D getViewDirection()
+  {
+	  return _center.sub(_position).asVector3D();
   }
 
   private int _width;
   private int _height;
 
-  private int[] _viewport = new int[4];
+  private MutableMatrix44D _modelMatrix = new MutableMatrix44D(); // Model matrix, computed in CPU in double precision
+  private MutableMatrix44D _projectionMatrix = new MutableMatrix44D(); // opengl projection matrix
 
-  private MutableMatrix44D _model = new MutableMatrix44D(); // Model matrix, computed in CPU in double precision
-  private MutableMatrix44D _projection = new MutableMatrix44D(); // opengl projection matrix
-
-  private MutableVector3D _pos = new MutableVector3D(); // position
-  private MutableVector3D _center = new MutableVector3D(); // center of view
+  private MutableVector3D _position = new MutableVector3D(); // position
+  private MutableVector3D _center = new MutableVector3D(); // point where camera is looking at
   private MutableVector3D _up = new MutableVector3D(); // vertical vector
+  private Geodetic3D _centerOfView; // intersection of view direction with globe
 
-  private void applyTransform(MutableMatrix44D M)
+  private Frustum _frustum;
+  private Frustum _frustumInModelCoordinates;
+
+
+  private final ILogger _logger;
+
+
+  private boolean _dirtyCachedValues;
+
+
+  private FrustumData calculateFrustumData(RenderContext rc)
   {
-	_pos = _pos.applyTransform(M);
-	_center = _center.applyTransform(M);
-	_up = _up.applyTransform(M);
+	// compute znear value
+	final double maxRadius = rc.getPlanet().getRadii().maxAxis();
+	final double distanceToPlanetCenter = _position.length();
+	final double distanceToSurface = distanceToPlanetCenter - maxRadius;
+
+//    double znear;
+//    if (distanceToSurface > maxRadius/5) {
+//      znear = maxRadius / 10; 
+//    }
+//    else if (distanceToSurface > maxRadius/500) {
+//      znear = maxRadius / 1e3;
+//    }
+//    else if (distanceToSurface > maxRadius/2000) {
+//      znear = maxRadius / 1e5;
+//    }
+//    else {
+//      znear = maxRadius / 1e6 * 3;
+//    }
+
+	double znear;
+	if (distanceToSurface > maxRadius/5)
+	{
+	  znear = maxRadius / 10;
+	}
+	else if (distanceToSurface > maxRadius/500)
+	{
+	  znear = maxRadius / 1e4;
+	}
+	else if (distanceToSurface > maxRadius/2000)
+	{
+	  znear = maxRadius / 1e5;
+	}
+	else
+	{
+	  znear = maxRadius / 1e6 * 3;
+	}
+
+	// compute zfar value
+	double zfar = 10000 * znear;
+	if (zfar > distanceToPlanetCenter)
+	{
+	  zfar = distanceToPlanetCenter;
+	}
+
+	// compute rest of frustum numbers
+	final double ratioScreen = (double) _height / _width;
+	final double right = 0.3 / ratioScreen * znear;
+	final double left = -right;
+	final double top = 0.3 * znear;
+	final double bottom = -top;
+
+	return new FrustumData(left, right, bottom, top, znear, zfar);
+  }
+
+
+  private void calculateCachedValues(RenderContext rc)
+  {
+	final FrustumData data = calculateFrustumData(rc);
+  
+	_projectionMatrix = MutableMatrix44D.createProjectionMatrix(data._left, data._right, data._bottom, data._top, data._znear, data._zfar);
+  
+	_modelMatrix = MutableMatrix44D.createModelMatrix(_position, _center, _up);
+  
+	// compute center of view on planet
+	if (_centerOfView != null)
+		if (_centerOfView != null)
+			_centerOfView.dispose();
+	final Planet planet = rc.getPlanet();
+	Vector3D centerV = centerOfViewOnPlanet(planet);
+	Geodetic3D centerG = planet.toGeodetic3D(centerV);
+	_centerOfView = new Geodetic3D(centerG);
+  
+	_frustum = new Frustum(data._left, data._right, data._bottom, data._top, data._znear, data._zfar);
+  
+	_frustumInModelCoordinates = _frustum.transformedBy_P(_modelMatrix.transposed());
+  
+	_halfFrustum = new Frustum(data._left/2, data._right/2, data._bottom/2, data._top/2, data._znear, data._zfar);
+  
+	_halfFrustumInModelCoordinates = _halfFrustum.transformedBy_P(_modelMatrix.transposed());
+  
+  
+  }
+
+  private void cleanCachedValues()
+  {
+	_dirtyCachedValues = true;
+	//    if (_frustum != NULL) {
+	//      delete _frustum;
+	//      _frustum = NULL;
+	//    }
+	if (_frustumInModelCoordinates != null)
+	{
+	  _frustumInModelCoordinates = null;
+	}
   }
 
 }

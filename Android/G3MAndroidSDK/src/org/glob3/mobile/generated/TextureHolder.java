@@ -1,5 +1,16 @@
 package org.glob3.mobile.generated; 
-public class TextureKey
+//
+//  TexturesHandler.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 19/06/12.
+//  Copyright (c) 2012 IGO Software SL. All rights reserved.
+//
+
+
+
+
+public class TextureHolder
 {
   public final String _textureId;
   public final int _textureWidth;
@@ -8,7 +19,7 @@ public class TextureKey
 
   public int _referenceCounter;
 
-  public TextureKey(String textureId, int textureWidth, int textureHeight)
+  public TextureHolder(String textureId, int textureWidth, int textureHeight)
   {
 	  _textureId = textureId;
 	  _textureWidth = textureWidth;
@@ -36,18 +47,18 @@ public class TextureKey
 	return _referenceCounter > 0;
   }
 
-  public final boolean equalsTo(TextureKey other)
+  public final boolean hasKey(String textureId, int textureWidth, int textureHeight)
   {
-	if (_textureWidth != other._textureWidth)
+	if (_textureWidth != textureWidth)
 	{
 	  return false;
 	}
-	if (_textureHeight != other._textureHeight)
+	if (_textureHeight != textureHeight)
 	{
 	  return false;
 	}
 
-	if (_textureId.compareTo(other._textureId) != 0)
+	if (_textureId.compareTo(textureId) != 0)
 	{
 	  return false;
 	}

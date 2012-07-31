@@ -17,7 +17,6 @@ package org.glob3.mobile.generated;
 
 
 
-
 public class CompositeRenderer extends Renderer
 {
   private java.util.ArrayList<Renderer> _renderers = new java.util.ArrayList<Renderer>();
@@ -44,11 +43,24 @@ public class CompositeRenderer extends Renderer
 	}
   }
 
+  public final boolean isReadyToRender(RenderContext rc)
+  {
+	for (int i = 0; i < _renderers.size(); i++)
+	{
+	  if (!_renderers.get(i).isReadyToRender(rc))
+	  {
+		return false;
+	  }
+	}
+  
+	return true;
+  }
+
   public final int render(RenderContext rc)
   {
 	//rc->getLogger()->logInfo("CompositeRenderer::render()");
   
-	int min = DefineConstants.MAX_TIME_TO_RENDER;
+	int min = MAX_TIME_TO_RENDER;
 	for (int i = 0; i < _renderers.size(); i++)
 	{
 	  int x = _renderers.get(i).render(rc);

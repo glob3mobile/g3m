@@ -33,11 +33,11 @@ public class MarksRenderer extends Renderer
   
 	IGL gl = rc.getGL();
   
-	gl.enableVertices();
+	gl.enableVerticesPosition();
 	gl.enableTextures();
   
-	gl.depthTest(false);
-	gl.blend(true);
+	gl.disableDepth();
+	gl.enableBlend();
   
 	final Vector3D radius = rc.getPlanet().getRadii();
 	final double minDistanceToCamera = (radius.x() + radius.y() + radius.z()) * 2;
@@ -51,14 +51,15 @@ public class MarksRenderer extends Renderer
 	  mark.render(rc, minDistanceToCamera);
 	}
   
-	gl.depthTest(true);
-	gl.blend(false);
+	gl.enableDepth();
+	gl.disableBlend();
   
 	gl.disableTextures();
-	gl.disableVertices();
+	gl.disableVerticesPosition();
+	gl.disableTexture2D();
   
   
-	return DefineConstants.MAX_TIME_TO_RENDER;
+	return MAX_TIME_TO_RENDER;
   }
 
   public boolean onTouchEvent(TouchEvent touchEvent)
@@ -84,6 +85,11 @@ public class MarksRenderer extends Renderer
   public final void onResizeViewportEvent(int width, int height)
   {
 
+  }
+
+  public final boolean isReadyToRender(RenderContext rc)
+  {
+	return true;
   }
 
 }

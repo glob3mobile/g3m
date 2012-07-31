@@ -16,8 +16,7 @@ public class DummyEffect extends EffectWithDuration
   {
 	final double percent = pace(percentDone(now));
 
-	rc.getCamera().zoom(1 - (percent / 50));
-//    rc->getCamera()->pivotOnCenter(Angle::fromDegrees(1));
+	rc.getCamera().zoom(1 - (percent / 25));
   }
 
   public void stop(RenderContext rc, TimeInterval now)
