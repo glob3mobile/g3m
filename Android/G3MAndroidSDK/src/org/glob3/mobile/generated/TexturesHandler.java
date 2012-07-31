@@ -25,7 +25,7 @@ public class TexturesHandler
 {
 	public int getTextureIdFromFileName(String filename, int textureWidth, int textureHeight)
 	{
-	  final IImage image = _factory.createImageFromFileName(filename);
+	  IImage image = _factory.createImageFromFileName(filename);
     
 	  final int texId = getTextureId(image, filename, textureWidth, textureHeight); // filename as the textureId
     
@@ -49,7 +49,7 @@ public class TexturesHandler
     
 	  return -1;
 	}
-	public int getTextureId(java.util.ArrayList<const IImage> images, String textureId, int textureWidth, int textureHeight)
+	public int getTextureId(java.util.ArrayList<IImage> images, String textureId, int textureWidth, int textureHeight)
 	{
 	  int previousId = getTextureIdIfAvailable(textureId, textureWidth, textureHeight);
 	  if (previousId >= 0)
@@ -69,7 +69,7 @@ public class TexturesHandler
     
 	  return holder._glTextureId;
 	}
-	public int getTextureId(java.util.ArrayList<const IImage> images, java.util.ArrayList<const Rectangle> rectangles, String textureId, int textureWidth, int textureHeight)
+	public int getTextureId(java.util.ArrayList<IImage> images, java.util.ArrayList<Rectangle> rectangles, String textureId, int textureWidth, int textureHeight)
 	{
 	  int previousId = getTextureIdIfAvailable(textureId, textureWidth, textureHeight);
 	  if (previousId >= 0)

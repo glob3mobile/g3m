@@ -11,7 +11,7 @@ package org.glob3.mobile.generated;
 
 public class Response
 {
-  private final URL _url = new URL();
+  private Url _url = new URL();
   private final ByteBuffer _data;
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:

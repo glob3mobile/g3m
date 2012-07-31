@@ -24,7 +24,7 @@ public class Download
 	  {
 		_listeners.get(j)._listener.onCancel(url); //CANCELING OPERATION
 //C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'erase' method in Java:
-		_listeners.erase(_listeners.iterator() + j);
+		_listeners.remove(j);
 		return true;
 	  }
 	}

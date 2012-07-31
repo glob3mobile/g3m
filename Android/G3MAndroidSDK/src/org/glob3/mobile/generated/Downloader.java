@@ -162,7 +162,7 @@ public class Downloader implements IDownloadListener
 		if (_petitions.get(i)._listeners.size() < 1)
 		{
 //C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'erase' method in Java:
-		  _petitions.erase(_petitions.iterator() + i);
+		  _petitions.remove(i);
 		}
 		break;
 	  }

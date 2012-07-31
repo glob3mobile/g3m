@@ -272,7 +272,7 @@ public class Camera
   }
 
 
-  public int __temporal__for_clipping;
+  public int __temporal_test_for_clipping;
   // TEMP TEST
   public Frustum _halfFrustum; // ONLY FOR DEBUG
   public Frustum _halfFrustumInModelCoordinates;
@@ -330,7 +330,7 @@ public class Camera
   private Frustum _frustumInModelCoordinates;
 
 
-  private final ILogger _logger;
+  private ILogger _logger;
 
 
   private boolean _dirtyCachedValues;

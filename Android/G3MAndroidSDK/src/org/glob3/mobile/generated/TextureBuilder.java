@@ -13,11 +13,11 @@ public abstract class TextureBuilder
 {
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual int createTextureFromImages(IGL * gl, const java.util.ArrayList<const IImage*>& vImages, int width, int height) const = 0;
-  public abstract int createTextureFromImages(IGL gl, java.util.ArrayList<const IImage> vImages, int width, int height);
+  public abstract int createTextureFromImages(IGL gl, java.util.ArrayList<IImage> vImages, int width, int height);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual int createTextureFromImages(IGL * gl, const IFactory* factory, const java.util.ArrayList<const IImage*>& vImages, const java.util.ArrayList<const Rectangle*>& vRectangles, int width, int height) const = 0;
-  public abstract int createTextureFromImages(IGL gl, IFactory factory, java.util.ArrayList<const IImage> vImages, java.util.ArrayList<const Rectangle> vRectangles, int width, int height);
+  public abstract int createTextureFromImages(IGL gl, IFactory factory, java.util.ArrayList<IImage> vImages, java.util.ArrayList<Rectangle> vRectangles, int width, int height);
 
 
   public void dispose()

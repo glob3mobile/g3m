@@ -33,8 +33,8 @@ public abstract class IGL
   public abstract void enablePolygonOffset(float factor, float units);
   public abstract void disablePolygonOffset();
 
-  public abstract void enableDepth();
-  public abstract void disableDepth();
+  public abstract void enableDepthTest();
+  public abstract void disableDepthTest();
 
   public abstract void enableBlend();
   public abstract void disableBlend();

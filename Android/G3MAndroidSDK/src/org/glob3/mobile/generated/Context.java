@@ -37,7 +37,7 @@ package org.glob3.mobile.generated;
 public class Context
 {
   protected final IFactory _factory;
-  protected final ILogger _logger;
+  protected ILogger _logger;
   protected final Planet _planet;
   protected final IDownloader _downloader;
 

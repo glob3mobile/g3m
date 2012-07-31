@@ -170,7 +170,7 @@ public class G3MWidget
 
   private void initializeGL()
   {
-	_gl.enableDepth();
+	_gl.enableDepthTest();
 	_gl.enableCullFace(CullFace.BACK);
   }
 

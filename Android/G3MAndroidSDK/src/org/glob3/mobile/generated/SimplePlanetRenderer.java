@@ -150,7 +150,7 @@ public class SimplePlanetRenderer extends Renderer
 	Color flatColor = null;
 	if (true)
 	{
-	  flatColor = new Color(Color.fromRGBA(0.0, 1.0, 0.0, 1.0));
+	  flatColor = new Color(Color.fromRGBA((float) 0.0, (float) 1.0, (float) 0.0, (float) 1.0));
 	}
   
 	float[] normals = 0;

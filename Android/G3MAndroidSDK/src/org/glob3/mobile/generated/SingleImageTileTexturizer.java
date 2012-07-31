@@ -22,7 +22,7 @@ package org.glob3.mobile.generated;
 public class SingleImageTileTexturizer extends TileTexturizer
 {
 
-  private final RenderContext _renderContext;
+  private RenderContext _renderContext;
   private final TileParameters _parameters;
   private int _texID;
   private final IImage _image;

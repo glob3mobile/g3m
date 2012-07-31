@@ -24,7 +24,7 @@ package org.glob3.mobile.generated;
 public class TextureMapping
 {
   private final int _textureId;
-  private final float _const* _texCoords;
+  private final float[] _texCoords;
   private MutableVector2D _translation = new MutableVector2D();
   private MutableVector2D _scale = new MutableVector2D();
 

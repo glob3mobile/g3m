@@ -22,12 +22,12 @@ package org.glob3.mobile.generated;
 
 public class Frustum
 {
-  private final Plane _leftPlane = new Plane();
-  private final Plane _rightPlane = new Plane();
-  private final Plane _bottomPlane = new Plane();
-  private final Plane _topPlane = new Plane();
-  private final Plane _nearPlane = new Plane();
-  private final Plane _farPlane = new Plane();
+  private Plane _leftPlane = new Plane();
+  private Plane _rightPlane = new Plane();
+  private Plane _bottomPlane = new Plane();
+  private Plane _topPlane = new Plane();
+  private Plane _nearPlane = new Plane();
+  private Plane _farPlane = new Plane();
 
   private Frustum(Plane leftPlane, Plane rightPlane, Plane bottomPlane, Plane topPlane, Plane nearPlane, Plane farPlane)
   {

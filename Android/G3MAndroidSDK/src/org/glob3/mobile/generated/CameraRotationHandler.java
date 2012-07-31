@@ -146,10 +146,10 @@ public class CameraRotationHandler extends CameraHandler
 	MutableMatrix44D M = trans1.multiply(rotation).multiply(trans2);
   
 	// update camera only if new view intersects globe
-	Camera cam = new Camera(_camera0);
-	cam.applyTransform(M);
-	cam.updateModelMatrix();
-	if (!cam.centerOfViewOnPlanet(_planet).isNan())
+	Camera camTest = new Camera(_camera0);
+	camTest.applyTransform(M);
+	camTest.updateModelMatrix();
+	if (!camTest.centerOfViewOnPlanet(_planet).isNan())
 	{
 	  _camera.copyFrom(_camera0);
 	  _camera.applyTransform(M);

@@ -21,16 +21,16 @@ public class CPUTextureBuilder extends TextureBuilder
 {
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: int createTextureFromImages(IGL * gl, const java.util.ArrayList<const IImage*>& vImages, int width, int height) const
-  public final int createTextureFromImages(IGL gl, java.util.ArrayList<const IImage> vImages, int width, int height)
+  public final int createTextureFromImages(IGL gl, java.util.ArrayList<IImage> vImages, int width, int height)
   {
 	if (vImages.size() > 0)
 	{
   
-	  final IImage im = vImages.get(0);
-	  final IImage im2 = null;
+	  IImage im = vImages.get(0);
+	  IImage im2 = null;
 	  for (int i = 1; i < vImages.size(); i++)
 	  {
-		final IImage imTrans = vImages.get(i);
+		IImage imTrans = vImages.get(i);
 		im2 = im.combineWith(imTrans, width, height);
 		if (i > 1)
 			if (im != null)
@@ -55,7 +55,7 @@ public class CPUTextureBuilder extends TextureBuilder
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: int createTextureFromImages(IGL * gl, const IFactory* factory, const java.util.ArrayList<const IImage*>& vImages, const java.util.ArrayList<const Rectangle*>& vRectangles, int width, int height) const
-  public final int createTextureFromImages(IGL gl, IFactory factory, java.util.ArrayList<const IImage> vImages, java.util.ArrayList<const Rectangle> vRectangles, int width, int height)
+  public final int createTextureFromImages(IGL gl, IFactory factory, java.util.ArrayList<IImage> vImages, java.util.ArrayList<Rectangle> vRectangles, int width, int height)
   {
   
 	int todo_JM = 0;

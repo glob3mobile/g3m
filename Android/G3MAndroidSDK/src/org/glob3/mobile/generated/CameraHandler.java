@@ -3,7 +3,7 @@ public abstract class CameraHandler extends Renderer
 {
 
   protected final Planet _planet;
-  protected final ILogger _logger;
+  protected ILogger _logger;
   protected static IGL gl;
 
   protected static Camera _camera0 ; //Initial Camera saved on Down event
