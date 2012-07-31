@@ -108,6 +108,8 @@ public:
   
   void lineWidth(float width);
   
+  void pointSize(float size);
+  
   int getError();
   
   int uploadTexture(const IImage* image, int textureWidth, int textureHeight);

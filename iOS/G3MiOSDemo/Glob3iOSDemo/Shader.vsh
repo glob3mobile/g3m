@@ -15,6 +15,7 @@ uniform mat4 Modelview;
 
 uniform bool BillBoard;
 uniform float ViewPortRatio;
+uniform float PointSize;
 
 varying vec4 VertexColor;
 varying vec2 TextureCoordOut;
@@ -37,7 +38,7 @@ void main() {
   
   VertexColor = Color;
   
-  gl_PointSize = 10.0;
+  gl_PointSize = PointSize;
   
   vec3 x = Normal; //This line has been added to avoid compiler taking Normal variable away (Remove when Normal has been used)
 }

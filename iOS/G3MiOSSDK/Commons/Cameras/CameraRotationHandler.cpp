@@ -59,9 +59,8 @@ void CameraRotationHandler::onDown(const TouchEvent& touchEvent)
 void CameraRotationHandler::onMove(const TouchEvent& touchEvent) 
 {
   int __agustin_at_work;
-  
   return;
-    
+      
   //_currentGesture = getGesture(touchEvent);
   if (_currentGesture!=Rotate) return;
   
@@ -77,14 +76,27 @@ void CameraRotationHandler::onMove(const TouchEvent& touchEvent)
   Vector2D p2 = touchEvent.getTouch(2)->getPrevPos();
   Vector2D pm = p0.add(p1).add(p2).div(3);
   
-  // rotate less than 90 degrees or more than 180 is not allowed
+  // compute angle between normal and view direction
   Vector3D normal = _planet->geodeticSurfaceNormal(_initialPoint.asVector3D());
-  Vector3D po = _initialPoint.sub(_camera0.getPosition().asMutableVector3D()).asVector3D();
+  Vector3D view = _camera0.getViewDirection();
+  double dot = normal.normalized().dot(view.normalized().times(-1));
+  Angle initialAngle = Angle::fromRadians(acos(dot));
+  
+  // rotate more than 85 degrees or less than 0 degrees is not allowed
+  Angle angleDelta = Angle::fromDegrees((cm.y() - lastYValid) * 0.25);
+  Angle finalAngle = initialAngle.add(angleDelta);
+  if (finalAngle.greaterThan(Angle::fromDegrees(85))) return;
+  if (finalAngle.lowerThan(Angle::fromDegrees(0))) return;
+
+  
+/*  // rotate less than 90 degrees or more than 180 is not allowed
+  Vector3D normal = _planet->geodeticSurfaceNormal(_initialPoint.asVector3D());
+  Vector3D po = _initialPoint.asVector3D().sub(_camera0.getPosition());
   double pe = normal.normalized().dot(po.normalized());
   if (pe < -1) pe = -1.0;
   if (pe > 1) pe = 1.0;
   double ang = acos(pe) * 180 / M_PI - (cm.y() - pm.y()) * 0.25;
-  printf ("ang=%f\n", ang);
+  printf ("ang=%f\n", ang);*/
   
   
 /*  // don't allow a minimum height above ground
@@ -95,20 +107,20 @@ void CameraRotationHandler::onMove(const TouchEvent& touchEvent)
   
   // horizontal rotation over the original camera horizontal axix
   Vector3D u = _camera0.getHorizontalVector();
-  Angle angle = Angle::fromDegrees((cm.y() - lastYValid) * 0.25);
   MutableMatrix44D trans1   = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D());
-  MutableMatrix44D rotation = MutableMatrix44D::createRotationMatrix(angle, u);
+  MutableMatrix44D rotation = MutableMatrix44D::createRotationMatrix(angleDelta, u);
   MutableMatrix44D trans2   = MutableMatrix44D::createTranslationMatrix(_initialPoint.times(-1.0).asVector3D());
   MutableMatrix44D M        = trans1.multiply(rotation).multiply(trans2);
 
   // update camera only if new view intersects globe
-  Camera camTest(_camera0);
-  camTest.applyTransform(M);
-  camTest.updateModelMatrix();
-  if (!camTest.centerOfViewOnPlanet(_planet).isNan()) {
-    _camera->copyFrom(_camera0);
-    _camera->applyTransform(M);
-    printf ("rotating from %.0f to %.0f.  Angle=%.1f\n", lastYValid, pm.y(), angle.degrees());
+  Camera tempCamera(_camera0);
+  tempCamera.applyTransform(M);
+  tempCamera.updateModelMatrix();
+  if (!tempCamera.centerOfViewOnPlanet(_planet).isNan()) {
+    //_camera->copyFrom(_camera0);
+    //_camera->applyTransform(M);
+    _camera->copyFrom(tempCamera);
+    printf ("rotating from %.0f to %.0f.  Angle=%.1f\n", lastYValid, cm.y(), angleDelta.degrees());
   } 
 }
 
@@ -132,8 +144,9 @@ int CameraRotationHandler::render(const RenderContext* rc) {
       gl->disableTextures();
       gl->vertexPointer(3, 0, vertices);
       gl->color((float) 1, (float) 1, (float) 0, 1);
+      gl->pointSize(10);
       gl->pushMatrix();
-      MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D().times(1.001));
+      MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D().times(1.0001));
       gl->multMatrixf(T);
       gl->drawPoints(1, indices);
       gl->popMatrix();
