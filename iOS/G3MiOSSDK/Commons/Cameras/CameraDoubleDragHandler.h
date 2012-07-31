@@ -25,7 +25,9 @@ private:
   void onDown(const TouchEvent& touchEvent);
   void onMove(const TouchEvent& touchEvent);
   void onUp(const TouchEvent& touchEvent);
-      
+  
+  MutableVector3D initialPoint0, initialPoint1;
+        
 };
 
 #endif
