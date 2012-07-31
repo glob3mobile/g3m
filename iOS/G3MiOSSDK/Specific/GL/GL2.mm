@@ -17,31 +17,32 @@
 
 
 struct UniformsStruct {
-  GLuint Projection;
-  GLuint Modelview;
-  GLint Sampler;
-  GLint EnableTexture;
-  GLint FlatColor;
-  GLint TranslationTexCoord;
-  GLint ScaleTexCoord;
+  GLuint  Projection;
+  GLuint  Modelview;
+  GLint   Sampler;
+  GLint   EnableTexture;
+  GLint   FlatColor;
+  GLint   TranslationTexCoord;
+  GLint   ScaleTexCoord;
+  GLfloat PointSize;
   
   //FOR BILLBOARDING
-  GLint BillBoard;
-  GLint ViewPortRatio;
+  GLint   BillBoard;
+  GLfloat ViewPortRatio;
   
   //FOR COLOR MIXING
-  GLint FlatColorIntensity;
-  GLint EnableColorPerVertex;
-  GLint EnableFlatColor;
-  GLint ColorPerVertexIntensity;
+  GLint   FlatColorIntensity;
+  GLint   EnableColorPerVertex;
+  GLint   EnableFlatColor;
+  GLint   ColorPerVertexIntensity;
 } Uniforms;
 
 
 struct AttributesStruct {
-  GLint Position;
-  GLint TextureCoord;
-  GLint Color;
-  GLint Normal;
+  GLint   Position;
+  GLint   TextureCoord;
+  GLint   Color;
+  GLint   Normal;
 } Attributes;
 
 
@@ -63,8 +64,12 @@ void GL2::useProgram(unsigned int program) {
   Uniforms.FlatColor           = glGetUniformLocation(program, "FlatColor");
   Uniforms.TranslationTexCoord = glGetUniformLocation(program, "TranslationTexCoord");
   Uniforms.ScaleTexCoord       = glGetUniformLocation(program, "ScaleTexCoord");
+  Uniforms.PointSize           = glGetUniformLocation(program, "PointSize");
+  
+  // default values
   glUniform2f(Uniforms.TranslationTexCoord, 0, 0);
   glUniform2f(Uniforms.ScaleTexCoord, 1, 1);
+  glUniform1f(Uniforms.PointSize, 1.0);
   
   //BILLBOARDS
   Uniforms.BillBoard     = glGetUniformLocation(program, "BillBoard");
@@ -163,6 +168,10 @@ void GL2::drawPoints(int n, const unsigned int *i) {
 
 void GL2::lineWidth(float width) {
   glLineWidth(width);
+}
+
+void GL2::pointSize(float size) {
+  glUniform1f(Uniforms.PointSize, size);
 }
 
 int GL2::getError() {

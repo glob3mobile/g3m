@@ -10,6 +10,7 @@
 
 #include "CameraSimpleDragHandler.h"
 #include "MutableVector2D.hpp"
+#include "IGL.hpp"
 
 
 bool CameraSimpleDragHandler::onTouchEvent(const TouchEvent* touchEvent) 
@@ -80,6 +81,33 @@ void CameraSimpleDragHandler::onUp(const TouchEvent& touchEvent)
 }
 
 int CameraSimpleDragHandler::render(const RenderContext* rc) {
+  // TEMP TO DRAW A POINT WHERE USER PRESS
+  if (false) {
+    if (_currentGesture == Drag) {
+      float vertices[] = { 0,0,0};
+      unsigned int indices[] = {0};
+      gl->enableVerticesPosition();
+      gl->disableTexture2D();
+      gl->disableTextures();
+      gl->vertexPointer(3, 0, vertices);
+      gl->color((float) 0, (float) 1, (float) 0, 1);
+      gl->pointSize(60);
+      gl->pushMatrix();
+      
+      double height = _planet->toGeodetic3D(_camera->getPosition()).height();
+      printf ("altura camara = %f\n", height);
+                                         
+      
+      MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D().times(1.0001));
+      gl->multMatrixf(T);
+      gl->drawPoints(1, indices);
+      gl->popMatrix();
+            
+      //Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
+      //printf ("zoom with initial point = (%f, %f)\n", g.latitude().degrees(), g.longitude().degrees());
+    }
+  }
+
   return MAX_TIME_TO_RENDER;
 }
 
