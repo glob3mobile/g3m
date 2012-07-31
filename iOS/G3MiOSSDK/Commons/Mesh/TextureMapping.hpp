@@ -43,7 +43,9 @@ public:
   }
   
   ~TextureMapping() {
+#ifdef C_CODE
     delete[] _texCoords;
+#endif
   }
   
   int getTextureId() const {
