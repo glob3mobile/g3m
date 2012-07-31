@@ -82,7 +82,7 @@ void CameraSimpleDragHandler::onUp(const TouchEvent& touchEvent)
 
 int CameraSimpleDragHandler::render(const RenderContext* rc) {
   // TEMP TO DRAW A POINT WHERE USER PRESS
-  if (true) {
+  if (false) {
     if (_currentGesture == Drag) {
       float vertices[] = { 0,0,0};
       unsigned int indices[] = {0};

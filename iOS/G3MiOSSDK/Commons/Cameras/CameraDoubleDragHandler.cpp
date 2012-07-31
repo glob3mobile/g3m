@@ -47,12 +47,6 @@ void CameraDoubleDragHandler::onDown(const TouchEvent& touchEvent)
   Vector3D ray1 = _camera0.pixel2Ray(pixel1);
   initialPoint1 = _planet->closestIntersection(_camera0.getPosition(), ray1).asMutableVector3D();
   
-  // TEMP: compute orientation of projected points
-  Vector2D p0 = _camera0.point2Pixel(initialPoint0.asVector3D());
-  Vector2D p1 = _camera0.point2Pixel(initialPoint1.asVector3D());
-  printf ("ori inicial = %f\n", p1.sub(p0).orientation().degrees());
-  
-
   // both pixels must intersect globe
   if (initialPoint0.isNan() || initialPoint1.isNan()) {
     _currentGesture = None;
@@ -101,14 +95,12 @@ void CameraDoubleDragHandler::onMove(const TouchEvent& touchEvent)
     if (rotationDelta.isNan()) return; 
     tempCamera.rotateWithAxis(rotationAxis, rotationDelta);  
   }
- 
   
   // move the camara 
   {
     double distance = tempCamera.getPosition().sub(centerPoint).length();
     tempCamera.moveForward(distance*(factor-1)/factor);
   }
-  
   
   // rotate the camera
   {
@@ -117,7 +109,6 @@ void CameraDoubleDragHandler::onMove(const TouchEvent& touchEvent)
     tempCamera.rotateWithAxis(normal, Angle::fromRadians(angle));
   }
    
-  
   // detect new final point
   {
     // compute 3D point of view center
@@ -144,28 +135,20 @@ void CameraDoubleDragHandler::onMove(const TouchEvent& touchEvent)
   // the gesture was valid. Copy data to final camera
   tempCamera.updateModelMatrix();
     
-  // TEMP: compute orientation of projected points
+  // adjust orientation of projected points
   Vector2D p00 = _camera0.point2Pixel(initialPoint0.asVector3D());
   Vector2D p10 = _camera0.point2Pixel(initialPoint1.asVector3D());
   Vector2D p0n = tempCamera.point2Pixel(initialPoint0.asVector3D());
   Vector2D p1n = tempCamera.point2Pixel(initialPoint1.asVector3D());
   Angle a0 = p10.sub(p00).orientation();
-  Angle a1 = p1n.sub(p0n).orientation();
-  printf ("angle inicial=%.2f    angle actual=%.2f\n", a0.degrees(), a1.degrees());
-          
-  
+  Angle a1 = p1n.sub(p0n).orientation();          
   Vector3D normal = _planet->geodeticSurfaceNormal(_initialPoint.asVector3D());
   MutableMatrix44D trans1   = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D());
-  MutableMatrix44D rotation = MutableMatrix44D::createRotationMatrix(a0.sub(a1).div(5), normal);
+  MutableMatrix44D rotation = MutableMatrix44D::createRotationMatrix(a0.sub(a1).div(6), normal);
   MutableMatrix44D trans2   = MutableMatrix44D::createTranslationMatrix(_initialPoint.times(-1.0).asVector3D());
   MutableMatrix44D M        = trans1.multiply(rotation).multiply(trans2);
   tempCamera.applyTransform(M);
-  
-
-  
   _camera->copyFrom(tempCamera);
-  
-
 
   //printf ("moving 2 fingers\n");
 }
@@ -182,7 +165,7 @@ void CameraDoubleDragHandler::onUp(const TouchEvent& touchEvent)
 
 int CameraDoubleDragHandler::render(const RenderContext* rc) {
   // TEMP TO DRAW A POINT WHERE USER PRESS
-  if (true) {
+  if (false) {
     if (_currentGesture == DoubleDrag) {
       float vertices[] = { 0,0,0};
       unsigned int indices[] = {0};
