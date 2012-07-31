@@ -108,12 +108,12 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
   int __TODO_tune_render_budget;
   if (_subtiles == NULL) { // the tile needs to create the subtiles
     if (statistics->getSplitsCountInFrame() > 1) {
-      // there are not more splitsCount budget to spend
+      // there are not more splitsCount-budget to spend
       return true;
     }
     
     if (lastSplitTimer->elapsedTime().milliseconds() < 50) {
-      // there are not time more budget to spend
+      // there are not more time-budget to spend
       return true;
     }
   }
@@ -134,8 +134,8 @@ void Tile::rawRender(const RenderContext *rc,
     }
     else {
       
-      const bool needsToCallTexturizer = (!isTextureSolved()         ||
-                                          (_texturizerMesh  == NULL) );
+      const bool needsToCallTexturizer = (!isTextureSolved() ||
+                                          (_texturizerMesh == NULL));
       
       if (needsToCallTexturizer) {
         int __TODO_tune_render_budget;

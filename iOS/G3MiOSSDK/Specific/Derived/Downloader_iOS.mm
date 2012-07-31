@@ -16,7 +16,6 @@ Downloader_iOS::~Downloader_iOS() {
   
 }
 
-
 Downloader_iOS::Downloader_iOS(int memoryCapacity,
                                int diskCapacity,
                                std::string diskPath,
@@ -99,8 +98,6 @@ long Downloader_iOS::request(const URL &url,
                              IDownloadListener* cppListener) {
   int __TODO_new_downloader;
   
-  const long requestId = _requestIdCounter++;
-  
   NSURL* nsURL = [NSURL URLWithString: toNSString(url.getPath())];
   
   Downloader_iOS_Listener* iosListener = [[Downloader_iOS_Listener alloc] initWithCPPListener: cppListener];
@@ -108,7 +105,9 @@ long Downloader_iOS::request(const URL &url,
   Downloader_iOS_Handler* handler = nil;
   
   [_lock lock];
-  
+
+  const long requestId = _requestIdCounter++;
+
   handler = [_downloadingHandlers objectForKey: nsURL];
   if (handler) {
     // the URL is being downloaded, just add the new listener.
