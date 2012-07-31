@@ -25,6 +25,8 @@
 
 -(long) requestId;
 
+-(Downloader_iOS_Listener*) listener;
+
 @end
 
 

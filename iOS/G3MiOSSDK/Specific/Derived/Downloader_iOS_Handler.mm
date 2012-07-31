@@ -8,6 +8,8 @@
 
 #import "Downloader_iOS_Handler.h"
 
+#include "ILogger.hpp"
+
 @implementation ListenerEntry
 
 +(id) entryWithListener: (Downloader_iOS_Listener*) listener
@@ -26,6 +28,11 @@
     _requestId = requestId;
   }
   return self;
+}
+
+-(Downloader_iOS_Listener*) listener
+{
+  return _listener;
 }
 
 -(long) requestId
@@ -98,7 +105,7 @@
       break;
     }
   }
-
+  
   bool removed = (indexToRemove >= 0);
   if (removed) {
     [_listeners removeObjectAtIndex:indexToRemove];
@@ -122,22 +129,47 @@
 {
   int __dgd_at_work;
   
-  //    NSURLRequest *request = [NSURLRequest requestWithURL:nsURL
-  //                                             cachePolicy:NSURLRequestUseProtocolCachePolicy
-  //                                         timeoutInterval:60.0];
-  //
-  //    // create the connection with the request
-  //    // and start loading the data
-  //    NSURLConnection *connection=[[NSURLConnection alloc] initWithRequest: request
-  //                                                                delegate: handler];
-  //    if (connection) {
-  //      // Create the NSMutableData to hold the received data.
-  //      // receivedData is an instance variable declared elsewhere.
-  //      receivedData = [NSMutableData data];
-  //    } else {
-  //      // Inform the user that the connection failed.
-  //    }
+  NSURLRequest *request = [NSURLRequest requestWithURL: _url
+                                           cachePolicy: NSURLRequestUseProtocolCachePolicy
+                                       timeoutInterval: 60.0];
+  
+  NSURLResponse *response;
+  NSError *error;
+  NSData* data = [NSURLConnection sendSynchronousRequest: request
+                                       returningResponse: &response
+                                                   error: &error];
+  if (data) {
+    int length = [data length];
+    unsigned char *bytes = new unsigned char[ length ]; // will be deleted by ByteBuffer's destructor
+    [data getBytes:bytes length: length];
+    ByteBuffer buffer(bytes, length);
 
+    Response res(URL( [[_url absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] ), &buffer);
+
+    const int listenersCount = [_listeners count];
+    for (int i = 0; i < listenersCount; i++) {
+      ListenerEntry* entry = [_listeners objectAtIndex:i];
+      
+      [[entry listener] onDownload:res];
+    }
+  }
+  else {
+    ILogger::instance()->logError("Can't load %s, response=%s, error=%s",
+                                  [ [_url     description] cStringUsingEncoding:NSUTF8StringEncoding ],
+                                  [ [response description] cStringUsingEncoding:NSUTF8StringEncoding ],
+                                  [ [error    description] cStringUsingEncoding:NSUTF8StringEncoding ] );
+    
+    ByteBuffer buffer(NULL, 0);
+    Response res(URL( [[_url absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] ), &buffer);
+    
+    const int listenersCount = [_listeners count];
+    for (int i = 0; i < listenersCount; i++) {
+      ListenerEntry* entry = [_listeners objectAtIndex:i];
+      
+      [[entry listener] onError:res];
+    }
+  }
+  
 }
 
 @end
