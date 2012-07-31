@@ -88,7 +88,9 @@ void Camera::calculateCachedValues(const RenderContext *rc) {
   _modelMatrix = MutableMatrix44D::createModelMatrix(_position, _center, _up);
   
   // compute center of view on planet
+#ifdef C_CODE
   if (_centerOfView) delete _centerOfView;
+#endif
   const Planet *planet = rc->getPlanet();
   Vector3D centerV = centerOfViewOnPlanet(planet);
   Geodetic3D centerG = planet->toGeodetic3D(centerV);
