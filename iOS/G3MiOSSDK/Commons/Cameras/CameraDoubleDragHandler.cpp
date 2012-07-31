@@ -133,9 +133,8 @@ void CameraDoubleDragHandler::onMove(const TouchEvent& touchEvent)
   // the gesture was valid. Copy data to final camera
   tempCamera.updateModelMatrix();
   _camera->copyFrom(tempCamera);
-  
-  
-  printf ("moving 2 fingers\n");
+
+  //printf ("moving 2 fingers\n");
 }
 
 
