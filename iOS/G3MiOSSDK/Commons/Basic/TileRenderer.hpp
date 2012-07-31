@@ -19,6 +19,7 @@ class TileTexturizer;
 #include <vector>
 
 #include "Tile.hpp"
+#include "Camera.hpp"
 
 
 //class TileCacheEntry {
@@ -192,7 +193,7 @@ private:
   const TileParameters*  _parameters;
   const bool             _showStatistics;
   bool                   _topTilesJustCreated;
-  
+
   std::vector<Tile*>     _topLevelTiles;
   
   ITimer* _frameTimer;     // timer started at the start of each frame rendering
@@ -202,6 +203,36 @@ private:
   void createTopLevelTiles(const InitializationContext* ic);
   
   TilesStatistics _lastStatistics;
+  
+  
+  class DistanceToCenterTileComparison {
+  private:
+    const Camera* _camera;
+    const Planet* _planet;
+    
+  public:
+    DistanceToCenterTileComparison(const Camera *camera,
+                                   const Planet *planet):
+    _camera(camera),
+    _planet(planet)
+    {}
+    
+    inline bool operator()(const Tile *t1,
+                           const Tile *t2) const {
+      const Vector3D cameraPos = _camera->getPosition();
+      
+      const Vector3D center1 = _planet->toVector3D(t1->getSector().getCenter());
+      const Vector3D center2 = _planet->toVector3D(t2->getSector().getCenter());
+      
+      const double dist1 = center1.sub(cameraPos).squaredLength();
+      const double dist2 = center2.sub(cameraPos).squaredLength();
+      return (dist1 < dist2);
+    }
+  };
+  
+                           
+  //bool isTile1ClosestToCameraThanTile2(Tile *t1, Tile *t2) const;
+  
   
 public:
   TileRenderer(const TileTessellator* tessellator,

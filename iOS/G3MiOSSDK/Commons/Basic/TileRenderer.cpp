@@ -14,6 +14,7 @@
 #include "Camera.hpp"
 #include "ITimer.hpp"
 
+
 TileRenderer::~TileRenderer() {
   clearTopLevelTiles();
   
@@ -110,14 +111,20 @@ int TileRenderer::render(const RenderContext* rc) {
     }
     _topTilesJustCreated = false;
   }
-
+  
+  const DistanceToCenterTileComparison predicate = DistanceToCenterTileComparison(rc->getCamera(),
+                                                                                  rc->getPlanet());
   
   std::vector<Tile*> toVisit(_topLevelTiles);
   while (toVisit.size() > 0) {
     std::vector<Tile*> toVisitInNextIteration;
-//    toVisitInNextIteration.reserve(128);
-  
-    for (int i = 0; i < toVisit.size(); i++) {
+    
+    std::sort(toVisit.begin(),
+              toVisit.end(),
+              predicate);
+    
+    const int toVisitSize = toVisit.size();
+    for (int i = 0; i < toVisitSize; i++) {
       Tile* tile = toVisit[i];
       tile->render(rc,
                    _tessellator,
@@ -143,3 +150,4 @@ int TileRenderer::render(const RenderContext* rc) {
     
   return MAX_TIME_TO_RENDER;
 }
+

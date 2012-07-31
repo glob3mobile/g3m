@@ -8,6 +8,7 @@
 
 #include "MarksRenderer.hpp"
 #include "Camera.hpp"
+#include "IGL.hpp"
 
 void MarksRenderer::initialize(const InitializationContext* ic) {
   

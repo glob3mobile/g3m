@@ -60,7 +60,7 @@ Mesh* Tile::getDebugMesh(const RenderContext* rc,
 bool Tile::isVisible(const RenderContext *rc,
                      const TileTessellator *tessellator) {
   
-  // DGD: Sector::isBackOriented doesn't work
+  // test if sector is back oriented with respect to the camera
   if (_sector.isBackOriented(rc)) {
       return false; 
     }
@@ -107,11 +107,13 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
   
   int __TODO_tune_render_budget;
   if (_subtiles == NULL) { // the tile needs to create the subtiles
-    if (statistics->getSplitsCountInFrame() > 1) { // there are not more budget to spend
+    if (statistics->getSplitsCountInFrame() > 1) {
+      // there are not more splitsCount budget to spend
       return true;
     }
     
-    if (lastSplitTimer->elapsedTime().milliseconds() < 35) { // there are not more budget to spend
+    if (lastSplitTimer->elapsedTime().milliseconds() < 50) {
+      // there are not time more budget to spend
       return true;
     }
   }
@@ -133,14 +135,13 @@ void Tile::rawRender(const RenderContext *rc,
     else {
       
       const bool needsToCallTexturizer = (!isTextureSolved()         ||
-                                          (_texturizerMesh  == NULL) ||
-                                          (_texturizerTimer == NULL) );
+                                          (_texturizerMesh  == NULL) );
       
       if (needsToCallTexturizer) {
         int __TODO_tune_render_budget;
 
         if (_texturizerTimer == NULL ||
-            _texturizerTimer->elapsedTime().milliseconds() > 100) {
+            _texturizerTimer->elapsedTime().milliseconds() > 125) {
           
           _texturizerMesh = texturizer->texturize(rc,
                                                   this,
@@ -301,3 +302,5 @@ std::vector<Tile*>* Tile::createSubTiles() {
   
   return subTiles;
 }
+
+

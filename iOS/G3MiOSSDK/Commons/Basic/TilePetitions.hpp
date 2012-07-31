@@ -9,16 +9,17 @@
 #ifndef G3MiOSSDK_TilePetitions_hpp
 #define G3MiOSSDK_TilePetitions_hpp
 
-#include "IDownloadListener.hpp"
-#include "MutableVector2D.hpp"
-#include "TileRenderer.hpp"
-
 #include <string>
 #include <vector>
 
-#include "Tile.hpp"
-#include "IFactory.hpp"
+#include "Sector.hpp"
+#include "IDownloadListener.hpp"
 
+class Tile;
+class Rectangle;
+class Sector;
+class IFactory;
+class MutableVector2D;
 class TileImagesTileTexturizer;
 
 class Petition {

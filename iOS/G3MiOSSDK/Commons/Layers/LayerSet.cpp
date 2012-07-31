@@ -7,6 +7,7 @@
 //
 
 #include "LayerSet.hpp"
+#include "Tile.hpp"
 
 std::vector<Petition*> LayerSet::createTilePetitions(const Tile& tile, int width, int height) const
 {

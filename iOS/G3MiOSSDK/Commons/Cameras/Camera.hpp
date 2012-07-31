@@ -19,7 +19,6 @@
 #include "MutableMatrix44D.hpp"
 #include "Frustum.hpp"
 
-//#include "ILogger.hpp"
 class ILogger;
 
 
@@ -63,6 +62,7 @@ public:
   _position(that._position),
   _center(that._center),
   _up(that._up),
+  _centerOfView(NULL),
   _frustum((that._frustum == NULL) ? NULL : new Frustum(*that._frustum)),
   _frustumInModelCoordinates((that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates)),
   _halfFrustumInModelCoordinates((that._halfFrustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._halfFrustumInModelCoordinates)),
@@ -94,7 +94,12 @@ public:
     if (_halfFrustumInModelCoordinates != NULL) {
       delete _halfFrustumInModelCoordinates;
     }
+    
+    if (_centerOfView != NULL) {
+      delete _centerOfView;
+    }
 #endif
+
   }
   
   void copyFrom(const Camera &c);
@@ -117,6 +122,7 @@ public:
   Vector3D getPosition() const { return _position.asVector3D(); }
   Vector3D getCenter() const { return _center.asVector3D(); }
   Vector3D getUp() const { return _up.asVector3D(); }
+  Geodetic3D getCenterOfView() const { return *_centerOfView; }
   
   //Dragging camera
   void dragCamera(const Vector3D& p0, const Vector3D& p1);
@@ -153,17 +159,19 @@ public:
   
   void applyTransform(const MutableMatrix44D& mat);
 
+  Vector3D getViewDirection() const { return _center.sub(_position).asVector3D(); }
     
 private:
   int _width;
   int _height;
   
-  MutableMatrix44D _modelMatrix;       // Model matrix, computed in CPU in double precision
-  MutableMatrix44D _projectionMatrix;  // opengl projection matrix
+  MutableMatrix44D _modelMatrix;        // Model matrix, computed in CPU in double precision
+  MutableMatrix44D _projectionMatrix;   // opengl projection matrix
   
-  MutableVector3D _position;           // position
-  MutableVector3D _center;             // center of view
-  MutableVector3D _up;                 // vertical vector
+  MutableVector3D _position;            // position
+  MutableVector3D _center;              // point where camera is looking at
+  MutableVector3D _up;                  // vertical vector
+  Geodetic3D*     _centerOfView;        // intersection of view direction with globe
   
   Frustum* _frustum;
   Frustum* _frustumInModelCoordinates;
@@ -243,6 +251,7 @@ private:
       _frustumInModelCoordinates = NULL;
     }
   }
+  
 };
 
 #endif

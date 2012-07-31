@@ -9,6 +9,8 @@
 #include "TilePetitions.hpp"
 
 #include "TileImagesTileTexturizer.hpp"
+#include "Downloader.hpp"
+#include "TexturesHandler.hpp"
 
 void TilePetitions::onDownload(const Response &response)
 {

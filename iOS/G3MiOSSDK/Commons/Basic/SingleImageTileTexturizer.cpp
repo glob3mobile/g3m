@@ -10,6 +10,7 @@
 
 #include "TextureMapping.hpp"
 #include "TexturedMesh.hpp"
+#include "Planet.hpp"
 
 
 std::vector<MutableVector2D> SingleImageTileTexturizer::createTextureCoordinates(const RenderContext* rc, Mesh* mesh) const {

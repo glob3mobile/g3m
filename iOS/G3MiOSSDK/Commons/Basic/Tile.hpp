@@ -17,6 +17,7 @@ class Mesh;
 class TileTessellator;
 class TileTexturizer;
 class TileParameters;
+class ITimer;
 
 //class TileKey {
 //public:
@@ -163,7 +164,7 @@ public:
               std::vector<Tile*>* toVisitInNextIteration,
               ITimer* frameTimer,
               ITimer* lastSplitTimer);
-  
+    
 };
 
 #endif

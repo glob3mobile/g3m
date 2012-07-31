@@ -10,6 +10,9 @@
 #define G3MiOSSDK_Extent_h
 
 #include "Context.hpp"
+#include <math.h>
+
+class Vector2D;
 
 class Frustum;
 

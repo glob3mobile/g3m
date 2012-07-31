@@ -6,9 +6,4 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_TouchEvent_h
-#define G3MiOSSDK_TouchEvent_h
-
 #include "TouchEvent.hpp"
-
-#endif
