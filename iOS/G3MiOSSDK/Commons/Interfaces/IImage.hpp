@@ -29,6 +29,8 @@ public:
   
   virtual ByteBuffer* getEncodedImage() const = 0;
   
+  virtual void fillWithRGBA(unsigned char data[], int width, int height) const = 0;
+  
 };
 
 #endif

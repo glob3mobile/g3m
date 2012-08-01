@@ -11,6 +11,8 @@
 
 #include <vector>
 
+#include "IGL.hpp"
+
 enum GLBufferType { ColorBuffer, DepthBuffer };
 
 enum GLFeature { PolygonOffsetFill, DepthTest, Blend, CullFacing };
@@ -101,6 +103,8 @@ public:
                             const void* data) const = 0;
   
   virtual void drawArrays(GLPrimitive mode, int first, int count) const = 0;
+  
+  virtual void cullFace(CullFace c) const = 0;
 
 
 

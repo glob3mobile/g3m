@@ -37,6 +37,17 @@ class NativeGL2_iOS: public INativeGL
     }
   }
   
+  inline GLenum getEnum(CullFace f) const{
+    switch (f) {
+      case FRONT:
+        return GL_FRONT;
+      case FRONT_AND_BACK:
+        return GL_FRONT_AND_BACK;
+      case BACK:
+        return GL_BACK;
+    }
+  }
+  
   inline GLenum getEnum(GLType t) const{
     switch (t) {
       case Float:
@@ -266,6 +277,10 @@ public:
   
   void drawArrays(GLPrimitive mode, int first, int count) const{
     glDrawArrays(getEnum(mode), first, count);
+  }
+  
+  void cullFace(CullFace c) const{
+    glCullFace(getEnum(c));
   }
   
 };

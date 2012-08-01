@@ -179,28 +179,10 @@ int GL::getError() {
 }
 
 int GL::uploadTexture(const IImage* image, int textureWidth, int textureHeight) {
-  int todo_reallocate_specific;
-  /*
-  UIImage * im = ((Image_iOS*) image)->getUIImage();
   
-  
-  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-  //void *imageData = malloc( textureHeight * textureWidth * 4 );
-  
-  void *imageData = new unsigned char[textureHeight * textureWidth * 4 ];
-  
-  CGContextRef context = CGBitmapContextCreate(imageData,
-                                               textureWidth, textureHeight,
-                                               8, 4 * textureWidth,
-                                               colorSpace,
-                                               kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
-  CGColorSpaceRelease( colorSpace );
-  CGContextClearRect( context, CGRectMake( 0, 0, textureWidth, textureHeight ) );
-  //CGContextTranslateCTM( context, 0, textureHeight - textureHeight );
-  CGContextDrawImage( context, CGRectMake( 0, 0, textureWidth, textureHeight ), im.CGImage );
-  
-  CGContextRelease(context);
-  */
+  unsigned char imageData[textureWidth * textureHeight * 4];
+  image->fillWithRGBA(imageData, textureWidth, textureHeight);
+
   
   
   _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);   
@@ -217,12 +199,7 @@ int GL::uploadTexture(const IImage* image, int textureWidth, int textureHeight) 
   _gl->texParameteri(Texture2D, WrapT, ClampToEdge);
   
   _gl->texImage2D(Texture2D, 0, RGBA, textureWidth, textureHeight, 0, RGBA, UnsignedByte, imageData);
-  
-  int todo_reallocate_specific;
-  /*
-  free(imageData);
-   */
-  
+
   return texID;
 }
 
@@ -265,7 +242,7 @@ void GL::drawBillBoard(const unsigned int textureId,
   vertexPointer(3, 0, vertex);
   setTextureCoordinates(2, 0, texcoord);
   
-  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+  _gl->drawArrays(TriangleStrip, 0, 4);
   
   enableDepthTest();
   
@@ -273,21 +250,21 @@ void GL::drawBillBoard(const unsigned int textureId,
 }
 
 void GL::deleteTexture(int glTextureId) {
-  unsigned int textures[] = { glTextureId };
-  glDeleteTextures(1, textures);
+  int textures[] = { glTextureId };
+  _gl->deleteTextures(1, textures);
 }
 
 // state handling
 void GL::enableTextures() {
   if (!_enableTextures) {
-    glEnableVertexAttribArray(Attributes.TextureCoord);
+    _gl->enableVertexAttribArray(Attributes.TextureCoord);
     _enableTextures = true;
   }
 }
 
 void GL::disableTextures() {
   if (_enableTextures) {
-    glDisableVertexAttribArray(Attributes.TextureCoord);
+    _gl->disableVertexAttribArray(Attributes.TextureCoord);
     _enableTextures = false;
   }
 }
@@ -310,8 +287,8 @@ void GL::enableVertexColor(float const colors[], float intensity) {
   //  if (colors != NULL) {
   if (!_enableVertexColor) {
     _gl->uniform1i(Uniforms.EnableColorPerVertex, true);
-    glEnableVertexAttribArray(Attributes.Color);
-    _gl->vertexAttribPointer(Attributes.Color, 4, GL_FLOAT, 0, 0, colors);
+    _gl->enableVertexAttribArray(Attributes.Color);
+    _gl->vertexAttribPointer(Attributes.Color, 4, Float, 0, 0, colors);
     _gl->uniform1f(Uniforms.ColorPerVertexIntensity, intensity);
     _enableVertexColor = true;
   }
@@ -320,7 +297,7 @@ void GL::enableVertexColor(float const colors[], float intensity) {
 
 void GL::disableVertexColor() {
   if (_enableVertexColor) {
-    glDisableVertexAttribArray(Attributes.Color);
+    _gl->disableVertexAttribArray(Attributes.Color);
     _gl->uniform1i(Uniforms.EnableColorPerVertex, false);
     _enableVertexColor = false;
   }
@@ -329,8 +306,8 @@ void GL::disableVertexColor() {
 void GL::enableVertexNormal(float const normals[]) {
   //  if (normals != NULL) {
   if (!_enableVertexNormal) {
-    glEnableVertexAttribArray(Attributes.Normal);
-    _gl->vertexAttribPointer(Attributes.Normal, 3, GL_FLOAT, 0, 0, normals);
+    _gl->enableVertexAttribArray(Attributes.Normal);
+    _gl->vertexAttribPointer(Attributes.Normal, 3, Float, 0, 0, normals);
     _enableVertexNormal = true;
   }
   //  }
@@ -338,21 +315,21 @@ void GL::enableVertexNormal(float const normals[]) {
 
 void GL::disableVertexNormal() {
   if (_enableVertexNormal) {
-    glDisableVertexAttribArray(Attributes.Normal);
+    _gl->disableVertexAttribArray(Attributes.Normal);
     _enableVertexNormal = false;
   }
 }
 
 void GL::enableVerticesPosition() {
   if (!_enableVerticesPosition) {
-    glEnableVertexAttribArray(Attributes.Position);
+    _gl->enableVertexAttribArray(Attributes.Position);
     _enableVerticesPosition = true;
   }
 }
 
 void GL::disableVerticesPosition() {
   if (_enableVerticesPosition) {
-    glDisableVertexAttribArray(Attributes.Position);
+    _gl->disableVertexAttribArray(Attributes.Position);
     _enableVerticesPosition = false;
   }
 }
@@ -363,7 +340,7 @@ void GL::enableVertexFlatColor(float r, float g, float b, float a,
     _gl->uniform1i(Uniforms.EnableFlatColor, true);
     _enableFlatColor = true;
   }
-  glUniform4f(Uniforms.FlatColor, r, g, b, a);
+  _gl->uniform4f(Uniforms.FlatColor, r, g, b, a);
   _gl->uniform1f(Uniforms.FlatColorIntensity, intensity);
 }
 
@@ -376,28 +353,28 @@ void GL::disableVertexFlatColor() {
 
 void GL::enableDepthTest() {
   if (!_enableDepthTest) {
-    glEnable(GL_DEPTH_TEST);
+    _gl->enable(DepthTest);
     _enableDepthTest = true;
   }
 }
 
 void GL::disableDepthTest() {
   if (_enableDepthTest) {
-    glDisable(GL_DEPTH_TEST);
+    _gl->disable(DepthTest);
     _enableDepthTest = false;
   }
 }
 
 void GL::enableBlend() {
   if (!_enableBlend) {
-    glEnable(GL_BLEND);
+    _gl->enable(Blend);
     _enableBlend = true;
   }
 }
 
 void GL::disableBlend() {
   if (_enableBlend) {
-    glDisable(GL_BLEND);
+    _gl->disable(Blend);
     _enableBlend = false;
   }
   
@@ -405,20 +382,20 @@ void GL::disableBlend() {
 
 void GL::enableCullFace(CullFace face) {
   if (!_enableCullFace) {
-    glEnable(GL_CULL_FACE);  
+    _gl->enable(CullFacing);  
     _enableCullFace = true;
   }
   
   if (_cullFace_face != face) {
     switch (face) {
       case FRONT:
-        glCullFace(GL_FRONT);
+        _gl->cullFace(FRONT);
         break;
       case BACK:
-        glCullFace(GL_BACK);
+        _gl->cullFace(BACK);
         break;
       case FRONT_AND_BACK:
-        glCullFace(GL_FRONT_AND_BACK);
+        _gl->cullFace(FRONT_AND_BACK);
         break;
     }
     
@@ -428,7 +405,7 @@ void GL::enableCullFace(CullFace face) {
 
 void GL::disableCullFace() {
   if (_enableCullFace) {
-    glDisable(GL_CULL_FACE);
+    _gl->disable(CullFacing);
     _enableCullFace = false;
   }
 }

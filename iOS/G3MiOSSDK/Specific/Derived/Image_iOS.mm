@@ -112,3 +112,19 @@ ByteBuffer* Image_iOS::getEncodedImage() const
   
   return new ByteBuffer(data, length);
 }
+
+void Image_iOS::fillWithRGBA(unsigned char imageData[], int width, int height) const
+{
+   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+   CGContextRef context = CGBitmapContextCreate(imageData,
+                                                width, height,
+                                                8, 4 * width,
+                                                colorSpace,
+                                                kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
+  
+   CGColorSpaceRelease( colorSpace );
+   CGContextClearRect( context, CGRectMake( 0, 0, width, height ) );
+   CGContextDrawImage( context, CGRectMake( 0, 0, width, height ), _image.CGImage );
+   
+   CGContextRelease(context);
+}
