@@ -49,8 +49,8 @@ public class StaticImageLayer extends Layer
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: java.util.ArrayList<Petition*> getTilePetitions(const Tile& tile, int width, int height) const
-  public final java.util.ArrayList<Petition> getTilePetitions(Tile tile, int width, int height)
+//ORIGINAL LINE: java.util.ArrayList<Petition*> getTilePetitions(const IFactory& factory, const Tile& tile, int width, int height) const
+  public final java.util.ArrayList<Petition> getTilePetitions(IFactory factory, Tile tile, int width, int height)
   {
 	java.util.ArrayList<Petition> res = new java.util.ArrayList<Petition>();
   
@@ -62,11 +62,7 @@ public class StaticImageLayer extends Layer
 	Sector imageSector = tile.getSector();
   
 	//CREATING ID FOR PETITION
-	std.ostringstream oss = new std.ostringstream();
-	oss << _layerID.compareTo() < 0< < "_" << imageSector.lower().latitude().degrees() << "_";
-	oss << imageSector.lower().longitude().degrees() << "_" << imageSector.upper().latitude().degrees();
-	oss << "_" << imageSector.upper().longitude().degrees();
-	String id = oss.str();
+	String id = factory.stringFormat("%s_%f_%f_%f_%f", _layerID, imageSector.lower().latitude().degrees(), imageSector.lower().longitude().degrees(), imageSector.upper().latitude().degrees(), imageSector.upper().longitude().degrees());
   
 	Petition pet = new Petition(tile.getSector(), id);
   

@@ -50,8 +50,8 @@ public class WMSLayer extends Layer
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: java.util.ArrayList<Petition*> getTilePetitions(const Tile& tile, int width, int height) const
-  public final java.util.ArrayList<Petition> getTilePetitions(Tile tile, int width, int height)
+//ORIGINAL LINE: java.util.ArrayList<Petition*> getTilePetitions(const IFactory& factory, const Tile& tile, int width, int height) const
+  public final java.util.ArrayList<Petition> getTilePetitions(IFactory factory, Tile tile, int width, int height)
   {
 	java.util.ArrayList<Petition> vPetitions = new java.util.ArrayList<Petition>();
   
@@ -108,13 +108,12 @@ public class WMSLayer extends Layer
   
 	Sector sector = tile.getSector();
   
-	  //Texture Size and BBOX
-	std.ostringstream oss = new std.ostringstream();
-	oss << "&WIDTH=" << width << "&HEIGHT=" << height;
-	oss << "&BBOX=" << sector.lower().longitude().degrees() << "," << sector.lower().latitude().degrees();
-	oss << "," << sector.upper().longitude().degrees() << "," << sector.upper().latitude().degrees();
-	String sizeAndBBox = oss.str();
-	req += oss.str();
+	//Texture Size
+	req += factory.stringFormat("&WIDTH=%d&HEIGHT=%d", width, height);
+  
+	  //BBOX
+	req += factory.stringFormat("&BBOX=%f,%f,%f,%f", sector.lower().longitude().degrees(), sector.lower().latitude().degrees(), sector.upper().longitude().degrees(), sector.upper().latitude().degrees());
+  
   
 	if (_serverVersion.equals("1.3.0"))
 	{

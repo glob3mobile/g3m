@@ -46,7 +46,7 @@ public class TileImagesTileTexturizer extends TileTexturizer
 
   private TilePetitions createTilePetitions(Tile tile)
   {
-	java.util.ArrayList<Petition> pet = _layerSet.createTilePetitions(tile, _parameters._tileTextureWidth, _parameters._tileTextureHeight);
+	java.util.ArrayList<Petition> pet = _layerSet.createTilePetitions(_factory, tile, _parameters._tileTextureWidth, _parameters._tileTextureHeight);
   //  if (pet.size() > 1){
   //    for (int i = 0; i < pet.size(); i++) {
   //      printf("%s\n", pet[i]->getURL().c_str());
@@ -205,13 +205,14 @@ public class TileImagesTileTexturizer extends TileTexturizer
   }
 
 
-  public TileImagesTileTexturizer(TileParameters parameters, Downloader downloader, LayerSet layerSet)
+  public TileImagesTileTexturizer(TileParameters parameters, Downloader downloader, LayerSet layerSet, IFactory factory)
   {
 	  _parameters = parameters;
 	  _layer = null;
 	  _downloader = downloader;
 	  _texCoordsCache = null;
 	  _layerSet = layerSet;
+	  _factory = factory;
   }
 
   public void dispose()

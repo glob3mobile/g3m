@@ -22,7 +22,7 @@ public abstract class Layer
   public abstract boolean fullContains(Sector s);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual java.util.ArrayList<Petition*> getTilePetitions(const Tile& tile, int width, int height) const = 0;
-  public abstract java.util.ArrayList<Petition> getTilePetitions(Tile tile, int width, int height);
+//ORIGINAL LINE: virtual java.util.ArrayList<Petition*> getTilePetitions(const IFactory& factory, const Tile& tile, int width, int height) const = 0;
+  public abstract java.util.ArrayList<Petition> getTilePetitions(IFactory factory, Tile tile, int width, int height);
 
 }
