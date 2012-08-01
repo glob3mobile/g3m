@@ -9,14 +9,15 @@
 #ifndef G3MiOSSDK_IRenderer_h
 #define G3MiOSSDK_IRenderer_h
 
-#define MAX_TIME_TO_RENDER 1000
-
 class TouchEvent;
 class InitializationContext;
 class RenderContext;
 
 class Renderer {
 public:
+  
+  static const int maxTimeToRender = 1000;
+  
   virtual void initialize(const InitializationContext* ic) = 0;
   
   virtual bool isReadyToRender(const RenderContext* rc) = 0;

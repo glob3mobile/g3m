@@ -148,6 +148,6 @@ int TileRenderer::render(const RenderContext* rc) {
     }
   }
     
-  return MAX_TIME_TO_RENDER;
+  return Renderer::maxTimeToRender;
 }
 

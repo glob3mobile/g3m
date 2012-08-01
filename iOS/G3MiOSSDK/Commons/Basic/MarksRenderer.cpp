@@ -48,7 +48,7 @@ int MarksRenderer::render(const RenderContext* rc) {
   gl->disableTexture2D();
   
   
-  return MAX_TIME_TO_RENDER;
+  return Renderer::maxTimeToRender;
 }
 
 

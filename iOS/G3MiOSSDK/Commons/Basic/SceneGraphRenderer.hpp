@@ -124,7 +124,7 @@ public:
   void removeChild(const SGNode* nodeToRemove);
   
   virtual int render(const RenderContext *rc) {
-    int max = MAX_TIME_TO_RENDER;
+    int max = Renderer::maxTimeToRender;
     
     for (int i = 0; i < _children.size(); i++) {
       SGNode* child = _children[i];
@@ -153,7 +153,7 @@ public:
   virtual int render(const RenderContext *rc) {
     
     if (!isVisible(rc)) {
-      return MAX_TIME_TO_RENDER;
+      return Renderer::maxTimeToRender;
     }
     
     IGL* gl = rc->getGL();

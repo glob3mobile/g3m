@@ -65,7 +65,7 @@ void EffectsScheduler::doOneCyle(const RenderContext *rc) {
 int EffectsScheduler::render(const RenderContext *rc) {
   doOneCyle(rc);
   if (_effectsRuns.size() == 0) {
-    return MAX_TIME_TO_RENDER;
+    return Renderer::maxTimeToRender;
   }
   else {
     return 0;

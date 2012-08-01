@@ -113,7 +113,7 @@ void CameraDoubleDragHandler::onMove(const TouchEvent& touchEvent)
   {
     // compute 3D point of view center
     tempCamera.updateModelMatrix();
-    Vector3D centerPoint = tempCamera.centerOfViewOnPlanet(_planet);
+    Vector3D newCenterPoint = tempCamera.centerOfViewOnPlanet(_planet);
     
     // middle point in 3D
     Vector3D ray0 = tempCamera.pixel2Ray(pixel0);
@@ -123,9 +123,9 @@ void CameraDoubleDragHandler::onMove(const TouchEvent& touchEvent)
     Geodetic2D g = _planet->getMidPoint(_planet->toGeodetic2D(P0), _planet->toGeodetic2D(P1));
     Vector3D finalPoint = _planet->toVector3D(g);    
     
-    // rotate globe from centerPoint to finalPoint
-    const Vector3D rotationAxis = centerPoint.cross(finalPoint);
-    const Angle rotationDelta = Angle::fromRadians( - acos(centerPoint.normalized().dot(finalPoint.normalized())) );
+    // rotate globe from newCenterPoint to finalPoint
+    const Vector3D rotationAxis = newCenterPoint.cross(finalPoint);
+    const Angle rotationDelta = Angle::fromRadians( - acos(newCenterPoint.normalized().dot(finalPoint.normalized())) );
     if (rotationDelta.isNan()) {
       return;
     }
@@ -200,6 +200,6 @@ int CameraDoubleDragHandler::render(const RenderContext* rc) {
     }
   }
   
-  return MAX_TIME_TO_RENDER;
+  return Renderer::maxTimeToRender;
 }
 

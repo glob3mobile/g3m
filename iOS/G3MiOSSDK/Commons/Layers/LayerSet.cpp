@@ -23,8 +23,8 @@ std::vector<Petition*> LayerSet::createTilePetitions(const Tile& tile, int width
     Layer* layer = _layers[i];
     if (layer->fullContains(tileSector)){
       std::vector<Petition*> pet = layer->getTilePetitions(tile, width, height);
-      for (int i = 0; i < pet.size(); i++) {
-        petitions.push_back(pet[i]);
+      for (int j = 0; j < pet.size(); j++) {
+        petitions.push_back(pet[j]);
       }
     }
   }

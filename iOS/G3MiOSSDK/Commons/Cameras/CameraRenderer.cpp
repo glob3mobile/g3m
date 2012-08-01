@@ -29,7 +29,7 @@ int CameraRenderer::render(const RenderContext* rc) {
   
   _camera->render(rc);
   
-  return MAX_TIME_TO_RENDER;
+  return Renderer::maxTimeToRender;
 }
 
 

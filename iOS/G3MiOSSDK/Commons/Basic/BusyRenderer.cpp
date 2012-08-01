@@ -11,5 +11,5 @@
 int BusyRenderer::render(const RenderContext* rc) {
   int __TODO_render_a_busy_wheel;
   
-  return MAX_TIME_TO_RENDER;
+  return Renderer::maxTimeToRender;
 }

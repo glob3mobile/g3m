@@ -26,7 +26,7 @@ void CompositeRenderer::addRenderer(Renderer *renderer) {
 int CompositeRenderer::render(const RenderContext* rc) {
   //rc->getLogger()->logInfo("CompositeRenderer::render()");
   
-  int min = MAX_TIME_TO_RENDER;
+  int min = Renderer::maxTimeToRender;
   for (int i = 0; i < _renderers.size(); i++) {
     int x = _renderers[i]->render(rc);
     if (x < min) min = x; 

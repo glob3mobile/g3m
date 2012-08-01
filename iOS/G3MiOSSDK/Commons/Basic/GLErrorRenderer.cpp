@@ -36,5 +36,5 @@ int GLErrorRenderer::render(const RenderContext *rc) {
     error = gl->getError();
   }
   
-  return MAX_TIME_TO_RENDER;
+  return Renderer::maxTimeToRender;
 }

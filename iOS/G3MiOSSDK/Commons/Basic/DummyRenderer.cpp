@@ -138,5 +138,5 @@ int DummyRenderer::render(const RenderContext* rc)
   
   gl->enableTextures();
   
-  return MAX_TIME_TO_RENDER;
+  return Renderer::maxTimeToRender;
 }
