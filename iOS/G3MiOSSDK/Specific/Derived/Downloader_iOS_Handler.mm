@@ -133,43 +133,48 @@
                                            cachePolicy: NSURLRequestUseProtocolCachePolicy
                                        timeoutInterval: 60.0];
   
-  NSURLResponse *response;
+  NSURLResponse *urlResponse;
   NSError *error;
   NSData* data = [NSURLConnection sendSynchronousRequest: request
-                                       returningResponse: &response
+                                       returningResponse: &urlResponse
                                                    error: &error];
+  
+  URL url( [[_url absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] );
+  
   if (data) {
     int length = [data length];
     unsigned char *bytes = new unsigned char[ length ]; // will be deleted by ByteBuffer's destructor
     [data getBytes:bytes length: length];
     ByteBuffer buffer(bytes, length);
 
-    Response res(URL( [[_url absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] ), &buffer);
+    Response response(url, &buffer);
 
     const int listenersCount = [_listeners count];
     for (int i = 0; i < listenersCount; i++) {
       ListenerEntry* entry = [_listeners objectAtIndex:i];
       
-      [[entry listener] onDownload:res];
+      [[entry listener] onDownload: response];
     }
   }
   else {
     ILogger::instance()->logError("Can't load %s, response=%s, error=%s",
-                                  [ [_url     description] cStringUsingEncoding:NSUTF8StringEncoding ],
-                                  [ [response description] cStringUsingEncoding:NSUTF8StringEncoding ],
-                                  [ [error    description] cStringUsingEncoding:NSUTF8StringEncoding ] );
+                                  [ [_url        description] cStringUsingEncoding: NSUTF8StringEncoding ],
+                                  [ [urlResponse description] cStringUsingEncoding: NSUTF8StringEncoding ],
+                                  [ [error       description] cStringUsingEncoding: NSUTF8StringEncoding ] );
     
     ByteBuffer buffer(NULL, 0);
-    Response res(URL( [[_url absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] ), &buffer);
+    
+    Response response(url, &buffer);
     
     const int listenersCount = [_listeners count];
     for (int i = 0; i < listenersCount; i++) {
       ListenerEntry* entry = [_listeners objectAtIndex:i];
       
-      [[entry listener] onError:res];
+      [[entry listener] onError: response];
     }
   }
-  
+
+//  [self removeListeners];
 }
 
 @end

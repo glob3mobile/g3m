@@ -56,7 +56,7 @@ public:
     double s = angle.sinus();
     return MutableMatrix44D(  c, 0.0,   s, 0.0,
                             0.0, 1.0, 0.0, 0.0,
-                            -s, 0.0,   c, 0.0,
+                             -s, 0.0,   c, 0.0,
                             0.0, 0.0, 0.0, 1.0);
     
   }

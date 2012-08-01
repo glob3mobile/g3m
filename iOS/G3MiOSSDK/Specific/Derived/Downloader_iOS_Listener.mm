@@ -34,4 +34,9 @@
   _cppListener->onCancel(url);
 }
 
+-(void) dealloc
+{
+  delete _cppListener;
+}
+
 @end

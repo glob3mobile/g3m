@@ -12,8 +12,13 @@
 
 
 Downloader_iOS::~Downloader_iOS() {
-  [_worker stop];
+//  [_worker stop];
   
+  const int workersCount = [_workers count];
+  for (int i = 0; i < workersCount; i++) {
+    Downloader_iOS_WorkerThread* worker = [_workers objectAtIndex:i];
+    [worker stop];
+  }
 }
 
 Downloader_iOS::Downloader_iOS(int memoryCapacity,
@@ -32,8 +37,17 @@ _requestIdCounter(0)
   
   _lock = [[NSLock alloc] init];
   
-  _worker = [Downloader_iOS_WorkerThread workerForDownloader: this];
-  [_worker start];
+  
+  _workers = [NSMutableArray arrayWithCapacity:maxConcurrentOperationCount];
+  for (int i = 0; i < maxConcurrentOperationCount; i++) {
+    Downloader_iOS_WorkerThread* worker = [Downloader_iOS_WorkerThread workerForDownloader: this];
+    [worker start];
+    
+    [_workers addObject: worker];
+  }
+
+//  _worker = [Downloader_iOS_WorkerThread workerForDownloader: this];
+//  [_worker start];
 }
 
 void Downloader_iOS::cancelRequest(long requestId) {

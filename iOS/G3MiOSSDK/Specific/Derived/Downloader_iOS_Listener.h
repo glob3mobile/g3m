@@ -22,4 +22,6 @@
 -(void) onError:(Response&)response;
 -(void) onCancel:(const URL&)url;
 
+-(void) dealloc;
+
 @end
