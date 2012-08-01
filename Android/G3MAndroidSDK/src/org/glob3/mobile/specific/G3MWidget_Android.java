@@ -126,43 +126,6 @@ public class G3MWidget_Android extends GLSurfaceView implements
 		setRenderer(_es2renderer);
 	}
 
-	@Override
-	public boolean onDown(MotionEvent event) {
-		return false;
-	}
-
-	@Override
-	public boolean onFling(MotionEvent arg0, MotionEvent arg1, float arg2,
-			float arg3) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void onLongPress(MotionEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean onScroll(MotionEvent arg0, MotionEvent arg1, float arg2,
-			float arg3) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void onShowPress(MotionEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean onSingleTapUp(MotionEvent arg0) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 	public boolean onTouchEvent(MotionEvent event) {
 
 		final TouchEvent te = _motionEventProcessor.processEvent(event);
@@ -170,7 +133,6 @@ public class G3MWidget_Android extends GLSurfaceView implements
 		if (te != null) {
 			// SEND MESSAGE TO RENDER THREAD
 			queueEvent(new Runnable() {
-				@Override
 				public void run() {
 					_widget.onTouchEvent(te);
 				}
@@ -180,4 +142,36 @@ public class G3MWidget_Android extends GLSurfaceView implements
 			return false;
 		}
 	}
+
+public boolean onDown(MotionEvent arg0) {
+	// TODO Auto-generated method stub
+	return false;
+}
+
+public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+		float velocityY) {
+	// TODO Auto-generated method stub
+	return false;
+}
+
+public void onLongPress(MotionEvent e) {
+	// TODO Auto-generated method stub
+	
+}
+
+public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+		float distanceY) {
+	// TODO Auto-generated method stub
+	return false;
+}
+
+public void onShowPress(MotionEvent e) {
+	// TODO Auto-generated method stub
+	
+}
+
+public boolean onSingleTapUp(MotionEvent e) {
+	// TODO Auto-generated method stub
+	return false;
+}
 }
