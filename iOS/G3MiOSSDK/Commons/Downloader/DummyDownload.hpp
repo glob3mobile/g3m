@@ -55,7 +55,7 @@ public:
         printf("\nFileName: %s;", filename.c_str());
         if (_fss->contains(filename.c_str())){
           ByteBuffer *bb = _fss->read(filename.c_str());
-          std::string resp = (char*)bb->getData();
+          std::string resp = _factory->stringFromUTF8( bb->getData() );
           printf("\nFileName: %s;\nData: %s;\nDataLength:%i;\n\n",(root+filename).c_str(), resp.c_str(), bb->getLength());
           fssAux->save(("_(1)" + filename).c_str(), *bb);
           delete bb;
@@ -80,9 +80,8 @@ public:
         printf("Image PNG readed");
       }
     } else{
+      std::string resp = _factory->stringFromUTF8( response.getByteBuffer()->getData() );
       
-      const unsigned char *data = response.getByteBuffer()->getData();
-      std::string resp = (char*)data;
       resp = resp.substr(0,10);
       printf("GETTING RESPONSE %s\n", resp.c_str());
       

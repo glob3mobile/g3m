@@ -72,6 +72,10 @@ public:
     delete n;
   }
   
+  std::string stringFromUTF8(const unsigned char data[]) const{
+    return (char*)data;
+  }
+  
   
 };
 

@@ -13,7 +13,6 @@
 
 #include "ByteBuffer.hpp"
 
-
 class ITimer;
 class IImage;
 class INetwork;
@@ -35,6 +34,8 @@ public:
   virtual INetwork* createNetwork() const = 0;
   
   virtual void deletenetwork(const INetwork* image) const = 0;
+  
+  virtual std::string stringFromUTF8(const unsigned char data[]) const = 0;
 
   // a virtual destructor is needed for conversion to Java
   virtual ~IFactory() {}
