@@ -51,7 +51,7 @@ public:
 #endif
   
 #ifdef JAVA_CODE
-  byte[] getData() const{ return _data;}
+  byte[] getData() { return _data;}
 #endif
   
   int getLength() const{
