@@ -142,6 +142,8 @@
 		D88C3453159C5A410044CED9 /* DataDownload.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D88C344F159C5A410044CED9 /* DataDownload.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D88C3454159C5A410044CED9 /* DataDownload.mm in Sources */ = {isa = PBXBuildFile; fileRef = D88C3450159C5A410044CED9 /* DataDownload.mm */; };
 		D88C3455159C5A410044CED9 /* NetworkQueue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D88C3451159C5A410044CED9 /* NetworkQueue.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		D892FBCC15C930CC00E69254 /* NativeGL2_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D892FBCB15C930CC00E69254 /* NativeGL2_iOS.hpp */; };
+		D892FBD015C9310A00E69254 /* GL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D892FBCF15C9310A00E69254 /* GL.cpp */; };
 		D8A5601F15AEF64E00035086 /* IndexedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A5601B15AEF64E00035086 /* IndexedMesh.cpp */; };
 		D8A5602015AEF64E00035086 /* IndexedMesh.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8A5601C15AEF64E00035086 /* IndexedMesh.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8A5602115AEF64E00035086 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A5601D15AEF64E00035086 /* Mesh.cpp */; };
@@ -298,8 +300,10 @@
 		D88C344F159C5A410044CED9 /* DataDownload.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DataDownload.hpp; path = Specific/Derived/DataDownload.hpp; sourceTree = "<group>"; };
 		D88C3450159C5A410044CED9 /* DataDownload.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = DataDownload.mm; path = Specific/Derived/DataDownload.mm; sourceTree = "<group>"; };
 		D88C3451159C5A410044CED9 /* NetworkQueue.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NetworkQueue.hpp; path = Specific/Derived/NetworkQueue.hpp; sourceTree = "<group>"; };
+		D892FBCB15C930CC00E69254 /* NativeGL2_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NativeGL2_iOS.hpp; path = Specific/GL/NativeGL2_iOS.hpp; sourceTree = "<group>"; };
+		D892FBCE15C930FC00E69254 /* GL.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GL.hpp; sourceTree = "<group>"; };
+		D892FBCF15C9310A00E69254 /* GL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GL.cpp; sourceTree = "<group>"; };
 		D8A415F515C7F085005010E6 /* INativeGL.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = INativeGL.hpp; path = Specific/GL/INativeGL.hpp; sourceTree = "<group>"; };
-		D8A415F715C7F0C4005010E6 /* NativeGL2_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NativeGL2_iOS.hpp; sourceTree = "<group>"; };
 		D8A5601B15AEF64E00035086 /* IndexedMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IndexedMesh.cpp; path = Commons/Mesh/IndexedMesh.cpp; sourceTree = "<group>"; };
 		D8A5601C15AEF64E00035086 /* IndexedMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IndexedMesh.hpp; path = Commons/Mesh/IndexedMesh.hpp; sourceTree = "<group>"; };
 		D8A5601D15AEF64E00035086 /* Mesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Mesh.cpp; path = Commons/Mesh/Mesh.cpp; sourceTree = "<group>"; };
@@ -389,6 +393,7 @@
 		383BD3881577EDE30012AC53 /* Commons */ = {
 			isa = PBXGroup;
 			children = (
+				D892FBCD15C930E600E69254 /* GL */,
 				383BD3891577EDF40012AC53 /* Basic */,
 				CC596F1B15C46CD7008FC230 /* Cameras */,
 				D8AD760F1599B5B900A7D39A /* Downloader */,
@@ -517,10 +522,10 @@
 		CC14B636157D34AB00793C92 /* GL */ = {
 			isa = PBXGroup;
 			children = (
+				D892FBCB15C930CC00E69254 /* NativeGL2_iOS.hpp */,
 				CC14B637157D34C700793C92 /* GL2.mm */,
 				CC14B638157D34C700793C92 /* GL2.hpp */,
 				D8A415F515C7F085005010E6 /* INativeGL.hpp */,
-				D8A415F715C7F0C4005010E6 /* NativeGL2_iOS.hpp */,
 			);
 			name = GL;
 			sourceTree = "<group>";
@@ -557,6 +562,16 @@
 			);
 			name = Layers;
 			path = Commons/Layers;
+			sourceTree = "<group>";
+		};
+		D892FBCD15C930E600E69254 /* GL */ = {
+			isa = PBXGroup;
+			children = (
+				D892FBCE15C930FC00E69254 /* GL.hpp */,
+				D892FBCF15C9310A00E69254 /* GL.cpp */,
+			);
+			name = GL;
+			path = Commons/GL;
 			sourceTree = "<group>";
 		};
 		D8A5601915AEF47300035086 /* Mesh */ = {
@@ -721,6 +736,7 @@
 				CF8A234E15C4306800FD56C9 /* Downloader_iOS_Handler.h in Headers */,
 				CF8A235315C4340900FD56C9 /* Downloader_iOS_Listener.h in Headers */,
 				CF6D404715C8278C008D8D78 /* Downloader_iOS_WorkerThread.h in Headers */,
+				D892FBCC15C930CC00E69254 /* NativeGL2_iOS.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -841,6 +857,7 @@
 				CF8A235415C4340900FD56C9 /* Downloader_iOS_Listener.mm in Sources */,
 				385827FE15C6FACE00B3E68B /* CameraHandler.cpp in Sources */,
 				CF6D404815C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm in Sources */,
+				D892FBD015C9310A00E69254 /* GL.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

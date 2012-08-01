@@ -41,6 +41,12 @@ class NativeGL2_iOS: public INativeGL
     switch (t) {
       case Float:
         return GL_FLOAT;
+      case UnsignedByte:
+        return GL_UNSIGNED_BYTE;
+      case UnsignedInt:
+        return GL_UNSIGNED_INT;
+      case Int:
+        return GL_INT;
     }
   }
   
@@ -132,19 +138,27 @@ public:
     glUseProgram(program);
   }
   
-  int getAttribLocation(int program, char name[]) const{
+  int getAttribLocation(int program, const char name[]) const{
     return glGetAttribLocation(program, name);
+  }
+  
+  int getUniformLocation(int program, const char name[]) const{
+    return glGetUniformLocation(program, name);
   }
   
   void uniform2f(int loc, float x, float y) const{
     glUniform2f(loc, x, y);
   }
   
+  void uniform1f(int loc, float x) const{
+    glUniform1f(loc, x);
+  }
+  
   void uniform1i(int loc, int v) const{
     glUniform1i(loc, v);
   }
   
-  void uniformMatrix4fv(int location, int count, bool transpose, const float value[]){
+  void uniformMatrix4fv(int location, int count, bool transpose, const float value[]) const{
     glUniformMatrix4fv(location, count, transpose, value);
   }
   
@@ -172,6 +186,10 @@ public:
   void disable(GLFeature feature) const{
     GLenum v = getEnum(feature);
     glDisable(v);
+  }
+  
+  void polygonOffset(float factor, float units) const{
+    glPolygonOffset(factor, units);
   }
   
   void vertexAttribPointer(int index, int size, GLType type, 
