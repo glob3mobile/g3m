@@ -10,7 +10,14 @@
 #define G3MiOSSDK_ByteBuffer_hpp
 
 class ByteBuffer{
+  
+#ifdef C_CODE
   unsigned char* _data;
+#endif
+#ifdef JAVA_CODE
+  byte[] _data;
+#endif
+  
   const int      _length;
   
 public:
@@ -39,9 +46,13 @@ public:
 #endif
   }
   
-  unsigned char* getData() const{
-    return _data;
-  }
+#ifdef C_CODE
+  unsigned char* getData() const{ return _data;}
+#endif
+  
+#ifdef JAVA_CODE
+  byte[] getData() const{ return _data;}
+#endif
   
   int getLength() const{
     return _length;
