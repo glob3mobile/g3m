@@ -76,6 +76,17 @@ public:
     return (char*)data;
   }
   
+  std::string stringFormat(std::string x, ...) const{
+    va_list l;
+    va_start(l, x);
+    
+    char buffer[1000];
+    vsprintf(buffer, x.c_str(), l);
+    
+    va_end(l);
+    return buffer;
+  }
+  
   
 };
 
