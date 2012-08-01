@@ -76,7 +76,7 @@ public class CameraSimpleDragHandler extends CameraHandler
 	  }
 	}
   
-	return MAX_TIME_TO_RENDER;
+	return Renderer.maxTimeToRender;
   }
   public final void initialize(InitializationContext ic)
   {

@@ -64,7 +64,7 @@ public class SGGGroupNode extends SGNode
 
   public int render(RenderContext rc)
   {
-	int max = MAX_TIME_TO_RENDER;
+	int max = Renderer.maxTimeToRender;
 
 	for (int i = 0; i < _children.size(); i++)
 	{

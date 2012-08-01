@@ -33,7 +33,7 @@ public class CameraRenderer extends CameraHandler
   
 	_camera.render(rc);
   
-	return MAX_TIME_TO_RENDER;
+	return Renderer.maxTimeToRender;
   }
 
   /*

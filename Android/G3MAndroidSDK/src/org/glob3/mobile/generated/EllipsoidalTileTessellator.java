@@ -33,63 +33,63 @@ public class EllipsoidalTileTessellator extends TileTessellator
 	vertices.add(planet.toVector3D(g).asMutableVector3D());
   }
 
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Mesh* createDebugMesh(const RenderContext* rc, const Tile* tile) const
-  private Mesh createDebugMesh(RenderContext rc, Tile tile)
-  {
-	final Sector sector = tile.getSector();
-	final Planet planet = rc.getPlanet();
-  
-	// create vectors
-	java.util.ArrayList<MutableVector3D> vertices = new java.util.ArrayList<MutableVector3D>();
-	java.util.ArrayList<MutableVector2D> texCoords = new java.util.ArrayList<MutableVector2D>();
-	java.util.ArrayList<Integer> indices = new java.util.ArrayList<Integer>();
-	int resol_1 = _resolution - 1;
-	int posS = 0;
-  
-	// compute offset for vertices
-	final Vector3D sw = planet.toVector3D(sector.getSW());
-	final Vector3D nw = planet.toVector3D(sector.getNW());
-	final double offset = nw.sub(sw).length() * 1e-3;
-  
-	// west side
-	for (int j = 0; j<resol_1; j++)
+	public final Mesh createDebugMesh(RenderContext rc, Tile tile)
 	{
-	  final Geodetic3D g = new Geodetic3D(sector.getInnerPoint(0.0, (double)j/resol_1), offset);
-	  addVertex(planet, vertices, g);
-	  indices.add(posS++);
+	  final Sector sector = tile.getSector();
+	  final Planet planet = rc.getPlanet();
+    
+	  // create vectors
+	  java.util.ArrayList<MutableVector3D> vertices = new java.util.ArrayList<MutableVector3D>();
+	  java.util.ArrayList<MutableVector2D> texCoords = new java.util.ArrayList<MutableVector2D>();
+	  java.util.ArrayList<Integer> indices = new java.util.ArrayList<Integer>();
+	  int resol_1 = _resolution - 1;
+	  int posS = 0;
+    
+	  // compute offset for vertices
+	  final Vector3D sw = planet.toVector3D(sector.getSW());
+	  final Vector3D nw = planet.toVector3D(sector.getNW());
+	  final double offset = nw.sub(sw).length() * 1e-3;
+    
+	  // west side
+	  for (int j = 0; j<resol_1; j++)
+	  {
+		final Geodetic3D g = new Geodetic3D(sector.getInnerPoint(0.0, (double)j/resol_1), offset);
+		addVertex(planet, vertices, g);
+		indices.add(posS++);
+	  }
+    
+	  // south side
+	  for (int i = 0; i<resol_1; i++)
+	  {
+		final Geodetic3D g = new Geodetic3D(sector.getInnerPoint((double)i/resol_1, 1.0), offset);
+		addVertex(planet, vertices, g);
+		indices.add(posS++);
+	  }
+    
+	  // east side
+	  for (int j = resol_1; j>0; j--)
+	  {
+		final Geodetic3D g = new Geodetic3D(sector.getInnerPoint(1.0, (double)j/resol_1), offset);
+		addVertex(planet, vertices, g);
+		indices.add(posS++);
+	  }
+    
+	  // north side
+	  for (int i = resol_1; i>0; i--)
+	  {
+		final Geodetic3D g = new Geodetic3D(sector.getInnerPoint((double)i/resol_1, 0.0), offset);
+		addVertex(planet, vertices, g);
+		indices.add(posS++);
+	  }
+    
+	  // create TexturedMesh
+	  final Color color = new Color(Color.fromRGBA((float) 1.0, (float) 0.0, (float) 0.0, (float) 1.0));
+	  final Vector3D center = planet.toVector3D(sector.getCenter());
+	  return new IndexedMesh(vertices, GLPrimitive.LineLoop, CenterStrategy.GivenCenter, center, indices, color);
 	}
-  
-	// south side
-	for (int i = 0; i<resol_1; i++)
-	{
-	  final Geodetic3D g = new Geodetic3D(sector.getInnerPoint((double)i/resol_1, 1.0), offset);
-	  addVertex(planet, vertices, g);
-	  indices.add(posS++);
-	}
-  
-	// east side
-	for (int j = resol_1; j>0; j--)
-	{
-	  final Geodetic3D g = new Geodetic3D(sector.getInnerPoint(1.0, (double)j/resol_1), offset);
-	  addVertex(planet, vertices, g);
-	  indices.add(posS++);
-	}
-  
-	// north side
-	for (int i = resol_1; i>0; i--)
-	{
-	  final Geodetic3D g = new Geodetic3D(sector.getInnerPoint((double)i/resol_1, 0.0), offset);
-	  addVertex(planet, vertices, g);
-	  indices.add(posS++);
-	}
-  
-	// create TexturedMesh
-	final Color color = new Color(Color.fromRGBA((float) 1.0, (float) 0.0, (float) 0.0, (float) 1.0));
-	final Vector3D center = planet.toVector3D(sector.getCenter());
-	return new IndexedMesh(vertices, GLPrimitive.LineLoop, CenterStrategy.GivenCenter, center, indices, color);
-  }
-
 
   public EllipsoidalTileTessellator(int resolution, boolean skirted)
   {

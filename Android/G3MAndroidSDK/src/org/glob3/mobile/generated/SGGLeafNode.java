@@ -14,7 +14,7 @@ public abstract class SGGLeafNode extends SGNode
 
 	if (!isVisible(rc))
 	{
-	  return MAX_TIME_TO_RENDER;
+	  return Renderer.maxTimeToRender;
 	}
 
 	IGL gl = rc.getGL();

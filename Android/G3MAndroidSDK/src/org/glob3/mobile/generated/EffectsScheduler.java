@@ -93,7 +93,7 @@ public class EffectsScheduler extends Renderer
 	doOneCyle(rc);
 	if (_effectsRuns.size() == 0)
 	{
-	  return MAX_TIME_TO_RENDER;
+	  return Renderer.maxTimeToRender;
 	}
 	else
 	{

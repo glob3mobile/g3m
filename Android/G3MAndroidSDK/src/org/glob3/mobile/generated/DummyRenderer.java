@@ -151,7 +151,7 @@ public class DummyRenderer extends Renderer
   
 	gl.enableTextures();
   
-	return MAX_TIME_TO_RENDER;
+	return Renderer.maxTimeToRender;
   }
 
   public final boolean onTouchEvent(TouchEvent touchEvent)

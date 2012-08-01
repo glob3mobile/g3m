@@ -168,6 +168,6 @@ public class SGCubeNode extends SGGLeafNode
   
   
   
-	return MAX_TIME_TO_RENDER;
+	return Renderer.maxTimeToRender;
   }
 }

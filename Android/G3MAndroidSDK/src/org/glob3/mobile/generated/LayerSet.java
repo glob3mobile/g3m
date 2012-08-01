@@ -56,9 +56,9 @@ public class LayerSet
 	  if (layer.fullContains(tileSector))
 	  {
 		java.util.ArrayList<Petition> pet = layer.getTilePetitions(tile, width, height);
-		for (int i = 0; i < pet.size(); i++)
+		for (int j = 0; j < pet.size(); j++)
 		{
-		  petitions.add(pet.get(i));
+		  petitions.add(pet.get(j));
 		}
 	  }
 	}

@@ -37,7 +37,7 @@ public class GLErrorRenderer extends Renderer
 	  error = gl.getError();
 	}
   
-	return MAX_TIME_TO_RENDER;
+	return Renderer.maxTimeToRender;
   }
 
   public boolean onTouchEvent(TouchEvent touchEvent)

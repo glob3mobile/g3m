@@ -59,7 +59,7 @@ public class MarksRenderer extends Renderer
 	gl.disableTexture2D();
   
   
-	return MAX_TIME_TO_RENDER;
+	return Renderer.maxTimeToRender;
   }
 
   public boolean onTouchEvent(TouchEvent touchEvent)
