@@ -2,9 +2,12 @@ package org.glob3.mobile.specific;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 
+import org.glob3.mobile.generated.ByteBuffer;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IImage;
+import org.glob3.mobile.generated.INetwork;
 import org.glob3.mobile.generated.ITimer;
 
 import android.content.Context;
@@ -51,5 +54,39 @@ public class Factory_Android extends IFactory {
 
 	@Override
 	public void deleteImage(IImage image) {}
+
+	@Override
+	public IImage createImageFromData(ByteBuffer bb) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IImage createImageFromSize(int width, int height) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public INetwork createNetwork() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deletenetwork(INetwork image) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String stringFromUTF8(byte[] data) {
+		try {
+			return new String(data, "UTF8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 }

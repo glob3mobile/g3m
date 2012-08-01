@@ -51,7 +51,7 @@ public class DummyDownload implements IDownloadListener
 		if (_fss.contains(filename))
 		{
 		  ByteBuffer bb = _fss.read(filename);
-		  String resp = (String)bb.getData();
+		  String resp = _factory.stringFromUTF8(bb.getData());
 		  System.out.printf("\nFileName: %s;\nData: %s;\nDataLength:%i;\n\n",(root+filename), resp, bb.getLength());
 		  fssAux.save(("_(1)" + filename), bb);
 		  if (bb != null)
@@ -84,9 +84,8 @@ public class DummyDownload implements IDownloadListener
 	}
 	else
 	{
+	  String resp = _factory.stringFromUTF8(response.getByteBuffer().getData());
 
-	  String data = response.getByteBuffer().getData();
-	  String resp = (String)data;
 	  resp = resp.substring(0,10);
 	  System.out.printf("GETTING RESPONSE %s\n", resp);
 

@@ -10,10 +10,12 @@ package org.glob3.mobile.generated;
 
 public class ByteBuffer
 {
-  private byte _data;
+
+  byte[] _data;
+
   private final int _length;
 
-  public ByteBuffer(byte data, int dataLength)
+  public ByteBuffer(byte[] data, int dataLength)
   {
 	  _data = data;
 	  _length = dataLength;
@@ -30,13 +32,8 @@ public class ByteBuffer
   {
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: byte* getData() const
-//C++ TO JAVA CONVERTER WARNING: Java has no equivalent to methods returning pointers to value types:
-  public final byte getData()
-  {
-	return _data;
-  }
+
+  byte[] getData() { return _data;}
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: int getLength() const

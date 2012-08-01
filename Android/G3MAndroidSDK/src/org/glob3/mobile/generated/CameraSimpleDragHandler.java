@@ -47,6 +47,35 @@ public class CameraSimpleDragHandler extends CameraHandler
   }
   public final int render(RenderContext rc)
   {
+	// TEMP TO DRAW A POINT WHERE USER PRESS
+	if (false)
+	{
+	  if (_currentGesture == Gesture.Drag)
+	  {
+		float[] vertices = { 0,0,0};
+		int[] indices = {0};
+		gl.enableVerticesPosition();
+		gl.disableTexture2D();
+		gl.disableTextures();
+		gl.vertexPointer(3, 0, vertices);
+		gl.color((float) 0, (float) 1, (float) 0, 1);
+		gl.pointSize(60);
+		gl.pushMatrix();
+  
+		double height = _planet.toGeodetic3D(_camera.getPosition()).height();
+		System.out.printf ("altura camara = %f\n", height);
+  
+  
+		MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(_initialPoint.asVector3D());
+		gl.multMatrixf(T);
+		gl.drawPoints(1, indices);
+		gl.popMatrix();
+  
+		//Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
+		//printf ("zoom with initial point = (%f, %f)\n", g.latitude().degrees(), g.longitude().degrees());
+	  }
+	}
+  
 	return MAX_TIME_TO_RENDER;
   }
   public final void initialize(InitializationContext ic)

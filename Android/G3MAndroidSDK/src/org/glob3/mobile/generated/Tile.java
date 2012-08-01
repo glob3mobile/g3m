@@ -151,13 +151,13 @@ public class Tile
 	{
 	  if (statistics.getSplitsCountInFrame() > 1)
 	  {
-		// there are not more splitsCount budget to spend
+		// there are not more splitsCount-budget to spend
 		return true;
 	  }
   
 	  if (lastSplitTimer.elapsedTime().milliseconds() < 50)
 	  {
-		// there are not time more budget to spend
+		// there are not more time-budget to spend
 		return true;
 	  }
 	}

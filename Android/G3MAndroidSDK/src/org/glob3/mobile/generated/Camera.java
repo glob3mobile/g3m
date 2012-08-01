@@ -145,7 +145,8 @@ public class Camera
   {
 	final MutableMatrix44D modelViewMatrix = _projectionMatrix.multiply(_modelMatrix);
 	int[] viewport = { 0, 0, _width, _height };
-	return modelViewMatrix.project(point, viewport);
+	Vector2D p = modelViewMatrix.project(point, viewport);
+	return new Vector2D(p.x(), _height-p.y());
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -402,9 +403,6 @@ public class Camera
 	_modelMatrix = MutableMatrix44D.createModelMatrix(_position, _center, _up);
   
 	// compute center of view on planet
-	if (_centerOfView != null)
-		if (_centerOfView != null)
-			_centerOfView.dispose();
 	final Planet planet = rc.getPlanet();
 	Vector3D centerV = centerOfViewOnPlanet(planet);
 	Geodetic3D centerG = planet.toGeodetic3D(centerV);

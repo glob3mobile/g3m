@@ -10,7 +10,6 @@ package org.glob3.mobile.generated;
 
 
 
-
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class ITimer;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
@@ -51,6 +50,10 @@ public abstract class IFactory
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual void deletenetwork(const INetwork* image) const = 0;
   public abstract void deletenetwork(INetwork image);
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual String stringFromUTF8(const byte data[]) const = 0;
+  public abstract String stringFromUTF8(byte[] data);
 
   // a virtual destructor is needed for conversion to Java
   public void dispose()

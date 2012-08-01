@@ -78,6 +78,8 @@ public abstract class IGL
 
   public abstract void lineWidth(float width);
 
+  public abstract void pointSize(float size);
+
   public abstract int getError();
 
   public abstract int uploadTexture(IImage image, int textureWidth, int textureHeight);

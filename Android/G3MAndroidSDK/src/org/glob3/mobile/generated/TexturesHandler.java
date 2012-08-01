@@ -1,4 +1,15 @@
 package org.glob3.mobile.generated; 
+//
+//  TexturesHandler.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 19/06/12.
+//  Copyright (c) 2012 IGO Software SL. All rights reserved.
+//
+
+
+
+
 //C++ TO JAVA CONVERTER WARNING: The declaration of the following method implementation was not found:
 //ORIGINAL LINE: int TexturesHandler::getTextureIdFromFileName(const String &filename, int textureWidth, int textureHeight)
 
