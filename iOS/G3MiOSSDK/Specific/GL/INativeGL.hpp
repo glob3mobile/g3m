@@ -86,7 +86,7 @@ public:
   
   virtual void pixelStorei(GLAlignment pname, int param) const = 0;
   
-  std::vector<int> genTextures(int	n);
+  std::vector<int> genTextures(int	n) const;
   
   virtual void texParameteri(GLTextureType target, GLTextureParameter par, GLTextureParameterValue v) const = 0;
   
@@ -99,6 +99,9 @@ public:
                             GLFormat    format,
                             GLType      type,
                             const void* data) const = 0;
+  
+  virtual void drawArrays(GLPrimitive mode, int first, int count) const = 0;
+
 
 
 };

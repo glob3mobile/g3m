@@ -203,34 +203,35 @@ int GL::uploadTexture(const IImage* image, int textureWidth, int textureHeight) 
   */
   
   
-  _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);
-  
-  GLuint textureID;    
+  _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);   
   _gl->pixelStorei(Unpack, 1);
   
-  _gl->genTextures(1, &textureID);
+  std::vector<int> ts = _gl->genTextures(1);
+  int texID = ts[0];
   
   
+  _gl->bindTexture(Texture2D, texID);
+  _gl->texParameteri(Texture2D, MinFilter, Linear);
+  _gl->texParameteri(Texture2D, MagFilter, Linear);
+  _gl->texParameteri(Texture2D, WrapS, ClampToEdge);
+  _gl->texParameteri(Texture2D, WrapT, ClampToEdge);
   
-  glBindTexture(GL_TEXTURE_2D, textureID);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  _gl->texImage2D(Texture2D, 0, RGBA, textureWidth, textureHeight, 0, RGBA, UnsignedByte, imageData);
   
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth, textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
-  
+  int todo_reallocate_specific;
+  /*
   free(imageData);
+   */
   
-  return textureID;
+  return texID;
 }
 
 void GL::setTextureCoordinates(int size, int stride, const float texcoord[]) {
-  _gl->vertexAttribPointer(Attributes.TextureCoord, size, GL_FLOAT, 0, stride, (const void *) texcoord);
+  _gl->vertexAttribPointer(Attributes.TextureCoord, size, Float, 0, stride, (const void *) texcoord);
 }
 
 void GL::bindTexture(unsigned int n) {
-  glBindTexture(GL_TEXTURE_2D, n);
+  _gl->bindTexture(Texture2D, n);
 }
 
 void GL::drawBillBoard(const unsigned int textureId,

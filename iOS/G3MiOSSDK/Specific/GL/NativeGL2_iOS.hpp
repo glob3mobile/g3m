@@ -238,8 +238,7 @@ public:
     glPixelStorei(getEnum(pname), param);
   }
   
-  std::vector<int> genTextures(int	n)
-  {
+  std::vector<int> genTextures(int	n) const{
     GLuint textureID[n];    
     glGenTextures(n, textureID);
     std::vector<int> ts;
@@ -263,6 +262,10 @@ public:
                     GLType      type,
                     const void* data) const{
     glTexImage2D(target, level, internalFormat, width, height, border, getEnum(format), getEnum(type), data);
+  }
+  
+  void drawArrays(GLPrimitive mode, int first, int count) const{
+    glDrawArrays(getEnum(mode), first, count);
   }
   
 };
