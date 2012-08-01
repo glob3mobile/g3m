@@ -98,7 +98,7 @@ int CameraSimpleDragHandler::render(const RenderContext* rc) {
       printf ("altura camara = %f\n", height);
                                          
       
-      MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D().times(1.0001));
+      MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D());
       gl->multMatrixf(T);
       gl->drawPoints(1, indices);
       gl->popMatrix();

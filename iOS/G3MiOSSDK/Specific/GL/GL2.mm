@@ -26,11 +26,11 @@ struct UniformsStruct {
   GLint   FlatColor;
   GLint   TranslationTexCoord;
   GLint   ScaleTexCoord;
-  GLfloat PointSize;
+  GLint   PointSize;
   
   //FOR BILLBOARDING
   GLint   BillBoard;
-  GLfloat ViewPortRatio;
+  GLint   ViewPortRatio;
   
   //FOR COLOR MIXING
   GLint   FlatColorIntensity;
@@ -71,7 +71,7 @@ void GL2::useProgram(unsigned int program) {
   // default values
   glUniform2f(Uniforms.TranslationTexCoord, 0, 0);
   glUniform2f(Uniforms.ScaleTexCoord, 1, 1);
-  glUniform1f(Uniforms.PointSize, 1.0);
+  glUniform1f(Uniforms.PointSize, (float) 1.0);
   
   //BILLBOARDS
   Uniforms.BillBoard     = glGetUniformLocation(program, "BillBoard");

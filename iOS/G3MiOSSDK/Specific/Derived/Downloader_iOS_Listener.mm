@@ -19,4 +19,19 @@
   return self;
 }
 
+-(void) onDownload:(Response&)response
+{
+  _cppListener->onDownload(response);
+}
+
+-(void) onError:(Response&)response
+{
+  _cppListener->onError(response);
+}
+
+-(void) onCancel:(const URL&)url
+{
+  _cppListener->onCancel(url);
+}
+
 @end

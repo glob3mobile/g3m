@@ -9,23 +9,34 @@
 #ifndef G3MiOSSDK_Downloader_iOS_hpp
 #define G3MiOSSDK_Downloader_iOS_hpp
 
+#import "Downloader_iOS_WorkerThread.h"
+#import "Downloader_iOS_Handler.h"
+
 #include "IDownloader.hpp"
+
+
 
 class Downloader_iOS : public IDownloader {
 private:
-  NSMutableDictionary* _downloadingHandlers;
+  Downloader_iOS_WorkerThread* _worker;
+  
+  NSLock*              _lock;                // synchronization helper
+  NSMutableDictionary* _downloadingHandlers; // downloads current in progress
+  NSMutableDictionary* _queuedHandlers;      // queued downloads
+  
   long                 _requestIdCounter;
   
   NSString* toNSString(const std::string& cppStr) const {
-    return [NSString stringWithCString:cppStr.c_str()
-                              encoding:[NSString defaultCStringEncoding]];
+    return [ NSString stringWithCString: cppStr.c_str()
+                               encoding: NSUTF8StringEncoding ];
   }
   
 public:
   
   Downloader_iOS(int memoryCapacity,
                  int diskCapacity,
-                 std::string diskPath);
+                 std::string diskPath,
+                 int maxConcurrentOperationCount);
   
   long request(const URL& url,
                long priority,
@@ -33,7 +44,9 @@ public:
   
   void cancelRequest(long requestId);
   
-  virtual ~Downloader_iOS() { }
+  Downloader_iOS_Handler* getHandlerToRun();
+  
+  virtual ~Downloader_iOS();
   
 };
 

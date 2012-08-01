@@ -104,9 +104,11 @@ void CameraDoubleDragHandler::onMove(const TouchEvent& touchEvent)
   
   // rotate the camera
   {
-    tempCamera.rotateWithAxis(tempCamera.getCenter().sub(tempCamera.getPosition()), Angle::fromRadians(-angle));
+    tempCamera.updateModelMatrix();
+    Vector3D normal = _planet->geodeticSurfaceNormal(_initialPoint.asVector3D());
+    tempCamera.rotateWithAxis(normal, Angle::fromRadians(angle));
   }
-  
+   
   // detect new final point
   {
     // compute 3D point of view center
@@ -119,8 +121,8 @@ void CameraDoubleDragHandler::onMove(const TouchEvent& touchEvent)
     Vector3D ray1 = tempCamera.pixel2Ray(pixel1);
     Vector3D P1 = _planet->closestIntersection(tempCamera.getPosition(), ray1);
     Geodetic2D g = _planet->getMidPoint(_planet->toGeodetic2D(P0), _planet->toGeodetic2D(P1));
-    Vector3D finalPoint = _planet->toVector3D(g);     
-          
+    Vector3D finalPoint = _planet->toVector3D(g);    
+    
     // rotate globe from centerPoint to finalPoint
     const Vector3D rotationAxis = centerPoint.cross(finalPoint);
     const Angle rotationDelta = Angle::fromRadians( - acos(centerPoint.normalized().dot(finalPoint.normalized())) );
@@ -132,6 +134,20 @@ void CameraDoubleDragHandler::onMove(const TouchEvent& touchEvent)
   
   // the gesture was valid. Copy data to final camera
   tempCamera.updateModelMatrix();
+    
+  // adjust orientation of projected points
+  Vector2D p00 = _camera0.point2Pixel(initialPoint0.asVector3D());
+  Vector2D p10 = _camera0.point2Pixel(initialPoint1.asVector3D());
+  Vector2D p0n = tempCamera.point2Pixel(initialPoint0.asVector3D());
+  Vector2D p1n = tempCamera.point2Pixel(initialPoint1.asVector3D());
+  Angle a0 = p10.sub(p00).orientation();
+  Angle a1 = p1n.sub(p0n).orientation();          
+  Vector3D normal = _planet->geodeticSurfaceNormal(_initialPoint.asVector3D());
+  MutableMatrix44D trans1   = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D());
+  MutableMatrix44D rotation = MutableMatrix44D::createRotationMatrix(a0.sub(a1).div(6), normal);
+  MutableMatrix44D trans2   = MutableMatrix44D::createTranslationMatrix(_initialPoint.times(-1.0).asVector3D());
+  MutableMatrix44D M        = trans1.multiply(rotation).multiply(trans2);
+  tempCamera.applyTransform(M);
   _camera->copyFrom(tempCamera);
 
   //printf ("moving 2 fingers\n");
@@ -160,7 +176,7 @@ int CameraDoubleDragHandler::render(const RenderContext* rc) {
       gl->color((float) 1, (float) 1, (float) 1, 1);
       gl->pointSize(10);
       gl->pushMatrix();
-      MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D().times(1.0001));
+      MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D());
       gl->multMatrixf(T);
       gl->drawPoints(1, indices);
       gl->popMatrix();
@@ -168,12 +184,12 @@ int CameraDoubleDragHandler::render(const RenderContext* rc) {
       // draw each finger
       gl->pointSize(60);
       gl->pushMatrix();
-      MutableMatrix44D T0 = MutableMatrix44D::createTranslationMatrix(initialPoint0.asVector3D().times(1.0001));
+      MutableMatrix44D T0 = MutableMatrix44D::createTranslationMatrix(initialPoint0.asVector3D());
       gl->multMatrixf(T0);
       gl->drawPoints(1, indices);
       gl->popMatrix();
       gl->pushMatrix();
-      MutableMatrix44D T1 = MutableMatrix44D::createTranslationMatrix(initialPoint1.asVector3D().times(1.0001));
+      MutableMatrix44D T1 = MutableMatrix44D::createTranslationMatrix(initialPoint1.asVector3D());
       gl->multMatrixf(T1);
       gl->drawPoints(1, indices);
       gl->popMatrix();

@@ -18,4 +18,8 @@
 
 -(id)initWithCPPListener:(IDownloadListener*)cppListener;
 
+-(void) onDownload:(Response&)response;
+-(void) onError:(Response&)response;
+-(void) onCancel:(const URL&)url;
+
 @end
