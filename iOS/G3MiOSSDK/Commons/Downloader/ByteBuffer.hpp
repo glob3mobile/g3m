@@ -21,7 +21,7 @@ class ByteBuffer{
   const int      _length;
   
 public:
-  ByteBuffer(unsigned char* const data,
+  ByteBuffer(unsigned char data[],
              int dataLength) :
   _data(data),
   _length(dataLength)
@@ -51,7 +51,7 @@ public:
 #endif
   
 #ifdef JAVA_CODE
-  byte[] getData() const{ return _data;}
+  byte[] getData() { return _data;}
 #endif
   
   int getLength() const{
