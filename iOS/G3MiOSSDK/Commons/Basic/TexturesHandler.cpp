@@ -10,6 +10,7 @@
 
 #include "IImage.hpp"
 #include "Context.hpp"
+#include "TextureHolder.h"
 
 
 int TexturesHandler::getTextureIdFromFileName(const std::string &filename,
