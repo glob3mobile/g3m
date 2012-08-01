@@ -169,7 +169,7 @@ public class TileRenderer extends Renderer
 	  }
 	}
   
-	return MAX_TIME_TO_RENDER;
+	return Renderer.maxTimeToRender;
   }
 
   public final boolean onTouchEvent(TouchEvent touchEvent)

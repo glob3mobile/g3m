@@ -197,13 +197,13 @@ public class SimplePlanetRenderer extends Renderer
 	{
 	  if (!initializeMesh(rc))
 	  {
-		return MAX_TIME_TO_RENDER;
+		return Renderer.maxTimeToRender;
 	  }
 	}
   
 	_mesh.render(rc);
   
-	return MAX_TIME_TO_RENDER;
+	return Renderer.maxTimeToRender;
   }
 
   public final boolean onTouchEvent(TouchEvent touchEvent)

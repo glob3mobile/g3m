@@ -33,7 +33,7 @@ public class BusyRenderer extends Renderer
   {
 	int __TODO_render_a_busy_wheel;
   
-	return MAX_TIME_TO_RENDER;
+	return Renderer.maxTimeToRender;
   }
 
   public final boolean onTouchEvent(TouchEvent touchEvent)
