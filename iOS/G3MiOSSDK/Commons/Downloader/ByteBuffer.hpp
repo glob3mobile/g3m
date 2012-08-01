@@ -21,7 +21,7 @@ class ByteBuffer{
   const int      _length;
   
 public:
-  ByteBuffer(unsigned char* const data,
+  ByteBuffer(unsigned char data[],
              int dataLength) :
   _data(data),
   _length(dataLength)
