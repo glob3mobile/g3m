@@ -35,11 +35,11 @@ private:
     vertices->push_back( planet->toVector3D(g).asMutableVector3D() );
   }
   
-  Mesh* createDebugMesh(const RenderContext* rc,
-                        const Tile* tile) const;
-  
   
 public:
+    Mesh* createDebugMesh(const RenderContext* rc,
+                          const Tile* tile) const;
+    
   EllipsoidalTileTessellator(const unsigned int resolution,
                              const bool skirted) :
   _resolution(resolution),
