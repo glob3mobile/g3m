@@ -34,6 +34,8 @@ private:
   
 public:
   
+  void removeDownloadingHandlerForNSURL(NSURL* url);
+  
   Downloader_iOS(int memoryCapacity,
                  int diskCapacity,
                  std::string diskPath,

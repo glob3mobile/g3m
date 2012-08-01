@@ -59,8 +59,8 @@ void Downloader_iOS::cancelRequest(long requestId) {
     NSURL*                  url     = key;
     Downloader_iOS_Handler* handler = obj;
 
-    if ( [handler removeRequest: requestId] ) {
-      if (![handler hasListeners]) {
+    if ( [handler removeListenerForRequestId: requestId] ) {
+      if ( ![handler hasListeners] ) {
         [_queuedHandlers removeObjectForKey:url];
       }
       
@@ -72,11 +72,19 @@ void Downloader_iOS::cancelRequest(long requestId) {
   [_lock unlock];
 }
 
+void Downloader_iOS::removeDownloadingHandlerForNSURL(NSURL* url) {
+  [_lock lock];
+  
+  [_downloadingHandlers removeObjectForKey:url];
+  
+  [_lock unlock];
+}
+
 Downloader_iOS_Handler* Downloader_iOS::getHandlerToRun() {
   
-  __block Downloader_iOS_Handler* selectedHandler = nil;
-  __block long                    selectedPriority = -1000000;
-  __block NSURL*                  selectedURL = nil;
+  __block long                    selectedPriority = -1000000; // TODO: LONG_MAX_VALUE;
+  __block Downloader_iOS_Handler* selectedHandler  = nil;
+  __block NSURL*                  selectedURL      = nil;
   
   [_lock lock];
   
@@ -142,10 +150,11 @@ long Downloader_iOS::request(const URL &url,
   
   
   // new handler, queue it
-  handler = [[Downloader_iOS_Handler alloc] initWithUrl: nsURL
-                                               listener: iosListener
-                                               priority: priority
-                                              requestId: requestId];
+  handler = [[Downloader_iOS_Handler alloc] initWithNSURL: nsURL
+                                                      url: new URL(url)
+                                                 listener: iosListener
+                                                 priority: priority
+                                                requestId: requestId];
   [_queuedHandlers setObject: handler
                       forKey: nsURL];
   

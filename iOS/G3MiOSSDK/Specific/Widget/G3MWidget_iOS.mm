@@ -310,9 +310,10 @@
     };
     
     IDownloadListener* listener = new Listener();
-    downloader->request(URL("http://glob3.sourceforge.net/img/isologo640x160.png"),
-                        priority,
-                        listener);
+    long requestId = downloader->request(URL("http://glob3.sourceforge.net/img/isologo640x160.png"),
+                                         priority,
+                                         listener);
+//    downloader->cancelRequest(requestId);
   }
 
   //LAYERS

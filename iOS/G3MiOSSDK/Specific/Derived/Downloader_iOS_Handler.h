@@ -30,29 +30,31 @@
 @end
 
 
-@interface Downloader_iOS_Handler : NSObject //<NSURLConnectionDelegate>
+@interface Downloader_iOS_Handler : NSObject
 {
   NSMutableArray* _listeners;
   long            _priority;
-  NSURL*          _url;
+  NSURL*          _nsURL;
+  URL*            _url;
   
   NSLock*         _lock;                // synchronization helper
 }
 
-- (id) initWithUrl: (NSURL*) nsURL
-          listener: (Downloader_iOS_Listener*) listener
-          priority: (long) priority
-         requestId: (long) requestId;
+- (id) initWithNSURL: (NSURL*) nsURL
+                 url: (URL*) url
+            listener: (Downloader_iOS_Listener*) listener
+            priority: (long) priority
+           requestId: (long) requestId;
 
 - (void) addListener: (Downloader_iOS_Listener*) listener
             priority: (long) priority
            requestId: (long) requestId;
 
-- (bool) removeRequest: (long) requestId;
+- (bool) removeListenerForRequestId: (long) requestId;
 - (bool) hasListeners;
 
 - (long) priority;
 
-- (void) run;
+- (void) runWithDownloader:(void*)downloaderV;
 
 @end
