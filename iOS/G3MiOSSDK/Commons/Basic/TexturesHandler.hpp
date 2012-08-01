@@ -21,60 +21,6 @@ class IGL;
 class IFactory;
 
 
-class TextureHolder {
-public:
-    const std::string _textureId;
-    const int         _textureWidth;
-    const int         _textureHeight;
-    int _glTextureId;
-    
-    long _referenceCounter;
-    
-    TextureHolder(const std::string textureId,
-                  const int textureWidth,
-                  const int textureHeight) :
-    _textureId(textureId),
-    _textureWidth(textureWidth),
-    _textureHeight(textureHeight)
-    {
-        _referenceCounter = 1;
-        _glTextureId = -1;
-    }
-    
-    ~TextureHolder() {
-    }
-    
-    void retain() {
-        _referenceCounter++;
-    }
-    
-    void release() {
-        _referenceCounter--;
-    }
-    
-    bool isRetained() {
-        return _referenceCounter > 0;
-    }
-    
-    bool hasKey(const std::string textureId,
-                const int textureWidth,
-                const int textureHeight) {
-        if (_textureWidth != textureWidth) {
-            return false;
-        }
-        if (_textureHeight != textureHeight) {
-            return false;
-        }
-        
-        if (_textureId.compare(textureId) != 0) {
-            return false;
-        }
-        
-        return true;
-    }
-};
-
-
 
 class TexturesHandler {
 private:
@@ -129,6 +75,60 @@ public:
   
   void takeTexture(int glTextureId);
   
+};
+
+
+class TextureHolder {
+public:
+    const std::string _textureId;
+    const int         _textureWidth;
+    const int         _textureHeight;
+    int _glTextureId;
+    
+    long _referenceCounter;
+    
+    TextureHolder(const std::string textureId,
+                  const int textureWidth,
+                  const int textureHeight) :
+    _textureId(textureId),
+    _textureWidth(textureWidth),
+    _textureHeight(textureHeight)
+    {
+        _referenceCounter = 1;
+        _glTextureId = -1;
+    }
+    
+    ~TextureHolder() {
+    }
+    
+    void retain() {
+        _referenceCounter++;
+    }
+    
+    void release() {
+        _referenceCounter--;
+    }
+    
+    bool isRetained() {
+        return _referenceCounter > 0;
+    }
+    
+    bool hasKey(const std::string textureId,
+                const int textureWidth,
+                const int textureHeight) {
+        if (_textureWidth != textureWidth) {
+            return false;
+        }
+        if (_textureHeight != textureHeight) {
+            return false;
+        }
+        
+        if (_textureId.compare(textureId) != 0) {
+            return false;
+        }
+        
+        return true;
+    }
 };
 
 #endif
