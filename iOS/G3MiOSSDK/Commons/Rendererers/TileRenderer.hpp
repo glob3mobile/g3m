@@ -259,6 +259,7 @@ private:
             }
             return 0;
         }
+    }
 #endif
   
                            
