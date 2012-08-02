@@ -1,21 +1,21 @@
 //
-//  MeshRenderer.h
+//  LatLonMeshRenderer.h
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 02/08/12.
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_MeshRenderer_h
-#define G3MiOSSDK_MeshRenderer_h
+#ifndef G3MiOSSDK_LatLonMeshRenderer_h
+#define G3MiOSSDK_LatLonMeshRenderer_h
 
 #include "Renderer.hpp"
 
 
-class MeshRenderer: public Renderer {
+class LatLonMeshRenderer: public Renderer {
  
 public:
-  ~MeshRenderer() {}
+  ~LatLonMeshRenderer() {}
   
   void initialize(const InitializationContext* ic);  
   

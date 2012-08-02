@@ -71,8 +71,8 @@
 		CCC2A03515CA6C7D00923850 /* GLErrorRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02215CA6C7D00923850 /* GLErrorRenderer.hpp */; };
 		CCC2A03615CA6C7D00923850 /* MarksRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02315CA6C7D00923850 /* MarksRenderer.cpp */; };
 		CCC2A03715CA6C7D00923850 /* MarksRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02415CA6C7D00923850 /* MarksRenderer.hpp */; };
-		CCC2A03815CA6C7D00923850 /* MeshRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02515CA6C7D00923850 /* MeshRenderer.cpp */; };
-		CCC2A03915CA6C7D00923850 /* MeshRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02615CA6C7D00923850 /* MeshRenderer.h */; };
+		CCC2A03815CA6C7D00923850 /* LatLonMeshRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02515CA6C7D00923850 /* LatLonMeshRenderer.cpp */; };
+		CCC2A03915CA6C7D00923850 /* LatLonMeshRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02615CA6C7D00923850 /* LatLonMeshRenderer.h */; };
 		CCC2A03A15CA6C7D00923850 /* Renderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02715CA6C7D00923850 /* Renderer.hpp */; };
 		CCC2A03B15CA6C7D00923850 /* SceneGraphRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02815CA6C7D00923850 /* SceneGraphRenderer.cpp */; };
 		CCC2A03C15CA6C7D00923850 /* SceneGraphRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02915CA6C7D00923850 /* SceneGraphRenderer.hpp */; };
@@ -238,8 +238,8 @@
 		CCC2A02215CA6C7D00923850 /* GLErrorRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GLErrorRenderer.hpp; path = Commons/Rendererers/GLErrorRenderer.hpp; sourceTree = "<group>"; };
 		CCC2A02315CA6C7D00923850 /* MarksRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MarksRenderer.cpp; path = Commons/Rendererers/MarksRenderer.cpp; sourceTree = "<group>"; };
 		CCC2A02415CA6C7D00923850 /* MarksRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MarksRenderer.hpp; path = Commons/Rendererers/MarksRenderer.hpp; sourceTree = "<group>"; };
-		CCC2A02515CA6C7D00923850 /* MeshRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MeshRenderer.cpp; path = Commons/Rendererers/MeshRenderer.cpp; sourceTree = "<group>"; };
-		CCC2A02615CA6C7D00923850 /* MeshRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MeshRenderer.h; path = Commons/Rendererers/MeshRenderer.h; sourceTree = "<group>"; };
+		CCC2A02515CA6C7D00923850 /* LatLonMeshRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LatLonMeshRenderer.cpp; path = Commons/Rendererers/LatLonMeshRenderer.cpp; sourceTree = "<group>"; };
+		CCC2A02615CA6C7D00923850 /* LatLonMeshRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LatLonMeshRenderer.h; path = Commons/Rendererers/LatLonMeshRenderer.h; sourceTree = "<group>"; };
 		CCC2A02715CA6C7D00923850 /* Renderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Renderer.hpp; path = Commons/Rendererers/Renderer.hpp; sourceTree = "<group>"; };
 		CCC2A02815CA6C7D00923850 /* SceneGraphRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SceneGraphRenderer.cpp; path = Commons/Rendererers/SceneGraphRenderer.cpp; sourceTree = "<group>"; };
 		CCC2A02915CA6C7D00923850 /* SceneGraphRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SceneGraphRenderer.hpp; path = Commons/Rendererers/SceneGraphRenderer.hpp; sourceTree = "<group>"; };
@@ -247,6 +247,7 @@
 		CCC2A02B15CA6C7D00923850 /* SimplePlanetRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SimplePlanetRenderer.hpp; path = Commons/Rendererers/SimplePlanetRenderer.hpp; sourceTree = "<group>"; };
 		CCC2A02C15CA6C7D00923850 /* TileRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileRenderer.cpp; path = Commons/Rendererers/TileRenderer.cpp; sourceTree = "<group>"; };
 		CCC2A02D15CA6C7D00923850 /* TileRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileRenderer.hpp; path = Commons/Rendererers/TileRenderer.hpp; sourceTree = "<group>"; };
+		CCC2A04115CA6DB700923850 /* LatLonMesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LatLonMesh.h; path = Commons/Mesh/LatLonMesh.h; sourceTree = "<group>"; };
 		CF0C3967157F987200646A2F /* Mark.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = Mark.hpp; path = Commons/Basic/Mark.hpp; sourceTree = "<group>"; };
 		CF0C3969157F988100646A2F /* Mark.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Mark.cpp; path = Commons/Basic/Mark.cpp; sourceTree = "<group>"; };
 		CF31CBEE158776020085E8F1 /* Effects.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Effects.hpp; path = Commons/Basic/Effects.hpp; sourceTree = "<group>"; };
@@ -548,10 +549,10 @@
 				CCC2A02015CA6C7D00923850 /* DummyRenderer.hpp */,
 				CCC2A02115CA6C7D00923850 /* GLErrorRenderer.cpp */,
 				CCC2A02215CA6C7D00923850 /* GLErrorRenderer.hpp */,
+				CCC2A02615CA6C7D00923850 /* LatLonMeshRenderer.h */,
+				CCC2A02515CA6C7D00923850 /* LatLonMeshRenderer.cpp */,
 				CCC2A02315CA6C7D00923850 /* MarksRenderer.cpp */,
 				CCC2A02415CA6C7D00923850 /* MarksRenderer.hpp */,
-				CCC2A02515CA6C7D00923850 /* MeshRenderer.cpp */,
-				CCC2A02615CA6C7D00923850 /* MeshRenderer.h */,
 				CCC2A02715CA6C7D00923850 /* Renderer.hpp */,
 				CCC2A02815CA6C7D00923850 /* SceneGraphRenderer.cpp */,
 				CCC2A02915CA6C7D00923850 /* SceneGraphRenderer.hpp */,
@@ -593,6 +594,7 @@
 			children = (
 				D8A5601B15AEF64E00035086 /* IndexedMesh.cpp */,
 				D8A5601C15AEF64E00035086 /* IndexedMesh.hpp */,
+				CCC2A04115CA6DB700923850 /* LatLonMesh.h */,
 				D8A5601D15AEF64E00035086 /* Mesh.cpp */,
 				D8A5601E15AEF64E00035086 /* Mesh.hpp */,
 				CCB2564F15B5A33A00079B96 /* TexturedMesh.cpp */,
@@ -747,7 +749,7 @@
 				CCC2A03315CA6C7D00923850 /* DummyRenderer.hpp in Headers */,
 				CCC2A03515CA6C7D00923850 /* GLErrorRenderer.hpp in Headers */,
 				CCC2A03715CA6C7D00923850 /* MarksRenderer.hpp in Headers */,
-				CCC2A03915CA6C7D00923850 /* MeshRenderer.h in Headers */,
+				CCC2A03915CA6C7D00923850 /* LatLonMeshRenderer.h in Headers */,
 				CCC2A03A15CA6C7D00923850 /* Renderer.hpp in Headers */,
 				CCC2A03C15CA6C7D00923850 /* SceneGraphRenderer.hpp in Headers */,
 				CCC2A03E15CA6C7D00923850 /* SimplePlanetRenderer.hpp in Headers */,
@@ -870,7 +872,7 @@
 				CCC2A03215CA6C7D00923850 /* DummyRenderer.cpp in Sources */,
 				CCC2A03415CA6C7D00923850 /* GLErrorRenderer.cpp in Sources */,
 				CCC2A03615CA6C7D00923850 /* MarksRenderer.cpp in Sources */,
-				CCC2A03815CA6C7D00923850 /* MeshRenderer.cpp in Sources */,
+				CCC2A03815CA6C7D00923850 /* LatLonMeshRenderer.cpp in Sources */,
 				CCC2A03B15CA6C7D00923850 /* SceneGraphRenderer.cpp in Sources */,
 				CCC2A03D15CA6C7D00923850 /* SimplePlanetRenderer.cpp in Sources */,
 				CCC2A03F15CA6C7D00923850 /* TileRenderer.cpp in Sources */,

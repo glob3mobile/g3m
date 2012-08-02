@@ -30,7 +30,7 @@
 #include "SceneGraphRenderer.hpp"
 #include "GLErrorRenderer.hpp"
 #include "EllipsoidalTileTessellator.hpp"
-#include "MeshRenderer.h"
+#include "LatLonMeshRenderer.h"
 
 #include "DummyDownload.hpp"
 #include "SQLiteStorage_iOS.hpp"
@@ -395,8 +395,8 @@
   }
   
   if (true) {
-    MeshRenderer *mr = new MeshRenderer();
-    comp->addRenderer(mr);
+    LatLonMeshRenderer *renderer = new LatLonMeshRenderer();
+    comp->addRenderer(renderer);
   }
   
   if (false) {

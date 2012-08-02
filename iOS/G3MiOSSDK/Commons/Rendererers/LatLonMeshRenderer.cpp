@@ -1,5 +1,5 @@
 //
-//  MeshRenderer.cpp
+//  LatLonMeshRenderer.cpp
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 02/08/12.
@@ -8,17 +8,17 @@
 
 #include <iostream>
 
-#include "MeshRenderer.h"
+#include "LatLonMeshRenderer.h"
 #include "Context.hpp"
 
 
-void MeshRenderer::initialize(const InitializationContext* ic)
+void LatLonMeshRenderer::initialize(const InitializationContext* ic)
 {
   
 }  
 
 
-int MeshRenderer::render(const RenderContext* rc)
+int LatLonMeshRenderer::render(const RenderContext* rc)
 {
   // obtaing gl object reference
   IGL *gl = rc->getGL();
