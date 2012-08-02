@@ -22,6 +22,7 @@ class Sector {
 private:
   const Geodetic2D _lower;
   const Geodetic2D _upper;
+  const Geodetic2D _center;
   
   const Angle _deltaLatitude;
   const Angle _deltaLongitude;
@@ -53,16 +54,19 @@ public:
   _lower(lower),
   _upper(upper),
   _deltaLatitude(upper.latitude().sub(lower.latitude())),
-  _deltaLongitude(upper.longitude().sub(lower.longitude()))
+  _deltaLongitude(upper.longitude().sub(lower.longitude())),
+  _center(Angle::midAngle(_lower.latitude(), _upper.latitude()),
+          Angle::midAngle(_lower.longitude(), _upper.longitude()))
   {
   }
 
   
-  Sector(const Sector& s) :
-  _lower(s._lower),
-  _upper(s._upper),
-  _deltaLatitude(s._deltaLatitude),
-  _deltaLongitude(s._deltaLongitude)
+  Sector(const Sector& sector) :
+  _lower(sector._lower),
+  _upper(sector._upper),
+  _deltaLatitude(sector._deltaLatitude),
+  _deltaLongitude(sector._deltaLongitude),
+  _center(sector._center)
   {
   }
   
@@ -142,8 +146,9 @@ public:
   }
 
   Geodetic2D getCenter() const {
-    return Geodetic2D(Angle::midAngle(_lower.latitude(), _upper.latitude()),
-                      Angle::midAngle(_lower.longitude(), _upper.longitude()));
+//    return Geodetic2D(Angle::midAngle(_lower.latitude(), _upper.latitude()),
+//                      Angle::midAngle(_lower.longitude(), _upper.longitude()));
+    return _center;
   }
   
   // (u,v) are similar to texture coordinates inside the Sector

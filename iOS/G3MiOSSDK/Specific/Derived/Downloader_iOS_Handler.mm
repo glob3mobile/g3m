@@ -154,7 +154,7 @@
   [_lock lock];
 
   if (data) {
-    int length = [data length];
+    const int length = [data length];
     unsigned char *bytes = new unsigned char[ length ]; // will be deleted by ByteBuffer's destructor
     [data getBytes:bytes length: length];
     ByteBuffer buffer(bytes, length);

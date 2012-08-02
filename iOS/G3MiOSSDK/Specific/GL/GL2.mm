@@ -180,14 +180,47 @@ int GL2::getError() {
   return glGetError();
 }
 
+GLuint GL2::getTextureID() {
+//  GLuint textureID;
+//  glGenTextures(1, &textureID);
+//  return textureID;
+  
+  if (_texturesIdBag.size() == 0) {
+    const int bugdetSize = 256;
+    
+    GLuint* texturesId = new GLuint[bugdetSize];
+    
+    glGenTextures(bugdetSize, texturesId);
+    
+    for (int i = 0; i < bugdetSize; i++) {
+      _texturesIdBag.push_back(texturesId[i]);
+    }
+    
+    delete [] texturesId;
+    
+    _texturesIdCounter += bugdetSize;
+    
+    printf("= Created %d texturesIds (accumulated %ld)\n", bugdetSize, _texturesIdCounter);
+  }
+  
+  GLuint result = _texturesIdBag.back();
+  _texturesIdBag.pop_back();
+  return result;
+}
+
+void GL2::deleteTexture(int glTextureId) {
+  unsigned int textures[] = { glTextureId };
+  glDeleteTextures(1, textures);
+  
+  _texturesIdBag.push_back(glTextureId);
+}
+
 int GL2::uploadTexture(const IImage* image, int textureWidth, int textureHeight) {
-  UIImage * im = ((Image_iOS*) image)->getUIImage();
-  
-  
+  CGImageRef cgImage = ((Image_iOS*) image)->getUIImage().CGImage;
+
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
   //void *imageData = malloc( textureHeight * textureWidth * 4 );
-  
-  void *imageData = new unsigned char[textureHeight * textureWidth * 4 ];
+  void *imageData = new unsigned char[textureHeight * textureWidth * 4];
   
   CGContextRef context = CGBitmapContextCreate(imageData,
                                                textureWidth, textureHeight,
@@ -195,26 +228,30 @@ int GL2::uploadTexture(const IImage* image, int textureWidth, int textureHeight)
                                                colorSpace,
                                                kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
   CGColorSpaceRelease( colorSpace );
-  CGContextClearRect( context, CGRectMake( 0, 0, textureWidth, textureHeight ) );
+  CGRect bounds = CGRectMake( 0, 0, textureWidth, textureHeight );
+  CGContextClearRect( context, bounds );
   //CGContextTranslateCTM( context, 0, textureHeight - textureHeight );
-  CGContextDrawImage( context, CGRectMake( 0, 0, textureWidth, textureHeight ), im.CGImage );
+  CGContextDrawImage( context, bounds, cgImage );
   
   CGContextRelease(context);
 
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   
-  GLuint textureID;    
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-  
-  glGenTextures(1, &textureID);
+
+  GLuint textureID = getTextureID();
+//  glGenTextures(1, &textureID);
   
   glBindTexture(GL_TEXTURE_2D, textureID);
+  
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-  
+
+
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth, textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
+//  glGenerateMipmap(GL_TEXTURE_2D); // /!\ Allocate the mipmaps /!\
   
   free(imageData);
   
@@ -265,11 +302,6 @@ void GL2::drawBillBoard(const unsigned int textureId,
   enableDepthTest();
   
   glUniform1i(Uniforms.BillBoard, false);
-}
-
-void GL2::deleteTexture(int glTextureId) {
-  unsigned int textures[] = { glTextureId };
-  glDeleteTextures(1, textures);
 }
 
 // state handling

@@ -32,7 +32,7 @@ IImage* Image_iOS::combineWith(const IImage& transparent, int width, int height)
   UIImage* transIm = ((Image_iOS&)transparent).getUIImage();
   
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-  void *imageData = new unsigned char[height * width * 4 ];
+  void *imageData = new unsigned char[height * width * 4];
   
   CGContextRef context = CGBitmapContextCreate(imageData,
                                                width, height,
@@ -40,11 +40,12 @@ IImage* Image_iOS::combineWith(const IImage& transparent, int width, int height)
                                                colorSpace,
                                                kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
   CGColorSpaceRelease( colorSpace );
-  CGContextClearRect( context, CGRectMake( 0, 0, width, height ) );
+  CGRect bounds = CGRectMake( 0, 0, width, height );
+  CGContextClearRect( context, bounds );
   
   //We draw the images one over the other
-  CGContextDrawImage( context, CGRectMake( 0, 0, width, height ), _image.CGImage );
-  CGContextDrawImage( context, CGRectMake( 0, 0, width, height ), transIm.CGImage );
+  CGContextDrawImage( context, bounds, _image.CGImage );
+  CGContextDrawImage( context, bounds, transIm.CGImage );
   
   CGImageRef imgRef = CGBitmapContextCreateImage(context);
   UIImage* img = [UIImage imageWithCGImage:imgRef];

@@ -16,6 +16,8 @@ private:
   
   // stack of ModelView matrices
   std::list<MutableMatrix44D> _matrixStack;
+  std::list<unsigned int>     _texturesIdBag;
+  long                        _texturesIdCounter;
   
   // state handling
   bool _enableTextures;
@@ -32,6 +34,8 @@ private:
   
   inline void loadModelView();
   
+  GLuint getTextureID();
+  
 public:
   
   GL2() :
@@ -44,33 +48,34 @@ public:
   _enableBlend(false),
   _enableDepthTest(false),
   _enableCullFace(false),
-  _cullFace_face(BACK)
+  _cullFace_face(BACK),
+  _texturesIdCounter(0)
   {
     
   }
   
-  void enableVerticesPosition() ;
+  void enableVerticesPosition();
   
-  void enableTextures() ;
+  void enableTextures();
   
   void verticesColors(bool v);
   
-  void enableTexture2D() ;
+  void enableTexture2D();
   
   void enableVertexFlatColor(float r, float g, float b, float a,
                              float intensity);
   
   void disableVertexFlatColor();
   
-  void disableTexture2D() ;
+  void disableTexture2D();
   
-  void disableVerticesPosition() ;
+  void disableVerticesPosition();
   
-  void disableTextures() ;
+  void disableTextures();
   
-  void clearScreen(float r, float g, float b, float a) ;
+  void clearScreen(float r, float g, float b, float a);
   
-  void color(float r, float g, float b, float a) ;
+  void color(float r, float g, float b, float a);
   
   void enableVertexColor(float const colors[], float intensity);
   
@@ -80,17 +85,17 @@ public:
   
   void disableVertexNormal();
   
-  void pushMatrix() ;
+  void pushMatrix();
   
-  void popMatrix() ;
+  void popMatrix();
   
-  void loadMatrixf(const MutableMatrix44D &m) ;
+  void loadMatrixf(const MutableMatrix44D &m);
   
-  void multMatrixf(const MutableMatrix44D &m) ;
+  void multMatrixf(const MutableMatrix44D &m);
   
-  void vertexPointer(int size, int stride, const float vertex[]) ;
+  void vertexPointer(int size, int stride, const float vertex[]);
   
-  void drawTriangleStrip(int n, const unsigned int i[]) ;
+  void drawTriangleStrip(int n, const unsigned int i[]);
   
   void drawLines(int n, const unsigned int *i); 
   
@@ -98,13 +103,13 @@ public:
   
   void drawPoints(int n, const unsigned int *i);
   
-  void setProjection(const MutableMatrix44D &projection) ;
+  void setProjection(const MutableMatrix44D &projection);
   
-  void useProgram(unsigned int program) ;
+  void useProgram(unsigned int program);
   
-  void enablePolygonOffset(float factor, float units) ;
+  void enablePolygonOffset(float factor, float units);
   
-  void disablePolygonOffset() ;
+  void disablePolygonOffset();
   
   void lineWidth(float width);
   
@@ -116,7 +121,7 @@ public:
   
   void setTextureCoordinates(int size, int stride, const float texcoord[]);
   
-  void bindTexture (unsigned int n);
+  void bindTexture(unsigned int n);
   
   void enableDepthTest();
   void disableDepthTest();
