@@ -30,6 +30,7 @@
 #include "SceneGraphRenderer.hpp"
 #include "GLErrorRenderer.hpp"
 #include "EllipsoidalTileTessellator.hpp"
+#include "LatLonMeshRenderer.h"
 
 #include "DummyDownload.hpp"
 #include "SQLiteStorage_iOS.hpp"
@@ -291,6 +292,30 @@
                                                64 * 1024 * 1024,
                                                ".G3M_Cache",
                                                8);
+  
+  if (true) {
+    const long priority = 999999999;
+    
+    class Listener : public IDownloadListener {
+      void onDownload(const Response& response) {
+        NSLog(@"Downloaded %d bytes", response.getByteBuffer()->getLength());
+      }
+      
+      void onError(const Response& response) {
+        
+      }
+      
+      void onCancel(const URL& url) {
+        
+      }
+    };
+    
+    IDownloadListener* listener = new Listener();
+    long requestId = downloader->request(URL("http://glob3.sourceforge.net/img/isologo640x160.png"),
+                                         priority,
+                                         listener);
+//    downloader->cancelRequest(requestId);
+  }
 
   //LAYERS
   LayerSet* layerSet = new LayerSet();
@@ -367,6 +392,11 @@
                               "mark.png",
                               Geodetic3D(latitude, longitude, 0)));
     } 
+  }
+  
+  if (true) {
+    LatLonMeshRenderer *renderer = new LatLonMeshRenderer();
+    comp->addRenderer(renderer);
   }
   
   if (false) {

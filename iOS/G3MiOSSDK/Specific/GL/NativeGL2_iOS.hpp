@@ -37,10 +37,27 @@ class NativeGL2_iOS: public INativeGL
     }
   }
   
+  inline GLenum getEnum(CullFace f) const{
+    switch (f) {
+      case FRONT:
+        return GL_FRONT;
+      case FRONT_AND_BACK:
+        return GL_FRONT_AND_BACK;
+      case BACK:
+        return GL_BACK;
+    }
+  }
+  
   inline GLenum getEnum(GLType t) const{
     switch (t) {
       case Float:
         return GL_FLOAT;
+      case UnsignedByte:
+        return GL_UNSIGNED_BYTE;
+      case UnsignedInt:
+        return GL_UNSIGNED_INT;
+      case Int:
+        return GL_INT;
     }
   }
   
@@ -132,19 +149,27 @@ public:
     glUseProgram(program);
   }
   
-  int getAttribLocation(int program, char name[]) const{
+  int getAttribLocation(int program, const char name[]) const{
     return glGetAttribLocation(program, name);
+  }
+  
+  int getUniformLocation(int program, const char name[]) const{
+    return glGetUniformLocation(program, name);
   }
   
   void uniform2f(int loc, float x, float y) const{
     glUniform2f(loc, x, y);
   }
   
+  void uniform1f(int loc, float x) const{
+    glUniform1f(loc, x);
+  }
+  
   void uniform1i(int loc, int v) const{
     glUniform1i(loc, v);
   }
   
-  void uniformMatrix4fv(int location, int count, bool transpose, const float value[]){
+  void uniformMatrix4fv(int location, int count, bool transpose, const float value[]) const{
     glUniformMatrix4fv(location, count, transpose, value);
   }
   
@@ -172,6 +197,10 @@ public:
   void disable(GLFeature feature) const{
     GLenum v = getEnum(feature);
     glDisable(v);
+  }
+  
+  void polygonOffset(float factor, float units) const{
+    glPolygonOffset(factor, units);
   }
   
   void vertexAttribPointer(int index, int size, GLType type, 
@@ -220,8 +249,7 @@ public:
     glPixelStorei(getEnum(pname), param);
   }
   
-  std::vector<int> genTextures(int	n)
-  {
+  std::vector<int> genTextures(int	n) const{
     GLuint textureID[n];    
     glGenTextures(n, textureID);
     std::vector<int> ts;
@@ -245,6 +273,14 @@ public:
                     GLType      type,
                     const void* data) const{
     glTexImage2D(target, level, internalFormat, width, height, border, getEnum(format), getEnum(type), data);
+  }
+  
+  void drawArrays(GLPrimitive mode, int first, int count) const{
+    glDrawArrays(getEnum(mode), first, count);
+  }
+  
+  void cullFace(CullFace c) const{
+    glCullFace(getEnum(c));
   }
   
 };

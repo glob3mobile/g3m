@@ -19,8 +19,10 @@
 MutableMatrix44D MutableMatrix44D::multiply(const MutableMatrix44D& m) const {
   double R[16];
   for (int j = 0; j < 4; j++) {
+    const int j4 = j*4;
     for (int i = 0; i < 4; i++) {
-      R[j * 4 + i] = m.get(j * 4) * _m[i] + m.get(j * 4 + 1) * _m[4 + i] + m.get(j * 4 + 2) * _m[8 + i] + m.get(j * 4 + 3) * _m[12 + i];
+//      R[j * 4 + i] = m.get(j * 4) * _m[i] + m.get(j * 4 + 1) * _m[4 + i] + m.get(j * 4 + 2) * _m[8 + i] + m.get(j * 4 + 3) * _m[12 + i];
+      R[j4 + i] = m._m[j4] * _m[i] + m._m[j4 + 1] * _m[4 + i] + m._m[j4 + 2] * _m[8 + i] + m._m[j4 + 3] * _m[12 + i];
     }
   }
   

@@ -18,7 +18,8 @@
 
 class Downloader_iOS : public IDownloader {
 private:
-  Downloader_iOS_WorkerThread* _worker;
+//  Downloader_iOS_WorkerThread* _worker;
+  NSMutableArray*      _workers;
   
   NSLock*              _lock;                // synchronization helper
   NSMutableDictionary* _downloadingHandlers; // downloads current in progress
@@ -32,6 +33,8 @@ private:
   }
   
 public:
+  
+  void removeDownloadingHandlerForNSURL(NSURL* url);
   
   Downloader_iOS(int memoryCapacity,
                  int diskCapacity,

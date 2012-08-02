@@ -51,7 +51,8 @@
   while (![self isStopping]) {
     Downloader_iOS_Handler* handler = _downloader->getHandlerToRun();
     if (handler) {
-      [handler run];
+      [handler runWithDownloader:_downloader];
+      int __diego_at_work;
     }
     else {
       // sleep for 10 milliseconds

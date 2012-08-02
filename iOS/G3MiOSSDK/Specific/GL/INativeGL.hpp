@@ -11,11 +11,13 @@
 
 #include <vector>
 
+#include "IGL.hpp"
+
 enum GLBufferType { ColorBuffer, DepthBuffer };
 
 enum GLFeature { PolygonOffsetFill, DepthTest, Blend, CullFacing };
 
-enum GLType { Float, UnsignedByte };
+enum GLType { Float, UnsignedByte , UnsignedInt, Int};
 
 enum GLPrimitive { TriangleStrip, Lines, LineLoop, Points };
 
@@ -41,13 +43,17 @@ public:
   
   virtual void useProgram(int program) const = 0;
   
-  virtual int getAttribLocation(int program, char name[]) const = 0;
+  virtual int getAttribLocation(int program, const char name[]) const = 0;
+  
+  virtual int getUniformLocation(int program, const char name[]) const = 0;
   
   virtual void uniform2f(int loc, float x, float y) const = 0;
   
+  virtual void uniform1f(int loc, float x) const = 0;
+  
   virtual void uniform1i(int loc, int v) const = 0;
   
-  virtual void uniformMatrix4fv(int location, int count, bool transpose, const float value[]);
+  virtual void uniformMatrix4fv(int location, int count, bool transpose, const float value[]) const;
   
   virtual void clearColor(float red, float green, float blue, float alpha) const = 0;
   
@@ -58,6 +64,8 @@ public:
   virtual void enable(GLFeature feature) const = 0;
   
   virtual void disable(GLFeature feature) const = 0;
+  
+  virtual void polygonOffset(float factor, float units) const = 0;
   
   virtual void vertexAttribPointer(int index, int size, GLType type, 
                                    bool normalized, int stride, const void*	pointer) const = 0;
@@ -80,7 +88,7 @@ public:
   
   virtual void pixelStorei(GLAlignment pname, int param) const = 0;
   
-  std::vector<int> genTextures(int	n);
+  std::vector<int> genTextures(int	n) const;
   
   virtual void texParameteri(GLTextureType target, GLTextureParameter par, GLTextureParameterValue v) const = 0;
   
@@ -93,6 +101,11 @@ public:
                             GLFormat    format,
                             GLType      type,
                             const void* data) const = 0;
+  
+  virtual void drawArrays(GLPrimitive mode, int first, int count) const = 0;
+  
+  virtual void cullFace(CullFace c) const = 0;
+
 
 
 };

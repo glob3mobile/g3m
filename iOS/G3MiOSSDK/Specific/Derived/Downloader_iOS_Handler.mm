@@ -9,6 +9,8 @@
 #import "Downloader_iOS_Handler.h"
 
 #include "ILogger.hpp"
+#include "Downloader_iOS.hpp"
+
 
 @implementation ListenerEntry
 
@@ -45,14 +47,16 @@
 
 @implementation Downloader_iOS_Handler
 
-- (id) initWithUrl: (NSURL*) nsURL
-          listener: (Downloader_iOS_Listener*) listener
-          priority: (long) priority
-         requestId: (long) requestId
+- (id) initWithNSURL: (NSURL*) nsURL
+                 url: (URL*) url
+            listener: (Downloader_iOS_Listener*) listener
+            priority: (long) priority
+           requestId: (long) requestId
 {
   self = [super init];
   if (self) {
-    _url       = nsURL;
+    _nsURL     = nsURL;
+    _url       = url;
     _priority  = priority;
     
     ListenerEntry* entry = [ListenerEntry entryWithListener: listener
@@ -91,24 +95,23 @@
   return result;
 }
 
-- (bool) removeRequest: (long) requestId
+- (bool) removeListenerForRequestId: (long)requestId
 {
+  bool removed = false;
+
   [_lock lock];
-  
-  int indexToRemove = -1;
   
   const int listenersCount = [_listeners count];
   for (int i = 0; i < listenersCount; i++) {
-    ListenerEntry* entry = [_listeners objectAtIndex:i];
+    ListenerEntry* entry = [_listeners objectAtIndex: i];
     if ([entry requestId] == requestId) {
-      indexToRemove = i;
+//      [[entry listener] onCancel:_url];
+      
+      [_listeners removeObjectAtIndex: i];
+
+      removed = true;
       break;
     }
-  }
-  
-  bool removed = (indexToRemove >= 0);
-  if (removed) {
-    [_listeners removeObjectAtIndex:indexToRemove];
   }
   
   [_lock unlock];
@@ -118,58 +121,74 @@
 
 - (bool) hasListeners
 {
-  bool hasListeners;
   [_lock lock];
-  hasListeners = [_listeners count] > 0;
+  
+  const bool hasListeners = [_listeners count] > 0;
+  
   [_lock unlock];
+  
   return hasListeners;
 }
 
-- (void) run
+- (void) runWithDownloader:(void*)downloaderV
 {
   int __dgd_at_work;
   
-  NSURLRequest *request = [NSURLRequest requestWithURL: _url
+  Downloader_iOS* downloader = (Downloader_iOS*) downloaderV;
+  
+  NSURLRequest *request = [NSURLRequest requestWithURL: _nsURL
                                            cachePolicy: NSURLRequestUseProtocolCachePolicy
                                        timeoutInterval: 60.0];
   
-  NSURLResponse *response;
+  NSURLResponse *urlResponse;
   NSError *error;
   NSData* data = [NSURLConnection sendSynchronousRequest: request
-                                       returningResponse: &response
+                                       returningResponse: &urlResponse
                                                    error: &error];
+  
+  URL url( [[_nsURL absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] );
+  
+  // inform downloader to remove myself, to avoid adding new Listeners
+  downloader->removeDownloadingHandlerForNSURL(_nsURL);
+  
+  [_lock lock];
+
   if (data) {
     int length = [data length];
     unsigned char *bytes = new unsigned char[ length ]; // will be deleted by ByteBuffer's destructor
     [data getBytes:bytes length: length];
     ByteBuffer buffer(bytes, length);
 
-    Response res(URL( [[_url absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] ), &buffer);
+    Response response(url, &buffer);
 
     const int listenersCount = [_listeners count];
     for (int i = 0; i < listenersCount; i++) {
-      ListenerEntry* entry = [_listeners objectAtIndex:i];
+      ListenerEntry* entry = [_listeners objectAtIndex: i];
       
-      [[entry listener] onDownload:res];
+      [[entry listener] onDownload: response];
     }
   }
   else {
     ILogger::instance()->logError("Can't load %s, response=%s, error=%s",
-                                  [ [_url     description] cStringUsingEncoding:NSUTF8StringEncoding ],
-                                  [ [response description] cStringUsingEncoding:NSUTF8StringEncoding ],
-                                  [ [error    description] cStringUsingEncoding:NSUTF8StringEncoding ] );
+                                  [ [_nsURL      description] cStringUsingEncoding: NSUTF8StringEncoding ],
+                                  [ [urlResponse description] cStringUsingEncoding: NSUTF8StringEncoding ],
+                                  [ [error       description] cStringUsingEncoding: NSUTF8StringEncoding ] );
     
     ByteBuffer buffer(NULL, 0);
-    Response res(URL( [[_url absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] ), &buffer);
+    
+    Response response(url, &buffer);
     
     const int listenersCount = [_listeners count];
     for (int i = 0; i < listenersCount; i++) {
-      ListenerEntry* entry = [_listeners objectAtIndex:i];
+      ListenerEntry* entry = [_listeners objectAtIndex: i];
       
-      [[entry listener] onError:res];
+      [[entry listener] onError: response];
     }
   }
+
+//  [_listeners removeAllObjects];
   
+  [_lock unlock];
 }
 
 @end
