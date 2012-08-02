@@ -37,8 +37,8 @@ public class LayerSet
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: java.util.ArrayList<Petition*> createTilePetitions(const Tile& tile, int width, int height) const
-  public final java.util.ArrayList<Petition> createTilePetitions(Tile tile, int width, int height)
+//ORIGINAL LINE: java.util.ArrayList<Petition*> createTilePetitions(const IFactory& factory, const Tile& tile, int width, int height) const
+  public final java.util.ArrayList<Petition> createTilePetitions(IFactory factory, Tile tile, int width, int height)
   {
 	java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
@@ -55,7 +55,7 @@ public class LayerSet
 	  Layer layer = _layers.get(i);
 	  if (layer.fullContains(tileSector))
 	  {
-		java.util.ArrayList<Petition> pet = layer.getTilePetitions(tile, width, height);
+		java.util.ArrayList<Petition> pet = layer.getTilePetitions(factory, tile, width, height);
 		for (int j = 0; j < pet.size(); j++)
 		{
 		  petitions.add(pet.get(j));

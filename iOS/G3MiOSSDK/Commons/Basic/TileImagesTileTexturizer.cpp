@@ -19,7 +19,8 @@
 
 
 TilePetitions* TileImagesTileTexturizer::createTilePetitions(const Tile* tile) {  
-  std::vector<Petition*> pet = _layerSet->createTilePetitions(*tile, 
+  std::vector<Petition*> pet = _layerSet->createTilePetitions(*_factory,
+                                                              *tile, 
                                                               _parameters->_tileTextureWidth, 
                                                               _parameters->_tileTextureHeight);
 //  if (pet.size() > 1){

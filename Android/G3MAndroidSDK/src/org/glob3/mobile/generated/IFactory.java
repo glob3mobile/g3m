@@ -55,6 +55,12 @@ public abstract class IFactory
 //ORIGINAL LINE: virtual String stringFromUTF8(const byte data[]) const = 0;
   public abstract String stringFromUTF8(byte[] data);
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual String stringFormat(String x, ...) const = 0;
+  public abstract String stringFormat(String x, Object... LegacyParamArray);
+
+
+
   // a virtual destructor is needed for conversion to Java
   public void dispose()
   {

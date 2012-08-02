@@ -36,6 +36,10 @@ public:
   virtual void deletenetwork(const INetwork* image) const = 0;
   
   virtual std::string stringFromUTF8(const unsigned char data[]) const = 0;
+  
+  virtual std::string stringFormat(std::string x, ...) const = 0;
+  
+  
 
   // a virtual destructor is needed for conversion to Java
   virtual ~IFactory() {}

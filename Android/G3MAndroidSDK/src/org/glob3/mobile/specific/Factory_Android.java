@@ -3,6 +3,7 @@ package org.glob3.mobile.specific;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Locale;
 
 import org.glob3.mobile.generated.ByteBuffer;
 import org.glob3.mobile.generated.IFactory;
@@ -17,6 +18,7 @@ import android.graphics.BitmapFactory;
 public class Factory_Android extends IFactory {
 	
 	final Context _context;
+	static Locale locale = new Locale("myLocale");
 	
 	public Factory_Android(Context c){
 		_context = c;
@@ -87,6 +89,12 @@ public class Factory_Android extends IFactory {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	@Override
+	public String stringFormat(String x, Object... LegacyParamArray) {
+		String res = String.format(locale, x, LegacyParamArray);
+		return res;
 	}
 
 }
