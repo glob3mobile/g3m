@@ -124,7 +124,8 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
 void Tile::rawRender(const RenderContext *rc,
                      const TileTessellator *tessellator,
                      TileTexturizer *texturizer,
-                     ITimer* frameTimer) {
+                     ITimer* frameTimer,
+                     ITimer* lastTexturizerTimer) {
   
   Mesh* tessellatorMesh = getTessellatorMesh(rc, tessellator);
   
@@ -139,16 +140,19 @@ void Tile::rawRender(const RenderContext *rc,
       
       if (needsToCallTexturizer) {
         int __TODO_tune_render_budget;
+        
+        bool callTexturizer = ((_texturizerTimer == NULL) ||
+                               (_texturizerTimer->elapsedTime().milliseconds() > 125 &&
+                                lastTexturizerTimer->elapsedTime().milliseconds() > 25));
 
-        if (_texturizerTimer == NULL ||
-            _texturizerTimer->elapsedTime().milliseconds() > 125) {
-          
+        if (callTexturizer) {
           _texturizerMesh = texturizer->texturize(rc,
                                                   this,
                                                   tessellator,
                                                   tessellatorMesh,
                                                   _texturizerMesh,
                                                   frameTimer);
+          lastTexturizerTimer->start();
 
           if (_texturizerTimer == NULL) {
             _texturizerTimer = rc->getFactory()->createTimer();
@@ -223,10 +227,11 @@ void Tile::render(const RenderContext* rc,
                   TilesStatistics* statistics,
                   std::vector<Tile*>* toVisitInNextIteration,
                   ITimer* frameTimer,
-                  ITimer* lastSplitTimer) {
+                  ITimer* lastSplitTimer,
+                  ITimer* lastTexturizerTimer) {
   if (isVisible(rc, tessellator)) {
     if (meetsRenderCriteria(rc, tessellator, texturizer, parameters, frameTimer, lastSplitTimer, statistics)) {
-      rawRender(rc, tessellator, texturizer, frameTimer);
+      rawRender(rc, tessellator, texturizer, frameTimer, lastTexturizerTimer);
       if (parameters->_renderDebug) {
         debugRender(rc, tessellator);
       }

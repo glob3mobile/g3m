@@ -90,7 +90,8 @@ private:
   inline void rawRender(const RenderContext* rc,
                         const TileTessellator* tessellator,
                         TileTexturizer* texturizer,
-                        ITimer* timer);
+                        ITimer* timer,
+                        ITimer* lastTexturizerTimer);
   
   void debugRender(const RenderContext* rc,
                    const TileTessellator* tessellator);
@@ -163,7 +164,8 @@ public:
               TilesStatistics* statistics,
               std::vector<Tile*>* toVisitInNextIteration,
               ITimer* frameTimer,
-              ITimer* lastSplitTimer);
+              ITimer* lastSplitTimer,
+              ITimer* lastTexturizerTimer);
     
 };
 
