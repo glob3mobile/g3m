@@ -500,6 +500,7 @@
 		383BD38B1577EE040012AC53 /* Interfaces */ = {
 			isa = PBXGroup;
 			children = (
+				D8F7665715CAD79100179E08 /* INativeGL.hpp */,
 				CFFEC11D15C2E645003FA986 /* IDownloader.cpp */,
 				CFFEC11B15C2E636003FA986 /* IDownloader.hpp */,
 				383BD3B81577EE630012AC53 /* IFactory.hpp */,
@@ -762,7 +763,7 @@
 				CCC2A03C15CA6C7D00923850 /* SceneGraphRenderer.hpp in Headers */,
 				CCC2A03E15CA6C7D00923850 /* SimplePlanetRenderer.hpp in Headers */,
 				CCC2A04015CA6C7D00923850 /* TileRenderer.hpp in Headers */,
-				D8F7662415CAB57300179E08 /* INativeGL.hpp in Headers */,
+				D8F7665815CAD79100179E08 /* INativeGL.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
