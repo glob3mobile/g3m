@@ -30,6 +30,7 @@
 #include "SceneGraphRenderer.hpp"
 #include "GLErrorRenderer.hpp"
 #include "EllipsoidalTileTessellator.hpp"
+#include "MeshRenderer.h"
 
 #include "DummyDownload.hpp"
 #include "SQLiteStorage_iOS.hpp"
@@ -391,6 +392,11 @@
                               "mark.png",
                               Geodetic3D(latitude, longitude, 0)));
     } 
+  }
+  
+  if (true) {
+    MeshRenderer *mr = new MeshRenderer();
+    comp->addRenderer(mr);
   }
   
   if (false) {
