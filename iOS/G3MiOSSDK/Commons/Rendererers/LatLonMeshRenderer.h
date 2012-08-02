@@ -10,12 +10,17 @@
 #define G3MiOSSDK_LatLonMeshRenderer_h
 
 #include "Renderer.hpp"
+#include "LatLonMesh.h"
 
 
 class LatLonMeshRenderer: public Renderer {
+  
+private:
+  LatLonMesh *mesh;
+  
  
 public:
-  ~LatLonMeshRenderer() {}
+  ~LatLonMeshRenderer();
   
   void initialize(const InitializationContext* ic);  
   

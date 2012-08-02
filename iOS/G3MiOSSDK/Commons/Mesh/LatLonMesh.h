@@ -11,7 +11,10 @@
 
 #include "IndexedMesh.hpp"
 
-class LatLonMesh: public IndexedMesh {
+class LatLonMesh: public Mesh {
+  
+private:
+  IndexedMesh *mesh;
   
 public:
   LatLonMesh(bool owner,
@@ -25,12 +28,22 @@ public:
              const Color* flatColor = NULL,
              const float * colors = NULL,
              const float colorsIntensity = 0.0,
-             const float* normals = NULL) {
-    return new IndexedMesh(owner, primitive, strategy, center, 
+             const float* normals = NULL) 
+  {
+    mesh = new IndexedMesh(owner, primitive, strategy, center,
                            numVertices, vertices, indexes, numIndex,
                            flatColor, colors, colorsIntensity, normals);
-    
   }
+  
+  int getVertexCount() const { return mesh->getVertexCount(); }
+  
+  const Vector3D getVertex(int i) const { return mesh->getVertex(i); }
+  
+  void render(const RenderContext* rc) const { mesh->render(rc); }
+  
+  Extent *getExtent() const { return mesh->getExtent(); }
+  
+  ~LatLonMesh() { delete mesh; }
 
 };
 
