@@ -204,7 +204,8 @@ private:
   
   TilesStatistics _lastStatistics;
   
-  
+
+#ifdef C_CODE    
   class DistanceToCenterTileComparison {
   private:
     const Camera* _camera;
@@ -229,6 +230,36 @@ private:
       return (dist1 < dist2);
     }
   };
+#endif
+
+#ifdef JAVA_CODE
+    private static class DistanceToCenterTileComparison implements java.util.Comparator<Tile> {
+        private final Camera _camera;
+        private Planet _planet;
+        
+        public DistanceToCenterTileComparison(Camera camera, Planet planet) {
+            _camera = camera;
+            _planet = planet;
+        }
+        
+        public int compare(Tile t1, Tile t2) {
+            final Vector3D cameraPos = _camera.getPosition();
+            
+            final Vector3D center1 = _planet.toVector3D(t1.getSector().getCenter());
+            final Vector3D center2 = _planet.toVector3D(t2.getSector().getCenter());
+            
+            final double dist1 = center1.sub(cameraPos).squaredLength();
+            final double dist2 = center2.sub(cameraPos).squaredLength();
+            
+            if (dist1 < dist2) {
+                return -1;
+            }
+            else if (dist1 > dist2) {
+                return 1;
+            }
+            return 0;
+        }
+#endif
   
                            
   //bool isTile1ClosestToCameraThanTile2(Tile *t1, Tile *t2) const;

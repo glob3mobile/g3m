@@ -119,10 +119,16 @@ int TileRenderer::render(const RenderContext* rc) {
   while (toVisit.size() > 0) {
     std::vector<Tile*> toVisitInNextIteration;
     
+#ifdef C_CODE      
     std::sort(toVisit.begin(),
               toVisit.end(),
               predicate);
-    
+#endif
+
+#ifdef JAVA_CODE
+      java.util.Collections.sort(toVisit, predicate);
+#endif
+      
     const int toVisitSize = toVisit.size();
     for (int i = 0; i < toVisitSize; i++) {
       Tile* tile = toVisit[i];
