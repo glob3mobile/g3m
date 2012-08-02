@@ -13,7 +13,7 @@ package org.glob3.mobile.generated;
 public abstract class IDownloadListener
 {
   public abstract void onDownload(Response response);
-  public abstract void onError(Response e);
+  public abstract void onError(Response response);
   public abstract void onCancel(URL url);
 
   public void dispose()

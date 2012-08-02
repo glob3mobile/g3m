@@ -1,17 +1,14 @@
 package org.glob3.mobile.generated; 
-public enum GLPrimitive
+public enum GLTextureType
 {
-	TriangleStrip,
-	Lines,
-	LineLoop,
-	Points;
+	Texture2D;
 
 	public int getValue()
 	{
 		return this.ordinal();
 	}
 
-	public static GLPrimitive forValue(int value)
+	public static GLTextureType forValue(int value)
 	{
 		return values()[value];
 	}

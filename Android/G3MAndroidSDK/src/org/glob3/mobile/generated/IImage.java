@@ -39,4 +39,8 @@ public abstract class IImage
 //ORIGINAL LINE: virtual ByteBuffer* getEncodedImage() const = 0;
   public abstract ByteBuffer getEncodedImage();
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual void fillWithRGBA(byte data[], int width, int height) const = 0;
+  public abstract void fillWithRGBA(byte[] data, int width, int height);
+
 }

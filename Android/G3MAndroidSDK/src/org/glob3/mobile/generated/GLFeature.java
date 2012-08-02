@@ -1,17 +1,17 @@
 package org.glob3.mobile.generated; 
-public enum GLPrimitive
+public enum GLFeature
 {
-	TriangleStrip,
-	Lines,
-	LineLoop,
-	Points;
+	PolygonOffsetFill,
+	DepthTest,
+	Blend,
+	CullFacing;
 
 	public int getValue()
 	{
 		return this.ordinal();
 	}
 
-	public static GLPrimitive forValue(int value)
+	public static GLFeature forValue(int value)
 	{
 		return values()[value];
 	}

@@ -59,32 +59,34 @@ public class TileRenderer extends Renderer
   private TilesStatistics _lastStatistics = new TilesStatistics();
 
 
-  private static class DistanceToCenterTileComparison
-  {
-	private final Camera _camera;
-	private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
 
-	public DistanceToCenterTileComparison(Camera camera, Planet planet)
-	{
-		_camera = camera;
-		_planet = planet;
+	private static class DistanceToCenterTileComparison implements java.util.Comparator<Tile> {
+		private final Camera _camera;
+		private Planet _planet;
+		
+		public DistanceToCenterTileComparison(Camera camera, Planet planet) {
+			_camera = camera;
+			_planet = planet;
+		}
+		
+		public int compare(Tile t1, Tile t2) {
+			final Vector3D cameraPos = _camera.getPosition();
+			
+			final Vector3D center1 = _planet.toVector3D(t1.getSector().getCenter());
+			final Vector3D center2 = _planet.toVector3D(t2.getSector().getCenter());
+			
+			final double dist1 = center1.sub(cameraPos).squaredLength();
+			final double dist2 = center2.sub(cameraPos).squaredLength();
+			
+			if (dist1 < dist2) {
+				return -1;
+			}
+			else if (dist1 > dist2) {
+				return 1;
+			}
+			return 0;
+		}
 	}
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: inline boolean operator ()(const Tile *t1, const Tile *t2) const
-//C++ TO JAVA CONVERTER TODO TASK: Operators cannot be overloaded in Java:
-	boolean operator ()(Tile t1, Tile t2)
-	{
-	  final Vector3D cameraPos = _camera.getPosition();
-
-	  final Vector3D center1 = _planet.toVector3D(t1.getSector().getCenter());
-	  final Vector3D center2 = _planet.toVector3D(t2.getSector().getCenter());
-
-	  final double dist1 = center1.sub(cameraPos).squaredLength();
-	  final double dist2 = center2.sub(cameraPos).squaredLength();
-	  return (dist1 < dist2);
-	}
-  }
 
 
   //bool isTile1ClosestToCameraThanTile2(Tile *t1, Tile *t2) const;
@@ -146,7 +148,8 @@ public class TileRenderer extends Renderer
 	{
 	  java.util.ArrayList<Tile> toVisitInNextIteration = new java.util.ArrayList<Tile>();
   
-	  std.sort(toVisit.iterator(), toVisit.end(), predicate);
+  
+  	  java.util.Collections.sort(toVisit, predicate);
   
 	  final int toVisitSize = toVisit.size();
 	  for (int i = 0; i < toVisitSize; i++)

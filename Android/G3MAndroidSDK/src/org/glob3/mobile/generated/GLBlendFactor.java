@@ -1,17 +1,15 @@
 package org.glob3.mobile.generated; 
-public enum GLPrimitive
+public enum GLBlendFactor
 {
-	TriangleStrip,
-	Lines,
-	LineLoop,
-	Points;
+	SrcAlpha,
+	OneMinusSrcAlpha;
 
 	public int getValue()
 	{
 		return this.ordinal();
 	}
 
-	public static GLPrimitive forValue(int value)
+	public static GLBlendFactor forValue(int value)
 	{
 		return values()[value];
 	}

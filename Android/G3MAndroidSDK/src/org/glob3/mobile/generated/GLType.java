@@ -1,17 +1,17 @@
 package org.glob3.mobile.generated; 
-public enum GLPrimitive
+public enum GLType
 {
-	TriangleStrip,
-	Lines,
-	LineLoop,
-	Points;
+	Float,
+	UnsignedByte,
+	UnsignedInt,
+	Int;
 
 	public int getValue()
 	{
 		return this.ordinal();
 	}
 
-	public static GLPrimitive forValue(int value)
+	public static GLType forValue(int value)
 	{
 		return values()[value];
 	}

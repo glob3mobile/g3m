@@ -1,17 +1,17 @@
 package org.glob3.mobile.generated; 
-public enum GLPrimitive
+public enum GLTextureParameter
 {
-	TriangleStrip,
-	Lines,
-	LineLoop,
-	Points;
+	MinFilter,
+	MagFilter,
+	WrapS,
+	WrapT;
 
 	public int getValue()
 	{
 		return this.ordinal();
 	}
 
-	public static GLPrimitive forValue(int value)
+	public static GLTextureParameter forValue(int value)
 	{
 		return values()[value];
 	}

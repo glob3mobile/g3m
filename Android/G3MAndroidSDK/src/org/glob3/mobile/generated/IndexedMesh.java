@@ -231,8 +231,7 @@ public class IndexedMesh extends Mesh
 	if (_centerStrategy!=CenterStrategy.NoCenter)
 	{
 	  gl.pushMatrix();
-	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(_center);
-	  gl.multMatrixf(T);
+	  gl.multMatrixf(MutableMatrix44D.createTranslationMatrix(_center));
 	}
   
 	switch (_primitive)

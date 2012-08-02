@@ -1,17 +1,14 @@
 package org.glob3.mobile.generated; 
-public enum GLPrimitive
+public enum GLFormat
 {
-	TriangleStrip,
-	Lines,
-	LineLoop,
-	Points;
+	RGBA;
 
 	public int getValue()
 	{
 		return this.ordinal();
 	}
 
-	public static GLPrimitive forValue(int value)
+	public static GLFormat forValue(int value)
 	{
 		return values()[value];
 	}
