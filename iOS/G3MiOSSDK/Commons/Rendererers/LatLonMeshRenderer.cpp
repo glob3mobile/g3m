@@ -23,10 +23,10 @@ void LatLonMeshRenderer::initialize(const InitializationContext* ic)
   unsigned int numIndices = 4;
   
   float v[] = {
-    3e6,  -7e6, 7e6,
-    3e6,  -7e6, -7e6,
-    3e6,  7e6,  7e6,
-    3e6,  7e6,  -7e6 
+    45,   -45,  1e6,
+    -45,  -45,  1e6,
+    45,   45,   1e6,
+    -45,  45,   1e6
   };
   
   unsigned int i[] = { 0, 1, 2, 3};
@@ -38,8 +38,8 @@ void LatLonMeshRenderer::initialize(const InitializationContext* ic)
   memcpy(indices, i, numIndices*sizeof(unsigned int));
 
   // create mesh
-  mesh = new LatLonMesh(true, TriangleStrip, NoCenter, Vector3D(0,0,0), 
-                        4, vertices, indices, 4);
+  mesh = new LatLonMesh(ic, true, TriangleStrip, NoCenter, Vector3D(0,0,0), 
+                        4, vertices, indices, 4/*, Color::fromRGBA(1, 1, 0, 1)*/);
 }  
 
 
