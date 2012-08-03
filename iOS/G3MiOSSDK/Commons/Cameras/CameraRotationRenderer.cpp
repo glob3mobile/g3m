@@ -124,6 +124,7 @@ void CameraRotationRenderer::onUp(const TouchEvent& touchEvent)
 
 int CameraRotationRenderer::render(const RenderContext* rc) {
   _planet = rc->getPlanet();
+  _camera = rc->getCamera();
   _gl = rc->getGL();
 
   // TEMP TO DRAW A POINT WHERE USER PRESS

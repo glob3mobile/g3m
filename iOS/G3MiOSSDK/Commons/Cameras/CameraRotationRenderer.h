@@ -32,7 +32,8 @@ private:
   double lastYValid;
   const Planet* _planet;
   IGL *_gl;
-  Camera _camera0;                //Initial Camera saved on Down event
+  Camera _camera0;         //Initial Camera saved on Down event
+  Camera* _camera;         // Camera used at current frame
 
     
 };

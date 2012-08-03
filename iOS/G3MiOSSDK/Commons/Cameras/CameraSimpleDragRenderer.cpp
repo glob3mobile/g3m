@@ -82,6 +82,7 @@ void CameraSimpleDragRenderer::onUp(const TouchEvent& touchEvent)
 
 int CameraSimpleDragRenderer::render(const RenderContext* rc) {
   _planet = rc->getPlanet();
+  _camera = rc->getCamera();
   _gl = rc->getGL();
 
   // TEMP TO DRAW A POINT WHERE USER PRESS
