@@ -86,7 +86,7 @@ int CameraSimpleDragRenderer::render(const RenderContext* rc) {
   _gl = rc->getGL();
 
   // TEMP TO DRAW A POINT WHERE USER PRESS
-  if (true) {
+  if (false) {
     if (_currentGesture == Drag) {
       float vertices[] = { 0,0,0};
       int indices[] = {0};

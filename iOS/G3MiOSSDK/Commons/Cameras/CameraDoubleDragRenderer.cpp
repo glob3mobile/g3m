@@ -135,16 +135,23 @@ void CameraDoubleDragRenderer::onMove(const TouchEvent& touchEvent)
   // the gesture was valid. Copy data to final camera
   tempCamera.updateModelMatrix();
     
-  /*
-  // adjust orientation of projected points
+/*  // adjust orientation of projected points
+  // THIS IS JUST AN APPROXIMATION
   Vector2D p00 = _camera0.point2Pixel(initialPoint0.asVector3D());
   Vector2D p10 = _camera0.point2Pixel(initialPoint1.asVector3D());
   Vector2D p0n = tempCamera.point2Pixel(initialPoint0.asVector3D());
   Vector2D p1n = tempCamera.point2Pixel(initialPoint1.asVector3D());
-  Angle a0 = p10.sub(p00).orientation();
-  Angle a1 = p1n.sub(p0n).orientation();          
+  double a0 = p10.sub(p00).orientation().degrees();
+  double a1 = p1n.sub(p0n).orientation().degrees();
+  if (a1<0 && a0>180) a1 += 360;
+  Angle correctionAngle = Angle::fromDegrees((a1-a0)/6);
   Vector3D normal = _planet->geodeticSurfaceNormal(_initialPoint.asVector3D());
-  tempCamera.rotateWithAxisAndPoint(normal, _initialPoint.asVector3D(), a0.sub(a1).div(6));*/
+  tempCamera.rotateWithAxisAndPoint(normal, _initialPoint.asVector3D(), correctionAngle);*/
+  
+  /*
+  printf ("rotating angle1=%.1f: dif_ori=%.1f initial=%.1f   corrAngle=%.1f: a0=%.1f a1=%.1f\n", 
+          angle/M_PI*180, difPixel.orientation().degrees(),  _initialFingerInclination/M_PI*180,
+          correctionAngle.degrees(), a0, a1);*/
     
   // copy final transformation to camera
   _camera->copyFrom(tempCamera);
@@ -168,7 +175,7 @@ int CameraDoubleDragRenderer::render(const RenderContext* rc) {
   _gl = rc->getGL();
   
   // TEMP TO DRAW A POINT WHERE USER PRESS
-  if (true) {
+  if (false) {
     if (_currentGesture == DoubleDrag) {
       float vertices[] = { 0,0,0};
       int indices[] = {0};
