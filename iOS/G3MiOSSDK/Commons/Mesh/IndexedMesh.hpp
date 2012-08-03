@@ -13,8 +13,11 @@
 #include "Color.hpp"
 #include "MutableVector2D.hpp"
 #include "MutableVector3D.hpp"
+#include "Geodetic3D.hpp"
+#include "Planet.hpp"
 
 #include <vector>
+
 
 
 enum GLPrimitive {
@@ -117,7 +120,36 @@ public:
                            flatColor, colors, colorsIntensity, normals);
   }
 
-                                         
+  
+  static IndexedMesh* CreateFromGeodetic3D(const Planet *planet,
+                                           bool owner,
+                                           const GLPrimitive primitive,
+                                           CenterStrategy strategy,
+                                           Vector3D center,
+                                           const unsigned int numVertices,
+                                           float* vertices,
+                                           const unsigned int* indexes,
+                                           const int numIndex, 
+                                           const Color* flatColor = NULL,
+                                           const float * colors = NULL,
+                                           const float colorsIntensity = 0.0,
+                                           const float* normals = NULL)
+  {
+    // convert vertices to latlon coordinates
+    for (unsigned int n=0; n<numVertices*3; n+=3) {
+      Geodetic3D g(Angle::fromDegrees(vertices[n]), Angle::fromDegrees(vertices[n+1]), vertices[n+2]);
+      Vector3D v = planet->toVector3D(g);
+      vertices[n]   = (float) v.x();
+      vertices[n+1] = (float) v.y();
+      vertices[n+2] = (float) v.z();
+    }
+    
+    // create indexed mesh
+    return new IndexedMesh(owner, primitive, strategy, center, numVertices, vertices,
+                           indexes, numIndex, flatColor, colors, colorsIntensity, normals);
+  }
+  
+
     
   virtual void render(const RenderContext* rc) const;
   
