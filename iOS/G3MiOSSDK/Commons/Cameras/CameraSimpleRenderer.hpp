@@ -19,6 +19,9 @@ public:
   int render(const RenderContext* rc);
   void initialize(const InitializationContext* ic);
   void onResizeViewportEvent(int width, int height);
+  
+private:
+  const ILogger * _logger;  
     
 };
 

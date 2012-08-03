@@ -12,7 +12,7 @@
 #include "IGL.hpp"
 
 //const Planet*     CameraRenderer::_planet;
-const ILogger*    CameraRenderer::_logger;
+//const ILogger*    CameraRenderer::_logger;
 IGL*              CameraRenderer::gl;
 
 Camera            CameraRenderer::_camera0(NULL, 0, 0);               

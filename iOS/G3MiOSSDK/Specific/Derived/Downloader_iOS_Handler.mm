@@ -171,7 +171,7 @@
   else {
     ILogger::instance()->logError("Can't load %s, response=%s, error=%s",
                                   [ [_nsURL      description] cStringUsingEncoding: NSUTF8StringEncoding ],
-                                  [ [urlResponse description] cStringUsingEncoding: NSUTF8StringEncoding ],
+                                  (urlResponse!=0)? [ [urlResponse description] cStringUsingEncoding: NSUTF8StringEncoding ] : "NULL",
                                   [ [error       description] cStringUsingEncoding: NSUTF8StringEncoding ] );
     
     ByteBuffer buffer(NULL, 0);
