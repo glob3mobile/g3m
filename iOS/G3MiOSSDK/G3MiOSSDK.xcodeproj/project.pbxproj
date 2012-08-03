@@ -50,15 +50,7 @@
 		CC41E3A015B1FD5B00B5581C /* Plane.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC41E39F15B1FD5B00B5581C /* Plane.cpp */; };
 		CC41E3B615B32DFB00B5581C /* Frustum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC41E3B515B32DFB00B5581C /* Frustum.cpp */; };
 		CC596F2215C46D4F008FC230 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F1C15C46D4F008FC230 /* Camera.cpp */; };
-<<<<<<< HEAD
-		CC596F2315C46D4F008FC230 /* Camera.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC596F1D15C46D4F008FC230 /* Camera.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		CC596F2415C46D4F008FC230 /* CameraDoubleDragHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F1E15C46D4F008FC230 /* CameraDoubleDragHandler.cpp */; };
-		CC596F2515C46D4F008FC230 /* CameraDoubleDragHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = CC596F1F15C46D4F008FC230 /* CameraDoubleDragHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		CC596F2615C46D4F008FC230 /* CameraRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F2015C46D4F008FC230 /* CameraRenderer.cpp */; };
-		CC596F2715C46D4F008FC230 /* CameraRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC596F2115C46D4F008FC230 /* CameraRenderer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		CC596F2A15C46DE2008FC230 /* CameraSimpleDragHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F2915C46DE2008FC230 /* CameraSimpleDragHandler.cpp */; };
-		CC596F2D15C472EF008FC230 /* CameraRotationHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F2C15C472EF008FC230 /* CameraRotationHandler.cpp */; };
-=======
+
 		CC596F2315C46D4F008FC230 /* Camera.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC596F1D15C46D4F008FC230 /* Camera.hpp */; };
 		CC596F2415C46D4F008FC230 /* CameraDoubleDragRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F1E15C46D4F008FC230 /* CameraDoubleDragRenderer.cpp */; };
 		CC596F2515C46D4F008FC230 /* CameraDoubleDragRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = CC596F1F15C46D4F008FC230 /* CameraDoubleDragRenderer.h */; };
@@ -66,7 +58,6 @@
 		CC596F2715C46D4F008FC230 /* CameraSimpleRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC596F2115C46D4F008FC230 /* CameraSimpleRenderer.hpp */; };
 		CC596F2A15C46DE2008FC230 /* CameraSimpleDragRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F2915C46DE2008FC230 /* CameraSimpleDragRenderer.cpp */; };
 		CC596F2D15C472EF008FC230 /* CameraRotationRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F2C15C472EF008FC230 /* CameraRotationRenderer.cpp */; };
->>>>>>> 2b343ce159eeb6cfecbc6628108d9742ec579151
 		CC96079215AF23F600D438D4 /* TextureMapping.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC96079115AF23F600D438D4 /* TextureMapping.cpp */; };
 		CCB2564E15B5A30900079B96 /* TextureMapping.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCB2564D15B5A30900079B96 /* TextureMapping.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CCB2565015B5A33A00079B96 /* TexturedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCB2564F15B5A33A00079B96 /* TexturedMesh.cpp */; };
@@ -89,12 +80,7 @@
 		CCC2A03D15CA6C7D00923850 /* SimplePlanetRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02A15CA6C7D00923850 /* SimplePlanetRenderer.cpp */; };
 		CCC2A03E15CA6C7D00923850 /* SimplePlanetRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02B15CA6C7D00923850 /* SimplePlanetRenderer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CCC2A03F15CA6C7D00923850 /* TileRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02C15CA6C7D00923850 /* TileRenderer.cpp */; };
-<<<<<<< HEAD
-		CCC2A04015CA6C7D00923850 /* TileRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02D15CA6C7D00923850 /* TileRenderer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		CCC2A05B15CA827D00923850 /* LatLonMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A05A15CA827D00923850 /* LatLonMesh.cpp */; };
-=======
 		CCC2A04015CA6C7D00923850 /* TileRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02D15CA6C7D00923850 /* TileRenderer.hpp */; };
->>>>>>> 2b343ce159eeb6cfecbc6628108d9742ec579151
 		CF0C396A157F988100646A2F /* Mark.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0C3969157F988100646A2F /* Mark.cpp */; };
 		CF31CBF1158776130085E8F1 /* Effects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF31CBF0158776120085E8F1 /* Effects.cpp */; };
 		CF59DF8F15C04AFC002173EC /* ILogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF59DF8E15C04AFC002173EC /* ILogger.cpp */; };
@@ -765,13 +751,10 @@
 				CCC2A03C15CA6C7D00923850 /* SceneGraphRenderer.hpp in Headers */,
 				CCC2A03E15CA6C7D00923850 /* SimplePlanetRenderer.hpp in Headers */,
 				CCC2A04015CA6C7D00923850 /* TileRenderer.hpp in Headers */,
-<<<<<<< HEAD
 				D88B5E2615C15C850083A43F /* Extent.hpp in Headers */,
 				D88B5E2715C15C850083A43F /* Frustum.hpp in Headers */,
 				D88B5E2815C15C850083A43F /* Plane.hpp in Headers */,
-=======
 				D8F7665815CAD79100179E08 /* INativeGL.hpp in Headers */,
->>>>>>> 2b343ce159eeb6cfecbc6628108d9742ec579151
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
