@@ -50,11 +50,11 @@
 		CC41E3A015B1FD5B00B5581C /* Plane.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC41E39F15B1FD5B00B5581C /* Plane.cpp */; };
 		CC41E3B615B32DFB00B5581C /* Frustum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC41E3B515B32DFB00B5581C /* Frustum.cpp */; };
 		CC596F2215C46D4F008FC230 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F1C15C46D4F008FC230 /* Camera.cpp */; };
-		CC596F2315C46D4F008FC230 /* Camera.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC596F1D15C46D4F008FC230 /* Camera.hpp */; };
+		CC596F2315C46D4F008FC230 /* Camera.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC596F1D15C46D4F008FC230 /* Camera.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CC596F2415C46D4F008FC230 /* CameraDoubleDragHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F1E15C46D4F008FC230 /* CameraDoubleDragHandler.cpp */; };
-		CC596F2515C46D4F008FC230 /* CameraDoubleDragHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = CC596F1F15C46D4F008FC230 /* CameraDoubleDragHandler.h */; };
+		CC596F2515C46D4F008FC230 /* CameraDoubleDragHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = CC596F1F15C46D4F008FC230 /* CameraDoubleDragHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CC596F2615C46D4F008FC230 /* CameraRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F2015C46D4F008FC230 /* CameraRenderer.cpp */; };
-		CC596F2715C46D4F008FC230 /* CameraRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC596F2115C46D4F008FC230 /* CameraRenderer.hpp */; };
+		CC596F2715C46D4F008FC230 /* CameraRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC596F2115C46D4F008FC230 /* CameraRenderer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CC596F2A15C46DE2008FC230 /* CameraSimpleDragHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F2915C46DE2008FC230 /* CameraSimpleDragHandler.cpp */; };
 		CC596F2D15C472EF008FC230 /* CameraRotationHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F2C15C472EF008FC230 /* CameraRotationHandler.cpp */; };
 		CC96079215AF23F600D438D4 /* TextureMapping.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC96079115AF23F600D438D4 /* TextureMapping.cpp */; };
@@ -62,43 +62,43 @@
 		CCB2565015B5A33A00079B96 /* TexturedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCB2564F15B5A33A00079B96 /* TexturedMesh.cpp */; };
 		CCB2566415B5F58500079B96 /* Box.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCB2566315B5F58500079B96 /* Box.cpp */; };
 		CCC2A02E15CA6C7D00923850 /* BusyRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A01B15CA6C7D00923850 /* BusyRenderer.cpp */; };
-		CCC2A02F15CA6C7D00923850 /* BusyRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A01C15CA6C7D00923850 /* BusyRenderer.hpp */; };
+		CCC2A02F15CA6C7D00923850 /* BusyRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A01C15CA6C7D00923850 /* BusyRenderer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CCC2A03015CA6C7D00923850 /* CompositeRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A01D15CA6C7D00923850 /* CompositeRenderer.cpp */; };
-		CCC2A03115CA6C7D00923850 /* CompositeRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A01E15CA6C7D00923850 /* CompositeRenderer.hpp */; };
+		CCC2A03115CA6C7D00923850 /* CompositeRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A01E15CA6C7D00923850 /* CompositeRenderer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CCC2A03215CA6C7D00923850 /* DummyRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A01F15CA6C7D00923850 /* DummyRenderer.cpp */; };
-		CCC2A03315CA6C7D00923850 /* DummyRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02015CA6C7D00923850 /* DummyRenderer.hpp */; };
+		CCC2A03315CA6C7D00923850 /* DummyRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02015CA6C7D00923850 /* DummyRenderer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CCC2A03415CA6C7D00923850 /* GLErrorRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02115CA6C7D00923850 /* GLErrorRenderer.cpp */; };
-		CCC2A03515CA6C7D00923850 /* GLErrorRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02215CA6C7D00923850 /* GLErrorRenderer.hpp */; };
+		CCC2A03515CA6C7D00923850 /* GLErrorRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02215CA6C7D00923850 /* GLErrorRenderer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CCC2A03615CA6C7D00923850 /* MarksRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02315CA6C7D00923850 /* MarksRenderer.cpp */; };
-		CCC2A03715CA6C7D00923850 /* MarksRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02415CA6C7D00923850 /* MarksRenderer.hpp */; };
+		CCC2A03715CA6C7D00923850 /* MarksRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02415CA6C7D00923850 /* MarksRenderer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CCC2A03815CA6C7D00923850 /* LatLonMeshRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02515CA6C7D00923850 /* LatLonMeshRenderer.cpp */; };
-		CCC2A03915CA6C7D00923850 /* LatLonMeshRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02615CA6C7D00923850 /* LatLonMeshRenderer.h */; };
-		CCC2A03A15CA6C7D00923850 /* Renderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02715CA6C7D00923850 /* Renderer.hpp */; };
+		CCC2A03915CA6C7D00923850 /* LatLonMeshRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02615CA6C7D00923850 /* LatLonMeshRenderer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CCC2A03A15CA6C7D00923850 /* Renderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02715CA6C7D00923850 /* Renderer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CCC2A03B15CA6C7D00923850 /* SceneGraphRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02815CA6C7D00923850 /* SceneGraphRenderer.cpp */; };
-		CCC2A03C15CA6C7D00923850 /* SceneGraphRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02915CA6C7D00923850 /* SceneGraphRenderer.hpp */; };
+		CCC2A03C15CA6C7D00923850 /* SceneGraphRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02915CA6C7D00923850 /* SceneGraphRenderer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CCC2A03D15CA6C7D00923850 /* SimplePlanetRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02A15CA6C7D00923850 /* SimplePlanetRenderer.cpp */; };
-		CCC2A03E15CA6C7D00923850 /* SimplePlanetRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02B15CA6C7D00923850 /* SimplePlanetRenderer.hpp */; };
+		CCC2A03E15CA6C7D00923850 /* SimplePlanetRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02B15CA6C7D00923850 /* SimplePlanetRenderer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CCC2A03F15CA6C7D00923850 /* TileRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02C15CA6C7D00923850 /* TileRenderer.cpp */; };
-		CCC2A04015CA6C7D00923850 /* TileRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02D15CA6C7D00923850 /* TileRenderer.hpp */; };
+		CCC2A04015CA6C7D00923850 /* TileRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02D15CA6C7D00923850 /* TileRenderer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CCC2A05B15CA827D00923850 /* LatLonMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A05A15CA827D00923850 /* LatLonMesh.cpp */; };
 		CF0C396A157F988100646A2F /* Mark.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0C3969157F988100646A2F /* Mark.cpp */; };
 		CF31CBF1158776130085E8F1 /* Effects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF31CBF0158776120085E8F1 /* Effects.cpp */; };
 		CF59DF8F15C04AFC002173EC /* ILogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF59DF8E15C04AFC002173EC /* ILogger.cpp */; };
-		CF6D404715C8278C008D8D78 /* Downloader_iOS_WorkerThread.h in Headers */ = {isa = PBXBuildFile; fileRef = CF6D404515C8278C008D8D78 /* Downloader_iOS_WorkerThread.h */; };
+		CF6D404715C8278C008D8D78 /* Downloader_iOS_WorkerThread.h in Headers */ = {isa = PBXBuildFile; fileRef = CF6D404515C8278C008D8D78 /* Downloader_iOS_WorkerThread.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF6D404815C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF6D404615C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm */; };
 		CF7A78EC159B9BE300074422 /* MutableVector2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */; };
 		CF7A78ED159B9BE300074422 /* MutableVector2D.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF7A78EB159B9BE300074422 /* MutableVector2D.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF883B821590984900AEE39C /* TexturesHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF883B811590984900AEE39C /* TexturesHandler.cpp */; };
 		CF883BCB1594B9A500AEE39C /* Sector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF883BCA1594B9A500AEE39C /* Sector.cpp */; };
-		CF8A234E15C4306800FD56C9 /* Downloader_iOS_Handler.h in Headers */ = {isa = PBXBuildFile; fileRef = CF8A234C15C4306800FD56C9 /* Downloader_iOS_Handler.h */; };
+		CF8A234E15C4306800FD56C9 /* Downloader_iOS_Handler.h in Headers */ = {isa = PBXBuildFile; fileRef = CF8A234C15C4306800FD56C9 /* Downloader_iOS_Handler.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF8A234F15C4306800FD56C9 /* Downloader_iOS_Handler.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF8A234D15C4306800FD56C9 /* Downloader_iOS_Handler.mm */; };
-		CF8A235315C4340900FD56C9 /* Downloader_iOS_Listener.h in Headers */ = {isa = PBXBuildFile; fileRef = CF8A235115C4340900FD56C9 /* Downloader_iOS_Listener.h */; };
+		CF8A235315C4340900FD56C9 /* Downloader_iOS_Listener.h in Headers */ = {isa = PBXBuildFile; fileRef = CF8A235115C4340900FD56C9 /* Downloader_iOS_Listener.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF8A235415C4340900FD56C9 /* Downloader_iOS_Listener.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF8A235215C4340900FD56C9 /* Downloader_iOS_Listener.mm */; };
 		CF8D0BFE15AF0D32005B5433 /* TileTexturizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */; };
 		CF9AEBBF159B3BAF004C3558 /* TileTessellator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9AEBBE159B3BAF004C3558 /* TileTessellator.cpp */; };
 		CF9AEBC2159B3FEB004C3558 /* EllipsoidalTileTessellator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9AEBC1159B3FEA004C3558 /* EllipsoidalTileTessellator.cpp */; };
-		CFF0999B15C18AAD005EAF12 /* TileTexturizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */; };
-		CFF0999C15C18AAD005EAF12 /* TilePetitions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8C874BE15B5C58D00F19859 /* TilePetitions.hpp */; };
+		CFF0999B15C18AAD005EAF12 /* TileTexturizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CFF0999C15C18AAD005EAF12 /* TilePetitions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8C874BE15B5C58D00F19859 /* TilePetitions.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFFEC11E15C2E645003FA986 /* IDownloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC11D15C2E645003FA986 /* IDownloader.cpp */; };
 		CFFEC12315C2EA5F003FA986 /* Downloader_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12215C2EA5F003FA986 /* Downloader_iOS.mm */; };
 		CFFEC12615C2EBA6003FA986 /* URL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12515C2EBA6003FA986 /* URL.cpp */; };
@@ -139,13 +139,13 @@
 		D88B5E2615C15C850083A43F /* Extent.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC41E3C915B4649800B5581C /* Extent.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D88B5E2715C15C850083A43F /* Frustum.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC41E3B315B32D2E00B5581C /* Frustum.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D88B5E2815C15C850083A43F /* Plane.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC41E39D15B1FD1300B5581C /* Plane.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		D88B5E5215C162AF0083A43F /* G3MWidget.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D88B5E5115C162AF0083A43F /* G3MWidget.hpp */; };
+		D88B5E5215C162AF0083A43F /* G3MWidget.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D88B5E5115C162AF0083A43F /* G3MWidget.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D88C344C159C5A250044CED9 /* DummyDownload.mm in Sources */ = {isa = PBXBuildFile; fileRef = D88C3449159C5A250044CED9 /* DummyDownload.mm */; };
 		D88C344D159C5A250044CED9 /* DummyDownload.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D88C344A159C5A250044CED9 /* DummyDownload.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D88C3453159C5A410044CED9 /* DataDownload.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D88C344F159C5A410044CED9 /* DataDownload.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D88C3454159C5A410044CED9 /* DataDownload.mm in Sources */ = {isa = PBXBuildFile; fileRef = D88C3450159C5A410044CED9 /* DataDownload.mm */; };
 		D88C3455159C5A410044CED9 /* NetworkQueue.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D88C3451159C5A410044CED9 /* NetworkQueue.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		D892FBCC15C930CC00E69254 /* NativeGL2_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D892FBCB15C930CC00E69254 /* NativeGL2_iOS.hpp */; };
+		D892FBCC15C930CC00E69254 /* NativeGL2_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D892FBCB15C930CC00E69254 /* NativeGL2_iOS.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D892FBD015C9310A00E69254 /* GL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D892FBCF15C9310A00E69254 /* GL.cpp */; };
 		D8A5601F15AEF64E00035086 /* IndexedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A5601B15AEF64E00035086 /* IndexedMesh.cpp */; };
 		D8A5602015AEF64E00035086 /* IndexedMesh.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8A5601C15AEF64E00035086 /* IndexedMesh.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -726,9 +726,7 @@
 				D88B5E1515C15C180083A43F /* Mark.hpp in Headers */,
 				D88B5E1815C15C180083A43F /* TexturesHandler.hpp in Headers */,
 				D88B5E1915C15C180083A43F /* Tile.hpp in Headers */,
-				CFF0999C15C18AAD005EAF12 /* TilePetitions.hpp in Headers */,
 				D88B5E1C15C15C180083A43F /* TileTessellator.hpp in Headers */,
-				CFF0999B15C18AAD005EAF12 /* TileTexturizer.hpp in Headers */,
 				D88B5E1E15C15C180083A43F /* TimeInterval.hpp in Headers */,
 				D88B5E2115C15C180083A43F /* MutableMatrix44D.hpp in Headers */,
 				D88B5E2215C15C180083A43F /* ITimer.hpp in Headers */,
@@ -736,9 +734,8 @@
 				D88B5E2415C15C180083A43F /* SQLiteStorage_iOS.hpp in Headers */,
 				D88B5DF615C150A10083A43F /* TileImagesTileTexturizer.hpp in Headers */,
 				D88B5E2515C15C850083A43F /* Box.hpp in Headers */,
-				D88B5E2615C15C850083A43F /* Extent.hpp in Headers */,
-				D88B5E2715C15C850083A43F /* Frustum.hpp in Headers */,
-				D88B5E2815C15C850083A43F /* Plane.hpp in Headers */,
+				CFF0999C15C18AAD005EAF12 /* TilePetitions.hpp in Headers */,
+				CFF0999B15C18AAD005EAF12 /* TileTexturizer.hpp in Headers */,
 				D88B5E5215C162AF0083A43F /* G3MWidget.hpp in Headers */,
 				CC596F2315C46D4F008FC230 /* Camera.hpp in Headers */,
 				CC596F2515C46D4F008FC230 /* CameraDoubleDragHandler.h in Headers */,
@@ -757,6 +754,9 @@
 				CCC2A03C15CA6C7D00923850 /* SceneGraphRenderer.hpp in Headers */,
 				CCC2A03E15CA6C7D00923850 /* SimplePlanetRenderer.hpp in Headers */,
 				CCC2A04015CA6C7D00923850 /* TileRenderer.hpp in Headers */,
+				D88B5E2615C15C850083A43F /* Extent.hpp in Headers */,
+				D88B5E2715C15C850083A43F /* Frustum.hpp in Headers */,
+				D88B5E2815C15C850083A43F /* Plane.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
