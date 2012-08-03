@@ -123,6 +123,8 @@ void CameraRotationRenderer::onUp(const TouchEvent& touchEvent)
 
 
 int CameraRotationRenderer::render(const RenderContext* rc) {
+  _planet = rc->getPlanet();
+
   // TEMP TO DRAW A POINT WHERE USER PRESS
   if (false) {
     if (_currentGesture == Rotate) {

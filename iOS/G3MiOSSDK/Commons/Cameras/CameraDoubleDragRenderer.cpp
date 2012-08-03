@@ -164,6 +164,8 @@ void CameraDoubleDragRenderer::onUp(const TouchEvent& touchEvent)
 
 
 int CameraDoubleDragRenderer::render(const RenderContext* rc) {
+  _planet = rc->getPlanet();
+  
   // TEMP TO DRAW A POINT WHERE USER PRESS
   if (false) {
     if (_currentGesture == DoubleDrag) {

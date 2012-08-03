@@ -33,7 +33,7 @@ class CameraRenderer: public Renderer
 {
   
 protected:
-  static const Planet* _planet;
+  //static const Planet* _planet;
   static const ILogger * _logger;
   static IGL *gl;
   

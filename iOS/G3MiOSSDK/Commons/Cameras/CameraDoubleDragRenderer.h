@@ -27,6 +27,7 @@ private:
   void onUp(const TouchEvent& touchEvent);
   
   MutableVector3D initialPoint0, initialPoint1;
+  const Planet* _planet;
         
 };
 

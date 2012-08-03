@@ -11,7 +11,7 @@
 #include "CameraRenderer.h"
 #include "IGL.hpp"
 
-const Planet*     CameraRenderer::_planet;
+//const Planet*     CameraRenderer::_planet;
 const ILogger*    CameraRenderer::_logger;
 IGL*              CameraRenderer::gl;
 

@@ -26,6 +26,8 @@ private:
   void onUp(const TouchEvent& touchEvent);
   
   double lastYValid;
+  const Planet* _planet;
+
     
 };
 
