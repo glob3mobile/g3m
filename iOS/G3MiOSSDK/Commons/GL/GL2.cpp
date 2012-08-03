@@ -6,7 +6,6 @@
 //  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
-#include <OpenGLES/ES2/gl.h>
 #include <list>
 
 #include "GL2.hpp"
@@ -19,32 +18,32 @@
 
 
 struct UniformsStruct {
-  GLuint  Projection;
-  GLuint  Modelview;
-  GLint   Sampler;
-  GLint   EnableTexture;
-  GLint   FlatColor;
-  GLint   TranslationTexCoord;
-  GLint   ScaleTexCoord;
-  GLint   PointSize;
+  int  Projection;
+  int  Modelview;
+  int   Sampler;
+  int   EnableTexture;
+  int   FlatColor;
+  int   TranslationTexCoord;
+  int   ScaleTexCoord;
+  int   PointSize;
   
   //FOR BILLBOARDING
-  GLint   BillBoard;
-  GLint   ViewPortRatio;
+  int   BillBoard;
+  int   ViewPortRatio;
   
   //FOR COLOR MIXING
-  GLint   FlatColorIntensity;
-  GLint   EnableColorPerVertex;
-  GLint   EnableFlatColor;
-  GLint   ColorPerVertexIntensity;
+  int   FlatColorIntensity;
+  int   EnableColorPerVertex;
+  int   EnableFlatColor;
+  int   ColorPerVertexIntensity;
 } Uniforms;
 
 
 struct AttributesStruct {
-  GLint   Position;
-  GLint   TextureCoord;
-  GLint   Color;
-  GLint   Normal;
+  int   Position;
+  int   TextureCoord;
+  int   Color;
+  int   Normal;
 } Attributes;
 
 
