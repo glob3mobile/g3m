@@ -22,6 +22,7 @@ void Camera::copyFrom(const Camera &that) {
   
   _modelMatrix      = that._modelMatrix;
   _projectionMatrix = that._projectionMatrix;
+//  _modelViewMatrix  = that._modelViewMatrix;
   
   _position = that._position;
   _center   = that._center;
@@ -70,6 +71,7 @@ void Camera::print() const {
   if (_logger != NULL){ 
     _modelMatrix.print("Model Matrix", _logger);
     _projectionMatrix.print("Projection Matrix", _logger);
+//    _modelViewMatrix.print("ModelView Matrix", _logger);
     _logger->logInfo("Width: %d, Height %d\n", _width, _height);
   }
 }
@@ -83,12 +85,19 @@ void Camera::calculateCachedValues(const RenderContext *rc) {
   
   _modelMatrix = MutableMatrix44D::createModelMatrix(_position, _center, _up);
   
+  
+//  _modelViewMatrix = _projectionMatrix.multiply(_modelMatrix);
+  
+  
   // compute center of view on planet
-  if (_centerOfView) delete _centerOfView;
+  if (_centerOfView) {
+    delete _centerOfView;
+  }
   const Planet *planet = rc->getPlanet();
-  Vector3D centerV = centerOfViewOnPlanet(planet);
-  Geodetic3D centerG = planet->toGeodetic3D(centerV);
+  const Vector3D centerV = centerOfViewOnPlanet(planet);
+  const Geodetic3D centerG = planet->toGeodetic3D(centerV);
   _centerOfView = new Geodetic3D(centerG);
+  
   
   if (_frustum != NULL) {
     delete _frustum;
@@ -190,8 +199,14 @@ Vector3D Camera::pixel2Ray(const Vector2D& pixel) const {
 Vector2D Camera::point2Pixel(const Vector3D& point) const
 {
   const MutableMatrix44D modelViewMatrix = _projectionMatrix.multiply(_modelMatrix);
+  
   const int viewport[4] = { 0, 0, _width, _height };
-  Vector2D p = modelViewMatrix.project(point, viewport);
+  const Vector2D p = modelViewMatrix.project(point, viewport);
+  
+  if (p.isNan()) {
+    return p;
+  }
+  
   return Vector2D(p.x(), _height-p.y());
 }
 
@@ -261,14 +276,14 @@ void Camera::setPosition(const Planet& planet, const Geodetic3D& g3d)
 
 Vector3D Camera::centerOfViewOnPlanet(const Planet *planet) const
 {
-  Vector3D ray = _center.sub(_position).asVector3D();
+  const Vector3D ray = _center.sub(_position).asVector3D();
   return planet->closestIntersection(_position.asVector3D(), ray);
 }
 
 
 Vector3D Camera::getHorizontalVector() const
 {
-  MutableMatrix44D M = MutableMatrix44D::createModelMatrix(_position, _center, _up);
+  const MutableMatrix44D M = MutableMatrix44D::createModelMatrix(_position, _center, _up);
   return Vector3D(M.get(0), M.get(4), M.get(8));
 }
 

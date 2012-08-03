@@ -25,6 +25,7 @@ private:
   
   // stack of ModelView matrices
   std::list<MutableMatrix44D> _matrixStack;
+  
   std::list<int>              _texturesIdBag;
   long                        _texturesIdCounter;
   

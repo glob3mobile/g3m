@@ -404,7 +404,7 @@ int GL2::getTextureID() {
   if (_texturesIdBag.size() == 0) {
     const int bugdetSize = 256;
     
-    std::vector<int> ids = _gl->genTextures(bugdetSize);
+    const std::vector<int> ids = _gl->genTextures(bugdetSize);
     
     for (int i = 0; i < bugdetSize; i++) {
       _texturesIdBag.push_back(ids[i]);
