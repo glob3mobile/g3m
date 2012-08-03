@@ -136,6 +136,8 @@ private:
   int _splitsCountInFrame;
   
 public:
+    TilesStatistics() {}
+
   TilesStatistics(const TileParameters* parameters) :
   _counter(0),
   _minLevel(parameters->_maxLevel + 1),
