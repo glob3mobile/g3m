@@ -13,11 +13,10 @@
 #include <vector>
 #include "TextureBuilder.hpp"
 
-#include "TextureHolder.hpp"
 
 class IImage;
 class RenderContext;
-//class TextureHolder;
+class TextureHolder;
 class IGL;
 class IFactory;
 
