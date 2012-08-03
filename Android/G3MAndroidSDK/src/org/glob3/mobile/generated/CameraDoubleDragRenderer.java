@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 
 //
-//  CameraDoubleDragHandler.h
+//  CameraDoubleDragRenderer.h
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 28/07/12.
@@ -20,8 +20,13 @@ package org.glob3.mobile.generated;
 
 
 
-public class CameraDoubleDragHandler extends CameraHandler
+public class CameraDoubleDragRenderer extends CameraRenderer
 {
+
+  public CameraDoubleDragRenderer()
+  {
+	  _camera0 = new Camera(new Camera(null, 0, 0));
+  }
 
   public final boolean onTouchEvent(TouchEvent touchEvent)
   {
@@ -47,6 +52,10 @@ public class CameraDoubleDragHandler extends CameraHandler
   }
   public final int render(RenderContext rc)
   {
+	_planet = rc.getPlanet();
+	_camera = rc.getCamera();
+	_gl = rc.getGL();
+  
 	// TEMP TO DRAW A POINT WHERE USER PRESS
 	if (false)
 	{
@@ -54,30 +63,30 @@ public class CameraDoubleDragHandler extends CameraHandler
 	  {
 		float[] vertices = { 0,0,0};
 		int[] indices = {0};
-		gl.enableVerticesPosition();
-		gl.disableTexture2D();
-		gl.disableTextures();
-		gl.vertexPointer(3, 0, vertices);
-		gl.color((float) 1, (float) 1, (float) 1, 1);
-		gl.pointSize(10);
-		gl.pushMatrix();
+		_gl.enableVerticesPosition();
+		_gl.disableTexture2D();
+		_gl.disableTextures();
+		_gl.vertexPointer(3, 0, vertices);
+		_gl.color((float) 1, (float) 1, (float) 1, 1);
+		_gl.pointSize(10);
+		_gl.pushMatrix();
 		MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(_initialPoint.asVector3D());
-		gl.multMatrixf(T);
-		gl.drawPoints(1, indices);
-		gl.popMatrix();
+		_gl.multMatrixf(T);
+		_gl.drawPoints(1, indices);
+		_gl.popMatrix();
   
 		// draw each finger
-		gl.pointSize(60);
-		gl.pushMatrix();
+		_gl.pointSize(60);
+		_gl.pushMatrix();
 		MutableMatrix44D T0 = MutableMatrix44D.createTranslationMatrix(initialPoint0.asVector3D());
-		gl.multMatrixf(T0);
-		gl.drawPoints(1, indices);
-		gl.popMatrix();
-		gl.pushMatrix();
+		_gl.multMatrixf(T0);
+		_gl.drawPoints(1, indices);
+		_gl.popMatrix();
+		_gl.pushMatrix();
 		MutableMatrix44D T1 = MutableMatrix44D.createTranslationMatrix(initialPoint1.asVector3D());
-		gl.multMatrixf(T1);
-		gl.drawPoints(1, indices);
-		gl.popMatrix();
+		_gl.multMatrixf(T1);
+		_gl.drawPoints(1, indices);
+		_gl.popMatrix();
   
   
 		//Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
@@ -225,5 +234,9 @@ public class CameraDoubleDragHandler extends CameraHandler
 
   private MutableVector3D initialPoint0 = new MutableVector3D();
   private MutableVector3D initialPoint1 = new MutableVector3D();
+  private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
+  private IGL _gl;
+  private Camera _camera0 ; //Initial Camera saved on Down event
+  private Camera _camera; // Camera used at current frame
 
 }

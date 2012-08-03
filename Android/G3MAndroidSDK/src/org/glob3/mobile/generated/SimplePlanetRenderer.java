@@ -166,7 +166,7 @@ public class SimplePlanetRenderer extends Renderer
 	  }
 	}
   
-	IndexedMesh im = new IndexedMesh(true, GLPrimitive.TriangleStrip, CenterStrategy.NoCenter, new Vector3D(0,0,0), _latRes *_lonRes, ver, ind, numIndexes, flatColor, colors, 0.5, normals);
+	IndexedMesh im = IndexedMesh.CreateFromVector3D(true, TriangleStrip, CenterStrategy.NoCenter, new Vector3D(0,0,0), _latRes *_lonRes, ver, ind, numIndexes, flatColor, colors, 0.5, normals);
   
 	_mesh = new TexturedMesh(im, true, new TextureMapping(texID, texC), true);
   

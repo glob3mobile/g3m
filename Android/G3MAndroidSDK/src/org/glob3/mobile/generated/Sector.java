@@ -24,6 +24,7 @@ public class Sector
 
   private final Geodetic2D _lower ;
   private final Geodetic2D _upper ;
+  private final Geodetic2D _center ;
 
   private final Angle _deltaLatitude ;
   private final Angle _deltaLongitude ;
@@ -55,15 +56,17 @@ public class Sector
 	  _upper = new Geodetic2D(upper);
 	  _deltaLatitude = new Angle(upper.latitude().sub(lower.latitude()));
 	  _deltaLongitude = new Angle(upper.longitude().sub(lower.longitude()));
+	  _center = new Geodetic2D(Angle.midAngle(_lower.latitude(), _upper.latitude()), Angle.midAngle(_lower.longitude(), _upper.longitude()));
   }
 
 
-  public Sector(Sector s)
+  public Sector(Sector sector)
   {
-	  _lower = new Geodetic2D(s._lower);
-	  _upper = new Geodetic2D(s._upper);
-	  _deltaLatitude = new Angle(s._deltaLatitude);
-	  _deltaLongitude = new Angle(s._deltaLongitude);
+	  _lower = new Geodetic2D(sector._lower);
+	  _upper = new Geodetic2D(sector._upper);
+	  _deltaLatitude = new Angle(sector._deltaLatitude);
+	  _deltaLongitude = new Angle(sector._deltaLongitude);
+	  _center = new Geodetic2D(sector._center);
   }
 
   public static Sector fromDegrees(double minLat, double minLon, double maxLat, double maxLon)
@@ -218,7 +221,9 @@ public class Sector
 //ORIGINAL LINE: Geodetic2D getCenter() const
   public final Geodetic2D getCenter()
   {
-	return new Geodetic2D(Angle.midAngle(_lower.latitude(), _upper.latitude()), Angle.midAngle(_lower.longitude(), _upper.longitude()));
+//    return Geodetic2D(Angle::midAngle(_lower.latitude(), _upper.latitude()),
+//                      Angle::midAngle(_lower.longitude(), _upper.longitude()));
+	return _center;
   }
 
   // (u,v) are similar to texture coordinates inside the Sector

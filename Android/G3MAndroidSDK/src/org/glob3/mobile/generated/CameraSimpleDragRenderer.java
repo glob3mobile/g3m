@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  CameraSimpleDragHandler.cpp
+//  CameraSimpleDragRenderer.cpp
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 28/07/12.
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 
 //
-//  CameraSimpleDragHandlerr.h
+//  CameraSimpleDragRenderer.h
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 28/07/12.
@@ -20,8 +20,13 @@ package org.glob3.mobile.generated;
 
 
 
-public class CameraSimpleDragHandler extends CameraHandler
+public class CameraSimpleDragRenderer extends CameraRenderer
 {
+
+  public CameraSimpleDragRenderer()
+  {
+	  _camera0 = new Camera(new Camera(null, 0, 0));
+  }
 
   public final boolean onTouchEvent(TouchEvent touchEvent)
   {
@@ -47,6 +52,10 @@ public class CameraSimpleDragHandler extends CameraHandler
   }
   public final int render(RenderContext rc)
   {
+	_planet = rc.getPlanet();
+	_camera = rc.getCamera();
+	_gl = rc.getGL();
+  
 	// TEMP TO DRAW A POINT WHERE USER PRESS
 	if (false)
 	{
@@ -54,22 +63,22 @@ public class CameraSimpleDragHandler extends CameraHandler
 	  {
 		float[] vertices = { 0,0,0};
 		int[] indices = {0};
-		gl.enableVerticesPosition();
-		gl.disableTexture2D();
-		gl.disableTextures();
-		gl.vertexPointer(3, 0, vertices);
-		gl.color((float) 0, (float) 1, (float) 0, 1);
-		gl.pointSize(60);
-		gl.pushMatrix();
+		_gl.enableVerticesPosition();
+		_gl.disableTexture2D();
+		_gl.disableTextures();
+		_gl.vertexPointer(3, 0, vertices);
+		_gl.color((float) 0, (float) 1, (float) 0, 1);
+		_gl.pointSize(60);
+		_gl.pushMatrix();
   
 		double height = _planet.toGeodetic3D(_camera.getPosition()).height();
 		System.out.printf ("altura camara = %f\n", height);
   
   
 		MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(_initialPoint.asVector3D());
-		gl.multMatrixf(T);
-		gl.drawPoints(1, indices);
-		gl.popMatrix();
+		_gl.multMatrixf(T);
+		_gl.drawPoints(1, indices);
+		_gl.popMatrix();
   
 		//Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
 		//printf ("zoom with initial point = (%f, %f)\n", g.latitude().degrees(), g.longitude().degrees());
@@ -84,7 +93,6 @@ public class CameraSimpleDragHandler extends CameraHandler
   public final void onResizeViewportEvent(int width, int height)
   {
   }
-
 
 
   private void onDown(TouchEvent touchEvent)
@@ -130,5 +138,10 @@ public class CameraSimpleDragHandler extends CameraHandler
   
 	//printf ("end 1 finger\n");
   }
+
+  private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
+  private IGL _gl;
+  private Camera _camera0 ; //Initial Camera saved on Down event
+  private Camera _camera; // Camera used at current frame
 
 }

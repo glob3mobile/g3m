@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  CameraHandler.cpp
+//  CameraRenderer.cpp
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 30/07/12.
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 
 //
-//  CameraHandler.h
+//  CameraRenderer.h
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 30/07/12.
