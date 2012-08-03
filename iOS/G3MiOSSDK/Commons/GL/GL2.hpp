@@ -25,7 +25,7 @@ private:
   
   // stack of ModelView matrices
   std::list<MutableMatrix44D> _matrixStack;
-  std::list<unsigned int>     _texturesIdBag;
+  std::list<int>              _texturesIdBag;
   long                        _texturesIdCounter;
   
   // state handling
@@ -43,7 +43,7 @@ private:
   
   inline void loadModelView();
   
-  GLuint getTextureID();
+  int getTextureID();
   
 public:
   

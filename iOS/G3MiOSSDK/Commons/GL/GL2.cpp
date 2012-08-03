@@ -189,8 +189,7 @@ int GL2::uploadTexture(const IImage* image, int textureWidth, int textureHeight)
   _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);   
   _gl->pixelStorei(Unpack, 1);
   
-  std::vector<int> ts = _gl->genTextures(1);
-  int texID = ts[0];
+  int texID = getTextureID();
   
   _gl->bindTexture(Texture2D, texID);
   _gl->texParameteri(Texture2D, MinFilter, Linear);
@@ -246,11 +245,6 @@ void GL2::drawBillBoard(const unsigned int textureId,
   enableDepthTest();
   
   _gl->uniform1i(Uniforms.BillBoard, false);
-}
-
-void GL2::deleteTexture(int glTextureId) {
-  int textures[] = { glTextureId };
-  _gl->deleteTextures(1, textures);
 }
 
 // state handling
@@ -405,5 +399,30 @@ void GL2::disableCullFace() {
     _gl->disable(CullFacing);
     _enableCullFace = false;
   }
+}
+
+int GL2::getTextureID() {
+  if (_texturesIdBag.size() == 0) {
+    const int bugdetSize = 256;
+    
+    std::vector<int> ids = _gl->genTextures(bugdetSize);
+    
+    for (int i = 0; i < bugdetSize; i++) {
+      _texturesIdBag.push_back(ids[i]);
+    }
+    
+    _texturesIdCounter += bugdetSize;
+    printf("= Created %d texturesIds (accumulated %ld)\n", bugdetSize, _texturesIdCounter);
+  }
+
+    int result = _texturesIdBag.back();
+    _texturesIdBag.pop_back();
+    return result;
+}
+
+void GL2::deleteTexture(int glTextureId) {
+  int textures[] = { glTextureId };
+  _gl->deleteTextures(1, textures);
+  _texturesIdBag.push_back(glTextureId);
 }
 
