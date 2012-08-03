@@ -187,7 +187,7 @@ public class Tile
 	return subTiles;
   }
 
-  private void rawRender(RenderContext rc, TileTessellator tessellator, TileTexturizer texturizer, ITimer frameTimer)
+  private void rawRender(RenderContext rc, TileTessellator tessellator, TileTexturizer texturizer, ITimer frameTimer, ITimer lastTexturizerTimer)
   {
   
 	Mesh tessellatorMesh = getTessellatorMesh(rc, tessellator);
@@ -207,10 +207,12 @@ public class Tile
 		{
 		  int __TODO_tune_render_budget;
   
-		  if (_texturizerTimer == null || _texturizerTimer.elapsedTime().milliseconds() > 125)
-		  {
+		  boolean callTexturizer = ((_texturizerTimer == null) || (_texturizerTimer.elapsedTime().milliseconds() > 125 && lastTexturizerTimer.elapsedTime().milliseconds() > 25));
   
+		  if (callTexturizer)
+		  {
 			_texturizerMesh = texturizer.texturize(rc, this, tessellator, tessellatorMesh, _texturizerMesh, frameTimer);
+			lastTexturizerTimer.start();
   
 			if (_texturizerTimer == null)
 			{
@@ -395,13 +397,13 @@ public class Tile
 	  return _parent;
   }
 
-  public final void render(RenderContext rc, TileTessellator tessellator, TileTexturizer texturizer, TileParameters parameters, TilesStatistics statistics, java.util.ArrayList<Tile> toVisitInNextIteration, ITimer frameTimer, ITimer lastSplitTimer)
+  public final void render(RenderContext rc, TileTessellator tessellator, TileTexturizer texturizer, TileParameters parameters, TilesStatistics statistics, java.util.ArrayList<Tile> toVisitInNextIteration, ITimer frameTimer, ITimer lastSplitTimer, ITimer lastTexturizerTimer)
   {
 	if (isVisible(rc, tessellator))
 	{
 	  if (meetsRenderCriteria(rc, tessellator, texturizer, parameters, frameTimer, lastSplitTimer, statistics))
 	  {
-		rawRender(rc, tessellator, texturizer, frameTimer);
+		rawRender(rc, tessellator, texturizer, frameTimer, lastTexturizerTimer);
 		if (parameters._renderDebug)
 		{
 		  debugRender(rc, tessellator);

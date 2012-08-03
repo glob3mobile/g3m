@@ -11,6 +11,7 @@ public class TileRenderer extends Renderer
 
   private ITimer _frameTimer; // timer started at the start of each frame rendering
   private ITimer _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
+  private ITimer _lastTexturizerTimer; // timer to start every time the texturizer is called
 
   private void clearTopLevelTiles()
   {
@@ -102,6 +103,7 @@ public class TileRenderer extends Renderer
 	  _topTilesJustCreated = false;
 	  _frameTimer = null;
 	  _lastSplitTimer = null;
+	  _lastTexturizerTimer = null;
 
   }
 
@@ -118,6 +120,7 @@ public class TileRenderer extends Renderer
   
 	_frameTimer = ic.getFactory().createTimer();
 	_lastSplitTimer = ic.getFactory().createTimer();
+	_lastTexturizerTimer = ic.getFactory().createTimer();
   }
 
   public final int render(RenderContext rc)
@@ -155,7 +158,7 @@ public class TileRenderer extends Renderer
 	  for (int i = 0; i < toVisitSize; i++)
 	  {
 		Tile tile = toVisit.get(i);
-		tile.render(rc, _tessellator, _texturizer, _parameters, statistics, toVisitInNextIteration, _frameTimer, _lastSplitTimer);
+		tile.render(rc, _tessellator, _texturizer, _parameters, statistics, toVisitInNextIteration, _frameTimer, _lastSplitTimer, _lastTexturizerTimer);
 	  }
   
 	  toVisit = toVisitInNextIteration;

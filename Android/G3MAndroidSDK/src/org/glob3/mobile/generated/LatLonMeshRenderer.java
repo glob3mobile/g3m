@@ -22,7 +22,7 @@ package org.glob3.mobile.generated;
 public class LatLonMeshRenderer extends Renderer
 {
 
-  private LatLonMesh mesh;
+  private Mesh mesh;
 
 
   public void dispose()
@@ -36,7 +36,7 @@ public class LatLonMeshRenderer extends Renderer
 	int numVertices = 4;
 	int numIndices = 4;
   
-	float[] v = { 28.753213, -17.898788, 500, 28.680347, -17.898788, 500, 28.753213, -17.83287, 500, 28.680347, -17.83287, 500 };
+	float[] v = { (float) 28.753213, (float) -17.898788, 500, (float) 28.680347, (float) -17.898788, 500, (float) 28.753213, (float) -17.83287, 500, (float) 28.680347, (float) -17.83287, 500 };
   
 	int[] i = { 0, 1, 2, 3};
   
@@ -52,7 +52,7 @@ public class LatLonMeshRenderer extends Renderer
   
 	// create mesh
 	Color flatColor = new Color(Color.fromRGBA(1.0, 1.0, 0.0, 1.0));
-	mesh = new LatLonMesh(ic, true, GLPrimitive.TriangleStrip, CenterStrategy.NoCenter, new Vector3D(0,0,0), 4, vertices, indices, 4, flatColor);
+	mesh = IndexedMesh.CreateFromGeodetic3D(ic.getPlanet(), true, TriangleStrip, CenterStrategy.NoCenter, new Vector3D(0,0,0), 4, vertices, indices, 4, flatColor);
   }
 
   public final int render(RenderContext rc)

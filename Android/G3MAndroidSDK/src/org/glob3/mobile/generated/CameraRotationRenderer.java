@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  CameraRotationHandler.cpp
+//  CameraRotationRenderer.cpp
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 28/07/12.
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 
 //
-//  CameraRotationHandler.h
+//  CameraRotationRenderer.h
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 28/07/12.
@@ -19,8 +19,13 @@ package org.glob3.mobile.generated;
 
 
 
-public class CameraRotationHandler extends CameraHandler
+public class CameraRotationRenderer extends CameraRenderer
 {
+
+  public CameraRotationRenderer()
+  {
+	  _camera0 = new Camera(new Camera(null, 0, 0));
+  }
 
   public final boolean onTouchEvent(TouchEvent touchEvent)
   {
@@ -46,6 +51,10 @@ public class CameraRotationHandler extends CameraHandler
   }
   public final int render(RenderContext rc)
   {
+	_planet = rc.getPlanet();
+	_camera = rc.getCamera();
+	_gl = rc.getGL();
+  
 	// TEMP TO DRAW A POINT WHERE USER PRESS
 	if (false)
 	{
@@ -53,17 +62,17 @@ public class CameraRotationHandler extends CameraHandler
 	  {
 		float[] vertices = { 0,0,0};
 		int[] indices = {0};
-		gl.enableVerticesPosition();
-		gl.disableTexture2D();
-		gl.disableTextures();
-		gl.vertexPointer(3, 0, vertices);
-		gl.color((float) 1, (float) 1, (float) 0, 1);
-		gl.pointSize(10);
-		gl.pushMatrix();
+		_gl.enableVerticesPosition();
+		_gl.disableTexture2D();
+		_gl.disableTextures();
+		_gl.vertexPointer(3, 0, vertices);
+		_gl.color((float) 1, (float) 1, (float) 0, 1);
+		_gl.pointSize(10);
+		_gl.pushMatrix();
 		MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(_initialPoint.asVector3D());
-		gl.multMatrixf(T);
-		gl.drawPoints(1, indices);
-		gl.popMatrix();
+		_gl.multMatrixf(T);
+		_gl.drawPoints(1, indices);
+		_gl.popMatrix();
 		//Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
 		//printf ("zoom with initial point = (%f, %f)\n", g.latitude().degrees(), g.longitude().degrees());
 	  }
@@ -139,8 +148,8 @@ public class CameraRotationHandler extends CameraHandler
 	// rotate more than 85 degrees or less than 0 degrees is not allowed
 	double delta = (cm.y() - _initialPixel.y()) * 0.25;
 	double finalAngle = initialAngle + delta;
-	if (finalAngle > 88)
-		delta = 88 - initialAngle;
+	if (finalAngle > 85)
+		delta = 85 - initialAngle;
 	if (finalAngle < 0)
 		delta = -initialAngle;
   
@@ -167,5 +176,10 @@ public class CameraRotationHandler extends CameraHandler
   }
 
   private double lastYValid;
+  private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
+  private IGL _gl;
+  private Camera _camera0 ; //Initial Camera saved on Down event
+  private Camera _camera; // Camera used at current frame
+
 
 }

@@ -67,10 +67,10 @@ public abstract class IGL
 
   public abstract void vertexPointer(int size, int stride, float[] vertex);
 
-  public abstract void drawTriangleStrip(int n, int i);
-  public abstract void drawLines(int n, int i);
-  public abstract void drawLineLoop(int n, int i);
-  public abstract void drawPoints(int n, int i);
+  public abstract void drawTriangleStrip(int n, int[] i);
+  public abstract void drawLines(int n, int[] i);
+  public abstract void drawLineLoop(int n, int[] i);
+  public abstract void drawPoints(int n, int[] i);
 
   public abstract void setProjection(MutableMatrix44D projection);
 

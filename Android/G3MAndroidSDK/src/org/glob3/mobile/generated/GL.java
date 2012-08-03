@@ -19,8 +19,7 @@ package org.glob3.mobile.generated;
 
 
 
-
-public class GL
+public class GL extends IGL
 {
 
   private final INativeGL _gl; //NATIVE GL
@@ -47,7 +46,7 @@ public class GL
   {
 	float[] M = new float[16];
 	_modelView.copyToFloatMatrix(M);
-	_gl.uniformMatrix4fv(GlobalMembersGL.Uniforms.Modelview, 1, 0, M);
+	_gl.uniformMatrix4fv(GlobalMembersGL.UniformsGL.Modelview, 1, 0, M);
   }
 
 
@@ -71,7 +70,7 @@ public class GL
   {
 	if (!_enableVerticesPosition)
 	{
-	  _gl.enableVertexAttribArray(GlobalMembersGL.Attributes.Position);
+	  _gl.enableVertexAttribArray(GlobalMembersGL.AttributesGL.Position);
 	  _enableVerticesPosition = true;
 	}
   }
@@ -82,7 +81,7 @@ public class GL
   {
 	if (!_enableTextures)
 	{
-	  _gl.enableVertexAttribArray(GlobalMembersGL.Attributes.TextureCoord);
+	  _gl.enableVertexAttribArray(GlobalMembersGL.AttributesGL.TextureCoord);
 	  _enableTextures = true;
 	}
   }
@@ -94,7 +93,7 @@ public class GL
   {
 	if (!_enableTexture2D)
 	{
-	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableTexture, true);
+	  _gl.uniform1i(GlobalMembersGL.UniformsGL.EnableTexture, true);
 	  _enableTexture2D = true;
 	}
   }
@@ -103,18 +102,18 @@ public class GL
   {
 	if (!_enableFlatColor)
 	{
-	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableFlatColor, true);
+	  _gl.uniform1i(GlobalMembersGL.UniformsGL.EnableFlatColor, true);
 	  _enableFlatColor = true;
 	}
-	_gl.uniform4f(GlobalMembersGL.Uniforms.FlatColor, r, g, b, a);
-	_gl.uniform1f(GlobalMembersGL.Uniforms.FlatColorIntensity, intensity);
+	_gl.uniform4f(GlobalMembersGL.UniformsGL.FlatColor, r, g, b, a);
+	_gl.uniform1f(GlobalMembersGL.UniformsGL.FlatColorIntensity, intensity);
   }
 
   public final void disableVertexFlatColor()
   {
 	if (_enableFlatColor)
 	{
-	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableFlatColor, false);
+	  _gl.uniform1i(GlobalMembersGL.UniformsGL.EnableFlatColor, false);
 	  _enableFlatColor = false;
 	}
   }
@@ -123,7 +122,7 @@ public class GL
   {
 	if (_enableTexture2D)
 	{
-	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableTexture, false);
+	  _gl.uniform1i(GlobalMembersGL.UniformsGL.EnableTexture, false);
 	  _enableTexture2D = false;
 	}
   }
@@ -132,7 +131,7 @@ public class GL
   {
 	if (_enableVerticesPosition)
 	{
-	  _gl.disableVertexAttribArray(GlobalMembersGL.Attributes.Position);
+	  _gl.disableVertexAttribArray(GlobalMembersGL.AttributesGL.Position);
 	  _enableVerticesPosition = false;
 	}
   }
@@ -141,7 +140,7 @@ public class GL
   {
 	if (_enableTextures)
 	{
-	  _gl.disableVertexAttribArray(GlobalMembersGL.Attributes.TextureCoord);
+	  _gl.disableVertexAttribArray(GlobalMembersGL.AttributesGL.TextureCoord);
 	  _enableTextures = false;
 	}
   }
@@ -156,7 +155,7 @@ public class GL
 
   public final void color(float r, float g, float b, float a)
   {
-	_gl.uniform4f(GlobalMembersGL.Uniforms.FlatColor, r, g, b, a);
+	_gl.uniform4f(GlobalMembersGL.UniformsGL.FlatColor, r, g, b, a);
   }
 
   public final void enableVertexColor(float[] colors, float intensity)
@@ -164,10 +163,10 @@ public class GL
 	//  if (colors != NULL) {
 	if (!_enableVertexColor)
 	{
-	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableColorPerVertex, true);
-	  _gl.enableVertexAttribArray(GlobalMembersGL.Attributes.Color);
-	  _gl.vertexAttribPointer(GlobalMembersGL.Attributes.Color, 4, Float, 0, 0, colors);
-	  _gl.uniform1f(GlobalMembersGL.Uniforms.ColorPerVertexIntensity, intensity);
+	  _gl.uniform1i(GlobalMembersGL.UniformsGL.EnableColorPerVertex, true);
+	  _gl.enableVertexAttribArray(GlobalMembersGL.AttributesGL.Color);
+	  _gl.vertexAttribPointer(GlobalMembersGL.AttributesGL.Color, 4, Float, 0, 0, colors);
+	  _gl.uniform1f(GlobalMembersGL.UniformsGL.ColorPerVertexIntensity, intensity);
 	  _enableVertexColor = true;
 	}
 	//  }
@@ -177,8 +176,8 @@ public class GL
   {
 	if (_enableVertexColor)
 	{
-	  _gl.disableVertexAttribArray(GlobalMembersGL.Attributes.Color);
-	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableColorPerVertex, false);
+	  _gl.disableVertexAttribArray(GlobalMembersGL.AttributesGL.Color);
+	  _gl.uniform1i(GlobalMembersGL.UniformsGL.EnableColorPerVertex, false);
 	  _enableVertexColor = false;
 	}
   }
@@ -188,8 +187,8 @@ public class GL
 	//  if (normals != NULL) {
 	if (!_enableVertexNormal)
 	{
-	  _gl.enableVertexAttribArray(GlobalMembersGL.Attributes.Normal);
-	  _gl.vertexAttribPointer(GlobalMembersGL.Attributes.Normal, 3, Float, 0, 0, normals);
+	  _gl.enableVertexAttribArray(GlobalMembersGL.AttributesGL.Normal);
+	  _gl.vertexAttribPointer(GlobalMembersGL.AttributesGL.Normal, 3, Float, 0, 0, normals);
 	  _enableVertexNormal = true;
 	}
 	//  }
@@ -199,7 +198,7 @@ public class GL
   {
 	if (_enableVertexNormal)
 	{
-	  _gl.disableVertexAttribArray(GlobalMembersGL.Attributes.Normal);
+	  _gl.disableVertexAttribArray(GlobalMembersGL.AttributesGL.Normal);
 	  _enableVertexNormal = false;
 	}
   }
@@ -233,22 +232,22 @@ public class GL
 
   public final void vertexPointer(int size, int stride, float[] vertex)
   {
-	_gl.vertexAttribPointer(GlobalMembersGL.Attributes.Position, size, Float, 0, stride, (Object) vertex);
+	_gl.vertexAttribPointer(GlobalMembersGL.AttributesGL.Position, size, Float, 0, stride, (Object) vertex);
   }
 
   public final void drawTriangleStrip(int n, int i)
   {
-	_gl.drawElements(GLPrimitive.TriangleStrip, n, Int, i);
+	_gl.drawElements(TriangleStrip, n, Int, i);
   }
 
   public final void drawLines(int n, int[] i)
   {
-	_gl.drawElements(GLPrimitive.Lines, n, Int, i);
+	_gl.drawElements(Lines, n, Int, i);
   }
 
   public final void drawLineLoop(int n, int[] i)
   {
-	_gl.drawElements(GLPrimitive.LineLoop, n, Int, i);
+	_gl.drawElements(LineLoop, n, Int, i);
   }
 
   public final void drawPoints(int n, int[] i)
@@ -260,7 +259,7 @@ public class GL
   {
 	float[] M = new float[16];
 	projection.copyToFloatMatrix(M);
-	_gl.uniformMatrix4fv(GlobalMembersGL.Uniforms.Projection, 1, 0, M);
+	_gl.uniformMatrix4fv(GlobalMembersGL.UniformsGL.Projection, 1, 0, M);
   }
 
   public final void useProgram(int program)
@@ -269,36 +268,36 @@ public class GL
 	_gl.useProgram(program);
   
 	// Extract the handles to attributes
-	GlobalMembersGL.Attributes.Position = _gl.getAttribLocation(program, "Position");
-	GlobalMembersGL.Attributes.TextureCoord = _gl.getAttribLocation(program, "TextureCoord");
-	GlobalMembersGL.Attributes.Color = _gl.getAttribLocation(program, "Color");
-	GlobalMembersGL.Attributes.Normal = _gl.getAttribLocation(program, "Normal");
+	GlobalMembersGL.AttributesGL.Position = _gl.getAttribLocation(program, "Position");
+	GlobalMembersGL.AttributesGL.TextureCoord = _gl.getAttribLocation(program, "TextureCoord");
+	GlobalMembersGL.AttributesGL.Color = _gl.getAttribLocation(program, "Color");
+	GlobalMembersGL.AttributesGL.Normal = _gl.getAttribLocation(program, "Normal");
   
 	// Extract the handles to uniforms
-	GlobalMembersGL.Uniforms.Projection = _gl.getUniformLocation(program, "Projection");
-	GlobalMembersGL.Uniforms.Modelview = _gl.getUniformLocation(program, "Modelview");
-	GlobalMembersGL.Uniforms.Sampler = _gl.getUniformLocation(program, "Sampler");
-	GlobalMembersGL.Uniforms.EnableTexture = _gl.getUniformLocation(program, "EnableTexture");
-	GlobalMembersGL.Uniforms.FlatColor = _gl.getUniformLocation(program, "FlatColor");
-	GlobalMembersGL.Uniforms.TranslationTexCoord = _gl.getUniformLocation(program, "TranslationTexCoord");
-	GlobalMembersGL.Uniforms.ScaleTexCoord = _gl.getUniformLocation(program, "ScaleTexCoord");
-	GlobalMembersGL.Uniforms.PointSize = _gl.getUniformLocation(program, "PointSize");
+	GlobalMembersGL.UniformsGL.Projection = _gl.getUniformLocation(program, "Projection");
+	GlobalMembersGL.UniformsGL.Modelview = _gl.getUniformLocation(program, "Modelview");
+	GlobalMembersGL.UniformsGL.Sampler = _gl.getUniformLocation(program, "Sampler");
+	GlobalMembersGL.UniformsGL.EnableTexture = _gl.getUniformLocation(program, "EnableTexture");
+	GlobalMembersGL.UniformsGL.FlatColor = _gl.getUniformLocation(program, "FlatColor");
+	GlobalMembersGL.UniformsGL.TranslationTexCoord = _gl.getUniformLocation(program, "TranslationTexCoord");
+	GlobalMembersGL.UniformsGL.ScaleTexCoord = _gl.getUniformLocation(program, "ScaleTexCoord");
+	GlobalMembersGL.UniformsGL.PointSize = _gl.getUniformLocation(program, "PointSize");
   
 	// default values
-	_gl.uniform2f(GlobalMembersGL.Uniforms.TranslationTexCoord, 0, 0);
-	_gl.uniform2f(GlobalMembersGL.Uniforms.ScaleTexCoord, 1, 1);
-	_gl.uniform1f(GlobalMembersGL.Uniforms.PointSize, (float) 1.0);
+	_gl.uniform2f(GlobalMembersGL.UniformsGL.TranslationTexCoord, 0, 0);
+	_gl.uniform2f(GlobalMembersGL.UniformsGL.ScaleTexCoord, 1, 1);
+	_gl.uniform1f(GlobalMembersGL.UniformsGL.PointSize, (float) 1.0);
   
 	//BILLBOARDS
-	GlobalMembersGL.Uniforms.BillBoard = _gl.getUniformLocation(program, "BillBoard");
-	GlobalMembersGL.Uniforms.ViewPortRatio = _gl.getUniformLocation(program, "ViewPortRatio");
-	_gl.uniform1i(GlobalMembersGL.Uniforms.BillBoard, false); //NOT DRAWING BILLBOARD
+	GlobalMembersGL.UniformsGL.BillBoard = _gl.getUniformLocation(program, "BillBoard");
+	GlobalMembersGL.UniformsGL.ViewPortRatio = _gl.getUniformLocation(program, "ViewPortRatio");
+	_gl.uniform1i(GlobalMembersGL.UniformsGL.BillBoard, false); //NOT DRAWING BILLBOARD
   
 	//FOR FLAT COLOR MIXING
-	GlobalMembersGL.Uniforms.FlatColorIntensity = _gl.getUniformLocation(program, "FlatColorIntensity");
-	GlobalMembersGL.Uniforms.ColorPerVertexIntensity = _gl.getUniformLocation(program, "ColorPerVertexIntensity");
-	GlobalMembersGL.Uniforms.EnableColorPerVertex = _gl.getUniformLocation(program, "EnableColorPerVertex");
-	GlobalMembersGL.Uniforms.EnableFlatColor = _gl.getUniformLocation(program, "EnableFlatColor");
+	GlobalMembersGL.UniformsGL.FlatColorIntensity = _gl.getUniformLocation(program, "FlatColorIntensity");
+	GlobalMembersGL.UniformsGL.ColorPerVertexIntensity = _gl.getUniformLocation(program, "ColorPerVertexIntensity");
+	GlobalMembersGL.UniformsGL.EnableColorPerVertex = _gl.getUniformLocation(program, "EnableColorPerVertex");
+	GlobalMembersGL.UniformsGL.EnableFlatColor = _gl.getUniformLocation(program, "EnableFlatColor");
   }
 
   public final void enablePolygonOffset(float factor, float units)
@@ -319,7 +318,7 @@ public class GL
 
   public final void pointSize(float size)
   {
-	_gl.uniform1f(GlobalMembersGL.Uniforms.PointSize, size);
+	_gl.uniform1f(GlobalMembersGL.UniformsGL.PointSize, size);
   }
 
   public final int getError()
@@ -355,7 +354,7 @@ public class GL
 
   public final void setTextureCoordinates(int size, int stride, float[] texcoord)
   {
-	_gl.vertexAttribPointer(GlobalMembersGL.Attributes.TextureCoord, size, Float, 0, stride, (Object) texcoord);
+	_gl.vertexAttribPointer(GlobalMembersGL.AttributesGL.TextureCoord, size, Float, 0, stride, (Object) texcoord);
   }
 
   public final void bindTexture(int n)
@@ -404,9 +403,9 @@ public class GL
   
 	float[] texcoord = { 1, 1, 1, 0, 0, 1, 0, 0 };
   
-	_gl.uniform1i(GlobalMembersGL.Uniforms.BillBoard, true);
+	_gl.uniform1i(GlobalMembersGL.UniformsGL.BillBoard, true);
   
-	_gl.uniform1f(GlobalMembersGL.Uniforms.ViewPortRatio, viewPortRatio);
+	_gl.uniform1f(GlobalMembersGL.UniformsGL.ViewPortRatio, viewPortRatio);
   
 	disableDepthTest();
   
@@ -418,11 +417,11 @@ public class GL
 	vertexPointer(3, 0, vertex);
 	setTextureCoordinates(2, 0, texcoord);
   
-	_gl.drawArrays(GLPrimitive.TriangleStrip, 0, 4);
+	_gl.drawArrays(TriangleStrip, 0, 4);
   
 	enableDepthTest();
   
-	_gl.uniform1i(GlobalMembersGL.Uniforms.BillBoard, false);
+	_gl.uniform1i(GlobalMembersGL.UniformsGL.BillBoard, false);
   }
 
   public final void deleteTexture(int glTextureId)
@@ -468,8 +467,8 @@ public class GL
 
   public final void transformTexCoords(Vector2D scale, Vector2D translation)
   {
-	_gl.uniform2f(GlobalMembersGL.Uniforms.ScaleTexCoord, (float) scale.x(), (float) scale.y());
-	_gl.uniform2f(GlobalMembersGL.Uniforms.TranslationTexCoord, (float) translation.x(), (float) translation.y());
+	_gl.uniform2f(GlobalMembersGL.UniformsGL.ScaleTexCoord, (float) scale.x(), (float) scale.y());
+	_gl.uniform2f(GlobalMembersGL.UniformsGL.TranslationTexCoord, (float) translation.x(), (float) translation.y());
   }
 
 }
