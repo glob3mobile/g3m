@@ -95,7 +95,7 @@ void CameraRotationRenderer::onMove(const TouchEvent& touchEvent)
   // rotate more than 85 degrees or less than 0 degrees is not allowed
   double delta = (cm.y() - _initialPixel.y()) * 0.25;
   double finalAngle = initialAngle + delta;
-  if (finalAngle > 88)  delta = 88 - initialAngle;
+  if (finalAngle > 85)  delta = 85 - initialAngle;
   if (finalAngle < 0)   delta = -initialAngle;
 
   // horizontal rotation over the original camera horizontal axix
