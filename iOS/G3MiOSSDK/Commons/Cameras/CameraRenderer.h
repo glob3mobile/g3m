@@ -37,7 +37,7 @@ protected:
   //static const ILogger * _logger;
   //static IGL *gl;
   
-  static Camera _camera0;                //Initial Camera saved on Down event
+  //static Camera _camera0;                //Initial Camera saved on Down event
   static Camera* _camera;         // Camera used at current frame
   
   MutableVector3D _initialPoint;  //Initial point at dragging

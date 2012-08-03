@@ -16,6 +16,10 @@
 class CameraSimpleDragRenderer: public CameraRenderer {
   
 public:
+  CameraSimpleDragRenderer():
+  _camera0(Camera(NULL, 0, 0)) 
+  {}
+
   bool onTouchEvent(const TouchEvent* touchEvent);
   int render(const RenderContext* rc);
   void initialize(const InitializationContext* ic) {}  
@@ -29,6 +33,7 @@ private:
   
   const Planet* _planet;
   IGL *_gl;
+  Camera _camera0;                //Initial Camera saved on Down event
   
 };
 

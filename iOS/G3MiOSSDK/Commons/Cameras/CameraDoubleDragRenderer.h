@@ -16,6 +16,10 @@
 class CameraDoubleDragRenderer: public CameraRenderer {
   
 public:
+  CameraDoubleDragRenderer():
+  _camera0(Camera(NULL, 0, 0)) 
+  {}
+  
   bool onTouchEvent(const TouchEvent* touchEvent);
   int render(const RenderContext* rc);
   void initialize(const InitializationContext* ic) {}  
@@ -29,6 +33,7 @@ private:
   MutableVector3D initialPoint0, initialPoint1;
   const Planet* _planet;
   IGL *_gl;
+  Camera _camera0;                //Initial Camera saved on Down event
         
 };
 

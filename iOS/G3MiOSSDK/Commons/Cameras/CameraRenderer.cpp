@@ -15,7 +15,7 @@
 //const ILogger*    CameraRenderer::_logger;
 //IGL*              CameraRenderer::gl;
 
-Camera            CameraRenderer::_camera0(NULL, 0, 0);               
+//Camera            CameraRenderer::_camera0(NULL, 0, 0);               
 Camera*           CameraRenderer::_camera = NULL;               
 
 Gesture           CameraRenderer::_currentGesture = None;

@@ -15,6 +15,10 @@
 class CameraRotationRenderer: public CameraRenderer {
   
 public:
+  CameraRotationRenderer():
+  _camera0(Camera(NULL, 0, 0)) 
+  {}
+
   bool onTouchEvent(const TouchEvent* touchEvent);
   int render(const RenderContext* rc);
   void initialize(const InitializationContext* ic) {}  
@@ -28,6 +32,7 @@ private:
   double lastYValid;
   const Planet* _planet;
   IGL *_gl;
+  Camera _camera0;                //Initial Camera saved on Down event
 
     
 };
