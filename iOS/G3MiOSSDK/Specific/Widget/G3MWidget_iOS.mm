@@ -17,10 +17,10 @@
 #include "Factory_iOS.hpp"
 #include "GL2.hpp"
 
-#include "CameraRenderer.hpp"
-#include "CameraSimpleDragHandler.h"
-#include "CameraDoubleDragHandler.h"
-#include "CameraRotationHandler.h"
+#include "CameraSimpleRenderer.hpp"
+#include "CameraSimpleDragRenderer.h"
+#include "CameraDoubleDragRenderer.h"
+#include "CameraRotationRenderer.h"
 
 #include "TileRenderer.hpp"
 #include "DummyRenderer.hpp"
@@ -45,6 +45,10 @@
 #include "StaticImageLayer.hpp"
 
 #include "Downloader_iOS.hpp"
+
+#include "INativeGL.hpp"
+#include "NativeGL2_iOS.hpp"
+#include "GL.hpp"
 
 #include <stdlib.h>
 
@@ -77,21 +81,25 @@
 
   IFactory *factory = new Factory_iOS();
   ILogger *logger = new Logger_iOS(ErrorLevel);
-  IGL* gl  = new GL2();
+  
+  
+  
+  NativeGL2_iOS * nGL = new NativeGL2_iOS(); 
+  IGL* gl  = new GL(nGL);
 
   // composite renderer is the father of the rest of renderers
   CompositeRenderer* comp = new CompositeRenderer();
   
   // camera renderer and handlers
-  CameraHandler *cameraHandler;
-  cameraHandler = new CameraRenderer();
-  comp->addRenderer(cameraHandler);
-  cameraHandler = new CameraSimpleDragHandler();
-  comp->addRenderer(cameraHandler);
-  cameraHandler = new CameraDoubleDragHandler();
-  comp->addRenderer(cameraHandler);
-  cameraHandler = new CameraRotationHandler();
-  comp->addRenderer(cameraHandler);
+  CameraRenderer *cameraRenderer;
+  cameraRenderer = new CameraSimpleRenderer();
+  comp->addRenderer(cameraRenderer);
+  cameraRenderer = new CameraSimpleDragRenderer();
+  comp->addRenderer(cameraRenderer);
+  cameraRenderer = new CameraDoubleDragRenderer();
+  comp->addRenderer(cameraRenderer);
+  cameraRenderer = new CameraRotationRenderer();
+  comp->addRenderer(cameraRenderer);
   
   //STORAGE
   NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
@@ -195,7 +203,9 @@
 
   IFactory *factory = new Factory_iOS();
   ILogger *logger = new Logger_iOS(ErrorLevel);
-  IGL* gl  = new GL2();
+  
+  NativeGL2_iOS * nGL = new NativeGL2_iOS(); 
+  IGL* gl  = new GL2(nGL);
   
   //Testing downloads
   if (false) {
@@ -274,15 +284,15 @@
   CompositeRenderer* comp = new CompositeRenderer();
   
   // camera renderer and handlers
-  CameraHandler *cameraHandler;
-  cameraHandler = new CameraRenderer();
-  comp->addRenderer(cameraHandler);
-  cameraHandler = new CameraSimpleDragHandler();
-  comp->addRenderer(cameraHandler);
-  cameraHandler = new CameraDoubleDragHandler();
-  comp->addRenderer(cameraHandler);
-  cameraHandler = new CameraRotationHandler();
-  comp->addRenderer(cameraHandler);
+  CameraRenderer *cameraRenderer;
+  cameraRenderer = new CameraSimpleRenderer();
+  comp->addRenderer(cameraRenderer);
+  cameraRenderer = new CameraSimpleDragRenderer();
+  comp->addRenderer(cameraRenderer);
+  cameraRenderer = new CameraDoubleDragRenderer();
+  comp->addRenderer(cameraRenderer);
+  cameraRenderer = new CameraRotationRenderer();
+  comp->addRenderer(cameraRenderer);
   
   //STORAGE
   NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
@@ -422,7 +432,6 @@
   const Planet* planet = Planet::createEarth();
   
   Renderer* busyRenderer = new BusyRenderer();
-
 
   _widget = G3MWidget::create(factory,
                               logger,

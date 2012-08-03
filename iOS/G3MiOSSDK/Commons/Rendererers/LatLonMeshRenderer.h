@@ -10,13 +10,13 @@
 #define G3MiOSSDK_LatLonMeshRenderer_h
 
 #include "Renderer.hpp"
-#include "LatLonMesh.h"
+#include "IndexedMesh.hpp"
 
 
 class LatLonMeshRenderer: public Renderer {
   
 private:
-  LatLonMesh *mesh;
+  Mesh *mesh;
   
  
 public:

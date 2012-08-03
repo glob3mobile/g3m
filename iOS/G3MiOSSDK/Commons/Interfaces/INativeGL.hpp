@@ -39,7 +39,7 @@ class INativeGL
 {
 public:
   
-  virtual ~INativeGL() = 0;
+  virtual ~INativeGL(){};
   
   virtual void useProgram(int program) const = 0;
   
@@ -53,7 +53,7 @@ public:
   
   virtual void uniform1i(int loc, int v) const = 0;
   
-  virtual void uniformMatrix4fv(int location, int count, bool transpose, const float value[]) const;
+  virtual void uniformMatrix4fv(int location, int count, bool transpose, const float value[]) const = 0;
   
   virtual void clearColor(float red, float green, float blue, float alpha) const = 0;
   
@@ -88,13 +88,13 @@ public:
   
   virtual void pixelStorei(GLAlignment pname, int param) const = 0;
   
-  std::vector<int> genTextures(int	n) const;
+  virtual std::vector<int> genTextures(int	n) const = 0;
   
   virtual void texParameteri(GLTextureType target, GLTextureParameter par, GLTextureParameterValue v) const = 0;
   
   virtual void texImage2D(GLTextureType target,
                             int         level,
-                            int         internalFormat,
+                            GLFormat    internalFormat,
                             int         width,
                             int         height,
                             int         border,
