@@ -37,7 +37,7 @@ LatLonMesh::LatLonMesh(const InitializationContext *ic,
   }
   
   // create indexed mesh
-  mesh = new IndexedMesh(owner, primitive, strategy, center,
-                         numVertices, vertices, indexes, numIndex,
-                         flatColor, colors, colorsIntensity, normals);
+  mesh = IndexedMesh::CreateFromVector3D(owner, primitive, strategy, center,
+                                         numVertices, vertices, indexes, numIndex,
+                                         flatColor, colors, colorsIntensity, normals);
 }

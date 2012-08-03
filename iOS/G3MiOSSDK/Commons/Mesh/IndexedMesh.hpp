@@ -33,6 +33,30 @@ enum CenterStrategy {
 
 class IndexedMesh : public Mesh {
 private:
+  IndexedMesh(std::vector<MutableVector3D>& vertices,
+              const GLPrimitive primitive,
+              CenterStrategy strategy,
+              Vector3D center,
+              std::vector<unsigned int>& indexes,
+              const Color* flatColor = NULL,
+              std::vector<Color>* colors = NULL,
+              const float colorsIntensity = 0.0,
+              std::vector<MutableVector3D>* normals = NULL);
+  
+  IndexedMesh(bool owner,
+              const GLPrimitive primitive,
+              CenterStrategy strategy,
+              Vector3D center,
+              const unsigned int numVertices,
+              const float* vertices,
+              const unsigned int* indexes,
+              const int numIndex, 
+              const Color* flatColor = NULL,
+              const float * colors = NULL,
+              const float colorsIntensity = 0.0,
+              const float* normals = NULL);
+
+
   const bool           _owner;
   
   const GLPrimitive    _primitive; 
@@ -60,30 +84,41 @@ public:
   
   ~IndexedMesh();
 
-  
-  IndexedMesh(bool owner,
-              const GLPrimitive primitive,
-              CenterStrategy strategy,
-              Vector3D center,
-              const unsigned int numVertices,
-              const float* vertices,
-              const unsigned int* indexes,
-              const int numIndex, 
-              const Color* flatColor = NULL,
-              const float * colors = NULL,
-              const float colorsIntensity = 0.0,
-              const float* normals = NULL);
-  
-  IndexedMesh(std::vector<MutableVector3D>& vertices,
-              const GLPrimitive primitive,
-              CenterStrategy strategy,
-              Vector3D center,
-              std::vector<unsigned int>& indexes,
-              const Color* flatColor = NULL,
-              std::vector<Color>* colors = NULL,
-              const float colorsIntensity = 0.0,
-              std::vector<MutableVector3D>* normals = NULL);
-  
+    
+  static IndexedMesh* CreateFromVector3D(bool owner,
+                                         const GLPrimitive primitive,
+                                         CenterStrategy strategy,
+                                         Vector3D center,
+                                         const unsigned int numVertices,
+                                         const float* vertices,
+                                         const unsigned int* indexes,
+                                         const int numIndex, 
+                                         const Color* flatColor = NULL,
+                                         const float * colors = NULL,
+                                         const float colorsIntensity = 0.0,
+                                         const float* normals = NULL)
+  {
+    return new IndexedMesh(owner, primitive, strategy, center, numVertices, vertices,
+                           indexes, numIndex, flatColor, colors, colorsIntensity, normals);
+  }
+
+    
+  static IndexedMesh* CreateFromVector3D(std::vector<MutableVector3D>& vertices,
+                                         const GLPrimitive primitive,
+                                         CenterStrategy strategy,
+                                         Vector3D center,
+                                         std::vector<unsigned int>& indexes,
+                                         const Color* flatColor = NULL,
+                                         std::vector<Color>* colors = NULL,
+                                         const float colorsIntensity = 0.0,
+                                         std::vector<MutableVector3D>* normals = NULL)
+  {
+    return new IndexedMesh(vertices, primitive, strategy, center, indexes,
+                           flatColor, colors, colorsIntensity, normals);
+  }
+
+                                         
+    
   virtual void render(const RenderContext* rc) const;
   
   Extent *getExtent() const;
