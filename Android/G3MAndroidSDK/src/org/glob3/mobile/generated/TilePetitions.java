@@ -163,11 +163,6 @@ public class TilePetitions implements IDownloadListener
 	  {
 		factory.deleteImage(images.get(i));
 	  }
-	  for (int i = 0; i < rectangles.size(); i++)
-	  {
-		if (rectangles.get(i) != null)
-			rectangles.get(i).dispose();
-	  }
 	}
   }
 
