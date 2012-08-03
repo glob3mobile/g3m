@@ -30,6 +30,9 @@ private:
   
 public:
   
+  Color(const Color& c):  _red(c._red), _green(c._green),
+  _blue(c._blue), _alpha(c._alpha){}
+  
   static Color fromRGBA(const float red,
                         const float green,
                         const float blue,
