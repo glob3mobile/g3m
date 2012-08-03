@@ -148,7 +148,8 @@ public class GL2 extends IGL {
 
 	@Override
 	public void multMatrixf(MutableMatrix44D m) {
-		MutableMatrix44D product = _modelView.multMatrix(m);
+		// TODO remove this TODO if this method is right 
+		MutableMatrix44D product = _modelView.multiply(m);
 
 		_modelView = new MutableMatrix44D(product);
 
@@ -373,8 +374,8 @@ public class GL2 extends IGL {
 
 	@Override
 	public void disableCullFace() {
-		// TODO Auto-generated method stub
-
+		// TODO remove this TODO if this method is right
+		GLES20.glDisable(GLES20.GL_CULL_FACE);
 	}
 
 	@Override

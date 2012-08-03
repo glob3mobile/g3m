@@ -55,4 +55,10 @@ public class Image_Android extends IImage{
 		return null;
 	}
 
+	@Override
+	public void fillWithRGBA(byte[] data, int width, int height) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

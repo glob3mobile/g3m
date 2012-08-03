@@ -2,7 +2,7 @@ package org.glob3.mobile.generated;
 public abstract class CameraHandler extends Renderer
 {
 
-  protected final Planet _planet;
+  protected Planet _planet;
   protected ILogger _logger;
   protected static IGL gl;
 

@@ -6,6 +6,7 @@ import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.CameraRenderer;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
+import org.glob3.mobile.generated.Downloader;
 import org.glob3.mobile.generated.DummyEffect;
 import org.glob3.mobile.generated.DummyRenderer;
 import org.glob3.mobile.generated.EffectsScheduler;
@@ -14,6 +15,7 @@ import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IGL;
 import org.glob3.mobile.generated.ILogger;
+import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
@@ -73,44 +75,46 @@ public class G3MWidget_Android extends GLSurfaceView implements
 		comp.addRenderer(cr);
 
 		// Dummy cube
-		if (false){
+		if (false) {
 			DummyRenderer dummy = new DummyRenderer();
 			comp.addRenderer(dummy);
 		}
 
 		// simple planet renderer, with a basic world image
-		if (true){
+		if (true) {
 			SimplePlanetRenderer spr = new SimplePlanetRenderer("world.jpg");
 			comp.addRenderer(spr);
 		}
 
 		// marks renderer
-		if (true){
+		if (true) {
 			MarksRenderer marks = new MarksRenderer();
 			comp.addRenderer(marks);
 			Mark m1 = new Mark("Fuerteventura", "plane.png", new Geodetic3D(
 					Angle.fromDegrees(28.05), Angle.fromDegrees(-14.36), 0));
 			marks.addMark(m1);
-	
+
 			Mark m2 = new Mark("Las Palmas", "plane.png", new Geodetic3D(
 					Angle.fromDegrees(28.05), Angle.fromDegrees(-15.36), 0));
 			marks.addMark(m2);
-	
+
 			Random r = new Random();
 			for (int i = 0; i < 1000; i++) {
-				Angle latitude = Angle.fromDegrees((int) (r.nextInt() % 180) - 90);
-				Angle longitude = Angle.fromDegrees((int) (r.nextInt() % 360) - 180);
-	
-				marks.addMark(new Mark("Random", "mark.png", 
-						new Geodetic3D(latitude, longitude, 0)));
+				Angle latitude = Angle
+						.fromDegrees((int) (r.nextInt() % 180) - 90);
+				Angle longitude = Angle
+						.fromDegrees((int) (r.nextInt() % 360) - 180);
+
+				marks.addMark(new Mark("Random", "mark.png", new Geodetic3D(
+						latitude, longitude, 0)));
 			}
 		}
-		
-	    if (true) {
-	        EffectsScheduler scheduler = new EffectsScheduler();
-	        scheduler.startEffect(new DummyEffect(TimeInterval.fromSeconds(3)));
-	        comp.addRenderer(scheduler);
-	    }
+
+		if (true) {
+			EffectsScheduler scheduler = new EffectsScheduler();
+			scheduler.startEffect(new DummyEffect(TimeInterval.fromSeconds(3)));
+			comp.addRenderer(scheduler);
+		}
 
 		ILogger logger = new Logger_Android(LogLevel.ErrorLevel);
 		IGL gl = new GL2();
@@ -118,8 +122,8 @@ public class G3MWidget_Android extends GLSurfaceView implements
 		TexturesHandler texturesHandler = new TexturesHandler();
 
 		_widget = G3MWidget.create(factory, logger, gl, texturesHandler, Planet
-				.createEarth(), comp, width, height, Color.fromRGB((float) 0.0,
-				(float) 0.1, (float) 0.2, (float) 1.0), true);
+				.createEarth(), comp, width, height, Color.fromRGBA(
+				(float) 0.0, (float) 0.1, (float) 0.2, (float) 1.0), true);
 
 		// SETTING RENDERER
 		_es2renderer = new ES2Renderer(this.getContext(), _widget);
@@ -143,35 +147,35 @@ public class G3MWidget_Android extends GLSurfaceView implements
 		}
 	}
 
-public boolean onDown(MotionEvent arg0) {
-	// TODO Auto-generated method stub
-	return false;
-}
+	public boolean onDown(MotionEvent arg0) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
-public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-		float velocityY) {
-	// TODO Auto-generated method stub
-	return false;
-}
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+			float velocityY) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
-public void onLongPress(MotionEvent e) {
-	// TODO Auto-generated method stub
-	
-}
+	public void onLongPress(MotionEvent e) {
+		// TODO Auto-generated method stub
 
-public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
-		float distanceY) {
-	// TODO Auto-generated method stub
-	return false;
-}
+	}
 
-public void onShowPress(MotionEvent e) {
-	// TODO Auto-generated method stub
-	
-}
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+			float distanceY) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
-public boolean onSingleTapUp(MotionEvent e) {
-	// TODO Auto-generated method stub
-	return false;
-}
+	public void onShowPress(MotionEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public boolean onSingleTapUp(MotionEvent e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

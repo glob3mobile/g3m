@@ -38,7 +38,7 @@ public class Context
 {
   protected final IFactory _factory;
   protected ILogger _logger;
-  protected final Planet _planet;
+  protected Planet _planet;
   protected final IDownloader _downloader;
 
   protected final Downloader _downloaderOLD;
