@@ -185,7 +185,7 @@ int GL2::uploadTexture(const IImage* image, int textureWidth, int textureHeight)
   unsigned char imageData[textureWidth * textureHeight * 4];
   image->fillWithRGBA(imageData, textureWidth, textureHeight);
   
-  _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);   
+  _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);
   _gl->pixelStorei(Unpack, 1);
   
   int texID = getTextureID();
@@ -372,7 +372,7 @@ void GL2::disableBlend() {
 
 void GL2::enableCullFace(CullFace face) {
   if (!_enableCullFace) {
-    _gl->enable(CullFacing);  
+    _gl->enable(CullFacing);
     _enableCullFace = true;
   }
   
@@ -413,10 +413,10 @@ int GL2::getTextureID() {
     _texturesIdCounter += bugdetSize;
     printf("= Created %d texturesIds (accumulated %ld)\n", bugdetSize, _texturesIdCounter);
   }
-
-    int result = _texturesIdBag.back();
-    _texturesIdBag.pop_back();
-    return result;
+  
+  int result = _texturesIdBag.back();
+  _texturesIdBag.pop_back();
+  return result;
 }
 
 void GL2::deleteTexture(int glTextureId) {

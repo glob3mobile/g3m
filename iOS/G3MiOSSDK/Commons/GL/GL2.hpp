@@ -107,9 +107,9 @@ public:
   
   void drawTriangleStrip(int n, const int i[]) ;
   
-  void drawLines(int n, const int i[]); 
+  void drawLines(int n, const int i[]);
   
-  void drawLineLoop(int n, const int i[]); 
+  void drawLineLoop(int n, const int i[]);
   
   void drawPoints(int n, const int i[]);
   
@@ -147,9 +147,9 @@ public:
   
   void enableCullFace(CullFace face);
   void disableCullFace();
-
+  
   void transformTexCoords(const Vector2D& scale, const Vector2D& translation);
-
+  
 };
 
 #endif
