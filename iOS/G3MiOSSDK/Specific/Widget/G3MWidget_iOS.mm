@@ -17,10 +17,10 @@
 #include "Factory_iOS.hpp"
 #include "GL2.hpp"
 
-#include "CameraRenderer.hpp"
-#include "CameraSimpleDragHandler.h"
-#include "CameraDoubleDragHandler.h"
-#include "CameraRotationHandler.h"
+#include "CameraSimpleRenderer.hpp"
+#include "CameraSimpleDragRenderer.h"
+#include "CameraDoubleDragRenderer.h"
+#include "CameraRotationRenderer.h"
 
 #include "TileRenderer.hpp"
 #include "DummyRenderer.hpp"
@@ -83,15 +83,15 @@
   CompositeRenderer* comp = new CompositeRenderer();
   
   // camera renderer and handlers
-  CameraHandler *cameraHandler;
-  cameraHandler = new CameraRenderer();
-  comp->addRenderer(cameraHandler);
-  cameraHandler = new CameraSimpleDragHandler();
-  comp->addRenderer(cameraHandler);
-  cameraHandler = new CameraDoubleDragHandler();
-  comp->addRenderer(cameraHandler);
-  cameraHandler = new CameraRotationHandler();
-  comp->addRenderer(cameraHandler);
+  CameraRenderer *cameraRenderer;
+  cameraRenderer = new CameraSimpleRenderer();
+  comp->addRenderer(cameraRenderer);
+  cameraRenderer = new CameraSimpleDragRenderer();
+  comp->addRenderer(cameraRenderer);
+  cameraRenderer = new CameraDoubleDragRenderer();
+  comp->addRenderer(cameraRenderer);
+  cameraRenderer = new CameraRotationRenderer();
+  comp->addRenderer(cameraRenderer);
   
   //STORAGE
   NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
@@ -274,15 +274,15 @@
   CompositeRenderer* comp = new CompositeRenderer();
   
   // camera renderer and handlers
-  CameraHandler *cameraHandler;
-  cameraHandler = new CameraRenderer();
-  comp->addRenderer(cameraHandler);
-  cameraHandler = new CameraSimpleDragHandler();
-  comp->addRenderer(cameraHandler);
-  cameraHandler = new CameraDoubleDragHandler();
-  comp->addRenderer(cameraHandler);
-  cameraHandler = new CameraRotationHandler();
-  comp->addRenderer(cameraHandler);
+  CameraRenderer *cameraRenderer;
+  cameraRenderer = new CameraSimpleRenderer();
+  comp->addRenderer(cameraRenderer);
+  cameraRenderer = new CameraSimpleDragRenderer();
+  comp->addRenderer(cameraRenderer);
+  cameraRenderer = new CameraDoubleDragRenderer();
+  comp->addRenderer(cameraRenderer);
+  cameraRenderer = new CameraRotationRenderer();
+  comp->addRenderer(cameraRenderer);
   
   //STORAGE
   NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];

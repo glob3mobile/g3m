@@ -8,11 +8,11 @@
 
 #include <iostream>
 
-#include "CameraDoubleDragHandler.h"
+#include "CameraDoubleDragRenderer.h"
 #include "IGL.hpp"
 
 
-bool CameraDoubleDragHandler::onTouchEvent(const TouchEvent* touchEvent) 
+bool CameraDoubleDragRenderer::onTouchEvent(const TouchEvent* touchEvent) 
 {
   // only one finger needed
   if (touchEvent->getTouchCount()!=2) return false;
@@ -34,7 +34,7 @@ bool CameraDoubleDragHandler::onTouchEvent(const TouchEvent* touchEvent)
 }
 
 
-void CameraDoubleDragHandler::onDown(const TouchEvent& touchEvent) 
+void CameraDoubleDragRenderer::onDown(const TouchEvent& touchEvent) 
 {
   _camera0 = Camera(*_camera);
   _currentGesture = DoubleDrag;  
@@ -68,7 +68,7 @@ void CameraDoubleDragHandler::onDown(const TouchEvent& touchEvent)
 }
 
 
-void CameraDoubleDragHandler::onMove(const TouchEvent& touchEvent) 
+void CameraDoubleDragRenderer::onMove(const TouchEvent& touchEvent) 
 {
   //_currentGesture = getGesture(touchEvent);
   if (_currentGesture!=DoubleDrag) return;
@@ -154,7 +154,7 @@ void CameraDoubleDragHandler::onMove(const TouchEvent& touchEvent)
 }
 
 
-void CameraDoubleDragHandler::onUp(const TouchEvent& touchEvent) 
+void CameraDoubleDragRenderer::onUp(const TouchEvent& touchEvent) 
 {
   _currentGesture = None;
   _initialPixel = Vector3D::nan().asMutableVector3D();
@@ -163,7 +163,7 @@ void CameraDoubleDragHandler::onUp(const TouchEvent& touchEvent)
 }
 
 
-int CameraDoubleDragHandler::render(const RenderContext* rc) {
+int CameraDoubleDragRenderer::render(const RenderContext* rc) {
   // TEMP TO DRAW A POINT WHERE USER PRESS
   if (false) {
     if (_currentGesture == DoubleDrag) {

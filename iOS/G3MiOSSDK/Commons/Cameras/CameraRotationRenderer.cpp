@@ -1,5 +1,5 @@
 //
-//  CameraRotationHandler.cpp
+//  CameraRotationRenderer.cpp
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 28/07/12.
@@ -8,11 +8,11 @@
 
 #include <iostream>
 
-#include "CameraRotationHandler.h"
+#include "CameraRotationRenderer.h"
 #include "IGL.hpp"
 
 
-bool CameraRotationHandler::onTouchEvent(const TouchEvent* touchEvent) 
+bool CameraRotationRenderer::onTouchEvent(const TouchEvent* touchEvent) 
 {
   // three finger needed
   if (touchEvent->getTouchCount()!=3) return false;
@@ -34,7 +34,7 @@ bool CameraRotationHandler::onTouchEvent(const TouchEvent* touchEvent)
 }
 
 
-void CameraRotationHandler::onDown(const TouchEvent& touchEvent) 
+void CameraRotationRenderer::onDown(const TouchEvent& touchEvent) 
 {  
   _camera0 = Camera(*_camera);
   _currentGesture = Rotate;
@@ -58,7 +58,7 @@ void CameraRotationHandler::onDown(const TouchEvent& touchEvent)
 }
 
 
-void CameraRotationHandler::onMove(const TouchEvent& touchEvent) 
+void CameraRotationRenderer::onMove(const TouchEvent& touchEvent) 
 {
   //_currentGesture = getGesture(touchEvent);
   if (_currentGesture!=Rotate) return;
@@ -115,14 +115,14 @@ void CameraRotationHandler::onMove(const TouchEvent& touchEvent)
 }
 
 
-void CameraRotationHandler::onUp(const TouchEvent& touchEvent) 
+void CameraRotationRenderer::onUp(const TouchEvent& touchEvent) 
 {
   _currentGesture = None;
   _initialPixel = Vector3D::nan().asMutableVector3D();
 }
 
 
-int CameraRotationHandler::render(const RenderContext* rc) {
+int CameraRotationRenderer::render(const RenderContext* rc) {
   // TEMP TO DRAW A POINT WHERE USER PRESS
   if (false) {
     if (_currentGesture == Rotate) {

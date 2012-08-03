@@ -2,35 +2,22 @@
 //  CameraRenderer.cpp
 //  G3MiOSSDK
 //
-//  Created by José Miguel S N on 04/06/12.
+//  Created by Agustín Trujillo Pino on 30/07/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#include "CameraRenderer.hpp"
+#include <iostream>
 
+#include "CameraRenderer.h"
+#include "IGL.hpp"
 
+const Planet*     CameraRenderer::_planet;
+const ILogger*    CameraRenderer::_logger;
+IGL*              CameraRenderer::gl;
 
-void CameraRenderer::initialize(const InitializationContext* ic){
-  _logger = ic->getLogger();
-}
+Camera            CameraRenderer::_camera0(NULL, 0, 0);               
+Camera*           CameraRenderer::_camera = NULL;               
 
-
-void CameraRenderer::onResizeViewportEvent(int width, int height) {
-  if (_camera != NULL) {
-    _camera->resizeViewport(width, height);
-  }
-}
-
-
-int CameraRenderer::render(const RenderContext* rc) {
-  _camera = rc->getCamera(); //Saving camera reference 
-  _planet = rc->getPlanet();
-  gl = rc->getGL();
-  
-  _camera->render(rc);
-  
-  return MAX_TIME_TO_RENDER;
-}
-
+Gesture           CameraRenderer::_currentGesture = None;
 
 

@@ -1,13 +1,13 @@
 //
-//  CameraHandler.h
+//  CameraRenderer.h
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 30/07/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_CameraHandler_h
-#define G3MiOSSDK_CameraHandler_h
+#ifndef G3MiOSSDK_CameraRenderer_h
+#define G3MiOSSDK_CameraRenderer_h
 
 #include "Renderer.hpp"
 #include "Camera.hpp"
@@ -29,7 +29,7 @@ enum Gesture {
 };
 
 
-class CameraHandler: public Renderer
+class CameraRenderer: public Renderer
 {
   
 protected:
@@ -51,7 +51,7 @@ protected:
   
 public:
   
-  CameraHandler():
+  CameraRenderer():
   _initialPoint(0,0,0),
   _initialPixel(0,0,0)
   {
