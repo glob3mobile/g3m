@@ -140,9 +140,11 @@ void TilePetitions::createTexture(TexturesHandler* texHandler, const IFactory* f
     for (int i = 0; i < images.size(); i++) {
       factory->deleteImage(images[i]);
     }
+#ifdef C_CODE      
     for (int i = 0; i < rectangles.size(); i++) {
       delete rectangles[i];
     }
+#endif
   }
 }
 
