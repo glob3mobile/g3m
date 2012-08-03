@@ -121,6 +121,8 @@ public:
   Vector3D getCenter() const { return _center.asVector3D(); }
   Vector3D getUp() const { return _up.asVector3D(); }
   Geodetic3D getCenterOfView() const { return *_centerOfView; }
+  Vector3D getViewDirection() const { return _center.sub(_position).asVector3D(); }
+
   
   //Dragging camera
   void dragCamera(const Vector3D& p0, const Vector3D& p1);
@@ -157,7 +159,6 @@ public:
   
   void applyTransform(const MutableMatrix44D& mat);
 
-  Vector3D getViewDirection() const { return _center.sub(_position).asVector3D(); }
     
 private:
   int _width;

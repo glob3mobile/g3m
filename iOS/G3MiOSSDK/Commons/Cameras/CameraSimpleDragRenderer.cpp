@@ -86,7 +86,7 @@ int CameraSimpleDragRenderer::render(const RenderContext* rc) {
   _gl = rc->getGL();
 
   // TEMP TO DRAW A POINT WHERE USER PRESS
-  if (false) {
+  if (true) {
     if (_currentGesture == Drag) {
       float vertices[] = { 0,0,0};
       int indices[] = {0};
@@ -99,8 +99,7 @@ int CameraSimpleDragRenderer::render(const RenderContext* rc) {
       _gl->pushMatrix();
       
       double height = _planet->toGeodetic3D(_camera->getPosition()).height();
-      printf ("altura camara = %f\n", height);
-                                         
+      //printf ("altura camara = %f\n", height);
       
       MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D());
       _gl->multMatrixf(T);

@@ -87,7 +87,7 @@ void CameraDoubleDragRenderer::onMove(const TouchEvent& touchEvent)
   // computer center view point
   Vector3D centerPoint = tempCamera.centerOfViewOnPlanet(_planet);
   
-  // rotate globe from initialPoint to centerPoing
+  // rotate globe from initialPoint to centerPoint
   {
     Vector3D initialPoint = _initialPoint.asVector3D();
     const Vector3D rotationAxis = initialPoint.cross(centerPoint);
@@ -106,7 +106,7 @@ void CameraDoubleDragRenderer::onMove(const TouchEvent& touchEvent)
   {
     tempCamera.updateModelMatrix();
     Vector3D normal = _planet->geodeticSurfaceNormal(_initialPoint.asVector3D());
-    tempCamera.rotateWithAxis(normal, Angle::fromRadians(angle));
+    tempCamera.rotateWithAxisAndPoint(normal, _initialPoint.asVector3D(), Angle::fromRadians(angle));
   }
    
   // detect new final point
@@ -135,6 +135,7 @@ void CameraDoubleDragRenderer::onMove(const TouchEvent& touchEvent)
   // the gesture was valid. Copy data to final camera
   tempCamera.updateModelMatrix();
     
+  /*
   // adjust orientation of projected points
   Vector2D p00 = _camera0.point2Pixel(initialPoint0.asVector3D());
   Vector2D p10 = _camera0.point2Pixel(initialPoint1.asVector3D());
@@ -143,11 +144,9 @@ void CameraDoubleDragRenderer::onMove(const TouchEvent& touchEvent)
   Angle a0 = p10.sub(p00).orientation();
   Angle a1 = p1n.sub(p0n).orientation();          
   Vector3D normal = _planet->geodeticSurfaceNormal(_initialPoint.asVector3D());
-  MutableMatrix44D trans1   = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D());
-  MutableMatrix44D rotation = MutableMatrix44D::createRotationMatrix(a0.sub(a1).div(6), normal);
-  MutableMatrix44D trans2   = MutableMatrix44D::createTranslationMatrix(_initialPoint.times(-1.0).asVector3D());
-  MutableMatrix44D M        = trans1.multiply(rotation).multiply(trans2);
-  tempCamera.applyTransform(M);
+  tempCamera.rotateWithAxisAndPoint(normal, _initialPoint.asVector3D(), a0.sub(a1).div(6));*/
+    
+  // copy final transformation to camera
   _camera->copyFrom(tempCamera);
 
   //printf ("moving 2 fingers\n");
@@ -169,7 +168,7 @@ int CameraDoubleDragRenderer::render(const RenderContext* rc) {
   _gl = rc->getGL();
   
   // TEMP TO DRAW A POINT WHERE USER PRESS
-  if (false) {
+  if (true) {
     if (_currentGesture == DoubleDrag) {
       float vertices[] = { 0,0,0};
       int indices[] = {0};

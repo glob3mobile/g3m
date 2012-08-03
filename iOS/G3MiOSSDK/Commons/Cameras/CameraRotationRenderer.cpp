@@ -81,11 +81,7 @@ void CameraRotationRenderer::onMove(const TouchEvent& touchEvent)
   // vertical rotation around normal vector to globe
   _camera->copyFrom(_camera0);
   Angle angle_v             = Angle::fromDegrees((_initialPixel.x()-cm.x())*0.25);
-  MutableMatrix44D trans1   = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D());
-  MutableMatrix44D rot1     = MutableMatrix44D::createRotationMatrix(angle_v, normal);
-  MutableMatrix44D trans2   = MutableMatrix44D::createTranslationMatrix(_initialPoint.times(-1.0).asVector3D());
-  MutableMatrix44D M1       = trans1.multiply(rot1).multiply(trans2);
-  _camera->applyTransform(M1);
+  _camera->rotateWithAxisAndPoint(normal, _initialPoint.asVector3D(), angle_v);
   
   // compute angle between normal and view direction
   Vector3D view = _camera->getViewDirection();
@@ -98,16 +94,14 @@ void CameraRotationRenderer::onMove(const TouchEvent& touchEvent)
   if (finalAngle > 85)  delta = 85 - initialAngle;
   if (finalAngle < 0)   delta = -initialAngle;
 
+  // create temporal camera to test if next rotation is valid
+  Camera tempCamera(*_camera);
+  
   // horizontal rotation over the original camera horizontal axix
   Vector3D u = _camera->getHorizontalVector();
-  MutableMatrix44D trans3   = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D());
-  MutableMatrix44D rot2     = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(delta), u);
-  MutableMatrix44D trans4   = MutableMatrix44D::createTranslationMatrix(_initialPoint.times(-1.0).asVector3D());
-  MutableMatrix44D M2       = trans3.multiply(rot2).multiply(trans4);
-
+  tempCamera.rotateWithAxisAndPoint(u, _initialPoint.asVector3D(), Angle::fromDegrees(delta));
+  
   // update camera only if new view intersects globe
-  Camera tempCamera(*_camera);
-  tempCamera.applyTransform(M2);
   tempCamera.updateModelMatrix();
   if (!tempCamera.centerOfViewOnPlanet(_planet).isNan()) {
     _camera->copyFrom(tempCamera);

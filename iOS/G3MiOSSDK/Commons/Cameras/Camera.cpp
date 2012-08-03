@@ -242,11 +242,8 @@ void Camera::pivotOnCenter(const Angle& a) {
 }
 
 void Camera::rotateWithAxisAndPoint(const Vector3D& axis, const Vector3D& point, const Angle& delta) {
-  const MutableMatrix44D trans1 = MutableMatrix44D::createTranslationMatrix(point.times(-1.0));
-  const MutableMatrix44D rotation = MutableMatrix44D::createRotationMatrix(delta, axis);
-  const MutableMatrix44D trans2 = MutableMatrix44D::createTranslationMatrix(point);
   
-  const MutableMatrix44D m = trans2.multiply(rotation).multiply(trans1);
+  const MutableMatrix44D m = MutableMatrix44D::createGeneralRotationMatrix(delta, axis, point);
   
   //m.print();
   
