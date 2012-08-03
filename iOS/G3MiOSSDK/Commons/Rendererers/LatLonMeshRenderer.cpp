@@ -23,10 +23,10 @@ void LatLonMeshRenderer::initialize(const InitializationContext* ic)
   int numIndices = 4;
 
   float v[] = {
-    28.753213,  -17.898788,   500,
-    28.680347,  -17.898788,   500,
-    28.753213,  -17.83287,    500,
-    28.680347,  -17.83287,    500
+    (float) 28.753213, (float) -17.898788, 500,
+    (float) 28.680347, (float) -17.898788, 500,
+    (float) 28.753213, (float) -17.83287,  500,
+    (float) 28.680347, (float) -17.83287,  500
   };
   
   int i[] = { 0, 1, 2, 3};

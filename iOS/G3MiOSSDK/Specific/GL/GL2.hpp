@@ -15,35 +15,6 @@
 
 #include "INativeGL.hpp"
 
-struct UniformsStruct {
-  GLuint  Projection;
-  GLuint  Modelview;
-  GLint   Sampler;
-  GLint   EnableTexture;
-  GLint   FlatColor;
-  GLint   TranslationTexCoord;
-  GLint   ScaleTexCoord;
-  GLint   PointSize;
-  
-  //FOR BILLBOARDING
-  GLint   BillBoard;
-  GLint   ViewPortRatio;
-  
-  //FOR COLOR MIXING
-  GLint   FlatColorIntensity;
-  GLint   EnableColorPerVertex;
-  GLint   EnableFlatColor;
-  GLint   ColorPerVertexIntensity;
-} Uniforms;
-
-
-struct AttributesStruct {
-  GLint   Position;
-  GLint   TextureCoord;
-  GLint   Color;
-  GLint   Normal;
-} Attributes;
-
 
 class GL2: public IGL {
 private:

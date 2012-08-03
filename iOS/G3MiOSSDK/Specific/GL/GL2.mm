@@ -18,6 +18,35 @@
 #include "NativeGL2_iOS.hpp"
 
 
+struct UniformsStructGL2 {
+  GLuint  Projection;
+  GLuint  Modelview;
+  GLint   Sampler;
+  GLint   EnableTexture;
+  GLint   FlatColor;
+  GLint   TranslationTexCoord;
+  GLint   ScaleTexCoord;
+  GLint   PointSize;
+  
+  //FOR BILLBOARDING
+  GLint   BillBoard;
+  GLint   ViewPortRatio;
+  
+  //FOR COLOR MIXING
+  GLint   FlatColorIntensity;
+  GLint   EnableColorPerVertex;
+  GLint   EnableFlatColor;
+  GLint   ColorPerVertexIntensity;
+} UniformsGL2;
+
+
+struct AttributesStructGL2 {
+  GLint   Position;
+  GLint   TextureCoord;
+  GLint   Color;
+  GLint   Normal;
+} AttributesGL2;
+
 
 
 void GL2::useProgram(unsigned int program) {
@@ -60,48 +89,48 @@ void GL2::useProgram(unsigned int program) {
   _gl->useProgram(program);
   
   // Extract the handles to attributes
-  Attributes.Position     = _gl->getAttribLocation(program, "Position");
-  Attributes.TextureCoord = _gl->getAttribLocation(program, "TextureCoord");
-  Attributes.Color        = _gl->getAttribLocation(program, "Color");
-  Attributes.Normal       = _gl->getAttribLocation(program, "Normal");
+  AttributesGL2.Position     = _gl->getAttribLocation(program, "Position");
+  AttributesGL2.TextureCoord = _gl->getAttribLocation(program, "TextureCoord");
+  AttributesGL2.Color        = _gl->getAttribLocation(program, "Color");
+  AttributesGL2.Normal       = _gl->getAttribLocation(program, "Normal");
   
   // Extract the handles to uniforms
-  Uniforms.Projection          = _gl->getUniformLocation(program, "Projection");
-  Uniforms.Modelview           = _gl->getUniformLocation(program, "Modelview");
-  Uniforms.Sampler             = _gl->getUniformLocation(program, "Sampler");
-  Uniforms.EnableTexture       = _gl->getUniformLocation(program, "EnableTexture");
-  Uniforms.FlatColor           = _gl->getUniformLocation(program, "FlatColor");
-  Uniforms.TranslationTexCoord = _gl->getUniformLocation(program, "TranslationTexCoord");
-  Uniforms.ScaleTexCoord       = _gl->getUniformLocation(program, "ScaleTexCoord");
-  Uniforms.PointSize           = _gl->getUniformLocation(program, "PointSize");
+  UniformsGL2.Projection          = _gl->getUniformLocation(program, "Projection");
+  UniformsGL2.Modelview           = _gl->getUniformLocation(program, "Modelview");
+  UniformsGL2.Sampler             = _gl->getUniformLocation(program, "Sampler");
+  UniformsGL2.EnableTexture       = _gl->getUniformLocation(program, "EnableTexture");
+  UniformsGL2.FlatColor           = _gl->getUniformLocation(program, "FlatColor");
+  UniformsGL2.TranslationTexCoord = _gl->getUniformLocation(program, "TranslationTexCoord");
+  UniformsGL2.ScaleTexCoord       = _gl->getUniformLocation(program, "ScaleTexCoord");
+  UniformsGL2.PointSize           = _gl->getUniformLocation(program, "PointSize");
   
   // default values
-  _gl->uniform2f(Uniforms.TranslationTexCoord, 0, 0);
-  _gl->uniform2f(Uniforms.ScaleTexCoord, 1, 1);
-  _gl->uniform1f(Uniforms.PointSize, (float) 1.0);
+  _gl->uniform2f(UniformsGL2.TranslationTexCoord, 0, 0);
+  _gl->uniform2f(UniformsGL2.ScaleTexCoord, 1, 1);
+  _gl->uniform1f(UniformsGL2.PointSize, (float) 1.0);
   
   //BILLBOARDS
-  Uniforms.BillBoard     = _gl->getUniformLocation(program, "BillBoard");
-  Uniforms.ViewPortRatio = _gl->getUniformLocation(program, "ViewPortRatio");
-  _gl->uniform1i(Uniforms.BillBoard, false); //NOT DRAWING BILLBOARD
+  UniformsGL2.BillBoard     = _gl->getUniformLocation(program, "BillBoard");
+  UniformsGL2.ViewPortRatio = _gl->getUniformLocation(program, "ViewPortRatio");
+  _gl->uniform1i(UniformsGL2.BillBoard, false); //NOT DRAWING BILLBOARD
   
   //FOR FLAT COLOR MIXING
-  Uniforms.FlatColorIntensity      = _gl->getUniformLocation(program, "FlatColorIntensity");
-  Uniforms.ColorPerVertexIntensity = _gl->getUniformLocation(program, "ColorPerVertexIntensity");
-  Uniforms.EnableColorPerVertex    = _gl->getUniformLocation(program, "EnableColorPerVertex");
-  Uniforms.EnableFlatColor         = _gl->getUniformLocation(program, "EnableFlatColor");
+  UniformsGL2.FlatColorIntensity      = _gl->getUniformLocation(program, "FlatColorIntensity");
+  UniformsGL2.ColorPerVertexIntensity = _gl->getUniformLocation(program, "ColorPerVertexIntensity");
+  UniformsGL2.EnableColorPerVertex    = _gl->getUniformLocation(program, "EnableColorPerVertex");
+  UniformsGL2.EnableFlatColor         = _gl->getUniformLocation(program, "EnableFlatColor");
 }
 
 void GL2::loadModelView() {
   static float M[16];
   _modelView.copyToFloatMatrix(M);
-  _gl->uniformMatrix4fv(Uniforms.Modelview, 1, 0, M);
+  _gl->uniformMatrix4fv(UniformsGL2.Modelview, 1, 0, M);
 }
 
 void GL2::setProjection(const MutableMatrix44D &projection) {
   static float M[16];
   projection.copyToFloatMatrix(M);
-  _gl->uniformMatrix4fv(Uniforms.Projection, 1, 0, M);
+  _gl->uniformMatrix4fv(UniformsGL2.Projection, 1, 0, M);
 }
 
 void GL2::loadMatrixf(const MutableMatrix44D &modelView) {
@@ -134,15 +163,15 @@ void GL2::clearScreen(float r, float g, float b, float a) {
 }
 
 void GL2::color(float r, float g, float b, float a) {
-  _gl->uniform4f(Uniforms.FlatColor, r, g, b, a);
+  _gl->uniform4f(UniformsGL2.FlatColor, r, g, b, a);
 }
 
 void GL2::transformTexCoords(const Vector2D& scale,
                              const Vector2D& translation) {
-  _gl->uniform2f(Uniforms.ScaleTexCoord,
+  _gl->uniform2f(UniformsGL2.ScaleTexCoord,
                  (float) scale.x(),
                  (float) scale.y());
-  _gl->uniform2f(Uniforms.TranslationTexCoord,
+  _gl->uniform2f(UniformsGL2.TranslationTexCoord,
                  (float) translation.x(),
                  (float) translation.y());
 }
@@ -157,7 +186,7 @@ void GL2::disablePolygonOffset() {
 }
 
 void GL2::vertexPointer(int size, int stride, const float vertex[]) {
-  _gl->vertexAttribPointer(Attributes.Position, size, Float, 0, stride, (const void *) vertex);
+  _gl->vertexAttribPointer(AttributesGL2.Position, size, Float, 0, stride, (const void *) vertex);
 }
 
 void GL2::drawTriangleStrip(int n, const int i[]) {
@@ -181,7 +210,7 @@ void GL2::lineWidth(float width) {
 }
 
 void GL2::pointSize(float size) {
-  _gl->uniform1f(Uniforms.PointSize, size);
+  _gl->uniform1f(UniformsGL2.PointSize, size);
 }
 
 int GL2::getError() {
@@ -265,7 +294,7 @@ int GL2::uploadTexture(const IImage* image, int textureWidth, int textureHeight)
 }
 
 void GL2::setTextureCoordinates(int size, int stride, const float texcoord[]) {
-  glVertexAttribPointer(Attributes.TextureCoord, size, GL_FLOAT, 0, stride, (const void *) texcoord);
+  glVertexAttribPointer(AttributesGL2.TextureCoord, size, GL_FLOAT, 0, stride, (const void *) texcoord);
 }
 
 void GL2::bindTexture(unsigned int n) {
@@ -289,9 +318,9 @@ void GL2::drawBillBoard(const unsigned int textureId,
     0, 0
   };
   
-  glUniform1i(Uniforms.BillBoard, true);
+  glUniform1i(UniformsGL2.BillBoard, true);
   
-  glUniform1f(Uniforms.ViewPortRatio, viewPortRatio);
+  glUniform1f(UniformsGL2.ViewPortRatio, viewPortRatio);
   
   disableDepthTest();
   
@@ -307,34 +336,34 @@ void GL2::drawBillBoard(const unsigned int textureId,
   
   enableDepthTest();
   
-  glUniform1i(Uniforms.BillBoard, false);
+  glUniform1i(UniformsGL2.BillBoard, false);
 }
 
 // state handling
 void GL2::enableTextures() {
   if (!_enableTextures) {
-    glEnableVertexAttribArray(Attributes.TextureCoord);
+    glEnableVertexAttribArray(AttributesGL2.TextureCoord);
     _enableTextures = true;
   }
 }
 
 void GL2::disableTextures() {
   if (_enableTextures) {
-    glDisableVertexAttribArray(Attributes.TextureCoord);
+    glDisableVertexAttribArray(AttributesGL2.TextureCoord);
     _enableTextures = false;
   }
 }
 
 void GL2::enableTexture2D() {
   if (!_enableTexture2D) {
-    glUniform1i(Uniforms.EnableTexture, true);
+    glUniform1i(UniformsGL2.EnableTexture, true);
     _enableTexture2D = true;
   }
 }
 
 void GL2::disableTexture2D() {
   if (_enableTexture2D) {
-    glUniform1i(Uniforms.EnableTexture, false);
+    glUniform1i(UniformsGL2.EnableTexture, false);
     _enableTexture2D = false;
   }
 }
@@ -342,10 +371,10 @@ void GL2::disableTexture2D() {
 void GL2::enableVertexColor(float const colors[], float intensity) {
 //  if (colors != NULL) {
   if (!_enableVertexColor) {
-    glUniform1i(Uniforms.EnableColorPerVertex, true);
-    glEnableVertexAttribArray(Attributes.Color);
-    glVertexAttribPointer(Attributes.Color, 4, GL_FLOAT, 0, 0, colors);
-    glUniform1f(Uniforms.ColorPerVertexIntensity, intensity);
+    glUniform1i(UniformsGL2.EnableColorPerVertex, true);
+    glEnableVertexAttribArray(AttributesGL2.Color);
+    glVertexAttribPointer(AttributesGL2.Color, 4, GL_FLOAT, 0, 0, colors);
+    glUniform1f(UniformsGL2.ColorPerVertexIntensity, intensity);
     _enableVertexColor = true;
   }
 //  }
@@ -353,8 +382,8 @@ void GL2::enableVertexColor(float const colors[], float intensity) {
 
 void GL2::disableVertexColor() {
   if (_enableVertexColor) {
-    glDisableVertexAttribArray(Attributes.Color);
-    glUniform1i(Uniforms.EnableColorPerVertex, false);
+    glDisableVertexAttribArray(AttributesGL2.Color);
+    glUniform1i(UniformsGL2.EnableColorPerVertex, false);
     _enableVertexColor = false;
   }
 }
@@ -362,8 +391,8 @@ void GL2::disableVertexColor() {
 void GL2::enableVertexNormal(float const normals[]) {
 //  if (normals != NULL) {
   if (!_enableVertexNormal) {
-    glEnableVertexAttribArray(Attributes.Normal);
-    glVertexAttribPointer(Attributes.Normal, 3, GL_FLOAT, 0, 0, normals);
+    glEnableVertexAttribArray(AttributesGL2.Normal);
+    glVertexAttribPointer(AttributesGL2.Normal, 3, GL_FLOAT, 0, 0, normals);
     _enableVertexNormal = true;
   }
 //  }
@@ -371,21 +400,21 @@ void GL2::enableVertexNormal(float const normals[]) {
 
 void GL2::disableVertexNormal() {
   if (_enableVertexNormal) {
-    glDisableVertexAttribArray(Attributes.Normal);
+    glDisableVertexAttribArray(AttributesGL2.Normal);
     _enableVertexNormal = false;
   }
 }
 
 void GL2::enableVerticesPosition() {
   if (!_enableVerticesPosition) {
-    glEnableVertexAttribArray(Attributes.Position);
+    glEnableVertexAttribArray(AttributesGL2.Position);
     _enableVerticesPosition = true;
   }
 }
 
 void GL2::disableVerticesPosition() {
   if (_enableVerticesPosition) {
-    glDisableVertexAttribArray(Attributes.Position);
+    glDisableVertexAttribArray(AttributesGL2.Position);
     _enableVerticesPosition = false;
   }
 }
@@ -393,16 +422,16 @@ void GL2::disableVerticesPosition() {
 void GL2::enableVertexFlatColor(float r, float g, float b, float a,
                                 float intensity) {
   if (!_enableFlatColor) {
-    glUniform1i(Uniforms.EnableFlatColor, true);
+    glUniform1i(UniformsGL2.EnableFlatColor, true);
     _enableFlatColor = true;
   }
-  glUniform4f(Uniforms.FlatColor, r, g, b, a);
-  glUniform1f(Uniforms.FlatColorIntensity, intensity);
+  glUniform4f(UniformsGL2.FlatColor, r, g, b, a);
+  glUniform1f(UniformsGL2.FlatColorIntensity, intensity);
 }
 
 void GL2::disableVertexFlatColor() {
   if (_enableFlatColor) {
-    glUniform1i(Uniforms.EnableFlatColor, false);
+    glUniform1i(UniformsGL2.EnableFlatColor, false);
     _enableFlatColor = false;
   }
 }
