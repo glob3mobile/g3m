@@ -85,7 +85,7 @@ int CameraSimpleDragHandler::render(const RenderContext* rc) {
   if (false) {
     if (_currentGesture == Drag) {
       float vertices[] = { 0,0,0};
-      unsigned int indices[] = {0};
+      int indices[] = {0};
       gl->enableVerticesPosition();
       gl->disableTexture2D();
       gl->disableTextures();

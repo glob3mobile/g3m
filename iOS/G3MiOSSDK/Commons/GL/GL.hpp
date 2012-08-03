@@ -17,7 +17,7 @@
 
 #include <list>
 
-class GL {
+class GL : public IGL{
 private:
   
   const INativeGL*      _gl;      //NATIVE GL

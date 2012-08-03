@@ -46,6 +46,10 @@
 
 #include "Downloader_iOS.hpp"
 
+#include "INativeGL.hpp"
+#include "NativeGL2_iOS.hpp"
+#include "GL.hpp"
+
 #include <stdlib.h>
 
 @interface G3MWidget_iOS ()
@@ -77,7 +81,11 @@
 
   IFactory *factory = new Factory_iOS();
   ILogger *logger = new Logger_iOS(ErrorLevel);
-  IGL* gl  = new GL2();
+  
+  
+  
+  NativeGL2_iOS * nGL = new NativeGL2_iOS(); 
+  IGL* gl  = new GL(nGL);
 
   // composite renderer is the father of the rest of renderers
   CompositeRenderer* comp = new CompositeRenderer();
@@ -195,7 +203,9 @@
 
   IFactory *factory = new Factory_iOS();
   ILogger *logger = new Logger_iOS(ErrorLevel);
-  IGL* gl  = new GL2();
+  
+  NativeGL2_iOS * nGL = new NativeGL2_iOS(); 
+  IGL* gl  = new GL2(nGL);
   
   //Testing downloads
   if (false) {
@@ -422,7 +432,6 @@
   const Planet* planet = Planet::createEarth();
   
   Renderer* busyRenderer = new BusyRenderer();
-
 
   _widget = G3MWidget::create(factory,
                               logger,
