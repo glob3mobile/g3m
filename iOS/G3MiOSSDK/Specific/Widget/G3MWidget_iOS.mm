@@ -15,7 +15,6 @@
 #include "Planet.hpp"
 #include "Logger_iOS.hpp"
 #include "Factory_iOS.hpp"
-#include "GL2.hpp"
 
 #include "CameraSimpleRenderer.hpp"
 #include "CameraSimpleDragRenderer.h"
@@ -48,7 +47,7 @@
 
 #include "INativeGL.hpp"
 #include "NativeGL2_iOS.hpp"
-#include "GL.hpp"
+#include "GL2.hpp"
 
 #include <stdlib.h>
 
@@ -85,7 +84,7 @@
   
   
   NativeGL2_iOS * nGL = new NativeGL2_iOS(); 
-  IGL* gl  = new GL(nGL);
+  IGL* gl  = new GL2(nGL);
 
   // composite renderer is the father of the rest of renderers
   CompositeRenderer* comp = new CompositeRenderer();
