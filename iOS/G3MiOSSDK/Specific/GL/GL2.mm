@@ -49,63 +49,98 @@ struct AttributesStruct {
 
 
 void GL2::useProgram(unsigned int program) {
+//  // set shaders
+//  glUseProgram(program);
+//  
+//  // Extract the handles to attributes
+//  Attributes.Position     = glGetAttribLocation(program, "Position");
+//  Attributes.TextureCoord = glGetAttribLocation(program, "TextureCoord");
+//  Attributes.Color        = glGetAttribLocation(program, "Color");
+//  Attributes.Normal       = glGetAttribLocation(program, "Normal");
+//  
+//  // Extract the handles to uniforms
+//  Uniforms.Projection          = glGetUniformLocation(program, "Projection");
+//  Uniforms.Modelview           = glGetUniformLocation(program, "Modelview");
+//  Uniforms.Sampler             = glGetUniformLocation(program, "Sampler");
+//  Uniforms.EnableTexture       = glGetUniformLocation(program, "EnableTexture");
+//  Uniforms.FlatColor           = glGetUniformLocation(program, "FlatColor");
+//  Uniforms.TranslationTexCoord = glGetUniformLocation(program, "TranslationTexCoord");
+//  Uniforms.ScaleTexCoord       = glGetUniformLocation(program, "ScaleTexCoord");
+//  Uniforms.PointSize           = glGetUniformLocation(program, "PointSize");
+//  
+//  // default values
+//  glUniform2f(Uniforms.TranslationTexCoord, 0, 0);
+//  glUniform2f(Uniforms.ScaleTexCoord, 1, 1);
+//  glUniform1f(Uniforms.PointSize, (float) 1.0);
+//  
+//  //BILLBOARDS
+//  Uniforms.BillBoard     = glGetUniformLocation(program, "BillBoard");
+//  Uniforms.ViewPortRatio = glGetUniformLocation(program, "ViewPortRatio");
+//  glUniform1i(Uniforms.BillBoard, false); //NOT DRAWING BILLBOARD
+//  
+//  //FOR FLAT COLOR MIXING
+//  Uniforms.FlatColorIntensity      = glGetUniformLocation(program, "FlatColorIntensity");
+//  Uniforms.ColorPerVertexIntensity = glGetUniformLocation(program, "ColorPerVertexIntensity");
+//  Uniforms.EnableColorPerVertex    = glGetUniformLocation(program, "EnableColorPerVertex");
+//  Uniforms.EnableFlatColor         = glGetUniformLocation(program, "EnableFlatColor");
+  
   // set shaders
-  glUseProgram(program);
+  _gl->useProgram(program);
   
   // Extract the handles to attributes
-  Attributes.Position     = glGetAttribLocation(program, "Position");
-  Attributes.TextureCoord = glGetAttribLocation(program, "TextureCoord");
-  Attributes.Color        = glGetAttribLocation(program, "Color");
-  Attributes.Normal       = glGetAttribLocation(program, "Normal");
+  Attributes.Position     = _gl->getAttribLocation(program, "Position");
+  Attributes.TextureCoord = _gl->getAttribLocation(program, "TextureCoord");
+  Attributes.Color        = _gl->getAttribLocation(program, "Color");
+  Attributes.Normal       = _gl->getAttribLocation(program, "Normal");
   
   // Extract the handles to uniforms
-  Uniforms.Projection          = glGetUniformLocation(program, "Projection");
-  Uniforms.Modelview           = glGetUniformLocation(program, "Modelview");
-  Uniforms.Sampler             = glGetUniformLocation(program, "Sampler");
-  Uniforms.EnableTexture       = glGetUniformLocation(program, "EnableTexture");
-  Uniforms.FlatColor           = glGetUniformLocation(program, "FlatColor");
-  Uniforms.TranslationTexCoord = glGetUniformLocation(program, "TranslationTexCoord");
-  Uniforms.ScaleTexCoord       = glGetUniformLocation(program, "ScaleTexCoord");
-  Uniforms.PointSize           = glGetUniformLocation(program, "PointSize");
+  Uniforms.Projection          = _gl->getUniformLocation(program, "Projection");
+  Uniforms.Modelview           = _gl->getUniformLocation(program, "Modelview");
+  Uniforms.Sampler             = _gl->getUniformLocation(program, "Sampler");
+  Uniforms.EnableTexture       = _gl->getUniformLocation(program, "EnableTexture");
+  Uniforms.FlatColor           = _gl->getUniformLocation(program, "FlatColor");
+  Uniforms.TranslationTexCoord = _gl->getUniformLocation(program, "TranslationTexCoord");
+  Uniforms.ScaleTexCoord       = _gl->getUniformLocation(program, "ScaleTexCoord");
+  Uniforms.PointSize           = _gl->getUniformLocation(program, "PointSize");
   
   // default values
-  glUniform2f(Uniforms.TranslationTexCoord, 0, 0);
-  glUniform2f(Uniforms.ScaleTexCoord, 1, 1);
-  glUniform1f(Uniforms.PointSize, (float) 1.0);
+  _gl->uniform2f(Uniforms.TranslationTexCoord, 0, 0);
+  _gl->uniform2f(Uniforms.ScaleTexCoord, 1, 1);
+  _gl->uniform1f(Uniforms.PointSize, (float) 1.0);
   
   //BILLBOARDS
-  Uniforms.BillBoard     = glGetUniformLocation(program, "BillBoard");
-  Uniforms.ViewPortRatio = glGetUniformLocation(program, "ViewPortRatio");
-  glUniform1i(Uniforms.BillBoard, false); //NOT DRAWING BILLBOARD
+  Uniforms.BillBoard     = _gl->getUniformLocation(program, "BillBoard");
+  Uniforms.ViewPortRatio = _gl->getUniformLocation(program, "ViewPortRatio");
+  _gl->uniform1i(Uniforms.BillBoard, false); //NOT DRAWING BILLBOARD
   
   //FOR FLAT COLOR MIXING
-  Uniforms.FlatColorIntensity      = glGetUniformLocation(program, "FlatColorIntensity");
-  Uniforms.ColorPerVertexIntensity = glGetUniformLocation(program, "ColorPerVertexIntensity");
-  Uniforms.EnableColorPerVertex    = glGetUniformLocation(program, "EnableColorPerVertex");
-  Uniforms.EnableFlatColor         = glGetUniformLocation(program, "EnableFlatColor");
+  Uniforms.FlatColorIntensity      = _gl->getUniformLocation(program, "FlatColorIntensity");
+  Uniforms.ColorPerVertexIntensity = _gl->getUniformLocation(program, "ColorPerVertexIntensity");
+  Uniforms.EnableColorPerVertex    = _gl->getUniformLocation(program, "EnableColorPerVertex");
+  Uniforms.EnableFlatColor         = _gl->getUniformLocation(program, "EnableFlatColor");
 }
 
 void GL2::loadModelView() {
   static float M[16];
   _modelView.copyToFloatMatrix(M);
-  glUniformMatrix4fv(Uniforms.Modelview, 1, 0, M);
+  _gl->uniformMatrix4fv(Uniforms.Modelview, 1, 0, M);
 }
 
 void GL2::setProjection(const MutableMatrix44D &projection) {
   static float M[16];
   projection.copyToFloatMatrix(M);
-  glUniformMatrix4fv(Uniforms.Projection, 1, 0, M);
+  _gl->uniformMatrix4fv(Uniforms.Projection, 1, 0, M);
 }
 
 void GL2::loadMatrixf(const MutableMatrix44D &modelView) {
   _modelView = modelView;
-
+  
   loadModelView();
 }
 
 void GL2::multMatrixf(const MutableMatrix44D &m) {
   _modelView = _modelView.multiply(m);
-
+  
   loadModelView();
 }
 
@@ -121,63 +156,64 @@ void GL2::pushMatrix() {
 }
 
 void GL2::clearScreen(float r, float g, float b, float a) {
-  glClearColor(r, g, b, a);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  _gl->clearColor(r, g, b, a);
+  GLBufferType buffers[] = { ColorBuffer, DepthBuffer };
+  _gl->clear(2, buffers);
 }
 
 void GL2::color(float r, float g, float b, float a) {
-  glUniform4f(Uniforms.FlatColor, r, g, b, a);
+  _gl->uniform4f(Uniforms.FlatColor, r, g, b, a);
 }
 
 void GL2::transformTexCoords(const Vector2D& scale,
                              const Vector2D& translation) {
-  glUniform2f(Uniforms.ScaleTexCoord,
-              (float) scale.x(),
-              (float) scale.y());
-  glUniform2f(Uniforms.TranslationTexCoord,
-              (float) translation.x(),
-              (float) translation.y());
+  _gl->uniform2f(Uniforms.ScaleTexCoord,
+                 (float) scale.x(),
+                 (float) scale.y());
+  _gl->uniform2f(Uniforms.TranslationTexCoord,
+                 (float) translation.x(),
+                 (float) translation.y());
 }
 
 void GL2::enablePolygonOffset(float factor, float units) {
-  glEnable(GL_POLYGON_OFFSET_FILL);
-  glPolygonOffset(factor, units);
+  _gl->enable(PolygonOffsetFill);
+  _gl->polygonOffset(factor, units);
 }
 
 void GL2::disablePolygonOffset() {
-  glDisable(GL_POLYGON_OFFSET_FILL);
+  _gl->disable(PolygonOffsetFill);
 }
 
 void GL2::vertexPointer(int size, int stride, const float vertex[]) {
-  glVertexAttribPointer(Attributes.Position, size, GL_FLOAT, 0, stride, (const void *) vertex);
+  _gl->vertexAttribPointer(Attributes.Position, size, Float, 0, stride, (const void *) vertex);
 }
 
-void GL2::drawTriangleStrip(int n, const unsigned int* i) {
-  glDrawElements(GL_TRIANGLE_STRIP, n, GL_UNSIGNED_INT, i);
+void GL2::drawTriangleStrip(int n, const int i[]) {
+  _gl->drawElements(TriangleStrip, n, UnsignedInt, i);
 }
 
-void GL2::drawLines(int n, const unsigned int *i) {
-  glDrawElements(GL_LINES, n, GL_UNSIGNED_INT, i);
+void GL2::drawLines(int n, const int i[]) {
+  _gl->drawElements(Lines, n, UnsignedInt, i);
 }
 
-void GL2::drawLineLoop(int n, const unsigned int *i) {
-  glDrawElements(GL_LINE_LOOP, n, GL_UNSIGNED_INT, i);
+void GL2::drawLineLoop(int n, const int i[]) {
+  _gl->drawElements(LineLoop, n, UnsignedInt, i);
 }
 
-void GL2::drawPoints(int n, const unsigned int *i) {
-  glDrawElements(GL_POINTS, n, GL_UNSIGNED_INT, i);
+void GL2::drawPoints(int n, const int i[]) {
+  _gl->drawElements(Points, n, UnsignedInt, i);
 }
 
 void GL2::lineWidth(float width) {
-  glLineWidth(width);
+  _gl->lineWidth(width);
 }
 
 void GL2::pointSize(float size) {
-  glUniform1f(Uniforms.PointSize, size);
+  _gl->uniform1f(Uniforms.PointSize, size);
 }
 
 int GL2::getError() {
-  return glGetError();
+  return _gl->getError();
 }
 
 GLuint GL2::getTextureID() {
@@ -220,7 +256,8 @@ int GL2::uploadTexture(const IImage* image, int textureWidth, int textureHeight)
 
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
   //void *imageData = malloc( textureHeight * textureWidth * 4 );
-  void *imageData = new unsigned char[textureHeight * textureWidth * 4];
+//  void *imageData = new unsigned char[textureHeight * textureWidth * 4];
+  unsigned char imageData[textureWidth * textureHeight * 4];
   
   CGContextRef context = CGBitmapContextCreate(imageData,
                                                textureWidth, textureHeight,
@@ -235,25 +272,22 @@ int GL2::uploadTexture(const IImage* image, int textureWidth, int textureHeight)
   
   CGContextRelease(context);
 
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  image->fillWithRGBA(imageData, textureWidth, textureHeight);
   
-  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
+  _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);   
+  _gl->pixelStorei(Unpack, 1);
+  
   GLuint textureID = getTextureID();
-//  glGenTextures(1, &textureID);
   
-  glBindTexture(GL_TEXTURE_2D, textureID);
+  _gl->bindTexture(Texture2D, textureID);
+  _gl->texParameteri(Texture2D, MinFilter, Linear);
+  _gl->texParameteri(Texture2D, MagFilter, Linear);
+  _gl->texParameteri(Texture2D, WrapS, ClampToEdge);
+  _gl->texParameteri(Texture2D, WrapT, ClampToEdge);
   
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth, textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
-//  glGenerateMipmap(GL_TEXTURE_2D); // /!\ Allocate the mipmaps /!\
+  //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureWidth, textureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
   
-  free(imageData);
+  _gl->texImage2D(Texture2D, 0, RGBA, textureWidth, textureHeight, 0, RGBA, UnsignedByte, imageData);
   
   return textureID;
 }

@@ -10,8 +10,13 @@
 
 #include "MutableMatrix44D.hpp"
 
+#include "INativeGL.hpp"
+
 class GL2: public IGL {
 private:
+  
+  INativeGL* const _gl;
+  
   MutableMatrix44D            _modelView;
   
   // stack of ModelView matrices
@@ -38,7 +43,8 @@ private:
   
 public:
   
-  GL2() :
+  GL2(INativeGL* const gl) :
+  _gl(gl),
   _enableTextures(false),
   _enableTexture2D(false),
   _enableVertexColor(false),
@@ -95,13 +101,13 @@ public:
   
   void vertexPointer(int size, int stride, const float vertex[]);
   
-  void drawTriangleStrip(int n, const unsigned int i[]);
+  void drawTriangleStrip(int n, const int i[]) ;
   
-  void drawLines(int n, const unsigned int *i); 
+  void drawLines(int n, const int i[]); 
   
-  void drawLineLoop(int n, const unsigned int *i); 
+  void drawLineLoop(int n, const int i[]); 
   
-  void drawPoints(int n, const unsigned int *i);
+  void drawPoints(int n, const int i[]);
   
   void setProjection(const MutableMatrix44D &projection);
   
