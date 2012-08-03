@@ -172,7 +172,7 @@ int CameraDoubleDragRenderer::render(const RenderContext* rc) {
   if (false) {
     if (_currentGesture == DoubleDrag) {
       float vertices[] = { 0,0,0};
-      unsigned int indices[] = {0};
+      int indices[] = {0};
       _gl->enableVerticesPosition();
       _gl->disableTexture2D();
       _gl->disableTextures();

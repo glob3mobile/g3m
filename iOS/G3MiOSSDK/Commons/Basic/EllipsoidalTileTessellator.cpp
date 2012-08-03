@@ -23,20 +23,20 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
   
   // create vertices coordinates
   std::vector<MutableVector3D> vertices;
-  unsigned int resol_1 = _resolution - 1;
-  for (unsigned int j=0; j<_resolution; j++) {
-    for (unsigned int i=0; i<_resolution; i++) {
+  int resol_1 = _resolution - 1;
+  for (int j=0; j<_resolution; j++) {
+    for (int i=0; i<_resolution; i++) {
       addVertex(planet, &vertices, sector.getInnerPoint((double)i/resol_1, (double)j/resol_1));
     }
   }
   
   // create indices
-  std::vector<unsigned int> indices;
-  for (unsigned int j=0; j<resol_1; j++) {
+  std::vector<int> indices;
+  for (int j=0; j<resol_1; j++) {
     if (j > 0) {
       indices.push_back(j*_resolution);
     }
-    for (unsigned int i = 0; i < _resolution; i++) {
+    for (int i = 0; i < _resolution; i++) {
       indices.push_back(j*_resolution + i);
       indices.push_back(j*_resolution + i + _resolution);
     }
@@ -52,10 +52,10 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
     const double skirtHeight = nw.sub(sw).length() * 0.05;
     
     indices.push_back(0);
-    unsigned int posS = _resolution * _resolution;
+    int posS = _resolution * _resolution;
     
     // west side
-    for (unsigned int j=0; j<resol_1; j++) {
+    for (int j=0; j<resol_1; j++) {
       const Geodetic3D g(sector.getInnerPoint(0.0, (double)j/resol_1), -skirtHeight);
       addVertex(planet, &vertices, g);
       indices.push_back(j*_resolution);
@@ -63,7 +63,7 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
     }
     
     // south side
-    for (unsigned int i=0; i<resol_1; i++) {
+    for (int i=0; i<resol_1; i++) {
       const Geodetic3D g(sector.getInnerPoint((double)i/resol_1, 1.0), -skirtHeight);
       addVertex(planet, &vertices, g);
       indices.push_back(resol_1*_resolution + i);
@@ -71,7 +71,7 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
     }
     
     // east side
-    for (unsigned int j=resol_1; j>0; j--) {
+    for (int j=resol_1; j>0; j--) {
       const Geodetic3D g(sector.getInnerPoint(1.0, (double)j/resol_1), -skirtHeight);
       addVertex(planet, &vertices, g);
       indices.push_back(j*_resolution + resol_1);
@@ -79,7 +79,7 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
     }
     
     // north side
-    for (unsigned int i=resol_1; i>0; i--) {
+    for (int i=resol_1; i>0; i--) {
       const Geodetic3D g(sector.getInnerPoint((double)i/resol_1, 0.0), -skirtHeight);
       addVertex(planet, &vertices, g);
       indices.push_back(i);
@@ -111,7 +111,7 @@ std::vector<MutableVector2D>* EllipsoidalTileTessellator::createUnitTextCoords()
   
   for (int j=0; j<n; j++) {
     for (int i=0; i<n; i++) {
-      unsigned int pos = j*n + i;
+      int pos = j*n + i;
       u[pos] = (float) i / (n-1);
       v[pos] = (float) j / (n-1);	
     }
@@ -119,7 +119,7 @@ std::vector<MutableVector2D>* EllipsoidalTileTessellator::createUnitTextCoords()
   
   for (int j=0; j<n; j++) {
     for (int i=0; i<n; i++) {
-      unsigned int pos = j*n + i;
+      int pos = j*n + i;
       textCoords->push_back(MutableVector2D(u[pos], v[pos]));
     }
   }
@@ -128,25 +128,25 @@ std::vector<MutableVector2D>* EllipsoidalTileTessellator::createUnitTextCoords()
   if (_skirted) {
     // west side
     for (int j=0; j<n-1; j++) {
-      unsigned int pos = j*n;
+      int pos = j*n;
       textCoords->push_back(MutableVector2D(u[pos], v[pos]));
     }
     
     // south side
     for (int i=0; i<n-1; i++) {
-      unsigned int pos = (n-1)*n + i;
+      int pos = (n-1)*n + i;
       textCoords->push_back(MutableVector2D(u[pos], v[pos]));
     }
     
     // east side
     for (int j=n-1; j>0; j--) {
-      unsigned int pos = j*n + n - 1;
+      int pos = j*n + n - 1;
       textCoords->push_back(MutableVector2D(u[pos], v[pos]));
     }
     
     // north side
     for (int i=n-1; i>0; i--) {
-      unsigned int pos = i;
+      int pos = i;
       textCoords->push_back(MutableVector2D(u[pos], v[pos]));
     }
   }
@@ -168,9 +168,9 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
   // create vectors
   std::vector<MutableVector3D> vertices;
   std::vector<MutableVector2D> texCoords;
-  std::vector<unsigned int> indices;
-  unsigned int resol_1 = _resolution - 1;  
-  unsigned int posS = 0;
+  std::vector<int> indices;
+  int resol_1 = _resolution - 1;  
+  int posS = 0;
   
   // compute offset for vertices
   const Vector3D sw = planet->toVector3D(sector.getSW());
@@ -178,28 +178,28 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
   const double offset = nw.sub(sw).length() * 1e-3;
   
   // west side
-  for (unsigned int j=0; j<resol_1; j++) {
+  for (int j=0; j<resol_1; j++) {
     const Geodetic3D g(sector.getInnerPoint(0.0, (double)j/resol_1), offset); 
     addVertex(planet, &vertices, g);
     indices.push_back(posS++);
   }
   
   // south side
-  for (unsigned int i=0; i<resol_1; i++) {
+  for (int i=0; i<resol_1; i++) {
     const Geodetic3D g(sector.getInnerPoint((double)i/resol_1, 1.0), offset);
     addVertex(planet, &vertices, g);
     indices.push_back(posS++);
   }
   
   // east side
-  for (unsigned int j=resol_1; j>0; j--) {
+  for (int j=resol_1; j>0; j--) {
     const Geodetic3D g(sector.getInnerPoint(1.0, (double)j/resol_1), offset);
     addVertex(planet, &vertices, g);
     indices.push_back(posS++);
   }
   
   // north side
-  for (unsigned int i=resol_1; i>0; i--) {
+  for (int i=resol_1; i>0; i--) {
     const Geodetic3D g(sector.getInnerPoint((double)i/resol_1, 0.0), offset);
     addVertex(planet, &vertices, g);
     indices.push_back(posS++);

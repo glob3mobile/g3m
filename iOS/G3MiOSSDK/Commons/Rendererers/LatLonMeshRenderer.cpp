@@ -20,7 +20,7 @@ LatLonMeshRenderer::~LatLonMeshRenderer()
 void LatLonMeshRenderer::initialize(const InitializationContext* ic)
 {
   unsigned int numVertices = 4;
-  unsigned int numIndices = 4;
+  int numIndices = 4;
 
   float v[] = {
     28.753213,  -17.898788,   500,
@@ -29,12 +29,12 @@ void LatLonMeshRenderer::initialize(const InitializationContext* ic)
     28.680347,  -17.83287,    500
   };
   
-  unsigned int i[] = { 0, 1, 2, 3};
+  int i[] = { 0, 1, 2, 3};
   
   // create vertices and indices in dinamic memory
   float *vertices = new float [numVertices*3];
   memcpy(vertices, v, numVertices*3*sizeof(float));
-  unsigned int *indices = new unsigned int [numIndices];
+  int *indices = new int [numIndices];
   memcpy(indices, i, numIndices*sizeof(unsigned int));
 
   // create mesh

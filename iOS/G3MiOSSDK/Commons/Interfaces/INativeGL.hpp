@@ -39,7 +39,7 @@ class INativeGL
 {
 public:
   
-  virtual ~INativeGL() = 0;
+  virtual ~INativeGL(){};
   
   virtual void useProgram(int program) const = 0;
   
@@ -94,7 +94,7 @@ public:
   
   virtual void texImage2D(GLTextureType target,
                             int         level,
-                            int         internalFormat,
+                            GLFormat    internalFormat,
                             int         width,
                             int         height,
                             int         border,

@@ -91,10 +91,10 @@ public:
   
   virtual void vertexPointer(int size, int stride, const float vertex[]) = 0;
   
-  virtual void drawTriangleStrip(int n, const unsigned int* i) = 0;
-  virtual void drawLines(int n, const unsigned int* i) = 0; 
-  virtual void drawLineLoop(int n, const unsigned int* i) = 0;
-  virtual void drawPoints(int n, const unsigned int *i) = 0;
+  virtual void drawTriangleStrip(int n, const int i[]) = 0;
+  virtual void drawLines(int n, const int i[]) = 0; 
+  virtual void drawLineLoop(int n, const int i[]) = 0;
+  virtual void drawPoints(int n, const int i[]) = 0;
   
   virtual void setProjection(const MutableMatrix44D &projection) = 0;
   

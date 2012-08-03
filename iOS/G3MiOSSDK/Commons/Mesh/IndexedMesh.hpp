@@ -18,13 +18,12 @@
 
 #include <vector>
 
-
-
-enum GLPrimitive {
-  TriangleStrip,
-  Lines,
-  LineLoop
-};
+#include "INativeGL.hpp"
+//enum GLPrimitive {
+//  TriangleStrip,
+//  Lines,
+//  LineLoop
+//};
 
 enum CenterStrategy {
   NoCenter,
@@ -40,7 +39,7 @@ private:
               const GLPrimitive primitive,
               CenterStrategy strategy,
               Vector3D center,
-              std::vector<unsigned int>& indexes,
+              std::vector<int>& indexes,
               const Color* flatColor = NULL,
               std::vector<Color>* colors = NULL,
               const float colorsIntensity = 0.0,
@@ -50,9 +49,9 @@ private:
               const GLPrimitive primitive,
               CenterStrategy strategy,
               Vector3D center,
-              const unsigned int numVertices,
+              const int numVertices,
               const float* vertices,
-              const unsigned int* indexes,
+              const int* indexes,
               const int numIndex, 
               const Color* flatColor = NULL,
               const float * colors = NULL,
@@ -65,9 +64,9 @@ private:
   const GLPrimitive    _primitive; 
   
   const float*         _vertices;
-  const unsigned int   _numVertices;
+  const int            _numVertices;
   
-  const unsigned int*  _indexes;
+  const int*           _indexes;
   const int            _numIndex;
   
   const float*         _normals;
@@ -92,9 +91,9 @@ public:
                                          const GLPrimitive primitive,
                                          CenterStrategy strategy,
                                          Vector3D center,
-                                         const unsigned int numVertices,
+                                         const int numVertices,
                                          const float* vertices,
-                                         const unsigned int* indexes,
+                                         const int* indexes,
                                          const int numIndex, 
                                          const Color* flatColor = NULL,
                                          const float * colors = NULL,
@@ -110,7 +109,7 @@ public:
                                          const GLPrimitive primitive,
                                          CenterStrategy strategy,
                                          Vector3D center,
-                                         std::vector<unsigned int>& indexes,
+                                         std::vector<int>& indexes,
                                          const Color* flatColor = NULL,
                                          std::vector<Color>* colors = NULL,
                                          const float colorsIntensity = 0.0,
@@ -126,9 +125,9 @@ public:
                                            const GLPrimitive primitive,
                                            CenterStrategy strategy,
                                            Vector3D center,
-                                           const unsigned int numVertices,
+                                           const int numVertices,
                                            float* vertices,
-                                           const unsigned int* indexes,
+                                           const int* indexes,
                                            const int numIndex, 
                                            const Color* flatColor = NULL,
                                            const float * colors = NULL,
@@ -148,7 +147,6 @@ public:
     return new IndexedMesh(owner, primitive, strategy, center, numVertices, vertices,
                            indexes, numIndex, flatColor, colors, colorsIntensity, normals);
   }
-  
 
     
   virtual void render(const RenderContext* rc) const;
