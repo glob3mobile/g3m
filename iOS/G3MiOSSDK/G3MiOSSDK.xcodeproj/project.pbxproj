@@ -160,6 +160,7 @@
 		D8D3BC8E159B11DA00738E37 /* Network_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8D3BC8C159B11DA00738E37 /* Network_iOS.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8E0EC1515C1B1CD0010A68A /* StaticImageLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8E0EC1415C1B1CD0010A68A /* StaticImageLayer.cpp */; };
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; };
+		D8F7665815CAD79100179E08 /* INativeGL.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8F7665715CAD79100179E08 /* INativeGL.hpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -310,7 +311,6 @@
 		D892FBCB15C930CC00E69254 /* NativeGL2_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NativeGL2_iOS.hpp; path = Specific/GL/NativeGL2_iOS.hpp; sourceTree = "<group>"; };
 		D892FBCE15C930FC00E69254 /* GL.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GL.hpp; sourceTree = "<group>"; };
 		D892FBCF15C9310A00E69254 /* GL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GL.cpp; sourceTree = "<group>"; };
-		D8A415F515C7F085005010E6 /* INativeGL.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = INativeGL.hpp; path = Specific/GL/INativeGL.hpp; sourceTree = "<group>"; };
 		D8A5601B15AEF64E00035086 /* IndexedMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IndexedMesh.cpp; path = Commons/Mesh/IndexedMesh.cpp; sourceTree = "<group>"; };
 		D8A5601C15AEF64E00035086 /* IndexedMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IndexedMesh.hpp; path = Commons/Mesh/IndexedMesh.hpp; sourceTree = "<group>"; };
 		D8A5601D15AEF64E00035086 /* Mesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Mesh.cpp; path = Commons/Mesh/Mesh.cpp; sourceTree = "<group>"; };
@@ -329,6 +329,7 @@
 		D8EEF3B51577924D003FEB5E /* libG3MiOSSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libG3MiOSSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8EEF3B81577924D003FEB5E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D8EEF3BC1577924D003FEB5E /* G3MiOSSDK-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "G3MiOSSDK-Prefix.pch"; sourceTree = "<group>"; };
+		D8F7665715CAD79100179E08 /* INativeGL.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = INativeGL.hpp; path = Commons/Interfaces/INativeGL.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -496,6 +497,7 @@
 		383BD38B1577EE040012AC53 /* Interfaces */ = {
 			isa = PBXGroup;
 			children = (
+				D8F7665715CAD79100179E08 /* INativeGL.hpp */,
 				CFFEC11D15C2E645003FA986 /* IDownloader.cpp */,
 				CFFEC11B15C2E636003FA986 /* IDownloader.hpp */,
 				383BD3B81577EE630012AC53 /* IFactory.hpp */,
@@ -516,7 +518,6 @@
 				D892FBCB15C930CC00E69254 /* NativeGL2_iOS.hpp */,
 				CC14B637157D34C700793C92 /* GL2.mm */,
 				CC14B638157D34C700793C92 /* GL2.hpp */,
-				D8A415F515C7F085005010E6 /* INativeGL.hpp */,
 			);
 			name = GL;
 			sourceTree = "<group>";
@@ -757,6 +758,7 @@
 				CCC2A03C15CA6C7D00923850 /* SceneGraphRenderer.hpp in Headers */,
 				CCC2A03E15CA6C7D00923850 /* SimplePlanetRenderer.hpp in Headers */,
 				CCC2A04015CA6C7D00923850 /* TileRenderer.hpp in Headers */,
+				D8F7665815CAD79100179E08 /* INativeGL.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
