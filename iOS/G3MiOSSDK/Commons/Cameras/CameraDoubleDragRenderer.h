@@ -28,6 +28,7 @@ private:
   
   MutableVector3D initialPoint0, initialPoint1;
   const Planet* _planet;
+  IGL *_gl;
         
 };
 

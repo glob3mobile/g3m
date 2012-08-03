@@ -27,6 +27,7 @@ private:
   
   double lastYValid;
   const Planet* _planet;
+  IGL *_gl;
 
     
 };

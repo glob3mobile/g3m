@@ -124,23 +124,24 @@ void CameraRotationRenderer::onUp(const TouchEvent& touchEvent)
 
 int CameraRotationRenderer::render(const RenderContext* rc) {
   _planet = rc->getPlanet();
+  _gl = rc->getGL();
 
   // TEMP TO DRAW A POINT WHERE USER PRESS
   if (false) {
     if (_currentGesture == Rotate) {
       float vertices[] = { 0,0,0};
       unsigned int indices[] = {0};
-      gl->enableVerticesPosition();
-      gl->disableTexture2D();
-      gl->disableTextures();
-      gl->vertexPointer(3, 0, vertices);
-      gl->color((float) 1, (float) 1, (float) 0, 1);
-      gl->pointSize(10);
-      gl->pushMatrix();
+      _gl->enableVerticesPosition();
+      _gl->disableTexture2D();
+      _gl->disableTextures();
+      _gl->vertexPointer(3, 0, vertices);
+      _gl->color((float) 1, (float) 1, (float) 0, 1);
+      _gl->pointSize(10);
+      _gl->pushMatrix();
       MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D());
-      gl->multMatrixf(T);
-      gl->drawPoints(1, indices);
-      gl->popMatrix();
+      _gl->multMatrixf(T);
+      _gl->drawPoints(1, indices);
+      _gl->popMatrix();
       //Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
       //printf ("zoom with initial point = (%f, %f)\n", g.latitude().degrees(), g.longitude().degrees());
     }

@@ -28,6 +28,7 @@ private:
   void onUp(const TouchEvent& touchEvent);
   
   const Planet* _planet;
+  IGL *_gl;
   
 };
 

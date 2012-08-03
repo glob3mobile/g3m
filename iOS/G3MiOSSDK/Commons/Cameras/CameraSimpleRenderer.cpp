@@ -25,7 +25,7 @@ void CameraSimpleRenderer::onResizeViewportEvent(int width, int height) {
 int CameraSimpleRenderer::render(const RenderContext* rc) {
   _camera = rc->getCamera(); //Saving camera reference 
   //_planet = rc->getPlanet();
-  gl = rc->getGL();
+  //gl = rc->getGL();
   
   _camera->render(rc);
   
