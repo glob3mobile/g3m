@@ -21,7 +21,7 @@ private:
   
   const INativeGL*      _gl;      //NATIVE GL
   
-  MutableMatrix44D            _modelView;
+  MutableMatrix44D      _modelView;
   
   // stack of ModelView matrices
   std::list<MutableMatrix44D> _matrixStack;
