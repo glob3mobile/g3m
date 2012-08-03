@@ -1,5 +1,5 @@
 //
-//  CameraSimpleDragHandler.cpp
+//  CameraSimpleDragRenderer.cpp
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 28/07/12.
@@ -8,12 +8,12 @@
 
 #include <iostream>
 
-#include "CameraSimpleDragHandler.h"
+#include "CameraSimpleDragRenderer.h"
 #include "MutableVector2D.hpp"
 #include "IGL.hpp"
 
 
-bool CameraSimpleDragHandler::onTouchEvent(const TouchEvent* touchEvent) 
+bool CameraSimpleDragRenderer::onTouchEvent(const TouchEvent* touchEvent) 
 {
   // only one finger needed
   if (touchEvent->getTouchCount()!=1) return false;
@@ -35,7 +35,7 @@ bool CameraSimpleDragHandler::onTouchEvent(const TouchEvent* touchEvent)
 }
 
 
-void CameraSimpleDragHandler::onDown(const TouchEvent& touchEvent) 
+void CameraSimpleDragRenderer::onDown(const TouchEvent& touchEvent) 
 {  
   _camera0 = Camera(*_camera);
   _currentGesture = Drag; 
@@ -49,7 +49,7 @@ void CameraSimpleDragHandler::onDown(const TouchEvent& touchEvent)
 }
 
 
-void CameraSimpleDragHandler::onMove(const TouchEvent& touchEvent) 
+void CameraSimpleDragRenderer::onMove(const TouchEvent& touchEvent) 
 {
   //_currentGesture = getGesture(touchEvent);
   if (_currentGesture!=Drag) return;
@@ -72,7 +72,7 @@ void CameraSimpleDragHandler::onMove(const TouchEvent& touchEvent)
 }
 
 
-void CameraSimpleDragHandler::onUp(const TouchEvent& touchEvent) 
+void CameraSimpleDragRenderer::onUp(const TouchEvent& touchEvent) 
 {
   _currentGesture = None;
   _initialPixel = Vector3D::nan().asMutableVector3D();
@@ -80,28 +80,32 @@ void CameraSimpleDragHandler::onUp(const TouchEvent& touchEvent)
   //printf ("end 1 finger\n");
 }
 
-int CameraSimpleDragHandler::render(const RenderContext* rc) {
+int CameraSimpleDragRenderer::render(const RenderContext* rc) {
+  _planet = rc->getPlanet();
+  _camera = rc->getCamera();
+  _gl = rc->getGL();
+
   // TEMP TO DRAW A POINT WHERE USER PRESS
   if (false) {
     if (_currentGesture == Drag) {
       float vertices[] = { 0,0,0};
       int indices[] = {0};
-      gl->enableVerticesPosition();
-      gl->disableTexture2D();
-      gl->disableTextures();
-      gl->vertexPointer(3, 0, vertices);
-      gl->color((float) 0, (float) 1, (float) 0, 1);
-      gl->pointSize(60);
-      gl->pushMatrix();
+      _gl->enableVerticesPosition();
+      _gl->disableTexture2D();
+      _gl->disableTextures();
+      _gl->vertexPointer(3, 0, vertices);
+      _gl->color((float) 0, (float) 1, (float) 0, 1);
+      _gl->pointSize(60);
+      _gl->pushMatrix();
       
       double height = _planet->toGeodetic3D(_camera->getPosition()).height();
       printf ("altura camara = %f\n", height);
                                          
       
       MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D());
-      gl->multMatrixf(T);
-      gl->drawPoints(1, indices);
-      gl->popMatrix();
+      _gl->multMatrixf(T);
+      _gl->drawPoints(1, indices);
+      _gl->popMatrix();
             
       //Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
       //printf ("zoom with initial point = (%f, %f)\n", g.latitude().degrees(), g.longitude().degrees());

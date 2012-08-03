@@ -55,11 +55,13 @@ git push\
 \cf0 Si alguna vez probamos algo y, antes de hacer comitt, queremos desechar todo lo que hemos hecho en local y volver a la situaci\'f3n de cuando hicimos pulo:\
 git checkout .\
 \
+Pero si adem\'e1s hemos creado, borrado o renombrado ficheros, no basta con el checkout .. Lo que queremos es volver a la \'faltima versi\'f3n del repo exactamente y pasar de todos los cambios locales\
+git reset --hard\
+\
 Si s\'f3lo queremos deshacer un fichero concreto:\
 git checkout -- fichero\
 \
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720
-\cf0 Si hay un conflicto y debemos editar un fichero oculto en Mac, ir al directorio y abrir el TextEdit desde consola:\
+Si hay un conflicto y debemos editar un fichero oculto en Mac, ir al directorio y abrir el TextEdit desde consola:\
 \pard\pardeftab720
 
 \fs26 \cf0 open -a TextEdit file

@@ -1,5 +1,5 @@
 //
-//  CameraRotationHandler.cpp
+//  CameraRotationRenderer.cpp
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 28/07/12.
@@ -8,11 +8,11 @@
 
 #include <iostream>
 
-#include "CameraRotationHandler.h"
+#include "CameraRotationRenderer.h"
 #include "IGL.hpp"
 
 
-bool CameraRotationHandler::onTouchEvent(const TouchEvent* touchEvent) 
+bool CameraRotationRenderer::onTouchEvent(const TouchEvent* touchEvent) 
 {
   // three finger needed
   if (touchEvent->getTouchCount()!=3) return false;
@@ -34,7 +34,7 @@ bool CameraRotationHandler::onTouchEvent(const TouchEvent* touchEvent)
 }
 
 
-void CameraRotationHandler::onDown(const TouchEvent& touchEvent) 
+void CameraRotationRenderer::onDown(const TouchEvent& touchEvent) 
 {  
   _camera0 = Camera(*_camera);
   _currentGesture = Rotate;
@@ -58,7 +58,7 @@ void CameraRotationHandler::onDown(const TouchEvent& touchEvent)
 }
 
 
-void CameraRotationHandler::onMove(const TouchEvent& touchEvent) 
+void CameraRotationRenderer::onMove(const TouchEvent& touchEvent) 
 {
   //_currentGesture = getGesture(touchEvent);
   if (_currentGesture!=Rotate) return;
@@ -95,7 +95,7 @@ void CameraRotationHandler::onMove(const TouchEvent& touchEvent)
   // rotate more than 85 degrees or less than 0 degrees is not allowed
   double delta = (cm.y() - _initialPixel.y()) * 0.25;
   double finalAngle = initialAngle + delta;
-  if (finalAngle > 88)  delta = 88 - initialAngle;
+  if (finalAngle > 85)  delta = 85 - initialAngle;
   if (finalAngle < 0)   delta = -initialAngle;
 
   // horizontal rotation over the original camera horizontal axix
@@ -115,30 +115,34 @@ void CameraRotationHandler::onMove(const TouchEvent& touchEvent)
 }
 
 
-void CameraRotationHandler::onUp(const TouchEvent& touchEvent) 
+void CameraRotationRenderer::onUp(const TouchEvent& touchEvent) 
 {
   _currentGesture = None;
   _initialPixel = Vector3D::nan().asMutableVector3D();
 }
 
 
-int CameraRotationHandler::render(const RenderContext* rc) {
+int CameraRotationRenderer::render(const RenderContext* rc) {
+  _planet = rc->getPlanet();
+  _camera = rc->getCamera();
+  _gl = rc->getGL();
+
   // TEMP TO DRAW A POINT WHERE USER PRESS
   if (false) {
     if (_currentGesture == Rotate) {
       float vertices[] = { 0,0,0};
       int indices[] = {0};
-      gl->enableVerticesPosition();
-      gl->disableTexture2D();
-      gl->disableTextures();
-      gl->vertexPointer(3, 0, vertices);
-      gl->color((float) 1, (float) 1, (float) 0, 1);
-      gl->pointSize(10);
-      gl->pushMatrix();
+      _gl->enableVerticesPosition();
+      _gl->disableTexture2D();
+      _gl->disableTextures();
+      _gl->vertexPointer(3, 0, vertices);
+      _gl->color((float) 1, (float) 1, (float) 0, 1);
+      _gl->pointSize(10);
+      _gl->pushMatrix();
       MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D());
-      gl->multMatrixf(T);
-      gl->drawPoints(1, indices);
-      gl->popMatrix();
+      _gl->multMatrixf(T);
+      _gl->drawPoints(1, indices);
+      _gl->popMatrix();
       //Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
       //printf ("zoom with initial point = (%f, %f)\n", g.latitude().degrees(), g.longitude().degrees());
     }
