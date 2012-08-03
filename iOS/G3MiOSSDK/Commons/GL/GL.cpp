@@ -14,35 +14,6 @@
 #include "INativeGL.hpp"
 
 
-struct UniformsStruct {
-  int  Projection;
-  int  Modelview;
-  int   Sampler;
-  int   EnableTexture;
-  int   FlatColor;
-  int   TranslationTexCoord;
-  int   ScaleTexCoord;
-  int   PointSize;
-  
-  //FOR BILLBOARDING
-  int   BillBoard;
-  int   ViewPortRatio;
-  
-  //FOR COLOR MIXING
-  int   FlatColorIntensity;
-  int   EnableColorPerVertex;
-  int   EnableFlatColor;
-  int   ColorPerVertexIntensity;
-} Uniforms;
-
-
-struct AttributesStruct {
-  int   Position;
-  int   TextureCoord;
-  int   Color;
-  int   Normal;
-} Attributes;
-
 
 void GL::useProgram(unsigned int program) {
   // set shaders

@@ -6,11 +6,44 @@
 //  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
+#ifndef G3MiOSSDK_GL2_hpp
+#define G3MiOSSDK_GL2_hpp
+
 #include "IGL.hpp"
 
 #include "MutableMatrix44D.hpp"
 
 #include "INativeGL.hpp"
+
+struct UniformsStruct {
+  GLuint  Projection;
+  GLuint  Modelview;
+  GLint   Sampler;
+  GLint   EnableTexture;
+  GLint   FlatColor;
+  GLint   TranslationTexCoord;
+  GLint   ScaleTexCoord;
+  GLint   PointSize;
+  
+  //FOR BILLBOARDING
+  GLint   BillBoard;
+  GLint   ViewPortRatio;
+  
+  //FOR COLOR MIXING
+  GLint   FlatColorIntensity;
+  GLint   EnableColorPerVertex;
+  GLint   EnableFlatColor;
+  GLint   ColorPerVertexIntensity;
+} Uniforms;
+
+
+struct AttributesStruct {
+  GLint   Position;
+  GLint   TextureCoord;
+  GLint   Color;
+  GLint   Normal;
+} Attributes;
+
 
 class GL2: public IGL {
 private:
@@ -148,3 +181,4 @@ public:
 
 };
 
+#endif
