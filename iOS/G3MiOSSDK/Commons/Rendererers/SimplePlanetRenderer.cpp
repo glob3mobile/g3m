@@ -56,21 +56,21 @@ float * SimplePlanetRenderer::createVertices(const Planet& planet)
 
 
 
-unsigned int* SimplePlanetRenderer::createMeshIndex()
+int* SimplePlanetRenderer::createMeshIndex()
 {
   const unsigned int res = _lonRes;
   
   const int numIndexes = (2 * (res - 1) * (res + 1)) -1;
-  unsigned int *indexes = new unsigned int[numIndexes];
+  int *indexes = new int[numIndexes];
   
   unsigned int n = 0;
   for (unsigned int j = 0; j < res - 1; j++) {
-    if (j > 0) indexes[n++] = (unsigned int) (j * res);
+    if (j > 0) indexes[n++] = (int) (j * res);
     for (unsigned int i = 0; i < res; i++) {
-      indexes[n++] = (unsigned int) (j * res + i);
-      indexes[n++] = (unsigned int) (j * res + i + res);
+      indexes[n++] = (int) (j * res + i);
+      indexes[n++] = (int) (j * res + i + res);
     }
-    indexes[n++] = (unsigned int) (j * res + 2 * res - 1);
+    indexes[n++] = (int) (j * res + 2 * res - 1);
   }
   
   return indexes;
@@ -102,7 +102,7 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   float* ver = createVertices(*planet);
   const int res = _lonRes;
   const int numIndexes = (2 * (res - 1) * (res + 1)) -1;
-  unsigned int * ind = createMeshIndex();
+  int * ind = createMeshIndex();
   
   //TEXTURED
   int texID = 0;
@@ -148,8 +148,8 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
     }
   }
   
-  IndexedMesh * im = new IndexedMesh(true, TriangleStrip, NoCenter, Vector3D(0,0,0), _latRes *_lonRes, ver, 
-                                     ind, numIndexes, flatColor, colors, 0.5, normals);
+  IndexedMesh *im = IndexedMesh::CreateFromVector3D(true, TriangleStrip, NoCenter, Vector3D(0,0,0), _latRes *_lonRes, ver, 
+                                                    ind, numIndexes, flatColor, colors, 0.5, normals);
   
   _mesh = new TexturedMesh(im, true, new TextureMapping(texID, texC), true);
   

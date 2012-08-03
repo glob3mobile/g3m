@@ -10,19 +10,18 @@
 #define G3MiOSSDK_GL_hpp
 
 #include "MutableMatrix44D.hpp"
-
 #include "IGL.hpp"
-
 #include "INativeGL.hpp"
 
 #include <list>
 
-class GL {
+
+class GL : public IGL{
 private:
   
   const INativeGL*      _gl;      //NATIVE GL
   
-  MutableMatrix44D            _modelView;
+  MutableMatrix44D      _modelView;
   
   // stack of ModelView matrices
   std::list<MutableMatrix44D> _matrixStack;

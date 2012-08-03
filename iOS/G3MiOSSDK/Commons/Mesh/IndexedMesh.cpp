@@ -34,9 +34,9 @@ IndexedMesh::IndexedMesh(bool owner,
                          const GLPrimitive primitive,
                          CenterStrategy strategy,
                          Vector3D center,
-                         const unsigned int numVertices,
+                         const int numVertices,
                          const float* vertices,
-                         const unsigned int* indexes,
+                         const int indexes[],
                          const int numIndex, 
                          const Color* flatColor,
                          const float* colors,
@@ -65,7 +65,7 @@ IndexedMesh::IndexedMesh(std::vector<MutableVector3D>& vertices,
                          const GLPrimitive primitive,
                          CenterStrategy strategy,
                          Vector3D center,                         
-                         std::vector<unsigned int>& indexes,
+                         std::vector<int>& indexes,
                          const Color* flatColor,
                          std::vector<Color>* colors,
                          const float colorsIntensity,
@@ -106,7 +106,7 @@ _center(center)
   
   _vertices = vert;
   
-  unsigned int * ind = new unsigned int[indexes.size()];
+  int * ind = new int[indexes.size()];
   for (int i = 0; i < indexes.size(); i++) {
     ind[i] = indexes[i];
   }

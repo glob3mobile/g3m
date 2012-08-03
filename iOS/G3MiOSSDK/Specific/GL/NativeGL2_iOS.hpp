@@ -20,7 +20,7 @@ class NativeGL2_iOS: public INativeGL
       case ColorBuffer:
         return GL_COLOR_BUFFER_BIT;
       case DepthBuffer:
-        return GL_COLOR_BUFFER_BIT;
+        return GL_DEPTH_BUFFER_BIT;
     }
   }
   
@@ -254,7 +254,7 @@ public:
     glGenTextures(n, textureID);
     std::vector<int> ts;
     for(int i = 0; i < n; i++){
-      ts[i] = textureID[i];
+      ts.push_back(textureID[i]);
     }
     return ts;
   }
@@ -265,14 +265,15 @@ public:
   
   void texImage2D(GLTextureType target,
                     int         level,
-                    int         internalFormat,
+                    GLFormat    internalFormat,
                     int         width,
                     int         height,
                     int         border,
                     GLFormat    format,
                     GLType      type,
                     const void* data) const{
-    glTexImage2D(target, level, internalFormat, width, height, border, getEnum(format), getEnum(type), data);
+    glTexImage2D(getEnum(target), level, getEnum(internalFormat), 
+                 width, height, border, getEnum(format), getEnum(type), data);
   }
   
   void drawArrays(GLPrimitive mode, int first, int count) const{

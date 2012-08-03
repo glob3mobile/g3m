@@ -161,7 +161,7 @@ void Camera::render(const RenderContext* rc) {
       (float) p2.x(), (float) p2.y(), (float) p2.z(),
       (float) p3.x(), (float) p3.y(), (float) p3.z(),    
     };
-    unsigned int indices[] = {0, 1, 2, 3};
+    int indices[] = {0, 1, 2, 3};
     
 //    IGL *gl = rc.getGL();
     gl->enableVerticesPosition();
