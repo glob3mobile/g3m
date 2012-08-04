@@ -225,7 +225,7 @@ void Tile::render(const RenderContext* rc,
                   TileTexturizer* texturizer,
                   const TileParameters* parameters,
                   TilesStatistics* statistics,
-                  std::vector<Tile*>* toVisitInNextIteration,
+                  std::list<Tile*>* toVisitInNextIteration,
                   ITimer* frameTimer,
                   ITimer* lastSplitTimer,
                   ITimer* lastTexturizerTimer) {
