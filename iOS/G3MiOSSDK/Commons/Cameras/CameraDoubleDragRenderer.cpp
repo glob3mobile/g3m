@@ -42,20 +42,20 @@ void CameraDoubleDragRenderer::onDown(const TouchEvent& touchEvent)
   // double dragging
   Vector2D pixel0 = touchEvent.getTouch(0)->getPos();
   Vector3D ray0 = _camera0.pixel2Ray(pixel0);
-  initialPoint0 = _planet->closestIntersection(_camera0.getPosition(), ray0).asMutableVector3D();
+  _initialPoint0 = _planet->closestIntersection(_camera0.getPosition(), ray0).asMutableVector3D();
   Vector2D pixel1 = touchEvent.getTouch(1)->getPos();
   Vector3D ray1 = _camera0.pixel2Ray(pixel1);
-  initialPoint1 = _planet->closestIntersection(_camera0.getPosition(), ray1).asMutableVector3D();
+  _initialPoint1 = _planet->closestIntersection(_camera0.getPosition(), ray1).asMutableVector3D();
   
   // both pixels must intersect globe
-  if (initialPoint0.isNan() || initialPoint1.isNan()) {
+  if (_initialPoint0.isNan() || _initialPoint1.isNan()) {
     _currentGesture = None;
     return;
   }
   
   // middle point in 3D
-  Geodetic2D g0 = _planet->toGeodetic2D(initialPoint0.asVector3D());
-  Geodetic2D g1 = _planet->toGeodetic2D(initialPoint1.asVector3D());
+  Geodetic2D g0 = _planet->toGeodetic2D(_initialPoint0.asVector3D());
+  Geodetic2D g1 = _planet->toGeodetic2D(_initialPoint1.asVector3D());
   Geodetic2D g = _planet->getMidPoint(g0, g1);
   _initialPoint = _planet->toVector3D(g).asMutableVector3D();
   
@@ -81,6 +81,47 @@ void CameraDoubleDragRenderer::onMove(const TouchEvent& touchEvent)
   double angle = difPixel.orientation().radians() - _initialFingerInclination;
   double factor = finalFingerSeparation/_initialFingerSeparation;
   
+  // compute camera translation using numerical iterations until convergence
+  double dAccum=0;
+  {
+    Camera tempCamera(_camera0);
+    Angle originalAngle = _initialPoint0.angleBetween(_initialPoint1);
+    double angle = originalAngle.degrees();
+    
+    // compute estimated camera translation
+    Vector3D centerPoint = tempCamera.centerOfViewOnPlanet(_planet);    
+    double distance = tempCamera.getPosition().sub(centerPoint).length();
+    double d = distance*(factor-1)/factor;
+    tempCamera.moveForward(d);
+    dAccum += d;
+    tempCamera.updateModelMatrix();
+    double angle0 = tempCamera.compute3DAngularDistance(pixel0, pixel1, _planet).degrees();
+    //printf("distancia angular original = %.4f     d=%.1f   angulo step0=%.4f\n", angle, d, angle0);
+ 
+    // step 1
+    d = fabs((distance-d)*0.3);
+    if (angle0 < angle) d*=-1;
+    tempCamera.moveForward(d);
+    dAccum += d;
+    tempCamera.updateModelMatrix();
+    double angle1 = tempCamera.compute3DAngularDistance(pixel0, pixel1, _planet).degrees();
+    double angle_n1=angle0, angle_n=angle1;
+    
+    // iterations
+    int iter=0;
+    double precision = pow(10, log10(distance)-9);
+    while (fabs(angle_n-angle) > precision) {
+      iter++;
+      if ((angle_n1-angle_n)/(angle_n-angle) < 0) d/=-2;
+      tempCamera.moveForward(d);
+      dAccum += d;
+      tempCamera.updateModelMatrix();
+      angle_n1 = angle_n;
+      angle_n = tempCamera.compute3DAngularDistance(pixel0, pixel1, _planet).degrees();  
+    }
+    //printf("-----------  iteraciones=%d  precision=%f angulo final=%.4f  distancia final=%.1f\n", iter, precision, angle_n, dAccum);
+  }
+  
   // create temp camera to test gesture first
   Camera tempCamera(_camera0);
 
@@ -98,8 +139,9 @@ void CameraDoubleDragRenderer::onMove(const TouchEvent& touchEvent)
   
   // move the camara 
   {
-    double distance = tempCamera.getPosition().sub(centerPoint).length();
-    tempCamera.moveForward(distance*(factor-1)/factor);
+    //double distance = tempCamera.getPosition().sub(centerPoint).length();
+    //tempCamera.moveForward(distance*(factor-1)/factor);
+    tempCamera.moveForward(dAccum);
   }
   
   // rotate the camera
@@ -194,12 +236,12 @@ int CameraDoubleDragRenderer::render(const RenderContext* rc) {
       // draw each finger
       _gl->pointSize(60);
       _gl->pushMatrix();
-      MutableMatrix44D T0 = MutableMatrix44D::createTranslationMatrix(initialPoint0.asVector3D());
+      MutableMatrix44D T0 = MutableMatrix44D::createTranslationMatrix(_initialPoint0.asVector3D());
       _gl->multMatrixf(T0);
       _gl->drawPoints(1, indices);
       _gl->popMatrix();
       _gl->pushMatrix();
-      MutableMatrix44D T1 = MutableMatrix44D::createTranslationMatrix(initialPoint1.asVector3D());
+      MutableMatrix44D T1 = MutableMatrix44D::createTranslationMatrix(_initialPoint1.asVector3D());
       _gl->multMatrixf(T1);
       _gl->drawPoints(1, indices);
       _gl->popMatrix();

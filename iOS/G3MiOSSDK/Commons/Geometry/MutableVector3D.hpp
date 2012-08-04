@@ -109,7 +109,7 @@ public:
                            _x * other._y - _y * other._x);
   }
   
-  double angleBetween(const MutableVector3D& other) const;
+  Angle angleBetween(const MutableVector3D& other) const;
   
   MutableVector3D rotatedAroundAxis(const MutableVector3D& other,
                                     const Angle& theta) const;

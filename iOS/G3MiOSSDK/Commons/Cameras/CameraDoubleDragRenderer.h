@@ -30,7 +30,7 @@ private:
   void onMove(const TouchEvent& touchEvent);
   void onUp(const TouchEvent& touchEvent);
   
-  MutableVector3D initialPoint0, initialPoint1;
+  MutableVector3D _initialPoint0, _initialPoint1;
   const Planet* _planet;
   IGL *_gl;
   Camera _camera0;         //Initial Camera saved on Down event

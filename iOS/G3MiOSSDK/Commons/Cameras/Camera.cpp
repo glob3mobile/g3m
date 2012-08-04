@@ -269,3 +269,14 @@ Vector3D Camera::getHorizontalVector() const
   return Vector3D(M.get(0), M.get(4), M.get(8));
 }
 
+
+Angle Camera::compute3DAngularDistance(const Vector2D& pixel0, const Vector2D& pixel1, const Planet *planet) const
+{
+  Vector3D ray0   = pixel2Ray(pixel0);
+  Vector3D point0 = planet->closestIntersection(_position.asVector3D(), ray0);
+  Vector3D ray1   = pixel2Ray(pixel1);
+  Vector3D point1 = planet->closestIntersection(_position.asVector3D(), ray1);
+  return point0.angleBetween(point1);
+}
+
+

@@ -158,6 +158,9 @@ public:
   Vector3D getHorizontalVector() const;
   
   void applyTransform(const MutableMatrix44D& mat);
+  
+  Angle compute3DAngularDistance(const Vector2D& pixel0, const Vector2D& pixel1, const Planet *planet) const;
+
 
     
 private:
@@ -248,6 +251,7 @@ private:
       _frustumInModelCoordinates = NULL;
     }
   }
+  
   
 };
 

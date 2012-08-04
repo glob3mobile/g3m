@@ -16,7 +16,7 @@ MutableVector3D MutableVector3D::normalized() const
 }
 
 
-double MutableVector3D::angleBetween(const MutableVector3D& other) const {
+Angle MutableVector3D::angleBetween(const MutableVector3D& other) const {
   const MutableVector3D v1 = normalized();
   const MutableVector3D v2 = other.normalized();
   
@@ -24,7 +24,7 @@ double MutableVector3D::angleBetween(const MutableVector3D& other) const {
   if (c > 1.0) c = 1.0;
   else if (c < -1.0) c = -1.0;
   
-  return acos(c);
+  return Angle::fromRadians(acos(c));
 }
 
 MutableVector3D MutableVector3D::rotatedAroundAxis(const MutableVector3D& axis,
