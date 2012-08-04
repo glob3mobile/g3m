@@ -109,10 +109,10 @@ void CameraDoubleDragRenderer::onMove(const TouchEvent& touchEvent)
     
     // iterations
     int iter=0;
-    double precision = pow(10, log10(distance)-9);
+    double precision = pow(10, log10(distance)-8.5);
     while (fabs(angle_n-angle) > precision) {
       iter++;
-      if ((angle_n1-angle_n)/(angle_n-angle) < 0) d/=-2;
+      if ((angle_n1-angle_n)/(angle_n-angle) < 0) d*=-0.5;
       tempCamera.moveForward(d);
       dAccum += d;
       tempCamera.updateModelMatrix();
