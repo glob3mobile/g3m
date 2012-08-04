@@ -103,7 +103,10 @@ public:
   
   MutableVector2D asMutableVector2D() const;
 
-  
+  bool isNan() const {
+    return isnan(_x * _y);
+  }
+
 };
 
 

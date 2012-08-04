@@ -143,7 +143,7 @@ void Tile::rawRender(const RenderContext *rc,
         
         bool callTexturizer = ((_texturizerTimer == NULL) ||
                                (_texturizerTimer->elapsedTime().milliseconds() > 125 &&
-                                lastTexturizerTimer->elapsedTime().milliseconds() > 25));
+                                lastTexturizerTimer->elapsedTime().milliseconds() > 50));
 
         if (callTexturizer) {
           _texturizerMesh = texturizer->texturize(rc,
@@ -225,7 +225,7 @@ void Tile::render(const RenderContext* rc,
                   TileTexturizer* texturizer,
                   const TileParameters* parameters,
                   TilesStatistics* statistics,
-                  std::vector<Tile*>* toVisitInNextIteration,
+                  std::list<Tile*>* toVisitInNextIteration,
                   ITimer* frameTimer,
                   ITimer* lastSplitTimer,
                   ITimer* lastTexturizerTimer) {
