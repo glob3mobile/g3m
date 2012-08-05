@@ -189,7 +189,7 @@
                               true);
   
   Geodetic3D australia = Geodetic3D::fromDegrees(-26.91, 133.94, 1.1e7);
-  ((G3MWidget*)_widget)->getCamera()->setPosition(*planet, australia);
+  ((G3MWidget*)_widget)->getCamera()->setPosition(australia);
 
 }
 

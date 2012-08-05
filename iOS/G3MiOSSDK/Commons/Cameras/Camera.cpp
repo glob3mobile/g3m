@@ -55,7 +55,8 @@ _dirtyCachedValues(true),
 _frustumInModelCoordinates(NULL),
 _halfFrustumInModelCoordinates(NULL),
 _halfFrustum(NULL),
-_centerOfView(NULL)
+_centerOfView(NULL),
+_planet(planet)
 {
   resizeViewport(width, height);
 }
@@ -94,7 +95,7 @@ void Camera::calculateCachedValues(const RenderContext *rc) {
     delete _centerOfView;
   }
   const Planet *planet = rc->getPlanet();
-  const Vector3D centerV = centerOfViewOnPlanet(planet);
+  const Vector3D centerV = centerOfViewOnPlanet();
   const Geodetic3D centerG = planet->toGeodetic3D(centerV);
   _centerOfView = new Geodetic3D(centerG);
   
@@ -196,6 +197,14 @@ Vector3D Camera::pixel2Ray(const Vector2D& pixel) const {
   return obj.sub(_position.asVector3D());
 }
 
+
+Vector3D Camera::pixel2PlanetPoint(const Vector2D& pixel) const
+{
+  return _planet->closestIntersection(_position.asVector3D(), pixel2Ray(pixel));
+}
+
+
+
 Vector2D Camera::point2Pixel(const Vector3D& point) const
 {
   const MutableMatrix44D modelViewMatrix = _projectionMatrix.multiply(_modelMatrix);
@@ -265,16 +274,16 @@ void Camera::rotateWithAxisAndPoint(const Vector3D& axis, const Vector3D& point,
   applyTransform(m);
 }
 
-void Camera::setPosition(const Planet& planet, const Geodetic3D& g3d)
+void Camera::setPosition(const Geodetic3D& g3d)
 {
-  _position = planet.toVector3D(g3d).asMutableVector3D();
+  _position = _planet->toVector3D(g3d).asMutableVector3D();
 }
 
 
-Vector3D Camera::centerOfViewOnPlanet(const Planet *planet) const
+Vector3D Camera::centerOfViewOnPlanet() const
 {
   const Vector3D ray = _center.sub(_position).asVector3D();
-  return planet->closestIntersection(_position.asVector3D(), ray);
+  return _planet->closestIntersection(_position.asVector3D(), ray);
 }
 
 
@@ -285,12 +294,10 @@ Vector3D Camera::getHorizontalVector() const
 }
 
 
-Angle Camera::compute3DAngularDistance(const Vector2D& pixel0, const Vector2D& pixel1, const Planet *planet) const
+Angle Camera::compute3DAngularDistance(const Vector2D& pixel0, const Vector2D& pixel1) const
 {
-  Vector3D ray0   = pixel2Ray(pixel0);
-  Vector3D point0 = planet->closestIntersection(_position.asVector3D(), ray0);
-  Vector3D ray1   = pixel2Ray(pixel1);
-  Vector3D point1 = planet->closestIntersection(_position.asVector3D(), ray1);
+  Vector3D point0 = pixel2PlanetPoint(pixel0);
+  Vector3D point1 = pixel2PlanetPoint(pixel1);
   return point0.angleBetween(point1);
 }
 

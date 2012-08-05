@@ -69,3 +69,14 @@ double Vector3D::maxAxis() const {
 MutableVector3D Vector3D::asMutableVector3D() const {
   return MutableVector3D(_x, _y, _z);
 }
+
+
+Vector3D Vector3D::projectionInPlane(const Vector3D& normal) const
+{
+  Vector3D axis = normal.cross(*this);
+  MutableMatrix44D m = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(90), axis);
+  Vector3D projected = normal.transformedBy(m, 0).normalized();
+  return projected.times(this->length());
+}
+
+

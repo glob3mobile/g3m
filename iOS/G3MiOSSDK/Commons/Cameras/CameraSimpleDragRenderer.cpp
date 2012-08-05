@@ -41,9 +41,8 @@ void CameraSimpleDragRenderer::onDown(const TouchEvent& touchEvent)
   _currentGesture = Drag; 
   
   // dragging
-  MutableVector2D pixel = touchEvent.getTouch(0)->getPos().asMutableVector2D();
-  const Vector3D ray = _camera0.pixel2Ray(pixel.asVector2D());
-  _initialPoint = _planet->closestIntersection(_camera0.getPosition(), ray).asMutableVector3D();
+  Vector2D pixel = touchEvent.getTouch(0)->getPos();  
+  _initialPoint = _camera0.pixel2PlanetPoint(pixel).asMutableVector3D();
   
   //printf ("down 1 finger\n");
 }
@@ -55,13 +54,12 @@ void CameraSimpleDragRenderer::onMove(const TouchEvent& touchEvent)
   if (_currentGesture!=Drag) return;
   if (_initialPoint.isNan()) return;
       
-  const Vector2D pixel = touchEvent.getTouch(0)->getPos();
-  const Vector3D ray = _camera0.pixel2Ray(pixel);
-  const Vector3D pos = _camera0.getPosition();
-  
-  MutableVector3D finalPoint = _planet->closestIntersection(pos, ray).asMutableVector3D();
+  const Vector2D pixel = touchEvent.getTouch(0)->getPos();  
+  MutableVector3D finalPoint = _camera0.pixel2PlanetPoint(pixel).asMutableVector3D();
   if (finalPoint.isNan()) {
     //INVALID FINAL POINT
+    Vector3D ray = _camera0.pixel2Ray(pixel);
+    Vector3D pos = _camera0.getPosition();
     finalPoint = _planet->closestPointToSphere(pos, ray).asMutableVector3D();
   }
   

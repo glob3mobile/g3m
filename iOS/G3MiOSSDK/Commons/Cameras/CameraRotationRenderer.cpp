@@ -48,7 +48,7 @@ void CameraRotationRenderer::onDown(const TouchEvent& touchEvent)
   lastYValid = _initialPixel.y();
   
   // compute center of view
-  _initialPoint = _camera->centerOfViewOnPlanet(_planet).asMutableVector3D();
+  _initialPoint = _camera->centerOfViewOnPlanet().asMutableVector3D();
   if (_initialPoint.isNan()) {
     printf ("CAMERA ERROR: center point does not intersect globe!!\n");
     _currentGesture = None;
@@ -103,7 +103,7 @@ void CameraRotationRenderer::onMove(const TouchEvent& touchEvent)
   
   // update camera only if new view intersects globe
   tempCamera.updateModelMatrix();
-  if (!tempCamera.centerOfViewOnPlanet(_planet).isNan()) {
+  if (!tempCamera.centerOfViewOnPlanet().isNan()) {
     _camera->copyFrom(tempCamera);
   } 
 }
