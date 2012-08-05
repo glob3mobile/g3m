@@ -68,7 +68,6 @@ void CameraDoubleDragRenderer::onDown(const TouchEvent& touchEvent)
 
 void CameraDoubleDragRenderer::onMove(const TouchEvent& touchEvent) 
 {
-  //_currentGesture = getGesture(touchEvent);
   if (_currentGesture!=DoubleDrag) return;
   if (_initialPoint.isNan()) return;
     
@@ -76,7 +75,6 @@ void CameraDoubleDragRenderer::onMove(const TouchEvent& touchEvent)
   Vector2D pixel1 = touchEvent.getTouch(1)->getPos();    
   Vector2D difPixel = pixel1.sub(pixel0);
   double finalFingerSeparation = difPixel.length();
-  double angle = difPixel.orientation().radians() - _initialFingerInclination;
   double factor = finalFingerSeparation/_initialFingerSeparation;
   
   // compute camera translation using numerical iterations until convergence
@@ -127,7 +125,7 @@ void CameraDoubleDragRenderer::onMove(const TouchEvent& touchEvent)
   // computer center view point
   Vector3D centerPoint = tempCamera.centerOfViewOnPlanet();
   
-  // rotate globe from initialPoint to centerPoint
+  // drag from initialPoint to centerPoint
   {
     Vector3D initialPoint = _initialPoint.asVector3D();
     const Vector3D rotationAxis = initialPoint.cross(centerPoint);
@@ -137,43 +135,30 @@ void CameraDoubleDragRenderer::onMove(const TouchEvent& touchEvent)
   }
   
   // move the camara 
-  {
-    //double distance = tempCamera.getPosition().sub(centerPoint).length();
-    //tempCamera.moveForward(distance*(factor-1)/factor);
-    tempCamera.moveForward(dAccum);
-  }
+  tempCamera.moveForward(dAccum);
+     
+  // compute 3D point of view center
+  tempCamera.updateModelMatrix();
+  Vector3D centerPoint2 = tempCamera.centerOfViewOnPlanet();
   
-/*  // rotate the camera
-  {
-    tempCamera.updateModelMatrix();
-    Vector3D normal = _planet->geodeticSurfaceNormal(_initialPoint.asVector3D());
-    tempCamera.rotateWithAxisAndPoint(normal, _initialPoint.asVector3D(), Angle::fromRadians(angle));
-  }*/
-   
-    // compute 3D point of view center
-    tempCamera.updateModelMatrix();
-    Vector3D centerPoint2 = tempCamera.centerOfViewOnPlanet();
-    
-    // middle point in 3D
-    Vector3D P0 = tempCamera.pixel2PlanetPoint(pixel0);
-    Vector3D P1 = tempCamera.pixel2PlanetPoint(pixel1);
-    Geodetic2D g = _planet->getMidPoint(_planet->toGeodetic2D(P0), _planet->toGeodetic2D(P1));
-    Vector3D finalPoint = _planet->toVector3D(g);    
-    
-    // rotate globe from centerPoint to finalPoint
-    const Vector3D rotationAxis = centerPoint2.cross(finalPoint);
-    const Angle rotationDelta = Angle::fromRadians( - acos(centerPoint2.normalized().dot(finalPoint.normalized())) );
-    if (rotationDelta.isNan()) {
-      return;
-    }
-    tempCamera.rotateWithAxis(rotationAxis, rotationDelta);  
+  // middle point in 3D
+  Vector3D P0 = tempCamera.pixel2PlanetPoint(pixel0);
+  Vector3D P1 = tempCamera.pixel2PlanetPoint(pixel1);
+  Geodetic2D g = _planet->getMidPoint(_planet->toGeodetic2D(P0), _planet->toGeodetic2D(P1));
+  Vector3D finalPoint = _planet->toVector3D(g);    
+  
+  // drag globe from centerPoint to finalPoint
+  const Vector3D rotationAxis = centerPoint2.cross(finalPoint);
+  const Angle rotationDelta = Angle::fromRadians( - acos(centerPoint2.normalized().dot(finalPoint.normalized())) );
+  if (rotationDelta.isNan()) {
+    return;
+  }
+  tempCamera.rotateWithAxis(rotationAxis, rotationDelta);  
   
   // the gesture was valid. Copy data to final camera
   tempCamera.updateModelMatrix();
     
-  
-  
-  // new rotation
+  // camera rotation
   {
     Vector3D normal = _planet->geodeticSurfaceNormal(centerPoint2);
     Vector3D v0     = _initialPoint0.asVector3D().sub(centerPoint2).projectionInPlane(normal);
@@ -184,26 +169,6 @@ void CameraDoubleDragRenderer::onMove(const TouchEvent& touchEvent)
     tempCamera.rotateWithAxisAndPoint(normal, centerPoint2, Angle::fromDegrees(angle));
   }
   
-  
-  
-/*  // adjust orientation of projected points
-  // THIS IS JUST AN APPROXIMATION
-  Vector2D p00 = _camera0.point2Pixel(initialPoint0.asVector3D());
-  Vector2D p10 = _camera0.point2Pixel(initialPoint1.asVector3D());
-  Vector2D p0n = tempCamera.point2Pixel(initialPoint0.asVector3D());
-  Vector2D p1n = tempCamera.point2Pixel(initialPoint1.asVector3D());
-  double a0 = p10.sub(p00).orientation().degrees();
-  double a1 = p1n.sub(p0n).orientation().degrees();
-  if (a1<0 && a0>180) a1 += 360;
-  Angle correctionAngle = Angle::fromDegrees((a1-a0)/6);
-  Vector3D normal = _planet->geodeticSurfaceNormal(_initialPoint.asVector3D());
-  tempCamera.rotateWithAxisAndPoint(normal, _initialPoint.asVector3D(), correctionAngle);*/
-  
-  /*
-  printf ("rotating angle1=%.1f: dif_ori=%.1f initial=%.1f   corrAngle=%.1f: a0=%.1f a1=%.1f\n", 
-          angle/M_PI*180, difPixel.orientation().degrees(),  _initialFingerInclination/M_PI*180,
-          correctionAngle.degrees(), a0, a1);*/
-    
   // copy final transformation to camera
   tempCamera.updateModelMatrix();
   _camera->copyFrom(tempCamera);
