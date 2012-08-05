@@ -94,6 +94,7 @@ void CameraDoubleDragRenderer::onMove(const TouchEvent& touchEvent)
     dAccum += d;
     tempCamera.updateModelMatrix();
     double angle0 = tempCamera.compute3DAngularDistance(pixel0, pixel1).degrees();
+    if (isnan(angle0)) return;
     //printf("distancia angular original = %.4f     d=%.1f   angulo step0=%.4f\n", angle, d, angle0);
  
     // step 1
