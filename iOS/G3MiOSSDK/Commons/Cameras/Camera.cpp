@@ -297,7 +297,9 @@ Vector3D Camera::getHorizontalVector() const
 Angle Camera::compute3DAngularDistance(const Vector2D& pixel0, const Vector2D& pixel1) const
 {
   Vector3D point0 = pixel2PlanetPoint(pixel0);
+  if (point0.isNan()) return Angle::nan();
   Vector3D point1 = pixel2PlanetPoint(pixel1);
+  if (point1.isNan()) return Angle::nan();
   return point0.angleBetween(point1);
 }
 
