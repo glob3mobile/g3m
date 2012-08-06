@@ -374,33 +374,35 @@
     comp->addRenderer(spr);
   }
   
-  // marks renderer
-  MarksRenderer* marks = new MarksRenderer();
-  comp->addRenderer(marks);
-  
-  Mark* m1 = new Mark("Fuerteventura",
-                      "plane.png",
-                      Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0));
-  //m1->addTouchListener(listener);
-  marks->addMark(m1);
-  
-  
-  Mark* m2 = new Mark("Las Palmas",
-                      "plane.png",
-                      Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0));
-  //m2->addTouchListener(listener);
-  marks->addMark(m2);
-  
   if (false) {
-    for (int i = 0; i < 500; i++) {
-      const Angle latitude = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
-      const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
-      //NSLog(@"lat=%f, lon=%f", latitude.degrees(), longitude.degrees());
-      
-      marks->addMark(new Mark("Random",
-                              "mark.png",
-                              Geodetic3D(latitude, longitude, 0)));
-    } 
+    // marks renderer
+    MarksRenderer* marks = new MarksRenderer();
+    comp->addRenderer(marks);
+    
+    Mark* m1 = new Mark("Fuerteventura",
+                        "g3m-marker.png",
+                        Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0));
+    //m1->addTouchListener(listener);
+    marks->addMark(m1);
+    
+    
+    Mark* m2 = new Mark("Las Palmas",
+                        "g3m-marker.png",
+                        Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0));
+    //m2->addTouchListener(listener);
+    marks->addMark(m2);
+    
+    if (false) {
+      for (int i = 0; i < 500; i++) {
+        const Angle latitude = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
+        const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
+        //NSLog(@"lat=%f, lon=%f", latitude.degrees(), longitude.degrees());
+        
+        marks->addMark(new Mark("Random",
+                                "g3m-marker.png",
+                                Geodetic3D(latitude, longitude, 0)));
+      }
+    }
   }
   
   if (true) {
