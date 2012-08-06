@@ -132,9 +132,6 @@ public:
   void rotateWithAxis(const Vector3D& axis, const Angle& delta);
   void moveForward(double d);
   
-  //Zoom
-  void zoom(double factor);
-  
   //Pivot
   void pivotOnCenter(const Angle& a);
   

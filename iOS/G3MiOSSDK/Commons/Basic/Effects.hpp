@@ -23,7 +23,7 @@ protected:
     if (f > 1) return 1;
     
     //return sigmoid(f);
-    return gently(f, 0.6, 0.85);
+    return gently(f, 0.25, 0.75);
   }
   
   double sigmoid(double x) const {
@@ -182,13 +182,14 @@ public:
   virtual void start(const RenderContext *rc,
                      const TimeInterval& now) {
     EffectWithDuration::start(rc, now);
+    _lastPercent = 0;
   }
   
   virtual void doStep(const RenderContext *rc,
                       const TimeInterval& now) {
-    const double percent = pace( percentDone(now) );
-    
-    rc->getCamera()->zoom(1 - (percent / 25));
+    double percent = pace( percentDone(now) );
+    rc->getCamera()->moveForward((percent-_lastPercent)*1e7);
+    _lastPercent = percent;
   }
   
   virtual void stop(const RenderContext *rc,
@@ -196,6 +197,8 @@ public:
     EffectWithDuration::stop(rc, now);
   }
 
+private:
+  double _lastPercent;
 };
 
 

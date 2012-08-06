@@ -391,7 +391,9 @@ void GL::disableCullFace() {
 
 int GL::getTextureID() {
   if (_texturesIdBag.size() == 0) {
-    const int bugdetSize = 256;
+    const int bugdetSize = 64;
+    
+    printf("= Creating %d texturesIds...\n", bugdetSize);
     
     const std::vector<int> ids = _gl->genTextures(bugdetSize);
     
@@ -400,17 +402,22 @@ int GL::getTextureID() {
     }
     
     _texturesIdCounter += bugdetSize;
-    printf("= Created %d texturesIds (accumulated %ld)\n", bugdetSize, _texturesIdCounter);
+    printf("= Created %d texturesIds (accumulated %ld).\n", bugdetSize, _texturesIdCounter);
   }
   
   int result = _texturesIdBag.back();
   _texturesIdBag.pop_back();
+  
+  printf("   - Assigning 1 texturesIds from bag (bag size=%ld).\n", _texturesIdBag.size());
+
   return result;
 }
 
 void GL::deleteTexture(int glTextureId) {
   int textures[] = { glTextureId };
   _gl->deleteTextures(1, textures);
-  _texturesIdBag.push_back(glTextureId);
-}
 
+  _texturesIdBag.push_back(glTextureId);
+
+  printf("   - Delete 1 texturesIds (bag size=%ld).\n", _texturesIdBag.size());
+}
