@@ -38,6 +38,8 @@ public:
 
   // a virtual destructor is needed for conversion to Java
   virtual ~IFactory() {}
+  
+  virtual std::string stringFormat(std::string x, ...) const = 0;
 };
 
 #endif

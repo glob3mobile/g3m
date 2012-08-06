@@ -14,7 +14,8 @@
 
 #include "Tile.hpp"
 
-std::vector<Petition*> StaticImageLayer::getTilePetitions(const Tile& tile, int width, int height) const
+std::vector<Petition*> StaticImageLayer::getTilePetitions(const IFactory& factory,
+                                                          const Tile& tile, int width, int height) const
 {
   std::vector<Petition*> res;
   
@@ -25,11 +26,11 @@ std::vector<Petition*> StaticImageLayer::getTilePetitions(const Tile& tile, int 
   Sector imageSector = tile.getSector();
   
   //CREATING ID FOR PETITION
-  std::ostringstream oss;
-  oss << _layerID << "_" << imageSector.lower().latitude().degrees() << "_";
-  oss << imageSector.lower().longitude().degrees() << "_" << imageSector.upper().latitude().degrees();
-  oss << "_" << imageSector.upper().longitude().degrees();
-  std::string id = oss.str();
+  std::string id = factory.stringFormat("%s_%f_%f_%f_%f", _layerID.c_str(),
+                                        imageSector.lower().latitude().degrees(),
+                                        imageSector.lower().longitude().degrees(),
+                                        imageSector.upper().latitude().degrees(),
+                                        imageSector.upper().longitude().degrees() );
   
   Petition *pet = new Petition(tile.getSector(), id);
 
