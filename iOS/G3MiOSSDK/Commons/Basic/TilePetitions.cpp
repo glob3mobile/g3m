@@ -141,3 +141,8 @@ void TilePetitions::createTexture(TexturesHandler* texHandler, const IFactory* f
   }
 }
 
+void TilePetitions::removeUnnecesaryPetitions(){
+  //For each opaque Bbox, we delete every covered request beneath
+  int todo_JM;
+}
+

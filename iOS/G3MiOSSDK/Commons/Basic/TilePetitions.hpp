@@ -117,6 +117,7 @@ public:
   _petitions(petitions),
   _texID(-1)
   {
+    removeUnnecesaryPetitions();
   }
   
   ~TilePetitions()
@@ -157,6 +158,8 @@ public:
   void onDownload(const Response &response); 
   void onError(const Response& e);
   void onCancel(const URL& url);
+  
+  void removeUnnecesaryPetitions();
   
 };
 
