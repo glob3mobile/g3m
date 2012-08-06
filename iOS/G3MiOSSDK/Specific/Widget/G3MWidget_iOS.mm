@@ -412,7 +412,7 @@
   
   if (true) {
     EffectsScheduler* scheduler = new EffectsScheduler();
-    scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(3)));
+    scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(2)));
     comp->addRenderer(scheduler);
   }
   

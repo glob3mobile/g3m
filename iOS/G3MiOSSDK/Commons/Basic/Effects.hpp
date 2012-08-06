@@ -22,7 +22,8 @@ protected:
     if (f < 0) return 0;
     if (f > 1) return 1;
     
-    //return sigmoid(f);
+//    return sigmoid(f);
+//    return gently(f, 0.6, 0.85);
     return gently(f, 0.25, 0.75);
   }
   
