@@ -176,7 +176,8 @@
   
   Renderer* busyRenderer = new BusyRenderer();
   
-  
+  EffectsScheduler* scheduler = new EffectsScheduler();
+
   _widget = G3MWidget::create(factory,
                               logger,
                               gl,
@@ -186,6 +187,7 @@
                               planet, 
                               comp,
                               busyRenderer,
+                              scheduler,
                               width, height,
                               Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
                               true);
@@ -423,11 +425,8 @@
     comp->addRenderer(renderer);
   }
   
-  if (true) {
-    EffectsScheduler* scheduler = new EffectsScheduler();
-    scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(2)));
-    comp->addRenderer(scheduler);
-  }
+  EffectsScheduler* scheduler = new EffectsScheduler();
+  scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(2)));
   
   if (false) {
     SceneGraphRenderer* sgr = new SceneGraphRenderer();
@@ -456,6 +455,7 @@
                               planet, 
                               comp,
                               busyRenderer,
+                              scheduler,
                               width, height,
                               Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
                               true);

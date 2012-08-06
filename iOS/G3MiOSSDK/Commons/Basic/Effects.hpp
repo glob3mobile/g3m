@@ -116,7 +116,7 @@ public:
 };
 
 
-class EffectsScheduler : public Renderer {
+class EffectsScheduler /*: public Renderer*/ {
 private:
   
   class EffectRun {
@@ -137,7 +137,6 @@ private:
   ITimer*                 _timer;
   const IFactory*         _factory;
   
-  void doOneCyle(const RenderContext *rc);
   
   void processFinishedEffects(const RenderContext *rc,
                               const TimeInterval& now);
@@ -146,14 +145,17 @@ public:
   EffectsScheduler(): _effectsRuns(std::vector<EffectRun*>()) {
     
   };
-  
-  virtual void initialize(const InitializationContext* ic);
-  
-  virtual int render(const RenderContext* rc);
-  
-  virtual bool onTouchEvent(const TouchEvent* touchEvent);
-  
-  virtual void onResizeViewportEvent(int width, int height);
+
+  void doOneCyle(const RenderContext *rc);
+
+  void initialize(const InitializationContext* ic);
+
+
+//  virtual int render(const RenderContext* rc);
+//  
+//  virtual bool onTouchEvent(const TouchEvent* touchEvent);
+//  
+//  virtual void onResizeViewportEvent(int width, int height);
   
   virtual ~EffectsScheduler() {
     _factory->deleteTimer(_timer);

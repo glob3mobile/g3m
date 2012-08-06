@@ -15,21 +15,22 @@
 #include "TexturesHandler.cpp"
 #include "Downloader.hpp"
 #include "IDownloader.hpp"
+#include "Effects.hpp"
 
-
-G3MWidget::G3MWidget(IFactory*        factory,
-                     ILogger*         logger,
-                     GL*             gl,
-                     TexturesHandler* texturesHandler,
-                     Downloader*      downloaderOLD,
-                     IDownloader*     downloader,
-                     const Planet*    planet,
-                     Renderer*        renderer,
-                     Renderer*        busyRenderer,
-                     int              width,
-                     int              height,
-                     Color            backgroundColor,
-                     const bool       logFPS):
+G3MWidget::G3MWidget(IFactory*         factory,
+                     ILogger*          logger,
+                     GL*               gl,
+                     TexturesHandler*  texturesHandler,
+                     Downloader*       downloaderOLD,
+                     IDownloader*      downloader,
+                     const Planet*     planet,
+                     Renderer*         renderer,
+                     Renderer*         busyRenderer,
+                     EffectsScheduler* scheduler,
+                     int               width,
+                     int               height,
+                     Color             backgroundColor,
+                     const bool        logFPS):
 _factory(factory),
 _logger(logger),
 _gl(gl),
@@ -37,6 +38,7 @@ _texturesHandler(texturesHandler),
 _planet(planet),
 _renderer(renderer),
 _busyRenderer(busyRenderer),
+_scheduler(scheduler),
 _camera(new Camera(planet, width, height)),
 _backgroundColor(backgroundColor),
 _timer(factory->createTimer()),
@@ -49,23 +51,26 @@ _rendererReady(false) // false until first call to G3MWidget::render()
 {
   initializeGL();
   
-  InitializationContext ic(_factory, _logger, _planet, _downloaderOLD, _downloader);
+  InitializationContext ic(_factory, _logger, _planet, _downloaderOLD, _downloader, _scheduler);
+  _scheduler->initialize(&ic);
   _renderer->initialize(&ic);
+  _busyRenderer->initialize(&ic);
 }
 
-G3MWidget* G3MWidget::create(IFactory*        factory,
-                             ILogger*         logger,
-                             GL*             gl,
-                             TexturesHandler* texturesHandler,
-                             Downloader *     downloaderOLD,
-                             IDownloader*     downloader,
-                             const Planet*    planet,
-                             Renderer*        renderer,
-                             Renderer*        busyRenderer,
-                             int              width,
-                             int              height,
+G3MWidget* G3MWidget::create(IFactory*         factory,
+                             ILogger*          logger,
+                             GL*               gl,
+                             TexturesHandler*  texturesHandler,
+                             Downloader *      downloaderOLD,
+                             IDownloader*      downloader,
+                             const Planet*     planet,
+                             Renderer*         renderer,
+                             Renderer*         busyRenderer,
+                             EffectsScheduler* scheduler,
+                             int               width,
+                             int               height,
                              Color             backgroundColor,
-                             const bool       logFPS) {
+                             const bool        logFPS) {
   if (logger != NULL) {
     logger->logInfo("Creating G3MWidget...");
   }
@@ -81,6 +86,7 @@ G3MWidget* G3MWidget::create(IFactory*        factory,
                        planet,
                        renderer,
                        busyRenderer,
+                       scheduler,
                        width, height,
                        backgroundColor,
                        logFPS);
@@ -102,6 +108,8 @@ G3MWidget::~G3MWidget() {
   delete _gl;
   delete _planet;
   delete _renderer;
+  delete _busyRenderer;
+  delete _scheduler;
   delete _camera;
   delete _texturesHandler;
   delete _timer;
@@ -125,19 +133,29 @@ int G3MWidget::render() {
   _timer->start();
   _renderCounter++;
   
-  RenderContext rc(_factory, _logger, _planet, _gl, _camera, _texturesHandler, _downloaderOLD, _downloader);
-  
+  RenderContext rc(_factory,
+                   _logger,
+                   _planet,
+                   _gl,
+                   _camera,
+                   _texturesHandler,
+                   _downloaderOLD,
+                   _downloader,
+                   _scheduler);
+
+  _scheduler->doOneCyle(&rc);
+
   _rendererReady = _renderer->isReadyToRender(&rc);
   Renderer* selectedRenderer = _rendererReady ? _renderer : _busyRenderer;
 
   // Clear the scene
   _gl->clearScreen(_backgroundColor);
   
-  int timeToRedraw = selectedRenderer->render(&rc);
+  const int timeToRedraw = selectedRenderer->render(&rc);
   
   const TimeInterval elapsedTime = _timer->elapsedTime();
   if (elapsedTime.milliseconds() > 100) {
-    //_logger->logWarning("Frame took too much time: %dms" , elapsedTime.milliseconds());
+    _logger->logWarning("Frame took too much time: %dms" , elapsedTime.milliseconds());
   }
   _totalRenderTime += elapsedTime.milliseconds();
   

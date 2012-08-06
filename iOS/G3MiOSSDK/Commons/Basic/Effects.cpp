@@ -62,23 +62,23 @@ void EffectsScheduler::doOneCyle(const RenderContext *rc) {
   }
 }
 
-int EffectsScheduler::render(const RenderContext *rc) {
-  doOneCyle(rc);
-  if (_effectsRuns.size() == 0) {
-    return MAX_TIME_TO_RENDER;
-  }
-  else {
-    return 0;
-  }
-}
-
-bool EffectsScheduler::onTouchEvent(const TouchEvent* touchEvent) {
-  return false;
-}
-
-void EffectsScheduler::onResizeViewportEvent(int width, int height) {
-
-}
+//int EffectsScheduler::render(const RenderContext *rc) {
+//  doOneCyle(rc);
+//  if (_effectsRuns.size() == 0) {
+//    return MAX_TIME_TO_RENDER;
+//  }
+//  else {
+//    return 0;
+//  }
+//}
+//
+//bool EffectsScheduler::onTouchEvent(const TouchEvent* touchEvent) {
+//  return false;
+//}
+//
+//void EffectsScheduler::onResizeViewportEvent(int width, int height) {
+//
+//}
 
 void EffectsScheduler::startEffect(Effect* effect) {
   _effectsRuns.push_back(new EffectRun(effect));
