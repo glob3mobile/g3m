@@ -127,11 +127,11 @@ int TileRenderer::render(const RenderContext* rc) {
   while (toVisit.size() > 0) {
     std::list<Tile*> toVisitInNextIteration;
     
-#ifdef C_CODE      
-    std::sort(toVisit.begin(),
-              toVisit.end(),
-              predicate);
-#endif
+//#ifdef C_CODE      
+//    std::sort(toVisit.begin(),
+//              toVisit.end(),
+//              predicate);
+//#endif
 
 #ifdef JAVA_CODE
       java.util.Collections.sort(toVisit, predicate);
