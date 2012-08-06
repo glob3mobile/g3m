@@ -9,14 +9,19 @@
 #ifndef G3MiOSSDK_GL2_hpp
 #define G3MiOSSDK_GL2_hpp
 
-#include "IGL.hpp"
+#include "INativeGL.hpp"
 
+#include "IImage.hpp"
 #include "MutableMatrix44D.hpp"
+#include "Color.hpp"
+#include "MutableVector2D.hpp"
 
 #include "INativeGL.hpp"
 
+#include <list>
 
-class GL2: public IGL {
+
+class GL2 {
 private:
   
   INativeGL* const _gl;
@@ -163,6 +168,10 @@ public:
                 col.getGreen(),
                 col.getBlue(),
                 col.getAlpha());
+  }
+  
+  void enableVertexFlatColor(const Color& c, float intensity) {
+    enableVertexFlatColor(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha(), intensity);
   }
   
 };

@@ -43,7 +43,6 @@
 		385827FE15C6FACE00B3E68B /* CameraRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 385827FD15C6FACD00B3E68B /* CameraRenderer.cpp */; };
 		38D786E61587B446003BBC75 /* Tile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 38D786E51587B446003BBC75 /* Tile.cpp */; };
 		44EEB5DD1598C64C0086F243 /* SQLiteStorage_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 44EEB5DC1598C64C0086F243 /* SQLiteStorage_iOS.mm */; };
-		CC14B64D157D35C100793C92 /* IGL.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC14B64B157D35C100793C92 /* IGL.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CC14B64E157D35C100793C92 /* IImage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC14B64C157D35C100793C92 /* IImage.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CC41E3A015B1FD5B00B5581C /* Plane.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC41E39F15B1FD5B00B5581C /* Plane.cpp */; };
 		CC41E3B615B32DFB00B5581C /* Frustum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC41E3B515B32DFB00B5581C /* Frustum.cpp */; };
@@ -204,7 +203,6 @@
 		442DF0B6159898F80077EFB5 /* SQLiteStorage_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SQLiteStorage_iOS.hpp; path = Specific/Derived/SQLiteStorage_iOS.hpp; sourceTree = "<group>"; };
 		443BBC8115A59AC200EAE280 /* DBStorage */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DBStorage; sourceTree = "<group>"; };
 		44EEB5DC1598C64C0086F243 /* SQLiteStorage_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = SQLiteStorage_iOS.mm; path = Specific/Derived/SQLiteStorage_iOS.mm; sourceTree = "<group>"; };
-		CC14B64B157D35C100793C92 /* IGL.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = IGL.hpp; path = Commons/Interfaces/IGL.hpp; sourceTree = "<group>"; };
 		CC14B64C157D35C100793C92 /* IImage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IImage.hpp; path = Commons/Interfaces/IImage.hpp; sourceTree = "<group>"; };
 		CC41E39D15B1FD1300B5581C /* Plane.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Plane.hpp; path = Commons/Geometry/Plane.hpp; sourceTree = "<group>"; };
 		CC41E39F15B1FD5B00B5581C /* Plane.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Plane.cpp; path = Commons/Geometry/Plane.cpp; sourceTree = "<group>"; };
@@ -495,7 +493,6 @@
 				CFFEC11D15C2E645003FA986 /* IDownloader.cpp */,
 				CFFEC11B15C2E636003FA986 /* IDownloader.hpp */,
 				383BD3B81577EE630012AC53 /* IFactory.hpp */,
-				CC14B64B157D35C100793C92 /* IGL.hpp */,
 				CC14B64C157D35C100793C92 /* IImage.hpp */,
 				CF59DF8E15C04AFC002173EC /* ILogger.cpp */,
 				383BD3B91577EE630012AC53 /* ILogger.hpp */,
@@ -681,7 +678,6 @@
 				383BD3B71577EE5A0012AC53 /* Vector3D.hpp in Headers */,
 				383BD3BA1577EE630012AC53 /* IFactory.hpp in Headers */,
 				383BD3BB1577EE630012AC53 /* ILogger.hpp in Headers */,
-				CC14B64D157D35C100793C92 /* IGL.hpp in Headers */,
 				CC14B64E157D35C100793C92 /* IImage.hpp in Headers */,
 				D84D5A32157E0EAA000C5E35 /* MutableVector3D.hpp in Headers */,
 				D86DD8A51588945200E25609 /* Image_iOS.hpp in Headers */,

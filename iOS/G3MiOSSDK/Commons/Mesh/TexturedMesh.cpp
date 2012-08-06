@@ -8,11 +8,11 @@
 
 #include "TexturedMesh.hpp"
 
-#include "IGL.hpp"
+#include "GL2.hpp"
 
 void TexturedMesh::render(const RenderContext* rc) const
 {
-  IGL *gl = rc->getGL();
+  GL2 *gl = rc->getGL();
   
   gl->enableTextures();
   gl->enableTexture2D();

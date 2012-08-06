@@ -13,7 +13,7 @@
 
 #include "Camera.hpp"
 #include "Plane.hpp"
-#include "IGL.hpp"
+#include "GL2.hpp"
 
 
 void Camera::copyFrom(const Camera &that) {
@@ -135,7 +135,7 @@ void Camera::render(const RenderContext* rc) {
     _dirtyCachedValues = false;
   }
   
-  IGL *gl = rc->getGL();
+  GL2 *gl = rc->getGL();
   gl->setProjection(_projectionMatrix);
   gl->loadMatrixf(_modelMatrix);
   
@@ -159,7 +159,7 @@ void Camera::render(const RenderContext* rc) {
     };
     int indices[] = {0, 1, 2, 3};
     
-//    IGL *gl = rc.getGL();
+//    GL2 *gl = rc.getGL();
     gl->enableVerticesPosition();
     gl->vertexPointer(3, 0, vertices);
     gl->lineWidth(2);
