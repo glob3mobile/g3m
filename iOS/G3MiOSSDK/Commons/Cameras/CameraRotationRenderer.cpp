@@ -70,10 +70,10 @@ void CameraRotationRenderer::onMove(const TouchEvent& touchEvent)
   Vector2D cm = c0.add(c1).add(c2).div(3);
   
   // previous middle pixel in 2D 
-  Vector2D p0 = touchEvent.getTouch(0)->getPrevPos();
-  Vector2D p1 = touchEvent.getTouch(1)->getPrevPos();
-  Vector2D p2 = touchEvent.getTouch(2)->getPrevPos();
-  Vector2D pm = p0.add(p1).add(p2).div(3);
+//  Vector2D p0 = touchEvent.getTouch(0)->getPrevPos();
+//  Vector2D p1 = touchEvent.getTouch(1)->getPrevPos();
+//  Vector2D p2 = touchEvent.getTouch(2)->getPrevPos();
+//  Vector2D pm = p0.add(p1).add(p2).div(3);
   
   // compute normal to Initial point
   Vector3D normal = _planet->geodeticSurfaceNormal(_initialPoint.asVector3D());

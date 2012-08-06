@@ -167,7 +167,7 @@ void Tile::rawRender(const RenderContext *rc,
 //          _texturedCounter = 0;
 //        }
       }
-
+      
       if ((_texturizerTimer != NULL) && isTextureSolved()) {
         delete _texturizerTimer;
         _texturizerTimer = NULL;

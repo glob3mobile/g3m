@@ -382,7 +382,7 @@ void GL::enableCullFace(GLCullFace face) {
   }
 }
 
-void GL::disableCullFace() {
+void GL::disableCullFace() {  
   if (_enableCullFace) {
     _gl->disable(CullFacing);
     _enableCullFace = false;
@@ -391,7 +391,7 @@ void GL::disableCullFace() {
 
 int GL::getTextureID() {
   if (_texturesIdBag.size() == 0) {
-    const int bugdetSize = 128;
+    const int bugdetSize = 256;
     
     printf("= Creating %d texturesIds...\n", bugdetSize);
     

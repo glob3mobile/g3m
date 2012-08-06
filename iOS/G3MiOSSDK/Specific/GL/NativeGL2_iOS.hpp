@@ -237,19 +237,19 @@ public:
     glDeleteTextures(n, ts);
   }
   
-  void enableVertexAttribArray(int location) const{
+  void enableVertexAttribArray(int location) const {
     glEnableVertexAttribArray(location);
   }
   
-  void disableVertexAttribArray(int location) const{
+  void disableVertexAttribArray(int location) const {
     glDisableVertexAttribArray(location);
   }
   
-  void pixelStorei(GLAlignment pname, int param) const{
+  void pixelStorei(GLAlignment pname, int param) const {
     glPixelStorei(getEnum(pname), param);
   }
   
-  std::vector<int> genTextures(int	n) const{
+  std::vector<int> genTextures(int n) const {
     GLuint textureID[n];    
     glGenTextures(n, textureID);
     std::vector<int> ts;
@@ -259,7 +259,7 @@ public:
     return ts;
   }
   
-  void texParameteri(GLTextureType target, GLTextureParameter par, GLTextureParameterValue v) const{
+  void texParameteri(GLTextureType target, GLTextureParameter par, GLTextureParameterValue v) const {
     glTexParameteri(getEnum(target), getEnum(par), getValue(v));
   }
   

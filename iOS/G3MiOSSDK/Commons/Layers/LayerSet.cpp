@@ -13,7 +13,7 @@ std::vector<Petition*> LayerSet::createTilePetitions(const RenderContext* rc, co
 {
   std::vector<Petition*> petitions;
   
-  const Sector tileSector = tile.getSector();
+//  const Sector tileSector = tile.getSector();
   
   for (int i = 0; i < _layers.size(); i++) {
     Layer* layer = _layers[i];
