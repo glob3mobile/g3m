@@ -410,9 +410,9 @@
     comp->addRenderer(renderer);
   }
   
-  if (false) {
+  if (true) {
     EffectsScheduler* scheduler = new EffectsScheduler();
-    scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(4)));
+    scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(3)));
     comp->addRenderer(scheduler);
   }
   
