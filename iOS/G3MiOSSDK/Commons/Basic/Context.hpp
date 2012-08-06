@@ -17,7 +17,7 @@ class TexturesHandler;
 class IDownloader;
 class Downloader;
 class ILogger;
-class IGL;
+class GL;
 
 class Context {
 protected:
@@ -79,7 +79,7 @@ public:
 
 class RenderContext: public Context {
 private:
-  IGL*             _gl;
+  GL*             _gl;
   Camera*          _camera;
   TexturesHandler* _texturesHandler;
   
@@ -87,7 +87,7 @@ public:
   RenderContext(IFactory *factory,
                 ILogger* logger,
                 const Planet* planet,
-                IGL *gl,
+                GL *gl,
                 Camera* camera,
                 TexturesHandler* texturesHandler,
                 Downloader* const downloaderOLD,
@@ -99,7 +99,7 @@ public:
     
   }
   
-  IGL* getGL() const {
+  GL* getGL() const {
     return _gl;
   }
   

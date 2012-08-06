@@ -9,7 +9,7 @@
 #include <iostream>
 
 #include "CameraRenderer.h"
-#include "IGL.hpp"
+#include "GL.hpp"
 
 
 Gesture           CameraRenderer::_currentGesture = None;

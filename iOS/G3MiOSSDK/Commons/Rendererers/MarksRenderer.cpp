@@ -8,7 +8,7 @@
 
 #include "MarksRenderer.hpp"
 #include "Camera.hpp"
-#include "IGL.hpp"
+#include "GL.hpp"
 
 void MarksRenderer::initialize(const InitializationContext* ic) {
   
@@ -21,7 +21,7 @@ bool MarksRenderer::onTouchEvent(const TouchEvent* touchEvent) {
 int MarksRenderer::render(const RenderContext* rc) {
 //  rc.getLogger()->logInfo("MarksRenderer::render()");
   
-  IGL* gl = rc->getGL();
+  GL* gl = rc->getGL();
   
   gl->enableVerticesPosition();
   gl->enableTextures();
@@ -55,7 +55,7 @@ int MarksRenderer::render(const RenderContext* rc) {
 //
 //int MarksRenderer::Render(RenderContext &rc) {
 //  // obtaing gl object reference
-//  IGL *gl = rc.GetGL();
+//  GL *gl = rc.GetGL();
 //  //Point3D po = View::GetInstance()->GetCamera()->GetPos();
 //  //Vector3D c(po.x, po.y, po.z); 
 //  Vector3D c = View::GetInstance()->GetCamera()->GetPos();

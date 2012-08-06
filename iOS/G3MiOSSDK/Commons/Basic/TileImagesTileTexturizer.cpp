@@ -201,19 +201,45 @@ bool TileImagesTileTexturizer::isReadyToRender(const RenderContext *rc) {
 
 TilePetitions* TileImagesTileTexturizer::getRegisteredTilePetitions(Tile* tile) const
 {
+//  for(std::list<TilePetitions*>::iterator it = _tilePetitions.begin();
+//      it != _tilePetitions.end();
+//      it++) {
+//    TilePetitions* tp = *it;
+//    
+//    if (tile->getLevel()  == tp->getLevel() &&
+//        tile->getRow()    == tp->getRow()   &&
+//        tile->getColumn() == tp->getColumn()) {
+//      return tp;
+//    }
+//  }
+  
   for (int i = 0; i < _tilePetitions.size(); i++) {
     TilePetitions* tp = _tilePetitions[i];
     if (tile->getLevel()  == tp->getLevel() &&
         tile->getRow()    == tp->getRow()   &&
-        tile->getColumn() == tp->getColumn()){
+        tile->getColumn() == tp->getColumn()) {
       return tp;
     }
   }
+  
   return NULL;
 }
 
 void TileImagesTileTexturizer::removeRegisteredTilePetitions(Tile* tile)
 {
+//  for(std::list<TilePetitions*>::iterator it = _tilePetitions.begin();
+//      it != _tilePetitions.end();
+//      it++) {
+//    TilePetitions* tp = *it;
+//    if (tile->getLevel()  == tp->getLevel() &&
+//        tile->getRow()    == tp->getRow()   &&
+//        tile->getColumn() == tp->getColumn()) {
+//      _tilePetitions.erase(it);
+//      delete tp;
+//      break;
+//    }
+//  }
+  
   TilePetitions* tp = NULL;
   for (int i = 0; i < _tilePetitions.size(); i++) {
     tp = _tilePetitions[i];

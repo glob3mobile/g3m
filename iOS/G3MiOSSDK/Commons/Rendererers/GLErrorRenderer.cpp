@@ -9,7 +9,7 @@
 #include "GLErrorRenderer.hpp"
 
 #include "Context.hpp"
-#include "IGL.hpp"
+#include "GL.hpp"
 
 
 void GLErrorRenderer::initialize(const InitializationContext* ic) {
@@ -27,7 +27,7 @@ void GLErrorRenderer::onResizeViewportEvent(int width, int height) {
 }
 
 int GLErrorRenderer::render(const RenderContext *rc) {
-  IGL* gl = rc->getGL();
+  GL* gl = rc->getGL();
   const ILogger* logger = rc->getLogger();
   
   int error = gl->getError();

@@ -9,7 +9,7 @@
 #include "DummyRenderer.hpp"
 
 #include "Context.hpp"
-#include "IGL.hpp"
+#include "GL.hpp"
 #include "Planet.hpp"
 #include "Vector3D.hpp"
 
@@ -62,7 +62,7 @@ int DummyRenderer::render(const RenderContext* rc)
 {
   
   // obtaing gl object reference
-  IGL *gl = rc->getGL();
+  GL *gl = rc->getGL();
   
   gl->enableVerticesPosition();
   

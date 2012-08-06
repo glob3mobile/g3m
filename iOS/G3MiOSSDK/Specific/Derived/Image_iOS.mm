@@ -51,7 +51,7 @@ IImage* Image_iOS::combineWith(const IImage& transparent, int width, int height)
   UIImage* img = [UIImage imageWithCGImage:imgRef];
   CGImageRelease(imgRef);
   CGContextRelease(context);
-
+  
   return new Image_iOS(img);
 }
 
@@ -77,7 +77,7 @@ IImage* Image_iOS::combineWith(const IImage& other, const Rectangle& rect, int w
                                           (float) rect._width,
                                           (float) rect._height ),
                      otherIm.CGImage );
-
+  
   //SAVING IMAGE
   CGImageRef imgRef = CGBitmapContextCreateImage(context);
   UIImage* img = [UIImage imageWithCGImage:imgRef];
@@ -98,7 +98,7 @@ IImage* Image_iOS::subImage(const Rectangle& rect) const
   CGImageRef imageRef = CGImageCreateWithImageInRect([this->_image CGImage], cropRect);
   
   Image_iOS* image = new Image_iOS([UIImage imageWithCGImage:imageRef]); //Create IImage
-
+  
   CGImageRelease(imageRef);
   return image;
 }
@@ -116,16 +116,17 @@ ByteBuffer* Image_iOS::getEncodedImage() const
 
 void Image_iOS::fillWithRGBA(unsigned char imageData[], int width, int height) const
 {
-   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-   CGContextRef context = CGBitmapContextCreate(imageData,
-                                                width, height,
-                                                8, 4 * width,
-                                                colorSpace,
-                                                kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
+  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+  CGContextRef context = CGBitmapContextCreate(imageData,
+                                               width, height,
+                                               8, 4 * width,
+                                               colorSpace,
+                                               kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
   
-   CGColorSpaceRelease( colorSpace );
-   CGContextClearRect( context, CGRectMake( 0, 0, width, height ) );
-   CGContextDrawImage( context, CGRectMake( 0, 0, width, height ), _image.CGImage );
-   
-   CGContextRelease(context);
+  CGColorSpaceRelease( colorSpace );
+  CGRect bounds = CGRectMake( 0, 0, width, height );
+  CGContextClearRect( context, bounds );
+  CGContextDrawImage( context, bounds, _image.CGImage );
+  
+  CGContextRelease(context);
 }

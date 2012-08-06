@@ -12,6 +12,8 @@
 #include "Sector.hpp"
 #include "Box.hpp"
 
+#include <list>
+
 class RenderContext;
 class Mesh;
 class TileTessellator;
@@ -162,7 +164,7 @@ public:
               TileTexturizer* texturizer,
               const TileParameters* parameters,
               TilesStatistics* statistics,
-              std::vector<Tile*>* toVisitInNextIteration,
+              std::list<Tile*>* toVisitInNextIteration,
               ITimer* frameTimer,
               ITimer* lastSplitTimer,
               ITimer* lastTexturizerTimer);

@@ -1,30 +1,38 @@
 //
 //  GL.hpp
-//  G3MiOSSDK
+//  Glob3 Mobile
 //
-//  Created by José Miguel S N on 01/08/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by Agustín Trujillo Pino on 14/06/11.
+//  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
 #ifndef G3MiOSSDK_GL_hpp
 #define G3MiOSSDK_GL_hpp
 
+#include "INativeGL.hpp"
+
+#include "IImage.hpp"
 #include "MutableMatrix44D.hpp"
-#include "IGL.hpp"
+#include "Color.hpp"
+#include "MutableVector2D.hpp"
+
 #include "INativeGL.hpp"
 
 #include <list>
 
 
-class GL : public IGL{
+class GL {
 private:
   
-  const INativeGL*      _gl;      //NATIVE GL
+  INativeGL* const _gl;
   
-  MutableMatrix44D      _modelView;
+  MutableMatrix44D            _modelView;
   
   // stack of ModelView matrices
   std::list<MutableMatrix44D> _matrixStack;
+  
+  std::list<int>              _texturesIdBag;
+  long                        _texturesIdCounter;
   
   // state handling
   bool _enableTextures;
@@ -37,13 +45,15 @@ private:
   bool _enableBlend;
   
   bool _enableCullFace;
-  CullFace _cullFace_face;
+  GLCullFace _cullFace_face;
   
   inline void loadModelView();
   
+  int getTextureID();
+  
 public:
   
-  GL(const INativeGL* gl) :
+  GL(INativeGL* const gl) :
   _gl(gl),
   _enableTextures(false),
   _enableTexture2D(false),
@@ -54,33 +64,34 @@ public:
   _enableBlend(false),
   _enableDepthTest(false),
   _enableCullFace(false),
-  _cullFace_face(BACK)
+  _cullFace_face(Back),
+  _texturesIdCounter(0)
   {
     
   }
   
-  void enableVerticesPosition() ;
+  void enableVerticesPosition();
   
-  void enableTextures() ;
+  void enableTextures();
   
   void verticesColors(bool v);
   
-  void enableTexture2D() ;
+  void enableTexture2D();
   
   void enableVertexFlatColor(float r, float g, float b, float a,
                              float intensity);
   
   void disableVertexFlatColor();
   
-  void disableTexture2D() ;
+  void disableTexture2D();
   
-  void disableVerticesPosition() ;
+  void disableVerticesPosition();
   
-  void disableTextures() ;
+  void disableTextures();
   
-  void clearScreen(float r, float g, float b, float a) ;
+  void clearScreen(float r, float g, float b, float a);
   
-  void color(float r, float g, float b, float a) ;
+  void color(float r, float g, float b, float a);
   
   void enableVertexColor(float const colors[], float intensity);
   
@@ -94,27 +105,27 @@ public:
   
   void popMatrix();
   
-  void loadMatrixf(const MutableMatrix44D &m) ;
+  void loadMatrixf(const MutableMatrix44D &m);
   
-  void multMatrixf(const MutableMatrix44D &m) ;
+  void multMatrixf(const MutableMatrix44D &m);
   
-  void vertexPointer(int size, int stride, const float vertex[]) ;
+  void vertexPointer(int size, int stride, const float vertex[]);
   
   void drawTriangleStrip(int n, const int i[]) ;
   
-  void drawLines(int n, const int i[]); 
+  void drawLines(int n, const int i[]);
   
-  void drawLineLoop(int n, const int i[]); 
+  void drawLineLoop(int n, const int i[]);
   
   void drawPoints(int n, const int i[]);
   
-  void setProjection(const MutableMatrix44D &projection) ;
+  void setProjection(const MutableMatrix44D &projection);
   
-  void useProgram(unsigned int program) ;
+  void useProgram(unsigned int program);
   
-  void enablePolygonOffset(float factor, float units) ;
+  void enablePolygonOffset(float factor, float units);
   
-  void disablePolygonOffset() ;
+  void disablePolygonOffset();
   
   void lineWidth(float width);
   
@@ -126,7 +137,7 @@ public:
   
   void setTextureCoordinates(int size, int stride, const float texcoord[]);
   
-  void bindTexture (unsigned int n);
+  void bindTexture(unsigned int n);
   
   void enableDepthTest();
   void disableDepthTest();
@@ -140,12 +151,29 @@ public:
   
   void deleteTexture(int glTextureId);
   
-  void enableCullFace(CullFace face);
+  void enableCullFace(GLCullFace face);
   void disableCullFace();
   
   void transformTexCoords(const Vector2D& scale, const Vector2D& translation);
   
+  void color(const Color& col) {
+    color(col.getRed(),
+          col.getGreen(),
+          col.getBlue(),
+          col.getAlpha());
+  }
+  
+  void clearScreen(const Color& col){
+    clearScreen(col.getRed(),
+                col.getGreen(),
+                col.getBlue(),
+                col.getAlpha());
+  }
+  
+  void enableVertexFlatColor(const Color& c, float intensity) {
+    enableVertexFlatColor(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha(), intensity);
+  }
+  
 };
-
 
 #endif

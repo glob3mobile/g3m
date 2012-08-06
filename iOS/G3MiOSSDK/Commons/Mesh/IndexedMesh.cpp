@@ -10,7 +10,7 @@
 
 #include "IndexedMesh.hpp"
 #include "Box.hpp"
-#include "IGL.hpp"
+#include "GL.hpp"
 
 
 IndexedMesh::~IndexedMesh()
@@ -142,7 +142,7 @@ _center(center)
 }
 
 void IndexedMesh::render(const RenderContext* rc) const {
-  IGL *gl = rc->getGL();
+  GL *gl = rc->getGL();
   
   gl->enableVerticesPosition();
   

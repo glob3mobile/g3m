@@ -117,9 +117,15 @@ int TileRenderer::render(const RenderContext* rc) {
   const DistanceToCenterTileComparison predicate = DistanceToCenterTileComparison(rc->getCamera(),
                                                                                   rc->getPlanet());
   
-  std::vector<Tile*> toVisit(_topLevelTiles);
+//  std::vector<Tile*> toVisit(_topLevelTiles);
+  std::list<Tile*> toVisit;
+
+  for (int i = 0; i < _topLevelTiles.size(); i++) {
+    toVisit.push_back(_topLevelTiles[i]);
+  }
+  
   while (toVisit.size() > 0) {
-    std::vector<Tile*> toVisitInNextIteration;
+    std::list<Tile*> toVisitInNextIteration;
     
 #ifdef C_CODE      
     std::sort(toVisit.begin(),
@@ -130,10 +136,9 @@ int TileRenderer::render(const RenderContext* rc) {
 #ifdef JAVA_CODE
       java.util.Collections.sort(toVisit, predicate);
 #endif
-      
-    const int toVisitSize = toVisit.size();
-    for (int i = 0; i < toVisitSize; i++) {
-      Tile* tile = toVisit[i];
+    
+    for (std::list<Tile *>::const_iterator i = toVisit.begin(); i != toVisit.end(); i++) {
+      Tile* tile = *i;
       tile->render(rc,
                    _tessellator,
                    _texturizer,
@@ -144,9 +149,9 @@ int TileRenderer::render(const RenderContext* rc) {
                    _lastSplitTimer,
                    _lastTexturizerTimer);
     }
-    
+
     toVisit = toVisitInNextIteration;
-    toVisitInNextIteration.clear();
+//    toVisitInNextIteration.clear();
   }
   
   

@@ -17,7 +17,7 @@
 class IImage;
 class RenderContext;
 class TextureHolder;
-class IGL;
+class GL;
 class IFactory;
 
 
@@ -26,7 +26,7 @@ class TexturesHandler {
 private:
   std::vector<TextureHolder*> _textureHolders;
   
-  IGL * const _gl;
+  GL * const _gl;
   const IFactory * const _factory;
   const TextureBuilder* _texBuilder;
   
@@ -34,7 +34,7 @@ private:
   
 public:
   
-  TexturesHandler(IGL* const  gl,
+  TexturesHandler(GL* const  gl,
                   const IFactory const * factory,
                   const TextureBuilder* texBuilder,
                   bool verbose): 

@@ -68,7 +68,8 @@ public:
   _halfFrustumInModelCoordinates((that._halfFrustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._halfFrustumInModelCoordinates)),
   _halfFrustum((that._halfFrustum == NULL) ? NULL : new Frustum(*that._halfFrustum)),
   _logger(that._logger),
-  _dirtyCachedValues(that._dirtyCachedValues)
+  _dirtyCachedValues(that._dirtyCachedValues),
+  _planet(that._planet)
   {
     cleanCachedValues();
   }
@@ -110,6 +111,8 @@ public:
   
   Vector3D pixel2Ray(const Vector2D& pixel) const;
   
+  Vector3D pixel2PlanetPoint(const Vector2D& pixel) const;
+  
   Vector2D point2Pixel(const Vector3D& point) const;
   
   int getWidth() const { return _width; }
@@ -123,6 +126,8 @@ public:
   Vector3D getCenter() const { return _center.asVector3D(); }
   Vector3D getUp() const { return _up.asVector3D(); }
   Geodetic3D getCenterOfView() const { return *_centerOfView; }
+  Vector3D getViewDirection() const { return _center.sub(_position).asVector3D(); }
+
   
   //Dragging camera
   void dragCamera(const Vector3D& p0, const Vector3D& p1);
@@ -142,7 +147,7 @@ public:
   
   const Frustum* const getFrustumInModelCoordinates();
   
-  void setPosition(const Planet& planet, const Geodetic3D& g3d);
+  void setPosition(const Geodetic3D& g3d);
   
   
   int __temporal_test_for_clipping;
@@ -153,17 +158,20 @@ public:
   int __to_ask_diego;
   void updateModelMatrix() { _modelMatrix = MutableMatrix44D::createModelMatrix(_position, _center, _up); }
   
-  Vector3D centerOfViewOnPlanet(const Planet *planet) const;
+  Vector3D centerOfViewOnPlanet() const;
   
   Vector3D getHorizontalVector() const;
   
   void applyTransform(const MutableMatrix44D& mat);
+  
+  Angle compute3DAngularDistance(const Vector2D& pixel0, const Vector2D& pixel1) const;
 
-  Vector3D getViewDirection() const { return _center.sub(_position).asVector3D(); }
     
 private:
   int _width;
   int _height;
+  
+  const Planet *_planet;
   
   MutableMatrix44D _modelMatrix;        // Model matrix, computed in CPU in double precision
   MutableMatrix44D _projectionMatrix;   // opengl projection matrix
@@ -251,6 +259,7 @@ private:
       _frustumInModelCoordinates = NULL;
     }
   }
+  
   
 };
 

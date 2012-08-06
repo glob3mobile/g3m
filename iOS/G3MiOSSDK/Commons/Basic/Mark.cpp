@@ -8,7 +8,7 @@
 
 #include "Mark.hpp"
 #include "Camera.hpp"
-#include "IGL.hpp"
+#include "GL.hpp"
 #include "TexturesHandler.hpp"
 
 
@@ -27,7 +27,7 @@ void Mark::render(const RenderContext* rc,
     const Vector3D normalAtMarkPosition = planet->geodeticSurfaceNormal(markPosition);
     
     if (normalAtMarkPosition.angleBetween(markCameraVector).radians() > M_PI / 2) {
-      IGL* gl = rc->getGL();
+      GL* gl = rc->getGL();
       
       Vector2D tr(0.0,0.0);
       Vector2D scale(1.0,1.0);

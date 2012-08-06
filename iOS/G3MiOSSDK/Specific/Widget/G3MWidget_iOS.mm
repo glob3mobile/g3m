@@ -15,7 +15,6 @@
 #include "Planet.hpp"
 #include "Logger_iOS.hpp"
 #include "Factory_iOS.hpp"
-#include "GL2.hpp"
 
 #include "CameraSimpleRenderer.hpp"
 #include "CameraSimpleDragRenderer.h"
@@ -85,7 +84,7 @@
   
   
   NativeGL2_iOS * nGL = new NativeGL2_iOS(); 
-  IGL* gl  = new GL(nGL);
+  GL* gl  = new GL(nGL);
 
   // composite renderer is the father of the rest of renderers
   CompositeRenderer* comp = new CompositeRenderer();
@@ -190,7 +189,7 @@
                               true);
   
   Geodetic3D australia = Geodetic3D::fromDegrees(-26.91, 133.94, 1.1e7);
-  ((G3MWidget*)_widget)->getCamera()->setPosition(*planet, australia);
+  ((G3MWidget*)_widget)->getCamera()->setPosition(australia);
 
 }
 
@@ -205,7 +204,7 @@
   ILogger *logger = new Logger_iOS(ErrorLevel);
   
   NativeGL2_iOS * nGL = new NativeGL2_iOS(); 
-  IGL* gl  = new GL2(nGL);
+  GL* gl  = new GL(nGL);
   
   //Testing downloads
   if (false) {
@@ -459,7 +458,7 @@
     eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
                                     [NSNumber numberWithBool:FALSE], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
     
-    // create IGL object
+    // create GL object
     _renderer = [[ES2Renderer alloc] init];
     if (!_renderer) {
       printf("**** ERROR: G3MWidget_iOS Mobile needs Opengl ES 2.0\n");
