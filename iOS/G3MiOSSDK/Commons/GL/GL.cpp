@@ -393,6 +393,8 @@ int GL::getTextureID() {
   if (_texturesIdBag.size() == 0) {
     const int bugdetSize = 256;
     
+    printf("= Creating %d texturesIds...\n", bugdetSize);
+    
     const std::vector<int> ids = _gl->genTextures(bugdetSize);
     
     for (int i = 0; i < bugdetSize; i++) {
@@ -400,7 +402,7 @@ int GL::getTextureID() {
     }
     
     _texturesIdCounter += bugdetSize;
-    printf("= Created %d texturesIds (accumulated %ld)\n", bugdetSize, _texturesIdCounter);
+    printf("= Created %d texturesIds (accumulated %ld).\n", bugdetSize, _texturesIdCounter);
   }
   
   int result = _texturesIdBag.back();
@@ -411,6 +413,6 @@ int GL::getTextureID() {
 void GL::deleteTexture(int glTextureId) {
   int textures[] = { glTextureId };
   _gl->deleteTextures(1, textures);
+  
   _texturesIdBag.push_back(glTextureId);
 }
-
