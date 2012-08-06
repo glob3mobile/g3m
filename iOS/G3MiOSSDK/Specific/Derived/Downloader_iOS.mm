@@ -45,9 +45,6 @@ _requestIdCounter(0)
     
     [_workers addObject: worker];
   }
-
-//  _worker = [Downloader_iOS_WorkerThread workerForDownloader: this];
-//  [_worker start];
 }
 
 void Downloader_iOS::cancelRequest(long requestId) {

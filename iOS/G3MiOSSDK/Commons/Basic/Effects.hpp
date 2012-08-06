@@ -188,7 +188,7 @@ public:
   
   virtual void doStep(const RenderContext *rc,
                       const TimeInterval& now) {
-    double percent = pace( percentDone(now) );
+    const double percent = pace( percentDone(now) );
     rc->getCamera()->moveForward((percent-_lastPercent)*1e7);
     _lastPercent = percent;
   }
