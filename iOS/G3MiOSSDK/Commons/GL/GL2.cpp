@@ -370,25 +370,14 @@ void GL2::disableBlend() {
   
 }
 
-void GL2::enableCullFace(CullFace face) {
+void GL2::enableCullFace(GLCullFace face) {
   if (!_enableCullFace) {
     _gl->enable(CullFacing);
     _enableCullFace = true;
   }
   
   if (_cullFace_face != face) {
-    switch (face) {
-      case FRONT:
-        _gl->cullFace(FRONT);
-        break;
-      case BACK:
-        _gl->cullFace(BACK);
-        break;
-      case FRONT_AND_BACK:
-        _gl->cullFace(FRONT_AND_BACK);
-        break;
-    }
-    
+    _gl->cullFace(face);
     _cullFace_face = face;
   }
 }

@@ -11,7 +11,7 @@
 
 #include <vector>
 
-#include "IGL.hpp"
+enum GLCullFace { Front, Back, FrontAndBack };
 
 enum GLBufferType { ColorBuffer, DepthBuffer };
 
@@ -104,7 +104,7 @@ public:
   
   virtual void drawArrays(GLPrimitive mode, int first, int count) const = 0;
   
-  virtual void cullFace(CullFace c) const = 0;
+  virtual void cullFace(GLCullFace c) const = 0;
 
 
 

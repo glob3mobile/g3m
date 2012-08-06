@@ -40,7 +40,7 @@ private:
   bool _enableBlend;
   
   bool _enableCullFace;
-  CullFace _cullFace_face;
+  GLCullFace _cullFace_face;
   
   inline void loadModelView();
   
@@ -59,7 +59,7 @@ public:
   _enableBlend(false),
   _enableDepthTest(false),
   _enableCullFace(false),
-  _cullFace_face(BACK),
+  _cullFace_face(Back),
   _texturesIdCounter(0)
   {
     
@@ -146,10 +146,24 @@ public:
   
   void deleteTexture(int glTextureId);
   
-  void enableCullFace(CullFace face);
+  void enableCullFace(GLCullFace face);
   void disableCullFace();
   
   void transformTexCoords(const Vector2D& scale, const Vector2D& translation);
+  
+  void color(const Color& col) {
+    color(col.getRed(),
+          col.getGreen(),
+          col.getBlue(),
+          col.getAlpha());
+  }
+  
+  void clearScreen(const Color& col){
+    clearScreen(col.getRed(),
+                col.getGreen(),
+                col.getBlue(),
+                col.getAlpha());
+  }
   
 };
 

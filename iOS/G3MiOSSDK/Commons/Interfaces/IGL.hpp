@@ -16,11 +16,9 @@
 #include "Color.hpp"
 #include "MutableVector2D.hpp"
 
-enum CullFace {
-  FRONT,
-  BACK,
-  FRONT_AND_BACK
-};
+#include "INativeGL.hpp"
+
+
 
 class IGL {
 public:
@@ -59,7 +57,7 @@ public:
   virtual void enableBlend() = 0;
   virtual void disableBlend() = 0;
   
-  virtual void enableCullFace(CullFace face) = 0;
+  virtual void enableCullFace(GLCullFace face) = 0;
   virtual void disableCullFace() = 0;
   
 

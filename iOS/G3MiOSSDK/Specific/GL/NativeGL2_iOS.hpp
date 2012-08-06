@@ -37,13 +37,13 @@ class NativeGL2_iOS: public INativeGL
     }
   }
   
-  inline GLenum getEnum(CullFace f) const{
+  inline GLenum getEnum(GLCullFace f) const{
     switch (f) {
-      case FRONT:
+      case Front:
         return GL_FRONT;
-      case FRONT_AND_BACK:
+      case FrontAndBack:
         return GL_FRONT_AND_BACK;
-      case BACK:
+      case Back:
         return GL_BACK;
     }
   }
@@ -280,7 +280,7 @@ public:
     glDrawArrays(getEnum(mode), first, count);
   }
   
-  void cullFace(CullFace c) const{
+  void cullFace(GLCullFace c) const{
     glCullFace(getEnum(c));
   }
   

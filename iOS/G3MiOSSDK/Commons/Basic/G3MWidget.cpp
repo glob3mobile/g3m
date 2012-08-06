@@ -89,10 +89,10 @@ G3MWidget* G3MWidget::create(IFactory*        factory,
 void G3MWidget::initializeGL() {
   _gl->enableDepthTest();
 #ifdef C_CODE
-  _gl->enableCullFace(BACK);
+  _gl->enableCullFace(Back);
 #endif
 #ifdef JAVA_CODE
-  _gl.enableCullFace(CullFace.BACK);
+  _gl.enableCullFace(CullFace.Back);
 #endif
 }
 
