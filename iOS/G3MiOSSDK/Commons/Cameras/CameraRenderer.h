@@ -16,7 +16,7 @@
 #include "TouchEvent.hpp"
 
 class Planet;
-class GL2;
+class GL;
 class ILogger;
 
 
@@ -35,7 +35,7 @@ class CameraRenderer: public Renderer
 protected:
   //static const Planet* _planet;
   //static const ILogger * _logger;
-  //static GL2 *gl;
+  //static GL *gl;
   
   //static Camera _camera0;                //Initial Camera saved on Down event
   //static Camera* _camera;         // Camera used at current frame

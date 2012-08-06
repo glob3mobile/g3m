@@ -9,7 +9,7 @@
 #import "ES2Renderer.h"
 
 #include "G3MWidget.hpp"
-#include "GL2.hpp"
+#include "GL.hpp"
 
 // uniform index
 enum {

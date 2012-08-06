@@ -11,7 +11,7 @@
 #include "ITimer.hpp"
 #include "Renderer.hpp"
 #include "Camera.hpp"
-#include "GL2.hpp"
+#include "GL.hpp"
 #include "TexturesHandler.cpp"
 #include "Downloader.hpp"
 #include "IDownloader.hpp"
@@ -19,7 +19,7 @@
 
 G3MWidget::G3MWidget(IFactory*        factory,
                      ILogger*         logger,
-                     GL2*             gl,
+                     GL*             gl,
                      TexturesHandler* texturesHandler,
                      Downloader*      downloaderOLD,
                      IDownloader*     downloader,
@@ -55,7 +55,7 @@ _rendererReady(false) // false until first call to G3MWidget::render()
 
 G3MWidget* G3MWidget::create(IFactory*        factory,
                              ILogger*         logger,
-                             GL2*             gl,
+                             GL*             gl,
                              TexturesHandler* texturesHandler,
                              Downloader *     downloaderOLD,
                              IDownloader*     downloader,

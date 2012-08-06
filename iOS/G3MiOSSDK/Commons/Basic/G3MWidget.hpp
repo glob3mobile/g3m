@@ -14,7 +14,7 @@ class TouchEvent;
 class Planet;
 class ILogger;
 class IFactory;
-class GL2;
+class GL;
 class TexturesHandler;
 class Downloader;
 class IDownloader;
@@ -28,7 +28,7 @@ public:
   
   static G3MWidget* create(IFactory*        factory,
                            ILogger*         logger,
-                           GL2*             gl,
+                           GL*             gl,
                            TexturesHandler* texturesHandler,
                            Downloader *     downloaderOLD,
                            IDownloader*     downloader,
@@ -48,7 +48,7 @@ public:
   
   void onResizeViewportEvent(int width, int height);
   
-  GL2* getGL() const {
+  GL* getGL() const {
     return _gl;
   }
   
@@ -60,7 +60,7 @@ public:
 private:
   IFactory*        _factory;
   ILogger*         _logger;
-  GL2*             _gl;
+  GL*             _gl;
   const Planet*    _planet;
   Renderer*        _renderer;
   Renderer*        _busyRenderer;
@@ -81,7 +81,7 @@ private:
   
   G3MWidget(IFactory*        factory,
             ILogger*         logger,
-            GL2*             gl,
+            GL*             gl,
             TexturesHandler* texturesHandler,
             Downloader*      downloaderOLD,
             IDownloader*     downloader,

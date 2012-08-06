@@ -15,7 +15,7 @@
 
 #include <vector>
 #include "Context.hpp"
-#include "GL2.hpp"
+#include "GL.hpp"
 
 
 class SGGGroupNode;
@@ -156,7 +156,7 @@ public:
       return MAX_TIME_TO_RENDER;
     }
     
-    GL2* gl = rc->getGL();
+    GL* gl = rc->getGL();
     
     gl->pushMatrix();
     MutableMatrix44D fullMatrix = getFullMatrix();

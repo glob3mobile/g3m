@@ -100,8 +100,8 @@
 		CFFEC12615C2EBA6003FA986 /* URL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12515C2EBA6003FA986 /* URL.cpp */; };
 		D816E7AA15B6C9B2004FA4D6 /* SingleImageTileTexturizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D816E7A815B6C9B1004FA4D6 /* SingleImageTileTexturizer.cpp */; };
 		D816E7AB15B6C9B2004FA4D6 /* SingleImageTileTexturizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D816E7A915B6C9B1004FA4D6 /* SingleImageTileTexturizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		D81BA17015CBF19F004EF0B0 /* GL2.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D81BA16E15CBF19E004EF0B0 /* GL2.hpp */; };
-		D81BA17115CBF19F004EF0B0 /* GL2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81BA16F15CBF19E004EF0B0 /* GL2.cpp */; };
+		D81BA17015CBF19F004EF0B0 /* GL.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D81BA16E15CBF19E004EF0B0 /* GL.hpp */; };
+		D81BA17115CBF19F004EF0B0 /* GL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81BA16F15CBF19E004EF0B0 /* GL.cpp */; };
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
 		D84D5A32157E0EAA000C5E35 /* MutableVector3D.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D84D5A30157E0EAA000C5E35 /* MutableVector3D.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -277,8 +277,8 @@
 		CFFEC12515C2EBA6003FA986 /* URL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = URL.cpp; path = Commons/Basic/URL.cpp; sourceTree = "<group>"; };
 		D816E7A815B6C9B1004FA4D6 /* SingleImageTileTexturizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SingleImageTileTexturizer.cpp; path = Commons/Basic/SingleImageTileTexturizer.cpp; sourceTree = "<group>"; };
 		D816E7A915B6C9B1004FA4D6 /* SingleImageTileTexturizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SingleImageTileTexturizer.hpp; path = Commons/Basic/SingleImageTileTexturizer.hpp; sourceTree = "<group>"; };
-		D81BA16E15CBF19E004EF0B0 /* GL2.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GL2.hpp; sourceTree = "<group>"; };
-		D81BA16F15CBF19E004EF0B0 /* GL2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GL2.cpp; sourceTree = "<group>"; };
+		D81BA16E15CBF19E004EF0B0 /* GL.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GL.hpp; sourceTree = "<group>"; };
+		D81BA16F15CBF19E004EF0B0 /* GL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GL.cpp; sourceTree = "<group>"; };
 		D8228EBC157F7F6100BBAF60 /* MutableMatrix44D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MutableMatrix44D.hpp; path = Commons/Geometry/MutableMatrix44D.hpp; sourceTree = "<group>"; };
 		D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = MutableMatrix44D.cpp; path = Commons/Geometry/MutableMatrix44D.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector3D.cpp; path = Commons/Geometry/MutableVector3D.cpp; sourceTree = "<group>"; };
@@ -574,8 +574,8 @@
 		D892FBCD15C930E600E69254 /* GL */ = {
 			isa = PBXGroup;
 			children = (
-				D81BA16E15CBF19E004EF0B0 /* GL2.hpp */,
-				D81BA16F15CBF19E004EF0B0 /* GL2.cpp */,
+				D81BA16E15CBF19E004EF0B0 /* GL.hpp */,
+				D81BA16F15CBF19E004EF0B0 /* GL.cpp */,
 			);
 			name = GL;
 			path = Commons/GL;
@@ -744,7 +744,7 @@
 				D88B5E2715C15C850083A43F /* Frustum.hpp in Headers */,
 				D88B5E2815C15C850083A43F /* Plane.hpp in Headers */,
 				D8F7665815CAD79100179E08 /* INativeGL.hpp in Headers */,
-				D81BA17015CBF19F004EF0B0 /* GL2.hpp in Headers */,
+				D81BA17015CBF19F004EF0B0 /* GL.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -865,7 +865,7 @@
 				CCC2A03B15CA6C7D00923850 /* SceneGraphRenderer.cpp in Sources */,
 				CCC2A03D15CA6C7D00923850 /* SimplePlanetRenderer.cpp in Sources */,
 				CCC2A03F15CA6C7D00923850 /* TileRenderer.cpp in Sources */,
-				D81BA17115CBF19F004EF0B0 /* GL2.cpp in Sources */,
+				D81BA17115CBF19F004EF0B0 /* GL.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

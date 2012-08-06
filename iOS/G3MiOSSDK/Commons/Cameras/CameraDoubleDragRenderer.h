@@ -32,7 +32,7 @@ private:
   
   MutableVector3D _initialPoint0, _initialPoint1;
   const Planet* _planet;
-  GL2 *_gl;
+  GL *_gl;
   Camera _camera0;         //Initial Camera saved on Down event
   Camera* _camera;         // Camera used at current frame
         

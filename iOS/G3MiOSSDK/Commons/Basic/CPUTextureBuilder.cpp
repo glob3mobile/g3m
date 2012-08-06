@@ -8,7 +8,7 @@
 
 #include "CPUTextureBuilder.hpp"
 
-int CPUTextureBuilder::createTextureFromImages(GL2 * gl, 
+int CPUTextureBuilder::createTextureFromImages(GL * gl, 
                                                const std::vector<const IImage*>& vImages, 
                                                int width, int height) const {
   if (vImages.size() > 0){
@@ -32,7 +32,7 @@ int CPUTextureBuilder::createTextureFromImages(GL2 * gl,
   }
 }
 
-int CPUTextureBuilder::createTextureFromImages(GL2 * gl, const IFactory* factory,
+int CPUTextureBuilder::createTextureFromImages(GL * gl, const IFactory* factory,
                                                const std::vector<const IImage*>& vImages, 
                                                const std::vector<const Rectangle*>& vRectangles, 
                                                int width, int height) const {

@@ -47,7 +47,7 @@
 
 #include "INativeGL.hpp"
 #include "NativeGL2_iOS.hpp"
-#include "GL2.hpp"
+#include "GL.hpp"
 
 #include <stdlib.h>
 
@@ -84,7 +84,7 @@
   
   
   NativeGL2_iOS * nGL = new NativeGL2_iOS(); 
-  GL2* gl  = new GL2(nGL);
+  GL* gl  = new GL(nGL);
 
   // composite renderer is the father of the rest of renderers
   CompositeRenderer* comp = new CompositeRenderer();
@@ -204,7 +204,7 @@
   ILogger *logger = new Logger_iOS(ErrorLevel);
   
   NativeGL2_iOS * nGL = new NativeGL2_iOS(); 
-  GL2* gl  = new GL2(nGL);
+  GL* gl  = new GL(nGL);
   
   //Testing downloads
   if (false) {
@@ -458,7 +458,7 @@
     eaglLayer.drawableProperties = [NSDictionary dictionaryWithObjectsAndKeys:
                                     [NSNumber numberWithBool:FALSE], kEAGLDrawablePropertyRetainedBacking, kEAGLColorFormatRGBA8, kEAGLDrawablePropertyColorFormat, nil];
     
-    // create GL2 object
+    // create GL object
     _renderer = [[ES2Renderer alloc] init];
     if (!_renderer) {
       printf("**** ERROR: G3MWidget_iOS Mobile needs Opengl ES 2.0\n");

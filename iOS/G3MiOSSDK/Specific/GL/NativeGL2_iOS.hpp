@@ -1,13 +1,13 @@
 //
-//  NativeGL2_iOS.hpp
+//  NativeGL_iOS.hpp
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 31/07/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_NativeGL2_iOS_hpp
-#define G3MiOSSDK_NativeGL2_iOS_hpp
+#ifndef G3MiOSSDK_NativeGL_iOS_hpp
+#define G3MiOSSDK_NativeGL_iOS_hpp
 
 #include <OpenGLES/ES2/gl.h>
 

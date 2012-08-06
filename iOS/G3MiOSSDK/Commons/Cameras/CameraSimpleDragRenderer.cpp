@@ -10,7 +10,7 @@
 
 #include "CameraSimpleDragRenderer.h"
 #include "MutableVector2D.hpp"
-#include "GL2.hpp"
+#include "GL.hpp"
 
 
 bool CameraSimpleDragRenderer::onTouchEvent(const TouchEvent* touchEvent) 

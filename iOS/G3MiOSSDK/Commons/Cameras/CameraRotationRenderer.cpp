@@ -9,7 +9,7 @@
 #include <iostream>
 
 #include "CameraRotationRenderer.h"
-#include "GL2.hpp"
+#include "GL.hpp"
 
 
 bool CameraRotationRenderer::onTouchEvent(const TouchEvent* touchEvent) 

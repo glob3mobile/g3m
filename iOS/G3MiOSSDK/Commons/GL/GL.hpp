@@ -1,13 +1,13 @@
 //
-//  GL2.hpp
+//  GL.hpp
 //  Glob3 Mobile
 //
 //  Created by Agustín Trujillo Pino on 14/06/11.
 //  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_GL2_hpp
-#define G3MiOSSDK_GL2_hpp
+#ifndef G3MiOSSDK_GL_hpp
+#define G3MiOSSDK_GL_hpp
 
 #include "INativeGL.hpp"
 
@@ -21,7 +21,7 @@
 #include <list>
 
 
-class GL2 {
+class GL {
 private:
   
   INativeGL* const _gl;
@@ -53,7 +53,7 @@ private:
   
 public:
   
-  GL2(INativeGL* const gl) :
+  GL(INativeGL* const gl) :
   _gl(gl),
   _enableTextures(false),
   _enableTexture2D(false),

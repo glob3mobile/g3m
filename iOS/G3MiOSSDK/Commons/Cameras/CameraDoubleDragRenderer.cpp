@@ -9,7 +9,7 @@
 #include <iostream>
 
 #include "CameraDoubleDragRenderer.h"
-#include "GL2.hpp"
+#include "GL.hpp"
 
 
 bool CameraDoubleDragRenderer::onTouchEvent(const TouchEvent* touchEvent) 

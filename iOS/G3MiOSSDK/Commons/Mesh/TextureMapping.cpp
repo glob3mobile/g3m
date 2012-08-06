@@ -9,7 +9,7 @@
 #include "TextureMapping.hpp"
 
 #include "Context.hpp"
-#include "GL2.hpp"
+#include "GL.hpp"
 
 
 TextureMapping::TextureMapping(int textureId, std::vector<MutableVector2D> texCoords) :
@@ -28,7 +28,7 @@ _textureId(textureId)
 }
 
 void TextureMapping::bind(const RenderContext* rc) const {
-  GL2 *gl = rc->getGL();
+  GL *gl = rc->getGL();
   
   gl->transformTexCoords( _scale.asVector2D(), _translation.asVector2D() );
   

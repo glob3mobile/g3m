@@ -222,7 +222,7 @@ void SGCubeNode::initialize(const RenderContext *rc)
 }  
 
 int SGCubeNode::rawRender(const RenderContext *rc) {
-  GL2* gl = rc->getGL();
+  GL* gl = rc->getGL();
 
   if (!_initializedGL) {
     initialize(rc);
