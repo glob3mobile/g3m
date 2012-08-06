@@ -31,7 +31,7 @@ public:
     _layers.push_back(l);
   }
   
-  std::vector<Petition*> createTilePetitions(const IFactory& factory, 
+  std::vector<Petition*> createTilePetitions(const RenderContext* rc, const IFactory& factory, 
                                              const Tile& tile, int width, int height) const;
   
   

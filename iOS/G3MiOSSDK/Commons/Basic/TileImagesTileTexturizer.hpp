@@ -31,9 +31,11 @@ class WMSLayer;
 class TileImagesTileTexturizer : public TileTexturizer {
 private:
   
+  //STATE
   const IFactory* _factory;
   TexturesHandler* _texHandler;
   Downloader * _downloader;
+  RenderContext* _renderContext;
   
   std::vector<TilePetitions*> _tilePetitions;
   std::vector<TilePetitions*> _tilePetitionsTopTile;
@@ -79,7 +81,8 @@ public:
   _downloader(downloader),
   _texCoordsCache(NULL),
   _layerSet(layerSet),
-  _factory(factory){
+  _factory(factory),
+  _renderContext(NULL){
   }
   
   ~TileImagesTileTexturizer() {

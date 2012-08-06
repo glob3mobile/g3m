@@ -19,7 +19,7 @@
 
 
 TilePetitions* TileImagesTileTexturizer::createTilePetitions(const Tile* tile) {  
-  std::vector<Petition*> pet = _layerSet->createTilePetitions(*_factory,
+  std::vector<Petition*> pet = _layerSet->createTilePetitions(_renderContext, *_factory,
                                                               *tile, 
                                                               _parameters->_tileTextureWidth, 
                                                               _parameters->_tileTextureHeight);
@@ -65,7 +65,8 @@ Mesh* TileImagesTileTexturizer::getNewTextureMesh(Tile* tile,
     
     //printf("TEXTURIZED %d, %d, %d\n", tile->getLevel(), tile->getRow(), tile->getColumn());
     
-    TextureMapping * tMap = new TextureMapping(texID, getTextureCoordinates(tessellator));
+    TextureMapping * tMap = new TextureMapping(texID, getTextureCoordinates(tessellator), 
+                                               _texHandler);
     TexturedMesh* texMesh = new TexturedMesh(tessellatorMesh, false, tMap, true);
     delete previousMesh;   //If a new mesh has been produced we delete the previous one
     return texMesh;
@@ -99,7 +100,9 @@ Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
   
   //CREATING MESH
   if (texID > -1) {
-    TextureMapping* tMap = new TextureMapping(texID, getTextureCoordinates(tessellator));
+    TextureMapping* tMap = new TextureMapping(texID, getTextureCoordinates(tessellator), 
+                                              _texHandler);
+    
     translateAndScaleFallBackTex(tile, fbTile, tMap);
     TexturedMesh* texMesh = new TexturedMesh(tessellatorMesh, false, tMap, true);
     delete previousMesh;   //If a new mesh has been produced we delete the previous one
@@ -158,9 +161,9 @@ void TileImagesTileTexturizer::tileToBeDeleted(Tile* tile) {
   TilePetitions* tp = getRegisteredTilePetitions(tile);
   
   if (tp != NULL){
-    if (tp->getTexID() > -1){
-      _texHandler->takeTexture(tp->getTexID());
-    }
+//    if (tp->getTexID() > -1){
+//      _texHandler->takeTexture(tp->getTexID());
+//    }
     
     tp->cancelPetitions(*_downloader);
     

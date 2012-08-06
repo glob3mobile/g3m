@@ -9,22 +9,27 @@
 #include "LayerSet.hpp"
 #include "Tile.hpp"
 
-std::vector<Petition*> LayerSet::createTilePetitions(const IFactory& factory, const Tile& tile, int width, int height) const
+std::vector<Petition*> LayerSet::createTilePetitions(const RenderContext* rc, const IFactory& factory, const Tile& tile, int width, int height) const
 {
   std::vector<Petition*> petitions;
   
   const Sector tileSector = tile.getSector();
   
-  if (tileSector.getDeltaLatitude().degrees() < 45){
-    int a = 0; a++;
-  }
-  
   for (int i = 0; i < _layers.size(); i++) {
     Layer* layer = _layers[i];
-    if (layer->fullContains(tileSector)){
+    if (layer->isAvailable(rc, tile)){
       std::vector<Petition*> pet = layer->getTilePetitions(factory, tile, width, height);
+      
+      //Storing petitions
       for (int j = 0; j < pet.size(); j++) {
         petitions.push_back(pet[j]);
+        
+        //IF A IMAGE OPAQUE FILLS THE TILE WE NEED NO MORE
+        if (!layer->isTransparent()){
+          if (pet[j]->getSector().fullContains(tile.getSector())){
+            return petitions;
+          }
+        }
       }
     }
   }

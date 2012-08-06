@@ -12,6 +12,18 @@
 
 #include "Tile.hpp"
 
+bool WMSLayer::isAvailable(const RenderContext* rc, const Tile& tile) const {
+  Angle dLon = tile.getSector().getDeltaLongitude();
+  
+  if ((!_minTileLongitudeDelta.isNan() && dLon.lowerThan(_minTileLongitudeDelta)) || 
+      (!_maxTileLongitudeDelta.isNan() && dLon.greaterThan(_maxTileLongitudeDelta))){
+    return false;
+  } else{
+    return true;
+  }
+}
+      
+
 std::vector<Petition*> WMSLayer::getTilePetitions(const IFactory& factory,
                                                   const Tile& tile, int width, int height) const
 {
