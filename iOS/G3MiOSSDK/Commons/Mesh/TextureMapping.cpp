@@ -11,9 +11,8 @@
 #include "Context.hpp"
 #include "GL.hpp"
 
-
-TextureMapping::TextureMapping(int textureId, std::vector<MutableVector2D> texCoords) :
-_textureId(textureId)
+TextureMapping::TextureMapping(int textureId, std::vector<MutableVector2D> texCoords, TexturesHandler* texHandler) :
+_textureId(textureId), _texHandler(texHandler)
 {
   float* texCoordsA = new float[2 * texCoords.size()];
   int p = 0;

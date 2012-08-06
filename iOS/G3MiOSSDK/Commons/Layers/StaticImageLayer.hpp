@@ -35,7 +35,15 @@ public:
     return _bbox.fullContains(s);
   }
   
-  std::vector<Petition*> getTilePetitions(const Tile& tile, int width, int height) const;
+  std::vector<Petition*> getTilePetitions(const IFactory& factory, const Tile& tile, int width, int height) const;
+  
+  bool isAvailable(const RenderContext* rc, const Tile& tile)const { 
+    return true;
+  }
+  
+  bool isTransparent() const{
+    return true;
+  }
   
 };
 

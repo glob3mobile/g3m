@@ -12,6 +12,8 @@
 #include "MutableVector2D.hpp"
 #include <vector>
 
+#include "TexturesHandler.hpp"
+
 class RenderContext;
 
 
@@ -21,20 +23,22 @@ private:
   const int          _textureId;
   const float const* _texCoords;
   MutableVector2D    _translation, _scale;
+  TexturesHandler* const _texHandler;
   
 public:
   
   TextureMapping(int textureId,
-                 float texCoords[]) :
+                 float texCoords[], TexturesHandler* const texHandler) :
   _textureId(textureId),
-  _texCoords(texCoords)
+  _texCoords(texCoords),
+  _texHandler(texHandler)
   {
     _translation = MutableVector2D(0, 0);
     _scale       = MutableVector2D(1, 1);
   }
   
   TextureMapping(int textureId,
-                 std::vector<MutableVector2D> texCoords);
+                 std::vector<MutableVector2D> texCoords, TexturesHandler* const texHandler);
   
   void setTranslationAndScale(const Vector2D& translation,
                               const Vector2D& scale){
@@ -43,7 +47,13 @@ public:
   }
   
   ~TextureMapping() {
+#ifdef C_CODE
     delete[] _texCoords;
+#endif
+    
+    if (_texHandler != NULL){
+      _texHandler->takeTexture(_textureId);
+    }
   }
   
   int getTextureId() const {

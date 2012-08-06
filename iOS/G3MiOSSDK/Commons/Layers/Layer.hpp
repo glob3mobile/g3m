@@ -12,6 +12,8 @@
 #include <string>
 #include "Sector.hpp"
 #include "TilePetitions.hpp"
+#include "IFactory.hpp"
+#include "Context.hpp"
 
 class Layer{
 
@@ -21,7 +23,12 @@ public:
   
   virtual bool fullContains(const Sector& s) const = 0;
 
-  virtual std::vector<Petition*> getTilePetitions(const Tile& tile, int width, int height) const = 0;
+  virtual std::vector<Petition*> getTilePetitions(const IFactory& factory,
+                                                  const Tile& tile, int width, int height) const = 0;
+  
+  virtual bool isAvailable(const RenderContext* rc, const Tile& tile) const = 0;
+  
+  virtual bool isTransparent() const = 0;
   
 };
 

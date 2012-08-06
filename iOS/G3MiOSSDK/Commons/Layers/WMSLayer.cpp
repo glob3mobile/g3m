@@ -12,7 +12,20 @@
 
 #include "Tile.hpp"
 
-std::vector<Petition*> WMSLayer::getTilePetitions(const Tile& tile, int width, int height) const
+bool WMSLayer::isAvailable(const RenderContext* rc, const Tile& tile) const {
+  Angle dLon = tile.getSector().getDeltaLongitude();
+  
+  if ((!_minTileLongitudeDelta.isNan() && dLon.lowerThan(_minTileLongitudeDelta)) || 
+      (!_maxTileLongitudeDelta.isNan() && dLon.greaterThan(_maxTileLongitudeDelta))){
+    return false;
+  } else{
+    return true;
+  }
+}
+      
+
+std::vector<Petition*> WMSLayer::getTilePetitions(const IFactory& factory,
+                                                  const Tile& tile, int width, int height) const
 {
   std::vector<Petition*> vPetitions;
   
@@ -65,7 +78,7 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const Tile& tile, int width, i
   req += "&TRANSPARENT=TRUE";
 
   Sector sector = tile.getSector();
-  
+
 	//Texture Size and BBOX
   std::ostringstream oss;
   oss << "&WIDTH=" << width << "&HEIGHT=" << height;
@@ -73,6 +86,7 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const Tile& tile, int width, i
   oss << "," << sector.upper().longitude().degrees() << "," << sector.upper().latitude().degrees();
   std::string sizeAndBBox = oss.str();
   req += oss.str();
+  
   
   if (_serverVersion == "1.3.0") {
     req += "&CRS=EPSG:4326";
