@@ -15,6 +15,11 @@
 #include "Camera.hpp"
 
 
+class EffectTarget {
+  
+};
+
+
 class Effect {
 protected:
   
@@ -68,6 +73,8 @@ public:
   virtual void stop(const RenderContext *rc,
                     const TimeInterval& now) = 0;
   
+  virtual void cancel(const TimeInterval& now) = 0;
+
   virtual ~Effect() { }
 };
 
@@ -121,10 +128,17 @@ private:
   
   class EffectRun {
   public:
-    Effect* _effect;
-    bool    _started;
+    Effect*       _effect;
+    EffectTarget* _target;
     
-    EffectRun(Effect* effect) : _effect(effect), _started(false) {
+    bool         _started;
+    
+    EffectRun(Effect* effect,
+              EffectTarget* target) :
+    _effect(effect),
+    _target(target),
+    _started(false)
+    {
     }
     
     ~EffectRun() {
@@ -159,15 +173,18 @@ public:
     }
   };
   
-  void startEffect(Effect* effect);
+  void startEffect(Effect* effect,
+                   EffectTarget* target);
+  
+  void cancellAllEffectsFor(EffectTarget* target);
   
 };
 
 
-class DummyEffect : public EffectWithDuration {
+class SampleEffect : public EffectWithDuration {
 public:
   
-  DummyEffect(TimeInterval duration) : EffectWithDuration(duration) {
+  SampleEffect(TimeInterval duration) : EffectWithDuration(duration) {
   }
   
   virtual void start(const RenderContext *rc,
@@ -186,6 +203,10 @@ public:
   virtual void stop(const RenderContext *rc,
                     const TimeInterval& now) {
     EffectWithDuration::stop(rc, now);
+  }
+  
+  virtual void cancel(const TimeInterval& now) {
+    // do nothing, just leave the effect in the intermediate state
   }
 
 private:

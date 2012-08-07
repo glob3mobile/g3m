@@ -424,8 +424,10 @@
   
   EffectsScheduler* scheduler = new EffectsScheduler();
   
-  if (false) {
-    scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(2)));
+  if (true) {
+    EffectTarget* target = NULL;
+    scheduler->startEffect(new SampleEffect(TimeInterval::fromSeconds(3)),
+                           target);
   }
   
   if (false) {
