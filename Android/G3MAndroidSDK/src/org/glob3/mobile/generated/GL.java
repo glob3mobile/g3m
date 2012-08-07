@@ -46,7 +46,7 @@ public class GL
   private boolean _enableBlend;
 
   private boolean _enableCullFace;
-  private GLCullFace _cullFace_face = new GLCullFace();
+  private GLCullFace _cullFace_face = Back;
 
 //C++ TO JAVA CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in Java):
   private float[] loadModelView_M = new float[16];
@@ -101,6 +101,10 @@ public class GL
 	  _cullFace_face = Back;
 	  _texturesIdCounter = 0;
 
+  }
+
+  public void dispose()
+  {
   }
 
   public final void enableVerticesPosition()
