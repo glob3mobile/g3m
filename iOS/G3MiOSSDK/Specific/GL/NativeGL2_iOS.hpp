@@ -149,12 +149,12 @@ public:
     glUseProgram(program);
   }
   
-  int getAttribLocation(int program, const char name[]) const{
-    return glGetAttribLocation(program, name);
+  int getAttribLocation(int program, const std::string& name) const{
+    return glGetAttribLocation(program, name.c_str());
   }
   
-  int getUniformLocation(int program, const char name[]) const{
-    return glGetUniformLocation(program, name);
+  int getUniformLocation(int program, const std::string& name) const{
+    return glGetUniformLocation(program, name.c_str());
   }
   
   void uniform2f(int loc, float x, float y) const{

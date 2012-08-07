@@ -162,9 +162,9 @@ void GL::disablePolygonOffset() {
 
 void GL::vertexPointer(int size, int stride, const float vertex[]) {
 #ifdef C_CODE
-  _gl->vertexAttribPointer(Attributes.Position, size, Float, 0, stride, (const void *) vertex);
+  _gl->vertexAttribPointer(Attributes.Position, size, Float, false, stride, (const void *) vertex);
 #else
-  _gl->vertexAttribPointer(Attributes.Position, size, GLType.Float, 0, stride, (const void *) vertex);
+  _gl->vertexAttribPointer(Attributes.Position, size, GLType.Float, false, stride, (const void *) vertex);
 #endif
 }
 
@@ -251,9 +251,9 @@ int GL::uploadTexture(const IImage* image, int textureWidth, int textureHeight) 
 
 void GL::setTextureCoordinates(int size, int stride, const float texcoord[]) {
 #ifdef C_CODE
-  _gl->vertexAttribPointer(Attributes.TextureCoord, size, Float, 0, stride, (const void *) texcoord);
+  _gl->vertexAttribPointer(Attributes.TextureCoord, size, Float, false, stride, (const void *) texcoord);
 #else
-  _gl->vertexAttribPointer(Attributes.TextureCoord, size, GLType.Float, 0, stride, (const void *) texcoord);
+  _gl->vertexAttribPointer(Attributes.TextureCoord, size, GLType.Float, false, stride, (const void *) texcoord);
 #endif
 }
 
@@ -341,9 +341,9 @@ void GL::enableVertexColor(float const colors[], float intensity) {
     _gl->uniform1i(Uniforms.EnableColorPerVertex, 1);
     _gl->enableVertexAttribArray(Attributes.Color);
 #ifdef C_CODE
-    _gl->vertexAttribPointer(Attributes.Color, 4, Float, 0, 0, colors);
+    _gl->vertexAttribPointer(Attributes.Color, 4, Float, false, 0, colors);
 #else
-    _gl->vertexAttribPointer(Attributes.Color, 4, GLType.Float, 0, 0, colors);
+    _gl->vertexAttribPointer(Attributes.Color, 4, GLType.Float, false, 0, colors);
 #endif
     _gl->uniform1f(Uniforms.ColorPerVertexIntensity, intensity);
     _enableVertexColor = true;
@@ -362,9 +362,9 @@ void GL::enableVertexNormal(float const normals[]) {
   if (!_enableVertexNormal) {
     _gl->enableVertexAttribArray(Attributes.Normal);
 #ifdef C_CODE
-    _gl->vertexAttribPointer(Attributes.Normal, 3, Float, 0, 0, normals);
+    _gl->vertexAttribPointer(Attributes.Normal, 3, Float, false, 0, normals);
 #else
-    _gl->vertexAttribPointer(Attributes.Normal, 3, GLType.Float, 0, 0, normals);
+    _gl->vertexAttribPointer(Attributes.Normal, 3, GLType.Float, false, 0, normals);
 #endif
     _enableVertexNormal = true;
   }
@@ -444,7 +444,7 @@ void GL::enableBlend() {
 void GL::disableBlend() {
   if (_enableBlend) {
 #ifdef C_CODE
-    _gl->disnable(Blend);
+    _gl->disable(Blend);
 #else
     _gl->disable(GLFeature.Blend);
 #endif

@@ -9,6 +9,8 @@
 #ifndef G3MiOSSDK_INativeGL_hpp
 #define G3MiOSSDK_INativeGL_hpp
 
+#include <string>
+
 #include <vector>
 
 enum GLCullFace { Front, Back, FrontAndBack };
@@ -43,9 +45,9 @@ public:
   
   virtual void useProgram(int program) const = 0;
   
-  virtual int getAttribLocation(int program, const char name[]) const = 0;
+  virtual int getAttribLocation(int program, const std::string& name) const = 0;
   
-  virtual int getUniformLocation(int program, const char name[]) const = 0;
+  virtual int getUniformLocation(int program, const std::string& name) const = 0;
   
   virtual void uniform2f(int loc, float x, float y) const = 0;
   
