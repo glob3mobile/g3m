@@ -58,7 +58,7 @@ public class GL
 //C++ TO JAVA CONVERTER NOTE: This static local variable declaration (not allowed in Java) has been moved just prior to the method:
 //	static float M[16];
 	_modelView.copyToFloatMatrix(loadModelView_M);
-	_gl.uniformMatrix4fv(GlobalMembersGL.Uniforms.Modelview, 1, 0, loadModelView_M);
+	_gl.uniformMatrix4fv(GlobalMembersGL.Uniforms.Modelview, 1, false, loadModelView_M);
   }
 
   private int getTextureID()
@@ -101,7 +101,7 @@ public class GL
 	  _enableBlend = false;
 	  _enableDepthTest = false;
 	  _enableCullFace = false;
-	  _cullFace_face = Back;
+	  _cullFace_face = GLCullFace.Back;
 	  _texturesIdCounter = 0;
 
   }
@@ -303,7 +303,7 @@ public class GL
 //C++ TO JAVA CONVERTER NOTE: This static local variable declaration (not allowed in Java) has been moved just prior to the method:
 //	static float M[16];
 	projection.copyToFloatMatrix(setProjection_M);
-	_gl.uniformMatrix4fv(GlobalMembersGL.Uniforms.Projection, 1, 0, setProjection_M);
+	_gl.uniformMatrix4fv(GlobalMembersGL.Uniforms.Projection, 1, false, setProjection_M);
   }
 
   public final void useProgram(int program)
