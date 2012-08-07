@@ -137,7 +137,7 @@ public class GL
   {
 	if (!_enableTexture2D)
 	{
-	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableTexture, true);
+	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableTexture, 1);
 	  _enableTexture2D = true;
 	}
   }
@@ -146,7 +146,7 @@ public class GL
   {
 	if (!_enableFlatColor)
 	{
-	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableFlatColor, true);
+	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableFlatColor, 1);
 	  _enableFlatColor = true;
 	}
 	_gl.uniform4f(GlobalMembersGL.Uniforms.FlatColor, r, g, b, a);
@@ -157,7 +157,7 @@ public class GL
   {
 	if (_enableFlatColor)
 	{
-	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableFlatColor, false);
+	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableFlatColor, 0);
 	  _enableFlatColor = false;
 	}
   }
@@ -166,7 +166,7 @@ public class GL
   {
 	if (_enableTexture2D)
 	{
-	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableTexture, false);
+	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableTexture, 0);
 	  _enableTexture2D = false;
 	}
   }
@@ -205,7 +205,7 @@ public class GL
   {
 	if (!_enableVertexColor)
 	{
-	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableColorPerVertex, true);
+	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableColorPerVertex, 1);
 	  _gl.enableVertexAttribArray(GlobalMembersGL.Attributes.Color);
 	  _gl.vertexAttribPointer(GlobalMembersGL.Attributes.Color, 4, Float, 0, 0, colors);
 	  _gl.uniform1f(GlobalMembersGL.Uniforms.ColorPerVertexIntensity, intensity);
@@ -218,7 +218,7 @@ public class GL
 	if (_enableVertexColor)
 	{
 	  _gl.disableVertexAttribArray(GlobalMembersGL.Attributes.Color);
-	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableColorPerVertex, false);
+	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableColorPerVertex, 0);
 	  _enableVertexColor = false;
 	}
   }
@@ -335,7 +335,7 @@ public class GL
 	//BILLBOARDS
 	GlobalMembersGL.Uniforms.BillBoard = _gl.getUniformLocation(program, "BillBoard");
 	GlobalMembersGL.Uniforms.ViewPortRatio = _gl.getUniformLocation(program, "ViewPortRatio");
-	_gl.uniform1i(GlobalMembersGL.Uniforms.BillBoard, false); //NOT DRAWING BILLBOARD
+	_gl.uniform1i(GlobalMembersGL.Uniforms.BillBoard, 0); //NOT DRAWING BILLBOARD
   
 	//FOR FLAT COLOR MIXING
 	GlobalMembersGL.Uniforms.FlatColorIntensity = _gl.getUniformLocation(program, "FlatColorIntensity");
@@ -442,7 +442,7 @@ public class GL
   
 	float[] texcoord = { 1, 1, 1, 0, 0, 1, 0, 0 };
   
-	_gl.uniform1i(GlobalMembersGL.Uniforms.BillBoard, true);
+	_gl.uniform1i(GlobalMembersGL.Uniforms.BillBoard, 1);
   
 	_gl.uniform1f(GlobalMembersGL.Uniforms.ViewPortRatio, viewPortRatio);
   
@@ -460,7 +460,7 @@ public class GL
   
 	enableDepthTest();
   
-	_gl.uniform1i(GlobalMembersGL.Uniforms.BillBoard, false);
+	_gl.uniform1i(GlobalMembersGL.Uniforms.BillBoard, 0);
   }
 
   public final void deleteTexture(int glTextureId)
