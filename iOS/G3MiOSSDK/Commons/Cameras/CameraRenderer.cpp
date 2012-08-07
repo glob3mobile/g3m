@@ -12,8 +12,9 @@
 
 
 
-void CameraRenderer::initialize(const InitializationContext* ic){
-  _logger = ic->getLogger();
+void CameraRenderer::initialize(const InitializationContext* ic) {
+  //_logger = ic->getLogger();
+  //cameraContext = new CameraContext(
 }
 
 
@@ -24,8 +25,17 @@ void CameraRenderer::onResizeViewportEvent(int width, int height) {
 }
 
 
-int CameraRenderer::render(const RenderContext* rc) 
+int CameraRenderer::render(const RenderContext* rc)
 {
+/*  // create the CameraContext
+  if (cameraContext==NULL)
+    cameraContext = new CameraContext(rc->getFactory(), rc->getLogger(), rc->getPlanet(),
+                                      rc->getGL(), rc->getCamera(), &_gesture,
+                                      rc->getDownloaderOLD(), rc->getDownloader(),
+                                      rc->getEffectsScheduler());
+  */
+                                      
+                                      
   rc->getCamera()->render(rc);
   
   int min = MAX_TIME_TO_RENDER;

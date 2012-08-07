@@ -67,7 +67,7 @@ public:
     return _downloader;
   }
   
-  EffectsScheduler* getEffectsScheduler() {
+  EffectsScheduler* getEffectsScheduler() const {
     return _scheduler;
   }
 };
@@ -128,7 +128,6 @@ public:
     
 };
 
-
 //************************************************************
 
 
@@ -173,8 +172,9 @@ public:
   }
   
   Gesture* getGesture() const { return _gesture; }
-
+  
 };
+
 
 
 #endif

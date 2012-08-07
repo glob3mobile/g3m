@@ -37,7 +37,7 @@ private:
   
 public:
   
-  CameraRenderer():_gesture(None) {}
+  CameraRenderer():_gesture(None), cameraContext(NULL) {}
   
   void addHandler(CameraEventHandler *handler) { _handlers.push_back(handler); }
   
@@ -49,6 +49,8 @@ public:
   bool isReadyToRender(const RenderContext* rc) {
     return true;
   }
+  
+  CameraContext *cameraContext;
   
   
 };
