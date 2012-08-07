@@ -20,6 +20,13 @@ package org.glob3.mobile.generated;
 public class Plane
 {
 
+
+  public Plane() //Empty constructor
+  {
+	  _normal = new Vector3D(0.0,0.0,0.0);
+	  _d = 0.0;
+  }
+
   public Plane(Vector3D point0, Vector3D point1, Vector3D point2)
   {
 	  _normal = new Vector3D(point1.sub(point0).cross(point2.sub(point0)).normalized());
