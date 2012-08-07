@@ -92,7 +92,7 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const IFactory& factory,
     req += "&CRS=EPSG:4326";
   }
   
-  Petition *pet = new Petition(sector, req);
+  Petition *pet = new Petition(sector, req, _isTransparent);
   vPetitions.push_back(pet);
   
 	return vPetitions;

@@ -24,16 +24,18 @@ class TileImagesTileTexturizer;
 
 class Petition {
   const std::string _url;
-  const Sector *_sector;
-  ByteBuffer* _bb;
-  long _downloadID;
+  const Sector *    _sector;
+  ByteBuffer*       _bb;
+  long              _downloadID;
+  const bool        _transparentImage;
   
 public:
   
-  Petition(Sector s, std::string url): _url(url), 
+  Petition(Sector s, std::string url, bool transparent): _url(url), 
   _sector(new Sector(s)),
   _bb(NULL),
-  _downloadID(-1)
+  _downloadID(-1),
+  _transparentImage(transparent)
   {}
   
   ~Petition(){ 
@@ -52,6 +54,10 @@ public:
   
   bool isArrived() const{ 
     return _bb != NULL;
+  }
+  
+  bool isTransparent() const{
+    return _transparentImage;
   }
   
   void setDownloadID(long id){
