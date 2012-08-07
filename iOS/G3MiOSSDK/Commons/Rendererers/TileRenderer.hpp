@@ -16,7 +16,8 @@ class TileTessellator;
 class TileTexturizer;
 
 #include "Sector.hpp"
-#include <vector>
+//#include <vector>
+#include <map>
 
 #include "Tile.hpp"
 #include "Camera.hpp"
@@ -210,6 +211,7 @@ private:
   private:
     const Camera* _camera;
     const Planet* _planet;
+    std::map<Geodetic2D, double> _distancesCache;
     
   public:
     DistanceToCenterTileComparison(const Camera *camera,
@@ -218,15 +220,38 @@ private:
     _planet(planet)
     {}
     
+    void initialize() {
+      _distancesCache.clear();
+    }
+    
+    double getSquaredDistanceToCamera(const Tile* tile) {
+      const Geodetic2D center = tile->getSector().getCenter();
+
+      double distance = _distancesCache[center];
+      if (distance == 0) {
+        const Vector3D cameraPos = _camera->getPosition();
+        const Vector3D centerVec3 = _planet->toVector3D(center);
+        
+        distance = centerVec3.sub(cameraPos).squaredLength();
+        
+        _distancesCache[center] = distance;
+      }
+      
+      return distance;
+    }
+    
     inline bool operator()(const Tile *t1,
-                           const Tile *t2) const {
-      const Vector3D cameraPos = _camera->getPosition();
+                           const Tile *t2) {
+//      const Vector3D cameraPos = _camera->getPosition();
+//
+//      const Vector3D center1 = _planet->toVector3D(t1->getSector().getCenter());
+//      const Vector3D center2 = _planet->toVector3D(t2->getSector().getCenter());
+//      
+//      const double dist1 = center1.sub(cameraPos).squaredLength();
+//      const double dist2 = center2.sub(cameraPos).squaredLength();
       
-      const Vector3D center1 = _planet->toVector3D(t1->getSector().getCenter());
-      const Vector3D center2 = _planet->toVector3D(t2->getSector().getCenter());
-      
-      const double dist1 = center1.sub(cameraPos).squaredLength();
-      const double dist2 = center2.sub(cameraPos).squaredLength();
+      const double dist1 = getSquaredDistanceToCamera(t1);
+      const double dist2 = getSquaredDistanceToCamera(t2);
       return (dist1 < dist2);
     }
   };

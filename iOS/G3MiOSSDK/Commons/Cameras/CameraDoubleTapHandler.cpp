@@ -32,21 +32,21 @@ void CameraDoubleTapHandler::onDown(const TouchEvent& touchEvent, Gesture &gestu
   _camera0 = Camera(*_camera);
   
   // compute globe point where user tapped
-  Vector2D pixel = touchEvent.getTouch(0)->getPos();  
+  const Vector2D pixel = touchEvent.getTouch(0)->getPos();
   _initialPoint = _camera0.pixel2PlanetPoint(pixel).asMutableVector3D();
   if (_initialPoint.isNan()) return;
-  Vector3D initialPoint = _initialPoint.asVector3D();
+  const Vector3D initialPoint = _initialPoint.asVector3D();
   
   // compute central point of view
-  Vector3D centerPoint = _camera->centerOfViewOnPlanet();
+  const Vector3D centerPoint = _camera->centerOfViewOnPlanet();
 
   // compute drag parameters
-  Vector3D axis = initialPoint.cross(centerPoint);
-  Angle tita = Angle::fromRadians(-asin(axis.length()/initialPoint.length()/centerPoint.length()));
+//  Vector3D axis = initialPoint.cross(centerPoint);
+//  Angle tita = Angle::fromRadians(-asin(axis.length()/initialPoint.length()/centerPoint.length()));
   
   // compute zoom factor
-  double height = _planet->toGeodetic3D(_camera->getPosition()).height();
-  double d      = height * 0.5;
+  const double height = _planet->toGeodetic3D(_camera->getPosition()).height();
+  const double d      = height * 0.5;
   
   // move the camera
   _camera->dragCamera(initialPoint, centerPoint);

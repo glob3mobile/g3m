@@ -47,6 +47,15 @@ public:
   
   bool isBetween(const Geodetic2D& min, const Geodetic2D& max) const;
   
+  bool operator<(const Geodetic2D& that) const {
+    if (_latitude.lowerThan(that._latitude)) {
+      return true;
+    }
+    if (_latitude.greaterThan(that._latitude)) {
+      return false;
+    }
+    return _longitude.lowerThan(that._longitude);
+  }
 };
 
 

@@ -360,7 +360,7 @@
   
   // very basic tile renderer
   if (true) {
-    TileParameters* parameters = TileParameters::createDefault(true);
+    TileParameters* parameters = TileParameters::createDefault(false);
     
     TileTexturizer* texturizer = NULL;
     if (true) {
