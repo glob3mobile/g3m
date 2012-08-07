@@ -372,7 +372,7 @@
       texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
     }
     
-    const bool showStatistics = false;
+    const bool showStatistics = true;
     TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
                                         texturizer,
                                         parameters,
@@ -444,7 +444,7 @@
     comp->addRenderer(sgr);
   }
   
-  //    comp->addRenderer(new GLErrorRenderer());
+  comp->addRenderer(new GLErrorRenderer());
   
   
   TextureBuilder* texBuilder = new CPUTextureBuilder();

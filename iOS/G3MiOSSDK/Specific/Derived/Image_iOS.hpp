@@ -40,9 +40,12 @@ public:
     return (_image == NULL) ? 0 : (int) _image.size.height;
   }
   
-  IImage* combineWith(const IImage& transparent, int width, int height) const;
+  IImage* combineWith(const IImage& other,
+                      int width, int height) const;
   
-  IImage* combineWith(const IImage& other, const Rectangle& rect, int width, int height) const;
+  IImage* combineWith(const IImage& other,
+                      const Rectangle& rect,
+                      int width, int height) const;
   
   IImage* subImage(const Rectangle& rect) const;
   

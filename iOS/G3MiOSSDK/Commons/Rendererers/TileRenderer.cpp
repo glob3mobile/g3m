@@ -118,8 +118,8 @@ int TileRenderer::render(const RenderContext* rc) {
     _topTilesJustCreated = false;
   }
   
-  DistanceToCenterTileComparison predicate = DistanceToCenterTileComparison(rc->getCamera(),
-                                                                            rc->getPlanet());
+//  DistanceToCenterTileComparison predicate = DistanceToCenterTileComparison(rc->getCamera(),
+//                                                                            rc->getPlanet());
   
 //  std::vector<Tile*> toVisit(_topLevelTiles);
   std::list<Tile*> toVisit;
@@ -134,8 +134,9 @@ int TileRenderer::render(const RenderContext* rc) {
 //    std::sort(toVisit.begin(),
 //              toVisit.end(),
 //              predicate);
-    predicate.initialize();
-    toVisit.sort(predicate);
+    
+//    predicate.initialize();
+//    toVisit.sort(predicate);
 
     for (std::list<Tile*>::iterator iter = toVisit.begin();
          iter != toVisit.end();

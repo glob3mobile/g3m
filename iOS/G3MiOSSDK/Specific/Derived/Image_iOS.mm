@@ -27,9 +27,10 @@ Image_iOS::Image_iOS(int width, int height)
   CGContextRelease(context);
 }
 
-IImage* Image_iOS::combineWith(const IImage& transparent, int width, int height) const
+IImage* Image_iOS::combineWith(const IImage& other,
+                               int width, int height) const
 {
-  UIImage* transIm = ((Image_iOS&)transparent).getUIImage();
+  UIImage* transIm = ((Image_iOS&)other).getUIImage();
   
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
   void *imageData = new unsigned char[height * width * 4];
@@ -55,7 +56,9 @@ IImage* Image_iOS::combineWith(const IImage& transparent, int width, int height)
   return new Image_iOS(img);
 }
 
-IImage* Image_iOS::combineWith(const IImage& other, const Rectangle& rect, int width, int height) const
+IImage* Image_iOS::combineWith(const IImage& other,
+                               const Rectangle& rect,
+                               int width, int height) const
 {
   UIImage* otherIm = ((Image_iOS&)other).getUIImage();
   

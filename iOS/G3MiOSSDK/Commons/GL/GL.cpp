@@ -68,9 +68,9 @@ void GL::useProgram(unsigned int program) {
   Uniforms.PointSize           = _gl->getUniformLocation(program, "PointSize");
   
   // default values
-  _gl->uniform2f(Uniforms.TranslationTexCoord, 0, 0);
-  _gl->uniform2f(Uniforms.ScaleTexCoord, 1, 1);
-  _gl->uniform1f(Uniforms.PointSize, (float) 1.0);
+  _gl->uniform2f(Uniforms.ScaleTexCoord, _scaleX, _scaleY);
+  _gl->uniform2f(Uniforms.TranslationTexCoord, _translationX, _translationY);
+  _gl->uniform1f(Uniforms.PointSize, 1);
   
   //BILLBOARDS
   Uniforms.BillBoard     = _gl->getUniformLocation(program, "BillBoard");
@@ -128,16 +128,52 @@ void GL::clearScreen(float r, float g, float b, float a) {
 void GL::color(float r, float g, float b, float a) {
   _gl->uniform4f(Uniforms.FlatColor, r, g, b, a);
 }
-
-void GL::transformTexCoords(const Vector2D& scale,
-                             const Vector2D& translation) {
-  _gl->uniform2f(Uniforms.ScaleTexCoord,
-                 (float) scale.x(),
-                 (float) scale.y());
-  _gl->uniform2f(Uniforms.TranslationTexCoord,
-                 (float) translation.x(),
-                 (float) translation.y());
+void GL::transformTexCoords(float scaleX,
+                            float scaleY,
+                            float translationX,
+                            float translationY) {
+  if ((_scaleX != scaleX) || (_scaleY != scaleY)) {
+    _gl->uniform2f(Uniforms.ScaleTexCoord,
+                   scaleX,
+                   scaleY);
+    _scaleX = scaleX;
+    _scaleY = scaleY;
+  }
+  
+  if ((_translationX != translationX) || (_translationY != translationY)) {
+    _gl->uniform2f(Uniforms.TranslationTexCoord,
+                   translationX,
+                   translationY);
+    _translationX = translationX;
+    _translationY = translationY;
+  }
 }
+
+//void GL::transformTexCoords(double scaleX,
+//                            double scaleY,
+//                            double translationX,
+//                            double translationY) {
+//  transformTexCoords((float) scaleX,
+//                     (float) scaleY,
+//                     (float) translationX,
+//                     (float) translationY);
+//}
+
+//void GL::transformTexCoords(const MutableVector2D& scale,
+//                            const MutableVector2D& translation) {
+//  transformTexCoords(scale.x(),
+//                     scale.y(),
+//                     translation.x(),
+//                     translation.y());
+//}
+
+//void GL::transformTexCoords(const Vector2D& scale,
+//                            const Vector2D& translation) {
+//  transformTexCoords(scale.x(),
+//                     scale.y(),
+//                     translation.x(),
+//                     translation.y());
+//}
 
 void GL::enablePolygonOffset(float factor, float units) {
   _gl->enable(PolygonOffsetFill);
@@ -180,7 +216,8 @@ int GL::getError() {
   return _gl->getError();
 }
 
-int GL::uploadTexture(const IImage* image, int textureWidth, int textureHeight) {
+int GL::uploadTexture(const IImage* image,
+                      int textureWidth, int textureHeight) {
   
   unsigned char imageData[textureWidth * textureHeight * 4];
   image->fillWithRGBA(imageData, textureWidth, textureHeight);
@@ -401,14 +438,20 @@ int GL::getTextureID() {
       _texturesIdBag.push_back(ids[i]);
     }
     
-    _texturesIdCounter += bugdetSize;
-    printf("= Created %d texturesIds (accumulated %ld).\n", bugdetSize, _texturesIdCounter);
+    _texturesIdAllocationCounter += bugdetSize;
+    printf("= Created %d texturesIds (accumulated %ld).\n", bugdetSize, _texturesIdAllocationCounter);
   }
+  
+  _texturesIdGetCounter++;
   
   int result = _texturesIdBag.back();
   _texturesIdBag.pop_back();
   
-//  printf("   - Assigning 1 texturesId from bag (bag size=%ld).\n", _texturesIdBag.size());
+  printf("   - Assigning 1 texturesId from bag (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
+         _texturesIdBag.size(),
+         _texturesIdGetCounter,
+         _texturesIdTakeCounter,
+         _texturesIdGetCounter - _texturesIdTakeCounter);
 
   return result;
 }
@@ -419,5 +462,11 @@ void GL::deleteTexture(int glTextureId) {
 
   _texturesIdBag.push_back(glTextureId);
 
-//  printf("   - Delete 1 texturesId (bag size=%ld).\n", _texturesIdBag.size());
+  _texturesIdTakeCounter++;
+  
+  printf("   - Delete 1 texturesId (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
+         _texturesIdBag.size(),
+         _texturesIdGetCounter,
+         _texturesIdTakeCounter,
+         _texturesIdGetCounter - _texturesIdTakeCounter);
 }

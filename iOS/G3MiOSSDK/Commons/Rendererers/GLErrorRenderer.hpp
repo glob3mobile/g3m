@@ -18,11 +18,13 @@ public:
   
   virtual int render(const RenderContext* rc);
   
-  virtual bool onTouchEvent(const TouchEvent* touchEvent);
+  virtual bool onTouchEvent(const EventContext* ec,
+                            const TouchEvent* touchEvent);
   
   virtual ~GLErrorRenderer();
   
-  void onResizeViewportEvent(int width, int height);
+  void onResizeViewportEvent(const EventContext* ec,
+                             int width, int height);
   
   bool isReadyToRender(const RenderContext* rc) {
     return true;
