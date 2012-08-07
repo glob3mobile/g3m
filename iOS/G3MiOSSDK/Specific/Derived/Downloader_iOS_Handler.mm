@@ -105,7 +105,7 @@
   for (int i = 0; i < listenersCount; i++) {
     ListenerEntry* entry = [_listeners objectAtIndex: i];
     if ([entry requestId] == requestId) {
-//      [[entry listener] onCancel:_url];
+      [[entry listener] onCancel:*_url];
       
       [_listeners removeObjectAtIndex: i];
 

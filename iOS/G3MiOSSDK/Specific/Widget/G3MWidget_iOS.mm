@@ -309,7 +309,13 @@
     
     class Listener : public IDownloadListener {
       void onDownload(const Response& response) {
-        NSLog(@"*** Downloaded %d bytes ***", response.getByteBuffer()->getLength());
+        BOOL isMainThread = [NSThread isMainThread];
+        if (isMainThread) {
+          NSLog(@"*** Main-Thread: Downloaded %d bytes ***", response.getByteBuffer()->getLength());
+        }
+        else {
+          NSLog(@"*** NOT IN Main-Thread: Downloaded %d bytes ***", response.getByteBuffer()->getLength());
+        }
       }
       
       void onError(const Response& response) {
@@ -324,7 +330,7 @@
     const long priority = 999999999;
     IDownloadListener* listener = new Listener();
     long requestId = downloader->request(URL("http://glob3.sourceforge.net/img/isologo640x160.png"), priority, listener);
-//    downloader->cancelRequest(requestId);
+    downloader->cancelRequest(requestId);
   }
 
   //LAYERS

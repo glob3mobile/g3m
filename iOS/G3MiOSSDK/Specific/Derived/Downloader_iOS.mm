@@ -10,6 +10,11 @@
 
 #import "Downloader_iOS_Handler.h"
 
+void Downloader_iOS::start() {
+  for (Downloader_iOS_WorkerThread* worker in _workers) {
+    [worker start];
+  }
+}
 
 Downloader_iOS::~Downloader_iOS() {
 //  [_worker stop];
@@ -27,21 +32,21 @@ Downloader_iOS::Downloader_iOS(int memoryCapacity,
                                int maxConcurrentOperationCount) :
 _requestIdCounter(0)
 {
-  _downloadingHandlers = [NSMutableDictionary dictionary];
-  _queuedHandlers      = [NSMutableDictionary dictionary];
-  
   NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity: memoryCapacity
                                                           diskCapacity: diskCapacity
                                                               diskPath: toNSString(diskPath)];
   [NSURLCache setSharedURLCache:sharedCache];
+
+  
+  _downloadingHandlers = [NSMutableDictionary dictionary];
+  _queuedHandlers      = [NSMutableDictionary dictionary];
   
   _lock = [[NSLock alloc] init];
-  
   
   _workers = [NSMutableArray arrayWithCapacity:maxConcurrentOperationCount];
   for (int i = 0; i < maxConcurrentOperationCount; i++) {
     Downloader_iOS_WorkerThread* worker = [Downloader_iOS_WorkerThread workerForDownloader: this];
-    [worker start];
+//    [worker start];
     
     [_workers addObject: worker];
   }

@@ -56,6 +56,8 @@ _rendererReady(false) // false until first call to G3MWidget::render()
   _scheduler->initialize(&ic);
   _renderer->initialize(&ic);
   _busyRenderer->initialize(&ic);
+  
+  _downloader->start();
 }
 
 G3MWidget* G3MWidget::create(IFactory*         factory,
