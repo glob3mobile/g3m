@@ -176,7 +176,8 @@
   
   Renderer* busyRenderer = new BusyRenderer();
   
-  
+  EffectsScheduler* scheduler = new EffectsScheduler();
+
   _widget = G3MWidget::create(factory,
                               logger,
                               gl,
@@ -186,6 +187,7 @@
                               planet, 
                               comp,
                               busyRenderer,
+                              scheduler,
                               width, height,
                               Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
                               true);
@@ -333,16 +335,13 @@
   WMSLayer* baseLayer = new WMSLayer("bmng200405", "http://www.nasa.network.com/wms?", 
                                      "1.3", "image/jpeg", Sector::fullSphere(), "EPSG:4326", "", false,
                                      Angle::nan(), Angle::nan());
-  layerSet->add(baseLayer);
-  
-  WMSLayer *wmsl = new WMSLayer("VIAS",
+
+  WMSLayer *vias = new WMSLayer("VIAS",
                                 "http://idecan2.grafcan.es/ServicioWMS/Callejero",
                                 "1.1.0", "image/gif", 
                                 Sector::fromDegrees(22.5,-22.5, 33.75, -11.25),
-                                "EPSG:4326", "", false,
+                                "EPSG:4326", "", true,
                                 Angle::nan(), Angle::nan());
-  
-  layerSet->add(wmsl);
   
   WMSLayer *pnoa = new WMSLayer("PNOA",
                                 "http://www.idee.es/wms/PNOA/PNOA",
@@ -350,7 +349,11 @@
                                 Sector::fromDegrees(21,-18, 45, 6),
                                 "EPSG:4326", "", false,
                                 Angle::nan(), Angle::nan());
+  
+  //ORDER IS IMPORTANT
+  layerSet->add(baseLayer);
   layerSet->add(pnoa);
+  layerSet->add(vias);
   
   // very basic tile renderer
   if (true) {
@@ -386,33 +389,35 @@
     comp->addRenderer(spr);
   }
   
-  // marks renderer
-  MarksRenderer* marks = new MarksRenderer();
-  comp->addRenderer(marks);
-  
-  Mark* m1 = new Mark("Fuerteventura",
-                      "plane.png",
-                      Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0));
-  //m1->addTouchListener(listener);
-  marks->addMark(m1);
-  
-  
-  Mark* m2 = new Mark("Las Palmas",
-                      "plane.png",
-                      Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0));
-  //m2->addTouchListener(listener);
-  marks->addMark(m2);
-  
   if (false) {
-    for (int i = 0; i < 500; i++) {
-      const Angle latitude = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
-      const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
-      //NSLog(@"lat=%f, lon=%f", latitude.degrees(), longitude.degrees());
-      
-      marks->addMark(new Mark("Random",
-                              "mark.png",
-                              Geodetic3D(latitude, longitude, 0)));
-    } 
+    // marks renderer
+    MarksRenderer* marks = new MarksRenderer();
+    comp->addRenderer(marks);
+    
+    Mark* m1 = new Mark("Fuerteventura",
+                        "g3m-marker.png",
+                        Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0));
+    //m1->addTouchListener(listener);
+    marks->addMark(m1);
+    
+    
+    Mark* m2 = new Mark("Las Palmas",
+                        "g3m-marker.png",
+                        Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0));
+    //m2->addTouchListener(listener);
+    marks->addMark(m2);
+    
+    if (false) {
+      for (int i = 0; i < 500; i++) {
+        const Angle latitude = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
+        const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
+        //NSLog(@"lat=%f, lon=%f", latitude.degrees(), longitude.degrees());
+        
+        marks->addMark(new Mark("Random",
+                                "g3m-marker.png",
+                                Geodetic3D(latitude, longitude, 0)));
+      }
+    }
   }
   
   if (true) {
@@ -420,11 +425,8 @@
     comp->addRenderer(renderer);
   }
   
-  if (false) {
-    EffectsScheduler* scheduler = new EffectsScheduler();
-    scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(4)));
-    comp->addRenderer(scheduler);
-  }
+  EffectsScheduler* scheduler = new EffectsScheduler();
+  scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(2)));
   
   if (false) {
     SceneGraphRenderer* sgr = new SceneGraphRenderer();
@@ -453,6 +455,7 @@
                               planet, 
                               comp,
                               busyRenderer,
+                              scheduler,
                               width, height,
                               Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
                               true);

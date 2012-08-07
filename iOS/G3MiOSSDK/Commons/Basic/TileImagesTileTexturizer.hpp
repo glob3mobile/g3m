@@ -35,7 +35,7 @@ private:
   const IFactory* _factory;
   TexturesHandler* _texHandler;
   Downloader * _downloader;
-  RenderContext* _renderContext;
+  const RenderContext * _renderContext;
   
   std::vector<TilePetitions*> _tilePetitions;
   std::vector<TilePetitions*> _tilePetitionsTopTile;

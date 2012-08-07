@@ -264,13 +264,6 @@ void Camera::moveForward(double d)
 }
 
 
-void Camera::zoom(double factor) {
-  const MutableVector3D w = _position.sub(_center);
-  _position = _center.add(w.times(factor));
-  
-  cleanCachedValues();
-}
-
 void Camera::pivotOnCenter(const Angle& a) {
   const Vector3D rotationAxis = _position.sub(_center).asVector3D();
   rotateWithAxis(rotationAxis, a);

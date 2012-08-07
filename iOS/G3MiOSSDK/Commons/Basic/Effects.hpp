@@ -22,8 +22,9 @@ protected:
     if (f < 0) return 0;
     if (f > 1) return 1;
     
-    //return sigmoid(f);
-    return gently(f, 0.6, 0.85);
+//    return sigmoid(f);
+//    return gently(f, 0.6, 0.85);
+    return gently(f, 0.25, 0.75);
   }
   
   double sigmoid(double x) const {
@@ -115,7 +116,7 @@ public:
 };
 
 
-class EffectsScheduler : public Renderer {
+class EffectsScheduler /*: public Renderer*/ {
 private:
   
   class EffectRun {
@@ -136,7 +137,6 @@ private:
   ITimer*                 _timer;
   const IFactory*         _factory;
   
-  void doOneCyle(const RenderContext *rc);
   
   void processFinishedEffects(const RenderContext *rc,
                               const TimeInterval& now);
@@ -145,14 +145,17 @@ public:
   EffectsScheduler(): _effectsRuns(std::vector<EffectRun*>()) {
     
   };
-  
-  virtual void initialize(const InitializationContext* ic);
-  
-  virtual int render(const RenderContext* rc);
-  
-  virtual bool onTouchEvent(const TouchEvent* touchEvent);
-  
-  virtual void onResizeViewportEvent(int width, int height);
+
+  void doOneCyle(const RenderContext *rc);
+
+  void initialize(const InitializationContext* ic);
+
+
+//  virtual int render(const RenderContext* rc);
+//  
+//  virtual bool onTouchEvent(const TouchEvent* touchEvent);
+//  
+//  virtual void onResizeViewportEvent(int width, int height);
   
   virtual ~EffectsScheduler() {
     _factory->deleteTimer(_timer);
@@ -182,13 +185,14 @@ public:
   virtual void start(const RenderContext *rc,
                      const TimeInterval& now) {
     EffectWithDuration::start(rc, now);
+    _lastPercent = 0;
   }
   
   virtual void doStep(const RenderContext *rc,
                       const TimeInterval& now) {
     const double percent = pace( percentDone(now) );
-    
-    rc->getCamera()->zoom(1 - (percent / 25));
+    rc->getCamera()->moveForward((percent-_lastPercent)*1e7);
+    _lastPercent = percent;
   }
   
   virtual void stop(const RenderContext *rc,
@@ -196,6 +200,8 @@ public:
     EffectWithDuration::stop(rc, now);
   }
 
+private:
+  double _lastPercent;
 };
 
 

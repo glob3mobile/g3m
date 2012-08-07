@@ -13,8 +13,6 @@ std::vector<Petition*> LayerSet::createTilePetitions(const RenderContext* rc, co
 {
   std::vector<Petition*> petitions;
   
-  const Sector tileSector = tile.getSector();
-  
   for (int i = 0; i < _layers.size(); i++) {
     Layer* layer = _layers[i];
     if (layer->isAvailable(rc, tile)){
@@ -23,13 +21,6 @@ std::vector<Petition*> LayerSet::createTilePetitions(const RenderContext* rc, co
       //Storing petitions
       for (int j = 0; j < pet.size(); j++) {
         petitions.push_back(pet[j]);
-        
-        //IF A IMAGE OPAQUE FILLS THE TILE WE NEED NO MORE
-        if (!layer->isTransparent()){
-          if (pet[j]->getSector().fullContains(tile.getSector())){
-            return petitions;
-          }
-        }
       }
     }
   }

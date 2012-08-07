@@ -72,11 +72,8 @@ public:
     delete n;
   }
   
-  std::string stringFromUTF8(const unsigned char data[]) const{
-    return (char*)data;
-  }
-  
-  std::string stringFormat(std::string x, ...) const{
+  std::string stringFormat(std::string x, ...) const
+  {
     va_list l;
     va_start(l, x);
     
@@ -86,6 +83,11 @@ public:
     va_end(l);
     return buffer;
   }
+  
+  std::string stringFromUTF8(const unsigned char data[]) const{
+    return (char*) data;
+  }
+  
   
   
 };

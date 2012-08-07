@@ -70,10 +70,10 @@ int TexturesHandler::getTextureId(const std::vector<const IImage*>& images,
 }
 
 int TexturesHandler::getTextureId(const std::vector<const IImage*>& images,
-                 const std::vector<const Rectangle*>& rectangles,
-                 const std::string& textureId,
-                 int textureWidth,
-                 int textureHeight)
+                                  const std::vector<const Rectangle*>& rectangles,
+                                  const std::string& textureId,
+                                  int textureWidth,
+                                  int textureHeight)
 {
   int previousId = getTextureIdIfAvailable(textureId, textureWidth, textureHeight);
   if (previousId >= 0) {
@@ -96,7 +96,7 @@ int TexturesHandler::getTextureId(const std::vector<const IImage*>& images,
   return holder->_glTextureId;
 }
 
-int TexturesHandler::getTextureId(const IImage *image, 
+int TexturesHandler::getTextureId(const IImage *image,
                                   const std::string &textureId,
                                   int textureWidth,
                                   int textureHeight) {
@@ -133,6 +133,6 @@ void TexturesHandler::takeTexture(int glTextureId) {
 
 TexturesHandler::~TexturesHandler() {
   if (_textureHolders.size() > 0) {
-    printf("WARNING: The TexturesHandler is destroyed, but the inner textures were not released.\n"); 
+    printf("WARNING: The TexturesHandler is destroyed, but the inner textures were not released.\n");
   }
 }

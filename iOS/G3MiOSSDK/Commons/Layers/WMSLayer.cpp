@@ -78,7 +78,6 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const IFactory& factory,
   req += "&TRANSPARENT=TRUE";
 
   Sector sector = tile.getSector();
-
   //Texture Size
   req += factory.stringFormat("&WIDTH=%d&HEIGHT=%d", width, height);
 	
@@ -92,7 +91,7 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const IFactory& factory,
     req += "&CRS=EPSG:4326";
   }
   
-  Petition *pet = new Petition(sector, req);
+  Petition *pet = new Petition(sector, req, _isTransparent);
   vPetitions.push_back(pet);
   
 	return vPetitions;

@@ -18,27 +18,31 @@ class IDownloader;
 class Downloader;
 class ILogger;
 class GL;
+class EffectsScheduler;
+
 
 class Context {
 protected:
-  const IFactory * _factory;
-  const ILogger*   _logger;
-  const Planet*    _planet;
+  const IFactory*    _factory;
+  const ILogger*     _logger;
+  const Planet*      _planet;
   const IDownloader* _downloader;
-
-  Downloader* const _downloaderOLD;
-
+  Downloader* const  _downloaderOLD;
+  EffectsScheduler*  _scheduler;
   
   Context(const IFactory *factory,
           const ILogger* logger,
           const Planet* planet,
           Downloader* const downloaderOLD,
-          IDownloader* downloader) :
+          IDownloader* downloader,
+          EffectsScheduler* scheduler) :
   _factory(factory),
   _logger(logger),
   _planet(planet),
   _downloader(downloader),
-  _downloaderOLD(downloaderOLD){
+  _downloaderOLD(downloaderOLD),
+  _scheduler(scheduler)
+  {
   }
   
 public:
@@ -62,6 +66,10 @@ public:
   const IDownloader* getDownloader() const {
     return _downloader;
   }
+  
+  EffectsScheduler* getEffectsScheduler() {
+    return _scheduler;
+  }
 };
 
 
@@ -71,15 +79,16 @@ public:
                         ILogger* logger,
                         const Planet* planet,
                         Downloader* const downloaderOLD,
-                        IDownloader* downloader) :
-  Context(factory, logger, planet, downloaderOLD, downloader) {
+                        IDownloader* downloader,
+                        EffectsScheduler* scheduler) :
+  Context(factory, logger, planet, downloaderOLD, downloader, scheduler) {
   }
 };
 
 
 class RenderContext: public Context {
 private:
-  GL*             _gl;
+  GL*              _gl;
   Camera*          _camera;
   TexturesHandler* _texturesHandler;
   
@@ -91,8 +100,9 @@ public:
                 Camera* camera,
                 TexturesHandler* texturesHandler,
                 Downloader* const downloaderOLD,
-                IDownloader* downloader) :
-  Context(factory, logger, planet, downloaderOLD, downloader),
+                IDownloader* downloader,
+                EffectsScheduler* scheduler) :
+  Context(factory, logger, planet, downloaderOLD, downloader, scheduler),
   _gl(gl),
   _camera(camera),
   _texturesHandler(texturesHandler) {

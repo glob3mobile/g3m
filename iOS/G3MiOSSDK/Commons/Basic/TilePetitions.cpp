@@ -148,3 +148,25 @@ void TilePetitions::createTexture(TexturesHandler* texHandler, const IFactory* f
   }
 }
 
+void TilePetitions::removeUnnecesaryPetitions(){
+  //For each opaque Bbox, we delete every covered request beneath
+  std::vector<Petition*> visiblePetitions;
+  
+  for(int i = 0; i < _petitions.size(); i++){
+    bool isVisible = true;
+    for (int j = i+1; j < _petitions.size(); j++) {
+      if (!_petitions[j]->isTransparent() && 
+          _petitions[j]->getSector().fullContains(_petitions[i]->getSector())){
+        isVisible = false;
+        break;
+      }
+    }
+    
+    if (isVisible){
+      visiblePetitions.push_back(_petitions[i]);
+    }
+  }
+  
+  _petitions = visiblePetitions;
+}
+

@@ -96,7 +96,7 @@ int CameraSimpleDragRenderer::render(const RenderContext* rc) {
       _gl->pointSize(60);
       _gl->pushMatrix();
       
-      double height = _planet->toGeodetic3D(_camera->getPosition()).height();
+//      double height = _planet->toGeodetic3D(_camera->getPosition()).height();
       //printf ("altura camara = %f\n", height);
       
       MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D());
