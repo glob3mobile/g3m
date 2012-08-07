@@ -1,5 +1,5 @@
 //
-//  CameraSimpleDragRenderer.cpp
+//  CameraSingleDragHandler.cpp
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 28/07/12.
@@ -8,25 +8,27 @@
 
 #include <iostream>
 
-#include "CameraSimpleDragRenderer.h"
+#include "CameraSingleDragHandler.hpp"
 #include "MutableVector2D.hpp"
 #include "GL.hpp"
+#include "TouchEvent.hpp"
+#include "CameraRenderer.hpp"
 
 
-bool CameraSimpleDragRenderer::onTouchEvent(const TouchEvent* touchEvent) 
+bool CameraSingleDragHandler::onTouchEvent(const TouchEvent* touchEvent, Gesture &gesture) 
 {
   // only one finger needed
   if (touchEvent->getTouchCount()!=1) return false;
 
   switch (touchEvent->getType()) {
     case Down:
-      onDown(*touchEvent);
+      onDown(*touchEvent, gesture);
       break;
     case Move:
-      onMove(*touchEvent);
+      onMove(*touchEvent, gesture);
       break;
     case Up:
-      onUp(*touchEvent);
+      onUp(*touchEvent, gesture);
     default:
       break;
   }
@@ -35,10 +37,10 @@ bool CameraSimpleDragRenderer::onTouchEvent(const TouchEvent* touchEvent)
 }
 
 
-void CameraSimpleDragRenderer::onDown(const TouchEvent& touchEvent) 
+void CameraSingleDragHandler::onDown(const TouchEvent& touchEvent, Gesture &gesture) 
 {  
   _camera0 = Camera(*_camera);
-  _currentGesture = Drag; 
+  gesture = Drag; 
   
   // dragging
   Vector2D pixel = touchEvent.getTouch(0)->getPos();  
@@ -48,10 +50,9 @@ void CameraSimpleDragRenderer::onDown(const TouchEvent& touchEvent)
 }
 
 
-void CameraSimpleDragRenderer::onMove(const TouchEvent& touchEvent) 
+void CameraSingleDragHandler::onMove(const TouchEvent& touchEvent, Gesture &gesture) 
 {
-  //_currentGesture = getGesture(touchEvent);
-  if (_currentGesture!=Drag) return;
+  if (gesture!=Drag) return;
   if (_initialPoint.isNan()) return;
       
   const Vector2D pixel = touchEvent.getTouch(0)->getPos();  
@@ -70,22 +71,22 @@ void CameraSimpleDragRenderer::onMove(const TouchEvent& touchEvent)
 }
 
 
-void CameraSimpleDragRenderer::onUp(const TouchEvent& touchEvent) 
+void CameraSingleDragHandler::onUp(const TouchEvent& touchEvent, Gesture &gesture) 
 {
-  _currentGesture = None;
+  gesture = None;
   _initialPixel = Vector3D::nan().asMutableVector3D();
   
   //printf ("end 1 finger\n");
 }
 
-int CameraSimpleDragRenderer::render(const RenderContext* rc) {
+int CameraSingleDragHandler::render(const RenderContext* rc, Gesture &gesture) {
   _planet = rc->getPlanet();
   _camera = rc->getCamera();
   _gl = rc->getGL();
 
   // TEMP TO DRAW A POINT WHERE USER PRESS
   if (false) {
-    if (_currentGesture == Drag) {
+    if (gesture == Drag) {
       float vertices[] = { 0,0,0};
       int indices[] = {0};
       _gl->enableVerticesPosition();

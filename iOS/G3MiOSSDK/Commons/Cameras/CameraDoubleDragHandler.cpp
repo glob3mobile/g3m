@@ -1,5 +1,5 @@
 //
-//  CameraDoubleDragRenderer.cpp
+//  CameraDoubleDragHandler.cpp
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 28/07/12.
@@ -8,24 +8,26 @@
 
 #include <iostream>
 
-#include "CameraDoubleDragRenderer.h"
+#include "CameraDoubleDragHandler.hpp"
 #include "GL.hpp"
+#include "TouchEvent.hpp"
 
 
-bool CameraDoubleDragRenderer::onTouchEvent(const TouchEvent* touchEvent) 
+
+bool CameraDoubleDragHandler::onTouchEvent(const TouchEvent* touchEvent, Gesture &gesture) 
 {
   // only one finger needed
   if (touchEvent->getTouchCount()!=2) return false;
   
   switch (touchEvent->getType()) {
     case Down:
-      onDown(*touchEvent);
+      onDown(*touchEvent, gesture);
       break;
     case Move:
-      onMove(*touchEvent);
+      onMove(*touchEvent, gesture);
       break;
     case Up:
-      onUp(*touchEvent);
+      onUp(*touchEvent, gesture);
     default:
       break;
   }
@@ -34,10 +36,10 @@ bool CameraDoubleDragRenderer::onTouchEvent(const TouchEvent* touchEvent)
 }
 
 
-void CameraDoubleDragRenderer::onDown(const TouchEvent& touchEvent) 
+void CameraDoubleDragHandler::onDown(const TouchEvent& touchEvent, Gesture &gesture) 
 {
   _camera0 = Camera(*_camera);
-  _currentGesture = DoubleDrag;  
+  gesture = DoubleDrag;  
   
   // double dragging
   Vector2D pixel0 = touchEvent.getTouch(0)->getPos();
@@ -47,7 +49,7 @@ void CameraDoubleDragRenderer::onDown(const TouchEvent& touchEvent)
   
   // both pixels must intersect globe
   if (_initialPoint0.isNan() || _initialPoint1.isNan()) {
-    _currentGesture = None;
+    gesture = None;
     return;
   }
   
@@ -66,9 +68,9 @@ void CameraDoubleDragRenderer::onDown(const TouchEvent& touchEvent)
 }
 
 
-void CameraDoubleDragRenderer::onMove(const TouchEvent& touchEvent) 
+void CameraDoubleDragHandler::onMove(const TouchEvent& touchEvent, Gesture &gesture) 
 {
-  if (_currentGesture!=DoubleDrag) return;
+  if (gesture!=DoubleDrag) return;
   if (_initialPoint.isNan()) return;
     
   Vector2D pixel0 = touchEvent.getTouch(0)->getPos();
@@ -177,23 +179,23 @@ void CameraDoubleDragRenderer::onMove(const TouchEvent& touchEvent)
 }
 
 
-void CameraDoubleDragRenderer::onUp(const TouchEvent& touchEvent) 
+void CameraDoubleDragHandler::onUp(const TouchEvent& touchEvent, Gesture &gesture) 
 {
-  _currentGesture = None;
+  gesture = None;
   _initialPixel = Vector3D::nan().asMutableVector3D();
   
   //printf ("end 2 fingers.  gesture=%d\n", _currentGesture);
 }
 
 
-int CameraDoubleDragRenderer::render(const RenderContext* rc) {
+int CameraDoubleDragHandler::render(const RenderContext* rc, Gesture &gesture) {
   _planet = rc->getPlanet();
   _camera = rc->getCamera();
   _gl = rc->getGL();
   
   // TEMP TO DRAW A POINT WHERE USER PRESS
   if (false) {
-    if (_currentGesture == DoubleDrag) {
+    if (gesture == DoubleDrag) {
       float vertices[] = { 0,0,0};
       int indices[] = {0};
       _gl->enableVerticesPosition();
@@ -229,4 +231,5 @@ int CameraDoubleDragRenderer::render(const RenderContext* rc) {
   
   return MAX_TIME_TO_RENDER;
 }
+
 

@@ -16,10 +16,10 @@
 #include "Logger_iOS.hpp"
 #include "Factory_iOS.hpp"
 
-#include "CameraSimpleRenderer.hpp"
-#include "CameraSimpleDragRenderer.h"
-#include "CameraDoubleDragRenderer.h"
-#include "CameraRotationRenderer.h"
+#include "CameraRenderer.hpp"
+#include "CameraSingleDragHandler.hpp"
+#include "CameraDoubleDragHandler.hpp"
+//#include "CameraRotationRenderer.h"
 
 #include "TileRenderer.hpp"
 #include "DummyRenderer.hpp"
@@ -91,14 +91,12 @@
   
   // camera renderer and handlers
   CameraRenderer *cameraRenderer;
-  cameraRenderer = new CameraSimpleRenderer();
+  cameraRenderer = new CameraRenderer();
+  cameraRenderer->addHandler(new CameraSingleDragHandler);
+  cameraRenderer->addHandler(new CameraDoubleDragHandler);
   comp->addRenderer(cameraRenderer);
-  cameraRenderer = new CameraSimpleDragRenderer();
-  comp->addRenderer(cameraRenderer);
-  cameraRenderer = new CameraDoubleDragRenderer();
-  comp->addRenderer(cameraRenderer);
-  cameraRenderer = new CameraRotationRenderer();
-  comp->addRenderer(cameraRenderer);
+  
+  
   
   //STORAGE
   NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
@@ -288,14 +286,12 @@
   
   // camera renderer and handlers
   CameraRenderer *cameraRenderer;
-  cameraRenderer = new CameraSimpleRenderer();
+  cameraRenderer = new CameraRenderer();
+  cameraRenderer->addHandler(new CameraSingleDragHandler);
+  cameraRenderer->addHandler(new CameraDoubleDragHandler);
   comp->addRenderer(cameraRenderer);
-  cameraRenderer = new CameraSimpleDragRenderer();
-  comp->addRenderer(cameraRenderer);
-  cameraRenderer = new CameraDoubleDragRenderer();
-  comp->addRenderer(cameraRenderer);
-  cameraRenderer = new CameraRotationRenderer();
-  comp->addRenderer(cameraRenderer);
+  
+  
   
   //STORAGE
   NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
@@ -307,7 +303,7 @@
                                                8);
   
   if (true) {
-    const long priority = 999999999;
+    //const long priority = 999999999;
     
     class Listener : public IDownloadListener {
       void onDownload(const Response& response) {
@@ -323,10 +319,8 @@
       }
     };
     
-    IDownloadListener* listener = new Listener();
-    long requestId = downloader->request(URL("http://glob3.sourceforge.net/img/isologo640x160.png"),
-                                         priority,
-                                         listener);
+    //IDownloadListener* listener = new Listener();
+    //long requestId = downloader->request(URL("http://glob3.sourceforge.net/img/isologo640x160.png"), priority, listener);
 //    downloader->cancelRequest(requestId);
   }
 

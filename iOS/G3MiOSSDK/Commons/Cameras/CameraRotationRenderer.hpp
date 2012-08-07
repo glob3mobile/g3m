@@ -1,5 +1,5 @@
 //
-//  CameraRotationRenderer.h
+//  CameraRotationRenderer.hpp
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 28/07/12.
@@ -9,9 +9,9 @@
 #ifndef G3MiOSSDK_CameraRotationRenderer_h
 #define G3MiOSSDK_CameraRotationRenderer_h
 
-#include "CameraRenderer.h"
+#include "CameraRenderer.hpp"
 
-
+/*
 class CameraRotationRenderer: public CameraRenderer {
   
 public:
@@ -36,7 +36,7 @@ private:
   Camera* _camera;         // Camera used at current frame
 
     
-};
+};*/
 
 
 

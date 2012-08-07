@@ -8,10 +8,10 @@
 
 #include <iostream>
 
-#include "CameraRotationRenderer.h"
+#include "CameraRotationRenderer.hpp"
 #include "GL.hpp"
 
-
+/*
 bool CameraRotationRenderer::onTouchEvent(const TouchEvent* touchEvent) 
 {
   // three finger needed
@@ -143,6 +143,6 @@ int CameraRotationRenderer::render(const RenderContext* rc) {
   }
   
   return MAX_TIME_TO_RENDER;
-}
+}*/
 
 
