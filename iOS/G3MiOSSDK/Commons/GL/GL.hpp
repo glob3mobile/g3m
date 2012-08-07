@@ -45,7 +45,14 @@ private:
   bool _enableBlend;
   
   bool _enableCullFace;
-  GLCullFace _cullFace_face = Back;
+  
+#ifdef C_CODE
+  GLCullFace _cullFace_face;
+#else
+  GLCullFace _cullFace_face = GLCullFace.Back;
+#endif
+  
+  
   
   inline void loadModelView();
   
