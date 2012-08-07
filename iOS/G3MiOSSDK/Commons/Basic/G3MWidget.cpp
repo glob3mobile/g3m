@@ -16,6 +16,7 @@
 #include "Downloader.hpp"
 #include "IDownloader.hpp"
 #include "Effects.hpp"
+#include "Context.hpp"
 
 G3MWidget::G3MWidget(IFactory*         factory,
                      ILogger*          logger,
@@ -119,13 +120,17 @@ G3MWidget::~G3MWidget() {
 
 void G3MWidget::onTouchEvent(const TouchEvent* myEvent) {
   if (_rendererReady) {
-    _renderer->onTouchEvent(myEvent);
+    EventContext ec(_factory, _logger, _planet, _downloaderOLD, _downloader, _scheduler);
+    
+    _renderer->onTouchEvent(&ec, myEvent);
   }
 }
 
 void G3MWidget::onResizeViewportEvent(int width, int height) {
   if (_rendererReady) {
-    _renderer->onResizeViewportEvent(width, height);
+    EventContext ec(_factory, _logger, _planet, _downloaderOLD, _downloader, _scheduler);
+    
+    _renderer->onResizeViewportEvent(&ec, width, height);
   }
 }
 

@@ -41,10 +41,14 @@ public:
   
   void addHandler(CameraEventHandler *handler) { _handlers.push_back(handler); }
   
-  bool onTouchEvent(const TouchEvent* touchEvent);
   int render(const RenderContext* rc);
   void initialize(const InitializationContext* ic);
-  void onResizeViewportEvent(int width, int height);
+  
+  bool onTouchEvent(const EventContext* ec,
+                    const TouchEvent* touchEvent);
+
+  void onResizeViewportEvent(const EventContext* ec,
+                             int width, int height);
   
   bool isReadyToRender(const RenderContext* rc) {
     return true;

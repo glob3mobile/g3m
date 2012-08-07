@@ -14,6 +14,7 @@
 class TouchEvent;
 class InitializationContext;
 class RenderContext;
+class EventContext;
 
 class Renderer {
 public:
@@ -23,9 +24,11 @@ public:
   
   virtual int render(const RenderContext* rc) = 0;
   
-  virtual bool onTouchEvent(const TouchEvent* touchEvent) = 0;
+  virtual bool onTouchEvent(const EventContext* ec,
+                            const TouchEvent* touchEvent) = 0;
   
-  virtual void onResizeViewportEvent(int width, int height) = 0;
+  virtual void onResizeViewportEvent(const EventContext* ec,
+                                     int width, int height) = 0;
   
   virtual ~Renderer() { };
 };

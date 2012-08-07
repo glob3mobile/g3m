@@ -173,11 +173,13 @@ void SceneGraphRenderer::initialize(const InitializationContext *ic) {
 
 }
 
-bool SceneGraphRenderer::onTouchEvent(const TouchEvent *touchEvent) {
+bool SceneGraphRenderer::onTouchEvent(const EventContext* ec,
+                                      const TouchEvent *touchEvent) {
   return false;
 }
 
-void SceneGraphRenderer::onResizeViewportEvent(int width, int height) {
+void SceneGraphRenderer::onResizeViewportEvent(const EventContext* ec,
+                                               int width, int height) {
   
 }
 

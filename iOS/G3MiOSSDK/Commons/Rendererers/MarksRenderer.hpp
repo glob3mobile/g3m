@@ -23,7 +23,6 @@ public:
   
   virtual int render(const RenderContext* rc);
   
-  virtual bool onTouchEvent(const TouchEvent* touchEvent);
   
   virtual ~MarksRenderer() {
     int marksSize = _marks.size();
@@ -36,7 +35,11 @@ public:
     _marks.push_back(mark);
   }
   
-  void onResizeViewportEvent(int width, int height) {
+  virtual bool onTouchEvent(const EventContext* ec,
+                            const TouchEvent* touchEvent);
+
+  void onResizeViewportEvent(const EventContext* ec,
+                             int width, int height) {
     
   }
   

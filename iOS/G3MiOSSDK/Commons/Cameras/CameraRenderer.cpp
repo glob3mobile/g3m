@@ -18,7 +18,8 @@ void CameraRenderer::initialize(const InitializationContext* ic) {
 }
 
 
-void CameraRenderer::onResizeViewportEvent(int width, int height) {
+void CameraRenderer::onResizeViewportEvent(const EventContext* ec,
+                                           int width, int height) {
   if (_camera != NULL) {
     _camera->resizeViewport(width, height);
   }
@@ -47,7 +48,8 @@ int CameraRenderer::render(const RenderContext* rc)
 }
 
 
-bool CameraRenderer::onTouchEvent(const TouchEvent* touchEvent)
+bool CameraRenderer::onTouchEvent(const EventContext* ec,
+                                  const TouchEvent* touchEvent)
 {
   // pass the event to all the handlers
   for (unsigned int n=0; n<_handlers.size(); n++)

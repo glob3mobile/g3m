@@ -34,21 +34,23 @@ int CompositeRenderer::render(const RenderContext* rc) {
   return min;
 }
 
-bool CompositeRenderer::onTouchEvent(const TouchEvent* touchEvent) {
+bool CompositeRenderer::onTouchEvent(const EventContext* ec,
+                                     const TouchEvent* touchEvent) {
   // the events are processed bottom to top
   for (int i = _renderers.size() - 1; i >= 0; i--) {
-    if (_renderers[i]->onTouchEvent(touchEvent)) {
+    if (_renderers[i]->onTouchEvent(ec, touchEvent)) {
       return true;
     }
   }
   return false;
 }
 
-void CompositeRenderer::onResizeViewportEvent(int width, int height)
+void CompositeRenderer::onResizeViewportEvent(const EventContext* ec,
+                                              int width, int height)
 {
   // the events are processed bottom to top
   for (int i = _renderers.size() - 1; i >= 0; i--) {
-    _renderers[i]->onResizeViewportEvent(width, height);
+    _renderers[i]->onResizeViewportEvent(ec, width, height);
   }
 }
 
