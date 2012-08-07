@@ -75,7 +75,7 @@ void GL::useProgram(unsigned int program) {
   //BILLBOARDS
   Uniforms.BillBoard     = _gl->getUniformLocation(program, "BillBoard");
   Uniforms.ViewPortRatio = _gl->getUniformLocation(program, "ViewPortRatio");
-  _gl->uniform1i(Uniforms.BillBoard, false); //NOT DRAWING BILLBOARD
+  _gl->uniform1i(Uniforms.BillBoard, 0); //NOT DRAWING BILLBOARD
   
   //FOR FLAT COLOR MIXING
   Uniforms.FlatColorIntensity      = _gl->getUniformLocation(program, "FlatColorIntensity");
@@ -225,7 +225,7 @@ void GL::drawBillBoard(const unsigned int textureId,
     0, 0
   };
   
-  _gl->uniform1i(Uniforms.BillBoard, true);
+  _gl->uniform1i(Uniforms.BillBoard, 1);
   
   _gl->uniform1f(Uniforms.ViewPortRatio, viewPortRatio);
   
@@ -243,7 +243,7 @@ void GL::drawBillBoard(const unsigned int textureId,
   
   enableDepthTest();
   
-  _gl->uniform1i(Uniforms.BillBoard, false);
+  _gl->uniform1i(Uniforms.BillBoard, 0);
 }
 
 // state handling
@@ -263,21 +263,21 @@ void GL::disableTextures() {
 
 void GL::enableTexture2D() {
   if (!_enableTexture2D) {
-    _gl->uniform1i(Uniforms.EnableTexture, true);
+    _gl->uniform1i(Uniforms.EnableTexture, 1);
     _enableTexture2D = true;
   }
 }
 
 void GL::disableTexture2D() {
   if (_enableTexture2D) {
-    _gl->uniform1i(Uniforms.EnableTexture, false);
+    _gl->uniform1i(Uniforms.EnableTexture, 0);
     _enableTexture2D = false;
   }
 }
 
 void GL::enableVertexColor(float const colors[], float intensity) {
   if (!_enableVertexColor) {
-    _gl->uniform1i(Uniforms.EnableColorPerVertex, true);
+    _gl->uniform1i(Uniforms.EnableColorPerVertex, 1);
     _gl->enableVertexAttribArray(Attributes.Color);
     _gl->vertexAttribPointer(Attributes.Color, 4, Float, 0, 0, colors);
     _gl->uniform1f(Uniforms.ColorPerVertexIntensity, intensity);
@@ -288,7 +288,7 @@ void GL::enableVertexColor(float const colors[], float intensity) {
 void GL::disableVertexColor() {
   if (_enableVertexColor) {
     _gl->disableVertexAttribArray(Attributes.Color);
-    _gl->uniform1i(Uniforms.EnableColorPerVertex, false);
+    _gl->uniform1i(Uniforms.EnableColorPerVertex, 0);
     _enableVertexColor = false;
   }
 }
@@ -327,7 +327,7 @@ void GL::disableVerticesPosition() {
 void GL::enableVertexFlatColor(float r, float g, float b, float a,
                                 float intensity) {
   if (!_enableFlatColor) {
-    _gl->uniform1i(Uniforms.EnableFlatColor, true);
+    _gl->uniform1i(Uniforms.EnableFlatColor, 1);
     _enableFlatColor = true;
   }
   _gl->uniform4f(Uniforms.FlatColor, r, g, b, a);
@@ -336,7 +336,7 @@ void GL::enableVertexFlatColor(float r, float g, float b, float a,
 
 void GL::disableVertexFlatColor() {
   if (_enableFlatColor) {
-    _gl->uniform1i(Uniforms.EnableFlatColor, false);
+    _gl->uniform1i(Uniforms.EnableFlatColor, 0);
     _enableFlatColor = false;
   }
 }
