@@ -139,22 +139,17 @@ public class IndexedMesh extends Mesh
   }
 
 
+  private final float[]         _vertices;
+  private final int[]           _indexes;
+  private final float[]         _normals;
+  private final float[]         _colors;
+  private final GLPrimitive _primitive = GLPrimitive.TriangleStrip;
+
   private final boolean _owner;
-
-  private final GLPrimitive _primitive = new GLPrimitive();
-
-  private final float _vertices;
   private final int _numVertices;
-
-  private final int _indexes;
   private final int _numIndex;
-
-  private final float _normals;
-
   private final Color _flatColor;
-  private final float _colors;
   private final float _colorsIntensity;
-
   private Extent _extent;
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
