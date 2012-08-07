@@ -12,6 +12,8 @@
 #include "Box.hpp"
 #include "GL.hpp"
 
+#include "INativeGL.hpp"
+
 
 IndexedMesh::~IndexedMesh()
 {

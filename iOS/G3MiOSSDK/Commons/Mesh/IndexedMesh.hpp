@@ -19,11 +19,6 @@
 #include <vector>
 
 #include "INativeGL.hpp"
-//enum GLPrimitive {
-//  TriangleStrip,
-//  Lines,
-//  LineLoop
-//};
 
 enum CenterStrategy {
   NoCenter,

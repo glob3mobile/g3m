@@ -206,10 +206,5 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
   const Color *color = new Color(Color::fromRGBA((float) 1.0, (float) 0.0, (float) 0.0, (float) 1.0));
   const Vector3D center = planet->toVector3D(sector.getCenter());
   
-  return IndexedMesh::CreateFromVector3D(vertices, 
-#ifdef JAVA_CODE
-                                         GLPrimitive.
-#endif
-                                         LineLoop, 
-                                         GivenCenter, center, indices, color);
+  return IndexedMesh::CreateFromVector3D(vertices, LineLoop, GivenCenter, center, indices, color);
 }
