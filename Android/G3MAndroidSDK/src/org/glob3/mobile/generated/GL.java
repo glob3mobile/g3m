@@ -192,7 +192,7 @@ public class GL
   public final void clearScreen(float r, float g, float b, float a)
   {
 	_gl.clearColor(r, g, b, a);
-	GLBufferType[] buffers = { ColorBuffer, DepthBuffer };
+	GLBufferType[] buffers = { GLBufferType.ColorBuffer, GLBufferType.DepthBuffer };
 	_gl.clear(2, buffers);
   }
 
@@ -273,12 +273,17 @@ public class GL
 
   public final void vertexPointer(int size, int stride, float[] vertex)
   {
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if C_CODE
 	_gl.vertexAttribPointer(GlobalMembersGL.Attributes.Position, size, Float, 0, stride, (Object) vertex);
+//#else
+	_gl.vertexAttribPointer(GlobalMembersGL.Attributes.Position, size, GLType.Float, 0, stride, (Object) vertex);
+//#endif
   }
 
   public final void drawTriangleStrip(int n, int[] i)
   {
-	_gl.drawElements(TriangleStrip, n, UnsignedInt, i);
+	_gl.drawElements(TriangleStrip, n, (GLType)UnsignedInt, i);
   }
 
   public final void drawLines(int n, int[] i)
@@ -346,13 +351,13 @@ public class GL
 
   public final void enablePolygonOffset(float factor, float units)
   {
-	_gl.enable(PolygonOffsetFill);
+	_gl.enable(GLFeature.PolygonOffsetFill);
 	_gl.polygonOffset(factor, units);
   }
 
   public final void disablePolygonOffset()
   {
-	_gl.disable(PolygonOffsetFill);
+	_gl.disable(GLFeature.PolygonOffsetFill);
   }
 
   public final void lineWidth(float width)
