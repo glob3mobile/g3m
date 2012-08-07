@@ -45,7 +45,7 @@ private:
   bool _enableBlend;
   
   bool _enableCullFace;
-  GLCullFace _cullFace_face;
+  GLCullFace _cullFace_face = Back;
   
   inline void loadModelView();
   
@@ -68,6 +68,12 @@ public:
   _texturesIdCounter(0)
   {
     
+  }
+  
+  ~GL(){
+#ifdef C_CODE
+    delete _gl;
+#endif
   }
   
   void enableVerticesPosition();

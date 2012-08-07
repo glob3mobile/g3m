@@ -345,9 +345,9 @@
   
   WMSLayer *pnoa = new WMSLayer("PNOA",
                                 "http://www.idee.es/wms/PNOA/PNOA",
-                                "1.1.0", "image/gif", 
+                                "1.1.0", "image/png", 
                                 Sector::fromDegrees(21,-18, 45, 6),
-                                "EPSG:4326", "", false,
+                                "EPSG:4326", "", true,
                                 Angle::nan(), Angle::nan());
   
   //ORDER IS IMPORTANT
