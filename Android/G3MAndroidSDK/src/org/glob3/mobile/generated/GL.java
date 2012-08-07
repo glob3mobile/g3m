@@ -273,32 +273,27 @@ public class GL
 
   public final void vertexPointer(int size, int stride, float[] vertex)
   {
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-	_gl.vertexAttribPointer(GlobalMembersGL.Attributes.Position, size, Float, 0, stride, (Object) vertex);
-//#else
 	_gl.vertexAttribPointer(GlobalMembersGL.Attributes.Position, size, GLType.Float, 0, stride, (Object) vertex);
-//#endif
   }
 
   public final void drawTriangleStrip(int n, int[] i)
   {
-	_gl.drawElements(TriangleStrip, n, (GLType)UnsignedInt, i);
+	_gl.drawElements(GLPrimitive.TriangleStrip, n, GLType.UnsignedInt, i);
   }
 
   public final void drawLines(int n, int[] i)
   {
-	_gl.drawElements(Lines, n, UnsignedInt, i);
+	_gl.drawElements(GLPrimitive.Lines, n, GLType.UnsignedInt, i);
   }
 
   public final void drawLineLoop(int n, int[] i)
   {
-	_gl.drawElements(LineLoop, n, UnsignedInt, i);
+	_gl.drawElements(GLPrimitive.LineLoop, n, GLType.UnsignedInt, i);
   }
 
   public final void drawPoints(int n, int[] i)
   {
-	_gl.drawElements(Points, n, UnsignedInt, i);
+	_gl.drawElements(GLPrimitive.Points, n, GLType.UnsignedInt, i);
   }
 
 //C++ TO JAVA CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in Java):
@@ -381,17 +376,19 @@ public class GL
 	byte[] imageData = new byte[textureWidth * textureHeight * 4];
 	image.fillWithRGBA(imageData, textureWidth, textureHeight);
   
-	_gl.blendFunc(SrcAlpha, OneMinusSrcAlpha);
-	_gl.pixelStorei(Unpack, 1);
-  
 	int texID = getTextureID();
   
-	_gl.bindTexture(Texture2D, texID);
-	_gl.texParameteri(Texture2D, MinFilter, Linear);
-	_gl.texParameteri(Texture2D, MagFilter, Linear);
-	_gl.texParameteri(Texture2D, WrapS, ClampToEdge);
-	_gl.texParameteri(Texture2D, WrapT, ClampToEdge);
-	_gl.texImage2D(Texture2D, 0, RGBA, textureWidth, textureHeight, 0, RGBA, UnsignedByte, imageData);
+  
+	_gl.blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
+	_gl.pixelStorei(GLAlignment.Unpack, 1);
+  
+	_gl.bindTexture(GLTextureType.Texture2D, texID);
+	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MinFilter, GLTextureParameterValue.Linear);
+	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MagFilter, GLTextureParameterValue.Linear);
+	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapS, GLTextureParameterValue.ClampToEdge);
+	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapT, GLTextureParameterValue.ClampToEdge);
+	_gl.texImage2D(GLTextureType.Texture2D, 0, GLFormat.RGBA, textureWidth, textureHeight, 0, GLFormat.RGBA, UnsignedByte, imageData);
+  
   
 	return texID;
   }
