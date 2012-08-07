@@ -23,6 +23,20 @@ class Vector3D;
 class TouchEvent;
 
 
+enum Gesture {
+  None,                  
+  Drag,
+  Zoom,
+  Rotate,
+  DoubleDrag
+};
+
+
+class CameraContext {
+  
+};
+
+
 class CameraRenderer: public Renderer
 {
   
