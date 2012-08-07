@@ -138,6 +138,9 @@ long Downloader_iOS::request(const URL &url,
     [handler addListener: iosListener
                 priority: priority
                requestId: requestId];
+    
+    [_lock unlock];
+
     return requestId;
   }
   
@@ -147,6 +150,9 @@ long Downloader_iOS::request(const URL &url,
     [handler addListener: iosListener
                 priority: priority
                requestId: requestId];
+    
+    [_lock unlock];
+
     return requestId;
   }
   
