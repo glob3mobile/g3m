@@ -178,7 +178,7 @@ void TileImagesTileTexturizer::justCreatedTopTile(Tile *tile) {
   tp->requestToNet(*_downloader, priority);
 }
 
-bool TileImagesTileTexturizer::isReadyToRender(const RenderContext *rc) {
+bool TileImagesTileTexturizer::isReady(const RenderContext *rc) {
   int todo_JM;
 //  for (int i = 0; i < _tilePetitionsTopTile.size(); i++) {
 //    if (!_tilePetitionsTopTile[i]->allFinished()) {

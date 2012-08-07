@@ -18,6 +18,9 @@ class ITimer;
 class TileTexturizer {
   
 public:
+  virtual ~TileTexturizer() {
+  }
+
   virtual Mesh* texturize(const RenderContext* rc,
                           Tile* tile,
                           const TileTessellator* tessellator,
@@ -27,16 +30,11 @@ public:
   
   virtual void tileToBeDeleted(Tile* tile) = 0;
   
-  virtual ~TileTexturizer() {
-    
-  }
-  
-  
   virtual bool tileMeetsRenderCriteria(Tile* tile) = 0;
   
   virtual void justCreatedTopTile(Tile* tile) = 0;
   
-  virtual bool isReadyToRender(const RenderContext *rc) = 0;
+  virtual bool isReady(const RenderContext *rc) = 0;
 
 };
 

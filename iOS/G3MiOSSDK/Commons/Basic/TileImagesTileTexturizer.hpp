@@ -100,7 +100,7 @@ public:
   
   void justCreatedTopTile(Tile* tile);
   
-  bool isReadyToRender(const RenderContext *rc);
+  bool isReady(const RenderContext *rc);
 
 
 };

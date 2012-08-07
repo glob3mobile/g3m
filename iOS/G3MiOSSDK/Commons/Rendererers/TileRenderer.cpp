@@ -85,7 +85,7 @@ bool TileRenderer::isReadyToRender(const RenderContext *rc) {
   }
   
   if (_texturizer != NULL) {
-    if (!_texturizer->isReadyToRender(rc)) {
+    if (!_texturizer->isReady(rc)) {
       return false;
     }
   }
