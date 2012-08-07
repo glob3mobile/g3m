@@ -101,25 +101,25 @@ public class IndexedMesh extends Mesh
 	}
   }
 
-  private IndexedMesh(boolean owner, GLPrimitive primitive, CenterStrategy strategy, Vector3D center, int numVertices, float vertices, int indexes[] indexes, int numIndex, Color flatColor, float colors, float colorsIntensity)
+  private IndexedMesh(boolean owner, GLPrimitive primitive, CenterStrategy strategy, Vector3D center, int numVertices, float[] vertices, int[] indexes, int numIndex, Color flatColor, float[] colors, float colorsIntensity)
   {
 	  this(owner, primitive, strategy, center, numVertices, vertices, indexes, numIndex, flatColor, colors, colorsIntensity, null);
   }
-  private IndexedMesh(boolean owner, GLPrimitive primitive, CenterStrategy strategy, Vector3D center, int numVertices, float vertices, int indexes[] indexes, int numIndex, Color flatColor, float colors)
+  private IndexedMesh(boolean owner, GLPrimitive primitive, CenterStrategy strategy, Vector3D center, int numVertices, float[] vertices, int[] indexes, int numIndex, Color flatColor, float[] colors)
   {
 	  this(owner, primitive, strategy, center, numVertices, vertices, indexes, numIndex, flatColor, colors, 0.0f, null);
   }
-  private IndexedMesh(boolean owner, GLPrimitive primitive, CenterStrategy strategy, Vector3D center, int numVertices, float vertices, int indexes[] indexes, int numIndex, Color flatColor)
+  private IndexedMesh(boolean owner, GLPrimitive primitive, CenterStrategy strategy, Vector3D center, int numVertices, float[] vertices, int[] indexes, int numIndex, Color flatColor)
   {
 	  this(owner, primitive, strategy, center, numVertices, vertices, indexes, numIndex, flatColor, null, 0.0f, null);
   }
-  private IndexedMesh(boolean owner, GLPrimitive primitive, CenterStrategy strategy, Vector3D center, int numVertices, float vertices, int indexes[] indexes, int numIndex)
+  private IndexedMesh(boolean owner, GLPrimitive primitive, CenterStrategy strategy, Vector3D center, int numVertices, float[] vertices, int[] indexes, int numIndex)
   {
 	  this(owner, primitive, strategy, center, numVertices, vertices, indexes, numIndex, null, null, 0.0f, null);
   }
 //C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
-//ORIGINAL LINE: IndexedMesh(boolean owner, const GLPrimitive primitive, CenterStrategy strategy, Vector3D center, const int numVertices, const float* vertices, const int indexes[] indexes, const int numIndex, const Color* flatColor = null, const float* colors = null, const float colorsIntensity = 0.0f, const float* normals = null): _owner(owner), _primitive(primitive), _numVertices(numVertices), _vertices(vertices), _indexes(indexes), _numIndex(numIndex), _flatColor(flatColor), _colors(colors), _colorsIntensity(colorsIntensity), _normals(normals), _extent(null), _centerStrategy(strategy), _center(center)
-  private IndexedMesh(boolean owner, GLPrimitive primitive, CenterStrategy strategy, Vector3D center, int numVertices, float vertices, int indexes[] indexes, int numIndex, Color flatColor, float colors, float colorsIntensity, float normals)
+//ORIGINAL LINE: IndexedMesh(boolean owner, const GLPrimitive primitive, CenterStrategy strategy, Vector3D center, const int numVertices, const float vertices[], const int indexes[], const int numIndex, const Color* flatColor = null, const float colors[] = null, const float colorsIntensity = 0.0f, const float normals[] = null): _owner(owner), _primitive(primitive), _numVertices(numVertices), _vertices(vertices), _indexes(indexes), _numIndex(numIndex), _flatColor(flatColor), _colors(colors), _colorsIntensity(colorsIntensity), _normals(normals), _extent(null), _centerStrategy(strategy), _center(center)
+  private IndexedMesh(boolean owner, GLPrimitive primitive, CenterStrategy strategy, Vector3D center, int numVertices, float[] vertices, int[] indexes, int numIndex, Color flatColor, float[] colors, float colorsIntensity, float[] normals)
   {
 	  _owner = owner;
 	  _primitive = primitive;
