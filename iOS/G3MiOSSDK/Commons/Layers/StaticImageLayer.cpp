@@ -32,7 +32,7 @@ std::vector<Petition*> StaticImageLayer::getTilePetitions(const IFactory& factor
                                         imageSector.upper().latitude().degrees(),
                                         imageSector.upper().longitude().degrees() );
   
-  Petition *pet = new Petition(tile.getSector(), id);
+  Petition *pet = new Petition(tile.getSector(), id, true);
 
   if (_storage != NULL)
   {

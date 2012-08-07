@@ -337,16 +337,16 @@
                                 "EPSG:4326", "", true,
                                 Angle::nan(), Angle::nan());
   
-//  WMSLayer *pnoa = new WMSLayer("PNOA",
-//                                "http://www.idee.es/wms/PNOA/PNOA",
-//                                "1.1.0", "image/gif", 
-//                                Sector::fromDegrees(21,-18, 45, 6),
-//                                "EPSG:4326", "", false,
-//                                Angle::nan(), Angle::nan());
+  WMSLayer *pnoa = new WMSLayer("PNOA",
+                                "http://www.idee.es/wms/PNOA/PNOA",
+                                "1.1.0", "image/gif", 
+                                Sector::fromDegrees(21,-18, 45, 6),
+                                "EPSG:4326", "", false,
+                                Angle::nan(), Angle::nan());
   
   //ORDER IS IMPORTANT
   layerSet->add(baseLayer);
-  //layerSet->add(pnoa);
+  layerSet->add(pnoa);
   layerSet->add(vias);
   
   // very basic tile renderer
