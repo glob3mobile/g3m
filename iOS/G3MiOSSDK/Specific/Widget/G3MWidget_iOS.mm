@@ -426,7 +426,7 @@
   
   if (true) {
     EffectTarget* target = NULL;
-    scheduler->startEffect(new SampleEffect(TimeInterval::fromSeconds(3)),
+    scheduler->startEffect(new SampleEffect(TimeInterval::fromSeconds(2)),
                            target);
   }
   
