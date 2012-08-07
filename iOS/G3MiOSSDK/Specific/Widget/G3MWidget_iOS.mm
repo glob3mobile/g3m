@@ -342,9 +342,9 @@
   
   WMSLayer *pnoa = new WMSLayer("PNOA",
                                 "http://www.idee.es/wms/PNOA/PNOA",
-                                "1.1.0", "image/gif", 
+                                "1.1.0", "image/png", 
                                 Sector::fromDegrees(21,-18, 45, 6),
-                                "EPSG:4326", "", false,
+                                "EPSG:4326", "", true,
                                 Angle::nan(), Angle::nan());
   
   //ORDER IS IMPORTANT
@@ -477,11 +477,23 @@
     _renderer = [[ES2Renderer alloc] init];
     if (!_renderer) {
       printf("**** ERROR: G3MWidget_iOS Mobile needs Opengl ES 2.0\n");
+      return nil;
     }
     else {
       printf("*** Using Opengl ES 2.0\n\n");
       glver = OpenGL_2;
     }
+    
+    
+    NSLog(@"----------------------------------------------------------------------------");
+    NSLog(@"OpenGL Extensions:");
+    NSString *extensionString = [[NSString stringWithUTF8String:(char *)glGetString(GL_EXTENSIONS)] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSArray *extensions = [extensionString componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    for (NSString *extension in extensions) {
+        NSLog(@"  %@", extension);
+    }
+    NSLog(@"----------------------------------------------------------------------------");
+    
     
     lastTouchEvent = NULL;
 
