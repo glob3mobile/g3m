@@ -131,14 +131,17 @@ public:
 
 class TilesStatistics {
 private:
-  long _counter;
+  long _tilesProcessed;
+  long _tilesRendered;
+
   int _minLevel;
   int _maxLevel;
   int _splitsCountInFrame;
   
 public:
   TilesStatistics(const TileParameters* parameters) :
-  _counter(0),
+  _tilesProcessed(0),
+  _tilesRendered(0),
   _minLevel(parameters->_maxLevel + 1),
   _maxLevel(parameters->_topLevel - 1),
   _splitsCountInFrame(0)
@@ -154,8 +157,12 @@ public:
     _splitsCountInFrame++;
   }
   
-  void computeTileRender(Tile* tile) {
-    _counter++;
+  void computeTileProcessed() {
+    _tilesProcessed++;
+  }
+  
+  void computeTileRendered(Tile* tile) {
+    _tilesRendered++;
     
     int level = tile->getLevel();
     if (level < _minLevel) {
@@ -167,11 +174,18 @@ public:
   }
   
   void log(const ILogger* logger) const {
-    logger->logInfo("Rendered %d tiles. Levels: %d-%d" , _counter, _minLevel, _maxLevel);
+    logger->logInfo("Tiles: processed=%d, rendered=%d. Levels: %d-%d",
+                    _tilesProcessed,
+                    _tilesRendered,
+                    _minLevel,
+                    _maxLevel);
   }
   
   bool equalsTo(const TilesStatistics& that) const {
-    if (_counter != that._counter) {
+    if (_tilesProcessed != that._tilesProcessed) {
+      return false;
+    }
+    if (_tilesRendered != that._tilesRendered) {
       return false;
     }
     if (_minLevel != that._minLevel) {
