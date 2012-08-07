@@ -52,24 +52,28 @@ private:
               const float * colors = NULL,
               const float colorsIntensity = 0.0f,
               const float* normals = NULL);
-
+  
+#ifdef C_CODE
+  const float*         _vertices;
+  const int*           _indexes;
+  const float*         _normals;
+  const float *        _colors;
+  const GLPrimitive    _primitive; 
+#endif
+  
+#ifdef JAVA_CODE
+  private final float[]         _vertices;
+  private final int[]           _indexes;
+  private final float[]         _normals;
+  private final float[]         _colors;
+  private final GLPrimitive _primitive = GLPrimitive.TriangleStrip;
+#endif
 
   const bool           _owner;
-  
-  const GLPrimitive    _primitive; 
-  
-  const float*         _vertices;
   const int            _numVertices;
-  
-  const int*           _indexes;
   const int            _numIndex;
-  
-  const float*         _normals;
-  
   const Color *        _flatColor;
-  const float *        _colors;
   const float          _colorsIntensity;
-  
   mutable Extent *     _extent;
   
   Extent* computeExtent() const;
