@@ -187,8 +187,6 @@ int SceneGraphRenderer::render(const RenderContext *rc) {
   return _rootNode->render(rc);
 }
 
-
-
 void SGCubeNode::initialize(const RenderContext *rc)
 {
   int res = 12;
