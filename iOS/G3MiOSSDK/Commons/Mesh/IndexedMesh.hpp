@@ -45,13 +45,13 @@ private:
               CenterStrategy strategy,
               Vector3D center,
               const int numVertices,
-              const float* vertices,
-              const int* indexes,
+              const float vertices[],
+              const int indexes[],
               const int numIndex, 
               const Color* flatColor = NULL,
-              const float * colors = NULL,
+              const float colors[] = NULL,
               const float colorsIntensity = 0.0f,
-              const float* normals = NULL);
+              const float normals[] = NULL);
   
 #ifdef C_CODE
   const float*         _vertices;
