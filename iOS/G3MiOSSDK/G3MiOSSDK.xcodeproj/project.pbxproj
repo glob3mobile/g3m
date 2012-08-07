@@ -51,7 +51,7 @@
 		CC596F2415C46D4F008FC230 /* CameraDoubleDragHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F1E15C46D4F008FC230 /* CameraDoubleDragHandler.cpp */; };
 		CC596F2515C46D4F008FC230 /* CameraDoubleDragHandler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC596F1F15C46D4F008FC230 /* CameraDoubleDragHandler.hpp */; };
 		CC596F2A15C46DE2008FC230 /* CameraSingleDragHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F2915C46DE2008FC230 /* CameraSingleDragHandler.cpp */; };
-		CC596F2D15C472EF008FC230 /* CameraRotationRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F2C15C472EF008FC230 /* CameraRotationRenderer.cpp */; };
+		CC596F2D15C472EF008FC230 /* CameraRotationHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F2C15C472EF008FC230 /* CameraRotationHandler.cpp */; };
 		CC96079215AF23F600D438D4 /* TextureMapping.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC96079115AF23F600D438D4 /* TextureMapping.cpp */; };
 		CCB2564E15B5A30900079B96 /* TextureMapping.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCB2564D15B5A30900079B96 /* TextureMapping.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CCB2565015B5A33A00079B96 /* TexturedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCB2564F15B5A33A00079B96 /* TexturedMesh.cpp */; };
@@ -214,8 +214,8 @@
 		CC596F1F15C46D4F008FC230 /* CameraDoubleDragHandler.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CameraDoubleDragHandler.hpp; path = Commons/Cameras/CameraDoubleDragHandler.hpp; sourceTree = "<group>"; };
 		CC596F2815C46DAB008FC230 /* CameraSingleDragHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraSingleDragHandler.hpp; path = Commons/Cameras/CameraSingleDragHandler.hpp; sourceTree = "<group>"; };
 		CC596F2915C46DE2008FC230 /* CameraSingleDragHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CameraSingleDragHandler.cpp; path = Commons/Cameras/CameraSingleDragHandler.cpp; sourceTree = "<group>"; };
-		CC596F2B15C472BA008FC230 /* CameraRotationRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraRotationRenderer.hpp; path = Commons/Cameras/CameraRotationRenderer.hpp; sourceTree = "<group>"; };
-		CC596F2C15C472EF008FC230 /* CameraRotationRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CameraRotationRenderer.cpp; path = Commons/Cameras/CameraRotationRenderer.cpp; sourceTree = "<group>"; };
+		CC596F2B15C472BA008FC230 /* CameraRotationHandler.hpp */ = {isa = PBXFileReference; name = CameraRotationHandler.hpp; path = Commons/Cameras/CameraRotationHandler.hpp; sourceTree = "<group>"; };
+		CC596F2C15C472EF008FC230 /* CameraRotationHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CameraRotationHandler.cpp; path = Commons/Cameras/CameraRotationHandler.cpp; sourceTree = "<group>"; };
 		CC94D7FA15D0FDF70074B12A /* CameraEventHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = CameraEventHandler.hpp; path = Commons/Cameras/CameraEventHandler.hpp; sourceTree = "<group>"; };
 		CC96079115AF23F600D438D4 /* TextureMapping.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TextureMapping.cpp; path = Commons/Mesh/TextureMapping.cpp; sourceTree = "<group>"; };
 		CCB2564D15B5A30900079B96 /* TextureMapping.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TextureMapping.hpp; path = Commons/Mesh/TextureMapping.hpp; sourceTree = "<group>"; };
@@ -518,8 +518,8 @@
 				CC94D7FA15D0FDF70074B12A /* CameraEventHandler.hpp */,
 				385827FB15C6FA4E00B3E68B /* CameraRenderer.hpp */,
 				385827FD15C6FACD00B3E68B /* CameraRenderer.cpp */,
-				CC596F2B15C472BA008FC230 /* CameraRotationRenderer.hpp */,
-				CC596F2C15C472EF008FC230 /* CameraRotationRenderer.cpp */,
+				CC596F2B15C472BA008FC230 /* CameraRotationHandler.hpp */,
+				CC596F2C15C472EF008FC230 /* CameraRotationHandler.cpp */,
 				CC596F2815C46DAB008FC230 /* CameraSingleDragHandler.hpp */,
 				CC596F2915C46DE2008FC230 /* CameraSingleDragHandler.cpp */,
 			);
@@ -845,7 +845,7 @@
 				CC596F2215C46D4F008FC230 /* Camera.cpp in Sources */,
 				CC596F2415C46D4F008FC230 /* CameraDoubleDragHandler.cpp in Sources */,
 				CC596F2A15C46DE2008FC230 /* CameraSingleDragHandler.cpp in Sources */,
-				CC596F2D15C472EF008FC230 /* CameraRotationRenderer.cpp in Sources */,
+				CC596F2D15C472EF008FC230 /* CameraRotationHandler.cpp in Sources */,
 				CF8A234F15C4306800FD56C9 /* Downloader_iOS_Handler.mm in Sources */,
 				CF8A235415C4340900FD56C9 /* Downloader_iOS_Listener.mm in Sources */,
 				385827FE15C6FACE00B3E68B /* CameraRenderer.cpp in Sources */,

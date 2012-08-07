@@ -19,7 +19,7 @@
 #include "CameraRenderer.hpp"
 #include "CameraSingleDragHandler.hpp"
 #include "CameraDoubleDragHandler.hpp"
-//#include "CameraRotationRenderer.h"
+#include "CameraRotationHandler.hpp"
 
 #include "TileRenderer.hpp"
 #include "DummyRenderer.hpp"
@@ -94,8 +94,8 @@
   cameraRenderer = new CameraRenderer();
   cameraRenderer->addHandler(new CameraSingleDragHandler);
   cameraRenderer->addHandler(new CameraDoubleDragHandler);
+  cameraRenderer->addHandler(new CameraRotationHandler);
   comp->addRenderer(cameraRenderer);
-  
   
   
   //STORAGE
@@ -289,9 +289,9 @@
   cameraRenderer = new CameraRenderer();
   cameraRenderer->addHandler(new CameraSingleDragHandler);
   cameraRenderer->addHandler(new CameraDoubleDragHandler);
+  cameraRenderer->addHandler(new CameraRotationHandler);
   comp->addRenderer(cameraRenderer);
-  
-  
+
   
   //STORAGE
   NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
