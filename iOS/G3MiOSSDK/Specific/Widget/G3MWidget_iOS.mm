@@ -330,7 +330,7 @@
     const long priority = 999999999;
     IDownloadListener* listener = new Listener();
     long requestId = downloader->request(URL("http://glob3.sourceforge.net/img/isologo640x160.png"), priority, listener);
-    downloader->cancelRequest(requestId);
+//    downloader->cancelRequest(requestId);
   }
 
   //LAYERS
