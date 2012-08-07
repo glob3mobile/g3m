@@ -72,6 +72,8 @@ public:
   }
 };
 
+//************************************************************
+
 
 class InitializationContext: public Context {
 public:
@@ -84,6 +86,8 @@ public:
   Context(factory, logger, planet, downloaderOLD, downloader, scheduler) {
   }
 };
+
+//************************************************************
 
 
 class RenderContext: public Context {
@@ -123,5 +127,54 @@ public:
     
     
 };
+
+
+//************************************************************
+
+
+enum Gesture {
+  None,                  
+  Drag,
+  Zoom,
+  Rotate,
+  DoubleDrag
+};
+
+
+
+class CameraContext: public Context {
+private:
+  GL*            _gl;
+  Camera*        _camera;
+  Gesture*       _gesture;
+  
+public:
+  CameraContext(IFactory *factory,
+                ILogger* logger,
+                const Planet* planet,
+                GL *gl,
+                Camera* camera,
+                Gesture *gesture,
+                Downloader* const downloaderOLD,
+                IDownloader* downloader,
+                EffectsScheduler* scheduler) :
+  Context(factory, logger, planet, downloaderOLD, downloader, scheduler),
+  _gl(gl),
+  _camera(camera),
+  _gesture(gesture) 
+  {}
+  
+  GL* getGL() const {
+    return _gl;
+  }
+  
+  Camera* getCamera() const {
+    return _camera;
+  }
+  
+  Gesture* getGesture() const { return _gesture; }
+
+};
+
 
 #endif

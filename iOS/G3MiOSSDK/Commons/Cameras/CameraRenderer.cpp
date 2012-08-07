@@ -7,7 +7,6 @@
 //
 
 #include "CameraRenderer.hpp"
-#include "Context.hpp"
 #include "Camera.hpp"
 #include "CameraEventHandler.hpp"
 

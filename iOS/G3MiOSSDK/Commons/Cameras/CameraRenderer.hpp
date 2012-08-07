@@ -12,7 +12,7 @@
 #include <vector>
 
 #include "Renderer.hpp"
-//#include "MutableVector3D.hpp"
+#include "Context.hpp"
 
 class CameraEventHandler;
 
@@ -21,15 +21,6 @@ class ILogger;
 class Camera;
 class Vector3D;
 class TouchEvent;
-
-
-enum Gesture {
-  None,                  
-  Drag,
-  Zoom,
-  Rotate,
-  DoubleDrag
-};
 
 
 class CameraRenderer: public Renderer

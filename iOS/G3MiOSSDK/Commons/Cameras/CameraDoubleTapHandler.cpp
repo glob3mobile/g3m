@@ -52,6 +52,7 @@ void CameraDoubleTapHandler::onDown(const TouchEvent& touchEvent, Gesture &gestu
   _camera->dragCamera(initialPoint, centerPoint);
   _camera->moveForward(d);
 
+
 }
 
 
