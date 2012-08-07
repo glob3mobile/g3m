@@ -208,7 +208,7 @@ void GL::pointSize(float size) {
   _gl->uniform1f(Uniforms.PointSize, size);
 }
 
-int GL::getError() {
+GLError GL::getError() {
   return _gl->getError();
 }
 

@@ -99,11 +99,6 @@ private:
             Color             backgroundColor,
             const bool        logFPS);
   
-  void initializeDefault()
-  {
-    
-  }
-  
 };
 
 #endif

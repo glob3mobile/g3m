@@ -148,7 +148,7 @@ public:
   
   void pointSize(float size);
   
-  int getError();
+  GLError getError();
   
   int uploadTexture(const IImage* image, int textureWidth, int textureHeight);
   

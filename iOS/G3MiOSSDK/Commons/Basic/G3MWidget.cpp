@@ -98,7 +98,7 @@ void G3MWidget::initializeGL() {
   _gl->enableCullFace(Back);
 #endif
 #ifdef JAVA_CODE
-  _gl.enableCullFace(CullFace.Back);
+  _gl.enableCullFace(GLCullFace.Back);
 #endif
 }
 

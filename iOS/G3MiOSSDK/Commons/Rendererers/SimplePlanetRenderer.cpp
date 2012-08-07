@@ -148,7 +148,8 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
     }
   }
   
-  IndexedMesh *im = IndexedMesh::CreateFromVector3D(true, TriangleStrip, NoCenter, Vector3D(0,0,0), _latRes *_lonRes, ver, 
+  IndexedMesh *im = IndexedMesh::CreateFromVector3D(true, TriangleStrip, NoCenter, Vector3D(0,0,0), 
+                                                    _latRes *_lonRes, ver, 
                                                     ind, numIndexes, flatColor, colors, 0.5, normals);
   
   _mesh = new TexturedMesh(im, true, new TextureMapping(texID, texC, rc->getTexturesHandler()), true);

@@ -37,7 +37,7 @@ private:
               std::vector<int>& indexes,
               const Color* flatColor = NULL,
               std::vector<Color>* colors = NULL,
-              const float colorsIntensity = 0.0,
+              const float colorsIntensity = 0.0f,
               std::vector<MutableVector3D>* normals = NULL);
   
   IndexedMesh(bool owner,
@@ -50,7 +50,7 @@ private:
               const int numIndex, 
               const Color* flatColor = NULL,
               const float * colors = NULL,
-              const float colorsIntensity = 0.0,
+              const float colorsIntensity = 0.0f,
               const float* normals = NULL);
 
 
