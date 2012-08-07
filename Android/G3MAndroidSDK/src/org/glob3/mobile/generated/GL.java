@@ -207,7 +207,7 @@ public class GL
 	{
 	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableColorPerVertex, 1);
 	  _gl.enableVertexAttribArray(GlobalMembersGL.Attributes.Color);
-	  _gl.vertexAttribPointer(GlobalMembersGL.Attributes.Color, 4, GLType.Float, 0, 0, colors);
+	  _gl.vertexAttribPointer(GlobalMembersGL.Attributes.Color, 4, GLType.Float, false, 0, colors);
 	  _gl.uniform1f(GlobalMembersGL.Uniforms.ColorPerVertexIntensity, intensity);
 	  _enableVertexColor = true;
 	}
@@ -228,7 +228,7 @@ public class GL
 	if (!_enableVertexNormal)
 	{
 	  _gl.enableVertexAttribArray(GlobalMembersGL.Attributes.Normal);
-	  _gl.vertexAttribPointer(GlobalMembersGL.Attributes.Normal, 3, GLType.Float, 0, 0, normals);
+	  _gl.vertexAttribPointer(GlobalMembersGL.Attributes.Normal, 3, GLType.Float, false, 0, normals);
 	  _enableVertexNormal = true;
 	}
   }
@@ -271,7 +271,7 @@ public class GL
 
   public final void vertexPointer(int size, int stride, float[] vertex)
   {
-	_gl.vertexAttribPointer(GlobalMembersGL.Attributes.Position, size, GLType.Float, 0, stride, (Object) vertex);
+	_gl.vertexAttribPointer(GlobalMembersGL.Attributes.Position, size, GLType.Float, false, stride, (Object) vertex);
   }
 
   public final void drawTriangleStrip(int n, int[] i)
@@ -393,7 +393,7 @@ public class GL
 
   public final void setTextureCoordinates(int size, int stride, float[] texcoord)
   {
-	_gl.vertexAttribPointer(GlobalMembersGL.Attributes.TextureCoord, size, GLType.Float, 0, stride, (Object) texcoord);
+	_gl.vertexAttribPointer(GlobalMembersGL.Attributes.TextureCoord, size, GLType.Float, false, stride, (Object) texcoord);
   }
 
   public final void bindTexture(int n)

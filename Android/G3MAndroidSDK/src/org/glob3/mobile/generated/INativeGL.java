@@ -11,12 +11,12 @@ public abstract class INativeGL
   public abstract void useProgram(int program);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual int getAttribLocation(int program, const sbyte name[]) const = 0;
-  public abstract int getAttribLocation(int program, RefObject<String> name);
+//ORIGINAL LINE: virtual int getAttribLocation(int program, const String& name) const = 0;
+  public abstract int getAttribLocation(int program, String name);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual int getUniformLocation(int program, const sbyte name[]) const = 0;
-  public abstract int getUniformLocation(int program, RefObject<String> name);
+//ORIGINAL LINE: virtual int getUniformLocation(int program, const String& name) const = 0;
+  public abstract int getUniformLocation(int program, String name);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual void uniform2f(int loc, float x, float y) const = 0;
