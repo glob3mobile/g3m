@@ -19,6 +19,7 @@ bool CameraSingleDragHandler::onTouchEvent(const TouchEvent* touchEvent, Gesture
 {
   // only one finger needed
   if (touchEvent->getTouchCount()!=1) return false;
+  if (touchEvent->getTapCount()>1) return false;
 
   switch (touchEvent->getType()) {
     case Down:

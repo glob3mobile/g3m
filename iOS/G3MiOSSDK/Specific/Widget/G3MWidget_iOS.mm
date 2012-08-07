@@ -20,6 +20,7 @@
 #include "CameraSingleDragHandler.hpp"
 #include "CameraDoubleDragHandler.hpp"
 #include "CameraRotationHandler.hpp"
+#include "CameraDoubleTapHandler.hpp"
 
 #include "TileRenderer.hpp"
 #include "DummyRenderer.hpp"
@@ -95,6 +96,7 @@
   cameraRenderer->addHandler(new CameraSingleDragHandler);
   cameraRenderer->addHandler(new CameraDoubleDragHandler);
   cameraRenderer->addHandler(new CameraRotationHandler);
+  cameraRenderer->addHandler(new CameraDoubleTapHandler);
   comp->addRenderer(cameraRenderer);
   
   
@@ -290,6 +292,7 @@
   cameraRenderer->addHandler(new CameraSingleDragHandler);
   cameraRenderer->addHandler(new CameraDoubleDragHandler);
   cameraRenderer->addHandler(new CameraRotationHandler);
+  cameraRenderer->addHandler(new CameraDoubleTapHandler);
   comp->addRenderer(cameraRenderer);
 
   
@@ -420,7 +423,10 @@
   }
   
   EffectsScheduler* scheduler = new EffectsScheduler();
-  scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(2)));
+  
+  if (false) {
+    scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(2)));
+  }
   
   if (false) {
     SceneGraphRenderer* sgr = new SceneGraphRenderer();
@@ -613,11 +619,13 @@
   NSEnumerator *enumerator = [allTouches objectEnumerator];
   UITouch *touch = nil;
   while ((touch = [enumerator nextObject])) {
-    CGPoint current  = [touch locationInView:self];
-    CGPoint previous = [touch previousLocationInView:self];
+    CGPoint current         = [touch locationInView:self];
+    CGPoint previous        = [touch previousLocationInView:self];
+    unsigned char tapCount  = (unsigned char) [touch tapCount];
     
     Touch *touch = new Touch(Vector2D(current.x, current.y), 
-                             Vector2D(previous.x, previous.y));
+                             Vector2D(previous.x, previous.y),
+                             tapCount);
     
     pointers.push_back(touch);
   }
