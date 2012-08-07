@@ -121,7 +121,11 @@ void GL::pushMatrix() {
 
 void GL::clearScreen(float r, float g, float b, float a) {
   _gl->clearColor(r, g, b, a);
+#ifdef C_CODE
   GLBufferType buffers[] = { ColorBuffer, DepthBuffer };
+#else
+  GLBufferType buffers[] = { GLBufferType.ColorBuffer, GLBufferType.DepthBuffer };
+#endif
   _gl->clear(2, buffers);
 }
 
@@ -140,20 +144,32 @@ void GL::transformTexCoords(const Vector2D& scale,
 }
 
 void GL::enablePolygonOffset(float factor, float units) {
+#ifdef C_CODE
   _gl->enable(PolygonOffsetFill);
+#else
+  _gl->enable(GLFeature.PolygonOffsetFill);
+#endif
   _gl->polygonOffset(factor, units);
 }
 
 void GL::disablePolygonOffset() {
+#ifdef C_CODE
   _gl->disable(PolygonOffsetFill);
+#else
+  _gl->disable(GLFeature.PolygonOffsetFill);
+#endif
 }
 
 void GL::vertexPointer(int size, int stride, const float vertex[]) {
+#if C_CODE
   _gl->vertexAttribPointer(Attributes.Position, size, Float, 0, stride, (const void *) vertex);
+#else
+  _gl->vertexAttribPointer(Attributes.Position, size, GLType.Float, 0, stride, (const void *) vertex);
+#endif
 }
 
 void GL::drawTriangleStrip(int n, const int i[]) {
-  _gl->drawElements(TriangleStrip, n, UnsignedInt, i);
+  _gl->drawElements(TriangleStrip, n, (GLType)UnsignedInt, i);
 }
 
 void GL::drawLines(int n, const int i[]) {
