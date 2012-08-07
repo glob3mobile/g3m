@@ -161,7 +161,7 @@ void GL::disablePolygonOffset() {
 }
 
 void GL::vertexPointer(int size, int stride, const float vertex[]) {
-#if C_CODE
+#ifdef C_CODE
   _gl->vertexAttribPointer(Attributes.Position, size, Float, 0, stride, (const void *) vertex);
 #else
   _gl->vertexAttribPointer(Attributes.Position, size, GLType.Float, 0, stride, (const void *) vertex);
@@ -169,19 +169,35 @@ void GL::vertexPointer(int size, int stride, const float vertex[]) {
 }
 
 void GL::drawTriangleStrip(int n, const int i[]) {
-  _gl->drawElements(TriangleStrip, n, (GLType)UnsignedInt, i);
+#ifdef C_CODE
+  _gl->drawElements(TriangleStrip, n, UnsignedInt, i);
+#else
+  _gl->drawElements(GLPrimitive.TriangleStrip, n, GLType.UnsignedInt, i);
+#endif
 }
 
 void GL::drawLines(int n, const int i[]) {
+#ifdef C_CODE
   _gl->drawElements(Lines, n, UnsignedInt, i);
+#else
+  _gl->drawElements(GLPrimitive.Lines, n, GLType.UnsignedInt, i);
+#endif
 }
 
 void GL::drawLineLoop(int n, const int i[]) {
+#ifdef C_CODE
   _gl->drawElements(LineLoop, n, UnsignedInt, i);
+#else
+  _gl->drawElements(GLPrimitive.LineLoop, n, GLType.UnsignedInt, i);
+#endif
 }
 
 void GL::drawPoints(int n, const int i[]) {
+#ifdef C_CODE
   _gl->drawElements(Points, n, UnsignedInt, i);
+#else
+  _gl->drawElements(GLPrimitive.Points, n, GLType.UnsignedInt, i);
+#endif
 }
 
 void GL::lineWidth(float width) {
@@ -201,10 +217,12 @@ int GL::uploadTexture(const IImage* image, int textureWidth, int textureHeight) 
   unsigned char imageData[textureWidth * textureHeight * 4];
   image->fillWithRGBA(imageData, textureWidth, textureHeight);
   
+  int texID = getTextureID();
+  
+#ifdef C_CODE
+  
   _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);
   _gl->pixelStorei(Unpack, 1);
-  
-  int texID = getTextureID();
   
   _gl->bindTexture(Texture2D, texID);
   _gl->texParameteri(Texture2D, MinFilter, Linear);
@@ -212,6 +230,21 @@ int GL::uploadTexture(const IImage* image, int textureWidth, int textureHeight) 
   _gl->texParameteri(Texture2D, WrapS, ClampToEdge);
   _gl->texParameteri(Texture2D, WrapT, ClampToEdge);
   _gl->texImage2D(Texture2D, 0, RGBA, textureWidth, textureHeight, 0, RGBA, UnsignedByte, imageData);
+  
+#else
+  
+  _gl->blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
+  _gl->pixelStorei(GLAlignment.Unpack, 1);
+  
+  _gl->bindTexture(GLTextureType.Texture2D, texID);
+  _gl->texParameteri(GLTextureType.Texture2D, GLTextureParameter.MinFilter, GLTextureParameterValue.Linear);
+  _gl->texParameteri(GLTextureType.Texture2D, GLTextureParameter.MagFilter, GLTextureParameterValue.Linear);
+  _gl->texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapS, GLTextureParameterValue.ClampToEdge);
+  _gl->texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapT, GLTextureParameterValue.ClampToEdge);
+  _gl->texImage2D(GLTextureType.Texture2D, 0, GLFormat.RGBA, textureWidth, textureHeight, 
+                  0, GLFormat.RGBA, UnsignedByte, imageData);
+  
+#endif
   
   return texID;
 }
