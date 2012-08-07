@@ -27,7 +27,7 @@ public class GLErrorRenderer extends Renderer
 
   public int render(RenderContext rc)
   {
-	IGL gl = rc.getGL();
+	GL gl = rc.getGL();
 	final ILogger logger = rc.getLogger();
   
 	int error = gl.getError();

@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class UniformsStructGL
+public class UniformsStruct
 {
   public int Projection;
   public int Modelview;

@@ -37,25 +37,19 @@ public class LayerSet
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: java.util.ArrayList<Petition*> createTilePetitions(const IFactory& factory, const Tile& tile, int width, int height) const
-  public final java.util.ArrayList<Petition> createTilePetitions(IFactory factory, Tile tile, int width, int height)
+//ORIGINAL LINE: java.util.ArrayList<Petition*> createTilePetitions(const RenderContext* rc, const IFactory& factory, const Tile& tile, int width, int height) const
+  public final java.util.ArrayList<Petition> createTilePetitions(RenderContext rc, IFactory factory, Tile tile, int width, int height)
   {
 	java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
-  
-	final Sector tileSector = tile.getSector();
-  
-	if (tileSector.getDeltaLatitude().degrees() < 45)
-	{
-	  int a = 0;
-	  a++;
-	}
   
 	for (int i = 0; i < _layers.size(); i++)
 	{
 	  Layer layer = _layers.get(i);
-	  if (layer.fullContains(tileSector))
+	  if (layer.isAvailable(rc, tile))
 	  {
 		java.util.ArrayList<Petition> pet = layer.getTilePetitions(factory, tile, width, height);
+  
+		//Storing petitions
 		for (int j = 0; j < pet.size(); j++)
 		{
 		  petitions.add(pet.get(j));

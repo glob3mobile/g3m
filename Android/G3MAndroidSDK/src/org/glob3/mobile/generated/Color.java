@@ -25,6 +25,14 @@ public class Color
   }
 
 
+  public Color(Color c)
+  {
+	  _red = c._red;
+	  _green = c._green;
+	  _blue = c._blue;
+	  _alpha = c._alpha;
+  }
+
   public static Color fromRGBA(float red, float green, float blue, float alpha)
   {
 	return new Color(red, green, blue, alpha);

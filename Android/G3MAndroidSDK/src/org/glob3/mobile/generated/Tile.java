@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class RenderContext;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
@@ -207,7 +208,7 @@ public class Tile
 		{
 		  int __TODO_tune_render_budget;
   
-		  boolean callTexturizer = ((_texturizerTimer == null) || (_texturizerTimer.elapsedTime().milliseconds() > 125 && lastTexturizerTimer.elapsedTime().milliseconds() > 25));
+		  boolean callTexturizer = ((_texturizerTimer == null) || (_texturizerTimer.elapsedTime().milliseconds() > 125 && lastTexturizerTimer.elapsedTime().milliseconds() > 50));
   
 		  if (callTexturizer)
 		  {
@@ -397,7 +398,7 @@ public class Tile
 	  return _parent;
   }
 
-  public final void render(RenderContext rc, TileTessellator tessellator, TileTexturizer texturizer, TileParameters parameters, TilesStatistics statistics, java.util.ArrayList<Tile> toVisitInNextIteration, ITimer frameTimer, ITimer lastSplitTimer, ITimer lastTexturizerTimer)
+  public final void render(RenderContext rc, TileTessellator tessellator, TileTexturizer texturizer, TileParameters parameters, TilesStatistics statistics, java.util.LinkedList<Tile> toVisitInNextIteration, ITimer frameTimer, ITimer lastSplitTimer, ITimer lastTexturizerTimer)
   {
 	if (isVisible(rc, tessellator))
 	{
@@ -428,7 +429,7 @@ public class Tile
 		{
 		  Tile subTile = subTiles.get(i);
 		  // subTile->render(rc, tessellator, texturizer, parameters, statistics, toVisitInNextIteration, timer);
-		  toVisitInNextIteration.add(subTile);
+		  toVisitInNextIteration.addLast(subTile);
 		}
 	  }
 	}

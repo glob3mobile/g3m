@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class RenderContext;
 
@@ -27,19 +28,22 @@ public class TextureMapping
   private final float[] _texCoords;
   private MutableVector2D _translation = new MutableVector2D();
   private MutableVector2D _scale = new MutableVector2D();
+  private final TexturesHandler _texHandler;
 
 
-  public TextureMapping(int textureId, float[] texCoords)
+  public TextureMapping(int textureId, float[] texCoords, TexturesHandler texHandler)
   {
 	  _textureId = textureId;
 	  _texCoords = texCoords;
+	  _texHandler = texHandler;
 	_translation = new MutableVector2D(0, 0);
 	_scale = new MutableVector2D(1, 1);
   }
 
-  public TextureMapping(int textureId, java.util.ArrayList<MutableVector2D> texCoords)
+  public TextureMapping(int textureId, java.util.ArrayList<MutableVector2D> texCoords, TexturesHandler texHandler)
   {
 	  _textureId = textureId;
+	  _texHandler = texHandler;
 	float[] texCoordsA = new float[2 * texCoords.size()];
 	int p = 0;
 	for (int i = 0; i < texCoords.size(); i++)
@@ -61,6 +65,11 @@ public class TextureMapping
 
   public void dispose()
   {
+
+	if (_texHandler != null)
+	{
+	  _texHandler.takeTexture(_textureId);
+	}
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -82,7 +91,7 @@ public class TextureMapping
 //ORIGINAL LINE: void bind(const RenderContext* rc) const
   public final void bind(RenderContext rc)
   {
-	IGL gl = rc.getGL();
+	GL gl = rc.getGL();
   
 	gl.transformTexCoords(_scale.asVector2D(), _translation.asVector2D());
   

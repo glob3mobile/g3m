@@ -1,13 +1,13 @@
 package org.glob3.mobile.generated; 
 public class RenderContext extends Context
 {
-  private IGL _gl;
+  private GL _gl;
   private Camera _camera;
   private TexturesHandler _texturesHandler;
 
-  public RenderContext(IFactory factory, ILogger logger, Planet planet, IGL gl, Camera camera, TexturesHandler texturesHandler, Downloader downloaderOLD, IDownloader downloader)
+  public RenderContext(IFactory factory, ILogger logger, Planet planet, GL gl, Camera camera, TexturesHandler texturesHandler, Downloader downloaderOLD, IDownloader downloader, EffectsScheduler scheduler)
   {
-	  super(factory, logger, planet, downloaderOLD, downloader);
+	  super(factory, logger, planet, downloaderOLD, downloader, scheduler);
 	  _gl = gl;
 	  _camera = camera;
 	  _texturesHandler = texturesHandler;
@@ -15,8 +15,8 @@ public class RenderContext extends Context
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: IGL* getGL() const
-  public final IGL getGL()
+//ORIGINAL LINE: GL* getGL() const
+  public final GL getGL()
   {
 	return _gl;
   }

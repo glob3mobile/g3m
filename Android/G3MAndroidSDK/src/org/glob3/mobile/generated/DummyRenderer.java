@@ -75,7 +75,7 @@ public class DummyRenderer extends Renderer
   {
   
 	// obtaing gl object reference
-	IGL gl = rc.getGL();
+	GL gl = rc.getGL();
   
 	gl.enableVerticesPosition();
   

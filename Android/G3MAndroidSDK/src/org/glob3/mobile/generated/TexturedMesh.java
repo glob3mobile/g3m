@@ -52,7 +52,7 @@ public class TexturedMesh extends Mesh
 //ORIGINAL LINE: void render(const RenderContext* rc) const
   public final void render(RenderContext rc)
   {
-	IGL gl = rc.getGL();
+	GL gl = rc.getGL();
   
 	gl.enableTextures();
 	gl.enableTexture2D();

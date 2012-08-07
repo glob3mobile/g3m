@@ -53,6 +53,7 @@ public class TilePetitions implements IDownloadListener
 	  _errorsCounter = 0;
 	  _petitions = petitions;
 	  _texID = -1;
+	removeUnnecesaryPetitions();
   }
 
   public void dispose()
@@ -226,6 +227,32 @@ public class TilePetitions implements IDownloadListener
   public final void onCancel(URL url)
   {
 	_errorsCounter++;
+  }
+
+  public final void removeUnnecesaryPetitions()
+  {
+	//For each opaque Bbox, we delete every covered request beneath
+	java.util.ArrayList<Petition> visiblePetitions = new java.util.ArrayList<Petition>();
+  
+	for(int i = 0; i < _petitions.size(); i++)
+	{
+	  boolean isVisible = true;
+	  for (int j = i+1; j < _petitions.size(); j++)
+	  {
+		if (!_petitions.get(j).isTransparent() && _petitions.get(j).getSector().fullContains(_petitions.get(i).getSector()))
+		{
+		  isVisible = false;
+		  break;
+		}
+	  }
+  
+	  if (isVisible)
+	  {
+		visiblePetitions.add(_petitions.get(i));
+	  }
+	}
+  
+	_petitions = visiblePetitions;
   }
 
 }

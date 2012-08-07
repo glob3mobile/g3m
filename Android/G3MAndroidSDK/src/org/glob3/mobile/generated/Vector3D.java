@@ -227,4 +227,14 @@ public class Vector3D
 	}
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector3D projectionInPlane(const Vector3D& normal) const
+  public final Vector3D projectionInPlane(Vector3D normal)
+  {
+	Vector3D axis = normal.cross(this);
+	MutableMatrix44D m = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(90), axis);
+	Vector3D projected = normal.transformedBy(m, 0).normalized();
+	return projected.times(this.length());
+  }
+
 }

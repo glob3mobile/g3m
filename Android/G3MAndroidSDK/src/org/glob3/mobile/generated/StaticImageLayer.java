@@ -64,7 +64,7 @@ public class StaticImageLayer extends Layer
 	//CREATING ID FOR PETITION
 	String id = factory.stringFormat("%s_%f_%f_%f_%f", _layerID, imageSector.lower().latitude().degrees(), imageSector.lower().longitude().degrees(), imageSector.upper().latitude().degrees(), imageSector.upper().longitude().degrees());
   
-	Petition pet = new Petition(tile.getSector(), id);
+	Petition pet = new Petition(tile.getSector(), id, true);
   
 	if (_storage != null)
 	{
@@ -100,6 +100,20 @@ public class StaticImageLayer extends Layer
 	}
   
 	return res;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isAvailable(const RenderContext* rc, const Tile& tile)const
+  public final boolean isAvailable(RenderContext rc, Tile tile)
+  {
+	return true;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isTransparent() const
+  public final boolean isTransparent()
+  {
+	return true;
   }
 
 }

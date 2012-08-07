@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class AttributesStructGL
+public class AttributesStruct
 {
   public int Position;
   public int TextureCoord;

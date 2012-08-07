@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
-public class EffectsScheduler extends Renderer
-{
+public class EffectsScheduler //: public Renderer
+ {
 
   private static class EffectRun
   {
@@ -25,27 +25,6 @@ public class EffectsScheduler extends Renderer
   private ITimer _timer;
   private IFactory _factory; // FINAL WORD REMOVE BY CONVERSOR RULE
 
-  private void doOneCyle(RenderContext rc)
-  {
-	final TimeInterval now = _timer.now();
-  
-  
-	processFinishedEffects(rc, now);
-  
-  
-	for (int i = 0; i < _effectsRuns.size(); i++)
-	{
-	  EffectRun effectRun = _effectsRuns.get(i);
-  
-	  if (effectRun._started == false)
-	  {
-		effectRun._effect.start(rc, now);
-		effectRun._started = true;
-	  }
-  
-	  effectRun._effect.doStep(rc, now);
-	}
-  }
 
   private void processFinishedEffects(RenderContext rc, TimeInterval now)
   {
@@ -82,34 +61,40 @@ public class EffectsScheduler extends Renderer
 
   }
 
-  public void initialize(InitializationContext ic)
+  public final void doOneCyle(RenderContext rc)
+  {
+	final TimeInterval now = _timer.now();
+  
+  
+	processFinishedEffects(rc, now);
+  
+  
+	for (int i = 0; i < _effectsRuns.size(); i++)
+	{
+	  EffectRun effectRun = _effectsRuns.get(i);
+  
+	  if (effectRun._started == false)
+	  {
+		effectRun._effect.start(rc, now);
+		effectRun._started = true;
+	  }
+  
+	  effectRun._effect.doStep(rc, now);
+	}
+  }
+
+  public final void initialize(InitializationContext ic)
   {
 	_factory = ic.getFactory();
 	_timer = _factory.createTimer();
   }
 
-  public int render(RenderContext rc)
-  {
-	doOneCyle(rc);
-	if (_effectsRuns.size() == 0)
-	{
-	  return Renderer.maxTimeToRender;
-	}
-	else
-	{
-	  return 0;
-	}
-  }
 
-  public boolean onTouchEvent(TouchEvent touchEvent)
-  {
-	return false;
-  }
-
-  public void onResizeViewportEvent(int width, int height)
-  {
-  
-  }
+//  virtual int render(const RenderContext* rc);
+//  
+//  virtual bool onTouchEvent(const TouchEvent* touchEvent);
+//  
+//  virtual void onResizeViewportEvent(int width, int height);
 
   public void dispose()
   {
@@ -123,6 +108,25 @@ public class EffectsScheduler extends Renderer
 	}
   }
 
+
+  //int EffectsScheduler::render(const RenderContext *rc) {
+  //  doOneCyle(rc);
+  //  if (_effectsRuns.size() == 0) {
+  //    return MAX_TIME_TO_RENDER;
+  //  }
+  //  else {
+  //    return 0;
+  //  }
+  //}
+  //
+  //bool EffectsScheduler::onTouchEvent(const TouchEvent* touchEvent) {
+  //  return false;
+  //}
+  //
+  //void EffectsScheduler::onResizeViewportEvent(int width, int height) {
+  //
+  //}
+  
   public final void startEffect(Effect effect)
   {
 	_effectsRuns.add(new EffectRun(effect));

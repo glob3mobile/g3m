@@ -291,7 +291,7 @@ public class IndexedMesh extends Mesh
 //ORIGINAL LINE: virtual void render(const RenderContext* rc) const
   public void render(RenderContext rc)
   {
-	IGL gl = rc.getGL();
+	GL gl = rc.getGL();
   
 	gl.enableVerticesPosition();
   

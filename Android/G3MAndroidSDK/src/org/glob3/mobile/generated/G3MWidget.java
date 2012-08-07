@@ -27,7 +27,7 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IFactory;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class IGL;
+//class GL;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TexturesHandler;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
@@ -38,12 +38,15 @@ package org.glob3.mobile.generated;
 //class Camera;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class ITimer;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class EffectsScheduler;
+
 
 
 public class G3MWidget
 {
 
-  public static G3MWidget create(IFactory factory, ILogger logger, IGL gl, TexturesHandler texturesHandler, Downloader downloaderOLD, IDownloader downloader, Planet planet, Renderer renderer, Renderer busyRenderer, int width, int height, Color backgroundColor, boolean logFPS)
+  public static G3MWidget create(IFactory factory, ILogger logger, GL gl, TexturesHandler texturesHandler, Downloader downloaderOLD, IDownloader downloader, Planet planet, Renderer renderer, Renderer busyRenderer, EffectsScheduler scheduler, int width, int height, Color backgroundColor, boolean logFPS)
   {
 	if (logger != null)
 	{
@@ -52,7 +55,7 @@ public class G3MWidget
   
 	ILogger.setInstance(logger);
   
-	return new G3MWidget(factory, logger, gl, texturesHandler, downloaderOLD, downloader, planet, renderer, busyRenderer, width, height, backgroundColor, logFPS);
+	return new G3MWidget(factory, logger, gl, texturesHandler, downloaderOLD, downloader, planet, renderer, busyRenderer, scheduler, width, height, backgroundColor, logFPS);
   }
 
   public void dispose()
@@ -65,6 +68,10 @@ public class G3MWidget
 		_gl.dispose();
 	if (_renderer != null)
 		_renderer.dispose();
+	if (_busyRenderer != null)
+		_busyRenderer.dispose();
+	if (_scheduler != null)
+		_scheduler.dispose();
 	if (_camera != null)
 		_camera.dispose();
 	if (_texturesHandler != null)
@@ -80,7 +87,9 @@ public class G3MWidget
 	_timer.start();
 	_renderCounter++;
   
-	RenderContext rc = new RenderContext(_factory, _logger, _planet, _gl, _camera, _texturesHandler, _downloaderOLD, _downloader);
+	RenderContext rc = new RenderContext(_factory, _logger, _planet, _gl, _camera, _texturesHandler, _downloaderOLD, _downloader, _scheduler);
+  
+	_scheduler.doOneCyle(rc);
   
 	_rendererReady = _renderer.isReadyToRender(rc);
 	Renderer selectedRenderer = _rendererReady ? _renderer : _busyRenderer;
@@ -88,12 +97,12 @@ public class G3MWidget
 	// Clear the scene
 	_gl.clearScreen(_backgroundColor);
   
-	int timeToRedraw = selectedRenderer.render(rc);
+	final int timeToRedraw = selectedRenderer.render(rc);
   
 	final TimeInterval elapsedTime = _timer.elapsedTime();
 	if (elapsedTime.milliseconds() > 100)
 	{
-	  //_logger->logWarning("Frame took too much time: %dms" , elapsedTime.milliseconds());
+	  _logger.logWarning("Frame took too much time: %dms", elapsedTime.milliseconds());
 	}
 	_totalRenderTime += elapsedTime.milliseconds();
   
@@ -131,8 +140,8 @@ public class G3MWidget
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: IGL* getGL() const
-  public final IGL getGL()
+//ORIGINAL LINE: GL* getGL() const
+  public final GL getGL()
   {
 	return _gl;
   }
@@ -147,10 +156,12 @@ public class G3MWidget
 
   private IFactory _factory;
   private ILogger _logger;
-  private IGL _gl;
+  private GL _gl;
   private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
   private Renderer _renderer;
   private Renderer _busyRenderer;
+  private EffectsScheduler _scheduler;
+
   private Camera _camera;
   private Downloader _downloaderOLD;
   private IDownloader _downloader;
@@ -167,10 +178,10 @@ public class G3MWidget
   private void initializeGL()
   {
 	_gl.enableDepthTest();
-	_gl.enableCullFace(CullFace.BACK);
+	_gl.enableCullFace(CullFace.Back);
   }
 
-  private G3MWidget(IFactory factory, ILogger logger, IGL gl, TexturesHandler texturesHandler, Downloader downloaderOLD, IDownloader downloader, Planet planet, Renderer renderer, Renderer busyRenderer, int width, int height, Color backgroundColor, boolean logFPS)
+  private G3MWidget(IFactory factory, ILogger logger, GL gl, TexturesHandler texturesHandler, Downloader downloaderOLD, IDownloader downloader, Planet planet, Renderer renderer, Renderer busyRenderer, EffectsScheduler scheduler, int width, int height, Color backgroundColor, boolean logFPS)
   {
 	  _factory = factory;
 	  _logger = logger;
@@ -179,6 +190,7 @@ public class G3MWidget
 	  _planet = planet;
 	  _renderer = renderer;
 	  _busyRenderer = busyRenderer;
+	  _scheduler = scheduler;
 	  _camera = new Camera(planet, width, height);
 	  _backgroundColor = backgroundColor;
 	  _timer = factory.createTimer();
@@ -190,8 +202,10 @@ public class G3MWidget
 	  _rendererReady = false;
 	initializeGL();
   
-	InitializationContext ic = new InitializationContext(_factory, _logger, _planet, _downloaderOLD, _downloader);
+	InitializationContext ic = new InitializationContext(_factory, _logger, _planet, _downloaderOLD, _downloader, _scheduler);
+	_scheduler.initialize(ic);
 	_renderer.initialize(ic);
+	_busyRenderer.initialize(ic);
   }
 
   private void initializeDefault()

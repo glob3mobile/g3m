@@ -4,7 +4,7 @@ public abstract class CameraRenderer extends Renderer
 
   //static const Planet* _planet;
   //static const ILogger * _logger;
-  //static IGL *gl;
+  //static GL *gl;
 
   //static Camera _camera0;                //Initial Camera saved on Down event
   //static Camera* _camera;         // Camera used at current frame

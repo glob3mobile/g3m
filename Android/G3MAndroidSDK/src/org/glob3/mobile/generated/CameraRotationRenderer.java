@@ -101,7 +101,7 @@ public class CameraRotationRenderer extends CameraRenderer
 	lastYValid = _initialPixel.y();
   
 	// compute center of view
-	_initialPoint = _camera.centerOfViewOnPlanet(_planet).asMutableVector3D();
+	_initialPoint = _camera.centerOfViewOnPlanet().asMutableVector3D();
 	if (_initialPoint.isNan())
 	{
 	  System.out.print("CAMERA ERROR: center point does not intersect globe!!\n");
@@ -123,10 +123,10 @@ public class CameraRotationRenderer extends CameraRenderer
 	Vector2D cm = c0.add(c1).add(c2).div(3);
   
 	// previous middle pixel in 2D
-	Vector2D p0 = touchEvent.getTouch(0).getPrevPos();
-	Vector2D p1 = touchEvent.getTouch(1).getPrevPos();
-	Vector2D p2 = touchEvent.getTouch(2).getPrevPos();
-	Vector2D pm = p0.add(p1).add(p2).div(3);
+  //  Vector2D p0 = touchEvent.getTouch(0)->getPrevPos();
+  //  Vector2D p1 = touchEvent.getTouch(1)->getPrevPos();
+  //  Vector2D p2 = touchEvent.getTouch(2)->getPrevPos();
+  //  Vector2D pm = p0.add(p1).add(p2).div(3);
   
 	// compute normal to Initial point
 	Vector3D normal = _planet.geodeticSurfaceNormal(_initialPoint.asVector3D());
@@ -134,11 +134,7 @@ public class CameraRotationRenderer extends CameraRenderer
 	// vertical rotation around normal vector to globe
 	_camera.copyFrom(_camera0);
 	Angle angle_v = Angle.fromDegrees((_initialPixel.x()-cm.x())*0.25);
-	MutableMatrix44D trans1 = MutableMatrix44D.createTranslationMatrix(_initialPoint.asVector3D());
-	MutableMatrix44D rot1 = MutableMatrix44D.createRotationMatrix(angle_v, normal);
-	MutableMatrix44D trans2 = MutableMatrix44D.createTranslationMatrix(_initialPoint.times(-1.0).asVector3D());
-	MutableMatrix44D M1 = trans1.multiply(rot1).multiply(trans2);
-	_camera.applyTransform(M1);
+	_camera.rotateWithAxisAndPoint(normal, _initialPoint.asVector3D(), angle_v);
   
 	// compute angle between normal and view direction
 	Vector3D view = _camera.getViewDirection();
@@ -153,18 +149,16 @@ public class CameraRotationRenderer extends CameraRenderer
 	if (finalAngle < 0)
 		delta = -initialAngle;
   
+	// create temporal camera to test if next rotation is valid
+	Camera tempCamera = new Camera(_camera);
+  
 	// horizontal rotation over the original camera horizontal axix
 	Vector3D u = _camera.getHorizontalVector();
-	MutableMatrix44D trans3 = MutableMatrix44D.createTranslationMatrix(_initialPoint.asVector3D());
-	MutableMatrix44D rot2 = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(delta), u);
-	MutableMatrix44D trans4 = MutableMatrix44D.createTranslationMatrix(_initialPoint.times(-1.0).asVector3D());
-	MutableMatrix44D M2 = trans3.multiply(rot2).multiply(trans4);
+	tempCamera.rotateWithAxisAndPoint(u, _initialPoint.asVector3D(), Angle.fromDegrees(delta));
   
 	// update camera only if new view intersects globe
-	Camera tempCamera = new Camera(_camera);
-	tempCamera.applyTransform(M2);
 	tempCamera.updateModelMatrix();
-	if (!tempCamera.centerOfViewOnPlanet(_planet).isNan())
+	if (!tempCamera.centerOfViewOnPlanet().isNan())
 	{
 	  _camera.copyFrom(tempCamera);
 	}
@@ -177,7 +171,7 @@ public class CameraRotationRenderer extends CameraRenderer
 
   private double lastYValid;
   private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
-  private IGL _gl;
+  private GL _gl;
   private Camera _camera0 ; //Initial Camera saved on Down event
   private Camera _camera; // Camera used at current frame
 

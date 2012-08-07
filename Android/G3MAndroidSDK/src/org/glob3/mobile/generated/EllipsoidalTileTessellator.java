@@ -85,11 +85,9 @@ public class EllipsoidalTileTessellator extends TileTessellator
 		indices.add(posS++);
 	  }
     
-	  // create TexturedMesh
 	  final Color color = new Color(Color.fromRGBA((float) 1.0, (float) 0.0, (float) 0.0, (float) 1.0));
 	  final Vector3D center = planet.toVector3D(sector.getCenter());
     
-	  //return new IndexedMesh(vertices, LineLoop, GivenCenter, center, indices, color);
 	  return IndexedMesh.CreateFromVector3D(vertices, LineLoop, CenterStrategy.GivenCenter, center, indices, color);
 	}
 
@@ -192,11 +190,9 @@ public class EllipsoidalTileTessellator extends TileTessellator
 	  indices.add(_resolution *_resolution);
 	}
   
-  //  const Color *color = new Color(Color::fromRGBA(1.0, 1.0, 1.0, 1.0));
 	final Color color = new Color(Color.fromRGBA((float) 0.1, (float) 0.1, (float) 0.1, (float) 1.0));
 	final Vector3D center = planet.toVector3D(sector.getCenter());
   
-	//return new IndexedMesh(vertices, TriangleStrip, GivenCenter, center, indices, color);
 	return IndexedMesh.CreateFromVector3D(vertices, TriangleStrip, CenterStrategy.GivenCenter, center, indices, color);
   }
 

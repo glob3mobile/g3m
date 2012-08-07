@@ -144,25 +144,37 @@ public class TileRenderer extends Renderer
 	  _topTilesJustCreated = false;
 	}
   
-	final DistanceToCenterTileComparison predicate = new DistanceToCenterTileComparison(rc.getCamera(), rc.getPlanet());
+  //  const DistanceToCenterTileComparison predicate = DistanceToCenterTileComparison(rc->getCamera(),
+  //                                                                                  rc->getPlanet());
   
-	java.util.ArrayList<Tile> toVisit = new java.util.ArrayList<Tile>(_topLevelTiles);
+  //  std::vector<Tile*> toVisit(_topLevelTiles);
+	java.util.LinkedList<Tile> toVisit = new java.util.LinkedList<Tile>();
+  
+	for (int i = 0; i < _topLevelTiles.size(); i++)
+	{
+	  toVisit.addLast(_topLevelTiles.get(i));
+	}
+  
 	while (toVisit.size() > 0)
 	{
-	  java.util.ArrayList<Tile> toVisitInNextIteration = new java.util.ArrayList<Tile>();
+	  java.util.LinkedList<Tile> toVisitInNextIteration = new java.util.LinkedList<Tile>();
   
+  ///#ifdef C_CODE
+  //    std::sort(toVisit.begin(),
+  //              toVisit.end(),
+  //              predicate);
+  ///#endif
   
   	  java.util.Collections.sort(toVisit, predicate);
   
-	  final int toVisitSize = toVisit.size();
-	  for (int i = 0; i < toVisitSize; i++)
+	  for (java.util.Iterator<Tile > i = toVisit.iterator(); i.hasNext();)
 	  {
-		Tile tile = toVisit.get(i);
+		Tile tile = i.next();
 		tile.render(rc, _tessellator, _texturizer, _parameters, statistics, toVisitInNextIteration, _frameTimer, _lastSplitTimer, _lastTexturizerTimer);
 	  }
   
 	  toVisit = toVisitInNextIteration;
-	  toVisitInNextIteration.clear();
+  //    toVisitInNextIteration.clear();
 	}
   
   

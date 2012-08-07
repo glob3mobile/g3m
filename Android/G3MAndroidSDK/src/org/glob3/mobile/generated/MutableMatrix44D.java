@@ -348,6 +348,14 @@ public class MutableMatrix44D
 	return new MutableMatrix44D(R);
   }
 
+  public static MutableMatrix44D createGeneralRotationMatrix(Angle angle, Vector3D axis, Vector3D point)
+  {
+	MutableMatrix44D T1 = MutableMatrix44D.createTranslationMatrix(point.times(-1.0));
+	MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(angle, axis);
+	MutableMatrix44D T2 = MutableMatrix44D.createTranslationMatrix(point);
+	return T2.multiply(R).multiply(T1);
+  }
+
   public static MutableMatrix44D createModelMatrix(MutableVector3D pos, MutableVector3D center, MutableVector3D up)
   {
 	final MutableVector3D w = center.sub(pos).normalized();

@@ -20,6 +20,7 @@ public class Camera
 	  _halfFrustum = (that._halfFrustum == null) ? null : new Frustum(that._halfFrustum);
 	  _logger = that._logger;
 	  _dirtyCachedValues = that._dirtyCachedValues;
+	  _planet = that._planet;
 	cleanCachedValues();
   }
 
@@ -36,6 +37,7 @@ public class Camera
 	  _halfFrustumInModelCoordinates = null;
 	  _halfFrustum = null;
 	  _centerOfView = null;
+	  _planet = planet;
 	resizeViewport(width, height);
   }
 
@@ -51,6 +53,7 @@ public class Camera
   
 	_modelMatrix = that._modelMatrix;
 	_projectionMatrix = that._projectionMatrix;
+  //  _modelViewMatrix  = that._modelViewMatrix;
   
 	_position = that._position;
 	_center = that._center;
@@ -84,7 +87,7 @@ public class Camera
 	  _dirtyCachedValues = false;
 	}
   
-	IGL gl = rc.getGL();
+	GL gl = rc.getGL();
 	gl.setProjection(_projectionMatrix);
 	gl.loadMatrixf(_modelMatrix);
   
@@ -104,7 +107,7 @@ public class Camera
 	  float[] vertices = { (float) p0.x(), (float) p0.y(), (float) p0.z(), (float) p1.x(), (float) p1.y(), (float) p1.z(), (float) p2.x(), (float) p2.y(), (float) p2.z(), (float) p3.x(), (float) p3.y(), (float) p3.z()};
 	  int[] indices = {0, 1, 2, 3};
   
-  //    IGL *gl = rc.getGL();
+  //    GL *gl = rc.getGL();
 	  gl.enableVerticesPosition();
 	  gl.vertexPointer(3, 0, vertices);
 	  gl.lineWidth(2);
@@ -140,12 +143,26 @@ public class Camera
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector3D pixel2PlanetPoint(const Vector2D& pixel) const
+  public final Vector3D pixel2PlanetPoint(Vector2D pixel)
+  {
+	return _planet.closestIntersection(_position.asVector3D(), pixel2Ray(pixel));
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Vector2D point2Pixel(const Vector3D& point) const
   public final Vector2D point2Pixel(Vector3D point)
   {
 	final MutableMatrix44D modelViewMatrix = _projectionMatrix.multiply(_modelMatrix);
+  
 	int[] viewport = { 0, 0, _width, _height };
-	Vector2D p = modelViewMatrix.project(point, viewport);
+	final Vector2D p = modelViewMatrix.project(point, viewport);
+  
+	if (p.isNan())
+	{
+	  return p;
+	}
+  
 	return new Vector2D(p.x(), _height-p.y());
   }
 
@@ -193,6 +210,13 @@ public class Camera
   {
 	  return _centerOfView;
   }
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector3D getViewDirection() const
+  public final Vector3D getViewDirection()
+  {
+	  return _center.sub(_position).asVector3D();
+  }
+
 
   //Dragging camera
   public final void dragCamera(Vector3D p0, Vector3D p1)
@@ -220,15 +244,6 @@ public class Camera
 	applyTransform(MutableMatrix44D.createTranslationMatrix(view.times(d)));
   }
 
-  //Zoom
-  public final void zoom(double factor)
-  {
-	final MutableVector3D w = _position.sub(_center);
-	_position = _center.add(w.times(factor));
-  
-	cleanCachedValues();
-  }
-
   //Pivot
   public final void pivotOnCenter(Angle a)
   {
@@ -239,11 +254,8 @@ public class Camera
   //Rotate
   public final void rotateWithAxisAndPoint(Vector3D axis, Vector3D point, Angle delta)
   {
-	final MutableMatrix44D trans1 = MutableMatrix44D.createTranslationMatrix(point.times(-1.0));
-	final MutableMatrix44D rotation = MutableMatrix44D.createRotationMatrix(delta, axis);
-	final MutableMatrix44D trans2 = MutableMatrix44D.createTranslationMatrix(point);
   
-	final MutableMatrix44D m = trans2.multiply(rotation).multiply(trans1);
+	final MutableMatrix44D m = MutableMatrix44D.createGeneralRotationMatrix(delta, axis, point);
   
 	//m.print();
   
@@ -258,6 +270,7 @@ public class Camera
 	{
 	  _modelMatrix.print("Model Matrix", _logger);
 	  _projectionMatrix.print("Projection Matrix", _logger);
+  //    _modelViewMatrix.print("ModelView Matrix", _logger);
 	  _logger.logInfo("Width: %d, Height %d\n", _width, _height);
 	}
   }
@@ -267,9 +280,9 @@ public class Camera
 	return _frustumInModelCoordinates;
   }
 
-  public final void setPosition(Planet planet, Geodetic3D g3d)
+  public final void setPosition(Geodetic3D g3d)
   {
-	_position = planet.toVector3D(g3d).asMutableVector3D();
+	_position = _planet.toVector3D(g3d).asMutableVector3D();
   }
 
 
@@ -285,18 +298,18 @@ public class Camera
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Vector3D centerOfViewOnPlanet(const Planet *planet) const
-  public final Vector3D centerOfViewOnPlanet(Planet planet)
+//ORIGINAL LINE: Vector3D centerOfViewOnPlanet() const
+  public final Vector3D centerOfViewOnPlanet()
   {
-	Vector3D ray = _center.sub(_position).asVector3D();
-	return planet.closestIntersection(_position.asVector3D(), ray);
+	final Vector3D ray = _center.sub(_position).asVector3D();
+	return _planet.closestIntersection(_position.asVector3D(), ray);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Vector3D getHorizontalVector() const
   public final Vector3D getHorizontalVector()
   {
-	MutableMatrix44D M = MutableMatrix44D.createModelMatrix(_position, _center, _up);
+	final MutableMatrix44D M = MutableMatrix44D.createModelMatrix(_position, _center, _up);
 	return new Vector3D(M.get(0), M.get(4), M.get(8));
   }
 
@@ -310,14 +323,23 @@ public class Camera
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Vector3D getViewDirection() const
-  public final Vector3D getViewDirection()
+//ORIGINAL LINE: Angle compute3DAngularDistance(const Vector2D& pixel0, const Vector2D& pixel1) const
+  public final Angle compute3DAngularDistance(Vector2D pixel0, Vector2D pixel1)
   {
-	  return _center.sub(_position).asVector3D();
+	Vector3D point0 = pixel2PlanetPoint(pixel0);
+	if (point0.isNan())
+		return Angle.nan();
+	Vector3D point1 = pixel2PlanetPoint(pixel1);
+	if (point1.isNan())
+		return Angle.nan();
+	return point0.angleBetween(point1);
   }
+
 
   private int _width;
   private int _height;
+
+  private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
 
   private MutableMatrix44D _modelMatrix = new MutableMatrix44D(); // Model matrix, computed in CPU in double precision
   private MutableMatrix44D _projectionMatrix = new MutableMatrix44D(); // opengl projection matrix
@@ -402,10 +424,14 @@ public class Camera
   
 	_modelMatrix = MutableMatrix44D.createModelMatrix(_position, _center, _up);
   
+  
+  //  _modelViewMatrix = _projectionMatrix.multiply(_modelMatrix);
+  
+  
 	// compute center of view on planet
 	final Planet planet = rc.getPlanet();
-	Vector3D centerV = centerOfViewOnPlanet(planet);
-	Geodetic3D centerG = planet.toGeodetic3D(centerV);
+	final Vector3D centerV = centerOfViewOnPlanet();
+	final Geodetic3D centerG = planet.toGeodetic3D(centerV);
 	_centerOfView = new Geodetic3D(centerG);
   
 	_frustum = new Frustum(data._left, data._right, data._bottom, data._top, data._znear, data._zfar);
@@ -431,5 +457,6 @@ public class Camera
 	  _frustumInModelCoordinates = null;
 	}
   }
+
 
 }

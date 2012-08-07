@@ -58,7 +58,7 @@ public class SGCubeNode extends SGGLeafNode
 
   public int rawRender(RenderContext rc)
   {
-	IGL gl = rc.getGL();
+	GL gl = rc.getGL();
   
 	if (!_initializedGL)
 	{

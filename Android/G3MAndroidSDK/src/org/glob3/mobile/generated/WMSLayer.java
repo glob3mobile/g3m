@@ -25,13 +25,17 @@ public class WMSLayer extends Layer
   private final String _style;
   private final String _srs;
   private Sector _bbox ;
+  private final boolean _isTransparent;
+
+  private final Angle _minTileLongitudeDelta ;
+  private final Angle _maxTileLongitudeDelta ;
 
 
   private final String _serverURL;
   private final String _serverVersion;
 
 
-  public WMSLayer(String name, String serverURL, String serverVer, String format, Sector bbox, String srs, String style)
+  public WMSLayer(String name, String serverURL, String serverVer, String format, Sector bbox, String srs, String style, boolean isTransparent, Angle minTileLongitudeDelta, Angle maxTileLongitudeDelta)
   {
 	  _name = name;
 	  _format = format;
@@ -40,6 +44,9 @@ public class WMSLayer extends Layer
 	  _srs = srs;
 	  _serverURL = serverURL;
 	  _serverVersion = serverVer;
+	  _isTransparent = isTransparent;
+	  _minTileLongitudeDelta = new Angle(minTileLongitudeDelta);
+	  _maxTileLongitudeDelta = new Angle(maxTileLongitudeDelta);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -107,7 +114,6 @@ public class WMSLayer extends Layer
 	req += "&TRANSPARENT=TRUE";
   
 	Sector sector = tile.getSector();
-  
 	//Texture Size
 	req += factory.stringFormat("&WIDTH=%d&HEIGHT=%d", width, height);
   
@@ -120,10 +126,33 @@ public class WMSLayer extends Layer
 	  req += "&CRS=EPSG:4326";
 	}
   
-	Petition pet = new Petition(sector, req);
+	Petition pet = new Petition(sector, req, _isTransparent);
 	vPetitions.add(pet);
   
 	  return vPetitions;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isAvailable(const RenderContext* rc, const Tile& tile) const
+  public final boolean isAvailable(RenderContext rc, Tile tile)
+  {
+	Angle dLon = tile.getSector().getDeltaLongitude();
+  
+	if ((!_minTileLongitudeDelta.isNan() && dLon.lowerThan(_minTileLongitudeDelta)) || (!_maxTileLongitudeDelta.isNan() && dLon.greaterThan(_maxTileLongitudeDelta)))
+	{
+	  return false;
+	}
+	else
+	{
+	  return true;
+	}
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isTransparent() const
+  public final boolean isTransparent()
+  {
+	return _isTransparent;
   }
 
 }

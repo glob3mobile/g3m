@@ -115,8 +115,8 @@ public abstract class INativeGL
   public abstract void drawArrays(GLPrimitive mode, int first, int count);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void cullFace(CullFace c) const = 0;
-  public abstract void cullFace(CullFace c);
+//ORIGINAL LINE: virtual void cullFace(GLCullFace c) const = 0;
+  public abstract void cullFace(GLCullFace c);
 
 
 

@@ -20,8 +20,8 @@ package org.glob3.mobile.generated;
 public class CPUTextureBuilder extends TextureBuilder
 {
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: int createTextureFromImages(IGL * gl, const java.util.ArrayList<const IImage*>& vImages, int width, int height) const
-  public final int createTextureFromImages(IGL gl, java.util.ArrayList<IImage> vImages, int width, int height)
+//ORIGINAL LINE: int createTextureFromImages(GL * gl, const java.util.ArrayList<const IImage*>& vImages, int width, int height) const
+  public final int createTextureFromImages(GL gl, java.util.ArrayList<IImage> vImages, int width, int height)
   {
 	if (vImages.size() > 0)
 	{
@@ -54,8 +54,8 @@ public class CPUTextureBuilder extends TextureBuilder
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: int createTextureFromImages(IGL * gl, const IFactory* factory, const java.util.ArrayList<const IImage*>& vImages, const java.util.ArrayList<const Rectangle*>& vRectangles, int width, int height) const
-  public final int createTextureFromImages(IGL gl, IFactory factory, java.util.ArrayList<IImage> vImages, java.util.ArrayList<Rectangle> vRectangles, int width, int height)
+//ORIGINAL LINE: int createTextureFromImages(GL * gl, const IFactory* factory, const java.util.ArrayList<const IImage*>& vImages, const java.util.ArrayList<const Rectangle*>& vRectangles, int width, int height) const
+  public final int createTextureFromImages(GL gl, IFactory factory, java.util.ArrayList<IImage> vImages, java.util.ArrayList<Rectangle> vRectangles, int width, int height)
   {
   
 	int todo_JM = 0;

@@ -30,8 +30,9 @@ public abstract class Effect
 	if (f > 1)
 		return 1;
 
-	//return sigmoid(f);
-	return gently(f, 0.6, 0.85);
+//    return sigmoid(f);
+//    return gently(f, 0.6, 0.85);
+	return gently(f, 0.25, 0.75);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

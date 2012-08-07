@@ -386,5 +386,4 @@ public class Ellipsoid
 	Vector3D solution = pos.add(ray.times(t.get(0)));
 	return solution;
   }
-
 }

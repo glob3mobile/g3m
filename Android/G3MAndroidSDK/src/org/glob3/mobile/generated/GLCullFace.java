@@ -1,27 +1,26 @@
 package org.glob3.mobile.generated; 
 //
-//  IGL.h
+//  INativeGL.hpp
 //  G3MiOSSDK
 //
-//  Created by José Miguel S N on 01/06/12.
+//  Created by José Miguel S N on 31/07/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 
 
-
-public enum CullFace
+public enum GLCullFace
 {
-  FRONT,
-  BACK,
-  FRONT_AND_BACK;
+	Front,
+	Back,
+	FrontAndBack;
 
 	public int getValue()
 	{
 		return this.ordinal();
 	}
 
-	public static CullFace forValue(int value)
+	public static GLCullFace forValue(int value)
 	{
 		return values()[value];
 	}

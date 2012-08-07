@@ -87,7 +87,7 @@ public class SingleImageTileTexturizer extends TileTexturizer
 	  rc.getFactory().deleteImage(_image);
 	}
   
-	final TextureMapping texMap = new TextureMapping(_texID, createTextureCoordinates(rc, mesh));
+	final TextureMapping texMap = new TextureMapping(_texID, createTextureCoordinates(rc, mesh), rc.getTexturesHandler());
   
 	if (previousMesh != null)
 		if (previousMesh != null)

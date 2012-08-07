@@ -168,7 +168,7 @@ public class SimplePlanetRenderer extends Renderer
   
 	IndexedMesh im = IndexedMesh.CreateFromVector3D(true, TriangleStrip, CenterStrategy.NoCenter, new Vector3D(0,0,0), _latRes *_lonRes, ver, ind, numIndexes, flatColor, colors, 0.5, normals);
   
-	_mesh = new TexturedMesh(im, true, new TextureMapping(texID, texC), true);
+	_mesh = new TexturedMesh(im, true, new TextureMapping(texID, texC, rc.getTexturesHandler()), true);
   
 	return true;
   }

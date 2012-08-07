@@ -69,7 +69,7 @@ public class Mark
   
 	  if (normalAtMarkPosition.angleBetween(markCameraVector).radians() > Math.PI / 2)
 	  {
-		IGL gl = rc.getGL();
+		GL gl = rc.getGL();
   
 		Vector2D tr = new Vector2D(0.0,0.0);
 		Vector2D scale = new Vector2D(1.0,1.0);

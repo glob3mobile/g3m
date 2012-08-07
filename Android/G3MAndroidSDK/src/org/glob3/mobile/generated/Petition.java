@@ -37,14 +37,16 @@ public class Petition
   private final Sector _sector;
   private ByteBuffer _bb;
   private int _downloadID;
+  private final boolean _transparentImage;
 
 
-  public Petition(Sector s, String url)
+  public Petition(Sector s, String url, boolean transparent)
   {
 	  _url = url;
 	  _sector = new Sector(s);
 	  _bb = null;
 	  _downloadID = -1;
+	  _transparentImage = transparent;
   }
 
   public void dispose()
@@ -71,6 +73,13 @@ public class Petition
   public final boolean isArrived()
   {
 	return _bb != null;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isTransparent() const
+  public final boolean isTransparent()
+  {
+	return _transparentImage;
   }
 
   public final void setDownloadID(int id)

@@ -25,4 +25,12 @@ public abstract class Layer
 //ORIGINAL LINE: virtual java.util.ArrayList<Petition*> getTilePetitions(const IFactory& factory, const Tile& tile, int width, int height) const = 0;
   public abstract java.util.ArrayList<Petition> getTilePetitions(IFactory factory, Tile tile, int width, int height);
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual boolean isAvailable(const RenderContext* rc, const Tile& tile) const = 0;
+  public abstract boolean isAvailable(RenderContext rc, Tile tile);
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual boolean isTransparent() const = 0;
+  public abstract boolean isTransparent();
+
 }

@@ -32,7 +32,10 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class ILogger;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class IGL;
+//class GL;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class EffectsScheduler;
+
 
 public class Context
 {
@@ -40,17 +43,17 @@ public class Context
   protected ILogger _logger;
   protected Planet _planet;
   protected final IDownloader _downloader;
-
   protected final Downloader _downloaderOLD;
+  protected EffectsScheduler _scheduler;
 
-
-  protected Context(IFactory factory, ILogger logger, Planet planet, Downloader downloaderOLD, IDownloader downloader)
+  protected Context(IFactory factory, ILogger logger, Planet planet, Downloader downloaderOLD, IDownloader downloader, EffectsScheduler scheduler)
   {
 	  _factory = factory;
 	  _logger = logger;
 	  _planet = planet;
 	  _downloader = downloader;
 	  _downloaderOLD = downloaderOLD;
+	  _scheduler = scheduler;
   }
 
 
@@ -87,5 +90,10 @@ public class Context
   public final IDownloader getDownloader()
   {
 	return _downloader;
+  }
+
+  public final EffectsScheduler getEffectsScheduler()
+  {
+	return _scheduler;
   }
 }

@@ -71,9 +71,8 @@ public class CameraSimpleDragRenderer extends CameraRenderer
 		_gl.pointSize(60);
 		_gl.pushMatrix();
   
-		double height = _planet.toGeodetic3D(_camera.getPosition()).height();
-		System.out.printf ("altura camara = %f\n", height);
-  
+  //      double height = _planet->toGeodetic3D(_camera->getPosition()).height();
+		//printf ("altura camara = %f\n", height);
   
 		MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(_initialPoint.asVector3D());
 		_gl.multMatrixf(T);
@@ -101,9 +100,8 @@ public class CameraSimpleDragRenderer extends CameraRenderer
 	_currentGesture = Gesture.Drag;
   
 	// dragging
-	MutableVector2D pixel = touchEvent.getTouch(0).getPos().asMutableVector2D();
-	final Vector3D ray = _camera0.pixel2Ray(pixel.asVector2D());
-	_initialPoint = _planet.closestIntersection(_camera0.getPosition(), ray).asMutableVector3D();
+	Vector2D pixel = touchEvent.getTouch(0).getPos();
+	_initialPoint = _camera0.pixel2PlanetPoint(pixel).asMutableVector3D();
   
 	//printf ("down 1 finger\n");
   }
@@ -116,13 +114,12 @@ public class CameraSimpleDragRenderer extends CameraRenderer
 		return;
   
 	final Vector2D pixel = touchEvent.getTouch(0).getPos();
-	final Vector3D ray = _camera0.pixel2Ray(pixel);
-	final Vector3D pos = _camera0.getPosition();
-  
-	MutableVector3D finalPoint = _planet.closestIntersection(pos, ray).asMutableVector3D();
+	MutableVector3D finalPoint = _camera0.pixel2PlanetPoint(pixel).asMutableVector3D();
 	if (finalPoint.isNan())
 	{
 	  //INVALID FINAL POINT
+	  Vector3D ray = _camera0.pixel2Ray(pixel);
+	  Vector3D pos = _camera0.getPosition();
 	  finalPoint = _planet.closestPointToSphere(pos, ray).asMutableVector3D();
 	}
   
@@ -140,7 +137,7 @@ public class CameraSimpleDragRenderer extends CameraRenderer
   }
 
   private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
-  private IGL _gl;
+  private GL _gl;
   private Camera _camera0 ; //Initial Camera saved on Down event
   private Camera _camera; // Camera used at current frame
 

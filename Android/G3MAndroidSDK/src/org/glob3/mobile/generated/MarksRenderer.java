@@ -31,7 +31,7 @@ public class MarksRenderer extends Renderer
   {
   //  rc.getLogger()->logInfo("MarksRenderer::render()");
   
-	IGL gl = rc.getGL();
+	GL gl = rc.getGL();
   
 	gl.enableVerticesPosition();
 	gl.enableTextures();
@@ -96,7 +96,7 @@ public class MarksRenderer extends Renderer
 //
 //int MarksRenderer::Render(RenderContext &rc) {
 //  // obtaing gl object reference
-//  IGL *gl = rc.GetGL();
+//  GL *gl = rc.GetGL();
 //  //Point3D po = View::GetInstance()->GetCamera()->GetPos();
 //  //Vector3D c(po.x, po.y, po.z); 
 //  Vector3D c = View::GetInstance()->GetCamera()->GetPos();

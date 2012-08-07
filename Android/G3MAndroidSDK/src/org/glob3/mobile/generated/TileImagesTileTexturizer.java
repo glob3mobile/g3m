@@ -30,9 +30,11 @@ package org.glob3.mobile.generated;
 public class TileImagesTileTexturizer extends TileTexturizer
 {
 
+  //STATE
   private IFactory _factory; // FINAL WORD REMOVE BY CONVERSOR RULE
   private TexturesHandler _texHandler;
   private Downloader _downloader;
+  private RenderContext _renderContext;
 
   private java.util.ArrayList<TilePetitions> _tilePetitions = new java.util.ArrayList<TilePetitions>();
   private java.util.ArrayList<TilePetitions> _tilePetitionsTopTile = new java.util.ArrayList<TilePetitions>();
@@ -46,12 +48,7 @@ public class TileImagesTileTexturizer extends TileTexturizer
 
   private TilePetitions createTilePetitions(Tile tile)
   {
-	java.util.ArrayList<Petition> pet = _layerSet.createTilePetitions(_factory, tile, _parameters._tileTextureWidth, _parameters._tileTextureHeight);
-  //  if (pet.size() > 1){
-  //    for (int i = 0; i < pet.size(); i++) {
-  //      printf("%s\n", pet[i]->getURL().c_str());
-  //    }
-  //  }
+	java.util.ArrayList<Petition> pet = _layerSet.createTilePetitions(_renderContext, _factory, tile, _parameters._tileTextureWidth, _parameters._tileTextureHeight);
   
 	return new TilePetitions(tile.getLevel(), tile.getRow(), tile.getColumn(), tile.getSector(), pet);
   }
@@ -117,6 +114,18 @@ public class TileImagesTileTexturizer extends TileTexturizer
 //ORIGINAL LINE: TilePetitions* getRegisteredTilePetitions(Tile* tile) const
   private TilePetitions getRegisteredTilePetitions(Tile tile)
   {
+  //  for(std::list<TilePetitions*>::iterator it = _tilePetitions.begin();
+  //      it != _tilePetitions.end();
+  //      it++) {
+  //    TilePetitions* tp = *it;
+  //
+  //    if (tile->getLevel()  == tp->getLevel() &&
+  //        tile->getRow()    == tp->getRow()   &&
+  //        tile->getColumn() == tp->getColumn()) {
+  //      return tp;
+  //    }
+  //  }
+  
 	for (int i = 0; i < _tilePetitions.size(); i++)
 	{
 	  TilePetitions tp = _tilePetitions.get(i);
@@ -125,10 +134,24 @@ public class TileImagesTileTexturizer extends TileTexturizer
 		return tp;
 	  }
 	}
+  
 	return null;
   }
   private void removeRegisteredTilePetitions(Tile tile)
   {
+  //  for(std::list<TilePetitions*>::iterator it = _tilePetitions.begin();
+  //      it != _tilePetitions.end();
+  //      it++) {
+  //    TilePetitions* tp = *it;
+  //    if (tile->getLevel()  == tp->getLevel() &&
+  //        tile->getRow()    == tp->getRow()   &&
+  //        tile->getColumn() == tp->getColumn()) {
+  //      _tilePetitions.erase(it);
+  //      delete tp;
+  //      break;
+  //    }
+  //  }
+  
 	TilePetitions tp = null;
 	for (int i = 0; i < _tilePetitions.size(); i++)
 	{
@@ -171,7 +194,7 @@ public class TileImagesTileTexturizer extends TileTexturizer
 	//CREATING MESH
 	if (texID > -1)
 	{
-	  TextureMapping tMap = new TextureMapping(texID, getTextureCoordinates(tessellator));
+	  TextureMapping tMap = new TextureMapping(texID, getTextureCoordinates(tessellator), _texHandler);
 	  translateAndScaleFallBackTex(tile, fbTile, tMap);
 	  TexturedMesh texMesh = new TexturedMesh(tessellatorMesh, false, tMap, true);
 	  if (previousMesh != null)
@@ -192,7 +215,8 @@ public class TileImagesTileTexturizer extends TileTexturizer
   
 	  //printf("TEXTURIZED %d, %d, %d\n", tile->getLevel(), tile->getRow(), tile->getColumn());
   
-	  TextureMapping tMap = new TextureMapping(texID, getTextureCoordinates(tessellator));
+	  TextureMapping tMap = new TextureMapping(texID, getTextureCoordinates(tessellator), _texHandler);
+  
 	  TexturedMesh texMesh = new TexturedMesh(tessellatorMesh, false, tMap, true);
 	  if (previousMesh != null)
 		  previousMesh.dispose(); //If a new mesh has been produced we delete the previous one
@@ -213,6 +237,7 @@ public class TileImagesTileTexturizer extends TileTexturizer
 	  _texCoordsCache = null;
 	  _layerSet = layerSet;
 	  _factory = factory;
+	  _renderContext = null;
   }
 
   public void dispose()
@@ -229,6 +254,7 @@ public class TileImagesTileTexturizer extends TileTexturizer
 	_factory = rc.getFactory();
 	_texHandler = rc.getTexturesHandler();
 	_downloader = rc.getDownloaderOLD();
+	_renderContext = rc;
   
 	//printf("TP SIZE: %lu\n", _tilePetitions.size());
   
@@ -263,10 +289,9 @@ public class TileImagesTileTexturizer extends TileTexturizer
   
 	if (tp != null)
 	{
-	  if (tp.getTexID() > -1)
-	  {
-		_texHandler.takeTexture(tp.getTexID());
-	  }
+  //    if (tp->getTexID() > -1){
+  //      _texHandler->takeTexture(tp->getTexID());
+  //    }
   
 	  tp.cancelPetitions(_downloader);
   

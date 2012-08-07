@@ -17,7 +17,7 @@ public abstract class SGGLeafNode extends SGNode
 	  return Renderer.maxTimeToRender;
 	}
 
-	IGL gl = rc.getGL();
+	GL gl = rc.getGL();
 
 	gl.pushMatrix();
 	MutableMatrix44D fullMatrix = getFullMatrix();
