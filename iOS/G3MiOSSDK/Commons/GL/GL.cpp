@@ -242,7 +242,7 @@ int GL::uploadTexture(const IImage* image, int textureWidth, int textureHeight) 
   _gl->texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapS, GLTextureParameterValue.ClampToEdge);
   _gl->texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapT, GLTextureParameterValue.ClampToEdge);
   _gl->texImage2D(GLTextureType.Texture2D, 0, GLFormat.RGBA, textureWidth, textureHeight, 
-                  0, GLFormat.RGBA, UnsignedByte, imageData);
+                  0, GLFormat.RGBA, GLType.UnsignedByte, imageData);
   
 #endif
   
@@ -250,11 +250,19 @@ int GL::uploadTexture(const IImage* image, int textureWidth, int textureHeight) 
 }
 
 void GL::setTextureCoordinates(int size, int stride, const float texcoord[]) {
+#ifdef C_CODE
   _gl->vertexAttribPointer(Attributes.TextureCoord, size, Float, 0, stride, (const void *) texcoord);
+#else
+  _gl->vertexAttribPointer(Attributes.TextureCoord, size, GLType.Float, 0, stride, (const void *) texcoord);
+#endif
 }
 
 void GL::bindTexture(unsigned int n) {
+#ifdef C_CODE
   _gl->bindTexture(Texture2D, n);
+#else
+  _gl->bindTexture(GLTextureType.Texture2D, n);
+#endif
 }
 
 void GL::drawBillBoard(const unsigned int textureId,
@@ -288,7 +296,11 @@ void GL::drawBillBoard(const unsigned int textureId,
   vertexPointer(3, 0, vertex);
   setTextureCoordinates(2, 0, texcoord);
   
+#ifdef C_CODE
   _gl->drawArrays(TriangleStrip, 0, 4);
+#else
+  _gl->drawArrays(GLPrimitive.TriangleStrip, 0, 4);
+#endif
   
   enableDepthTest();
   
@@ -328,7 +340,11 @@ void GL::enableVertexColor(float const colors[], float intensity) {
   if (!_enableVertexColor) {
     _gl->uniform1i(Uniforms.EnableColorPerVertex, 1);
     _gl->enableVertexAttribArray(Attributes.Color);
+#ifdef C_CODE
     _gl->vertexAttribPointer(Attributes.Color, 4, Float, 0, 0, colors);
+#else
+    _gl->vertexAttribPointer(Attributes.Color, 4, GLType.Float, 0, 0, colors);
+#endif
     _gl->uniform1f(Uniforms.ColorPerVertexIntensity, intensity);
     _enableVertexColor = true;
   }
@@ -343,13 +359,15 @@ void GL::disableVertexColor() {
 }
 
 void GL::enableVertexNormal(float const normals[]) {
-  //  if (normals != NULL) {
   if (!_enableVertexNormal) {
     _gl->enableVertexAttribArray(Attributes.Normal);
+#ifdef C_CODE
     _gl->vertexAttribPointer(Attributes.Normal, 3, Float, 0, 0, normals);
+#else
+    _gl->vertexAttribPointer(Attributes.Normal, 3, GLType.Float, 0, 0, normals);
+#endif
     _enableVertexNormal = true;
   }
-  //  }
 }
 
 void GL::disableVertexNormal() {
@@ -392,28 +410,44 @@ void GL::disableVertexFlatColor() {
 
 void GL::enableDepthTest() {
   if (!_enableDepthTest) {
+#ifdef C_CODE
     _gl->enable(DepthTest);
+#else
+    _gl->enable(GLFeature.DepthTest);
+#endif
     _enableDepthTest = true;
   }
 }
 
 void GL::disableDepthTest() {
   if (_enableDepthTest) {
+#ifdef C_CODE
     _gl->disable(DepthTest);
+#else
+    _gl->disable(GLFeature.DepthTest);
+#endif
     _enableDepthTest = false;
   }
 }
 
 void GL::enableBlend() {
   if (!_enableBlend) {
+#ifdef C_CODE
     _gl->enable(Blend);
+#else
+    _gl->enable(GLFeature.Blend);
+#endif
     _enableBlend = true;
   }
 }
 
 void GL::disableBlend() {
   if (_enableBlend) {
-    _gl->disable(Blend);
+#ifdef C_CODE
+    _gl->disnable(Blend);
+#else
+    _gl->disable(GLFeature.Blend);
+#endif
     _enableBlend = false;
   }
   
@@ -421,7 +455,11 @@ void GL::disableBlend() {
 
 void GL::enableCullFace(GLCullFace face) {
   if (!_enableCullFace) {
+#ifdef C_CODE
     _gl->enable(CullFacing);
+#else
+    _gl->enable(GLFeature.CullFacing);
+#endif
     _enableCullFace = true;
   }
   
@@ -433,7 +471,11 @@ void GL::enableCullFace(GLCullFace face) {
 
 void GL::disableCullFace() {  
   if (_enableCullFace) {
+#ifdef C_CODE
     _gl->disable(CullFacing);
+#else
+    _gl->disable(GLFeature.CullFacing);
+#endif
     _enableCullFace = false;
   }
 }
