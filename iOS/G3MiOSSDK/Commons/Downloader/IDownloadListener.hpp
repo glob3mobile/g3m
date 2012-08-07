@@ -13,7 +13,9 @@
 
 class IDownloadListener {
 public:
+#ifdef C_CODE
   virtual ~IDownloadListener() {  }
+#endif
   
   virtual void onDownload(const Response& response) = 0; 
   virtual void onError(const Response& response) = 0;
