@@ -232,7 +232,8 @@ void Camera::dragCamera(const Vector3D& p0, const Vector3D& p1) {
   const Vector3D rotationAxis = p0.cross(p1);
   
   // compute the angle
-  const Angle rotationDelta = Angle::fromRadians( - acos(p0.normalized().dot(p1.normalized())) );
+  //const Angle rotationDelta = Angle::fromRadians( - acos(p0.normalized().dot(p1.normalized())) );
+  Angle rotationDelta = Angle::fromRadians(-asin(rotationAxis.length()/p0.length()/p1.length()));
   
   if (rotationDelta.isNan()) {
     return; 
