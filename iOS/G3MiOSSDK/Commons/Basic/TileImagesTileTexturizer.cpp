@@ -116,8 +116,7 @@ Mesh* TileImagesTileTexturizer::texturize(const RenderContext* rc,
                                           Tile* tile,
                                           const TileTessellator* tessellator,
                                           Mesh* tessellatorMesh,
-                                          Mesh* previousMesh,
-                                          ITimer* timer) {
+                                          Mesh* previousMesh) {
   //STORING CONTEXT
   _factory    = rc->getFactory();
   _texHandler = rc->getTexturesHandler();

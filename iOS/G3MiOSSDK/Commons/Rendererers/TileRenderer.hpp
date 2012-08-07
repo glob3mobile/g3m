@@ -211,7 +211,6 @@ private:
 
   std::vector<Tile*>     _topLevelTiles;
   
-  ITimer* _frameTimer;          // timer started at the start of each frame rendering
   ITimer* _lastSplitTimer;      // timer to start every time a tile get splitted into subtiles
   ITimer* _lastTexturizerTimer; // timer to start every time the texturizer is called
   
@@ -285,7 +284,6 @@ public:
   _showStatistics(showStatistics),
   _lastStatistics(parameters),
   _topTilesJustCreated(false),
-  _frameTimer(NULL),
   _lastSplitTimer(NULL),
   _lastTexturizerTimer(NULL)
   {

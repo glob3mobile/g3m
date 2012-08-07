@@ -73,7 +73,6 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
                                const TileTessellator *tessellator,
                                TileTexturizer *texturizer,
                                const TileParameters* parameters,
-                               ITimer* frameTimer,
                                ITimer* lastSplitTimer,
                                TilesStatistics* statistics) {
   if (_level >= parameters->_maxLevel) {
@@ -124,7 +123,6 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
 void Tile::rawRender(const RenderContext *rc,
                      const TileTessellator *tessellator,
                      TileTexturizer *texturizer,
-                     ITimer* frameTimer,
                      ITimer* lastTexturizerTimer) {
   
   Mesh* tessellatorMesh = getTessellatorMesh(rc, tessellator);
@@ -150,8 +148,7 @@ void Tile::rawRender(const RenderContext *rc,
                                                   this,
                                                   tessellator,
                                                   tessellatorMesh,
-                                                  _texturizerMesh,
-                                                  frameTimer);
+                                                  _texturizerMesh);
           lastTexturizerTimer->start();
 
           if (_texturizerTimer == NULL) {
@@ -240,12 +237,11 @@ void Tile::render(const RenderContext* rc,
                   const TileParameters* parameters,
                   TilesStatistics* statistics,
                   std::list<Tile*>* toVisitInNextIteration,
-                  ITimer* frameTimer,
                   ITimer* lastSplitTimer,
                   ITimer* lastTexturizerTimer) {
   if (isVisible(rc, tessellator)) {
-    if (meetsRenderCriteria(rc, tessellator, texturizer, parameters, frameTimer, lastSplitTimer, statistics)) {
-      rawRender(rc, tessellator, texturizer, frameTimer, lastTexturizerTimer);
+    if (meetsRenderCriteria(rc, tessellator, texturizer, parameters, lastSplitTimer, statistics)) {
+      rawRender(rc, tessellator, texturizer, lastTexturizerTimer);
       if (parameters->_renderDebug) {
         debugRender(rc, tessellator);
       }

@@ -82,7 +82,6 @@ private:
                                   const TileTessellator *tessellator,
                                   TileTexturizer *texturizer,
                                   const TileParameters* parameters,
-                                  ITimer* frameTimer,
                                   ITimer* lastSplitTimer,
                                   TilesStatistics* statistics);
   
@@ -91,7 +90,6 @@ private:
   inline void rawRender(const RenderContext* rc,
                         const TileTessellator* tessellator,
                         TileTexturizer* texturizer,
-                        ITimer* timer,
                         ITimer* lastTexturizerTimer);
   
   void cleanTexturizerMesh();
@@ -165,7 +163,6 @@ public:
               const TileParameters* parameters,
               TilesStatistics* statistics,
               std::list<Tile*>* toVisitInNextIteration,
-              ITimer* frameTimer,
               ITimer* lastSplitTimer,
               ITimer* lastTexturizerTimer);
     

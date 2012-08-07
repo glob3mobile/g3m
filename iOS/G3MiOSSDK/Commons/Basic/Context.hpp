@@ -19,6 +19,7 @@ class Downloader;
 class ILogger;
 class GL;
 class EffectsScheduler;
+class ITimer;
 
 
 class Context {
@@ -62,7 +63,7 @@ public:
   Downloader* const getDownloaderOLD() const {
     return _downloaderOLD;
   }
-
+  
   const IDownloader* getDownloader() const {
     return _downloader;
   }
@@ -109,6 +110,7 @@ private:
   GL*              _gl;
   Camera*          _camera;
   TexturesHandler* _texturesHandler;
+  ITimer*          _frameStartTimer;
   
 public:
   RenderContext(IFactory *factory,
@@ -119,11 +121,13 @@ public:
                 TexturesHandler* texturesHandler,
                 Downloader* const downloaderOLD,
                 IDownloader* downloader,
-                EffectsScheduler* scheduler) :
+                EffectsScheduler* scheduler,
+                ITimer* frameStartTimer) :
   Context(factory, logger, planet, downloaderOLD, downloader, scheduler),
   _gl(gl),
   _camera(camera),
-  _texturesHandler(texturesHandler) {
+  _texturesHandler(texturesHandler),
+  _frameStartTimer(frameStartTimer) {
     
   }
   
@@ -138,8 +142,13 @@ public:
   TexturesHandler* getTexturesHandler() const {
     return _texturesHandler;
   }
-    
-    
+  
+  const ITimer* getFrameStartTimer() const {
+    return _frameStartTimer;
+  }
+  
+  ~RenderContext();
+  
 };
 
 

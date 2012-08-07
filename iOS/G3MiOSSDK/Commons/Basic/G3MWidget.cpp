@@ -148,7 +148,8 @@ int G3MWidget::render() {
                    _texturesHandler,
                    _downloaderOLD,
                    _downloader,
-                   _scheduler);
+                   _scheduler,
+                   _factory->createTimer());
 
   _scheduler->doOneCyle(&rc);
 
