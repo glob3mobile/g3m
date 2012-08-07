@@ -9,13 +9,10 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class IDownloadListener
+public interface IDownloadListener
 {
-  public void dispose()
-  {
-  }
 
-  public abstract void onDownload(Response response);
-  public abstract void onError(Response response);
-  public abstract void onCancel(URL url);
+  void onDownload(Response response);
+  void onError(Response response);
+  void onCancel(URL url);
 }
