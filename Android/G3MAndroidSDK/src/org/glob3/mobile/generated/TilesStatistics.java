@@ -6,6 +6,10 @@ public class TilesStatistics
   private int _maxLevel;
   private int _splitsCountInFrame;
 
+	public TilesStatistics()
+	{
+	}
+
   public TilesStatistics(TileParameters parameters)
   {
 	  _counter = 0;
