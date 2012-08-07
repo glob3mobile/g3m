@@ -35,6 +35,11 @@ public class Downloader implements IDownloadListener
 	}
   }
 
+
+  public void dispose()
+  {
+  }
+
   public Downloader(IStorage storage, int maxSimultaneous, INetwork net)
   {
 	  _storage = storage;
