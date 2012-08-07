@@ -19,11 +19,6 @@ package org.glob3.mobile.generated;
 
 
 
-//enum GLPrimitive {
-//  TriangleStrip,
-//  Lines,
-//  LineLoop
-//};
 
 public enum CenterStrategy
 {

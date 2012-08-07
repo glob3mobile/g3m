@@ -88,7 +88,6 @@ public class EllipsoidalTileTessellator extends TileTessellator
 	  final Color color = new Color(Color.fromRGBA((float) 1.0, (float) 0.0, (float) 0.0, (float) 1.0));
 	  final Vector3D center = planet.toVector3D(sector.getCenter());
     
-	  return IndexedMesh::CreateFromVector3D(vertices,GLPrimitive.
 	  return IndexedMesh.CreateFromVector3D(vertices, LineLoop, CenterStrategy.GivenCenter, center, indices, color);
 	}
 
