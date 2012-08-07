@@ -71,7 +71,11 @@ public:
   _enableBlend(false),
   _enableDepthTest(false),
   _enableCullFace(false),
+#ifdef C_CODE
   _cullFace_face(Back),
+#else
+  _cullFace_face(GLCullFace.Back),
+#endif
   _texturesIdCounter(0)
   {
     
