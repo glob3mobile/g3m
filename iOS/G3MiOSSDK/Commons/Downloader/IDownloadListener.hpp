@@ -9,8 +9,6 @@
 #ifndef G3MiOSSDK_IDownloadListener_h
 #define G3MiOSSDK_IDownloadListener_h
 
-#include <string>
-
 #include "Response.hpp"
 
 class IDownloadListener {
@@ -19,7 +17,9 @@ public:
   virtual void onError(const Response& response) = 0;
   virtual void onCancel(const URL& url) = 0;
   
-  virtual ~IDownloadListener() {}
+  virtual ~IDownloadListener(){  
+  
+  }
 };
 
 #endif
