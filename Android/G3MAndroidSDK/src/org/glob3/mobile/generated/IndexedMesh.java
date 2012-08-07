@@ -7,18 +7,18 @@ public class IndexedMesh extends Mesh
   }
   private IndexedMesh(java.util.ArrayList<MutableVector3D> vertices, GLPrimitive primitive, CenterStrategy strategy, Vector3D center, java.util.ArrayList<Integer> indexes, Color flatColor, java.util.ArrayList<Color> colors)
   {
-	  this(vertices, primitive, strategy, center, indexes, flatColor, colors, 0.0, null);
+	  this(vertices, primitive, strategy, center, indexes, flatColor, colors, 0.0f, null);
   }
   private IndexedMesh(java.util.ArrayList<MutableVector3D> vertices, GLPrimitive primitive, CenterStrategy strategy, Vector3D center, java.util.ArrayList<Integer> indexes, Color flatColor)
   {
-	  this(vertices, primitive, strategy, center, indexes, flatColor, null, 0.0, null);
+	  this(vertices, primitive, strategy, center, indexes, flatColor, null, 0.0f, null);
   }
   private IndexedMesh(java.util.ArrayList<MutableVector3D> vertices, GLPrimitive primitive, CenterStrategy strategy, Vector3D center, java.util.ArrayList<Integer> indexes)
   {
-	  this(vertices, primitive, strategy, center, indexes, null, null, 0.0, null);
+	  this(vertices, primitive, strategy, center, indexes, null, null, 0.0f, null);
   }
 //C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
-//ORIGINAL LINE: IndexedMesh(java.util.ArrayList<MutableVector3D>& vertices, const GLPrimitive primitive, CenterStrategy strategy, Vector3D center, java.util.ArrayList<int>& indexes, const Color* flatColor = null, java.util.ArrayList<Color>* colors = null, const float colorsIntensity = 0.0, java.util.ArrayList<MutableVector3D>* normals = null): _owner(true), _primitive(primitive), _numVertices(vertices.size()), _flatColor(flatColor), _numIndex(indexes.size()), _colorsIntensity(colorsIntensity), _extent(null), _centerStrategy(strategy), _center(center)
+//ORIGINAL LINE: IndexedMesh(java.util.ArrayList<MutableVector3D>& vertices, const GLPrimitive primitive, CenterStrategy strategy, Vector3D center, java.util.ArrayList<int>& indexes, const Color* flatColor = null, java.util.ArrayList<Color>* colors = null, const float colorsIntensity = 0.0f, java.util.ArrayList<MutableVector3D>* normals = null): _owner(true), _primitive(primitive), _numVertices(vertices.size()), _flatColor(flatColor), _numIndex(indexes.size()), _colorsIntensity(colorsIntensity), _extent(null), _centerStrategy(strategy), _center(center)
   private IndexedMesh(java.util.ArrayList<MutableVector3D> vertices, GLPrimitive primitive, CenterStrategy strategy, Vector3D center, java.util.ArrayList<Integer> indexes, Color flatColor, java.util.ArrayList<Color> colors, float colorsIntensity, java.util.ArrayList<MutableVector3D> normals)
   {
 	  _owner = true;
@@ -107,18 +107,18 @@ public class IndexedMesh extends Mesh
   }
   private IndexedMesh(boolean owner, GLPrimitive primitive, CenterStrategy strategy, Vector3D center, int numVertices, float vertices, int indexes[] indexes, int numIndex, Color flatColor, float colors)
   {
-	  this(owner, primitive, strategy, center, numVertices, vertices, indexes, numIndex, flatColor, colors, 0.0, null);
+	  this(owner, primitive, strategy, center, numVertices, vertices, indexes, numIndex, flatColor, colors, 0.0f, null);
   }
   private IndexedMesh(boolean owner, GLPrimitive primitive, CenterStrategy strategy, Vector3D center, int numVertices, float vertices, int indexes[] indexes, int numIndex, Color flatColor)
   {
-	  this(owner, primitive, strategy, center, numVertices, vertices, indexes, numIndex, flatColor, null, 0.0, null);
+	  this(owner, primitive, strategy, center, numVertices, vertices, indexes, numIndex, flatColor, null, 0.0f, null);
   }
   private IndexedMesh(boolean owner, GLPrimitive primitive, CenterStrategy strategy, Vector3D center, int numVertices, float vertices, int indexes[] indexes, int numIndex)
   {
-	  this(owner, primitive, strategy, center, numVertices, vertices, indexes, numIndex, null, null, 0.0, null);
+	  this(owner, primitive, strategy, center, numVertices, vertices, indexes, numIndex, null, null, 0.0f, null);
   }
 //C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
-//ORIGINAL LINE: IndexedMesh(boolean owner, const GLPrimitive primitive, CenterStrategy strategy, Vector3D center, const int numVertices, const float* vertices, const int indexes[] indexes, const int numIndex, const Color* flatColor = null, const float* colors = null, const float colorsIntensity = 0.0, const float* normals = null): _owner(owner), _primitive(primitive), _numVertices(numVertices), _vertices(vertices), _indexes(indexes), _numIndex(numIndex), _flatColor(flatColor), _colors(colors), _colorsIntensity(colorsIntensity), _normals(normals), _extent(null), _centerStrategy(strategy), _center(center)
+//ORIGINAL LINE: IndexedMesh(boolean owner, const GLPrimitive primitive, CenterStrategy strategy, Vector3D center, const int numVertices, const float* vertices, const int indexes[] indexes, const int numIndex, const Color* flatColor = null, const float* colors = null, const float colorsIntensity = 0.0f, const float* normals = null): _owner(owner), _primitive(primitive), _numVertices(numVertices), _vertices(vertices), _indexes(indexes), _numIndex(numIndex), _flatColor(flatColor), _colors(colors), _colorsIntensity(colorsIntensity), _normals(normals), _extent(null), _centerStrategy(strategy), _center(center)
   private IndexedMesh(boolean owner, GLPrimitive primitive, CenterStrategy strategy, Vector3D center, int numVertices, float vertices, int indexes[] indexes, int numIndex, Color flatColor, float colors, float colorsIntensity, float normals)
   {
 	  _owner = owner;

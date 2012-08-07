@@ -178,7 +178,7 @@ public class G3MWidget
   private void initializeGL()
   {
 	_gl.enableDepthTest();
-	_gl.enableCullFace(CullFace.Back);
+	_gl.enableCullFace(GLCullFace.Back);
   }
 
   private G3MWidget(IFactory factory, ILogger logger, GL gl, TexturesHandler texturesHandler, Downloader downloaderOLD, IDownloader downloader, Planet planet, Renderer renderer, Renderer busyRenderer, EffectsScheduler scheduler, int width, int height, Color backgroundColor, boolean logFPS)
@@ -206,11 +206,6 @@ public class G3MWidget
 	_scheduler.initialize(ic);
 	_renderer.initialize(ic);
 	_busyRenderer.initialize(ic);
-  }
-
-  private void initializeDefault()
-  {
-
   }
 
 }

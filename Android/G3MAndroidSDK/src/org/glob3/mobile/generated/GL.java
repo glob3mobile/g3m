@@ -363,7 +363,7 @@ public class GL
 	_gl.uniform1f(GlobalMembersGL.Uniforms.PointSize, size);
   }
 
-  public final int getError()
+  public final GLError getError()
   {
 	return _gl.getError();
   }
