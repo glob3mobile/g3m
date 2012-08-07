@@ -207,7 +207,7 @@ public class GL
 	{
 	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableColorPerVertex, 1);
 	  _gl.enableVertexAttribArray(GlobalMembersGL.Attributes.Color);
-	  _gl.vertexAttribPointer(GlobalMembersGL.Attributes.Color, 4, Float, 0, 0, colors);
+	  _gl.vertexAttribPointer(GlobalMembersGL.Attributes.Color, 4, GLType.Float, 0, 0, colors);
 	  _gl.uniform1f(GlobalMembersGL.Uniforms.ColorPerVertexIntensity, intensity);
 	  _enableVertexColor = true;
 	}
@@ -225,14 +225,12 @@ public class GL
 
   public final void enableVertexNormal(float[] normals)
   {
-	//  if (normals != NULL) {
 	if (!_enableVertexNormal)
 	{
 	  _gl.enableVertexAttribArray(GlobalMembersGL.Attributes.Normal);
-	  _gl.vertexAttribPointer(GlobalMembersGL.Attributes.Normal, 3, Float, 0, 0, normals);
+	  _gl.vertexAttribPointer(GlobalMembersGL.Attributes.Normal, 3, GLType.Float, 0, 0, normals);
 	  _enableVertexNormal = true;
 	}
-	//  }
   }
 
   public final void disableVertexNormal()
@@ -387,7 +385,7 @@ public class GL
 	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MagFilter, GLTextureParameterValue.Linear);
 	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapS, GLTextureParameterValue.ClampToEdge);
 	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapT, GLTextureParameterValue.ClampToEdge);
-	_gl.texImage2D(GLTextureType.Texture2D, 0, GLFormat.RGBA, textureWidth, textureHeight, 0, GLFormat.RGBA, UnsignedByte, imageData);
+	_gl.texImage2D(GLTextureType.Texture2D, 0, GLFormat.RGBA, textureWidth, textureHeight, 0, GLFormat.RGBA, GLType.UnsignedByte, imageData);
   
   
 	return texID;
@@ -395,19 +393,19 @@ public class GL
 
   public final void setTextureCoordinates(int size, int stride, float[] texcoord)
   {
-	_gl.vertexAttribPointer(GlobalMembersGL.Attributes.TextureCoord, size, Float, 0, stride, (Object) texcoord);
+	_gl.vertexAttribPointer(GlobalMembersGL.Attributes.TextureCoord, size, GLType.Float, 0, stride, (Object) texcoord);
   }
 
   public final void bindTexture(int n)
   {
-	_gl.bindTexture(Texture2D, n);
+	_gl.bindTexture(GLTextureType.Texture2D, n);
   }
 
   public final void enableDepthTest()
   {
 	if (!_enableDepthTest)
 	{
-	  _gl.enable(DepthTest);
+	  _gl.enable(GLFeature.DepthTest);
 	  _enableDepthTest = true;
 	}
   }
@@ -415,7 +413,7 @@ public class GL
   {
 	if (_enableDepthTest)
 	{
-	  _gl.disable(DepthTest);
+	  _gl.disable(GLFeature.DepthTest);
 	  _enableDepthTest = false;
 	}
   }
@@ -424,7 +422,7 @@ public class GL
   {
 	if (!_enableBlend)
 	{
-	  _gl.enable(Blend);
+	  _gl.enable(GLFeature.Blend);
 	  _enableBlend = true;
 	}
   }
@@ -432,7 +430,7 @@ public class GL
   {
 	if (_enableBlend)
 	{
-	  _gl.disable(Blend);
+	  _gl.disable(GLFeature.Blend);
 	  _enableBlend = false;
 	}
   
@@ -458,7 +456,7 @@ public class GL
 	vertexPointer(3, 0, vertex);
 	setTextureCoordinates(2, 0, texcoord);
   
-	_gl.drawArrays(TriangleStrip, 0, 4);
+	_gl.drawArrays(GLPrimitive.TriangleStrip, 0, 4);
   
 	enableDepthTest();
   
@@ -479,7 +477,7 @@ public class GL
   {
 	if (!_enableCullFace)
 	{
-	  _gl.enable(CullFacing);
+	  _gl.enable(GLFeature.CullFacing);
 	  _enableCullFace = true;
 	}
   
@@ -493,7 +491,7 @@ public class GL
   {
 	if (_enableCullFace)
 	{
-	  _gl.disable(CullFacing);
+	  _gl.disable(GLFeature.CullFacing);
 	  _enableCullFace = false;
 	}
   }
