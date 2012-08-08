@@ -12,28 +12,32 @@
 
 #include "Tile.hpp"
 
-bool WMSLayer::isAvailable(const RenderContext* rc, const Tile& tile) const {
-  Angle dLon = tile.getSector().getDeltaLongitude();
+bool WMSLayer::isAvailable(const RenderContext* rc,
+                           const Tile* tile) const {
+  const Angle dLon = tile->getSector().getDeltaLongitude();
   
-  if ((!_minTileLongitudeDelta.isNan() && dLon.lowerThan(_minTileLongitudeDelta)) || 
-      (!_maxTileLongitudeDelta.isNan() && dLon.greaterThan(_maxTileLongitudeDelta))){
+  if ((!_minTileLongitudeDelta.isNan() && dLon.lowerThan(_minTileLongitudeDelta)) ||
+      (!_maxTileLongitudeDelta.isNan() && dLon.greaterThan(_maxTileLongitudeDelta))) {
     return false;
-  } else{
+  }
+  else {
     return true;
   }
 }
-      
 
-std::vector<Petition*> WMSLayer::getTilePetitions(const IFactory& factory,
-                                                  const Tile& tile, int width, int height) const
+
+std::vector<Petition*> WMSLayer::getTilePetitions(const RenderContext* rc,
+                                                  const Tile* tile,
+                                                  int width, int height) const
 {
-  std::vector<Petition*> vPetitions;
-
-  if (!_bbox.touchesWith(tile.getSector())) {
-      return vPetitions;
+  std::vector<Petition*> petitions;
+  
+  Sector tileSector = tile->getSector();
+  if (!_bbox.touchesWith(tileSector)) {
+    return petitions;
   }
   
-  Sector sector = tile.getSector().intersection(_bbox);
+  Sector sector = tileSector.intersection(_bbox);
   
 	//Server name
   std::string req = _serverURL;
@@ -46,47 +50,48 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const IFactory& factory,
   if (pos != -1) {
     req = req.substr(pos+9);
     
-    int pos2 = this->_serverURL.find("/", 8);
-    std::string newHost = this->_serverURL.substr(0, pos2);
+    int pos2 = _serverURL.find("/", 8);
+    std::string newHost = _serverURL.substr(0, pos2);
     
     req = newHost + req;
   }
 	
 	//Petition
-  if (_serverVersion != "")
+  if (_serverVersion != "") {
     req += "REQUEST=GetMap&SERVICE=WMS&VERSION=" + _serverVersion;
-  else
+  }
+  else {
     req += "REQUEST=GetMap&SERVICE=WMS&VERSION=1.1.1";
+  }
 	
-	//Layer 
   req += "&LAYERS=" + _name;
 	
-	//Format
-	req += "&FORMAT=" + this->_format;
+	req += "&FORMAT=" + _format;
 	
-	//Ref. system
-  if (_srs != "")
+  if (_srs != "") {
     req += "&SRS=" + _srs;
-	else
+  }
+	else {
     req += "&SRS=EPSG:4326";
+  }
   
   //Style
-  if (_style != "")
+  if (_style != "") {
     req += "&STYLES=" + _style;
-	else
+  }
+	else {
     req += "&STYLES=";
+  }
   
   //ASKING TRANSPARENCY
   req += "&TRANSPARENT=TRUE";
-
+  
 	//Texture Size and BBOX
   std::ostringstream oss;
   oss << "&WIDTH=" << width << "&HEIGHT=" << height;
   oss << "&BBOX=" << sector.lower().longitude().degrees() << "," << sector.lower().latitude().degrees();
   oss << "," << sector.upper().longitude().degrees() << "," << sector.upper().latitude().degrees();
-  std::string sizeAndBBox = oss.str();
   req += oss.str();
-  
   
   if (_serverVersion == "1.3.0") {
     req += "&CRS=EPSG:4326";
@@ -95,7 +100,7 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const IFactory& factory,
   //printf("%s\n", req.c_str());
   
   Petition *pet = new Petition(sector, req, _isTransparent);
-  vPetitions.push_back(pet);
+  petitions.push_back(pet);
   
-	return vPetitions;
+	return petitions;
 }

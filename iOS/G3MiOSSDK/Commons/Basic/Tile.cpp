@@ -15,7 +15,7 @@
 #include "TileRenderer.hpp"
 
 #include "ITimer.hpp"
-
+#include "TilesRenderParameters.hpp"
 
 Tile::~Tile() {
   prune(NULL);
@@ -72,7 +72,7 @@ bool Tile::isVisible(const RenderContext *rc,
 bool Tile::meetsRenderCriteria(const RenderContext *rc,
                                const TileTessellator *tessellator,
                                TileTexturizer *texturizer,
-                               const TileParameters* parameters,
+                               const TilesRenderParameters* parameters,
                                ITimer* lastSplitTimer,
                                TilesStatistics* statistics) {
   if (_level >= parameters->_maxLevel) {
@@ -225,7 +225,7 @@ void Tile::prune(TileTexturizer* texturizer) {
 void Tile::render(const RenderContext* rc,
                   const TileTessellator* tessellator,
                   TileTexturizer* texturizer,
-                  const TileParameters* parameters,
+                  const TilesRenderParameters* parameters,
                   TilesStatistics* statistics,
                   std::list<Tile*>* toVisitInNextIteration,
                   ITimer* lastSplitTimer,

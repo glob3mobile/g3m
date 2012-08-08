@@ -22,8 +22,8 @@
 class SingleImageTileTexturizer : public TileTexturizer {
 private:
   
-  const RenderContext* _renderContext;
-  TileParameters* const _parameters;  
+  const RenderContext*         _renderContext;
+  TilesRenderParameters* const _parameters;  
   int _texID;
   IImage * const _image;
   
@@ -31,7 +31,7 @@ private:
   
 public:
   
-  SingleImageTileTexturizer(TileParameters * const par, IImage *image) :
+  SingleImageTileTexturizer(TilesRenderParameters* const par, IImage *image) :
   _texID(-1),
   _image(image),
   _parameters(par),
@@ -46,7 +46,8 @@ public:
     }
   }
   
-  void initialize(const InitializationContext* ic) {
+  void initialize(const InitializationContext* ic,
+                  const TilesRenderParameters* parameters) {
     
   }
   
@@ -60,7 +61,8 @@ public:
   
   bool tileMeetsRenderCriteria(Tile* tile);
 
-  void justCreatedTopTile(Tile* tile);
+  void justCreatedTopTile(const RenderContext* rc,
+                          Tile* tile);
   
   bool isReady(const RenderContext *rc) {
     return true;

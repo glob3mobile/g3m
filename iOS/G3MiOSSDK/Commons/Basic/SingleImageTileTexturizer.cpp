@@ -70,6 +70,7 @@ bool SingleImageTileTexturizer::tileMeetsRenderCriteria(Tile* tile) {
   return false;
 }
 
-void SingleImageTileTexturizer::justCreatedTopTile(Tile *tile) {
+void SingleImageTileTexturizer::justCreatedTopTile(const RenderContext* rc,
+                                                   Tile *tile) {
   
 }

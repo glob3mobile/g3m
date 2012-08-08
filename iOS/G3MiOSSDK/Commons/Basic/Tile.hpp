@@ -18,7 +18,7 @@ class RenderContext;
 class Mesh;
 class TileTessellator;
 class TileTexturizer;
-class TileParameters;
+class TilesRenderParameters;
 class ITimer;
 
 //class TileKey {
@@ -81,7 +81,7 @@ private:
   inline bool meetsRenderCriteria(const RenderContext* rc,
                                   const TileTessellator *tessellator,
                                   TileTexturizer *texturizer,
-                                  const TileParameters* parameters,
+                                  const TilesRenderParameters* parameters,
                                   ITimer* lastSplitTimer,
                                   TilesStatistics* statistics);
   
@@ -164,7 +164,7 @@ public:
   void render(const RenderContext* rc,
               const TileTessellator* tessellator,
               TileTexturizer* texturizer,
-              const TileParameters* parameters,
+              const TilesRenderParameters* parameters,
               TilesStatistics* statistics,
               std::list<Tile*>* toVisitInNextIteration,
               ITimer* lastSplitTimer,

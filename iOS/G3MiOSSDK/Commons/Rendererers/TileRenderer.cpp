@@ -13,6 +13,7 @@
 #include "TileTexturizer.hpp"
 #include "Camera.hpp"
 #include "ITimer.hpp"
+#include "TilesRenderParameters.hpp"
 
 
 TileRenderer::~TileRenderer() {
@@ -74,7 +75,7 @@ void TileRenderer::initialize(const InitializationContext* ic) {
   _lastSplitTimer      = ic->getFactory()->createTimer();
   _lastTexturizerTimer = ic->getFactory()->createTimer();
   
-  _texturizer->initialize(ic);
+  _texturizer->initialize(ic, _parameters);
 }
 
 bool TileRenderer::isReadyToRender(const RenderContext *rc) {
@@ -110,7 +111,7 @@ int TileRenderer::render(const RenderContext* rc) {
     if (_texturizer != NULL) {
       for (int i = 0; i < topLevelTilesSize; i++) {
         Tile* tile = _topLevelTiles[i];
-        _texturizer->justCreatedTopTile(tile);
+        _texturizer->justCreatedTopTile(rc, tile);
       }
     }
     _topTilesJustCreated = false;

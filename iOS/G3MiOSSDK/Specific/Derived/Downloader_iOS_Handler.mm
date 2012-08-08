@@ -166,6 +166,8 @@
 //    return;
 //  }
 
+  NSInteger statusCode = [((NSHTTPURLResponse*) urlResponse) statusCode];
+  
   __block URL url( [[_nsURL absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] );
   
   // inform downloader to remove myself, to avoid adding new Listeners
@@ -188,7 +190,7 @@
       }
     }
     else {
-      if (data) {
+      if (data && statusCode == 200) {
         const int length = [data length];
         unsigned char *bytes = new unsigned char[ length ]; // will be deleted by ByteBuffer's destructor
         [data getBytes:bytes length: length];
@@ -204,8 +206,9 @@
       }
       else {
 //        ILogger::instance()->logError("Can't load %s\n", [[_nsURL absoluteString] UTF8String]);
-        ILogger::instance()->logError ("Error %s trying to load %s\n",
+        ILogger::instance()->logError ("Error %s, StatusCode=%d trying to load %s\n",
                                        [[error localizedDescription] UTF8String],
+                                       statusCode,
                                        [[_nsURL absoluteString] UTF8String]);
         
         ByteBuffer buffer(NULL, 0);

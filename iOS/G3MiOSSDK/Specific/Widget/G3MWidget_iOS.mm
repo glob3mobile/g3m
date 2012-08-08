@@ -50,6 +50,9 @@
 #include "NativeGL2_iOS.hpp"
 #include "GL.hpp"
 
+#include "MultiLayerTileTexturizer.hpp"
+#include "TilesRenderParameters.hpp"
+
 #include <stdlib.h>
 
 @interface G3MWidget_iOS ()
@@ -114,7 +117,7 @@
   WMSLayer* baseLayer = new WMSLayer("bmng200405", "http://www.nasa.network.com/wms?", 
                                      "1.3", "image/jpeg", Sector::fullSphere(), "EPSG:4326", "", false,
                                      Angle::nan(), Angle::nan());
-  layerSet->add(baseLayer);
+  layerSet->addLayer(baseLayer);
 
   if (false){
     Sector s = Sector::fromDegrees(-60, 50, 10, 185);
@@ -123,8 +126,8 @@
     WMSLayer *wms_sst = new WMSLayer("sea_surface_temperature","http://opendap-vpac.arcs.org.au/thredds/wms/IMOS/SRS/GHRSST-SSTsubskin/2012/20120626-ABOM-L3P_GHRSST-SSTsubskin-AVHRR_MOSAIC_01km-AO_DAAC-v01-fv01_0.nc?","1.3.0", "image/png", s, "EPSG:4326&COLORSCALERANGE=273.8%2C302.8&NUMCOLORBANDS=50&LOGSCALE=false", "boxfill%2Fsst_36",
                                      true, Angle::nan(), Angle::nan());
     
-    layerSet->add(wmsl);
-    layerSet->add(wms_sst);
+    layerSet->addLayer(wmsl);
+    layerSet->addLayer(wms_sst);
   }
   
   //STATIC IMAGE FOR TESTING AUSTRALIA
@@ -133,11 +136,11 @@
                                                        image,
                                                        Sector::fromDegrees(-60, 50, 10, 185), 
                                                        fss);
-  layerSet->add(imageLayer);
+  layerSet->addLayer(imageLayer);
   
   // very basic tile renderer
   if (true) {
-    TileParameters* parameters = TileParameters::createDefault(false);
+    TilesRenderParameters* parameters = TilesRenderParameters::createDefault(false);
     
     TileTexturizer* texturizer = NULL;
     if (true) {
@@ -354,17 +357,23 @@
                                 Angle::nan(), Angle::nan());
   
   //ORDER IS IMPORTANT
-  layerSet->add(baseLayer);
-  layerSet->add(pnoa);
-  layerSet->add(vias);
+  layerSet->addLayer(baseLayer);
+  layerSet->addLayer(pnoa);
+  layerSet->addLayer(vias);
   
   // very basic tile renderer
   if (true) {
-    TileParameters* parameters = TileParameters::createDefault(true);
+    TilesRenderParameters* parameters = TilesRenderParameters::createDefault(true);
     
     TileTexturizer* texturizer = NULL;
     if (true) {
-      texturizer = new TileImagesTileTexturizer(parameters, downloader, layerSet); //WMS
+      const bool useNewTexturizer = false;
+      if (useNewTexturizer) {
+        texturizer = new MultiLayerTileTexturizer(layerSet);
+      }
+      else {
+        texturizer = new TileImagesTileTexturizer(parameters, downloader, layerSet); //WMS
+      }
     }
     else {
       //SINGLE IMAGE

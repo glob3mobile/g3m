@@ -16,14 +16,17 @@
 #include "TileTessellator.hpp"
 #include "ITimer.hpp"
 #include "TexturesHandler.hpp"
+#include "TilesRenderParameters.hpp"
 
-
-void TileImagesTileTexturizer::initialize(const InitializationContext* ic) {
+void TileImagesTileTexturizer::initialize(const InitializationContext* ic,
+                                          const TilesRenderParameters* parameters) {
   
 }
 
-TilePetitions* TileImagesTileTexturizer::createTilePetitions(const Tile* tile) {
-  std::vector<Petition*> pet = _layerSet->createTilePetitions(_renderContext, *_factory, *tile, 
+TilePetitions* TileImagesTileTexturizer::createTilePetitions(const RenderContext* rc,
+                                                             const Tile* tile) {
+  std::vector<Petition*> pet = _layerSet->createTilePetitions(rc,
+                                                              tile,
                                                               _parameters->_tileTextureWidth, 
                                                               _parameters->_tileTextureHeight);
 
@@ -126,10 +129,11 @@ Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
   return NULL;
 }
 
-void TileImagesTileTexturizer::registerNewRequest(Tile *tile){
+void TileImagesTileTexturizer::registerNewRequest(const RenderContext* rc,
+                                                  Tile *tile){
   if (getRegisteredTilePetitions(tile) == NULL) { //NOT YET REQUESTED
     int priority = tile->getLevel(); //DOWNLOAD PRIORITY SET TO TILE LEVEL
-    TilePetitions *tp = createTilePetitions(tile);
+    TilePetitions *tp = createTilePetitions(rc, tile);
     _tilePetitions.push_back(tp); //STORED
     tp->requestToNet(_downloader, priority);
   }
@@ -144,14 +148,13 @@ Mesh* TileImagesTileTexturizer::texturize(const RenderContext* rc,
   _factory    = rc->getFactory();
   _texHandler = rc->getTexturesHandler();
   _downloader = rc->getDownloader();
-  _renderContext = rc;
   
   //printf("TP SIZE: %lu\n", _tilePetitions.size());
   
   Mesh* mesh = getNewTextureMesh(tile, tessellator, tessellatorMesh, previousMesh);
   if (mesh == NULL){
     //REGISTERING PETITION AND SENDING TO THE NET IF NEEDED
-    registerNewRequest(tile);
+    registerNewRequest(rc, tile);
     mesh = getNewTextureMesh(tile, tessellator, tessellatorMesh, previousMesh);
     
     //If we still can't get a new TexturedMesh we try to get a FallBack Mesh
@@ -178,9 +181,10 @@ bool TileImagesTileTexturizer::tileMeetsRenderCriteria(Tile* tile) {
   return false;
 }
 
-void TileImagesTileTexturizer::justCreatedTopTile(Tile *tile) {
+void TileImagesTileTexturizer::justCreatedTopTile(const RenderContext* rc,
+                                                  Tile *tile) {
   int priority = 9999; //MAX PRIORITY
-  TilePetitions *tp = createTilePetitions(tile);
+  TilePetitions *tp = createTilePetitions(rc, tile);
   _tilePetitionsTopTile.push_back(tp); //STORED
   _tilePetitions.push_back(tp);
   tp->requestToNet(_downloader, priority);

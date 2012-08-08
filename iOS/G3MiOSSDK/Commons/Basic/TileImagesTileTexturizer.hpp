@@ -34,25 +34,26 @@ private:
   const IFactory* _factory;
   TexturesHandler* _texHandler;
   IDownloader * _downloader;
-  const RenderContext * _renderContext;
   
   std::vector<TilePetitions*> _tilePetitions;
   std::vector<TilePetitions*> _tilePetitionsTopTile;
   
-  const TileParameters *_parameters;
+  const TilesRenderParameters *_parameters;
   
   WMSLayer* _layer;
   LayerSet * _layerSet;
   
   mutable std::vector<MutableVector2D>* _texCoordsCache;
   
-  TilePetitions* createTilePetitions(const Tile* tile);
+  TilePetitions* createTilePetitions(const RenderContext* rc,
+                                     const Tile* tile);
   
   std::vector<MutableVector2D> getTextureCoordinates(const TileTessellator* tessellator) const;
   
   void translateAndScaleFallBackTex(Tile* tile, Tile* fallbackTile, TextureMapping* tmap) const;
   
-  void registerNewRequest(Tile* tile);
+  void registerNewRequest(const RenderContext* rc,
+                          Tile* tile);
   
   TilePetitions* getRegisteredTilePetitions(Tile* tile) const;
   void removeRegisteredTilePetitions(Tile* tile);
@@ -69,7 +70,7 @@ private:
   
 public:
   
-  TileImagesTileTexturizer(const TileParameters* parameters,
+  TileImagesTileTexturizer(const TilesRenderParameters* parameters,
                            IDownloader* downloader,
                            LayerSet* layerSet) : 
   _parameters(parameters),
@@ -95,11 +96,13 @@ public:
   
   bool tileMeetsRenderCriteria(Tile* tile);
   
-  void justCreatedTopTile(Tile* tile);
+  void justCreatedTopTile(const RenderContext* rc,
+                          Tile* tile);
   
   bool isReady(const RenderContext *rc);
   
-  void initialize(const InitializationContext* ic);
+  void initialize(const InitializationContext* ic,
+                  const TilesRenderParameters* parameters);
 
 
 };

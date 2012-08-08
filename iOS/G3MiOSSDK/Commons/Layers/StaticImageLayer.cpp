@@ -14,25 +14,25 @@
 
 #include "Tile.hpp"
 
-std::vector<Petition*> StaticImageLayer::getTilePetitions(const IFactory& factory,
-                                                          const Tile& tile, int width, int height) const
+std::vector<Petition*> StaticImageLayer::getTilePetitions(const RenderContext* rc,
+                                                          const Tile* tile, int width, int height) const
 {
   std::vector<Petition*> res;
+
+  Sector tileSector = tile->getSector();
   
-  if (!_bbox.fullContains(tile.getSector())) {
+  if (!_bbox.fullContains(tileSector)) {
     return res;
   }
   
-  Sector imageSector = tile.getSector();
-  
   //CREATING ID FOR PETITION
-  std::string id = factory.stringFormat("%s_%f_%f_%f_%f", _layerID.c_str(),
-                                        imageSector.lower().latitude().degrees(),
-                                        imageSector.lower().longitude().degrees(),
-                                        imageSector.upper().latitude().degrees(),
-                                        imageSector.upper().longitude().degrees() );
+  std::string id = rc->getFactory()->stringFormat("%s_%f_%f_%f_%f", _layerID.c_str(),
+                                                  tileSector.lower().latitude().degrees(),
+                                                  tileSector.lower().longitude().degrees(),
+                                                  tileSector.upper().latitude().degrees(),
+                                                  tileSector.upper().longitude().degrees() );
   
-  Petition *pet = new Petition(tile.getSector(), id, true);
+  Petition *pet = new Petition(tileSector, id, true);
 
   if (_storage != NULL)
   {
@@ -44,10 +44,10 @@ std::vector<Petition*> StaticImageLayer::getTilePetitions(const IFactory& factor
     }
   }
   
-  double widthUV = imageSector.getDeltaLongitude().degrees() / _bbox.getDeltaLongitude().degrees();
-  double heightUV = imageSector.getDeltaLatitude().degrees() / _bbox.getDeltaLatitude().degrees();
+  double widthUV = tileSector.getDeltaLongitude().degrees() / _bbox.getDeltaLongitude().degrees();
+  double heightUV = tileSector.getDeltaLatitude().degrees() / _bbox.getDeltaLatitude().degrees();
   
-  Vector2D p = _bbox.getUVCoordinates(imageSector.lower().latitude(), imageSector.lower().longitude());
+  Vector2D p = _bbox.getUVCoordinates(tileSector.lower().latitude(), tileSector.lower().longitude());
   Vector2D pos(p.x(), p.y() - heightUV);
   
   Rectangle r(pos.x() * _image->getWidth(), pos.y() * _image->getHeight(), widthUV * _image->getWidth(), heightUV * _image->getHeight());

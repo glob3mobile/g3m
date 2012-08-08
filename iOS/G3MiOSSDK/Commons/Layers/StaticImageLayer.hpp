@@ -35,9 +35,12 @@ public:
     return _bbox.fullContains(s);
   }
   
-  std::vector<Petition*> getTilePetitions(const IFactory& factory, const Tile& tile, int width, int height) const;
+  std::vector<Petition*> getTilePetitions(const RenderContext* rc,
+                                          const Tile* tile,
+                                          int width, int height) const;
   
-  bool isAvailable(const RenderContext* rc, const Tile& tile)const { 
+  bool isAvailable(const RenderContext* rc,
+                   const Tile* tile)const {
     return true;
   }
   
