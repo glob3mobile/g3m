@@ -272,6 +272,7 @@ Vector3D Camera::centerOfViewOnPlanet() const {
 }
 
 Vector3D Camera::getHorizontalVector() const {
+  int __use_cached_model_matrix;
   const MutableMatrix44D M = MutableMatrix44D::createModelMatrix(_position, _center, _up);
   return Vector3D(M.get(0), M.get(4), M.get(8));
 }
