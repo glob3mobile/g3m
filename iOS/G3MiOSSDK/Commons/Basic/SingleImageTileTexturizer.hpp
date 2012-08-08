@@ -46,6 +46,10 @@ public:
     }
   }
   
+  void initialize(const InitializationContext* ic) {
+    
+  }
+  
   Mesh* texturize(const RenderContext* rc,
                   Tile* tile,
                   const TileTessellator* tessellator,

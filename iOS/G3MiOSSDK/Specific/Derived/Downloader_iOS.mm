@@ -131,7 +131,7 @@ long Downloader_iOS::request(const URL &url,
   [_lock lock];
 
   const long requestId = _requestIdCounter++;
-
+  
   handler = [_downloadingHandlers objectForKey: nsURL];
   if (handler) {
     // the URL is being downloaded, just add the new listener.
@@ -139,32 +139,35 @@ long Downloader_iOS::request(const URL &url,
                 priority: priority
                requestId: requestId];
     
-    [_lock unlock];
-
-    return requestId;
+//    [_lock unlock];
+//    
+//    return requestId;
   }
   
-  handler = [_queuedHandlers objectForKey: nsURL];
-  if (handler) {
-    // the URL is queued for future download, just add the new listener.
-    [handler addListener: iosListener
-                priority: priority
-               requestId: requestId];
-    
-    [_lock unlock];
-
-    return requestId;
+  if (!handler) {
+    handler = [_queuedHandlers objectForKey: nsURL];
+    if (handler) {
+      // the URL is queued for future download, just add the new listener.
+      [handler addListener: iosListener
+                  priority: priority
+                 requestId: requestId];
+      
+//      [_lock unlock];
+//      
+//      return requestId;
+    }
   }
   
-  
-  // new handler, queue it
-  handler = [[Downloader_iOS_Handler alloc] initWithNSURL: nsURL
-                                                      url: new URL(url)
-                                                 listener: iosListener
-                                                 priority: priority
-                                                requestId: requestId];
-  [_queuedHandlers setObject: handler
-                      forKey: nsURL];
+  if (!handler) {
+    // new handler, queue it
+    handler = [[Downloader_iOS_Handler alloc] initWithNSURL: nsURL
+                                                        url: new URL(url)
+                                                   listener: iosListener
+                                                   priority: priority
+                                                  requestId: requestId];
+    [_queuedHandlers setObject: handler
+                        forKey: nsURL];
+  }
   
   [_lock unlock];
   

@@ -149,13 +149,19 @@ public:
     return _column;
   }
   
+  Mesh* getTexturizerMesh() const {
+    return _texturizerMesh;
+  }
+  
   void setTextureSolved(bool textureSolved);
   
   bool isTextureSolved() const {
     return _textureSolved;
   }
   
-  Tile* getParent() const { return _parent; }
+  Tile* getParent() const {
+    return _parent;
+  }
   
   void render(const RenderContext* rc,
               const TileTessellator* tessellator,

@@ -13,7 +13,7 @@ class Mesh;
 class RenderContext;
 class Tile;
 class TileTessellator;
-
+class InitializationContext;
 
 class TileTexturizer {
 public:
@@ -21,7 +21,9 @@ public:
   }
   
   virtual bool isReady(const RenderContext *rc) = 0;
-  
+
+  virtual void initialize(const InitializationContext* ic) = 0;
+
   virtual Mesh* texturize(const RenderContext* rc,
                           Tile* tile,
                           const TileTessellator* tessellator,
@@ -34,6 +36,7 @@ public:
   
   virtual void justCreatedTopTile(Tile* tile) = 0;
   
+
 };
 
 #endif

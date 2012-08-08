@@ -144,10 +144,8 @@ public:
   Geodetic2D getSE() const {
     return Geodetic2D(_lower.latitude(), _upper.longitude());
   }
-
+  
   Geodetic2D getCenter() const {
-//    return Geodetic2D(Angle::midAngle(_lower.latitude(), _upper.latitude()),
-//                      Angle::midAngle(_lower.longitude(), _upper.longitude()));
     return _center;
   }
   

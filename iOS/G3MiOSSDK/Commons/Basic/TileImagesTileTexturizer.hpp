@@ -54,8 +54,6 @@ private:
   
   void registerNewRequest(Tile* tile);
   
-  int getTexture(Tile* tile);
-  
   TilePetitions* getRegisteredTilePetitions(Tile* tile) const;
   void removeRegisteredTilePetitions(Tile* tile);
   
@@ -100,6 +98,8 @@ public:
   void justCreatedTopTile(Tile* tile);
   
   bool isReady(const RenderContext *rc);
+  
+  void initialize(const InitializationContext* ic);
 
 
 };

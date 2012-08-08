@@ -28,10 +28,12 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const IFactory& factory,
                                                   const Tile& tile, int width, int height) const
 {
   std::vector<Petition*> vPetitions;
-  
-  if (!_bbox.fullContains(tile.getSector())) {
-    return vPetitions;
+
+  if (!_bbox.touchesWith(tile.getSector())) {
+      return vPetitions;
   }
+  
+  Sector sector = tile.getSector().intersection(_bbox);
   
 	//Server name
   std::string req = _serverURL;
@@ -77,8 +79,6 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const IFactory& factory,
   //ASKING TRANSPARENCY
   req += "&TRANSPARENT=TRUE";
 
-  Sector sector = tile.getSector();
-
 	//Texture Size and BBOX
   std::ostringstream oss;
   oss << "&WIDTH=" << width << "&HEIGHT=" << height;
@@ -91,6 +91,8 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const IFactory& factory,
   if (_serverVersion == "1.3.0") {
     req += "&CRS=EPSG:4326";
   }
+  
+  //printf("%s\n", req.c_str());
   
   Petition *pet = new Petition(sector, req, _isTransparent);
   vPetitions.push_back(pet);

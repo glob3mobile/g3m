@@ -34,26 +34,26 @@ void CameraDoubleTapHandler::onDown(const EventContext *eventContext,
                                     CameraContext *cameraContext) 
 {  
   // compute globe point where user tapped
-  Vector2D pixel = touchEvent.getTouch(0)->getPos();
-  Camera *camera = cameraContext->getCamera();
-  Vector3D initialPoint = camera->pixel2PlanetPoint(pixel);
+  const Vector2D pixel = touchEvent.getTouch(0)->getPos();
+  Camera* camera = cameraContext->getCamera();
+  const Vector3D initialPoint = camera->pixel2PlanetPoint(pixel);
   if (initialPoint.isNan()) return;
   
   // compute central point of view
-  Vector3D centerPoint = camera->centerOfViewOnPlanet();
+  const Vector3D centerPoint = camera->centerOfViewOnPlanet();
 
   // compute drag parameters
-  Vector3D axis = initialPoint.cross(centerPoint);
-  Angle angle   = Angle::fromRadians(-asin(axis.length()/initialPoint.length()/centerPoint.length()));
+  const Vector3D axis = initialPoint.cross(centerPoint);
+  const Angle angle   = Angle::fromRadians(-asin(axis.length()/initialPoint.length()/centerPoint.length()));
 
   // compute zoom factor
   const double height   = eventContext->getPlanet()->toGeodetic3D(camera->getPosition()).height();
   const double distance = height * 0.6;
 
-  Effect *effect = new DoubleTapEffect(TimeInterval::fromSeconds(1), axis, angle, distance);
+  Effect* effect = new DoubleTapEffect(TimeInterval::fromSeconds(0.75), axis, angle, distance);
+  
+  int __check_with_agustin;
+  // the EffectTarget has to be the Camera or the Planet.
+  // use inheritance for EffectTarget
   eventContext->getEffectsScheduler()->startEffect(effect, (EffectTarget *) cameraContext);
 }
-
-
-
-
