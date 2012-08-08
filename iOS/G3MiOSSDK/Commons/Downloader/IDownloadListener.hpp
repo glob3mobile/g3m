@@ -20,7 +20,7 @@ public:
   virtual void onCancel(const URL& url) = 0;
   
   virtual ~IDownloadListener() {
-    printf("**>> deleting listener=%x\n", (int) this);
+//    printf("**>> deleting listener=%x\n", (int) this);
   }
 };
 

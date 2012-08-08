@@ -139,9 +139,17 @@ void Tile::rawRender(const RenderContext *rc,
       if (needsToCallTexturizer) {
         int __TODO_tune_render_budget;
         
-        bool callTexturizer = ((_texturizerTimer == NULL) ||
-                               (_texturizerTimer->elapsedTime().milliseconds() > 125 &&
-                                lastTexturizerTimer->elapsedTime().milliseconds() > 50));
+//                               (_texturizerTimer->elapsedTime().milliseconds() > 125 &&
+//        const bool callTexturizer = ((_texturizerTimer == NULL) ||
+//                               (_texturizerTimer->elapsedTime().milliseconds() > 125 &&
+//                                lastTexturizerTimer->elapsedTime().milliseconds() > 50));
+//        const bool callTexturizer = ((_texturizerTimer == NULL) ||
+//                                     (_texturizerTimer->elapsedTime().milliseconds() > 100 &&
+//                                      lastTexturizerTimer->elapsedTime().milliseconds() > 10));
+//        const bool callTexturizer = ((_texturizerTimer == NULL) ||
+//                                     (_texturizerTimer->elapsedTime().milliseconds() > 100));
+        const bool callTexturizer = ((_texturizerTimer == NULL) ||
+                                     (_texturizerTimer->elapsedTime().milliseconds() > 5));
 
         if (callTexturizer) {
           _texturizerMesh = texturizer->texturize(rc,

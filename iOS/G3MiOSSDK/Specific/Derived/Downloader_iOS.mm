@@ -78,12 +78,11 @@ void Downloader_iOS::cancelRequest(long requestId) {
     [ _downloadingHandlers enumerateKeysAndObjectsUsingBlock:^(id key,
                                                                id obj,
                                                                BOOL *stop) {
-      NSURL*                  url     = key;
+//      NSURL*                  url     = key;
       Downloader_iOS_Handler* handler = obj;
       
       if ( [handler removeListenerForRequestId: requestId] ) {
         if ( ![handler hasListeners] ) {
-//          [_downloadingHandlers removeObjectForKey:url];
           [handler cancel];
         }
         

@@ -119,8 +119,8 @@ void TilePetitions::createTexture(TexturesHandler* texHandler, const IFactory* f
       const ByteBuffer* bb = getPetition(i)->getByteBuffer();
       IImage *im = factory->createImageFromData(*bb);
       
-      Sector imSector = getPetition(i)->getSector();
       if (im != NULL) {
+        Sector imSector = getPetition(i)->getSector();
         images.push_back(im);
         
         Rectangle* rec = getImageRectangleInTexture(_tileSector, imSector, width, height);

@@ -140,21 +140,23 @@
   NSURLRequest *request = [NSURLRequest requestWithURL: _nsURL
                                            cachePolicy: NSURLRequestUseProtocolCachePolicy
                                        timeoutInterval: 60.0];
-  
+//  if (_canceled) {
+//    return;
+//  }
+
   NSURLResponse *urlResponse;
   NSError *error;
   __block NSData* data = [NSURLConnection sendSynchronousRequest: request
-                                       returningResponse: &urlResponse
-                                                   error: &error];
-  
+                                               returningResponse: &urlResponse
+                                                           error: &error];
+//  if (_canceled) {
+//    return;
+//  }
+
   __block URL url( [[_nsURL absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] );
   
   // inform downloader to remove myself, to avoid adding new Listeners
   downloader->removeDownloadingHandlerForNSURL(_nsURL);
-  
-  if (_canceled) {
-    return;
-  }
   
   dispatch_async( dispatch_get_main_queue(), ^{
     // Add code here to update the UI/send notifications based on the
@@ -162,41 +164,44 @@
     
     [_lock lock];
     
-    if (data) {
-      const int length = [data length];
-      unsigned char *bytes = new unsigned char[ length ]; // will be deleted by ByteBuffer's destructor
-      [data getBytes:bytes length: length];
-      ByteBuffer buffer(bytes, length);
+    const int listenersCount = [_listeners count];
+    
+    if (!_canceled && listenersCount > 0) {
       
-      Response response(url, &buffer);
-      
-      const int listenersCount = [_listeners count];
-      for (int i = 0; i < listenersCount; i++) {
-        ListenerEntry* entry = [_listeners objectAtIndex: i];
+      if (data) {
+        const int length = [data length];
+        unsigned char *bytes = new unsigned char[ length ]; // will be deleted by ByteBuffer's destructor
+        [data getBytes:bytes length: length];
+        ByteBuffer buffer(bytes, length);
         
-        [[entry listener] onDownload: response];
+        Response response(url, &buffer);
+        
+        for (int i = 0; i < listenersCount; i++) {
+          ListenerEntry* entry = [_listeners objectAtIndex: i];
+          
+          [[entry listener] onDownload: response];
+        }
       }
-    }
-    else {
-      /*ILogger::instance()->logError("Can't load %s, response=%s, error=%s",
-       [ [_nsURL      description] cStringUsingEncoding: NSUTF8StringEncoding ],
-       (urlResponse!=0)? [ [urlResponse description] cStringUsingEncoding: NSUTF8StringEncoding ] : "NULL",
-       [ [error       description] cStringUsingEncoding: NSUTF8StringEncoding ] );*/
-      
-      //ILogger::instance()->logError("Can't load %s\n", [[_nsURL absoluteString] UTF8String]);
-      printf ("Error %s trying to load %s\n",
-              [[error localizedDescription] cStringUsingEncoding:NSUTF8StringEncoding],
-              [[_nsURL absoluteString] UTF8String]);
-      
-      ByteBuffer buffer(NULL, 0);
-      
-      Response response(url, &buffer);
-      
-      const int listenersCount = [_listeners count];
-      for (int i = 0; i < listenersCount; i++) {
-        ListenerEntry* entry = [_listeners objectAtIndex: i];
+      else {
+        /*ILogger::instance()->logError("Can't load %s, response=%s, error=%s",
+         [ [_nsURL      description] cStringUsingEncoding: NSUTF8StringEncoding ],
+         (urlResponse!=0)? [ [urlResponse description] cStringUsingEncoding: NSUTF8StringEncoding ] : "NULL",
+         [ [error       description] cStringUsingEncoding: NSUTF8StringEncoding ] );*/
         
-        [[entry listener] onError: response];
+        //ILogger::instance()->logError("Can't load %s\n", [[_nsURL absoluteString] UTF8String]);
+        printf ("Error %s trying to load %s\n",
+                [[error localizedDescription] cStringUsingEncoding:NSUTF8StringEncoding],
+                [[_nsURL absoluteString] UTF8String]);
+        
+        ByteBuffer buffer(NULL, 0);
+        
+        Response response(url, &buffer);
+        
+        for (int i = 0; i < listenersCount; i++) {
+          ListenerEntry* entry = [_listeners objectAtIndex: i];
+          
+          [[entry listener] onError: response];
+        }
       }
     }
     
@@ -210,7 +215,11 @@
 
 - (void) cancel
 {
+  [_lock lock];
+  
   _canceled = true;
+  
+  [_lock unlock];
 }
 
 - (void)dealloc

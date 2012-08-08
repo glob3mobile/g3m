@@ -51,7 +51,7 @@ public:
     
     UIImage* image = [UIImage imageWithData:data];
     if (!image) {
-      printf("Can't read image\n");
+      printf("Can't read image from ByteBuffer of %d bytes\n", bb.getLength());
       return NULL;
     }
     
