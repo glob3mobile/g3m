@@ -118,9 +118,9 @@ _center(center)
     float * norm = new float[3* vertices.size()];
     p = 0;
     for (int i = 0; i < vertices.size(); i++) {
-      norm[p++] = (float) (*normals)[i].x();
-      norm[p++] = (float) (*normals)[i].y();
-      norm[p++] = (float) (*normals)[i].z();
+      norm[p++] = (float) normals->at(i).x();
+      norm[p++] = (float) normals->at(i).y();
+      norm[p++] = (float) normals->at(i).z();
     }
     _normals = norm;
   }
@@ -131,10 +131,10 @@ _center(center)
   if (colors != NULL) {
     float * vertexColor = new float[4* colors->size()];
     for (int i = 0; i < colors->size(); i+=4){
-      vertexColor[i] = (*colors)[i].getRed();
-      vertexColor[i+1] = (*colors)[i].getGreen();
-      vertexColor[i+2] = (*colors)[i].getBlue();
-      vertexColor[i+3] = (*colors)[i].getAlpha();
+      vertexColor[i] = colors->at(i).getRed();
+      vertexColor[i+1] = colors->at(i).getGreen();
+      vertexColor[i+2] = colors->at(i).getBlue();
+      vertexColor[i+3] = colors->at(i).getAlpha();
     }
     _colors = vertexColor;
   }

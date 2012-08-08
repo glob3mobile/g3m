@@ -132,7 +132,7 @@ void TilePetitions::createTexture(TexturesHandler* texHandler, const IFactory* f
     //Creating the texture
     const std::string& url = getPetitionsID();  
     _texID = texHandler->getTextureId(images, url, width, height);
-    
+
     //RELEASING MEMORY
     for (int i = 0; i < _petitions.size(); i++) {
       _petitions[i]->releaseData();
