@@ -32,12 +32,12 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const RenderContext* rc,
 {
   std::vector<Petition*> petitions;
   
-  Sector tileSector = tile->getSector();
+  const Sector tileSector = tile->getSector();
   if (!_bbox.touchesWith(tileSector)) {
     return petitions;
   }
   
-  Sector sector = tileSector.intersection(_bbox);
+  const Sector sector = tileSector.intersection(_bbox);
   
 	//Server name
   std::string req = _serverURL;

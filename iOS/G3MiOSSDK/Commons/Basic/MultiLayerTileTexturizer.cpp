@@ -33,12 +33,12 @@ Mesh* MultiLayerTileTexturizer::texturize(const RenderContext* rc,
                                           Mesh* tessellatorMesh,
                                           Mesh* previousMesh) {
   
-//  TexturedMesh* result = getFinalTexturedMesh(tile, tessellatorMesh);
+  //  TexturedMesh* result = getFinalTexturedMesh(tile, tessellatorMesh);
   
-  _layerSet->createTilePetitions(rc,
-                                 tile,
-                                 _parameters->_tileTextureWidth,
-                                 _parameters->_tileTextureHeight);
+  std::vector<Petition*> petitions = _layerSet->createTilePetitions(rc,
+                                                                    tile,
+                                                                    _parameters->_tileTextureWidth,
+                                                                    _parameters->_tileTextureHeight);
   
   int ___XX;
   

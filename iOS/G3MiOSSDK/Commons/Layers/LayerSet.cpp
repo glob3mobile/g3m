@@ -15,10 +15,6 @@ std::vector<Petition*> LayerSet::createTilePetitions(const RenderContext* rc,
 {
   std::vector<Petition*> petitions;
   
-//  const Sector tileSector = tile.getSector();
-
-  const IFactory* factory = rc->getFactory();
-  
   for (int i = 0; i < _layers.size(); i++) {
     Layer* layer = _layers[i];
     if (layer->isAvailable(rc, tile)){
