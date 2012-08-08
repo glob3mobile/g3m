@@ -103,7 +103,7 @@ Rectangle* TilePetitions::getImageRectangleInTexture(const Sector& wholeSector,
   
   
   
-  Rectangle* r = new Rectangle(pos.x() * texWidth, pos.y() * texHeight, width * texWidth, height * texHeight);
+  Rectangle* r = new Rectangle(pos.x() * texWidth, (1.0 - pos.y()) * texHeight, width * texWidth, height * texHeight);
   return r;
 }
 
@@ -113,20 +113,24 @@ void TilePetitions::createTexture(TexturesHandler* texHandler, const IFactory* f
   {
     //Creating images (opaque one must be the first)
     std::vector<const IImage*> images;
-    std::vector<Rectangle*> rectangles;
+    std::vector<const Rectangle*> rectangles;
     for (int i = 0; i < getNumPetitions(); i++) {
       const ByteBuffer* bb = getPetition(i)->getByteBuffer();
       IImage *im = factory->createImageFromData(*bb);
+      
+      Sector imSector = getPetition(i)->getSector();
       if (im != NULL) {
         images.push_back(im);
-        Rectangle* rec = getImageRectangleInTexture(_tileSector, getPetition(i)->getSector(), width, height);
+        
+        Rectangle* rec = getImageRectangleInTexture(_tileSector, imSector, width, height);
         rectangles.push_back(rec);
       }
     }
     
     //Creating the texture
     const std::string& url = getPetitionsID();  
-    _texID = texHandler->getTextureId(images, url, width, height);
+    //_texID = texHandler->getTextureId(images, url, width, height);
+    _texID = texHandler->getTextureId(images, rectangles, url, width, height);
     
     //RELEASING MEMORY
     for (int i = 0; i < _petitions.size(); i++) {

@@ -20,6 +20,10 @@ public:
   Rectangle(const Rectangle& rec):
   _x(rec._x), _y(rec._y), _width(rec._width), _height(rec._height){}
   
+  bool equalTo(const Rectangle& r) const{
+    return _x == r._x && _y == r._y && _width == r._width && _height == r._height;
+  }
+  
   
   
 };
