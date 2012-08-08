@@ -65,21 +65,27 @@ int CPUTextureBuilder::createTextureFromImages(GL * gl, const IFactory* factory,
                                                const std::vector<const IImage*>& vImages, 
                                                const std::vector<const Rectangle*>& vRectangles, 
                                                int width, int height) const {
-  
-  int todo_JM = 0;
   const IImage* base;
-  if (vRectangles[0]->_width == width && vRectangles[0]->_height == height){
+  int i = 0; //First image to merge
+  Rectangle baseRec(0,0, width, height);
+  if (vRectangles[0]->equalTo(baseRec)){
     base = vImages[0];
+    i = 1;
   } else{
     base = factory->createImageFromSize(width, height);
   }
   
-  for (int i = 1; i < vImages.size(); i++) {
+  for (; i < vImages.size(); i++) {
     IImage* im2 = base->combineWith(*vImages[i], *vRectangles[i], width, height);
-    delete base;
+    
+    if (base != vImages[0]) {
+      delete base;
+    }
+    
     base = im2;
   }
   
-  return todo_JM;
-  
+  int texID = gl->uploadTexture(base, width, height);
+
+  return texID;
 }
