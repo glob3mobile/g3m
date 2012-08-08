@@ -30,7 +30,7 @@ bool MultiLayerTileTexturizer::isReady(const RenderContext *rc) {
 Mesh* MultiLayerTileTexturizer::texturize(const RenderContext* rc,
                                           const TileRenderContext* trc,
                                           Tile* tile,
-                                          Mesh* tessellatorMesh,
+                                            Mesh* tessellatorMesh,
                                           Mesh* previousMesh) {
   
   //  TexturedMesh* result = getFinalTexturedMesh(tile, tessellatorMesh);

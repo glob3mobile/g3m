@@ -150,8 +150,6 @@ void Tile::rawRender(const RenderContext *rc,
                                      (_texturizerTimer->elapsedTime().milliseconds() > 5));
 
         if (callTexturizer) {
-          
-          int ____pass_TileRenderContext_to_texturizer;
           _texturizerMesh = texturizer->texturize(rc,
                                                   trc,
                                                   this,
