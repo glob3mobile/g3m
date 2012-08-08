@@ -58,37 +58,37 @@ std::string TilePetitions::getPetitionsID() const
   return id;
 }
 
-void TilePetitions::requestToNet(Downloader& downloader, int priority)
+void TilePetitions::requestToNet(IDownloader* downloader, int priority)
 {
   for (int i = 0; i < getNumPetitions(); i++) {
     Petition* pet = getPetition(i);
     if (!pet->isArrived()) {
       const URL& url = URL(pet->getURL());
-      long id = downloader.request(url, priority, this);
+      long id = downloader->request(url, priority, this);
       pet->setDownloadID(id);
     }
   }
 }
 
-void TilePetitions::requestToCache(Downloader& downloader)
-{
-  for (int i = 0; i < getNumPetitions(); i++) {
-    Petition* pet = getPetition(i);
-    if (!pet->isArrived()) {
-      const std::string& url = pet->getURL();
-      ByteBuffer* bb = downloader.getByteBufferFromCache(url);
-      if (bb != NULL){
-        pet->setByteBuffer(bb);
-      }
-    }
-  }
-}
+//void TilePetitions::requestToCache(Downloader& downloader)
+//{
+//  for (int i = 0; i < getNumPetitions(); i++) {
+//    Petition* pet = getPetition(i);
+//    if (!pet->isArrived()) {
+//      const std::string& url = pet->getURL();
+//      ByteBuffer* bb = downloader.getByteBufferFromCache(url);
+//      if (bb != NULL){
+//        pet->setByteBuffer(bb);
+//      }
+//    }
+//  }
+//}
 
-void TilePetitions::cancelPetitions(Downloader& downloader)
+void TilePetitions::cancelPetitions(IDownloader* downloader)
 {
   for (int i = 0; i < _petitions.size(); i++) {
     long id = _petitions[i]->getDownloadID();
-    if (id > -1) downloader.cancelRequest(id);
+    if (id > -1) downloader->cancelRequest(id);
   }
 }
 

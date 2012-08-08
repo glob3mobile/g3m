@@ -33,7 +33,7 @@ private:
   
   const IFactory* _factory;
   TexturesHandler* _texHandler;
-  Downloader * _downloader;
+  IDownloader * _downloader;
   const RenderContext * _renderContext;
   
   std::vector<TilePetitions*> _tilePetitions;
@@ -70,7 +70,7 @@ private:
 public:
   
   TileImagesTileTexturizer(const TileParameters* parameters,
-                           Downloader* downloader,
+                           IDownloader* downloader,
                            LayerSet* layerSet) : 
   _parameters(parameters),
   _layer(NULL),

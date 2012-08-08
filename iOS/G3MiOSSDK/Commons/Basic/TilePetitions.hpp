@@ -14,6 +14,7 @@
 
 #include "Sector.hpp"
 #include "IDownloadListener.hpp"
+#include "IDownloader.hpp"
 
 class Tile;
 class Rectangle;
@@ -133,9 +134,9 @@ public:
     }
   }
   
-  void requestToNet(Downloader& downloader, int priority);
-  void requestToCache(Downloader& downloader);
-  void cancelPetitions(Downloader& downloader);
+  void requestToNet(IDownloader* downloader, int priority);
+  //void requestToCache(Downloader& downloader);
+  void cancelPetitions(IDownloader* downloader);
   
   int getLevel() const {
     return _level;

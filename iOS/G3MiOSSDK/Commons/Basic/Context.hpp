@@ -27,7 +27,7 @@ protected:
   const IFactory*    _factory;
   const ILogger*     _logger;
   const Planet*      _planet;
-  const IDownloader* _downloader;
+  IDownloader* _downloader;
   Downloader* const  _downloaderOLD;
   EffectsScheduler*  _scheduler;
   
@@ -64,7 +64,7 @@ public:
     return _downloaderOLD;
   }
   
-  const IDownloader* getDownloader() const {
+  IDownloader* getDownloader() const {
     return _downloader;
   }
   

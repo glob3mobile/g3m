@@ -130,7 +130,7 @@ void TileImagesTileTexturizer::registerNewRequest(Tile *tile){
     int priority = tile->getLevel(); //DOWNLOAD PRIORITY SET TO TILE LEVEL
     TilePetitions *tp = createTilePetitions(tile);
     _tilePetitions.push_back(tp); //STORED
-    tp->requestToNet(*_downloader, priority);
+    tp->requestToNet(_downloader, priority);
   }
 }
 
@@ -142,7 +142,7 @@ Mesh* TileImagesTileTexturizer::texturize(const RenderContext* rc,
   //STORING CONTEXT
   _factory    = rc->getFactory();
   _texHandler = rc->getTexturesHandler();
-  _downloader = rc->getDownloaderOLD();
+  _downloader = rc->getDownloader();
   _renderContext = rc;
   
   //printf("TP SIZE: %lu\n", _tilePetitions.size());
@@ -167,16 +167,9 @@ void TileImagesTileTexturizer::tileToBeDeleted(Tile* tile) {
   TilePetitions* tp = getRegisteredTilePetitions(tile);
   
   if (tp != NULL){
-//    if (tp->getTexID() > -1){
-//      _texHandler->takeTexture(tp->getTexID());
-//    }
-    
-    tp->cancelPetitions(*_downloader);
-    
+    tp->cancelPetitions(_downloader);
     removeRegisteredTilePetitions(tile);
   }
-  
-  
 }
 
 bool TileImagesTileTexturizer::tileMeetsRenderCriteria(Tile* tile) {
@@ -189,7 +182,7 @@ void TileImagesTileTexturizer::justCreatedTopTile(Tile *tile) {
   TilePetitions *tp = createTilePetitions(tile);
   _tilePetitionsTopTile.push_back(tp); //STORED
   _tilePetitions.push_back(tp);
-  tp->requestToNet(*_downloader, priority);
+  tp->requestToNet(_downloader, priority);
 }
 
 bool TileImagesTileTexturizer::isReady(const RenderContext *rc) {
