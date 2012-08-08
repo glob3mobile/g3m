@@ -54,8 +54,6 @@ private:
   
   void registerNewRequest(Tile* tile);
   
-  int getTexture(Tile* tile);
-  
   TilePetitions* getRegisteredTilePetitions(Tile* tile) const;
   void removeRegisteredTilePetitions(Tile* tile);
   

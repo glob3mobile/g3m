@@ -149,6 +149,10 @@ public:
     return _column;
   }
   
+  Mesh* getTexturizerMesh() const {
+    return _texturizerMesh;
+  }
+  
   void setTextureSolved(bool textureSolved);
   
   bool isTextureSolved() const {
