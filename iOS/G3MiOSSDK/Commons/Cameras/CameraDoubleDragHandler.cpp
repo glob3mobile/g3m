@@ -14,20 +14,20 @@
 
 
 
-bool CameraDoubleDragHandler::onTouchEvent(const TouchEvent* touchEvent, Gesture &gesture) 
+bool CameraDoubleDragHandler::onTouchEvent(const TouchEvent* touchEvent, CameraContext *cameraContext) 
 {
   // only one finger needed
   if (touchEvent->getTouchCount()!=2) return false;
   
   switch (touchEvent->getType()) {
     case Down:
-      onDown(*touchEvent, gesture);
+      onDown(*touchEvent, cameraContext);
       break;
     case Move:
-      onMove(*touchEvent, gesture);
+      onMove(*touchEvent, cameraContext);
       break;
     case Up:
-      onUp(*touchEvent, gesture);
+      onUp(*touchEvent, cameraContext);
     default:
       break;
   }
@@ -36,10 +36,10 @@ bool CameraDoubleDragHandler::onTouchEvent(const TouchEvent* touchEvent, Gesture
 }
 
 
-void CameraDoubleDragHandler::onDown(const TouchEvent& touchEvent, Gesture &gesture) 
+void CameraDoubleDragHandler::onDown(const TouchEvent& touchEvent, CameraContext *cameraContext) 
 {
   _camera0 = Camera(*_camera);
-  gesture = DoubleDrag;  
+  cameraContext->setCurrentGesture(DoubleDrag);  
   
   // double dragging
   Vector2D pixel0 = touchEvent.getTouch(0)->getPos();
@@ -49,7 +49,7 @@ void CameraDoubleDragHandler::onDown(const TouchEvent& touchEvent, Gesture &gest
   
   // both pixels must intersect globe
   if (_initialPoint0.isNan() || _initialPoint1.isNan()) {
-    gesture = None;
+    cameraContext->setCurrentGesture(None);
     return;
   }
   
@@ -68,9 +68,9 @@ void CameraDoubleDragHandler::onDown(const TouchEvent& touchEvent, Gesture &gest
 }
 
 
-void CameraDoubleDragHandler::onMove(const TouchEvent& touchEvent, Gesture &gesture) 
+void CameraDoubleDragHandler::onMove(const TouchEvent& touchEvent, CameraContext *cameraContext) 
 {
-  if (gesture!=DoubleDrag) return;
+  if (cameraContext->getCurrentGesture() != DoubleDrag) return;
   if (_initialPoint.isNan()) return;
     
   Vector2D pixel0 = touchEvent.getTouch(0)->getPos();
@@ -179,23 +179,23 @@ void CameraDoubleDragHandler::onMove(const TouchEvent& touchEvent, Gesture &gest
 }
 
 
-void CameraDoubleDragHandler::onUp(const TouchEvent& touchEvent, Gesture &gesture) 
+void CameraDoubleDragHandler::onUp(const TouchEvent& touchEvent, CameraContext *cameraContext) 
 {
-  gesture = None;
+  cameraContext->setCurrentGesture(None);
   _initialPixel = Vector3D::nan().asMutableVector3D();
   
   //printf ("end 2 fingers.  gesture=%d\n", _currentGesture);
 }
 
 
-int CameraDoubleDragHandler::render(const RenderContext* rc, Gesture &gesture) {
+int CameraDoubleDragHandler::render(const RenderContext* rc, CameraContext *cameraContext) {
   _planet = rc->getPlanet();
   _camera = rc->getCamera();
   _gl = rc->getGL();
   
   // TEMP TO DRAW A POINT WHERE USER PRESS
   if (false) {
-    if (gesture == DoubleDrag) {
+    if (cameraContext->getCurrentGesture() == DoubleDrag) {
       float vertices[] = { 0,0,0};
       int indices[] = {0};
       _gl->enableVerticesPosition();

@@ -15,7 +15,7 @@
 #include "CameraRenderer.hpp"
 
 
-bool CameraSingleDragHandler::onTouchEvent(const TouchEvent* touchEvent, Gesture &gesture) 
+bool CameraSingleDragHandler::onTouchEvent(const TouchEvent* touchEvent, CameraContext *cameraContext) 
 {
   // only one finger needed
   if (touchEvent->getTouchCount()!=1) return false;
@@ -23,13 +23,13 @@ bool CameraSingleDragHandler::onTouchEvent(const TouchEvent* touchEvent, Gesture
 
   switch (touchEvent->getType()) {
     case Down:
-      onDown(*touchEvent, gesture);
+      onDown(*touchEvent, cameraContext);
       break;
     case Move:
-      onMove(*touchEvent, gesture);
+      onMove(*touchEvent, cameraContext);
       break;
     case Up:
-      onUp(*touchEvent, gesture);
+      onUp(*touchEvent, cameraContext);
     default:
       break;
   }
@@ -38,10 +38,10 @@ bool CameraSingleDragHandler::onTouchEvent(const TouchEvent* touchEvent, Gesture
 }
 
 
-void CameraSingleDragHandler::onDown(const TouchEvent& touchEvent, Gesture &gesture) 
+void CameraSingleDragHandler::onDown(const TouchEvent& touchEvent, CameraContext *cameraContext) 
 {  
   _camera0 = Camera(*_camera);
-  gesture = Drag; 
+  cameraContext->setCurrentGesture(Drag); 
   
   // dragging
   Vector2D pixel = touchEvent.getTouch(0)->getPos();  
@@ -51,9 +51,9 @@ void CameraSingleDragHandler::onDown(const TouchEvent& touchEvent, Gesture &gest
 }
 
 
-void CameraSingleDragHandler::onMove(const TouchEvent& touchEvent, Gesture &gesture) 
+void CameraSingleDragHandler::onMove(const TouchEvent& touchEvent, CameraContext *cameraContext) 
 {
-  if (gesture!=Drag) return;
+  if (cameraContext->getCurrentGesture()!=Drag) return;
   if (_initialPoint.isNan()) return;
       
   const Vector2D pixel = touchEvent.getTouch(0)->getPos();  
@@ -72,22 +72,22 @@ void CameraSingleDragHandler::onMove(const TouchEvent& touchEvent, Gesture &gest
 }
 
 
-void CameraSingleDragHandler::onUp(const TouchEvent& touchEvent, Gesture &gesture) 
+void CameraSingleDragHandler::onUp(const TouchEvent& touchEvent, CameraContext *cameraContext) 
 {
-  gesture = None;
+  cameraContext->setCurrentGesture(None);
   _initialPixel = Vector3D::nan().asMutableVector3D();
   
   //printf ("end 1 finger\n");
 }
 
-int CameraSingleDragHandler::render(const RenderContext* rc, Gesture &gesture) {
+int CameraSingleDragHandler::render(const RenderContext* rc, CameraContext *cameraContext) {
   _planet = rc->getPlanet();
   _camera = rc->getCamera();
   _gl = rc->getGL();
 
   // TEMP TO DRAW A POINT WHERE USER PRESS
   if (false) {
-    if (gesture == Drag) {
+    if (cameraContext->getCurrentGesture() == Drag) {
       float vertices[] = { 0,0,0};
       int indices[] = {0};
       _gl->enableVerticesPosition();

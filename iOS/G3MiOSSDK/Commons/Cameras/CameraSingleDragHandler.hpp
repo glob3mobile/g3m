@@ -26,14 +26,14 @@ public:
   ~CameraSingleDragHandler() {}
 
 
-  bool onTouchEvent(const TouchEvent* touchEvent, Gesture &gesture);
-  int render(const RenderContext* rc, Gesture &gesture);
+  bool onTouchEvent(const TouchEvent* touchEvent, CameraContext *cameraContext);
+  int render(const RenderContext* rc, CameraContext *cameraContext);
   
   
 private:
-  void onDown(const TouchEvent& touchEvent, Gesture &gesture);
-  void onMove(const TouchEvent& touchEvent, Gesture &gesture);
-  void onUp(const TouchEvent& touchEvent, Gesture &gesture);
+  void onDown(const TouchEvent& touchEvent, CameraContext *cameraContext);
+  void onMove(const TouchEvent& touchEvent, CameraContext *cameraContext);
+  void onUp(const TouchEvent& touchEvent, CameraContext *cameraContext);
   
   
   const Planet* _planet;

@@ -15,19 +15,19 @@
 #include "CameraRenderer.hpp"
 
 
-bool CameraDoubleTapHandler::onTouchEvent(const TouchEvent* touchEvent, Gesture &gesture) 
+bool CameraDoubleTapHandler::onTouchEvent(const TouchEvent* touchEvent, CameraContext *cameraContext) 
 {
   // only one finger needed
   if (touchEvent->getTouchCount()!=1) return false;
   if (touchEvent->getTapCount()!=2) return false;
   if (touchEvent->getType()!=Down) return false;
   
-  onDown(*touchEvent, gesture);
+  onDown(*touchEvent, cameraContext);
   return true;
 }
 
 
-void CameraDoubleTapHandler::onDown(const TouchEvent& touchEvent, Gesture &gesture) 
+void CameraDoubleTapHandler::onDown(const TouchEvent& touchEvent, CameraContext *cameraContext) 
 {  
   _camera0 = Camera(*_camera);
   
@@ -56,7 +56,7 @@ void CameraDoubleTapHandler::onDown(const TouchEvent& touchEvent, Gesture &gestu
 }
 
 
-int CameraDoubleTapHandler::render(const RenderContext* rc, Gesture &gesture) {
+int CameraDoubleTapHandler::render(const RenderContext* rc, CameraContext *cameraContext) {
   _planet = rc->getPlanet();
   _camera = rc->getCamera();
 

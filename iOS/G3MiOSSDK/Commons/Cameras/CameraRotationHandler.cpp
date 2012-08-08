@@ -14,20 +14,20 @@
 
 
 
-bool CameraRotationHandler::onTouchEvent(const TouchEvent* touchEvent, Gesture &gesture) 
+bool CameraRotationHandler::onTouchEvent(const TouchEvent* touchEvent, CameraContext *cameraContext) 
 {
   // three finger needed
   if (touchEvent->getTouchCount()!=3) return false;
   
   switch (touchEvent->getType()) {
     case Down:
-      onDown(*touchEvent, gesture);
+      onDown(*touchEvent, cameraContext);
       break;
     case Move:
-      onMove(*touchEvent, gesture);
+      onMove(*touchEvent, cameraContext);
       break;
     case Up:
-      onUp(*touchEvent, gesture);
+      onUp(*touchEvent, cameraContext);
     default:
       break;
   }
@@ -36,10 +36,10 @@ bool CameraRotationHandler::onTouchEvent(const TouchEvent* touchEvent, Gesture &
 }
 
 
-void CameraRotationHandler::onDown(const TouchEvent& touchEvent, Gesture &gesture) 
+void CameraRotationHandler::onDown(const TouchEvent& touchEvent, CameraContext *cameraContext) 
 {  
   _camera0 = Camera(*_camera);
-  gesture = Rotate;
+  cameraContext->setCurrentGesture(Rotate);
   
   // middle pixel in 2D 
   Vector2D pixel0 = touchEvent.getTouch(0)->getPos();
@@ -53,17 +53,17 @@ void CameraRotationHandler::onDown(const TouchEvent& touchEvent, Gesture &gestur
   _initialPoint = _camera->centerOfViewOnPlanet().asMutableVector3D();
   if (_initialPoint.isNan()) {
     printf ("CAMERA ERROR: center point does not intersect globe!!\n");
-    gesture = None;
+    cameraContext->setCurrentGesture(None);
   }
  
   //printf ("down 3 fingers\n");
 }
 
 
-void CameraRotationHandler::onMove(const TouchEvent& touchEvent, Gesture &gesture) 
+void CameraRotationHandler::onMove(const TouchEvent& touchEvent, CameraContext *cameraContext) 
 {
   //_currentGesture = getGesture(touchEvent);
-  if (gesture!=Rotate) return;
+  if (cameraContext->getCurrentGesture() != Rotate) return;
   
   // current middle pixel in 2D 
   Vector2D c0 = touchEvent.getTouch(0)->getPos();
@@ -105,21 +105,21 @@ void CameraRotationHandler::onMove(const TouchEvent& touchEvent, Gesture &gestur
 }
 
 
-void CameraRotationHandler::onUp(const TouchEvent& touchEvent, Gesture &gesture) 
+void CameraRotationHandler::onUp(const TouchEvent& touchEvent, CameraContext *cameraContext) 
 {
-  gesture = None;
+  cameraContext->setCurrentGesture(None);
   _initialPixel = Vector3D::nan().asMutableVector3D();
 }
 
 
-int CameraRotationHandler::render(const RenderContext* rc, Gesture &gesture) {
+int CameraRotationHandler::render(const RenderContext* rc, CameraContext *cameraContext) {
   _planet = rc->getPlanet();
   _camera = rc->getCamera();
   _gl = rc->getGL();
 
   // TEMP TO DRAW A POINT WHERE USER PRESS
   if (false) {
-    if (gesture == Rotate) {
+    if (cameraContext->getCurrentGesture() == Rotate) {
       float vertices[] = { 0,0,0};
       int indices[] = {0};
       _gl->enableVerticesPosition();
