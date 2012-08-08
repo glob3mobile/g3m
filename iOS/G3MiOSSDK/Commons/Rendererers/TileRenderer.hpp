@@ -134,8 +134,10 @@ class TilesStatistics {
 private:
   long               _tilesProcessed;
   std::map<int, int> _tilesProcessedByLevel;
+  
   long               _tilesVisible;
   std::map<int, int> _tilesVisibleByLevel;
+  
   long               _tilesRendered;
   std::map<int, int> _tilesRenderedByLevel;
   
@@ -210,16 +212,16 @@ public:
         first = false;
       }
       else {
-        buffer << ",";
+        buffer << ", ";
       }
-      buffer << "L" << level << "=" << counter;
+      buffer << "L" << level << ":" << counter;
     }
     
     return buffer.str();
   }
   
   void log(const ILogger* logger) const {
-    logger->logInfo("Tiles: processed=%d (%s), visible=%d (%s), rendered=%d (%s).",
+    logger->logInfo("Tiles processed:%d (%s), visible:%d (%s), rendered:%d (%s).",
                     _tilesProcessed,
                     asLogString(_tilesProcessedByLevel).c_str(),
                     _tilesVisible,
