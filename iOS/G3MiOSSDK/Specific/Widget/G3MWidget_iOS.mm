@@ -521,20 +521,25 @@
     if ([currSysVer compare:reqSysVer options:NSNumericSearch] != NSOrderedAscending)
       _displayLinkSupported = TRUE;
     
+    /*
     //Detecting LongPress
     UILongPressGestureRecognizer *longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
-    [self addGestureRecognizer:longPressRecognizer];
+    [self addGestureRecognizer:longPressRecognizer];*/
   }
   return self;
 }
 
+//** Agustin cancelled lonpressgesture because touchedmoved and touchedended event don't work
+/*
 - (IBAction)handleLongPress:(UIGestureRecognizer *)sender {
+
+  printf ("Longpress. state=%d\n", sender.state);
   
   if (sender.state == UIGestureRecognizerStateEnded) {
     NSLog(@"LONG PRESS");
   }
   
-}
+}*/
 
 - (void)drawView:(id)sender {
   if (_animating) {
@@ -629,7 +634,7 @@
 }*/
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-  
+    
   //NSSet *allTouches = [event allTouches];
   NSSet *allTouches = [event touchesForView:self];
   
@@ -659,6 +664,7 @@
 
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+  
   //NSSet *allTouches = [event allTouches];
   NSSet *allTouches = [event touchesForView:self];
   
@@ -740,6 +746,8 @@
   while ((touch = [enumerator nextObject])) {
     CGPoint current  = [touch locationInView:self];
     CGPoint previous = [touch previousLocationInView:self];
+    
+    [touch timestamp];
     
     Touch *touch = new Touch(Vector2D(current.x, current.y), 
                              Vector2D(previous.x, previous.y));
