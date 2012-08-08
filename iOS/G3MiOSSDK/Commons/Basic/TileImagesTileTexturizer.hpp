@@ -100,6 +100,8 @@ public:
   void justCreatedTopTile(Tile* tile);
   
   bool isReady(const RenderContext *rc);
+  
+  void initialize(const InitializationContext* ic);
 
 
 };

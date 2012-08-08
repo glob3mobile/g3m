@@ -18,7 +18,11 @@
 #include "TexturesHandler.hpp"
 
 
-TilePetitions* TileImagesTileTexturizer::createTilePetitions(const Tile* tile) {  
+void TileImagesTileTexturizer::initialize(const InitializationContext* ic) {
+  
+}
+
+TilePetitions* TileImagesTileTexturizer::createTilePetitions(const Tile* tile) {
   std::vector<Petition*> pet = _layerSet->createTilePetitions(_renderContext, *_factory, *tile, 
                                                               _parameters->_tileTextureWidth, 
                                                               _parameters->_tileTextureHeight);

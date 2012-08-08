@@ -73,6 +73,8 @@ void TileRenderer::initialize(const InitializationContext* ic) {
   
   _lastSplitTimer      = ic->getFactory()->createTimer();
   _lastTexturizerTimer = ic->getFactory()->createTimer();
+  
+  _texturizer->initialize(ic);
 }
 
 bool TileRenderer::isReadyToRender(const RenderContext *rc) {
