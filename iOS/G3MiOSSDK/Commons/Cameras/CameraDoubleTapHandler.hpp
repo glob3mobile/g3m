@@ -36,8 +36,8 @@ public:
   virtual void doStep(const RenderContext *rc,
                       const TimeInterval& now) {
     //const double percent = gently(percentDone(now), 0.2, 0.9);
-    const double percent = pace( percentDone(now) );
-    //double percent = percentDone(now);
+    //const double percent = pace( percentDone(now) );
+    double percent = percentDone(now);
     Camera *camera = rc->getCamera();
     double step = percent - _lastPercent;
     camera->rotateWithAxis(_axis, _angle.times(step));

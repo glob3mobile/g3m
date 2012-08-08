@@ -50,7 +50,7 @@ void CameraDoubleTapHandler::onDown(const EventContext *eventContext,
   const double height   = eventContext->getPlanet()->toGeodetic3D(camera->getPosition()).height();
   const double distance = height * 0.5;
 
-  Effect *effect = new DoubleTapEffect(TimeInterval::fromSeconds(2), axis, angle, distance);
+  Effect *effect = new DoubleTapEffect(TimeInterval::fromSeconds(1), axis, angle, distance);
   eventContext->getEffectsScheduler()->startEffect(effect, (EffectTarget *) cameraContext);
 }
 

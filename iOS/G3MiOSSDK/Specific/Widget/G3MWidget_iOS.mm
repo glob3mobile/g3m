@@ -614,25 +614,6 @@
   }
 }
 
-/*
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-  
-  printf ("----------------- touch began\n");
-  
-  UITouch *touch = [touches anyObject];
-  
-  CGPoint current  = [touch locationInView:self];
-  CGPoint previous = [touch previousLocationInView:self];
-  
-  TouchEvent* te = TouchEvent::create(Down,
-                                      new Touch(Vector2D(current.x, current.y),
-                                                Vector2D(previous.x, previous.y)));
-  
-  ((G3MWidget*)[self widget])->onTouchEvent(te);
-  
-  delete te;
-}*/
-
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     
   //NSSet *allTouches = [event allTouches];
@@ -712,26 +693,6 @@
   ((G3MWidget*)[self widget])->onTouchEvent(lastTouchEvent);
 }
 
-
-/*
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-  printf ("----------------- touch end\n");
-
-  
-  
-  UITouch *touch = [touches anyObject];
-  
-  CGPoint current = [touch locationInView:self];
-  CGPoint previous = [touch previousLocationInView:self];
-  
-  TouchEvent* te = TouchEvent::create(Up,
-                                      new Touch(Vector2D(current.x, current.y), 
-                                                Vector2D(previous.x, previous.y)));
-  
-  ((G3MWidget*)[self widget])->onTouchEvent(te);
-  
-  delete te;
-}*/
 
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
