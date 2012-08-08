@@ -306,7 +306,7 @@
   IDownloader* downloader = new Downloader_iOS(2 * 1024 * 1024,
                                                256 * 1024 * 1024,
                                                ".G3M_Cache",
-                                               8);
+                                               16);
   
   if (true) {
     
@@ -372,7 +372,7 @@
         texturizer = new MultiLayerTileTexturizer(layerSet);
       }
       else {
-        texturizer = new TileImagesTileTexturizer(parameters, downloader, layerSet); //WMS
+        texturizer = new TileImagesTileTexturizer(parameters, downloader, layerSet);
       }
     }
     else {
