@@ -25,18 +25,24 @@ public:
   ~CameraDoubleTapHandler() {}
   
   
-  bool onTouchEvent(const TouchEvent* touchEvent, CameraContext *cameraContext);
+  bool onTouchEvent(const EventContext *eventContext,
+                    const TouchEvent* touchEvent, 
+                    CameraContext *cameraContext);
   int render(const RenderContext* rc, CameraContext *cameraContext);
 
   
 private:
-  void onDown(const TouchEvent& touchEvent, CameraContext *cameraContext);
-  void onMove(const TouchEvent& touchEvent, CameraContext *cameraContext) {}
-  void onUp(const TouchEvent& touchEvent, CameraContext *cameraContext) {}
+  void onDown(const EventContext *eventContext,
+              const TouchEvent& touchEvent, 
+              CameraContext *cameraContext);
+  void onMove(const EventContext *eventContext,
+              const TouchEvent& touchEvent, 
+              CameraContext *cameraContext) {}
+  void onUp(const EventContext *eventContext,
+            const TouchEvent& touchEvent, 
+            CameraContext *cameraContext) {}
   
   
-  const Planet* _planet;
-  GL *_gl;
   Camera _camera0;         //Initial Camera saved on Down event
   Camera* _camera;         // Camera used at current frame
   

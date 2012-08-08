@@ -15,19 +15,23 @@
 #include "CameraRenderer.hpp"
 
 
-bool CameraDoubleTapHandler::onTouchEvent(const TouchEvent* touchEvent, CameraContext *cameraContext) 
+bool CameraDoubleTapHandler::onTouchEvent(const EventContext *eventContext,
+                                          const TouchEvent* touchEvent, 
+                                          CameraContext *cameraContext) 
 {
   // only one finger needed
   if (touchEvent->getTouchCount()!=1) return false;
   if (touchEvent->getTapCount()!=2) return false;
   if (touchEvent->getType()!=Down) return false;
   
-  onDown(*touchEvent, cameraContext);
+  onDown(eventContext, *touchEvent, cameraContext);
   return true;
 }
 
 
-void CameraDoubleTapHandler::onDown(const TouchEvent& touchEvent, CameraContext *cameraContext) 
+void CameraDoubleTapHandler::onDown(const EventContext *eventContext,
+                                    const TouchEvent& touchEvent, 
+                                    CameraContext *cameraContext) 
 {  
   _camera0 = Camera(*_camera);
   
@@ -45,7 +49,7 @@ void CameraDoubleTapHandler::onDown(const TouchEvent& touchEvent, CameraContext 
 //  Angle tita = Angle::fromRadians(-asin(axis.length()/initialPoint.length()/centerPoint.length()));
   
   // compute zoom factor
-  const double height = _planet->toGeodetic3D(_camera->getPosition()).height();
+  const double height = eventContext->getPlanet()->toGeodetic3D(_camera->getPosition()).height();
   const double d      = height * 0.5;
   
   // move the camera
@@ -57,7 +61,6 @@ void CameraDoubleTapHandler::onDown(const TouchEvent& touchEvent, CameraContext 
 
 
 int CameraDoubleTapHandler::render(const RenderContext* rc, CameraContext *cameraContext) {
-  _planet = rc->getPlanet();
   _camera = rc->getCamera();
 
   return MAX_TIME_TO_RENDER;

@@ -14,20 +14,22 @@
 
 
 
-bool CameraRotationHandler::onTouchEvent(const TouchEvent* touchEvent, CameraContext *cameraContext) 
+bool CameraRotationHandler::onTouchEvent(const EventContext *eventContext,
+                                         const TouchEvent* touchEvent, 
+                                         CameraContext *cameraContext) 
 {
   // three finger needed
   if (touchEvent->getTouchCount()!=3) return false;
   
   switch (touchEvent->getType()) {
     case Down:
-      onDown(*touchEvent, cameraContext);
+      onDown(eventContext, *touchEvent, cameraContext);
       break;
     case Move:
-      onMove(*touchEvent, cameraContext);
+      onMove(eventContext, *touchEvent, cameraContext);
       break;
     case Up:
-      onUp(*touchEvent, cameraContext);
+      onUp(eventContext, *touchEvent, cameraContext);
     default:
       break;
   }
@@ -36,7 +38,9 @@ bool CameraRotationHandler::onTouchEvent(const TouchEvent* touchEvent, CameraCon
 }
 
 
-void CameraRotationHandler::onDown(const TouchEvent& touchEvent, CameraContext *cameraContext) 
+void CameraRotationHandler::onDown(const EventContext *eventContext,
+                                   const TouchEvent& touchEvent, 
+                                   CameraContext *cameraContext) 
 {  
   _camera0 = Camera(*_camera);
   cameraContext->setCurrentGesture(Rotate);
@@ -60,7 +64,9 @@ void CameraRotationHandler::onDown(const TouchEvent& touchEvent, CameraContext *
 }
 
 
-void CameraRotationHandler::onMove(const TouchEvent& touchEvent, CameraContext *cameraContext) 
+void CameraRotationHandler::onMove(const EventContext *eventContext,
+                                   const TouchEvent& touchEvent, 
+                                   CameraContext *cameraContext) 
 {
   //_currentGesture = getGesture(touchEvent);
   if (cameraContext->getCurrentGesture() != Rotate) return;
@@ -72,7 +78,7 @@ void CameraRotationHandler::onMove(const TouchEvent& touchEvent, CameraContext *
   Vector2D cm = c0.add(c1).add(c2).div(3);
     
   // compute normal to Initial point
-  Vector3D normal = _planet->geodeticSurfaceNormal(_initialPoint.asVector3D());
+  Vector3D normal = eventContext->getPlanet()->geodeticSurfaceNormal(_initialPoint.asVector3D());
   
   // vertical rotation around normal vector to globe
   _camera->copyFrom(_camera0);
@@ -105,7 +111,9 @@ void CameraRotationHandler::onMove(const TouchEvent& touchEvent, CameraContext *
 }
 
 
-void CameraRotationHandler::onUp(const TouchEvent& touchEvent, CameraContext *cameraContext) 
+void CameraRotationHandler::onUp(const EventContext *eventContext,
+                                 const TouchEvent& touchEvent, 
+                                 CameraContext *cameraContext) 
 {
   cameraContext->setCurrentGesture(None);
   _initialPixel = Vector3D::nan().asMutableVector3D();
@@ -113,26 +121,25 @@ void CameraRotationHandler::onUp(const TouchEvent& touchEvent, CameraContext *ca
 
 
 int CameraRotationHandler::render(const RenderContext* rc, CameraContext *cameraContext) {
-  _planet = rc->getPlanet();
   _camera = rc->getCamera();
-  _gl = rc->getGL();
 
   // TEMP TO DRAW A POINT WHERE USER PRESS
   if (false) {
     if (cameraContext->getCurrentGesture() == Rotate) {
+      GL *gl = rc->getGL();
       float vertices[] = { 0,0,0};
       int indices[] = {0};
-      _gl->enableVerticesPosition();
-      _gl->disableTexture2D();
-      _gl->disableTextures();
-      _gl->vertexPointer(3, 0, vertices);
-      _gl->color((float) 1, (float) 1, (float) 0, 1);
-      _gl->pointSize(10);
-      _gl->pushMatrix();
+      gl->enableVerticesPosition();
+      gl->disableTexture2D();
+      gl->disableTextures();
+      gl->vertexPointer(3, 0, vertices);
+      gl->color((float) 1, (float) 1, (float) 0, 1);
+      gl->pointSize(10);
+      gl->pushMatrix();
       MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D());
-      _gl->multMatrixf(T);
-      _gl->drawPoints(1, indices);
-      _gl->popMatrix();
+      gl->multMatrixf(T);
+      gl->drawPoints(1, indices);
+      gl->popMatrix();
       //Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
       //printf ("zoom with initial point = (%f, %f)\n", g.latitude().degrees(), g.longitude().degrees());
     }

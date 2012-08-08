@@ -18,14 +18,22 @@ class RenderContext;
 class CameraEventHandler {
   
 public:  
-  virtual bool onTouchEvent(const TouchEvent* touchEvent, CameraContext *cameraContext) = 0;
+  virtual bool onTouchEvent(const EventContext *eventContext, 
+                            const TouchEvent* touchEvent, 
+                            CameraContext *cameraContext) = 0;
   virtual int render(const RenderContext* rc, CameraContext *cameraContext) = 0;
   virtual ~CameraEventHandler() {}
   
 private:
-  virtual void onDown(const TouchEvent& touchEvent, CameraContext *cameraContext) = 0;
-  virtual void onMove(const TouchEvent& touchEvent, CameraContext *cameraContext) = 0;
-  virtual void onUp(const TouchEvent& touchEvent, CameraContext *cameraContext) = 0;
+  virtual void onDown(const EventContext *eventContext,
+                      const TouchEvent& touchEvent, 
+                      CameraContext *cameraContext) = 0;
+  virtual void onMove(const EventContext *eventContext,
+                      const TouchEvent& touchEvent, 
+                      CameraContext *cameraContext) = 0;
+  virtual void onUp(const EventContext *eventContext,
+                    const TouchEvent& touchEvent, 
+                    CameraContext *cameraContext) = 0;
 
 };
 

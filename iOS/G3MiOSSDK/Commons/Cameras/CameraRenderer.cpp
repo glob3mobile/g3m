@@ -53,7 +53,7 @@ bool CameraRenderer::onTouchEvent(const EventContext* ec,
 {
   // pass the event to all the handlers
   for (unsigned int n=0; n<_handlers.size(); n++)
-    if (_handlers[n]->onTouchEvent(touchEvent, &_cameraContext)) return true;
+    if (_handlers[n]->onTouchEvent(ec, touchEvent, &_cameraContext)) return true;
   
   // if any of them processed the event, return false
   return false;

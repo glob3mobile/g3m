@@ -10,12 +10,14 @@
 
 #include "CameraSingleDragHandler.hpp"
 #include "MutableVector2D.hpp"
-#include "GL.hpp"
 #include "TouchEvent.hpp"
 #include "CameraRenderer.hpp"
+#include "GL.hpp"
 
 
-bool CameraSingleDragHandler::onTouchEvent(const TouchEvent* touchEvent, CameraContext *cameraContext) 
+bool CameraSingleDragHandler::onTouchEvent(const EventContext *eventContext,
+                                           const TouchEvent* touchEvent, 
+                                           CameraContext *cameraContext) 
 {
   // only one finger needed
   if (touchEvent->getTouchCount()!=1) return false;
@@ -23,13 +25,13 @@ bool CameraSingleDragHandler::onTouchEvent(const TouchEvent* touchEvent, CameraC
 
   switch (touchEvent->getType()) {
     case Down:
-      onDown(*touchEvent, cameraContext);
+      onDown(eventContext, *touchEvent, cameraContext);
       break;
     case Move:
-      onMove(*touchEvent, cameraContext);
+      onMove(eventContext, *touchEvent, cameraContext);
       break;
     case Up:
-      onUp(*touchEvent, cameraContext);
+      onUp(eventContext, *touchEvent, cameraContext);
     default:
       break;
   }
@@ -38,7 +40,9 @@ bool CameraSingleDragHandler::onTouchEvent(const TouchEvent* touchEvent, CameraC
 }
 
 
-void CameraSingleDragHandler::onDown(const TouchEvent& touchEvent, CameraContext *cameraContext) 
+void CameraSingleDragHandler::onDown(const EventContext *eventContext,
+                                     const TouchEvent& touchEvent, 
+                                     CameraContext *cameraContext) 
 {  
   _camera0 = Camera(*_camera);
   cameraContext->setCurrentGesture(Drag); 
@@ -51,7 +55,9 @@ void CameraSingleDragHandler::onDown(const TouchEvent& touchEvent, CameraContext
 }
 
 
-void CameraSingleDragHandler::onMove(const TouchEvent& touchEvent, CameraContext *cameraContext) 
+void CameraSingleDragHandler::onMove(const EventContext *eventContext,
+                                     const TouchEvent& touchEvent, 
+                                     CameraContext *cameraContext) 
 {
   if (cameraContext->getCurrentGesture()!=Drag) return;
   if (_initialPoint.isNan()) return;
@@ -62,7 +68,7 @@ void CameraSingleDragHandler::onMove(const TouchEvent& touchEvent, CameraContext
     //INVALID FINAL POINT
     Vector3D ray = _camera0.pixel2Ray(pixel);
     Vector3D pos = _camera0.getPosition();
-    finalPoint = _planet->closestPointToSphere(pos, ray).asMutableVector3D();
+    finalPoint = eventContext->getPlanet()->closestPointToSphere(pos, ray).asMutableVector3D();
   }
   
   _camera->copyFrom(_camera0);
@@ -72,7 +78,9 @@ void CameraSingleDragHandler::onMove(const TouchEvent& touchEvent, CameraContext
 }
 
 
-void CameraSingleDragHandler::onUp(const TouchEvent& touchEvent, CameraContext *cameraContext) 
+void CameraSingleDragHandler::onUp(const EventContext *eventContext,
+                                   const TouchEvent& touchEvent, 
+                                   CameraContext *cameraContext) 
 {
   cameraContext->setCurrentGesture(None);
   _initialPixel = Vector3D::nan().asMutableVector3D();
@@ -81,30 +89,25 @@ void CameraSingleDragHandler::onUp(const TouchEvent& touchEvent, CameraContext *
 }
 
 int CameraSingleDragHandler::render(const RenderContext* rc, CameraContext *cameraContext) {
-  _planet = rc->getPlanet();
   _camera = rc->getCamera();
-  _gl = rc->getGL();
 
   // TEMP TO DRAW A POINT WHERE USER PRESS
   if (false) {
     if (cameraContext->getCurrentGesture() == Drag) {
+      GL *gl = rc->getGL();
       float vertices[] = { 0,0,0};
       int indices[] = {0};
-      _gl->enableVerticesPosition();
-      _gl->disableTexture2D();
-      _gl->disableTextures();
-      _gl->vertexPointer(3, 0, vertices);
-      _gl->color((float) 0, (float) 1, (float) 0, 1);
-      _gl->pointSize(60);
-      _gl->pushMatrix();
-      
-//      double height = _planet->toGeodetic3D(_camera->getPosition()).height();
-      //printf ("altura camara = %f\n", height);
-      
+      gl->enableVerticesPosition();
+      gl->disableTexture2D();
+      gl->disableTextures();
+      gl->vertexPointer(3, 0, vertices);
+      gl->color((float) 0, (float) 1, (float) 0, 1);
+      gl->pointSize(60);
+      gl->pushMatrix();
       MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D());
-      _gl->multMatrixf(T);
-      _gl->drawPoints(1, indices);
-      _gl->popMatrix();
+      gl->multMatrixf(T);
+      gl->drawPoints(1, indices);
+      gl->popMatrix();
             
       //Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
       //printf ("zoom with initial point = (%f, %f)\n", g.latitude().degrees(), g.longitude().degrees());

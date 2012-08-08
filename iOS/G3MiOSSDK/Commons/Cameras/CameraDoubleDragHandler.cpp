@@ -14,20 +14,22 @@
 
 
 
-bool CameraDoubleDragHandler::onTouchEvent(const TouchEvent* touchEvent, CameraContext *cameraContext) 
+bool CameraDoubleDragHandler::onTouchEvent(const EventContext *eventContext,
+                                           const TouchEvent* touchEvent, 
+                                           CameraContext *cameraContext) 
 {
   // only one finger needed
   if (touchEvent->getTouchCount()!=2) return false;
   
   switch (touchEvent->getType()) {
     case Down:
-      onDown(*touchEvent, cameraContext);
+      onDown(eventContext, *touchEvent, cameraContext);
       break;
     case Move:
-      onMove(*touchEvent, cameraContext);
+      onMove(eventContext, *touchEvent, cameraContext);
       break;
     case Up:
-      onUp(*touchEvent, cameraContext);
+      onUp(eventContext, *touchEvent, cameraContext);
     default:
       break;
   }
@@ -36,7 +38,9 @@ bool CameraDoubleDragHandler::onTouchEvent(const TouchEvent* touchEvent, CameraC
 }
 
 
-void CameraDoubleDragHandler::onDown(const TouchEvent& touchEvent, CameraContext *cameraContext) 
+void CameraDoubleDragHandler::onDown(const EventContext *eventContext,
+                                     const TouchEvent& touchEvent, 
+                                     CameraContext *cameraContext) 
 {
   _camera0 = Camera(*_camera);
   cameraContext->setCurrentGesture(DoubleDrag);  
@@ -54,10 +58,11 @@ void CameraDoubleDragHandler::onDown(const TouchEvent& touchEvent, CameraContext
   }
   
   // middle point in 3D
-  Geodetic2D g0 = _planet->toGeodetic2D(_initialPoint0.asVector3D());
-  Geodetic2D g1 = _planet->toGeodetic2D(_initialPoint1.asVector3D());
-  Geodetic2D g = _planet->getMidPoint(g0, g1);
-  _initialPoint = _planet->toVector3D(g).asMutableVector3D();
+  const Planet *planet = eventContext->getPlanet();
+  Geodetic2D g0 = planet->toGeodetic2D(_initialPoint0.asVector3D());
+  Geodetic2D g1 = planet->toGeodetic2D(_initialPoint1.asVector3D());
+  Geodetic2D g  = planet->getMidPoint(g0, g1);
+  _initialPoint = planet->toVector3D(g).asMutableVector3D();
   
   // fingers difference
   Vector2D difPixel = pixel1.sub(pixel0);
@@ -68,7 +73,9 @@ void CameraDoubleDragHandler::onDown(const TouchEvent& touchEvent, CameraContext
 }
 
 
-void CameraDoubleDragHandler::onMove(const TouchEvent& touchEvent, CameraContext *cameraContext) 
+void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
+                                     const TouchEvent& touchEvent, 
+                                     CameraContext *cameraContext) 
 {
   if (cameraContext->getCurrentGesture() != DoubleDrag) return;
   if (_initialPoint.isNan()) return;
@@ -146,8 +153,9 @@ void CameraDoubleDragHandler::onMove(const TouchEvent& touchEvent, CameraContext
   // middle point in 3D
   Vector3D P0 = tempCamera.pixel2PlanetPoint(pixel0);
   Vector3D P1 = tempCamera.pixel2PlanetPoint(pixel1);
-  Geodetic2D g = _planet->getMidPoint(_planet->toGeodetic2D(P0), _planet->toGeodetic2D(P1));
-  Vector3D finalPoint = _planet->toVector3D(g);    
+  const Planet *planet = eventContext->getPlanet();
+  Geodetic2D g = planet->getMidPoint(planet->toGeodetic2D(P0), planet->toGeodetic2D(P1));
+  Vector3D finalPoint = planet->toVector3D(g);    
   
   // drag globe from centerPoint to finalPoint
   const Vector3D rotationAxis = centerPoint2.cross(finalPoint);
@@ -162,7 +170,7 @@ void CameraDoubleDragHandler::onMove(const TouchEvent& touchEvent, CameraContext
     
   // camera rotation
   {
-    Vector3D normal = _planet->geodeticSurfaceNormal(centerPoint2);
+    Vector3D normal = planet->geodeticSurfaceNormal(centerPoint2);
     Vector3D v0     = _initialPoint0.asVector3D().sub(centerPoint2).projectionInPlane(normal);
     Vector3D v1     = tempCamera.pixel2PlanetPoint(pixel0).sub(centerPoint2).projectionInPlane(normal);
     double angle    = v0.angleBetween(v1).degrees();
@@ -179,7 +187,9 @@ void CameraDoubleDragHandler::onMove(const TouchEvent& touchEvent, CameraContext
 }
 
 
-void CameraDoubleDragHandler::onUp(const TouchEvent& touchEvent, CameraContext *cameraContext) 
+void CameraDoubleDragHandler::onUp(const EventContext *eventContext,
+                                   const TouchEvent& touchEvent, 
+                                   CameraContext *cameraContext) 
 {
   cameraContext->setCurrentGesture(None);
   _initialPixel = Vector3D::nan().asMutableVector3D();
@@ -189,39 +199,38 @@ void CameraDoubleDragHandler::onUp(const TouchEvent& touchEvent, CameraContext *
 
 
 int CameraDoubleDragHandler::render(const RenderContext* rc, CameraContext *cameraContext) {
-  _planet = rc->getPlanet();
   _camera = rc->getCamera();
-  _gl = rc->getGL();
   
   // TEMP TO DRAW A POINT WHERE USER PRESS
   if (false) {
     if (cameraContext->getCurrentGesture() == DoubleDrag) {
+      GL *gl = rc->getGL();
       float vertices[] = { 0,0,0};
       int indices[] = {0};
-      _gl->enableVerticesPosition();
-      _gl->disableTexture2D();
-      _gl->disableTextures();
-      _gl->vertexPointer(3, 0, vertices);
-      _gl->color((float) 1, (float) 1, (float) 1, 1);
-      _gl->pointSize(10);
-      _gl->pushMatrix();
+      gl->enableVerticesPosition();
+      gl->disableTexture2D();
+      gl->disableTextures();
+      gl->vertexPointer(3, 0, vertices);
+      gl->color((float) 1, (float) 1, (float) 1, 1);
+      gl->pointSize(10);
+      gl->pushMatrix();
       MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D());
-      _gl->multMatrixf(T);
-      _gl->drawPoints(1, indices);
-      _gl->popMatrix();
+      gl->multMatrixf(T);
+      gl->drawPoints(1, indices);
+      gl->popMatrix();
       
       // draw each finger
-      _gl->pointSize(60);
-      _gl->pushMatrix();
+      gl->pointSize(60);
+      gl->pushMatrix();
       MutableMatrix44D T0 = MutableMatrix44D::createTranslationMatrix(_initialPoint0.asVector3D());
-      _gl->multMatrixf(T0);
-      _gl->drawPoints(1, indices);
-      _gl->popMatrix();
-      _gl->pushMatrix();
+      gl->multMatrixf(T0);
+      gl->drawPoints(1, indices);
+      gl->popMatrix();
+      gl->pushMatrix();
       MutableMatrix44D T1 = MutableMatrix44D::createTranslationMatrix(_initialPoint1.asVector3D());
-      _gl->multMatrixf(T1);
-      _gl->drawPoints(1, indices);
-      _gl->popMatrix();
+      gl->multMatrixf(T1);
+      gl->drawPoints(1, indices);
+      gl->popMatrix();
       
       
       //Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
