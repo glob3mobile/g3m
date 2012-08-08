@@ -177,23 +177,6 @@ void Tile::rawRender(const RenderContext *rc,
   
 }
 
-void Tile::cleanTexturizerMesh() {
-  int __DIEGO_AT_WORK;
-  
-  
-//  if (_texturizerMesh != NULL) {
-//    delete _texturizerMesh;
-//    _texturizerMesh = NULL;
-//  }
-//  
-//  setTextureSolved(false);
-//  
-//  if (_texturizerTimer != NULL) {
-//    delete _texturizerTimer;
-//    _texturizerTimer = NULL;
-//  }
-}
-
 void Tile::debugRender(const RenderContext* rc,
                        const TileTessellator* tessellator) {
   Mesh* debugMesh = getDebugMesh(rc, tessellator);
@@ -255,8 +238,6 @@ void Tile::render(const RenderContext* rc,
       prune(texturizer);
     }
     else {
-      cleanTexturizerMesh();
-      
       std::vector<Tile*>* subTiles = getSubTiles();
       if (_justCreatedSubtiles) {
         lastSplitTimer->start();

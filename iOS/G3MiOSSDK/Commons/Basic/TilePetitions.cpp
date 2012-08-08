@@ -64,7 +64,7 @@ void TilePetitions::requestToNet(IDownloader* downloader, int priority)
     Petition* pet = getPetition(i);
     if (!pet->isArrived()) {
       const URL& url = URL(pet->getURL());
-      long id = downloader->request(url, priority, this);
+      long id = downloader->request(url, priority, this, false);
       pet->setDownloadID(id);
     }
   }

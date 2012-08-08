@@ -55,21 +55,43 @@ _requestIdCounter(0)
 void Downloader_iOS::cancelRequest(long requestId) {
   [_lock lock];
 
+  __block bool found = false;
+  
   [ _queuedHandlers enumerateKeysAndObjectsUsingBlock:^(id key,
                                                         id obj,
                                                         BOOL *stop) {
     NSURL*                  url     = key;
     Downloader_iOS_Handler* handler = obj;
-
+    
     if ( [handler removeListenerForRequestId: requestId] ) {
       if ( ![handler hasListeners] ) {
         [_queuedHandlers removeObjectForKey:url];
       }
       
       *stop = YES;
+      found = true;
     }
   } ];
 
+  
+  if (!found) {
+    [ _downloadingHandlers enumerateKeysAndObjectsUsingBlock:^(id key,
+                                                               id obj,
+                                                               BOOL *stop) {
+      NSURL*                  url     = key;
+      Downloader_iOS_Handler* handler = obj;
+      
+      if ( [handler removeListenerForRequestId: requestId] ) {
+        if ( ![handler hasListeners] ) {
+//          [_downloadingHandlers removeObjectForKey:url];
+          [handler cancel];
+        }
+        
+        *stop = YES;
+        found = true;
+      }
+    } ];
+  }
   
   [_lock unlock];
 }
@@ -119,12 +141,14 @@ Downloader_iOS_Handler* Downloader_iOS::getHandlerToRun() {
 
 long Downloader_iOS::request(const URL &url,
                              long priority,
-                             IDownloadListener* cppListener) {
+                             IDownloadListener* cppListener,
+                             bool deleteListener) {
   int __TODO_new_downloader;
   
   NSURL* nsURL = [NSURL URLWithString: toNSString(url.getPath())];
   
-  Downloader_iOS_Listener* iosListener = [[Downloader_iOS_Listener alloc] initWithCPPListener: cppListener];
+  Downloader_iOS_Listener* iosListener = [[Downloader_iOS_Listener alloc] initWithCPPListener: cppListener
+                                                                               deleteListener: deleteListener];
   
   Downloader_iOS_Handler* handler = nil;
   

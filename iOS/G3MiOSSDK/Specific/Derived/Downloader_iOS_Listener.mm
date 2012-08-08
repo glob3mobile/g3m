@@ -11,32 +11,44 @@
 @implementation Downloader_iOS_Listener
 
 -(id)initWithCPPListener:(IDownloadListener*)cppListener
+          deleteListener:(bool)deleteListener
 {
   self = [super init];
   if (self) {
-    _cppListener = cppListener;
+    _cppListener    = cppListener;
+    _deleteListener = deleteListener;
   }
   return self;
 }
 
 -(void) onDownload:(Response&)response
 {
-  _cppListener->onDownload(response);
+  if (_cppListener) {
+    _cppListener->onDownload(response);
+  }
 }
 
 -(void) onError:(Response&)response
 {
-  _cppListener->onError(response);
+  if (_cppListener) {
+    _cppListener->onError(response);
+  }
 }
 
 -(void) onCancel:(const URL&)url
 {
-  _cppListener->onCancel(url);
+  if (_cppListener) {
+    _cppListener->onCancel(url);
+  }
 }
 
 -(void) dealloc
 {
-  delete _cppListener;
+  if (_cppListener) {
+    if (_deleteListener) {
+      delete _cppListener;
+    }
+  }
 }
 
 @end

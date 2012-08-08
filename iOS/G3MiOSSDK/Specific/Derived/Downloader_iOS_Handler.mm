@@ -58,6 +58,7 @@
     _nsURL     = nsURL;
     _url       = url;
     _priority  = priority;
+    _canceled  = false;
     
     ListenerEntry* entry = [ListenerEntry entryWithListener: listener
                                                   requestId: requestId];
@@ -142,14 +143,18 @@
   
   NSURLResponse *urlResponse;
   NSError *error;
-  NSData* data = [NSURLConnection sendSynchronousRequest: request
+  __block NSData* data = [NSURLConnection sendSynchronousRequest: request
                                        returningResponse: &urlResponse
                                                    error: &error];
   
-  URL url( [[_nsURL absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] );
+  __block URL url( [[_nsURL absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] );
   
   // inform downloader to remove myself, to avoid adding new Listeners
   downloader->removeDownloadingHandlerForNSURL(_nsURL);
+  
+  if (_canceled) {
+    return;
+  }
   
   dispatch_async( dispatch_get_main_queue(), ^{
     // Add code here to update the UI/send notifications based on the
@@ -179,8 +184,9 @@
        [ [error       description] cStringUsingEncoding: NSUTF8StringEncoding ] );*/
       
       //ILogger::instance()->logError("Can't load %s\n", [[_nsURL absoluteString] UTF8String]);
-      printf ("Can't load %s\n", [[_nsURL absoluteString] UTF8String]);
-      
+      printf ("Error %s trying to load %s\n",
+              [[error localizedDescription] cStringUsingEncoding:NSUTF8StringEncoding],
+              [[_nsURL absoluteString] UTF8String]);
       
       ByteBuffer buffer(NULL, 0);
       
@@ -200,6 +206,11 @@
     
   });
   
+}
+
+- (void) cancel
+{
+  _canceled = true;
 }
 
 - (void)dealloc

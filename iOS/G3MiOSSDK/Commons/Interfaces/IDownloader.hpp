@@ -18,7 +18,8 @@ public:
   
   virtual long request(const URL& url,
                        long priority,
-                       IDownloadListener* listener) = 0;
+                       IDownloadListener* listener,
+                       bool deleteListener) = 0;
   
   virtual void cancelRequest(long requestId) = 0;
   

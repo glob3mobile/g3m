@@ -19,7 +19,9 @@ public:
   virtual void onError(const Response& response) = 0;
   virtual void onCancel(const URL& url) = 0;
   
-  virtual ~IDownloadListener() {}
+  virtual ~IDownloadListener() {
+    printf("**>> deleting listener=%x\n", (int) this);
+  }
 };
 
 #endif

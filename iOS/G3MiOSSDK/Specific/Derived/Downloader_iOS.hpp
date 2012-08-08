@@ -42,7 +42,8 @@ public:
   
   long request(const URL& url,
                long priority,
-               IDownloadListener* listener);
+               IDownloadListener* listener,
+               bool deleteListener);
   
   void cancelRequest(long requestId);
   

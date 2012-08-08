@@ -92,8 +92,6 @@ private:
                         TileTexturizer* texturizer,
                         ITimer* lastTexturizerTimer);
   
-  void cleanTexturizerMesh();
-
   void debugRender(const RenderContext* rc,
                    const TileTessellator* tessellator);
 

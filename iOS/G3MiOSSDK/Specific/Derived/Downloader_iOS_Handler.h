@@ -37,6 +37,8 @@
   NSURL*          _nsURL;
   URL*            _url;
   
+  bool            _canceled;
+  
   NSLock*         _lock;                // synchronization helper
 }
 
@@ -56,6 +58,8 @@
 - (long) priority;
 
 - (void) runWithDownloader:(void*)downloaderV;
+
+- (void) cancel;
 
 - (void) dealloc;
 
