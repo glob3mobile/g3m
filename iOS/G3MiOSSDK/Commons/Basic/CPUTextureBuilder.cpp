@@ -91,9 +91,5 @@ int CPUTextureBuilder::createTextureFromImages(GL * gl, const IFactory* factory,
     delete base;
   }
 
-  if (base != vImages[0]) {
-    delete base;
-  }
-  
   return texID;
 }
