@@ -43,7 +43,7 @@ public:
                            Color             backgroundColor,
                            const bool        logFPS);
   
-  ~G3MWidget();
+  ~G3MWidget(); 
   
   int render();
   
@@ -55,8 +55,12 @@ public:
     return _gl;
   }
   
-  Camera* getCamera() const {
-    return _camera;
+/*  const Camera* getCurrentCamera() const {
+    return _currentCamera;
+  }*/
+  
+  Camera* getNextCamera() const {
+    return _nextCamera;
   }
   
   
@@ -69,7 +73,8 @@ private:
   Renderer*         _busyRenderer;
   EffectsScheduler* _scheduler;
   
-  Camera*          _camera;
+  Camera*          _currentCamera;
+  Camera*          _nextCamera;
   Downloader*      _downloaderOLD;
   IDownloader*     _downloader;
   TexturesHandler* _texturesHandler;

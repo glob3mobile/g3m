@@ -30,7 +30,7 @@ public:
   
   virtual void doStep(const RenderContext *rc, const TimeInterval& now) {
     EffectWithForce::doStep(rc, now);
-    rc->getCamera()->rotateWithAxis(_axis, Angle::fromDegrees(getForce()));
+    rc->getNextCamera()->rotateWithAxis(_axis, Angle::fromDegrees(getForce()));
   }
   
   virtual void stop(const RenderContext *rc, const TimeInterval& now) { }

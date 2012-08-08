@@ -31,10 +31,10 @@ int CameraRenderer::render(const RenderContext* rc)
 {
   // create the CameraContext
   if (_cameraContext == NULL)
-    _cameraContext = new CameraContext(None, rc->getCamera());
+    _cameraContext = new CameraContext(None, rc->getNextCamera());
 
   // render camera object
-  rc->getCamera()->render(rc);
+  rc->getNextCamera()->render(rc);
   
   int min = MAX_TIME_TO_RENDER;
   for (unsigned int i=0; i<_handlers.size(); i++) {

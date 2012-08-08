@@ -40,7 +40,8 @@ _planet(planet),
 _renderer(renderer),
 _busyRenderer(busyRenderer),
 _scheduler(scheduler),
-_camera(new Camera(planet, width, height)),
+_currentCamera(new Camera(planet, width, height)),
+_nextCamera(new Camera(planet, width, height)),
 _backgroundColor(backgroundColor),
 _timer(factory->createTimer()),
 _renderCounter(0),
@@ -59,6 +60,7 @@ _rendererReady(false) // false until first call to G3MWidget::render()
   
   _downloader->start();
 }
+
 
 G3MWidget* G3MWidget::create(IFactory*         factory,
                              ILogger*          logger,
@@ -113,7 +115,8 @@ G3MWidget::~G3MWidget() {
   delete _renderer;
   delete _busyRenderer;
   delete _scheduler;
-  delete _camera;
+  delete _currentCamera;
+  delete _nextCamera;
   delete _texturesHandler;
   delete _timer;
   delete _downloaderOLD;
@@ -140,11 +143,15 @@ int G3MWidget::render() {
   _timer->start();
   _renderCounter++;
   
+  // copy next camera to current camera
+  _currentCamera->copyFrom(*_nextCamera);
+  
   RenderContext rc(_factory,
                    _logger,
                    _planet,
                    _gl,
-                   _camera,
+                   _currentCamera,
+                   _nextCamera,
                    _texturesHandler,
                    _downloaderOLD,
                    _downloader,
