@@ -35,7 +35,8 @@ int CameraRenderer::render(const RenderContext* rc)
                                       rc->getDownloaderOLD(), rc->getDownloader(),
                                       rc->getEffectsScheduler());
   */
-                                      
+                                    
+  _camera = rc->getCamera();
                                       
   rc->getCamera()->render(rc);
   

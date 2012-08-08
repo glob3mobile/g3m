@@ -51,7 +51,7 @@ private:
   
 public:
   
-  CameraRenderer():_gesture(None), cameraContext(NULL) {}
+  CameraRenderer():_gesture(None), cameraContext(NULL), _camera(NULL) {}
   
   void addHandler(CameraEventHandler *handler) { _handlers.push_back(handler); }
   
