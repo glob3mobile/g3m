@@ -18,6 +18,7 @@ class TileTexturizer;
 #include "Sector.hpp"
 //#include <vector>
 #include <map>
+#include <sstream>
 
 #include "Tile.hpp"
 #include "Camera.hpp"
@@ -131,19 +132,20 @@ public:
 
 class TilesStatistics {
 private:
-  long _tilesProcessed;
-  long _tilesRendered;
-
-  int _minLevel;
-  int _maxLevel;
+  long               _tilesProcessed;
+  std::map<int, int> _tilesProcessedByLevel;
+  long               _tilesVisible;
+  std::map<int, int> _tilesVisibleByLevel;
+  long               _tilesRendered;
+  std::map<int, int> _tilesRenderedByLevel;
+  
   int _splitsCountInFrame;
   
 public:
-  TilesStatistics(const TileParameters* parameters) :
+  TilesStatistics() :
   _tilesProcessed(0),
+  _tilesVisible(0),
   _tilesRendered(0),
-  _minLevel(parameters->_maxLevel + 1),
-  _maxLevel(parameters->_topLevel - 1),
   _splitsCountInFrame(0)
   {
     
@@ -157,28 +159,25 @@ public:
     _splitsCountInFrame++;
   }
   
-  void computeTileProcessed() {
+  void computeTileProcessed(Tile* tile) {
     _tilesProcessed++;
+    
+    const int level = tile->getLevel();
+    _tilesProcessedByLevel[level] = _tilesProcessedByLevel[level] + 1;
   }
   
+  void computeVisibleTile(Tile* tile) {
+    _tilesVisible++;
+    
+    const int level = tile->getLevel();
+    _tilesVisibleByLevel[level] = _tilesVisibleByLevel[level] + 1;
+  }
+
   void computeTileRendered(Tile* tile) {
     _tilesRendered++;
     
-    int level = tile->getLevel();
-    if (level < _minLevel) {
-      _minLevel = level;
-    }
-    if (level > _maxLevel) {
-      _maxLevel = level;
-    }
-  }
-  
-  void log(const ILogger* logger) const {
-    logger->logInfo("Tiles: processed=%d, rendered=%d. Levels: %d-%d",
-                    _tilesProcessed,
-                    _tilesRendered,
-                    _minLevel,
-                    _maxLevel);
+    const int level = tile->getLevel();
+    _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
   }
   
   bool equalsTo(const TilesStatistics& that) const {
@@ -188,16 +187,47 @@ public:
     if (_tilesRendered != that._tilesRendered) {
       return false;
     }
-    if (_minLevel != that._minLevel) {
+    if (_tilesRenderedByLevel != that._tilesRenderedByLevel) {
       return false;
     }
-    if (_maxLevel != that._maxLevel) {
+    if (_tilesProcessedByLevel != that._tilesProcessedByLevel) {
       return false;
     }
-    
     return true;
   }
   
+  static std::string asLogString(std::map<int, int> map) {
+    std::ostringstream buffer;
+    
+    bool first = true;
+    for(std::map<int, int>::const_iterator i = map.begin();
+        i != map.end();
+        ++i ) {
+      int level   = i->first;
+      int counter = i->second;
+      
+      if (first) {
+        first = false;
+      }
+      else {
+        buffer << ",";
+      }
+      buffer << "L" << level << "=" << counter;
+    }
+    
+    return buffer.str();
+  }
+  
+  void log(const ILogger* logger) const {
+    logger->logInfo("Tiles: processed=%d (%s), visible=%d (%s), rendered=%d (%s).",
+                    _tilesProcessed,
+                    asLogString(_tilesProcessedByLevel).c_str(),
+                    _tilesVisible,
+                    asLogString(_tilesVisibleByLevel).c_str(),
+                    _tilesRendered,
+                    asLogString(_tilesRenderedByLevel).c_str());
+  }
+
 };
 
 
@@ -282,7 +312,7 @@ public:
   _texturizer(texturizer),
   _parameters(parameters),
   _showStatistics(showStatistics),
-  _lastStatistics(parameters),
+  _lastStatistics(),
   _topTilesJustCreated(false),
   _lastSplitTimer(NULL),
   _lastTexturizerTimer(NULL)

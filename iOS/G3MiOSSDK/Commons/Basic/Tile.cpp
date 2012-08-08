@@ -239,7 +239,11 @@ void Tile::render(const RenderContext* rc,
                   std::list<Tile*>* toVisitInNextIteration,
                   ITimer* lastSplitTimer,
                   ITimer* lastTexturizerTimer) {
+  statistics->computeTileProcessed(this);
+
   if (isVisible(rc, tessellator)) {
+    statistics->computeVisibleTile(this);
+
     if (meetsRenderCriteria(rc, tessellator, texturizer, parameters, lastSplitTimer, statistics)) {
       rawRender(rc, tessellator, texturizer, lastTexturizerTimer);
       if (parameters->_renderDebug) {

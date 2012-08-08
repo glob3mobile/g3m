@@ -94,7 +94,7 @@ bool TileRenderer::isReadyToRender(const RenderContext *rc) {
 }
 
 int TileRenderer::render(const RenderContext* rc) {
-  TilesStatistics statistics(_parameters);
+  TilesStatistics statistics;
   
   const int topLevelTilesSize = _topLevelTiles.size();
 
@@ -150,7 +150,6 @@ int TileRenderer::render(const RenderContext* rc) {
                    _lastSplitTimer,
                    _lastTexturizerTimer);
       
-      statistics.computeTileProcessed();
     }
 
     toVisit = toVisitInNextIteration;

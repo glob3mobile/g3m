@@ -159,7 +159,9 @@ public:
     return _textureSolved;
   }
   
-  Tile* getParent() const { return _parent; }
+  Tile* getParent() const {
+    return _parent;
+  }
   
   void render(const RenderContext* rc,
               const TileTessellator* tessellator,
