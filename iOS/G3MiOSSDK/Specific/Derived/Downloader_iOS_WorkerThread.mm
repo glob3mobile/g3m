@@ -26,7 +26,7 @@
     _downloader = downloader;
     _stopping = false;
     
-    [self setThreadPriority:1];
+    [self setThreadPriority:0.9];
   }
   return self;
 }

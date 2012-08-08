@@ -95,28 +95,29 @@ Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
                                                         Mesh* previousMesh) {
   const TextureMapping* fbTMap = NULL;
   int texID = -1;
-  Tile* fbTile = tile->getParent();
-  while (fbTile != NULL && texID < 0) {
+  Tile* ancestor = tile->getParent();
+  while (ancestor != NULL && texID < 0) {
     
-    if (fbTile->isTextureSolved()){
-      TexturedMesh* texMesh = (TexturedMesh*) fbTile->getTexturizerMesh();
+    if (ancestor->isTextureSolved()){
+      TexturedMesh* texMesh = (TexturedMesh*) ancestor->getTexturizerMesh();
       if (texMesh != NULL){
         fbTMap = texMesh->getTextureMapping();
         
         texID = _texHandler->getTextureIdIfAvailable(fbTMap->getStringTexID(), 
                                                      fbTMap->getWidth(), fbTMap->getHeight());
-        
-        break;
+        if (texID >= 0) {
+          break;
+        }
       }
     }
-    fbTile = fbTile->getParent();       //TRYING TO CREATE FALLBACK TEXTURE FROM ANTECESOR
+    ancestor = ancestor->getParent();       //TRYING TO CREATE FALLBACK TEXTURE FROM ANTECESOR
   }
   
   //CREATING MESH
   if (texID > -1) {
     TextureMapping* tMap = new TextureMapping(texID, getTextureCoordinates(tessellator), _texHandler, fbTMap->getStringTexID(), 
                                               fbTMap->getWidth(), fbTMap->getHeight());
-    translateAndScaleFallBackTex(tile, fbTile, tMap);
+    translateAndScaleFallBackTex(tile, ancestor, tMap);
     TexturedMesh* texMesh = new TexturedMesh(tessellatorMesh, false, tMap, true);
     delete previousMesh;   //If a new mesh has been produced we delete the previous one
     return texMesh;

@@ -115,6 +115,8 @@
     }
   }
   
+//  _canceled = [_listeners count] == 0;
+  
   [_lock unlock];
   
   return removed;
@@ -129,6 +131,17 @@
   [_lock unlock];
   
   return hasListeners;
+}
+
+-(bool)isCanceled
+{
+  [_lock lock];
+
+  const bool result = _canceled;
+
+  [_lock unlock];
+
+  return result;
 }
 
 - (void) runWithDownloader:(void*)downloaderV
@@ -158,6 +171,7 @@
   // inform downloader to remove myself, to avoid adding new Listeners
   downloader->removeDownloadingHandlerForNSURL(_nsURL);
   
+  
   dispatch_async( dispatch_get_main_queue(), ^{
     // Add code here to update the UI/send notifications based on the
     // results of the background processing
@@ -166,8 +180,14 @@
     
     const int listenersCount = [_listeners count];
     
-    if (!_canceled && listenersCount > 0) {
-      
+    if (_canceled) {
+      for (int i = 0; i < listenersCount; i++) {
+        ListenerEntry* entry = [_listeners objectAtIndex: i];
+        
+        [[entry listener] onCancel: url];
+      }
+    }
+    else {
       if (data) {
         const int length = [data length];
         unsigned char *bytes = new unsigned char[ length ]; // will be deleted by ByteBuffer's destructor
@@ -183,15 +203,10 @@
         }
       }
       else {
-        /*ILogger::instance()->logError("Can't load %s, response=%s, error=%s",
-         [ [_nsURL      description] cStringUsingEncoding: NSUTF8StringEncoding ],
-         (urlResponse!=0)? [ [urlResponse description] cStringUsingEncoding: NSUTF8StringEncoding ] : "NULL",
-         [ [error       description] cStringUsingEncoding: NSUTF8StringEncoding ] );*/
-        
-        //ILogger::instance()->logError("Can't load %s\n", [[_nsURL absoluteString] UTF8String]);
-        printf ("Error %s trying to load %s\n",
-                [[error localizedDescription] cStringUsingEncoding:NSUTF8StringEncoding],
-                [[_nsURL absoluteString] UTF8String]);
+//        ILogger::instance()->logError("Can't load %s\n", [[_nsURL absoluteString] UTF8String]);
+        ILogger::instance()->logError ("Error %s trying to load %s\n",
+                                       [[error localizedDescription] UTF8String],
+                                       [[_nsURL absoluteString] UTF8String]);
         
         ByteBuffer buffer(NULL, 0);
         

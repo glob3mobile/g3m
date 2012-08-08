@@ -61,6 +61,8 @@
 
 - (void) cancel;
 
+-(bool)isCanceled;
+
 - (void) dealloc;
 
 @end
