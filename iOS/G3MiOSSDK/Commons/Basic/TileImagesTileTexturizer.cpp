@@ -37,11 +37,10 @@ TilePetitions* TileImagesTileTexturizer::createTilePetitions(const RenderContext
                            pet);
 }
 
-std::vector<MutableVector2D> TileImagesTileTexturizer::getTextureCoordinates(const TileTessellator* tessellator) const {
+std::vector<MutableVector2D> TileImagesTileTexturizer::getTextureCoordinates(const TileRenderContext* trc) const {
   if (_texCoordsCache == NULL) {
-    _texCoordsCache = tessellator->createUnitTextCoords();
+    _texCoordsCache = trc->getTessellator()->createUnitTextCoords();
   }
-  
   return *_texCoordsCache;
 }
 
@@ -56,7 +55,7 @@ void TileImagesTileTexturizer::translateAndScaleFallBackTex(Tile* tile,
 }
 
 Mesh* TileImagesTileTexturizer::getNewTextureMesh(Tile* tile,
-                                                  const TileTessellator* tessellator,
+                                                  const TileRenderContext* trc,
                                                   Mesh* tessellatorMesh,
                                                   Mesh* previousMesh) {
   //THE TEXTURE HAS BEEN LOADED???
@@ -77,7 +76,9 @@ Mesh* TileImagesTileTexturizer::getNewTextureMesh(Tile* tile,
     
       //printf("TEXTURIZED %d, %d, %d\n", tile->getLevel(), tile->getRow(), tile->getColumn());
     
-      TextureMapping * tMap = new TextureMapping(texID, getTextureCoordinates(tessellator), _texHandler, 
+      TextureMapping * tMap = new TextureMapping(texID,
+                                                 getTextureCoordinates(trc),
+                                                 _texHandler,
                                                  tp->getPetitionsID(), 
                                                  _parameters->_tileTextureWidth, 
                                                  _parameters->_tileTextureHeight);
@@ -93,7 +94,7 @@ Mesh* TileImagesTileTexturizer::getNewTextureMesh(Tile* tile,
 }
 
 Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
-                                                        const TileTessellator* tessellator,
+                                                        const TileRenderContext* trc,
                                                         Mesh* tessellatorMesh,
                                                         Mesh* previousMesh) {
   const TextureMapping* fbTMap = NULL;
@@ -118,7 +119,7 @@ Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
   
   //CREATING MESH
   if (texID > -1) {
-    TextureMapping* tMap = new TextureMapping(texID, getTextureCoordinates(tessellator), _texHandler, fbTMap->getStringTexID(), 
+    TextureMapping* tMap = new TextureMapping(texID, getTextureCoordinates(trc), _texHandler, fbTMap->getStringTexID(),
                                               fbTMap->getWidth(), fbTMap->getHeight());
     translateAndScaleFallBackTex(tile, ancestor, tMap);
     TexturedMesh* texMesh = new TexturedMesh(tessellatorMesh, false, tMap, true);
@@ -140,8 +141,8 @@ void TileImagesTileTexturizer::registerNewRequest(const RenderContext* rc,
 }
 
 Mesh* TileImagesTileTexturizer::texturize(const RenderContext* rc,
+                                          const TileRenderContext* trc,
                                           Tile* tile,
-                                          const TileTessellator* tessellator,
                                           Mesh* tessellatorMesh,
                                           Mesh* previousMesh) {
   //STORING CONTEXT
@@ -151,15 +152,15 @@ Mesh* TileImagesTileTexturizer::texturize(const RenderContext* rc,
   
   //printf("TP SIZE: %lu\n", _tilePetitions.size());
   
-  Mesh* mesh = getNewTextureMesh(tile, tessellator, tessellatorMesh, previousMesh);
+  Mesh* mesh = getNewTextureMesh(tile, trc, tessellatorMesh, previousMesh);
   if (mesh == NULL){
     //REGISTERING PETITION AND SENDING TO THE NET IF NEEDED
     registerNewRequest(rc, tile);
-    mesh = getNewTextureMesh(tile, tessellator, tessellatorMesh, previousMesh);
+    mesh = getNewTextureMesh(tile, trc, tessellatorMesh, previousMesh);
     
     //If we still can't get a new TexturedMesh we try to get a FallBack Mesh
     if (mesh == NULL){
-      mesh = getFallBackTexturedMesh(tile, tessellator, tessellatorMesh, previousMesh);
+      mesh = getFallBackTexturedMesh(tile, trc, tessellatorMesh, previousMesh);
     }
   }
   

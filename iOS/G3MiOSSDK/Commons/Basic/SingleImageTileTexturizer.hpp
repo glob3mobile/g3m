@@ -52,8 +52,8 @@ public:
   }
   
   Mesh* texturize(const RenderContext* rc,
+                  const TileRenderContext* trc,
                   Tile* tile,
-                  const TileTessellator* tessellator,
                   Mesh* mesh,
                   Mesh* previousMesh);
   

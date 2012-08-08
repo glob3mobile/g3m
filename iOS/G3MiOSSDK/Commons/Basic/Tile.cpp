@@ -9,13 +9,12 @@
 #include "Tile.hpp"
 #include "Mesh.hpp"
 #include "Camera.hpp"
-
+#include "ITimer.hpp"
 #include "TileTessellator.hpp"
 #include "TileTexturizer.hpp"
 #include "TileRenderer.hpp"
-
-#include "ITimer.hpp"
 #include "TilesRenderParameters.hpp"
+
 
 Tile::~Tile() {
   prune(NULL);
@@ -42,39 +41,37 @@ void Tile::setTextureSolved(bool textureSolved) {
 }
 
 Mesh* Tile::getTessellatorMesh(const RenderContext* rc,
-                               const TileTessellator* tessellator) {
+                               const TileRenderContext* trc) {
   if (_tessellatorMesh == NULL) {
-    _tessellatorMesh = tessellator->createMesh(rc, this);
+    _tessellatorMesh = trc->getTessellator()->createMesh(rc, this);
   }
   return _tessellatorMesh;
 }
 
 Mesh* Tile::getDebugMesh(const RenderContext* rc,
-                         const TileTessellator* tessellator) {
+                         const TileRenderContext* trc) {
   if (_debugMesh == NULL) {
-    _debugMesh = tessellator->createDebugMesh(rc, this);
+    _debugMesh = trc->getTessellator()->createDebugMesh(rc, this);
   }
   return _debugMesh;
 }
 
 bool Tile::isVisible(const RenderContext *rc,
-                     const TileTessellator *tessellator) {
+                     const TileRenderContext* trc) {
   
   // test if sector is back oriented with respect to the camera
   if (_sector.isBackOriented(rc)) {
       return false; 
     }
   
-  return getTessellatorMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->getFrustumInModelCoordinates());
+  return getTessellatorMesh(rc, trc)->getExtent()->touches(rc->getCamera()->getFrustumInModelCoordinates());
   //return getTessellatorMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->_halfFrustumInModelCoordinates);
 }
 
 bool Tile::meetsRenderCriteria(const RenderContext *rc,
-                               const TileTessellator *tessellator,
-                               TileTexturizer *texturizer,
-                               const TilesRenderParameters* parameters,
-                               ITimer* lastSplitTimer,
-                               TilesStatistics* statistics) {
+                               const TileRenderContext* trc) {
+  const TilesRenderParameters* parameters = trc->getParameters();
+  
   if (_level >= parameters->_maxLevel) {
     return true;
   }
@@ -85,6 +82,7 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
 //    }
 //  }
   
+  TileTexturizer* texturizer = trc->getTexturizer();
   if (texturizer != NULL) {
     if (texturizer->tileMeetsRenderCriteria(this)) {
       return true;
@@ -96,7 +94,7 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
 //  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
 //    return true;
 //  }
-  const Vector2D extent = getTessellatorMesh(rc, tessellator)->getExtent()->projectedExtent(rc);
+  const Vector2D extent = getTessellatorMesh(rc, trc)->getExtent()->projectedExtent(rc);
   //const double t = extent.maxAxis() * 2;
   const double t = (extent.x() + extent.y());
   if ( t <= ((parameters->_tileTextureWidth + parameters->_tileTextureHeight) * 1.75) ) {
@@ -106,12 +104,12 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
   
   int __TODO_tune_render_budget;
   if (_subtiles == NULL) { // the tile needs to create the subtiles
-    if (statistics->getSplitsCountInFrame() > 1) {
+    if (trc->getStatistics()->getSplitsCountInFrame() > 1) {
       // there are not more splitsCount-budget to spend
       return true;
     }
     
-    if (lastSplitTimer->elapsedTime().milliseconds() < 50) {
+    if (trc->getLastSplitTimer()->elapsedTime().milliseconds() < 50) {
       // there are not more time-budget to spend
       return true;
     }
@@ -121,12 +119,12 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
 }
 
 void Tile::rawRender(const RenderContext *rc,
-                     const TileTessellator *tessellator,
-                     TileTexturizer *texturizer,
-                     ITimer* lastTexturizerTimer) {
+                     const TileRenderContext* trc) {
   
-  Mesh* tessellatorMesh = getTessellatorMesh(rc, tessellator);
-  
+  Mesh* tessellatorMesh = getTessellatorMesh(rc, trc);
+
+  TileTexturizer* texturizer = trc->getTexturizer();
+
   if (tessellatorMesh != NULL) {
     if (texturizer == NULL) {
       tessellatorMesh->render(rc);
@@ -152,12 +150,14 @@ void Tile::rawRender(const RenderContext *rc,
                                      (_texturizerTimer->elapsedTime().milliseconds() > 5));
 
         if (callTexturizer) {
+          
+          int ____pass_TileRenderContext_to_texturizer;
           _texturizerMesh = texturizer->texturize(rc,
+                                                  trc,
                                                   this,
-                                                  tessellator,
                                                   tessellatorMesh,
                                                   _texturizerMesh);
-          lastTexturizerTimer->start();
+          trc->getLastTexturizerTimer()->start();
 
           if (_texturizerTimer == NULL) {
             _texturizerTimer = rc->getFactory()->createTimer();
@@ -186,8 +186,8 @@ void Tile::rawRender(const RenderContext *rc,
 }
 
 void Tile::debugRender(const RenderContext* rc,
-                       const TileTessellator* tessellator) {
-  Mesh* debugMesh = getDebugMesh(rc, tessellator);
+                       const TileRenderContext* trc) {
+  Mesh* debugMesh = getDebugMesh(rc, trc);
   if (debugMesh != NULL) {
     debugMesh->render(rc);
   }
@@ -201,14 +201,16 @@ std::vector<Tile*>* Tile::getSubTiles() {
   return _subtiles;
 }
 
-void Tile::prune(TileTexturizer* texturizer) {
+void Tile::prune(const TileRenderContext* trc) {
   if (_subtiles != NULL) {
+    
+    TileTexturizer* texturizer = trc->getTexturizer();
     
     const int subtilesSize = _subtiles->size();
     for (int i = 0; i < subtilesSize; i++) {
       Tile* subtile = _subtiles->at(i);
       
-      subtile->prune(texturizer);
+      subtile->prune(trc);
       if (texturizer != NULL) {
         texturizer->tileToBeDeleted(subtile);
       }
@@ -223,32 +225,29 @@ void Tile::prune(TileTexturizer* texturizer) {
 
 
 void Tile::render(const RenderContext* rc,
-                  const TileTessellator* tessellator,
-                  TileTexturizer* texturizer,
-                  const TilesRenderParameters* parameters,
-                  TilesStatistics* statistics,
-                  std::list<Tile*>* toVisitInNextIteration,
-                  ITimer* lastSplitTimer,
-                  ITimer* lastTexturizerTimer) {
+                  const TileRenderContext* trc,
+                  std::list<Tile*>* toVisitInNextIteration) {
+  TilesStatistics* statistics = trc->getStatistics();
+  
   statistics->computeTileProcessed(this);
 
-  if (isVisible(rc, tessellator)) {
+  if (isVisible(rc, trc)) {
     statistics->computeVisibleTile(this);
 
-    if (meetsRenderCriteria(rc, tessellator, texturizer, parameters, lastSplitTimer, statistics)) {
-      rawRender(rc, tessellator, texturizer, lastTexturizerTimer);
-      if (parameters->_renderDebug) {
-        debugRender(rc, tessellator);
+    if (meetsRenderCriteria(rc, trc)) {
+      rawRender(rc, trc);
+      if (trc->getParameters()->_renderDebug) {
+        debugRender(rc, trc);
       }
       
       statistics->computeTileRendered(this);
       
-      prune(texturizer);
+      prune(trc);
     }
     else {
       std::vector<Tile*>* subTiles = getSubTiles();
       if (_justCreatedSubtiles) {
-        lastSplitTimer->start();
+        trc->getLastSplitTimer()->start();
         statistics->computeSplit();
         _justCreatedSubtiles = false;
       }
@@ -262,7 +261,7 @@ void Tile::render(const RenderContext* rc,
     }
   }
   else {
-    prune(texturizer);
+    prune(trc);
   }
 }
 

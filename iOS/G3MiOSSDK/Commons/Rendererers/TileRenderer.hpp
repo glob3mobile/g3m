@@ -71,6 +71,59 @@ class TileTexturizer;
 //};
 
 
+class TileRenderContext {
+private:
+  const TileTessellator*       _tessellator;
+  TileTexturizer*              _texturizer;
+  const TilesRenderParameters* _parameters;
+  TilesStatistics*             _statistics;
+  
+  ITimer* _lastSplitTimer;      // timer to start every time a tile get splitted into subtiles
+  ITimer* _lastTexturizerTimer; // timer to start every time the texturizer is called
+  
+public:
+  TileRenderContext(const TileTessellator*       tessellator,
+                    TileTexturizer*              texturizer,
+                    const TilesRenderParameters* parameters,
+                    TilesStatistics*             statistics,
+                    ITimer*                      lastSplitTimer,
+                    ITimer*                      lastTexturizerTimer) :
+  _tessellator(tessellator),
+  _texturizer(texturizer),
+  _parameters(parameters),
+  _statistics(statistics),
+  _lastSplitTimer(lastSplitTimer),
+  _lastTexturizerTimer(lastTexturizerTimer)
+  {
+    
+  }
+  
+  
+  const TileTessellator* getTessellator() const {
+    return _tessellator;
+  }
+  
+  TileTexturizer* getTexturizer() const {
+    return _texturizer;
+  }
+  
+  const TilesRenderParameters* getParameters() const {
+    return _parameters;
+  }
+  
+  TilesStatistics* getStatistics() const {
+    return _statistics;
+  }
+  
+  ITimer* getLastSplitTimer() const {
+    return _lastSplitTimer;
+  }
+  
+  ITimer* getLastTexturizerTimer() const {
+    return _lastTexturizerTimer;
+  }
+  
+};
 
 
 class TilesStatistics {

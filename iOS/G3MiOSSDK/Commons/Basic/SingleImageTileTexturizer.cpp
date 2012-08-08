@@ -33,8 +33,8 @@ std::vector<MutableVector2D> SingleImageTileTexturizer::createTextureCoordinates
 }
 
 Mesh* SingleImageTileTexturizer::texturize(const RenderContext* rc,
+                                           const TileRenderContext* trc,
                                            Tile* tile,
-                                           const TileTessellator* tessellator,
                                            Mesh* mesh,
                                            Mesh* previousMesh) {
   _renderContext = rc; //SAVING CONTEXT

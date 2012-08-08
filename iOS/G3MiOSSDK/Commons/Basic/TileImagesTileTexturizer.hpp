@@ -48,7 +48,7 @@ private:
   TilePetitions* createTilePetitions(const RenderContext* rc,
                                      const Tile* tile);
   
-  std::vector<MutableVector2D> getTextureCoordinates(const TileTessellator* tessellator) const;
+  std::vector<MutableVector2D> getTextureCoordinates(const TileRenderContext* trc) const;
   
   void translateAndScaleFallBackTex(Tile* tile, Tile* fallbackTile, TextureMapping* tmap) const;
   
@@ -59,12 +59,12 @@ private:
   void removeRegisteredTilePetitions(Tile* tile);
   
   Mesh* getFallBackTexturedMesh(Tile* tile,
-                                const TileTessellator* tessellator,
+                                const TileRenderContext* trc,
                                 Mesh* tessellatorMesh,
                                 Mesh* previousMesh);
   
   Mesh* getNewTextureMesh(Tile* tile,
-                          const TileTessellator* tessellator,
+                          const TileRenderContext* trc,
                           Mesh* mesh,
                           Mesh* previousMesh);
   
@@ -87,8 +87,8 @@ public:
   }
   
   Mesh* texturize(const RenderContext* rc,
+                  const TileRenderContext* trc,
                   Tile* tile,
-                  const TileTessellator* tessellator,
                   Mesh* mesh,
                   Mesh* previousMesh);
   

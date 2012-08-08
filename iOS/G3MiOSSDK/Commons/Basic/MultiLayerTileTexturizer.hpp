@@ -40,8 +40,8 @@ public:
                   const TilesRenderParameters* parameters);
   
   Mesh* texturize(const RenderContext* rc,
+                  const TileRenderContext* trc,
                   Tile* tile,
-                  const TileTessellator* tessellator,
                   Mesh* tessellatorMesh,
                   Mesh* previousMesh);
   

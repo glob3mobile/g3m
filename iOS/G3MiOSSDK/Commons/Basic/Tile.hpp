@@ -20,34 +20,8 @@ class TileTessellator;
 class TileTexturizer;
 class TilesRenderParameters;
 class ITimer;
-
-//class TileKey {
-//public:
-//  const int _level;
-//  const int _row;
-//  const int _column;
-//  
-//  TileKey(const int level,
-//          const int row,
-//          const int column) :
-//  _level(level),
-//  _row(row),
-//  _column(column)
-//  {
-//    
-//  }
-//  
-//  TileKey(const TileKey& that):
-//  _level(that._level),
-//  _row(that._row),
-//  _column(that._column)
-//  {
-//    
-//  }
-//  
-//};
-
 class TilesStatistics;
+class TileRenderContext;
 
 class Tile {
 private:
@@ -70,30 +44,24 @@ private:
   
   
   inline Mesh* getTessellatorMesh(const RenderContext* rc,
-                                  const TileTessellator* tessellator);
+                                  const TileRenderContext* trc);
   
   Mesh* getDebugMesh(const RenderContext* rc,
-                     const TileTessellator* tessellator);
+                     const TileRenderContext* trc);
 
   inline bool isVisible(const RenderContext* rc,
-                        const TileTessellator *tessellator);
+                        const TileRenderContext* trc);
   
   inline bool meetsRenderCriteria(const RenderContext* rc,
-                                  const TileTessellator *tessellator,
-                                  TileTexturizer *texturizer,
-                                  const TilesRenderParameters* parameters,
-                                  ITimer* lastSplitTimer,
-                                  TilesStatistics* statistics);
+                                  const TileRenderContext* trc);
   
   inline std::vector<Tile*>* createSubTiles();
   
   inline void rawRender(const RenderContext* rc,
-                        const TileTessellator* tessellator,
-                        TileTexturizer* texturizer,
-                        ITimer* lastTexturizerTimer);
+                        const TileRenderContext* trc);
   
   void debugRender(const RenderContext* rc,
-                   const TileTessellator* tessellator);
+                   const TileRenderContext* trc);
 
   inline Tile* createSubTile(const Angle& lowerLat, const Angle& lowerLon,
                              const Angle& upperLat, const Angle& upperLon,
@@ -103,7 +71,7 @@ private:
 
   inline std::vector<Tile*>* getSubTiles();
 
-  inline void prune(TileTexturizer* texturizer);
+  inline void prune(const TileRenderContext* trc);
   
   Tile(const Tile& that);
   
@@ -162,14 +130,9 @@ public:
   }
   
   void render(const RenderContext* rc,
-              const TileTessellator* tessellator,
-              TileTexturizer* texturizer,
-              const TilesRenderParameters* parameters,
-              TilesStatistics* statistics,
-              std::list<Tile*>* toVisitInNextIteration,
-              ITimer* lastSplitTimer,
-              ITimer* lastTexturizerTimer);
-    
+              const TileRenderContext* trc,
+              std::list<Tile*>* toVisitInNextIteration);
+  
 };
 
 #endif
