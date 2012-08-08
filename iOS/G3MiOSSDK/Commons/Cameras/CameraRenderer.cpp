@@ -9,7 +9,6 @@
 #include "CameraRenderer.hpp"
 #include "Camera.hpp"
 #include "CameraEventHandler.hpp"
-#include "Effects.hpp"
 #include "TouchEvent.hpp"
 
 

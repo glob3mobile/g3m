@@ -102,7 +102,7 @@ void CameraSingleDragHandler::onUp(const EventContext *eventContext,
   // start inertial effect
   if (cameraContext->getCurrentGesture()==Drag && !_axis.isNan() && desp>2) {
     Effect *effect = new SingleDragEffect(_axis.asVector3D(), Angle::fromRadians(_radiansStep));
-    eventContext->getEffectsScheduler()->startEffect(effect, (EffectTarget *) cameraContext);
+    eventContext->getEffectsScheduler()->startEffect(effect, cameraContext);
   }
   
   // update gesture
