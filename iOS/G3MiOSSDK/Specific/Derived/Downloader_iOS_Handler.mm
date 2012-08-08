@@ -151,16 +151,6 @@
   // inform downloader to remove myself, to avoid adding new Listeners
   downloader->removeDownloadingHandlerForNSURL(_nsURL);
   
-//  dispatch_async( dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//    // Add code here to do background processing
-//    //
-//    //
-//    dispatch_async( dispatch_get_main_queue(), ^{
-//      // Add code here to update the UI/send notifications based on the
-//      // results of the background processing
-//    });
-//  });
-  
   dispatch_async( dispatch_get_main_queue(), ^{
     // Add code here to update the UI/send notifications based on the
     // results of the background processing
@@ -210,6 +200,13 @@
     
   });
   
+}
+
+- (void)dealloc
+{
+	if (_url) {
+    delete _url;
+  }
 }
 
 @end
