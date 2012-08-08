@@ -174,6 +174,8 @@ public:
   }
   
   void log(const ILogger* logger) const {
+    
+    
     logger->logInfo("Tiles: processed=%d, rendered=%d. Levels: %d-%d",
                     _tilesProcessed,
                     _tilesRendered,

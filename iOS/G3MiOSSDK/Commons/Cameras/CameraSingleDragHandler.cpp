@@ -47,6 +47,8 @@ void CameraSingleDragHandler::onDown(const EventContext *eventContext,
   Camera *camera = cameraContext->getCamera();
   _camera0 = Camera(*camera);
   cameraContext->setCurrentGesture(Drag); 
+  _axis = MutableVector3D::nan();
+  _lastRadians = _radiansStep = 0.0;
   
   // dragging
   Vector2D pixel = touchEvent.getTouch(0)->getPos();  
@@ -72,9 +74,16 @@ void CameraSingleDragHandler::onMove(const EventContext *eventContext,
     finalPoint = eventContext->getPlanet()->closestPointToSphere(pos, ray).asMutableVector3D();
   }
   
+  // make drag
   Camera *camera = cameraContext->getCamera();
   camera->copyFrom(_camera0);
   camera->dragCamera(_initialPoint.asVector3D(), finalPoint.asVector3D());
+  
+  // save drag parameters
+  _axis           = _initialPoint.cross(finalPoint);
+  double radians  = -asin(_axis.length()/_initialPoint.length()/finalPoint.length());
+  _radiansStep    = radians - _lastRadians;
+  _lastRadians    = radians;
   
   //printf ("Moving 1 finger.  gesture=%d\n", _currentGesture);
 }
@@ -83,11 +92,22 @@ void CameraSingleDragHandler::onMove(const EventContext *eventContext,
 void CameraSingleDragHandler::onUp(const EventContext *eventContext,
                                    const TouchEvent& touchEvent, 
                                    CameraContext *cameraContext) 
-{
+{  
+  // test if animation is needed
+  const Touch *touch = touchEvent.getTouch(0);
+  Vector2D currPixel = touch->getPos();
+  Vector2D prevPixel = touch->getPrevPos();
+  double desp        = currPixel.sub(prevPixel).length();
+  
+  // start inertial effect
+  if (cameraContext->getCurrentGesture()==Drag && !_axis.isNan() && desp>2) {
+    Effect *effect = new SingleDragEffect(_axis.asVector3D(), Angle::fromRadians(_radiansStep));
+    eventContext->getEffectsScheduler()->startEffect(effect, (EffectTarget *) cameraContext);
+  }
+  
+  // update gesture
   cameraContext->setCurrentGesture(None);
   _initialPixel = Vector3D::nan().asMutableVector3D();
-  
-  //printf ("end 1 finger\n");
 }
 
 int CameraSingleDragHandler::render(const RenderContext* rc, CameraContext *cameraContext) 

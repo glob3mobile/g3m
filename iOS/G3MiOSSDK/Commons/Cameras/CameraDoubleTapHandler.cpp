@@ -48,7 +48,7 @@ void CameraDoubleTapHandler::onDown(const EventContext *eventContext,
 
   // compute zoom factor
   const double height   = eventContext->getPlanet()->toGeodetic3D(camera->getPosition()).height();
-  const double distance = height * 0.5;
+  const double distance = height * 0.6;
 
   Effect *effect = new DoubleTapEffect(TimeInterval::fromSeconds(1), axis, angle, distance);
   eventContext->getEffectsScheduler()->startEffect(effect, (EffectTarget *) cameraContext);

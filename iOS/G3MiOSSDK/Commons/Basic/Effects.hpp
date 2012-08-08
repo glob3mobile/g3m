@@ -120,7 +120,34 @@ public:
     const double percent = percentDone(now);
     return percent >= 1;
   }
+  
+};
 
+//***************************************************************
+
+class EffectWithForce : public Effect {
+  double _force;
+  double _friction;
+  
+protected:
+  EffectWithForce(double force, double friction): 
+  _force(force),
+  _friction(friction)
+  {}
+  
+  double getForce() const { return _force; }  
+  
+public:
+  virtual void doStep(const RenderContext *rc,
+                      const TimeInterval& now) {
+    _force *= _friction;
+  };
+  
+  virtual bool isDone(const RenderContext *rc,
+                      const TimeInterval& now) {
+    return (fabs(_force) < 1e-6);
+  }
+  
 };
 
 //***************************************************************

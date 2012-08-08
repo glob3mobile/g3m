@@ -12,6 +12,39 @@
 
 #include "CameraEventHandler.hpp"
 #include "Camera.hpp"
+#include "Effects.hpp"
+
+
+//***************************************************************
+
+
+class SingleDragEffect : public EffectWithForce {
+public:
+  
+  SingleDragEffect(const Vector3D& axis, const Angle& angle): 
+  EffectWithForce(angle.degrees(), 0.975),
+  _axis(axis)
+  { }
+  
+  virtual void start(const RenderContext *rc, const TimeInterval& now) {}
+  
+  virtual void doStep(const RenderContext *rc, const TimeInterval& now) {
+    EffectWithForce::doStep(rc, now);
+    rc->getCamera()->rotateWithAxis(_axis, Angle::fromDegrees(getForce()));
+  }
+  
+  virtual void stop(const RenderContext *rc, const TimeInterval& now) { }
+    
+  virtual void cancel(const TimeInterval& now) {
+    // do nothing, just leave the effect in the intermediate state
+  }
+    
+private:
+  Vector3D  _axis;
+  
+};
+
+//***************************************************************
 
 
 class CameraSingleDragHandler: public CameraEventHandler {
@@ -48,6 +81,10 @@ private:
   
   MutableVector3D _initialPoint;  //Initial point at dragging
   MutableVector3D _initialPixel;  //Initial pixel at start of gesture
+  
+  MutableVector3D _axis;
+  double          _lastRadians;
+  double          _radiansStep;
   
 };
 
