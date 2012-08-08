@@ -11,16 +11,63 @@
 
 #include "CameraEventHandler.hpp"
 #include "Camera.hpp"
+#include "Effects.hpp"
+
+
+//***************************************************************
+
+class DoubleTapEffect : public EffectWithDuration {
+public:
+  
+  DoubleTapEffect(TimeInterval duration, const Vector3D& axis, 
+                  const Angle& angle, double distance):
+  EffectWithDuration(duration),
+  _axis(axis),
+  _angle(angle),
+  _distance(distance)
+  {}
+  
+  virtual void start(const RenderContext *rc,
+                     const TimeInterval& now) {
+    EffectWithDuration::start(rc, now);
+    _lastPercent = 0;
+  }
+  
+  virtual void doStep(const RenderContext *rc,
+                      const TimeInterval& now) {
+    //const double percent = gently(percentDone(now), 0.2, 0.9);
+    const double percent = pace( percentDone(now) );
+    //double percent = percentDone(now);
+    Camera *camera = rc->getCamera();
+    double step = percent - _lastPercent;
+    camera->rotateWithAxis(_axis, _angle.times(step));
+    camera->moveForward(_distance*step);
+    _lastPercent = percent;
+  }
+  
+  virtual void stop(const RenderContext *rc,
+                    const TimeInterval& now) {
+    EffectWithDuration::stop(rc, now);
+  }
+  
+  virtual void cancel(const TimeInterval& now) {
+    // do nothing, just leave the effect in the intermediate state
+  }
+  
+private:
+  Vector3D  _axis;
+  Angle     _angle;
+  double    _distance;
+  double    _lastPercent;
+  
+};
+
+//***************************************************************
 
 
 class CameraDoubleTapHandler: public CameraEventHandler {
   
 public:
-  CameraDoubleTapHandler():
-  _camera0(Camera(NULL, 0, 0)),
-  _initialPoint(0,0,0),
-  _initialPixel(0,0,0)
-  {}
   
   ~CameraDoubleTapHandler() {}
   
@@ -43,13 +90,7 @@ private:
   void onUp(const EventContext *eventContext,
             const TouchEvent& touchEvent, 
             CameraContext *cameraContext) {}
-  
-  
-  Camera _camera0;         //Initial Camera saved on Down event
-  
-  MutableVector3D _initialPoint;  //Initial point at dragging
-  MutableVector3D _initialPixel;  //Initial pixel at start of gesture
-  
+    
 };
 
 

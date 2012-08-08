@@ -9,6 +9,8 @@
 #include "CameraRenderer.hpp"
 #include "Camera.hpp"
 #include "CameraEventHandler.hpp"
+#include "Effects.hpp"
+#include "TouchEvent.hpp"
 
 
 
@@ -47,6 +49,10 @@ int CameraRenderer::render(const RenderContext* rc)
 bool CameraRenderer::onTouchEvent(const EventContext* ec,
                                   const TouchEvent* touchEvent)
 {
+  // abort all the camera effect currently running
+  if (touchEvent->getType() == Down)
+    ec->getEffectsScheduler()->cancellAllEffectsFor((EffectTarget *) _cameraContext);
+  
   // pass the event to all the handlers
   for (unsigned int n=0; n<_handlers.size(); n++)
     if (_handlers[n]->onTouchEvent(ec, touchEvent, _cameraContext)) return true;

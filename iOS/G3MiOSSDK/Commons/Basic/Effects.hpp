@@ -78,6 +78,7 @@ public:
   virtual ~Effect() { }
 };
 
+//***************************************************************
 
 class EffectWithDuration : public Effect {
 private:
@@ -121,6 +122,8 @@ public:
   }
 
 };
+
+//***************************************************************
 
 
 class EffectsScheduler {
@@ -179,6 +182,8 @@ public:
   void cancellAllEffectsFor(EffectTarget* target);
   
 };
+
+//***************************************************************
 
 
 class SampleEffect : public EffectWithDuration {

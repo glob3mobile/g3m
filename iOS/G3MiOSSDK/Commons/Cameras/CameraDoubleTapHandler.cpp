@@ -23,7 +23,7 @@ bool CameraDoubleTapHandler::onTouchEvent(const EventContext *eventContext,
   if (touchEvent->getTouchCount()!=1) return false;
   if (touchEvent->getTapCount()!=2) return false;
   if (touchEvent->getType()!=Down) return false;
-  
+    
   onDown(eventContext, *touchEvent, cameraContext);
   return true;
 }
@@ -33,31 +33,25 @@ void CameraDoubleTapHandler::onDown(const EventContext *eventContext,
                                     const TouchEvent& touchEvent, 
                                     CameraContext *cameraContext) 
 {  
-  Camera *camera = cameraContext->getCamera();
-  _camera0 = Camera(*camera);
-  
   // compute globe point where user tapped
-  const Vector2D pixel = touchEvent.getTouch(0)->getPos();
-  _initialPoint = _camera0.pixel2PlanetPoint(pixel).asMutableVector3D();
-  if (_initialPoint.isNan()) return;
-  const Vector3D initialPoint = _initialPoint.asVector3D();
+  Vector2D pixel = touchEvent.getTouch(0)->getPos();
+  Camera *camera = cameraContext->getCamera();
+  Vector3D initialPoint = camera->pixel2PlanetPoint(pixel);
+  if (initialPoint.isNan()) return;
   
   // compute central point of view
-  const Vector3D centerPoint = camera->centerOfViewOnPlanet();
+  Vector3D centerPoint = camera->centerOfViewOnPlanet();
 
   // compute drag parameters
-//  Vector3D axis = initialPoint.cross(centerPoint);
-//  Angle tita = Angle::fromRadians(-asin(axis.length()/initialPoint.length()/centerPoint.length()));
-  
+  Vector3D axis = initialPoint.cross(centerPoint);
+  Angle angle   = Angle::fromRadians(-asin(axis.length()/initialPoint.length()/centerPoint.length()));
+
   // compute zoom factor
-  const double height = eventContext->getPlanet()->toGeodetic3D(camera->getPosition()).height();
-  const double d      = height * 0.5;
-  
-  // move the camera
-  camera->dragCamera(initialPoint, centerPoint);
-  camera->moveForward(d);
+  const double height   = eventContext->getPlanet()->toGeodetic3D(camera->getPosition()).height();
+  const double distance = height * 0.5;
 
-
+  Effect *effect = new DoubleTapEffect(TimeInterval::fromSeconds(2), axis, angle, distance);
+  eventContext->getEffectsScheduler()->startEffect(effect, (EffectTarget *) cameraContext);
 }
 
 

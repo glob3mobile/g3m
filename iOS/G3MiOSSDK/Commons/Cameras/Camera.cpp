@@ -298,3 +298,4 @@ Angle Camera::compute3DAngularDistance(const Vector2D& pixel0, const Vector2D& p
 }
 
 
+

@@ -430,7 +430,7 @@
   
   EffectsScheduler* scheduler = new EffectsScheduler();
   
-  if (true) {
+  if (false) {
     EffectTarget* target = NULL;
     scheduler->startEffect(new SampleEffect(TimeInterval::fromSeconds(2)),
                            target);

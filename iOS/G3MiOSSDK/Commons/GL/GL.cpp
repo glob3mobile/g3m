@@ -447,11 +447,12 @@ int GL::getTextureID() {
   int result = _texturesIdBag.back();
   _texturesIdBag.pop_back();
   
-  printf("   - Assigning 1 texturesId from bag (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
+  /*
+   printf("   - Assigning 1 texturesId from bag (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
          _texturesIdBag.size(),
          _texturesIdGetCounter,
          _texturesIdTakeCounter,
-         _texturesIdGetCounter - _texturesIdTakeCounter);
+         _texturesIdGetCounter - _texturesIdTakeCounter);*/
 
   return result;
 }
