@@ -112,6 +112,7 @@ void Camera::calculateCachedValues(const RenderContext *rc) {
   }
   _frustumInModelCoordinates = _frustum->transformedBy_P(_modelMatrix.transposed());
   
+  
   if (_halfFrustum != NULL) {
     delete _halfFrustum;
   }
@@ -254,7 +255,6 @@ void Camera::pivotOnCenter(const Angle& a) {
 }
 
 void Camera::rotateWithAxisAndPoint(const Vector3D& axis, const Vector3D& point, const Angle& delta) {
-  
   const MutableMatrix44D m = MutableMatrix44D::createGeneralRotationMatrix(delta, axis, point);
   
   //m.print();
