@@ -205,14 +205,14 @@ public:
     for(std::map<int, int>::const_iterator i = map.begin();
         i != map.end();
         ++i ) {
-      int level   = i->first;
-      int counter = i->second;
+      const int level   = i->first;
+      const int counter = i->second;
       
       if (first) {
         first = false;
       }
       else {
-        buffer << ", ";
+        buffer << ",";
       }
       buffer << "L" << level << ":" << counter;
     }
@@ -222,12 +222,9 @@ public:
   
   void log(const ILogger* logger) const {
     logger->logInfo("Tiles processed:%d (%s), visible:%d (%s), rendered:%d (%s).",
-                    _tilesProcessed,
-                    asLogString(_tilesProcessedByLevel).c_str(),
-                    _tilesVisible,
-                    asLogString(_tilesVisibleByLevel).c_str(),
-                    _tilesRendered,
-                    asLogString(_tilesRenderedByLevel).c_str());
+                    _tilesProcessed, asLogString(_tilesProcessedByLevel).c_str(),
+                    _tilesVisible,   asLogString(_tilesVisibleByLevel).c_str(),
+                    _tilesRendered,  asLogString(_tilesRenderedByLevel).c_str());
   }
 
 };
