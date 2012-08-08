@@ -33,7 +33,8 @@ void CameraDoubleTapHandler::onDown(const EventContext *eventContext,
                                     const TouchEvent& touchEvent, 
                                     CameraContext *cameraContext) 
 {  
-  _camera0 = Camera(*_camera);
+  Camera *camera = cameraContext->getCamera();
+  _camera0 = Camera(*camera);
   
   // compute globe point where user tapped
   const Vector2D pixel = touchEvent.getTouch(0)->getPos();
@@ -42,29 +43,23 @@ void CameraDoubleTapHandler::onDown(const EventContext *eventContext,
   const Vector3D initialPoint = _initialPoint.asVector3D();
   
   // compute central point of view
-  const Vector3D centerPoint = _camera->centerOfViewOnPlanet();
+  const Vector3D centerPoint = camera->centerOfViewOnPlanet();
 
   // compute drag parameters
 //  Vector3D axis = initialPoint.cross(centerPoint);
 //  Angle tita = Angle::fromRadians(-asin(axis.length()/initialPoint.length()/centerPoint.length()));
   
   // compute zoom factor
-  const double height = eventContext->getPlanet()->toGeodetic3D(_camera->getPosition()).height();
+  const double height = eventContext->getPlanet()->toGeodetic3D(camera->getPosition()).height();
   const double d      = height * 0.5;
   
   // move the camera
-  _camera->dragCamera(initialPoint, centerPoint);
-  _camera->moveForward(d);
+  camera->dragCamera(initialPoint, centerPoint);
+  camera->moveForward(d);
 
 
 }
 
-
-int CameraDoubleTapHandler::render(const RenderContext* rc, CameraContext *cameraContext) {
-  _camera = rc->getCamera();
-
-  return MAX_TIME_TO_RENDER;
-}
 
 
 

@@ -42,7 +42,8 @@ void CameraDoubleDragHandler::onDown(const EventContext *eventContext,
                                      const TouchEvent& touchEvent, 
                                      CameraContext *cameraContext) 
 {
-  _camera0 = Camera(*_camera);
+  Camera *camera = cameraContext->getCamera();
+  _camera0 = Camera(*camera);
   cameraContext->setCurrentGesture(DoubleDrag);  
   
   // double dragging
@@ -181,7 +182,7 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
   
   // copy final transformation to camera
   tempCamera.updateModelMatrix();
-  _camera->copyFrom(tempCamera);
+  cameraContext->getCamera()->copyFrom(tempCamera);
 
   //printf ("moving 2 fingers\n");
 }
@@ -198,9 +199,8 @@ void CameraDoubleDragHandler::onUp(const EventContext *eventContext,
 }
 
 
-int CameraDoubleDragHandler::render(const RenderContext* rc, CameraContext *cameraContext) {
-  _camera = rc->getCamera();
-  
+int CameraDoubleDragHandler::render(const RenderContext* rc, CameraContext *cameraContext) 
+{  
   // TEMP TO DRAW A POINT WHERE USER PRESS
   if (false) {
     if (cameraContext->getCurrentGesture() == DoubleDrag) {

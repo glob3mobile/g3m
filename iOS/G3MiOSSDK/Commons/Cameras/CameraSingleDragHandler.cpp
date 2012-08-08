@@ -44,7 +44,8 @@ void CameraSingleDragHandler::onDown(const EventContext *eventContext,
                                      const TouchEvent& touchEvent, 
                                      CameraContext *cameraContext) 
 {  
-  _camera0 = Camera(*_camera);
+  Camera *camera = cameraContext->getCamera();
+  _camera0 = Camera(*camera);
   cameraContext->setCurrentGesture(Drag); 
   
   // dragging
@@ -71,8 +72,9 @@ void CameraSingleDragHandler::onMove(const EventContext *eventContext,
     finalPoint = eventContext->getPlanet()->closestPointToSphere(pos, ray).asMutableVector3D();
   }
   
-  _camera->copyFrom(_camera0);
-  _camera->dragCamera(_initialPoint.asVector3D(), finalPoint.asVector3D());
+  Camera *camera = cameraContext->getCamera();
+  camera->copyFrom(_camera0);
+  camera->dragCamera(_initialPoint.asVector3D(), finalPoint.asVector3D());
   
   //printf ("Moving 1 finger.  gesture=%d\n", _currentGesture);
 }
@@ -88,9 +90,8 @@ void CameraSingleDragHandler::onUp(const EventContext *eventContext,
   //printf ("end 1 finger\n");
 }
 
-int CameraSingleDragHandler::render(const RenderContext* rc, CameraContext *cameraContext) {
-  _camera = rc->getCamera();
-
+int CameraSingleDragHandler::render(const RenderContext* rc, CameraContext *cameraContext) 
+{
   // TEMP TO DRAW A POINT WHERE USER PRESS
   if (false) {
     if (cameraContext->getCurrentGesture() == Drag) {

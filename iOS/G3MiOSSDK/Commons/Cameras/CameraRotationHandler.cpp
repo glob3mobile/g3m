@@ -42,7 +42,8 @@ void CameraRotationHandler::onDown(const EventContext *eventContext,
                                    const TouchEvent& touchEvent, 
                                    CameraContext *cameraContext) 
 {  
-  _camera0 = Camera(*_camera);
+  Camera *camera = cameraContext->getCamera();
+  _camera0 = Camera(*camera);
   cameraContext->setCurrentGesture(Rotate);
   
   // middle pixel in 2D 
@@ -54,7 +55,7 @@ void CameraRotationHandler::onDown(const EventContext *eventContext,
   lastYValid = _initialPixel.y();
   
   // compute center of view
-  _initialPoint = _camera->centerOfViewOnPlanet().asMutableVector3D();
+  _initialPoint = camera->centerOfViewOnPlanet().asMutableVector3D();
   if (_initialPoint.isNan()) {
     printf ("CAMERA ERROR: center point does not intersect globe!!\n");
     cameraContext->setCurrentGesture(None);
@@ -81,12 +82,13 @@ void CameraRotationHandler::onMove(const EventContext *eventContext,
   Vector3D normal = eventContext->getPlanet()->geodeticSurfaceNormal(_initialPoint.asVector3D());
   
   // vertical rotation around normal vector to globe
-  _camera->copyFrom(_camera0);
+  Camera *camera = cameraContext->getCamera();
+  camera->copyFrom(_camera0);
   Angle angle_v             = Angle::fromDegrees((_initialPixel.x()-cm.x())*0.25);
-  _camera->rotateWithAxisAndPoint(normal, _initialPoint.asVector3D(), angle_v);
+  camera->rotateWithAxisAndPoint(normal, _initialPoint.asVector3D(), angle_v);
   
   // compute angle between normal and view direction
-  Vector3D view = _camera->getViewDirection();
+  Vector3D view = camera->getViewDirection();
   double dot = normal.normalized().dot(view.normalized().times(-1));
   double initialAngle = acos(dot) / M_PI * 180;
   
@@ -97,16 +99,16 @@ void CameraRotationHandler::onMove(const EventContext *eventContext,
   if (finalAngle < 0)   delta = -initialAngle;
 
   // create temporal camera to test if next rotation is valid
-  Camera tempCamera(*_camera);
+  Camera tempCamera(*camera);
   
   // horizontal rotation over the original camera horizontal axix
-  Vector3D u = _camera->getHorizontalVector();
+  Vector3D u = camera->getHorizontalVector();
   tempCamera.rotateWithAxisAndPoint(u, _initialPoint.asVector3D(), Angle::fromDegrees(delta));
   
   // update camera only if new view intersects globe
   tempCamera.updateModelMatrix();
   if (!tempCamera.centerOfViewOnPlanet().isNan()) {
-    _camera->copyFrom(tempCamera);
+    camera->copyFrom(tempCamera);
   } 
 }
 
@@ -120,9 +122,8 @@ void CameraRotationHandler::onUp(const EventContext *eventContext,
 }
 
 
-int CameraRotationHandler::render(const RenderContext* rc, CameraContext *cameraContext) {
-  _camera = rc->getCamera();
-
+int CameraRotationHandler::render(const RenderContext* rc, CameraContext *cameraContext) 
+{
   // TEMP TO DRAW A POINT WHERE USER PRESS
   if (false) {
     if (cameraContext->getCurrentGesture() == Rotate) {

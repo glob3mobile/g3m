@@ -50,7 +50,6 @@ private:
   double _initialFingerInclination;
   
   Camera _camera0;         //Initial Camera saved on Down event
-  Camera* _camera;         // Camera used at current frame
         
 };
 

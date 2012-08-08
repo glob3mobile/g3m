@@ -35,9 +35,17 @@ enum Gesture {
 class CameraContext {
 private:
   Gesture _currentGesture;
+  Camera* _camera;         
+
 public:
+  CameraContext(Gesture gesture, Camera* camera): 
+  _currentGesture(gesture),
+  _camera(camera)
+  {}
+  
   Gesture getCurrentGesture() const { return _currentGesture; }
   void setCurrentGesture(Gesture gesture) { _currentGesture = gesture; }
+  Camera* getCamera() { return _camera; }
 };
 
 
@@ -46,15 +54,14 @@ class CameraRenderer: public Renderer
 {
   
 private:      
-  const ILogger * _logger;  
-  Camera* _camera;         // Camera used at current frame
   
   std::vector<CameraEventHandler *> _handlers;
   
-  CameraContext _cameraContext;
-    
+  CameraContext *_cameraContext;    
   
 public:
+  CameraRenderer(): _cameraContext(NULL) {}
+  ~CameraRenderer() { if (_cameraContext!=NULL) delete _cameraContext; }
     
   void addHandler(CameraEventHandler *handler) { _handlers.push_back(handler); }
   

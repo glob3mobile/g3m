@@ -20,28 +20,24 @@ void CameraRenderer::initialize(const InitializationContext* ic) {
 
 void CameraRenderer::onResizeViewportEvent(const EventContext* ec,
                                            int width, int height) {
-  if (_camera != NULL) {
-    _camera->resizeViewport(width, height);
+  if (_cameraContext != NULL) {
+    _cameraContext->getCamera()->resizeViewport(width, height);
   }
 }
 
 
 int CameraRenderer::render(const RenderContext* rc)
 {
-/*  // create the CameraContext
-  if (cameraContext==NULL)
-    cameraContext = new CameraContext(rc->getFactory(), rc->getLogger(), rc->getPlanet(),
-                                      rc->getGL(), rc->getCamera(), &_gesture,
-                                      rc->getDownloaderOLD(), rc->getDownloader(),
-                                      rc->getEffectsScheduler());
-  */
-                                      
-                                      
+  // create the CameraContext
+  if (_cameraContext == NULL)
+    _cameraContext = new CameraContext(None, rc->getCamera());
+
+  // render camera object
   rc->getCamera()->render(rc);
   
   int min = MAX_TIME_TO_RENDER;
   for (unsigned int i=0; i<_handlers.size(); i++) {
-    int x = _handlers[i]->render(rc, &_cameraContext);
+    int x = _handlers[i]->render(rc, _cameraContext);
     if (x<min) min = x; 
   }
   return min;
@@ -53,7 +49,7 @@ bool CameraRenderer::onTouchEvent(const EventContext* ec,
 {
   // pass the event to all the handlers
   for (unsigned int n=0; n<_handlers.size(); n++)
-    if (_handlers[n]->onTouchEvent(ec, touchEvent, &_cameraContext)) return true;
+    if (_handlers[n]->onTouchEvent(ec, touchEvent, _cameraContext)) return true;
   
   // if any of them processed the event, return false
   return false;

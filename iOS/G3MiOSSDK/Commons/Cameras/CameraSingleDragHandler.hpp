@@ -45,7 +45,6 @@ private:
   
   
   Camera _camera0;         //Initial Camera saved on Down event
-  Camera* _camera;         // Camera used at current frame
   
   MutableVector3D _initialPoint;  //Initial point at dragging
   MutableVector3D _initialPixel;  //Initial pixel at start of gesture

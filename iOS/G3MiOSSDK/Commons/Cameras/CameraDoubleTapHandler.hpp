@@ -28,7 +28,9 @@ public:
   bool onTouchEvent(const EventContext *eventContext,
                     const TouchEvent* touchEvent, 
                     CameraContext *cameraContext);
-  int render(const RenderContext* rc, CameraContext *cameraContext);
+  int render(const RenderContext* rc, CameraContext *cameraContext) {
+    return MAX_TIME_TO_RENDER;
+  }
 
   
 private:
@@ -44,7 +46,6 @@ private:
   
   
   Camera _camera0;         //Initial Camera saved on Down event
-  Camera* _camera;         // Camera used at current frame
   
   MutableVector3D _initialPoint;  //Initial point at dragging
   MutableVector3D _initialPixel;  //Initial pixel at start of gesture
