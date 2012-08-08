@@ -145,11 +145,11 @@ void Camera::render(const RenderContext* rc) {
   if (false) {
     const MutableMatrix44D inversed = _modelMatrix.inversed();
     
-    FrustumData data = calculateFrustumData(rc);
-    Vector3D p0(Vector3D(data._left/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
-    Vector3D p1(Vector3D(data._left/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
-    Vector3D p2(Vector3D(data._right/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
-    Vector3D p3(Vector3D(data._right/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
+    const FrustumData data = calculateFrustumData(rc);
+    const Vector3D p0(Vector3D(data._left/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
+    const Vector3D p1(Vector3D(data._left/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
+    const Vector3D p2(Vector3D(data._right/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
+    const Vector3D p3(Vector3D(data._right/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
     
     const float vertices[] = {
       (float) p0.x(), (float) p0.y(), (float) p0.z(),
@@ -157,9 +157,8 @@ void Camera::render(const RenderContext* rc) {
       (float) p2.x(), (float) p2.y(), (float) p2.z(),
       (float) p3.x(), (float) p3.y(), (float) p3.z(),    
     };
-    int indices[] = {0, 1, 2, 3};
+    const int indices[] = {0, 1, 2, 3};
     
-//    GL *gl = rc.getGL();
     gl->enableVerticesPosition();
     gl->vertexPointer(3, 0, vertices);
     gl->lineWidth(2);
@@ -182,6 +181,7 @@ Vector3D Camera::pixel2Ray(const Vector2D& pixel) const {
   const int py = _height - (int) pixel.y();
   const Vector3D pixel3D(px, py, 0);
   
+  int __cache_model_view_matrix;
   const MutableMatrix44D modelViewMatrix = _projectionMatrix.multiply(_modelMatrix);
   
   const int viewport[4] = {
@@ -197,16 +197,12 @@ Vector3D Camera::pixel2Ray(const Vector2D& pixel) const {
   return obj.sub(_position.asVector3D());
 }
 
-
-Vector3D Camera::pixel2PlanetPoint(const Vector2D& pixel) const
-{
+Vector3D Camera::pixel2PlanetPoint(const Vector2D& pixel) const {
   return _planet->closestIntersection(_position.asVector3D(), pixel2Ray(pixel));
 }
 
-
-
-Vector2D Camera::point2Pixel(const Vector3D& point) const
-{
+Vector2D Camera::point2Pixel(const Vector3D& point) const {
+  int __cache_model_view_matrix;
   const MutableMatrix44D modelViewMatrix = _projectionMatrix.multiply(_modelMatrix);
   
   const int viewport[4] = { 0, 0, _width, _height };
@@ -233,7 +229,7 @@ void Camera::dragCamera(const Vector3D& p0, const Vector3D& p1) {
   
   // compute the angle
   //const Angle rotationDelta = Angle::fromRadians( - acos(p0.normalized().dot(p1.normalized())) );
-  Angle rotationDelta = Angle::fromRadians(-asin(rotationAxis.length()/p0.length()/p1.length()));
+  const Angle rotationDelta = Angle::fromRadians(-asin(rotationAxis.length()/p0.length()/p1.length()));
   
   if (rotationDelta.isNan()) {
     return; 
@@ -247,12 +243,10 @@ void Camera::rotateWithAxis(const Vector3D& axis, const Angle& delta) {
   applyTransform(MutableMatrix44D::createRotationMatrix(delta, axis));
 }
 
-void Camera::moveForward(double d)
-{
-  Vector3D view = _center.sub(_position).normalized().asVector3D();
+void Camera::moveForward(double d) {
+  const Vector3D view = _center.sub(_position).normalized().asVector3D();
   applyTransform(MutableMatrix44D::createTranslationMatrix(view.times(d)));
 }
-
 
 void Camera::pivotOnCenter(const Angle& a) {
   const Vector3D rotationAxis = _position.sub(_center).asVector3D();
@@ -268,34 +262,31 @@ void Camera::rotateWithAxisAndPoint(const Vector3D& axis, const Vector3D& point,
   applyTransform(m);
 }
 
-void Camera::setPosition(const Geodetic3D& g3d)
-{
+void Camera::setPosition(const Geodetic3D& g3d) {
   _position = _planet->toVector3D(g3d).asMutableVector3D();
 }
 
-
-Vector3D Camera::centerOfViewOnPlanet() const
-{
+Vector3D Camera::centerOfViewOnPlanet() const {
   const Vector3D ray = _center.sub(_position).asVector3D();
   return _planet->closestIntersection(_position.asVector3D(), ray);
 }
 
-
-Vector3D Camera::getHorizontalVector() const
-{
+Vector3D Camera::getHorizontalVector() const {
   const MutableMatrix44D M = MutableMatrix44D::createModelMatrix(_position, _center, _up);
   return Vector3D(M.get(0), M.get(4), M.get(8));
 }
 
-
-Angle Camera::compute3DAngularDistance(const Vector2D& pixel0, const Vector2D& pixel1) const
-{
-  Vector3D point0 = pixel2PlanetPoint(pixel0);
-  if (point0.isNan()) return Angle::nan();
-  Vector3D point1 = pixel2PlanetPoint(pixel1);
-  if (point1.isNan()) return Angle::nan();
+Angle Camera::compute3DAngularDistance(const Vector2D& pixel0,
+                                       const Vector2D& pixel1) const {
+  const Vector3D point0 = pixel2PlanetPoint(pixel0);
+  if (point0.isNan()) {
+    return Angle::nan();
+  }
+  
+  const Vector3D point1 = pixel2PlanetPoint(pixel1);
+  if (point1.isNan()) {
+    return Angle::nan();
+  }
+  
   return point0.angleBetween(point1);
 }
-
-
-

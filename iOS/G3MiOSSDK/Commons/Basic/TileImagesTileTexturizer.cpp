@@ -147,13 +147,6 @@ Mesh* TileImagesTileTexturizer::texturize(const RenderContext* rc,
   
   //printf("TP SIZE: %lu\n", _tilePetitions.size());
   
-  int __TODO_tune_TEXTURIZER_render_budget;
-//  if (timer != NULL) {
-//    if ( timer->elapsedTime().milliseconds() > 50 ) {
-//      return getFallBackTexturedMesh(tile, tessellator, tessellatorMesh, previousMesh);
-//    }
-//  }
-  
   Mesh* mesh = getNewTextureMesh(tile, tessellator, tessellatorMesh, previousMesh);
   if (mesh == NULL){
     //REGISTERING PETITION AND SENDING TO THE NET IF NEEDED
