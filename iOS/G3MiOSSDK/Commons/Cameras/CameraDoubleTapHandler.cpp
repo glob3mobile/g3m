@@ -48,12 +48,9 @@ void CameraDoubleTapHandler::onDown(const EventContext *eventContext,
 
   // compute zoom factor
   const double height   = eventContext->getPlanet()->toGeodetic3D(camera->getPosition()).height();
-  const double distance = height * 0.5;
+  const double distance = height * 0.6;
 
+  // create effect
   Effect* effect = new DoubleTapEffect(TimeInterval::fromSeconds(0.75), axis, angle, distance);
-  
-  int __check_with_agustin;
-  // the EffectTarget has to be the Camera or the Planet.
-  // use inheritance for EffectTarget
-  eventContext->getEffectsScheduler()->startEffect(effect, (EffectTarget *) cameraContext);
+  eventContext->getEffectsScheduler()->startEffect(effect, cameraContext);
 }
