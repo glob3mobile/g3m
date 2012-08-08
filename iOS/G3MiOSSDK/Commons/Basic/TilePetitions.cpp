@@ -98,12 +98,13 @@ Rectangle* TilePetitions::getImageRectangleInTexture(const Sector& wholeSector,
 {
   Vector2D pos = wholeSector.getUVCoordinates(imageSector.lower().latitude(), imageSector.lower().longitude());
   
-  double width = wholeSector.getDeltaLongitude().degrees() / imageSector.getDeltaLongitude().degrees();
-  double height = wholeSector.getDeltaLatitude().degrees() / imageSector.getDeltaLatitude().degrees();
+  double width = imageSector.getDeltaLongitude().degrees() / wholeSector.getDeltaLongitude().degrees();
+  double height = imageSector.getDeltaLatitude().degrees() / wholeSector.getDeltaLatitude().degrees();
   
-  
-  
-  Rectangle* r = new Rectangle(pos.x() * texWidth, (1.0 - pos.y()) * texHeight, width * texWidth, height * texHeight);
+  Rectangle* r = new Rectangle(pos.x() * texWidth, 
+                               (1.0 - pos.y()) * texHeight, 
+                               width * texWidth, 
+                               height * texHeight);
   return r;
 }
 
