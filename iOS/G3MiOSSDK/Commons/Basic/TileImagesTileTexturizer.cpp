@@ -57,47 +57,65 @@ Mesh* TileImagesTileTexturizer::getNewTextureMesh(Tile* tile,
                                                   Mesh* tessellatorMesh,
                                                   Mesh* previousMesh) {
   //THE TEXTURE HAS BEEN LOADED???
-  int texID = getTexture(tile);
-  if (texID > -1) {
-    tile->setTextureSolved(true);
+  TilePetitions* tp = getRegisteredTilePetitions(tile);
+  
+  if (tp!= NULL) {
+    int texID = tp->getTexID();
+    if (texID < 0){ //Texture has not been created
+      if (tp->allFinished()){
+        tp->createTexture(_texHandler, _factory, 
+                          _parameters->_tileTextureWidth, _parameters->_tileTextureHeight);
+        texID = tp->getTexID();
+      }
+    }
+  
+    if (texID > -1) {
+      tile->setTextureSolved(true);
     
-    //printf("TEXTURIZED %d, %d, %d\n", tile->getLevel(), tile->getRow(), tile->getColumn());
+      //printf("TEXTURIZED %d, %d, %d\n", tile->getLevel(), tile->getRow(), tile->getColumn());
     
-    TextureMapping * tMap = new TextureMapping(texID, getTextureCoordinates(tessellator), _texHandler);
-    TexturedMesh* texMesh = new TexturedMesh(tessellatorMesh, false, tMap, true);
-    delete previousMesh;   //If a new mesh has been produced we delete the previous one
-    return texMesh;
-  } else{
-    return NULL;
+      TextureMapping * tMap = new TextureMapping(texID, getTextureCoordinates(tessellator), _texHandler, 
+                                                 tp->getPetitionsID(), 
+                                                 _parameters->_tileTextureWidth, 
+                                                 _parameters->_tileTextureHeight);
+      TexturedMesh* texMesh = new TexturedMesh(tessellatorMesh, false, tMap, true);
+      delete previousMesh;   //If a new mesh has been produced we delete the previous one
+      return texMesh;
+    }
+  
   }
+  
+  return NULL;
+
 }
 
 Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
                                                         const TileTessellator* tessellator,
                                                         Mesh* tessellatorMesh,
                                                         Mesh* previousMesh) {
+  const TextureMapping* fbTMap = NULL;
   int texID = -1;
   Tile* fbTile = tile->getParent();
   while (fbTile != NULL && texID < 0) {
     
-    TilePetitions* tp = createTilePetitions(fbTile);
-    tp->requestToCache(*_downloader);
-    if (tp->allFinished()){
-      tp->createTexture(_texHandler, _factory, 
-                        _parameters->_tileTextureWidth, _parameters->_tileTextureHeight);
-      texID = tp->getTexID();
+    if (fbTile->isTextureSolved()){
+      TexturedMesh* texMesh = (TexturedMesh*) fbTile->getTexturizerMesh();
+      if (texMesh != NULL){
+        fbTMap = texMesh->getTextureMapping();
+        
+        texID = _texHandler->getTextureIdIfAvailable(fbTMap->getStringTexID(), 
+                                                     fbTMap->getWidth(), fbTMap->getHeight());
+        
+        break;
+      }
     }
-    
-    //We do no store the petitions
-    delete tp;
-    
-    if (texID > -1) break;
     fbTile = fbTile->getParent();       //TRYING TO CREATE FALLBACK TEXTURE FROM ANTECESOR
   }
   
   //CREATING MESH
   if (texID > -1) {
-    TextureMapping* tMap = new TextureMapping(texID, getTextureCoordinates(tessellator), _texHandler);
+    TextureMapping* tMap = new TextureMapping(texID, getTextureCoordinates(tessellator), _texHandler, fbTMap->getStringTexID(), 
+                                              fbTMap->getWidth(), fbTMap->getHeight());
     translateAndScaleFallBackTex(tile, fbTile, tMap);
     TexturedMesh* texMesh = new TexturedMesh(tessellatorMesh, false, tMap, true);
     delete previousMesh;   //If a new mesh has been produced we delete the previous one
@@ -249,24 +267,4 @@ void TileImagesTileTexturizer::removeRegisteredTilePetitions(Tile* tile)
       break;
     }
   }
-}
-
-int TileImagesTileTexturizer::getTexture(Tile* tile)
-{
-  TilePetitions* tp = getRegisteredTilePetitions(tile);
-  
-  if (tp!= NULL) {
-    
-    if (tp->getTexID() > -1){
-      return tp->getTexID();
-    } else{
-      if (tp->allFinished()){
-        tp->createTexture(_texHandler, _factory, 
-                          _parameters->_tileTextureWidth, _parameters->_tileTextureHeight);
-        return tp->getTexID();
-      }
-    }
-  }
-  
-  return -1;
 }

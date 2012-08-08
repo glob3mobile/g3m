@@ -20,6 +20,7 @@ class SimplePlanetRenderer: public Renderer {
 private:
   
   const std::string _textureFilename;
+  const int _texWidth, _texHeight;
   
   const int _latRes;
   const int _lonRes;
