@@ -49,9 +49,11 @@ public:
   
 #ifdef C_CODE
   bool operator<(const Geodetic2D& that) const {
-#else
-  bool lowerThanOperator(const Geodetic2D& that) const {
+    return lowerThan(that);
+  }
 #endif
+  
+  bool lowerThan(const Geodetic2D& that) const {
     if (_latitude.lowerThan(that._latitude)) {
       return true;
     }

@@ -14,15 +14,15 @@
 class URL {
 private:
   const std::string _path;
-  
-  URL& operator=(const URL& that);
-  
+
 public:  
   
   URL(const URL& that) :
   _path(that._path) {
     
   }
+  
+  URL():_path(""){}
   
   explicit URL(const std::string& path):
   _path(path)

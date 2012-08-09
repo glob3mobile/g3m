@@ -32,7 +32,11 @@ void SimplePlanetRenderer::initialize(const InitializationContext* ic)
 
 }
 
+#ifdef C_CODE
 float * SimplePlanetRenderer::createVertices(const Planet& planet)
+#else
+float [] SimplePlanetRenderer::createVertices(const Planet& planet)
+#endif
 {
   //VERTICES
   float* vertices = new float[_latRes *_lonRes * 3];
@@ -57,8 +61,11 @@ float * SimplePlanetRenderer::createVertices(const Planet& planet)
 }
 
 
-
+#ifdef C_CODE
 int* SimplePlanetRenderer::createMeshIndex()
+#else
+int[] SimplePlanetRenderer::createMeshIndex()
+#endif
 {
   const unsigned int res = _lonRes;
   
@@ -78,7 +85,11 @@ int* SimplePlanetRenderer::createMeshIndex()
   return indexes;
 }
 
+#ifdef C_CODE
 float* SimplePlanetRenderer::createTextureCoordinates()
+#else
+float[] SimplePlanetRenderer::createTextureCoordinates()
+#endif
 {
   float* texCoords = new float[_latRes *_lonRes * 2];
   
