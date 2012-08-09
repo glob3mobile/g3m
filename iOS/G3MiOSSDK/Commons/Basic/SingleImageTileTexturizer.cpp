@@ -36,8 +36,7 @@ Mesh* SingleImageTileTexturizer::texturize(const RenderContext* rc,
                                            Tile* tile,
                                            const TileTessellator* tessellator,
                                            Mesh* mesh,
-                                           Mesh* previousMesh,
-                                           ITimer* timer) {
+                                           Mesh* previousMesh) {
   _renderContext = rc; //SAVING CONTEXT
   
   if (_texID < 0) {
@@ -54,7 +53,7 @@ Mesh* SingleImageTileTexturizer::texturize(const RenderContext* rc,
     rc->getFactory()->deleteImage(_image);
   }
 
-  const TextureMapping* texMap = new TextureMapping( _texID, createTextureCoordinates(rc, mesh), rc->getTexturesHandler() );
+  const TextureMapping* texMap = new TextureMapping( _texID, createTextureCoordinates(rc, mesh), rc->getTexturesHandler(), "SINGLE_IMAGE_TEX", _image->getWidth(), _image->getHeight() );
   
   if (previousMesh != NULL) delete previousMesh;
   

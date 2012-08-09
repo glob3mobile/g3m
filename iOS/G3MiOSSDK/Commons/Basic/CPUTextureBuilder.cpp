@@ -9,53 +9,86 @@
 #include "CPUTextureBuilder.hpp"
 
 int CPUTextureBuilder::createTextureFromImages(GL * gl, 
-                                               const std::vector<const IImage*>& vImages, 
+                                               const std::vector<const IImage*>& images,
                                                int width, int height) const {
-  if (vImages.size() > 0){
-    
-    const IImage* im = vImages[0], *im2 = NULL;
-    for (int i = 1; i < vImages.size(); i++) {
-      const IImage* imTrans = vImages[i];
-      im2 = im->combineWith(*imTrans, width, height);
-      if (i > 1) delete im;
-      im = im2;
-    }
-    
-    int texID = gl->uploadTexture(im, width, height);
-    
-    if (1 < vImages.size()){
-      delete im;
-    }
-    return texID;
-  } else{
+  const int imagesSize = images.size();
+  
+  if (imagesSize == 0) {
     return -1;
   }
+  
+  const IImage* im = images[0];
+  const IImage* im2 = NULL;
+  for (int i = 1; i < imagesSize; i++) {
+    const IImage* imTrans = images[i];
+    im2 = im->combineWith(*imTrans, width, height);
+    if (i > 1) {
+      delete im;
+    }
+    im = im2;
+  }
+  
+  int texID = gl->uploadTexture(im, width, height);
+  
+  if (imagesSize > 1) {
+    delete im;
+  }
+  
+  return texID;
+  
+//  const int imagesSize = images.size();
+//
+//  if (imagesSize > 0) {
+//    const IImage* im = images[0], *im2 = NULL;
+//    for (int i = 1; i < imagesSize; i++) {
+//      const IImage* imTrans = images[i];
+//      im2 = im->combineWith(*imTrans, width, height);
+//      if (i > 1) {
+//        delete im;
+//      }
+//      im = im2;
+//    }
+//    
+//    int texID = gl->uploadTexture(im, width, height);
+//    
+//    if (imagesSize > 1){
+//      delete im;
+//    }
+//    return texID;
+//  }
+//  else {
+//    return -1;
+//  }
 }
 
 int CPUTextureBuilder::createTextureFromImages(GL * gl, const IFactory* factory,
                                                const std::vector<const IImage*>& vImages, 
                                                const std::vector<const Rectangle*>& vRectangles, 
                                                int width, int height) const {
-  
-  int todo_JM = 0;
   const IImage* base;
-  if (vRectangles[0]->_width == width && vRectangles[0]->_height == height){
+  int i = 0; //First image to merge
+  Rectangle baseRec(0,0, width, height);
+  if (vRectangles[0]->equalTo(baseRec)){
     base = vImages[0];
+    i = 1;
   } else{
     base = factory->createImageFromSize(width, height);
   }
-  
-  for (int i = 1; i < vImages.size(); i++) {
-#ifdef C_CODE
-      IImage* im2 = base->combineWith(*vImages[i], *vRectangles[i], width, height);
-#endif
-#ifdef JAVA_CODE
-      IImage im2 = base.combineWith(vImages.get(i), vRectangles.get(i), width, height);
-#endif
-    delete base;
+
+  for (; i < vImages.size(); i++) {
+    IImage* im2 = base->combineWith(*(vImages[i]), *(vRectangles[i]), width, height);
+    
+    if (base != vImages[0]) {
+      delete base;
+    }
     base = im2;
   }
   
-  return todo_JM;
+  int texID = gl->uploadTexture(base, width, height);
   
+  if (base != vImages[0]) {
+    delete base;
+  }
+
+  return texID;
 }

@@ -32,7 +32,9 @@ private:
   std::list<MutableMatrix44D> _matrixStack;
   
   std::list<int>              _texturesIdBag;
-  long                        _texturesIdCounter;
+  long                        _texturesIdAllocationCounter;
+  long                        _texturesIdGetCounter;
+  long                        _texturesIdTakeCounter;
   
   // state handling
   bool _enableTextures;
@@ -53,6 +55,11 @@ private:
 #endif
   
   
+  
+  float _scaleX;
+  float _scaleY;
+  float _translationX;
+  float _translationY;
   
   inline void loadModelView();
   
@@ -76,7 +83,13 @@ public:
 #else
   _cullFace_face(GLCullFace.Back),
 #endif
-  _texturesIdCounter(0)
+  _texturesIdAllocationCounter(0),
+  _scaleX(1),
+  _scaleY(1),
+  _translationX(0),
+  _translationY(0),
+  _texturesIdGetCounter(0),
+  _texturesIdTakeCounter(0)
   {
     
   }
@@ -150,7 +163,8 @@ public:
   
   GLError getError();
   
-  int uploadTexture(const IImage* image, int textureWidth, int textureHeight);
+  int uploadTexture(const IImage* image,
+                    int textureWidth, int textureHeight);
   
   void setTextureCoordinates(int size, int stride, const float texcoord[]);
   
@@ -171,8 +185,38 @@ public:
   void enableCullFace(GLCullFace face);
   void disableCullFace();
   
-  void transformTexCoords(const Vector2D& scale, const Vector2D& translation);
+  void transformTexCoords(float scaleX,
+                          float scaleY,
+                          float translationX,
+                          float translationY);
   
+  void transformTexCoords(double scaleX,
+                          double scaleY,
+                          double translationX,
+                          double translationY) {
+    transformTexCoords((float) scaleX,
+                       (float) scaleY,
+                       (float) translationX,
+                       (float) translationY);
+  }
+
+  void transformTexCoords(const Vector2D& scale,
+                          const Vector2D& translation) {
+    transformTexCoords((float) scale.x(),
+                       (float) scale.y(),
+                       (float) translation.x(),
+                       (float) translation.y());
+  }
+
+  void transformTexCoords(const MutableVector2D& scale,
+                          const MutableVector2D& translation) {
+    transformTexCoords((float) scale.x(),
+                       (float) scale.y(),
+                       (float) translation.x(),
+                       (float) translation.y());
+  }
+
+
   void color(const Color& col) {
     color(col.getRed(),
           col.getGreen(),

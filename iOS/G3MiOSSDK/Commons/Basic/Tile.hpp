@@ -64,7 +64,6 @@ private:
   bool _textureSolved;
   std::vector<Tile*>* _subtiles;
 
-  int _texturedCounter;
   ITimer* _texturizerTimer;
   
   bool _justCreatedSubtiles;
@@ -83,7 +82,6 @@ private:
                                   const TileTessellator *tessellator,
                                   TileTexturizer *texturizer,
                                   const TileParameters* parameters,
-                                  ITimer* frameTimer,
                                   ITimer* lastSplitTimer,
                                   TilesStatistics* statistics);
   
@@ -92,9 +90,10 @@ private:
   inline void rawRender(const RenderContext* rc,
                         const TileTessellator* tessellator,
                         TileTexturizer* texturizer,
-                        ITimer* timer,
                         ITimer* lastTexturizerTimer);
   
+  void cleanTexturizerMesh();
+
   void debugRender(const RenderContext* rc,
                    const TileTessellator* tessellator);
 
@@ -126,7 +125,6 @@ public:
   _texturizerMesh(NULL),
   _textureSolved(false),
   _subtiles(NULL),
-  _texturedCounter(0),
   _justCreatedSubtiles(false),
   _texturizerTimer(NULL)
   {
@@ -151,13 +149,19 @@ public:
     return _column;
   }
   
+  Mesh* getTexturizerMesh() const {
+    return _texturizerMesh;
+  }
+  
   void setTextureSolved(bool textureSolved);
   
   bool isTextureSolved() const {
     return _textureSolved;
   }
   
-  Tile* getParent() const { return _parent; }
+  Tile* getParent() const {
+    return _parent;
+  }
   
   void render(const RenderContext* rc,
               const TileTessellator* tessellator,
@@ -165,7 +169,6 @@ public:
               const TileParameters* parameters,
               TilesStatistics* statistics,
               std::list<Tile*>* toVisitInNextIteration,
-              ITimer* frameTimer,
               ITimer* lastSplitTimer,
               ITimer* lastTexturizerTimer);
     

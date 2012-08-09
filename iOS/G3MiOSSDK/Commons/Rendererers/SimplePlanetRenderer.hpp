@@ -20,6 +20,7 @@ class SimplePlanetRenderer: public Renderer {
 private:
   
   const std::string _textureFilename;
+  const int _texWidth, _texHeight;
   
   const int _latRes;
   const int _lonRes;
@@ -41,11 +42,13 @@ public:
   
   int render(const RenderContext* rc);
   
-  bool onTouchEvent(const TouchEvent* touchEvent) {
+  bool onTouchEvent(const EventContext* ec,
+                    const TouchEvent* touchEvent) {
     return false;
   }
   
-  void onResizeViewportEvent(int width, int height) {
+  void onResizeViewportEvent(const EventContext* ec,
+                             int width, int height) {
     
   }
   

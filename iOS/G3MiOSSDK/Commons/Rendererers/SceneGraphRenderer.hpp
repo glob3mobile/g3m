@@ -215,9 +215,11 @@ public:
   
   virtual int render(const RenderContext* rc);
   
-  virtual bool onTouchEvent(const TouchEvent* touchEvent);
+  virtual bool onTouchEvent(const EventContext* ec,
+                            const TouchEvent* touchEvent);
   
-  virtual void onResizeViewportEvent(int width, int height);
+  virtual void onResizeViewportEvent(const EventContext* ec,
+                                     int width, int height);
   
   virtual ~SceneGraphRenderer() { }
   

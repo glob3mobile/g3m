@@ -15,6 +15,11 @@
 #include "Camera.hpp"
 
 
+class EffectTarget {
+  
+};
+
+
 class Effect {
 protected:
   
@@ -68,9 +73,12 @@ public:
   virtual void stop(const RenderContext *rc,
                     const TimeInterval& now) = 0;
   
+  virtual void cancel(const TimeInterval& now) = 0;
+
   virtual ~Effect() { }
 };
 
+//***************************************************************
 
 class EffectWithDuration : public Effect {
 private:
@@ -115,16 +123,25 @@ public:
 
 };
 
+//***************************************************************
 
-class EffectsScheduler /*: public Renderer*/ {
+
+class EffectsScheduler {
 private:
   
   class EffectRun {
   public:
-    Effect* _effect;
-    bool    _started;
+    Effect*       _effect;
+    EffectTarget* _target;
     
-    EffectRun(Effect* effect) : _effect(effect), _started(false) {
+    bool         _started;
+    
+    EffectRun(Effect* effect,
+              EffectTarget* target) :
+    _effect(effect),
+    _target(target),
+    _started(false)
+    {
     }
     
     ~EffectRun() {
@@ -145,17 +162,10 @@ public:
   EffectsScheduler(): _effectsRuns(std::vector<EffectRun*>()) {
     
   };
-
+  
   void doOneCyle(const RenderContext *rc);
 
   void initialize(const InitializationContext* ic);
-
-
-//  virtual int render(const RenderContext* rc);
-//  
-//  virtual bool onTouchEvent(const TouchEvent* touchEvent);
-//  
-//  virtual void onResizeViewportEvent(int width, int height);
   
   virtual ~EffectsScheduler() {
     _factory->deleteTimer(_timer);
@@ -166,20 +176,20 @@ public:
     }
   };
   
-  void startEffect(Effect* effect);
+  void startEffect(Effect* effect,
+                   EffectTarget* target);
   
+  void cancellAllEffectsFor(EffectTarget* target);
   
-  bool isReadyToRender(const RenderContext* rc) {
-    return true;
-  }
-
 };
 
+//***************************************************************
 
-class DummyEffect : public EffectWithDuration {
+
+class SampleEffect : public EffectWithDuration {
 public:
   
-  DummyEffect(TimeInterval duration) : EffectWithDuration(duration) {
+  SampleEffect(TimeInterval duration) : EffectWithDuration(duration) {
   }
   
   virtual void start(const RenderContext *rc,
@@ -198,6 +208,10 @@ public:
   virtual void stop(const RenderContext *rc,
                     const TimeInterval& now) {
     EffectWithDuration::stop(rc, now);
+  }
+  
+  virtual void cancel(const TimeInterval& now) {
+    // do nothing, just leave the effect in the intermediate state
   }
 
 private:

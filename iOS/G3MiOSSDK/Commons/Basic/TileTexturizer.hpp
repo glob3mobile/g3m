@@ -13,30 +13,29 @@ class Mesh;
 class RenderContext;
 class Tile;
 class TileTessellator;
-class ITimer;
+class InitializationContext;
 
 class TileTexturizer {
-  
 public:
+  virtual ~TileTexturizer() {
+  }
+  
+  virtual bool isReady(const RenderContext *rc) = 0;
+
+  virtual void initialize(const InitializationContext* ic) = 0;
+
   virtual Mesh* texturize(const RenderContext* rc,
                           Tile* tile,
                           const TileTessellator* tessellator,
                           Mesh* tessellatorMesh,
-                          Mesh* previousMesh,
-                          ITimer* timer) = 0;
+                          Mesh* previousMesh) = 0;
   
   virtual void tileToBeDeleted(Tile* tile) = 0;
-  
-  virtual ~TileTexturizer() {
-    
-  }
-  
   
   virtual bool tileMeetsRenderCriteria(Tile* tile) = 0;
   
   virtual void justCreatedTopTile(Tile* tile) = 0;
   
-  virtual bool isReadyToRender(const RenderContext *rc) = 0;
 
 };
 

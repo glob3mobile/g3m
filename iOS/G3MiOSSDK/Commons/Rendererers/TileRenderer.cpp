@@ -23,7 +23,6 @@ TileRenderer::~TileRenderer() {
   delete _texturizer;
   delete _parameters;
 
-  delete _frameTimer;
   delete _lastSplitTimer;
   delete _lastTexturizerTimer;
 #endif
@@ -76,9 +75,10 @@ void TileRenderer::initialize(const InitializationContext* ic) {
   clearTopLevelTiles();
   createTopLevelTiles(ic);
   
-  _frameTimer          = ic->getFactory()->createTimer();
   _lastSplitTimer      = ic->getFactory()->createTimer();
   _lastTexturizerTimer = ic->getFactory()->createTimer();
+  
+  _texturizer->initialize(ic);
 }
 
 bool TileRenderer::isReadyToRender(const RenderContext *rc) {
@@ -89,7 +89,7 @@ bool TileRenderer::isReadyToRender(const RenderContext *rc) {
   }
   
   if (_texturizer != NULL) {
-    if (!_texturizer->isReadyToRender(rc)) {
+    if (!_texturizer->isReady(rc)) {
       return false;
     }
   }
@@ -98,13 +98,19 @@ bool TileRenderer::isReadyToRender(const RenderContext *rc) {
 }
 
 int TileRenderer::render(const RenderContext* rc) {
-  _frameTimer->start();
-
-  TilesStatistics statistics(_parameters);
+  TilesStatistics statistics;
   
   const int topLevelTilesSize = _topLevelTiles.size();
 
   if (_topTilesJustCreated) {
+    DistanceToCenterTileComparison predicate = DistanceToCenterTileComparison(rc->getCamera(),
+                                                                              rc->getPlanet());
+    
+    predicate.initialize();
+    std::sort(_topLevelTiles.begin(),
+              _topLevelTiles.end(),
+              predicate);
+    
     if (_texturizer != NULL) {
       for (int i = 0; i < topLevelTilesSize; i++) {
         Tile* tile = _topLevelTiles[i];
@@ -114,8 +120,8 @@ int TileRenderer::render(const RenderContext* rc) {
     _topTilesJustCreated = false;
   }
   
-//  const DistanceToCenterTileComparison predicate = DistanceToCenterTileComparison(rc->getCamera(),
-//                                                                                  rc->getPlanet());
+  DistanceToCenterTileComparison predicate = DistanceToCenterTileComparison(rc->getCamera(),
+                                                                            rc->getPlanet());
   
 //  std::vector<Tile*> toVisit(_topLevelTiles);
   std::list<Tile*> toVisit;
@@ -126,12 +132,6 @@ int TileRenderer::render(const RenderContext* rc) {
   
   while (toVisit.size() > 0) {
     std::list<Tile*> toVisitInNextIteration;
-    
-//#ifdef C_CODE      
-//    std::sort(toVisit.begin(),
-//              toVisit.end(),
-//              predicate);
-//#endif
 
 #ifdef JAVA_CODE
       java.util.Collections.sort(toVisit, predicate);
@@ -145,9 +145,9 @@ int TileRenderer::render(const RenderContext* rc) {
                    _parameters,
                    &statistics,
                    &toVisitInNextIteration,
-                   _frameTimer,
                    _lastSplitTimer,
                    _lastTexturizerTimer);
+      
     }
 
     toVisit = toVisitInNextIteration;

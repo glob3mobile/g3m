@@ -16,7 +16,9 @@ SimplePlanetRenderer::SimplePlanetRenderer(const std::string textureFilename):
 _latRes(30),//FOR NOW THEY MUST BE EQUAL
 _lonRes(30),
 _textureFilename(textureFilename),
-_mesh(NULL)
+_mesh(NULL),
+_texWidth(2048),
+_texHeight(1024)
 {
 }
 
@@ -108,7 +110,7 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   int texID = 0;
   float * texC = NULL;
   if (true){
-    texID = rc->getTexturesHandler()->getTextureIdFromFileName(_textureFilename, 2048, 1024);
+    texID = rc->getTexturesHandler()->getTextureIdFromFileName(_textureFilename, _texWidth, _texHeight);
     if (texID < 1) {
       rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
       return false;
@@ -152,7 +154,11 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
                                                     _latRes *_lonRes, ver, 
                                                     ind, numIndexes, flatColor, colors, 0.5, normals);
   
-  _mesh = new TexturedMesh(im, true, new TextureMapping(texID, texC, rc->getTexturesHandler()), true);
+  TextureMapping* texMap = new TextureMapping(texID, texC, rc->getTexturesHandler(),
+                                              _textureFilename,
+                                              _texWidth,_texHeight);
+  
+  _mesh = new TexturedMesh(im, true, texMap, true);
   
   return true;
 }

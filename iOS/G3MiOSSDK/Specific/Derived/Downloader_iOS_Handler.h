@@ -57,4 +57,6 @@
 
 - (void) runWithDownloader:(void*)downloaderV;
 
+- (void) dealloc;
+
 @end

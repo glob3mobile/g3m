@@ -46,12 +46,15 @@ public:
     }
   }
   
+  void initialize(const InitializationContext* ic) {
+    
+  }
+  
   Mesh* texturize(const RenderContext* rc,
                   Tile* tile,
                   const TileTessellator* tessellator,
                   Mesh* mesh,
-                  Mesh* previousMesh,
-                  ITimer* timer);
+                  Mesh* previousMesh);
   
   void tileToBeDeleted(Tile* tile);
   
@@ -59,7 +62,7 @@ public:
 
   void justCreatedTopTile(Tile* tile);
   
-  bool isReadyToRender(const RenderContext *rc) {
+  bool isReady(const RenderContext *rc) {
     return true;
   }
 

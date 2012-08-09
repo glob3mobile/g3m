@@ -16,7 +16,9 @@ class TileTessellator;
 class TileTexturizer;
 
 #include "Sector.hpp"
-#include <vector>
+//#include <vector>
+#include <map>
+#include <sstream>
 
 #include "Tile.hpp"
 #include "Camera.hpp"
@@ -130,18 +132,23 @@ public:
 
 class TilesStatistics {
 private:
-  long _counter;
-  int _minLevel;
-  int _maxLevel;
+  long               _tilesProcessed;
+  std::map<int, int> _tilesProcessedByLevel;
+  
+  long               _tilesVisible;
+  std::map<int, int> _tilesVisibleByLevel;
+  
+  long               _tilesRendered;
+  std::map<int, int> _tilesRenderedByLevel;
+  
   int _splitsCountInFrame;
   
 public:
-    TilesStatistics() {}
-
-  TilesStatistics(const TileParameters* parameters) :
-  _counter(0),
-  _minLevel(parameters->_maxLevel + 1),
-  _maxLevel(parameters->_topLevel - 1),
+  
+  TilesStatistics() :
+  _tilesProcessed(0),
+  _tilesVisible(0),
+  _tilesRendered(0),
   _splitsCountInFrame(0)
   {
     
@@ -155,36 +162,72 @@ public:
     _splitsCountInFrame++;
   }
   
-  void computeTileRender(Tile* tile) {
-    _counter++;
+  void computeTileProcessed(Tile* tile) {
+    _tilesProcessed++;
     
-    int level = tile->getLevel();
-    if (level < _minLevel) {
-      _minLevel = level;
-    }
-    if (level > _maxLevel) {
-      _maxLevel = level;
-    }
+    const int level = tile->getLevel();
+    _tilesProcessedByLevel[level] = _tilesProcessedByLevel[level] + 1;
   }
   
-  void log(const ILogger* logger) const {
-    logger->logInfo("Rendered %d tiles. Levels: %d-%d" , _counter, _minLevel, _maxLevel);
+  void computeVisibleTile(Tile* tile) {
+    _tilesVisible++;
+    
+    const int level = tile->getLevel();
+    _tilesVisibleByLevel[level] = _tilesVisibleByLevel[level] + 1;
+  }
+
+  void computeTileRendered(Tile* tile) {
+    _tilesRendered++;
+    
+    const int level = tile->getLevel();
+    _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
   }
   
   bool equalsTo(const TilesStatistics& that) const {
-    if (_counter != that._counter) {
+    if (_tilesProcessed != that._tilesProcessed) {
       return false;
     }
-    if (_minLevel != that._minLevel) {
+    if (_tilesRendered != that._tilesRendered) {
       return false;
     }
-    if (_maxLevel != that._maxLevel) {
+    if (_tilesRenderedByLevel != that._tilesRenderedByLevel) {
       return false;
     }
-    
+    if (_tilesProcessedByLevel != that._tilesProcessedByLevel) {
+      return false;
+    }
     return true;
   }
   
+  static std::string asLogString(std::map<int, int> map) {
+    std::ostringstream buffer;
+    
+    bool first = true;
+    for(std::map<int, int>::const_iterator i = map.begin();
+        i != map.end();
+        ++i ) {
+      const int level   = i->first;
+      const int counter = i->second;
+      
+      if (first) {
+        first = false;
+      }
+      else {
+        buffer << ",";
+      }
+      buffer << "L" << level << ":" << counter;
+    }
+    
+    return buffer.str();
+  }
+  
+  void log(const ILogger* logger) const {
+    logger->logInfo("Tiles processed:%d (%s), visible:%d (%s), rendered:%d (%s).",
+                    _tilesProcessed, asLogString(_tilesProcessedByLevel).c_str(),
+                    _tilesVisible,   asLogString(_tilesVisibleByLevel).c_str(),
+                    _tilesRendered,  asLogString(_tilesRenderedByLevel).c_str());
+  }
+
 };
 
 
@@ -198,7 +241,6 @@ private:
 
   std::vector<Tile*>     _topLevelTiles;
   
-  ITimer* _frameTimer;          // timer started at the start of each frame rendering
   ITimer* _lastSplitTimer;      // timer to start every time a tile get splitted into subtiles
   ITimer* _lastTexturizerTimer; // timer to start every time the texturizer is called
   
@@ -213,6 +255,7 @@ private:
   private:
     const Camera* _camera;
     const Planet* _planet;
+    std::map<Geodetic2D, double> _distancesCache;
     
   public:
     DistanceToCenterTileComparison(const Camera *camera,
@@ -221,15 +264,38 @@ private:
     _planet(planet)
     {}
     
+    void initialize() {
+      _distancesCache.clear();
+    }
+    
+    double getSquaredDistanceToCamera(const Tile* tile) {
+      const Geodetic2D center = tile->getSector().getCenter();
+
+      double distance = _distancesCache[center];
+      if (distance == 0) {
+        const Vector3D cameraPos = _camera->getPosition();
+        const Vector3D centerVec3 = _planet->toVector3D(center);
+        
+        distance = centerVec3.sub(cameraPos).squaredLength();
+        
+        _distancesCache[center] = distance;
+      }
+      
+      return distance;
+    }
+    
     inline bool operator()(const Tile *t1,
-                           const Tile *t2) const {
-      const Vector3D cameraPos = _camera->getPosition();
+                           const Tile *t2) {
+//      const Vector3D cameraPos = _camera->getPosition();
+//
+//      const Vector3D center1 = _planet->toVector3D(t1->getSector().getCenter());
+//      const Vector3D center2 = _planet->toVector3D(t2->getSector().getCenter());
+//      
+//      const double dist1 = center1.sub(cameraPos).squaredLength();
+//      const double dist2 = center2.sub(cameraPos).squaredLength();
       
-      const Vector3D center1 = _planet->toVector3D(t1->getSector().getCenter());
-      const Vector3D center2 = _planet->toVector3D(t2->getSector().getCenter());
-      
-      const double dist1 = center1.sub(cameraPos).squaredLength();
-      const double dist2 = center2.sub(cameraPos).squaredLength();
+      const double dist1 = getSquaredDistanceToCamera(t1);
+      const double dist2 = getSquaredDistanceToCamera(t2);
       return (dist1 < dist2);
     }
   };
@@ -278,9 +344,8 @@ public:
   _texturizer(texturizer),
   _parameters(parameters),
   _showStatistics(showStatistics),
-  _lastStatistics(parameters),
+  _lastStatistics(),
   _topTilesJustCreated(false),
-  _frameTimer(NULL),
   _lastSplitTimer(NULL),
   _lastTexturizerTimer(NULL)
   {
@@ -293,11 +358,13 @@ public:
   
   int render(const RenderContext* rc);
   
-  bool onTouchEvent(const TouchEvent* touchEvent) {
+  bool onTouchEvent(const EventContext* ec,
+                    const TouchEvent* touchEvent) {
     return false;
   }
   
-  void onResizeViewportEvent(int width, int height) {
+  void onResizeViewportEvent(const EventContext* ec,
+                             int width, int height) {
     
   }
   

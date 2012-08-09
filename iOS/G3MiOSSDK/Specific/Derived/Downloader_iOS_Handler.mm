@@ -105,7 +105,7 @@
   for (int i = 0; i < listenersCount; i++) {
     ListenerEntry* entry = [_listeners objectAtIndex: i];
     if ([entry requestId] == requestId) {
-//      [[entry listener] onCancel:_url];
+      [[entry listener] onCancel:*_url];
       
       [_listeners removeObjectAtIndex: i];
 
@@ -151,48 +151,62 @@
   // inform downloader to remove myself, to avoid adding new Listeners
   downloader->removeDownloadingHandlerForNSURL(_nsURL);
   
-  [_lock lock];
-
-  if (data) {
-    const int length = [data length];
-    unsigned char *bytes = new unsigned char[ length ]; // will be deleted by ByteBuffer's destructor
-    [data getBytes:bytes length: length];
-    ByteBuffer buffer(bytes, length);
-
-    Response response(url, &buffer);
-
-    const int listenersCount = [_listeners count];
-    for (int i = 0; i < listenersCount; i++) {
-      ListenerEntry* entry = [_listeners objectAtIndex: i];
-      
-      [[entry listener] onDownload: response];
-    }
-  }
-  else {
-    /*ILogger::instance()->logError("Can't load %s, response=%s, error=%s",
-                                  [ [_nsURL      description] cStringUsingEncoding: NSUTF8StringEncoding ],
-                                  (urlResponse!=0)? [ [urlResponse description] cStringUsingEncoding: NSUTF8StringEncoding ] : "NULL",
-                                  [ [error       description] cStringUsingEncoding: NSUTF8StringEncoding ] );*/
+  dispatch_async( dispatch_get_main_queue(), ^{
+    // Add code here to update the UI/send notifications based on the
+    // results of the background processing
     
-    //ILogger::instance()->logError("Can't load %s\n", [[_nsURL absoluteString] UTF8String]);
-    printf ("Can't load %s\n", [[_nsURL absoluteString] UTF8String]);
+    [_lock lock];
+    
+    if (data) {
+      const int length = [data length];
+      unsigned char *bytes = new unsigned char[ length ]; // will be deleted by ByteBuffer's destructor
+      [data getBytes:bytes length: length];
+      ByteBuffer buffer(bytes, length);
+      
+      Response response(url, &buffer);
+      
+      const int listenersCount = [_listeners count];
+      for (int i = 0; i < listenersCount; i++) {
+        ListenerEntry* entry = [_listeners objectAtIndex: i];
         
-    
-    ByteBuffer buffer(NULL, 0);
-    
-    Response response(url, &buffer);
-    
-    const int listenersCount = [_listeners count];
-    for (int i = 0; i < listenersCount; i++) {
-      ListenerEntry* entry = [_listeners objectAtIndex: i];
-      
-      [[entry listener] onError: response];
+        [[entry listener] onDownload: response];
+      }
     }
-  }
-
-//  [_listeners removeAllObjects];
+    else {
+      /*ILogger::instance()->logError("Can't load %s, response=%s, error=%s",
+       [ [_nsURL      description] cStringUsingEncoding: NSUTF8StringEncoding ],
+       (urlResponse!=0)? [ [urlResponse description] cStringUsingEncoding: NSUTF8StringEncoding ] : "NULL",
+       [ [error       description] cStringUsingEncoding: NSUTF8StringEncoding ] );*/
+      
+      //ILogger::instance()->logError("Can't load %s\n", [[_nsURL absoluteString] UTF8String]);
+      printf ("Can't load %s\n", [[_nsURL absoluteString] UTF8String]);
+      
+      
+      ByteBuffer buffer(NULL, 0);
+      
+      Response response(url, &buffer);
+      
+      const int listenersCount = [_listeners count];
+      for (int i = 0; i < listenersCount; i++) {
+        ListenerEntry* entry = [_listeners objectAtIndex: i];
+        
+        [[entry listener] onError: response];
+      }
+    }
+    
+    //  [_listeners removeAllObjects];
+    
+    [_lock unlock];
+    
+  });
   
-  [_lock unlock];
+}
+
+- (void)dealloc
+{
+	if (_url) {
+    delete _url;
+  }
 }
 
 @end

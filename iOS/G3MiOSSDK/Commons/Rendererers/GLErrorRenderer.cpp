@@ -16,14 +16,16 @@ void GLErrorRenderer::initialize(const InitializationContext* ic) {
   
 }
 
-bool GLErrorRenderer::onTouchEvent(const TouchEvent* touchEvent) {
+bool GLErrorRenderer::onTouchEvent(const EventContext* ec,
+                                   const TouchEvent* touchEvent) {
   return false;
 }
 
 GLErrorRenderer::~GLErrorRenderer() {
 }
 
-void GLErrorRenderer::onResizeViewportEvent(int width, int height) {
+void GLErrorRenderer::onResizeViewportEvent(const EventContext* ec,
+                                            int width, int height) {
 }
 
 int GLErrorRenderer::render(const RenderContext *rc) {

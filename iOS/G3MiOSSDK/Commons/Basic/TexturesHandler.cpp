@@ -46,8 +46,7 @@ int TexturesHandler::getTextureIdIfAvailable(const std::string &textureId,
 int TexturesHandler::getTextureId(const std::vector<const IImage*>& images,
                                   const std::string& textureId,
                                   int textureWidth,
-                                  int textureHeight)
-{
+                                  int textureHeight) {
   int previousId = getTextureIdIfAvailable(textureId, textureWidth, textureHeight);
   if (previousId >= 0) {
     return previousId;
@@ -73,8 +72,7 @@ int TexturesHandler::getTextureId(const std::vector<const IImage*>& images,
                                   const std::vector<const Rectangle*>& rectangles,
                                   const std::string& textureId,
                                   int textureWidth,
-                                  int textureHeight)
-{
+                                  int textureHeight) {
   int previousId = getTextureIdIfAvailable(textureId, textureWidth, textureHeight);
   if (previousId >= 0) {
     return previousId;
@@ -100,7 +98,6 @@ int TexturesHandler::getTextureId(const IImage *image,
                                   const std::string &textureId,
                                   int textureWidth,
                                   int textureHeight) {
-  
   std::vector<const IImage*> images;
   images.push_back(image);
   return getTextureId(images, textureId, textureWidth, textureHeight);
@@ -114,14 +111,14 @@ void TexturesHandler::takeTexture(int glTextureId) {
       holder->release();
       
       if (!holder->isRetained()) {
+        _gl->deleteTexture(holder->_glTextureId);
+        
 #ifdef C_CODE
         _textureHolders.erase(_textureHolders.begin() + i);
 #endif
 #ifdef JAVA_CODE
         _textureHolders.remove(i);
 #endif
-        
-        _gl->deleteTexture(holder->_glTextureId);
         
         delete holder;
       }

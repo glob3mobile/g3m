@@ -16,10 +16,11 @@
 #include "Logger_iOS.hpp"
 #include "Factory_iOS.hpp"
 
-#include "CameraSimpleRenderer.hpp"
-#include "CameraSimpleDragRenderer.h"
-#include "CameraDoubleDragRenderer.h"
-#include "CameraRotationRenderer.h"
+#include "CameraRenderer.hpp"
+#include "CameraSingleDragHandler.hpp"
+#include "CameraDoubleDragHandler.hpp"
+#include "CameraRotationHandler.hpp"
+#include "CameraDoubleTapHandler.hpp"
 
 #include "TileRenderer.hpp"
 #include "DummyRenderer.hpp"
@@ -91,14 +92,13 @@
   
   // camera renderer and handlers
   CameraRenderer *cameraRenderer;
-  cameraRenderer = new CameraSimpleRenderer();
+  cameraRenderer = new CameraRenderer();
+  cameraRenderer->addHandler(new CameraSingleDragHandler);
+  cameraRenderer->addHandler(new CameraDoubleDragHandler);
+  cameraRenderer->addHandler(new CameraRotationHandler);
+  cameraRenderer->addHandler(new CameraDoubleTapHandler);
   comp->addRenderer(cameraRenderer);
-  cameraRenderer = new CameraSimpleDragRenderer();
-  comp->addRenderer(cameraRenderer);
-  cameraRenderer = new CameraDoubleDragRenderer();
-  comp->addRenderer(cameraRenderer);
-  cameraRenderer = new CameraRotationRenderer();
-  comp->addRenderer(cameraRenderer);
+  
   
   //STORAGE
   NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
@@ -288,14 +288,13 @@
   
   // camera renderer and handlers
   CameraRenderer *cameraRenderer;
-  cameraRenderer = new CameraSimpleRenderer();
+  cameraRenderer = new CameraRenderer();
+  cameraRenderer->addHandler(new CameraSingleDragHandler);
+  cameraRenderer->addHandler(new CameraDoubleDragHandler);
+  cameraRenderer->addHandler(new CameraRotationHandler);
+  cameraRenderer->addHandler(new CameraDoubleTapHandler);
   comp->addRenderer(cameraRenderer);
-  cameraRenderer = new CameraSimpleDragRenderer();
-  comp->addRenderer(cameraRenderer);
-  cameraRenderer = new CameraDoubleDragRenderer();
-  comp->addRenderer(cameraRenderer);
-  cameraRenderer = new CameraRotationRenderer();
-  comp->addRenderer(cameraRenderer);
+
   
   //STORAGE
   NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
@@ -307,11 +306,16 @@
                                                8);
   
   if (true) {
-    const long priority = 999999999;
     
     class Listener : public IDownloadListener {
       void onDownload(const Response& response) {
-        NSLog(@"Downloaded %d bytes", response.getByteBuffer()->getLength());
+        BOOL isMainThread = [NSThread isMainThread];
+        if (isMainThread) {
+          NSLog(@"*** Main-Thread: Downloaded %d bytes ***", response.getByteBuffer()->getLength());
+        }
+        else {
+          NSLog(@"*** NOT IN Main-Thread: Downloaded %d bytes ***", response.getByteBuffer()->getLength());
+        }
       }
       
       void onError(const Response& response) {
@@ -323,11 +327,10 @@
       }
     };
     
-    IDownloadListener* listener = new Listener();
-    long requestId = downloader->request(URL("http://glob3.sourceforge.net/img/isologo640x160.png"),
-                                         priority,
-                                         listener);
-//    downloader->cancelRequest(requestId);
+    const long priority = 999999999;
+    long requestId = downloader->request(URL("http://glob3.sourceforge.net/img/isologo640x160.png"), priority, new Listener());
+//    long requestId2 = downloader->request(URL("http://glob3.sourceforge.net/img/isologo640x160.png"), priority, new Listener());
+    downloader->cancelRequest(requestId);
   }
 
   //LAYERS
@@ -369,7 +372,7 @@
       texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
     }
     
-    const bool showStatistics = false;
+    const bool showStatistics = true;
     TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
                                         texturizer,
                                         parameters,
@@ -426,7 +429,12 @@
   }
   
   EffectsScheduler* scheduler = new EffectsScheduler();
-  scheduler->startEffect(new DummyEffect(TimeInterval::fromSeconds(2)));
+  
+  if (false) {
+    EffectTarget* target = NULL;
+    scheduler->startEffect(new SampleEffect(TimeInterval::fromSeconds(2)),
+                           target);
+  }
   
   if (false) {
     SceneGraphRenderer* sgr = new SceneGraphRenderer();
@@ -436,7 +444,7 @@
     comp->addRenderer(sgr);
   }
   
-  //    comp->addRenderer(new GLErrorRenderer());
+  comp->addRenderer(new GLErrorRenderer());
   
   
   TextureBuilder* texBuilder = new CPUTextureBuilder();
@@ -477,11 +485,23 @@
     _renderer = [[ES2Renderer alloc] init];
     if (!_renderer) {
       printf("**** ERROR: G3MWidget_iOS Mobile needs Opengl ES 2.0\n");
+      return nil;
     }
     else {
       printf("*** Using Opengl ES 2.0\n\n");
       glver = OpenGL_2;
     }
+    
+    
+    NSLog(@"----------------------------------------------------------------------------");
+    NSLog(@"OpenGL Extensions:");
+    NSString *extensionString = [[NSString stringWithUTF8String:(char *)glGetString(GL_EXTENSIONS)] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSArray *extensions = [extensionString componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    for (NSString *extension in extensions) {
+        NSLog(@"  %@", extension);
+    }
+    NSLog(@"----------------------------------------------------------------------------");
+    
     
     lastTouchEvent = NULL;
 
@@ -501,20 +521,25 @@
     if ([currSysVer compare:reqSysVer options:NSNumericSearch] != NSOrderedAscending)
       _displayLinkSupported = TRUE;
     
+    /*
     //Detecting LongPress
     UILongPressGestureRecognizer *longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
-    [self addGestureRecognizer:longPressRecognizer];
+    [self addGestureRecognizer:longPressRecognizer];*/
   }
   return self;
 }
 
+//** Agustin cancelled lonpressgesture because touchedmoved and touchedended event don't work
+/*
 - (IBAction)handleLongPress:(UIGestureRecognizer *)sender {
+
+  printf ("Longpress. state=%d\n", sender.state);
   
   if (sender.state == UIGestureRecognizerStateEnded) {
     NSLog(@"LONG PRESS");
   }
   
-}
+}*/
 
 - (void)drawView:(id)sender {
   if (_animating) {
@@ -589,27 +614,8 @@
   }
 }
 
-/*
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-  
-  printf ("----------------- touch began\n");
-  
-  UITouch *touch = [touches anyObject];
-  
-  CGPoint current  = [touch locationInView:self];
-  CGPoint previous = [touch previousLocationInView:self];
-  
-  TouchEvent* te = TouchEvent::create(Down,
-                                      new Touch(Vector2D(current.x, current.y),
-                                                Vector2D(previous.x, previous.y)));
-  
-  ((G3MWidget*)[self widget])->onTouchEvent(te);
-  
-  delete te;
-}*/
-
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-  
+    
   //NSSet *allTouches = [event allTouches];
   NSSet *allTouches = [event touchesForView:self];
   
@@ -619,11 +625,13 @@
   NSEnumerator *enumerator = [allTouches objectEnumerator];
   UITouch *touch = nil;
   while ((touch = [enumerator nextObject])) {
-    CGPoint current  = [touch locationInView:self];
-    CGPoint previous = [touch previousLocationInView:self];
+    CGPoint current         = [touch locationInView:self];
+    CGPoint previous        = [touch previousLocationInView:self];
+    unsigned char tapCount  = (unsigned char) [touch tapCount];
     
     Touch *touch = new Touch(Vector2D(current.x, current.y), 
-                             Vector2D(previous.x, previous.y));
+                             Vector2D(previous.x, previous.y),
+                             tapCount);
     
     pointers.push_back(touch);
   }
@@ -637,6 +645,7 @@
 
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+  
   //NSSet *allTouches = [event allTouches];
   NSSet *allTouches = [event touchesForView:self];
   
@@ -685,26 +694,6 @@
 }
 
 
-/*
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-  printf ("----------------- touch end\n");
-
-  
-  
-  UITouch *touch = [touches anyObject];
-  
-  CGPoint current = [touch locationInView:self];
-  CGPoint previous = [touch previousLocationInView:self];
-  
-  TouchEvent* te = TouchEvent::create(Up,
-                                      new Touch(Vector2D(current.x, current.y), 
-                                                Vector2D(previous.x, previous.y)));
-  
-  ((G3MWidget*)[self widget])->onTouchEvent(te);
-  
-  delete te;
-}*/
-
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
   //NSSet *allTouches = [event allTouches];
@@ -718,6 +707,8 @@
   while ((touch = [enumerator nextObject])) {
     CGPoint current  = [touch locationInView:self];
     CGPoint previous = [touch previousLocationInView:self];
+    
+    [touch timestamp];
     
     Touch *touch = new Touch(Vector2D(current.x, current.y), 
                              Vector2D(previous.x, previous.y));

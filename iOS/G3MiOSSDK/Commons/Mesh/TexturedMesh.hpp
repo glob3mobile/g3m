@@ -50,6 +50,10 @@ public:
   
   int getVertexCount() const { return _mesh->getVertexCount(); }
   const Vector3D getVertex(int i) const { return _mesh->getVertex(i);}
+  
+  const TextureMapping* getTextureMapping() const {
+    return _textureMapping;
+  }
 
 };
 

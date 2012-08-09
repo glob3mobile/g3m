@@ -257,7 +257,6 @@ private:
     }
   }
   
-  
 };
 
 #endif

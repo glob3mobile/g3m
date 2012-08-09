@@ -73,7 +73,6 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
                                const TileTessellator *tessellator,
                                TileTexturizer *texturizer,
                                const TileParameters* parameters,
-                               ITimer* frameTimer,
                                ITimer* lastSplitTimer,
                                TilesStatistics* statistics) {
   if (_level >= parameters->_maxLevel) {
@@ -124,7 +123,6 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
 void Tile::rawRender(const RenderContext *rc,
                      const TileTessellator *tessellator,
                      TileTexturizer *texturizer,
-                     ITimer* frameTimer,
                      ITimer* lastTexturizerTimer) {
   
   Mesh* tessellatorMesh = getTessellatorMesh(rc, tessellator);
@@ -150,8 +148,7 @@ void Tile::rawRender(const RenderContext *rc,
                                                   this,
                                                   tessellator,
                                                   tessellatorMesh,
-                                                  _texturizerMesh,
-                                                  frameTimer);
+                                                  _texturizerMesh);
           lastTexturizerTimer->start();
 
           if (_texturizerTimer == NULL) {
@@ -162,10 +159,6 @@ void Tile::rawRender(const RenderContext *rc,
           }
         }
         
-//        if ((_texturedCounter++ % 25) == 0) {
-//          _texturizerMesh = texturizer->texturize(rc, this, tessellator, tessellatorMesh, _texturizerMesh, timer);
-//          _texturedCounter = 0;
-//        }
       }
       
       if ((_texturizerTimer != NULL) && isTextureSolved()) {
@@ -182,6 +175,23 @@ void Tile::rawRender(const RenderContext *rc,
     }
   }
   
+}
+
+void Tile::cleanTexturizerMesh() {
+  int __DIEGO_AT_WORK;
+  
+  
+//  if (_texturizerMesh != NULL) {
+//    delete _texturizerMesh;
+//    _texturizerMesh = NULL;
+//  }
+//  
+//  setTextureSolved(false);
+//  
+//  if (_texturizerTimer != NULL) {
+//    delete _texturizerTimer;
+//    _texturizerTimer = NULL;
+//  }
 }
 
 void Tile::debugRender(const RenderContext* rc,
@@ -220,27 +230,33 @@ void Tile::prune(TileTexturizer* texturizer) {
   }
 }
 
+
 void Tile::render(const RenderContext* rc,
                   const TileTessellator* tessellator,
                   TileTexturizer* texturizer,
                   const TileParameters* parameters,
                   TilesStatistics* statistics,
                   std::list<Tile*>* toVisitInNextIteration,
-                  ITimer* frameTimer,
                   ITimer* lastSplitTimer,
                   ITimer* lastTexturizerTimer) {
+  statistics->computeTileProcessed(this);
+
   if (isVisible(rc, tessellator)) {
-    if (meetsRenderCriteria(rc, tessellator, texturizer, parameters, frameTimer, lastSplitTimer, statistics)) {
-      rawRender(rc, tessellator, texturizer, frameTimer, lastTexturizerTimer);
+    statistics->computeVisibleTile(this);
+
+    if (meetsRenderCriteria(rc, tessellator, texturizer, parameters, lastSplitTimer, statistics)) {
+      rawRender(rc, tessellator, texturizer, lastTexturizerTimer);
       if (parameters->_renderDebug) {
         debugRender(rc, tessellator);
       }
       
-      statistics->computeTileRender(this);
+      statistics->computeTileRendered(this);
       
       prune(texturizer);
     }
     else {
+      cleanTexturizerMesh();
+      
       std::vector<Tile*>* subTiles = getSubTiles();
       if (_justCreatedSubtiles) {
         lastSplitTimer->start();

@@ -7,3 +7,10 @@
 //
 
 #include "Context.hpp"
+
+#include "ITimer.hpp"
+
+
+RenderContext::~RenderContext() {
+  delete _frameStartTimer;
+}

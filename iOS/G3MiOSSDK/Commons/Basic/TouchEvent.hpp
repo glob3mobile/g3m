@@ -18,16 +18,24 @@ class Touch {
 private:
   const Vector2D _pos;
   const Vector2D _prevPos;
+  const unsigned char _tapCount;
 
 public:
-  Touch(const Touch& other) : _pos(other._pos), _prevPos(other._prevPos) {
-    
-  }
+  Touch(const Touch& other) : 
+  _pos(other._pos), 
+  _prevPos(other._prevPos),
+  _tapCount(other._tapCount)
+  {}
   
-  Touch(const Vector2D& pos, const Vector2D& prev) : _pos(pos), _prevPos(prev) { }
+  Touch(const Vector2D& pos, const Vector2D& prev, const unsigned char tapCount=0): 
+  _pos(pos), 
+  _prevPos(prev),
+  _tapCount(tapCount)
+  { }
   
   const Vector2D getPos() const { return _pos; }
   const Vector2D getPrevPos() const { return _prevPos; }
+  const unsigned char getTapCount() const { return _tapCount; }
   ~Touch(){}
 };
 
@@ -115,6 +123,8 @@ public:
   int getTouchCount() const {
     return _touchs.size();
   }
+  
+  unsigned char getTapCount() const;
   
   ~TouchEvent() {
     for (unsigned int i = 0; i < _touchs.size(); i++) {

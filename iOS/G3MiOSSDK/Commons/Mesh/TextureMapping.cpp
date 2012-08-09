@@ -11,8 +11,11 @@
 #include "Context.hpp"
 #include "GL.hpp"
 
-TextureMapping::TextureMapping(int textureId, std::vector<MutableVector2D> texCoords, TexturesHandler* texHandler) :
-_textureId(textureId), _texHandler(texHandler)
+TextureMapping::TextureMapping(int textureId, std::vector<MutableVector2D> texCoords, TexturesHandler* texHandler, const std::string& texID, int width, int height) :
+_textureId(textureId), _texHandler(texHandler),
+_width(width),
+_height(height),
+_texID(texID)
 {
   float* texCoordsA = new float[2 * texCoords.size()];
   int p = 0;
@@ -29,7 +32,7 @@ _textureId(textureId), _texHandler(texHandler)
 void TextureMapping::bind(const RenderContext* rc) const {
   GL *gl = rc->getGL();
   
-  gl->transformTexCoords( _scale.asVector2D(), _translation.asVector2D() );
+  gl->transformTexCoords( _scale, _translation );
   
   gl->bindTexture(_textureId);
   gl->setTextureCoordinates(2, 0, _texCoords);

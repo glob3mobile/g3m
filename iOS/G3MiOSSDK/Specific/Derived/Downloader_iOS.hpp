@@ -18,7 +18,6 @@
 
 class Downloader_iOS : public IDownloader {
 private:
-//  Downloader_iOS_WorkerThread* _worker;
   NSMutableArray*      _workers;
   
   NSLock*              _lock;                // synchronization helper
@@ -51,6 +50,8 @@ public:
   
   virtual ~Downloader_iOS();
   
+  virtual void start();
+
 };
 
 

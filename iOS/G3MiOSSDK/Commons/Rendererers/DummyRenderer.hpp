@@ -27,9 +27,11 @@ public:
   
   int render(const RenderContext* rc);
   
-  bool onTouchEvent(const TouchEvent* touchEvent);
+  bool onTouchEvent(const EventContext* ec,
+                    const TouchEvent* touchEvent);
   
-  void onResizeViewportEvent(int width, int height) {
+  void onResizeViewportEvent(const EventContext* ec,
+                             int width, int height) {
 
   }
   
