@@ -21,20 +21,20 @@ class GL;
 class IFactory;
 
 
-class TextureID {
+class TextureSpec {
 private:
   const std::string _id;
+  
   const int         _width;
   const int         _height;
   
-  TextureID(const TextureID& that);
   
-  void operator=(const TextureID& that);
+  void operator=(const TextureSpec& that);
   
 public:
-  TextureID(const std::string& id,
-            const int          width,
-            const int          height):
+  TextureSpec(const std::string& id,
+              const int          width,
+              const int          height):
   _id(id),
   _width(width),
   _height(height)
@@ -42,11 +42,29 @@ public:
     
   }
   
-  bool equalsTo(const TextureID& that) const {
-    return (_id == that._id) && (_width == that._width) && (_height == that._height);
+  TextureSpec(const TextureSpec& that):
+  _id(that._id),
+  _width(that._width),
+  _height(that._height)
+  {
+    
   }
   
-  bool lowerThan(const TextureID& that) const {
+  int getWidth() const {
+    return _width;
+  }
+  
+  int getHeight() const {
+    return _height;
+  }
+  
+  bool equalsTo(const TextureSpec& that) const {
+    return ((_id.compare(that._id) == 0) &&
+            (_width == that._width) &&
+            (_height == that._height));
+  }
+  
+  bool lowerThan(const TextureSpec& that) const {
     if (_id < that._id) {
       return true;
     }
@@ -64,8 +82,10 @@ public:
     return (_height < that._height);
   }
   
+  std::string description() const;
+  
 #ifdef C_CODE
-  bool operator<(const TextureID& that) const {
+  bool operator<(const TextureSpec& that) const {
     return lowerThan(that);
   }
 #endif
@@ -102,33 +122,25 @@ public:
   
   ~TexturesHandler();
   
-  GLTextureId getTextureIdFromFileName(const std::string& filename,
-                                       int textureWidth,
-                                       int textureHeight);
+  GLTextureID getGLTextureIdFromFileName(const std::string &filename,
+                                         int textureWidth,
+                                         int textureHeight);
   
-  GLTextureId getTextureId(const std::vector<const IImage*>& images,
-                           const std::string& textureId,
-                           int textureWidth,
-                           int textureHeight);
+  GLTextureID getGLTextureId(const std::vector<const IImage*>& images,
+                             const TextureSpec& textureSpec);
   
-  GLTextureId getTextureId(const std::vector<const IImage*>& images,
-                           const std::vector<const Rectangle*>& rectangles,
-                           const std::string& textureId,
-                           int textureWidth,
-                           int textureHeight);
+  GLTextureID getGLTextureId(const std::vector<const IImage*>& images,
+                             const std::vector<const Rectangle*>& rectangles,
+                             const TextureSpec& textureSpec);
   
-  GLTextureId getTextureId(const IImage* image,
-                           const std::string& textureId,
-                           int textureWidth,
-                           int textureHeight);
+  GLTextureID getGLTextureId(const IImage* image,
+                             const TextureSpec& textureSpec);
   
   
-  GLTextureId getTextureIdIfAvailable(const std::string& textureId,
-                                      int textureWidth,
-                                      int textureHeight);
+  GLTextureID getGLTextureIdIfAvailable(const TextureSpec& textureSpec);
   
   
-  void takeTexture(const GLTextureId& glTextureId);
+  void takeTexture(const GLTextureID& glTextureId);
   
 };
 

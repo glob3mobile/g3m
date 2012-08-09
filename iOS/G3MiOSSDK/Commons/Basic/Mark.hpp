@@ -21,7 +21,7 @@ private:
   const std::string  _textureFilename;
   const Geodetic3D   _position;
 
-  GLTextureId _textureId;
+  GLTextureID _textureId;
 
 public:
   Mark(const std::string name,

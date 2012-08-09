@@ -11,16 +11,13 @@
 #include "Context.hpp"
 #include "GL.hpp"
 
-TextureMapping::TextureMapping(GLTextureId textureId,
+TextureMapping::TextureMapping(const GLTextureID& textureId,
                                std::vector<MutableVector2D> texCoords,
                                TexturesHandler* texturesHandler,
-                               const std::string& texID,
-                               int width, int height) :
+                               const TextureSpec textureSpec) :
 _textureId(textureId),
 _texturesHandler(texturesHandler),
-_texID(texID),
-_width(width),
-_height(height),
+_textureSpec(textureSpec),
 _translation(0, 0),
 _scale(1, 1)
 {

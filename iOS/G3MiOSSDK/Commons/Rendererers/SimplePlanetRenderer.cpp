@@ -29,7 +29,7 @@ SimplePlanetRenderer::~SimplePlanetRenderer()
 
 void SimplePlanetRenderer::initialize(const InitializationContext* ic)
 {
-
+  
 }
 
 float * SimplePlanetRenderer::createVertices(const Planet& planet)
@@ -97,7 +97,7 @@ float* SimplePlanetRenderer::createTextureCoordinates()
 }
 
 bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
-
+  
   
   const Planet* planet = rc->getPlanet();
   
@@ -107,10 +107,10 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   int * ind = createMeshIndex();
   
   //TEXTURED
-  GLTextureId texID = GLTextureId::invalid();
+  GLTextureID texID = GLTextureID::invalid();
   float * texC = NULL;
   if (true){
-    texID = rc->getTexturesHandler()->getTextureIdFromFileName(_textureFilename, _texWidth, _texHeight);
+    texID = rc->getTexturesHandler()->getGLTextureIdFromFileName(_textureFilename, _texWidth, _texHeight);
     if (!texID.isValid()) {
       rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
       return false;
@@ -150,12 +150,15 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
     }
   }
   
-  IndexedMesh *im = IndexedMesh::CreateFromVector3D(true, TriangleStrip, NoCenter, Vector3D(0,0,0), _latRes *_lonRes, ver, 
+  IndexedMesh *im = IndexedMesh::CreateFromVector3D(true, TriangleStrip, NoCenter, Vector3D(0,0,0), _latRes *_lonRes, ver,
                                                     ind, numIndexes, flatColor, colors, 0.5, normals);
   
-  TextureMapping* texMap = new TextureMapping(texID, texC, rc->getTexturesHandler(),
-                                              _textureFilename,
-                                              _texWidth,_texHeight);
+  TextureMapping* texMap = new TextureMapping(texID,
+                                              texC,
+                                              rc->getTexturesHandler(),
+                                              TextureSpec(_textureFilename,
+                                                          _texWidth,
+                                                          _texHeight));
   
   _mesh = new TexturedMesh(im, true, texMap, true);
   

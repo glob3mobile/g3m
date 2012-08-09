@@ -8,13 +8,13 @@
 
 #include "CPUTextureBuilder.hpp"
 
-const GLTextureId CPUTextureBuilder::createTextureFromImages(GL * gl,
+const GLTextureID CPUTextureBuilder::createTextureFromImages(GL * gl,
                                                              const std::vector<const IImage*>& images,
                                                              int width, int height) const {
   const int imagesSize = images.size();
   
   if (imagesSize == 0) {
-    return GLTextureId::invalid();
+    return GLTextureID::invalid();
   }
   
   const IImage* im = images[0];
@@ -28,7 +28,7 @@ const GLTextureId CPUTextureBuilder::createTextureFromImages(GL * gl,
     im = im2;
   }
   
-  const GLTextureId texID = gl->uploadTexture(im, width, height);
+  const GLTextureID texID = gl->uploadTexture(im, width, height);
   
   if (imagesSize > 1) {
     delete im;
@@ -37,7 +37,7 @@ const GLTextureId CPUTextureBuilder::createTextureFromImages(GL * gl,
   return texID;
 }
 
-const GLTextureId CPUTextureBuilder::createTextureFromImages(GL * gl, const IFactory* factory,
+const GLTextureID CPUTextureBuilder::createTextureFromImages(GL * gl, const IFactory* factory,
                                                              const std::vector<const IImage*>& vImages,
                                                              const std::vector<const Rectangle*>& vRectangles,
                                                              int width, int height) const {
@@ -62,7 +62,7 @@ const GLTextureId CPUTextureBuilder::createTextureFromImages(GL * gl, const IFac
     base = im2;
   }
   
-  const GLTextureId texID = gl->uploadTexture(base, width, height);
+  const GLTextureID texID = gl->uploadTexture(base, width, height);
   
   if (base != vImages[0]) {
     delete base;

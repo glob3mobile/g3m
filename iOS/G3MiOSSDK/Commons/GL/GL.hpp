@@ -31,7 +31,7 @@ private:
   // stack of ModelView matrices
   std::list<MutableMatrix44D> _matrixStack;
   
-  std::list<GLTextureId>      _texturesIdBag;
+  std::list<GLTextureID>      _texturesIdBag;
   long                        _texturesIdAllocationCounter;
   long                        _texturesIdGetCounter;
   long                        _texturesIdTakeCounter;
@@ -56,7 +56,7 @@ private:
   
   inline void loadModelView();
   
-  const GLTextureId getTextureID();
+  const GLTextureID getGLTextureID();
   
 public:
   
@@ -146,14 +146,14 @@ public:
   
   int getError();
   
-  const GLTextureId uploadTexture(const IImage* image,
+  const GLTextureID uploadTexture(const IImage* image,
                                   int textureWidth, int textureHeight);
   
   void setTextureCoordinates(int size,
                              int stride,
                              const float texcoord[]);
   
-  void bindTexture(const GLTextureId& textureId);
+  void bindTexture(const GLTextureID& textureId);
   
   void enableDepthTest();
   void disableDepthTest();
@@ -161,11 +161,11 @@ public:
   void enableBlend();
   void disableBlend();
   
-  void drawBillBoard(const GLTextureId& textureId,
+  void drawBillBoard(const GLTextureID& textureId,
                      const Vector3D& pos,
                      const float viewPortRatio);
   
-  void deleteTexture(const GLTextureId& textureId);
+  void deleteTexture(const GLTextureID& textureId);
   
   void enableCullFace(GLCullFace face);
   void disableCullFace();

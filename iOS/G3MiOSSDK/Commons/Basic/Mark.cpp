@@ -34,7 +34,7 @@ void Mark::render(const RenderContext* rc,
       gl->transformTexCoords(scale, tr);
       
       if (!_textureId.isValid()) {
-        _textureId = rc->getTexturesHandler()->getTextureIdFromFileName(_textureFilename, 128, 128);
+        _textureId = rc->getTexturesHandler()->getGLTextureIdFromFileName(_textureFilename, 128, 128);
       }
       
       if (!_textureId.isValid()) {

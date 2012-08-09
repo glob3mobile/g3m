@@ -9,7 +9,7 @@
 #ifndef G3MiOSSDK_INativeGL_hpp
 #define G3MiOSSDK_INativeGL_hpp
 
-#include "GLTextureId.hpp"
+#include "GLTextureID.hpp"
 
 #include <vector>
 
@@ -167,7 +167,7 @@ public:
   virtual void pixelStorei(GLAlignment pname,
                            int param) const = 0;
   
-  virtual std::vector<GLTextureId> genTextures(int	n) const = 0;
+  virtual std::vector<GLTextureID> genTextures(int	n) const = 0;
   
   virtual void texParameteri(GLTextureType target,
                              GLTextureParameter par,

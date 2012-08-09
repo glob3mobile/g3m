@@ -27,9 +27,9 @@ TilePetitions* TileImagesTileTexturizer::createTilePetitions(const RenderContext
                                                              const Tile* tile) {
   std::vector<Petition*> pet = _layerSet->createTilePetitions(rc,
                                                               tile,
-                                                              _parameters->_tileTextureWidth, 
+                                                              _parameters->_tileTextureWidth,
                                                               _parameters->_tileTextureHeight);
-
+  
   return new TilePetitions(tile->getLevel(),
                            tile->getRow(),
                            tile->getColumn(),
@@ -45,7 +45,7 @@ std::vector<MutableVector2D> TileImagesTileTexturizer::getTextureCoordinates(con
 }
 
 void TileImagesTileTexturizer::translateAndScaleFallBackTex(Tile* tile,
-                                                            Tile* fallbackTile, 
+                                                            Tile* fallbackTile,
                                                             TextureMapping* tmap) const {
   const Sector tileSector         = tile->getSector();
   const Sector fallbackTileSector = fallbackTile->getSector();
@@ -62,35 +62,35 @@ Mesh* TileImagesTileTexturizer::getNewTextureMesh(Tile* tile,
   TilePetitions* tp = getRegisteredTilePetitions(tile);
   
   if (tp!= NULL) {
-    GLTextureId texID = tp->getTexID();
+    GLTextureID texID = tp->getTexID();
     if (!texID.isValid()){ //Texture has not been created
       if (tp->allFinished()){
-        tp->createTexture(_texturesHandler, _factory, 
+        tp->createTexture(_texturesHandler, _factory,
                           _parameters->_tileTextureWidth, _parameters->_tileTextureHeight);
         texID = tp->getTexID();
       }
     }
-  
+    
     if (texID.isValid()) {
       tile->setTextureSolved(true);
-    
+      
       //printf("TEXTURIZED %d, %d, %d\n", tile->getLevel(), tile->getRow(), tile->getColumn());
-    
+      
       TextureMapping * tMap = new TextureMapping(texID,
                                                  getTextureCoordinates(trc),
                                                  _texturesHandler,
-                                                 tp->getPetitionsID(), 
-                                                 _parameters->_tileTextureWidth, 
-                                                 _parameters->_tileTextureHeight);
+                                                 TextureSpec(tp->getPetitionsID(),
+                                                             _parameters->_tileTextureWidth,
+                                                             _parameters->_tileTextureHeight));
       TexturedMesh* texMesh = new TexturedMesh(tessellatorMesh, false, tMap, true);
       delete previousMesh;   //If a new mesh has been produced we delete the previous one
       return texMesh;
     }
-  
+    
   }
   
   return NULL;
-
+  
 }
 
 Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
@@ -98,7 +98,7 @@ Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
                                                         Mesh* tessellatorMesh,
                                                         Mesh* previousMesh) {
   const TextureMapping* fbTMap = NULL;
-  GLTextureId texID = GLTextureId::invalid();
+  GLTextureID texID = GLTextureID::invalid();
   Tile* ancestor = tile->getParent();
   while (ancestor != NULL && !texID.isValid()) {
     
@@ -107,8 +107,7 @@ Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
       if (texMesh != NULL){
         fbTMap = texMesh->getTextureMapping();
         
-        texID = _texturesHandler->getTextureIdIfAvailable(fbTMap->getStringTexID(), 
-                                                     fbTMap->getWidth(), fbTMap->getHeight());
+        texID = _texturesHandler->getGLTextureIdIfAvailable(fbTMap->getTextureSpec());
         if (texID.isValid()) {
           break;
         }
@@ -119,8 +118,10 @@ Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
   
   //CREATING MESH
   if (texID.isValid()) {
-    TextureMapping* tMap = new TextureMapping(texID, getTextureCoordinates(trc), _texturesHandler, fbTMap->getStringTexID(),
-                                              fbTMap->getWidth(), fbTMap->getHeight());
+    TextureMapping* tMap = new TextureMapping(texID,
+                                              getTextureCoordinates(trc),
+                                              _texturesHandler,
+                                              fbTMap->getTextureSpec());
     translateAndScaleFallBackTex(tile, ancestor, tMap);
     TexturedMesh* texMesh = new TexturedMesh(tessellatorMesh, false, tMap, true);
     delete previousMesh;   //If a new mesh has been produced we delete the previous one
@@ -193,14 +194,14 @@ void TileImagesTileTexturizer::justCreatedTopTile(const RenderContext* rc,
 
 bool TileImagesTileTexturizer::isReady(const RenderContext *rc) {
   int todo_JM;
-//  for (int i = 0; i < _tilePetitionsTopTile.size(); i++) {
-//    if (!_tilePetitionsTopTile[i]->allFinished()) {
-//      return false;
-//    }
-//  }
-//  if (_tilePetitionsTopTile.size() > 0) {
-//    _tilePetitionsTopTile.clear();
-//  }
+  //  for (int i = 0; i < _tilePetitionsTopTile.size(); i++) {
+  //    if (!_tilePetitionsTopTile[i]->allFinished()) {
+  //      return false;
+  //    }
+  //  }
+  //  if (_tilePetitionsTopTile.size() > 0) {
+  //    _tilePetitionsTopTile.clear();
+  //  }
   
   return true;
 }
@@ -209,17 +210,17 @@ bool TileImagesTileTexturizer::isReady(const RenderContext *rc) {
 
 TilePetitions* TileImagesTileTexturizer::getRegisteredTilePetitions(Tile* tile) const
 {
-//  for(std::list<TilePetitions*>::iterator it = _tilePetitions.begin();
-//      it != _tilePetitions.end();
-//      it++) {
-//    TilePetitions* tp = *it;
-//    
-//    if (tile->getLevel()  == tp->getLevel() &&
-//        tile->getRow()    == tp->getRow()   &&
-//        tile->getColumn() == tp->getColumn()) {
-//      return tp;
-//    }
-//  }
+  //  for(std::list<TilePetitions*>::iterator it = _tilePetitions.begin();
+  //      it != _tilePetitions.end();
+  //      it++) {
+  //    TilePetitions* tp = *it;
+  //
+  //    if (tile->getLevel()  == tp->getLevel() &&
+  //        tile->getRow()    == tp->getRow()   &&
+  //        tile->getColumn() == tp->getColumn()) {
+  //      return tp;
+  //    }
+  //  }
   
   for (int i = 0; i < _tilePetitions.size(); i++) {
     TilePetitions* tp = _tilePetitions[i];
@@ -235,18 +236,18 @@ TilePetitions* TileImagesTileTexturizer::getRegisteredTilePetitions(Tile* tile) 
 
 void TileImagesTileTexturizer::removeRegisteredTilePetitions(Tile* tile)
 {
-//  for(std::list<TilePetitions*>::iterator it = _tilePetitions.begin();
-//      it != _tilePetitions.end();
-//      it++) {
-//    TilePetitions* tp = *it;
-//    if (tile->getLevel()  == tp->getLevel() &&
-//        tile->getRow()    == tp->getRow()   &&
-//        tile->getColumn() == tp->getColumn()) {
-//      _tilePetitions.erase(it);
-//      delete tp;
-//      break;
-//    }
-//  }
+  //  for(std::list<TilePetitions*>::iterator it = _tilePetitions.begin();
+  //      it != _tilePetitions.end();
+  //      it++) {
+  //    TilePetitions* tp = *it;
+  //    if (tile->getLevel()  == tp->getLevel() &&
+  //        tile->getRow()    == tp->getRow()   &&
+  //        tile->getColumn() == tp->getColumn()) {
+  //      _tilePetitions.erase(it);
+  //      delete tp;
+  //      break;
+  //    }
+  //  }
   
   TilePetitions* tp = NULL;
   for (int i = 0; i < _tilePetitions.size(); i++) {

@@ -14,12 +14,12 @@
 class CPUTextureBuilder:public TextureBuilder
 {
 public:
-  const GLTextureId createTextureFromImages(GL * gl,
+  const GLTextureID createTextureFromImages(GL * gl,
                                             const std::vector<const IImage*>& vImages,
                                             int width,
                                             int height) const;
   
-  const GLTextureId createTextureFromImages(GL * gl,
+  const GLTextureID createTextureFromImages(GL * gl,
                                             const IFactory* factory,
                                             const std::vector<const IImage*>& vImages,
                                             const std::vector<const Rectangle*>& vRectangles,

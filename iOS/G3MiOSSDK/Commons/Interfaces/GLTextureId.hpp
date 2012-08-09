@@ -1,27 +1,27 @@
 //
-//  GLTextureId.h
+//  GLTextureID.h
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 09/08/12.
 //
 //
 
-#ifndef __G3MiOSSDK__GLTextureId__
-#define __G3MiOSSDK__GLTextureId__
+#ifndef __G3MiOSSDK__GLTextureID__
+#define __G3MiOSSDK__GLTextureID__
 
 #include <string>
 
 
-class GLTextureId {
+class GLTextureID {
 private:
   int _textureId;
   
 public:
-  static GLTextureId invalid() {
-    return GLTextureId(-1);
+  static GLTextureID invalid() {
+    return GLTextureID(-1);
   }
   
-  explicit GLTextureId(int textureId) :
+  explicit GLTextureID(int textureId) :
   _textureId(textureId)
   {
     
@@ -31,13 +31,13 @@ public:
     return (_textureId > 0);
   }
   
-  int getGLTextureId() const {
+  int getGLTextureID() const {
     return _textureId;
   }
   
   std::string description() const;
   
-  bool isEqualsTo(const GLTextureId& that) const {
+  bool isEqualsTo(const GLTextureID& that) const {
     return (_textureId == that._textureId);
   }
 };

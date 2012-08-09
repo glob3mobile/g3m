@@ -24,7 +24,7 @@ private:
   
   const RenderContext*         _renderContext;
   TilesRenderParameters* const _parameters;  
-  GLTextureId _texID;
+  GLTextureID _texID;
   IImage * const _image;
   
   std::vector<MutableVector2D> createTextureCoordinates(const RenderContext* rc, Mesh* mesh) const;

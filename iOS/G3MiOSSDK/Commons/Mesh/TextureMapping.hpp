@@ -20,7 +20,7 @@ class RenderContext;
 class TextureMapping
 {
 private:
-  const GLTextureId      _textureId;
+  const GLTextureID      _textureId;
   const float const*     _texCoords;
   
   MutableVector2D        _translation;
@@ -28,34 +28,28 @@ private:
   
   TexturesHandler* const _texturesHandler;
 
-  const std::string _texID;
-  const int _width;
-  const int _height;
+  const TextureSpec _textureSpec;
   
 public:
   
-  TextureMapping(const GLTextureId textureId,
+  TextureMapping(const GLTextureID& textureId,
                  float texCoords[],
                  TexturesHandler* const texturesHandler,
-                 const std::string& texID,
-                 int width, int height) :
+                 const TextureSpec textureSpec) :
   _textureId(textureId),
   _texCoords(texCoords),
   _texturesHandler(texturesHandler),
-  _texID(texID),
-  _width(width),
-  _height(height),
+  _textureSpec(textureSpec),
   _translation(0, 0),
   _scale(1, 1)
   {
 
   }
   
-  TextureMapping(const GLTextureId textureId,
+  TextureMapping(const GLTextureID& textureId,
                  std::vector<MutableVector2D> texCoords,
                  TexturesHandler* const texturesHandler,
-                 const std::string& texID,
-                 int width, int height);
+                 const TextureSpec textureSpec);
   
   void setTranslationAndScale(const Vector2D& translation,
                               const Vector2D& scale){
@@ -73,24 +67,28 @@ public:
     }
   }
   
-  const GLTextureId getTextureId() const {
-    return _textureId;
-  }
-  
-  std::string getStringTexID() const {
-    return _texID;
-  }
-  
-  int getWidth() const {
-    return _width;
-  }
-  
-  int getHeight() const {
-    return _height;
-  }
+//  const GLTextureID getGLTextureID() const {
+//    return _textureId;
+//  }
+//  
+//  std::string getStringTexID() const {
+//    return _texID;
+//  }
+//  
+//  int getWidth() const {
+//    return _width;
+//  }
+//  
+//  int getHeight() const {
+//    return _height;
+//  }
   
   const float* getTexCoords() const {
     return _texCoords;
+  }
+  
+  const TextureSpec getTextureSpec() const {
+    return _textureSpec;
   }
   
   void bind(const RenderContext* rc) const;

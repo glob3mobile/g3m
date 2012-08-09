@@ -11,27 +11,34 @@
 #include "IImage.hpp"
 #include "Context.hpp"
 
+#include <sstream>
+
+std::string TextureSpec::description() const {
+  std::ostringstream buffer;
+  buffer << "(";
+  buffer << _id;
+  buffer << " ";
+  buffer << _width;
+  buffer << "x";
+  buffer << _height;
+  buffer << ")";
+  return buffer.str();
+}
+
 
 class TextureHolder {
 public:
-  const std::string _textureId;
-  const int         _textureWidth;
-  const int         _textureHeight;
-  
-  GLTextureId _glTextureId;
+  const TextureSpec _textureSpec;
+  GLTextureID _glTextureId;
   
   long _referenceCounter;
   
-  TextureHolder(const std::string textureId,
-                const int textureWidth,
-                const int textureHeight) :
+  TextureHolder(const TextureSpec& textureSpec) :
   _referenceCounter(1),
-  _textureId(textureId),
-  _textureWidth(textureWidth),
-  _textureHeight(textureHeight),
-  _glTextureId(GLTextureId::invalid())
+  _textureSpec(textureSpec),
+  _glTextureId(GLTextureID::invalid())
   {
-
+    
   }
   
   ~TextureHolder() {
@@ -49,72 +56,56 @@ public:
     return _referenceCounter > 0;
   }
   
-  bool hasKey(const std::string textureId,
-              const int textureWidth,
-              const int textureHeight) {
-    if (_textureWidth != textureWidth) {
-      return false;
-    }
-    if (_textureHeight != textureHeight) {
-      return false;
-    }
-    
-    if (_textureId.compare(textureId) != 0) {
-      return false;
-    }
-    
-    return true;
+  bool hasSpec(const TextureSpec& textureSpec) {
+    return _textureSpec.equalsTo(textureSpec);
   }
 };
 
 
-GLTextureId TexturesHandler::getTextureIdFromFileName(const std::string &filename,
-                                                      int textureWidth,
-                                                      int textureHeight) {
+GLTextureID TexturesHandler::getGLTextureIdFromFileName(const std::string &filename,
+                                                        int textureWidth,
+                                                        int textureHeight) {
   const IImage* image = _factory->createImageFromFileName(filename);
   
-  const GLTextureId texId = getTextureId(image,
-                                         filename, // filename as the textureId
-                                         textureWidth,
-                                         textureHeight);
+  const GLTextureID texId = getGLTextureId(image,
+                                           TextureSpec(filename, // filename as the id
+                                                       textureWidth,
+                                                       textureHeight));
   
   delete image;
   
   return texId;
 }
 
-GLTextureId TexturesHandler::getTextureIdIfAvailable(const std::string &textureId,
-                                                     int textureWidth,
-                                                     int textureHeight) {
+GLTextureID TexturesHandler::getGLTextureIdIfAvailable(const TextureSpec& textureSpec) {
   for (int i = 0; i < _textureHolders.size(); i++) {
     TextureHolder* holder = _textureHolders[i];
-    if (holder->hasKey(textureId, textureWidth, textureHeight)) {
+    if (holder->hasSpec(textureSpec)) {
       holder->retain();
       
       return holder->_glTextureId;
     }
   }
   
-  return GLTextureId::invalid();
+  return GLTextureID::invalid();
 }
 
-GLTextureId TexturesHandler::getTextureId(const std::vector<const IImage*>& images,
-                                          const std::string& textureId,
-                                          int textureWidth,
-                                          int textureHeight) {
-  GLTextureId previousId = getTextureIdIfAvailable(textureId, textureWidth, textureHeight);
+GLTextureID TexturesHandler::getGLTextureId(const std::vector<const IImage*>& images,
+                                            const TextureSpec& textureSpec) {
+  GLTextureID previousId = getGLTextureIdIfAvailable(textureSpec);
   if (previousId.isValid()) {
     return previousId;
   }
   
-  TextureHolder* holder = new TextureHolder(textureId, textureWidth, textureHeight);
-  holder->_glTextureId = _texBuilder->createTextureFromImages(_gl, images, textureWidth, textureHeight);
+  TextureHolder* holder = new TextureHolder(textureSpec);
+  holder->_glTextureId = _texBuilder->createTextureFromImages(_gl,
+                                                              images,
+                                                              textureSpec.getWidth(),
+                                                              textureSpec.getHeight());
   
   if (_verbose) {
-    ILogger::instance()->logInfo("Uploaded texture \"%s\" (%dx%d) to GPU with texId=%s" ,
-                                 textureId.c_str(),
-                                 textureWidth,
-                                 textureHeight,
+    ILogger::instance()->logInfo("Uploaded texture \"%s\" to GPU with texId=%s" ,
+                                 textureSpec.description().c_str(),
                                  holder->_glTextureId.description().c_str() );
   }
   
@@ -123,24 +114,25 @@ GLTextureId TexturesHandler::getTextureId(const std::vector<const IImage*>& imag
   return holder->_glTextureId;
 }
 
-GLTextureId TexturesHandler::getTextureId(const std::vector<const IImage*>& images,
-                                          const std::vector<const Rectangle*>& rectangles,
-                                          const std::string& textureId,
-                                          int textureWidth,
-                                          int textureHeight) {
-  GLTextureId previousId = getTextureIdIfAvailable(textureId, textureWidth, textureHeight);
+GLTextureID TexturesHandler::getGLTextureId(const std::vector<const IImage*>& images,
+                                            const std::vector<const Rectangle*>& rectangles,
+                                            const TextureSpec& textureSpec) {
+  GLTextureID previousId = getGLTextureIdIfAvailable(textureSpec);
   if (previousId.isValid()) {
     return previousId;
   }
   
-  TextureHolder* holder = new TextureHolder(textureId, textureWidth, textureHeight);
-  holder->_glTextureId = _texBuilder->createTextureFromImages(_gl, _factory, images, rectangles, textureWidth, textureHeight);
+  TextureHolder* holder = new TextureHolder(textureSpec);
+  holder->_glTextureId = _texBuilder->createTextureFromImages(_gl,
+                                                              _factory,
+                                                              images,
+                                                              rectangles,
+                                                              textureSpec.getWidth(),
+                                                              textureSpec.getHeight());
   
   if (_verbose) {
-    ILogger::instance()->logInfo("Uploaded texture \"%s\" (%dx%d) to GPU with texId=%s" ,
-                                 textureId.c_str(),
-                                 textureWidth,
-                                 textureHeight,
+    ILogger::instance()->logInfo("Uploaded texture \"%s\" to GPU with texId=%s" ,
+                                 textureSpec.description().c_str(),
                                  holder->_glTextureId.description().c_str());
   }
   
@@ -149,16 +141,14 @@ GLTextureId TexturesHandler::getTextureId(const std::vector<const IImage*>& imag
   return holder->_glTextureId;
 }
 
-GLTextureId TexturesHandler::getTextureId(const IImage *image,
-                                          const std::string &textureId,
-                                          int textureWidth,
-                                          int textureHeight) {
+GLTextureID TexturesHandler::getGLTextureId(const IImage *image,
+                                            const TextureSpec& textureSpec) {
   std::vector<const IImage*> images;
   images.push_back(image);
-  return getTextureId(images, textureId, textureWidth, textureHeight);
+  return getGLTextureId(images, textureSpec);
 }
 
-void TexturesHandler::takeTexture(const GLTextureId& glTextureId) {
+void TexturesHandler::takeTexture(const GLTextureID& glTextureId) {
   for (int i = 0; i < _textureHolders.size(); i++) {
     TextureHolder* holder = _textureHolders[i];
     

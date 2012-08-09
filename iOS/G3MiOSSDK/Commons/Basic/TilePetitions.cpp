@@ -92,18 +92,18 @@ void TilePetitions::cancelPetitions(IDownloader* downloader)
   }
 }
 
-Rectangle* TilePetitions::getImageRectangleInTexture(const Sector& wholeSector, 
-                                                               const Sector& imageSector,
-                                                               int texWidth, int texHeight) const
+Rectangle* TilePetitions::getImageRectangleInTexture(const Sector& wholeSector,
+                                                     const Sector& imageSector,
+                                                     int texWidth, int texHeight) const
 {
   Vector2D pos = wholeSector.getUVCoordinates(imageSector.lower().latitude(), imageSector.lower().longitude());
   
   double width = imageSector.getDeltaLongitude().degrees() / wholeSector.getDeltaLongitude().degrees();
   double height = imageSector.getDeltaLatitude().degrees() / wholeSector.getDeltaLatitude().degrees();
   
-  Rectangle* r = new Rectangle(pos.x() * texWidth, 
-                               (1.0 - pos.y()) * texHeight, 
-                               width * texWidth, 
+  Rectangle* r = new Rectangle(pos.x() * texWidth,
+                               (1.0 - pos.y()) * texHeight,
+                               width * texWidth,
                                height * texHeight);
   return r;
 }
@@ -129,9 +129,11 @@ void TilePetitions::createTexture(TexturesHandler* texturesHandler, const IFacto
     }
     
     //Creating the texture
-    const std::string& url = getPetitionsID();  
+    const std::string& petitionsID = getPetitionsID();
     //_texID = texturesHandler->getTextureId(images, url, width, height);
-    _texID = texturesHandler->getTextureId(images, rectangles, url, width, height);
+    _texID = texturesHandler->getGLTextureId(images,
+                                             rectangles,
+                                             TextureSpec(petitionsID, width, height));
     
     //RELEASING MEMORY
     for (int i = 0; i < _petitions.size(); i++) {
@@ -153,7 +155,7 @@ void TilePetitions::removeUnnecesaryPetitions(){
   for(int i = 0; i < _petitions.size(); i++){
     bool isVisible = true;
     for (int j = i+1; j < _petitions.size(); j++) {
-      if (!_petitions[j]->isTransparent() && 
+      if (!_petitions[j]->isTransparent() &&
           _petitions[j]->getSector().fullContains(_petitions[i]->getSector())){
         isVisible = false;
         break;

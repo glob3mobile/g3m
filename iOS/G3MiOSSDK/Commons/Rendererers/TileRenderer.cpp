@@ -127,12 +127,12 @@ int TileRenderer::render(const RenderContext* rc) {
     toVisit.push_back(_topLevelTiles[i]);
   }
   
-  TileRenderContext* trc = new TileRenderContext(_tessellator,
-                                                 _texturizer,
-                                                 _parameters,
-                                                 &statistics,
-                                                 _lastSplitTimer,
-                                                 _lastTexturizerTimer);
+  TileRenderContext trc(_tessellator,
+                        _texturizer,
+                        _parameters,
+                        &statistics,
+                        _lastSplitTimer,
+                        _lastTexturizerTimer);
   
   while (toVisit.size() > 0) {
     std::list<Tile*> toVisitInNextIteration;
@@ -150,7 +150,7 @@ int TileRenderer::render(const RenderContext* rc) {
       Tile* tile = *iter;
       
       tile->render(rc,
-                   trc,
+                   &trc,
                    &toVisitInNextIteration);
     }
 
