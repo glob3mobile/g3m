@@ -37,8 +37,7 @@ public class StaticImageLayer extends Layer
 
   public void dispose()
   {
-	if (_image != null)
-		_image.dispose();
+	_image = null;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -89,8 +88,7 @@ public class StaticImageLayer extends Layer
   
 	ByteBuffer bb = subImage.getEncodedImage(); //Image Encoding PNG
 	pet.setByteBuffer(bb); //FILLING DATA
-	if (subImage != null)
-		subImage.dispose();
+	subImage = null;
   
 	res.add(pet);
   

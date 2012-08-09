@@ -83,6 +83,8 @@ public class TilesStatistics
 
   public static String asLogString(java.util.HashMap<Integer, Integer> map)
   {
+
+	boolean first = true;
 	String res = "";
 	for (java.util.Map.Entry<Integer, Integer> i: map.entrySet()){
 		  final int level = i.getKey();
