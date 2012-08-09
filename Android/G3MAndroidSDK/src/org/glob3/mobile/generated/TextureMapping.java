@@ -110,11 +110,10 @@ public class TextureMapping
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const float* getTexCoords() const
-//C++ TO JAVA CONVERTER WARNING: Java has no equivalent to methods returning pointers to value types:
-  public final float getTexCoords()
+//ORIGINAL LINE: const float[] getTexCoords() const
+  public final float[] getTexCoords()
   {
-	return _texCoords;
+	  return _texCoords;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

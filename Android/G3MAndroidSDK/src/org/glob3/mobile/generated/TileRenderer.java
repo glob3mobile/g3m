@@ -68,6 +68,8 @@ public class TileRenderer extends Renderer
 			_camera = camera;
 			_planet = planet;
 		}
+	  
+		public void initialize() {}
 		
 		public int compare(Tile t1, Tile t2) {
 			final Vector3D cameraPos = _camera.getPosition();
@@ -128,12 +130,13 @@ public class TileRenderer extends Renderer
   
 	final int topLevelTilesSize = _topLevelTiles.size();
   
+  
+	DistanceToCenterTileComparison predicate = new DistanceToCenterTileComparison(rc.getCamera(), rc.getPlanet());
+  
 	if (_topTilesJustCreated)
 	{
-	  DistanceToCenterTileComparison predicate = new DistanceToCenterTileComparison(rc.getCamera(), rc.getPlanet());
   
-	  predicate.initialize();
-	  std.sort(_topLevelTiles.iterator(), _topLevelTiles.end(), predicate);
+  	java.util.Collections.sort(_topLevelTiles, predicate);
   
 	  if (_texturizer != null)
 	  {
@@ -145,8 +148,6 @@ public class TileRenderer extends Renderer
 	  }
 	  _topTilesJustCreated = false;
 	}
-  
-	DistanceToCenterTileComparison predicate = new DistanceToCenterTileComparison(rc.getCamera(), rc.getPlanet());
   
   //  std::vector<Tile*> toVisit(_topLevelTiles);
 	java.util.LinkedList<Tile> toVisit = new java.util.LinkedList<Tile>();

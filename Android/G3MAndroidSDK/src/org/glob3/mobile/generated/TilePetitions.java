@@ -179,7 +179,7 @@ public class TilePetitions implements IDownloadListener
 //ORIGINAL LINE: String getPetitionsID() const
   public final String getPetitionsID()
   {
-	String id;
+	String id = "";
 	for (int j = 0; j < _petitions.size(); j++)
 	{
 	  if (j > 0)
