@@ -79,8 +79,6 @@ public:
     return Renderer::maxTimeToRender;
   }
 
-  
-private:
   void onDown(const EventContext *eventContext,
               const TouchEvent& touchEvent, 
               CameraContext *cameraContext);

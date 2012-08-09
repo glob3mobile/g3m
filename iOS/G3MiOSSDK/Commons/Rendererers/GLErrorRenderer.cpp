@@ -32,8 +32,12 @@ int GLErrorRenderer::render(const RenderContext *rc) {
   GL* gl = rc->getGL();
   const ILogger* logger = rc->getLogger();
   
-  int error = gl->getError();
-  while (error != 0) {
+  GLError error = gl->getError();
+#ifdef C_CODE
+  while (error != NoError) {
+#else
+  while (error != GLError.NoError) { 
+#endif
     logger->logError("GL Error: %i", error);
     error = gl->getError();
   }

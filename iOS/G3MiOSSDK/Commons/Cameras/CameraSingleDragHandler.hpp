@@ -31,8 +31,6 @@ public:
                     CameraContext *cameraContext);
   int render(const RenderContext* rc, CameraContext *cameraContext);
   
-  
-private:
   void onDown(const EventContext *eventContext,
               const TouchEvent& touchEvent, 
               CameraContext *cameraContext);

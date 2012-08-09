@@ -47,7 +47,11 @@ public:
   
   bool isBetween(const Geodetic2D& min, const Geodetic2D& max) const;
   
+#ifdef C_CODE
   bool operator<(const Geodetic2D& that) const {
+#else
+  bool lowerThanOperator(const Geodetic2D& that) const {
+#endif
     if (_latitude.lowerThan(that._latitude)) {
       return true;
     }
