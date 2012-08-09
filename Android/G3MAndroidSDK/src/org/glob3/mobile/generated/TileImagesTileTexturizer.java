@@ -145,7 +145,7 @@ public class TileImagesTileTexturizer extends TileTexturizer
 
   private Mesh getFallBackTexturedMesh(Tile tile, TileTessellator tessellator, Mesh tessellatorMesh, Mesh previousMesh)
   {
-	TextureMapping fbTMap = NULL;
+	TextureMapping fbTMap = null;
 	int texID = -1;
 	Tile fbTile = tile.getParent();
 	while (fbTile != null && texID < 0)
