@@ -111,9 +111,9 @@ public class SimplePlanetRenderer extends Renderer
   
 	int[] ind = createMeshIndex();
 	float[] ver = createVertices(planet);
-	float[] texC = 0;
-	float[] colors = 0;
-	float[] normals = 0;
+	float[] texC;
+	float[] colors;
+	float[] normals;
   
 	//TEXTURED
 	int texID = 0;
@@ -135,8 +135,7 @@ public class SimplePlanetRenderer extends Renderer
 	  colors = new float[numVertices];
 	  for(int i = 0; i < numVertices;)
 	  {
-		float val = (float)(0.5 + sinf((float)(2.0 * Math.PI * ((float) i) / numVertices)) / 2.0);
-  
+  	  float val = (float)(0.5 + Math.sin(2.0 * Math.PI * ((float) i / numVertices) / 2.0));
 		colors[i++] = val;
 		colors[i++] = 0F;
 		colors[i++] = (float)(1.0 - val);
@@ -163,7 +162,7 @@ public class SimplePlanetRenderer extends Renderer
 	  }
 	}
   
-	IndexedMesh im = IndexedMesh.CreateFromVector3D(true, TriangleStrip, CenterStrategy.NoCenter, new Vector3D(0,0,0), _latRes *_lonRes, ver, ind, numIndexes, flatColor, colors, 0.5, normals);
+	IndexedMesh im = IndexedMesh.CreateFromVector3D(true, GLPrimitive.TriangleStrip, CenterStrategy.NoCenter, new Vector3D(0,0,0), _latRes *_lonRes, ver, ind, numIndexes, flatColor, colors, 0.5, normals);
   
 	TextureMapping texMap = new TextureMapping(texID, texC, rc.getTexturesHandler(), _textureFilename, _texWidth,_texHeight);
   
