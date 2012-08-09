@@ -112,14 +112,25 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   
   const Planet* planet = rc->getPlanet();
   
-  float* ver = createVertices(*planet);
   const int res = _lonRes;
   const int numIndexes = (2 * (res - 1) * (res + 1)) -1;
+  
+#ifdef C_CODE
   int * ind = createMeshIndex();
+  float* ver = createVertices(*planet);
+  float * texC = NULL;
+  float * colors = NULL;
+  float * normals = NULL;
+#else
+  int ind[] = createMeshIndex();
+  float ver[] = createVertices(*planet);
+  float texC[] = NULL;
+  float colors[] = NULL;
+  float normals[] = NULL;
+#endif
   
   //TEXTURED
   int texID = 0;
-  float * texC = NULL;
   if (true){
     texID = rc->getTexturesHandler()->getTextureIdFromFileName(_textureFilename, _texWidth, _texHeight);
     if (texID < 1) {
@@ -130,7 +141,6 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   }
   
   //COLORS PER VERTEX
-  float *colors = NULL;
   if (true){
     int numVertices = res * res * 4;
     colors = new float[numVertices];
@@ -150,7 +160,6 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
     flatColor = new Color( Color::fromRGBA(0.0, 1.0, 0.0, 1.0) );
   }
   
-  float * normals = NULL;
   if (true){
     int numVertices = res * res * 3;
     normals = new float[numVertices];
