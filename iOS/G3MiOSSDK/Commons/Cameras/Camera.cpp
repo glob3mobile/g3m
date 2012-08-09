@@ -139,9 +139,7 @@ void Camera::render(const RenderContext* rc) {
   GL *gl = rc->getGL();
   gl->setProjection(_projectionMatrix);
   gl->loadMatrixf(_modelMatrix);
-  
-  
-  
+    
   // TEMP: TEST TO SEE HALF SIZE FRUSTUM CLIPPING 
   if (false) {
     const MutableMatrix44D inversed = _modelMatrix.inversed();

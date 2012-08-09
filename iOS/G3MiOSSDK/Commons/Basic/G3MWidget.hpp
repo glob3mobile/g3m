@@ -22,7 +22,10 @@ class Camera;
 class ITimer;
 class EffectsScheduler;
 
+#include <vector>
 #include "Color.hpp"
+
+class ICameraConstrainer;
 
 
 class G3MWidget {
@@ -35,6 +38,7 @@ public:
                            Downloader *      downloaderOLD,
                            IDownloader*      downloader,
                            const Planet*     planet,
+                           std::vector<ICameraConstrainer *> cameraConstraint,
                            Renderer*         renderer,
                            Renderer*         busyRenderer,
                            EffectsScheduler* scheduler,
@@ -73,6 +77,8 @@ private:
   Renderer*         _busyRenderer;
   EffectsScheduler* _scheduler;
   
+  std::vector<ICameraConstrainer *> _cameraConstraint;
+  
   Camera*          _currentCamera;
   Camera*          _nextCamera;
   Downloader*      _downloaderOLD;
@@ -96,6 +102,7 @@ private:
             Downloader*       downloaderOLD,
             IDownloader*      downloader,
             const Planet*     planet,
+            std::vector<ICameraConstrainer *> cameraConstraint,
             Renderer*         renderer,
             Renderer*         busyRenderer,
             EffectsScheduler* scheduler,
