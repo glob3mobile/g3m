@@ -25,7 +25,7 @@ public class ByteBuffer
   {
 	  _length = bb._length;
 	  _data = new byte[bb._length];
-	  System.arraycopy (bb._data, 0, _data, 0, _length);
+	  System.arraycopy(bb._data, 0, _data, 0, _length);
   }
 
   public void dispose()

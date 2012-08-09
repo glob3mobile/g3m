@@ -24,32 +24,7 @@ package org.glob3.mobile.generated;
 
 public class Angle
 {
-  @Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		long temp;
-		temp = Double.doubleToLongBits(_degrees);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Angle other = (Angle) obj;
-		if (Double.doubleToLongBits(_degrees) != Double
-				.doubleToLongBits(other._degrees))
-			return false;
-		return true;
-	}
-
-private final double _degrees;
+  private final double _degrees;
 
   private Angle(double degrees)
   {
@@ -249,5 +224,30 @@ private final double _degrees;
 		dif = 360 - dif;
 	return Angle.fromDegrees(dif);
   }
+
+  @Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		long temp;
+		temp = Double.doubleToLongBits(_degrees);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
+  
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Angle other = (Angle) obj;
+		if (Double.doubleToLongBits(_degrees) != Double
+				.doubleToLongBits(other._degrees))
+			return false;
+		return true;
+	}
 
 }

@@ -89,14 +89,12 @@ public class TilesStatistics
 	for (java.util.Map.Entry<Integer, Integer> i: map.entrySet()){
 		  final int level = i.getKey();
 		  final int counter = i.getValue();
-	  
 		  if (first){
 		first = false;
-		  }
-		  else{
+		  }else{
 		res += ",";
 		  }
-		  buffer += "L" + level + ":" + counter;
+		  res += "L" + level + ":" + counter;
 	}
 	return res;
   }
