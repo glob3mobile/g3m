@@ -12,6 +12,11 @@
 
 @synthesize window = _window;
 
+- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
+{
+//  [[NSURLCache sharedURLCache] removeAllCachedResponses];
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
