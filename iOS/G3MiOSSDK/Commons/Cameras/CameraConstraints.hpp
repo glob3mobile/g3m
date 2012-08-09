@@ -25,7 +25,7 @@ public:
   bool acceptsCamera(const Camera* camera, const Planet *planet) const {
     double distance = camera->getPosition().length();
     double radii    = planet->getRadii().maxAxis();
-    if (distance>radii*10 || distance<radii) {
+    if (distance > radii*10) {
       printf ("--- camera constraint!\n");
       return false;
     }
