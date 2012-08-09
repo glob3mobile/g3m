@@ -91,13 +91,13 @@ public:
                                          CenterStrategy strategy,
                                          Vector3D center,
                                          const int numVertices,
-                                         const float* vertices,
-                                         const int* indexes,
+                                         const float vertices[],
+                                         const int indexes[],
                                          const int numIndex, 
                                          const Color* flatColor = NULL,
-                                         const float * colors = NULL,
+                                         const float colors[] = NULL,
                                          const float colorsIntensity = 0.0,
-                                         const float* normals = NULL)
+                                         const float normals[] = NULL)
   {
     return new IndexedMesh(owner, primitive, strategy, center, numVertices, vertices,
                            indexes, numIndex, flatColor, colors, colorsIntensity, normals);
@@ -125,13 +125,13 @@ public:
                                            CenterStrategy strategy,
                                            Vector3D center,
                                            const int numVertices,
-                                           float* vertices,
-                                           const int* indexes,
+                                           float vertices[],
+                                           const int indexes[],
                                            const int numIndex, 
                                            const Color* flatColor = NULL,
-                                           const float * colors = NULL,
+                                           const float colors[] = NULL,
                                            const float colorsIntensity = 0.0,
-                                           const float* normals = NULL)
+                                           const float normals[] = NULL)
   {
     // convert vertices to latlon coordinates
     for (unsigned int n=0; n<numVertices*3; n+=3) {
