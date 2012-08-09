@@ -62,8 +62,8 @@ Mesh* TileImagesTileTexturizer::getNewTextureMesh(Tile* tile,
   TilePetitions* tp = getRegisteredTilePetitions(tile);
   
   if (tp!= NULL) {
-    int texID = tp->getTexID();
-    if (texID < 0){ //Texture has not been created
+    GLTextureId texID = tp->getTexID();
+    if (!texID.isValid()){ //Texture has not been created
       if (tp->allFinished()){
         tp->createTexture(_texturesHandler, _factory, 
                           _parameters->_tileTextureWidth, _parameters->_tileTextureHeight);
@@ -71,7 +71,7 @@ Mesh* TileImagesTileTexturizer::getNewTextureMesh(Tile* tile,
       }
     }
   
-    if (texID > -1) {
+    if (texID.isValid()) {
       tile->setTextureSolved(true);
     
       //printf("TEXTURIZED %d, %d, %d\n", tile->getLevel(), tile->getRow(), tile->getColumn());
@@ -98,9 +98,9 @@ Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
                                                         Mesh* tessellatorMesh,
                                                         Mesh* previousMesh) {
   const TextureMapping* fbTMap = NULL;
-  int texID = -1;
+  GLTextureId texID = GLTextureId::invalid();
   Tile* ancestor = tile->getParent();
-  while (ancestor != NULL && texID < 0) {
+  while (ancestor != NULL && !texID.isValid()) {
     
     if (ancestor->isTextureSolved()){
       TexturedMesh* texMesh = (TexturedMesh*) ancestor->getTexturizerMesh();
@@ -109,7 +109,7 @@ Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
         
         texID = _texturesHandler->getTextureIdIfAvailable(fbTMap->getStringTexID(), 
                                                      fbTMap->getWidth(), fbTMap->getHeight());
-        if (texID >= 0) {
+        if (texID.isValid()) {
           break;
         }
       }
@@ -118,7 +118,7 @@ Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
   }
   
   //CREATING MESH
-  if (texID > -1) {
+  if (texID.isValid()) {
     TextureMapping* tMap = new TextureMapping(texID, getTextureCoordinates(trc), _texturesHandler, fbTMap->getStringTexID(),
                                               fbTMap->getWidth(), fbTMap->getHeight());
     translateAndScaleFallBackTex(tile, ancestor, tMap);

@@ -20,7 +20,7 @@ class RenderContext;
 class TextureMapping
 {
 private:
-  const int              _textureId;
+  const GLTextureId      _textureId;
   const float const*     _texCoords;
   
   MutableVector2D        _translation;
@@ -34,7 +34,7 @@ private:
   
 public:
   
-  TextureMapping(int textureId,
+  TextureMapping(const GLTextureId textureId,
                  float texCoords[],
                  TexturesHandler* const texturesHandler,
                  const std::string& texID,
@@ -51,7 +51,7 @@ public:
 
   }
   
-  TextureMapping(int textureId,
+  TextureMapping(const GLTextureId textureId,
                  std::vector<MutableVector2D> texCoords,
                  TexturesHandler* const texturesHandler,
                  const std::string& texID,
@@ -73,7 +73,7 @@ public:
     }
   }
   
-  int getTextureId() const {
+  const GLTextureId getTextureId() const {
     return _textureId;
   }
   

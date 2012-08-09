@@ -17,15 +17,20 @@
 class TextureBuilder
 {
 public:
-  virtual int createTextureFromImages(GL * gl, const std::vector<const IImage*>& vImages, int width, int height) const = 0;
+  virtual const GLTextureId createTextureFromImages(GL * gl,
+                                                    const std::vector<const IImage*>& vImages,
+                                                    int width,
+                                                    int height) const = 0;
   
-  virtual int createTextureFromImages(GL * gl, const IFactory* factory,
-                              const std::vector<const IImage*>& vImages, 
-                              const std::vector<const Rectangle*>& vRectangles, 
-                              int width, int height) const = 0;
+  virtual const GLTextureId createTextureFromImages(GL * gl,
+                                                    const IFactory* factory,
+                                                    const std::vector<const IImage*>& vImages,
+                                                    const std::vector<const Rectangle*>& vRectangles,
+                                                    int width,
+                                                    int height) const = 0;
   
   
-  virtual ~TextureBuilder() {} 
+  virtual ~TextureBuilder() {}
 };
 
 

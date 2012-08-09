@@ -15,6 +15,7 @@
 #include "Sector.hpp"
 #include "IDownloadListener.hpp"
 #include "IDownloader.hpp"
+#include "GLTextureId.hpp"
 
 class Tile;
 class Rectangle;
@@ -93,7 +94,7 @@ class TilePetitions: public IDownloadListener {
 
   std::vector<Petition*> _petitions;
   
-  int _texID;      //TEXTURE ID ONCE IS FINISHED
+  GLTextureId _texID;      //TEXTURE ID ONCE IS FINISHED
   
   int _downloadsCounter;
   int _errorsCounter;
@@ -156,7 +157,7 @@ public:
   
   void createTexture(TexturesHandler* texturesHandler, const IFactory* factory, int width, int height);
   
-  int getTexID() const{ return _texID;}
+  GLTextureId getTexID() const{ return _texID;}
 
   std::string getPetitionsID() const;
   

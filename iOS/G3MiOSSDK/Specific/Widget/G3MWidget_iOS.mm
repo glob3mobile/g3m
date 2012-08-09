@@ -401,7 +401,7 @@
     comp->addRenderer(spr);
   }
   
-  if (false) {
+  if (true) {
     // marks renderer
     MarksRenderer* marks = new MarksRenderer();
     comp->addRenderer(marks);

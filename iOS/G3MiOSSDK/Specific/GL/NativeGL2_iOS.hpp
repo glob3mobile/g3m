@@ -13,6 +13,9 @@
 
 #include "INativeGL.hpp"
 
+
+
+
 class NativeGL2_iOS: public INativeGL
 {
   inline GLbitfield getBitField(GLBufferType b) const {
@@ -249,12 +252,12 @@ public:
     glPixelStorei(getEnum(pname), param);
   }
   
-  std::vector<int> genTextures(int n) const {
+  std::vector<GLTextureId> genTextures(int n) const {
     GLuint textureID[n];    
     glGenTextures(n, textureID);
-    std::vector<int> ts;
+    std::vector<GLTextureId> ts;
     for(int i = 0; i < n; i++){
-      ts.push_back(textureID[i]);
+      ts.push_back( GLTextureId(textureID[i]) );
     }
     return ts;
   }

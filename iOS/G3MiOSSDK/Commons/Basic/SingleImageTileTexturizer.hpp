@@ -24,7 +24,7 @@ private:
   
   const RenderContext*         _renderContext;
   TilesRenderParameters* const _parameters;  
-  int _texID;
+  GLTextureId _texID;
   IImage * const _image;
   
   std::vector<MutableVector2D> createTextureCoordinates(const RenderContext* rc, Mesh* mesh) const;
@@ -39,7 +39,7 @@ public:
   }
   
   ~SingleImageTileTexturizer() {
-    if (_texID > -1){
+    if (_texID.isValid()){
       if (_renderContext != NULL) {
         _renderContext->getTexturesHandler()->takeTexture(_texID);
       }
