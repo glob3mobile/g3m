@@ -55,5 +55,5 @@ void CameraDoubleTapHandler::onDown(const EventContext *eventContext,
   int __check_with_agustin;
   // the EffectTarget has to be the Camera or the Planet.
   // use inheritance for EffectTarget
-  eventContext->getEffectsScheduler()->startEffect(effect, (EffectTarget *) cameraContext);
+  eventContext->getEffectsScheduler()->startEffect(effect, cameraContext);
 }

@@ -14,6 +14,8 @@
 #include "Renderer.hpp"
 #include "Context.hpp"
 
+#include "Effects.hpp"
+
 class CameraEventHandler;
 
 
@@ -32,7 +34,7 @@ enum Gesture {
 };
 
 
-class CameraContext {
+class CameraContext: public EffectTarget {
 private:
   Gesture _currentGesture;
   Camera* _camera;         
@@ -42,6 +44,8 @@ public:
   _currentGesture(gesture),
   _camera(camera)
   {}
+  
+  ~CameraContext(){}
   
   Gesture getCurrentGesture() const { return _currentGesture; }
   void setCurrentGesture(Gesture gesture) { _currentGesture = gesture; }

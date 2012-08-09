@@ -76,7 +76,11 @@ int CPUTextureBuilder::createTextureFromImages(GL * gl, const IFactory* factory,
   }
 
   for (; i < vImages.size(); i++) {
-    IImage* im2 = base->combineWith(*(vImages[i]), *(vRectangles[i]), width, height);
+    
+    const IImage* image = vImages[i];
+    const Rectangle * rect = vRectangles[i];
+    
+    IImage* im2 = base->combineWith(*image, *rect, width, height);
     
     if (base != vImages[0]) {
       delete base;
