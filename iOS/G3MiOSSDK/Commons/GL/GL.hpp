@@ -56,7 +56,7 @@ private:
   
   inline void loadModelView();
   
-  GLTextureId getTextureID();
+  const GLTextureId getTextureID();
   
 public:
   

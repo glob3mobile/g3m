@@ -149,32 +149,6 @@ void GL::transformTexCoords(float scaleX,
   }
 }
 
-//void GL::transformTexCoords(double scaleX,
-//                            double scaleY,
-//                            double translationX,
-//                            double translationY) {
-//  transformTexCoords((float) scaleX,
-//                     (float) scaleY,
-//                     (float) translationX,
-//                     (float) translationY);
-//}
-
-//void GL::transformTexCoords(const MutableVector2D& scale,
-//                            const MutableVector2D& translation) {
-//  transformTexCoords(scale.x(),
-//                     scale.y(),
-//                     translation.x(),
-//                     translation.y());
-//}
-
-//void GL::transformTexCoords(const Vector2D& scale,
-//                            const Vector2D& translation) {
-//  transformTexCoords(scale.x(),
-//                     scale.y(),
-//                     translation.x(),
-//                     translation.y());
-//}
-
 void GL::enablePolygonOffset(float factor, float units) {
   _gl->enable(PolygonOffsetFill);
   _gl->polygonOffset(factor, units);
@@ -217,7 +191,7 @@ int GL::getError() {
 }
 
 const GLTextureId GL::uploadTexture(const IImage* image,
-                              int textureWidth, int textureHeight) {
+                                    int textureWidth, int textureHeight) {
   
   unsigned char imageData[textureWidth * textureHeight * 4];
   image->fillWithRGBA(imageData, textureWidth, textureHeight);
@@ -426,7 +400,7 @@ void GL::disableCullFace() {
   }
 }
 
-GLTextureId GL::getTextureID() {
+const GLTextureId GL::getTextureID() {
   if (_texturesIdBag.size() == 0) {
     const int bugdetSize = 256;
     
@@ -444,21 +418,22 @@ GLTextureId GL::getTextureID() {
   
   _texturesIdGetCounter++;
   
-  GLTextureId result = _texturesIdBag.back();
+  const GLTextureId result = _texturesIdBag.back();
   _texturesIdBag.pop_back();
   
-  /*
-   printf("   - Assigning 1 texturesId from bag (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
-   _texturesIdBag.size(),
-   _texturesIdGetCounter,
-   _texturesIdTakeCounter,
-   _texturesIdGetCounter - _texturesIdTakeCounter);*/
+//  printf("   - Assigning 1 texturesId from bag (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
+//         _texturesIdBag.size(),
+//         _texturesIdGetCounter,
+//         _texturesIdTakeCounter,
+//         _texturesIdGetCounter - _texturesIdTakeCounter);
   
   return result;
 }
 
 void GL::deleteTexture(const GLTextureId& textureId) {
-  int textures[] = { textureId.getGLTextureId() };
+  const int textures[] = {
+    textureId.getGLTextureId()
+  };
   _gl->deleteTextures(1, textures);
   
   _texturesIdBag.push_back(textureId);
