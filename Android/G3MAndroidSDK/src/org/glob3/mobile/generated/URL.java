@@ -21,14 +21,16 @@ public class URL
 {
   private final String _path;
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  URL operator =(URL that);
-
 
   public URL(URL that)
   {
 	  _path = that._path;
 
+  }
+
+  public URL()
+  {
+	  _path = "";
   }
 
   public URL(String path)

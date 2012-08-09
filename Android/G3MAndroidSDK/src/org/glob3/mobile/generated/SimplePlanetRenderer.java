@@ -32,9 +32,7 @@ public class SimplePlanetRenderer extends Renderer
   private Mesh _mesh;
 
 
-//C++ TO JAVA CONVERTER WARNING: Java has no equivalent to methods returning pointers to value types:
-//ORIGINAL LINE: float * createVertices(const Planet& planet)
-  private float createVertices(Planet planet)
+  private float [] createVertices(Planet planet)
   {
 	//VERTICES
 	float[] vertices = new float[_latRes *_lonRes * 3];
@@ -59,9 +57,7 @@ public class SimplePlanetRenderer extends Renderer
   
 	return vertices;
   }
-//C++ TO JAVA CONVERTER WARNING: Java has no equivalent to methods returning pointers to value types:
-//ORIGINAL LINE: int* createMeshIndex()
-  private int createMeshIndex()
+  private int[] createMeshIndex()
   {
 	final int res = _lonRes;
   
@@ -83,9 +79,7 @@ public class SimplePlanetRenderer extends Renderer
   
 	return indexes;
   }
-//C++ TO JAVA CONVERTER WARNING: Java has no equivalent to methods returning pointers to value types:
-//ORIGINAL LINE: float* createTextureCoordinates()
-  private float createTextureCoordinates()
+  private float[] createTextureCoordinates()
   {
 	float[] texCoords = new float[_latRes *_lonRes * 2];
   

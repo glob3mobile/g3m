@@ -10,16 +10,11 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class IStorage
+public interface IStorage
 {
-  public abstract boolean contains(String url);
+  boolean contains(String url);
 
-  public abstract void save(String url, ByteBuffer bb);
+  void save(String url, ByteBuffer bb);
 
-  public abstract ByteBuffer read(String url);
-
-  public void dispose()
-  {
-  }
-
+  ByteBuffer read(String url);
 }

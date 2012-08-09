@@ -80,9 +80,10 @@ public class Geodetic2D
 	return _latitude.isBetween(min.latitude(), max.latitude()) && _longitude.isBetween(min.longitude(), max.longitude());
   }
 
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean lowerThanOperator(const Geodetic2D& that) const
-  public final boolean lowerThanOperator(Geodetic2D that)
+//ORIGINAL LINE: boolean lowerThan(const Geodetic2D& that) const
+  public final boolean lowerThan(Geodetic2D that)
   {
 	if (_latitude.lowerThan(that._latitude))
 	{
