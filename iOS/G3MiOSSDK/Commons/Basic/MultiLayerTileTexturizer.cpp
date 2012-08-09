@@ -23,13 +23,13 @@ enum PetitionStatus {
 
 class DownloadListener : public IDownloadListener {
 private:
-  PetitionsMixer* _mixer;
-  const int       _position;
+  TileTextureBuilder* _builder;
+  const int           _position;
   
 public:
-  DownloadListener(PetitionsMixer* mixer,
+  DownloadListener(TileTextureBuilder* builder,
                    int position) :
-  _mixer(mixer),
+  _builder(builder),
   _position(position)
   {
     
@@ -45,7 +45,7 @@ public:
 
 
 
-class PetitionsMixer {
+class TileTextureBuilder {
 private:
   Tile*                  _tile;
   std::vector<Petition*> _petitions;
@@ -57,11 +57,11 @@ private:
   Mesh* _mesh;
   
 public:
-  PetitionsMixer(const RenderContext*         rc,
-                 const LayerSet* const        layerSet,
-                 const TilesRenderParameters* parameters,
-                 IDownloader*                 downloader,
-                 Tile* tile) :
+  TileTextureBuilder(const RenderContext*         rc,
+                     const LayerSet* const        layerSet,
+                     const TilesRenderParameters* parameters,
+                     IDownloader*                 downloader,
+                     Tile* tile) :
   _tile(tile),
   _mesh(NULL)
   {
@@ -70,7 +70,7 @@ public:
       _status.push_back(STATUS_PENDING);
       _buffers.push_back(NULL);
     }
-
+    
     
     _petitions = layerSet->createTilePetitions(rc,
                                                tile,
@@ -86,9 +86,9 @@ public:
       const long priority = tile->getLevel() * 1000000 + tile->getRow() * 1000 + tile->getColumn();
       
       downloader->request(URL(petition->getURL()),
-                           priority,
-                           new DownloadListener(this, i),
-                           true);
+                          priority,
+                          new DownloadListener(this, i),
+                          true);
     }
     
   }
@@ -131,7 +131,7 @@ public:
   void downloaded(int position,
                   const ByteBuffer* buffer) {
     checkIsPending(position);
-
+    
     _status[position]  = STATUS_DOWNLOADED;
     _buffers[position] = buffer;
     
@@ -140,7 +140,7 @@ public:
   
   void canceled(int position) {
     checkIsPending(position);
-
+    
     _status[position] = STATUS_CANCELED;
     
     checkCompletion();
@@ -152,7 +152,7 @@ public:
 //    return mesh;
     return NULL;
   }
-
+  
   Mesh* getMesh() {
     if (_mesh == NULL) {
       _mesh = createMesh();
@@ -162,15 +162,15 @@ public:
 };
 
 void DownloadListener::onDownload(const Response& response) {
-  _mixer->downloaded(_position, response.getByteBuffer());
+  _builder->downloaded(_position, response.getByteBuffer());
 }
 
 void DownloadListener::onError(const Response& response) {
-  _mixer->canceled(_position);
+  _builder->canceled(_position);
 }
 
 void DownloadListener::onCancel(const URL& url) {
-  _mixer->canceled(_position);
+  _builder->canceled(_position);
 }
 
 void MultiLayerTileTexturizer::initialize(const InitializationContext* ic,
@@ -199,15 +199,15 @@ Mesh* MultiLayerTileTexturizer::texturize(const RenderContext* rc,
   }
   
   const TileKey key = tile->getKey();
-  PetitionsMixer* mixer = _mixers[key];
-  if (mixer == NULL) {
-    mixer = new PetitionsMixer(rc, _layerSet, _parameters, _downloader, tile);
-    _mixers[key] = mixer;
+  TileTextureBuilder* builder = _builders[key];
+  if (builder == NULL) {
+    builder = new TileTextureBuilder(rc, _layerSet, _parameters, _downloader, tile);
+    _builders[key] = builder;
   }
-
+  
   int ___XX;
-
-  return mixer->getMesh();
+  
+  return builder->getMesh();
 }
 
 void MultiLayerTileTexturizer::tileToBeDeleted(Tile* tile,

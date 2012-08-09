@@ -10,13 +10,12 @@
 #define G3MiOSSDK_MultiLayerTileTexturizer_hpp
 
 #include "TileTexturizer.hpp"
-//#include "LayerSet.hpp"
 class LayerSet;
 class IDownloader;
 
 #include <map>
 #include "TileKey.hpp"
-class PetitionsMixer;
+class TileTextureBuilder;
 
 
 class MultiLayerTileTexturizer : public TileTexturizer {
@@ -26,7 +25,7 @@ private:
   IDownloader*                 _downloader;
   const TilesRenderParameters* _parameters;
   
-  std::map<TileKey, PetitionsMixer*> _mixers;
+  std::map<TileKey, TileTextureBuilder*> _builders;
   
 public:
   MultiLayerTileTexturizer(LayerSet* layerSet) :
