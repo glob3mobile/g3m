@@ -79,9 +79,11 @@ public:
     return _height;
   }
   
-  const float* getTexCoords() const {
-    return _texCoords;
-  }
+#ifdef C_CODE
+  const float* getTexCoords() const { return _texCoords;}
+#else
+  const float[] getTexCoords() const { return _texCoords;}
+#endif
   
   void bind(const RenderContext* rc) const;  
 };

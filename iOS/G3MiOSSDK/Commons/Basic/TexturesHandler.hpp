@@ -11,7 +11,6 @@
 
 #include <string>
 #include <vector>
-#include "TextureBuilder.hpp"
 
 
 class IImage;
@@ -19,6 +18,8 @@ class RenderContext;
 class TextureHolder;
 class GL;
 class IFactory;
+class TextureBuilder;
+class Rectangle;
 
 
 

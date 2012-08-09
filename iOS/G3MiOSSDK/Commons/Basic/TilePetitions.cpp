@@ -11,6 +11,7 @@
 #include "TileImagesTileTexturizer.hpp"
 #include "Downloader.hpp"
 #include "TexturesHandler.hpp"
+#include "Rectangle.hpp"
 
 void TilePetitions::onDownload(const Response &response)
 {
@@ -53,7 +54,7 @@ void TilePetitions::onCancel(const URL& url){
 
 std::string TilePetitions::getPetitionsID() const
 {
-  std::string id;
+  std::string id = "";
   for (int j = 0; j < _petitions.size(); j++) {
     if (j > 0){
       id += "__";

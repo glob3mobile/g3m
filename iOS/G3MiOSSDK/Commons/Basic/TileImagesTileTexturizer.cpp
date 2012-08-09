@@ -91,7 +91,11 @@ Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
                                                         const TileTessellator* tessellator,
                                                         Mesh* tessellatorMesh,
                                                         Mesh* previousMesh) {
+#ifdef C_CODE
   const TextureMapping* fbTMap = NULL;
+#else
+  TextureMapping* fbTMap = NULL;
+#endif
   int texID = -1;
   Tile* fbTile = tile->getParent();
   while (fbTile != NULL && texID < 0) {
@@ -253,7 +257,13 @@ void TileImagesTileTexturizer::removeRegisteredTilePetitions(Tile* tile)
     if (tile->getLevel()  == tp->getLevel() &&
         tile->getRow()    == tp->getRow()   &&
         tile->getColumn() == tp->getColumn()){
+      
+#ifdef C_CODE
       _tilePetitions.erase(_tilePetitions.begin() + i);
+#endif
+#ifdef JAVA_CODE
+      _tilePetitions.remove(i);
+#endif
       delete tp;
       break;
     }

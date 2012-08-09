@@ -17,7 +17,7 @@ class TexturedMesh: public Mesh
 {
 private:
   const Mesh*           _mesh;
-  const TextureMapping* _textureMapping;
+  const TextureMapping* const _textureMapping;
   const bool            _ownedMesh;
   const bool            _ownedTexMapping;
   
@@ -25,7 +25,7 @@ public:
   
   TexturedMesh(const Mesh* mesh,
                bool ownedMesh,
-               const TextureMapping* textureMapping,
+               TextureMapping* const textureMapping,
                bool ownedTexMapping) :
   _mesh(mesh),
   _ownedMesh(ownedMesh),
@@ -51,7 +51,7 @@ public:
   int getVertexCount() const { return _mesh->getVertexCount(); }
   const Vector3D getVertex(int i) const { return _mesh->getVertex(i);}
   
-  const TextureMapping* getTextureMapping() const {
+  const TextureMapping* const getTextureMapping() const {
     return _textureMapping;
   }
 

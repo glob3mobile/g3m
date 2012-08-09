@@ -9,6 +9,8 @@
 #ifndef G3MiOSSDK_TextureHolder_h
 #define G3MiOSSDK_TextureHolder_h
 
+#include <string>
+
 class TextureHolder {
 public:
     const std::string _textureId;

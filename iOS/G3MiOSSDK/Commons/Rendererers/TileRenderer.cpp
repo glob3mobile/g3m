@@ -101,15 +101,22 @@ int TileRenderer::render(const RenderContext* rc) {
   TilesStatistics statistics;
   
   const int topLevelTilesSize = _topLevelTiles.size();
+  
+  
+  DistanceToCenterTileComparison predicate = DistanceToCenterTileComparison(rc->getCamera(),
+                                                                            rc->getPlanet());
 
   if (_topTilesJustCreated) {
-    DistanceToCenterTileComparison predicate = DistanceToCenterTileComparison(rc->getCamera(),
-                                                                              rc->getPlanet());
-    
+#ifdef C_CODE
     predicate.initialize();
     std::sort(_topLevelTiles.begin(),
               _topLevelTiles.end(),
               predicate);
+#endif
+    
+#ifdef JAVA_CODE
+    java.util.Collections.sort(_topLevelTiles, predicate);
+#endif
     
     if (_texturizer != NULL) {
       for (int i = 0; i < topLevelTilesSize; i++) {
@@ -119,9 +126,6 @@ int TileRenderer::render(const RenderContext* rc) {
     }
     _topTilesJustCreated = false;
   }
-  
-  DistanceToCenterTileComparison predicate = DistanceToCenterTileComparison(rc->getCamera(),
-                                                                            rc->getPlanet());
   
 //  std::vector<Tile*> toVisit(_topLevelTiles);
   std::list<Tile*> toVisit;
