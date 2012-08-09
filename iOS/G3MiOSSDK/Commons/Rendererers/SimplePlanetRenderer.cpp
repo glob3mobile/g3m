@@ -177,11 +177,11 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
 #ifdef C_CODE
   IndexedMesh *im = IndexedMesh::CreateFromVector3D(true, TriangleStrip, NoCenter, Vector3D(0,0,0), 
                                                     _latRes *_lonRes, ver, 
-                                                    ind, numIndexes, flatColor, colors, 0.5, normals);
+                                                    ind, numIndexes, flatColor, colors, (float)0.5, normals);
 #else
   IndexedMesh *im = IndexedMesh::CreateFromVector3D(true, GLPrimitive.TriangleStrip, NoCenter, Vector3D(0,0,0), 
                                                     _latRes *_lonRes, ver, 
-                                                    ind, numIndexes, flatColor, colors, 0.5, normals);
+                                                    ind, numIndexes, flatColor, colors, (float)0.5, normals);
 #endif
   
   TextureMapping* texMap = new TextureMapping(texID, texC, rc->getTexturesHandler(),
