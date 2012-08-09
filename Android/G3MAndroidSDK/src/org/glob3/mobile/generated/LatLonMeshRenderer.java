@@ -42,13 +42,17 @@ public class LatLonMeshRenderer extends Renderer
   
 	// create vertices and indices in dinamic memory
 	float[] vertices = new float [numVertices *3];
-	System.arraycopy(v, 0, vertices, 0, v.length());
-  
 	int[] indices = new int [numIndices];
-	System.arraycopy(i, 0, indices, 0, i.length());
+  
+	Color flatColor = new Color(Color.fromRGBA((float)1.0, (float)1.0, (float)0.0, (float)1.0));
+  
+	System.arraycopy(v, 0, vertices, 0, v.length);
+	System.arraycopy(i, 0, indices, 0, i.length);
 	// create mesh
-	Color flatColor = new Color(Color.fromRGBA(1.0, 1.0, 0.0, 1.0));
-	mesh = IndexedMesh.CreateFromGeodetic3D(ic.getPlanet(), true, TriangleStrip, CenterStrategy.NoCenter, new Vector3D(0,0,0), 4, vertices, indices, 4, flatColor);
+	mesh = IndexedMesh::CreateFromGeodetic3D(ic->getPlanet(), true, GLPrimitive.TriangleStrip,
+  										   CenterStrategy.NoCenter, Vector3D(0,0,0),
+  										   4, vertices, indices, 4, flatColor);
+  
   }
 
   public final int render(RenderContext rc)
