@@ -28,7 +28,9 @@ public:
   _image(image), _bbox(sector), _layerID(layerID), _storage(storage){}
   
   ~StaticImageLayer(){
+#ifdef C_CODE
     delete _image;
+#endif
   }
   
   bool fullContains(const Sector& s) const {
