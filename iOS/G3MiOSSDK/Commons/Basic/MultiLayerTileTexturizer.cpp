@@ -13,45 +13,52 @@
 #include "TilesRenderParameters.hpp"
 #include "Tile.hpp"
 
-class Mixer {
+
+enum PetitionStatus {
+  PENDING,
+  DOWNLOADED,
+  CANCELED
+};
+
+
+class PetitionsMixer {
 private:
   Tile*                  _tile;
   std::vector<Petition*> _petitions;
   const int              _petitionsCount;
   
-  std::vector<int>               _status;
+  std::vector<PetitionStatus>    _status;
   std::vector<const ByteBuffer*> _buffers;
   
-  static const int PENDING    = 0;
-  static const int DOWNLOADED = 1;
-  static const int CANCELED   = 2;
+//  static const int PENDING    = 0;
+//  static const int DOWNLOADED = 1;
+//  static const int CANCELED   = 2;
   
 public:
-  Mixer(Tile* tile,
-        std::vector<Petition*>& petitions) :
+  PetitionsMixer(Tile* tile,
+                 std::vector<Petition*>& petitions) :
   _tile(tile),
   _petitions(petitions),
   _petitionsCount(petitions.size())
   {
     
     for (int i = 0; i < _petitionsCount; i++) {
-      _status.push_back(0 /*Mixer::PENDING*/);
+      _status.push_back(PENDING);
       _buffers.push_back(NULL);
     }
   }
-
+  
   void checkCompletion() {
-    
-    bool completed = true;
+    bool completed   = true;
     bool anyCanceled = false;
     
     for (int i = 0; i < _petitionsCount; i++) {
       const int status = _status[i];
-      if (status == Mixer::PENDING) {
+      if (status == PENDING) {
         completed = false;
         break;
       }
-      else if (status == Mixer::CANCELED) {
+      else if (status == CANCELED) {
         anyCanceled = true;
       }
     }
@@ -70,20 +77,20 @@ public:
   
   void downloaded(int position,
                   const ByteBuffer* buffer) {
-    if (_status[position] != Mixer::PENDING) {
+    if (_status[position] != PENDING) {
       printf("Logic error, expected pending\n");
     }
-    _status[position]  = Mixer::DOWNLOADED;
+    _status[position]  = DOWNLOADED;
     _buffers[position] = buffer;
     
     checkCompletion();
   }
   
   void canceled(int position) {
-    if (_status[position] != Mixer::PENDING) {
+    if (_status[position] != PENDING) {
       printf("Logic error, expected pending\n");
     }
-    _status[position] = Mixer::CANCELED;
+    _status[position] = CANCELED;
     
     checkCompletion();
   }
@@ -92,11 +99,11 @@ public:
 
 class DownloadListener : public IDownloadListener {
 private:
-  Mixer*    _mixer;
-  const int _position;
+  PetitionsMixer* _mixer;
+  const int       _position;
   
 public:
-  DownloadListener(Mixer* mixer,
+  DownloadListener(PetitionsMixer* mixer,
                    int position) :
   _mixer(mixer),
   _position(position)
@@ -141,26 +148,39 @@ Mesh* MultiLayerTileTexturizer::texturize(const RenderContext* rc,
   
   //  TexturedMesh* result = getFinalTexturedMesh(tile, tessellatorMesh);
   
-  std::vector<Petition*> petitions = _layerSet->createTilePetitions(rc,
-                                                                    tile,
-                                                                    _parameters->_tileTextureWidth,
-                                                                    _parameters->_tileTextureHeight);
+  //  int level  = tile->getLevel();
+  //  int column = tile->getColumn();
+  //  int row    = tile->getRow();
   
-  Mixer* mixer = new Mixer(tile, petitions);
+  TileKey key = tile->getKey();
   
-  for (int i = 0; i < petitions.size(); i++) {
-    const Petition* petition = petitions[i];
+  PetitionsMixer* mixer = _mixers[key];
+  
+  if (mixer == NULL) {
+    std::vector<Petition*> petitions = _layerSet->createTilePetitions(rc,
+                                                                      tile,
+                                                                      _parameters->_tileTextureWidth,
+                                                                      _parameters->_tileTextureHeight);
     
-    const URL url = URL(petition->getURL());
-    const long priority = tile->getLevel();
-    const bool deleteListener = true;
+    mixer = new PetitionsMixer(tile, petitions);
+    _mixers[key] = mixer;
     
-    _downloader->request(url,
-                         priority,
-                         new DownloadListener(mixer, i),
-                         deleteListener);
+    for (int i = 0; i < petitions.size(); i++) {
+      const Petition* petition = petitions[i];
+      
+      const URL url = URL(petition->getURL());
+      const long priority = tile->getLevel();
+      const bool deleteListener = true;
+      
+      _downloader->request(url,
+                           priority,
+                           new DownloadListener(mixer, i),
+                           deleteListener);
+    }
   }
-  
+  else {
+    printf("****** mixer already created\n");
+  }
   
   int ___XX;
   

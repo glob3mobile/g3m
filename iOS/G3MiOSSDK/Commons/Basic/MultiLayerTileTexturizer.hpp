@@ -14,6 +14,10 @@
 class LayerSet;
 class IDownloader;
 
+#include <map>
+#include "TileKey.hpp"
+class PetitionsMixer;
+
 
 class MultiLayerTileTexturizer : public TileTexturizer {
 private:
@@ -21,6 +25,8 @@ private:
   
   IDownloader*                 _downloader;
   const TilesRenderParameters* _parameters;
+  
+  std::map<TileKey, PetitionsMixer*> _mixers;
   
 public:
   MultiLayerTileTexturizer(LayerSet* layerSet) :

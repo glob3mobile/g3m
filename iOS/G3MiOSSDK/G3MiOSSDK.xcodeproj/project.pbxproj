@@ -94,6 +94,8 @@
 		CF9AEBC2159B3FEB004C3558 /* EllipsoidalTileTessellator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9AEBC1159B3FEA004C3558 /* EllipsoidalTileTessellator.cpp */; };
 		CFA71BE515D2E85600F8C78D /* MultiLayerTileTexturizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA71BE315D2E85600F8C78D /* MultiLayerTileTexturizer.cpp */; };
 		CFA71BEA15D2F6D200F8C78D /* TilesRenderParameters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA71BE815D2F6D200F8C78D /* TilesRenderParameters.cpp */; };
+		CFD0021B15D3C94C00735FD8 /* TileKey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD0021915D3C94C00735FD8 /* TileKey.cpp */; };
+		CFD0021C15D3C94C00735FD8 /* TileKey.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFD0021A15D3C94C00735FD8 /* TileKey.hpp */; };
 		CFF0999B15C18AAD005EAF12 /* TileTexturizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFF0999C15C18AAD005EAF12 /* TilePetitions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8C874BE15B5C58D00F19859 /* TilePetitions.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFFEC11E15C2E645003FA986 /* IDownloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC11D15C2E645003FA986 /* IDownloader.cpp */; };
@@ -273,6 +275,8 @@
 		CFA71BE315D2E85600F8C78D /* MultiLayerTileTexturizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MultiLayerTileTexturizer.cpp; path = Commons/Basic/MultiLayerTileTexturizer.cpp; sourceTree = "<group>"; };
 		CFA71BE715D2F6C500F8C78D /* TilesRenderParameters.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TilesRenderParameters.hpp; path = Commons/Rendererers/TilesRenderParameters.hpp; sourceTree = "<group>"; };
 		CFA71BE815D2F6D200F8C78D /* TilesRenderParameters.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TilesRenderParameters.cpp; path = Commons/Rendererers/TilesRenderParameters.cpp; sourceTree = "<group>"; };
+		CFD0021915D3C94C00735FD8 /* TileKey.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileKey.cpp; path = Commons/Basic/TileKey.cpp; sourceTree = "<group>"; };
+		CFD0021A15D3C94C00735FD8 /* TileKey.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileKey.hpp; path = Commons/Basic/TileKey.hpp; sourceTree = "<group>"; };
 		CFF95F741588DF0A00B56E11 /* TimeInterval.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TimeInterval.hpp; path = Commons/Basic/TimeInterval.hpp; sourceTree = "<group>"; };
 		CFF95F761588E82200B56E11 /* Color.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Color.hpp; path = Commons/Basic/Color.hpp; sourceTree = "<group>"; };
 		CFFEC11B15C2E636003FA986 /* IDownloader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IDownloader.hpp; path = Commons/Interfaces/IDownloader.hpp; sourceTree = "<group>"; };
@@ -454,6 +458,8 @@
 				CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */,
 				D8C874BE15B5C58D00F19859 /* TilePetitions.hpp */,
 				D8C874BF15B5C5AE00F19859 /* TilePetitions.cpp */,
+				CFD0021915D3C94C00735FD8 /* TileKey.cpp */,
+				CFD0021A15D3C94C00735FD8 /* TileKey.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -755,6 +761,7 @@
 				D88B5E2815C15C850083A43F /* Plane.hpp in Headers */,
 				D8F7665815CAD79100179E08 /* INativeGL.hpp in Headers */,
 				D81BA17015CBF19F004EF0B0 /* GL.hpp in Headers */,
+				CFD0021C15D3C94C00735FD8 /* TileKey.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -878,6 +885,7 @@
 				CC55C47F15D11D8500923D7B /* CameraDoubleTapHandler.cpp in Sources */,
 				CFA71BE515D2E85600F8C78D /* MultiLayerTileTexturizer.cpp in Sources */,
 				CFA71BEA15D2F6D200F8C78D /* TilesRenderParameters.cpp in Sources */,
+				CFD0021B15D3C94C00735FD8 /* TileKey.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

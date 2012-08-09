@@ -14,7 +14,7 @@
 #include "TileTexturizer.hpp"
 #include "TileRenderer.hpp"
 #include "TilesRenderParameters.hpp"
-
+#include "TileKey.hpp"
 
 Tile::~Tile() {
   prune(NULL);
@@ -311,3 +311,6 @@ std::vector<Tile*>* Tile::createSubTiles() {
 }
 
 
+TileKey Tile::getKey() const {
+  return TileKey(_level, _row, _column);
+}

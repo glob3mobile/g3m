@@ -367,7 +367,7 @@
     
     TileTexturizer* texturizer = NULL;
     if (true) {
-      const bool useNewTexturizer = false;
+      const bool useNewTexturizer = true;
       if (useNewTexturizer) {
         texturizer = new MultiLayerTileTexturizer(layerSet);
       }

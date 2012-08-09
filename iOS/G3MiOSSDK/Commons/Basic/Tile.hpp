@@ -22,6 +22,7 @@ class TilesRenderParameters;
 class ITimer;
 class TilesStatistics;
 class TileRenderContext;
+class TileKey;
 
 class Tile {
 private:
@@ -29,15 +30,15 @@ private:
   const int    _level;
   const int    _row;
   const int    _column;
-
+  
   Mesh* _tessellatorMesh;
   Mesh* _debugMesh;
   Mesh* _texturizerMesh;
-
+  
   Tile* _parent;
   bool _textureSolved;
   std::vector<Tile*>* _subtiles;
-
+  
   ITimer* _texturizerTimer;
   
   bool _justCreatedSubtiles;
@@ -48,7 +49,7 @@ private:
   
   Mesh* getDebugMesh(const RenderContext* rc,
                      const TileRenderContext* trc);
-
+  
   inline bool isVisible(const RenderContext* rc,
                         const TileRenderContext* trc);
   
@@ -62,15 +63,15 @@ private:
   
   void debugRender(const RenderContext* rc,
                    const TileRenderContext* trc);
-
+  
   inline Tile* createSubTile(const Angle& lowerLat, const Angle& lowerLon,
                              const Angle& upperLat, const Angle& upperLon,
                              const int level,
                              const int row, const int column);
   
-
+  
   inline std::vector<Tile*>* getSubTiles();
-
+  
   inline void prune(const TileRenderContext* trc);
   
   Tile(const Tile& that);
@@ -133,6 +134,7 @@ public:
               const TileRenderContext* trc,
               std::list<Tile*>* toVisitInNextIteration);
   
+  TileKey getKey() const;
 };
 
 #endif
