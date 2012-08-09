@@ -83,26 +83,20 @@ public class TilesStatistics
 
   public static String asLogString(java.util.HashMap<Integer, Integer> map)
   {
-	std.ostringstream buffer = new std.ostringstream();
-
-	boolean first = true;
-	for(java.util.Iterator<Integer, Integer> i = map.iterator(); i.hasNext();)
-	{
-	  final int level = i.next().getKey();
-	  final int counter = i.next().getValue();
-
-	  if (first)
-	  {
+	String res = "";
+	for (java.util.Map.Entry<Integer, Integer> i: map.entrySet()){
+		  final int level = i.getKey();
+		  final int counter = i.getValue();
+	  
+		  if (first){
 		first = false;
-	  }
-	  else
-	  {
-		buffer << ",";
-	  }
-	  buffer << "L" << level << ":" << counter;
+		  }
+		  else{
+		res += ",";
+		  }
+		  buffer += "L" + level + ":" + counter;
 	}
-
-	return buffer.str();
+	return res;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

@@ -34,10 +34,10 @@ public class Touch
 
   public Touch(Vector2D pos, Vector2D prev)
   {
-	  this(pos, prev, 0);
+	  this(pos, prev, (byte)0);
   }
 //C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
-//ORIGINAL LINE: Touch(const Vector2D& pos, const Vector2D& prev, const byte tapCount=0): _pos(pos), _prevPos(prev), _tapCount(tapCount)
+//ORIGINAL LINE: Touch(const Vector2D& pos, const Vector2D& prev, const byte tapCount= (byte)0): _pos(pos), _prevPos(prev), _tapCount(tapCount)
   public Touch(Vector2D pos, Vector2D prev, byte tapCount)
   {
 	  _pos = new Vector2D(pos);
