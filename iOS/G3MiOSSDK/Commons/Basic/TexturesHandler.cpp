@@ -148,7 +148,23 @@ GLTextureID TexturesHandler::getGLTextureId(const IImage *image,
   return getGLTextureId(images, textureSpec);
 }
 
-void TexturesHandler::takeTexture(const GLTextureID& glTextureId) {
+void TexturesHandler::retainGLTextureId(const GLTextureID& glTextureId) {
+  if (!glTextureId.isValid()) {
+    return;
+  }
+  
+  for (int i = 0; i < _textureHolders.size(); i++) {
+    TextureHolder* holder = _textureHolders[i];
+    
+    if (holder->_glTextureId.isEqualsTo(glTextureId)) {
+      holder->retain();
+      
+      return;
+    }
+  }
+}
+
+void TexturesHandler::releaseGLTextureId(const GLTextureID& glTextureId) {
   if (!glTextureId.isValid()) {
     return;
   }

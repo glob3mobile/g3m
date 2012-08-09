@@ -92,7 +92,8 @@ public:
                   Mesh* mesh,
                   Mesh* previousMesh);
   
-  void tileToBeDeleted(Tile* tile);
+  void tileToBeDeleted(Tile* tile,
+                       Mesh* mesh);
   
   bool tileMeetsRenderCriteria(Tile* tile);
   
@@ -103,8 +104,7 @@ public:
   
   void initialize(const InitializationContext* ic,
                   const TilesRenderParameters* parameters);
-
-
+  
 };
 
 #endif

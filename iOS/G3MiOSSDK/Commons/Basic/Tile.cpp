@@ -147,7 +147,7 @@ void Tile::rawRender(const RenderContext *rc,
 //        const bool callTexturizer = ((_texturizerTimer == NULL) ||
 //                                     (_texturizerTimer->elapsedTime().milliseconds() > 100));
         const bool callTexturizer = ((_texturizerTimer == NULL) ||
-                                     (_texturizerTimer->elapsedTime().milliseconds() > 5));
+                                     (_texturizerTimer->elapsedTime().milliseconds() > 50));
 
         if (callTexturizer) {
           _texturizerMesh = texturizer->texturize(rc,
@@ -210,7 +210,7 @@ void Tile::prune(const TileRenderContext* trc) {
       
       subtile->prune(trc);
       if (texturizer != NULL) {
-        texturizer->tileToBeDeleted(subtile);
+        texturizer->tileToBeDeleted(subtile, subtile->_texturizerMesh);
       }
       delete subtile;
     }

@@ -51,7 +51,8 @@ public:
                   Mesh* tessellatorMesh,
                   Mesh* previousMesh);
   
-  void tileToBeDeleted(Tile* tile);
+  void tileToBeDeleted(Tile* tile,
+                       Mesh* mesh);
   
   bool tileMeetsRenderCriteria(Tile* tile);
   

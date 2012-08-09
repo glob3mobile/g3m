@@ -150,8 +150,9 @@
   
   Downloader_iOS* downloader = (Downloader_iOS*) downloaderV;
   
+  /* NSURLRequestUseProtocolCachePolicy */
   NSURLRequest *request = [NSURLRequest requestWithURL: _nsURL
-                                           cachePolicy: NSURLRequestUseProtocolCachePolicy
+                                           cachePolicy: NSURLRequestReturnCacheDataElseLoad 
                                        timeoutInterval: 60.0];
 //  if (_canceled) {
 //    return;

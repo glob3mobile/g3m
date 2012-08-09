@@ -31,17 +31,19 @@ private:
   
 public:
   
-  SingleImageTileTexturizer(TilesRenderParameters* const par, IImage *image) :
+  SingleImageTileTexturizer(TilesRenderParameters* const parameters,
+                            IImage* image) :
   _texID(-1),
   _image(image),
-  _parameters(par),
-  _renderContext(NULL) {
+  _parameters(parameters),
+  _renderContext(NULL)
+  {
   }
   
   ~SingleImageTileTexturizer() {
     if (_texID.isValid()){
       if (_renderContext != NULL) {
-        _renderContext->getTexturesHandler()->takeTexture(_texID);
+        _renderContext->getTexturesHandler()->releaseGLTextureId(_texID);
       }
     }
   }
@@ -57,7 +59,8 @@ public:
                   Mesh* mesh,
                   Mesh* previousMesh);
   
-  void tileToBeDeleted(Tile* tile);
+  void tileToBeDeleted(Tile* tile,
+                       Mesh* mesh);
   
   bool tileMeetsRenderCriteria(Tile* tile);
 

@@ -198,7 +198,8 @@ Mesh* MultiLayerTileTexturizer::texturize(const RenderContext* rc,
   return result;
 }
 
-void MultiLayerTileTexturizer::tileToBeDeleted(Tile* tile) {
+void MultiLayerTileTexturizer::tileToBeDeleted(Tile* tile,
+                                               Mesh* mesh) {
   
 }
 

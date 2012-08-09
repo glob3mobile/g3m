@@ -26,20 +26,19 @@ private:
   MutableVector2D        _translation;
   MutableVector2D        _scale;
   
-  TexturesHandler* const _texturesHandler;
-
-  const TextureSpec _textureSpec;
+//  TexturesHandler* const _texturesHandler;
+//  const TextureSpec _textureSpec;
   
 public:
   
   TextureMapping(const GLTextureID& textureId,
-                 float texCoords[],
+                 float texCoords[]/*,
                  TexturesHandler* const texturesHandler,
-                 const TextureSpec textureSpec) :
+                 const TextureSpec textureSpec*/) :
   _textureId(textureId),
   _texCoords(texCoords),
-  _texturesHandler(texturesHandler),
-  _textureSpec(textureSpec),
+//  _texturesHandler(texturesHandler),
+//  _textureSpec(textureSpec),
   _translation(0, 0),
   _scale(1, 1)
   {
@@ -47,9 +46,9 @@ public:
   }
   
   TextureMapping(const GLTextureID& textureId,
-                 std::vector<MutableVector2D> texCoords,
+                 std::vector<MutableVector2D> texCoords/*,
                  TexturesHandler* const texturesHandler,
-                 const TextureSpec textureSpec);
+                 const TextureSpec textureSpec*/);
   
   void setTranslationAndScale(const Vector2D& translation,
                               const Vector2D& scale){
@@ -62,34 +61,22 @@ public:
     delete[] _texCoords;
 #endif
     
-    if (_texturesHandler != NULL){
-      _texturesHandler->takeTexture(_textureId);
-    }
+//    if (_texturesHandler != NULL){
+//      _texturesHandler->releaseGLTextureId(_textureId);
+//    }
   }
   
-//  const GLTextureID getGLTextureID() const {
-//    return _textureId;
-//  }
-//  
-//  std::string getStringTexID() const {
-//    return _texID;
-//  }
-//  
-//  int getWidth() const {
-//    return _width;
-//  }
-//  
-//  int getHeight() const {
-//    return _height;
-//  }
+  const GLTextureID getGLTextureID() const {
+    return _textureId;
+  }
   
   const float* getTexCoords() const {
     return _texCoords;
   }
   
-  const TextureSpec getTextureSpec() const {
-    return _textureSpec;
-  }
+//  const TextureSpec getTextureSpec() const {
+//    return _textureSpec;
+//  }
   
   void bind(const RenderContext* rc) const;
   

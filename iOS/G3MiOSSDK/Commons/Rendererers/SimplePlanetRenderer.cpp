@@ -154,11 +154,7 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
                                                     ind, numIndexes, flatColor, colors, 0.5, normals);
   
   TextureMapping* texMap = new TextureMapping(texID,
-                                              texC,
-                                              rc->getTexturesHandler(),
-                                              TextureSpec(_textureFilename,
-                                                          _texWidth,
-                                                          _texHeight));
+                                              texC);
   
   _mesh = new TexturedMesh(im, true, texMap, true);
   

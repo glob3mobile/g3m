@@ -33,8 +33,9 @@ public:
                           Mesh* tessellatorMesh,
                           Mesh* previousMesh) = 0;
   
-  virtual void tileToBeDeleted(Tile* tile) = 0;
-  
+  virtual void tileToBeDeleted(Tile* tile,
+                               Mesh* mesh) = 0;
+
   virtual bool tileMeetsRenderCriteria(Tile* tile) = 0;
   
   virtual void justCreatedTopTile(const RenderContext* rc,

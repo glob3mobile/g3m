@@ -136,11 +136,11 @@ public:
   GLTextureID getGLTextureId(const IImage* image,
                              const TextureSpec& textureSpec);
   
-  
   GLTextureID getGLTextureIdIfAvailable(const TextureSpec& textureSpec);
   
+  void releaseGLTextureId(const GLTextureID& glTextureId);
   
-  void takeTexture(const GLTextureID& glTextureId);
+  void retainGLTextureId(const GLTextureID& glTextureId);
   
 };
 

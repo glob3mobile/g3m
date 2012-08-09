@@ -77,11 +77,7 @@ Mesh* TileImagesTileTexturizer::getNewTextureMesh(Tile* tile,
       //printf("TEXTURIZED %d, %d, %d\n", tile->getLevel(), tile->getRow(), tile->getColumn());
       
       TextureMapping * tMap = new TextureMapping(texID,
-                                                 getTextureCoordinates(trc),
-                                                 _texturesHandler,
-                                                 TextureSpec(tp->getPetitionsID(),
-                                                             _parameters->_tileTextureWidth,
-                                                             _parameters->_tileTextureHeight));
+                                                 getTextureCoordinates(trc));
       TexturedMesh* texMesh = new TexturedMesh(tessellatorMesh, false, tMap, true);
       delete previousMesh;   //If a new mesh has been produced we delete the previous one
       return texMesh;
@@ -102,13 +98,13 @@ Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
   Tile* ancestor = tile->getParent();
   while (ancestor != NULL && !texID.isValid()) {
     
-    if (ancestor->isTextureSolved()){
+    if (ancestor->isTextureSolved()) {
       TexturedMesh* texMesh = (TexturedMesh*) ancestor->getTexturizerMesh();
       if (texMesh != NULL){
         fbTMap = texMesh->getTextureMapping();
-        
-        texID = _texturesHandler->getGLTextureIdIfAvailable(fbTMap->getTextureSpec());
+        texID = fbTMap->getGLTextureID();
         if (texID.isValid()) {
+          _texturesHandler->retainGLTextureId(texID);
           break;
         }
       }
@@ -119,9 +115,7 @@ Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
   //CREATING MESH
   if (texID.isValid()) {
     TextureMapping* tMap = new TextureMapping(texID,
-                                              getTextureCoordinates(trc),
-                                              _texturesHandler,
-                                              fbTMap->getTextureSpec());
+                                              getTextureCoordinates(trc));
     translateAndScaleFallBackTex(tile, ancestor, tMap);
     TexturedMesh* texMesh = new TexturedMesh(tessellatorMesh, false, tMap, true);
     delete previousMesh;   //If a new mesh has been produced we delete the previous one
@@ -168,7 +162,15 @@ Mesh* TileImagesTileTexturizer::texturize(const RenderContext* rc,
   return mesh;
 }
 
-void TileImagesTileTexturizer::tileToBeDeleted(Tile* tile) {
+void TileImagesTileTexturizer::tileToBeDeleted(Tile* tile,
+                                               Mesh* mesh) {
+  
+  if ((_texturesHandler != NULL) && (mesh != NULL)) {
+    TexturedMesh* texturedMesh = (TexturedMesh*) mesh;
+    
+    _texturesHandler->releaseGLTextureId( texturedMesh->getTextureMapping()->getGLTextureID() );
+  }
+
   
   TilePetitions* tp = getRegisteredTilePetitions(tile);
   
@@ -206,10 +208,7 @@ bool TileImagesTileTexturizer::isReady(const RenderContext *rc) {
   return true;
 }
 
-
-
-TilePetitions* TileImagesTileTexturizer::getRegisteredTilePetitions(Tile* tile) const
-{
+TilePetitions* TileImagesTileTexturizer::getRegisteredTilePetitions(Tile* tile) const {
   //  for(std::list<TilePetitions*>::iterator it = _tilePetitions.begin();
   //      it != _tilePetitions.end();
   //      it++) {
@@ -234,8 +233,7 @@ TilePetitions* TileImagesTileTexturizer::getRegisteredTilePetitions(Tile* tile) 
   return NULL;
 }
 
-void TileImagesTileTexturizer::removeRegisteredTilePetitions(Tile* tile)
-{
+void TileImagesTileTexturizer::removeRegisteredTilePetitions(Tile* tile) {
   //  for(std::list<TilePetitions*>::iterator it = _tilePetitions.begin();
   //      it != _tilePetitions.end();
   //      it++) {

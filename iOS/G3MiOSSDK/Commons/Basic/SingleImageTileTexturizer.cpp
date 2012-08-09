@@ -54,13 +54,8 @@ Mesh* SingleImageTileTexturizer::texturize(const RenderContext* rc,
     rc->getFactory()->deleteImage(_image);
   }
   
-  const TextureMapping* texMap = new TextureMapping( _texID,
-                                                    createTextureCoordinates(rc, mesh),
-                                                    rc->getTexturesHandler(),
-                                                    TextureSpec("SINGLE_IMAGE_TEX",
-                                                                _image->getWidth(),
-                                                                _image->getHeight())
-                                                    );
+  const TextureMapping* texMap = new TextureMapping(_texID,
+                                                    createTextureCoordinates(rc, mesh));
   
   if (previousMesh != NULL) delete previousMesh;
   
@@ -69,7 +64,8 @@ Mesh* SingleImageTileTexturizer::texturize(const RenderContext* rc,
   return new TexturedMesh(mesh, false, texMap, true);
 }
 
-void SingleImageTileTexturizer::tileToBeDeleted(Tile* tile) {
+void SingleImageTileTexturizer::tileToBeDeleted(Tile* tile,
+                                                Mesh* mesh) {
   
 }
 

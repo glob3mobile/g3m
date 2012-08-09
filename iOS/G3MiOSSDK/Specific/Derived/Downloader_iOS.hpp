@@ -26,6 +26,8 @@ private:
   
   long                 _requestIdCounter;
   
+  NSURLCache* _cache;
+  
   NSString* toNSString(const std::string& cppStr) const {
     return [ NSString stringWithCString: cppStr.c_str()
                                encoding: NSUTF8StringEncoding ];
