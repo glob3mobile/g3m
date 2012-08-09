@@ -98,7 +98,11 @@ public class CPUTextureBuilder extends TextureBuilder
   
 	for (; i < vImages.size(); i++)
 	{
-	  IImage im2 = base.combineWith(*(vImages.get(i)), *(vRectangles.get(i)), width, height);
+  
+	  IImage image = vImages.get(i);
+	  final Rectangle rect = vRectangles.get(i);
+  
+	  IImage im2 = base.combineWith(image, rect, width, height);
   
 	  if (base != vImages.get(0))
 	  {

@@ -24,8 +24,8 @@ public abstract class CameraEventHandler
   {
   }
 
-  private abstract void onDown(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext);
-  private abstract void onMove(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext);
-  private abstract void onUp(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext);
+  public abstract void onDown(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext);
+  public abstract void onMove(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext);
+  public abstract void onUp(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext);
 
 }

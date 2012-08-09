@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class CameraContext
+public class CameraContext extends EffectTarget
 {
   private Gesture _currentGesture;
   private Camera _camera;
@@ -8,6 +8,10 @@ public class CameraContext
   {
 	  _currentGesture = gesture;
 	  _camera = camera;
+  }
+
+  public void dispose()
+  {
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
