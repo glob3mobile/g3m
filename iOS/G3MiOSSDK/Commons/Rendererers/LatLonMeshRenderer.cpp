@@ -33,24 +33,26 @@ void LatLonMeshRenderer::initialize(const InitializationContext* ic)
   
   // create vertices and indices in dinamic memory
   float *vertices = new float [numVertices*3];
+  int *indices = new int [numIndices];
+
+  Color *flatColor = new Color(Color::fromRGBA((float)1.0, (float)1.0, (float)0.0, (float)1.0));
+
 #ifdef C_CODE 
   memcpy(vertices, v, numVertices*3*sizeof(float));
-#endif
-#ifdef JAVA_CODE
-  System.arraycopy(v, 0, vertices, 0, v.length());
-#endif
-  
-  int *indices = new int [numIndices];
-#ifdef C_CODE
   memcpy(indices, i, numIndices*sizeof(unsigned int));
-#endif
-#ifdef JAVA_CODE
-  System.arraycopy(i, 0, indices, 0, i.length());
-#endif
   // create mesh
-  Color *flatColor = new Color(Color::fromRGBA(1.0, 1.0, 0.0, 1.0));
   mesh = IndexedMesh::CreateFromGeodetic3D(ic->getPlanet(), true, TriangleStrip, NoCenter, Vector3D(0,0,0), 
                                            4, vertices, indices, 4, flatColor);
+#endif
+#ifdef JAVA_CODE
+  System.arraycopy(v, 0, vertices, 0, v.length);
+  System.arraycopy(i, 0, indices, 0, i.length);
+  // create mesh
+  mesh = IndexedMesh::CreateFromGeodetic3D(ic->getPlanet(), true, GLPrimitive.TriangleStrip, 
+                                           CenterStrategy.NoCenter, Vector3D(0,0,0), 
+                                           4, vertices, indices, 4, flatColor);
+#endif
+
 }  
 
 
