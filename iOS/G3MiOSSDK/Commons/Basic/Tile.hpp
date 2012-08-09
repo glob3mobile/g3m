@@ -134,7 +134,7 @@ public:
               const TileRenderContext* trc,
               std::list<Tile*>* toVisitInNextIteration);
   
-  TileKey getKey() const;
+  const TileKey getKey() const;
 };
 
 #endif

@@ -108,7 +108,7 @@ Rectangle* TilePetitions::getImageRectangleInTexture(const Sector& wholeSector,
   return r;
 }
 
-void TilePetitions::createTexture(TexturesHandler* texHandler, const IFactory* factory, int width, int height)
+void TilePetitions::createTexture(TexturesHandler* texturesHandler, const IFactory* factory, int width, int height)
 {
   if (allFinished())
   {
@@ -130,8 +130,8 @@ void TilePetitions::createTexture(TexturesHandler* texHandler, const IFactory* f
     
     //Creating the texture
     const std::string& url = getPetitionsID();  
-    //_texID = texHandler->getTextureId(images, url, width, height);
-    _texID = texHandler->getTextureId(images, rectangles, url, width, height);
+    //_texID = texturesHandler->getTextureId(images, url, width, height);
+    _texID = texturesHandler->getTextureId(images, rectangles, url, width, height);
     
     //RELEASING MEMORY
     for (int i = 0; i < _petitions.size(); i++) {

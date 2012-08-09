@@ -32,7 +32,7 @@ class TileImagesTileTexturizer : public TileTexturizer {
 private:
   
   const IFactory* _factory;
-  TexturesHandler* _texHandler;
+  TexturesHandler* _texturesHandler;
   IDownloader * _downloader;
   
   std::vector<TilePetitions*> _tilePetitions;

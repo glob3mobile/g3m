@@ -65,7 +65,7 @@ Mesh* TileImagesTileTexturizer::getNewTextureMesh(Tile* tile,
     int texID = tp->getTexID();
     if (texID < 0){ //Texture has not been created
       if (tp->allFinished()){
-        tp->createTexture(_texHandler, _factory, 
+        tp->createTexture(_texturesHandler, _factory, 
                           _parameters->_tileTextureWidth, _parameters->_tileTextureHeight);
         texID = tp->getTexID();
       }
@@ -78,7 +78,7 @@ Mesh* TileImagesTileTexturizer::getNewTextureMesh(Tile* tile,
     
       TextureMapping * tMap = new TextureMapping(texID,
                                                  getTextureCoordinates(trc),
-                                                 _texHandler,
+                                                 _texturesHandler,
                                                  tp->getPetitionsID(), 
                                                  _parameters->_tileTextureWidth, 
                                                  _parameters->_tileTextureHeight);
@@ -107,7 +107,7 @@ Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
       if (texMesh != NULL){
         fbTMap = texMesh->getTextureMapping();
         
-        texID = _texHandler->getTextureIdIfAvailable(fbTMap->getStringTexID(), 
+        texID = _texturesHandler->getTextureIdIfAvailable(fbTMap->getStringTexID(), 
                                                      fbTMap->getWidth(), fbTMap->getHeight());
         if (texID >= 0) {
           break;
@@ -119,7 +119,7 @@ Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
   
   //CREATING MESH
   if (texID > -1) {
-    TextureMapping* tMap = new TextureMapping(texID, getTextureCoordinates(trc), _texHandler, fbTMap->getStringTexID(),
+    TextureMapping* tMap = new TextureMapping(texID, getTextureCoordinates(trc), _texturesHandler, fbTMap->getStringTexID(),
                                               fbTMap->getWidth(), fbTMap->getHeight());
     translateAndScaleFallBackTex(tile, ancestor, tMap);
     TexturedMesh* texMesh = new TexturedMesh(tessellatorMesh, false, tMap, true);
@@ -147,7 +147,7 @@ Mesh* TileImagesTileTexturizer::texturize(const RenderContext* rc,
                                           Mesh* previousMesh) {
   //STORING CONTEXT
   _factory    = rc->getFactory();
-  _texHandler = rc->getTexturesHandler();
+  _texturesHandler = rc->getTexturesHandler();
   _downloader = rc->getDownloader();
   
   //printf("TP SIZE: %lu\n", _tilePetitions.size());

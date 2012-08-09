@@ -20,32 +20,42 @@ class RenderContext;
 class TextureMapping
 {
 private:
-  const int          _textureId;
-  const float const* _texCoords;
-  MutableVector2D    _translation, _scale;
-  TexturesHandler* const _texHandler;
-  const int _width, _height;
+  const int              _textureId;
+  const float const*     _texCoords;
+  
+  MutableVector2D        _translation;
+  MutableVector2D        _scale;
+  
+  TexturesHandler* const _texturesHandler;
+
   const std::string _texID;
+  const int _width;
+  const int _height;
   
 public:
   
   TextureMapping(int textureId,
-                 float texCoords[], TexturesHandler* const texHandler, 
-                 const std::string& texID, int width, int height) :
+                 float texCoords[],
+                 TexturesHandler* const texturesHandler,
+                 const std::string& texID,
+                 int width, int height) :
   _textureId(textureId),
   _texCoords(texCoords),
-  _texHandler(texHandler),
+  _texturesHandler(texturesHandler),
+  _texID(texID),
   _width(width),
   _height(height),
-  _texID(texID)
+  _translation(0, 0),
+  _scale(1, 1)
   {
-    _translation = MutableVector2D(0, 0);
-    _scale       = MutableVector2D(1, 1);
+
   }
   
   TextureMapping(int textureId,
-                 std::vector<MutableVector2D> texCoords, TexturesHandler* const texHandler,
-                 const std::string& texID, int width, int height);
+                 std::vector<MutableVector2D> texCoords,
+                 TexturesHandler* const texturesHandler,
+                 const std::string& texID,
+                 int width, int height);
   
   void setTranslationAndScale(const Vector2D& translation,
                               const Vector2D& scale){
@@ -58,8 +68,8 @@ public:
     delete[] _texCoords;
 #endif
     
-    if (_texHandler != NULL){
-      _texHandler->takeTexture(_textureId);
+    if (_texturesHandler != NULL){
+      _texturesHandler->takeTexture(_textureId);
     }
   }
   
@@ -83,7 +93,8 @@ public:
     return _texCoords;
   }
   
-  void bind(const RenderContext* rc) const;  
+  void bind(const RenderContext* rc) const;
+  
 };
 
 #endif

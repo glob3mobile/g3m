@@ -154,7 +154,7 @@ public:
     return _tileSector;
   }
   
-  void createTexture(TexturesHandler* texHandler, const IFactory* factory, int width, int height);
+  void createTexture(TexturesHandler* texturesHandler, const IFactory* factory, int width, int height);
   
   int getTexID() const{ return _texID;}
 

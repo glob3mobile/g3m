@@ -7,17 +7,17 @@
 //
 
 #include "MultiLayerTileTexturizer.hpp"
-//#include "IDownloader.hpp"
 #include "Context.hpp"
 #include "LayerSet.hpp"
 #include "TilesRenderParameters.hpp"
 #include "Tile.hpp"
+#include "TexturedMesh.hpp"
 
 
 enum PetitionStatus {
-  PENDING,
-  DOWNLOADED,
-  CANCELED
+  STATUS_PENDING,
+  STATUS_DOWNLOADED,
+  STATUS_CANCELED
 };
 
 
@@ -30,10 +30,6 @@ private:
   std::vector<PetitionStatus>    _status;
   std::vector<const ByteBuffer*> _buffers;
   
-//  static const int PENDING    = 0;
-//  static const int DOWNLOADED = 1;
-//  static const int CANCELED   = 2;
-  
 public:
   PetitionsMixer(Tile* tile,
                  std::vector<Petition*>& petitions) :
@@ -43,7 +39,7 @@ public:
   {
     
     for (int i = 0; i < _petitionsCount; i++) {
-      _status.push_back(PENDING);
+      _status.push_back(STATUS_PENDING);
       _buffers.push_back(NULL);
     }
   }
@@ -54,11 +50,11 @@ public:
     
     for (int i = 0; i < _petitionsCount; i++) {
       const int status = _status[i];
-      if (status == PENDING) {
+      if (status == STATUS_PENDING) {
         completed = false;
         break;
       }
-      else if (status == CANCELED) {
+      else if (status == STATUS_CANCELED) {
         anyCanceled = true;
       }
     }
@@ -75,22 +71,28 @@ public:
     }
   }
   
+  void checkIsPending(int position) {
+    if (_status[position] != STATUS_PENDING) {
+      printf("Logic error: Expected STATUS_PENDING at position #%d but found status: %d\n",
+             position,
+             _status[position]);
+    }
+  }
+  
   void downloaded(int position,
                   const ByteBuffer* buffer) {
-    if (_status[position] != PENDING) {
-      printf("Logic error, expected pending\n");
-    }
-    _status[position]  = DOWNLOADED;
+    checkIsPending(position);
+
+    _status[position]  = STATUS_DOWNLOADED;
     _buffers[position] = buffer;
     
     checkCompletion();
   }
   
   void canceled(int position) {
-    if (_status[position] != PENDING) {
-      printf("Logic error, expected pending\n");
-    }
-    _status[position] = CANCELED;
+    checkIsPending(position);
+
+    _status[position] = STATUS_CANCELED;
     
     checkCompletion();
   }
@@ -148,14 +150,9 @@ Mesh* MultiLayerTileTexturizer::texturize(const RenderContext* rc,
   
   //  TexturedMesh* result = getFinalTexturedMesh(tile, tessellatorMesh);
   
-  //  int level  = tile->getLevel();
-  //  int column = tile->getColumn();
-  //  int row    = tile->getRow();
-  
-  TileKey key = tile->getKey();
+  const TileKey key = tile->getKey();
   
   PetitionsMixer* mixer = _mixers[key];
-  
   if (mixer == NULL) {
     std::vector<Petition*> petitions = _layerSet->createTilePetitions(rc,
                                                                       tile,
@@ -182,9 +179,23 @@ Mesh* MultiLayerTileTexturizer::texturize(const RenderContext* rc,
     printf("****** mixer already created\n");
   }
   
+//  tile->setTexturizerInProgress(true);
+  
+  Mesh* result = NULL;
+  
+//  if (previousMesh == NULL) {
+//    const TextureMapping* textureMapping;
+//    
+//    result = new TexturedMesh(tessellatorMesh, false,
+//                              textureMapping, true);
+//  }
+//  else {
+//    result = previousMesh;
+//  }
+  
   int ___XX;
   
-  return 0;
+  return result;
 }
 
 void MultiLayerTileTexturizer::tileToBeDeleted(Tile* tile) {
