@@ -87,7 +87,7 @@ public class CameraRotationHandler extends CameraEventHandler
 	return Renderer.maxTimeToRender;
   }
 
-  private void onDown(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final void onDown(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	Camera camera = cameraContext.getCamera();
 	_camera0 = new Camera(camera);
@@ -111,7 +111,7 @@ public class CameraRotationHandler extends CameraEventHandler
   
 	//printf ("down 3 fingers\n");
   }
-  private void onMove(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final void onMove(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	//_currentGesture = getGesture(touchEvent);
 	if (cameraContext.getCurrentGesture() != Gesture.Rotate)
@@ -159,17 +159,17 @@ public class CameraRotationHandler extends CameraEventHandler
 	  camera.copyFrom(tempCamera);
 	}
   }
-  private void onUp(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final void onUp(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	cameraContext.setCurrentGesture(Gesture.None);
 	_initialPixel = Vector3D.nan().asMutableVector3D();
   }
 
-  private double lastYValid;
-  private Camera _camera0 ; //Initial Camera saved on Down event
+  public double lastYValid;
+  public Camera _camera0 ; //Initial Camera saved on Down event
 
-  private MutableVector3D _initialPoint = new MutableVector3D(); //Initial point at dragging
-  private MutableVector3D _initialPixel = new MutableVector3D(); //Initial pixel at start of gesture
+  public MutableVector3D _initialPoint = new MutableVector3D(); //Initial point at dragging
+  public MutableVector3D _initialPixel = new MutableVector3D(); //Initial pixel at start of gesture
 
 }
 //#endif

@@ -81,9 +81,8 @@ public class Geodetic2D
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean operator <(const Geodetic2D& that) const
-//C++ TO JAVA CONVERTER TODO TASK: Operators cannot be overloaded in Java:
-  boolean operator <(Geodetic2D that)
+//ORIGINAL LINE: boolean lowerThanOperator(const Geodetic2D& that) const
+  public final boolean lowerThanOperator(Geodetic2D that)
   {
 	if (_latitude.lowerThan(that._latitude))
 	{

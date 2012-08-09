@@ -29,8 +29,7 @@ public class CameraDoubleTapHandler extends CameraEventHandler
 	return Renderer.maxTimeToRender;
   }
 
-
-  private void onDown(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final void onDown(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	// compute globe point where user tapped
 	final Vector2D pixel = touchEvent.getTouch(0).getPos();
@@ -57,10 +56,10 @@ public class CameraDoubleTapHandler extends CameraEventHandler
 	// use inheritance for EffectTarget
 	eventContext.getEffectsScheduler().startEffect(effect, cameraContext);
   }
-  private void onMove(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final void onMove(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
   }
-  private void onUp(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final void onUp(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
   }
 

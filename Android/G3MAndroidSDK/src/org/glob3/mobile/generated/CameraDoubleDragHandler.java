@@ -101,8 +101,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 	return Renderer.maxTimeToRender;
   }
 
-
-  private void onDown(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final void onDown(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	Camera camera = cameraContext.getCamera();
 	_camera0 = new Camera(camera);
@@ -135,7 +134,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   
 	//printf ("down 2 finger\n");
   }
-  private void onMove(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final void onMove(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	if (cameraContext.getCurrentGesture() != Gesture.DoubleDrag)
 		return;
@@ -286,7 +285,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   
 	//printf ("moving 2 fingers\n");
   }
-  private void onUp(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final void onUp(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	cameraContext.setCurrentGesture(Gesture.None);
 	_initialPixel = Vector3D.nan().asMutableVector3D();
@@ -294,13 +293,13 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 	//printf ("end 2 fingers.  gesture=%d\n", _currentGesture);
   }
 
-  private MutableVector3D _initialPoint = new MutableVector3D(); //Initial point at dragging
-  private MutableVector3D _initialPixel = new MutableVector3D(); //Initial pixel at start of gesture
-  private MutableVector3D _initialPoint0 = new MutableVector3D();
-  private MutableVector3D _initialPoint1 = new MutableVector3D();
-  private double _initialFingerSeparation;
-  private double _initialFingerInclination;
+  public MutableVector3D _initialPoint = new MutableVector3D(); //Initial point at dragging
+  public MutableVector3D _initialPixel = new MutableVector3D(); //Initial pixel at start of gesture
+  public MutableVector3D _initialPoint0 = new MutableVector3D();
+  public MutableVector3D _initialPoint1 = new MutableVector3D();
+  public double _initialFingerSeparation;
+  public double _initialFingerInclination;
 
-  private Camera _camera0 ; //Initial Camera saved on Down event
+  public Camera _camera0 ; //Initial Camera saved on Down event
 
 }
