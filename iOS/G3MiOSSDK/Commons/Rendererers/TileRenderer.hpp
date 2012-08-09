@@ -200,10 +200,10 @@ public:
   }
   
   static std::string asLogString(std::map<int, int> map) {
-#ifdef C_CODE
-    std::ostringstream buffer;
     
     bool first = true;
+#ifdef C_CODE
+    std::ostringstream buffer;
     for(std::map<int, int>::const_iterator i = map.begin();
         i != map.end();
         ++i ) {

@@ -13,13 +13,21 @@
 #include <vector>
 
 
-class IImage;
-class RenderContext;
-class TextureHolder;
-class GL;
-class IFactory;
-class TextureBuilder;
-class Rectangle;
+//class IImage;
+//class RenderContext;
+//class TextureHolder;
+//class GL;
+//class IFactory;
+//class TextureBuilder;
+//class Rectangle;
+
+#include "IImage.hpp"
+#include "Context.hpp"
+#include "TextureHolder.hpp"
+#include "GL.hpp"
+#include "IFactory.hpp"
+#include "TextureBuilder.hpp"
+#include "Rectangle.hpp"
 
 
 
