@@ -106,14 +106,17 @@ public class SimplePlanetRenderer extends Renderer
   
 	final Planet planet = rc.getPlanet();
   
-	float ver = createVertices(planet);
 	final int res = _lonRes;
 	final int numIndexes = (2 * (res - 1) * (res + 1)) -1;
-	int ind = createMeshIndex();
+  
+	int[] ind = createMeshIndex();
+	float[] ver = createVertices(planet);
+	float[] texC = 0;
+	float[] colors = 0;
+	float[] normals = 0;
   
 	//TEXTURED
 	int texID = 0;
-	float texC = 0F;
 	if (true)
 	{
 	  texID = rc.getTexturesHandler().getTextureIdFromFileName(_textureFilename, _texWidth, _texHeight);
@@ -126,7 +129,6 @@ public class SimplePlanetRenderer extends Renderer
 	}
   
 	//COLORS PER VERTEX
-	float[] colors = 0;
 	if (true)
 	{
 	  int numVertices = res * res * 4;
@@ -149,7 +151,6 @@ public class SimplePlanetRenderer extends Renderer
 	  flatColor = new Color(Color.fromRGBA((float) 0.0, (float) 1.0, (float) 0.0, (float) 1.0));
 	}
   
-	float[] normals = 0;
 	if (true)
 	{
 	  int numVertices = res * res * 3;
