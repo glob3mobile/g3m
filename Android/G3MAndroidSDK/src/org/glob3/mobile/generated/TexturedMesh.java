@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 public class TexturedMesh extends Mesh
 {
   private final Mesh _mesh;
-  private final TextureMapping _const _textureMapping;
+  private final TextureMapping _textureMapping;
   private final boolean _ownedMesh;
   private final boolean _ownedTexMapping;
 
@@ -36,15 +36,6 @@ public class TexturedMesh extends Mesh
 
   public void dispose()
   {
-	if (_ownedMesh)
-	{
-	  if (_mesh != null)
-		  _mesh.dispose();
-	}
-	if (_ownedTexMapping)
-	{
-	  _textureMapping = null;
-	}
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

@@ -38,7 +38,8 @@ public class CPUTextureBuilder extends TextureBuilder
 	  im2 = im.combineWith(imTrans, width, height);
 	  if (i > 1)
 	  {
-		im = null;
+		if (im != null)
+			im.dispose();
 	  }
 	  im = im2;
 	}
@@ -47,7 +48,8 @@ public class CPUTextureBuilder extends TextureBuilder
   
 	if (imagesSize > 1)
 	{
-	  im = null;
+	  if (im != null)
+		  im.dispose();
 	}
   
 	return texID;
@@ -104,7 +106,8 @@ public class CPUTextureBuilder extends TextureBuilder
   
 	  if (base != vImages.get(0))
 	  {
-		base = null;
+		if (base != null)
+			base.dispose();
 	  }
 	  base = im2;
 	}
@@ -113,7 +116,8 @@ public class CPUTextureBuilder extends TextureBuilder
   
 	if (base != vImages.get(0))
 	{
-	  base = null;
+	  if (base != null)
+		  base.dispose();
 	}
   
 	return texID;

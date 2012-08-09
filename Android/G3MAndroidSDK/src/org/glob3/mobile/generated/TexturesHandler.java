@@ -40,7 +40,8 @@ public class TexturesHandler
     
 	  final int texId = getTextureId(image, filename, textureWidth, textureHeight); // filename as the textureId
     
-	  image = null;
+	  if (image != null)
+		  image.dispose();
     
 	  return texId;
 	}
@@ -121,7 +122,8 @@ public class TexturesHandler
     
 			_textureHolders.remove(i);
     
-			holder = null;
+			if (holder != null)
+				holder.dispose();
 		  }
     
 		  return;
