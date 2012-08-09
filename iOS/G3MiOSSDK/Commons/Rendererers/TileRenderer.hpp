@@ -200,6 +200,7 @@ public:
   }
   
   static std::string asLogString(std::map<int, int> map) {
+#ifdef C_CODE
     std::ostringstream buffer;
     
     bool first = true;
@@ -219,6 +220,23 @@ public:
     }
     
     return buffer.str();
+#endif
+#ifdef JAVA_CODE
+    String res = "";
+    for (java.util.Map.Entry<Integer, Integer> i: map.entrySet()){
+		  final int level = i.getKey();
+		  final int counter = i.getValue();
+      
+		  if (first){
+        first = false;
+		  }
+		  else{
+        res += ",";
+		  }
+		  buffer += "L" + level + ":" + counter;
+    }
+    return res;
+#endif
   }
   
   void log(const ILogger* logger) const {
