@@ -98,16 +98,15 @@ public class Camera
 	{
 	  final MutableMatrix44D inversed = _modelMatrix.inversed();
   
-	  FrustumData data = calculateFrustumData(rc);
-	  Vector3D p0 = new Vector3D(new Vector3D(data._left/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
-	  Vector3D p1 = new Vector3D(new Vector3D(data._left/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
-	  Vector3D p2 = new Vector3D(new Vector3D(data._right/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
-	  Vector3D p3 = new Vector3D(new Vector3D(data._right/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
+	  final FrustumData data = calculateFrustumData(rc);
+	  final Vector3D p0 = new Vector3D(new Vector3D(data._left/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
+	  final Vector3D p1 = new Vector3D(new Vector3D(data._left/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
+	  final Vector3D p2 = new Vector3D(new Vector3D(data._right/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
+	  final Vector3D p3 = new Vector3D(new Vector3D(data._right/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
   
 	  float[] vertices = { (float) p0.x(), (float) p0.y(), (float) p0.z(), (float) p1.x(), (float) p1.y(), (float) p1.z(), (float) p2.x(), (float) p2.y(), (float) p2.z(), (float) p3.x(), (float) p3.y(), (float) p3.z()};
 	  int[] indices = {0, 1, 2, 3};
   
-  //    GL *gl = rc.getGL();
 	  gl.enableVerticesPosition();
 	  gl.vertexPointer(3, 0, vertices);
 	  gl.lineWidth(2);
@@ -129,6 +128,7 @@ public class Camera
 	final int py = _height - (int) pixel.y();
 	final Vector3D pixel3D = new Vector3D(px, py, 0);
   
+	int __cache_model_view_matrix;
 	final MutableMatrix44D modelViewMatrix = _projectionMatrix.multiply(_modelMatrix);
   
 	int[] viewport = { 0, 0, _width, _height };
@@ -153,6 +153,7 @@ public class Camera
 //ORIGINAL LINE: Vector2D point2Pixel(const Vector3D& point) const
   public final Vector2D point2Pixel(Vector3D point)
   {
+	int __cache_model_view_matrix;
 	final MutableMatrix44D modelViewMatrix = _projectionMatrix.multiply(_modelMatrix);
   
 	int[] viewport = { 0, 0, _width, _height };
@@ -225,7 +226,8 @@ public class Camera
 	final Vector3D rotationAxis = p0.cross(p1);
   
 	// compute the angle
-	final Angle rotationDelta = Angle.fromRadians(- Math.acos(p0.normalized().dot(p1.normalized())));
+	//const Angle rotationDelta = Angle::fromRadians( - acos(p0.normalized().dot(p1.normalized())) );
+	final Angle rotationDelta = Angle.fromRadians(-Math.asin(rotationAxis.length()/p0.length()/p1.length()));
   
 	if (rotationDelta.isNan())
 	{
@@ -240,7 +242,7 @@ public class Camera
   }
   public final void moveForward(double d)
   {
-	Vector3D view = _center.sub(_position).normalized().asVector3D();
+	final Vector3D view = _center.sub(_position).normalized().asVector3D();
 	applyTransform(MutableMatrix44D.createTranslationMatrix(view.times(d)));
   }
 
@@ -254,7 +256,6 @@ public class Camera
   //Rotate
   public final void rotateWithAxisAndPoint(Vector3D axis, Vector3D point, Angle delta)
   {
-  
 	final MutableMatrix44D m = MutableMatrix44D.createGeneralRotationMatrix(delta, axis, point);
   
 	//m.print();
@@ -309,6 +310,7 @@ public class Camera
 //ORIGINAL LINE: Vector3D getHorizontalVector() const
   public final Vector3D getHorizontalVector()
   {
+	int __use_cached_model_matrix;
 	final MutableMatrix44D M = MutableMatrix44D.createModelMatrix(_position, _center, _up);
 	return new Vector3D(M.get(0), M.get(4), M.get(8));
   }
@@ -326,12 +328,18 @@ public class Camera
 //ORIGINAL LINE: Angle compute3DAngularDistance(const Vector2D& pixel0, const Vector2D& pixel1) const
   public final Angle compute3DAngularDistance(Vector2D pixel0, Vector2D pixel1)
   {
-	Vector3D point0 = pixel2PlanetPoint(pixel0);
+	final Vector3D point0 = pixel2PlanetPoint(pixel0);
 	if (point0.isNan())
-		return Angle.nan();
-	Vector3D point1 = pixel2PlanetPoint(pixel1);
+	{
+	  return Angle.nan();
+	}
+  
+	final Vector3D point1 = pixel2PlanetPoint(pixel1);
 	if (point1.isNan())
-		return Angle.nan();
+	{
+	  return Angle.nan();
+	}
+  
 	return point0.angleBetween(point1);
   }
 
@@ -457,6 +465,5 @@ public class Camera
 	  _frustumInModelCoordinates = null;
 	}
   }
-
 
 }

@@ -20,65 +20,103 @@ package org.glob3.mobile.generated;
 public class CPUTextureBuilder extends TextureBuilder
 {
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: int createTextureFromImages(GL * gl, const java.util.ArrayList<const IImage*>& vImages, int width, int height) const
-  public final int createTextureFromImages(GL gl, java.util.ArrayList<IImage> vImages, int width, int height)
+//ORIGINAL LINE: int createTextureFromImages(GL * gl, const java.util.ArrayList<const IImage*>& images, int width, int height) const
+  public final int createTextureFromImages(GL gl, java.util.ArrayList<IImage> images, int width, int height)
   {
-	if (vImages.size() > 0)
+	final int imagesSize = images.size();
+  
+	if (imagesSize == 0)
 	{
+	  return -1;
+	}
   
-	  IImage im = vImages.get(0);
-	  IImage im2 = null;
-	  for (int i = 1; i < vImages.size(); i++)
-	  {
-		IImage imTrans = vImages.get(i);
-		im2 = im.combineWith(imTrans, width, height);
-		if (i > 1)
-			if (im != null)
-				im.dispose();
-		im = im2;
-	  }
-  
-	  int texID = gl.uploadTexture(im, width, height);
-  
-	  if (1 < vImages.size())
+	IImage im = images.get(0);
+	IImage im2 = null;
+	for (int i = 1; i < imagesSize; i++)
+	{
+	  IImage imTrans = images.get(i);
+	  im2 = im.combineWith(imTrans, width, height);
+	  if (i > 1)
 	  {
 		if (im != null)
 			im.dispose();
 	  }
-	  return texID;
+	  im = im2;
 	}
-	else
+  
+	int texID = gl.uploadTexture(im, width, height);
+  
+	if (imagesSize > 1)
 	{
-	  return -1;
+	  if (im != null)
+		  im.dispose();
 	}
+  
+	return texID;
+  
+  //  const int imagesSize = images.size();
+  //
+  //  if (imagesSize > 0) {
+  //    const IImage* im = images[0], *im2 = NULL;
+  //    for (int i = 1; i < imagesSize; i++) {
+  //      const IImage* imTrans = images[i];
+  //      im2 = im->combineWith(*imTrans, width, height);
+  //      if (i > 1) {
+  //        delete im;
+  //      }
+  //      im = im2;
+  //    }
+  //
+  //    int texID = gl->uploadTexture(im, width, height);
+  //
+  //    if (imagesSize > 1){
+  //      delete im;
+  //    }
+  //    return texID;
+  //  }
+  //  else {
+  //    return -1;
+  //  }
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: int createTextureFromImages(GL * gl, const IFactory* factory, const java.util.ArrayList<const IImage*>& vImages, const java.util.ArrayList<const Rectangle*>& vRectangles, int width, int height) const
   public final int createTextureFromImages(GL gl, IFactory factory, java.util.ArrayList<IImage> vImages, java.util.ArrayList<Rectangle> vRectangles, int width, int height)
   {
-  
-	int todo_JM = 0;
 	IImage base;
-	if (vRectangles.get(0)._width == width && vRectangles.get(0)._height == height)
+	int i = 0; //First image to merge
+	Rectangle baseRec = new Rectangle(0,0, width, height);
+	if (vRectangles.get(0).equalTo(baseRec))
 	{
 	  base = vImages.get(0);
+	  i = 1;
 	}
 	else
 	{
 	  base = factory.createImageFromSize(width, height);
 	}
   
-	for (int i = 1; i < vImages.size(); i++)
+	for (; i < vImages.size(); i++)
 	{
-  	  IImage im2 = base.combineWith(vImages.get(i), vRectangles.get(i), width, height);
-	  if (base != null)
-		  base.dispose();
+	  IImage im2 = base.combineWith(*(vImages.get(i)), *(vRectangles.get(i)), width, height);
+  
+	  if (base != vImages.get(0))
+	  {
+		if (base != null)
+			base.dispose();
+	  }
 	  base = im2;
 	}
   
-	return todo_JM;
+	int texID = gl.uploadTexture(base, width, height);
   
+	if (base != vImages.get(0))
+	{
+	  if (base != null)
+		  base.dispose();
+	}
+  
+	return texID;
   }
 
 }

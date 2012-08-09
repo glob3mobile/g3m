@@ -23,12 +23,10 @@ public class TilePetitions implements IDownloadListener
   {
 	Vector2D pos = wholeSector.getUVCoordinates(imageSector.lower().latitude(), imageSector.lower().longitude());
   
-	double width = wholeSector.getDeltaLongitude().degrees() / imageSector.getDeltaLongitude().degrees();
-	double height = wholeSector.getDeltaLatitude().degrees() / imageSector.getDeltaLatitude().degrees();
+	double width = imageSector.getDeltaLongitude().degrees() / wholeSector.getDeltaLongitude().degrees();
+	double height = imageSector.getDeltaLatitude().degrees() / wholeSector.getDeltaLatitude().degrees();
   
-  
-  
-	Rectangle r = new Rectangle(pos.x() * texWidth, pos.y() * texHeight, width * texWidth, height * texHeight);
+	Rectangle r = new Rectangle(pos.x() * texWidth, (1.0 - pos.y()) * texHeight, width * texWidth, height * texHeight);
 	return r;
   }
 
@@ -138,22 +136,25 @@ public class TilePetitions implements IDownloadListener
 	{
 	  //Creating images (opaque one must be the first)
 	  final java.util.ArrayList<IImage> images = new java.util.ArrayList<IImage>();
-	  java.util.ArrayList<Rectangle> rectangles = new java.util.ArrayList<Rectangle>();
+	  final java.util.ArrayList<Rectangle> rectangles = new java.util.ArrayList<Rectangle>();
 	  for (int i = 0; i < getNumPetitions(); i++)
 	  {
 		final ByteBuffer bb = getPetition(i).getByteBuffer();
 		IImage im = factory.createImageFromData(bb);
+  
+		Sector imSector = getPetition(i).getSector();
 		if (im != null)
 		{
 		  images.add(im);
-		  Rectangle rec = getImageRectangleInTexture(_tileSector, getPetition(i).getSector(), width, height);
+  
+		  Rectangle rec = getImageRectangleInTexture(_tileSector, imSector, width, height);
 		  rectangles.add(rec);
 		}
 	  }
   
 	  //Creating the texture
 	  final String url = getPetitionsID();
-	  _texID = texHandler.getTextureId(images, url, width, height);
+	  _texID = texHandler.getTextureId(images, rectangles, url, width, height);
   
 	  //RELEASING MEMORY
 	  for (int i = 0; i < _petitions.size(); i++)

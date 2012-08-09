@@ -1,15 +1,21 @@
 package org.glob3.mobile.generated; 
-public class EffectsScheduler //: public Renderer
- {
+//***************************************************************
+
+
+public class EffectsScheduler
+{
 
   private static class EffectRun
   {
 	public Effect _effect;
+	public EffectTarget _target;
+
 	public boolean _started;
 
-	public EffectRun(Effect effect)
+	public EffectRun(Effect effect, EffectTarget target)
 	{
 		_effect = effect;
+		_target = target;
 		_started = false;
 	}
 
@@ -89,13 +95,6 @@ public class EffectsScheduler //: public Renderer
 	_timer = _factory.createTimer();
   }
 
-
-//  virtual int render(const RenderContext* rc);
-//  
-//  virtual bool onTouchEvent(const TouchEvent* touchEvent);
-//  
-//  virtual void onResizeViewportEvent(int width, int height);
-
   public void dispose()
   {
 	_factory.deleteTimer(_timer);
@@ -108,34 +107,41 @@ public class EffectsScheduler //: public Renderer
 	}
   }
 
-
-  //int EffectsScheduler::render(const RenderContext *rc) {
-  //  doOneCyle(rc);
-  //  if (_effectsRuns.size() == 0) {
-  //    return MAX_TIME_TO_RENDER;
-  //  }
-  //  else {
-  //    return 0;
-  //  }
-  //}
-  //
-  //bool EffectsScheduler::onTouchEvent(const TouchEvent* touchEvent) {
-  //  return false;
-  //}
-  //
-  //void EffectsScheduler::onResizeViewportEvent(int width, int height) {
-  //
-  //}
-  
-  public final void startEffect(Effect effect)
+  public final void startEffect(Effect effect, EffectTarget target)
   {
-	_effectsRuns.add(new EffectRun(effect));
+	_effectsRuns.add(new EffectRun(effect, target));
   }
 
-
-  public final boolean isReadyToRender(RenderContext rc)
+  public final void cancellAllEffectsFor(EffectTarget target)
   {
-	return true;
+	java.util.ArrayList<Integer> indicesToRemove = new java.util.ArrayList<Integer>();
+	final TimeInterval now = _timer.now();
+  
+	for (int i = 0; i < _effectsRuns.size(); i++)
+	{
+	  EffectRun effectRun = _effectsRuns.get(i);
+  
+	  if (effectRun._started == true)
+	  {
+		if (effectRun._target == target)
+		{
+		  effectRun._effect.cancel(now);
+  
+		  indicesToRemove.add(i);
+		}
+	  }
+	}
+  
+	// backward iteration, to remove from bottom to top
+	for (int i = indicesToRemove.size() - 1; i >= 0; i--)
+	{
+	  final int indexToRemove = indicesToRemove.get(i);
+	  if (_effectsRuns.get(indexToRemove) != null)
+		  _effectsRuns.get(indexToRemove).dispose();
+  
+  	_effectsRuns.remove(indexToRemove);
+	}
+  
   }
 
 }

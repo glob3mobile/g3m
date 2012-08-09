@@ -87,7 +87,7 @@ public class G3MWidget
 	_timer.start();
 	_renderCounter++;
   
-	RenderContext rc = new RenderContext(_factory, _logger, _planet, _gl, _camera, _texturesHandler, _downloaderOLD, _downloader, _scheduler);
+	RenderContext rc = new RenderContext(_factory, _logger, _planet, _gl, _camera, _texturesHandler, _downloaderOLD, _downloader, _scheduler, _factory.createTimer());
   
 	_scheduler.doOneCyle(rc);
   
@@ -127,7 +127,9 @@ public class G3MWidget
   {
 	if (_rendererReady)
 	{
-	  _renderer.onTouchEvent(myEvent);
+	  EventContext ec = new EventContext(_factory, _logger, _planet, _downloaderOLD, _downloader, _scheduler);
+  
+	  _renderer.onTouchEvent(ec, myEvent);
 	}
   }
 
@@ -135,7 +137,9 @@ public class G3MWidget
   {
 	if (_rendererReady)
 	{
-	  _renderer.onResizeViewportEvent(width, height);
+	  EventContext ec = new EventContext(_factory, _logger, _planet, _downloaderOLD, _downloader, _scheduler);
+  
+	  _renderer.onResizeViewportEvent(ec, width, height);
 	}
   }
 
@@ -206,6 +210,8 @@ public class G3MWidget
 	_scheduler.initialize(ic);
 	_renderer.initialize(ic);
 	_busyRenderer.initialize(ic);
+  
+	_downloader.start();
   }
 
 }

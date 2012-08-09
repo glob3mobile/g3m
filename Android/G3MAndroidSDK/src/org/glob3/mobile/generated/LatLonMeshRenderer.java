@@ -62,12 +62,12 @@ public class LatLonMeshRenderer extends Renderer
 	return Renderer.maxTimeToRender;
   }
 
-  public final boolean onTouchEvent(TouchEvent touchEvent)
+  public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
   {
 	return false;
   }
 
-  public final void onResizeViewportEvent(int width, int height)
+  public final void onResizeViewportEvent(EventContext ec, int width, int height)
   {
   }
 

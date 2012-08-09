@@ -62,10 +62,6 @@ public class MarksRenderer extends Renderer
 	return Renderer.maxTimeToRender;
   }
 
-  public boolean onTouchEvent(TouchEvent touchEvent)
-  {
-	return false;
-  }
 
   public void dispose()
   {
@@ -82,7 +78,12 @@ public class MarksRenderer extends Renderer
 	_marks.add(mark);
   }
 
-  public final void onResizeViewportEvent(int width, int height)
+  public boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
+  {
+	return false;
+  }
+
+  public final void onResizeViewportEvent(EventContext ec, int width, int height)
   {
 
   }

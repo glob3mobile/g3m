@@ -62,10 +62,12 @@ public class WMSLayer extends Layer
   {
 	java.util.ArrayList<Petition> vPetitions = new java.util.ArrayList<Petition>();
   
-	if (!_bbox.fullContains(tile.getSector()))
+	if (!_bbox.touchesWith(tile.getSector()))
 	{
-	  return vPetitions;
+		return vPetitions;
 	}
+  
+	Sector sector = tile.getSector().intersection(_bbox);
   
 	  //Server name
 	String req = _serverURL;
@@ -113,7 +115,6 @@ public class WMSLayer extends Layer
 	//ASKING TRANSPARENCY
 	req += "&TRANSPARENT=TRUE";
   
-	Sector sector = tile.getSector();
 	//Texture Size
 	req += factory.stringFormat("&WIDTH=%d&HEIGHT=%d", width, height);
   
@@ -125,6 +126,8 @@ public class WMSLayer extends Layer
 	{
 	  req += "&CRS=EPSG:4326";
 	}
+  
+	//printf("%s\n", req.c_str());
   
 	Petition pet = new Petition(sector, req, _isTransparent);
 	vPetitions.add(pet);

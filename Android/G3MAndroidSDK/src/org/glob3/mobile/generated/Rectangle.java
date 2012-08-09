@@ -31,6 +31,13 @@ public class Rectangle
 	  _height = rec._height;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean equalTo(const Rectangle& r) const
+  public final boolean equalTo(Rectangle r)
+  {
+	return _x == r._x && _y == r._y && _width == r._width && _height == r._height;
+  }
+
 
 
 }

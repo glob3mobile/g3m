@@ -29,21 +29,30 @@ public class TextureMapping
   private MutableVector2D _translation = new MutableVector2D();
   private MutableVector2D _scale = new MutableVector2D();
   private final TexturesHandler _texHandler;
+  private final int _width;
+  private final int _height;
+  private final String _texID;
 
 
-  public TextureMapping(int textureId, float[] texCoords, TexturesHandler texHandler)
+  public TextureMapping(int textureId, float[] texCoords, TexturesHandler texHandler, String texID, int width, int height)
   {
 	  _textureId = textureId;
 	  _texCoords = texCoords;
 	  _texHandler = texHandler;
+	  _width = width;
+	  _height = height;
+	  _texID = texID;
 	_translation = new MutableVector2D(0, 0);
 	_scale = new MutableVector2D(1, 1);
   }
 
-  public TextureMapping(int textureId, java.util.ArrayList<MutableVector2D> texCoords, TexturesHandler texHandler)
+  public TextureMapping(int textureId, java.util.ArrayList<MutableVector2D> texCoords, TexturesHandler texHandler, String texID, int width, int height)
   {
 	  _textureId = textureId;
 	  _texHandler = texHandler;
+	  _width = width;
+	  _height = height;
+	  _texID = texID;
 	float[] texCoordsA = new float[2 * texCoords.size()];
 	int p = 0;
 	for (int i = 0; i < texCoords.size(); i++)
@@ -80,6 +89,27 @@ public class TextureMapping
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: String getStringTexID() const
+  public final String getStringTexID()
+  {
+	return _texID;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: int getWidth() const
+  public final int getWidth()
+  {
+	return _width;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: int getHeight() const
+  public final int getHeight()
+  {
+	return _height;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: const float* getTexCoords() const
 //C++ TO JAVA CONVERTER WARNING: Java has no equivalent to methods returning pointers to value types:
   public final float getTexCoords()
@@ -93,7 +123,7 @@ public class TextureMapping
   {
 	GL gl = rc.getGL();
   
-	gl.transformTexCoords(_scale.asVector2D(), _translation.asVector2D());
+	gl.transformTexCoords(_scale, _translation);
   
 	gl.bindTexture(_textureId);
 	gl.setTextureCoordinates(2, 0, _texCoords);

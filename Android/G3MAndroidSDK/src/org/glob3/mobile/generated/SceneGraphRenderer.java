@@ -32,12 +32,12 @@ public class SceneGraphRenderer extends Renderer
 	return _rootNode.render(rc);
   }
 
-  public boolean onTouchEvent(TouchEvent touchEvent)
+  public boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
   {
 	return false;
   }
 
-  public void onResizeViewportEvent(int width, int height)
+  public void onResizeViewportEvent(EventContext ec, int width, int height)
   {
   
   }

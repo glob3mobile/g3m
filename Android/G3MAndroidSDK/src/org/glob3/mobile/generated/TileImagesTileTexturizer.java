@@ -86,30 +86,6 @@ public class TileImagesTileTexturizer extends TileTexturizer
 	}
   }
 
-  private int getTexture(Tile tile)
-  {
-	TilePetitions tp = getRegisteredTilePetitions(tile);
-  
-	if (tp!= null)
-	{
-  
-	  if (tp.getTexID() > -1)
-	  {
-		return tp.getTexID();
-	  }
-	  else
-	  {
-		if (tp.allFinished())
-		{
-		  tp.createTexture(_texHandler, _factory, _parameters._tileTextureWidth, _parameters._tileTextureHeight);
-		  return tp.getTexID();
-		}
-	  }
-	}
-  
-	return -1;
-  }
-
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: TilePetitions* getRegisteredTilePetitions(Tile* tile) const
   private TilePetitions getRegisteredTilePetitions(Tile tile)
@@ -169,32 +145,31 @@ public class TileImagesTileTexturizer extends TileTexturizer
 
   private Mesh getFallBackTexturedMesh(Tile tile, TileTessellator tessellator, Mesh tessellatorMesh, Mesh previousMesh)
   {
+	final TextureMapping fbTMap = null;
 	int texID = -1;
 	Tile fbTile = tile.getParent();
 	while (fbTile != null && texID < 0)
 	{
   
-	  TilePetitions tp = createTilePetitions(fbTile);
-	  tp.requestToCache(_downloader);
-	  if (tp.allFinished())
+	  if (fbTile.isTextureSolved())
 	  {
-		tp.createTexture(_texHandler, _factory, _parameters._tileTextureWidth, _parameters._tileTextureHeight);
-		texID = tp.getTexID();
-	  }
+		TexturedMesh texMesh = (TexturedMesh) fbTile.getTexturizerMesh();
+		if (texMesh != null)
+		{
+		  fbTMap = texMesh.getTextureMapping();
   
-	  //We do no store the petitions
-	  if (tp != null)
-		  tp.dispose();
+		  texID = _texHandler.getTextureIdIfAvailable(fbTMap.getStringTexID(), fbTMap.getWidth(), fbTMap.getHeight());
   
-	  if (texID > -1)
 		  break;
+		}
+	  }
 	  fbTile = fbTile.getParent(); //TRYING TO CREATE FALLBACK TEXTURE FROM ANTECESOR
 	}
   
 	//CREATING MESH
 	if (texID > -1)
 	{
-	  TextureMapping tMap = new TextureMapping(texID, getTextureCoordinates(tessellator), _texHandler);
+	  TextureMapping tMap = new TextureMapping(texID, getTextureCoordinates(tessellator), _texHandler, fbTMap.getStringTexID(), fbTMap.getWidth(), fbTMap.getHeight());
 	  translateAndScaleFallBackTex(tile, fbTile, tMap);
 	  TexturedMesh texMesh = new TexturedMesh(tessellatorMesh, false, tMap, true);
 	  if (previousMesh != null)
@@ -208,24 +183,35 @@ public class TileImagesTileTexturizer extends TileTexturizer
   private Mesh getNewTextureMesh(Tile tile, TileTessellator tessellator, Mesh tessellatorMesh, Mesh previousMesh)
   {
 	//THE TEXTURE HAS BEEN LOADED???
-	int texID = getTexture(tile);
-	if (texID > -1)
+	TilePetitions tp = getRegisteredTilePetitions(tile);
+  
+	if (tp!= null)
 	{
-	  tile.setTextureSolved(true);
+	  int texID = tp.getTexID();
+	  if (texID < 0) //Texture has not been created
+	  {
+		if (tp.allFinished())
+		{
+		  tp.createTexture(_texHandler, _factory, _parameters._tileTextureWidth, _parameters._tileTextureHeight);
+		  texID = tp.getTexID();
+		}
+	  }
   
-	  //printf("TEXTURIZED %d, %d, %d\n", tile->getLevel(), tile->getRow(), tile->getColumn());
+	  if (texID > -1)
+	  {
+		tile.setTextureSolved(true);
+		//printf("TEXTURIZED %d, %d, %d\n", tile->getLevel(), tile->getRow(), tile->getColumn());
   
-	  TextureMapping tMap = new TextureMapping(texID, getTextureCoordinates(tessellator), _texHandler);
-  
-	  TexturedMesh texMesh = new TexturedMesh(tessellatorMesh, false, tMap, true);
-	  if (previousMesh != null)
-		  previousMesh.dispose(); //If a new mesh has been produced we delete the previous one
-	  return texMesh;
+		TextureMapping tMap = new TextureMapping(texID, getTextureCoordinates(tessellator), _texHandler, tp.getPetitionsID(), _parameters._tileTextureWidth, _parameters._tileTextureHeight);
+		TexturedMesh texMesh = new TexturedMesh(tessellatorMesh, false, tMap, true);
+		if (previousMesh != null)
+			previousMesh.dispose(); //If a new mesh has been produced we delete the previous one
+		return texMesh;
+	  }
 	}
-	else
-	{
-	  return null;
-	}
+  
+	return null;
+  
   }
 
 
@@ -248,7 +234,7 @@ public class TileImagesTileTexturizer extends TileTexturizer
 	}
   }
 
-  public final Mesh texturize(RenderContext rc, Tile tile, TileTessellator tessellator, Mesh tessellatorMesh, Mesh previousMesh, ITimer timer)
+  public final Mesh texturize(RenderContext rc, Tile tile, TileTessellator tessellator, Mesh tessellatorMesh, Mesh previousMesh)
   {
 	//STORING CONTEXT
 	_factory = rc.getFactory();
@@ -257,13 +243,6 @@ public class TileImagesTileTexturizer extends TileTexturizer
 	_renderContext = rc;
   
 	//printf("TP SIZE: %lu\n", _tilePetitions.size());
-  
-	int __TODO_tune_TEXTURIZER_render_budget;
-  //  if (timer != NULL) {
-  //    if ( timer->elapsedTime().milliseconds() > 50 ) {
-  //      return getFallBackTexturedMesh(tile, tessellator, tessellatorMesh, previousMesh);
-  //    }
-  //  }
   
 	Mesh mesh = getNewTextureMesh(tile, tessellator, tessellatorMesh, previousMesh);
 	if (mesh == null)
@@ -316,7 +295,7 @@ public class TileImagesTileTexturizer extends TileTexturizer
 	tp.requestToNet(_downloader, priority);
   }
 
-  public final boolean isReadyToRender(RenderContext rc)
+  public final boolean isReady(RenderContext rc)
   {
 	int todo_JM;
   //  for (int i = 0; i < _tilePetitionsTopTile.size(); i++) {
@@ -329,6 +308,11 @@ public class TileImagesTileTexturizer extends TileTexturizer
   //  }
   
 	return true;
+  }
+
+  public final void initialize(InitializationContext ic)
+  {
+  
   }
 
 

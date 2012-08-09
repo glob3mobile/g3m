@@ -75,7 +75,6 @@ public class Tile
   private boolean _textureSolved;
   private java.util.ArrayList<Tile> _subtiles;
 
-  private int _texturedCounter;
   private ITimer _texturizerTimer;
 
   private boolean _justCreatedSubtiles;
@@ -112,7 +111,7 @@ public class Tile
 	//return getTessellatorMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->_halfFrustumInModelCoordinates);
   }
 
-  private boolean meetsRenderCriteria(RenderContext rc, TileTessellator tessellator, TileTexturizer texturizer, TileParameters parameters, ITimer frameTimer, ITimer lastSplitTimer, TilesStatistics statistics)
+  private boolean meetsRenderCriteria(RenderContext rc, TileTessellator tessellator, TileTexturizer texturizer, TileParameters parameters, ITimer lastSplitTimer, TilesStatistics statistics)
   {
 	if (_level >= parameters._maxLevel)
 	{
@@ -188,7 +187,7 @@ public class Tile
 	return subTiles;
   }
 
-  private void rawRender(RenderContext rc, TileTessellator tessellator, TileTexturizer texturizer, ITimer frameTimer, ITimer lastTexturizerTimer)
+  private void rawRender(RenderContext rc, TileTessellator tessellator, TileTexturizer texturizer, ITimer lastTexturizerTimer)
   {
   
 	Mesh tessellatorMesh = getTessellatorMesh(rc, tessellator);
@@ -212,7 +211,7 @@ public class Tile
   
 		  if (callTexturizer)
 		  {
-			_texturizerMesh = texturizer.texturize(rc, this, tessellator, tessellatorMesh, _texturizerMesh, frameTimer);
+			_texturizerMesh = texturizer.texturize(rc, this, tessellator, tessellatorMesh, _texturizerMesh);
 			lastTexturizerTimer.start();
   
 			if (_texturizerTimer == null)
@@ -225,10 +224,6 @@ public class Tile
 			}
 		  }
   
-  //        if ((_texturedCounter++ % 25) == 0) {
-  //          _texturizerMesh = texturizer->texturize(rc, this, tessellator, tessellatorMesh, _texturizerMesh, timer);
-  //          _texturedCounter = 0;
-  //        }
 		}
   
 		if ((_texturizerTimer != null) && isTextureSolved())
@@ -249,6 +244,24 @@ public class Tile
 	  }
 	}
   
+  }
+
+  private void cleanTexturizerMesh()
+  {
+	int __DIEGO_AT_WORK;
+  
+  
+  //  if (_texturizerMesh != NULL) {
+  //    delete _texturizerMesh;
+  //    _texturizerMesh = NULL;
+  //  }
+  //
+  //  setTextureSolved(false);
+  //
+  //  if (_texturizerTimer != NULL) {
+  //    delete _texturizerTimer;
+  //    _texturizerTimer = NULL;
+  //  }
   }
 
   private void debugRender(RenderContext rc, TileTessellator tessellator)
@@ -316,7 +329,6 @@ public class Tile
 	  _texturizerMesh = null;
 	  _textureSolved = false;
 	  _subtiles = null;
-	  _texturedCounter = 0;
 	  _justCreatedSubtiles = false;
 	  _texturizerTimer = null;
   }
@@ -379,6 +391,13 @@ public class Tile
 	return _column;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Mesh* getTexturizerMesh() const
+  public final Mesh getTexturizerMesh()
+  {
+	return _texturizerMesh;
+  }
+
   public final void setTextureSolved(boolean textureSolved)
   {
 	_textureSolved = textureSolved;
@@ -395,27 +414,33 @@ public class Tile
 //ORIGINAL LINE: Tile* getParent() const
   public final Tile getParent()
   {
-	  return _parent;
+	return _parent;
   }
 
-  public final void render(RenderContext rc, TileTessellator tessellator, TileTexturizer texturizer, TileParameters parameters, TilesStatistics statistics, java.util.LinkedList<Tile> toVisitInNextIteration, ITimer frameTimer, ITimer lastSplitTimer, ITimer lastTexturizerTimer)
+  public final void render(RenderContext rc, TileTessellator tessellator, TileTexturizer texturizer, TileParameters parameters, TilesStatistics statistics, java.util.LinkedList<Tile> toVisitInNextIteration, ITimer lastSplitTimer, ITimer lastTexturizerTimer)
   {
+	statistics.computeTileProcessed(this);
+  
 	if (isVisible(rc, tessellator))
 	{
-	  if (meetsRenderCriteria(rc, tessellator, texturizer, parameters, frameTimer, lastSplitTimer, statistics))
+	  statistics.computeVisibleTile(this);
+  
+	  if (meetsRenderCriteria(rc, tessellator, texturizer, parameters, lastSplitTimer, statistics))
 	  {
-		rawRender(rc, tessellator, texturizer, frameTimer, lastTexturizerTimer);
+		rawRender(rc, tessellator, texturizer, lastTexturizerTimer);
 		if (parameters._renderDebug)
 		{
 		  debugRender(rc, tessellator);
 		}
   
-		statistics.computeTileRender(this);
+		statistics.computeTileRendered(this);
   
 		prune(texturizer);
 	  }
 	  else
 	  {
+		cleanTexturizerMesh();
+  
 		java.util.ArrayList<Tile> subTiles = getSubTiles();
 		if (_justCreatedSubtiles)
 		{

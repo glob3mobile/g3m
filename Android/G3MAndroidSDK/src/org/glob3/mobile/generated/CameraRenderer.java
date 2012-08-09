@@ -1,37 +1,74 @@
 package org.glob3.mobile.generated; 
-public abstract class CameraRenderer extends Renderer
+public class CameraRenderer extends Renderer
 {
 
-  //static const Planet* _planet;
-  //static const ILogger * _logger;
-  //static GL *gl;
 
-  //static Camera _camera0;                //Initial Camera saved on Down event
-  //static Camera* _camera;         // Camera used at current frame
+  private java.util.ArrayList<CameraEventHandler > _handlers = new java.util.ArrayList<CameraEventHandler >();
 
-  protected MutableVector3D _initialPoint = new MutableVector3D(); //Initial point at dragging
-  protected MutableVector3D _initialPixel = new MutableVector3D(); //Initial pixel at start of gesture
-
-  protected static Gesture _currentGesture = Gesture.None; //Gesture the user is making at the moment
-
-  protected double _initialFingerSeparation;
-  protected double _initialFingerInclination;
-
-
+  private CameraContext _cameraContext;
 
   public CameraRenderer()
   {
-	  _initialPoint = new MutableVector3D(0,0,0);
-	  _initialPixel = new MutableVector3D(0,0,0);
+	  _cameraContext = null;
+  }
+  public void dispose()
+  {
+	  if (_cameraContext!=null)
+		  if (_cameraContext != null)
+			  _cameraContext.dispose();
   }
 
-  public abstract void initialize(InitializationContext ic);
+  public final void addHandler(CameraEventHandler handler)
+  {
+	  _handlers.add(handler);
+  }
 
-  public abstract int render(RenderContext rc);
+  public final int render(RenderContext rc)
+  {
+	// create the CameraContext
+	if (_cameraContext == null)
+	  _cameraContext = new CameraContext(Gesture.None, rc.getCamera());
+  
+	// render camera object
+	rc.getCamera().render(rc);
+  
+	int min = Renderer.maxTimeToRender;
+	for (int i = 0; i<_handlers.size(); i++)
+	{
+	  int x = _handlers.get(i).render(rc, _cameraContext);
+	  if (x<min)
+		  min = x;
+	}
+	return min;
+  }
+  public final void initialize(InitializationContext ic)
+  {
+	//_logger = ic->getLogger();
+	//cameraContext = new CameraContext(
+  }
 
-  public abstract boolean onTouchEvent(TouchEvent touchEvent);
+  public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
+  {
+	// abort all the camera effect currently running
+	if (touchEvent.getType() == TouchEventType.Down)
+	  ec.getEffectsScheduler().cancellAllEffectsFor((EffectTarget) _cameraContext);
+  
+	// pass the event to all the handlers
+	for (int n = 0; n<_handlers.size(); n++)
+	  if (_handlers.get(n).onTouchEvent(ec, touchEvent, _cameraContext))
+		  return true;
+  
+	// if any of them processed the event, return false
+	return false;
+  }
 
-  public abstract void onResizeViewportEvent(int width, int height);
+  public final void onResizeViewportEvent(EventContext ec, int width, int height)
+  {
+	if (_cameraContext != null)
+	{
+	  _cameraContext.getCamera().resizeViewport(width, height);
+	}
+  }
 
   public final boolean isReadyToRender(RenderContext rc)
   {

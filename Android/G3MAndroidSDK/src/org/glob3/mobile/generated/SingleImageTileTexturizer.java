@@ -70,7 +70,12 @@ public class SingleImageTileTexturizer extends TileTexturizer
 	}
   }
 
-  public final Mesh texturize(RenderContext rc, Tile tile, TileTessellator tessellator, Mesh mesh, Mesh previousMesh, ITimer timer)
+  public final void initialize(InitializationContext ic)
+  {
+
+  }
+
+  public final Mesh texturize(RenderContext rc, Tile tile, TileTessellator tessellator, Mesh mesh, Mesh previousMesh)
   {
 	_renderContext = rc; //SAVING CONTEXT
   
@@ -87,7 +92,7 @@ public class SingleImageTileTexturizer extends TileTexturizer
 	  rc.getFactory().deleteImage(_image);
 	}
   
-	final TextureMapping texMap = new TextureMapping(_texID, createTextureCoordinates(rc, mesh), rc.getTexturesHandler());
+	final TextureMapping texMap = new TextureMapping(_texID, createTextureCoordinates(rc, mesh), rc.getTexturesHandler(), "SINGLE_IMAGE_TEX", _image.getWidth(), _image.getHeight());
   
 	if (previousMesh != null)
 		if (previousMesh != null)
@@ -113,7 +118,7 @@ public class SingleImageTileTexturizer extends TileTexturizer
   
   }
 
-  public final boolean isReadyToRender(RenderContext rc)
+  public final boolean isReady(RenderContext rc)
   {
 	return true;
   }

@@ -113,8 +113,8 @@ public class Sector
 	final Angle lowLon = Angle.getMax(lower().longitude(), s.lower().longitude());
 	final Geodetic2D low = new Geodetic2D(lowLat, lowLon);
   
-	final Angle upLat = Angle.getMin(lower().latitude(), s.lower().latitude());
-	final Angle upLon = Angle.getMin(lower().longitude(), s.lower().longitude());
+	final Angle upLat = Angle.getMin(upper().latitude(), s.upper().latitude());
+	final Angle upLon = Angle.getMin(upper().longitude(), s.upper().longitude());
 	final Geodetic2D up = new Geodetic2D(upLat, upLon);
   
 	return new Sector(low, up);
@@ -221,8 +221,6 @@ public class Sector
 //ORIGINAL LINE: Geodetic2D getCenter() const
   public final Geodetic2D getCenter()
   {
-//    return Geodetic2D(Angle::midAngle(_lower.latitude(), _upper.latitude()),
-//                      Angle::midAngle(_lower.longitude(), _upper.longitude()));
 	return _center;
   }
 

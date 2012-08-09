@@ -23,6 +23,8 @@ public class SimplePlanetRenderer extends Renderer
 {
 
   private final String _textureFilename;
+  private final int _texWidth;
+  private final int _texHeight;
 
   private final int _latRes;
   private final int _lonRes;
@@ -120,7 +122,7 @@ public class SimplePlanetRenderer extends Renderer
 	float texC = 0F;
 	if (true)
 	{
-	  texID = rc.getTexturesHandler().getTextureIdFromFileName(_textureFilename, 2048, 1024);
+	  texID = rc.getTexturesHandler().getTextureIdFromFileName(_textureFilename, _texWidth, _texHeight);
 	  if (texID < 1)
 	  {
 		rc.getLogger().logError("Can't load file %s", _textureFilename);
@@ -168,7 +170,9 @@ public class SimplePlanetRenderer extends Renderer
   
 	IndexedMesh im = IndexedMesh.CreateFromVector3D(true, TriangleStrip, CenterStrategy.NoCenter, new Vector3D(0,0,0), _latRes *_lonRes, ver, ind, numIndexes, flatColor, colors, 0.5, normals);
   
-	_mesh = new TexturedMesh(im, true, new TextureMapping(texID, texC, rc.getTexturesHandler()), true);
+	TextureMapping texMap = new TextureMapping(texID, texC, rc.getTexturesHandler(), _textureFilename, _texWidth,_texHeight);
+  
+	_mesh = new TexturedMesh(im, true, texMap, true);
   
 	return true;
   }
@@ -179,6 +183,8 @@ public class SimplePlanetRenderer extends Renderer
 	  _lonRes = 30;
 	  _textureFilename = textureFilename;
 	  _mesh = null;
+	  _texWidth = 2048;
+	  _texHeight = 1024;
   }
   public void dispose()
   {
@@ -206,12 +212,12 @@ public class SimplePlanetRenderer extends Renderer
 	return Renderer.maxTimeToRender;
   }
 
-  public final boolean onTouchEvent(TouchEvent touchEvent)
+  public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
   {
 	return false;
   }
 
-  public final void onResizeViewportEvent(int width, int height)
+  public final void onResizeViewportEvent(EventContext ec, int width, int height)
   {
 
   }

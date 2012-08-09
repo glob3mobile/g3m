@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  CameraDoubleDragRenderer.cpp
+//  CameraDoubleDragHandler.cpp
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 28/07/12.
@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 
 //
-//  CameraDoubleDragRenderer.h
+//  CameraDoubleDragHandler.hpp
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 28/07/12.
@@ -20,15 +20,22 @@ package org.glob3.mobile.generated;
 
 
 
-public class CameraDoubleDragRenderer extends CameraRenderer
+public class CameraDoubleDragHandler extends CameraEventHandler
 {
 
-  public CameraDoubleDragRenderer()
+  public CameraDoubleDragHandler()
   {
 	  _camera0 = new Camera(new Camera(null, 0, 0));
+	  _initialPoint = new MutableVector3D(0,0,0);
+	  _initialPixel = new MutableVector3D(0,0,0);
   }
 
-  public final boolean onTouchEvent(TouchEvent touchEvent)
+  public void dispose()
+  {
+  }
+
+
+  public final boolean onTouchEvent(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	// only one finger needed
 	if (touchEvent.getTouchCount()!=2)
@@ -37,56 +44,53 @@ public class CameraDoubleDragRenderer extends CameraRenderer
 	switch (touchEvent.getType())
 	{
 	  case Down:
-		onDown(touchEvent);
+		onDown(eventContext, touchEvent, cameraContext);
 		break;
 	  case Move:
-		onMove(touchEvent);
+		onMove(eventContext, touchEvent, cameraContext);
 		break;
 	  case Up:
-		onUp(touchEvent);
+		onUp(eventContext, touchEvent, cameraContext);
 	  default:
 		break;
 	}
   
 	return true;
   }
-  public final int render(RenderContext rc)
+  public final int render(RenderContext rc, CameraContext cameraContext)
   {
-	_planet = rc.getPlanet();
-	_camera = rc.getCamera();
-	_gl = rc.getGL();
-  
 	// TEMP TO DRAW A POINT WHERE USER PRESS
 	if (false)
 	{
-	  if (_currentGesture == Gesture.DoubleDrag)
+	  if (cameraContext.getCurrentGesture() == Gesture.DoubleDrag)
 	  {
+		GL gl = rc.getGL();
 		float[] vertices = { 0,0,0};
 		int[] indices = {0};
-		_gl.enableVerticesPosition();
-		_gl.disableTexture2D();
-		_gl.disableTextures();
-		_gl.vertexPointer(3, 0, vertices);
-		_gl.color((float) 1, (float) 1, (float) 1, 1);
-		_gl.pointSize(10);
-		_gl.pushMatrix();
+		gl.enableVerticesPosition();
+		gl.disableTexture2D();
+		gl.disableTextures();
+		gl.vertexPointer(3, 0, vertices);
+		gl.color((float) 1, (float) 1, (float) 1, 1);
+		gl.pointSize(10);
+		gl.pushMatrix();
 		MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(_initialPoint.asVector3D());
-		_gl.multMatrixf(T);
-		_gl.drawPoints(1, indices);
-		_gl.popMatrix();
+		gl.multMatrixf(T);
+		gl.drawPoints(1, indices);
+		gl.popMatrix();
   
 		// draw each finger
-		_gl.pointSize(60);
-		_gl.pushMatrix();
+		gl.pointSize(60);
+		gl.pushMatrix();
 		MutableMatrix44D T0 = MutableMatrix44D.createTranslationMatrix(_initialPoint0.asVector3D());
-		_gl.multMatrixf(T0);
-		_gl.drawPoints(1, indices);
-		_gl.popMatrix();
-		_gl.pushMatrix();
+		gl.multMatrixf(T0);
+		gl.drawPoints(1, indices);
+		gl.popMatrix();
+		gl.pushMatrix();
 		MutableMatrix44D T1 = MutableMatrix44D.createTranslationMatrix(_initialPoint1.asVector3D());
-		_gl.multMatrixf(T1);
-		_gl.drawPoints(1, indices);
-		_gl.popMatrix();
+		gl.multMatrixf(T1);
+		gl.drawPoints(1, indices);
+		gl.popMatrix();
   
   
 		//Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
@@ -96,17 +100,13 @@ public class CameraDoubleDragRenderer extends CameraRenderer
   
 	return Renderer.maxTimeToRender;
   }
-  public final void initialize(InitializationContext ic)
-  {
-  }
-  public final void onResizeViewportEvent(int width, int height)
-  {
-  }
 
-  private void onDown(TouchEvent touchEvent)
+
+  private void onDown(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
-	_camera0 = new Camera(_camera);
-	_currentGesture = Gesture.DoubleDrag;
+	Camera camera = cameraContext.getCamera();
+	_camera0 = new Camera(camera);
+	cameraContext.setCurrentGesture(Gesture.DoubleDrag);
   
 	// double dragging
 	Vector2D pixel0 = touchEvent.getTouch(0).getPos();
@@ -117,15 +117,16 @@ public class CameraDoubleDragRenderer extends CameraRenderer
 	// both pixels must intersect globe
 	if (_initialPoint0.isNan() || _initialPoint1.isNan())
 	{
-	  _currentGesture = Gesture.None;
+	  cameraContext.setCurrentGesture(Gesture.None);
 	  return;
 	}
   
 	// middle point in 3D
-	Geodetic2D g0 = _planet.toGeodetic2D(_initialPoint0.asVector3D());
-	Geodetic2D g1 = _planet.toGeodetic2D(_initialPoint1.asVector3D());
-	Geodetic2D g = _planet.getMidPoint(g0, g1);
-	_initialPoint = _planet.toVector3D(g).asMutableVector3D();
+	final Planet planet = eventContext.getPlanet();
+	Geodetic2D g0 = planet.toGeodetic2D(_initialPoint0.asVector3D());
+	Geodetic2D g1 = planet.toGeodetic2D(_initialPoint1.asVector3D());
+	Geodetic2D g = planet.getMidPoint(g0, g1);
+	_initialPoint = planet.toVector3D(g).asMutableVector3D();
   
 	// fingers difference
 	Vector2D difPixel = pixel1.sub(pixel0);
@@ -134,9 +135,9 @@ public class CameraDoubleDragRenderer extends CameraRenderer
   
 	//printf ("down 2 finger\n");
   }
-  private void onMove(TouchEvent touchEvent)
+  private void onMove(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
-	if (_currentGesture!=Gesture.DoubleDrag)
+	if (cameraContext.getCurrentGesture() != Gesture.DoubleDrag)
 		return;
 	if (_initialPoint.isNan())
 		return;
@@ -250,8 +251,9 @@ public class CameraDoubleDragRenderer extends CameraRenderer
 	// middle point in 3D
 	Vector3D P0 = tempCamera.pixel2PlanetPoint(pixel0);
 	Vector3D P1 = tempCamera.pixel2PlanetPoint(pixel1);
-	Geodetic2D g = _planet.getMidPoint(_planet.toGeodetic2D(P0), _planet.toGeodetic2D(P1));
-	Vector3D finalPoint = _planet.toVector3D(g);
+	final Planet planet = eventContext.getPlanet();
+	Geodetic2D g = planet.getMidPoint(planet.toGeodetic2D(P0), planet.toGeodetic2D(P1));
+	Vector3D finalPoint = planet.toVector3D(g);
   
 	// drag globe from centerPoint to finalPoint
 	final Vector3D rotationAxis = centerPoint2.cross(finalPoint);
@@ -268,7 +270,7 @@ public class CameraDoubleDragRenderer extends CameraRenderer
   
 	// camera rotation
 	{
-	  Vector3D normal = _planet.geodeticSurfaceNormal(centerPoint2);
+	  Vector3D normal = planet.geodeticSurfaceNormal(centerPoint2);
 	  Vector3D v0 = _initialPoint0.asVector3D().sub(centerPoint2).projectionInPlane(normal);
 	  Vector3D v1 = tempCamera.pixel2PlanetPoint(pixel0).sub(centerPoint2).projectionInPlane(normal);
 	  double angle = v0.angleBetween(v1).degrees();
@@ -280,23 +282,25 @@ public class CameraDoubleDragRenderer extends CameraRenderer
   
 	// copy final transformation to camera
 	tempCamera.updateModelMatrix();
-	_camera.copyFrom(tempCamera);
+	cameraContext.getCamera().copyFrom(tempCamera);
   
 	//printf ("moving 2 fingers\n");
   }
-  private void onUp(TouchEvent touchEvent)
+  private void onUp(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
-	_currentGesture = Gesture.None;
+	cameraContext.setCurrentGesture(Gesture.None);
 	_initialPixel = Vector3D.nan().asMutableVector3D();
   
 	//printf ("end 2 fingers.  gesture=%d\n", _currentGesture);
   }
 
+  private MutableVector3D _initialPoint = new MutableVector3D(); //Initial point at dragging
+  private MutableVector3D _initialPixel = new MutableVector3D(); //Initial pixel at start of gesture
   private MutableVector3D _initialPoint0 = new MutableVector3D();
   private MutableVector3D _initialPoint1 = new MutableVector3D();
-  private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
-  private GL _gl;
+  private double _initialFingerSeparation;
+  private double _initialFingerInclination;
+
   private Camera _camera0 ; //Initial Camera saved on Down event
-  private Camera _camera; // Camera used at current frame
 
 }

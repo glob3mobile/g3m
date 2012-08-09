@@ -70,17 +70,26 @@ public class CompositeRenderer extends Renderer
 	return min;
   }
 
-  public final boolean onTouchEvent(TouchEvent touchEvent)
+  public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
   {
 	// the events are processed bottom to top
 	for (int i = _renderers.size() - 1; i >= 0; i--)
 	{
-	  if (_renderers.get(i).onTouchEvent(touchEvent))
+	  if (_renderers.get(i).onTouchEvent(ec, touchEvent))
 	  {
 		return true;
 	  }
 	}
 	return false;
+  }
+
+  public final void onResizeViewportEvent(EventContext ec, int width, int height)
+  {
+	// the events are processed bottom to top
+	for (int i = _renderers.size() - 1; i >= 0; i--)
+	{
+	  _renderers.get(i).onResizeViewportEvent(ec, width, height);
+	}
   }
 
   public final void addRenderer(Renderer renderer)
@@ -89,15 +98,6 @@ public class CompositeRenderer extends Renderer
 	if (_ic != null)
 	{
 	  renderer.initialize(_ic);
-	}
-  }
-
-  public final void onResizeViewportEvent(int width, int height)
-  {
-	// the events are processed bottom to top
-	for (int i = _renderers.size() - 1; i >= 0; i--)
-	{
-	  _renderers.get(i).onResizeViewportEvent(width, height);
 	}
   }
 }

@@ -102,7 +102,6 @@ public class TexturesHandler
 	}
 	public int getTextureId(IImage image, String textureId, int textureWidth, int textureHeight)
 	{
-    
 	  final java.util.ArrayList<IImage> images = new java.util.ArrayList<IImage>();
 	  images.add(image);
 	  return getTextureId(images, textureId, textureWidth, textureHeight);
@@ -119,9 +118,9 @@ public class TexturesHandler
     
 		  if (!holder.isRetained())
 		  {
-			_textureHolders.remove(i);
-    
 			_gl.deleteTexture(holder._glTextureId);
+    
+			_textureHolders.remove(i);
     
 			if (holder != null)
 				holder.dispose();

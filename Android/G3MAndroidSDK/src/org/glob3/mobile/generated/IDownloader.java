@@ -19,6 +19,7 @@ package org.glob3.mobile.generated;
 
 public abstract class IDownloader
 {
+  public abstract void start();
 
   public abstract int request(URL url, int priority, IDownloadListener listener);
 

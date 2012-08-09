@@ -73,6 +73,15 @@ public class TouchEvent
 	return _touchs.size();
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: byte getTapCount() const
+  public final byte getTapCount()
+  {
+	if (_touchs.isEmpty())
+		return 0;
+	return _touchs.get(0).getTapCount();
+  }
+
   public void dispose()
   {
 	for (int i = 0; i < _touchs.size(); i++)

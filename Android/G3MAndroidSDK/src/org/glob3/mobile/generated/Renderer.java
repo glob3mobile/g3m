@@ -14,6 +14,8 @@ package org.glob3.mobile.generated;
 //class InitializationContext;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class RenderContext;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class EventContext;
 
 public abstract class Renderer
 {
@@ -26,9 +28,9 @@ public abstract class Renderer
 
   public abstract int render(RenderContext rc);
 
-  public abstract boolean onTouchEvent(TouchEvent touchEvent);
+  public abstract boolean onTouchEvent(EventContext ec, TouchEvent touchEvent);
 
-  public abstract void onResizeViewportEvent(int width, int height);
+  public abstract void onResizeViewportEvent(EventContext ec, int width, int height);
 
   public void dispose()
   {

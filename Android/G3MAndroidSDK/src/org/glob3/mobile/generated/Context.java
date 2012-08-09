@@ -35,6 +35,8 @@ package org.glob3.mobile.generated;
 //class GL;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class EffectsScheduler;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class ITimer;
 
 
 public class Context
@@ -92,6 +94,8 @@ public class Context
 	return _downloader;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: EffectsScheduler* getEffectsScheduler() const
   public final EffectsScheduler getEffectsScheduler()
   {
 	return _scheduler;

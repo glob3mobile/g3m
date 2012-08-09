@@ -33,7 +33,9 @@ public class GL
   private java.util.LinkedList<MutableMatrix44D> _matrixStack = new java.util.LinkedList<MutableMatrix44D>();
 
   private java.util.LinkedList<Integer> _texturesIdBag = new java.util.LinkedList<Integer>();
-  private int _texturesIdCounter;
+  private int _texturesIdAllocationCounter;
+  private int _texturesIdGetCounter;
+  private int _texturesIdTakeCounter;
 
   // state handling
   private boolean _enableTextures;
@@ -50,6 +52,11 @@ public class GL
   private GLCullFace _cullFace_face = GLCullFace.Back;
 
 
+
+  private float _scaleX;
+  private float _scaleY;
+  private float _translationX;
+  private float _translationY;
 
 //C++ TO JAVA CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in Java):
   private float[] loadModelView_M = new float[16];
@@ -76,14 +83,21 @@ public class GL
 		_texturesIdBag.addLast(ids.get(i));
 	  }
   
-	  _texturesIdCounter += bugdetSize;
-	  System.out.printf("= Created %d texturesIds (accumulated %ld).\n", bugdetSize, _texturesIdCounter);
+	  _texturesIdAllocationCounter += bugdetSize;
+	  System.out.printf("= Created %d texturesIds (accumulated %ld).\n", bugdetSize, _texturesIdAllocationCounter);
 	}
+  
+	_texturesIdGetCounter++;
   
 	int result = _texturesIdBag.getLast();
 	_texturesIdBag.removeLast();
   
-  //  printf("   - Assigning 1 texturesId from bag (bag size=%ld).\n", _texturesIdBag.size());
+	/*
+	 printf("   - Assigning 1 texturesId from bag (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
+		   _texturesIdBag.size(),
+		   _texturesIdGetCounter,
+		   _texturesIdTakeCounter,
+		   _texturesIdGetCounter - _texturesIdTakeCounter);*/
   
 	return result;
   }
@@ -102,7 +116,13 @@ public class GL
 	  _enableDepthTest = false;
 	  _enableCullFace = false;
 	  _cullFace_face = GLCullFace.Back;
-	  _texturesIdCounter = 0;
+	  _texturesIdAllocationCounter = 0;
+	  _scaleX = 1F;
+	  _scaleY = 1F;
+	  _translationX = 0F;
+	  _translationY = 0F;
+	  _texturesIdGetCounter = 0;
+	  _texturesIdTakeCounter = 0;
 
   }
 
@@ -326,9 +346,9 @@ public class GL
 	GlobalMembersGL.Uniforms.PointSize = _gl.getUniformLocation(program, "PointSize");
   
 	// default values
-	_gl.uniform2f(GlobalMembersGL.Uniforms.TranslationTexCoord, 0, 0);
-	_gl.uniform2f(GlobalMembersGL.Uniforms.ScaleTexCoord, 1, 1);
-	_gl.uniform1f(GlobalMembersGL.Uniforms.PointSize, (float) 1.0);
+	_gl.uniform2f(GlobalMembersGL.Uniforms.ScaleTexCoord, _scaleX, _scaleY);
+	_gl.uniform2f(GlobalMembersGL.Uniforms.TranslationTexCoord, _translationX, _translationY);
+	_gl.uniform1f(GlobalMembersGL.Uniforms.PointSize, 1);
   
 	//BILLBOARDS
 	GlobalMembersGL.Uniforms.BillBoard = _gl.getUniformLocation(program, "BillBoard");
@@ -342,6 +362,33 @@ public class GL
 	GlobalMembersGL.Uniforms.EnableFlatColor = _gl.getUniformLocation(program, "EnableFlatColor");
   }
 
+
+  //void GL::transformTexCoords(double scaleX,
+  //                            double scaleY,
+  //                            double translationX,
+  //                            double translationY) {
+  //  transformTexCoords((float) scaleX,
+  //                     (float) scaleY,
+  //                     (float) translationX,
+  //                     (float) translationY);
+  //}
+  
+  //void GL::transformTexCoords(const MutableVector2D& scale,
+  //                            const MutableVector2D& translation) {
+  //  transformTexCoords(scale.x(),
+  //                     scale.y(),
+  //                     translation.x(),
+  //                     translation.y());
+  //}
+  
+  //void GL::transformTexCoords(const Vector2D& scale,
+  //                            const Vector2D& translation) {
+  //  transformTexCoords(scale.x(),
+  //                     scale.y(),
+  //                     translation.x(),
+  //                     translation.y());
+  //}
+  
   public final void enablePolygonOffset(float factor, float units)
   {
 	_gl.enable(GLFeature.PolygonOffsetFill);
@@ -470,7 +517,9 @@ public class GL
   
 	_texturesIdBag.addLast(glTextureId);
   
-  //  printf("   - Delete 1 texturesId (bag size=%ld).\n", _texturesIdBag.size());
+	_texturesIdTakeCounter++;
+  
+	System.out.printf("   - Delete 1 texturesId (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n", _texturesIdBag.size(), _texturesIdGetCounter, _texturesIdTakeCounter, _texturesIdGetCounter - _texturesIdTakeCounter);
   }
 
   public final void enableCullFace(GLCullFace face)
@@ -496,11 +545,38 @@ public class GL
 	}
   }
 
+  public final void transformTexCoords(float scaleX, float scaleY, float translationX, float translationY)
+  {
+	if ((_scaleX != scaleX) || (_scaleY != scaleY))
+	{
+	  _gl.uniform2f(GlobalMembersGL.Uniforms.ScaleTexCoord, scaleX, scaleY);
+	  _scaleX = scaleX;
+	  _scaleY = scaleY;
+	}
+  
+	if ((_translationX != translationX) || (_translationY != translationY))
+	{
+	  _gl.uniform2f(GlobalMembersGL.Uniforms.TranslationTexCoord, translationX, translationY);
+	  _translationX = translationX;
+	  _translationY = translationY;
+	}
+  }
+
+  public final void transformTexCoords(double scaleX, double scaleY, double translationX, double translationY)
+  {
+	transformTexCoords((float) scaleX, (float) scaleY, (float) translationX, (float) translationY);
+  }
+
   public final void transformTexCoords(Vector2D scale, Vector2D translation)
   {
-	_gl.uniform2f(GlobalMembersGL.Uniforms.ScaleTexCoord, (float) scale.x(), (float) scale.y());
-	_gl.uniform2f(GlobalMembersGL.Uniforms.TranslationTexCoord, (float) translation.x(), (float) translation.y());
+	transformTexCoords((float) scale.x(), (float) scale.y(), (float) translation.x(), (float) translation.y());
   }
+
+  public final void transformTexCoords(MutableVector2D scale, MutableVector2D translation)
+  {
+	transformTexCoords((float) scale.x(), (float) scale.y(), (float) translation.x(), (float) translation.y());
+  }
+
 
   public final void color(Color col)
   {

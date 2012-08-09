@@ -40,7 +40,7 @@ public class GLErrorRenderer extends Renderer
 	return Renderer.maxTimeToRender;
   }
 
-  public boolean onTouchEvent(TouchEvent touchEvent)
+  public boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
   {
 	return false;
   }
@@ -49,7 +49,7 @@ public class GLErrorRenderer extends Renderer
   {
   }
 
-  public final void onResizeViewportEvent(int width, int height)
+  public final void onResizeViewportEvent(EventContext ec, int width, int height)
   {
   }
 

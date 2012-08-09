@@ -85,4 +85,11 @@ public class TexturedMesh extends Mesh
 	  return _mesh.getVertex(i);
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const TextureMapping* getTextureMapping() const
+  public final TextureMapping getTextureMapping()
+  {
+	return _textureMapping;
+  }
+
 }

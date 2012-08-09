@@ -9,7 +9,6 @@ public class TileRenderer extends Renderer
 
   private java.util.ArrayList<Tile> _topLevelTiles = new java.util.ArrayList<Tile>();
 
-  private ITimer _frameTimer; // timer started at the start of each frame rendering
   private ITimer _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
   private ITimer _lastTexturizerTimer; // timer to start every time the texturizer is called
 
@@ -99,9 +98,8 @@ public class TileRenderer extends Renderer
 	  _texturizer = texturizer;
 	  _parameters = parameters;
 	  _showStatistics = showStatistics;
-	  _lastStatistics = new TilesStatistics(parameters);
+	  _lastStatistics = new TilesStatistics();
 	  _topTilesJustCreated = false;
-	  _frameTimer = null;
 	  _lastSplitTimer = null;
 	  _lastTexturizerTimer = null;
 
@@ -118,21 +116,25 @@ public class TileRenderer extends Renderer
 	clearTopLevelTiles();
 	createTopLevelTiles(ic);
   
-	_frameTimer = ic.getFactory().createTimer();
 	_lastSplitTimer = ic.getFactory().createTimer();
 	_lastTexturizerTimer = ic.getFactory().createTimer();
+  
+	_texturizer.initialize(ic);
   }
 
   public final int render(RenderContext rc)
   {
-	_frameTimer.start();
-  
-	TilesStatistics statistics = new TilesStatistics(_parameters);
+	TilesStatistics statistics = new TilesStatistics();
   
 	final int topLevelTilesSize = _topLevelTiles.size();
   
 	if (_topTilesJustCreated)
 	{
+	  DistanceToCenterTileComparison predicate = new DistanceToCenterTileComparison(rc.getCamera(), rc.getPlanet());
+  
+	  predicate.initialize();
+	  std.sort(_topLevelTiles.iterator(), _topLevelTiles.end(), predicate);
+  
 	  if (_texturizer != null)
 	  {
 		for (int i = 0; i < topLevelTilesSize; i++)
@@ -144,8 +146,7 @@ public class TileRenderer extends Renderer
 	  _topTilesJustCreated = false;
 	}
   
-  //  const DistanceToCenterTileComparison predicate = DistanceToCenterTileComparison(rc->getCamera(),
-  //                                                                                  rc->getPlanet());
+	DistanceToCenterTileComparison predicate = new DistanceToCenterTileComparison(rc.getCamera(), rc.getPlanet());
   
   //  std::vector<Tile*> toVisit(_topLevelTiles);
 	java.util.LinkedList<Tile> toVisit = new java.util.LinkedList<Tile>();
@@ -159,18 +160,13 @@ public class TileRenderer extends Renderer
 	{
 	  java.util.LinkedList<Tile> toVisitInNextIteration = new java.util.LinkedList<Tile>();
   
-  ///#ifdef C_CODE
-  //    std::sort(toVisit.begin(),
-  //              toVisit.end(),
-  //              predicate);
-  ///#endif
-  
   	  java.util.Collections.sort(toVisit, predicate);
   
 	  for (java.util.Iterator<Tile > i = toVisit.iterator(); i.hasNext();)
 	  {
 		Tile tile = i.next();
-		tile.render(rc, _tessellator, _texturizer, _parameters, statistics, toVisitInNextIteration, _frameTimer, _lastSplitTimer, _lastTexturizerTimer);
+		tile.render(rc, _tessellator, _texturizer, _parameters, statistics, toVisitInNextIteration, _lastSplitTimer, _lastTexturizerTimer);
+  
 	  }
   
 	  toVisit = toVisitInNextIteration;
@@ -190,12 +186,12 @@ public class TileRenderer extends Renderer
 	return Renderer.maxTimeToRender;
   }
 
-  public final boolean onTouchEvent(TouchEvent touchEvent)
+  public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
   {
 	return false;
   }
 
-  public final void onResizeViewportEvent(int width, int height)
+  public final void onResizeViewportEvent(EventContext ec, int width, int height)
   {
 
   }
@@ -212,7 +208,7 @@ public class TileRenderer extends Renderer
   
 	if (_texturizer != null)
 	{
-	  if (!_texturizer.isReadyToRender(rc))
+	  if (!_texturizer.isReady(rc))
 	  {
 		return false;
 	  }

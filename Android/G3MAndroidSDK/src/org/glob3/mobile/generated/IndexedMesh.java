@@ -72,9 +72,9 @@ public class IndexedMesh extends Mesh
 	  p = 0;
 	  for (int i = 0; i < vertices.size(); i++)
 	  {
-		norm[p++] = (float)(normals)[i].x();
-		norm[p++] = (float)(normals)[i].y();
-		norm[p++] = (float)(normals)[i].z();
+		norm[p++] = (float) normals.get(i).x();
+		norm[p++] = (float) normals.get(i).y();
+		norm[p++] = (float) normals.get(i).z();
 	  }
 	  _normals = norm;
 	}
@@ -88,10 +88,10 @@ public class IndexedMesh extends Mesh
 	  float[] vertexColor = new float[4* colors.size()];
 	  for (int i = 0; i < colors.size(); i+=4)
 	  {
-		vertexColor[i] = (colors)[i].getRed();
-		vertexColor[i+1] = (colors)[i].getGreen();
-		vertexColor[i+2] = (colors)[i].getBlue();
-		vertexColor[i+3] = (colors)[i].getAlpha();
+		vertexColor[i] = colors.get(i).getRed();
+		vertexColor[i+1] = colors.get(i).getGreen();
+		vertexColor[i+2] = colors.get(i).getBlue();
+		vertexColor[i+3] = colors.get(i).getAlpha();
 	  }
 	  _colors = vertexColor;
 	}

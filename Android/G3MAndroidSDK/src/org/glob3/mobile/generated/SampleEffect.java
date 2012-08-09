@@ -1,10 +1,11 @@
 package org.glob3.mobile.generated; 
- //: public Renderer
+//***************************************************************
 
-public class DummyEffect extends EffectWithDuration
+
+public class SampleEffect extends EffectWithDuration
 {
 
-  public DummyEffect(TimeInterval duration)
+  public SampleEffect(TimeInterval duration)
   {
 	  super(duration);
   }
@@ -25,6 +26,11 @@ public class DummyEffect extends EffectWithDuration
   public void stop(RenderContext rc, TimeInterval now)
   {
 	super.stop(rc, now);
+  }
+
+  public void cancel(TimeInterval now)
+  {
+	// do nothing, just leave the effect in the intermediate state
   }
 
   private double _lastPercent;
