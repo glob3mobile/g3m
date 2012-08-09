@@ -22,7 +22,39 @@ package org.glob3.mobile.generated;
  */
 public class Geodetic2D
 {
-  private final Angle _latitude ;
+  @Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((_latitude == null) ? 0 : _latitude.hashCode());
+		result = prime * result
+				+ ((_longitude == null) ? 0 : _longitude.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Geodetic2D other = (Geodetic2D) obj;
+		if (_latitude == null) {
+			if (other._latitude != null)
+				return false;
+		} else if (!_latitude.equals(other._latitude))
+			return false;
+		if (_longitude == null) {
+			if (other._longitude != null)
+				return false;
+		} else if (!_longitude.equals(other._longitude))
+			return false;
+		return true;
+	}
+
+private final Angle _latitude ;
   private final Angle _longitude ;
 
 
@@ -80,10 +112,9 @@ public class Geodetic2D
 	return _latitude.isBetween(min.latitude(), max.latitude()) && _longitude.isBetween(min.longitude(), max.longitude());
   }
 
-
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean lowerThan(const Geodetic2D& that) const
-  public final boolean lowerThan(Geodetic2D that)
+//ORIGINAL LINE: boolean lowerThanOperator(const Geodetic2D& that) const
+  public final boolean lowerThanOperator(Geodetic2D that)
   {
 	if (_latitude.lowerThan(that._latitude))
 	{

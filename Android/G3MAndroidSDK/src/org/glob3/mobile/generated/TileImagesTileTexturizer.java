@@ -134,8 +134,8 @@ public class TileImagesTileTexturizer extends TileTexturizer
 	  tp = _tilePetitions.get(i);
 	  if (tile.getLevel() == tp.getLevel() && tile.getRow() == tp.getRow() && tile.getColumn() == tp.getColumn())
 	  {
-  
-  	  _tilePetitions.remove(i);
+//C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'erase' method in Java:
+		_tilePetitions.remove(i);
 		if (tp != null)
 			tp.dispose();
 		break;
@@ -145,7 +145,7 @@ public class TileImagesTileTexturizer extends TileTexturizer
 
   private Mesh getFallBackTexturedMesh(Tile tile, TileTessellator tessellator, Mesh tessellatorMesh, Mesh previousMesh)
   {
-	TextureMapping fbTMap = null;
+	final TextureMapping fbTMap;
 	int texID = -1;
 	Tile fbTile = tile.getParent();
 	while (fbTile != null && texID < 0)

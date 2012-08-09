@@ -161,7 +161,7 @@ public class SimplePlanetRenderer extends Renderer
 		normals[i++] = 1.0F;
 	  }
 	}
-  
+
 	IndexedMesh im = IndexedMesh.CreateFromVector3D(true, GLPrimitive.TriangleStrip, CenterStrategy.NoCenter, new Vector3D(0,0,0), _latRes *_lonRes, ver, ind, numIndexes, flatColor, colors, 0.5, normals);
   
 	TextureMapping texMap = new TextureMapping(texID, texC, rc.getTexturesHandler(), _textureFilename, _texWidth,_texHeight);

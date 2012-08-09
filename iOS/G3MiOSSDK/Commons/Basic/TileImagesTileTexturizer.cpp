@@ -93,8 +93,9 @@ Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
                                                         Mesh* previousMesh) {
 #ifdef C_CODE
   const TextureMapping* fbTMap = NULL;
-#else
-  TextureMapping* fbTMap = NULL;
+#endif
+#ifdef JAVA_CODE
+  TextureMapping fbTMap = NULL;
 #endif
   int texID = -1;
   Tile* fbTile = tile->getParent();
