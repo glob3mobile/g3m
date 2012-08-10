@@ -37,7 +37,7 @@ private:
               std::vector<int>& indexes,
               const Color* flatColor = NULL,
               std::vector<Color>* colors = NULL,
-              const float colorsIntensity = 0.0f,
+              const float colorsIntensity = (float)0.0,
               std::vector<MutableVector3D>* normals = NULL);
   
   IndexedMesh(bool owner,
@@ -50,7 +50,7 @@ private:
               const int numIndex, 
               const Color* flatColor = NULL,
               const float colors[] = NULL,
-              const float colorsIntensity = 0.0f,
+              const float colorsIntensity = (float)0.0,
               const float normals[] = NULL);
   
 #ifdef C_CODE
@@ -58,7 +58,6 @@ private:
   const int*           _indexes;
   const float*         _normals;
   const float *        _colors;
-  const GLPrimitive    _primitive; 
 #endif
   
 #ifdef JAVA_CODE
@@ -66,9 +65,10 @@ private:
   private final int[]           _indexes;
   private final float[]         _normals;
   private final float[]         _colors;
-  private final GLPrimitive _primitive = GLPrimitive.TriangleStrip;
 #endif
 
+  
+  const GLPrimitive    _primitive; 
   const bool           _owner;
   const int            _numVertices;
   const int            _numIndex;
@@ -96,7 +96,7 @@ public:
                                          const int numIndex, 
                                          const Color* flatColor = NULL,
                                          const float colors[] = NULL,
-                                         const float colorsIntensity = 0.0,
+                                         const float colorsIntensity = (float)0.0,
                                          const float normals[] = NULL)
   {
     return new IndexedMesh(owner, primitive, strategy, center, numVertices, vertices,
@@ -111,7 +111,7 @@ public:
                                          std::vector<int>& indexes,
                                          const Color* flatColor = NULL,
                                          std::vector<Color>* colors = NULL,
-                                         const float colorsIntensity = 0.0,
+                                         const float colorsIntensity = (float)0.0,
                                          std::vector<MutableVector3D>* normals = NULL)
   {
     return new IndexedMesh(vertices, primitive, strategy, center, indexes,
@@ -130,7 +130,7 @@ public:
                                            const int numIndex, 
                                            const Color* flatColor = NULL,
                                            const float colors[] = NULL,
-                                           const float colorsIntensity = 0.0,
+                                           const float colorsIntensity = (float)0.0,
                                            const float normals[] = NULL)
   {
     // convert vertices to latlon coordinates
