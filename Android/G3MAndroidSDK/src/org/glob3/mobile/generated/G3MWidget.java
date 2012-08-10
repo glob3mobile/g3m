@@ -86,9 +86,6 @@ public class G3MWidget
 	if (_downloader != null)
 		_downloader.dispose();
   
-	for (int n = 0; n<_cameraConstraint.size(); n++)
-	  if (_cameraConstraint.get(n) != null)
-		  _cameraConstraint.get(n).dispose();
   }
 
   public final int render()
