@@ -103,7 +103,7 @@ int TileRenderer::render(const RenderContext* rc) {
   const int topLevelTilesSize = _topLevelTiles.size();
   
   
-  DistanceToCenterTileComparison predicate = DistanceToCenterTileComparison(rc->getCamera(),
+  DistanceToCenterTileComparison predicate = DistanceToCenterTileComparison(rc->getCurrentCamera(),
                                                                             rc->getPlanet());
 
   if (_topTilesJustCreated) {
@@ -126,7 +126,7 @@ int TileRenderer::render(const RenderContext* rc) {
     }
     _topTilesJustCreated = false;
   }
-  
+
 //  std::vector<Tile*> toVisit(_topLevelTiles);
   std::list<Tile*> toVisit;
 

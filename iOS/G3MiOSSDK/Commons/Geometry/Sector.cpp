@@ -46,7 +46,7 @@ Geodetic2D Sector::getInnerPoint(double u, double v) const {
 }
 
 bool Sector::isBackOriented(const RenderContext *rc) const {
-  const Camera* camera = rc->getCamera();
+  const Camera* camera = rc->getNextCamera();
   const Planet* planet = rc->getPlanet();
   
   // compute sector point nearest to centerPoint

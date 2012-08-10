@@ -13,6 +13,8 @@
 
 #include "Renderer.hpp"
 #include "Context.hpp"
+#include "Effects.hpp"
+
 
 #include "Effects.hpp"
 
@@ -32,7 +34,6 @@ enum Gesture {
   Rotate,
   DoubleDrag
 };
-
 
 class CameraContext: public EffectTarget {
 private:

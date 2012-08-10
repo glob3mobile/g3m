@@ -108,7 +108,8 @@ public:
 class RenderContext: public Context {
 private:
   GL*              _gl;
-  Camera*          _camera;
+  const Camera*    _currentCamera;
+  Camera*          _nextCamera;
   TexturesHandler* _texturesHandler;
   ITimer*          _frameStartTimer;
   
@@ -117,7 +118,8 @@ public:
                 ILogger* logger,
                 const Planet* planet,
                 GL *gl,
-                Camera* camera,
+                const Camera* currentCamera,
+                Camera* nextCamera,
                 TexturesHandler* texturesHandler,
                 Downloader* const downloaderOLD,
                 IDownloader* downloader,
@@ -125,7 +127,8 @@ public:
                 ITimer* frameStartTimer) :
   Context(factory, logger, planet, downloaderOLD, downloader, scheduler),
   _gl(gl),
-  _camera(camera),
+  _currentCamera(currentCamera),
+  _nextCamera(nextCamera),
   _texturesHandler(texturesHandler),
   _frameStartTimer(frameStartTimer) {
     
@@ -135,8 +138,12 @@ public:
     return _gl;
   }
   
-  Camera* getCamera() const {
-    return _camera;
+  const Camera* getCurrentCamera() const {
+    return _currentCamera;
+  }
+  
+  Camera* getNextCamera() const {
+    return _nextCamera;
   }
   
   TexturesHandler* getTexturesHandler() const {

@@ -22,7 +22,10 @@ class Camera;
 class ITimer;
 class EffectsScheduler;
 
+#include <vector>
 #include "Color.hpp"
+
+class ICameraConstrainer;
 
 
 class G3MWidget {
@@ -35,6 +38,7 @@ public:
                            Downloader *      downloaderOLD,
                            IDownloader*      downloader,
                            const Planet*     planet,
+                           std::vector<ICameraConstrainer *> cameraConstraint,
                            Renderer*         renderer,
                            Renderer*         busyRenderer,
                            EffectsScheduler* scheduler,
@@ -43,7 +47,7 @@ public:
                            Color             backgroundColor,
                            const bool        logFPS);
   
-  ~G3MWidget();
+  ~G3MWidget(); 
   
   int render();
   
@@ -55,8 +59,12 @@ public:
     return _gl;
   }
   
-  Camera* getCamera() const {
-    return _camera;
+/*  const Camera* getCurrentCamera() const {
+    return _currentCamera;
+  }*/
+  
+  Camera* getNextCamera() const {
+    return _nextCamera;
   }
   
   
@@ -69,7 +77,10 @@ private:
   Renderer*         _busyRenderer;
   EffectsScheduler* _scheduler;
   
-  Camera*          _camera;
+  std::vector<ICameraConstrainer *> _cameraConstraint;
+  
+  Camera*          _currentCamera;
+  Camera*          _nextCamera;
   Downloader*      _downloaderOLD;
   IDownloader*     _downloader;
   TexturesHandler* _texturesHandler;
@@ -91,6 +102,7 @@ private:
             Downloader*       downloaderOLD,
             IDownloader*      downloader,
             const Planet*     planet,
+            std::vector<ICameraConstrainer *> cameraConstraint,
             Renderer*         renderer,
             Renderer*         busyRenderer,
             EffectsScheduler* scheduler,
