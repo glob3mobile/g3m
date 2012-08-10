@@ -43,12 +43,12 @@ private:
   WMSLayer* _layer;
   LayerSet * _layerSet;
   
-  mutable std::vector<MutableVector2D>* _texCoordsCache;
+  mutable float* _texCoordsCache;
   
   TilePetitions* createTilePetitions(const RenderContext* rc,
                                      const Tile* tile);
   
-  std::vector<MutableVector2D> getTextureCoordinates(const TileRenderContext* trc) const;
+  float* getTextureCoordinates(const TileRenderContext* trc) const;
   
   void translateAndScaleFallBackTex(Tile* tile, Tile* fallbackTile, SimpleTextureMapping* tmap) const;
   
@@ -82,7 +82,7 @@ public:
   
   ~TileImagesTileTexturizer() {
     if (_texCoordsCache != NULL) {
-      delete _texCoordsCache;
+      delete [] _texCoordsCache;
     }
   }
   

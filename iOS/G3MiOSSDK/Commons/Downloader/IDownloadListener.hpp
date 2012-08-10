@@ -15,9 +15,9 @@
 
 class IDownloadListener {
 public:
-  virtual void onDownload(const Response& response) = 0; 
-  virtual void onError(const Response& response) = 0;
-  virtual void onCancel(const URL& url) = 0;
+  virtual void onDownload(const Response* response) = 0;
+  virtual void onError(const Response* response) = 0;
+  virtual void onCancel(const URL* url) = 0;
   
   virtual ~IDownloadListener() {
 //    printf("**>> deleting listener=%x\n", (int) this);

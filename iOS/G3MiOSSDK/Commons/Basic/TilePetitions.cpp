@@ -12,37 +12,37 @@
 #include "Downloader.hpp"
 #include "TexturesHandler.hpp"
 
-void TilePetitions::onDownload(const Response &response)
+void TilePetitions::onDownload(const Response* response)
 {
   _downloadsCounter++;
   
-  std::string url = response.getURL().getPath();
+  std::string url = response->getURL().getPath();
   
   for (int j = 0; j < _petitions.size(); j++) {
     if (_petitions[j]->getURL() == url)
     {
       //STORING PIXEL DATA FOR RECEIVED URL
-      ByteBuffer *bb = new ByteBuffer(*response.getByteBuffer());
+      ByteBuffer* bb = response->getByteBuffer()->copy();
       _petitions[j]->setByteBuffer(bb);
     }
   }
 }
 
 
-void TilePetitions::onError(const Response& e) {
+void TilePetitions::onError(const Response* e) {
   _errorsCounter++;
 }
 
 bool TilePetitions::allFinished() const {
   for (int i = 0; i < _petitions.size(); i++) {
-    if (!_petitions[i]->isArrived()){
+    if (!_petitions[i]->hasByteBuffer()){
       return false;
     }
   }
   return true;
 }
 
-void TilePetitions::onCancel(const URL& url){
+void TilePetitions::onCancel(const URL* url){
   _errorsCounter++;
 }
 
@@ -62,7 +62,7 @@ void TilePetitions::requestToNet(IDownloader* downloader, int priority)
 {
   for (int i = 0; i < getNumPetitions(); i++) {
     Petition* pet = getPetition(i);
-    if (!pet->isArrived()) {
+    if (!pet->hasByteBuffer()) {
       const URL& url = URL(pet->getURL());
       long id = downloader->request(url, priority, this, false);
       pet->setDownloadID(id);
@@ -117,7 +117,7 @@ void TilePetitions::createTexture(TexturesHandler* texturesHandler, const IFacto
     std::vector<const Rectangle*> rectangles;
     for (int i = 0; i < getNumPetitions(); i++) {
       const ByteBuffer* bb = getPetition(i)->getByteBuffer();
-      IImage *im = factory->createImageFromData(*bb);
+      IImage *im = factory->createImageFromData(bb);
       
       if (im != NULL) {
         Sector imSector = getPetition(i)->getSector();

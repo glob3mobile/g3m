@@ -311,21 +311,21 @@
   if (true) {
     
     class Listener : public IDownloadListener {
-      void onDownload(const Response& response) {
+      void onDownload(const Response* response) {
         BOOL isMainThread = [NSThread isMainThread];
         if (isMainThread) {
-          NSLog(@"*** Main-Thread: Downloaded %d bytes ***", response.getByteBuffer()->getLength());
+          NSLog(@"*** Main-Thread: Downloaded %d bytes ***", response->getByteBuffer()->getLength());
         }
         else {
-          NSLog(@"*** NOT IN Main-Thread: Downloaded %d bytes ***", response.getByteBuffer()->getLength());
+          NSLog(@"*** NOT IN Main-Thread: Downloaded %d bytes ***", response->getByteBuffer()->getLength());
         }
       }
       
-      void onError(const Response& response) {
+      void onError(const Response* response) {
         
       }
       
-      void onCancel(const URL& url) {
+      void onCancel(const URL* url) {
         
       }
     };
@@ -383,7 +383,7 @@
     
     TileTexturizer* texturizer = NULL;
     if (true) {
-      const bool useNewTexturizer = false;
+      const bool useNewTexturizer = true;
       if (useNewTexturizer) {
         texturizer = new MultiLayerTileTexturizer(layerSet);
       }

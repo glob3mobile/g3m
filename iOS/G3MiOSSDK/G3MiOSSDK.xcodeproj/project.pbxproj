@@ -451,6 +451,8 @@
 				38D786E41587B3DD003BBC75 /* Tile.hpp */,
 				D88B5DF315C150A10083A43F /* TileImagesTileTexturizer.cpp */,
 				D88B5DF415C150A10083A43F /* TileImagesTileTexturizer.hpp */,
+				CFD0021915D3C94C00735FD8 /* TileKey.cpp */,
+				CFD0021A15D3C94C00735FD8 /* TileKey.hpp */,
 				D8C874BF15B5C5AE00F19859 /* TilePetitions.cpp */,
 				D8C874BE15B5C58D00F19859 /* TilePetitions.hpp */,
 				CF9AEBBE159B3BAF004C3558 /* TileTessellator.cpp */,
@@ -466,8 +468,6 @@
 				CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */,
 				D8C874BE15B5C58D00F19859 /* TilePetitions.hpp */,
 				D8C874BF15B5C5AE00F19859 /* TilePetitions.cpp */,
-				CFD0021915D3C94C00735FD8 /* TileKey.cpp */,
-				CFD0021A15D3C94C00735FD8 /* TileKey.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -538,19 +538,19 @@
 		CC596F1B15C46CD7008FC230 /* Cameras */ = {
 			isa = PBXGroup;
 			children = (
-				CC596F1D15C46D4F008FC230 /* Camera.hpp */,
 				CC596F1C15C46D4F008FC230 /* Camera.cpp */,
-				CC596F1F15C46D4F008FC230 /* CameraDoubleDragHandler.hpp */,
+				CC596F1D15C46D4F008FC230 /* Camera.hpp */,
 				CC596F1E15C46D4F008FC230 /* CameraDoubleDragHandler.cpp */,
-				CC55C47C15D11D4000923D7B /* CameraDoubleTapHandler.hpp */,
+				CC596F1F15C46D4F008FC230 /* CameraDoubleDragHandler.hpp */,
 				CC55C47E15D11D8500923D7B /* CameraDoubleTapHandler.cpp */,
+				CC55C47C15D11D4000923D7B /* CameraDoubleTapHandler.hpp */,
 				CC94D7FA15D0FDF70074B12A /* CameraEventHandler.hpp */,
-				385827FB15C6FA4E00B3E68B /* CameraRenderer.hpp */,
 				385827FD15C6FACD00B3E68B /* CameraRenderer.cpp */,
-				CC596F2B15C472BA008FC230 /* CameraRotationHandler.hpp */,
+				385827FB15C6FA4E00B3E68B /* CameraRenderer.hpp */,
 				CC596F2C15C472EF008FC230 /* CameraRotationHandler.cpp */,
-				CC596F2815C46DAB008FC230 /* CameraSingleDragHandler.hpp */,
+				CC596F2B15C472BA008FC230 /* CameraRotationHandler.hpp */,
 				CC596F2915C46DE2008FC230 /* CameraSingleDragHandler.cpp */,
+				CC596F2815C46DAB008FC230 /* CameraSingleDragHandler.hpp */,
 			);
 			name = Cameras;
 			sourceTree = "<group>";
@@ -566,8 +566,8 @@
 				CCC2A02015CA6C7D00923850 /* DummyRenderer.hpp */,
 				CCC2A02115CA6C7D00923850 /* GLErrorRenderer.cpp */,
 				CCC2A02215CA6C7D00923850 /* GLErrorRenderer.hpp */,
-				CCC2A02615CA6C7D00923850 /* LatLonMeshRenderer.h */,
 				CCC2A02515CA6C7D00923850 /* LatLonMeshRenderer.cpp */,
+				CCC2A02615CA6C7D00923850 /* LatLonMeshRenderer.h */,
 				CCC2A02315CA6C7D00923850 /* MarksRenderer.cpp */,
 				CCC2A02415CA6C7D00923850 /* MarksRenderer.hpp */,
 				CCC2A02715CA6C7D00923850 /* Renderer.hpp */,
@@ -577,8 +577,8 @@
 				CCC2A02B15CA6C7D00923850 /* SimplePlanetRenderer.hpp */,
 				CCC2A02C15CA6C7D00923850 /* TileRenderer.cpp */,
 				CCC2A02D15CA6C7D00923850 /* TileRenderer.hpp */,
-				CFA71BE715D2F6C500F8C78D /* TilesRenderParameters.hpp */,
 				CFA71BE815D2F6D200F8C78D /* TilesRenderParameters.cpp */,
+				CFA71BE715D2F6C500F8C78D /* TilesRenderParameters.hpp */,
 			);
 			name = Renderers;
 			sourceTree = "<group>";
@@ -613,14 +613,14 @@
 			children = (
 				D8A5601B15AEF64E00035086 /* IndexedMesh.cpp */,
 				D8A5601C15AEF64E00035086 /* IndexedMesh.hpp */,
+				CF8FF98915D5539F000F79D1 /* LeveledTexturedMesh.cpp */,
+				CF8FF98A15D5539F000F79D1 /* LeveledTexturedMesh.hpp */,
 				D8A5601D15AEF64E00035086 /* Mesh.cpp */,
 				D8A5601E15AEF64E00035086 /* Mesh.hpp */,
 				CCB2564F15B5A33A00079B96 /* TexturedMesh.cpp */,
 				D8A5602315AEF69200035086 /* TexturedMesh.hpp */,
 				CC96079115AF23F600D438D4 /* TextureMapping.cpp */,
 				CCB2564D15B5A30900079B96 /* TextureMapping.hpp */,
-				CF8FF98915D5539F000F79D1 /* LeveledTexturedMesh.cpp */,
-				CF8FF98A15D5539F000F79D1 /* LeveledTexturedMesh.hpp */,
 			);
 			name = Mesh;
 			sourceTree = "<group>";

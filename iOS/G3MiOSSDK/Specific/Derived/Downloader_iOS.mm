@@ -162,10 +162,12 @@ long Downloader_iOS::request(const URL &url,
     unsigned char *bytes = new unsigned char[ length ]; // will be deleted by ByteBuffer's destructor
     [data getBytes:bytes length: length];
     
-    ByteBuffer buffer(bytes, length);
-    Response response(url, &buffer);
+    ByteBuffer* buffer = new ByteBuffer(bytes, length);
+    Response response(url, buffer);
     
-    cppListener->onDownload(response);
+    cppListener->onDownload(&response);
+    
+    delete buffer;
     
     if (deleteListener) {
       delete cppListener;

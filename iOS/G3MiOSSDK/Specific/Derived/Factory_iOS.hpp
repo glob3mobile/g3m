@@ -45,13 +45,13 @@ public:
     return new Image_iOS(image);
   }
   
-  virtual IImage* createImageFromData(const ByteBuffer& bb) const {
+  virtual IImage* createImageFromData(const ByteBuffer* bb) const {
     
-    NSData* data = [NSData dataWithBytes:bb.getData() length:bb.getLength()];
+    NSData* data = [NSData dataWithBytes:bb->getData() length:bb->getLength()];
     
     UIImage* image = [UIImage imageWithData:data];
     if (!image) {
-      printf("Can't read image from ByteBuffer of %d bytes\n", bb.getLength());
+      printf("Can't read image from ByteBuffer of %d bytes\n", bb->getLength());
       return NULL;
     }
     

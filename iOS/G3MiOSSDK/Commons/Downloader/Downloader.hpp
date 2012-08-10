@@ -42,7 +42,7 @@ public:
     
     for (int j = 0; j < _listeners.size(); j++) {
       if (_listeners[j]._id == id){
-        _listeners[j]._listener->onCancel(url); //CANCELING OPERATION
+        _listeners[j]._listener->onCancel(&url); //CANCELING OPERATION
         _listeners.erase(_listeners.begin() + j);
         return true;
       }
@@ -78,11 +78,11 @@ public:
   
   long request(const URL& urlOfFile, int priority, IDownloadListener* listener);
   
-  void onDownload(const Response& e);
+  void onDownload(const Response* e);
   
-  void onError(const Response& e);
+  void onError(const Response* e);
   
-  void onCancel(const URL& url) {}
+  void onCancel(const URL* url) {}
   
   void cancelRequest(long id);
   

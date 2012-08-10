@@ -27,7 +27,7 @@ class TileImagesTileTexturizer;
 class Petition {
   const std::string _url;
   const Sector *    _sector;
-  ByteBuffer*       _bb;
+  ByteBuffer*       _buffer;
   long              _downloadID;
   const bool        _transparentImage;
   
@@ -35,7 +35,7 @@ public:
   
   Petition(Sector s, std::string url, bool transparent): _url(url), 
   _sector(new Sector(s)),
-  _bb(NULL),
+  _buffer(NULL),
   _downloadID(-1),
   _transparentImage(transparent)
   {}
@@ -46,16 +46,18 @@ public:
   }
   
   void releaseData(){ 
-    if (_bb != NULL) delete _bb;
-    _bb = NULL;
+    if (_buffer != NULL) {
+      delete _buffer;
+      _buffer = NULL;
+    }
   }
   
   long getDownloadID() const {
     return _downloadID;
   }
   
-  bool isArrived() const{ 
-    return _bb != NULL;
+  bool hasByteBuffer() const{
+    return _buffer != NULL;
   }
   
   bool isTransparent() const{
@@ -74,14 +76,17 @@ public:
     return *_sector;
   }
   
-  void setByteBuffer(ByteBuffer* bb) {
-    if (_bb != NULL) delete _bb;
-    _bb = bb;
+  void setByteBuffer(ByteBuffer* buffer) {
+    if (_buffer != NULL) {
+      delete _buffer;
+    }
+    _buffer = buffer;
   }
 
-  const ByteBuffer* getByteBuffer() const {
-    return _bb;
+  ByteBuffer* getByteBuffer() const {
+    return _buffer;
   }
+  
 };
 
 
@@ -163,9 +168,9 @@ public:
   
   bool allFinished() const;
   
-  void onDownload(const Response &response); 
-  void onError(const Response& e);
-  void onCancel(const URL& url);
+  void onDownload(const Response* response);
+  void onError(const Response* e);
+  void onCancel(const URL* url);
   
   void removeUnnecesaryPetitions();
   

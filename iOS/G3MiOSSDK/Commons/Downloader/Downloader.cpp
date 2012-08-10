@@ -33,7 +33,7 @@ long Downloader::request(const URL& url, int priority, IDownloadListener* listen
     ByteBuffer *bb = _storage->read(urlOfFile);
     Response r(url , bb);
     if (listener != NULL){
-      listener->onDownload(r); 
+      listener->onDownload(&r);
     }
     delete bb;
     return -1;
@@ -88,14 +88,14 @@ void Downloader::startDownload()
   }
 }
 
-void Downloader::onDownload(const Response& e)
+void Downloader::onDownload(const Response* e)
 {
   //Saving on storage
-  _storage->save(e.getURL().getPath(), *e.getByteBuffer());
+  _storage->save(e->getURL().getPath(), *e->getByteBuffer());
   
   for (int i = 0; i < _petitions.size(); i++)
   {
-    if (_petitions[i]._url == e.getURL().getPath()) //RECEIVED RESPONSE
+    if (_petitions[i]._url == e->getURL().getPath()) //RECEIVED RESPONSE
     {
       Download& pet = _petitions[i];
       for (int j = 0; j < pet._listeners.size(); j++) {
@@ -120,11 +120,11 @@ void Downloader::onDownload(const Response& e)
   startDownload();          //CHECK IF WE CAN THROW A NEW PETITION TO THE NET
 }
 
-void Downloader::onError(const Response& e)
+void Downloader::onError(const Response* e)
 {
   for (int i = 0; i < _petitions.size(); i++)
   {
-    if (_petitions[i]._url == e.getURL().getPath()) //RECEIVED RESPONSE
+    if (_petitions[i]._url == e->getURL().getPath()) //RECEIVED RESPONSE
     {
       Download& pet = _petitions[i];
       for (int j = 0; j < pet._listeners.size(); j++) {

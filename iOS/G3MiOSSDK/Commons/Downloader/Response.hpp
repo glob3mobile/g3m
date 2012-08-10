@@ -15,7 +15,7 @@
 class Response {
 private:
   const URL         _url;
-  const ByteBuffer* _data;
+  ByteBuffer* _data;
   
   Response& operator=(const Response& that);
   
@@ -34,7 +34,7 @@ public:
     return _url;
   }
   
-  const ByteBuffer* getByteBuffer() const {
+  ByteBuffer* getByteBuffer() const {
     return _data;
   }
   

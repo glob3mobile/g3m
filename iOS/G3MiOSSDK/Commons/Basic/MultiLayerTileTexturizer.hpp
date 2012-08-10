@@ -27,16 +27,24 @@ private:
   
   std::map<TileKey, TileTextureBuilder*> _builders;
   
+  mutable float* _texCoordsCache;
+
+  float* getTextureCoordinates(const TileRenderContext* trc) const;
+
 public:
   MultiLayerTileTexturizer(LayerSet* layerSet) :
   _layerSet(layerSet),
   _downloader(0),
-  _parameters(0)
+  _parameters(0),
+  _texCoordsCache(NULL)
   {
     
   }
   
   virtual ~MultiLayerTileTexturizer() {
+    if (_texCoordsCache != NULL) {
+      delete [] _texCoordsCache;
+    }
   }
   
   bool isReady(const RenderContext *rc);

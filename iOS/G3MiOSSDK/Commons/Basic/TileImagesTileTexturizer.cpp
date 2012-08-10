@@ -37,11 +37,24 @@ TilePetitions* TileImagesTileTexturizer::createTilePetitions(const RenderContext
                            pet);
 }
 
-std::vector<MutableVector2D> TileImagesTileTexturizer::getTextureCoordinates(const TileRenderContext* trc) const {
+float* TileImagesTileTexturizer::getTextureCoordinates(const TileRenderContext* trc) const {
   if (_texCoordsCache == NULL) {
-    _texCoordsCache = trc->getTessellator()->createUnitTextCoords();
+    std::vector<MutableVector2D>* texCoordsV = trc->getTessellator()->createUnitTextCoords();
+    
+    const int texCoordsSize = texCoordsV->size();
+    float* texCoordsA = new float[2 * texCoordsSize];
+    int p = 0;
+    for (int i = 0; i < texCoordsSize; i++) {
+      texCoordsA[p++] = (float) texCoordsV->at(i).x();
+      texCoordsA[p++] = (float) texCoordsV->at(i).y();
+    }
+    
+    delete texCoordsV;
+    
+    _texCoordsCache = texCoordsA;
+
   }
-  return *_texCoordsCache;
+  return _texCoordsCache;
 }
 
 void TileImagesTileTexturizer::translateAndScaleFallBackTex(Tile* tile,
@@ -78,7 +91,8 @@ Mesh* TileImagesTileTexturizer::getNewTextureMesh(Tile* tile,
       //printf("TEXTURIZED %d, %d, %d\n", tile->getLevel(), tile->getRow(), tile->getColumn());
       
       TextureMapping * tMap = new SimpleTextureMapping(texID,
-                                                       getTextureCoordinates(trc));
+                                                       getTextureCoordinates(trc),
+                                                       false);
       TexturedMesh* texMesh = new TexturedMesh(tessellatorMesh, false, tMap, true);
       delete previousMesh;   //If a new mesh has been produced we delete the previous one
       return texMesh;
@@ -115,7 +129,8 @@ Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
   //CREATING MESH
   if (texID.isValid()) {
     SimpleTextureMapping* tMap = new SimpleTextureMapping(texID,
-                                                          getTextureCoordinates(trc));
+                                                          getTextureCoordinates(trc),
+                                                          false);
     translateAndScaleFallBackTex(tile, ancestor, tMap);
     TexturedMesh* texMesh = new TexturedMesh(tessellatorMesh, false, tMap, true);
     delete previousMesh;   //If a new mesh has been produced we delete the previous one

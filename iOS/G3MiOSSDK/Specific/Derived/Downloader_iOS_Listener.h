@@ -20,9 +20,9 @@
 -(id)initWithCPPListener:(IDownloadListener*)cppListener
           deleteListener: (bool)deleteListener;
 
--(void) onDownload:(Response&)response;
--(void) onError:(Response&)response;
--(void) onCancel:(const URL&)url;
+-(void) onDownload:(Response*)response;
+-(void) onError:(Response*)response;
+-(void) onCancel:(const URL*)url;
 
 -(void) dealloc;
 

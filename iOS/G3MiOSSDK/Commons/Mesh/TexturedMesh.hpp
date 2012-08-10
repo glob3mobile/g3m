@@ -21,6 +21,7 @@ private:
   const bool            _ownedMesh;
   const bool            _ownedTexMapping;
   
+  
 public:
   
   TexturedMesh(const Mesh* mesh,

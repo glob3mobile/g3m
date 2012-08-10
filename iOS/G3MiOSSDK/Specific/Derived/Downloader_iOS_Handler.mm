@@ -106,7 +106,7 @@
   for (int i = 0; i < listenersCount; i++) {
     ListenerEntry* entry = [_listeners objectAtIndex: i];
     if ([entry requestId] == requestId) {
-      [[entry listener] onCancel:*_url];
+      [[entry listener] onCancel:_url];
       
       [_listeners removeObjectAtIndex: i];
 
@@ -148,28 +148,26 @@
 {
   int __dgd_at_work;
   
-  Downloader_iOS* downloader = (Downloader_iOS*) downloaderV;
+  __block Downloader_iOS* downloader = (Downloader_iOS*) downloaderV;
   
   /* NSURLRequestUseProtocolCachePolicy */
-  NSURLRequest *request = [NSURLRequest requestWithURL: _nsURL
-                                           cachePolicy: NSURLRequestReturnCacheDataElseLoad 
-                                       timeoutInterval: 60.0];
-//  if (_canceled) {
-//    return;
-//  }
-
-  NSURLResponse *urlResponse;
-  NSError *error;
+  __block NSURLRequest *request = [NSURLRequest requestWithURL: _nsURL
+                                                   cachePolicy: NSURLRequestReturnCacheDataElseLoad
+                                               timeoutInterval: 60.0];
+  //  if (_canceled) {
+  //    return;
+  //  }
+  
+  __block NSURLResponse *urlResponse;
+  __block NSError *error;
   __block NSData* data = [NSURLConnection sendSynchronousRequest: request
                                                returningResponse: &urlResponse
                                                            error: &error];
-//  if (_canceled) {
-//    return;
-//  }
-
-  NSInteger statusCode = [((NSHTTPURLResponse*) urlResponse) statusCode];
+  //  if (_canceled) {
+  //    return;
+  //  }
   
-  __block URL url( [[_nsURL absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] );
+  
   
   // inform downloader to remove myself, to avoid adding new Listeners
   downloader->removeDownloadingHandlerForNSURL(_nsURL);
@@ -183,11 +181,15 @@
     
     const int listenersCount = [_listeners count];
     
+    NSInteger statusCode = [((NSHTTPURLResponse*) urlResponse) statusCode];
+
+    URL url( [[_nsURL absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] );
+    
     if (_canceled) {
       for (int i = 0; i < listenersCount; i++) {
         ListenerEntry* entry = [_listeners objectAtIndex: i];
         
-        [[entry listener] onCancel: url];
+        [[entry listener] onCancel: &url];
       }
     }
     else {
@@ -195,15 +197,18 @@
         const int length = [data length];
         unsigned char *bytes = new unsigned char[ length ]; // will be deleted by ByteBuffer's destructor
         [data getBytes:bytes length: length];
-        ByteBuffer buffer(bytes, length);
+        ByteBuffer* buffer = new ByteBuffer(bytes, length);
         
-        Response response(url, &buffer);
+        Response* response = new Response(url, buffer);
         
         for (int i = 0; i < listenersCount; i++) {
           ListenerEntry* entry = [_listeners objectAtIndex: i];
           
           [[entry listener] onDownload: response];
         }
+        
+        delete response;
+        delete buffer;
       }
       else {
 //        ILogger::instance()->logError("Can't load %s\n", [[_nsURL absoluteString] UTF8String]);
@@ -212,15 +217,18 @@
                                        statusCode,
                                        [[_nsURL absoluteString] UTF8String]);
         
-        ByteBuffer buffer(NULL, 0);
+        ByteBuffer* buffer = new ByteBuffer(NULL, 0);
         
-        Response response(url, &buffer);
+        Response* response = new Response(url, buffer);
         
         for (int i = 0; i < listenersCount; i++) {
           ListenerEntry* entry = [_listeners objectAtIndex: i];
           
           [[entry listener] onError: response];
         }
+
+        delete response;
+        delete buffer;
       }
     }
     

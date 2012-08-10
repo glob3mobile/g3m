@@ -63,8 +63,8 @@ public:
 
 
 const GLTextureID TexturesHandler::getGLTextureIdFromFileName(const std::string &filename,
-                                                        int textureWidth,
-                                                        int textureHeight) {
+                                                              int textureWidth,
+                                                              int textureHeight) {
   const IImage* image = _factory->createImageFromFileName(filename);
   
   const GLTextureID texId = getGLTextureId(image,
@@ -91,7 +91,7 @@ const GLTextureID TexturesHandler::getGLTextureIdIfAvailable(const TextureSpec& 
 }
 
 const GLTextureID TexturesHandler::getGLTextureId(const std::vector<const IImage*>& images,
-                                            const TextureSpec& textureSpec) {
+                                                  const TextureSpec& textureSpec) {
   GLTextureID previousId = getGLTextureIdIfAvailable(textureSpec);
   if (previousId.isValid()) {
     return previousId;
@@ -115,8 +115,8 @@ const GLTextureID TexturesHandler::getGLTextureId(const std::vector<const IImage
 }
 
 const GLTextureID TexturesHandler::getGLTextureId(const std::vector<const IImage*>& images,
-                                            const std::vector<const Rectangle*>& rectangles,
-                                            const TextureSpec& textureSpec) {
+                                                  const std::vector<const Rectangle*>& rectangles,
+                                                  const TextureSpec& textureSpec) {
   GLTextureID previousId = getGLTextureIdIfAvailable(textureSpec);
   if (previousId.isValid()) {
     return previousId;
@@ -142,7 +142,7 @@ const GLTextureID TexturesHandler::getGLTextureId(const std::vector<const IImage
 }
 
 const GLTextureID TexturesHandler::getGLTextureId(const IImage *image,
-                                            const TextureSpec& textureSpec) {
+                                                  const TextureSpec& textureSpec) {
   std::vector<const IImage*> images;
   images.push_back(image);
   return getGLTextureId(images, textureSpec);

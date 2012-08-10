@@ -15,6 +15,7 @@
 
 class RenderContext;
 
+
 class TextureMapping {
 public:
   
@@ -29,25 +30,28 @@ public:
 
 class SimpleTextureMapping : public TextureMapping {
 private:
-  const GLTextureID  _textureId;
+  const GLTextureID  _glTextureId;
   const float const* _texCoords;
-  
+  const bool _ownedTexCoords;
+
   MutableVector2D    _translation;
   MutableVector2D    _scale;
   
 public:
   
-  SimpleTextureMapping(const GLTextureID& textureId,
-                       float texCoords[]) :
-  _textureId(textureId),
+  SimpleTextureMapping(const GLTextureID& glTextureId,
+                       float texCoords[],
+                       bool ownedTexCoords) :
+  _glTextureId(glTextureId),
   _texCoords(texCoords),
   _translation(0, 0),
-  _scale(1, 1)
+  _scale(1, 1),
+  _ownedTexCoords(ownedTexCoords)
   {
     
   }
   
-  SimpleTextureMapping(const GLTextureID& textureId,
+  SimpleTextureMapping(const GLTextureID& glTextureId,
                        std::vector<MutableVector2D> texCoords);
   
   void setTranslationAndScale(const Vector2D& translation,
@@ -58,17 +62,19 @@ public:
   
   virtual ~SimpleTextureMapping() {
 #ifdef C_CODE
-    delete[] _texCoords;
+    if (_ownedTexCoords) {
+      delete[] _texCoords;
+    }
 #endif
   }
   
   const GLTextureID getGLTextureID() const {
-    return _textureId;
+    return _glTextureId;
   }
   
-  const float* getTexCoords() const {
-    return _texCoords;
-  }
+//  const float* getTexCoords() const {
+//    return _texCoords;
+//  }
   
   void bind(const RenderContext* rc) const;
   

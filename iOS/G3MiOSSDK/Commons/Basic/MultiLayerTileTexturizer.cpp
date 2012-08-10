@@ -15,6 +15,8 @@
 #include "Rectangle.hpp"
 #include "TexturesHandler.hpp"
 
+#include "TileRenderer.hpp"
+#include "TileTessellator.hpp"
 
 enum PetitionStatus {
   STATUS_PENDING,
@@ -37,14 +39,67 @@ public:
     
   }
   
-  void onDownload(const Response& response);
+  void onDownload(const Response* response);
   
-  void onError(const Response& response);
+  void onError(const Response* response);
   
-  void onCancel(const URL& url);
+  void onCancel(const URL* url);
   
 };
 
+
+class LTMInitializer : public LazyTextureMappingInitializer {
+private:
+  const Tile* _tile;
+  const Tile* _ancestor;
+  
+  MutableVector2D _scale;
+  MutableVector2D _translation;
+  
+  const float* _texCoords;
+  
+public:
+  LTMInitializer(const Tile* tile,
+                 const Tile* ancestor,
+                 const float* texCoords) :
+  _tile(tile),
+  _ancestor(ancestor),
+  _texCoords(texCoords)
+  {
+    
+  }
+  
+  virtual ~LTMInitializer() {
+    
+  }
+  
+  void calculate() {
+    if (_tile == _ancestor) {
+      _scale       = MutableVector2D(1, 1);
+      _translation = MutableVector2D(0, 0);
+    }
+    else {
+      const Sector tileSector     = _tile->getSector();
+      const Sector ancestorSector = _ancestor->getSector();
+      
+      _scale       = tileSector.getScaleFactor(ancestorSector).asMutableVector2D();
+      _translation = tileSector.getTranslationFactor(ancestorSector).asMutableVector2D();
+    }
+  }
+  
+  MutableVector2D getScale() const {
+    return _scale;
+  }
+  
+  MutableVector2D getTranslation() const {
+    return _translation;
+  }
+  
+  float const* getTexCoords() const {
+    return _texCoords;
+  }
+  
+};
 
 
 class TileTextureBuilder {
@@ -55,14 +110,19 @@ private:
   int                       _petitionsCount;
   int                       _stepsDone;
   
-  const RenderContext*         _rc;
-  //  const IFactory*              _factory;
+  //  const RenderContext*         _rc;
+  const IFactory*  _factory;
+  TexturesHandler* _texturesHandler;
+  
   const TilesRenderParameters* _parameters;
   
   const Mesh* _tessellatorMesh;
   
+  const float* _texCoords;
+  
+  
   std::vector<PetitionStatus>    _status;
-  std::vector<const ByteBuffer*> _buffers;
+//  std::vector<ByteBuffer*> _buffers;
   std::vector<long>              _requestsIds;
   
   LeveledTexturedMesh* _mesh;
@@ -76,15 +136,18 @@ public:
                      const TilesRenderParameters* parameters,
                      IDownloader*                 downloader,
                      Tile* tile,
-                     const Mesh* tessellatorMesh) :
+                     const Mesh* tessellatorMesh,
+                     float* texCoords) :
   _texturizer(texturizer),
-  _rc(rc),
+  _factory(rc->getFactory()),
+  _texturesHandler(rc->getTexturesHandler()),
   _parameters(parameters),
   _tile(tile),
   _tessellatorMesh(tessellatorMesh),
   _stepsDone(0),
   _anyCanceled(false),
-  _mesh(NULL)
+  _mesh(NULL),
+  _texCoords(texCoords)
   {
     _petitions = layerSet->createTilePetitions(rc,
                                                tile,
@@ -95,9 +158,10 @@ public:
     
     for (int i = 0; i < _petitionsCount; i++) {
       _status.push_back(STATUS_PENDING);
-      _buffers.push_back(NULL);
-      
-      
+//      _buffers.push_back(NULL);
+    }
+    
+    for (int i = 0; i < _petitionsCount; i++) {
       const Petition* petition = _petitions[i];
       const long priority = tile->getLevel() * 1000000 + tile->getRow() * 1000 + tile->getColumn();
       const long requestId = downloader->request(URL(petition->getURL()),
@@ -109,48 +173,6 @@ public:
     }
     
   }
-  
-  /*
-   void TilePetitions::createTexture(TexturesHandler* texturesHandler, const IFactory* factory, int width, int height)
-   {
-   if (allFinished())
-   {
-   //Creating images (opaque one must be the first)
-   std::vector<const IImage*> images;
-   std::vector<const Rectangle*> rectangles;
-   for (int i = 0; i < getNumPetitions(); i++) {
-   const ByteBuffer* bb = getPetition(i)->getByteBuffer();
-   IImage *im = factory->createImageFromData(*bb);
-   
-   if (im != NULL) {
-   Sector imSector = getPetition(i)->getSector();
-   images.push_back(im);
-   
-   Rectangle* rec = getImageRectangleInTexture(_tileSector, imSector, width, height);
-   rectangles.push_back(rec);
-   }
-   }
-   
-   //Creating the texture
-   const std::string& petitionsID = getPetitionsID();
-   //_texID = texturesHandler->getTextureId(images, url, width, height);
-   _texID = texturesHandler->getGLTextureId(images,
-   rectangles,
-   TextureSpec(petitionsID, width, height));
-   
-   //RELEASING MEMORY
-   for (int i = 0; i < _petitions.size(); i++) {
-   _petitions[i]->releaseData();
-   }
-   for (int i = 0; i < images.size(); i++) {
-   factory->deleteImage(images[i]);
-   }
-   for (int i = 0; i < rectangles.size(); i++) {
-   delete rectangles[i];
-   }
-   }
-   }
-   */
   
   Rectangle* getImageRectangleInTexture(const Sector& wholeSector,
                                         const Sector& imageSector,
@@ -175,63 +197,73 @@ public:
       if (_anyCanceled) {
         printf("Completed with cancelation\n");
       }
-      else {
-        //        printf("Completed!!!!\n");
-        
-        const IFactory* factory = _rc->getFactory();
-        
-        std::vector<const IImage*>    images;
-        std::vector<const Rectangle*> rectangles;
-        
-        const int textureWidth  = _parameters->_tileTextureWidth;
-        const int textureHeight = _parameters->_tileTextureHeight;
-        
-        const Sector tileSector = _tile->getSector();
-        std::string petitionsID;
+      
+      
+      std::vector<const IImage*>    images;
+      std::vector<const Rectangle*> rectangles;
+      
+      const int textureWidth  = _parameters->_tileTextureWidth;
+      const int textureHeight = _parameters->_tileTextureHeight;
+      
+      const Sector tileSector = _tile->getSector();
+      std::string petitionsID;
+      
+      for (int i = 0; i < _petitionsCount; i++) {
+        Petition* petition       = _petitions[i];
+//        const ByteBuffer* buffer = _buffers[i];
+        const ByteBuffer* buffer = petition->getByteBuffer();
 
-        for (int i = 0; i < _petitionsCount; i++) {
-          const ByteBuffer* buffer   = _buffers[i];
-          Petition*         petition = _petitions[i];
-          
-          IImage *im = factory->createImageFromData(*buffer);
-          if (im != NULL) {
-            images.push_back(im);
+        if (buffer != NULL) {
+          const IImage* image = _factory->createImageFromData(buffer);
+          if (image != NULL) {
+            images.push_back(image);
             
-            const Sector imageSector = petition->getSector();
+            const Sector petitionSector = petition->getSector();
             
-            Rectangle* rec = getImageRectangleInTexture(tileSector,
-                                                        imageSector,
-                                                        textureWidth,
-                                                        textureHeight);
-            rectangles.push_back(rec);
+            Rectangle* rectangle = getImageRectangleInTexture(tileSector,
+                                                              petitionSector,
+                                                              textureWidth,
+                                                              textureHeight);
+            rectangles.push_back(rectangle);
             
-
             petitionsID += petition->getURL();
             petitionsID += "_";
           }
           
-          delete buffer;
-          delete petition;
+//          delete buffer;
+//          _buffers[i] = NULL;
         }
         
-        GLTextureID glTextureID = _rc->getTexturesHandler()->getGLTextureId(images,
-                                                                            rectangles,
-                                                                            TextureSpec(petitionsID, textureWidth, textureHeight));
+        int ___FFFFF;
+        //          delete buffer;
+        //        _buffers[i] = NULL;
+        //        delete petition;
+        //        _petitions[i] = NULL;
         
-        for (int i = 0; i < images.size(); i++) {
-          factory->deleteImage(images[i]);
-        }
-        for (int i = 0; i < rectangles.size(); i++) {
-          delete rectangles[i];
+        if (images.size() > 0) {
+          
+          GLTextureID glTextureID = _texturesHandler->getGLTextureId(images,
+                                                                     rectangles,
+                                                                     TextureSpec(petitionsID, textureWidth, textureHeight));
+          
+//          for (int i = 0; i < images.size(); i++) {
+//            _factory->deleteImage(images[i]);
+//          }
+          
+          getMesh()->setGLTextureIDForLevel(_tile->getLevel() - _parameters->_topLevel,
+                                            glTextureID);
         }
         
-        getMesh()->setGLTextureIDForLevel(_tile->getLevel() - _parameters->_topLevel,
-                                          glTextureID);
+//        for (int i = 0; i < rectangles.size(); i++) {
+//          delete rectangles[i];
+//        }
+        
+        _tile->setTexturizerDirty(true);
+        
       }
       
       int ___new_texturizer_dgd_at_work;
       
-      _tile->setTexturizerDirty(true);
       /*
        mixTexture();
        updateTextureMappingOfMesh();
@@ -249,11 +281,12 @@ public:
   }
   
   void downloaded(int position,
-                  const ByteBuffer* buffer) {
+                  ByteBuffer* buffer) {
     checkIsPending(position);
     
     _status[position]  = STATUS_DOWNLOADED;
-    _buffers[position] = buffer;
+//    _buffers[position] = buffer;
+    _petitions[position]->setByteBuffer(buffer->copy());
     
     stepDone();
   }
@@ -271,8 +304,20 @@ public:
   LeveledTexturedMesh* createMesh() const {
     int ___new_texturizer_dgd_at_work;
     
-    LeveledTexturedMesh* mesh = new LeveledTexturedMesh(_tessellatorMesh, false);
-    return mesh;
+    std::vector<LazyTextureMapping*> mappings;
+    
+    Tile* current = _tile;
+    while (current != NULL) {
+      LazyTextureMappingInitializer* initializer = new LTMInitializer(_tile, current, _texCoords);
+      LazyTextureMapping* mapping = new LazyTextureMapping(initializer, _texturesHandler);
+      mappings.push_back(mapping);
+      
+      current = current->getParent();
+    }
+    
+    return new LeveledTexturedMesh(_tessellatorMesh,
+                                   false,
+                                   mappings);
   }
   
   LeveledTexturedMesh* getMesh() {
@@ -283,15 +328,15 @@ public:
   }
 };
 
-void BuilderDownloadStepDownloadListener::onDownload(const Response& response) {
-  _builder->downloaded(_position, response.getByteBuffer());
+void BuilderDownloadStepDownloadListener::onDownload(const Response* response) {
+  _builder->downloaded(_position, response->getByteBuffer());
 }
 
-void BuilderDownloadStepDownloadListener::onError(const Response& response) {
+void BuilderDownloadStepDownloadListener::onError(const Response* response) {
   _builder->canceled(_position);
 }
 
-void BuilderDownloadStepDownloadListener::onCancel(const URL& url) {
+void BuilderDownloadStepDownloadListener::onCancel(const URL* url) {
   _builder->canceled(_position);
 }
 
@@ -323,7 +368,7 @@ Mesh* MultiLayerTileTexturizer::texturize(const RenderContext* rc,
   const TileKey key = tile->getKey();
   TileTextureBuilder* builder = _builders[key];
   if (builder == NULL) {
-    builder = new TileTextureBuilder(this, rc, _layerSet, _parameters, _downloader, tile, tessellatorMesh);
+    builder = new TileTextureBuilder(this, rc, _layerSet, _parameters, _downloader, tile, tessellatorMesh, getTextureCoordinates(trc));
     _builders[key] = builder;
   }
   
@@ -340,11 +385,31 @@ void MultiLayerTileTexturizer::tileToBeDeleted(Tile* tile,
 }
 
 bool MultiLayerTileTexturizer::tileMeetsRenderCriteria(Tile* tile) {
-  return true;
+  return false;
 }
 
 void MultiLayerTileTexturizer::ancestorTexturedSolvedChanged(Tile* tile,
                                                              Tile* ancestorTile,
                                                              bool textureSolved) {
   
+}
+
+float* MultiLayerTileTexturizer::getTextureCoordinates(const TileRenderContext* trc) const {
+  if (_texCoordsCache == NULL) {
+    std::vector<MutableVector2D>* texCoordsV = trc->getTessellator()->createUnitTextCoords();
+    
+    const int texCoordsSize = texCoordsV->size();
+    float* texCoordsA = new float[2 * texCoordsSize];
+    int p = 0;
+    for (int i = 0; i < texCoordsSize; i++) {
+      texCoordsA[p++] = (float) texCoordsV->at(i).x();
+      texCoordsA[p++] = (float) texCoordsV->at(i).y();
+    }
+    
+    delete texCoordsV;
+    
+    _texCoordsCache = texCoordsA;
+    
+  }
+  return _texCoordsCache;
 }

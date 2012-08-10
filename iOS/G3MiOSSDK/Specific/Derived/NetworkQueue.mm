@@ -56,7 +56,7 @@
 	if ( [op error] ) {
     ByteBuffer bb(NULL, 0);
     Response r(URL( [[op getURL] cStringUsingEncoding:NSUTF8StringEncoding] ), &bb);
-    ((IDownloadListener*)_listener)->onError(r);
+    ((IDownloadListener*)_listener)->onError(&r);
 	}
   else {
     NSData* data = [op downloadData];
@@ -68,7 +68,7 @@
     //std::string resp = (char*)bb.getData();
     //printf("\nData: %s;\n", resp.c_str());
     Response r(URL( [[op getURL] cStringUsingEncoding:NSUTF8StringEncoding] ), &bb);
-    ((IDownloadListener*)_listener)->onDownload(r);
+    ((IDownloadListener*)_listener)->onDownload(&r);
   }
 }
 

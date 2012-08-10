@@ -11,11 +11,12 @@
 #include "Context.hpp"
 #include "GL.hpp"
 
-SimpleTextureMapping::SimpleTextureMapping(const GLTextureID& textureId,
+SimpleTextureMapping::SimpleTextureMapping(const GLTextureID& glTextureId,
                                            std::vector<MutableVector2D> texCoords) :
-_textureId(textureId),
+_glTextureId(glTextureId),
 _translation(0, 0),
-_scale(1, 1)
+_scale(1, 1),
+_ownedTexCoords(true)
 {
   const int texCoordsSize = texCoords.size();
   float* texCoordsA = new float[2 * texCoordsSize];
@@ -28,10 +29,9 @@ _scale(1, 1)
 }
 
 void SimpleTextureMapping::bind(const RenderContext* rc) const {
-  GL *gl = rc->getGL();
+  GL* gl = rc->getGL();
   
-  gl->transformTexCoords( _scale, _translation );
-  
-  gl->bindTexture(_textureId);
+  gl->transformTexCoords(_scale, _translation);
+  gl->bindTexture(_glTextureId);
   gl->setTextureCoordinates(2, 0, _texCoords);
 }

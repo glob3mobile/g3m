@@ -9,7 +9,7 @@
 #include "CPUTextureBuilder.hpp"
 
 const GLTextureID CPUTextureBuilder::createTextureFromImages(GL * gl,
-                                                             const std::vector<const IImage*>& images,
+                                                             const std::vector<const IImage*> images,
                                                              int width, int height) const {
   const int imagesSize = images.size();
   
@@ -38,24 +38,24 @@ const GLTextureID CPUTextureBuilder::createTextureFromImages(GL * gl,
 }
 
 const GLTextureID CPUTextureBuilder::createTextureFromImages(GL * gl, const IFactory* factory,
-                                                             const std::vector<const IImage*>& vImages,
-                                                             const std::vector<const Rectangle*>& vRectangles,
+                                                             const std::vector<const IImage*> images,
+                                                             const std::vector<const Rectangle*> rectangles,
                                                              int width, int height) const {
   const IImage* base;
   int i = 0; //First image to merge
   Rectangle baseRec(0,0, width, height);
-  if (vRectangles[0]->equalTo(baseRec)) {
-    base = vImages[0];
+  if (rectangles[0]->equalTo(baseRec)) {
+    base = images[0];
     i = 1;
   }
   else {
     base = factory->createImageFromSize(width, height);
   }
   
-  for (; i < vImages.size(); i++) {
-    IImage* im2 = base->combineWith(*vImages[i], *vRectangles[i], width, height);
+  for (; i < images.size(); i++) {
+    IImage* im2 = base->combineWith(*images[i], *rectangles[i], width, height);
     
-    if (base != vImages[0]) {
+    if (base != images[0]) {
       delete base;
     }
     
@@ -64,7 +64,7 @@ const GLTextureID CPUTextureBuilder::createTextureFromImages(GL * gl, const IFac
   
   const GLTextureID texID = gl->uploadTexture(base, width, height);
   
-  if (base != vImages[0]) {
+  if (base != images[0]) {
     delete base;
   }
   

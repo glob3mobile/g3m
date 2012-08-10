@@ -21,21 +21,21 @@
   return self;
 }
 
--(void) onDownload:(Response&)response
+-(void) onDownload:(Response*)response
 {
   if (_cppListener) {
     _cppListener->onDownload(response);
   }
 }
 
--(void) onError:(Response&)response
+-(void) onError:(Response*)response
 {
   if (_cppListener) {
     _cppListener->onError(response);
   }
 }
 
--(void) onCancel:(const URL&)url
+-(void) onCancel:(const URL*)url
 {
   if (_cppListener) {
     _cppListener->onCancel(url);
