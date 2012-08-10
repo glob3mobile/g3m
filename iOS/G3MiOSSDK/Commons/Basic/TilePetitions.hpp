@@ -165,7 +165,7 @@ public:
   
   void onDownload(const Response &response); 
   void onError(const Response& e);
-  void onCancel(const URL& url);
+  void onCancel(const Url& url);
   
   void removeUnnecesaryPetitions();
   

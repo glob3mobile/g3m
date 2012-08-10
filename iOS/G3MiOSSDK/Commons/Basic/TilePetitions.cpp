@@ -48,7 +48,7 @@ bool TilePetitions::allFinished() const {
   return true;
 }
 
-void TilePetitions::onCancel(const URL& url){
+void TilePetitions::onCancel(const Url& url){
   _errorsCounter++;
 }
 
@@ -69,7 +69,7 @@ void TilePetitions::requestToNet(Downloader& downloader, int priority)
   for (int i = 0; i < getNumPetitions(); i++) {
     Petition* pet = getPetition(i);
     if (!pet->isArrived()) {
-      const URL& url = URL(pet->getURL());
+      const Url& url = Url(pet->getURL());
       long id = downloader.request(url, priority, this);
       pet->setDownloadID(id);
     }

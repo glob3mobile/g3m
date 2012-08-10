@@ -35,13 +35,13 @@
   NSMutableArray* _listeners;
   long            _priority;
   NSURL*          _nsURL;
-  URL*            _url;
+  Url*            _url;
   
   NSLock*         _lock;                // synchronization helper
 }
 
 - (id) initWithNSURL: (NSURL*) nsURL
-                 url: (URL*) url
+                 url: (Url*) url
             listener: (Downloader_iOS_Listener*) listener
             priority: (long) priority
            requestId: (long) requestId;

@@ -16,7 +16,7 @@ class IDownloader {
 public:
   virtual void start() = 0;
   
-  virtual long request(const URL& url,
+  virtual long request(const Url& url,
                        long priority,
                        IDownloadListener* listener) = 0;
   

@@ -20,7 +20,7 @@
 
 -(void) onDownload:(Response&)response;
 -(void) onError:(Response&)response;
--(void) onCancel:(const URL&)url;
+-(void) onCancel:(const Url&)url;
 
 -(void) dealloc;
 

@@ -38,7 +38,7 @@ public:
   }
 
   bool cancel(long id) {
-    const URL url(_url);
+    const Url url(_url);
     
     for (int j = 0; j < _listeners.size(); j++) {
       if (_listeners[j]._id == id){
@@ -79,13 +79,13 @@ public:
   
   ByteBuffer* getByteBufferFromCache(const std::string& urlOfFile) const;
   
-  long request(const URL& urlOfFile, int priority, IDownloadListener* listener);
+  long request(const Url& urlOfFile, int priority, IDownloadListener* listener);
   
   void onDownload(const Response& e);
   
   void onError(const Response& e);
   
-  void onCancel(const URL& url) {}
+  void onCancel(const Url& url) {}
   
   void cancelRequest(long id);
   

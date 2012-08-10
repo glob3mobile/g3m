@@ -11,20 +11,20 @@
 
 #include <string>
 
-class URL {
+class Url {
 private:
   const std::string _path;
 
 public:  
   
-  URL(const URL& that) :
+  Url(const Url& that) :
   _path(that._path) {
     
   }
   
-  URL():_path(""){}
+  Url():_path(""){}
   
-  explicit URL(const std::string& path):
+  explicit Url(const std::string& path):
   _path(path)
   {
   };

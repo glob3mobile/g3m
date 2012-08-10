@@ -24,7 +24,7 @@ ByteBuffer* Downloader::getByteBufferFromCache(const std::string& urlOfFile) con
   return _storage->read(urlOfFile);
 }
 
-long Downloader::request(const URL& url, int priority, IDownloadListener* listener)
+long Downloader::request(const Url& url, int priority, IDownloadListener* listener)
 {
   std::string urlOfFile = url.getPath();
   

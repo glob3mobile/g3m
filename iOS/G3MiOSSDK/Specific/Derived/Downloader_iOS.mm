@@ -117,7 +117,7 @@ Downloader_iOS_Handler* Downloader_iOS::getHandlerToRun() {
   return selectedHandler;
 }
 
-long Downloader_iOS::request(const URL &url,
+long Downloader_iOS::request(const Url &url,
                              long priority,
                              IDownloadListener* cppListener) {
   int __TODO_new_downloader;
@@ -161,7 +161,7 @@ long Downloader_iOS::request(const URL &url,
   if (!handler) {
     // new handler, queue it
     handler = [[Downloader_iOS_Handler alloc] initWithNSURL: nsURL
-                                                        url: new URL(url)
+                                                        url: new Url(url)
                                                    listener: iosListener
                                                    priority: priority
                                                   requestId: requestId];

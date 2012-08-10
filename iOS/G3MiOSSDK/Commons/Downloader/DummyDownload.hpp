@@ -33,10 +33,10 @@ public:
   
   void run()
   {
-    URL url("http://demo.cubewerx.com/demo/cubeserv/cubeserv.cgi?Request=GetCapabilities&SERVICE=WMS");
-    URL url2("http://ovc.catastro.meh.es/Cartografia/WMS/ServidorWMS.aspx?request=capabilities");
+    Url url("http://demo.cubewerx.com/demo/cubeserv/cubeserv.cgi?Request=GetCapabilities&SERVICE=WMS");
+    Url url2("http://ovc.catastro.meh.es/Cartografia/WMS/ServidorWMS.aspx?request=capabilities");
     
-    URL urlPNG("http://upload.wikimedia.org/wikipedia/commons/thumb/4/47/PNG_transparency_demonstration_1.png/300px-PNG_transparency_demonstration_1.png");
+    Url urlPNG("http://upload.wikimedia.org/wikipedia/commons/thumb/4/47/PNG_transparency_demonstration_1.png/300px-PNG_transparency_demonstration_1.png");
     
     _downloader->request(url, 10, this);
      
@@ -44,7 +44,7 @@ public:
     
     _downloader->request(url2, 20, this);
    
-    _downloader->request(URL("....."), 15, this); //THIS SHOULD PRODUCE AN ERROR
+    _downloader->request(Url("....."), 15, this); //THIS SHOULD PRODUCE AN ERROR
     _downloader->request(url, 30, this);
     
     _downloader->request(urlPNG, 60, this);
@@ -95,7 +95,7 @@ public:
     printf("GETTING ERROR IN URL: %s\n", response.getURL().getPath().c_str());
   }
   
-  void onCancel(const URL& url){
+  void onCancel(const Url& url){
     printf("GETTING CANCELR IN URL: %s\n", url.getPath().c_str());
   }
   

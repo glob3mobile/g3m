@@ -40,7 +40,7 @@ public:
                  std::string diskPath,
                  int maxConcurrentOperationCount);
   
-  long request(const URL& url,
+  long request(const Url& url,
                long priority,
                IDownloadListener* listener);
   

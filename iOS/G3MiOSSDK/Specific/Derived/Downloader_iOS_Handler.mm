@@ -48,7 +48,7 @@
 @implementation Downloader_iOS_Handler
 
 - (id) initWithNSURL: (NSURL*) nsURL
-                 url: (URL*) url
+                 url: (Url*) url
             listener: (Downloader_iOS_Listener*) listener
             priority: (long) priority
            requestId: (long) requestId
@@ -146,7 +146,7 @@
                                        returningResponse: &urlResponse
                                                    error: &error];
   
-  URL url( [[_nsURL absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] );
+  Url url( [[_nsURL absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] );
   
   // inform downloader to remove myself, to avoid adding new Listeners
   downloader->removeDownloadingHandlerForNSURL(_nsURL);

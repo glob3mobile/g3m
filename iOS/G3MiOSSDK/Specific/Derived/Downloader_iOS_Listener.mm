@@ -29,7 +29,7 @@
   _cppListener->onError(response);
 }
 
--(void) onCancel:(const URL&)url
+-(void) onCancel:(const Url&)url
 {
   _cppListener->onCancel(url);
 }
