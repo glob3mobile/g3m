@@ -58,7 +58,7 @@ void TileRenderer::createTopLevelTiles(const InitializationContext* ic) {
       const Geodetic2D tileUpper(tileLatTo, tileLonTo);
       const Sector sector(tileLower, tileUpper);
       
-      Tile* tile = new Tile(NULL, sector, _parameters->_topLevel, row, col);
+      Tile* tile = new Tile(_texturizer, NULL, sector, _parameters->_topLevel, row, col);
       _topLevelTiles.push_back(tile);
     }
   }

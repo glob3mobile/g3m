@@ -46,7 +46,7 @@ public:
   
   void render(const RenderContext* rc) const;
 
-  Extent *getExtent()  const { return _mesh->getExtent(); }
+  Extent* getExtent()  const { return _mesh->getExtent(); }
   
   int getVertexCount() const { return _mesh->getVertexCount(); }
   const Vector3D getVertex(int i) const { return _mesh->getVertex(i);}

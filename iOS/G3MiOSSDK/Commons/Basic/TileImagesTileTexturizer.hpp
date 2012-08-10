@@ -50,7 +50,7 @@ private:
   
   std::vector<MutableVector2D> getTextureCoordinates(const TileRenderContext* trc) const;
   
-  void translateAndScaleFallBackTex(Tile* tile, Tile* fallbackTile, TextureMapping* tmap) const;
+  void translateAndScaleFallBackTex(Tile* tile, Tile* fallbackTile, SimpleTextureMapping* tmap) const;
   
   void registerNewRequest(const RenderContext* rc,
                           Tile* tile);
@@ -104,6 +104,10 @@ public:
   
   void initialize(const InitializationContext* ic,
                   const TilesRenderParameters* parameters);
+  
+  void ancestorTexturedSolvedChanged(Tile* tile,
+                                     Tile* ancestorTile,
+                                     bool textureSolved);
   
 };
 

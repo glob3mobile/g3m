@@ -41,6 +41,9 @@ public:
   virtual void justCreatedTopTile(const RenderContext* rc,
                                   Tile* tile) = 0;
   
+  virtual void ancestorTexturedSolvedChanged(Tile* tile,
+                                             Tile* ancestorTile,
+                                             bool textureSolved) = 0;
 
 };
 

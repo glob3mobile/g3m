@@ -58,6 +58,10 @@ public:
   void justCreatedTopTile(const RenderContext* rc,
                           Tile* tile);
   
+  void ancestorTexturedSolvedChanged(Tile* tile,
+                                     Tile* ancestorTile,
+                                     bool textureSolved);
+  
 };
 
 

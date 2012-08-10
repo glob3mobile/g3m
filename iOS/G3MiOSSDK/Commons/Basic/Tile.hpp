@@ -26,6 +26,8 @@ class TileKey;
 
 class Tile {
 private:
+  TileTexturizer* _texturizer;
+  
   const Sector _sector;
   const int    _level;
   const int    _row;
@@ -42,6 +44,7 @@ private:
   ITimer* _texturizerTimer;
   
   bool _justCreatedSubtiles;
+  bool _texturizerDirty;
   
   
   inline Mesh* getTessellatorMesh(const RenderContext* rc,
@@ -76,12 +79,17 @@ private:
   
   Tile(const Tile& that);
   
+  void ancestorTexturedSolvedChanged(Tile* ancestor,
+                                     bool textureSolved);
+
 public:
-  Tile(Tile* parent,
+  Tile(TileTexturizer* texturizer,
+       Tile* parent,
        const Sector& sector,
        int level,
        int row,
        int column):
+  _texturizer(texturizer),
   _parent(parent),
   _sector(sector),
   _level(level),
@@ -91,6 +99,7 @@ public:
   _debugMesh(NULL),
   _texturizerMesh(NULL),
   _textureSolved(false),
+  _texturizerDirty(true),
   _subtiles(NULL),
   _justCreatedSubtiles(false),
   _texturizerTimer(NULL)
@@ -120,12 +129,6 @@ public:
     return _texturizerMesh;
   }
   
-  void setTextureSolved(bool textureSolved);
-  
-  bool isTextureSolved() const {
-    return _textureSolved;
-  }
-  
   Tile* getParent() const {
     return _parent;
   }
@@ -135,6 +138,21 @@ public:
               std::list<Tile*>* toVisitInNextIteration);
   
   const TileKey getKey() const;
+
+  void setTextureSolved(bool textureSolved);
+  
+  bool isTextureSolved() const {
+    return _textureSolved;
+  }
+
+  void setTexturizerDirty(bool texturizerDirty) {
+    _texturizerDirty = texturizerDirty;
+  }
+  
+  bool isTexturizerDirty() const {
+    return _texturizerDirty;
+  }
+
 };
 
 #endif

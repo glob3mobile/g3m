@@ -70,6 +70,10 @@ public:
   bool isReady(const RenderContext *rc) {
     return true;
   }
+  
+  void ancestorTexturedSolvedChanged(Tile* tile,
+                                     Tile* ancestorTile,
+                                     bool textureSolved);
 
 };
 

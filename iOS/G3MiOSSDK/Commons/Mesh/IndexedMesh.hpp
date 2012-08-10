@@ -71,11 +71,11 @@ private:
   
   const float*         _normals;
   
-  const Color *        _flatColor;
-  const float *        _colors;
+  const Color*         _flatColor;
+  const float*         _colors;
   const float          _colorsIntensity;
   
-  mutable Extent *     _extent;
+  mutable Extent*      _extent;
   
   Extent* computeExtent() const;
   
@@ -151,7 +151,7 @@ public:
     
   virtual void render(const RenderContext* rc) const;
   
-  Extent *getExtent() const;
+  Extent* getExtent() const;
   
   int getVertexCount() const {
     return _numVertices;

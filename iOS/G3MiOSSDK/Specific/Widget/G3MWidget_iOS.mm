@@ -144,7 +144,7 @@
     
     TileTexturizer* texturizer = NULL;
     if (true) {
-      texturizer = new TileImagesTileTexturizer(parameters, downloader, layerSet); //WMS
+      texturizer = new TileImagesTileTexturizer(parameters, downloader, layerSet);
     }
     else {
       //SINGLE IMAGE

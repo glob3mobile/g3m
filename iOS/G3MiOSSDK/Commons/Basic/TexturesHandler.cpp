@@ -62,7 +62,7 @@ public:
 };
 
 
-GLTextureID TexturesHandler::getGLTextureIdFromFileName(const std::string &filename,
+const GLTextureID TexturesHandler::getGLTextureIdFromFileName(const std::string &filename,
                                                         int textureWidth,
                                                         int textureHeight) {
   const IImage* image = _factory->createImageFromFileName(filename);
@@ -77,7 +77,7 @@ GLTextureID TexturesHandler::getGLTextureIdFromFileName(const std::string &filen
   return texId;
 }
 
-GLTextureID TexturesHandler::getGLTextureIdIfAvailable(const TextureSpec& textureSpec) {
+const GLTextureID TexturesHandler::getGLTextureIdIfAvailable(const TextureSpec& textureSpec) {
   for (int i = 0; i < _textureHolders.size(); i++) {
     TextureHolder* holder = _textureHolders[i];
     if (holder->hasSpec(textureSpec)) {
@@ -90,7 +90,7 @@ GLTextureID TexturesHandler::getGLTextureIdIfAvailable(const TextureSpec& textur
   return GLTextureID::invalid();
 }
 
-GLTextureID TexturesHandler::getGLTextureId(const std::vector<const IImage*>& images,
+const GLTextureID TexturesHandler::getGLTextureId(const std::vector<const IImage*>& images,
                                             const TextureSpec& textureSpec) {
   GLTextureID previousId = getGLTextureIdIfAvailable(textureSpec);
   if (previousId.isValid()) {
@@ -114,7 +114,7 @@ GLTextureID TexturesHandler::getGLTextureId(const std::vector<const IImage*>& im
   return holder->_glTextureId;
 }
 
-GLTextureID TexturesHandler::getGLTextureId(const std::vector<const IImage*>& images,
+const GLTextureID TexturesHandler::getGLTextureId(const std::vector<const IImage*>& images,
                                             const std::vector<const Rectangle*>& rectangles,
                                             const TextureSpec& textureSpec) {
   GLTextureID previousId = getGLTextureIdIfAvailable(textureSpec);
@@ -141,7 +141,7 @@ GLTextureID TexturesHandler::getGLTextureId(const std::vector<const IImage*>& im
   return holder->_glTextureId;
 }
 
-GLTextureID TexturesHandler::getGLTextureId(const IImage *image,
+const GLTextureID TexturesHandler::getGLTextureId(const IImage *image,
                                             const TextureSpec& textureSpec) {
   std::vector<const IImage*> images;
   images.push_back(image);

@@ -46,7 +46,7 @@ std::vector<MutableVector2D> TileImagesTileTexturizer::getTextureCoordinates(con
 
 void TileImagesTileTexturizer::translateAndScaleFallBackTex(Tile* tile,
                                                             Tile* fallbackTile,
-                                                            TextureMapping* tmap) const {
+                                                            SimpleTextureMapping* tmap) const {
   const Sector tileSector         = tile->getSector();
   const Sector fallbackTileSector = fallbackTile->getSector();
   
@@ -61,7 +61,7 @@ Mesh* TileImagesTileTexturizer::getNewTextureMesh(Tile* tile,
   //THE TEXTURE HAS BEEN LOADED???
   TilePetitions* tp = getRegisteredTilePetitions(tile);
   
-  if (tp!= NULL) {
+  if (tp != NULL) {
     GLTextureID texID = tp->getTexID();
     if (!texID.isValid()){ //Texture has not been created
       if (tp->allFinished()){
@@ -73,16 +73,16 @@ Mesh* TileImagesTileTexturizer::getNewTextureMesh(Tile* tile,
     
     if (texID.isValid()) {
       tile->setTextureSolved(true);
-      
+      tile->setTexturizerDirty(false);
+
       //printf("TEXTURIZED %d, %d, %d\n", tile->getLevel(), tile->getRow(), tile->getColumn());
       
-      TextureMapping * tMap = new TextureMapping(texID,
-                                                 getTextureCoordinates(trc));
+      TextureMapping * tMap = new SimpleTextureMapping(texID,
+                                                       getTextureCoordinates(trc));
       TexturedMesh* texMesh = new TexturedMesh(tessellatorMesh, false, tMap, true);
       delete previousMesh;   //If a new mesh has been produced we delete the previous one
       return texMesh;
     }
-    
   }
   
   return NULL;
@@ -93,7 +93,7 @@ Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
                                                         const TileRenderContext* trc,
                                                         Mesh* tessellatorMesh,
                                                         Mesh* previousMesh) {
-  const TextureMapping* fbTMap = NULL;
+  const SimpleTextureMapping* fbTMap = NULL;
   GLTextureID texID = GLTextureID::invalid();
   Tile* ancestor = tile->getParent();
   while (ancestor != NULL && !texID.isValid()) {
@@ -101,7 +101,7 @@ Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
     if (ancestor->isTextureSolved()) {
       TexturedMesh* texMesh = (TexturedMesh*) ancestor->getTexturizerMesh();
       if (texMesh != NULL){
-        fbTMap = texMesh->getTextureMapping();
+        fbTMap = (SimpleTextureMapping*) texMesh->getTextureMapping();
         texID = fbTMap->getGLTextureID();
         if (texID.isValid()) {
           _texturesHandler->retainGLTextureId(texID);
@@ -114,8 +114,8 @@ Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
   
   //CREATING MESH
   if (texID.isValid()) {
-    TextureMapping* tMap = new TextureMapping(texID,
-                                              getTextureCoordinates(trc));
+    SimpleTextureMapping* tMap = new SimpleTextureMapping(texID,
+                                                          getTextureCoordinates(trc));
     translateAndScaleFallBackTex(tile, ancestor, tMap);
     TexturedMesh* texMesh = new TexturedMesh(tessellatorMesh, false, tMap, true);
     delete previousMesh;   //If a new mesh has been produced we delete the previous one
@@ -168,7 +168,8 @@ void TileImagesTileTexturizer::tileToBeDeleted(Tile* tile,
   if ((_texturesHandler != NULL) && (mesh != NULL)) {
     TexturedMesh* texturedMesh = (TexturedMesh*) mesh;
     
-    _texturesHandler->releaseGLTextureId( texturedMesh->getTextureMapping()->getGLTextureID() );
+    SimpleTextureMapping* simpleTextureMapping = (SimpleTextureMapping*) texturedMesh->getTextureMapping();
+    _texturesHandler->releaseGLTextureId( simpleTextureMapping->getGLTextureID() );
   }
 
   
@@ -258,4 +259,10 @@ void TileImagesTileTexturizer::removeRegisteredTilePetitions(Tile* tile) {
       break;
     }
   }
+}
+
+void TileImagesTileTexturizer::ancestorTexturedSolvedChanged(Tile* tile,
+                                                             Tile* ancestorTile,
+                                                             bool textureSolved) {
+  
 }

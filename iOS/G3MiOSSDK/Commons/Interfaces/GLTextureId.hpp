@@ -21,6 +21,12 @@ public:
     return GLTextureID(-1);
   }
   
+  GLTextureID(const GLTextureID& that) :
+  _textureId(that._textureId)
+  {
+    
+  }
+  
   explicit GLTextureID(int textureId) :
   _textureId(textureId)
   {

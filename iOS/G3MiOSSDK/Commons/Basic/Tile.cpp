@@ -28,16 +28,45 @@ Tile::~Tile() {
   }
   
   if (_tessellatorMesh != NULL) {
-    delete _tessellatorMesh; 
+    delete _tessellatorMesh;
   }
   
   if (_texturizerMesh != NULL) {
-    delete _texturizerMesh; 
+    delete _texturizerMesh;
+  }
+}
+
+void Tile::ancestorTexturedSolvedChanged(Tile* ancestor,
+                                         bool textureSolved) {
+  if (isTextureSolved()) {
+    return;
+  }
+  
+  if (_texturizer != NULL) {
+    _texturizer->ancestorTexturedSolvedChanged(this, ancestor, textureSolved);
+  }
+  
+  if (_subtiles != NULL) {
+    const int subtilesSize = _subtiles->size();
+    for (int i = 0; i < subtilesSize; i++) {
+      Tile* subtile = _subtiles->at(i);
+      subtile->ancestorTexturedSolvedChanged(ancestor, textureSolved);
+    }
   }
 }
 
 void Tile::setTextureSolved(bool textureSolved) {
-  _textureSolved = textureSolved;
+  if (textureSolved != _textureSolved) {
+    _textureSolved = textureSolved;
+    
+    if (_subtiles != NULL) {
+      const int subtilesSize = _subtiles->size();
+      for (int i = 0; i < subtilesSize; i++) {
+        Tile* subtile = _subtiles->at(i);
+        subtile->ancestorTexturedSolvedChanged(this, _textureSolved);
+      }
+    }
+  }
 }
 
 Mesh* Tile::getTessellatorMesh(const RenderContext* rc,
@@ -61,8 +90,8 @@ bool Tile::isVisible(const RenderContext *rc,
   
   // test if sector is back oriented with respect to the camera
   if (_sector.isBackOriented(rc)) {
-      return false; 
-    }
+    return false;
+  }
   
   return getTessellatorMesh(rc, trc)->getExtent()->touches(rc->getCamera()->getFrustumInModelCoordinates());
   //return getTessellatorMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->_halfFrustumInModelCoordinates);
@@ -76,11 +105,11 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
     return true;
   }
   
-//  if (timer != NULL) {
-//    if ( timer->elapsedTime().milliseconds() > 50 ) {
-//      return true;
-//    }
-//  }
+  //  if (timer != NULL) {
+  //    if ( timer->elapsedTime().milliseconds() > 50 ) {
+  //      return true;
+  //    }
+  //  }
   
   TileTexturizer* texturizer = trc->getTexturizer();
   if (texturizer != NULL) {
@@ -90,17 +119,17 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
   }
   
   
-//  int projectedSize = getTessellatorMesh(rc, tessellator)->getExtent()->squaredProjectedArea(rc);
-//  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
-//    return true;
-//  }
+  //  int projectedSize = getTessellatorMesh(rc, tessellator)->getExtent()->squaredProjectedArea(rc);
+  //  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
+  //    return true;
+  //  }
   const Vector2D extent = getTessellatorMesh(rc, trc)->getExtent()->projectedExtent(rc);
   //const double t = extent.maxAxis() * 2;
   const double t = (extent.x() + extent.y());
   if ( t <= ((parameters->_tileTextureWidth + parameters->_tileTextureHeight) * 1.75) ) {
     return true;
   }
-
+  
   
   int __TODO_tune_render_budget;
   if (_subtiles == NULL) { // the tile needs to create the subtiles
@@ -122,33 +151,32 @@ void Tile::rawRender(const RenderContext *rc,
                      const TileRenderContext* trc) {
   
   Mesh* tessellatorMesh = getTessellatorMesh(rc, trc);
-
+  
   TileTexturizer* texturizer = trc->getTexturizer();
-
+  
   if (tessellatorMesh != NULL) {
     if (texturizer == NULL) {
       tessellatorMesh->render(rc);
     }
     else {
       
-      const bool needsToCallTexturizer = (!isTextureSolved() ||
-                                          (_texturizerMesh == NULL));
+      const bool needsToCallTexturizer = (!isTextureSolved() || (_texturizerMesh == NULL)) && isTexturizerDirty();
       
       if (needsToCallTexturizer) {
         int __TODO_tune_render_budget;
         
-//                               (_texturizerTimer->elapsedTime().milliseconds() > 125 &&
-//        const bool callTexturizer = ((_texturizerTimer == NULL) ||
-//                               (_texturizerTimer->elapsedTime().milliseconds() > 125 &&
-//                                lastTexturizerTimer->elapsedTime().milliseconds() > 50));
-//        const bool callTexturizer = ((_texturizerTimer == NULL) ||
-//                                     (_texturizerTimer->elapsedTime().milliseconds() > 100 &&
-//                                      lastTexturizerTimer->elapsedTime().milliseconds() > 10));
-//        const bool callTexturizer = ((_texturizerTimer == NULL) ||
-//                                     (_texturizerTimer->elapsedTime().milliseconds() > 100));
+        //                               (_texturizerTimer->elapsedTime().milliseconds() > 125 &&
+        //        const bool callTexturizer = ((_texturizerTimer == NULL) ||
+        //                               (_texturizerTimer->elapsedTime().milliseconds() > 125 &&
+        //                                lastTexturizerTimer->elapsedTime().milliseconds() > 50));
+        //        const bool callTexturizer = ((_texturizerTimer == NULL) ||
+        //                                     (_texturizerTimer->elapsedTime().milliseconds() > 100 &&
+        //                                      lastTexturizerTimer->elapsedTime().milliseconds() > 10));
+        //        const bool callTexturizer = ((_texturizerTimer == NULL) ||
+        //                                     (_texturizerTimer->elapsedTime().milliseconds() > 100));
         const bool callTexturizer = ((_texturizerTimer == NULL) ||
-                                     (_texturizerTimer->elapsedTime().milliseconds() > 50));
-
+                                     (_texturizerTimer->elapsedTime().milliseconds() > 50)) && isTexturizerDirty();
+        
         if (callTexturizer) {
           _texturizerMesh = texturizer->texturize(rc,
                                                   trc,
@@ -156,7 +184,7 @@ void Tile::rawRender(const RenderContext *rc,
                                                   tessellatorMesh,
                                                   _texturizerMesh);
           trc->getLastTexturizerTimer()->start();
-
+          
           if (_texturizerTimer == NULL) {
             _texturizerTimer = rc->getFactory()->createTimer();
           }
@@ -228,10 +256,10 @@ void Tile::render(const RenderContext* rc,
   TilesStatistics* statistics = trc->getStatistics();
   
   statistics->computeTileProcessed(this);
-
+  
   if (isVisible(rc, trc)) {
     statistics->computeVisibleTile(this);
-
+    
     if (meetsRenderCriteria(rc, trc)) {
       rawRender(rc, trc);
       if (trc->getParameters()->_renderDebug) {
@@ -249,7 +277,7 @@ void Tile::render(const RenderContext* rc,
         statistics->computeSplit();
         _justCreatedSubtiles = false;
       }
-
+      
       const int subTilesSize = subTiles->size();
       for (int i = 0; i < subTilesSize; i++) {
         Tile* subTile = subTiles->at(i);
@@ -267,7 +295,8 @@ Tile* Tile::createSubTile(const Angle& lowerLat, const Angle& lowerLon,
                           const Angle& upperLat, const Angle& upperLon,
                           const int level,
                           const int row, const int column) {
-  return new Tile(this,
+  return new Tile(_texturizer,
+                  this,
                   Sector(Geodetic2D(lowerLat, lowerLon), Geodetic2D(upperLat, upperLon)),
                   level,
                   row, column);

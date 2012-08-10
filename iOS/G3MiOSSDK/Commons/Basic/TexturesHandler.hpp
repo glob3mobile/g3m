@@ -122,21 +122,21 @@ public:
   
   ~TexturesHandler();
   
-  GLTextureID getGLTextureIdFromFileName(const std::string &filename,
-                                         int textureWidth,
-                                         int textureHeight);
+  const GLTextureID getGLTextureIdFromFileName(const std::string &filename,
+                                               int textureWidth,
+                                               int textureHeight);
   
-  GLTextureID getGLTextureId(const std::vector<const IImage*>& images,
-                             const TextureSpec& textureSpec);
+  const GLTextureID getGLTextureId(const std::vector<const IImage*>& images,
+                                   const TextureSpec& textureSpec);
   
-  GLTextureID getGLTextureId(const std::vector<const IImage*>& images,
-                             const std::vector<const Rectangle*>& rectangles,
-                             const TextureSpec& textureSpec);
+  const GLTextureID getGLTextureId(const std::vector<const IImage*>& images,
+                                   const std::vector<const Rectangle*>& rectangles,
+                                   const TextureSpec& textureSpec);
   
-  GLTextureID getGLTextureId(const IImage* image,
-                             const TextureSpec& textureSpec);
+  const GLTextureID getGLTextureId(const IImage* image,
+                                   const TextureSpec& textureSpec);
   
-  GLTextureID getGLTextureIdIfAvailable(const TextureSpec& textureSpec);
+  const GLTextureID getGLTextureIdIfAvailable(const TextureSpec& textureSpec);
   
   void releaseGLTextureId(const GLTextureID& glTextureId);
   

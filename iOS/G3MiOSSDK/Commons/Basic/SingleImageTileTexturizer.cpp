@@ -54,12 +54,13 @@ Mesh* SingleImageTileTexturizer::texturize(const RenderContext* rc,
     rc->getFactory()->deleteImage(_image);
   }
   
-  const TextureMapping* texMap = new TextureMapping(_texID,
-                                                    createTextureCoordinates(rc, mesh));
+  const TextureMapping* texMap = new SimpleTextureMapping(_texID,
+                                                          createTextureCoordinates(rc, mesh));
   
   if (previousMesh != NULL) delete previousMesh;
   
   tile->setTextureSolved(true);
+  tile->setTexturizerDirty(false);
   
   return new TexturedMesh(mesh, false, texMap, true);
 }
@@ -75,5 +76,11 @@ bool SingleImageTileTexturizer::tileMeetsRenderCriteria(Tile* tile) {
 
 void SingleImageTileTexturizer::justCreatedTopTile(const RenderContext* rc,
                                                    Tile *tile) {
+  
+}
+
+void SingleImageTileTexturizer::ancestorTexturedSolvedChanged(Tile* tile,
+                                                              Tile* ancestorTile,
+                                                              bool textureSolved) {
   
 }
