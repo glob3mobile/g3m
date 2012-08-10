@@ -47,13 +47,11 @@ public class CameraDoubleTapHandler extends CameraEventHandler
   
 	// compute zoom factor
 	final double height = eventContext.getPlanet().toGeodetic3D(camera.getPosition()).height();
-	final double distance = height * 0.5;
+	final double distance = height * 0.6;
   
+	// create effect
 	Effect effect = new DoubleTapEffect(TimeInterval.fromSeconds(0.75), axis, angle, distance);
   
-	int __check_with_agustin;
-	// the EffectTarget has to be the Camera or the Planet.
-	// use inheritance for EffectTarget
 	eventContext.getEffectsScheduler().startEffect(effect, cameraContext);
   }
   public final void onMove(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)

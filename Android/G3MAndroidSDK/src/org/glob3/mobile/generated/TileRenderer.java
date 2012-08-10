@@ -131,7 +131,7 @@ public class TileRenderer extends Renderer
 	final int topLevelTilesSize = _topLevelTiles.size();
   
   
-	DistanceToCenterTileComparison predicate = new DistanceToCenterTileComparison(rc.getCamera(), rc.getPlanet());
+	DistanceToCenterTileComparison predicate = new DistanceToCenterTileComparison(rc.getCurrentCamera(), rc.getPlanet());
   
 	if (_topTilesJustCreated)
 	{

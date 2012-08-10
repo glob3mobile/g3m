@@ -54,7 +54,7 @@ public class Mark
 
   public final void render(RenderContext rc, double minDistanceToCamera)
   {
-	final Camera camera = rc.getCamera();
+	final Camera camera = rc.getNextCamera();
 	final Planet planet = rc.getPlanet();
   
 	final Vector3D cameraPosition = camera.getPosition();

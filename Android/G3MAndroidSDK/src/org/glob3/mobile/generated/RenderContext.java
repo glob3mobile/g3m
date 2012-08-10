@@ -5,15 +5,17 @@ package org.glob3.mobile.generated;
 public class RenderContext extends Context
 {
   private GL _gl;
-  private Camera _camera;
+  private final Camera _currentCamera;
+  private Camera _nextCamera;
   private TexturesHandler _texturesHandler;
   private ITimer _frameStartTimer;
 
-  public RenderContext(IFactory factory, ILogger logger, Planet planet, GL gl, Camera camera, TexturesHandler texturesHandler, Downloader downloaderOLD, IDownloader downloader, EffectsScheduler scheduler, ITimer frameStartTimer)
+  public RenderContext(IFactory factory, ILogger logger, Planet planet, GL gl, Camera currentCamera, Camera nextCamera, TexturesHandler texturesHandler, Downloader downloaderOLD, IDownloader downloader, EffectsScheduler scheduler, ITimer frameStartTimer)
   {
 	  super(factory, logger, planet, downloaderOLD, downloader, scheduler);
 	  _gl = gl;
-	  _camera = camera;
+	  _currentCamera = currentCamera;
+	  _nextCamera = nextCamera;
 	  _texturesHandler = texturesHandler;
 	  _frameStartTimer = frameStartTimer;
 
@@ -27,10 +29,17 @@ public class RenderContext extends Context
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Camera* getCamera() const
-  public final Camera getCamera()
+//ORIGINAL LINE: const Camera* getCurrentCamera() const
+  public final Camera getCurrentCamera()
   {
-	return _camera;
+	return _currentCamera;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Camera* getNextCamera() const
+  public final Camera getNextCamera()
+  {
+	return _nextCamera;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

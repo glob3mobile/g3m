@@ -91,8 +91,6 @@ public class Camera
 	gl.setProjection(_projectionMatrix);
 	gl.loadMatrixf(_modelMatrix);
   
-  
-  
 	// TEMP: TEST TO SEE HALF SIZE FRUSTUM CLIPPING
 	if (false)
 	{

@@ -19,7 +19,7 @@ public class SampleEffect extends EffectWithDuration
   public void doStep(RenderContext rc, TimeInterval now)
   {
 	final double percent = pace(percentDone(now));
-	rc.getCamera().moveForward((percent-_lastPercent)*1e7);
+	rc.getNextCamera().moveForward((percent-_lastPercent)*1e7);
 	_lastPercent = percent;
   }
 

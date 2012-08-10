@@ -107,7 +107,7 @@ public class Tile
 		return false;
 	  }
   
-	return getTessellatorMesh(rc, tessellator).getExtent().touches(rc.getCamera().getFrustumInModelCoordinates());
+	return getTessellatorMesh(rc, tessellator).getExtent().touches(rc.getNextCamera().getFrustumInModelCoordinates());
 	//return getTessellatorMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->_halfFrustumInModelCoordinates);
   }
 
