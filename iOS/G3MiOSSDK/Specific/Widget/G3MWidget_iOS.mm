@@ -338,23 +338,39 @@
 
   //LAYERS
   LayerSet* layerSet = new LayerSet();
-  WMSLayer* baseLayer = new WMSLayer("bmng200405", "http://www.nasa.network.com/wms?", 
-                                     "1.3", "image/jpeg", Sector::fullSphere(), "EPSG:4326", "", false,
-                                     Angle::nan(), Angle::nan());
+  
+  WMSLayer* baseLayer = new WMSLayer("bmng200405",
+                                     "http://www.nasa.network.com/wms?",
+                                     "1.3",
+                                     "image/jpeg",
+                                     Sector::fullSphere(),
+                                     "EPSG:4326",
+                                     "",
+                                     false,
+                                     Angle::nan(),
+                                     Angle::nan());
   
   WMSLayer *vias = new WMSLayer("VIAS",
                                 "http://idecan2.grafcan.es/ServicioWMS/Callejero",
-                                "1.1.0", "image/gif", 
+                                "1.1.0",
+                                "image/gif",
                                 Sector::fromDegrees(22.5,-22.5, 33.75, -11.25),
-                                "EPSG:4326", "", true,
-                                Angle::nan(), Angle::nan());
+                                "EPSG:4326",
+                                "",
+                                true,
+                                Angle::nan(),
+                                Angle::nan());
   
   WMSLayer *pnoa = new WMSLayer("PNOA",
                                 "http://www.idee.es/wms/PNOA/PNOA",
-                                "1.1.0", "image/png", 
+                                "1.1.0",
+                                "image/png",
                                 Sector::fromDegrees(21,-18, 45, 6),
-                                "EPSG:4326", "", true,
-                                Angle::nan(), Angle::nan());
+                                "EPSG:4326",
+                                "",
+                                true,
+                                Angle::nan(),
+                                Angle::nan());
   
   //ORDER IS IMPORTANT
   layerSet->addLayer(baseLayer);
