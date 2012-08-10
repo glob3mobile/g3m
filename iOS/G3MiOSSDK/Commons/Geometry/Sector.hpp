@@ -168,6 +168,8 @@ public:
   
   Geodetic2D getClosestPoint(const Geodetic2D& pos) const;
   
+  Geodetic2D getApproximatedClosestPoint(const Geodetic2D& pos) const;
+  
 };
 
 
