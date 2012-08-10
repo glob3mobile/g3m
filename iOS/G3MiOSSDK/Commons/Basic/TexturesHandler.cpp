@@ -6,14 +6,14 @@
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
+#include "TexturesHandler.hpp"
+
+
 #include "IImage.hpp"
 #include "Context.hpp"
 #include "TextureHolder.hpp"
 #include "TextureBuilder.hpp"
 #include "Rectangle.hpp"
-
-
-#include "TexturesHandler.hpp"
 
 int TexturesHandler::getTextureIdFromFileName(const std::string &filename,
                                               int textureWidth,

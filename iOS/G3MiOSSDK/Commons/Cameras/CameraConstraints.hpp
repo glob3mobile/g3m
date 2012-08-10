@@ -15,7 +15,9 @@
 class ICameraConstrainer {
 public:
   virtual bool acceptsCamera(const Camera* camera, const Planet *planet) const = 0;
+#ifdef C_CODE
   virtual ~ICameraConstrainer() {}
+#endif
 };
 
 

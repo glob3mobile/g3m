@@ -12,7 +12,6 @@
 #include <string>
 #include <vector>
 
-
 class IImage;
 class RenderContext;
 class TextureHolder;
