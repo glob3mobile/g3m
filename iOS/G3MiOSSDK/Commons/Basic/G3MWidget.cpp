@@ -112,13 +112,12 @@ void G3MWidget::initializeGL() {
 #endif
 }
 
-G3MWidget::~G3MWidget() { 
+G3MWidget::~G3MWidget() {
+#ifdef C_CODE
   delete _factory;
   delete _logger;
   delete _gl;
-#ifdef C_CODE
   delete _planet;
-#endif
   delete _renderer;
   delete _busyRenderer;
   delete _scheduler;
@@ -126,13 +125,12 @@ G3MWidget::~G3MWidget() {
   delete _nextCamera;
   delete _texturesHandler;
   delete _timer;
-#ifdef C_CODE
   delete _downloaderOLD;
-#endif
   delete _downloader;
   
   for (unsigned int n=0; n<_cameraConstraint.size(); n++)
     delete _cameraConstraint[n];
+#endif
 }
 
 void G3MWidget::onTouchEvent(const TouchEvent* myEvent) {
