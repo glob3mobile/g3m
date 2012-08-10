@@ -21,14 +21,14 @@ enum PetitionStatus {
 };
 
 
-class DownloadListener : public IDownloadListener {
+class BuilderDownloadStepDownloadListener : public IDownloadListener {
 private:
   TileTextureBuilder* _builder;
   const int           _position;
   
 public:
-  DownloadListener(TileTextureBuilder* builder,
-                   int position) :
+  BuilderDownloadStepDownloadListener(TileTextureBuilder* builder,
+                                      int position) :
   _builder(builder),
   _position(position)
   {
@@ -50,11 +50,15 @@ private:
   Tile*                  _tile;
   std::vector<Petition*> _petitions;
   int                    _petitionsCount;
+  int                    _stepsDone;
   
   std::vector<PetitionStatus>    _status;
   std::vector<const ByteBuffer*> _buffers;
-  
+  std::vector<long>              _requestsIds;
+
   Mesh* _mesh;
+  
+  bool _anyCanceled;
   
 public:
   TileTextureBuilder(const RenderContext*         rc,
@@ -63,15 +67,10 @@ public:
                      IDownloader*                 downloader,
                      Tile* tile) :
   _tile(tile),
+  _stepsDone(0),
+  _anyCanceled(false),
   _mesh(NULL)
   {
-    
-    for (int i = 0; i < _petitionsCount; i++) {
-      _status.push_back(STATUS_PENDING);
-      _buffers.push_back(NULL);
-    }
-    
-    
     _petitions = layerSet->createTilePetitions(rc,
                                                tile,
                                                parameters->_tileTextureWidth,
@@ -79,48 +78,79 @@ public:
     
     _petitionsCount = _petitions.size();
     
-    
     for (int i = 0; i < _petitionsCount; i++) {
+      _status.push_back(STATUS_PENDING);
+      _buffers.push_back(NULL);
+
+      
       const Petition* petition = _petitions[i];
-      
       const long priority = tile->getLevel() * 1000000 + tile->getRow() * 1000 + tile->getColumn();
+      const long requestId = downloader->request(URL(petition->getURL()),
+                                                 priority,
+                                                 new BuilderDownloadStepDownloadListener(this, i),
+                                                 true);
       
-      downloader->request(URL(petition->getURL()),
-                          priority,
-                          new DownloadListener(this, i),
-                          true);
+      _requestsIds.push_back(requestId);
     }
     
   }
   
-  void checkCompletion() {
-    bool completed   = true;
-    bool anyCanceled = false;
+  void stepDone() {
+//    bool completed   = true;
+//    bool anyCanceled = false;
+//    
+//    for (int i = 0; i < _petitionsCount; i++) {
+//      const int status = _status[i];
+//      if (status == STATUS_PENDING) {
+//        completed = false;
+//        break;
+//      }
+//      else if (status == STATUS_CANCELED) {
+//        anyCanceled = true;
+//      }
+//    }
+//    
+//    if (completed) {
+//      int __diego_at_work;
+//      if (anyCanceled) {
+//        printf("Completed with cancelation\n");
+//      }
+//      else {
+//        printf("Completed!!!!\n");
+//      }
+//      _tile->setTextureSolved(true);
+//    }
     
-    for (int i = 0; i < _petitionsCount; i++) {
-      const int status = _status[i];
-      if (status == STATUS_PENDING) {
-        completed = false;
-        break;
-      }
-      else if (status == STATUS_CANCELED) {
-        anyCanceled = true;
-      }
-    }
+    _stepsDone++;
     
-    if (completed) {
-      int __diego_at_work;
-      if (anyCanceled) {
+    if (_stepsDone == _petitionsCount) {
+//      bool canceled = false;
+//      for (int i = 0; i < _petitionsCount; i++) {
+//        const int status = _status[i];
+//        if (status == STATUS_CANCELED) {
+//          canceled = true;
+//          break;
+//        }
+//      }
+      
+      if (_anyCanceled) {
         printf("Completed with cancelation\n");
       }
       else {
-        printf("Completed!!!!\n");
+//        printf("Completed!!!!\n");
       }
-      _tile->setTextureSolved(true);
+      
+      int ___new_texturizer_dgd_at_work;
+      
+      /*
+      mixTexture();
+      updateTextureMappingOfMesh();
+      removeMixer(); // where?? be carefull of SYNC finalization from downloader
+       */
     }
   }
   
-  void checkIsPending(int position) {
+  void checkIsPending(int position) const {
     if (_status[position] != STATUS_PENDING) {
       printf("Logic error: Expected STATUS_PENDING at position #%d but found status: %d\n",
              position,
@@ -135,18 +165,22 @@ public:
     _status[position]  = STATUS_DOWNLOADED;
     _buffers[position] = buffer;
     
-    checkCompletion();
+    stepDone();
   }
   
   void canceled(int position) {
     checkIsPending(position);
     
+    _anyCanceled = true;
+    
     _status[position] = STATUS_CANCELED;
     
-    checkCompletion();
+    stepDone();
   }
   
   Mesh* createMesh() const {
+    int ___new_texturizer_dgd_at_work;
+
 //    LeveledTexturedMesh* mesh = new LeveledTexturedMesh();
 //    
 //    return mesh;
@@ -161,15 +195,15 @@ public:
   }
 };
 
-void DownloadListener::onDownload(const Response& response) {
+void BuilderDownloadStepDownloadListener::onDownload(const Response& response) {
   _builder->downloaded(_position, response.getByteBuffer());
 }
 
-void DownloadListener::onError(const Response& response) {
+void BuilderDownloadStepDownloadListener::onError(const Response& response) {
   _builder->canceled(_position);
 }
 
-void DownloadListener::onCancel(const URL& url) {
+void BuilderDownloadStepDownloadListener::onCancel(const URL& url) {
   _builder->canceled(_position);
 }
 
