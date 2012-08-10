@@ -263,7 +263,7 @@ public class G3MWidget_Android extends GLSurfaceView implements
 	  if (true) {
 	    TileParameters parameters = TileParameters.createDefault(true);
 	    
-	    TileTexturizer texturizer = NULL;
+	    TileTexturizer texturizer = null;
 	    if (true) {
 	      texturizer = new TileImagesTileTexturizer(parameters, downloaderOLD, layerSet, factory); //WMS
 	    }
@@ -273,7 +273,7 @@ public class G3MWidget_Android extends GLSurfaceView implements
 	      texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
 	    }
 	    
-	    const bool showStatistics = true;
+	    boolean showStatistics = true;
 	    TileRenderer tr = new TileRenderer(new EllipsoidalTileTessellator(parameters._tileResolution, true),
 	                                        texturizer,
 	                                        parameters,
@@ -358,9 +358,9 @@ public class G3MWidget_Android extends GLSurfaceView implements
 	  BusyRenderer busyRenderer = new BusyRenderer();
 	  
 	  ArrayList<ICameraConstrainer> cameraConstraint;
-	  cameraConstraint.push_back(new SimpleCameraConstrainer());
+	  cameraConstraint.add(new SimpleCameraConstrainer());
 
-	  _widget = G3MWidget::create(factory,
+	  _widget = G3MWidget.create(factory,
 	                              logger,
 	                              gl,
 	                              texturesHandler,
@@ -372,7 +372,7 @@ public class G3MWidget_Android extends GLSurfaceView implements
 	                              busyRenderer,
 	                              scheduler,
 	                              width, height,
-	                              Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
+	                              Color.fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
 	                              true);
 	                              
 	                             
