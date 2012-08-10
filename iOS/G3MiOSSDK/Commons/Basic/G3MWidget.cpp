@@ -12,7 +12,7 @@
 #include "Renderer.hpp"
 #include "Camera.hpp"
 #include "GL.hpp"
-#include "TexturesHandler.cpp"
+#include "TexturesHandler.hpp"
 #include "Downloader.hpp"
 #include "IDownloader.hpp"
 #include "Effects.hpp"
