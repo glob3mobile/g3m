@@ -169,40 +169,28 @@ public class NativeGL2_Android extends INativeGL {
 
 	
 	// TOO SLOW (PUT ANDROID BUG)
-	static public long timeConvertingFloat = 0;
-	Map<float[], FloatBuffer> arrayToBufferMap = new HashMap<float[], FloatBuffer>();
+	private Map<float[], FloatBuffer> _arrayToBufferMap = new HashMap<float[], FloatBuffer>();
 
 	private FloatBuffer floatArrayToFloatBuffer(final float[] fv) {
 
 		// Clear the map when is big
-		final int size = arrayToBufferMap.size();
+		final int size = _arrayToBufferMap.size();
 		if (size > 5000) {
-			arrayToBufferMap.clear();
+			_arrayToBufferMap.clear();
 		}
 
-		if (!arrayToBufferMap.containsKey(fv)) {
-
-			// Log.d("GL", "CREANDO BUFFER");
+		if (!_arrayToBufferMap.containsKey(fv)) {
 			final ByteBuffer byteBuf = ByteBuffer.allocateDirect(fv.length * 4);
 			byteBuf.order(ByteOrder.nativeOrder());
 			final FloatBuffer fb = byteBuf.asFloatBuffer();
-
-			final long t1 = System.nanoTime();
-
 			fb.put(fv); // /TOO SLOW UNTIL VERSION GINGERBEAD (BECAUSE OF THIS,
 						// USE HASHMAP)
-
-			final long t2 = System.nanoTime();
-			timeConvertingFloat += (t2 - t1);
-
 			fb.position(0);
-
-			arrayToBufferMap.put(fv, fb);
-
+			_arrayToBufferMap.put(fv, fb);
 			return fb;
 		}
 
-		return arrayToBufferMap.get(fv);
+		return _arrayToBufferMap.get(fv);
 	}
 
 	/////////////////////////////
@@ -358,20 +346,23 @@ public class NativeGL2_Android extends INativeGL {
 	public void texImage2D(GLTextureType target, int level,
 			GLFormat internalFormat, int width, int height, int border,
 			GLFormat format, GLType type, Object data) {
-		// TODO Auto-generated method stub
-
+		
+		if (type == GLType.UnsignedByte){
+			byte[] array = (byte[]) data;
+			final ByteBuffer pixels = ByteBuffer.wrap(array);
+			GLES20.glTexImage2D(getEnum(target), level, getEnum(internalFormat), width, height, border, getEnum(format), getEnum(type), pixels);
+		}
 	}
 
 	@Override
 	public void drawArrays(GLPrimitive mode, int first, int count) {
-		// TODO Auto-generated method stub
+		GLES20.glDrawArrays(getEnum(mode), first, count);
 
 	}
 
 	@Override
 	public void cullFace(GLCullFace c) {
-		// TODO Auto-generated method stub
-
+		GLES20.glCullFace(getEnum(c));
 	}
 
 }
