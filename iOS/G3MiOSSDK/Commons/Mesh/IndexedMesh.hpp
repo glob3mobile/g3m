@@ -58,6 +58,7 @@ private:
   const int*           _indexes;
   const float*         _normals;
   const float *        _colors;
+  const GLPrimitive    _primitive; 
 #endif
   
 #ifdef JAVA_CODE
@@ -65,10 +66,9 @@ private:
   private final int[]           _indexes;
   private final float[]         _normals;
   private final float[]         _colors;
+  private final GLPrimitive     _primitive; 
 #endif
 
-  
-  const GLPrimitive    _primitive; 
   const bool           _owner;
   const int            _numVertices;
   const int            _numIndex;

@@ -16,10 +16,12 @@ class Response {
 private:
   const URL         _url;
   const ByteBuffer* _data;
-  
+
+#ifdef C_CODE
   Response& operator=(const Response& that);
   
   Response(const Response& that);
+#endif
   
 public:
   
