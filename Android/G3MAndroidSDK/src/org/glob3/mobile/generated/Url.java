@@ -17,23 +17,23 @@ package org.glob3.mobile.generated;
 
 
 
-public class URL
+public class Url
 {
   private final String _path;
 
 
-  public URL(URL that)
+  public Url(Url that)
   {
 	  _path = that._path;
 
   }
 
-  public URL()
+  public Url()
   {
 	  _path = "";
   }
 
-  public URL(String path)
+  public Url(String path)
   {
 	  _path = path;
   }

@@ -21,7 +21,7 @@ public abstract class IDownloader
 {
   public abstract void start();
 
-  public abstract int request(URL url, int priority, IDownloadListener listener);
+  public abstract int request(Url url, int priority, IDownloadListener listener);
 
   public abstract void cancelRequest(int requestId);
 

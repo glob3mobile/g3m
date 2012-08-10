@@ -28,10 +28,10 @@ public class DummyDownload implements IDownloadListener
 
   public final void run()
   {
-	URL url = new URL("http://demo.cubewerx.com/demo/cubeserv/cubeserv.cgi?Request=GetCapabilities&SERVICE=WMS");
-	URL url2 = new URL("http://ovc.catastro.meh.es/Cartografia/WMS/ServidorWMS.aspx?request=capabilities");
+	Url url = new Url("http://demo.cubewerx.com/demo/cubeserv/cubeserv.cgi?Request=GetCapabilities&SERVICE=WMS");
+	Url url2 = new Url("http://ovc.catastro.meh.es/Cartografia/WMS/ServidorWMS.aspx?request=capabilities");
 
-	URL urlPNG = new URL("http://upload.wikimedia.org/wikipedia/commons/thumb/4/47/PNG_transparency_demonstration_1.png/300px-PNG_transparency_demonstration_1.png");
+	Url urlPNG = new Url("http://upload.wikimedia.org/wikipedia/commons/thumb/4/47/PNG_transparency_demonstration_1.png/300px-PNG_transparency_demonstration_1.png");
 
 	_downloader.request(url, 10, this);
 
@@ -39,7 +39,7 @@ public class DummyDownload implements IDownloadListener
 
 	_downloader.request(url2, 20, this);
 
-	_downloader.request(new URL("....."), 15, this); //THIS SHOULD PRODUCE AN ERROR
+	_downloader.request(new Url("....."), 15, this); //THIS SHOULD PRODUCE AN ERROR
 	_downloader.request(url, 30, this);
 
 	_downloader.request(urlPNG, 60, this);
@@ -99,7 +99,7 @@ public class DummyDownload implements IDownloadListener
 	System.out.printf("GETTING ERROR IN URL: %s\n", response.getURL().getPath());
   }
 
-  public final void onCancel(URL url)
+  public final void onCancel(Url url)
   {
 	System.out.printf("GETTING CANCELR IN URL: %s\n", url.getPath());
   }

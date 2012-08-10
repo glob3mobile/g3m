@@ -11,20 +11,20 @@ package org.glob3.mobile.generated;
 
 public class Response
 {
-  private Url _url = new URL();
+  private Url _url = new Url();
   private final ByteBuffer _data;
 
 
 
-  public Response(URL url, ByteBuffer data)
+  public Response(Url url, ByteBuffer data)
   {
-	  _url = new URL(url);
+	  _url = new Url(url);
 	  _data = data;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: URL getURL() const
-  public final URL getURL()
+//ORIGINAL LINE: Url getURL() const
+  public final Url getURL()
   {
 	return _url;
   }

@@ -14,5 +14,5 @@ public interface IDownloadListener
 
   void onDownload(Response response);
   void onError(Response response);
-  void onCancel(URL url);
+  void onCancel(Url url);
 }

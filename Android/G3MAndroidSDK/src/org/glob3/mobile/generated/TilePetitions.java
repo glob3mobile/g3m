@@ -70,7 +70,7 @@ public class TilePetitions implements IDownloadListener
 	  Petition pet = getPetition(i);
 	  if (!pet.isArrived())
 	  {
-		final URL url = new URL(pet.getURL());
+		final Url url = new Url(pet.getURL());
 		int id = downloader.request(url, priority, this);
 		pet.setDownloadID(id);
 	  }
@@ -225,7 +225,7 @@ public class TilePetitions implements IDownloadListener
   {
 	_errorsCounter++;
   }
-  public final void onCancel(URL url)
+  public final void onCancel(Url url)
   {
 	_errorsCounter++;
   }

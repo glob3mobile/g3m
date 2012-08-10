@@ -55,7 +55,7 @@ public class Downloader implements IDownloadListener
 	return _storage.read(urlOfFile);
   }
 
-  public final int request(URL url, int priority, IDownloadListener listener)
+  public final int request(Url url, int priority, IDownloadListener listener)
   {
 	String urlOfFile = url.getPath();
   
@@ -154,7 +154,7 @@ public class Downloader implements IDownloadListener
 	startDownload(); //CHECK IF WE CAN THROW A NEW PETITION TO THE NET
   }
 
-  public final void onCancel(URL url)
+  public final void onCancel(Url url)
   {
   }
 

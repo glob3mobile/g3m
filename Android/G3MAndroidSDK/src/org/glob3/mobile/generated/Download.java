@@ -16,7 +16,7 @@ public class Download
 
   public final boolean cancel(int id)
   {
-	final URL url = new URL(_url);
+	final Url url = new Url(_url);
 
 	for (int j = 0; j < _listeners.size(); j++)
 	{
