@@ -143,9 +143,8 @@ public class IndexedMesh extends Mesh
   private final int[]           _indexes;
   private final float[]         _normals;
   private final float[]         _colors;
+  private final GLPrimitive     _primitive; 
 
-
-  private final GLPrimitive _primitive = new GLPrimitive();
   private final boolean _owner;
   private final int _numVertices;
   private final int _numIndex;

@@ -14,11 +14,6 @@ public class Response
   private Url _url = new URL();
   private final ByteBuffer _data;
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  Response operator =(Response that);
-
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  Response(Response that);
 
 
   public Response(URL url, ByteBuffer data)
