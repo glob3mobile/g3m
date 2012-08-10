@@ -37,6 +37,7 @@ import org.glob3.mobile.generated.SGCubeNode;
 import org.glob3.mobile.generated.SampleEffect;
 import org.glob3.mobile.generated.SceneGraphRenderer;
 import org.glob3.mobile.generated.Sector;
+import org.glob3.mobile.generated.SimpleCameraConstrainer;
 import org.glob3.mobile.generated.SimplePlanetRenderer;
 import org.glob3.mobile.generated.SingleImageTileTexturizer;
 import org.glob3.mobile.generated.TextureBuilder;
@@ -48,7 +49,6 @@ import org.glob3.mobile.generated.TileTexturizer;
 import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.WMSLayer;
-import org.glob3.mobile.generated.SimpleCameraConstrainer;
 
 import android.R.bool;
 import android.content.Context;
