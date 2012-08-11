@@ -79,19 +79,17 @@ public:
 
   Vector2D getScaleFactor(const Sector& s) const
   {
-    double u = _deltaLatitude.div(s._deltaLatitude);
-    double v = _deltaLongitude.div(s._deltaLongitude);
-    Vector2D scale(u,v);
-    return scale;
+    const double u = _deltaLatitude.div(s._deltaLatitude);
+    const double v = _deltaLongitude.div(s._deltaLongitude);
+    return Vector2D(u,v);
   }
   
   Vector2D getTranslationFactor(const Sector& s) const
   {
-    double diff = _deltaLongitude.div(s._deltaLongitude);
-    Vector2D uv = s.getUVCoordinates(_lower);
+    const double diff = _deltaLongitude.div(s._deltaLongitude);
+    const Vector2D uv = s.getUVCoordinates(_lower);
     
-    Vector2D trans(uv.x(), uv.y()- diff);
-    return trans;
+    return Vector2D(uv.x(), uv.y() - diff);
   }
   
   bool fullContains(const Sector& s) const;

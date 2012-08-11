@@ -190,6 +190,14 @@ public:
                          (1.0 - pos.y()) * textureHeight,
                          width * textureWidth,
                          height * textureHeight);
+
+//    const Vector2D lowerUV = wholeSector.getUVCoordinates(imageSector.lower());
+//    const Vector2D upperUV = wholeSector.getUVCoordinates(imageSector.upper());
+//    
+//    return new Rectangle(lowerUV.x() * textureWidth,
+//                         (1.0 - lowerUV.y()) * textureHeight,
+//                         upperUV.x() * textureWidth,
+//                         (1.0 - upperUV.y()) * textureHeight);
   }
   
   void finalize() {

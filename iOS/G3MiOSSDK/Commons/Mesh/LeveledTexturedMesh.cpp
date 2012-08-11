@@ -141,13 +141,15 @@ void LeveledTexturedMesh::setGLTextureIDForInversedLevel(int inversedLevel,
                                                          const GLTextureID glTextureID) {
   int __XXXX;
   
+  if (!glTextureID.isValid()) {
+    return;
+  }
+  
   int level = _mappings->size() - inversedLevel - 1;
   
   if (!_currentLevelIsValid || (level < _currentLevel)) {
-    if (glTextureID.isValid()) {
-      if (_mappings->at(level)->setGLTextureID(glTextureID)) {
-        _currentLevelIsValid = false;
-      }
+    if (_mappings->at(level)->setGLTextureID(glTextureID)) {
+      _currentLevelIsValid = false;
     }
   }
   
