@@ -30,7 +30,7 @@ public:
   
   virtual void doStep(const RenderContext *rc, const TimeInterval& now) {
     EffectWithForce::doStep(rc, now);
-    rc->getCamera()->rotateWithAxis(_axis, Angle::fromDegrees(getForce()));
+    rc->getNextCamera()->rotateWithAxis(_axis, Angle::fromDegrees(getForce()));
   }
   
   virtual void stop(const RenderContext *rc, const TimeInterval& now) { }
@@ -51,7 +51,7 @@ class CameraSingleDragHandler: public CameraEventHandler {
   
 public:
   CameraSingleDragHandler():
-  _camera0(Camera(NULL, 0, 0)),
+  _camera0(Camera(0, 0)),
   _initialPoint(0,0,0),
   _initialPixel(0,0,0)
   {}

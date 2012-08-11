@@ -93,12 +93,12 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
     double angle = originalAngle.degrees();
     
     // compute estimated camera translation
-    Vector3D centerPoint = tempCamera.centerOfViewOnPlanet();    
+    Vector3D centerPoint = tempCamera.getXYZCenterOfView();    
     double distance = tempCamera.getPosition().sub(centerPoint).length();
     double d = distance*(factor-1)/factor;
     tempCamera.moveForward(d);
     dAccum += d;
-    tempCamera.updateModelMatrix();
+    //tempCamera.updateModelMatrix();
     double angle0 = tempCamera.compute3DAngularDistance(pixel0, pixel1).degrees();
     if (isnan(angle0)) return;
     //printf("distancia angular original = %.4f     d=%.1f   angulo step0=%.4f\n", angle, d, angle0);
@@ -108,7 +108,7 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
     if (angle0 < angle) d*=-1;
     tempCamera.moveForward(d);
     dAccum += d;
-    tempCamera.updateModelMatrix();
+    //tempCamera.updateModelMatrix();
     double angle1 = tempCamera.compute3DAngularDistance(pixel0, pixel1).degrees();
     double angle_n1=angle0, angle_n=angle1;
     
@@ -120,7 +120,7 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
       if ((angle_n1-angle_n)/(angle_n-angle) < 0) d*=-0.5;
       tempCamera.moveForward(d);
       dAccum += d;
-      tempCamera.updateModelMatrix();
+      //tempCamera.updateModelMatrix();
       angle_n1 = angle_n;
       angle_n = tempCamera.compute3DAngularDistance(pixel0, pixel1).degrees();  
     }
@@ -131,7 +131,7 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
   Camera tempCamera(_camera0);
 
   // computer center view point
-  Vector3D centerPoint = tempCamera.centerOfViewOnPlanet();
+  Vector3D centerPoint = tempCamera.getXYZCenterOfView();
   
   // drag from initialPoint to centerPoint
   {
@@ -146,8 +146,8 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
   tempCamera.moveForward(dAccum);
      
   // compute 3D point of view center
-  tempCamera.updateModelMatrix();
-  Vector3D centerPoint2 = tempCamera.centerOfViewOnPlanet();
+  //tempCamera.updateModelMatrix();
+  Vector3D centerPoint2 = tempCamera.getXYZCenterOfView();
   
   // middle point in 3D
   Vector3D P0 = tempCamera.pixel2PlanetPoint(pixel0);
@@ -165,7 +165,7 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
   tempCamera.rotateWithAxis(rotationAxis, rotationDelta);  
   
   // the gesture was valid. Copy data to final camera
-  tempCamera.updateModelMatrix();
+  //tempCamera.updateModelMatrix();
     
   // camera rotation
   {
@@ -179,7 +179,7 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
   }
   
   // copy final transformation to camera
-  tempCamera.updateModelMatrix();
+  //tempCamera.updateModelMatrix();
   cameraContext->getCamera()->copyFrom(tempCamera);
 
   //printf ("moving 2 fingers\n");

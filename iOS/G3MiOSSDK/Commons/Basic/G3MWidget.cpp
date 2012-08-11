@@ -17,6 +17,7 @@
 #include "IDownloader.hpp"
 #include "Effects.hpp"
 #include "Context.hpp"
+#include "CameraConstraints.hpp"
 
 G3MWidget::G3MWidget(IFactory*         factory,
                      ILogger*          logger,
@@ -25,6 +26,7 @@ G3MWidget::G3MWidget(IFactory*         factory,
                      Downloader*       downloaderOLD,
                      IDownloader*      downloader,
                      const Planet*     planet,
+                     std::vector<ICameraConstrainer *> cameraConstraint,
                      Renderer*         renderer,
                      Renderer*         busyRenderer,
                      EffectsScheduler* scheduler,
@@ -37,10 +39,12 @@ _logger(logger),
 _gl(gl),
 _texturesHandler(texturesHandler),
 _planet(planet),
+_cameraConstraint(cameraConstraint),
 _renderer(renderer),
 _busyRenderer(busyRenderer),
 _scheduler(scheduler),
-_camera(new Camera(planet, width, height)),
+_currentCamera(new Camera(width, height)),
+_nextCamera(new Camera(width, height)),
 _backgroundColor(backgroundColor),
 _timer(factory->createTimer()),
 _renderCounter(0),
@@ -56,9 +60,12 @@ _rendererReady(false) // false until first call to G3MWidget::render()
   _scheduler->initialize(&ic);
   _renderer->initialize(&ic);
   _busyRenderer->initialize(&ic);
+  _currentCamera->initialize(&ic);
+  _nextCamera->initialize(&ic);
   
   _downloader->start();
 }
+
 
 G3MWidget* G3MWidget::create(IFactory*         factory,
                              ILogger*          logger,
@@ -67,6 +74,7 @@ G3MWidget* G3MWidget::create(IFactory*         factory,
                              Downloader *      downloaderOLD,
                              IDownloader*      downloader,
                              const Planet*     planet,
+                             std::vector<ICameraConstrainer *> cameraConstraint,
                              Renderer*         renderer,
                              Renderer*         busyRenderer,
                              EffectsScheduler* scheduler,
@@ -87,6 +95,7 @@ G3MWidget* G3MWidget::create(IFactory*         factory,
                        downloaderOLD,
                        downloader,
                        planet,
+                       cameraConstraint,
                        renderer,
                        busyRenderer,
                        scheduler,
@@ -113,11 +122,15 @@ G3MWidget::~G3MWidget() {
   delete _renderer;
   delete _busyRenderer;
   delete _scheduler;
-  delete _camera;
+  delete _currentCamera;
+  delete _nextCamera;
   delete _texturesHandler;
   delete _timer;
   delete _downloaderOLD;
   delete _downloader;
+  
+  for (unsigned int n=0; n<_cameraConstraint.size(); n++)
+    delete _cameraConstraint[n];
 }
 
 void G3MWidget::onTouchEvent(const TouchEvent* myEvent) {
@@ -140,11 +153,27 @@ int G3MWidget::render() {
   _timer->start();
   _renderCounter++;
   
+  // copy next camera to current camera
+  bool acceptCamera = true;
+  for (unsigned int n=0; n<_cameraConstraint.size(); n++) {
+    if (!_cameraConstraint[n]->acceptsCamera(_nextCamera, _planet)) {
+      acceptCamera = false;
+    }
+  }
+  if (acceptCamera) {
+    _currentCamera->copyFrom(*_nextCamera);
+  }
+  else {
+    _nextCamera->copyFrom(*_currentCamera);
+  }
+  
+  // create RenderContext
   RenderContext rc(_factory,
                    _logger,
                    _planet,
                    _gl,
-                   _camera,
+                   _currentCamera,
+                   _nextCamera,
                    _texturesHandler,
                    _downloaderOLD,
                    _downloader,

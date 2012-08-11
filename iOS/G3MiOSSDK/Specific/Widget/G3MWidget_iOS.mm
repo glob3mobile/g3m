@@ -21,6 +21,7 @@
 #include "CameraDoubleDragHandler.hpp"
 #include "CameraRotationHandler.hpp"
 #include "CameraDoubleTapHandler.hpp"
+#include "CameraConstraints.hpp"
 
 #include "TileRenderer.hpp"
 #include "DummyRenderer.hpp"
@@ -180,6 +181,9 @@
   Renderer* busyRenderer = new BusyRenderer();
   
   EffectsScheduler* scheduler = new EffectsScheduler();
+  
+  std::vector <ICameraConstrainer *> cameraConstraint;
+  cameraConstraint.push_back(new SimpleCameraConstrainer);
 
   _widget = G3MWidget::create(factory,
                               logger,
@@ -188,6 +192,7 @@
                               downloaderOLD,
                               downloader,
                               planet, 
+                              cameraConstraint,
                               comp,
                               busyRenderer,
                               scheduler,
@@ -196,7 +201,7 @@
                               true);
   
   Geodetic3D australia = Geodetic3D::fromDegrees(-26.91, 133.94, 1.1e7);
-  ((G3MWidget*)_widget)->getCamera()->setPosition(australia);
+  ((G3MWidget*)_widget)->getNextCamera()->setPosition(australia);
 
 }
 
@@ -478,6 +483,9 @@
   const Planet* planet = Planet::createEarth();
   
   Renderer* busyRenderer = new BusyRenderer();
+  
+  std::vector <ICameraConstrainer *> cameraConstraint;
+  cameraConstraint.push_back(new SimpleCameraConstrainer);
 
   _widget = G3MWidget::create(factory,
                               logger,
@@ -486,6 +494,7 @@
                               downloaderOLD,
                               downloader,
                               planet, 
+                              cameraConstraint,
                               comp,
                               busyRenderer,
                               scheduler,
