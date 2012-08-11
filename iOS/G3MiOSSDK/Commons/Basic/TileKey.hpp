@@ -53,16 +53,19 @@ public:
     if (_level < that._level) {
       return true;
     }
-    
-    if (_row < that._row) {
-      return true;
+    else if (_level > that._level) {
+      return false;
     }
-    
+
     if (_column < that._column) {
       return true;
     }
-    
-    return false;
+    else if (_column > that._column) {
+      return false;
+    }
+
+//    return (_column < that._column);
+    return (_row < that._row);
   }
 };
 

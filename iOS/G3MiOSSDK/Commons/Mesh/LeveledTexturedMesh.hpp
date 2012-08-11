@@ -38,27 +38,41 @@ private:
   GLTextureID  _glTextureId;
   
   mutable bool _initialized;
+
+  mutable bool            _ownedTexCoords;
   mutable float const*    _texCoords;
   mutable MutableVector2D _translation;
   mutable MutableVector2D _scale;
   
   TexturesHandler* _texturesHandler;
   
+  void operator=(const LazyTextureMapping& that);
+  
+  LazyTextureMapping(const LazyTextureMapping& that);
+  
 public:
   LazyTextureMapping(LazyTextureMappingInitializer* initializer,
-                     TexturesHandler* texturesHandler) :
+                     TexturesHandler* texturesHandler,
+                     bool ownedTexCoords) :
   _initializer(initializer),
   _glTextureId(GLTextureID::invalid()),
   _initialized(false),
   _texCoords(NULL),
   _translation(0,0),
   _scale(1,1),
-  _texturesHandler(texturesHandler)
+  _texturesHandler(texturesHandler),
+  _ownedTexCoords(ownedTexCoords)
   {
     
   }
   
   virtual ~LazyTextureMapping() {
+    if (_texCoords != NULL) {
+      if (_ownedTexCoords) {
+        delete [] _texCoords;
+      }
+      _texCoords = NULL;
+    }
   }
   
   void bind(const RenderContext* rc) const;
@@ -67,8 +81,12 @@ public:
     return _glTextureId.isValid();
   }
   
-  void setGLTextureID(const GLTextureID glTextureId) {
-    _glTextureId = glTextureId;
+  bool setGLTextureID(const GLTextureID glTextureId) {
+    const bool change = !_glTextureId.isEqualsTo(glTextureId);
+    if (change) {
+      _glTextureId = glTextureId;
+    }
+    return change;
   }
   
   void releaseGLTextureId();
@@ -85,25 +103,30 @@ private:
   const Mesh* _mesh;
   const bool  _ownedMesh;
 
-  mutable std::vector<LazyTextureMapping*> _mappings;
+  mutable std::vector<LazyTextureMapping*>* _mappings;
   
   
   const   int _levelsCount;
-  mutable int _currentLevel;
+  
+  mutable int  _currentLevel;
+  mutable bool _currentLevelDirty;
   
   LazyTextureMapping* getCurrentTextureMapping() const;
 
 public:
   LeveledTexturedMesh(const Mesh* mesh,
                       bool ownedMesh,
-                      std::vector<LazyTextureMapping*> mappings) :
+                      std::vector<LazyTextureMapping*>* mappings) :
   _mesh(mesh),
   _ownedMesh(ownedMesh),
   _mappings(mappings),
-  _levelsCount(mappings.size()),
-  _currentLevel(-1)
+  _levelsCount(mappings->size()),
+  _currentLevel(0),
+  _currentLevelDirty(true)
   {
-
+    if (_mappings->size() <= 0) {
+      printf("LOGIC ERROR\n");
+    }
   }
   
   virtual ~LeveledTexturedMesh();

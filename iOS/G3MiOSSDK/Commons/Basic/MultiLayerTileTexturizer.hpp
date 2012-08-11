@@ -44,6 +44,7 @@ public:
   virtual ~MultiLayerTileTexturizer() {
     if (_texCoordsCache != NULL) {
       delete [] _texCoordsCache;
+      _texCoordsCache = NULL;
     }
   }
   

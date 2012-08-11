@@ -41,6 +41,34 @@ const GLTextureID CPUTextureBuilder::createTextureFromImages(GL * gl, const IFac
                                                              const std::vector<const IImage*> images,
                                                              const std::vector<const Rectangle*> rectangles,
                                                              int width, int height) const {
+  const int imagesSize = images.size();
+  
+  if (imagesSize == 0) {
+    return GLTextureID::invalid();
+  }
+
+//  const Rectangle baseRec(0,0, width, height);
+//  
+//  if ((imagesSize == 1) && (rectangles[0]->equalTo(baseRec))) {
+//    return gl->uploadTexture(images[0], width, height);
+//  }
+//  
+//  
+//  
+//  const IImage* image = factory->createImageFromSize(width, height);
+//  for (int i = 0; i < imagesSize; i++) {
+//    IImage* nextImage = image->combineWith(*images[i], *rectangles[i], width, height);
+//    delete image;
+//    image = nextImage;
+//  }
+//  
+//  const GLTextureID texID = gl->uploadTexture(image, width, height);
+//  
+//  delete image;
+//  
+//  return texID;
+
+
   const IImage* base;
   int i = 0; //First image to merge
   Rectangle baseRec(0,0, width, height);
@@ -52,7 +80,7 @@ const GLTextureID CPUTextureBuilder::createTextureFromImages(GL * gl, const IFac
     base = factory->createImageFromSize(width, height);
   }
   
-  for (; i < images.size(); i++) {
+  for (; i < imagesSize; i++) {
     IImage* im2 = base->combineWith(*images[i], *rectangles[i], width, height);
     
     if (base != images[0]) {
