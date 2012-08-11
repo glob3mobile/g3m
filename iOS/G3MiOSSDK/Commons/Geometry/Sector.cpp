@@ -45,12 +45,12 @@ Geodetic2D Sector::getInnerPoint(double u, double v) const {
   return Geodetic2D(lat, lon);
 }
 
-bool Sector::isBackOriented(const RenderContext *rc) const {
-  const Camera* camera = rc->getNextCamera();
+bool Sector::isBackOriented(const RenderContext *rc) {
+  Camera* camera = rc->getNextCamera();
   const Planet* planet = rc->getPlanet();
   
   // compute sector point nearest to centerPoint
-  const Geodetic2D center = camera->getCenterOfView().asGeodetic2D();
+  const Geodetic2D center = camera->getGeodeticCenterOfView().asGeodetic2D();
   const Geodetic2D point = getClosestPoint(center);
   
   // compute angle between normals

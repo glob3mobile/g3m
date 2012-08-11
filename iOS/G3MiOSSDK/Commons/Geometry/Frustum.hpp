@@ -14,6 +14,7 @@
 #include "Plane.hpp"
 
 class Box;
+class FrustumData;
 
 class Frustum {
 private:
@@ -71,6 +72,8 @@ public:
   _farPlane(Plane(Vector3D(0, 0, -1), -zfar))
   {
   }
+  
+  Frustum (const FrustumData& data);
   
   bool contains(const Vector3D& point) const;
   

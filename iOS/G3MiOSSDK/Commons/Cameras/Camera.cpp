@@ -20,6 +20,7 @@ void Camera::initialize(const InitializationContext* ic)
 {
   _planet = ic->getPlanet();
   _position = MutableVector3D(_planet->getRadii().maxAxis() * 5, 0, 0);
+  _dirtyFlags.setAll(true);
 }
 
 
@@ -29,7 +30,7 @@ void Camera::copyFrom(const Camera &that) {
   
   _modelMatrix      = that._modelMatrix;
   _projectionMatrix = that._projectionMatrix;
-//  _modelViewMatrix  = that._modelViewMatrix;
+  _modelViewMatrix  = that._modelViewMatrix;
   
   _position = that._position;
   _center   = that._center;
@@ -44,11 +45,12 @@ void Camera::copyFrom(const Camera &that) {
   _frustum = (that._frustum == NULL) ? NULL : new Frustum(*that._frustum);
   _frustumInModelCoordinates = (that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates);
   
-  _dirtyCachedValues = that._dirtyCachedValues;
+  //_dirtyCachedValues = that._dirtyCachedValues;
+  _dirtyFlags = that._dirtyFlags;
   
   _logger = that._logger;
   
-  cleanCachedValues();
+  //cleanCachedValues();
 }
 
 Camera::Camera(int width, int height) :
@@ -57,11 +59,13 @@ _center(0, 0, 0),
 _up(0, 0, 1),
 _logger(NULL),
 _frustum(NULL),
-_dirtyCachedValues(true),
 _frustumInModelCoordinates(NULL),
 _halfFrustumInModelCoordinates(NULL),
 _halfFrustum(NULL),
-_centerOfView(NULL)
+_dirtyFlags(),
+_XYZCenterOfView(0, 0, 0),
+_geodeticCenterOfView(NULL),
+_frustumData()
 {
   resizeViewport(width, height);
 }
@@ -70,18 +74,19 @@ void Camera::resizeViewport(int width, int height) {
   _width = width;
   _height = height;
   
-  cleanCachedValues();
+  //cleanCachedValues();
 }
 
-void Camera::print() const {
+void Camera::print() {
   if (_logger != NULL){ 
-    _modelMatrix.print("Model Matrix", _logger);
-    _projectionMatrix.print("Projection Matrix", _logger);
-//    _modelViewMatrix.print("ModelView Matrix", _logger);
+    getModelMatrix().print("Model Matrix", _logger);
+    getProjectionMatrix().print("Projection Matrix", _logger);
+    getModelViewMatrix().print("ModelView Matrix", _logger);
     _logger->logInfo("Width: %d, Height %d\n", _width, _height);
   }
 }
 
+/*
 void Camera::calculateCachedValues() {
   const FrustumData data = calculateFrustumData();
   
@@ -114,7 +119,7 @@ void Camera::calculateCachedValues() {
   if (_frustumInModelCoordinates != NULL) {
     delete _frustumInModelCoordinates;
   }
-  _frustumInModelCoordinates = _frustum->transformedBy_P(_modelMatrix.transposed());
+  _frustumInModelCoordinates = _frustum->_frustum->transformedBy_P(_modelMatrix.transposed());(_modelMatrix.transposed());
   
   
   if (_halfFrustum != NULL) {
@@ -130,23 +135,23 @@ void Camera::calculateCachedValues() {
   _halfFrustumInModelCoordinates = _halfFrustum->transformedBy_P(_modelMatrix.transposed());
 
 
-}
+}*/
 
 void Camera::render(const RenderContext* rc) {
   _logger = rc->getLogger();
-  
+  /*
   if (_dirtyCachedValues) {
     calculateCachedValues();
     _dirtyCachedValues = false;
-  }
+  }*/
   
   GL *gl = rc->getGL();
-  gl->setProjection(_projectionMatrix);
-  gl->loadMatrixf(_modelMatrix);
+  gl->setProjection(getProjectionMatrix());
+  gl->loadMatrixf(getModelMatrix());
     
   // TEMP: TEST TO SEE HALF SIZE FRUSTUM CLIPPING 
   if (false) {
-    const MutableMatrix44D inversed = _modelMatrix.inversed();
+    const MutableMatrix44D inversed = getModelMatrix().inversed();
     
     const FrustumData data = calculateFrustumData();
     const Vector3D p0(Vector3D(data._left/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
@@ -175,24 +180,18 @@ void Camera::render(const RenderContext* rc) {
 
 }
 
-const Frustum* const Camera::getFrustumInModelCoordinates() {
-  return _frustumInModelCoordinates;
-}
 
-Vector3D Camera::pixel2Ray(const Vector2D& pixel) const {
+Vector3D Camera::pixel2Ray(const Vector2D& pixel) {
   const int px = (int) pixel.x();
   const int py = _height - (int) pixel.y();
   const Vector3D pixel3D(px, py, 0);
-  
-  int __cache_model_view_matrix;
-  const MutableMatrix44D modelViewMatrix = _projectionMatrix.multiply(_modelMatrix);
-  
+    
   const int viewport[4] = {
     0, 0,
     _width, _height
   };
-  
-  const Vector3D obj = modelViewMatrix.unproject(pixel3D, viewport);
+    
+  const Vector3D obj = getModelViewMatrix().unproject(pixel3D, viewport);
   if (obj.isNan()) {
     return obj; 
   }
@@ -200,16 +199,13 @@ Vector3D Camera::pixel2Ray(const Vector2D& pixel) const {
   return obj.sub(_position.asVector3D());
 }
 
-Vector3D Camera::pixel2PlanetPoint(const Vector2D& pixel) const {
+Vector3D Camera::pixel2PlanetPoint(const Vector2D& pixel) {
   return _planet->closestIntersection(_position.asVector3D(), pixel2Ray(pixel));
 }
 
-Vector2D Camera::point2Pixel(const Vector3D& point) const {
-  int __cache_model_view_matrix;
-  const MutableMatrix44D modelViewMatrix = _projectionMatrix.multiply(_modelMatrix);
-  
+Vector2D Camera::point2Pixel(const Vector3D& point) {  
   const int viewport[4] = { 0, 0, _width, _height };
-  const Vector2D p = modelViewMatrix.project(point, viewport);
+  Vector2D p = getModelViewMatrix().project(point, viewport);
   
   if (p.isNan()) {
     return p;
@@ -223,7 +219,7 @@ void Camera::applyTransform(const MutableMatrix44D& M) {
   _center   = _center.transformedBy(M, 1.0);
   _up       = _up.transformedBy(M, 0.0);
   
-  cleanCachedValues();
+  _dirtyFlags.setAll(true);
 }
 
 void Camera::dragCamera(const Vector3D& p0, const Vector3D& p1) {
@@ -266,6 +262,7 @@ void Camera::rotateWithAxisAndPoint(const Vector3D& axis, const Vector3D& point,
 
 void Camera::setPosition(const Geodetic3D& g3d) {
   _position = _planet->toVector3D(g3d).asMutableVector3D();
+  _dirtyFlags.setAll(true);
 }
 
 Vector3D Camera::centerOfViewOnPlanet() const {
@@ -273,14 +270,13 @@ Vector3D Camera::centerOfViewOnPlanet() const {
   return _planet->closestIntersection(_position.asVector3D(), ray);
 }
 
-Vector3D Camera::getHorizontalVector() const {
-  int __use_cached_model_matrix;
-  const MutableMatrix44D M = MutableMatrix44D::createModelMatrix(_position, _center, _up);
+Vector3D Camera::getHorizontalVector() {
+  MutableMatrix44D M = getModelMatrix();
   return Vector3D(M.get(0), M.get(4), M.get(8));
 }
 
 Angle Camera::compute3DAngularDistance(const Vector2D& pixel0,
-                                       const Vector2D& pixel1) const {
+                                       const Vector2D& pixel1) {
   const Vector3D point0 = pixel2PlanetPoint(pixel0);
   if (point0.isNan()) {
     return Angle::nan();

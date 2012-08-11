@@ -14,6 +14,7 @@
 #include "Vector2D.hpp"
 #include "Angle.hpp"
 #include "MutableVector3D.hpp"
+#include "Camera.hpp"
 
 
 MutableMatrix44D MutableMatrix44D::multiply(const MutableMatrix44D& m) const {
@@ -264,6 +265,15 @@ MutableMatrix44D MutableMatrix44D::createProjectionMatrix(double left, double ri
   
   return MutableMatrix44D(P);
 }
+
+MutableMatrix44D MutableMatrix44D::createProjectionMatrix(const FrustumData& data)
+{
+  return createProjectionMatrix(data._left, data._right,
+                                data._bottom, data._top,
+                                data._znear, data._zfar);
+}
+
+
 
 MutableMatrix44D MutableMatrix44D::fromTranslation(const MutableVector3D& translation) {
   return MutableMatrix44D(1.0, 0.0, 0.0, translation.x(),
