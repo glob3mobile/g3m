@@ -43,8 +43,8 @@ _cameraConstraint(cameraConstraint),
 _renderer(renderer),
 _busyRenderer(busyRenderer),
 _scheduler(scheduler),
-_currentCamera(new Camera(planet, width, height)),
-_nextCamera(new Camera(planet, width, height)),
+_currentCamera(new Camera(width, height)),
+_nextCamera(new Camera(width, height)),
 _backgroundColor(backgroundColor),
 _timer(factory->createTimer()),
 _renderCounter(0),
@@ -60,6 +60,8 @@ _rendererReady(false) // false until first call to G3MWidget::render()
   _scheduler->initialize(&ic);
   _renderer->initialize(&ic);
   _busyRenderer->initialize(&ic);
+  _currentCamera->initialize(&ic);
+  _nextCamera->initialize(&ic);
   
   _downloader->start();
 }

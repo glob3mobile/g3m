@@ -16,6 +16,13 @@
 #include "GL.hpp"
 
 
+void Camera::initialize(const InitializationContext* ic)
+{
+  _planet = ic->getPlanet();
+  _position = MutableVector3D(_planet->getRadii().maxAxis() * 5, 0, 0);
+}
+
+
 void Camera::copyFrom(const Camera &that) {
   _width  = that._width;
   _height = that._height;
@@ -44,9 +51,8 @@ void Camera::copyFrom(const Camera &that) {
   cleanCachedValues();
 }
 
-Camera::Camera(const Planet* planet,
-               int width, int height) :
-_position((planet == NULL) ? 0 : planet->getRadii().maxAxis() * 5, 0, 0),
+Camera::Camera(int width, int height) :
+_position(0, 0, 0),
 _center(0, 0, 0),
 _up(0, 0, 1),
 _logger(NULL),
@@ -55,8 +61,7 @@ _dirtyCachedValues(true),
 _frustumInModelCoordinates(NULL),
 _halfFrustumInModelCoordinates(NULL),
 _halfFrustum(NULL),
-_centerOfView(NULL),
-_planet(planet)
+_centerOfView(NULL)
 {
   resizeViewport(width, height);
 }
@@ -94,9 +99,8 @@ void Camera::calculateCachedValues(const RenderContext *rc) {
   if (_centerOfView) {
     delete _centerOfView;
   }
-  const Planet *planet = rc->getPlanet();
   const Vector3D centerV = centerOfViewOnPlanet();
-  const Geodetic3D centerG = planet->toGeodetic3D(centerV);
+  const Geodetic3D centerG = _planet->toGeodetic3D(centerV);
   _centerOfView = new Geodetic3D(centerG);
   
   

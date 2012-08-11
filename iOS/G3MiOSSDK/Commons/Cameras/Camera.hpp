@@ -75,8 +75,7 @@ public:
   }
   
   
-  Camera(const Planet* planet,
-         int width, int height);
+  Camera(int width, int height);
   
   ~Camera() {
     if (_frustum != NULL) {
@@ -160,6 +159,8 @@ public:
   void applyTransform(const MutableMatrix44D& mat);
   
   Angle compute3DAngularDistance(const Vector2D& pixel0, const Vector2D& pixel1) const;
+  
+  void initialize(const InitializationContext* ic); 
 
     
 private:
@@ -188,7 +189,7 @@ private:
   
   FrustumData calculateFrustumData(const RenderContext* rc) {
     // compute znear value
-    const double maxRadius = rc->getPlanet()->getRadii().maxAxis();
+    const double maxRadius = _planet->getRadii().maxAxis();
     const double distanceToPlanetCenter = _position.length();
     const double distanceToSurface = distanceToPlanetCenter - maxRadius;  
     
