@@ -187,7 +187,7 @@ private:
   bool _dirtyCachedValues;
   
   
-  FrustumData calculateFrustumData(const RenderContext* rc) {
+  FrustumData calculateFrustumData() {
     // compute znear value
     const double maxRadius = _planet->getRadii().maxAxis();
     const double distanceToPlanetCenter = _position.length();
@@ -240,7 +240,7 @@ private:
   }
   
   
-  void calculateCachedValues(const RenderContext* rc);
+  void calculateCachedValues();
   
   void cleanCachedValues() {
     _dirtyCachedValues = true;

@@ -99,11 +99,11 @@ Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const
   bool insideLon    = true;
   if (lon < minLon) {
     lon = minLon;
-    insideLon = false;
+    //insideLon = false;
   } 
   if (lon > maxLon) {
     lon = maxLon;
-    insideLon = false;
+    //insideLon = false;
   }
 
   // test latitude
@@ -113,11 +113,11 @@ Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const
   bool insideLat    = true;
   if (lat < minLat) {
     lat = minLat;
-    insideLat = false;
+    //insideLat = false;
   }
   if (lat > maxLat) {
     lat = maxLat;
-    insideLat = false;
+    //insideLat = false;
   }
   
   // here we have to handle the case where sectos is close to the pole, 

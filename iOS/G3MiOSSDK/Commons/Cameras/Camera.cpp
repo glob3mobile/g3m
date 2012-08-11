@@ -82,8 +82,8 @@ void Camera::print() const {
   }
 }
 
-void Camera::calculateCachedValues(const RenderContext *rc) {
-  const FrustumData data = calculateFrustumData(rc);
+void Camera::calculateCachedValues() {
+  const FrustumData data = calculateFrustumData();
   
   _projectionMatrix = MutableMatrix44D::createProjectionMatrix(data._left, data._right,
                                                                data._bottom, data._top,
@@ -136,7 +136,7 @@ void Camera::render(const RenderContext* rc) {
   _logger = rc->getLogger();
   
   if (_dirtyCachedValues) {
-    calculateCachedValues(rc);
+    calculateCachedValues();
     _dirtyCachedValues = false;
   }
   
@@ -148,7 +148,7 @@ void Camera::render(const RenderContext* rc) {
   if (false) {
     const MutableMatrix44D inversed = _modelMatrix.inversed();
     
-    const FrustumData data = calculateFrustumData(rc);
+    const FrustumData data = calculateFrustumData();
     const Vector3D p0(Vector3D(data._left/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
     const Vector3D p1(Vector3D(data._left/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
     const Vector3D p2(Vector3D(data._right/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
