@@ -96,9 +96,9 @@ public:
   
   void releaseGLTextureId();
 
-//  const GLTextureID getGLTextureID() const {
-//    return _glTextureId;
-//  }
+  const GLTextureID getGLTextureID() const {
+    return _glTextureId;
+  }
 
 };
 
@@ -147,6 +147,8 @@ public:
   void setGLTextureIDForInversedLevel(int inversedLevel,
                                       const GLTextureID glTextureID);
   
+  const GLTextureID getGLTextureID() const;
+
 };
 
 #endif

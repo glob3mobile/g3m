@@ -54,6 +54,8 @@ private:
   float _translationX;
   float _translationY;
   
+  const float* _textureCoordinates;
+  
   inline void loadModelView();
   
   const GLTextureID getGLTextureID();
@@ -78,7 +80,8 @@ public:
   _translationX(0),
   _translationY(0),
   _texturesIdGetCounter(0),
-  _texturesIdTakeCounter(0)
+  _texturesIdTakeCounter(0),
+  _textureCoordinates(NULL)
   {
     
   }

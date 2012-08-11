@@ -212,7 +212,10 @@ const GLTextureID GL::uploadTexture(const IImage* image,
 }
 
 void GL::setTextureCoordinates(int size, int stride, const float texcoord[]) {
-  _gl->vertexAttribPointer(Attributes.TextureCoord, size, Float, 0, stride, (const void *) texcoord);
+  if (_textureCoordinates != texcoord) {
+    _gl->vertexAttribPointer(Attributes.TextureCoord, size, Float, 0, stride, (const void *) texcoord);
+    _textureCoordinates = texcoord;
+  }
 }
 
 void GL::bindTexture(const GLTextureID& textureId) {

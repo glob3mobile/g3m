@@ -15,6 +15,8 @@ class IDownloader;
 
 #include <map>
 #include "TileKey.hpp"
+#include "GLTextureID.hpp"
+
 class TileTextureBuilder;
 
 
@@ -70,6 +72,8 @@ public:
   void ancestorTexturedSolvedChanged(Tile* tile,
                                      Tile* ancestorTile,
                                      bool textureSolved);
+  
+  const GLTextureID getGLTextureIDForTile(Tile* tile);
   
 };
 

@@ -38,9 +38,9 @@ Tile::~Tile() {
 
 void Tile::ancestorTexturedSolvedChanged(Tile* ancestor,
                                          bool textureSolved) {
-  if (isTextureSolved()) {
-    return;
-  }
+//  if (isTextureSolved()) {
+//    return;
+//  }
   
   if (_texturizer != NULL) {
     _texturizer->ancestorTexturedSolvedChanged(this, ancestor, textureSolved);

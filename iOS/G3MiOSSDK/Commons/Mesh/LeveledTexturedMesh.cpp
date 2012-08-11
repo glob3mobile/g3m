@@ -109,6 +109,13 @@ LazyTextureMapping* LeveledTexturedMesh::getCurrentTextureMapping() const {
   return _currentLevelIsValid ? _mappings->at(_currentLevel) : NULL;
 }
 
+const GLTextureID LeveledTexturedMesh::getGLTextureID() const {
+  const LazyTextureMapping* mapping = getCurrentTextureMapping();
+  
+  return (mapping == NULL) ? GLTextureID::invalid() : mapping->getGLTextureID();
+}
+
+
 void LeveledTexturedMesh::render(const RenderContext* rc) const {
   LazyTextureMapping* mapping = getCurrentTextureMapping();
   
