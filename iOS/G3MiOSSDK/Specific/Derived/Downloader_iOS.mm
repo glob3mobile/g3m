@@ -156,6 +156,8 @@ long Downloader_iOS::request(const URL &url,
   NSCachedURLResponse* response = [_cache cachedResponseForRequest:request];
   if (response) {
     //    NSLog(@"cache hit for %@", nsURL);
+
+//    dispatch_async( dispatch_get_main_queue(), ^{
     
     NSData* data = [response data];
     const int length = [data length];
@@ -172,6 +174,8 @@ long Downloader_iOS::request(const URL &url,
     if (deleteListener) {
       delete cppListener;
     }
+    
+//    });
     
     return -1;
   }

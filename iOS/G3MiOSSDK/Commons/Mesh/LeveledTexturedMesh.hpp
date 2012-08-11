@@ -114,7 +114,7 @@ private:
   const   int _levelsCount;
   
   mutable int  _currentLevel;
-  mutable bool _currentLevelDirty;
+  mutable bool _currentLevelIsValid;
   
   LazyTextureMapping* getCurrentTextureMapping() const;
 
@@ -127,7 +127,7 @@ public:
   _mappings(mappings),
   _levelsCount(mappings->size()),
   _currentLevel(0),
-  _currentLevelDirty(true)
+  _currentLevelIsValid(false)
   {
     if (_mappings->size() <= 0) {
       printf("LOGIC ERROR\n");
@@ -144,8 +144,8 @@ public:
   
   Extent* getExtent() const;
 
-  void setGLTextureIDForLevel(int level,
-                              const GLTextureID glTextureID);
+  void setGLTextureIDForInversedLevel(int inversedLevel,
+                                      const GLTextureID glTextureID);
   
 };
 

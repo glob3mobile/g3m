@@ -233,10 +233,12 @@ public:
       if (images.size() > 0) {
         GLTextureID glTextureID = _texturesHandler->getGLTextureId(images,
                                                                    rectangles,
-                                                                   TextureSpec(petitionsID, textureWidth, textureHeight));
+                                                                   TextureSpec(petitionsID,
+                                                                               textureWidth,
+                                                                               textureHeight));
         if (glTextureID.isValid()) {
-          getMesh()->setGLTextureIDForLevel(_tile->getLevel() - _parameters->_topLevel,
-                                            glTextureID);
+          getMesh()->setGLTextureIDForInversedLevel(_tile->getLevel() - _parameters->_topLevel,
+                                                    glTextureID);
         }
       }
       
@@ -336,13 +338,19 @@ public:
     
     std::vector<LazyTextureMapping*>* mappings = new std::vector<LazyTextureMapping*>();
     
-    Tile* current = _tile;
-    while (current != NULL) {
-      LazyTextureMappingInitializer* initializer = new LTMInitializer(_tile, current, _texCoords);
-      LazyTextureMapping* mapping = new LazyTextureMapping(initializer, _texturesHandler, false);
+    Tile* ancestor = _tile;
+    if (ancestor->getLevel() > 0) {
+      printf("Break point here, please");
+    }
+    while (ancestor != NULL) {
+      LazyTextureMapping* mapping = new LazyTextureMapping(new LTMInitializer(_tile,
+                                                                              ancestor,
+                                                                              _texCoords),
+                                                           _texturesHandler,
+                                                           false);
       mappings->push_back(mapping);
       
-      current = current->getParent();
+      ancestor = ancestor->getParent();
     }
     
     if (mappings->size() == 0) {

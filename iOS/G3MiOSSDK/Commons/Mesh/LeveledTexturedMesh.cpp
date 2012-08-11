@@ -81,22 +81,19 @@ Extent* LeveledTexturedMesh::getExtent() const {
 }
 
 LazyTextureMapping* LeveledTexturedMesh::getCurrentTextureMapping() const {
-  if (_currentLevelDirty) {
-    // backward iteration, last is best level
-//    for (int i = _levelsCount-1; i >=0; i--) {
+  if (!_currentLevelIsValid) {
     for (int i = 0; i < _levelsCount; i++) {
       LazyTextureMapping* mapping = _mappings->at(i);
       if (mapping != NULL) {
         if (mapping->isValid()) {
           _currentLevel = i;
-          _currentLevelDirty = false;
+          _currentLevelIsValid = true;
           break;
         }
       }
     }
     
-    if (!_currentLevelDirty) {
-//      for (int i = 0; i < _currentLevel; i++) {
+    if (_currentLevelIsValid) {
       for (int i = _currentLevel+1; i < _levelsCount; i++) {
         LazyTextureMapping* mapping = _mappings->at(i);
         if (mapping != NULL) {
@@ -109,7 +106,7 @@ LazyTextureMapping* LeveledTexturedMesh::getCurrentTextureMapping() const {
     }
   }
   
-  return _currentLevelDirty ? NULL : _mappings->at(_currentLevel);
+  return _currentLevelIsValid ? _mappings->at(_currentLevel) : NULL;
 }
 
 void LeveledTexturedMesh::render(const RenderContext* rc) const {
@@ -133,16 +130,18 @@ void LeveledTexturedMesh::render(const RenderContext* rc) const {
   }
 }
 
-void LeveledTexturedMesh::setGLTextureIDForLevel(int level,
-                                                 const GLTextureID glTextureID) {
+void LeveledTexturedMesh::setGLTextureIDForInversedLevel(int inversedLevel,
+                                                         const GLTextureID glTextureID) {
   int __XXXX;
   
-  if (level < _currentLevel || _currentLevelDirty) {
+  int level = _mappings->size() - inversedLevel - 1;
+  
+  if (!_currentLevelIsValid || (level < _currentLevel)) {
     if (glTextureID.isValid()) {
       if (_mappings->at(level)->setGLTextureID(glTextureID)) {
-//        _currentLevel = -1; // force recalculation
-        _currentLevelDirty=true;
+        _currentLevelIsValid = false;
       }
     }
   }
+  
 }
