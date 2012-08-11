@@ -14,7 +14,42 @@
 #include "Plane.hpp"
 
 class Box;
-class FrustumData;
+
+class FrustumData {
+public:
+  double _left;
+  double _right;
+  double _bottom;
+  double _top;
+  double _znear;
+  double _zfar;
+  
+  FrustumData(double left,
+              double right,
+              double bottom,
+              double top,
+              double znear,
+              double zfar) :
+  _left(left),
+  _right(right),
+  _bottom(bottom),
+  _top(top),
+  _znear(znear),
+  _zfar(zfar)
+  {
+    
+  }
+  
+  FrustumData():
+  _left(-1),
+  _right(1),
+  _bottom(-1),
+  _top(1),
+  _znear(1),
+  _zfar(10)
+  {}
+};
+
 
 class Frustum {
 private:

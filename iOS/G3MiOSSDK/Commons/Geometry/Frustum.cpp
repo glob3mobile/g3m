@@ -8,7 +8,7 @@
 
 #include "Frustum.hpp"
 #include "Box.hpp"
-#include "Camera.hpp"
+
 
 Frustum::Frustum (const FrustumData& data):
 _leftPlane(Plane(Vector3D(0, 0, 0), 

@@ -22,42 +22,6 @@
 class ILogger;
 
 
-class FrustumData {
-public:
-  double _left;
-  double _right;
-  double _bottom;
-  double _top;
-  double _znear;
-  double _zfar;
-  
-  FrustumData(double left,
-              double right,
-              double bottom,
-              double top,
-              double znear,
-              double zfar) :
-  _left(left),
-  _right(right),
-  _bottom(bottom),
-  _top(top),
-  _znear(znear),
-  _zfar(zfar)
-  {
-    
-  }
-  
-  FrustumData():
-  _left(-1),
-  _right(1),
-  _bottom(-1),
-  _top(1),
-  _znear(1),
-  _zfar(10)
-  {}
-};
-
-
 class CameraDirtyFlags {
 public:
   bool _frustumData;
@@ -204,9 +168,7 @@ public:
   Frustum* _halfFrustumInModelCoordinates;
     
   Vector3D getHorizontalVector();
-  
-  void applyTransform(const MutableMatrix44D& mat);
-  
+    
   Angle compute3DAngularDistance(const Vector2D& pixel0, const Vector2D& pixel1);
   
   void initialize(const InitializationContext* ic); 
@@ -228,6 +190,8 @@ private:
   
   CameraDirtyFlags _dirtyFlags;
   
+  void applyTransform(const MutableMatrix44D& mat);
+
   Vector3D centerOfViewOnPlanet() const;
   
   // data to compute frustum
@@ -321,20 +285,6 @@ private:
     const double distanceToPlanetCenter = _position.length();
     const double distanceToSurface = distanceToPlanetCenter - maxRadius;  
     
-//    double znear;
-//    if (distanceToSurface > maxRadius/5) {
-//      znear = maxRadius / 10; 
-//    }
-//    else if (distanceToSurface > maxRadius/500) {
-//      znear = maxRadius / 1e3;
-//    }
-//    else if (distanceToSurface > maxRadius/2000) {
-//      znear = maxRadius / 1e5;
-//    }
-//    else {
-//      znear = maxRadius / 1e6 * 3;
-//    }
-
     double znear;
     if (distanceToSurface > maxRadius/5) {
       znear = maxRadius / 10; 

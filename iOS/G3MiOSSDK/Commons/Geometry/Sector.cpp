@@ -96,7 +96,7 @@ Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const
     lon-=360;
   double minLon     = _lower.longitude().degrees();
   double maxLon     = _upper.longitude().degrees();
-  bool insideLon    = true;
+  //bool insideLon    = true;
   if (lon < minLon) {
     lon = minLon;
     //insideLon = false;
@@ -110,7 +110,7 @@ Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const
   double lat        = pos.latitude().degrees();
   double minLat     = _lower.latitude().degrees();
   double maxLat     = _upper.latitude().degrees();
-  bool insideLat    = true;
+  //bool insideLat    = true;
   if (lat < minLat) {
     lat = minLat;
     //insideLat = false;
