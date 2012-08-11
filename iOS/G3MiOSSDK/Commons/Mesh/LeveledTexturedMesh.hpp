@@ -33,7 +33,7 @@ public:
 
 class LazyTextureMapping : public TextureMapping {
 private:
-  LazyTextureMappingInitializer* _initializer;
+  mutable LazyTextureMappingInitializer* _initializer;
   
   GLTextureID  _glTextureId;
   
@@ -67,6 +67,11 @@ public:
   }
   
   virtual ~LazyTextureMapping() {
+    if (_initializer != NULL) {
+      delete _initializer;
+      _initializer = NULL;
+    }
+
     if (_texCoords != NULL) {
       if (_ownedTexCoords) {
         delete [] _texCoords;

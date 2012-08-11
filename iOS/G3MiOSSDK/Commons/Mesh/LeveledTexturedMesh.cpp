@@ -23,6 +23,7 @@ void LazyTextureMapping::bind(const RenderContext* rc) const {
     _texCoords   = _initializer->getTexCoords();
     
     delete _initializer;
+    _initializer = NULL;
     
     _initialized = true;
   }
