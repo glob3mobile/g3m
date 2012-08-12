@@ -312,12 +312,12 @@
   Downloader* downloaderOLD = new Downloader(fss, 5, factory->createNetwork());
   const bool cleanCache = false;
   IDownloader* downloader = new Downloader_iOS(4 * 1024 * 1024,
-                                               256 * 1024 * 1024,
+                                               512 * 1024 * 1024,
                                                ".G3M_Cache",
-                                               8,
+                                               16,
                                                cleanCache);
   
-  if (true) {
+  if (false) {
     
     class Listener : public IDownloadListener {
       void onDownload(const Response* response) {
@@ -388,34 +388,13 @@
   
   // very basic tile renderer
   if (true) {
-    TilesRenderParameters* parameters = TilesRenderParameters::createDefault(true);
+    const bool renderDebug = false;
+    TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug);
     
     TileTexturizer* texturizer = NULL;
     if (true) {
       const bool useNewTexturizer = true;
       if (useNewTexturizer) {
-        
-        Sector ancestorSector(Geodetic2D(Angle::fromDegrees(0),
-                                         Angle::fromDegrees(0)),
-                              Geodetic2D(Angle::fromDegrees(100),
-                                         Angle::fromDegrees(100)));
-        
-        Sector tileSector(Geodetic2D(Angle::fromDegrees(0),
-                                     Angle::fromDegrees(0)),
-                          Geodetic2D(Angle::fromDegrees(50),
-                                     Angle::fromDegrees(50)));
-        
-        MutableVector2D scale       = tileSector.getScaleFactor(ancestorSector).asMutableVector2D();
-        MutableVector2D translation = tileSector.getTranslationFactor(ancestorSector).asMutableVector2D();
-        
-        logger->logInfo("ancestorSector=%s", ancestorSector.description().c_str());
-        logger->logInfo("tileSector=%s",     tileSector.description().c_str());
-        
-        logger->logInfo("scale=%s", scale.description().c_str());
-        logger->logInfo("translation=%s", translation.description().c_str());
-        
-        int ____REMOVE_PRINTS;
-        
         texturizer = new MultiLayerTileTexturizer(layerSet);
       }
       else {
