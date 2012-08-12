@@ -75,6 +75,9 @@ public:
   
   const GLTextureID getTopLevelGLTextureIDForTile(Tile* tile);
   
+  void deleteBuilder(TileKey key,
+                     TileTextureBuilder* builder);
+  
 };
 
 

@@ -314,7 +314,7 @@
   IDownloader* downloader = new Downloader_iOS(4 * 1024 * 1024,
                                                512 * 1024 * 1024,
                                                ".G3M_Cache",
-                                               16,
+                                               8,
                                                cleanCache);
   
   if (false) {

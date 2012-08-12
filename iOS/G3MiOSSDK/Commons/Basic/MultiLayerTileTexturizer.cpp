@@ -75,16 +75,6 @@ public:
     
   }
   
-  double to(double v) {
-//    while (v > 1) {
-//      v -= 1;
-//    }
-//    while (v < -1) {
-//      v += 1;
-//    }
-    return v;
-  }
-  
   void initialize() {
     // The default scale and translation are ok when (tile == _ancestor)
     if (_tile != _ancestor) {
@@ -115,15 +105,16 @@ class TileTextureBuilder {
 private:
   MultiLayerTileTexturizer* _texturizer;
   Tile*                     _tile;
+  const TileKey             _tileKey;
   std::vector<Petition*>    _petitions;
   int                       _petitionsCount;
   int                       _stepsDone;
   
-  //  const RenderContext*         _rc;
   const IFactory*  _factory;
   TexturesHandler* _texturesHandler;
   
   const TilesRenderParameters* _parameters;
+  IDownloader*                 _downloader;
   
   const Mesh* _tessellatorMesh;
   
@@ -131,7 +122,6 @@ private:
   
   
   std::vector<PetitionStatus>    _status;
-  //  std::vector<ByteBuffer*> _buffers;
   std::vector<long>              _requestsIds;
   
   LeveledTexturedMesh* _mesh;
@@ -153,7 +143,9 @@ public:
   _factory(rc->getFactory()),
   _texturesHandler(rc->getTexturesHandler()),
   _parameters(parameters),
+  _downloader(downloader),
   _tile(tile),
+  _tileKey(tile->getKey()),
   _tessellatorMesh(tessellatorMesh),
   _stepsDone(0),
   _anyCanceled(false),
@@ -171,7 +163,6 @@ public:
     
     for (int i = 0; i < _petitionsCount; i++) {
       _status.push_back(STATUS_PENDING);
-      //      _buffers.push_back(NULL);
     }
     
     for (int i = 0; i < _petitionsCount; i++) {
@@ -187,6 +178,10 @@ public:
     
   }
   
+  ~TileTextureBuilder() {
+    deletePetitions();
+  }
+  
   Rectangle* getImageRectangleInTexture(const Sector& wholeSector,
                                         const Sector& imageSector,
                                         int textureWidth,
@@ -200,14 +195,6 @@ public:
                          (1.0 - pos.y()) * textureHeight,
                          width * textureWidth,
                          height * textureHeight);
-
-//    const Vector2D lowerUV = wholeSector.getUVCoordinates(imageSector.lower());
-//    const Vector2D upperUV = wholeSector.getUVCoordinates(imageSector.upper());
-//    
-//    return new Rectangle(lowerUV.x() * textureWidth,
-//                         (1.0 - lowerUV.y()) * textureHeight,
-//                         upperUV.x() * textureWidth,
-//                         (1.0 - upperUV.y()) * textureHeight);
   }
   
   void finalize() {
@@ -225,7 +212,6 @@ public:
       
       for (int i = 0; i < _petitionsCount; i++) {
         Petition* petition       = _petitions[i];
-        //        const ByteBuffer* buffer = _buffers[i];
         const ByteBuffer* buffer = petition->getByteBuffer();
         
         if (buffer != NULL) {
@@ -248,14 +234,13 @@ public:
       }
       
       if (images.size() > 0) {
-        GLTextureID glTextureID = _texturesHandler->getGLTextureId(images,
-                                                                   rectangles,
-                                                                   TextureSpec(petitionsID,
-                                                                               textureWidth,
-                                                                               textureHeight));
+        const GLTextureID glTextureID = _texturesHandler->getGLTextureId(images,
+                                                                         rectangles,
+                                                                         TextureSpec(petitionsID,
+                                                                                     textureWidth,
+                                                                                     textureHeight));
         if (glTextureID.isValid()) {
-          getMesh()->setGLTextureIDForInversedLevel(_tile->getLevel() - _parameters->_topLevel,
-                                                    glTextureID);
+          getMesh()->setGLTextureIDForLevel(0, glTextureID);
         }
       }
       
@@ -306,21 +291,29 @@ public:
     }
   }
   
-  void cancel() {
-    _canceled = true;
-    
-    checkHasToLive();
-  }
-  
   void checkHasToLive() {
     if (_canceled && _finalized) {
       deletePetitions();
       
-      delete this;
+      _texturizer->deleteBuilder(_tileKey, this);
     }
-    
   }
-  
+
+  void cancel() {
+    _canceled = true;
+    
+    if (!_finalized) {
+      int __testing_requests_cancelation;
+      for (int i = 0; i < _requestsIds.size(); i++) {
+        const long requestId = _requestsIds[i];
+        _downloader->cancelRequest(requestId);
+      }
+    }
+    _requestsIds.clear();
+    
+    checkHasToLive();
+  }
+    
   void checkIsPending(int position) const {
     if (_status[position] != STATUS_PENDING) {
       printf("Logic error: Expected STATUS_PENDING at position #%d but found status: %d\n",
@@ -334,7 +327,6 @@ public:
     checkIsPending(position);
     
     _status[position]  = STATUS_DOWNLOADED;
-    //    _buffers[position] = buffer;
     _petitions[position]->setByteBuffer(buffer->copy());
     
     stepDone();
@@ -451,6 +443,9 @@ Mesh* MultiLayerTileTexturizer::texturize(const RenderContext* rc,
     builder = new TileTextureBuilder(this, rc, _layerSet, _parameters, _downloader, tile, tessellatorMesh, getTextureCoordinates(trc));
     _builders[key] = builder;
   }
+  else {
+    printf("please break (point) me\n");
+  }
   
   int ___new_texturizer_dgd_at_work;
   
@@ -464,13 +459,31 @@ void MultiLayerTileTexturizer::tileToBeDeleted(Tile* tile,
   const TileKey key = tile->getKey();
   
   TileTextureBuilder* builder = _builders[key];
-  if (builder == NULL) {
-    return;
+  if (builder != NULL) {
+    builder->cancel();
+    _builders.erase(key);
+    
+    int __TODO_delete_builder;
+//    delete builder;
   }
-  
-  _builders.erase(key);
-//  _builders[key] = NULL;
-  builder->cancel();
+}
+
+void MultiLayerTileTexturizer::deleteBuilder(TileKey key,
+                                             TileTextureBuilder* builder) {
+  TileTextureBuilder* currentBuilder = _builders[key];
+  if (currentBuilder == NULL) {
+    printf("break (point) me\n");
+  }
+  else {
+    if (builder == currentBuilder) {
+      _builders.erase(key);
+//      delete builder;
+    }
+    else {
+      printf("break (point) me\n");
+    }
+  }
+
 }
 
 const GLTextureID MultiLayerTileTexturizer::getTopLevelGLTextureIDForTile(Tile* tile) {

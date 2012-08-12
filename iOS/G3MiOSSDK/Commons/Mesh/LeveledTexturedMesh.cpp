@@ -110,13 +110,9 @@ LazyTextureMapping* LeveledTexturedMesh::getCurrentTextureMapping() const {
 }
 
 const GLTextureID LeveledTexturedMesh::getTopLevelGLTextureIDForTile() const {
-//  const LazyTextureMapping* mapping = getCurrentTextureMapping();
-//  
-//  return (mapping == NULL) ? GLTextureID::invalid() : mapping->getGLTextureID();
-
   const LazyTextureMapping* mapping = getCurrentTextureMapping();
   if (mapping != NULL) {
-    if (_currentLevelIsValid && _currentLevel == 0) {
+    if (_currentLevel == 0) {
       return mapping->getGLTextureID();
     }
   }
@@ -138,8 +134,6 @@ void LeveledTexturedMesh::render(const RenderContext* rc) const {
     gl->enableTexture2D();
     
     mapping->bind(rc);
-    
-//    gl->enableVertexFlatColor(1, 0, 0, 1, (float)0.7);
     
     _mesh->render(rc);
     
