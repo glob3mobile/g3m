@@ -48,9 +48,9 @@ ByteBuffer* FileSystemStorage::read(std::string url)
   }
   
   NSUInteger length = [readData length];
-  
   unsigned char* data = new unsigned char[length];
-  [readData getBytes:data length:length ];
+  [readData getBytes: data
+              length: length];
   
   return new ByteBuffer(data, length);
 }

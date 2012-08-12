@@ -29,13 +29,18 @@ Downloader_iOS::~Downloader_iOS() {
 Downloader_iOS::Downloader_iOS(int memoryCapacity,
                                int diskCapacity,
                                std::string diskPath,
-                               int maxConcurrentOperationCount) :
+                               int maxConcurrentOperationCount,
+                               bool cleanCache) :
 _requestIdCounter(0)
 {
   _cache = [[NSURLCache alloc] initWithMemoryCapacity: memoryCapacity
                                          diskCapacity: diskCapacity
                                              diskPath: toNSString(diskPath)];
   [NSURLCache setSharedURLCache:_cache];
+  
+  if (cleanCache) {
+    [_cache removeAllCachedResponses];
+  }
   
   _downloadingHandlers = [NSMutableDictionary dictionary];
   _queuedHandlers      = [NSMutableDictionary dictionary];
@@ -162,7 +167,8 @@ long Downloader_iOS::request(const URL &url,
     NSData* data = [response data];
     const int length = [data length];
     unsigned char *bytes = new unsigned char[ length ]; // will be deleted by ByteBuffer's destructor
-    [data getBytes:bytes length: length];
+    [data getBytes: bytes
+            length: length];
     
     ByteBuffer* buffer = new ByteBuffer(bytes, length);
     Response response(url, buffer);

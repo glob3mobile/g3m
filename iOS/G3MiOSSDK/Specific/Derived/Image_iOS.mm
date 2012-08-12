@@ -118,7 +118,8 @@ ByteBuffer* Image_iOS::getEncodedImage() const
   NSUInteger length = [readData length];
   
   unsigned char* data = new unsigned char[length];
-  [readData getBytes:data length:length ];
+  [readData getBytes: data
+              length: length];
   
   return new ByteBuffer(data, length);
 }

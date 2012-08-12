@@ -62,7 +62,8 @@
     NSData* data = [op downloadData];
     int length = [data length];
     unsigned char *bytes = new unsigned char[ length ]; // will be deleted by ByteBuffer's destructor
-    [data getBytes:bytes length: length];
+    [data getBytes: bytes
+            length: length];
     
     ByteBuffer bb(bytes, length);
     //std::string resp = (char*)bb.getData();

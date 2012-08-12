@@ -196,7 +196,8 @@
       if (data && statusCode == 200) {
         const int length = [data length];
         unsigned char *bytes = new unsigned char[ length ]; // will be deleted by ByteBuffer's destructor
-        [data getBytes:bytes length: length];
+        [data getBytes: bytes
+                length: length];
         ByteBuffer* buffer = new ByteBuffer(bytes, length);
         
         Response* response = new Response(url, buffer);

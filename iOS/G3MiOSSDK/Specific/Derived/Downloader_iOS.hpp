@@ -40,7 +40,8 @@ public:
   Downloader_iOS(int memoryCapacity,
                  int diskCapacity,
                  std::string diskPath,
-                 int maxConcurrentOperationCount);
+                 int maxConcurrentOperationCount,
+                 bool cleanCache);
   
   long request(const URL& url,
                long priority,
