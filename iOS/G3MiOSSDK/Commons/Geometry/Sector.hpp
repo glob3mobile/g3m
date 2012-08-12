@@ -55,8 +55,8 @@ public:
   _upper(upper),
   _deltaLatitude(upper.latitude().sub(lower.latitude())),
   _deltaLongitude(upper.longitude().sub(lower.longitude())),
-  _center(Angle::midAngle(_lower.latitude(), _upper.latitude()),
-          Angle::midAngle(_lower.longitude(), _upper.longitude()))
+  _center(Angle::midAngle(lower.latitude(), upper.latitude()),
+          Angle::midAngle(lower.longitude(), upper.longitude()))
   {
   }
 
@@ -71,23 +71,21 @@ public:
   }
   
   static Sector fromDegrees(double minLat, double minLon, double maxLat, double maxLon){
-    Geodetic2D lower(Angle::fromDegrees(minLat), Angle::fromDegrees(minLon));
-    Geodetic2D upper(Angle::fromDegrees(maxLat), Angle::fromDegrees(maxLon));
-    Sector s(lower, upper);
-    return s;
+    const Geodetic2D lower(Angle::fromDegrees(minLat), Angle::fromDegrees(minLon));
+    const Geodetic2D upper(Angle::fromDegrees(maxLat), Angle::fromDegrees(maxLon));
+    
+    return Sector(lower, upper);
   }
 
-  Vector2D getScaleFactor(const Sector& s) const
-  {
-    const double u = _deltaLatitude.div(s._deltaLatitude);
-    const double v = _deltaLongitude.div(s._deltaLongitude);
-    return Vector2D(u,v);
+  Vector2D getScaleFactor(const Sector& that) const {
+    const double u = _deltaLatitude.div(that._deltaLatitude);
+    const double v = _deltaLongitude.div(that._deltaLongitude);
+    return Vector2D(u, v);
   }
   
-  Vector2D getTranslationFactor(const Sector& s) const
-  {
-    const double diff = _deltaLongitude.div(s._deltaLongitude);
-    const Vector2D uv = s.getUVCoordinates(_lower);
+  Vector2D getTranslationFactor(const Sector& that) const {
+    const double diff = _deltaLongitude.div(that._deltaLongitude);
+    const Vector2D uv = that.getUVCoordinates(_lower);
     
     return Vector2D(uv.x(), uv.y() - diff);
   }
@@ -119,39 +117,39 @@ public:
   
   bool touchesWith(const Sector& that) const;
   
-  Angle getDeltaLatitude() const {
+  const Angle getDeltaLatitude() const {
     return _deltaLatitude;
   }
   
-  Angle getDeltaLongitude() const {
+  const Angle getDeltaLongitude() const {
     return _deltaLongitude;
   }
   
-  Geodetic2D getSW() const {
+  const Geodetic2D getSW() const {
     return _lower;
   }
   
-  Geodetic2D getNE() const {
+  const Geodetic2D getNE() const {
     return _upper;
   }
   
-  Geodetic2D getNW() const {
+  const Geodetic2D getNW() const {
     return Geodetic2D(_upper.latitude(), _lower.longitude());
   }
   
-  Geodetic2D getSE() const {
+  const Geodetic2D getSE() const {
     return Geodetic2D(_lower.latitude(), _upper.longitude());
   }
   
-  Geodetic2D getCenter() const {
+  const Geodetic2D getCenter() const {
     return _center;
   }
   
   // (u,v) are similar to texture coordinates inside the Sector
   // (u,v)=(0,0) in NW point, and (1,1) in SE point
-  Geodetic2D getInnerPoint(double u, double v) const;
+  const Geodetic2D getInnerPoint(double u, double v) const;
   
-  Vector2D getUVCoordinates(const Geodetic2D& point) const {
+  const Vector2D getUVCoordinates(const Geodetic2D& point) const {
     return getUVCoordinates(point.latitude(), point.longitude());
   }
 
@@ -164,10 +162,11 @@ public:
   
   bool isBackOriented(const RenderContext *rc);
   
-  Geodetic2D getClosestPoint(const Geodetic2D& pos) const;
+  const Geodetic2D getClosestPoint(const Geodetic2D& pos) const;
   
-  Geodetic2D getApproximatedClosestPoint(const Geodetic2D& pos) const;
+  const Geodetic2D getApproximatedClosestPoint(const Geodetic2D& pos) const;
   
+  const std::string description() const;
 };
 
 

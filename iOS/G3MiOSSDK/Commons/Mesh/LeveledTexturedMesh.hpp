@@ -21,13 +21,13 @@ public:
   virtual ~LazyTextureMappingInitializer() {
   }
   
-  virtual void calculate() = 0;
+  virtual void initialize() = 0;
   
-  virtual MutableVector2D getScale() const = 0;
+  virtual const MutableVector2D getScale() const = 0;
   
-  virtual MutableVector2D getTranslation() const = 0;
+  virtual const MutableVector2D getTranslation() const = 0;
   
-  virtual float const*    getTexCoords() const = 0;
+  virtual float const* getTexCoords() const = 0;
   
 };
 
@@ -89,6 +89,7 @@ public:
   bool setGLTextureID(const GLTextureID glTextureId) {
     const bool change = !_glTextureId.isEqualsTo(glTextureId);
     if (change) {
+      releaseGLTextureId();
       _glTextureId = glTextureId;
     }
     return change;
@@ -144,10 +145,13 @@ public:
   
   Extent* getExtent() const;
 
+  void setGLTextureIDForLevel(int level,
+                              const GLTextureID glTextureID);
+  
   void setGLTextureIDForInversedLevel(int inversedLevel,
                                       const GLTextureID glTextureID);
   
-  const GLTextureID getGLTextureID() const;
+  const GLTextureID getTopLevelGLTextureIDForTile() const;
 
 };
 

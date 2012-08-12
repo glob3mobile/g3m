@@ -11,6 +11,8 @@
 
 #include "Angle.hpp"
 
+#include <string>
+
 /**
  * Class to represent a position in the globe by latitude, longitud and altitude.
  */
@@ -56,6 +58,9 @@ public:
     }
     return _longitude.lowerThan(that._longitude);
   }
+  
+  const std::string description() const;
+
 };
 
 

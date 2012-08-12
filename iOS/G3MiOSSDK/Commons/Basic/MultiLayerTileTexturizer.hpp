@@ -73,7 +73,7 @@ public:
                                      Tile* ancestorTile,
                                      bool textureSolved);
   
-  const GLTextureID getGLTextureIDForTile(Tile* tile);
+  const GLTextureID getTopLevelGLTextureIDForTile(Tile* tile);
   
 };
 

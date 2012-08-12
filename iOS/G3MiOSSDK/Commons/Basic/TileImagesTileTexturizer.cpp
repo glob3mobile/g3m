@@ -118,7 +118,6 @@ Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
         fbTMap = (SimpleTextureMapping*) texMesh->getTextureMapping();
         texID = fbTMap->getGLTextureID();
         if (texID.isValid()) {
-          _texturesHandler->retainGLTextureId(texID);
           break;
         }
       }
@@ -128,6 +127,8 @@ Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
   
   //CREATING MESH
   if (texID.isValid()) {
+    _texturesHandler->retainGLTextureId(texID);
+
     SimpleTextureMapping* tMap = new SimpleTextureMapping(texID,
                                                           getTextureCoordinates(trc),
                                                           false);

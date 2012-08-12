@@ -7,3 +7,15 @@
 //
 
 #include "MutableVector2D.hpp"
+
+#include <sstream>
+
+const std::string MutableVector2D::description() const {
+  std::ostringstream buffer;
+  buffer << "(MV2D ";
+  buffer << _x;
+  buffer << ", ";
+  buffer << _y;
+  buffer << ")";
+  return buffer.str();
+}

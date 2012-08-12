@@ -82,7 +82,7 @@ public:
     return (_height < that._height);
   }
   
-  std::string description() const;
+  const std::string description() const;
   
 #ifdef C_CODE
   bool operator<(const TextureSpec& that) const {

@@ -41,7 +41,7 @@ public:
     return _textureId;
   }
   
-  std::string description() const;
+  const std::string description() const;
   
   bool isEqualsTo(const GLTextureID& that) const {
     return (_textureId == that._textureId);

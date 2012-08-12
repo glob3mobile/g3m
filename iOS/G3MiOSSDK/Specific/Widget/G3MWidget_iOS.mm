@@ -394,6 +394,28 @@
     if (true) {
       const bool useNewTexturizer = true;
       if (useNewTexturizer) {
+        
+        Sector ancestorSector(Geodetic2D(Angle::fromDegrees(0),
+                                         Angle::fromDegrees(0)),
+                              Geodetic2D(Angle::fromDegrees(100),
+                                         Angle::fromDegrees(100)));
+        
+        Sector tileSector(Geodetic2D(Angle::fromDegrees(0),
+                                     Angle::fromDegrees(0)),
+                          Geodetic2D(Angle::fromDegrees(50),
+                                     Angle::fromDegrees(50)));
+        
+        MutableVector2D scale       = tileSector.getScaleFactor(ancestorSector).asMutableVector2D();
+        MutableVector2D translation = tileSector.getTranslationFactor(ancestorSector).asMutableVector2D();
+        
+        logger->logInfo("ancestorSector=%s", ancestorSector.description().c_str());
+        logger->logInfo("tileSector=%s",     tileSector.description().c_str());
+        
+        logger->logInfo("scale=%s", scale.description().c_str());
+        logger->logInfo("translation=%s", translation.description().c_str());
+        
+        int ____REMOVE_PRINTS;
+        
         texturizer = new MultiLayerTileTexturizer(layerSet);
       }
       else {

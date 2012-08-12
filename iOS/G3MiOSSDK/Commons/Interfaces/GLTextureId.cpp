@@ -10,7 +10,7 @@
 
 #include <sstream>
 
-std::string GLTextureID::description() const {
+const std::string GLTextureID::description() const {
   std::ostringstream buffer;
   buffer << "GLTextureID #";
   buffer << _textureId;

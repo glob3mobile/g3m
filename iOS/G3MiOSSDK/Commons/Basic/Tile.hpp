@@ -109,7 +109,7 @@ public:
   ~Tile();
   
   
-  Sector getSector() const {
+  const Sector getSector() const {
     return _sector;
   }
   

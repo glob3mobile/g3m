@@ -8,6 +8,7 @@
 
 #include "Angle.hpp"
 
+#include <sstream>
 
 Angle Angle::clampedTo(const Angle& min,
                        const Angle& max) const {
@@ -47,4 +48,11 @@ Angle Angle::nearestAngleInInterval(const Angle& min,
   const Angle dif0 = distanceTo(min);
   const Angle dif1 = distanceTo(max);
   return (dif0.lowerThan(dif1))? min : max;
+}
+
+const std::string Angle::description() const {
+  std::ostringstream buffer;
+  buffer << _degrees;
+  buffer << "°";
+  return buffer.str();
 }

@@ -90,6 +90,8 @@ public:
     return _y;
   }
   
+  const std::string description() const;
+  
 };
 
 

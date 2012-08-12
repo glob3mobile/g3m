@@ -13,7 +13,7 @@
 
 #include <sstream>
 
-std::string TextureSpec::description() const {
+const std::string TextureSpec::description() const {
   std::ostringstream buffer;
   buffer << "(";
   buffer << _id;

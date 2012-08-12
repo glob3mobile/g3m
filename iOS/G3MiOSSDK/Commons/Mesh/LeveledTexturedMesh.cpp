@@ -16,7 +16,7 @@
 
 void LazyTextureMapping::bind(const RenderContext* rc) const {
   if (!_initialized) {
-    _initializer->calculate();
+    _initializer->initialize();
     
     _scale       = _initializer->getScale();
     _translation = _initializer->getTranslation();
@@ -109,10 +109,19 @@ LazyTextureMapping* LeveledTexturedMesh::getCurrentTextureMapping() const {
   return _currentLevelIsValid ? _mappings->at(_currentLevel) : NULL;
 }
 
-const GLTextureID LeveledTexturedMesh::getGLTextureID() const {
+const GLTextureID LeveledTexturedMesh::getTopLevelGLTextureIDForTile() const {
+//  const LazyTextureMapping* mapping = getCurrentTextureMapping();
+//  
+//  return (mapping == NULL) ? GLTextureID::invalid() : mapping->getGLTextureID();
+
   const LazyTextureMapping* mapping = getCurrentTextureMapping();
+  if (mapping != NULL) {
+    if (_currentLevelIsValid && _currentLevel == 0) {
+      return mapping->getGLTextureID();
+    }
+  }
   
-  return (mapping == NULL) ? GLTextureID::invalid() : mapping->getGLTextureID();
+  return GLTextureID::invalid();
 }
 
 
@@ -130,6 +139,8 @@ void LeveledTexturedMesh::render(const RenderContext* rc) const {
     
     mapping->bind(rc);
     
+//    gl->enableVertexFlatColor(1, 0, 0, 1, (float)0.7);
+    
     _mesh->render(rc);
     
     gl->disableTexture2D();
@@ -137,20 +148,19 @@ void LeveledTexturedMesh::render(const RenderContext* rc) const {
   }
 }
 
-void LeveledTexturedMesh::setGLTextureIDForInversedLevel(int inversedLevel,
-                                                         const GLTextureID glTextureID) {
-  int __XXXX;
-  
-  if (!glTextureID.isValid()) {
-    return;
-  }
-  
-  int level = _mappings->size() - inversedLevel - 1;
-  
-  if (!_currentLevelIsValid || (level < _currentLevel)) {
-    if (_mappings->at(level)->setGLTextureID(glTextureID)) {
-      _currentLevelIsValid = false;
+void LeveledTexturedMesh::setGLTextureIDForLevel(int level,
+                                                 const GLTextureID glTextureID) {
+  if (glTextureID.isValid()) {
+    if (!_currentLevelIsValid || (level < _currentLevel)) {
+      if (_mappings->at(level)->setGLTextureID(glTextureID)) {
+        _currentLevelIsValid = false;
+      }
     }
   }
-  
+}
+
+void LeveledTexturedMesh::setGLTextureIDForInversedLevel(int inversedLevel,
+                                                         const GLTextureID glTextureID) {
+  const int level = _mappings->size() - inversedLevel - 1;
+  setGLTextureIDForLevel(level, glTextureID);
 }

@@ -14,6 +14,7 @@
 #define THRESHOLD               1e-5
 #define ISBETWEEN_THRESHOLD     1e-2
 
+#include <string>
 
 
 class Angle {
@@ -126,6 +127,8 @@ public:
   
   Angle distanceTo(const Angle& other) const;
   
+  const std::string description() const;
+
 };
 
 #endif

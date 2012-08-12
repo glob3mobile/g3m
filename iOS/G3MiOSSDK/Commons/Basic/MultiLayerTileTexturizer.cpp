@@ -75,22 +75,32 @@ public:
     
   }
   
-  void calculate() {
+  double to(double v) {
+//    while (v > 1) {
+//      v -= 1;
+//    }
+//    while (v < -1) {
+//      v += 1;
+//    }
+    return v;
+  }
+  
+  void initialize() {
     // The default scale and translation are ok when (tile == _ancestor)
     if (_tile != _ancestor) {
       const Sector tileSector     = _tile->getSector();
       const Sector ancestorSector = _ancestor->getSector();
-      
+
       _scale       = tileSector.getScaleFactor(ancestorSector).asMutableVector2D();
       _translation = tileSector.getTranslationFactor(ancestorSector).asMutableVector2D();
     }
   }
   
-  MutableVector2D getScale() const {
+  const MutableVector2D getScale() const {
     return _scale;
   }
   
-  MutableVector2D getTranslation() const {
+  const MutableVector2D getTranslation() const {
     return _translation;
   }
   
@@ -349,17 +359,22 @@ public:
     bool fallbackSolved = false;
     while (ancestor != NULL) {
       int __TODO_look_for_ancestor_texture;
-
       
-      LazyTextureMapping* mapping = new LazyTextureMapping(new LTMInitializer(_tile,
-                                                                              ancestor,
-                                                                              _texCoords),
-                                                           _texturesHandler,
-                                                           false);
+      LazyTextureMapping* mapping;
+      if (fallbackSolved) {
+        mapping = NULL;
+      }
+      else {
+        mapping = new LazyTextureMapping(new LTMInitializer(_tile,
+                                                            ancestor,
+                                                            _texCoords),
+                                         _texturesHandler,
+                                         false);
+      }
       
       if (ancestor != _tile) {
         if (!fallbackSolved) {
-          const GLTextureID glTextureId = _texturizer->getGLTextureIDForTile(ancestor);
+          const GLTextureID glTextureId = _texturizer->getTopLevelGLTextureIDForTile(ancestor);
           if (glTextureId.isValid()) {
             _texturesHandler->retainGLTextureId(glTextureId);
             mapping->setGLTextureID(glTextureId);
@@ -367,9 +382,13 @@ public:
           }
         }
       }
-
+      
       mappings->push_back(mapping);
       ancestor = ancestor->getParent();
+    }
+    
+    if (mappings->size() != _tile->getLevel() + 1) {
+      printf("pleae break (point) me\n");
     }
     
     return new LeveledTexturedMesh(_tessellatorMesh,
@@ -377,8 +396,8 @@ public:
                                    mappings);
   }
   
-  const GLTextureID getGLTextureID() const {
-    return (_mesh == NULL) ? GLTextureID::invalid() : _mesh->getGLTextureID();
+  const GLTextureID getTopLevelGLTextureIDForTile() const {
+    return (_mesh == NULL) ? GLTextureID::invalid() : _mesh->getTopLevelGLTextureIDForTile();
   }
   
   LeveledTexturedMesh* getMesh() {
@@ -454,12 +473,12 @@ void MultiLayerTileTexturizer::tileToBeDeleted(Tile* tile,
   builder->cancel();
 }
 
-const GLTextureID MultiLayerTileTexturizer::getGLTextureIDForTile(Tile* tile) {
+const GLTextureID MultiLayerTileTexturizer::getTopLevelGLTextureIDForTile(Tile* tile) {
   const TileKey key = tile->getKey();
 
   const TileTextureBuilder* builder = _builders[key];
   
-  return (builder == NULL) ? GLTextureID::invalid() : builder->getGLTextureID();
+  return (builder == NULL) ? GLTextureID::invalid() : builder->getTopLevelGLTextureIDForTile();
 }
 
 bool MultiLayerTileTexturizer::tileMeetsRenderCriteria(Tile* tile) {

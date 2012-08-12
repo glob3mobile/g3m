@@ -8,6 +8,8 @@
 
 #include "Geodetic2D.hpp"
 
+#include <sstream>
+
 bool Geodetic2D::isBetween(const Geodetic2D& min,
                            const Geodetic2D& max) const {
   return
@@ -21,4 +23,15 @@ bool Geodetic2D::closeTo(const Geodetic2D &other) const {
   }
   
   return _longitude.closeTo(other._longitude);
+}
+
+
+const std::string Geodetic2D::description() const {
+  std::ostringstream buffer;
+  buffer << "(lat=";
+  buffer << _latitude.description();
+  buffer << ", lon=";
+  buffer << _longitude.description();
+  buffer << ")";
+  return buffer.str();
 }
