@@ -32,15 +32,22 @@ private:
   mutable float* _texCoordsCache;
 
   float* getTextureCoordinates(const TileRenderContext* trc) const;
+  
+  long _pendingTopTileRequests;
 
 public:
   MultiLayerTileTexturizer(LayerSet* layerSet) :
   _layerSet(layerSet),
   _downloader(0),
   _parameters(0),
-  _texCoordsCache(NULL)
+  _texCoordsCache(NULL),
+  _pendingTopTileRequests(0)
   {
     
+  }
+  
+  void countTopTileRequest() {
+    _pendingTopTileRequests--;
   }
   
   virtual ~MultiLayerTileTexturizer() {

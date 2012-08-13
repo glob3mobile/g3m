@@ -9,6 +9,8 @@
 #ifndef __G3MiOSSDK__TileKey__
 #define __G3MiOSSDK__TileKey__
 
+#include <string>
+
 
 class TileKey {
 private:
@@ -67,6 +69,9 @@ public:
 //    return (_column < that._column);
     return (_row < that._row);
   }
+  
+  const std::string description() const;
+  
 };
 
 #endif

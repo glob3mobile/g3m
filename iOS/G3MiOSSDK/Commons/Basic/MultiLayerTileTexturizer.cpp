@@ -431,15 +431,6 @@ void MultiLayerTileTexturizer::initialize(const InitializationContext* ic,
   _parameters = parameters;
 }
 
-void MultiLayerTileTexturizer::justCreatedTopTile(const RenderContext* rc,
-                                                  Tile* tile) {
-  
-}
-
-bool MultiLayerTileTexturizer::isReady(const RenderContext *rc) {
-  return true;
-}
-
 Mesh* MultiLayerTileTexturizer::texturize(const RenderContext* rc,
                                           const TileRenderContext* trc,
                                           Tile* tile,
@@ -535,4 +526,59 @@ float* MultiLayerTileTexturizer::getTextureCoordinates(const TileRenderContext* 
     _texCoordsCache = texCoordsA;
   }
   return _texCoordsCache;
+}
+
+class TopTileDownloadListener : public IDownloadListener {
+private:
+  MultiLayerTileTexturizer* _texturizer;
+  
+public:
+  TopTileDownloadListener(MultiLayerTileTexturizer* texturizer) :
+  _texturizer(texturizer)
+  {
+    
+  }
+  
+  void onDownload(const Response* response) {
+    _texturizer->countTopTileRequest();
+  }
+  
+  void onError(const Response* response) {
+    _texturizer->countTopTileRequest();
+  }
+  
+  void onCancel(const URL* url) {
+    _texturizer->countTopTileRequest();
+  }
+
+};
+
+void MultiLayerTileTexturizer::justCreatedTopTile(const RenderContext* rc,
+                                                  Tile* tile) {
+  printf("JustCreatedTopTile=%s\n", tile->getKey().description().c_str());
+  
+  std::vector<Petition*> petitions = _layerSet->createTilePetitions(rc,
+                                                                    tile,
+                                                                    _parameters->_tileTextureWidth,
+                                                                    _parameters->_tileTextureHeight);
+
+  
+  _pendingTopTileRequests += petitions.size();
+  
+  const long priority = 1000000000;
+  for (int i = 0; i < petitions.size(); i++) {
+    const Petition* petition = petitions[i];
+    _downloader->request(URL(petition->getURL()),
+                         priority,
+                         new TopTileDownloadListener(this),
+                         true);
+    
+    delete petition;
+  }
+}
+
+bool MultiLayerTileTexturizer::isReady(const RenderContext *rc) {
+  const bool isReady = _pendingTopTileRequests <= 0;
+//  printf("MultiLayerTileTexturizer::isReady(%d)\n", isReady);
+  return isReady;
 }

@@ -7,3 +7,17 @@
 //
 
 #include "TileKey.hpp"
+
+#include <sstream>
+
+const std::string TileKey::description() const {
+  std::ostringstream buffer;
+  buffer << "(level=";
+  buffer << _level;
+  buffer << ", row=";
+  buffer << _row;
+  buffer << ", col=";
+  buffer << _column;
+  buffer << ")";
+  return buffer.str();
+}

@@ -345,6 +345,7 @@
     downloader->cancelRequest(requestId);
   }
 
+  
   //LAYERS
   LayerSet* layerSet = new LayerSet();
   
@@ -369,7 +370,7 @@
                                 true,
                                 Angle::nan(),
                                 Angle::nan());
-  
+
   WMSLayer *pnoa = new WMSLayer("PNOA",
                                 "http://www.idee.es/wms/PNOA/PNOA",
                                 "1.1.0",
@@ -388,7 +389,7 @@
   
   // very basic tile renderer
   if (true) {
-    const bool renderDebug = false;
+    const bool renderDebug = true;
     TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug);
     
     TileTexturizer* texturizer = NULL;

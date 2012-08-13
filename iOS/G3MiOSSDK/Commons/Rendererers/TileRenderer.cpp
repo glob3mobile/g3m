@@ -79,6 +79,27 @@ void TileRenderer::initialize(const InitializationContext* ic) {
 }
 
 bool TileRenderer::isReadyToRender(const RenderContext *rc) {
+  if (_topTilesJustCreated) {
+    const int topLevelTilesSize = _topLevelTiles.size();
+    
+    DistanceToCenterTileComparison predicate = DistanceToCenterTileComparison(rc->getNextCamera(),
+                                                                              rc->getPlanet());
+    
+    predicate.initialize();
+    std::sort(_topLevelTiles.begin(),
+              _topLevelTiles.end(),
+              predicate);
+    
+    if (_texturizer != NULL) {
+      for (int i = 0; i < topLevelTilesSize; i++) {
+        Tile* tile = _topLevelTiles[i];
+        _texturizer->justCreatedTopTile(rc, tile);
+      }
+    }
+    _topTilesJustCreated = false;
+  }
+  
+  
   if (_tessellator != NULL) {
     if (!_tessellator->isReadyToRender(rc)) {
       return false;
@@ -96,26 +117,6 @@ bool TileRenderer::isReadyToRender(const RenderContext *rc) {
 
 int TileRenderer::render(const RenderContext* rc) {
   TilesStatistics statistics;
-  
-  const int topLevelTilesSize = _topLevelTiles.size();
-
-  if (_topTilesJustCreated) {
-    DistanceToCenterTileComparison predicate = DistanceToCenterTileComparison(rc->getNextCamera(),
-                                                                              rc->getPlanet());
-    
-    predicate.initialize();
-    std::sort(_topLevelTiles.begin(),
-              _topLevelTiles.end(),
-              predicate);
-    
-    if (_texturizer != NULL) {
-      for (int i = 0; i < topLevelTilesSize; i++) {
-        Tile* tile = _topLevelTiles[i];
-        _texturizer->justCreatedTopTile(rc, tile);
-      }
-    }
-    _topTilesJustCreated = false;
-  }
   
 //  DistanceToCenterTileComparison predicate = DistanceToCenterTileComparison(rc->getNextCamera(),
 //                                                                            rc->getPlanet());
