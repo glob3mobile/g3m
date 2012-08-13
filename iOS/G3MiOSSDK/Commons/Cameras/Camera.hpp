@@ -24,16 +24,16 @@ class ILogger;
 
 class CameraDirtyFlags {
 public:
-  bool _frustumData;
-  bool _projectionMatrix;
-  bool _modelMatrix;
-  bool _modelViewMatrix;
-  bool _XYZCenterOfView;
-  bool _geodeticCenterOfView;
-  bool _frustum;
-  bool _frustumMC;
-  bool _halfFrustum;
-  bool _halfFrustumMC;
+  mutable bool _frustumData;
+  mutable bool _projectionMatrix;
+  mutable bool _modelMatrix;
+  mutable bool _modelViewMatrix;
+  mutable bool _XYZCenterOfView;
+  mutable bool _geodeticCenterOfView;
+  mutable bool _frustum;
+  mutable bool _frustumMC;
+  mutable bool _halfFrustum;
+  mutable bool _halfFrustumMC;
   
   
   CameraDirtyFlags() {
@@ -129,11 +129,11 @@ public:
   
   void render(const RenderContext* rc);
   
-  Vector3D pixel2Ray(const Vector2D& pixel);
+  Vector3D pixel2Ray(const Vector2D& pixel) const;
   
-  Vector3D pixel2PlanetPoint(const Vector2D& pixel);
+  Vector3D pixel2PlanetPoint(const Vector2D& pixel) const;
   
-  Vector2D point2Pixel(const Vector3D& point);
+  Vector2D point2Pixel(const Vector3D& point) const;
   
   int getWidth() const { return _width; }
   int getHeight() const { return _height; }
@@ -191,15 +191,15 @@ private:
   
   const ILogger* _logger;
   
-  CameraDirtyFlags _dirtyFlags;
+  mutable CameraDirtyFlags _dirtyFlags;
   
   void applyTransform(const MutableMatrix44D& mat);
 
   Vector3D centerOfViewOnPlanet() const;
   
   // data to compute frustum
-  FrustumData _frustumData;                 
-  FrustumData getFrustumData() {
+  mutable FrustumData _frustumData;                 
+  FrustumData getFrustumData() const {
     if (_dirtyFlags._frustumData) {
       _dirtyFlags._frustumData = false;
       _frustumData = calculateFrustumData();
@@ -208,8 +208,8 @@ private:
   }
   
   // opengl projection matrix 
-  MutableMatrix44D _projectionMatrix;       
-  MutableMatrix44D getProjectionMatrix() {
+  mutable MutableMatrix44D _projectionMatrix;       
+  MutableMatrix44D getProjectionMatrix() const{
     if (_dirtyFlags._projectionMatrix) {
       _dirtyFlags._projectionMatrix = false;
       _projectionMatrix = MutableMatrix44D::createProjectionMatrix(getFrustumData());
@@ -218,8 +218,8 @@ private:
   }
   
   // Model matrix, computed in CPU in double precision
-  MutableMatrix44D _modelMatrix;  
-  MutableMatrix44D getModelMatrix() {
+  mutable MutableMatrix44D _modelMatrix;  
+  MutableMatrix44D getModelMatrix() const {
     if (_dirtyFlags._modelMatrix) {
       _dirtyFlags._modelMatrix = false;
       _modelMatrix = MutableMatrix44D::createModelMatrix(_position, _center, _up);
@@ -228,8 +228,8 @@ private:
   }
   
   // multiplication of model * projection
-  MutableMatrix44D _modelViewMatrix;  
-  MutableMatrix44D getModelViewMatrix() {
+  mutable MutableMatrix44D _modelViewMatrix;  
+  MutableMatrix44D getModelViewMatrix() const {
     if (_dirtyFlags._modelViewMatrix) {
       _dirtyFlags._modelViewMatrix = false;
       _modelViewMatrix = getProjectionMatrix().multiply(getModelMatrix());
@@ -308,7 +308,7 @@ private:
 
   
   
-  FrustumData calculateFrustumData() {
+  FrustumData calculateFrustumData() const{
     // compute znear value
     const double maxRadius = _planet->getRadii().maxAxis();
     const double distanceToPlanetCenter = _position.length();

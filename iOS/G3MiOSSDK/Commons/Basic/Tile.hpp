@@ -10,8 +10,6 @@
 #define G3MiOSSDK_Tile_h
 
 #include "Sector.hpp"
-#include "Box.hpp"
-
 #include <list>
 
 class RenderContext;
@@ -23,6 +21,7 @@ class ITimer;
 class TilesStatistics;
 class TileRenderContext;
 class TileKey;
+class Vector3D;
 
 class Tile {
 private:
@@ -152,6 +151,8 @@ public:
   bool isTexturizerDirty() const {
     return _texturizerDirty;
   }
+  
+  Vector3D intersection(const Vector3D& origin, const Vector3D& ray) const;
 
 };
 

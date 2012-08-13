@@ -382,10 +382,26 @@
                                 Angle::nan(),
                                 Angle::nan());
   
+//  http://igosoftware.dyndns.org:8080/geoserver/igo/wms?LAYERS=igo%3Aocean_temp_1993_01_02&STYLES=&FORMAT=image%2Fpng&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG%3A4326&BBOX=-167.24786940962,-78.845880590379,64.783380590379,37.169744409621&WIDTH=660&HEIGHT=330&TRANSPARENT=true
+//  
+//  http://igosoftware.dyndns.org:8080/geoserver/igo/wms?service=WMS&version=1.1.0&request=GetMap&layers=igo:ocean_temp_1993_01_02&styles=&bbox=-180.0,-90.0,180.0,90.0&width=660&height=330&srs=EPSG:4326&format=application/openlayers
+  
+  WMSLayer *oceans = new WMSLayer("igo:ocean_temp_1993_01_02",
+                                "http://igosoftware.dyndns.org:8080/geoserver/igo/wms",
+                                "1.1.1",
+                                "image/png",
+                                Sector::fullSphere(),
+                                "EPSG:4326",
+                                "",
+                                true,
+                                Angle::nan(),
+                                Angle::nan());
+  
   //ORDER IS IMPORTANT
   layerSet->addLayer(baseLayer);
   layerSet->addLayer(pnoa);
   layerSet->addLayer(vias);
+  layerSet->addLayer(oceans);
   
   // very basic tile renderer
   if (true) {
@@ -561,16 +577,15 @@
     if ([currSysVer compare:reqSysVer options:NSNumericSearch] != NSOrderedAscending)
       _displayLinkSupported = TRUE;
     
-    /*
     //Detecting LongPress
     UILongPressGestureRecognizer *longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
-    [self addGestureRecognizer:longPressRecognizer];*/
+    longPressRecognizer.minimumPressDuration = 1.0;
+    [self addGestureRecognizer:longPressRecognizer];
   }
   return self;
 }
 
 //** Agustin cancelled lonpressgesture because touchedmoved and touchedended event don't work
-/*
 - (IBAction)handleLongPress:(UIGestureRecognizer *)sender {
 
   printf ("Longpress. state=%d\n", sender.state);
@@ -579,7 +594,18 @@
     NSLog(@"LONG PRESS");
   }
   
-}*/
+  if (sender.state == 1){
+    
+    CGPoint tapPoint = [sender locationInView:sender.view.superview];
+    
+    std::vector<const Touch*> pointers = std::vector<const Touch*>();
+    Touch *touch = new Touch(Vector2D(tapPoint.x, tapPoint.y), Vector2D(0.0, 0.0), 1);
+    pointers.push_back(touch);
+    lastTouchEvent = TouchEvent::create(LongPress, pointers);
+    ((G3MWidget*)[self widget])->onTouchEvent(lastTouchEvent);
+  }
+  
+}
 
 - (void)drawView:(id)sender {
   if (_animating) {

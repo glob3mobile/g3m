@@ -43,6 +43,8 @@ public:
     return point.dot(_normal) + _d;
   }
   
+  Vector3D intersectionWithRay(const Vector3D& origin, const Vector3D& direction) const;
+  
 private:
   const Vector3D _normal;
   const double   _d;

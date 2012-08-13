@@ -344,3 +344,9 @@ std::vector<Tile*>* Tile::createSubTiles() {
 const TileKey Tile::getKey() const {
   return TileKey(_level, _row, _column);
 }
+
+Vector3D Tile::intersection(const Vector3D& origin, const Vector3D& ray) const{
+  
+  return _tessellatorMesh->getExtent()->intersectionWithRay(origin, ray);
+  
+}

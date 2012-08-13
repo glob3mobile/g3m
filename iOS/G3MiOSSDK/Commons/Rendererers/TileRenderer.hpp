@@ -233,6 +233,7 @@ private:
   const TilesRenderParameters* _parameters;
   const bool                   _showStatistics;
   bool                         _topTilesJustCreated;
+  const Camera*                _lastCamera;
   
   std::vector<Tile*>     _topLevelTiles;
   
@@ -310,7 +311,8 @@ public:
   _lastStatistics(),
   _topTilesJustCreated(false),
   _lastSplitTimer(NULL),
-  _lastTexturizerTimer(NULL)
+  _lastTexturizerTimer(NULL),
+  _lastCamera(NULL)
   {
     
   }
@@ -322,9 +324,7 @@ public:
   int render(const RenderContext* rc);
   
   bool onTouchEvent(const EventContext* ec,
-                    const TouchEvent* touchEvent) {
-    return false;
-  }
+                    const TouchEvent* touchEvent);
   
   void onResizeViewportEvent(const EventContext* ec,
                              int width, int height) {
