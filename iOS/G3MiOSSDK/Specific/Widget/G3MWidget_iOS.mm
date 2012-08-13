@@ -405,7 +405,7 @@
   
   // very basic tile renderer
   if (true) {
-    const bool renderDebug = true;
+    const bool renderDebug = false;
     TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug);
     
     TileTexturizer* texturizer = NULL;
