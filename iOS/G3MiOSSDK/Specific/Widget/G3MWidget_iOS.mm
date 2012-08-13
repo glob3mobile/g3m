@@ -387,6 +387,7 @@
 //  http://igosoftware.dyndns.org:8080/geoserver/igo/wms?service=WMS&version=1.1.0&request=GetMap&layers=igo:ocean_temp_1993_01_02&styles=&bbox=-180.0,-90.0,180.0,90.0&width=660&height=330&srs=EPSG:4326&format=application/openlayers
   
   WMSLayer *oceans = new WMSLayer("igo:ocean_temp_1993_01_02",
+                                  //"igo:ocean_temp_1993_01_02_180",
                                   "http://igosoftware.dyndns.org:8080/geoserver/igo/wms",
                                   "1.1.1",
                                   "image/png",
