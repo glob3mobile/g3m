@@ -53,7 +53,7 @@ public:
     if (_latitude.lowerThan(that._latitude)) {
       return true;
     }
-    if (_latitude.greaterThan(that._latitude)) {
+    else if (_latitude.greaterThan(that._latitude)) {
       return false;
     }
     return _longitude.lowerThan(that._longitude);
@@ -61,6 +61,11 @@ public:
   
   const std::string description() const;
 
+#ifdef JAVA_CODE
+  TODO_java_equals;
+  TODO_java_hashcode;
+#endif
+  
 };
 
 
