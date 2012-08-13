@@ -13,9 +13,8 @@
 
 class BusyRenderer : public Renderer {
 private:
-  int     _numIndices;
-  int*    _index;
-  float*  _vertices;
+  float*    _vertices;
+  int*      _indices;
 
 public:  
   void initialize(const InitializationContext* ic);
