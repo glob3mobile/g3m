@@ -12,9 +12,13 @@
 #include "Renderer.hpp"
 
 class BusyRenderer : public Renderer {
-  void initialize(const InitializationContext* ic) {
-    
-  }
+private:
+  int     _numIndices;
+  int*    _index;
+  float*  _vertices;
+
+public:  
+  void initialize(const InitializationContext* ic);
   
   bool isReadyToRender(const RenderContext* rc) {
     return true;
