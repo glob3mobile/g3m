@@ -44,29 +44,62 @@ MutableMatrix44D createOrthographicProjectionMatrix(double left, double right,
 
 void BusyRenderer::initialize(const InitializationContext* ic)
 {
-  unsigned int numVertices = 8;
-  int numIndices = 4;
-  float x=100, y=150;
-  
-  float v[] = {
-    -x,   y,  0,
-    -x,   -y, 0,
-    x,    y,  0,
-    x,    -y, 0
-  };
-  
-  int i[] = { 0, 1, 2, 3};
+  unsigned int numStrides = 60;
+  unsigned int numVertices = numStrides * 2 + 2;
+  int numIndices = numVertices;
   
   // create vertices and indices in dinamic memory
   float *vertices = new float [numVertices*3];
-  memcpy(vertices, v, numVertices*3*sizeof(float));
   int *indices = new int [numIndices];
-  memcpy(indices, i, numIndices*sizeof(int));  
+  float *colors = new float [numVertices*4];
+  
+  // create vertices
+  unsigned int nv=0, ni=0, nc=0;
+  float r1=200, r2=230;
+  for (unsigned int step=0; step<=numStrides; step++) {
+    double angle = (double) step * 2 * M_PI / numStrides;
+    double c = cos(angle);
+    double s = sin(angle);
+    vertices[nv++]  = (float) (r1 * c);
+    vertices[nv++]  = (float) (r1 * s);
+    vertices[nv++]  = 0.0;
+    vertices[nv++]  = (float) (r2 * c);
+    vertices[nv++]  = (float) (r2 * s);
+    vertices[nv++]  = 0.0;
+    indices[ni]     = ni;
+    indices[ni+1]   = ni+1;
+    ni+=2;    
+    float col       = 1.1 * step / numStrides;
+    if (col>1) {
+      colors[nc++]    = 128;
+      colors[nc++]    = 128;
+      colors[nc++]    = 128;
+      colors[nc++]    = 0;
+      colors[nc++]    = 128;
+      colors[nc++]    = 128;
+      colors[nc++]    = 128;
+      colors[nc++]    = 0;      
+    } else {
+      colors[nc++]    = 128;
+      colors[nc++]    = 128;
+      colors[nc++]    = 128;
+      colors[nc++]    = 1-col;
+      colors[nc++]    = 128;
+      colors[nc++]    = 128;
+      colors[nc++]    = 128;
+      colors[nc++]    = 1-col;
+    }
+  }
+
+  // the two last indices
+  indices[ni++]     = 0;
+  indices[ni++]     = 1;
   
   // create mesh
-  Color *flatColor = new Color(Color::fromRGBA(1.0, 1.0, 0.0, 1.0));
+  //Color *flatColor = new Color(Color::fromRGBA(1.0, 1.0, 0.0, 1.0));
+
   _mesh = IndexedMesh::CreateFromVector3D(true, TriangleStrip, NoCenter, Vector3D(0,0,0), 
-                                           4, vertices, indices, 4, flatColor);
+                                           numVertices, vertices, indices, numIndices, NULL, colors);
 }  
 
 
@@ -77,17 +110,24 @@ int BusyRenderer::render(const RenderContext* rc)
   // init modelview matrix
   GLint currentViewport[4];
   glGetIntegerv(GL_VIEWPORT, currentViewport);
-  int halfWidth = currentViewport[2];
-  int halfHeight = currentViewport[3];
-  MutableMatrix44D M = createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -1, 1);
+  int halfWidth = currentViewport[2] / 2;
+  int halfHeight = currentViewport[3] / 2;
+  MutableMatrix44D M = createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
   gl->setProjection(M);
   gl->loadMatrixf(MutableMatrix44D::identity());
   
   // clear screen
   gl->clearScreen(0.0f, 0.2f, 0.4f, 1.0f);
   
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  
+  gl-
+
   // draw mesh
   _mesh->render(rc);
 
+  glDisable(GL_BLEND);
+  
   return MAX_TIME_TO_RENDER;
 }
