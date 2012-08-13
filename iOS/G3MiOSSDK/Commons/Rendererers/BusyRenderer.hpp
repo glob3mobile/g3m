@@ -10,11 +10,22 @@
 #define G3MiOSSDK_BusyRenderer_hpp
 
 #include "Renderer.hpp"
+#include "IndexedMesh.hpp"
+#include "Effects.hpp"
 
-class BusyRenderer : public Renderer {
-  void initialize(const InitializationContext* ic) {
-    
-  }
+
+//***************************************************************
+
+
+class BusyRenderer : public Renderer, EffectTarget {
+private:
+  Mesh    *_mesh;
+  double  _degrees;
+  
+public:    
+  BusyRenderer(): _degrees(0) {}
+  
+  void initialize(const InitializationContext* ic);
   
   bool isReadyToRender(const RenderContext* rc) {
     return true;
@@ -32,8 +43,42 @@ class BusyRenderer : public Renderer {
     
   }
   
-  virtual ~BusyRenderer() { };
+  virtual ~BusyRenderer() {}
+  
+  void incDegrees(double value) { 
+    _degrees += value; 
+    if (_degrees>360) _degrees -= 360;
+  }
 
 };
+
+//***************************************************************
+
+class BusyEffect : public EffectWithForce {  
+private:
+  BusyRenderer* _renderer;
+  
+public:
+  
+  BusyEffect(BusyRenderer *renderer): 
+  EffectWithForce(1, 1),
+  _renderer(renderer)
+  { }
+  
+  virtual void start(const RenderContext *rc, const TimeInterval& now) {}
+  
+  virtual void doStep(const RenderContext *rc, const TimeInterval& now) {
+    EffectWithForce::doStep(rc, now);
+    _renderer->incDegrees(5);
+  }
+  
+  virtual void stop(const RenderContext *rc, const TimeInterval& now) { }
+  
+  virtual void cancel(const TimeInterval& now) {
+    // do nothing, just leave the effect in the intermediate state
+  }
+  
+};
+
 
 #endif

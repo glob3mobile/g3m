@@ -182,8 +182,14 @@ int G3MWidget::render() {
 
   _scheduler->doOneCyle(&rc);
 
+  int __agustin_at_work;
   _rendererReady = _renderer->isReadyToRender(&rc);
+  //_rendererReady = false;
+  
+  
+  
   Renderer* selectedRenderer = _rendererReady ? _renderer : _busyRenderer;
+  
 
   // Clear the scene
   _gl->clearScreen(_backgroundColor);
