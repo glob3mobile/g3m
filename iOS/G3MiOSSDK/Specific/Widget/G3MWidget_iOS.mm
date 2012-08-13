@@ -181,8 +181,8 @@
   
   const Planet* planet = Planet::createEarth();
   
-  //Renderer* busyRenderer = new BusyQuadRenderer("world.jpg");
-  Renderer* busyRenderer = new BusyMeshRenderer();
+  Renderer* busyRenderer = new BusyQuadRenderer("ProgressWheel.png");
+  //Renderer* busyRenderer = new BusyMeshRenderer();
   
   EffectsScheduler* scheduler = new EffectsScheduler();
   
@@ -506,8 +506,8 @@
   
   const Planet* planet = Planet::createEarth();
   
-  //Renderer* busyRenderer = new BusyQuadRenderer("world.jpg");
-  Renderer* busyRenderer = new BusyMeshRenderer();
+  Renderer* busyRenderer = new BusyQuadRenderer("ProgressWheel.png");
+  //Renderer* busyRenderer = new BusyMeshRenderer();
   
   std::vector <ICameraConstrainer *> cameraConstraint;
   cameraConstraint.push_back(new SimpleCameraConstrainer);

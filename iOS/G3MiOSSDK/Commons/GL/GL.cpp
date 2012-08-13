@@ -193,7 +193,8 @@ int GL::getError() {
 const GLTextureID GL::uploadTexture(const IImage* image,
                                     int textureWidth, int textureHeight) {
   
-  unsigned char imageData[textureWidth * textureHeight * 4];
+  //unsigned char imageData[textureWidth * textureHeight * 4];
+  unsigned char *imageData = new unsigned char [textureWidth * textureHeight * 4];
   image->fillWithRGBA(imageData, textureWidth, textureHeight);
   
   _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);
@@ -208,6 +209,7 @@ const GLTextureID GL::uploadTexture(const IImage* image,
   _gl->texParameteri(Texture2D, WrapT, ClampToEdge);
   _gl->texImage2D(Texture2D, 0, RGBA, textureWidth, textureHeight, 0, RGBA, UnsignedByte, imageData);
   
+  delete imageData;
   return texID;
 }
 

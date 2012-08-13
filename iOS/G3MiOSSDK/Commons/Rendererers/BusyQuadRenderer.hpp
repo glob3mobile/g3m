@@ -20,7 +20,6 @@
 
 class BusyQuadRenderer : public Renderer, EffectTarget {
 private:
-  Mesh    *_mesh;
   double  _degrees;
   const std::string _textureFilename;
   Mesh *  _quadMesh;
@@ -80,7 +79,7 @@ public:
   
   virtual void doStep(const RenderContext *rc, const TimeInterval& now) {
     EffectWithForce::doStep(rc, now);
-    _renderer->incDegrees(5);
+    _renderer->incDegrees(3);
   }
   
   virtual void stop(const RenderContext *rc, const TimeInterval& now) { }

@@ -47,83 +47,23 @@ MutableMatrix44D createOrthographicProjectionMatrix(double left, double right,
 
 bool BusyQuadRenderer::initMesh(const RenderContext* rc)
 {  
-  // compute number of vertex for the ring
-  unsigned int numStrides = 60;
-  unsigned int numVertices = numStrides * 2 + 2;
-  int numIndices = numVertices;
-  
-  // add number of vertex for the square
-  
-  // create vertices and indices in dinamic memory
-  float *vertices = new float [numVertices*3];
-  int *indices = new int [numIndices];
-  float *colors = new float [numVertices*4];
-  
-  // create vertices
-  unsigned int nv=0, ni=0, nc=0;
-  float r1=200, r2=230;
-  for (unsigned int step=0; step<=numStrides; step++) {
-    double angle = (double) step * 2 * M_PI / numStrides;
-    double c = cos(angle);
-    double s = sin(angle);
-    vertices[nv++]  = (float) (r1 * c);
-    vertices[nv++]  = (float) (r1 * s);
-    vertices[nv++]  = 0.0;
-    vertices[nv++]  = (float) (r2 * c);
-    vertices[nv++]  = (float) (r2 * s);
-    vertices[nv++]  = 0.0;
-    indices[ni]     = ni;
-    indices[ni+1]   = ni+1;
-    ni+=2;    
-    float col       = 1.1f * step / numStrides;
-    if (col>1) {
-      colors[nc++]    = 128;
-      colors[nc++]    = 128;
-      colors[nc++]    = 128;
-      colors[nc++]    = 0;
-      colors[nc++]    = 128;
-      colors[nc++]    = 128;
-      colors[nc++]    = 128;
-      colors[nc++]    = 0;      
-    } else {
-      colors[nc++]    = 128;
-      colors[nc++]    = 128;
-      colors[nc++]    = 128;
-      colors[nc++]    = 1-col;
-      colors[nc++]    = 128;
-      colors[nc++]    = 128;
-      colors[nc++]    = 128;
-      colors[nc++]    = 1-col;
-    }
-  }
-  
-  // the two last indices
-  indices[ni++]     = 0;
-  indices[ni++]     = 1;
-  
-  
-  // create mesh
-  //Color *flatColor = new Color(Color::fromRGBA(1.0, 1.0, 0.0, 1.0));
-  
-  _mesh = IndexedMesh::CreateFromVector3D(true, TriangleStrip, NoCenter, Vector3D(0,0,0), 
-                                          numVertices, vertices, indices, numIndices, NULL, colors);
-  
   // create quad
-  numVertices = 4;
-  numIndices = 4;
+  unsigned int numVertices = 4;
+  unsigned int numIndices = 4;
   float *quadVertices = new float [numVertices*3];
   int *quadIndices = new int [numIndices];
   float *texC = new float [numVertices*2];
   
-  nv = 0;
-  quadVertices[nv++] = -200;    quadVertices[nv++] = 200;   quadVertices[nv++] = 0;
-  quadVertices[nv++] = -200;    quadVertices[nv++] = -200;  quadVertices[nv++] = 0;
-  quadVertices[nv++] = 200;     quadVertices[nv++] = 200;   quadVertices[nv++] = 0;
-  quadVertices[nv++] = 200;     quadVertices[nv++] = -200;  quadVertices[nv++] = 0;
+  unsigned int nv = 0;
+  float halfSize = 100;
+  quadVertices[nv++] = -halfSize;    quadVertices[nv++] = halfSize;   quadVertices[nv++] = 0;
+  quadVertices[nv++] = -halfSize;    quadVertices[nv++] = -halfSize;  quadVertices[nv++] = 0;
+  quadVertices[nv++] = halfSize;     quadVertices[nv++] = halfSize;   quadVertices[nv++] = 0;
+  quadVertices[nv++] = halfSize;     quadVertices[nv++] = -halfSize;  quadVertices[nv++] = 0;
   
   for (unsigned int n=0; n<numIndices; n++) quadIndices[n] = n;
   
-  nc = 0;
+  unsigned int nc = 0;
   texC[nc++] = 0;    texC[nc++] = 0.0;
   texC[nc++] = 0;    texC[nc++] = 1.0;
   texC[nc++] = 1;    texC[nc++] = 0.0;
@@ -146,7 +86,7 @@ bool BusyQuadRenderer::initMesh(const RenderContext* rc)
   
   TextureMapping* texMap = new SimpleTextureMapping(texID, texC, true);
   
-  _mesh = new TexturedMesh(im, true, texMap, true);
+  _quadMesh = new TexturedMesh(im, true, texMap, true);
 
   return true;
 }  
@@ -187,16 +127,12 @@ int BusyQuadRenderer::render(const RenderContext* rc)
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   
   gl->pushMatrix();
-  MutableMatrix44D R1 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(60), Vector3D(-1, 0, 0));
-  MutableMatrix44D R2 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
+  MutableMatrix44D R1 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(0), Vector3D(-1, 0, 0));
+  MutableMatrix44D R2 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1));
   gl->multMatrixf(R1.multiply(R2));
   
-  // draw mesh
-  _mesh->render(rc);
-  
+  // draw mesh  
   _quadMesh->render(rc);
-  
-  
   
   gl->popMatrix();
   
