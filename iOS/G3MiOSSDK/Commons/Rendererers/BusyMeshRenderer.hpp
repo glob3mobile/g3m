@@ -1,13 +1,13 @@
 //
-//  BusyRenderer.hpp
+//  BusyMeshRenderer.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 20/07/12.
 //  Copyright (c) 2012 IGO Software SL. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_BusyRenderer_hpp
-#define G3MiOSSDK_BusyRenderer_hpp
+#ifndef G3MiOSSDK_BusyMeshRenderer_hpp
+#define G3MiOSSDK_BusyMeshRenderer_hpp
 
 #include "Renderer.hpp"
 #include "IndexedMesh.hpp"
@@ -17,13 +17,13 @@
 //***************************************************************
 
 
-class BusyRenderer : public Renderer, EffectTarget {
+class BusyMeshRenderer : public Renderer, EffectTarget {
 private:
   Mesh    *_mesh;
   double  _degrees;
   
 public:    
-  BusyRenderer(): _degrees(0) {}
+  BusyMeshRenderer(): _degrees(0) {}
   
   void initialize(const InitializationContext* ic);
   
@@ -43,7 +43,7 @@ public:
     
   }
   
-  virtual ~BusyRenderer() {}
+  virtual ~BusyMeshRenderer() {}
   
   void incDegrees(double value) { 
     _degrees += value; 
@@ -54,13 +54,13 @@ public:
 
 //***************************************************************
 
-class BusyEffect : public EffectWithForce {  
+class BusyMeshEffect : public EffectWithForce {  
 private:
-  BusyRenderer* _renderer;
+  BusyMeshRenderer* _renderer;
   
 public:
   
-  BusyEffect(BusyRenderer *renderer): 
+  BusyMeshEffect(BusyMeshRenderer *renderer): 
   EffectWithForce(1, 1),
   _renderer(renderer)
   { }

@@ -1,20 +1,23 @@
 //
-//  BusyRenderer.cpp
+//  BusyQuadRenderer.cpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 20/07/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
+//  Created by Agustín Trujillo Pino on 13/08/12.
+//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
-
 
 #include <OpenGLES/ES2/gl.h>
 
 
-#include "BusyRenderer.hpp"
+#include "BusyQuadRenderer.hpp"
 
 #include "Context.hpp"
 #include "GL.hpp"
 #include "MutableMatrix44D.hpp"
+#include "TexturesHandler.hpp"
+#include "TextureMapping.hpp"
+#include "TexturedMesh.hpp"
+
 
 int __agustin_note; // this function is already implemented in shaders branch
 MutableMatrix44D createOrthographicProjectionMatrix(double left, double right,
@@ -42,7 +45,7 @@ MutableMatrix44D createOrthographicProjectionMatrix(double left, double right,
 }
 
 
-void BusyRenderer::initialize(const InitializationContext* ic)
+bool BusyQuadRenderer::initMesh(const RenderContext* rc)
 {  
   // compute number of vertex for the ring
   unsigned int numStrides = 60;
@@ -72,7 +75,7 @@ void BusyRenderer::initialize(const InitializationContext* ic)
     indices[ni]     = ni;
     indices[ni+1]   = ni+1;
     ni+=2;    
-    float col       = 1.1 * step / numStrides;
+    float col       = 1.1f * step / numStrides;
     if (col>1) {
       colors[nc++]    = 128;
       colors[nc++]    = 128;
@@ -93,23 +96,72 @@ void BusyRenderer::initialize(const InitializationContext* ic)
       colors[nc++]    = 1-col;
     }
   }
-
+  
   // the two last indices
   indices[ni++]     = 0;
   indices[ni++]     = 1;
-
+  
   
   // create mesh
   //Color *flatColor = new Color(Color::fromRGBA(1.0, 1.0, 0.0, 1.0));
-
+  
   _mesh = IndexedMesh::CreateFromVector3D(true, TriangleStrip, NoCenter, Vector3D(0,0,0), 
-                                           numVertices, vertices, indices, numIndices, NULL, colors);
+                                          numVertices, vertices, indices, numIndices, NULL, colors);
+  
+  // create quad
+  numVertices = 4;
+  numIndices = 4;
+  float *quadVertices = new float [numVertices*3];
+  int *quadIndices = new int [numIndices];
+  float *texC = new float [numVertices*2];
+  
+  nv = 0;
+  quadVertices[nv++] = -200;    quadVertices[nv++] = 200;   quadVertices[nv++] = 0;
+  quadVertices[nv++] = -200;    quadVertices[nv++] = -200;  quadVertices[nv++] = 0;
+  quadVertices[nv++] = 200;     quadVertices[nv++] = 200;   quadVertices[nv++] = 0;
+  quadVertices[nv++] = 200;     quadVertices[nv++] = -200;  quadVertices[nv++] = 0;
+  
+  for (unsigned int n=0; n<numIndices; n++) quadIndices[n] = n;
+  
+  nc = 0;
+  texC[nc++] = 0;    texC[nc++] = 0.0;
+  texC[nc++] = 0;    texC[nc++] = 1.0;
+  texC[nc++] = 1;    texC[nc++] = 0.0;
+  texC[nc++] = 1;    texC[nc++] = 1.0;
+  
+  
+  //TEXTURED
+  GLTextureID texID = GLTextureID::invalid();
+  if (true){
+    texID = rc->getTexturesHandler()->getGLTextureIdFromFileName(_textureFilename, 2048, 1024);
+    if (!texID.isValid()) {
+      rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
+      return false;
+    }
+  }
+
+
+  IndexedMesh *im = IndexedMesh::CreateFromVector3D(true, TriangleStrip, NoCenter, Vector3D(0,0,0), 
+                                                    numVertices, quadVertices, quadIndices, numIndices, NULL);
+  
+  TextureMapping* texMap = new SimpleTextureMapping(texID, texC, true);
+  
+  _mesh = new TexturedMesh(im, true, texMap, true);
+
+  return true;
 }  
 
 
-int BusyRenderer::render(const RenderContext* rc) 
+int BusyQuadRenderer::render(const RenderContext* rc) 
 {  
   GL* gl = rc->getGL();
+  
+  if (_quadMesh == NULL){
+    if (!initMesh(rc)) {
+      return MAX_TIME_TO_RENDER;
+    }
+  }
+
   
   // init effect in the first render
   static bool firstTime = true;
@@ -118,7 +170,7 @@ int BusyRenderer::render(const RenderContext* rc)
     Effect *effect = new BusyEffect(this);
     rc->getEffectsScheduler()->startEffect(effect, this);
   }
-
+  
   // init modelview matrix
   GLint currentViewport[4];
   glGetIntegerv(GL_VIEWPORT, currentViewport);
@@ -142,11 +194,14 @@ int BusyRenderer::render(const RenderContext* rc)
   // draw mesh
   _mesh->render(rc);
   
+  _quadMesh->render(rc);
   
-
+  
+  
   gl->popMatrix();
   
   glDisable(GL_BLEND);
   
   return MAX_TIME_TO_RENDER;
 }
+
