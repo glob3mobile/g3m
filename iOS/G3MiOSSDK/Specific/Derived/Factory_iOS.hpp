@@ -37,16 +37,15 @@ public:
     
     UIImage* image = [UIImage imageNamed:fn];
     if (!image) {
-      printf("Can't read image %s\n",
-             filename.c_str());
+      printf("Can't read image %s\n", filename.c_str());
       
       return NULL;
     }
+
     return new Image_iOS(image);
   }
   
   virtual IImage* createImageFromData(const ByteBuffer* bb) const {
-    
     NSData* data = [NSData dataWithBytes:bb->getData() length:bb->getLength()];
     
     UIImage* image = [UIImage imageWithData:data];

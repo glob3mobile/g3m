@@ -46,7 +46,15 @@ public:
   bool isReadyToRender(const RenderContext* rc) {
     return true;
   }
-
+  
+  void start() {
+    
+  }
+  
+  void stop() {
+    
+  }
+  
 };
 
 #endif

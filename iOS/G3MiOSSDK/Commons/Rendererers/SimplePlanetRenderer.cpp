@@ -17,6 +17,7 @@ _latRes(30),//FOR NOW THEY MUST BE EQUAL
 _lonRes(30),
 _textureFilename(textureFilename),
 _mesh(NULL),
+//_texWidth(2048 / 2),
 _texWidth(2048),
 _texHeight(1024)
 {

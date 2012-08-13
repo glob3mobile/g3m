@@ -62,7 +62,7 @@ public:
 };
 
 
-const GLTextureID TexturesHandler::getGLTextureIdFromFileName(const std::string &filename,
+const GLTextureID TexturesHandler::getGLTextureIdFromFileName(const std::string filename,
                                                               int textureWidth,
                                                               int textureHeight) {
   const IImage* image = _factory->createImageFromFileName(filename);
@@ -71,8 +71,7 @@ const GLTextureID TexturesHandler::getGLTextureIdFromFileName(const std::string 
                                            TextureSpec(filename, // filename as the id
                                                        textureWidth,
                                                        textureHeight));
-  
-  delete image;
+  _factory->deleteImage(image);
   
   return texId;
 }
@@ -90,7 +89,7 @@ const GLTextureID TexturesHandler::getGLTextureIdIfAvailable(const TextureSpec& 
   return GLTextureID::invalid();
 }
 
-const GLTextureID TexturesHandler::getGLTextureId(const std::vector<const IImage*>& images,
+const GLTextureID TexturesHandler::getGLTextureId(const std::vector<const IImage*> images,
                                                   const TextureSpec& textureSpec) {
   GLTextureID previousId = getGLTextureIdIfAvailable(textureSpec);
   if (previousId.isValid()) {
@@ -114,8 +113,8 @@ const GLTextureID TexturesHandler::getGLTextureId(const std::vector<const IImage
   return holder->_glTextureId;
 }
 
-const GLTextureID TexturesHandler::getGLTextureId(const std::vector<const IImage*>& images,
-                                                  const std::vector<const Rectangle*>& rectangles,
+const GLTextureID TexturesHandler::getGLTextureId(const std::vector<const IImage*> images,
+                                                  const std::vector<const Rectangle*> rectangles,
                                                   const TextureSpec& textureSpec) {
   GLTextureID previousId = getGLTextureIdIfAvailable(textureSpec);
   if (previousId.isValid()) {

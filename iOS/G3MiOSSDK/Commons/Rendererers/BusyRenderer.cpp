@@ -107,9 +107,15 @@ void BusyRenderer::initialize(const InitializationContext* ic)
                                            numVertices, vertices, indices, numIndices, NULL, colors);
 }  
 
+void BusyRenderer::start() {
+  int _TODO_start_effects;
+}
 
-int BusyRenderer::render(const RenderContext* rc) 
-{  
+void BusyRenderer::stop() {
+  int _TODO_stop_effects;
+}
+
+int BusyRenderer::render(const RenderContext* rc) {
   GL* gl = rc->getGL();
   
   // init effect in the first render
