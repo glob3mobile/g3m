@@ -183,8 +183,8 @@ int G3MWidget::render() {
   _scheduler->doOneCyle(&rc);
 
   int __agustin_at_work;
-  //_rendererReady = _renderer->isReadyToRender(&rc);
-  _rendererReady = false;
+  _rendererReady = _renderer->isReadyToRender(&rc);
+  //_rendererReady = false;
   
   
   

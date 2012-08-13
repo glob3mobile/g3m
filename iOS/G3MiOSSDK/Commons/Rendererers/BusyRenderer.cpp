@@ -43,10 +43,13 @@ MutableMatrix44D createOrthographicProjectionMatrix(double left, double right,
 
 
 void BusyRenderer::initialize(const InitializationContext* ic)
-{
+{  
+  // compute number of vertex for the ring
   unsigned int numStrides = 60;
   unsigned int numVertices = numStrides * 2 + 2;
   int numIndices = numVertices;
+  
+  // add number of vertex for the square
   
   // create vertices and indices in dinamic memory
   float *vertices = new float [numVertices*3];
@@ -94,6 +97,7 @@ void BusyRenderer::initialize(const InitializationContext* ic)
   // the two last indices
   indices[ni++]     = 0;
   indices[ni++]     = 1;
+
   
   // create mesh
   //Color *flatColor = new Color(Color::fromRGBA(1.0, 1.0, 0.0, 1.0));
@@ -107,6 +111,14 @@ int BusyRenderer::render(const RenderContext* rc)
 {  
   GL* gl = rc->getGL();
   
+  // init effect in the first render
+  static bool firstTime = true;
+  if (firstTime) {
+    firstTime = false;
+    Effect *effect = new BusyEffect(this);
+    rc->getEffectsScheduler()->startEffect(effect, this);
+  }
+
   // init modelview matrix
   GLint currentViewport[4];
   glGetIntegerv(GL_VIEWPORT, currentViewport);
@@ -122,11 +134,18 @@ int BusyRenderer::render(const RenderContext* rc)
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   
-  gl-
-
+  gl->pushMatrix();
+  MutableMatrix44D R1 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(60), Vector3D(-1, 0, 0));
+  MutableMatrix44D R2 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
+  gl->multMatrixf(R1.multiply(R2));
+  
   // draw mesh
   _mesh->render(rc);
+  
+  
 
+  gl->popMatrix();
+  
   glDisable(GL_BLEND);
   
   return MAX_TIME_TO_RENDER;

@@ -504,7 +504,7 @@
   
   const Planet* planet = Planet::createEarth();
   
-  Renderer* busyRenderer = new BusyRenderer();
+  Renderer* busyRenderer = new BusyRenderer();  
   
   std::vector <ICameraConstrainer *> cameraConstraint;
   cameraConstraint.push_back(new SimpleCameraConstrainer);
