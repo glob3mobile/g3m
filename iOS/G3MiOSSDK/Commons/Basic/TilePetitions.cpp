@@ -46,7 +46,7 @@ void TilePetitions::onCancel(const URL& url){
   _errorsCounter++;
 }
 
-std::string TilePetitions::getPetitionsID() const
+std::string TilePetitions::createPetitionsID(const IFactory* fac) const
 {
   std::string id;
   for (int j = 0; j < _petitions.size(); j++) {
@@ -55,6 +55,9 @@ std::string TilePetitions::getPetitionsID() const
     }
     id += _petitions[j]->getURL();
   }
+  
+  id += fac->stringFormat("_%f_%f_%f", _level, _row, _column);
+  
   return id;
 }
 
@@ -122,7 +125,6 @@ void TilePetitions::createTexture(TexturesHandler* texHandler, const IFactory* f
       Sector imSector = getPetition(i)->getSector();
       if (im != NULL) {
         images.push_back(im);
-        
         Rectangle* rec = getImageRectangleInTexture(_tileSector, imSector, width, height);
         rectangles.push_back(rec);
       }

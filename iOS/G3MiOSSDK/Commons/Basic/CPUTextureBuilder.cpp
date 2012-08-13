@@ -68,12 +68,16 @@ int CPUTextureBuilder::createTextureFromImages(GL * gl, const IFactory* factory,
   const IImage* base;
   int i = 0; //First image to merge
   Rectangle baseRec(0,0, width, height);
-  if (vRectangles[0]->equalTo(baseRec)){
+  if (vRectangles.size() > 0 && vRectangles[0]->equalTo(baseRec)){
     base = vImages[0];
     i = 1;
   } else{
     base = factory->createImageFromSize(width, height);
+    
+    printf("IMAGE BASE %d, %d\n", base->getWidth(), base->getHeight());
   }
+  
+  
   
   for (; i < vImages.size(); i++) {
     IImage* im2 = base->combineWith(*vImages[i], *vRectangles[i], width, height);
@@ -87,7 +91,7 @@ int CPUTextureBuilder::createTextureFromImages(GL * gl, const IFactory* factory,
   
   int texID = gl->uploadTexture(base, width, height);
   
-  if (base != vImages[0]) {
+  if (vRectangles.size() > 0 && base != vImages[0]) {
     delete base;
   }
 

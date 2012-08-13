@@ -142,7 +142,7 @@
     
     TileTexturizer* texturizer = NULL;
     if (true) {
-      texturizer = new TileImagesTileTexturizer(parameters, downloaderOLD, layerSet); //WMS
+      texturizer = new TileImagesTileTexturizer(parameters, downloaderOLD, layerSet, factory); //WMS
     }
     else {
       //SINGLE IMAGE
@@ -369,7 +369,7 @@
     
     TileTexturizer* texturizer = NULL;
     if (true) {
-      texturizer = new TileImagesTileTexturizer(parameters, downloaderOLD, layerSet); //WMS
+      texturizer = new TileImagesTileTexturizer(parameters, downloaderOLD, layerSet, factory); //WMS
     }
     else {
       //SINGLE IMAGE
