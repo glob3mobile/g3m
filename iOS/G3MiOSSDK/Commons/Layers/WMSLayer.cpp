@@ -104,3 +104,65 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const RenderContext* rc,
   
 	return petitions;
 }
+
+URL WMSLayer::getFeatureURL(const Geodetic2D& g, const RenderContext* rc,
+                                                  const Tile* tile,
+                                                  int width, int height)  const{
+
+  const Sector tileSector = tile->getSector();
+  if (!_bbox.touchesWith(tileSector)) {
+    return URL::null();
+  }
+  
+  const Sector sector = tileSector.intersection(_bbox);
+  
+	//Server name
+  std::string req = _serverURL;
+	if (req[req.size()-1] != '?') {
+		req += '?';
+	}
+  
+  //If the server refer to itself as localhost...
+  int pos = req.find("localhost");
+  if (pos != -1) {
+    req = req.substr(pos+9);
+    
+    int pos2 = _serverURL.find("/", 8);
+    std::string newHost = _serverURL.substr(0, pos2);
+    
+    req = newHost + req;
+  }
+	
+	//Petition
+  if (_serverVersion != "") {
+    req += "REQUEST=GetFeatureInfo&SERVICE=WMS&VERSION=" + _serverVersion;
+  }
+  else {
+    req += "REQUEST=GetFeatureInfo&SERVICE=WMS&VERSION=1.1.1";
+  }
+  
+  //SRS
+  if (_srs != "") {
+    req += "&SRS=" + _srs;
+  }
+	else {
+    req += "&SRS=EPSG:4326";
+  }
+  
+  //Texture Size and BBOX
+  std::ostringstream oss;
+  oss << "&WIDTH=" << width << "&HEIGHT=" << height;
+  oss << "&BBOX=" << sector.lower().longitude().degrees() << "," << sector.lower().latitude().degrees();
+  oss << "," << sector.upper().longitude().degrees() << "," << sector.upper().latitude().degrees();
+  req += oss.str();
+	
+  req += "&QUERY_LAYERS=" + _name;
+  
+  //X and Y
+  Vector2D pixel = tile->getSector().getUVCoordinates(g);
+  int x = (int) (pixel.x() * width);
+  int y = (int) ((1.0 - pixel.y()) * height);
+  req += rc->getFactory()->stringFormat("&X=%d&Y=%d", x, y);
+  
+	return URL(req);
+}

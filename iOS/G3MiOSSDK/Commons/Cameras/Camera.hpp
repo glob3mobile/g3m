@@ -32,6 +32,8 @@ public:
   bool _geodeticCenterOfView;
   bool _frustum;
   bool _frustumMC;
+  bool _halfFrustum;
+  bool _halfFrustumMC;
   
   
   CameraDirtyFlags() {
@@ -46,7 +48,9 @@ public:
   _XYZCenterOfView      (other._XYZCenterOfView),
   _geodeticCenterOfView (other._geodeticCenterOfView),
   _frustum              (other._frustum),
-  _frustumMC            (other._frustumMC)
+  _frustumMC            (other._frustumMC),
+  _halfFrustum          (other._halfFrustum),
+  _halfFrustumMC        (other._halfFrustumMC)
   {}
   
   void setAll(bool value) {
@@ -58,6 +62,8 @@ public:
     _geodeticCenterOfView = value;
     _frustum              = value;
     _frustumMC            = value;
+    _halfFrustum          = value;
+    _halfFrustumMC        = value;
   }
   
 };
@@ -159,14 +165,11 @@ public:
   
   const Frustum* const getFrustumInModelCoordinates() { return getFrustumMC(); }
   
+  const Frustum* const getHalfFrustuminModelCoordinates() { return getHalfFrustumMC(); }
+  
   void setPosition(const Geodetic3D& g3d);
   
-  
-  int __temporal_test_for_clipping;
-  // TEMP TEST
-  Frustum* _halfFrustum;               // ONLY FOR DEBUG
-  Frustum* _halfFrustumInModelCoordinates;
-    
+      
   Vector3D getHorizontalVector();
     
   Angle compute3DAngularDistance(const Vector2D& pixel0, const Vector2D& pixel1);
@@ -276,6 +279,32 @@ private:
     }
     return _frustumInModelCoordinates;
   }
+
+  int __temporal_test_for_clipping;
+
+  Frustum* _halfFrustum;                    // ONLY FOR DEBUG
+  Frustum*  getHalfFrustum() {
+    if (_dirtyFlags._halfFrustum) {
+      _dirtyFlags._halfFrustum = false;
+      if (_halfFrustum!=NULL) delete _halfFrustum;
+      FrustumData data = getFrustumData();
+      _halfFrustum = new Frustum(data._left/2, data._right/2,
+                                 data._bottom/2, data._top/2,
+                                 data._znear, data._zfar);
+    }
+    return _halfFrustum;
+  }
+  
+  Frustum* _halfFrustumInModelCoordinates;  // ONLY FOR DEBUG
+  Frustum*  getHalfFrustumMC() {
+    if (_dirtyFlags._halfFrustumMC) {
+      _dirtyFlags._halfFrustumMC = false;
+      if (_halfFrustumInModelCoordinates!=NULL) delete _halfFrustumInModelCoordinates;
+      _halfFrustumInModelCoordinates = getHalfFrustum()->transformedBy_P(getModelMatrix().transposed());
+    }
+    return _halfFrustumInModelCoordinates;
+  }
+  
 
   
   

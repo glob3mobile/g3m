@@ -32,6 +32,14 @@ public:
   std::string getPath() const {
     return _path;
   }
+  
+  static URL null(){
+    return URL("");
+  }
+  
+  bool isNull(){
+    return _path == "";
+  }
 };
 
 
