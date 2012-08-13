@@ -10,12 +10,13 @@
 #define G3MiOSSDK_BusyRenderer_hpp
 
 #include "Renderer.hpp"
+#include "IndexedMesh.hpp"
+
 
 class BusyRenderer : public Renderer {
 private:
-  float*    _vertices;
-  int*      _indices;
-
+  Mesh *_mesh;
+  
 public:    
   void initialize(const InitializationContext* ic);
   
@@ -35,7 +36,7 @@ public:
     
   }
   
-  virtual ~BusyRenderer();
+  virtual ~BusyRenderer() {}
 
 };
 

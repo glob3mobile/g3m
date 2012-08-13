@@ -42,14 +42,6 @@ MutableMatrix44D createOrthographicProjectionMatrix(double left, double right,
 }
 
 
-BusyRenderer::~BusyRenderer()
-{
-  delete _vertices;
-  delete _indices;
-}
-
-
-
 void BusyRenderer::initialize(const InitializationContext* ic)
 {
   unsigned int numVertices = 8;
@@ -66,10 +58,15 @@ void BusyRenderer::initialize(const InitializationContext* ic)
   int i[] = { 0, 1, 2, 3};
   
   // create vertices and indices in dinamic memory
-  _vertices = new float [numVertices*3];
-  memcpy(_vertices, v, numVertices*3*sizeof(float));
-  _indices = new int [numIndices];
-  memcpy(_indices, i, numIndices*sizeof(int));  
+  float *vertices = new float [numVertices*3];
+  memcpy(vertices, v, numVertices*3*sizeof(float));
+  int *indices = new int [numIndices];
+  memcpy(indices, i, numIndices*sizeof(int));  
+  
+  // create mesh
+  Color *flatColor = new Color(Color::fromRGBA(1.0, 1.0, 0.0, 1.0));
+  _mesh = IndexedMesh::CreateFromVector3D(true, TriangleStrip, NoCenter, Vector3D(0,0,0), 
+                                           4, vertices, indices, 4, flatColor);
 }  
 
 
@@ -77,7 +74,7 @@ int BusyRenderer::render(const RenderContext* rc)
 {  
   GL* gl = rc->getGL();
   
-  // create projection matrix
+  // init modelview matrix
   GLint currentViewport[4];
   glGetIntegerv(GL_VIEWPORT, currentViewport);
   int halfWidth = currentViewport[2];
@@ -86,13 +83,11 @@ int BusyRenderer::render(const RenderContext* rc)
   gl->setProjection(M);
   gl->loadMatrixf(MutableMatrix44D::identity());
   
+  // clear screen
   gl->clearScreen(0.0f, 0.2f, 0.4f, 1.0f);
-  gl->disableTexture2D();
-  gl->enableVerticesPosition();
-    
-  gl->color(1, 0, 0, 1);
-  gl->vertexPointer(3, 0, _vertices);
-  gl->drawTriangleStrip(4, _indices);
+  
+  // draw mesh
+  _mesh->render(rc);
 
   return MAX_TIME_TO_RENDER;
 }
