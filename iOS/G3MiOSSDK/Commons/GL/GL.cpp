@@ -197,7 +197,7 @@ const GLTextureID GL::uploadTexture(const IImage* image,
   unsigned char* imageData = new unsigned char[textureWidth * textureHeight * 4];
 #endif
 #ifdef JAVA_CODE
-  unsigned char imageData[textureWidth * textureHeight * 4];
+  char[] imageData = new char[textureWidth * textureHeight * 4];
 #endif
   
   image->fillWithRGBA(imageData, textureWidth, textureHeight);
