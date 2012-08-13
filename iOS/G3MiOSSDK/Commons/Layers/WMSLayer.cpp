@@ -108,9 +108,10 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const RenderContext* rc,
 	return petitions;
 }
 
-URL WMSLayer::getFeatureURL(const Geodetic2D& g, const RenderContext* rc,
-                                                  const Tile* tile,
-                                                  int width, int height)  const{
+URL WMSLayer::getFeatureURL(const Geodetic2D& g,
+                            const RenderContext* rc,
+                            const Tile* tile,
+                            int width, int height) const {
 
   const Sector tileSector = tile->getSector();
   if (!_bbox.touchesWith(tileSector)) {
