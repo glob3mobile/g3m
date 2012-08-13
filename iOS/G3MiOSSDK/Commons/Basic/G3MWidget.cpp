@@ -185,7 +185,7 @@ int G3MWidget::render() {
 
   int __agustin_at_work;
   _rendererReady = _renderer->isReadyToRender(&rc);
-//  _rendererReady = false;
+  //_rendererReady = false;
   
   Renderer* selectedRenderer = _rendererReady ? _renderer : _busyRenderer;
   
