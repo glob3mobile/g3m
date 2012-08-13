@@ -164,10 +164,24 @@ public:
     for (int i = 0; i < _petitionsCount; i++) {
       _status.push_back(STATUS_PENDING);
     }
+
+//    const Camera* camera = rc->getCurrentCamera();
+//    const Planet* planet = rc->getPlanet();
+//    const Geodetic2D center = tile->getSector().getCenter();
     
     for (int i = 0; i < _petitionsCount; i++) {
       const Petition* petition = _petitions[i];
       const long priority = tile->getLevel() * 1000000 + tile->getRow() * 1000 + tile->getColumn();
+      
+//      const Vector3D cameraPos = camera->getPosition();
+//      const Vector3D centerVec3 = planet->toVector3D(center);
+//      
+//      const double squaredDistance = centerVec3.sub(cameraPos).squaredLength();
+
+
+//      const long priority = (long) (tile->getLevel() * 1000000 + -squaredDistance);
+
+      
       const long requestId = downloader->request(URL(petition->getURL()),
                                                  priority,
                                                  new BuilderDownloadStepDownloadListener(this, i),
