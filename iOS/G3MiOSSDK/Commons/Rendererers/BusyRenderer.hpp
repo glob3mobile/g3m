@@ -16,7 +16,7 @@ private:
   float*    _vertices;
   int*      _indices;
 
-public:  
+public:    
   void initialize(const InitializationContext* ic);
   
   bool isReadyToRender(const RenderContext* rc) {
@@ -35,7 +35,7 @@ public:
     
   }
   
-  virtual ~BusyRenderer() { };
+  virtual ~BusyRenderer();
 
 };
 
