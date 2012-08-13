@@ -63,7 +63,7 @@ bool BusyQuadRenderer::initMesh(const RenderContext* rc)
   float *texC = new float [numVertices*2];
   
   unsigned int nv = 0;
-  float halfSize = 100;
+  float halfSize = 16;
   quadVertices[nv++] = -halfSize;    quadVertices[nv++] = halfSize;   quadVertices[nv++] = 0;
   quadVertices[nv++] = -halfSize;    quadVertices[nv++] = -halfSize;  quadVertices[nv++] = 0;
   quadVertices[nv++] = halfSize;     quadVertices[nv++] = halfSize;   quadVertices[nv++] = 0;
