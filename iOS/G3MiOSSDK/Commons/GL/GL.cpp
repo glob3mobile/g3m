@@ -192,14 +192,13 @@ int GL::getError() {
 
 const GLTextureID GL::uploadTexture(const IImage* image,
                                     int textureWidth, int textureHeight) {
-
 #ifdef C_CODE
   unsigned char* imageData = new unsigned char[textureWidth * textureHeight * 4];
 #endif
 #ifdef JAVA_CODE
   char[] imageData = new char[textureWidth * textureHeight * 4];
 #endif
-  
+
   image->fillWithRGBA(imageData, textureWidth, textureHeight);
   
   _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);
@@ -217,7 +216,7 @@ const GLTextureID GL::uploadTexture(const IImage* image,
 #ifdef C_CODE
   delete imageData;
 #endif
-  
+
   return texID;
 }
 

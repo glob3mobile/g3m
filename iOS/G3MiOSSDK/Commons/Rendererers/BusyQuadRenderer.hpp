@@ -1,13 +1,14 @@
 //
-//  BusyRenderer.hpp
+//  BusyQuadRenderer.hpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 20/07/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
+//  Created by Agustín Trujillo Pino on 13/08/12.
+//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_BusyRenderer_hpp
-#define G3MiOSSDK_BusyRenderer_hpp
+#ifndef G3MiOSSDK_BusyQuadRenderer_hpp
+#define G3MiOSSDK_BusyQuadRenderer_hpp
+
 
 #include "Renderer.hpp"
 #include "IndexedMesh.hpp"
@@ -17,15 +18,24 @@
 //***************************************************************
 
 
-class BusyRenderer : public Renderer, EffectTarget {
+class BusyQuadRenderer : public Renderer, EffectTarget {
 private:
-  Mesh    *_mesh;
   double  _degrees;
+  const std::string _textureFilename;
+  Mesh *  _quadMesh;
+
+  bool initMesh(const RenderContext* rc);
+
+
   
 public:    
-  BusyRenderer(): _degrees(0) {}
+  BusyQuadRenderer(const std::string textureFilename): 
+  _degrees(0), 
+  _quadMesh(NULL),
+  _textureFilename(textureFilename)
+  {}
   
-  void initialize(const InitializationContext* ic);
+  void initialize(const InitializationContext* ic) {}
   
   bool isReadyToRender(const RenderContext* rc) {
     return true;
@@ -43,13 +53,13 @@ public:
     
   }
   
-  virtual ~BusyRenderer() {}
+  virtual ~BusyQuadRenderer() {}
   
   void incDegrees(double value) { 
     _degrees += value; 
     if (_degrees>360) _degrees -= 360;
   }
-
+  
   void start();
   
   void stop();
@@ -60,11 +70,11 @@ public:
 
 class BusyEffect : public EffectWithForce {  
 private:
-  BusyRenderer* _renderer;
+  BusyQuadRenderer* _renderer;
   
 public:
   
-  BusyEffect(BusyRenderer *renderer): 
+  BusyEffect(BusyQuadRenderer *renderer): 
   EffectWithForce(1, 1),
   _renderer(renderer)
   { }
@@ -73,7 +83,7 @@ public:
   
   virtual void doStep(const RenderContext *rc, const TimeInterval& now) {
     EffectWithForce::doStep(rc, now);
-    _renderer->incDegrees(5);
+    _renderer->incDegrees(3);
   }
   
   virtual void stop(const RenderContext *rc, const TimeInterval& now) { }
@@ -83,6 +93,7 @@ public:
   }
   
 };
+
 
 
 #endif

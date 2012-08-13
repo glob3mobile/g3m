@@ -1,5 +1,5 @@
 //
-//  BusyRenderer.cpp
+//  BusyMeshRenderer.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 20/07/12.
@@ -10,7 +10,7 @@
 #include <OpenGLES/ES2/gl.h>
 
 
-#include "BusyRenderer.hpp"
+#include "BusyMeshRenderer.hpp"
 
 #include "Context.hpp"
 #include "GL.hpp"
@@ -42,7 +42,7 @@ MutableMatrix44D createOrthographicProjectionMatrix(double left, double right,
 }
 
 
-void BusyRenderer::initialize(const InitializationContext* ic)
+void BusyMeshRenderer::initialize(const InitializationContext* ic)
 {  
   // compute number of vertex for the ring
   unsigned int numStrides = 60;
@@ -107,22 +107,23 @@ void BusyRenderer::initialize(const InitializationContext* ic)
                                            numVertices, vertices, indices, numIndices, NULL, colors);
 }  
 
-void BusyRenderer::start() {
+void BusyMeshRenderer::start() {
   int _TODO_start_effects;
 }
 
-void BusyRenderer::stop() {
+void BusyMeshRenderer::stop() {
   int _TODO_stop_effects;
 }
 
-int BusyRenderer::render(const RenderContext* rc) {
+int BusyMeshRenderer::render(const RenderContext* rc) 
+{  
   GL* gl = rc->getGL();
   
   // init effect in the first render
   static bool firstTime = true;
   if (firstTime) {
     firstTime = false;
-    Effect *effect = new BusyEffect(this);
+    Effect *effect = new BusyMeshEffect(this);
     rc->getEffectsScheduler()->startEffect(effect, this);
   }
 
