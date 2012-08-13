@@ -13,6 +13,7 @@
 #include <math.h>
 
 class Vector2D;
+class Vector3D;
 
 class Frustum;
 
@@ -30,6 +31,8 @@ public:
   virtual double squaredProjectedArea(const RenderContext* rc) const = 0;
   
   virtual Vector2D projectedExtent(const RenderContext* rc) const = 0;
+  
+  virtual Vector3D intersectionWithRay(const Vector3D& origin, const Vector3D& direction) const = 0;
 
 };
 

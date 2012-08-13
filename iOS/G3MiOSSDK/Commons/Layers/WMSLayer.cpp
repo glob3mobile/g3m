@@ -102,6 +102,9 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const RenderContext* rc,
   Petition *pet = new Petition(sector, req, _isTransparent);
   petitions.push_back(pet);
   
+  //Testing
+  //printf("%s\n\n",getFeatureURL(sector.getCenter(), rc, tile, width, height).getPath().c_str() );
+  
 	return petitions;
 }
 

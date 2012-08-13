@@ -14,6 +14,7 @@
 #include "Camera.hpp"
 #include "ITimer.hpp"
 #include "TilesRenderParameters.hpp"
+#include "TouchEvent.hpp"
 
 
 TileRenderer::~TileRenderer() {
@@ -95,6 +96,10 @@ bool TileRenderer::isReadyToRender(const RenderContext *rc) {
 }
 
 int TileRenderer::render(const RenderContext* rc) {
+  
+  //Saving camera for using during long press event
+  _lastCamera = rc->getCurrentCamera();
+  
   TilesStatistics statistics;
   
   const int topLevelTilesSize = _topLevelTiles.size();
@@ -167,5 +172,26 @@ int TileRenderer::render(const RenderContext* rc) {
   }
     
   return MAX_TIME_TO_RENDER;
+}
+
+bool TileRenderer::onTouchEvent(const EventContext* ec, const TouchEvent* touchEvent) {
+  
+  if (touchEvent->getType() == LongPress){
+    
+    if (_lastCamera != NULL){
+      Vector2D pixel = touchEvent->getTouch(0)->getPos();
+      _lastCamera->pixel2Ray(pixel);
+      
+      for(int i = 0; i < _topLevelTiles.size(); i++){
+        
+        
+      }
+      
+    }
+    
+    return true;
+  }
+  
+  return false;
 }
 
