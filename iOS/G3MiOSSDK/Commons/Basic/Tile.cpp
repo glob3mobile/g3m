@@ -60,13 +60,13 @@ Mesh* Tile::getDebugMesh(const RenderContext* rc,
 bool Tile::isVisible(const RenderContext *rc,
                      const TileTessellator *tessellator) {
   
-  // test if sector is back oriented with respect to the camera
+  /*// test if sector is back oriented with respect to the camera
   if (_sector.isBackOriented(rc)) {
       return false; 
-    }
+    }*/
   
   return getTessellatorMesh(rc, tessellator)->getExtent()->touches(rc->getNextCamera()->getFrustumInModelCoordinates());
-  //return getTessellatorMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->_halfFrustumInModelCoordinates);
+  //return getTessellatorMesh(rc, tessellator)->getExtent()->touches(rc->getNextCamera()->getHalfFrustuminModelCoordinates());
 }
 
 bool Tile::meetsRenderCriteria(const RenderContext *rc,

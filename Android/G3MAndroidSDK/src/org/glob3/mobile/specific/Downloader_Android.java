@@ -7,168 +7,184 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
-import org.glob3.mobile.generated.IBIL;
 import org.glob3.mobile.generated.IDownloadListener;
 import org.glob3.mobile.generated.IDownloader;
-import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.Url;
 
+import android.R.id;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.webkit.DownloadListener;
 
 public class Downloader_Android extends IDownloader {
-	
+
 	private ArrayList<Downloader_Android_WorkerThread> _workers;
-	
+
 	// downloads current in progress
-	private Map<Object, Object> _downloadingHandlers = new HashMap<Object, Object>();
+	private Map<String, Downloader_Android_Handler> _downloadingHandlers = new HashMap<String, Downloader_Android_Handler>();
 
 	// queued downloads
-	private Map<Object, Object> _queuedHandlers = new HashMap<Object, Object>();
+	private Map<String, Downloader_Android_Handler> _queuedHandlers = new HashMap<String, Downloader_Android_Handler>();
 
-	long                 _requestIdCounter;
+	long _requestIdCounter;
 
-	Downloader_Android(int memoryCapacity, int diskCapacity, String diskPath, int maxConcurrentOperationCount){
-//		  NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity: memoryCapacity
-//                                     diskCapacity: diskCapacity
-//                                         diskPath: toNSString(diskPath)];
-//		  [NSURLCache setSharedURLCache:sharedCache];
+	Downloader_Android(int memoryCapacity, int diskCapacity, String diskPath,
+			int maxConcurrentOperationCount) {
+		// NSURLCache *sharedCache = [[NSURLCache alloc] initWithMemoryCapacity:
+		// memoryCapacity
+		// diskCapacity: diskCapacity
+		// diskPath: toNSString(diskPath)];
+		// [NSURLCache setSharedURLCache:sharedCache];
 
 		for (int i = 0; i < maxConcurrentOperationCount; i++) {
-			Downloader_Android_WorkerThread worker = [Downloader_iOS_WorkerThread workerForDownloader: this];
-//[worker start];
-
-[_workers addObject: worker];
-}
+			Downloader_Android_WorkerThread worker = new Downloader_Android_WorkerThread(
+					this);
+			_workers.add(worker);
+		}
 	}
 
-	Downloader_Android_Handler getHandlerToRun(){
-		
-	}
+	Downloader_Android_Handler getHandlerToRun() {
+		long selectedPriority = -1000000;
+		Downloader_Android_Handler selectedHandler = null;
 
+		Iterator<Entry<String, Downloader_Android_Handler>> it = _queuedHandlers
+				.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry<String, Downloader_Android_Handler> e = it.next();
+			Downloader_Android_Handler handler = e.getValue();
+
+			if (handler._priority > selectedPriority) {
+				selectedPriority = handler._priority;
+				selectedHandler = handler;
+			}
+		}
+
+		return selectedHandler;
+	}
 
 	@Override
 	public synchronized void start() {
-		for (int i = 0; i < _workers.size(); i++){
+		for (int i = 0; i < _workers.size(); i++) {
 			Downloader_Android_WorkerThread worker = _workers.get(i);
 			worker.start();
 		}
 	}
 
 	@Override
-	public synchronized int request(Url url, int priority, IDownloadListener listener) {
-		  Downloader_iOS_Listener iosListener = [[Downloader_iOS_Listener alloc] initWithCPPListener: cppListener];
-		  
-		  Downloader_iOS_Handler* handler = nil;
-		  
-		  [_lock lock];
+	public synchronized long request(Url url, int priority,
+			IDownloadListener listener) {
+		Downloader_Android_Handler handler = null;
+		final long requestId = _requestIdCounter++;
 
-		  const long requestId = _requestIdCounter++;
-		  
-		  handler = [_downloadingHandlers objectForKey: nsURL];
-		  if (handler) {
-		    // the URL is being downloaded, just add the new listener.
-		    [handler addListener: iosListener
-		                priority: priority
-		               requestId: requestId];
-		  }
-		  
-		  if (!handler) {
-		    handler = [_queuedHandlers objectForKey: nsURL];
-		    if (handler) {
-		      // the URL is queued for future download, just add the new listener.
-		      [handler addListener: iosListener
-		                  priority: priority
-		                 requestId: requestId];
-		    }
-		  }
-		  
-		  if (!handler) {
-		    // new handler, queue it
-		    handler = [[Downloader_iOS_Handler alloc] initWithNSURL: nsURL
-		                                                        url: new Url(url)
-		                                                   listener: iosListener
-		                                                   priority: priority
-		                                                  requestId: requestId];
-		    [_queuedHandlers setObject: handler
-		                        forKey: nsURL];
-		  }
-		  
-		  [_lock unlock];
-		  
-		  return requestId;
+		handler = _downloadingHandlers.get(url.getPath());
+
+		if (handler != null) {
+			// the URL is being downloaded, just add the new listener.
+			handler.addListener(listener, priority, requestId);
+		}
+
+		if (handler == null) {
+			handler = _queuedHandlers.get(url.getPath());
+			if (handler != null) {
+				// the URL is queued for future download, just add the new
+				// listener.
+				handler.addListener(listener, priority, requestId);
+			}
+		}
+
+		if (handler != null) {
+			// new handler, queue it
+			Downloader_Android_Handler h = new Downloader_Android_Handler(url,
+					listener, priority, requestId);
+			_queuedHandlers.put(url.getPath(), h);
+		}
+		return requestId;
 	}
 
 	@Override
 	public synchronized void cancelRequest(int requestId) {
-		// TODO Auto-generated method stub
+		Iterator<Entry<String, Downloader_Android_Handler>> it = _queuedHandlers
+				.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry<String, Downloader_Android_Handler> e = it.next();
+			Downloader_Android_Handler handler = e.getValue();
 
+			handler.removeListenerForRequestId(requestId);
+			if (!handler.hasListeners()) {
+				_queuedHandlers.remove(handler.getURL().getPath());
+			}
+		}
 	}
 
 }
 
-class Downloader_Android_Handler{
-	
-	class ListenerEntry{
-		public final IDownloadListener _listener;
-		public final long 		_requestID;
+class Downloader_Android_Handler {
 
-		public ListEntry(IDownloadListener dl, long rid){
+	class ListenerEntry {
+		public final IDownloadListener _listener;
+		public final long _requestID;
+
+		public ListenerEntry(IDownloadListener dl, long rid) {
 			_listener = dl;
 			_requestID = rid;
 		}
 	};
-	
-	ArrayList<ListenerEntry> _listeners = new ArrayList<ListenerEntry>();
-	long            _priority;
-	Url             _url;
-	
-	Downloader_Android_Handler(Url url, IDownloadListener listener, long priority, long requestID){
+
+	private ArrayList<ListenerEntry> _listeners = new ArrayList<ListenerEntry>();
+	private long _priority;
+	private Url _url;
+
+	Downloader_Android_Handler(Url url, IDownloadListener listener,
+			long priority, long requestID) {
 		_priority = priority;
 		_url = url;
-		
+
 		_listeners.add(new ListenerEntry(listener, requestID));
 	}
-	
-	public synchronized void addListener(IDownloadListener listener, long priority, long requestId){
+
+	public synchronized void addListener(IDownloadListener listener,
+			long priority, long requestId) {
 		_listeners.add(new ListenerEntry(listener, requestId));
-		
-		if (_priority < priority){
+
+		if (_priority < priority) {
 			_priority = priority;
 		}
 	}
-	
 
-	public synchronized boolean removeListenerForRequestId(long requestId){
-		  boolean removed = false;
+	public synchronized boolean removeListenerForRequestId(long requestId) {
+		boolean removed = false;
 
-		  final int listenersCount = _listeners.size();
-		  for (int i = 0; i < listenersCount; i++) {
-		    ListenerEntry entry = _listeners.get(i);
-		    if (entry._requestID == requestId) {
-		      entry._listener.onCancel(_url);
-		      _listeners.remove(i);
-		      removed = true;
-		      break;
-		    }
-		  }
-		  
-		  return removed;
+		final int listenersCount = _listeners.size();
+		for (int i = 0; i < listenersCount; i++) {
+			ListenerEntry entry = _listeners.get(i);
+			if (entry._requestID == requestId) {
+				entry._listener.onCancel(_url);
+				_listeners.remove(i);
+				removed = true;
+				break;
+			}
+		}
+
+		return removed;
 	}
 
-	public synchronized boolean hasListeners(long requestId){
+	public synchronized boolean hasListeners() {
 		return _listeners.size() > 0;
 	}
 
-	public synchronized long getPriority(){
+	public synchronized long getPriority() {
 		return _priority;
+	}
+	
+	public synchronized Url getURL() {
+		return _url;
 	}
 
 	public synchronized void runWithDownloader(Object downloaderV){
-	  Downloader_Android downloader = Downloader_Android downloaderV;
+	  Downloader_Android downloader = (Downloader_Android) downloaderV;
 	  
 	  NSURLRequest *request = [NSURLRequest requestWithURL: _nsURL
 	                                           cachePolicy: NSURLRequestUseProtocolCachePolicy
@@ -235,17 +251,19 @@ class Downloader_Android_Handler{
 	  });
 	  
 	}
-	- (void) dealloc;
-	
 }
 
 class Downloader_Android_WorkerThread extends AsyncTask<String, Void, Void> {
 
 	byte[] _data = null;
 	boolean finished = false;
-	
-	Downloader_Android_WorkerThread()
-	
+
+	final IDownloader _downloader = null;
+
+	Downloader_Android_WorkerThread(IDownloader downloader) {
+		_downloader = downloader;
+	}
+
 	public static byte[] getAsByteArray(final String url_) throws IOException {
 
 		final URL url = new URL(url_);
@@ -261,7 +279,8 @@ class Downloader_Android_WorkerThread extends AsyncTask<String, Void, Void> {
 		if (contentLength != -1) {
 			tmpOut = new ByteArrayOutputStream(contentLength);
 		} else {
-			tmpOut = new ByteArrayOutputStream(16384); // Pick some appropriate size
+			tmpOut = new ByteArrayOutputStream(16384); // Pick some appropriate
+														// size
 		}
 
 		final byte[] buf = new byte[512];
@@ -273,7 +292,8 @@ class Downloader_Android_WorkerThread extends AsyncTask<String, Void, Void> {
 			tmpOut.write(buf, 0, len);
 		}
 		in.close();
-		tmpOut.close(); // No effect, but good to do anyway to keep the metaphor alive
+		tmpOut.close(); // No effect, but good to do anyway to keep the metaphor
+						// alive
 
 		final byte[] array = tmpOut.toByteArray();
 		return array;
@@ -291,7 +311,5 @@ class Downloader_Android_WorkerThread extends AsyncTask<String, Void, Void> {
 		}
 		return null;
 	}
-
-}
 
 }

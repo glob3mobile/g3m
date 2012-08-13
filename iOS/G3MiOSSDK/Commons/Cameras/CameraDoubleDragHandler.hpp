@@ -18,7 +18,7 @@ class CameraDoubleDragHandler: public CameraEventHandler {
   
 public:
   CameraDoubleDragHandler():
-  _camera0(Camera(NULL, 0, 0)), 
+  _camera0(Camera(0, 0)), 
   _initialPoint(0,0,0),
   _initialPixel(0,0,0)
   {}

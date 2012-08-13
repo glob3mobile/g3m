@@ -45,18 +45,25 @@ Geodetic2D Sector::getInnerPoint(double u, double v) const {
   return Geodetic2D(lat, lon);
 }
 
-bool Sector::isBackOriented(const RenderContext *rc) const {
-  const Camera* camera = rc->getNextCamera();
+bool Sector::isBackOriented(const RenderContext *rc) {
+  Camera* camera = rc->getNextCamera();
   const Planet* planet = rc->getPlanet();
   
   // compute sector point nearest to centerPoint
-  const Geodetic2D center = camera->getCenterOfView().asGeodetic2D();
+  const Geodetic2D center = camera->getGeodeticCenterOfView().asGeodetic2D();
   const Geodetic2D point = getClosestPoint(center);
   
   // compute angle between normals
   const Vector3D normal = planet->geodeticSurfaceNormal(point);
   const Vector3D view   = camera->getViewDirection().times(-1);
   const double dot = normal.dot(view);
+  
+ /* 
+  if (dot<0 && _upper.latitude().degrees()>89) {
+    getClosestPoint(center);
+    printf ("ehh\n");
+  }  */
+  
   return (dot < 0) ? true : false;  
 }
 
@@ -72,8 +79,58 @@ Sector Sector::intersection(const Sector& s) const {
   return Sector(low, up);
 }
 
-Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const {
+Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const 
+{
+  // if pos is included, return pos
+  if (contains(pos)) return pos;
+    
+  // test longitude
+  Geodetic2D center = getCenter();
+  double lon        = pos.longitude().degrees();
+  double centerLon  = center.longitude().degrees();
+  double oppLon1    = centerLon - 180;
+  double oppLon2    = centerLon + 180;
+  if (lon<oppLon1) 
+    lon+=360;
+  if (lon>oppLon2) 
+    lon-=360;
+  double minLon     = _lower.longitude().degrees();
+  double maxLon     = _upper.longitude().degrees();
+  //bool insideLon    = true;
+  if (lon < minLon) {
+    lon = minLon;
+    //insideLon = false;
+  } 
+  if (lon > maxLon) {
+    lon = maxLon;
+    //insideLon = false;
+  }
+
+  // test latitude
+  double lat        = pos.latitude().degrees();
+  double minLat     = _lower.latitude().degrees();
+  double maxLat     = _upper.latitude().degrees();
+  //bool insideLat    = true;
+  if (lat < minLat) {
+    lat = minLat;
+    //insideLat = false;
+  }
+  if (lat > maxLat) {
+    lat = maxLat;
+    //insideLat = false;
+  }
+  
+  // here we have to handle the case where sectos is close to the pole, 
+  // and the latitude of the other point must be seen from the other side
+  
+  
+  return Geodetic2D(Angle::fromDegrees(lat), Angle::fromDegrees(lon));
+
+
+  
+/*  
   const Angle lat = pos.latitude().nearestAngleInInterval(_lower.latitude(), _upper.latitude());
   const Angle lon = pos.longitude().nearestAngleInInterval(_lower.longitude(), _upper.longitude());
-  return Geodetic2D(lat, lon);
+  return Geodetic2D(lat, lon);*/
 }
+

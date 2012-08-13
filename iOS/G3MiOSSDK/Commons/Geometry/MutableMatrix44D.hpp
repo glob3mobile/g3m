@@ -13,6 +13,7 @@ class Vector3D;
 class Vector2D;
 //class Angle;
 class MutableVector3D;
+class FrustumData;
 
 #include "Angle.hpp"
 
@@ -177,6 +178,8 @@ public:
   static MutableMatrix44D createProjectionMatrix(double left, double right,
                                                  double bottom, double top,
                                                  double znear, double zfar);
+  
+  static MutableMatrix44D createProjectionMatrix(const FrustumData& data);
   
 };
 

@@ -55,7 +55,7 @@ void CameraRotationHandler::onDown(const EventContext *eventContext,
   lastYValid = _initialPixel.y();
   
   // compute center of view
-  _initialPoint = camera->centerOfViewOnPlanet().asMutableVector3D();
+  _initialPoint = camera->getXYZCenterOfView().asMutableVector3D();
   if (_initialPoint.isNan()) {
     printf ("CAMERA ERROR: center point does not intersect globe!!\n");
     cameraContext->setCurrentGesture(None);
@@ -106,8 +106,8 @@ void CameraRotationHandler::onMove(const EventContext *eventContext,
   tempCamera.rotateWithAxisAndPoint(u, _initialPoint.asVector3D(), Angle::fromDegrees(delta));
   
   // update camera only if new view intersects globe
-  tempCamera.updateModelMatrix();
-  if (!tempCamera.centerOfViewOnPlanet().isNan()) {
+  //tempCamera.updateModelMatrix();
+  if (!tempCamera.getXYZCenterOfView().isNan()) {
     camera->copyFrom(tempCamera);
   } 
 }

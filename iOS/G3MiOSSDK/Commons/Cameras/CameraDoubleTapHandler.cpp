@@ -40,7 +40,7 @@ void CameraDoubleTapHandler::onDown(const EventContext *eventContext,
   if (initialPoint.isNan()) return;
   
   // compute central point of view
-  const Vector3D centerPoint = camera->centerOfViewOnPlanet();
+  const Vector3D centerPoint = camera->getXYZCenterOfView();
 
   // compute drag parameters
   const Vector3D axis = initialPoint.cross(centerPoint);

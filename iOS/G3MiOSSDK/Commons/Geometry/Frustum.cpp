@@ -10,6 +10,25 @@
 #include "Box.hpp"
 
 
+Frustum::Frustum (const FrustumData& data):
+_leftPlane(Plane(Vector3D(0, 0, 0), 
+                 Vector3D(data._left, data._top, -data._znear), 
+                 Vector3D(data._left, data._bottom, -data._znear))),
+_bottomPlane(Plane(Vector3D(0, 0, 0), 
+                   Vector3D(data._left, data._bottom, -data._znear), 
+                   Vector3D(data._right, data._bottom, -data._znear))),
+_rightPlane(Plane(Vector3D(0, 0, 0), 
+                  Vector3D(data._right, data._bottom, -data._znear), 
+                  Vector3D(data._right, data._top, -data._znear))),
+_topPlane(Plane(Vector3D(0, 0, 0), 
+                Vector3D(data._right, data._top, -data._znear), 
+                Vector3D(data._left, data._top, -data._znear))),
+_nearPlane(Plane(Vector3D(0, 0, 1), data._znear)),
+_farPlane(Plane(Vector3D(0, 0, -1), -data._zfar))
+{
+}
+
+
 bool Frustum::contains(const Vector3D& point) const {
   if (_leftPlane.signedDistance(point)   > 0) return false;
   if (_rightPlane.signedDistance(point)  > 0) return false;

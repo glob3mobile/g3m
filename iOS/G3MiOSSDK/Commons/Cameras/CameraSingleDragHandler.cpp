@@ -54,7 +54,7 @@ void CameraSingleDragHandler::onDown(const EventContext *eventContext,
   Vector2D pixel = touchEvent.getTouch(0)->getPos();  
   _initialPoint = _camera0.pixel2PlanetPoint(pixel).asMutableVector3D();
   
-  //printf ("down 1 finger\n");
+  //printf ("down 1 finger. Initial point = %f %f %f\n", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
 }
 
 
@@ -69,6 +69,7 @@ void CameraSingleDragHandler::onMove(const EventContext *eventContext,
   MutableVector3D finalPoint = _camera0.pixel2PlanetPoint(pixel).asMutableVector3D();
   if (finalPoint.isNan()) {
     //INVALID FINAL POINT
+    //printf ("--invalid final point in drag!!\n");
     Vector3D ray = _camera0.pixel2Ray(pixel);
     Vector3D pos = _camera0.getPosition();
     finalPoint = eventContext->getPlanet()->closestPointToSphere(pos, ray).asMutableVector3D();
@@ -85,7 +86,7 @@ void CameraSingleDragHandler::onMove(const EventContext *eventContext,
   _radiansStep    = radians - _lastRadians;
   _lastRadians    = radians;
   
-  //printf ("Moving 1 finger.  gesture=%d\n", _currentGesture);
+  //printf ("Moving 1 finger.\n");
 }
 
 
