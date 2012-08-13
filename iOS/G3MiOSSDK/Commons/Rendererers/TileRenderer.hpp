@@ -332,7 +332,16 @@ public:
   }
   
   bool isReadyToRender(const RenderContext* rc);
+
   
+  void start() {
+    
+  }
+  
+  void stop() {
+    
+  }
+
 };
 
 

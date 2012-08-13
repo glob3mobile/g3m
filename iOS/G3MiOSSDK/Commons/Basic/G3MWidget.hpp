@@ -91,7 +91,8 @@ private:
   long             _totalRenderTime;
   const bool       _logFPS;
   
-  bool _rendererReady;
+  bool      _rendererReady;
+  Renderer* _selectedRenderer;
   
   void initializeGL();
   

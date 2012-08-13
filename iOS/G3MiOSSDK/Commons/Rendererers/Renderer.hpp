@@ -30,6 +30,10 @@ public:
   virtual void onResizeViewportEvent(const EventContext* ec,
                                      int width, int height) = 0;
   
+  virtual void start() = 0;
+  
+  virtual void stop() = 0;
+  
   virtual ~Renderer() { };
 };
 

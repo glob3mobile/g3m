@@ -46,7 +46,7 @@ void LatLonMeshRenderer::initialize(const InitializationContext* ic)
 
 int LatLonMeshRenderer::render(const RenderContext* rc)
 {  
-  GL *gl = rc->getGL();
+//  GL *gl = rc->getGL();
   
   mesh->render(rc);
   

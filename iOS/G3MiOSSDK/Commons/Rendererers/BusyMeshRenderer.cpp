@@ -58,7 +58,8 @@ void BusyMeshRenderer::initialize(const InitializationContext* ic)
   
   // create vertices
   unsigned int nv=0, ni=0, nc=0;
-  float r1=200, r2=230;
+//  float r1=200, r2=230;
+  float r1=12, r2=18;
   for (unsigned int step=0; step<=numStrides; step++) {
     double angle = (double) step * 2 * M_PI / numStrides;
     double c = cos(angle);
@@ -74,22 +75,22 @@ void BusyMeshRenderer::initialize(const InitializationContext* ic)
     ni+=2;    
     float col       = 1.1 * step / numStrides;
     if (col>1) {
-      colors[nc++]    = 128;
-      colors[nc++]    = 128;
-      colors[nc++]    = 128;
+      colors[nc++]    = 255;
+      colors[nc++]    = 255;
+      colors[nc++]    = 255;
       colors[nc++]    = 0;
-      colors[nc++]    = 128;
-      colors[nc++]    = 128;
-      colors[nc++]    = 128;
+      colors[nc++]    = 255;
+      colors[nc++]    = 255;
+      colors[nc++]    = 255;
       colors[nc++]    = 0;      
     } else {
-      colors[nc++]    = 128;
-      colors[nc++]    = 128;
-      colors[nc++]    = 128;
+      colors[nc++]    = 255;
+      colors[nc++]    = 255;
+      colors[nc++]    = 255;
       colors[nc++]    = 1-col;
-      colors[nc++]    = 128;
-      colors[nc++]    = 128;
-      colors[nc++]    = 128;
+      colors[nc++]    = 255;
+      colors[nc++]    = 255;
+      colors[nc++]    = 255;
       colors[nc++]    = 1-col;
     }
   }
@@ -106,6 +107,13 @@ void BusyMeshRenderer::initialize(const InitializationContext* ic)
                                            numVertices, vertices, indices, numIndices, NULL, colors);
 }  
 
+void BusyMeshRenderer::start() {
+  int _TODO_start_effects;
+}
+
+void BusyMeshRenderer::stop() {
+  int _TODO_stop_effects;
+}
 
 int BusyMeshRenderer::render(const RenderContext* rc) 
 {  
@@ -129,13 +137,13 @@ int BusyMeshRenderer::render(const RenderContext* rc)
   gl->loadMatrixf(MutableMatrix44D::identity());
   
   // clear screen
-  gl->clearScreen(0.0f, 0.2f, 0.4f, 1.0f);
+//  gl->clearScreen(0.0f, 0.2f, 0.4f, 1.0f);
   
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   
   gl->pushMatrix();
-  MutableMatrix44D R1 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(60), Vector3D(-1, 0, 0));
+  MutableMatrix44D R1 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(0), Vector3D(-1, 0, 0));
   MutableMatrix44D R2 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, -1));
   gl->multMatrixf(R1.multiply(R2));
   

@@ -21,15 +21,19 @@ public:
   virtual int getWidth() const = 0;
   virtual int getHeight() const = 0;
   
-  virtual IImage* combineWith(const IImage& other, int width, int height) const = 0;
+  virtual IImage* combineWith(const IImage& other,
+                              int width, int height) const = 0;
   
-  virtual IImage* combineWith(const IImage& other, const Rectangle& rect, int width, int height) const = 0;
+  virtual IImage* combineWith(const IImage& other,
+                              const Rectangle& rect,
+                              int width, int height) const = 0;
   
   virtual IImage* subImage(const Rectangle& rect) const = 0;
   
   virtual ByteBuffer* getEncodedImage() const = 0;
   
-  virtual void fillWithRGBA(unsigned char data[], int width, int height) const = 0;
+  virtual void fillWithRGBA(unsigned char data[],
+                            int width, int height) const = 0;
   
 };
 

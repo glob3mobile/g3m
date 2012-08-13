@@ -44,6 +44,14 @@ MutableMatrix44D createOrthographicProjectionMatrix(double left, double right,
   return MutableMatrix44D(P);
 }
 
+void BusyQuadRenderer::start() {
+  int _TODO_start_effects;
+}
+
+void BusyQuadRenderer::stop() {
+  int _TODO_stop_effects;
+}
+
 
 bool BusyQuadRenderer::initMesh(const RenderContext* rc)
 {  

@@ -17,6 +17,10 @@ const GLTextureID CPUTextureBuilder::createTextureFromImages(GL * gl,
     return GLTextureID::invalid();
   }
   
+  if (imagesSize == 1) {
+    return gl->uploadTexture(images[0], width, height);
+  }
+  
   const IImage* im = images[0];
   const IImage* im2 = NULL;
   for (int i = 1; i < imagesSize; i++) {

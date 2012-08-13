@@ -52,7 +52,8 @@ _totalRenderTime(0),
 _logFPS(logFPS),
 _downloaderOLD(downloaderOLD),
 _downloader(downloader),
-_rendererReady(false) // false until first call to G3MWidget::render()
+_rendererReady(false), // false until first call to G3MWidget::render()
+_selectedRenderer(NULL)
 {
   initializeGL();
   
@@ -184,11 +185,17 @@ int G3MWidget::render() {
 
   int __agustin_at_work;
   _rendererReady = _renderer->isReadyToRender(&rc);
-  //_rendererReady = false;
-  
-  
+//  _rendererReady = false;
   
   Renderer* selectedRenderer = _rendererReady ? _renderer : _busyRenderer;
+  
+  if (selectedRenderer != _selectedRenderer) {
+    if (_selectedRenderer != NULL) {
+      _selectedRenderer->stop();
+    }
+    _selectedRenderer = selectedRenderer;
+    _selectedRenderer->start();
+  }
   
 
   // Clear the scene
