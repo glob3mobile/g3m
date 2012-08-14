@@ -254,7 +254,9 @@ private:
   Geodetic3D*     _getGeodeticCenterOfView() {
     if (_dirtyFlags._geodeticCenterOfView) {
       _dirtyFlags._geodeticCenterOfView = false;
+#ifdef C_CODE
       if (_geodeticCenterOfView) delete _geodeticCenterOfView;
+#endif
       _geodeticCenterOfView = new Geodetic3D(_planet->toGeodetic3D(getXYZCenterOfView()));
     }
     return _geodeticCenterOfView;
@@ -265,7 +267,9 @@ private:
   Frustum*  getFrustum() {
     if (_dirtyFlags._frustum) {
       _dirtyFlags._frustum = false;
+#ifdef C_CODE
       if (_frustum!=NULL) delete _frustum;
+#endif
       _frustum = new Frustum(getFrustumData());
     }
     return _frustum;
@@ -276,7 +280,9 @@ private:
   Frustum*  getFrustumMC() {
     if (_dirtyFlags._frustumMC) {
       _dirtyFlags._frustumMC = false;
+#ifdef C_CODE
       if (_frustumInModelCoordinates!=NULL) delete _frustumInModelCoordinates;
+#endif
       _frustumInModelCoordinates = getFrustum()->transformedBy_P(getModelMatrix().transposed());
     }
     return _frustumInModelCoordinates;
@@ -288,7 +294,9 @@ private:
   Frustum*  getHalfFrustum() {
     if (_dirtyFlags._halfFrustum) {
       _dirtyFlags._halfFrustum = false;
+#ifdef C_CODE
       if (_halfFrustum!=NULL) delete _halfFrustum;
+#endif
       FrustumData data = getFrustumData();
       _halfFrustum = new Frustum(data._left/2, data._right/2,
                                  data._bottom/2, data._top/2,
@@ -301,7 +309,9 @@ private:
   Frustum*  getHalfFrustumMC() {
     if (_dirtyFlags._halfFrustumMC) {
       _dirtyFlags._halfFrustumMC = false;
+#ifdef C_CODE
       if (_halfFrustumInModelCoordinates!=NULL) delete _halfFrustumInModelCoordinates;
+#endif
       _halfFrustumInModelCoordinates = getHalfFrustum()->transformedBy_P(getModelMatrix().transposed());
     }
     return _halfFrustumInModelCoordinates;
