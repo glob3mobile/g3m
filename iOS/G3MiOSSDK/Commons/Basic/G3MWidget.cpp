@@ -206,10 +206,12 @@ int G3MWidget::render() {
   if (elapsedTime.milliseconds() > 100) {
     _logger->logWarning("Frame took too much time: %dms" , elapsedTime.milliseconds());
   }
-  _totalRenderTime += elapsedTime.milliseconds();
   
   if (_logFPS) {
-    if (_renderStatisticsTimer == NULL || _renderStatisticsTimer->elapsedTime().seconds() > 2) {
+    _totalRenderTime += elapsedTime.milliseconds();
+    
+    if ((_renderStatisticsTimer == NULL) ||
+        (_renderStatisticsTimer->elapsedTime().seconds() > 2)) {
       const double averageTimePerRender = (double) _totalRenderTime / _renderCounter;
       const double fps = 1000.0 / averageTimePerRender;
       _logger->logInfo("FPS=%f" , fps);
