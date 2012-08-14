@@ -106,51 +106,6 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const RenderContext* rc,
     }
   }
 	
-//  switch (_serverVersion) {
-//    case WMS_1_3_0:
-//      req += "&VERSION=1.3.0";
-//      
-//      std::ostringstream oss1;
-//      oss1 << "&WIDTH=" << width;
-//      oss1 << "&HEIGHT=" << height;
-//      
-//      oss1 << "&BBOX=";
-//      oss1 << sector.lower().latitude().degrees();
-//      oss1 << ",";
-//      oss1 << sector.lower().longitude().degrees();
-//      oss1 << ",";
-//      oss1 << sector.upper().latitude().degrees();
-//      oss1 << ",";
-//      oss1 << sector.upper().longitude().degrees();
-//      req += oss1.str();
-//      
-//      req += "&CRS=EPSG:4326";
-//
-//      
-//      break;
-//    case WMS_1_1_0:
-////      break;
-//    default:
-//      // default is 1.1.1
-//      req += "&VERSION=1.1.1";
-//      
-//      std::ostringstream oss2;
-//      oss2 << "&WIDTH=" << width;
-//      oss2 << "&HEIGHT=" << height;
-//      
-//      oss2 << "&BBOX=";
-//      oss2 << sector.lower().longitude().degrees();
-//      oss2 << ",";
-//      oss2 << sector.lower().latitude().degrees();
-//      oss2 << ",";
-//      oss2 << sector.upper().longitude().degrees();
-//      oss2 << ",";
-//      oss2 << sector.upper().latitude().degrees();
-//      req += oss2.str();
-//
-//      break;
-//  }
-	
   req += "&LAYERS=" + _name;
 	
 	req += "&FORMAT=" + _format;
@@ -194,41 +149,6 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const RenderContext* rc,
       break;
   }
 
-  
-//  if (_serverVersion == "1.3.0") {
-//    std::ostringstream oss;
-//    oss << "&WIDTH=" << width;
-//    oss << "&HEIGHT=" << height;
-//
-//    oss << "&BBOX=";
-//    oss << sector.lower().latitude().degrees();
-//    oss << ",";
-//    oss << sector.lower().longitude().degrees();
-//    oss << ",";
-//    oss << sector.upper().latitude().degrees();
-//    oss << ",";
-//    oss << sector.upper().longitude().degrees();
-//    req += oss.str();
-//
-//    req += "&CRS=EPSG:4326";
-//  }
-//  else {
-//    std::ostringstream oss;
-//    oss << "&WIDTH=" << width;
-//    oss << "&HEIGHT=" << height;
-//
-//    oss << "&BBOX=";
-//    oss << sector.lower().longitude().degrees();
-//    oss << ",";
-//    oss << sector.lower().latitude().degrees();
-//    oss << ",";
-//    oss << sector.upper().longitude().degrees();
-//    oss << ",";
-//    oss << sector.upper().latitude().degrees();
-//    req += oss.str();
-//  }
-  //printf("%s\n", req.c_str());
-  
   Petition *pet = new Petition(sector, req, _isTransparent);
   petitions.push_back(pet);
   
