@@ -101,14 +101,13 @@ public class Tile
   private boolean isVisible(RenderContext rc, TileTessellator tessellator)
   {
   
-	// test if sector is back oriented with respect to the camera
-	if (_sector.isBackOriented(rc))
-	{
+	/* // test if sector is back oriented with respect to the camera
+	if (_sector.isBackOriented(rc)) {
 		return false;
-	  }
+	  }*/
   
 	return getTessellatorMesh(rc, tessellator).getExtent().touches(rc.getNextCamera().getFrustumInModelCoordinates());
-	//return getTessellatorMesh(rc, tessellator)->getExtent()->touches(rc->getCamera()->_halfFrustumInModelCoordinates);
+	//return getTessellatorMesh(rc, tessellator)->getExtent()->touches(rc->getNextCamera()->getHalfFrustuminModelCoordinates());
   }
 
   private boolean meetsRenderCriteria(RenderContext rc, TileTessellator tessellator, TileTexturizer texturizer, TileParameters parameters, ITimer lastSplitTimer, TilesStatistics statistics)

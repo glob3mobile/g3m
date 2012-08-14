@@ -86,7 +86,7 @@ public class CPUTextureBuilder extends TextureBuilder
 	IImage base;
 	int i = 0; //First image to merge
 	Rectangle baseRec = new Rectangle(0,0, width, height);
-	if (vRectangles.get(0).equalTo(baseRec))
+	if (vRectangles.size() > 0 && vRectangles.get(0).equalTo(baseRec))
 	{
 	  base = vImages.get(0);
 	  i = 1;
@@ -94,7 +94,11 @@ public class CPUTextureBuilder extends TextureBuilder
 	else
 	{
 	  base = factory.createImageFromSize(width, height);
+  
+	  System.out.printf("IMAGE BASE %d, %d\n", base.getWidth(), base.getHeight());
 	}
+  
+  
   
 	for (; i < vImages.size(); i++)
 	{
@@ -114,7 +118,7 @@ public class CPUTextureBuilder extends TextureBuilder
   
 	int texID = gl.uploadTexture(base, width, height);
   
-	if (base != vImages.get(0))
+	if (vRectangles.size() > 0 && base != vImages.get(0))
 	{
 	  if (base != null)
 		  base.dispose();

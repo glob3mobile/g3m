@@ -27,7 +27,7 @@ public class CameraRotationHandler extends CameraEventHandler
 
   public CameraRotationHandler()
   {
-	  _camera0 = new Camera(new Camera(null, 0, 0));
+	  _camera0 = new Camera(new Camera(0, 0));
 	  _initialPoint = new MutableVector3D(0,0,0);
 	  _initialPixel = new MutableVector3D(0,0,0);
   }
@@ -102,7 +102,7 @@ public class CameraRotationHandler extends CameraEventHandler
 	lastYValid = _initialPixel.y();
   
 	// compute center of view
-	_initialPoint = camera.centerOfViewOnPlanet().asMutableVector3D();
+	_initialPoint = camera.getXYZCenterOfView().asMutableVector3D();
 	if (_initialPoint.isNan())
 	{
 	  System.out.print("CAMERA ERROR: center point does not intersect globe!!\n");
@@ -153,8 +153,8 @@ public class CameraRotationHandler extends CameraEventHandler
 	tempCamera.rotateWithAxisAndPoint(u, _initialPoint.asVector3D(), Angle.fromDegrees(delta));
   
 	// update camera only if new view intersects globe
-	tempCamera.updateModelMatrix();
-	if (!tempCamera.centerOfViewOnPlanet().isNan())
+	//tempCamera.updateModelMatrix();
+	if (!tempCamera.getXYZCenterOfView().isNan())
 	{
 	  camera.copyFrom(tempCamera);
 	}

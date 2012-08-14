@@ -23,6 +23,8 @@ package org.glob3.mobile.generated;
 //class Angle;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class MutableVector3D;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class FrustumData;
 
 
 
@@ -387,6 +389,11 @@ public class MutableMatrix44D
 	P[15] = 0;
   
 	return new MutableMatrix44D(P);
+  }
+
+  public static MutableMatrix44D createProjectionMatrix(FrustumData data)
+  {
+	return createProjectionMatrix(data._left, data._right, data._bottom, data._top, data._znear, data._zfar);
   }
 
 }

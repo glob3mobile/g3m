@@ -9,6 +9,8 @@ public class TilePetitions implements IDownloadListener
 
   private java.util.ArrayList<Petition> _petitions = new java.util.ArrayList<Petition>();
 
+  private String _petitionsID;
+
   private int _texID; //TEXTURE ID ONCE IS FINISHED
 
   private int _downloadsCounter;
@@ -40,8 +42,27 @@ public class TilePetitions implements IDownloadListener
 	  return _petitions.size();
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: String createPetitionsID(const IFactory* fac) const
+  private String createPetitionsID(IFactory fac)
+  {
+	String id = "";
+	for (int j = 0; j < _petitions.size(); j++)
+	{
+	  if (j > 0)
+	  {
+		id += "__";
+	  }
+	  id += _petitions.get(j).getURL();
+	}
+  
+	id += fac.stringFormat("_%f_%f_%f", _level, _row, _column);
+  
+	return id;
+  }
 
-  public TilePetitions(int level, int row, int column, Sector sector, java.util.ArrayList<Petition> petitions)
+
+  public TilePetitions(int level, int row, int column, Sector sector, java.util.ArrayList<Petition> petitions, IFactory fac)
   {
 	  _level = level;
 	  _row = row;
@@ -52,6 +73,7 @@ public class TilePetitions implements IDownloadListener
 	  _petitions = petitions;
 	  _texID = -1;
 	removeUnnecesaryPetitions();
+	_petitionsID = createPetitionsID(fac);
   }
 
   public void dispose()
@@ -146,7 +168,6 @@ public class TilePetitions implements IDownloadListener
 		if (im != null)
 		{
 		  images.add(im);
-  
 		  Rectangle rec = getImageRectangleInTexture(_tileSector, imSector, width, height);
 		  rectangles.add(rec);
 		}
@@ -179,16 +200,7 @@ public class TilePetitions implements IDownloadListener
 //ORIGINAL LINE: String getPetitionsID() const
   public final String getPetitionsID()
   {
-	String id = "";
-	for (int j = 0; j < _petitions.size(); j++)
-	{
-	  if (j > 0)
-	  {
-		id += "__";
-	  }
-	  id += _petitions.get(j).getURL();
-	}
-	return id;
+	return _petitionsID;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

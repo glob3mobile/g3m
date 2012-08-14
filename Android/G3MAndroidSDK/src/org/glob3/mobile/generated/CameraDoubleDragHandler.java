@@ -25,7 +25,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 
   public CameraDoubleDragHandler()
   {
-	  _camera0 = new Camera(new Camera(null, 0, 0));
+	  _camera0 = new Camera(new Camera(0, 0));
 	  _initialPoint = new MutableVector3D(0,0,0);
 	  _initialPixel = new MutableVector3D(0,0,0);
   }
@@ -155,12 +155,12 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 	  double angle = originalAngle.degrees();
   
 	  // compute estimated camera translation
-	  Vector3D centerPoint = tempCamera.centerOfViewOnPlanet();
+	  Vector3D centerPoint = tempCamera.getXYZCenterOfView();
 	  double distance = tempCamera.getPosition().sub(centerPoint).length();
 	  double d = distance*(factor-1)/factor;
 	  tempCamera.moveForward(d);
 	  dAccum += d;
-	  tempCamera.updateModelMatrix();
+	  //tempCamera.updateModelMatrix();
 	  double angle0 = tempCamera.compute3DAngularDistance(pixel0, pixel1).degrees();
 	  if (Double.isNaN(angle0))
 		  return;
@@ -172,7 +172,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 		  d*=-1;
 	  tempCamera.moveForward(d);
 	  dAccum += d;
-	  tempCamera.updateModelMatrix();
+	  //tempCamera.updateModelMatrix();
 	  double angle1 = tempCamera.compute3DAngularDistance(pixel0, pixel1).degrees();
 	  double angle_n1 = angle0;
 	  double angle_n = angle1;
@@ -187,7 +187,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 			d*=-0.5;
 		tempCamera.moveForward(d);
 		dAccum += d;
-		tempCamera.updateModelMatrix();
+		//tempCamera.updateModelMatrix();
 		angle_n1 = angle_n;
 		angle_n = tempCamera.compute3DAngularDistance(pixel0, pixel1).degrees();
 	  }
@@ -198,7 +198,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 	Camera tempCamera = new Camera(_camera0);
   
 	// computer center view point
-	Vector3D centerPoint = tempCamera.centerOfViewOnPlanet();
+	Vector3D centerPoint = tempCamera.getXYZCenterOfView();
   
 	// drag from initialPoint to centerPoint
 	{
@@ -214,8 +214,8 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 	tempCamera.moveForward(dAccum);
   
 	// compute 3D point of view center
-	tempCamera.updateModelMatrix();
-	Vector3D centerPoint2 = tempCamera.centerOfViewOnPlanet();
+	//tempCamera.updateModelMatrix();
+	Vector3D centerPoint2 = tempCamera.getXYZCenterOfView();
   
   //<<<<<<< HEAD
   //  // rotate the camera
@@ -265,7 +265,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 	tempCamera.rotateWithAxis(rotationAxis, rotationDelta);
   
 	// the gesture was valid. Copy data to final camera
-	tempCamera.updateModelMatrix();
+	//tempCamera.updateModelMatrix();
   
 	// camera rotation
 	{
@@ -280,7 +280,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 	}
   
 	// copy final transformation to camera
-	tempCamera.updateModelMatrix();
+	//tempCamera.updateModelMatrix();
 	cameraContext.getCamera().copyFrom(tempCamera);
   
 	//printf ("moving 2 fingers\n");

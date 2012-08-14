@@ -254,21 +254,26 @@ public class Sector
 	return new Vector2D(u, v);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isBackOriented(const RenderContext *rc) const
   public final boolean isBackOriented(RenderContext rc)
   {
-	final Camera camera = rc.getNextCamera();
+	Camera camera = rc.getNextCamera();
 	final Planet planet = rc.getPlanet();
   
 	// compute sector point nearest to centerPoint
-	final Geodetic2D center = camera.getCenterOfView().asGeodetic2D();
+	final Geodetic2D center = camera.getGeodeticCenterOfView().asGeodetic2D();
 	final Geodetic2D point = getClosestPoint(center);
   
 	// compute angle between normals
 	final Vector3D normal = planet.geodeticSurfaceNormal(point);
 	final Vector3D view = camera.getViewDirection().times(-1);
 	final double dot = normal.dot(view);
+  
+   /*
+	if (dot<0 && _upper.latitude().degrees()>89) {
+	  getClosestPoint(center);
+	  printf ("ehh\n");
+	}  */
+  
 	return (dot < 0) ? true : false;
   }
 
@@ -276,9 +281,67 @@ public class Sector
 //ORIGINAL LINE: Geodetic2D getClosestPoint(const Geodetic2D& pos) const
   public final Geodetic2D getClosestPoint(Geodetic2D pos)
   {
-	final Angle lat = pos.latitude().nearestAngleInInterval(_lower.latitude(), _upper.latitude());
-	final Angle lon = pos.longitude().nearestAngleInInterval(_lower.longitude(), _upper.longitude());
-	return new Geodetic2D(lat, lon);
+	// if pos is included, return pos
+	if (contains(pos))
+		return pos;
+  
+	// test longitude
+	Geodetic2D center = getCenter();
+	double lon = pos.longitude().degrees();
+	double centerLon = center.longitude().degrees();
+	double oppLon1 = centerLon - 180;
+	double oppLon2 = centerLon + 180;
+	if (lon<oppLon1)
+	  lon+=360;
+	if (lon>oppLon2)
+	  lon-=360;
+	double minLon = _lower.longitude().degrees();
+	double maxLon = _upper.longitude().degrees();
+	//bool insideLon    = true;
+	if (lon < minLon)
+	{
+	  lon = minLon;
+	  //insideLon = false;
+	}
+	if (lon > maxLon)
+	{
+	  lon = maxLon;
+	  //insideLon = false;
+	}
+  
+	// test latitude
+	double lat = pos.latitude().degrees();
+	double minLat = _lower.latitude().degrees();
+	double maxLat = _upper.latitude().degrees();
+	//bool insideLat    = true;
+	if (lat < minLat)
+	{
+	  lat = minLat;
+	  //insideLat = false;
+	}
+	if (lat > maxLat)
+	{
+	  lat = maxLat;
+	  //insideLat = false;
+	}
+  
+	// here we have to handle the case where sectos is close to the pole,
+	// and the latitude of the other point must be seen from the other side
+  
+  
+	return new Geodetic2D(Angle.fromDegrees(lat), Angle.fromDegrees(lon));
+  
+  
+  
+  /*
+	const Angle lat = pos.latitude().nearestAngleInInterval(_lower.latitude(), _upper.latitude());
+	const Angle lon = pos.longitude().nearestAngleInInterval(_lower.longitude(), _upper.longitude());
+	return Geodetic2D(lat, lon);*/
   }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Geodetic2D getApproximatedClosestPoint(const Geodetic2D& pos) const;
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  Geodetic2D getApproximatedClosestPoint(Geodetic2D pos);
 
 }

@@ -50,7 +50,7 @@ public class TileImagesTileTexturizer extends TileTexturizer
   {
 	java.util.ArrayList<Petition> pet = _layerSet.createTilePetitions(_renderContext, _factory, tile, _parameters._tileTextureWidth, _parameters._tileTextureHeight);
   
-	return new TilePetitions(tile.getLevel(), tile.getRow(), tile.getColumn(), tile.getSector(), pet);
+	return new TilePetitions(tile.getLevel(), tile.getRow(), tile.getColumn(), tile.getSector(), pet, _factory);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -215,15 +215,14 @@ public class TileImagesTileTexturizer extends TileTexturizer
   }
 
 
-  public TileImagesTileTexturizer(TileParameters parameters, Downloader downloader, LayerSet layerSet, IFactory factory)
+  public TileImagesTileTexturizer(TileParameters parameters, Downloader downloader, LayerSet layerSet, IFactory fac)
   {
 	  _parameters = parameters;
 	  _layer = null;
 	  _downloader = downloader;
 	  _texCoordsCache = null;
 	  _layerSet = layerSet;
-	  _factory = factory;
-	  _renderContext = null;
+	  _factory = fac;
   }
 
   public void dispose()

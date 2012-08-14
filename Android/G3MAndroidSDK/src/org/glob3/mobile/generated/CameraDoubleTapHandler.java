@@ -39,7 +39,7 @@ public class CameraDoubleTapHandler extends CameraEventHandler
 		return;
   
 	// compute central point of view
-	final Vector3D centerPoint = camera.centerOfViewOnPlanet();
+	final Vector3D centerPoint = camera.getXYZCenterOfView();
   
 	// compute drag parameters
 	final Vector3D axis = initialPoint.cross(centerPoint);

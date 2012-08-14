@@ -1,25 +1,4 @@
 package org.glob3.mobile.generated; 
-//
-//  Frustum.cpp
-//  G3MiOSSDK
-//
-//  Created by Agustín Trujillo Pino on 15/07/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
-//
-
-//
-//  Frustum.h
-//  G3MiOSSDK
-//
-//  Created by Agustín Trujillo Pino on 15/07/12.
-//  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
-//
-
-
-
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class Box;
-
 public class Frustum
 {
   private Plane _leftPlane = new Plane();
@@ -59,6 +38,16 @@ public class Frustum
 	  _topPlane = new Plane(new Plane(new Vector3D(0, 0, 0), new Vector3D(right, top, -znear), new Vector3D(left, top, -znear)));
 	  _nearPlane = new Plane(new Plane(new Vector3D(0, 0, 1), znear));
 	  _farPlane = new Plane(new Plane(new Vector3D(0, 0, -1), -zfar));
+  }
+
+  public Frustum (FrustumData data)
+  {
+	  _leftPlane = new Plane(new Plane(new Vector3D(0, 0, 0), new Vector3D(data._left, data._top, -data._znear), new Vector3D(data._left, data._bottom, -data._znear)));
+	  _bottomPlane = new Plane(new Plane(new Vector3D(0, 0, 0), new Vector3D(data._left, data._bottom, -data._znear), new Vector3D(data._right, data._bottom, -data._znear)));
+	  _rightPlane = new Plane(new Plane(new Vector3D(0, 0, 0), new Vector3D(data._right, data._bottom, -data._znear), new Vector3D(data._right, data._top, -data._znear)));
+	  _topPlane = new Plane(new Plane(new Vector3D(0, 0, 0), new Vector3D(data._right, data._top, -data._znear), new Vector3D(data._left, data._top, -data._znear)));
+	  _nearPlane = new Plane(new Plane(new Vector3D(0, 0, 1), data._znear));
+	  _farPlane = new Plane(new Plane(new Vector3D(0, 0, -1), -data._zfar));
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

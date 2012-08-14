@@ -7,7 +7,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
 
   public CameraSingleDragHandler()
   {
-	  _camera0 = new Camera(new Camera(null, 0, 0));
+	  _camera0 = new Camera(new Camera(0, 0));
 	  _initialPoint = new MutableVector3D(0,0,0);
 	  _initialPixel = new MutableVector3D(0,0,0);
   }
@@ -83,7 +83,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
 	Vector2D pixel = touchEvent.getTouch(0).getPos();
 	_initialPoint = _camera0.pixel2PlanetPoint(pixel).asMutableVector3D();
   
-	//printf ("down 1 finger\n");
+	//printf ("down 1 finger. Initial point = %f %f %f\n", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
   }
   public final void onMove(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
@@ -97,6 +97,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
 	if (finalPoint.isNan())
 	{
 	  //INVALID FINAL POINT
+	  //printf ("--invalid final point in drag!!\n");
 	  Vector3D ray = _camera0.pixel2Ray(pixel);
 	  Vector3D pos = _camera0.getPosition();
 	  finalPoint = eventContext.getPlanet().closestPointToSphere(pos, ray).asMutableVector3D();
@@ -113,7 +114,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
 	_radiansStep = radians - _lastRadians;
 	_lastRadians = radians;
   
-	//printf ("Moving 1 finger.  gesture=%d\n", _currentGesture);
+	//printf ("Moving 1 finger.\n");
   }
   public final void onUp(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
