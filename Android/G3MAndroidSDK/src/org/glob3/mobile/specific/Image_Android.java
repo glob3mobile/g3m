@@ -1,5 +1,7 @@
 package org.glob3.mobile.specific;
 
+import java.io.ByteArrayOutputStream;
+
 import org.glob3.mobile.generated.ByteBuffer;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.Rectangle;
@@ -20,14 +22,12 @@ public class Image_Android extends IImage{
 
 	@Override
 	public int getWidth() {
-		// TODO Auto-generated method stub
-		return 0;
+		return _image.getWidth();
 	}
 
 	@Override
 	public int getHeight() {
-		// TODO Auto-generated method stub
-		return 0;
+		return _image.getHeight();
 	}
 
 	@Override
@@ -45,14 +45,18 @@ public class Image_Android extends IImage{
 
 	@Override
 	public IImage subImage(Rectangle rect) {
-		// TODO Auto-generated method stub
-		return null;
+		Bitmap bm = Bitmap.createBitmap(_image, (int) rect._x, (int) rect._y, (int) rect._width, (int) rect._height);
+		
+		return new Image_Android(bm);
 	}
 
 	@Override
 	public ByteBuffer getEncodedImage() {
-		// TODO Auto-generated method stub
-		return null;
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();  
+		_image.compress(Bitmap.CompressFormat.PNG, 100, baos);
+		byte[] b = baos.toByteArray();
+		
+		return new ByteBuffer(b, b.length);
 	}
 
 	@Override
