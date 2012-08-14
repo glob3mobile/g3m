@@ -391,16 +391,45 @@
   //LAYERS
   LayerSet* layerSet = new LayerSet();
   
-//  WMSLayer* baseLayer = new WMSLayer("bmng200405",
-//                                     "http://www.nasa.network.com/wms?",
-//                                     "1.1.0",
-//                                     "image/jpeg",
-//                                     Sector::fullSphere(),
-//                                     "EPSG:4326",
-//                                     "",
-//                                     false,
-//                                     Angle::nan(),
-//                                     Angle::nan());
+  class TouchOcean: public TerrainTouchEventListener, IDownloadListener{
+    IFactory* const _factory;
+    IDownloader * const _downloader;
+  public:
+    
+    TouchOcean(IFactory* f, IDownloader* d):_factory(f), _downloader(d){}
+    
+    void onTerrainTouchEvent(const TerrainTouchEvent& event){
+      printf("POINT %f, %f", event._g2d.latitude().degrees(), event._g2d.longitude().degrees());
+      URL url = event._layer->getFeatureURL(event._g2d, _factory, event._sector, 256, 256);
+      printf("%s\n", url.getPath().c_str());
+      
+      _downloader->request(url, 999999999, this, false);
+    }
+    
+    void onDownload(const Response* response){
+      std::string s = (char*) response->getByteBuffer()->getData();
+      printf("%s\n", s.c_str());
+    }
+    
+    void onError(const Response* response){
+      printf("Error in request\n");
+    }
+    
+    void onCancel(const URL* url){
+      printf("Cancel in request\n");
+    }
+  };
+
+  WMSLayer* baseLayer = new WMSLayer("bmng200405",
+                                     "http://www.nasa.network.com/wms?",
+                                     WMS_1_3_0,
+                                     "image/jpeg",
+                                     Sector::fullSphere(),
+                                     "EPSG:4326",
+                                     "",
+                                     false,
+                                     Angle::nan(),
+                                     Angle::nan());
   
 //  WMSLayer *vias = new WMSLayer("VIAS",
 //                                "http://idecan2.grafcan.es/ServicioWMS/Callejero",
@@ -424,10 +453,8 @@
 //                                Angle::nan(),
 //                                Angle::nan());
 
-  WMSLayer *oceans = new WMSLayer(//"igo:bmng200401",
-                                  "igo:bmng200401,igo:ocean_2010_0_15,igo:ocean_cnt_2010_0_15",
-                                  //"igo:ocean_temp_1993_01_02",
-                                  //"igo:ocean_temp_1993_01_02_180",
+  WMSLayer *oceans = new WMSLayer("igo:bmng200401,igo:ocean_2010_0_15,igo:ocean_cnt_2010_0_15",
+                                  "igo:ocean_2010_0_15,igo:ocean_cnt_2010_0_15",
                                   "http://igosoftware.dyndns.org:8080/geoserver/igo/wms",
                                   WMS_1_3_0,
                                   "image/jpeg",
@@ -438,11 +465,14 @@
                                   Angle::nan(),
                                   Angle::nan());
   
+  oceans->addTerrainTouchEventListener(new TouchOcean(factory, downloader));
+  
   //ORDER IS IMPORTANT
+  layerSet->addLayer(baseLayer);
   layerSet->addLayer(oceans);
 //  layerSet->addLayer(vias);
 
-//  layerSet->addLayer(baseLayer);
+
 //  layerSet->addLayer(pnoa);
 //  layerSet->addLayer(vias);
 //  layerSet->addLayer(oceans);

@@ -75,8 +75,9 @@ public:
                                      Tile* ancestorTile,
                                      bool textureSolved);
   
-  void getFeatureInfo(const TileRenderContext* trc,
-                      Tile* tile, const Geodetic3D& g, IDownloadListener* downListener);
+  void onTerrainTouchEvent(const Geodetic3D& g3d, const Tile* tile) {
+    
+  }
 
 };
 

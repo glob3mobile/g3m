@@ -319,17 +319,6 @@ bool TileRenderer::onTouchEvent(const EventContext* ec, const TouchEvent* touchE
         Geodetic3D g = _topLevelTiles[i]->intersection(origin, ray, ec->getPlanet());
         if (!g.isNan()){
           printf("G: %f, %f, %f\n", g.latitude().degrees(), g.longitude().degrees(), g.height());
-          
-          TilesStatistics statistics;
-          TileRenderContext trc(_tessellator,
-                                _texturizer,
-                                _parameters,
-                                &statistics,
-                                _lastSplitTimer,
-                                _lastTexturizerTimer);
-          
-          
-          _texturizer->getFeatureInfo(&trc, _topLevelTiles[i], g, NULL);
         }
       }
       

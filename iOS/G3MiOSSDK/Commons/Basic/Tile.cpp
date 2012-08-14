@@ -347,7 +347,15 @@ const TileKey Tile::getKey() const {
 
 Geodetic3D Tile::intersection(const Vector3D& origin, const Vector3D& ray, const Planet* planet) const{
   
-  int todo_check_with_subtiles_jm; //NECESARY ????
+  //If this tile is not a leafe
+  if (_subtiles != NULL){
+    for (int i = 0; i < 4; i++) {
+      Geodetic3D g3d = _subtiles->at(0)->intersection(origin, ray, planet);
+      if (!g3d.isNan()){
+        return g3d;
+      }
+    }
+  }
   
   Vector3D v = _tessellatorMesh->getExtent()->intersectionWithRay(origin, ray);
   
@@ -364,6 +372,8 @@ Geodetic3D Tile::intersection(const Vector3D& origin, const Vector3D& ray, const
       Geodetic3D g = planet->toGeodetic3D(onPlanet);
       
       if (_sector.contains(g)){
+        _texturizer->onTerrainTouchEvent(g, this);
+        
         return g;
       } else {
         return Geodetic3D::nan();

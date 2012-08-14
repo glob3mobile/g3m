@@ -585,10 +585,7 @@ bool MultiLayerTileTexturizer::isReady(const RenderContext *rc) {
   return isReady;
 }
 
-void MultiLayerTileTexturizer::getFeatureInfo(const TileRenderContext* trc,
-                                              Tile* tile, const Geodetic3D& g, 
-                                              IDownloadListener* downListener){
-  
-  
-  
+void MultiLayerTileTexturizer::onTerrainTouchEvent(const Geodetic3D& g3d, const Tile* tile){
+  _layerSet->onTerrainTouchEvent(g3d, tile);
 }
+

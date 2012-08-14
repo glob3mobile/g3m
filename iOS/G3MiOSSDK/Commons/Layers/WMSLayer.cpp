@@ -106,7 +106,7 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const RenderContext* rc,
     }
   }
 	
-  req += "&LAYERS=" + _name;
+  req += "&LAYERS=" + _mapLayers;
 	
 	req += "&FORMAT=" + _format;
 	
@@ -160,10 +160,8 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const RenderContext* rc,
 
 URL WMSLayer::getFeatureURL(const Geodetic2D& g,
                             const IFactory* factory,
-                            const Tile* tile,
+                            const Sector& tileSector,
                             int width, int height) const {
-
-  const Sector tileSector = tile->getSector();
   if (!_bbox.touchesWith(tileSector)) {
     return URL::null();
   }
@@ -186,7 +184,7 @@ URL WMSLayer::getFeatureURL(const Geodetic2D& g,
     
     req = newHost + req;
   }
-	
+  
   req += "REQUEST=GetFeatureInfo&SERVICE=WMS";
   switch (_serverVersion) {
     case WMS_1_3_0:
@@ -219,14 +217,62 @@ URL WMSLayer::getFeatureURL(const Geodetic2D& g,
   //Texture Size and BBOX
   std::ostringstream oss;
   oss << "&WIDTH=" << width << "&HEIGHT=" << height;
-  oss << "&BBOX=" << sector.lower().longitude().degrees() << "," << sector.lower().latitude().degrees();
-  oss << "," << sector.upper().longitude().degrees() << "," << sector.upper().latitude().degrees();
+//  oss << "&BBOX=" << sector.lower().longitude().degrees() << "," << sector.lower().latitude().degrees();
+//  oss << "," << sector.upper().longitude().degrees() << "," << sector.upper().latitude().degrees();
   req += oss.str();
+  
+  switch (_serverVersion) {
+    case WMS_1_3_0:
+    {
+      req += "&VERSION=1.3.0";
+      
+      std::ostringstream oss1;
+      oss1 << "&WIDTH=" << width;
+      oss1 << "&HEIGHT=" << height;
+      
+      oss1 << "&BBOX=";
+      oss1 << sector.lower().latitude().degrees();
+      oss1 << ",";
+      oss1 << sector.lower().longitude().degrees();
+      oss1 << ",";
+      oss1 << sector.upper().latitude().degrees();
+      oss1 << ",";
+      oss1 << sector.upper().longitude().degrees();
+      req += oss1.str();
+      
+      req += "&CRS=EPSG:4326";
+    }
+      break;
+      
+    case WMS_1_1_0:
+    default:
+    {
+      // default is 1.1.1
+      req += "&VERSION=1.1.1";
+      
+      std::ostringstream oss2;
+      oss2 << "&WIDTH=" << width;
+      oss2 << "&HEIGHT=" << height;
+      
+      oss2 << "&BBOX=";
+      oss2 << sector.lower().longitude().degrees();
+      oss2 << ",";
+      oss2 << sector.lower().latitude().degrees();
+      oss2 << ",";
+      oss2 << sector.upper().longitude().degrees();
+      oss2 << ",";
+      oss2 << sector.upper().latitude().degrees();
+      req += oss2.str();
+      
+      break;
+    }
+  }
 	
-  req += "&QUERY_LAYERS=" + _name;
+  req += "&QUERY_LAYERS=" + _queryLayers;
+  req += "&LAYERS=" + _mapLayers;
   
   //X and Y
-  Vector2D pixel = tile->getSector().getUVCoordinates(g);
+  Vector2D pixel = tileSector.getUVCoordinates(g);
   int x = (int) (pixel.x() * width);
   int y = (int) ((1.0 - pixel.y()) * height);
   req += factory->stringFormat("&X=%d&Y=%d", x, y);

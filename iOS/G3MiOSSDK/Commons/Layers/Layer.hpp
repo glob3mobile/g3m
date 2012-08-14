@@ -15,7 +15,12 @@
 #include "IFactory.hpp"
 #include "Context.hpp"
 
+#include "TerrainTouchEventListener.hpp"
+
 class Layer{
+protected:
+  
+  TerrainTouchEventListener* _ttel;
 
 public:
   
@@ -34,8 +39,18 @@ public:
   
   virtual URL getFeatureURL(const Geodetic2D& g,
                             const IFactory* factory,
-                            const Tile* tile,
+                            const Sector& sector,
                             int width, int height) const = 0;
+  
+  void addTerrainTouchEventListener(TerrainTouchEventListener* ttel){
+    _ttel = ttel;
+  }
+  
+  void onTerrainTouchEventListener(TerrainTouchEvent& tte){
+    if (_ttel != NULL){
+      _ttel->onTerrainTouchEvent(tte);
+    }
+  }
   
 };
 
