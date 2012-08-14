@@ -399,11 +399,11 @@
     TouchOcean(IFactory* f, IDownloader* d):_factory(f), _downloader(d){}
     
     void onTerrainTouchEvent(const TerrainTouchEvent& event){
-      printf("POINT %f, %f", event._g2d.latitude().degrees(), event._g2d.longitude().degrees());
+//      printf("POINT %f, %f", event._g2d.latitude().degrees(), event._g2d.longitude().degrees());
       URL url = event._layer->getFeatureURL(event._g2d, _factory, event._sector, 256, 256);
-      printf("%s\n", url.getPath().c_str());
+//      printf("%s\n", url.getPath().c_str());
       
-      _downloader->request(url, 999999999, this, false);
+      _downloader->request(url, 999999999, this, true);
     }
     
     void onDownload(const Response* response) {
