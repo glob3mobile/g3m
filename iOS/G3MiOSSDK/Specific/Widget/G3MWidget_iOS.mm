@@ -120,17 +120,41 @@
 
   //LAYERS
   LayerSet* layerSet = new LayerSet();
-  WMSLayer* baseLayer = new WMSLayer("bmng200405", "http://www.nasa.network.com/wms?", 
-                                     "1.3", "image/jpeg", Sector::fullSphere(), "EPSG:4326", "", false,
-                                     Angle::nan(), Angle::nan());
+  WMSLayer* baseLayer = new WMSLayer("bmng200405",
+                                     "http://www.nasa.network.com/wms?",
+                                     WMS_1_1_0,
+                                     "image/jpeg",
+                                     Sector::fullSphere(),
+                                     "EPSG:4326",
+                                     "",
+                                     false,
+                                     Angle::nan(),
+                                     Angle::nan());
   layerSet->addLayer(baseLayer);
 
   if (false){
     Sector s = Sector::fromDegrees(-60, 50, 10, 185);
-    WMSLayer *wmsl = new WMSLayer("test:contourGSLA","http://imos2.ersa.edu.au/geo2/test/wms","1.1.1", "image/png", s, "EPSG:4326", "sla_test", true, Angle::nan(), Angle::nan());
+    WMSLayer *wmsl = new WMSLayer("test:contourGSLA",
+                                  "http://imos2.ersa.edu.au/geo2/test/wms",
+                                  WMS_1_1_0,
+                                  "image/png",
+                                  s,
+                                  "EPSG:4326",
+                                  "sla_test",
+                                  true,
+                                  Angle::nan(),
+                                  Angle::nan());
     
-    WMSLayer *wms_sst = new WMSLayer("sea_surface_temperature","http://opendap-vpac.arcs.org.au/thredds/wms/IMOS/SRS/GHRSST-SSTsubskin/2012/20120626-ABOM-L3P_GHRSST-SSTsubskin-AVHRR_MOSAIC_01km-AO_DAAC-v01-fv01_0.nc?","1.3.0", "image/png", s, "EPSG:4326&COLORSCALERANGE=273.8%2C302.8&NUMCOLORBANDS=50&LOGSCALE=false", "boxfill%2Fsst_36",
-                                     true, Angle::nan(), Angle::nan());
+    WMSLayer *wms_sst = new WMSLayer("sea_surface_temperature",
+                                     "http://opendap-vpac.arcs.org.au/thredds/wms/IMOS/SRS/GHRSST-SSTsubskin/2012/20120626-ABOM-L3P_GHRSST-SSTsubskin-AVHRR_MOSAIC_01km-AO_DAAC-v01-fv01_0.nc?",
+                                     WMS_1_3_0,
+                                     "image/png",
+                                     s,
+                                     "EPSG:4326&COLORSCALERANGE=273.8%2C302.8&NUMCOLORBANDS=50&LOGSCALE=false",
+                                     "boxfill%2Fsst_36",
+                                     true,
+                                     Angle::nan(),
+                                     Angle::nan());
     
     layerSet->addLayer(wmsl);
     layerSet->addLayer(wms_sst);
@@ -404,7 +428,7 @@
                                   //"igo:ocean_temp_1993_01_02",
                                   //"igo:ocean_temp_1993_01_02_180",
                                   "http://igosoftware.dyndns.org:8080/geoserver/igo/wms",
-                                  "1.3.0",
+                                  WMS_1_3_0,
                                   "image/jpeg",
                                   Sector::fullSphere(),
                                   "EPSG:4326",

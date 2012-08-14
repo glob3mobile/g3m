@@ -12,6 +12,12 @@
 #include "Layer.hpp"
 #include "Tile.hpp"
 
+enum WMSServerVersion {
+  WMS_1_1_0,
+  WMS_1_3_0
+};
+
+
 class WMSLayer: public Layer {
   
   const std::string   _name;
@@ -24,14 +30,14 @@ class WMSLayer: public Layer {
   const Angle         _minTileLongitudeDelta,  _maxTileLongitudeDelta;
   
 	
-  const std::string   _serverURL;
-  const std::string   _serverVersion;
+  const std::string      _serverURL;
+  const WMSServerVersion _serverVersion;
   
 public:
   
   WMSLayer(const std::string& name,
            const std::string& serverURL,
-           const std::string& serverVer, 
+           const WMSServerVersion serverVersion,
            const std::string& format,
            const Sector& bbox,
            const std::string srs,
@@ -45,7 +51,7 @@ public:
   _bbox(bbox),
   _srs(srs),
   _serverURL(serverURL),
-  _serverVersion(serverVer),
+  _serverVersion(serverVersion),
   _isTransparent(isTransparent),
   _minTileLongitudeDelta(minTileLongitudeDelta),
   _maxTileLongitudeDelta(maxTileLongitudeDelta)
