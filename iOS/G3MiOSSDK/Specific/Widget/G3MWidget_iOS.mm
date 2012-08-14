@@ -63,6 +63,43 @@
 @property(nonatomic, getter=isAnimating) BOOL animating;
 @end
 
+class OceanTerrainTouchEventListener: public TerrainTouchEventListener, IDownloadListener{
+  IFactory*    const _factory;
+  IDownloader* const _downloader;
+public:
+  
+  OceanTerrainTouchEventListener(IFactory* f, IDownloader* d):_factory(f), _downloader(d){}
+  
+  void onTerrainTouchEvent(const TerrainTouchEvent& event){
+    //      printf("POINT %f, %f", event._g2d.latitude().degrees(), event._g2d.longitude().degrees());
+    URL url = event._layer->getFeatureURL(event._g2d, _factory, event._sector, 256, 256);
+    //      printf("%s\n", url.getPath().c_str());
+    
+    _downloader->request(url, 999999999, this, true);
+  }
+  
+  void onDownload(const Response* response) {
+    std::string s = (char*) response->getByteBuffer()->getData();
+    //printf("%s\n", s.c_str());
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"FEATURE"
+                                                    message:[NSString stringWithCString:s.c_str()
+                                                                               encoding:NSUTF8StringEncoding]
+                                                   delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
+  }
+  
+  void onError(const Response* response) {
+    printf("Error in request\n");
+  }
+  
+  void onCancel(const URL* url) {
+    printf("Cancel in request\n");
+  }
+};
+
 
 @implementation G3MWidget_iOS
 
@@ -120,53 +157,71 @@
 
   //LAYERS
   LayerSet* layerSet = new LayerSet();
-  WMSLayer* baseLayer = new WMSLayer("bmng200405",
-                                     "http://www.nasa.network.com/wms?",
-                                     WMS_1_1_0,
-                                     "image/jpeg",
-                                     Sector::fullSphere(),
-                                     "EPSG:4326",
-                                     "",
-                                     false,
-                                     Angle::nan(),
-                                     Angle::nan());
-  layerSet->addLayer(baseLayer);
+//  WMSLayer* baseLayer = new WMSLayer("bmng200405",
+//                                     "http://www.nasa.network.com/wms?",
+//                                     WMS_1_1_0,
+//                                     "image/jpeg",
+//                                     Sector::fullSphere(),
+//                                     "EPSG:4326",
+//                                     "",
+//                                     false,
+//                                     Angle::nan(),
+//                                     Angle::nan());
+//  layerSet->addLayer(baseLayer);
 
   if (false){
-    Sector s = Sector::fromDegrees(-60, 50, 10, 185);
-    WMSLayer *wmsl = new WMSLayer("test:contourGSLA",
-                                  "http://imos2.ersa.edu.au/geo2/test/wms",
-                                  WMS_1_1_0,
-                                  "image/png",
-                                  s,
-                                  "EPSG:4326",
-                                  "sla_test",
-                                  true,
-                                  Angle::nan(),
-                                  Angle::nan());
-    
-    WMSLayer *wms_sst = new WMSLayer("sea_surface_temperature",
-                                     "http://opendap-vpac.arcs.org.au/thredds/wms/IMOS/SRS/GHRSST-SSTsubskin/2012/20120626-ABOM-L3P_GHRSST-SSTsubskin-AVHRR_MOSAIC_01km-AO_DAAC-v01-fv01_0.nc?",
-                                     WMS_1_3_0,
-                                     "image/png",
-                                     s,
-                                     "EPSG:4326&COLORSCALERANGE=273.8%2C302.8&NUMCOLORBANDS=50&LOGSCALE=false",
-                                     "boxfill%2Fsst_36",
-                                     true,
-                                     Angle::nan(),
-                                     Angle::nan());
-    
-    layerSet->addLayer(wmsl);
-    layerSet->addLayer(wms_sst);
+//    Sector s = Sector::fromDegrees(-60, 50, 10, 185);
+//    WMSLayer *wmsl = new WMSLayer("test:contourGSLA",
+//                                  "http://imos2.ersa.edu.au/geo2/test/wms",
+//                                  WMS_1_1_0,
+//                                  "image/png",
+//                                  s,
+//                                  "EPSG:4326",
+//                                  "sla_test",
+//                                  true,
+//                                  Angle::nan(),
+//                                  Angle::nan());
+//    
+//    WMSLayer *wms_sst = new WMSLayer("sea_surface_temperature",
+//                                     "http://opendap-vpac.arcs.org.au/thredds/wms/IMOS/SRS/GHRSST-SSTsubskin/2012/20120626-ABOM-L3P_GHRSST-SSTsubskin-AVHRR_MOSAIC_01km-AO_DAAC-v01-fv01_0.nc?",
+//                                     WMS_1_3_0,
+//                                     "image/png",
+//                                     s,
+//                                     "EPSG:4326&COLORSCALERANGE=273.8%2C302.8&NUMCOLORBANDS=50&LOGSCALE=false",
+//                                     "boxfill%2Fsst_36",
+//                                     true,
+//                                     Angle::nan(),
+//                                     Angle::nan());
+//    
+//    layerSet->addLayer(wmsl);
+//    layerSet->addLayer(wms_sst);
   }
   
+  WMSLayer *oceans = new WMSLayer("igo:bmng200401,igo:ocean_2010_0_15",
+                                  "igo:ocean_2010_0_15",
+                                  "http://igosoftware.dyndns.org:8081/geoserver/igo/wms",
+                                  WMS_1_3_0,
+                                  "image/jpeg",
+                                  Sector::fullSphere(),
+                                  "EPSG:4326",
+                                  "",
+                                  false,
+                                  Angle::nan(),
+                                  Angle::nan());
+  
+  oceans->addTerrainTouchEventListener(new OceanTerrainTouchEventListener(factory, downloader));
+  
+  
+  layerSet->addLayer(oceans);
+
+  
   //STATIC IMAGE FOR TESTING AUSTRALIA
-  IImage *image = factory->createImageFromFileName("20120720_cintp1.png");
-  StaticImageLayer * imageLayer = new StaticImageLayer("SIL",
-                                                       image,
-                                                       Sector::fromDegrees(-60, 50, 10, 185), 
-                                                       fss);
-  layerSet->addLayer(imageLayer);
+//  IImage *image = factory->createImageFromFileName("20120720_cintp1.png");
+//  StaticImageLayer * imageLayer = new StaticImageLayer("SIL",
+//                                                       image,
+//                                                       Sector::fromDegrees(-60, 50, 10, 185), 
+//                                                       fss);
+//  layerSet->addLayer(imageLayer);
   
   // very basic tile renderer
   if (true) {
@@ -174,7 +229,13 @@
     
     TileTexturizer* texturizer = NULL;
     if (true) {
-      texturizer = new TileImagesTileTexturizer(parameters, downloader, layerSet);
+      const bool useNewTexturizer = true;
+      if (useNewTexturizer) {
+        texturizer = new MultiLayerTileTexturizer(layerSet);
+      }
+      else {
+        texturizer = new TileImagesTileTexturizer(parameters, downloader, layerSet);
+      }
     }
     else {
       //SINGLE IMAGE
@@ -353,10 +414,10 @@
   FileSystemStorage * fss = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
   Downloader* downloaderOLD = new Downloader(fss, 5, factory->createNetwork());
   const bool cleanCache = false;
-  IDownloader* downloader = new Downloader_iOS(4 * 1024 * 1024,
-                                               512 * 1024 * 1024,
+  IDownloader* downloader = new Downloader_iOS(4 * 1024 * 1024,     // 4Mb
+                                               1024 * 1024 * 1024,  // 1G
                                                ".G3M_Cache",
-                                               8,
+                                               2,
                                                cleanCache);
   
   if (false) {
@@ -390,44 +451,7 @@
   
   //LAYERS
   LayerSet* layerSet = new LayerSet();
-  
-  class TouchOcean: public TerrainTouchEventListener, IDownloadListener{
-    IFactory* const _factory;
-    IDownloader * const _downloader;
-  public:
-    
-    TouchOcean(IFactory* f, IDownloader* d):_factory(f), _downloader(d){}
-    
-    void onTerrainTouchEvent(const TerrainTouchEvent& event){
-//      printf("POINT %f, %f", event._g2d.latitude().degrees(), event._g2d.longitude().degrees());
-      URL url = event._layer->getFeatureURL(event._g2d, _factory, event._sector, 256, 256);
-//      printf("%s\n", url.getPath().c_str());
-      
-      _downloader->request(url, 999999999, this, true);
-    }
-    
-    void onDownload(const Response* response) {
-      std::string s = (char*) response->getByteBuffer()->getData();
-      //printf("%s\n", s.c_str());
-      
-      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"FEATURE"
-                                                      message:[NSString stringWithCString:s.c_str()
-                                                                                 encoding:NSUTF8StringEncoding]
-                                                     delegate:nil
-                                            cancelButtonTitle:@"OK"
-                                            otherButtonTitles:nil];
-      [alert show];
-    }
-    
-    void onError(const Response* response) {
-      printf("Error in request\n");
-    }
-    
-    void onCancel(const URL* url) {
-      printf("Cancel in request\n");
-    }
-  };
-
+ 
 //  WMSLayer* baseLayer = new WMSLayer("bmng200405",
 //                                     "http://www.nasa.network.com/wms?",
 //                                     WMS_1_3_0,
@@ -461,9 +485,22 @@
 //                                Angle::nan(),
 //                                Angle::nan());
 
-  WMSLayer *oceans = new WMSLayer("igo:bmng200401,igo:ocean_2010_0_15,igo:ocean_cnt_2010_0_15",
-                                  "igo:ocean_2010_0_15,igo:ocean_cnt_2010_0_15",
-                                  "http://igosoftware.dyndns.org:8080/geoserver/igo/wms",
+//  WMSLayer *oceans = new WMSLayer("igo:bmng200401,igo:ocean_2010_0_15,igo:ocean_cnt_2010_0_15",
+//                                  "igo:ocean_2010_0_15,igo:ocean_cnt_2010_0_15",
+//                                  //                                  "igo:ocean_2010_0_15",
+//                                  "http://igosoftware.dyndns.org:8081/geoserver/igo/wms",
+//                                  WMS_1_3_0,
+//                                  "image/jpeg",
+//                                  Sector::fullSphere(),
+//                                  "EPSG:4326",
+//                                  "",
+//                                  false,
+//                                  Angle::nan(),
+//                                  Angle::nan());
+
+  WMSLayer *oceans = new WMSLayer("igo:bmng200401,igo:ocean_2010_0_15",
+                                  "igo:ocean_2010_0_15",
+                                  "http://igosoftware.dyndns.org:8081/geoserver/igo/wms",
                                   WMS_1_3_0,
                                   "image/jpeg",
                                   Sector::fullSphere(),
@@ -472,8 +509,8 @@
                                   false,
                                   Angle::nan(),
                                   Angle::nan());
-  
-  oceans->addTerrainTouchEventListener(new TouchOcean(factory, downloader));
+
+  oceans->addTerrainTouchEventListener(new OceanTerrainTouchEventListener(factory, downloader));
   
   //ORDER IS IMPORTANT
   //layerSet->addLayer(baseLayer);

@@ -261,8 +261,9 @@ URL WMSLayer::getFeatureURL(const Geodetic2D& g,
     }
   }
 	
-  req += "&QUERY_LAYERS=" + _queryLayers;
   req += "&LAYERS=" + _mapLayers;
+  //req += "&LAYERS=" + _queryLayers;
+  req += "&QUERY_LAYERS=" + _queryLayers;
   
   req += "&INFO_FORMAT=text/plain";
   
