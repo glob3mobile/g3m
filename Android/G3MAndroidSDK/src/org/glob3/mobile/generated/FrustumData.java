@@ -40,6 +40,17 @@ public class FrustumData
 
   }
 
+
+	public FrustumData(FrustumData fd)
+	{
+		_left = fd._left;
+		_right = fd._right;
+		_bottom = fd._bottom;
+		_top = fd._top;
+		_znear = fd._znear;
+		_zfar = fd._zfar;
+	}
+
   public FrustumData()
   {
 	  _left = -1;

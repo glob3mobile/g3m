@@ -472,9 +472,6 @@ public class Camera
 	if (_dirtyFlags._geodeticCenterOfView)
 	{
 	  _dirtyFlags._geodeticCenterOfView = false;
-	  if (_geodeticCenterOfView != null)
-		  if (_geodeticCenterOfView != null)
-			  _geodeticCenterOfView.dispose();
 	  _geodeticCenterOfView = new Geodetic3D(_planet.toGeodetic3D(getXYZCenterOfView()));
 	}
 	return _geodeticCenterOfView;
@@ -487,9 +484,6 @@ public class Camera
 	if (_dirtyFlags._frustum)
 	{
 	  _dirtyFlags._frustum = false;
-	  if (_frustum!=null)
-		  if (_frustum != null)
-			  _frustum.dispose();
 	  _frustum = new Frustum(getFrustumData());
 	}
 	return _frustum;
@@ -502,9 +496,6 @@ public class Camera
 	if (_dirtyFlags._frustumMC)
 	{
 	  _dirtyFlags._frustumMC = false;
-	  if (_frustumInModelCoordinates!=null)
-		  if (_frustumInModelCoordinates != null)
-			  _frustumInModelCoordinates.dispose();
 	  _frustumInModelCoordinates = getFrustum().transformedBy_P(getModelMatrix().transposed());
 	}
 	return _frustumInModelCoordinates;
@@ -518,9 +509,6 @@ public class Camera
 	if (_dirtyFlags._halfFrustum)
 	{
 	  _dirtyFlags._halfFrustum = false;
-	  if (_halfFrustum!=null)
-		  if (_halfFrustum != null)
-			  _halfFrustum.dispose();
 	  FrustumData data = getFrustumData();
 	  _halfFrustum = new Frustum(data._left/2, data._right/2, data._bottom/2, data._top/2, data._znear, data._zfar);
 	}
@@ -533,9 +521,6 @@ public class Camera
 	if (_dirtyFlags._halfFrustumMC)
 	{
 	  _dirtyFlags._halfFrustumMC = false;
-	  if (_halfFrustumInModelCoordinates!=null)
-		  if (_halfFrustumInModelCoordinates != null)
-			  _halfFrustumInModelCoordinates.dispose();
 	  _halfFrustumInModelCoordinates = getHalfFrustum().transformedBy_P(getModelMatrix().transposed());
 	}
 	return _halfFrustumInModelCoordinates;
