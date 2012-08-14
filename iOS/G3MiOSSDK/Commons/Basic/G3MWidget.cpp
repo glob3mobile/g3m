@@ -184,9 +184,7 @@ int G3MWidget::render() {
 
   _scheduler->doOneCyle(&rc);
 
-  int __agustin_at_work;
   _rendererReady = _renderer->isReadyToRender(&rc);
-  //_rendererReady = false;
   
   Renderer* selectedRenderer = _rendererReady ? _renderer : _busyRenderer;
   
@@ -210,7 +208,6 @@ int G3MWidget::render() {
   }
   _totalRenderTime += elapsedTime.milliseconds();
   
-//  if ((_renderCounter % 60) == 0) {
   if (_logFPS) {
     if (_renderStatisticsTimer == NULL || _renderStatisticsTimer->elapsedTime().seconds() > 2) {
       const double averageTimePerRender = (double) _totalRenderTime / _renderCounter;
