@@ -53,7 +53,8 @@ _logFPS(logFPS),
 _downloaderOLD(downloaderOLD),
 _downloader(downloader),
 _rendererReady(false), // false until first call to G3MWidget::render()
-_selectedRenderer(NULL)
+_selectedRenderer(NULL),
+_renderStatisticsTimer(NULL)
 {
   initializeGL();
   
@@ -209,15 +210,23 @@ int G3MWidget::render() {
   }
   _totalRenderTime += elapsedTime.milliseconds();
   
-  if ((_renderCounter % 60) == 0) {
-    if (_logFPS) {
+//  if ((_renderCounter % 60) == 0) {
+  if (_logFPS) {
+    if (_renderStatisticsTimer == NULL || _renderStatisticsTimer->elapsedTime().seconds() > 2) {
       const double averageTimePerRender = (double) _totalRenderTime / _renderCounter;
       const double fps = 1000.0 / averageTimePerRender;
       _logger->logInfo("FPS=%f" , fps);
+      
+      _renderCounter = 0;
+      _totalRenderTime = 0;
+      
+      if (_renderStatisticsTimer == NULL) {
+        _renderStatisticsTimer = _factory->createTimer();
+      }
+      else {
+        _renderStatisticsTimer->start();
+      }
     }
-    
-    _renderCounter = 0;
-    _totalRenderTime = 0;
   }
   
   return timeToRedraw;

@@ -94,6 +94,8 @@ private:
   bool      _rendererReady;
   Renderer* _selectedRenderer;
   
+  ITimer* _renderStatisticsTimer;
+  
   void initializeGL();
   
   G3MWidget(IFactory*         factory,

@@ -212,7 +212,6 @@
         delete buffer;
       }
       else {
-//        ILogger::instance()->logError("Can't load %s\n", [[_nsURL absoluteString] UTF8String]);
         ILogger::instance()->logError ("Error %s, StatusCode=%d trying to load %s\n",
                                        [[error localizedDescription] UTF8String],
                                        statusCode,
@@ -236,7 +235,6 @@
     //  [_listeners removeAllObjects];
     
     [_lock unlock];
-    
   });
   
 }

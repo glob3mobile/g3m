@@ -181,8 +181,8 @@ public:
       const long priority = tile->getLevel() * 1000000 + tile->getRow() * 1000 + tile->getColumn();
 //      const long priority = (long) (tile->getLevel() * 1000000000000 + -squaredDistance);
 
-      int ___remove_print;
-      printf("Downloading %s\n", petition->getURL().c_str());
+//      int ___remove_print;
+//      printf("Downloading %s\n", petition->getURL().c_str());
       
       const long requestId = downloader->request(URL(petition->getURL()),
                                                  priority,
@@ -339,7 +339,7 @@ public:
   }
   
   void stepDownloaded(int position,
-                      ByteBuffer* buffer) {
+                      const ByteBuffer* buffer) {
     checkIsPending(position);
     
     _status[position]  = STATUS_DOWNLOADED;
@@ -557,7 +557,7 @@ public:
 
 void MultiLayerTileTexturizer::justCreatedTopTile(const RenderContext* rc,
                                                   Tile* tile) {
-  printf("JustCreatedTopTile=%s\n", tile->getKey().description().c_str());
+//  printf("JustCreatedTopTile=%s\n", tile->getKey().description().c_str());
   
   std::vector<Petition*> petitions = _layerSet->createTilePetitions(rc,
                                                                     tile,
