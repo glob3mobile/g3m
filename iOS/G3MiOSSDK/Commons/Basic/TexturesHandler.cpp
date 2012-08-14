@@ -97,10 +97,10 @@ const GLTextureID TexturesHandler::getGLTextureId(const std::vector<const IImage
   }
   
   TextureHolder* holder = new TextureHolder(textureSpec);
-  holder->_glTextureId = _texBuilder->createTextureFromImages(_gl,
-                                                              images,
-                                                              textureSpec.getWidth(),
-                                                              textureSpec.getHeight());
+  holder->_glTextureId = _textureBuilder->createTextureFromImages(_gl,
+                                                                  images,
+                                                                  textureSpec.getWidth(),
+                                                                  textureSpec.getHeight());
   
   if (_verbose) {
     ILogger::instance()->logInfo("Uploaded texture \"%s\" to GPU with texId=%s" ,
@@ -122,12 +122,12 @@ const GLTextureID TexturesHandler::getGLTextureId(const std::vector<const IImage
   }
   
   TextureHolder* holder = new TextureHolder(textureSpec);
-  holder->_glTextureId = _texBuilder->createTextureFromImages(_gl,
-                                                              _factory,
-                                                              images,
-                                                              rectangles,
-                                                              textureSpec.getWidth(),
-                                                              textureSpec.getHeight());
+  holder->_glTextureId = _textureBuilder->createTextureFromImages(_gl,
+                                                                  _factory,
+                                                                  images,
+                                                                  rectangles,
+                                                                  textureSpec.getWidth(),
+                                                                  textureSpec.getHeight());
   
   if (_verbose) {
     ILogger::instance()->logInfo("Uploaded texture \"%s\" to GPU with texId=%s" ,

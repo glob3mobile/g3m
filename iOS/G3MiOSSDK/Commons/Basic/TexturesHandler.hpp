@@ -103,7 +103,7 @@ private:
   
   GL * const _gl;
   const IFactory * const _factory;
-  const TextureBuilder* _texBuilder;
+  const TextureBuilder* _textureBuilder;
   
   const bool _verbose;
   
@@ -115,7 +115,7 @@ public:
                   bool verbose):
   _gl(gl),
   _factory(factory),
-  _texBuilder(texBuilder),
+  _textureBuilder(texBuilder),
   _verbose(verbose)
   {
   }
