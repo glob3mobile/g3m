@@ -187,7 +187,6 @@ int G3MWidget::render() {
   _rendererReady = _renderer->isReadyToRender(&rc);
   
   Renderer* selectedRenderer = _rendererReady ? _renderer : _busyRenderer;
-  
   if (selectedRenderer != _selectedRenderer) {
     if (_selectedRenderer != NULL) {
       _selectedRenderer->stop();
@@ -200,7 +199,7 @@ int G3MWidget::render() {
   // Clear the scene
   _gl->clearScreen(_backgroundColor);
   
-  const int timeToRedraw = selectedRenderer->render(&rc);
+  const int timeToRedraw = _selectedRenderer->render(&rc);
   
   const TimeInterval elapsedTime = _timer->elapsedTime();
   if (elapsedTime.milliseconds() > 100) {
