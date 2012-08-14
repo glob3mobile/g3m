@@ -160,6 +160,7 @@ int G3MWidget::render() {
   for (unsigned int n=0; n<_cameraConstraint.size(); n++) {
     if (!_cameraConstraint[n]->acceptsCamera(_nextCamera, _planet)) {
       acceptCamera = false;
+      break;
     }
   }
   if (acceptCamera) {
