@@ -369,11 +369,12 @@ Geodetic3D Tile::intersection(const Vector3D& origin, const Vector3D& ray, const
         
       } else{
         
-        printf("TOUCH TILE %d\n", _level);
+        //printf("TOUCH TILE %d\n", _level);
         _texturizer->onTerrainTouchEvent(g, this);
         return g;
         
       }
+      return Geodetic3D::nan();
     } else {
       return Geodetic3D::nan();
     }
