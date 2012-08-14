@@ -453,7 +453,10 @@
 //                                Angle::nan(),
 //                                Angle::nan());
 
-  WMSLayer *oceans = new WMSLayer("igo:bmng200401",
+  WMSLayer *oceans = new WMSLayer(//"igo:bmng200401",
+                                  "igo:bmng200401,igo:ocean_2010_0_15,igo:ocean_cnt_2010_0_15",
+                                  //"igo:ocean_temp_1993_01_02",
+                                  //"igo:ocean_temp_1993_01_02_180",
                                   "http://igosoftware.dyndns.org:8080/geoserver/igo/wms",
                                   WMS_1_3_0,
                                   "image/jpeg",
