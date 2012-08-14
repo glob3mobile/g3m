@@ -406,24 +406,24 @@
       _downloader->request(url, 999999999, this, false);
     }
     
-    void onDownload(const Response* response){
+    void onDownload(const Response* response) {
       std::string s = (char*) response->getByteBuffer()->getData();
-      printf("%s\n", s.c_str());
+      //printf("%s\n", s.c_str());
       
-      UIAlertView *alert = [UIAlertView alloc];
-      [alert initWithTitle:@"FEATURE" message:[NSString stringWithCString:s.c_str() encoding:NSUTF8StringEncoding] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
+      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"FEATURE"
+                                                      message:[NSString stringWithCString:s.c_str()
+                                                                                 encoding:NSUTF8StringEncoding]
+                                                     delegate:nil
+                                            cancelButtonTitle:@"OK"
+                                            otherButtonTitles:nil];
       [alert show];
-      
-//      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"YOur Message\" message:@\"Your description\"
-//                                                     delegate:self cancelButtonTitle:@\"No\" otherButtonTitles:@\"Yes\", nil];
-//      [alert show];
     }
     
-    void onError(const Response* response){
+    void onError(const Response* response) {
       printf("Error in request\n");
     }
     
-    void onCancel(const URL* url){
+    void onCancel(const URL* url) {
       printf("Cancel in request\n");
     }
   };

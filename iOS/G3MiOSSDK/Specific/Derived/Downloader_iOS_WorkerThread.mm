@@ -55,8 +55,8 @@
       int __diego_at_work;
     }
     else {
-      // sleep for 25 milliseconds
-      [NSThread sleepForTimeInterval:25.0 / 1000.0];
+      // sleep for 10 milliseconds
+      [NSThread sleepForTimeInterval:10.0 / 1000.0];
     }
   }
 }
