@@ -16,6 +16,8 @@ class TileTessellator;
 class InitializationContext;
 class TilesRenderParameters;
 class TileRenderContext;
+class Geodetic3D;
+class IDownloadListener;
 
 class TileTexturizer {
 public:
@@ -44,6 +46,9 @@ public:
   virtual void ancestorTexturedSolvedChanged(Tile* tile,
                                              Tile* ancestorTile,
                                              bool textureSolved) = 0;
+  
+  virtual void getFeatureInfo(const TileRenderContext* trc,
+                              Tile* tile, const Geodetic3D& g, IDownloadListener* downListener){}
 
 };
 

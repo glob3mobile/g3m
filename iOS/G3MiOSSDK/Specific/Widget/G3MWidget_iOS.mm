@@ -55,6 +55,8 @@
 #include "MultiLayerTileTexturizer.hpp"
 #include "TilesRenderParameters.hpp"
 
+#include "Box.hpp"
+
 #include <stdlib.h>
 
 @interface G3MWidget_iOS ()
@@ -221,6 +223,20 @@
   
   NativeGL2_iOS * nGL = new NativeGL2_iOS(); 
   GL* gl  = new GL(nGL);
+  
+  //Testing BOX intersection
+  if (true){
+    Box b(Vector3D(-10,-10,-10) , Vector3D(10,10,10) );
+    
+    Vector3D v = b.intersectionWithRay(Vector3D(-20,0,0), Vector3D(1.0,0,0));
+    printf("%f, %f, %f\n", v.x(), v.y(), v.z());
+    
+    Vector3D v1 = b.intersectionWithRay(Vector3D(-20,20,0), Vector3D(1.0,0,0));
+    printf("%f, %f, %f\n", v1.x(), v1.y(), v1.z());
+    
+    Vector3D v2 = b.intersectionWithRay(Vector3D(-20,0,0), Vector3D(1.0,0.1,0));
+    printf("%f, %f, %f\n", v2.x(), v2.y(), v2.z());
+  }
   
   //Testing downloads
   if (false) {

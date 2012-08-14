@@ -49,7 +49,7 @@ public:
   }
   
   URL getFeatureURL(const Geodetic2D& g,
-                    const RenderContext* rc,
+                    const IFactory* factory,
                     const Tile* tile,
                     int width, int height) const {
     return URL::null();

@@ -345,8 +345,32 @@ const TileKey Tile::getKey() const {
   return TileKey(_level, _row, _column);
 }
 
-Vector3D Tile::intersection(const Vector3D& origin, const Vector3D& ray) const{
+Geodetic3D Tile::intersection(const Vector3D& origin, const Vector3D& ray, const Planet* planet) const{
   
-  return _tessellatorMesh->getExtent()->intersectionWithRay(origin, ray);
+  int todo_check_with_subtiles_jm; //NECESARY ????
   
+  Vector3D v = _tessellatorMesh->getExtent()->intersectionWithRay(origin, ray);
+  
+  if (v.isNan()){
+    //Ray doesn't touch the extent
+    return Geodetic3D::nan();
+  } else {
+    
+    //As our tiles are still flat our onPlanet vector is calculated directly from Planet
+    std::vector<double> ts = planet->intersections(origin, ray);
+    
+    if (ts.size() > 0){
+      Vector3D onPlanet = origin.add(ray.times(ts[0]));
+      Geodetic3D g = planet->toGeodetic3D(onPlanet);
+      
+      if (_sector.contains(g)){
+        return g;
+      } else {
+        return Geodetic3D::nan();
+      }
+    } else{
+      //Touches extent but not the tile
+      return Geodetic3D::nan();
+    }
+  }
 }

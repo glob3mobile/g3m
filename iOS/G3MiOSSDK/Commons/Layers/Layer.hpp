@@ -33,7 +33,7 @@ public:
   virtual bool isTransparent() const = 0;
   
   virtual URL getFeatureURL(const Geodetic2D& g,
-                            const RenderContext* rc,
+                            const IFactory* factory,
                             const Tile* tile,
                             int width, int height) const = 0;
   

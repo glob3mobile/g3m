@@ -152,7 +152,7 @@ public:
     return _texturizerDirty;
   }
   
-  Vector3D intersection(const Vector3D& origin, const Vector3D& ray) const;
+  Geodetic3D intersection(const Vector3D& origin, const Vector3D& ray, const Planet* planet) const;
 
 };
 
