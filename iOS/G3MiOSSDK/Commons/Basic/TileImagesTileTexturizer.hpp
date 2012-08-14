@@ -109,6 +109,10 @@ public:
                                      Tile* ancestorTile,
                                      bool textureSolved);
   
+  void getFeatureInfo(const RenderContext* rc,
+                      const TileRenderContext* trc,
+                      Tile* tile, const Geodetic3D& g, IDownloadListener* downListener);
+  
 };
 
 #endif

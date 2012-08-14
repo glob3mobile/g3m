@@ -74,6 +74,9 @@ public:
   void ancestorTexturedSolvedChanged(Tile* tile,
                                      Tile* ancestorTile,
                                      bool textureSolved);
+  
+  void getFeatureInfo(const TileRenderContext* trc,
+                      Tile* tile, const Geodetic3D& g, IDownloadListener* downListener);
 
 };
 

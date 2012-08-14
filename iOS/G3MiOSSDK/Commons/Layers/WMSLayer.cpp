@@ -137,7 +137,7 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const RenderContext* rc,
 }
 
 URL WMSLayer::getFeatureURL(const Geodetic2D& g,
-                            const RenderContext* rc,
+                            const IFactory* factory,
                             const Tile* tile,
                             int width, int height) const {
 
@@ -194,7 +194,7 @@ URL WMSLayer::getFeatureURL(const Geodetic2D& g,
   Vector2D pixel = tile->getSector().getUVCoordinates(g);
   int x = (int) (pixel.x() * width);
   int y = (int) ((1.0 - pixel.y()) * height);
-  req += rc->getFactory()->stringFormat("&X=%d&Y=%d", x, y);
+  req += factory->stringFormat("&X=%d&Y=%d", x, y);
   
 	return URL(req);
 }

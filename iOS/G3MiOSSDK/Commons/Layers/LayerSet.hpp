@@ -36,6 +36,11 @@ public:
                                              int width, int height) const;
   
   
+  std::vector<URL*> getFeatureURL(const Geodetic2D& g,
+                                const IFactory* factory,
+                                 const Tile* tile,
+                                 int width, int height) const;
+  
 };
 
 #endif

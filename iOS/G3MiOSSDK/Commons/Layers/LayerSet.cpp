@@ -29,3 +29,19 @@ std::vector<Petition*> LayerSet::createTilePetitions(const RenderContext* rc,
   
   return petitions;
 }
+
+std::vector<URL*> LayerSet::getFeatureURL(const Geodetic2D& g,
+                               const IFactory* factory,
+                               const Tile* tile,
+                               int width, int height) const
+{
+  std::vector<URL*> petitions;
+  for (int i = 0; i < _layers.size(); i++) {
+    Layer* layer = _layers[i];
+    URL url = layer->getFeatureURL(g, factory, tile, width, height);
+    if (!url.isNull()){
+      petitions.push_back(new URL(url));
+    }
+  }
+  return petitions;
+}

@@ -19,6 +19,8 @@ class IDownloader;
 
 class TileTextureBuilder;
 
+#include "Geodetic3D.hpp"
+
 
 class MultiLayerTileTexturizer : public TileTexturizer {
 private:
@@ -84,6 +86,10 @@ public:
   
   void deleteBuilder(TileKey key,
                      TileTextureBuilder* builder);
+  
+   
+  void getFeatureInfo(const TileRenderContext* trc,
+                      Tile* tile, const Geodetic3D& g, IDownloadListener* downListener);
   
 };
 

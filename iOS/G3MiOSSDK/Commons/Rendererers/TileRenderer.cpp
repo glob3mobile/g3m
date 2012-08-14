@@ -253,10 +253,9 @@ bool TileRenderer::isReadyToRender(const RenderContext *rc) {
 int TileRenderer::render(const RenderContext* rc) {
   TilesStatistics statistics;
   
-  //  DistanceToCenterTileComparison predicate = DistanceToCenterTileComparison(rc->getNextCamera(),
-  //                                                                            rc->getPlanet());
+  //Saving camera for Long Press Event
+  _lastCamera = rc->getCurrentCamera();
   
-  //  std::vector<Tile*> toVisit(_topLevelTiles);
   std::list<Tile*> toVisit;
   
   for (int i = 0; i < _topLevelTiles.size(); i++) {
@@ -312,11 +311,26 @@ bool TileRenderer::onTouchEvent(const EventContext* ec, const TouchEvent* touchE
     
     if (_lastCamera != NULL){
       Vector2D pixel = touchEvent->getTouch(0)->getPos();
-      _lastCamera->pixel2Ray(pixel);
+      Vector3D ray = _lastCamera->pixel2Ray(pixel);
+      Vector3D origin = _lastCamera->getCenter();
       
       for(int i = 0; i < _topLevelTiles.size(); i++){
         
-        
+        Geodetic3D g = _topLevelTiles[i]->intersection(origin, ray, ec->getPlanet());
+        if (!g.isNan()){
+          printf("G: %f, %f, %f\n", g.latitude().degrees(), g.longitude().degrees(), g.height());
+          
+          TilesStatistics statistics;
+          TileRenderContext trc(_tessellator,
+                                _texturizer,
+                                _parameters,
+                                &statistics,
+                                _lastSplitTimer,
+                                _lastTexturizerTimer);
+          
+          
+          _texturizer->getFeatureInfo(&trc, _topLevelTiles[i], g, NULL);
+        }
       }
       
     }

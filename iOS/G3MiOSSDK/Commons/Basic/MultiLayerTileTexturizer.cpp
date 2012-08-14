@@ -17,6 +17,7 @@
 
 #include "TileRenderer.hpp"
 #include "TileTessellator.hpp"
+#include "Geodetic3D.hpp"
 
 enum PetitionStatus {
   STATUS_PENDING,
@@ -581,4 +582,12 @@ bool MultiLayerTileTexturizer::isReady(const RenderContext *rc) {
   const bool isReady = _pendingTopTileRequests <= 0;
 //  printf("MultiLayerTileTexturizer::isReady(%d)\n", isReady);
   return isReady;
+}
+
+void MultiLayerTileTexturizer::getFeatureInfo(const TileRenderContext* trc,
+                                              Tile* tile, const Geodetic3D& g, 
+                                              IDownloadListener* downListener){
+  
+  
+  
 }
