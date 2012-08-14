@@ -20,7 +20,9 @@ enum WMSServerVersion {
 
 class WMSLayer: public Layer {
   
-  const std::string   _name;
+  const std::string   _mapLayers;
+  const std::string   _queryLayers;
+  
   const std::string   _format;
   const std::string   _style;
   const std::string   _srs;
@@ -35,7 +37,7 @@ class WMSLayer: public Layer {
   
 public:
   
-  WMSLayer(const std::string& name,
+  WMSLayer(const std::string& mapLayers,
            const std::string& serverURL,
            const WMSServerVersion serverVersion,
            const std::string& format,
@@ -45,7 +47,34 @@ public:
            const bool isTransparent,
            const Angle& minTileLongitudeDelta, 
            const Angle& maxTileLongitudeDelta):
-  _name(name),
+  _mapLayers(mapLayers),
+  _queryLayers(mapLayers),
+  _format(format),
+  _style(style),
+  _bbox(bbox),
+  _srs(srs),
+  _serverURL(serverURL),
+  _serverVersion(serverVersion),
+  _isTransparent(isTransparent),
+  _minTileLongitudeDelta(minTileLongitudeDelta),
+  _maxTileLongitudeDelta(maxTileLongitudeDelta)
+  {
+    this->_ttel = NULL;
+  }
+  
+  WMSLayer(const std::string& mapLayers,
+           const std::string& queryLayers,
+           const std::string& serverURL,
+           const WMSServerVersion serverVersion,
+           const std::string& format,
+           const Sector& bbox,
+           const std::string srs,
+           const std::string& style,
+           const bool isTransparent,
+           const Angle& minTileLongitudeDelta, 
+           const Angle& maxTileLongitudeDelta):
+  _mapLayers(mapLayers),
+  _queryLayers(queryLayers),
   _format(format),
   _style(style),
   _bbox(bbox),

@@ -106,7 +106,7 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const RenderContext* rc,
     }
   }
 	
-  req += "&LAYERS=" + _name;
+  req += "&LAYERS=" + _mapLayers;
 	
 	req += "&FORMAT=" + _format;
 	
@@ -184,15 +184,6 @@ URL WMSLayer::getFeatureURL(const Geodetic2D& g,
     
     req = newHost + req;
   }
-	
-	//Petition
-//  if (_serverVersion != "") {
-//    req += "REQUEST=GetFeatureInfo&SERVICE=WMS&VERSION=" + _serverVersion;
-//  }
-//  else {
-//    req += "REQUEST=GetFeatureInfo&SERVICE=WMS&VERSION=1.1.1";
-//  }
-  
   
   req += "REQUEST=GetFeatureInfo&SERVICE=WMS";
   switch (_serverVersion) {
@@ -277,7 +268,8 @@ URL WMSLayer::getFeatureURL(const Geodetic2D& g,
     }
   }
 	
-  req += "&QUERY_LAYERS=" + _name;
+  req += "&QUERY_LAYERS=" + _queryLayers;
+  req += "&LAYERS=" + _mapLayers;
   
   //X and Y
   Vector2D pixel = tileSector.getUVCoordinates(g);

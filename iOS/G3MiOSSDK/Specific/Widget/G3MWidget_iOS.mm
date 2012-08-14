@@ -403,7 +403,7 @@
       URL url = event._layer->getFeatureURL(event._g2d, _factory, event._sector, 256, 256);
       printf("%s\n", url.getPath().c_str());
       
-      _downloader->request(url, 100, this, false);
+      _downloader->request(url, 999999999, this, false);
     }
     
     void onDownload(const Response* response){
@@ -453,10 +453,8 @@
 //                                Angle::nan(),
 //                                Angle::nan());
 
-  WMSLayer *oceans = new WMSLayer(//"igo:bmng200401",
-                                  "igo:bmng200401,igo:ocean_2010_0_15,igo:ocean_cnt_2010_0_15",
-                                  //"igo:ocean_temp_1993_01_02",
-                                  //"igo:ocean_temp_1993_01_02_180",
+  WMSLayer *oceans = new WMSLayer("igo:bmng200401,igo:ocean_2010_0_15,igo:ocean_cnt_2010_0_15",
+                                  "igo:ocean_2010_0_15,igo:ocean_cnt_2010_0_15",
                                   "http://igosoftware.dyndns.org:8080/geoserver/igo/wms",
                                   WMS_1_3_0,
                                   "image/jpeg",
