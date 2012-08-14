@@ -399,6 +399,22 @@
                                 true,
                                 Angle::nan(),
                                 Angle::nan());
+  
+  class TouchOcean: public TerrainTouchEventListener{
+    IFactory* _factory;
+  public:
+    
+    TouchOcean(IFactory* f):_factory(f){}
+    
+    void onTerrainTouchEvent(const TerrainTouchEvent& event){
+      printf("POINT %f, %f", event._g2d.latitude().degrees(), event._g2d.longitude().degrees());
+      
+      URL url = event._layer->getFeatureURL(event._g2d, _factory, event._sector, 256, 256);
+      
+      printf("%s\n", url.getPath().c_str());
+    }
+  };
+  
 
   WMSLayer *oceans = new WMSLayer("igo:ocean_temp_1993_01_02",
                                   //"igo:ocean_temp_1993_01_02_180",
@@ -411,6 +427,8 @@
                                   true,
                                   Angle::nan(),
                                   Angle::nan());
+  
+  oceans->addTerrainTouchEventListener(new TouchOcean(factory));
   
   //ORDER IS IMPORTANT
   layerSet->addLayer(baseLayer);

@@ -19,6 +19,8 @@ class TileRenderContext;
 class Geodetic3D;
 class IDownloadListener;
 
+#include "TerrainTouchEventListener.hpp"
+
 class TileTexturizer {
 public:
   virtual ~TileTexturizer() {
@@ -47,8 +49,7 @@ public:
                                              Tile* ancestorTile,
                                              bool textureSolved) = 0;
   
-  virtual void getFeatureInfo(const TileRenderContext* trc,
-                              Tile* tile, const Geodetic3D& g, IDownloadListener* downListener){}
+  virtual void onTerrainTouchEvent(const Geodetic3D& g3d, const Tile* tile) = 0;
 
 };
 

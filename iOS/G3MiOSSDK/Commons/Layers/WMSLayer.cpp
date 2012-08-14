@@ -110,10 +110,8 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const RenderContext* rc,
 
 URL WMSLayer::getFeatureURL(const Geodetic2D& g,
                             const IFactory* factory,
-                            const Tile* tile,
+                            const Sector& tileSector,
                             int width, int height) const {
-
-  const Sector tileSector = tile->getSector();
   if (!_bbox.touchesWith(tileSector)) {
     return URL::null();
   }
@@ -163,7 +161,7 @@ URL WMSLayer::getFeatureURL(const Geodetic2D& g,
   req += "&QUERY_LAYERS=" + _name;
   
   //X and Y
-  Vector2D pixel = tile->getSector().getUVCoordinates(g);
+  Vector2D pixel = tileSector.getUVCoordinates(g);
   int x = (int) (pixel.x() * width);
   int y = (int) ((1.0 - pixel.y()) * height);
   req += factory->stringFormat("&X=%d&Y=%d", x, y);

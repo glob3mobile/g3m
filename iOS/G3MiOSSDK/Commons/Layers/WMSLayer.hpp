@@ -50,6 +50,7 @@ public:
   _minTileLongitudeDelta(minTileLongitudeDelta),
   _maxTileLongitudeDelta(maxTileLongitudeDelta)
   {
+    this->_ttel = NULL;
   }
   
   bool fullContains(const Sector& s) const {
@@ -69,7 +70,7 @@ public:
   
   URL getFeatureURL(const Geodetic2D& g,
                     const IFactory* factory,
-                    const Tile* tile,
+                    const Sector& sector,
                     int width, int height) const;
   
 };
