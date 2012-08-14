@@ -914,7 +914,6 @@ public:
   if (lastTouchEvent!=NULL) {
     delete lastTouchEvent;
   }
-
 }
 
 @end
