@@ -19,31 +19,6 @@
 #include "TexturedMesh.hpp"
 
 
-int __agustin_note; // this function is already implemented in shaders branch
-MutableMatrix44D createOrthographicProjectionMatrix(double left, double right,
-                                                    double bottom, double top,
-                                                    double znear, double zfar) 
-{
-  // set frustum matrix in double
-  const double rl = right - left;
-  const double tb = top - bottom;
-  const double fn = zfar - znear;
-  
-  double P[16];
-  P[0] = 2 / rl;
-  P[1] = P[2] = P[3] = P[4] = 0;
-  P[5] = 2 / tb;
-  P[6] = P[7] = P[8] = P[9] = 0;
-  P[10] = -2 / fn;
-  P[11] = 0;
-  P[12] = -(right+left) / rl;
-  P[13] = -(top+bottom) / tb;
-  P[14] = -(zfar+znear) / fn;
-  P[15] = 1;
-  
-  return MutableMatrix44D(P);
-}
-
 void BusyQuadRenderer::start() {
   int _TODO_start_effects;
 }
@@ -124,13 +99,16 @@ int BusyQuadRenderer::render(const RenderContext* rc)
   glGetIntegerv(GL_VIEWPORT, currentViewport);
   int halfWidth = currentViewport[2] / 2;
   int halfHeight = currentViewport[3] / 2;
-  MutableMatrix44D M = createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
+  MutableMatrix44D M = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
+                                                                            -halfHeight, halfHeight,
+                                                                            -halfWidth, halfWidth);
   gl->setProjection(M);
   gl->loadMatrixf(MutableMatrix44D::identity());
   
   // clear screen
-  gl->clearScreen(0.0f, 0.2f, 0.4f, 1.0f);
-  
+  //gl->clearScreen(0.0f, 0.2f, 0.4f, 1.0f);
+  gl->clearScreen(0.0f, 0.0f, 0.0f, 1.0f);
+
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   

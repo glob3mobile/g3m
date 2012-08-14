@@ -55,14 +55,101 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const RenderContext* rc,
     
     req = newHost + req;
   }
+  
+  req += "REQUEST=GetMap&SERVICE=WMS";
+
+  
+  switch (_serverVersion) {
+    case WMS_1_3_0:
+    {
+      req += "&VERSION=1.3.0";
+      
+      std::ostringstream oss1;
+      oss1 << "&WIDTH=" << width;
+      oss1 << "&HEIGHT=" << height;
+      
+      oss1 << "&BBOX=";
+      oss1 << sector.lower().latitude().degrees();
+      oss1 << ",";
+      oss1 << sector.lower().longitude().degrees();
+      oss1 << ",";
+      oss1 << sector.upper().latitude().degrees();
+      oss1 << ",";
+      oss1 << sector.upper().longitude().degrees();
+      req += oss1.str();
+      
+      req += "&CRS=EPSG:4326";
+    }
+      break;
+      
+    case WMS_1_1_0:
+    default:
+    {
+      // default is 1.1.1
+      req += "&VERSION=1.1.1";
+      
+      std::ostringstream oss2;
+      oss2 << "&WIDTH=" << width;
+      oss2 << "&HEIGHT=" << height;
+      
+      oss2 << "&BBOX=";
+      oss2 << sector.lower().longitude().degrees();
+      oss2 << ",";
+      oss2 << sector.lower().latitude().degrees();
+      oss2 << ",";
+      oss2 << sector.upper().longitude().degrees();
+      oss2 << ",";
+      oss2 << sector.upper().latitude().degrees();
+      req += oss2.str();
+      
+      break;
+    }
+  }
 	
-	//Petition
-  if (_serverVersion != "") {
-    req += "REQUEST=GetMap&SERVICE=WMS&VERSION=" + _serverVersion;
-  }
-  else {
-    req += "REQUEST=GetMap&SERVICE=WMS&VERSION=1.1.1";
-  }
+//  switch (_serverVersion) {
+//    case WMS_1_3_0:
+//      req += "&VERSION=1.3.0";
+//      
+//      std::ostringstream oss1;
+//      oss1 << "&WIDTH=" << width;
+//      oss1 << "&HEIGHT=" << height;
+//      
+//      oss1 << "&BBOX=";
+//      oss1 << sector.lower().latitude().degrees();
+//      oss1 << ",";
+//      oss1 << sector.lower().longitude().degrees();
+//      oss1 << ",";
+//      oss1 << sector.upper().latitude().degrees();
+//      oss1 << ",";
+//      oss1 << sector.upper().longitude().degrees();
+//      req += oss1.str();
+//      
+//      req += "&CRS=EPSG:4326";
+//
+//      
+//      break;
+//    case WMS_1_1_0:
+////      break;
+//    default:
+//      // default is 1.1.1
+//      req += "&VERSION=1.1.1";
+//      
+//      std::ostringstream oss2;
+//      oss2 << "&WIDTH=" << width;
+//      oss2 << "&HEIGHT=" << height;
+//      
+//      oss2 << "&BBOX=";
+//      oss2 << sector.lower().longitude().degrees();
+//      oss2 << ",";
+//      oss2 << sector.lower().latitude().degrees();
+//      oss2 << ",";
+//      oss2 << sector.upper().longitude().degrees();
+//      oss2 << ",";
+//      oss2 << sector.upper().latitude().degrees();
+//      req += oss2.str();
+//
+//      break;
+//  }
 	
   req += "&LAYERS=" + _name;
 	
@@ -84,19 +171,62 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const RenderContext* rc,
   }
   
   //ASKING TRANSPARENCY
-  req += "&TRANSPARENT=TRUE";
-  
-	//Texture Size and BBOX
-  std::ostringstream oss;
-  oss << "&WIDTH=" << width << "&HEIGHT=" << height;
-  oss << "&BBOX=" << sector.lower().longitude().degrees() << "," << sector.lower().latitude().degrees();
-  oss << "," << sector.upper().longitude().degrees() << "," << sector.upper().latitude().degrees();
-  req += oss.str();
-  
-  if (_serverVersion == "1.3.0") {
-    req += "&CRS=EPSG:4326";
+  if (_isTransparent) {
+    req += "&TRANSPARENT=TRUE";
+  }
+  else {
+    req += "&TRANSPARENT=FALSE";
   }
   
+	//Texture Size and BBOX
+  
+  req += "REQUEST=GetMap&SERVICE=WMS";
+  switch (_serverVersion) {
+    case WMS_1_1_0:
+      req += "VERSION=1.1.1";
+      break;
+    case WMS_1_3_0:
+      req += "VERSION=1.3.0";
+      break;
+    default:
+      // default is 1.1.1
+      req += "VERSION=1.1.1";
+      break;
+  }
+
+  
+//  if (_serverVersion == "1.3.0") {
+//    std::ostringstream oss;
+//    oss << "&WIDTH=" << width;
+//    oss << "&HEIGHT=" << height;
+//
+//    oss << "&BBOX=";
+//    oss << sector.lower().latitude().degrees();
+//    oss << ",";
+//    oss << sector.lower().longitude().degrees();
+//    oss << ",";
+//    oss << sector.upper().latitude().degrees();
+//    oss << ",";
+//    oss << sector.upper().longitude().degrees();
+//    req += oss.str();
+//
+//    req += "&CRS=EPSG:4326";
+//  }
+//  else {
+//    std::ostringstream oss;
+//    oss << "&WIDTH=" << width;
+//    oss << "&HEIGHT=" << height;
+//
+//    oss << "&BBOX=";
+//    oss << sector.lower().longitude().degrees();
+//    oss << ",";
+//    oss << sector.lower().latitude().degrees();
+//    oss << ",";
+//    oss << sector.upper().longitude().degrees();
+//    oss << ",";
+//    oss << sector.upper().latitude().degrees();
+//    req += oss.str();
+//  }
   //printf("%s\n", req.c_str());
   
   Petition *pet = new Petition(sector, req, _isTransparent);
@@ -136,12 +266,34 @@ URL WMSLayer::getFeatureURL(const Geodetic2D& g,
   }
 	
 	//Petition
-  if (_serverVersion != "") {
-    req += "REQUEST=GetFeatureInfo&SERVICE=WMS&VERSION=" + _serverVersion;
+//  if (_serverVersion != "") {
+//    req += "REQUEST=GetFeatureInfo&SERVICE=WMS&VERSION=" + _serverVersion;
+//  }
+//  else {
+//    req += "REQUEST=GetFeatureInfo&SERVICE=WMS&VERSION=1.1.1";
+//  }
+  
+  
+  req += "REQUEST=GetFeatureInfo&SERVICE=WMS";
+  switch (_serverVersion) {
+    case WMS_1_3_0:
+    {
+      req += "&VERSION=1.3.0";
+      
+      req += "&CRS=EPSG:4326";
+    }
+      break;
+      
+    case WMS_1_1_0:
+    default:
+    {
+      // default is 1.1.1
+      req += "&VERSION=1.1.1";
+      
+      break;
+    }
   }
-  else {
-    req += "REQUEST=GetFeatureInfo&SERVICE=WMS&VERSION=1.1.1";
-  }
+  
   
   //SRS
   if (_srs != "") {
@@ -154,9 +306,56 @@ URL WMSLayer::getFeatureURL(const Geodetic2D& g,
   //Texture Size and BBOX
   std::ostringstream oss;
   oss << "&WIDTH=" << width << "&HEIGHT=" << height;
-  oss << "&BBOX=" << sector.lower().longitude().degrees() << "," << sector.lower().latitude().degrees();
-  oss << "," << sector.upper().longitude().degrees() << "," << sector.upper().latitude().degrees();
+//  oss << "&BBOX=" << sector.lower().longitude().degrees() << "," << sector.lower().latitude().degrees();
+//  oss << "," << sector.upper().longitude().degrees() << "," << sector.upper().latitude().degrees();
   req += oss.str();
+  
+  switch (_serverVersion) {
+    case WMS_1_3_0:
+    {
+      req += "&VERSION=1.3.0";
+      
+      std::ostringstream oss1;
+      oss1 << "&WIDTH=" << width;
+      oss1 << "&HEIGHT=" << height;
+      
+      oss1 << "&BBOX=";
+      oss1 << sector.lower().latitude().degrees();
+      oss1 << ",";
+      oss1 << sector.lower().longitude().degrees();
+      oss1 << ",";
+      oss1 << sector.upper().latitude().degrees();
+      oss1 << ",";
+      oss1 << sector.upper().longitude().degrees();
+      req += oss1.str();
+      
+      req += "&CRS=EPSG:4326";
+    }
+      break;
+      
+    case WMS_1_1_0:
+    default:
+    {
+      // default is 1.1.1
+      req += "&VERSION=1.1.1";
+      
+      std::ostringstream oss2;
+      oss2 << "&WIDTH=" << width;
+      oss2 << "&HEIGHT=" << height;
+      
+      oss2 << "&BBOX=";
+      oss2 << sector.lower().longitude().degrees();
+      oss2 << ",";
+      oss2 << sector.lower().latitude().degrees();
+      oss2 << ",";
+      oss2 << sector.upper().longitude().degrees();
+      oss2 << ",";
+      oss2 << sector.upper().latitude().degrees();
+      req += oss2.str();
+      
+      break;
+    }
+  }
 	
   req += "&QUERY_LAYERS=" + _name;
   
