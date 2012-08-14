@@ -383,17 +383,13 @@
                                 true,
                                 Angle::nan(),
                                 Angle::nan());
-  
-//  http://igosoftware.dyndns.org:8080/geoserver/igo/wms?LAYERS=igo%3Aocean_temp_1993_01_02&STYLES=&FORMAT=image%2Fpng&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&SRS=EPSG%3A4326&BBOX=-167.24786940962,-78.845880590379,64.783380590379,37.169744409621&WIDTH=660&HEIGHT=330&TRANSPARENT=true
-//  
-//  http://igosoftware.dyndns.org:8080/geoserver/igo/wms?service=WMS&version=1.1.0&request=GetMap&layers=igo:ocean_temp_1993_01_02&styles=&bbox=-180.0,-90.0,180.0,90.0&width=660&height=330&srs=EPSG:4326&format=application/openlayers
-  
+
   WMSLayer *oceans = new WMSLayer("igo:ocean_temp_1993_01_02",
                                   //"igo:ocean_temp_1993_01_02_180",
                                   "http://igosoftware.dyndns.org:8080/geoserver/igo/wms",
                                   "1.1.1",
                                   "image/png",
-                                  Sector::fullSphere(),
+                                  Sector::fromDegrees(-90,0, 90, 180),
                                   "EPSG:4326",
                                   "",
                                   true,
