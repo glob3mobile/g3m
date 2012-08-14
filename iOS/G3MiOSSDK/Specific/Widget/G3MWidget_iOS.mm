@@ -409,6 +409,14 @@
     void onDownload(const Response* response){
       std::string s = (char*) response->getByteBuffer()->getData();
       printf("%s\n", s.c_str());
+      
+      UIAlertView *alert = [UIAlertView alloc];
+      [alert initWithTitle:@"FEATURE" message:[NSString stringWithCString:s.c_str() encoding:NSUTF8StringEncoding] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
+      [alert show];
+      
+//      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"YOur Message\" message:@\"Your description\"
+//                                                     delegate:self cancelButtonTitle:@\"No\" otherButtonTitles:@\"Yes\", nil];
+//      [alert show];
     }
     
     void onError(const Response* response){
@@ -420,16 +428,16 @@
     }
   };
 
-  WMSLayer* baseLayer = new WMSLayer("bmng200405",
-                                     "http://www.nasa.network.com/wms?",
-                                     WMS_1_3_0,
-                                     "image/jpeg",
-                                     Sector::fullSphere(),
-                                     "EPSG:4326",
-                                     "",
-                                     false,
-                                     Angle::nan(),
-                                     Angle::nan());
+//  WMSLayer* baseLayer = new WMSLayer("bmng200405",
+//                                     "http://www.nasa.network.com/wms?",
+//                                     WMS_1_3_0,
+//                                     "image/jpeg",
+//                                     Sector::fullSphere(),
+//                                     "EPSG:4326",
+//                                     "",
+//                                     false,
+//                                     Angle::nan(),
+//                                     Angle::nan());
   
 //  WMSLayer *vias = new WMSLayer("VIAS",
 //                                "http://idecan2.grafcan.es/ServicioWMS/Callejero",
@@ -468,7 +476,7 @@
   oceans->addTerrainTouchEventListener(new TouchOcean(factory, downloader));
   
   //ORDER IS IMPORTANT
-  layerSet->addLayer(baseLayer);
+  //layerSet->addLayer(baseLayer);
   layerSet->addLayer(oceans);
 //  layerSet->addLayer(vias);
 

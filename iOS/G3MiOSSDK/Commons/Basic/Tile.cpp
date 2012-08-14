@@ -346,17 +346,43 @@ const TileKey Tile::getKey() const {
 }
 
 Geodetic3D Tile::intersection(const Vector3D& origin, const Vector3D& ray, const Planet* planet) const{
+
+  //As our tiles are still flat our onPlanet vector is calculated directly from Planet
+  std::vector<double> ts = planet->intersections(origin, ray);
   
-  //If this tile is not a leafe
-  if (_subtiles != NULL){
-    for (int i = 0; i < 4; i++) {
-      Geodetic3D g3d = _subtiles->at(0)->intersection(origin, ray, planet);
-      if (!g3d.isNan()){
-        return g3d;
+  if (ts.size() > 0){
+    
+    Vector3D onPlanet = origin.add(ray.times(ts[0]));
+    Geodetic3D g = planet->toGeodetic3D(onPlanet);
+
+    if (_sector.contains(g)){
+      
+      //If this tile is not a leafe
+      if (_subtiles != NULL){
+        
+        for (int i = 0; i < 4; i++) {
+          Geodetic3D g3d = _subtiles->at(i)->intersection(origin, ray, planet);
+          if (!g3d.isNan()){
+            return g3d;
+          }
+        }
+        
+      } else{
+        
+        printf("TOUCH TILE %d\n", _level);
+        _texturizer->onTerrainTouchEvent(g, this);
+        return g;
+        
       }
+    } else {
+      return Geodetic3D::nan();
     }
+  } else{
+    //Touches extent but not the tile
+    return Geodetic3D::nan();
   }
   
+  /*
   Vector3D v = _tessellatorMesh->getExtent()->intersectionWithRay(origin, ray);
   
   if (v.isNan()){
@@ -364,23 +390,33 @@ Geodetic3D Tile::intersection(const Vector3D& origin, const Vector3D& ray, const
     return Geodetic3D::nan();
   } else {
     
-    //As our tiles are still flat our onPlanet vector is calculated directly from Planet
-    std::vector<double> ts = planet->intersections(origin, ray);
-    
-    if (ts.size() > 0){
-      Vector3D onPlanet = origin.add(ray.times(ts[0]));
-      Geodetic3D g = planet->toGeodetic3D(onPlanet);
+    //If this tile is not a leafe
+    if (_subtiles != NULL){
+      for (int i = 0; i < 4; i++) {
+        Geodetic3D g3d = _subtiles->at(i)->intersection(origin, ray, planet);
+        if (!g3d.isNan()){
+          return g3d;
+        }
+      }
+    } 
+      //As our tiles are still flat our onPlanet vector is calculated directly from Planet
+      std::vector<double> ts = planet->intersections(origin, ray);
       
-      if (_sector.contains(g)){
-        _texturizer->onTerrainTouchEvent(g, this);
+      if (ts.size() > 0){
+        Vector3D onPlanet = origin.add(ray.times(ts[0]));
+        Geodetic3D g = planet->toGeodetic3D(onPlanet);
         
-        return g;
-      } else {
+        if (_sector.contains(g)){
+          printf("TOUCH TILE %d\n", _level);
+          _texturizer->onTerrainTouchEvent(g, this);
+          
+          return g;
+        } else {
+          return Geodetic3D::nan();
+        }
+      } else{
+        //Touches extent but not the tile
         return Geodetic3D::nan();
       }
-    } else{
-      //Touches extent but not the tile
-      return Geodetic3D::nan();
-    }
-  }
+  }*/
 }

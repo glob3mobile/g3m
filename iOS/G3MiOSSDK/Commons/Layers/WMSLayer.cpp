@@ -214,13 +214,6 @@ URL WMSLayer::getFeatureURL(const Geodetic2D& g,
     req += "&SRS=EPSG:4326";
   }
   
-  //Texture Size and BBOX
-  std::ostringstream oss;
-  oss << "&WIDTH=" << width << "&HEIGHT=" << height;
-//  oss << "&BBOX=" << sector.lower().longitude().degrees() << "," << sector.lower().latitude().degrees();
-//  oss << "," << sector.upper().longitude().degrees() << "," << sector.upper().latitude().degrees();
-  req += oss.str();
-  
   switch (_serverVersion) {
     case WMS_1_3_0:
     {
@@ -270,6 +263,8 @@ URL WMSLayer::getFeatureURL(const Geodetic2D& g,
 	
   req += "&QUERY_LAYERS=" + _queryLayers;
   req += "&LAYERS=" + _mapLayers;
+  
+  req += "&INFO_FORMAT=text/plain";
   
   //X and Y
   Vector2D pixel = tileSector.getUVCoordinates(g);

@@ -75,7 +75,7 @@ public:
                                      Tile* ancestorTile,
                                      bool textureSolved);
   
-  void onTerrainTouchEvent(const Geodetic3D& g3d, const Tile* tile);
+  void onTerrainTouchEvent(const Geodetic3D& g3d, const Tile* tile){}
 
 };
 

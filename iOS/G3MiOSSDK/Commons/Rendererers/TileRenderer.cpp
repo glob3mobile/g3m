@@ -312,7 +312,7 @@ bool TileRenderer::onTouchEvent(const EventContext* ec, const TouchEvent* touchE
     if (_lastCamera != NULL){
       Vector2D pixel = touchEvent->getTouch(0)->getPos();
       Vector3D ray = _lastCamera->pixel2Ray(pixel);
-      Vector3D origin = _lastCamera->getCenter();
+      Vector3D origin = _lastCamera->getPosition();
       
       for(int i = 0; i < _topLevelTiles.size(); i++){
         
