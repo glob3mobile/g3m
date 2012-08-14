@@ -167,6 +167,7 @@ public:
   const Geodetic2D getApproximatedClosestPoint(const Geodetic2D& pos) const;
   
   const std::string description() const;
+  
 };
 
 

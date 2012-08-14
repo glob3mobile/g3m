@@ -149,10 +149,10 @@ public:
   FileSystemStorage * fss = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
   Downloader* downloaderOLD = new Downloader(fss, 5, factory->createNetwork());
   const bool cleanCache = false;
-  IDownloader* downloader = new Downloader_iOS(1 * 1024 * 1024,
-                                               64 * 1024 * 1024,
+  IDownloader* downloader = new Downloader_iOS(4 * 1024 * 1024,     // 4Mb
+                                               1024 * 1024 * 1024,  // 1G
                                                ".G3M_Cache",
-                                               8,
+                                               2,
                                                cleanCache);
 
   //LAYERS
