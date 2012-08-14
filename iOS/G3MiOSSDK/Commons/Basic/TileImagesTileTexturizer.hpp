@@ -73,14 +73,13 @@ public:
   TileImagesTileTexturizer(const TileParameters* parameters,
                            Downloader* downloader,
                            LayerSet* layerSet,
-                           IFactory* factory) : 
+                           IFactory* fac) :
   _parameters(parameters),
   _layer(NULL),
   _downloader(downloader),
   _texCoordsCache(NULL),
   _layerSet(layerSet),
-  _factory(factory),
-  _renderContext(NULL){
+  _factory(fac){
   }
   
   ~TileImagesTileTexturizer() {

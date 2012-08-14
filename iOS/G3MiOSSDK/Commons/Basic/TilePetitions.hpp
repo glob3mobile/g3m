@@ -94,6 +94,8 @@ class TilePetitions: public IDownloadListener {
 
   std::vector<Petition*> _petitions;
   
+  std::string _petitionsID;
+  
   int _texID;      //TEXTURE ID ONCE IS FINISHED
   
   int _downloadsCounter;
@@ -109,13 +111,16 @@ class TilePetitions: public IDownloadListener {
   
   int getNumPetitions() { return _petitions.size();}
   
+  std::string createPetitionsID(const IFactory* fac) const;
+  
 public:
   
   TilePetitions(const int level,
                 const int row,
                 const int column,
                 const Sector sector,
-                const std::vector<Petition*>& petitions):
+                const std::vector<Petition*>& petitions,
+                const IFactory* fac):
   _level(level),
   _row(row),
   _column(column),
@@ -126,6 +131,7 @@ public:
   _texID(-1)
   {
     removeUnnecesaryPetitions();
+    _petitionsID = createPetitionsID(fac);
   }
   
   ~TilePetitions()
@@ -159,7 +165,9 @@ public:
   
   int getTexID() const{ return _texID;}
 
-  std::string getPetitionsID() const;
+  std::string getPetitionsID() const{
+    return _petitionsID;
+  }
   
   bool allFinished() const;
   

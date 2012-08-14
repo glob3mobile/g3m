@@ -31,7 +31,8 @@ TilePetitions* TileImagesTileTexturizer::createTilePetitions(const Tile* tile) {
                            tile->getRow(),
                            tile->getColumn(),
                            tile->getSector(),
-                           pet);
+                           pet,
+                           _factory);
 }
 
 std::vector<MutableVector2D> TileImagesTileTexturizer::getTextureCoordinates(const TileTessellator* tessellator) const {
