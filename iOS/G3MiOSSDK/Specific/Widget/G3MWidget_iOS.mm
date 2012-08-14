@@ -473,14 +473,7 @@
                                   Angle::nan(),
                                   Angle::nan());
   
-  IDownloader* featuresDownloader = new Downloader_iOS(1 * 1024 * 1024,
-                                               64 * 1024 * 1024,
-                                               ".G3M_Cache",
-                                               8,
-                                               cleanCache);
-  featuresDownloader->start();
-  
-  oceans->addTerrainTouchEventListener(new TouchOcean(factory, featuresDownloader));
+  oceans->addTerrainTouchEventListener(new TouchOcean(factory, downloader));
   
   //ORDER IS IMPORTANT
   //layerSet->addLayer(baseLayer);
