@@ -505,7 +505,6 @@ bool MultiLayerTileTexturizer::tileMeetsRenderCriteria(Tile* tile) {
 void MultiLayerTileTexturizer::ancestorTexturedSolvedChanged(Tile* tile,
                                                              Tile* ancestorTile,
                                                              bool textureSolved) {
-  int ___hehe;
   
 }
 

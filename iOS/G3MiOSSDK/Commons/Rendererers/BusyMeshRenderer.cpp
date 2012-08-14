@@ -73,7 +73,7 @@ void BusyMeshRenderer::initialize(const InitializationContext* ic)
     indices[ni]     = ni;
     indices[ni+1]   = ni+1;
     ni+=2;    
-    float col       = 1.1 * step / numStrides;
+    float col       = (float) (1.1 * step / numStrides);
     if (col>1) {
       colors[nc++]    = 255;
       colors[nc++]    = 255;
