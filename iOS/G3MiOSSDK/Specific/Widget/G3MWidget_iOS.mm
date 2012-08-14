@@ -211,9 +211,7 @@ public:
   
   oceans->addTerrainTouchEventListener(new OceanTerrainTouchEventListener(factory, downloader));
   
-  
   layerSet->addLayer(oceans);
-
   
   //STATIC IMAGE FOR TESTING AUSTRALIA
 //  IImage *image = factory->createImageFromFileName("20120720_cintp1.png");
