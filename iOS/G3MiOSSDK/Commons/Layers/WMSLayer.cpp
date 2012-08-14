@@ -84,19 +84,47 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const RenderContext* rc,
   }
   
   //ASKING TRANSPARENCY
-  req += "&TRANSPARENT=TRUE";
-  
-	//Texture Size and BBOX
-  std::ostringstream oss;
-  oss << "&WIDTH=" << width << "&HEIGHT=" << height;
-  oss << "&BBOX=" << sector.lower().longitude().degrees() << "," << sector.lower().latitude().degrees();
-  oss << "," << sector.upper().longitude().degrees() << "," << sector.upper().latitude().degrees();
-  req += oss.str();
-  
-  if (_serverVersion == "1.3.0") {
-    req += "&CRS=EPSG:4326";
+  if (_isTransparent) {
+    req += "&TRANSPARENT=TRUE";
+  }
+  else {
+    req += "&TRANSPARENT=FALSE";
   }
   
+	//Texture Size and BBOX
+  
+  if (_serverVersion == "1.3.0") {
+    std::ostringstream oss;
+    oss << "&WIDTH=" << width;
+    oss << "&HEIGHT=" << height;
+    //  oss << "&BBOX=" << sector.lower().longitude().degrees() << "," << sector.lower().latitude().degrees();
+    oss << "&BBOX=";
+    oss << sector.lower().latitude().degrees();
+    oss << ",";
+    oss << sector.lower().longitude().degrees();
+    oss << ",";
+    oss << sector.upper().latitude().degrees();
+    oss << ",";
+    oss << sector.upper().longitude().degrees();
+    req += oss.str();
+
+    req += "&CRS=EPSG:4326";
+  }
+  else {
+    std::ostringstream oss;
+    oss << "&WIDTH=" << width;
+    oss << "&HEIGHT=" << height;
+    //  oss << "&BBOX=" << sector.lower().longitude().degrees() << "," << sector.lower().latitude().degrees();
+    oss << "&BBOX=";
+    oss << sector.lower().longitude().degrees();
+    oss << ",";
+    oss << sector.lower().latitude().degrees();
+    oss << ",";
+    oss << sector.upper().longitude().degrees();
+    oss << ",";
+    oss << sector.upper().latitude().degrees();
+    req += oss.str();
+  }
   //printf("%s\n", req.c_str());
   
   Petition *pet = new Petition(sector, req, _isTransparent);

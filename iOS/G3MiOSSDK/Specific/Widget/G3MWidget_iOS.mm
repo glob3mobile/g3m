@@ -351,56 +351,60 @@
   //LAYERS
   LayerSet* layerSet = new LayerSet();
   
-  WMSLayer* baseLayer = new WMSLayer("bmng200405",
-                                     "http://www.nasa.network.com/wms?",
-                                     "1.3",
-                                     "image/jpeg",
-                                     Sector::fullSphere(),
-                                     "EPSG:4326",
-                                     "",
-                                     false,
-                                     Angle::nan(),
-                                     Angle::nan());
+//  WMSLayer* baseLayer = new WMSLayer("bmng200405",
+//                                     "http://www.nasa.network.com/wms?",
+//                                     "1.1.0",
+//                                     "image/jpeg",
+//                                     Sector::fullSphere(),
+//                                     "EPSG:4326",
+//                                     "",
+//                                     false,
+//                                     Angle::nan(),
+//                                     Angle::nan());
   
-  WMSLayer *vias = new WMSLayer("VIAS",
-                                "http://idecan2.grafcan.es/ServicioWMS/Callejero",
-                                "1.1.0",
-                                "image/gif",
-                                Sector::fromDegrees(22.5,-22.5, 33.75, -11.25),
-                                "EPSG:4326",
-                                "",
-                                true,
-                                Angle::nan(),
-                                Angle::nan());
+//  WMSLayer *vias = new WMSLayer("VIAS",
+//                                "http://idecan2.grafcan.es/ServicioWMS/Callejero",
+//                                "1.1.0",
+//                                "image/gif",
+//                                Sector::fromDegrees(22.5,-22.5, 33.75, -11.25),
+//                                "EPSG:4326",
+//                                "",
+//                                true,
+//                                Angle::nan(),
+//                                Angle::nan());
 
-  WMSLayer *pnoa = new WMSLayer("PNOA",
-                                "http://www.idee.es/wms/PNOA/PNOA",
-                                "1.1.0",
-                                "image/png",
-                                Sector::fromDegrees(21,-18, 45, 6),
-                                "EPSG:4326",
-                                "",
-                                true,
-                                Angle::nan(),
-                                Angle::nan());
+//  WMSLayer *pnoa = new WMSLayer("PNOA",
+//                                "http://www.idee.es/wms/PNOA/PNOA",
+//                                "1.1.0",
+//                                "image/png",
+//                                Sector::fromDegrees(21,-18, 45, 6),
+//                                "EPSG:4326",
+//                                "",
+//                                true,
+//                                Angle::nan(),
+//                                Angle::nan());
 
-  WMSLayer *oceans = new WMSLayer("igo:ocean_temp_1993_01_02",
+  WMSLayer *oceans = new WMSLayer("igo:bmng200401",
+                                  //"igo:ocean_temp_1993_01_02",
                                   //"igo:ocean_temp_1993_01_02_180",
                                   "http://igosoftware.dyndns.org:8080/geoserver/igo/wms",
-                                  "1.1.1",
-                                  "image/png",
-                                  Sector::fromDegrees(-90,0, 90, 180),
+                                  "1.3.0",
+                                  "image/jpeg",
+                                  Sector::fullSphere(),
                                   "EPSG:4326",
                                   "",
-                                  true,
+                                  false,
                                   Angle::nan(),
                                   Angle::nan());
   
   //ORDER IS IMPORTANT
-  layerSet->addLayer(baseLayer);
-  layerSet->addLayer(pnoa);
-  layerSet->addLayer(vias);
   layerSet->addLayer(oceans);
+//  layerSet->addLayer(vias);
+
+//  layerSet->addLayer(baseLayer);
+//  layerSet->addLayer(pnoa);
+//  layerSet->addLayer(vias);
+//  layerSet->addLayer(oceans);
   
   // very basic tile renderer
   if (true) {

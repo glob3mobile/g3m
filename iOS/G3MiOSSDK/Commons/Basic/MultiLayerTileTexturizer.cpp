@@ -180,6 +180,7 @@ public:
       const long priority = tile->getLevel() * 1000000 + tile->getRow() * 1000 + tile->getColumn();
 //      const long priority = (long) (tile->getLevel() * 1000000000000 + -squaredDistance);
 
+      printf("Downloading %s\n", petition->getURL().c_str());
       
       const long requestId = downloader->request(URL(petition->getURL()),
                                                  priority,
