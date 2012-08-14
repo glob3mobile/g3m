@@ -463,6 +463,9 @@
       }
     }
     else {
+      
+      http://igosoftware.dyndns.org:8080/geoserver/igo/wms?REQUEST=GetFeatureInfo&SERVICE=WMS&VERSION=1.3.0&CRS=EPSG:4326&SRS=EPSG:4326&WIDTH=256&HEIGHT=256&VERSION=1.3.0&WIDTH=256&HEIGHT=256&BBOX=-90,0,0,90&CRS=EPSG:4326&QUERY_LAYERS=igo:bmng200401&LAYERS=igo:ocean_cnt_2010_0_15&X=210&Y=181
+      
       //SINGLE IMAGE
       IImage *singleWorldImage = factory->createImageFromFileName("world.jpg");
       texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);

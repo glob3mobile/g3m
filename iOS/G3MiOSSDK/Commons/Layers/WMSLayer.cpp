@@ -187,15 +187,6 @@ URL WMSLayer::getFeatureURL(const Geodetic2D& g,
     req = newHost + req;
   }
 	
-	//Petition
-//  if (_serverVersion != "") {
-//    req += "REQUEST=GetFeatureInfo&SERVICE=WMS&VERSION=" + _serverVersion;
-//  }
-//  else {
-//    req += "REQUEST=GetFeatureInfo&SERVICE=WMS&VERSION=1.1.1";
-//  }
-  
-  
   req += "REQUEST=GetFeatureInfo&SERVICE=WMS";
   switch (_serverVersion) {
     case WMS_1_3_0:
