@@ -35,7 +35,7 @@
 #include "LatLonMeshRenderer.h"
 
 #include "SQLiteStorage_iOS.hpp"
-#include "FileSystemStorage.hpp"
+#include "FileSystemStorage_iOS.hpp"
 #include "NullStorage.hpp"
 #include "TileImagesTileTexturizer.hpp"
 #include "SingleImageTileTexturizer.hpp"
@@ -146,7 +146,7 @@ public:
   
   //STORAGE
   NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-  FileSystemStorage * fss = new FileSystemStorage(URL([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]));
+  FileSystemStorage_iOS * fss = new FileSystemStorage_iOS(URL([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]));
   Downloader* downloaderOLD = new Downloader(fss, 5, factory->createNetwork());
   const bool cleanCache = false;
   IDownloader* downloader = new Downloader_iOS(4 * 1024 * 1024,     // 4Mb
@@ -337,7 +337,7 @@ public:
   
   //STORAGE
   NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-  FileSystemStorage * fss = new FileSystemStorage(URL([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]));
+  FileSystemStorage_iOS * fss = new FileSystemStorage_iOS(URL([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]));
   Downloader* downloaderOLD = new Downloader(fss, 5, factory->createNetwork());
   const bool cleanCache = false;
   IDownloader* downloader = new Downloader_iOS(4 * 1024 * 1024,     // 4Mb

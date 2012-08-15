@@ -6,18 +6,18 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_FileSystemStorage_h
-#define G3MiOSSDK_FileSystemStorage_h
+#ifndef G3MiOSSDK_FileSystemStorage_iOS_h
+#define G3MiOSSDK_FileSystemStorage_iOS_h
 
 #include "IStorage.hpp"
 
-class FileSystemStorage: public IStorage
+class FileSystemStorage_iOS: public IStorage
 {
   NSString* _root;
   NSString* generateFileName(const URL& url);
 public:
   
-  FileSystemStorage(const URL& root);
+  FileSystemStorage_iOS(const URL& root);
   
   bool contains(const URL& url);
   

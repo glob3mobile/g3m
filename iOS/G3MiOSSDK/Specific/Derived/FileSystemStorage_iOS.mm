@@ -1,30 +1,30 @@
 //
-//  FileSystemStorage.mm
+//  FileSystemStorage_iOS.mm
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 26/06/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#include "FileSystemStorage.hpp"
+#include "FileSystemStorage_iOS.hpp"
 
-FileSystemStorage::FileSystemStorage(const URL& root)
+FileSystemStorage_iOS::FileSystemStorage_iOS(const URL& root)
 {
   _root = [[NSString alloc] initWithCString: root.getPath().c_str()
                                    encoding: NSUTF8StringEncoding];
 }
 
-bool FileSystemStorage::contains(const URL& url)
+bool FileSystemStorage_iOS::contains(const URL& url)
 {
   NSString *file = generateFileName(url);
   
   return [[NSFileManager defaultManager] fileExistsAtPath:file];
 }
 
-void FileSystemStorage::save(const URL& url,
-                             const ByteBuffer& buffer) {
+void FileSystemStorage_iOS::save(const URL& url,
+                                 const ByteBuffer& buffer) {
   
-  NSString *fullPath = generateFileName(url); 	
+  NSString *fullPath = generateFileName(url);
   NSFileManager *fileManager = [NSFileManager defaultManager];
   NSData *writeData = [[NSData alloc] initWithBytes: buffer.getData()
                                              length: buffer.getLength()];
@@ -46,7 +46,7 @@ void FileSystemStorage::save(const URL& url,
   }
 }
 
-const ByteBuffer* FileSystemStorage::read(const URL& url)
+const ByteBuffer* FileSystemStorage_iOS::read(const URL& url)
 {
   NSString *file = generateFileName(url);
   NSData *readData = [[NSData alloc] initWithContentsOfFile:file];
@@ -63,8 +63,7 @@ const ByteBuffer* FileSystemStorage::read(const URL& url)
   return new ByteBuffer(data, length);
 }
 
-
-NSString* FileSystemStorage::generateFileName(const URL& url) {
+NSString* FileSystemStorage_iOS::generateFileName(const URL& url) {
   NSString* fileName = [[NSString alloc] initWithCString: url.getPath().c_str()
                                                 encoding: NSUTF8StringEncoding];
   
