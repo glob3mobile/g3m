@@ -12,14 +12,35 @@
 #include "Downloader.hpp"
 #include "TexturesHandler.hpp"
 
+const std::string Petition::description() const {
+  std::ostringstream buffer;
+  buffer << "Petition(url=";
+  buffer << _url.description();
+  buffer << ", sector=";
+  buffer << _sector->description();
+  buffer << ", buffer=";
+  if (_buffer == NULL) {
+    buffer << "NULL";
+  }
+  else {
+    buffer << _buffer->description();
+  }
+  buffer << ", downloadID=";
+  buffer << _downloadID;
+  buffer << ", transparentImage=";
+  buffer << _transparentImage;
+  buffer << ")";
+  return buffer.str();
+}
+
 void TilePetitions::onDownload(const Response* response)
 {
   _downloadsCounter++;
   
-  std::string url = response->getURL().getPath();
+  const URL url = response->getURL();
   
   for (int j = 0; j < _petitions.size(); j++) {
-    if (_petitions[j]->getURL() == url)
+    if (_petitions[j]->getURL().isEqualsTo(url))
     {
       //STORING PIXEL DATA FOR RECEIVED URL
       ByteBuffer* bb = response->getByteBuffer()->copy();
@@ -53,7 +74,7 @@ std::string TilePetitions::getPetitionsID() const
     if (j > 0){
       id += "__";
     }
-    id += _petitions[j]->getURL();
+    id += _petitions[j]->getURL().getPath();
   }
   return id;
 }

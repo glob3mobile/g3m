@@ -135,22 +135,10 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const RenderContext* rc,
   
 	//Texture Size and BBOX
   
-  req += "REQUEST=GetMap&SERVICE=WMS";
-  switch (_serverVersion) {
-    case WMS_1_1_0:
-      req += "VERSION=1.1.1";
-      break;
-    case WMS_1_3_0:
-      req += "VERSION=1.3.0";
-      break;
-    default:
-      // default is 1.1.1
-      req += "VERSION=1.1.1";
-      break;
-  }
-
-  Petition *pet = new Petition(sector, req, _isTransparent);
-  petitions.push_back(pet);
+  Petition *petition = new Petition(sector, URL(req), _isTransparent);
+  petitions.push_back(petition);
+  
+  printf("%s\n", petition->description().c_str());
   
   //Testing
   //printf("%s\n\n",getFeatureURL(sector.getCenter(), rc, tile, width, height).getPath().c_str() );

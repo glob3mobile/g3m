@@ -8,19 +8,20 @@
 
 #include "FileSystemStorage.hpp"
 
-FileSystemStorage::FileSystemStorage(const std::string& root)
+FileSystemStorage::FileSystemStorage(const URL& root)
 {
-  _root = [[NSString alloc] initWithCString:root.c_str() encoding:NSUTF8StringEncoding];
+  _root = [[NSString alloc] initWithCString: root.getPath().c_str()
+                                   encoding: NSUTF8StringEncoding];
 }
 
-bool FileSystemStorage::contains(const std::string& url)
+bool FileSystemStorage::contains(const URL& url)
 {
   NSString *file = generateFileName(url);
   
   return [[NSFileManager defaultManager] fileExistsAtPath:file];
 }
 
-void FileSystemStorage::save(const std::string& url,
+void FileSystemStorage::save(const URL& url,
                              const ByteBuffer& buffer) {
   
   NSString *fullPath = generateFileName(url); 	
@@ -45,7 +46,7 @@ void FileSystemStorage::save(const std::string& url,
   }
 }
 
-const ByteBuffer* FileSystemStorage::read(const std::string& url)
+const ByteBuffer* FileSystemStorage::read(const URL& url)
 {
   NSString *file = generateFileName(url);
   NSData *readData = [[NSData alloc] initWithContentsOfFile:file];
@@ -63,12 +64,12 @@ const ByteBuffer* FileSystemStorage::read(const std::string& url)
 }
 
 
-NSString* FileSystemStorage::generateFileName(const std::string& url) {
-  NSString* fileName = [[NSString alloc] initWithCString:url.c_str()
-                                                encoding:NSUTF8StringEncoding];
+NSString* FileSystemStorage::generateFileName(const URL& url) {
+  NSString* fileName = [[NSString alloc] initWithCString: url.getPath().c_str()
+                                                encoding: NSUTF8StringEncoding];
   
-  fileName = [fileName stringByReplacingOccurrencesOfString:@"/"
-                                                 withString:@"_"];
+  fileName = [fileName stringByReplacingOccurrencesOfString: @"/"
+                                                 withString: @"_"];
   
   //NSLog(@"%@", fileName);
   

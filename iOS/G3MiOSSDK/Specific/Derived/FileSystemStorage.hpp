@@ -14,17 +14,18 @@
 class FileSystemStorage: public IStorage
 {
   NSString* _root;
-  NSString* generateFileName(const std::string& url);
+  NSString* generateFileName(const URL& url);
 public:
   
-  FileSystemStorage(const std::string& root);
+  FileSystemStorage(const URL& root);
   
-  bool contains(const std::string& url);
+  bool contains(const URL& url);
   
-  void save(const std::string& url,
+  void save(const URL& url,
             const ByteBuffer& buffer);
   
-  const ByteBuffer* read(const std::string& url);
+  const ByteBuffer* read(const URL& url);
+  
 };
 
 #endif

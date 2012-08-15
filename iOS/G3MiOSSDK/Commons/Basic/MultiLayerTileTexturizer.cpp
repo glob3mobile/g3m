@@ -243,7 +243,7 @@ public:
                                                               textureHeight);
             rectangles.push_back(rectangle);
             
-            petitionsID += petition->getURL();
+            petitionsID += petition->getURL().getPath();
             petitionsID += "_";
           }
         }

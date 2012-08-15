@@ -9,19 +9,20 @@
 #ifndef G3MiOSSDK_Storage_h
 #define G3MiOSSDK_Storage_h
 
-#include <string>
+//#include <string>
 
 #include "ByteBuffer.hpp"
+#include "URL.hpp"
 
 class IStorage
 {
 public:
-  virtual bool contains(const std::string& url) = 0;
+  virtual bool contains(const URL& url) = 0;
   
-  virtual void save(const std::string& url,
+  virtual void save(const URL& url,
                     const ByteBuffer& buffer) = 0;
   
-  virtual const ByteBuffer* read(const std::string& url) = 0;
+  virtual const ByteBuffer* read(const URL& url) = 0;
   
   virtual ~IStorage() {}
 

@@ -103,7 +103,7 @@ void Downloader_iOS::cancelRequest(long requestId) {
   [_lock unlock];
 }
 
-void Downloader_iOS::removeDownloadingHandlerForNSURL(NSURL* url) {
+void Downloader_iOS::removeDownloadingHandlerForNSURL(const NSURL* url) {
   [_lock lock];
   
   [_downloadingHandlers removeObjectForKey:url];

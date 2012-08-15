@@ -33,13 +33,20 @@ public:
     return _path;
   }
   
-  static URL null(){
-    return URL("");
+  static URL null() {
+    return URL("__NULL__");
   }
   
-  bool isNull(){
-    return _path == "";
+  bool isNull() const {
+    return (_path == "__NULL__");
   }
+  
+  bool isEqualsTo(const URL& that) const {
+    return (_path == that._path);
+  }
+  
+  const std::string description() const;
+  
 };
 
 

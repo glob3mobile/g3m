@@ -26,11 +26,11 @@ std::vector<Petition*> StaticImageLayer::getTilePetitions(const RenderContext* r
   }
   
   //CREATING ID FOR PETITION
-  std::string id = rc->getFactory()->stringFormat("%s_%f_%f_%f_%f", _layerID.c_str(),
-                                                  tileSector.lower().latitude().degrees(),
-                                                  tileSector.lower().longitude().degrees(),
-                                                  tileSector.upper().latitude().degrees(),
-                                                  tileSector.upper().longitude().degrees() );
+  const URL id = URL(rc->getFactory()->stringFormat("%s_%f_%f_%f_%f", _layerID.c_str(),
+                                                    tileSector.lower().latitude().degrees(),
+                                                    tileSector.lower().longitude().degrees(),
+                                                    tileSector.upper().latitude().degrees(),
+                                                    tileSector.upper().longitude().degrees() ));
   
   Petition *pet = new Petition(tileSector, id, true);
 

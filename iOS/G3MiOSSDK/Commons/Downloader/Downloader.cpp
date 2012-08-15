@@ -19,18 +19,18 @@ _storage(storage), _maxSimultaneous(maxSimultaneous), _network(net), _simultaneo
 {
 }
 
-const ByteBuffer* Downloader::getByteBufferFromCache(const std::string& urlOfFile) const
+const ByteBuffer* Downloader::getByteBufferFromCache(const URL& urlOfFile) const
 {
   return _storage->read(urlOfFile);
 }
 
 long Downloader::request(const URL& url, int priority, IDownloadListener* listener)
 {
-  std::string urlOfFile = url.getPath();
+//  std::string urlOfFile = url.getPath();
   
   //First we check in storage
-  if (_storage->contains(urlOfFile)){
-    const ByteBuffer *bb = _storage->read(urlOfFile);
+  if (_storage->contains(url)){
+    const ByteBuffer *bb = _storage->read(url);
     Response r(url , bb);
     if (listener != NULL){
       listener->onDownload(&r);
@@ -43,7 +43,7 @@ long Downloader::request(const URL& url, int priority, IDownloadListener* listen
   //We look for repeated petitions
   for (int i = 0; i < _petitions.size(); i++)
   {
-    if (urlOfFile == _petitions[i]._url){ //IF WE FOUND THE SAME PETITION
+    if (url.isEqualsTo(_petitions[i].getURL())){ //IF WE FOUND THE SAME PETITION
       if (priority > _petitions[i]._priority){ //MAX PRIORITY
         _petitions[i]._priority = priority;
       }
@@ -53,7 +53,7 @@ long Downloader::request(const URL& url, int priority, IDownloadListener* listen
   
   if (currentID == -1){
     //NEW DOWNLOAD
-    Download d(urlOfFile, priority);
+    Download d(url, priority);
     currentID = d.addListener(listener);
     _petitions.push_back(d);
   }
@@ -91,7 +91,7 @@ void Downloader::startDownload()
 void Downloader::onDownload(const Response* e)
 {
   //Saving on storage
-  _storage->save(e->getURL().getPath(), *e->getByteBuffer());
+  _storage->save(e->getURL(), *e->getByteBuffer());
   
   for (int i = 0; i < _petitions.size(); i++)
   {

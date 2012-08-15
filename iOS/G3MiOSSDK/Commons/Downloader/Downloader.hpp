@@ -31,8 +31,9 @@ public:
   int                     _priority;
   std::vector<ListenerID> _listeners;
   
-  Download(const std::string& url, int priority):
-  _url(url),
+  Download(const URL& url,
+           int priority):
+  _url(url.getPath()),
   _priority(priority)
   {
   }
@@ -57,6 +58,10 @@ public:
     _listeners.push_back(lid);
     return lid._id;
   }
+  
+  const URL getURL() const {
+    return URL(_url);
+  }
 };
 
 class Downloader: public IDownloadListener
@@ -74,7 +79,7 @@ private:
 public:
   Downloader(IStorage *storage, unsigned int maxSimultaneous, INetwork * const net);
   
-  const ByteBuffer* getByteBufferFromCache(const std::string& urlOfFile) const;
+  const ByteBuffer* getByteBufferFromCache(const URL& urlOfFile) const;
   
   long request(const URL& urlOfFile, int priority, IDownloadListener* listener);
   

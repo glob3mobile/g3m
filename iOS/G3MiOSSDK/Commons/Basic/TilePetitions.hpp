@@ -25,20 +25,25 @@ class MutableVector2D;
 class TileImagesTileTexturizer;
 
 class Petition {
-  const std::string _url;
-  const Sector *    _sector;
+private:
+  const URL         _url;
+  const Sector*     _sector;
   const ByteBuffer* _buffer;
   long              _downloadID;
   const bool        _transparentImage;
   
 public:
   
-  Petition(Sector s, std::string url, bool transparent): _url(url), 
-  _sector(new Sector(s)),
+  Petition(Sector sector,
+           URL url,
+           bool transparent):
+  _sector(new Sector(sector)),
+  _url(url),
+  _transparentImage(transparent),
   _buffer(NULL),
-  _downloadID(-1),
-  _transparentImage(transparent)
-  {}
+  _downloadID(-1)
+  {
+  }
   
   ~Petition(){ 
     delete _sector;
@@ -68,7 +73,7 @@ public:
     _downloadID = id;
   }
 
-  std::string getURL() const {
+  const URL getURL() const {
     return _url;
   }
   
@@ -86,6 +91,8 @@ public:
   const ByteBuffer* getByteBuffer() const {
     return _buffer;
   }
+  
+  const std::string description() const;
   
 };
 

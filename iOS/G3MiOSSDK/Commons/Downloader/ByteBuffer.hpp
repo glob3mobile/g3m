@@ -9,7 +9,10 @@
 #ifndef G3MiOSSDK_ByteBuffer_hpp
 #define G3MiOSSDK_ByteBuffer_hpp
 
-class ByteBuffer{
+#include <string>
+
+
+class ByteBuffer {
   unsigned char* _data;
   const int      _length;
   
@@ -31,13 +34,6 @@ public:
     return new ByteBuffer(newData, _length);
   }
 
-//  ByteBuffer(const ByteBuffer& that) :
-//  _length(that._length),
-//  _data(new unsigned char[that._length])
-//  {
-//    memcpy(_data, that._data, _length * sizeof(unsigned char));
-//  };
-  
   ~ByteBuffer(){
 #ifdef C_CODE
     if (_data != NULL) {
@@ -53,6 +49,8 @@ public:
   int getLength() const{
     return _length;
   }
+  
+  const std::string description() const;
   
 };
 

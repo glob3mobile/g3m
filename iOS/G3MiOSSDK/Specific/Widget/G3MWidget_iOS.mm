@@ -23,6 +23,7 @@
 #include "CameraDoubleTapHandler.hpp"
 #include "CameraConstraints.hpp"
 
+#include "Downloader.hpp"
 #include "TileRenderer.hpp"
 #include "DummyRenderer.hpp"
 #include "MarksRenderer.hpp"
@@ -33,7 +34,6 @@
 #include "EllipsoidalTileTessellator.hpp"
 #include "LatLonMeshRenderer.h"
 
-#include "DummyDownload.hpp"
 #include "SQLiteStorage_iOS.hpp"
 #include "FileSystemStorage.hpp"
 #include "NullStorage.hpp"
@@ -146,13 +146,13 @@ public:
   
   //STORAGE
   NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-  FileSystemStorage * fss = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
+  FileSystemStorage * fss = new FileSystemStorage(URL([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]));
   Downloader* downloaderOLD = new Downloader(fss, 5, factory->createNetwork());
   const bool cleanCache = false;
   IDownloader* downloader = new Downloader_iOS(4 * 1024 * 1024,     // 4Mb
                                                1024 * 1024 * 1024,  // 1G
                                                ".G3M_Cache",
-                                               2,
+                                               8,
                                                cleanCache);
 
   //LAYERS
@@ -322,79 +322,6 @@ public:
     printf("%f, %f, %f\n", v2.x(), v2.y(), v2.z());
   }
   
-  //Testing downloads
-  if (false) {
-    NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    
-    FileSystemStorage * fss = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
-    
-    DummyDownload *dummyDownload = new DummyDownload(factory, fss );
-    dummyDownload->run();
-  }
-  
-  if (false){
-    NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    NSLog(@"\nDocument Directory: %s;", [documentsDirectory UTF8String]);
-    
-    SQLiteStorage_iOS *sql = new SQLiteStorage_iOS("test.db", "file");
-    DummyDownload *dummyDownload = new DummyDownload(factory, sql);
-    
-    std::string directory = "";
-    std::string file1 = "";
-    std::string file2 = "";
-    std::string file3 = "";
-    
-    if(false){
-      directory = "/Users/vidalete/Downloads/";
-      file1 = "Tic2Vtwo.pdf";
-      file2 = "Pantallazo.png";
-      file3 = "blobtest.png";
-    }else{
-      directory = [documentsDirectory UTF8String];
-      file1 = "mark.png";
-      file2 = "world.jpg";
-      file3 = "plane.png";
-      
-      const NSFileManager *fileManager = [NSFileManager defaultManager];
-      NSError *error;
-      
-      NSString *writableDBPathNS = [documentsDirectory stringByAppendingPathComponent:[[NSString alloc] initWithCString:file1.c_str() encoding:NSUTF8StringEncoding]];
-      if (![fileManager fileExistsAtPath:writableDBPathNS]){
-        // The writable database does not exist, so copy the default to the appropriate location.
-        NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:[[NSString alloc] initWithCString:file1.c_str() encoding:NSUTF8StringEncoding]];
-        if (![fileManager copyItemAtPath:defaultDBPath toPath:writableDBPathNS error:&error]) {
-          NSLog(@"Failed to create writable file with message '%@'.", [error localizedDescription]);
-        } 
-      }
-      
-      writableDBPathNS = [documentsDirectory stringByAppendingPathComponent:[[NSString alloc] initWithCString:file2.c_str() encoding:NSUTF8StringEncoding]];
-      if (![fileManager fileExistsAtPath:writableDBPathNS]){
-        // The writable database does not exist, so copy the default to the appropriate location.
-        NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:[[NSString alloc] initWithCString:file2.c_str() encoding:NSUTF8StringEncoding]];
-        if (![fileManager copyItemAtPath:defaultDBPath toPath:writableDBPathNS error:&error]) {
-          NSLog(@"Failed to create writable file with message '%@'.", [error localizedDescription]);
-        } 
-      }
-      
-      writableDBPathNS = [documentsDirectory stringByAppendingPathComponent:[[NSString alloc] initWithCString:file3.c_str() encoding:NSUTF8StringEncoding]];
-      if (![fileManager fileExistsAtPath:writableDBPathNS]){
-        // The writable database does not exist, so copy the default to the appropriate location.
-        NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:[[NSString alloc] initWithCString:file3.c_str() encoding:NSUTF8StringEncoding]];
-        if (![fileManager copyItemAtPath:defaultDBPath toPath:writableDBPathNS error:&error]) {
-          NSLog(@"Failed to create writable file with message '%@'.", [error localizedDescription]);
-        } 
-      }
-      
-    }
-    
-    
-    FileSystemStorage * fssAux = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
-    
-    dummyDownload->runSqlite(directory, file1, fssAux);
-    dummyDownload->runSqlite(directory, file2, fssAux);
-    dummyDownload->runSqlite(directory, file3, fssAux);
-  }
-
   // composite renderer is the father of the rest of renderers
   CompositeRenderer* comp = new CompositeRenderer();
   
@@ -410,13 +337,13 @@ public:
   
   //STORAGE
   NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-  FileSystemStorage * fss = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
+  FileSystemStorage * fss = new FileSystemStorage(URL([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]));
   Downloader* downloaderOLD = new Downloader(fss, 5, factory->createNetwork());
   const bool cleanCache = false;
   IDownloader* downloader = new Downloader_iOS(4 * 1024 * 1024,     // 4Mb
                                                1024 * 1024 * 1024,  // 1G
                                                ".G3M_Cache",
-                                               2,
+                                               8,
                                                cleanCache);
   
   if (false) {
@@ -451,38 +378,39 @@ public:
   //LAYERS
   LayerSet* layerSet = new LayerSet();
  
-//  WMSLayer* baseLayer = new WMSLayer("bmng200405",
-//                                     "http://www.nasa.network.com/wms?",
-//                                     WMS_1_3_0,
-//                                     "image/jpeg",
-//                                     Sector::fullSphere(),
-//                                     "EPSG:4326",
-//                                     "",
-//                                     false,
-//                                     Angle::nan(),
-//                                     Angle::nan());
+  WMSLayer* blueMarble = new WMSLayer("bmng200405",
+                                      "http://www.nasa.network.com/wms?",
+                                      WMS_1_1_0,
+                                      "image/jpeg",
+                                      Sector::fullSphere(),
+                                      "EPSG:4326",
+                                      "",
+                                      false,
+                                      Angle::nan(),
+                                      Angle::nan());
   
-//  WMSLayer *vias = new WMSLayer("VIAS",
-//                                "http://idecan2.grafcan.es/ServicioWMS/Callejero",
-//                                "1.1.0",
-//                                "image/gif",
-//                                Sector::fromDegrees(22.5,-22.5, 33.75, -11.25),
-//                                "EPSG:4326",
-//                                "",
-//                                true,
-//                                Angle::nan(),
-//                                Angle::nan());
+  WMSLayer *pnoa = new WMSLayer("PNOA",
+                                "http://www.idee.es/wms/PNOA/PNOA",
+                                WMS_1_1_0,
+                                "image/png",
+                                Sector::fromDegrees(21, -18, 45, 6),
+                                "EPSG:4326",
+                                "",
+                                true,
+                                Angle::nan(),
+                                Angle::nan());
 
-//  WMSLayer *pnoa = new WMSLayer("PNOA",
-//                                "http://www.idee.es/wms/PNOA/PNOA",
-//                                "1.1.0",
-//                                "image/png",
-//                                Sector::fromDegrees(21,-18, 45, 6),
-//                                "EPSG:4326",
-//                                "",
-//                                true,
-//                                Angle::nan(),
-//                                Angle::nan());
+  WMSLayer *vias = new WMSLayer("VIAS",
+                                "http://idecan2.grafcan.es/ServicioWMS/Callejero",
+                                WMS_1_1_0,
+                                "image/gif",
+                                Sector::fromDegrees(22.5,-22.5, 33.75, -11.25),
+                                "EPSG:4326",
+                                "",
+                                true,
+                                Angle::nan(),
+                                Angle::nan());
+  
 
 //  WMSLayer *oceans = new WMSLayer("igo:bmng200401,igo:ocean_2010_0_15,igo:ocean_cnt_2010_0_15",
 //                                  "igo:ocean_2010_0_15,igo:ocean_cnt_2010_0_15",
@@ -497,28 +425,28 @@ public:
 //                                  Angle::nan(),
 //                                  Angle::nan());
 
-  WMSLayer *oceans = new WMSLayer("igo:bmng200401,igo:ocean_2010_0_15",
-                                  "igo:ocean_2010_0_15",
-                                  "http://igosoftware.dyndns.org:8081/geoserver/igo/wms",
-                                  WMS_1_3_0,
-                                  "image/jpeg",
-                                  Sector::fullSphere(),
-                                  "EPSG:4326",
-                                  "",
-                                  false,
-                                  Angle::nan(),
-                                  Angle::nan());
-
-  oceans->addTerrainTouchEventListener(new OceanTerrainTouchEventListener(factory, downloader));
+//  WMSLayer *oceans = new WMSLayer("igo:bmng200401,igo:ocean_2010_0_15",
+//                                  "igo:ocean_2010_0_15",
+//                                  "http://igosoftware.dyndns.org:8081/geoserver/igo/wms",
+//                                  WMS_1_3_0,
+//                                  "image/jpeg",
+//                                  Sector::fullSphere(),
+//                                  "EPSG:4326",
+//                                  "",
+//                                  false,
+//                                  Angle::nan(),
+//                                  Angle::nan());
+//
+//  oceans->addTerrainTouchEventListener(new OceanTerrainTouchEventListener(factory, downloader));
   
   //ORDER IS IMPORTANT
-  //layerSet->addLayer(baseLayer);
-  layerSet->addLayer(oceans);
+  layerSet->addLayer(blueMarble);
+//  layerSet->addLayer(oceans);
 //  layerSet->addLayer(vias);
 
 
-//  layerSet->addLayer(pnoa);
-//  layerSet->addLayer(vias);
+  layerSet->addLayer(pnoa);
+  layerSet->addLayer(vias);
 //  layerSet->addLayer(oceans);
   
   // very basic tile renderer
