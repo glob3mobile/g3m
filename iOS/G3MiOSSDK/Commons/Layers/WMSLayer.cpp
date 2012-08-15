@@ -133,15 +133,10 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const RenderContext* rc,
     req += "&TRANSPARENT=FALSE";
   }
   
-	//Texture Size and BBOX
-  
   Petition *petition = new Petition(sector, URL(req), _isTransparent);
   petitions.push_back(petition);
   
-  printf("%s\n", petition->description().c_str());
-  
-  //Testing
-  //printf("%s\n\n",getFeatureURL(sector.getCenter(), rc, tile, width, height).getPath().c_str() );
+//  printf("%s\n", petition->description().c_str());
   
 	return petitions;
 }
