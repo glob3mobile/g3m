@@ -223,7 +223,8 @@ public:
   
   // very basic tile renderer
   if (true) {
-    TilesRenderParameters* parameters = TilesRenderParameters::createDefault(false);
+    bool renderDebug = false;
+    TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug);
     
     TileTexturizer* texturizer = NULL;
     if (true) {
