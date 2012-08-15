@@ -16,12 +16,12 @@
 class IStorage
 {
 public:
-  virtual bool contains(const std::string url) = 0;
+  virtual bool contains(const std::string& url) = 0;
   
-  virtual void save(const std::string url,
-                    const ByteBuffer& bb) = 0;
+  virtual void save(const std::string& url,
+                    const ByteBuffer& buffer) = 0;
   
-  virtual ByteBuffer* read(const std::string url) = 0;
+  virtual const ByteBuffer* read(const std::string& url) = 0;
   
   virtual ~IStorage() {}
 

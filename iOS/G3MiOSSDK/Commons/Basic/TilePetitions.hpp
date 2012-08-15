@@ -27,7 +27,7 @@ class TileImagesTileTexturizer;
 class Petition {
   const std::string _url;
   const Sector *    _sector;
-  ByteBuffer*       _buffer;
+  const ByteBuffer* _buffer;
   long              _downloadID;
   const bool        _transparentImage;
   
@@ -76,14 +76,14 @@ public:
     return *_sector;
   }
   
-  void setByteBuffer(ByteBuffer* buffer) {
+  void setByteBuffer(const ByteBuffer* buffer) {
     if (_buffer != NULL) {
       delete _buffer;
     }
     _buffer = buffer;
   }
 
-  ByteBuffer* getByteBuffer() const {
+  const ByteBuffer* getByteBuffer() const {
     return _buffer;
   }
   

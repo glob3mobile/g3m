@@ -37,7 +37,7 @@ std::vector<Petition*> StaticImageLayer::getTilePetitions(const RenderContext* r
   if (_storage != NULL)
   {
     if (_storage->contains(id)){
-      ByteBuffer* bb = _storage->read(id);
+      const ByteBuffer* bb = _storage->read(id);
       pet->setByteBuffer(bb);        //FILLING DATA
       res.push_back(pet);
       return res;

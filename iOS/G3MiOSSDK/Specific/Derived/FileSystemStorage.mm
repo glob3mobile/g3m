@@ -13,32 +13,39 @@ FileSystemStorage::FileSystemStorage(const std::string& root)
   _root = [[NSString alloc] initWithCString:root.c_str() encoding:NSUTF8StringEncoding];
 }
 
-bool FileSystemStorage::contains(std::string url)
+bool FileSystemStorage::contains(const std::string& url)
 {
   NSString *file = generateFileName(url);
   
   return [[NSFileManager defaultManager] fileExistsAtPath:file];
 }
 
-void FileSystemStorage::save(std::string url, const ByteBuffer& bb){
+void FileSystemStorage::save(const std::string& url,
+                             const ByteBuffer& buffer) {
   
   NSString *fullPath = generateFileName(url); 	
-  NSFileManager *fm = [NSFileManager defaultManager];
-  NSData *writeData = [[NSData alloc] initWithBytes: bb.getData() length:bb.getLength()];
+  NSFileManager *fileManager = [NSFileManager defaultManager];
+  NSData *writeData = [[NSData alloc] initWithBytes: buffer.getData()
+                                             length: buffer.getLength()];
   
-  if (![fm createFileAtPath:fullPath contents:writeData attributes:nil])
-  {
+  if (![fileManager createFileAtPath: fullPath
+                            contents: writeData
+                          attributes: nil]) {
     //ASSUMING DIRECTORY MISSING
     NSString* dir = [fullPath stringByDeletingLastPathComponent];
-    [fm createDirectoryAtPath:dir withIntermediateDirectories:YES attributes:nil error:nil];
-    if (![fm createFileAtPath:fullPath contents:writeData attributes:nil])
-    {
+    [fileManager createDirectoryAtPath: dir
+           withIntermediateDirectories: YES
+                            attributes: nil
+                                 error: nil];
+    if (![fileManager createFileAtPath: fullPath
+                              contents: writeData
+                            attributes: nil]) {
       NSLog(@"ERROR WRITING FILE: %d - message: %s", errno, strerror(errno));
     }
   }
 }
 
-ByteBuffer* FileSystemStorage::read(std::string url)
+const ByteBuffer* FileSystemStorage::read(const std::string& url)
 {
   NSString *file = generateFileName(url);
   NSData *readData = [[NSData alloc] initWithContentsOfFile:file];
@@ -56,13 +63,14 @@ ByteBuffer* FileSystemStorage::read(std::string url)
 }
 
 
-NSString* FileSystemStorage::generateFileName(const std::string& url)
-{
-  NSString* file = [[NSString alloc] initWithCString:url.c_str() encoding:NSUTF8StringEncoding];
-  file = [file stringByReplacingOccurrencesOfString:@"/" withString:@"_"];
-  file = [_root stringByAppendingPathComponent:file];
+NSString* FileSystemStorage::generateFileName(const std::string& url) {
+  NSString* fileName = [[NSString alloc] initWithCString:url.c_str()
+                                                encoding:NSUTF8StringEncoding];
   
-  //NSLog(@"%@", file);
+  fileName = [fileName stringByReplacingOccurrencesOfString:@"/"
+                                                 withString:@"_"];
   
-  return file;
+  //NSLog(@"%@", fileName);
+  
+  return [_root stringByAppendingPathComponent:fileName];
 }

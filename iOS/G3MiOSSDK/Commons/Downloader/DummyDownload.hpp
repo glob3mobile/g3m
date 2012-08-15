@@ -54,13 +54,13 @@ public:
   {
     printf("\nFileName: %s;", filename.c_str());
     if (_fss->contains(filename.c_str())){
-      ByteBuffer *bb = _fss->read(filename.c_str());
+      const ByteBuffer *bb = _fss->read(filename.c_str());
       std::string resp = (char*)bb->getData();
       printf("\nFileName: %s;\nData: %s;\nDataLength:%i;\n\n",(root+filename).c_str(), resp.c_str(), bb->getLength());
       fssAux->save(("_(1)" + filename).c_str(), *bb);
       delete bb;
     }else{
-      ByteBuffer *bb = fssAux->read(filename);
+      const ByteBuffer *bb = fssAux->read(filename);
       if(bb->getData() != NULL){
         fssAux->save(("_withoutsaveinsqlite_" + filename).c_str(), *bb);
         _fss->save(filename, *bb);

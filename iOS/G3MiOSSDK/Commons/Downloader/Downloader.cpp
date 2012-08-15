@@ -19,7 +19,7 @@ _storage(storage), _maxSimultaneous(maxSimultaneous), _network(net), _simultaneo
 {
 }
 
-ByteBuffer* Downloader::getByteBufferFromCache(const std::string& urlOfFile) const
+const ByteBuffer* Downloader::getByteBufferFromCache(const std::string& urlOfFile) const
 {
   return _storage->read(urlOfFile);
 }
@@ -30,7 +30,7 @@ long Downloader::request(const URL& url, int priority, IDownloadListener* listen
   
   //First we check in storage
   if (_storage->contains(urlOfFile)){
-    ByteBuffer *bb = _storage->read(urlOfFile);
+    const ByteBuffer *bb = _storage->read(urlOfFile);
     Response r(url , bb);
     if (listener != NULL){
       listener->onDownload(&r);
