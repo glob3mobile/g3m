@@ -79,7 +79,7 @@ void CachedDownloader::cancelRequest(long requestId) {
   _downloader->cancelRequest(requestId);
 }
 
-std::string removeInvalidChars(const std::string& path) {
+std::string CachedDownloader::removeInvalidChars(const std::string& path) const {
   std::string result = path;
   std::replace(result.begin(), result.end(), '/', '_');
   return result;

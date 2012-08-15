@@ -22,6 +22,8 @@ private:
   
   const URL getCacheFileName(const URL& url) const;
   
+  std::string removeInvalidChars(const std::string& path) const;
+
 public:
   CachedDownloader(IDownloader* downloader,
                    IStorage*    cacheStorage,
