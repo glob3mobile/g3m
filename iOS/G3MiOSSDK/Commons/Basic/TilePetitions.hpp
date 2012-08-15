@@ -179,6 +179,9 @@ public:
   void onError(const Response* e);
   void onCancel(const URL* url);
   
+  void onCanceledDownload(const Response* response) {
+  }
+
   void removeUnnecesaryPetitions();
   
 };

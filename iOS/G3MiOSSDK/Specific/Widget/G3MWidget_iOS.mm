@@ -46,6 +46,7 @@
 #include "WMSLayer.hpp"
 #include "StaticImageLayer.hpp"
 
+#include "CachedDownloader.hpp"
 #include "Downloader_iOS.hpp"
 
 #include "INativeGL.hpp"
@@ -93,6 +94,9 @@ public:
   
   void onError(const Response* response) {
     printf("Error in request\n");
+  }
+  
+  void onCanceledDownload(const Response* response) {
   }
   
   void onCancel(const URL* url) {
@@ -149,12 +153,21 @@ public:
   FileSystemStorage_iOS * fss = new FileSystemStorage_iOS(URL([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]));
   Downloader* downloaderOLD = new Downloader(fss, 5, factory->createNetwork());
   const bool cleanCache = false;
-  IDownloader* downloader = new Downloader_iOS(4 * 1024 * 1024,     // 4Mb
-                                               1024 * 1024 * 1024,  // 1G
-                                               ".G3M_Cache",
-                                               8,
-                                               cleanCache);
+//  IDownloader* downloader = new Downloader_iOS(4 * 1024 * 1024,     // 4Mb
+//                                               1024 * 1024 * 1024,  // 1G
+//                                               ".G3M_Cache",
+//                                               8,
+//                                               cleanCache);
 
+  IDownloader* downloader = new CachedDownloader(new Downloader_iOS(0,
+                                                                    0,
+                                                                    ".G3M_Cache",
+                                                                    8,
+                                                                    cleanCache),
+                                                 fss,
+                                                 URL(".cache")
+                                                 );
+  
   //LAYERS
   LayerSet* layerSet = new LayerSet();
 //  WMSLayer* baseLayer = new WMSLayer("bmng200405",
@@ -340,11 +353,20 @@ public:
   FileSystemStorage_iOS * fss = new FileSystemStorage_iOS(URL([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]));
   Downloader* downloaderOLD = new Downloader(fss, 5, factory->createNetwork());
   const bool cleanCache = false;
-  IDownloader* downloader = new Downloader_iOS(4 * 1024 * 1024,     // 4Mb
-                                               1024 * 1024 * 1024,  // 1G
-                                               ".G3M_Cache",
-                                               8,
-                                               cleanCache);
+//  IDownloader* downloader = new Downloader_iOS(4 * 1024 * 1024,     // 4Mb
+//                                               1024 * 1024 * 1024,  // 1G
+//                                               ".G3M_Cache",
+//                                               8,
+//                                               cleanCache);
+  
+  IDownloader* downloader = new CachedDownloader(new Downloader_iOS(0,
+                                                                    0,
+                                                                    ".G3M_Cache",
+                                                                    8,
+                                                                    cleanCache),
+                                                 fss,
+                                                 URL(".cache")
+                                                 );
   
   if (false) {
     
@@ -360,12 +382,14 @@ public:
       }
       
       void onError(const Response* response) {
-        
       }
       
       void onCancel(const URL* url) {
-        
       }
+      
+      void onCanceledDownload(const Response* response) {
+      }
+
     };
     
     const long priority = 999999999;
@@ -441,10 +465,6 @@ public:
   
   //ORDER IS IMPORTANT
   layerSet->addLayer(blueMarble);
-//  layerSet->addLayer(oceans);
-//  layerSet->addLayer(vias);
-
-
   layerSet->addLayer(pnoa);
   layerSet->addLayer(vias);
 //  layerSet->addLayer(oceans);

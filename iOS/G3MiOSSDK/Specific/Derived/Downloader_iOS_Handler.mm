@@ -186,10 +186,20 @@
     URL url( [[_nsURL absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] );
     
     if (_canceled) {
+      const int length = [data length];
+      unsigned char *bytes = new unsigned char[ length ]; // will be deleted by ByteBuffer's destructor
+      [data getBytes: bytes
+              length: length];
+      ByteBuffer buffer(bytes, length);
+      Response response(url, &buffer);
+
       for (int i = 0; i < listenersCount; i++) {
         ListenerEntry* entry = [_listeners objectAtIndex: i];
+        Downloader_iOS_Listener* listener = [entry listener];
         
-        [[entry listener] onCancel: &url];
+        [listener onCanceledDownload: &response];
+        
+        [listener onCancel: &url];
       }
     }
     else {

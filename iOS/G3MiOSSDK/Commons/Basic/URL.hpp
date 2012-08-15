@@ -17,7 +17,7 @@ private:
   
   URL& operator=(const URL& that);
   
-public:  
+public:
   
   URL(const URL& that) :
   _path(that._path) {
@@ -26,6 +26,12 @@ public:
   
   explicit URL(const std::string& path):
   _path(path)
+  {
+  };
+  
+  URL(const URL& parent,
+      const std::string& path):
+  _path(parent.getPath() + "/" + path)
   {
   };
   

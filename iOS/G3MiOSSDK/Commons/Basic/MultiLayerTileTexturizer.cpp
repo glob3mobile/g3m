@@ -44,6 +44,9 @@ public:
   
   void onError(const Response* response);
   
+  void onCanceledDownload(const Response* response) {
+  }
+
   void onCancel(const URL* url);
   
 };
@@ -549,6 +552,9 @@ public:
     _texturizer->countTopTileRequest();
   }
   
+  void onCanceledDownload(const Response* response) {
+  }
+
   void onCancel(const URL* url) {
     _texturizer->countTopTileRequest();
   }

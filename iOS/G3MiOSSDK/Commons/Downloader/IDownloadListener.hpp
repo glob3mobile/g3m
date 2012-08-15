@@ -19,6 +19,10 @@ public:
   virtual void onError(const Response* response) = 0;
   virtual void onCancel(const URL* url) = 0;
   
+  /* this method will be call, before onCancel, when the data arrived before the cancelation */
+  virtual void onCanceledDownload(const Response* response) = 0;
+
+  
   virtual ~IDownloadListener() {
 //    printf("**>> deleting listener=%x\n", (int) this);
   }

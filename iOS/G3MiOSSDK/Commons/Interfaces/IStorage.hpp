@@ -14,9 +14,9 @@
 #include "ByteBuffer.hpp"
 #include "URL.hpp"
 
-class IStorage
-{
+class IStorage {
 public:
+  
   virtual bool contains(const URL& url) = 0;
   
   virtual void save(const URL& url,

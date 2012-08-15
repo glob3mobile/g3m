@@ -1,5 +1,5 @@
 //
-//  FileSystemStorage.hpp
+//  FileSystemStorage_iOS.hpp
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 26/06/12.
@@ -11,10 +11,11 @@
 
 #include "IStorage.hpp"
 
-class FileSystemStorage_iOS: public IStorage
-{
+class FileSystemStorage_iOS: public IStorage {
   NSString* _root;
+  
   NSString* generateFileName(const URL& url);
+  
 public:
   
   FileSystemStorage_iOS(const URL& root);

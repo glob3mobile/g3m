@@ -42,6 +42,13 @@
   }
 }
 
+-(void) onCanceledDownload:(Response*)response
+{
+  if (_cppListener) {
+    _cppListener->onCanceledDownload(response);
+  }
+}
+
 -(void) dealloc
 {
   if (_cppListener) {
