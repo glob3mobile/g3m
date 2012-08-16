@@ -21,7 +21,7 @@ private:
   
 public:
   
-  ~LayerSet(){
+  ~LayerSet() {
     for (int i = 0; i < _layers.size(); i++) {
       delete _layers[i];
     }

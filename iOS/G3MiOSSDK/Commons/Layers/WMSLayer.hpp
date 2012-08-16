@@ -59,7 +59,7 @@ public:
   _minTileLongitudeDelta(minTileLongitudeDelta),
   _maxTileLongitudeDelta(maxTileLongitudeDelta)
   {
-    this->_ttel = NULL;
+
   }
   
   WMSLayer(const std::string& mapLayers,
@@ -85,7 +85,7 @@ public:
   _minTileLongitudeDelta(minTileLongitudeDelta),
   _maxTileLongitudeDelta(maxTileLongitudeDelta)
   {
-    this->_ttel = NULL;
+
   }
   
   bool fullContains(const Sector& s) const {

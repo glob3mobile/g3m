@@ -1,221 +1,105 @@
 //
-//  SQLiteStorage.cpp
+//  SQLiteStorage_iOS.cpp
 //  G3MiOSSDK
 //
-//  Created by Vidal Toboso on 25/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by Diego Gomez Deck on 16/08/12.
+//
 //
 
 #include "SQLiteStorage_iOS.hpp"
-#include <sqlite3.h>
 
-
-SQLiteStorage_iOS::SQLiteStorage_iOS(const std::string databaseName,
-                                     const std::string table) {
-  _databaseName = databaseName;
-  _table = table;
-  SQLiteStorage_iOS::createEditableCopyOfDatabaseIfNeeded();
-  SQLiteStorage_iOS::testConnection();
-  SQLiteStorage_iOS::checkDataBaseConnection();
-  SQLiteStorage_iOS::checkTableExist();
-}
-
-bool SQLiteStorage_iOS::contains(const std::string& filename) {
-  bool contain = false;
-  sqlite3 *db;
-  if (SQLITE_OK != sqlite3_open(_writableDBPath, &db)) {
-    NSLog(@"ERROR Opening Database For contains: %s.",sqlite3_errmsg(db));
-  }
-  else {
-    sqlite3_stmt *ppStmt;
-    char consulta[128];
-    sprintf(consulta, "SELECT COUNT(*) FROM %s WHERE filename=@filename;", _table.c_str());
-    if( sqlite3_prepare_v2(db, consulta, -1, &ppStmt, NULL)!=SQLITE_OK ) {
-      NSLog(@"Error: %s ", sqlite3_errmsg(db));
-    }
-    else {
-      sqlite3_bind_text(ppStmt, sqlite3_bind_parameter_index(ppStmt, "@filename"), filename.c_str(), -1, SQLITE_STATIC);
-      if (SQLITE_ROW == sqlite3_step(ppStmt)) {
-        int count = sqlite3_column_int(ppStmt, 0);
-        contain = (count > 0);
-      }
-    }
-    sqlite3_finalize(ppStmt);
-    sqlite3_close(db);
-  }
-  return contain;
-}
-
-void SQLiteStorage_iOS::save(const std::string& filename,
-                             const ByteBuffer& buffer) {
-  sqlite3 *db;
-  if (SQLITE_OK != sqlite3_open(_writableDBPath, &db)) {
-    NSLog(@"ERROR Opening Database For save: %s.", sqlite3_errmsg(db));
-  }
-  else {
-    sqlite3_stmt *ppStmt;
-    char consulta[128];
-    sqlite3_exec(db, "BEGIN", 0, 0, 0);
-    sprintf(consulta, "INSERT INTO %s (filename, file) VALUES (@filename, @file);", _table.c_str());
-    if (sqlite3_prepare_v2(db, consulta, -1, &ppStmt, NULL) == SQLITE_OK) {
-      sqlite3_bind_text(ppStmt, sqlite3_bind_parameter_index(ppStmt, "@filename"), filename.c_str(), -1, SQLITE_TRANSIENT);
-      sqlite3_bind_blob(ppStmt, sqlite3_bind_parameter_index(ppStmt, "@file"), buffer.getData(), buffer.getLength(), SQLITE_TRANSIENT);
-      //sqlite3_step(ppStmt);
-      if(SQLITE_DONE != sqlite3_step(ppStmt)) {
-        NSLog(@"Error: %s ", sqlite3_errmsg(db));
-      }
-      
-      if(SQLITE_OK != sqlite3_finalize(ppStmt)){
-        NSLog(@"Error in finalize: %s ", sqlite3_errmsg(db));
-      }
-    }
-    sqlite3_exec(db, "END", 0, 0, 0);
-  }
-  sqlite3_close(db);
-}
-
-const ByteBuffer* SQLiteStorage_iOS::read(const std::string& filename) {
-  return SQLiteStorage_iOS::findFileFromFileName(filename);
-}
-
-const ByteBuffer* SQLiteStorage_iOS::findFileFromFileName(const std::string& filename) {
-  unsigned char *raw = NULL, *myRaw = NULL;
-  int rawLen = 0;
-  sqlite3 *db;
-  if(SQLITE_OK != sqlite3_open(_writableDBPath, &db)){
-    NSLog(@"ERROR Opening Database For findFileFromFileName: %s.",sqlite3_errmsg(db));
-  }else{
-    sqlite3_stmt *ppStmt;
-    char consulta[128];
-    
-    sprintf(consulta, "SELECT rowId,filename,file FROM %s WHERE filename=@filename;", _table.c_str());
-    if( sqlite3_prepare_v2(db, consulta, -1, &ppStmt, NULL)!=SQLITE_OK ){
-      NSLog(@"ERROR sqlite3_prepare_v2 For findFileFromFileName: %s.",sqlite3_errmsg(db));
-    } else {
-      sqlite3_bind_text(ppStmt, sqlite3_bind_parameter_index(ppStmt, "@filename"), filename.c_str(), -1, SQLITE_STATIC);
-      while(SQLITE_ROW == sqlite3_step(ppStmt)) {
-        raw = (unsigned char *)sqlite3_column_blob(ppStmt, 2);
-        rawLen = sqlite3_column_bytes(ppStmt, 2);
-        myRaw = new unsigned char[rawLen];
-        for (int i = 0; i < rawLen; i++) {
-          myRaw[i] = raw[i];
-        }
-      }
-      sqlite3_finalize(ppStmt);
-    }
-  }
-  sqlite3_exec(db, "COMMIT", NULL, NULL, NULL);
-  sqlite3_close(db);
-  ByteBuffer *bb = new ByteBuffer(myRaw, rawLen);
-  return bb;
-}
-
-void SQLiteStorage_iOS::createEditableCopyOfDatabaseIfNeeded() {
-  // First, test for existence.
-  const NSFileManager *fileManager = [NSFileManager defaultManager];
-  NSString *database = [[NSString alloc] initWithCString:_databaseName.c_str() encoding:NSUTF8StringEncoding];
-  NSError *error;
+NSString* SQLiteStorage_iOS::getDBPath() const {
+  
   NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
   NSString *documentsDirectory = [paths objectAtIndex:0];
-  NSString *writableDBPathNS = [documentsDirectory stringByAppendingPathComponent:database];
-  _writableDBPath = [writableDBPathNS cStringUsingEncoding:NSUTF8StringEncoding];
-  NSLog(@"writableDBPath: %s ", _writableDBPath);
-  if (![fileManager fileExistsAtPath:writableDBPathNS]){
-    NSLog(@"Writable database file NOT exist");
-    // The writable database does not exist, so copy the default to the appropriate location.
-    NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:database];
-    if (![fileManager copyItemAtPath:defaultDBPath toPath:writableDBPathNS error:&error]) {
-      NSLog(@"Failed to create writable database file with message '%@'.", [error localizedDescription]);
-    }
-  }else{
-    NSLog(@"Writable database file exist");
-  }
+  NSString *dbPath = [documentsDirectory stringByAppendingPathComponent: toNSString(_databaseName)];
+  
+//  NSString *tmpDirectory = NSTemporaryDirectory();
+//  NSString *dbPath = [tmpDirectory stringByAppendingPathComponent: toNSString(_databaseName)];
+  
+  NSLog(@"dbPath=%@", dbPath);
+  
+  return dbPath;
 }
 
 
-bool SQLiteStorage_iOS::checkDataBaseConnection() const {
-  sqlite3 *db;
-  bool ok = true;
-  if(SQLITE_OK != sqlite3_open(_writableDBPath, &db)){
-    printf("ERROR Opening Database %s \n", _databaseName.c_str());
-    ok = false;
-  }else{
-    printf("Opening Database %s OK\n", _databaseName.c_str());
-  }
-  sqlite3_close(db);
-  return ok;
-}
-
-bool SQLiteStorage_iOS::checkTableExist() const {
-  sqlite3 *db;
-  bool ok = true;
-  if(SQLITE_OK != sqlite3_open(_writableDBPath, &db)){
-    printf("ERROR Opening Database %s \n", _databaseName.c_str());
-    ok = false;
-  }else{
-    char consulta[128];
-    sprintf(consulta, "SELECT COUNT(*) FROM %s;", _table.c_str());
-    if(SQLITE_OK != sqlite3_exec(db, consulta, 0, 0, 0)) {
-      printf("ERROR TABLE %s DON'T EXIST\n", _table.c_str());
-      ok = false;
-    }
-  }
-  if(ok){
-    printf("TABLE %s EXIST\n", _table.c_str());
+SQLiteStorage_iOS::SQLiteStorage_iOS(const std::string &databaseName) :
+_databaseName(databaseName)
+{
+  _db = [SQDatabase databaseWithPath:getDBPath()];
+  if (!_db) {
+    printf("Can't open database \"%s\"\n",
+           databaseName.c_str());
   }
   
-  sqlite3_close(db);
-  return ok;
+  [_db open];
+  
+  //  statement.executeUpdate("CREATE TABLE article (id INT, title TEXT, summary TEXT, icon_name TEXT, html TEXT, importance INT, latitude NUMBER, longitude NUMBER);");
+  //  statement.executeUpdate("CREATE UNIQUE INDEX IF NOT EXISTS article_id ON article (id);");
+  //  statement.executeUpdate("CREATE UNIQUE INDEX IF NOT EXISTS article_title ON article (title);");
+  //  statement.executeUpdate("CREATE INDEX IF NOT EXISTS article_importance ON article (importance);");
+  //  statement.executeUpdate("CREATE INDEX IF NOT EXISTS article_latitude ON article (latitude);");
+  //  statement.executeUpdate("CREATE INDEX IF NOT EXISTS article_longitude ON article (longitude);");
+  //
+  
+  
+  if (![_db executeNonQuery:@"CREATE TABLE IF NOT EXISTS entry (name TEXT, contents TEXT);"]) {
+    printf("Can't create table \"entry\" on database \"%s\"\n",
+           databaseName.c_str());
+    return;
+  }
+  
+  if (![_db executeNonQuery:@"CREATE UNIQUE INDEX IF NOT EXISTS entry_name ON entry(name);"]) {
+    printf("Can't create index \"entry_name\" on database \"%s\"\n",
+           databaseName.c_str());
+    return;
+  }
+  
 }
 
-void SQLiteStorage_iOS::testConnection() const {
-  sqlite3 *db;
-  if(SQLITE_OK != sqlite3_open(_writableDBPath, &db)){
-    printf("Connection KO\n");
-  }else{
-    
-    const char *pSQL[6];
-    
-    // Create a new myTable in database
-    pSQL[0] = "create table myTable (FirstName varchar(30), LastName varchar(30), Age smallint)";
-    
-    // Insert first data item into myTable
-    pSQL[1] = "insert into myTable (FirstName, LastName, Age) values ('Woody', 'Alan', 45)";
-    
-    // Insert second data item into myTable
-    pSQL[2] = "insert into myTable (FirstName, LastName, Age) values ('Micheal', 'Bay', 38)";
-    
-    // Select all data in myTable
-    pSQL[3] = "select * from myTable";
-    
-    // Remove all data in myTable
-    pSQL[4] = "delete from myTable";
-    
-    // Drop the table from database
-    pSQL[5] = "drop table myTable";
-    
-    // execute all the sql statements
-    for(int i = 0; i < 6; i++){
-      if ( sqlite3_exec(db, pSQL[i], 0, 0, 0)!=SQLITE_OK ){
-        printf ("\Error: %s ", sqlite3_errmsg(db));
-        break; // break the loop if error occur
-      } else if (i == 3){
-        sqlite3_stmt *ppStmt;
-        char consulta[64];
-        strcpy(consulta, "select rowId,* from myTable;");
-        if( sqlite3_prepare_v2(db, consulta, -1, &ppStmt, NULL)!=SQLITE_OK ){
-          printf ("\Error: %s ", sqlite3_errmsg(db));
-        } else {
-          while(SQLITE_ROW == sqlite3_step(ppStmt)) {
-            printf ("\nID: %i ", sqlite3_column_int(ppStmt, 0));
-            printf ("\nFirstName: %s ", sqlite3_column_text(ppStmt, 1));
-            printf ("\nLastName: %s ", sqlite3_column_text(ppStmt, 2));
-            printf ("\nAge: %i ", sqlite3_column_int(ppStmt, 3));
-          }
-        }
-        sqlite3_finalize(ppStmt);
-      }
-    }
-    sqlite3_close(db);
+
+bool SQLiteStorage_iOS::contains(const URL& url) {
+  NSString* name = toNSString(url.getPath());
+  
+  SQResultSet* rs = [_db executeQuery:@"SELECT 1 FROM entry WHERE (name = ?)", name];
+  
+  BOOL hasAny = [rs next];
+  
+  [rs close];
+  
+  return hasAny;
+}
+
+void SQLiteStorage_iOS::save(const URL& url,
+                             const ByteBuffer& buffer) {
+  //  insert or replace into Book (Name, TypeID, Level, Seen) values ( ... )
+  
+  NSString* name = toNSString(url.getPath());
+  NSData* contents = [NSData dataWithBytes: buffer.getData()
+                                    length: buffer.getLength()];
+  
+  if (![_db executeNonQuery:@"INSERT OR REPLACE INTO entry (name, contents) VALUES (?, ?)", name, contents]) {
+    printf("Can't save \"%s\"\n", url.getPath().c_str());
   }
+}
+
+const ByteBuffer* SQLiteStorage_iOS::read(const URL& url) {
+  ByteBuffer* result = NULL;
+  
+  NSString* name = toNSString(url.getPath());
+  SQResultSet* rs = [_db executeQuery:@"SELECT contents FROM entry WHERE (name = ?)", name];
+  if ([rs next]) {
+    NSData* nsData = [rs dataColumnByIndex: 0];
+    
+    NSUInteger length = [nsData length];
+    unsigned char* bytes = new unsigned char[length];
+    [nsData getBytes: bytes
+              length: length];
+    
+    result = new ByteBuffer(bytes, length);
+  }
+  
+  [rs close];
+  
+  return result;
 }

@@ -66,7 +66,6 @@ public:
       return false;
     }
 
-//    return (_column < that._column);
     return (_row < that._row);
   }
   

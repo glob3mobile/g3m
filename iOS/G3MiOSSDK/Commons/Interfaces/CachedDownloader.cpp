@@ -113,6 +113,11 @@ long CachedDownloader::request(const URL& url,
     return requestId;
   }
   else {
+
+//    dispatch_async( dispatch_get_main_queue(), ^{
+//
+//    });
+    
     // cache hit
     Response response(url, cachedBuffer);
     

@@ -27,10 +27,10 @@ public:
   }
   
   virtual bool isReady(const RenderContext *rc) = 0;
-
+  
   virtual void initialize(const InitializationContext* ic,
                           const TilesRenderParameters* parameters) = 0;
-
+  
   virtual Mesh* texturize(const RenderContext* rc,
                           const TileRenderContext* trc,
                           Tile* tile,
@@ -39,7 +39,10 @@ public:
   
   virtual void tileToBeDeleted(Tile* tile,
                                Mesh* mesh) = 0;
-
+  
+  virtual void tileMeshToBeDeleted(Tile* tile,
+                                   Mesh* mesh) = 0;
+  
   virtual bool tileMeetsRenderCriteria(Tile* tile) = 0;
   
   virtual void justCreatedTopTile(const RenderContext* rc,
@@ -50,7 +53,7 @@ public:
                                              bool textureSolved) = 0;
   
   virtual void onTerrainTouchEvent(const Geodetic3D& g3d, const Tile* tile) = 0;
-
+  
 };
 
 #endif

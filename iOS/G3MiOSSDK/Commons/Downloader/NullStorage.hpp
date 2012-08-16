@@ -11,21 +11,19 @@
 
 #include "IStorage.hpp"
 
-class NullStorage: public IStorage
-{
+class NullStorage: public IStorage {
 public:
-  bool contains(const std::string& url) {
+  bool contains(const URL& url) {
     return false;
   }
   
-  void save(const std::string& url,
+  void save(const URL& url,
             const ByteBuffer& buffer) {
   }
   
-  const ByteBuffer* read(const std::string& url) {
+  const ByteBuffer* read(const URL& url) {
     return NULL;
   }
 };
-
 
 #endif

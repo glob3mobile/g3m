@@ -24,9 +24,15 @@ private:
   IStorage* const   _storage;
 public:
   
-  StaticImageLayer(std::string layerID, IImage* image, const Sector& sector, IStorage* storage): 
-  _image(image), _bbox(sector), _layerID(layerID), _storage(storage){
-    this->_ttel = NULL;
+  StaticImageLayer(std::string layerID,
+                   IImage* image,
+                   const Sector& sector,
+                   IStorage* storage):
+  _image(image),
+  _bbox(sector),
+  _layerID(layerID),
+  _storage(storage) {
+
   }
   
   ~StaticImageLayer(){

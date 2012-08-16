@@ -161,6 +161,8 @@ void TexturesHandler::retainGLTextureId(const GLTextureID& glTextureId) {
       return;
     }
   }
+  
+  printf("break (point) on me\n");
 }
 
 void TexturesHandler::releaseGLTextureId(const GLTextureID& glTextureId) {

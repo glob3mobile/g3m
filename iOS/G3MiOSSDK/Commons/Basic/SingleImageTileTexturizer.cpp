@@ -84,3 +84,8 @@ void SingleImageTileTexturizer::ancestorTexturedSolvedChanged(Tile* tile,
                                                               bool textureSolved) {
   
 }
+
+void SingleImageTileTexturizer::tileMeshToBeDeleted(Tile* tile,
+                                                    Mesh* mesh) {
+  
+}

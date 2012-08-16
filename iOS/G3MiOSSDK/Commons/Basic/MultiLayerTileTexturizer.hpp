@@ -32,18 +32,21 @@ private:
   std::map<TileKey, TileTextureBuilder*> _builders;
   
   mutable float* _texCoordsCache;
-
+  
   float* getTextureCoordinates(const TileRenderContext* trc) const;
   
   long _pendingTopTileRequests;
-
+  
+  TexturesHandler* _texturesHandler;
+  
 public:
   MultiLayerTileTexturizer(LayerSet* layerSet) :
   _layerSet(layerSet),
   _downloader(0),
   _parameters(0),
   _texCoordsCache(NULL),
-  _pendingTopTileRequests(0)
+  _pendingTopTileRequests(0),
+  _texturesHandler(NULL)
   {
     
   }
@@ -87,8 +90,11 @@ public:
   void deleteBuilder(TileKey key,
                      TileTextureBuilder* builder);
   
-   
+  
   void onTerrainTouchEvent(const Geodetic3D& g3d, const Tile* tile);
+  
+  void tileMeshToBeDeleted(Tile* tile,
+                           Mesh* mesh);
   
 };
 

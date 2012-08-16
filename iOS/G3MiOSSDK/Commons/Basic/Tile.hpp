@@ -45,7 +45,6 @@ private:
   bool _justCreatedSubtiles;
   bool _texturizerDirty;
   
-  
   inline Mesh* getTessellatorMesh(const RenderContext* rc,
                                   const TileRenderContext* trc);
   
@@ -81,6 +80,9 @@ private:
   void ancestorTexturedSolvedChanged(Tile* ancestor,
                                      bool textureSolved);
 
+  bool _isVisible;
+  void setIsVisible(bool isVisible);
+
 public:
   Tile(TileTexturizer* texturizer,
        Tile* parent,
@@ -101,7 +103,8 @@ public:
   _texturizerDirty(true),
   _subtiles(NULL),
   _justCreatedSubtiles(false),
-  _texturizerTimer(NULL)
+  _texturizerTimer(NULL),
+  _isVisible(false)
   {
   }
   

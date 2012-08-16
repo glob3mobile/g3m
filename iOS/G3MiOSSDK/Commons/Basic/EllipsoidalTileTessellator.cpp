@@ -49,7 +49,7 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
     // compute skirt height
     const Vector3D sw = planet->toVector3D(sector.getSW());
     const Vector3D nw = planet->toVector3D(sector.getNW());
-    const double skirtHeight = nw.sub(sw).length() * 0.05;
+    const double skirtHeight = nw.sub(sw).length() * 0.025;
     
     indices.push_back(0);
     int posS = _resolution * _resolution;

@@ -52,7 +52,7 @@ float* TileImagesTileTexturizer::getTextureCoordinates(const TileRenderContext* 
     delete texCoordsV;
     
     _texCoordsCache = texCoordsA;
-
+    
   }
   return _texCoordsCache;
 }
@@ -87,7 +87,7 @@ Mesh* TileImagesTileTexturizer::getNewTextureMesh(Tile* tile,
     if (texID.isValid()) {
       tile->setTextureSolved(true);
       tile->setTexturizerDirty(false);
-
+      
       //printf("TEXTURIZED %d, %d, %d\n", tile->getLevel(), tile->getRow(), tile->getColumn());
       
       TextureMapping * tMap = new SimpleTextureMapping(texID,
@@ -128,7 +128,7 @@ Mesh* TileImagesTileTexturizer::getFallBackTexturedMesh(Tile* tile,
   //CREATING MESH
   if (texID.isValid()) {
     _texturesHandler->retainGLTextureId(texID);
-
+    
     SimpleTextureMapping* tMap = new SimpleTextureMapping(texID,
                                                           getTextureCoordinates(trc),
                                                           false);
@@ -187,7 +187,7 @@ void TileImagesTileTexturizer::tileToBeDeleted(Tile* tile,
     SimpleTextureMapping* simpleTextureMapping = (SimpleTextureMapping*) texturedMesh->getTextureMapping();
     _texturesHandler->releaseGLTextureId( simpleTextureMapping->getGLTextureID() );
   }
-
+  
   
   TilePetitions* tp = getRegisteredTilePetitions(tile);
   
@@ -280,5 +280,10 @@ void TileImagesTileTexturizer::removeRegisteredTilePetitions(Tile* tile) {
 void TileImagesTileTexturizer::ancestorTexturedSolvedChanged(Tile* tile,
                                                              Tile* ancestorTile,
                                                              bool textureSolved) {
+  
+}
+
+void TileImagesTileTexturizer::tileMeshToBeDeleted(Tile* tile,
+                                                   Mesh* mesh) {
   
 }

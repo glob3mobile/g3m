@@ -26,6 +26,7 @@ public:
   virtual ~IDownloadListener() {
 //    printf("**>> deleting listener=%x\n", (int) this);
   }
+  
 };
 
 #endif

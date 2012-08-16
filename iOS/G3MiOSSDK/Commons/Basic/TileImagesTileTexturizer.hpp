@@ -111,6 +111,9 @@ public:
   
   void onTerrainTouchEvent(const Geodetic3D& g3d, const Tile* tile){}
   
+  void tileMeshToBeDeleted(Tile* tile,
+                           Mesh* mesh);
+
 };
 
 #endif

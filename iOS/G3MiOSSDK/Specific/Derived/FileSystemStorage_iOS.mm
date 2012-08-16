@@ -41,7 +41,10 @@ void FileSystemStorage_iOS::save(const URL& url,
     if (![fileManager createFileAtPath: fullPath
                               contents: writeData
                             attributes: nil]) {
-      NSLog(@"ERROR WRITING FILE: %d - message: %s", errno, strerror(errno));
+      NSLog(@"ERROR %d (%s) saving file %@",
+            errno,
+            strerror(errno),
+            [fullPath description]);
     }
   }
 }

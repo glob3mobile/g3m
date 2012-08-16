@@ -18,11 +18,15 @@
 #include "TerrainTouchEventListener.hpp"
 
 class Layer{
-protected:
+private:
   
-  TerrainTouchEventListener* _ttel;
+  std::vector<TerrainTouchEventListener*> _listeners;
 
 public:
+  
+  Layer() {
+    
+  }
   
   virtual ~Layer(){};
   
@@ -42,13 +46,16 @@ public:
                             const Sector& sector,
                             int width, int height) const = 0;
   
-  void addTerrainTouchEventListener(TerrainTouchEventListener* ttel){
-    _ttel = ttel;
+  void addTerrainTouchEventListener(TerrainTouchEventListener* listener) {
+    _listeners.push_back(listener);
   }
   
-  void onTerrainTouchEventListener(TerrainTouchEvent& tte){
-    if (_ttel != NULL){
-      _ttel->onTerrainTouchEvent(tte);
+  void onTerrainTouchEventListener(TerrainTouchEvent& tte) const {
+    for (int i = 0; i < _listeners.size(); i++) {
+      TerrainTouchEventListener* listener = _listeners[i];
+      if (listener != NULL) {
+        listener->onTerrainTouchEvent(tte);
+      }
     }
   }
   

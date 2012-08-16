@@ -99,7 +99,7 @@
 - (bool) removeListenerForRequestId: (long)requestId
 {
   bool removed = false;
-
+  
   [_lock lock];
   
   const int listenersCount = [_listeners count];
@@ -109,13 +109,13 @@
       [[entry listener] onCancel:_url];
       
       [_listeners removeObjectAtIndex: i];
-
+      
       removed = true;
       break;
     }
   }
   
-//  _canceled = [_listeners count] == 0;
+  //  _canceled = [_listeners count] == 0;
   
   [_lock unlock];
   
@@ -136,11 +136,11 @@
 -(bool)isCanceled
 {
   [_lock lock];
-
+  
   const bool result = _canceled;
-
+  
   [_lock unlock];
-
+  
   return result;
 }
 
@@ -148,25 +148,19 @@
 {
   int __dgd_at_work;
   
-  __block Downloader_iOS* downloader = (Downloader_iOS*) downloaderV;
+  Downloader_iOS* downloader = (Downloader_iOS*) downloaderV;
   
-  /* NSURLRequestUseProtocolCachePolicy */
-  __block NSURLRequest *request = [NSURLRequest requestWithURL: _nsURL
-                                                   cachePolicy: NSURLRequestReturnCacheDataElseLoad
-                                               timeoutInterval: 60.0];
-  //  if (_canceled) {
-  //    return;
-  //  }
+  NSURLRequest *request = [NSURLRequest requestWithURL: _nsURL
+                                           cachePolicy: NSURLRequestReturnCacheDataElseLoad
+                                       timeoutInterval: 60.0];
   
-  __block NSURLResponse *urlResponse;
+  NSURLResponse *urlResponse;
   __block NSError *error;
   __block NSData* data = [NSURLConnection sendSynchronousRequest: request
                                                returningResponse: &urlResponse
                                                            error: &error];
-  //  if (_canceled) {
-  //    return;
-  //  }
   
+  __block const NSInteger statusCode = [((NSHTTPURLResponse*) urlResponse) statusCode];
   
   
   // inform downloader to remove myself, to avoid adding new Listeners
@@ -174,36 +168,44 @@
   
   
   dispatch_async( dispatch_get_main_queue(), ^{
-    // Add code here to update the UI/send notifications based on the
-    // results of the background processing
-    
     [_lock lock];
+    
+    const bool dataIsValid = data && (statusCode == 200);
+    if (!dataIsValid) {
+      ILogger::instance()->logError("Error %s, StatusCode=%d, URL=%s\n",
+                                    [[error localizedDescription] UTF8String],
+                                    statusCode,
+                                    [[_nsURL absoluteString] UTF8String]);
+    }
     
     const int listenersCount = [_listeners count];
     
-    NSInteger statusCode = [((NSHTTPURLResponse*) urlResponse) statusCode];
-
-    URL url( [[_nsURL absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] );
+    const URL url( [[_nsURL absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] );
     
     if (_canceled) {
-      const int length = [data length];
-      unsigned char *bytes = new unsigned char[ length ]; // will be deleted by ByteBuffer's destructor
-      [data getBytes: bytes
-              length: length];
-      ByteBuffer buffer(bytes, length);
-      Response response(url, &buffer);
-
+      if (dataIsValid) {
+        const int length = [data length];
+        unsigned char *bytes = new unsigned char[ length ]; // will be deleted by ByteBuffer's destructor
+        [data getBytes: bytes
+                length: length];
+        ByteBuffer buffer(bytes, length);
+        Response response(url, &buffer);
+        
+        for (int i = 0; i < listenersCount; i++) {
+          ListenerEntry* entry = [_listeners objectAtIndex: i];
+          
+          [[entry listener] onCanceledDownload: &response];
+        }
+      }
+      
       for (int i = 0; i < listenersCount; i++) {
         ListenerEntry* entry = [_listeners objectAtIndex: i];
-        Downloader_iOS_Listener* listener = [entry listener];
         
-        [listener onCanceledDownload: &response];
-        
-        [listener onCancel: &url];
+        [[entry listener] onCancel: &url];
       }
     }
     else {
-      if (data && statusCode == 200) {
+      if (dataIsValid) {
         const int length = [data length];
         unsigned char *bytes = new unsigned char[ length ]; // will be deleted by ByteBuffer's destructor
         [data getBytes: bytes
@@ -222,11 +224,6 @@
         delete buffer;
       }
       else {
-        ILogger::instance()->logError ("Error %s, StatusCode=%d trying to load %s\n",
-                                       [[error localizedDescription] UTF8String],
-                                       statusCode,
-                                       [[_nsURL absoluteString] UTF8String]);
-        
         ByteBuffer* buffer = new ByteBuffer(NULL, 0);
         
         Response* response = new Response(url, buffer);
@@ -236,7 +233,7 @@
           
           [[entry listener] onError: response];
         }
-
+        
         delete response;
         delete buffer;
       }

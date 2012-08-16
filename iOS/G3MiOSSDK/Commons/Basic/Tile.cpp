@@ -16,9 +16,18 @@
 #include "TilesRenderParameters.hpp"
 #include "TileKey.hpp"
 
+static long visibleCounter = 0;
+
 Tile::~Tile() {
   prune(NULL);
   
+  if (_isVisible) {
+    visibleCounter--;
+    printf("**** Tile %s is DESTROYED (visibles=%ld)\n",
+           getKey().description().c_str(),
+           visibleCounter);
+  }
+
   if (_texturizerTimer != NULL) {
     delete _texturizerTimer;
   }
@@ -38,9 +47,9 @@ Tile::~Tile() {
 
 void Tile::ancestorTexturedSolvedChanged(Tile* ancestor,
                                          bool textureSolved) {
-//  if (isTextureSolved()) {
-//    return;
-//  }
+  if (textureSolved && isTextureSolved()) {
+    return;
+  }
   
   if (_texturizer != NULL) {
     _texturizer->ancestorTexturedSolvedChanged(this, ancestor, textureSolved);
@@ -120,10 +129,10 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
   }
   
   
-  //  int projectedSize = getTessellatorMesh(rc, tessellator)->getExtent()->squaredProjectedArea(rc);
-  //  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
-  //    return true;
-  //  }
+//  const double projectedSize = getTessellatorMesh(rc, trc)->getExtent()->squaredProjectedArea(rc);
+//  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
+//    return true;
+//  }
   const Vector2D extent = getTessellatorMesh(rc, trc)->getExtent()->projectedExtent(rc);
   //const double t = extent.maxAxis() * 2;
   const double t = (extent.x() + extent.y());
@@ -250,6 +259,49 @@ void Tile::prune(const TileRenderContext* trc) {
   }
 }
 
+//void Tile::setIsRendering(bool isRendering) {
+//  if (_isRendering != isRendering) {
+//    _isRendering = isRendering;
+// 
+//    if (isRendering) {
+//      printf("== Tile %s is Rendering\n", getKey().description().c_str());
+//    }
+//    else {
+//      printf("== Tile %s is NOT Rendering anymore\n", getKey().description().c_str());
+//    }
+//  }
+//}
+
+void Tile::setIsVisible(bool isVisible) {
+
+  
+  if (_isVisible != isVisible) {
+    _isVisible = isVisible;
+
+    if (_isVisible) {
+      visibleCounter++;
+      printf("**** Tile %s becomed Visible (visibles=%ld)\n",
+             getKey().description().c_str(),
+             visibleCounter);
+    }
+    else {
+      visibleCounter--;
+      printf("**** Tile %s becomed INVisible (visibles=%ld)\n",
+             getKey().description().c_str(),
+             visibleCounter);
+      
+      if (_level > 0) {
+        int _BIG_BANG;
+        _texturizer->tileMeshToBeDeleted(this, _texturizerMesh);
+        
+        delete _texturizerMesh;
+        _texturizerMesh = NULL;
+        
+        setTexturizerDirty(true);
+      }
+    }
+  }
+}
 
 void Tile::render(const RenderContext* rc,
                   const TileRenderContext* trc,
@@ -257,11 +309,14 @@ void Tile::render(const RenderContext* rc,
   TilesStatistics* statistics = trc->getStatistics();
   
   statistics->computeTileProcessed(this);
-  
   if (isVisible(rc, trc)) {
+    setIsVisible(true);
+
     statistics->computeVisibleTile(this);
     
     if (meetsRenderCriteria(rc, trc)) {
+      //setIsRendering(true);
+
       rawRender(rc, trc);
       if (trc->getParameters()->_renderDebug) {
         debugRender(rc, trc);
@@ -272,6 +327,8 @@ void Tile::render(const RenderContext* rc,
       prune(trc);
     }
     else {
+      //setIsRendering(false);
+      
       std::vector<Tile*>* subTiles = getSubTiles();
       if (_justCreatedSubtiles) {
         trc->getLastSplitTimer()->start();
@@ -282,12 +339,15 @@ void Tile::render(const RenderContext* rc,
       const int subTilesSize = subTiles->size();
       for (int i = 0; i < subTilesSize; i++) {
         Tile* subTile = subTiles->at(i);
-        // subTile->render(rc, tessellator, texturizer, parameters, statistics, toVisitInNextIteration, timer);
         toVisitInNextIteration->push_back(subTile);
       }
     }
   }
   else {
+    setIsVisible(false);
+
+    //setIsRendering(false);
+
     prune(trc);
   }
 }

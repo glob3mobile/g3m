@@ -34,8 +34,8 @@
 #include "EllipsoidalTileTessellator.hpp"
 #include "LatLonMeshRenderer.h"
 
+//#include "FileSystemStorage_iOS.hpp"
 #include "SQLiteStorage_iOS.hpp"
-#include "FileSystemStorage_iOS.hpp"
 #include "NullStorage.hpp"
 #include "TileImagesTileTexturizer.hpp"
 #include "SingleImageTileTexturizer.hpp"
@@ -76,7 +76,7 @@ public:
     URL url = event._layer->getFeatureURL(event._g2d, _factory, event._sector, 256, 256);
     //      printf("%s\n", url.getPath().c_str());
     
-    _downloader->request(url, 999999999, this, true);
+    _downloader->request(url, 999999999, this, false);
   }
   
   void onDownload(const Response* response) {
@@ -149,24 +149,13 @@ public:
   
   
   //STORAGE
-  NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-  FileSystemStorage_iOS * fss = new FileSystemStorage_iOS(URL([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]));
-  Downloader* downloaderOLD = new Downloader(fss, 5, factory->createNetwork());
-  const bool cleanCache = false;
-//  IDownloader* downloader = new Downloader_iOS(4 * 1024 * 1024,     // 4Mb
-//                                               1024 * 1024 * 1024,  // 1G
-//                                               ".G3M_Cache",
-//                                               8,
-//                                               cleanCache);
-
-  IDownloader* downloader = new CachedDownloader(new Downloader_iOS(0,
-                                                                    0,
-                                                                    ".G3M_Cache",
-                                                                    8,
-                                                                    cleanCache),
-                                                 fss,
-                                                 URL(".cache")
-                                                 );
+//  NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+//  IStorage* storage = new FileSystemStorage_iOS(URL([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]));
+  IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
+  Downloader* downloaderOLD = new Downloader(storage, 5, factory->createNetwork());
+  IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
+                                                 storage,
+                                                 URL(".cache"));
   
   //LAYERS
   LayerSet* layerSet = new LayerSet();
@@ -349,24 +338,20 @@ public:
 
   
   //STORAGE
-  NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-  FileSystemStorage_iOS * fss = new FileSystemStorage_iOS(URL([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]));
-  Downloader* downloaderOLD = new Downloader(fss, 5, factory->createNetwork());
-  const bool cleanCache = false;
+//  NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+//  IStorage* storage = new FileSystemStorage_iOS(URL([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]));
+  IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
+  Downloader* downloaderOLD = new Downloader(storage, 5, factory->createNetwork());
+//  const bool cleanCache = false;
 //  IDownloader* downloader = new Downloader_iOS(4 * 1024 * 1024,     // 4Mb
 //                                               1024 * 1024 * 1024,  // 1G
 //                                               ".G3M_Cache",
 //                                               8,
 //                                               cleanCache);
   
-  IDownloader* downloader = new CachedDownloader(new Downloader_iOS(0,
-                                                                    0,
-                                                                    ".G3M_Cache",
-                                                                    8,
-                                                                    cleanCache),
-                                                 fss,
-                                                 URL(".cache")
-                                                 );
+  IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
+                                                 storage,
+                                                 URL(".cache"));
   
   if (false) {
     
@@ -402,38 +387,38 @@ public:
   //LAYERS
   LayerSet* layerSet = new LayerSet();
  
-  WMSLayer* blueMarble = new WMSLayer("bmng200405",
-                                      "http://www.nasa.network.com/wms?",
-                                      WMS_1_1_0,
-                                      "image/jpeg",
-                                      Sector::fullSphere(),
-                                      "EPSG:4326",
-                                      "",
-                                      false,
-                                      Angle::nan(),
-                                      Angle::nan());
+//  WMSLayer* blueMarble = new WMSLayer("bmng200405",
+//                                      "http://www.nasa.network.com/wms?",
+//                                      WMS_1_1_0,
+//                                      "image/jpeg",
+//                                      Sector::fullSphere(),
+//                                      "EPSG:4326",
+//                                      "",
+//                                      false,
+//                                      Angle::nan(),
+//                                      Angle::nan());
   
-  WMSLayer *pnoa = new WMSLayer("PNOA",
-                                "http://www.idee.es/wms/PNOA/PNOA",
-                                WMS_1_1_0,
-                                "image/png",
-                                Sector::fromDegrees(21, -18, 45, 6),
-                                "EPSG:4326",
-                                "",
-                                true,
-                                Angle::nan(),
-                                Angle::nan());
-
-  WMSLayer *vias = new WMSLayer("VIAS",
-                                "http://idecan2.grafcan.es/ServicioWMS/Callejero",
-                                WMS_1_1_0,
-                                "image/gif",
-                                Sector::fromDegrees(22.5,-22.5, 33.75, -11.25),
-                                "EPSG:4326",
-                                "",
-                                true,
-                                Angle::nan(),
-                                Angle::nan());
+//  WMSLayer *pnoa = new WMSLayer("PNOA",
+//                                "http://www.idee.es/wms/PNOA/PNOA",
+//                                WMS_1_1_0,
+//                                "image/png",
+//                                Sector::fromDegrees(21, -18, 45, 6),
+//                                "EPSG:4326",
+//                                "",
+//                                true,
+//                                Angle::nan(),
+//                                Angle::nan());
+//
+//  WMSLayer *vias = new WMSLayer("VIAS",
+//                                "http://idecan2.grafcan.es/ServicioWMS/Callejero",
+//                                WMS_1_1_0,
+//                                "image/gif",
+//                                Sector::fromDegrees(22.5,-22.5, 33.75, -11.25),
+//                                "EPSG:4326",
+//                                "",
+//                                true,
+//                                Angle::nan(),
+//                                Angle::nan());
   
 
 //  WMSLayer *oceans = new WMSLayer("igo:bmng200401,igo:ocean_2010_0_15,igo:ocean_cnt_2010_0_15",
@@ -449,29 +434,31 @@ public:
 //                                  Angle::nan(),
 //                                  Angle::nan());
 
-//  WMSLayer *oceans = new WMSLayer("igo:bmng200401,igo:ocean_2010_0_15",
-//                                  "igo:ocean_2010_0_15",
-//                                  "http://igosoftware.dyndns.org:8081/geoserver/igo/wms",
-//                                  WMS_1_3_0,
-//                                  "image/jpeg",
-//                                  Sector::fullSphere(),
-//                                  "EPSG:4326",
-//                                  "",
-//                                  false,
-//                                  Angle::nan(),
-//                                  Angle::nan());
-//
-//  oceans->addTerrainTouchEventListener(new OceanTerrainTouchEventListener(factory, downloader));
+  WMSLayer *oceans = new WMSLayer(//"igo:bmng200401,igo:ocean_2010_0_15",
+                                  "igo:bmng200401,igo:ocean_cnt__2010_0_15_tiled,igo:ocean_2010_0_15_tiled",
+//                                  "igo:ocean_2010_0_15_tiled",
+                                  "igo:ocean_2010_0_15_tiled",
+                                  "http://igosoftware.dyndns.org:8081/geoserver/igo/wms",
+                                  WMS_1_3_0,
+                                  "image/jpeg",
+                                  Sector::fullSphere(),
+                                  "EPSG:4326",
+                                  "",
+                                  false,
+                                  Angle::nan(),
+                                  Angle::nan());
+
+  oceans->addTerrainTouchEventListener(new OceanTerrainTouchEventListener(factory, downloader));
   
   //ORDER IS IMPORTANT
-  layerSet->addLayer(blueMarble);
-  layerSet->addLayer(pnoa);
-  layerSet->addLayer(vias);
-//  layerSet->addLayer(oceans);
+//  layerSet->addLayer(blueMarble);
+//  layerSet->addLayer(pnoa);
+//  layerSet->addLayer(vias);
+  layerSet->addLayer(oceans);
   
   // very basic tile renderer
   if (true) {
-    const bool renderDebug = false;
+    const bool renderDebug = true;
     TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug);
     
     TileTexturizer* texturizer = NULL;
@@ -510,7 +497,7 @@ public:
     comp->addRenderer(spr);
   }
   
-  if (true) {
+  if (false) {
     // marks renderer
     MarksRenderer* marks = new MarksRenderer();
     comp->addRenderer(marks);

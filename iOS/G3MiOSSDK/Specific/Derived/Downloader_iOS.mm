@@ -26,21 +26,13 @@ Downloader_iOS::~Downloader_iOS() {
   }
 }
 
-Downloader_iOS::Downloader_iOS(int memoryCapacity,
-                               int diskCapacity,
-                               std::string diskPath,
-                               int maxConcurrentOperationCount,
-                               bool cleanCache) :
-_requestIdCounter(0)
+Downloader_iOS::Downloader_iOS(int maxConcurrentOperationCount) :
+_requestIdCounter(1)
 {
-  _cache = [[NSURLCache alloc] initWithMemoryCapacity: memoryCapacity
-                                         diskCapacity: diskCapacity
-                                             diskPath: toNSString(diskPath)];
-  [NSURLCache setSharedURLCache:_cache];
-  
-  if (cleanCache) {
-    [_cache removeAllCachedResponses];
-  }
+  NSURLCache* cache = [[NSURLCache alloc] initWithMemoryCapacity: 0
+                                                    diskCapacity: 0
+                                                        diskPath: nil];
+  [NSURLCache setSharedURLCache: cache];
   
   _downloadingHandlers = [NSMutableDictionary dictionary];
   _queuedHandlers      = [NSMutableDictionary dictionary];
@@ -50,8 +42,6 @@ _requestIdCounter(0)
   _workers = [NSMutableArray arrayWithCapacity:maxConcurrentOperationCount];
   for (int i = 0; i < maxConcurrentOperationCount; i++) {
     Downloader_iOS_WorkerThread* worker = [Downloader_iOS_WorkerThread workerForDownloader: this];
-    //    [worker start];
-    
     [_workers addObject: worker];
   }
 }
@@ -98,6 +88,10 @@ void Downloader_iOS::cancelRequest(long requestId) {
         found = true;
       }
     } ];
+  }
+  
+  if (!found) {
+    printf("break (point) on me\n");
   }
   
   [_lock unlock];
@@ -153,39 +147,6 @@ long Downloader_iOS::request(const URL &url,
   int __TODO_new_downloader;
   
   NSURL* nsURL = [NSURL URLWithString: toNSString(url.getPath())];
-  
-  NSURLRequest *request = [NSURLRequest requestWithURL: nsURL
-                                           cachePolicy: NSURLRequestReturnCacheDataDontLoad
-                                       timeoutInterval: 1.0];
-  
-  NSCachedURLResponse* response = [_cache cachedResponseForRequest:request];
-  if (response) {
-    //    NSLog(@"cache hit for %@", nsURL);
-
-//    dispatch_async( dispatch_get_main_queue(), ^{
-    
-    NSData* data = [response data];
-    const int length = [data length];
-    unsigned char *bytes = new unsigned char[ length ]; // will be deleted by ByteBuffer's destructor
-    [data getBytes: bytes
-            length: length];
-    
-    ByteBuffer* buffer = new ByteBuffer(bytes, length);
-    Response response(url, buffer);
-    
-    cppListener->onDownload(&response);
-    
-    delete buffer;
-    
-    if (deleteListener) {
-      delete cppListener;
-    }
-    
-//    });
-    
-    return -1;
-  }
-  
   
   Downloader_iOS_Listener* iosListener = [[Downloader_iOS_Listener alloc] initWithCPPListener: cppListener
                                                                                deleteListener: deleteListener];

@@ -26,8 +26,6 @@ private:
   
   long                 _requestIdCounter;
   
-  NSURLCache* _cache;
-  
   NSString* toNSString(const std::string& cppStr) const {
     return [ NSString stringWithCString: cppStr.c_str()
                                encoding: NSUTF8StringEncoding ];
@@ -37,11 +35,7 @@ public:
   
   void removeDownloadingHandlerForNSURL(const NSURL* url);
   
-  Downloader_iOS(int memoryCapacity,
-                 int diskCapacity,
-                 std::string diskPath,
-                 int maxConcurrentOperationCount,
-                 bool cleanCache);
+  Downloader_iOS(int maxConcurrentOperationCount);
   
   long request(const URL& url,
                long priority,

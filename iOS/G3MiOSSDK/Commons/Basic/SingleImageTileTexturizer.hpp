@@ -23,7 +23,7 @@ class SingleImageTileTexturizer : public TileTexturizer {
 private:
   
   const RenderContext*         _renderContext;
-  TilesRenderParameters* const _parameters;  
+  TilesRenderParameters* const _parameters;
   GLTextureID _texID;
   IImage * const _image;
   
@@ -63,7 +63,7 @@ public:
                        Mesh* mesh);
   
   bool tileMeetsRenderCriteria(Tile* tile);
-
+  
   void justCreatedTopTile(const RenderContext* rc,
                           Tile* tile);
   
@@ -74,9 +74,13 @@ public:
   void ancestorTexturedSolvedChanged(Tile* tile,
                                      Tile* ancestorTile,
                                      bool textureSolved);
-
+  
   void onTerrainTouchEvent(const Geodetic3D& g3d, const Tile* tile){}
-
+  
+  
+  void tileMeshToBeDeleted(Tile* tile,
+                           Mesh* mesh);
+  
 };
 
 

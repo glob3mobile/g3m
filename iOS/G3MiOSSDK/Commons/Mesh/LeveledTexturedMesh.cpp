@@ -109,7 +109,7 @@ LazyTextureMapping* LeveledTexturedMesh::getCurrentTextureMapping() const {
   return _currentLevelIsValid ? _mappings->at(_currentLevel) : NULL;
 }
 
-const GLTextureID LeveledTexturedMesh::getTopLevelGLTextureIDForTile() const {
+const GLTextureID LeveledTexturedMesh::getTopLevelGLTextureID() const {
   const LazyTextureMapping* mapping = getCurrentTextureMapping();
   if (mapping != NULL) {
     if (_currentLevel == 0) {
@@ -145,10 +145,9 @@ void LeveledTexturedMesh::render(const RenderContext* rc) const {
 void LeveledTexturedMesh::setGLTextureIDForLevel(int level,
                                                  const GLTextureID glTextureID) {
   if (glTextureID.isValid()) {
-    if (!_currentLevelIsValid || (level < _currentLevel)) {
-      if (_mappings->at(level)->setGLTextureID(glTextureID)) {
-        _currentLevelIsValid = false;
-      }
+    if (!_currentLevelIsValid || (level > _currentLevel)) {
+      _mappings->at(level)->setGLTextureID(glTextureID);
+      _currentLevelIsValid = false;
     }
   }
 }

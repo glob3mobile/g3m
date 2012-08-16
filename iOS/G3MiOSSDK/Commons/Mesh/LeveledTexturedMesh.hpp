@@ -86,13 +86,9 @@ public:
     return _glTextureId.isValid();
   }
   
-  bool setGLTextureID(const GLTextureID glTextureId) {
-    const bool change = !_glTextureId.isEqualsTo(glTextureId);
-    if (change) {
-      releaseGLTextureId();
-      _glTextureId = glTextureId;
-    }
-    return change;
+  void setGLTextureID(const GLTextureID glTextureId) {
+    releaseGLTextureId();
+    _glTextureId = glTextureId;
   }
   
   void releaseGLTextureId();
@@ -151,7 +147,7 @@ public:
   void setGLTextureIDForInversedLevel(int inversedLevel,
                                       const GLTextureID glTextureID);
   
-  const GLTextureID getTopLevelGLTextureIDForTile() const;
+  const GLTextureID getTopLevelGLTextureID() const;
 
 };
 

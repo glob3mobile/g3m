@@ -53,10 +53,38 @@ public:
     const int maxLevel = 14;
     const int tileTextureHeight = 256;
     const int tileTextureWidth = 256;
-    //    const int tRes = 16;
     const int tRes = 10;
     
     return new TilesRenderParameters(Sector::fullSphere(),
+                                     splitsByLatitude,
+                                     splitsByLongitude,
+                                     topLevel,
+                                     maxLevel,
+                                     tileTextureHeight,
+                                     tileTextureWidth,
+                                     tRes,
+                                     renderDebug);
+  }
+  
+  
+  static TilesRenderParameters* createSingleSector(const bool renderDebug) {
+    const int splitsByLatitude = 1;
+    const int splitsByLongitude = 1;
+    const int topLevel = 0;
+    const int maxLevel = 2;
+    const int tileTextureHeight = 256;
+    const int tileTextureWidth = 256;
+    const int tRes = 10;
+    
+    //    Sector sector = Sector::fullSphere();
+    //    Sector sector = Sector(Geodetic2D(Angle::fromDegrees(-90), Angle::fromDegrees(-180)),
+    //                           Geodetic2D(Angle::fromDegrees(90), Angle::fromDegrees(180)));
+    Sector sector = Sector(Geodetic2D(Angle::fromDegrees(0), Angle::fromDegrees(0)),
+                           Geodetic2D(Angle::fromDegrees(90), Angle::fromDegrees(90)));
+    
+    int ___TODO_put_complete_globe;
+    
+    return new TilesRenderParameters(sector,
                                      splitsByLatitude,
                                      splitsByLongitude,
                                      topLevel,
