@@ -212,10 +212,10 @@ void SQLiteStorage_iOS::testConnection() const{
                     printf ("\Error: %s ", sqlite3_errmsg(db));
                 } else {
                     while(SQLITE_ROW == sqlite3_step(ppStmt)) {
-                        printf ("\nID: %i ", sqlite3_column_int(ppStmt, 0));
+                        printf ("\nID: %d ", sqlite3_column_int(ppStmt, 0));
                         printf ("\nFirstName: %s ", sqlite3_column_text(ppStmt, 1));
                         printf ("\nLastName: %s ", sqlite3_column_text(ppStmt, 2));
-                        printf ("\nAge: %i ", sqlite3_column_int(ppStmt, 3));
+                        printf ("\nAge: %d ", sqlite3_column_int(ppStmt, 3));
                     }
                 }
                 sqlite3_finalize(ppStmt);

@@ -51,7 +51,7 @@ public class TileRenderer extends Renderer
 	  }
 	}
   
-	ic.getLogger().logInfo("Created %i top level tiles", _topLevelTiles.size());
+	ic.getLogger().logInfo("Created %d top level tiles", _topLevelTiles.size());
   
 	_topTilesJustCreated = true;
   }

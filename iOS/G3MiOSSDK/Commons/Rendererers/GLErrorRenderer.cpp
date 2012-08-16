@@ -38,7 +38,7 @@ int GLErrorRenderer::render(const RenderContext *rc) {
 #else
   while (error != GLError.NoError) { 
 #endif
-    logger->logError("GL Error: %i", error);
+    logger->logError("GL Error: %d", error);
     error = gl->getError();
   }
   
