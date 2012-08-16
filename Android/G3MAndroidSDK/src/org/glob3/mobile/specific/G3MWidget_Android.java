@@ -1,5 +1,6 @@
 package org.glob3.mobile.specific;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -89,71 +90,13 @@ public class G3MWidget_Android extends GLSurfaceView implements
 
 		int width = getWidth();
 		int height = getHeight();
-
-		// Creating factory
-		IFactory factory = new Factory_Android(this.getContext());
-
-		// RENDERERS
-		CompositeRenderer comp = new CompositeRenderer();
-
-		// Camera must be first
-		CameraRenderer cr = new CameraRenderer();
-		comp.addRenderer(cr);
-
-		// Dummy cube
-		if (false) {
-			DummyRenderer dummy = new DummyRenderer();
-			comp.addRenderer(dummy);
+		
+		File f = getContext().getExternalCacheDir();
+		if (!f.exists()){
+			f = getContext().getCacheDir();
 		}
-
-		// simple planet renderer, with a basic world image
-		if (true) {
-			SimplePlanetRenderer spr = new SimplePlanetRenderer("world.jpg");
-			comp.addRenderer(spr);
-		}
-
-		// marks renderer
-		if (true) {
-			MarksRenderer marks = new MarksRenderer();
-			comp.addRenderer(marks);
-			Mark m1 = new Mark("Fuerteventura", "plane.png", new Geodetic3D(
-					Angle.fromDegrees(28.05), Angle.fromDegrees(-14.36), 0));
-			marks.addMark(m1);
-
-			Mark m2 = new Mark("Las Palmas", "plane.png", new Geodetic3D(
-					Angle.fromDegrees(28.05), Angle.fromDegrees(-15.36), 0));
-			marks.addMark(m2);
-
-			Random r = new Random();
-			for (int i = 0; i < 1000; i++) {
-				Angle latitude = Angle
-						.fromDegrees((int) (r.nextInt() % 180) - 90);
-				Angle longitude = Angle
-						.fromDegrees((int) (r.nextInt() % 360) - 180);
-
-				marks.addMark(new Mark("Random", "mark.png", new Geodetic3D(
-						latitude, longitude, 0)));
-			}
-		}
-
-		if (true) {
-			EffectsScheduler scheduler = new EffectsScheduler();
-			scheduler.startEffect(new DummyEffect(TimeInterval.fromSeconds(3)));
-			comp.addRenderer(scheduler);
-		}
-
-		ILogger logger = new Logger_Android(LogLevel.ErrorLevel);
-		IGL gl = new GL2();
-
-		TexturesHandler texturesHandler = new TexturesHandler();
-
-		_widget = G3MWidget.create(factory, logger, gl, texturesHandler, Planet
-				.createEarth(), comp, width, height, Color.fromRGBA(
-				(float) 0.0, (float) 0.1, (float) 0.2, (float) 1.0), true);
-
-		// SETTING RENDERER
-		_es2renderer = new ES2Renderer(this.getContext(), _widget);
-		setRenderer(_es2renderer);
+		
+		initWidgetDemo(width, height, getContext(), f.getAbsolutePath());
 	}
 
 	public boolean onTouchEvent(MotionEvent event) {
@@ -227,8 +170,8 @@ public class G3MWidget_Android extends GLSurfaceView implements
 
 	  
 	  //STORAGE
-	  FileSystemStorage fss = new FileSystemStorage(documentsDirectory);
-	  Downloader downloaderOLD = new Downloader(fss, 5, factory.createNetwork());
+	  //FileSystemStorage fss = new FileSystemStorage(documentsDirectory);
+	  Downloader downloaderOLD = new Downloader(null, 5, factory.createNetwork());
 	  IDownloader downloader = new Downloader_Android(1 * 1024 * 1024,
 	                                               64 * 1024 * 1024,
 	                                               ".G3M_Cache",
@@ -357,7 +300,7 @@ public class G3MWidget_Android extends GLSurfaceView implements
 	  
 	  BusyRenderer busyRenderer = new BusyRenderer();
 	  
-	  ArrayList<ICameraConstrainer> cameraConstraint;
+	  ArrayList<ICameraConstrainer> cameraConstraint = new ArrayList<ICameraConstrainer>();
 	  cameraConstraint.add(new SimpleCameraConstrainer());
 
 	  _widget = G3MWidget.create(factory,
