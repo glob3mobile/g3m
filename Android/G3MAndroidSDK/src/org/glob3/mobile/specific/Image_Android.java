@@ -7,7 +7,6 @@ import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.Rectangle;
 
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 
 public class Image_Android extends IImage {
@@ -91,7 +90,18 @@ public class Image_Android extends IImage {
    public void fillWithRGBA(byte[] data,
                             int width,
                             int height) {
-      // TODO Auto-generated method stub
+	   int[] pixels = new int[getWidth() * getHeight()];
+	   _image.getPixels(pixels, 0, getWidth(), 0, 0, getWidth(), getHeight());
+	   
+	   data = new byte[pixels.length*4];
+	   int p = 0;
+	   for(int i = 0; i < pixels.length; i++){
+		   int color = pixels[i];
+		   data[p++] = (byte) ((color >> 16) & 0xFF);  	//R
+		   data[p++] = (byte) ((color >> 8) & 0xFF);  	//G
+		   data[p++] = (byte) (color & 0xFF);  			//B
+		   data[p++] = (byte) (color >>> 24);  			//A
+	   }
    }
 
 }
