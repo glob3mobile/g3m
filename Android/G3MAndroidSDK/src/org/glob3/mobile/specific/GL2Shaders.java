@@ -83,7 +83,7 @@ public class GL2Shaders {
 	"  TextureCoordOut = TextureCoord;" +
 	"  VertexColor = Color;" + 
 	"  gl_PointSize = PointSize;" + 
-	"  vec3 x = Normal;  //This line has been added to avoid compiler taking Normal variable away (Remove when Normal has been used)" +
+	"  vec3 x = Normal;" +
 	"}";
 
 
