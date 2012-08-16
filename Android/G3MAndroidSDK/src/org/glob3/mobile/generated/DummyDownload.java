@@ -52,7 +52,7 @@ public class DummyDownload implements IDownloadListener
 		{
 		  ByteBuffer bb = _fss.read(filename);
 		  String resp = _factory.stringFromUTF8(bb.getData());
-		  System.out.printf("\nFileName: %s;\nData: %s;\nDataLength:%i;\n\n",(root+filename), resp, bb.getLength());
+		  System.out.printf("\nFileName: %s;\nData: %s;\nDataLength:%d;\n\n",(root+filename), resp, bb.getLength());
 		  fssAux.save(("_(1)" + filename), bb);
 		  if (bb != null)
 			  bb.dispose();
