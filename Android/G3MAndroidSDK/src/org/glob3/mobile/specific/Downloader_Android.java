@@ -20,6 +20,37 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 public class Downloader_Android extends IDownloader {
+	
+	Downloader_Android(int memoryCapacity, int diskCapacity, String diskPath,
+			int maxConcurrentOperationCount) {
+	}
+
+	@Override
+	public void start() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int request(Url url, int priority, IDownloadListener listener) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void cancelRequest(int requestId) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+}
+
+//PRELIMINAR IMPLEMENTATION NOT FINISHED YET
+//DO NOT ERASE!
+
+/*
+
+public class Downloader_Android extends IDownloader {
 
 	private ArrayList<Downloader_Android_WorkerThread> _workers;
 
@@ -223,10 +254,10 @@ class Downloader_Android_Handler {
 	      }
 	    }
 	    else {
-	      /*ILogger::instance()->logError("Can't load %s, response=%s, error=%s",
-	       [ [_nsURL      description] cStringUsingEncoding: NSUTF8StringEncoding ],
-	       (urlResponse!=0)? [ [urlResponse description] cStringUsingEncoding: NSUTF8StringEncoding ] : "NULL",
-	       [ [error       description] cStringUsingEncoding: NSUTF8StringEncoding ] );*/
+//	       ILogger::instance()->logError("Can't load %s, response=%s, error=%s",
+//	       [ [_nsURL      description] cStringUsingEncoding: NSUTF8StringEncoding ],
+//	       (urlResponse!=0)? [ [urlResponse description] cStringUsingEncoding: NSUTF8StringEncoding ] : "NULL",
+//	       [ [error       description] cStringUsingEncoding: NSUTF8StringEncoding ] );
 	      
 	      //ILogger::instance()->logError("Can't load %s\n", [[_nsURL absoluteString] UTF8String]);
 	      printf ("Can't load %s\n", [[_nsURL absoluteString] UTF8String]);
@@ -313,3 +344,4 @@ class Downloader_Android_WorkerThread extends AsyncTask<String, Void, Void> {
 	}
 
 }
+*/
