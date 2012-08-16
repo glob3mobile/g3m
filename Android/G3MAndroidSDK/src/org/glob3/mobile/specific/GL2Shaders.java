@@ -8,92 +8,78 @@ public class GL2Shaders {
 
 
 	private final static String _fragmentShader = 
-	"varying mediump vec2 TextureCoordOut;\n" + 
-	"uniform mediump vec2 TranslationTexCoord;\n" + 
-	"uniform mediump vec2 ScaleTexCoord;\n" + 
-	"\n" + 
-	"varying mediump vec4 VertexColor;\n" + 
-	"\n" + 
-	"uniform sampler2D Sampler;\n" + 
-	"uniform bool EnableTexture;\n" + 
-	"uniform lowp vec4 FlatColor;\n" + 
-	"\n" + 
-	"uniform bool EnableColorPerVertex;\n" + 
-	"uniform bool EnableFlatColor;\n" + 
-	"uniform mediump float FlatColorIntensity;\n" + 
-	"uniform mediump float ColorPerVertexIntensity;\n" + 
-	"\n" + 
-	"void main() {\n" + 
-	"  \n" + 
-	"  if (EnableTexture) {\n" + 
-	"    gl_FragColor = texture2D(Sampler, TextureCoordOut * ScaleTexCoord + TranslationTexCoord);\n" + 
-	"\n" + 
-	"    if (EnableFlatColor || EnableColorPerVertex){\n" + 
-	"      lowp vec4 color;\n" + 
-	"      if (EnableFlatColor) {\n" + 
-	"        color = FlatColor;\n" + 
-	"        if (EnableColorPerVertex) {\n" + 
-	"          color = color * VertexColor;\n" + 
-	"        }\n" + 
-	"      }\n" + 
-	"      else {\n" + 
-	"        color = VertexColor;\n" + 
-	"      }\n" + 
-	"      \n" + 
-	"      lowp float intensity = (FlatColorIntensity + ColorPerVertexIntensity) / 2.0;\n" + 
-	"      gl_FragColor = mix(gl_FragColor,\n" + 
-	"                         VertexColor,\n" + 
-	"                         intensity);\n" + 
-	"    }\n" + 
-	"  }\n" + 
-	"  else {\n" + 
-	"    \n" + 
-	"    if (EnableColorPerVertex) {\n" + 
-	"      gl_FragColor = VertexColor;\n" + 
-	"      if (EnableFlatColor) {\n" + 
-	"        gl_FragColor = gl_FragColor * FlatColor;\n" + 
-	"      }\n" + 
-	"    }\n" + 
-	"    else {\n" + 
-	"      gl_FragColor = FlatColor;\n" + 
-	"    }\n" + 
-	"    \n" + 
-	"  }\n" + 
-	"  \n" + 
+	"varying mediump vec2 TextureCoordOut;" + 
+	"uniform mediump vec2 TranslationTexCoord;" + 
+	"uniform mediump vec2 ScaleTexCoord;" + 
+	"" + 
+	"varying mediump vec4 VertexColor;" + 
+	"" + 
+	"uniform sampler2D Sampler;" + 
+	"uniform bool EnableTexture;" + 
+	"uniform lowp vec4 FlatColor;" + 
+	"" + 
+	"uniform bool EnableColorPerVertex;" + 
+	"uniform bool EnableFlatColor;" + 
+	"uniform mediump float FlatColorIntensity;" + 
+	"uniform mediump float ColorPerVertexIntensity;" + 
+	"" + 
+	"void main() {" + 
+	"  " + 
+	"  if (EnableTexture) {" + 
+	"    gl_FragColor = texture2D(Sampler, TextureCoordOut * ScaleTexCoord + TranslationTexCoord);" + 
+	"" + 
+	"    if (EnableFlatColor || EnableColorPerVertex){" + 
+	"      lowp vec4 color;" + 
+	"      if (EnableFlatColor) {" + 
+	"        color = FlatColor;" + 
+	"        if (EnableColorPerVertex) {" + 
+	"          color = color * VertexColor;" + 
+	"        }" + 
+	"      }" + 
+	"      else {" + 
+	"        color = VertexColor;" + 
+	"      }" + 
+	"      " + 
+	"      lowp float intensity = (FlatColorIntensity + ColorPerVertexIntensity) / 2.0;" + 
+	"      gl_FragColor = mix(gl_FragColor," + 
+	"                         VertexColor," + 
+	"                         intensity);" + 
+	"    }" + 
+	"  }" + 
+	"  else {" + 
+	"    " + 
+	"    if (EnableColorPerVertex) {" + 
+	"      gl_FragColor = VertexColor;" + 
+	"      if (EnableFlatColor) {" + 
+	"        gl_FragColor = gl_FragColor * FlatColor;" + 
+	"      }" + 
+	"    }" + 
+	"    else {" + 
+	"      gl_FragColor = FlatColor;" + 
+	"    }" + 
+	"    " + 
+	"  }" + 
+	"  " + 
 	"}";
 
 	private final static String _vertexShader = 
-	"uniform mat4 Projection;\n" + 
-	"uniform mat4 Modelview;\n" + 
-	"\n" + 
-	"uniform bool BillBoard;\n" + 
-	"uniform float ViewPortRatio;\n" + 
-	"uniform float PointSize;\n" + 
-	"\n" + 
-	"varying vec4 VertexColor;\n" + 
-	"varying vec2 TextureCoordOut;\n" + 
-	"\n" + 
-	"/* //USEFUL VARIABLES FOR LIGHTING\n" + 
-	"varying float DiffuseLighting;\n" + 
-	"uniform vec3 LightDirection; // light direction in eye coords\n" + 
-	"*/\n" + 
-	"\n" + 
-	"\n" + 
-	"void main() {\n" + 
-	"  gl_Position = Projection * Modelview * Position;\n" + 
-	"  \n" + 
-	"  if (BillBoard) {\n" + 
-	"    gl_Position.x += (-0.05 + TextureCoord.x * 0.1) * gl_Position.w;\n" + 
-	"    gl_Position.y -= (-0.05 + TextureCoord.y * 0.1) * gl_Position.w * ViewPortRatio;\n" + 
-	"  }\n" + 
-	"  \n" + 
-	"  TextureCoordOut = TextureCoord;\n" + 
-	"  \n" + 
-	"  VertexColor = Color;\n" + 
-	"  \n" + 
-	"  gl_PointSize = PointSize;\n" + 
-	"  \n" + 
-	"  vec3 x = Normal; //This line has been added to avoid compiler taking Normal variable away (Remove when Normal has been used)\n" + 
+	"uniform mat4 Projection;" + 
+	"uniform mat4 Modelview;" + 
+	"uniform bool BillBoard;" + 
+	"uniform float ViewPortRatio;" + 
+	"uniform float PointSize;" + 
+	"varying vec4 VertexColor;" + 
+	"varying vec2 TextureCoordOut;" + 
+	"void main() {" + 
+	"  gl_Position = Projection * Modelview * Position;" + 
+	"  if (BillBoard) {" + 
+	"    gl_Position.x += (-0.05 + TextureCoord.x * 0.1) * gl_Position.w;" + 
+	"    gl_Position.y -= (-0.05 + TextureCoord.y * 0.1) * gl_Position.w * ViewPortRatio;" + 
+	"  }" + 
+	"  TextureCoordOut = TextureCoord;" + 
+	"  VertexColor = Color;" + 
+	"  gl_PointSize = PointSize;" + 
+	"  vec3 x = Normal; //This line has been added to avoid compiler taking Normal variable away (Remove when Normal has been used)" +
 	"}";
 
 

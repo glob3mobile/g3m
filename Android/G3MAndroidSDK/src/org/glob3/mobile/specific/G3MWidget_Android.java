@@ -78,6 +78,7 @@ public class G3MWidget_Android extends GLSurfaceView implements
 
 		// Debug flags
 		setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
+
 	}
 
 	// The initialization of _widget occurs when the android widget is resized
@@ -96,7 +97,11 @@ public class G3MWidget_Android extends GLSurfaceView implements
 			f = getContext().getCacheDir();
 		}
 		
-		initWidgetDemo(width, height, getContext(), f.getAbsolutePath());
+		initSimpleWidgetDemo(width, height, getContext(), f.getAbsolutePath());
+		
+		// SETTING RENDERER
+		_es2renderer = new ES2Renderer(this.getContext(), _widget);
+		setRenderer(_es2renderer);
 	}
 
 	public boolean onTouchEvent(MotionEvent event) {
@@ -148,6 +153,78 @@ public class G3MWidget_Android extends GLSurfaceView implements
 		return false;
 	}
 	
+	private void initSimpleWidgetDemo(int width, int height, Context ctx, String documentsDirectory)
+	{
+		IFactory factory = new Factory_Android(ctx);
+		  ILogger logger = new Logger_Android(LogLevel.ErrorLevel);
+		  
+		  NativeGL2_Android nGL = new NativeGL2_Android(); 
+		  GL gl  = new GL(nGL);
+		  
+		  // composite renderer is the father of the rest of renderers
+		  CompositeRenderer comp = new CompositeRenderer();
+		  
+		  // camera renderer and handlers
+		  CameraRenderer cameraRenderer = new CameraRenderer();
+		  cameraRenderer.addHandler(new CameraSingleDragHandler());
+		  cameraRenderer.addHandler(new CameraDoubleDragHandler());
+		  cameraRenderer.addHandler(new CameraRotationHandler());
+		  cameraRenderer.addHandler(new CameraDoubleTapHandler());
+		  comp.addRenderer(cameraRenderer);
+
+		  
+		  //STORAGE
+		  //FileSystemStorage fss = new FileSystemStorage(documentsDirectory);
+		  Downloader downloaderOLD = new Downloader(null, 5, factory.createNetwork());
+		  IDownloader downloader = new Downloader_Android(1 * 1024 * 1024,
+		                                               64 * 1024 * 1024,
+		                                               ".G3M_Cache",
+		                                               8);
+
+		  if (true) {
+		    // dummy renderer with a simple box
+		    DummyRenderer dum = new DummyRenderer();
+		    comp.addRenderer(dum);
+		  }
+		  
+		  if (false) {
+		    // simple planet renderer, with a basic world image
+		    SimplePlanetRenderer spr = new SimplePlanetRenderer("world.jpg");
+		    comp.addRenderer(spr);
+		  }
+
+		  EffectsScheduler scheduler = new EffectsScheduler();
+
+		  comp.addRenderer(new GLErrorRenderer());
+		  
+		  
+		  TextureBuilder texBuilder = new CPUTextureBuilder();
+		  TexturesHandler texturesHandler = new TexturesHandler(gl, factory, texBuilder, false);
+		  
+		  Planet planet = Planet.createEarth();
+		  
+		  BusyRenderer busyRenderer = new BusyRenderer();
+		  
+		  ArrayList<ICameraConstrainer> cameraConstraint = new ArrayList<ICameraConstrainer>();
+		  cameraConstraint.add(new SimpleCameraConstrainer());
+
+		  _widget = G3MWidget.create(factory,
+		                              logger,
+		                              gl,
+		                              texturesHandler,
+		                              downloaderOLD,
+		                              downloader,
+		                              planet, 
+		                              cameraConstraint,
+		                              comp,
+		                              busyRenderer,
+		                              scheduler,
+		                              width, height,
+		                              Color.fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
+		                              true);
+		                              
+		                             
+	}
 
 	private void initWidgetDemo(int width, int height, Context ctx, String documentsDirectory)
 	{
