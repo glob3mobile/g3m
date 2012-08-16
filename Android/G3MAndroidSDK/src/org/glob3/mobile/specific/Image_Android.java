@@ -90,9 +90,19 @@ public class Image_Android extends IImage {
    public void fillWithRGBA(byte[] data,
                             int width,
                             int height) {
-	   int[] pixels = new int[getWidth() * getHeight()];
-	   _image.getPixels(pixels, 0, getWidth(), 0, 0, getWidth(), getHeight());
+	   //Scaling
+	   Bitmap scaledImage = null;
+	   if ((_image.getWidth() != width) && (_image.getHeight() != height)) {
+		   scaledImage = Bitmap.createScaledBitmap(_image, width, height, true);
+	   } else{
+		   scaledImage = _image;
+	   }
 	   
+	   //Getting pixels in Color format
+	   int[] pixels = new int[getWidth() * getHeight()];
+	   scaledImage.getPixels(pixels, 0, getWidth(), 0, 0, getWidth(), getHeight());
+	   
+	   //To RGBA
 	   data = new byte[pixels.length*4];
 	   int p = 0;
 	   for(int i = 0; i < pixels.length; i++){
