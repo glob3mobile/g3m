@@ -11,26 +11,28 @@ import android.opengl.GLSurfaceView;
 
 class ES2Renderer implements GLSurfaceView.Renderer {
 	
-	final G3MWidget _widget;
+	final G3MWidget_Android _widget;
 
     private int _program;
     final Context _context;
 
-    public ES2Renderer(Context context, G3MWidget widget) {
+    public ES2Renderer(Context context, G3MWidget_Android widget) {
     	_context = context;
         _widget = widget;
     }
     
     public void onDrawFrame(GL10 glUnused) {
     	
+    	G3MWidget widget = _widget.getWidget();
+    	
         GLES20.glClear( GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
-        _widget.getGL().useProgram(_program);
+        widget.getGL().useProgram(_program);
         
         // Enable the depth tests and Cull Face
 		GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 		GLES20.glEnable(GLES20.GL_CULL_FACE);
         
-        _widget.render();
+        widget.render();
     }
     
     public void onSurfaceChanged(GL10 glUnused, int width, int height) {
@@ -38,7 +40,7 @@ class ES2Renderer implements GLSurfaceView.Renderer {
         // class's static methods instead.
         GLES20.glViewport(0, 0, width, height);
         
-        _widget.onResizeViewportEvent(width,height);
+        _widget.getWidget().onResizeViewportEvent(width,height);
     }
 
     public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {

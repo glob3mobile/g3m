@@ -86,22 +86,11 @@ public class G3MWidget_Android extends GLSurfaceView implements
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 		super.onSizeChanged(w, h, oldw, oldh);
 
-		if (_widget != null)
-			return; // No further initialization needed
-
-		int width = getWidth();
-		int height = getHeight();
-		
-		File f = getContext().getExternalCacheDir();
-		if (!f.exists()){
-			f = getContext().getCacheDir();
+		if (_widget == null){
+			// SETTING RENDERER
+			_es2renderer = new ES2Renderer(this.getContext(), this);
+			setRenderer(_es2renderer);
 		}
-		
-		initSimpleWidgetDemo(width, height, getContext(), f.getAbsolutePath());
-		
-		// SETTING RENDERER
-		_es2renderer = new ES2Renderer(this.getContext(), _widget);
-		setRenderer(_es2renderer);
 	}
 
 	public boolean onTouchEvent(MotionEvent event) {
@@ -153,8 +142,25 @@ public class G3MWidget_Android extends GLSurfaceView implements
 		return false;
 	}
 	
-	private void initSimpleWidgetDemo(int width, int height, Context ctx, String documentsDirectory)
+	public G3MWidget getWidget() {
+		if (_widget == null) {
+			initSimpleWidgetDemo();
+		}
+		return _widget;
+	}
+	
+	private void initSimpleWidgetDemo()
 	{
+		int width = getWidth();
+		int height = getHeight();
+		Context ctx = getContext();
+		
+		File f = getContext().getExternalCacheDir();
+		if (!f.exists()){
+			f = getContext().getCacheDir();
+		}
+		String documentsDirectory = f.getAbsolutePath();
+		
 		IFactory factory = new Factory_Android(ctx);
 		  ILogger logger = new Logger_Android(LogLevel.ErrorLevel);
 		  
@@ -220,7 +226,7 @@ public class G3MWidget_Android extends GLSurfaceView implements
 		                              busyRenderer,
 		                              scheduler,
 		                              width, height,
-		                              Color.fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
+		                              Color.fromRGBA((float)0, (float)1.0, (float)0.2, (float)1),
 		                              true);
 		                              
 		                             
