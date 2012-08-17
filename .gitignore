@@ -53,4 +53,8 @@ Android/G3MAndroidDemo/bin/
 Android/G3MAndroidDemo/gen/
 Android/G3MAndroidSDK/bin/jarlist.cache
 Android/G3MAndroidDemo/bin/jarlist.cache
-Android/G3MAndroidDemo/bin/*
+Android/G3MAndroidDemo/bin/res/*/*
+Android/G3MAndroidDemo/bin/res/*/*
+Android/G3MAndroidSDK/bin/*
+Android/G3MAndroidSDK/bin/*/*/*
+
