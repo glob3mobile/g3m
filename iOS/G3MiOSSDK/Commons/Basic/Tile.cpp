@@ -25,13 +25,13 @@ Tile::~Tile() {
   
   prune(NULL);
   
-//  if (_isVisible) {
-//    visibleCounter--;
-//    printf("**** Tile %s is DESTROYED (visibles=%ld)\n",
-//           getKey().description().c_str(),
-//           visibleCounter);
-//  }
-
+  //  if (_isVisible) {
+  //    visibleCounter--;
+  //    printf("**** Tile %s is DESTROYED (visibles=%ld)\n",
+  //           getKey().description().c_str(),
+  //           visibleCounter);
+  //  }
+  
   if (_texturizerTimer != NULL) {
     delete _texturizerTimer;
   }
@@ -103,11 +103,11 @@ bool Tile::isVisible(const RenderContext *rc,
   
   /*
    // test if sector is back oriented with respect to the camera
-  if (_sector.isBackOriented(rc)) {
-      return false;
-  }
-  */
-
+   if (_sector.isBackOriented(rc)) {
+   return false;
+   }
+   */
+  
   return getTessellatorMesh(rc, trc)->getExtent()->touches(rc->getNextCamera()->getFrustumInModelCoordinates());
 }
 
@@ -133,10 +133,10 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
   }
   
   
-//  const double projectedSize = getTessellatorMesh(rc, trc)->getExtent()->squaredProjectedArea(rc);
-//  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
-//    return true;
-//  }
+  //  const double projectedSize = getTessellatorMesh(rc, trc)->getExtent()->squaredProjectedArea(rc);
+  //  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
+  //    return true;
+  //  }
   const Vector2D extent = getTessellatorMesh(rc, trc)->getExtent()->projectedExtent(rc);
   //const double t = extent.maxAxis() * 2;
   const double t = (extent.x() + extent.y());
@@ -249,10 +249,10 @@ void Tile::prune(const TileRenderContext* trc) {
     const int subtilesSize = _subtiles->size();
     for (int i = 0; i < subtilesSize; i++) {
       Tile* subtile = _subtiles->at(i);
-
+      
       int ___TESTING;
       subtile->setIsVisible(false);
-
+      
       subtile->prune(trc);
       if (texturizer != NULL) {
         texturizer->tileToBeDeleted(subtile, subtile->_texturizerMesh);
@@ -266,36 +266,23 @@ void Tile::prune(const TileRenderContext* trc) {
   }
 }
 
-//void Tile::setIsRendering(bool isRendering) {
-//  if (_isRendering != isRendering) {
-//    _isRendering = isRendering;
-// 
-//    if (isRendering) {
-//      printf("== Tile %s is Rendering\n", getKey().description().c_str());
-//    }
-//    else {
-//      printf("== Tile %s is NOT Rendering anymore\n", getKey().description().c_str());
-//    }
-//  }
-//}
-
 void Tile::setIsVisible(bool isVisible) {
-
+  
   
   if (_isVisible != isVisible) {
     _isVisible = isVisible;
-
+    
     if (_isVisible) {
-//      visibleCounter++;
-//      printf("**** Tile %s becomed Visible (visibles=%ld)\n",
-//             getKey().description().c_str(),
-//             visibleCounter);
+      //      visibleCounter++;
+      //      printf("**** Tile %s becomed Visible (visibles=%ld)\n",
+      //             getKey().description().c_str(),
+      //             visibleCounter);
     }
     else {
-//      visibleCounter--;
-//      printf("**** Tile %s becomed INVisible (visibles=%ld)\n",
-//             getKey().description().c_str(),
-//             visibleCounter);
+      //      visibleCounter--;
+      //      printf("**** Tile %s becomed INVisible (visibles=%ld)\n",
+      //             getKey().description().c_str(),
+      //             visibleCounter);
       deleteTexturizerMesh();
     }
   }
@@ -304,14 +291,14 @@ void Tile::setIsVisible(bool isVisible) {
 void Tile::deleteTexturizerMesh() {
   if ((_level > 0) && (_texturizerMesh != NULL)) {
     int _BIG_BANG;
-//    _texturizer->tileMeshToBeDeleted(this, _texturizerMesh);
-//    
-//    delete _texturizerMesh;
-//    _texturizerMesh = NULL;
-//    
-//    setTexturizerDirty(true);
+    //    _texturizer->tileMeshToBeDeleted(this, _texturizerMesh);
+    //
+    //    delete _texturizerMesh;
+    //    _texturizerMesh = NULL;
+    //
+    //    setTexturizerDirty(true);
   }
-
+  
 }
 
 void Tile::render(const RenderContext* rc,
@@ -322,12 +309,10 @@ void Tile::render(const RenderContext* rc,
   statistics->computeTileProcessed(this);
   if (isVisible(rc, trc)) {
     setIsVisible(true);
-
+    
     statistics->computeVisibleTile(this);
     
     if (meetsRenderCriteria(rc, trc)) {
-      //setIsRendering(true);
-
       rawRender(rc, trc);
       if (trc->getParameters()->_renderDebug) {
         debugRender(rc, trc);
@@ -338,8 +323,6 @@ void Tile::render(const RenderContext* rc,
       prune(trc);
     }
     else {
-      //setIsRendering(false);
-      
       std::vector<Tile*>* subTiles = getSubTiles();
       if (_justCreatedSubtiles) {
         trc->getLastSplitTimer()->start();
@@ -356,9 +339,7 @@ void Tile::render(const RenderContext* rc,
   }
   else {
     setIsVisible(false);
-
-    //setIsRendering(false);
-
+    
     prune(trc);
   }
 }
@@ -416,79 +397,33 @@ const TileKey Tile::getKey() const {
   return TileKey(_level, _row, _column);
 }
 
-Geodetic3D Tile::intersection(const Vector3D& origin, const Vector3D& ray, const Planet* planet) const{
-
-  //As our tiles are still flat our onPlanet vector is calculated directly from Planet
+Geodetic3D Tile::intersection(const Vector3D& origin,
+                              const Vector3D& ray,
+                              const Planet* planet) const {
+    //As our tiles are still flat our onPlanet vector is calculated directly from Planet
   std::vector<double> ts = planet->intersections(origin, ray);
   
   if (ts.size() > 0){
+    const Vector3D onPlanet = origin.add(ray.times(ts[0]));
+    const Geodetic3D g = planet->toGeodetic3D(onPlanet);
     
-    Vector3D onPlanet = origin.add(ray.times(ts[0]));
-    Geodetic3D g = planet->toGeodetic3D(onPlanet);
-
-    if (_sector.contains(g)){
-      
-      //If this tile is not a leafe
-      if (_subtiles != NULL){
-        
-        for (int i = 0; i < 4; i++) {
-          Geodetic3D g3d = _subtiles->at(i)->intersection(origin, ray, planet);
+    if (_sector.contains(g)) {
+      //If this tile is not a leaf
+      if (_subtiles != NULL) {
+        for (int i = 0; i < _subtiles->size(); i++) {
+          const Geodetic3D g3d = _subtiles->at(i)->intersection(origin, ray, planet);
           if (!g3d.isNan()){
             return g3d;
           }
         }
-        
-      } else{
-        
+      }
+      else {
         //printf("TOUCH TILE %d\n", _level);
         _texturizer->onTerrainTouchEvent(g, this);
         return g;
-        
       }
-      return Geodetic3D::nan();
-    } else {
-      return Geodetic3D::nan();
     }
-  } else{
-    //Touches extent but not the tile
-    return Geodetic3D::nan();
   }
-  
-  /*
-  Vector3D v = _tessellatorMesh->getExtent()->intersectionWithRay(origin, ray);
-  
-  if (v.isNan()){
-    //Ray doesn't touch the extent
-    return Geodetic3D::nan();
-  } else {
-    
-    //If this tile is not a leafe
-    if (_subtiles != NULL){
-      for (int i = 0; i < 4; i++) {
-        Geodetic3D g3d = _subtiles->at(i)->intersection(origin, ray, planet);
-        if (!g3d.isNan()){
-          return g3d;
-        }
-      }
-    } 
-      //As our tiles are still flat our onPlanet vector is calculated directly from Planet
-      std::vector<double> ts = planet->intersections(origin, ray);
-      
-      if (ts.size() > 0){
-        Vector3D onPlanet = origin.add(ray.times(ts[0]));
-        Geodetic3D g = planet->toGeodetic3D(onPlanet);
-        
-        if (_sector.contains(g)){
-          printf("TOUCH TILE %d\n", _level);
-          _texturizer->onTerrainTouchEvent(g, this);
-          
-          return g;
-        } else {
-          return Geodetic3D::nan();
-        }
-      } else{
-        //Touches extent but not the tile
-        return Geodetic3D::nan();
-      }
-  }*/
+
+  return Geodetic3D::nan();
 }
