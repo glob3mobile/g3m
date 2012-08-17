@@ -32,11 +32,6 @@ Tile::~Tile() {
   //           visibleCounter);
   //  }
   
-  if (_texturizerData != NULL) {
-    delete _texturizerData;
-    _texturizerData = NULL;
-  }
-  
   if (_texturizerTimer != NULL) {
     delete _texturizerTimer;
   }
@@ -47,6 +42,11 @@ Tile::~Tile() {
   
   if (_tessellatorMesh != NULL) {
     delete _tessellatorMesh;
+  }
+  
+  if (_texturizerData != NULL) {
+    delete _texturizerData;
+    _texturizerData = NULL;
   }
   
   if (_texturizerMesh != NULL) {
@@ -193,8 +193,9 @@ void Tile::rawRender(const RenderContext *rc,
         //                                      lastTexturizerTimer->elapsedTime().milliseconds() > 10));
         //        const bool callTexturizer = ((_texturizerTimer == NULL) ||
         //                                     (_texturizerTimer->elapsedTime().milliseconds() > 100));
-        const bool callTexturizer = ((_texturizerTimer == NULL) ||
-                                     (_texturizerTimer->elapsedTime().milliseconds() > 50)) && isTexturizerDirty();
+//        const bool callTexturizer = ((_texturizerTimer == NULL) ||
+//                                     (_texturizerTimer->elapsedTime().milliseconds() > 50)) && isTexturizerDirty();
+        const bool callTexturizer = true;
         
         if (callTexturizer) {
           _texturizerMesh = texturizer->texturize(rc,
@@ -295,13 +296,17 @@ void Tile::setIsVisible(bool isVisible) {
 void Tile::deleteTexturizerMesh() {
   if ((_level > 0) && (_texturizerMesh != NULL)) {
     int _BIG_BANG;
-    _texturizer->tileMeshToBeDeleted(this, _texturizerMesh);
-    
-    delete _texturizerMesh;
-    _texturizerMesh = NULL;
-    
-    setTexturizerDirty(true);
-    setTextureSolved(false);
+//    _texturizer->tileMeshToBeDeleted(this, _texturizerMesh);
+//    
+//    delete _texturizerMesh;
+//    _texturizerMesh = NULL;
+//    
+//    int __TEST_DELETE_TEXTURIZER_DATA;
+//    delete _texturizerData;
+//    _texturizerData = NULL;
+//    
+//    setTexturizerDirty(true);
+//    setTextureSolved(false);
   }
 }
 

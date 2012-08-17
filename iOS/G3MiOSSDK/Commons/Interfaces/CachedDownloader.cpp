@@ -60,6 +60,8 @@ public:
     saveResponse(response);
     
     _listener->onCanceledDownload(response);
+    
+    // no deleteListener() call, onCanceledDownload() is always called before onCancel().
   }
 
   void onCancel(const URL* url) {
@@ -107,15 +109,10 @@ long CachedDownloader::request(const URL& url,
                                                                           url),
                                                 true);
     
-    delete cachedBuffer;
+//    delete cachedBuffer;
     return requestId;
   }
   else {
-
-//    dispatch_async( dispatch_get_main_queue(), ^{
-//
-//    });
-    
     // cache hit
     Response response(url, cachedBuffer);
     

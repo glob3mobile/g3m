@@ -354,7 +354,22 @@ public:
   if (false) {
     
     class Listener : public IDownloadListener {
+    private:
+      int _onDownload;
+      int _onError;
+      int _onCancel;
+
+    public:
+      Listener() :
+      _onDownload(0),
+      _onError(0),
+      _onCancel(0)
+      {
+        
+      }
+      
       void onDownload(const Response* response) {
+        _onDownload++;
         BOOL isMainThread = [NSThread isMainThread];
         if (isMainThread) {
           NSLog(@"*** Main-Thread: Downloaded %d bytes ***", response->getByteBuffer()->getLength());
@@ -365,20 +380,45 @@ public:
       }
       
       void onError(const Response* response) {
+        _onError++;
       }
       
       void onCancel(const URL* url) {
+        _onCancel++;
       }
       
       void onCanceledDownload(const Response* response) {
       }
+      
+      void showInvalidState() const {
+        printf("onDownload=%d, onCancel=%d, onError=%d\n", _onDownload, _onCancel, _onError);
+      }
+      
+      void testState() const {
+        if ((_onDownload == 1) && (_onCancel == 0) && (_onError == 0)) {
+          return;
+        }
+        if ((_onDownload == 0) && (_onCancel == 1) && (_onError == 0)) {
+          return;
+        }
+        if ((_onDownload == 0) && (_onCancel == 0) && (_onError == 1)) {
+          return;
+        }
+        showInvalidState();
+      }
 
+      virtual ~Listener() {
+        testState();
+      }
     };
     
     const long priority = 999999999;
     long requestId = downloader->request(URL("http://glob3.sourceforge.net/img/isologo640x160.png"), priority, new Listener(), true);
-//    long requestId2 = downloader->request(URL("http://glob3.sourceforge.net/img/isologo640x160.png"), priority, new Listener(), true);
+    long requestId2 = downloader->request(URL("http://glob3.sourceforge.net/img/isologo640x160.png"), priority, new Listener(), true);
     downloader->cancelRequest(requestId);
+    downloader->cancelRequest(requestId2);
+    
+    printf("break (point) on me");
   }
 
   
@@ -527,7 +567,7 @@ public:
     }
   }
   
-  if (true) {
+  if (false) {
     LatLonMeshRenderer *renderer = new LatLonMeshRenderer();
     comp->addRenderer(renderer);
   }

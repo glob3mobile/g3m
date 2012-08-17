@@ -49,7 +49,8 @@ private:
   void operator=(const LazyTextureMapping& that);
   
   LazyTextureMapping(const LazyTextureMapping& that);
-  
+  void releaseGLTextureId();
+
 public:
   LazyTextureMapping(LazyTextureMappingInitializer* initializer,
                      TexturesHandler* texturesHandler,
@@ -78,6 +79,8 @@ public:
       }
       _texCoords = NULL;
     }
+    
+    releaseGLTextureId();
   }
   
   void bind(const RenderContext* rc) const;
@@ -91,7 +94,6 @@ public:
     _glTextureId = glTextureId;
   }
   
-  void releaseGLTextureId();
 
   const GLTextureID getGLTextureID() const {
     return _glTextureId;

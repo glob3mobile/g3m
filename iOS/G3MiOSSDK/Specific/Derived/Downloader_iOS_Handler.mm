@@ -28,6 +28,7 @@
   if (self) {
     _listener  = listener;
     _requestId = requestId;
+    _canceled  = false;
   }
   return self;
 }
@@ -40,6 +41,19 @@
 -(long) requestId
 {
   return _requestId;
+}
+
+-(void) cancel
+{
+  if (_canceled) {
+    NSLog(@"Listener for RequestId=%ld already canceled", _requestId);
+  }
+  _canceled = YES;
+}
+
+-(bool) isCanceled
+{
+  return _canceled;
 }
 
 @end
@@ -58,7 +72,7 @@
     _nsURL     = nsURL;
     _url       = url;
     _priority  = priority;
-    _canceled  = false;
+    //    _canceled  = false;
     
     ListenerEntry* entry = [ListenerEntry entryWithListener: listener
                                                   requestId: requestId];
@@ -96,6 +110,31 @@
   return result;
 }
 
+- (bool) cancelListenerForRequestId: (long)requestId
+{
+  bool canceled = false;
+  
+  [_lock lock];
+  
+  const int listenersCount = [_listeners count];
+  for (int i = 0; i < listenersCount; i++) {
+    ListenerEntry* entry = [_listeners objectAtIndex: i];
+    if ([entry requestId] == requestId) {
+      //      [[entry listener] onCancel:_url];
+      //
+      //      [_listeners removeObjectAtIndex: i];
+      [entry cancel];
+      
+      canceled = true;
+      break;
+    }
+  }
+  
+  [_lock unlock];
+  
+  return canceled;
+}
+
 - (bool) removeListenerForRequestId: (long)requestId
 {
   bool removed = false;
@@ -115,8 +154,6 @@
     }
   }
   
-  //  _canceled = [_listeners count] == 0;
-  
   [_lock unlock];
   
   return removed;
@@ -133,16 +170,16 @@
   return hasListeners;
 }
 
--(bool)isCanceled
-{
-  [_lock lock];
-  
-  const bool result = _canceled;
-  
-  [_lock unlock];
-  
-  return result;
-}
+//-(bool)isCanceled
+//{
+//  [_lock lock];
+//
+//  const bool result = _canceled;
+//
+//  [_lock unlock];
+//
+//  return result;
+//}
 
 - (void) runWithDownloader:(void*)downloaderV
 {
@@ -182,62 +219,70 @@
     
     const URL url( [[_nsURL absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] );
     
-    if (_canceled) {
-      if (dataIsValid) {
-        const int length = [data length];
-        unsigned char *bytes = new unsigned char[ length ]; // will be deleted by ByteBuffer's destructor
-        [data getBytes: bytes
-                length: length];
-        ByteBuffer buffer(bytes, length);
-        Response response(url, &buffer);
-        
-        for (int i = 0; i < listenersCount; i++) {
-          ListenerEntry* entry = [_listeners objectAtIndex: i];
+    //    if (_canceled) {
+    //      if (dataIsValid) {
+    //        const int length = [data length];
+    //        unsigned char *bytes = new unsigned char[ length ]; // will be deleted by ByteBuffer's destructor
+    //        [data getBytes: bytes
+    //                length: length];
+    //        ByteBuffer buffer(bytes, length);
+    //        Response response(url, &buffer);
+    //
+    //        for (int i = 0; i < listenersCount; i++) {
+    //          ListenerEntry* entry = [_listeners objectAtIndex: i];
+    //
+    //          [[entry listener] onCanceledDownload: &response];
+    //        }
+    //      }
+    //
+    //      for (int i = 0; i < listenersCount; i++) {
+    //        ListenerEntry* entry = [_listeners objectAtIndex: i];
+    //
+    //        [[entry listener] onCancel: &url];
+    //      }
+    //    }
+    //    else {
+    if (dataIsValid) {
+      const int length = [data length];
+      unsigned char *bytes = new unsigned char[ length ]; // will be deleted by ByteBuffer's destructor
+      [data getBytes: bytes
+              length: length];
+      ByteBuffer* buffer = new ByteBuffer(bytes, length);
+      
+      Response* response = new Response(url, buffer);
+      
+      for (int i = 0; i < listenersCount; i++) {
+        ListenerEntry* entry = [_listeners objectAtIndex: i];
+        Downloader_iOS_Listener* listener = [entry listener];
+
+        if ([entry isCanceled]) {
+          [listener onCanceledDownload: response];
           
-          [[entry listener] onCanceledDownload: &response];
+          [listener onCancel: &url];
+        }
+        else {
+          [listener onDownload: response];
         }
       }
+      
+      delete response;
+      delete buffer;
+    }
+    else {
+      ByteBuffer* buffer = new ByteBuffer(NULL, 0);
+      
+      Response* response = new Response(url, buffer);
       
       for (int i = 0; i < listenersCount; i++) {
         ListenerEntry* entry = [_listeners objectAtIndex: i];
         
-        [[entry listener] onCancel: &url];
+        [[entry listener] onError: response];
       }
+      
+      delete response;
+      delete buffer;
     }
-    else {
-      if (dataIsValid) {
-        const int length = [data length];
-        unsigned char *bytes = new unsigned char[ length ]; // will be deleted by ByteBuffer's destructor
-        [data getBytes: bytes
-                length: length];
-        ByteBuffer* buffer = new ByteBuffer(bytes, length);
-        
-        Response* response = new Response(url, buffer);
-        
-        for (int i = 0; i < listenersCount; i++) {
-          ListenerEntry* entry = [_listeners objectAtIndex: i];
-          
-          [[entry listener] onDownload: response];
-        }
-        
-        delete response;
-        delete buffer;
-      }
-      else {
-        ByteBuffer* buffer = new ByteBuffer(NULL, 0);
-        
-        Response* response = new Response(url, buffer);
-        
-        for (int i = 0; i < listenersCount; i++) {
-          ListenerEntry* entry = [_listeners objectAtIndex: i];
-          
-          [[entry listener] onError: response];
-        }
-        
-        delete response;
-        delete buffer;
-      }
-    }
+    //    }
     
     //  [_listeners removeAllObjects];
     
@@ -246,14 +291,14 @@
   
 }
 
-- (void) cancel
-{
-  [_lock lock];
-  
-  _canceled = true;
-  
-  [_lock unlock];
-}
+//- (void) cancel
+//{
+//  [_lock lock];
+//
+//  _canceled = true;
+//
+//  [_lock unlock];
+//}
 
 - (void)dealloc
 {

@@ -56,8 +56,6 @@ LeveledTexturedMesh::~LeveledTexturedMesh() {
     for (int i = 0; i < _mappings->size(); i++) {
       LazyTextureMapping* mapping = _mappings->at(i);
       if (mapping != NULL) {
-        mapping->releaseGLTextureId();
-        
         delete mapping;
       }
     }
@@ -97,8 +95,6 @@ LazyTextureMapping* LeveledTexturedMesh::getCurrentTextureMapping() const {
       for (int i = _currentLevel+1; i < _levelsCount; i++) {
         LazyTextureMapping* mapping = _mappings->at(i);
         if (mapping != NULL) {
-          mapping->releaseGLTextureId();
-
           _mappings->at(i) = NULL;
           delete mapping;
         }
