@@ -32,6 +32,11 @@ Tile::~Tile() {
   //           visibleCounter);
   //  }
   
+  if (_texturizerData != NULL) {
+    delete _texturizerData;
+    _texturizerData = NULL;
+  }
+  
   if (_texturizerTimer != NULL) {
     delete _texturizerTimer;
   }

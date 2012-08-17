@@ -23,6 +23,14 @@ class TileRenderContext;
 class TileKey;
 class Vector3D;
 
+class TexturizerData {
+public:
+  virtual ~TexturizerData() {
+    
+  }
+};
+
+
 class Tile {
 private:
   TileTexturizer* _texturizer;
@@ -84,6 +92,8 @@ private:
   void setIsVisible(bool isVisible);
   
   void deleteTexturizerMesh();
+  
+  TexturizerData* _texturizerData;
 
 public:
   Tile(TileTexturizer* texturizer,
@@ -106,7 +116,8 @@ public:
   _subtiles(NULL),
   _justCreatedSubtiles(false),
   _texturizerTimer(NULL),
-  _isVisible(false)
+  _isVisible(false),
+  _texturizerData(NULL)
   {
   }
   
@@ -159,6 +170,22 @@ public:
   
   Geodetic3D intersection(const Vector3D& origin, const Vector3D& ray, const Planet* planet) const;
 
+  
+  bool hasTexturizerData() const {
+    return (_texturizerData != NULL);
+  }
+  
+  TexturizerData* getTexturizerData() const {
+    return _texturizerData;
+  }
+  
+  void setTexturizerData(TexturizerData* texturizerData) {
+    if (_texturizerData != NULL) {
+      delete _texturizerData;
+    }
+    _texturizerData = texturizerData;
+  }
+  
 };
 
 #endif
