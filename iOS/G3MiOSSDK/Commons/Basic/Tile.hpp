@@ -23,11 +23,9 @@ class TileRenderContext;
 class TileKey;
 class Vector3D;
 
-class TexturizerData {
+class ITexturizerData {
 public:
-  virtual ~TexturizerData() {
-    
-  }
+  virtual ~ITexturizerData() { }
 };
 
 
@@ -93,7 +91,7 @@ private:
   
   void deleteTexturizerMesh();
   
-  TexturizerData* _texturizerData;
+  ITexturizerData* _texturizerData;
 
 public:
   Tile(TileTexturizer* texturizer,
@@ -175,11 +173,11 @@ public:
     return (_texturizerData != NULL);
   }
   
-  TexturizerData* getTexturizerData() const {
+  ITexturizerData* getTexturizerData() const {
     return _texturizerData;
   }
   
-  void setTexturizerData(TexturizerData* texturizerData) {
+  void setTexturizerData(ITexturizerData* texturizerData) {
     if (_texturizerData != NULL) {
       delete _texturizerData;
     }

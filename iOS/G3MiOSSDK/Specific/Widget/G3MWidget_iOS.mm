@@ -457,8 +457,8 @@ public:
   // very basic tile renderer
   if (true) {
     const bool renderDebug = true;
-//    TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug);
-    TilesRenderParameters* parameters = TilesRenderParameters::createSingleSector(renderDebug);
+    TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug);
+//    TilesRenderParameters* parameters = TilesRenderParameters::createSingleSector(renderDebug);
     
     TileTexturizer* texturizer = NULL;
     if (true) {

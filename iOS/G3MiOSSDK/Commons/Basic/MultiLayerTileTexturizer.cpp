@@ -105,7 +105,7 @@ public:
 };
 
 
-class TileTextureBuilder {
+class TileTextureBuilder : public ITexturizerData {
 private:
   MultiLayerTileTexturizer* _texturizer;
   Tile*                     _tile;
@@ -199,6 +199,8 @@ public:
   }
   
   ~TileTextureBuilder() {
+    cancel();
+    
     deletePetitions();
   }
   
@@ -315,11 +317,11 @@ public:
   }
   
   void checkHasToLive() {
-    if (_canceled || _finalized) {
-//      deletePetitions();
-      
-      _texturizer->deleteBuilder(_tileKey, this);
-    }
+//    if (_canceled || _finalized) {
+////      deletePetitions();
+//      
+//      _texturizer->deleteBuilder(_tileKey, this);
+//    }
   }
   
   void cancel() {
@@ -351,6 +353,9 @@ public:
   
   void stepDownloaded(int position,
                       const ByteBuffer* buffer) {
+    if (_canceled) {
+      return;
+    }
     checkIsPending(position);
     
     _status[position]  = STATUS_DOWNLOADED;
@@ -360,6 +365,9 @@ public:
   }
   
   void stepCanceled(int position) {
+    if (_canceled) {
+      return;
+    }
     checkIsPending(position);
     
     _anyCanceled = true;
@@ -467,18 +475,31 @@ Mesh* MultiLayerTileTexturizer::texturize(const RenderContext* rc,
     return previousMesh;
   }
   
-  const TileKey key = tile->getKey();
-  TileTextureBuilder* builder = _builders[key];
   LeveledTexturedMesh* mesh = NULL;
+  TileTextureBuilder* builder = (TileTextureBuilder*) tile->getTexturizerData();
   if (builder == NULL) {
     builder = new TileTextureBuilder(this, rc, _layerSet, _parameters, _downloader, tile, tessellatorMesh, getTextureCoordinates(trc));
-    _builders[key] = builder;
+    tile->setTexturizerData(builder);
     mesh = builder->getMesh();
     builder->start();
   }
   else {
+    mesh = builder->getMesh();
     printf("please break (point) me\n");
   }
+  
+//  const TileKey key = tile->getKey();
+//  TileTextureBuilder* builder = _builders[key];
+//  LeveledTexturedMesh* mesh = NULL;
+//  if (builder == NULL) {
+//    builder = new TileTextureBuilder(this, rc, _layerSet, _parameters, _downloader, tile, tessellatorMesh, getTextureCoordinates(trc));
+//    _builders[key] = builder;
+//    mesh = builder->getMesh();
+//    builder->start();
+//  }
+//  else {
+//    printf("please break (point) me\n");
+//  }
   
   //  if (builder != NULL) {
   //    builder->cancel();
@@ -492,18 +513,20 @@ Mesh* MultiLayerTileTexturizer::texturize(const RenderContext* rc,
   
   tile->setTexturizerDirty(false);
   
-  
   return mesh;
 }
 
 void MultiLayerTileTexturizer::tileToBeDeleted(Tile* tile,
                                                Mesh* mesh) {
-  const TileKey key = tile->getKey();
   
-  TileTextureBuilder* builder = _builders[key];
+  TileTextureBuilder* builder = (TileTextureBuilder*) tile->getTexturizerData();
+  
+//  const TileKey key = tile->getKey();
+//  
+//  TileTextureBuilder* builder = _builders[key];
   if (builder != NULL) {
-    builder->cleanMesh();
     builder->cancel();
+    builder->cleanMesh();
     //    _builders.erase(key);
     
     int __TODO_delete_builder;
@@ -519,9 +542,9 @@ void MultiLayerTileTexturizer::tileToBeDeleted(Tile* tile,
 
 void MultiLayerTileTexturizer::tileMeshToBeDeleted(Tile* tile,
                                                    Mesh* mesh) {
-  const TileKey key = tile->getKey();
-  
-  TileTextureBuilder* builder = _builders[key];
+//  const TileKey key = tile->getKey();
+//  TileTextureBuilder* builder = _builders[key];
+  TileTextureBuilder* builder = (TileTextureBuilder*) tile->getTexturizerData();
   if (builder != NULL) {
     builder->cleanMesh();
   }
@@ -532,25 +555,26 @@ void MultiLayerTileTexturizer::tileMeshToBeDeleted(Tile* tile,
   }
 }
 
-void MultiLayerTileTexturizer::deleteBuilder(TileKey key,
-                                             TileTextureBuilder* builder) {
-  TileTextureBuilder* currentBuilder = _builders[key];
-  if (currentBuilder == NULL) {
-    //printf("break (point) me\n");
-  }
-  else {
-    if (builder == currentBuilder) {
-      _builders.erase(key);
-      
-      int __TODO_delete_builder;
-//      delete builder;
-    }
-    else {
-      printf("break (point) me\n");
-    }
-  }
-  
-}
+//void MultiLayerTileTexturizer::deleteBuilder(TileKey key,
+//                                             TileTextureBuilder* builder) {
+////  TileTextureBuilder* currentBuilder = _builders[key];
+////  if (currentBuilder == NULL) {
+////    //printf("break (point) me\n");
+////  }
+////  else {
+////    if (builder == currentBuilder) {
+////      _builders.erase(key);
+////      
+////      int __TODO_delete_builder;
+//////      delete builder;
+////    }
+////    else {
+////      printf("break (point) me\n");
+////    }
+////  }
+//  
+//  printf("break (point) me\n");
+//}
 
 const GLTextureID MultiLayerTileTexturizer::getTopLevelGLTextureIDForTile(Tile* tile) {
   
@@ -585,8 +609,9 @@ void MultiLayerTileTexturizer::ancestorTexturedSolvedChanged(Tile* tile,
   if (tile->isTextureSolved()) {
     return;
   }
-  
-  TileTextureBuilder* ancestorBuilder = _builders[ancestorTile->getKey()];
+
+  TileTextureBuilder* ancestorBuilder = (TileTextureBuilder*) ancestorTile->getTexturizerData();
+  //TileTextureBuilder* ancestorBuilder = _builders[ancestorTile->getKey()];
   if (ancestorBuilder == NULL) {
     return;
   }
@@ -597,7 +622,10 @@ void MultiLayerTileTexturizer::ancestorTexturedSolvedChanged(Tile* tile,
   
   LeveledTexturedMesh* ancestorMesh = ancestorBuilder->getMesh();
   
-  TileTextureBuilder* tileBuilder = _builders[tile->getKey()];
+  
+  
+//  TileTextureBuilder* tileBuilder = _builders[tile->getKey()];
+  TileTextureBuilder* tileBuilder = (TileTextureBuilder*) tile->getTexturizerData();
   if (tileBuilder == NULL) {
     return;
   }

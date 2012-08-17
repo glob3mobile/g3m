@@ -29,7 +29,7 @@ private:
   IDownloader*                 _downloader;
   const TilesRenderParameters* _parameters;
   
-  std::map<TileKey, TileTextureBuilder*> _builders;
+//  std::map<TileKey, TileTextureBuilder*> _builders;
   
   mutable float* _texCoordsCache;
   
@@ -87,8 +87,8 @@ public:
   
   const GLTextureID getTopLevelGLTextureIDForTile(Tile* tile);
   
-  void deleteBuilder(TileKey key,
-                     TileTextureBuilder* builder);
+//  void deleteBuilder(TileKey key,
+//                     TileTextureBuilder* builder);
   
   
   void onTerrainTouchEvent(const Geodetic3D& g3d, const Tile* tile);
