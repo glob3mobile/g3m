@@ -26,7 +26,7 @@ public:
     double distance = camera->getPosition().length();
     double radii    = planet->getRadii().maxAxis();
     if (distance > radii*10) {
-      printf ("--- camera constraint!\n");
+//      printf ("--- camera constraint!\n");
       return false;
     }
       

@@ -206,7 +206,6 @@ void Tile::rawRender(const RenderContext *rc,
             _texturizerTimer->start();
           }
         }
-        
       }
       
       if ((_texturizerTimer != NULL) && isTextureSolved()) {
@@ -291,12 +290,14 @@ void Tile::setIsVisible(bool isVisible) {
 void Tile::deleteTexturizerMesh() {
   if ((_level > 0) && (_texturizerMesh != NULL)) {
     int _BIG_BANG;
-    //    _texturizer->tileMeshToBeDeleted(this, _texturizerMesh);
-    //
-    //    delete _texturizerMesh;
-    //    _texturizerMesh = NULL;
-    //
-    //    setTexturizerDirty(true);
+//    _texturizer->tileMeshToBeDeleted(this, _texturizerMesh);
+//    
+//    delete _texturizerMesh;
+//    _texturizerMesh = NULL;
+//    
+//    setTexturizerDirty(true);
+//    setTextureSolved(false);
+
   }
   
 }
@@ -403,7 +404,7 @@ Geodetic3D Tile::intersection(const Vector3D& origin,
     //As our tiles are still flat our onPlanet vector is calculated directly from Planet
   std::vector<double> ts = planet->intersections(origin, ray);
   
-  if (ts.size() > 0){
+  if (ts.size() > 0) {
     const Vector3D onPlanet = origin.add(ray.times(ts[0]));
     const Geodetic3D g = planet->toGeodetic3D(onPlanet);
     
@@ -412,7 +413,7 @@ Geodetic3D Tile::intersection(const Vector3D& origin,
       if (_subtiles != NULL) {
         for (int i = 0; i < _subtiles->size(); i++) {
           const Geodetic3D g3d = _subtiles->at(i)->intersection(origin, ray, planet);
-          if (!g3d.isNan()){
+          if (!g3d.isNan()) {
             return g3d;
           }
         }
