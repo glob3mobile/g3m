@@ -195,15 +195,18 @@ void Tile::rawRender(const RenderContext *rc,
         //                                     (_texturizerTimer->elapsedTime().milliseconds() > 100));
 //        const bool callTexturizer = ((_texturizerTimer == NULL) ||
 //                                     (_texturizerTimer->elapsedTime().milliseconds() > 50)) && isTexturizerDirty();
-        const bool callTexturizer = true;
-        
+
+                const bool callTexturizer = true;
+//        const bool callTexturizer = (trc->getLastTexturizerTimer()->elapsedTime().milliseconds() > 10);
+//        const bool callTexturizer = (trc->getLastTexturizerTimer()->elapsedTime().milliseconds() > 10);
+
         if (callTexturizer) {
           _texturizerMesh = texturizer->texturize(rc,
                                                   trc,
                                                   this,
                                                   tessellatorMesh,
                                                   _texturizerMesh);
-          trc->getLastTexturizerTimer()->start();
+          //trc->getLastTexturizerTimer()->start();
           
           if (_texturizerTimer == NULL) {
             _texturizerTimer = rc->getFactory()->createTimer();
