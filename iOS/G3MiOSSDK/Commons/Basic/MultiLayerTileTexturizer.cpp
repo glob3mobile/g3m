@@ -379,13 +379,8 @@ public:
     _canceled = true;
     
     if (!_finalized) {
-      int __testing_requests_cancelation;
       for (int i = 0; i < _requestsIds.size(); i++) {
         const long requestId = _requestsIds[i];
-        int __BUG;
-        /*
-         the cancel is ASYNCronous, the cancel step will be ejecuted AFTER builder deletion -> CRASH!!!
-         */
         _downloader->cancelRequest(requestId);
       }
     }
