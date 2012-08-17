@@ -107,6 +107,8 @@ private:
   
   const bool _verbose;
   
+//  void showHolders(const std::string message) const;
+  
 public:
   
   TexturesHandler(GL* const  gl,

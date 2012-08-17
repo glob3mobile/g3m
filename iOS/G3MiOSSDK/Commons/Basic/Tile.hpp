@@ -82,6 +82,8 @@ private:
 
   bool _isVisible;
   void setIsVisible(bool isVisible);
+  
+  void deleteTexturizerMesh();
 
 public:
   Tile(TileTexturizer* texturizer,

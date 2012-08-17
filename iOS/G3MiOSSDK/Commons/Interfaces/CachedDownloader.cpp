@@ -13,17 +13,17 @@ class SaverDownloadListener : public IDownloadListener {
   IDownloadListener* _listener;
   const bool         _deleteListener;
   IStorage*          _cacheStorage;
-  const URL          _cacheFileName;
+  const URL          _url;
   
 public:
   SaverDownloadListener(IDownloadListener* listener,
                         bool deleteListener,
                         IStorage* cacheStorage,
-                        const URL cacheFileName) :
+                        const URL url) :
   _listener(listener),
   _deleteListener(deleteListener),
   _cacheStorage(cacheStorage),
-  _cacheFileName(cacheFileName)
+  _url(url)
   {
     
   }
@@ -36,8 +36,8 @@ public:
   }
   
   void saveResponse(const Response* response) {
-    if (!_cacheStorage->contains(_cacheFileName)) {
-      _cacheStorage->save(_cacheFileName,
+    if (!_cacheStorage->contains(_url)) {
+      _cacheStorage->save(_url,
                           *response->getByteBuffer());
     }
   }
@@ -86,19 +86,17 @@ std::string CachedDownloader::removeInvalidChars(const std::string& path) const 
 }
 
 
-const URL CachedDownloader::getCacheFileName(const URL& url) const {
-  return URL(_cacheDirectory, removeInvalidChars(url.getPath()));
-}
+//const URL CachedDownloader::getCacheFileName(const URL& url) const {
+//  return URL(_cacheDirectory, removeInvalidChars(url.getPath()));
+//}
 
 long CachedDownloader::request(const URL& url,
                                long priority,
                                IDownloadListener* listener,
                                bool deleteListener) {
   
-  const URL cacheFileName = getCacheFileName(url);
   
-  
-  const ByteBuffer* cachedBuffer = _cacheStorage->read(cacheFileName);
+  const ByteBuffer* cachedBuffer = _cacheStorage->read(url);
   if (cachedBuffer == NULL) {
     // cache miss
     const long requestId = _downloader->request(url,
@@ -106,7 +104,7 @@ long CachedDownloader::request(const URL& url,
                                                 new SaverDownloadListener(listener,
                                                                           deleteListener,
                                                                           _cacheStorage,
-                                                                          cacheFileName),
+                                                                          url),
                                                 true);
     
     delete cachedBuffer;

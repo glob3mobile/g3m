@@ -123,7 +123,7 @@ public:
   _ownedMesh(ownedMesh),
   _mappings(mappings),
   _levelsCount(mappings->size()),
-  _currentLevel(0),
+  _currentLevel(mappings->size() + 1),
   _currentLevelIsValid(false)
   {
     if (_mappings->size() <= 0) {
@@ -141,11 +141,11 @@ public:
   
   Extent* getExtent() const;
 
-  void setGLTextureIDForLevel(int level,
+  bool setGLTextureIDForLevel(int level,
                               const GLTextureID glTextureID);
   
-  void setGLTextureIDForInversedLevel(int inversedLevel,
-                                      const GLTextureID glTextureID);
+//  void setGLTextureIDForInversedLevel(int inversedLevel,
+//                                      const GLTextureID glTextureID);
   
   const GLTextureID getTopLevelGLTextureID() const;
 

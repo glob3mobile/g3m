@@ -421,7 +421,8 @@ const GLTextureID GL::getGLTextureID() {
     const std::vector<GLTextureID> ids = _gl->genTextures(bugdetSize);
     
     for (int i = 0; i < bugdetSize; i++) {
-      _texturesIdBag.push_back(ids[i]);
+//      _texturesIdBag.push_back(ids[i]);
+      _texturesIdBag.push_front(ids[i]);
     }
     
     _texturesIdAllocationCounter += bugdetSize;
@@ -433,16 +434,20 @@ const GLTextureID GL::getGLTextureID() {
   const GLTextureID result = _texturesIdBag.back();
   _texturesIdBag.pop_back();
   
-//  printf("   - Assigning 1 texturesId from bag (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
-//         _texturesIdBag.size(),
-//         _texturesIdGetCounter,
-//         _texturesIdTakeCounter,
-//         _texturesIdGetCounter - _texturesIdTakeCounter);
+  printf("   - Assigning 1 texturesId (#%d) from bag (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
+         result.getGLTextureID(),
+         _texturesIdBag.size(),
+         _texturesIdGetCounter,
+         _texturesIdTakeCounter,
+         _texturesIdGetCounter - _texturesIdTakeCounter);
   
   return result;
 }
 
 void GL::deleteTexture(const GLTextureID& textureId) {
+  if (!textureId.isValid()) {
+    return;
+  }
   const int textures[] = {
     textureId.getGLTextureID()
   };
@@ -452,7 +457,8 @@ void GL::deleteTexture(const GLTextureID& textureId) {
   
   _texturesIdTakeCounter++;
   
-  printf("   - Delete 1 texturesId (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
+  printf("   - Delete 1 texturesId (#%d) (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
+         textureId.getGLTextureID(),
          _texturesIdBag.size(),
          _texturesIdGetCounter,
          _texturesIdTakeCounter,

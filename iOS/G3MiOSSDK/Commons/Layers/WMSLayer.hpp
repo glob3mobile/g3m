@@ -37,6 +37,34 @@ class WMSLayer: public Layer {
   
 public:
   
+  
+  WMSLayer(const std::string& mapLayers,
+           const std::string& queryLayers,
+           const std::string& serverURL,
+           const WMSServerVersion serverVersion,
+           const std::string& format,
+           const Sector& bbox,
+           const std::string srs,
+           const std::string& style,
+           const bool isTransparent,
+           const Angle& minTileLongitudeDelta,
+           const Angle& maxTileLongitudeDelta):
+  _mapLayers(mapLayers),
+  _queryLayers(queryLayers),
+  _format(format),
+  _style(style),
+  _bbox(bbox),
+  _srs(srs),
+  _serverURL(serverURL),
+  _serverVersion(serverVersion),
+  _isTransparent(isTransparent),
+  _minTileLongitudeDelta(minTileLongitudeDelta),
+  _maxTileLongitudeDelta(maxTileLongitudeDelta)
+  {
+    
+  }
+
+  
   WMSLayer(const std::string& mapLayers,
            const std::string& serverURL,
            const WMSServerVersion serverVersion,
@@ -61,33 +89,7 @@ public:
   {
 
   }
-  
-  WMSLayer(const std::string& mapLayers,
-           const std::string& queryLayers,
-           const std::string& serverURL,
-           const WMSServerVersion serverVersion,
-           const std::string& format,
-           const Sector& bbox,
-           const std::string srs,
-           const std::string& style,
-           const bool isTransparent,
-           const Angle& minTileLongitudeDelta, 
-           const Angle& maxTileLongitudeDelta):
-  _mapLayers(mapLayers),
-  _queryLayers(queryLayers),
-  _format(format),
-  _style(style),
-  _bbox(bbox),
-  _srs(srs),
-  _serverURL(serverURL),
-  _serverVersion(serverVersion),
-  _isTransparent(isTransparent),
-  _minTileLongitudeDelta(minTileLongitudeDelta),
-  _maxTileLongitudeDelta(maxTileLongitudeDelta)
-  {
-
-  }
-  
+    
   bool fullContains(const Sector& s) const {
     return _bbox.fullContains(s);
   }

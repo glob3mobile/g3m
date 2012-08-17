@@ -17,7 +17,7 @@ NSString* SQLiteStorage_iOS::getDBPath() const {
 //  NSString *tmpDirectory = NSTemporaryDirectory();
 //  NSString *dbPath = [tmpDirectory stringByAppendingPathComponent: toNSString(_databaseName)];
   
-  NSLog(@"dbPath=%@", dbPath);
+//  NSLog(@"dbPath=%@", dbPath);
   
   return dbPath;
 }

@@ -71,7 +71,7 @@ public:
     const int splitsByLatitude = 1;
     const int splitsByLongitude = 1;
     const int topLevel = 0;
-    const int maxLevel = 2;
+    const int maxLevel = 5;
     const int tileTextureHeight = 256;
     const int tileTextureWidth = 256;
     const int tRes = 10;

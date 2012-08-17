@@ -18,19 +18,16 @@ class CachedDownloader : public IDownloader {
 private:
   IDownloader* _downloader;
   IStorage*    _cacheStorage;
-  const URL    _cacheDirectory;
   
-  const URL getCacheFileName(const URL& url) const;
+//  const URL getCacheFileName(const URL& url) const;
   
   std::string removeInvalidChars(const std::string& path) const;
 
 public:
   CachedDownloader(IDownloader* downloader,
-                   IStorage*    cacheStorage,
-                   const URL    cacheDirectory) :
+                   IStorage*    cacheStorage) :
   _downloader(downloader),
-  _cacheStorage(cacheStorage),
-  _cacheDirectory(cacheDirectory)
+  _cacheStorage(cacheStorage)
   {
     
   }

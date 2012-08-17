@@ -16,17 +16,21 @@
 #include "TilesRenderParameters.hpp"
 #include "TileKey.hpp"
 
-static long visibleCounter = 0;
+//static long visibleCounter = 0;
 
 Tile::~Tile() {
+  if (_isVisible) {
+    deleteTexturizerMesh();
+  }
+  
   prune(NULL);
   
-  if (_isVisible) {
-    visibleCounter--;
-    printf("**** Tile %s is DESTROYED (visibles=%ld)\n",
-           getKey().description().c_str(),
-           visibleCounter);
-  }
+//  if (_isVisible) {
+//    visibleCounter--;
+//    printf("**** Tile %s is DESTROYED (visibles=%ld)\n",
+//           getKey().description().c_str(),
+//           visibleCounter);
+//  }
 
   if (_texturizerTimer != NULL) {
     delete _texturizerTimer;
@@ -240,12 +244,15 @@ std::vector<Tile*>* Tile::getSubTiles() {
 void Tile::prune(const TileRenderContext* trc) {
   if (_subtiles != NULL) {
     
-    TileTexturizer* texturizer = trc->getTexturizer();
+    TileTexturizer* texturizer = (trc == NULL) ? NULL : trc->getTexturizer();
     
     const int subtilesSize = _subtiles->size();
     for (int i = 0; i < subtilesSize; i++) {
       Tile* subtile = _subtiles->at(i);
-      
+
+      int ___TESTING;
+      subtile->setIsVisible(false);
+
       subtile->prune(trc);
       if (texturizer != NULL) {
         texturizer->tileToBeDeleted(subtile, subtile->_texturizerMesh);
@@ -279,28 +286,32 @@ void Tile::setIsVisible(bool isVisible) {
     _isVisible = isVisible;
 
     if (_isVisible) {
-      visibleCounter++;
-      printf("**** Tile %s becomed Visible (visibles=%ld)\n",
-             getKey().description().c_str(),
-             visibleCounter);
+//      visibleCounter++;
+//      printf("**** Tile %s becomed Visible (visibles=%ld)\n",
+//             getKey().description().c_str(),
+//             visibleCounter);
     }
     else {
-      visibleCounter--;
-      printf("**** Tile %s becomed INVisible (visibles=%ld)\n",
-             getKey().description().c_str(),
-             visibleCounter);
-      
-      if (_level > 0) {
-        int _BIG_BANG;
-        _texturizer->tileMeshToBeDeleted(this, _texturizerMesh);
-        
-        delete _texturizerMesh;
-        _texturizerMesh = NULL;
-        
-        setTexturizerDirty(true);
-      }
+//      visibleCounter--;
+//      printf("**** Tile %s becomed INVisible (visibles=%ld)\n",
+//             getKey().description().c_str(),
+//             visibleCounter);
+      deleteTexturizerMesh();
     }
   }
+}
+
+void Tile::deleteTexturizerMesh() {
+  if ((_level > 0) && (_texturizerMesh != NULL)) {
+    int _BIG_BANG;
+//    _texturizer->tileMeshToBeDeleted(this, _texturizerMesh);
+//    
+//    delete _texturizerMesh;
+//    _texturizerMesh = NULL;
+//    
+//    setTexturizerDirty(true);
+  }
+
 }
 
 void Tile::render(const RenderContext* rc,

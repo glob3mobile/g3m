@@ -154,8 +154,7 @@ public:
   IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
   Downloader* downloaderOLD = new Downloader(storage, 5, factory->createNetwork());
   IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
-                                                 storage,
-                                                 URL(".cache"));
+                                                 storage);
   
   //LAYERS
   LayerSet* layerSet = new LayerSet();
@@ -350,8 +349,7 @@ public:
 //                                               cleanCache);
   
   IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
-                                                 storage,
-                                                 URL(".cache"));
+                                                 storage);
   
   if (false) {
     
@@ -387,16 +385,16 @@ public:
   //LAYERS
   LayerSet* layerSet = new LayerSet();
  
-//  WMSLayer* blueMarble = new WMSLayer("bmng200405",
-//                                      "http://www.nasa.network.com/wms?",
-//                                      WMS_1_1_0,
-//                                      "image/jpeg",
-//                                      Sector::fullSphere(),
-//                                      "EPSG:4326",
-//                                      "",
-//                                      false,
-//                                      Angle::nan(),
-//                                      Angle::nan());
+  WMSLayer* blueMarble = new WMSLayer("bmng200405",
+                                      "http://www.nasa.network.com/wms?",
+                                      WMS_1_1_0,
+                                      "image/jpeg",
+                                      Sector::fullSphere(),
+                                      "EPSG:4326",
+                                      "",
+                                      false,
+                                      Angle::nan(),
+                                      Angle::nan());
   
 //  WMSLayer *pnoa = new WMSLayer("PNOA",
 //                                "http://www.idee.es/wms/PNOA/PNOA",
@@ -434,32 +432,33 @@ public:
 //                                  Angle::nan(),
 //                                  Angle::nan());
 
-  WMSLayer *oceans = new WMSLayer(//"igo:bmng200401,igo:ocean_2010_0_15",
-                                  "igo:bmng200401,igo:ocean_cnt__2010_0_15_tiled,igo:ocean_2010_0_15_tiled",
+//  WMSLayer *oceans = new WMSLayer(//"igo:bmng200401,igo:ocean_2010_0_15",
+//                                  "igo:bmng200401,igo:ocean_2010_0_15_tiled,igo:ocean_cnt__2010_0_15_tiled",
+////                                  "igo:ocean_2010_0_15_tiled",
 //                                  "igo:ocean_2010_0_15_tiled",
-                                  "igo:ocean_2010_0_15_tiled",
-                                  "http://igosoftware.dyndns.org:8081/geoserver/igo/wms",
-                                  WMS_1_3_0,
-                                  "image/jpeg",
-                                  Sector::fullSphere(),
-                                  "EPSG:4326",
-                                  "",
-                                  false,
-                                  Angle::nan(),
-                                  Angle::nan());
-
-  oceans->addTerrainTouchEventListener(new OceanTerrainTouchEventListener(factory, downloader));
+//                                  "http://igosoftware.dyndns.org:8081/geoserver/igo/wms",
+//                                  WMS_1_3_0,
+//                                  "image/jpeg",
+//                                  Sector::fullSphere(),
+//                                  "EPSG:4326",
+//                                  "",
+//                                  false,
+//                                  Angle::nan(),
+//                                  Angle::nan());
+//
+//  oceans->addTerrainTouchEventListener(new OceanTerrainTouchEventListener(factory, downloader));
   
   //ORDER IS IMPORTANT
-//  layerSet->addLayer(blueMarble);
+  layerSet->addLayer(blueMarble);
 //  layerSet->addLayer(pnoa);
 //  layerSet->addLayer(vias);
-  layerSet->addLayer(oceans);
+//  layerSet->addLayer(oceans);
   
   // very basic tile renderer
   if (true) {
     const bool renderDebug = true;
     TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug);
+//    TilesRenderParameters* parameters = TilesRenderParameters::createSingleSector(renderDebug);
     
     TileTexturizer* texturizer = NULL;
     if (true) {
