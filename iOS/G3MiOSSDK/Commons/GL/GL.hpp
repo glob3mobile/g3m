@@ -56,6 +56,12 @@ private:
   
   const float* _textureCoordinates;
   
+  float _flatColorR;
+  float _flatColorG;
+  float _flatColorB;
+  float _flatColorA;
+  float _flatColorIntensity;
+  
   inline void loadModelView();
   
   const GLTextureID getGLTextureID();
@@ -81,7 +87,12 @@ public:
   _translationY(0),
   _texturesIdGetCounter(0),
   _texturesIdTakeCounter(0),
-  _textureCoordinates(NULL)
+  _textureCoordinates(NULL),
+  _flatColorR(0),
+  _flatColorG(0),
+  _flatColorB(0),
+  _flatColorA(0),
+  _flatColorIntensity(0)
   {
     
   }

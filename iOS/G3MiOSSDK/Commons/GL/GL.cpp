@@ -18,32 +18,32 @@
 
 
 struct UniformsStruct {
-  int  Projection;
-  int  Modelview;
-  int   Sampler;
-  int   EnableTexture;
-  int   FlatColor;
-  int   TranslationTexCoord;
-  int   ScaleTexCoord;
-  int   PointSize;
+  int Projection;
+  int Modelview;
+  int Sampler;
+  int EnableTexture;
+  int FlatColor;
+  int TranslationTexCoord;
+  int ScaleTexCoord;
+  int PointSize;
   
   //FOR BILLBOARDING
-  int   BillBoard;
-  int   ViewPortRatio;
+  int BillBoard;
+  int ViewPortRatio;
   
   //FOR COLOR MIXING
-  int   FlatColorIntensity;
-  int   EnableColorPerVertex;
-  int   EnableFlatColor;
-  int   ColorPerVertexIntensity;
+  int FlatColorIntensity;
+  int EnableColorPerVertex;
+  int EnableFlatColor;
+  int ColorPerVertexIntensity;
 } Uniforms;
 
 
 struct AttributesStruct {
-  int   Position;
-  int   TextureCoord;
-  int   Color;
-  int   Normal;
+  int Position;
+  int TextureCoord;
+  int Color;
+  int Normal;
 } Attributes;
 
 
@@ -126,8 +126,23 @@ void GL::clearScreen(float r, float g, float b, float a) {
 }
 
 void GL::color(float r, float g, float b, float a) {
-  _gl->uniform4f(Uniforms.FlatColor, r, g, b, a);
+  if (
+      (_flatColorR != r) ||
+      (_flatColorG != g) ||
+      (_flatColorB != b) ||
+      (_flatColorA != a)
+      ) {
+    _gl->uniform4f(Uniforms.FlatColor, r, g, b, a);
+    
+    _flatColorR = r;
+    _flatColorG = g;
+    _flatColorB = b;
+    _flatColorA = a;
+  }
+  
+//  _gl->uniform4f(Uniforms.FlatColor, r, g, b, a);
 }
+
 void GL::transformTexCoords(float scaleX,
                             float scaleY,
                             float translationX,
@@ -353,8 +368,14 @@ void GL::enableVertexFlatColor(float r, float g, float b, float a,
     _gl->uniform1i(Uniforms.EnableFlatColor, true);
     _enableFlatColor = true;
   }
-  _gl->uniform4f(Uniforms.FlatColor, r, g, b, a);
-  _gl->uniform1f(Uniforms.FlatColorIntensity, intensity);
+  
+  color(r, g, b, a);
+  
+//  _gl->uniform1f(Uniforms.FlatColorIntensity, intensity);
+  if (_flatColorIntensity != intensity) {
+    _gl->uniform1f(Uniforms.FlatColorIntensity, intensity);
+    _flatColorIntensity = intensity;
+  }
 }
 
 void GL::disableVertexFlatColor() {
@@ -457,10 +478,10 @@ void GL::deleteTexture(const GLTextureID& textureId) {
   
   _texturesIdTakeCounter++;
   
-  printf("   - Delete 1 texturesId (#%d) (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
-         textureId.getGLTextureID(),
-         _texturesIdBag.size(),
-         _texturesIdGetCounter,
-         _texturesIdTakeCounter,
-         _texturesIdGetCounter - _texturesIdTakeCounter);
+//  printf("   - Delete 1 texturesId (#%d) (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
+//         textureId.getGLTextureID(),
+//         _texturesIdBag.size(),
+//         _texturesIdGetCounter,
+//         _texturesIdTakeCounter,
+//         _texturesIdGetCounter - _texturesIdTakeCounter);
 }

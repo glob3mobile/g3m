@@ -20,7 +20,7 @@
 #include "Geodetic3D.hpp"
 
 #include "RCObject.hpp"
-
+#include "ITimer.hpp"
 
 enum PetitionStatus {
   STATUS_PENDING,
@@ -172,6 +172,7 @@ private:
   bool _finalized;
   bool _canceled;
   bool _anyCanceled;
+  bool _alreadyStarted;
   
 public:
   LeveledTexturedMesh* _mesh;
@@ -197,7 +198,8 @@ public:
   _mesh(NULL),
   _texCoords(texCoords),
   _finalized(false),
-  _canceled(false)
+  _canceled(false),
+  _alreadyStarted(false)
   {
     _petitions = layerSet->createTilePetitions(rc,
                                                tile,
@@ -214,6 +216,10 @@ public:
   }
   
   void start() {
+    if (_alreadyStarted) {
+      return;
+    }
+    _alreadyStarted = true;
     if (_tile == NULL) {
       return;
     }
@@ -238,6 +244,10 @@ public:
       
       _requestsIds.push_back(requestId);
     }
+    
+//    if (_finalized) {
+//      printf("SYNC finalization of Tile %s\n", _tile->getKey().description().c_str());
+//    }
   }
   
   ~TileTextureBuilder() {
@@ -554,14 +564,64 @@ Mesh* MultiLayerTileTexturizer::texturize(const RenderContext* rc,
                                           Mesh* tessellatorMesh,
                                           Mesh* previousMesh) {
   
+//  _texturesHandler = rc->getTexturesHandler();
+//
+//  TileTextureBuilderHolder* builderHolder = (TileTextureBuilderHolder*) tile->getTexturizerData();
+//
+//  if (previousMesh != NULL) {
+//    // previousMesh is NULL only in the first call to texturize().
+//    
+//    if (builderHolder != NULL) {
+//      const bool startBuilder = ((tile->getLevel() == _parameters->_topLevel) ||
+//                                 (trc->getStatistics()->getBuildersStartsInFrame() < 1) ||
+//                                 (rc->getFrameStartTimer()->elapsedTime().milliseconds() < 25));
+//
+//      if (startBuilder) {
+//        trc->getStatistics()->computeBuilderStartInFrame();
+//        builderHolder->get()->start();
+//        tile->setTexturizerDirty(false);
+//      }
+//    }
+//    
+//    return previousMesh;
+//  }
+//  
+//  if (builderHolder == NULL) {
+//    builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this,
+//                                                                        rc,
+//                                                                        _layerSet,
+//                                                                        _parameters,
+//                                                                        _downloader,
+//                                                                        tile,
+//                                                                        tessellatorMesh,
+//                                                                        getTextureCoordinates(trc)));
+//    tile->setTexturizerData(builderHolder);
+////    builderHolder->get()->start();
+//    
+//    const bool startBuilder = ((tile->getLevel() == _parameters->_topLevel) ||
+//                               (trc->getStatistics()->getBuildersStartsInFrame() < 1) ||
+//                               (rc->getFrameStartTimer()->elapsedTime().milliseconds() < 25));
+//    if (startBuilder) {
+//      trc->getStatistics()->computeBuilderStartInFrame();
+//      builderHolder->get()->start();
+//      tile->setTexturizerDirty(false);
+//    }
+//    
+//  }
+//  else {
+//    printf("please break (point) me\n");
+//  }
+//  
+//  int ___new_texturizer_dgd_at_work;
+//  
+//  return builderHolder->get()->getMesh();
+  
+  
   _texturesHandler = rc->getTexturesHandler();
+
   
-  if (previousMesh != NULL) {
-    return previousMesh;
-  }
-  
-  LeveledTexturedMesh* mesh = NULL;
   TileTextureBuilderHolder* builderHolder = (TileTextureBuilderHolder*) tile->getTexturizerData();
+  
   if (builderHolder == NULL) {
     builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this,
                                                                         rc,
@@ -572,40 +632,20 @@ Mesh* MultiLayerTileTexturizer::texturize(const RenderContext* rc,
                                                                         tessellatorMesh,
                                                                         getTextureCoordinates(trc)));
     tile->setTexturizerData(builderHolder);
+  }
+  
+  int __TODO_tune_render_budget;
+  const bool startBuilder = ((tile->getLevel() == _parameters->_topLevel) ||
+                             (trc->getStatistics()->getBuildersStartsInFrame() < 1) /*||
+                             (rc->getFrameStartTimer()->elapsedTime().milliseconds() < 33)*/);
+  if (startBuilder) {
+    trc->getStatistics()->computeBuilderStartInFrame();
     builderHolder->get()->start();
+    tile->setTexturizerDirty(false);
   }
-  else {
-    printf("please break (point) me\n");
-  }
+
+  return builderHolder->get()->getMesh();
   
-  mesh = builderHolder->get()->getMesh();
-  
-  //  const TileKey key = tile->getKey();
-  //  TileTextureBuilder* builder = _builders[key];
-  //  LeveledTexturedMesh* mesh = NULL;
-  //  if (builder == NULL) {
-  //    builder = new TileTextureBuilder(this, rc, _layerSet, _parameters, _downloader, tile, tessellatorMesh, getTextureCoordinates(trc));
-  //    _builders[key] = builder;
-  //    mesh = builder->getMesh();
-  //    builder->start();
-  //  }
-  //  else {
-  //    printf("please break (point) me\n");
-  //  }
-  
-  //  if (builder != NULL) {
-  //    builder->cancel();
-  ////    builder->_mesh = NULL;
-  ////    delete builder;
-  //  }
-  //  builder = new TileTextureBuilder(this, rc, _layerSet, _parameters, _downloader, tile, tessellatorMesh, getTextureCoordinates(trc));
-  //  _builders[key] = builder;
-  
-  int ___new_texturizer_dgd_at_work;
-  
-  tile->setTexturizerDirty(false);
-  
-  return mesh;
 }
 
 void MultiLayerTileTexturizer::tileToBeDeleted(Tile* tile,

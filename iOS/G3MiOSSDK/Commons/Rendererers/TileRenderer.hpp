@@ -139,13 +139,15 @@ private:
   std::map<int, int> _tilesRenderedByLevel;
   
   int _splitsCountInFrame;
+  int _buildersStartsInFrame;
   
 public:
   TilesStatistics() :
   _tilesProcessed(0),
   _tilesVisible(0),
   _tilesRendered(0),
-  _splitsCountInFrame(0)
+  _splitsCountInFrame(0),
+  _buildersStartsInFrame(0)
   {
     
   }
@@ -154,10 +156,18 @@ public:
     return _splitsCountInFrame;
   }
   
-  void computeSplit() {
+  void computeSplitInFrame() {
     _splitsCountInFrame++;
   }
   
+  int getBuildersStartsInFrame() const {
+    return _buildersStartsInFrame;
+  }
+  
+  void computeBuilderStartInFrame() {
+    _buildersStartsInFrame++;
+  }
+
   void computeTileProcessed(Tile* tile) {
     _tilesProcessed++;
     

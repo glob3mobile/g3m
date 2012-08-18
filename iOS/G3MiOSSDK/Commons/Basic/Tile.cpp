@@ -154,7 +154,7 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
       return true;
     }
     
-    if (trc->getLastSplitTimer()->elapsedTime().milliseconds() < 10) {
+    if (trc->getLastSplitTimer()->elapsedTime().milliseconds() < 25) {
       // there are not more time-budget to spend
       return true;
     }
@@ -249,6 +249,8 @@ std::vector<Tile*>* Tile::getSubTiles() {
 void Tile::prune(const TileRenderContext* trc) {
   if (_subtiles != NULL) {
     
+//    printf("= pruned tile %s\n", getKey().description().c_str());
+    
     TileTexturizer* texturizer = (trc == NULL) ? NULL : trc->getTexturizer();
     
     const int subtilesSize = _subtiles->size();
@@ -335,7 +337,7 @@ void Tile::render(const RenderContext* rc,
       std::vector<Tile*>* subTiles = getSubTiles();
       if (_justCreatedSubtiles) {
         trc->getLastSplitTimer()->start();
-        statistics->computeSplit();
+        statistics->computeSplitInFrame();
         _justCreatedSubtiles = false;
       }
       

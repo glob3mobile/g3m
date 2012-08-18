@@ -150,7 +150,7 @@ public:
   
   IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
   Downloader* downloaderOLD = new Downloader(storage, 5, factory->createNetwork());
-  IDownloader* downloader = new CachedDownloader(new Downloader_iOS(4),
+  IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
                                                  storage);
   
   //LAYERS
@@ -285,7 +285,7 @@ public:
                               width, height,
                               Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
                               true,
-                              true);
+                              false);
   
   Geodetic3D australia = Geodetic3D::fromDegrees(-26.91, 133.94, 1.1e7);
   ((G3MWidget*)_widget)->getNextCamera()->setPosition(australia);
@@ -334,7 +334,7 @@ public:
   
   IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
   Downloader* downloaderOLD = new Downloader(storage, 5, factory->createNetwork());
-  IDownloader* downloader = new CachedDownloader(new Downloader_iOS(4),
+  IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
                                                  storage);
   
   if (false) {
@@ -466,7 +466,7 @@ public:
   
   // very basic tile renderer
   if (true) {
-    const bool renderDebug = true;
+    const bool renderDebug = false;
     TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug);
 //    TilesRenderParameters* parameters = TilesRenderParameters::createSingleSector(renderDebug);
     
@@ -486,7 +486,7 @@ public:
       texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
     }
     
-    const bool showStatistics = true;
+    const bool showStatistics = false;
     TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
                                         texturizer,
                                         parameters,
@@ -558,7 +558,7 @@ public:
     comp->addRenderer(sgr);
   }
   
-  comp->addRenderer(new GLErrorRenderer());
+//  comp->addRenderer(new GLErrorRenderer());
   
   
   TextureBuilder* texBuilder = new CPUTextureBuilder();
@@ -572,6 +572,9 @@ public:
   std::vector <ICameraConstrainer *> cameraConstraint;
   cameraConstraint.push_back(new SimpleCameraConstrainer);
 
+  const bool logFPS = false;
+  const bool logDownloaderStatistics = false;
+  
   _widget = G3MWidget::create(factory,
                               logger,
                               gl,
@@ -585,8 +588,8 @@ public:
                               scheduler,
                               width, height,
                               Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
-                              true,
-                              true);
+                              logFPS,
+                              logDownloaderStatistics);
 }
 
 //The EAGL view is stored in the nib file. When it's unarchived it's sent -initWithCoder:

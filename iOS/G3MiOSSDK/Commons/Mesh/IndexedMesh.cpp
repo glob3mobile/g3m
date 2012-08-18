@@ -146,24 +146,30 @@ void IndexedMesh::render(const RenderContext* rc) const {
   
   gl->enableVerticesPosition();
   
-  if (_colors != NULL)
-    gl->enableVertexColor(_colors, _colorsIntensity);
-  else
+  if (_colors == NULL) {
     gl->disableVertexColor();
+  }
+  else {
+    gl->enableVertexColor(_colors, _colorsIntensity);
+  }
   
-  if (_flatColor != NULL)
-    gl->enableVertexFlatColor(*_flatColor, _colorsIntensity);
-  else
+  if (_flatColor == NULL) {
     gl->disableVertexFlatColor();
+  }
+  else {
+    gl->enableVertexFlatColor(*_flatColor, _colorsIntensity);
+  }
   
-  if (_normals != NULL)
-    gl->enableVertexNormal(_normals);
-  else
+  if (_normals == NULL) {
     gl->disableVertexNormal();
+  }
+  else {
+    gl->enableVertexNormal(_normals);
+  }
   
   gl->vertexPointer(3, 0, _vertices);
   
-  if (_centerStrategy!=NoCenter) {
+  if (_centerStrategy != NoCenter) {
     gl->pushMatrix();
     gl->multMatrixf(MutableMatrix44D::createTranslationMatrix(_center));
   }
@@ -182,7 +188,7 @@ void IndexedMesh::render(const RenderContext* rc) const {
       break;
   }
   
-  if (_centerStrategy!=NoCenter) {
+  if (_centerStrategy != NoCenter) {
     gl->popMatrix();
   }
   
