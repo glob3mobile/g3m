@@ -10,6 +10,9 @@
 
 #import "Downloader_iOS_Handler.h"
 
+#include <sstream>
+
+
 void Downloader_iOS::start() {
   for (Downloader_iOS_WorkerThread* worker in _workers) {
     [worker start];
@@ -27,7 +30,9 @@ Downloader_iOS::~Downloader_iOS() {
 }
 
 Downloader_iOS::Downloader_iOS(int maxConcurrentOperationCount) :
-_requestIdCounter(1)
+_requestIdCounter(1),
+_requestsCounter(0),
+_cancelsCounter(0)
 {
   NSURLCache* cache = [[NSURLCache alloc] initWithMemoryCapacity: 0
                                                     diskCapacity: 0
@@ -52,6 +57,8 @@ void Downloader_iOS::cancelRequest(long requestId) {
   }
   
   [_lock lock];
+  
+  _cancelsCounter++;
   
   __block bool found = false;
   
@@ -161,6 +168,8 @@ long Downloader_iOS::request(const URL &url,
   
   [_lock lock];
   
+  _requestsCounter++;
+  
   const long requestId = _requestIdCounter++;
   
   handler = [_downloadingHandlers objectForKey: nsURL];
@@ -193,4 +202,26 @@ long Downloader_iOS::request(const URL &url,
   [_lock unlock];
   
   return requestId;
+}
+
+const std::string Downloader_iOS::statistics() {
+  std::ostringstream buffer;
+
+  buffer << "Downloader_iOS(downloading=";
+
+  [_lock lock];
+  
+  buffer << [_downloadingHandlers count];
+  buffer << ", queued=";
+  buffer << [_queuedHandlers count];
+  buffer << ", totalRequests=";
+  buffer << _requestsCounter;
+  buffer << ", totalCancels=";
+  buffer << _cancelsCounter;
+
+  [_lock unlock];
+
+  buffer << ")";
+  
+  return buffer.str();
 }

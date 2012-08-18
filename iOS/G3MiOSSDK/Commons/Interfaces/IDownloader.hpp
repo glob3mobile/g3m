@@ -10,7 +10,11 @@
 #define G3MiOSSDK_IDownloader_hpp
 
 #include "URL.hpp"
-#include "IDownloadListener.hpp"
+
+#include <string>
+
+class IDownloadListener;
+
 
 class IDownloader {
 public:
@@ -26,6 +30,9 @@ public:
   virtual ~IDownloader() {
     
   }
+
+  virtual const std::string statistics() = 0;
+  
 };
 
 #endif

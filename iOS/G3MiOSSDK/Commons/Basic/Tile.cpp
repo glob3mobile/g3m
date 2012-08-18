@@ -296,17 +296,17 @@ void Tile::setIsVisible(bool isVisible) {
 void Tile::deleteTexturizerMesh() {
   if ((_level > 0) && (_texturizerMesh != NULL)) {
     int _BIG_BANG;
-//    _texturizer->tileMeshToBeDeleted(this, _texturizerMesh);
-//    
-//    delete _texturizerMesh;
-//    _texturizerMesh = NULL;
-//    
-//    int __TEST_DELETE_TEXTURIZER_DATA;
-//    delete _texturizerData;
-//    _texturizerData = NULL;
-//    
-//    setTexturizerDirty(true);
-//    setTextureSolved(false);
+    _texturizer->tileMeshToBeDeleted(this, _texturizerMesh);
+    
+    delete _texturizerMesh;
+    _texturizerMesh = NULL;
+    
+    int __TEST_DELETE_TEXTURIZER_DATA;
+    delete _texturizerData;
+    _texturizerData = NULL;
+    
+    setTexturizerDirty(true);
+    setTextureSolved(false);
   }
 }
 

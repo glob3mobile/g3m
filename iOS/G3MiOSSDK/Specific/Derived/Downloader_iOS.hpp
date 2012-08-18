@@ -24,8 +24,11 @@ private:
   NSMutableDictionary* _downloadingHandlers; // downloads current in progress
   NSMutableDictionary* _queuedHandlers;      // queued downloads
   
-  long                 _requestIdCounter;
+  long _requestIdCounter;
   
+  long _requestsCounter;
+  long _cancelsCounter;
+
   NSString* toNSString(const std::string& cppStr) const {
     return [ NSString stringWithCString: cppStr.c_str()
                                encoding: NSUTF8StringEncoding ];
@@ -48,7 +51,9 @@ public:
   
   virtual ~Downloader_iOS();
   
-  virtual void start();
+  void start();
+
+  const std::string statistics();
 
 };
 

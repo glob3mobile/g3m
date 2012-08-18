@@ -23,11 +23,18 @@ private:
   
   std::string removeInvalidChars(const std::string& path) const;
 
+  long _requestsCounter;
+  long _cacheHitsCounter;
+  long _savesCounter;
+  
 public:
   CachedDownloader(IDownloader* downloader,
                    IStorage*    cacheStorage) :
   _downloader(downloader),
-  _cacheStorage(cacheStorage)
+  _cacheStorage(cacheStorage),
+  _requestsCounter(0),
+  _cacheHitsCounter(0),
+  _savesCounter(0)
   {
     
   }
@@ -45,6 +52,11 @@ public:
     delete _downloader;
   }
   
+  const std::string statistics();
+  
+  void countSave() {
+    _savesCounter++;
+  }
   
 };
 

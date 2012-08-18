@@ -23,6 +23,8 @@ class ITimer;
 class EffectsScheduler;
 
 #include <vector>
+#include <string>
+
 #include "Color.hpp"
 
 class ICameraConstrainer;
@@ -45,7 +47,8 @@ public:
                            int               width,
                            int               height,
                            Color             backgroundColor,
-                           const bool        logFPS);
+                           const bool        logFPS,
+                           const bool        logDownloaderStatistics);
   
   ~G3MWidget(); 
   
@@ -90,6 +93,8 @@ private:
   long             _renderCounter;
   long             _totalRenderTime;
   const bool       _logFPS;
+  const bool       _logDownloaderStatistics;
+  std::string      _lastCacheStatistics;
   
   bool      _rendererReady;
   Renderer* _selectedRenderer;
@@ -112,7 +117,8 @@ private:
             int               width,
             int               height,
             Color             backgroundColor,
-            const bool        logFPS);
+            const bool        logFPS,
+            const bool        logDownloaderStatistics);
   
   void initializeDefault()
   {

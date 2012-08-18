@@ -228,13 +228,9 @@ public:
     for (int i = 0; i < _petitionsCount; i++) {
       const Petition* petition = _petitions[i];
       
-      //      const long priority = tile->getLevel() * 1000000 + tile->getRow() * 1000 + tile->getColumn();
+      //const long priority = _tile->getLevel() * 1000000 + _tile->getRow() * 1000 + _tile->getColumn();
       const long priority = _tile->getLevel();
-      //      const long priority = (long) (tile->getLevel() * 1000000000000 + -squaredDistance);
-      
-      //      int ___remove_print;
-      //      printf("Downloading %s\n", petition->getURL().getPath().c_str());
-      
+
       const long requestId = _downloader->request(URL(petition->getURL()),
                                                   priority,
                                                   new BuilderDownloadStepDownloadListener(this, i),
@@ -655,7 +651,7 @@ void MultiLayerTileTexturizer::tileMeshToBeDeleted(Tile* tile,
   TileTextureBuilderHolder* builderHolder = (TileTextureBuilderHolder*) tile->getTexturizerData();
   if (builderHolder != NULL) {
     int __TEST_clean_mesh;
-
+    builderHolder->get()->cancel();
     builderHolder->get()->cleanMesh();
   }
   else {

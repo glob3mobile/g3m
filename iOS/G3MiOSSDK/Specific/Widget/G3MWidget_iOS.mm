@@ -148,12 +148,9 @@ public:
   comp->addRenderer(cameraRenderer);
   
   
-  //STORAGE
-//  NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-//  IStorage* storage = new FileSystemStorage_iOS(URL([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]));
   IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
   Downloader* downloaderOLD = new Downloader(storage, 5, factory->createNetwork());
-  IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
+  IDownloader* downloader = new CachedDownloader(new Downloader_iOS(4),
                                                  storage);
   
   //LAYERS
@@ -170,7 +167,6 @@ public:
 //                                     Angle::nan());
 //  layerSet->addLayer(baseLayer);
 
-  if (false){
 //    Sector s = Sector::fromDegrees(-60, 50, 10, 185);
 //    WMSLayer *wmsl = new WMSLayer("test:contourGSLA",
 //                                  "http://imos2.ersa.edu.au/geo2/test/wms",
@@ -196,24 +192,8 @@ public:
 //    
 //    layerSet->addLayer(wmsl);
 //    layerSet->addLayer(wms_sst);
-  }
   
-//  WMSLayer *oceans = new WMSLayer("igo:bmng200401,igo:ocean_2010_0_15",
-//                                  "igo:ocean_2010_0_15",
-//                                  "http://igosoftware.dyndns.org:8081/geoserver/igo/wms",
-//                                  WMS_1_3_0,
-//                                  "image/jpeg",
-//                                  Sector::fullSphere(),
-//                                  "EPSG:4326",
-//                                  "",
-//                                  false,
-//                                  Angle::nan(),
-//                                  Angle::nan());
-  
-  WMSLayer *oceans = new WMSLayer(//"igo:bmng200401,igo:ocean_2010_0_15",
-                                  //                                  "igo:bmng200401,igo:ocean_2010_0_15_tiled,igo:ocean_cnt__2010_0_15_tiled",
-                                  "igo:bmng200401,igo:sttOZ,igo:cntOZ",
-                                  //                                  "igo:ocean_2010_0_15_tiled",
+  WMSLayer *oceans = new WMSLayer("igo:bmng200401,igo:sttOZ,igo:cntOZ",
                                   "igo:sttOZ",
                                   "http://igosoftware.dyndns.org:8081/geoserver/igo/wms",
                                   WMS_1_3_0,
@@ -224,7 +204,6 @@ public:
                                   false,
                                   Angle::nan(),
                                   Angle::nan());
-
   
   oceans->addTerrainTouchEventListener(new OceanTerrainTouchEventListener(factory, downloader));
   
@@ -305,6 +284,7 @@ public:
                               scheduler,
                               width, height,
                               Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
+                              true,
                               true);
   
   Geodetic3D australia = Geodetic3D::fromDegrees(-26.91, 133.94, 1.1e7);
@@ -352,23 +332,12 @@ public:
   comp->addRenderer(cameraRenderer);
 
   
-  //STORAGE
-//  NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-//  IStorage* storage = new FileSystemStorage_iOS(URL([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]));
   IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
   Downloader* downloaderOLD = new Downloader(storage, 5, factory->createNetwork());
-//  const bool cleanCache = false;
-//  IDownloader* downloader = new Downloader_iOS(4 * 1024 * 1024,     // 4Mb
-//                                               1024 * 1024 * 1024,  // 1G
-//                                               ".G3M_Cache",
-//                                               8,
-//                                               cleanCache);
-  
-  IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
+  IDownloader* downloader = new CachedDownloader(new Downloader_iOS(4),
                                                  storage);
   
   if (false) {
-    
     class Listener : public IDownloadListener {
     private:
       int _onDownload;
@@ -441,16 +410,16 @@ public:
   //LAYERS
   LayerSet* layerSet = new LayerSet();
  
-//  WMSLayer* blueMarble = new WMSLayer("bmng200405",
-//                                      "http://www.nasa.network.com/wms?",
-//                                      WMS_1_1_0,
-//                                      "image/jpeg",
-//                                      Sector::fullSphere(),
-//                                      "EPSG:4326",
-//                                      "",
-//                                      false,
-//                                      Angle::nan(),
-//                                      Angle::nan());
+  WMSLayer* blueMarble = new WMSLayer("bmng200405",
+                                      "http://www.nasa.network.com/wms?",
+                                      WMS_1_1_0,
+                                      "image/jpeg",
+                                      Sector::fullSphere(),
+                                      "EPSG:4326",
+                                      "",
+                                      false,
+                                      Angle::nan(),
+                                      Angle::nan());
   
 //  WMSLayer *pnoa = new WMSLayer("PNOA",
 //                                "http://www.idee.es/wms/PNOA/PNOA",
@@ -475,9 +444,8 @@ public:
 //                                Angle::nan());
   
 
-//  WMSLayer *oceans = new WMSLayer("igo:bmng200401,igo:ocean_2010_0_15,igo:ocean_cnt_2010_0_15",
-//                                  "igo:ocean_2010_0_15,igo:ocean_cnt_2010_0_15",
-//                                  //                                  "igo:ocean_2010_0_15",
+//  WMSLayer *oceans = new WMSLayer("igo:bmng200401,igo:sttOZ,igo:cntOZ",
+//                                  "igo:sttOZ",
 //                                  "http://igosoftware.dyndns.org:8081/geoserver/igo/wms",
 //                                  WMS_1_3_0,
 //                                  "image/jpeg",
@@ -487,29 +455,14 @@ public:
 //                                  false,
 //                                  Angle::nan(),
 //                                  Angle::nan());
-
-  WMSLayer *oceans = new WMSLayer(//"igo:bmng200401,igo:ocean_2010_0_15",
-//                                  "igo:bmng200401,igo:ocean_2010_0_15_tiled,igo:ocean_cnt__2010_0_15_tiled",
-                                  "igo:bmng200401,igo:sttOZ,igo:cntOZ",
-//                                  "igo:ocean_2010_0_15_tiled",
-                                  "igo:sttOZ",
-                                  "http://igosoftware.dyndns.org:8081/geoserver/igo/wms",
-                                  WMS_1_3_0,
-                                  "image/jpeg",
-                                  Sector::fullSphere(),
-                                  "EPSG:4326",
-                                  "",
-                                  false,
-                                  Angle::nan(),
-                                  Angle::nan());
-
-  oceans->addTerrainTouchEventListener(new OceanTerrainTouchEventListener(factory, downloader));
+//
+//  oceans->addTerrainTouchEventListener(new OceanTerrainTouchEventListener(factory, downloader));
   
   //ORDER IS IMPORTANT
-//  layerSet->addLayer(blueMarble);
+  layerSet->addLayer(blueMarble);
 //  layerSet->addLayer(pnoa);
 //  layerSet->addLayer(vias);
-  layerSet->addLayer(oceans);
+//  layerSet->addLayer(oceans);
   
   // very basic tile renderer
   if (true) {
@@ -632,6 +585,7 @@ public:
                               scheduler,
                               width, height,
                               Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
+                              true,
                               true);
 }
 

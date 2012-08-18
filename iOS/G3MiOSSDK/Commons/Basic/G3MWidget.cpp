@@ -33,7 +33,8 @@ G3MWidget::G3MWidget(IFactory*         factory,
                      int               width,
                      int               height,
                      Color             backgroundColor,
-                     const bool        logFPS):
+                     const bool        logFPS,
+                     const bool        logDownloaderStatistics):
 _factory(factory),
 _logger(logger),
 _gl(gl),
@@ -54,7 +55,8 @@ _downloaderOLD(downloaderOLD),
 _downloader(downloader),
 _rendererReady(false), // false until first call to G3MWidget::render()
 _selectedRenderer(NULL),
-_renderStatisticsTimer(NULL)
+_renderStatisticsTimer(NULL),
+_logDownloaderStatistics(logDownloaderStatistics)
 {
   initializeGL();
   
@@ -83,7 +85,8 @@ G3MWidget* G3MWidget::create(IFactory*         factory,
                              int               width,
                              int               height,
                              Color             backgroundColor,
-                             const bool        logFPS) {
+                             const bool        logFPS,
+                             const bool        logDownloaderStatistics) {
   if (logger != NULL) {
     logger->logInfo("Creating G3MWidget...");
   }
@@ -103,7 +106,8 @@ G3MWidget* G3MWidget::create(IFactory*         factory,
                        scheduler,
                        width, height,
                        backgroundColor,
-                       logFPS);
+                       logFPS,
+                       logDownloaderStatistics);
 }
 
 void G3MWidget::initializeGL() {
@@ -225,6 +229,15 @@ int G3MWidget::render() {
       else {
         _renderStatisticsTimer->start();
       }
+    }
+  }
+  
+  if (_logDownloaderStatistics) {
+    const std::string cacheStatistics = _downloader->statistics();
+    
+    if (cacheStatistics != _lastCacheStatistics) {
+      _logger->logInfo("%s" , cacheStatistics.c_str());
+      _lastCacheStatistics = cacheStatistics;
     }
   }
   

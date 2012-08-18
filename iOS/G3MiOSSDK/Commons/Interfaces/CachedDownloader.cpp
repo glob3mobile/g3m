@@ -7,19 +7,24 @@
 //
 
 #include "CachedDownloader.hpp"
+#include "IDownloadListener.hpp"
 
+#include <sstream>
 
 class SaverDownloadListener : public IDownloadListener {
+  CachedDownloader*  _downloader;
   IDownloadListener* _listener;
   const bool         _deleteListener;
   IStorage*          _cacheStorage;
   const URL          _url;
   
 public:
-  SaverDownloadListener(IDownloadListener* listener,
+  SaverDownloadListener(CachedDownloader* downloader,
+                        IDownloadListener* listener,
                         bool deleteListener,
                         IStorage* cacheStorage,
                         const URL url) :
+  _downloader(downloader),
   _listener(listener),
   _deleteListener(deleteListener),
   _cacheStorage(cacheStorage),
@@ -37,6 +42,7 @@ public:
   
   void saveResponse(const Response* response) {
     if (!_cacheStorage->contains(_url)) {
+      _downloader->countSave();
       _cacheStorage->save(_url,
                           *response->getByteBuffer());
     }
@@ -96,14 +102,15 @@ long CachedDownloader::request(const URL& url,
                                long priority,
                                IDownloadListener* listener,
                                bool deleteListener) {
-  
+  _requestsCounter++;
   
   const ByteBuffer* cachedBuffer = _cacheStorage->read(url);
   if (cachedBuffer == NULL) {
     // cache miss
     const long requestId = _downloader->request(url,
                                                 priority,
-                                                new SaverDownloadListener(listener,
+                                                new SaverDownloadListener(this,
+                                                                          listener,
                                                                           deleteListener,
                                                                           _cacheStorage,
                                                                           url),
@@ -114,6 +121,8 @@ long CachedDownloader::request(const URL& url,
   }
   else {
     // cache hit
+    _cacheHitsCounter++;
+    
     Response response(url, cachedBuffer);
     
     listener->onDownload(&response);
@@ -125,4 +134,21 @@ long CachedDownloader::request(const URL& url,
     delete cachedBuffer;
     return -1;
   }
+}
+
+
+const std::string CachedDownloader::statistics() {
+  std::ostringstream buffer;
+  
+  buffer << "CachedDownloader(cache hits=";
+  buffer << _cacheHitsCounter;
+  buffer << "/";
+  buffer << _requestsCounter;
+  buffer << ", saves=";
+  buffer << _savesCounter;
+  buffer << ", downloader=";
+  buffer << _downloader->statistics();
+  buffer << ")";
+  
+  return buffer.str();
 }
