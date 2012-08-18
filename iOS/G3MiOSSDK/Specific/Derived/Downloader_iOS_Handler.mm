@@ -183,7 +183,6 @@
 
 - (void) runWithDownloader:(void*)downloaderV
 {
-  int __dgd_at_work;
   
   Downloader_iOS* downloader = (Downloader_iOS*) downloaderV;
   

@@ -157,7 +157,6 @@ long Downloader_iOS::request(const URL &url,
                              long priority,
                              IDownloadListener* cppListener,
                              bool deleteListener) {
-  int __TODO_new_downloader;
   
   NSURL* nsURL = [NSURL URLWithString: toNSString(url.getPath())];
   
