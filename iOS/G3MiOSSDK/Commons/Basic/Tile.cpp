@@ -149,13 +149,12 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
   
   int __TODO_tune_render_budget;
   if (_subtiles == NULL) { // the tile needs to create the subtiles
-    if (trc->getStatistics()->getSplitsCountInFrame() > 1) {
-      // there are not more splitsCount-budget to spend
-      return true;
-    }
+    //    if (trc->getStatistics()->getSplitsCountInFrame() > 1) {
+    //      // there are not more splitsCount-budget to spend
+    //      return true;
+    //    }
     
-//    if (trc->getLastSplitTimer()->elapsedTime().milliseconds() < 25) {
-   if (trc->getLastSplitTimer()->elapsedTime().milliseconds() < 20) {
+    if (trc->getLastSplitTimer()->elapsedTime().milliseconds() < 20) {
       // there are not more time-budget to spend
       return true;
     }

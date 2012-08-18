@@ -543,8 +543,8 @@ Mesh* MultiLayerTileTexturizer::texturize(const RenderContext* rc,
    to the GPU, causing a bootleneck when too many tiles are renderered for the first time. (dgd)
    */
   const bool startBuilder = ((tile->getLevel() == _parameters->_topLevel) ||
-                             (trc->getStatistics()->getBuildersStartsInFrame() < 1) /*||
-                             (rc->getFrameStartTimer()->elapsedTime().milliseconds() < 33)*/);
+                             (trc->getStatistics()->getBuildersStartsInFrame() < 1) ||
+                             (rc->getFrameStartTimer()->elapsedTime().milliseconds() < 33));
   if (startBuilder) {
     trc->getStatistics()->computeBuilderStartInFrame();
     builderHolder->get()->start();

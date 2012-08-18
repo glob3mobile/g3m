@@ -152,6 +152,12 @@ public:
     
   }
   
+  ~TilesStatistics() {
+//    if (_buildersStartsInFrame > 0) {
+//      printf("buildersStartsInFrame=%d\n", _buildersStartsInFrame);
+//    }
+  }
+  
   int getSplitsCountInFrame() const {
     return _splitsCountInFrame;
   }
