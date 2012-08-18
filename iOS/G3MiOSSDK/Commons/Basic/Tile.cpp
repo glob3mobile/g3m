@@ -154,7 +154,8 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
       return true;
     }
     
-    if (trc->getLastSplitTimer()->elapsedTime().milliseconds() < 25) {
+//    if (trc->getLastSplitTimer()->elapsedTime().milliseconds() < 25) {
+   if (trc->getLastSplitTimer()->elapsedTime().milliseconds() < 20) {
       // there are not more time-budget to spend
       return true;
     }
