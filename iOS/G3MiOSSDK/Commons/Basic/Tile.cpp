@@ -105,11 +105,10 @@ Mesh* Tile::getDebugMesh(const RenderContext* rc,
 
 bool Tile::isVisible(const RenderContext *rc,
                      const TileRenderContext* trc) {
-  
   // test if sector is back oriented with respect to the camera
-//  if (_sector.isBackOriented(rc)) {
-//    return false;
-//  }
+  //  if (_sector.isBackOriented(rc)) {
+  //    return false;
+  //  }
   
   return getTessellatorMesh(rc, trc)->getExtent()->touches(rc->getNextCamera()->getFrustumInModelCoordinates());
 }
@@ -155,7 +154,7 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
       return true;
     }
     
-    if (trc->getLastSplitTimer()->elapsedTime().milliseconds() < 50) {
+    if (trc->getLastSplitTimer()->elapsedTime().milliseconds() < 25) {
       // there are not more time-budget to spend
       return true;
     }
