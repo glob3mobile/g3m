@@ -455,6 +455,11 @@ public:
           }
         }
       }
+      else {
+        if ( mapping->getGLTextureID().isValid() ) {
+          printf("break (point) on me\n");
+        }
+      }
       
       mappings->push_back(mapping);
       ancestor = ancestor->getParent();

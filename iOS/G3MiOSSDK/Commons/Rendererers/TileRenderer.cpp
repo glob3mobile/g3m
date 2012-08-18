@@ -23,7 +23,7 @@ TileRenderer::~TileRenderer() {
   delete _tessellator;
   delete _texturizer;
   delete _parameters;
-
+  
   delete _lastSplitTimer;
   delete _lastTexturizerTimer;
 }
@@ -77,7 +77,7 @@ void TileRenderer::initialize(const InitializationContext* ic) {
     delete _lastSplitTimer;
   }
   _lastSplitTimer      = ic->getFactory()->createTimer();
-
+  
   if (_lastTexturizerTimer != NULL) {
     delete _lastTexturizerTimer;
   }
@@ -99,7 +99,7 @@ bool TileRenderer::isReadyToRender(const RenderContext *rc) {
     }
     _topTilesJustCreated = false;
   }
-
+  
   
   if (_tessellator != NULL) {
     if (!_tessellator->isReady(rc)) {
@@ -122,48 +122,58 @@ int TileRenderer::render(const RenderContext* rc) {
   //Saving camera for Long Press Event
   _lastCamera = rc->getCurrentCamera();
   
-  std::list<Tile*> toVisit;
-  for (int i = 0; i < _topLevelTiles.size(); i++) {
-    toVisit.push_back(_topLevelTiles[i]);
-  }
-  
   TileRenderContext trc(_tessellator,
                         _texturizer,
                         _parameters,
                         &statistics,
                         _lastSplitTimer,
                         _lastTexturizerTimer);
-  
-  
-//  DistanceToCenterTileComparison predicate = DistanceToCenterTileComparison(rc->getNextCamera(),
-//                                                                            rc->getPlanet());
-  
-  
-  
-  while (toVisit.size() > 0) {
-    std::list<Tile*> toVisitInNextIteration;
+
+  if (_firstRender) {
+    // force one render of the topLevel tiles to make the (toplevel) textures loaded as they
+    // will be used as last-change fallback texture for any tile.
+    _firstRender = false;
     
-//    std::sort(toVisit.begin(),
-//              toVisit.end(),
-//              predicate);
-    
-//    predicate.initialize();
-//    toVisit.sort(predicate);
-    
-    for (std::list<Tile*>::iterator iter = toVisit.begin();
-         iter != toVisit.end();
-         iter++) {
-      Tile* tile = *iter;
-      
+    for (int i = 0; i < _topLevelTiles.size(); i++) {
+      Tile* tile = _topLevelTiles[i];
       tile->render(rc,
                    &trc,
-                   &toVisitInNextIteration);
+                   NULL);
+    }
+  }
+  else {
+    std::list<Tile*> toVisit;
+    for (int i = 0; i < _topLevelTiles.size(); i++) {
+      toVisit.push_back(_topLevelTiles[i]);
     }
     
-    toVisit = toVisitInNextIteration;
-    //    toVisitInNextIteration.clear();
+    DistanceToCenterTileComparison predicate = DistanceToCenterTileComparison(rc->getNextCamera(),
+                                                                              rc->getPlanet());
+    
+    while (toVisit.size() > 0) {
+      std::list<Tile*> toVisitInNextIteration;
+      
+      //    std::sort(toVisit.begin(),
+      //              toVisit.end(),
+      //              predicate);
+      
+      predicate.initialize();
+      toVisit.sort(predicate);
+      
+      for (std::list<Tile*>::iterator iter = toVisit.begin();
+           iter != toVisit.end();
+           iter++) {
+        Tile* tile = *iter;
+        
+        tile->render(rc,
+                     &trc,
+                     &toVisitInNextIteration);
+      }
+      
+      toVisit = toVisitInNextIteration;
+      //    toVisitInNextIteration.clear();
+    }
   }
-  
   
   if (_showStatistics) {
     if (!_lastStatistics.equalsTo(statistics)) {

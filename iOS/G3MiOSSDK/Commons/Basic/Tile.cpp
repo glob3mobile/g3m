@@ -154,7 +154,7 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
       return true;
     }
     
-    if (trc->getLastSplitTimer()->elapsedTime().milliseconds() < 25) {
+    if (trc->getLastSplitTimer()->elapsedTime().milliseconds() < 10) {
       // there are not more time-budget to spend
       return true;
     }
@@ -321,7 +321,7 @@ void Tile::render(const RenderContext* rc,
     
     statistics->computeVisibleTile(this);
     
-    if (meetsRenderCriteria(rc, trc)) {
+    if ((toVisitInNextIteration == NULL) || meetsRenderCriteria(rc, trc)) {
       rawRender(rc, trc);
       if (trc->getParameters()->_renderDebug) {
         debugRender(rc, trc);

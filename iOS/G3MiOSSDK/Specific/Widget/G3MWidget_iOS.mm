@@ -198,8 +198,23 @@ public:
 //    layerSet->addLayer(wms_sst);
   }
   
-  WMSLayer *oceans = new WMSLayer("igo:bmng200401,igo:ocean_2010_0_15",
-                                  "igo:ocean_2010_0_15",
+//  WMSLayer *oceans = new WMSLayer("igo:bmng200401,igo:ocean_2010_0_15",
+//                                  "igo:ocean_2010_0_15",
+//                                  "http://igosoftware.dyndns.org:8081/geoserver/igo/wms",
+//                                  WMS_1_3_0,
+//                                  "image/jpeg",
+//                                  Sector::fullSphere(),
+//                                  "EPSG:4326",
+//                                  "",
+//                                  false,
+//                                  Angle::nan(),
+//                                  Angle::nan());
+  
+  WMSLayer *oceans = new WMSLayer(//"igo:bmng200401,igo:ocean_2010_0_15",
+                                  //                                  "igo:bmng200401,igo:ocean_2010_0_15_tiled,igo:ocean_cnt__2010_0_15_tiled",
+                                  "igo:bmng200401,igo:sttOZ,igo:cntOZ",
+                                  //                                  "igo:ocean_2010_0_15_tiled",
+                                  "igo:sttOZ",
                                   "http://igosoftware.dyndns.org:8081/geoserver/igo/wms",
                                   WMS_1_3_0,
                                   "image/jpeg",
@@ -209,6 +224,7 @@ public:
                                   false,
                                   Angle::nan(),
                                   Angle::nan());
+
   
   oceans->addTerrainTouchEventListener(new OceanTerrainTouchEventListener(factory, downloader));
   
@@ -425,16 +441,16 @@ public:
   //LAYERS
   LayerSet* layerSet = new LayerSet();
  
-  WMSLayer* blueMarble = new WMSLayer("bmng200405",
-                                      "http://www.nasa.network.com/wms?",
-                                      WMS_1_1_0,
-                                      "image/jpeg",
-                                      Sector::fullSphere(),
-                                      "EPSG:4326",
-                                      "",
-                                      false,
-                                      Angle::nan(),
-                                      Angle::nan());
+//  WMSLayer* blueMarble = new WMSLayer("bmng200405",
+//                                      "http://www.nasa.network.com/wms?",
+//                                      WMS_1_1_0,
+//                                      "image/jpeg",
+//                                      Sector::fullSphere(),
+//                                      "EPSG:4326",
+//                                      "",
+//                                      false,
+//                                      Angle::nan(),
+//                                      Angle::nan());
   
 //  WMSLayer *pnoa = new WMSLayer("PNOA",
 //                                "http://www.idee.es/wms/PNOA/PNOA",
@@ -472,31 +488,32 @@ public:
 //                                  Angle::nan(),
 //                                  Angle::nan());
 
-//  WMSLayer *oceans = new WMSLayer(//"igo:bmng200401,igo:ocean_2010_0_15",
+  WMSLayer *oceans = new WMSLayer(//"igo:bmng200401,igo:ocean_2010_0_15",
 //                                  "igo:bmng200401,igo:ocean_2010_0_15_tiled,igo:ocean_cnt__2010_0_15_tiled",
-////                                  "igo:ocean_2010_0_15_tiled",
+                                  "igo:bmng200401,igo:sttOZ,igo:cntOZ",
 //                                  "igo:ocean_2010_0_15_tiled",
-//                                  "http://igosoftware.dyndns.org:8081/geoserver/igo/wms",
-//                                  WMS_1_3_0,
-//                                  "image/jpeg",
-//                                  Sector::fullSphere(),
-//                                  "EPSG:4326",
-//                                  "",
-//                                  false,
-//                                  Angle::nan(),
-//                                  Angle::nan());
-//
-//  oceans->addTerrainTouchEventListener(new OceanTerrainTouchEventListener(factory, downloader));
+                                  "igo:sttOZ",
+                                  "http://igosoftware.dyndns.org:8081/geoserver/igo/wms",
+                                  WMS_1_3_0,
+                                  "image/jpeg",
+                                  Sector::fullSphere(),
+                                  "EPSG:4326",
+                                  "",
+                                  false,
+                                  Angle::nan(),
+                                  Angle::nan());
+
+  oceans->addTerrainTouchEventListener(new OceanTerrainTouchEventListener(factory, downloader));
   
   //ORDER IS IMPORTANT
-  layerSet->addLayer(blueMarble);
+//  layerSet->addLayer(blueMarble);
 //  layerSet->addLayer(pnoa);
 //  layerSet->addLayer(vias);
-//  layerSet->addLayer(oceans);
+  layerSet->addLayer(oceans);
   
   // very basic tile renderer
   if (true) {
-    const bool renderDebug = false;
+    const bool renderDebug = true;
     TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug);
 //    TilesRenderParameters* parameters = TilesRenderParameters::createSingleSector(renderDebug);
     

@@ -21,6 +21,7 @@ class TileTexturizer;
 #include <sstream>
 
 #include "Tile.hpp"
+#include "TileKey.hpp"
 #include "Camera.hpp"
 
 
@@ -245,12 +246,14 @@ private:
   
   TilesStatistics _lastStatistics;
   
+  bool _firstRender;
   
   class DistanceToCenterTileComparison {
   private:
     const Camera* _camera;
     const Planet* _planet;
-    std::map<Geodetic2D, double> _distancesCache;
+//    std::map<Geodetic2D, double> _distancesCache;
+    std::map<TileKey, double> _distancesCache;
     
   public:
     DistanceToCenterTileComparison(const Camera *camera,
@@ -264,19 +267,34 @@ private:
     }
     
     double getSquaredDistanceToCamera(const Tile* tile) {
-      const Geodetic2D center = tile->getSector().getCenter();
+//      const Geodetic2D center = tile->getSector().getCenter();
+//      
+//      double distance = _distancesCache[center];
+//      if (distance == 0) {
+//        const Vector3D cameraPosition = _camera->getPosition();
+//        const Vector3D centerVec3 = _planet->toVector3D(center);
+//        
+//        distance = centerVec3.sub(cameraPosition).squaredLength();
+//        
+//        _distancesCache[center] = distance;
+//      }
+//      
+//      return distance;
       
-      double distance = _distancesCache[center];
+      const TileKey key = tile->getKey();
+      double distance = _distancesCache[key];
       if (distance == 0) {
-        const Vector3D cameraPos = _camera->getPosition();
+        const Geodetic2D center = tile->getSector().getCenter();
+        const Vector3D cameraPosition = _camera->getPosition();
         const Vector3D centerVec3 = _planet->toVector3D(center);
         
-        distance = centerVec3.sub(cameraPos).squaredLength();
+        distance = centerVec3.sub(cameraPosition).squaredLength();
         
-        _distancesCache[center] = distance;
+        _distancesCache[key] = distance;
       }
       
       return distance;
+
     }
     
     inline bool operator()(const Tile *t1,
@@ -312,7 +330,8 @@ public:
   _topTilesJustCreated(false),
   _lastSplitTimer(NULL),
   _lastTexturizerTimer(NULL),
-  _lastCamera(NULL)
+  _lastCamera(NULL),
+  _firstRender(false)
   {
     
   }
@@ -335,11 +354,11 @@ public:
 
   
   void start() {
-    
+    _firstRender = true;
   }
   
   void stop() {
-    
+    _firstRender = false;
   }
 
 };
