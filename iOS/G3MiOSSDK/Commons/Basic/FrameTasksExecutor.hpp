@@ -44,7 +44,7 @@ private:
 public:
   FrameTasksExecutor() :
   _minimumExecutionsPerFrame(1),
-  _maximumExecutionsPerFrame(8),
+  _maximumExecutionsPerFrame(16),
   _maximumQueuedTasks(64),
 //  _maximumQueuedTasks(128),
   _maxTimePerFrame(TimeInterval::fromMilliseconds(10)),
