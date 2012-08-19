@@ -209,6 +209,7 @@ const GLTextureID GL::uploadTexture(const IImage* image,
                                     int textureWidth, int textureHeight) {
   const GLTextureID texID = getGLTextureID();
   if (texID.isValid()) {
+    
 #ifdef C_CODE
 //    unsigned char* imageData = new unsigned char[textureWidth * textureHeight * 4];
     unsigned char* imageData;
@@ -226,11 +227,11 @@ const GLTextureID GL::uploadTexture(const IImage* image,
         delete [] _lastImageData;
       }
       _lastImageData = imageData;
-
       _lastTextureWidth = textureWidth;
       _lastTextureHeight = textureHeight;
     }
 #endif
+    
 #ifdef JAVA_CODE
     char[] imageData = new char[textureWidth * textureHeight * 4];
 #endif
@@ -247,9 +248,9 @@ const GLTextureID GL::uploadTexture(const IImage* image,
     _gl->texParameteri(Texture2D, WrapT, ClampToEdge);
     _gl->texImage2D(Texture2D, 0, RGBA, textureWidth, textureHeight, 0, RGBA, UnsignedByte, imageData);
     
-#ifdef C_CODE
+//#ifdef C_CODE
 //    delete [] imageData;
-#endif
+//#endif
   }
   else {
     printf("can't get a valid texture id\n");
