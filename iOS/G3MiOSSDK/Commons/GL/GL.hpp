@@ -66,6 +66,17 @@ private:
   
   const GLTextureID getGLTextureID();
   
+  
+  int _lastTextureWidth;
+  int _lastTextureHeight;
+#ifdef C_CODE
+  unsigned char* _lastImageData;
+#endif
+#ifdef JAVA_CODE
+  char[] _lastImageData;
+#endif
+
+  
 public:
   
   GL(INativeGL* const gl) :
@@ -92,7 +103,10 @@ public:
   _flatColorG(0),
   _flatColorB(0),
   _flatColorA(0),
-  _flatColorIntensity(0)
+  _flatColorIntensity(0),
+  _lastTextureWidth(-1),
+  _lastTextureHeight(-1),
+  _lastImageData(NULL)
   {
     
   }
@@ -234,6 +248,12 @@ public:
     enableVertexFlatColor(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha(), intensity);
   }
   
+  ~GL() {
+    if (_lastImageData != NULL) {
+      delete [] _lastImageData;
+      _lastImageData = NULL;
+    }
+  }
 };
 
 #endif

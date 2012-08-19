@@ -207,31 +207,54 @@ int GL::getError() {
 
 const GLTextureID GL::uploadTexture(const IImage* image,
                                     int textureWidth, int textureHeight) {
+  const GLTextureID texID = getGLTextureID();
+  if (texID.isValid()) {
 #ifdef C_CODE
-  unsigned char* imageData = new unsigned char[textureWidth * textureHeight * 4];
+//    unsigned char* imageData = new unsigned char[textureWidth * textureHeight * 4];
+    unsigned char* imageData;
+    
+    const bool lastImageDataIsValid = ((_lastTextureWidth == textureWidth) &&
+                                       (_lastTextureHeight == textureHeight) &&
+                                       (_lastImageData != NULL));
+    
+    if (lastImageDataIsValid) {
+      imageData = _lastImageData;
+    }
+    else {
+      imageData = new unsigned char[textureWidth * textureHeight * 4];
+      if (_lastImageData != NULL) {
+        delete [] _lastImageData;
+      }
+      _lastImageData = imageData;
+
+      _lastTextureWidth = textureWidth;
+      _lastTextureHeight = textureHeight;
+    }
 #endif
 #ifdef JAVA_CODE
-  char[] imageData = new char[textureWidth * textureHeight * 4];
+    char[] imageData = new char[textureWidth * textureHeight * 4];
 #endif
-
-  image->fillWithRGBA(imageData, textureWidth, textureHeight);
-  
-  _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);
-  _gl->pixelStorei(Unpack, 1);
-  
-  const GLTextureID texID = getGLTextureID();
-  
-  _gl->bindTexture(Texture2D, texID.getGLTextureID());
-  _gl->texParameteri(Texture2D, MinFilter, Linear);
-  _gl->texParameteri(Texture2D, MagFilter, Linear);
-  _gl->texParameteri(Texture2D, WrapS, ClampToEdge);
-  _gl->texParameteri(Texture2D, WrapT, ClampToEdge);
-  _gl->texImage2D(Texture2D, 0, RGBA, textureWidth, textureHeight, 0, RGBA, UnsignedByte, imageData);
-  
+    
+    image->fillWithRGBA8888(imageData, textureWidth, textureHeight);
+    
+    _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);
+    _gl->pixelStorei(Unpack, 1);
+    
+    _gl->bindTexture(Texture2D, texID.getGLTextureID());
+    _gl->texParameteri(Texture2D, MinFilter, Linear);
+    _gl->texParameteri(Texture2D, MagFilter, Linear);
+    _gl->texParameteri(Texture2D, WrapS, ClampToEdge);
+    _gl->texParameteri(Texture2D, WrapT, ClampToEdge);
+    _gl->texImage2D(Texture2D, 0, RGBA, textureWidth, textureHeight, 0, RGBA, UnsignedByte, imageData);
+    
 #ifdef C_CODE
-  delete imageData;
+//    delete [] imageData;
 #endif
-
+  }
+  else {
+    printf("can't get a valid texture id\n");
+  }
+  
   return texID;
 }
 

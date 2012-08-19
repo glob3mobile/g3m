@@ -51,7 +51,9 @@ public:
   
   ByteBuffer* getEncodedImage() const;
   
-  void fillWithRGBA(unsigned char data[], int width, int height) const;
+  void fillWithRGBA8888(unsigned char data[],
+                        int width,
+                        int height) const;
 
 };
 
