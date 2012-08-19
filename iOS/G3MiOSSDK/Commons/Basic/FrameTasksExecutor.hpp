@@ -28,19 +28,30 @@ public:
 
 class FrameTasksExecutor {
 private:
+  const int          _minimumExecutionsPerFrame;
+  const int          _maximumExecutionsPerFrame;
+  const int          _maximumQueuedTasks;
   const TimeInterval _maxTimePerFrame;
+  const TimeInterval _maxTimePerFrameStressed;
   
   std::list<FrameTask*> _preRenderTasks;
   
-  const int _minimumExecutionsPerFrame;
+  inline bool canExecutePreRenderStep(const RenderContext* rc,
+                                      int executedTasksCounter);
   
-  inline bool executeTask(const RenderContext* rc,
-                          int executedTasksCounter) const;
+  bool _stressed;
   
 public:
   FrameTasksExecutor() :
-  _maxTimePerFrame(TimeInterval::fromMilliseconds(15)),
-  _minimumExecutionsPerFrame(1)
+  _minimumExecutionsPerFrame(1),
+  _maximumExecutionsPerFrame(8),
+  _maximumQueuedTasks(64),
+//  _maximumQueuedTasks(128),
+  _maxTimePerFrame(TimeInterval::fromMilliseconds(10)),
+  _maxTimePerFrameStressed(TimeInterval::fromMilliseconds(25)),
+//  _maxTimePerFrameStressed(TimeInterval::fromMilliseconds(30)),
+//  _maxTimePerFrameStressed(TimeInterval::fromMilliseconds(45)),
+  _stressed(false)
   {
     int __TODO_tune_render_budget;
   }

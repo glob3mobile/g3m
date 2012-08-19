@@ -39,7 +39,7 @@ void LatLonMeshRenderer::initialize(const InitializationContext* ic)
 
   // create mesh
   Color *flatColor = new Color(Color::fromRGBA(1.0, 1.0, 0.0, 1.0));
-  mesh = IndexedMesh::CreateFromGeodetic3D(ic->getPlanet(), true, TriangleStrip, NoCenter, Vector3D(0,0,0), 
+  mesh = IndexedMesh::createFromGeodetic3D(ic->getPlanet(), true, TriangleStrip, NoCenter, Vector3D(0,0,0), 
                                            4, vertices, indices, 4, flatColor);
 }  
 

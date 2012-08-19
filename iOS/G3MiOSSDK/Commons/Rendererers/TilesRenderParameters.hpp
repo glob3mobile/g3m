@@ -23,6 +23,8 @@ public:
   const int    _tileResolution;
   const bool   _renderDebug;
   
+  const bool   _useTilesSplitBudget;
+  
   TilesRenderParameters(const Sector topSector,
                         const int    splitsByLatitude,
                         const int    splitsByLongitude,
@@ -31,7 +33,8 @@ public:
                         const int    tileTextureHeight,
                         const int    tileTextureWidth,
                         const int    tileResolution,
-                        const bool   renderDebug) :
+                        const bool   renderDebug,
+                        const bool   useTilesSplitBudget) :
   _topSector(topSector),
   _splitsByLatitude(splitsByLatitude),
   _splitsByLongitude(splitsByLongitude),
@@ -40,7 +43,8 @@ public:
   _tileTextureHeight(tileTextureHeight),
   _tileTextureWidth(tileTextureWidth),
   _tileResolution(tileResolution),
-  _renderDebug(renderDebug)
+  _renderDebug(renderDebug),
+  _useTilesSplitBudget(useTilesSplitBudget)
   {
     
   }
@@ -54,6 +58,7 @@ public:
     const int tileTextureHeight = 256;
     const int tileTextureWidth = 256;
     const int tRes = 10;
+    const bool useTilesSplitBudget = true;
     
     return new TilesRenderParameters(Sector::fullSphere(),
                                      splitsByLatitude,
@@ -63,7 +68,8 @@ public:
                                      tileTextureHeight,
                                      tileTextureWidth,
                                      tRes,
-                                     renderDebug);
+                                     renderDebug,
+                                     useTilesSplitBudget);
   }
   
   
@@ -75,14 +81,13 @@ public:
     const int tileTextureHeight = 256;
     const int tileTextureWidth = 256;
     const int tRes = 10;
-    
+    const bool useTilesSplitBudget = true;
+
     //    Sector sector = Sector::fullSphere();
     //    Sector sector = Sector(Geodetic2D(Angle::fromDegrees(-90), Angle::fromDegrees(-180)),
     //                           Geodetic2D(Angle::fromDegrees(90), Angle::fromDegrees(180)));
     Sector sector = Sector(Geodetic2D(Angle::fromDegrees(0), Angle::fromDegrees(0)),
                            Geodetic2D(Angle::fromDegrees(90), Angle::fromDegrees(90)));
-    
-    int ___TODO_put_complete_globe;
     
     return new TilesRenderParameters(sector,
                                      splitsByLatitude,
@@ -92,10 +97,9 @@ public:
                                      tileTextureHeight,
                                      tileTextureWidth,
                                      tRes,
-                                     renderDebug);
+                                     renderDebug,
+                                     useTilesSplitBudget);
   }
 };
-
-
 
 #endif

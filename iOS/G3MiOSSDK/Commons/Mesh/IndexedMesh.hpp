@@ -87,7 +87,7 @@ public:
   ~IndexedMesh();
 
     
-  static IndexedMesh* CreateFromVector3D(bool owner,
+  static IndexedMesh* createFromVector3D(bool owner,
                                          const GLPrimitive primitive,
                                          CenterStrategy strategy,
                                          Vector3D center,
@@ -105,7 +105,7 @@ public:
   }
 
     
-  static IndexedMesh* CreateFromVector3D(std::vector<MutableVector3D>& vertices,
+  static IndexedMesh* createFromVector3D(std::vector<MutableVector3D>& vertices,
                                          const GLPrimitive primitive,
                                          CenterStrategy strategy,
                                          Vector3D center,
@@ -120,7 +120,7 @@ public:
   }
 
   
-  static IndexedMesh* CreateFromGeodetic3D(const Planet *planet,
+  static IndexedMesh* createFromGeodetic3D(const Planet *planet,
                                            bool owner,
                                            const GLPrimitive primitive,
                                            CenterStrategy strategy,

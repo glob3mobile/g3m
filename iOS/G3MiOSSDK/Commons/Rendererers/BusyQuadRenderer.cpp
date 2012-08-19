@@ -64,7 +64,7 @@ bool BusyQuadRenderer::initMesh(const RenderContext* rc)
   }
 
 
-  IndexedMesh *im = IndexedMesh::CreateFromVector3D(true, TriangleStrip, NoCenter, Vector3D(0,0,0), 
+  IndexedMesh *im = IndexedMesh::createFromVector3D(true, TriangleStrip, NoCenter, Vector3D(0,0,0), 
                                                     numVertices, quadVertices, quadIndices, numIndices, NULL);
   
   TextureMapping* texMap = new SimpleTextureMapping(texID, texC, true);

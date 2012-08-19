@@ -82,7 +82,7 @@ private:
   const bool _isForcedFullRender;
   
   ITimer* _lastSplitTimer;      // timer to start every time a tile get splitted into subtiles
-  ITimer* _lastTexturizerTimer; // timer to start every time the texturizer is called
+//  ITimer* _lastTexturizerTimer; // timer to start every time the texturizer is called
   
 public:
   TileRenderContext(const TileTessellator*       tessellator,
@@ -90,14 +90,14 @@ public:
                     const TilesRenderParameters* parameters,
                     TilesStatistics*             statistics,
                     ITimer*                      lastSplitTimer,
-                    ITimer*                      lastTexturizerTimer,
+//                    ITimer*                      lastTexturizerTimer,
                     bool                         isForcedFullRender) :
   _tessellator(tessellator),
   _texturizer(texturizer),
   _parameters(parameters),
   _statistics(statistics),
   _lastSplitTimer(lastSplitTimer),
-  _lastTexturizerTimer(lastTexturizerTimer),
+//  _lastTexturizerTimer(lastTexturizerTimer),
   _isForcedFullRender(isForcedFullRender)
   {
     
@@ -124,9 +124,9 @@ public:
     return _lastSplitTimer;
   }
   
-  ITimer* getLastTexturizerTimer() const {
-    return _lastTexturizerTimer;
-  }
+//  ITimer* getLastTexturizerTimer() const {
+//    return _lastTexturizerTimer;
+//  }
   
   bool isForcedFullRender() const {
     return _isForcedFullRender;
@@ -263,7 +263,7 @@ private:
   std::vector<Tile*>     _topLevelTiles;
   
   ITimer* _lastSplitTimer;      // timer to start every time a tile get splitted into subtiles
-  ITimer* _lastTexturizerTimer; // timer to start every time the texturizer is called
+//  ITimer* _lastTexturizerTimer; // timer to start every time the texturizer is called
   
   void clearTopLevelTiles();
   void createTopLevelTiles(const InitializationContext* ic);
@@ -353,7 +353,7 @@ public:
   _lastStatistics(),
   _topTilesJustCreated(false),
   _lastSplitTimer(NULL),
-  _lastTexturizerTimer(NULL),
+//  _lastTexturizerTimer(NULL),
   _lastCamera(NULL),
   _firstRender(false)
   {

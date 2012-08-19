@@ -77,7 +77,7 @@ void BusyMeshRenderer::initialize(const InitializationContext* ic)
   // create mesh
   //Color *flatColor = new Color(Color::fromRGBA(1.0, 1.0, 0.0, 1.0));
 
-  _mesh = IndexedMesh::CreateFromVector3D(true, TriangleStrip, NoCenter, Vector3D(0,0,0), 
+  _mesh = IndexedMesh::createFromVector3D(true, TriangleStrip, NoCenter, Vector3D(0,0,0), 
                                            numVertices, vertices, indices, numIndices, NULL, colors);
 }  
 

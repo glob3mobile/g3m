@@ -219,6 +219,9 @@ public:
   }
   
   void start() {
+    if (_canceled) {
+      return;
+    }
     if (_alreadyStarted) {
       return;
     }
