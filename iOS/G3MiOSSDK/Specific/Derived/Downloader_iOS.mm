@@ -160,6 +160,8 @@ long Downloader_iOS::request(const URL &url,
   
   NSURL* nsURL = [NSURL URLWithString: toNSString(url.getPath())];
   
+//  NSLog(@"Downloading %@", [nsURL absoluteString]);
+  
   Downloader_iOS_Listener* iosListener = [[Downloader_iOS_Listener alloc] initWithCPPListener: cppListener
                                                                                deleteListener: deleteListener];
   
