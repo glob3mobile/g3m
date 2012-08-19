@@ -22,6 +22,9 @@
 #include "RCObject.hpp"
 #include "ITimer.hpp"
 
+#include "FrameTasksExecutor.hpp"
+
+
 enum PetitionStatus {
   STATUS_PENDING,
   STATUS_DOWNLOADED,
@@ -220,7 +223,7 @@ public:
       return;
     }
     _alreadyStarted = true;
-
+    
     if (_tile == NULL) {
       return;
     }
@@ -230,7 +233,7 @@ public:
       
       //const long priority = _tile->getLevel() * 1000000 + _tile->getRow() * 1000 + _tile->getColumn();
       const long priority = _tile->getLevel();
-
+      
       const long requestId = _downloader->request(URL(petition->getURL()),
                                                   priority,
                                                   new BuilderDownloadStepDownloadListener(this, i),
@@ -431,7 +434,7 @@ public:
       }
       else {
         if ( mapping->getGLTextureID().isValid() ) {
-          printf("break (point) on me\n");
+          printf("break (point) on me 3\n");
         }
       }
       
@@ -463,7 +466,7 @@ public:
       _tile = NULL;
     }
   }
-
+  
 };
 
 
@@ -521,7 +524,7 @@ Mesh* MultiLayerTileTexturizer::texturize(const RenderContext* rc,
                                           Mesh* tessellatorMesh,
                                           Mesh* previousMesh) {
   _texturesHandler = rc->getTexturesHandler();
-
+  
   
   TileTextureBuilderHolder* builderHolder = (TileTextureBuilderHolder*) tile->getTexturizerData();
   
@@ -542,15 +545,46 @@ Mesh* MultiLayerTileTexturizer::texturize(const RenderContext* rc,
    We user a budget for builder.start() as it can (syncronously if cached data) upload a texture
    to the GPU, causing a bootleneck when too many tiles are renderered for the first time. (dgd)
    */
-  const bool startBuilder = ((tile->getLevel() == _parameters->_topLevel) ||
-                             (trc->getStatistics()->getBuildersStartsInFrame() < 1) ||
-                             (rc->getFrameStartTimer()->elapsedTime().milliseconds() < 33));
-  if (startBuilder) {
-    trc->getStatistics()->computeBuilderStartInFrame();
+  //  const bool startBuilder = ((tile->getLevel() == _parameters->_topLevel) ||
+  //                             (trc->getStatistics()->getBuildersStartsInFrame() < 1) ||
+  //                             (rc->getFrameStartTimer()->elapsedTime().milliseconds() < 33));
+  //  if (startBuilder) {
+  //    trc->getStatistics()->computeBuilderStartInFrame();
+  //    builderHolder->get()->start();
+  //    tile->setTexturizerDirty(false);
+  //  }
+  
+  
+  if (trc->isForcedFullRender()) {
     builderHolder->get()->start();
-    tile->setTexturizerDirty(false);
+  }
+  else {
+    
+    int ____DIEGO_AT_WORK;
+    class BuilderStartTask : public FrameTask {
+    private:
+      TileTextureBuilder* _builder;
+      
+    public:
+      BuilderStartTask(TileTextureBuilder* builder) :
+      _builder(builder)
+      {
+        _builder->_retain();
+      }
+      
+      virtual ~BuilderStartTask() {
+        _builder->_release();
+      }
+      
+      void execute(const RenderContext* rc) {
+        _builder->start();
+      }
+    };
+    
+    rc->getFrameTasksExecutor()->addPreRenderTask(new BuilderStartTask(builderHolder->get()));
   }
 
+  tile->setTexturizerDirty(false);
   return builderHolder->get()->getMesh();
   
 }
@@ -567,7 +601,7 @@ void MultiLayerTileTexturizer::tileToBeDeleted(Tile* tile,
   }
   else {
     if (mesh != NULL) {
-      printf("break (point) on me\n");
+      printf("break (point) on me 4\n");
     }
   }
 }
@@ -581,14 +615,14 @@ void MultiLayerTileTexturizer::tileMeshToBeDeleted(Tile* tile,
   }
   else {
     if (mesh != NULL) {
-      printf("break (point) on me\n");
+      printf("break (point) on me 5\n");
     }
   }
 }
 
 const GLTextureID MultiLayerTileTexturizer::getTopLevelGLTextureIDForTile(Tile* tile) {
   LeveledTexturedMesh* mesh = (LeveledTexturedMesh*) tile->getTexturizerMesh();
-
+  
   return (mesh == NULL) ? GLTextureID::invalid() : mesh->getTopLevelGLTextureID();
 }
 
@@ -615,7 +649,7 @@ void MultiLayerTileTexturizer::ancestorTexturedSolvedChanged(Tile* tile,
   if (ancestorMesh == NULL) {
     return;
   }
-
+  
   TileTextureBuilderHolder* tileBuilderHolder = (TileTextureBuilderHolder*) tile->getTexturizerData();
   if (tileBuilderHolder == NULL) {
     return;

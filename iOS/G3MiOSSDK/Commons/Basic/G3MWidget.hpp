@@ -28,27 +28,29 @@ class EffectsScheduler;
 #include "Color.hpp"
 
 class ICameraConstrainer;
+class FrameTasksExecutor;
 
 
 class G3MWidget {
 public:
   
-  static G3MWidget* create(IFactory*         factory,
-                           ILogger*          logger,
-                           GL*               gl,
-                           TexturesHandler*  texturesHandler,
-                           Downloader *      downloaderOLD,
-                           IDownloader*      downloader,
-                           const Planet*     planet,
+  static G3MWidget* create(FrameTasksExecutor* frameTasksExecutor,
+                           IFactory*           factory,
+                           ILogger*            logger,
+                           GL*                 gl,
+                           TexturesHandler*    texturesHandler,
+                           Downloader *        downloaderOLD,
+                           IDownloader*        downloader,
+                           const Planet*       planet,
                            std::vector<ICameraConstrainer *> cameraConstraint,
-                           Renderer*         renderer,
-                           Renderer*         busyRenderer,
-                           EffectsScheduler* scheduler,
-                           int               width,
-                           int               height,
-                           Color             backgroundColor,
-                           const bool        logFPS,
-                           const bool        logDownloaderStatistics);
+                           Renderer*           renderer,
+                           Renderer*           busyRenderer,
+                           EffectsScheduler*   scheduler,
+                           int                 width,
+                           int                 height,
+                           Color               backgroundColor,
+                           const bool          logFPS,
+                           const bool          logDownloaderStatistics);
   
   ~G3MWidget(); 
   
@@ -72,13 +74,14 @@ public:
   
   
 private:
+  FrameTasksExecutor* _frameTasksExecutor;
   IFactory*         _factory;
   ILogger*          _logger;
   GL*               _gl;
   const Planet*     _planet;
   Renderer*         _renderer;
   Renderer*         _busyRenderer;
-  EffectsScheduler* _scheduler;
+  EffectsScheduler* _effectsScheduler;
   
   std::vector<ICameraConstrainer *> _cameraConstraint;
   
@@ -103,22 +106,23 @@ private:
   
   void initializeGL();
   
-  G3MWidget(IFactory*         factory,
-            ILogger*          logger,
-            GL*               gl,
-            TexturesHandler*  texturesHandler,
-            Downloader*       downloaderOLD,
-            IDownloader*      downloader,
-            const Planet*     planet,
-            std::vector<ICameraConstrainer *> cameraConstraint,
-            Renderer*         renderer,
-            Renderer*         busyRenderer,
-            EffectsScheduler* scheduler,
-            int               width,
-            int               height,
-            Color             backgroundColor,
-            const bool        logFPS,
-            const bool        logDownloaderStatistics);
+  G3MWidget(FrameTasksExecutor* frameTasksExecutor,
+            IFactory*           factory,
+            ILogger*            logger,
+            GL*                 gl,
+            TexturesHandler*    texturesHandler,
+            Downloader*         downloaderOLD,
+            IDownloader*        downloader,
+            const Planet*       planet,
+            std::vector<ICameraConstrainer*> cameraConstraint,
+            Renderer*           renderer,
+            Renderer*           busyRenderer,
+            EffectsScheduler*   scheduler,
+            int                 width,
+            int                 height,
+            Color               backgroundColor,
+            const bool          logFPS,
+            const bool          logDownloaderStatistics);
   
   void initializeDefault()
   {

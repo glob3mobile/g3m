@@ -18,8 +18,11 @@
 #include "Effects.hpp"
 #include "Context.hpp"
 #include "CameraConstraints.hpp"
+#include "FrameTasksExecutor.hpp"
 
-G3MWidget::G3MWidget(IFactory*         factory,
+
+G3MWidget::G3MWidget(FrameTasksExecutor* frameTasksExecutor,
+                     IFactory*         factory,
                      ILogger*          logger,
                      GL*               gl,
                      TexturesHandler*  texturesHandler,
@@ -29,12 +32,13 @@ G3MWidget::G3MWidget(IFactory*         factory,
                      std::vector<ICameraConstrainer *> cameraConstraint,
                      Renderer*         renderer,
                      Renderer*         busyRenderer,
-                     EffectsScheduler* scheduler,
+                     EffectsScheduler* effectsScheduler,
                      int               width,
                      int               height,
                      Color             backgroundColor,
                      const bool        logFPS,
                      const bool        logDownloaderStatistics):
+_frameTasksExecutor(frameTasksExecutor),
 _factory(factory),
 _logger(logger),
 _gl(gl),
@@ -43,7 +47,7 @@ _planet(planet),
 _cameraConstraint(cameraConstraint),
 _renderer(renderer),
 _busyRenderer(busyRenderer),
-_scheduler(scheduler),
+_effectsScheduler(effectsScheduler),
 _currentCamera(new Camera(width, height)),
 _nextCamera(new Camera(width, height)),
 _backgroundColor(backgroundColor),
@@ -60,8 +64,8 @@ _logDownloaderStatistics(logDownloaderStatistics)
 {
   initializeGL();
   
-  InitializationContext ic(_factory, _logger, _planet, _downloaderOLD, _downloader, _scheduler);
-  _scheduler->initialize(&ic);
+  InitializationContext ic(_factory, _logger, _planet, _downloaderOLD, _downloader, _effectsScheduler);
+  _effectsScheduler->initialize(&ic);
   _renderer->initialize(&ic);
   _busyRenderer->initialize(&ic);
   _currentCamera->initialize(&ic);
@@ -71,29 +75,31 @@ _logDownloaderStatistics(logDownloaderStatistics)
 }
 
 
-G3MWidget* G3MWidget::create(IFactory*         factory,
-                             ILogger*          logger,
-                             GL*               gl,
-                             TexturesHandler*  texturesHandler,
-                             Downloader *      downloaderOLD,
-                             IDownloader*      downloader,
-                             const Planet*     planet,
-                             std::vector<ICameraConstrainer *> cameraConstraint,
-                             Renderer*         renderer,
-                             Renderer*         busyRenderer,
-                             EffectsScheduler* scheduler,
-                             int               width,
-                             int               height,
-                             Color             backgroundColor,
-                             const bool        logFPS,
-                             const bool        logDownloaderStatistics) {
+G3MWidget* G3MWidget::create(FrameTasksExecutor* frameTasksExecutor,
+                             IFactory*           factory,
+                             ILogger*            logger,
+                             GL*                 gl,
+                             TexturesHandler*    texturesHandler,
+                             Downloader *        downloaderOLD,
+                             IDownloader*        downloader,
+                             const Planet*       planet,
+                             std::vector<ICameraConstrainer*> cameraConstraint,
+                             Renderer*           renderer,
+                             Renderer*           busyRenderer,
+                             EffectsScheduler*   scheduler,
+                             int                 width,
+                             int                 height,
+                             Color               backgroundColor,
+                             const bool          logFPS,
+                             const bool          logDownloaderStatistics) {
   if (logger != NULL) {
     logger->logInfo("Creating G3MWidget...");
   }
   
   ILogger::setInstance(logger);
   
-  return new G3MWidget(factory,
+  return new G3MWidget(frameTasksExecutor,
+                       factory,
                        logger,
                        gl,
                        texturesHandler,
@@ -127,7 +133,7 @@ G3MWidget::~G3MWidget() {
   delete _planet;
   delete _renderer;
   delete _busyRenderer;
-  delete _scheduler;
+  delete _effectsScheduler;
   delete _currentCamera;
   delete _nextCamera;
   delete _texturesHandler;
@@ -135,13 +141,16 @@ G3MWidget::~G3MWidget() {
   delete _downloaderOLD;
   delete _downloader;
   
-  for (unsigned int n=0; n<_cameraConstraint.size(); n++)
+  for (unsigned int n=0; n<_cameraConstraint.size(); n++) {
     delete _cameraConstraint[n];
+  }
+  
+  delete _frameTasksExecutor;
 }
 
 void G3MWidget::onTouchEvent(const TouchEvent* myEvent) {
   if (_rendererReady) {
-    EventContext ec(_factory, _logger, _planet, _downloaderOLD, _downloader, _scheduler);
+    EventContext ec(_factory, _logger, _planet, _downloaderOLD, _downloader, _effectsScheduler);
     
     _renderer->onTouchEvent(&ec, myEvent);
   }
@@ -149,7 +158,7 @@ void G3MWidget::onTouchEvent(const TouchEvent* myEvent) {
 
 void G3MWidget::onResizeViewportEvent(int width, int height) {
   if (_rendererReady) {
-    EventContext ec(_factory, _logger, _planet, _downloaderOLD, _downloader, _scheduler);
+    EventContext ec(_factory, _logger, _planet, _downloaderOLD, _downloader, _effectsScheduler);
     
     _renderer->onResizeViewportEvent(&ec, width, height);
   }
@@ -175,7 +184,8 @@ int G3MWidget::render() {
   }
   
   // create RenderContext
-  RenderContext rc(_factory,
+  RenderContext rc(_frameTasksExecutor,
+                   _factory,
                    _logger,
                    _planet,
                    _gl,
@@ -184,10 +194,12 @@ int G3MWidget::render() {
                    _texturesHandler,
                    _downloaderOLD,
                    _downloader,
-                   _scheduler,
+                   _effectsScheduler,
                    _factory->createTimer());
 
-  _scheduler->doOneCyle(&rc);
+  _effectsScheduler->doOneCyle(&rc);
+  
+  _frameTasksExecutor->doPreRenderCycle(&rc);
 
   _rendererReady = _renderer->isReadyToRender(&rc);
   
@@ -205,6 +217,8 @@ int G3MWidget::render() {
   _gl->clearScreen(_backgroundColor);
   
   const int timeToRedraw = _selectedRenderer->render(&rc);
+  
+//  _frameTasksExecutor->doPostRenderCycle(&rc);
   
   const TimeInterval elapsedTime = _timer->elapsedTime();
   if (elapsedTime.milliseconds() > 100) {

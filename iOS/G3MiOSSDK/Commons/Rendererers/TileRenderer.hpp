@@ -79,6 +79,8 @@ private:
   const TilesRenderParameters* _parameters;
   TilesStatistics*             _statistics;
   
+  const bool _isForcedFullRender;
+  
   ITimer* _lastSplitTimer;      // timer to start every time a tile get splitted into subtiles
   ITimer* _lastTexturizerTimer; // timer to start every time the texturizer is called
   
@@ -88,13 +90,15 @@ public:
                     const TilesRenderParameters* parameters,
                     TilesStatistics*             statistics,
                     ITimer*                      lastSplitTimer,
-                    ITimer*                      lastTexturizerTimer) :
+                    ITimer*                      lastTexturizerTimer,
+                    bool                         isForcedFullRender) :
   _tessellator(tessellator),
   _texturizer(texturizer),
   _parameters(parameters),
   _statistics(statistics),
   _lastSplitTimer(lastSplitTimer),
-  _lastTexturizerTimer(lastTexturizerTimer)
+  _lastTexturizerTimer(lastTexturizerTimer),
+  _isForcedFullRender(isForcedFullRender)
   {
     
   }
@@ -122,6 +126,10 @@ public:
   
   ITimer* getLastTexturizerTimer() const {
     return _lastTexturizerTimer;
+  }
+  
+  bool isForcedFullRender() const {
+    return _isForcedFullRender;
   }
   
 };

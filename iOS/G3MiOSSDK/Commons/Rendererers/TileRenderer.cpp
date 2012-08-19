@@ -127,7 +127,8 @@ int TileRenderer::render(const RenderContext* rc) {
                         _parameters,
                         &statistics,
                         _lastSplitTimer,
-                        _lastTexturizerTimer);
+                        _lastTexturizerTimer,
+                        _firstRender /* if first render, force full render */);
 
   if (_firstRender) {
     // force one render of the topLevel tiles to make the (toplevel) textures loaded as they

@@ -103,9 +103,9 @@ void Downloader_iOS::cancelRequest(long requestId) {
     } ];
   }
   
-  if (!found) {
-    printf("break (point) on me\n");
-  }
+//  if (!found) {
+//    printf("break (point) on me 1\n");
+//  }
   
   [_lock unlock];
 }

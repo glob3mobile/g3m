@@ -85,6 +85,8 @@
 		CF59DF8F15C04AFC002173EC /* ILogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF59DF8E15C04AFC002173EC /* ILogger.cpp */; };
 		CF6D404715C8278C008D8D78 /* Downloader_iOS_WorkerThread.h in Headers */ = {isa = PBXBuildFile; fileRef = CF6D404515C8278C008D8D78 /* Downloader_iOS_WorkerThread.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF6D404815C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF6D404615C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm */; };
+		CF73BFDB15E114E3001CE412 /* FrameTasksExecutor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */; };
+		CF73BFDC15E114E3001CE412 /* FrameTasksExecutor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF73BFDA15E114E3001CE412 /* FrameTasksExecutor.hpp */; };
 		CF7A78EC159B9BE300074422 /* MutableVector2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */; };
 		CF7A78ED159B9BE300074422 /* MutableVector2D.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF7A78EB159B9BE300074422 /* MutableVector2D.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF883B821590984900AEE39C /* TexturesHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF883B811590984900AEE39C /* TexturesHandler.cpp */; };
@@ -274,6 +276,8 @@
 		CF59DF8E15C04AFC002173EC /* ILogger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ILogger.cpp; path = Commons/Interfaces/ILogger.cpp; sourceTree = "<group>"; };
 		CF6D404515C8278C008D8D78 /* Downloader_iOS_WorkerThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Downloader_iOS_WorkerThread.h; path = Specific/Derived/Downloader_iOS_WorkerThread.h; sourceTree = "<group>"; };
 		CF6D404615C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Downloader_iOS_WorkerThread.mm; path = Specific/Derived/Downloader_iOS_WorkerThread.mm; sourceTree = "<group>"; };
+		CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FrameTasksExecutor.cpp; path = Commons/Basic/FrameTasksExecutor.cpp; sourceTree = "<group>"; };
+		CF73BFDA15E114E3001CE412 /* FrameTasksExecutor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FrameTasksExecutor.hpp; path = Commons/Basic/FrameTasksExecutor.hpp; sourceTree = "<group>"; };
 		CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector2D.cpp; path = Commons/Geometry/MutableVector2D.cpp; sourceTree = "<group>"; };
 		CF7A78EB159B9BE300074422 /* MutableVector2D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MutableVector2D.hpp; path = Commons/Geometry/MutableVector2D.hpp; sourceTree = "<group>"; };
 		CF883B7F1590983B00AEE39C /* TexturesHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TexturesHandler.hpp; path = Commons/Basic/TexturesHandler.hpp; sourceTree = "<group>"; };
@@ -494,6 +498,8 @@
 				D807E21415DA6BB200CA7B8E /* TerrainTouchEventListener.hpp */,
 				CFF8C4BB15DEB6A70034A576 /* RCObject.cpp */,
 				CFF8C4BC15DEB6A70034A576 /* RCObject.hpp */,
+				CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */,
+				CF73BFDA15E114E3001CE412 /* FrameTasksExecutor.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -810,6 +816,7 @@
 				CF8B21B315DD32820068601A /* SQLiteStorage_iOS.hpp in Headers */,
 				CF8B21BF15DD345D0068601A /* SQDatabase.h in Headers */,
 				CFF8C4BE15DEB6A70034A576 /* RCObject.hpp in Headers */,
+				CF73BFDC15E114E3001CE412 /* FrameTasksExecutor.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -941,6 +948,7 @@
 				CF8B21B215DD32820068601A /* SQLiteStorage_iOS.mm in Sources */,
 				CF8B21C015DD345D0068601A /* SQDatabase.m in Sources */,
 				CFF8C4BD15DEB6A70034A576 /* RCObject.cpp in Sources */,
+				CF73BFDB15E114E3001CE412 /* FrameTasksExecutor.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

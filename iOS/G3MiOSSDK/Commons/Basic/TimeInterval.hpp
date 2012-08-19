@@ -53,6 +53,10 @@ public:
     return isnan(_milliseconds);
   }
   
+  bool lowerThan(const TimeInterval& that) const {
+    return _milliseconds < that._milliseconds;
+  }
+  
 };
 
 

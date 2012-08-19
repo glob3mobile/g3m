@@ -29,20 +29,20 @@ protected:
   const Planet*      _planet;
   IDownloader* _downloader;
   Downloader* const  _downloaderOLD;
-  EffectsScheduler*  _scheduler;
+  EffectsScheduler*  _effectsScheduler;
   
   Context(const IFactory *factory,
           const ILogger* logger,
           const Planet* planet,
           Downloader* const downloaderOLD,
           IDownloader* downloader,
-          EffectsScheduler* scheduler) :
+          EffectsScheduler* effectsScheduler) :
   _factory(factory),
   _logger(logger),
   _planet(planet),
   _downloader(downloader),
   _downloaderOLD(downloaderOLD),
-  _scheduler(scheduler)
+  _effectsScheduler(effectsScheduler)
   {
   }
   
@@ -69,7 +69,7 @@ public:
   }
   
   EffectsScheduler* getEffectsScheduler() const {
-    return _scheduler;
+    return _effectsScheduler;
   }
 };
 
@@ -83,8 +83,8 @@ public:
                         const Planet* planet,
                         Downloader* const downloaderOLD,
                         IDownloader* downloader,
-                        EffectsScheduler* scheduler) :
-  Context(factory, logger, planet, downloaderOLD, downloader, scheduler) {
+                        EffectsScheduler* effectsScheduler) :
+  Context(factory, logger, planet, downloaderOLD, downloader, effectsScheduler) {
   }
 };
 
@@ -105,16 +105,21 @@ public:
 //************************************************************
 
 
+class FrameTasksExecutor;
+
+
 class RenderContext: public Context {
 private:
-  GL*              _gl;
-  const Camera*    _currentCamera;
-  Camera*          _nextCamera;
-  TexturesHandler* _texturesHandler;
-  ITimer*          _frameStartTimer;
+  FrameTasksExecutor* _frameTasksExecutor;
+  GL*                 _gl;
+  const Camera*       _currentCamera;
+  Camera*             _nextCamera;
+  TexturesHandler*    _texturesHandler;
+  ITimer*             _frameStartTimer;
   
 public:
-  RenderContext(IFactory *factory,
+  RenderContext(FrameTasksExecutor* frameTasksExecutor,
+                IFactory *factory,
                 ILogger* logger,
                 const Planet* planet,
                 GL *gl,
@@ -126,6 +131,7 @@ public:
                 EffectsScheduler* scheduler,
                 ITimer* frameStartTimer) :
   Context(factory, logger, planet, downloaderOLD, downloader, scheduler),
+  _frameTasksExecutor(frameTasksExecutor),
   _gl(gl),
   _currentCamera(currentCamera),
   _nextCamera(nextCamera),
@@ -152,6 +158,10 @@ public:
   
   const ITimer* getFrameStartTimer() const {
     return _frameStartTimer;
+  }
+  
+  FrameTasksExecutor* getFrameTasksExecutor() const {
+    return _frameTasksExecutor;
   }
   
   ~RenderContext();

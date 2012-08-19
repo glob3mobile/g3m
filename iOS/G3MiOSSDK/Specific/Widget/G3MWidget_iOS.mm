@@ -55,6 +55,7 @@
 
 #include "MultiLayerTileTexturizer.hpp"
 #include "TilesRenderParameters.hpp"
+#include "FrameTasksExecutor.hpp"
 
 #include "Box.hpp"
 
@@ -271,7 +272,10 @@ public:
   std::vector <ICameraConstrainer *> cameraConstraint;
   cameraConstraint.push_back(new SimpleCameraConstrainer);
 
-  _widget = G3MWidget::create(factory,
+  FrameTasksExecutor* frameTasksExecutor = new FrameTasksExecutor();
+  
+  _widget = G3MWidget::create(frameTasksExecutor,
+                              factory,
                               logger,
                               gl,
                               texturesHandler,
@@ -403,7 +407,7 @@ public:
     downloader->cancelRequest(requestId);
     downloader->cancelRequest(requestId2);
     
-    printf("break (point) on me");
+    printf("break (point) on me 2");
   }
 
   
@@ -575,7 +579,10 @@ public:
   const bool logFPS = false;
   const bool logDownloaderStatistics = false;
   
-  _widget = G3MWidget::create(factory,
+  FrameTasksExecutor* frameTasksExecutor = new FrameTasksExecutor();
+  
+  _widget = G3MWidget::create(frameTasksExecutor,
+                              factory,
                               logger,
                               gl,
                               texturesHandler,
