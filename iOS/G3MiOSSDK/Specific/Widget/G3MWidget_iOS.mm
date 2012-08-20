@@ -415,16 +415,16 @@ public:
   //LAYERS
   LayerSet* layerSet = new LayerSet();
  
-//  WMSLayer* blueMarble = new WMSLayer("bmng200405",
-//                                      "http://www.nasa.network.com/wms?",
-//                                      WMS_1_1_0,
-//                                      "image/jpeg",
-//                                      Sector::fullSphere(),
-//                                      "EPSG:4326",
-//                                      "",
-//                                      false,
-//                                      Angle::nan(),
-//                                      Angle::nan());
+  WMSLayer* blueMarble = new WMSLayer("bmng200405",
+                                      "http://www.nasa.network.com/wms?",
+                                      WMS_1_1_0,
+                                      "image/jpeg",
+                                      Sector::fullSphere(),
+                                      "EPSG:4326",
+                                      "",
+                                      false,
+                                      Angle::nan(),
+                                      Angle::nan());
   
 //  WMSLayer *pnoa = new WMSLayer("PNOA",
 //                                "http://www.idee.es/wms/PNOA/PNOA",
@@ -464,22 +464,35 @@ public:
 //  oceans->addTerrainTouchEventListener(new OceanTerrainTouchEventListener(factory, downloader));
   
   
-  WMSLayer *osm = new WMSLayer("bing",
-                               "bing",
-                               "http://wms.latlon.org/",
-                               WMS_1_1_0,
-                               "image/jpeg",
-                               Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
-                               "EPSG:4326",
-                               "",
-                               false,
-                               Angle::nan(),
-                               Angle::nan());
-  layerSet->addLayer(osm);
+//  WMSLayer *osm = new WMSLayer("bing",
+//                               "bing",
+//                               "http://wms.latlon.org/",
+//                               WMS_1_1_0,
+//                               "image/jpeg",
+//                               Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
+//                               "EPSG:4326",
+//                               "",
+//                               false,
+//                               Angle::nan(),
+//                               Angle::nan());
+//  layerSet->addLayer(osm);
+  
+//  WMSLayer *osm = new WMSLayer("osm",
+//                               "osm",
+//                               "http://wms.latlon.org/",
+//                               WMS_1_1_0,
+//                               "image/jpeg",
+//                               Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
+//                               "EPSG:4326",
+//                               "",
+//                               false,
+//                               Angle::nan(),
+//                               Angle::nan());
+//  layerSet->addLayer(osm);
 
   
   //ORDER IS IMPORTANT
-//  layerSet->addLayer(blueMarble);
+  layerSet->addLayer(blueMarble);
 //  layerSet->addLayer(pnoa);
 //  layerSet->addLayer(vias);
 //  layerSet->addLayer(oceans);
