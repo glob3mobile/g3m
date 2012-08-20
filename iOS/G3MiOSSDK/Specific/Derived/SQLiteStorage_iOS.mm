@@ -55,6 +55,22 @@ _databaseName(databaseName)
     return;
   }
   
+  showStatistics();
+}
+
+void SQLiteStorage_iOS::showStatistics() const {
+  SQResultSet* rs = [_db executeQuery:@"SELECT COUNT(*), SUM(LENGTH(contents)) FROM entry"];
+  if ([rs next]) {
+    NSInteger count     = [rs integerColumnByIndex: 0];
+    NSInteger usedSpace = [rs integerColumnByIndex: 1];
+
+    NSLog(@"Initialized Storage on %@, entries=%d, usedSpace=%fMb",
+          getDBPath(),
+          count,
+          (float) ((double)usedSpace / 1024 / 1024));
+  }
+  
+  [rs close];
 }
 
 

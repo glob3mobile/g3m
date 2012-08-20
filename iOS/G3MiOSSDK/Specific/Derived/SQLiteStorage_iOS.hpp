@@ -26,6 +26,7 @@ private:
 
   NSString* getDBPath() const;
 
+  void showStatistics() const;
   
 public:
   SQLiteStorage_iOS(const std::string &databaseName);
