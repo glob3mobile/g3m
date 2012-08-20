@@ -37,7 +37,6 @@
 //#include "FileSystemStorage_iOS.hpp"
 #include "SQLiteStorage_iOS.hpp"
 #include "NullStorage.hpp"
-#include "TileImagesTileTexturizer.hpp"
 #include "SingleImageTileTexturizer.hpp"
 #include "BusyQuadRenderer.hpp"
 #include "BusyMeshRenderer.hpp"
@@ -150,7 +149,6 @@ public:
   
   
   IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
-  Downloader* downloaderOLD = new Downloader(storage, 5, factory->createNetwork());
   IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
                                                  storage);
   
@@ -225,13 +223,7 @@ public:
     
     TileTexturizer* texturizer = NULL;
     if (true) {
-      const bool useNewTexturizer = true;
-      if (useNewTexturizer) {
-        texturizer = new MultiLayerTileTexturizer(layerSet);
-      }
-      else {
-        texturizer = new TileImagesTileTexturizer(parameters, downloader, layerSet);
-      }
+      texturizer = new MultiLayerTileTexturizer(layerSet);
     }
     else {
       //SINGLE IMAGE
@@ -280,7 +272,6 @@ public:
                               logger,
                               gl,
                               texturesHandler,
-                              downloaderOLD,
                               downloader,
                               planet, 
                               cameraConstraint,
@@ -338,7 +329,6 @@ public:
 
   
   IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
-  Downloader* downloaderOLD = new Downloader(storage, 5, factory->createNetwork());
   IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
                                                  storage);
   
@@ -504,13 +494,7 @@ public:
     
     TileTexturizer* texturizer = NULL;
     if (true) {
-      const bool useNewTexturizer = true;
-      if (useNewTexturizer) {
-        texturizer = new MultiLayerTileTexturizer(layerSet);
-      }
-      else {
-        texturizer = new TileImagesTileTexturizer(parameters, downloader, layerSet);
-      }
+      texturizer = new MultiLayerTileTexturizer(layerSet);
     }
     else {
       //SINGLE IMAGE
@@ -615,7 +599,6 @@ public:
                               logger,
                               gl,
                               texturesHandler,
-                              downloaderOLD,
                               downloader,
                               planet, 
                               cameraConstraint,

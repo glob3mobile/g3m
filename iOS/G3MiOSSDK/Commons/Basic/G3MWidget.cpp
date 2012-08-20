@@ -13,7 +13,6 @@
 #include "Camera.hpp"
 #include "GL.hpp"
 #include "TexturesHandler.cpp"
-#include "Downloader.hpp"
 #include "IDownloader.hpp"
 #include "Effects.hpp"
 #include "Context.hpp"
@@ -26,7 +25,6 @@ G3MWidget::G3MWidget(FrameTasksExecutor* frameTasksExecutor,
                      ILogger*          logger,
                      GL*               gl,
                      TexturesHandler*  texturesHandler,
-                     Downloader*       downloaderOLD,
                      IDownloader*      downloader,
                      const Planet*     planet,
                      std::vector<ICameraConstrainer *> cameraConstraint,
@@ -55,7 +53,6 @@ _timer(factory->createTimer()),
 _renderCounter(0),
 _totalRenderTime(0),
 _logFPS(logFPS),
-_downloaderOLD(downloaderOLD),
 _downloader(downloader),
 _rendererReady(false), // false until first call to G3MWidget::render()
 _selectedRenderer(NULL),
@@ -64,7 +61,7 @@ _logDownloaderStatistics(logDownloaderStatistics)
 {
   initializeGL();
   
-  InitializationContext ic(_factory, _logger, _planet, _downloaderOLD, _downloader, _effectsScheduler);
+  InitializationContext ic(_factory, _logger, _planet, _downloader, _effectsScheduler);
   _effectsScheduler->initialize(&ic);
   _renderer->initialize(&ic);
   _busyRenderer->initialize(&ic);
@@ -80,7 +77,6 @@ G3MWidget* G3MWidget::create(FrameTasksExecutor* frameTasksExecutor,
                              ILogger*            logger,
                              GL*                 gl,
                              TexturesHandler*    texturesHandler,
-                             Downloader *        downloaderOLD,
                              IDownloader*        downloader,
                              const Planet*       planet,
                              std::vector<ICameraConstrainer*> cameraConstraint,
@@ -103,7 +99,6 @@ G3MWidget* G3MWidget::create(FrameTasksExecutor* frameTasksExecutor,
                        logger,
                        gl,
                        texturesHandler,
-                       downloaderOLD,
                        downloader,
                        planet,
                        cameraConstraint,
@@ -138,7 +133,6 @@ G3MWidget::~G3MWidget() {
   delete _nextCamera;
   delete _texturesHandler;
   delete _timer;
-  delete _downloaderOLD;
   delete _downloader;
   
   for (unsigned int n=0; n<_cameraConstraint.size(); n++) {
@@ -150,7 +144,7 @@ G3MWidget::~G3MWidget() {
 
 void G3MWidget::onTouchEvent(const TouchEvent* myEvent) {
   if (_rendererReady) {
-    EventContext ec(_factory, _logger, _planet, _downloaderOLD, _downloader, _effectsScheduler);
+    EventContext ec(_factory, _logger, _planet, _downloader, _effectsScheduler);
     
     _renderer->onTouchEvent(&ec, myEvent);
   }
@@ -158,7 +152,7 @@ void G3MWidget::onTouchEvent(const TouchEvent* myEvent) {
 
 void G3MWidget::onResizeViewportEvent(int width, int height) {
   if (_rendererReady) {
-    EventContext ec(_factory, _logger, _planet, _downloaderOLD, _downloader, _effectsScheduler);
+    EventContext ec(_factory, _logger, _planet, _downloader, _effectsScheduler);
     
     _renderer->onResizeViewportEvent(&ec, width, height);
   }
@@ -192,7 +186,6 @@ int G3MWidget::render() {
                    _currentCamera,
                    _nextCamera,
                    _texturesHandler,
-                   _downloaderOLD,
                    _downloader,
                    _effectsScheduler,
                    _factory->createTimer());

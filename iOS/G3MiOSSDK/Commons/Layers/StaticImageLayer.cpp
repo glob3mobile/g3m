@@ -13,6 +13,8 @@
 #include "IStorage.hpp"
 
 #include "Tile.hpp"
+#include "Petition.hpp"
+
 
 std::vector<Petition*> StaticImageLayer::getTilePetitions(const RenderContext* rc,
                                                           const Tile* tile, int width, int height) const

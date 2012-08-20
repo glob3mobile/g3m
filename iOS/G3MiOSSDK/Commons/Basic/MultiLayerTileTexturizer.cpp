@@ -23,7 +23,9 @@
 #include "ITimer.hpp"
 
 #include "FrameTasksExecutor.hpp"
-
+#include "IDownloadListener.hpp"
+#include "IDownloader.hpp"
+#include "Petition.hpp"
 
 enum PetitionStatus {
   STATUS_PENDING,
@@ -562,8 +564,6 @@ Mesh* MultiLayerTileTexturizer::texturize(const RenderContext* rc,
     builderHolder->get()->start();
   }
   else {
-    
-    int ____DIEGO_AT_WORK;
     class BuilderStartTask : public FrameTask {
     private:
       TileTextureBuilder* _builder;

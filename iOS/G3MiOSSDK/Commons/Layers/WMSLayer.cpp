@@ -11,6 +11,7 @@
 #include <sstream>
 
 #include "Tile.hpp"
+#include "Petition.hpp"
 
 bool WMSLayer::isAvailable(const RenderContext* rc,
                            const Tile* tile) const {

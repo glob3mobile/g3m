@@ -11,8 +11,8 @@
 
 #include <vector>
 #include "Layer.hpp"
-#include "TilePetitions.hpp"
 
+class Petition;
 
 class LayerSet
 {

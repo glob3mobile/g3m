@@ -39,7 +39,6 @@ public:
                            ILogger*            logger,
                            GL*                 gl,
                            TexturesHandler*    texturesHandler,
-                           Downloader *        downloaderOLD,
                            IDownloader*        downloader,
                            const Planet*       planet,
                            std::vector<ICameraConstrainer *> cameraConstraint,
@@ -87,7 +86,6 @@ private:
   
   Camera*          _currentCamera;
   Camera*          _nextCamera;
-  Downloader*      _downloaderOLD;
   IDownloader*     _downloader;
   TexturesHandler* _texturesHandler;
   const Color      _backgroundColor;
@@ -111,7 +109,6 @@ private:
             ILogger*            logger,
             GL*                 gl,
             TexturesHandler*    texturesHandler,
-            Downloader*         downloaderOLD,
             IDownloader*        downloader,
             const Planet*       planet,
             std::vector<ICameraConstrainer*> cameraConstraint,

@@ -10,12 +10,15 @@
 #define G3MiOSSDK_Layer_hpp
 
 #include <string>
+
 #include "Sector.hpp"
-#include "TilePetitions.hpp"
 #include "IFactory.hpp"
 #include "Context.hpp"
-
+#include "URL.hpp"
 #include "TerrainTouchEventListener.hpp"
+
+class Petition;
+class Tile;
 
 class Layer{
 private:
