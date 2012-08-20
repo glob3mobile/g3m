@@ -23,7 +23,6 @@
 #include "CameraDoubleTapHandler.hpp"
 #include "CameraConstraints.hpp"
 
-#include "Downloader.hpp"
 #include "TileRenderer.hpp"
 #include "DummyRenderer.hpp"
 #include "MarksRenderer.hpp"
@@ -405,27 +404,27 @@ public:
   //LAYERS
   LayerSet* layerSet = new LayerSet();
  
-  WMSLayer* blueMarble = new WMSLayer("bmng200405",
-                                      "http://www.nasa.network.com/wms?",
-                                      WMS_1_1_0,
-                                      "image/jpeg",
-                                      Sector::fullSphere(),
-                                      "EPSG:4326",
-                                      "",
-                                      false,
-                                      Angle::nan(),
-                                      Angle::nan());
+//  WMSLayer* blueMarble = new WMSLayer("bmng200405",
+//                                      "http://www.nasa.network.com/wms?",
+//                                      WMS_1_1_0,
+//                                      "image/jpeg",
+//                                      Sector::fullSphere(),
+//                                      "EPSG:4326",
+//                                      "",
+//                                      false,
+//                                      Angle::nan(),
+//                                      Angle::nan());
   
-//  WMSLayer *pnoa = new WMSLayer("PNOA",
-//                                "http://www.idee.es/wms/PNOA/PNOA",
-//                                WMS_1_1_0,
-//                                "image/png",
-//                                Sector::fromDegrees(21, -18, 45, 6),
-//                                "EPSG:4326",
-//                                "",
-//                                true,
-//                                Angle::nan(),
-//                                Angle::nan());
+  WMSLayer *pnoa = new WMSLayer("PNOA",
+                                "http://www.idee.es/wms/PNOA/PNOA",
+                                WMS_1_1_0,
+                                "image/png",
+                                Sector::fromDegrees(21, -18, 45, 6),
+                                "EPSG:4326",
+                                "",
+                                true,
+                                Angle::nan(),
+                                Angle::nan());
 
 //  WMSLayer *vias = new WMSLayer("VIAS",
 //                                "http://idecan2.grafcan.es/ServicioWMS/Callejero",
@@ -480,8 +479,8 @@ public:
 
   
   //ORDER IS IMPORTANT
-  layerSet->addLayer(blueMarble);
-//  layerSet->addLayer(pnoa);
+//  layerSet->addLayer(blueMarble);
+  layerSet->addLayer(pnoa);
 //  layerSet->addLayer(vias);
 //  layerSet->addLayer(oceans);
 //  layerSet->addLayer(osm);

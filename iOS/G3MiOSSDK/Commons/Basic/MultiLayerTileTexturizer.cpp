@@ -281,7 +281,7 @@ public:
     if (!_canceled && (_tile != NULL) && (_mesh != NULL)) {
       std::vector<const IImage*>    images;
       std::vector<const Rectangle*> rectangles;
-      std::string petitionsID;
+      std::string petitionsID = _tile->getKey().description();
       
       const int textureWidth  = _parameters->_tileTextureWidth;
       const int textureHeight = _parameters->_tileTextureHeight;

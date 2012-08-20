@@ -83,7 +83,7 @@ const GLTextureID CPUTextureBuilder::createTextureFromImages(GL * gl, const IFac
   else {
     base = factory->createImageFromSize(width, height);
     
-    printf("IMAGE BASE %d, %d\n", base->getWidth(), base->getHeight());
+//    printf("IMAGE BASE %d, %d\n", base->getWidth(), base->getHeight());
   }
   
   for (; i < images.size(); i++) {
