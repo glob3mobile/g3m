@@ -436,7 +436,7 @@ public:
 //                                true,
 //                                Angle::nan(),
 //                                Angle::nan());
-//
+
 //  WMSLayer *vias = new WMSLayer("VIAS",
 //                                "http://idecan2.grafcan.es/ServicioWMS/Callejero",
 //                                WMS_1_1_0,
@@ -447,7 +447,6 @@ public:
 //                                true,
 //                                Angle::nan(),
 //                                Angle::nan());
-  
 
 //  WMSLayer *oceans = new WMSLayer("igo:bmng200401,igo:sttOZ,igo:cntOZ",
 //                                  "igo:sttOZ",
@@ -462,7 +461,6 @@ public:
 //                                  Angle::nan());
 //
 //  oceans->addTerrainTouchEventListener(new OceanTerrainTouchEventListener(factory, downloader));
-  
   
 //  WMSLayer *osm = new WMSLayer("bing",
 //                               "bing",
