@@ -33,7 +33,6 @@
 #include "EllipsoidalTileTessellator.hpp"
 #include "LatLonMeshRenderer.h"
 
-//#include "FileSystemStorage_iOS.hpp"
 #include "SQLiteStorage_iOS.hpp"
 #include "NullStorage.hpp"
 #include "SingleImageTileTexturizer.hpp"
