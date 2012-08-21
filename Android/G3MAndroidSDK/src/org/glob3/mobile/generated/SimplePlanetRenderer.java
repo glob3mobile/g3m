@@ -109,11 +109,11 @@ public class SimplePlanetRenderer extends Renderer
 	final int res = _lonRes;
 	final int numIndexes = (2 * (res - 1) * (res + 1)) -1;
   
-	int[] ind = createMeshIndex();
-	float[] ver = createVertices(planet);
-	float[] texC;
-	float[] colors;
-	float[] normals;
+	int ind[] = createMeshIndex();
+	float ver[] = createVertices(*planet);
+	float texC[] = null;
+	float colors[] = null;
+	float normals[] = null;
   
 	//TEXTURED
 	int texID = 0;
@@ -129,7 +129,7 @@ public class SimplePlanetRenderer extends Renderer
 	}
   
 	//COLORS PER VERTEX
-	if (true)
+	if (false)
 	{
 	  int numVertices = res * res * 4;
 	  colors = new float[numVertices];
@@ -137,28 +137,28 @@ public class SimplePlanetRenderer extends Renderer
 	  {
   	  float val = (float)(0.5 + Math.sin(2.0 * Math.PI * ((float) i / numVertices) / 2.0));
 		colors[i++] = val;
-		colors[i++] = 0F;
+		colors[i++] = 0;
 		colors[i++] = (float)(1.0 - val);
-		colors[i++] = 1F;
+		colors[i++] = 1;
 	  }
 	}
   
 	//FLAT COLOR
 	Color flatColor = null;
-	if (true)
+	if (false)
 	{
 	  flatColor = new Color(Color.fromRGBA((float) 0.0, (float) 1.0, (float) 0.0, (float) 1.0));
 	}
   
-	if (true)
+	if (false)
 	{
 	  int numVertices = res * res * 3;
 	  normals = new float[numVertices];
 	  for(int i = 0; i < numVertices;)
 	  {
-		normals[i++] = 1.0F;
-		normals[i++] = 1.0F;
-		normals[i++] = 1.0F;
+		normals[i++] = 1.0;
+		normals[i++] = 1.0;
+		normals[i++] = 1.0;
 	  }
 	}
   
