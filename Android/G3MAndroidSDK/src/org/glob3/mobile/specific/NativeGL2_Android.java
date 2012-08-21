@@ -173,24 +173,32 @@ public class NativeGL2_Android extends INativeGL {
 
 	private FloatBuffer floatArrayToFloatBuffer(final float[] fv) {
 
-		// Clear the map when is big
-		final int size = _arrayToBufferMap.size();
-		if (size > 5000) {
-			_arrayToBufferMap.clear();
-		}
-
-		if (!_arrayToBufferMap.containsKey(fv)) {
-			final ByteBuffer byteBuf = ByteBuffer.allocateDirect(fv.length * 4);
-			byteBuf.order(ByteOrder.nativeOrder());
-			final FloatBuffer fb = byteBuf.asFloatBuffer();
-			fb.put(fv); // /TOO SLOW UNTIL VERSION GINGERBEAD (BECAUSE OF THIS,
-						// USE HASHMAP)
-			fb.position(0);
-			_arrayToBufferMap.put(fv, fb);
-			return fb;
-		}
-
-		return _arrayToBufferMap.get(fv);
+//		// Clear the map when is big
+//		final int size = _arrayToBufferMap.size();
+//		if (size > 5000) {
+//			_arrayToBufferMap.clear();
+//		}
+//
+//		if (!_arrayToBufferMap.containsKey(fv)) {
+//			final ByteBuffer byteBuf = ByteBuffer.allocateDirect(fv.length * 4);
+//			byteBuf.order(ByteOrder.nativeOrder());
+//			final FloatBuffer fb = byteBuf.asFloatBuffer();
+//			fb.put(fv); // /TOO SLOW UNTIL VERSION GINGERBEAD (BECAUSE OF THIS,
+//						// USE HASHMAP)
+//			fb.position(0);
+//			_arrayToBufferMap.put(fv, fb);
+//			return fb;
+//		}
+//
+//		return _arrayToBufferMap.get(fv);
+		
+		final ByteBuffer byteBuf = ByteBuffer.allocateDirect(fv.length * 4);
+		byteBuf.order(ByteOrder.nativeOrder());
+		final FloatBuffer fb = byteBuf.asFloatBuffer();
+		fb.put(fv); // /TOO SLOW UNTIL VERSION GINGERBEAD (BECAUSE OF THIS,
+					// USE HASHMAP)
+		fb.position(0);
+		return fb;
 	}
 
 	/////////////////////////////
@@ -229,6 +237,12 @@ public class NativeGL2_Android extends INativeGL {
 	public void uniformMatrix4fv(int location, int count, boolean transpose,
 			float[] value) {
 		FloatBuffer fb = floatArrayToFloatBuffer(value);
+		
+		for(int i = 0; i < fb.capacity(); i++) {
+			float d = fb.get(i);
+			d++;
+		}
+		
 		GLES20.glUniformMatrix4fv(location, count, transpose, fb);
 	}
 

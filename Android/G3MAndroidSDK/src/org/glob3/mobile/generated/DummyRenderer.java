@@ -61,13 +61,13 @@ public class DummyRenderer extends Renderer
 	for (int j = 0; j < res - 1; j++)
 	{
 	  if (j > 0)
-		  _index[n++] = (byte)(j * res);
+		  _index[n++] = (j * res);
 	  for (int i = 0; i < res; i++)
 	  {
-		_index[n++] = (byte)(j * res + i);
-		_index[n++] = (byte)(j * res + i + res);
+		_index[n++] = (j * res + i);
+		_index[n++] = (j * res + i + res);
 	  }
-	  _index[n++] = (byte)(j * res + 2 * res - 1);
+	  _index[n++] = (j * res + 2 * res - 1);
 	}
   }
 

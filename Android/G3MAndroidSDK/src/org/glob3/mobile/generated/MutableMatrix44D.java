@@ -376,16 +376,16 @@ public class MutableMatrix44D
 	final double fn = zfar - znear;
   
 	double[] P = new double[16];
-	P[0] = 2 * znear / rl;
-	P[1] = P[2] = P[3] = P[4] = 0;
-	P[5] = 2 * znear / tb;
-	P[6] = P[7] = 0;
+	P[0] = 2.0 * znear / rl;
+	P[1] = P[2] = P[3] = P[4] = 0.0;
+	P[5] = 2.0 * znear / tb;
+	P[6] = P[7] = 0.0;
 	P[8] = (right + left) / rl;
 	P[9] = (top + bottom) / tb;
 	P[10] = -(zfar + znear) / fn;
-	P[11] = -1;
-	P[12] = P[13] = 0;
-	P[14] = -2 * zfar / fn * znear;
+	P[11] = -1.0;
+	P[12] = P[13] = 0.0;
+	P[14] = -2.0 * zfar / fn * znear;
 	P[15] = 0;
   
 	return new MutableMatrix44D(P);
