@@ -84,7 +84,11 @@ public class GL
 	  }
   
 	  _texturesIdAllocationCounter += bugdetSize;
-	  System.out.printf("= Created %d texturesIds (accumulated %d).\n", bugdetSize, _texturesIdAllocationCounter);
+  
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if C_CODE
+	  System.out.printf("= Created %d texturesIds (accumulated %ld).\n", bugdetSize, _texturesIdAllocationCounter);
+//#endif
 	}
   
 	_texturesIdGetCounter++;
@@ -519,7 +523,10 @@ public class GL
   
 	_texturesIdTakeCounter++;
   
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if C_CODE
 	System.out.printf("   - Delete 1 texturesId (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n", _texturesIdBag.size(), _texturesIdGetCounter, _texturesIdTakeCounter, _texturesIdGetCounter - _texturesIdTakeCounter);
+//#endif
   }
 
   public final void enableCullFace(GLCullFace face)

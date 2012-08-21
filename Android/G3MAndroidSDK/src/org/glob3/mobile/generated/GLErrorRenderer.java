@@ -33,9 +33,10 @@ public class GLErrorRenderer extends Renderer
 	GLError error = gl.getError();
 	while (error != GLError.NoError)
 	{
-	  logger.logError("GL Error: %d", error);
+	  logger.logError("GL Error: %d", error.getValue());
 	  error = gl.getError();
 	}
+  
   
 	return Renderer.maxTimeToRender;
   }
