@@ -127,7 +127,7 @@ public class G3MWidget
 	final TimeInterval elapsedTime = _timer.elapsedTime();
 	if (elapsedTime.milliseconds() > 100)
 	{
-	  _logger.logWarning("Frame took too much time: %d ms", elapsedTime.milliseconds());
+	  _logger.logWarning("Frame took too much time: %dms", elapsedTime.milliseconds());
 	}
 	_totalRenderTime += elapsedTime.milliseconds();
   
