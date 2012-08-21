@@ -163,9 +163,9 @@ private:
     int posS = 0;
     
     // compute offset for vertices
-//    const Vector3D sw = planet->toVector3D(sector->getSW());
-//    const Vector3D nw = planet->toVector3D(sector->getNW());
-//    const double offset = nw.sub(sw).length(); // * 1e-3;
+    //    const Vector3D sw = planet->toVector3D(sector->getSW());
+    //    const Vector3D nw = planet->toVector3D(sector->getNW());
+    //    const double offset = nw.sub(sw).length(); // * 1e-3;
     const double offset = 5000;
     
     // west side
@@ -252,7 +252,7 @@ public:
         _meshes.push_back(createMesh(rc, sector));
       }
       
-//      cleanSectors();
+      //      cleanSectors();
     }
     
     for (int i = 0; i < _meshes.size(); i++) {
@@ -296,77 +296,59 @@ public:
   //  cameraRenderer->addHandler(new CameraDoubleTapHandler());
   comp->addRenderer(cameraRenderer);
   
-  
   IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
   IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
                                                  storage);
   
-  //LAYERS
-  LayerSet* layerSet = new LayerSet();
-  //  WMSLayer* baseLayer = new WMSLayer("bmng200405",
-  //                                     "http://www.nasa.network.com/wms?",
-  //                                     WMS_1_1_0,
-  //                                     "image/jpeg",
-  //                                     Sector::fullSphere(),
-  //                                     "EPSG:4326",
-  //                                     "",
-  //                                     false,
-  //                                     Angle::nan(),
-  //                                     Angle::nan());
-  //  layerSet->addLayer(baseLayer);
-  
-  WMSLayer *osm = new WMSLayer("osm",
-                               "osm",
-                               "http://wms.latlon.org/",
-                               WMS_1_1_0,
-                               "image/jpeg",
-                               Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
-                               "EPSG:4326",
-                               "",
-                               false,
-                               Angle::nan(),
-                               Angle::nan());
-  layerSet->addLayer(osm);
-  
-  WMSLayer *oceans = new WMSLayer(//"igo:bmng200401,igo:sttOZ,igo:cntOZ",
-                                  "igo:sttOZ,igo:cntOZ",
-                                  "igo:sttOZ",
-                                  "http://igosoftware.dyndns.org:8081/geoserver/igo/wms",
-                                  WMS_1_3_0,
-                                  "image/png",
-                                  Sector::fullSphere(),
-                                  "EPSG:4326",
-                                  "",
-                                  true,
-                                  Angle::nan(),
-                                  Angle::nan());
-  
-  oceans->addTerrainTouchEventListener(new OceanTerrainTouchEventListener(factory, downloader));
-  
-  layerSet->addLayer(oceans);
-  
-  //STATIC IMAGE FOR TESTING AUSTRALIA
-  //  IImage *image = factory->createImageFromFileName("20120720_cintp1.png");
-  //  StaticImageLayer * imageLayer = new StaticImageLayer("SIL",
-  //                                                       image,
-  //                                                       Sector::fromDegrees(-60, 50, 10, 185),
-  //                                                       fss);
-  //  layerSet->addLayer(imageLayer);
-  
-  // very basic tile renderer
-  if (true) {
-    bool renderDebug = false;
+  {
+    //LAYERS
+    LayerSet* layerSet = new LayerSet();
+    //  WMSLayer* baseLayer = new WMSLayer("bmng200405",
+    //                                     "http://www.nasa.network.com/wms?",
+    //                                     WMS_1_1_0,
+    //                                     "image/jpeg",
+    //                                     Sector::fullSphere(),
+    //                                     "EPSG:4326",
+    //                                     "",
+    //                                     false,
+    //                                     Angle::nan(),
+    //                                     Angle::nan());
+    //  layerSet->addLayer(baseLayer);
+    
+    WMSLayer *osm = new WMSLayer("osm",
+                                 "osm",
+                                 "http://wms.latlon.org/",
+                                 WMS_1_1_0,
+                                 "image/jpeg",
+                                 Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
+                                 "EPSG:4326",
+                                 "",
+                                 false,
+                                 Angle::nan(),
+                                 Angle::nan());
+    layerSet->addLayer(osm);
+    
+    WMSLayer *oceans = new WMSLayer(//"igo:bmng200401,igo:sttOZ,igo:cntOZ",
+                                    "igo:sttOZ,igo:cntOZ",
+                                    "igo:sttOZ",
+                                    "http://igosoftware.dyndns.org:8081/geoserver/igo/wms",
+                                    WMS_1_3_0,
+                                    "image/png",
+                                    Sector::fullSphere(),
+                                    "EPSG:4326",
+                                    "",
+                                    true,
+                                    Angle::nan(),
+                                    Angle::nan());
+    
+    oceans->addTerrainTouchEventListener(new OceanTerrainTouchEventListener(factory, downloader));
+    
+    layerSet->addLayer(oceans);
+    
+    const bool renderDebug = false;
     TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug);
     
-    TileTexturizer* texturizer = NULL;
-    if (true) {
-      texturizer = new MultiLayerTileTexturizer(layerSet);
-    }
-    else {
-      //SINGLE IMAGE
-      IImage *singleWorldImage = factory->createImageFromFileName("world.jpg");
-      texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
-    }
+    TileTexturizer* texturizer = new MultiLayerTileTexturizer(layerSet);
     
     const bool showStatistics = false;
     TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
@@ -376,50 +358,47 @@ public:
     comp->addRenderer(tr);
   }
   
+  //STATIC IMAGE FOR TESTING AUSTRALIA
+  //  IImage *image = factory->createImageFromFileName("20120720_cintp1.png");
+  //  StaticImageLayer * imageLayer = new StaticImageLayer("SIL",
+  //                                                       image,
+  //                                                       Sector::fromDegrees(-60, 50, 10, 185),
+  //                                                       fss);
+  //  layerSet->addLayer(imageLayer);
+  
+  
   if (false) {
-    // dummy renderer with a simple box
-    DummyRenderer* dum = new DummyRenderer();
-    comp->addRenderer(dum);
+    //  all LL || UR
+    //
+    //  -38/150 || -27/160
+    //  -27/145 || -14/154
+    
+    //  -38/130 || -29/140
+    //  -37/110 || -25/115
+    //  -22/110 || -10/120
+    
+    std::vector<Sector*> sectors;
+    
+    int ___rendering_sectors_dgd_at_work;
+    sectors.push_back(new Sector(Geodetic2D::fromDegrees(-38, 150),
+                                 Geodetic2D::fromDegrees(-27, 160)));
+    
+    sectors.push_back(new Sector(Geodetic2D::fromDegrees(-27, 145),
+                                 Geodetic2D::fromDegrees(-14, 154)));
+    
+    sectors.push_back(new Sector(Geodetic2D::fromDegrees(-38, 130),
+                                 Geodetic2D::fromDegrees(-29, 140)));
+    
+    sectors.push_back(new Sector(Geodetic2D::fromDegrees(-37, 110),
+                                 Geodetic2D::fromDegrees(-25, 115)));
+    
+    sectors.push_back(new Sector(Geodetic2D::fromDegrees(-22, 110),
+                                 Geodetic2D::fromDegrees(-10, 120)));
+    
+    
+    const int resolution = 12;
+    comp->addRenderer(new CRISOBoundsRenderer(sectors, resolution));
   }
-  
-  if (false) {
-    // simple planet renderer, with a basic world image
-    SimplePlanetRenderer* spr = new SimplePlanetRenderer("world.jpg");
-    comp->addRenderer(spr);
-  }
-  
-  
-//  all LL || UR
-//
-//  -38/150 || -27/160
-//  -27/145 || -14/154
-  
-//  -38/130 || -29/140
-//  -37/110 || -25/115
-//  -22/110 || -10/120
-
-  std::vector<Sector*> sectors;
-  
-  int ___rendering_sectors_dgd_at_work;
-  sectors.push_back(new Sector(Geodetic2D::fromDegrees(-38, 150),
-                               Geodetic2D::fromDegrees(-27, 160)));
-
-  sectors.push_back(new Sector(Geodetic2D::fromDegrees(-27, 145),
-                               Geodetic2D::fromDegrees(-14, 154)));
-  
-  sectors.push_back(new Sector(Geodetic2D::fromDegrees(-38, 130),
-                               Geodetic2D::fromDegrees(-29, 140)));
-  
-  sectors.push_back(new Sector(Geodetic2D::fromDegrees(-37, 110),
-                               Geodetic2D::fromDegrees(-25, 115)));
-  
-  sectors.push_back(new Sector(Geodetic2D::fromDegrees(-22, 110),
-                               Geodetic2D::fromDegrees(-10, 120)));
-
-  
-  int resolution = 12;
-  comp->addRenderer(new CRISOBoundsRenderer(sectors, resolution));
-
   
   TextureBuilder* texBuilder = new CPUTextureBuilder();
   TexturesHandler* texturesHandler = new TexturesHandler(gl, factory, texBuilder, false);
@@ -437,8 +416,10 @@ public:
     bool acceptsCamera(const Camera* camera,
                        const Planet *planet) const {
       
+      
       Geodetic3D cameraPosition = planet->toGeodetic3D(camera->getPosition());
-
+      
+      
       const double lowerHeight = 1.67384e+06 * 0.9;
       const double upperHeight = 2.39243e+06 * 1.15;
       
@@ -446,31 +427,35 @@ public:
           (cameraPosition.height() > upperHeight)) {
         return false;
       }
-//      //  printf("Camera Position=%s\n" ,
-//      //         _planet->toGeodetic3D(_currentCamera->getPosition()).description().c_str());
-//
-//      const double distance = camera->getPosition().length();
-//      const double radii    = planet->getRadii().maxAxis();
-//      if (distance > radii*10) {
-//        // printf ("--- camera constraint!\n");
-//        return false;
-//      }
+      
+      Geodetic3D centerOfView = camera->getGeodeticCenterOfView();
+      int __checkCameraPositionOnCurrentSector__TODO;
+      
+      //      //  printf("Camera Position=%s\n" ,
+      //      //         _planet->toGeodetic3D(_currentCamera->getPosition()).description().c_str());
+      //
+      //      const double distance = camera->getPosition().length();
+      //      const double radii    = planet->getRadii().maxAxis();
+      //      if (distance > radii*10) {
+      //        // printf ("--- camera constraint!\n");
+      //        return false;
+      //      }
       
       return true;
     }
   };
-
+  
   cameraConstraint.push_back(new CSIROCameraConstrainer());
   
   FrameTasksExecutor* frameTasksExecutor = new FrameTasksExecutor();
-
+  
   int __PUT_contraints;
-//    [self gotoPosition: Geodetic3D::fromDegrees(-32.5232, 154.818, 2.02496e+06)];
-//    [self gotoPosition: Geodetic3D::fromDegrees(-20.4393, 149.518, 2.39243e+06)];
-//    [self gotoPosition: Geodetic3D::fromDegrees(-33.4738, 134.91, 1.67384e+06)];
-//    [self gotoPosition: Geodetic3D::fromDegrees(-30.9246, 112.307, 2.20362e+06)];
-//    [self gotoPosition: Geodetic3D::fromDegrees(-15.9925, 114.829, 2.19699e+06)];
-
+  //    [self gotoPosition: Geodetic3D::fromDegrees(-32.5232, 154.818, 2.02496e+06)];
+  //    [self gotoPosition: Geodetic3D::fromDegrees(-20.4393, 149.518, 2.39243e+06)];
+  //    [self gotoPosition: Geodetic3D::fromDegrees(-33.4738, 134.91, 1.67384e+06)];
+  //    [self gotoPosition: Geodetic3D::fromDegrees(-30.9246, 112.307, 2.20362e+06)];
+  //    [self gotoPosition: Geodetic3D::fromDegrees(-15.9925, 114.829, 2.19699e+06)];
+  
   
   
   _widgetVP = G3MWidget::create(frameTasksExecutor,
@@ -489,7 +474,7 @@ public:
                                 true,
                                 false);
   
-//  const Geodetic3D australia = Geodetic3D::fromDegrees(-26.91, 133.94, 1.1e7);
+  //  const Geodetic3D australia = Geodetic3D::fromDegrees(-26.91, 133.94, 1.1e7);
   [self widget]->getNextCamera()->setPosition(Geodetic3D::fromDegrees(-32.5232, 154.818, 2.02496e+06));
   
 }

@@ -145,8 +145,8 @@ public:
   Vector3D getPosition() const { return _position.asVector3D(); }
   Vector3D getCenter() const { return _center.asVector3D(); }
   Vector3D getUp() const { return _up.asVector3D(); }
-  Geodetic3D getGeodeticCenterOfView() { return *_getGeodeticCenterOfView(); }
-  Vector3D getXYZCenterOfView() { return _getXYZCenterOfView().asVector3D(); }
+  Geodetic3D getGeodeticCenterOfView() const { return *_getGeodeticCenterOfView(); }
+  Vector3D getXYZCenterOfView() const { return _getXYZCenterOfView().asVector3D(); }
   Vector3D getViewDirection() const { return _center.sub(_position).asVector3D(); }
 
   
@@ -239,8 +239,8 @@ private:
   }
   
   // intersection of view direction with globe in(x,y,z)
-  MutableVector3D   _XYZCenterOfView;  
-  MutableVector3D   _getXYZCenterOfView() {
+  mutable MutableVector3D   _XYZCenterOfView;
+  MutableVector3D   _getXYZCenterOfView() const {
     if (_dirtyFlags._XYZCenterOfView) {
       _dirtyFlags._XYZCenterOfView = false;
       _XYZCenterOfView = centerOfViewOnPlanet().asMutableVector3D();
@@ -249,8 +249,8 @@ private:
   }
 
   // intersection of view direction with globe in geodetic
-  Geodetic3D*     _geodeticCenterOfView;  
-  Geodetic3D*     _getGeodeticCenterOfView() {
+  mutable Geodetic3D*     _geodeticCenterOfView;
+  Geodetic3D*     _getGeodeticCenterOfView() const {
     if (_dirtyFlags._geodeticCenterOfView) {
       _dirtyFlags._geodeticCenterOfView = false;
       if (_geodeticCenterOfView) delete _geodeticCenterOfView;
