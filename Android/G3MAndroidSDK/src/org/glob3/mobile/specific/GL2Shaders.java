@@ -56,7 +56,7 @@ public class GL2Shaders {
 	"    }" + 
 	"    else {" + 
 	"      gl_FragColor = FlatColor;" + 
-	"    }" + 
+	"    }" +
 	"    " + 
 	"  }" + 
 	"  " + 

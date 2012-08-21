@@ -101,7 +101,7 @@ public class Image_Android extends IImage {
 	   
 	   //Getting pixels in Color format
 	   int[] pixels = new int[scaledImage.getWidth() * scaledImage.getHeight()];
-	   scaledImage.getPixels(pixels, 0, getWidth(), 0, 0, getWidth(), getHeight());
+	   scaledImage.getPixels(pixels, 0, scaledImage.getWidth(), 0, 0, scaledImage.getWidth(), scaledImage.getHeight());
 	   
 	   //To RGBA
 	   if (data.length != pixels.length*4) {

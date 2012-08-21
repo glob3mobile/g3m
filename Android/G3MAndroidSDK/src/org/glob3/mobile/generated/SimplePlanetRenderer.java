@@ -111,9 +111,9 @@ public class SimplePlanetRenderer extends Renderer
   
 	int[] ind = createMeshIndex();
 	float[] ver = createVertices(planet);
-	float[] texC;
-	float[] colors;
-	float[] normals;
+	float[] texC = null;
+	float[] colors = null;
+	float[] normals = null;
   
 	//TEXTURED
 	int texID = 0;
@@ -129,7 +129,7 @@ public class SimplePlanetRenderer extends Renderer
 	}
   
 	//COLORS PER VERTEX
-	if (true)
+	if (false)
 	{
 	  int numVertices = res * res * 4;
 	  colors = new float[numVertices];
@@ -145,12 +145,12 @@ public class SimplePlanetRenderer extends Renderer
   
 	//FLAT COLOR
 	Color flatColor = null;
-	if (true)
+	if (false)
 	{
 	  flatColor = new Color(Color.fromRGBA((float) 0.0, (float) 1.0, (float) 0.0, (float) 1.0));
 	}
   
-	if (true)
+	if (false)
 	{
 	  int numVertices = res * res * 3;
 	  normals = new float[numVertices];

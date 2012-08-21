@@ -417,7 +417,6 @@ public class GL
 
   public final int uploadTexture(IImage image, int textureWidth, int textureHeight)
   {
-  
 	byte[] imageData = new byte[textureWidth * textureHeight * 4];
 	image.fillWithRGBA(imageData, textureWidth, textureHeight);
   

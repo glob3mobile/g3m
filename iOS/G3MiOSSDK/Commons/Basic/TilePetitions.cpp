@@ -62,7 +62,7 @@ std::string TilePetitions::createPetitionsID(const IFactory* fac) const
     id += _petitions[j]->getURL();
   }
   
-  id += fac->stringFormat("_%f_%f_%f", _level, _row, _column);
+  id += fac->stringFormat("_%d_%d_%d", _level, _row, _column);
   
   return id;
 }

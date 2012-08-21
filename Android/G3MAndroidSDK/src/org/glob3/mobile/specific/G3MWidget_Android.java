@@ -144,7 +144,8 @@ public class G3MWidget_Android extends GLSurfaceView implements
 	
 	public G3MWidget getWidget() {
 		if (_widget == null) {
-			initSimpleWidgetDemo();
+			//initSimpleWidgetDemo();
+			initWidgetDemo();
 		}
 		return _widget;
 	}
@@ -232,8 +233,13 @@ public class G3MWidget_Android extends GLSurfaceView implements
 		                             
 	}
 
-	private void initWidgetDemo(int width, int height, Context ctx, String documentsDirectory)
+	private void initWidgetDemo()
 	{
+
+		int width = getWidth();
+		int height = getHeight();
+		Context ctx = getContext();
+		
 	  IFactory factory = new Factory_Android(ctx);
 	  ILogger logger = new Logger_Android(LogLevel.ErrorLevel);
 	  
@@ -286,7 +292,7 @@ public class G3MWidget_Android extends GLSurfaceView implements
 	  layerSet.add(vias);
 	  
 	  // very basic tile renderer
-	  if (true) {
+	  if (false) {
 	    TileParameters parameters = TileParameters.createDefault(true);
 	    
 	    TileTexturizer texturizer = null;
@@ -313,13 +319,13 @@ public class G3MWidget_Android extends GLSurfaceView implements
 	    comp.addRenderer(dum);
 	  }
 	  
-	  if (false) {
+	  if (true) {
 	    // simple planet renderer, with a basic world image
 	    SimplePlanetRenderer spr = new SimplePlanetRenderer("world.jpg");
 	    comp.addRenderer(spr);
 	  }
 	  
-	  if (false) {
+	  if (true) {
 	    // marks renderer
 	    MarksRenderer marks = new MarksRenderer();
 	    comp.addRenderer(marks);
