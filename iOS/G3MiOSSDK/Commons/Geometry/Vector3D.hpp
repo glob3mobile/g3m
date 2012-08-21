@@ -130,6 +130,9 @@ public:
   double maxAxis() const;
   
   Vector3D projectionInPlane(const Vector3D& normal) const;
+  
+  const std::string description() const;
+
 };
 
 

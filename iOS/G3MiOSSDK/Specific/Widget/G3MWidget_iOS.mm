@@ -119,6 +119,153 @@ public:
   return [CAEAGLLayer class];
 }
 
+
+class CRISOBoundsRenderer : public Renderer {
+private:
+  const int            _resolution;
+  std::vector<Sector*> _sectors;
+  std::vector<Mesh*>   _meshes;
+  
+  
+  
+  static void addVertex(const Planet* planet,
+                        std::vector<MutableVector3D>* vertices,
+                        const Geodetic3D& g) {
+    vertices->push_back( planet->toVector3D(g).asMutableVector3D() );
+  }
+  
+  void cleanMeshes() {
+    for (int i = 0; i < _meshes.size(); i++) {
+      Mesh* mesh = _meshes[i];
+      delete mesh;
+    }
+    _meshes.clear();
+  }
+  
+  void cleanSectors() {
+    for (int i = 0; i < _sectors.size(); i++) {
+      Sector* sector = _sectors[i];
+      delete sector;
+    }
+    _sectors.clear();
+  }
+  
+  Mesh* createMesh(const RenderContext* rc,
+                   const Sector* sector) const
+  {
+    const Planet* planet = rc->getPlanet();
+    
+    // create vectors
+    std::vector<MutableVector3D> vertices;
+    std::vector<MutableVector2D> texCoords;
+    std::vector<int> indices;
+    const int resolutionMinus1 = _resolution - 1;
+    int posS = 0;
+    
+    // compute offset for vertices
+//    const Vector3D sw = planet->toVector3D(sector->getSW());
+//    const Vector3D nw = planet->toVector3D(sector->getNW());
+//    const double offset = nw.sub(sw).length(); // * 1e-3;
+    const double offset = 5000;
+    
+    // west side
+    for (int j = 0; j < resolutionMinus1; j++) {
+      const Geodetic3D g(sector->getInnerPoint(0, (double)j/resolutionMinus1), offset);
+      addVertex(planet, &vertices, g);
+      indices.push_back(posS++);
+    }
+    
+    // south side
+    for (int i = 0; i < resolutionMinus1; i++) {
+      const Geodetic3D g(sector->getInnerPoint((double)i/resolutionMinus1, 1), offset);
+      addVertex(planet, &vertices, g);
+      indices.push_back(posS++);
+    }
+    
+    // east side
+    for (int j = resolutionMinus1; j > 0; j--) {
+      const Geodetic3D g(sector->getInnerPoint(1, (double)j/resolutionMinus1), offset);
+      addVertex(planet, &vertices, g);
+      indices.push_back(posS++);
+    }
+    
+    // north side
+    for (int i = resolutionMinus1; i > 0; i--) {
+      const Geodetic3D g(sector->getInnerPoint((double)i/resolutionMinus1, 0), offset);
+      addVertex(planet, &vertices, g);
+      indices.push_back(posS++);
+    }
+    
+    const Color *color = new Color(Color::fromRGBA((float) 1.0, (float) 0.0, (float) 0, (float) 1.0));
+    const Vector3D center = planet->toVector3D(sector->getCenter());
+    
+    return IndexedMesh::createFromVector3D(vertices, LineLoop, GivenCenter, center, indices, color);
+  }
+  
+  
+public:
+  CRISOBoundsRenderer(const std::vector<Sector*>& sectors,
+                      int resolution) :
+  _sectors(sectors),
+  _resolution(resolution)
+  {
+    //    for (int i = 0; i < sectors.size(); i++) {
+    //      _sectors.push_back(sectors[i]);
+    //    }
+  }
+  void initialize(const InitializationContext* ic) { }
+  
+  bool isReadyToRender(const RenderContext* rc) {
+    return true;
+  }
+  
+  bool onTouchEvent(const EventContext* ec,
+                    const TouchEvent* touchEvent) {
+    return false;
+  }
+  
+  void onResizeViewportEvent(const EventContext* ec,
+                             int width, int height) {
+    
+  }
+  
+  void start() {
+    
+  }
+  
+  void stop() {
+    
+  }
+  
+  virtual ~CRISOBoundsRenderer() {
+    cleanSectors();
+    cleanMeshes();
+  };
+  
+  int render(const RenderContext* rc) {
+    if (_meshes.size() != _sectors.size()) {
+      cleanMeshes();
+      
+      for (int i = 0; i < _sectors.size(); i++) {
+        Sector* sector = _sectors[i];
+        
+        _meshes.push_back(createMesh(rc, sector));
+      }
+      
+//      cleanSectors();
+    }
+    
+    for (int i = 0; i < _meshes.size(); i++) {
+      Mesh* mesh = _meshes[i];
+      mesh->render(rc);
+    }
+    
+    return MAX_TIME_TO_RENDER;
+  }
+  
+};
+
+
 - (void) initWidgetCSIRO
 {
   // create GLOB3M WIDGET
@@ -142,11 +289,11 @@ public:
   const bool useInertia = false;
   cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
   const bool processRotation = false;
-  const bool processZoom = false;
+  const bool processZoom = true;
   cameraRenderer->addHandler(new CameraDoubleDragHandler(processRotation,
                                                          processZoom));
-//  cameraRenderer->addHandler(new CameraRotationHandler());
-//  cameraRenderer->addHandler(new CameraDoubleTapHandler());
+  //  cameraRenderer->addHandler(new CameraRotationHandler());
+  //  cameraRenderer->addHandler(new CameraDoubleTapHandler());
   comp->addRenderer(cameraRenderer);
   
   
@@ -167,7 +314,7 @@ public:
   //                                     Angle::nan(),
   //                                     Angle::nan());
   //  layerSet->addLayer(baseLayer);
-
+  
   WMSLayer *osm = new WMSLayer("osm",
                                "osm",
                                "http://wms.latlon.org/",
@@ -180,7 +327,7 @@ public:
                                Angle::nan(),
                                Angle::nan());
   layerSet->addLayer(osm);
-
+  
   WMSLayer *oceans = new WMSLayer(//"igo:bmng200401,igo:sttOZ,igo:cntOZ",
                                   "igo:sttOZ,igo:cntOZ",
                                   "igo:sttOZ",
@@ -241,6 +388,39 @@ public:
     comp->addRenderer(spr);
   }
   
+  
+//  all LL || UR
+//
+//  -38/150 || -27/160
+//  -27/145 || -14/154
+  
+//  -38/130 || -29/140
+//  -37/110 || -25/115
+//  -22/110 || -10/120
+
+  std::vector<Sector*> sectors;
+  
+  int ___rendering_sectors_dgd_at_work;
+  sectors.push_back(new Sector(Geodetic2D::fromDegrees(-38, 150),
+                               Geodetic2D::fromDegrees(-27, 160)));
+
+  sectors.push_back(new Sector(Geodetic2D::fromDegrees(-27, 145),
+                               Geodetic2D::fromDegrees(-14, 154)));
+  
+  sectors.push_back(new Sector(Geodetic2D::fromDegrees(-38, 130),
+                               Geodetic2D::fromDegrees(-29, 140)));
+  
+  sectors.push_back(new Sector(Geodetic2D::fromDegrees(-37, 110),
+                               Geodetic2D::fromDegrees(-25, 115)));
+  
+  sectors.push_back(new Sector(Geodetic2D::fromDegrees(-22, 110),
+                               Geodetic2D::fromDegrees(-10, 120)));
+
+  
+  int resolution = 12;
+  comp->addRenderer(new CRISOBoundsRenderer(sectors, resolution));
+
+  
   TextureBuilder* texBuilder = new CPUTextureBuilder();
   TexturesHandler* texturesHandler = new TexturesHandler(gl, factory, texBuilder, false);
   
@@ -251,9 +431,47 @@ public:
   EffectsScheduler* scheduler = new EffectsScheduler();
   
   std::vector <ICameraConstrainer *> cameraConstraint;
-  cameraConstraint.push_back(new SimpleCameraConstrainer);
+  
+  class CSIROCameraConstrainer : public ICameraConstrainer {
+  public:
+    bool acceptsCamera(const Camera* camera,
+                       const Planet *planet) const {
+      
+      Geodetic3D cameraPosition = planet->toGeodetic3D(camera->getPosition());
+
+      const double lowerHeight = 1.67384e+06 * 0.9;
+      const double upperHeight = 2.39243e+06 * 1.15;
+      
+      if ((cameraPosition.height() < lowerHeight) ||
+          (cameraPosition.height() > upperHeight)) {
+        return false;
+      }
+//      //  printf("Camera Position=%s\n" ,
+//      //         _planet->toGeodetic3D(_currentCamera->getPosition()).description().c_str());
+//
+//      const double distance = camera->getPosition().length();
+//      const double radii    = planet->getRadii().maxAxis();
+//      if (distance > radii*10) {
+//        // printf ("--- camera constraint!\n");
+//        return false;
+//      }
+      
+      return true;
+    }
+  };
+
+  cameraConstraint.push_back(new CSIROCameraConstrainer());
   
   FrameTasksExecutor* frameTasksExecutor = new FrameTasksExecutor();
+
+  int __PUT_contraints;
+//    [self gotoPosition: Geodetic3D::fromDegrees(-32.5232, 154.818, 2.02496e+06)];
+//    [self gotoPosition: Geodetic3D::fromDegrees(-20.4393, 149.518, 2.39243e+06)];
+//    [self gotoPosition: Geodetic3D::fromDegrees(-33.4738, 134.91, 1.67384e+06)];
+//    [self gotoPosition: Geodetic3D::fromDegrees(-30.9246, 112.307, 2.20362e+06)];
+//    [self gotoPosition: Geodetic3D::fromDegrees(-15.9925, 114.829, 2.19699e+06)];
+
+  
   
   _widgetVP = G3MWidget::create(frameTasksExecutor,
                                 factory,
@@ -271,8 +489,8 @@ public:
                                 true,
                                 false);
   
-  const Geodetic3D australia = Geodetic3D::fromDegrees(-26.91, 133.94, 1.1e7);
-  [self widget]->getNextCamera()->setPosition(australia);
+//  const Geodetic3D australia = Geodetic3D::fromDegrees(-26.91, 133.94, 1.1e7);
+  [self widget]->getNextCamera()->setPosition(Geodetic3D::fromDegrees(-32.5232, 154.818, 2.02496e+06));
   
 }
 

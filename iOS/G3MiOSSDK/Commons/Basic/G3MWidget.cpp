@@ -178,6 +178,9 @@ int G3MWidget::render() {
     _nextCamera->copyFrom(*_currentCamera);
   }
   
+//  int __removePrint;
+//  printf("Camera Position=%s\n" ,
+//         _planet->toGeodetic3D(_currentCamera->getPosition()).description().c_str());
   
   // create RenderContext
   RenderContext rc(_frameTasksExecutor,

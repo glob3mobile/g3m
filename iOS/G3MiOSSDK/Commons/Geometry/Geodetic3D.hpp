@@ -67,7 +67,9 @@ public:
   Geodetic2D asGeodetic2D() const {
     return Geodetic2D(_latitude, _longitude);
   }
-  
+
+  const std::string description() const;
+
 };
 
 
