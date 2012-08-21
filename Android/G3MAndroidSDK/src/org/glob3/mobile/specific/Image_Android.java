@@ -8,6 +8,7 @@ import org.glob3.mobile.generated.Rectangle;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.util.Log;
 
 public class Image_Android extends IImage {
 
@@ -92,18 +93,21 @@ public class Image_Android extends IImage {
                             int height) {
 	   //Scaling
 	   Bitmap scaledImage = null;
-	   if ((_image.getWidth() != width) && (_image.getHeight() != height)) {
+	   if ((_image.getWidth() != width) || (_image.getHeight() != height)) {
 		   scaledImage = Bitmap.createScaledBitmap(_image, width, height, true);
 	   } else{
 		   scaledImage = _image;
 	   }
 	   
 	   //Getting pixels in Color format
-	   int[] pixels = new int[getWidth() * getHeight()];
+	   int[] pixels = new int[scaledImage.getWidth() * scaledImage.getHeight()];
 	   scaledImage.getPixels(pixels, 0, getWidth(), 0, 0, getWidth(), getHeight());
 	   
 	   //To RGBA
-	   data = new byte[pixels.length*4];
+	   if (data.length != pixels.length*4) {
+		   Log.d("", "FAILURE FillWithRGBA");
+		   return;
+	   }
 	   int p = 0;
 	   for(int i = 0; i < pixels.length; i++){
 		   int color = pixels[i];

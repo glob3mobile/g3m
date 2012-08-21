@@ -531,7 +531,7 @@ int GL::getTextureID() {
     
     _texturesIdAllocationCounter += bugdetSize;
     
-#if C_CODE
+#ifdef C_CODE
     printf("= Created %d texturesIds (accumulated %ld).\n", bugdetSize, _texturesIdAllocationCounter);
 #endif
   }
