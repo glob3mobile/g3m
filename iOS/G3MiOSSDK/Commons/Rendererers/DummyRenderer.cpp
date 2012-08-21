@@ -46,10 +46,10 @@ void DummyRenderer::initialize(const InitializationContext* ic)
   for (int j = 0; j < res - 1; j++) {
     if (j > 0) _index[n++] = (char) (j * res);
     for (int i = 0; i < res; i++) {
-      _index[n++] = (char) (j * res + i);
-      _index[n++] = (char) (j * res + i + res);
+      _index[n++] = (j * res + i);
+      _index[n++] = (j * res + i + res);
     }
-    _index[n++] = (char) (j * res + 2 * res - 1);
+    _index[n++] = (j * res + 2 * res - 1);
   }
 }  
 
