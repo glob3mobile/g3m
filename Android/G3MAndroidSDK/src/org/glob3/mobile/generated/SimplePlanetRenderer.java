@@ -110,7 +110,7 @@ public class SimplePlanetRenderer extends Renderer
 	final int numIndexes = (2 * (res - 1) * (res + 1)) -1;
   
 	int ind[] = createMeshIndex();
-	float ver[] = createVertices(*planet);
+	float ver[] = createVertices(planet);
 	float texC[] = null;
 	float colors[] = null;
 	float normals[] = null;
@@ -156,7 +156,7 @@ public class SimplePlanetRenderer extends Renderer
 	  normals = new float[numVertices];
 	  for(int i = 0; i < numVertices;)
 	  {
-		normals[i++] = 1.0;
+		normals[i++] = (float) 1.0;
 		normals[i++] = 1.0;
 		normals[i++] = 1.0;
 	  }

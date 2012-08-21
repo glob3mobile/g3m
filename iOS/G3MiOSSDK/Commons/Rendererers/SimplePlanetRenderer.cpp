@@ -124,7 +124,7 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
 #endif 
 #ifdef JAVA_CODE
   int ind[] = createMeshIndex();
-  float ver[] = createVertices(*planet);
+  float ver[] = createVertices(planet);
   float texC[] = null;
   float colors[] = null;
   float normals[] = null;
@@ -169,9 +169,9 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
     int numVertices = res * res * 3;
     normals = new float[numVertices];
     for(int i = 0; i < numVertices; ){
-      normals[i++] = 1.0;
-      normals[i++] = 1.0;
-      normals[i++] = 1.0;
+      normals[i++] = (float) 1.0;
+      normals[i++] = (float) 1.0;
+      normals[i++] = (float) 1.0;
     }
   }
 
