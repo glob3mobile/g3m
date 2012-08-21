@@ -34,15 +34,6 @@ _databaseName(databaseName)
   
   [_db open];
   
-  //  statement.executeUpdate("CREATE TABLE article (id INT, title TEXT, summary TEXT, icon_name TEXT, html TEXT, importance INT, latitude NUMBER, longitude NUMBER);");
-  //  statement.executeUpdate("CREATE UNIQUE INDEX IF NOT EXISTS article_id ON article (id);");
-  //  statement.executeUpdate("CREATE UNIQUE INDEX IF NOT EXISTS article_title ON article (title);");
-  //  statement.executeUpdate("CREATE INDEX IF NOT EXISTS article_importance ON article (importance);");
-  //  statement.executeUpdate("CREATE INDEX IF NOT EXISTS article_latitude ON article (latitude);");
-  //  statement.executeUpdate("CREATE INDEX IF NOT EXISTS article_longitude ON article (longitude);");
-  //
-  
-  
   if (![_db executeNonQuery:@"CREATE TABLE IF NOT EXISTS entry (name TEXT, contents TEXT);"]) {
     printf("Can't create table \"entry\" on database \"%s\"\n",
            databaseName.c_str());
@@ -64,8 +55,8 @@ void SQLiteStorage_iOS::showStatistics() const {
     NSInteger count     = [rs integerColumnByIndex: 0];
     NSInteger usedSpace = [rs integerColumnByIndex: 1];
 
-    NSLog(@"Initialized Storage on %@, entries=%d, usedSpace=%fMb",
-          getDBPath(),
+    NSLog(@"Initialized Storage on DB \"%@\", entries=%d, usedSpace=%fMb",
+          toNSString(_databaseName), //getDBPath(),
           count,
           (float) ((double)usedSpace / 1024 / 1024));
   }

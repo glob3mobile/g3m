@@ -162,20 +162,22 @@ int G3MWidget::render() {
   _timer->start();
   _renderCounter++;
   
+  
   // copy next camera to current camera
-  bool acceptCamera = true;
-  for (unsigned int n=0; n<_cameraConstraint.size(); n++) {
+  bool acceptedCamera = true;
+  for (int n = 0; n < _cameraConstraint.size(); n++) {
     if (!_cameraConstraint[n]->acceptsCamera(_nextCamera, _planet)) {
-      acceptCamera = false;
+      acceptedCamera = false;
       break;
     }
   }
-  if (acceptCamera) {
+  if (acceptedCamera) {
     _currentCamera->copyFrom(*_nextCamera);
   }
   else {
     _nextCamera->copyFrom(*_currentCamera);
   }
+  
   
   // create RenderContext
   RenderContext rc(_frameTasksExecutor,
