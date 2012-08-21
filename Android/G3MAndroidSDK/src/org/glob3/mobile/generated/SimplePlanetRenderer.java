@@ -157,8 +157,8 @@ public class SimplePlanetRenderer extends Renderer
 	  for(int i = 0; i < numVertices;)
 	  {
 		normals[i++] = (float) 1.0;
-		normals[i++] = 1.0;
-		normals[i++] = 1.0;
+		normals[i++] = (float) 1.0;
+		normals[i++] = (float) 1.0;
 	  }
 	}
   
