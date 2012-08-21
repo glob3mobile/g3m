@@ -139,10 +139,14 @@ public:
   // camera renderer and handlers
   CameraRenderer *cameraRenderer;
   cameraRenderer = new CameraRenderer();
-  cameraRenderer->addHandler(new CameraSingleDragHandler);
-  cameraRenderer->addHandler(new CameraDoubleDragHandler);
-  cameraRenderer->addHandler(new CameraRotationHandler);
-  cameraRenderer->addHandler(new CameraDoubleTapHandler);
+  const bool useInertia = false;
+  cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
+  const bool processRotation = false;
+  const bool processZoom = false;
+  cameraRenderer->addHandler(new CameraDoubleDragHandler(processRotation,
+                                                         processZoom));
+//  cameraRenderer->addHandler(new CameraRotationHandler());
+//  cameraRenderer->addHandler(new CameraDoubleTapHandler());
   comp->addRenderer(cameraRenderer);
   
   
@@ -163,42 +167,30 @@ public:
   //                                     Angle::nan(),
   //                                     Angle::nan());
   //  layerSet->addLayer(baseLayer);
-  
-  //    Sector s = Sector::fromDegrees(-60, 50, 10, 185);
-  //    WMSLayer *wmsl = new WMSLayer("test:contourGSLA",
-  //                                  "http://imos2.ersa.edu.au/geo2/test/wms",
-  //                                  WMS_1_1_0,
-  //                                  "image/png",
-  //                                  s,
-  //                                  "EPSG:4326",
-  //                                  "sla_test",
-  //                                  true,
-  //                                  Angle::nan(),
-  //                                  Angle::nan());
-  //
-  //    WMSLayer *wms_sst = new WMSLayer("sea_surface_temperature",
-  //                                     "http://opendap-vpac.arcs.org.au/thredds/wms/IMOS/SRS/GHRSST-SSTsubskin/2012/20120626-ABOM-L3P_GHRSST-SSTsubskin-AVHRR_MOSAIC_01km-AO_DAAC-v01-fv01_0.nc?",
-  //                                     WMS_1_3_0,
-  //                                     "image/png",
-  //                                     s,
-  //                                     "EPSG:4326&COLORSCALERANGE=273.8%2C302.8&NUMCOLORBANDS=50&LOGSCALE=false",
-  //                                     "boxfill%2Fsst_36",
-  //                                     true,
-  //                                     Angle::nan(),
-  //                                     Angle::nan());
-  //
-  //    layerSet->addLayer(wmsl);
-  //    layerSet->addLayer(wms_sst);
-  
-  WMSLayer *oceans = new WMSLayer("igo:bmng200401,igo:sttOZ,igo:cntOZ",
+
+  WMSLayer *osm = new WMSLayer("osm",
+                               "osm",
+                               "http://wms.latlon.org/",
+                               WMS_1_1_0,
+                               "image/jpeg",
+                               Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
+                               "EPSG:4326",
+                               "",
+                               false,
+                               Angle::nan(),
+                               Angle::nan());
+  layerSet->addLayer(osm);
+
+  WMSLayer *oceans = new WMSLayer(//"igo:bmng200401,igo:sttOZ,igo:cntOZ",
+                                  "igo:sttOZ,igo:cntOZ",
                                   "igo:sttOZ",
                                   "http://igosoftware.dyndns.org:8081/geoserver/igo/wms",
                                   WMS_1_3_0,
-                                  "image/jpeg",
+                                  "image/png",
                                   Sector::fullSphere(),
                                   "EPSG:4326",
                                   "",
-                                  false,
+                                  true,
                                   Angle::nan(),
                                   Angle::nan());
   
@@ -317,10 +309,14 @@ public:
   // camera renderer and handlers
   CameraRenderer *cameraRenderer;
   cameraRenderer = new CameraRenderer();
-  cameraRenderer->addHandler(new CameraSingleDragHandler);
-  cameraRenderer->addHandler(new CameraDoubleDragHandler);
-  cameraRenderer->addHandler(new CameraRotationHandler);
-  cameraRenderer->addHandler(new CameraDoubleTapHandler);
+  const bool useInertia = true;
+  cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
+  const bool processRotation = true;
+  const bool processZoom = true;
+  cameraRenderer->addHandler(new CameraDoubleDragHandler(processRotation,
+                                                         processZoom));
+  cameraRenderer->addHandler(new CameraRotationHandler());
+  cameraRenderer->addHandler(new CameraDoubleTapHandler());
   comp->addRenderer(cameraRenderer);
   
   

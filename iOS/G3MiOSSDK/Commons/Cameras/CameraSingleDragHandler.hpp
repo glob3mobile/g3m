@@ -13,7 +13,7 @@
 #include "CameraEventHandler.hpp"
 #include "Camera.hpp"
 #include "Effects.hpp"
-
+#include "MutableVector2D.hpp"
 
 //***************************************************************
 
@@ -50,10 +50,11 @@ private:
 class CameraSingleDragHandler: public CameraEventHandler {
   
 public:
-  CameraSingleDragHandler():
+  CameraSingleDragHandler(bool useInertia):
   _camera0(Camera(0, 0)),
   _initialPoint(0,0,0),
-  _initialPixel(0,0,0)
+  _initialPixel(0,0),
+  _useInertia(useInertia)
   {}
   
   ~CameraSingleDragHandler() {}
@@ -66,6 +67,8 @@ public:
   
   
 private:
+  const bool _useInertia;
+  
   void onDown(const EventContext *eventContext,
               const TouchEvent& touchEvent, 
               CameraContext *cameraContext);
@@ -80,7 +83,7 @@ private:
   Camera _camera0;         //Initial Camera saved on Down event
   
   MutableVector3D _initialPoint;  //Initial point at dragging
-  MutableVector3D _initialPixel;  //Initial pixel at start of gesture
+  MutableVector2D _initialPixel;  //Initial pixel at start of gesture
   
   MutableVector3D _axis;
   double          _lastRadians;

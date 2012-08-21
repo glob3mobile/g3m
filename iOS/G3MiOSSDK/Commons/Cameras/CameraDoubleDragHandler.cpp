@@ -142,8 +142,10 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
     tempCamera.rotateWithAxis(rotationAxis, rotationDelta);  
   }
   
-  // move the camara 
-  tempCamera.moveForward(dAccum);
+  // move the camera
+  if (_processZoom) {
+    tempCamera.moveForward(dAccum);
+  }
      
   // compute 3D point of view center
   //tempCamera.updateModelMatrix();
@@ -168,7 +170,7 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
   //tempCamera.updateModelMatrix();
     
   // camera rotation
-  {
+  if (_processRotation) {
     Vector3D normal = planet->geodeticSurfaceNormal(centerPoint2);
     Vector3D v0     = _initialPoint0.asVector3D().sub(centerPoint2).projectionInPlane(normal);
     Vector3D v1     = tempCamera.pixel2PlanetPoint(pixel0).sub(centerPoint2).projectionInPlane(normal);

@@ -176,6 +176,7 @@ public:
   
   void initialize(const InitializationContext* ic); 
 
+  void reset();
     
 private:
   int _width;
