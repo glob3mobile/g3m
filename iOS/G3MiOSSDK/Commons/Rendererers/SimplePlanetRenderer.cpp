@@ -121,12 +121,13 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   float * texC = NULL;
   float * colors = NULL;
   float * normals = NULL;
-#else
+#endif 
+#ifdef JAVA_CODE
   int ind[] = createMeshIndex();
   float ver[] = createVertices(*planet);
-  float texC[];
-  float colors[];
-  float normals[];
+  float texC[] = null;
+  float colors[] = null;
+  float normals[] = null;
 #endif
   
   //TEXTURED
@@ -141,7 +142,7 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   }
   
   //COLORS PER VERTEX
-  if (true){
+  if (false){
     int numVertices = res * res * 4;
     colors = new float[numVertices];
     for(int i = 0; i < numVertices; ){
@@ -160,11 +161,11 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   
   //FLAT COLOR
   Color * flatColor = NULL;
-  if (true){
+  if (false){
     flatColor = new Color( Color::fromRGBA(0.0, 1.0, 0.0, 1.0) );
   }
   
-  if (true){
+  if (false){
     int numVertices = res * res * 3;
     normals = new float[numVertices];
     for(int i = 0; i < numVertices; ){

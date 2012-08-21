@@ -23,7 +23,7 @@ public class Timer_Android extends ITimer {
 	@Override
 	public TimeInterval elapsedTime() {
 		long t = SystemClock.uptimeMillis();
-		return TimeInterval.fromMilliseconds((int)( _startTime - t));
+		return TimeInterval.fromMilliseconds((int)( t - _startTime));
 	}
 
 }
