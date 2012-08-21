@@ -84,7 +84,7 @@ public class GL
 	  }
   
 	  _texturesIdAllocationCounter += bugdetSize;
-	  System.out.printf("= Created %d texturesIds (accumulated %ld).\n", bugdetSize, _texturesIdAllocationCounter);
+	  System.out.printf("= Created %d texturesIds (accumulated %d).\n", bugdetSize, _texturesIdAllocationCounter);
 	}
   
 	_texturesIdGetCounter++;

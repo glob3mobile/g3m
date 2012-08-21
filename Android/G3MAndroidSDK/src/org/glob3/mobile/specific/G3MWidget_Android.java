@@ -193,7 +193,7 @@ public class G3MWidget_Android extends GLSurfaceView implements
 		    comp.addRenderer(dum);
 		  }
 		  
-		  if (false) {
+		  if (true) {
 		    // simple planet renderer, with a basic world image
 		    SimplePlanetRenderer spr = new SimplePlanetRenderer("world.jpg");
 		    comp.addRenderer(spr);

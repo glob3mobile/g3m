@@ -530,7 +530,10 @@ int GL::getTextureID() {
     }
     
     _texturesIdAllocationCounter += bugdetSize;
+    
+#if C_CODE
     printf("= Created %d texturesIds (accumulated %ld).\n", bugdetSize, _texturesIdAllocationCounter);
+#endif
   }
   
   _texturesIdGetCounter++;
@@ -556,9 +559,11 @@ void GL::deleteTexture(int glTextureId) {
 
   _texturesIdTakeCounter++;
   
+#if C_CODE
   printf("   - Delete 1 texturesId (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
          _texturesIdBag.size(),
          _texturesIdGetCounter,
          _texturesIdTakeCounter,
          _texturesIdGetCounter - _texturesIdTakeCounter);
+#endif
 }

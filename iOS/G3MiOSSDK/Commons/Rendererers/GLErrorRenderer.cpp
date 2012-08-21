@@ -35,12 +35,16 @@ int GLErrorRenderer::render(const RenderContext *rc) {
   GLError error = gl->getError();
 #ifdef C_CODE
   while (error != NoError) {
-#else
-  while (error != GLError.NoError) { 
-#endif
     logger->logError("GL Error: %d", error);
     error = gl->getError();
   }
+#else
+  while (error != GLError.NoError) { 
+    logger->logError("GL Error: %d", error.getValue());
+    error = gl->getError();
+  }
+#endif
+
   
   return Renderer::maxTimeToRender;
 }
