@@ -45,7 +45,7 @@
 		CC41E3B615B32DFB00B5581C /* Frustum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC41E3B515B32DFB00B5581C /* Frustum.cpp */; };
 		CC55C47F15D11D8500923D7B /* CameraDoubleTapHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC55C47E15D11D8500923D7B /* CameraDoubleTapHandler.cpp */; };
 		CC596F2215C46D4F008FC230 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F1C15C46D4F008FC230 /* Camera.cpp */; };
-		CC596F2315C46D4F008FC230 /* Camera.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC596F1D15C46D4F008FC230 /* Camera.hpp */; };
+		CC596F2315C46D4F008FC230 /* Camera.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC596F1D15C46D4F008FC230 /* Camera.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CC596F2415C46D4F008FC230 /* CameraDoubleDragHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F1E15C46D4F008FC230 /* CameraDoubleDragHandler.cpp */; };
 		CC596F2515C46D4F008FC230 /* CameraDoubleDragHandler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC596F1F15C46D4F008FC230 /* CameraDoubleDragHandler.hpp */; };
 		CC596F2A15C46DE2008FC230 /* CameraSingleDragHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC596F2915C46DE2008FC230 /* CameraSingleDragHandler.cpp */; };
@@ -686,6 +686,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CC596F2315C46D4F008FC230 /* Camera.hpp in Headers */,
 				383BD3861577EDDB0012AC53 /* G3MWidget_iOS.h in Headers */,
 				383BD37C1577EDC00012AC53 /* Factory_iOS.hpp in Headers */,
 				383BD37E1577EDC00012AC53 /* Logger_iOS.hpp in Headers */,
@@ -736,7 +737,6 @@
 				D88B5E2515C15C850083A43F /* Box.hpp in Headers */,
 				CFF0999B15C18AAD005EAF12 /* TileTexturizer.hpp in Headers */,
 				D88B5E5215C162AF0083A43F /* G3MWidget.hpp in Headers */,
-				CC596F2315C46D4F008FC230 /* Camera.hpp in Headers */,
 				CC596F2515C46D4F008FC230 /* CameraDoubleDragHandler.hpp in Headers */,
 				CF8A234E15C4306800FD56C9 /* Downloader_iOS_Handler.h in Headers */,
 				CF8A235315C4340900FD56C9 /* Downloader_iOS_Listener.h in Headers */,
@@ -949,6 +949,7 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				DSTROOT = /tmp/Glob3iOSSDK.dst;
+				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Glob3iOSSDK/G3MiOSSDK-Prefix.pch";
 				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = NO;
@@ -960,6 +961,7 @@
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
 				OTHER_LDFLAGS = "-ObjC";
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = G3MiOSSDK;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SKIP_INSTALL = YES;
@@ -972,6 +974,7 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
 				DSTROOT = /tmp/Glob3iOSSDK.dst;
+				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Glob3iOSSDK/G3MiOSSDK-Prefix.pch";
 				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = NO;
@@ -983,6 +986,7 @@
 				GCC_WARN_UNUSED_PARAMETER = NO;
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
 				OTHER_LDFLAGS = "-ObjC";
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = G3MiOSSDK;
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SKIP_INSTALL = YES;

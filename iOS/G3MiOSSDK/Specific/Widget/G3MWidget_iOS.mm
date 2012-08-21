@@ -110,7 +110,7 @@ public:
 @synthesize displayLink            = _displayLink;
 @synthesize animationTimer         = _animationTimer;
 @synthesize renderer               = _renderer;
-@synthesize widget                 = _widget;
+//@synthesize widgetV                = _widgetV;
 /*@synthesize  multipleTouchEnabled*/
 
 
@@ -124,15 +124,15 @@ public:
   // create GLOB3M WIDGET
   int width = (int) [self frame].size.width;
   int height = (int) [self frame].size.height;
-
+  
   IFactory *factory = new Factory_iOS();
   ILogger *logger = new Logger_iOS(ErrorLevel);
   
   
   
-  NativeGL2_iOS * nGL = new NativeGL2_iOS(); 
+  NativeGL2_iOS * nGL = new NativeGL2_iOS();
   GL* gl  = new GL(nGL);
-
+  
   // composite renderer is the father of the rest of renderers
   CompositeRenderer* comp = new CompositeRenderer();
   
@@ -152,43 +152,43 @@ public:
   
   //LAYERS
   LayerSet* layerSet = new LayerSet();
-//  WMSLayer* baseLayer = new WMSLayer("bmng200405",
-//                                     "http://www.nasa.network.com/wms?",
-//                                     WMS_1_1_0,
-//                                     "image/jpeg",
-//                                     Sector::fullSphere(),
-//                                     "EPSG:4326",
-//                                     "",
-//                                     false,
-//                                     Angle::nan(),
-//                                     Angle::nan());
-//  layerSet->addLayer(baseLayer);
-
-//    Sector s = Sector::fromDegrees(-60, 50, 10, 185);
-//    WMSLayer *wmsl = new WMSLayer("test:contourGSLA",
-//                                  "http://imos2.ersa.edu.au/geo2/test/wms",
-//                                  WMS_1_1_0,
-//                                  "image/png",
-//                                  s,
-//                                  "EPSG:4326",
-//                                  "sla_test",
-//                                  true,
-//                                  Angle::nan(),
-//                                  Angle::nan());
-//    
-//    WMSLayer *wms_sst = new WMSLayer("sea_surface_temperature",
-//                                     "http://opendap-vpac.arcs.org.au/thredds/wms/IMOS/SRS/GHRSST-SSTsubskin/2012/20120626-ABOM-L3P_GHRSST-SSTsubskin-AVHRR_MOSAIC_01km-AO_DAAC-v01-fv01_0.nc?",
-//                                     WMS_1_3_0,
-//                                     "image/png",
-//                                     s,
-//                                     "EPSG:4326&COLORSCALERANGE=273.8%2C302.8&NUMCOLORBANDS=50&LOGSCALE=false",
-//                                     "boxfill%2Fsst_36",
-//                                     true,
-//                                     Angle::nan(),
-//                                     Angle::nan());
-//    
-//    layerSet->addLayer(wmsl);
-//    layerSet->addLayer(wms_sst);
+  //  WMSLayer* baseLayer = new WMSLayer("bmng200405",
+  //                                     "http://www.nasa.network.com/wms?",
+  //                                     WMS_1_1_0,
+  //                                     "image/jpeg",
+  //                                     Sector::fullSphere(),
+  //                                     "EPSG:4326",
+  //                                     "",
+  //                                     false,
+  //                                     Angle::nan(),
+  //                                     Angle::nan());
+  //  layerSet->addLayer(baseLayer);
+  
+  //    Sector s = Sector::fromDegrees(-60, 50, 10, 185);
+  //    WMSLayer *wmsl = new WMSLayer("test:contourGSLA",
+  //                                  "http://imos2.ersa.edu.au/geo2/test/wms",
+  //                                  WMS_1_1_0,
+  //                                  "image/png",
+  //                                  s,
+  //                                  "EPSG:4326",
+  //                                  "sla_test",
+  //                                  true,
+  //                                  Angle::nan(),
+  //                                  Angle::nan());
+  //
+  //    WMSLayer *wms_sst = new WMSLayer("sea_surface_temperature",
+  //                                     "http://opendap-vpac.arcs.org.au/thredds/wms/IMOS/SRS/GHRSST-SSTsubskin/2012/20120626-ABOM-L3P_GHRSST-SSTsubskin-AVHRR_MOSAIC_01km-AO_DAAC-v01-fv01_0.nc?",
+  //                                     WMS_1_3_0,
+  //                                     "image/png",
+  //                                     s,
+  //                                     "EPSG:4326&COLORSCALERANGE=273.8%2C302.8&NUMCOLORBANDS=50&LOGSCALE=false",
+  //                                     "boxfill%2Fsst_36",
+  //                                     true,
+  //                                     Angle::nan(),
+  //                                     Angle::nan());
+  //
+  //    layerSet->addLayer(wmsl);
+  //    layerSet->addLayer(wms_sst);
   
   WMSLayer *oceans = new WMSLayer("igo:bmng200401,igo:sttOZ,igo:cntOZ",
                                   "igo:sttOZ",
@@ -207,12 +207,12 @@ public:
   layerSet->addLayer(oceans);
   
   //STATIC IMAGE FOR TESTING AUSTRALIA
-//  IImage *image = factory->createImageFromFileName("20120720_cintp1.png");
-//  StaticImageLayer * imageLayer = new StaticImageLayer("SIL",
-//                                                       image,
-//                                                       Sector::fromDegrees(-60, 50, 10, 185), 
-//                                                       fss);
-//  layerSet->addLayer(imageLayer);
+  //  IImage *image = factory->createImageFromFileName("20120720_cintp1.png");
+  //  StaticImageLayer * imageLayer = new StaticImageLayer("SIL",
+  //                                                       image,
+  //                                                       Sector::fromDegrees(-60, 50, 10, 185),
+  //                                                       fss);
+  //  layerSet->addLayer(imageLayer);
   
   // very basic tile renderer
   if (true) {
@@ -248,7 +248,7 @@ public:
     SimplePlanetRenderer* spr = new SimplePlanetRenderer("world.jpg");
     comp->addRenderer(spr);
   }
-
+  
   TextureBuilder* texBuilder = new CPUTextureBuilder();
   TexturesHandler* texturesHandler = new TexturesHandler(gl, factory, texBuilder, false);
   
@@ -260,28 +260,28 @@ public:
   
   std::vector <ICameraConstrainer *> cameraConstraint;
   cameraConstraint.push_back(new SimpleCameraConstrainer);
-
+  
   FrameTasksExecutor* frameTasksExecutor = new FrameTasksExecutor();
   
-  _widget = G3MWidget::create(frameTasksExecutor,
-                              factory,
-                              logger,
-                              gl,
-                              texturesHandler,
-                              downloader,
-                              planet, 
-                              cameraConstraint,
-                              comp,
-                              busyRenderer,
-                              scheduler,
-                              width, height,
-                              Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
-                              true,
-                              false);
+  _widgetVP = G3MWidget::create(frameTasksExecutor,
+                                factory,
+                                logger,
+                                gl,
+                                texturesHandler,
+                                downloader,
+                                planet,
+                                cameraConstraint,
+                                comp,
+                                busyRenderer,
+                                scheduler,
+                                width, height,
+                                Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
+                                true,
+                                false);
   
-  Geodetic3D australia = Geodetic3D::fromDegrees(-26.91, 133.94, 1.1e7);
-  ((G3MWidget*)_widget)->getNextCamera()->setPosition(australia);
-
+  const Geodetic3D australia = Geodetic3D::fromDegrees(-26.91, 133.94, 1.1e7);
+  [self widget]->getNextCamera()->setPosition(australia);
+  
 }
 
 - (void) initWidgetDemo
@@ -290,11 +290,11 @@ public:
   // create GLOB3M WIDGET
   int width = (int) [self frame].size.width;
   int height = (int) [self frame].size.height;
-
+  
   IFactory *factory = new Factory_iOS();
   ILogger *logger = new Logger_iOS(ErrorLevel);
   
-  NativeGL2_iOS * nGL = new NativeGL2_iOS(); 
+  NativeGL2_iOS * nGL = new NativeGL2_iOS();
   GL* gl  = new GL(nGL);
   
   //Testing BOX intersection
@@ -322,7 +322,7 @@ public:
   cameraRenderer->addHandler(new CameraRotationHandler);
   cameraRenderer->addHandler(new CameraDoubleTapHandler);
   comp->addRenderer(cameraRenderer);
-
+  
   
   IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
   IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
@@ -334,7 +334,7 @@ public:
       int _onDownload;
       int _onError;
       int _onCancel;
-
+      
     public:
       Listener() :
       _onDownload(0),
@@ -382,7 +382,7 @@ public:
         }
         showInvalidState();
       }
-
+      
       virtual ~Listener() {
         testState();
       }
@@ -396,11 +396,11 @@ public:
     
     printf("break (point) on me 2");
   }
-
+  
   
   //LAYERS
   LayerSet* layerSet = new LayerSet();
- 
+  
   WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                       "http://www.nasa.network.com/wms?",
                                       WMS_1_1_0,
@@ -412,82 +412,82 @@ public:
                                       Angle::nan(),
                                       Angle::nan());
   layerSet->addLayer(blueMarble);
-
-//  WMSLayer *pnoa = new WMSLayer("PNOA",
-//                                "http://www.idee.es/wms/PNOA/PNOA",
-//                                WMS_1_1_0,
-//                                "image/png",
-//                                Sector::fromDegrees(21, -18, 45, 6),
-//                                "EPSG:4326",
-//                                "",
-//                                true,
-//                                Angle::nan(),
-//                                Angle::nan());
-//  layerSet->addLayer(pnoa);
-
-//  WMSLayer *vias = new WMSLayer("VIAS",
-//                                "http://idecan2.grafcan.es/ServicioWMS/Callejero",
-//                                WMS_1_1_0,
-//                                "image/gif",
-//                                Sector::fromDegrees(22.5,-22.5, 33.75, -11.25),
-//                                "EPSG:4326",
-//                                "",
-//                                true,
-//                                Angle::nan(),
-//                                Angle::nan());
-//  layerSet->addLayer(vias);
-
-//  WMSLayer *oceans = new WMSLayer(//"igo:bmng200401,igo:sttOZ,igo:cntOZ",
-//                                  "bmsstcnt",
-////                                  "OZ",
-//                                  "bmsstcnt",
-////                                  "OZ",
-////                                  "http://igosoftware.dyndns.org:8081/geoserver/igo/wms",
-//                                  "http://igosoftware.dyndns.org:8081/geowebcache/service/wms",
-//                                  WMS_1_1_0,
-//                                  "image/jpeg",
-//                                  Sector::fullSphere(),
-//                                  "EPSG:4326",
-//                                  "",
-//                                  false,
-//                                  Angle::nan(),
-//                                  Angle::nan());
-//  
-//  oceans->addTerrainTouchEventListener(new OceanTerrainTouchEventListener(factory, downloader));
-//  layerSet->addLayer(oceans);
   
-//  WMSLayer *osm = new WMSLayer("bing",
-//                               "bing",
-//                               "http://wms.latlon.org/",
-//                               WMS_1_1_0,
-//                               "image/jpeg",
-//                               Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
-//                               "EPSG:4326",
-//                               "",
-//                               false,
-//                               Angle::nan(),
-//                               Angle::nan());
-//  layerSet->addLayer(osm);
-
-//  WMSLayer *osm = new WMSLayer("osm",
-//                               "osm",
-//                               "http://wms.latlon.org/",
-//                               WMS_1_1_0,
-//                               "image/jpeg",
-//                               Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
-//                               "EPSG:4326",
-//                               "",
-//                               false,
-//                               Angle::nan(),
-//                               Angle::nan());
-//  layerSet->addLayer(osm);
-
+  //  WMSLayer *pnoa = new WMSLayer("PNOA",
+  //                                "http://www.idee.es/wms/PNOA/PNOA",
+  //                                WMS_1_1_0,
+  //                                "image/png",
+  //                                Sector::fromDegrees(21, -18, 45, 6),
+  //                                "EPSG:4326",
+  //                                "",
+  //                                true,
+  //                                Angle::nan(),
+  //                                Angle::nan());
+  //  layerSet->addLayer(pnoa);
+  
+  //  WMSLayer *vias = new WMSLayer("VIAS",
+  //                                "http://idecan2.grafcan.es/ServicioWMS/Callejero",
+  //                                WMS_1_1_0,
+  //                                "image/gif",
+  //                                Sector::fromDegrees(22.5,-22.5, 33.75, -11.25),
+  //                                "EPSG:4326",
+  //                                "",
+  //                                true,
+  //                                Angle::nan(),
+  //                                Angle::nan());
+  //  layerSet->addLayer(vias);
+  
+  //  WMSLayer *oceans = new WMSLayer(//"igo:bmng200401,igo:sttOZ,igo:cntOZ",
+  //                                  "bmsstcnt",
+  ////                                  "OZ",
+  //                                  "bmsstcnt",
+  ////                                  "OZ",
+  ////                                  "http://igosoftware.dyndns.org:8081/geoserver/igo/wms",
+  //                                  "http://igosoftware.dyndns.org:8081/geowebcache/service/wms",
+  //                                  WMS_1_1_0,
+  //                                  "image/jpeg",
+  //                                  Sector::fullSphere(),
+  //                                  "EPSG:4326",
+  //                                  "",
+  //                                  false,
+  //                                  Angle::nan(),
+  //                                  Angle::nan());
+  //
+  //  oceans->addTerrainTouchEventListener(new OceanTerrainTouchEventListener(factory, downloader));
+  //  layerSet->addLayer(oceans);
+  
+  //  WMSLayer *osm = new WMSLayer("bing",
+  //                               "bing",
+  //                               "http://wms.latlon.org/",
+  //                               WMS_1_1_0,
+  //                               "image/jpeg",
+  //                               Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
+  //                               "EPSG:4326",
+  //                               "",
+  //                               false,
+  //                               Angle::nan(),
+  //                               Angle::nan());
+  //  layerSet->addLayer(osm);
+  
+  //  WMSLayer *osm = new WMSLayer("osm",
+  //                               "osm",
+  //                               "http://wms.latlon.org/",
+  //                               WMS_1_1_0,
+  //                               "image/jpeg",
+  //                               Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
+  //                               "EPSG:4326",
+  //                               "",
+  //                               false,
+  //                               Angle::nan(),
+  //                               Angle::nan());
+  //  layerSet->addLayer(osm);
+  
   
   // very basic tile renderer
   if (true) {
     const bool renderDebug = false;
     TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug);
-//    TilesRenderParameters* parameters = TilesRenderParameters::createSingleSector(renderDebug);
+    //    TilesRenderParameters* parameters = TilesRenderParameters::createSingleSector(renderDebug);
     
     TileTexturizer* texturizer = NULL;
     if (true) {
@@ -571,7 +571,7 @@ public:
     comp->addRenderer(sgr);
   }
   
-//  comp->addRenderer(new GLErrorRenderer());
+  //  comp->addRenderer(new GLErrorRenderer());
   
   
   TextureBuilder* texBuilder = new CPUTextureBuilder();
@@ -584,27 +584,27 @@ public:
   
   std::vector <ICameraConstrainer *> cameraConstraint;
   cameraConstraint.push_back(new SimpleCameraConstrainer);
-
+  
   const bool logFPS = false;
   const bool logDownloaderStatistics = false;
   
   FrameTasksExecutor* frameTasksExecutor = new FrameTasksExecutor();
   
-  _widget = G3MWidget::create(frameTasksExecutor,
-                              factory,
-                              logger,
-                              gl,
-                              texturesHandler,
-                              downloader,
-                              planet, 
-                              cameraConstraint,
-                              comp,
-                              busyRenderer,
-                              scheduler,
-                              width, height,
-                              Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
-                              logFPS,
-                              logDownloaderStatistics);
+  _widgetVP = G3MWidget::create(frameTasksExecutor,
+                                factory,
+                                logger,
+                                gl,
+                                texturesHandler,
+                                downloader,
+                                planet,
+                                cameraConstraint,
+                                comp,
+                                busyRenderer,
+                                scheduler,
+                                width, height,
+                                Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
+                                logFPS,
+                                logDownloaderStatistics);
 }
 
 //The EAGL view is stored in the nib file. When it's unarchived it's sent -initWithCoder:
@@ -636,13 +636,13 @@ public:
     NSString *extensionString = [[NSString stringWithUTF8String:(char *)glGetString(GL_EXTENSIONS)] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     NSArray *extensions = [extensionString componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     for (NSString *extension in extensions) {
-        NSLog(@"  %@", extension);
+      NSLog(@"  %@", extension);
     }
     NSLog(@"----------------------------------------------------------------------------");
     
     
     lastTouchEvent = NULL;
-
+    
     // rest of initialization
     _animating = FALSE;
     _displayLinkSupported = FALSE;
@@ -669,7 +669,7 @@ public:
 
 //** Agustin cancelled lonpressgesture because touchedmoved and touchedended event don't work
 - (IBAction)handleLongPress:(UIGestureRecognizer *)sender {
-
+  
   printf ("Longpress. state=%d\n", sender.state);
   
   if (sender.state == UIGestureRecognizerStateEnded) {
@@ -684,7 +684,7 @@ public:
     Touch *touch = new Touch(Vector2D(tapPoint.x, tapPoint.y), Vector2D(0.0, 0.0), 1);
     pointers.push_back(touch);
     lastTouchEvent = TouchEvent::create(LongPress, pointers);
-    ((G3MWidget*)[self widget])->onTouchEvent(lastTouchEvent);
+    [self widget]->onTouchEvent(lastTouchEvent);
   }
   
 }
@@ -699,7 +699,7 @@ public:
   int w = (int) [self frame].size.width;
   int h = (int) [self frame].size.height;
   NSLog(@"ResizeViewportEvent: %dx%d", w, h);
-  ((G3MWidget*)_widget)->onResizeViewportEvent(w,h);
+  [self widget]->onResizeViewportEvent(w,h);
   
   [_renderer resizeFromLayer:(CAEAGLLayer *) self.layer];
   [self drawView:nil];
@@ -736,7 +736,7 @@ public:
                          forMode:NSDefaultRunLoopMode];
     }
     else {
-      self.animationTimer = [NSTimer scheduledTimerWithTimeInterval:(NSTimeInterval) ((1.0 / 60.0) * _animationFrameInterval) 
+      self.animationTimer = [NSTimer scheduledTimerWithTimeInterval:(NSTimeInterval) ((1.0 / 60.0) * _animationFrameInterval)
                                                              target:self
                                                            selector:@selector(drawView:)
                                                            userInfo:nil
@@ -763,7 +763,7 @@ public:
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    
+  
   //NSSet *allTouches = [event allTouches];
   NSSet *allTouches = [event touchesForView:self];
   
@@ -777,7 +777,7 @@ public:
     CGPoint previous        = [touch previousLocationInView:self];
     unsigned char tapCount  = (unsigned char) [touch tapCount];
     
-    Touch *touch = new Touch(Vector2D(current.x, current.y), 
+    Touch *touch = new Touch(Vector2D(current.x, current.y),
                              Vector2D(previous.x, previous.y),
                              tapCount);
     
@@ -788,7 +788,7 @@ public:
     delete lastTouchEvent;
   }
   lastTouchEvent = TouchEvent::create(Down, pointers);
-  ((G3MWidget*)[self widget])->onTouchEvent(lastTouchEvent);
+  [self widget]->onTouchEvent(lastTouchEvent);
 }
 
 
@@ -805,7 +805,7 @@ public:
     CGPoint current  = [touch locationInView:self];
     CGPoint previous = [touch previousLocationInView:self];
     
-    Touch *touch = new Touch(Vector2D(current.x, current.y), 
+    Touch *touch = new Touch(Vector2D(current.x, current.y),
                              Vector2D(previous.x, previous.y));
     
     pointers.push_back(touch);
@@ -838,7 +838,7 @@ public:
     lastTouchEvent = TouchEvent::create(Move, pointers);
   }
   
-  ((G3MWidget*)[self widget])->onTouchEvent(lastTouchEvent);
+  [self widget]->onTouchEvent(lastTouchEvent);
 }
 
 
@@ -858,7 +858,7 @@ public:
     
     [touch timestamp];
     
-    Touch *touch = new Touch(Vector2D(current.x, current.y), 
+    Touch *touch = new Touch(Vector2D(current.x, current.y),
                              Vector2D(previous.x, previous.y));
     
     pointers.push_back(touch);
@@ -868,14 +868,17 @@ public:
     delete lastTouchEvent;
   }
   lastTouchEvent = TouchEvent::create(Up, pointers);
-  ((G3MWidget*)[self widget])->onTouchEvent(lastTouchEvent);
+  [self widget]->onTouchEvent(lastTouchEvent);
 }
-
 
 - (void)dealloc {
   if (lastTouchEvent!=NULL) {
     delete lastTouchEvent;
   }
+}
+
+- (G3MWidget*) widget {
+  return (G3MWidget*) _widgetVP;
 }
 
 @end

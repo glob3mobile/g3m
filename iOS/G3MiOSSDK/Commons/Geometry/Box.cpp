@@ -7,8 +7,8 @@
 //
 
 #include "Box.hpp"
+#include "Vector2D.hpp"
 #include "Camera.hpp"
-
 
 std::vector<Vector3D> Box::getCorners() const
 {

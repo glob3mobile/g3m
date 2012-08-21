@@ -11,13 +11,16 @@
 
 #import "TouchEvent.hpp"
 
+//class G3MWidget;
+
 @class ES2Renderer;
 
+class G3MWidget;
 
 // opengl versions value
 enum GL_version {
-    OpenGL_1,   //obsolete
-    OpenGL_2
+  OpenGL_1,   //obsolete
+  OpenGL_2
 };
 
 // This class wraps the CAEAGLLayer from CoreAnimation into a convenient UIView subclass.
@@ -25,33 +28,20 @@ enum GL_version {
 // Note that setting the view non-opaque will only work if the EAGL surface has an alpha channel.
 @interface G3MWidget_iOS : UIView {
 @private
-//    ES2Renderer *renderer;
-
-//    BOOL animating;
-    BOOL _displayLinkSupported;
-//    NSInteger animationFrameInterval;
-    // Use of the CADisplayLink class is the preferred method for controlling your animation timing.
-    // CADisplayLink will link to the main display and fire every vsync when added to a given run-loop.
-    // The NSTimer class is used only as fallback when running on a pre 3.1 device where CADisplayLink
-    // isn't available.
-//    id displayLink;
-//    NSTimer *__weak animationTimer;
-
-    //BOOL multipleTouchEnabled;
-
-    enum GL_version glver;
+  BOOL _displayLinkSupported;
+  
+  enum GL_version glver;
   
   TouchEvent *lastTouchEvent;
+  
+  void* _widgetVP;
 }
 
-@property(readonly, nonatomic, getter=isAnimating) BOOL animating;
-@property(nonatomic) NSInteger animationFrameInterval;
-@property(nonatomic, strong) id displayLink;
-@property(nonatomic, weak) NSTimer *animationTimer;
-//@property(nonatomic, getter=isMultipleTouchEnabled) BOOL multipleTouchEnabled;
-@property(nonatomic, retain) ES2Renderer *renderer;
-
-@property(readonly, nonatomic) void *widget;
+@property(readonly, nonatomic, getter=isAnimating) BOOL         animating;
+@property(nonatomic)                               NSInteger    animationFrameInterval;
+@property(nonatomic, strong)                       id           displayLink;
+@property(nonatomic, weak)                         NSTimer*     animationTimer;
+@property(nonatomic, retain)                       ES2Renderer* renderer;
 
 
 - (void)startAnimation;
@@ -63,5 +53,7 @@ enum GL_version {
 - (void) initWidgetCSIRO;
 
 - (void) initWidgetDemo;
+
+- (G3MWidget*) widget;
 
 @end

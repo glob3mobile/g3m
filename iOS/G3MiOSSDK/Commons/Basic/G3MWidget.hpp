@@ -1,5 +1,5 @@
 //
-//  G3MWidget.h
+//  G3MWidget.hpp
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 31/05/12.
