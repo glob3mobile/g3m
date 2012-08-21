@@ -85,10 +85,6 @@ public class GL
   
 	  _texturesIdAllocationCounter += bugdetSize;
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-	  System.out.printf("= Created %d texturesIds (accumulated %ld).\n", bugdetSize, _texturesIdAllocationCounter);
-//#endif
 	}
   
 	_texturesIdGetCounter++;
