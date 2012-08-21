@@ -21,3 +21,13 @@ const std::string TileKey::description() const {
   buffer << ")";
   return buffer.str();
 }
+
+const std::string TileKey::tinyDescription() const {
+  std::ostringstream buffer;
+  buffer << _level;
+  buffer << "-";
+  buffer << _row;
+  buffer << "/";
+  buffer << _column;
+  return buffer.str();
+}

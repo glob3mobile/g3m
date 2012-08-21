@@ -42,9 +42,8 @@ bool Sector::touchesWith(const Sector &that) const {
 // (u,v) are similar to texture coordinates inside the Sector
 // (u,v)=(0,0) in NW point, and (1,1) in SE point
 const Geodetic2D Sector::getInnerPoint(double u, double v) const {
-  const Angle lat = Angle::lerp(_lower.latitude(),  _upper.latitude(), (float) (1-v));
-  const Angle lon = Angle::lerp(_lower.longitude(), _upper.longitude(), (float) u);
-  return Geodetic2D(lat, lon);
+  return Geodetic2D(Angle::lerp( _lower.latitude(),  _upper.latitude(),  (float) (1.0-v) ),
+                    Angle::lerp( _lower.longitude(), _upper.longitude(), (float)      u  ) );
 }
 
 bool Sector::isBackOriented(const RenderContext *rc) const {

@@ -75,7 +75,7 @@ const Vector3D LeveledTexturedMesh::getVertex(int i) const {
 }
 
 Extent* LeveledTexturedMesh::getExtent() const {
-  return _mesh->getExtent();
+  return (_mesh == NULL) ? NULL : _mesh->getExtent();
 }
 
 LazyTextureMapping* LeveledTexturedMesh::getCurrentTextureMapping() const {

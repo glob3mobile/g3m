@@ -113,7 +113,7 @@ _center(center)
   _indexes = ind;
   
   if (normals != NULL) {
-    float * norm = new float[3* vertices.size()];
+    float * norm = new float[3 * vertices.size()];
     p = 0;
     for (int i = 0; i < vertices.size(); i++) {
       norm[p++] = (float) (*normals)[i].x();
@@ -127,7 +127,7 @@ _center(center)
   }
   
   if (colors != NULL) {
-    float * vertexColor = new float[4* colors->size()];
+    float * vertexColor = new float[4 * colors->size()];
     for (int i = 0; i < colors->size(); i+=4){
       vertexColor[i] = (*colors)[i].getRed();
       vertexColor[i+1] = (*colors)[i].getGreen();
@@ -197,6 +197,10 @@ void IndexedMesh::render(const RenderContext* rc) const {
 
 
 Extent* IndexedMesh::computeExtent() const {
+  if (_numVertices <= 0) {
+    return NULL;
+  }
+  
   double minx=1e10, miny=1e10, minz=1e10;
   double maxx=-1e10, maxy=-1e10, maxz=-1e10;
   

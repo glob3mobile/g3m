@@ -17,30 +17,43 @@
 
 Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
                                              const Tile* tile) const {
-    
+  
   const Sector sector = tile->getSector();
   const Planet* planet = rc->getPlanet();
   
+  /*
+   very crude draft of a posible latitude-based dynamic resolution to avoid the
+   oversampling in the poles. (dgd)
+   */
+  //int resolution = _resolution * tile->getSector().getCenter().latitude().sinus();
+  //if (resolution < 0) {
+  //  resolution *= -1;
+  //}
+  const int resolution = _resolution;
+  const int resolutionMinus1 = resolution - 1;
+  
   // create vertices coordinates
   std::vector<MutableVector3D> vertices;
-  int resol_1 = _resolution - 1;
-  for (int j=0; j<_resolution; j++) {
-    for (int i=0; i<_resolution; i++) {
-      addVertex(planet, &vertices, sector.getInnerPoint((double)i/resol_1, (double)j/resol_1));
+  for (int j = 0; j < resolution; j++) {
+    for (int i = 0; i < resolution; i++) {
+      addVertex(planet,
+                &vertices,
+                sector.getInnerPoint((double) i / resolutionMinus1,
+                                     (double) j / resolutionMinus1));
     }
   }
   
   // create indices
   std::vector<int> indices;
-  for (int j=0; j<resol_1; j++) {
+  for (int j = 0; j < resolutionMinus1; j++) {
     if (j > 0) {
-      indices.push_back(j*_resolution);
+      indices.push_back(j*resolution);
     }
-    for (int i = 0; i < _resolution; i++) {
-      indices.push_back(j*_resolution + i);
-      indices.push_back(j*_resolution + i + _resolution);
+    for (int i = 0; i < resolution; i++) {
+      indices.push_back(j*resolution + i);
+      indices.push_back(j*resolution + i + resolution);
     }
-    indices.push_back(j*_resolution + 2*_resolution - 1);
+    indices.push_back(j*resolution + 2*resolutionMinus1);
   }
   
   // create skirts
@@ -52,35 +65,35 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
     const double skirtHeight = nw.sub(sw).length() * 0.05;
     
     indices.push_back(0);
-    int posS = _resolution * _resolution;
+    int posS = resolution * resolution;
     
     // west side
-    for (int j=0; j<resol_1; j++) {
-      const Geodetic3D g(sector.getInnerPoint(0.0, (double)j/resol_1), -skirtHeight);
+    for (int j = 0; j < resolutionMinus1; j++) {
+      const Geodetic3D g(sector.getInnerPoint(0, (double)j/resolutionMinus1), -skirtHeight);
       addVertex(planet, &vertices, g);
-      indices.push_back(j*_resolution);
+      indices.push_back(j*resolution);
       indices.push_back(posS++);
     }
     
     // south side
-    for (int i=0; i<resol_1; i++) {
-      const Geodetic3D g(sector.getInnerPoint((double)i/resol_1, 1.0), -skirtHeight);
+    for (int i = 0; i < resolutionMinus1; i++) {
+      const Geodetic3D g(sector.getInnerPoint((double)i/resolutionMinus1, 1), -skirtHeight);
       addVertex(planet, &vertices, g);
-      indices.push_back(resol_1*_resolution + i);
+      indices.push_back(resolutionMinus1*resolution + i);
       indices.push_back(posS++);
     }
     
     // east side
-    for (int j=resol_1; j>0; j--) {
-      const Geodetic3D g(sector.getInnerPoint(1.0, (double)j/resol_1), -skirtHeight);
+    for (int j = resolutionMinus1; j > 0; j--) {
+      const Geodetic3D g(sector.getInnerPoint(1, (double)j/resolutionMinus1), -skirtHeight);
       addVertex(planet, &vertices, g);
-      indices.push_back(j*_resolution + resol_1);
+      indices.push_back(j*resolution + resolutionMinus1);
       indices.push_back(posS++);
     }
     
     // north side
-    for (int i=resol_1; i>0; i--) {
-      const Geodetic3D g(sector.getInnerPoint((double)i/resol_1, 0.0), -skirtHeight);
+    for (int i = resolutionMinus1; i > 0; i--) {
+      const Geodetic3D g(sector.getInnerPoint((double)i/resolutionMinus1, 0), -skirtHeight);
       addVertex(planet, &vertices, g);
       indices.push_back(i);
       indices.push_back(posS++);
@@ -88,9 +101,9 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
     
     // last triangles
     indices.push_back(0);
-    indices.push_back(_resolution*_resolution);
+    indices.push_back(resolution*resolution);
   }
-
+  
   const Color *color = new Color(Color::fromRGBA((float) 0.1, (float) 0.1, (float) 0.1, (float) 1.0));
   const Vector3D center = planet->toVector3D(sector.getCenter());
   
@@ -102,49 +115,50 @@ std::vector<MutableVector2D>* EllipsoidalTileTessellator::createUnitTextCoords()
   
   std::vector<MutableVector2D>* textCoords = new std::vector<MutableVector2D>();
   
-  const int n = _resolution;
+  const int resolution       = _resolution;
+  const int resolutionMinus1 = resolution - 1;
+
+  float* u = new float[resolution * resolution];
+  float* v = new float[resolution * resolution];
   
-  float* u = new float[n*n];
-  float* v = new float[n*n];
-  
-  for (int j=0; j<n; j++) {
-    for (int i=0; i<n; i++) {
-      int pos = j*n + i;
-      u[pos] = (float) i / (n-1);
-      v[pos] = (float) j / (n-1);	
+  for (int j = 0; j < resolution; j++) {
+    for (int i = 0; i < resolution; i++) {
+      const int pos = j*resolution + i;
+      u[pos] = (float) i / resolutionMinus1;
+      v[pos] = (float) j / resolutionMinus1;
     }
   }
   
-  for (int j=0; j<n; j++) {
-    for (int i=0; i<n; i++) {
-      int pos = j*n + i;
+  for (int j = 0; j < resolution; j++) {
+    for (int i = 0; i < resolution; i++) {
+      const int pos = j*resolution + i;
       textCoords->push_back(MutableVector2D(u[pos], v[pos]));
     }
   }
   
-  // create skirts 
+  // create skirts
   if (_skirted) {
     // west side
-    for (int j=0; j<n-1; j++) {
-      int pos = j*n;
+    for (int j = 0; j < resolutionMinus1; j++) {
+      const int pos = j*resolution;
       textCoords->push_back(MutableVector2D(u[pos], v[pos]));
     }
     
     // south side
-    for (int i=0; i<n-1; i++) {
-      int pos = (n-1)*n + i;
+    for (int i = 0; i < resolutionMinus1; i++) {
+      const int pos = resolutionMinus1 * resolution + i;
       textCoords->push_back(MutableVector2D(u[pos], v[pos]));
     }
     
     // east side
-    for (int j=n-1; j>0; j--) {
-      int pos = j*n + n - 1;
+    for (int j = resolutionMinus1; j > 0; j--) {
+      const int pos = j*resolution + resolutionMinus1;
       textCoords->push_back(MutableVector2D(u[pos], v[pos]));
     }
     
     // north side
-    for (int i=n-1; i>0; i--) {
-      int pos = i;
+    for (int i = resolutionMinus1; i > 0; i--) {
+      const int pos = i;
       textCoords->push_back(MutableVector2D(u[pos], v[pos]));
     }
   }
@@ -158,7 +172,7 @@ std::vector<MutableVector2D>* EllipsoidalTileTessellator::createUnitTextCoords()
 
 
 Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
-                                                  const Tile* tile) const 
+                                                  const Tile* tile) const
 {
   const Sector sector = tile->getSector();
   const Planet* planet = rc->getPlanet();
@@ -167,7 +181,7 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
   std::vector<MutableVector3D> vertices;
   std::vector<MutableVector2D> texCoords;
   std::vector<int> indices;
-  int resol_1 = _resolution - 1;  
+  const int resolutionMinus1 = _resolution - 1;
   int posS = 0;
   
   // compute offset for vertices
@@ -176,34 +190,34 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
   const double offset = nw.sub(sw).length() * 1e-3;
   
   // west side
-  for (int j=0; j<resol_1; j++) {
-    const Geodetic3D g(sector.getInnerPoint(0.0, (double)j/resol_1), offset); 
+  for (int j = 0; j < resolutionMinus1; j++) {
+    const Geodetic3D g(sector.getInnerPoint(0, (double)j/resolutionMinus1), offset);
     addVertex(planet, &vertices, g);
     indices.push_back(posS++);
   }
   
   // south side
-  for (int i=0; i<resol_1; i++) {
-    const Geodetic3D g(sector.getInnerPoint((double)i/resol_1, 1.0), offset);
+  for (int i = 0; i < resolutionMinus1; i++) {
+    const Geodetic3D g(sector.getInnerPoint((double)i/resolutionMinus1, 1), offset);
     addVertex(planet, &vertices, g);
     indices.push_back(posS++);
   }
   
   // east side
-  for (int j=resol_1; j>0; j--) {
-    const Geodetic3D g(sector.getInnerPoint(1.0, (double)j/resol_1), offset);
+  for (int j = resolutionMinus1; j > 0; j--) {
+    const Geodetic3D g(sector.getInnerPoint(1, (double)j/resolutionMinus1), offset);
     addVertex(planet, &vertices, g);
     indices.push_back(posS++);
   }
   
   // north side
-  for (int i=resol_1; i>0; i--) {
-    const Geodetic3D g(sector.getInnerPoint((double)i/resol_1, 0.0), offset);
+  for (int i = resolutionMinus1; i > 0; i--) {
+    const Geodetic3D g(sector.getInnerPoint((double)i/resolutionMinus1, 0), offset);
     addVertex(planet, &vertices, g);
     indices.push_back(posS++);
   }
   
-  const Color *color = new Color(Color::fromRGBA((float) 1.0, (float) 0.0, (float) 0.0, (float) 1.0));
+  const Color *color = new Color(Color::fromRGBA((float) 1.0, (float) 0, (float) 0, (float) 1.0));
   const Vector3D center = planet->toVector3D(sector.getCenter());
   
   return IndexedMesh::createFromVector3D(vertices, LineLoop, GivenCenter, center, indices, color);

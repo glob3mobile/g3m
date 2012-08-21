@@ -71,6 +71,8 @@ public:
   
   const std::string description() const;
   
+  const std::string tinyDescription() const;
+
 };
 
 #endif

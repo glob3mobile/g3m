@@ -31,11 +31,6 @@ public:
     return new Planet("Earth", Vector3D(6378137.0, 6378137.0, 6356752.314245));
   }
   
-//  static const Planet* createHugeEarth() {
-//    return new Planet("Earth", Vector3D(6378137.0 * 1000, 6378137.0 * 1000, 6356752.314245 * 1000));
-//  }
-
-  
   std::string getName() const {
     return _name;
   }

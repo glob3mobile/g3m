@@ -253,9 +253,7 @@ public:
   TexturesHandler* texturesHandler = new TexturesHandler(gl, factory, texBuilder, false);
   
   const Planet* planet = Planet::createEarth();
-//  const Planet* planet = Planet::createHugeEarth();
   
-//  Renderer* busyRenderer = new BusyQuadRenderer("ProgressWheel.png");
   Renderer* busyRenderer = new BusyMeshRenderer();
   
   EffectsScheduler* scheduler = new EffectsScheduler();
@@ -413,17 +411,19 @@ public:
 //                                      false,
 //                                      Angle::nan(),
 //                                      Angle::nan());
-  
-  WMSLayer *pnoa = new WMSLayer("PNOA",
-                                "http://www.idee.es/wms/PNOA/PNOA",
-                                WMS_1_1_0,
-                                "image/png",
-                                Sector::fromDegrees(21, -18, 45, 6),
-                                "EPSG:4326",
-                                "",
-                                true,
-                                Angle::nan(),
-                                Angle::nan());
+//  layerSet->addLayer(blueMarble);
+
+//  WMSLayer *pnoa = new WMSLayer("PNOA",
+//                                "http://www.idee.es/wms/PNOA/PNOA",
+//                                WMS_1_1_0,
+//                                "image/png",
+//                                Sector::fromDegrees(21, -18, 45, 6),
+//                                "EPSG:4326",
+//                                "",
+//                                true,
+//                                Angle::nan(),
+//                                Angle::nan());
+//  layerSet->addLayer(pnoa);
 
 //  WMSLayer *vias = new WMSLayer("VIAS",
 //                                "http://idecan2.grafcan.es/ServicioWMS/Callejero",
@@ -435,20 +435,26 @@ public:
 //                                true,
 //                                Angle::nan(),
 //                                Angle::nan());
+//  layerSet->addLayer(vias);
 
-//  WMSLayer *oceans = new WMSLayer("igo:bmng200401,igo:sttOZ,igo:cntOZ",
-//                                  "igo:sttOZ",
+  WMSLayer *oceans = new WMSLayer(//"igo:bmng200401,igo:sttOZ,igo:cntOZ",
+                                  "bmsstcnt",
+//                                  "OZ",
+                                  "bmsstcnt",
+//                                  "OZ",
 //                                  "http://igosoftware.dyndns.org:8081/geoserver/igo/wms",
-//                                  WMS_1_3_0,
-//                                  "image/jpeg",
-//                                  Sector::fullSphere(),
-//                                  "EPSG:4326",
-//                                  "",
-//                                  false,
-//                                  Angle::nan(),
-//                                  Angle::nan());
-//
-//  oceans->addTerrainTouchEventListener(new OceanTerrainTouchEventListener(factory, downloader));
+                                  "http://igosoftware.dyndns.org:8081/geowebcache/service/wms",
+                                  WMS_1_1_0,
+                                  "image/jpeg",
+                                  Sector::fullSphere(),
+                                  "EPSG:4326",
+                                  "",
+                                  false,
+                                  Angle::nan(),
+                                  Angle::nan());
+  
+  oceans->addTerrainTouchEventListener(new OceanTerrainTouchEventListener(factory, downloader));
+  layerSet->addLayer(oceans);
   
 //  WMSLayer *osm = new WMSLayer("bing",
 //                               "bing",
@@ -462,7 +468,7 @@ public:
 //                               Angle::nan(),
 //                               Angle::nan());
 //  layerSet->addLayer(osm);
-  
+
 //  WMSLayer *osm = new WMSLayer("osm",
 //                               "osm",
 //                               "http://wms.latlon.org/",
@@ -477,16 +483,9 @@ public:
 //  layerSet->addLayer(osm);
 
   
-  //ORDER IS IMPORTANT
-//  layerSet->addLayer(blueMarble);
-  layerSet->addLayer(pnoa);
-//  layerSet->addLayer(vias);
-//  layerSet->addLayer(oceans);
-//  layerSet->addLayer(osm);
-
   // very basic tile renderer
   if (true) {
-    const bool renderDebug = false;
+    const bool renderDebug = true;
     TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug);
 //    TilesRenderParameters* parameters = TilesRenderParameters::createSingleSector(renderDebug);
     
@@ -579,7 +578,6 @@ public:
   TexturesHandler* texturesHandler = new TexturesHandler(gl, factory, texBuilder, false);
   
   const Planet* planet = Planet::createEarth();
-//  const Planet* planet = Planet::createHugeEarth();
   
   //Renderer* busyRenderer = new BusyQuadRenderer("ProgressWheel.png");
   Renderer* busyRenderer = new BusyMeshRenderer();
