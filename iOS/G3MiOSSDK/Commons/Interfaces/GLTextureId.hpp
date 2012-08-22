@@ -17,6 +17,12 @@ private:
   int _textureId;
   
 public:
+  
+  GLTextureID() {
+    _textureId = -1;
+  }
+  
+  
   static GLTextureID invalid() {
     return GLTextureID(-1);
   }
