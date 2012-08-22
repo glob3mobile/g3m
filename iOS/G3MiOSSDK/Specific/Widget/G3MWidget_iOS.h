@@ -20,7 +20,7 @@ class LayerSet;
 class ICameraConstrainer;
 class Renderer;
 class UserData;
-
+class TilesRenderParameters;
 class G3MWidget;
 
 // opengl versions value
@@ -63,6 +63,7 @@ enum GL_version {
 
 - (void)initWidgetWithCameraRenderer: (CameraRenderer*) cameraRenderer
                             layerSet: (LayerSet*) layerSet
+               tilesRenderParameters: (TilesRenderParameters*) parameters
                    cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
                            renderers: (std::vector<Renderer*>) renderers
                             userData: (UserData*) userData;

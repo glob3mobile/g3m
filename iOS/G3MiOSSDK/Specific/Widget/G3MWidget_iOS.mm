@@ -85,9 +85,17 @@
   cameraRenderer->addHandler(new CameraRotationHandler());
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
   
+  const bool renderDebug = false;
+  const bool useTilesSplitBudget = true;
+  const bool forceTopLevelTilesRenderOnStart = true;
+  
+  TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug,
+                                                                           useTilesSplitBudget,
+                                                                           forceTopLevelTilesRenderOnStart);
   
   [self initWidgetWithCameraRenderer: cameraRenderer
                             layerSet: layerSet
+               tilesRenderParameters: parameters
                    cameraConstraints: cameraConstraints
                            renderers: renderers
                             userData: userData];
@@ -95,6 +103,7 @@
 
 - (void) initWidgetWithCameraRenderer: (CameraRenderer*) cameraRenderer
                              layerSet: (LayerSet*) layerSet
+                tilesRenderParameters: (TilesRenderParameters*) parameters
                     cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
                             renderers: (std::vector<Renderer*>) renderers
                              userData: (UserData*) userData
@@ -121,7 +130,7 @@
   if (layerSet != NULL) {
     if (layerSet->size() > 0) {
       const bool renderDebug = false;
-      TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug);
+      //      TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug);
       
       TileTexturizer* texturizer = new MultiLayerTileTexturizer(layerSet);
       
@@ -171,34 +180,34 @@
 
 //- (void) initWidgetDemo
 //{
-//  
+//
 //  // create GLOB3M WIDGET
 //  int width = (int) [self frame].size.width;
 //  int height = (int) [self frame].size.height;
-//  
+//
 //  IFactory *factory = new Factory_iOS();
 //  ILogger *logger = new Logger_iOS(ErrorLevel);
-//  
+//
 //  NativeGL2_iOS * nGL = new NativeGL2_iOS();
 //  GL* gl  = new GL(nGL);
-//  
+//
 //  //Testing BOX intersection
 //  if (true){
 //    Box b(Vector3D(-10,-10,-10) , Vector3D(10,10,10) );
-//    
+//
 //    Vector3D v = b.intersectionWithRay(Vector3D(-20,0,0), Vector3D(1.0,0,0));
 //    printf("%f, %f, %f\n", v.x(), v.y(), v.z());
-//    
+//
 //    Vector3D v1 = b.intersectionWithRay(Vector3D(-20,20,0), Vector3D(1.0,0,0));
 //    printf("%f, %f, %f\n", v1.x(), v1.y(), v1.z());
-//    
+//
 //    Vector3D v2 = b.intersectionWithRay(Vector3D(-20,0,0), Vector3D(1.0,0.1,0));
 //    printf("%f, %f, %f\n", v2.x(), v2.y(), v2.z());
 //  }
-//  
+//
 //  // composite renderer is the father of the rest of renderers
 //  CompositeRenderer* comp = new CompositeRenderer();
-//  
+//
 //  // camera renderer and handlers
 //  CameraRenderer *cameraRenderer;
 //  cameraRenderer = new CameraRenderer();
@@ -211,28 +220,28 @@
 //  cameraRenderer->addHandler(new CameraRotationHandler());
 //  cameraRenderer->addHandler(new CameraDoubleTapHandler());
 //  comp->addRenderer(cameraRenderer);
-//  
-//  
+//
+//
 //  IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
 //  IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
 //                                                 storage);
-//  
+//
 //  if (false) {
 //    class Listener : public IDownloadListener {
 //    private:
 //      int _onDownload;
 //      int _onError;
 //      int _onCancel;
-//      
+//
 //    public:
 //      Listener() :
 //      _onDownload(0),
 //      _onError(0),
 //      _onCancel(0)
 //      {
-//        
+//
 //      }
-//      
+//
 //      void onDownload(const Response* response) {
 //        _onDownload++;
 //        BOOL isMainThread = [NSThread isMainThread];
@@ -243,22 +252,22 @@
 //          NSLog(@"*** NOT IN Main-Thread: Downloaded %d bytes ***", response->getByteBuffer()->getLength());
 //        }
 //      }
-//      
+//
 //      void onError(const Response* response) {
 //        _onError++;
 //      }
-//      
+//
 //      void onCancel(const URL* url) {
 //        _onCancel++;
 //      }
-//      
+//
 //      void onCanceledDownload(const Response* response) {
 //      }
-//      
+//
 //      void showInvalidState() const {
 //        printf("onDownload=%d, onCancel=%d, onError=%d\n", _onDownload, _onCancel, _onError);
 //      }
-//      
+//
 //      void testState() const {
 //        if ((_onDownload == 1) && (_onCancel == 0) && (_onError == 0)) {
 //          return;
@@ -271,25 +280,25 @@
 //        }
 //        showInvalidState();
 //      }
-//      
+//
 //      virtual ~Listener() {
 //        testState();
 //      }
 //    };
-//    
+//
 //    const long priority = 999999999;
 //    long requestId = downloader->request(URL("http://glob3.sourceforge.net/img/isologo640x160.png"), priority, new Listener(), true);
 //    long requestId2 = downloader->request(URL("http://glob3.sourceforge.net/img/isologo640x160.png"), priority, new Listener(), true);
 //    downloader->cancelRequest(requestId);
 //    downloader->cancelRequest(requestId2);
-//    
+//
 //    printf("break (point) on me 2");
 //  }
-//  
-//  
+//
+//
 //  //LAYERS
 //  LayerSet* layerSet = new LayerSet();
-//  
+//
 //  WMSLayer* blueMarble = new WMSLayer("bmng200405",
 //                                      "http://www.nasa.network.com/wms?",
 //                                      WMS_1_1_0,
@@ -301,7 +310,7 @@
 //                                      Angle::nan(),
 //                                      Angle::nan());
 //  layerSet->addLayer(blueMarble);
-//  
+//
 //  //  WMSLayer *pnoa = new WMSLayer("PNOA",
 //  //                                "http://www.idee.es/wms/PNOA/PNOA",
 //  //                                WMS_1_1_0,
@@ -313,7 +322,7 @@
 //  //                                Angle::nan(),
 //  //                                Angle::nan());
 //  //  layerSet->addLayer(pnoa);
-//  
+//
 //  //  WMSLayer *vias = new WMSLayer("VIAS",
 //  //                                "http://idecan2.grafcan.es/ServicioWMS/Callejero",
 //  //                                WMS_1_1_0,
@@ -325,7 +334,7 @@
 //  //                                Angle::nan(),
 //  //                                Angle::nan());
 //  //  layerSet->addLayer(vias);
-//  
+//
 //  //  WMSLayer *oceans = new WMSLayer(//"igo:bmng200401,igo:sttOZ,igo:cntOZ",
 //  //                                  "bmsstcnt",
 //  ////                                  "OZ",
@@ -344,7 +353,7 @@
 //  //
 //  //  oceans->addTerrainTouchEventListener(new OceanTerrainTouchEventListener(factory, downloader));
 //  //  layerSet->addLayer(oceans);
-//  
+//
 //  //  WMSLayer *osm = new WMSLayer("bing",
 //  //                               "bing",
 //  //                               "http://wms.latlon.org/",
@@ -357,7 +366,7 @@
 //  //                               Angle::nan(),
 //  //                               Angle::nan());
 //  //  layerSet->addLayer(osm);
-//  
+//
 //  //  WMSLayer *osm = new WMSLayer("osm",
 //  //                               "osm",
 //  //                               "http://wms.latlon.org/",
@@ -370,14 +379,14 @@
 //  //                               Angle::nan(),
 //  //                               Angle::nan());
 //  //  layerSet->addLayer(osm);
-//  
-//  
+//
+//
 //  // very basic tile renderer
 //  if (true) {
 //    const bool renderDebug = false;
 //    TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug);
 //    //    TilesRenderParameters* parameters = TilesRenderParameters::createSingleSector(renderDebug);
-//    
+//
 //    TileTexturizer* texturizer = NULL;
 //    if (true) {
 //      texturizer = new MultiLayerTileTexturizer(layerSet);
@@ -387,7 +396,7 @@
 //      IImage *singleWorldImage = factory->createImageFromFileName("world.jpg");
 //      texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
 //    }
-//    
+//
 //    const bool showStatistics = false;
 //    TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
 //                                        texturizer,
@@ -395,63 +404,63 @@
 //                                        showStatistics);
 //    comp->addRenderer(tr);
 //  }
-//  
+//
 //  if (false) {
 //    // dummy renderer with a simple box
 //    DummyRenderer* dum = new DummyRenderer();
 //    comp->addRenderer(dum);
 //  }
-//  
+//
 //  if (false) {
 //    // simple planet renderer, with a basic world image
 //    SimplePlanetRenderer* spr = new SimplePlanetRenderer("world.jpg");
 //    comp->addRenderer(spr);
 //  }
-//  
+//
 //  if (false) {
 //    // marks renderer
 //    MarksRenderer* marks = new MarksRenderer();
 //    comp->addRenderer(marks);
-//    
+//
 //    Mark* m1 = new Mark("Fuerteventura",
 //                        "g3m-marker.png",
 //                        Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0));
 //    //m1->addTouchListener(listener);
 //    marks->addMark(m1);
-//    
-//    
+//
+//
 //    Mark* m2 = new Mark("Las Palmas",
 //                        "g3m-marker.png",
 //                        Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0));
 //    //m2->addTouchListener(listener);
 //    marks->addMark(m2);
-//    
+//
 //    if (false) {
 //      for (int i = 0; i < 500; i++) {
 //        const Angle latitude = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
 //        const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
 //        //NSLog(@"lat=%f, lon=%f", latitude.degrees(), longitude.degrees());
-//        
+//
 //        marks->addMark(new Mark("Random",
 //                                "g3m-marker.png",
 //                                Geodetic3D(latitude, longitude, 0)));
 //      }
 //    }
 //  }
-//  
+//
 //  if (false) {
 //    LatLonMeshRenderer *renderer = new LatLonMeshRenderer();
 //    comp->addRenderer(renderer);
 //  }
-//  
+//
 //  EffectsScheduler* scheduler = new EffectsScheduler();
-//  
+//
 //  if (false) {
 //    EffectTarget* target = NULL;
 //    scheduler->startEffect(new SampleEffect(TimeInterval::fromSeconds(2)),
 //                           target);
 //  }
-//  
+//
 //  if (false) {
 //    SceneGraphRenderer* sgr = new SceneGraphRenderer();
 //    SGCubeNode* cube = new SGCubeNode();
@@ -459,26 +468,26 @@
 //    sgr->getRootNode()->addChild(cube);
 //    comp->addRenderer(sgr);
 //  }
-//  
+//
 //  //  comp->addRenderer(new GLErrorRenderer());
-//  
-//  
+//
+//
 //  TextureBuilder* texBuilder = new CPUTextureBuilder();
 //  TexturesHandler* texturesHandler = new TexturesHandler(gl, factory, texBuilder, false);
-//  
+//
 //  const Planet* planet = Planet::createEarth();
-//  
+//
 //  //Renderer* busyRenderer = new BusyQuadRenderer("ProgressWheel.png");
 //  Renderer* busyRenderer = new BusyMeshRenderer();
-//  
+//
 //  std::vector <ICameraConstrainer*> cameraConstraint;
 //  cameraConstraint.push_back(new SimpleCameraConstrainer);
-//  
+//
 //  const bool logFPS = false;
 //  const bool logDownloaderStatistics = false;
-//  
+//
 //  FrameTasksExecutor* frameTasksExecutor = new FrameTasksExecutor();
-//  
+//
 //  _widgetVP = G3MWidget::create(frameTasksExecutor,
 //                                factory,
 //                                logger,

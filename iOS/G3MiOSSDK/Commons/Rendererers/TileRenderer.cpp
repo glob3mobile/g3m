@@ -88,6 +88,10 @@ void TileRenderer::initialize(const InitializationContext* ic) {
 }
 
 bool TileRenderer::isReadyToRender(const RenderContext *rc) {
+  if (!_parameters->_forceTopLevelTilesRenderOnStart) {
+    return true;
+  }
+  
   if (_topTilesJustCreated) {
     
     if (_texturizer != NULL) {
@@ -130,7 +134,7 @@ int TileRenderer::render(const RenderContext* rc) {
 //                        _lastTexturizerTimer,
                         _firstRender /* if first render, force full render */);
 
-  if (_firstRender) {
+  if (_firstRender && _parameters->_forceTopLevelTilesRenderOnStart) {
     // force one render of the topLevel tiles to make the (toplevel) textures loaded as they
     // will be used as last-change fallback texture for any tile.
     _firstRender = false;
