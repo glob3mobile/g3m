@@ -166,11 +166,6 @@ public:
     return _texturizerDirty;
   }
   
-  Geodetic3D intersection(const Vector3D& origin,
-                          const Vector3D& ray,
-                          const EventContext* ec) const;
-
-  
   bool hasTexturizerData() const {
     return (_texturizerData != NULL);
   }
@@ -185,6 +180,12 @@ public:
     }
     _texturizerData = texturizerData;
   }
+
+//  Geodetic3D intersection(const EventContext* ec,
+//                          const Vector3D& origin,
+//                          const Vector3D& ray) const;
+  
+  const Tile* getDeepestTileContaining(const Geodetic3D& position) const;
   
 };
 

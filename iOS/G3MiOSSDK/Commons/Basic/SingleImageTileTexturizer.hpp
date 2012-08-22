@@ -27,7 +27,8 @@ private:
   GLTextureID _texID;
   IImage * const _image;
   
-  std::vector<MutableVector2D> createTextureCoordinates(const RenderContext* rc, Mesh* mesh) const;
+  std::vector<MutableVector2D> createTextureCoordinates(const RenderContext* rc,
+                                                        Mesh* mesh) const;
   
 public:
   
@@ -76,7 +77,7 @@ public:
                                      bool textureSolved);
   
   void onTerrainTouchEvent(const EventContext* ec,
-                           const Geodetic3D& g3d,
+                           const Geodetic3D& position,
                            const Tile* tile) {
   }
   

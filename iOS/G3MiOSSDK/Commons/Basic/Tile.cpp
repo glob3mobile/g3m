@@ -199,13 +199,13 @@ void Tile::rawRender(const RenderContext *rc,
         //                                      lastTexturizerTimer->elapsedTime().milliseconds() > 10));
         //        const bool callTexturizer = ((_texturizerTimer == NULL) ||
         //                                     (_texturizerTimer->elapsedTime().milliseconds() > 100));
-//        const bool callTexturizer = ((_texturizerTimer == NULL) ||
-//                                     (_texturizerTimer->elapsedTime().milliseconds() > 50)) && isTexturizerDirty();
-
-                const bool callTexturizer = true;
-//        const bool callTexturizer = (trc->getLastTexturizerTimer()->elapsedTime().milliseconds() > 10);
-//        const bool callTexturizer = (trc->getLastTexturizerTimer()->elapsedTime().milliseconds() > 10);
-
+        //        const bool callTexturizer = ((_texturizerTimer == NULL) ||
+        //                                     (_texturizerTimer->elapsedTime().milliseconds() > 50)) && isTexturizerDirty();
+        
+        const bool callTexturizer = true;
+        //        const bool callTexturizer = (trc->getLastTexturizerTimer()->elapsedTime().milliseconds() > 10);
+        //        const bool callTexturizer = (trc->getLastTexturizerTimer()->elapsedTime().milliseconds() > 10);
+        
         if (callTexturizer) {
           _texturizerMesh = texturizer->texturize(rc,
                                                   trc,
@@ -258,7 +258,7 @@ std::vector<Tile*>* Tile::getSubTiles() {
 void Tile::prune(const TileRenderContext* trc) {
   if (_subtiles != NULL) {
     
-//    printf("= pruned tile %s\n", getKey().description().c_str());
+    //    printf("= pruned tile %s\n", getKey().description().c_str());
     
     TileTexturizer* texturizer = (trc == NULL) ? NULL : trc->getTexturizer();
     
@@ -414,35 +414,53 @@ const TileKey Tile::getKey() const {
   return TileKey(_level, _row, _column);
 }
 
-Geodetic3D Tile::intersection(const Vector3D& origin,
-                              const Vector3D& ray,
-                              const EventContext* ec) const {
-  const Planet* planet = ec->getPlanet();
-  
-    //As our tiles are still flat our onPlanet vector is calculated directly from Planet
-  std::vector<double> ts = planet->intersections(origin, ray);
-  
-  if (ts.size() > 0) {
-    const Vector3D onPlanet = origin.add(ray.times(ts[0]));
-    const Geodetic3D g = planet->toGeodetic3D(onPlanet);
-    
-    if (_sector.contains(g)) {
-      //If this tile is not a leaf
-      if (_subtiles != NULL) {
-        for (int i = 0; i < _subtiles->size(); i++) {
-          const Geodetic3D g3d = _subtiles->at(i)->intersection(origin, ray, ec);
-          if (!g3d.isNan()) {
-            return g3d;
-          }
+//Geodetic3D Tile::intersection(const EventContext* ec,
+//                              const Vector3D& origin,
+//                              const Vector3D& ray) const {
+//  const Planet* planet = ec->getPlanet();
+//
+//  const Vector3D onPlanet = planet->closestIntersection(origin, ray);
+//  if (onPlanet.isNan()) {
+//    return Geodetic3D::nan();
+//  }
+//
+//  const Geodetic3D g = planet->toGeodetic3D(onPlanet);
+//
+//  if (_sector.contains(g)) {
+//    //If this tile is not a leaf
+//    if (_subtiles != NULL) {
+//      for (int i = 0; i < _subtiles->size(); i++) {
+//        const Geodetic3D g3d = _subtiles->at(i)->intersection(ec, origin, ray);
+//        if (!g3d.isNan()) {
+//          return g3d;
+//        }
+//      }
+//    }
+//    else {
+//      //printf("TOUCH TILE %d\n", _level);
+//      _texturizer->onTerrainTouchEvent(ec, g, this);
+//      return g;
+//    }
+//  }
+//
+//  return Geodetic3D::nan();
+//}
+
+const Tile* Tile::getDeepestTileContaining(const Geodetic3D& position) const {
+  if (_sector.contains(position)) {
+    if (_subtiles == NULL) {
+      return this;
+    }
+    else {
+      for (int i = 0; i < _subtiles->size(); i++) {
+        const Tile* subtile = _subtiles->at(i);
+        const Tile* subtileResult = subtile->getDeepestTileContaining(position);
+        if (subtileResult != NULL) {
+          return subtileResult;
         }
-      }
-      else {
-        //printf("TOUCH TILE %d\n", _level);
-        _texturizer->onTerrainTouchEvent(ec, g, this);
-        return g;
       }
     }
   }
-
-  return Geodetic3D::nan();
+  
+  return NULL;
 }

@@ -13,7 +13,8 @@
 #include "Planet.hpp"
 
 
-std::vector<MutableVector2D> SingleImageTileTexturizer::createTextureCoordinates(const RenderContext* rc, Mesh* mesh) const {
+std::vector<MutableVector2D> SingleImageTileTexturizer::createTextureCoordinates(const RenderContext* rc,
+                                                                                 Mesh* mesh) const {
   std::vector<MutableVector2D> texCoors;
   
   for (int i = 0; i < mesh->getVertexCount(); i++) {

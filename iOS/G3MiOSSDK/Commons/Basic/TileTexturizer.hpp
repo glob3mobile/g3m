@@ -53,7 +53,7 @@ public:
                                              bool textureSolved) = 0;
   
   virtual void onTerrainTouchEvent(const EventContext* ec,
-                                   const Geodetic3D& g3d,
+                                   const Geodetic3D& position,
                                    const Tile* tile) = 0;
   
 };

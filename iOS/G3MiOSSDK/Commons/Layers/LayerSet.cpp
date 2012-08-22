@@ -30,13 +30,13 @@ std::vector<Petition*> LayerSet::createTilePetitions(const RenderContext* rc,
 }
 
 void LayerSet::onTerrainTouchEvent(const EventContext* ec,
-                                   const Geodetic3D& g3d,
+                                   const Geodetic3D& position,
                                    const Tile* tile) const {
   
   for (int i = 0; i < _layers.size(); i++) {
     Layer* layer = _layers[i];
     
-    TerrainTouchEvent tte(g3d.asGeodetic2D(), tile->getSector(), layer);
+    TerrainTouchEvent tte(position, tile->getSector(), layer);
     
     layer->onTerrainTouchEventListener(ec, tte);
   }

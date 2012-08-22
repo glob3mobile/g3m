@@ -87,10 +87,6 @@ public:
   
   const GLTextureID getTopLevelGLTextureIDForTile(Tile* tile);
   
-//  void deleteBuilder(TileKey key,
-//                     TileTextureBuilder* builder);
-  
-  
   void onTerrainTouchEvent(const EventContext* ec,
                            const Geodetic3D& g3d,
                            const Tile* tile);

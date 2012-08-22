@@ -198,14 +198,22 @@ bool TileRenderer::onTouchEvent(const EventContext* ec,
     
     if (_lastCamera != NULL){
       const Vector2D pixel = touchEvent->getTouch(0)->getPos();
-      const Vector3D ray = _lastCamera->pixel2Ray(pixel);
+      const Vector3D ray = _lastCamera->pixel2Ray(pixel).normalized();
       const Vector3D origin = _lastCamera->getPosition();
+
+      const Planet* planet = ec->getPlanet();
       
-      for(int i = 0; i < _topLevelTiles.size(); i++){
-        
-        Geodetic3D g = _topLevelTiles[i]->intersection(origin, ray, ec);
-        if (!g.isNan()){
-          printf("G: %f, %f, %f\n", g.latitude().degrees(), g.longitude().degrees(), g.height());
+      const Vector3D onPlanet = planet->closestIntersection(origin, ray);
+      if (onPlanet.isNan()) {
+        return false;
+      }
+      
+      const Geodetic3D position = planet->toGeodetic3D(onPlanet);
+      
+      for (int i = 0; i < _topLevelTiles.size(); i++) {
+        const Tile* tile = _topLevelTiles[i]->getDeepestTileContaining(position);
+        if (tile != NULL) {
+          _texturizer->onTerrainTouchEvent(ec, position, tile);
         }
       }
       
