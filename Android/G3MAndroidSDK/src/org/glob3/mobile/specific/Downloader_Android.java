@@ -1,48 +1,194 @@
 package org.glob3.mobile.specific;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
-
 import org.glob3.mobile.generated.IDownloadListener;
 import org.glob3.mobile.generated.IDownloader;
+import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.Url;
 
-import android.R.id;
-import android.os.AsyncTask;
-import android.util.Log;
-
 public class Downloader_Android extends IDownloader {
-	
-	Downloader_Android(int memoryCapacity, int diskCapacity, String diskPath,
-			int maxConcurrentOperationCount) {
-	}
 
-	@Override
-	public void start() {
-		// TODO Auto-generated method stub
-		
-	}
+   private long                                       _requestIdCounter;
+   private long                                       _requestsCounter;
+   private long                                       _cancelsCounter;
+   private ArrayList<Downloader_Android_WorkerThread> _workers;
+   private Map<String, Downloader_Android_Handler>    _downloadingHandlers;
+   private Map<String, Downloader_Android_Handler>    _queuedHandlers;
 
-	@Override
-	public int request(Url url, int priority, IDownloadListener listener) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
-	@Override
-	public void cancelRequest(int requestId) {
-		// TODO Auto-generated method stub
-		
-	}
-	
+   Downloader_Android(int memoryCapacity,
+                      int diskCapacity,
+                      String diskPath,
+                      int maxConcurrentOperationCount) {
+      // TODO memoryCapacity ??
+      // TODO diskCapacity ??
+      // TODO diskPath ??
+
+      _requestIdCounter = 1;
+      _requestsCounter = 0;
+      _cancelsCounter = 0;
+      // TODO String or Url as key??
+      _downloadingHandlers = new HashMap<String, Downloader_Android_Handler>();
+      _queuedHandlers = new HashMap<String, Downloader_Android_Handler>();
+      _workers = new ArrayList<Downloader_Android_WorkerThread>(maxConcurrentOperationCount);
+
+      for (int i = 0; i < maxConcurrentOperationCount; i++) {
+         _workers.add(new Downloader_Android_WorkerThread(this));
+      }
+   }
+
+
+   @Override
+   public void start() {
+      Iterator<Downloader_Android_WorkerThread> iter = _workers.iterator();
+      while (iter.hasNext()) {
+         iter.next().execute();
+      }
+   }
+   
+   // TODO stop()
+//   @Override
+   public void stop() {
+      Iterator<Downloader_Android_WorkerThread> iter = _workers.iterator();
+      while (iter.hasNext()) {
+         iter.next().stop();
+      }
+   }
+
+
+   @Override
+   public long request(Url url,
+                       int priority,
+                       IDownloadListener listener) {
+
+      Downloader_Android_Handler handler = null;
+      long requestId;
+
+      synchronized (this) {
+         _requestsCounter++;
+         requestId = _requestIdCounter++;
+         handler = _downloadingHandlers.get(url.getPath());
+
+         if (handler != null) {
+            // the URL is being downloaded, just add the new listener
+            handler.addListener(listener, priority, requestId);
+         }
+         else {
+            handler = _queuedHandlers.get(url);
+            if (handler != null) {
+               // the URL is queued for future download, just add the new listener
+               handler.addListener(listener, priority, requestId);
+            }
+            else {
+               // new handler, queue it
+               handler = new Downloader_Android_Handler(url, listener, priority, requestId);
+               _queuedHandlers.put(url.getPath(), handler);
+            }
+         }
+      }
+
+      return requestId;
+   }
+
+
+   @Override
+   public void cancelRequest(int requestId) {
+      if (requestId < 0) {
+         return;
+      }
+
+      synchronized (this) {
+         _cancelsCounter++;
+
+         boolean found = false;
+         Iterator<Map.Entry<String, Downloader_Android_Handler>> iter = _queuedHandlers.entrySet().iterator();
+
+         while (iter.hasNext() && !found) {
+            Map.Entry<String, Downloader_Android_Handler> e = iter.next();
+            String url = e.getKey();
+            Downloader_Android_Handler handler = e.getValue();
+
+            if (handler.removeListenerForRequestId(requestId)) {
+               if (!handler.hasListener()) {
+                  _queuedHandlers.remove(url);
+               }
+               found = true;
+            }
+         }
+
+         if (!found) {
+            iter = _downloadingHandlers.entrySet().iterator();
+
+            while (iter.hasNext() && !found) {
+               Map.Entry<String, Downloader_Android_Handler> e = iter.next();
+               Downloader_Android_Handler handler = e.getValue();
+
+               if (handler.cancelListenerForRequestId(requestId)) {
+                  found = true;
+               }
+            }
+         }
+      }
+   }
+
+
+   public synchronized void removeDownloadHandlerForUrl(String url) {
+      _downloadingHandlers.remove(url);
+   }
+
+
+   public Downloader_Android_Handler getHandlerToRun() {
+      long selectedPriority = -100000000; // TODO: LONG_MAX_VALUE;
+      Downloader_Android_Handler selectedHandler = null;
+      String selectedURL = null;
+
+      synchronized (this) {
+         Iterator<Map.Entry<String, Downloader_Android_Handler>> it = _queuedHandlers.entrySet().iterator();
+
+         while (it.hasNext()) {
+            Map.Entry<String, Downloader_Android_Handler> e = it.next();
+            String url = e.getKey();
+            Downloader_Android_Handler handler = e.getValue();
+            long priority = handler.getPriority();
+
+            if (priority > selectedPriority) {
+               selectedPriority = priority;
+               selectedHandler = handler;
+               selectedURL = url;
+            }
+         }
+
+         if (selectedHandler != null) {
+            // move the selected handler to _downloadingHandlers collection
+            _queuedHandlers.remove(selectedURL);
+            _downloadingHandlers.put(selectedURL, selectedHandler);
+         }
+      }
+
+      return selectedHandler;
+   }
+
+
+   @Override
+   public int request(URL url,
+                      int priority,
+                      IDownloadListener listener,
+                      boolean deleteListener) {
+      // TODO Auto-generated method stub
+      return 0;
+   }
+
+
+   @Override
+   public String statistics() {
+      // TODO Auto-generated method stub
+      return null;
+   }
+
 }
 
 //PRELIMINAR IMPLEMENTATION NOT FINISHED YET
