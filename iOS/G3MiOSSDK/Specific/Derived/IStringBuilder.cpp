@@ -17,6 +17,6 @@ void IStringBuilder::setInstance(IStringBuilder* isb) {
   _instance = isb;
 }
 
-IStringBuilder* IStringBuilder::instance() {
-  return _instance;
+IStringBuilder* IStringBuilder::newStringBuilder() {
+  return _instance->getNewInstance();
 }

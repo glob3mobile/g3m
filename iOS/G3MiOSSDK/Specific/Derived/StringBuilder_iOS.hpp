@@ -11,12 +11,38 @@
 
 #include "IStringBuilder.hpp"
 
+#include <sstream>
+
 class StringBuilder_iOS: public IStringBuilder{
   
-  std::string stringFromUTF8(const unsigned char data[]) const;
+  std::ostringstream _oss;
   
-  std::string stringFormat(std::string x, ...) const;
+protected: 
   
+  
+  IStringBuilder* getNewInstance() const{
+    return new StringBuilder_iOS();
+  }
+public:  
+  
+  IStringBuilder* add(double d){
+    _oss << d;
+    return this;
+  }
+  
+  IStringBuilder* add(const char c[]){
+    _oss << c;
+    return this;
+  }
+  
+  IStringBuilder* add(const std::string& s){
+    _oss << s;
+    return this;
+  }
+  
+  std::string getString() const{
+    return _oss.str();
+  }
 };
 
 #endif

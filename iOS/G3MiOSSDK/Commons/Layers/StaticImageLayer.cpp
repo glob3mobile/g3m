@@ -8,7 +8,7 @@
 
 #include "StaticImageLayer.hpp"
 
-#include <sstream>
+#include "IStringBuilder.hpp"
 
 #include "IStorage.hpp"
 
@@ -28,11 +28,15 @@ std::vector<Petition*> StaticImageLayer::getTilePetitions(const RenderContext* r
   }
   
   //CREATING ID FOR PETITION
-  const URL id = URL(rc->getFactory()->stringFormat("%s_%f_%f_%f_%f", _layerID.c_str(),
-                                                    tileSector.lower().latitude().degrees(),
-                                                    tileSector.lower().longitude().degrees(),
-                                                    tileSector.upper().latitude().degrees(),
-                                                    tileSector.upper().longitude().degrees() ));
+  
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->add(_layerID)->add("_")->add(tileSector.lower().latitude().degrees());
+  isb->add("_")->add(tileSector.lower().longitude().degrees());
+  isb->add("_")->add(tileSector.upper().latitude().degrees());
+  isb->add("_")->add(tileSector.upper().longitude().degrees());
+  
+  
+  const URL id = URL(isb->getString());
   
   Petition *pet = new Petition(tileSector, id, true);
 

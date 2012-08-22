@@ -15,14 +15,22 @@ class IStringBuilder{
   
   static IStringBuilder* _instance;
   
+  
+protected:
+  
+  virtual IStringBuilder* getNewInstance() const = 0;
+  
 public:
   static void setInstance(IStringBuilder* isb);
   
-  static IStringBuilder* instance();
+  static IStringBuilder* newStringBuilder();
   
-  virtual std::string stringFromUTF8(const unsigned char data[]) const = 0;
+  virtual IStringBuilder* add(double d) = 0;
+  virtual IStringBuilder* add(const char c[]) = 0;
+  virtual IStringBuilder* add(const std::string& s) = 0;
   
-  virtual std::string stringFormat(std::string x, ...) const = 0;
+  virtual std::string getString() const = 0;
+  
 #ifdef C_CODE
   // a virtual destructor is needed for conversion to Java
   virtual ~IStringBuilder() {}
