@@ -28,6 +28,8 @@ public:
     
   }
   
+  TimeInterval() : _milliseconds(0) {}
+  
   static TimeInterval nan() {
     return TimeInterval(NAN);
   }

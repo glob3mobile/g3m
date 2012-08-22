@@ -28,10 +28,8 @@ public:
                                                     const std::vector<const Rectangle*> rectangles,
                                                     int width,
                                                     int height) const = 0;
-  
-#ifdef C_CODE
+
   virtual ~TextureBuilder() {}
-#endif
 };
 
 

@@ -62,6 +62,8 @@ public:
   
   void doPreRenderCycle(const RenderContext* rc);
   
+  ~FrameTasksExecutor(){}
+  
 };
 
 #endif

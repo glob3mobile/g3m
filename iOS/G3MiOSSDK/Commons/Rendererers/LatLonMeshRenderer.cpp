@@ -48,7 +48,7 @@ void LatLonMeshRenderer::initialize(const InitializationContext* ic)
   System.arraycopy(v, 0, vertices, 0, v.length);
   System.arraycopy(i, 0, indices, 0, i.length);
   // create mesh
-  mesh = IndexedMesh.CreateFromGeodetic3D(ic.getPlanet(), true, GLPrimitive.TriangleStrip, 
+  mesh = IndexedMesh.createFromGeodetic3D(ic.getPlanet(), true, GLPrimitive.TriangleStrip, 
                                           CenterStrategy.NoCenter, new Vector3D((double)0.0,(double)0.0,(double)0.0), 
                                           4, vertices, indices, 4, flatColor);
 #endif
