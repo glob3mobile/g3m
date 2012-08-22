@@ -22,6 +22,13 @@ public class GLTextureID
 {
   private int _textureId;
 
+
+  public GLTextureID()
+  {
+	_textureId = -1;
+  }
+
+
   public static GLTextureID invalid()
   {
 	return new GLTextureID(-1);

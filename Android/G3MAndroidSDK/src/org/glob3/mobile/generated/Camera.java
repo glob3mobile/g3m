@@ -85,58 +85,58 @@ public class Camera
 
   /*
   void Camera::calculateCachedValues() {
-    const FrustumData data = calculateFrustumData();
+	const FrustumData data = calculateFrustumData();
     
-    _projectionMatrix = MutableMatrix44D::createProjectionMatrix(data._left, data._right,
-                                                                 data._bottom, data._top,
-                                                                 data._znear, data._zfar);
+	_projectionMatrix = MutableMatrix44D::createProjectionMatrix(data._left, data._right,
+																 data._bottom, data._top,
+																 data._znear, data._zfar);
     
-    _modelMatrix = MutableMatrix44D::createModelMatrix(_position, _center, _up);
+	_modelMatrix = MutableMatrix44D::createModelMatrix(_position, _center, _up);
     
     
   //  _modelViewMatrix = _projectionMatrix.multiply(_modelMatrix);
     
     
-    // compute center of view on planet
+	// compute center of view on planet
   #ifdef C_CODE
-    if (_centerOfView) delete _centerOfView;
+	if (_centerOfView) delete _centerOfView;
   #endif
-    const Planet *planet = rc->getPlanet();
-    const Vector3D centerV = centerOfViewOnPlanet();
-    const Geodetic3D centerG = _planet->toGeodetic3D(centerV);
-    _centerOfView = new Geodetic3D(centerG);
+	const Planet *planet = rc->getPlanet();
+	const Vector3D centerV = centerOfViewOnPlanet();
+	const Geodetic3D centerG = _planet->toGeodetic3D(centerV);
+	_centerOfView = new Geodetic3D(centerG);
     
   #ifdef C_CODE
-    if (_frustum != NULL) {
-      delete _frustum;
-    }
+	if (_frustum != NULL) {
+	  delete _frustum;
+	}
   #endif
-    _frustum = new Frustum(data._left, data._right,
-                           data._bottom, data._top,
-                           data._znear, data._zfar);
+	_frustum = new Frustum(data._left, data._right,
+						   data._bottom, data._top,
+						   data._znear, data._zfar);
   
   #ifdef C_CODE    
-    if (_frustumInModelCoordinates != NULL) {
-      delete _frustumInModelCoordinates;
-    }
-    _frustumInModelCoordinates = _frustum->_frustum->transformedBy_P(_modelMatrix.transposed());(_modelMatrix.transposed());
+	if (_frustumInModelCoordinates != NULL) {
+	  delete _frustumInModelCoordinates;
+	}
+	_frustumInModelCoordinates = _frustum->_frustum->transformedBy_P(_modelMatrix.transposed());(_modelMatrix.transposed());
     
     
   >>>>>>> origin/master
-    if (_halfFrustum != NULL) {
-      delete _halfFrustum;
-    }
+	if (_halfFrustum != NULL) {
+	  delete _halfFrustum;
+	}
   #endif
-    _halfFrustum =  new Frustum(data._left/2, data._right/2,
-                                data._bottom/2, data._top/2,
-                                data._znear, data._zfar);
+	_halfFrustum =  new Frustum(data._left/2, data._right/2,
+								data._bottom/2, data._top/2,
+								data._znear, data._zfar);
     
   #ifdef C_CODE
-    if (_halfFrustumInModelCoordinates != NULL) {
-      delete _halfFrustumInModelCoordinates;
-    }
+	if (_halfFrustumInModelCoordinates != NULL) {
+	  delete _halfFrustumInModelCoordinates;
+	}
   #endif
-    _halfFrustumInModelCoordinates = _halfFrustum->transformedBy_P(_modelMatrix.transposed());
+	_halfFrustumInModelCoordinates = _halfFrustum->transformedBy_P(_modelMatrix.transposed());
   
   
   }*/
@@ -591,17 +591,17 @@ public class Camera
   //void calculateCachedValues();
 
   /*void cleanCachedValues() {
-    _dirtyCachedValues = true;
-    //    if (_frustum != NULL) {
-    //      delete _frustum;
-    //      _frustum = NULL;
-    //    }
-    if (_frustumInModelCoordinates != NULL) {
+	_dirtyCachedValues = true;
+	//    if (_frustum != NULL) {
+	//      delete _frustum;
+	//      _frustum = NULL;
+	//    }
+	if (_frustumInModelCoordinates != NULL) {
 #ifdef C_CODE
-      delete _frustumInModelCoordinates;
+	  delete _frustumInModelCoordinates;
 #endif
-      _frustumInModelCoordinates = NULL;
-    }
+	  _frustumInModelCoordinates = NULL;
+	}
   }*/
 
 

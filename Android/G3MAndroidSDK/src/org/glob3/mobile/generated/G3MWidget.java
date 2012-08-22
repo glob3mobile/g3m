@@ -220,7 +220,7 @@ public class G3MWidget
   }
 
 /*  const Camera* getCurrentCamera() const {
-    return _currentCamera;
+	return _currentCamera;
   }*/
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

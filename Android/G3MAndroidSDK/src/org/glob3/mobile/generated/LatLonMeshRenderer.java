@@ -62,12 +62,12 @@ public class LatLonMeshRenderer extends Renderer
 	mesh.render(rc);
   
   /*  gl->pushMatrix();
-    Geodetic2D centerMesh = Geodetic2D(Angle::fromDegrees(28.715), Angle::fromDegrees(-17.855));
-    Vector3D normal = rc->getPlanet()->geodeticSurfaceNormal(centerMesh);
-    gl->multMatrixf(MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(45), normal,
-                                                                  rc->getPlanet()->toVector3D(centerMesh)));
-    mesh->render(rc);
-    gl->popMatrix();*/
+	Geodetic2D centerMesh = Geodetic2D(Angle::fromDegrees(28.715), Angle::fromDegrees(-17.855));
+	Vector3D normal = rc->getPlanet()->geodeticSurfaceNormal(centerMesh);
+	gl->multMatrixf(MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(45), normal,
+																  rc->getPlanet()->toVector3D(centerMesh)));
+	mesh->render(rc);
+	gl->popMatrix();*/
   
 	return Renderer.maxTimeToRender;
   }

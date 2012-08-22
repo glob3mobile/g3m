@@ -267,10 +267,10 @@ public class Sector
 	final double dot = normal.dot(view);
   
    /*
-    if (dot<0 && _upper.latitude().degrees()>89) {
-      getClosestPoint(center);
-      printf ("ehh\n");
-    }  */
+	if (dot<0 && _upper.latitude().degrees()>89) {
+	  getClosestPoint(center);
+	  printf ("ehh\n");
+	}  */
   
 	return (dot < 0) ? true : false;
   }
@@ -332,9 +332,9 @@ public class Sector
   
   
   /*
-    const Angle lat = pos.latitude().nearestAngleInInterval(_lower.latitude(), _upper.latitude());
-    const Angle lon = pos.longitude().nearestAngleInInterval(_lower.longitude(), _upper.longitude());
-    return Geodetic2D(lat, lon);*/
+	const Angle lat = pos.latitude().nearestAngleInInterval(_lower.latitude(), _upper.latitude());
+	const Angle lon = pos.longitude().nearestAngleInInterval(_lower.longitude(), _upper.longitude());
+	return Geodetic2D(lat, lon);*/
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
