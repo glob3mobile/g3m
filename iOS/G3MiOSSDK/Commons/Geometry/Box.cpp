@@ -76,3 +76,64 @@ double Box::squaredProjectedArea(const RenderContext* rc) const {
   const Vector2D extent = projectedExtent(rc);
   return extent.x() * extent.y();
 }
+
+bool Box::contains(const Vector3D& p) const{
+  const static double margin = 1e-3;
+  if (p.x() < _lower.x() - margin) return false;
+  if (p.x() > _upper.x() + margin) return false;
+  
+  if (p.y() < _lower.y() - margin) return false;
+  if (p.y() > _upper.y() + margin) return false;
+  
+  if (p.z() < _lower.z() - margin) return false;
+  if (p.z() > _upper.z() + margin) return false;
+  
+  return true;
+}
+
+Vector3D Box::intersectionWithRay(const Vector3D& origin, const Vector3D& direction) const{
+  
+  //MIN X
+  {
+    Plane p( Vector3D(1.0, 0.0, 0.0), _lower.x());
+    Vector3D inter = p.intersectionWithRay(origin, direction);
+    if (!inter.isNan() && contains(inter)) return inter;
+  }
+  
+  //MAX X
+  {
+    Plane p( Vector3D(1.0, 0.0, 0.0), _upper.x());
+    Vector3D inter = p.intersectionWithRay(origin, direction);
+    if (!inter.isNan() && contains(inter)) return inter;
+  }
+  
+  //MIN Y
+  {
+    Plane p( Vector3D(0.0, 1.0, 0.0), _lower.y());
+    Vector3D inter = p.intersectionWithRay(origin, direction);
+    if (!inter.isNan() && contains(inter)) return inter;
+  }
+  
+  //MAX Y
+  {
+    Plane p( Vector3D(0.0, 1.0, 0.0), _upper.y());
+    Vector3D inter = p.intersectionWithRay(origin, direction);
+    if (!inter.isNan() && contains(inter)) return inter;
+  }
+  
+  //MIN Z
+  {
+    Plane p( Vector3D(0.0, 0.0, 1.0), _lower.z());
+    Vector3D inter = p.intersectionWithRay(origin, direction);
+    if (!inter.isNan() && contains(inter)) return inter;
+  }
+  
+  //MAX Z
+  {
+    Plane p( Vector3D(0.0, 0.0, 1.0), _upper.z());
+    Vector3D inter = p.intersectionWithRay(origin, direction);
+    if (!inter.isNan() && contains(inter)) return inter;
+  }
+  
+  return Vector3D::nan();  
+}

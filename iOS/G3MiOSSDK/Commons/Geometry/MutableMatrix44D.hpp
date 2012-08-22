@@ -181,6 +181,30 @@ public:
   
   static MutableMatrix44D createProjectionMatrix(const FrustumData& data);
   
+  static MutableMatrix44D createOrthographicProjectionMatrix(double left, double right,
+                                                             double bottom, double top,
+                                                             double znear, double zfar) {
+    // set frustum matrix in double
+    const double rl = right - left;
+    const double tb = top - bottom;
+    const double fn = zfar - znear;
+    
+    double P[16];
+    P[0] = 2 / rl;
+    P[1] = P[2] = P[3] = P[4] = 0;
+    P[5] = 2 / tb;
+    P[6] = P[7] = P[8] = P[9] = 0;
+    P[10] = -2 / fn;
+    P[11] = 0;
+    P[12] = -(right+left) / rl;
+    P[13] = -(top+bottom) / tb;
+    P[14] = -(zfar+znear) / fn;
+    P[15] = 1;
+    
+    return MutableMatrix44D(P);
+  }
+
+  
 };
 
 

@@ -14,6 +14,12 @@ class RenderContext;
 class Tile;
 class TileTessellator;
 class InitializationContext;
+class TilesRenderParameters;
+class TileRenderContext;
+class Geodetic3D;
+class IDownloadListener;
+
+#include "TerrainTouchEventListener.hpp"
 
 class TileTexturizer {
 public:
@@ -21,22 +27,33 @@ public:
   }
   
   virtual bool isReady(const RenderContext *rc) = 0;
-
-  virtual void initialize(const InitializationContext* ic) = 0;
-
+  
+  virtual void initialize(const InitializationContext* ic,
+                          const TilesRenderParameters* parameters) = 0;
+  
   virtual Mesh* texturize(const RenderContext* rc,
+                          const TileRenderContext* trc,
                           Tile* tile,
-                          const TileTessellator* tessellator,
                           Mesh* tessellatorMesh,
                           Mesh* previousMesh) = 0;
   
-  virtual void tileToBeDeleted(Tile* tile) = 0;
+  virtual void tileToBeDeleted(Tile* tile,
+                               Mesh* mesh) = 0;
+  
+  virtual void tileMeshToBeDeleted(Tile* tile,
+                                   Mesh* mesh) = 0;
   
   virtual bool tileMeetsRenderCriteria(Tile* tile) = 0;
   
-  virtual void justCreatedTopTile(Tile* tile) = 0;
+  virtual void justCreatedTopTile(const RenderContext* rc,
+                                  Tile* tile) = 0;
   
-
+  virtual void ancestorTexturedSolvedChanged(Tile* tile,
+                                             Tile* ancestorTile,
+                                             bool textureSolved) = 0;
+  
+  virtual void onTerrainTouchEvent(const Geodetic3D& g3d, const Tile* tile) = 0;
+  
 };
 
 #endif

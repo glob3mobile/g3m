@@ -12,13 +12,89 @@
 #include <string>
 #include <vector>
 
+#include "TextureBuilder.hpp"
+
 class IImage;
 class RenderContext;
 class TextureHolder;
 class GL;
 class IFactory;
-class TextureBuilder;
-class Rectangle;
+
+
+class TextureSpec {
+private:
+  const std::string _id;
+  
+  const int         _width;
+  const int         _height;
+  
+  
+  void operator=(const TextureSpec& that);
+  
+public:
+  TextureSpec(const std::string& id,
+              const int          width,
+              const int          height):
+  _id(id),
+  _width(width),
+  _height(height)
+  {
+    
+  }
+  
+  TextureSpec(const TextureSpec& that):
+  _id(that._id),
+  _width(that._width),
+  _height(that._height)
+  {
+    
+  }
+  
+  int getWidth() const {
+    return _width;
+  }
+  
+  int getHeight() const {
+    return _height;
+  }
+  
+  bool equalsTo(const TextureSpec& that) const {
+    return ((_id.compare(that._id) == 0) &&
+            (_width == that._width) &&
+            (_height == that._height));
+  }
+  
+  bool lowerThan(const TextureSpec& that) const {
+    if (_id < that._id) {
+      return true;
+    }
+    else if (_id > that._id) {
+      return false;
+    }
+    
+    if (_width < that._width) {
+      return true;
+    }
+    else if (_width > that._width) {
+      return false;
+    }
+    
+    return (_height < that._height);
+  }
+  
+  const std::string description() const;
+  
+#ifdef C_CODE
+  bool operator<(const TextureSpec& that) const {
+    return lowerThan(that);
+  }
+#endif
+  
+#ifdef JAVA_CODE
+  TODO_implements_equals;
+  TODO_implements_hashcode;
+#endif
+};
 
 class TexturesHandler {
 private:
@@ -26,52 +102,46 @@ private:
   
   GL * const _gl;
   const IFactory * const _factory;
-  const TextureBuilder* _texBuilder;
+  const TextureBuilder* _textureBuilder;
   
   const bool _verbose;
+  
+  void showHolders(const std::string message) const;
   
 public:
   
   TexturesHandler(GL* const  gl,
                   const IFactory const * factory,
                   const TextureBuilder* texBuilder,
-                  bool verbose): 
+                  bool verbose):
   _gl(gl),
   _factory(factory),
-  _texBuilder(texBuilder),
+  _textureBuilder(texBuilder),
   _verbose(verbose)
   {
   }
   
   ~TexturesHandler();
   
-  int getTextureIdFromFileName(const std::string& filename,
-                               int textureWidth,
-                               int textureHeight);
+  const GLTextureID getGLTextureIdFromFileName(const std::string filename,
+                                               int textureWidth,
+                                               int textureHeight);
   
-  int getTextureId(const std::vector<const IImage*>& images,
-                   const std::string& textureId,
-                   int textureWidth,
-                   int textureHeight);
+  const GLTextureID getGLTextureId(const std::vector<const IImage*> images,
+                                   const TextureSpec& textureSpec);
   
-  int getTextureId(const std::vector<const IImage*>& images,
-                   const std::vector<const Rectangle*>& rectangles,
-                   const std::string& textureId,
-                   int textureWidth,
-                   int textureHeight);
+  const GLTextureID getGLTextureId(const std::vector<const IImage*> images,
+                                   const std::vector<const Rectangle*> rectangles,
+                                   const TextureSpec& textureSpec);
   
-  int getTextureId(const IImage* image,
-                   const std::string& textureId,
-                   int textureWidth,
-                   int textureHeight);
-
+  const GLTextureID getGLTextureId(const IImage* image,
+                                   const TextureSpec& textureSpec);
   
-  int getTextureIdIfAvailable(const std::string& textureId,
-                              int textureWidth,
-                              int textureHeight);
+  const GLTextureID getGLTextureIdIfAvailable(const TextureSpec& textureSpec);
   
+  void releaseGLTextureId(const GLTextureID& glTextureId);
   
-  void takeTexture(int glTextureId);
+  void retainGLTextureId(const GLTextureID& glTextureId);
   
 };
 

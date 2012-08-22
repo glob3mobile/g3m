@@ -31,8 +31,6 @@ public:
     return new Planet("Earth", Vector3D(6378137.0, 6378137.0, 6356752.314245));
   }
   
-  
-  
   std::string getName() const {
     return _name;
   }

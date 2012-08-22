@@ -36,7 +36,7 @@ void Logger_iOS::logWarning(const std::string x, ...) const
 void Logger_iOS::logError(const std::string x, ...) const
 {
   if (_level >= ErrorLevel) {
-    printf("Error: ");
+    printf("ERROR: ");
     va_list args;
     va_start (args, x);
     vprintf(x.c_str(), args);

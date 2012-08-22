@@ -18,32 +18,32 @@
 
 
 struct UniformsStruct {
-  int  Projection;
-  int  Modelview;
-  int   Sampler;
-  int   EnableTexture;
-  int   FlatColor;
-  int   TranslationTexCoord;
-  int   ScaleTexCoord;
-  int   PointSize;
+  int Projection;
+  int Modelview;
+  int Sampler;
+  int EnableTexture;
+  int FlatColor;
+  int TranslationTexCoord;
+  int ScaleTexCoord;
+  int PointSize;
   
   //FOR BILLBOARDING
-  int   BillBoard;
-  int   ViewPortRatio;
+  int BillBoard;
+  int ViewPortRatio;
   
   //FOR COLOR MIXING
-  int   FlatColorIntensity;
-  int   EnableColorPerVertex;
-  int   EnableFlatColor;
-  int   ColorPerVertexIntensity;
+  int FlatColorIntensity;
+  int EnableColorPerVertex;
+  int EnableFlatColor;
+  int ColorPerVertexIntensity;
 } Uniforms;
 
 
 struct AttributesStruct {
-  int   Position;
-  int   TextureCoord;
-  int   Color;
-  int   Normal;
+  int Position;
+  int TextureCoord;
+  int Color;
+  int Normal;
 } Attributes;
 
 
@@ -130,8 +130,23 @@ void GL::clearScreen(float r, float g, float b, float a) {
 }
 
 void GL::color(float r, float g, float b, float a) {
-  _gl->uniform4f(Uniforms.FlatColor, r, g, b, a);
+  if (
+      (_flatColorR != r) ||
+      (_flatColorG != g) ||
+      (_flatColorB != b) ||
+      (_flatColorA != a)
+      ) {
+    _gl->uniform4f(Uniforms.FlatColor, r, g, b, a);
+    
+    _flatColorR = r;
+    _flatColorG = g;
+    _flatColorB = b;
+    _flatColorA = a;
+  }
+  
+//  _gl->uniform4f(Uniforms.FlatColor, r, g, b, a);
 }
+
 void GL::transformTexCoords(float scaleX,
                             float scaleY,
                             float translationX,
@@ -152,32 +167,6 @@ void GL::transformTexCoords(float scaleX,
     _translationY = translationY;
   }
 }
-
-//void GL::transformTexCoords(double scaleX,
-//                            double scaleY,
-//                            double translationX,
-//                            double translationY) {
-//  transformTexCoords((float) scaleX,
-//                     (float) scaleY,
-//                     (float) translationX,
-//                     (float) translationY);
-//}
-
-//void GL::transformTexCoords(const MutableVector2D& scale,
-//                            const MutableVector2D& translation) {
-//  transformTexCoords(scale.x(),
-//                     scale.y(),
-//                     translation.x(),
-//                     translation.y());
-//}
-
-//void GL::transformTexCoords(const Vector2D& scale,
-//                            const Vector2D& translation) {
-//  transformTexCoords(scale.x(),
-//                     scale.y(),
-//                     translation.x(),
-//                     translation.y());
-//}
 
 void GL::enablePolygonOffset(float factor, float units) {
 #ifdef C_CODE
@@ -248,63 +237,76 @@ GLError GL::getError() {
   return _gl->getError();
 }
 
-int GL::uploadTexture(const IImage* image,
-                      int textureWidth, int textureHeight) {
-  
-  unsigned char imageData[textureWidth * textureHeight * 4];
-  image->fillWithRGBA(imageData, textureWidth, textureHeight);
-  
-  int texID = getTextureID();
-  
+const GLTextureID GL::uploadTexture(const IImage* image,
+                                    int textureWidth, int textureHeight) {
+  const GLTextureID texID = getGLTextureID();
+  if (texID.isValid()) {
+    
 #ifdef C_CODE
-  
-  _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);
-  _gl->pixelStorei(Unpack, 1);
-  
-  _gl->bindTexture(Texture2D, texID);
-  _gl->texParameteri(Texture2D, MinFilter, Linear);
-  _gl->texParameteri(Texture2D, MagFilter, Linear);
-  _gl->texParameteri(Texture2D, WrapS, ClampToEdge);
-  _gl->texParameteri(Texture2D, WrapT, ClampToEdge);
-  _gl->texImage2D(Texture2D, 0, RGBA, textureWidth, textureHeight, 0, RGBA, UnsignedByte, imageData);
-  
-#else
-  
-  _gl->blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
-  _gl->pixelStorei(GLAlignment.Unpack, 1);
-  
-  _gl->bindTexture(GLTextureType.Texture2D, texID);
-  _gl->texParameteri(GLTextureType.Texture2D, GLTextureParameter.MinFilter, GLTextureParameterValue.Linear);
-  _gl->texParameteri(GLTextureType.Texture2D, GLTextureParameter.MagFilter, GLTextureParameterValue.Linear);
-  _gl->texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapS, GLTextureParameterValue.ClampToEdge);
-  _gl->texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapT, GLTextureParameterValue.ClampToEdge);
-  _gl->texImage2D(GLTextureType.Texture2D, 0, GLFormat.RGBA, textureWidth, textureHeight, 
-                  0, GLFormat.RGBA, GLType.UnsignedByte, imageData);
-  
+//    unsigned char* imageData = new unsigned char[textureWidth * textureHeight * 4];
+    unsigned char* imageData;
+    
+    const bool lastImageDataIsValid = ((_lastTextureWidth == textureWidth) &&
+                                       (_lastTextureHeight == textureHeight) &&
+                                       (_lastImageData != NULL));
+    
+    if (lastImageDataIsValid) {
+      imageData = _lastImageData;
+    }
+    else {
+      imageData = new unsigned char[textureWidth * textureHeight * 4];
+      if (_lastImageData != NULL) {
+        delete [] _lastImageData;
+      }
+      _lastImageData = imageData;
+      _lastTextureWidth = textureWidth;
+      _lastTextureHeight = textureHeight;
+    }
 #endif
-  
+    
+#ifdef JAVA_CODE
+    char[] imageData = new char[textureWidth * textureHeight * 4];
+#endif
+    
+    image->fillWithRGBA8888(imageData, textureWidth, textureHeight);
+    
+    _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);
+    _gl->pixelStorei(Unpack, 1);
+    
+    _gl->bindTexture(Texture2D, texID.getGLTextureID());
+    _gl->texParameteri(Texture2D, MinFilter, Linear);
+    _gl->texParameteri(Texture2D, MagFilter, Linear);
+    _gl->texParameteri(Texture2D, WrapS, ClampToEdge);
+    _gl->texParameteri(Texture2D, WrapT, ClampToEdge);
+    _gl->texImage2D(Texture2D, 0, RGBA, textureWidth, textureHeight, 0, RGBA, UnsignedByte, imageData);
+  }
+  else {
+    printf("can't get a valid texture id\n");
+  }
   return texID;
 }
 
 void GL::setTextureCoordinates(int size, int stride, const float texcoord[]) {
+    if (_textureCoordinates != texcoord) {
 #ifdef C_CODE
   _gl->vertexAttribPointer(Attributes.TextureCoord, size, Float, false, stride, (const void *) texcoord);
 #else
   _gl->vertexAttribPointer(Attributes.TextureCoord, size, GLType.Float, false, stride, (const void *) texcoord);
 #endif
+    }
 }
 
-void GL::bindTexture(unsigned int n) {
+void GL::bindTexture(const GLTextureID& textureId) {
 #ifdef C_CODE
-  _gl->bindTexture(Texture2D, n);
+  _gl->bindTexture(Texture2D, textureId.getGLTextureID());
 #else
-  _gl->bindTexture(GLTextureType.Texture2D, n);
+  _gl->bindTexture(GLTextureType.Texture2D, textureId.getGLTextureID());
 #endif
 }
 
-void GL::drawBillBoard(const unsigned int textureId,
-                        const Vector3D& pos,
-                        const float viewPortRatio) {
+void GL::drawBillBoard(const GLTextureID& textureId,
+                       const Vector3D& pos,
+                       const float viewPortRatio) {
   const float vertex[] = {
     (float) pos.x(), (float) pos.y(), (float) pos.z(),
     (float) pos.x(), (float) pos.y(), (float) pos.z(),
@@ -429,13 +431,19 @@ void GL::disableVerticesPosition() {
 }
 
 void GL::enableVertexFlatColor(float r, float g, float b, float a,
-                                float intensity) {
+                               float intensity) {
   if (!_enableFlatColor) {
     _gl->uniform1i(Uniforms.EnableFlatColor, 1);
     _enableFlatColor = true;
   }
-  _gl->uniform4f(Uniforms.FlatColor, r, g, b, a);
-  _gl->uniform1f(Uniforms.FlatColorIntensity, intensity);
+  
+  color(r, g, b, a);
+  
+//  _gl->uniform1f(Uniforms.FlatColorIntensity, intensity);
+  if (_flatColorIntensity != intensity) {
+    _gl->uniform1f(Uniforms.FlatColorIntensity, intensity);
+    _flatColorIntensity = intensity;
+  }
 }
 
 void GL::disableVertexFlatColor() {
@@ -506,7 +514,7 @@ void GL::enableCullFace(GLCullFace face) {
   }
 }
 
-void GL::disableCullFace() {  
+void GL::disableCullFace() {
   if (_enableCullFace) {
 #ifdef C_CODE
     _gl->disable(CullFacing);
@@ -517,16 +525,17 @@ void GL::disableCullFace() {
   }
 }
 
-int GL::getTextureID() {
+const GLTextureID GL::getGLTextureID() {
   if (_texturesIdBag.size() == 0) {
     const int bugdetSize = 256;
     
     printf("= Creating %d texturesIds...\n", bugdetSize);
     
-    const std::vector<int> ids = _gl->genTextures(bugdetSize);
+    const std::vector<GLTextureID> ids = _gl->genTextures(bugdetSize);
     
     for (int i = 0; i < bugdetSize; i++) {
-      _texturesIdBag.push_back(ids[i]);
+//      _texturesIdBag.push_back(ids[i]);
+      _texturesIdBag.push_front(ids[i]);
     }
     
     _texturesIdAllocationCounter += bugdetSize;
@@ -538,27 +547,31 @@ int GL::getTextureID() {
   
   _texturesIdGetCounter++;
   
-  int result = _texturesIdBag.back();
+  const GLTextureID result = _texturesIdBag.back();
   _texturesIdBag.pop_back();
   
-  /*
-   printf("   - Assigning 1 texturesId from bag (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
-         _texturesIdBag.size(),
-         _texturesIdGetCounter,
-         _texturesIdTakeCounter,
-         _texturesIdGetCounter - _texturesIdTakeCounter);*/
-
+//  printf("   - Assigning 1 texturesId (#%d) from bag (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
+//         result.getGLTextureID(),
+//         _texturesIdBag.size(),
+//         _texturesIdGetCounter,
+//         _texturesIdTakeCounter,
+//         _texturesIdGetCounter - _texturesIdTakeCounter);
+  
   return result;
 }
 
-void GL::deleteTexture(int glTextureId) {
-  int textures[] = { glTextureId };
+void GL::deleteTexture(const GLTextureID& textureId) {
+  if (!textureId.isValid()) {
+    return;
+  }
+  const int textures[] = {
+    textureId.getGLTextureID()
+  };
   _gl->deleteTextures(1, textures);
-
-  _texturesIdBag.push_back(glTextureId);
-
-  _texturesIdTakeCounter++;
   
+  _texturesIdBag.push_back(textureId);
+  
+  _texturesIdTakeCounter++;
 #if C_CODE
   printf("   - Delete 1 texturesId (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
          _texturesIdBag.size(),

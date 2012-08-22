@@ -192,7 +192,7 @@ void Camera::render(const RenderContext* rc) {
 }
 
 
-Vector3D Camera::pixel2Ray(const Vector2D& pixel) {
+Vector3D Camera::pixel2Ray(const Vector2D& pixel) const {
   const int px = (int) pixel.x();
   const int py = _height - (int) pixel.y();
   const Vector3D pixel3D(px, py, 0);
@@ -210,11 +210,11 @@ Vector3D Camera::pixel2Ray(const Vector2D& pixel) {
   return obj.sub(_position.asVector3D());
 }
 
-Vector3D Camera::pixel2PlanetPoint(const Vector2D& pixel) {
+Vector3D Camera::pixel2PlanetPoint(const Vector2D& pixel) const {
   return _planet->closestIntersection(_position.asVector3D(), pixel2Ray(pixel));
 }
 
-Vector2D Camera::point2Pixel(const Vector3D& point) {  
+Vector2D Camera::point2Pixel(const Vector3D& point) const {  
   const int viewport[4] = { 0, 0, _width, _height };
   Vector2D p = getModelViewMatrix().project(point, viewport);
   

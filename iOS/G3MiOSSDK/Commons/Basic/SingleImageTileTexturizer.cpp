@@ -15,7 +15,7 @@
 
 std::vector<MutableVector2D> SingleImageTileTexturizer::createTextureCoordinates(const RenderContext* rc, Mesh* mesh) const {
   std::vector<MutableVector2D> texCoors;
-
+  
   for (int i = 0; i < mesh->getVertexCount(); i++) {
     
     Vector3D pos = mesh->getVertex(i);
@@ -33,19 +33,20 @@ std::vector<MutableVector2D> SingleImageTileTexturizer::createTextureCoordinates
 }
 
 Mesh* SingleImageTileTexturizer::texturize(const RenderContext* rc,
+                                           const TileRenderContext* trc,
                                            Tile* tile,
-                                           const TileTessellator* tessellator,
                                            Mesh* mesh,
                                            Mesh* previousMesh) {
   _renderContext = rc; //SAVING CONTEXT
   
-  if (_texID < 0) {
-    _texID = rc->getTexturesHandler()->getTextureId(_image,
-                                                    "SINGLE_IMAGE_TEX",
-                                                    _image->getWidth(),
-                                                    _image->getHeight());
+  if (!_texID.isValid()) {
+    _texID = rc->getTexturesHandler()->getGLTextureId(_image,
+                                                      TextureSpec("SINGLE_IMAGE_TEX",
+                                                                  _image->getWidth(),
+                                                                  _image->getHeight())
+                                                      );
     
-    if (_texID < 0) {
+    if (!_texID.isValid()) {
       rc->getLogger()->logError("Can't upload texture to GPU");
       return NULL;
     }
@@ -53,16 +54,18 @@ Mesh* SingleImageTileTexturizer::texturize(const RenderContext* rc,
     rc->getFactory()->deleteImage(_image);
   }
 
-  TextureMapping* texMap = new TextureMapping( _texID, createTextureCoordinates(rc, mesh), rc->getTexturesHandler(), "SINGLE_IMAGE_TEX", _image->getWidth(), _image->getHeight() );
-  
+  TextureMapping* texMap = new SimpleTextureMapping(_texID,
+                                                          createTextureCoordinates(rc, mesh));
   if (previousMesh != NULL) delete previousMesh;
   
   tile->setTextureSolved(true);
+  tile->setTexturizerDirty(false);
   
   return new TexturedMesh(mesh, false, texMap, true);
 }
 
-void SingleImageTileTexturizer::tileToBeDeleted(Tile* tile) {
+void SingleImageTileTexturizer::tileToBeDeleted(Tile* tile,
+                                                Mesh* mesh) {
   
 }
 
@@ -70,6 +73,18 @@ bool SingleImageTileTexturizer::tileMeetsRenderCriteria(Tile* tile) {
   return false;
 }
 
-void SingleImageTileTexturizer::justCreatedTopTile(Tile *tile) {
+void SingleImageTileTexturizer::justCreatedTopTile(const RenderContext* rc,
+                                                   Tile *tile) {
+  
+}
+
+void SingleImageTileTexturizer::ancestorTexturedSolvedChanged(Tile* tile,
+                                                              Tile* ancestorTile,
+                                                              bool textureSolved) {
+  
+}
+
+void SingleImageTileTexturizer::tileMeshToBeDeleted(Tile* tile,
+                                                    Mesh* mesh) {
   
 }

@@ -28,6 +28,7 @@
   if (self) {
     _listener  = listener;
     _requestId = requestId;
+    _canceled  = false;
   }
   return self;
 }
@@ -42,13 +43,26 @@
   return _requestId;
 }
 
+-(void) cancel
+{
+  if (_canceled) {
+    NSLog(@"Listener for RequestId=%ld already canceled", _requestId);
+  }
+  _canceled = YES;
+}
+
+-(bool) isCanceled
+{
+  return _canceled;
+}
+
 @end
 
 
 @implementation Downloader_iOS_Handler
 
 - (id) initWithNSURL: (NSURL*) nsURL
-                 url: (Url*) url
+                 url: (URL*) url
             listener: (Downloader_iOS_Listener*) listener
             priority: (long) priority
            requestId: (long) requestId
@@ -58,6 +72,7 @@
     _nsURL     = nsURL;
     _url       = url;
     _priority  = priority;
+    //    _canceled  = false;
     
     ListenerEntry* entry = [ListenerEntry entryWithListener: listener
                                                   requestId: requestId];
@@ -95,20 +110,45 @@
   return result;
 }
 
-- (bool) removeListenerForRequestId: (long)requestId
+- (bool) cancelListenerForRequestId: (long)requestId
 {
-  bool removed = false;
-
+  bool canceled = false;
+  
   [_lock lock];
   
   const int listenersCount = [_listeners count];
   for (int i = 0; i < listenersCount; i++) {
     ListenerEntry* entry = [_listeners objectAtIndex: i];
     if ([entry requestId] == requestId) {
-      [[entry listener] onCancel:*_url];
+      //      [[entry listener] onCancel:_url];
+      //
+      //      [_listeners removeObjectAtIndex: i];
+      [entry cancel];
+      
+      canceled = true;
+      break;
+    }
+  }
+  
+  [_lock unlock];
+  
+  return canceled;
+}
+
+- (bool) removeListenerForRequestId: (long)requestId
+{
+  bool removed = false;
+  
+  [_lock lock];
+  
+  const int listenersCount = [_listeners count];
+  for (int i = 0; i < listenersCount; i++) {
+    ListenerEntry* entry = [_listeners objectAtIndex: i];
+    if ([entry requestId] == requestId) {
+      [[entry listener] onCancel:_url];
       
       [_listeners removeObjectAtIndex: i];
-
+      
       removed = true;
       break;
     }
@@ -130,77 +170,110 @@
   return hasListeners;
 }
 
+//-(bool)isCanceled
+//{
+//  [_lock lock];
+//
+//  const bool result = _canceled;
+//
+//  [_lock unlock];
+//
+//  return result;
+//}
+
 - (void) runWithDownloader:(void*)downloaderV
 {
-  int __dgd_at_work;
   
   Downloader_iOS* downloader = (Downloader_iOS*) downloaderV;
   
   NSURLRequest *request = [NSURLRequest requestWithURL: _nsURL
-                                           cachePolicy: NSURLRequestUseProtocolCachePolicy
+                                           cachePolicy: NSURLRequestReturnCacheDataElseLoad
                                        timeoutInterval: 60.0];
   
   NSURLResponse *urlResponse;
-  NSError *error;
-  NSData* data = [NSURLConnection sendSynchronousRequest: request
-                                       returningResponse: &urlResponse
-                                                   error: &error];
+  __block NSError *error;
+  __block NSData* data = [NSURLConnection sendSynchronousRequest: request
+                                               returningResponse: &urlResponse
+                                                           error: &error];
   
-  Url url( [[_nsURL absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] );
+  __block const NSInteger statusCode = [((NSHTTPURLResponse*) urlResponse) statusCode];
   
   // inform downloader to remove myself, to avoid adding new Listeners
   downloader->removeDownloadingHandlerForNSURL(_nsURL);
   
+  
   dispatch_async( dispatch_get_main_queue(), ^{
-    // Add code here to update the UI/send notifications based on the
-    // results of the background processing
-    
     [_lock lock];
     
-    if (data) {
+    const bool dataIsValid = data && (statusCode == 200);
+    if (!dataIsValid) {
+      ILogger::instance()->logError("Error %s, StatusCode=%d, URL=%s\n",
+                                    [[error localizedDescription] UTF8String],
+                                    statusCode,
+                                    [[_nsURL absoluteString] UTF8String]);
+    }
+    
+    const int listenersCount = [_listeners count];
+    
+    const URL url( [[_nsURL absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] );
+    
+    if (dataIsValid) {
       const int length = [data length];
       unsigned char *bytes = new unsigned char[ length ]; // will be deleted by ByteBuffer's destructor
-      [data getBytes:bytes length: length];
-      ByteBuffer buffer(bytes, length);
+      [data getBytes: bytes
+              length: length];
+      ByteBuffer* buffer = new ByteBuffer(bytes, length);
       
-      Response response(url, &buffer);
+      Response* response = new Response(url, buffer);
       
-      const int listenersCount = [_listeners count];
       for (int i = 0; i < listenersCount; i++) {
         ListenerEntry* entry = [_listeners objectAtIndex: i];
-        
-        [[entry listener] onDownload: response];
+        Downloader_iOS_Listener* listener = [entry listener];
+
+        if ([entry isCanceled]) {
+          [listener onCanceledDownload: response];
+          
+          [listener onCancel: &url];
+        }
+        else {
+          [listener onDownload: response];
+        }
       }
+      
+      delete response;
+      delete buffer;
     }
     else {
-      /*ILogger::instance()->logError("Can't load %s, response=%s, error=%s",
-       [ [_nsURL      description] cStringUsingEncoding: NSUTF8StringEncoding ],
-       (urlResponse!=0)? [ [urlResponse description] cStringUsingEncoding: NSUTF8StringEncoding ] : "NULL",
-       [ [error       description] cStringUsingEncoding: NSUTF8StringEncoding ] );*/
+      ByteBuffer* buffer = new ByteBuffer(NULL, 0);
       
-      //ILogger::instance()->logError("Can't load %s\n", [[_nsURL absoluteString] UTF8String]);
-      printf ("Can't load %s\n", [[_nsURL absoluteString] UTF8String]);
+      Response* response = new Response(url, buffer);
       
-      
-      ByteBuffer buffer(NULL, 0);
-      
-      Response response(url, &buffer);
-      
-      const int listenersCount = [_listeners count];
       for (int i = 0; i < listenersCount; i++) {
         ListenerEntry* entry = [_listeners objectAtIndex: i];
         
         [[entry listener] onError: response];
       }
+      
+      delete response;
+      delete buffer;
     }
+    //    }
     
     //  [_listeners removeAllObjects];
     
     [_lock unlock];
-    
   });
   
 }
+
+//- (void) cancel
+//{
+//  [_lock lock];
+//
+//  _canceled = true;
+//
+//  [_lock unlock];
+//}
 
 - (void)dealloc
 {

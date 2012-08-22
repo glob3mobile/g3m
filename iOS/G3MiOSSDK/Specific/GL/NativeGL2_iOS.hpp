@@ -13,6 +13,9 @@
 
 #include "INativeGL.hpp"
 
+
+
+
 class NativeGL2_iOS: public INativeGL
 {
   inline GLbitfield getBitField(GLBufferType b) const {
@@ -149,12 +152,12 @@ public:
     glUseProgram(program);
   }
   
-  int getAttribLocation(int program, const std::string& name) const{
-    return glGetAttribLocation(program, name.c_str());
+  int getAttribLocation(int program, const char name[]) const{
+    return glGetAttribLocation(program, name);
   }
   
-  int getUniformLocation(int program, const std::string& name) const{
-    return glGetUniformLocation(program, name.c_str());
+  int getUniformLocation(int program, const char name[]) const{
+    return glGetUniformLocation(program, name);
   }
   
   void uniform2f(int loc, float x, float y) const{
@@ -249,12 +252,12 @@ public:
     glPixelStorei(getEnum(pname), param);
   }
   
-  std::vector<int> genTextures(int n) const {
-    GLuint textureID[n];    
-    glGenTextures(n, textureID);
-    std::vector<int> ts;
+  std::vector<GLTextureID> genTextures(int n) const {
+    GLuint textures[n];
+    glGenTextures(n, textures);
+    std::vector<GLTextureID> ts;
     for(int i = 0; i < n; i++){
-      ts.push_back(textureID[i]);
+      ts.push_back( GLTextureID(textures[i]) );
     }
     return ts;
   }

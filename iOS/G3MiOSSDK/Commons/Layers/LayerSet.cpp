@@ -9,14 +9,16 @@
 #include "LayerSet.hpp"
 #include "Tile.hpp"
 
-std::vector<Petition*> LayerSet::createTilePetitions(const RenderContext* rc, const IFactory& factory, const Tile& tile, int width, int height) const
+std::vector<Petition*> LayerSet::createTilePetitions(const RenderContext* rc,
+                                                     const Tile* tile,
+                                                     int width, int height) const
 {
   std::vector<Petition*> petitions;
   
   for (int i = 0; i < _layers.size(); i++) {
     Layer* layer = _layers[i];
     if (layer->isAvailable(rc, tile)){
-      std::vector<Petition*> pet = layer->getTilePetitions(factory, tile, width, height);
+      std::vector<Petition*> pet = layer->getTilePetitions(rc, tile, width, height);
       
       //Storing petitions
       for (int j = 0; j < pet.size(); j++) {
@@ -26,4 +28,18 @@ std::vector<Petition*> LayerSet::createTilePetitions(const RenderContext* rc, co
   }
   
   return petitions;
+}
+
+void LayerSet::onTerrainTouchEvent(const Geodetic3D& g3d, const Tile* tile) const{
+  
+  for (int i = 0; i < _layers.size(); i++) {
+    Layer* layer = _layers[i];
+    
+    TerrainTouchEvent tte(g3d.asGeodetic2D(), tile->getSector(), layer);
+    
+    layer->onTerrainTouchEventListener(tte);
+  }
+  
+  
+  
 }

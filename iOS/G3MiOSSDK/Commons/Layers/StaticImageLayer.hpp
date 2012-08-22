@@ -24,8 +24,16 @@ private:
   IStorage* const   _storage;
 public:
   
-  StaticImageLayer(std::string layerID, IImage* image, const Sector& sector, IStorage* storage): 
-  _image(image), _bbox(sector), _layerID(layerID), _storage(storage){}
+  StaticImageLayer(std::string layerID,
+                   IImage* image,
+                   const Sector& sector,
+                   IStorage* storage):
+  _image(image),
+  _bbox(sector),
+  _layerID(layerID),
+  _storage(storage) {
+
+  }
   
   ~StaticImageLayer(){
 #ifdef C_CODE
@@ -37,14 +45,24 @@ public:
     return _bbox.fullContains(s);
   }
   
-  std::vector<Petition*> getTilePetitions(const IFactory& factory, const Tile& tile, int width, int height) const;
+  std::vector<Petition*> getTilePetitions(const RenderContext* rc,
+                                          const Tile* tile,
+                                          int width, int height) const;
   
-  bool isAvailable(const RenderContext* rc, const Tile& tile)const { 
+  bool isAvailable(const RenderContext* rc,
+                   const Tile* tile)const {
     return true;
   }
   
   bool isTransparent() const{
     return true;
+  }
+  
+  URL getFeatureURL(const Geodetic2D& g,
+                    const IFactory* factory,
+                    const Sector& sector,
+                    int width, int height) const {
+    return URL::null();
   }
   
 };

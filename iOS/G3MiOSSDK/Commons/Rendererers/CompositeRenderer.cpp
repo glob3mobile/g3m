@@ -63,3 +63,15 @@ bool CompositeRenderer::isReadyToRender(const RenderContext *rc) {
   
   return true;
 }
+
+void CompositeRenderer::start() {
+  for (int i = 0; i < _renderers.size(); i++) {
+    _renderers[i]->start();
+  }
+}
+
+void CompositeRenderer::stop() {
+  for (int i = 0; i < _renderers.size(); i++) {
+    _renderers[i]->stop();
+  }
+}

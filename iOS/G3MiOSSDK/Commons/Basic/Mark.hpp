@@ -13,13 +13,15 @@
 #include "Geodetic3D.hpp"
 #include "Context.hpp"
 
+#include "INativeGL.hpp"
+
 class Mark {
 private:
-  const std::string _name;
-  const std::string _textureFilename;
-  const Geodetic3D  _position;
+  const std::string  _name;
+  const std::string  _textureFilename;
+  const Geodetic3D   _position;
 
-  int _textureId;
+  GLTextureID _textureId;
 
 public:
   Mark(const std::string name,

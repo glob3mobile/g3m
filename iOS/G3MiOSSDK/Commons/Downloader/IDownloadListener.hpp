@@ -16,10 +16,13 @@ public:
 #ifdef C_CODE
   virtual ~IDownloadListener() {  }
 #endif
+
+  virtual void onDownload(const Response* response) = 0;
+  virtual void onError(const Response* response) = 0;
+  virtual void onCancel(const URL* url) = 0;
   
-  virtual void onDownload(const Response& response) = 0; 
-  virtual void onError(const Response& response) = 0;
-  virtual void onCancel(const Url& url) = 0;
+  /* this method will be call, before onCancel, when the data arrived before the cancelation */
+  virtual void onCanceledDownload(const Response* response) = 0;
 };
 
 #endif

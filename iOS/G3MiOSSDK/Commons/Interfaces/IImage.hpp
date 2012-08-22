@@ -17,19 +17,23 @@ class IImage {
 public:
   // a virtual destructor is needed for conversion to Java
   virtual ~IImage() {}
-
+  
   virtual int getWidth() const = 0;
   virtual int getHeight() const = 0;
   
-  virtual IImage* combineWith(const IImage& transparent, int width, int height) const = 0;
+  virtual IImage* combineWith(const IImage& other,
+                              int width, int height) const = 0;
   
-  virtual IImage* combineWith(const IImage& other, const Rectangle& rect, int width, int height) const = 0;
+  virtual IImage* combineWith(const IImage& other,
+                              const Rectangle& rect,
+                              int width, int height) const = 0;
   
   virtual IImage* subImage(const Rectangle& rect) const = 0;
   
   virtual ByteBuffer* getEncodedImage() const = 0;
   
-  virtual void fillWithRGBA(unsigned char data[], int width, int height) const = 0;
+  virtual void fillWithRGBA8888(unsigned char data[],
+                                int width, int height) const = 0;
   
 };
 

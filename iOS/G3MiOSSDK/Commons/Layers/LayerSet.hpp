@@ -11,8 +11,8 @@
 
 #include <vector>
 #include "Layer.hpp"
-#include "TilePetitions.hpp"
 
+class Petition;
 
 class LayerSet
 {
@@ -21,19 +21,21 @@ private:
   
 public:
   
-  ~LayerSet(){
+  ~LayerSet() {
     for (int i = 0; i < _layers.size(); i++) {
       delete _layers[i];
     }
   }
   
-  void add(Layer* l){
-    _layers.push_back(l);
+  void addLayer(Layer* layer) {
+    _layers.push_back(layer);
   }
   
-  std::vector<Petition*> createTilePetitions(const RenderContext* rc, const IFactory& factory, 
-                                             const Tile& tile, int width, int height) const;
+  std::vector<Petition*> createTilePetitions(const RenderContext* rc,
+                                             const Tile* tile,
+                                             int width, int height) const;
   
+  void onTerrainTouchEvent(const Geodetic3D& g3d, const Tile* tile) const;
   
 };
 

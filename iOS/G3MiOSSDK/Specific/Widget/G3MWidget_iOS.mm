@@ -33,29 +33,77 @@
 #include "EllipsoidalTileTessellator.hpp"
 #include "LatLonMeshRenderer.h"
 
-#include "DummyDownload.hpp"
 #include "SQLiteStorage_iOS.hpp"
-#include "FileSystemStorage.hpp"
 #include "NullStorage.hpp"
-#include "TileImagesTileTexturizer.hpp"
 #include "SingleImageTileTexturizer.hpp"
-#include "BusyRenderer.hpp"
+#include "BusyQuadRenderer.hpp"
+#include "BusyMeshRenderer.hpp"
 #include "CPUTextureBuilder.hpp"
 #include "LayerSet.hpp"
 #include "WMSLayer.hpp"
 #include "StaticImageLayer.hpp"
 
+#include "CachedDownloader.hpp"
 #include "Downloader_iOS.hpp"
 
 #include "INativeGL.hpp"
 #include "NativeGL2_iOS.hpp"
 #include "GL.hpp"
 
+#include "MultiLayerTileTexturizer.hpp"
+#include "TilesRenderParameters.hpp"
+#include "FrameTasksExecutor.hpp"
+
+#include "IStringBuilder.hpp"
+#include "StringBuilder_iOS.hpp"
+
+#include "Box.hpp"
+
 #include <stdlib.h>
 
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
 @end
+
+class OceanTerrainTouchEventListener: public TerrainTouchEventListener, IDownloadListener{
+  IFactory*    const _factory;
+  IDownloader* const _downloader;
+public:
+  
+  OceanTerrainTouchEventListener(IFactory* f, IDownloader* d):_factory(f), _downloader(d){}
+  
+  void onTerrainTouchEvent(const TerrainTouchEvent& event){
+    //      printf("POINT %f, %f", event._g2d.latitude().degrees(), event._g2d.longitude().degrees());
+    URL url = event._layer->getFeatureURL(event._g2d, _factory, event._sector, 256, 256);
+    //      printf("%s\n", url.getPath().c_str());
+    
+    _downloader->request(url, 999999999, this, false);
+  }
+  
+  void onDownload(const Response* response) {
+    std::string s = (char*) response->getByteBuffer()->getData();
+    //printf("%s\n", s.c_str());
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"FEATURE"
+                                                    message:[NSString stringWithCString:s.c_str()
+                                                                               encoding:NSUTF8StringEncoding]
+                                                   delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
+  }
+  
+  void onError(const Response* response) {
+    printf("Error in request\n");
+  }
+  
+  void onCanceledDownload(const Response* response) {
+  }
+  
+  void onCancel(const URL* url) {
+    printf("Cancel in request\n");
+  }
+};
 
 
 @implementation G3MWidget_iOS
@@ -83,7 +131,7 @@
   IFactory *factory = new Factory_iOS();
   ILogger *logger = new Logger_iOS(ErrorLevel);
   
-  
+  IStringBuilder::setInstance(new StringBuilder_iOS()); //Setting StringBuilder
   
   NativeGL2_iOS * nGL = new NativeGL2_iOS(); 
   GL* gl  = new GL(nGL);
@@ -101,48 +149,82 @@
   comp->addRenderer(cameraRenderer);
   
   
-  //STORAGE
-  NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-  FileSystemStorage * fss = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
-  Downloader* downloaderOLD = new Downloader(fss, 5, factory->createNetwork());
-  IDownloader* downloader = new Downloader_iOS(1 * 1024 * 1024,
-                                               64 * 1024 * 1024,
-                                               ".G3M_Cache",
-                                               8);
-
+  IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
+  IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
+                                                 storage);
+  
   //LAYERS
   LayerSet* layerSet = new LayerSet();
-  WMSLayer* baseLayer = new WMSLayer("bmng200405", "http://www.nasa.network.com/wms?", 
-                                     "1.3", "image/jpeg", Sector::fullSphere(), "EPSG:4326", "", false,
-                                     Angle::nan(), Angle::nan());
-  layerSet->add(baseLayer);
+//  WMSLayer* baseLayer = new WMSLayer("bmng200405",
+//                                     "http://www.nasa.network.com/wms?",
+//                                     WMS_1_1_0,
+//                                     "image/jpeg",
+//                                     Sector::fullSphere(),
+//                                     "EPSG:4326",
+//                                     "",
+//                                     false,
+//                                     Angle::nan(),
+//                                     Angle::nan());
+//  layerSet->addLayer(baseLayer);
 
-  if (false){
-    Sector s = Sector::fromDegrees(-60, 50, 10, 185);
-    WMSLayer *wmsl = new WMSLayer("test:contourGSLA","http://imos2.ersa.edu.au/geo2/test/wms","1.1.1", "image/png", s, "EPSG:4326", "sla_test", true, Angle::nan(), Angle::nan());
-    
-    WMSLayer *wms_sst = new WMSLayer("sea_surface_temperature","http://opendap-vpac.arcs.org.au/thredds/wms/IMOS/SRS/GHRSST-SSTsubskin/2012/20120626-ABOM-L3P_GHRSST-SSTsubskin-AVHRR_MOSAIC_01km-AO_DAAC-v01-fv01_0.nc?","1.3.0", "image/png", s, "EPSG:4326&COLORSCALERANGE=273.8%2C302.8&NUMCOLORBANDS=50&LOGSCALE=false", "boxfill%2Fsst_36",
-                                     true, Angle::nan(), Angle::nan());
-    
-    layerSet->add(wmsl);
-    layerSet->add(wms_sst);
-  }
+//    Sector s = Sector::fromDegrees(-60, 50, 10, 185);
+//    WMSLayer *wmsl = new WMSLayer("test:contourGSLA",
+//                                  "http://imos2.ersa.edu.au/geo2/test/wms",
+//                                  WMS_1_1_0,
+//                                  "image/png",
+//                                  s,
+//                                  "EPSG:4326",
+//                                  "sla_test",
+//                                  true,
+//                                  Angle::nan(),
+//                                  Angle::nan());
+//    
+//    WMSLayer *wms_sst = new WMSLayer("sea_surface_temperature",
+//                                     "http://opendap-vpac.arcs.org.au/thredds/wms/IMOS/SRS/GHRSST-SSTsubskin/2012/20120626-ABOM-L3P_GHRSST-SSTsubskin-AVHRR_MOSAIC_01km-AO_DAAC-v01-fv01_0.nc?",
+//                                     WMS_1_3_0,
+//                                     "image/png",
+//                                     s,
+//                                     "EPSG:4326&COLORSCALERANGE=273.8%2C302.8&NUMCOLORBANDS=50&LOGSCALE=false",
+//                                     "boxfill%2Fsst_36",
+//                                     true,
+//                                     Angle::nan(),
+//                                     Angle::nan());
+//    
+//    layerSet->addLayer(wmsl);
+//    layerSet->addLayer(wms_sst);
+  
+  WMSLayer *oceans = new WMSLayer("igo:bmng200401,igo:sttOZ,igo:cntOZ",
+                                  "igo:sttOZ",
+                                  "http://igosoftware.dyndns.org:8081/geoserver/igo/wms",
+                                  WMS_1_3_0,
+                                  "image/jpeg",
+                                  Sector::fullSphere(),
+                                  "EPSG:4326",
+                                  "",
+                                  false,
+                                  Angle::nan(),
+                                  Angle::nan());
+  
+  oceans->addTerrainTouchEventListener(new OceanTerrainTouchEventListener(factory, downloader));
+  
+  layerSet->addLayer(oceans);
   
   //STATIC IMAGE FOR TESTING AUSTRALIA
-  IImage *image = factory->createImageFromFileName("20120720_cintp1.png");
-  StaticImageLayer * imageLayer = new StaticImageLayer("SIL",
-                                                       image,
-                                                       Sector::fromDegrees(-60, 50, 10, 185), 
-                                                       fss);
-  layerSet->add(imageLayer);
+//  IImage *image = factory->createImageFromFileName("20120720_cintp1.png");
+//  StaticImageLayer * imageLayer = new StaticImageLayer("SIL",
+//                                                       image,
+//                                                       Sector::fromDegrees(-60, 50, 10, 185), 
+//                                                       fss);
+//  layerSet->addLayer(imageLayer);
   
   // very basic tile renderer
   if (true) {
-    TileParameters* parameters = TileParameters::createDefault(false);
+    bool renderDebug = false;
+    TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug);
     
     TileTexturizer* texturizer = NULL;
     if (true) {
-      texturizer = new TileImagesTileTexturizer(parameters, downloaderOLD, layerSet, factory); //WMS
+      texturizer = new MultiLayerTileTexturizer(layerSet);
     }
     else {
       //SINGLE IMAGE
@@ -175,18 +257,20 @@
   
   const Planet* planet = Planet::createEarth();
   
-  Renderer* busyRenderer = new BusyRenderer();
+  Renderer* busyRenderer = new BusyMeshRenderer();
   
   EffectsScheduler* scheduler = new EffectsScheduler();
   
   std::vector <ICameraConstrainer *> cameraConstraint;
   cameraConstraint.push_back(new SimpleCameraConstrainer);
 
-  _widget = G3MWidget::create(factory,
+  FrameTasksExecutor* frameTasksExecutor = new FrameTasksExecutor();
+  
+  _widget = G3MWidget::create(frameTasksExecutor,
+                              factory,
                               logger,
                               gl,
                               texturesHandler,
-                              downloaderOLD,
                               downloader,
                               planet, 
                               cameraConstraint,
@@ -195,7 +279,8 @@
                               scheduler,
                               width, height,
                               Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
-                              true);
+                              true,
+                              false);
   
   Geodetic3D australia = Geodetic3D::fromDegrees(-26.91, 133.94, 1.1e7);
   ((G3MWidget*)_widget)->getNextCamera()->setPosition(australia);
@@ -212,82 +297,25 @@
   IFactory *factory = new Factory_iOS();
   ILogger *logger = new Logger_iOS(ErrorLevel);
   
+  IStringBuilder::setInstance(new StringBuilder_iOS()); //Setting StringBuilder
+  
   NativeGL2_iOS * nGL = new NativeGL2_iOS(); 
   GL* gl  = new GL(nGL);
   
-  //Testing downloads
-  if (false) {
-    NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+  //Testing BOX intersection
+  if (true){
+    Box b(Vector3D(-10,-10,-10) , Vector3D(10,10,10) );
     
-    FileSystemStorage * fss = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
+    Vector3D v = b.intersectionWithRay(Vector3D(-20,0,0), Vector3D(1.0,0,0));
+    printf("%f, %f, %f\n", v.x(), v.y(), v.z());
     
-    DummyDownload *dummyDownload = new DummyDownload(factory, fss );
-    dummyDownload->run();
+    Vector3D v1 = b.intersectionWithRay(Vector3D(-20,20,0), Vector3D(1.0,0,0));
+    printf("%f, %f, %f\n", v1.x(), v1.y(), v1.z());
+    
+    Vector3D v2 = b.intersectionWithRay(Vector3D(-20,0,0), Vector3D(1.0,0.1,0));
+    printf("%f, %f, %f\n", v2.x(), v2.y(), v2.z());
   }
   
-  if (false){
-    NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    NSLog(@"\nDocument Directory: %s;", [documentsDirectory UTF8String]);
-    
-    SQLiteStorage_iOS *sql = new SQLiteStorage_iOS("test.db", "file");
-    DummyDownload *dummyDownload = new DummyDownload(factory, sql);
-    
-    std::string directory = "";
-    std::string file1 = "";
-    std::string file2 = "";
-    std::string file3 = "";
-    
-    if(false){
-      directory = "/Users/vidalete/Downloads/";
-      file1 = "Tic2Vtwo.pdf";
-      file2 = "Pantallazo.png";
-      file3 = "blobtest.png";
-    }else{
-      directory = [documentsDirectory UTF8String];
-      file1 = "mark.png";
-      file2 = "world.jpg";
-      file3 = "plane.png";
-      
-      const NSFileManager *fileManager = [NSFileManager defaultManager];
-      NSError *error;
-      
-      NSString *writableDBPathNS = [documentsDirectory stringByAppendingPathComponent:[[NSString alloc] initWithCString:file1.c_str() encoding:NSUTF8StringEncoding]];
-      if (![fileManager fileExistsAtPath:writableDBPathNS]){
-        // The writable database does not exist, so copy the default to the appropriate location.
-        NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:[[NSString alloc] initWithCString:file1.c_str() encoding:NSUTF8StringEncoding]];
-        if (![fileManager copyItemAtPath:defaultDBPath toPath:writableDBPathNS error:&error]) {
-          NSLog(@"Failed to create writable file with message '%@'.", [error localizedDescription]);
-        } 
-      }
-      
-      writableDBPathNS = [documentsDirectory stringByAppendingPathComponent:[[NSString alloc] initWithCString:file2.c_str() encoding:NSUTF8StringEncoding]];
-      if (![fileManager fileExistsAtPath:writableDBPathNS]){
-        // The writable database does not exist, so copy the default to the appropriate location.
-        NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:[[NSString alloc] initWithCString:file2.c_str() encoding:NSUTF8StringEncoding]];
-        if (![fileManager copyItemAtPath:defaultDBPath toPath:writableDBPathNS error:&error]) {
-          NSLog(@"Failed to create writable file with message '%@'.", [error localizedDescription]);
-        } 
-      }
-      
-      writableDBPathNS = [documentsDirectory stringByAppendingPathComponent:[[NSString alloc] initWithCString:file3.c_str() encoding:NSUTF8StringEncoding]];
-      if (![fileManager fileExistsAtPath:writableDBPathNS]){
-        // The writable database does not exist, so copy the default to the appropriate location.
-        NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:[[NSString alloc] initWithCString:file3.c_str() encoding:NSUTF8StringEncoding]];
-        if (![fileManager copyItemAtPath:defaultDBPath toPath:writableDBPathNS error:&error]) {
-          NSLog(@"Failed to create writable file with message '%@'.", [error localizedDescription]);
-        } 
-      }
-      
-    }
-    
-    
-    FileSystemStorage * fssAux = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
-    
-    dummyDownload->runSqlite(directory, file1, fssAux);
-    dummyDownload->runSqlite(directory, file2, fssAux);
-    dummyDownload->runSqlite(directory, file3, fssAux);
-  }
-
   // composite renderer is the father of the rest of renderers
   CompositeRenderer* comp = new CompositeRenderer();
   
@@ -301,75 +329,173 @@
   comp->addRenderer(cameraRenderer);
 
   
-  //STORAGE
-  NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-  FileSystemStorage * fss = new FileSystemStorage([documentsDirectory cStringUsingEncoding:NSUTF8StringEncoding]);
-  Downloader* downloaderOLD = new Downloader(fss, 5, factory->createNetwork());
-  IDownloader* downloader = new Downloader_iOS(1 * 1024 * 1024,
-                                               64 * 1024 * 1024,
-                                               ".G3M_Cache",
-                                               8);
+  IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
+  IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
+                                                 storage);
   
-  if (true) {
-    
+  if (false) {
     class Listener : public IDownloadListener {
-      void onDownload(const Response& response) {
+    private:
+      int _onDownload;
+      int _onError;
+      int _onCancel;
+
+    public:
+      Listener() :
+      _onDownload(0),
+      _onError(0),
+      _onCancel(0)
+      {
+        
+      }
+      
+      void onDownload(const Response* response) {
+        _onDownload++;
         BOOL isMainThread = [NSThread isMainThread];
         if (isMainThread) {
-          NSLog(@"*** Main-Thread: Downloaded %d bytes ***", response.getByteBuffer()->getLength());
+          NSLog(@"*** Main-Thread: Downloaded %d bytes ***", response->getByteBuffer()->getLength());
         }
         else {
-          NSLog(@"*** NOT IN Main-Thread: Downloaded %d bytes ***", response.getByteBuffer()->getLength());
+          NSLog(@"*** NOT IN Main-Thread: Downloaded %d bytes ***", response->getByteBuffer()->getLength());
         }
       }
       
-      void onError(const Response& response) {
-        
+      void onError(const Response* response) {
+        _onError++;
+      }
+
+      void onCancel(const URL* url) {
+        _onCancel++;
       }
       
-      void onCancel(const Url& url) {
-        
+      void onCanceledDownload(const Response* response) {
+      }
+      
+      void showInvalidState() const {
+        printf("onDownload=%d, onCancel=%d, onError=%d\n", _onDownload, _onCancel, _onError);
+      }
+      
+      void testState() const {
+        if ((_onDownload == 1) && (_onCancel == 0) && (_onError == 0)) {
+          return;
+        }
+        if ((_onDownload == 0) && (_onCancel == 1) && (_onError == 0)) {
+          return;
+        }
+        if ((_onDownload == 0) && (_onCancel == 0) && (_onError == 1)) {
+          return;
+        }
+        showInvalidState();
+      }
+
+      virtual ~Listener() {
+        testState();
       }
     };
     
     const long priority = 999999999;
-    long requestId = downloader->request(Url("http://glob3.sourceforge.net/img/isologo640x160.png"), priority, new Listener());
-//    long requestId2 = downloader->request(URL("http://glob3.sourceforge.net/img/isologo640x160.png"), priority, new Listener());
+    long requestId = downloader->request(URL("http://glob3.sourceforge.net/img/isologo640x160.png"), priority, new Listener(), true);
+    long requestId2 = downloader->request(URL("http://glob3.sourceforge.net/img/isologo640x160.png"), priority, new Listener(), true);
     downloader->cancelRequest(requestId);
+    downloader->cancelRequest(requestId2);
+    
+    printf("break (point) on me 2");
   }
 
+  
   //LAYERS
   LayerSet* layerSet = new LayerSet();
-  WMSLayer* baseLayer = new WMSLayer("bmng200405", "http://www.nasa.network.com/wms?", 
-                                     "1.3", "image/jpeg", Sector::fullSphere(), "EPSG:4326", "", false,
-                                     Angle::nan(), Angle::nan());
+ 
+  WMSLayer* blueMarble = new WMSLayer("bmng200405",
+                                      "http://www.nasa.network.com/wms?",
+                                      WMS_1_1_0,
+                                      "image/jpeg",
+                                      Sector::fullSphere(),
+                                      "EPSG:4326",
+                                      "",
+                                      false,
+                                      Angle::nan(),
+                                      Angle::nan());
+  layerSet->addLayer(blueMarble);
 
-  WMSLayer *vias = new WMSLayer("VIAS",
-                                "http://idecan2.grafcan.es/ServicioWMS/Callejero",
-                                "1.1.0", "image/gif", 
-                                Sector::fromDegrees(22.5,-22.5, 33.75, -11.25),
-                                "EPSG:4326", "", true,
-                                Angle::nan(), Angle::nan());
+//  WMSLayer *pnoa = new WMSLayer("PNOA",
+//                                "http://www.idee.es/wms/PNOA/PNOA",
+//                                WMS_1_1_0,
+//                                "image/png",
+//                                Sector::fromDegrees(21, -18, 45, 6),
+//                                "EPSG:4326",
+//                                "",
+//                                true,
+//                                Angle::nan(),
+//                                Angle::nan());
+//  layerSet->addLayer(pnoa);
+
+//  WMSLayer *vias = new WMSLayer("VIAS",
+//                                "http://idecan2.grafcan.es/ServicioWMS/Callejero",
+//                                WMS_1_1_0,
+//                                "image/gif",
+//                                Sector::fromDegrees(22.5,-22.5, 33.75, -11.25),
+//                                "EPSG:4326",
+//                                "",
+//                                true,
+//                                Angle::nan(),
+//                                Angle::nan());
+//  layerSet->addLayer(vias);
+
+//  WMSLayer *oceans = new WMSLayer(//"igo:bmng200401,igo:sttOZ,igo:cntOZ",
+//                                  "bmsstcnt",
+////                                  "OZ",
+//                                  "bmsstcnt",
+////                                  "OZ",
+////                                  "http://igosoftware.dyndns.org:8081/geoserver/igo/wms",
+//                                  "http://igosoftware.dyndns.org:8081/geowebcache/service/wms",
+//                                  WMS_1_1_0,
+//                                  "image/jpeg",
+//                                  Sector::fullSphere(),
+//                                  "EPSG:4326",
+//                                  "",
+//                                  false,
+//                                  Angle::nan(),
+//                                  Angle::nan());
+//  
+//  oceans->addTerrainTouchEventListener(new OceanTerrainTouchEventListener(factory, downloader));
+//  layerSet->addLayer(oceans);
   
-  WMSLayer *pnoa = new WMSLayer("PNOA",
-                                "http://www.idee.es/wms/PNOA/PNOA",
-                                "1.1.0", "image/png", 
-                                Sector::fromDegrees(21,-18, 45, 6),
-                                "EPSG:4326", "", true,
-                                Angle::nan(), Angle::nan());
-  
-  //ORDER IS IMPORTANT
-  layerSet->add(baseLayer);
-  layerSet->add(pnoa);
-  layerSet->add(vias);
+//  WMSLayer *osm = new WMSLayer("bing",
+//                               "bing",
+//                               "http://wms.latlon.org/",
+//                               WMS_1_1_0,
+//                               "image/jpeg",
+//                               Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
+//                               "EPSG:4326",
+//                               "",
+//                               false,
+//                               Angle::nan(),
+//                               Angle::nan());
+//  layerSet->addLayer(osm);
+
+//  WMSLayer *osm = new WMSLayer("osm",
+//                               "osm",
+//                               "http://wms.latlon.org/",
+//                               WMS_1_1_0,
+//                               "image/jpeg",
+//                               Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
+//                               "EPSG:4326",
+//                               "",
+//                               false,
+//                               Angle::nan(),
+//                               Angle::nan());
+//  layerSet->addLayer(osm);
   
   // very basic tile renderer
   if (true) {
-    TileParameters* parameters = TileParameters::createDefault(true);
+    const bool renderDebug = false;
+    TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug);
+//    TilesRenderParameters* parameters = TilesRenderParameters::createSingleSector(renderDebug);
     
     TileTexturizer* texturizer = NULL;
     if (true) {
-      texturizer = new TileImagesTileTexturizer(parameters, downloaderOLD, layerSet, factory); //WMS
+      texturizer = new MultiLayerTileTexturizer(layerSet);
     }
     else {
       //SINGLE IMAGE
@@ -377,7 +503,7 @@
       texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
     }
     
-    const bool showStatistics = true;
+    const bool showStatistics = false;
     TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
                                         texturizer,
                                         parameters,
@@ -428,7 +554,7 @@
     }
   }
   
-  if (true) {
+  if (false) {
     LatLonMeshRenderer *renderer = new LatLonMeshRenderer();
     comp->addRenderer(renderer);
   }
@@ -449,7 +575,7 @@
     comp->addRenderer(sgr);
   }
   
-  comp->addRenderer(new GLErrorRenderer());
+//  comp->addRenderer(new GLErrorRenderer());
   
   
   TextureBuilder* texBuilder = new CPUTextureBuilder();
@@ -457,16 +583,22 @@
   
   const Planet* planet = Planet::createEarth();
   
-  Renderer* busyRenderer = new BusyRenderer();
+  //Renderer* busyRenderer = new BusyQuadRenderer("ProgressWheel.png");
+  Renderer* busyRenderer = new BusyMeshRenderer();
   
   std::vector <ICameraConstrainer *> cameraConstraint;
   cameraConstraint.push_back(new SimpleCameraConstrainer);
 
-  _widget = G3MWidget::create(factory,
+  const bool logFPS = false;
+  const bool logDownloaderStatistics = false;
+  
+  FrameTasksExecutor* frameTasksExecutor = new FrameTasksExecutor();
+  
+  _widget = G3MWidget::create(frameTasksExecutor,
+                              factory,
                               logger,
                               gl,
                               texturesHandler,
-                              downloaderOLD,
                               downloader,
                               planet, 
                               cameraConstraint,
@@ -475,7 +607,8 @@
                               scheduler,
                               width, height,
                               Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
-                              true);
+                              logFPS,
+                              logDownloaderStatistics);
 }
 
 //The EAGL view is stored in the nib file. When it's unarchived it's sent -initWithCoder:
@@ -530,16 +663,15 @@
     if ([currSysVer compare:reqSysVer options:NSNumericSearch] != NSOrderedAscending)
       _displayLinkSupported = TRUE;
     
-    /*
     //Detecting LongPress
     UILongPressGestureRecognizer *longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
-    [self addGestureRecognizer:longPressRecognizer];*/
+    longPressRecognizer.minimumPressDuration = 1.0;
+    [self addGestureRecognizer:longPressRecognizer];
   }
   return self;
 }
 
 //** Agustin cancelled lonpressgesture because touchedmoved and touchedended event don't work
-/*
 - (IBAction)handleLongPress:(UIGestureRecognizer *)sender {
 
   printf ("Longpress. state=%d\n", sender.state);
@@ -548,7 +680,18 @@
     NSLog(@"LONG PRESS");
   }
   
-}*/
+  if (sender.state == 1){
+    
+    CGPoint tapPoint = [sender locationInView:sender.view.superview];
+    
+    std::vector<const Touch*> pointers = std::vector<const Touch*>();
+    Touch *touch = new Touch(Vector2D(tapPoint.x, tapPoint.y), Vector2D(0.0, 0.0), 1);
+    pointers.push_back(touch);
+    lastTouchEvent = TouchEvent::create(LongPress, pointers);
+    ((G3MWidget*)[self widget])->onTouchEvent(lastTouchEvent);
+  }
+  
+}
 
 - (void)drawView:(id)sender {
   if (_animating) {
@@ -737,7 +880,6 @@
   if (lastTouchEvent!=NULL) {
     delete lastTouchEvent;
   }
-
 }
 
 @end

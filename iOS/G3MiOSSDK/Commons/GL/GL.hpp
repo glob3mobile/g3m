@@ -31,7 +31,7 @@ private:
   // stack of ModelView matrices
   std::list<MutableMatrix44D> _matrixStack;
   
-  std::list<int>              _texturesIdBag;
+  std::list<GLTextureID>      _texturesIdBag;
   long                        _texturesIdAllocationCounter;
   long                        _texturesIdGetCounter;
   long                        _texturesIdTakeCounter;
@@ -61,9 +61,28 @@ private:
   float _translationX;
   float _translationY;
   
+  const float* _textureCoordinates;
+  
+  float _flatColorR;
+  float _flatColorG;
+  float _flatColorB;
+  float _flatColorA;
+  float _flatColorIntensity;
+  
   inline void loadModelView();
   
-  int getTextureID();
+  const GLTextureID getGLTextureID();
+  
+  
+  int _lastTextureWidth;
+  int _lastTextureHeight;
+#ifdef C_CODE
+  unsigned char* _lastImageData;
+#endif
+#ifdef JAVA_CODE
+  char[] _lastImageData;
+#endif
+
   
 public:
   
@@ -89,15 +108,18 @@ public:
   _translationX(0),
   _translationY(0),
   _texturesIdGetCounter(0),
-  _texturesIdTakeCounter(0)
+  _texturesIdTakeCounter(0),
+  _textureCoordinates(NULL),
+  _flatColorR(0),
+  _flatColorG(0),
+  _flatColorB(0),
+  _flatColorA(0),
+  _flatColorIntensity(0),
+  _lastTextureWidth(-1),
+  _lastTextureHeight(-1),
+  _lastImageData(NULL)
   {
     
-  }
-  
-  ~GL(){
-#ifdef C_CODE
-    delete _gl;
-#endif
   }
   
   void enableVerticesPosition();
@@ -163,12 +185,14 @@ public:
   
   GLError getError();
   
-  int uploadTexture(const IImage* image,
-                    int textureWidth, int textureHeight);
+  const GLTextureID uploadTexture(const IImage* image,
+                                  int textureWidth, int textureHeight);
   
-  void setTextureCoordinates(int size, int stride, const float texcoord[]);
+  void setTextureCoordinates(int size,
+                             int stride,
+                             const float texcoord[]);
   
-  void bindTexture(unsigned int n);
+  void bindTexture(const GLTextureID& textureId);
   
   void enableDepthTest();
   void disableDepthTest();
@@ -176,11 +200,11 @@ public:
   void enableBlend();
   void disableBlend();
   
-  void drawBillBoard(const unsigned int textureId,
+  void drawBillBoard(const GLTextureID& textureId,
                      const Vector3D& pos,
                      const float viewPortRatio);
   
-  void deleteTexture(int glTextureId);
+  void deleteTexture(const GLTextureID& textureId);
   
   void enableCullFace(GLCullFace face);
   void disableCullFace();
@@ -199,7 +223,7 @@ public:
                        (float) translationX,
                        (float) translationY);
   }
-
+  
   void transformTexCoords(const Vector2D& scale,
                           const Vector2D& translation) {
     transformTexCoords((float) scale.x(),
@@ -207,7 +231,7 @@ public:
                        (float) translation.x(),
                        (float) translation.y());
   }
-
+  
   void transformTexCoords(const MutableVector2D& scale,
                           const MutableVector2D& translation) {
     transformTexCoords((float) scale.x(),
@@ -215,8 +239,8 @@ public:
                        (float) translation.x(),
                        (float) translation.y());
   }
-
-
+  
+  
   void color(const Color& col) {
     color(col.getRed(),
           col.getGreen(),
@@ -235,6 +259,16 @@ public:
     enableVertexFlatColor(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha(), intensity);
   }
   
+  ~GL() {
+#ifdef C_CODE
+    delete _gl;
+#endif
+    
+    if (_lastImageData != NULL) {
+      delete [] _lastImageData;
+      _lastImageData = NULL;
+    }
+  }
 };
 
 #endif

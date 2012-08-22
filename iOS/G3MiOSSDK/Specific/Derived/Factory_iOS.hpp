@@ -13,7 +13,6 @@
 
 #include "Timer_iOS.hpp"
 #include "Image_iOS.hpp"
-#include "Network_iOS.hpp"
 
 class Factory_iOS: public IFactory {
 public:
@@ -37,21 +36,20 @@ public:
     
     UIImage* image = [UIImage imageNamed:fn];
     if (!image) {
-      printf("Can't read image %s\n",
-             filename.c_str());
+      printf("Can't read image %s\n", filename.c_str());
       
       return NULL;
     }
+
     return new Image_iOS(image);
   }
   
-  virtual IImage* createImageFromData(const ByteBuffer& bb) const {
-    
-    NSData* data = [NSData dataWithBytes:bb.getData() length:bb.getLength()];
+  virtual IImage* createImageFromData(const ByteBuffer* bb) const {
+    NSData* data = [NSData dataWithBytes:bb->getData() length:bb->getLength()];
     
     UIImage* image = [UIImage imageWithData:data];
     if (!image) {
-      printf("Can't read image\n");
+      printf("Can't read image from ByteBuffer of %d bytes\n", bb->getLength());
       return NULL;
     }
     
@@ -62,22 +60,11 @@ public:
     delete image;
   }
   
-  virtual INetwork* createNetwork() const
-  {
-    return new Network_iOS();
-  }
-  
-  virtual void deletenetwork(const INetwork* n) const 
-  {
-    delete n;
-  }
-  
-  std::string stringFormat(std::string x, ...) const
-  {
+  std::string stringFormat(std::string x, ...) const {
     va_list l;
     va_start(l, x);
     
-    char buffer[1000];
+    char buffer[2048];
     vsprintf(buffer, x.c_str(), l);
     
     va_end(l);

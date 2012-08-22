@@ -7,3 +7,13 @@
 //
 
 #include "URL.hpp"
+
+#include <sstream>
+
+const std::string URL::description() const {
+  std::ostringstream buffer;
+  buffer << "URL(";
+  buffer << getPath();
+  buffer << ")";
+  return buffer.str();
+}

@@ -22,50 +22,65 @@
 class SingleImageTileTexturizer : public TileTexturizer {
 private:
   
-  const RenderContext* _renderContext;
-  TileParameters* const _parameters;  
-  int _texID;
+  const RenderContext*         _renderContext;
+  TilesRenderParameters* const _parameters;
+  GLTextureID _texID;
   IImage * const _image;
   
   std::vector<MutableVector2D> createTextureCoordinates(const RenderContext* rc, Mesh* mesh) const;
   
 public:
   
-  SingleImageTileTexturizer(TileParameters * const par, IImage *image) :
+  SingleImageTileTexturizer(TilesRenderParameters* const parameters,
+                            IImage* image) :
   _texID(-1),
   _image(image),
-  _parameters(par),
-  _renderContext(NULL) {
+  _parameters(parameters),
+  _renderContext(NULL)
+  {
   }
   
   ~SingleImageTileTexturizer() {
-    if (_texID > -1){
+    if (_texID.isValid()){
       if (_renderContext != NULL) {
-        _renderContext->getTexturesHandler()->takeTexture(_texID);
+        _renderContext->getTexturesHandler()->releaseGLTextureId(_texID);
       }
     }
   }
   
-  void initialize(const InitializationContext* ic) {
+  void initialize(const InitializationContext* ic,
+                  const TilesRenderParameters* parameters) {
     
   }
   
   Mesh* texturize(const RenderContext* rc,
+                  const TileRenderContext* trc,
                   Tile* tile,
-                  const TileTessellator* tessellator,
                   Mesh* mesh,
                   Mesh* previousMesh);
   
-  void tileToBeDeleted(Tile* tile);
+  void tileToBeDeleted(Tile* tile,
+                       Mesh* mesh);
   
   bool tileMeetsRenderCriteria(Tile* tile);
-
-  void justCreatedTopTile(Tile* tile);
+  
+  void justCreatedTopTile(const RenderContext* rc,
+                          Tile* tile);
   
   bool isReady(const RenderContext *rc) {
     return true;
   }
-
+  
+  void ancestorTexturedSolvedChanged(Tile* tile,
+                                     Tile* ancestorTile,
+                                     bool textureSolved);
+  
+  void onTerrainTouchEvent(const Geodetic3D& g3d, const Tile* tile){}
+  
+  
+  void tileMeshToBeDeleted(Tile* tile,
+                           Mesh* mesh);
+  
 };
 
 

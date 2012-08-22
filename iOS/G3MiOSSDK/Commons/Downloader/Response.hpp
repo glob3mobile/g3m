@@ -14,7 +14,7 @@
 
 class Response {
 private:
-  const Url         _url;
+  const URL         _url;
   const ByteBuffer* _data;
 
 #ifdef C_CODE
@@ -25,14 +25,14 @@ private:
   
 public:
   
-  Response(const Url& url,
-           ByteBuffer* data):
+  Response(const URL& url,
+           const ByteBuffer* data):
   _url(url),
   _data(data)
   {
   }
   
-  Url getURL() const {
+  URL getURL() const {
     return _url;
   }
   

@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 Universidad de Las Palmas. All rights reserved.
 //
 
-#include <iostream>
 
 #include "LatLonMeshRenderer.h"
+#include "GL.hpp"
 
 
 LatLonMeshRenderer::~LatLonMeshRenderer()
@@ -41,7 +41,7 @@ void LatLonMeshRenderer::initialize(const InitializationContext* ic)
   memcpy(vertices, v, numVertices*3*sizeof(float));
   memcpy(indices, i, numIndices*sizeof(unsigned int));
   // create mesh
-  mesh = IndexedMesh::CreateFromGeodetic3D(ic->getPlanet(), true, TriangleStrip, NoCenter, Vector3D(0,0,0), 
+  mesh = IndexedMesh::createFromGeodetic3D(ic->getPlanet(), true, TriangleStrip, NoCenter, Vector3D(0,0,0), 
                                            4, vertices, indices, 4, flatColor);
 #endif
 #ifdef JAVA_CODE
@@ -58,7 +58,17 @@ void LatLonMeshRenderer::initialize(const InitializationContext* ic)
 
 int LatLonMeshRenderer::render(const RenderContext* rc)
 {  
+//  GL *gl = rc->getGL();
+  
   mesh->render(rc);
+  
+/*  gl->pushMatrix();
+  Geodetic2D centerMesh = Geodetic2D(Angle::fromDegrees(28.715), Angle::fromDegrees(-17.855));
+  Vector3D normal = rc->getPlanet()->geodeticSurfaceNormal(centerMesh);
+  gl->multMatrixf(MutableMatrix44D::createGeneralRotationMatrix(Angle::fromDegrees(45), normal, 
+                                                                rc->getPlanet()->toVector3D(centerMesh)));
+  mesh->render(rc);
+  gl->popMatrix();*/
 
   return Renderer::maxTimeToRender;
 }

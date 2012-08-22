@@ -40,6 +40,11 @@ public:
                              int width, int height);
   
   void addRenderer(Renderer* renderer);
+  
+  void start();
+  
+  void stop();
+
 };
 
 #endif

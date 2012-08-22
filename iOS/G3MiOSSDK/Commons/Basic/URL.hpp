@@ -11,27 +11,49 @@
 
 #include <string>
 
-class Url {
+class URL {
 private:
   const std::string _path;
-
-public:  
+  URL& operator=(const URL& that);
   
-  Url(const Url& that) :
+public:
+  
+  URL(const URL& that) :
   _path(that._path) {
     
   }
   
-  Url():_path(""){}
+  URL():_path(""){}
   
-  explicit Url(const std::string& path):
+  explicit URL(const std::string& path):
   _path(path)
+  {
+  };
+  
+  URL(const URL& parent,
+      const std::string& path):
+  _path(parent.getPath() + "/" + path)
   {
   };
   
   std::string getPath() const {
     return _path;
   }
+  
+  static URL null() {
+    return URL("__NULL__");
+  }
+  
+  bool isNull() const {
+    return (_path == "__NULL__");
+  }
+  
+  bool isEqualsTo(const URL& that) const {
+    return (_path == that._path);
+  }
+  
+  const std::string description() const;
+  
 };
 
 

@@ -11,29 +11,27 @@
 #include "Context.hpp"
 #include "GL.hpp"
 
-TextureMapping::TextureMapping(int textureId, std::vector<MutableVector2D> texCoords, TexturesHandler* texHandler, const std::string& texID, int width, int height) :
-_textureId(textureId), _texHandler(texHandler),
-_width(width),
-_height(height),
-_texID(texID)
+SimpleTextureMapping::SimpleTextureMapping(const GLTextureID& glTextureId,
+                                           std::vector<MutableVector2D> texCoords) :
+_glTextureId(glTextureId),
+_translation(0, 0),
+_scale(1, 1),
+_ownedTexCoords(true)
 {
-  float* texCoordsA = new float[2 * texCoords.size()];
+  const int texCoordsSize = texCoords.size();
+  float* texCoordsA = new float[2 * texCoordsSize];
   int p = 0;
-  for (int i = 0; i < texCoords.size(); i++) {
+  for (int i = 0; i < texCoordsSize; i++) {
     texCoordsA[p++] = (float) texCoords[i].x();
     texCoordsA[p++] = (float) texCoords[i].y();
   }
   _texCoords = texCoordsA;
-  
-  _translation = MutableVector2D(0.0, 0.0);
-  _scale       = MutableVector2D(1.0, 1.0);
 }
 
-void TextureMapping::bind(const RenderContext* rc) const {
-  GL *gl = rc->getGL();
+void SimpleTextureMapping::bind(const RenderContext* rc) const {
+  GL* gl = rc->getGL();
   
-  gl->transformTexCoords( _scale, _translation );
-  
-  gl->bindTexture(_textureId);
+  gl->transformTexCoords(_scale, _translation);
+  gl->bindTexture(_glTextureId);
   gl->setTextureCoordinates(2, 0, _texCoords);
 }

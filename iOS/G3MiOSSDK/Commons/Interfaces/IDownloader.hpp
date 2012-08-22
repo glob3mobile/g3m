@@ -10,21 +10,29 @@
 #define G3MiOSSDK_IDownloader_hpp
 
 #include "URL.hpp"
-#include "IDownloadListener.hpp"
+
+#include <string>
+
+class IDownloadListener;
+
 
 class IDownloader {
 public:
   virtual void start() = 0;
   
-  virtual long request(const Url& url,
+  virtual long request(const URL& url,
                        long priority,
-                       IDownloadListener* listener) = 0;
+                       IDownloadListener* listener,
+                       bool deleteListener) = 0;
   
   virtual void cancelRequest(long requestId) = 0;
   
   virtual ~IDownloader() {
     
   }
+
+  virtual const std::string statistics() = 0;
+  
 };
 
 #endif

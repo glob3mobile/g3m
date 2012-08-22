@@ -17,6 +17,7 @@ _latRes(30),//FOR NOW THEY MUST BE EQUAL
 _lonRes(30),
 _textureFilename(textureFilename),
 _mesh(NULL),
+//_texWidth(2048 / 2),
 _texWidth(2048),
 _texHeight(1024)
 {
@@ -29,7 +30,7 @@ SimplePlanetRenderer::~SimplePlanetRenderer()
 
 void SimplePlanetRenderer::initialize(const InitializationContext* ic)
 {
-
+  
 }
 
 #ifdef C_CODE
@@ -108,7 +109,7 @@ float[] SimplePlanetRenderer::createTextureCoordinates()
 }
 
 bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
-
+  
   
   const Planet* planet = rc->getPlanet();
   
@@ -131,10 +132,10 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
 #endif
   
   //TEXTURED
-  int texID = 0;
+  GLTextureID texID = GLTextureID::invalid();
   if (true){
-    texID = rc->getTexturesHandler()->getTextureIdFromFileName(_textureFilename, _texWidth, _texHeight);
-    if (texID < 1) {
+    texID = rc->getTexturesHandler()->getGLTextureIdFromFileName(_textureFilename, _texWidth, _texHeight);
+    if (!texID.isValid()) {
       rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
       return false;
     }
@@ -176,18 +177,18 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   }
 
 #ifdef C_CODE
-  IndexedMesh *im = IndexedMesh::CreateFromVector3D(true, TriangleStrip, NoCenter, Vector3D(0,0,0), 
+  IndexedMesh *im = IndexedMesh::createFromVector3D(true, TriangleStrip, NoCenter, Vector3D(0,0,0), 
                                                     _latRes *_lonRes, ver, 
                                                     ind, numIndexes, flatColor, colors, (float)0.5, normals);
 #else
-  IndexedMesh *im = IndexedMesh::CreateFromVector3D(true, GLPrimitive.TriangleStrip, NoCenter, Vector3D(0,0,0), 
+  IndexedMesh *im = IndexedMesh::createFromVector3D(true, GLPrimitive.TriangleStrip, NoCenter, Vector3D(0,0,0), 
                                                     _latRes *_lonRes, ver, 
                                                     ind, numIndexes, flatColor, colors, (float)0.5, normals);
 #endif
   
-  TextureMapping* texMap = new TextureMapping(texID, texC, rc->getTexturesHandler(),
-                                              _textureFilename,
-                                              _texWidth,_texHeight);
+  TextureMapping* texMap = new SimpleTextureMapping(texID,
+                                                    texC,
+                                                    true);
   
   _mesh = new TexturedMesh(im, true, texMap, true);
   

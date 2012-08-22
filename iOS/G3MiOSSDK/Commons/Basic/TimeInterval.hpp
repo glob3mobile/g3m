@@ -44,9 +44,17 @@ public:
   long milliseconds() const {
     return _milliseconds;
   }
+
+  double seconds() const {
+    return (double) _milliseconds / 1000.0;
+  }
   
   bool isNan() const {
     return isnan(_milliseconds);
+  }
+  
+  bool lowerThan(const TimeInterval& that) const {
+    return _milliseconds < that._milliseconds;
   }
   
 };

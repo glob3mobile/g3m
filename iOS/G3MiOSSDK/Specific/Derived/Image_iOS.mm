@@ -62,28 +62,33 @@ IImage* Image_iOS::combineWith(const IImage& other,
 
 IImage* Image_iOS::combineWith(const IImage& other,
                                const Rectangle& rect,
-                               int width, int height) const
-{
+                               int width, int height) const {
   UIImage* otherIm = ((Image_iOS&)other).getUIImage();
   
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-  unsigned char *imageData = new unsigned char[height * width * 4 ];
+  unsigned char *imageData = new unsigned char[height * width * 4];
   
   CGContextRef context = CGBitmapContextCreate(imageData,
                                                width, height,
                                                8, 4 * width,
                                                colorSpace,
                                                kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
+  
+  CGRect bounds = CGRectMake( 0, 0, width, height );
+  
   CGColorSpaceRelease( colorSpace );
-  CGContextClearRect( context, CGRectMake( 0, 0, width, height ) );
+  CGContextClearRect( context, bounds );
   
   //We draw the images one over the other
-  CGContextDrawImage( context, CGRectMake( 0, 0, width, height ), _image.CGImage );
-  CGContextDrawImage( context, CGRectMake((float) rect._x,
-                                          (float) rect._y,
-                                          (float) rect._width,
-                                          (float) rect._height ),
-                     otherIm.CGImage );
+  CGContextDrawImage(context,
+                     bounds,
+                     _image.CGImage);
+  CGContextDrawImage(context,
+                     CGRectMake((float) rect._x,
+                                (float) rect._y,
+                                (float) rect._width,
+                                (float) rect._height ),
+                     otherIm.CGImage);
   
   //SAVING IMAGE
   CGImageRef imgRef = CGBitmapContextCreateImage(context);
@@ -118,15 +123,18 @@ ByteBuffer* Image_iOS::getEncodedImage() const
   NSUInteger length = [readData length];
   
   unsigned char* data = new unsigned char[length];
-  [readData getBytes:data length:length ];
+  [readData getBytes: data
+              length: length];
   
   return new ByteBuffer(data, length);
 }
 
-void Image_iOS::fillWithRGBA(unsigned char imageData[], int width, int height) const
+void Image_iOS::fillWithRGBA8888(unsigned char data[],
+                                 int width,
+                                 int height) const
 {
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-  CGContextRef context = CGBitmapContextCreate(imageData,
+  CGContextRef context = CGBitmapContextCreate(data,
                                                width, height,
                                                8, 4 * width,
                                                colorSpace,
@@ -135,6 +143,7 @@ void Image_iOS::fillWithRGBA(unsigned char imageData[], int width, int height) c
   CGColorSpaceRelease( colorSpace );
   CGRect bounds = CGRectMake( 0, 0, width, height );
   CGContextClearRect( context, bounds );
+  
   CGContextDrawImage( context, bounds, _image.CGImage );
   
   CGContextRelease(context);

@@ -15,6 +15,7 @@
 {
   Downloader_iOS_Listener* _listener;
   long                     _requestId;
+  bool                     _canceled;
 }
 
 +(id) entryWithListener: (Downloader_iOS_Listener*) listener
@@ -24,6 +25,9 @@
              requestId: (long) requestId;
 
 -(long) requestId;
+
+-(void) cancel;
+-(bool) isCanceled;
 
 -(Downloader_iOS_Listener*) listener;
 
@@ -35,13 +39,15 @@
   NSMutableArray* _listeners;
   long            _priority;
   NSURL*          _nsURL;
-  Url*            _url;
+  URL*            _url;
+  
+//  bool            _canceled;
   
   NSLock*         _lock;                // synchronization helper
 }
 
 - (id) initWithNSURL: (NSURL*) nsURL
-                 url: (Url*) url
+                 url: (URL*) url
             listener: (Downloader_iOS_Listener*) listener
             priority: (long) priority
            requestId: (long) requestId;
@@ -50,12 +56,18 @@
             priority: (long) priority
            requestId: (long) requestId;
 
+
+- (bool) cancelListenerForRequestId: (long) requestId;
 - (bool) removeListenerForRequestId: (long) requestId;
 - (bool) hasListeners;
 
 - (long) priority;
 
 - (void) runWithDownloader:(void*)downloaderV;
+
+//- (void) cancel;
+
+//-(bool)isCanceled;
 
 - (void) dealloc;
 

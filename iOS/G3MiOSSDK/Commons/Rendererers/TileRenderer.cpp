@@ -13,6 +13,8 @@
 #include "TileTexturizer.hpp"
 #include "Camera.hpp"
 #include "ITimer.hpp"
+#include "TilesRenderParameters.hpp"
+#include "TouchEvent.hpp"
 
 
 TileRenderer::~TileRenderer() {
@@ -22,9 +24,8 @@ TileRenderer::~TileRenderer() {
   delete _tessellator;
   delete _texturizer;
   delete _parameters;
-
+  
   delete _lastSplitTimer;
-  delete _lastTexturizerTimer;
 #endif
 }
 
@@ -61,7 +62,7 @@ void TileRenderer::createTopLevelTiles(const InitializationContext* ic) {
       const Geodetic2D tileUpper(tileLatTo, tileLonTo);
       const Sector sector(tileLower, tileUpper);
       
-      Tile* tile = new Tile(NULL, sector, _parameters->_topLevel, row, col);
+      Tile* tile = new Tile(_texturizer, NULL, sector, _parameters->_topLevel, row, col);
       _topLevelTiles.push_back(tile);
     }
   }
@@ -75,15 +76,36 @@ void TileRenderer::initialize(const InitializationContext* ic) {
   clearTopLevelTiles();
   createTopLevelTiles(ic);
   
+  if (_lastSplitTimer != NULL) {
+    delete _lastSplitTimer;
+  }
   _lastSplitTimer      = ic->getFactory()->createTimer();
-  _lastTexturizerTimer = ic->getFactory()->createTimer();
   
-  _texturizer->initialize(ic);
+//  if (_lastTexturizerTimer != NULL) {
+//    delete _lastTexturizerTimer;
+//  }
+//  _lastTexturizerTimer = ic->getFactory()->createTimer();
+  
+  _texturizer->initialize(ic, _parameters);
+  
 }
 
 bool TileRenderer::isReadyToRender(const RenderContext *rc) {
+  if (_topTilesJustCreated) {
+    
+    if (_texturizer != NULL) {
+      const int topLevelTilesSize = _topLevelTiles.size();
+      for (int i = 0; i < topLevelTilesSize; i++) {
+        Tile* tile = _topLevelTiles[i];
+        _texturizer->justCreatedTopTile(rc, tile);
+      }
+    }
+    _topTilesJustCreated = false;
+  }
+  
+  
   if (_tessellator != NULL) {
-    if (!_tessellator->isReadyToRender(rc)) {
+    if (!_tessellator->isReady(rc)) {
       return false;
     }
   }
@@ -99,65 +121,62 @@ bool TileRenderer::isReadyToRender(const RenderContext *rc) {
 
 int TileRenderer::render(const RenderContext* rc) {
   TilesStatistics statistics;
+  //Saving camera for Long Press Event
+  _lastCamera = rc->getCurrentCamera();
   
-  const int topLevelTilesSize = _topLevelTiles.size();
-  
-  
-  DistanceToCenterTileComparison predicate = DistanceToCenterTileComparison(rc->getCurrentCamera(),
-                                                                            rc->getPlanet());
+  TileRenderContext trc(_tessellator,
+                        _texturizer,
+                        _parameters,
+                        &statistics,
+                        _lastSplitTimer,
+//                        _lastTexturizerTimer,
+                        _firstRender /* if first render, force full render */);
 
-  if (_topTilesJustCreated) {
-#ifdef C_CODE
-    predicate.initialize();
-    std::sort(_topLevelTiles.begin(),
-              _topLevelTiles.end(),
-              predicate);
-#endif
+  if (_firstRender) {
+    // force one render of the topLevel tiles to make the (toplevel) textures loaded as they
+    // will be used as last-change fallback texture for any tile.
+    _firstRender = false;
     
-#ifdef JAVA_CODE
-    java.util.Collections.sort(_topLevelTiles, predicate);
-#endif
-    
-    if (_texturizer != NULL) {
-      for (int i = 0; i < topLevelTilesSize; i++) {
-        Tile* tile = _topLevelTiles[i];
-        _texturizer->justCreatedTopTile(tile);
-      }
-    }
-    _topTilesJustCreated = false;
-  }
-
-//  std::vector<Tile*> toVisit(_topLevelTiles);
-  std::list<Tile*> toVisit;
-
-  for (int i = 0; i < _topLevelTiles.size(); i++) {
-    toVisit.push_back(_topLevelTiles[i]);
-  }
-  
-  while (toVisit.size() > 0) {
-    std::list<Tile*> toVisitInNextIteration;
-
-#ifdef JAVA_CODE
-      java.util.Collections.sort(toVisit, predicate);
-#endif
-    
-    for (std::list<Tile *>::const_iterator i = toVisit.begin(); i != toVisit.end(); i++) {
-      Tile* tile = *i;
+    for (int i = 0; i < _topLevelTiles.size(); i++) {
+      Tile* tile = _topLevelTiles[i];
       tile->render(rc,
-                   _tessellator,
-                   _texturizer,
-                   _parameters,
-                   &statistics,
-                   &toVisitInNextIteration,
-                   _lastSplitTimer,
-                   _lastTexturizerTimer);
-      
+                   &trc,
+                   NULL);
     }
-
-    toVisit = toVisitInNextIteration;
-//    toVisitInNextIteration.clear();
   }
-  
+  else {
+    std::list<Tile*> toVisit;
+    for (int i = 0; i < _topLevelTiles.size(); i++) {
+      toVisit.push_back(_topLevelTiles[i]);
+    }
+    
+//    DistanceToCenterTileComparison predicate = DistanceToCenterTileComparison(rc->getNextCamera(),
+//                                                                              rc->getPlanet());
+    
+    while (toVisit.size() > 0) {
+      std::list<Tile*> toVisitInNextIteration;
+      
+      //    std::sort(toVisit.begin(),
+      //              toVisit.end(),
+      //              predicate);
+      
+//      predicate.initialize();
+//      toVisit.sort(predicate);
+      
+      for (std::list<Tile*>::iterator iter = toVisit.begin();
+           iter != toVisit.end();
+           iter++) {
+        Tile* tile = *iter;
+        
+        tile->render(rc,
+                     &trc,
+                     &toVisitInNextIteration);
+      }
+      
+      toVisit = toVisitInNextIteration;
+      //    toVisitInNextIteration.clear();
+    }
+  }
   
   if (_showStatistics) {
     if (!_lastStatistics.equalsTo(statistics)) {
@@ -165,7 +184,32 @@ int TileRenderer::render(const RenderContext* rc) {
       statistics.log(rc->getLogger());
     }
   }
-    
   return Renderer::maxTimeToRender;
+}
+
+
+bool TileRenderer::onTouchEvent(const EventContext* ec, const TouchEvent* touchEvent) {
+  
+  if (touchEvent->getType() == LongPress){
+    
+    if (_lastCamera != NULL){
+      Vector2D pixel = touchEvent->getTouch(0)->getPos();
+      Vector3D ray = _lastCamera->pixel2Ray(pixel);
+      Vector3D origin = _lastCamera->getPosition();
+      
+      for(int i = 0; i < _topLevelTiles.size(); i++){
+        
+        Geodetic3D g = _topLevelTiles[i]->intersection(origin, ray, ec->getPlanet());
+        if (!g.isNan()){
+          printf("G: %f, %f, %f\n", g.latitude().degrees(), g.longitude().degrees(), g.height());
+        }
+      }
+      
+    }
+    
+    return true;
+  }
+  
+  return false;
 }
 

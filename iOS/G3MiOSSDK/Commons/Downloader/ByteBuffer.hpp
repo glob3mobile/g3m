@@ -9,16 +9,20 @@
 #ifndef G3MiOSSDK_ByteBuffer_hpp
 #define G3MiOSSDK_ByteBuffer_hpp
 
-class ByteBuffer{
-  
-#ifdef C_CODE
+#include <string>
+
+
+class ByteBuffer {
   unsigned char* _data;
-#endif
 #ifdef JAVA_CODE
   byte[] _data;
 #endif
   
   const int      _length;
+  
+  ByteBuffer(const ByteBuffer& that);
+  
+  void operator=(const ByteBuffer& that);
   
 public:
   ByteBuffer(unsigned char data[],
@@ -27,22 +31,23 @@ public:
   _length(dataLength)
   {
   };
-
-  ByteBuffer(const ByteBuffer& bb) :
-  _length(bb._length),
-  _data(new unsigned char[bb._length])
-  {
+  
+  ByteBuffer* copy() const {
+    unsigned char* newData = new unsigned char[_length];
 #ifdef C_CODE
-    memcpy(_data, bb._data, _length * sizeof(unsigned char));
+    memcpy(newData, _data, _length * sizeof(unsigned char));
 #endif
 #ifdef JAVA_CODE
-      System.arraycopy(bb._data, 0, _data, 0, _length);
+    System.arraycopy(_data, 0, newData, 0, _length);
 #endif
-  };
-  
+    return new ByteBuffer(newData, _length);
+  }
+
   ~ByteBuffer(){
 #ifdef C_CODE
-    if (_data != NULL) delete [] _data;
+    if (_data != NULL) {
+      delete [] _data;
+    }
 #endif
   }
   
@@ -57,6 +62,8 @@ public:
   int getLength() const{
     return _length;
   }
+  
+  const std::string description() const;
   
 };
 

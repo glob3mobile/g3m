@@ -10,6 +10,8 @@
 #include "Camera.hpp"
 #include "Planet.hpp"
 
+#include <sstream>
+
 
 bool Sector::contains(const Geodetic2D &position) const {
   return position.isBetween(_lower, _upper);
@@ -39,13 +41,12 @@ bool Sector::touchesWith(const Sector &that) const {
 
 // (u,v) are similar to texture coordinates inside the Sector
 // (u,v)=(0,0) in NW point, and (1,1) in SE point
-Geodetic2D Sector::getInnerPoint(double u, double v) const {
-  const Angle lat = Angle::lerp(_lower.latitude(),  _upper.latitude(), (float) (1-v));
-  const Angle lon = Angle::lerp(_lower.longitude(), _upper.longitude(), (float) u);
-  return Geodetic2D(lat, lon);
+const Geodetic2D Sector::getInnerPoint(double u, double v) const {
+  return Geodetic2D(Angle::lerp( _lower.latitude(),  _upper.latitude(),  (float) (1.0-v) ),
+                    Angle::lerp( _lower.longitude(), _upper.longitude(), (float)      u  ) );
 }
 
-bool Sector::isBackOriented(const RenderContext *rc) {
+bool Sector::isBackOriented(const RenderContext *rc) const {
   Camera* camera = rc->getNextCamera();
   const Planet* planet = rc->getPlanet();
   
@@ -79,7 +80,7 @@ Sector Sector::intersection(const Sector& s) const {
   return Sector(low, up);
 }
 
-Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const 
+const Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const 
 {
   // if pos is included, return pos
   if (contains(pos)) return pos;
@@ -134,3 +135,13 @@ Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const
   return Geodetic2D(lat, lon);*/
 }
 
+
+const std::string Sector::description() const {
+  std::ostringstream buffer;
+  buffer << "(Sector ";
+  buffer << _lower.description();
+  buffer << " - ";
+  buffer << _upper.description();
+  buffer << ")";
+  return buffer.str();
+}

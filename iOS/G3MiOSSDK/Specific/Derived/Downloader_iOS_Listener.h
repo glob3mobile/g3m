@@ -14,13 +14,17 @@
 @interface Downloader_iOS_Listener : NSObject
 {
   IDownloadListener* _cppListener;
+  bool               _deleteListener;
 }
 
--(id)initWithCPPListener:(IDownloadListener*)cppListener;
+-(id)initWithCPPListener:(IDownloadListener*)cppListener
+          deleteListener: (bool)deleteListener;
 
--(void) onDownload:(Response&)response;
--(void) onError:(Response&)response;
--(void) onCancel:(const Url&)url;
+-(void) onDownload:(Response*)response;
+-(void) onError:(Response*)response;
+-(void) onCancel:(const URL*)url;
+
+-(void) onCanceledDownload:(Response*)response;
 
 -(void) dealloc;
 

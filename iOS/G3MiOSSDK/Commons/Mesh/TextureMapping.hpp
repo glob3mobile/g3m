@@ -9,83 +9,76 @@
 #ifndef G3MiOSSDK_TextureMapping_hpp
 #define G3MiOSSDK_TextureMapping_hpp
 
-#include "MutableVector2D.hpp"
 #include <vector>
-
-#include "TexturesHandler.hpp"
+#include "MutableVector2D.hpp"
+#include "GLTextureID.hpp"
 
 class RenderContext;
 
 
-class TextureMapping
-{
+class TextureMapping {
+public:
+  
+  virtual ~TextureMapping() {
+  }
+  
+  virtual void bind(const RenderContext* rc) const = 0;
+  
+};
+
+
+
+class SimpleTextureMapping : public TextureMapping {
 private:
-  const int          _textureId;
+  const GLTextureID  _glTextureId;
   const float const* _texCoords;
-  MutableVector2D    _translation, _scale;
-  TexturesHandler* const _texHandler;
-  const int _width, _height;
-  const std::string _texID;
+  const bool _ownedTexCoords;
+
+  MutableVector2D    _translation;
+  MutableVector2D    _scale;
   
 public:
   
-  TextureMapping(int textureId,
-                 float texCoords[], TexturesHandler* const texHandler, 
-                 const std::string& texID, int width, int height) :
-  _textureId(textureId),
+  SimpleTextureMapping(const GLTextureID& glTextureId,
+                       float texCoords[],
+                       bool ownedTexCoords) :
+  _glTextureId(glTextureId),
   _texCoords(texCoords),
-  _texHandler(texHandler),
-  _width(width),
-  _height(height),
-  _texID(texID)
+  _translation(0, 0),
+  _scale(1, 1),
+  _ownedTexCoords(ownedTexCoords)
   {
-    _translation = MutableVector2D(0, 0);
-    _scale       = MutableVector2D(1, 1);
+    
   }
   
-  TextureMapping(int textureId,
-                 std::vector<MutableVector2D> texCoords, TexturesHandler* const texHandler,
-                 const std::string& texID, int width, int height);
+  SimpleTextureMapping(const GLTextureID& glTextureId,
+                       std::vector<MutableVector2D> texCoords);
   
   void setTranslationAndScale(const Vector2D& translation,
-                              const Vector2D& scale){
+                              const Vector2D& scale) {
     _translation = translation.asMutableVector2D();
     _scale       = scale.asMutableVector2D();
   }
   
-  ~TextureMapping() {
+  virtual ~SimpleTextureMapping() {
 #ifdef C_CODE
-    delete[] _texCoords;
-#endif
-    
-    if (_texHandler != NULL){
-      _texHandler->takeTexture(_textureId);
+    if (_ownedTexCoords) {
+      delete[] _texCoords;
     }
+#endif
   }
   
-  int getTextureId() const {
-    return _textureId;
+  const GLTextureID getGLTextureID() const {
+    return _glTextureId;
   }
-  
-  std::string getStringTexID() const {
-    return _texID;
-  }
-  
-  int getWidth() const {
-    return _width;
-  }
-  
-  int getHeight() const {
-    return _height;
-  }
-  
+
 #ifdef C_CODE
   const float* getTexCoords() const { return _texCoords;}
 #else
   const float[] getTexCoords() const { return _texCoords;}
 #endif
   
-  void bind(const RenderContext* rc) const;  
+  void bind(const RenderContext* rc) const;
+  
 };
-
 #endif

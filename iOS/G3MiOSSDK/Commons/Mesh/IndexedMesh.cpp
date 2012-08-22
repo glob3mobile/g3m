@@ -115,7 +115,7 @@ _center(center)
   _indexes = ind;
   
   if (normals != NULL) {
-    float * norm = new float[3* vertices.size()];
+    float * norm = new float[3 * vertices.size()];
     p = 0;
     for (int i = 0; i < vertices.size(); i++) {
       norm[p++] = (float) normals->at(i).x();
@@ -129,7 +129,7 @@ _center(center)
   }
   
   if (colors != NULL) {
-    float * vertexColor = new float[4* colors->size()];
+    float * vertexColor = new float[4 * colors->size()];
     for (int i = 0; i < colors->size(); i+=4){
       vertexColor[i] = colors->at(i).getRed();
       vertexColor[i+1] = colors->at(i).getGreen();
@@ -148,24 +148,30 @@ void IndexedMesh::render(const RenderContext* rc) const {
   
   gl->enableVerticesPosition();
   
-  if (_colors != NULL)
-    gl->enableVertexColor(_colors, _colorsIntensity);
-  else
+  if (_colors == NULL) {
     gl->disableVertexColor();
+  }
+  else {
+    gl->enableVertexColor(_colors, _colorsIntensity);
+  }
   
-  if (_flatColor != NULL)
-    gl->enableVertexFlatColor(*_flatColor, _colorsIntensity);
-  else
+  if (_flatColor == NULL) {
     gl->disableVertexFlatColor();
+  }
+  else {
+    gl->enableVertexFlatColor(*_flatColor, _colorsIntensity);
+  }
   
-  if (_normals != NULL)
-    gl->enableVertexNormal(_normals);
-  else
+  if (_normals == NULL) {
     gl->disableVertexNormal();
+  }
+  else {
+    gl->enableVertexNormal(_normals);
+  }
   
   gl->vertexPointer(3, 0, _vertices);
   
-  if (_centerStrategy!=NoCenter) {
+  if (_centerStrategy != NoCenter) {
     gl->pushMatrix();
     gl->multMatrixf(MutableMatrix44D::createTranslationMatrix(_center));
   }
@@ -184,7 +190,7 @@ void IndexedMesh::render(const RenderContext* rc) const {
       break;
   }
   
-  if (_centerStrategy!=NoCenter) {
+  if (_centerStrategy != NoCenter) {
     gl->popMatrix();
   }
   
@@ -193,6 +199,10 @@ void IndexedMesh::render(const RenderContext* rc) const {
 
 
 Extent* IndexedMesh::computeExtent() const {
+  if (_numVertices <= 0) {
+    return NULL;
+  }
+  
   double minx=1e10, miny=1e10, minz=1e10;
   double maxx=-1e10, maxy=-1e10, maxz=-1e10;
   

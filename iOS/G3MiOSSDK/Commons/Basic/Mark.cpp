@@ -33,11 +33,11 @@ void Mark::render(const RenderContext* rc,
       Vector2D scale(1.0,1.0);
       gl->transformTexCoords(scale, tr);
       
-      if (_textureId < 1) {
-        _textureId = rc->getTexturesHandler()->getTextureIdFromFileName(_textureFilename, 128, 128);
+      if (!_textureId.isValid()) {
+        _textureId = rc->getTexturesHandler()->getGLTextureIdFromFileName(_textureFilename, 128, 128);
       }
       
-      if (_textureId < 1) {
+      if (!_textureId.isValid()) {
         rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
         return;
       }
