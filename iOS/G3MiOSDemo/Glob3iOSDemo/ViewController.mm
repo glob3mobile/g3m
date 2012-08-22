@@ -49,10 +49,10 @@
   LayerSet* layerSet = new LayerSet();
   
   WMSLayer* blueMarble = new WMSLayer("bmng200405",
-                                      "http://www.nasa.network.com/wms?",
+                                      URL("http://www.nasa.network.com/wms?"),
                                       WMS_1_1_0,
-                                      "image/jpeg",
                                       Sector::fullSphere(),
+                                      "image/jpeg",
                                       "EPSG:4326",
                                       "",
                                       false,

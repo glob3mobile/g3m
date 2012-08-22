@@ -34,14 +34,14 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const RenderContext* rc,
   std::vector<Petition*> petitions;
   
   const Sector tileSector = tile->getSector();
-  if (!_bbox.touchesWith(tileSector)) {
+  if (!_sector.touchesWith(tileSector)) {
     return petitions;
   }
   
-  const Sector sector = tileSector.intersection(_bbox);
+  const Sector sector = tileSector.intersection(_sector);
   
 	//Server name
-  std::string req = _serverURL;
+  std::string req = _mapServerURL.getPath();
 	if (req[req.size()-1] != '?') {
 		req += '?';
 	}
@@ -51,8 +51,8 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const RenderContext* rc,
   if (pos != -1) {
     req = req.substr(pos+9);
     
-    int pos2 = _serverURL.find("/", 8);
-    std::string newHost = _serverURL.substr(0, pos2);
+    int pos2 = req.find("/", 8);
+    std::string newHost = req.substr(0, pos2);
     
     req = newHost + req;
   }
@@ -60,7 +60,7 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const RenderContext* rc,
   req += "REQUEST=GetMap&SERVICE=WMS";
 
   
-  switch (_serverVersion) {
+  switch (_mapServerVersion) {
     case WMS_1_3_0:
     {
       req += "&VERSION=1.3.0";
@@ -107,7 +107,7 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const RenderContext* rc,
     }
   }
 	
-  req += "&LAYERS=" + _mapLayers;
+  req += "&LAYERS=" + _mapLayer;
 	
 	req += "&FORMAT=" + _format;
 	
@@ -146,14 +146,14 @@ URL WMSLayer::getFeatureURL(const Geodetic2D& g,
                             const IFactory* factory,
                             const Sector& tileSector,
                             int width, int height) const {
-  if (!_bbox.touchesWith(tileSector)) {
+  if (!_sector.touchesWith(tileSector)) {
     return URL::null();
   }
   
-  const Sector sector = tileSector.intersection(_bbox);
+  const Sector sector = tileSector.intersection(_sector);
   
 	//Server name
-  std::string req = _serverURL;
+  std::string req = _queryServerURL.getPath();
 	if (req[req.size()-1] != '?') {
 		req += '?';
 	}
@@ -163,32 +163,13 @@ URL WMSLayer::getFeatureURL(const Geodetic2D& g,
   if (pos != -1) {
     req = req.substr(pos+9);
     
-    int pos2 = _serverURL.find("/", 8);
-    std::string newHost = _serverURL.substr(0, pos2);
+    int pos2 = req.find("/", 8);
+    std::string newHost = req.substr(0, pos2);
     
     req = newHost + req;
   }
   
   req += "REQUEST=GetFeatureInfo&SERVICE=WMS";
-//  switch (_serverVersion) {
-//    case WMS_1_3_0:
-//    {
-//      req += "&VERSION=1.3.0";
-//      
-//      req += "&CRS=EPSG:4326";
-//    }
-//      break;
-//      
-//    case WMS_1_1_0:
-//    default:
-//    {
-//      // default is 1.1.1
-//      req += "&VERSION=1.1.1";
-//      
-//      break;
-//    }
-//  }
-  
   
   //SRS
   if (_srs != "") {
@@ -198,7 +179,7 @@ URL WMSLayer::getFeatureURL(const Geodetic2D& g,
     req += "&SRS=EPSG:4326";
   }
   
-  switch (_serverVersion) {
+  switch (_queryServerVersion) {
     case WMS_1_3_0:
     {
       req += "&VERSION=1.3.0";
@@ -245,9 +226,9 @@ URL WMSLayer::getFeatureURL(const Geodetic2D& g,
     }
   }
 	
-  req += "&LAYERS=" + _mapLayers;
+  req += "&LAYERS=" + _queryLayer;
   //req += "&LAYERS=" + _queryLayers;
-  req += "&QUERY_LAYERS=" + _queryLayers;
+  req += "&QUERY_LAYERS=" + _queryLayer;
   
   req += "&INFO_FORMAT=text/plain";
   

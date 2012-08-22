@@ -19,44 +19,52 @@ enum WMSServerVersion {
 
 
 class WMSLayer: public Layer {
+private:
+  const std::string      _mapLayer;
+  const URL              _mapServerURL;
+  const WMSServerVersion _mapServerVersion;
+
+  const std::string      _queryLayer;
+  const URL              _queryServerURL;
+  const WMSServerVersion _queryServerVersion;
   
-  const std::string   _mapLayers;
-  const std::string   _queryLayers;
-  
+  Sector              _sector;
+
   const std::string   _format;
-  const std::string   _style;
   const std::string   _srs;
-  Sector              _bbox;
+  const std::string   _style;
   const bool          _isTransparent;
   
-  const Angle         _minTileLongitudeDelta,  _maxTileLongitudeDelta;
-  
-	
-  const std::string      _serverURL;
-  const WMSServerVersion _serverVersion;
+  const Angle         _minTileLongitudeDelta;
+  const Angle         _maxTileLongitudeDelta;
+
   
 public:
   
   
-  WMSLayer(const std::string& mapLayers,
-           const std::string& queryLayers,
-           const std::string& serverURL,
-           const WMSServerVersion serverVersion,
+  WMSLayer(const std::string& mapLayer,
+           const URL& mapServerURL,
+           const WMSServerVersion mapServerVersion,
+           const std::string& queryLayer,
+           const URL& queryServerURL,
+           const WMSServerVersion queryServerVersion,
+           const Sector& sector,
            const std::string& format,
-           const Sector& bbox,
            const std::string srs,
            const std::string& style,
            const bool isTransparent,
            const Angle& minTileLongitudeDelta,
            const Angle& maxTileLongitudeDelta):
-  _mapLayers(mapLayers),
-  _queryLayers(queryLayers),
+  _mapLayer(mapLayer),
+  _mapServerURL(mapServerURL),
+  _mapServerVersion(mapServerVersion),
+  _queryLayer(queryLayer),
+  _queryServerURL(queryServerURL),
+  _queryServerVersion(queryServerVersion),
+  _sector(sector),
   _format(format),
-  _style(style),
-  _bbox(bbox),
   _srs(srs),
-  _serverURL(serverURL),
-  _serverVersion(serverVersion),
+  _style(style),
   _isTransparent(isTransparent),
   _minTileLongitudeDelta(minTileLongitudeDelta),
   _maxTileLongitudeDelta(maxTileLongitudeDelta)
@@ -64,34 +72,35 @@ public:
     
   }
 
-  
-  WMSLayer(const std::string& mapLayers,
-           const std::string& serverURL,
-           const WMSServerVersion serverVersion,
+  WMSLayer(const std::string& mapLayer,
+           const URL& mapServerURL,
+           const WMSServerVersion mapServerVersion,
+           const Sector& sector,
            const std::string& format,
-           const Sector& bbox,
            const std::string srs,
            const std::string& style,
            const bool isTransparent,
-           const Angle& minTileLongitudeDelta, 
+           const Angle& minTileLongitudeDelta,
            const Angle& maxTileLongitudeDelta):
-  _mapLayers(mapLayers),
-  _queryLayers(mapLayers),
+  _mapLayer(mapLayer),
+  _mapServerURL(mapServerURL),
+  _mapServerVersion(mapServerVersion),
+  _queryLayer(mapLayer),
+  _queryServerURL(mapServerURL),
+  _queryServerVersion(mapServerVersion),
+  _sector(sector),
   _format(format),
-  _style(style),
-  _bbox(bbox),
   _srs(srs),
-  _serverURL(serverURL),
-  _serverVersion(serverVersion),
+  _style(style),
   _isTransparent(isTransparent),
   _minTileLongitudeDelta(minTileLongitudeDelta),
   _maxTileLongitudeDelta(maxTileLongitudeDelta)
   {
-
+    
   }
     
   bool fullContains(const Sector& s) const {
-    return _bbox.fullContains(s);
+    return _sector.fullContains(s);
   }
   
   std::vector<Petition*> getTilePetitions(const RenderContext* rc,
