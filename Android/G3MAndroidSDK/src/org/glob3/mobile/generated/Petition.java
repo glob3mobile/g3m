@@ -1,18 +1,18 @@
 package org.glob3.mobile.generated; 
 //
-//  TilePetitions.cpp
+//  Petition.cpp
 //  G3MiOSSDK
 //
-//  Created by José Miguel S N on 17/07/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by Diego Gomez Deck on 20/08/12.
+//
 //
 
 //
-//  TilePetitions.hpp
+//  Petition.hpp
 //  G3MiOSSDK
 //
-//  Created by José Miguel S N on 17/07/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by Diego Gomez Deck on 20/08/12.
+//
 //
 
 
@@ -28,37 +28,40 @@ package org.glob3.mobile.generated;
 //class IFactory;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class MutableVector2D;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class TileImagesTileTexturizer;
 
 public class Petition
 {
-  private final String _url;
+  private Url _url = new URL();
   private final Sector _sector;
-  private ByteBuffer _bb;
+  private final ByteBuffer _buffer;
   private int _downloadID;
   private final boolean _transparentImage;
 
 
-  public Petition(Sector s, String url, boolean transparent)
+  public Petition(Sector sector, URL url, boolean transparent)
   {
-	  _url = url;
-	  _sector = new Sector(s);
-	  _bb = null;
-	  _downloadID = -1;
+	  _sector = new Sector(sector);
+	  _url = new URL(url);
 	  _transparentImage = transparent;
+	  _buffer = null;
+	  _downloadID = -1;
   }
 
   public void dispose()
   {
+	if (_sector != null)
+		_sector.dispose();
 	releaseData();
   }
 
   public final void releaseData()
   {
-	if (_bb != null)
-		_bb = null;
-	_bb = null;
+	if (_buffer != null)
+	{
+	  if (_buffer != null)
+		  _buffer.dispose();
+	  _buffer = null;
+	}
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -69,10 +72,10 @@ public class Petition
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isArrived() const
-  public final boolean isArrived()
+//ORIGINAL LINE: boolean hasByteBuffer() const
+  public final boolean hasByteBuffer()
   {
-	return _bb != null;
+	return _buffer != null;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -88,8 +91,8 @@ public class Petition
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: String getURL() const
-  public final String getURL()
+//ORIGINAL LINE: const URL getURL() const
+  public final URL getURL()
   {
 	return _url;
   }
@@ -101,17 +104,47 @@ public class Petition
 	return _sector;
   }
 
-  public final void setByteBuffer(ByteBuffer bb)
+  public final void setByteBuffer(ByteBuffer buffer)
   {
-	if (_bb != null)
-		_bb = null;
-	_bb = bb;
+	if (_buffer != null)
+	{
+	  if (_buffer != null)
+		  _buffer.dispose();
+	}
+	_buffer = buffer;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: const ByteBuffer* getByteBuffer() const
   public final ByteBuffer getByteBuffer()
   {
-	return _bb;
+	return _buffer;
   }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const String description() const
+  public final String description()
+  {
+	std.ostringstream buffer = new std.ostringstream();
+	buffer << "Petition(url=";
+	buffer << _url.description();
+	buffer << ", sector=";
+	buffer << _sector.description();
+	buffer << ", buffer=";
+	if (_buffer == null)
+	{
+	  buffer << "NULL";
+	}
+	else
+	{
+	  buffer << _buffer.description();
+	}
+	buffer << ", downloadID=";
+	buffer << _downloadID;
+	buffer << ", transparentImage=";
+	buffer << _transparentImage;
+	buffer << ")";
+	return buffer.str();
+  }
+
 }

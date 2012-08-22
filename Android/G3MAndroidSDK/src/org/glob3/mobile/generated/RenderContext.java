@@ -2,17 +2,23 @@ package org.glob3.mobile.generated;
 //************************************************************
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class FrameTasksExecutor;
+
+
 public class RenderContext extends Context
 {
+  private FrameTasksExecutor _frameTasksExecutor;
   private GL _gl;
   private final Camera _currentCamera;
   private Camera _nextCamera;
   private TexturesHandler _texturesHandler;
   private ITimer _frameStartTimer;
 
-  public RenderContext(IFactory factory, ILogger logger, Planet planet, GL gl, Camera currentCamera, Camera nextCamera, TexturesHandler texturesHandler, Downloader downloaderOLD, IDownloader downloader, EffectsScheduler scheduler, ITimer frameStartTimer)
+  public RenderContext(FrameTasksExecutor frameTasksExecutor, IFactory factory, ILogger logger, Planet planet, GL gl, Camera currentCamera, Camera nextCamera, TexturesHandler texturesHandler, IDownloader downloader, EffectsScheduler scheduler, ITimer frameStartTimer)
   {
-	  super(factory, logger, planet, downloaderOLD, downloader, scheduler);
+	  super(factory, logger, planet, downloader, scheduler);
+	  _frameTasksExecutor = frameTasksExecutor;
 	  _gl = gl;
 	  _currentCamera = currentCamera;
 	  _nextCamera = nextCamera;
@@ -54,6 +60,13 @@ public class RenderContext extends Context
   public final ITimer getFrameStartTimer()
   {
 	return _frameStartTimer;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: FrameTasksExecutor* getFrameTasksExecutor() const
+  public final FrameTasksExecutor getFrameTasksExecutor()
+  {
+	return _frameTasksExecutor;
   }
 
   public void dispose()

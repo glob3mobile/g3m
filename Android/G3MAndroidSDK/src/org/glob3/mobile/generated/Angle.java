@@ -250,4 +250,13 @@ public class Angle
 		return true;
 	}
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const String description() const
+  public final String description()
+  {
+	std.ostringstream buffer = new std.ostringstream();
+	buffer << _degrees;
+	buffer << "°";
+	return buffer.str();
+  }
 }

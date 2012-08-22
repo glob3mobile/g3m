@@ -71,6 +71,40 @@ public class Plane
 	return point.dot(_normal) + _d;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector3D intersectionWithRay(const Vector3D& origin, const Vector3D& direction) const
+  public final Vector3D intersectionWithRay(Vector3D origin, Vector3D direction)
+  {
+	//P = P1 + u (P2 - P1)
+  
+	double x1 = origin.x();
+	double y1 = origin.y();
+	double z1 = origin.z();
+	Vector3D P2 = origin.add(direction);
+	double x2 = P2.x();
+	double y2 = P2.y();
+	double z2 = P2.z();
+	double A = _normal.x();
+	double B = _normal.y();
+	double C = _normal.z();
+  
+	double den = A * (x1 -x2) + B * (y1 - y2) + C * (z1 - z2);
+  
+	if (den == 0)
+	{
+	  return Vector3D.nan();
+	}
+	else
+	{
+	  double num = A * x1 + B * y1 + C * z1 + _d;
+	  double t = num / den;
+  
+	  Vector3D intersection = origin.add(direction.times(t));
+  
+	  return intersection;
+	}
+  }
+
   private final Vector3D _normal ;
   private final double _d;
 

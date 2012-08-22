@@ -122,6 +122,85 @@ public class Box extends Extent
 	return new Vector2D(width, height);
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean contains(const Vector3D& p) const
+  public final boolean contains(Vector3D p)
+  {
+	final double margin = 1e-3;
+	if (p.x() < _lower.x() - margin)
+		return false;
+	if (p.x() > _upper.x() + margin)
+		return false;
+  
+	if (p.y() < _lower.y() - margin)
+		return false;
+	if (p.y() > _upper.y() + margin)
+		return false;
+  
+	if (p.z() < _lower.z() - margin)
+		return false;
+	if (p.z() > _upper.z() + margin)
+		return false;
+  
+	return true;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector3D intersectionWithRay(const Vector3D& origin, const Vector3D& direction) const
+  public final Vector3D intersectionWithRay(Vector3D origin, Vector3D direction)
+  {
+  
+	//MIN X
+	{
+	  Plane p = new Plane(new Vector3D(1.0, 0.0, 0.0), _lower.x());
+	  Vector3D inter = p.intersectionWithRay(origin, direction);
+	  if (!inter.isNan() && contains(inter))
+		  return inter;
+	}
+  
+	//MAX X
+	{
+	  Plane p = new Plane(new Vector3D(1.0, 0.0, 0.0), _upper.x());
+	  Vector3D inter = p.intersectionWithRay(origin, direction);
+	  if (!inter.isNan() && contains(inter))
+		  return inter;
+	}
+  
+	//MIN Y
+	{
+	  Plane p = new Plane(new Vector3D(0.0, 1.0, 0.0), _lower.y());
+	  Vector3D inter = p.intersectionWithRay(origin, direction);
+	  if (!inter.isNan() && contains(inter))
+		  return inter;
+	}
+  
+	//MAX Y
+	{
+	  Plane p = new Plane(new Vector3D(0.0, 1.0, 0.0), _upper.y());
+	  Vector3D inter = p.intersectionWithRay(origin, direction);
+	  if (!inter.isNan() && contains(inter))
+		  return inter;
+	}
+  
+	//MIN Z
+	{
+	  Plane p = new Plane(new Vector3D(0.0, 0.0, 1.0), _lower.z());
+	  Vector3D inter = p.intersectionWithRay(origin, direction);
+	  if (!inter.isNan() && contains(inter))
+		  return inter;
+	}
+  
+	//MAX Z
+	{
+	  Plane p = new Plane(new Vector3D(0.0, 0.0, 1.0), _upper.z());
+	  Vector3D inter = p.intersectionWithRay(origin, direction);
+	  if (!inter.isNan() && contains(inter))
+		  return inter;
+	}
+  
+	return Vector3D.nan();
+  }
+
 
   private final Vector3D _lower ;
   private final Vector3D _upper ;

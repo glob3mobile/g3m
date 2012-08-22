@@ -25,6 +25,7 @@ public class TexturedMesh extends Mesh
   private final boolean _ownedTexMapping;
 
 
+
   public TexturedMesh(Mesh mesh, boolean ownedMesh, TextureMapping textureMapping, boolean ownedTexMapping)
   {
 	  _mesh = mesh;
@@ -56,23 +57,24 @@ public class TexturedMesh extends Mesh
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Extent *getExtent() const
+//ORIGINAL LINE: Extent* getExtent() const
   public final Extent getExtent()
   {
-	  return _mesh.getExtent();
+	return (_mesh == null) ? null : _mesh.getExtent();
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: int getVertexCount() const
   public final int getVertexCount()
   {
-	  return _mesh.getVertexCount();
+	return _mesh.getVertexCount();
   }
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: const Vector3D getVertex(int i) const
   public final Vector3D getVertex(int i)
   {
-	  return _mesh.getVertex(i);
+	return _mesh.getVertex(i);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

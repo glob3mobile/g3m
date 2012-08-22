@@ -85,58 +85,58 @@ public class Camera
 
   /*
   void Camera::calculateCachedValues() {
-	const FrustumData data = calculateFrustumData();
+    const FrustumData data = calculateFrustumData();
     
-	_projectionMatrix = MutableMatrix44D::createProjectionMatrix(data._left, data._right,
-																 data._bottom, data._top,
-																 data._znear, data._zfar);
+    _projectionMatrix = MutableMatrix44D::createProjectionMatrix(data._left, data._right,
+                                                                 data._bottom, data._top,
+                                                                 data._znear, data._zfar);
     
-	_modelMatrix = MutableMatrix44D::createModelMatrix(_position, _center, _up);
+    _modelMatrix = MutableMatrix44D::createModelMatrix(_position, _center, _up);
     
     
   //  _modelViewMatrix = _projectionMatrix.multiply(_modelMatrix);
     
     
-	// compute center of view on planet
+    // compute center of view on planet
   #ifdef C_CODE
-	if (_centerOfView) delete _centerOfView;
+    if (_centerOfView) delete _centerOfView;
   #endif
-	const Planet *planet = rc->getPlanet();
-	const Vector3D centerV = centerOfViewOnPlanet();
-	const Geodetic3D centerG = _planet->toGeodetic3D(centerV);
-	_centerOfView = new Geodetic3D(centerG);
+    const Planet *planet = rc->getPlanet();
+    const Vector3D centerV = centerOfViewOnPlanet();
+    const Geodetic3D centerG = _planet->toGeodetic3D(centerV);
+    _centerOfView = new Geodetic3D(centerG);
     
   #ifdef C_CODE
-	if (_frustum != NULL) {
-	  delete _frustum;
-	}
+    if (_frustum != NULL) {
+      delete _frustum;
+    }
   #endif
-	_frustum = new Frustum(data._left, data._right,
-						   data._bottom, data._top,
-						   data._znear, data._zfar);
+    _frustum = new Frustum(data._left, data._right,
+                           data._bottom, data._top,
+                           data._znear, data._zfar);
   
   #ifdef C_CODE    
-	if (_frustumInModelCoordinates != NULL) {
-	  delete _frustumInModelCoordinates;
-	}
-	_frustumInModelCoordinates = _frustum->_frustum->transformedBy_P(_modelMatrix.transposed());(_modelMatrix.transposed());
+    if (_frustumInModelCoordinates != NULL) {
+      delete _frustumInModelCoordinates;
+    }
+    _frustumInModelCoordinates = _frustum->_frustum->transformedBy_P(_modelMatrix.transposed());(_modelMatrix.transposed());
     
     
   >>>>>>> origin/master
-	if (_halfFrustum != NULL) {
-	  delete _halfFrustum;
-	}
+    if (_halfFrustum != NULL) {
+      delete _halfFrustum;
+    }
   #endif
-	_halfFrustum =  new Frustum(data._left/2, data._right/2,
-								data._bottom/2, data._top/2,
-								data._znear, data._zfar);
+    _halfFrustum =  new Frustum(data._left/2, data._right/2,
+                                data._bottom/2, data._top/2,
+                                data._znear, data._zfar);
     
   #ifdef C_CODE
-	if (_halfFrustumInModelCoordinates != NULL) {
-	  delete _halfFrustumInModelCoordinates;
-	}
+    if (_halfFrustumInModelCoordinates != NULL) {
+      delete _halfFrustumInModelCoordinates;
+    }
   #endif
-	_halfFrustumInModelCoordinates = _halfFrustum->transformedBy_P(_modelMatrix.transposed());
+    _halfFrustumInModelCoordinates = _halfFrustum->transformedBy_P(_modelMatrix.transposed());
   
   
   }*/
@@ -181,6 +181,8 @@ public class Camera
   
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector3D pixel2Ray(const Vector2D& pixel) const
   public final Vector3D pixel2Ray(Vector2D pixel)
   {
 	final int px = (int) pixel.x();
@@ -198,11 +200,15 @@ public class Camera
 	return obj.sub(_position.asVector3D());
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector3D pixel2PlanetPoint(const Vector2D& pixel) const
   public final Vector3D pixel2PlanetPoint(Vector2D pixel)
   {
 	return _planet.closestIntersection(_position.asVector3D(), pixel2Ray(pixel));
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector2D point2Pixel(const Vector3D& point) const
   public final Vector2D point2Pixel(Vector3D point)
   {
 	int[] viewport = { 0, 0, _width, _height };
@@ -407,6 +413,8 @@ public class Camera
 
   // data to compute frustum
   private FrustumData _frustumData = new FrustumData();
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: FrustumData getFrustumData() const
   private FrustumData getFrustumData()
   {
 	if (_dirtyFlags._frustumData)
@@ -419,6 +427,8 @@ public class Camera
 
   // opengl projection matrix 
   private MutableMatrix44D _projectionMatrix = new MutableMatrix44D();
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: MutableMatrix44D getProjectionMatrix() const
   private MutableMatrix44D getProjectionMatrix()
   {
 	if (_dirtyFlags._projectionMatrix)
@@ -431,6 +441,8 @@ public class Camera
 
   // Model matrix, computed in CPU in double precision
   private MutableMatrix44D _modelMatrix = new MutableMatrix44D();
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: MutableMatrix44D getModelMatrix() const
   private MutableMatrix44D getModelMatrix()
   {
 	if (_dirtyFlags._modelMatrix)
@@ -443,6 +455,8 @@ public class Camera
 
   // multiplication of model * projection
   private MutableMatrix44D _modelViewMatrix = new MutableMatrix44D();
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: MutableMatrix44D getModelViewMatrix() const
   private MutableMatrix44D getModelViewMatrix()
   {
 	if (_dirtyFlags._modelViewMatrix)
@@ -529,6 +543,8 @@ public class Camera
 
 
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: FrustumData calculateFrustumData() const
   private FrustumData calculateFrustumData()
   {
 	// compute znear value
@@ -575,17 +591,17 @@ public class Camera
   //void calculateCachedValues();
 
   /*void cleanCachedValues() {
-	_dirtyCachedValues = true;
-	//    if (_frustum != NULL) {
-	//      delete _frustum;
-	//      _frustum = NULL;
-	//    }
-	if (_frustumInModelCoordinates != NULL) {
+    _dirtyCachedValues = true;
+    //    if (_frustum != NULL) {
+    //      delete _frustum;
+    //      _frustum = NULL;
+    //    }
+    if (_frustumInModelCoordinates != NULL) {
 #ifdef C_CODE
-	  delete _frustumInModelCoordinates;
+      delete _frustumInModelCoordinates;
 #endif
-	  _frustumInModelCoordinates = NULL;
-	}
+      _frustumInModelCoordinates = NULL;
+    }
   }*/
 
 

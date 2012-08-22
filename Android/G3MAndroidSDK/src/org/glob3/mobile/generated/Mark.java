@@ -17,20 +17,21 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class Mark
 {
   private final String _name;
   private final String _textureFilename;
   private final Geodetic3D _position ;
 
-  private int _textureId;
+  private GLTextureID _textureId = new GLTextureID();
 
   public Mark(String name, String textureFilename, Geodetic3D position)
   {
 	  _name = name;
 	  _textureFilename = textureFilename;
 	  _position = new Geodetic3D(position);
-	  _textureId = -1;
+	  _textureId = new GLTextureID(-1);
 
   }
 
@@ -75,12 +76,12 @@ public class Mark
 		Vector2D scale = new Vector2D(1.0,1.0);
 		gl.transformTexCoords(scale, tr);
   
-		if (_textureId < 1)
+		if (!_textureId.isValid())
 		{
-		  _textureId = rc.getTexturesHandler().getTextureIdFromFileName(_textureFilename, 128, 128);
+		  _textureId = rc.getTexturesHandler().getGLTextureIdFromFileName(_textureFilename, 128, 128);
 		}
   
-		if (_textureId < 1)
+		if (!_textureId.isValid())
 		{
 		  rc.getLogger().logError("Can't load file %s", _textureFilename);
 		  return;

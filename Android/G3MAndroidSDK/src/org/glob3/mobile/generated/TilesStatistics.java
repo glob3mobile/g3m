@@ -11,6 +11,7 @@ public class TilesStatistics
   private java.util.HashMap<Integer, Integer> _tilesRenderedByLevel = new java.util.HashMap<Integer, Integer>();
 
   private int _splitsCountInFrame;
+  private int _buildersStartsInFrame;
 
 
   public TilesStatistics()
@@ -19,7 +20,15 @@ public class TilesStatistics
 	  _tilesVisible = 0;
 	  _tilesRendered = 0;
 	  _splitsCountInFrame = 0;
+	  _buildersStartsInFrame = 0;
 
+  }
+
+  public void dispose()
+  {
+//    if (_buildersStartsInFrame > 0) {
+//      printf("buildersStartsInFrame=%d\n", _buildersStartsInFrame);
+//    }
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -29,9 +38,21 @@ public class TilesStatistics
 	return _splitsCountInFrame;
   }
 
-  public final void computeSplit()
+  public final void computeSplitInFrame()
   {
 	_splitsCountInFrame++;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: int getBuildersStartsInFrame() const
+  public final int getBuildersStartsInFrame()
+  {
+	return _buildersStartsInFrame;
+  }
+
+  public final void computeBuilderStartInFrame()
+  {
+	_buildersStartsInFrame++;
   }
 
   public final void computeTileProcessed(Tile tile)

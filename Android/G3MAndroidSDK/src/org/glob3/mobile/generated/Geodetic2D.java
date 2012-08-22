@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 /**
  * Class to represent a position in the globe by latitude, longitud and altitude.
  */
@@ -89,10 +90,27 @@ public class Geodetic2D
 	{
 	  return true;
 	}
-	if (_latitude.greaterThan(that._latitude))
+	else if (_latitude.greaterThan(that._latitude))
 	{
 	  return false;
 	}
 	return _longitude.lowerThan(that._longitude);
   }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const String description() const
+  public final String description()
+  {
+	std.ostringstream buffer = new std.ostringstream();
+	buffer << "(lat=";
+	buffer << _latitude.description();
+	buffer << ", lon=";
+	buffer << _longitude.description();
+	buffer << ")";
+	return buffer.str();
+  }
+
+  TODO_java_equals;
+  TODO_java_hashcode;
+
 }

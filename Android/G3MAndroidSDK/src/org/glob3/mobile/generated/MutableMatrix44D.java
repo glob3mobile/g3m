@@ -396,4 +396,27 @@ public class MutableMatrix44D
 	return createProjectionMatrix(data._left, data._right, data._bottom, data._top, data._znear, data._zfar);
   }
 
+  public static MutableMatrix44D createOrthographicProjectionMatrix(double left, double right, double bottom, double top, double znear, double zfar)
+  {
+	// set frustum matrix in double
+	final double rl = right - left;
+	final double tb = top - bottom;
+	final double fn = zfar - znear;
+
+	double[] P = new double[16];
+	P[0] = 2 / rl;
+	P[1] = P[2] = P[3] = P[4] = 0;
+	P[5] = 2 / tb;
+	P[6] = P[7] = P[8] = P[9] = 0;
+	P[10] = -2 / fn;
+	P[11] = 0;
+	P[12] = -(right+left) / rl;
+	P[13] = -(top+bottom) / tb;
+	P[14] = -(zfar+znear) / fn;
+	P[15] = 1;
+
+	return new MutableMatrix44D(P);
+  }
+
+
 }

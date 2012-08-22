@@ -236,5 +236,4 @@ public class Vector3D
 	Vector3D projected = normal.transformedBy(m, 0).normalized();
 	return projected.times(this.length());
   }
-
 }

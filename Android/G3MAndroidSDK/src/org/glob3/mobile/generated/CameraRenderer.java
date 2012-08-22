@@ -75,5 +75,15 @@ public class CameraRenderer extends Renderer
 	return true;
   }
 
+  public final void start()
+  {
+
+  }
+
+  public final void stop()
+  {
+
+  }
+
 
 }

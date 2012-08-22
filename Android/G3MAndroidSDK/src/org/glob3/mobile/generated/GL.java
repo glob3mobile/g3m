@@ -32,7 +32,7 @@ public class GL
   // stack of ModelView matrices
   private java.util.LinkedList<MutableMatrix44D> _matrixStack = new java.util.LinkedList<MutableMatrix44D>();
 
-  private java.util.LinkedList<Integer> _texturesIdBag = new java.util.LinkedList<Integer>();
+  private java.util.LinkedList<GLTextureID> _texturesIdBag = new java.util.LinkedList<GLTextureID>();
   private int _texturesIdAllocationCounter;
   private int _texturesIdGetCounter;
   private int _texturesIdTakeCounter;
@@ -58,6 +58,14 @@ public class GL
   private float _translationX;
   private float _translationY;
 
+  private final float _textureCoordinates;
+
+  private float _flatColorR;
+  private float _flatColorG;
+  private float _flatColorB;
+  private float _flatColorA;
+  private float _flatColorIntensity;
+
 //C++ TO JAVA CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in Java):
   private float[] loadModelView_M = new float[16];
   private void loadModelView()
@@ -68,7 +76,7 @@ public class GL
 	_gl.uniformMatrix4fv(GlobalMembersGL.Uniforms.Modelview, 1, false, loadModelView_M);
   }
 
-  private int getTextureID()
+  private GLTextureID getGLTextureID()
   {
 	if (_texturesIdBag.size() == 0)
 	{
@@ -76,11 +84,12 @@ public class GL
   
 	  System.out.printf("= Creating %d texturesIds...\n", bugdetSize);
   
-	  final java.util.ArrayList<Integer> ids = _gl.genTextures(bugdetSize);
+	  final java.util.ArrayList<GLTextureID> ids = _gl.genTextures(bugdetSize);
   
 	  for (int i = 0; i < bugdetSize; i++)
 	  {
-		_texturesIdBag.addLast(ids.get(i));
+  //      _texturesIdBag.push_back(ids[i]);
+		_texturesIdBag.addFirst(ids.get(i));
 	  }
   
 	  _texturesIdAllocationCounter += bugdetSize;
@@ -89,18 +98,24 @@ public class GL
   
 	_texturesIdGetCounter++;
   
-	int result = _texturesIdBag.getLast();
+	final GLTextureID result = _texturesIdBag.getLast();
 	_texturesIdBag.removeLast();
   
-	/*
-	 printf("   - Assigning 1 texturesId from bag (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
-		   _texturesIdBag.size(),
-		   _texturesIdGetCounter,
-		   _texturesIdTakeCounter,
-		   _texturesIdGetCounter - _texturesIdTakeCounter);*/
+  //  printf("   - Assigning 1 texturesId (#%d) from bag (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
+  //         result.getGLTextureID(),
+  //         _texturesIdBag.size(),
+  //         _texturesIdGetCounter,
+  //         _texturesIdTakeCounter,
+  //         _texturesIdGetCounter - _texturesIdTakeCounter);
   
 	return result;
   }
+
+
+  private int _lastTextureWidth;
+  private int _lastTextureHeight;
+  char[] _lastImageData;
+
 
 
   public GL(INativeGL gl)
@@ -123,11 +138,16 @@ public class GL
 	  _translationY = 0F;
 	  _texturesIdGetCounter = 0;
 	  _texturesIdTakeCounter = 0;
+	  _textureCoordinates = null;
+	  _flatColorR = 0F;
+	  _flatColorG = 0F;
+	  _flatColorB = 0F;
+	  _flatColorA = 0F;
+	  _flatColorIntensity = 0F;
+	  _lastTextureWidth = -1;
+	  _lastTextureHeight = -1;
+	  _lastImageData = null;
 
-  }
-
-  public void dispose()
-  {
   }
 
   public final void enableVerticesPosition()
@@ -169,8 +189,15 @@ public class GL
 	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableFlatColor, 1);
 	  _enableFlatColor = true;
 	}
-	_gl.uniform4f(GlobalMembersGL.Uniforms.FlatColor, r, g, b, a);
-	_gl.uniform1f(GlobalMembersGL.Uniforms.FlatColorIntensity, intensity);
+  
+	color(r, g, b, a);
+  
+  //  _gl->uniform1f(Uniforms.FlatColorIntensity, intensity);
+	if (_flatColorIntensity != intensity)
+	{
+	  _gl.uniform1f(GlobalMembersGL.Uniforms.FlatColorIntensity, intensity);
+	  _flatColorIntensity = intensity;
+	}
   }
 
   public final void disableVertexFlatColor()
@@ -218,7 +245,17 @@ public class GL
 
   public final void color(float r, float g, float b, float a)
   {
-	_gl.uniform4f(GlobalMembersGL.Uniforms.FlatColor, r, g, b, a);
+	if ((_flatColorR != r) || (_flatColorG != g) || (_flatColorB != b) || (_flatColorA != a))
+	{
+	  _gl.uniform4f(GlobalMembersGL.Uniforms.FlatColor, r, g, b, a);
+  
+	  _flatColorR = r;
+	  _flatColorG = g;
+	  _flatColorB = b;
+	  _flatColorA = a;
+	}
+  
+  //  _gl->uniform4f(Uniforms.FlatColor, r, g, b, a);
   }
 
   public final void enableVertexColor(float[] colors, float intensity)
@@ -362,33 +399,6 @@ public class GL
 	GlobalMembersGL.Uniforms.EnableFlatColor = _gl.getUniformLocation(program, "EnableFlatColor");
   }
 
-
-  //void GL::transformTexCoords(double scaleX,
-  //                            double scaleY,
-  //                            double translationX,
-  //                            double translationY) {
-  //  transformTexCoords((float) scaleX,
-  //                     (float) scaleY,
-  //                     (float) translationX,
-  //                     (float) translationY);
-  //}
-  
-  //void GL::transformTexCoords(const MutableVector2D& scale,
-  //                            const MutableVector2D& translation) {
-  //  transformTexCoords(scale.x(),
-  //                     scale.y(),
-  //                     translation.x(),
-  //                     translation.y());
-  //}
-  
-  //void GL::transformTexCoords(const Vector2D& scale,
-  //                            const Vector2D& translation) {
-  //  transformTexCoords(scale.x(),
-  //                     scale.y(),
-  //                     translation.x(),
-  //                     translation.y());
-  //}
-  
   public final void enablePolygonOffset(float factor, float units)
   {
 	_gl.enable(GLFeature.PolygonOffsetFill);
@@ -415,37 +425,45 @@ public class GL
 	return _gl.getError();
   }
 
-  public final int uploadTexture(IImage image, int textureWidth, int textureHeight)
+  public final GLTextureID uploadTexture(IImage image, int textureWidth, int textureHeight)
   {
-  
-	byte[] imageData = new byte[textureWidth * textureHeight * 4];
-	image.fillWithRGBA(imageData, textureWidth, textureHeight);
-  
-	int texID = getTextureID();
+	final GLTextureID texID = getGLTextureID();
+	if (texID.isValid())
+	{
   
   
-	_gl.blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
-	_gl.pixelStorei(GLAlignment.Unpack, 1);
+  	char[] imageData = new char[textureWidth * textureHeight * 4];
   
-	_gl.bindTexture(GLTextureType.Texture2D, texID);
-	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MinFilter, GLTextureParameterValue.Linear);
-	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MagFilter, GLTextureParameterValue.Linear);
-	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapS, GLTextureParameterValue.ClampToEdge);
-	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapT, GLTextureParameterValue.ClampToEdge);
-	_gl.texImage2D(GLTextureType.Texture2D, 0, GLFormat.RGBA, textureWidth, textureHeight, 0, GLFormat.RGBA, GLType.UnsignedByte, imageData);
+	  image.fillWithRGBA8888(imageData, textureWidth, textureHeight);
   
+	  _gl.blendFunc(SrcAlpha, OneMinusSrcAlpha);
+	  _gl.pixelStorei(Unpack, 1);
   
+	  _gl.bindTexture(Texture2D, texID.getGLTextureID());
+	  _gl.texParameteri(Texture2D, MinFilter, Linear);
+	  _gl.texParameteri(Texture2D, MagFilter, Linear);
+	  _gl.texParameteri(Texture2D, WrapS, ClampToEdge);
+	  _gl.texParameteri(Texture2D, WrapT, ClampToEdge);
+	  _gl.texImage2D(Texture2D, 0, RGBA, textureWidth, textureHeight, 0, RGBA, UnsignedByte, imageData);
+	}
+	else
+	{
+	  System.out.print("can't get a valid texture id\n");
+	}
 	return texID;
   }
 
   public final void setTextureCoordinates(int size, int stride, float[] texcoord)
   {
+	  if (_textureCoordinates != texcoord)
+	  {
 	_gl.vertexAttribPointer(GlobalMembersGL.Attributes.TextureCoord, size, GLType.Float, false, stride, (Object) texcoord);
+	  }
   }
 
-  public final void bindTexture(int n)
+  public final void bindTexture(GLTextureID textureId)
   {
-	_gl.bindTexture(GLTextureType.Texture2D, n);
+	_gl.bindTexture(GLTextureType.Texture2D, textureId.getGLTextureID());
   }
 
   public final void enableDepthTest()
@@ -483,7 +501,7 @@ public class GL
   
   }
 
-  public final void drawBillBoard(int textureId, Vector3D pos, float viewPortRatio)
+  public final void drawBillBoard(GLTextureID textureId, Vector3D pos, float viewPortRatio)
   {
 	float[] vertex = { (float) pos.x(), (float) pos.y(), (float) pos.z(), (float) pos.x(), (float) pos.y(), (float) pos.z(), (float) pos.x(), (float) pos.y(), (float) pos.z(), (float) pos.x(), (float) pos.y(), (float) pos.z() };
   
@@ -510,15 +528,18 @@ public class GL
 	_gl.uniform1i(GlobalMembersGL.Uniforms.BillBoard, 0);
   }
 
-  public final void deleteTexture(int glTextureId)
+  public final void deleteTexture(GLTextureID textureId)
   {
-	int[] textures = { glTextureId };
+	if (!textureId.isValid())
+	{
+	  return;
+	}
+	int[] textures = { textureId.getGLTextureID() };
 	_gl.deleteTextures(1, textures);
   
-	_texturesIdBag.addLast(glTextureId);
+	_texturesIdBag.addLast(textureId);
   
 	_texturesIdTakeCounter++;
-  
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#if C_CODE
 	System.out.printf("   - Delete 1 texturesId (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n", _texturesIdBag.size(), _texturesIdGetCounter, _texturesIdTakeCounter, _texturesIdGetCounter - _texturesIdTakeCounter);
@@ -596,4 +617,13 @@ public class GL
 	enableVertexFlatColor(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha(), intensity);
   }
 
+  public void dispose()
+  {
+
+	if (_lastImageData != null)
+	{
+	  _lastImageData = null;
+	  _lastImageData = null;
+	}
+  }
 }

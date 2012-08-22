@@ -17,6 +17,8 @@ package org.glob3.mobile.generated;
 
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class Petition;
 
 public class LayerSet
 {
@@ -31,14 +33,14 @@ public class LayerSet
 	}
   }
 
-  public final void add(Layer l)
+  public final void addLayer(Layer layer)
   {
-	_layers.add(l);
+	_layers.add(layer);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: java.util.ArrayList<Petition*> createTilePetitions(const RenderContext* rc, const IFactory& factory, const Tile& tile, int width, int height) const
-  public final java.util.ArrayList<Petition> createTilePetitions(RenderContext rc, IFactory factory, Tile tile, int width, int height)
+//ORIGINAL LINE: java.util.ArrayList<Petition*> createTilePetitions(const RenderContext* rc, const Tile* tile, int width, int height) const
+  public final java.util.ArrayList<Petition> createTilePetitions(RenderContext rc, Tile tile, int width, int height)
   {
 	java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
@@ -47,7 +49,7 @@ public class LayerSet
 	  Layer layer = _layers.get(i);
 	  if (layer.isAvailable(rc, tile))
 	  {
-		java.util.ArrayList<Petition> pet = layer.getTilePetitions(factory, tile, width, height);
+		java.util.ArrayList<Petition> pet = layer.getTilePetitions(rc, tile, width, height);
   
 		//Storing petitions
 		for (int j = 0; j < pet.size(); j++)
@@ -60,5 +62,22 @@ public class LayerSet
 	return petitions;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: void onTerrainTouchEvent(const Geodetic3D& g3d, const Tile* tile) const
+  public final void onTerrainTouchEvent(Geodetic3D g3d, Tile tile)
+  {
+  
+	for (int i = 0; i < _layers.size(); i++)
+	{
+	  Layer layer = _layers.get(i);
+  
+	  TerrainTouchEvent tte = new TerrainTouchEvent(g3d.asGeodetic2D(), tile.getSector(), layer);
+  
+	  layer.onTerrainTouchEventListener(tte);
+	}
+  
+  
+  
+  }
 
 }

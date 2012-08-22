@@ -33,8 +33,8 @@ public abstract class TileTessellator
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual boolean isReadyToRender(const RenderContext *rc) const = 0;
-  public abstract boolean isReadyToRender(RenderContext rc);
+//ORIGINAL LINE: virtual boolean isReady(const RenderContext *rc) const = 0;
+  public abstract boolean isReady(RenderContext rc);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual Mesh* createMesh(const RenderContext* rc, const Tile* tile) const = 0;

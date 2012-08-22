@@ -33,6 +33,7 @@ public class StaticImageLayer extends Layer
 	  _bbox = new Sector(sector);
 	  _layerID = layerID;
 	  _storage = storage;
+
   }
 
   public void dispose()
@@ -47,38 +48,46 @@ public class StaticImageLayer extends Layer
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: java.util.ArrayList<Petition*> getTilePetitions(const IFactory& factory, const Tile& tile, int width, int height) const
-  public final java.util.ArrayList<Petition> getTilePetitions(IFactory factory, Tile tile, int width, int height)
+//ORIGINAL LINE: java.util.ArrayList<Petition*> getTilePetitions(const RenderContext* rc, const Tile* tile, int width, int height) const
+  public final java.util.ArrayList<Petition> getTilePetitions(RenderContext rc, Tile tile, int width, int height)
   {
 	java.util.ArrayList<Petition> res = new java.util.ArrayList<Petition>();
   
-	if (!_bbox.fullContains(tile.getSector()))
+	Sector tileSector = tile.getSector();
+  
+	if (!_bbox.fullContains(tileSector))
 	{
 	  return res;
 	}
   
-	Sector imageSector = tile.getSector();
-  
 	//CREATING ID FOR PETITION
-	String id = factory.stringFormat("%s_%f_%f_%f_%f", _layerID, imageSector.lower().latitude().degrees(), imageSector.lower().longitude().degrees(), imageSector.upper().latitude().degrees(), imageSector.upper().longitude().degrees());
   
-	Petition pet = new Petition(tile.getSector(), id, true);
+	IStringBuilder isb = IStringBuilder.newStringBuilder();
+	isb.add(_layerID).add("_").add(tileSector.lower().latitude().degrees());
+	isb.add("_").add(tileSector.lower().longitude().degrees());
+	isb.add("_").add(tileSector.upper().latitude().degrees());
+	isb.add("_").add(tileSector.upper().longitude().degrees());
+  
+  
+	final URL id = new URL(isb.getString());
+  
+	Petition pet = new Petition(tileSector, id, true);
   
 	if (_storage != null)
 	{
 	  if (_storage.contains(id))
 	  {
-		ByteBuffer bb = _storage.read(id);
+		final ByteBuffer bb = _storage.read(id);
 		pet.setByteBuffer(bb); //FILLING DATA
 		res.add(pet);
 		return res;
 	  }
 	}
   
-	double widthUV = imageSector.getDeltaLongitude().degrees() / _bbox.getDeltaLongitude().degrees();
-	double heightUV = imageSector.getDeltaLatitude().degrees() / _bbox.getDeltaLatitude().degrees();
+	double widthUV = tileSector.getDeltaLongitude().degrees() / _bbox.getDeltaLongitude().degrees();
+	double heightUV = tileSector.getDeltaLatitude().degrees() / _bbox.getDeltaLatitude().degrees();
   
-	Vector2D p = _bbox.getUVCoordinates(imageSector.lower().latitude(), imageSector.lower().longitude());
+	Vector2D p = _bbox.getUVCoordinates(tileSector.lower().latitude(), tileSector.lower().longitude());
 	Vector2D pos = new Vector2D(p.x(), p.y() - heightUV);
   
 	Rectangle r = new Rectangle(pos.x() * _image.getWidth(), pos.y() * _image.getHeight(), widthUV * _image.getWidth(), heightUV * _image.getHeight());
@@ -101,7 +110,7 @@ public class StaticImageLayer extends Layer
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isAvailable(const RenderContext* rc, const Tile& tile)const
+//ORIGINAL LINE: boolean isAvailable(const RenderContext* rc, const Tile* tile)const
   public final boolean isAvailable(RenderContext rc, Tile tile)
   {
 	return true;
@@ -112,6 +121,13 @@ public class StaticImageLayer extends Layer
   public final boolean isTransparent()
   {
 	return true;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: URL getFeatureURL(const Geodetic2D& g, const IFactory* factory, const Sector& sector, int width, int height) const
+  public final URL getFeatureURL(Geodetic2D g, IFactory factory, Sector sector, int width, int height)
+  {
+	return URL.null(_);
   }
 
 }
