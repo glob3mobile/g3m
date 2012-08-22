@@ -35,7 +35,13 @@ public:
                                              const Tile* tile,
                                              int width, int height) const;
   
-  void onTerrainTouchEvent(const Geodetic3D& g3d, const Tile* tile) const;
+  void onTerrainTouchEvent(const EventContext* ec,
+                           const Geodetic3D& g3d,
+                           const Tile* tile) const;
+  
+  int size() const {
+    return _layers.size();
+  }
   
 };
 

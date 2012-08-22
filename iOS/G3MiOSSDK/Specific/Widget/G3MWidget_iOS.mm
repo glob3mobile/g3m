@@ -62,45 +62,6 @@
 @property(nonatomic, getter=isAnimating) BOOL animating;
 @end
 
-class OceanTerrainTouchEventListener: public TerrainTouchEventListener, IDownloadListener{
-  IFactory*    const _factory;
-  IDownloader* const _downloader;
-public:
-  
-  OceanTerrainTouchEventListener(IFactory* f, IDownloader* d):_factory(f), _downloader(d){}
-  
-  void onTerrainTouchEvent(const TerrainTouchEvent& event){
-    //      printf("POINT %f, %f", event._g2d.latitude().degrees(), event._g2d.longitude().degrees());
-    URL url = event._layer->getFeatureURL(event._g2d, _factory, event._sector, 256, 256);
-    //      printf("%s\n", url.getPath().c_str());
-    
-    _downloader->request(url, 999999999, this, false);
-  }
-  
-  void onDownload(const Response* response) {
-    std::string s = (char*) response->getByteBuffer()->getData();
-    //printf("%s\n", s.c_str());
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"FEATURE"
-                                                    message:[NSString stringWithCString:s.c_str()
-                                                                               encoding:NSUTF8StringEncoding]
-                                                   delegate:nil
-                                          cancelButtonTitle:@"OK"
-                                          otherButtonTitles:nil];
-    [alert show];
-  }
-  
-  void onError(const Response* response) {
-    printf("Error in request\n");
-  }
-  
-  void onCanceledDownload(const Response* response) {
-  }
-  
-  void onCancel(const URL* url) {
-    printf("Cancel in request\n");
-  }
-};
 
 
 @implementation G3MWidget_iOS
@@ -119,289 +80,79 @@ public:
   return [CAEAGLLayer class];
 }
 
-
-class CRISOBoundsRenderer : public Renderer {
-private:
-  const int            _resolution;
-  std::vector<Sector*> _sectors;
-  std::vector<Mesh*>   _meshes;
-  
-  
-  
-  static void addVertex(const Planet* planet,
-                        std::vector<MutableVector3D>* vertices,
-                        const Geodetic3D& g) {
-    vertices->push_back( planet->toVector3D(g).asMutableVector3D() );
-  }
-  
-  void cleanMeshes() {
-    for (int i = 0; i < _meshes.size(); i++) {
-      Mesh* mesh = _meshes[i];
-      delete mesh;
-    }
-    _meshes.clear();
-  }
-  
-  void cleanSectors() {
-    for (int i = 0; i < _sectors.size(); i++) {
-      Sector* sector = _sectors[i];
-      delete sector;
-    }
-    _sectors.clear();
-  }
-  
-  Mesh* createMesh(const RenderContext* rc,
-                   const Sector* sector) const
-  {
-    const Planet* planet = rc->getPlanet();
-    
-    // create vectors
-    std::vector<MutableVector3D> vertices;
-    std::vector<MutableVector2D> texCoords;
-    std::vector<int> indices;
-    const int resolutionMinus1 = _resolution - 1;
-    int posS = 0;
-    
-    // compute offset for vertices
-    //    const Vector3D sw = planet->toVector3D(sector->getSW());
-    //    const Vector3D nw = planet->toVector3D(sector->getNW());
-    //    const double offset = nw.sub(sw).length(); // * 1e-3;
-    const double offset = 5000;
-    
-    // west side
-    for (int j = 0; j < resolutionMinus1; j++) {
-      const Geodetic3D g(sector->getInnerPoint(0, (double)j/resolutionMinus1), offset);
-      addVertex(planet, &vertices, g);
-      indices.push_back(posS++);
-    }
-    
-    // south side
-    for (int i = 0; i < resolutionMinus1; i++) {
-      const Geodetic3D g(sector->getInnerPoint((double)i/resolutionMinus1, 1), offset);
-      addVertex(planet, &vertices, g);
-      indices.push_back(posS++);
-    }
-    
-    // east side
-    for (int j = resolutionMinus1; j > 0; j--) {
-      const Geodetic3D g(sector->getInnerPoint(1, (double)j/resolutionMinus1), offset);
-      addVertex(planet, &vertices, g);
-      indices.push_back(posS++);
-    }
-    
-    // north side
-    for (int i = resolutionMinus1; i > 0; i--) {
-      const Geodetic3D g(sector->getInnerPoint((double)i/resolutionMinus1, 0), offset);
-      addVertex(planet, &vertices, g);
-      indices.push_back(posS++);
-    }
-    
-    const Color *color = new Color(Color::fromRGBA((float) 1.0, (float) 0.0, (float) 0, (float) 1.0));
-    const Vector3D center = planet->toVector3D(sector->getCenter());
-    
-    return IndexedMesh::createFromVector3D(vertices, LineLoop, GivenCenter, center, indices, color);
-  }
-  
-  
-public:
-  CRISOBoundsRenderer(const std::vector<Sector*>& sectors,
-                      int resolution) :
-  _sectors(sectors),
-  _resolution(resolution)
-  {
-    //    for (int i = 0; i < sectors.size(); i++) {
-    //      _sectors.push_back(sectors[i]);
-    //    }
-  }
-  void initialize(const InitializationContext* ic) { }
-  
-  bool isReadyToRender(const RenderContext* rc) {
-    return true;
-  }
-  
-  bool onTouchEvent(const EventContext* ec,
-                    const TouchEvent* touchEvent) {
-    return false;
-  }
-  
-  void onResizeViewportEvent(const EventContext* ec,
-                             int width, int height) {
-    
-  }
-  
-  void start() {
-    
-  }
-  
-  void stop() {
-    
-  }
-  
-  virtual ~CRISOBoundsRenderer() {
-    cleanSectors();
-    cleanMeshes();
-  };
-  
-  int render(const RenderContext* rc) {
-    if (_meshes.size() != _sectors.size()) {
-      cleanMeshes();
-      
-      for (int i = 0; i < _sectors.size(); i++) {
-        Sector* sector = _sectors[i];
-        
-        _meshes.push_back(createMesh(rc, sector));
-      }
-      
-      //      cleanSectors();
-    }
-    
-    for (int i = 0; i < _meshes.size(); i++) {
-      Mesh* mesh = _meshes[i];
-      mesh->render(rc);
-    }
-    
-    return MAX_TIME_TO_RENDER;
-  }
-  
-};
-
-
-- (void) initWidgetCSIRO
+- (void) initWidgetWithLayerSet: (LayerSet*) layerSet
+              cameraConstraints: (std::vector<ICameraConstrainer *>) cameraConstraints
+                      renderers: (std::vector<Renderer*>) renderers
+                       userData: (UserData*) userData
 {
+  CameraRenderer *cameraRenderer = new CameraRenderer();
+  
+  const bool useInertia = true;
+  cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
+  
+  const bool processRotation = true;
+  const bool processZoom = true;
+  cameraRenderer->addHandler(new CameraDoubleDragHandler(processRotation,
+                                                         processZoom));
+  cameraRenderer->addHandler(new CameraRotationHandler());
+  cameraRenderer->addHandler(new CameraDoubleTapHandler());
+  
+  
+  [self initWidgetWithCameraRenderer: cameraRenderer
+                            layerSet: layerSet
+                   cameraConstraints: cameraConstraints
+                           renderers: renderers
+                            userData: userData];
+}
+
+- (void) initWidgetWithCameraRenderer: (CameraRenderer*) cameraRenderer
+                             layerSet: (LayerSet*) layerSet
+                    cameraConstraints: (std::vector<ICameraConstrainer *>) cameraConstraints
+                            renderers: (std::vector<Renderer*>) renderers
+                             userData: (UserData*) userData
+{
+  int __diego_at_work;
+  
   // create GLOB3M WIDGET
   int width = (int) [self frame].size.width;
   int height = (int) [self frame].size.height;
   
-  IFactory *factory = new Factory_iOS();
-  ILogger *logger = new Logger_iOS(ErrorLevel);
-  
-  
-  
-  NativeGL2_iOS * nGL = new NativeGL2_iOS();
+  IFactory *factory  = new Factory_iOS();
+  ILogger *logger    = new Logger_iOS(ErrorLevel);
+  NativeGL2_iOS* nGL = new NativeGL2_iOS();
   GL* gl  = new GL(nGL);
-  
-  // composite renderer is the father of the rest of renderers
-  CompositeRenderer* comp = new CompositeRenderer();
-  
-  // camera renderer and handlers
-  CameraRenderer *cameraRenderer;
-  cameraRenderer = new CameraRenderer();
-  const bool useInertia = false;
-  cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
-  const bool processRotation = false;
-  const bool processZoom = true;
-  cameraRenderer->addHandler(new CameraDoubleDragHandler(processRotation,
-                                                         processZoom));
-  //  cameraRenderer->addHandler(new CameraRotationHandler());
-  //  cameraRenderer->addHandler(new CameraDoubleTapHandler());
-  comp->addRenderer(cameraRenderer);
   
   IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
   IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
                                                  storage);
   
-  {
-    //LAYERS
-    LayerSet* layerSet = new LayerSet();
-    //  WMSLayer* baseLayer = new WMSLayer("bmng200405",
-    //                                     "http://www.nasa.network.com/wms?",
-    //                                     WMS_1_1_0,
-    //                                     "image/jpeg",
-    //                                     Sector::fullSphere(),
-    //                                     "EPSG:4326",
-    //                                     "",
-    //                                     false,
-    //                                     Angle::nan(),
-    //                                     Angle::nan());
-    //  layerSet->addLayer(baseLayer);
-    
-    WMSLayer *osm = new WMSLayer("osm",
-                                 "osm",
-                                 "http://wms.latlon.org/",
-                                 WMS_1_1_0,
-                                 "image/jpeg",
-                                 Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
-                                 "EPSG:4326",
-                                 "",
-                                 false,
-                                 Angle::nan(),
-                                 Angle::nan());
-    layerSet->addLayer(osm);
-    
-    WMSLayer *oceans = new WMSLayer(//"igo:bmng200401,igo:sttOZ,igo:cntOZ",
-                                    "igo:sttOZ,igo:cntOZ",
-                                    "igo:sttOZ",
-                                    "http://igosoftware.dyndns.org:8081/geoserver/igo/wms",
-                                    WMS_1_3_0,
-                                    "image/png",
-                                    Sector::fullSphere(),
-                                    "EPSG:4326",
-                                    "",
-                                    true,
-                                    Angle::nan(),
-                                    Angle::nan());
-    
-    oceans->addTerrainTouchEventListener(new OceanTerrainTouchEventListener(factory, downloader));
-    
-    layerSet->addLayer(oceans);
-    
-    const bool renderDebug = false;
-    TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug);
-    
-    TileTexturizer* texturizer = new MultiLayerTileTexturizer(layerSet);
-    
-    const bool showStatistics = false;
-    TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
-                                        texturizer,
-                                        parameters,
-                                        showStatistics);
-    comp->addRenderer(tr);
+  CompositeRenderer* composite = new CompositeRenderer();
+  
+  composite->addRenderer(cameraRenderer);
+  
+  if (layerSet != NULL) {
+    if (layerSet->size() > 0) {
+      const bool renderDebug = false;
+      TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug);
+      
+      TileTexturizer* texturizer = new MultiLayerTileTexturizer(layerSet);
+      
+      const bool showStatistics = false;
+      TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
+                                          texturizer,
+                                          parameters,
+                                          showStatistics);
+      composite->addRenderer(tr);
+    }
   }
   
-  //STATIC IMAGE FOR TESTING AUSTRALIA
-  //  IImage *image = factory->createImageFromFileName("20120720_cintp1.png");
-  //  StaticImageLayer * imageLayer = new StaticImageLayer("SIL",
-  //                                                       image,
-  //                                                       Sector::fromDegrees(-60, 50, 10, 185),
-  //                                                       fss);
-  //  layerSet->addLayer(imageLayer);
-  
-  
-  if (false) {
-    //  all LL || UR
-    //
-    //  -38/150 || -27/160
-    //  -27/145 || -14/154
-    
-    //  -38/130 || -29/140
-    //  -37/110 || -25/115
-    //  -22/110 || -10/120
-    
-    std::vector<Sector*> sectors;
-    
-    int ___rendering_sectors_dgd_at_work;
-    sectors.push_back(new Sector(Geodetic2D::fromDegrees(-38, 150),
-                                 Geodetic2D::fromDegrees(-27, 160)));
-    
-    sectors.push_back(new Sector(Geodetic2D::fromDegrees(-27, 145),
-                                 Geodetic2D::fromDegrees(-14, 154)));
-    
-    sectors.push_back(new Sector(Geodetic2D::fromDegrees(-38, 130),
-                                 Geodetic2D::fromDegrees(-29, 140)));
-    
-    sectors.push_back(new Sector(Geodetic2D::fromDegrees(-37, 110),
-                                 Geodetic2D::fromDegrees(-25, 115)));
-    
-    sectors.push_back(new Sector(Geodetic2D::fromDegrees(-22, 110),
-                                 Geodetic2D::fromDegrees(-10, 120)));
-    
-    
-    const int resolution = 12;
-    comp->addRenderer(new CRISOBoundsRenderer(sectors, resolution));
+  for (int i = 0; i < renderers.size(); i++) {
+    composite->addRenderer(renderers[i]);
   }
   
-  TextureBuilder* texBuilder = new CPUTextureBuilder();
-  TexturesHandler* texturesHandler = new TexturesHandler(gl, factory, texBuilder, false);
+  
+  TextureBuilder* textureBuilder = new CPUTextureBuilder();
+  TexturesHandler* texturesHandler = new TexturesHandler(gl, factory, textureBuilder, false);
   
   const Planet* planet = Planet::createEarth();
   
@@ -409,54 +160,7 @@ public:
   
   EffectsScheduler* scheduler = new EffectsScheduler();
   
-  std::vector <ICameraConstrainer *> cameraConstraint;
-  
-  class CSIROCameraConstrainer : public ICameraConstrainer {
-  public:
-    bool acceptsCamera(const Camera* camera,
-                       const Planet *planet) const {
-      
-      
-      Geodetic3D cameraPosition = planet->toGeodetic3D(camera->getPosition());
-      
-      
-      const double lowerHeight = 1.67384e+06 * 0.9;
-      const double upperHeight = 2.39243e+06 * 1.15;
-      
-      if ((cameraPosition.height() < lowerHeight) ||
-          (cameraPosition.height() > upperHeight)) {
-        return false;
-      }
-      
-      Geodetic3D centerOfView = camera->getGeodeticCenterOfView();
-      int __checkCameraPositionOnCurrentSector__TODO;
-      
-      //      //  printf("Camera Position=%s\n" ,
-      //      //         _planet->toGeodetic3D(_currentCamera->getPosition()).description().c_str());
-      //
-      //      const double distance = camera->getPosition().length();
-      //      const double radii    = planet->getRadii().maxAxis();
-      //      if (distance > radii*10) {
-      //        // printf ("--- camera constraint!\n");
-      //        return false;
-      //      }
-      
-      return true;
-    }
-  };
-  
-  cameraConstraint.push_back(new CSIROCameraConstrainer());
-  
   FrameTasksExecutor* frameTasksExecutor = new FrameTasksExecutor();
-  
-  int __PUT_contraints;
-  //    [self gotoPosition: Geodetic3D::fromDegrees(-32.5232, 154.818, 2.02496e+06)];
-  //    [self gotoPosition: Geodetic3D::fromDegrees(-20.4393, 149.518, 2.39243e+06)];
-  //    [self gotoPosition: Geodetic3D::fromDegrees(-33.4738, 134.91, 1.67384e+06)];
-  //    [self gotoPosition: Geodetic3D::fromDegrees(-30.9246, 112.307, 2.20362e+06)];
-  //    [self gotoPosition: Geodetic3D::fromDegrees(-15.9925, 114.829, 2.19699e+06)];
-  
-  
   
   _widgetVP = G3MWidget::create(frameTasksExecutor,
                                 factory,
@@ -465,8 +169,8 @@ public:
                                 texturesHandler,
                                 downloader,
                                 planet,
-                                cameraConstraint,
-                                comp,
+                                cameraConstraints,
+                                composite,
                                 busyRenderer,
                                 scheduler,
                                 width, height,
@@ -474,10 +178,9 @@ public:
                                 true,
                                 false);
   
-  //  const Geodetic3D australia = Geodetic3D::fromDegrees(-26.91, 133.94, 1.1e7);
-  [self widget]->getNextCamera()->setPosition(Geodetic3D::fromDegrees(-32.5232, 154.818, 2.02496e+06));
-  
+  [self widget]->setUserData(userData);
 }
+
 
 - (void) initWidgetDemo
 {

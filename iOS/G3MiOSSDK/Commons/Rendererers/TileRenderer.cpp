@@ -187,18 +187,19 @@ int TileRenderer::render(const RenderContext* rc) {
 }
 
 
-bool TileRenderer::onTouchEvent(const EventContext* ec, const TouchEvent* touchEvent) {
+bool TileRenderer::onTouchEvent(const EventContext* ec,
+                                const TouchEvent* touchEvent) {
   
   if (touchEvent->getType() == LongPress){
     
     if (_lastCamera != NULL){
-      Vector2D pixel = touchEvent->getTouch(0)->getPos();
-      Vector3D ray = _lastCamera->pixel2Ray(pixel);
-      Vector3D origin = _lastCamera->getPosition();
+      const Vector2D pixel = touchEvent->getTouch(0)->getPos();
+      const Vector3D ray = _lastCamera->pixel2Ray(pixel);
+      const Vector3D origin = _lastCamera->getPosition();
       
       for(int i = 0; i < _topLevelTiles.size(); i++){
         
-        Geodetic3D g = _topLevelTiles[i]->intersection(origin, ray, ec->getPlanet());
+        Geodetic3D g = _topLevelTiles[i]->intersection(origin, ray, ec);
         if (!g.isNan()){
           printf("G: %f, %f, %f\n", g.latitude().degrees(), g.longitude().degrees(), g.height());
         }

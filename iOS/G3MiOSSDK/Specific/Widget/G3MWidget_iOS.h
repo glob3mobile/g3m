@@ -15,6 +15,12 @@
 
 @class ES2Renderer;
 
+class CameraRenderer;
+class LayerSet;
+class ICameraConstrainer;
+class Renderer;
+class UserData;
+
 class G3MWidget;
 
 // opengl versions value
@@ -48,11 +54,20 @@ enum GL_version {
 
 - (void)stopAnimation;
 
-- (void)drawView:(id)sender;
+- (void)drawView: (id)sender;
 
-- (void) initWidgetCSIRO;
+- (void)initWidgetDemo;
 
-- (void) initWidgetDemo;
+- (void)initWidgetWithLayerSet: (LayerSet*) layerSet
+             cameraConstraints: (std::vector<ICameraConstrainer *>) cameraConstraints
+                     renderers: (std::vector<Renderer*>) renderers
+                      userData: (UserData*) userData;
+
+- (void)initWidgetWithCameraRenderer: (CameraRenderer*) cameraRenderer
+                            layerSet: (LayerSet*) layerSet
+                   cameraConstraints: (std::vector<ICameraConstrainer *>) cameraConstraints
+                           renderers: (std::vector<Renderer*>) renderers
+                            userData: (UserData*) userData;
 
 - (G3MWidget*) widget;
 

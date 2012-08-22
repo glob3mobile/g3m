@@ -57,7 +57,8 @@ _downloader(downloader),
 _rendererReady(false), // false until first call to G3MWidget::render()
 _selectedRenderer(NULL),
 _renderStatisticsTimer(NULL),
-_logDownloaderStatistics(logDownloaderStatistics)
+_logDownloaderStatistics(logDownloaderStatistics),
+_userData(NULL)
 {
   initializeGL();
   
@@ -121,7 +122,11 @@ void G3MWidget::initializeGL() {
 #endif
 }
 
-G3MWidget::~G3MWidget() { 
+G3MWidget::~G3MWidget() {
+  if (_userData != NULL) {
+    delete _userData;
+  }
+
   delete _factory;
   delete _logger;
   delete _gl;
@@ -133,7 +138,10 @@ G3MWidget::~G3MWidget() {
   delete _nextCamera;
   delete _texturesHandler;
   delete _timer;
-  delete _downloader;
+  if (_downloader != NULL) {
+    _downloader->stop();
+    delete _downloader;
+  }
   
   for (unsigned int n=0; n<_cameraConstraint.size(); n++) {
     delete _cameraConstraint[n];

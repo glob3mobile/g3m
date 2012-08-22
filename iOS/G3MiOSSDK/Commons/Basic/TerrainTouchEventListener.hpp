@@ -28,7 +28,8 @@ public:
 
 class TerrainTouchEventListener{
 public:
-  virtual void onTerrainTouchEvent(const TerrainTouchEvent& event) = 0;
+  virtual void onTerrainTouchEvent(const EventContext* ec,
+                                   const TerrainTouchEvent& event) = 0;
   
   virtual ~TerrainTouchEventListener(){}
   

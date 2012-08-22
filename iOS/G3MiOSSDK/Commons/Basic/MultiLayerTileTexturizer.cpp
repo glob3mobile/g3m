@@ -747,6 +747,8 @@ bool MultiLayerTileTexturizer::isReady(const RenderContext *rc) {
   return isReady;
 }
 
-void MultiLayerTileTexturizer::onTerrainTouchEvent(const Geodetic3D& g3d, const Tile* tile){
-  _layerSet->onTerrainTouchEvent(g3d, tile);
+void MultiLayerTileTexturizer::onTerrainTouchEvent(const EventContext* ec,
+                                                   const Geodetic3D& g3d,
+                                                   const Tile* tile){
+  _layerSet->onTerrainTouchEvent(ec, g3d, tile);
 }

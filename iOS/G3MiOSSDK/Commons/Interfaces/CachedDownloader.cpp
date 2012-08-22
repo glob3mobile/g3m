@@ -83,6 +83,10 @@ void CachedDownloader::start() {
   _downloader->start();
 }
 
+void CachedDownloader::stop() {
+  _downloader->stop();
+}
+
 void CachedDownloader::cancelRequest(long requestId) {
   _downloader->cancelRequest(requestId);
 }

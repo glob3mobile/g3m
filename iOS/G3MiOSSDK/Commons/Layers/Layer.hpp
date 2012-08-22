@@ -20,7 +20,7 @@
 class Petition;
 class Tile;
 
-class Layer{
+class Layer {
 private:
   
   std::vector<TerrainTouchEventListener*> _listeners;
@@ -53,11 +53,12 @@ public:
     _listeners.push_back(listener);
   }
   
-  void onTerrainTouchEventListener(TerrainTouchEvent& tte) const {
+  void onTerrainTouchEventListener(const EventContext* ec,
+                                   TerrainTouchEvent& tte) const {
     for (int i = 0; i < _listeners.size(); i++) {
       TerrainTouchEventListener* listener = _listeners[i];
       if (listener != NULL) {
-        listener->onTerrainTouchEvent(tte);
+        listener->onTerrainTouchEvent(ec, tte);
       }
     }
   }

@@ -166,7 +166,9 @@ public:
     return _texturizerDirty;
   }
   
-  Geodetic3D intersection(const Vector3D& origin, const Vector3D& ray, const Planet* planet) const;
+  Geodetic3D intersection(const Vector3D& origin,
+                          const Vector3D& ray,
+                          const EventContext* ec) const;
 
   
   bool hasTexturizerData() const {

@@ -416,7 +416,9 @@ const TileKey Tile::getKey() const {
 
 Geodetic3D Tile::intersection(const Vector3D& origin,
                               const Vector3D& ray,
-                              const Planet* planet) const {
+                              const EventContext* ec) const {
+  const Planet* planet = ec->getPlanet();
+  
     //As our tiles are still flat our onPlanet vector is calculated directly from Planet
   std::vector<double> ts = planet->intersections(origin, ray);
   
@@ -428,7 +430,7 @@ Geodetic3D Tile::intersection(const Vector3D& origin,
       //If this tile is not a leaf
       if (_subtiles != NULL) {
         for (int i = 0; i < _subtiles->size(); i++) {
-          const Geodetic3D g3d = _subtiles->at(i)->intersection(origin, ray, planet);
+          const Geodetic3D g3d = _subtiles->at(i)->intersection(origin, ray, ec);
           if (!g3d.isNan()) {
             return g3d;
           }
@@ -436,7 +438,7 @@ Geodetic3D Tile::intersection(const Vector3D& origin,
       }
       else {
         //printf("TOUCH TILE %d\n", _level);
-        _texturizer->onTerrainTouchEvent(g, this);
+        _texturizer->onTerrainTouchEvent(ec, g, this);
         return g;
       }
     }

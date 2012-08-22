@@ -30,6 +30,26 @@ class EffectsScheduler;
 class ICameraConstrainer;
 class FrameTasksExecutor;
 
+class G3MWidget;
+
+class UserData {
+private:
+  G3MWidget* _widget;
+  
+public:
+  virtual ~UserData() {
+    
+  }
+  
+  void setWidget(G3MWidget* widget) {
+    _widget = widget;
+  }
+
+  G3MWidget* getWidget() const {
+    return _widget;
+  }
+};
+
 
 class G3MWidget {
 public:
@@ -71,6 +91,17 @@ public:
     return _nextCamera;
   }
   
+  void setUserData(UserData* userData) {
+    if (_userData != NULL) {
+      delete _userData;
+    }
+    _userData = userData;
+    _userData->setWidget(this);
+  }
+  
+  UserData* getUserData() const {
+    return _userData;
+  }
   
 private:
   FrameTasksExecutor* _frameTasksExecutor;
@@ -102,6 +133,8 @@ private:
   
   ITimer* _renderStatisticsTimer;
   
+  UserData* _userData;
+  
   void initializeGL();
   
   G3MWidget(FrameTasksExecutor* frameTasksExecutor,
@@ -121,10 +154,10 @@ private:
             const bool          logFPS,
             const bool          logDownloaderStatistics);
   
-  void initializeDefault()
-  {
-    
-  }
+//  void initializeDefault()
+//  {
+//    
+//  }
   
 };
 
