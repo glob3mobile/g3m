@@ -56,7 +56,7 @@ public class Sector
 	  _upper = new Geodetic2D(upper);
 	  _deltaLatitude = new Angle(upper.latitude().sub(lower.latitude()));
 	  _deltaLongitude = new Angle(upper.longitude().sub(lower.longitude()));
-	  _center = new Geodetic2D(Angle.midAngle(_lower.latitude(), _upper.latitude()), Angle.midAngle(_lower.longitude(), _upper.longitude()));
+	  _center = new Geodetic2D(Angle.midAngle(lower.latitude(), upper.latitude()), Angle.midAngle(lower.longitude(), upper.longitude()));
   }
 
 
@@ -71,31 +71,29 @@ public class Sector
 
   public static Sector fromDegrees(double minLat, double minLon, double maxLat, double maxLon)
   {
-	Geodetic2D lower = new Geodetic2D(Angle.fromDegrees(minLat), Angle.fromDegrees(minLon));
-	Geodetic2D upper = new Geodetic2D(Angle.fromDegrees(maxLat), Angle.fromDegrees(maxLon));
-	Sector s = new Sector(lower, upper);
-	return s;
+	final Geodetic2D lower = new Geodetic2D(Angle.fromDegrees(minLat), Angle.fromDegrees(minLon));
+	final Geodetic2D upper = new Geodetic2D(Angle.fromDegrees(maxLat), Angle.fromDegrees(maxLon));
+
+	return new Sector(lower, upper);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Vector2D getScaleFactor(const Sector& s) const
-  public final Vector2D getScaleFactor(Sector s)
+//ORIGINAL LINE: Vector2D getScaleFactor(const Sector& that) const
+  public final Vector2D getScaleFactor(Sector that)
   {
-	double u = _deltaLatitude.div(s._deltaLatitude);
-	double v = _deltaLongitude.div(s._deltaLongitude);
-	Vector2D scale = new Vector2D(u,v);
-	return scale;
+	final double u = _deltaLatitude.div(that._deltaLatitude);
+	final double v = _deltaLongitude.div(that._deltaLongitude);
+	return new Vector2D(u, v);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Vector2D getTranslationFactor(const Sector& s) const
-  public final Vector2D getTranslationFactor(Sector s)
+//ORIGINAL LINE: Vector2D getTranslationFactor(const Sector& that) const
+  public final Vector2D getTranslationFactor(Sector that)
   {
-	double diff = _deltaLongitude.div(s._deltaLongitude);
-	Vector2D uv = s.getUVCoordinates(_lower);
+	final double diff = _deltaLongitude.div(that._deltaLongitude);
+	final Vector2D uv = that.getUVCoordinates(_lower);
 
-	Vector2D trans = new Vector2D(uv.x(), uv.y()- diff);
-	return trans;
+	return new Vector2D(uv.x(), uv.y() - diff);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -176,49 +174,49 @@ public class Sector
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Angle getDeltaLatitude() const
+//ORIGINAL LINE: const Angle getDeltaLatitude() const
   public final Angle getDeltaLatitude()
   {
 	return _deltaLatitude;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Angle getDeltaLongitude() const
+//ORIGINAL LINE: const Angle getDeltaLongitude() const
   public final Angle getDeltaLongitude()
   {
 	return _deltaLongitude;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Geodetic2D getSW() const
+//ORIGINAL LINE: const Geodetic2D getSW() const
   public final Geodetic2D getSW()
   {
 	return _lower;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Geodetic2D getNE() const
+//ORIGINAL LINE: const Geodetic2D getNE() const
   public final Geodetic2D getNE()
   {
 	return _upper;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Geodetic2D getNW() const
+//ORIGINAL LINE: const Geodetic2D getNW() const
   public final Geodetic2D getNW()
   {
 	return new Geodetic2D(_upper.latitude(), _lower.longitude());
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Geodetic2D getSE() const
+//ORIGINAL LINE: const Geodetic2D getSE() const
   public final Geodetic2D getSE()
   {
 	return new Geodetic2D(_lower.latitude(), _upper.longitude());
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Geodetic2D getCenter() const
+//ORIGINAL LINE: const Geodetic2D getCenter() const
   public final Geodetic2D getCenter()
   {
 	return _center;
@@ -230,16 +228,14 @@ public class Sector
   // (u,v) are similar to texture coordinates inside the Sector
   // (u,v)=(0,0) in NW point, and (1,1) in SE point
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Geodetic2D getInnerPoint(double u, double v) const
+//ORIGINAL LINE: const Geodetic2D getInnerPoint(double u, double v) const
   public final Geodetic2D getInnerPoint(double u, double v)
   {
-	final Angle lat = Angle.lerp(_lower.latitude(), _upper.latitude(), (float)(1-v));
-	final Angle lon = Angle.lerp(_lower.longitude(), _upper.longitude(), (float) u);
-	return new Geodetic2D(lat, lon);
+	return new Geodetic2D(Angle.lerp(_lower.latitude(), _upper.latitude(), (float)(1.0-v)), Angle.lerp(_lower.longitude(), _upper.longitude(), (float) u));
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Vector2D getUVCoordinates(const Geodetic2D& point) const
+//ORIGINAL LINE: const Vector2D getUVCoordinates(const Geodetic2D& point) const
   public final Vector2D getUVCoordinates(Geodetic2D point)
   {
 	return getUVCoordinates(point.latitude(), point.longitude());
@@ -254,6 +250,8 @@ public class Sector
 	return new Vector2D(u, v);
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isBackOriented(const RenderContext *rc) const
   public final boolean isBackOriented(RenderContext rc)
   {
 	Camera camera = rc.getNextCamera();
@@ -269,16 +267,16 @@ public class Sector
 	final double dot = normal.dot(view);
   
    /*
-	if (dot<0 && _upper.latitude().degrees()>89) {
-	  getClosestPoint(center);
-	  printf ("ehh\n");
-	}  */
+    if (dot<0 && _upper.latitude().degrees()>89) {
+      getClosestPoint(center);
+      printf ("ehh\n");
+    }  */
   
 	return (dot < 0) ? true : false;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Geodetic2D getClosestPoint(const Geodetic2D& pos) const
+//ORIGINAL LINE: const Geodetic2D getClosestPoint(const Geodetic2D& pos) const
   public final Geodetic2D getClosestPoint(Geodetic2D pos)
   {
 	// if pos is included, return pos
@@ -334,14 +332,27 @@ public class Sector
   
   
   /*
-	const Angle lat = pos.latitude().nearestAngleInInterval(_lower.latitude(), _upper.latitude());
-	const Angle lon = pos.longitude().nearestAngleInInterval(_lower.longitude(), _upper.longitude());
-	return Geodetic2D(lat, lon);*/
+    const Angle lat = pos.latitude().nearestAngleInInterval(_lower.latitude(), _upper.latitude());
+    const Angle lon = pos.longitude().nearestAngleInInterval(_lower.longitude(), _upper.longitude());
+    return Geodetic2D(lat, lon);*/
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Geodetic2D getApproximatedClosestPoint(const Geodetic2D& pos) const;
+//ORIGINAL LINE: const Geodetic2D getApproximatedClosestPoint(const Geodetic2D& pos) const;
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  Geodetic2D getApproximatedClosestPoint(Geodetic2D pos);
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const String description() const
+  public final String description()
+  {
+	std.ostringstream buffer = new std.ostringstream();
+	buffer << "(Sector ";
+	buffer << _lower.description();
+	buffer << " - ";
+	buffer << _upper.description();
+	buffer << ")";
+	return buffer.str();
+  }
 
 }

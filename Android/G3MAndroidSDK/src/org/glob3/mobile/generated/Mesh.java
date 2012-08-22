@@ -22,6 +22,7 @@ package org.glob3.mobile.generated;
 
 public abstract class Mesh
 {
+
   public void dispose()
   {
   }
@@ -29,6 +30,7 @@ public abstract class Mesh
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual int getVertexCount() const = 0;
   public abstract int getVertexCount();
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual const Vector3D getVertex(int i) const = 0;
   public abstract Vector3D getVertex(int i);
@@ -36,7 +38,9 @@ public abstract class Mesh
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual void render(const RenderContext* rc) const = 0;
   public abstract void render(RenderContext rc);
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual Extent *getExtent() const = 0;
+//ORIGINAL LINE: virtual Extent* getExtent() const = 0;
   public abstract Extent getExtent();
+
 }

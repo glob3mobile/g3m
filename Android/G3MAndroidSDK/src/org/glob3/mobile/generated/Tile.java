@@ -1,67 +1,8 @@
 package org.glob3.mobile.generated; 
-//
-//  Tile.cpp
-//  G3MiOSSDK
-//
-//  Created by Agustín Trujillo Pino on 12/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
-//
-
-//
-//  Tile.h
-//  G3MiOSSDK
-//
-//  Created by Agustín Trujillo Pino on 12/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
-//
-
-
-
-
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class RenderContext;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class Mesh;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class TileTessellator;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class TileTexturizer;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class TileParameters;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class ITimer;
-
-//class TileKey {
-//public:
-//  const int _level;
-//  const int _row;
-//  const int _column;
-//  
-//  TileKey(const int level,
-//          const int row,
-//          const int column) :
-//  _level(level),
-//  _row(row),
-//  _column(column)
-//  {
-//    
-//  }
-//  
-//  TileKey(const TileKey& that):
-//  _level(that._level),
-//  _row(that._row),
-//  _column(that._column)
-//  {
-//    
-//  }
-//  
-//};
-
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class TilesStatistics;
-
 public class Tile
 {
+  private TileTexturizer _texturizer;
+
   private final Sector _sector ;
   private final int _level;
   private final int _row;
@@ -78,51 +19,57 @@ public class Tile
   private ITimer _texturizerTimer;
 
   private boolean _justCreatedSubtiles;
+  private boolean _texturizerDirty;
 
-
-  private Mesh getTessellatorMesh(RenderContext rc, TileTessellator tessellator)
+  private Mesh getTessellatorMesh(RenderContext rc, TileRenderContext trc)
   {
 	if (_tessellatorMesh == null)
 	{
-	  _tessellatorMesh = tessellator.createMesh(rc, this);
+	  _tessellatorMesh = trc.getTessellator().createMesh(rc, this);
 	}
 	return _tessellatorMesh;
   }
 
-  private Mesh getDebugMesh(RenderContext rc, TileTessellator tessellator)
+  private Mesh getDebugMesh(RenderContext rc, TileRenderContext trc)
   {
 	if (_debugMesh == null)
 	{
-	  _debugMesh = tessellator.createDebugMesh(rc, this);
+	  _debugMesh = trc.getTessellator().createDebugMesh(rc, this);
 	}
 	return _debugMesh;
   }
 
-  private boolean isVisible(RenderContext rc, TileTessellator tessellator)
+  private boolean isVisible(RenderContext rc, TileRenderContext trc)
   {
+	// test if sector is back oriented with respect to the camera
+	//  if (_sector.isBackOriented(rc)) {
+	//    return false;
+	//  }
   
-	/* // test if sector is back oriented with respect to the camera
-	if (_sector.isBackOriented(rc)) {
-		return false;
-	  }*/
-  
-	return getTessellatorMesh(rc, tessellator).getExtent().touches(rc.getNextCamera().getFrustumInModelCoordinates());
-	//return getTessellatorMesh(rc, tessellator)->getExtent()->touches(rc->getNextCamera()->getHalfFrustuminModelCoordinates());
+	Extent extent = getTessellatorMesh(rc, trc).getExtent();
+	if (extent == null)
+	{
+	  return false;
+	}
+	return extent.touches(rc.getNextCamera().getFrustumInModelCoordinates());
   }
 
-  private boolean meetsRenderCriteria(RenderContext rc, TileTessellator tessellator, TileTexturizer texturizer, TileParameters parameters, ITimer lastSplitTimer, TilesStatistics statistics)
+  private boolean meetsRenderCriteria(RenderContext rc, TileRenderContext trc)
   {
+	final TilesRenderParameters parameters = trc.getParameters();
+  
 	if (_level >= parameters._maxLevel)
 	{
 	  return true;
 	}
   
-  //  if (timer != NULL) {
-  //    if ( timer->elapsedTime().milliseconds() > 50 ) {
-  //      return true;
-  //    }
-  //  }
+	//  if (timer != NULL) {
+	//    if ( timer->elapsedTime().milliseconds() > 50 ) {
+	//      return true;
+	//    }
+	//  }
   
+	TileTexturizer texturizer = trc.getTexturizer();
 	if (texturizer != null)
 	{
 	  if (texturizer.tileMeetsRenderCriteria(this))
@@ -131,14 +78,18 @@ public class Tile
 	  }
 	}
   
-  
-  //  int projectedSize = getTessellatorMesh(rc, tessellator)->getExtent()->squaredProjectedArea(rc);
-  //  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
-  //    return true;
-  //  }
-	final Vector2D extent = getTessellatorMesh(rc, tessellator).getExtent().projectedExtent(rc);
+	Extent extent = getTessellatorMesh(rc, trc).getExtent();
+	if (extent == null)
+	{
+	  return true;
+	}
+	//  const double projectedSize = extent->squaredProjectedArea(rc);
+	//  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
+	//    return true;
+	//  }
+	final Vector2D ex = extent.projectedExtent(rc);
 	//const double t = extent.maxAxis() * 2;
-	final double t = (extent.x() + extent.y());
+	final double t = (ex.x() + ex.y());
 	if (t <= ((parameters._tileTextureWidth + parameters._tileTextureHeight) * 1.75))
 	{
 	  return true;
@@ -146,18 +97,21 @@ public class Tile
   
   
 	int __TODO_tune_render_budget;
-	if (_subtiles == null) // the tile needs to create the subtiles
+	if (trc.getParameters()._useTilesSplitBudget)
 	{
-	  if (statistics.getSplitsCountInFrame() > 1)
+	  if (_subtiles == null) // the tile needs to create the subtiles
 	  {
-		// there are not more splitsCount-budget to spend
-		return true;
-	  }
+		if (trc.getStatistics().getSplitsCountInFrame() > 1)
+		{
+		  // there are not more splitsCount-budget to spend
+		  return true;
+		}
   
-	  if (lastSplitTimer.elapsedTime().milliseconds() < 50)
-	  {
-		// there are not more time-budget to spend
-		return true;
+		if (trc.getLastSplitTimer().elapsedTime().milliseconds() < 25)
+		{
+		  // there are not more time-budget to spend
+		  return true;
+		}
 	  }
 	}
   
@@ -186,10 +140,12 @@ public class Tile
 	return subTiles;
   }
 
-  private void rawRender(RenderContext rc, TileTessellator tessellator, TileTexturizer texturizer, ITimer lastTexturizerTimer)
+  private void rawRender(RenderContext rc, TileRenderContext trc)
   {
   
-	Mesh tessellatorMesh = getTessellatorMesh(rc, tessellator);
+	Mesh tessellatorMesh = getTessellatorMesh(rc, trc);
+  
+	TileTexturizer texturizer = trc.getTexturizer();
   
 	if (tessellatorMesh != null)
 	{
@@ -200,18 +156,32 @@ public class Tile
 	  else
 	  {
   
-		final boolean needsToCallTexturizer = (!isTextureSolved() || (_texturizerMesh == null));
+		final boolean needsToCallTexturizer = (!isTextureSolved() || (_texturizerMesh == null)) && isTexturizerDirty();
   
 		if (needsToCallTexturizer)
 		{
 		  int __TODO_tune_render_budget;
   
-		  boolean callTexturizer = ((_texturizerTimer == null) || (_texturizerTimer.elapsedTime().milliseconds() > 125 && lastTexturizerTimer.elapsedTime().milliseconds() > 50));
+		  //                               (_texturizerTimer->elapsedTime().milliseconds() > 125 &&
+		  //        const bool callTexturizer = ((_texturizerTimer == NULL) ||
+		  //                               (_texturizerTimer->elapsedTime().milliseconds() > 125 &&
+		  //                                lastTexturizerTimer->elapsedTime().milliseconds() > 50));
+		  //        const bool callTexturizer = ((_texturizerTimer == NULL) ||
+		  //                                     (_texturizerTimer->elapsedTime().milliseconds() > 100 &&
+		  //                                      lastTexturizerTimer->elapsedTime().milliseconds() > 10));
+		  //        const bool callTexturizer = ((_texturizerTimer == NULL) ||
+		  //                                     (_texturizerTimer->elapsedTime().milliseconds() > 100));
+  //        const bool callTexturizer = ((_texturizerTimer == NULL) ||
+  //                                     (_texturizerTimer->elapsedTime().milliseconds() > 50)) && isTexturizerDirty();
+  
+				  final boolean callTexturizer = true;
+  //        const bool callTexturizer = (trc->getLastTexturizerTimer()->elapsedTime().milliseconds() > 10);
+  //        const bool callTexturizer = (trc->getLastTexturizerTimer()->elapsedTime().milliseconds() > 10);
   
 		  if (callTexturizer)
 		  {
-			_texturizerMesh = texturizer.texturize(rc, this, tessellator, tessellatorMesh, _texturizerMesh);
-			lastTexturizerTimer.start();
+			_texturizerMesh = texturizer.texturize(rc, trc, this, tessellatorMesh, _texturizerMesh);
+			//trc->getLastTexturizerTimer()->start();
   
 			if (_texturizerTimer == null)
 			{
@@ -222,7 +192,6 @@ public class Tile
 			  _texturizerTimer.start();
 			}
 		  }
-  
 		}
   
 		if ((_texturizerTimer != null) && isTextureSolved())
@@ -245,27 +214,9 @@ public class Tile
   
   }
 
-  private void cleanTexturizerMesh()
+  private void debugRender(RenderContext rc, TileRenderContext trc)
   {
-	int __DIEGO_AT_WORK;
-  
-  
-  //  if (_texturizerMesh != NULL) {
-  //    delete _texturizerMesh;
-  //    _texturizerMesh = NULL;
-  //  }
-  //
-  //  setTextureSolved(false);
-  //
-  //  if (_texturizerTimer != NULL) {
-  //    delete _texturizerTimer;
-  //    _texturizerTimer = NULL;
-  //  }
-  }
-
-  private void debugRender(RenderContext rc, TileTessellator tessellator)
-  {
-	Mesh debugMesh = getDebugMesh(rc, tessellator);
+	Mesh debugMesh = getDebugMesh(rc, trc);
 	if (debugMesh != null)
 	{
 	  debugMesh.render(rc);
@@ -274,7 +225,7 @@ public class Tile
 
   private Tile createSubTile(Angle lowerLat, Angle lowerLon, Angle upperLat, Angle upperLon, int level, int row, int column)
   {
-	return new Tile(this, new Sector(new Geodetic2D(lowerLat, lowerLon), new Geodetic2D(upperLat, upperLon)), level, row, column);
+	return new Tile(_texturizer, this, new Sector(new Geodetic2D(lowerLat, lowerLon), new Geodetic2D(upperLat, upperLon)), level, row, column);
   }
 
 
@@ -288,20 +239,26 @@ public class Tile
 	return _subtiles;
   }
 
-  private void prune(TileTexturizer texturizer)
+  private void prune(TileRenderContext trc)
   {
 	if (_subtiles != null)
 	{
+  
+  //    printf("= pruned tile %s\n", getKey().description().c_str());
+  
+	  TileTexturizer texturizer = (trc == null) ? null : trc.getTexturizer();
   
 	  final int subtilesSize = _subtiles.size();
 	  for (int i = 0; i < subtilesSize; i++)
 	  {
 		Tile subtile = _subtiles.get(i);
   
-		subtile.prune(texturizer);
+		subtile.setIsVisible(false);
+  
+		subtile.prune(trc);
 		if (texturizer != null)
 		{
-		  texturizer.tileToBeDeleted(subtile);
+		  texturizer.tileToBeDeleted(subtile, subtile._texturizerMesh);
 		}
 		if (subtile != null)
 			subtile.dispose();
@@ -316,8 +273,80 @@ public class Tile
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  Tile(Tile that);
 
-  public Tile(Tile parent, Sector sector, int level, int row, int column)
+  private void ancestorTexturedSolvedChanged(Tile ancestor, boolean textureSolved)
   {
+	if (textureSolved && isTextureSolved())
+	{
+	  return;
+	}
+  
+	if (_texturizer != null)
+	{
+	  _texturizer.ancestorTexturedSolvedChanged(this, ancestor, textureSolved);
+	}
+  
+	if (_subtiles != null)
+	{
+	  final int subtilesSize = _subtiles.size();
+	  for (int i = 0; i < subtilesSize; i++)
+	  {
+		Tile subtile = _subtiles.get(i);
+		subtile.ancestorTexturedSolvedChanged(ancestor, textureSolved);
+	  }
+	}
+  }
+
+  private boolean _isVisible;
+  private void setIsVisible(boolean isVisible)
+  {
+  
+  
+	if (_isVisible != isVisible)
+	{
+	  _isVisible = isVisible;
+  
+	  if (_isVisible)
+	  {
+		//      visibleCounter++;
+		//      printf("**** Tile %s becomed Visible (visibles=%ld)\n",
+		//             getKey().description().c_str(),
+		//             visibleCounter);
+	  }
+	  else
+	  {
+		//      visibleCounter--;
+		//      printf("**** Tile %s becomed INVisible (visibles=%ld)\n",
+		//             getKey().description().c_str(),
+		//             visibleCounter);
+		deleteTexturizerMesh();
+	  }
+	}
+  }
+
+  private void deleteTexturizerMesh()
+  {
+	if ((_level > 0) && (_texturizerMesh != null))
+	{
+	  _texturizer.tileMeshToBeDeleted(this, _texturizerMesh);
+  
+	  if (_texturizerMesh != null)
+		  _texturizerMesh.dispose();
+	  _texturizerMesh = null;
+  
+	  if (_texturizerData != null)
+		  _texturizerData.dispose();
+	  _texturizerData = null;
+  
+	  setTexturizerDirty(true);
+	  setTextureSolved(false);
+	}
+  }
+
+  private ITexturizerData _texturizerData;
+
+  public Tile(TileTexturizer texturizer, Tile parent, Sector sector, int level, int row, int column)
+  {
+	  _texturizer = texturizer;
 	  _parent = parent;
 	  _sector = new Sector(sector);
 	  _level = level;
@@ -327,14 +356,32 @@ public class Tile
 	  _debugMesh = null;
 	  _texturizerMesh = null;
 	  _textureSolved = false;
+	  _texturizerDirty = true;
 	  _subtiles = null;
 	  _justCreatedSubtiles = false;
 	  _texturizerTimer = null;
+	  _isVisible = false;
+	  _texturizerData = null;
   }
 
+
+  //static long visibleCounter = 0;
+  
   public void dispose()
   {
+	if (_isVisible)
+	{
+	  deleteTexturizerMesh();
+	}
+  
 	prune(null);
+  
+	//  if (_isVisible) {
+	//    visibleCounter--;
+	//    printf("**** Tile %s is DESTROYED (visibles=%ld)\n",
+	//           getKey().description().c_str(),
+	//           visibleCounter);
+	//  }
   
 	if (_texturizerTimer != null)
 	{
@@ -354,6 +401,13 @@ public class Tile
 		  _tessellatorMesh.dispose();
 	}
   
+	if (_texturizerData != null)
+	{
+	  if (_texturizerData != null)
+		  _texturizerData.dispose();
+	  _texturizerData = null;
+	}
+  
 	if (_texturizerMesh != null)
 	{
 	  if (_texturizerMesh != null)
@@ -363,7 +417,7 @@ public class Tile
 
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Sector getSector() const
+//ORIGINAL LINE: const Sector getSector() const
   public final Sector getSector()
   {
 	return _sector;
@@ -397,9 +451,85 @@ public class Tile
 	return _texturizerMesh;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Tile* getParent() const
+  public final Tile getParent()
+  {
+	return _parent;
+  }
+
+  public final void render(RenderContext rc, TileRenderContext trc, java.util.LinkedList<Tile> toVisitInNextIteration)
+  {
+	TilesStatistics statistics = trc.getStatistics();
+  
+	statistics.computeTileProcessed(this);
+	if (isVisible(rc, trc))
+	{
+	  setIsVisible(true);
+  
+	  statistics.computeVisibleTile(this);
+  
+	  if ((toVisitInNextIteration == null) || meetsRenderCriteria(rc, trc))
+	  {
+		rawRender(rc, trc);
+		if (trc.getParameters()._renderDebug)
+		{
+		  debugRender(rc, trc);
+		}
+  
+		statistics.computeTileRendered(this);
+  
+		prune(trc);
+	  }
+	  else
+	  {
+		java.util.ArrayList<Tile> subTiles = getSubTiles();
+		if (_justCreatedSubtiles)
+		{
+		  trc.getLastSplitTimer().start();
+		  statistics.computeSplitInFrame();
+		  _justCreatedSubtiles = false;
+		}
+  
+		final int subTilesSize = subTiles.size();
+		for (int i = 0; i < subTilesSize; i++)
+		{
+		  Tile subTile = subTiles.get(i);
+		  toVisitInNextIteration.addLast(subTile);
+		}
+	  }
+	}
+	else
+	{
+	  setIsVisible(false);
+  
+	  prune(trc);
+	}
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const TileKey getKey() const
+  public final TileKey getKey()
+  {
+	return new TileKey(_level, _row, _column);
+  }
+
   public final void setTextureSolved(boolean textureSolved)
   {
-	_textureSolved = textureSolved;
+	if (textureSolved != _textureSolved)
+	{
+	  _textureSolved = textureSolved;
+  
+	  if (_subtiles != null)
+	  {
+		final int subtilesSize = _subtiles.size();
+		for (int i = 0; i < subtilesSize; i++)
+		{
+		  Tile subtile = _subtiles.get(i);
+		  subtile.ancestorTexturedSolvedChanged(this, _textureSolved);
+		}
+	  }
+	}
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -409,58 +539,79 @@ public class Tile
 	return _textureSolved;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Tile* getParent() const
-  public final Tile getParent()
+  public final void setTexturizerDirty(boolean texturizerDirty)
   {
-	return _parent;
+	_texturizerDirty = texturizerDirty;
   }
 
-  public final void render(RenderContext rc, TileTessellator tessellator, TileTexturizer texturizer, TileParameters parameters, TilesStatistics statistics, java.util.LinkedList<Tile> toVisitInNextIteration, ITimer lastSplitTimer, ITimer lastTexturizerTimer)
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isTexturizerDirty() const
+  public final boolean isTexturizerDirty()
   {
-	statistics.computeTileProcessed(this);
+	return _texturizerDirty;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Geodetic3D intersection(const Vector3D& origin, const Vector3D& ray, const Planet* planet) const
+  public final Geodetic3D intersection(Vector3D origin, Vector3D ray, Planet planet)
+  {
+	  //As our tiles are still flat our onPlanet vector is calculated directly from Planet
+	java.util.ArrayList<Double> ts = planet.intersections(origin, ray);
   
-	if (isVisible(rc, tessellator))
+	if (ts.size() > 0)
 	{
-	  statistics.computeVisibleTile(this);
+	  final Vector3D onPlanet = origin.add(ray.times(ts.get(0)));
+	  final Geodetic3D g = planet.toGeodetic3D(onPlanet);
   
-	  if (meetsRenderCriteria(rc, tessellator, texturizer, parameters, lastSplitTimer, statistics))
+	  if (_sector.contains(g))
 	  {
-		rawRender(rc, tessellator, texturizer, lastTexturizerTimer);
-		if (parameters._renderDebug)
+		//If this tile is not a leaf
+		if (_subtiles != null)
 		{
-		  debugRender(rc, tessellator);
+		  for (int i = 0; i < _subtiles.size(); i++)
+		  {
+			final Geodetic3D g3d = _subtiles.get(i).intersection(origin, ray, planet);
+			if (!g3d.isNan())
+			{
+			  return g3d;
+			}
+		  }
 		}
-  
-		statistics.computeTileRendered(this);
-  
-		prune(texturizer);
-	  }
-	  else
-	  {
-		cleanTexturizerMesh();
-  
-		java.util.ArrayList<Tile> subTiles = getSubTiles();
-		if (_justCreatedSubtiles)
+		else
 		{
-		  lastSplitTimer.start();
-		  statistics.computeSplit();
-		  _justCreatedSubtiles = false;
-		}
-  
-		final int subTilesSize = subTiles.size();
-		for (int i = 0; i < subTilesSize; i++)
-		{
-		  Tile subTile = subTiles.get(i);
-		  // subTile->render(rc, tessellator, texturizer, parameters, statistics, toVisitInNextIteration, timer);
-		  toVisitInNextIteration.addLast(subTile);
+		  //printf("TOUCH TILE %d\n", _level);
+		  _texturizer.onTerrainTouchEvent(g, this);
+		  return g;
 		}
 	  }
 	}
-	else
+  
+	return Geodetic3D.nan();
+  }
+
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean hasTexturizerData() const
+  public final boolean hasTexturizerData()
+  {
+	return (_texturizerData != null);
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: ITexturizerData* getTexturizerData() const
+  public final ITexturizerData getTexturizerData()
+  {
+	return _texturizerData;
+  }
+
+  public final void setTexturizerData(ITexturizerData texturizerData)
+  {
+	if (_texturizerData != null)
 	{
-	  prune(texturizer);
+	  if (_texturizerData != null)
+		  _texturizerData.dispose();
 	}
+	_texturizerData = texturizerData;
   }
 
 }

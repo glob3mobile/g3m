@@ -23,8 +23,8 @@ public class SingleImageTileTexturizer extends TileTexturizer
 {
 
   private RenderContext _renderContext;
-  private final TileParameters _parameters;
-  private int _texID;
+  private final TilesRenderParameters _parameters;
+  private GLTextureID _texID = new GLTextureID();
   private final IImage _image;
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -51,39 +51,39 @@ public class SingleImageTileTexturizer extends TileTexturizer
   }
 
 
-  public SingleImageTileTexturizer(TileParameters par, IImage image)
+  public SingleImageTileTexturizer(TilesRenderParameters parameters, IImage image)
   {
-	  _texID = -1;
+	  _texID = new GLTextureID(-1);
 	  _image = image;
-	  _parameters = par;
+	  _parameters = parameters;
 	  _renderContext = null;
   }
 
   public void dispose()
   {
-	if (_texID > -1)
+	if (_texID.isValid())
 	{
 	  if (_renderContext != null)
 	  {
-		_renderContext.getTexturesHandler().takeTexture(_texID);
+		_renderContext.getTexturesHandler().releaseGLTextureId(_texID);
 	  }
 	}
   }
 
-  public final void initialize(InitializationContext ic)
+  public final void initialize(InitializationContext ic, TilesRenderParameters parameters)
   {
 
   }
 
-  public final Mesh texturize(RenderContext rc, Tile tile, TileTessellator tessellator, Mesh mesh, Mesh previousMesh)
+  public final Mesh texturize(RenderContext rc, TileRenderContext trc, Tile tile, Mesh mesh, Mesh previousMesh)
   {
 	_renderContext = rc; //SAVING CONTEXT
   
-	if (_texID < 0)
+	if (!_texID.isValid())
 	{
-	  _texID = rc.getTexturesHandler().getTextureId(_image, "SINGLE_IMAGE_TEX", _image.getWidth(), _image.getHeight());
+	  _texID = rc.getTexturesHandler().getGLTextureId(_image, new TextureSpec("SINGLE_IMAGE_TEX", _image.getWidth(), _image.getHeight()));
   
-	  if (_texID < 0)
+	  if (!_texID.isValid())
 	  {
 		rc.getLogger().logError("Can't upload texture to GPU");
 		return null;
@@ -92,18 +92,18 @@ public class SingleImageTileTexturizer extends TileTexturizer
 	  rc.getFactory().deleteImage(_image);
 	}
   
-	TextureMapping texMap = new TextureMapping(_texID, createTextureCoordinates(rc, mesh), rc.getTexturesHandler(), "SINGLE_IMAGE_TEX", _image.getWidth(), _image.getHeight());
-  
+	TextureMapping texMap = new SimpleTextureMapping(_texID, createTextureCoordinates(rc, mesh));
 	if (previousMesh != null)
 		if (previousMesh != null)
 			previousMesh.dispose();
   
 	tile.setTextureSolved(true);
+	tile.setTexturizerDirty(false);
   
 	return new TexturedMesh(mesh, false, texMap, true);
   }
 
-  public final void tileToBeDeleted(Tile tile)
+  public final void tileToBeDeleted(Tile tile, Mesh mesh)
   {
   
   }
@@ -113,7 +113,7 @@ public class SingleImageTileTexturizer extends TileTexturizer
 	return false;
   }
 
-  public final void justCreatedTopTile(Tile tile)
+  public final void justCreatedTopTile(RenderContext rc, Tile tile)
   {
   
   }
@@ -121,6 +121,21 @@ public class SingleImageTileTexturizer extends TileTexturizer
   public final boolean isReady(RenderContext rc)
   {
 	return true;
+  }
+
+  public final void ancestorTexturedSolvedChanged(Tile tile, Tile ancestorTile, boolean textureSolved)
+  {
+  
+  }
+
+  public final void onTerrainTouchEvent(Geodetic3D g3d, Tile tile)
+  {
+  }
+
+
+  public final void tileMeshToBeDeleted(Tile tile, Mesh mesh)
+  {
+  
   }
 
 }

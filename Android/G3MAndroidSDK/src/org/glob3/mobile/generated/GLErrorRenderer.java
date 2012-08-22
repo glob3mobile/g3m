@@ -59,4 +59,14 @@ public class GLErrorRenderer extends Renderer
 	return true;
   }
 
+  public final void start()
+  {
+
+  }
+
+  public final void stop()
+  {
+
+  }
+
 }

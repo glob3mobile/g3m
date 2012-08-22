@@ -100,4 +100,21 @@ public class CompositeRenderer extends Renderer
 	  renderer.initialize(_ic);
 	}
   }
+
+  public final void start()
+  {
+	for (int i = 0; i < _renderers.size(); i++)
+	{
+	  _renderers.get(i).start();
+	}
+  }
+
+  public final void stop()
+  {
+	for (int i = 0; i < _renderers.size(); i++)
+	{
+	  _renderers.get(i).stop();
+	}
+  }
+
 }

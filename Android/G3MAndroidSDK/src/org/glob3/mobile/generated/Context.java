@@ -28,8 +28,6 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IDownloader;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class Downloader;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class ILogger;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class GL;
@@ -44,18 +42,16 @@ public class Context
   protected final IFactory _factory;
   protected ILogger _logger;
   protected Planet _planet;
-  protected final IDownloader _downloader;
-  protected final Downloader _downloaderOLD;
-  protected EffectsScheduler _scheduler;
+  protected IDownloader _downloader;
+  protected EffectsScheduler _effectsScheduler;
 
-  protected Context(IFactory factory, ILogger logger, Planet planet, Downloader downloaderOLD, IDownloader downloader, EffectsScheduler scheduler)
+  protected Context(IFactory factory, ILogger logger, Planet planet, IDownloader downloader, EffectsScheduler effectsScheduler)
   {
 	  _factory = factory;
 	  _logger = logger;
 	  _planet = planet;
 	  _downloader = downloader;
-	  _downloaderOLD = downloaderOLD;
-	  _scheduler = scheduler;
+	  _effectsScheduler = effectsScheduler;
   }
 
 
@@ -81,14 +77,7 @@ public class Context
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Downloader* const getDownloaderOLD() const
-  public final Downloader getDownloaderOLD()
-  {
-	return _downloaderOLD;
-  }
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const IDownloader* getDownloader() const
+//ORIGINAL LINE: IDownloader* getDownloader() const
   public final IDownloader getDownloader()
   {
 	return _downloader;
@@ -98,6 +87,6 @@ public class Context
 //ORIGINAL LINE: EffectsScheduler* getEffectsScheduler() const
   public final EffectsScheduler getEffectsScheduler()
   {
-	return _scheduler;
+	return _effectsScheduler;
   }
 }

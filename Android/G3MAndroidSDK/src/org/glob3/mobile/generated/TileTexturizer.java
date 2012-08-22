@@ -26,6 +26,15 @@ package org.glob3.mobile.generated;
 //class TileTessellator;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class InitializationContext;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class TilesRenderParameters;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class TileRenderContext;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class Geodetic3D;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IDownloadListener;
+
 
 public abstract class TileTexturizer
 {
@@ -35,15 +44,20 @@ public abstract class TileTexturizer
 
   public abstract boolean isReady(RenderContext rc);
 
-  public abstract void initialize(InitializationContext ic);
+  public abstract void initialize(InitializationContext ic, TilesRenderParameters parameters);
 
-  public abstract Mesh texturize(RenderContext rc, Tile tile, TileTessellator tessellator, Mesh tessellatorMesh, Mesh previousMesh);
+  public abstract Mesh texturize(RenderContext rc, TileRenderContext trc, Tile tile, Mesh tessellatorMesh, Mesh previousMesh);
 
-  public abstract void tileToBeDeleted(Tile tile);
+  public abstract void tileToBeDeleted(Tile tile, Mesh mesh);
+
+  public abstract void tileMeshToBeDeleted(Tile tile, Mesh mesh);
 
   public abstract boolean tileMeetsRenderCriteria(Tile tile);
 
-  public abstract void justCreatedTopTile(Tile tile);
+  public abstract void justCreatedTopTile(RenderContext rc, Tile tile);
 
+  public abstract void ancestorTexturedSolvedChanged(Tile tile, Tile ancestorTile, boolean textureSolved);
+
+  public abstract void onTerrainTouchEvent(Geodetic3D g3d, Tile tile);
 
 }

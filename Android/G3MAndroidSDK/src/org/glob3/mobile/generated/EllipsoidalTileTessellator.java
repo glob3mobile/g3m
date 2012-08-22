@@ -45,7 +45,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
 	  java.util.ArrayList<MutableVector3D> vertices = new java.util.ArrayList<MutableVector3D>();
 	  java.util.ArrayList<MutableVector2D> texCoords = new java.util.ArrayList<MutableVector2D>();
 	  java.util.ArrayList<Integer> indices = new java.util.ArrayList<Integer>();
-	  int resol_1 = _resolution - 1;
+	  final int resolutionMinus1 = _resolution - 1;
 	  int posS = 0;
     
 	  // compute offset for vertices
@@ -54,41 +54,41 @@ public class EllipsoidalTileTessellator extends TileTessellator
 	  final double offset = nw.sub(sw).length() * 1e-3;
     
 	  // west side
-	  for (int j = 0; j<resol_1; j++)
+	  for (int j = 0; j < resolutionMinus1; j++)
 	  {
-		final Geodetic3D g = new Geodetic3D(sector.getInnerPoint(0.0, (double)j/resol_1), offset);
+		final Geodetic3D g = new Geodetic3D(sector.getInnerPoint(0, (double)j/resolutionMinus1), offset);
 		addVertex(planet, vertices, g);
 		indices.add(posS++);
 	  }
     
 	  // south side
-	  for (int i = 0; i<resol_1; i++)
+	  for (int i = 0; i < resolutionMinus1; i++)
 	  {
-		final Geodetic3D g = new Geodetic3D(sector.getInnerPoint((double)i/resol_1, 1.0), offset);
+		final Geodetic3D g = new Geodetic3D(sector.getInnerPoint((double)i/resolutionMinus1, 1), offset);
 		addVertex(planet, vertices, g);
 		indices.add(posS++);
 	  }
     
 	  // east side
-	  for (int j = resol_1; j>0; j--)
+	  for (int j = resolutionMinus1; j > 0; j--)
 	  {
-		final Geodetic3D g = new Geodetic3D(sector.getInnerPoint(1.0, (double)j/resol_1), offset);
+		final Geodetic3D g = new Geodetic3D(sector.getInnerPoint(1, (double)j/resolutionMinus1), offset);
 		addVertex(planet, vertices, g);
 		indices.add(posS++);
 	  }
     
 	  // north side
-	  for (int i = resol_1; i>0; i--)
+	  for (int i = resolutionMinus1; i > 0; i--)
 	  {
-		final Geodetic3D g = new Geodetic3D(sector.getInnerPoint((double)i/resol_1, 0.0), offset);
+		final Geodetic3D g = new Geodetic3D(sector.getInnerPoint((double)i/resolutionMinus1, 0), offset);
 		addVertex(planet, vertices, g);
 		indices.add(posS++);
 	  }
     
-	  final Color color = new Color(Color.fromRGBA((float) 1.0, (float) 0.0, (float) 0.0, (float) 1.0));
+	  final Color color = new Color(Color.fromRGBA((float) 1.0, (float) 0, (float) 0, (float) 1.0));
 	  final Vector3D center = planet.toVector3D(sector.getCenter());
     
-	  return IndexedMesh.CreateFromVector3D(vertices, GLPrimitive.LineLoop, CenterStrategy.GivenCenter, center, indices, color);
+	  return IndexedMesh.createFromVector3D(vertices, GLPrimitive.LineLoop, CenterStrategy.GivenCenter, center, indices, color);
 	}
 
   public EllipsoidalTileTessellator(int resolution, boolean skirted)
@@ -110,31 +110,41 @@ public class EllipsoidalTileTessellator extends TileTessellator
 	final Sector sector = tile.getSector();
 	final Planet planet = rc.getPlanet();
   
+	/*
+	 very crude draft of a posible latitude-based dynamic resolution to avoid the
+	 oversampling in the poles. (dgd)
+	 */
+	//int resolution = _resolution * tile->getSector().getCenter().latitude().sinus();
+	//if (resolution < 0) {
+	//  resolution *= -1;
+	//}
+	final int resolution = _resolution;
+	final int resolutionMinus1 = resolution - 1;
+  
 	// create vertices coordinates
 	java.util.ArrayList<MutableVector3D> vertices = new java.util.ArrayList<MutableVector3D>();
-	int resol_1 = _resolution - 1;
-	for (int j = 0; j<_resolution; j++)
+	for (int j = 0; j < resolution; j++)
 	{
-	  for (int i = 0; i<_resolution; i++)
+	  for (int i = 0; i < resolution; i++)
 	  {
-		addVertex(planet, vertices, sector.getInnerPoint((double)i/resol_1, (double)j/resol_1));
+		addVertex(planet, vertices, sector.getInnerPoint((double) i / resolutionMinus1, (double) j / resolutionMinus1));
 	  }
 	}
   
 	// create indices
 	java.util.ArrayList<Integer> indices = new java.util.ArrayList<Integer>();
-	for (int j = 0; j<resol_1; j++)
+	for (int j = 0; j < resolutionMinus1; j++)
 	{
 	  if (j > 0)
 	  {
-		indices.add(j *_resolution);
+		indices.add(j *resolution);
 	  }
-	  for (int i = 0; i < _resolution; i++)
+	  for (int i = 0; i < resolution; i++)
 	  {
-		indices.add(j *_resolution + i);
-		indices.add(j *_resolution + i + _resolution);
+		indices.add(j *resolution + i);
+		indices.add(j *resolution + i + resolution);
 	  }
-	  indices.add(j *_resolution + 2 *_resolution - 1);
+	  indices.add(j *resolution + 2 *resolutionMinus1);
 	}
   
 	// create skirts
@@ -147,39 +157,39 @@ public class EllipsoidalTileTessellator extends TileTessellator
 	  final double skirtHeight = nw.sub(sw).length() * 0.05;
   
 	  indices.add(0);
-	  int posS = _resolution * _resolution;
+	  int posS = resolution * resolution;
   
 	  // west side
-	  for (int j = 0; j<resol_1; j++)
+	  for (int j = 0; j < resolutionMinus1; j++)
 	  {
-		final Geodetic3D g = new Geodetic3D(sector.getInnerPoint(0.0, (double)j/resol_1), -skirtHeight);
+		final Geodetic3D g = new Geodetic3D(sector.getInnerPoint(0, (double)j/resolutionMinus1), -skirtHeight);
 		addVertex(planet, vertices, g);
-		indices.add(j *_resolution);
+		indices.add(j *resolution);
 		indices.add(posS++);
 	  }
   
 	  // south side
-	  for (int i = 0; i<resol_1; i++)
+	  for (int i = 0; i < resolutionMinus1; i++)
 	  {
-		final Geodetic3D g = new Geodetic3D(sector.getInnerPoint((double)i/resol_1, 1.0), -skirtHeight);
+		final Geodetic3D g = new Geodetic3D(sector.getInnerPoint((double)i/resolutionMinus1, 1), -skirtHeight);
 		addVertex(planet, vertices, g);
-		indices.add(resol_1 *_resolution + i);
+		indices.add(resolutionMinus1 *resolution + i);
 		indices.add(posS++);
 	  }
   
 	  // east side
-	  for (int j = resol_1; j>0; j--)
+	  for (int j = resolutionMinus1; j > 0; j--)
 	  {
-		final Geodetic3D g = new Geodetic3D(sector.getInnerPoint(1.0, (double)j/resol_1), -skirtHeight);
+		final Geodetic3D g = new Geodetic3D(sector.getInnerPoint(1, (double)j/resolutionMinus1), -skirtHeight);
 		addVertex(planet, vertices, g);
-		indices.add(j *_resolution + resol_1);
+		indices.add(j *resolution + resolutionMinus1);
 		indices.add(posS++);
 	  }
   
 	  // north side
-	  for (int i = resol_1; i>0; i--)
+	  for (int i = resolutionMinus1; i > 0; i--)
 	  {
-		final Geodetic3D g = new Geodetic3D(sector.getInnerPoint((double)i/resol_1, 0.0), -skirtHeight);
+		final Geodetic3D g = new Geodetic3D(sector.getInnerPoint((double)i/resolutionMinus1, 0), -skirtHeight);
 		addVertex(planet, vertices, g);
 		indices.add(i);
 		indices.add(posS++);
@@ -187,18 +197,18 @@ public class EllipsoidalTileTessellator extends TileTessellator
   
 	  // last triangles
 	  indices.add(0);
-	  indices.add(_resolution *_resolution);
+	  indices.add(resolution *resolution);
 	}
   
 	final Color color = new Color(Color.fromRGBA((float) 0.1, (float) 0.1, (float) 0.1, (float) 1.0));
 	final Vector3D center = planet.toVector3D(sector.getCenter());
   
-	return IndexedMesh.CreateFromVector3D(vertices, GLPrimitive.TriangleStrip, CenterStrategy.GivenCenter, center, indices, color);
+	return IndexedMesh.createFromVector3D(vertices, GLPrimitive.TriangleStrip, CenterStrategy.GivenCenter, center, indices, color);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isReadyToRender(const RenderContext *rc) const
-  public final boolean isReadyToRender(RenderContext rc)
+//ORIGINAL LINE: boolean isReady(const RenderContext *rc) const
+  public final boolean isReady(RenderContext rc)
   {
 	return true;
   }
@@ -210,26 +220,27 @@ public class EllipsoidalTileTessellator extends TileTessellator
   
 	java.util.ArrayList<MutableVector2D> textCoords = new java.util.ArrayList<MutableVector2D>();
   
-	final int n = _resolution;
+	final int resolution = _resolution;
+	final int resolutionMinus1 = resolution - 1;
   
-	float[] u = new float[n *n];
-	float[] v = new float[n *n];
+	float[] u = new float[resolution * resolution];
+	float[] v = new float[resolution * resolution];
   
-	for (int j = 0; j<n; j++)
+	for (int j = 0; j < resolution; j++)
 	{
-	  for (int i = 0; i<n; i++)
+	  for (int i = 0; i < resolution; i++)
 	  {
-		int pos = j *n + i;
-		u[pos] = (float) i / (n-1);
-		v[pos] = (float) j / (n-1);
+		final int pos = j *resolution + i;
+		u[pos] = (float) i / resolutionMinus1;
+		v[pos] = (float) j / resolutionMinus1;
 	  }
 	}
   
-	for (int j = 0; j<n; j++)
+	for (int j = 0; j < resolution; j++)
 	{
-	  for (int i = 0; i<n; i++)
+	  for (int i = 0; i < resolution; i++)
 	  {
-		int pos = j *n + i;
+		final int pos = j *resolution + i;
 		textCoords.add(new MutableVector2D(u[pos], v[pos]));
 	  }
 	}
@@ -238,30 +249,30 @@ public class EllipsoidalTileTessellator extends TileTessellator
 	if (_skirted)
 	{
 	  // west side
-	  for (int j = 0; j<n-1; j++)
+	  for (int j = 0; j < resolutionMinus1; j++)
 	  {
-		int pos = j *n;
+		final int pos = j *resolution;
 		textCoords.add(new MutableVector2D(u[pos], v[pos]));
 	  }
   
 	  // south side
-	  for (int i = 0; i<n-1; i++)
+	  for (int i = 0; i < resolutionMinus1; i++)
 	  {
-		int pos = (n-1)*n + i;
+		final int pos = resolutionMinus1 * resolution + i;
 		textCoords.add(new MutableVector2D(u[pos], v[pos]));
 	  }
   
 	  // east side
-	  for (int j = n-1; j>0; j--)
+	  for (int j = resolutionMinus1; j > 0; j--)
 	  {
-		int pos = j *n + n - 1;
+		final int pos = j *resolution + resolutionMinus1;
 		textCoords.add(new MutableVector2D(u[pos], v[pos]));
 	  }
   
 	  // north side
-	  for (int i = n-1; i>0; i--)
+	  for (int i = resolutionMinus1; i > 0; i--)
 	  {
-		int pos = i;
+		final int pos = i;
 		textCoords.add(new MutableVector2D(u[pos], v[pos]));
 	  }
 	}

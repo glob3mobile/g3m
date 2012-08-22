@@ -17,11 +17,16 @@ package org.glob3.mobile.generated;
 
 
 
+
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IDownloadListener;
+
+
 public abstract class IDownloader
 {
   public abstract void start();
 
-  public abstract int request(Url url, int priority, IDownloadListener listener);
+  public abstract int request(URL url, int priority, IDownloadListener listener, boolean deleteListener);
 
   public abstract void cancelRequest(int requestId);
 
@@ -29,4 +34,7 @@ public abstract class IDownloader
   {
 
   }
+
+  public abstract String statistics();
+
 }

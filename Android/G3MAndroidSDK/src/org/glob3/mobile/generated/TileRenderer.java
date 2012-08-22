@@ -3,14 +3,15 @@ public class TileRenderer extends Renderer
 {
   private final TileTessellator _tessellator;
   private TileTexturizer _texturizer;
-  private final TileParameters _parameters;
+  private final TilesRenderParameters _parameters;
   private final boolean _showStatistics;
   private boolean _topTilesJustCreated;
+  private final Camera _lastCamera;
 
   private java.util.ArrayList<Tile> _topLevelTiles = new java.util.ArrayList<Tile>();
 
   private ITimer _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
-  private ITimer _lastTexturizerTimer; // timer to start every time the texturizer is called
+//  ITimer* _lastTexturizerTimer; // timer to start every time the texturizer is called
 
   private void clearTopLevelTiles()
   {
@@ -46,7 +47,7 @@ public class TileRenderer extends Renderer
 		final Geodetic2D tileUpper = new Geodetic2D(tileLatTo, tileLonTo);
 		final Sector sector = new Sector(tileLower, tileUpper);
   
-		Tile tile = new Tile(null, sector, _parameters._topLevel, row, col);
+		Tile tile = new Tile(_texturizer, null, sector, _parameters._topLevel, row, col);
 		_topLevelTiles.add(tile);
 	  }
 	}
@@ -57,7 +58,6 @@ public class TileRenderer extends Renderer
   }
 
   private TilesStatistics _lastStatistics = new TilesStatistics();
-
 
 
 	private static class DistanceToCenterTileComparison implements java.util.Comparator<Tile> {
@@ -94,7 +94,8 @@ public class TileRenderer extends Renderer
   //bool isTile1ClosestToCameraThanTile2(Tile *t1, Tile *t2) const;
 
 
-  public TileRenderer(TileTessellator tessellator, TileTexturizer texturizer, TileParameters parameters, boolean showStatistics)
+  public TileRenderer(TileTessellator tessellator, TileTexturizer texturizer, TilesRenderParameters parameters, boolean showStatistics)
+//  _lastTexturizerTimer(NULL),
   {
 	  _tessellator = tessellator;
 	  _texturizer = texturizer;
@@ -103,7 +104,8 @@ public class TileRenderer extends Renderer
 	  _lastStatistics = new TilesStatistics();
 	  _topTilesJustCreated = false;
 	  _lastSplitTimer = null;
-	  _lastTexturizerTimer = null;
+	  _lastCamera = null;
+	  _firstRender = false;
 
   }
 
@@ -118,62 +120,76 @@ public class TileRenderer extends Renderer
 	clearTopLevelTiles();
 	createTopLevelTiles(ic);
   
+	if (_lastSplitTimer != null)
+	{
+	  if (_lastSplitTimer != null)
+		  _lastSplitTimer.dispose();
+	}
 	_lastSplitTimer = ic.getFactory().createTimer();
-	_lastTexturizerTimer = ic.getFactory().createTimer();
   
-	_texturizer.initialize(ic);
+  //  if (_lastTexturizerTimer != NULL) {
+  //    delete _lastTexturizerTimer;
+  //  }
+  //  _lastTexturizerTimer = ic->getFactory()->createTimer();
+  
+	_texturizer.initialize(ic, _parameters);
+  
   }
 
   public final int render(RenderContext rc)
   {
 	TilesStatistics statistics = new TilesStatistics();
+	//Saving camera for Long Press Event
+	_lastCamera = rc.getCurrentCamera();
   
-	final int topLevelTilesSize = _topLevelTiles.size();
+	TileRenderContext trc = new TileRenderContext(_tessellator, _texturizer, _parameters, statistics, _lastSplitTimer, _firstRender); // if first render, force full render
+  //                        _lastTexturizerTimer,
   
-  
-	DistanceToCenterTileComparison predicate = new DistanceToCenterTileComparison(rc.getCurrentCamera(), rc.getPlanet());
-  
-	if (_topTilesJustCreated)
+	if (_firstRender)
 	{
+	  // force one render of the topLevel tiles to make the (toplevel) textures loaded as they
+	  // will be used as last-change fallback texture for any tile.
+	  _firstRender = false;
   
-  	java.util.Collections.sort(_topLevelTiles, predicate);
-  
-	  if (_texturizer != null)
+	  for (int i = 0; i < _topLevelTiles.size(); i++)
 	  {
-		for (int i = 0; i < topLevelTilesSize; i++)
+		Tile tile = _topLevelTiles.get(i);
+		tile.render(rc, trc, null);
+	  }
+	}
+	else
+	{
+	  java.util.LinkedList<Tile> toVisit = new java.util.LinkedList<Tile>();
+	  for (int i = 0; i < _topLevelTiles.size(); i++)
+	  {
+		toVisit.addLast(_topLevelTiles.get(i));
+	  }
+  
+  //    DistanceToCenterTileComparison predicate = DistanceToCenterTileComparison(rc->getNextCamera(),
+  //                                                                              rc->getPlanet());
+  
+	  while (toVisit.size() > 0)
+	  {
+		java.util.LinkedList<Tile> toVisitInNextIteration = new java.util.LinkedList<Tile>();
+  
+		//    std::sort(toVisit.begin(),
+		//              toVisit.end(),
+		//              predicate);
+  
+  //      predicate.initialize();
+  //      toVisit.sort(predicate);
+  
+		for (java.util.Iterator<Tile> iter = toVisit.iterator(); iter.hasNext();)
 		{
-		  Tile tile = _topLevelTiles.get(i);
-		  _texturizer.justCreatedTopTile(tile);
+		  Tile tile = iter.next();
+  
+		  tile.render(rc, trc, toVisitInNextIteration);
 		}
+  
+		toVisit = toVisitInNextIteration;
+		//    toVisitInNextIteration.clear();
 	  }
-	  _topTilesJustCreated = false;
 	}
-  
-  //  std::vector<Tile*> toVisit(_topLevelTiles);
-	java.util.LinkedList<Tile> toVisit = new java.util.LinkedList<Tile>();
-  
-	for (int i = 0; i < _topLevelTiles.size(); i++)
-	{
-	  toVisit.addLast(_topLevelTiles.get(i));
-	}
-  
-	while (toVisit.size() > 0)
-	{
-	  java.util.LinkedList<Tile> toVisitInNextIteration = new java.util.LinkedList<Tile>();
-  
-  	  java.util.Collections.sort(toVisit, predicate);
-  
-	  for (java.util.Iterator<Tile > i = toVisit.iterator(); i.hasNext();)
-	  {
-		Tile tile = i.next();
-		tile.render(rc, _tessellator, _texturizer, _parameters, statistics, toVisitInNextIteration, _lastSplitTimer, _lastTexturizerTimer);
-  
-	  }
-  
-	  toVisit = toVisitInNextIteration;
-  //    toVisitInNextIteration.clear();
-	}
-  
   
 	if (_showStatistics)
 	{
@@ -183,12 +199,36 @@ public class TileRenderer extends Renderer
 		statistics.log(rc.getLogger());
 	  }
 	}
-  
 	return Renderer.maxTimeToRender;
   }
 
   public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
   {
+  
+	if (touchEvent.getType() == TouchEventType.LongPress)
+	{
+  
+	  if (_lastCamera != null)
+	  {
+		Vector2D pixel = touchEvent.getTouch(0).getPos();
+		Vector3D ray = _lastCamera.pixel2Ray(pixel);
+		Vector3D origin = _lastCamera.getPosition();
+  
+		for(int i = 0; i < _topLevelTiles.size(); i++)
+		{
+  
+		  Geodetic3D g = _topLevelTiles.get(i).intersection(origin, ray, ec.getPlanet());
+		  if (!g.isNan())
+		  {
+			System.out.printf("G: %f, %f, %f\n", g.latitude().degrees(), g.longitude().degrees(), g.height());
+		  }
+		}
+  
+	  }
+  
+	  return true;
+	}
+  
 	return false;
   }
 
@@ -199,9 +239,25 @@ public class TileRenderer extends Renderer
 
   public final boolean isReadyToRender(RenderContext rc)
   {
+	if (_topTilesJustCreated)
+	{
+  
+	  if (_texturizer != null)
+	  {
+		final int topLevelTilesSize = _topLevelTiles.size();
+		for (int i = 0; i < topLevelTilesSize; i++)
+		{
+		  Tile tile = _topLevelTiles.get(i);
+		  _texturizer.justCreatedTopTile(rc, tile);
+		}
+	  }
+	  _topTilesJustCreated = false;
+	}
+  
+  
 	if (_tessellator != null)
 	{
-	  if (!_tessellator.isReadyToRender(rc))
+	  if (!_tessellator.isReady(rc))
 	  {
 		return false;
 	  }
@@ -216,6 +272,17 @@ public class TileRenderer extends Renderer
 	}
   
 	return true;
+  }
+
+
+  public final void start()
+  {
+	_firstRender = true;
+  }
+
+  public final void stop()
+  {
+	_firstRender = false;
   }
 
 }

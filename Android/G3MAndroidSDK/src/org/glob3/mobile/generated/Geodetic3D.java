@@ -28,6 +28,18 @@ public class Geodetic3D
   private final double _height;
 
 
+  public static Geodetic3D nan()
+  {
+	return new Geodetic3D(Angle.nan(), Angle.nan(), 0);
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isNan() const
+  public final boolean isNan()
+  {
+	return _latitude.isNan() || _longitude.isNan();
+  }
+
   public static Geodetic3D zero()
   {
 	return new Geodetic3D(Angle.zero(), Angle.zero(), 0);

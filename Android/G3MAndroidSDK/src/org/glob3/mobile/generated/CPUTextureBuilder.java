@@ -20,14 +20,19 @@ package org.glob3.mobile.generated;
 public class CPUTextureBuilder extends TextureBuilder
 {
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: int createTextureFromImages(GL * gl, const java.util.ArrayList<const IImage*>& images, int width, int height) const
-  public final int createTextureFromImages(GL gl, java.util.ArrayList<IImage> images, int width, int height)
+//ORIGINAL LINE: const GLTextureID createTextureFromImages(GL * gl, const java.util.ArrayList<const IImage*> images, int width, int height) const
+  public final GLTextureID createTextureFromImages(GL gl, java.util.ArrayList<IImage> images, int width, int height)
   {
 	final int imagesSize = images.size();
   
 	if (imagesSize == 0)
 	{
-	  return -1;
+	  return GLTextureID.invalid();
+	}
+  
+	if (imagesSize == 1)
+	{
+	  return gl.uploadTexture(images.get(0), width, height);
 	}
   
 	IImage im = images.get(0);
@@ -44,7 +49,7 @@ public class CPUTextureBuilder extends TextureBuilder
 	  im = im2;
 	}
   
-	int texID = gl.uploadTexture(im, width, height);
+	final GLTextureID texID = gl.uploadTexture(im, width, height);
   
 	if (imagesSize > 1)
 	{
@@ -53,62 +58,60 @@ public class CPUTextureBuilder extends TextureBuilder
 	}
   
 	return texID;
-  
-  //  const int imagesSize = images.size();
-  //
-  //  if (imagesSize > 0) {
-  //    const IImage* im = images[0], *im2 = NULL;
-  //    for (int i = 1; i < imagesSize; i++) {
-  //      const IImage* imTrans = images[i];
-  //      im2 = im->combineWith(*imTrans, width, height);
-  //      if (i > 1) {
-  //        delete im;
-  //      }
-  //      im = im2;
-  //    }
-  //
-  //    int texID = gl->uploadTexture(im, width, height);
-  //
-  //    if (imagesSize > 1){
-  //      delete im;
-  //    }
-  //    return texID;
-  //  }
-  //  else {
-  //    return -1;
-  //  }
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: int createTextureFromImages(GL * gl, const IFactory* factory, const java.util.ArrayList<const IImage*>& vImages, const java.util.ArrayList<const Rectangle*>& vRectangles, int width, int height) const
-  public final int createTextureFromImages(GL gl, IFactory factory, java.util.ArrayList<IImage> vImages, java.util.ArrayList<Rectangle> vRectangles, int width, int height)
+//ORIGINAL LINE: const GLTextureID createTextureFromImages(GL * gl, const IFactory* factory, const java.util.ArrayList<const IImage*> images, const java.util.ArrayList<const Rectangle*> rectangles, int width, int height) const
+  public final GLTextureID createTextureFromImages(GL gl, IFactory factory, java.util.ArrayList<IImage> images, java.util.ArrayList<Rectangle> rectangles, int width, int height)
   {
+	final int imagesSize = images.size();
+  
+	if (imagesSize == 0)
+	{
+	  return GLTextureID.invalid();
+	}
+  
+  //  const Rectangle baseRec(0,0, width, height);
+  //
+  //  if ((imagesSize == 1) && (rectangles[0]->equalTo(baseRec))) {
+  //    return gl->uploadTexture(images[0], width, height);
+  //  }
+  //
+  //
+  //
+  //  const IImage* image = factory->createImageFromSize(width, height);
+  //  for (int i = 0; i < imagesSize; i++) {
+  //    IImage* nextImage = image->combineWith(*images[i], *rectangles[i], width, height);
+  //    delete image;
+  //    image = nextImage;
+  //  }
+  //
+  //  const GLTextureID texID = gl->uploadTexture(image, width, height);
+  //
+  //  delete image;
+  //
+  //  return texID;
+  
+  
 	IImage base;
 	int i = 0; //First image to merge
 	Rectangle baseRec = new Rectangle(0,0, width, height);
-	if (vRectangles.size() > 0 && vRectangles.get(0).equalTo(baseRec))
+	if (rectangles.size() > 0 && rectangles.get(0).equalTo(baseRec))
 	{
-	  base = vImages.get(0);
+	  base = images.get(0);
 	  i = 1;
 	}
 	else
 	{
 	  base = factory.createImageFromSize(width, height);
   
-	  System.out.printf("IMAGE BASE %d, %d\n", base.getWidth(), base.getHeight());
+  //    printf("IMAGE BASE %d, %d\n", base->getWidth(), base->getHeight());
 	}
   
-  
-  
-	for (; i < vImages.size(); i++)
+	for (; i < images.size(); i++)
 	{
-  
-	  IImage image = vImages.get(i);
-	  final Rectangle rect = vRectangles.get(i);
-  
-	  IImage im2 = base.combineWith(image, rect, width, height);
-  
-	  if (base != vImages.get(0))
+	  IImage im2 = base.combineWith(*images.get(i), *rectangles.get(i), width, height);
+	  if (base != images.get(0))
 	  {
 		if (base != null)
 			base.dispose();
@@ -116,9 +119,9 @@ public class CPUTextureBuilder extends TextureBuilder
 	  base = im2;
 	}
   
-	int texID = gl.uploadTexture(base, width, height);
+	final GLTextureID texID = gl.uploadTexture(base, width, height);
   
-	if (vRectangles.size() > 0 && base != vImages.get(0))
+	if (rectangles.size() > 0 && base != images.get(0))
 	{
 	  if (base != null)
 		  base.dispose();
