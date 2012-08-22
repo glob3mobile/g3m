@@ -545,21 +545,6 @@ Mesh* MultiLayerTileTexturizer::texturize(const RenderContext* rc,
     tile->setTexturizerData(builderHolder);
   }
   
-  int __TODO_tune_render_budget;
-  /*
-   We user a budget for builder.start() as it can (syncronously if cached data) upload a texture
-   to the GPU, causing a bootleneck when too many tiles are renderered for the first time. (dgd)
-   */
-  //  const bool startBuilder = ((tile->getLevel() == _parameters->_topLevel) ||
-  //                             (trc->getStatistics()->getBuildersStartsInFrame() < 1) ||
-  //                             (rc->getFrameStartTimer()->elapsedTime().milliseconds() < 33));
-  //  if (startBuilder) {
-  //    trc->getStatistics()->computeBuilderStartInFrame();
-  //    builderHolder->get()->start();
-  //    tile->setTexturizerDirty(false);
-  //  }
-  
-  
   if (trc->isForcedFullRender()) {
     builderHolder->get()->start();
   }
@@ -586,10 +571,9 @@ Mesh* MultiLayerTileTexturizer::texturize(const RenderContext* rc,
     
     rc->getFrameTasksExecutor()->addPreRenderTask(new BuilderStartTask(builderHolder->get()));
   }
-
+  
   tile->setTexturizerDirty(false);
   return builderHolder->get()->getMesh();
-  
 }
 
 void MultiLayerTileTexturizer::tileToBeDeleted(Tile* tile,

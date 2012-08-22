@@ -20,11 +20,11 @@
 
 
 void BusyQuadRenderer::start() {
-  int _TODO_start_effects;
+  //int _TODO_start_effects;
 }
 
 void BusyQuadRenderer::stop() {
-  int _TODO_stop_effects;
+  //int _TODO_stop_effects;
 }
 
 

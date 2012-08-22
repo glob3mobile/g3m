@@ -82,11 +82,11 @@ void BusyMeshRenderer::initialize(const InitializationContext* ic)
 }  
 
 void BusyMeshRenderer::start() {
-  int _TODO_start_effects;
+  //int _TODO_start_effects;
 }
 
 void BusyMeshRenderer::stop() {
-  int _TODO_stop_effects;
+  //int _TODO_stop_effects;
 }
 
 int BusyMeshRenderer::render(const RenderContext* rc) 
