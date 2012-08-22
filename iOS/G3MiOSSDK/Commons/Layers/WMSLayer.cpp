@@ -170,24 +170,24 @@ URL WMSLayer::getFeatureURL(const Geodetic2D& g,
   }
   
   req += "REQUEST=GetFeatureInfo&SERVICE=WMS";
-  switch (_serverVersion) {
-    case WMS_1_3_0:
-    {
-      req += "&VERSION=1.3.0";
-      
-      req += "&CRS=EPSG:4326";
-    }
-      break;
-      
-    case WMS_1_1_0:
-    default:
-    {
-      // default is 1.1.1
-      req += "&VERSION=1.1.1";
-      
-      break;
-    }
-  }
+//  switch (_serverVersion) {
+//    case WMS_1_3_0:
+//    {
+//      req += "&VERSION=1.3.0";
+//      
+//      req += "&CRS=EPSG:4326";
+//    }
+//      break;
+//      
+//    case WMS_1_1_0:
+//    default:
+//    {
+//      // default is 1.1.1
+//      req += "&VERSION=1.1.1";
+//      
+//      break;
+//    }
+//  }
   
   
   //SRS
