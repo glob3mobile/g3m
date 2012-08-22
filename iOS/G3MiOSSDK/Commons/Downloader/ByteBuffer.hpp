@@ -13,7 +13,9 @@
 
 
 class ByteBuffer {
+#ifdef C_CODE
   unsigned char* _data;
+#endif
 #ifdef JAVA_CODE
   byte[] _data;
 #endif

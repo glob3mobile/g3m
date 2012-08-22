@@ -76,9 +76,13 @@ void BusyMeshRenderer::initialize(const InitializationContext* ic)
   
   // create mesh
   //Color *flatColor = new Color(Color::fromRGBA(1.0, 1.0, 0.0, 1.0));
-
+#ifdef C_CODE
   _mesh = IndexedMesh::createFromVector3D(true, TriangleStrip, NoCenter, Vector3D(0,0,0), 
                                            numVertices, vertices, indices, numIndices, NULL, colors);
+#else
+  _mesh = IndexedMesh::createFromVector3D(true, GLPrimitive.TriangleStrip, NoCenter, Vector3D(0,0,0), 
+                                          numVertices, vertices, indices, numIndices, NULL, colors);
+#endif
 }  
 
 void BusyMeshRenderer::start() {
@@ -102,8 +106,8 @@ int BusyMeshRenderer::render(const RenderContext* rc)
   }
 
   // init modelview matrix
-  GLint currentViewport[4];
-  glGetIntegerv(GL_VIEWPORT, currentViewport);
+  int currentViewport[4];
+  gl->getViewport(currentViewport);
   int halfWidth = currentViewport[2] / 2;
   int halfHeight = currentViewport[3] / 2;
   MutableMatrix44D M = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
@@ -115,9 +119,9 @@ int BusyMeshRenderer::render(const RenderContext* rc)
   // clear screen
   //gl->clearScreen(0.0f, 0.2f, 0.4f, 1.0f);
   gl->clearScreen(0.0f, 0.0f, 0.0f, 1.0f);
-  
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+  gl->enableBlend();
+  gl->setBlendFuncSrcAlpha();
   
   gl->pushMatrix();
   MutableMatrix44D R1 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(0), Vector3D(-1, 0, 0));
@@ -127,11 +131,9 @@ int BusyMeshRenderer::render(const RenderContext* rc)
   // draw mesh
   _mesh->render(rc);
   
-  
-
   gl->popMatrix();
   
-  glDisable(GL_BLEND);
+  gl->disableBlend();
   
   return Renderer::maxTimeToRender;
 }

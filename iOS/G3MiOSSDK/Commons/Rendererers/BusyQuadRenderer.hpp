@@ -63,6 +63,10 @@ public:
   void start();
   
   void stop();
+  
+  bool isEffectable() const{
+    return true;
+  }
 
 };
 

@@ -259,6 +259,16 @@ public:
     enableVertexFlatColor(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha(), intensity);
   }
   
+  void setBlendFuncSrcAlpha();
+  
+  void getViewport(int v[]){
+#ifdef C_CODE
+    _gl->getIntegerv(Viewport, v);
+#else
+    _gl->getIntegerv(GLVariable.Viewport, v);
+#endif
+  }
+  
   ~GL() {
 #ifdef C_CODE
     delete _gl;

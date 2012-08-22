@@ -84,6 +84,10 @@ enum GLFormat {
   RGBA
 };
 
+enum GLVariable {
+  Viewport
+};
+
 
 
 class INativeGL {
@@ -188,6 +192,8 @@ public:
                           int count) const = 0;
   
   virtual void cullFace(GLCullFace c) const = 0;
+  
+  virtual void getIntegerv(GLVariable v, int i[]) const = 0;
   
 };
 

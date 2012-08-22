@@ -96,7 +96,7 @@ int BusyQuadRenderer::render(const RenderContext* rc)
   
   // init modelview matrix
   GLint currentViewport[4];
-  glGetIntegerv(GL_VIEWPORT, currentViewport);
+  rc->getGL()->getViewport(currentViewport);
   int halfWidth = currentViewport[2] / 2;
   int halfHeight = currentViewport[3] / 2;
   MutableMatrix44D M = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,
@@ -109,8 +109,8 @@ int BusyQuadRenderer::render(const RenderContext* rc)
   //gl->clearScreen(0.0f, 0.2f, 0.4f, 1.0f);
   gl->clearScreen(0.0f, 0.0f, 0.0f, 1.0f);
 
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  gl->enableBlend();
+  gl->setBlendFuncSrcAlpha();
   
   gl->pushMatrix();
   MutableMatrix44D R1 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(0), Vector3D(-1, 0, 0));
@@ -122,7 +122,7 @@ int BusyQuadRenderer::render(const RenderContext* rc)
   
   gl->popMatrix();
   
-  glDisable(GL_BLEND);
+  gl->disableBlend();
   
   return Renderer::maxTimeToRender;
 }

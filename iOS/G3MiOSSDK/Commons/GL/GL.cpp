@@ -498,6 +498,14 @@ void GL::disableBlend() {
   
 }
 
+void GL::setBlendFuncSrcAlpha(){
+#ifdef C_CODE
+  _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);
+#else
+  _gl->blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
+#endif
+}
+
 void GL::enableCullFace(GLCullFace face) {
   if (!_enableCullFace) {
 #ifdef C_CODE

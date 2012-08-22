@@ -30,11 +30,9 @@ public:
   virtual IStringBuilder* add(const std::string& s) = 0;
   
   virtual std::string getString() const = 0;
-  
-#ifdef C_CODE
+
   // a virtual destructor is needed for conversion to Java
   virtual ~IStringBuilder() {}
-#endif
   
 };
 
