@@ -349,7 +349,8 @@ public class Sector
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
 	isb.add("(Sector ").add(_lower.description()).add(" - ").add(_upper.description()).add(")");
 	String s = isb.getString();
-	isb = null;
+	if (isb != null)
+		isb.dispose();
 	return s;
   }
 

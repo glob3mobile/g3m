@@ -46,7 +46,8 @@ public class TextureHolder
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
 	isb.add("(#").add(_glTextureId.getGLTextureID()).add(", counter=").add(_referenceCounter).add(")");
 	String s = isb.getString();
-	isb = null;
+	if (isb != null)
+		isb.dispose();
 	return s;
   }
 }

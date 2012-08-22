@@ -110,7 +110,8 @@ public class CachedDownloader implements IDownloader
 	isb.add("CachedDownloader(cache hits=").add(_cacheHitsCounter).add("/").add(_requestsCounter).add(", saves=");
 	isb.add(_savesCounter).add(", downloader=").add(_downloader.statistics());
 	String s = isb.getString();
-	isb = null;
+	if (isb != null)
+		isb.dispose();
 	return s;
   }
 

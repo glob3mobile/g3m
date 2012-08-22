@@ -105,7 +105,8 @@ public class Geodetic2D
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
 	isb.add("(lat=").add(_latitude.description()).add(", lon=").add(_longitude.description()).add(")");
 	String s = isb.getString();
-	isb = null;
+	if (isb != null)
+		isb.dispose();
 	return s;
   }
 

@@ -258,7 +258,8 @@ public class Angle
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
 	isb.add(_degrees).add("°");
 	String s = isb.getString();
-	isb = null;
+	if (isb != null)
+		isb.dispose();
 	return s;
   }
 }

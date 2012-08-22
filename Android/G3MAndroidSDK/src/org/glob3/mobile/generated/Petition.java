@@ -139,7 +139,8 @@ public class Petition
 	isb.add(", downloadID=").add(_downloadID).add(", transparentImage=").add(_transparentImage).add(")");
 	String s = isb.getString();
   
-	isb = null;
+	if (isb != null)
+		isb.dispose();
 	return s;
   
   }

@@ -67,7 +67,8 @@ public class GLTextureID
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
 	isb.add("GLTextureID #").add(_textureId);
 	String s = isb.getString();
-	isb = null;
+	if (isb != null)
+		isb.dispose();
 	return s;
   }
 

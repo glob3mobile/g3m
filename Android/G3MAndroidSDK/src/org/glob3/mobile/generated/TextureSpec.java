@@ -110,7 +110,8 @@ public class TextureSpec
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
 	isb.add("(").add(_id).add(" ").add(_width).add("x").add(_height).add(")");
 	String s = isb.getString();
-	isb = null;
+	if (isb != null)
+		isb.dispose();
 	return s;
   }
 

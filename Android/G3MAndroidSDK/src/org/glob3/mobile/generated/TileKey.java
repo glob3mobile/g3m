@@ -96,7 +96,8 @@ public class TileKey
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
 	isb.add("(level=").add(_level).add(", row=").add(_row).add(", col=").add(_column).add(")");
 	String s = isb.getString();
-	isb = null;
+	if (isb != null)
+		isb.dispose();
 	return s;
   }
 
@@ -107,7 +108,8 @@ public class TileKey
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
 	isb.add(_level).add("-").add(_row).add("/").add(_column);
 	String s = isb.getString();
-	isb = null;
+	if (isb != null)
+		isb.dispose();
 	return s;
   }
 

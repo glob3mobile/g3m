@@ -67,7 +67,8 @@ public class ByteBuffer
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
 	isb.add("ByteBuffer(length=").add(_length).add(")");
 	String s = isb.getString();
-	isb = null;
+	if (isb != null)
+		isb.dispose();
 	return s;
   }
 

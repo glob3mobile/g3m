@@ -1,5 +1,13 @@
 package org.glob3.mobile.generated; 
 //
+//  IStringBuilder.cpp
+//  G3MiOSSDK
+//
+//  Created by José Miguel S N on 22/08/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//
+
+//
 //  IStringBuilder.hpp
 //  G3MiOSSDK
 //
@@ -12,7 +20,7 @@ package org.glob3.mobile.generated;
 public abstract class IStringBuilder
 {
 
-  private static IStringBuilder _instance;
+  private static IStringBuilder _instance = null;
 
 
 
@@ -20,11 +28,19 @@ public abstract class IStringBuilder
 //ORIGINAL LINE: virtual IStringBuilder* getNewInstance() const = 0;
   protected abstract IStringBuilder getNewInstance();
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  static void setInstance(IStringBuilder isb);
+  public static void setInstance(IStringBuilder isb)
+  {
+	if (_instance != null)
+	{
+	  System.out.print("Warning, ISB instance set two times\n");
+	}
+	_instance = isb;
+  }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  static IStringBuilder newStringBuilder();
+  public static IStringBuilder newStringBuilder()
+  {
+	return _instance.getNewInstance();
+  }
 
   public abstract IStringBuilder add(double d);
   public abstract IStringBuilder add(RefObject<String> c);

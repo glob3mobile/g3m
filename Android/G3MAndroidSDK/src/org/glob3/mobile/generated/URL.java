@@ -79,7 +79,8 @@ public class URL
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
 	isb.add("URL(").add(getPath()).add(")");
 	String s = isb.getString();
-	isb = null;
+	if (isb != null)
+		isb.dispose();
 	return s;
   }
 

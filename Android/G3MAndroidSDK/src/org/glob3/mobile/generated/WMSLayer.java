@@ -113,7 +113,8 @@ public class WMSLayer extends Layer
 		isb.add(sector.upper().longitude().degrees());
   
 		req += isb.getString();
-		isb = null;
+		if (isb != null)
+			isb.dispose();
   
 		req += "&CRS=EPSG:4326";
   
@@ -136,7 +137,8 @@ public class WMSLayer extends Layer
 		isb.add(sector.upper().latitude().degrees());
   
 		req += isb.getString();
-		isb = null;
+		if (isb != null)
+			isb.dispose();
 		break;
 	  }
 	}
@@ -285,7 +287,8 @@ public class WMSLayer extends Layer
   
 		req += isb.getString();
   
-		isb = null;
+		if (isb != null)
+			isb.dispose();
   
 		req += "&CRS=EPSG:4326";
   
@@ -309,7 +312,8 @@ public class WMSLayer extends Layer
   
 		req += isb.getString();
   
-		isb = null;
+		if (isb != null)
+			isb.dispose();
 		break;
 	  }
 	}
@@ -327,7 +331,8 @@ public class WMSLayer extends Layer
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
 	isb.add("&X=").add(x).add("&Y=").add(y);
 	req += isb.getString();
-	isb = null;
+	if (isb != null)
+		isb.dispose();
   
 	  return new URL(req);
   }

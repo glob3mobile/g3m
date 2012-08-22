@@ -142,7 +142,8 @@ public class MutableVector2D
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
 	isb.add("(MV2D ").add(_x).add(", ").add(_y).add(")");
 	String s = isb.getString();
-	isb = null;
+	if (isb != null)
+		isb.dispose();
 	return s;
   }
 
