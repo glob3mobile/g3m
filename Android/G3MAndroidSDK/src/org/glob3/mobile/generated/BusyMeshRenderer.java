@@ -101,8 +101,7 @@ public class BusyMeshRenderer extends Renderer implements EffectTarget
   
 	// create mesh
 	//Color *flatColor = new Color(Color::fromRGBA(1.0, 1.0, 0.0, 1.0));
-  
-	_mesh = IndexedMesh.createFromVector3D(true, TriangleStrip, CenterStrategy.NoCenter, new Vector3D(0,0,0), numVertices, vertices, indices, numIndices, null, colors);
+	_mesh = IndexedMesh.createFromVector3D(true, GLPrimitive.TriangleStrip, CenterStrategy.NoCenter, new Vector3D(0,0,0), numVertices, vertices, indices, numIndices, null, colors);
   }
 
   public final boolean isReadyToRender(RenderContext rc)
@@ -127,8 +126,8 @@ public class BusyMeshRenderer extends Renderer implements EffectTarget
 	}
   
 	// init modelview matrix
-	GLint[] currentViewport = new GLint[4];
-	glGetIntegerv(GL_VIEWPORT, currentViewport);
+	int[] currentViewport = new int[4];
+	gl.getViewport(currentViewport);
 	int halfWidth = currentViewport[2] / 2;
 	int halfHeight = currentViewport[3] / 2;
 	MutableMatrix44D M = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
@@ -139,8 +138,8 @@ public class BusyMeshRenderer extends Renderer implements EffectTarget
 	//gl->clearScreen(0.0f, 0.2f, 0.4f, 1.0f);
 	gl.clearScreen(0.0f, 0.0f, 0.0f, 1.0f);
   
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	gl.enableBlend();
+	gl.setBlendFuncSrcAlpha();
   
 	gl.pushMatrix();
 	MutableMatrix44D R1 = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(0), new Vector3D(-1, 0, 0));
@@ -150,11 +149,9 @@ public class BusyMeshRenderer extends Renderer implements EffectTarget
 	// draw mesh
 	_mesh.render(rc);
   
-  
-  
 	gl.popMatrix();
   
-	glDisable(GL_BLEND);
+	gl.disableBlend();
   
 	return Renderer.maxTimeToRender;
   }

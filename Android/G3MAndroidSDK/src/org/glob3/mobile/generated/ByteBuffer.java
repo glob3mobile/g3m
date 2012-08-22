@@ -20,7 +20,6 @@ package org.glob3.mobile.generated;
 
 public class ByteBuffer
 {
-  private byte _data;
   byte[] _data;
 
   private final int _length;

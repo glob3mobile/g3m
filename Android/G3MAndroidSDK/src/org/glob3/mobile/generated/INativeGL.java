@@ -118,4 +118,8 @@ public abstract class INativeGL
 //ORIGINAL LINE: virtual void cullFace(GLCullFace c) const = 0;
   public abstract void cullFace(GLCullFace c);
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual void getIntegerv(GLVariable v, int i[]) const = 0;
+  public abstract void getIntegerv(GLVariable v, int[] i);
+
 }

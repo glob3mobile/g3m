@@ -135,7 +135,7 @@ public class BusyQuadRenderer extends Renderer implements EffectTarget
   
 	// init modelview matrix
 	GLint[] currentViewport = new GLint[4];
-	glGetIntegerv(GL_VIEWPORT, currentViewport);
+	rc.getGL().getViewport(currentViewport);
 	int halfWidth = currentViewport[2] / 2;
 	int halfHeight = currentViewport[3] / 2;
 	MutableMatrix44D M = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
@@ -146,8 +146,8 @@ public class BusyQuadRenderer extends Renderer implements EffectTarget
 	//gl->clearScreen(0.0f, 0.2f, 0.4f, 1.0f);
 	gl.clearScreen(0.0f, 0.0f, 0.0f, 1.0f);
   
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	gl.enableBlend();
+	gl.setBlendFuncSrcAlpha();
   
 	gl.pushMatrix();
 	MutableMatrix44D R1 = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(0), new Vector3D(-1, 0, 0));
@@ -159,7 +159,7 @@ public class BusyQuadRenderer extends Renderer implements EffectTarget
   
 	gl.popMatrix();
   
-	glDisable(GL_BLEND);
+	gl.disableBlend();
   
 	return Renderer.maxTimeToRender;
   }
@@ -193,6 +193,13 @@ public class BusyQuadRenderer extends Renderer implements EffectTarget
   public final void stop()
   {
 	int _TODO_stop_effects;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isEffectable() const
+  public final boolean isEffectable()
+  {
+	return true;
   }
 
 }

@@ -617,6 +617,16 @@ public class GL
 	enableVertexFlatColor(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha(), intensity);
   }
 
+  public final void setBlendFuncSrcAlpha()
+  {
+	_gl.blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
+  }
+
+  public final void getViewport(int[] v)
+  {
+	_gl.getIntegerv(GLVariable.Viewport, v);
+  }
+
   public void dispose()
   {
 

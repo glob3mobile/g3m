@@ -32,6 +32,11 @@ public class TimeInterval
 
   }
 
+  public TimeInterval()
+  {
+	  _milliseconds = 0;
+  }
+
   public static TimeInterval nan()
   {
 	return new TimeInterval(Double.NaN);

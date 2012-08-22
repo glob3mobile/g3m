@@ -50,5 +50,9 @@ public abstract class IStringBuilder
 //ORIGINAL LINE: virtual String getString() const = 0;
   public abstract String getString();
 
+  // a virtual destructor is needed for conversion to Java
+  public void dispose()
+  {
+  }
 
 }

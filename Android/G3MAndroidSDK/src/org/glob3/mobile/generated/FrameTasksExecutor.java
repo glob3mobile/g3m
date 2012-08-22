@@ -113,4 +113,8 @@ public class FrameTasksExecutor
   
   }
 
+  public void dispose()
+  {
+  }
+
 }
