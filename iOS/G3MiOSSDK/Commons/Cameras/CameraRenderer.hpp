@@ -51,6 +51,10 @@ public:
   Gesture getCurrentGesture() const { return _currentGesture; }
   void setCurrentGesture(Gesture gesture) { _currentGesture = gesture; }
   Camera* getCamera() { return _camera; }
+  
+  bool isEffectable() const{
+    return true;
+  }
 };
 
 

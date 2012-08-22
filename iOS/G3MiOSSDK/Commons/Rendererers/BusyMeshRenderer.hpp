@@ -53,6 +53,10 @@ public:
   void start();
   
   void stop();
+  
+  bool isEffectable() const{
+    return true;
+  }
 
 };
 
@@ -80,6 +84,10 @@ public:
   
   virtual void cancel(const TimeInterval& now) {
     // do nothing, just leave the effect in the intermediate state
+  }
+  
+  bool isEffectable() const{
+    return true;
   }
   
 };

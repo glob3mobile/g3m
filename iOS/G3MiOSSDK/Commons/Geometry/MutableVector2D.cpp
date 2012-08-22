@@ -8,14 +8,12 @@
 
 #include "MutableVector2D.hpp"
 
-#include <sstream>
+#include "IStringBuilder.hpp"
 
 const std::string MutableVector2D::description() const {
-  std::ostringstream buffer;
-  buffer << "(MV2D ";
-  buffer << _x;
-  buffer << ", ";
-  buffer << _y;
-  buffer << ")";
-  return buffer.str();
+  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  isb->add("(MV2D ")->add(_x)->add(", ")->add(_y)->add(")");
+  std::string s = isb->getString();
+  delete isb;
+  return s;
 }

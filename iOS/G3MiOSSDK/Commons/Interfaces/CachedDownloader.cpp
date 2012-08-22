@@ -9,7 +9,7 @@
 #include "CachedDownloader.hpp"
 #include "IDownloadListener.hpp"
 
-#include <sstream>
+#include "IStringBuilder.hpp"
 
 class SaverDownloadListener : public IDownloadListener {
   CachedDownloader*  _downloader;
@@ -138,17 +138,11 @@ long CachedDownloader::request(const URL& url,
 
 
 const std::string CachedDownloader::statistics() {
-  std::ostringstream buffer;
   
-  buffer << "CachedDownloader(cache hits=";
-  buffer << _cacheHitsCounter;
-  buffer << "/";
-  buffer << _requestsCounter;
-  buffer << ", saves=";
-  buffer << _savesCounter;
-  buffer << ", downloader=";
-  buffer << _downloader->statistics();
-  buffer << ")";
-  
-  return buffer.str();
+  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  isb->add("CachedDownloader(cache hits=")->add(_cacheHitsCounter)->add("/")->add(_requestsCounter)->add(", saves=");
+  isb->add(_savesCounter)->add(", downloader=")->add(_downloader->statistics());
+  std::string s = isb->getString();
+  delete isb;
+  return s;
 }

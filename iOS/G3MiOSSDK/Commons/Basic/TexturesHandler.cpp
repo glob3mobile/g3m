@@ -14,18 +14,14 @@
 #include "TextureBuilder.hpp"
 #include "Rectangle.hpp"
 
-#include <sstream>
+#include "IStringBuilder.hpp"
 
 const std::string TextureSpec::description() const {
-  std::ostringstream buffer;
-  buffer << "(";
-  buffer << _id;
-  buffer << " ";
-  buffer << _width;
-  buffer << "x";
-  buffer << _height;
-  buffer << ")";
-  return buffer.str();
+  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  isb->add("(")->add(_id)->add(" ")->add(_width)->add("x")->add(_height)->add(")");
+  std::string s = isb->getString();
+  delete isb;
+  return s;  
 }
 
 
@@ -64,16 +60,12 @@ public:
   }
   
   const std::string description() const {
-    std::ostringstream buffer;
-    buffer << "(#";
-    buffer << _glTextureId.getGLTextureID();
-    buffer << ", counter=";
-    buffer << _referenceCounter;
-    buffer << ")";
-    return buffer.str();
     
-    ////    return "TextureHolder(textureSpec=" + _textureSpec.description() + ", glTextureId=" + _glTextureId.description() + ")";
-    //    return "TextureHolder(#" + _glTextureId.description() + ", counter=" + _referenceCounter + ")";
+    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+    isb->add("(#")->add(_glTextureId.getGLTextureID())->add(", counter=")->add(_referenceCounter)->add(")");
+    std::string s = isb->getString();
+    delete isb;
+    return s;  
   }
 };
 

@@ -8,13 +8,13 @@
 
 #include "ByteBuffer.hpp"
 
-#include <sstream>
+#include "IStringBuilder.hpp"
 
 const std::string ByteBuffer::description() const {
-  std::ostringstream buffer;
-  buffer << "ByteBuffer(length=";
-  buffer << _length;
-  buffer << ")";
-  return buffer.str();
+  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  isb->add("ByteBuffer(length=")->add(_length)->add(")");
+  std::string s = isb->getString();
+  delete isb;
+  return s;
 }
 

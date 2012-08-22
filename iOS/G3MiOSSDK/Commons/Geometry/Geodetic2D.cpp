@@ -8,7 +8,7 @@
 
 #include "Geodetic2D.hpp"
 
-#include <sstream>
+#include "IStringBuilder.hpp"
 
 bool Geodetic2D::isBetween(const Geodetic2D& min,
                            const Geodetic2D& max) const {
@@ -27,11 +27,10 @@ bool Geodetic2D::closeTo(const Geodetic2D &other) const {
 
 
 const std::string Geodetic2D::description() const {
-  std::ostringstream buffer;
-  buffer << "(lat=";
-  buffer << _latitude.description();
-  buffer << ", lon=";
-  buffer << _longitude.description();
-  buffer << ")";
-  return buffer.str();
+  
+  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  isb->add("(lat=")->add(_latitude.description())->add(", lon=")->add(_longitude.description())->add(")");
+  std::string s = isb->getString();
+  delete isb;
+  return s;
 }

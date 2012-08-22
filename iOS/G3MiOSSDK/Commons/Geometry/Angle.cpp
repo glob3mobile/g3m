@@ -8,7 +8,7 @@
 
 #include "Angle.hpp"
 
-#include <sstream>
+#include "IStringBuilder.hpp"
 
 Angle Angle::clampedTo(const Angle& min,
                        const Angle& max) const {
@@ -51,8 +51,10 @@ Angle Angle::nearestAngleInInterval(const Angle& min,
 }
 
 const std::string Angle::description() const {
-  std::ostringstream buffer;
-  buffer << _degrees;
-  buffer << "°";
-  return buffer.str();
+  
+  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  isb->add(_degrees)->add("°");
+  std::string s = isb->getString();
+  delete isb;
+  return s;
 }

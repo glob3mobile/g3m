@@ -18,7 +18,7 @@ class TileTexturizer;
 #include "Sector.hpp"
 //#include <vector>
 #include <map>
-#include <sstream>
+#include "IStringBuilder.hpp"
 
 #include "Tile.hpp"
 #include "TileKey.hpp"
@@ -224,7 +224,8 @@ public:
     
     bool first = true;
 #ifdef C_CODE
-    std::ostringstream buffer;
+    
+    IStringBuilder *isb = IStringBuilder::newStringBuilder();
     for(std::map<int, int>::const_iterator i = map.begin();
         i != map.end();
         ++i ) {
@@ -235,12 +236,14 @@ public:
         first = false;
       }
       else {
-        buffer << ",";
+        isb->add(",");
       }
-      buffer << "L" << level << ":" << counter;
+      isb->add("L")->add(level)->add(":")->add(counter);
     }
     
-    return buffer.str();
+    std::string s = isb->getString();
+    delete isb;
+    return s;  
 #endif
 #ifdef JAVA_CODE
     String res = "";

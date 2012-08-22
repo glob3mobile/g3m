@@ -14,8 +14,13 @@
 #include "ITimer.hpp"
 #include "Camera.hpp"
 
-
 class EffectTarget {
+public:  
+  virtual bool isEffectable() const = 0;
+  
+#ifdef C_CODE
+  virtual ~EffectTarget(){}
+#endif
   
 };
 
