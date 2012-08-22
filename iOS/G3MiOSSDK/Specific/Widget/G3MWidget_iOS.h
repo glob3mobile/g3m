@@ -56,16 +56,14 @@ enum GL_version {
 
 - (void)drawView: (id)sender;
 
-- (void)initWidgetDemo;
-
 - (void)initWidgetWithLayerSet: (LayerSet*) layerSet
-             cameraConstraints: (std::vector<ICameraConstrainer *>) cameraConstraints
+             cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
                      renderers: (std::vector<Renderer*>) renderers
                       userData: (UserData*) userData;
 
 - (void)initWidgetWithCameraRenderer: (CameraRenderer*) cameraRenderer
                             layerSet: (LayerSet*) layerSet
-                   cameraConstraints: (std::vector<ICameraConstrainer *>) cameraConstraints
+                   cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
                            renderers: (std::vector<Renderer*>) renderers
                             userData: (UserData*) userData;
 

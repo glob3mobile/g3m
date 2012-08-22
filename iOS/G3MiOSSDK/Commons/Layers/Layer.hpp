@@ -55,7 +55,7 @@ public:
   
   void onTerrainTouchEventListener(const EventContext* ec,
                                    TerrainTouchEvent& tte) const {
-    for (int i = 0; i < _listeners.size(); i++) {
+    for (unsigned int i = 0; i < _listeners.size(); i++) {
       TerrainTouchEventListener* listener = _listeners[i];
       if (listener != NULL) {
         listener->onTerrainTouchEvent(ec, tte);

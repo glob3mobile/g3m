@@ -44,7 +44,7 @@ public:
   void setWidget(G3MWidget* widget) {
     _widget = widget;
   }
-
+  
   G3MWidget* getWidget() const {
     return _widget;
   }
@@ -61,7 +61,7 @@ public:
                            TexturesHandler*    texturesHandler,
                            IDownloader*        downloader,
                            const Planet*       planet,
-                           std::vector<ICameraConstrainer *> cameraConstraint,
+                           std::vector<ICameraConstrainer*> cameraConstraint,
                            Renderer*           renderer,
                            Renderer*           busyRenderer,
                            EffectsScheduler*   scheduler,
@@ -71,7 +71,7 @@ public:
                            const bool          logFPS,
                            const bool          logDownloaderStatistics);
   
-  ~G3MWidget(); 
+  ~G3MWidget();
   
   int render();
   
@@ -83,9 +83,9 @@ public:
     return _gl;
   }
   
-/*  const Camera* getCurrentCamera() const {
-    return _currentCamera;
-  }*/
+  /*  const Camera* getCurrentCamera() const {
+   return _currentCamera;
+   }*/
   
   Camera* getNextCamera() const {
     return _nextCamera;
@@ -96,7 +96,9 @@ public:
       delete _userData;
     }
     _userData = userData;
-    _userData->setWidget(this);
+    if (_userData != NULL) {
+      _userData->setWidget(this);
+    }
   }
   
   UserData* getUserData() const {
@@ -113,7 +115,7 @@ private:
   Renderer*         _busyRenderer;
   EffectsScheduler* _effectsScheduler;
   
-  std::vector<ICameraConstrainer *> _cameraConstraint;
+  std::vector<ICameraConstrainer*> _cameraConstraint;
   
   Camera*          _currentCamera;
   Camera*          _nextCamera;
@@ -153,11 +155,6 @@ private:
             Color               backgroundColor,
             const bool          logFPS,
             const bool          logDownloaderStatistics);
-  
-//  void initializeDefault()
-//  {
-//    
-//  }
   
 };
 
