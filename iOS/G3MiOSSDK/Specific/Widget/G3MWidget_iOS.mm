@@ -564,11 +564,11 @@
 //** Agustin cancelled lonpressgesture because touchedmoved and touchedended event don't work
 - (IBAction)handleLongPress:(UIGestureRecognizer *)sender {
   
-  printf ("Longpress. state=%d\n", sender.state);
-  
-  if (sender.state == UIGestureRecognizerStateEnded) {
-    NSLog(@"LONG PRESS");
-  }
+//  printf ("Longpress. state=%d\n", sender.state);
+//  
+//  if (sender.state == UIGestureRecognizerStateEnded) {
+//    NSLog(@"LONG PRESS");
+//  }
   
   if (sender.state == 1){
     
