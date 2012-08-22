@@ -108,7 +108,6 @@
                             renderers: (std::vector<Renderer*>) renderers
                              userData: (UserData*) userData
 {
-  int __diego_at_work;
   
   // create GLOB3M WIDGET
   int width = (int) [self frame].size.width;
@@ -129,9 +128,6 @@
   
   if (layerSet != NULL) {
     if (layerSet->size() > 0) {
-      const bool renderDebug = false;
-      //      TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug);
-      
       TileTexturizer* texturizer = new MultiLayerTileTexturizer(layerSet);
       
       const bool showStatistics = false;
