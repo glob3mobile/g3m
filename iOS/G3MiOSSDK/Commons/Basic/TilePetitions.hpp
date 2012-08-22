@@ -84,7 +84,7 @@ public:
   }
 };
 
-
+/*
 class TilePetitions: public IDownloadListener {
   
   const int    _level;
@@ -178,5 +178,5 @@ public:
   void removeUnnecesaryPetitions();
   
 };
-
+*/
 #endif
