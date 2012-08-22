@@ -31,4 +31,11 @@ public class BusyMeshEffect extends EffectWithForce
 	// do nothing, just leave the effect in the intermediate state
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isEffectable() const
+  public final boolean isEffectable()
+  {
+	return true;
+  }
+
 }

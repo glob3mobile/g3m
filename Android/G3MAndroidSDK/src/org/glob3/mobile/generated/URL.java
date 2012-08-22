@@ -75,11 +75,12 @@ public class URL
 //ORIGINAL LINE: const String description() const
   public final String description()
   {
-	std.ostringstream buffer = new std.ostringstream();
-	buffer << "URL(";
-	buffer << getPath();
-	buffer << ")";
-	return buffer.str();
+  
+	IStringBuilder isb = IStringBuilder.newStringBuilder();
+	isb.add("URL(").add(getPath()).add(")");
+	String s = isb.getString();
+	isb = null;
+	return s;
   }
 
 }

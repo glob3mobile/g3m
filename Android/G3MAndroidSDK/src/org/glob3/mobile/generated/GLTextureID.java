@@ -64,10 +64,11 @@ public class GLTextureID
 //ORIGINAL LINE: const String description() const
   public final String description()
   {
-	std.ostringstream buffer = new std.ostringstream();
-	buffer << "GLTextureID #";
-	buffer << _textureId;
-	return buffer.str();
+	IStringBuilder isb = IStringBuilder.newStringBuilder();
+	isb.add("GLTextureID #").add(_textureId);
+	String s = isb.getString();
+	isb = null;
+	return s;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

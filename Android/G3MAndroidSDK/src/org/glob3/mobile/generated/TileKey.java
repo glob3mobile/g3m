@@ -93,28 +93,22 @@ public class TileKey
 //ORIGINAL LINE: const String description() const
   public final String description()
   {
-	std.ostringstream buffer = new std.ostringstream();
-	buffer << "(level=";
-	buffer << _level;
-	buffer << ", row=";
-	buffer << _row;
-	buffer << ", col=";
-	buffer << _column;
-	buffer << ")";
-	return buffer.str();
+	IStringBuilder isb = IStringBuilder.newStringBuilder();
+	isb.add("(level=").add(_level).add(", row=").add(_row).add(", col=").add(_column).add(")");
+	String s = isb.getString();
+	isb = null;
+	return s;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: const String tinyDescription() const
   public final String tinyDescription()
   {
-	std.ostringstream buffer = new std.ostringstream();
-	buffer << _level;
-	buffer << "-";
-	buffer << _row;
-	buffer << "/";
-	buffer << _column;
-	return buffer.str();
+	IStringBuilder isb = IStringBuilder.newStringBuilder();
+	isb.add(_level).add("-").add(_row).add("/").add(_column);
+	String s = isb.getString();
+	isb = null;
+	return s;
   }
 
 }

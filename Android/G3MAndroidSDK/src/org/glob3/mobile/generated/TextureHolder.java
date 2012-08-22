@@ -42,15 +42,11 @@ public class TextureHolder
 //ORIGINAL LINE: const String description() const
   public final String description()
   {
-	std.ostringstream buffer = new std.ostringstream();
-	buffer << "(#";
-	buffer << _glTextureId.getGLTextureID();
-	buffer << ", counter=";
-	buffer << _referenceCounter;
-	buffer << ")";
-	return buffer.str();
 
-	////    return "TextureHolder(textureSpec=" + _textureSpec.description() + ", glTextureId=" + _glTextureId.description() + ")";
-	//    return "TextureHolder(#" + _glTextureId.description() + ", counter=" + _referenceCounter + ")";
+	IStringBuilder isb = IStringBuilder.newStringBuilder();
+	isb.add("(#").add(_glTextureId.getGLTextureID()).add(", counter=").add(_referenceCounter).add(")");
+	String s = isb.getString();
+	isb = null;
+	return s;
   }
 }

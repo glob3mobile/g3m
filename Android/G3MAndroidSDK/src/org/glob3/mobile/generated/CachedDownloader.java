@@ -105,19 +105,13 @@ public class CachedDownloader implements IDownloader
 
   public final String statistics()
   {
-	std.ostringstream buffer = new std.ostringstream();
   
-	buffer << "CachedDownloader(cache hits=";
-	buffer << _cacheHitsCounter;
-	buffer << "/";
-	buffer << _requestsCounter;
-	buffer << ", saves=";
-	buffer << _savesCounter;
-	buffer << ", downloader=";
-	buffer << _downloader.statistics();
-	buffer << ")";
-  
-	return buffer.str();
+	IStringBuilder isb = IStringBuilder.newStringBuilder();
+	isb.add("CachedDownloader(cache hits=").add(_cacheHitsCounter).add("/").add(_requestsCounter).add(", saves=");
+	isb.add(_savesCounter).add(", downloader=").add(_downloader.statistics());
+	String s = isb.getString();
+	isb = null;
+	return s;
   }
 
   public final void countSave()

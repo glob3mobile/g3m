@@ -139,13 +139,11 @@ public class MutableVector2D
 //ORIGINAL LINE: const String description() const
   public final String description()
   {
-	std.ostringstream buffer = new std.ostringstream();
-	buffer << "(MV2D ";
-	buffer << _x;
-	buffer << ", ";
-	buffer << _y;
-	buffer << ")";
-	return buffer.str();
+	IStringBuilder isb = IStringBuilder.newStringBuilder();
+	isb.add("(MV2D ").add(_x).add(", ").add(_y).add(")");
+	String s = isb.getString();
+	isb = null;
+	return s;
   }
 
 }

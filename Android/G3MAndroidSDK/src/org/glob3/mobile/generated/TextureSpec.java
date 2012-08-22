@@ -107,15 +107,11 @@ public class TextureSpec
 //ORIGINAL LINE: const String description() const
   public final String description()
   {
-	std.ostringstream buffer = new std.ostringstream();
-	buffer << "(";
-	buffer << _id;
-	buffer << " ";
-	buffer << _width;
-	buffer << "x";
-	buffer << _height;
-	buffer << ")";
-	return buffer.str();
+	IStringBuilder isb = IStringBuilder.newStringBuilder();
+	isb.add("(").add(_id).add(" ").add(_width).add("x").add(_height).add(")");
+	String s = isb.getString();
+	isb = null;
+	return s;
   }
 
 

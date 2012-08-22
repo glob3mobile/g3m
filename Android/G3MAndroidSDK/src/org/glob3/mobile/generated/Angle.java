@@ -254,9 +254,11 @@ public class Angle
 //ORIGINAL LINE: const String description() const
   public final String description()
   {
-	std.ostringstream buffer = new std.ostringstream();
-	buffer << _degrees;
-	buffer << "°";
-	return buffer.str();
+  
+	IStringBuilder isb = IStringBuilder.newStringBuilder();
+	isb.add(_degrees).add("°");
+	String s = isb.getString();
+	isb = null;
+	return s;
   }
 }

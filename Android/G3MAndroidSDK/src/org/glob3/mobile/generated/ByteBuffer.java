@@ -64,11 +64,11 @@ public class ByteBuffer
 //ORIGINAL LINE: const String description() const
   public final String description()
   {
-	std.ostringstream buffer = new std.ostringstream();
-	buffer << "ByteBuffer(length=";
-	buffer << _length;
-	buffer << ")";
-	return buffer.str();
+	IStringBuilder isb = IStringBuilder.newStringBuilder();
+	isb.add("ByteBuffer(length=").add(_length).add(")");
+	String s = isb.getString();
+	isb = null;
+	return s;
   }
 
 }

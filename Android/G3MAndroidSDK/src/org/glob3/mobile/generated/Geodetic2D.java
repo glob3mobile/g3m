@@ -101,13 +101,12 @@ public class Geodetic2D
 //ORIGINAL LINE: const String description() const
   public final String description()
   {
-	std.ostringstream buffer = new std.ostringstream();
-	buffer << "(lat=";
-	buffer << _latitude.description();
-	buffer << ", lon=";
-	buffer << _longitude.description();
-	buffer << ")";
-	return buffer.str();
+  
+	IStringBuilder isb = IStringBuilder.newStringBuilder();
+	isb.add("(lat=").add(_latitude.description()).add(", lon=").add(_longitude.description()).add(")");
+	String s = isb.getString();
+	isb = null;
+	return s;
   }
 
   TODO_java_equals;

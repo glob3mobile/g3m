@@ -24,8 +24,7 @@ package org.glob3.mobile.generated;
 //***************************************************************
 
 
-//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
-public class BusyMeshRenderer extends Renderer, EffectTarget
+public class BusyMeshRenderer extends Renderer implements EffectTarget
 {
   private Mesh _mesh;
   private double _degrees;
@@ -189,6 +188,13 @@ public class BusyMeshRenderer extends Renderer, EffectTarget
   public final void stop()
   {
 	int _TODO_stop_effects;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isEffectable() const
+  public final boolean isEffectable()
+  {
+	return true;
   }
 
 }

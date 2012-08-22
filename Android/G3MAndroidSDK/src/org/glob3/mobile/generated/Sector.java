@@ -346,13 +346,11 @@ public class Sector
 //ORIGINAL LINE: const String description() const
   public final String description()
   {
-	std.ostringstream buffer = new std.ostringstream();
-	buffer << "(Sector ";
-	buffer << _lower.description();
-	buffer << " - ";
-	buffer << _upper.description();
-	buffer << ")";
-	return buffer.str();
+	IStringBuilder isb = IStringBuilder.newStringBuilder();
+	isb.add("(Sector ").add(_lower.description()).add(" - ").add(_upper.description()).add(")");
+	String s = isb.getString();
+	isb = null;
+	return s;
   }
 
 }

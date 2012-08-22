@@ -125,26 +125,23 @@ public class Petition
 //ORIGINAL LINE: const String description() const
   public final String description()
   {
-	std.ostringstream buffer = new std.ostringstream();
-	buffer << "Petition(url=";
-	buffer << _url.description();
-	buffer << ", sector=";
-	buffer << _sector.description();
-	buffer << ", buffer=";
+  
+	IStringBuilder isb = IStringBuilder.newStringBuilder();
+	isb.add("Petition(url=").add(_url.description()).add(", sector=").add(_sector.description()).add(", buffer=");
 	if (_buffer == null)
 	{
-	  buffer << "NULL";
+	  isb.add("NULL");
 	}
 	else
 	{
-	  buffer << _buffer.description();
+	  isb.add(_buffer.description());
 	}
-	buffer << ", downloadID=";
-	buffer << _downloadID;
-	buffer << ", transparentImage=";
-	buffer << _transparentImage;
-	buffer << ")";
-	return buffer.str();
+	isb.add(", downloadID=").add(_downloadID).add(", transparentImage=").add(_transparentImage).add(")");
+	String s = isb.getString();
+  
+	isb = null;
+	return s;
+  
   }
 
 }
