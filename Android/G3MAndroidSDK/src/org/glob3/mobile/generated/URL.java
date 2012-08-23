@@ -52,7 +52,7 @@ public class URL
 	return _path;
   }
 
-  public static URL _null()
+  public static URL nullURL()
   {
 	return new URL("__NULL__");
   }

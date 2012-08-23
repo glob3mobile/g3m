@@ -21,8 +21,6 @@ public class SaverDownloadListener implements IDownloadListener
   {
 	if (_deleteListener && (_listener != null))
 	{
-	  if (_listener != null)
-		  _listener.dispose();
 	  _listener = null;
 	}
   }
@@ -32,7 +30,9 @@ public class SaverDownloadListener implements IDownloadListener
 	if (!_cacheStorage.contains(_url))
 	{
 	  _downloader.countSave();
-	  _cacheStorage.save(_url, *response.getByteBuffer());
+
+	  final ByteBuffer bb = response.getByteBuffer();
+	  _cacheStorage.save(_url, bb);
 	}
   }
 

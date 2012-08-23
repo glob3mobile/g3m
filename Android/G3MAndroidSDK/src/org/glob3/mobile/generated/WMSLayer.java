@@ -213,7 +213,7 @@ public class WMSLayer extends Layer
   {
 	if (!_bbox.touchesWith(tileSector))
 	{
-	  return URL.null(_);
+	  return URL.nullURL();
 	}
   
 	final Sector sector = tileSector.intersection(_bbox);

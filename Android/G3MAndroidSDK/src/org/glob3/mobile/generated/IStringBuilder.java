@@ -44,6 +44,7 @@ public abstract class IStringBuilder
 
   public abstract IStringBuilder add(double d);
   public abstract IStringBuilder add(String s);
+  public abstract IStringBuilder addBool(boolean b);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual String getString() const = 0;

@@ -26,7 +26,6 @@ public class RCObject
 //ORIGINAL LINE: void _suicide() const
   private void _suicide()
   {
-	this = null;
   }
 
   protected RCObject() // the object starts retained

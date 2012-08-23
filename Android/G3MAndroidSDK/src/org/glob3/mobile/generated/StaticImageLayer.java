@@ -127,7 +127,7 @@ public class StaticImageLayer extends Layer
 //ORIGINAL LINE: URL getFeatureURL(const Geodetic2D& g, const IFactory* factory, const Sector& sector, int width, int height) const
   public final URL getFeatureURL(Geodetic2D g, IFactory factory, Sector sector, int width, int height)
   {
-	return URL.null(_);
+	return URL.nullURL();
   }
 
 }
