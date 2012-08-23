@@ -35,8 +35,8 @@ private:
   const std::string   _style;
   const bool          _isTransparent;
   
-  const Angle         _minTileLongitudeDelta;
-  const Angle         _maxTileLongitudeDelta;
+//  const Angle         _minTileLongitudeDelta;
+//  const Angle         _maxTileLongitudeDelta;
 
   bool isAvailable(const Sector& sector) const;
 
@@ -54,8 +54,8 @@ public:
            const std::string srs,
            const std::string& style,
            const bool isTransparent,
-           const Angle& minTileLongitudeDelta,
-           const Angle& maxTileLongitudeDelta):
+           LayerCondition* condition):
+  Layer(condition),
   _mapLayer(mapLayer),
   _mapServerURL(mapServerURL),
   _mapServerVersion(mapServerVersion),
@@ -66,9 +66,9 @@ public:
   _format(format),
   _srs(srs),
   _style(style),
-  _isTransparent(isTransparent),
-  _minTileLongitudeDelta(minTileLongitudeDelta),
-  _maxTileLongitudeDelta(maxTileLongitudeDelta)
+  _isTransparent(isTransparent)
+//  _minTileLongitudeDelta(minTileLongitudeDelta),
+//  _maxTileLongitudeDelta(maxTileLongitudeDelta)
   {
     
   }
@@ -81,8 +81,8 @@ public:
            const std::string srs,
            const std::string& style,
            const bool isTransparent,
-           const Angle& minTileLongitudeDelta,
-           const Angle& maxTileLongitudeDelta):
+           LayerCondition* condition):
+  Layer(condition),
   _mapLayer(mapLayer),
   _mapServerURL(mapServerURL),
   _mapServerVersion(mapServerVersion),
@@ -93,9 +93,9 @@ public:
   _format(format),
   _srs(srs),
   _style(style),
-  _isTransparent(isTransparent),
-  _minTileLongitudeDelta(minTileLongitudeDelta),
-  _maxTileLongitudeDelta(maxTileLongitudeDelta)
+  _isTransparent(isTransparent)
+//  _minTileLongitudeDelta(minTileLongitudeDelta),
+//  _maxTileLongitudeDelta(maxTileLongitudeDelta)
   {
     
   }
@@ -108,11 +108,11 @@ public:
                                           const Tile* tile,
                                           int width, int height) const;
   
-  bool isAvailable(const RenderContext* rc,
-                   const Tile* tile) const;
-
-  bool isAvailable(const EventContext* ec,
-                   const Tile* tile) const;
+//  bool isAvailable(const RenderContext* rc,
+//                   const Tile* tile) const;
+//
+//  bool isAvailable(const EventContext* ec,
+//                   const Tile* tile) const;
 
   bool isTransparent() const{
     return _isTransparent;

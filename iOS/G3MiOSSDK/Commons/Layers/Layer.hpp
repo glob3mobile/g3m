@@ -19,14 +19,18 @@
 
 class Petition;
 class Tile;
+class LayerCondition;
 
 class Layer {
 private:
+  LayerCondition*                         _condition;
   std::vector<TerrainTouchEventListener*> _listeners;
   
 public:
   
-  Layer() {
+  Layer(LayerCondition* condition) :
+  _condition(condition)
+  {
     
   }
   
@@ -39,10 +43,10 @@ public:
                                                   int width, int height) const = 0;
   
   virtual bool isAvailable(const RenderContext* rc,
-                           const Tile* tile) const = 0;
+                           const Tile* tile) const;
   
   virtual bool isAvailable(const EventContext* ec,
-                           const Tile* tile) const = 0;
+                           const Tile* tile) const;
   
   virtual bool isTransparent() const = 0;
   

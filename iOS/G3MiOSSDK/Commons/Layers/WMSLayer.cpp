@@ -13,37 +13,17 @@
 #include "Tile.hpp"
 #include "Petition.hpp"
 
-bool WMSLayer::isAvailable(const Sector& sector) const {
-  const Angle deltaLon = sector.getDeltaLongitude();
-  
-  if ((!_minTileLongitudeDelta.isNan() && deltaLon.lowerThan(_minTileLongitudeDelta)) ||
-      (!_maxTileLongitudeDelta.isNan() && deltaLon.greaterThan(_maxTileLongitudeDelta))) {
-    return false;
-  }
-  else {
-    return true;
-  }
-}
-
-bool WMSLayer::isAvailable(const RenderContext* rc,
-                           const Tile* tile) const {
-  return isAvailable(tile->getSector());
-  
-  //  const Angle deltaLon = sector.getDeltaLongitude();
-  //
-  //  if ((!_minTileLongitudeDelta.isNan() && deltaLon.lowerThan(_minTileLongitudeDelta)) ||
-  //      (!_maxTileLongitudeDelta.isNan() && deltaLon.greaterThan(_maxTileLongitudeDelta))) {
-  //    return false;
-  //  }
-  //  else {
-  //    return true;
-  //  }
-}
-
-bool WMSLayer::isAvailable(const EventContext* ec,
-                           const Tile* tile) const {
-  return isAvailable(tile->getSector());
-}
+//bool WMSLayer::isAvailable(const Sector& sector) const {
+//  const Angle deltaLon = sector.getDeltaLongitude();
+//  
+//  if ((!_minTileLongitudeDelta.isNan() && deltaLon.lowerThan(_minTileLongitudeDelta)) ||
+//      (!_maxTileLongitudeDelta.isNan() && deltaLon.greaterThan(_maxTileLongitudeDelta))) {
+//    return false;
+//  }
+//  else {
+//    return true;
+//  }
+//}
 
 std::vector<Petition*> WMSLayer::getTilePetitions(const RenderContext* rc,
                                                   const Tile* tile,
@@ -258,3 +238,13 @@ URL WMSLayer::getFeatureURL(const Geodetic2D& g,
   
 	return URL(req);
 }
+
+//bool WMSLayer::isAvailable(const RenderContext* rc,
+//                           const Tile* tile) const {
+//  return isAvailable(tile->getSector());
+//}
+//
+//bool WMSLayer::isAvailable(const EventContext* ec,
+//                           const Tile* tile) const {
+//  return isAvailable(tile->getSector());
+//}

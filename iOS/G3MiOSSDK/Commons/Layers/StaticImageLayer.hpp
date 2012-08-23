@@ -27,7 +27,9 @@ public:
   StaticImageLayer(std::string layerID,
                    IImage* image,
                    const Sector& sector,
-                   IStorage* storage):
+                   IStorage* storage,
+                   LayerCondition* condition):
+  Layer(condition),
   _image(image),
   _bbox(sector),
   _layerID(layerID),
@@ -47,15 +49,15 @@ public:
                                           const Tile* tile,
                                           int width, int height) const;
   
-  bool isAvailable(const RenderContext* rc,
-                   const Tile* tile) const {
-    return true;
-  }
-  
-  bool isAvailable(const EventContext* ec,
-                   const Tile* tile) const {
-    return true;
-  }
+//  bool isAvailable(const RenderContext* rc,
+//                   const Tile* tile) const {
+//    return true;
+//  }
+//  
+//  bool isAvailable(const EventContext* ec,
+//                   const Tile* tile) const {
+//    return true;
+//  }
 
   
   bool isTransparent() const{

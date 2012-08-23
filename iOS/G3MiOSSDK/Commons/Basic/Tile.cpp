@@ -39,12 +39,12 @@ _texturizerTimer(NULL),
 _isVisible(false),
 _texturizerData(NULL)
 {
-  int __remove_tile_print;
-  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
-         getKey().description().c_str(),
-         _sector.getDeltaLatitude().description().c_str(),
-         _sector.getDeltaLongitude().description().c_str()
-         );
+//  int __remove_tile_print;
+//  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
+//         getKey().description().c_str(),
+//         _sector.getDeltaLatitude().description().c_str(),
+//         _sector.getDeltaLongitude().description().c_str()
+//         );
 }
 
 Tile::~Tile() {
