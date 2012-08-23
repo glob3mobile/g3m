@@ -62,7 +62,7 @@ public:
                     const IFactory* factory,
                     const Sector& sector,
                     int width, int height) const {
-    return URL::null();
+    return URL::nullURL();
   }
   
 };

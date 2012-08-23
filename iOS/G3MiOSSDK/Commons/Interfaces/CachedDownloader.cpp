@@ -35,7 +35,9 @@ public:
   
   void deleteListener() {
     if (_deleteListener && (_listener != NULL)) {
+#ifdef C_CODE
       delete _listener;
+#endif
       _listener = NULL;
     }
   }
@@ -43,8 +45,9 @@ public:
   void saveResponse(const Response* response) {
     if (!_cacheStorage->contains(_url)) {
       _downloader->countSave();
-      _cacheStorage->save(_url,
-                          *response->getByteBuffer());
+      
+      const ByteBuffer* bb = response->getByteBuffer();
+      _cacheStorage->save(_url, *bb);
     }
   }
   

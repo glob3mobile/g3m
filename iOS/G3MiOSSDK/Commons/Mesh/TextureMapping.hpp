@@ -30,7 +30,11 @@ public:
 
 class SimpleTextureMapping : public TextureMapping {
 private:
+#ifdef C_CODE
   const GLTextureID  _glTextureId;
+#else
+  GLTextureID  _glTextureId;
+#endif
   const float const* _texCoords;
   const bool _ownedTexCoords;
 

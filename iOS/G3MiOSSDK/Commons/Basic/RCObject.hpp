@@ -16,7 +16,9 @@ private:
   mutable long _referenceCounter;
 
   void _suicide() const {
+#ifdef C_CODE
     delete this;
+#endif
   }
   
 protected:

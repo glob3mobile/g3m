@@ -143,7 +143,7 @@ URL WMSLayer::getFeatureURL(const Geodetic2D& g,
                             const Sector& tileSector,
                             int width, int height) const {
   if (!_bbox.touchesWith(tileSector)) {
-    return URL::null();
+    return URL::nullURL();
   }
   
   const Sector sector = tileSector.intersection(_bbox);

@@ -25,9 +25,15 @@ class MutableVector2D;
 
 class Petition {
 private:
+#ifdef C_CODE
   const URL             _url;
-  const Sector*       _sector;
   const ByteBuffer* _buffer;
+#endif
+#ifdef JAVA_CODE
+  private URL _url = new URL(); //Conversor creates class "Url"
+  private ByteBuffer _buffer;
+#endif
+  const Sector*       _sector;
   long                     _downloadID;
   const bool            _transparentImage;
   
@@ -45,8 +51,10 @@ public:
   }
   
   ~Petition(){
+#ifdef C_CODE
     delete _sector;
     releaseData();
+#endif
   }
   
   void releaseData(){

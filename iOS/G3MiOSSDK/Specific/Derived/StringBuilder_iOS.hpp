@@ -25,6 +25,11 @@ protected:
   }
 public:  
   
+  IStringBuilder* addBool(bool b){
+    _oss << b;
+    return this;
+  }
+  
   IStringBuilder* add(double d){
     _oss << d;
     return this;

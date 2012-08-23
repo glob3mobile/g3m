@@ -40,7 +40,7 @@ public:
     return _path;
   }
   
-  static URL null() {
+  static URL nullURL() {
     return URL("__NULL__");
   }
   

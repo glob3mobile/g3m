@@ -23,11 +23,16 @@ class TileTextureBuilder;
 
 class MultiLayerTileTexturizer : public TileTexturizer {
 private:
+#ifdef C_CODE
   const LayerSet* const        _layerSet;
+  const TilesRenderParameters* _parameters;
+#else
+  const LayerSet*              _layerSet;
+  TilesRenderParameters* _parameters;
+#endif
   
   IDownloader*                 _downloader;
-  const TilesRenderParameters* _parameters;
-  
+
 //  std::map<TileKey, TileTextureBuilder*> _builders;
   
   mutable float* _texCoordsCache;

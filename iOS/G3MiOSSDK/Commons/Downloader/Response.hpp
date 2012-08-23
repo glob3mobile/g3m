@@ -14,7 +14,12 @@
 
 class Response {
 private:
+#ifdef C_CODE
   const URL         _url;
+#endif
+#ifdef JAVA_CODE
+  private URL _url = new URL();     //Converter puts "Url"
+#endif
   const ByteBuffer* _data;
 
 #ifdef C_CODE

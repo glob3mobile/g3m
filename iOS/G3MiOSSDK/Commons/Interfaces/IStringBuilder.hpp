@@ -27,6 +27,7 @@ public:
   
   virtual IStringBuilder* add(double d) = 0;
   virtual IStringBuilder* add(const std::string& s) = 0;
+  virtual IStringBuilder* addBool(bool b) = 0;
   
   virtual std::string getString() const = 0;
 
