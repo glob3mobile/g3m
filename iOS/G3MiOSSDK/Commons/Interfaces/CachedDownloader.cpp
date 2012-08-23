@@ -16,7 +16,13 @@ class SaverDownloadListener : public IDownloadListener {
   IDownloadListener* _listener;
   const bool         _deleteListener;
   IStorage*          _cacheStorage;
+  
+#ifdef C_CODE
   const URL          _url;
+#endif
+#ifdef JAVA_CODE
+  private Url _url = new URL();
+#endif
   
 public:
   SaverDownloadListener(CachedDownloader* downloader,

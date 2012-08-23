@@ -290,8 +290,9 @@ private:
   
   TilesStatistics _lastStatistics;
   
-#ifdef C_CODE  
   bool _firstRender;
+  
+#ifdef C_CODE  
   class DistanceToCenterTileComparison {
   private:
     const Camera* _camera;

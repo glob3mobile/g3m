@@ -184,8 +184,12 @@ private:
   
   const Mesh* _tessellatorMesh;
   
+#ifdef C_CODE
   const float* _texCoords;
-  
+#endif
+#ifdef JAVA_CODE
+  private final float[] _texCoords;
+#endif
   
   std::vector<PetitionStatus>    _status;
   std::vector<long>              _requestsIds;
@@ -201,12 +205,12 @@ public:
   
   TileTextureBuilder(MultiLayerTileTexturizer*    texturizer,
                      const RenderContext*         rc,
-                     const LayerSet* const        layerSet,
+                     const LayerSet*        layerSet,
                      const TilesRenderParameters* parameters,
                      IDownloader*                 downloader,
                      Tile* tile,
                      const Mesh* tessellatorMesh,
-                     float* texCoords) :
+                     float texCoords[]) :
   _texturizer(texturizer),
   _factory(rc->getFactory()),
   _texturesHandler(rc->getTexturesHandler()),
@@ -346,10 +350,11 @@ public:
         _factory->deleteImage(images[i]);
       }
       
-      
+#ifdef C_CODE
       for (int i = 0; i < rectangles.size(); i++) {
         delete rectangles[i];
       }
+#endif
     }
     
     _tile->setTextureSolved(true);

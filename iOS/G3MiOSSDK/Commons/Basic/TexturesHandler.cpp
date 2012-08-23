@@ -27,7 +27,12 @@ const std::string TextureSpec::description() const {
 
 class TextureHolder {
 public:
+#ifdef C_CODE
   const TextureSpec _textureSpec;
+#endif
+#ifdef JAVA_CODE
+  public final TextureSpec _textureSpec = new TextureSpec();
+#endif
   GLTextureID _glTextureId;
   
   long _referenceCounter;

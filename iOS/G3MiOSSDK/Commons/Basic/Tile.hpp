@@ -181,9 +181,11 @@ public:
   }
   
   void setTexturizerData(ITexturizerData* texturizerData) {
+#ifdef C_CODE
     if (_texturizerData != NULL) {
       delete _texturizerData;
     }
+#endif
     _texturizerData = texturizerData;
   }
   
