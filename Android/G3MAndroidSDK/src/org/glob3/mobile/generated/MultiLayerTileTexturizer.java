@@ -29,9 +29,9 @@ package org.glob3.mobile.generated;
 public class MultiLayerTileTexturizer extends TileTexturizer
 {
   private final LayerSet _layerSet;
+  private TilesRenderParameters _parameters;
 
   private IDownloader _downloader;
-  private final TilesRenderParameters _parameters;
 
 //  std::map<TileKey, TileTextureBuilder*> _builders;
 
