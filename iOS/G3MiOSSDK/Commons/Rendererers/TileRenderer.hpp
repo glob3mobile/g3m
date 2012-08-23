@@ -16,7 +16,6 @@ class TileTessellator;
 class TileTexturizer;
 
 #include "Sector.hpp"
-//#include <vector>
 #include <map>
 #include <sstream>
 

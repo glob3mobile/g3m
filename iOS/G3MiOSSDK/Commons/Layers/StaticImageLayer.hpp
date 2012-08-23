@@ -48,9 +48,15 @@ public:
                                           int width, int height) const;
   
   bool isAvailable(const RenderContext* rc,
-                   const Tile* tile)const {
+                   const Tile* tile) const {
     return true;
   }
+  
+  bool isAvailable(const EventContext* ec,
+                   const Tile* tile) const {
+    return true;
+  }
+
   
   bool isTransparent() const{
     return true;

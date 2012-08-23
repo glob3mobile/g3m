@@ -13,12 +13,11 @@
 #include "Tile.hpp"
 #include "Petition.hpp"
 
-bool WMSLayer::isAvailable(const RenderContext* rc,
-                           const Tile* tile) const {
-  const Angle dLon = tile->getSector().getDeltaLongitude();
+bool WMSLayer::isAvailable(const Sector& sector) const {
+  const Angle deltaLon = sector.getDeltaLongitude();
   
-  if ((!_minTileLongitudeDelta.isNan() && dLon.lowerThan(_minTileLongitudeDelta)) ||
-      (!_maxTileLongitudeDelta.isNan() && dLon.greaterThan(_maxTileLongitudeDelta))) {
+  if ((!_minTileLongitudeDelta.isNan() && deltaLon.lowerThan(_minTileLongitudeDelta)) ||
+      (!_maxTileLongitudeDelta.isNan() && deltaLon.greaterThan(_maxTileLongitudeDelta))) {
     return false;
   }
   else {
@@ -26,6 +25,25 @@ bool WMSLayer::isAvailable(const RenderContext* rc,
   }
 }
 
+bool WMSLayer::isAvailable(const RenderContext* rc,
+                           const Tile* tile) const {
+  return isAvailable(tile->getSector());
+  
+  //  const Angle deltaLon = sector.getDeltaLongitude();
+  //
+  //  if ((!_minTileLongitudeDelta.isNan() && deltaLon.lowerThan(_minTileLongitudeDelta)) ||
+  //      (!_maxTileLongitudeDelta.isNan() && deltaLon.greaterThan(_maxTileLongitudeDelta))) {
+  //    return false;
+  //  }
+  //  else {
+  //    return true;
+  //  }
+}
+
+bool WMSLayer::isAvailable(const EventContext* ec,
+                           const Tile* tile) const {
+  return isAvailable(tile->getSector());
+}
 
 std::vector<Petition*> WMSLayer::getTilePetitions(const RenderContext* rc,
                                                   const Tile* tile,
@@ -58,7 +76,7 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const RenderContext* rc,
   }
   
   req += "REQUEST=GetMap&SERVICE=WMS";
-
+  
   
   switch (_mapServerVersion) {
     case WMS_1_3_0:
@@ -137,7 +155,7 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const RenderContext* rc,
   Petition *petition = new Petition(sector, URL(req), _isTransparent);
   petitions.push_back(petition);
   
-//  printf("%s\n", petition->description().c_str());
+  //  printf("%s\n", petition->description().c_str());
   
 	return petitions;
 }

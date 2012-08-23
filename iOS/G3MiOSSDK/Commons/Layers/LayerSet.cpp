@@ -35,10 +35,11 @@ void LayerSet::onTerrainTouchEvent(const EventContext* ec,
   
   for (int i = 0; i < _layers.size(); i++) {
     Layer* layer = _layers[i];
-    
-    TerrainTouchEvent tte(position, tile->getSector(), layer);
-    
-    layer->onTerrainTouchEventListener(ec, tte);
+    if (layer->isAvailable(ec, tile)) {
+      TerrainTouchEvent tte(position, tile->getSector(), layer);
+      
+      layer->onTerrainTouchEventListener(ec, tte);
+    }
   }
-
+  
 }

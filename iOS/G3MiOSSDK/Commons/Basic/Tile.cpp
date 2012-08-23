@@ -16,7 +16,36 @@
 #include "TilesRenderParameters.hpp"
 #include "TileKey.hpp"
 
-//static long visibleCounter = 0;
+Tile::Tile(TileTexturizer* texturizer,
+           Tile* parent,
+           const Sector& sector,
+           int level,
+           int row,
+           int column):
+_texturizer(texturizer),
+_parent(parent),
+_sector(sector),
+_level(level),
+_row(row),
+_column(column),
+_tessellatorMesh(NULL),
+_debugMesh(NULL),
+_texturizerMesh(NULL),
+_textureSolved(false),
+_texturizerDirty(true),
+_subtiles(NULL),
+_justCreatedSubtiles(false),
+_texturizerTimer(NULL),
+_isVisible(false),
+_texturizerData(NULL)
+{
+  int __remove_tile_print;
+  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
+         getKey().description().c_str(),
+         _sector.getDeltaLatitude().description().c_str(),
+         _sector.getDeltaLongitude().description().c_str()
+         );
+}
 
 Tile::~Tile() {
   if (_isVisible) {
@@ -24,13 +53,6 @@ Tile::~Tile() {
   }
   
   prune(NULL);
-  
-  //  if (_isVisible) {
-  //    visibleCounter--;
-  //    printf("**** Tile %s is DESTROYED (visibles=%ld)\n",
-  //           getKey().description().c_str(),
-  //           visibleCounter);
-  //  }
   
   if (_texturizerTimer != NULL) {
     delete _texturizerTimer;
@@ -282,22 +304,10 @@ void Tile::prune(const TileRenderContext* trc) {
 }
 
 void Tile::setIsVisible(bool isVisible) {
-  
-  
   if (_isVisible != isVisible) {
     _isVisible = isVisible;
     
-    if (_isVisible) {
-      //      visibleCounter++;
-      //      printf("**** Tile %s becomed Visible (visibles=%ld)\n",
-      //             getKey().description().c_str(),
-      //             visibleCounter);
-    }
-    else {
-      //      visibleCounter--;
-      //      printf("**** Tile %s becomed INVisible (visibles=%ld)\n",
-      //             getKey().description().c_str(),
-      //             visibleCounter);
+    if (!_isVisible) {
       deleteTexturizerMesh();
     }
   }
@@ -409,42 +419,9 @@ std::vector<Tile*>* Tile::createSubTiles() {
   return subTiles;
 }
 
-
 const TileKey Tile::getKey() const {
   return TileKey(_level, _row, _column);
 }
-
-//Geodetic3D Tile::intersection(const EventContext* ec,
-//                              const Vector3D& origin,
-//                              const Vector3D& ray) const {
-//  const Planet* planet = ec->getPlanet();
-//
-//  const Vector3D onPlanet = planet->closestIntersection(origin, ray);
-//  if (onPlanet.isNan()) {
-//    return Geodetic3D::nan();
-//  }
-//
-//  const Geodetic3D g = planet->toGeodetic3D(onPlanet);
-//
-//  if (_sector.contains(g)) {
-//    //If this tile is not a leaf
-//    if (_subtiles != NULL) {
-//      for (int i = 0; i < _subtiles->size(); i++) {
-//        const Geodetic3D g3d = _subtiles->at(i)->intersection(ec, origin, ray);
-//        if (!g3d.isNan()) {
-//          return g3d;
-//        }
-//      }
-//    }
-//    else {
-//      //printf("TOUCH TILE %d\n", _level);
-//      _texturizer->onTerrainTouchEvent(ec, g, this);
-//      return g;
-//    }
-//  }
-//
-//  return Geodetic3D::nan();
-//}
 
 const Tile* Tile::getDeepestTileContaining(const Geodetic3D& position) const {
   if (_sector.contains(position)) {

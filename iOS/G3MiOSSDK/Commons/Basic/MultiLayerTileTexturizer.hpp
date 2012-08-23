@@ -10,16 +10,13 @@
 #define G3MiOSSDK_MultiLayerTileTexturizer_hpp
 
 #include "TileTexturizer.hpp"
-class LayerSet;
-class IDownloader;
-
-#include <map>
 #include "TileKey.hpp"
 #include "GLTextureID.hpp"
+#include "Geodetic3D.hpp"
 
 class TileTextureBuilder;
-
-#include "Geodetic3D.hpp"
+class LayerSet;
+class IDownloader;
 
 
 class MultiLayerTileTexturizer : public TileTexturizer {
@@ -28,8 +25,6 @@ private:
   
   IDownloader*                 _downloader;
   const TilesRenderParameters* _parameters;
-  
-//  std::map<TileKey, TileTextureBuilder*> _builders;
   
   mutable float* _texCoordsCache;
   

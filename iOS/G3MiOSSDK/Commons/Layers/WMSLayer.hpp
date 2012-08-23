@@ -38,7 +38,8 @@ private:
   const Angle         _minTileLongitudeDelta;
   const Angle         _maxTileLongitudeDelta;
 
-  
+  bool isAvailable(const Sector& sector) const;
+
 public:
   
   
@@ -109,7 +110,10 @@ public:
   
   bool isAvailable(const RenderContext* rc,
                    const Tile* tile) const;
-  
+
+  bool isAvailable(const EventContext* ec,
+                   const Tile* tile) const;
+
   bool isTransparent() const{
     return _isTransparent;
   }

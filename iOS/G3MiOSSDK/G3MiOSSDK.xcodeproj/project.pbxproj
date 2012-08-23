@@ -598,10 +598,10 @@
 				D87EC5C115BEB12F00E38C36 /* Layer.hpp */,
 				D87EC5C215BEB12F00E38C36 /* LayerSet.cpp */,
 				D87EC5C315BEB12F00E38C36 /* LayerSet.hpp */,
+				D8E0EC1415C1B1CD0010A68A /* StaticImageLayer.cpp */,
+				D8E0EC1215C1B1BB0010A68A /* StaticImageLayer.hpp */,
 				D87EC5C415BEB12F00E38C36 /* WMSLayer.cpp */,
 				D87EC5C515BEB12F00E38C36 /* WMSLayer.hpp */,
-				D8E0EC1215C1B1BB0010A68A /* StaticImageLayer.hpp */,
-				D8E0EC1415C1B1CD0010A68A /* StaticImageLayer.cpp */,
 			);
 			name = Layers;
 			path = Commons/Layers;

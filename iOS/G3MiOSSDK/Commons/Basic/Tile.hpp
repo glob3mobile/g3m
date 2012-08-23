@@ -99,25 +99,7 @@ public:
        const Sector& sector,
        int level,
        int row,
-       int column):
-  _texturizer(texturizer),
-  _parent(parent),
-  _sector(sector),
-  _level(level),
-  _row(row),
-  _column(column),
-  _tessellatorMesh(NULL),
-  _debugMesh(NULL),
-  _texturizerMesh(NULL),
-  _textureSolved(false),
-  _texturizerDirty(true),
-  _subtiles(NULL),
-  _justCreatedSubtiles(false),
-  _texturizerTimer(NULL),
-  _isVisible(false),
-  _texturizerData(NULL)
-  {
-  }
+       int column);
   
   ~Tile();
   
@@ -181,10 +163,6 @@ public:
     _texturizerData = texturizerData;
   }
 
-//  Geodetic3D intersection(const EventContext* ec,
-//                          const Vector3D& origin,
-//                          const Vector3D& ray) const;
-  
   const Tile* getDeepestTileContaining(const Geodetic3D& position) const;
   
 };
