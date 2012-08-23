@@ -18,7 +18,7 @@ class IStorage;
 class StaticImageLayer: public Layer
 {
 private:
-  Sector            _bbox;
+  Sector            _sector;
   const IImage*     _image;
   const std::string _layerID;
   IStorage* const   _storage;
@@ -31,7 +31,7 @@ public:
                    LayerCondition* condition):
   Layer(condition),
   _image(image),
-  _bbox(sector),
+  _sector(sector),
   _layerID(layerID),
   _storage(storage) {
 
@@ -42,23 +42,12 @@ public:
   }
   
   bool fullContains(const Sector& s) const {
-    return _bbox.fullContains(s);
+    return _sector.fullContains(s);
   }
   
   std::vector<Petition*> getTilePetitions(const RenderContext* rc,
                                           const Tile* tile,
                                           int width, int height) const;
-  
-//  bool isAvailable(const RenderContext* rc,
-//                   const Tile* tile) const {
-//    return true;
-//  }
-//  
-//  bool isAvailable(const EventContext* ec,
-//                   const Tile* tile) const {
-//    return true;
-//  }
-
   
   bool isTransparent() const{
     return true;

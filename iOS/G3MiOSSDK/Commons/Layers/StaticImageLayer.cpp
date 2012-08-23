@@ -23,7 +23,7 @@ std::vector<Petition*> StaticImageLayer::getTilePetitions(const RenderContext* r
 
   Sector tileSector = tile->getSector();
   
-  if (!_bbox.fullContains(tileSector)) {
+  if (!_sector.fullContains(tileSector)) {
     return res;
   }
   
@@ -36,9 +36,8 @@ std::vector<Petition*> StaticImageLayer::getTilePetitions(const RenderContext* r
   
   Petition *pet = new Petition(tileSector, id, true);
 
-  if (_storage != NULL)
-  {
-    if (_storage->contains(id)){
+  if (_storage != NULL) {
+    if (_storage->contains(id)) {
       const ByteBuffer* bb = _storage->read(id);
       pet->setByteBuffer(bb);        //FILLING DATA
       res.push_back(pet);
@@ -46,23 +45,26 @@ std::vector<Petition*> StaticImageLayer::getTilePetitions(const RenderContext* r
     }
   }
   
-  double widthUV = tileSector.getDeltaLongitude().degrees() / _bbox.getDeltaLongitude().degrees();
-  double heightUV = tileSector.getDeltaLatitude().degrees() / _bbox.getDeltaLatitude().degrees();
+  const double widthUV = tileSector.getDeltaLongitude().degrees() / _sector.getDeltaLongitude().degrees();
+  const double heightUV = tileSector.getDeltaLatitude().degrees() / _sector.getDeltaLatitude().degrees();
   
-  Vector2D p = _bbox.getUVCoordinates(tileSector.lower().latitude(), tileSector.lower().longitude());
-  Vector2D pos(p.x(), p.y() - heightUV);
+  const Vector2D p = _sector.getUVCoordinates(tileSector.lower().latitude(), tileSector.lower().longitude());
+  const Vector2D pos(p.x(), p.y() - heightUV);
   
-  Rectangle r(pos.x() * _image->getWidth(), pos.y() * _image->getHeight(), widthUV * _image->getWidth(), heightUV * _image->getHeight());
+  Rectangle r(pos.x() * _image->getWidth(),
+              pos.y() * _image->getHeight(),
+              widthUV * _image->getWidth(),
+              heightUV * _image->getHeight());
   
-  IImage* subImage = _image->subImage(r);
+  const IImage* subImage = _image->subImage(r);
   
-  ByteBuffer* bb = subImage->getEncodedImage(); //Image Encoding PNG
+  const ByteBuffer* bb = subImage->getEncodedImage(); //Image Encoding PNG
   pet->setByteBuffer(bb);        //FILLING DATA
   delete subImage;
 
   res.push_back(pet);
   
-  if (_storage != NULL){
+  if (_storage != NULL) {
     _storage->save(id, *bb);
   }
   

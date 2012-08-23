@@ -35,9 +35,6 @@ private:
   const std::string   _style;
   const bool          _isTransparent;
   
-//  const Angle         _minTileLongitudeDelta;
-//  const Angle         _maxTileLongitudeDelta;
-
   bool isAvailable(const Sector& sector) const;
 
 public:
@@ -67,8 +64,6 @@ public:
   _srs(srs),
   _style(style),
   _isTransparent(isTransparent)
-//  _minTileLongitudeDelta(minTileLongitudeDelta),
-//  _maxTileLongitudeDelta(maxTileLongitudeDelta)
   {
     
   }
@@ -94,8 +89,6 @@ public:
   _srs(srs),
   _style(style),
   _isTransparent(isTransparent)
-//  _minTileLongitudeDelta(minTileLongitudeDelta),
-//  _maxTileLongitudeDelta(maxTileLongitudeDelta)
   {
     
   }
@@ -108,12 +101,6 @@ public:
                                           const Tile* tile,
                                           int width, int height) const;
   
-//  bool isAvailable(const RenderContext* rc,
-//                   const Tile* tile) const;
-//
-//  bool isAvailable(const EventContext* ec,
-//                   const Tile* tile) const;
-
   bool isTransparent() const{
     return _isTransparent;
   }
