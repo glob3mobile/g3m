@@ -49,7 +49,9 @@ public:
   void cancelRequest(long requestId);
   
   virtual ~CachedDownloader() {
+#ifdef C_CODE
     delete _downloader;
+#endif
   }
   
   const std::string statistics();

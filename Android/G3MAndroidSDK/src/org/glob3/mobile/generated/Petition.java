@@ -31,9 +31,9 @@ package org.glob3.mobile.generated;
 
 public class Petition
 {
-  private URL _url = new URL(); //Conversor creates class "Url"
-  private ByteBuffer _buffer;
+  private URL _url = new URL();
   private final Sector _sector;
+  private ByteBuffer _buffer;
   private int _downloadID;
   private final boolean _transparentImage;
 
@@ -41,7 +41,7 @@ public class Petition
   public Petition(Sector sector, URL url, boolean transparent)
   {
 	  _sector = new Sector(sector);
-	  _url = url;
+	  _url = new URL(url);
 	  _transparentImage = transparent;
 	  _buffer = null;
 	  _downloadID = -1;
@@ -49,13 +49,17 @@ public class Petition
 
   public void dispose()
   {
+	if (_sector != null)
+		_sector.dispose();
+	releaseData();
   }
 
   public final void releaseData()
   {
 	if (_buffer != null)
 	{
-	  _buffer = null;
+	  if (_buffer != null)
+		  _buffer.dispose();
 	  _buffer = null;
 	}
   }
@@ -104,7 +108,8 @@ public class Petition
   {
 	if (_buffer != null)
 	{
-	  _buffer = null;
+	  if (_buffer != null)
+		  _buffer.dispose();
 	}
 	_buffer = buffer;
   }
@@ -131,7 +136,7 @@ public class Petition
 	{
 	  isb.add(_buffer.description());
 	}
-	isb.add(", downloadID=").add(_downloadID).add(", transparentImage=").addBool(_transparentImage).add(")");
+	isb.add(", downloadID=").add(_downloadID).add(", transparentImage=").add(_transparentImage).add(")");
 	String s = isb.getString();
   
 	if (isb != null)

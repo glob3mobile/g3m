@@ -17,10 +17,12 @@ import org.glob3.mobile.generated.GLError;
 import org.glob3.mobile.generated.GLFeature;
 import org.glob3.mobile.generated.GLFormat;
 import org.glob3.mobile.generated.GLPrimitive;
+import org.glob3.mobile.generated.GLTextureID;
 import org.glob3.mobile.generated.GLTextureParameter;
 import org.glob3.mobile.generated.GLTextureParameterValue;
 import org.glob3.mobile.generated.GLTextureType;
 import org.glob3.mobile.generated.GLType;
+import org.glob3.mobile.generated.GLVariable;
 import org.glob3.mobile.generated.INativeGL;
 
 import android.opengl.GLES20;
@@ -166,6 +168,14 @@ public class NativeGL2_Android extends INativeGL {
 		    }
 			return 0;
 		  }
+		  
+		  final int getEnum(GLVariable v) {
+			    switch (v) {
+			      case Viewport:
+			        return GLES20.GL_VIEWPORT;
+			    }
+				return 0;
+			  }
 
 	
 	// TOO SLOW (PUT ANDROID BUG)
@@ -340,12 +350,12 @@ public class NativeGL2_Android extends INativeGL {
 	}
 
 	@Override
-	public ArrayList<Integer> genTextures(int n) {
+	public ArrayList<GLTextureID> genTextures(int n) {
+		ArrayList<GLTextureID> ai = new ArrayList<GLTextureID>();
 		int[] tex = new int[n];
 		GLES20.glGenTextures(n, tex, 0);
-		ArrayList<Integer> ai = new ArrayList<Integer>();
 		for(int i = 0; i < n; i++){
-			ai.add(tex[i]);
+			ai.add(new GLTextureID( tex[i]) );
 		}
 		return ai;
 	}
@@ -377,6 +387,11 @@ public class NativeGL2_Android extends INativeGL {
 	@Override
 	public void cullFace(GLCullFace c) {
 		GLES20.glCullFace(getEnum(c));
+	}
+
+	@Override
+	public void getIntegerv(GLVariable v, int[] i) {
+		GLES20.glGetIntegerv(getEnum(v), IntBuffer.wrap(i));
 	}
 
 }

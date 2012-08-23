@@ -96,8 +96,6 @@ public class CachedDownloader implements IDownloader
 
   public void dispose()
   {
-	if (_downloader != null)
-		_downloader.dispose();
   }
 
   public final String statistics()

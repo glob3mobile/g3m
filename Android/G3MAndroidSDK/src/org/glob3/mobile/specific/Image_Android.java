@@ -88,9 +88,7 @@ public class Image_Android extends IImage {
 
 
    @Override
-   public void fillWithRGBA888(byte[] data,
-                            int width,
-                            int height) {
+   public void fillWithRGBA8888(byte[] data, int width, int height) {
 	   //Scaling
 	   Bitmap scaledImage = null;
 	   if ((_image.getWidth() != width) || (_image.getHeight() != height)) {

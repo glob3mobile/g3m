@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
 import org.glob3.mobile.generated.IDownloadListener;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.URL;
-import org.glob3.mobile.generated.Url;
 
-public class Downloader_Android extends IDownloader {
+public class Downloader_Android implements IDownloader {
 
    private long                                       _requestIdCounter;
    private long                                       _requestsCounter;
@@ -61,9 +61,7 @@ public class Downloader_Android extends IDownloader {
 
 
    @Override
-   public long request(Url url,
-                       int priority,
-                       IDownloadListener listener) {
+   public int request(URL url, int priority, IDownloadListener listener, boolean deleteListener) {
 
       Downloader_Android_Handler handler = null;
       long requestId;
@@ -171,17 +169,6 @@ public class Downloader_Android extends IDownloader {
 
       return selectedHandler;
    }
-
-
-   @Override
-   public int request(URL url,
-                      int priority,
-                      IDownloadListener listener,
-                      boolean deleteListener) {
-      // TODO Auto-generated method stub
-      return 0;
-   }
-
 
    @Override
    public String statistics() {

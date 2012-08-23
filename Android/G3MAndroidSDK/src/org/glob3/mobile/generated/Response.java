@@ -11,14 +11,14 @@ package org.glob3.mobile.generated;
 
 public class Response
 {
-  private URL _url = new URL();     //Converter puts "Url"
+  private URL _url = new URL();
   private final ByteBuffer _data;
 
 
 
   public Response(URL url, ByteBuffer data)
   {
-	  _url = url;
+	  _url = new URL(url);
 	  _data = data;
   }
 

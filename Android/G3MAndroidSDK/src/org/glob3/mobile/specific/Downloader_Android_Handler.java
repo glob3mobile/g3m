@@ -12,20 +12,18 @@ import java.util.Iterator;
 import org.apache.http.HttpConnection;
 import org.glob3.mobile.generated.IDownloadListener;
 import org.glob3.mobile.generated.IDownloader;
-import org.glob3.mobile.generated.Url;
-
 import android.util.Log;
 
 public class Downloader_Android_Handler {
 
    private long                     _priority;
    private boolean                  _canceled;
-   private Url                      _url;
+   private org.glob3.mobile.generated.URL                      _url;
    private URL                      _URL;
    private ArrayList<ListenerEntry> _listeners;
 
 
-   public Downloader_Android_Handler(Url url,
+   public Downloader_Android_Handler(org.glob3.mobile.generated.URL url,
                                      IDownloadListener listener,
                                      int priority,
                                      long requestId) {
