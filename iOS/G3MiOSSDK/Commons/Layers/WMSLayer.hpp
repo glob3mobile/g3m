@@ -23,20 +23,20 @@ private:
   const std::string      _mapLayer;
   const URL              _mapServerURL;
   const WMSServerVersion _mapServerVersion;
-
+  
   const std::string      _queryLayer;
   const URL              _queryServerURL;
   const WMSServerVersion _queryServerVersion;
   
   Sector              _sector;
-
+  
   const std::string   _format;
   const std::string   _srs;
   const std::string   _style;
   const bool          _isTransparent;
   
   bool isAvailable(const Sector& sector) const;
-
+  
 public:
   
   
@@ -67,7 +67,7 @@ public:
   {
     
   }
-
+  
   WMSLayer(const std::string& mapLayer,
            const URL& mapServerURL,
            const WMSServerVersion mapServerVersion,
@@ -92,23 +92,19 @@ public:
   {
     
   }
-    
-  bool fullContains(const Sector& s) const {
-    return _sector.fullContains(s);
-  }
   
-  std::vector<Petition*> getTilePetitions(const RenderContext* rc,
-                                          const Tile* tile,
-                                          int width, int height) const;
+  std::vector<Petition*> getMapPetitions(const RenderContext* rc,
+                                         const Tile* tile,
+                                         int width, int height) const;
   
   bool isTransparent() const{
     return _isTransparent;
   }
   
-  URL getFeatureURL(const Geodetic2D& g,
-                    const IFactory* factory,
-                    const Sector& sector,
-                    int width, int height) const;
+  URL getFeatureInfoURL(const Geodetic2D& g,
+                        const IFactory* factory,
+                        const Sector& sector,
+                        int width, int height) const;
   
 };
 

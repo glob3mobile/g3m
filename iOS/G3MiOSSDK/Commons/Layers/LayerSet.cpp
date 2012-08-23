@@ -16,8 +16,8 @@ std::vector<Petition*> LayerSet::createTilePetitions(const RenderContext* rc,
   
   for (int i = 0; i < _layers.size(); i++) {
     Layer* layer = _layers[i];
-    if (layer->isAvailable(rc, tile)){
-      std::vector<Petition*> pet = layer->getTilePetitions(rc, tile, width, height);
+    if (layer->isAvailable(rc, tile)) {
+      std::vector<Petition*> pet = layer->getMapPetitions(rc, tile, width, height);
       
       //Storing petitions
       for (int j = 0; j < pet.size(); j++) {

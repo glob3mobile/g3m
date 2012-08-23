@@ -16,11 +16,11 @@
 #include "Petition.hpp"
 
 
-std::vector<Petition*> StaticImageLayer::getTilePetitions(const RenderContext* rc,
-                                                          const Tile* tile, int width, int height) const
+std::vector<Petition*> StaticImageLayer::getMapPetitions(const RenderContext* rc,
+                                                         const Tile* tile, int width, int height) const
 {
   std::vector<Petition*> res;
-
+  
   Sector tileSector = tile->getSector();
   
   if (!_sector.fullContains(tileSector)) {
@@ -35,7 +35,7 @@ std::vector<Petition*> StaticImageLayer::getTilePetitions(const RenderContext* r
                                                     tileSector.upper().longitude().degrees() ));
   
   Petition *pet = new Petition(tileSector, id, true);
-
+  
   if (_storage != NULL) {
     if (_storage->contains(id)) {
       const ByteBuffer* bb = _storage->read(id);
@@ -61,7 +61,7 @@ std::vector<Petition*> StaticImageLayer::getTilePetitions(const RenderContext* r
   const ByteBuffer* bb = subImage->getEncodedImage(); //Image Encoding PNG
   pet->setByteBuffer(bb);        //FILLING DATA
   delete subImage;
-
+  
   res.push_back(pet);
   
   if (_storage != NULL) {

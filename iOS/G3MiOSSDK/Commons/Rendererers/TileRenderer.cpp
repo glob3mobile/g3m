@@ -25,7 +25,7 @@ TileRenderer::~TileRenderer() {
   delete _parameters;
   
   delete _lastSplitTimer;
-//  delete _lastTexturizerTimer;
+  //  delete _lastTexturizerTimer;
 }
 
 void TileRenderer::clearTopLevelTiles() {
@@ -78,22 +78,17 @@ void TileRenderer::initialize(const InitializationContext* ic) {
   }
   _lastSplitTimer      = ic->getFactory()->createTimer();
   
-//  if (_lastTexturizerTimer != NULL) {
-//    delete _lastTexturizerTimer;
-//  }
-//  _lastTexturizerTimer = ic->getFactory()->createTimer();
+  //  if (_lastTexturizerTimer != NULL) {
+  //    delete _lastTexturizerTimer;
+  //  }
+  //  _lastTexturizerTimer = ic->getFactory()->createTimer();
   
   _texturizer->initialize(ic, _parameters);
   
 }
 
 bool TileRenderer::isReadyToRender(const RenderContext *rc) {
-  if (!_parameters->_forceTopLevelTilesRenderOnStart) {
-    return true;
-  }
-  
   if (_topTilesJustCreated) {
-    
     if (_texturizer != NULL) {
       const int topLevelTilesSize = _topLevelTiles.size();
       for (int i = 0; i < topLevelTilesSize; i++) {
@@ -103,17 +98,18 @@ bool TileRenderer::isReadyToRender(const RenderContext *rc) {
     }
     _topTilesJustCreated = false;
   }
-  
-  
-  if (_tessellator != NULL) {
-    if (!_tessellator->isReady(rc)) {
-      return false;
+
+  if (_parameters->_forceTopLevelTilesRenderOnStart) {
+    if (_tessellator != NULL) {
+      if (!_tessellator->isReady(rc)) {
+        return false;
+      }
     }
-  }
-  
-  if (_texturizer != NULL) {
-    if (!_texturizer->isReady(rc)) {
-      return false;
+    
+    if (_texturizer != NULL) {
+      if (!_texturizer->isReady(rc)) {
+        return false;
+      }
     }
   }
   
@@ -131,9 +127,9 @@ int TileRenderer::render(const RenderContext* rc) {
                         _parameters,
                         &statistics,
                         _lastSplitTimer,
-//                        _lastTexturizerTimer,
+                        //                        _lastTexturizerTimer,
                         _firstRender /* if first render, force full render */);
-
+  
   if (_firstRender && _parameters->_forceTopLevelTilesRenderOnStart) {
     // force one render of the topLevel tiles to make the (toplevel) textures loaded as they
     // will be used as last-change fallback texture for any tile.
@@ -152,8 +148,8 @@ int TileRenderer::render(const RenderContext* rc) {
       toVisit.push_back(_topLevelTiles[i]);
     }
     
-//    DistanceToCenterTileComparison predicate = DistanceToCenterTileComparison(rc->getNextCamera(),
-//                                                                              rc->getPlanet());
+    //    DistanceToCenterTileComparison predicate = DistanceToCenterTileComparison(rc->getNextCamera(),
+    //                                                                              rc->getPlanet());
     
     while (toVisit.size() > 0) {
       std::list<Tile*> toVisitInNextIteration;
@@ -162,8 +158,8 @@ int TileRenderer::render(const RenderContext* rc) {
       //              toVisit.end(),
       //              predicate);
       
-//      predicate.initialize();
-//      toVisit.sort(predicate);
+      //      predicate.initialize();
+      //      toVisit.sort(predicate);
       
       for (std::list<Tile*>::iterator iter = toVisit.begin();
            iter != toVisit.end();
@@ -200,7 +196,7 @@ bool TileRenderer::onTouchEvent(const EventContext* ec,
       const Vector2D pixel = touchEvent->getTouch(0)->getPos();
       const Vector3D ray = _lastCamera->pixel2Ray(pixel);
       const Vector3D origin = _lastCamera->getPosition();
-
+      
       const Planet* planet = ec->getPlanet();
       
       const Vector3D onPlanet = planet->closestIntersection(origin, ray);

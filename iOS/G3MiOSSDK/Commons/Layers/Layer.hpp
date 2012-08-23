@@ -36,11 +36,9 @@ public:
   
   virtual ~Layer(){};
   
-  virtual bool fullContains(const Sector& s) const = 0;
-  
-  virtual std::vector<Petition*> getTilePetitions(const RenderContext* rc,
-                                                  const Tile* tile,
-                                                  int width, int height) const = 0;
+  virtual std::vector<Petition*> getMapPetitions(const RenderContext* rc,
+                                                 const Tile* tile,
+                                                 int width, int height) const = 0;
   
   virtual bool isAvailable(const RenderContext* rc,
                            const Tile* tile) const;
@@ -50,10 +48,10 @@ public:
   
   virtual bool isTransparent() const = 0;
   
-  virtual URL getFeatureURL(const Geodetic2D& g,
-                            const IFactory* factory,
-                            const Sector& sector,
-                            int width, int height) const = 0;
+  virtual URL getFeatureInfoURL(const Geodetic2D& g,
+                                const IFactory* factory,
+                                const Sector& sector,
+                                int width, int height) const = 0;
   
   void addTerrainTouchEventListener(TerrainTouchEventListener* listener) {
     _listeners.push_back(listener);
