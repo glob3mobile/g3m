@@ -56,8 +56,7 @@
                                       "EPSG:4326",
                                       "",
                                       false,
-                                      Angle::nan(),
-                                      Angle::nan());
+                                      NULL);
   layerSet->addLayer(blueMarble);
   
   //  WMSLayer *pnoa = new WMSLayer("PNOA",
