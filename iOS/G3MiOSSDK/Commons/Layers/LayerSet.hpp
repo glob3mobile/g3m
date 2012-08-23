@@ -31,9 +31,9 @@ public:
     _layers.push_back(layer);
   }
   
-  std::vector<Petition*> createTilePetitions(const RenderContext* rc,
-                                             const Tile* tile,
-                                             int width, int height) const;
+  std::vector<Petition*> createTileMapPetitions(const RenderContext* rc,
+                                                const Tile* tile,
+                                                int width, int height) const;
   
   void onTerrainTouchEvent(const EventContext* ec,
                            const Geodetic3D& g3d,

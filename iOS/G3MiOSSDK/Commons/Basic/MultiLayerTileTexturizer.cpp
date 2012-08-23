@@ -206,10 +206,10 @@ public:
   _canceled(false),
   _alreadyStarted(false)
   {
-    _petitions = layerSet->createTilePetitions(rc,
-                                               tile,
-                                               parameters->_tileTextureWidth,
-                                               parameters->_tileTextureHeight);
+    _petitions = layerSet->createTileMapPetitions(rc,
+                                                  tile,
+                                                  parameters->_tileTextureWidth,
+                                                  parameters->_tileTextureHeight);
     
     _petitionsCount = _petitions.size();
     
@@ -706,10 +706,10 @@ public:
 
 void MultiLayerTileTexturizer::justCreatedTopTile(const RenderContext* rc,
                                                   Tile* tile) {
-  std::vector<Petition*> petitions = _layerSet->createTilePetitions(rc,
-                                                                    tile,
-                                                                    _parameters->_tileTextureWidth,
-                                                                    _parameters->_tileTextureHeight);
+  std::vector<Petition*> petitions = _layerSet->createTileMapPetitions(rc,
+                                                                       tile,
+                                                                       _parameters->_tileTextureWidth,
+                                                                       _parameters->_tileTextureHeight);
   
   
   _pendingTopTileRequests += petitions.size();

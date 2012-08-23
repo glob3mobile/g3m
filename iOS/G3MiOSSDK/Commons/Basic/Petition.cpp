@@ -23,10 +23,6 @@ const std::string Petition::description() const {
   else {
     buffer << _buffer->description();
   }
-  buffer << ", downloadID=";
-  buffer << _downloadID;
-  buffer << ", transparentImage=";
-  buffer << _transparentImage;
   buffer << ")";
   return buffer.str();
 }

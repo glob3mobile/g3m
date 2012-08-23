@@ -119,7 +119,7 @@ std::vector<Petition*> WMSLayer::getMapPetitions(const RenderContext* rc,
     req += "&TRANSPARENT=FALSE";
   }
   
-  Petition *petition = new Petition(sector, URL(req), _isTransparent);
+  Petition *petition = new Petition(sector, URL(req));
   petitions.push_back(petition);
   
   //  printf("%s\n", petition->description().c_str());

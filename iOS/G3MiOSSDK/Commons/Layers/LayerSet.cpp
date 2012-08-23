@@ -8,10 +8,11 @@
 
 #include "LayerSet.hpp"
 #include "Tile.hpp"
+#include "TileKey.hpp"
 
-std::vector<Petition*> LayerSet::createTilePetitions(const RenderContext* rc,
-                                                     const Tile* tile,
-                                                     int width, int height) const {
+std::vector<Petition*> LayerSet::createTileMapPetitions(const RenderContext* rc,
+                                                        const Tile* tile,
+                                                        int width, int height) const {
   std::vector<Petition*> petitions;
   
   for (int i = 0; i < _layers.size(); i++) {
@@ -24,6 +25,11 @@ std::vector<Petition*> LayerSet::createTilePetitions(const RenderContext* rc,
         petitions.push_back(pet[j]);
       }
     }
+  }
+  
+  if (petitions.empty()) {
+    rc->getLogger()->logWarning("Can't create map petitions for tile %s",
+                                tile->getKey().description().c_str());
   }
   
   return petitions;
