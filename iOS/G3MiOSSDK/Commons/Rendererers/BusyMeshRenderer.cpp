@@ -21,6 +21,8 @@ void BusyMeshRenderer::initialize(const InitializationContext* ic)
   // compute number of vertex for the ring
   unsigned int numStrides = 60;
   unsigned int numVertices = numStrides * 2 + 2;
+  int __ASK_to_JM_numVertices;
+  /* the +2 fix is not here?? */
   int numIndices = numVertices;
   
   // add number of vertex for the square
