@@ -333,8 +333,6 @@ public class Tile
 		  _texturizerMesh.dispose();
 	  _texturizerMesh = null;
   
-	  if (_texturizerData != null)
-		  _texturizerData.dispose();
 	  _texturizerData = null;
   
 	  setTexturizerDirty(true);
@@ -403,8 +401,6 @@ public class Tile
   
 	if (_texturizerData != null)
 	{
-	  if (_texturizerData != null)
-		  _texturizerData.dispose();
 	  _texturizerData = null;
 	}
   

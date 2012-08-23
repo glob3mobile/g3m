@@ -6,7 +6,7 @@ public class SaverDownloadListener implements IDownloadListener
   private final boolean _deleteListener;
   private IStorage _cacheStorage;
 
-  private Url _url = new URL();
+  private URL _url = new URL();
 
   public SaverDownloadListener(CachedDownloader downloader, IDownloadListener listener, boolean deleteListener, IStorage cacheStorage, URL url)
   {

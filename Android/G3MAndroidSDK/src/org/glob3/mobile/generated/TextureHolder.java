@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated; 
 public class TextureHolder
 {
-  public final TextureSpec _textureSpec = new TextureSpec();
+  public final TextureSpec _textureSpec;
   public GLTextureID _glTextureId = new GLTextureID();
 
   public int _referenceCounter;

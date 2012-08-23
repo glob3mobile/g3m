@@ -6,7 +6,8 @@ public class TileRenderer extends Renderer
   private final TilesRenderParameters _parameters;
   private final boolean _showStatistics;
   private boolean _topTilesJustCreated;
-  private final Camera _lastCamera;
+
+  private Camera _lastCamera;
 
   private java.util.ArrayList<Tile> _topLevelTiles = new java.util.ArrayList<Tile>();
 

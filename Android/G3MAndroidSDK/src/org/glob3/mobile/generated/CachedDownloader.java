@@ -80,8 +80,7 @@ public class CachedDownloader implements IDownloader
   
 	  if (deleteListener)
 	  {
-		if (listener != null)
-			listener.dispose();
+		listener = null;
 	  }
   
 	  if (cachedBuffer != null)

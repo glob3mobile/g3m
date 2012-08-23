@@ -86,8 +86,9 @@ public class G3MWidget
 		_texturesHandler.dispose();
 	if (_timer != null)
 		_timer.dispose();
-	if (_downloader != null)
-		_downloader.dispose();
+  
+	_downloader = null;
+  
   
 	if (_frameTasksExecutor != null)
 		_frameTasksExecutor.dispose();
