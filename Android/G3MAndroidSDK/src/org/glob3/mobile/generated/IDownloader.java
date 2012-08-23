@@ -22,14 +22,18 @@ package org.glob3.mobile.generated;
 //class IDownloadListener;
 
 
-public interface IDownloader
+public abstract class IDownloader
 {
-  void start();
+  public abstract void start();
 
-  int request(URL url, int priority, IDownloadListener listener, boolean deleteListener);
+  public abstract int request(URL url, int priority, IDownloadListener listener, boolean deleteListener);
 
-  void cancelRequest(int requestId);
+  public abstract void cancelRequest(int requestId);
 
-  String statistics();
+  public void dispose()
+  {
+  }
+
+  public abstract String statistics();
 
 }

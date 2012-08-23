@@ -80,8 +80,7 @@ public class BusyQuadRenderer extends Renderer implements EffectTarget
 	  }
 	}
   
-  
-	IndexedMesh im = IndexedMesh.createFromVector3D(true, TriangleStrip, CenterStrategy.NoCenter, new Vector3D(0,0,0), numVertices, quadVertices, quadIndices, numIndices, null);
+	IndexedMesh im = IndexedMesh.createFromVector3D(true, GLPrimitive.TriangleStrip, CenterStrategy.NoCenter, new Vector3D(0,0,0), numVertices, quadVertices, quadIndices, numIndices, null);
   
 	TextureMapping texMap = new SimpleTextureMapping(texID, texC, true);
   
@@ -134,7 +133,7 @@ public class BusyQuadRenderer extends Renderer implements EffectTarget
 	}
   
 	// init modelview matrix
-	GLint[] currentViewport = new GLint[4];
+	int[] currentViewport = new int[4];
 	rc.getGL().getViewport(currentViewport);
 	int halfWidth = currentViewport[2] / 2;
 	int halfHeight = currentViewport[3] / 2;

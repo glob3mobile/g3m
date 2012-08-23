@@ -29,9 +29,7 @@ public class CachedDownloader implements IDownloader
 //ORIGINAL LINE: String removeInvalidChars(const String& path) const
   private String removeInvalidChars(String path)
   {
-	String result = path;
-	std.replace(result.iterator(), result.end(), '/', '_');
-	return result;
+	return path.replaceAll("/", "_");
   }
 
   private int _requestsCounter;

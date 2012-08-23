@@ -35,8 +35,6 @@ public abstract class LazyTextureMappingInitializer
 //ORIGINAL LINE: virtual const MutableVector2D getTranslation() const = 0;
   public abstract MutableVector2D getTranslation();
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual float const* getTexCoords() const = 0;
-  public abstract float const getTexCoords();
+  public abstract float[] getTexCoords();
 
 }

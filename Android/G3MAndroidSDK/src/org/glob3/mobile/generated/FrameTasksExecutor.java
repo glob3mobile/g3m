@@ -4,8 +4,8 @@ public class FrameTasksExecutor
   private final int _minimumExecutionsPerFrame;
   private final int _maximumExecutionsPerFrame;
   private final int _maximumQueuedTasks;
-  private final TimeInterval _maxTimePerFrame = new TimeInterval();
-  private final TimeInterval _maxTimePerFrameStressed = new TimeInterval();
+  private final TimeInterval _maxTimePerFrame;
+  private final TimeInterval _maxTimePerFrameStressed;
 
   private java.util.LinkedList<FrameTask> _preRenderTasks = new java.util.LinkedList<FrameTask>();
 

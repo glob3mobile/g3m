@@ -9,13 +9,16 @@ package org.glob3.mobile.generated;
 
 
 
-public interface IDownloadListener
+public abstract class IDownloadListener
 {
+  public void dispose()
+  {
+  }
 
-  void onDownload(Response response);
-  void onError(Response response);
-  void onCancel(URL url);
+  public abstract void onDownload(Response response);
+  public abstract void onError(Response response);
+  public abstract void onCancel(URL url);
 
   /* this method will be call, before onCancel, when the data arrived before the cancelation */
-  void onCanceledDownload(Response response);
+  public abstract void onCanceledDownload(Response response);
 }

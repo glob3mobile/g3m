@@ -43,7 +43,6 @@ public abstract class IStringBuilder
   }
 
   public abstract IStringBuilder add(double d);
-  public abstract IStringBuilder add(RefObject<String> c);
   public abstract IStringBuilder add(String s);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
