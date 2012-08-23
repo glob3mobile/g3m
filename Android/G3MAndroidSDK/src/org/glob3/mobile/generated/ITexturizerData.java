@@ -38,9 +38,9 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Vector3D;
 
-public class ITexturizerData
+public interface ITexturizerData
 {
-  public void dispose()
-  {
-  }
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual boolean isTexturizerData() const = 0;
+  boolean isTexturizerData(); //Java needs to know that this is an interface
 }

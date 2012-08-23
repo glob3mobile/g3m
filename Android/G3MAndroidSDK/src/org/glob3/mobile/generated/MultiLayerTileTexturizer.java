@@ -26,7 +26,6 @@ package org.glob3.mobile.generated;
 //class TileTextureBuilder;
 
 
-
 public class MultiLayerTileTexturizer extends TileTexturizer
 {
   private final LayerSet _const _layerSet;
@@ -39,8 +38,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
   private float[] _texCoordsCache;
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: float* getTextureCoordinates(const TileRenderContext* trc) const
-//C++ TO JAVA CONVERTER WARNING: Java has no equivalent to methods returning pointers to value types:
+//ORIGINAL LINE: float[] getTextureCoordinates(const TileRenderContext* trc) const
   private float[] getTextureCoordinates(TileRenderContext trc)
   {
 	if (_texCoordsCache == null)
@@ -70,8 +68,8 @@ public class MultiLayerTileTexturizer extends TileTexturizer
   public MultiLayerTileTexturizer(LayerSet layerSet)
   {
 	  _layerSet = layerSet;
-	  _downloader = 0;
-	  _parameters = 0;
+	  _downloader = null;
+	  _parameters = null;
 	  _texCoordsCache = null;
 	  _pendingTopTileRequests = 0;
 	  _texturesHandler = null;
@@ -138,29 +136,6 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 	}
 	else
 	{
-//C++ TO JAVA CONVERTER TODO TASK: Java does not allow declaring types within methods:
-//	  class BuilderStartTask : public FrameTask
-//	  {
-//	  private:
-//		TileTextureBuilder* _builder;
-//  
-//	  public:
-//		BuilderStartTask(TileTextureBuilder* builder) : _builder(builder)
-//		{
-//		  _builder->_retain();
-//		}
-//  
-//		virtual ~BuilderStartTask()
-//		{
-//		  _builder->_release();
-//		}
-//  
-//		void execute(const RenderContext* rc)
-//		{
-//		  _builder->start();
-//		}
-//	  };
-  
 	  rc.getFrameTasksExecutor().addPreRenderTask(new BuilderStartTask(builderHolder.get()));
 	}
   
