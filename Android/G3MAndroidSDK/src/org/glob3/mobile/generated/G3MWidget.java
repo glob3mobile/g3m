@@ -180,7 +180,12 @@ public class G3MWidget
   
 	if (_logDownloaderStatistics)
 	{
-	  final String cacheStatistics = _downloader.statistics();
+	  String cacheStatistics = "";
+  
+	  if (_downloader != null)
+	  {
+		cacheStatistics = _downloader.statistics();
+	  }
   
 	  if (!_lastCacheStatistics.equals(cacheStatistics))
 	  {
@@ -300,7 +305,10 @@ public class G3MWidget
 	_currentCamera.initialize(ic);
 	_nextCamera.initialize(ic);
   
-	_downloader.start();
+	if (_downloader != null)
+	{
+	  _downloader.start();
+	}
   }
 
 }
