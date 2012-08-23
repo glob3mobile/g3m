@@ -46,15 +46,7 @@ public:
     return _data;
   }
 
-  std::string getDataAsString() const {
-//    return _data;
-//    std::string result;
-    unsigned char* cStr = new unsigned char[_length + 1];
-    memcpy(cStr, _data, _length * sizeof(unsigned char));
-    cStr[_length] = 0;
-    
-    return (char*) cStr;
-  }
+  std::string getDataAsString() const;
   
   int getLength() const{
     return _length;

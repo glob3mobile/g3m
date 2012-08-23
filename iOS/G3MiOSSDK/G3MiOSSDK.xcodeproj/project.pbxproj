@@ -121,6 +121,10 @@
 		CFB72A3915E65BAC00A5BAF4 /* Layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFB72A3715E65BAC00A5BAF4 /* Layer.cpp */; };
 		CFB72A3D15E65DBC00A5BAF4 /* LevelTileCondition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFB72A3B15E65DBB00A5BAF4 /* LevelTileCondition.cpp */; };
 		CFB72A3E15E65DBC00A5BAF4 /* LevelTileCondition.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFB72A3C15E65DBC00A5BAF4 /* LevelTileCondition.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CFB72A6915E6808900A5BAF4 /* IStringUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFB72A6715E6808900A5BAF4 /* IStringUtils.cpp */; };
+		CFB72A6A15E6808900A5BAF4 /* IStringUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFB72A6815E6808900A5BAF4 /* IStringUtils.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CFB72A6E15E682B400A5BAF4 /* StringUtils_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFB72A6C15E682B400A5BAF4 /* StringUtils_iOS.cpp */; };
+		CFB72A6F15E682B400A5BAF4 /* StringUtils_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFB72A6D15E682B400A5BAF4 /* StringUtils_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
 		CFD0021B15D3C94C00735FD8 /* TileKey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD0021915D3C94C00735FD8 /* TileKey.cpp */; };
 		CFD0021C15D3C94C00735FD8 /* TileKey.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFD0021A15D3C94C00735FD8 /* TileKey.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFE0844115E27A310004EC0E /* TerrainTouchEventListener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFE0844015E27A310004EC0E /* TerrainTouchEventListener.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -308,6 +312,10 @@
 		CFB72A3715E65BAC00A5BAF4 /* Layer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Layer.cpp; sourceTree = "<group>"; };
 		CFB72A3B15E65DBB00A5BAF4 /* LevelTileCondition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LevelTileCondition.cpp; sourceTree = "<group>"; };
 		CFB72A3C15E65DBC00A5BAF4 /* LevelTileCondition.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LevelTileCondition.hpp; sourceTree = "<group>"; };
+		CFB72A6715E6808900A5BAF4 /* IStringUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IStringUtils.cpp; path = Commons/Interfaces/IStringUtils.cpp; sourceTree = "<group>"; };
+		CFB72A6815E6808900A5BAF4 /* IStringUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IStringUtils.hpp; path = Commons/Interfaces/IStringUtils.hpp; sourceTree = "<group>"; };
+		CFB72A6C15E682B400A5BAF4 /* StringUtils_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StringUtils_iOS.cpp; path = Specific/Derived/StringUtils_iOS.cpp; sourceTree = "<group>"; };
+		CFB72A6D15E682B400A5BAF4 /* StringUtils_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StringUtils_iOS.hpp; path = Specific/Derived/StringUtils_iOS.hpp; sourceTree = "<group>"; };
 		CFD0021915D3C94C00735FD8 /* TileKey.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileKey.cpp; path = Commons/Basic/TileKey.cpp; sourceTree = "<group>"; };
 		CFD0021A15D3C94C00735FD8 /* TileKey.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileKey.hpp; path = Commons/Basic/TileKey.hpp; sourceTree = "<group>"; };
 		CFE0844015E27A310004EC0E /* TerrainTouchEventListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TerrainTouchEventListener.hpp; path = Commons/Basic/TerrainTouchEventListener.hpp; sourceTree = "<group>"; };
@@ -404,6 +412,8 @@
 				D86DD8A41588945200E25609 /* Image_iOS.mm */,
 				CF8B21B015DD32820068601A /* SQLiteStorage_iOS.mm */,
 				CF8B21B115DD32820068601A /* SQLiteStorage_iOS.hpp */,
+				CFB72A6C15E682B400A5BAF4 /* StringUtils_iOS.cpp */,
+				CFB72A6D15E682B400A5BAF4 /* StringUtils_iOS.hpp */,
 			);
 			name = Derived;
 			sourceTree = "<group>";
@@ -538,6 +548,8 @@
 				CF31CBF215878AF90085E8F1 /* ITimer.hpp */,
 				CF9CD89815DBE2C800C6FD7E /* CachedDownloader.cpp */,
 				CF9CD89915DBE2C800C6FD7E /* CachedDownloader.hpp */,
+				CFB72A6715E6808900A5BAF4 /* IStringUtils.cpp */,
+				CFB72A6815E6808900A5BAF4 /* IStringUtils.hpp */,
 			);
 			name = Interfaces;
 			sourceTree = "<group>";
@@ -713,6 +725,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CFB72A6A15E6808900A5BAF4 /* IStringUtils.hpp in Headers */,
 				CFB72A3615E65B1F00A5BAF4 /* LayerCondition.hpp in Headers */,
 				CFB72A3E15E65DBC00A5BAF4 /* LevelTileCondition.hpp in Headers */,
 				CF75436615E5172800A0ABC7 /* MultiLayerTileTexturizer.hpp in Headers */,
@@ -799,6 +812,7 @@
 				D88B5E2615C15C850083A43F /* Extent.hpp in Headers */,
 				D88B5E2715C15C850083A43F /* Frustum.hpp in Headers */,
 				D88B5E2815C15C850083A43F /* Plane.hpp in Headers */,
+				CFB72A6F15E682B400A5BAF4 /* StringUtils_iOS.hpp in Headers */,
 				383BD37C1577EDC00012AC53 /* Factory_iOS.hpp in Headers */,
 				383BD37E1577EDC00012AC53 /* Logger_iOS.hpp in Headers */,
 				D86DD8A51588945200E25609 /* Image_iOS.hpp in Headers */,
@@ -936,6 +950,8 @@
 				CFB72A3515E65B1F00A5BAF4 /* LayerCondition.cpp in Sources */,
 				CFB72A3915E65BAC00A5BAF4 /* Layer.cpp in Sources */,
 				CFB72A3D15E65DBC00A5BAF4 /* LevelTileCondition.cpp in Sources */,
+				CFB72A6915E6808900A5BAF4 /* IStringUtils.cpp in Sources */,
+				CFB72A6E15E682B400A5BAF4 /* StringUtils_iOS.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

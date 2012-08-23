@@ -45,7 +45,7 @@
 #include "Logger_iOS.hpp"
 #include "Factory_iOS.hpp"
 #include "NativeGL2_iOS.hpp"
-
+#include "StringUtils_iOS.hpp"
 
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
@@ -155,8 +155,11 @@
   
   FrameTasksExecutor* frameTasksExecutor = new FrameTasksExecutor();
   
+  const IStringUtils* stringUtils = new StringUtils_iOS();
+
   _widgetVP = G3MWidget::create(frameTasksExecutor,
                                 factory,
+                                stringUtils,
                                 logger,
                                 gl,
                                 texturesHandler,

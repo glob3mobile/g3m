@@ -21,6 +21,7 @@ class IDownloader;
 class Camera;
 class ITimer;
 class EffectsScheduler;
+class IStringUtils;
 
 #include <vector>
 #include <string>
@@ -56,6 +57,7 @@ public:
   
   static G3MWidget* create(FrameTasksExecutor* frameTasksExecutor,
                            IFactory*           factory,
+                           const IStringUtils* stringUtils,
                            ILogger*            logger,
                            GL*                 gl,
                            TexturesHandler*    texturesHandler,
@@ -107,13 +109,14 @@ public:
   
 private:
   FrameTasksExecutor* _frameTasksExecutor;
-  IFactory*         _factory;
-  ILogger*          _logger;
-  GL*               _gl;
-  const Planet*     _planet;
-  Renderer*         _renderer;
-  Renderer*         _busyRenderer;
-  EffectsScheduler* _effectsScheduler;
+  IFactory*           _factory;
+  const IStringUtils* _stringUtils;
+  ILogger*            _logger;
+  GL*                 _gl;
+  const Planet*       _planet;
+  Renderer*           _renderer;
+  Renderer*           _busyRenderer;
+  EffectsScheduler*   _effectsScheduler;
   
   std::vector<ICameraConstrainer*> _cameraConstraint;
   
@@ -141,6 +144,7 @@ private:
   
   G3MWidget(FrameTasksExecutor* frameTasksExecutor,
             IFactory*           factory,
+            const IStringUtils* stringUtils,
             ILogger*            logger,
             GL*                 gl,
             TexturesHandler*    texturesHandler,

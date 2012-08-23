@@ -18,26 +18,28 @@
 #include "Context.hpp"
 #include "CameraConstraints.hpp"
 #include "FrameTasksExecutor.hpp"
+#include "IStringUtils.hpp"
 
-
-G3MWidget::G3MWidget(FrameTasksExecutor* frameTasksExecutor,
-                     IFactory*         factory,
-                     ILogger*          logger,
-                     GL*               gl,
-                     TexturesHandler*  texturesHandler,
-                     IDownloader*      downloader,
-                     const Planet*     planet,
+G3MWidget::G3MWidget(FrameTasksExecutor*              frameTasksExecutor,
+                     IFactory*                        factory,
+                     const IStringUtils*              stringUtils,
+                     ILogger*                         logger,
+                     GL*                              gl,
+                     TexturesHandler*                 texturesHandler,
+                     IDownloader*                     downloader,
+                     const Planet*                    planet,
                      std::vector<ICameraConstrainer*> cameraConstraint,
-                     Renderer*         renderer,
-                     Renderer*         busyRenderer,
-                     EffectsScheduler* effectsScheduler,
-                     int               width,
-                     int               height,
-                     Color             backgroundColor,
-                     const bool        logFPS,
-                     const bool        logDownloaderStatistics):
+                     Renderer*                        renderer,
+                     Renderer*                        busyRenderer,
+                     EffectsScheduler*                effectsScheduler,
+                     int                              width,
+                     int                              height,
+                     Color                            backgroundColor,
+                     const bool                       logFPS,
+                     const bool                       logDownloaderStatistics):
 _frameTasksExecutor(frameTasksExecutor),
 _factory(factory),
+_stringUtils(stringUtils),
 _logger(logger),
 _gl(gl),
 _texturesHandler(texturesHandler),
@@ -62,7 +64,13 @@ _userData(NULL)
 {
   initializeGL();
   
-  InitializationContext ic(_factory, _logger, _planet, _downloader, _effectsScheduler);
+  InitializationContext ic(_factory,
+                           _stringUtils,
+                           _logger,
+                           _planet,
+                           _downloader,
+                           _effectsScheduler);
+  
   _effectsScheduler->initialize(&ic);
   _renderer->initialize(&ic);
   _busyRenderer->initialize(&ic);
@@ -75,6 +83,7 @@ _userData(NULL)
 
 G3MWidget* G3MWidget::create(FrameTasksExecutor* frameTasksExecutor,
                              IFactory*           factory,
+                             const IStringUtils* stringUtils,
                              ILogger*            logger,
                              GL*                 gl,
                              TexturesHandler*    texturesHandler,
@@ -92,11 +101,13 @@ G3MWidget* G3MWidget::create(FrameTasksExecutor* frameTasksExecutor,
   if (logger != NULL) {
     logger->logInfo("Creating G3MWidget...");
   }
-  
+
+  IStringUtils::setInstance(stringUtils);
   ILogger::setInstance(logger);
   
   return new G3MWidget(frameTasksExecutor,
                        factory,
+                       stringUtils,
                        logger,
                        gl,
                        texturesHandler,
@@ -152,7 +163,7 @@ G3MWidget::~G3MWidget() {
 
 void G3MWidget::onTouchEvent(const TouchEvent* myEvent) {
   if (_rendererReady) {
-    EventContext ec(_factory, _logger, _planet, _downloader, _effectsScheduler);
+    EventContext ec(_factory, _stringUtils, _logger, _planet, _downloader, _effectsScheduler);
     
     _renderer->onTouchEvent(&ec, myEvent);
   }
@@ -160,7 +171,7 @@ void G3MWidget::onTouchEvent(const TouchEvent* myEvent) {
 
 void G3MWidget::onResizeViewportEvent(int width, int height) {
   if (_rendererReady) {
-    EventContext ec(_factory, _logger, _planet, _downloader, _effectsScheduler);
+    EventContext ec(_factory, _stringUtils, _logger, _planet, _downloader, _effectsScheduler);
     
     _renderer->onResizeViewportEvent(&ec, width, height);
   }
@@ -193,6 +204,7 @@ int G3MWidget::render() {
   // create RenderContext
   RenderContext rc(_frameTasksExecutor,
                    _factory,
+                   _stringUtils,
                    _logger,
                    _planet,
                    _gl,
