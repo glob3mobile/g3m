@@ -46,6 +46,7 @@
 #include "Factory_iOS.hpp"
 #include "NativeGL2_iOS.hpp"
 #include "StringUtils_iOS.hpp"
+#include "SingleImageTileTexturizer.hpp"
 
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
@@ -129,7 +130,9 @@
   if (layerSet != NULL) {
     if (layerSet->size() > 0) {
       TileTexturizer* texturizer = new MultiLayerTileTexturizer(layerSet);
-      
+//      IImage *singleWorldImage = factory->createImageFromFileName("world.jpg");
+//      TileTexturizer* texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
+
       const bool showStatistics = false;
       TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
                                           texturizer,
