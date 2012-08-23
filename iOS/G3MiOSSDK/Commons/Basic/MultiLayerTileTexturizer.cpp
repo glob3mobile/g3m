@@ -171,7 +171,9 @@ class TileTextureBuilder : public RCObject {
 private:
   MultiLayerTileTexturizer* _texturizer;
   Tile*                     _tile;
-  const TileKey             _tileKey;
+
+//  const TileKey             _tileKey;
+
   std::vector<Petition*>    _petitions;
   int                       _petitionsCount;
   int                       _stepsDone;
@@ -217,7 +219,7 @@ public:
   _parameters(parameters),
   _downloader(downloader),
   _tile(tile),
-  _tileKey(tile->getKey()),
+  //_tileKey(tile->getKey()),
   _tessellatorMesh(tessellatorMesh),
   _stepsDone(0),
   _anyCanceled(false),
