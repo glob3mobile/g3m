@@ -9,7 +9,7 @@ public class TextureHolder
   public TextureHolder(TextureSpec textureSpec)
   {
 	  _referenceCounter = 1;
-	  _textureSpec = new TextureSpec(textureSpec);
+	  _textureSpec = textureSpec;
 	  _glTextureId = new GLTextureID(GLTextureID.invalid());
 
   }

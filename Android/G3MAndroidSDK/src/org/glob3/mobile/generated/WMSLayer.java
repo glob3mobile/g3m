@@ -325,8 +325,8 @@ public class WMSLayer extends Layer
   
 	//X and Y
 	Vector2D pixel = tileSector.getUVCoordinates(g);
-	int x = (int) round((pixel.x() * width));
-	int y = (int) round (((1.0 - pixel.y()) * height));
+	int x = (int) (pixel.x() * width) );
+	int y = (int) ((1.0 - pixel.y()) * height) );
   
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
 	isb.add("&X=").add(x).add("&Y=").add(y);

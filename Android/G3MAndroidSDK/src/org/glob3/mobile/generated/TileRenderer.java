@@ -59,6 +59,8 @@ public class TileRenderer extends Renderer
 
   private TilesStatistics _lastStatistics = new TilesStatistics();
 
+  private boolean _firstRender;
+
 
 	private static class DistanceToCenterTileComparison implements java.util.Comparator<Tile> {
 		private final Camera _camera;

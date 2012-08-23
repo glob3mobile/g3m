@@ -606,11 +606,6 @@ public class Tile
 
   public final void setTexturizerData(ITexturizerData texturizerData)
   {
-	if (_texturizerData != null)
-	{
-	  if (_texturizerData != null)
-		  _texturizerData.dispose();
-	}
 	_texturizerData = texturizerData;
   }
 

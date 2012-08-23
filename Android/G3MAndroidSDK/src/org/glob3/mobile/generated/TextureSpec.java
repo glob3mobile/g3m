@@ -49,6 +49,13 @@ public class TextureSpec
 
   }
 
+  public TextureSpec()
+  {
+	  _id = "";
+	  _width = 0;
+	  _height = 0;
+  }
+
   public TextureSpec(TextureSpec that)
   {
 	  _id = that._id;
@@ -116,6 +123,34 @@ public class TextureSpec
   }
 
 
-  TODO_implements_equals;
-  TODO_implements_hashcode;
+  @Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + _height;
+		result = prime * result + ((_id == null) ? 0 : _id.hashCode());
+		result = prime * result + _width;
+		return result;
+	}
+  
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TextureSpec other = (TextureSpec) obj;
+		if (_height != other._height)
+			return false;
+		if (_id == null) {
+			if (other._id != null)
+				return false;
+		} else if (!_id.equals(other._id))
+			return false;
+		if (_width != other._width)
+			return false;
+		return true;
+	}
 }

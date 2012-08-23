@@ -16,8 +16,7 @@ public class TileTextureBuilder extends RCObject
 
   private final Mesh _tessellatorMesh;
 
-  private final float _texCoords;
-
+  private final float[] _texCoords;
 
   private java.util.ArrayList<PetitionStatus> _status = new java.util.ArrayList<PetitionStatus>();
   private java.util.ArrayList<Integer> _requestsIds = new java.util.ArrayList<Integer>();
@@ -30,7 +29,7 @@ public class TileTextureBuilder extends RCObject
 
   public LeveledTexturedMesh _mesh;
 
-  public TileTextureBuilder(MultiLayerTileTexturizer texturizer, RenderContext rc, LayerSet* const layerSet, TilesRenderParameters parameters, IDownloader downloader, Tile tile, Mesh tessellatorMesh, float texCoords)
+  public TileTextureBuilder(MultiLayerTileTexturizer texturizer, RenderContext rc, LayerSet layerSet, TilesRenderParameters parameters, IDownloader downloader, Tile tile, Mesh tessellatorMesh, float[] texCoords)
   {
 	  _texturizer = texturizer;
 	  _factory = rc.getFactory();
@@ -172,12 +171,6 @@ public class TileTextureBuilder extends RCObject
 		_factory.deleteImage(images.get(i));
 	  }
 
-
-	  for (int i = 0; i < rectangles.size(); i++)
-	  {
-		if (rectangles.get(i) != null)
-			rectangles.get(i).dispose();
-	  }
 	}
 
 	_tile.setTextureSolved(true);
