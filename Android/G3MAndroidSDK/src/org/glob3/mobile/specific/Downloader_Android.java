@@ -12,7 +12,8 @@ import org.glob3.mobile.generated.URL;
 
 public class Downloader_Android implements IDownloader {
 
-   private long                                       _requestIdCounter;
+   private int                                       _requestIdCounter;
+   private int                                       _maxConcurrentOperationCount;
    private long                                       _requestsCounter;
    private long                                       _cancelsCounter;
    private ArrayList<Downloader_Android_WorkerThread> _workers;
@@ -27,7 +28,7 @@ public class Downloader_Android implements IDownloader {
       // TODO memoryCapacity ??
       // TODO diskCapacity ??
       // TODO diskPath ??
-
+	   _maxConcurrentOperationCount = maxConcurrentOperationCount;
       _requestIdCounter = 1;
       _requestsCounter = 0;
       _cancelsCounter = 0;
@@ -35,15 +36,17 @@ public class Downloader_Android implements IDownloader {
       _downloadingHandlers = new HashMap<String, Downloader_Android_Handler>();
       _queuedHandlers = new HashMap<String, Downloader_Android_Handler>();
       _workers = new ArrayList<Downloader_Android_WorkerThread>(maxConcurrentOperationCount);
-
-      for (int i = 0; i < maxConcurrentOperationCount; i++) {
-         _workers.add(new Downloader_Android_WorkerThread(this));
-      }
    }
 
 
    @Override
    public void start() {
+	      for (int i = 0; i < _maxConcurrentOperationCount; i++) {
+	    	  Downloader_Android_WorkerThread da = new Downloader_Android_WorkerThread(this);
+	         _workers.add(da);
+	      }
+	   
+	   
       Iterator<Downloader_Android_WorkerThread> iter = _workers.iterator();
       while (iter.hasNext()) {
          iter.next().execute();
@@ -64,7 +67,7 @@ public class Downloader_Android implements IDownloader {
    public int request(URL url, int priority, IDownloadListener listener, boolean deleteListener) {
 
       Downloader_Android_Handler handler = null;
-      long requestId;
+      int requestId;
 
       synchronized (this) {
          _requestsCounter++;

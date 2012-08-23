@@ -3,7 +3,6 @@ package org.glob3.mobile.specific;
 import java.io.File;
 import java.util.ArrayList;
 
-import org.glob3.mobile.generated.BusyMeshRenderer;
 import org.glob3.mobile.generated.CPUTextureBuilder;
 import org.glob3.mobile.generated.CameraDoubleDragHandler;
 import org.glob3.mobile.generated.CameraDoubleTapHandler;
@@ -162,7 +161,6 @@ public class G3MWidget_Android extends GLSurfaceView implements
 
 		  
 		  //STORAGE
-		  //FileSystemStorage fss = new FileSystemStorage(documentsDirectory);
 		  IDownloader downloader = new Downloader_Android(1 * 1024 * 1024,
 		                                               64 * 1024 * 1024,
 		                                               ".G3M_Cache",
@@ -190,7 +188,7 @@ public class G3MWidget_Android extends GLSurfaceView implements
 		  
 		  Planet planet = Planet.createEarth();
 		  
-		  BusyMeshRenderer busyRenderer = new BusyMeshRenderer();
+		  org.glob3.mobile.generated.Renderer busyRenderer = new NullBusyRender();
 		  
 		  ArrayList<ICameraConstrainer> cameraConstraint = new ArrayList<ICameraConstrainer>();
 		  cameraConstraint.add(new SimpleCameraConstrainer());

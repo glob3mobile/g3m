@@ -15,6 +15,7 @@ class ES2Renderer implements GLSurfaceView.Renderer {
 
     private int _program;
     final Context _context;
+    boolean _hasRendered = false;
 
     public ES2Renderer(Context context, G3MWidget_Android widget) {
     	_context = context;
@@ -22,6 +23,8 @@ class ES2Renderer implements GLSurfaceView.Renderer {
     }
     
     public void onDrawFrame(GL10 glUnused) {
+    	
+    	_hasRendered = true;
     	
     	G3MWidget widget = _widget.getWidget();
     	
@@ -40,7 +43,9 @@ class ES2Renderer implements GLSurfaceView.Renderer {
         // class's static methods instead.
         GLES20.glViewport(0, 0, width, height);
         
-        _widget.getWidget().onResizeViewportEvent(width,height);
+        if (_hasRendered) {
+        	_widget.getWidget().onResizeViewportEvent(width,height);
+        }
     }
 
     public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {

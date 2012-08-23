@@ -68,7 +68,9 @@ _logDownloaderStatistics(logDownloaderStatistics)
   _currentCamera->initialize(&ic);
   _nextCamera->initialize(&ic);
   
-  _downloader->start();
+  if (_downloader != NULL){
+    _downloader->start();
+  }
 }
 
 
@@ -137,7 +139,9 @@ G3MWidget::~G3MWidget() {
   delete _timer;
   
 #ifdef C_CODE
-  delete _downloader;
+  if (_downloader != NULL){
+    delete _downloader;
+  }
 #else
   _downloader = NULL;
 #endif
@@ -242,7 +246,7 @@ int G3MWidget::render() {
       
       if (_renderStatisticsTimer == NULL) {
         _renderStatisticsTimer = _factory->createTimer();
-      }
+      } 
       else {
         _renderStatisticsTimer->start();
       }
@@ -250,7 +254,11 @@ int G3MWidget::render() {
   }
   
   if (_logDownloaderStatistics) {
-    const std::string cacheStatistics = _downloader->statistics();
+    std::string cacheStatistics = "";
+    
+    if (_downloader != NULL){
+      cacheStatistics = _downloader->statistics();
+    }
     
     if (cacheStatistics != _lastCacheStatistics) {
       _logger->logInfo("%s" , cacheStatistics.c_str());
