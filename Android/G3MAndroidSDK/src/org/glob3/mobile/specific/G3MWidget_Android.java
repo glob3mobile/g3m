@@ -2,7 +2,9 @@ package org.glob3.mobile.specific;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Random;
 
+import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.CPUTextureBuilder;
 import org.glob3.mobile.generated.CameraDoubleDragHandler;
 import org.glob3.mobile.generated.CameraDoubleTapHandler;
@@ -12,23 +14,43 @@ import org.glob3.mobile.generated.CameraSingleDragHandler;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
 import org.glob3.mobile.generated.DummyRenderer;
+import org.glob3.mobile.generated.EffectTarget;
 import org.glob3.mobile.generated.EffectsScheduler;
+import org.glob3.mobile.generated.EllipsoidalTileTessellator;
 import org.glob3.mobile.generated.FrameTasksExecutor;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GL;
 import org.glob3.mobile.generated.GLErrorRenderer;
+import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
+import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IStringBuilder;
+import org.glob3.mobile.generated.LatLonMeshRenderer;
+import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LogLevel;
+import org.glob3.mobile.generated.Mark;
+import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.Planet;
+import org.glob3.mobile.generated.SGCubeNode;
+import org.glob3.mobile.generated.SampleEffect;
+import org.glob3.mobile.generated.SceneGraphRenderer;
+import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
 import org.glob3.mobile.generated.SimplePlanetRenderer;
+import org.glob3.mobile.generated.SingleImageTileTexturizer;
 import org.glob3.mobile.generated.TextureBuilder;
 import org.glob3.mobile.generated.TexturesHandler;
+import org.glob3.mobile.generated.TileRenderer;
+import org.glob3.mobile.generated.TileTexturizer;
+import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.TouchEvent;
+import org.glob3.mobile.generated.WMSLayer;
+import org.glob3.mobile.generated.WMSServerVersion;
+
+import org.glob3.mobile.generated.*;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
@@ -122,8 +144,8 @@ public class G3MWidget_Android extends GLSurfaceView implements
 	
 	public G3MWidget getWidget() {
 		if (_widget == null) {
+			initWidgetDemo();
 			//initSimpleWidgetDemo();
-			initSimpleWidgetDemo();
 		}
 		return _widget;
 	}
@@ -161,10 +183,11 @@ public class G3MWidget_Android extends GLSurfaceView implements
 
 		  
 		  //STORAGE
-		  IDownloader downloader = new Downloader_Android(1 * 1024 * 1024,
-		                                               64 * 1024 * 1024,
-		                                               ".G3M_Cache",
-		                                               8);
+		  IDownloader downloader = null;
+//		  IDownloader downloader = new Downloader_Android(1 * 1024 * 1024,
+//		                                               64 * 1024 * 1024,
+//		                                               ".G3M_Cache",
+//		                                               8);
 
 		  if (true) {
 		    // dummy renderer with a simple box
@@ -213,7 +236,7 @@ public class G3MWidget_Android extends GLSurfaceView implements
 		                              
 		                             
 	}
-/*
+
 	private void initWidgetDemo()
 	{
 		
@@ -242,53 +265,37 @@ public class G3MWidget_Android extends GLSurfaceView implements
 
 	  
 	  //STORAGE
-	  //FileSystemStorage fss = new FileSystemStorage(documentsDirectory);
-	  Downloader downloaderOLD = new Downloader(null, 5, factory.createNetwork());
-	  IDownloader downloader = new Downloader_Android(1 * 1024 * 1024,
-	                                               64 * 1024 * 1024,
-	                                               ".G3M_Cache",
-	                                               8);
+	  IDownloader downloader = null;
+//	  IDownloader downloader = new Downloader_Android(1 * 1024 * 1024,
+//	                                               64 * 1024 * 1024,
+//	                                               ".G3M_Cache",
+//	                                               8);
 
 	  //LAYERS
 	  LayerSet layerSet = new LayerSet();
-	  WMSLayer baseLayer = new WMSLayer("bmng200405", "http://www.nasa.network.com/wms?", 
-	                                     "1.3", "image/jpeg", Sector.fullSphere(), "EPSG:4326", "", false,
-	                                     Angle.nan(), Angle.nan());
-
-	  WMSLayer vias = new WMSLayer("VIAS",
-	                                "http://idecan2.grafcan.es/ServicioWMS/Callejero",
-	                                "1.1.0", "image/gif", 
-	                                Sector.fromDegrees(22.5,-22.5, 33.75, -11.25),
-	                                "EPSG:4326", "", true,
-	                                Angle.nan(), Angle.nan());
-	  
-	  WMSLayer pnoa = new WMSLayer("PNOA",
-	                                "http://www.idee.es/wms/PNOA/PNOA",
-	                                "1.1.0", "image/png", 
-	                                Sector.fromDegrees(21,-18, 45, 6),
-	                                "EPSG:4326", "", true,
-	                                Angle.nan(), Angle.nan());
-	  
-	  //ORDER IS IMPORTANT
-	  layerSet.add(baseLayer);
-	  layerSet.add(pnoa);
-	  layerSet.add(vias);
+	  WMSLayer blueMarble = new WMSLayer("bmng200405",
+              "http://www.nasa.network.com/wms?",
+              WMSServerVersion.WMS_1_1_0,
+              "image/jpeg",
+              Sector.fullSphere(),
+              "EPSG:4326",
+              "",
+              false,
+              Angle.nan(),
+              Angle.nan());
+	  layerSet.addLayer(blueMarble);
 	  
 	  // very basic tile renderer
 	  if (false) {
-	    TileParameters parameters = TileParameters.createDefault(true);
+	    boolean renderDebug = true;
 	    
+	    TilesRenderParameters parameters = TilesRenderParameters.createDefault(renderDebug);
+
 	    TileTexturizer texturizer = null;
-	    if (true) {
-	      texturizer = new TileImagesTileTexturizer(parameters, downloaderOLD, layerSet, factory); //WMS
-	    }
-	    else {
-	      //SINGLE IMAGE
-	      IImage singleWorldImage = factory.createImageFromFileName("world.jpg");
-	      texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
-	    }
+	    IImage singleWorldImage = factory.createImageFromFileName("world.jpg");
+	    texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
 	    
-	    boolean showStatistics = true;
+	    boolean showStatistics = false;
 	    TileRenderer tr = new TileRenderer(new EllipsoidalTileTessellator(parameters._tileResolution, true),
 	                                        texturizer,
 	                                        parameters,
@@ -370,27 +377,30 @@ public class G3MWidget_Android extends GLSurfaceView implements
 	  
 	  Planet planet = Planet.createEarth();
 	  
-	  BusyRenderer busyRenderer = new BusyRenderer();
+	  org.glob3.mobile.generated.Renderer busyRenderer = new BusyMeshRenderer();// new NullBusyRender();
 	  
 	  ArrayList<ICameraConstrainer> cameraConstraint = new ArrayList<ICameraConstrainer>();
 	  cameraConstraint.add(new SimpleCameraConstrainer());
+	  
+	  FrameTasksExecutor frameTasksExecutor = new FrameTasksExecutor();
 
-	  _widget = G3MWidget.create(factory,
-	                              logger,
-	                              gl,
-	                              texturesHandler,
-	                              downloaderOLD,
-	                              downloader,
-	                              planet, 
-	                              cameraConstraint,
-	                              comp,
-	                              busyRenderer,
-	                              scheduler,
-	                              width, height,
-	                              Color.fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
-	                              true);
+	  _widget = G3MWidget.create(frameTasksExecutor,
+              factory,
+              logger,
+              gl,
+              texturesHandler,
+              downloader,
+              planet, 
+              cameraConstraint,
+              comp,
+              busyRenderer,
+              scheduler,
+              width, height,
+              Color.fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
+              true,
+              false);
 	                              
 	                             
 	}
-*/
+
 }
