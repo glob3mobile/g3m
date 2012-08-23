@@ -252,8 +252,8 @@ URL WMSLayer::getFeatureURL(const Geodetic2D& g,
   int y = (int) round ( ((1.0 - pixel.y()) * height) );
 #endif
 #ifdef JAVA_CODE
-  int x = (int) (pixel.x() * width) );
-  int y = (int) ((1.0 - pixel.y()) * height) );
+  int x = (int) (pixel.x() * width);
+  int y = (int) ((1.0 - pixel.y()) * height);
 #endif
   
   IStringBuilder* isb = IStringBuilder::newStringBuilder();

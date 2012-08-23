@@ -135,7 +135,13 @@ G3MWidget::~G3MWidget() {
   delete _nextCamera;
   delete _texturesHandler;
   delete _timer;
+  
+#ifdef C_CODE
   delete _downloader;
+#else
+  _downloader = NULL;
+#endif
+  
   
 #ifdef C_CODE
   for (unsigned int n=0; n<_cameraConstraint.size(); n++)

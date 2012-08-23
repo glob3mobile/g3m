@@ -278,7 +278,12 @@ private:
   const TilesRenderParameters* _parameters;
   const bool                   _showStatistics;
   bool                         _topTilesJustCreated;
+  
+#ifdef C_CODE
   const Camera*                _lastCamera;
+#else
+  Camera*                _lastCamera;
+#endif 
   
   std::vector<Tile*>     _topLevelTiles;
   

@@ -21,7 +21,7 @@ class SaverDownloadListener : public IDownloadListener {
   const URL          _url;
 #endif
 #ifdef JAVA_CODE
-  private Url _url = new URL();
+  private URL _url = new URL();
 #endif
   
 public:
@@ -142,7 +142,11 @@ long CachedDownloader::request(const URL& url,
     listener->onDownload(&response);
     
     if (deleteListener) {
+#ifdef C_CODE
       delete listener;
+#else
+      listener = NULL;
+#endif
     }
     
     delete cachedBuffer;

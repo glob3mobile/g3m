@@ -73,16 +73,14 @@ public:
   
 #ifdef JAVA_CODE
   @Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + _column;
-		result = prime * result + _level;
-		result = prime * result + _row;
-		result = prime * result + (operator ? 1231 : 1237);
-		result = prime * result + ((that == null) ? 0 : that.hashCode());
-		return result;
-	}
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + _column;
+    result = prime * result + _level;
+    result = prime * result + _row;
+    return result;
+  }
   
 	@Override
 	public boolean equals(Object obj) {
@@ -98,13 +96,6 @@ public:
 		if (_level != other._level)
 			return false;
 		if (_row != other._row)
-			return false;
-		if (operator != other.operator)
-			return false;
-		if (that == null) {
-			if (other.that != null)
-				return false;
-		} else if (!that.equals(other.that))
 			return false;
 		return true;
 	}

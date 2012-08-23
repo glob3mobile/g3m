@@ -31,7 +31,7 @@ public:
   const TextureSpec _textureSpec;
 #endif
 #ifdef JAVA_CODE
-  public final TextureSpec _textureSpec = new TextureSpec();
+  public final TextureSpec _textureSpec;
 #endif
   GLTextureID _glTextureId;
   
