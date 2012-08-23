@@ -25,7 +25,10 @@ class Vector3D;
 
 class ITexturizerData {
 public:
+  virtual bool isTexturizerData() const = 0; //Java needs to know that this is an interface
+#ifdef C_CODE
   virtual ~ITexturizerData() { }
+#endif
 };
 
 

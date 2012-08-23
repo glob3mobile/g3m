@@ -279,11 +279,10 @@ const GLTextureID GL::uploadTexture(const IImage* image,
     byte[] imageData = new byte[textureWidth * textureHeight * 4];
     image.fillWithRGBA8888(imageData, textureWidth, textureHeight);
     
-    int texID = getTextureID();
     _gl.blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
     _gl.pixelStorei(GLAlignment.Unpack, 1);
     
-    _gl.bindTexture(GLTextureType.Texture2D, texID);
+    _gl.bindTexture(GLTextureType.Texture2D, texID.getGLTextureID());
     _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MinFilter, GLTextureParameterValue.Linear);
     _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MagFilter, GLTextureParameterValue.Linear);
     _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapS, GLTextureParameterValue.ClampToEdge);

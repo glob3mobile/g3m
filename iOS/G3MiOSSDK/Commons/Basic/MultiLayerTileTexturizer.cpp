@@ -86,12 +86,16 @@ private:
   MutableVector2D _scale;
   MutableVector2D _translation;
   
+#ifdef C_CODE
   const float* _texCoords;
+#else
+  const float[] _texCoords;
+#endif
   
 public:
   LTMInitializer(const Tile* tile,
                  const Tile* ancestor,
-                 const float* texCoords) :
+                 const float texCoords[]) :
   _tile(tile),
   _ancestor(ancestor),
   _texCoords(texCoords),
@@ -124,9 +128,18 @@ public:
     return _translation;
   }
   
+#ifdef C_CODE
   float const* getTexCoords() const {
     return _texCoords;
   }
+#endif
+  
+#ifdef JAVA_CODE
+  @Override
+  public float[] getTexCoords() {
+    return _texCoords;
+  }
+#endif
   
 };
 
@@ -147,6 +160,10 @@ public:
   }
   
   virtual ~TileTextureBuilderHolder();
+  
+  bool isTexturizerData() const{
+    return true;
+  }
 };
 
 
@@ -523,6 +540,26 @@ void MultiLayerTileTexturizer::initialize(const InitializationContext* ic,
   _parameters = parameters;
 }
 
+class BuilderStartTask : public FrameTask {
+private:
+  TileTextureBuilder* _builder;
+  
+public:
+  BuilderStartTask(TileTextureBuilder* builder) :
+  _builder(builder)
+  {
+    _builder->_retain();
+  }
+  
+  virtual ~BuilderStartTask() {
+    _builder->_release();
+  }
+  
+  void execute(const RenderContext* rc) {
+    _builder->start();
+  }
+};
+
 Mesh* MultiLayerTileTexturizer::texturize(const RenderContext* rc,
                                           const TileRenderContext* trc,
                                           Tile* tile,
@@ -564,26 +601,6 @@ Mesh* MultiLayerTileTexturizer::texturize(const RenderContext* rc,
     builderHolder->get()->start();
   }
   else {
-    class BuilderStartTask : public FrameTask {
-    private:
-      TileTextureBuilder* _builder;
-      
-    public:
-      BuilderStartTask(TileTextureBuilder* builder) :
-      _builder(builder)
-      {
-        _builder->_retain();
-      }
-      
-      virtual ~BuilderStartTask() {
-        _builder->_release();
-      }
-      
-      void execute(const RenderContext* rc) {
-        _builder->start();
-      }
-    };
-    
     rc->getFrameTasksExecutor()->addPreRenderTask(new BuilderStartTask(builderHolder->get()));
   }
 
@@ -674,7 +691,11 @@ void MultiLayerTileTexturizer::ancestorTexturedSolvedChanged(Tile* tile,
   }
 }
 
+#ifdef C_CODE
 float* MultiLayerTileTexturizer::getTextureCoordinates(const TileRenderContext* trc) const {
+#else
+float[] MultiLayerTileTexturizer::getTextureCoordinates(const TileRenderContext* trc) const {
+#endif
   if (_texCoordsCache == NULL) {
     std::vector<MutableVector2D>* texCoordsV = trc->getTessellator()->createUnitTextCoords();
     

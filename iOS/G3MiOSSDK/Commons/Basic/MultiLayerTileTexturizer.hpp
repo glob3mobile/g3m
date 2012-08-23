@@ -21,7 +21,6 @@ class TileTextureBuilder;
 
 #include "Geodetic3D.hpp"
 
-
 class MultiLayerTileTexturizer : public TileTexturizer {
 private:
   const LayerSet* const        _layerSet;
@@ -33,7 +32,11 @@ private:
   
   mutable float* _texCoordsCache;
   
+#ifdef C_CODE
   float* getTextureCoordinates(const TileRenderContext* trc) const;
+#else
+  float[] getTextureCoordinates(const TileRenderContext* trc) const;
+#endif
   
   long _pendingTopTileRequests;
   
@@ -42,8 +45,8 @@ private:
 public:
   MultiLayerTileTexturizer(LayerSet* layerSet) :
   _layerSet(layerSet),
-  _downloader(0),
-  _parameters(0),
+  _downloader(NULL),
+  _parameters(NULL),
   _texCoordsCache(NULL),
   _pendingTopTileRequests(0),
   _texturesHandler(NULL)

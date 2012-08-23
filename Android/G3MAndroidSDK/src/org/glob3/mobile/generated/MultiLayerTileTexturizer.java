@@ -41,7 +41,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: float* getTextureCoordinates(const TileRenderContext* trc) const
 //C++ TO JAVA CONVERTER WARNING: Java has no equivalent to methods returning pointers to value types:
-  private float getTextureCoordinates(TileRenderContext trc)
+  private float[] getTextureCoordinates(TileRenderContext trc)
   {
 	if (_texCoordsCache == null)
 	{
