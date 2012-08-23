@@ -123,7 +123,7 @@
 		CFB72A3E15E65DBC00A5BAF4 /* LevelTileCondition.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFB72A3C15E65DBC00A5BAF4 /* LevelTileCondition.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFB72A6915E6808900A5BAF4 /* IStringUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFB72A6715E6808900A5BAF4 /* IStringUtils.cpp */; };
 		CFB72A6A15E6808900A5BAF4 /* IStringUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFB72A6815E6808900A5BAF4 /* IStringUtils.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		CFB72A6E15E682B400A5BAF4 /* StringUtils_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFB72A6C15E682B400A5BAF4 /* StringUtils_iOS.cpp */; };
+		CFB72A6E15E682B400A5BAF4 /* StringUtils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFB72A6C15E682B400A5BAF4 /* StringUtils_iOS.mm */; };
 		CFB72A6F15E682B400A5BAF4 /* StringUtils_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFB72A6D15E682B400A5BAF4 /* StringUtils_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
 		CFD0021B15D3C94C00735FD8 /* TileKey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD0021915D3C94C00735FD8 /* TileKey.cpp */; };
 		CFD0021C15D3C94C00735FD8 /* TileKey.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFD0021A15D3C94C00735FD8 /* TileKey.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -314,7 +314,7 @@
 		CFB72A3C15E65DBC00A5BAF4 /* LevelTileCondition.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LevelTileCondition.hpp; sourceTree = "<group>"; };
 		CFB72A6715E6808900A5BAF4 /* IStringUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IStringUtils.cpp; path = Commons/Interfaces/IStringUtils.cpp; sourceTree = "<group>"; };
 		CFB72A6815E6808900A5BAF4 /* IStringUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IStringUtils.hpp; path = Commons/Interfaces/IStringUtils.hpp; sourceTree = "<group>"; };
-		CFB72A6C15E682B400A5BAF4 /* StringUtils_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StringUtils_iOS.cpp; path = Specific/Derived/StringUtils_iOS.cpp; sourceTree = "<group>"; };
+		CFB72A6C15E682B400A5BAF4 /* StringUtils_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = StringUtils_iOS.mm; path = Specific/Derived/StringUtils_iOS.mm; sourceTree = "<group>"; };
 		CFB72A6D15E682B400A5BAF4 /* StringUtils_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StringUtils_iOS.hpp; path = Specific/Derived/StringUtils_iOS.hpp; sourceTree = "<group>"; };
 		CFD0021915D3C94C00735FD8 /* TileKey.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileKey.cpp; path = Commons/Basic/TileKey.cpp; sourceTree = "<group>"; };
 		CFD0021A15D3C94C00735FD8 /* TileKey.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileKey.hpp; path = Commons/Basic/TileKey.hpp; sourceTree = "<group>"; };
@@ -412,7 +412,7 @@
 				D86DD8A41588945200E25609 /* Image_iOS.mm */,
 				CF8B21B015DD32820068601A /* SQLiteStorage_iOS.mm */,
 				CF8B21B115DD32820068601A /* SQLiteStorage_iOS.hpp */,
-				CFB72A6C15E682B400A5BAF4 /* StringUtils_iOS.cpp */,
+				CFB72A6C15E682B400A5BAF4 /* StringUtils_iOS.mm */,
 				CFB72A6D15E682B400A5BAF4 /* StringUtils_iOS.hpp */,
 			);
 			name = Derived;
@@ -951,7 +951,7 @@
 				CFB72A3915E65BAC00A5BAF4 /* Layer.cpp in Sources */,
 				CFB72A3D15E65DBC00A5BAF4 /* LevelTileCondition.cpp in Sources */,
 				CFB72A6915E6808900A5BAF4 /* IStringUtils.cpp in Sources */,
-				CFB72A6E15E682B400A5BAF4 /* StringUtils_iOS.cpp in Sources */,
+				CFB72A6E15E682B400A5BAF4 /* StringUtils_iOS.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -159,7 +159,23 @@
   FrameTasksExecutor* frameTasksExecutor = new FrameTasksExecutor();
   
   const IStringUtils* stringUtils = new StringUtils_iOS();
-
+//  if (true) {
+//    int __REMOVE_STRING_UTILS_TESTS;
+//    
+//    std::vector<std::string> lines = stringUtils->splitLines("line1\nline2");
+//    
+//    printf("%s\n", stringUtils->left("Diego", 1).c_str());
+//    printf("%s\n", stringUtils->substring("Diego", 1).c_str());
+//
+//    std::string line = "name=value";
+//    int equalsPosition = stringUtils->indexOf(line, "=");
+//    std::string name = stringUtils->left(line, equalsPosition);
+//    std::string value = stringUtils->substring(line, equalsPosition+1);
+//    printf("\"%s\"=\"%s\"\n", name.c_str(), value.c_str());
+//    
+//    printf("\n");
+//  }
+  
   _widgetVP = G3MWidget::create(frameTasksExecutor,
                                 factory,
                                 stringUtils,
