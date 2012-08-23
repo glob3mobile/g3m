@@ -93,7 +93,7 @@ std::string CachedDownloader::removeInvalidChars(const std::string& path) const 
   std::replace(result.begin(), result.end(), '/', '_');
   return result;
 #endif
-#ifdef JAVA
+#ifdef JAVA_CODE
   return path.replaceAll("/", "_");
 #endif
 }

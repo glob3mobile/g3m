@@ -30,11 +30,6 @@ public:
     return this;
   }
   
-  IStringBuilder* add(const char c[]){
-    _oss << c;
-    return this;
-  }
-  
   IStringBuilder* add(const std::string& s){
     _oss << s;
     return this;

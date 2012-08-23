@@ -35,7 +35,7 @@ private:
   const TimeInterval _maxTimePerFrame;
   const TimeInterval _maxTimePerFrameStressed;
 #endif
-#ifdef JAVA
+#ifdef JAVA_CODE
   private final TimeInterval _maxTimePerFrame;
   private final TimeInterval _maxTimePerFrameStressed;
 #endif

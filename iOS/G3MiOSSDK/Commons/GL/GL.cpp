@@ -243,7 +243,6 @@ const GLTextureID GL::uploadTexture(const IImage* image,
   if (texID.isValid()) {
     
 #ifdef C_CODE
-//    unsigned char* imageData = new unsigned char[textureWidth * textureHeight * 4];
     unsigned char* imageData;
     
     const bool lastImageDataIsValid = ((_lastTextureWidth == textureWidth) &&
@@ -262,12 +261,7 @@ const GLTextureID GL::uploadTexture(const IImage* image,
       _lastTextureWidth = textureWidth;
       _lastTextureHeight = textureHeight;
     }
-#endif
-    
-#ifdef JAVA_CODE
-    char[] imageData = new char[textureWidth * textureHeight * 4];
-#endif
-    
+
     image->fillWithRGBA8888(imageData, textureWidth, textureHeight);
     
     _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);
@@ -279,6 +273,25 @@ const GLTextureID GL::uploadTexture(const IImage* image,
     _gl->texParameteri(Texture2D, WrapS, ClampToEdge);
     _gl->texParameteri(Texture2D, WrapT, ClampToEdge);
     _gl->texImage2D(Texture2D, 0, RGBA, textureWidth, textureHeight, 0, RGBA, UnsignedByte, imageData);
+#endif
+    
+#ifdef JAVA_CODE
+    byte[] imageData = new byte[textureWidth * textureHeight * 4];
+    image.fillWithRGBA8888(imageData, textureWidth, textureHeight);
+    
+    int texID = getTextureID();
+    _gl.blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
+    _gl.pixelStorei(GLAlignment.Unpack, 1);
+    
+    _gl.bindTexture(GLTextureType.Texture2D, texID);
+    _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MinFilter, GLTextureParameterValue.Linear);
+    _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MagFilter, GLTextureParameterValue.Linear);
+    _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapS, GLTextureParameterValue.ClampToEdge);
+    _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapT, GLTextureParameterValue.ClampToEdge);
+    _gl.texImage2D(GLTextureType.Texture2D, 0, GLFormat.RGBA, textureWidth, textureHeight, 0, GLFormat.RGBA, GLType.UnsignedByte, imageData);
+    return texID;
+#endif
+    
   }
   else {
     printf("can't get a valid texture id\n");

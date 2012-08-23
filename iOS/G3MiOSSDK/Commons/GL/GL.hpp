@@ -61,7 +61,12 @@ private:
   float _translationX;
   float _translationY;
   
+#ifdef C_CODE
   const float* _textureCoordinates;
+#endif
+#ifdef JAVA_CODE
+  private final float[] _textureCoordinates;
+#endif
   
   float _flatColorR;
   float _flatColorG;

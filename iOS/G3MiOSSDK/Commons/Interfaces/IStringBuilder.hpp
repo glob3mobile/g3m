@@ -26,7 +26,6 @@ public:
   static IStringBuilder* newStringBuilder();
   
   virtual IStringBuilder* add(double d) = 0;
-  virtual IStringBuilder* add(const char c[]) = 0;
   virtual IStringBuilder* add(const std::string& s) = 0;
   
   virtual std::string getString() const = 0;

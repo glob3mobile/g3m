@@ -27,7 +27,12 @@ public:
   
   virtual const MutableVector2D getTranslation() const = 0;
   
+#ifdef C_CODE
   virtual float const* getTexCoords() const = 0;
+#endif
+#ifdef JAVA_CODE
+  public abstract float[] getTexCoords();
+#endif
   
 };
 
@@ -40,7 +45,12 @@ private:
   mutable bool _initialized;
 
   mutable bool            _ownedTexCoords;
+#ifdef C_CODE
   mutable float const*    _texCoords;
+#endif
+#ifdef JAVA_CODE
+  private float[]    _texCoords;        //NOT VALID MUTABLE AND CONST IN JAVA CONVERSION
+#endif
   mutable MutableVector2D _translation;
   mutable MutableVector2D _scale;
   
