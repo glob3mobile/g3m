@@ -88,9 +88,14 @@ void CachedDownloader::cancelRequest(long requestId) {
 }
 
 std::string CachedDownloader::removeInvalidChars(const std::string& path) const {
+#ifdef C_CODE
   std::string result = path;
   std::replace(result.begin(), result.end(), '/', '_');
   return result;
+#endif
+#ifdef JAVA
+  return path.replaceAll("/", "_");
+#endif
 }
 
 

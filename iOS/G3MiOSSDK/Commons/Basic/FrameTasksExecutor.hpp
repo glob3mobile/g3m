@@ -31,8 +31,14 @@ private:
   const int          _minimumExecutionsPerFrame;
   const int          _maximumExecutionsPerFrame;
   const int          _maximumQueuedTasks;
+#ifdef C_CODE
   const TimeInterval _maxTimePerFrame;
   const TimeInterval _maxTimePerFrameStressed;
+#endif
+#ifdef JAVA
+  private final TimeInterval _maxTimePerFrame;
+  private final TimeInterval _maxTimePerFrameStressed;
+#endif
   
   std::list<FrameTask*> _preRenderTasks;
   

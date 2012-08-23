@@ -63,9 +63,13 @@ bool BusyQuadRenderer::initMesh(const RenderContext* rc)
     }
   }
 
-
+#ifdef C_CODE
   IndexedMesh *im = IndexedMesh::createFromVector3D(true, TriangleStrip, NoCenter, Vector3D(0,0,0), 
                                                     numVertices, quadVertices, quadIndices, numIndices, NULL);
+#else
+  IndexedMesh *im = IndexedMesh::createFromVector3D(true, GLPrimitive.TriangleStrip, NoCenter, Vector3D(0,0,0), 
+                                                    numVertices, quadVertices, quadIndices, numIndices, NULL);
+#endif
   
   TextureMapping* texMap = new SimpleTextureMapping(texID, texC, true);
   
@@ -95,7 +99,7 @@ int BusyQuadRenderer::render(const RenderContext* rc)
   }
   
   // init modelview matrix
-  GLint currentViewport[4];
+  int currentViewport[4];
   rc->getGL()->getViewport(currentViewport);
   int halfWidth = currentViewport[2] / 2;
   int halfHeight = currentViewport[3] / 2;

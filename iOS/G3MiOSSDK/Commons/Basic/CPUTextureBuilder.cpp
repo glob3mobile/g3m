@@ -87,7 +87,10 @@ const GLTextureID CPUTextureBuilder::createTextureFromImages(GL * gl, const IFac
   }
 
   for (; i < images.size(); i++) {
-    IImage* im2 = base->combineWith(*images[i], *rectangles[i], width, height);
+    const IImage* newIm = images[i];
+    const Rectangle* newRect = rectangles[i];
+    
+    IImage* im2 = base->combineWith(*newIm, *newRect, width, height);
     if (base != images[0]) {
       delete base;
     }
