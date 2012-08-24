@@ -48,16 +48,39 @@
   //LAYERS
   LayerSet* layerSet = new LayerSet();
   
-  WMSLayer* blueMarble = new WMSLayer("bmng200405",
-                                      URL("http://www.nasa.network.com/wms?"),
-                                      WMS_1_1_0,
-                                      Sector::fullSphere(),
-                                      "image/jpeg",
-                                      "EPSG:4326",
-                                      "",
-                                      false,
-                                      NULL);
-  layerSet->addLayer(blueMarble);
+//  WMSLayer* blueMarble = new WMSLayer("bmng200405",
+//                                      URL("http://www.nasa.network.com/wms?"),
+//                                      WMS_1_1_0,
+//                                      Sector::fullSphere(),
+//                                      "image/jpeg",
+//                                      "EPSG:4326",
+//                                      "",
+//                                      false,
+//                                      NULL);
+//  layerSet->addLayer(blueMarble);
+  
+  WMSLayer* bing = new WMSLayer("ve",
+                                URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?"),
+                                WMS_1_1_0,
+                                Sector::fullSphere(),
+                                "image/png",
+                                "EPSG:4326",
+                                "",
+                                false,
+                                NULL);
+  layerSet->addLayer(bing);
+
+//  WMSLayer* political = new WMSLayer("topp:cia",
+//                                     URL("http://worldwind22.arc.nasa.gov/geoserver/wms?"),
+//                                     WMS_1_1_0,
+//                                     Sector::fullSphere(),
+//                                     "image/png",
+//                                     "EPSG:4326",
+//                                     "countryboundaries",
+//                                     true,
+//                                     NULL);
+//  layerSet->addLayer(political);
+
   
   if (false) {
     WMSLayer *osm = new WMSLayer("osm",
