@@ -18,11 +18,11 @@ class MathUtils{
   bool isNan(double v) const{ return isNan(v);}
   bool isNan(float v) const{ return isNan(v);}
   
-  double NanD() const{ return Nan;}
-  float NanF() const = 0;
+  double NanD() const{ return NAN;}
+  float NanF() const{ return NAN; }
   
-  double sin(double v) const = 0;
-  float sin(float v) const = 0;
+  double sin(double v) const{ return sin(v); }
+  float sin(float v) const{ return sin(v); }
   
   double cos(double v) const = 0;
   float cos(float v) const = 0;
