@@ -207,8 +207,8 @@ int GL::getError() {
 
 const GLTextureId GL::uploadTexture(const IImage* image,
                                     int textureWidth, int textureHeight) {
-  const GLTextureId texID = getGLTextureId();
-  if (texID.isValid()) {
+  const GLTextureId texId = getGLTextureId();
+  if (texId.isValid()) {
     
 #ifdef C_CODE
 //    unsigned char* imageData = new unsigned char[textureWidth * textureHeight * 4];
@@ -241,7 +241,7 @@ const GLTextureId GL::uploadTexture(const IImage* image,
     _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);
     _gl->pixelStorei(Unpack, 1);
     
-    _gl->bindTexture(Texture2D, texID.getGLTextureId());
+    _gl->bindTexture(Texture2D, texId.getGLTextureId());
     _gl->texParameteri(Texture2D, MinFilter, Linear);
     _gl->texParameteri(Texture2D, MagFilter, Linear);
     _gl->texParameteri(Texture2D, WrapS, ClampToEdge);
@@ -256,7 +256,7 @@ const GLTextureId GL::uploadTexture(const IImage* image,
     printf("can't get a valid texture id\n");
   }
   
-  return texID;
+  return texId;
 }
 
 void GL::setTextureCoordinates(int size, int stride, const float texcoord[]) {

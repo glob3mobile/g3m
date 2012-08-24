@@ -10,7 +10,7 @@
 #include "Vector2D.hpp"
 #include "Camera.hpp"
 
-std::vector<Vector3D> Box::getCorners() const
+const std::vector<Vector3D> Box::getCorners() const
 {
   const Vector3D c[8] = {
     Vector3D(_lower.x(), _lower.y(), _lower.z()),

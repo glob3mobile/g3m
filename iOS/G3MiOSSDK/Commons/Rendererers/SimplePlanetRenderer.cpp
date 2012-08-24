@@ -108,11 +108,11 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   int * ind = createMeshIndex();
   
   //TEXTURED
-  GLTextureId texID = GLTextureId::invalid();
+  GLTextureId texId = GLTextureId::invalid();
   float * texC = NULL;
   if (true){
-    texID = rc->getTexturesHandler()->getGLTextureIdFromFileName(_textureFilename, _texWidth, _texHeight);
-    if (!texID.isValid()) {
+    texId = rc->getTexturesHandler()->getGLTextureIdFromFileName(_textureFilename, _texWidth, _texHeight);
+    if (!texId.isValid()) {
       rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
       return false;
     }
@@ -154,7 +154,7 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   IndexedMesh *im = IndexedMesh::createFromVector3D(true, TriangleStrip, NoCenter, Vector3D(0,0,0), _latRes *_lonRes, ver,
                                                     ind, numIndexes, flatColor, colors, 0.5, normals);
   
-  TextureMapping* texMap = new SimpleTextureMapping(texID,
+  TextureMapping* texMap = new SimpleTextureMapping(texId,
                                                     texC,
                                                     true);
   

@@ -32,13 +32,13 @@ const GLTextureId CPUTextureBuilder::createTextureFromImages(GL * gl,
     im = im2;
   }
   
-  const GLTextureId texID = gl->uploadTexture(im, width, height);
+  const GLTextureId texId = gl->uploadTexture(im, width, height);
   
   if (imagesSize > 1) {
     delete im;
   }
   
-  return texID;
+  return texId;
 }
 
 const GLTextureId CPUTextureBuilder::createTextureFromImages(GL * gl, const IFactory* factory,
@@ -66,11 +66,11 @@ const GLTextureId CPUTextureBuilder::createTextureFromImages(GL * gl, const IFac
 //    image = nextImage;
 //  }
 //  
-//  const GLTextureId texID = gl->uploadTexture(image, width, height);
+//  const GLTextureId texId = gl->uploadTexture(image, width, height);
 //  
 //  delete image;
 //  
-//  return texID;
+//  return texId;
 
 
   const IImage* base;
@@ -96,11 +96,11 @@ const GLTextureId CPUTextureBuilder::createTextureFromImages(GL * gl, const IFac
     base = im2;
   }
   
-  const GLTextureId texID = gl->uploadTexture(base, width, height);
+  const GLTextureId texId = gl->uploadTexture(base, width, height);
   
   if (rectangles.size() > 0 && base != images[0]) {
     delete base;
   }
   
-  return texID;
+  return texId;
 }

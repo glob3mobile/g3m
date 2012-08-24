@@ -312,14 +312,14 @@ public:
       }
       
       if (images.size() > 0) {
-        const GLTextureId glTextureID = _texturesHandler->getGLTextureId(images,
+        const GLTextureId glTextureId = _texturesHandler->getGLTextureId(images,
                                                                          rectangles,
                                                                          TextureSpec(petitionsID,
                                                                                      textureWidth,
                                                                                      textureHeight));
-        if (glTextureID.isValid()) {
-          if (!_mesh->setGLTextureIdForLevel(0, glTextureID)) {
-            _texturesHandler->releaseGLTextureId(glTextureID);
+        if (glTextureId.isValid()) {
+          if (!_mesh->setGLTextureIdForLevel(0, glTextureId)) {
+            _texturesHandler->releaseGLTextureId(glTextureId);
           }
         }
         

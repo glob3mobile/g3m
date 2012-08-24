@@ -144,10 +144,10 @@ public:
   Extent* getExtent() const;
 
   bool setGLTextureIdForLevel(int level,
-                              const GLTextureId glTextureID);
+                              const GLTextureId glTextureId);
   
 //  void setGLTextureIdForInversedLevel(int inversedLevel,
-//                                      const GLTextureId glTextureID);
+//                                      const GLTextureId glTextureId);
   
   const GLTextureId getTopLevelGLTextureId() const;
 

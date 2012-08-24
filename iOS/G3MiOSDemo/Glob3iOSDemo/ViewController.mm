@@ -33,7 +33,7 @@
 {
   [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-//  [[self G3MWidget] initWidgetDemo];
+  //  [[self G3MWidget] initWidgetDemo];
   [self initWidgetDemo];
   
   [[self G3MWidget] startAnimation];
@@ -191,11 +191,10 @@
   cameraConstraints.push_back(new SimpleCameraConstrainer());
   
   UserData* userData = NULL;
-  [[self G3MWidget] initWidgetWithLayerSet: layerSet
-                         cameraConstraints: cameraConstraints
-                                 renderers: renderers
-                                  userData: userData];
-  
+  [[self G3MWidget] initWidgetWithCameraConstraints: cameraConstraints
+                                           layerSet: layerSet
+                                          renderers: renderers
+                                           userData: userData];
   
 }
 

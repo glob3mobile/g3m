@@ -40,14 +40,14 @@ Mesh* SingleImageTileTexturizer::texturize(const RenderContext* rc,
                                            Mesh* previousMesh) {
   _renderContext = rc; //SAVING CONTEXT
   
-  if (!_texID.isValid()) {
-    _texID = rc->getTexturesHandler()->getGLTextureId(_image,
+  if (!_texId.isValid()) {
+    _texId = rc->getTexturesHandler()->getGLTextureId(_image,
                                                       TextureSpec("SINGLE_IMAGE_TEX",
                                                                   _image->getWidth(),
                                                                   _image->getHeight())
                                                       );
     
-    if (!_texID.isValid()) {
+    if (!_texId.isValid()) {
       rc->getLogger()->logError("Can't upload texture to GPU");
       return NULL;
     }
@@ -55,7 +55,7 @@ Mesh* SingleImageTileTexturizer::texturize(const RenderContext* rc,
     rc->getFactory()->deleteImage(_image);
   }
   
-  const TextureMapping* texMap = new SimpleTextureMapping(_texID,
+  const TextureMapping* texMap = new SimpleTextureMapping(_texId,
                                                           createTextureCoordinates(rc, mesh));
   
   if (previousMesh != NULL) delete previousMesh;

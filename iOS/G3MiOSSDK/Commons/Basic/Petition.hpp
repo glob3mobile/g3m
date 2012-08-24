@@ -22,7 +22,6 @@ class Rectangle;
 class Sector;
 class IFactory;
 class MutableVector2D;
-class TileImagesTileTexturizer;
 
 class Petition {
 private:
