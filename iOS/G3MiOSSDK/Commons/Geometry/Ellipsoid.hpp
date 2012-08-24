@@ -15,6 +15,8 @@
 #include <vector>
 #include <list>
 
+#include "IMathUtils.hpp"
+
 
 class Ellipsoid {
 private:
