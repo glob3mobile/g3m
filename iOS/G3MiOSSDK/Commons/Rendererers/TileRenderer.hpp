@@ -188,8 +188,7 @@ public:
     
     const int level = tile->getLevel();
     
-    std::map<int,int>::iterator it = _tilesProcessedByLevel.find(level);
-    if (it != _tilesProcessedByLevel.end()){
+    if (_tilesProcessedByLevel.count(level) != 0){
       _tilesProcessedByLevel[level] = _tilesProcessedByLevel[level] + 1;
     } else{
       _tilesProcessedByLevel[level] = 1;
@@ -200,8 +199,8 @@ public:
     _tilesVisible++;
     
     const int level = tile->getLevel();
-    std::map<int,int>::iterator it = _tilesVisibleByLevel.find(level);
-    if (it != _tilesVisibleByLevel.end()){
+    
+    if (_tilesVisibleByLevel.count(level) != 0){
       _tilesVisibleByLevel[level] = _tilesVisibleByLevel[level] + 1;
     } else{
       _tilesVisibleByLevel[level] = 1;
@@ -212,8 +211,7 @@ public:
     _tilesRendered++;
     
     const int level = tile->getLevel();
-    std::map<int,int>::iterator it = _tilesRenderedByLevel.find(level);
-    if (it != _tilesRenderedByLevel.end()){
+    if (_tilesRenderedByLevel.count(level) != 0){
       _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
     } else{
       _tilesRenderedByLevel[level] = 1;
