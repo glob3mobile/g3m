@@ -286,7 +286,7 @@ public class G3MWidget_Android extends GLSurfaceView implements
 	  layerSet.addLayer(blueMarble);
 	  
 	  // very basic tile renderer
-	  if (false) {
+	  if (true) {
 	    boolean renderDebug = true;
 	    
 	    TilesRenderParameters parameters = TilesRenderParameters.createDefault(renderDebug);

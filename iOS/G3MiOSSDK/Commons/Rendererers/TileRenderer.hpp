@@ -187,21 +187,37 @@ public:
     _tilesProcessed++;
     
     const int level = tile->getLevel();
-    _tilesProcessedByLevel[level] = _tilesProcessedByLevel[level] + 1;
+    
+    std::map<int,int>::iterator it = _tilesProcessedByLevel.find(level);
+    if (it != _tilesProcessedByLevel.end()){
+      _tilesProcessedByLevel[level] = _tilesProcessedByLevel[level] + 1;
+    } else{
+      _tilesProcessedByLevel[level] = 1;
+    }
   }
   
   void computeVisibleTile(Tile* tile) {
     _tilesVisible++;
     
     const int level = tile->getLevel();
-    _tilesVisibleByLevel[level] = _tilesVisibleByLevel[level] + 1;
+    std::map<int,int>::iterator it = _tilesVisibleByLevel.find(level);
+    if (it != _tilesVisibleByLevel.end()){
+      _tilesVisibleByLevel[level] = _tilesVisibleByLevel[level] + 1;
+    } else{
+      _tilesVisibleByLevel[level] = 1;
+    }
   }
   
   void computeTileRendered(Tile* tile) {
     _tilesRendered++;
     
     const int level = tile->getLevel();
-    _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
+    std::map<int,int>::iterator it = _tilesRenderedByLevel.find(level);
+    if (it != _tilesRenderedByLevel.end()){
+      _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
+    } else{
+      _tilesRenderedByLevel[level] = 1;
+    }
   }
   
   bool equalsTo(const TilesStatistics& that) const {

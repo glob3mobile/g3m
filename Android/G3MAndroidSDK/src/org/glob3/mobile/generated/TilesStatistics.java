@@ -60,7 +60,8 @@ public class TilesStatistics
 	_tilesProcessed++;
 
 	final int level = tile.getLevel();
-	_tilesProcessedByLevel.put(level, _tilesProcessedByLevel.get(level) + 1);
+	int nt = _tilesProcessedByLevel.get(level);
+	_tilesProcessedByLevel.put(level, nt + 1);
   }
 
   public final void computeVisibleTile(Tile tile)
