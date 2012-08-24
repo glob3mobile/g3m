@@ -8,6 +8,7 @@ import org.glob3.mobile.generated.G3MWidget;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.os.Looper;
 
 class ES2Renderer implements GLSurfaceView.Renderer {
 	
@@ -23,6 +24,10 @@ class ES2Renderer implements GLSurfaceView.Renderer {
     }
     
     public void onDrawFrame(GL10 glUnused) {
+    	
+		if (Looper.myLooper() == null) {
+			Looper.prepare();
+		}
     	
     	_hasRendered = true;
     	

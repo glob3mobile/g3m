@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.BusyMeshRenderer;
 import org.glob3.mobile.generated.CPUTextureBuilder;
 import org.glob3.mobile.generated.CameraDoubleDragHandler;
 import org.glob3.mobile.generated.CameraDoubleTapHandler;
@@ -33,6 +34,7 @@ import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
+import org.glob3.mobile.generated.MultiLayerTileTexturizer;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.SGCubeNode;
 import org.glob3.mobile.generated.SampleEffect;
@@ -45,17 +47,20 @@ import org.glob3.mobile.generated.TextureBuilder;
 import org.glob3.mobile.generated.TexturesHandler;
 import org.glob3.mobile.generated.TileRenderer;
 import org.glob3.mobile.generated.TileTexturizer;
+import org.glob3.mobile.generated.TilesRenderParameters;
 import org.glob3.mobile.generated.TimeInterval;
+import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
+import org.glob3.mobile.generated.TouchEventType;
+import org.glob3.mobile.generated.Vector2D;
 import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
-
-import org.glob3.mobile.generated.*;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
+import android.view.MotionEvent.PointerCoords;
 
 public class G3MWidget_Android extends GLSurfaceView implements
 		OnGestureListener {
@@ -78,7 +83,6 @@ public class G3MWidget_Android extends GLSurfaceView implements
 
 		// Debug flags
 		setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
-
 	}
 
 	// The initialization of _widget occurs when the android widget is resized
@@ -122,8 +126,16 @@ public class G3MWidget_Android extends GLSurfaceView implements
 	}
 
 	public void onLongPress(MotionEvent e) {
-		// TODO Auto-generated method stub
-
+		PointerCoords pc = new PointerCoords();
+		e.getPointerCoords(0, pc);
+		Touch t = new Touch(new Vector2D(pc.x, pc.y), new Vector2D(0,0));
+		final TouchEvent te = TouchEvent.create(TouchEventType.LongPress, t);
+		
+		queueEvent(new Runnable() {
+			public void run() {
+				_widget.onTouchEvent(te);
+			}
+		});
 	}
 
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
@@ -265,11 +277,11 @@ public class G3MWidget_Android extends GLSurfaceView implements
 
 	  
 	  //STORAGE
-	  IDownloader downloader = null;
-//	  IDownloader downloader = new Downloader_Android(1 * 1024 * 1024,
-//	                                               64 * 1024 * 1024,
-//	                                               ".G3M_Cache",
-//	                                               8);
+//	  IDownloader downloader = null;
+	  IDownloader downloader = new Downloader_Android(1 * 1024 * 1024,
+	                                               64 * 1024 * 1024,
+	                                               ".G3M_Cache",
+	                                               8);
 
 	  //LAYERS
 	  LayerSet layerSet = new LayerSet();
@@ -292,8 +304,14 @@ public class G3MWidget_Android extends GLSurfaceView implements
 	    TilesRenderParameters parameters = TilesRenderParameters.createDefault(renderDebug);
 
 	    TileTexturizer texturizer = null;
-	    IImage singleWorldImage = factory.createImageFromFileName("world.jpg");
-	    texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
+	    if (true) {
+	      texturizer = new MultiLayerTileTexturizer(layerSet);
+	    }
+	    else {
+	      //SINGLE IMAGE
+	      IImage singleWorldImage = factory.createImageFromFileName("world.jpg");
+	      texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
+	    }
 	    
 	    boolean showStatistics = false;
 	    TileRenderer tr = new TileRenderer(new EllipsoidalTileTessellator(parameters._tileResolution, true),
