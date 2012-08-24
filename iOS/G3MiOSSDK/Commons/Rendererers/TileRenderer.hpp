@@ -138,13 +138,19 @@ public:
 class TilesStatistics {
 private:
   long               _tilesProcessed;
-  std::map<int, int> _tilesProcessedByLevel;
+  //std::map<int, int> _tilesProcessedByLevel;
   
   long               _tilesVisible;
-  std::map<int, int> _tilesVisibleByLevel;
+  //std::map<int, int> _tilesVisibleByLevel;
   
   long               _tilesRendered;
-  std::map<int, int> _tilesRenderedByLevel;
+  //std::map<int, int> _tilesRenderedByLevel;
+  
+  static const int _maxLOD = 30;
+  
+  int _tilesProcessedByLevel[_maxLOD];
+  int _tilesVisibleByLevel[_maxLOD];
+  int _tilesRenderedByLevel[_maxLOD];
   
   int _splitsCountInFrame;
   int _buildersStartsInFrame;
@@ -158,7 +164,9 @@ public:
   _splitsCountInFrame(0),
   _buildersStartsInFrame(0)
   {
-    
+    for(int i = 0; i < _maxLOD; i++){
+      _tilesProcessedByLevel[i] = _tilesVisibleByLevel[i] = _tilesRenderedByLevel[i] = 0;
+    }
   }
   
   ~TilesStatistics() {
@@ -187,35 +195,21 @@ public:
     _tilesProcessed++;
     
     const int level = tile->getLevel();
-    
-    if (_tilesProcessedByLevel.count(level) != 0){
-      _tilesProcessedByLevel[level] = _tilesProcessedByLevel[level] + 1;
-    } else{
-      _tilesProcessedByLevel[level] = 1;
-    }
+    _tilesProcessedByLevel[level] = _tilesProcessedByLevel[level] + 1;
   }
   
   void computeVisibleTile(Tile* tile) {
     _tilesVisible++;
     
     const int level = tile->getLevel();
-    
-    if (_tilesVisibleByLevel.count(level) != 0){
-      _tilesVisibleByLevel[level] = _tilesVisibleByLevel[level] + 1;
-    } else{
-      _tilesVisibleByLevel[level] = 1;
-    }
+    _tilesVisibleByLevel[level] = _tilesVisibleByLevel[level] + 1;
   }
   
   void computeTileRendered(Tile* tile) {
     _tilesRendered++;
     
     const int level = tile->getLevel();
-    if (_tilesRenderedByLevel.count(level) != 0){
-      _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
-    } else{
-      _tilesRenderedByLevel[level] = 1;
-    }
+    _tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
   }
   
   bool equalsTo(const TilesStatistics& that) const {
@@ -275,11 +269,34 @@ public:
 #endif
   }
   
+  static std::string asLogString(const int m[], const int nMax) {
+    
+    bool first = true;
+    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+    for(int i = 0; i < nMax; i++) {
+      const int level   = i;
+      const int counter = m[i];
+      if (counter != 0){
+        if (first) {
+          first = false;
+        }
+        else {
+          isb->add(",");
+        }
+        isb->add("L")->add(level)->add(":")->add(counter);
+      }
+    }
+    
+    std::string s = isb->getString();
+    delete isb;
+    return s;  
+  }
+  
   void log(const ILogger* logger) const {
     logger->logInfo("Tiles processed:%d (%s), visible:%d (%s), rendered:%d (%s).",
-                    _tilesProcessed, asLogString(_tilesProcessedByLevel).c_str(),
-                    _tilesVisible,   asLogString(_tilesVisibleByLevel).c_str(),
-                    _tilesRendered,  asLogString(_tilesRenderedByLevel).c_str());
+                    _tilesProcessed, asLogString(_tilesProcessedByLevel, _maxLOD).c_str(),
+                    _tilesVisible,   asLogString(_tilesVisibleByLevel, _maxLOD).c_str(),
+                    _tilesRendered,  asLogString(_tilesRenderedByLevel, _maxLOD).c_str());
   }
   
 };
