@@ -18,7 +18,7 @@ class ByteBuffer {
   
   ByteBuffer(const ByteBuffer& that);
   
-  void operator=(const ByteBuffer& that);
+  ByteBuffer& operator=(const ByteBuffer& that);
   
 public:
   ByteBuffer(unsigned char data[],

@@ -11,14 +11,16 @@
 
 #include <string>
 #include <vector>
-#include "TextureBuilder.hpp"
+//#include "TextureBuilder.hpp"
+#include "GLTextureId.hpp"
 
-
+class TextureBuilder;
 class IImage;
 class RenderContext;
 class TextureHolder;
 class GL;
 class IFactory;
+class Rectangle;
 
 
 class TextureSpec {
@@ -29,7 +31,7 @@ private:
   const int         _height;
   
   
-  void operator=(const TextureSpec& that);
+  TextureSpec& operator=(const TextureSpec& that);
   
 public:
   TextureSpec(const std::string& id,

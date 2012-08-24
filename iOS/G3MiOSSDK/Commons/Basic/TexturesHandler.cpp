@@ -10,6 +10,7 @@
 
 #include "IImage.hpp"
 #include "Context.hpp"
+#include "TextureBuilder.hpp"
 
 #include <sstream>
 
