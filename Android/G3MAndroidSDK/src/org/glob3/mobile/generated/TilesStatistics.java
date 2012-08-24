@@ -2,13 +2,19 @@ package org.glob3.mobile.generated;
 public class TilesStatistics
 {
   private int _tilesProcessed;
-  private java.util.HashMap<Integer, Integer> _tilesProcessedByLevel = new java.util.HashMap<Integer, Integer>();
+  //std::map<int, int> _tilesProcessedByLevel;
 
   private int _tilesVisible;
-  private java.util.HashMap<Integer, Integer> _tilesVisibleByLevel = new java.util.HashMap<Integer, Integer>();
+  //std::map<int, int> _tilesVisibleByLevel;
 
   private int _tilesRendered;
-  private java.util.HashMap<Integer, Integer> _tilesRenderedByLevel = new java.util.HashMap<Integer, Integer>();
+  //std::map<int, int> _tilesRenderedByLevel;
+
+  private static final int _maxLOD = 30;
+
+  private int[] _tilesProcessedByLevel = new int[_maxLOD];
+  private int[] _tilesVisibleByLevel = new int[_maxLOD];
+  private int[] _tilesRenderedByLevel = new int[_maxLOD];
 
   private int _splitsCountInFrame;
   private int _buildersStartsInFrame;
@@ -21,7 +27,10 @@ public class TilesStatistics
 	  _tilesRendered = 0;
 	  _splitsCountInFrame = 0;
 	  _buildersStartsInFrame = 0;
-
+	for(int i = 0; i < _maxLOD; i++)
+	{
+	  _tilesProcessedByLevel[i] = _tilesVisibleByLevel[i] = _tilesRenderedByLevel[i] = 0;
+	}
   }
 
   public void dispose()
@@ -60,15 +69,7 @@ public class TilesStatistics
 	_tilesProcessed++;
 
 	final int level = tile.getLevel();
-
-	if (_tilesProcessedByLevel.count(level) != 0)
-	{
-	  _tilesProcessedByLevel.put(level, _tilesProcessedByLevel.get(level) + 1);
-	}
-	else
-	{
-	  _tilesProcessedByLevel.put(level, 1);
-	}
+	_tilesProcessedByLevel[level] = _tilesProcessedByLevel[level] + 1;
   }
 
   public final void computeVisibleTile(Tile tile)
@@ -76,15 +77,7 @@ public class TilesStatistics
 	_tilesVisible++;
 
 	final int level = tile.getLevel();
-
-	if (_tilesVisibleByLevel.count(level) != 0)
-	{
-	  _tilesVisibleByLevel.put(level, _tilesVisibleByLevel.get(level) + 1);
-	}
-	else
-	{
-	  _tilesVisibleByLevel.put(level, 1);
-	}
+	_tilesVisibleByLevel[level] = _tilesVisibleByLevel[level] + 1;
   }
 
   public final void computeTileRendered(Tile tile)
@@ -92,14 +85,7 @@ public class TilesStatistics
 	_tilesRendered++;
 
 	final int level = tile.getLevel();
-	if (_tilesRenderedByLevel.count(level) != 0)
-	{
-	  _tilesRenderedByLevel.put(level, _tilesRenderedByLevel.get(level) + 1);
-	}
-	else
-	{
-	  _tilesRenderedByLevel.put(level, 1);
-	}
+	_tilesRenderedByLevel[level] = _tilesRenderedByLevel[level] + 1;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -143,11 +129,40 @@ public class TilesStatistics
 	return res;
   }
 
+  public static String asLogString(int[] m, int nMax)
+  {
+
+	boolean first = true;
+	IStringBuilder isb = IStringBuilder.newStringBuilder();
+	for(int i = 0; i < nMax; i++)
+	{
+	  final int level = i;
+	  final int counter = m[i];
+	  if (counter != 0)
+	  {
+		if (first)
+		{
+		  first = false;
+		}
+		else
+		{
+		  isb.add(",");
+		}
+		isb.add("L").add(level).add(":").add(counter);
+	  }
+	}
+
+	String s = isb.getString();
+	if (isb != null)
+		isb.dispose();
+	return s;
+  }
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: void log(const ILogger* logger) const
   public final void log(ILogger logger)
   {
-	logger.logInfo("Tiles processed:%d (%s), visible:%d (%s), rendered:%d (%s).", _tilesProcessed, asLogString(_tilesProcessedByLevel), _tilesVisible, asLogString(_tilesVisibleByLevel), _tilesRendered, asLogString(_tilesRenderedByLevel));
+	logger.logInfo("Tiles processed:%d (%s), visible:%d (%s), rendered:%d (%s).", _tilesProcessed, asLogString(_tilesProcessedByLevel, _maxLOD), _tilesVisible, asLogString(_tilesVisibleByLevel, _maxLOD), _tilesRendered, asLogString(_tilesRenderedByLevel, _maxLOD));
   }
 
 }
