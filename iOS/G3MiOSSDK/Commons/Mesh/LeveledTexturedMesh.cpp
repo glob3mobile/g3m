@@ -139,10 +139,10 @@ void LeveledTexturedMesh::render(const RenderContext* rc) const {
 }
 
 bool LeveledTexturedMesh::setGLTextureIdForLevel(int level,
-                                                 const GLTextureId glTextureID) {
-  if (glTextureID.isValid()) {
+                                                 const GLTextureId glTextureId) {
+  if (glTextureId.isValid()) {
     if (!_currentLevelIsValid || (level < _currentLevel)) {
-      _mappings->at(level)->setGLTextureId(glTextureID);
+      _mappings->at(level)->setGLTextureId(glTextureId);
       _currentLevelIsValid = false;
       return true;
     }
@@ -152,7 +152,7 @@ bool LeveledTexturedMesh::setGLTextureIdForLevel(int level,
 }
 
 //void LeveledTexturedMesh::setGLTextureIdForInversedLevel(int inversedLevel,
-//                                                         const GLTextureId glTextureID) {
+//                                                         const GLTextureId glTextureId) {
 //  const int level = _mappings->size() - inversedLevel - 1;
-//  setGLTextureIdForLevel(level, glTextureID);
+//  setGLTextureIdForLevel(level, glTextureId);
 //}

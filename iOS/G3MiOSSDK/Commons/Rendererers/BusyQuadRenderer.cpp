@@ -54,10 +54,10 @@ bool BusyQuadRenderer::initMesh(const RenderContext* rc)
   
   
   //TEXTURED
-  GLTextureId texID = GLTextureId::invalid();
+  GLTextureId texId = GLTextureId::invalid();
   if (true){
-    texID = rc->getTexturesHandler()->getGLTextureIdFromFileName(_textureFilename, 2048, 1024);
-    if (!texID.isValid()) {
+    texId = rc->getTexturesHandler()->getGLTextureIdFromFileName(_textureFilename, 2048, 1024);
+    if (!texId.isValid()) {
       rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
       return false;
     }
@@ -67,7 +67,7 @@ bool BusyQuadRenderer::initMesh(const RenderContext* rc)
   IndexedMesh *im = IndexedMesh::createFromVector3D(true, TriangleStrip, NoCenter, Vector3D(0,0,0), 
                                                     numVertices, quadVertices, quadIndices, numIndices, NULL);
   
-  TextureMapping* texMap = new SimpleTextureMapping(texID, texC, true);
+  TextureMapping* texMap = new SimpleTextureMapping(texId, texC, true);
   
   _quadMesh = new TexturedMesh(im, true, texMap, true);
 

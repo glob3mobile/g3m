@@ -68,10 +68,10 @@
   return [CAEAGLLayer class];
 }
 
-- (void) initWidgetWithLayerSet: (LayerSet*) layerSet
-              cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
-                      renderers: (std::vector<Renderer*>) renderers
-                       userData: (UserData*) userData
+- (void) initWidgetWithCameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
+                                layerSet: (LayerSet*) layerSet
+                               renderers: (std::vector<Renderer*>) renderers
+                                userData: (UserData*) userData
 {
   // creates default camera-renderer and camera-handlers
   CameraRenderer *cameraRenderer = new CameraRenderer();
@@ -95,17 +95,17 @@
                                                                            forceTopLevelTilesRenderOnStart);
   
   [self initWidgetWithCameraRenderer: cameraRenderer
+                   cameraConstraints: cameraConstraints
                             layerSet: layerSet
                tilesRenderParameters: parameters
-                   cameraConstraints: cameraConstraints
                            renderers: renderers
                             userData: userData];
 }
 
 - (void) initWidgetWithCameraRenderer: (CameraRenderer*) cameraRenderer
+                    cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
                              layerSet: (LayerSet*) layerSet
                 tilesRenderParameters: (TilesRenderParameters*) parameters
-                    cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
                             renderers: (std::vector<Renderer*>) renderers
                              userData: (UserData*) userData
 {
