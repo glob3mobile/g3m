@@ -40,7 +40,7 @@ void LazyTextureMapping::releaseGLTextureId() {
   if (_texturesHandler) {
     if (_glTextureId.isValid()) {
       _texturesHandler->releaseGLTextureId(_glTextureId);
-      _glTextureId = GLTextureID::invalid();
+      _glTextureId = GLTextureId::invalid();
     }
   }
 }
@@ -105,15 +105,15 @@ LazyTextureMapping* LeveledTexturedMesh::getCurrentTextureMapping() const {
   return _currentLevelIsValid ? _mappings->at(_currentLevel) : NULL;
 }
 
-const GLTextureID LeveledTexturedMesh::getTopLevelGLTextureID() const {
+const GLTextureId LeveledTexturedMesh::getTopLevelGLTextureId() const {
   const LazyTextureMapping* mapping = getCurrentTextureMapping();
   if (mapping != NULL) {
     if (_currentLevel == 0) {
-      return mapping->getGLTextureID();
+      return mapping->getGLTextureId();
     }
   }
   
-  return GLTextureID::invalid();
+  return GLTextureId::invalid();
 }
 
 
@@ -138,11 +138,11 @@ void LeveledTexturedMesh::render(const RenderContext* rc) const {
   }
 }
 
-bool LeveledTexturedMesh::setGLTextureIDForLevel(int level,
-                                                 const GLTextureID glTextureID) {
+bool LeveledTexturedMesh::setGLTextureIdForLevel(int level,
+                                                 const GLTextureId glTextureID) {
   if (glTextureID.isValid()) {
     if (!_currentLevelIsValid || (level < _currentLevel)) {
-      _mappings->at(level)->setGLTextureID(glTextureID);
+      _mappings->at(level)->setGLTextureId(glTextureID);
       _currentLevelIsValid = false;
       return true;
     }
@@ -151,8 +151,8 @@ bool LeveledTexturedMesh::setGLTextureIDForLevel(int level,
   return false;
 }
 
-//void LeveledTexturedMesh::setGLTextureIDForInversedLevel(int inversedLevel,
-//                                                         const GLTextureID glTextureID) {
+//void LeveledTexturedMesh::setGLTextureIdForInversedLevel(int inversedLevel,
+//                                                         const GLTextureId glTextureID) {
 //  const int level = _mappings->size() - inversedLevel - 1;
-//  setGLTextureIDForLevel(level, glTextureID);
+//  setGLTextureIdForLevel(level, glTextureID);
 //}

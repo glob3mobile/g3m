@@ -8,13 +8,13 @@
 
 #include "CPUTextureBuilder.hpp"
 
-const GLTextureID CPUTextureBuilder::createTextureFromImages(GL * gl,
+const GLTextureId CPUTextureBuilder::createTextureFromImages(GL * gl,
                                                              const std::vector<const IImage*> images,
                                                              int width, int height) const {
   const int imagesSize = images.size();
   
   if (imagesSize == 0) {
-    return GLTextureID::invalid();
+    return GLTextureId::invalid();
   }
   
   if (imagesSize == 1) {
@@ -32,7 +32,7 @@ const GLTextureID CPUTextureBuilder::createTextureFromImages(GL * gl,
     im = im2;
   }
   
-  const GLTextureID texID = gl->uploadTexture(im, width, height);
+  const GLTextureId texID = gl->uploadTexture(im, width, height);
   
   if (imagesSize > 1) {
     delete im;
@@ -41,14 +41,14 @@ const GLTextureID CPUTextureBuilder::createTextureFromImages(GL * gl,
   return texID;
 }
 
-const GLTextureID CPUTextureBuilder::createTextureFromImages(GL * gl, const IFactory* factory,
+const GLTextureId CPUTextureBuilder::createTextureFromImages(GL * gl, const IFactory* factory,
                                                              const std::vector<const IImage*> images,
                                                              const std::vector<const Rectangle*> rectangles,
                                                              int width, int height) const {
   const int imagesSize = images.size();
   
   if (imagesSize == 0) {
-    return GLTextureID::invalid();
+    return GLTextureId::invalid();
   }
 
 //  const Rectangle baseRec(0,0, width, height);
@@ -66,7 +66,7 @@ const GLTextureID CPUTextureBuilder::createTextureFromImages(GL * gl, const IFac
 //    image = nextImage;
 //  }
 //  
-//  const GLTextureID texID = gl->uploadTexture(image, width, height);
+//  const GLTextureId texID = gl->uploadTexture(image, width, height);
 //  
 //  delete image;
 //  
@@ -96,7 +96,7 @@ const GLTextureID CPUTextureBuilder::createTextureFromImages(GL * gl, const IFac
     base = im2;
   }
   
-  const GLTextureID texID = gl->uploadTexture(base, width, height);
+  const GLTextureId texID = gl->uploadTexture(base, width, height);
   
   if (rectangles.size() > 0 && base != images[0]) {
     delete base;

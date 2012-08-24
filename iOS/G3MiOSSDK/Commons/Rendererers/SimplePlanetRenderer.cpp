@@ -108,7 +108,7 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   int * ind = createMeshIndex();
   
   //TEXTURED
-  GLTextureID texID = GLTextureID::invalid();
+  GLTextureId texID = GLTextureId::invalid();
   float * texC = NULL;
   if (true){
     texID = rc->getTexturesHandler()->getGLTextureIdFromFileName(_textureFilename, _texWidth, _texHeight);

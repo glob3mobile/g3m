@@ -205,9 +205,9 @@ int GL::getError() {
   return _gl->getError();
 }
 
-const GLTextureID GL::uploadTexture(const IImage* image,
+const GLTextureId GL::uploadTexture(const IImage* image,
                                     int textureWidth, int textureHeight) {
-  const GLTextureID texID = getGLTextureID();
+  const GLTextureId texID = getGLTextureId();
   if (texID.isValid()) {
     
 #ifdef C_CODE
@@ -241,7 +241,7 @@ const GLTextureID GL::uploadTexture(const IImage* image,
     _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);
     _gl->pixelStorei(Unpack, 1);
     
-    _gl->bindTexture(Texture2D, texID.getGLTextureID());
+    _gl->bindTexture(Texture2D, texID.getGLTextureId());
     _gl->texParameteri(Texture2D, MinFilter, Linear);
     _gl->texParameteri(Texture2D, MagFilter, Linear);
     _gl->texParameteri(Texture2D, WrapS, ClampToEdge);
@@ -266,11 +266,11 @@ void GL::setTextureCoordinates(int size, int stride, const float texcoord[]) {
   }
 }
 
-void GL::bindTexture(const GLTextureID& textureId) {
-  _gl->bindTexture(Texture2D, textureId.getGLTextureID());
+void GL::bindTexture(const GLTextureId& textureId) {
+  _gl->bindTexture(Texture2D, textureId.getGLTextureId());
 }
 
-void GL::drawBillBoard(const GLTextureID& textureId,
+void GL::drawBillBoard(const GLTextureId& textureId,
                        const Vector3D& pos,
                        const float viewPortRatio) {
   const float vertex[] = {
@@ -457,13 +457,13 @@ void GL::disableCullFace() {
   }
 }
 
-const GLTextureID GL::getGLTextureID() {
+const GLTextureId GL::getGLTextureId() {
   if (_texturesIdBag.size() == 0) {
     const int bugdetSize = 256;
     
     printf("= Creating %d texturesIds...\n", bugdetSize);
     
-    const std::vector<GLTextureID> ids = _gl->genTextures(bugdetSize);
+    const std::vector<GLTextureId> ids = _gl->genTextures(bugdetSize);
     
     for (int i = 0; i < bugdetSize; i++) {
 //      _texturesIdBag.push_back(ids[i]);
@@ -476,11 +476,11 @@ const GLTextureID GL::getGLTextureID() {
   
   _texturesIdGetCounter++;
   
-  const GLTextureID result = _texturesIdBag.back();
+  const GLTextureId result = _texturesIdBag.back();
   _texturesIdBag.pop_back();
   
 //  printf("   - Assigning 1 texturesId (#%d) from bag (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
-//         result.getGLTextureID(),
+//         result.getGLTextureId(),
 //         _texturesIdBag.size(),
 //         _texturesIdGetCounter,
 //         _texturesIdTakeCounter,
@@ -489,12 +489,12 @@ const GLTextureID GL::getGLTextureID() {
   return result;
 }
 
-void GL::deleteTexture(const GLTextureID& textureId) {
+void GL::deleteTexture(const GLTextureId& textureId) {
   if (!textureId.isValid()) {
     return;
   }
   const int textures[] = {
-    textureId.getGLTextureID()
+    textureId.getGLTextureId()
   };
   _gl->deleteTextures(1, textures);
   
@@ -503,7 +503,7 @@ void GL::deleteTexture(const GLTextureID& textureId) {
   _texturesIdTakeCounter++;
   
 //  printf("   - Delete 1 texturesId (#%d) (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
-//         textureId.getGLTextureID(),
+//         textureId.getGLTextureId(),
 //         _texturesIdBag.size(),
 //         _texturesIdGetCounter,
 //         _texturesIdTakeCounter,

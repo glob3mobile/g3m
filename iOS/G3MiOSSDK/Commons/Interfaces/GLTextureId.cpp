@@ -1,18 +1,18 @@
 //
-//  GLTextureID.cpp
+//  GLTextureId.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 09/08/12.
 //
 //
 
-#include "GLTextureID.hpp"
+#include "GLTextureId.hpp"
 
 #include <sstream>
 
-const std::string GLTextureID::description() const {
+const std::string GLTextureId::description() const {
   std::ostringstream buffer;
-  buffer << "GLTextureID #";
+  buffer << "GLTextureId #";
   buffer << _textureId;
   return buffer.str();
 }

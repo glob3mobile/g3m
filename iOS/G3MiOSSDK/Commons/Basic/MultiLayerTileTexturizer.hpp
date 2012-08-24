@@ -11,7 +11,7 @@
 
 #include "TileTexturizer.hpp"
 #include "TileKey.hpp"
-#include "GLTextureID.hpp"
+#include "GLTextureId.hpp"
 #include "Geodetic3D.hpp"
 
 class TileTextureBuilder;
@@ -80,7 +80,7 @@ public:
                                      Tile* ancestorTile,
                                      bool textureSolved);
   
-  const GLTextureID getTopLevelGLTextureIDForTile(Tile* tile);
+  const GLTextureId getTopLevelGLTextureIdForTile(Tile* tile);
   
   void onTerrainTouchEvent(const EventContext* ec,
                            const Geodetic3D& g3d,

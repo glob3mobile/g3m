@@ -29,14 +29,14 @@ const std::string TextureSpec::description() const {
 class TextureHolder {
 public:
   const TextureSpec _textureSpec;
-  GLTextureID _glTextureId;
+  GLTextureId _glTextureId;
   
   long _referenceCounter;
   
   TextureHolder(const TextureSpec& textureSpec) :
   _referenceCounter(1),
   _textureSpec(textureSpec),
-  _glTextureId(GLTextureID::invalid())
+  _glTextureId(GLTextureId::invalid())
   {
     
   }
@@ -63,7 +63,7 @@ public:
   const std::string description() const {
     std::ostringstream buffer;
     buffer << "(#";
-    buffer << _glTextureId.getGLTextureID();
+    buffer << _glTextureId.getGLTextureId();
     buffer << ", counter=";
     buffer << _referenceCounter;
     buffer << ")";
@@ -75,12 +75,12 @@ public:
 };
 
 
-const GLTextureID TexturesHandler::getGLTextureIdFromFileName(const std::string filename,
+const GLTextureId TexturesHandler::getGLTextureIdFromFileName(const std::string filename,
                                                               int textureWidth,
                                                               int textureHeight) {
   const IImage* image = _factory->createImageFromFileName(filename);
   
-  const GLTextureID texId = getGLTextureId(image,
+  const GLTextureId texId = getGLTextureId(image,
                                            TextureSpec(filename, // filename as the id
                                                        textureWidth,
                                                        textureHeight));
@@ -107,7 +107,7 @@ void TexturesHandler::showHolders(const std::string message) const {
 }
 
 
-const GLTextureID TexturesHandler::getGLTextureIdIfAvailable(const TextureSpec& textureSpec) {
+const GLTextureId TexturesHandler::getGLTextureIdIfAvailable(const TextureSpec& textureSpec) {
   for (int i = 0; i < _textureHolders.size(); i++) {
     TextureHolder* holder = _textureHolders[i];
     if (holder->hasSpec(textureSpec)) {
@@ -119,12 +119,12 @@ const GLTextureID TexturesHandler::getGLTextureIdIfAvailable(const TextureSpec& 
     }
   }
   
-  return GLTextureID::invalid();
+  return GLTextureId::invalid();
 }
 
-const GLTextureID TexturesHandler::getGLTextureId(const std::vector<const IImage*> images,
+const GLTextureId TexturesHandler::getGLTextureId(const std::vector<const IImage*> images,
                                                   const TextureSpec& textureSpec) {
-  GLTextureID previousId = getGLTextureIdIfAvailable(textureSpec);
+  GLTextureId previousId = getGLTextureIdIfAvailable(textureSpec);
   if (previousId.isValid()) {
     return previousId;
   }
@@ -148,10 +148,10 @@ const GLTextureID TexturesHandler::getGLTextureId(const std::vector<const IImage
   return holder->_glTextureId;
 }
 
-const GLTextureID TexturesHandler::getGLTextureId(const std::vector<const IImage*> images,
+const GLTextureId TexturesHandler::getGLTextureId(const std::vector<const IImage*> images,
                                                   const std::vector<const Rectangle*> rectangles,
                                                   const TextureSpec& textureSpec) {
-  GLTextureID previousId = getGLTextureIdIfAvailable(textureSpec);
+  GLTextureId previousId = getGLTextureIdIfAvailable(textureSpec);
   if (previousId.isValid()) {
     return previousId;
   }
@@ -177,14 +177,14 @@ const GLTextureID TexturesHandler::getGLTextureId(const std::vector<const IImage
   return holder->_glTextureId;
 }
 
-const GLTextureID TexturesHandler::getGLTextureId(const IImage *image,
+const GLTextureId TexturesHandler::getGLTextureId(const IImage *image,
                                                   const TextureSpec& textureSpec) {
   std::vector<const IImage*> images;
   images.push_back(image);
   return getGLTextureId(images, textureSpec);
 }
 
-void TexturesHandler::retainGLTextureId(const GLTextureID& glTextureId) {
+void TexturesHandler::retainGLTextureId(const GLTextureId& glTextureId) {
   if (!glTextureId.isValid()) {
     return;
   }
@@ -204,7 +204,7 @@ void TexturesHandler::retainGLTextureId(const GLTextureID& glTextureId) {
   printf("break (point) on me 6\n");
 }
 
-void TexturesHandler::releaseGLTextureId(const GLTextureID& glTextureId) {
+void TexturesHandler::releaseGLTextureId(const GLTextureId& glTextureId) {
   if (!glTextureId.isValid()) {
     return;
   }

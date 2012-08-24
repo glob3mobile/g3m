@@ -15,7 +15,7 @@
 #include "Sector.hpp"
 #include "IDownloadListener.hpp"
 #include "IDownloader.hpp"
-#include "GLTextureID.hpp"
+#include "GLTextureId.hpp"
 
 class Tile;
 class Rectangle;

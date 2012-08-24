@@ -252,12 +252,12 @@ public:
     glPixelStorei(getEnum(pname), param);
   }
   
-  std::vector<GLTextureID> genTextures(int n) const {
+  std::vector<GLTextureId> genTextures(int n) const {
     GLuint textures[n];
     glGenTextures(n, textures);
-    std::vector<GLTextureID> ts;
+    std::vector<GLTextureId> ts;
     for(int i = 0; i < n; i++){
-      ts.push_back( GLTextureID(textures[i]) );
+      ts.push_back( GLTextureId(textures[i]) );
     }
     return ts;
   }
