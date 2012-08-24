@@ -61,8 +61,7 @@ public class TilesStatistics
 
 	final int level = tile.getLevel();
 
-	java.util.Iterator<Integer,Integer> it = _tilesProcessedByLevel.indexOf(level);
-	if (it.hasNext())
+	if (_tilesProcessedByLevel.count(level) != 0)
 	{
 	  _tilesProcessedByLevel.put(level, _tilesProcessedByLevel.get(level) + 1);
 	}
@@ -77,8 +76,8 @@ public class TilesStatistics
 	_tilesVisible++;
 
 	final int level = tile.getLevel();
-	java.util.Iterator<Integer,Integer> it = _tilesVisibleByLevel.indexOf(level);
-	if (it.hasNext())
+
+	if (_tilesVisibleByLevel.count(level) != 0)
 	{
 	  _tilesVisibleByLevel.put(level, _tilesVisibleByLevel.get(level) + 1);
 	}
@@ -93,8 +92,7 @@ public class TilesStatistics
 	_tilesRendered++;
 
 	final int level = tile.getLevel();
-	java.util.Iterator<Integer,Integer> it = _tilesRenderedByLevel.indexOf(level);
-	if (it.hasNext())
+	if (_tilesRenderedByLevel.count(level) != 0)
 	{
 	  _tilesRenderedByLevel.put(level, _tilesRenderedByLevel.get(level) + 1);
 	}
