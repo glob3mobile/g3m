@@ -147,6 +147,13 @@ class NativeGL2_iOS: public INativeGL
     }
   }
   
+  inline GLenum getEnum(GLVariable f) const{
+    switch (f) {
+      case Viewport:
+        return GL_VIEWPORT;
+    }
+  }
+  
 public:
   void useProgram(int program) const{
     glUseProgram(program);
@@ -285,6 +292,10 @@ public:
   
   void cullFace(GLCullFace c) const{
     glCullFace(getEnum(c));
+  }
+  
+  void getIntegerv(GLVariable v, int i[]) const{
+    glGetIntegerv(getEnum(v), i);
   }
   
 };
