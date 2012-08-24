@@ -45,7 +45,7 @@ public class BusyMeshRenderer extends Renderer implements EffectTarget
   
 	// create vertices and indices in dinamic memory
 	float[] vertices = new float [numVertices *3];
-	int[] indices = new int [numIndices + 2];
+	int[] indices = new int [numIndices+2];
 	float[] colors = new float [numVertices *4];
   
 	// create vertices

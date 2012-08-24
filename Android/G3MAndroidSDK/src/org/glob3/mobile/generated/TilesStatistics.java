@@ -60,8 +60,16 @@ public class TilesStatistics
 	_tilesProcessed++;
 
 	final int level = tile.getLevel();
-	int nt = _tilesProcessedByLevel.get(level);
-	_tilesProcessedByLevel.put(level, nt + 1);
+
+	java.util.Iterator<Integer,Integer> it = _tilesProcessedByLevel.indexOf(level);
+	if (it.hasNext())
+	{
+	  _tilesProcessedByLevel.put(level, _tilesProcessedByLevel.get(level) + 1);
+	}
+	else
+	{
+	  _tilesProcessedByLevel.put(level, 1);
+	}
   }
 
   public final void computeVisibleTile(Tile tile)
@@ -69,7 +77,15 @@ public class TilesStatistics
 	_tilesVisible++;
 
 	final int level = tile.getLevel();
-	_tilesVisibleByLevel.put(level, _tilesVisibleByLevel.get(level) + 1);
+	java.util.Iterator<Integer,Integer> it = _tilesVisibleByLevel.indexOf(level);
+	if (it.hasNext())
+	{
+	  _tilesVisibleByLevel.put(level, _tilesVisibleByLevel.get(level) + 1);
+	}
+	else
+	{
+	  _tilesVisibleByLevel.put(level, 1);
+	}
   }
 
   public final void computeTileRendered(Tile tile)
@@ -77,7 +93,15 @@ public class TilesStatistics
 	_tilesRendered++;
 
 	final int level = tile.getLevel();
-	_tilesRenderedByLevel.put(level, _tilesRenderedByLevel.get(level) + 1);
+	java.util.Iterator<Integer,Integer> it = _tilesRenderedByLevel.indexOf(level);
+	if (it.hasNext())
+	{
+	  _tilesRenderedByLevel.put(level, _tilesRenderedByLevel.get(level) + 1);
+	}
+	else
+	{
+	  _tilesRenderedByLevel.put(level, 1);
+	}
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
