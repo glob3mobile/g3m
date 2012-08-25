@@ -187,6 +187,8 @@ public:
                           GLType      type,
                           const void* data) const = 0;
   
+  virtual void generateMipmap(GLTextureType target) const = 0;
+  
   virtual void drawArrays(GLPrimitive mode,
                           int first,
                           int count) const = 0;

@@ -134,7 +134,8 @@ const GLTextureId TexturesHandler::getGLTextureId(const std::vector<const IImage
   holder->_glTextureId = _textureBuilder->createTextureFromImages(_gl,
                                                                   images,
                                                                   textureSpec.getWidth(),
-                                                                  textureSpec.getHeight());
+                                                                  textureSpec.getHeight(),
+                                                                  false);
   
   if (_verbose) {
     ILogger::instance()->logInfo("Uploaded texture \"%s\" to GPU with texId=%s" ,
@@ -163,7 +164,8 @@ const GLTextureId TexturesHandler::getGLTextureId(const std::vector<const IImage
                                                                   images,
                                                                   rectangles,
                                                                   textureSpec.getWidth(),
-                                                                  textureSpec.getHeight());
+                                                                  textureSpec.getHeight(),
+                                                                  false);
   
   if (_verbose) {
     ILogger::instance()->logInfo("Uploaded texture \"%s\" to GPU with texId=%s" ,

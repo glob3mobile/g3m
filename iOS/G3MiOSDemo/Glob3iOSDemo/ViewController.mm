@@ -16,6 +16,7 @@
 #include "CameraConstraints.hpp"
 #include "GLErrorRenderer.hpp"
 
+#include "LevelTileCondition.hpp"
 
 @implementation ViewController
 
@@ -41,34 +42,31 @@
 
 - (void) initWidgetDemo
 {
-  
-  std::vector<Renderer*> renderers;
-  
-  
-  //LAYERS
   LayerSet* layerSet = new LayerSet();
   
-//  WMSLayer* blueMarble = new WMSLayer("bmng200405",
-//                                      URL("http://www.nasa.network.com/wms?"),
-//                                      WMS_1_1_0,
-//                                      Sector::fullSphere(),
-//                                      "image/jpeg",
-//                                      "EPSG:4326",
-//                                      "",
-//                                      false,
-//                                      NULL);
-//  layerSet->addLayer(blueMarble);
-  
-  WMSLayer* bing = new WMSLayer("ve",
-                                URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?"),
-                                WMS_1_1_0,
-                                Sector::fullSphere(),
-                                "image/png",
-                                "EPSG:4326",
-                                "",
-                                false,
-                                NULL);
-  layerSet->addLayer(bing);
+  if (false) {
+    WMSLayer* blueMarble = new WMSLayer("bmng200405",
+                                        URL("http://www.nasa.network.com/wms?"),
+                                        WMS_1_1_0,
+                                        Sector::fullSphere(),
+                                        "image/jpeg",
+                                        "EPSG:4326",
+                                        "",
+                                        false,
+                                        new LevelTileCondition(0, 6));
+    layerSet->addLayer(blueMarble);
+    
+    WMSLayer* i3Landsat = new WMSLayer("esat",
+                                       URL("http://data.worldwind.arc.nasa.gov/wms?"),
+                                       WMS_1_1_0,
+                                       Sector::fullSphere(),
+                                       "image/jpeg",
+                                       "EPSG:4326",
+                                       "",
+                                       false,
+                                       new LevelTileCondition(7, 100));
+    layerSet->addLayer(i3Landsat);
+  }
 
 //  WMSLayer* political = new WMSLayer("topp:cia",
 //                                     URL("http://worldwind22.arc.nasa.gov/geoserver/wms?"),
@@ -80,6 +78,17 @@
 //                                     true,
 //                                     NULL);
 //  layerSet->addLayer(political);
+  
+  WMSLayer* bing = new WMSLayer("ve",
+                                URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?"),
+                                WMS_1_1_0,
+                                Sector::fullSphere(),
+                                "image/png",
+                                "EPSG:4326",
+                                "",
+                                false,
+                                NULL);
+  layerSet->addLayer(bing);
 
   
   if (false) {
@@ -120,25 +129,6 @@
   //                                Angle::nan());
   //  layerSet->addLayer(vias);
   
-  //  WMSLayer *oceans = new WMSLayer(//"igo:bmng200401,igo:sttOZ,igo:cntOZ",
-  //                                  "bmsstcnt",
-  ////                                  "OZ",
-  //                                  "bmsstcnt",
-  ////                                  "OZ",
-  ////                                  "http://igosoftware.dyndns.org:8081/geoserver/igo/wms",
-  //                                  "http://igosoftware.dyndns.org:8081/geowebcache/service/wms",
-  //                                  WMS_1_1_0,
-  //                                  "image/jpeg",
-  //                                  Sector::fullSphere(),
-  //                                  "EPSG:4326",
-  //                                  "",
-  //                                  false,
-  //                                  Angle::nan(),
-  //                                  Angle::nan());
-  //
-  //  oceans->addTerrainTouchEventListener(new OceanTerrainTouchEventListener(factory, downloader));
-  //  layerSet->addLayer(oceans);
-  
   //  WMSLayer *osm = new WMSLayer("bing",
   //                               "bing",
   //                               "http://wms.latlon.org/",
@@ -166,6 +156,9 @@
   //  layerSet->addLayer(osm);
   
   
+  
+  std::vector<Renderer*> renderers;
+
   //  if (false) {
   //    // dummy renderer with a simple box
   //    DummyRenderer* dum = new DummyRenderer();
@@ -177,6 +170,7 @@
   //    SimplePlanetRenderer* spr = new SimplePlanetRenderer("world.jpg");
   //    comp->addRenderer(spr);
   //  }
+  
   
   if (true) {
     // marks renderer
