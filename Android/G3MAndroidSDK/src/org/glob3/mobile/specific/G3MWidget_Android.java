@@ -304,7 +304,7 @@ public class G3MWidget_Android extends GLSurfaceView implements
 	    TilesRenderParameters parameters = TilesRenderParameters.createDefault(renderDebug);
 
 	    TileTexturizer texturizer = null;
-	    if (true) {
+	    if (false) {
 	      texturizer = new MultiLayerTileTexturizer(layerSet);
 	    }
 	    else {
