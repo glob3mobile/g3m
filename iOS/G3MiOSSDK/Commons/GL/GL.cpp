@@ -272,6 +272,10 @@ void GL::setTextureCoordinates(int size, int stride, const float texcoord[]) {
 }
 
 void GL::bindTexture(const GLTextureId& textureId) {
+//  if (!_textureId.isEqualsTo(textureId)) {
+//    _gl->bindTexture(Texture2D, textureId.getGLTextureId());
+//    _textureId = textureId;
+//  }
   _gl->bindTexture(Texture2D, textureId.getGLTextureId());
 }
 

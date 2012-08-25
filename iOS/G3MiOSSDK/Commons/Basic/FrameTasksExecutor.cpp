@@ -17,7 +17,7 @@ bool FrameTasksExecutor::canExecutePreRenderStep(const RenderContext* rc,
   const int tasksCount = _preRenderTasks.size();
   if (tasksCount == 0) {
     if (_stressed) {
-//      rc->getLogger()->logWarning("Abandon STRESSED mode");
+      //      rc->getLogger()->logWarning("Abandon STRESSED mode");
       _stressed = false;
     }
     return false;
@@ -28,10 +28,10 @@ bool FrameTasksExecutor::canExecutePreRenderStep(const RenderContext* rc,
   }
   
   if (tasksCount > _maximumQueuedTasks) {
-//    if (!_stressed) {
-//      rc->getLogger()->logWarning("Too many queued tasks (%d). Goes to STRESSED mode",
-//                                  _preRenderTasks.size());
-//    }
+    //    if (!_stressed) {
+    //      rc->getLogger()->logWarning("Too many queued tasks (%d). Goes to STRESSED mode",
+    //                                  _preRenderTasks.size());
+    //    }
     
     _stressed = true;
   }
@@ -63,6 +63,28 @@ bool FrameTasksExecutor::canExecutePreRenderStep(const RenderContext* rc,
 }
 
 void FrameTasksExecutor::doPreRenderCycle(const RenderContext *rc) {
+  
+  int canceledCounter = 0;
+  std::list<FrameTask*>::iterator i = _preRenderTasks.begin();
+  while (i != _preRenderTasks.end()) {
+    FrameTask* task = *i;
+    
+    bool isCanceled = task->isCanceled(rc);
+    if (isCanceled) {
+      delete task;
+
+      _preRenderTasks.erase(i);
+      canceledCounter++;
+    }
+    i++;
+  }
+  
+  //  if (canceledCounter > 0) {
+  //    rc->getLogger()->logInfo("Removed %d tasks, actived %d tasks.",
+  //                             canceledCounter,
+  //                             _preRenderTasks.size());
+  //  }
+  
   int executedCounter = 0;
   while (canExecutePreRenderStep(rc, executedCounter)) {
     FrameTask* task = _preRenderTasks.front();
@@ -75,13 +97,27 @@ void FrameTasksExecutor::doPreRenderCycle(const RenderContext *rc) {
     executedCounter++;
   }
   
-//  if ((executedCounter > 0) ||
-//      (_preRenderTasks.size() > 0)) {
-//    rc->getLogger()->logInfo("Executed %d tasks in %ld ms, queued %d tasks. STRESSED=%d",
-//                             executedCounter,
-//                             rc->getFrameStartTimer()->elapsedTime().milliseconds(),
-//                             _preRenderTasks.size(),
-//                             _stressed);
-//  }
-  
+  if (false) {
+    if ( rc->getFrameStartTimer()->elapsedTime().milliseconds() > _maxTimePerFrame.milliseconds()*3 ) {
+      rc->getLogger()->logWarning("doPreRenderCycle() took too much time, Tasks: canceled=%d, executed=%d in %ld ms, queued %d. STRESSED=%d",
+                                  canceledCounter,
+                                  executedCounter,
+                                  rc->getFrameStartTimer()->elapsedTime().milliseconds(),
+                                  _preRenderTasks.size(),
+                                  _stressed);
+      
+    }
+    //  else {
+    //    if ((executedCounter > 0) ||
+    //        (canceledCounter > 0) ||
+    //        (_preRenderTasks.size() > 0)) {
+    //      rc->getLogger()->logInfo("Tasks: canceled=%d, executed=%d in %ld ms, queued %d. STRESSED=%d",
+    //                               canceledCounter,
+    //                               executedCounter,
+    //                               rc->getFrameStartTimer()->elapsedTime().milliseconds(),
+    //                               _preRenderTasks.size(),
+    //                               _stressed);
+    //    }
+    //  }
+  }
 }

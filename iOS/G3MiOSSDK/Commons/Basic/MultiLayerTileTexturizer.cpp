@@ -312,11 +312,14 @@ public:
       }
       
       if (images.size() > 0) {
+//        int __TESTING_mipmapping;
+        const bool isMipmap = false;
         const GLTextureId glTextureId = _texturesHandler->getGLTextureId(images,
                                                                          rectangles,
                                                                          TextureSpec(petitionsID,
                                                                                      textureWidth,
-                                                                                     textureHeight));
+                                                                                     textureHeight,
+                                                                                     isMipmap));
         if (glTextureId.isValid()) {
           if (!_mesh->setGLTextureIdForLevel(0, glTextureId)) {
             _texturesHandler->releaseGLTextureId(glTextureId);
@@ -373,6 +376,10 @@ public:
       }
     }
     _requestsIds.clear();
+  }
+  
+  bool isCanceled() const {
+    return _canceled;
   }
   
   void checkIsPending(int position) const {
@@ -566,6 +573,10 @@ Mesh* MultiLayerTileTexturizer::texturize(const RenderContext* rc,
       
       void execute(const RenderContext* rc) {
         _builder->start();
+      }
+      
+      bool isCanceled(const RenderContext *rc) {
+        return _builder->isCanceled();
       }
     };
     

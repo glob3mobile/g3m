@@ -29,17 +29,19 @@ private:
   
   const int         _width;
   const int         _height;
-  
+  const bool        _isMipmap;
   
   TextureSpec& operator=(const TextureSpec& that);
   
 public:
   TextureSpec(const std::string& id,
               const int          width,
-              const int          height):
+              const int          height,
+              const bool         isMipmap):
   _id(id),
   _width(width),
-  _height(height)
+  _height(height),
+  _isMipmap(isMipmap)
   {
     
   }
@@ -47,11 +49,16 @@ public:
   TextureSpec(const TextureSpec& that):
   _id(that._id),
   _width(that._width),
-  _height(that._height)
+  _height(that._height),
+  _isMipmap(that._isMipmap)
   {
     
   }
   
+  int isMipmap() const {
+    return _isMipmap;
+  }
+
   int getWidth() const {
     return _width;
   }
@@ -127,8 +134,9 @@ public:
   ~TexturesHandler();
   
   const GLTextureId getGLTextureIdFromFileName(const std::string filename,
-                                               int textureWidth,
-                                               int textureHeight);
+                                               int               textureWidth,
+                                               int               textureHeight,
+                                               const bool        isMipmap);
   
   const GLTextureId getGLTextureId(const std::vector<const IImage*> images,
                                    const TextureSpec& textureSpec);

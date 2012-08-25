@@ -111,7 +111,7 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   GLTextureId texId = GLTextureId::invalid();
   float * texC = NULL;
   if (true){
-    texId = rc->getTexturesHandler()->getGLTextureIdFromFileName(_textureFilename, _texWidth, _texHeight);
+    texId = rc->getTexturesHandler()->getGLTextureIdFromFileName(_textureFilename, _texWidth, _texHeight, true);
     if (!texId.isValid()) {
       rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
       return false;
