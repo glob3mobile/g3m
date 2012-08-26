@@ -65,6 +65,21 @@ public:
     return _alpha;
   }
   
+  Color mixedWith(const Color& that,
+                  float factor) const {
+    float frac1 = factor;
+    if (factor < 0) factor = 0;
+    if (factor > 1) factor = 1;
+    
+    const float frac2 = 1 - frac1;
+    
+    const float newRed   = (getRed()   * frac2) + (that.getRed()   * frac1);
+    const float newGreen = (getGreen() * frac2) + (that.getGreen() * frac1);
+    const float newBlue  = (getBlue()  * frac2) + (that.getBlue()  * frac1);
+    const float newAlpha = (getAlpha() * frac2) + (that.getAlpha() * frac1);
+    
+    return Color::fromRGBA(newRed, newGreen, newBlue, newAlpha);
+  }
 };
 
 #endif

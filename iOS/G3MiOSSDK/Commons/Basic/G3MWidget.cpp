@@ -101,7 +101,7 @@ G3MWidget* G3MWidget::create(FrameTasksExecutor* frameTasksExecutor,
   if (logger != NULL) {
     logger->logInfo("Creating G3MWidget...");
   }
-
+  
   IStringUtils::setInstance(stringUtils);
   ILogger::setInstance(logger);
   
@@ -137,7 +137,7 @@ G3MWidget::~G3MWidget() {
   if (_userData != NULL) {
     delete _userData;
   }
-
+  
   delete _factory;
   delete _logger;
   delete _gl;
@@ -177,6 +177,18 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
   }
 }
 
+const double clamp(const double value,
+                   const double lower,
+                   const double upper) {
+  if (value < lower) {
+    return lower;
+  }
+  if (value > upper) {
+    return upper;
+  }
+  return value;
+}
+
 int G3MWidget::render() {
   _timer->start();
   _renderCounter++;
@@ -197,9 +209,9 @@ int G3MWidget::render() {
     _nextCamera->copyFrom(*_currentCamera);
   }
   
-//  int __removePrint;
-//  printf("Camera Position=%s\n" ,
-//         _planet->toGeodetic3D(_currentCamera->getPosition()).description().c_str());
+  //  int __removePrint;
+  //  printf("Camera Position=%s\n" ,
+  //         _planet->toGeodetic3D(_currentCamera->getPosition()).description().c_str());
   
   // create RenderContext
   RenderContext rc(_frameTasksExecutor,
@@ -214,11 +226,11 @@ int G3MWidget::render() {
                    _downloader,
                    _effectsScheduler,
                    _factory->createTimer());
-
+  
   _effectsScheduler->doOneCyle(&rc);
   
   _frameTasksExecutor->doPreRenderCycle(&rc);
-
+  
   _rendererReady = _renderer->isReadyToRender(&rc);
   
   Renderer* selectedRenderer = _rendererReady ? _renderer : _busyRenderer;
@@ -230,13 +242,39 @@ int G3MWidget::render() {
     _selectedRenderer->start();
   }
   
-
-  // Clear the scene
+//  const Vector3D ray = _currentCamera->getCenter();
+//  const Vector3D origin = _currentCamera->getPosition();
+//  
+//  const Vector3D intersection = _planet->closestIntersection(origin, ray);
+//  if (!intersection.isNan()) {
+//    const Vector3D cameraPosition = _currentCamera->getPosition();
+//    
+//    const double minDistance = 1000;
+//    const double maxDistance = 20000;
+//    
+//    const double distanceToTerrain = clamp(intersection.sub(cameraPosition).length(),
+//                                           minDistance,
+//                                           maxDistance + minDistance) - minDistance;
+//    
+//    printf("Camera to terrain distance=%f\n", distanceToTerrain);
+//    
+//    const float factor = (float) (distanceToTerrain / maxDistance);
+//    
+//    // Clear the scene
+//    const Color dayColor = Color::fromRGBA((float) 0.5, (float) 0.5, 1, 1);
+//    _gl->clearScreen(_backgroundColor.mixedWith(dayColor, factor));
+//    //    _gl->clearScreen(_backgroundColor);
+//    
+//  }
+//  else {
+//    // Clear the scene
+//    _gl->clearScreen(_backgroundColor);
+//  }
   _gl->clearScreen(_backgroundColor);
-  
+
   const int timeToRedraw = _selectedRenderer->render(&rc);
   
-//  _frameTasksExecutor->doPostRenderCycle(&rc);
+  //  _frameTasksExecutor->doPostRenderCycle(&rc);
   
   const TimeInterval elapsedTime = _timer->elapsedTime();
   if (elapsedTime.milliseconds() > 100) {
@@ -274,5 +312,5 @@ int G3MWidget::render() {
   }
   
   return timeToRedraw;
-
+  
 }
