@@ -163,7 +163,7 @@ void Camera::calculateCachedValues() {
 
 }*/
 
-void Camera::render(const RenderContext* rc) {
+void Camera::render(const RenderContext* rc) const {
   _logger = rc->getLogger();
   /*
   if (_dirtyCachedValues) {

@@ -127,7 +127,7 @@ public:
   
   void resizeViewport(int width, int height);
   
-  void render(const RenderContext* rc);
+  void render(const RenderContext* rc) const;
   
   Vector3D pixel2Ray(const Vector2D& pixel) const;
   
@@ -163,9 +163,13 @@ public:
   
   void print();
   
-  const Frustum* const getFrustumInModelCoordinates() { return getFrustumMC(); }
+  const Frustum* const getFrustumInModelCoordinates() const {
+    return getFrustumMC();
+  }
   
-  const Frustum* const getHalfFrustuminModelCoordinates() { return getHalfFrustumMC(); }
+  const Frustum* const getHalfFrustuminModelCoordinates() const {
+    return getHalfFrustumMC();
+  }
   
   void setPosition(const Geodetic3D& g3d);
   
@@ -190,7 +194,7 @@ private:
   
   
   
-  const ILogger* _logger;
+  mutable const ILogger* _logger;
   
   mutable CameraDirtyFlags _dirtyFlags;
   
@@ -260,8 +264,8 @@ private:
   }
 
   // camera frustum
-  Frustum* _frustum;
-  Frustum*  getFrustum() {
+  mutable Frustum* _frustum;
+  Frustum*  getFrustum() const {
     if (_dirtyFlags._frustum) {
       _dirtyFlags._frustum = false;
       if (_frustum!=NULL) delete _frustum;
@@ -271,8 +275,8 @@ private:
   }
 
   // frustum in Model coordinates
-  Frustum* _frustumInModelCoordinates;
-  Frustum*  getFrustumMC() {
+  mutable Frustum* _frustumInModelCoordinates;
+  Frustum*  getFrustumMC() const {
     if (_dirtyFlags._frustumMC) {
       _dirtyFlags._frustumMC = false;
       if (_frustumInModelCoordinates!=NULL) delete _frustumInModelCoordinates;
@@ -283,8 +287,8 @@ private:
 
   int __temporal_test_for_clipping;
 
-  Frustum* _halfFrustum;                    // ONLY FOR DEBUG
-  Frustum*  getHalfFrustum() {
+  mutable Frustum* _halfFrustum;                    // ONLY FOR DEBUG
+  Frustum* getHalfFrustum() const {
     if (_dirtyFlags._halfFrustum) {
       _dirtyFlags._halfFrustum = false;
       if (_halfFrustum!=NULL) delete _halfFrustum;
@@ -296,8 +300,8 @@ private:
     return _halfFrustum;
   }
   
-  Frustum* _halfFrustumInModelCoordinates;  // ONLY FOR DEBUG
-  Frustum*  getHalfFrustumMC() {
+  mutable Frustum* _halfFrustumInModelCoordinates;  // ONLY FOR DEBUG
+  Frustum* getHalfFrustumMC() const {
     if (_dirtyFlags._halfFrustumMC) {
       _dirtyFlags._halfFrustumMC = false;
       if (_halfFrustumInModelCoordinates!=NULL) delete _halfFrustumInModelCoordinates;

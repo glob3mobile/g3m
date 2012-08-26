@@ -179,6 +179,8 @@ private:
   bool _anyCanceled;
   bool _alreadyStarted;
   
+//  static long _sequenceCounter;
+  
 public:
   LeveledTexturedMesh* _mesh;
   
@@ -480,6 +482,9 @@ public:
   }
   
 };
+
+
+//long TileTextureBuilder::_sequenceCounter = 0;
 
 
 BuilderDownloadStepDownloadListener::BuilderDownloadStepDownloadListener(TileTextureBuilder* builder,

@@ -51,7 +51,7 @@ public:
   _maximumExecutionsPerFrame(8),
   _maximumQueuedTasks(64),
 //  _maximumQueuedTasks(128),
-  _maxTimePerFrame(TimeInterval::fromMilliseconds(10)),
+  _maxTimePerFrame(TimeInterval::fromMilliseconds(7)),
   _maxTimePerFrameStressed(TimeInterval::fromMilliseconds(25)),
 //  _maxTimePerFrameStressed(TimeInterval::fromMilliseconds(30)),
 //  _maxTimePerFrameStressed(TimeInterval::fromMilliseconds(45)),

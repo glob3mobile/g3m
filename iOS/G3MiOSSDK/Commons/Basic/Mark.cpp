@@ -14,7 +14,7 @@
 
 void Mark::render(const RenderContext* rc,
                   const double minDistanceToCamera) {
-  const Camera* camera = rc->getNextCamera();
+  const Camera* camera = rc->getCurrentCamera();
   const Planet* planet = rc->getPlanet();
   
   const Vector3D cameraPosition = camera->getPosition();
