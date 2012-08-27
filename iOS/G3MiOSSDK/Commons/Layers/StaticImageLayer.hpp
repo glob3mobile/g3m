@@ -34,29 +34,25 @@ public:
   _sector(sector),
   _layerID(layerID),
   _storage(storage) {
-
+    
   }
   
   ~StaticImageLayer(){
     delete _image;
   }
   
-  bool fullContains(const Sector& s) const {
-    return _sector.fullContains(s);
-  }
+  std::vector<Petition*> getMapPetitions(const RenderContext* rc,
+                                         const Tile* tile,
+                                         int width, int height) const;
   
-  std::vector<Petition*> getTilePetitions(const RenderContext* rc,
-                                          const Tile* tile,
-                                          int width, int height) const;
-  
-  bool isTransparent() const{
+  bool isTransparent() const {
     return true;
   }
   
-  URL getFeatureURL(const Geodetic2D& g,
-                    const IFactory* factory,
-                    const Sector& sector,
-                    int width, int height) const {
+  URL getFeatureInfoURL(const Geodetic2D& g,
+                        const IFactory* factory,
+                        const Sector& sector,
+                        int width, int height) const {
     return URL::null();
   }
   

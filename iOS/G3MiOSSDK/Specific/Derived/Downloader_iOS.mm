@@ -11,7 +11,7 @@
 #import "Downloader_iOS_Handler.h"
 
 #include <sstream>
-
+#include <UIKit/UIKit.h>
 
 void Downloader_iOS::start() {
   if (!_started) {
@@ -156,6 +156,13 @@ Downloader_iOS_Handler* Downloader_iOS::getHandlerToRun() {
   }
   
   [_lock unlock];
+  
+  if (selectedHandler == NULL) {
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+  }
+  else {
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+  }
   
   return selectedHandler;
 }

@@ -34,7 +34,7 @@ public:
   Vector3D getLower() const { return _lower; }
   Vector3D getUpper() const { return _upper; }
   
-  inline std::vector<Vector3D> getCorners() const;
+  inline const std::vector<Vector3D> getCorners() const;
   
   double squaredProjectedArea(const RenderContext* rc) const;
   Vector2D projectedExtent(const RenderContext* rc) const;

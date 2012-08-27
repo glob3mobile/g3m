@@ -136,7 +136,7 @@ bool Tile::isVisible(const RenderContext *rc,
   if (extent == NULL) {
     return false;
   }
-  return extent->touches(rc->getNextCamera()->getFrustumInModelCoordinates());
+  return extent->touches(rc->getCurrentCamera()->getFrustumInModelCoordinates());
 }
 
 bool Tile::meetsRenderCriteria(const RenderContext *rc,

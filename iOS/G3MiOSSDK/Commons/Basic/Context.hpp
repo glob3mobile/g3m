@@ -19,22 +19,25 @@ class ILogger;
 class GL;
 class EffectsScheduler;
 class ITimer;
-
+class IStringUtils;
 
 class Context {
 protected:
-  const IFactory*    _factory;
-  const ILogger*     _logger;
-  const Planet*      _planet;
-  IDownloader* _downloader;
-  EffectsScheduler*  _effectsScheduler;
+  const IFactory*     _factory;
+  const IStringUtils* _stringUtils;
+  const ILogger*      _logger;
+  const Planet*       _planet;
+  IDownloader*        _downloader;
+  EffectsScheduler*   _effectsScheduler;
   
   Context(const IFactory *factory,
+          const IStringUtils* stringUtils,
           const ILogger* logger,
           const Planet* planet,
           IDownloader* downloader,
           EffectsScheduler* effectsScheduler) :
   _factory(factory),
+  _stringUtils(stringUtils),
   _logger(logger),
   _planet(planet),
   _downloader(downloader),
@@ -46,6 +49,10 @@ public:
   
   const IFactory* getFactory() const {
     return _factory;
+  }
+  
+  const IStringUtils* getStringUtils() const {
+    return _stringUtils;
   }
   
   const ILogger* getLogger() const {
@@ -71,11 +78,12 @@ public:
 class InitializationContext: public Context {
 public:
   InitializationContext(IFactory *factory,
+                        const IStringUtils* stringUtils,
                         ILogger* logger,
                         const Planet* planet,
                         IDownloader* downloader,
                         EffectsScheduler* effectsScheduler) :
-  Context(factory, logger, planet, downloader, effectsScheduler) {
+  Context(factory, stringUtils, logger, planet, downloader, effectsScheduler) {
   }
 };
 
@@ -84,11 +92,12 @@ public:
 class EventContext: public Context {
 public:
   EventContext(IFactory *factory,
+               const IStringUtils* stringUtils,
                ILogger* logger,
                const Planet* planet,
                IDownloader* downloader,
                EffectsScheduler* scheduler) :
-  Context(factory, logger, planet, downloader, scheduler) {
+  Context(factory, stringUtils, logger, planet, downloader, scheduler) {
   }
 };
 
@@ -110,6 +119,7 @@ private:
 public:
   RenderContext(FrameTasksExecutor* frameTasksExecutor,
                 IFactory *factory,
+                const IStringUtils* stringUtils,
                 ILogger* logger,
                 const Planet* planet,
                 GL *gl,
@@ -119,7 +129,7 @@ public:
                 IDownloader* downloader,
                 EffectsScheduler* scheduler,
                 ITimer* frameStartTimer) :
-  Context(factory, logger, planet, downloader, scheduler),
+  Context(factory, stringUtils, logger, planet, downloader, scheduler),
   _frameTasksExecutor(frameTasksExecutor),
   _gl(gl),
   _currentCamera(currentCamera),

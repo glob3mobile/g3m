@@ -13,9 +13,9 @@
 #include "Tile.hpp"
 #include "Petition.hpp"
 
-std::vector<Petition*> WMSLayer::getTilePetitions(const RenderContext* rc,
-                                                  const Tile* tile,
-                                                  int width, int height) const {
+std::vector<Petition*> WMSLayer::getMapPetitions(const RenderContext* rc,
+                                                 const Tile* tile,
+                                                 int width, int height) const {
   std::vector<Petition*> petitions;
   
   const Sector tileSector = tile->getSector();
@@ -119,7 +119,7 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const RenderContext* rc,
     req += "&TRANSPARENT=FALSE";
   }
   
-  Petition *petition = new Petition(sector, URL(req), _isTransparent);
+  Petition *petition = new Petition(sector, URL(req));
   petitions.push_back(petition);
   
   //  printf("%s\n", petition->description().c_str());
@@ -127,10 +127,10 @@ std::vector<Petition*> WMSLayer::getTilePetitions(const RenderContext* rc,
 	return petitions;
 }
 
-URL WMSLayer::getFeatureURL(const Geodetic2D& g,
-                            const IFactory* factory,
-                            const Sector& tileSector,
-                            int width, int height) const {
+URL WMSLayer::getFeatureInfoURL(const Geodetic2D& g,
+                                const IFactory* factory,
+                                const Sector& tileSector,
+                                int width, int height) const {
   if (!_sector.touchesWith(tileSector)) {
     return URL::null();
   }

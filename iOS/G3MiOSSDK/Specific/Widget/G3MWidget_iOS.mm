@@ -45,7 +45,8 @@
 #include "Logger_iOS.hpp"
 #include "Factory_iOS.hpp"
 #include "NativeGL2_iOS.hpp"
-
+#include "StringUtils_iOS.hpp"
+#include "SingleImageTileTexturizer.hpp"
 
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
@@ -67,10 +68,10 @@
   return [CAEAGLLayer class];
 }
 
-- (void) initWidgetWithLayerSet: (LayerSet*) layerSet
-              cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
-                      renderers: (std::vector<Renderer*>) renderers
-                       userData: (UserData*) userData
+- (void) initWidgetWithCameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
+                                layerSet: (LayerSet*) layerSet
+                               renderers: (std::vector<Renderer*>) renderers
+                                userData: (UserData*) userData
 {
   // creates default camera-renderer and camera-handlers
   CameraRenderer *cameraRenderer = new CameraRenderer();
@@ -94,17 +95,17 @@
                                                                            forceTopLevelTilesRenderOnStart);
   
   [self initWidgetWithCameraRenderer: cameraRenderer
+                   cameraConstraints: cameraConstraints
                             layerSet: layerSet
                tilesRenderParameters: parameters
-                   cameraConstraints: cameraConstraints
                            renderers: renderers
                             userData: userData];
 }
 
 - (void) initWidgetWithCameraRenderer: (CameraRenderer*) cameraRenderer
+                    cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
                              layerSet: (LayerSet*) layerSet
                 tilesRenderParameters: (TilesRenderParameters*) parameters
-                    cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
                             renderers: (std::vector<Renderer*>) renderers
                              userData: (UserData*) userData
 {
@@ -129,7 +130,9 @@
   if (layerSet != NULL) {
     if (layerSet->size() > 0) {
       TileTexturizer* texturizer = new MultiLayerTileTexturizer(layerSet);
-      
+//      IImage *singleWorldImage = factory->createImageFromFileName("world.jpg");
+//      TileTexturizer* texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
+
       const bool showStatistics = false;
       TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
                                           texturizer,
@@ -155,8 +158,27 @@
   
   FrameTasksExecutor* frameTasksExecutor = new FrameTasksExecutor();
   
+  const IStringUtils* stringUtils = new StringUtils_iOS();
+//  if (true) {
+//    int __REMOVE_STRING_UTILS_TESTS;
+//    
+//    std::vector<std::string> lines = stringUtils->splitLines("line1\nline2");
+//    
+//    printf("%s\n", stringUtils->left("Diego", 1).c_str());
+//    printf("%s\n", stringUtils->substring("Diego", 1).c_str());
+//
+//    std::string line = "name=value";
+//    int equalsPosition = stringUtils->indexOf(line, "=");
+//    std::string name = stringUtils->left(line, equalsPosition);
+//    std::string value = stringUtils->substring(line, equalsPosition+1);
+//    printf("\"%s\"=\"%s\"\n", name.c_str(), value.c_str());
+//    
+//    printf("\n");
+//  }
+  
   _widgetVP = G3MWidget::create(frameTasksExecutor,
                                 factory,
+                                stringUtils,
                                 logger,
                                 gl,
                                 texturesHandler,

@@ -121,6 +121,12 @@
 		CFB72A3915E65BAC00A5BAF4 /* Layer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFB72A3715E65BAC00A5BAF4 /* Layer.cpp */; };
 		CFB72A3D15E65DBC00A5BAF4 /* LevelTileCondition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFB72A3B15E65DBB00A5BAF4 /* LevelTileCondition.cpp */; };
 		CFB72A3E15E65DBC00A5BAF4 /* LevelTileCondition.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFB72A3C15E65DBC00A5BAF4 /* LevelTileCondition.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CFB72A6915E6808900A5BAF4 /* IStringUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFB72A6715E6808900A5BAF4 /* IStringUtils.cpp */; };
+		CFB72A6A15E6808900A5BAF4 /* IStringUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFB72A6815E6808900A5BAF4 /* IStringUtils.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CFB72A6E15E682B400A5BAF4 /* StringUtils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFB72A6C15E682B400A5BAF4 /* StringUtils_iOS.mm */; };
+		CFB72A6F15E682B400A5BAF4 /* StringUtils_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFB72A6D15E682B400A5BAF4 /* StringUtils_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
+		CFBCCE9515E709EF00FBF950 /* TilePetitions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8C874BE15B5C58D00F19859 /* TilePetitions.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CFBCCE9615E709EF00FBF950 /* Downloader_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFFEC11F15C2E9B0003FA986 /* Downloader_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
 		CFD0021B15D3C94C00735FD8 /* TileKey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD0021915D3C94C00735FD8 /* TileKey.cpp */; };
 		CFD0021C15D3C94C00735FD8 /* TileKey.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFD0021A15D3C94C00735FD8 /* TileKey.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFE0844115E27A310004EC0E /* TerrainTouchEventListener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFE0844015E27A310004EC0E /* TerrainTouchEventListener.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -219,7 +225,7 @@
 		38D786E71587B52F003BBC75 /* Sector.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Sector.hpp; path = Commons/Geometry/Sector.hpp; sourceTree = "<group>"; };
 		443BBC8115A59AC200EAE280 /* DBStorage */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DBStorage; sourceTree = "<group>"; };
 		CC041F5015D98EAD00D6AC5D /* BusyQuadRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = BusyQuadRenderer.hpp; path = Commons/Rendererers/BusyQuadRenderer.hpp; sourceTree = "<group>"; };
-		CC041F5215D98FF000D6AC5D /* BusyQuadRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BusyQuadRenderer.cpp; path = Commons/Rendererers/BusyQuadRenderer.cpp; sourceTree = "<group>"; };
+		CC041F5215D98FF000D6AC5D /* BusyQuadRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = BusyQuadRenderer.cpp; path = Commons/Rendererers/BusyQuadRenderer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CC14B64C157D35C100793C92 /* IImage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IImage.hpp; path = Commons/Interfaces/IImage.hpp; sourceTree = "<group>"; };
 		CC41E39D15B1FD1300B5581C /* Plane.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Plane.hpp; path = Commons/Geometry/Plane.hpp; sourceTree = "<group>"; };
 		CC41E39F15B1FD5B00B5581C /* Plane.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Plane.cpp; path = Commons/Geometry/Plane.cpp; sourceTree = "<group>"; };
@@ -308,6 +314,10 @@
 		CFB72A3715E65BAC00A5BAF4 /* Layer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Layer.cpp; sourceTree = "<group>"; };
 		CFB72A3B15E65DBB00A5BAF4 /* LevelTileCondition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LevelTileCondition.cpp; sourceTree = "<group>"; };
 		CFB72A3C15E65DBC00A5BAF4 /* LevelTileCondition.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LevelTileCondition.hpp; sourceTree = "<group>"; };
+		CFB72A6715E6808900A5BAF4 /* IStringUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IStringUtils.cpp; path = Commons/Interfaces/IStringUtils.cpp; sourceTree = "<group>"; };
+		CFB72A6815E6808900A5BAF4 /* IStringUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IStringUtils.hpp; path = Commons/Interfaces/IStringUtils.hpp; sourceTree = "<group>"; };
+		CFB72A6C15E682B400A5BAF4 /* StringUtils_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = StringUtils_iOS.mm; path = Specific/Derived/StringUtils_iOS.mm; sourceTree = "<group>"; };
+		CFB72A6D15E682B400A5BAF4 /* StringUtils_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StringUtils_iOS.hpp; path = Specific/Derived/StringUtils_iOS.hpp; sourceTree = "<group>"; };
 		CFD0021915D3C94C00735FD8 /* TileKey.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileKey.cpp; path = Commons/Basic/TileKey.cpp; sourceTree = "<group>"; };
 		CFD0021A15D3C94C00735FD8 /* TileKey.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileKey.hpp; path = Commons/Basic/TileKey.hpp; sourceTree = "<group>"; };
 		CFE0844015E27A310004EC0E /* TerrainTouchEventListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TerrainTouchEventListener.hpp; path = Commons/Basic/TerrainTouchEventListener.hpp; sourceTree = "<group>"; };
@@ -326,7 +336,7 @@
 		D816E7A815B6C9B1004FA4D6 /* SingleImageTileTexturizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SingleImageTileTexturizer.cpp; path = Commons/Basic/SingleImageTileTexturizer.cpp; sourceTree = "<group>"; };
 		D816E7A915B6C9B1004FA4D6 /* SingleImageTileTexturizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SingleImageTileTexturizer.hpp; path = Commons/Basic/SingleImageTileTexturizer.hpp; sourceTree = "<group>"; };
 		D81BA16E15CBF19E004EF0B0 /* GL.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GL.hpp; sourceTree = "<group>"; };
-		D81BA16F15CBF19E004EF0B0 /* GL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GL.cpp; sourceTree = "<group>"; };
+		D81BA16F15CBF19E004EF0B0 /* GL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = GL.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D8228EBC157F7F6100BBAF60 /* MutableMatrix44D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MutableMatrix44D.hpp; path = Commons/Geometry/MutableMatrix44D.hpp; sourceTree = "<group>"; };
 		D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = MutableMatrix44D.cpp; path = Commons/Geometry/MutableMatrix44D.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector3D.cpp; path = Commons/Geometry/MutableVector3D.cpp; sourceTree = "<group>"; };
@@ -338,8 +348,8 @@
 		D87EC5C315BEB12F00E38C36 /* LayerSet.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LayerSet.hpp; sourceTree = "<group>"; };
 		D87EC5C415BEB12F00E38C36 /* WMSLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WMSLayer.cpp; sourceTree = "<group>"; };
 		D87EC5C515BEB12F00E38C36 /* WMSLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = WMSLayer.hpp; sourceTree = "<group>"; };
-		D87EC5CB15BEB31000E38C36 /* CPUTextureBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CPUTextureBuilder.cpp; path = Commons/Basic/CPUTextureBuilder.cpp; sourceTree = "<group>"; };
-		D87EC5CC15BEB31000E38C36 /* CPUTextureBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CPUTextureBuilder.hpp; path = Commons/Basic/CPUTextureBuilder.hpp; sourceTree = "<group>"; };
+		D87EC5CB15BEB31000E38C36 /* CPUTextureBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CPUTextureBuilder.cpp; path = Commons/Basic/CPUTextureBuilder.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		D87EC5CC15BEB31000E38C36 /* CPUTextureBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = CPUTextureBuilder.hpp; path = Commons/Basic/CPUTextureBuilder.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D87EC5CD15BEB31000E38C36 /* TextureBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TextureBuilder.hpp; path = Commons/Basic/TextureBuilder.hpp; sourceTree = "<group>"; };
 		D87EC5D215BEC73400E38C36 /* Rectangle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Rectangle.hpp; path = Commons/Geometry/Rectangle.hpp; sourceTree = "<group>"; };
 		D88B5E5115C162AF0083A43F /* G3MWidget.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = G3MWidget.hpp; path = Commons/Basic/G3MWidget.hpp; sourceTree = "<group>"; };
@@ -404,6 +414,8 @@
 				D86DD8A41588945200E25609 /* Image_iOS.mm */,
 				CF8B21B015DD32820068601A /* SQLiteStorage_iOS.mm */,
 				CF8B21B115DD32820068601A /* SQLiteStorage_iOS.hpp */,
+				CFB72A6C15E682B400A5BAF4 /* StringUtils_iOS.mm */,
+				CFB72A6D15E682B400A5BAF4 /* StringUtils_iOS.hpp */,
 			);
 			name = Derived;
 			sourceTree = "<group>";
@@ -538,6 +550,8 @@
 				CF31CBF215878AF90085E8F1 /* ITimer.hpp */,
 				CF9CD89815DBE2C800C6FD7E /* CachedDownloader.cpp */,
 				CF9CD89915DBE2C800C6FD7E /* CachedDownloader.hpp */,
+				CFB72A6715E6808900A5BAF4 /* IStringUtils.cpp */,
+				CFB72A6815E6808900A5BAF4 /* IStringUtils.hpp */,
 			);
 			name = Interfaces;
 			sourceTree = "<group>";
@@ -713,6 +727,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CFBCCE9515E709EF00FBF950 /* TilePetitions.hpp in Headers */,
+				CFB72A6A15E6808900A5BAF4 /* IStringUtils.hpp in Headers */,
 				CFB72A3615E65B1F00A5BAF4 /* LayerCondition.hpp in Headers */,
 				CFB72A3E15E65DBC00A5BAF4 /* LevelTileCondition.hpp in Headers */,
 				CF75436615E5172800A0ABC7 /* MultiLayerTileTexturizer.hpp in Headers */,
@@ -799,6 +815,8 @@
 				D88B5E2615C15C850083A43F /* Extent.hpp in Headers */,
 				D88B5E2715C15C850083A43F /* Frustum.hpp in Headers */,
 				D88B5E2815C15C850083A43F /* Plane.hpp in Headers */,
+				CFBCCE9615E709EF00FBF950 /* Downloader_iOS.hpp in Headers */,
+				CFB72A6F15E682B400A5BAF4 /* StringUtils_iOS.hpp in Headers */,
 				383BD37C1577EDC00012AC53 /* Factory_iOS.hpp in Headers */,
 				383BD37E1577EDC00012AC53 /* Logger_iOS.hpp in Headers */,
 				D86DD8A51588945200E25609 /* Image_iOS.hpp in Headers */,
@@ -936,6 +954,8 @@
 				CFB72A3515E65B1F00A5BAF4 /* LayerCondition.cpp in Sources */,
 				CFB72A3915E65BAC00A5BAF4 /* Layer.cpp in Sources */,
 				CFB72A3D15E65DBC00A5BAF4 /* LevelTileCondition.cpp in Sources */,
+				CFB72A6915E6808900A5BAF4 /* IStringUtils.cpp in Sources */,
+				CFB72A6E15E682B400A5BAF4 /* StringUtils_iOS.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -31,7 +31,7 @@ private:
   // stack of ModelView matrices
   std::list<MutableMatrix44D> _matrixStack;
   
-  std::list<GLTextureID>      _texturesIdBag;
+  std::list<GLTextureId>      _texturesIdBag;
   long                        _texturesIdAllocationCounter;
   long                        _texturesIdGetCounter;
   long                        _texturesIdTakeCounter;
@@ -64,7 +64,7 @@ private:
   
   inline void loadModelView();
   
-  const GLTextureID getGLTextureID();
+  const GLTextureId getGLTextureId();
   
   
   int _lastTextureWidth;
@@ -174,14 +174,15 @@ public:
   
   int getError();
   
-  const GLTextureID uploadTexture(const IImage* image,
-                                  int textureWidth, int textureHeight);
+  const GLTextureId uploadTexture(const IImage* image,
+                                  int textureWidth, int textureHeight,
+                                  bool generateMipmap);
   
   void setTextureCoordinates(int size,
                              int stride,
                              const float texcoord[]);
   
-  void bindTexture(const GLTextureID& textureId);
+  void bindTexture(const GLTextureId& textureId);
   
   void enableDepthTest();
   void disableDepthTest();
@@ -189,11 +190,11 @@ public:
   void enableBlend();
   void disableBlend();
   
-  void drawBillBoard(const GLTextureID& textureId,
+  void drawBillBoard(const GLTextureId& textureId,
                      const Vector3D& pos,
                      const float viewPortRatio);
   
-  void deleteTexture(const GLTextureID& textureId);
+  void deleteTexture(const GLTextureId& textureId);
   
   void enableCullFace(GLCullFace face);
   void disableCullFace();
@@ -248,11 +249,21 @@ public:
     enableVertexFlatColor(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha(), intensity);
   }
   
+  void setBlendFuncSrcAlpha();
+  
   ~GL() {
     if (_lastImageData != NULL) {
       delete [] _lastImageData;
       _lastImageData = NULL;
     }
+  }
+  
+  void getViewport(int v[]){
+#ifdef C_CODE
+    _gl->getIntegerv(Viewport, v);
+#else
+    _gl->getIntegerv(GLVariable.Viewport, v);
+#endif
   }
 };
 

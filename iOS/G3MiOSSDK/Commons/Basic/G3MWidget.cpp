@@ -18,26 +18,28 @@
 #include "Context.hpp"
 #include "CameraConstraints.hpp"
 #include "FrameTasksExecutor.hpp"
+#include "IStringUtils.hpp"
 
-
-G3MWidget::G3MWidget(FrameTasksExecutor* frameTasksExecutor,
-                     IFactory*         factory,
-                     ILogger*          logger,
-                     GL*               gl,
-                     TexturesHandler*  texturesHandler,
-                     IDownloader*      downloader,
-                     const Planet*     planet,
+G3MWidget::G3MWidget(FrameTasksExecutor*              frameTasksExecutor,
+                     IFactory*                        factory,
+                     const IStringUtils*              stringUtils,
+                     ILogger*                         logger,
+                     GL*                              gl,
+                     TexturesHandler*                 texturesHandler,
+                     IDownloader*                     downloader,
+                     const Planet*                    planet,
                      std::vector<ICameraConstrainer*> cameraConstraint,
-                     Renderer*         renderer,
-                     Renderer*         busyRenderer,
-                     EffectsScheduler* effectsScheduler,
-                     int               width,
-                     int               height,
-                     Color             backgroundColor,
-                     const bool        logFPS,
-                     const bool        logDownloaderStatistics):
+                     Renderer*                        renderer,
+                     Renderer*                        busyRenderer,
+                     EffectsScheduler*                effectsScheduler,
+                     int                              width,
+                     int                              height,
+                     Color                            backgroundColor,
+                     const bool                       logFPS,
+                     const bool                       logDownloaderStatistics):
 _frameTasksExecutor(frameTasksExecutor),
 _factory(factory),
+_stringUtils(stringUtils),
 _logger(logger),
 _gl(gl),
 _texturesHandler(texturesHandler),
@@ -62,7 +64,13 @@ _userData(NULL)
 {
   initializeGL();
   
-  InitializationContext ic(_factory, _logger, _planet, _downloader, _effectsScheduler);
+  InitializationContext ic(_factory,
+                           _stringUtils,
+                           _logger,
+                           _planet,
+                           _downloader,
+                           _effectsScheduler);
+  
   _effectsScheduler->initialize(&ic);
   _renderer->initialize(&ic);
   _busyRenderer->initialize(&ic);
@@ -75,6 +83,7 @@ _userData(NULL)
 
 G3MWidget* G3MWidget::create(FrameTasksExecutor* frameTasksExecutor,
                              IFactory*           factory,
+                             const IStringUtils* stringUtils,
                              ILogger*            logger,
                              GL*                 gl,
                              TexturesHandler*    texturesHandler,
@@ -93,10 +102,12 @@ G3MWidget* G3MWidget::create(FrameTasksExecutor* frameTasksExecutor,
     logger->logInfo("Creating G3MWidget...");
   }
   
+  IStringUtils::setInstance(stringUtils);
   ILogger::setInstance(logger);
   
   return new G3MWidget(frameTasksExecutor,
                        factory,
+                       stringUtils,
                        logger,
                        gl,
                        texturesHandler,
@@ -126,7 +137,7 @@ G3MWidget::~G3MWidget() {
   if (_userData != NULL) {
     delete _userData;
   }
-
+  
   delete _factory;
   delete _logger;
   delete _gl;
@@ -152,7 +163,7 @@ G3MWidget::~G3MWidget() {
 
 void G3MWidget::onTouchEvent(const TouchEvent* myEvent) {
   if (_rendererReady) {
-    EventContext ec(_factory, _logger, _planet, _downloader, _effectsScheduler);
+    EventContext ec(_factory, _stringUtils, _logger, _planet, _downloader, _effectsScheduler);
     
     _renderer->onTouchEvent(&ec, myEvent);
   }
@@ -160,10 +171,22 @@ void G3MWidget::onTouchEvent(const TouchEvent* myEvent) {
 
 void G3MWidget::onResizeViewportEvent(int width, int height) {
   if (_rendererReady) {
-    EventContext ec(_factory, _logger, _planet, _downloader, _effectsScheduler);
+    EventContext ec(_factory, _stringUtils, _logger, _planet, _downloader, _effectsScheduler);
     
     _renderer->onResizeViewportEvent(&ec, width, height);
   }
+}
+
+const double clamp(const double value,
+                   const double lower,
+                   const double upper) {
+  if (value < lower) {
+    return lower;
+  }
+  if (value > upper) {
+    return upper;
+  }
+  return value;
 }
 
 int G3MWidget::render() {
@@ -186,13 +209,14 @@ int G3MWidget::render() {
     _nextCamera->copyFrom(*_currentCamera);
   }
   
-//  int __removePrint;
-//  printf("Camera Position=%s\n" ,
-//         _planet->toGeodetic3D(_currentCamera->getPosition()).description().c_str());
+  //  int __removePrint;
+  //  printf("Camera Position=%s\n" ,
+  //         _planet->toGeodetic3D(_currentCamera->getPosition()).description().c_str());
   
   // create RenderContext
   RenderContext rc(_frameTasksExecutor,
                    _factory,
+                   _stringUtils,
                    _logger,
                    _planet,
                    _gl,
@@ -202,11 +226,11 @@ int G3MWidget::render() {
                    _downloader,
                    _effectsScheduler,
                    _factory->createTimer());
-
+  
   _effectsScheduler->doOneCyle(&rc);
   
   _frameTasksExecutor->doPreRenderCycle(&rc);
-
+  
   _rendererReady = _renderer->isReadyToRender(&rc);
   
   Renderer* selectedRenderer = _rendererReady ? _renderer : _busyRenderer;
@@ -218,13 +242,39 @@ int G3MWidget::render() {
     _selectedRenderer->start();
   }
   
-
-  // Clear the scene
+//  const Vector3D ray = _currentCamera->getCenter();
+//  const Vector3D origin = _currentCamera->getPosition();
+//  
+//  const Vector3D intersection = _planet->closestIntersection(origin, ray);
+//  if (!intersection.isNan()) {
+//    const Vector3D cameraPosition = _currentCamera->getPosition();
+//    
+//    const double minDistance = 1000;
+//    const double maxDistance = 20000;
+//    
+//    const double distanceToTerrain = clamp(intersection.sub(cameraPosition).length(),
+//                                           minDistance,
+//                                           maxDistance + minDistance) - minDistance;
+//    
+//    printf("Camera to terrain distance=%f\n", distanceToTerrain);
+//    
+//    const float factor = (float) (distanceToTerrain / maxDistance);
+//    
+//    // Clear the scene
+//    const Color dayColor = Color::fromRGBA((float) 0.5, (float) 0.5, 1, 1);
+//    _gl->clearScreen(_backgroundColor.mixedWith(dayColor, factor));
+//    //    _gl->clearScreen(_backgroundColor);
+//    
+//  }
+//  else {
+//    // Clear the scene
+//    _gl->clearScreen(_backgroundColor);
+//  }
   _gl->clearScreen(_backgroundColor);
-  
+
   const int timeToRedraw = _selectedRenderer->render(&rc);
   
-//  _frameTasksExecutor->doPostRenderCycle(&rc);
+  //  _frameTasksExecutor->doPostRenderCycle(&rc);
   
   const TimeInterval elapsedTime = _timer->elapsedTime();
   if (elapsedTime.milliseconds() > 100) {
@@ -262,5 +312,5 @@ int G3MWidget::render() {
   }
   
   return timeToRedraw;
-
+  
 }

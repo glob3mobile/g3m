@@ -24,7 +24,7 @@ private:
   
   const RenderContext*         _renderContext;
   TilesRenderParameters* const _parameters;
-  GLTextureID _texID;
+  GLTextureId _texId;
   IImage * const _image;
     const bool _isMercatorImage;  
   
@@ -34,8 +34,9 @@ private:
 public:
   
   SingleImageTileTexturizer(TilesRenderParameters* const parameters,
+
                             IImage* image, const bool isMercatorImage) :
-  _texID(-1),
+  _texId(-1),
   _image(image),
   _parameters(parameters),
   _renderContext(NULL),
@@ -44,9 +45,9 @@ public:
   }
   
   ~SingleImageTileTexturizer() {
-    if (_texID.isValid()){
+    if (_texId.isValid()){
       if (_renderContext != NULL) {
-        _renderContext->getTexturesHandler()->releaseGLTextureId(_texID);
+        _renderContext->getTexturesHandler()->releaseGLTextureId(_texId);
       }
     }
   }

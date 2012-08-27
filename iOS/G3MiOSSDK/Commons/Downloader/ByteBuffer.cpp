@@ -8,6 +8,8 @@
 
 #include "ByteBuffer.hpp"
 
+#include "IStringUtils.hpp"
+
 #include <sstream>
 
 const std::string ByteBuffer::description() const {
@@ -18,3 +20,6 @@ const std::string ByteBuffer::description() const {
   return buffer.str();
 }
 
+std::string ByteBuffer::getDataAsString() const {
+  return IStringUtils::instance()->createString(_data, _length);
+}
