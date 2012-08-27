@@ -24,6 +24,8 @@ private:
   
 public:
   
+  ~Geodetic3D(){}
+  
   static Geodetic3D nan() {
     return Geodetic3D(Angle::nan(), Angle::nan(), 0);
   }

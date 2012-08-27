@@ -72,8 +72,12 @@ void FrameTasksExecutor::doPreRenderCycle(const RenderContext *rc) {
     bool isCanceled = task->isCanceled(rc);
     if (isCanceled) {
       delete task;
-
+#ifdef C_CODE
       _preRenderTasks.erase(i);
+#endif
+#ifdef JAVA_CODE
+      _preRenderTasks.remove(i);
+#endif
       canceledCounter++;
     }
     i++;

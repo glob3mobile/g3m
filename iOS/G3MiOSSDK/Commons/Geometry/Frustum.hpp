@@ -141,6 +141,8 @@ public:
                        _nearPlane.transformedBy(matrix),
                        _farPlane.transformedBy(matrix));
   }
+  
+  ~Frustum(){}
 };
 
 

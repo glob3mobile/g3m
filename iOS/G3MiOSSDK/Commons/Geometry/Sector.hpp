@@ -31,6 +31,8 @@ private:
   
 public:
   
+  ~Sector(){}
+  
 //  static Sector fromLowerAndUpper(const Geodetic2D& lower,
 //                           const Geodetic2D& upper){
 //    

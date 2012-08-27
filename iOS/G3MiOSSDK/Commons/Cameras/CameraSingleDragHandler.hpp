@@ -65,7 +65,7 @@ public:
                     CameraContext *cameraContext);
   int render(const RenderContext* rc, CameraContext *cameraContext);
 
-private:
+
   const bool _useInertia;
   void onDown(const EventContext *eventContext,
               const TouchEvent& touchEvent, 
@@ -76,7 +76,7 @@ private:
   void onUp(const EventContext *eventContext,
             const TouchEvent& touchEvent, 
             CameraContext *cameraContext);
-  
+private:
   
   Camera _camera0;         //Initial Camera saved on Down event
   

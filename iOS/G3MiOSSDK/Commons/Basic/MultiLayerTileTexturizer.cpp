@@ -576,6 +576,10 @@ public:
   void execute(const RenderContext* rc) {
     _builder->start();
   }
+  
+  bool isCanceled(const RenderContext *rc){
+    return false;
+  }
 };
 
 Mesh* MultiLayerTileTexturizer::texturize(const RenderContext* rc,

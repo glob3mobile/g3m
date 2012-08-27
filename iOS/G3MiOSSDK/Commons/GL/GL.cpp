@@ -274,6 +274,10 @@ const GLTextureId GL::uploadTexture(const IImage* image,
     _gl->texParameteri(Texture2D, WrapS, ClampToEdge);
     _gl->texParameteri(Texture2D, WrapT, ClampToEdge);
     _gl->texImage2D(Texture2D, 0, RGBA, textureWidth, textureHeight, 0, RGBA, UnsignedByte, imageData);
+    
+    if (generateMipmap) {
+      _gl->generateMipmap(Texture2D);
+    }
 #endif
     
 #ifdef JAVA_CODE
@@ -283,17 +287,18 @@ const GLTextureId GL::uploadTexture(const IImage* image,
     _gl.blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
     _gl.pixelStorei(GLAlignment.Unpack, 1);
     
-    _gl.bindTexture(GLTextureType.Texture2D, texID.getGLTextureID());
+    _gl.bindTexture(GLTextureType.Texture2D, texId.getGLTextureID());
     _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MinFilter, GLTextureParameterValue.Linear);
     _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MagFilter, GLTextureParameterValue.Linear);
     _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapS, GLTextureParameterValue.ClampToEdge);
     _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapT, GLTextureParameterValue.ClampToEdge);
     _gl.texImage2D(GLTextureType.Texture2D, 0, GLFormat.RGBA, textureWidth, textureHeight, 0, GLFormat.RGBA, GLType.UnsignedByte, imageData);
-    return texID;
-#endif
+    
     if (generateMipmap) {
-      _gl->generateMipmap(Texture2D);
+      _gl->generateMipmap(GLTextureType.Texture2D);
     }
+#endif
+
   }
   else {
     printf("can't get a valid texture id\n");
