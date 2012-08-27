@@ -12,7 +12,7 @@
 #include "Renderer.hpp"
 #include "Camera.hpp"
 #include "GL.hpp"
-#include "TexturesHandler.cpp"
+#include "TexturesHandler.hpp"
 #include "IDownloader.hpp"
 #include "Effects.hpp"
 #include "Context.hpp"
@@ -177,17 +177,17 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
   }
 }
 
-const double clamp(const double value,
-                   const double lower,
-                   const double upper) {
-  if (value < lower) {
-    return lower;
-  }
-  if (value > upper) {
-    return upper;
-  }
-  return value;
-}
+//const double clamp(const double value,
+//                   const double lower,
+//                   const double upper) {
+//  if (value < lower) {
+//    return lower;
+//  }
+//  if (value > upper) {
+//    return upper;
+//  }
+//  return value;
+//}
 
 int G3MWidget::render() {
   _timer->start();

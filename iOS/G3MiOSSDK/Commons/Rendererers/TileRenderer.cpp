@@ -132,7 +132,7 @@ int TileRenderer::render(const RenderContext* rc) {
   
   if (_firstRender && _parameters->_forceTopLevelTilesRenderOnStart) {
     // force one render of the topLevel tiles to make the (toplevel) textures loaded as they
-    // will be used as last-change fallback texture for any tile.
+    // will be used as last-chance fallback texture for any tile.
     _firstRender = false;
     
     for (int i = 0; i < _topLevelTiles.size(); i++) {
