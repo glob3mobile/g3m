@@ -368,7 +368,7 @@
 		D8EEF3BC1577924D003FEB5E /* G3MiOSSDK-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "G3MiOSSDK-Prefix.pch"; sourceTree = "<group>"; };
 		D8F7665715CAD79100179E08 /* INativeGL.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = INativeGL.hpp; path = Commons/Interfaces/INativeGL.hpp; sourceTree = "<group>"; };
 		D8FEDAC615E7BD23007633A0 /* IMathUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IMathUtils.hpp; path = Commons/Interfaces/IMathUtils.hpp; sourceTree = "<group>"; };
-		D8FEDAC815E7C219007633A0 /* MathUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MathUtils.hpp; path = Specific/Derived/MathUtils.hpp; sourceTree = "<group>"; };
+		D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */ = {isa = PBXFileReference; name = MathUtils_iOS.hpp; path = Specific/Derived/MathUtils_iOS.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -418,7 +418,7 @@
 				CF8B21B115DD32820068601A /* SQLiteStorage_iOS.hpp */,
 				CFB72A6C15E682B400A5BAF4 /* StringUtils_iOS.mm */,
 				CFB72A6D15E682B400A5BAF4 /* StringUtils_iOS.hpp */,
-				D8FEDAC815E7C219007633A0 /* MathUtils.hpp */,
+				D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */,
 			);
 			name = Derived;
 			sourceTree = "<group>";

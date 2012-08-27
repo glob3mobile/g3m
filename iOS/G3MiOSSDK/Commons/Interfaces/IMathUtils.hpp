@@ -11,6 +11,10 @@
 
 class IMathUtils{
   
+public:
+  
+  virtual ~IMathUtils(){}
+  
   virtual bool isNan(double v) const = 0;
   virtual bool isNan(float v) const = 0;
   
@@ -48,6 +52,8 @@ class IMathUtils{
   virtual double exp(double v) const = 0;
   virtual float exp(float v) const = 0;
   
+  virtual int maxInt() const = 0;
+  virtual int minInt() const = 0;
   virtual double maxDouble() const = 0;
   virtual double minDouble() const = 0;
   virtual float maxFloat() const = 0;

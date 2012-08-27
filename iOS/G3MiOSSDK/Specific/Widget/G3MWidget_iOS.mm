@@ -48,6 +48,8 @@
 #include "StringUtils_iOS.hpp"
 #include "SingleImageTileTexturizer.hpp"
 
+#include "MathUtils_iOS.hpp"
+
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
 @end
