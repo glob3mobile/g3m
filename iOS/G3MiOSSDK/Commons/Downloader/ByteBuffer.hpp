@@ -11,13 +11,13 @@
 
 #include <string>
 
-
 class ByteBuffer {
   
 
 #ifdef JAVA_CODE
   byte[] _data;
-#else 
+#endif
+#ifdef C_CODE
   unsigned char* _data;
 #endif
   
