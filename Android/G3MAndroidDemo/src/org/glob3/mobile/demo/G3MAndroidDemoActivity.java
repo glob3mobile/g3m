@@ -1,9 +1,25 @@
 package org.glob3.mobile.demo;
 
+import java.util.ArrayList;
+
+import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.GLErrorRenderer;
+import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.ICameraConstrainer;
+import org.glob3.mobile.generated.LayerSet;
+import org.glob3.mobile.generated.Mark;
+import org.glob3.mobile.generated.MarksRenderer;
+import org.glob3.mobile.generated.Renderer;
+import org.glob3.mobile.generated.Sector;
+import org.glob3.mobile.generated.SimpleCameraConstrainer;
+import org.glob3.mobile.generated.URL;
+import org.glob3.mobile.generated.UserData;
+import org.glob3.mobile.generated.WMSLayer;
+import org.glob3.mobile.generated.WMSServerVersion;
+import org.glob3.mobile.specific.G3MWidget_Android;
+
 import android.app.Activity;
 import android.os.Bundle;
-
-import org.glob3.mobile.demo.*;
 
 public class G3MAndroidDemoActivity extends Activity {
 	
@@ -11,33 +27,19 @@ public class G3MAndroidDemoActivity extends Activity {
 	
 	void initWidgetDemo()
 	{
-	  LayerSet layerSet = new LayerSet();
-	  
+	  final LayerSet layerSet = new LayerSet();
+
 	  WMSLayer bing = new WMSLayer("ve",
-	                                URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?"),
-	                                WMS_1_1_0,
-	                                Sector::fullSphere(),
+			  						new URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?"),
+	                                WMSServerVersion.WMS_1_1_0,
+	                                Sector.fullSphere(),
 	                                "image/png",
 	                                "EPSG:4326",
 	                                "",
 	                                false,
-	                                NULL);
-	  layerSet->addLayer(bing);
+	                                null);
+	  layerSet.addLayer(bing);
 
-	  
-	  if (false) {
-	    WMSLayer *osm = new WMSLayer("osm",
-	                                 URL("http://wms.latlon.org/"),
-	                                 WMS_1_1_0,
-	                                 Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
-	                                 "image/jpeg",
-	                                 "EPSG:4326",
-	                                 "",
-	                                 false,
-	                                 NULL);
-	    layerSet->addLayer(osm);
-	  }
-	  
 	  
 	  //  WMSLayer *pnoa = new WMSLayer("PNOA",
 	  //                                "http://www.idee.es/wms/PNOA/PNOA",
@@ -91,7 +93,7 @@ public class G3MAndroidDemoActivity extends Activity {
 	  
 	  
 	  
-	  std::vector<Renderer*> renderers;
+	  final ArrayList<Renderer> renderers = new ArrayList<Renderer>();
 
 	  //  if (false) {
 	  //    // dummy renderer with a simple box
@@ -108,33 +110,21 @@ public class G3MAndroidDemoActivity extends Activity {
 	  
 	  if (true) {
 	    // marks renderer
-	    MarksRenderer* marks = new MarksRenderer();
-	    renderers.push_back(marks);
+	    MarksRenderer marks = new MarksRenderer();
+	    renderers.add(marks);
 	    
-	    Mark* m1 = new Mark("Fuerteventura",
+	    Mark m1 = new Mark("Fuerteventura",
 	                        "g3m-marker.png",
-	                        Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0));
+	                        new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-14.36), 0));
 	    //m1->addTouchListener(listener);
-	    marks->addMark(m1);
+	    marks.addMark(m1);
 	    
 	    
-	    Mark* m2 = new Mark("Las Palmas",
+	    Mark m2 = new Mark("Las Palmas",
 	                        "g3m-marker.png",
-	                        Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0));
+	                        new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-15.36), 0));
 	    //m2->addTouchListener(listener);
-	    marks->addMark(m2);
-	    
-	    if (false) {
-	      for (int i = 0; i < 500; i++) {
-	        const Angle latitude = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
-	        const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
-	        //NSLog(@"lat=%f, lon=%f", latitude.degrees(), longitude.degrees());
-	        
-	        marks->addMark(new Mark("Random",
-	                                "g3m-marker.png",
-	                                Geodetic3D(latitude, longitude, 0)));
-	      }
-	    }
+	    marks.addMark(m2);
 	  }
 	  
 	  //  if (false) {
@@ -150,28 +140,32 @@ public class G3MAndroidDemoActivity extends Activity {
 	  //    renderers.push_back(sgr);
 	  //  }
 	  
-	  renderers.push_back(new GLErrorRenderer());
+	  renderers.add(new GLErrorRenderer());
 	  
-	  std::vector <ICameraConstrainer*> cameraConstraints;
-	  SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
-	  cameraConstraints.push_back(scc);
+	  final ArrayList<ICameraConstrainer> cameraConstraints = new ArrayList<ICameraConstrainer>();
+	  SimpleCameraConstrainer scc = new SimpleCameraConstrainer();
+	  cameraConstraints.add(scc);
 	  
-	  UserData* userData = NULL;
-	  [[self G3MWidget] initWidgetWithCameraConstraints: cameraConstraints
-	                                           layerSet: layerSet
-	                                          renderers: renderers
-	                                           userData: userData];
+	  final UserData userData = null;
+
+	  _widget.initWidget(cameraConstraints,
+				layerSet,
+				renderers,
+				userData); 
 	  
 	}
 
-	
-    /** Called when the activity is first created. */
+
+	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
         if (_widget == null){ //Just the first time
         	_widget = new G3MWidget_Android(this);
+        	
+        	initWidgetDemo();
+        	
         	setContentView(_widget);
         }
     }

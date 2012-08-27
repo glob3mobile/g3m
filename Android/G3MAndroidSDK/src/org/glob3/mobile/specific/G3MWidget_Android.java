@@ -19,6 +19,7 @@ import org.glob3.mobile.generated.GL;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
+import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IStringBuilder;
@@ -27,6 +28,7 @@ import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.MultiLayerTileTexturizer;
 import org.glob3.mobile.generated.Planet;
+import org.glob3.mobile.generated.SingleImageTileTexturizer;
 import org.glob3.mobile.generated.TextureBuilder;
 import org.glob3.mobile.generated.TexturesHandler;
 import org.glob3.mobile.generated.TileRenderer;
@@ -38,7 +40,6 @@ import org.glob3.mobile.generated.TouchEventType;
 import org.glob3.mobile.generated.UserData;
 import org.glob3.mobile.generated.Vector2D;
 
-import android.R.bool;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.view.GestureDetector.OnGestureListener;
@@ -139,7 +140,7 @@ public class G3MWidget_Android extends GLSurfaceView implements
 	
 	public G3MWidget getWidget() {
 		if (_widget == null) {
-			initWidgetDemo();
+			//initWidgetDemo();
 			//initSimpleWidgetDemo();
 		}
 		return _widget;
@@ -407,37 +408,37 @@ public class G3MWidget_Android extends GLSurfaceView implements
 	
 */
 
-	void initWidget( ArrayList<ICameraConstrainer> cameraConstraints,
+	public void initWidget( ArrayList<ICameraConstrainer> cameraConstraints,
 			LayerSet layerSet,
 			ArrayList<org.glob3.mobile.generated.Renderer> renderers,
 			UserData userData) 
-{
-// creates default camera-renderer and camera-handlers
-CameraRenderer cameraRenderer = new CameraRenderer();
+	{
+		// creates default camera-renderer and camera-handlers
+		CameraRenderer cameraRenderer = new CameraRenderer();
 
-boolean useInertia = true;
-cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
+		boolean useInertia = true;
+		cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
 
-boolean processRotation = true;
-boolean processZoom = true;
-cameraRenderer.addHandler(new CameraDoubleDragHandler(processRotation,
-                             processZoom));
-cameraRenderer.addHandler(new CameraRotationHandler());
-cameraRenderer.addHandler(new CameraDoubleTapHandler());
+		boolean processRotation = true;
+		boolean processZoom = true;
+		cameraRenderer.addHandler(new CameraDoubleDragHandler(processRotation,
+				processZoom));
+		cameraRenderer.addHandler(new CameraRotationHandler());
+		cameraRenderer.addHandler(new CameraDoubleTapHandler());
 
-boolean renderDebug = false;
-boolean useTilesSplitBudget = true;
-boolean forceTopLevelTilesRenderOnStart = true;
+		boolean renderDebug = false;
+		boolean useTilesSplitBudget = true;
+		boolean forceTopLevelTilesRenderOnStart = true;
 
-TilesRenderParameters parameters = TilesRenderParameters.createDefault(renderDebug,
-                                               useTilesSplitBudget,
-                                               forceTopLevelTilesRenderOnStart);
+		TilesRenderParameters parameters = TilesRenderParameters.createDefault(renderDebug,
+				useTilesSplitBudget,
+				forceTopLevelTilesRenderOnStart);
 
-	initWidget(cameraRenderer, cameraConstraints, layerSet, parameters, renderers, userData);
+		initWidget(cameraRenderer, cameraConstraints, layerSet, parameters, renderers, userData);
 
-}
+	}
 	
-	void initWidget(CameraRenderer cameraRenderer, 
+	public void initWidget(CameraRenderer cameraRenderer, 
 			ArrayList<ICameraConstrainer> cameraConstraints,
 			LayerSet layerSet,
 			TilesRenderParameters parameters,
@@ -464,7 +465,19 @@ TilesRenderParameters parameters = TilesRenderParameters.createDefault(renderDeb
 		  
 		  if (layerSet != null && layerSet.size() > 0) {
 
-		      TileTexturizer texturizer = new MultiLayerTileTexturizer(layerSet);
+		      TileTexturizer texturizer;// = new MultiLayerTileTexturizer(layerSet);
+		      
+			    if (false) {
+			    	texturizer = new MultiLayerTileTexturizer(layerSet);
+				}
+				else {
+				   //SINGLE IMAGE
+				   IImage singleWorldImage = factory.createImageFromFileName("world.jpg");
+				   texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
+				}
+				    
+		      
+		      
 		      final boolean showStatistics = false;
 		      
 		      TileRenderer tr = new TileRenderer(new EllipsoidalTileTessellator(parameters._tileResolution, true),
