@@ -16,13 +16,6 @@ public class WMSLayer extends Layer
   private final String _style;
   private final boolean _isTransparent;
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isAvailable(const RenderContext* rc, const Tile* tile) const
-  private boolean isAvailable(RenderContext rc, Tile tile)
-  {
-	return true;
-  }
-
 
 
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition)
@@ -298,5 +291,14 @@ public class WMSLayer extends Layer
   
 	  return new URL(req);
   }
+
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isAvailable(const RenderContext* rc, const Tile* tile) const
+  public final boolean isAvailable(RenderContext rc, Tile tile)
+  {
+	return true;
+  }
+
 
 }

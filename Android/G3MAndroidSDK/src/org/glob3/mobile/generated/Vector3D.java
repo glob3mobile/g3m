@@ -244,15 +244,12 @@ public class Vector3D
 //ORIGINAL LINE: const String description() const
   public final String description()
   {
-	std.ostringstream buffer = new std.ostringstream();
-	buffer << "(V3D ";
-	buffer << _x;
-	buffer << ", ";
-	buffer << _y;
-	buffer << ", ";
-	buffer << _z;
-	buffer << ")";
-	return buffer.str();
+	IStringBuilder isb = IStringBuilder.newStringBuilder();
+	isb.add("(V2D ").add(_x).add(", ").add(_y).add(", ").add(_z).add(")");
+	String s = isb.getString();
+	if (isb != null)
+		isb.dispose();
+	return s;
   }
 
 }
