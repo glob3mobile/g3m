@@ -129,7 +129,7 @@ public:
   
   void resizeViewport(int width, int height);
   
-  void render(const RenderContext* rc);
+  void render(const RenderContext* rc) const;
   
   Vector3D pixel2Ray(const Vector2D& pixel) const;
   
@@ -147,8 +147,8 @@ public:
   Vector3D getPosition() const { return _position.asVector3D(); }
   Vector3D getCenter() const { return _center.asVector3D(); }
   Vector3D getUp() const { return _up.asVector3D(); }
-  Geodetic3D getGeodeticCenterOfView() { return *_getGeodeticCenterOfView(); }
-  Vector3D getXYZCenterOfView() { return _getXYZCenterOfView().asVector3D(); }
+  Geodetic3D getGeodeticCenterOfView() const { return *_getGeodeticCenterOfView(); }
+  Vector3D getXYZCenterOfView() const { return _getXYZCenterOfView().asVector3D(); }
   Vector3D getViewDirection() const { return _center.sub(_position).asVector3D(); }
 
   
@@ -165,9 +165,13 @@ public:
   
   void print();
   
-  const Frustum* const getFrustumInModelCoordinates() { return getFrustumMC(); }
+  const Frustum* const getFrustumInModelCoordinates() const {
+    return getFrustumMC();
+  }
   
-  const Frustum* const getHalfFrustuminModelCoordinates() { return getHalfFrustumMC(); }
+  const Frustum* const getHalfFrustuminModelCoordinates() const {
+    return getHalfFrustumMC();
+  }
   
   void setPosition(const Geodetic3D& g3d);
   
@@ -178,6 +182,7 @@ public:
   
   void initialize(const InitializationContext* ic); 
 
+  void reset();
     
 private:
   int _width;
@@ -191,7 +196,7 @@ private:
   
   
   
-  const ILogger* _logger;
+  mutable const ILogger* _logger;
   
   mutable CameraDirtyFlags _dirtyFlags;
   
@@ -240,8 +245,8 @@ private:
   }
   
   // intersection of view direction with globe in(x,y,z)
-  MutableVector3D   _XYZCenterOfView;  
-  MutableVector3D   _getXYZCenterOfView() {
+  mutable MutableVector3D   _XYZCenterOfView;
+  MutableVector3D   _getXYZCenterOfView() const {
     if (_dirtyFlags._XYZCenterOfView) {
       _dirtyFlags._XYZCenterOfView = false;
       _XYZCenterOfView = centerOfViewOnPlanet().asMutableVector3D();
@@ -250,8 +255,8 @@ private:
   }
 
   // intersection of view direction with globe in geodetic
-  Geodetic3D*     _geodeticCenterOfView;  
-  Geodetic3D*     _getGeodeticCenterOfView() {
+  mutable Geodetic3D*     _geodeticCenterOfView;
+  Geodetic3D*     _getGeodeticCenterOfView() const {
     if (_dirtyFlags._geodeticCenterOfView) {
       _dirtyFlags._geodeticCenterOfView = false;
 #ifdef C_CODE
@@ -263,8 +268,8 @@ private:
   }
 
   // camera frustum
-  Frustum* _frustum;
-  Frustum*  getFrustum() {
+  mutable Frustum* _frustum;
+  Frustum*  getFrustum() const {
     if (_dirtyFlags._frustum) {
       _dirtyFlags._frustum = false;
 #ifdef C_CODE
@@ -276,8 +281,8 @@ private:
   }
 
   // frustum in Model coordinates
-  Frustum* _frustumInModelCoordinates;
-  Frustum*  getFrustumMC() {
+  mutable Frustum* _frustumInModelCoordinates;
+  Frustum*  getFrustumMC() const {
     if (_dirtyFlags._frustumMC) {
       _dirtyFlags._frustumMC = false;
 #ifdef C_CODE
@@ -290,8 +295,8 @@ private:
 
   int __temporal_test_for_clipping;
 
-  Frustum* _halfFrustum;                    // ONLY FOR DEBUG
-  Frustum*  getHalfFrustum() {
+  mutable Frustum* _halfFrustum;                    // ONLY FOR DEBUG
+  Frustum* getHalfFrustum() const {
     if (_dirtyFlags._halfFrustum) {
       _dirtyFlags._halfFrustum = false;
 #ifdef C_CODE
@@ -305,8 +310,8 @@ private:
     return _halfFrustum;
   }
   
-  Frustum* _halfFrustumInModelCoordinates;  // ONLY FOR DEBUG
-  Frustum*  getHalfFrustumMC() {
+  mutable Frustum* _halfFrustumInModelCoordinates;  // ONLY FOR DEBUG
+  Frustum* getHalfFrustumMC() const {
     if (_dirtyFlags._halfFrustumMC) {
       _dirtyFlags._halfFrustumMC = false;
 #ifdef C_CODE

@@ -13,8 +13,6 @@
 #include "G3MWidget.hpp"
 #include "CompositeRenderer.hpp"
 #include "Planet.hpp"
-#include "Logger_iOS.hpp"
-#include "Factory_iOS.hpp"
 
 #include "CameraRenderer.hpp"
 #include "CameraSingleDragHandler.hpp"
@@ -24,30 +22,18 @@
 #include "CameraConstraints.hpp"
 
 #include "TileRenderer.hpp"
-#include "DummyRenderer.hpp"
-#include "MarksRenderer.hpp"
-#include "SimplePlanetRenderer.hpp"
 #include "Effects.hpp"
-#include "SceneGraphRenderer.hpp"
-#include "GLErrorRenderer.hpp"
 #include "EllipsoidalTileTessellator.hpp"
-#include "LatLonMeshRenderer.h"
 
 #include "SQLiteStorage_iOS.hpp"
-#include "NullStorage.hpp"
-#include "SingleImageTileTexturizer.hpp"
-#include "BusyQuadRenderer.hpp"
 #include "BusyMeshRenderer.hpp"
 #include "CPUTextureBuilder.hpp"
 #include "LayerSet.hpp"
-#include "WMSLayer.hpp"
-#include "StaticImageLayer.hpp"
 
 #include "CachedDownloader.hpp"
 #include "Downloader_iOS.hpp"
 
 #include "INativeGL.hpp"
-#include "NativeGL2_iOS.hpp"
 #include "GL.hpp"
 
 #include "MultiLayerTileTexturizer.hpp"
@@ -59,51 +45,18 @@
 
 #include "Box.hpp"
 
-#include <stdlib.h>
+#include "TexturesHandler.hpp"
+
+#include "Logger_iOS.hpp"
+#include "Factory_iOS.hpp"
+#include "NativeGL2_iOS.hpp"
+#include "StringUtils_iOS.hpp"
+#include "SingleImageTileTexturizer.hpp"
 
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
 @end
 
-class OceanTerrainTouchEventListener: public TerrainTouchEventListener, IDownloadListener{
-  IFactory*    const _factory;
-  IDownloader* const _downloader;
-public:
-  
-  OceanTerrainTouchEventListener(IFactory* f, IDownloader* d):_factory(f), _downloader(d){}
-  
-  void onTerrainTouchEvent(const TerrainTouchEvent& event){
-    //      printf("POINT %f, %f", event._g2d.latitude().degrees(), event._g2d.longitude().degrees());
-    URL url = event._layer->getFeatureURL(event._g2d, _factory, event._sector, 256, 256);
-    //      printf("%s\n", url.getPath().c_str());
-    
-    _downloader->request(url, 999999999, this, false);
-  }
-  
-  void onDownload(const Response* response) {
-    std::string s = (char*) response->getByteBuffer()->getData();
-    //printf("%s\n", s.c_str());
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"FEATURE"
-                                                    message:[NSString stringWithCString:s.c_str()
-                                                                               encoding:NSUTF8StringEncoding]
-                                                   delegate:nil
-                                          cancelButtonTitle:@"OK"
-                                          otherButtonTitles:nil];
-    [alert show];
-  }
-  
-  void onError(const Response* response) {
-    printf("Error in request\n");
-  }
-  
-  void onCanceledDownload(const Response* response) {
-  }
-  
-  void onCancel(const URL* url) {
-    printf("Cancel in request\n");
-  }
-};
 
 
 @implementation G3MWidget_iOS
@@ -113,8 +66,6 @@ public:
 @synthesize displayLink            = _displayLink;
 @synthesize animationTimer         = _animationTimer;
 @synthesize renderer               = _renderer;
-@synthesize widget                 = _widget;
-/*@synthesize  multipleTouchEnabled*/
 
 
 // You must implement this method
@@ -122,138 +73,89 @@ public:
   return [CAEAGLLayer class];
 }
 
-- (void) initWidgetCSIRO
+- (void) initWidgetWithCameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
+                                layerSet: (LayerSet*) layerSet
+                               renderers: (std::vector<Renderer*>) renderers
+                                userData: (UserData*) userData
 {
+  // creates default camera-renderer and camera-handlers
+  CameraRenderer *cameraRenderer = new CameraRenderer();
+  
+  const bool useInertia = true;
+  cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
+  
+  const bool processRotation = true;
+  const bool processZoom = true;
+  cameraRenderer->addHandler(new CameraDoubleDragHandler(processRotation,
+                                                         processZoom));
+  cameraRenderer->addHandler(new CameraRotationHandler());
+  cameraRenderer->addHandler(new CameraDoubleTapHandler());
+  
+  const bool renderDebug = false;
+  const bool useTilesSplitBudget = true;
+  const bool forceTopLevelTilesRenderOnStart = true;
+  
+  TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug,
+                                                                           useTilesSplitBudget,
+                                                                           forceTopLevelTilesRenderOnStart);
+  
+  [self initWidgetWithCameraRenderer: cameraRenderer
+                   cameraConstraints: cameraConstraints
+                            layerSet: layerSet
+               tilesRenderParameters: parameters
+                           renderers: renderers
+                            userData: userData];
+}
+
+- (void) initWidgetWithCameraRenderer: (CameraRenderer*) cameraRenderer
+                    cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
+                             layerSet: (LayerSet*) layerSet
+                tilesRenderParameters: (TilesRenderParameters*) parameters
+                            renderers: (std::vector<Renderer*>) renderers
+                             userData: (UserData*) userData
+{
+  
   // create GLOB3M WIDGET
   int width = (int) [self frame].size.width;
   int height = (int) [self frame].size.height;
 
-  IFactory *factory = new Factory_iOS();
-  ILogger *logger = new Logger_iOS(ErrorLevel);
-  
   IStringBuilder::setInstance(new StringBuilder_iOS()); //Setting StringBuilder
-  
-  NativeGL2_iOS * nGL = new NativeGL2_iOS(); 
-  GL* gl  = new GL(nGL);
 
-  // composite renderer is the father of the rest of renderers
-  CompositeRenderer* comp = new CompositeRenderer();
-  
-  // camera renderer and handlers
-  CameraRenderer *cameraRenderer;
-  cameraRenderer = new CameraRenderer();
-  cameraRenderer->addHandler(new CameraSingleDragHandler);
-  cameraRenderer->addHandler(new CameraDoubleDragHandler);
-  cameraRenderer->addHandler(new CameraRotationHandler);
-  cameraRenderer->addHandler(new CameraDoubleTapHandler);
-  comp->addRenderer(cameraRenderer);
-  
+  IFactory *factory  = new Factory_iOS();
+  ILogger *logger    = new Logger_iOS(ErrorLevel);
+  NativeGL2_iOS* nGL = new NativeGL2_iOS();
+  GL* gl  = new GL(nGL);
   
   IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
   IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
                                                  storage);
-  
-  //LAYERS
-  LayerSet* layerSet = new LayerSet();
-//  WMSLayer* baseLayer = new WMSLayer("bmng200405",
-//                                     "http://www.nasa.network.com/wms?",
-//                                     WMS_1_1_0,
-//                                     "image/jpeg",
-//                                     Sector::fullSphere(),
-//                                     "EPSG:4326",
-//                                     "",
-//                                     false,
-//                                     Angle::nan(),
-//                                     Angle::nan());
-//  layerSet->addLayer(baseLayer);
 
-//    Sector s = Sector::fromDegrees(-60, 50, 10, 185);
-//    WMSLayer *wmsl = new WMSLayer("test:contourGSLA",
-//                                  "http://imos2.ersa.edu.au/geo2/test/wms",
-//                                  WMS_1_1_0,
-//                                  "image/png",
-//                                  s,
-//                                  "EPSG:4326",
-//                                  "sla_test",
-//                                  true,
-//                                  Angle::nan(),
-//                                  Angle::nan());
-//    
-//    WMSLayer *wms_sst = new WMSLayer("sea_surface_temperature",
-//                                     "http://opendap-vpac.arcs.org.au/thredds/wms/IMOS/SRS/GHRSST-SSTsubskin/2012/20120626-ABOM-L3P_GHRSST-SSTsubskin-AVHRR_MOSAIC_01km-AO_DAAC-v01-fv01_0.nc?",
-//                                     WMS_1_3_0,
-//                                     "image/png",
-//                                     s,
-//                                     "EPSG:4326&COLORSCALERANGE=273.8%2C302.8&NUMCOLORBANDS=50&LOGSCALE=false",
-//                                     "boxfill%2Fsst_36",
-//                                     true,
-//                                     Angle::nan(),
-//                                     Angle::nan());
-//    
-//    layerSet->addLayer(wmsl);
-//    layerSet->addLayer(wms_sst);
+  CompositeRenderer* composite = new CompositeRenderer();
   
-  WMSLayer *oceans = new WMSLayer("igo:bmng200401,igo:sttOZ,igo:cntOZ",
-                                  "igo:sttOZ",
-                                  "http://igosoftware.dyndns.org:8081/geoserver/igo/wms",
-                                  WMS_1_3_0,
-                                  "image/jpeg",
-                                  Sector::fullSphere(),
-                                  "EPSG:4326",
-                                  "",
-                                  false,
-                                  Angle::nan(),
-                                  Angle::nan());
+  composite->addRenderer(cameraRenderer);
   
-  oceans->addTerrainTouchEventListener(new OceanTerrainTouchEventListener(factory, downloader));
-  
-  layerSet->addLayer(oceans);
-  
-  //STATIC IMAGE FOR TESTING AUSTRALIA
-//  IImage *image = factory->createImageFromFileName("20120720_cintp1.png");
-//  StaticImageLayer * imageLayer = new StaticImageLayer("SIL",
-//                                                       image,
-//                                                       Sector::fromDegrees(-60, 50, 10, 185), 
-//                                                       fss);
-//  layerSet->addLayer(imageLayer);
-  
-  // very basic tile renderer
-  if (true) {
-    bool renderDebug = false;
-    TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug);
-    
-    TileTexturizer* texturizer = NULL;
-    if (true) {
-      texturizer = new MultiLayerTileTexturizer(layerSet);
-    }
-    else {
-      //SINGLE IMAGE
-      IImage *singleWorldImage = factory->createImageFromFileName("world.jpg");
-      texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
-    }
-    
-    const bool showStatistics = false;
-    TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
-                                        texturizer,
-                                        parameters,
-                                        showStatistics);
-    comp->addRenderer(tr);
-  }
-  
-  if (false) {
-    // dummy renderer with a simple box
-    DummyRenderer* dum = new DummyRenderer();
-    comp->addRenderer(dum);
-  }
-  
-  if (false) {
-    // simple planet renderer, with a basic world image
-    SimplePlanetRenderer* spr = new SimplePlanetRenderer("world.jpg");
-    comp->addRenderer(spr);
-  }
+  if (layerSet != NULL) {
+    if (layerSet->size() > 0) {
+      TileTexturizer* texturizer = new MultiLayerTileTexturizer(layerSet);
+//      IImage *singleWorldImage = factory->createImageFromFileName("world.jpg");
+//      TileTexturizer* texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
 
-  TextureBuilder* texBuilder = new CPUTextureBuilder();
-  TexturesHandler* texturesHandler = new TexturesHandler(gl, factory, texBuilder, false);
+      const bool showStatistics = false;
+      TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
+                                          texturizer,
+                                          parameters,
+                                          showStatistics);
+      composite->addRenderer(tr);
+    }
+  }
+  
+  for (int i = 0; i < renderers.size(); i++) {
+    composite->addRenderer(renderers[i]);
+  }
+  
+  
+  TextureBuilder* textureBuilder = new CPUTextureBuilder();
+  TexturesHandler* texturesHandler = new TexturesHandler(gl, factory, textureBuilder, false);
   
   const Planet* planet = Planet::createEarth();
   
@@ -261,355 +163,372 @@ public:
   
   EffectsScheduler* scheduler = new EffectsScheduler();
   
-  std::vector <ICameraConstrainer *> cameraConstraint;
-  cameraConstraint.push_back(new SimpleCameraConstrainer);
-
   FrameTasksExecutor* frameTasksExecutor = new FrameTasksExecutor();
   
-  _widget = G3MWidget::create(frameTasksExecutor,
-                              factory,
-                              logger,
-                              gl,
-                              texturesHandler,
-                              downloader,
-                              planet, 
-                              cameraConstraint,
-                              comp,
-                              busyRenderer,
-                              scheduler,
-                              width, height,
-                              Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
-                              true,
-                              false);
+  const IStringUtils* stringUtils = new StringUtils_iOS();
+//  if (true) {
+//    int __REMOVE_STRING_UTILS_TESTS;
+//    
+//    std::vector<std::string> lines = stringUtils->splitLines("line1\nline2");
+//    
+//    printf("%s\n", stringUtils->left("Diego", 1).c_str());
+//    printf("%s\n", stringUtils->substring("Diego", 1).c_str());
+//
+//    std::string line = "name=value";
+//    int equalsPosition = stringUtils->indexOf(line, "=");
+//    std::string name = stringUtils->left(line, equalsPosition);
+//    std::string value = stringUtils->substring(line, equalsPosition+1);
+//    printf("\"%s\"=\"%s\"\n", name.c_str(), value.c_str());
+//    
+//    printf("\n");
+//  }
   
-  Geodetic3D australia = Geodetic3D::fromDegrees(-26.91, 133.94, 1.1e7);
-  ((G3MWidget*)_widget)->getNextCamera()->setPosition(australia);
-
+  _widgetVP = G3MWidget::create(frameTasksExecutor,
+                                factory,
+                                stringUtils,
+                                logger,
+                                gl,
+                                texturesHandler,
+                                downloader,
+                                planet,
+                                cameraConstraints,
+                                composite,
+                                busyRenderer,
+                                scheduler,
+                                width, height,
+                                Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
+                                true,
+                                false);
+  
+  [self widget]->setUserData(userData);
 }
 
-- (void) initWidgetDemo
-{
-  
-  // create GLOB3M WIDGET
-  int width = (int) [self frame].size.width;
-  int height = (int) [self frame].size.height;
-
-  IFactory *factory = new Factory_iOS();
-  ILogger *logger = new Logger_iOS(ErrorLevel);
-  
-  IStringBuilder::setInstance(new StringBuilder_iOS()); //Setting StringBuilder
-  
-  NativeGL2_iOS * nGL = new NativeGL2_iOS(); 
-  GL* gl  = new GL(nGL);
-  
-  //Testing BOX intersection
-  if (true){
-    Box b(Vector3D(-10,-10,-10) , Vector3D(10,10,10) );
-    
-    Vector3D v = b.intersectionWithRay(Vector3D(-20,0,0), Vector3D(1.0,0,0));
-    printf("%f, %f, %f\n", v.x(), v.y(), v.z());
-    
-    Vector3D v1 = b.intersectionWithRay(Vector3D(-20,20,0), Vector3D(1.0,0,0));
-    printf("%f, %f, %f\n", v1.x(), v1.y(), v1.z());
-    
-    Vector3D v2 = b.intersectionWithRay(Vector3D(-20,0,0), Vector3D(1.0,0.1,0));
-    printf("%f, %f, %f\n", v2.x(), v2.y(), v2.z());
-  }
-  
-  // composite renderer is the father of the rest of renderers
-  CompositeRenderer* comp = new CompositeRenderer();
-  
-  // camera renderer and handlers
-  CameraRenderer *cameraRenderer;
-  cameraRenderer = new CameraRenderer();
-  cameraRenderer->addHandler(new CameraSingleDragHandler);
-  cameraRenderer->addHandler(new CameraDoubleDragHandler);
-  cameraRenderer->addHandler(new CameraRotationHandler);
-  cameraRenderer->addHandler(new CameraDoubleTapHandler);
-  comp->addRenderer(cameraRenderer);
-
-  
-  IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
-  IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
-                                                 storage);
-  
-  if (false) {
-    class Listener : public IDownloadListener {
-    private:
-      int _onDownload;
-      int _onError;
-      int _onCancel;
-
-    public:
-      Listener() :
-      _onDownload(0),
-      _onError(0),
-      _onCancel(0)
-      {
-        
-      }
-      
-      void onDownload(const Response* response) {
-        _onDownload++;
-        BOOL isMainThread = [NSThread isMainThread];
-        if (isMainThread) {
-          NSLog(@"*** Main-Thread: Downloaded %d bytes ***", response->getByteBuffer()->getLength());
-        }
-        else {
-          NSLog(@"*** NOT IN Main-Thread: Downloaded %d bytes ***", response->getByteBuffer()->getLength());
-        }
-      }
-      
-      void onError(const Response* response) {
-        _onError++;
-      }
-
-      void onCancel(const URL* url) {
-        _onCancel++;
-      }
-      
-      void onCanceledDownload(const Response* response) {
-      }
-      
-      void showInvalidState() const {
-        printf("onDownload=%d, onCancel=%d, onError=%d\n", _onDownload, _onCancel, _onError);
-      }
-      
-      void testState() const {
-        if ((_onDownload == 1) && (_onCancel == 0) && (_onError == 0)) {
-          return;
-        }
-        if ((_onDownload == 0) && (_onCancel == 1) && (_onError == 0)) {
-          return;
-        }
-        if ((_onDownload == 0) && (_onCancel == 0) && (_onError == 1)) {
-          return;
-        }
-        showInvalidState();
-      }
-
-      virtual ~Listener() {
-        testState();
-      }
-    };
-    
-    const long priority = 999999999;
-    long requestId = downloader->request(URL("http://glob3.sourceforge.net/img/isologo640x160.png"), priority, new Listener(), true);
-    long requestId2 = downloader->request(URL("http://glob3.sourceforge.net/img/isologo640x160.png"), priority, new Listener(), true);
-    downloader->cancelRequest(requestId);
-    downloader->cancelRequest(requestId2);
-    
-    printf("break (point) on me 2");
-  }
-
-  
-  //LAYERS
-  LayerSet* layerSet = new LayerSet();
- 
-  WMSLayer* blueMarble = new WMSLayer("bmng200405",
-                                      "http://www.nasa.network.com/wms?",
-                                      WMS_1_1_0,
-                                      "image/jpeg",
-                                      Sector::fullSphere(),
-                                      "EPSG:4326",
-                                      "",
-                                      false,
-                                      Angle::nan(),
-                                      Angle::nan());
-  layerSet->addLayer(blueMarble);
-
-//  WMSLayer *pnoa = new WMSLayer("PNOA",
-//                                "http://www.idee.es/wms/PNOA/PNOA",
-//                                WMS_1_1_0,
-//                                "image/png",
-//                                Sector::fromDegrees(21, -18, 45, 6),
-//                                "EPSG:4326",
-//                                "",
-//                                true,
-//                                Angle::nan(),
-//                                Angle::nan());
-//  layerSet->addLayer(pnoa);
-
-//  WMSLayer *vias = new WMSLayer("VIAS",
-//                                "http://idecan2.grafcan.es/ServicioWMS/Callejero",
-//                                WMS_1_1_0,
-//                                "image/gif",
-//                                Sector::fromDegrees(22.5,-22.5, 33.75, -11.25),
-//                                "EPSG:4326",
-//                                "",
-//                                true,
-//                                Angle::nan(),
-//                                Angle::nan());
-//  layerSet->addLayer(vias);
-
-//  WMSLayer *oceans = new WMSLayer(//"igo:bmng200401,igo:sttOZ,igo:cntOZ",
-//                                  "bmsstcnt",
-////                                  "OZ",
-//                                  "bmsstcnt",
-////                                  "OZ",
-////                                  "http://igosoftware.dyndns.org:8081/geoserver/igo/wms",
-//                                  "http://igosoftware.dyndns.org:8081/geowebcache/service/wms",
-//                                  WMS_1_1_0,
-//                                  "image/jpeg",
-//                                  Sector::fullSphere(),
-//                                  "EPSG:4326",
-//                                  "",
-//                                  false,
-//                                  Angle::nan(),
-//                                  Angle::nan());
-//  
-//  oceans->addTerrainTouchEventListener(new OceanTerrainTouchEventListener(factory, downloader));
-//  layerSet->addLayer(oceans);
-  
-//  WMSLayer *osm = new WMSLayer("bing",
-//                               "bing",
-//                               "http://wms.latlon.org/",
-//                               WMS_1_1_0,
-//                               "image/jpeg",
-//                               Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
-//                               "EPSG:4326",
-//                               "",
-//                               false,
-//                               Angle::nan(),
-//                               Angle::nan());
-//  layerSet->addLayer(osm);
-
-//  WMSLayer *osm = new WMSLayer("osm",
-//                               "osm",
-//                               "http://wms.latlon.org/",
-//                               WMS_1_1_0,
-//                               "image/jpeg",
-//                               Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
-//                               "EPSG:4326",
-//                               "",
-//                               false,
-//                               Angle::nan(),
-//                               Angle::nan());
-//  layerSet->addLayer(osm);
-  
-  // very basic tile renderer
-  if (true) {
-    const bool renderDebug = false;
-    TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug);
-//    TilesRenderParameters* parameters = TilesRenderParameters::createSingleSector(renderDebug);
-    
-    TileTexturizer* texturizer = NULL;
-    if (true) {
-      texturizer = new MultiLayerTileTexturizer(layerSet);
-    }
-    else {
-      //SINGLE IMAGE
-      IImage *singleWorldImage = factory->createImageFromFileName("world.jpg");
-      texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
-    }
-    
-    const bool showStatistics = false;
-    TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
-                                        texturizer,
-                                        parameters,
-                                        showStatistics);
-    comp->addRenderer(tr);
-  }
-  
-  if (false) {
-    // dummy renderer with a simple box
-    DummyRenderer* dum = new DummyRenderer();
-    comp->addRenderer(dum);
-  }
-  
-  if (false) {
-    // simple planet renderer, with a basic world image
-    SimplePlanetRenderer* spr = new SimplePlanetRenderer("world.jpg");
-    comp->addRenderer(spr);
-  }
-  
-  if (false) {
-    // marks renderer
-    MarksRenderer* marks = new MarksRenderer();
-    comp->addRenderer(marks);
-    
-    Mark* m1 = new Mark("Fuerteventura",
-                        "g3m-marker.png",
-                        Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0));
-    //m1->addTouchListener(listener);
-    marks->addMark(m1);
-    
-    
-    Mark* m2 = new Mark("Las Palmas",
-                        "g3m-marker.png",
-                        Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0));
-    //m2->addTouchListener(listener);
-    marks->addMark(m2);
-    
-    if (false) {
-      for (int i = 0; i < 500; i++) {
-        const Angle latitude = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
-        const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
-        //NSLog(@"lat=%f, lon=%f", latitude.degrees(), longitude.degrees());
-        
-        marks->addMark(new Mark("Random",
-                                "g3m-marker.png",
-                                Geodetic3D(latitude, longitude, 0)));
-      }
-    }
-  }
-  
-  if (false) {
-    LatLonMeshRenderer *renderer = new LatLonMeshRenderer();
-    comp->addRenderer(renderer);
-  }
-  
-  EffectsScheduler* scheduler = new EffectsScheduler();
-  
-  if (false) {
-    EffectTarget* target = NULL;
-    scheduler->startEffect(new SampleEffect(TimeInterval::fromSeconds(2)),
-                           target);
-  }
-  
-  if (false) {
-    SceneGraphRenderer* sgr = new SceneGraphRenderer();
-    SGCubeNode* cube = new SGCubeNode();
-    // cube->setScale(Vector3D(6378137.0, 6378137.0, 6378137.0));
-    sgr->getRootNode()->addChild(cube);
-    comp->addRenderer(sgr);
-  }
-  
-//  comp->addRenderer(new GLErrorRenderer());
-  
-  
-  TextureBuilder* texBuilder = new CPUTextureBuilder();
-  TexturesHandler* texturesHandler = new TexturesHandler(gl, factory, texBuilder, false);
-  
-  const Planet* planet = Planet::createEarth();
-  
-  //Renderer* busyRenderer = new BusyQuadRenderer("ProgressWheel.png");
-  Renderer* busyRenderer = new BusyMeshRenderer();
-  
-  std::vector <ICameraConstrainer *> cameraConstraint;
-  cameraConstraint.push_back(new SimpleCameraConstrainer);
-
-  const bool logFPS = false;
-  const bool logDownloaderStatistics = false;
-  
-  FrameTasksExecutor* frameTasksExecutor = new FrameTasksExecutor();
-  
-  _widget = G3MWidget::create(frameTasksExecutor,
-                              factory,
-                              logger,
-                              gl,
-                              texturesHandler,
-                              downloader,
-                              planet, 
-                              cameraConstraint,
-                              comp,
-                              busyRenderer,
-                              scheduler,
-                              width, height,
-                              Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
-                              logFPS,
-                              logDownloaderStatistics);
-}
+//- (void) initWidgetDemo
+//{
+//
+//  // create GLOB3M WIDGET
+//  int width = (int) [self frame].size.width;
+//  int height = (int) [self frame].size.height;
+//
+//  IFactory *factory = new Factory_iOS();
+//  ILogger *logger = new Logger_iOS(ErrorLevel);
+//
+//  NativeGL2_iOS * nGL = new NativeGL2_iOS();
+//  GL* gl  = new GL(nGL);
+//
+//  //Testing BOX intersection
+//  if (true){
+//    Box b(Vector3D(-10,-10,-10) , Vector3D(10,10,10) );
+//
+//    Vector3D v = b.intersectionWithRay(Vector3D(-20,0,0), Vector3D(1.0,0,0));
+//    printf("%f, %f, %f\n", v.x(), v.y(), v.z());
+//
+//    Vector3D v1 = b.intersectionWithRay(Vector3D(-20,20,0), Vector3D(1.0,0,0));
+//    printf("%f, %f, %f\n", v1.x(), v1.y(), v1.z());
+//
+//    Vector3D v2 = b.intersectionWithRay(Vector3D(-20,0,0), Vector3D(1.0,0.1,0));
+//    printf("%f, %f, %f\n", v2.x(), v2.y(), v2.z());
+//  }
+//
+//  // composite renderer is the father of the rest of renderers
+//  CompositeRenderer* comp = new CompositeRenderer();
+//
+//  // camera renderer and handlers
+//  CameraRenderer *cameraRenderer;
+//  cameraRenderer = new CameraRenderer();
+//  const bool useInertia = true;
+//  cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
+//  const bool processRotation = true;
+//  const bool processZoom = true;
+//  cameraRenderer->addHandler(new CameraDoubleDragHandler(processRotation,
+//                                                         processZoom));
+//  cameraRenderer->addHandler(new CameraRotationHandler());
+//  cameraRenderer->addHandler(new CameraDoubleTapHandler());
+//  comp->addRenderer(cameraRenderer);
+//
+//
+//  IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
+//  IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
+//                                                 storage);
+//
+//  if (false) {
+//    class Listener : public IDownloadListener {
+//    private:
+//      int _onDownload;
+//      int _onError;
+//      int _onCancel;
+//
+//    public:
+//      Listener() :
+//      _onDownload(0),
+//      _onError(0),
+//      _onCancel(0)
+//      {
+//
+//      }
+//
+//      void onDownload(const Response* response) {
+//        _onDownload++;
+//        BOOL isMainThread = [NSThread isMainThread];
+//        if (isMainThread) {
+//          NSLog(@"*** Main-Thread: Downloaded %d bytes ***", response->getByteBuffer()->getLength());
+//        }
+//        else {
+//          NSLog(@"*** NOT IN Main-Thread: Downloaded %d bytes ***", response->getByteBuffer()->getLength());
+//        }
+//      }
+//
+//      void onError(const Response* response) {
+//        _onError++;
+//      }
+//
+//      void onCancel(const URL* url) {
+//        _onCancel++;
+//      }
+//
+//      void onCanceledDownload(const Response* response) {
+//      }
+//
+//      void showInvalidState() const {
+//        printf("onDownload=%d, onCancel=%d, onError=%d\n", _onDownload, _onCancel, _onError);
+//      }
+//
+//      void testState() const {
+//        if ((_onDownload == 1) && (_onCancel == 0) && (_onError == 0)) {
+//          return;
+//        }
+//        if ((_onDownload == 0) && (_onCancel == 1) && (_onError == 0)) {
+//          return;
+//        }
+//        if ((_onDownload == 0) && (_onCancel == 0) && (_onError == 1)) {
+//          return;
+//        }
+//        showInvalidState();
+//      }
+//
+//      virtual ~Listener() {
+//        testState();
+//      }
+//    };
+//
+//    const long priority = 999999999;
+//    long requestId = downloader->request(URL("http://glob3.sourceforge.net/img/isologo640x160.png"), priority, new Listener(), true);
+//    long requestId2 = downloader->request(URL("http://glob3.sourceforge.net/img/isologo640x160.png"), priority, new Listener(), true);
+//    downloader->cancelRequest(requestId);
+//    downloader->cancelRequest(requestId2);
+//
+//    printf("break (point) on me 2");
+//  }
+//
+//
+//  //LAYERS
+//  LayerSet* layerSet = new LayerSet();
+//
+//  WMSLayer* blueMarble = new WMSLayer("bmng200405",
+//                                      "http://www.nasa.network.com/wms?",
+//                                      WMS_1_1_0,
+//                                      "image/jpeg",
+//                                      Sector::fullSphere(),
+//                                      "EPSG:4326",
+//                                      "",
+//                                      false,
+//                                      Angle::nan(),
+//                                      Angle::nan());
+//  layerSet->addLayer(blueMarble);
+//
+//  //  WMSLayer *pnoa = new WMSLayer("PNOA",
+//  //                                "http://www.idee.es/wms/PNOA/PNOA",
+//  //                                WMS_1_1_0,
+//  //                                "image/png",
+//  //                                Sector::fromDegrees(21, -18, 45, 6),
+//  //                                "EPSG:4326",
+//  //                                "",
+//  //                                true,
+//  //                                Angle::nan(),
+//  //                                Angle::nan());
+//  //  layerSet->addLayer(pnoa);
+//
+//  //  WMSLayer *vias = new WMSLayer("VIAS",
+//  //                                "http://idecan2.grafcan.es/ServicioWMS/Callejero",
+//  //                                WMS_1_1_0,
+//  //                                "image/gif",
+//  //                                Sector::fromDegrees(22.5,-22.5, 33.75, -11.25),
+//  //                                "EPSG:4326",
+//  //                                "",
+//  //                                true,
+//  //                                Angle::nan(),
+//  //                                Angle::nan());
+//  //  layerSet->addLayer(vias);
+//
+//  //  WMSLayer *oceans = new WMSLayer(//"igo:bmng200401,igo:sttOZ,igo:cntOZ",
+//  //                                  "bmsstcnt",
+//  ////                                  "OZ",
+//  //                                  "bmsstcnt",
+//  ////                                  "OZ",
+//  ////                                  "http://igosoftware.dyndns.org:8081/geoserver/igo/wms",
+//  //                                  "http://igosoftware.dyndns.org:8081/geowebcache/service/wms",
+//  //                                  WMS_1_1_0,
+//  //                                  "image/jpeg",
+//  //                                  Sector::fullSphere(),
+//  //                                  "EPSG:4326",
+//  //                                  "",
+//  //                                  false,
+//  //                                  Angle::nan(),
+//  //                                  Angle::nan());
+//  //
+//  //  oceans->addTerrainTouchEventListener(new OceanTerrainTouchEventListener(factory, downloader));
+//  //  layerSet->addLayer(oceans);
+//
+//  //  WMSLayer *osm = new WMSLayer("bing",
+//  //                               "bing",
+//  //                               "http://wms.latlon.org/",
+//  //                               WMS_1_1_0,
+//  //                               "image/jpeg",
+//  //                               Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
+//  //                               "EPSG:4326",
+//  //                               "",
+//  //                               false,
+//  //                               Angle::nan(),
+//  //                               Angle::nan());
+//  //  layerSet->addLayer(osm);
+//
+//  //  WMSLayer *osm = new WMSLayer("osm",
+//  //                               "osm",
+//  //                               "http://wms.latlon.org/",
+//  //                               WMS_1_1_0,
+//  //                               "image/jpeg",
+//  //                               Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
+//  //                               "EPSG:4326",
+//  //                               "",
+//  //                               false,
+//  //                               Angle::nan(),
+//  //                               Angle::nan());
+//  //  layerSet->addLayer(osm);
+//
+//
+//  // very basic tile renderer
+//  if (true) {
+//    const bool renderDebug = false;
+//    TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug);
+//    //    TilesRenderParameters* parameters = TilesRenderParameters::createSingleSector(renderDebug);
+//
+//    TileTexturizer* texturizer = NULL;
+//    if (true) {
+//      texturizer = new MultiLayerTileTexturizer(layerSet);
+//    }
+//    else {
+//      //SINGLE IMAGE
+//      IImage *singleWorldImage = factory->createImageFromFileName("world.jpg");
+//      texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
+//    }
+//
+//    const bool showStatistics = false;
+//    TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
+//                                        texturizer,
+//                                        parameters,
+//                                        showStatistics);
+//    comp->addRenderer(tr);
+//  }
+//
+//  if (false) {
+//    // dummy renderer with a simple box
+//    DummyRenderer* dum = new DummyRenderer();
+//    comp->addRenderer(dum);
+//  }
+//
+//  if (false) {
+//    // simple planet renderer, with a basic world image
+//    SimplePlanetRenderer* spr = new SimplePlanetRenderer("world.jpg");
+//    comp->addRenderer(spr);
+//  }
+//
+//  if (false) {
+//    // marks renderer
+//    MarksRenderer* marks = new MarksRenderer();
+//    comp->addRenderer(marks);
+//
+//    Mark* m1 = new Mark("Fuerteventura",
+//                        "g3m-marker.png",
+//                        Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0));
+//    //m1->addTouchListener(listener);
+//    marks->addMark(m1);
+//
+//
+//    Mark* m2 = new Mark("Las Palmas",
+//                        "g3m-marker.png",
+//                        Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0));
+//    //m2->addTouchListener(listener);
+//    marks->addMark(m2);
+//
+//    if (false) {
+//      for (int i = 0; i < 500; i++) {
+//        const Angle latitude = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
+//        const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
+//        //NSLog(@"lat=%f, lon=%f", latitude.degrees(), longitude.degrees());
+//
+//        marks->addMark(new Mark("Random",
+//                                "g3m-marker.png",
+//                                Geodetic3D(latitude, longitude, 0)));
+//      }
+//    }
+//  }
+//
+//  if (false) {
+//    LatLonMeshRenderer *renderer = new LatLonMeshRenderer();
+//    comp->addRenderer(renderer);
+//  }
+//
+//  EffectsScheduler* scheduler = new EffectsScheduler();
+//
+//  if (false) {
+//    EffectTarget* target = NULL;
+//    scheduler->startEffect(new SampleEffect(TimeInterval::fromSeconds(2)),
+//                           target);
+//  }
+//
+//  if (false) {
+//    SceneGraphRenderer* sgr = new SceneGraphRenderer();
+//    SGCubeNode* cube = new SGCubeNode();
+//    // cube->setScale(Vector3D(6378137.0, 6378137.0, 6378137.0));
+//    sgr->getRootNode()->addChild(cube);
+//    comp->addRenderer(sgr);
+//  }
+//
+//  //  comp->addRenderer(new GLErrorRenderer());
+//
+//
+//  TextureBuilder* texBuilder = new CPUTextureBuilder();
+//  TexturesHandler* texturesHandler = new TexturesHandler(gl, factory, texBuilder, false);
+//
+//  const Planet* planet = Planet::createEarth();
+//
+//  //Renderer* busyRenderer = new BusyQuadRenderer("ProgressWheel.png");
+//  Renderer* busyRenderer = new BusyMeshRenderer();
+//
+//  std::vector <ICameraConstrainer*> cameraConstraint;
+//  cameraConstraint.push_back(new SimpleCameraConstrainer);
+//
+//  const bool logFPS = false;
+//  const bool logDownloaderStatistics = false;
+//
+//  FrameTasksExecutor* frameTasksExecutor = new FrameTasksExecutor();
+//
+//  _widgetVP = G3MWidget::create(frameTasksExecutor,
+//                                factory,
+//                                logger,
+//                                gl,
+//                                texturesHandler,
+//                                downloader,
+//                                planet,
+//                                cameraConstraint,
+//                                comp,
+//                                busyRenderer,
+//                                scheduler,
+//                                width, height,
+//                                Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
+//                                logFPS,
+//                                logDownloaderStatistics);
+//}
 
 //The EAGL view is stored in the nib file. When it's unarchived it's sent -initWithCoder:
 - (id)initWithCoder:(NSCoder *)coder {
@@ -640,13 +559,13 @@ public:
     NSString *extensionString = [[NSString stringWithUTF8String:(char *)glGetString(GL_EXTENSIONS)] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     NSArray *extensions = [extensionString componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     for (NSString *extension in extensions) {
-        NSLog(@"  %@", extension);
+      NSLog(@"  %@", extension);
     }
     NSLog(@"----------------------------------------------------------------------------");
     
     
     lastTouchEvent = NULL;
-
+    
     // rest of initialization
     _animating = FALSE;
     _displayLinkSupported = FALSE;
@@ -673,12 +592,12 @@ public:
 
 //** Agustin cancelled lonpressgesture because touchedmoved and touchedended event don't work
 - (IBAction)handleLongPress:(UIGestureRecognizer *)sender {
-
-  printf ("Longpress. state=%d\n", sender.state);
   
-  if (sender.state == UIGestureRecognizerStateEnded) {
-    NSLog(@"LONG PRESS");
-  }
+//  printf ("Longpress. state=%d\n", sender.state);
+//  
+//  if (sender.state == UIGestureRecognizerStateEnded) {
+//    NSLog(@"LONG PRESS");
+//  }
   
   if (sender.state == 1){
     
@@ -688,7 +607,7 @@ public:
     Touch *touch = new Touch(Vector2D(tapPoint.x, tapPoint.y), Vector2D(0.0, 0.0), 1);
     pointers.push_back(touch);
     lastTouchEvent = TouchEvent::create(LongPress, pointers);
-    ((G3MWidget*)[self widget])->onTouchEvent(lastTouchEvent);
+    [self widget]->onTouchEvent(lastTouchEvent);
   }
   
 }
@@ -703,7 +622,7 @@ public:
   int w = (int) [self frame].size.width;
   int h = (int) [self frame].size.height;
   NSLog(@"ResizeViewportEvent: %dx%d", w, h);
-  ((G3MWidget*)_widget)->onResizeViewportEvent(w,h);
+  [self widget]->onResizeViewportEvent(w,h);
   
   [_renderer resizeFromLayer:(CAEAGLLayer *) self.layer];
   [self drawView:nil];
@@ -740,7 +659,7 @@ public:
                          forMode:NSDefaultRunLoopMode];
     }
     else {
-      self.animationTimer = [NSTimer scheduledTimerWithTimeInterval:(NSTimeInterval) ((1.0 / 60.0) * _animationFrameInterval) 
+      self.animationTimer = [NSTimer scheduledTimerWithTimeInterval:(NSTimeInterval) ((1.0 / 60.0) * _animationFrameInterval)
                                                              target:self
                                                            selector:@selector(drawView:)
                                                            userInfo:nil
@@ -767,7 +686,7 @@ public:
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    
+  
   //NSSet *allTouches = [event allTouches];
   NSSet *allTouches = [event touchesForView:self];
   
@@ -781,7 +700,7 @@ public:
     CGPoint previous        = [touch previousLocationInView:self];
     unsigned char tapCount  = (unsigned char) [touch tapCount];
     
-    Touch *touch = new Touch(Vector2D(current.x, current.y), 
+    Touch *touch = new Touch(Vector2D(current.x, current.y),
                              Vector2D(previous.x, previous.y),
                              tapCount);
     
@@ -792,7 +711,7 @@ public:
     delete lastTouchEvent;
   }
   lastTouchEvent = TouchEvent::create(Down, pointers);
-  ((G3MWidget*)[self widget])->onTouchEvent(lastTouchEvent);
+  [self widget]->onTouchEvent(lastTouchEvent);
 }
 
 
@@ -809,7 +728,7 @@ public:
     CGPoint current  = [touch locationInView:self];
     CGPoint previous = [touch previousLocationInView:self];
     
-    Touch *touch = new Touch(Vector2D(current.x, current.y), 
+    Touch *touch = new Touch(Vector2D(current.x, current.y),
                              Vector2D(previous.x, previous.y));
     
     pointers.push_back(touch);
@@ -842,7 +761,7 @@ public:
     lastTouchEvent = TouchEvent::create(Move, pointers);
   }
   
-  ((G3MWidget*)[self widget])->onTouchEvent(lastTouchEvent);
+  [self widget]->onTouchEvent(lastTouchEvent);
 }
 
 
@@ -862,7 +781,7 @@ public:
     
     [touch timestamp];
     
-    Touch *touch = new Touch(Vector2D(current.x, current.y), 
+    Touch *touch = new Touch(Vector2D(current.x, current.y),
                              Vector2D(previous.x, previous.y));
     
     pointers.push_back(touch);
@@ -872,14 +791,17 @@ public:
     delete lastTouchEvent;
   }
   lastTouchEvent = TouchEvent::create(Up, pointers);
-  ((G3MWidget*)[self widget])->onTouchEvent(lastTouchEvent);
+  [self widget]->onTouchEvent(lastTouchEvent);
 }
-
 
 - (void)dealloc {
   if (lastTouchEvent!=NULL) {
     delete lastTouchEvent;
   }
+}
+
+- (G3MWidget*) widget {
+  return (G3MWidget*) _widgetVP;
 }
 
 @end

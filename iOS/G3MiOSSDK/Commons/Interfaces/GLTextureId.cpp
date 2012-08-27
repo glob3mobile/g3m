@@ -1,18 +1,18 @@
 //
-//  GLTextureID.cpp
+//  GLTextureId.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 09/08/12.
 //
 //
 
-#include "GLTextureID.hpp"
+#include "GLTextureId.hpp"
 
 #include "IStringBuilder.hpp"
 
-const std::string GLTextureID::description() const {
+const std::string GLTextureId::description() const {
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
-  isb->add("GLTextureID #")->add(_textureId);
+  isb->add("GLTextureId #")->add(_textureId);
   std::string s = isb->getString();
   delete isb;
   return s;

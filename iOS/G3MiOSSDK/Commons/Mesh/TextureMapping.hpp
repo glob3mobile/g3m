@@ -11,7 +11,7 @@
 
 #include <vector>
 #include "MutableVector2D.hpp"
-#include "GLTextureID.hpp"
+#include "GLTextureId.hpp"
 
 class RenderContext;
 
@@ -31,9 +31,9 @@ public:
 class SimpleTextureMapping : public TextureMapping {
 private:
 #ifdef C_CODE
-  const GLTextureID  _glTextureId;
+  const GLTextureId  _glTextureId;
 #else
-  GLTextureID  _glTextureId;
+  GLTextureId  _glTextureId;
 #endif
   const float const* _texCoords;
   const bool _ownedTexCoords;
@@ -43,7 +43,7 @@ private:
   
 public:
   
-  SimpleTextureMapping(const GLTextureID& glTextureId,
+  SimpleTextureMapping(const GLTextureId& glTextureId,
                        float texCoords[],
                        bool ownedTexCoords) :
   _glTextureId(glTextureId),
@@ -55,7 +55,7 @@ public:
     
   }
   
-  SimpleTextureMapping(const GLTextureID& glTextureId,
+  SimpleTextureMapping(const GLTextureId& glTextureId,
                        std::vector<MutableVector2D> texCoords);
   
   void setTranslationAndScale(const Vector2D& translation,
@@ -72,7 +72,7 @@ public:
 #endif
   }
   
-  const GLTextureID getGLTextureID() const {
+  const GLTextureId getGLTextureId() const {
     return _glTextureId;
   }
 

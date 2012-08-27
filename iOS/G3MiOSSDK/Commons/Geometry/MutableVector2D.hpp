@@ -37,6 +37,14 @@ public:
     
   }
   
+  static MutableVector2D nan() {
+    return MutableVector2D(NAN, NAN);
+  }
+  
+  bool isNan() const {
+    return isnan(_x * _y);
+  }
+
   MutableVector2D normalized() const;
   
   double length() const {

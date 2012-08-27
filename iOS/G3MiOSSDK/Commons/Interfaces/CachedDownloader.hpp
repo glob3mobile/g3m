@@ -41,6 +41,8 @@ public:
   
   void start();
   
+  void stop();
+  
   long request(const URL& url,
                long priority,
                IDownloadListener* listener,

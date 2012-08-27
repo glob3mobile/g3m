@@ -12,13 +12,15 @@
 #include <string>
 #include <vector>
 
-#include "TextureBuilder.hpp"
+#include "GLTextureId.hpp"
 
+class TextureBuilder;
 class IImage;
 class RenderContext;
 class TextureHolder;
 class GL;
 class IFactory;
+class Rectangle;
 
 
 class TextureSpec {
@@ -27,31 +29,38 @@ private:
   
   const int         _width;
   const int         _height;
+  const bool        _isMipmap;
   
-  
-  void operator=(const TextureSpec& that);
+  TextureSpec& operator=(const TextureSpec& that);
   
 public:
   TextureSpec(const std::string& id,
               const int          width,
-              const int          height):
+              const int          height,
+              const bool         isMipmap):
   _id(id),
   _width(width),
-  _height(height)
+  _height(height),
+  _isMipmap(isMipmap)
   {
     
   }
   
-  TextureSpec():_id(""), _width(0),_height(0){}
+  TextureSpec():_id(""), _width(0),_height(0), _isMipmap(false){}
   
   TextureSpec(const TextureSpec& that):
   _id(that._id),
   _width(that._width),
-  _height(that._height)
+  _height(that._height),
+  _isMipmap(that._isMipmap)
   {
     
   }
   
+  int isMipmap() const {
+    return _isMipmap;
+  }
+
   int getWidth() const {
     return _width;
   }
@@ -153,25 +162,26 @@ public:
   
   ~TexturesHandler();
   
-  const GLTextureID getGLTextureIdFromFileName(const std::string filename,
-                                               int textureWidth,
-                                               int textureHeight);
+  const GLTextureId getGLTextureIdFromFileName(const std::string filename,
+                                               int               textureWidth,
+                                               int               textureHeight,
+                                               const bool        isMipmap);
   
-  const GLTextureID getGLTextureId(const std::vector<const IImage*> images,
+  const GLTextureId getGLTextureId(const std::vector<const IImage*> images,
                                    const TextureSpec& textureSpec);
   
-  const GLTextureID getGLTextureId(const std::vector<const IImage*> images,
+  const GLTextureId getGLTextureId(const std::vector<const IImage*> images,
                                    const std::vector<const Rectangle*> rectangles,
                                    const TextureSpec& textureSpec);
   
-  const GLTextureID getGLTextureId(const IImage* image,
+  const GLTextureId getGLTextureId(const IImage* image,
                                    const TextureSpec& textureSpec);
   
-  const GLTextureID getGLTextureIdIfAvailable(const TextureSpec& textureSpec);
+  const GLTextureId getGLTextureIdIfAvailable(const TextureSpec& textureSpec);
   
-  void releaseGLTextureId(const GLTextureID& glTextureId);
+  void releaseGLTextureId(const GLTextureId& glTextureId);
   
-  void retainGLTextureId(const GLTextureID& glTextureId);
+  void retainGLTextureId(const GLTextureId& glTextureId);
   
 };
 

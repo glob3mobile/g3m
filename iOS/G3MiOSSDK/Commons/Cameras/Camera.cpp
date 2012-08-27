@@ -74,6 +74,32 @@ _frustumData()
   resizeViewport(width, height);
 }
 
+void Camera::reset() {
+  _position = MutableVector3D(0, 0, 0);
+  _center = MutableVector3D(0, 0, 0);
+  _up = MutableVector3D(0, 0, 1);
+  
+  if (_frustum != NULL) delete _frustum;
+  _frustum = NULL;
+  
+  if (_frustumInModelCoordinates != NULL) delete _frustumInModelCoordinates;
+  _frustumInModelCoordinates = NULL;
+  
+  if (_halfFrustumInModelCoordinates != NULL) delete _halfFrustumInModelCoordinates;
+  _halfFrustumInModelCoordinates = NULL;
+  
+  if (_halfFrustum != NULL) delete _halfFrustum;
+  _halfFrustum = NULL;
+  
+  _dirtyFlags.setAll(true);
+  _XYZCenterOfView = MutableVector3D(0, 0, 0);
+  
+  if (_geodeticCenterOfView != NULL) delete _geodeticCenterOfView;
+  _geodeticCenterOfView = NULL;
+  
+  _frustumData = FrustumData();
+}
+
 void Camera::resizeViewport(int width, int height) {
   _width = width;
   _height = height;
@@ -148,7 +174,7 @@ void Camera::calculateCachedValues() {
 
 }*/
 
-void Camera::render(const RenderContext* rc) {
+void Camera::render(const RenderContext* rc) const {
   _logger = rc->getLogger();
   /*
   if (_dirtyCachedValues) {

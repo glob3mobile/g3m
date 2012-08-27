@@ -1,5 +1,5 @@
 //
-//  G3MWidget.h
+//  G3MWidget.hpp
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 31/05/12.
@@ -21,6 +21,7 @@ class IDownloader;
 class Camera;
 class ITimer;
 class EffectsScheduler;
+class IStringUtils;
 
 #include <vector>
 #include <string>
@@ -30,18 +31,39 @@ class EffectsScheduler;
 class ICameraConstrainer;
 class FrameTasksExecutor;
 
+class G3MWidget;
+
+class UserData {
+private:
+  G3MWidget* _widget;
+  
+public:
+  virtual ~UserData() {
+    
+  }
+  
+  void setWidget(G3MWidget* widget) {
+    _widget = widget;
+  }
+  
+  G3MWidget* getWidget() const {
+    return _widget;
+  }
+};
+
 
 class G3MWidget {
 public:
   
   static G3MWidget* create(FrameTasksExecutor* frameTasksExecutor,
                            IFactory*           factory,
+                           const IStringUtils* stringUtils,
                            ILogger*            logger,
                            GL*                 gl,
                            TexturesHandler*    texturesHandler,
                            IDownloader*        downloader,
                            const Planet*       planet,
-                           std::vector<ICameraConstrainer *> cameraConstraint,
+                           std::vector<ICameraConstrainer*> cameraConstraint,
                            Renderer*           renderer,
                            Renderer*           busyRenderer,
                            EffectsScheduler*   scheduler,
@@ -51,7 +73,7 @@ public:
                            const bool          logFPS,
                            const bool          logDownloaderStatistics);
   
-  ~G3MWidget(); 
+  ~G3MWidget();
   
   int render();
   
@@ -63,26 +85,40 @@ public:
     return _gl;
   }
   
-/*  const Camera* getCurrentCamera() const {
-    return _currentCamera;
-  }*/
+  /*  const Camera* getCurrentCamera() const {
+   return _currentCamera;
+   }*/
   
   Camera* getNextCamera() const {
     return _nextCamera;
   }
   
+  void setUserData(UserData* userData) {
+    if (_userData != NULL) {
+      delete _userData;
+    }
+    _userData = userData;
+    if (_userData != NULL) {
+      _userData->setWidget(this);
+    }
+  }
+  
+  UserData* getUserData() const {
+    return _userData;
+  }
   
 private:
   FrameTasksExecutor* _frameTasksExecutor;
-  IFactory*         _factory;
-  ILogger*          _logger;
-  GL*               _gl;
-  const Planet*     _planet;
-  Renderer*         _renderer;
-  Renderer*         _busyRenderer;
-  EffectsScheduler* _effectsScheduler;
+  IFactory*           _factory;
+  const IStringUtils* _stringUtils;
+  ILogger*            _logger;
+  GL*                 _gl;
+  const Planet*       _planet;
+  Renderer*           _renderer;
+  Renderer*           _busyRenderer;
+  EffectsScheduler*   _effectsScheduler;
   
-  std::vector<ICameraConstrainer *> _cameraConstraint;
+  std::vector<ICameraConstrainer*> _cameraConstraint;
   
   Camera*          _currentCamera;
   Camera*          _nextCamera;
@@ -102,10 +138,13 @@ private:
   
   ITimer* _renderStatisticsTimer;
   
+  UserData* _userData;
+  
   void initializeGL();
   
   G3MWidget(FrameTasksExecutor* frameTasksExecutor,
             IFactory*           factory,
+            const IStringUtils* stringUtils,
             ILogger*            logger,
             GL*                 gl,
             TexturesHandler*    texturesHandler,

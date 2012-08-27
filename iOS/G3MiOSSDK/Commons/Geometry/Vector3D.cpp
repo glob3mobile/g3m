@@ -10,6 +10,9 @@
 #include "MutableVector3D.hpp"
 #include "Angle.hpp"
 
+#include <sstream>
+
+
 Vector3D Vector3D::normalized() const {
   double d = length();
   return Vector3D(_x / d, _y /d, _z / d);
@@ -79,4 +82,16 @@ Vector3D Vector3D::projectionInPlane(const Vector3D& normal) const
   return projected.times(this->length());
 }
 
+
+const std::string Vector3D::description() const {
+  std::ostringstream buffer;
+  buffer << "(V3D ";
+  buffer << _x;
+  buffer << ", ";
+  buffer << _y;
+  buffer << ", ";
+  buffer << _z;
+  buffer << ")";
+  return buffer.str();
+}
 

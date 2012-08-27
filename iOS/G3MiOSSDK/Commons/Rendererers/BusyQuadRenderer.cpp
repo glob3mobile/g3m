@@ -20,11 +20,11 @@
 
 
 void BusyQuadRenderer::start() {
-  int _TODO_start_effects;
+  //int _TODO_start_effects;
 }
 
 void BusyQuadRenderer::stop() {
-  int _TODO_stop_effects;
+  //int _TODO_stop_effects;
 }
 
 
@@ -54,10 +54,10 @@ bool BusyQuadRenderer::initMesh(const RenderContext* rc)
   
   
   //TEXTURED
-  GLTextureID texID = GLTextureID::invalid();
+  GLTextureId texId = GLTextureId::invalid();
   if (true){
-    texID = rc->getTexturesHandler()->getGLTextureIdFromFileName(_textureFilename, 2048, 1024);
-    if (!texID.isValid()) {
+    texId = rc->getTexturesHandler()->getGLTextureIdFromFileName(_textureFilename, 256, 256, false);
+    if (!texId.isValid()) {
       rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
       return false;
     }
@@ -71,7 +71,7 @@ bool BusyQuadRenderer::initMesh(const RenderContext* rc)
                                                     numVertices, quadVertices, quadIndices, numIndices, NULL);
 #endif
   
-  TextureMapping* texMap = new SimpleTextureMapping(texID, texC, true);
+  TextureMapping* texMap = new SimpleTextureMapping(texId, texC, true);
   
   _quadMesh = new TexturedMesh(im, true, texMap, true);
 
@@ -100,7 +100,7 @@ int BusyQuadRenderer::render(const RenderContext* rc)
   
   // init modelview matrix
   int currentViewport[4];
-  rc->getGL()->getViewport(currentViewport);
+  gl->getViewport(currentViewport);
   int halfWidth = currentViewport[2] / 2;
   int halfHeight = currentViewport[3] / 2;
   MutableMatrix44D M = MutableMatrix44D::createOrthographicProjectionMatrix(-halfWidth, halfWidth,

@@ -21,6 +21,8 @@ private:
   const double _y;
   const double _z;
   
+  Vector3D& operator=(const Vector3D& that);
+  
 public:
   
   Vector3D(const double x,
@@ -130,6 +132,9 @@ public:
   double maxAxis() const;
   
   Vector3D projectionInPlane(const Vector3D& normal) const;
+  
+  const std::string description() const;
+
 };
 
 

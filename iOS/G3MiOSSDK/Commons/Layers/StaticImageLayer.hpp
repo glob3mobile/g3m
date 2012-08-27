@@ -18,7 +18,7 @@ class IStorage;
 class StaticImageLayer: public Layer
 {
 private:
-  Sector            _bbox;
+  Sector            _sector;
   const IImage*     _image;
   const std::string _layerID;
   IStorage* const   _storage;
@@ -27,12 +27,14 @@ public:
   StaticImageLayer(std::string layerID,
                    IImage* image,
                    const Sector& sector,
-                   IStorage* storage):
+                   IStorage* storage,
+                   LayerCondition* condition):
+  Layer(condition),
   _image(image),
-  _bbox(sector),
+  _sector(sector),
   _layerID(layerID),
   _storage(storage) {
-
+    
   }
   
   ~StaticImageLayer(){
@@ -41,27 +43,18 @@ public:
 #endif
   }
   
-  bool fullContains(const Sector& s) const {
-    return _bbox.fullContains(s);
-  }
+  std::vector<Petition*> getMapPetitions(const RenderContext* rc,
+                                         const Tile* tile,
+                                         int width, int height) const;
   
-  std::vector<Petition*> getTilePetitions(const RenderContext* rc,
-                                          const Tile* tile,
-                                          int width, int height) const;
-  
-  bool isAvailable(const RenderContext* rc,
-                   const Tile* tile)const {
+  bool isTransparent() const {
     return true;
   }
-  
-  bool isTransparent() const{
-    return true;
-  }
-  
-  URL getFeatureURL(const Geodetic2D& g,
-                    const IFactory* factory,
-                    const Sector& sector,
-                    int width, int height) const {
+
+  URL getFeatureInfoURL(const Geodetic2D& g,
+                        const IFactory* factory,
+                        const Sector& sector,
+                        int width, int height) const {
     return URL::nullURL();
   }
   

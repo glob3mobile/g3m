@@ -21,7 +21,7 @@ void BusyMeshRenderer::initialize(const InitializationContext* ic)
   // compute number of vertex for the ring
   unsigned int numStrides = 60;
   unsigned int numVertices = numStrides * 2 + 2;
-  int numIndices = numVertices;
+  int numIndices = numVertices + 2;
   
   // add number of vertex for the square
   
@@ -86,11 +86,11 @@ void BusyMeshRenderer::initialize(const InitializationContext* ic)
 }  
 
 void BusyMeshRenderer::start() {
-  int _TODO_start_effects;
+  //int _TODO_start_effects;
 }
 
 void BusyMeshRenderer::stop() {
-  int _TODO_stop_effects;
+  //int _TODO_stop_effects;
 }
 
 int BusyMeshRenderer::render(const RenderContext* rc) 

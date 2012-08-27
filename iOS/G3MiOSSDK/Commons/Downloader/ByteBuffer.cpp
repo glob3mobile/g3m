@@ -10,6 +10,8 @@
 
 #include "IStringBuilder.hpp"
 
+#include "IStringUtils.hpp"
+
 const std::string ByteBuffer::description() const {
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
   isb->add("ByteBuffer(length=")->add(_length)->add(")");
@@ -18,3 +20,6 @@ const std::string ByteBuffer::description() const {
   return s;
 }
 
+std::string ByteBuffer::getDataAsString() const {
+  return IStringUtils::instance()->createString(_data, _length);
+}

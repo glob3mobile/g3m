@@ -30,11 +30,12 @@ void CameraRenderer::onResizeViewportEvent(const EventContext* ec,
 int CameraRenderer::render(const RenderContext* rc)
 {
   // create the CameraContext
-  if (_cameraContext == NULL)
+  if (_cameraContext == NULL) {
     _cameraContext = new CameraContext(None, rc->getNextCamera());
+  }
 
   // render camera object
-  rc->getNextCamera()->render(rc);
+  rc->getCurrentCamera()->render(rc);
   
   int min = Renderer::maxTimeToRender;
   for (unsigned int i=0; i<_handlers.size(); i++) {

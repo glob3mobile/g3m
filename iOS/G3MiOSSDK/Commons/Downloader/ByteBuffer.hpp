@@ -13,18 +13,19 @@
 
 
 class ByteBuffer {
-#ifdef C_CODE
-  unsigned char* _data;
-#endif
+  
+
 #ifdef JAVA_CODE
   byte[] _data;
+#else 
+  unsigned char* _data;
 #endif
   
-  const int      _length;
+  const int _length;
   
   ByteBuffer(const ByteBuffer& that);
   
-  void operator=(const ByteBuffer& that);
+  ByteBuffer& operator=(const ByteBuffer& that);
   
 public:
   ByteBuffer(unsigned char data[],
@@ -52,7 +53,7 @@ public:
     }
 #endif
   }
-  
+
 #ifdef C_CODE
   unsigned char* getData() const{ return _data;}
 #endif
@@ -60,6 +61,8 @@ public:
 #ifdef JAVA_CODE
   byte[] getData() { return _data;}
 #endif
+
+  std::string getDataAsString() const;
   
   int getLength() const{
     return _length;
