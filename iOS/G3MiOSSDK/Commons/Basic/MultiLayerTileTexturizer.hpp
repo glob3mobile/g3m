@@ -17,7 +17,7 @@
 class TileTextureBuilder;
 class LayerSet;
 class IDownloader;
-
+class LeveledTexturedMesh;
 
 class MultiLayerTileTexturizer : public TileTexturizer {
 private:
@@ -34,6 +34,8 @@ private:
   
   TexturesHandler* _texturesHandler;
   
+  inline LeveledTexturedMesh* getMesh(Tile* tile) const;
+
 public:
   MultiLayerTileTexturizer(LayerSet* layerSet) :
   _layerSet(layerSet),

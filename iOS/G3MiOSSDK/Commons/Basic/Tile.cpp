@@ -47,9 +47,9 @@ _texturizerData(NULL)
 }
 
 Tile::~Tile() {
-  if (_isVisible) {
-    deleteTexturizedMesh();
-  }
+//  if (_isVisible) {
+//    deleteTexturizedMesh();
+//  }
   
   prune(NULL);
   
@@ -252,7 +252,7 @@ void Tile::prune(const TileRenderContext* trc) {
     for (int i = 0; i < subtilesSize; i++) {
       Tile* subtile = _subtiles->at(i);
       
-      subtile->setIsVisible(false);
+      subtile->setIsVisible(false, trc);
       
       subtile->prune(trc);
       if (texturizer != NULL) {
@@ -267,19 +267,24 @@ void Tile::prune(const TileRenderContext* trc) {
   }
 }
 
-void Tile::setIsVisible(bool isVisible) {
+void Tile::setIsVisible(bool isVisible,
+                        const TileRenderContext* trc) {
   if (_isVisible != isVisible) {
     _isVisible = isVisible;
     
     if (!_isVisible) {
-      deleteTexturizedMesh();
+      deleteTexturizedMesh(trc);
     }
   }
 }
 
-void Tile::deleteTexturizedMesh() {
+void Tile::deleteTexturizedMesh(const TileRenderContext* trc) {
   if ((_level > 0) && (_texturizedMesh != NULL)) {
-    _texturizer->tileMeshToBeDeleted(this, _texturizedMesh);
+    
+    TileTexturizer* texturizer = trc->getTexturizer();
+    if (texturizer != NULL) {
+      texturizer->tileMeshToBeDeleted(this, _texturizedMesh);
+    }
     
     delete _texturizedMesh;
     _texturizedMesh = NULL;
@@ -299,7 +304,7 @@ void Tile::render(const RenderContext* rc,
   
   statistics->computeTileProcessed(this);
   if (isVisible(rc, trc)) {
-    setIsVisible(true);
+    setIsVisible(true, trc);
     
     statistics->computeVisibleTile(this);
     
@@ -329,7 +334,7 @@ void Tile::render(const RenderContext* rc,
     }
   }
   else {
-    setIsVisible(false);
+    setIsVisible(false, trc);
     
     prune(trc);
   }

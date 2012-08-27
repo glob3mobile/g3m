@@ -629,10 +629,15 @@ bool MultiLayerTileTexturizer::tileMeetsRenderCriteria(Tile* tile) {
   return false;
 }
 
+LeveledTexturedMesh* MultiLayerTileTexturizer::getMesh(Tile* tile) const {
+  TileTextureBuilderHolder* tileBuilderHolder = (TileTextureBuilderHolder*) tile->getTexturizerData();
+  return (tileBuilderHolder == NULL) ? NULL : tileBuilderHolder->get()->getMesh();
+}
+
 void MultiLayerTileTexturizer::ancestorTexturedSolvedChanged(Tile* tile,
                                                              Tile* ancestorTile,
                                                              bool textureSolved) {
-  if (textureSolved == false) {
+  if (!textureSolved) {
     return;
   }
   
@@ -640,33 +645,25 @@ void MultiLayerTileTexturizer::ancestorTexturedSolvedChanged(Tile* tile,
     return;
   }
   
-  TileTextureBuilderHolder* ancestorBuilderHolder = (TileTextureBuilderHolder*) ancestorTile->getTexturizerData();
-  if (ancestorBuilderHolder == NULL) {
-    return;
-  }
-  LeveledTexturedMesh* ancestorMesh = ancestorBuilderHolder->get()->getMesh();
+  LeveledTexturedMesh* ancestorMesh = getMesh(ancestorTile);
   if (ancestorMesh == NULL) {
     return;
   }
   
-  TileTextureBuilderHolder* tileBuilderHolder = (TileTextureBuilderHolder*) tile->getTexturizerData();
-  if (tileBuilderHolder == NULL) {
+  const GLTextureId glTextureId = ancestorMesh->getTopLevelGLTextureId();
+  if (!glTextureId.isValid()) {
     return;
   }
-  LeveledTexturedMesh* tileMesh = tileBuilderHolder->get()->getMesh();
+
+  LeveledTexturedMesh* tileMesh = getMesh(tile);
   if (tileMesh == NULL) {
     return;
   }
-  
-  const GLTextureId glTextureId = ancestorMesh->getTopLevelGLTextureId();
-  if (glTextureId.isValid()) {
-    _texturesHandler->retainGLTextureId(glTextureId);
-    
-    const int level = tile->getLevel() - ancestorTile->getLevel() - _parameters->_topLevel;
-    
-    if (!tileMesh->setGLTextureIdForLevel(level, glTextureId)) {
-      _texturesHandler->releaseGLTextureId(glTextureId);
-    }
+
+  const int level = tile->getLevel() - ancestorTile->getLevel() - _parameters->_topLevel;
+  _texturesHandler->retainGLTextureId(glTextureId);
+  if (!tileMesh->setGLTextureIdForLevel(level, glTextureId)) {
+    _texturesHandler->releaseGLTextureId(glTextureId);
   }
 }
 

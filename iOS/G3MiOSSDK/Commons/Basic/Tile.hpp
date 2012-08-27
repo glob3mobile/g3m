@@ -84,9 +84,10 @@ private:
                                      bool textureSolved);
 
   bool _isVisible;
-  void setIsVisible(bool isVisible);
+  void setIsVisible(bool isVisible,
+                    const TileRenderContext* trc);
   
-  void deleteTexturizedMesh();
+  void deleteTexturizedMesh(const TileRenderContext* trc);
   
   ITexturizerData* _texturizerData;
 
