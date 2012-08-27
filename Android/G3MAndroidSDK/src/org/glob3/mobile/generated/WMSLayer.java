@@ -1,12 +1,15 @@
 package org.glob3.mobile.generated; 
 public class WMSLayer extends Layer
 {
-  private final String _mapLayer;
-  private final URL _mapServerURL = new URL();
-  private final WMSServerVersion _mapServerVersion;
 
+
+
+  private final URL _mapServerURL;
+  private final URL _queryServerURL;
+
+  private final String _mapLayer;
+  private final WMSServerVersion _mapServerVersion;
   private final String _queryLayer;
-  private final URL _queryServerURL = new URL();
   private final WMSServerVersion _queryServerVersion;
 
   private Sector _sector ;
@@ -22,10 +25,10 @@ public class WMSLayer extends Layer
   {
 	  super(condition);
 	  _mapLayer = mapLayer;
-	  _mapServerURL = new URL(mapServerURL);
+	  _mapServerURL = mapServerURL;
 	  _mapServerVersion = mapServerVersion;
 	  _queryLayer = queryLayer;
-	  _queryServerURL = new URL(queryServerURL);
+	  _queryServerURL = queryServerURL;
 	  _queryServerVersion = queryServerVersion;
 	  _sector = new Sector(sector);
 	  _format = format;
@@ -39,10 +42,10 @@ public class WMSLayer extends Layer
   {
 	  super(condition);
 	  _mapLayer = mapLayer;
-	  _mapServerURL = new URL(mapServerURL);
+	  _mapServerURL = mapServerURL;
 	  _mapServerVersion = mapServerVersion;
 	  _queryLayer = mapLayer;
-	  _queryServerURL = new URL(mapServerURL);
+	  _queryServerURL = mapServerURL;
 	  _queryServerVersion = mapServerVersion;
 	  _sector = new Sector(sector);
 	  _format = format;

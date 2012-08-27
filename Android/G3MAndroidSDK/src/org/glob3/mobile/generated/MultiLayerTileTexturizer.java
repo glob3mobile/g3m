@@ -140,14 +140,6 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 //		  return _builder->isCanceled();
 //		}
 //	  };
-		BuilderStartTask b = new BuilderStartTask() {
-			
-			@Override
-			public boolean isCanceled(RenderContext rc) {
-				// TODO Auto-generated method stub
-				return false;
-			}
-		};
 	  rc.getFrameTasksExecutor().addPreRenderTask(new BuilderStartTask(builderHolder.get()));
 	}
   
