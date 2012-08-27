@@ -10,7 +10,7 @@
 #include "MutableVector3D.hpp"
 #include "Angle.hpp"
 
-#include <sstream>
+#include "IStringBuilder.hpp"
 
 
 Vector3D Vector3D::normalized() const {
@@ -83,15 +83,11 @@ Vector3D Vector3D::projectionInPlane(const Vector3D& normal) const
 }
 
 
-const std::string Vector3D::description() const {
-  std::ostringstream buffer;
-  buffer << "(V3D ";
-  buffer << _x;
-  buffer << ", ";
-  buffer << _y;
-  buffer << ", ";
-  buffer << _z;
-  buffer << ")";
-  return buffer.str();
+const std::string Vector3D::description() const {  
+  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  isb->add("(V2D ")->add(_x)->add(", ")->add(_y)->add(", ")->add(_z)->add(")");
+  std::string s = isb->getString();
+  delete isb;
+  return s;
 }
 

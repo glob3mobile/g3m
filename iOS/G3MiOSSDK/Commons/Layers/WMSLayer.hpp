@@ -35,8 +35,6 @@ private:
   const std::string   _style;
   const bool          _isTransparent;
   
-  bool isAvailable(const RenderContext* rc, const Tile* tile) const;
-  
 public:
   
   
@@ -105,6 +103,10 @@ public:
                         const IFactory* factory,
                         const Sector& sector,
                         int width, int height) const;
+  
+  
+  bool isAvailable(const RenderContext* rc, const Tile* tile) const;
+  
   
 };
 
