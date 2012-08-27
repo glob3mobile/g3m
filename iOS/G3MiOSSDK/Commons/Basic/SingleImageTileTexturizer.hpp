@@ -26,6 +26,7 @@ private:
   TilesRenderParameters* const _parameters;
   GLTextureID _texID;
   IImage * const _image;
+    const bool _isMercatorImage;  
   
   std::vector<MutableVector2D> createTextureCoordinates(const RenderContext* rc,
                                                         Mesh* mesh) const;
@@ -33,11 +34,12 @@ private:
 public:
   
   SingleImageTileTexturizer(TilesRenderParameters* const parameters,
-                            IImage* image) :
+                            IImage* image, const bool isMercatorImage) :
   _texID(-1),
   _image(image),
   _parameters(parameters),
-  _renderContext(NULL)
+  _renderContext(NULL),
+  _isMercatorImage(isMercatorImage)  
   {
   }
   
