@@ -9,26 +9,46 @@
 #ifndef G3MiOSSDK_TerrainTouchEventListener_hpp
 #define G3MiOSSDK_TerrainTouchEventListener_hpp
 
-#include "Geodetic2D.hpp"
+#include "Geodetic3D.hpp"
 #include "Sector.hpp"
 class Layer;
 
 class TerrainTouchEvent{
-public:
-  const Geodetic2D _g2d;
+private:
+  const Geodetic3D _position;
   const Sector     _sector;
-  const Layer *    _layer;
-  
-  TerrainTouchEvent(const Geodetic2D& g2d, const Sector& s, const Layer* layer):
-  _g2d(g2d), _sector(s), _layer(layer){
+  const Layer*     _layer;
+
+public:
+  TerrainTouchEvent(const Geodetic3D& position,
+                    const Sector& sector,
+                    const Layer* layer):
+  _position(position),
+  _sector(sector),
+  _layer(layer)
+  {
     
   }
   
+  const Geodetic3D getPosition() const {
+    return _position;
+  }
+  
+  const Sector getSector() const {
+    return _sector;
+  }
+  
+  const Layer* getLayer() const {
+    return _layer;
+  }
+
 };
 
 class TerrainTouchEventListener{
 public:
-  virtual void onTerrainTouchEvent(const TerrainTouchEvent& e) = 0;
+  
+  virtual void onTerrainTouchEvent(const EventContext* ec,
+                                   const TerrainTouchEvent& event) = 0;
   
   virtual ~TerrainTouchEventListener(){}
   

@@ -20,10 +20,10 @@ const std::string Petition::description() const {
   else {
     isb->add(_buffer->description() );
   }
+  
   isb->add(", downloadID=")->add(_downloadID)->add(", transparentImage=")->addBool(_transparentImage)->add(")");
   std::string s = isb->getString();
   
   delete isb;
   return s;
-
 }

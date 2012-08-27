@@ -10,7 +10,18 @@
 
 #include "MutableVector2D.hpp"
 
+#include <sstream>
 
 MutableVector2D Vector2D::asMutableVector2D() const {
   return MutableVector2D(_x, _y);
+}
+
+const std::string Vector2D::description() const {
+  std::ostringstream buffer;
+  buffer << "(V2D ";
+  buffer << _x;
+  buffer << ", ";
+  buffer << _y;
+  buffer << ")";
+  return buffer.str();
 }

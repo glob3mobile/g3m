@@ -15,13 +15,20 @@
 
 
 class CameraDoubleDragHandler: public CameraEventHandler {
+private:
+  const bool _processRotation;
+  const bool _processZoom;
   
 public:
-  CameraDoubleDragHandler():
-  _camera0(Camera(0, 0)), 
+  CameraDoubleDragHandler(bool processRotation,
+                          bool processZoom):
+  _camera0(Camera(0, 0)),
   _initialPoint(0,0,0),
-  _initialPixel(0,0,0)
-  {}
+  _initialPixel(0,0,0),
+  _processRotation(processRotation),
+  _processZoom(processZoom)
+  {
+  }
   
   ~CameraDoubleDragHandler() {}
   

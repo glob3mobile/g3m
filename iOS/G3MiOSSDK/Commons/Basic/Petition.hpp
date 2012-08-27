@@ -15,7 +15,7 @@
 #include "Sector.hpp"
 #include "IDownloadListener.hpp"
 #include "IDownloader.hpp"
-#include "GLTextureID.hpp"
+#include "GLTextureId.hpp"
 
 class Tile;
 class Rectangle;
@@ -39,45 +39,30 @@ private:
   
 public:
   
-  Petition(Sector sector,
-           URL url,
-           bool transparent):
+  Petition(const Sector& sector,
+           const URL& url):
   _sector(new Sector(sector)),
   _url(url),
-  _transparentImage(transparent),
-  _buffer(NULL),
-  _downloadID(-1)
+  _buffer(NULL)
   {
   }
   
   ~Petition(){
 #ifdef C_CODE
     delete _sector;
-    releaseData();
 #endif
+    releaseBuffer();
   }
   
-  void releaseData(){
+  void releaseBuffer() {
     if (_buffer != NULL) {
       delete _buffer;
       _buffer = NULL;
     }
   }
   
-  long getDownloadID() const {
-    return _downloadID;
-  }
-  
-  bool hasByteBuffer() const{
+  bool hasByteBuffer() const {
     return _buffer != NULL;
-  }
-  
-  bool isTransparent() const{
-    return _transparentImage;
-  }
-  
-  void setDownloadID(long id){
-    _downloadID = id;
   }
   
   const URL getURL() const {
@@ -89,9 +74,7 @@ public:
   }
   
   void setByteBuffer(const ByteBuffer* buffer) {
-    if (_buffer != NULL) {
-      delete _buffer;
-    }
+    releaseBuffer();
     _buffer = buffer;
   }
   

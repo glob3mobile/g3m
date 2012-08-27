@@ -24,7 +24,7 @@ class ByteBuffer {
   
   ByteBuffer(const ByteBuffer& that);
   
-  void operator=(const ByteBuffer& that);
+  ByteBuffer& operator=(const ByteBuffer& that);
   
 public:
   ByteBuffer(unsigned char data[],
@@ -52,7 +52,7 @@ public:
     }
 #endif
   }
-  
+
 #ifdef C_CODE
   unsigned char* getData() const{ return _data;}
 #endif
@@ -60,6 +60,8 @@ public:
 #ifdef JAVA_CODE
   byte[] getData() { return _data;}
 #endif
+
+  std::string getDataAsString() const;
   
   int getLength() const{
     return _length;

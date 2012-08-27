@@ -34,6 +34,8 @@ private:
                                encoding: NSUTF8StringEncoding ];
   }
   
+  bool _started;
+  
 public:
   
   void removeDownloadingHandlerForNSURL(const NSURL* url);
@@ -52,6 +54,8 @@ public:
   virtual ~Downloader_iOS();
   
   void start();
+  
+  void stop();
 
   const std::string statistics();
 

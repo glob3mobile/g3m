@@ -237,10 +237,11 @@ GLError GL::getError() {
   return _gl->getError();
 }
 
-const GLTextureID GL::uploadTexture(const IImage* image,
-                                    int textureWidth, int textureHeight) {
-  const GLTextureID texID = getGLTextureID();
-  if (texID.isValid()) {
+const GLTextureId GL::uploadTexture(const IImage* image,
+                                    int textureWidth, int textureHeight,
+                                    bool generateMipmap) {
+  const GLTextureId texId = getGLTextureId();
+  if (texId.isValid()) {
     
 #ifdef C_CODE
     unsigned char* imageData;
@@ -267,7 +268,7 @@ const GLTextureID GL::uploadTexture(const IImage* image,
     _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);
     _gl->pixelStorei(Unpack, 1);
     
-    _gl->bindTexture(Texture2D, texID.getGLTextureID());
+    _gl->bindTexture(Texture2D, texId.getGLTextureId());
     _gl->texParameteri(Texture2D, MinFilter, Linear);
     _gl->texParameteri(Texture2D, MagFilter, Linear);
     _gl->texParameteri(Texture2D, WrapS, ClampToEdge);
@@ -290,12 +291,15 @@ const GLTextureID GL::uploadTexture(const IImage* image,
     _gl.texImage2D(GLTextureType.Texture2D, 0, GLFormat.RGBA, textureWidth, textureHeight, 0, GLFormat.RGBA, GLType.UnsignedByte, imageData);
     return texID;
 #endif
-    
+    if (generateMipmap) {
+      _gl->generateMipmap(Texture2D);
+    }
   }
   else {
     printf("can't get a valid texture id\n");
   }
-  return texID;
+
+  return texId;
 }
 
 void GL::setTextureCoordinates(int size, int stride, const float texcoord[]) {
@@ -308,15 +312,15 @@ void GL::setTextureCoordinates(int size, int stride, const float texcoord[]) {
     }
 }
 
-void GL::bindTexture(const GLTextureID& textureId) {
+void GL::bindTexture(const GLTextureId& textureId) {
 #ifdef C_CODE
-  _gl->bindTexture(Texture2D, textureId.getGLTextureID());
+  _gl->bindTexture(Texture2D, textureId.getGLTextureId());
 #else
   _gl->bindTexture(GLTextureType.Texture2D, textureId.getGLTextureID());
 #endif
 }
 
-void GL::drawBillBoard(const GLTextureID& textureId,
+void GL::drawBillBoard(const GLTextureId& textureId,
                        const Vector3D& pos,
                        const float viewPortRatio) {
   const float vertex[] = {
@@ -545,13 +549,13 @@ void GL::disableCullFace() {
   }
 }
 
-const GLTextureID GL::getGLTextureID() {
+const GLTextureId GL::getGLTextureId() {
   if (_texturesIdBag.size() == 0) {
     const int bugdetSize = 256;
     
     printf("= Creating %d texturesIds...\n", bugdetSize);
     
-    const std::vector<GLTextureID> ids = _gl->genTextures(bugdetSize);
+    const std::vector<GLTextureId> ids = _gl->genTextures(bugdetSize);
     
     for (int i = 0; i < bugdetSize; i++) {
 //      _texturesIdBag.push_back(ids[i]);
@@ -567,11 +571,11 @@ const GLTextureID GL::getGLTextureID() {
   
   _texturesIdGetCounter++;
   
-  const GLTextureID result = _texturesIdBag.back();
+  const GLTextureId result = _texturesIdBag.back();
   _texturesIdBag.pop_back();
   
 //  printf("   - Assigning 1 texturesId (#%d) from bag (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
-//         result.getGLTextureID(),
+//         result.getGLTextureId(),
 //         _texturesIdBag.size(),
 //         _texturesIdGetCounter,
 //         _texturesIdTakeCounter,
@@ -580,23 +584,24 @@ const GLTextureID GL::getGLTextureID() {
   return result;
 }
 
-void GL::deleteTexture(const GLTextureID& textureId) {
+void GL::deleteTexture(const GLTextureId& textureId) {
   if (!textureId.isValid()) {
     return;
   }
   const int textures[] = {
-    textureId.getGLTextureID()
+    textureId.getGLTextureId()
   };
   _gl->deleteTextures(1, textures);
   
   _texturesIdBag.push_back(textureId);
   
   _texturesIdTakeCounter++;
-#if C_CODE
-  printf("   - Delete 1 texturesId (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
-         _texturesIdBag.size(),
-         _texturesIdGetCounter,
-         _texturesIdTakeCounter,
-         _texturesIdGetCounter - _texturesIdTakeCounter);
+}
+
+void GL::setBlendFuncSrcAlpha(){
+#ifdef C_CODE
+  _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);
+#else
+  _gl->blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
 #endif
 }

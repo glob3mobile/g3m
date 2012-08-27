@@ -202,6 +202,8 @@ private:
   bool _anyCanceled;
   bool _alreadyStarted;
   
+//  static long _sequenceCounter;
+  
 public:
   LeveledTexturedMesh* _mesh;
   
@@ -229,10 +231,10 @@ public:
   _canceled(false),
   _alreadyStarted(false)
   {
-    _petitions = layerSet->createTilePetitions(rc,
-                                               tile,
-                                               parameters->_tileTextureWidth,
-                                               parameters->_tileTextureHeight);
+    _petitions = layerSet->createTileMapPetitions(rc,
+                                                  tile,
+                                                  parameters->_tileTextureWidth,
+                                                  parameters->_tileTextureHeight);
     
     _petitionsCount = _petitions.size();
     
@@ -335,14 +337,17 @@ public:
       }
       
       if (images.size() > 0) {
-        const GLTextureID glTextureID = _texturesHandler->getGLTextureId(images,
+//        int __TESTING_mipmapping;
+        const bool isMipmap = false;
+        const GLTextureId glTextureId = _texturesHandler->getGLTextureId(images,
                                                                          rectangles,
                                                                          TextureSpec(petitionsID,
                                                                                      textureWidth,
-                                                                                     textureHeight));
-        if (glTextureID.isValid()) {
-          if (!_mesh->setGLTextureIDForLevel(0, glTextureID)) {
-            _texturesHandler->releaseGLTextureId(glTextureID);
+                                                                                     textureHeight,
+                                                                                     isMipmap));
+        if (glTextureId.isValid()) {
+          if (!_mesh->setGLTextureIdForLevel(0, glTextureId)) {
+            _texturesHandler->releaseGLTextureId(glTextureId);
           }
         }
         
@@ -399,6 +404,10 @@ public:
     _requestsIds.clear();
   }
   
+  bool isCanceled() const {
+    return _canceled;
+  }
+  
   void checkIsPending(int position) const {
     if (_status[position] != STATUS_PENDING) {
       printf("Logic error: Expected STATUS_PENDING at position #%d but found status: %d\n",
@@ -453,16 +462,16 @@ public:
       
       if (ancestor != _tile) {
         if (!fallbackSolved) {
-          const GLTextureID glTextureId = _texturizer->getTopLevelGLTextureIDForTile(ancestor);
+          const GLTextureId glTextureId = _texturizer->getTopLevelGLTextureIdForTile(ancestor);
           if (glTextureId.isValid()) {
             _texturesHandler->retainGLTextureId(glTextureId);
-            mapping->setGLTextureID(glTextureId);
+            mapping->setGLTextureId(glTextureId);
             fallbackSolved = true;
           }
         }
       }
       else {
-        if ( mapping->getGLTextureID().isValid() ) {
+        if ( mapping->getGLTextureId().isValid() ) {
           printf("break (point) on me 3\n");
         }
       }
@@ -497,6 +506,9 @@ public:
   }
   
 };
+
+
+//long TileTextureBuilder::_sequenceCounter = 0;
 
 
 BuilderDownloadStepDownloadListener::BuilderDownloadStepDownloadListener(TileTextureBuilder* builder,
@@ -589,31 +601,38 @@ Mesh* MultiLayerTileTexturizer::texturize(const RenderContext* rc,
     tile->setTexturizerData(builderHolder);
   }
   
-  int __TODO_tune_render_budget;
-  /*
-   We user a budget for builder.start() as it can (syncronously if cached data) upload a texture
-   to the GPU, causing a bootleneck when too many tiles are renderered for the first time. (dgd)
-   */
-  //  const bool startBuilder = ((tile->getLevel() == _parameters->_topLevel) ||
-  //                             (trc->getStatistics()->getBuildersStartsInFrame() < 1) ||
-  //                             (rc->getFrameStartTimer()->elapsedTime().milliseconds() < 33));
-  //  if (startBuilder) {
-  //    trc->getStatistics()->computeBuilderStartInFrame();
-  //    builderHolder->get()->start();
-  //    tile->setTexturizerDirty(false);
-  //  }
-  
-  
   if (trc->isForcedFullRender()) {
     builderHolder->get()->start();
   }
   else {
+    class BuilderStartTask : public FrameTask {
+    private:
+      TileTextureBuilder* _builder;
+      
+    public:
+      BuilderStartTask(TileTextureBuilder* builder) :
+      _builder(builder)
+      {
+        _builder->_retain();
+      }
+      
+      virtual ~BuilderStartTask() {
+        _builder->_release();
+      }
+      
+      void execute(const RenderContext* rc) {
+        _builder->start();
+      }
+      
+      bool isCanceled(const RenderContext *rc) {
+        return _builder->isCanceled();
+      }
+    };
     rc->getFrameTasksExecutor()->addPreRenderTask(new BuilderStartTask(builderHolder->get()));
   }
-
+  
   tile->setTexturizerDirty(false);
   return builderHolder->get()->getMesh();
-  
 }
 
 void MultiLayerTileTexturizer::tileToBeDeleted(Tile* tile,
@@ -647,10 +666,10 @@ void MultiLayerTileTexturizer::tileMeshToBeDeleted(Tile* tile,
   }
 }
 
-const GLTextureID MultiLayerTileTexturizer::getTopLevelGLTextureIDForTile(Tile* tile) {
+const GLTextureId MultiLayerTileTexturizer::getTopLevelGLTextureIdForTile(Tile* tile) {
   LeveledTexturedMesh* mesh = (LeveledTexturedMesh*) tile->getTexturizerMesh();
   
-  return (mesh == NULL) ? GLTextureID::invalid() : mesh->getTopLevelGLTextureID();
+  return (mesh == NULL) ? GLTextureId::invalid() : mesh->getTopLevelGLTextureId();
 }
 
 bool MultiLayerTileTexturizer::tileMeetsRenderCriteria(Tile* tile) {
@@ -686,13 +705,13 @@ void MultiLayerTileTexturizer::ancestorTexturedSolvedChanged(Tile* tile,
     return;
   }
   
-  const GLTextureID glTextureId = ancestorMesh->getTopLevelGLTextureID();
+  const GLTextureId glTextureId = ancestorMesh->getTopLevelGLTextureId();
   if (glTextureId.isValid()) {
     _texturesHandler->retainGLTextureId(glTextureId);
     
     const int level = tile->getLevel() - ancestorTile->getLevel() - _parameters->_topLevel;
     
-    if (!tileMesh->setGLTextureIDForLevel(level, glTextureId)) {
+    if (!tileMesh->setGLTextureIdForLevel(level, glTextureId)) {
       _texturesHandler->releaseGLTextureId(glTextureId);
     }
   }
@@ -750,10 +769,10 @@ public:
 
 void MultiLayerTileTexturizer::justCreatedTopTile(const RenderContext* rc,
                                                   Tile* tile) {
-  std::vector<Petition*> petitions = _layerSet->createTilePetitions(rc,
-                                                                    tile,
-                                                                    _parameters->_tileTextureWidth,
-                                                                    _parameters->_tileTextureHeight);
+  std::vector<Petition*> petitions = _layerSet->createTileMapPetitions(rc,
+                                                                       tile,
+                                                                       _parameters->_tileTextureWidth,
+                                                                       _parameters->_tileTextureHeight);
   
   
   _pendingTopTileRequests += petitions.size();
@@ -775,6 +794,8 @@ bool MultiLayerTileTexturizer::isReady(const RenderContext *rc) {
   return isReady;
 }
 
-void MultiLayerTileTexturizer::onTerrainTouchEvent(const Geodetic3D& g3d, const Tile* tile){
-  _layerSet->onTerrainTouchEvent(g3d, tile);
+void MultiLayerTileTexturizer::onTerrainTouchEvent(const EventContext* ec,
+                                                   const Geodetic3D& position,
+                                                   const Tile* tile){
+  _layerSet->onTerrainTouchEvent(ec, position, tile);
 }

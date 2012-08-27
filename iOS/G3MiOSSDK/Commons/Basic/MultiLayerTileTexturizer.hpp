@@ -10,16 +10,13 @@
 #define G3MiOSSDK_MultiLayerTileTexturizer_hpp
 
 #include "TileTexturizer.hpp"
-class LayerSet;
-class IDownloader;
-
-#include <map>
 #include "TileKey.hpp"
-#include "GLTextureID.hpp"
+#include "GLTextureId.hpp"
+#include "Geodetic3D.hpp"
 
 class TileTextureBuilder;
-
-#include "Geodetic3D.hpp"
+class LayerSet;
+class IDownloader;
 
 class MultiLayerTileTexturizer : public TileTexturizer {
 private:
@@ -30,11 +27,7 @@ private:
   const LayerSet*              _layerSet;
   TilesRenderParameters* _parameters;
 #endif
-  
-  IDownloader*                 _downloader;
 
-//  std::map<TileKey, TileTextureBuilder*> _builders;
-  
   mutable float* _texCoordsCache;
   
 #ifdef C_CODE
@@ -93,13 +86,11 @@ public:
                                      Tile* ancestorTile,
                                      bool textureSolved);
   
-  const GLTextureID getTopLevelGLTextureIDForTile(Tile* tile);
+  const GLTextureId getTopLevelGLTextureIdForTile(Tile* tile);
   
-//  void deleteBuilder(TileKey key,
-//                     TileTextureBuilder* builder);
-  
-  
-  void onTerrainTouchEvent(const Geodetic3D& g3d, const Tile* tile);
+  void onTerrainTouchEvent(const EventContext* ec,
+                           const Geodetic3D& g3d,
+                           const Tile* tile);
   
   void tileMeshToBeDeleted(Tile* tile,
                            Mesh* mesh);

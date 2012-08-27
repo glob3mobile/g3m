@@ -46,7 +46,9 @@ _databaseName(databaseName)
     return;
   }
   
-  showStatistics();
+  if (false) {
+    showStatistics();
+  }
 }
 
 void SQLiteStorage_iOS::showStatistics() const {

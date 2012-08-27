@@ -25,6 +25,8 @@ public:
   
   const bool   _useTilesSplitBudget;
   
+  const bool   _forceTopLevelTilesRenderOnStart;
+  
   TilesRenderParameters(const Sector topSector,
                         const int    splitsByLatitude,
                         const int    splitsByLongitude,
@@ -34,7 +36,8 @@ public:
                         const int    tileTextureWidth,
                         const int    tileResolution,
                         const bool   renderDebug,
-                        const bool   useTilesSplitBudget) :
+                        const bool   useTilesSplitBudget,
+                        const bool   forceTopLevelTilesRenderOnStart) :
   _topSector(topSector),
   _splitsByLatitude(splitsByLatitude),
   _splitsByLongitude(splitsByLongitude),
@@ -44,21 +47,23 @@ public:
   _tileTextureWidth(tileTextureWidth),
   _tileResolution(tileResolution),
   _renderDebug(renderDebug),
-  _useTilesSplitBudget(useTilesSplitBudget)
+  _useTilesSplitBudget(useTilesSplitBudget),
+  _forceTopLevelTilesRenderOnStart(forceTopLevelTilesRenderOnStart)
   {
     
   }
   
-  static TilesRenderParameters* createDefault(const bool renderDebug) {
+  static TilesRenderParameters* createDefault(const bool renderDebug,
+                                              const bool useTilesSplitBudget,
+                                              const bool forceTopLevelTilesRenderOnStart) {
     const int K = 1;
     const int splitsByLatitude = 2 * K;
     const int splitsByLongitude = 4 * K;
     const int topLevel = 0;
-    const int maxLevel = 16;
+    const int maxLevel = 17;
     const int tileTextureHeight = 256;
     const int tileTextureWidth = 256;
     const int tRes = 10;
-    const bool useTilesSplitBudget = true;
     
     return new TilesRenderParameters(Sector::fullSphere(),
                                      splitsByLatitude,
@@ -69,11 +74,14 @@ public:
                                      tileTextureWidth,
                                      tRes,
                                      renderDebug,
-                                     useTilesSplitBudget);
+                                     useTilesSplitBudget,
+                                     forceTopLevelTilesRenderOnStart);
   }
   
   
-  static TilesRenderParameters* createSingleSector(const bool renderDebug) {
+  static TilesRenderParameters* createSingleSector(const bool renderDebug,
+                                                   const bool useTilesSplitBudget,
+                                                   const bool forceTopLevelTilesRenderOnStart) {
     const int splitsByLatitude = 1;
     const int splitsByLongitude = 1;
     const int topLevel = 0;
@@ -81,7 +89,6 @@ public:
     const int tileTextureHeight = 256;
     const int tileTextureWidth = 256;
     const int tRes = 10;
-    const bool useTilesSplitBudget = true;
 
     //    Sector sector = Sector::fullSphere();
     //    Sector sector = Sector(Geodetic2D(Angle::fromDegrees(-90), Angle::fromDegrees(-180)),
@@ -98,7 +105,8 @@ public:
                                      tileTextureWidth,
                                      tRes,
                                      renderDebug,
-                                     useTilesSplitBudget);
+                                     useTilesSplitBudget,
+                                     forceTopLevelTilesRenderOnStart);
   }
 };
 

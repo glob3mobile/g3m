@@ -9,30 +9,37 @@
 #include "Downloader_iOS.hpp"
 
 #import "Downloader_iOS_Handler.h"
-
 #include "IStringBuilder.hpp"
 
+#include <UIKit/UIKit.h>
 
 void Downloader_iOS::start() {
-  for (Downloader_iOS_WorkerThread* worker in _workers) {
-    [worker start];
+  if (!_started) {
+    for (Downloader_iOS_WorkerThread* worker in _workers) {
+      [worker start];
+    }
+    _started = true;
+  }
+}
+
+void Downloader_iOS::stop() {
+  if (_started) {
+    for (Downloader_iOS_WorkerThread* worker in _workers) {
+      [worker stop];
+    }
+    _started = false;
   }
 }
 
 Downloader_iOS::~Downloader_iOS() {
-  //  [_worker stop];
-  
-  const int workersCount = [_workers count];
-  for (int i = 0; i < workersCount; i++) {
-    Downloader_iOS_WorkerThread* worker = [_workers objectAtIndex:i];
-    [worker stop];
-  }
+  stop();
 }
 
 Downloader_iOS::Downloader_iOS(int maxConcurrentOperationCount) :
 _requestIdCounter(1),
 _requestsCounter(0),
-_cancelsCounter(0)
+_cancelsCounter(0),
+_started(false)
 {
   NSURLCache* cache = [[NSURLCache alloc] initWithMemoryCapacity: 0
                                                     diskCapacity: 0
@@ -85,27 +92,27 @@ void Downloader_iOS::cancelRequest(long requestId) {
                                                                BOOL *stop) {
       //      NSURL*                  url     = key;
       Downloader_iOS_Handler* handler = obj;
-
+      
       if ( [handler cancelListenerForRequestId: requestId] ) {
         *stop = YES;
         found = true;
       }
-
       
-//      if ( [handler removeListenerForRequestId: requestId] ) {
-//        if ( ![handler hasListeners] ) {
-//          [handler cancel];
-//        }
-//        
-//        *stop = YES;
-//        found = true;
-//      }
+      
+      //      if ( [handler removeListenerForRequestId: requestId] ) {
+      //        if ( ![handler hasListeners] ) {
+      //          [handler cancel];
+      //        }
+      //
+      //        *stop = YES;
+      //        found = true;
+      //      }
     } ];
   }
   
-//  if (!found) {
-//    printf("break (point) on me 1\n");
-//  }
+  //  if (!found) {
+  //    printf("break (point) on me 1\n");
+  //  }
   
   [_lock unlock];
 }
@@ -150,6 +157,13 @@ Downloader_iOS_Handler* Downloader_iOS::getHandlerToRun() {
   
   [_lock unlock];
   
+  if (selectedHandler == NULL) {
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+  }
+  else {
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+  }
+  
   return selectedHandler;
 }
 
@@ -160,7 +174,7 @@ long Downloader_iOS::request(const URL &url,
   
   NSURL* nsURL = [NSURL URLWithString: toNSString(url.getPath())];
   
-//  NSLog(@"Downloading %@", [nsURL absoluteString]);
+  //  NSLog(@"Downloading %@", [nsURL absoluteString]);
   
   Downloader_iOS_Listener* iosListener = [[Downloader_iOS_Listener alloc] initWithCPPListener: cppListener
                                                                                deleteListener: deleteListener];
@@ -206,7 +220,6 @@ long Downloader_iOS::request(const URL &url,
 }
 
 const std::string Downloader_iOS::statistics() {
-  
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
   isb->add("Downloader_iOS(downloading=")->add([_downloadingHandlers count])->add(", queued=")->add([_queuedHandlers count]);
   isb->add(", totalRequests=")->add(_requestsCounter);

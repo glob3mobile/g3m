@@ -44,8 +44,8 @@ public:
   
   Vector3D geodeticSurfaceNormal(const Geodetic2D& geodetic) const;
   
-  std::vector<double> intersections(const Vector3D& origin,
-                                    const Vector3D& direction) const;
+  std::vector<double> intersectionsDistances(const Vector3D& origin,
+                                             const Vector3D& direction) const;
   
   Vector3D toVector3D(const Geodetic3D& geodetic) const;
   

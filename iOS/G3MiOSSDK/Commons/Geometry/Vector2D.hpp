@@ -107,6 +107,8 @@ public:
     return isnan(_x * _y);
   }
 
+  const std::string description() const;
+
 };
 
 

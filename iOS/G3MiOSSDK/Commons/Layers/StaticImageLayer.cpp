@@ -16,19 +16,18 @@
 #include "Petition.hpp"
 
 
-std::vector<Petition*> StaticImageLayer::getTilePetitions(const RenderContext* rc,
-                                                          const Tile* tile, int width, int height) const
+std::vector<Petition*> StaticImageLayer::getMapPetitions(const RenderContext* rc,
+                                                         const Tile* tile, int width, int height) const
 {
   std::vector<Petition*> res;
-
+  
   Sector tileSector = tile->getSector();
   
-  if (!_bbox.fullContains(tileSector)) {
+  if (!_sector.fullContains(tileSector)) {
     return res;
   }
   
   //CREATING ID FOR PETITION
-  
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->add(_layerID)->add("_")->add(tileSector.lower().latitude().degrees());
   isb->add("_")->add(tileSector.lower().longitude().degrees());
@@ -38,36 +37,38 @@ std::vector<Petition*> StaticImageLayer::getTilePetitions(const RenderContext* r
   
   const URL id = URL(isb->getString());
   
-  Petition *pet = new Petition(tileSector, id, true);
-
-  if (_storage != NULL)
-  {
-    if (_storage->contains(id)){
-      const ByteBuffer* bb = _storage->read(id);
-      pet->setByteBuffer(bb);        //FILLING DATA
+  Petition *pet = new Petition(tileSector, url);
+  
+  if (_storage != NULL) {
+    if (_storage->contains(url)) {
+      const ByteBuffer* buffer = _storage->read(url);
+      pet->setByteBuffer(buffer);        //FILLING DATA
       res.push_back(pet);
       return res;
     }
   }
   
-  double widthUV = tileSector.getDeltaLongitude().degrees() / _bbox.getDeltaLongitude().degrees();
-  double heightUV = tileSector.getDeltaLatitude().degrees() / _bbox.getDeltaLatitude().degrees();
+  const double widthUV = tileSector.getDeltaLongitude().degrees() / _sector.getDeltaLongitude().degrees();
+  const double heightUV = tileSector.getDeltaLatitude().degrees() / _sector.getDeltaLatitude().degrees();
   
-  Vector2D p = _bbox.getUVCoordinates(tileSector.lower().latitude(), tileSector.lower().longitude());
-  Vector2D pos(p.x(), p.y() - heightUV);
+  const Vector2D p = _sector.getUVCoordinates(tileSector.lower());
+  const Vector2D pos(p.x(), p.y() - heightUV);
   
-  Rectangle r(pos.x() * _image->getWidth(), pos.y() * _image->getHeight(), widthUV * _image->getWidth(), heightUV * _image->getHeight());
+  Rectangle r(pos.x() * _image->getWidth(),
+              pos.y() * _image->getHeight(),
+              widthUV * _image->getWidth(),
+              heightUV * _image->getHeight());
   
-  IImage* subImage = _image->subImage(r);
+  const IImage* subImage = _image->subImage(r);
   
-  ByteBuffer* bb = subImage->getEncodedImage(); //Image Encoding PNG
-  pet->setByteBuffer(bb);        //FILLING DATA
+  const ByteBuffer* buffer = subImage->getEncodedImage(); //Image Encoding PNG
+  pet->setByteBuffer(buffer);        //FILLING DATA
   delete subImage;
-
+  
   res.push_back(pet);
   
-  if (_storage != NULL){
-    _storage->save(id, *bb);
+  if (_storage != NULL) {
+    _storage->save(url, *buffer);
   }
   
   return res;

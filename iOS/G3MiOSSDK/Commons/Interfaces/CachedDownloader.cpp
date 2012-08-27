@@ -26,15 +26,15 @@ class SaverDownloadListener : public IDownloadListener {
   
 public:
   SaverDownloadListener(CachedDownloader* downloader,
-                        IDownloadListener* listener,
-                        bool deleteListener,
                         IStorage* cacheStorage,
-                        const URL url) :
+                        const URL url,
+                        IDownloadListener* listener,
+                        bool deleteListener) :
   _downloader(downloader),
-  _listener(listener),
-  _deleteListener(deleteListener),
   _cacheStorage(cacheStorage),
-  _url(url)
+  _url(url),
+  _listener(listener),
+  _deleteListener(deleteListener)
   {
     
   }
@@ -92,6 +92,10 @@ void CachedDownloader::start() {
   _downloader->start();
 }
 
+void CachedDownloader::stop() {
+  _downloader->stop();
+}
+
 void CachedDownloader::cancelRequest(long requestId) {
   _downloader->cancelRequest(requestId);
 }
@@ -121,17 +125,14 @@ long CachedDownloader::request(const URL& url,
   const ByteBuffer* cachedBuffer = _cacheStorage->read(url);
   if (cachedBuffer == NULL) {
     // cache miss
-    const long requestId = _downloader->request(url,
-                                                priority,
-                                                new SaverDownloadListener(this,
-                                                                          listener,
-                                                                          deleteListener,
-                                                                          _cacheStorage,
-                                                                          url),
-                                                true);
-    
-//    delete cachedBuffer;
-    return requestId;
+    return _downloader->request(url,
+                                priority,
+                                new SaverDownloadListener(this,
+                                                          _cacheStorage,
+                                                          url,
+                                                          listener,
+                                                          deleteListener),
+                                true);
   }
   else {
     // cache hit

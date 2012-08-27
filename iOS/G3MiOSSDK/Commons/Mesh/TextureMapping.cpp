@@ -11,7 +11,7 @@
 #include "Context.hpp"
 #include "GL.hpp"
 
-SimpleTextureMapping::SimpleTextureMapping(const GLTextureID& glTextureId,
+SimpleTextureMapping::SimpleTextureMapping(const GLTextureId& glTextureId,
                                            std::vector<MutableVector2D> texCoords) :
 _glTextureId(glTextureId),
 _translation(0, 0),

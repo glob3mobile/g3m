@@ -12,7 +12,6 @@
 #include "IImage.hpp"
 #include "Context.hpp"
 #include "TextureBuilder.hpp"
-#include "Rectangle.hpp"
 
 #include "IStringBuilder.hpp"
 
@@ -33,14 +32,14 @@ public:
 #ifdef JAVA_CODE
   public final TextureSpec _textureSpec;
 #endif
-  GLTextureID _glTextureId;
-  
+  GLTextureId _glTextureId;
+
   long _referenceCounter;
   
   TextureHolder(const TextureSpec& textureSpec) :
   _referenceCounter(1),
   _textureSpec(textureSpec),
-  _glTextureId(GLTextureID::invalid())
+  _glTextureId(GLTextureId::invalid())
   {
     
   }
@@ -65,24 +64,25 @@ public:
   }
   
   const std::string description() const {
-    
     IStringBuilder *isb = IStringBuilder::newStringBuilder();
-    isb->add("(#")->add(_glTextureId.getGLTextureID())->add(", counter=")->add(_referenceCounter)->add(")");
+    isb->add("(#")->add(_glTextureId.getGLTextureId())->add(", counter=")->add(_referenceCounter)->add(")");
     std::string s = isb->getString();
     delete isb;
     return s;  
   }
 };
 
-const GLTextureID TexturesHandler::getGLTextureIdFromFileName(const std::string filename,
-                                                              int textureWidth,
-                                                              int textureHeight) {
+const GLTextureId TexturesHandler::getGLTextureIdFromFileName(const std::string filename,
+                                                              int               textureWidth,
+                                                              int               textureHeight,
+                                                              const bool        isMipmap) {
   const IImage* image = _factory->createImageFromFileName(filename);
   
-  const GLTextureID texId = getGLTextureId(image,
+  const GLTextureId texId = getGLTextureId(image,
                                            TextureSpec(filename, // filename as the id
                                                        textureWidth,
-                                                       textureHeight));
+                                                       textureHeight,
+                                                       isMipmap));
   _factory->deleteImage(image);
   
   return texId;
@@ -106,7 +106,7 @@ void TexturesHandler::showHolders(const std::string message) const {
 }
 
 
-const GLTextureID TexturesHandler::getGLTextureIdIfAvailable(const TextureSpec& textureSpec) {
+const GLTextureId TexturesHandler::getGLTextureIdIfAvailable(const TextureSpec& textureSpec) {
   for (int i = 0; i < _textureHolders.size(); i++) {
     TextureHolder* holder = _textureHolders[i];
     if (holder->hasSpec(textureSpec)) {
@@ -118,12 +118,12 @@ const GLTextureID TexturesHandler::getGLTextureIdIfAvailable(const TextureSpec& 
     }
   }
   
-  return GLTextureID::invalid();
+  return GLTextureId::invalid();
 }
 
-const GLTextureID TexturesHandler::getGLTextureId(const std::vector<const IImage*> images,
+const GLTextureId TexturesHandler::getGLTextureId(const std::vector<const IImage*> images,
                                                   const TextureSpec& textureSpec) {
-  GLTextureID previousId = getGLTextureIdIfAvailable(textureSpec);
+  GLTextureId previousId = getGLTextureIdIfAvailable(textureSpec);
   if (previousId.isValid()) {
     return previousId;
   }
@@ -132,7 +132,8 @@ const GLTextureID TexturesHandler::getGLTextureId(const std::vector<const IImage
   holder->_glTextureId = _textureBuilder->createTextureFromImages(_gl,
                                                                   images,
                                                                   textureSpec.getWidth(),
-                                                                  textureSpec.getHeight());
+                                                                  textureSpec.getHeight(),
+                                                                  textureSpec.isMipmap());
   
   if (_verbose) {
     ILogger::instance()->logInfo("Uploaded texture \"%s\" to GPU with texId=%s" ,
@@ -147,10 +148,10 @@ const GLTextureID TexturesHandler::getGLTextureId(const std::vector<const IImage
   return holder->_glTextureId;
 }
 
-const GLTextureID TexturesHandler::getGLTextureId(const std::vector<const IImage*> images,
+const GLTextureId TexturesHandler::getGLTextureId(const std::vector<const IImage*> images,
                                                   const std::vector<const Rectangle*> rectangles,
                                                   const TextureSpec& textureSpec) {
-  GLTextureID previousId = getGLTextureIdIfAvailable(textureSpec);
+  GLTextureId previousId = getGLTextureIdIfAvailable(textureSpec);
   if (previousId.isValid()) {
     return previousId;
   }
@@ -161,7 +162,8 @@ const GLTextureID TexturesHandler::getGLTextureId(const std::vector<const IImage
                                                                   images,
                                                                   rectangles,
                                                                   textureSpec.getWidth(),
-                                                                  textureSpec.getHeight());
+                                                                  textureSpec.getHeight(),
+                                                                  textureSpec.isMipmap());
   
   if (_verbose) {
     ILogger::instance()->logInfo("Uploaded texture \"%s\" to GPU with texId=%s" ,
@@ -176,14 +178,14 @@ const GLTextureID TexturesHandler::getGLTextureId(const std::vector<const IImage
   return holder->_glTextureId;
 }
 
-const GLTextureID TexturesHandler::getGLTextureId(const IImage *image,
+const GLTextureId TexturesHandler::getGLTextureId(const IImage *image,
                                                   const TextureSpec& textureSpec) {
   std::vector<const IImage*> images;
   images.push_back(image);
   return getGLTextureId(images, textureSpec);
 }
 
-void TexturesHandler::retainGLTextureId(const GLTextureID& glTextureId) {
+void TexturesHandler::retainGLTextureId(const GLTextureId& glTextureId) {
   if (!glTextureId.isValid()) {
     return;
   }
@@ -203,7 +205,7 @@ void TexturesHandler::retainGLTextureId(const GLTextureID& glTextureId) {
   printf("break (point) on me 6\n");
 }
 
-void TexturesHandler::releaseGLTextureId(const GLTextureID& glTextureId) {
+void TexturesHandler::releaseGLTextureId(const GLTextureId& glTextureId) {
   if (!glTextureId.isValid()) {
     return;
   }

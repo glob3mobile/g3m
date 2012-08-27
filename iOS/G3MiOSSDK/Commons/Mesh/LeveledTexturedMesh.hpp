@@ -10,7 +10,7 @@
 #define __G3MiOSSDK__LeveledTexturedMesh__
 
 #include "Mesh.hpp"
-#include "GLTextureID.hpp"
+#include "GLTextureId.hpp"
 
 #include "TextureMapping.hpp"
 
@@ -40,7 +40,7 @@ class LazyTextureMapping : public TextureMapping {
 private:
   mutable LazyTextureMappingInitializer* _initializer;
   
-  GLTextureID  _glTextureId;
+  GLTextureId  _glTextureId;
   
   mutable bool _initialized;
 
@@ -56,7 +56,7 @@ private:
   
   TexturesHandler* _texturesHandler;
   
-  void operator=(const LazyTextureMapping& that);
+  LazyTextureMapping& operator=(const LazyTextureMapping& that);
   
   LazyTextureMapping(const LazyTextureMapping& that);
   void releaseGLTextureId();
@@ -66,7 +66,7 @@ public:
                      TexturesHandler* texturesHandler,
                      bool ownedTexCoords) :
   _initializer(initializer),
-  _glTextureId(GLTextureID::invalid()),
+  _glTextureId(GLTextureId::invalid()),
   _initialized(false),
   _texCoords(NULL),
   _translation(0,0),
@@ -99,13 +99,13 @@ public:
     return _glTextureId.isValid();
   }
   
-  void setGLTextureID(const GLTextureID glTextureId) {
+  void setGLTextureId(const GLTextureId glTextureId) {
     releaseGLTextureId();
     _glTextureId = glTextureId;
   }
   
 
-  const GLTextureID getGLTextureID() const {
+  const GLTextureId getGLTextureId() const {
     return _glTextureId;
   }
 
@@ -153,13 +153,13 @@ public:
   
   Extent* getExtent() const;
 
-  bool setGLTextureIDForLevel(int level,
-                              const GLTextureID glTextureID);
+  bool setGLTextureIdForLevel(int level,
+                              const GLTextureId glTextureId);
   
-//  void setGLTextureIDForInversedLevel(int inversedLevel,
-//                                      const GLTextureID glTextureID);
+//  void setGLTextureIdForInversedLevel(int inversedLevel,
+//                                      const GLTextureId glTextureId);
   
-  const GLTextureID getTopLevelGLTextureID() const;
+  const GLTextureId getTopLevelGLTextureId() const;
 
 };
 

@@ -1,12 +1,12 @@
 //
-//  GLTextureID.cpp
+//  GLTextureId.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 09/08/12.
 //
 //
 
-#include "GLTextureID.hpp"
+#include "GLTextureId.hpp"
 
 #include "IStringBuilder.hpp"
 

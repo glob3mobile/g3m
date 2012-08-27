@@ -16,7 +16,6 @@ class TileTessellator;
 class TileTexturizer;
 
 #include "Sector.hpp"
-//#include <vector>
 #include <map>
 #include "IStringBuilder.hpp"
 
@@ -333,7 +332,6 @@ private:
   private:
     const Camera* _camera;
     const Planet* _planet;
-//    std::map<Geodetic2D, double> _distancesCache;
     std::map<TileKey, double> _distancesCache;
     
   public:
@@ -348,20 +346,6 @@ private:
     }
     
     double getSquaredDistanceToCamera(const Tile* tile) {
-//      const Geodetic2D center = tile->getSector().getCenter();
-//      
-//      double distance = _distancesCache[center];
-//      if (distance == 0) {
-//        const Vector3D cameraPosition = _camera->getPosition();
-//        const Vector3D centerVec3 = _planet->toVector3D(center);
-//        
-//        distance = centerVec3.sub(cameraPosition).squaredLength();
-//        
-//        _distancesCache[center] = distance;
-//      }
-//      
-//      return distance;
-      
       const TileKey key = tile->getKey();
       double distance = _distancesCache[key];
       if (distance == 0) {
@@ -427,8 +411,7 @@ private:
 #endif
   
   
-  //bool isTile1ClosestToCameraThanTile2(Tile *t1, Tile *t2) const;
-  
+
   
 public:
   TileRenderer(const TileTessellator* tessellator,

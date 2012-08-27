@@ -21,7 +21,7 @@ _oneOverRadiiSquared(Vector3D(1.0 / (radii.x() * radii.x() ),
                               1.0 / (radii.y() * radii.y()),
                               1.0 / (radii.z() * radii.z())))
 {
-
+  
 }
 
 
@@ -41,30 +41,30 @@ Vector3D Ellipsoid::geodeticSurfaceNormal(const Geodetic2D& geodetic) const {
                   geodetic.latitude().sinus());
 }
 
-std::vector<double> Ellipsoid::intersections(const Vector3D& origin,
-                                             const Vector3D& direction) const {
+std::vector<double> Ellipsoid::intersectionsDistances(const Vector3D& origin,
+                                                      const Vector3D& direction) const {
   std::vector<double> intersections;
   
+  int __ASK_Normalized_or_not;
   //direction.Normalize();
   
   // By laborious algebraic manipulation....
-  double a =  direction.x() * direction.x() * _oneOverRadiiSquared.x() +
-              direction.y() * direction.y() * _oneOverRadiiSquared.y() +
-              direction.z() * direction.z() * _oneOverRadiiSquared.z();
+  const double a = (direction.x() * direction.x() * _oneOverRadiiSquared.x() +
+                    direction.y() * direction.y() * _oneOverRadiiSquared.y() +
+                    direction.z() * direction.z() * _oneOverRadiiSquared.z());
   
-  double b = 2.0 *
-                (origin.x() * direction.x() * _oneOverRadiiSquared.x() +
-                 origin.y() * direction.y() * _oneOverRadiiSquared.y() +
-                 origin.z() * direction.z() * _oneOverRadiiSquared.z());
+  const double b = 2.0 * (origin.x() * direction.x() * _oneOverRadiiSquared.x() +
+                          origin.y() * direction.y() * _oneOverRadiiSquared.y() +
+                          origin.z() * direction.z() * _oneOverRadiiSquared.z());
   
-  double c =  origin.x() * origin.x() * _oneOverRadiiSquared.x() +
-              origin.y() * origin.y() * _oneOverRadiiSquared.y() +
-              origin.z() * origin.z() * _oneOverRadiiSquared.z() - 1.0;
+  const double c = (origin.x() * origin.x() * _oneOverRadiiSquared.x() +
+                    origin.y() * origin.y() * _oneOverRadiiSquared.y() +
+                    origin.z() * origin.z() * _oneOverRadiiSquared.z() - 1.0);
   
   // Solve the quadratic equation: ax^2 + bx + c = 0.
   // Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
   // Numerical Recipes in C, section 5.6: "Quadratic and Cubic Equations"
-  double discriminant = b * b - 4 * a * c;
+  const double discriminant = b * b - 4 * a * c;
   if (discriminant < 0.0) {
     // no intersections
     return intersections;
@@ -76,21 +76,20 @@ std::vector<double> Ellipsoid::intersections(const Vector3D& origin,
     return intersections;
   }
   
-  double t = -0.5 * (b + (b > 0.0 ? 1.0 : -1.0) * sqrt(discriminant));
-  double root1 = t / a;
-  double root2 = c / t;
+  const double t = -0.5 * (b + (b > 0.0 ? 1.0 : -1.0) * sqrt(discriminant));
+  const double root1 = t / a;
+  const double root2 = c / t;
   
   // Two intersections - return the smallest first.
   if (root1 < root2) {
     intersections.push_back(root1);
     intersections.push_back(root2);
-    return intersections;
   }
   else {
     intersections.push_back(root2);
     intersections.push_back(root1);
-    return intersections;
   }
+  return intersections;
 }
 
 
@@ -200,7 +199,7 @@ Geodetic2D Ellipsoid::getMidPoint (const Geodetic2D& P0, const Geodetic2D& P1) c
   Vector3D normal = v0.cross(v1).normalized();
   Angle theta = v0.angleBetween(v1);
   Vector3D midPoint = scaleToGeocentricSurface(v0.rotateAroundAxis(normal, theta.times(0.5)));
-  return toGeodetic2D(midPoint);                                             
+  return toGeodetic2D(midPoint);
 }
 
 
@@ -262,7 +261,7 @@ double Ellipsoid::computeFastLatLonDistance(const Geodetic2D& g1,
                                             const Geodetic2D& g2) const {
   const Vector3D radius = _radii;
   double R = (radius.x() + radius.y() + radius.z()) / 3;
-
+  
   double medLat = g1.latitude().degrees();
   double medLon = g1.longitude().degrees();
   
@@ -276,11 +275,13 @@ double Ellipsoid::computeFastLatLonDistance(const Geodetic2D& g1,
   return dist * M_PI / 180 * R;
 }
 
-Vector3D Ellipsoid::closestIntersection(const Vector3D& pos, const Vector3D& ray) const {
-  std::vector<double> t = intersections(pos , ray);
-  if (t.empty()) return Vector3D::nan();
-  Vector3D solution = pos.add(ray.times(t[0]));
-  return solution;
+Vector3D Ellipsoid::closestIntersection(const Vector3D& pos,
+                                        const Vector3D& ray) const {
+  std::vector<double> distances = intersectionsDistances(pos , ray);
+  if (distances.empty()) {
+    return Vector3D::nan();
+  }
+  return pos.add(ray.times(distances[0]));
 }
 
 
