@@ -46,7 +46,7 @@ public:
     
   }
   
-  TextureSpec():_id(""), _width(0),_height(0){}
+  TextureSpec():_id(""), _width(0),_height(0), _isMipmap(false){}
   
   TextureSpec(const TextureSpec& that):
   _id(that._id),

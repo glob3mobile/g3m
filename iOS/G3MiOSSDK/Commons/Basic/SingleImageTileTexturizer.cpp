@@ -56,7 +56,7 @@ Mesh* SingleImageTileTexturizer::texturize(const RenderContext* rc,
     rc->getFactory()->deleteImage(_image);
   }
 
-  const TextureMapping* texMap = new SimpleTextureMapping(_texId,
+  TextureMapping* texMap = new SimpleTextureMapping(_texId,
                                                           createTextureCoordinates(rc, mesh));
   if (previousMesh != NULL) delete previousMesh;
   

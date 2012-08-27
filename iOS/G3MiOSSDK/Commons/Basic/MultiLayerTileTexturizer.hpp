@@ -43,7 +43,6 @@ private:
 public:
   MultiLayerTileTexturizer(LayerSet* layerSet) :
   _layerSet(layerSet),
-  _downloader(NULL),
   _parameters(NULL),
   _texCoordsCache(NULL),
   _pendingTopTileRequests(0),
