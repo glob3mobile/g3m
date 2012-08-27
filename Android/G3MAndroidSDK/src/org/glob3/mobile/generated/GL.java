@@ -468,7 +468,7 @@ public class GL
 
   public final void bindTexture(GLTextureId textureId)
   {
-	_gl.bindTexture(GLTextureType.Texture2D, textureId.getGLTextureID());
+	_gl.bindTexture(GLTextureType.Texture2D, textureId.getGLTextureId());
   }
 
   public final void enableDepthTest()

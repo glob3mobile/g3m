@@ -72,8 +72,8 @@ public class TextureSpec
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: int isMipmap() const
-  public final int isMipmap()
+//ORIGINAL LINE: boolean isMipmap() const
+  public final boolean isMipmap()
   {
 	return _isMipmap;
   }
