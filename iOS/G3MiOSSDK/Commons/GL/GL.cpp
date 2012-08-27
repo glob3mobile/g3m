@@ -287,7 +287,7 @@ const GLTextureId GL::uploadTexture(const IImage* image,
     _gl.blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
     _gl.pixelStorei(GLAlignment.Unpack, 1);
     
-    _gl.bindTexture(GLTextureType.Texture2D, texId.getGLTextureID());
+    _gl.bindTexture(GLTextureType.Texture2D, texId.getGLTextureId());
     _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MinFilter, GLTextureParameterValue.Linear);
     _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MagFilter, GLTextureParameterValue.Linear);
     _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapS, GLTextureParameterValue.ClampToEdge);
@@ -295,7 +295,7 @@ const GLTextureId GL::uploadTexture(const IImage* image,
     _gl.texImage2D(GLTextureType.Texture2D, 0, GLFormat.RGBA, textureWidth, textureHeight, 0, GLFormat.RGBA, GLType.UnsignedByte, imageData);
     
     if (generateMipmap) {
-      _gl->generateMipmap(GLTextureType.Texture2D);
+      _gl.generateMipmap(GLTextureType.Texture2D);
     }
 #endif
 
