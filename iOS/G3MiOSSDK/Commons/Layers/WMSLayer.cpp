@@ -14,6 +14,7 @@
 
 bool WMSLayer::isAvailable(const RenderContext* rc,
                            const Tile* tile) const {
+  return true;
 }
 
 std::vector<Petition*> WMSLayer::getMapPetitions(const RenderContext* rc,

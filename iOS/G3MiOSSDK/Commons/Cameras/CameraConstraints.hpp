@@ -14,7 +14,9 @@
 
 class ICameraConstrainer {
 public:
-#ifdef C_CODE
+#ifdef JAVA_CODE
+  //NO DESTRUCTOR FOR INTERFACE
+#else
   virtual ~ICameraConstrainer() {}
 #endif
 
