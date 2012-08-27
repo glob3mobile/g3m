@@ -69,7 +69,8 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
     
     // west side
     for (int j = 0; j < resolutionMinus1; j++) {
-      const Geodetic3D g(sector.getInnerPoint(0, (double)j/resolutionMinus1), -skirtHeight);
+      const Geodetic3D g(sector.getInnerPoint(0, (double)j/resolutionMinus1),
+                         -skirtHeight);
       addVertex(planet, &vertices, g);
       indices.push_back(j*resolution);
       indices.push_back(posS++);
@@ -77,7 +78,8 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
     
     // south side
     for (int i = 0; i < resolutionMinus1; i++) {
-      const Geodetic3D g(sector.getInnerPoint((double)i/resolutionMinus1, 1), -skirtHeight);
+      const Geodetic3D g(sector.getInnerPoint((double)i/resolutionMinus1, 1),
+                         -skirtHeight);
       addVertex(planet, &vertices, g);
       indices.push_back(resolutionMinus1*resolution + i);
       indices.push_back(posS++);
@@ -85,7 +87,8 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
     
     // east side
     for (int j = resolutionMinus1; j > 0; j--) {
-      const Geodetic3D g(sector.getInnerPoint(1, (double)j/resolutionMinus1), -skirtHeight);
+      const Geodetic3D g(sector.getInnerPoint(1, (double)j/resolutionMinus1),
+                         -skirtHeight);
       addVertex(planet, &vertices, g);
       indices.push_back(j*resolution + resolutionMinus1);
       indices.push_back(posS++);
@@ -93,7 +96,8 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
     
     // north side
     for (int i = resolutionMinus1; i > 0; i--) {
-      const Geodetic3D g(sector.getInnerPoint((double)i/resolutionMinus1, 0), -skirtHeight);
+      const Geodetic3D g(sector.getInnerPoint((double)i/resolutionMinus1, 0),
+                         -skirtHeight);
       addVertex(planet, &vertices, g);
       indices.push_back(i);
       indices.push_back(posS++);
