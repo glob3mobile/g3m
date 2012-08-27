@@ -17,13 +17,11 @@ package org.glob3.mobile.generated;
 
 
 
-
 public class ByteBuffer
 {
 
 
   byte[] _data;
-  private byte _data;
 
   private final int _length;
 

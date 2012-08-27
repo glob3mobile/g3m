@@ -28,6 +28,10 @@ public class Geodetic3D
   private final double _height;
 
 
+  public void dispose()
+  {
+  }
+
   public static Geodetic3D nan()
   {
 	return new Geodetic3D(Angle.nan(), Angle.nan(), 0);
@@ -103,15 +107,13 @@ public class Geodetic3D
 //ORIGINAL LINE: const String description() const
   public final String description()
   {
-	std.ostringstream buffer = new std.ostringstream();
-	buffer << "(lat=";
-	buffer << _latitude.description();
-	buffer << ", lon=";
-	buffer << _longitude.description();
-	buffer << ", height=";
-	buffer << _height;
-	buffer << ")";
-	return buffer.str();
+	IStringBuilder isb = IStringBuilder.newStringBuilder();
+	isb.add("(lat=").add(_latitude.description()).add(", lon=").add(_longitude.description());
+	isb.add(", height=").add(_height).add(")");
+	String s = isb.getString();
+	if (isb != null)
+		isb.dispose();
+	return s;
   }
 
 }

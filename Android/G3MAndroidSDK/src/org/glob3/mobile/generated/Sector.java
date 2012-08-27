@@ -32,6 +32,10 @@ public class Sector
 
 
 
+  public void dispose()
+  {
+  }
+
 //  static Sector fromLowerAndUpper(const Geodetic2D& lower,
 //                           const Geodetic2D& upper){
 //    

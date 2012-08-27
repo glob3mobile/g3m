@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 public abstract class IStringUtils
 {
-  private static final IStringUtils _instance = null;
+  private static IStringUtils _instance;
 
   public static void setInstance(IStringUtils instance)
   {

@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public abstract class BuilderStartTask extends FrameTask
+public class BuilderStartTask extends FrameTask
 {
   private TileTextureBuilder _builder;
 
@@ -17,5 +17,10 @@ public abstract class BuilderStartTask extends FrameTask
   public final void execute(RenderContext rc)
   {
 	_builder.start();
+  }
+
+  public final boolean isCanceled(RenderContext rc)
+  {
+	return false;
   }
 }

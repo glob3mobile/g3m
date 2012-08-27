@@ -164,4 +164,8 @@ public class Frustum
   {
 	return new Frustum(_leftPlane.transformedBy(matrix), _rightPlane.transformedBy(matrix), _bottomPlane.transformedBy(matrix), _topPlane.transformedBy(matrix), _nearPlane.transformedBy(matrix), _farPlane.transformedBy(matrix));
   }
+
+  public void dispose()
+  {
+  }
 }

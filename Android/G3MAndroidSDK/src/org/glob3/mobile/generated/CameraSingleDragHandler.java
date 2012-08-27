@@ -72,8 +72,9 @@ public class CameraSingleDragHandler extends CameraEventHandler
 	return Renderer.maxTimeToRender;
   }
 
-  private final boolean _useInertia;
-  private void onDown(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+
+  public final boolean _useInertia;
+  public final void onDown(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	Camera camera = cameraContext.getCamera();
 	_camera0 = new Camera(camera);
@@ -88,7 +89,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
   
 	//printf ("down 1 finger. Initial point = %f %f %f\n", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
   }
-  private void onMove(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final void onMove(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
   
 	if (cameraContext.getCurrentGesture()!=Gesture.Drag)
@@ -128,7 +129,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
 	_radiansStep = radians - _lastRadians;
 	_lastRadians = radians;
   }
-  private void onUp(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final void onUp(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	if (_useInertia)
 	{
@@ -150,7 +151,6 @@ public class CameraSingleDragHandler extends CameraEventHandler
 	cameraContext.setCurrentGesture(Gesture.None);
 	_initialPixel = MutableVector2D.nan();
   }
-
 
   private Camera _camera0 ; //Initial Camera saved on Down event
 

@@ -438,17 +438,17 @@ public class GL
   	_gl.blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
   	_gl.pixelStorei(GLAlignment.Unpack, 1);
   
-  	_gl.bindTexture(GLTextureType.Texture2D, texID.getGLTextureID());
+  	_gl.bindTexture(GLTextureType.Texture2D, texId.getGLTextureID());
   	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MinFilter, GLTextureParameterValue.Linear);
   	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MagFilter, GLTextureParameterValue.Linear);
   	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapS, GLTextureParameterValue.ClampToEdge);
   	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapT, GLTextureParameterValue.ClampToEdge);
   	_gl.texImage2D(GLTextureType.Texture2D, 0, GLFormat.RGBA, textureWidth, textureHeight, 0, GLFormat.RGBA, GLType.UnsignedByte, imageData);
-  	return texID;
-	  if (generateMipmap)
-	  {
-		_gl.generateMipmap(Texture2D);
-	  }
+  
+  	if (generateMipmap) {
+  	  _gl->generateMipmap(GLTextureType.Texture2D);
+  	}
+  
 	}
 	else
 	{
