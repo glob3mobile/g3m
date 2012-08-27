@@ -597,11 +597,3 @@ void GL::deleteTexture(const GLTextureId& textureId) {
   
   _texturesIdTakeCounter++;
 }
-
-void GL::setBlendFuncSrcAlpha(){
-#ifdef C_CODE
-  _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);
-#else
-  _gl->blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
-#endif
-}

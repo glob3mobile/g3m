@@ -14,15 +14,6 @@
 
 bool WMSLayer::isAvailable(const RenderContext* rc,
                            const Tile* tile) const {
-  const Angle dLon = tile->getSector().getDeltaLongitude();
-  
-  if ((!_minTileLongitudeDelta.isNan() && dLon.lowerThan(_minTileLongitudeDelta)) ||
-      (!_maxTileLongitudeDelta.isNan() && dLon.greaterThan(_maxTileLongitudeDelta))) {
-    return false;
-  }
-  else {
-    return true;
-  }
 }
 
 std::vector<Petition*> WMSLayer::getMapPetitions(const RenderContext* rc,
@@ -139,7 +130,7 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& g,
                                 const Sector& tileSector,
                                 int width, int height) const {
   if (!_sector.touchesWith(tileSector)) {
-    return URL::null();
+    return URL::nullURL();
   }
   
   const Sector sector = tileSector.intersection(_sector);
@@ -214,7 +205,8 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& g,
       
       delete isb;
       break;
-    }	
+    }
+  }
   req += "&LAYERS=" + _queryLayer;
 
   //req += "&LAYERS=" + _queryLayers;

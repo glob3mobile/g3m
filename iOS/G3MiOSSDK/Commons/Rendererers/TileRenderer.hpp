@@ -9,6 +9,8 @@
 #ifndef G3MiOSSDK_TileRenderer_h
 #define G3MiOSSDK_TileRenderer_h
 
+#include "IStringBuilder.hpp"
+
 #include "Renderer.hpp"
 
 class Tile;
@@ -17,7 +19,6 @@ class TileTexturizer;
 
 #include "Sector.hpp"
 #include <map>
-#include "IStringBuilder.hpp"
 
 #include "Tile.hpp"
 #include "TileKey.hpp"

@@ -204,7 +204,8 @@ int G3MWidget::render() {
   // copy next camera to current camera
   bool acceptedCamera = true;
   for (int n = 0; n < _cameraConstraint.size(); n++) {
-    if (!_cameraConstraint[n]->acceptsCamera(_nextCamera, _planet)) {
+    ICameraConstrainer* cc = _cameraConstraint[n];
+    if (!cc->acceptsCamera(_nextCamera, _planet)) {
       acceptedCamera = false;
       break;
     }

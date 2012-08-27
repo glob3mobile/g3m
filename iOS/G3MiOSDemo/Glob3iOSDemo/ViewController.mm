@@ -219,7 +219,8 @@
   renderers.push_back(new GLErrorRenderer());
   
   std::vector <ICameraConstrainer*> cameraConstraints;
-  cameraConstraints.push_back(new SimpleCameraConstrainer());
+  SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
+  cameraConstraints.push_back(scc);
   
   UserData* userData = NULL;
   [[self G3MWidget] initWidgetWithCameraConstraints: cameraConstraints

@@ -34,8 +34,6 @@ private:
   private ByteBuffer _buffer;
 #endif
   const Sector*       _sector;
-  long                     _downloadID;
-  const bool            _transparentImage;
   
 public:
   

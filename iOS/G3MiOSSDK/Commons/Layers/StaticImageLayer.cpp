@@ -37,11 +37,11 @@ std::vector<Petition*> StaticImageLayer::getMapPetitions(const RenderContext* rc
   
   const URL id = URL(isb->getString());
   
-  Petition *pet = new Petition(tileSector, url);
+  Petition *pet = new Petition(tileSector, id);
   
   if (_storage != NULL) {
-    if (_storage->contains(url)) {
-      const ByteBuffer* buffer = _storage->read(url);
+    if (_storage->contains(id)) {
+      const ByteBuffer* buffer = _storage->read(id);
       pet->setByteBuffer(buffer);        //FILLING DATA
       res.push_back(pet);
       return res;
@@ -68,7 +68,7 @@ std::vector<Petition*> StaticImageLayer::getMapPetitions(const RenderContext* rc
   res.push_back(pet);
   
   if (_storage != NULL) {
-    _storage->save(url, *buffer);
+    _storage->save(id, *buffer);
   }
   
   return res;

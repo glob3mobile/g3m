@@ -10,9 +10,9 @@
 
 #include "IStringBuilder.hpp"
 
-const std::string GLTextureID::description() const {
+const std::string GLTextureId::description() const {
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
-  isb->add("GLTextureID #")->add(_textureId);
+  isb->add("GLTextureId #")->add(_textureId);
   std::string s = isb->getString();
   delete isb;
   return s;

@@ -555,7 +555,6 @@ void BuilderDownloadStepDownloadListener::onCancel(const URL* url) {
 
 void MultiLayerTileTexturizer::initialize(const InitializationContext* ic,
                                           const TilesRenderParameters* parameters) {
-  _downloader = ic->getDownloader();
   _parameters = parameters;
 }
 
@@ -594,7 +593,7 @@ Mesh* MultiLayerTileTexturizer::texturize(const RenderContext* rc,
                                                                         rc,
                                                                         _layerSet,
                                                                         _parameters,
-                                                                        _downloader,
+                                                                        rc->getDownloader(),
                                                                         tile,
                                                                         tessellatorMesh,
                                                                         getTextureCoordinates(trc)));
@@ -780,7 +779,7 @@ void MultiLayerTileTexturizer::justCreatedTopTile(const RenderContext* rc,
   const long priority = 1000000000;
   for (int i = 0; i < petitions.size(); i++) {
     const Petition* petition = petitions[i];
-    _downloader->request(URL(petition->getURL()),
+    rc->getDownloader()->request(URL(petition->getURL()),
                          priority,
                          new TopTileDownloadListener(this),
                          true);

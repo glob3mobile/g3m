@@ -13,14 +13,15 @@
 
 
 class ByteBuffer {
-#ifdef C_CODE
-  unsigned char* _data;
-#endif
+  
+
 #ifdef JAVA_CODE
   byte[] _data;
+#else 
+  unsigned char* _data;
 #endif
   
-  const int      _length;
+  const int _length;
   
   ByteBuffer(const ByteBuffer& that);
   

@@ -133,7 +133,6 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   
   //TEXTURED
   GLTextureId texId = GLTextureId::invalid();
-  float * texC = NULL;
   if (true){
     texId = rc->getTexturesHandler()->getGLTextureIdFromFileName(_textureFilename, _texWidth, _texHeight, true);
     if (!texId.isValid()) {
