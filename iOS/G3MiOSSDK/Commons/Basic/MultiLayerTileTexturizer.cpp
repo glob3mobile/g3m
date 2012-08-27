@@ -620,7 +620,7 @@ void MultiLayerTileTexturizer::tileMeshToBeDeleted(Tile* tile,
 }
 
 const GLTextureId MultiLayerTileTexturizer::getTopLevelGLTextureIdForTile(Tile* tile) {
-  LeveledTexturedMesh* mesh = (LeveledTexturedMesh*) tile->getTexturizerMesh();
+  LeveledTexturedMesh* mesh = (LeveledTexturedMesh*) tile->getTexturizedMesh();
   
   return (mesh == NULL) ? GLTextureId::invalid() : mesh->getTopLevelGLTextureId();
 }

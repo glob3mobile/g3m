@@ -32,23 +32,20 @@ public:
 class Tile {
 private:
   TileTexturizer* _texturizer;
-  
-  const Sector _sector;
-  const int    _level;
-  const int    _row;
-  const int    _column;
+  Tile*           _parent;
+  const Sector    _sector;
+  const int       _level;
+  const int       _row;
+  const int       _column;
   
   Mesh* _tessellatorMesh;
   Mesh* _debugMesh;
-  Mesh* _texturizerMesh;
+  Mesh* _texturizedMesh;
   
-  Tile* _parent;
   bool _textureSolved;
   std::vector<Tile*>* _subtiles;
-  
-  ITimer* _texturizerTimer;
-  
   bool _justCreatedSubtiles;
+  
   bool _texturizerDirty;
   
   inline Mesh* getTessellatorMesh(const RenderContext* rc,
@@ -89,7 +86,7 @@ private:
   bool _isVisible;
   void setIsVisible(bool isVisible);
   
-  void deleteTexturizerMesh();
+  void deleteTexturizedMesh();
   
   ITexturizerData* _texturizerData;
 
@@ -120,8 +117,8 @@ public:
     return _column;
   }
   
-  Mesh* getTexturizerMesh() const {
-    return _texturizerMesh;
+  Mesh* getTexturizedMesh() const {
+    return _texturizedMesh;
   }
   
   Tile* getParent() const {
