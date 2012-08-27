@@ -41,8 +41,8 @@ public abstract class IStringUtils
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual String createString(byte* data, int length) const = 0;
-  public abstract String createString(byte data, int length);
+//ORIGINAL LINE: virtual String createString(byte data[], int length) const = 0;
+  public abstract String createString(byte[] data, int length);
 
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
