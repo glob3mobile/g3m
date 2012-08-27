@@ -111,23 +111,46 @@ public class TilesStatistics
 	return true;
   }
 
-  public static String asLogString(java.util.HashMap<Integer, Integer> map)
-  {
-
-	boolean first = true;
-	String res = "";
-	for (java.util.Map.Entry<Integer, Integer> i: map.entrySet()){
-		  final int level = i.getKey();
-		  final int counter = i.getValue();
-		  if (first){
-		first = false;
-		  }else{
-		res += ",";
-		  }
-		  res += "L" + level + ":" + counter;
-	}
-	return res;
-  }
+//  static std::string asLogString(std::map<int, int> map) {
+//    
+//    bool first = true;
+///#ifdef C_CODE
+//    
+//    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+//    for(std::map<int, int>::const_iterator i = map.begin();
+//        i != map.end();
+//        ++i ) {
+//      const int level   = i->first;
+//      const int counter = i->second;
+//      
+//      if (first) {
+//        first = false;
+//      }
+//      else {
+//        isb->add(",");
+//      }
+//      isb->add("L")->add(level)->add(":")->add(counter);
+//    }
+//    
+//    std::string s = isb->getString();
+//    delete isb;
+//    return s;  
+///#endif
+///#ifdef JAVA_CODE
+//    String res = "";
+//    for (java.util.Map.Entry<Integer, Integer> i: map.entrySet()){
+//		  final int level = i.getKey();
+//		  final int counter = i.getValue();
+//		  if (first){
+//        first = false;
+//		  }else{
+//        res += ",";
+//		  }
+//		  res += "L" + level + ":" + counter;
+//    }
+//    return res;
+///#endif
+//  }
 
   public static String asLogString(int[] m, int nMax)
   {
