@@ -321,7 +321,7 @@ void GL::bindTexture(const GLTextureId& textureId) {
 #ifdef C_CODE
   _gl->bindTexture(Texture2D, textureId.getGLTextureId());
 #else
-  _gl->bindTexture(GLTextureType.Texture2D, textureId.getGLTextureID());
+  _gl->bindTexture(GLTextureType.Texture2D, textureId.getGLTextureId());
 #endif
 }
 

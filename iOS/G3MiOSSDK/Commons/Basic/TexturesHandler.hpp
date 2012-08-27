@@ -57,7 +57,7 @@ public:
     
   }
   
-  int isMipmap() const {
+  bool isMipmap() const {
     return _isMipmap;
   }
 
