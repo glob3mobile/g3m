@@ -117,8 +117,8 @@
 		CFB72A6915E6808900A5BAF4 /* IStringUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFB72A6715E6808900A5BAF4 /* IStringUtils.cpp */; };
 		CFB72A6A15E6808900A5BAF4 /* IStringUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFB72A6815E6808900A5BAF4 /* IStringUtils.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFB72A6E15E682B400A5BAF4 /* StringUtils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFB72A6C15E682B400A5BAF4 /* StringUtils_iOS.mm */; };
-		CFB72A6F15E682B400A5BAF4 /* StringUtils_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFB72A6D15E682B400A5BAF4 /* StringUtils_iOS.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		CFBCCE9615E709EF00FBF950 /* Downloader_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFFEC11F15C2E9B0003FA986 /* Downloader_iOS.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CFB72A6F15E682B400A5BAF4 /* StringUtils_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFB72A6D15E682B400A5BAF4 /* StringUtils_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
+		CFBCCE9615E709EF00FBF950 /* Downloader_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFFEC11F15C2E9B0003FA986 /* Downloader_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
 		CFD0021B15D3C94C00735FD8 /* TileKey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD0021915D3C94C00735FD8 /* TileKey.cpp */; };
 		CFE0844515E27B9A0004EC0E /* Petition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE0844315E27B9A0004EC0E /* Petition.cpp */; };
 		CFF0999B15C18AAD005EAF12 /* TileTexturizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -484,6 +484,7 @@
 				38D786E41587B3DD003BBC75 /* Tile.hpp */,
 				CFD0021915D3C94C00735FD8 /* TileKey.cpp */,
 				CFD0021A15D3C94C00735FD8 /* TileKey.hpp */,
+				CF9AEBBE159B3BAF004C3558 /* TileTessellator.cpp */,
 				CF9AEBBD159B3B95004C3558 /* TileTessellator.hpp */,
 				CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */,
 				CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */,
