@@ -32,7 +32,7 @@ public:
     
   }
   
-  virtual std::string createString(unsigned char* data,
+  virtual std::string createString(unsigned char data[],
                                    int            length) const = 0;
   
   
