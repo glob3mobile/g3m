@@ -100,7 +100,9 @@ public class FrameTasksExecutor
 	  {
 		if (task != null)
 			task.dispose();
-  	  _preRenderTasks.remove(i);
+  
+//C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL list 'erase' method in Java:
+		_preRenderTasks.remove(location)erase(i);
 		canceledCounter++;
 	  }
 	}

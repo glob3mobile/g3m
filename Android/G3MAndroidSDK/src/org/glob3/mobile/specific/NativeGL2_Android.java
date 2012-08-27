@@ -1,7 +1,6 @@
 package org.glob3.mobile.specific;
 
 import java.nio.ByteBuffer;
-
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -17,7 +16,7 @@ import org.glob3.mobile.generated.GLError;
 import org.glob3.mobile.generated.GLFeature;
 import org.glob3.mobile.generated.GLFormat;
 import org.glob3.mobile.generated.GLPrimitive;
-import org.glob3.mobile.generated.GLTextureID;
+import org.glob3.mobile.generated.GLTextureId;
 import org.glob3.mobile.generated.GLTextureParameter;
 import org.glob3.mobile.generated.GLTextureParameterValue;
 import org.glob3.mobile.generated.GLTextureType;
@@ -350,12 +349,12 @@ public class NativeGL2_Android extends INativeGL {
 	}
 
 	@Override
-	public ArrayList<GLTextureID> genTextures(int n) {
-		ArrayList<GLTextureID> ai = new ArrayList<GLTextureID>();
+	public ArrayList<GLTextureId> genTextures(int n) {
+		ArrayList<GLTextureId> ai = new ArrayList<GLTextureId>();
 		int[] tex = new int[n];
 		GLES20.glGenTextures(n, tex, 0);
 		for(int i = 0; i < n; i++){
-			ai.add(new GLTextureID( tex[i]) );
+			ai.add(new GLTextureId( tex[i]) );
 		}
 		return ai;
 	}
@@ -392,6 +391,11 @@ public class NativeGL2_Android extends INativeGL {
 	@Override
 	public void getIntegerv(GLVariable v, int[] i) {
 		GLES20.glGetIntegerv(getEnum(v), IntBuffer.wrap(i));
+	}
+
+	@Override
+	public void generateMipmap(GLTextureType target) {
+		GLES20.glGenerateMipmap(getEnum(target));
 	}
 
 }

@@ -1,5 +1,6 @@
 package org.glob3.mobile.specific;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import org.glob3.mobile.generated.IStringUtils;
@@ -8,7 +9,11 @@ public class StringUtils_Android extends IStringUtils {
 
 	@Override
 	public String createString(byte[] data, int length) {
-		return new String(data, "UTF8");
+		try {
+			return new String(data, "UTF8");
+		} catch (UnsupportedEncodingException e) {
+			return null;
+		}
 	}
 
 	@Override

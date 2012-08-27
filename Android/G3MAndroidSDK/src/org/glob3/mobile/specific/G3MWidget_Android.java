@@ -1,10 +1,7 @@
 package org.glob3.mobile.specific;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Random;
 
-import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BusyMeshRenderer;
 import org.glob3.mobile.generated.CPUTextureBuilder;
 import org.glob3.mobile.generated.CameraDoubleDragHandler;
@@ -14,48 +11,34 @@ import org.glob3.mobile.generated.CameraRotationHandler;
 import org.glob3.mobile.generated.CameraSingleDragHandler;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
-import org.glob3.mobile.generated.DummyRenderer;
-import org.glob3.mobile.generated.EffectTarget;
 import org.glob3.mobile.generated.EffectsScheduler;
 import org.glob3.mobile.generated.EllipsoidalTileTessellator;
 import org.glob3.mobile.generated.FrameTasksExecutor;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GL;
-import org.glob3.mobile.generated.GLErrorRenderer;
-import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
-import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.ILogger;
+import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IStringBuilder;
-import org.glob3.mobile.generated.LatLonMeshRenderer;
+import org.glob3.mobile.generated.IStringUtils;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LogLevel;
-import org.glob3.mobile.generated.Mark;
-import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.MultiLayerTileTexturizer;
 import org.glob3.mobile.generated.Planet;
-import org.glob3.mobile.generated.SGCubeNode;
-import org.glob3.mobile.generated.SampleEffect;
-import org.glob3.mobile.generated.SceneGraphRenderer;
-import org.glob3.mobile.generated.Sector;
-import org.glob3.mobile.generated.SimpleCameraConstrainer;
-import org.glob3.mobile.generated.SimplePlanetRenderer;
-import org.glob3.mobile.generated.SingleImageTileTexturizer;
 import org.glob3.mobile.generated.TextureBuilder;
 import org.glob3.mobile.generated.TexturesHandler;
 import org.glob3.mobile.generated.TileRenderer;
 import org.glob3.mobile.generated.TileTexturizer;
 import org.glob3.mobile.generated.TilesRenderParameters;
-import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.TouchEventType;
+import org.glob3.mobile.generated.UserData;
 import org.glob3.mobile.generated.Vector2D;
-import org.glob3.mobile.generated.WMSLayer;
-import org.glob3.mobile.generated.WMSServerVersion;
 
+import android.R.bool;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.view.GestureDetector.OnGestureListener;
@@ -162,6 +145,7 @@ public class G3MWidget_Android extends GLSurfaceView implements
 		return _widget;
 	}
 	
+	/*
 	private void initSimpleWidgetDemo()
 	{
 		IStringBuilder.setInstance(new StringBuilder_Android());
@@ -196,8 +180,8 @@ public class G3MWidget_Android extends GLSurfaceView implements
 		  
 		  //STORAGE
 		  IDownloader downloader = null;
-//		  IDownloader downloader = new Downloader_Android(1 * 1024 * 1024,
-//		                                               64 * 1024 * 1024,
+//		  IDownloader downloader = new Downloader_Android(1  1024  1024,
+//		                                               64  1024  1024,
 //		                                               ".G3M_Cache",
 //		                                               8);
 
@@ -278,8 +262,8 @@ public class G3MWidget_Android extends GLSurfaceView implements
 	  
 	  //STORAGE
 //	  IDownloader downloader = null;
-	  IDownloader downloader = new Downloader_Android(1 * 1024 * 1024,
-	                                               64 * 1024 * 1024,
+	  IDownloader downloader = new Downloader_Android(1  1024  1024,
+	                                               64  1024  1024,
 	                                               ".G3M_Cache",
 	                                               8);
 
@@ -420,5 +404,114 @@ public class G3MWidget_Android extends GLSurfaceView implements
 	                              
 	                             
 	}
+	
+*/
 
+	void initWidget( ArrayList<ICameraConstrainer> cameraConstraints,
+			LayerSet layerSet,
+			ArrayList<org.glob3.mobile.generated.Renderer> renderers,
+			UserData userData) 
+{
+// creates default camera-renderer and camera-handlers
+CameraRenderer cameraRenderer = new CameraRenderer();
+
+boolean useInertia = true;
+cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
+
+boolean processRotation = true;
+boolean processZoom = true;
+cameraRenderer.addHandler(new CameraDoubleDragHandler(processRotation,
+                             processZoom));
+cameraRenderer.addHandler(new CameraRotationHandler());
+cameraRenderer.addHandler(new CameraDoubleTapHandler());
+
+boolean renderDebug = false;
+boolean useTilesSplitBudget = true;
+boolean forceTopLevelTilesRenderOnStart = true;
+
+TilesRenderParameters parameters = TilesRenderParameters.createDefault(renderDebug,
+                                               useTilesSplitBudget,
+                                               forceTopLevelTilesRenderOnStart);
+
+	initWidget(cameraRenderer, cameraConstraints, layerSet, parameters, renderers, userData);
+
+}
+	
+	void initWidget(CameraRenderer cameraRenderer, 
+			ArrayList<ICameraConstrainer> cameraConstraints,
+			LayerSet layerSet,
+			TilesRenderParameters parameters,
+			ArrayList<org.glob3.mobile.generated.Renderer> renderers,
+			UserData userData) {
+		
+		  // create GLOB3M WIDGET
+		  int width = getWidth();
+		  int height = getHeight();
+
+		  IStringBuilder.setInstance(new StringBuilder_Android()); //Setting StringBuilder
+
+		  IFactory factory  = new Factory_Android(getContext());
+		  ILogger logger    = new Logger_Android(LogLevel.ErrorLevel);
+		  NativeGL2_Android nGL = new NativeGL2_Android();
+		  GL gl  = new GL(nGL);
+		  
+		  IStorage storage = new SQLiteStorage_Android("g3m.cache");
+		  IDownloader downloader = null;// new CachedDownloader(new Downloader_Android(8), storage);
+
+		  CompositeRenderer composite = new CompositeRenderer();
+		  
+		  composite.addRenderer(cameraRenderer);
+		  
+		  if (layerSet != null && layerSet.size() > 0) {
+
+		      TileTexturizer texturizer = new MultiLayerTileTexturizer(layerSet);
+		      final boolean showStatistics = false;
+		      
+		      TileRenderer tr = new TileRenderer(new EllipsoidalTileTessellator(parameters._tileResolution, true),
+                      texturizer,
+                      parameters,
+                      showStatistics);
+		      
+		      composite.addRenderer(tr);
+		  }
+		  
+		  for (int i = 0; i < renderers.size(); i++) {
+		    composite.addRenderer(renderers.get(i));
+		  }
+		  
+		  
+		  TextureBuilder textureBuilder = new CPUTextureBuilder();
+		  TexturesHandler texturesHandler = new TexturesHandler(gl, factory, textureBuilder, false);
+		  
+		  Planet planet = Planet.createEarth();
+		  
+		  org.glob3.mobile.generated.Renderer busyRenderer =  new BusyMeshRenderer();
+		  
+		  EffectsScheduler scheduler = new EffectsScheduler();
+		  
+		  FrameTasksExecutor frameTasksExecutor = new FrameTasksExecutor();
+		  
+		  IStringUtils stringUtils = new StringUtils_Android();
+
+		  _widget = G3MWidget.create(frameTasksExecutor,
+		                                factory,
+		                                stringUtils,
+		                                logger,
+		                                gl,
+		                                texturesHandler,
+		                                downloader,
+		                                planet,
+		                                cameraConstraints,
+		                                composite,
+		                                busyRenderer,
+		                                scheduler,
+		                                width, height,
+		                                Color.fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
+		                                true,
+		                                false);
+		  
+		  _widget.setUserData(userData);
+		
+	}
+	
 }
