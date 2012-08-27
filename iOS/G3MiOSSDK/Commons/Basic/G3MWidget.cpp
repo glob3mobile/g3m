@@ -278,7 +278,8 @@ int G3MWidget::render() {
   
   const TimeInterval elapsedTime = _timer->elapsedTime();
   if (elapsedTime.milliseconds() > 100) {
-    _logger->logWarning("Frame took too much time: %dms" , elapsedTime.milliseconds());
+    _logger->logWarning("Frame took too much time: %dms" ,
+                        elapsedTime.milliseconds());
   }
   
   if (_logFPS) {

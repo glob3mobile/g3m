@@ -201,8 +201,8 @@ void Tile::rawRender(const RenderContext *rc,
       tessellatorMesh->render(rc);
     }
     else {
-      
-      const bool needsToCallTexturizer = (!isTextureSolved() || (_texturizedMesh == NULL)) && isTexturizerDirty();
+//      const bool needsToCallTexturizer = (!isTextureSolved() || (_texturizedMesh == NULL)) && isTexturizerDirty();
+      const bool needsToCallTexturizer = (_texturizedMesh == NULL) || isTexturizerDirty();
       
       if (needsToCallTexturizer) {
         int __TODO_tune_render_budget;
