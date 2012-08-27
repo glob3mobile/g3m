@@ -10,10 +10,14 @@ package org.glob3.mobile.generated;
 
 
 
-public interface ICameraConstrainer
+public abstract class ICameraConstrainer
 {
+  //NO DESTRUCTOR FOR INTERFACE
+  public void dispose()
+  {
+  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual boolean acceptsCamera(const Camera* camera, const Planet *planet) const = 0;
-  boolean acceptsCamera(Camera camera, Planet planet);
+  public abstract boolean acceptsCamera(Camera camera, Planet planet);
 }

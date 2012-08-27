@@ -30,8 +30,8 @@ public abstract class IFactory
   public abstract IImage createImageFromFileName(String filename);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual IImage* createImageFromData(const ByteBuffer* bb) const = 0;
-  public abstract IImage createImageFromData(ByteBuffer bb);
+//ORIGINAL LINE: virtual IImage* createImageFromData(const ByteBuffer* buffer) const = 0;
+  public abstract IImage createImageFromData(ByteBuffer buffer);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual IImage* createImageFromSize(int width, int height) const = 0;

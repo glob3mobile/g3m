@@ -27,10 +27,12 @@ public class CameraRenderer extends Renderer
   {
 	// create the CameraContext
 	if (_cameraContext == null)
+	{
 	  _cameraContext = new CameraContext(Gesture.None, rc.getNextCamera());
+	}
   
 	// render camera object
-	rc.getNextCamera().render(rc);
+	rc.getCurrentCamera().render(rc);
   
 	int min = Renderer.maxTimeToRender;
 	for (int i = 0; i<_handlers.size(); i++)

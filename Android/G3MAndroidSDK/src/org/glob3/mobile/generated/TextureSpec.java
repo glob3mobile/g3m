@@ -19,6 +19,8 @@ package org.glob3.mobile.generated;
 
 
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class TextureBuilder;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IImage;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class RenderContext;
@@ -28,6 +30,8 @@ package org.glob3.mobile.generated;
 //class GL;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IFactory;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class Rectangle;
 
 
 public class TextureSpec
@@ -36,16 +40,17 @@ public class TextureSpec
 
   private final int _width;
   private final int _height;
-
+  private final boolean _isMipmap;
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void operator =(TextureSpec that);
+//  TextureSpec operator =(TextureSpec that);
 
-  public TextureSpec(String id, int width, int height)
+  public TextureSpec(String id, int width, int height, boolean isMipmap)
   {
 	  _id = id;
 	  _width = width;
 	  _height = height;
+	  _isMipmap = isMipmap;
 
   }
 
@@ -54,6 +59,7 @@ public class TextureSpec
 	  _id = "";
 	  _width = 0;
 	  _height = 0;
+	  _isMipmap = false;
   }
 
   public TextureSpec(TextureSpec that)
@@ -61,7 +67,15 @@ public class TextureSpec
 	  _id = that._id;
 	  _width = that._width;
 	  _height = that._height;
+	  _isMipmap = that._isMipmap;
 
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: int isMipmap() const
+  public final int isMipmap()
+  {
+	return _isMipmap;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

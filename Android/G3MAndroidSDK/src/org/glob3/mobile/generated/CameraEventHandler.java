@@ -13,19 +13,24 @@ package org.glob3.mobile.generated;
 //class TouchEvent;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class RenderContext;
-
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class CameraContext;
 
 public abstract class CameraEventHandler
 {
 
   public abstract boolean onTouchEvent(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext);
+
   public abstract int render(RenderContext rc, CameraContext cameraContext);
+
   public void dispose()
   {
   }
 
   public abstract void onDown(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext);
+
   public abstract void onMove(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext);
+
   public abstract void onUp(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext);
 
 }

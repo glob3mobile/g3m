@@ -141,6 +141,8 @@ public class Camera
   
   }*/
   
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: void render(const RenderContext* rc) const
   public final void render(RenderContext rc)
   {
 	_logger = rc.getLogger();
@@ -260,10 +262,14 @@ public class Camera
   {
 	  return _up.asVector3D();
   }
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Geodetic3D getGeodeticCenterOfView() const
   public final Geodetic3D getGeodeticCenterOfView()
   {
 	  return _getGeodeticCenterOfView();
   }
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector3D getXYZCenterOfView() const
   public final Vector3D getXYZCenterOfView()
   {
 	  return _getXYZCenterOfView().asVector3D();
@@ -331,14 +337,18 @@ public class Camera
 	}
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const Frustum* const getFrustumInModelCoordinates() const
   public final Frustum getFrustumInModelCoordinates()
   {
-	  return getFrustumMC();
+	return getFrustumMC();
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const Frustum* const getHalfFrustuminModelCoordinates() const
   public final Frustum getHalfFrustuminModelCoordinates()
   {
-	  return getHalfFrustumMC();
+	return getHalfFrustumMC();
   }
 
   public final void setPosition(Geodetic3D g3d)
@@ -378,6 +388,42 @@ public class Camera
 	_dirtyFlags.setAll(true);
   }
 
+  public final void reset()
+  {
+	_position = new MutableVector3D(0, 0, 0);
+	_center = new MutableVector3D(0, 0, 0);
+	_up = new MutableVector3D(0, 0, 1);
+  
+	if (_frustum != null)
+		if (_frustum != null)
+			_frustum.dispose();
+	_frustum = null;
+  
+	if (_frustumInModelCoordinates != null)
+		if (_frustumInModelCoordinates != null)
+			_frustumInModelCoordinates.dispose();
+	_frustumInModelCoordinates = null;
+  
+	if (_halfFrustumInModelCoordinates != null)
+		if (_halfFrustumInModelCoordinates != null)
+			_halfFrustumInModelCoordinates.dispose();
+	_halfFrustumInModelCoordinates = null;
+  
+	if (_halfFrustum != null)
+		if (_halfFrustum != null)
+			_halfFrustum.dispose();
+	_halfFrustum = null;
+  
+	_dirtyFlags.setAll(true);
+	_XYZCenterOfView = new MutableVector3D(0, 0, 0);
+  
+	if (_geodeticCenterOfView != null)
+		if (_geodeticCenterOfView != null)
+			_geodeticCenterOfView.dispose();
+	_geodeticCenterOfView = null;
+  
+	_frustumData = new FrustumData();
+  }
 
   private int _width;
   private int _height;
@@ -469,6 +515,8 @@ public class Camera
 
   // intersection of view direction with globe in(x,y,z)
   private MutableVector3D _XYZCenterOfView = new MutableVector3D();
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: MutableVector3D _getXYZCenterOfView() const
   private MutableVector3D _getXYZCenterOfView()
   {
 	if (_dirtyFlags._XYZCenterOfView)
@@ -481,6 +529,8 @@ public class Camera
 
   // intersection of view direction with globe in geodetic
   private Geodetic3D _geodeticCenterOfView;
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Geodetic3D* _getGeodeticCenterOfView() const
   private Geodetic3D _getGeodeticCenterOfView()
   {
 	if (_dirtyFlags._geodeticCenterOfView)
@@ -493,6 +543,8 @@ public class Camera
 
   // camera frustum
   private Frustum _frustum;
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Frustum* getFrustum() const
   private Frustum getFrustum()
   {
 	if (_dirtyFlags._frustum)
@@ -505,6 +557,8 @@ public class Camera
 
   // frustum in Model coordinates
   private Frustum _frustumInModelCoordinates;
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Frustum* getFrustumMC() const
   private Frustum getFrustumMC()
   {
 	if (_dirtyFlags._frustumMC)
@@ -518,6 +572,8 @@ public class Camera
   private int __temporal_test_for_clipping;
 
   private Frustum _halfFrustum; // ONLY FOR DEBUG
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Frustum* getHalfFrustum() const
   private Frustum getHalfFrustum()
   {
 	if (_dirtyFlags._halfFrustum)
@@ -530,6 +586,8 @@ public class Camera
   }
 
   private Frustum _halfFrustumInModelCoordinates; // ONLY FOR DEBUG
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Frustum* getHalfFrustumMC() const
   private Frustum getHalfFrustumMC()
   {
 	if (_dirtyFlags._halfFrustumMC)

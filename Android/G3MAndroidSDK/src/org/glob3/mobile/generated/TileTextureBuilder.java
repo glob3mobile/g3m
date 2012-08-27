@@ -29,6 +29,8 @@ public class TileTextureBuilder extends RCObject
   private boolean _anyCanceled;
   private boolean _alreadyStarted;
 
+//  static long _sequenceCounter;
+
   public LeveledTexturedMesh _mesh;
 
   public TileTextureBuilder(MultiLayerTileTexturizer texturizer, RenderContext rc, LayerSet layerSet, TilesRenderParameters parameters, IDownloader downloader, Tile tile, Mesh tessellatorMesh, float[] texCoords)
@@ -48,7 +50,7 @@ public class TileTextureBuilder extends RCObject
 	  _finalized = false;
 	  _canceled = false;
 	  _alreadyStarted = false;
-	_petitions = layerSet.createTilePetitions(rc, tile, parameters._tileTextureWidth, parameters._tileTextureHeight);
+	_petitions = layerSet.createTileMapPetitions(rc, tile, parameters._tileTextureWidth, parameters._tileTextureHeight);
 
 	_petitionsCount = _petitions.size();
 
@@ -157,12 +159,14 @@ public class TileTextureBuilder extends RCObject
 
 	  if (images.size() > 0)
 	  {
-		final GLTextureID glTextureID = _texturesHandler.getGLTextureId(images, rectangles, new TextureSpec(petitionsID, textureWidth, textureHeight));
-		if (glTextureID.isValid())
+//        int __TESTING_mipmapping;
+		final boolean isMipmap = false;
+		final GLTextureId glTextureId = _texturesHandler.getGLTextureId(images, rectangles, new TextureSpec(petitionsID, textureWidth, textureHeight, isMipmap));
+		if (glTextureId.isValid())
 		{
-		  if (!_mesh.setGLTextureIDForLevel(0, glTextureID))
+		  if (!_mesh.setGLTextureIdForLevel(0, glTextureId))
 		  {
-			_texturesHandler.releaseGLTextureId(glTextureID);
+			_texturesHandler.releaseGLTextureId(glTextureId);
 		  }
 		}
 
@@ -223,6 +227,13 @@ public class TileTextureBuilder extends RCObject
 	  }
 	}
 	_requestsIds.clear();
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isCanceled() const
+  public final boolean isCanceled()
+  {
+	return _canceled;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -288,18 +299,18 @@ public class TileTextureBuilder extends RCObject
 	  {
 		if (!fallbackSolved)
 		{
-		  final GLTextureID glTextureId = _texturizer.getTopLevelGLTextureIDForTile(ancestor);
+		  final GLTextureId glTextureId = _texturizer.getTopLevelGLTextureIdForTile(ancestor);
 		  if (glTextureId.isValid())
 		  {
 			_texturesHandler.retainGLTextureId(glTextureId);
-			mapping.setGLTextureID(glTextureId);
+			mapping.setGLTextureId(glTextureId);
 			fallbackSolved = true;
 		  }
 		}
 	  }
 	  else
 	  {
-		if (mapping.getGLTextureID().isValid())
+		if (mapping.getGLTextureId().isValid())
 		{
 		  System.out.print("break (point) on me 3\n");
 		}

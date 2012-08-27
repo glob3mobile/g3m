@@ -69,11 +69,11 @@ public class BusyQuadRenderer extends Renderer implements EffectTarget
   
   
 	//TEXTURED
-	GLTextureID texID = GLTextureID.invalid();
+	GLTextureId texId = GLTextureId.invalid();
 	if (true)
 	{
-	  texID = rc.getTexturesHandler().getGLTextureIdFromFileName(_textureFilename, 2048, 1024);
-	  if (!texID.isValid())
+	  texId = rc.getTexturesHandler().getGLTextureIdFromFileName(_textureFilename, 256, 256, false);
+	  if (!texId.isValid())
 	  {
 		rc.getLogger().logError("Can't load file %s", _textureFilename);
 		return false;
@@ -82,7 +82,7 @@ public class BusyQuadRenderer extends Renderer implements EffectTarget
   
 	IndexedMesh im = IndexedMesh.createFromVector3D(true, GLPrimitive.TriangleStrip, CenterStrategy.NoCenter, new Vector3D(0,0,0), numVertices, quadVertices, quadIndices, numIndices, null);
   
-	TextureMapping texMap = new SimpleTextureMapping(texID, texC, true);
+	TextureMapping texMap = new SimpleTextureMapping(texId, texC, true);
   
 	_quadMesh = new TexturedMesh(im, true, texMap, true);
   
@@ -134,7 +134,7 @@ public class BusyQuadRenderer extends Renderer implements EffectTarget
   
 	// init modelview matrix
 	int[] currentViewport = new int[4];
-	rc.getGL().getViewport(currentViewport);
+	gl.getViewport(currentViewport);
 	int halfWidth = currentViewport[2] / 2;
 	int halfHeight = currentViewport[3] / 2;
 	MutableMatrix44D M = MutableMatrix44D.createOrthographicProjectionMatrix(-halfWidth, halfWidth, -halfHeight, halfHeight, -halfWidth, halfWidth);
@@ -186,12 +186,12 @@ public class BusyQuadRenderer extends Renderer implements EffectTarget
 
   public final void start()
   {
-	int _TODO_start_effects;
+	//int _TODO_start_effects;
   }
 
   public final void stop()
   {
-	int _TODO_stop_effects;
+	//int _TODO_stop_effects;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

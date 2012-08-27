@@ -52,7 +52,7 @@ public class Box extends Extent
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: java.util.ArrayList<Vector3D> getCorners() const
+//ORIGINAL LINE: const java.util.ArrayList<Vector3D> getCorners() const
   public final java.util.ArrayList<Vector3D> getCorners()
   {
   	final java.util.ArrayList<Vector3D> c = new java.util.ArrayList<Vector3D>(8);
@@ -82,7 +82,7 @@ public class Box extends Extent
   {
 	final java.util.ArrayList<Vector3D> corners = getCorners();
   
-	final Vector2D pixel0 = rc.getNextCamera().point2Pixel(corners.get(0));
+	final Vector2D pixel0 = rc.getCurrentCamera().point2Pixel(corners.get(0));
   
 	double lowerX = pixel0.x();
 	double upperX = pixel0.x();
@@ -92,7 +92,7 @@ public class Box extends Extent
 	final int cornersSize = corners.size();
 	for (int i = 1; i < cornersSize; i++)
 	{
-	  final Vector2D pixel = rc.getNextCamera().point2Pixel(corners.get(i));
+	  final Vector2D pixel = rc.getCurrentCamera().point2Pixel(corners.get(i));
   
 	  final double x = pixel.x();
 	  final double y = pixel.y();

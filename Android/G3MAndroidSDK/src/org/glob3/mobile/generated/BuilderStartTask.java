@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class BuilderStartTask extends FrameTask
+public abstract class BuilderStartTask extends FrameTask
 {
   private TileTextureBuilder _builder;
 

@@ -29,5 +29,8 @@ public abstract class FrameTask
 
   }
 
+  public abstract boolean isCanceled(RenderContext rc);
+
   public abstract void execute(RenderContext rc);
+
 }

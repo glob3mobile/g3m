@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated; 
 public class SimpleTextureMapping extends TextureMapping
 {
-  private GLTextureID _glTextureId = new GLTextureID();
+  private GLTextureId _glTextureId = new GLTextureId();
   private final float[] _texCoords;
   private final boolean _ownedTexCoords;
 
@@ -9,9 +9,9 @@ public class SimpleTextureMapping extends TextureMapping
   private MutableVector2D _scale = new MutableVector2D();
 
 
-  public SimpleTextureMapping(GLTextureID glTextureId, float[] texCoords, boolean ownedTexCoords)
+  public SimpleTextureMapping(GLTextureId glTextureId, float[] texCoords, boolean ownedTexCoords)
   {
-	  _glTextureId = new GLTextureID(glTextureId);
+	  _glTextureId = new GLTextureId(glTextureId);
 	  _texCoords = texCoords;
 	  _translation = new MutableVector2D(0, 0);
 	  _scale = new MutableVector2D(1, 1);
@@ -19,9 +19,9 @@ public class SimpleTextureMapping extends TextureMapping
 
   }
 
-  public SimpleTextureMapping(GLTextureID glTextureId, java.util.ArrayList<MutableVector2D> texCoords)
+  public SimpleTextureMapping(GLTextureId glTextureId, java.util.ArrayList<MutableVector2D> texCoords)
   {
-	  _glTextureId = new GLTextureID(glTextureId);
+	  _glTextureId = new GLTextureId(glTextureId);
 	  _translation = new MutableVector2D(0, 0);
 	  _scale = new MutableVector2D(1, 1);
 	  _ownedTexCoords = true;
@@ -47,8 +47,8 @@ public class SimpleTextureMapping extends TextureMapping
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const GLTextureID getGLTextureID() const
-  public final GLTextureID getGLTextureID()
+//ORIGINAL LINE: const GLTextureId getGLTextureId() const
+  public final GLTextureId getGLTextureId()
   {
 	return _glTextureId;
   }

@@ -51,7 +51,7 @@ public class Tile
 	{
 	  return false;
 	}
-	return extent.touches(rc.getNextCamera().getFrustumInModelCoordinates());
+	return extent.touches(rc.getCurrentCamera().getFrustumInModelCoordinates());
   }
 
   private boolean meetsRenderCriteria(RenderContext rc, TileRenderContext trc)
@@ -171,12 +171,12 @@ public class Tile
 		  //                                      lastTexturizerTimer->elapsedTime().milliseconds() > 10));
 		  //        const bool callTexturizer = ((_texturizerTimer == NULL) ||
 		  //                                     (_texturizerTimer->elapsedTime().milliseconds() > 100));
-  //        const bool callTexturizer = ((_texturizerTimer == NULL) ||
-  //                                     (_texturizerTimer->elapsedTime().milliseconds() > 50)) && isTexturizerDirty();
+		  //        const bool callTexturizer = ((_texturizerTimer == NULL) ||
+		  //                                     (_texturizerTimer->elapsedTime().milliseconds() > 50)) && isTexturizerDirty();
   
-				  final boolean callTexturizer = true;
-  //        const bool callTexturizer = (trc->getLastTexturizerTimer()->elapsedTime().milliseconds() > 10);
-  //        const bool callTexturizer = (trc->getLastTexturizerTimer()->elapsedTime().milliseconds() > 10);
+		  final boolean callTexturizer = true;
+		  //        const bool callTexturizer = (trc->getLastTexturizerTimer()->elapsedTime().milliseconds() > 10);
+		  //        const bool callTexturizer = (trc->getLastTexturizerTimer()->elapsedTime().milliseconds() > 10);
   
 		  if (callTexturizer)
 		  {
@@ -244,7 +244,7 @@ public class Tile
 	if (_subtiles != null)
 	{
   
-  //    printf("= pruned tile %s\n", getKey().description().c_str());
+	  //    printf("= pruned tile %s\n", getKey().description().c_str());
   
 	  TileTexturizer texturizer = (trc == null) ? null : trc.getTexturizer();
   
@@ -299,25 +299,12 @@ public class Tile
   private boolean _isVisible;
   private void setIsVisible(boolean isVisible)
   {
-  
-  
 	if (_isVisible != isVisible)
 	{
 	  _isVisible = isVisible;
   
-	  if (_isVisible)
+	  if (!_isVisible)
 	  {
-		//      visibleCounter++;
-		//      printf("**** Tile %s becomed Visible (visibles=%ld)\n",
-		//             getKey().description().c_str(),
-		//             visibleCounter);
-	  }
-	  else
-	  {
-		//      visibleCounter--;
-		//      printf("**** Tile %s becomed INVisible (visibles=%ld)\n",
-		//             getKey().description().c_str(),
-		//             visibleCounter);
 		deleteTexturizerMesh();
 	  }
 	}
@@ -360,11 +347,14 @@ public class Tile
 	  _texturizerTimer = null;
 	  _isVisible = false;
 	  _texturizerData = null;
+  //  int __remove_tile_print;
+  //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
+  //         getKey().description().c_str(),
+  //         _sector.getDeltaLatitude().description().c_str(),
+  //         _sector.getDeltaLongitude().description().c_str()
+  //         );
   }
 
-
-  //static long visibleCounter = 0;
-  
   public void dispose()
   {
 	if (_isVisible)
@@ -373,13 +363,6 @@ public class Tile
 	}
   
 	prune(null);
-  
-	//  if (_isVisible) {
-	//    visibleCounter--;
-	//    printf("**** Tile %s is DESTROYED (visibles=%ld)\n",
-	//           getKey().description().c_str(),
-	//           visibleCounter);
-	//  }
   
 	if (_texturizerTimer != null)
 	{
@@ -548,45 +531,6 @@ public class Tile
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Geodetic3D intersection(const Vector3D& origin, const Vector3D& ray, const Planet* planet) const
-  public final Geodetic3D intersection(Vector3D origin, Vector3D ray, Planet planet)
-  {
-	  //As our tiles are still flat our onPlanet vector is calculated directly from Planet
-	java.util.ArrayList<Double> ts = planet.intersections(origin, ray);
-  
-	if (ts.size() > 0)
-	{
-	  final Vector3D onPlanet = origin.add(ray.times(ts.get(0)));
-	  final Geodetic3D g = planet.toGeodetic3D(onPlanet);
-  
-	  if (_sector.contains(g))
-	  {
-		//If this tile is not a leaf
-		if (_subtiles != null)
-		{
-		  for (int i = 0; i < _subtiles.size(); i++)
-		  {
-			final Geodetic3D g3d = _subtiles.get(i).intersection(origin, ray, planet);
-			if (!g3d.isNan())
-			{
-			  return g3d;
-			}
-		  }
-		}
-		else
-		{
-		  //printf("TOUCH TILE %d\n", _level);
-		  _texturizer.onTerrainTouchEvent(g, this);
-		  return g;
-		}
-	  }
-	}
-  
-	return Geodetic3D.nan();
-  }
-
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: boolean hasTexturizerData() const
   public final boolean hasTexturizerData()
   {
@@ -603,6 +547,33 @@ public class Tile
   public final void setTexturizerData(ITexturizerData texturizerData)
   {
 	_texturizerData = texturizerData;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const Tile* getDeepestTileContaining(const Geodetic3D& position) const
+  public final Tile getDeepestTileContaining(Geodetic3D position)
+  {
+	if (_sector.contains(position))
+	{
+	  if (_subtiles == null)
+	  {
+		return this;
+	  }
+	  else
+	  {
+		for (int i = 0; i < _subtiles.size(); i++)
+		{
+		  final Tile subtile = _subtiles.get(i);
+		  final Tile subtileResult = subtile.getDeepestTileContaining(position);
+		  if (subtileResult != null)
+		  {
+			return subtileResult;
+		  }
+		}
+	  }
+	}
+  
+	return null;
   }
 
 }

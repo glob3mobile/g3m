@@ -1,81 +1,80 @@
 package org.glob3.mobile.generated; 
 public class WMSLayer extends Layer
 {
+  private final String _mapLayer;
+  private final URL _mapServerURL = new URL();
+  private final WMSServerVersion _mapServerVersion;
 
-  private final String _mapLayers;
-  private final String _queryLayers;
+  private final String _queryLayer;
+  private final URL _queryServerURL = new URL();
+  private final WMSServerVersion _queryServerVersion;
+
+  private Sector _sector ;
 
   private final String _format;
-  private final String _style;
   private final String _srs;
-  private Sector _bbox ;
+  private final String _style;
   private final boolean _isTransparent;
 
-  private final Angle _minTileLongitudeDelta ;
-  private final Angle _maxTileLongitudeDelta ;
-
-
-  private final String _serverURL;
-  private final WMSServerVersion _serverVersion;
-
-
-
-  public WMSLayer(String mapLayers, String queryLayers, String serverURL, WMSServerVersion serverVersion, String format, Sector bbox, String srs, String style, boolean isTransparent, Angle minTileLongitudeDelta, Angle maxTileLongitudeDelta)
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isAvailable(const RenderContext* rc, const Tile* tile) const
+  private boolean isAvailable(RenderContext rc, Tile tile)
   {
-	  _mapLayers = mapLayers;
-	  _queryLayers = queryLayers;
-	  _format = format;
-	  _style = style;
-	  _bbox = new Sector(bbox);
-	  _srs = srs;
-	  _serverURL = serverURL;
-	  _serverVersion = serverVersion;
-	  _isTransparent = isTransparent;
-	  _minTileLongitudeDelta = new Angle(minTileLongitudeDelta);
-	  _maxTileLongitudeDelta = new Angle(maxTileLongitudeDelta);
-
+	return true;
   }
 
 
-  public WMSLayer(String mapLayers, String serverURL, WMSServerVersion serverVersion, String format, Sector bbox, String srs, String style, boolean isTransparent, Angle minTileLongitudeDelta, Angle maxTileLongitudeDelta)
+
+  public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition)
   {
-	  _mapLayers = mapLayers;
-	  _queryLayers = mapLayers;
+	  super(condition);
+	  _mapLayer = mapLayer;
+	  _mapServerURL = new URL(mapServerURL);
+	  _mapServerVersion = mapServerVersion;
+	  _queryLayer = queryLayer;
+	  _queryServerURL = new URL(queryServerURL);
+	  _queryServerVersion = queryServerVersion;
+	  _sector = new Sector(sector);
 	  _format = format;
-	  _style = style;
-	  _bbox = new Sector(bbox);
 	  _srs = srs;
-	  _serverURL = serverURL;
-	  _serverVersion = serverVersion;
+	  _style = style;
 	  _isTransparent = isTransparent;
-	  _minTileLongitudeDelta = new Angle(minTileLongitudeDelta);
-	  _maxTileLongitudeDelta = new Angle(maxTileLongitudeDelta);
+
+  }
+
+  public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition)
+  {
+	  super(condition);
+	  _mapLayer = mapLayer;
+	  _mapServerURL = new URL(mapServerURL);
+	  _mapServerVersion = mapServerVersion;
+	  _queryLayer = mapLayer;
+	  _queryServerURL = new URL(mapServerURL);
+	  _queryServerVersion = mapServerVersion;
+	  _sector = new Sector(sector);
+	  _format = format;
+	  _srs = srs;
+	  _style = style;
+	  _isTransparent = isTransparent;
 
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean fullContains(const Sector& s) const
-  public final boolean fullContains(Sector s)
-  {
-	return _bbox.fullContains(s);
-  }
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: java.util.ArrayList<Petition*> getTilePetitions(const RenderContext* rc, const Tile* tile, int width, int height) const
-  public final java.util.ArrayList<Petition> getTilePetitions(RenderContext rc, Tile tile, int width, int height)
+//ORIGINAL LINE: java.util.ArrayList<Petition*> getMapPetitions(const RenderContext* rc, const Tile* tile, int width, int height) const
+  public final java.util.ArrayList<Petition> getMapPetitions(RenderContext rc, Tile tile, int width, int height)
   {
 	java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
 	final Sector tileSector = tile.getSector();
-	if (!_bbox.touchesWith(tileSector))
+	if (!_sector.touchesWith(tileSector))
 	{
 	  return petitions;
 	}
   
-	final Sector sector = tileSector.intersection(_bbox);
+	final Sector sector = tileSector.intersection(_sector);
   
 	  //Server name
-	String req = _serverURL;
+	String req = _mapServerURL.getPath();
 	  if (req.charAt(req.length()-1) != '?')
 	  {
 		  req += '?';
@@ -87,8 +86,8 @@ public class WMSLayer extends Layer
 	{
 	  req = req.substring(pos+9);
   
-	  int pos2 = _serverURL.indexOf("/", 8);
-	  String newHost = _serverURL.substring(0, pos2);
+	  int pos2 = req.indexOf("/", 8);
+	  String newHost = req.substring(0, pos2);
   
 	  req = newHost + req;
 	}
@@ -96,7 +95,7 @@ public class WMSLayer extends Layer
 	req += "REQUEST=GetMap&SERVICE=WMS";
   
   
-	switch (_serverVersion)
+	switch (_mapServerVersion)
 	{
 	  case WMS_1_3_0:
 	  {
@@ -143,7 +142,7 @@ public class WMSLayer extends Layer
 	  }
 	}
   
-	req += "&LAYERS=" + _mapLayers;
+	req += "&LAYERS=" + _mapLayer;
   
 	  req += "&FORMAT=" + _format;
   
@@ -176,28 +175,10 @@ public class WMSLayer extends Layer
 	  req += "&TRANSPARENT=FALSE";
 	}
   
-	Petition petition = new Petition(sector, new URL(req), _isTransparent);
+	Petition petition = new Petition(sector, new URL(req));
 	petitions.add(petition);
   
-	//printf("%s\n", req.c_str());
-  
 	  return petitions;
-  }
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isAvailable(const RenderContext* rc, const Tile* tile) const
-  public final boolean isAvailable(RenderContext rc, Tile tile)
-  {
-	final Angle dLon = tile.getSector().getDeltaLongitude();
-  
-	if ((!_minTileLongitudeDelta.isNan() && dLon.lowerThan(_minTileLongitudeDelta)) || (!_maxTileLongitudeDelta.isNan() && dLon.greaterThan(_maxTileLongitudeDelta)))
-	{
-	  return false;
-	}
-	else
-	{
-	  return true;
-	}
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -208,18 +189,18 @@ public class WMSLayer extends Layer
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: URL getFeatureURL(const Geodetic2D& g, const IFactory* factory, const Sector& tileSector, int width, int height) const
-  public final URL getFeatureURL(Geodetic2D g, IFactory factory, Sector tileSector, int width, int height)
+//ORIGINAL LINE: URL getFeatureInfoURL(const Geodetic2D& g, const IFactory* factory, const Sector& tileSector, int width, int height) const
+  public final URL getFeatureInfoURL(Geodetic2D g, IFactory factory, Sector tileSector, int width, int height)
   {
-	if (!_bbox.touchesWith(tileSector))
+	if (!_sector.touchesWith(tileSector))
 	{
 	  return URL.nullURL();
 	}
   
-	final Sector sector = tileSector.intersection(_bbox);
+	final Sector sector = tileSector.intersection(_sector);
   
 	  //Server name
-	String req = _serverURL;
+	String req = _queryServerURL.getPath();
 	  if (req.charAt(req.length()-1) != '?')
 	  {
 		  req += '?';
@@ -231,33 +212,13 @@ public class WMSLayer extends Layer
 	{
 	  req = req.substring(pos+9);
   
-	  int pos2 = _serverURL.indexOf("/", 8);
-	  String newHost = _serverURL.substring(0, pos2);
+	  int pos2 = req.indexOf("/", 8);
+	  String newHost = req.substring(0, pos2);
   
 	  req = newHost + req;
 	}
   
 	req += "REQUEST=GetFeatureInfo&SERVICE=WMS";
-	switch (_serverVersion)
-	{
-	  case WMS_1_3_0:
-	  {
-		req += "&VERSION=1.3.0";
-  
-		req += "&CRS=EPSG:4326";
-	  }
-		break;
-  
-	  case WMS_1_1_0:
-	  default:
-	  {
-		// default is 1.1.1
-		req += "&VERSION=1.1.1";
-  
-		break;
-	  }
-	}
-  
   
 	//SRS
 	if (!_srs.equals(""))
@@ -269,7 +230,7 @@ public class WMSLayer extends Layer
 	  req += "&SRS=EPSG:4326";
 	}
   
-	switch (_serverVersion)
+	switch (_queryServerVersion)
 	{
 	  case WMS_1_3_0:
 	  {
@@ -317,9 +278,10 @@ public class WMSLayer extends Layer
 		break;
 	  }
 	}
-	req += "&LAYERS=" + _mapLayers;
+	req += "&LAYERS=" + _queryLayer;
+  
 	//req += "&LAYERS=" + _queryLayers;
-	req += "&QUERY_LAYERS=" + _queryLayers;
+	req += "&QUERY_LAYERS=" + _queryLayer;
   
 	req += "&INFO_FORMAT=text/plain";
   

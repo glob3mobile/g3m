@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  GLTextureID.cpp
+//  GLTextureId.cpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 09/08/12.
@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  GLTextureID.h
+//  GLTextureId.h
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 09/08/12.
@@ -18,29 +18,27 @@ package org.glob3.mobile.generated;
 
 
 
-public class GLTextureID
+public class GLTextureId
 {
   private int _textureId;
 
-
-  public GLTextureID()
+  public GLTextureId()
   {
 	_textureId = -1;
   }
 
-
-  public static GLTextureID invalid()
+  public static GLTextureId invalid()
   {
-	return new GLTextureID(-1);
+	return new GLTextureId(-1);
   }
 
-  public GLTextureID(GLTextureID that)
+  public GLTextureId(GLTextureId that)
   {
 	  _textureId = that._textureId;
 
   }
 
-  public GLTextureID(int textureId)
+  public GLTextureId(int textureId)
   {
 	  _textureId = textureId;
 
@@ -54,8 +52,8 @@ public class GLTextureID
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: int getGLTextureID() const
-  public final int getGLTextureID()
+//ORIGINAL LINE: int getGLTextureId() const
+  public final int getGLTextureId()
   {
 	return _textureId;
   }
@@ -65,7 +63,7 @@ public class GLTextureID
   public final String description()
   {
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.add("GLTextureID #").add(_textureId);
+	isb.add("GLTextureId #").add(_textureId);
 	String s = isb.getString();
 	if (isb != null)
 		isb.dispose();
@@ -73,8 +71,8 @@ public class GLTextureID
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isEqualsTo(const GLTextureID& that) const
-  public final boolean isEqualsTo(GLTextureID that)
+//ORIGINAL LINE: boolean isEqualsTo(const GLTextureId& that) const
+  public final boolean isEqualsTo(GLTextureId that)
   {
 	return (_textureId == that._textureId);
   }

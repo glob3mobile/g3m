@@ -21,12 +21,16 @@ package org.glob3.mobile.generated;
 
 public class CameraDoubleDragHandler extends CameraEventHandler
 {
+  private final boolean _processRotation;
+  private final boolean _processZoom;
 
-  public CameraDoubleDragHandler()
+  public CameraDoubleDragHandler(boolean processRotation, boolean processZoom)
   {
 	  _camera0 = new Camera(new Camera(0, 0));
 	  _initialPoint = new MutableVector3D(0,0,0);
 	  _initialPixel = new MutableVector3D(0,0,0);
+	  _processRotation = processRotation;
+	  _processZoom = processZoom;
   }
 
   public void dispose()
@@ -209,8 +213,11 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 	  tempCamera.rotateWithAxis(rotationAxis, rotationDelta);
 	}
   
-	// move the camara
-	tempCamera.moveForward(dAccum);
+	// move the camera
+	if (_processZoom)
+	{
+	  tempCamera.moveForward(dAccum);
+	}
   
 	// compute 3D point of view center
 	//tempCamera.updateModelMatrix();
@@ -267,6 +274,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 	//tempCamera.updateModelMatrix();
   
 	// camera rotation
+	if (_processRotation)
 	{
 	  Vector3D normal = planet.geodeticSurfaceNormal(centerPoint2);
 	  Vector3D v0 = _initialPoint0.asVector3D().sub(centerPoint2).projectionInPlane(normal);

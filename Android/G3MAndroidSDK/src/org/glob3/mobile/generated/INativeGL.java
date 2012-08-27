@@ -99,8 +99,8 @@ public abstract class INativeGL
   public abstract void pixelStorei(GLAlignment pname, int param);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual java.util.ArrayList<GLTextureID> genTextures(int n) const = 0;
-  public abstract java.util.ArrayList<GLTextureID> genTextures(int n);
+//ORIGINAL LINE: virtual java.util.ArrayList<GLTextureId> genTextures(int n) const = 0;
+  public abstract java.util.ArrayList<GLTextureId> genTextures(int n);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual void texParameteri(GLTextureType target, GLTextureParameter par, GLTextureParameterValue v) const = 0;
@@ -109,6 +109,10 @@ public abstract class INativeGL
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual void texImage2D(GLTextureType target, int level, GLFormat internalFormat, int width, int height, int border, GLFormat format, GLType type, const Object* data) const = 0;
   public abstract void texImage2D(GLTextureType target, int level, GLFormat internalFormat, int width, int height, int border, GLFormat format, GLType type, Object data);
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual void generateMipmap(GLTextureType target) const = 0;
+  public abstract void generateMipmap(GLTextureType target);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual void drawArrays(GLPrimitive mode, int first, int count) const = 0;

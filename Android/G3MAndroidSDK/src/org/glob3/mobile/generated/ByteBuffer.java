@@ -20,7 +20,10 @@ package org.glob3.mobile.generated;
 
 public class ByteBuffer
 {
+
+
   byte[] _data;
+  private byte _data;
 
   private final int _length;
 
@@ -28,7 +31,7 @@ public class ByteBuffer
 //  ByteBuffer(ByteBuffer that);
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void operator =(ByteBuffer that);
+//  ByteBuffer operator =(ByteBuffer that);
 
   public ByteBuffer(byte[] data, int dataLength)
   {
@@ -51,6 +54,13 @@ public class ByteBuffer
 
 
   byte[] getData() { return _data;}
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: String getDataAsString() const
+  public final String getDataAsString()
+  {
+	return IStringUtils.instance().createString(_data, _length);
+  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: int getLength() const

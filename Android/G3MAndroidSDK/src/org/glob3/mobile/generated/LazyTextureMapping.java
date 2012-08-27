@@ -3,7 +3,7 @@ public class LazyTextureMapping extends TextureMapping
 {
   private LazyTextureMappingInitializer _initializer;
 
-  private GLTextureID _glTextureId = new GLTextureID();
+  private GLTextureId _glTextureId = new GLTextureId();
 
   private boolean _initialized;
 
@@ -15,7 +15,7 @@ public class LazyTextureMapping extends TextureMapping
   private TexturesHandler _texturesHandler;
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void operator =(LazyTextureMapping that);
+//  LazyTextureMapping operator =(LazyTextureMapping that);
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  LazyTextureMapping(LazyTextureMapping that);
@@ -26,7 +26,7 @@ public class LazyTextureMapping extends TextureMapping
 	  if (_glTextureId.isValid())
 	  {
 		_texturesHandler.releaseGLTextureId(_glTextureId);
-		_glTextureId = GLTextureID.invalid();
+		_glTextureId = GLTextureId.invalid();
 	  }
 	}
   }
@@ -34,7 +34,7 @@ public class LazyTextureMapping extends TextureMapping
   public LazyTextureMapping(LazyTextureMappingInitializer initializer, TexturesHandler texturesHandler, boolean ownedTexCoords)
   {
 	  _initializer = initializer;
-	  _glTextureId = new GLTextureID(GLTextureID.invalid());
+	  _glTextureId = new GLTextureId(GLTextureId.invalid());
 	  _initialized = false;
 	  _texCoords = null;
 	  _translation = new MutableVector2D(0,0);
@@ -98,7 +98,7 @@ public class LazyTextureMapping extends TextureMapping
 	return _glTextureId.isValid();
   }
 
-  public final void setGLTextureID(GLTextureID glTextureId)
+  public final void setGLTextureId(GLTextureId glTextureId)
   {
 	releaseGLTextureId();
 	_glTextureId = glTextureId;
@@ -106,8 +106,8 @@ public class LazyTextureMapping extends TextureMapping
 
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const GLTextureID getGLTextureID() const
-  public final GLTextureID getGLTextureID()
+//ORIGINAL LINE: const GLTextureId getGLTextureId() const
+  public final GLTextureId getGLTextureId()
   {
 	return _glTextureId;
   }

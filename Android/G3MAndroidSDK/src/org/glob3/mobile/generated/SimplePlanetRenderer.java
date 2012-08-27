@@ -116,11 +116,11 @@ public class SimplePlanetRenderer extends Renderer
 	float normals[] = null;
   
 	//TEXTURED
-	GLTextureID texID = GLTextureID.invalid();
+	GLTextureId texId = GLTextureId.invalid();
 	if (true)
 	{
-	  texID = rc.getTexturesHandler().getGLTextureIdFromFileName(_textureFilename, _texWidth, _texHeight);
-	  if (!texID.isValid())
+	  texId = rc.getTexturesHandler().getGLTextureIdFromFileName(_textureFilename, _texWidth, _texHeight, true);
+	  if (!texId.isValid())
 	  {
 		rc.getLogger().logError("Can't load file %s", _textureFilename);
 		return false;
@@ -164,7 +164,7 @@ public class SimplePlanetRenderer extends Renderer
   
 	IndexedMesh im = IndexedMesh.createFromVector3D(true, GLPrimitive.TriangleStrip, CenterStrategy.NoCenter, new Vector3D(0,0,0), _latRes *_lonRes, ver, ind, numIndexes, flatColor, colors, (float)0.5, normals);
   
-	TextureMapping texMap = new SimpleTextureMapping(texID, texC, true);
+	TextureMapping texMap = new SimpleTextureMapping(texId, texC, true);
   
 	_mesh = new TexturedMesh(im, true, texMap, true);
   

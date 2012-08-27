@@ -77,4 +77,23 @@ public class Color
 	return _alpha;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Color mixedWith(const Color& that, float factor) const
+  public final Color mixedWith(Color that, float factor)
+  {
+	float frac1 = factor;
+	if (factor < 0)
+		factor = 0F;
+	if (factor > 1)
+		factor = 1F;
+
+	final float frac2 = 1 - frac1;
+
+	final float newRed = (getRed() * frac2) + (that.getRed() * frac1);
+	final float newGreen = (getGreen() * frac2) + (that.getGreen() * frac1);
+	final float newBlue = (getBlue() * frac2) + (that.getBlue() * frac1);
+	final float newAlpha = (getAlpha() * frac2) + (that.getAlpha() * frac1);
+
+	return Color.fromRGBA(newRed, newGreen, newBlue, newAlpha);
+  }
 }

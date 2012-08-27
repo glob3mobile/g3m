@@ -16,24 +16,18 @@ package org.glob3.mobile.generated;
 //
 
 
+
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class TileTextureBuilder;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class LayerSet;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IDownloader;
 
-
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class TileTextureBuilder;
-
-
 public class MultiLayerTileTexturizer extends TileTexturizer
 {
   private final LayerSet _layerSet;
   private TilesRenderParameters _parameters;
-
-  private IDownloader _downloader;
-
-//  std::map<TileKey, TileTextureBuilder*> _builders;
 
   private float[] _texCoordsCache;
 
@@ -68,7 +62,6 @@ public class MultiLayerTileTexturizer extends TileTexturizer
   public MultiLayerTileTexturizer(LayerSet layerSet)
   {
 	  _layerSet = layerSet;
-	  _downloader = null;
 	  _parameters = null;
 	  _texCoordsCache = null;
 	  _pendingTopTileRequests = 0;
@@ -98,7 +91,6 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 
   public final void initialize(InitializationContext ic, TilesRenderParameters parameters)
   {
-	_downloader = ic.getDownloader();
 	_parameters = parameters;
   }
 
@@ -111,24 +103,9 @@ public class MultiLayerTileTexturizer extends TileTexturizer
   
 	if (builderHolder == null)
 	{
-	  builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, rc, _layerSet, _parameters, _downloader, tile, tessellatorMesh, getTextureCoordinates(trc)));
+	  builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, rc, _layerSet, _parameters, rc.getDownloader(), tile, tessellatorMesh, getTextureCoordinates(trc)));
 	  tile.setTexturizerData(builderHolder);
 	}
-  
-	int __TODO_tune_render_budget;
-	/*
-	 We user a budget for builder.start() as it can (syncronously if cached data) upload a texture
-	 to the GPU, causing a bootleneck when too many tiles are renderered for the first time. (dgd)
-	 */
-	//  const bool startBuilder = ((tile->getLevel() == _parameters->_topLevel) ||
-	//                             (trc->getStatistics()->getBuildersStartsInFrame() < 1) ||
-	//                             (rc->getFrameStartTimer()->elapsedTime().milliseconds() < 33));
-	//  if (startBuilder) {
-	//    trc->getStatistics()->computeBuilderStartInFrame();
-	//    builderHolder->get()->start();
-	//    tile->setTexturizerDirty(false);
-	//  }
-  
   
 	if (trc.isForcedFullRender())
 	{
@@ -136,12 +113,38 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 	}
 	else
 	{
+//C++ TO JAVA CONVERTER TODO TASK: Java does not allow declaring types within methods:
+//	  class BuilderStartTask : public FrameTask
+//	  {
+//	  private:
+//		TileTextureBuilder* _builder;
+//  
+//	  public:
+//		BuilderStartTask(TileTextureBuilder* builder) : _builder(builder)
+//		{
+//		  _builder->_retain();
+//		}
+//  
+//		virtual ~BuilderStartTask()
+//		{
+//		  _builder->_release();
+//		}
+//  
+//		void execute(const RenderContext* rc)
+//		{
+//		  _builder->start();
+//		}
+//  
+//		boolean isCanceled(const RenderContext *rc)
+//		{
+//		  return _builder->isCanceled();
+//		}
+//	  };
 	  rc.getFrameTasksExecutor().addPreRenderTask(new BuilderStartTask(builderHolder.get()));
 	}
   
 	tile.setTexturizerDirty(false);
 	return builderHolder.get().getMesh();
-  
   }
 
   public final void tileToBeDeleted(Tile tile, Mesh mesh)
@@ -171,7 +174,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 
   public final void justCreatedTopTile(RenderContext rc, Tile tile)
   {
-	java.util.ArrayList<Petition> petitions = _layerSet.createTilePetitions(rc, tile, _parameters._tileTextureWidth, _parameters._tileTextureHeight);
+	java.util.ArrayList<Petition> petitions = _layerSet.createTileMapPetitions(rc, tile, _parameters._tileTextureWidth, _parameters._tileTextureHeight);
   
   
 	_pendingTopTileRequests += petitions.size();
@@ -180,7 +183,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 	for (int i = 0; i < petitions.size(); i++)
 	{
 	  final Petition petition = petitions.get(i);
-	  _downloader.request(new URL(petition.getURL()), priority, new TopTileDownloadListener(this), true);
+	  rc.getDownloader().request(new URL(petition.getURL()), priority, new TopTileDownloadListener(this), true);
   
 	  if (petition != null)
 		  petition.dispose();
@@ -221,34 +224,30 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 	  return;
 	}
   
-	final GLTextureID glTextureId = ancestorMesh.getTopLevelGLTextureID();
+	final GLTextureId glTextureId = ancestorMesh.getTopLevelGLTextureId();
 	if (glTextureId.isValid())
 	{
 	  _texturesHandler.retainGLTextureId(glTextureId);
   
 	  final int level = tile.getLevel() - ancestorTile.getLevel() - _parameters._topLevel;
   
-	  if (!tileMesh.setGLTextureIDForLevel(level, glTextureId))
+	  if (!tileMesh.setGLTextureIdForLevel(level, glTextureId))
 	  {
 		_texturesHandler.releaseGLTextureId(glTextureId);
 	  }
 	}
   }
 
-  public final GLTextureID getTopLevelGLTextureIDForTile(Tile tile)
+  public final GLTextureId getTopLevelGLTextureIdForTile(Tile tile)
   {
 	LeveledTexturedMesh mesh = (LeveledTexturedMesh) tile.getTexturizerMesh();
   
-	return (mesh == null) ? GLTextureID.invalid() : mesh.getTopLevelGLTextureID();
+	return (mesh == null) ? GLTextureId.invalid() : mesh.getTopLevelGLTextureId();
   }
 
-//  void deleteBuilder(TileKey key,
-//                     TileTextureBuilder* builder);
-
-
-  public final void onTerrainTouchEvent(Geodetic3D g3d, Tile tile)
+  public final void onTerrainTouchEvent(EventContext ec, Geodetic3D position, Tile tile)
   {
-	_layerSet.onTerrainTouchEvent(g3d, tile);
+	_layerSet.onTerrainTouchEvent(ec, position, tile);
   }
 
   public final void tileMeshToBeDeleted(Tile tile, Mesh mesh)

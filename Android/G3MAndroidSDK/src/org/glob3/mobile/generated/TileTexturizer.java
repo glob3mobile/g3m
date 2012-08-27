@@ -58,6 +58,6 @@ public abstract class TileTexturizer
 
   public abstract void ancestorTexturedSolvedChanged(Tile tile, Tile ancestorTile, boolean textureSolved);
 
-  public abstract void onTerrainTouchEvent(Geodetic3D g3d, Tile tile);
+  public abstract void onTerrainTouchEvent(EventContext ec, Geodetic3D position, Tile tile);
 
 }

@@ -29,7 +29,8 @@ public class LayerSet
   {
 	for (int i = 0; i < _layers.size(); i++)
 	{
-	  _layers.get(i).dispose();
+	  if (_layers.get(i) != null)
+		  _layers.get(i).dispose();
 	}
   }
 
@@ -39,8 +40,8 @@ public class LayerSet
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: java.util.ArrayList<Petition*> createTilePetitions(const RenderContext* rc, const Tile* tile, int width, int height) const
-  public final java.util.ArrayList<Petition> createTilePetitions(RenderContext rc, Tile tile, int width, int height)
+//ORIGINAL LINE: java.util.ArrayList<Petition*> createTileMapPetitions(const RenderContext* rc, const Tile* tile, int width, int height) const
+  public final java.util.ArrayList<Petition> createTileMapPetitions(RenderContext rc, Tile tile, int width, int height)
   {
 	java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
@@ -49,7 +50,7 @@ public class LayerSet
 	  Layer layer = _layers.get(i);
 	  if (layer.isAvailable(rc, tile))
 	  {
-		java.util.ArrayList<Petition> pet = layer.getTilePetitions(rc, tile, width, height);
+		java.util.ArrayList<Petition> pet = layer.getMapPetitions(rc, tile, width, height);
   
 		//Storing petitions
 		for (int j = 0; j < pet.size(); j++)
@@ -59,25 +60,37 @@ public class LayerSet
 	  }
 	}
   
+	if (petitions.isEmpty())
+	{
+	  rc.getLogger().logWarning("Can't create map petitions for tile %s", tile.getKey().description());
+	}
+  
 	return petitions;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void onTerrainTouchEvent(const Geodetic3D& g3d, const Tile* tile) const
-  public final void onTerrainTouchEvent(Geodetic3D g3d, Tile tile)
+//ORIGINAL LINE: void onTerrainTouchEvent(const EventContext* ec, const Geodetic3D& position, const Tile* tile) const
+  public final void onTerrainTouchEvent(EventContext ec, Geodetic3D position, Tile tile)
   {
   
 	for (int i = 0; i < _layers.size(); i++)
 	{
 	  Layer layer = _layers.get(i);
+	  if (layer.isAvailable(ec, tile))
+	  {
+		TerrainTouchEvent tte = new TerrainTouchEvent(position, tile.getSector(), layer);
   
-	  TerrainTouchEvent tte = new TerrainTouchEvent(g3d.asGeodetic2D(), tile.getSector(), layer);
-  
-	  layer.onTerrainTouchEventListener(tte);
+		layer.onTerrainTouchEventListener(ec, tte);
+	  }
 	}
   
-  
-  
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: int size() const
+  public final int size()
+  {
+	return _layers.size();
   }
 
 }

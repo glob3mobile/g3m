@@ -94,7 +94,6 @@ public class TileRenderer extends Renderer
 	}
 
 
-  //bool isTile1ClosestToCameraThanTile2(Tile *t1, Tile *t2) const;
 
 
   public TileRenderer(TileTessellator tessellator, TileTexturizer texturizer, TilesRenderParameters parameters, boolean showStatistics)
@@ -130,10 +129,10 @@ public class TileRenderer extends Renderer
 	}
 	_lastSplitTimer = ic.getFactory().createTimer();
   
-  //  if (_lastTexturizerTimer != NULL) {
-  //    delete _lastTexturizerTimer;
-  //  }
-  //  _lastTexturizerTimer = ic->getFactory()->createTimer();
+	//  if (_lastTexturizerTimer != NULL) {
+	//    delete _lastTexturizerTimer;
+	//  }
+	//  _lastTexturizerTimer = ic->getFactory()->createTimer();
   
 	_texturizer.initialize(ic, _parameters);
   
@@ -146,9 +145,9 @@ public class TileRenderer extends Renderer
 	_lastCamera = rc.getCurrentCamera();
   
 	TileRenderContext trc = new TileRenderContext(_tessellator, _texturizer, _parameters, statistics, _lastSplitTimer, _firstRender); // if first render, force full render
-  //                        _lastTexturizerTimer,
+						  // _lastTexturizerTimer,
   
-	if (_firstRender)
+	if (_firstRender && _parameters._forceTopLevelTilesRenderOnStart)
 	{
 	  // force one render of the topLevel tiles to make the (toplevel) textures loaded as they
 	  // will be used as last-change fallback texture for any tile.
@@ -168,19 +167,15 @@ public class TileRenderer extends Renderer
 		toVisit.addLast(_topLevelTiles.get(i));
 	  }
   
-  //    DistanceToCenterTileComparison predicate = DistanceToCenterTileComparison(rc->getNextCamera(),
-  //                                                                              rc->getPlanet());
+	  //    DistanceToCenterTileComparison predicate = DistanceToCenterTileComparison(rc->getCurrentCamera(),
+	  //                                                                              rc->getPlanet());
   
 	  while (toVisit.size() > 0)
 	  {
 		java.util.LinkedList<Tile> toVisitInNextIteration = new java.util.LinkedList<Tile>();
   
-		//    std::sort(toVisit.begin(),
-		//              toVisit.end(),
-		//              predicate);
-  
-  //      predicate.initialize();
-  //      toVisit.sort(predicate);
+		//      predicate.initialize();
+		//      toVisit.sort(predicate);
   
 		for (java.util.Iterator<Tile> iter = toVisit.iterator(); iter.hasNext();)
 		{
@@ -190,7 +185,6 @@ public class TileRenderer extends Renderer
 		}
   
 		toVisit = toVisitInNextIteration;
-		//    toVisitInNextIteration.clear();
 	  }
 	}
   
@@ -207,32 +201,41 @@ public class TileRenderer extends Renderer
 
   public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
   {
+	boolean handled = false;
   
 	if (touchEvent.getType() == TouchEventType.LongPress)
 	{
   
 	  if (_lastCamera != null)
 	  {
-		Vector2D pixel = touchEvent.getTouch(0).getPos();
-		Vector3D ray = _lastCamera.pixel2Ray(pixel);
-		Vector3D origin = _lastCamera.getPosition();
+		final Vector2D pixel = touchEvent.getTouch(0).getPos();
+		final Vector3D ray = _lastCamera.pixel2Ray(pixel);
+		final Vector3D origin = _lastCamera.getPosition();
   
-		for(int i = 0; i < _topLevelTiles.size(); i++)
+		final Planet planet = ec.getPlanet();
+  
+		final Vector3D positionCartesian = planet.closestIntersection(origin, ray);
+		if (positionCartesian.isNan())
 		{
-  
-		  Geodetic3D g = _topLevelTiles.get(i).intersection(origin, ray, ec.getPlanet());
-		  if (!g.isNan())
-		  {
-			System.out.printf("G: %f, %f, %f\n", g.latitude().degrees(), g.longitude().degrees(), g.height());
-		  }
+		  return false;
 		}
   
+		final Geodetic3D position = planet.toGeodetic3D(positionCartesian);
+  
+		for (int i = 0; i < _topLevelTiles.size(); i++)
+		{
+		  final Tile tile = _topLevelTiles.get(i).getDeepestTileContaining(position);
+		  if (tile != null)
+		  {
+			_texturizer.onTerrainTouchEvent(ec, position, tile);
+			handled = true;
+		  }
+		}
 	  }
   
-	  return true;
 	}
   
-	return false;
+	return handled;
   }
 
   public final void onResizeViewportEvent(EventContext ec, int width, int height)
@@ -244,7 +247,6 @@ public class TileRenderer extends Renderer
   {
 	if (_topTilesJustCreated)
 	{
-  
 	  if (_texturizer != null)
 	  {
 		final int topLevelTilesSize = _topLevelTiles.size();
@@ -257,20 +259,22 @@ public class TileRenderer extends Renderer
 	  _topTilesJustCreated = false;
 	}
   
-  
-	if (_tessellator != null)
+	if (_parameters._forceTopLevelTilesRenderOnStart)
 	{
-	  if (!_tessellator.isReady(rc))
+	  if (_tessellator != null)
 	  {
-		return false;
+		if (!_tessellator.isReady(rc))
+		{
+		  return false;
+		}
 	  }
-	}
   
-	if (_texturizer != null)
-	{
-	  if (!_texturizer.isReady(rc))
+	  if (_texturizer != null)
 	  {
-		return false;
+		if (!_texturizer.isReady(rc))
+		{
+		  return false;
+		}
 	  }
 	}
   

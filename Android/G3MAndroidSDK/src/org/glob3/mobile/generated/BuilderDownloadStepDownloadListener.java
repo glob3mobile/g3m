@@ -8,6 +8,10 @@ public class BuilderDownloadStepDownloadListener implements IDownloadListener
   private int _onError;
   private int _onCancel;
 
+
+  //long TileTextureBuilder::_sequenceCounter = 0;
+  
+  
   public BuilderDownloadStepDownloadListener(TileTextureBuilder builder, int position)
   {
 	  _builder = builder;

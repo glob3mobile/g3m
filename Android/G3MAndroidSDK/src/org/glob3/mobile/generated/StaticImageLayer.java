@@ -22,15 +22,16 @@ package org.glob3.mobile.generated;
 
 public class StaticImageLayer extends Layer
 {
-  private Sector _bbox ;
+  private Sector _sector ;
   private final IImage _image;
   private final String _layerID;
   private final IStorage _storage;
 
-  public StaticImageLayer(String layerID, IImage image, Sector sector, IStorage storage)
+  public StaticImageLayer(String layerID, IImage image, Sector sector, IStorage storage, LayerCondition condition)
   {
+	  super(condition);
 	  _image = image;
-	  _bbox = new Sector(sector);
+	  _sector = new Sector(sector);
 	  _layerID = layerID;
 	  _storage = storage;
 
@@ -41,27 +42,19 @@ public class StaticImageLayer extends Layer
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean fullContains(const Sector& s) const
-  public final boolean fullContains(Sector s)
-  {
-	return _bbox.fullContains(s);
-  }
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: java.util.ArrayList<Petition*> getTilePetitions(const RenderContext* rc, const Tile* tile, int width, int height) const
-  public final java.util.ArrayList<Petition> getTilePetitions(RenderContext rc, Tile tile, int width, int height)
+//ORIGINAL LINE: java.util.ArrayList<Petition*> getMapPetitions(const RenderContext* rc, const Tile* tile, int width, int height) const
+  public final java.util.ArrayList<Petition> getMapPetitions(RenderContext rc, Tile tile, int width, int height)
   {
 	java.util.ArrayList<Petition> res = new java.util.ArrayList<Petition>();
   
 	Sector tileSector = tile.getSector();
   
-	if (!_bbox.fullContains(tileSector))
+	if (!_sector.fullContains(tileSector))
 	{
 	  return res;
 	}
   
 	//CREATING ID FOR PETITION
-  
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
 	isb.add(_layerID).add("_").add(tileSector.lower().latitude().degrees());
 	isb.add("_").add(tileSector.lower().longitude().degrees());
@@ -71,31 +64,31 @@ public class StaticImageLayer extends Layer
   
 	final URL id = new URL(isb.getString());
   
-	Petition pet = new Petition(tileSector, id, true);
+	Petition pet = new Petition(tileSector, id);
   
 	if (_storage != null)
 	{
 	  if (_storage.contains(id))
 	  {
-		final ByteBuffer bb = _storage.read(id);
-		pet.setByteBuffer(bb); //FILLING DATA
+		final ByteBuffer buffer = _storage.read(id);
+		pet.setByteBuffer(buffer); //FILLING DATA
 		res.add(pet);
 		return res;
 	  }
 	}
   
-	double widthUV = tileSector.getDeltaLongitude().degrees() / _bbox.getDeltaLongitude().degrees();
-	double heightUV = tileSector.getDeltaLatitude().degrees() / _bbox.getDeltaLatitude().degrees();
+	final double widthUV = tileSector.getDeltaLongitude().degrees() / _sector.getDeltaLongitude().degrees();
+	final double heightUV = tileSector.getDeltaLatitude().degrees() / _sector.getDeltaLatitude().degrees();
   
-	Vector2D p = _bbox.getUVCoordinates(tileSector.lower().latitude(), tileSector.lower().longitude());
-	Vector2D pos = new Vector2D(p.x(), p.y() - heightUV);
+	final Vector2D p = _sector.getUVCoordinates(tileSector.lower());
+	final Vector2D pos = new Vector2D(p.x(), p.y() - heightUV);
   
 	Rectangle r = new Rectangle(pos.x() * _image.getWidth(), pos.y() * _image.getHeight(), widthUV * _image.getWidth(), heightUV * _image.getHeight());
   
-	IImage subImage = _image.subImage(r);
+	final IImage subImage = _image.subImage(r);
   
-	ByteBuffer bb = subImage.getEncodedImage(); //Image Encoding PNG
-	pet.setByteBuffer(bb); //FILLING DATA
+	final ByteBuffer buffer = subImage.getEncodedImage(); //Image Encoding PNG
+	pet.setByteBuffer(buffer); //FILLING DATA
 	if (subImage != null)
 		subImage.dispose();
   
@@ -103,17 +96,10 @@ public class StaticImageLayer extends Layer
   
 	if (_storage != null)
 	{
-	  _storage.save(id, bb);
+	  _storage.save(id, buffer);
 	}
   
 	return res;
-  }
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isAvailable(const RenderContext* rc, const Tile* tile)const
-  public final boolean isAvailable(RenderContext rc, Tile tile)
-  {
-	return true;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -124,8 +110,8 @@ public class StaticImageLayer extends Layer
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: URL getFeatureURL(const Geodetic2D& g, const IFactory* factory, const Sector& sector, int width, int height) const
-  public final URL getFeatureURL(Geodetic2D g, IFactory factory, Sector sector, int width, int height)
+//ORIGINAL LINE: URL getFeatureInfoURL(const Geodetic2D& g, const IFactory* factory, const Sector& sector, int width, int height) const
+  public final URL getFeatureInfoURL(Geodetic2D g, IFactory factory, Sector sector, int width, int height)
   {
 	return URL.nullURL();
   }

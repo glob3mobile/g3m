@@ -49,26 +49,26 @@ public class TexturesHandler
 	}
   }
 
-  public final GLTextureID getGLTextureIdFromFileName(String filename, int textureWidth, int textureHeight)
+  public final GLTextureId getGLTextureIdFromFileName(String filename, int textureWidth, int textureHeight, boolean isMipmap)
   {
 	IImage image = _factory.createImageFromFileName(filename);
   
-	final GLTextureID texId = getGLTextureId(image, new TextureSpec(filename, textureWidth, textureHeight)); // filename as the id
+	final GLTextureId texId = getGLTextureId(image, new TextureSpec(filename, textureWidth, textureHeight, isMipmap)); // filename as the id
 	_factory.deleteImage(image);
   
 	return texId;
   }
 
-  public final GLTextureID getGLTextureId(java.util.ArrayList<IImage> images, TextureSpec textureSpec)
+  public final GLTextureId getGLTextureId(java.util.ArrayList<IImage> images, TextureSpec textureSpec)
   {
-	GLTextureID previousId = getGLTextureIdIfAvailable(textureSpec);
+	GLTextureId previousId = getGLTextureIdIfAvailable(textureSpec);
 	if (previousId.isValid())
 	{
 	  return previousId;
 	}
   
 	TextureHolder holder = new TextureHolder(textureSpec);
-	holder._glTextureId = _textureBuilder.createTextureFromImages(_gl, images, textureSpec.getWidth(), textureSpec.getHeight());
+	holder._glTextureId = _textureBuilder.createTextureFromImages(_gl, images, textureSpec.getWidth(), textureSpec.getHeight(), textureSpec.isMipmap());
   
 	if (_verbose)
 	{
@@ -82,16 +82,16 @@ public class TexturesHandler
 	return holder._glTextureId;
   }
 
-  public final GLTextureID getGLTextureId(java.util.ArrayList<IImage> images, java.util.ArrayList<Rectangle> rectangles, TextureSpec textureSpec)
+  public final GLTextureId getGLTextureId(java.util.ArrayList<IImage> images, java.util.ArrayList<Rectangle> rectangles, TextureSpec textureSpec)
   {
-	GLTextureID previousId = getGLTextureIdIfAvailable(textureSpec);
+	GLTextureId previousId = getGLTextureIdIfAvailable(textureSpec);
 	if (previousId.isValid())
 	{
 	  return previousId;
 	}
   
 	TextureHolder holder = new TextureHolder(textureSpec);
-	holder._glTextureId = _textureBuilder.createTextureFromImages(_gl, _factory, images, rectangles, textureSpec.getWidth(), textureSpec.getHeight());
+	holder._glTextureId = _textureBuilder.createTextureFromImages(_gl, _factory, images, rectangles, textureSpec.getWidth(), textureSpec.getHeight(), textureSpec.isMipmap());
   
 	if (_verbose)
 	{
@@ -105,14 +105,14 @@ public class TexturesHandler
 	return holder._glTextureId;
   }
 
-  public final GLTextureID getGLTextureId(IImage image, TextureSpec textureSpec)
+  public final GLTextureId getGLTextureId(IImage image, TextureSpec textureSpec)
   {
 	final java.util.ArrayList<IImage> images = new java.util.ArrayList<IImage>();
 	images.add(image);
 	return getGLTextureId(images, textureSpec);
   }
 
-  public final GLTextureID getGLTextureIdIfAvailable(TextureSpec textureSpec)
+  public final GLTextureId getGLTextureIdIfAvailable(TextureSpec textureSpec)
   {
 	for (int i = 0; i < _textureHolders.size(); i++)
 	{
@@ -127,10 +127,10 @@ public class TexturesHandler
 	  }
 	}
   
-	return GLTextureID.invalid();
+	return GLTextureId.invalid();
   }
 
-  public final void releaseGLTextureId(GLTextureID glTextureId)
+  public final void releaseGLTextureId(GLTextureId glTextureId)
   {
 	if (!glTextureId.isValid())
 	{
@@ -162,7 +162,7 @@ public class TexturesHandler
 	}
   }
 
-  public final void retainGLTextureId(GLTextureID glTextureId)
+  public final void retainGLTextureId(GLTextureId glTextureId)
   {
 	if (!glTextureId.isValid())
 	{

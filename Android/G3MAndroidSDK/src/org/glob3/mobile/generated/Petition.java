@@ -1,18 +1,10 @@
 package org.glob3.mobile.generated; 
 //
-//  Petition.cpp
+//  TilePetitions.hpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 20/08/12.
-//
-//
-
-//
-//  Petition.hpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 20/08/12.
-//
+//  Created by José Miguel S N on 17/07/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 
@@ -31,33 +23,35 @@ package org.glob3.mobile.generated;
 
 public class Petition
 {
-  private URL _url = new URL(); //Conversor creates class "Url"
-  private ByteBuffer _buffer;
+  private final String _url;
   private final Sector _sector;
+  private ByteBuffer _bb;
   private int _downloadID;
   private final boolean _transparentImage;
 
 
-  public Petition(Sector sector, URL url, boolean transparent)
+  public Petition(Sector s, String url, boolean transparent)
   {
-	  _sector = new Sector(sector);
 	  _url = url;
-	  _transparentImage = transparent;
-	  _buffer = null;
+	  _sector = new Sector(s);
+	  _bb = null;
 	  _downloadID = -1;
+	  _transparentImage = transparent;
   }
 
   public void dispose()
   {
+	if (_sector != null)
+		_sector.dispose();
+	releaseData();
   }
 
   public final void releaseData()
   {
-	if (_buffer != null)
-	{
-	  _buffer = null;
-	  _buffer = null;
-	}
+	if (_bb != null)
+		if (_bb != null)
+			_bb.dispose();
+	_bb = null;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -68,10 +62,10 @@ public class Petition
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean hasByteBuffer() const
-  public final boolean hasByteBuffer()
+//ORIGINAL LINE: boolean isArrived() const
+  public final boolean isArrived()
   {
-	return _buffer != null;
+	return _bb != null;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -87,8 +81,8 @@ public class Petition
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const URL getURL() const
-  public final URL getURL()
+//ORIGINAL LINE: String getURL() const
+  public final String getURL()
   {
 	return _url;
   }
@@ -100,44 +94,112 @@ public class Petition
 	return _sector;
   }
 
-  public final void setByteBuffer(ByteBuffer buffer)
+  public final void setByteBuffer(ByteBuffer bb)
   {
-	if (_buffer != null)
-	{
-	  _buffer = null;
-	}
-	_buffer = buffer;
+	if (_bb != null)
+		if (_bb != null)
+			_bb.dispose();
+	_bb = bb;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: const ByteBuffer* getByteBuffer() const
   public final ByteBuffer getByteBuffer()
   {
-	return _buffer;
+	return _bb;
   }
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const String description() const
-  public final String description()
-  {
-  
-	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.add("Petition(url=").add(_url.description()).add(", sector=").add(_sector.description()).add(", buffer=");
-	if (_buffer == null)
-	{
-	  isb.add("NULL");
-	}
-	else
-	{
-	  isb.add(_buffer.description());
-	}
-	isb.add(", downloadID=").add(_downloadID).add(", transparentImage=").addBool(_transparentImage).add(")");
-	String s = isb.getString();
-  
-	if (isb != null)
-		isb.dispose();
-	return s;
-  
-  }
-
 }
+//class TilePetitions: public IDownloadListener {
+//  
+//  const int    _level;
+//  const int    _row;
+//  const int    _column;
+//  const Sector _tileSector;
+//
+//  std::vector<Petition*> _petitions;
+//  
+//  std::string _petitionsID;
+//  
+//  int _texId;      //TEXTURE ID ONCE IS FINISHED
+//  
+//  int _downloadsCounter;
+//  int _errorsCounter;
+//  
+//  TilePetitions(const TilePetitions& that);
+//  
+//  Rectangle* getImageRectangleInTexture(const Sector& wholeSector, 
+//                                       const Sector& imageSector,
+//                                       int texWidth, int texHeight) const;
+//  
+//  Petition* getPetition(int i) { return _petitions[i];}
+//  
+//  int getNumPetitions() { return _petitions.size();}
+//  
+//  std::string createPetitionsID(const IFactory* fac) const;
+//  
+//public:
+//  
+//  TilePetitions(const int level,
+//                const int row,
+//                const int column,
+//                const Sector sector,
+//                const std::vector<Petition*>& petitions,
+//                const IFactory* fac):
+//  _level(level),
+//  _row(row),
+//  _column(column),
+//  _tileSector(sector),
+//  _downloadsCounter(0),
+//  _errorsCounter(0),
+//  _petitions(petitions),
+//  _texId(-1)
+//  {
+//    removeUnnecesaryPetitions();
+//    _petitionsID = createPetitionsID(fac);
+//  }
+//  
+//  ~TilePetitions()
+//  {
+//    for (int i = 0; i < _petitions.size(); i++) {
+//      delete _petitions[i];
+//    }
+//  }
+//  
+//  void requestToNet(Downloader& downloader, int priority);
+//  void requestToCache(Downloader& downloader);
+//  void cancelPetitions(Downloader& downloader);
+//  
+//  int getLevel() const {
+//    return _level;
+//  }
+//  
+//  int getRow() const {
+//    return _row;
+//  }
+//  
+//  int getColumn() const {
+//    return _column;
+//  }
+//  
+//  Sector getSector() const{ 
+//    return _tileSector;
+//  }
+//  
+//  void createTexture(TexturesHandler* texHandler, const IFactory* factory, int width, int height);
+//  
+//  int getTexID() const{ return _texId;}
+//
+//  std::string getPetitionsID() const{
+//    return _petitionsID;
+//  }
+//  
+//  bool allFinished() const;
+//  
+//  void onDownload(const Response &response); 
+//  void onError(const Response& e);
+//  void onCancel(const URL& url);
+//  
+//  void removeUnnecesaryPetitions();
+//  
+//};
+

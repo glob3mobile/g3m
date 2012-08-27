@@ -8,13 +8,13 @@ public class SaverDownloadListener implements IDownloadListener
 
   private URL _url = new URL();
 
-  public SaverDownloadListener(CachedDownloader downloader, IDownloadListener listener, boolean deleteListener, IStorage cacheStorage, URL url)
+  public SaverDownloadListener(CachedDownloader downloader, IStorage cacheStorage, URL url, IDownloadListener listener, boolean deleteListener)
   {
 	  _downloader = downloader;
-	  _listener = listener;
-	  _deleteListener = deleteListener;
 	  _cacheStorage = cacheStorage;
 	  _url = url;
+	  _listener = listener;
+	  _deleteListener = deleteListener;
 
   }
 

@@ -168,4 +168,17 @@ public class Vector2D
 	return Double.isNaN(_x * _y);
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const String description() const
+  public final String description()
+  {
+	std.ostringstream buffer = new std.ostringstream();
+	buffer << "(V2D ";
+	buffer << _x;
+	buffer << ", ";
+	buffer << _y;
+	buffer << ")";
+	return buffer.str();
+  }
+
 }

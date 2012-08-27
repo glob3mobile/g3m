@@ -51,6 +51,11 @@ public class CachedDownloader implements IDownloader
 	_downloader.start();
   }
 
+  public final void stop()
+  {
+	_downloader.stop();
+  }
+
 
   //const URL CachedDownloader::getCacheFileName(const URL& url) const {
   //  return URL(_cacheDirectory, removeInvalidChars(url.getPath()));
@@ -64,10 +69,7 @@ public class CachedDownloader implements IDownloader
 	if (cachedBuffer == null)
 	{
 	  // cache miss
-	  final int requestId = _downloader.request(url, priority, new SaverDownloadListener(this, listener, deleteListener, _cacheStorage, url), true);
-  
-  //    delete cachedBuffer;
-	  return requestId;
+	  return _downloader.request(url, priority, new SaverDownloadListener(this, _cacheStorage, url, listener, deleteListener), true);
 	}
 	else
 	{

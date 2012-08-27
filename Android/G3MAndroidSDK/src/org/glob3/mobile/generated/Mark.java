@@ -24,14 +24,14 @@ public class Mark
   private final String _textureFilename;
   private final Geodetic3D _position ;
 
-  private GLTextureID _textureId = new GLTextureID();
+  private GLTextureId _textureId = new GLTextureId();
 
   public Mark(String name, String textureFilename, Geodetic3D position)
   {
 	  _name = name;
 	  _textureFilename = textureFilename;
 	  _position = new Geodetic3D(position);
-	  _textureId = new GLTextureID(-1);
+	  _textureId = new GLTextureId(-1);
 
   }
 
@@ -55,7 +55,7 @@ public class Mark
 
   public final void render(RenderContext rc, double minDistanceToCamera)
   {
-	final Camera camera = rc.getNextCamera();
+	final Camera camera = rc.getCurrentCamera();
 	final Planet planet = rc.getPlanet();
   
 	final Vector3D cameraPosition = camera.getPosition();
@@ -78,7 +78,7 @@ public class Mark
   
 		if (!_textureId.isValid())
 		{
-		  _textureId = rc.getTexturesHandler().getGLTextureIdFromFileName(_textureFilename, 128, 128);
+		  _textureId = rc.getTexturesHandler().getGLTextureIdFromFileName(_textureFilename, 128, 128, false);
 		}
   
 		if (!_textureId.isValid())

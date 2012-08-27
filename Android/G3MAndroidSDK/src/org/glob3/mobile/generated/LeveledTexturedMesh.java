@@ -137,13 +137,13 @@ public class LeveledTexturedMesh extends Mesh
 	return (_mesh == null) ? null : _mesh.getExtent();
   }
 
-  public final boolean setGLTextureIDForLevel(int level, GLTextureID glTextureID)
+  public final boolean setGLTextureIdForLevel(int level, GLTextureId glTextureId)
   {
-	if (glTextureID.isValid())
+	if (glTextureId.isValid())
 	{
 	  if (!_currentLevelIsValid || (level < _currentLevel))
 	  {
-		_mappings.get(level).setGLTextureID(glTextureID);
+		_mappings.get(level).setGLTextureId(glTextureId);
 		_currentLevelIsValid = false;
 		return true;
 	  }
@@ -152,28 +152,28 @@ public class LeveledTexturedMesh extends Mesh
 	return false;
   }
 
-//  void setGLTextureIDForInversedLevel(int inversedLevel,
-//                                      const GLTextureID glTextureID);
+//  void setGLTextureIdForInversedLevel(int inversedLevel,
+//                                      const GLTextureId glTextureId);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const GLTextureID getTopLevelGLTextureID() const
-  public final GLTextureID getTopLevelGLTextureID()
+//ORIGINAL LINE: const GLTextureId getTopLevelGLTextureId() const
+  public final GLTextureId getTopLevelGLTextureId()
   {
 	final LazyTextureMapping mapping = getCurrentTextureMapping();
 	if (mapping != null)
 	{
 	  if (_currentLevel == 0)
 	  {
-		return mapping.getGLTextureID();
+		return mapping.getGLTextureId();
 	  }
 	}
   
-	return GLTextureID.invalid();
+	return GLTextureId.invalid();
   }
 
 }
-//void LeveledTexturedMesh::setGLTextureIDForInversedLevel(int inversedLevel,
-//                                                         const GLTextureID glTextureID) {
+//void LeveledTexturedMesh::setGLTextureIdForInversedLevel(int inversedLevel,
+//                                                         const GLTextureId glTextureId) {
 //  const int level = _mappings->size() - inversedLevel - 1;
-//  setGLTextureIDForLevel(level, glTextureID);
+//  setGLTextureIdForLevel(level, glTextureId);
 //}

@@ -32,7 +32,7 @@ public class GL
   // stack of ModelView matrices
   private java.util.LinkedList<MutableMatrix44D> _matrixStack = new java.util.LinkedList<MutableMatrix44D>();
 
-  private java.util.LinkedList<GLTextureID> _texturesIdBag = new java.util.LinkedList<GLTextureID>();
+  private java.util.LinkedList<GLTextureId> _texturesIdBag = new java.util.LinkedList<GLTextureId>();
   private int _texturesIdAllocationCounter;
   private int _texturesIdGetCounter;
   private int _texturesIdTakeCounter;
@@ -76,7 +76,7 @@ public class GL
 	_gl.uniformMatrix4fv(GlobalMembersGL.Uniforms.Modelview, 1, false, loadModelView_M);
   }
 
-  private GLTextureID getGLTextureID()
+  private GLTextureId getGLTextureId()
   {
 	if (_texturesIdBag.size() == 0)
 	{
@@ -84,7 +84,7 @@ public class GL
   
 	  System.out.printf("= Creating %d texturesIds...\n", bugdetSize);
   
-	  final java.util.ArrayList<GLTextureID> ids = _gl.genTextures(bugdetSize);
+	  final java.util.ArrayList<GLTextureId> ids = _gl.genTextures(bugdetSize);
   
 	  for (int i = 0; i < bugdetSize; i++)
 	  {
@@ -98,11 +98,11 @@ public class GL
   
 	_texturesIdGetCounter++;
   
-	final GLTextureID result = _texturesIdBag.getLast();
+	final GLTextureId result = _texturesIdBag.getLast();
 	_texturesIdBag.removeLast();
   
   //  printf("   - Assigning 1 texturesId (#%d) from bag (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
-  //         result.getGLTextureID(),
+  //         result.getGLTextureId(),
   //         _texturesIdBag.size(),
   //         _texturesIdGetCounter,
   //         _texturesIdTakeCounter,
@@ -425,10 +425,10 @@ public class GL
 	return _gl.getError();
   }
 
-  public final GLTextureID uploadTexture(IImage image, int textureWidth, int textureHeight)
+  public final GLTextureId uploadTexture(IImage image, int textureWidth, int textureHeight, boolean generateMipmap)
   {
-	final GLTextureID texID = getGLTextureID();
-	if (texID.isValid())
+	final GLTextureId texId = getGLTextureId();
+	if (texId.isValid())
 	{
   
   
@@ -445,13 +445,17 @@ public class GL
   	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapT, GLTextureParameterValue.ClampToEdge);
   	_gl.texImage2D(GLTextureType.Texture2D, 0, GLFormat.RGBA, textureWidth, textureHeight, 0, GLFormat.RGBA, GLType.UnsignedByte, imageData);
   	return texID;
-  
+	  if (generateMipmap)
+	  {
+		_gl.generateMipmap(Texture2D);
+	  }
 	}
 	else
 	{
 	  System.out.print("can't get a valid texture id\n");
 	}
-	return texID;
+  
+	return texId;
   }
 
   public final void setTextureCoordinates(int size, int stride, float[] texcoord)
@@ -462,7 +466,7 @@ public class GL
 	  }
   }
 
-  public final void bindTexture(GLTextureID textureId)
+  public final void bindTexture(GLTextureId textureId)
   {
 	_gl.bindTexture(GLTextureType.Texture2D, textureId.getGLTextureID());
   }
@@ -502,7 +506,7 @@ public class GL
   
   }
 
-  public final void drawBillBoard(GLTextureID textureId, Vector3D pos, float viewPortRatio)
+  public final void drawBillBoard(GLTextureId textureId, Vector3D pos, float viewPortRatio)
   {
 	float[] vertex = { (float) pos.x(), (float) pos.y(), (float) pos.z(), (float) pos.x(), (float) pos.y(), (float) pos.z(), (float) pos.x(), (float) pos.y(), (float) pos.z(), (float) pos.x(), (float) pos.y(), (float) pos.z() };
   
@@ -529,22 +533,18 @@ public class GL
 	_gl.uniform1i(GlobalMembersGL.Uniforms.BillBoard, 0);
   }
 
-  public final void deleteTexture(GLTextureID textureId)
+  public final void deleteTexture(GLTextureId textureId)
   {
 	if (!textureId.isValid())
 	{
 	  return;
 	}
-	int[] textures = { textureId.getGLTextureID() };
+	int[] textures = { textureId.getGLTextureId() };
 	_gl.deleteTextures(1, textures);
   
 	_texturesIdBag.addLast(textureId);
   
 	_texturesIdTakeCounter++;
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if C_CODE
-	System.out.printf("   - Delete 1 texturesId (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n", _texturesIdBag.size(), _texturesIdGetCounter, _texturesIdTakeCounter, _texturesIdGetCounter - _texturesIdTakeCounter);
-//#endif
   }
 
   public final void enableCullFace(GLCullFace face)
@@ -637,4 +637,5 @@ public class GL
 	  _lastImageData = null;
 	}
   }
+
 }

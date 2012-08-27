@@ -52,6 +52,18 @@ public class MutableVector2D
 
   }
 
+  public static MutableVector2D nan()
+  {
+	return new MutableVector2D(Double.NaN, Double.NaN);
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isNan() const
+  public final boolean isNan()
+  {
+	return Double.isNaN(_x * _y);
+  }
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: MutableVector2D normalized() const;
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:

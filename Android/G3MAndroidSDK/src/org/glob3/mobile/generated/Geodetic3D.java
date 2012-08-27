@@ -99,4 +99,19 @@ public class Geodetic3D
 	return new Geodetic2D(_latitude, _longitude);
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const String description() const
+  public final String description()
+  {
+	std.ostringstream buffer = new std.ostringstream();
+	buffer << "(lat=";
+	buffer << _latitude.description();
+	buffer << ", lon=";
+	buffer << _longitude.description();
+	buffer << ", height=";
+	buffer << _height;
+	buffer << ")";
+	return buffer.str();
+  }
+
 }

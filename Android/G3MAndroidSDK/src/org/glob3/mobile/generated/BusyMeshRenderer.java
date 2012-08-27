@@ -39,7 +39,7 @@ public class BusyMeshRenderer extends Renderer implements EffectTarget
 	// compute number of vertex for the ring
 	int numStrides = 60;
 	int numVertices = numStrides * 2 + 2;
-	int numIndices = numVertices;
+	int numIndices = numVertices + 2;
   
 	// add number of vertex for the square
   
@@ -179,12 +179,12 @@ public class BusyMeshRenderer extends Renderer implements EffectTarget
 
   public final void start()
   {
-	int _TODO_start_effects;
+	//int _TODO_start_effects;
   }
 
   public final void stop()
   {
-	int _TODO_stop_effects;
+	//int _TODO_stop_effects;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

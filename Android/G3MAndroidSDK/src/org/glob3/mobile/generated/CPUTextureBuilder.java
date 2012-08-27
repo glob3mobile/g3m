@@ -20,19 +20,19 @@ package org.glob3.mobile.generated;
 public class CPUTextureBuilder extends TextureBuilder
 {
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const GLTextureID createTextureFromImages(GL * gl, const java.util.ArrayList<const IImage*> images, int width, int height) const
-  public final GLTextureID createTextureFromImages(GL gl, java.util.ArrayList<IImage> images, int width, int height)
+//ORIGINAL LINE: const GLTextureId createTextureFromImages(GL * gl, const java.util.ArrayList<const IImage*> images, int width, int height, boolean generateMipmap) const
+  public final GLTextureId createTextureFromImages(GL gl, java.util.ArrayList<IImage> images, int width, int height, boolean generateMipmap)
   {
 	final int imagesSize = images.size();
   
 	if (imagesSize == 0)
 	{
-	  return GLTextureID.invalid();
+	  return GLTextureId.invalid();
 	}
   
 	if (imagesSize == 1)
 	{
-	  return gl.uploadTexture(images.get(0), width, height);
+	  return gl.uploadTexture(images.get(0), width, height, generateMipmap);
 	}
   
 	IImage im = images.get(0);
@@ -49,7 +49,7 @@ public class CPUTextureBuilder extends TextureBuilder
 	  im = im2;
 	}
   
-	final GLTextureID texID = gl.uploadTexture(im, width, height);
+	final GLTextureId texId = gl.uploadTexture(im, width, height, generateMipmap);
   
 	if (imagesSize > 1)
 	{
@@ -57,18 +57,18 @@ public class CPUTextureBuilder extends TextureBuilder
 		  im.dispose();
 	}
   
-	return texID;
+	return texId;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const GLTextureID createTextureFromImages(GL * gl, const IFactory* factory, const java.util.ArrayList<const IImage*> images, const java.util.ArrayList<const Rectangle*> rectangles, int width, int height) const
-  public final GLTextureID createTextureFromImages(GL gl, IFactory factory, java.util.ArrayList<IImage> images, java.util.ArrayList<Rectangle> rectangles, int width, int height)
+//ORIGINAL LINE: const GLTextureId createTextureFromImages(GL * gl, const IFactory* factory, const java.util.ArrayList<const IImage*> images, const java.util.ArrayList<const Rectangle*> rectangles, int width, int height, boolean generateMipmap) const
+  public final GLTextureId createTextureFromImages(GL gl, IFactory factory, java.util.ArrayList<IImage> images, java.util.ArrayList<Rectangle> rectangles, int width, int height, boolean generateMipmap)
   {
 	final int imagesSize = images.size();
   
 	if (imagesSize == 0)
 	{
-	  return GLTextureID.invalid();
+	  return GLTextureId.invalid();
 	}
   
   //  const Rectangle baseRec(0,0, width, height);
@@ -86,11 +86,11 @@ public class CPUTextureBuilder extends TextureBuilder
   //    image = nextImage;
   //  }
   //
-  //  const GLTextureID texID = gl->uploadTexture(image, width, height);
+  //  const GLTextureId texId = gl->uploadTexture(image, width, height);
   //
   //  delete image;
   //
-  //  return texID;
+  //  return texId;
   
   
 	IImage base;
@@ -122,7 +122,7 @@ public class CPUTextureBuilder extends TextureBuilder
 	  base = im2;
 	}
   
-	final GLTextureID texID = gl.uploadTexture(base, width, height);
+	final GLTextureId texId = gl.uploadTexture(base, width, height, generateMipmap);
   
 	if (rectangles.size() > 0 && base != images.get(0))
 	{
@@ -130,7 +130,7 @@ public class CPUTextureBuilder extends TextureBuilder
 		  base.dispose();
 	}
   
-	return texID;
+	return texId;
   }
 
 }

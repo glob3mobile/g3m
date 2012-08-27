@@ -5,11 +5,12 @@ package org.glob3.mobile.generated;
 public class CameraSingleDragHandler extends CameraEventHandler
 {
 
-  public CameraSingleDragHandler()
+  public CameraSingleDragHandler(boolean useInertia)
   {
 	  _camera0 = new Camera(new Camera(0, 0));
 	  _initialPoint = new MutableVector3D(0,0,0);
-	  _initialPixel = new MutableVector3D(0,0,0);
+	  _initialPixel = new MutableVector2D(0,0);
+	  _useInertia = useInertia;
   }
 
   public void dispose()
@@ -71,7 +72,8 @@ public class CameraSingleDragHandler extends CameraEventHandler
 	return Renderer.maxTimeToRender;
   }
 
-  public final void onDown(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  private final boolean _useInertia;
+  private void onDown(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	Camera camera = cameraContext.getCamera();
 	_camera0 = new Camera(camera);
@@ -80,19 +82,29 @@ public class CameraSingleDragHandler extends CameraEventHandler
 	_lastRadians = _radiansStep = 0.0;
   
 	// dragging
-	Vector2D pixel = touchEvent.getTouch(0).getPos();
+	final Vector2D pixel = touchEvent.getTouch(0).getPos();
+	_initialPixel = pixel.asMutableVector2D();
 	_initialPoint = _camera0.pixel2PlanetPoint(pixel).asMutableVector3D();
   
 	//printf ("down 1 finger. Initial point = %f %f %f\n", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
   }
-  public final void onMove(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  private void onMove(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
+  
 	if (cameraContext.getCurrentGesture()!=Gesture.Drag)
-		return;
+	{
+	  return;
+	}
+  
 	if (_initialPoint.isNan())
-		return;
+	{
+	  return;
+	}
   
 	final Vector2D pixel = touchEvent.getTouch(0).getPos();
+  
+  //  const Vector2D pixel = Vector2D(touchEvent.getTouch(0)->getPos().x(), _initialPixel.y());
+  
 	MutableVector3D finalPoint = _camera0.pixel2PlanetPoint(pixel).asMutableVector3D();
 	if (finalPoint.isNan())
 	{
@@ -108,42 +120,45 @@ public class CameraSingleDragHandler extends CameraEventHandler
 	camera.copyFrom(_camera0);
 	camera.dragCamera(_initialPoint.asVector3D(), finalPoint.asVector3D());
   
+  
 	// save drag parameters
 	_axis = _initialPoint.cross(finalPoint);
-	double radians = -Math.asin(_axis.length()/_initialPoint.length()/finalPoint.length());
+  
+	final double radians = -Math.asin(_axis.length()/_initialPoint.length()/finalPoint.length());
 	_radiansStep = radians - _lastRadians;
 	_lastRadians = radians;
-  
-	//printf ("Moving 1 finger.\n");
   }
-  public final void onUp(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  private void onUp(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
-	// test if animation is needed
-	final Touch touch = touchEvent.getTouch(0);
-	Vector2D currPixel = touch.getPos();
-	Vector2D prevPixel = touch.getPrevPos();
-	double desp = currPixel.sub(prevPixel).length();
-  
-	// start inertial effect
-	if (cameraContext.getCurrentGesture() == Gesture.Drag && !_axis.isNan() && desp>2)
+	if (_useInertia)
 	{
-	  Effect effect = new SingleDragEffect(_axis.asVector3D(), Angle.fromRadians(_radiansStep));
-	  eventContext.getEffectsScheduler().startEffect(effect, cameraContext);
+	  // test if animation is needed
+	  final Touch touch = touchEvent.getTouch(0);
+	  Vector2D currPixel = touch.getPos();
+	  Vector2D prevPixel = touch.getPrevPos();
+	  double desp = currPixel.sub(prevPixel).length();
+  
+	  if (cameraContext.getCurrentGesture() == Gesture.Drag && !_axis.isNan() && desp>2)
+	  {
+		// start inertial effect
+		Effect effect = new SingleDragEffect(_axis.asVector3D(), Angle.fromRadians(_radiansStep));
+		eventContext.getEffectsScheduler().startEffect(effect, cameraContext);
+	  }
 	}
   
 	// update gesture
 	cameraContext.setCurrentGesture(Gesture.None);
-	_initialPixel = Vector3D.nan().asMutableVector3D();
+	_initialPixel = MutableVector2D.nan();
   }
 
 
-  public Camera _camera0 ; //Initial Camera saved on Down event
+  private Camera _camera0 ; //Initial Camera saved on Down event
 
-  public MutableVector3D _initialPoint = new MutableVector3D(); //Initial point at dragging
-  public MutableVector3D _initialPixel = new MutableVector3D(); //Initial pixel at start of gesture
+  private MutableVector3D _initialPoint = new MutableVector3D(); //Initial point at dragging
+  private MutableVector2D _initialPixel = new MutableVector2D(); //Initial pixel at start of gesture
 
-  public MutableVector3D _axis = new MutableVector3D();
-  public double _lastRadians;
-  public double _radiansStep;
+  private MutableVector3D _axis = new MutableVector3D();
+  private double _lastRadians;
+  private double _radiansStep;
 
 }

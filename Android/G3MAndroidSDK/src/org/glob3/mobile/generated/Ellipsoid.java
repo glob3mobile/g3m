@@ -77,24 +77,25 @@ public class Ellipsoid
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: java.util.ArrayList<double> intersections(const Vector3D& origin, const Vector3D& direction) const
-  public final java.util.ArrayList<Double> intersections(Vector3D origin, Vector3D direction)
+//ORIGINAL LINE: java.util.ArrayList<double> intersectionsDistances(const Vector3D& origin, const Vector3D& direction) const
+  public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
   {
 	java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
   
+	int __ASK_Normalized_or_not;
 	//direction.Normalize();
   
 	// By laborious algebraic manipulation....
-	double a = direction.x() * direction.x() * _oneOverRadiiSquared.x() + direction.y() * direction.y() * _oneOverRadiiSquared.y() + direction.z() * direction.z() * _oneOverRadiiSquared.z();
+	final double a = (direction.x() * direction.x() * _oneOverRadiiSquared.x() + direction.y() * direction.y() * _oneOverRadiiSquared.y() + direction.z() * direction.z() * _oneOverRadiiSquared.z());
   
-	double b = 2.0 * (origin.x() * direction.x() * _oneOverRadiiSquared.x() + origin.y() * direction.y() * _oneOverRadiiSquared.y() + origin.z() * direction.z() * _oneOverRadiiSquared.z());
+	final double b = 2.0 * (origin.x() * direction.x() * _oneOverRadiiSquared.x() + origin.y() * direction.y() * _oneOverRadiiSquared.y() + origin.z() * direction.z() * _oneOverRadiiSquared.z());
   
-	double c = origin.x() * origin.x() * _oneOverRadiiSquared.x() + origin.y() * origin.y() * _oneOverRadiiSquared.y() + origin.z() * origin.z() * _oneOverRadiiSquared.z() - 1.0;
+	final double c = (origin.x() * origin.x() * _oneOverRadiiSquared.x() + origin.y() * origin.y() * _oneOverRadiiSquared.y() + origin.z() * origin.z() * _oneOverRadiiSquared.z() - 1.0);
   
 	// Solve the quadratic equation: ax^2 + bx + c = 0.
 	// Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
 	// Numerical Recipes in C, section 5.6: "Quadratic and Cubic Equations"
-	double discriminant = b * b - 4 * a * c;
+	final double discriminant = b * b - 4 * a * c;
 	if (discriminant < 0.0)
 	{
 	  // no intersections
@@ -108,23 +109,22 @@ public class Ellipsoid
 	  return intersections;
 	}
   
-	double t = -0.5 * (b + (b > 0.0 ? 1.0 : -1.0) * Math.sqrt(discriminant));
-	double root1 = t / a;
-	double root2 = c / t;
+	final double t = -0.5 * (b + (b > 0.0 ? 1.0 : -1.0) * Math.sqrt(discriminant));
+	final double root1 = t / a;
+	final double root2 = c / t;
   
 	// Two intersections - return the smallest first.
 	if (root1 < root2)
 	{
 	  intersections.add(root1);
 	  intersections.add(root2);
-	  return intersections;
 	}
 	else
 	{
 	  intersections.add(root2);
 	  intersections.add(root1);
-	  return intersections;
 	}
+	return intersections;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -380,10 +380,11 @@ public class Ellipsoid
 //ORIGINAL LINE: Vector3D closestIntersection(const Vector3D& pos, const Vector3D& ray) const
   public final Vector3D closestIntersection(Vector3D pos, Vector3D ray)
   {
-	java.util.ArrayList<Double> t = intersections(pos, ray);
-	if (t.isEmpty())
-		return Vector3D.nan();
-	Vector3D solution = pos.add(ray.times(t.get(0)));
-	return solution;
+	java.util.ArrayList<Double> distances = intersectionsDistances(pos, ray);
+	if (distances.isEmpty())
+	{
+	  return Vector3D.nan();
+	}
+	return pos.add(ray.times(distances.get(0)));
   }
 }

@@ -42,9 +42,9 @@ public class DoubleTapEffect extends EffectWithDuration
   {
 	//const double percent = gently(percentDone(now), 0.2, 0.9);
 	//const double percent = pace( percentDone(now) );
-	double percent = percentDone(now);
+	final double percent = percentDone(now);
 	Camera camera = rc.getNextCamera();
-	double step = percent - _lastPercent;
+	final double step = percent - _lastPercent;
 	camera.rotateWithAxis(_axis, _angle.times(step));
 	camera.moveForward(_distance *step);
 	_lastPercent = percent;

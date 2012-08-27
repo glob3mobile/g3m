@@ -24,7 +24,7 @@ public class SingleImageTileTexturizer extends TileTexturizer
 
   private RenderContext _renderContext;
   private final TilesRenderParameters _parameters;
-  private GLTextureID _texID = new GLTextureID();
+  private GLTextureId _texId = new GLTextureId();
   private final IImage _image;
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -53,7 +53,7 @@ public class SingleImageTileTexturizer extends TileTexturizer
 
   public SingleImageTileTexturizer(TilesRenderParameters parameters, IImage image)
   {
-	  _texID = new GLTextureID(-1);
+	  _texId = new GLTextureId(-1);
 	  _image = image;
 	  _parameters = parameters;
 	  _renderContext = null;
@@ -61,11 +61,11 @@ public class SingleImageTileTexturizer extends TileTexturizer
 
   public void dispose()
   {
-	if (_texID.isValid())
+	if (_texId.isValid())
 	{
 	  if (_renderContext != null)
 	  {
-		_renderContext.getTexturesHandler().releaseGLTextureId(_texID);
+		_renderContext.getTexturesHandler().releaseGLTextureId(_texId);
 	  }
 	}
   }
@@ -79,11 +79,11 @@ public class SingleImageTileTexturizer extends TileTexturizer
   {
 	_renderContext = rc; //SAVING CONTEXT
   
-	if (!_texID.isValid())
+	if (!_texId.isValid())
 	{
-	  _texID = rc.getTexturesHandler().getGLTextureId(_image, new TextureSpec("SINGLE_IMAGE_TEX", _image.getWidth(), _image.getHeight()));
+	  _texId = rc.getTexturesHandler().getGLTextureId(_image, new TextureSpec("SINGLE_IMAGE_TEX", _image.getWidth(), _image.getHeight(), true));
   
-	  if (!_texID.isValid())
+	  if (!_texId.isValid())
 	  {
 		rc.getLogger().logError("Can't upload texture to GPU");
 		return null;
@@ -92,7 +92,7 @@ public class SingleImageTileTexturizer extends TileTexturizer
 	  rc.getFactory().deleteImage(_image);
 	}
   
-	TextureMapping texMap = new SimpleTextureMapping(_texID, createTextureCoordinates(rc, mesh));
+	TextureMapping texMap = new SimpleTextureMapping(_texId, createTextureCoordinates(rc, mesh));
 	if (previousMesh != null)
 		if (previousMesh != null)
 			previousMesh.dispose();
@@ -128,7 +128,7 @@ public class SingleImageTileTexturizer extends TileTexturizer
   
   }
 
-  public final void onTerrainTouchEvent(Geodetic3D g3d, Tile tile)
+  public final void onTerrainTouchEvent(EventContext ec, Geodetic3D position, Tile tile)
   {
   }
 

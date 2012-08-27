@@ -254,7 +254,7 @@ public class Sector
 //ORIGINAL LINE: boolean isBackOriented(const RenderContext *rc) const
   public final boolean isBackOriented(RenderContext rc)
   {
-	Camera camera = rc.getNextCamera();
+	final Camera camera = rc.getCurrentCamera();
 	final Planet planet = rc.getPlanet();
   
 	// compute sector point nearest to centerPoint

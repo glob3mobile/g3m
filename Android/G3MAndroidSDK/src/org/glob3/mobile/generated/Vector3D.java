@@ -27,6 +27,9 @@ public class Vector3D
   private final double _y;
   private final double _z;
 
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  Vector3D operator =(Vector3D that);
+
 
   public Vector3D(double x, double y, double z)
   {
@@ -236,4 +239,20 @@ public class Vector3D
 	Vector3D projected = normal.transformedBy(m, 0).normalized();
 	return projected.times(this.length());
   }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const String description() const
+  public final String description()
+  {
+	std.ostringstream buffer = new std.ostringstream();
+	buffer << "(V3D ";
+	buffer << _x;
+	buffer << ", ";
+	buffer << _y;
+	buffer << ", ";
+	buffer << _z;
+	buffer << ")";
+	return buffer.str();
+  }
+
 }
