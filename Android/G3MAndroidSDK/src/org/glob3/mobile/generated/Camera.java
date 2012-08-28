@@ -14,7 +14,7 @@ public class Camera
 	  _position = new MutableVector3D(that._position);
 	  _center = new MutableVector3D(that._center);
 	  _up = new MutableVector3D(that._up);
-	  _geodeticCenterOfView = null;
+	  _geodeticCenterOfView = (that._geodeticCenterOfView == null) ? null : new Geodetic3D(that._geodeticCenterOfView);
 	  _XYZCenterOfView = new MutableVector3D(that._XYZCenterOfView);
 	  _frustum = (that._frustum == null) ? null : new Frustum(that._frustum);
 	  _frustumInModelCoordinates = (that._frustumInModelCoordinates == null) ? null : new Frustum(that._frustumInModelCoordinates);
@@ -25,6 +25,20 @@ public class Camera
 	  _frustumData = new FrustumData(that._frustumData);
 	  _planet = that._planet;
 	//cleanCachedValues();
+  }
+
+  public final boolean check()
+  {
+	if (!_dirtyFlags._frustum && _frustum == null)
+	{
+	  return true;
+	}
+
+	if (!_dirtyFlags._frustumMC && _frustumInModelCoordinates == null)
+	{
+	  return true;
+	}
+	return false;
   }
 
 
@@ -644,8 +658,6 @@ public class Camera
 
 	return new FrustumData(left, right, bottom, top, znear, zfar);
   }
-  
-  
 
 
   //void calculateCachedValues();
@@ -663,6 +675,8 @@ public class Camera
 	  _frustumInModelCoordinates = NULL;
 	}
   }*/
+
+
 
 
 }
