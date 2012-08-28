@@ -38,19 +38,19 @@ enum Gesture {
 class CameraContext: public EffectTarget {
 private:
   Gesture _currentGesture;
-  Camera* _camera;         
+  Camera* _nextCamera;         
 
 public:
-  CameraContext(Gesture gesture, Camera* camera): 
+  CameraContext(Gesture gesture, Camera* nextCamera): 
   _currentGesture(gesture),
-  _camera(camera)
+  _nextCamera(nextCamera)
   {}
   
   ~CameraContext(){}
   
-  Gesture getCurrentGesture() const { return _currentGesture; }
-  void setCurrentGesture(Gesture gesture) { _currentGesture = gesture; }
-  Camera* getCamera() { return _camera; }
+  const Gesture getCurrentGesture() const { return _currentGesture; }
+  void setCurrentGesture(const Gesture& gesture) { _currentGesture = gesture; }
+  Camera* getNextCamera() { return _nextCamera; }
   
   bool isEffectable() const{
     return true;

@@ -19,65 +19,121 @@
 void Camera::initialize(const InitializationContext* ic)
 {
   _planet = ic->getPlanet();
-  _position = MutableVector3D(_planet->getRadii().maxAxis() * 5, 0, 0);
+  setPosition( MutableVector3D(_planet->getRadii().maxAxis() * 5, 0, 0) );
   _dirtyFlags.setAll(true);
 }
 
 
 void Camera::copyFrom(const Camera &that) {
+  
+  /*  int _width;
+   int _height;
+   
+   const Planet *_planet;
+   
+   MutableVector3D _position;            // position
+   MutableVector3D _center;              // point where camera is looking at
+   MutableVector3D _up;                  // vertical vector
+   
+   mutable const ILogger* _logger;
+   mutable CameraDirtyFlags _dirtyFlags;
+   mutable FrustumData _frustumData;
+   mutable MutableMatrix44D _projectionMatrix; 
+   mutable MutableMatrix44D _modelMatrix;  
+   mutable MutableMatrix44D _modelViewMatrix; 
+   mutable MutableVector3D   _XYZCenterOfView;
+   mutable Geodetic3D*     _geodeticCenterOfView;
+   mutable Frustum* _frustum;
+   mutable Frustum* _frustumInModelCoordinates;
+   mutable Frustum* _halfFrustum;                    // ONLY FOR DEBUG
+   mutable Frustum* _halfFrustumInModelCoordinates;  // ONLY FOR DEBUG*/
+  
+  
   _width  = that._width;
   _height = that._height;
   
-  _modelMatrix      = that._modelMatrix;
-  _projectionMatrix = that._projectionMatrix;
-  _modelViewMatrix  = that._modelViewMatrix;
+  _planet = that._planet;
   
-  _position = that._position;
-  _center   = that._center;
-  _up       = that._up;
+  _position = MutableVector3D(that._position);
+  _center   = MutableVector3D(that._center);
+  _up       = MutableVector3D(that._up);
+  
+  _dirtyFlags.copyFrom(that._dirtyFlags);
+  
+  _frustumData = FrustumData(that._frustumData);
+  
+  _projectionMatrix = MutableMatrix44D(that._projectionMatrix);
+  _modelMatrix      = MutableMatrix44D(that._modelMatrix);
+  _modelViewMatrix  = MutableMatrix44D(that._modelViewMatrix);
+  
+  _geodeticCenterOfView = (that._geodeticCenterOfView == NULL) ? NULL : new Geodetic3D(*that._geodeticCenterOfView);
   
 #ifdef C_CODE
   if (_frustum != NULL) {
     delete _frustum;
   }
-#endif
-#ifdef C_CODE
   if (_frustumInModelCoordinates != NULL) {
     delete _frustumInModelCoordinates;
   }
+  if (_halfFrustum != NULL) {
+    delete _halfFrustum;
+  }
+  if (_halfFrustumInModelCoordinates != NULL) {
+    delete _halfFrustumInModelCoordinates;
+  }
 #endif
+  
   _frustum = (that._frustum == NULL) ? NULL : new Frustum(*that._frustum);
+  
   _frustumInModelCoordinates = (that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates);
   
-  //_dirtyCachedValues = that._dirtyCachedValues;
-  _dirtyFlags = that._dirtyFlags;
+  _halfFrustum = (that._frustum == NULL) ? NULL : new Frustum(*that._frustum);
   
-  _logger = that._logger;
-  
-  //cleanCachedValues();
+  _halfFrustumInModelCoordinates = (that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates);
 }
 
 Camera::Camera(int width, int height) :
+_width(0),
+_height(0),
+_planet(NULL),
 _position(0, 0, 0),
 _center(0, 0, 0),
 _up(0, 0, 1),
-_logger(NULL),
+_dirtyFlags(),
+_frustumData(),
+_projectionMatrix(),
+_modelMatrix(),
+_modelViewMatrix(),
+_cartesianCenterOfView(0,0,0),
+_geodeticCenterOfView(NULL),
 _frustum(NULL),
 _frustumInModelCoordinates(NULL),
 _halfFrustumInModelCoordinates(NULL),
-_halfFrustum(NULL),
-_dirtyFlags(),
-_XYZCenterOfView(0, 0, 0),
-_geodeticCenterOfView(NULL),
-_frustumData()
+_halfFrustum(NULL)
 {
   resizeViewport(width, height);
 }
 
 void Camera::reset() {
+
+  _width = 0;
+  _height = 0;
+  _planet = NULL;
+  
   _position = MutableVector3D(0, 0, 0);
   _center = MutableVector3D(0, 0, 0);
   _up = MutableVector3D(0, 0, 1);
+  
+  _dirtyFlags.setAll(true);
+  
+  _frustumData = FrustumData();
+  _projectionMatrix = MutableMatrix44D();
+  _modelMatrix = MutableMatrix44D();
+  _modelViewMatrix = MutableMatrix44D();
+  _cartesianCenterOfView = MutableVector3D();
+  
+  if (_geodeticCenterOfView != NULL) delete _geodeticCenterOfView;
+  _geodeticCenterOfView = NULL;
   
   if (_frustum != NULL) delete _frustum;
   _frustum = NULL;
@@ -90,30 +146,22 @@ void Camera::reset() {
   
   if (_halfFrustum != NULL) delete _halfFrustum;
   _halfFrustum = NULL;
-  
-  _dirtyFlags.setAll(true);
-  _XYZCenterOfView = MutableVector3D(0, 0, 0);
-  
-  if (_geodeticCenterOfView != NULL) delete _geodeticCenterOfView;
-  _geodeticCenterOfView = NULL;
-  
-  _frustumData = FrustumData();
 }
 
 void Camera::resizeViewport(int width, int height) {
   _width = width;
   _height = height;
   
+  _dirtyFlags._projectionMatrix = true;
+  
   //cleanCachedValues();
 }
 
 void Camera::print() {
-  if (_logger != NULL){ 
-    getModelMatrix().print("Model Matrix", _logger);
-    getProjectionMatrix().print("Projection Matrix", _logger);
-    getModelViewMatrix().print("ModelView Matrix", _logger);
-    _logger->logInfo("Width: %d, Height %d\n", _width, _height);
-  }
+  getModelMatrix().print("Model Matrix", ILogger::instance());
+  getProjectionMatrix().print("Projection Matrix", ILogger::instance());
+  getModelViewMatrix().print("ModelView Matrix", ILogger::instance());
+  ILogger::instance()->logInfo("Width: %d, Height %d\n", _width, _height);
 }
 
 /*
@@ -175,13 +223,7 @@ void Camera::calculateCachedValues() {
 }*/
 
 void Camera::render(const RenderContext* rc) const {
-  _logger = rc->getLogger();
-  /*
-  if (_dirtyCachedValues) {
-    calculateCachedValues();
-    _dirtyCachedValues = false;
-  }*/
-  
+
   GL *gl = rc->getGL();
   gl->setProjection(getProjectionMatrix());
   gl->loadMatrixf(getModelMatrix());
@@ -252,11 +294,11 @@ Vector2D Camera::point2Pixel(const Vector3D& point) const {
 }
 
 void Camera::applyTransform(const MutableMatrix44D& M) {
-  _position = _position.transformedBy(M, 1.0);
-  _center   = _center.transformedBy(M, 1.0);
-  _up       = _up.transformedBy(M, 0.0);
+  setPosition( _position.transformedBy(M, 1.0) );
+  setCenter( _center.transformedBy(M, 1.0) );
+  setUp(  _up.transformedBy(M, 0.0) );
   
-  _dirtyFlags.setAll(true);
+  //_dirtyFlags.setAll(true);
 }
 
 void Camera::dragCamera(const Vector3D& p0, const Vector3D& p1) {
@@ -291,15 +333,12 @@ void Camera::pivotOnCenter(const Angle& a) {
 
 void Camera::rotateWithAxisAndPoint(const Vector3D& axis, const Vector3D& point, const Angle& delta) {
   const MutableMatrix44D m = MutableMatrix44D::createGeneralRotationMatrix(delta, axis, point);
-  
-  //m.print();
-  
   applyTransform(m);
 }
 
 void Camera::setPosition(const Geodetic3D& g3d) {
-  _position = _planet->toVector3D(g3d).asMutableVector3D();
-  _dirtyFlags.setAll(true);
+  setPosition( _planet->toVector3D(g3d).asMutableVector3D() );
+  //_dirtyFlags.setAll(true);
 }
 
 Vector3D Camera::centerOfViewOnPlanet() const {

@@ -200,8 +200,6 @@ int G3MWidget::render() {
   _timer->start();
   _renderCounter++;
   
-  _nextCamera->check();
-  
   
   // copy next camera to current camera
   bool acceptedCamera = true;
