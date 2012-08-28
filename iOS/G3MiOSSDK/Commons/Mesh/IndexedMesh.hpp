@@ -133,8 +133,8 @@ public:
                                            const float* normals = NULL) {
     // convert vertices to latlon coordinates
     for (unsigned int n=0; n<numVertices*3; n+=3) {
-      Geodetic3D g(Angle::fromDegrees(vertices[n]), Angle::fromDegrees(vertices[n+1]), vertices[n+2]);
-      Vector3D v = planet->toVector3D(g);
+      const Geodetic3D g(Angle::fromDegrees(vertices[n]), Angle::fromDegrees(vertices[n+1]), vertices[n+2]);
+      const Vector3D v = planet->toCartesian(g);
       vertices[n]   = (float) v.x();
       vertices[n+1] = (float) v.y();
       vertices[n+2] = (float) v.z();

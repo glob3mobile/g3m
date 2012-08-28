@@ -287,7 +287,7 @@ void Camera::rotateWithAxisAndPoint(const Vector3D& axis, const Vector3D& point,
 }
 
 void Camera::setPosition(const Geodetic3D& g3d) {
-  _position = _planet->toVector3D(g3d).asMutableVector3D();
+  _position = _planet->toCartesian(g3d).asMutableVector3D();
   _dirtyFlags.setAll(true);
 }
 

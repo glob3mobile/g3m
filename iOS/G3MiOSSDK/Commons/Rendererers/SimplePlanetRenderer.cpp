@@ -47,7 +47,7 @@ float * SimplePlanetRenderer::createVertices(const Planet& planet)
       const Angle lat = Angle::fromDegrees( (j * 180.0 / latRes1)  -90.0 );
       const Geodetic2D g(lat, lon);
       
-      const Vector3D v = planet.toVector3D(g);
+      const Vector3D v = planet.toCartesian(g);
       vertices[verticesIndex++] = (float) v.x();//Vertices
       vertices[verticesIndex++] = (float) v.y();
       vertices[verticesIndex++] = (float) v.z();

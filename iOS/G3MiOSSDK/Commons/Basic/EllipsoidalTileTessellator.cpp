@@ -60,8 +60,8 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
   if (_skirted) {
     
     // compute skirt height
-    const Vector3D sw = planet->toVector3D(sector.getSW());
-    const Vector3D nw = planet->toVector3D(sector.getNW());
+    const Vector3D sw = planet->toCartesian(sector.getSW());
+    const Vector3D nw = planet->toCartesian(sector.getNW());
     const double skirtHeight = nw.sub(sw).length() * 0.05;
     
     indices.push_back(0);
@@ -109,7 +109,7 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
   }
   
   const Color *color = new Color(Color::fromRGBA((float) 0.1, (float) 0.1, (float) 0.1, (float) 1.0));
-  const Vector3D center = planet->toVector3D(sector.getCenter());
+  const Vector3D center = planet->toCartesian(sector.getCenter());
   
   return IndexedMesh::createFromVector3D(vertices, TriangleStrip, GivenCenter, center, indices, color);
 }
@@ -189,8 +189,8 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
   int posS = 0;
   
   // compute offset for vertices
-  const Vector3D sw = planet->toVector3D(sector.getSW());
-  const Vector3D nw = planet->toVector3D(sector.getNW());
+  const Vector3D sw = planet->toCartesian(sector.getSW());
+  const Vector3D nw = planet->toCartesian(sector.getNW());
   const double offset = nw.sub(sw).length() * 1e-3;
   
   // west side
@@ -222,7 +222,7 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
   }
   
   const Color *color = new Color(Color::fromRGBA((float) 1.0, (float) 0, (float) 0, (float) 1.0));
-  const Vector3D center = planet->toVector3D(sector.getCenter());
+  const Vector3D center = planet->toCartesian(sector.getCenter());
   
   return IndexedMesh::createFromVector3D(vertices, LineLoop, GivenCenter, center, indices, color);
 }
