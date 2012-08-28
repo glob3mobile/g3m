@@ -142,6 +142,10 @@ public class G3MWidget_Android extends GLSurfaceView implements
 		if (_widget == null) {
 			//initWidgetDemo();
 			//initSimpleWidgetDemo();
+			initWidgetPrivate(_cameraConstraints,
+					_layerSet, 
+					_renderers, 
+					_userData);
 		}
 		return _widget;
 	}
@@ -407,11 +411,29 @@ public class G3MWidget_Android extends GLSurfaceView implements
 	}
 	
 */
-
+	
+	//THIS METHOD SAVES PARAMETERS FOR INITIALIZATION IN RENDER THREAD
+	
+	ArrayList<ICameraConstrainer> _cameraConstraints = null;
+	LayerSet _layerSet = null;
+	ArrayList<org.glob3.mobile.generated.Renderer> _renderers = null;
+	UserData _userData = null;
 	public void initWidget( ArrayList<ICameraConstrainer> cameraConstraints,
 			LayerSet layerSet,
 			ArrayList<org.glob3.mobile.generated.Renderer> renderers,
 			UserData userData) 
+	{
+		_cameraConstraints = cameraConstraints;
+		_layerSet = layerSet;
+		_renderers = renderers;
+		_userData = userData;
+	}
+	
+
+	private void initWidgetPrivate( final ArrayList<ICameraConstrainer> cameraConstraints,
+			final LayerSet layerSet,
+			final ArrayList<org.glob3.mobile.generated.Renderer> renderers,
+			final UserData userData) 
 	{
 		// creates default camera-renderer and camera-handlers
 		CameraRenderer cameraRenderer = new CameraRenderer();
@@ -438,7 +460,7 @@ public class G3MWidget_Android extends GLSurfaceView implements
 
 	}
 	
-	public void initWidget(CameraRenderer cameraRenderer, 
+	private void initWidget(CameraRenderer cameraRenderer, 
 			ArrayList<ICameraConstrainer> cameraConstraints,
 			LayerSet layerSet,
 			TilesRenderParameters parameters,

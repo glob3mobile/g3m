@@ -83,7 +83,7 @@ public:
   _position(that._position),
   _center(that._center),
   _up(that._up),
-  _geodeticCenterOfView(NULL),
+  _geodeticCenterOfView((that._geodeticCenterOfView == NULL) ? NULL : new Geodetic3D(*that._geodeticCenterOfView)),
   _XYZCenterOfView(that._XYZCenterOfView),
   _frustum((that._frustum == NULL) ? NULL : new Frustum(*that._frustum)),
   _frustumInModelCoordinates((that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates)),
@@ -95,6 +95,17 @@ public:
   _planet(that._planet)
   {
     //cleanCachedValues();
+  }
+  
+  bool check(){
+    if (!_dirtyFlags._frustum && _frustum == NULL){
+      return true;
+    }
+    
+    if (!_dirtyFlags._frustumMC && _frustumInModelCoordinates == NULL){
+      return true;
+    }
+    return false;
   }
   
   
@@ -379,6 +390,8 @@ private:
       _frustumInModelCoordinates = NULL;
     }
   }*/
+  
+
 
   
 };
