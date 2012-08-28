@@ -58,9 +58,6 @@ void Camera::copyFrom(const Camera &that) {
   _center   = MutableVector3D(that._center);
   _up       = MutableVector3D(that._up);
   
-  
-  _logger = that._logger;
-  
   _dirtyFlags.copyFrom(that._dirtyFlags);
   
   _frustumData = FrustumData(that._frustumData);
@@ -102,7 +99,6 @@ _planet(NULL),
 _position(0, 0, 0),
 _center(0, 0, 0),
 _up(0, 0, 1),
-_logger(NULL),
 _dirtyFlags(),
 _frustumData(),
 _projectionMatrix(),
@@ -120,14 +116,14 @@ _halfFrustum(NULL)
 
 void Camera::reset() {
 
-  _width = _height = 0;
+  _width = 0;
+  _height = 0;
   _planet = NULL;
   
   _position = MutableVector3D(0, 0, 0);
   _center = MutableVector3D(0, 0, 0);
   _up = MutableVector3D(0, 0, 1);
   
-  _logger = NULL;
   _dirtyFlags.setAll(true);
   
   _frustumData = FrustumData();
@@ -164,7 +160,7 @@ void Camera::print() {
     getModelMatrix().print("Model Matrix", _logger);
     getProjectionMatrix().print("Projection Matrix", _logger);
     getModelViewMatrix().print("ModelView Matrix", _logger);
-    _logger->logInfo("Width: %d, Height %d\n", _width, _height);
+    ILogger::instance()->logInfo("Width: %d, Height %d\n", _width, _height);
   }
 }
 

@@ -33,7 +33,7 @@ public:
   mutable bool _projectionMatrix;
   mutable bool _modelMatrix;
   mutable bool _modelViewMatrix;
-  mutable bool _XYZCenterOfView;
+  mutable bool _cartesiansCenterOfView;
   mutable bool _geodeticCenterOfView;
   mutable bool _frustum;
   mutable bool _frustumMC;
@@ -50,7 +50,7 @@ public:
     _projectionMatrix     = other._projectionMatrix;
     _modelMatrix          = other._modelMatrix;
     _modelViewMatrix      = other._modelViewMatrix;
-    _XYZCenterOfView      = other._XYZCenterOfView;
+    _cartesiansCenterOfView      = other._cartesiansCenterOfView;
     _geodeticCenterOfView = other._geodeticCenterOfView;
     _frustum              = other._frustum;
     _frustumMC            = other._frustumMC;
@@ -64,7 +64,7 @@ public:
   _projectionMatrix     (other._projectionMatrix),
   _modelMatrix          (other._modelMatrix),
   _modelViewMatrix      (other._modelViewMatrix),
-  _XYZCenterOfView      (other._XYZCenterOfView),
+  _cartesiansCenterOfView      (other._cartesiansCenterOfView),
   _geodeticCenterOfView (other._geodeticCenterOfView),
   _frustum              (other._frustum),
   _frustumMC            (other._frustumMC),
@@ -77,7 +77,7 @@ public:
     _projectionMatrix     = value;
     _modelMatrix          = value;
     _modelViewMatrix      = value;
-    _XYZCenterOfView      = value;
+    _cartesiansCenterOfView      = value;
     _geodeticCenterOfView = value;
     _frustum              = value;
     _frustumMC            = value;
@@ -100,13 +100,12 @@ public:
   _position(that._position),
   _center(that._center),
   _up(that._up),
-  _logger(that._logger),
   _dirtyFlags(that._dirtyFlags),
   _frustumData(that._frustumData),
   _projectionMatrix(that._projectionMatrix),
   _modelMatrix(that._modelMatrix),
   _modelViewMatrix(that._modelViewMatrix),
-  _XYZCenterOfView(that._XYZCenterOfView),
+  _cartesianCenterOfView(that._cartesianCenterOfView),
   _geodeticCenterOfView((that._geodeticCenterOfView == NULL) ? NULL : new Geodetic3D(*that._geodeticCenterOfView)),
   _frustum((that._frustum == NULL) ? NULL : new Frustum(*that._frustum)),
   _frustumInModelCoordinates((that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates)),
@@ -227,13 +226,12 @@ private:
   MutableVector3D _center;              // point where camera is looking at
   MutableVector3D _up;                  // vertical vector
   
-  mutable const ILogger* _logger;
   mutable CameraDirtyFlags _dirtyFlags;
   mutable FrustumData _frustumData;
   mutable MutableMatrix44D _projectionMatrix; 
   mutable MutableMatrix44D _modelMatrix;  
   mutable MutableMatrix44D _modelViewMatrix; 
-  mutable MutableVector3D   _XYZCenterOfView;
+  mutable MutableVector3D   _cartesianCenterOfView;
   mutable Geodetic3D*     _geodeticCenterOfView;
   mutable Frustum* _frustum;
   mutable Frustum* _frustumInModelCoordinates;
@@ -284,9 +282,9 @@ private:
   MutableVector3D   _getXYZCenterOfView() const {
     if (_dirtyFlags._XYZCenterOfView) {
       _dirtyFlags._XYZCenterOfView = false;
-      _XYZCenterOfView = centerOfViewOnPlanet().asMutableVector3D();
+      _cartesianCenterOfView = centerOfViewOnPlanet().asMutableVector3D();
     }
-    return _XYZCenterOfView;
+    return _cartesianCenterOfView;
   }
 
   // intersection of view direction with globe in geodetic
