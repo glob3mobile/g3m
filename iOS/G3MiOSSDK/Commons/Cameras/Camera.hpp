@@ -242,18 +242,24 @@ private:
   Vector3D centerOfViewOnPlanet() const;
   
   void setPosition(const MutableVector3D& v){
-    _position = MutableVector3D(v);
-    _dirtyFlags.setAll(true);
+    if (!v.equalTo(_position)){
+      _position = MutableVector3D(v);
+      _dirtyFlags.setAll(true);
+    }
   }
   
   void setCenter(const MutableVector3D& v){
-    _center = MutableVector3D(v);
-    _dirtyFlags.setAll(true);
+    if (!v.equalTo(_center)){
+      _center = MutableVector3D(v);
+      _dirtyFlags.setAll(true);
+    }
   }
   
   void setUp(const MutableVector3D& v){
-    _up = MutableVector3D(v);
-    _dirtyFlags.setAll(true);
+    if (!v.equalTo(_up)){
+      _up = MutableVector3D(v);
+      _dirtyFlags.setAll(true);
+    }
   }
   
   // data to compute frustum                 

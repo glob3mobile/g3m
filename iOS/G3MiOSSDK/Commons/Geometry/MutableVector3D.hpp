@@ -43,6 +43,10 @@ public:
     return MutableVector3D(NAN, NAN, NAN);
   }
   
+  bool equalTo(const MutableVector3D& v) const{
+    return (v._x == _x && v._y == _y && v._z == _z);
+  }
+  
   bool isNan() const {
     return (isnan(_x) || isnan(_y) || isnan(_z));
   }
