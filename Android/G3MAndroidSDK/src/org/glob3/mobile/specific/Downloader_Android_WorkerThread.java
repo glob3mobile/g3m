@@ -2,25 +2,28 @@ package org.glob3.mobile.specific;
 
 import android.os.AsyncTask;
 
-public class Downloader_Android_WorkerThread extends AsyncTask<Void, Void, Void> {
+public class Downloader_Android_WorkerThread extends AsyncTask<Void, Void, Boolean> {
 
-	Downloader_Android _downloader = null;
-   boolean     _stopping;
+   Downloader_Android         _downloader;
+   Downloader_Android_Handler _handler;
+   boolean                    _stopping;
 
 
    Downloader_Android_WorkerThread(Downloader_Android downloader) {
       _downloader = downloader;
+      _handler = null;
       _stopping = false;
       // TODO: setPriority??
    }
 
 
    @Override
-   protected Void doInBackground(Void... params) {
+   protected Boolean doInBackground(Void... params) {
+      boolean result = false;
       while (!isStopping()) {
-         Downloader_Android_Handler handler = _downloader.getHandlerToRun();
-         if (handler != null) {
-            handler.runWithDownloader(_downloader);
+         _handler = _downloader.getHandlerToRun();
+         if (_handler != null) {
+            result = _handler.runWithDownloader(_downloader);
          }
          else {
             // sleep for 25 milliseconds
@@ -28,13 +31,18 @@ public class Downloader_Android_WorkerThread extends AsyncTask<Void, Void, Void>
                Thread.sleep(25);
             }
             catch (InterruptedException e) {
-               // TODO Auto-generated catch block
                e.printStackTrace();
             }
          }
       }
-      return null;
+      return result;
    }
+
+
+   @Override
+   protected void onPostExecute(Boolean result) {
+      _handler.processResponse(result);
+   };
 
 
    public void stop() {
@@ -49,4 +57,5 @@ public class Downloader_Android_WorkerThread extends AsyncTask<Void, Void, Void>
    private synchronized boolean isStopping() {
       return _stopping;
    }
+
 }
