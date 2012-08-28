@@ -41,7 +41,7 @@ void CameraRotationHandler::onDown(const EventContext *eventContext,
                                    const TouchEvent& touchEvent, 
                                    CameraContext *cameraContext) 
 {  
-  Camera *camera = cameraContext->getCamera();
+  Camera *camera = cameraContext->getNextCamera();
   _camera0.copyFrom(*camera);
   cameraContext->setCurrentGesture(Rotate);
   
@@ -81,7 +81,7 @@ void CameraRotationHandler::onMove(const EventContext *eventContext,
   Vector3D normal = eventContext->getPlanet()->geodeticSurfaceNormal(_initialPoint.asVector3D());
   
   // vertical rotation around normal vector to globe
-  Camera *camera = cameraContext->getCamera();
+  Camera *camera = cameraContext->getNextCamera();
   camera->copyFrom(_camera0);
   Angle angle_v             = Angle::fromDegrees((_initialPixel.x()-cm.x())*0.25);
   camera->rotateWithAxisAndPoint(normal, _initialPoint.asVector3D(), angle_v);

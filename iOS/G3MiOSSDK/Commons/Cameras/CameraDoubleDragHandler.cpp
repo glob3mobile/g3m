@@ -40,7 +40,7 @@ void CameraDoubleDragHandler::onDown(const EventContext *eventContext,
                                      const TouchEvent& touchEvent, 
                                      CameraContext *cameraContext) 
 {
-  Camera *camera = cameraContext->getCamera();
+  Camera *camera = cameraContext->getNextCamera();
   _camera0.copyFrom(*camera);
   cameraContext->setCurrentGesture(DoubleDrag);  
   
@@ -213,7 +213,7 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
   
   // copy final transformation to camera
   //tempCamera.updateModelMatrix();
-  cameraContext->getCamera()->copyFrom(tempCamera);
+  cameraContext->getNextCamera()->copyFrom(tempCamera);
 
   //printf ("moving 2 fingers\n");
 }

@@ -22,7 +22,7 @@ void CameraRenderer::initialize(const InitializationContext* ic) {
 void CameraRenderer::onResizeViewportEvent(const EventContext* ec,
                                            int width, int height) {
   if (_cameraContext != NULL) {
-    _cameraContext->getCamera()->resizeViewport(width, height);
+    _cameraContext->getNextCamera()->resizeViewport(width, height);
   }
 }
 

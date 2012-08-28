@@ -19,7 +19,7 @@
 void Camera::initialize(const InitializationContext* ic)
 {
   _planet = ic->getPlanet();
-  _position = MutableVector3D(_planet->getRadii().maxAxis() * 5, 0, 0);
+  setPosition( MutableVector3D(_planet->getRadii().maxAxis() * 5, 0, 0) );
   _dirtyFlags.setAll(true);
 }
 
@@ -104,7 +104,7 @@ _frustumData(),
 _projectionMatrix(),
 _modelMatrix(),
 _modelViewMatrix(),
-_XYZCenterOfView(0,0,0),
+_cartesianCenterOfView(0,0,0),
 _geodeticCenterOfView(NULL),
 _frustum(NULL),
 _frustumInModelCoordinates(NULL),
@@ -130,7 +130,7 @@ void Camera::reset() {
   _projectionMatrix = MutableMatrix44D();
   _modelMatrix = MutableMatrix44D();
   _modelViewMatrix = MutableMatrix44D();
-  _XYZCenterOfView = MutableVector3D();
+  _cartesianCenterOfView = MutableVector3D();
   
   if (_geodeticCenterOfView != NULL) delete _geodeticCenterOfView;
   _geodeticCenterOfView = NULL;
@@ -152,16 +152,16 @@ void Camera::resizeViewport(int width, int height) {
   _width = width;
   _height = height;
   
+  _dirtyFlags._projectionMatrix = true;
+  
   //cleanCachedValues();
 }
 
 void Camera::print() {
-  if (_logger != NULL){ 
-    getModelMatrix().print("Model Matrix", _logger);
-    getProjectionMatrix().print("Projection Matrix", _logger);
-    getModelViewMatrix().print("ModelView Matrix", _logger);
-    ILogger::instance()->logInfo("Width: %d, Height %d\n", _width, _height);
-  }
+  getModelMatrix().print("Model Matrix", ILogger::instance());
+  getProjectionMatrix().print("Projection Matrix", ILogger::instance());
+  getModelViewMatrix().print("ModelView Matrix", ILogger::instance());
+  ILogger::instance()->logInfo("Width: %d, Height %d\n", _width, _height);
 }
 
 /*
@@ -223,13 +223,7 @@ void Camera::calculateCachedValues() {
 }*/
 
 void Camera::render(const RenderContext* rc) const {
-  _logger = rc->getLogger();
-  /*
-  if (_dirtyCachedValues) {
-    calculateCachedValues();
-    _dirtyCachedValues = false;
-  }*/
-  
+
   GL *gl = rc->getGL();
   gl->setProjection(getProjectionMatrix());
   gl->loadMatrixf(getModelMatrix());
@@ -300,11 +294,11 @@ Vector2D Camera::point2Pixel(const Vector3D& point) const {
 }
 
 void Camera::applyTransform(const MutableMatrix44D& M) {
-  _position = _position.transformedBy(M, 1.0);
-  _center   = _center.transformedBy(M, 1.0);
-  _up       = _up.transformedBy(M, 0.0);
+  setPosition( _position.transformedBy(M, 1.0) );
+  setCenter( _center.transformedBy(M, 1.0) );
+  setUp(  _up.transformedBy(M, 0.0) );
   
-  _dirtyFlags.setAll(true);
+  //_dirtyFlags.setAll(true);
 }
 
 void Camera::dragCamera(const Vector3D& p0, const Vector3D& p1) {
@@ -339,15 +333,12 @@ void Camera::pivotOnCenter(const Angle& a) {
 
 void Camera::rotateWithAxisAndPoint(const Vector3D& axis, const Vector3D& point, const Angle& delta) {
   const MutableMatrix44D m = MutableMatrix44D::createGeneralRotationMatrix(delta, axis, point);
-  
-  //m.print();
-  
   applyTransform(m);
 }
 
 void Camera::setPosition(const Geodetic3D& g3d) {
-  _position = _planet->toVector3D(g3d).asMutableVector3D();
-  _dirtyFlags.setAll(true);
+  setPosition( _planet->toVector3D(g3d).asMutableVector3D() );
+  //_dirtyFlags.setAll(true);
 }
 
 Vector3D Camera::centerOfViewOnPlanet() const {

@@ -84,7 +84,6 @@ public:
     _halfFrustum          = value;
     _halfFrustumMC        = value;
   }
-  
 };
 
 
@@ -242,6 +241,21 @@ private:
 
   Vector3D centerOfViewOnPlanet() const;
   
+  void setPosition(const MutableVector3D& v){
+    _position = MutableVector3D(v);
+    _dirtyFlags.setAll(true);
+  }
+  
+  void setCenter(const MutableVector3D& v){
+    _center = MutableVector3D(v);
+    _dirtyFlags.setAll(true);
+  }
+  
+  void setUp(const MutableVector3D& v){
+    _up = MutableVector3D(v);
+    _dirtyFlags.setAll(true);
+  }
+  
   // data to compute frustum                 
   FrustumData getFrustumData() const {
     if (_dirtyFlags._frustumData) {
@@ -280,8 +294,8 @@ private:
   
   // intersection of view direction with globe in(x,y,z)
   MutableVector3D   _getXYZCenterOfView() const {
-    if (_dirtyFlags._XYZCenterOfView) {
-      _dirtyFlags._XYZCenterOfView = false;
+    if (_dirtyFlags._cartesiansCenterOfView) {
+      _dirtyFlags._cartesiansCenterOfView = false;
       _cartesianCenterOfView = centerOfViewOnPlanet().asMutableVector3D();
     }
     return _cartesianCenterOfView;

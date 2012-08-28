@@ -43,7 +43,7 @@ void CameraSingleDragHandler::onDown(const EventContext *eventContext,
                                      const TouchEvent& touchEvent, 
                                      CameraContext *cameraContext) 
 {  
-  Camera *camera = cameraContext->getCamera();
+  Camera *camera = cameraContext->getNextCamera();
   _camera0.copyFrom(*camera);
   cameraContext->setCurrentGesture(Drag); 
   _axis = MutableVector3D::nan();
@@ -84,7 +84,7 @@ void CameraSingleDragHandler::onMove(const EventContext *eventContext,
   }
 
   // make drag
-  Camera *camera = cameraContext->getCamera();
+  Camera *camera = cameraContext->getNextCamera();
   camera->copyFrom(_camera0);
   camera->dragCamera(_initialPoint.asVector3D(), finalPoint.asVector3D());
   
