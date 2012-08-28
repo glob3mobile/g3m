@@ -142,7 +142,7 @@ public:
     return (float) _width / _height;
   }
   
-  Vector3D getPosition() const { return _position.asVector3D(); }
+  Vector3D getCartesianPosition() const { return _position.asVector3D(); }
   Vector3D getCenter() const { return _center.asVector3D(); }
   Vector3D getUp() const { return _up.asVector3D(); }
   Geodetic3D getGeodeticCenterOfView() const { return *_getGeodeticCenterOfView(); }

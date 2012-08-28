@@ -94,7 +94,7 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
     
     // compute estimated camera translation
     Vector3D centerPoint = tempCamera.getXYZCenterOfView();    
-    double distance = tempCamera.getPosition().sub(centerPoint).length();
+    double distance = tempCamera.getCartesianPosition().sub(centerPoint).length();
     double d = distance*(factor-1)/factor;
     tempCamera.moveForward(d);
     dAccum += d;

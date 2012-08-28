@@ -183,7 +183,7 @@ bool TileRenderer::onTouchEvent(const EventContext* ec,
     if (_lastCamera != NULL) {
       const Vector2D pixel = touchEvent->getTouch(0)->getPos();
       const Vector3D ray = _lastCamera->pixel2Ray(pixel);
-      const Vector3D origin = _lastCamera->getPosition();
+      const Vector3D origin = _lastCamera->getCartesianPosition();
       
       const Planet* planet = ec->getPlanet();
       

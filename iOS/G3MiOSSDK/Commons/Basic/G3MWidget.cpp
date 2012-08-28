@@ -28,7 +28,7 @@ G3MWidget::G3MWidget(FrameTasksExecutor*              frameTasksExecutor,
                      TexturesHandler*                 texturesHandler,
                      IDownloader*                     downloader,
                      const Planet*                    planet,
-                     std::vector<ICameraConstrainer*> cameraConstraint,
+                     std::vector<ICameraConstrainer*> cameraConstrainers,
                      Renderer*                        renderer,
                      Renderer*                        busyRenderer,
                      EffectsScheduler*                effectsScheduler,
@@ -44,7 +44,7 @@ _logger(logger),
 _gl(gl),
 _texturesHandler(texturesHandler),
 _planet(planet),
-_cameraConstraint(cameraConstraint),
+_cameraConstrainers(cameraConstrainers),
 _renderer(renderer),
 _busyRenderer(busyRenderer),
 _effectsScheduler(effectsScheduler),
@@ -154,8 +154,8 @@ G3MWidget::~G3MWidget() {
     delete _downloader;
   }
   
-  for (unsigned int n=0; n<_cameraConstraint.size(); n++) {
-    delete _cameraConstraint[n];
+  for (unsigned int n=0; n<_cameraConstrainers.size(); n++) {
+    delete _cameraConstrainers[n];
   }
   
   delete _frameTasksExecutor;
@@ -193,21 +193,14 @@ int G3MWidget::render() {
   _timer->start();
   _renderCounter++;
   
-  
-  // copy next camera to current camera
-  bool acceptedCamera = true;
-  for (int n = 0; n < _cameraConstraint.size(); n++) {
-    if (!_cameraConstraint[n]->acceptsCamera(_nextCamera, _planet)) {
-      acceptedCamera = false;
-      break;
-    }
+  // give to the CameraContrainers the opportunity to change the nextCamera
+  for (int i = 0; i< _cameraConstrainers.size(); i++) {
+    ICameraConstrainer* constrainer =  _cameraConstrainers[i];
+    constrainer->onCameraChange(_planet,
+                                _currentCamera,
+                                _nextCamera);
   }
-  if (acceptedCamera) {
-    _currentCamera->copyFrom(*_nextCamera);
-  }
-  else {
-    _nextCamera->copyFrom(*_currentCamera);
-  }
+  _currentCamera->copyFrom(*_nextCamera);
   
   //  int __removePrint;
   //  printf("Camera Position=%s\n" ,

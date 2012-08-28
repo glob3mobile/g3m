@@ -17,7 +17,7 @@ void Mark::render(const RenderContext* rc,
   const Camera* camera = rc->getCurrentCamera();
   const Planet* planet = rc->getPlanet();
   
-  const Vector3D cameraPosition = camera->getPosition();
+  const Vector3D cameraPosition = camera->getCartesianPosition();
   const Vector3D markPosition = planet->toCartesian(_position);
   
   const Vector3D markCameraVector = markPosition.sub(cameraPosition);
