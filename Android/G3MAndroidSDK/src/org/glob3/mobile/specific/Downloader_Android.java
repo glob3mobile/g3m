@@ -10,6 +10,8 @@ import org.glob3.mobile.generated.IDownloadListener;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.URL;
 
+import android.util.Log;
+
 public class Downloader_Android implements IDownloader {
 
    private boolean                                    _started;
@@ -22,9 +24,7 @@ public class Downloader_Android implements IDownloader {
    private Map<String, Downloader_Android_Handler>    _queuedHandlers;
 
 
-   Downloader_Android(int maxConcurrentOperationCount) {
-      // TODO cache
-
+   public Downloader_Android(int maxConcurrentOperationCount) {
       _started = false;
       _maxConcurrentOperationCount = maxConcurrentOperationCount;
       _requestIdCounter = 1;
@@ -44,23 +44,26 @@ public class Downloader_Android implements IDownloader {
 
    @Override
    public void start() {
+      Log.i("Downloader_Android", "STARTING");
       if (!_started) {
          Iterator<Downloader_Android_WorkerThread> iter = _workers.iterator();
          while (iter.hasNext()) {
             iter.next().execute();
          }
+         _started = true;
       }
-      _started = true;
    }
 
 
    @Override
    public void stop() {
       if (_started) {
+         Log.e("Downloader_Android", "STOPPING");
          Iterator<Downloader_Android_WorkerThread> iter = _workers.iterator();
          while (iter.hasNext()) {
             iter.next().stop();
          }
+         _started = false;
       }
    }
 
@@ -173,6 +176,7 @@ public class Downloader_Android implements IDownloader {
             _queuedHandlers.remove(selectedURL);
             _downloadingHandlers.put(selectedURL, selectedHandler);
          }
+         Log.i("Downloader_Android", statistics());
       }
 
       return selectedHandler;

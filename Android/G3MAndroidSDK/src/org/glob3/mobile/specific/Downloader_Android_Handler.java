@@ -3,10 +3,8 @@ package org.glob3.mobile.specific;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -37,8 +35,7 @@ public class Downloader_Android_Handler {
          _URL = new java.net.URL(url.getPath());
       }
       catch (MalformedURLException e) {
-         // TODO Logger_Android
-         Log.e("Downloader_Android_Handler", e.getMessage());
+         Logger_Android.instance().logError("Downloader_Android_Handler: url=" + _url.getPath() + " " + e.getMessage());
          e.printStackTrace();
       }
       _listeners = new ArrayList<ListenerEntry>();
@@ -135,13 +132,13 @@ public class Downloader_Android_Handler {
          while ((length = bis.read(buffer)) > 0) {
             baos.write(buffer, 0, length);
          }
-         
+
          baos.flush();
          _data = baos.toByteArray();
          baos.close();
          statusCode = connection.getResponseCode();
          dataIsValid = (_data != null) && (statusCode == 200);
-         
+
          if (!dataIsValid) {
             Logger_Android.instance().logError("Error runWithDownloader, StatusCode=" + statusCode + ", URL=" + _url.getPath());
          }
@@ -150,8 +147,7 @@ public class Downloader_Android_Handler {
          }
       }
       catch (IOException e) {
-         // TODO Logger_Android
-         Log.e("Downloader_Android_Handler", e.getMessage());
+         Logger_Android.instance().logError("Downloader_Android_Handler: url=" + _url.getPath() + " " + e.getMessage());
          e.printStackTrace();
       }
       finally {
@@ -159,15 +155,16 @@ public class Downloader_Android_Handler {
             connection.disconnect();
          }
       }
-
       // inform downloader to remove myself, to avoid adding new Listener
       dl.removeDownloadHandlerForUrl(_url.getPath());
 
+      Log.i("Handler", "returning dataIsValid=" + dataIsValid);
       return (dataIsValid);
    }
 
 
    public synchronized void processResponse(boolean dataIsValid) {
+      Log.e("Handler", "processingResponse url=" + _url.getPath());
       if (dataIsValid) {
          ByteBuffer buffer = new ByteBuffer(_data, 0);
          Response response = new Response(_url, buffer);
