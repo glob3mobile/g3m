@@ -58,6 +58,8 @@ public class G3MWidget
 	_timer.start();
 	_renderCounter++;
   
+	_nextCamera.check();
+  
   
 	// copy next camera to current camera
 	boolean acceptedCamera = true;
