@@ -32,23 +32,20 @@ public:
 class Tile {
 private:
   TileTexturizer* _texturizer;
-  
-  const Sector _sector;
-  const int    _level;
-  const int    _row;
-  const int    _column;
+  Tile*           _parent;
+  const Sector    _sector;
+  const int       _level;
+  const int       _row;
+  const int       _column;
   
   Mesh* _tessellatorMesh;
   Mesh* _debugMesh;
-  Mesh* _texturizerMesh;
+  Mesh* _texturizedMesh;
   
-  Tile* _parent;
   bool _textureSolved;
   std::vector<Tile*>* _subtiles;
-  
-  ITimer* _texturizerTimer;
-  
   bool _justCreatedSubtiles;
+  
   bool _texturizerDirty;
   
   inline Mesh* getTessellatorMesh(const RenderContext* rc,
@@ -87,9 +84,10 @@ private:
                                      bool textureSolved);
 
   bool _isVisible;
-  void setIsVisible(bool isVisible);
+  void setIsVisible(bool isVisible,
+                    const TileRenderContext* trc);
   
-  void deleteTexturizerMesh();
+  void deleteTexturizedMesh(const TileRenderContext* trc);
   
   ITexturizerData* _texturizerData;
 
@@ -99,25 +97,7 @@ public:
        const Sector& sector,
        int level,
        int row,
-       int column):
-  _texturizer(texturizer),
-  _parent(parent),
-  _sector(sector),
-  _level(level),
-  _row(row),
-  _column(column),
-  _tessellatorMesh(NULL),
-  _debugMesh(NULL),
-  _texturizerMesh(NULL),
-  _textureSolved(false),
-  _texturizerDirty(true),
-  _subtiles(NULL),
-  _justCreatedSubtiles(false),
-  _texturizerTimer(NULL),
-  _isVisible(false),
-  _texturizerData(NULL)
-  {
-  }
+       int column);
   
   ~Tile();
   
@@ -138,8 +118,8 @@ public:
     return _column;
   }
   
-  Mesh* getTexturizerMesh() const {
-    return _texturizerMesh;
+  Mesh* getTexturizedMesh() const {
+    return _texturizedMesh;
   }
   
   Tile* getParent() const {
@@ -166,9 +146,6 @@ public:
     return _texturizerDirty;
   }
   
-  Geodetic3D intersection(const Vector3D& origin, const Vector3D& ray, const Planet* planet) const;
-
-  
   bool hasTexturizerData() const {
     return (_texturizerData != NULL);
   }
@@ -183,6 +160,8 @@ public:
     }
     _texturizerData = texturizerData;
   }
+
+  const Tile* getDeepestTileContaining(const Geodetic3D& position) const;
   
 };
 

@@ -18,7 +18,7 @@ class ByteBuffer {
   
   ByteBuffer(const ByteBuffer& that);
   
-  void operator=(const ByteBuffer& that);
+  ByteBuffer& operator=(const ByteBuffer& that);
   
 public:
   ByteBuffer(unsigned char data[],
@@ -45,6 +45,8 @@ public:
   unsigned char* getData() const{
     return _data;
   }
+
+  std::string getDataAsString() const;
   
   int getLength() const{
     return _length;

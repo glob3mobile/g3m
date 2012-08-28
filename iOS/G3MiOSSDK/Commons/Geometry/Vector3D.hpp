@@ -21,6 +21,8 @@ private:
   const double _y;
   const double _z;
   
+  Vector3D& operator=(const Vector3D& that);
+  
 public:
   
   Vector3D(const double x,

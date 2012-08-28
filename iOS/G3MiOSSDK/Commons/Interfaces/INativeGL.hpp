@@ -9,7 +9,7 @@
 #ifndef G3MiOSSDK_INativeGL_hpp
 #define G3MiOSSDK_INativeGL_hpp
 
-#include "GLTextureID.hpp"
+#include "GLTextureId.hpp"
 
 #include <vector>
 
@@ -82,6 +82,10 @@ enum GLAlignment {
 
 enum GLFormat {
   RGBA
+};
+
+enum GLVariable {
+  Viewport
 };
 
 
@@ -167,7 +171,7 @@ public:
   virtual void pixelStorei(GLAlignment pname,
                            int param) const = 0;
   
-  virtual std::vector<GLTextureID> genTextures(int	n) const = 0;
+  virtual std::vector<GLTextureId> genTextures(int	n) const = 0;
   
   virtual void texParameteri(GLTextureType target,
                              GLTextureParameter par,
@@ -183,11 +187,15 @@ public:
                           GLType      type,
                           const void* data) const = 0;
   
+  virtual void generateMipmap(GLTextureType target) const = 0;
+  
   virtual void drawArrays(GLPrimitive mode,
                           int first,
                           int count) const = 0;
   
   virtual void cullFace(GLCullFace c) const = 0;
+  
+  virtual void getIntegerv(GLVariable v, int i[]) const = 0;
   
 };
 

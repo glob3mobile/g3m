@@ -24,16 +24,17 @@ private:
   
   const RenderContext*         _renderContext;
   TilesRenderParameters* const _parameters;
-  GLTextureID _texID;
+  GLTextureId _texId;
   IImage * const _image;
   
-  std::vector<MutableVector2D> createTextureCoordinates(const RenderContext* rc, Mesh* mesh) const;
+  std::vector<MutableVector2D> createTextureCoordinates(const RenderContext* rc,
+                                                        Mesh* mesh) const;
   
 public:
   
   SingleImageTileTexturizer(TilesRenderParameters* const parameters,
                             IImage* image) :
-  _texID(-1),
+  _texId(-1),
   _image(image),
   _parameters(parameters),
   _renderContext(NULL)
@@ -41,9 +42,9 @@ public:
   }
   
   ~SingleImageTileTexturizer() {
-    if (_texID.isValid()){
+    if (_texId.isValid()){
       if (_renderContext != NULL) {
-        _renderContext->getTexturesHandler()->releaseGLTextureId(_texID);
+        _renderContext->getTexturesHandler()->releaseGLTextureId(_texId);
       }
     }
   }
@@ -75,7 +76,10 @@ public:
                                      Tile* ancestorTile,
                                      bool textureSolved);
   
-  void onTerrainTouchEvent(const Geodetic3D& g3d, const Tile* tile){}
+  void onTerrainTouchEvent(const EventContext* ec,
+                           const Geodetic3D& position,
+                           const Tile* tile) {
+  }
   
   
   void tileMeshToBeDeleted(Tile* tile,

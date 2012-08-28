@@ -14,11 +14,11 @@
 
 void Mark::render(const RenderContext* rc,
                   const double minDistanceToCamera) {
-  const Camera* camera = rc->getNextCamera();
+  const Camera* camera = rc->getCurrentCamera();
   const Planet* planet = rc->getPlanet();
   
-  const Vector3D cameraPosition = camera->getPosition();
-  const Vector3D markPosition = planet->toVector3D(_position);
+  const Vector3D cameraPosition = camera->getCartesianPosition();
+  const Vector3D markPosition = planet->toCartesian(_position);
   
   const Vector3D markCameraVector = markPosition.sub(cameraPosition);
   const double distanceToCamera = markCameraVector.length();
@@ -34,7 +34,7 @@ void Mark::render(const RenderContext* rc,
       gl->transformTexCoords(scale, tr);
       
       if (!_textureId.isValid()) {
-        _textureId = rc->getTexturesHandler()->getGLTextureIdFromFileName(_textureFilename, 128, 128);
+        _textureId = rc->getTexturesHandler()->getGLTextureIdFromFileName(_textureFilename, 128, 128, false);
       }
       
       if (!_textureId.isValid()) {

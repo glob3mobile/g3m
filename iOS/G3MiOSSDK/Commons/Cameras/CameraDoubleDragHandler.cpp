@@ -61,7 +61,7 @@ void CameraDoubleDragHandler::onDown(const EventContext *eventContext,
   Geodetic2D g0 = planet->toGeodetic2D(_initialPoint0.asVector3D());
   Geodetic2D g1 = planet->toGeodetic2D(_initialPoint1.asVector3D());
   Geodetic2D g  = planet->getMidPoint(g0, g1);
-  _initialPoint = planet->toVector3D(g).asMutableVector3D();
+  _initialPoint = planet->toCartesian(g).asMutableVector3D();
   
   // fingers difference
   Vector2D difPixel = pixel1.sub(pixel0);
@@ -94,7 +94,7 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
     
     // compute estimated camera translation
     Vector3D centerPoint = tempCamera.getXYZCenterOfView();    
-    double distance = tempCamera.getPosition().sub(centerPoint).length();
+    double distance = tempCamera.getCartesianPosition().sub(centerPoint).length();
     double d = distance*(factor-1)/factor;
     tempCamera.moveForward(d);
     dAccum += d;
@@ -156,7 +156,7 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
   Vector3D P1 = tempCamera.pixel2PlanetPoint(pixel1);
   const Planet *planet = eventContext->getPlanet();
   Geodetic2D g = planet->getMidPoint(planet->toGeodetic2D(P0), planet->toGeodetic2D(P1));
-  Vector3D finalPoint = planet->toVector3D(g);    
+  Vector3D finalPoint = planet->toCartesian(g);    
   
   // drag globe from centerPoint to finalPoint
   const Vector3D rotationAxis = centerPoint2.cross(finalPoint);

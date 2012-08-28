@@ -8,17 +8,17 @@
 
 #include "LayerSet.hpp"
 #include "Tile.hpp"
+#include "TileKey.hpp"
 
-std::vector<Petition*> LayerSet::createTilePetitions(const RenderContext* rc,
-                                                     const Tile* tile,
-                                                     int width, int height) const
-{
+std::vector<Petition*> LayerSet::createTileMapPetitions(const RenderContext* rc,
+                                                        const Tile* tile,
+                                                        int width, int height) const {
   std::vector<Petition*> petitions;
   
   for (int i = 0; i < _layers.size(); i++) {
     Layer* layer = _layers[i];
-    if (layer->isAvailable(rc, tile)){
-      std::vector<Petition*> pet = layer->getTilePetitions(rc, tile, width, height);
+    if (layer->isAvailable(rc, tile)) {
+      std::vector<Petition*> pet = layer->getMapPetitions(rc, tile, width, height);
       
       //Storing petitions
       for (int j = 0; j < pet.size(); j++) {
@@ -27,19 +27,25 @@ std::vector<Petition*> LayerSet::createTilePetitions(const RenderContext* rc,
     }
   }
   
+  if (petitions.empty()) {
+    rc->getLogger()->logWarning("Can't create map petitions for tile %s",
+                                tile->getKey().description().c_str());
+  }
+  
   return petitions;
 }
 
-void LayerSet::onTerrainTouchEvent(const Geodetic3D& g3d, const Tile* tile) const{
+void LayerSet::onTerrainTouchEvent(const EventContext* ec,
+                                   const Geodetic3D& position,
+                                   const Tile* tile) const {
   
   for (int i = 0; i < _layers.size(); i++) {
     Layer* layer = _layers[i];
-    
-    TerrainTouchEvent tte(g3d.asGeodetic2D(), tile->getSector(), layer);
-    
-    layer->onTerrainTouchEventListener(tte);
+    if (layer->isAvailable(ec, tile)) {
+      TerrainTouchEvent tte(position, tile->getSector(), layer);
+      
+      layer->onTerrainTouchEventListener(ec, tte);
+    }
   }
-  
-  
   
 }

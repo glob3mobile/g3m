@@ -90,7 +90,7 @@ class NativeGL2_iOS: public INativeGL
       case GL_OUT_OF_MEMORY:
         return OutOfMemory;
     }
-    return UnknownError; 
+    return UnknownError;
   }
   
   inline GLenum getEnum(GLBlendFactor b) const{
@@ -144,6 +144,13 @@ class NativeGL2_iOS: public INativeGL
     switch (f) {
       case RGBA:
         return GL_RGBA;
+    }
+  }
+  
+  inline GLenum getEnum(GLVariable f) const{
+    switch (f) {
+      case Viewport:
+        return GL_VIEWPORT;
     }
   }
   
@@ -206,7 +213,7 @@ public:
     glPolygonOffset(factor, units);
   }
   
-  void vertexAttribPointer(int index, int size, GLType type, 
+  void vertexAttribPointer(int index, int size, GLType type,
                            bool normalized, int stride, const void*	pointer) const{
     GLenum t = getEnum(type);
     glVertexAttribPointer(index, size, t, normalized, stride, pointer);
@@ -252,31 +259,37 @@ public:
     glPixelStorei(getEnum(pname), param);
   }
   
-  std::vector<GLTextureID> genTextures(int n) const {
+  std::vector<GLTextureId> genTextures(int n) const {
     GLuint textures[n];
     glGenTextures(n, textures);
-    std::vector<GLTextureID> ts;
+    std::vector<GLTextureId> ts;
     for(int i = 0; i < n; i++){
-      ts.push_back( GLTextureID(textures[i]) );
+      ts.push_back( GLTextureId(textures[i]) );
     }
     return ts;
   }
   
-  void texParameteri(GLTextureType target, GLTextureParameter par, GLTextureParameterValue v) const {
+  void texParameteri(GLTextureType target,
+                     GLTextureParameter par,
+                     GLTextureParameterValue v) const {
     glTexParameteri(getEnum(target), getEnum(par), getValue(v));
   }
   
   void texImage2D(GLTextureType target,
-                    int         level,
-                    GLFormat    internalFormat,
-                    int         width,
-                    int         height,
-                    int         border,
-                    GLFormat    format,
-                    GLType      type,
-                    const void* data) const{
-    glTexImage2D(getEnum(target), level, getEnum(internalFormat), 
+                  int         level,
+                  GLFormat    internalFormat,
+                  int         width,
+                  int         height,
+                  int         border,
+                  GLFormat    format,
+                  GLType      type,
+                  const void* data) const{
+    glTexImage2D(getEnum(target), level, getEnum(internalFormat),
                  width, height, border, getEnum(format), getEnum(type), data);
+  }
+  
+  void generateMipmap(GLTextureType target) const {
+    glGenerateMipmap(getEnum(target));
   }
   
   void drawArrays(GLPrimitive mode, int first, int count) const{
@@ -285,6 +298,10 @@ public:
   
   void cullFace(GLCullFace c) const{
     glCullFace(getEnum(c));
+  }
+  
+  void getIntegerv(GLVariable v, int i[]) const{
+    glGetIntegerv(getEnum(v), i);
   }
   
 };

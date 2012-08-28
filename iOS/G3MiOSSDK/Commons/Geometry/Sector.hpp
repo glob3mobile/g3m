@@ -109,8 +109,7 @@ public:
   
   bool contains(const Geodetic2D& position) const;
   
-  bool contains(const Geodetic3D& position) const
-  {
+  bool contains(const Geodetic3D& position) const {
     return contains(position.asGeodetic2D());
   }
   
