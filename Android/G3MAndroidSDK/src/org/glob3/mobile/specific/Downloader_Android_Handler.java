@@ -11,12 +11,15 @@ import java.util.Iterator;
 import org.glob3.mobile.generated.ByteBuffer;
 import org.glob3.mobile.generated.IDownloadListener;
 import org.glob3.mobile.generated.IDownloader;
+import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.Response;
 import org.glob3.mobile.generated.URL;
 
 import android.util.Log;
 
 public class Downloader_Android_Handler {
+
+   final static String              TAG = "Downloader_Android_Handler";
 
    private long                     _priority;
    private URL                      _url;
@@ -35,7 +38,12 @@ public class Downloader_Android_Handler {
          _URL = new java.net.URL(url.getPath());
       }
       catch (MalformedURLException e) {
-         Logger_Android.instance().logError("Downloader_Android_Handler: url=" + _url.getPath() + " " + e.getMessage());
+         if (ILogger.instance() != null) {
+            ILogger.instance().logError("Downloader_Android_Handler: MalformedURLException url=" + _url.getPath());
+         }
+         else {
+            Log.e(TAG, "Url=" + _url.getPath());
+         }
          e.printStackTrace();
       }
       _listeners = new ArrayList<ListenerEntry>();
@@ -136,23 +144,34 @@ public class Downloader_Android_Handler {
          baos.flush();
          _data = baos.toByteArray();
          baos.close();
+
          statusCode = connection.getResponseCode();
          dataIsValid = (_data != null) && (statusCode == 200);
-
-         if (!dataIsValid) {
-            Logger_Android.instance().logError("Error runWithDownloader, StatusCode=" + statusCode + ", URL=" + _url.getPath());
-         }
-         else {
-            Log.i("Downloader_Android_Handler", "Success runWithDownloader, StatusCode=" + statusCode + ", URL=" + _url.getPath());
-         }
       }
       catch (IOException e) {
-         Logger_Android.instance().logError("Downloader_Android_Handler: url=" + _url.getPath() + " " + e.getMessage());
+         if (ILogger.instance() != null) {
+            ILogger.instance().logError(TAG + ": url=" + _url.getPath());
+         }
+         else {
+            Log.e(TAG, "url=" + _url.getPath());
+         }
          e.printStackTrace();
       }
       finally {
          if (connection != null) {
             connection.disconnect();
+         }
+         if (!dataIsValid) {
+            if (ILogger.instance() != null) {
+               ILogger.instance().logError(
+                        TAG + ": Error runWithDownloader, StatusCode=" + statusCode + ", URL=" + _url.getPath());
+            }
+            else {
+               Log.e(TAG, "Error runWithDownloader, statusCode=" + statusCode + ", url=" + _url.getPath());
+            }
+         }
+         else {
+            Log.i(TAG, "Success runWithDownloader, statusCode=" + statusCode + ", url=" + _url.getPath());
          }
       }
       // inform downloader to remove myself, to avoid adding new Listener
