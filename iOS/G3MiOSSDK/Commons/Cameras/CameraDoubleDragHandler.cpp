@@ -41,7 +41,7 @@ void CameraDoubleDragHandler::onDown(const EventContext *eventContext,
                                      CameraContext *cameraContext) 
 {
   Camera *camera = cameraContext->getCamera();
-  _camera0 = Camera(*camera);
+  _camera0.copyFrom(*camera);
   cameraContext->setCurrentGesture(DoubleDrag);  
   
   // double dragging
