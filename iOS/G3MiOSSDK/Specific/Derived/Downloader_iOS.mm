@@ -127,7 +127,7 @@ void Downloader_iOS::removeDownloadingHandlerForNSURL(const NSURL* url) {
 
 Downloader_iOS_Handler* Downloader_iOS::getHandlerToRun() {
   
-  __block long                    selectedPriority = -100000000; // TODO: LONG_MAX_VALUE;
+  __block long long                   selectedPriority = -100000000; // TODO: LONG_MAX_VALUE;
   __block Downloader_iOS_Handler* selectedHandler  = nil;
   __block NSURL*                  selectedURL      = nil;
   
@@ -139,7 +139,7 @@ Downloader_iOS_Handler* Downloader_iOS::getHandlerToRun() {
     NSURL*                  url     = key;
     Downloader_iOS_Handler* handler = obj;
     
-    const long priority = [handler priority];
+    const long long priority = [handler priority];
     
     if (priority > selectedPriority) {
       selectedPriority = priority;
@@ -185,7 +185,7 @@ long long Downloader_iOS::request(const URL &url,
   
   _requestsCounter++;
   
-  const long requestId = _requestIdCounter++;
+  const long long requestId = _requestIdCounter++;
   
   handler = [_downloadingHandlers objectForKey: nsURL];
   if (handler) {

@@ -14,17 +14,17 @@
 @interface ListenerEntry : NSObject
 {
   Downloader_iOS_Listener* _listener;
-  long                     _requestId;
+  long long                _requestId;
   bool                     _canceled;
 }
 
 +(id) entryWithListener: (Downloader_iOS_Listener*) listener
-              requestId: (long) requestId;
+              requestId: (long long) requestId;
 
 -(id) initWithListener: (Downloader_iOS_Listener*) listener
-             requestId: (long) requestId;
+             requestId: (long long) requestId;
 
--(long) requestId;
+-(long long) requestId;
 
 -(void) cancel;
 -(bool) isCanceled;
@@ -37,7 +37,7 @@
 @interface Downloader_iOS_Handler : NSObject
 {
   NSMutableArray* _listeners;
-  long            _priority;
+  long long       _priority;
   NSURL*          _nsURL;
   URL*            _url;
   
@@ -49,19 +49,19 @@
 - (id) initWithNSURL: (NSURL*) nsURL
                  url: (URL*) url
             listener: (Downloader_iOS_Listener*) listener
-            priority: (long) priority
-           requestId: (long) requestId;
+            priority: (long long) priority
+           requestId: (long long) requestId;
 
 - (void) addListener: (Downloader_iOS_Listener*) listener
-            priority: (long) priority
-           requestId: (long) requestId;
+            priority: (long long) priority
+           requestId: (long long) requestId;
 
 
-- (bool) cancelListenerForRequestId: (long) requestId;
-- (bool) removeListenerForRequestId: (long) requestId;
+- (bool) cancelListenerForRequestId: (long long) requestId;
+- (bool) removeListenerForRequestId: (long long) requestId;
 - (bool) hasListeners;
 
-- (long) priority;
+- (long long) priority;
 
 - (void) runWithDownloader:(void*)downloaderV;
 

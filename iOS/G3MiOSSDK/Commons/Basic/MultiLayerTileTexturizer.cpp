@@ -171,7 +171,7 @@ private:
   
   
   std::vector<PetitionStatus>    _status;
-  std::vector<long>              _requestsIds;
+  std::vector<long long>              _requestsIds;
   
   
   bool _finalized;
@@ -237,9 +237,9 @@ public:
       const Petition* petition = _petitions[i];
       
       //const long priority = _tile->getLevel() * 1000000 + _tile->getRow() * 1000 + _tile->getColumn();
-      const long priority = _tile->getLevel();
+      const long long priority = _tile->getLevel();
       
-      const long requestId = _downloader->request(URL(petition->getURL()),
+      const long long requestId = _downloader->request(URL(petition->getURL()),
                                                   priority,
                                                   new BuilderDownloadStepDownloadListener(this, i),
                                                   true);
@@ -371,7 +371,7 @@ public:
     
     if (!_finalized) {
       for (int i = 0; i < _requestsIds.size(); i++) {
-        const long requestId = _requestsIds[i];
+        const long long requestId = _requestsIds[i];
         _downloader->cancelRequest(requestId);
       }
     }
