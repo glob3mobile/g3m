@@ -47,7 +47,7 @@ float * SimplePlanetRenderer::createVertices(const Planet& planet)
       const Angle lat = Angle::fromDegrees( (j * 180.0 / latRes1)  -90.0 );
       const Geodetic2D g(lat, lon);
       
-      const Vector3D v = planet.toVector3D(g);
+      const Vector3D v = planet.toCartesian(g);
       vertices[verticesIndex++] = (float) v.x();//Vertices
       vertices[verticesIndex++] = (float) v.y();
       vertices[verticesIndex++] = (float) v.z();
@@ -111,7 +111,7 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   GLTextureId texId = GLTextureId::invalid();
   float * texC = NULL;
   if (true){
-    texId = rc->getTexturesHandler()->getGLTextureIdFromFileName(_textureFilename, _texWidth, _texHeight);
+    texId = rc->getTexturesHandler()->getGLTextureIdFromFileName(_textureFilename, _texWidth, _texHeight, true);
     if (!texId.isValid()) {
       rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
       return false;

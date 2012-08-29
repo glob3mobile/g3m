@@ -175,7 +175,8 @@ public:
   int getError();
   
   const GLTextureId uploadTexture(const IImage* image,
-                                  int textureWidth, int textureHeight);
+                                  int textureWidth, int textureHeight,
+                                  bool generateMipmap);
   
   void setTextureCoordinates(int size,
                              int stride,

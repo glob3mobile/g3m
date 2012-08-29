@@ -10,7 +10,8 @@
 
 const GLTextureId CPUTextureBuilder::createTextureFromImages(GL * gl,
                                                              const std::vector<const IImage*> images,
-                                                             int width, int height) const {
+                                                             int width, int height,
+                                                             bool generateMipmap) const {
   const int imagesSize = images.size();
   
   if (imagesSize == 0) {
@@ -18,7 +19,7 @@ const GLTextureId CPUTextureBuilder::createTextureFromImages(GL * gl,
   }
   
   if (imagesSize == 1) {
-    return gl->uploadTexture(images[0], width, height);
+    return gl->uploadTexture(images[0], width, height, generateMipmap);
   }
   
   const IImage* im = images[0];
@@ -32,7 +33,7 @@ const GLTextureId CPUTextureBuilder::createTextureFromImages(GL * gl,
     im = im2;
   }
   
-  const GLTextureId texId = gl->uploadTexture(im, width, height);
+  const GLTextureId texId = gl->uploadTexture(im, width, height, generateMipmap);
   
   if (imagesSize > 1) {
     delete im;
@@ -44,7 +45,8 @@ const GLTextureId CPUTextureBuilder::createTextureFromImages(GL * gl,
 const GLTextureId CPUTextureBuilder::createTextureFromImages(GL * gl, const IFactory* factory,
                                                              const std::vector<const IImage*> images,
                                                              const std::vector<const Rectangle*> rectangles,
-                                                             int width, int height) const {
+                                                             int width, int height,
+                                                             bool generateMipmap) const {
   const int imagesSize = images.size();
   
   if (imagesSize == 0) {
@@ -96,7 +98,7 @@ const GLTextureId CPUTextureBuilder::createTextureFromImages(GL * gl, const IFac
     base = im2;
   }
   
-  const GLTextureId texId = gl->uploadTexture(base, width, height);
+  const GLTextureId texId = gl->uploadTexture(base, width, height, generateMipmap);
   
   if (rectangles.size() > 0 && base != images[0]) {
     delete base;

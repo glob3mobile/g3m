@@ -25,7 +25,6 @@ TileRenderer::~TileRenderer() {
   delete _parameters;
   
   delete _lastSplitTimer;
-  //  delete _lastTexturizerTimer;
 }
 
 void TileRenderer::clearTopLevelTiles() {
@@ -78,13 +77,7 @@ void TileRenderer::initialize(const InitializationContext* ic) {
   }
   _lastSplitTimer      = ic->getFactory()->createTimer();
   
-  //  if (_lastTexturizerTimer != NULL) {
-  //    delete _lastTexturizerTimer;
-  //  }
-  //  _lastTexturizerTimer = ic->getFactory()->createTimer();
-  
   _texturizer->initialize(ic, _parameters);
-  
 }
 
 bool TileRenderer::isReadyToRender(const RenderContext *rc) {
@@ -127,12 +120,11 @@ int TileRenderer::render(const RenderContext* rc) {
                         _parameters,
                         &statistics,
                         _lastSplitTimer,
-                        // _lastTexturizerTimer,
                         _firstRender /* if first render, force full render */);
   
   if (_firstRender && _parameters->_forceTopLevelTilesRenderOnStart) {
     // force one render of the topLevel tiles to make the (toplevel) textures loaded as they
-    // will be used as last-change fallback texture for any tile.
+    // will be used as last-chance fallback texture for any tile.
     _firstRender = false;
     
     for (int i = 0; i < _topLevelTiles.size(); i++) {
@@ -148,7 +140,7 @@ int TileRenderer::render(const RenderContext* rc) {
       toVisit.push_back(_topLevelTiles[i]);
     }
     
-    //    DistanceToCenterTileComparison predicate = DistanceToCenterTileComparison(rc->getNextCamera(),
+    //    DistanceToCenterTileComparison predicate = DistanceToCenterTileComparison(rc->getCurrentCamera(),
     //                                                                              rc->getPlanet());
     
     while (toVisit.size() > 0) {
@@ -191,7 +183,7 @@ bool TileRenderer::onTouchEvent(const EventContext* ec,
     if (_lastCamera != NULL) {
       const Vector2D pixel = touchEvent->getTouch(0)->getPos();
       const Vector3D ray = _lastCamera->pixel2Ray(pixel);
-      const Vector3D origin = _lastCamera->getPosition();
+      const Vector3D origin = _lastCamera->getCartesianPosition();
       
       const Planet* planet = ec->getPlanet();
       

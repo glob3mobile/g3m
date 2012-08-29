@@ -206,7 +206,8 @@ int GL::getError() {
 }
 
 const GLTextureId GL::uploadTexture(const IImage* image,
-                                    int textureWidth, int textureHeight) {
+                                    int textureWidth, int textureHeight,
+                                    bool generateMipmap) {
   const GLTextureId texId = getGLTextureId();
   if (texId.isValid()) {
     
@@ -248,6 +249,10 @@ const GLTextureId GL::uploadTexture(const IImage* image,
     _gl->texParameteri(Texture2D, WrapT, ClampToEdge);
     _gl->texImage2D(Texture2D, 0, RGBA, textureWidth, textureHeight, 0, RGBA, UnsignedByte, imageData);
     
+    if (generateMipmap) {
+      _gl->generateMipmap(Texture2D);
+    }
+    
 //#ifdef C_CODE
 //    delete [] imageData;
 //#endif
@@ -267,6 +272,10 @@ void GL::setTextureCoordinates(int size, int stride, const float texcoord[]) {
 }
 
 void GL::bindTexture(const GLTextureId& textureId) {
+//  if (!_textureId.isEqualsTo(textureId)) {
+//    _gl->bindTexture(Texture2D, textureId.getGLTextureId());
+//    _textureId = textureId;
+//  }
   _gl->bindTexture(Texture2D, textureId.getGLTextureId());
 }
 

@@ -125,7 +125,6 @@
 		CFB72A6A15E6808900A5BAF4 /* IStringUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFB72A6815E6808900A5BAF4 /* IStringUtils.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFB72A6E15E682B400A5BAF4 /* StringUtils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFB72A6C15E682B400A5BAF4 /* StringUtils_iOS.mm */; };
 		CFB72A6F15E682B400A5BAF4 /* StringUtils_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFB72A6D15E682B400A5BAF4 /* StringUtils_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
-		CFBCCE9515E709EF00FBF950 /* TilePetitions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8C874BE15B5C58D00F19859 /* TilePetitions.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFBCCE9615E709EF00FBF950 /* Downloader_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFFEC11F15C2E9B0003FA986 /* Downloader_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
 		CFD0021B15D3C94C00735FD8 /* TileKey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD0021915D3C94C00735FD8 /* TileKey.cpp */; };
 		CFD0021C15D3C94C00735FD8 /* TileKey.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFD0021A15D3C94C00735FD8 /* TileKey.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -362,7 +361,6 @@
 		D8A5601D15AEF64E00035086 /* Mesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Mesh.cpp; path = Commons/Mesh/Mesh.cpp; sourceTree = "<group>"; };
 		D8A5601E15AEF64E00035086 /* Mesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Mesh.hpp; path = Commons/Mesh/Mesh.hpp; sourceTree = "<group>"; };
 		D8A5602315AEF69200035086 /* TexturedMesh.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TexturedMesh.hpp; path = Commons/Mesh/TexturedMesh.hpp; sourceTree = "<group>"; };
-		D8C874BE15B5C58D00F19859 /* TilePetitions.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TilePetitions.hpp; path = Commons/Basic/TilePetitions.hpp; sourceTree = "<group>"; };
 		D8CD6F7815A6FFAC00279BE7 /* IDownloadListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IDownloadListener.hpp; path = Commons/Downloader/IDownloadListener.hpp; sourceTree = "<group>"; };
 		D8E0EC1215C1B1BB0010A68A /* StaticImageLayer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StaticImageLayer.hpp; sourceTree = "<group>"; };
 		D8E0EC1415C1B1CD0010A68A /* StaticImageLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StaticImageLayer.cpp; sourceTree = "<group>"; };
@@ -481,7 +479,6 @@
 				38D786E41587B3DD003BBC75 /* Tile.hpp */,
 				CFD0021915D3C94C00735FD8 /* TileKey.cpp */,
 				CFD0021A15D3C94C00735FD8 /* TileKey.hpp */,
-				D8C874BE15B5C58D00F19859 /* TilePetitions.hpp */,
 				CF9AEBBE159B3BAF004C3558 /* TileTessellator.cpp */,
 				CF9AEBBD159B3B95004C3558 /* TileTessellator.hpp */,
 				CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */,
@@ -493,7 +490,6 @@
 				CFFEC12415C2EB96003FA986 /* URL.hpp */,
 				CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */,
 				CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */,
-				D8C874BE15B5C58D00F19859 /* TilePetitions.hpp */,
 				CFF8C4BB15DEB6A70034A576 /* RCObject.cpp */,
 				CFF8C4BC15DEB6A70034A576 /* RCObject.hpp */,
 				CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */,
@@ -735,7 +731,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CFBCCE9515E709EF00FBF950 /* TilePetitions.hpp in Headers */,
 				CFB72A6A15E6808900A5BAF4 /* IStringUtils.hpp in Headers */,
 				CFB72A3615E65B1F00A5BAF4 /* LayerCondition.hpp in Headers */,
 				CFB72A3E15E65DBC00A5BAF4 /* LevelTileCondition.hpp in Headers */,

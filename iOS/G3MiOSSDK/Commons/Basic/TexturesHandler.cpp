@@ -10,6 +10,7 @@
 
 #include "IImage.hpp"
 #include "Context.hpp"
+#include "TextureBuilder.hpp"
 
 #include <sstream>
 
@@ -76,14 +77,16 @@ public:
 
 
 const GLTextureId TexturesHandler::getGLTextureIdFromFileName(const std::string filename,
-                                                              int textureWidth,
-                                                              int textureHeight) {
+                                                              int               textureWidth,
+                                                              int               textureHeight,
+                                                              const bool        isMipmap) {
   const IImage* image = _factory->createImageFromFileName(filename);
   
   const GLTextureId texId = getGLTextureId(image,
                                            TextureSpec(filename, // filename as the id
                                                        textureWidth,
-                                                       textureHeight));
+                                                       textureHeight,
+                                                       isMipmap));
   _factory->deleteImage(image);
   
   return texId;
@@ -133,7 +136,8 @@ const GLTextureId TexturesHandler::getGLTextureId(const std::vector<const IImage
   holder->_glTextureId = _textureBuilder->createTextureFromImages(_gl,
                                                                   images,
                                                                   textureSpec.getWidth(),
-                                                                  textureSpec.getHeight());
+                                                                  textureSpec.getHeight(),
+                                                                  textureSpec.isMipmap());
   
   if (_verbose) {
     ILogger::instance()->logInfo("Uploaded texture \"%s\" to GPU with texId=%s" ,
@@ -162,7 +166,8 @@ const GLTextureId TexturesHandler::getGLTextureId(const std::vector<const IImage
                                                                   images,
                                                                   rectangles,
                                                                   textureSpec.getWidth(),
-                                                                  textureSpec.getHeight());
+                                                                  textureSpec.getHeight(),
+                                                                  textureSpec.isMipmap());
   
   if (_verbose) {
     ILogger::instance()->logInfo("Uploaded texture \"%s\" to GPU with texId=%s" ,

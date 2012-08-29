@@ -56,7 +56,7 @@ bool BusyQuadRenderer::initMesh(const RenderContext* rc)
   //TEXTURED
   GLTextureId texId = GLTextureId::invalid();
   if (true){
-    texId = rc->getTexturesHandler()->getGLTextureIdFromFileName(_textureFilename, 2048, 1024);
+    texId = rc->getTexturesHandler()->getGLTextureIdFromFileName(_textureFilename, 256, 256, false);
     if (!texId.isValid()) {
       rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
       return false;

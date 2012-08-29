@@ -61,7 +61,7 @@ public:
     
     deleteListener();
   }
-
+  
   void onCanceledDownload(const Response* response) {
     saveResponse(response);
     
@@ -69,7 +69,7 @@ public:
     
     // no deleteListener() call, onCanceledDownload() is always called before onCancel().
   }
-
+  
   void onCancel(const URL* url) {
     _listener->onCancel(url);
     
@@ -87,7 +87,7 @@ void CachedDownloader::stop() {
   _downloader->stop();
 }
 
-void CachedDownloader::cancelRequest(long requestId) {
+void CachedDownloader::cancelRequest(long long requestId) {
   _downloader->cancelRequest(requestId);
 }
 
@@ -102,10 +102,10 @@ std::string CachedDownloader::removeInvalidChars(const std::string& path) const 
 //  return URL(_cacheDirectory, removeInvalidChars(url.getPath()));
 //}
 
-long CachedDownloader::request(const URL& url,
-                               long priority,
-                               IDownloadListener* listener,
-                               bool deleteListener) {
+long long CachedDownloader::request(const URL& url,
+                                    long long priority,
+                                    IDownloadListener* listener,
+                                    bool deleteListener) {
   _requestsCounter++;
   
   const ByteBuffer* cachedBuffer = _cacheStorage->read(url);

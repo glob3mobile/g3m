@@ -46,7 +46,7 @@ private:
   
   TexturesHandler* _texturesHandler;
   
-  void operator=(const LazyTextureMapping& that);
+  LazyTextureMapping& operator=(const LazyTextureMapping& that);
   
   LazyTextureMapping(const LazyTextureMapping& that);
   void releaseGLTextureId();

@@ -58,7 +58,7 @@ _started(false)
   }
 }
 
-void Downloader_iOS::cancelRequest(long requestId) {
+void Downloader_iOS::cancelRequest(long long requestId) {
   if (requestId < 0) {
     return;
   }
@@ -167,10 +167,10 @@ Downloader_iOS_Handler* Downloader_iOS::getHandlerToRun() {
   return selectedHandler;
 }
 
-long Downloader_iOS::request(const URL &url,
-                             long priority,
-                             IDownloadListener* cppListener,
-                             bool deleteListener) {
+long long Downloader_iOS::request(const URL &url,
+                                  long long priority,
+                                  IDownloadListener* cppListener,
+                                  bool deleteListener) {
   
   NSURL* nsURL = [NSURL URLWithString: toNSString(url.getPath())];
   

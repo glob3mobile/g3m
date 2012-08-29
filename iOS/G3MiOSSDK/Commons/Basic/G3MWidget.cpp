@@ -12,7 +12,7 @@
 #include "Renderer.hpp"
 #include "Camera.hpp"
 #include "GL.hpp"
-#include "TexturesHandler.cpp"
+#include "TexturesHandler.hpp"
 #include "IDownloader.hpp"
 #include "Effects.hpp"
 #include "Context.hpp"
@@ -28,7 +28,7 @@ G3MWidget::G3MWidget(FrameTasksExecutor*              frameTasksExecutor,
                      TexturesHandler*                 texturesHandler,
                      IDownloader*                     downloader,
                      const Planet*                    planet,
-                     std::vector<ICameraConstrainer*> cameraConstraint,
+                     std::vector<ICameraConstrainer*> cameraConstrainers,
                      Renderer*                        renderer,
                      Renderer*                        busyRenderer,
                      EffectsScheduler*                effectsScheduler,
@@ -44,7 +44,7 @@ _logger(logger),
 _gl(gl),
 _texturesHandler(texturesHandler),
 _planet(planet),
-_cameraConstraint(cameraConstraint),
+_cameraConstrainers(cameraConstrainers),
 _renderer(renderer),
 _busyRenderer(busyRenderer),
 _effectsScheduler(effectsScheduler),
@@ -101,7 +101,7 @@ G3MWidget* G3MWidget::create(FrameTasksExecutor* frameTasksExecutor,
   if (logger != NULL) {
     logger->logInfo("Creating G3MWidget...");
   }
-
+  
   IStringUtils::setInstance(stringUtils);
   ILogger::setInstance(logger);
   
@@ -137,7 +137,7 @@ G3MWidget::~G3MWidget() {
   if (_userData != NULL) {
     delete _userData;
   }
-
+  
   delete _factory;
   delete _logger;
   delete _gl;
@@ -154,8 +154,8 @@ G3MWidget::~G3MWidget() {
     delete _downloader;
   }
   
-  for (unsigned int n=0; n<_cameraConstraint.size(); n++) {
-    delete _cameraConstraint[n];
+  for (unsigned int n=0; n<_cameraConstrainers.size(); n++) {
+    delete _cameraConstrainers[n];
   }
   
   delete _frameTasksExecutor;
@@ -177,29 +177,34 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
   }
 }
 
+//const double clamp(const double value,
+//                   const double lower,
+//                   const double upper) {
+//  if (value < lower) {
+//    return lower;
+//  }
+//  if (value > upper) {
+//    return upper;
+//  }
+//  return value;
+//}
+
 int G3MWidget::render() {
   _timer->start();
   _renderCounter++;
   
+  // give to the CameraContrainers the opportunity to change the nextCamera
+  for (int i = 0; i< _cameraConstrainers.size(); i++) {
+    ICameraConstrainer* constrainer =  _cameraConstrainers[i];
+    constrainer->onCameraChange(_planet,
+                                _currentCamera,
+                                _nextCamera);
+  }
+  _currentCamera->copyFrom(*_nextCamera);
   
-  // copy next camera to current camera
-  bool acceptedCamera = true;
-  for (int n = 0; n < _cameraConstraint.size(); n++) {
-    if (!_cameraConstraint[n]->acceptsCamera(_nextCamera, _planet)) {
-      acceptedCamera = false;
-      break;
-    }
-  }
-  if (acceptedCamera) {
-    _currentCamera->copyFrom(*_nextCamera);
-  }
-  else {
-    _nextCamera->copyFrom(*_currentCamera);
-  }
-  
-//  int __removePrint;
-//  printf("Camera Position=%s\n" ,
-//         _planet->toGeodetic3D(_currentCamera->getPosition()).description().c_str());
+  //  int __removePrint;
+  //  printf("Camera Position=%s\n" ,
+  //         _planet->toGeodetic3D(_currentCamera->getCartesianPosition()).description().c_str());
   
   // create RenderContext
   RenderContext rc(_frameTasksExecutor,
@@ -214,11 +219,11 @@ int G3MWidget::render() {
                    _downloader,
                    _effectsScheduler,
                    _factory->createTimer());
-
+  
   _effectsScheduler->doOneCyle(&rc);
   
   _frameTasksExecutor->doPreRenderCycle(&rc);
-
+  
   _rendererReady = _renderer->isReadyToRender(&rc);
   
   Renderer* selectedRenderer = _rendererReady ? _renderer : _busyRenderer;
@@ -230,17 +235,44 @@ int G3MWidget::render() {
     _selectedRenderer->start();
   }
   
-
-  // Clear the scene
+//  const Vector3D ray = _currentCamera->getCenter();
+//  const Vector3D origin = _currentCamera->getPosition();
+//  
+//  const Vector3D intersection = _planet->closestIntersection(origin, ray);
+//  if (!intersection.isNan()) {
+//    const Vector3D cameraPosition = _currentCamera->getPosition();
+//    
+//    const double minDistance = 1000;
+//    const double maxDistance = 20000;
+//    
+//    const double distanceToTerrain = clamp(intersection.sub(cameraPosition).length(),
+//                                           minDistance,
+//                                           maxDistance + minDistance) - minDistance;
+//    
+//    printf("Camera to terrain distance=%f\n", distanceToTerrain);
+//    
+//    const float factor = (float) (distanceToTerrain / maxDistance);
+//    
+//    // Clear the scene
+//    const Color dayColor = Color::fromRGBA((float) 0.5, (float) 0.5, 1, 1);
+//    _gl->clearScreen(_backgroundColor.mixedWith(dayColor, factor));
+//    //    _gl->clearScreen(_backgroundColor);
+//    
+//  }
+//  else {
+//    // Clear the scene
+//    _gl->clearScreen(_backgroundColor);
+//  }
   _gl->clearScreen(_backgroundColor);
-  
+
   const int timeToRedraw = _selectedRenderer->render(&rc);
   
-//  _frameTasksExecutor->doPostRenderCycle(&rc);
+  //  _frameTasksExecutor->doPostRenderCycle(&rc);
   
   const TimeInterval elapsedTime = _timer->elapsedTime();
   if (elapsedTime.milliseconds() > 100) {
-    _logger->logWarning("Frame took too much time: %dms" , elapsedTime.milliseconds());
+    _logger->logWarning("Frame took too much time: %dms" ,
+                        elapsedTime.milliseconds());
   }
   
   if (_logFPS) {
@@ -274,5 +306,5 @@ int G3MWidget::render() {
   }
   
   return timeToRedraw;
-
+  
 }

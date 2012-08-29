@@ -19,10 +19,10 @@ private:
   IDownloader* _downloader;
   IStorage*    _cacheStorage;
   
-//  const URL getCacheFileName(const URL& url) const;
+  //  const URL getCacheFileName(const URL& url) const;
   
   std::string removeInvalidChars(const std::string& path) const;
-
+  
   long _requestsCounter;
   long _cacheHitsCounter;
   long _savesCounter;
@@ -43,12 +43,12 @@ public:
   
   void stop();
   
-  long request(const URL& url,
-               long priority,
-               IDownloadListener* listener,
-               bool deleteListener);
+  long long request(const URL& url,
+                    long long priority,
+                    IDownloadListener* listener,
+                    bool deleteListener);
   
-  void cancelRequest(long requestId);
+  void cancelRequest(long long requestId);
   
   virtual ~CachedDownloader() {
     delete _downloader;

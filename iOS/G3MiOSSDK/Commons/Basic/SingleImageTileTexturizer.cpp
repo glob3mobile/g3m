@@ -44,7 +44,8 @@ Mesh* SingleImageTileTexturizer::texturize(const RenderContext* rc,
     _texId = rc->getTexturesHandler()->getGLTextureId(_image,
                                                       TextureSpec("SINGLE_IMAGE_TEX",
                                                                   _image->getWidth(),
-                                                                  _image->getHeight())
+                                                                  _image->getHeight(),
+                                                                  true)
                                                       );
     
     if (!_texId.isValid()) {
