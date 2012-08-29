@@ -219,8 +219,8 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& g,
   
   //X and Y
   Vector2D pixel = tileSector.getUVCoordinates(g);
-  int x = (int) MATH.round( (pixel.x() * width) );
-  int y = (int) MATH.round ( ((1.0 - pixel.y()) * height) );
+  int x = (int) GMath.round( (pixel.x() * width) );
+  int y = (int) GMath.round ( ((1.0 - pixel.y()) * height) );
   req += factory->stringFormat("&X=%d&Y=%d", x, y);
   
 	return URL(req);

@@ -100,11 +100,11 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
     dAccum += d;
     //tempCamera.updateModelMatrix();
     double angle0 = tempCamera.compute3DAngularDistance(pixel0, pixel1).degrees();
-    if (MATH.isNan(angle0)) return;
+    if (GMath.isNan(angle0)) return;
     //printf("distancia angular original = %.4f     d=%.1f   angulo step0=%.4f\n", angle, d, angle0);
  
     // step 1
-    d = MATH.abs((distance-d)*0.3);
+    d = GMath.abs((distance-d)*0.3);
     if (angle0 < angle) d*=-1;
     tempCamera.moveForward(d);
     dAccum += d;
@@ -114,8 +114,8 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
     
     // iterations
     int iter=0;
-    double precision = MATH.pow(10, MATH.log10(distance)-8.5);
-    while (MATH.abs(angle_n-angle) > precision) {
+    double precision = GMath.pow(10, GMath.log10(distance)-8.5);
+    while (GMath.abs(angle_n-angle) > precision) {
       iter++;
       if ((angle_n1-angle_n)/(angle_n-angle) < 0) d*=-0.5;
       tempCamera.moveForward(d);
@@ -137,7 +137,7 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
   {
     Vector3D initialPoint = _initialPoint.asVector3D();
     const Vector3D rotationAxis = initialPoint.cross(centerPoint);
-    const Angle rotationDelta = Angle::fromRadians( - MATH.acos(initialPoint.normalized().dot(centerPoint.normalized())) );
+    const Angle rotationDelta = Angle::fromRadians( - GMath.acos(initialPoint.normalized().dot(centerPoint.normalized())) );
     if (rotationDelta.isNan()) return; 
     tempCamera.rotateWithAxis(rotationAxis, rotationDelta);  
   }
@@ -160,7 +160,7 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
   
   // drag globe from centerPoint to finalPoint
   const Vector3D rotationAxis = centerPoint2.cross(finalPoint);
-  const Angle rotationDelta = Angle::fromRadians( - MATH.acos(centerPoint2.normalized().dot(finalPoint.normalized())) );
+  const Angle rotationDelta = Angle::fromRadians( - GMath.acos(centerPoint2.normalized().dot(finalPoint.normalized())) );
   if (rotationDelta.isNan()) {
     return;
   }

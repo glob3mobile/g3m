@@ -38,17 +38,17 @@ public:
   }
   
   static MutableVector2D nan() {
-    return MutableVector2D(MATH.NanD(), MATH.NanD());
+    return MutableVector2D(GMath.NanD(), GMath.NanD());
   }
   
   bool isNan() const {
-    return MATH.isNan(_x * _y);
+    return GMath.isNan(_x * _y);
   }
 
   MutableVector2D normalized() const;
   
   double length() const {
-    return MATH.sqrt(squaredLength());
+    return GMath.sqrt(squaredLength());
   }
   
   double squaredLength() const {
@@ -86,7 +86,7 @@ public:
   }
   
   Angle angle() const { 
-    double a = MATH.atan2(_y, _x);
+    double a = GMath.atan2(_y, _x);
     return Angle::fromRadians(a);
   }
   

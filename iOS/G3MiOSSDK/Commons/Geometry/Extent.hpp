@@ -25,7 +25,7 @@ public:
   
   
   virtual double projectedArea(const RenderContext* rc) const {
-    return MATH.sqrt(squaredProjectedArea(rc));
+    return GMath.sqrt(squaredProjectedArea(rc));
   }
 
   virtual double squaredProjectedArea(const RenderContext* rc) const = 0;

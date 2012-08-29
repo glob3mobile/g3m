@@ -40,11 +40,11 @@ public:
   MutableVector3D normalized() const;
   
   static MutableVector3D nan() {
-    return MutableVector3D(MATH.NanD(), MATH.NanD(), MATH.NanD());
+    return MutableVector3D(GMath.NanD(), GMath.NanD(), GMath.NanD());
   }
   
   bool isNan() const {
-    return (MATH.isNan(_x) || MATH.isNan(_y) || MATH.isNan(_z));
+    return (GMath.isNan(_x) || GMath.isNan(_y) || GMath.isNan(_z));
   }
   
   bool isZero() const {
@@ -56,7 +56,7 @@ public:
   }
   
   double length() const {
-    return MATH.sqrt(squaredLength());
+    return GMath.sqrt(squaredLength());
   }
   
   double squaredLength() const {

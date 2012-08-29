@@ -36,11 +36,11 @@ public:
   }
   
   static Vector3D nan() {
-    return Vector3D(MATH.NanD(), MATH.NanD(), MATH.NanD());
+    return Vector3D(GMath.NanD(), GMath.NanD(), GMath.NanD());
   }
   
   bool isNan() const {
-    return MATH.isNan(_x*_y*_z);
+    return GMath.isNan(_x*_y*_z);
   }
   
   bool isZero() const {
@@ -50,7 +50,7 @@ public:
   Vector3D normalized() const;
   
   double length() const {
-    return MATH.sqrt(squaredLength());
+    return GMath.sqrt(squaredLength());
   }
   
   double squaredLength() const {

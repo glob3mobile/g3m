@@ -37,9 +37,9 @@ void BusyMeshRenderer::initialize(const InitializationContext* ic)
 //  float r1=200, r2=230;
   float r1=12, r2=18;
   for (unsigned int step=0; step<=numStrides; step++) {
-    double angle = (double) step * 2 * MATH.pi() / numStrides;
-    double c = MATH.cos(angle);
-    double s = MATH.sin(angle);
+    double angle = (double) step * 2 * GMath.pi() / numStrides;
+    double c = GMath.cos(angle);
+    double s = GMath.sin(angle);
     vertices[nv++]  = (float) (r1 * c);
     vertices[nv++]  = (float) (r1 * s);
     vertices[nv++]  = 0.0;

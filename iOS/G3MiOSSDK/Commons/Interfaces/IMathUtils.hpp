@@ -12,7 +12,11 @@
 #include <string.h>
 #include <cstdio>
 
-#define MATH (*IMathUtils::instance())
+#ifdef GMath
+  TODO_GMATH_PREDEFINED!!!!
+#endif
+
+#define GMath (*IMathUtils::instance())
 
 class IMathUtils{
   

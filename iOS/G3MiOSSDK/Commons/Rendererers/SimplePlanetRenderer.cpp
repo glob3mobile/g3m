@@ -125,7 +125,7 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
     int numVertices = res * res * 4;
     colors = new float[numVertices];
     for(int i = 0; i < numVertices; ){
-      float val = (float) (0.5 + MATH.sin( (float) (2.0 * MATH.pi() * ((float) i) / numVertices) ) / 2.0);
+      float val = (float) (0.5 + GMath.sin( (float) (2.0 * GMath.pi() * ((float) i) / numVertices) ) / 2.0);
       
       colors[i++] = val;
       colors[i++] = 0;

@@ -31,7 +31,7 @@ bool Angle::isBetween(const Angle& min,
 
 Angle Angle::distanceTo(const Angle& other) const
 {
-  double dif = MATH.abs(_degrees - other._degrees);
+  double dif = GMath.abs(_degrees - other._degrees);
   if (dif > 180) dif = 360 - dif;
   return Angle::fromDegrees(dif);
 }

@@ -35,7 +35,7 @@ public:
   }
   
   static Angle fromRadians(const double radians) {
-    return Angle::fromDegrees(radians / MATH.pi() * 180.0);
+    return Angle::fromDegrees(radians / GMath.pi() * 180.0);
   }
   
   static Angle getMin(const Angle& a1, const Angle& a2) {
@@ -53,7 +53,7 @@ public:
   }
   
   static Angle nan() {
-    return Angle::fromDegrees(MATH.NanD());
+    return Angle::fromDegrees(GMath.NanD());
   }
   
   static Angle midAngle(const Angle& angle1, const Angle& angle2) {
@@ -70,11 +70,11 @@ public:
   }
   
   double sinus() const {
-    return MATH.sin( _degrees / 180.0 * MATH.pi());
+    return GMath.sin( _degrees / 180.0 * GMath.pi());
   }
   
   double cosinus() const {
-    return MATH.cos(_degrees / 180.0 * MATH.pi());
+    return GMath.cos(_degrees / 180.0 * GMath.pi());
   }
   
   double degrees() const {
@@ -82,11 +82,11 @@ public:
   }
   
   double radians() const {
-    return _degrees / 180.0 * MATH.pi();
+    return _degrees / 180.0 * GMath.pi();
   }
   
   bool closeTo(const Angle& other) const {
-    return (MATH.abs(_degrees - other._degrees) < THRESHOLD);
+    return (GMath.abs(_degrees - other._degrees) < THRESHOLD);
   }
     
   Angle add(const Angle& a) const {

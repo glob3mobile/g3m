@@ -29,7 +29,7 @@ public:
   }
   
   static TimeInterval nan() {
-    return TimeInterval(MATH.NanD());
+    return TimeInterval(GMath.NanD());
   }
   
   static TimeInterval fromMilliseconds(const long milliseconds) {
@@ -50,7 +50,7 @@ public:
   }
   
   bool isNan() const {
-    return MATH.isNan((double)_milliseconds);
+    return GMath.isNan((double)_milliseconds);
   }
   
   bool lowerThan(const TimeInterval& that) const {
