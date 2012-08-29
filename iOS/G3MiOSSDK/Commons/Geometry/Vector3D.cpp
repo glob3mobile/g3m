@@ -26,7 +26,7 @@ Angle Vector3D::angleBetween(const Vector3D& other) const {
   if (c > 1.0) c = 1.0;
   else if (c < -1.0) c = -1.0;
   
-  return Angle::fromRadians(acos(c));
+  return Angle::fromRadians(MATH.acos(c));
 }
 
 Vector3D Vector3D::rotateAroundAxis(const Vector3D& axis,
@@ -39,7 +39,7 @@ Vector3D Vector3D::rotateAroundAxis(const Vector3D& axis,
   const double sinTheta = theta.sinus();
   
   const double ms = axis.squaredLength();
-  const double m = sqrt(ms);
+  const double m = MATH.sqrt(ms);
   
   return Vector3D(
                   ((u * (u * _x + v * _y + w * _z)) +

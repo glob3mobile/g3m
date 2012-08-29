@@ -9,7 +9,7 @@
 #ifndef G3MiOSSDK_Vector2D_hpp
 #define G3MiOSSDK_Vector2D_hpp
 
-#include <math.h>
+#include "IMathUtils.hpp"
 
 #include "Angle.hpp"
 
@@ -37,10 +37,10 @@ public:
   Vector2D normalized() const;
   
   double length() const {
-    return sqrt(squaredLength());
+    return MATH.sqrt(squaredLength());
   }
   
-  Angle orientation() const { return Angle::fromRadians(atan2(_y, _x)); }
+  Angle orientation() const { return Angle::fromRadians(MATH.atan2(_y, _x)); }
   
   double squaredLength() const {
     return _x * _x + _y * _y ;
@@ -77,7 +77,7 @@ public:
   }
   
   Angle angle() const { 
-    double a = atan2(_y, _x);
+    double a = MATH.atan2(_y, _x);
     return Angle::fromRadians(a);
   }
   
@@ -90,7 +90,7 @@ public:
   }
   
   static Vector2D nan() {
-    return Vector2D(NAN, NAN);
+    return Vector2D(MATH.NanD(), MATH.NanD());
   }
   
   double maxAxis() const {
@@ -104,7 +104,7 @@ public:
   MutableVector2D asMutableVector2D() const;
 
   bool isNan() const {
-    return isnan(_x * _y);
+    return MATH.isNan(_x * _y);
   }
 
   const std::string description() const;

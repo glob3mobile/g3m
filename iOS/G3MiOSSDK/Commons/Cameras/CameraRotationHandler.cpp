@@ -89,7 +89,7 @@ void CameraRotationHandler::onMove(const EventContext *eventContext,
   // compute angle between normal and view direction
   Vector3D view = camera->getViewDirection();
   double dot = normal.normalized().dot(view.normalized().times(-1));
-  double initialAngle = acos(dot) / M_PI * 180;
+  double initialAngle = MATH.acos(dot) / MATH.pi() * 180;
   
   // rotate more than 85 degrees or less than 0 degrees is not allowed
   double delta = (cm.y() - _initialPixel.y()) * 0.25;

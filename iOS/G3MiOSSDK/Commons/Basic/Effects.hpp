@@ -14,6 +14,8 @@
 #include "ITimer.hpp"
 #include "Camera.hpp"
 
+#include "IMathUtils.hpp"
+
 
 class EffectTarget {
   
@@ -34,7 +36,7 @@ protected:
   
   double sigmoid(double x) const {
     x = 12.0*x - 6.0;
-    return (1.0 / (1.0 + exp(-1.0 * x)));
+    return (1.0 / (1.0 + MATH.exp(-1.0 * x)));
   }
   
   double gently(const double x,
@@ -145,7 +147,7 @@ public:
   
   virtual bool isDone(const RenderContext *rc,
                       const TimeInterval& now) {
-    return (fabs(_force) < 1e-6);
+    return (MATH.abs(_force) < 1e-6);
   }
   
 };

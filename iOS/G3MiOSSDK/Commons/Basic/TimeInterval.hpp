@@ -9,7 +9,7 @@
 #ifndef G3MiOSSDK_TimeInterval_hpp
 #define G3MiOSSDK_TimeInterval_hpp
 
-#include <math.h>
+#include "IMathUtils.hpp"
 
 
 class TimeInterval {
@@ -29,7 +29,7 @@ public:
   }
   
   static TimeInterval nan() {
-    return TimeInterval(NAN);
+    return TimeInterval(MATH.NanD());
   }
   
   static TimeInterval fromMilliseconds(const long milliseconds) {
@@ -50,7 +50,7 @@ public:
   }
   
   bool isNan() const {
-    return isnan(_milliseconds);
+    return MATH.isNan((double)_milliseconds);
   }
   
   bool lowerThan(const TimeInterval& that) const {

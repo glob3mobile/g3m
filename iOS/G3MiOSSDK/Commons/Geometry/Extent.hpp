@@ -10,7 +10,7 @@
 #define G3MiOSSDK_Extent_h
 
 #include "Context.hpp"
-#include <math.h>
+#include "IMathUtils.hpp"
 
 class Vector2D;
 class Vector3D;
@@ -25,7 +25,7 @@ public:
   
   
   virtual double projectedArea(const RenderContext* rc) const {
-    return sqrt(squaredProjectedArea(rc));
+    return MATH.sqrt(squaredProjectedArea(rc));
   }
 
   virtual double squaredProjectedArea(const RenderContext* rc) const = 0;

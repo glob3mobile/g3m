@@ -9,7 +9,7 @@
 #ifndef G3MiOSSDK_Vector3D_hpp
 #define G3MiOSSDK_Vector3D_hpp
 
-#include <math.h>
+#include "IMathUtils.hpp"
 
 #include "MutableMatrix44D.hpp"
 
@@ -36,11 +36,11 @@ public:
   }
   
   static Vector3D nan() {
-    return Vector3D(NAN, NAN, NAN);
+    return Vector3D(MATH.NanD(), MATH.NanD(), MATH.NanD());
   }
   
   bool isNan() const {
-    return isnan(_x*_y*_z);
+    return MATH.isNan(_x*_y*_z);
   }
   
   bool isZero() const {
@@ -50,7 +50,7 @@ public:
   Vector3D normalized() const;
   
   double length() const {
-    return sqrt(squaredLength());
+    return MATH.sqrt(squaredLength());
   }
   
   double squaredLength() const {

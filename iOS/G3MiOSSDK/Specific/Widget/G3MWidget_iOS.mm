@@ -121,6 +121,8 @@
   NativeGL2_iOS* nGL = new NativeGL2_iOS();
   GL* gl  = new GL(nGL);
   
+  IMathUtils::setInstance(new MathUtils_iOS()); //Mathematics utilities
+  
   IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
   IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
                                                  storage);

@@ -9,11 +9,31 @@
 #ifndef G3MiOSSDK_IMathUtils_hpp
 #define G3MiOSSDK_IMathUtils_hpp
 
+#include <string.h>
+#include <cstdio>
+
+#define MATH (*IMathUtils::instance())
+
 class IMathUtils{
   
+  
+  static IMathUtils* _instance;
+  
 public:
+  static void setInstance(IMathUtils* math) {
+    if (_instance != NULL) {
+      printf("Warning, IMathUtils instance set two times\n");
+    }
+    _instance = math;
+  }
+  
+  static IMathUtils* instance() {
+    return _instance;
+  }
   
   virtual ~IMathUtils(){}
+  
+  virtual double pi() const = 0;
   
   virtual bool isNan(double v) const = 0;
   virtual bool isNan(float v) const = 0;
@@ -24,8 +44,14 @@ public:
   virtual double sin(double v) const = 0;
   virtual float sin(float v) const = 0;
   
+  virtual double asin(double v) const = 0;
+  virtual float asin(float v) const = 0;
+  
   virtual double cos(double v) const = 0;
   virtual float cos(float v) const = 0;
+  
+  virtual double acos(double v) const = 0;
+  virtual float acos(float v) const = 0;
   
   virtual double tan(double v) const = 0;
   virtual float tan(float v) const = 0;
@@ -33,11 +59,11 @@ public:
   virtual double atan(double v) const = 0;
   virtual float atan(float v) const = 0;
   
-  virtual double atan2(double v) const = 0;
-  virtual float atan2(float v) const = 0;
+  virtual double atan2(double u, double v) const = 0;
+  virtual float atan2(float u, float v) const = 0;
   
-  virtual int round(double v) const = 0;
-  virtual int round(float v) const = 0;
+  virtual double round(double v) const = 0;
+  virtual float round(float v) const = 0;
   
   virtual int abs(int v) const = 0;
   virtual double abs(double v) const = 0;
@@ -52,6 +78,9 @@ public:
   virtual double exp(double v) const = 0;
   virtual float exp(float v) const = 0;
   
+  virtual double log10(double v) const = 0;
+  virtual float log10(float v) const = 0;
+  
   virtual int maxInt() const = 0;
   virtual int minInt() const = 0;
   virtual double maxDouble() const = 0;
@@ -59,5 +88,7 @@ public:
   virtual float maxFloat() const = 0;
   virtual float minFloat() const = 0;
 };
+
+
 
 #endif
