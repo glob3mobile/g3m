@@ -719,7 +719,7 @@ void MultiLayerTileTexturizer::justCreatedTopTile(const RenderContext* rc,
                                                                        tile,
                                                                        _parameters->_tileTextureWidth,
                                                                        _parameters->_tileTextureHeight);
-  
+    
   _pendingTopTileRequests += petitions.size();
   
   const long priority = 1000000000;  // very big priority for toplevel tiles
