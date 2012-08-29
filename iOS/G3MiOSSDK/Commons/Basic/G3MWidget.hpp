@@ -118,7 +118,7 @@ private:
   Renderer*           _busyRenderer;
   EffectsScheduler*   _effectsScheduler;
   
-  std::vector<ICameraConstrainer*> _cameraConstraint;
+  std::vector<ICameraConstrainer*> _cameraConstrainers;
   
   Camera*          _currentCamera;
   Camera*          _nextCamera;

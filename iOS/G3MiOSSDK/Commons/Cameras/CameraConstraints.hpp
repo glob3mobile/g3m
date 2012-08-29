@@ -21,26 +21,41 @@ public:
   virtual ~ICameraConstrainer() {}
 #endif
 
-  virtual bool acceptsCamera(const Camera* camera,
-                             const Planet *planet) const = 0;
+  virtual void onCameraChange(const Planet *planet,
+                              const Camera* previousCamera,
+                              Camera* nextCamera) const = 0;
 };
-
 
 
 class SimpleCameraConstrainer : public ICameraConstrainer {
 public:
-  bool acceptsCamera(const Camera* camera,
-                     const Planet *planet) const {
-    const double distance = camera->getPosition().length();
-    const double radii    = planet->getRadii().maxAxis();
-    if (distance > radii*10) {
-      // printf ("--- camera constraint!\n");
-      return false;
-    }
-    
-    return true;
-  }
-};
+  void onCameraChange(const Planet *planet,
+                      const Camera* previousCamera,
+                      Camera* nextCamera) const {
 
+    const double radii = planet->getRadii().maxAxis();
+    
+    const Geodetic3D cameraPosition3D = planet->toGeodetic3D(nextCamera->getCartesianPosition());
+    const double cameraHeight = cameraPosition3D.height();
+    
+    if (cameraHeight > radii*9) {
+      nextCamera->reset();
+      nextCamera->setPosition(  planet->toGeodetic3D(previousCamera->getCartesianPosition())  );
+    }
+  }
+  
+  
+  //  bool acceptsCamera(const Camera* camera,
+  //                     const Planet *planet) const {
+  //    const double distance = camera->getPosition().length();
+  //    const double radii    = planet->getRadii().maxAxis();
+  //    if (distance > radii*10) {
+  //      // printf ("--- camera constraint!\n");
+  //      return false;
+  //    }
+  //
+  //    return true;
+  //  }
+};
 
 #endif

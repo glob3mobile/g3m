@@ -95,10 +95,9 @@ public:
                                          const int indexes[],
                                          const int numIndex, 
                                          const Color* flatColor = NULL,
-                                         const float colors[] = NULL,
-                                         const float colorsIntensity = (float)0.0,
-                                         const float normals[] = NULL)
-  {
+                                         const float * colors = NULL,
+                                         const float colorsIntensity = 0.0,
+                                         const float* normals = NULL) {
     return new IndexedMesh(owner, primitive, strategy, center, numVertices, vertices,
                            indexes, numIndex, flatColor, colors, colorsIntensity, normals);
   }
@@ -111,9 +110,8 @@ public:
                                          std::vector<int>& indexes,
                                          const Color* flatColor = NULL,
                                          std::vector<Color>* colors = NULL,
-                                         const float colorsIntensity = (float)0.0,
-                                         std::vector<MutableVector3D>* normals = NULL)
-  {
+                                         const float colorsIntensity = 0.0,
+                                         std::vector<MutableVector3D>* normals = NULL) {
     return new IndexedMesh(vertices, primitive, strategy, center, indexes,
                            flatColor, colors, colorsIntensity, normals);
   }
@@ -129,14 +127,13 @@ public:
                                            const int indexes[],
                                            const int numIndex, 
                                            const Color* flatColor = NULL,
-                                           const float colors[] = NULL,
-                                           const float colorsIntensity = (float)0.0,
-                                           const float normals[] = NULL)
-  {
+                                           const float * colors = NULL,
+                                           const float colorsIntensity = 0.0,
+                                           const float* normals = NULL) {
     // convert vertices to latlon coordinates
     for (unsigned int n=0; n<numVertices*3; n+=3) {
-      Geodetic3D g(Angle::fromDegrees(vertices[n]), Angle::fromDegrees(vertices[n+1]), vertices[n+2]);
-      Vector3D v = planet->toVector3D(g);
+      const Geodetic3D g(Angle::fromDegrees(vertices[n]), Angle::fromDegrees(vertices[n+1]), vertices[n+2]);
+      const Vector3D v = planet->toCartesian(g);
       vertices[n]   = (float) v.x();
       vertices[n+1] = (float) v.y();
       vertices[n+2] = (float) v.z();

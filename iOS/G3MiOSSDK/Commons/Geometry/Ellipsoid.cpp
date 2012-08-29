@@ -26,7 +26,7 @@ _oneOverRadiiSquared(Vector3D(1.0 / (radii.x() * radii.x() ),
 
 
 Vector3D Ellipsoid::geodeticSurfaceNormal(const Geodetic3D& geodetic) const {
-  double cosLatitude = geodetic.latitude().cosinus();
+  const double cosLatitude = geodetic.latitude().cosinus();
   
   return Vector3D(cosLatitude * geodetic.longitude().cosinus(),
                   cosLatitude * geodetic.longitude().sinus(),
@@ -34,7 +34,7 @@ Vector3D Ellipsoid::geodeticSurfaceNormal(const Geodetic3D& geodetic) const {
 }
 
 Vector3D Ellipsoid::geodeticSurfaceNormal(const Geodetic2D& geodetic) const {
-  double cosLatitude = geodetic.latitude().cosinus();
+  const double cosLatitude = geodetic.latitude().cosinus();
   
   return Vector3D(cosLatitude * geodetic.longitude().cosinus(),
                   cosLatitude * geodetic.longitude().sinus(),
@@ -93,7 +93,7 @@ std::vector<double> Ellipsoid::intersectionsDistances(const Vector3D& origin,
 }
 
 
-Vector3D Ellipsoid::toVector3D(const Geodetic3D& geodetic) const {
+Vector3D Ellipsoid::toCartesian(const Geodetic3D& geodetic) const {
   const Vector3D n = geodeticSurfaceNormal(geodetic);
   const Vector3D k = _radiiSquared.times(n);
   const double gamma = sqrt((k.x() * n.x()) +
@@ -194,11 +194,11 @@ Vector3D Ellipsoid::scaleToGeocentricSurface(const Vector3D& position) const {
 
 Geodetic2D Ellipsoid::getMidPoint (const Geodetic2D& P0, const Geodetic2D& P1) const
 {
-  Vector3D v0 = toVector3D(P0);
-  Vector3D v1 = toVector3D(P1);
-  Vector3D normal = v0.cross(v1).normalized();
-  Angle theta = v0.angleBetween(v1);
-  Vector3D midPoint = scaleToGeocentricSurface(v0.rotateAroundAxis(normal, theta.times(0.5)));
+  const Vector3D v0 = toCartesian(P0);
+  const Vector3D v1 = toCartesian(P1);
+  const Vector3D normal = v0.cross(v1).normalized();
+  const Angle theta = v0.angleBetween(v1);
+  const Vector3D midPoint = scaleToGeocentricSurface(v0.rotateAroundAxis(normal, theta.times(0.5)));
   return toGeodetic2D(midPoint);
 }
 

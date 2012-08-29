@@ -19,36 +19,12 @@
 void Camera::initialize(const InitializationContext* ic)
 {
   _planet = ic->getPlanet();
-  setPosition( MutableVector3D(_planet->getRadii().maxAxis() * 5, 0, 0) );
+  setCartesianPosition( MutableVector3D(_planet->getRadii().maxAxis() * 5, 0, 0) );
   _dirtyFlags.setAll(true);
 }
 
 
 void Camera::copyFrom(const Camera &that) {
-  
-  /*  int _width;
-   int _height;
-   
-   const Planet *_planet;
-   
-   MutableVector3D _position;            // position
-   MutableVector3D _center;              // point where camera is looking at
-   MutableVector3D _up;                  // vertical vector
-   
-   mutable const ILogger* _logger;
-   mutable CameraDirtyFlags _dirtyFlags;
-   mutable FrustumData _frustumData;
-   mutable MutableMatrix44D _projectionMatrix; 
-   mutable MutableMatrix44D _modelMatrix;  
-   mutable MutableMatrix44D _modelViewMatrix; 
-   mutable MutableVector3D   _XYZCenterOfView;
-   mutable Geodetic3D*     _geodeticCenterOfView;
-   mutable Frustum* _frustum;
-   mutable Frustum* _frustumInModelCoordinates;
-   mutable Frustum* _halfFrustum;                    // ONLY FOR DEBUG
-   mutable Frustum* _halfFrustumInModelCoordinates;  // ONLY FOR DEBUG*/
-  
-  
   _width  = that._width;
   _height = that._height;
   
@@ -65,6 +41,8 @@ void Camera::copyFrom(const Camera &that) {
   _projectionMatrix = MutableMatrix44D(that._projectionMatrix);
   _modelMatrix      = MutableMatrix44D(that._modelMatrix);
   _modelViewMatrix  = MutableMatrix44D(that._modelViewMatrix);
+  
+  _cartesianCenterOfView = MutableVector3D(that._cartesianCenterOfView);
   
   _geodeticCenterOfView = (that._geodeticCenterOfView == NULL) ? NULL : new Geodetic3D(*that._geodeticCenterOfView);
   
@@ -294,8 +272,10 @@ Vector2D Camera::point2Pixel(const Vector3D& point) const {
 }
 
 void Camera::applyTransform(const MutableMatrix44D& M) {
-  setPosition( _position.transformedBy(M, 1.0) );
+  setCartesianPosition( _position.transformedBy(M, 1.0) );
   setCenter( _center.transformedBy(M, 1.0) );
+  
+  int ask_agustin_0;
   setUp(  _up.transformedBy(M, 0.0) );
   
   //_dirtyFlags.setAll(true);
@@ -337,8 +317,7 @@ void Camera::rotateWithAxisAndPoint(const Vector3D& axis, const Vector3D& point,
 }
 
 void Camera::setPosition(const Geodetic3D& g3d) {
-  setPosition( _planet->toVector3D(g3d).asMutableVector3D() );
-  //_dirtyFlags.setAll(true);
+  setCartesianPosition( _planet->toCartesian(g3d).asMutableVector3D() );
 }
 
 Vector3D Camera::centerOfViewOnPlanet() const {

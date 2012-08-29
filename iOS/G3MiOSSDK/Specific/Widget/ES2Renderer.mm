@@ -42,6 +42,7 @@ enum {
   self = [super init];
   
   if (self) {
+    _firstRender = true;
     context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
     
     if (!context || ![EAGLContext setCurrentContext:context] || ![self loadShaders]) {
@@ -55,7 +56,7 @@ enum {
     glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorRenderbuffer);
     
-    // creamos el depth_buffer
+    // Create the depthbuffer
     glGenRenderbuffers(1, &depthRenderbuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, depthRenderbuffer);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderbuffer);
@@ -73,23 +74,28 @@ enum {
   
   G3MWidget* widget = (G3MWidget*) widgetV;
   
-  // This application only creates a single context which is already set current at this point.
-  // This call is redundant, but needed if dealing with multiple contexts.
-  [EAGLContext setCurrentContext:context];
-  
-  // This application only creates a single default framebuffer which is already bound at this point.
-  // This call is redundant, but needed if dealing with multiple framebuffers.
-  glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);
-  glViewport(0, 0, backingWidth, backingHeight);
-  
-  // Use shader program
-  widget->getGL()->useProgram(program);
+  if (_firstRender) {
+    // This application only creates a single context which is already set current at this point.
+    // This call is redundant, but needed if dealing with multiple contexts.
+    [EAGLContext setCurrentContext:context];
+    
+    // This application only creates a single default framebuffer which is already bound at this point.
+    // This call is redundant, but needed if dealing with multiple framebuffers.
+    glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);
+    glViewport(0, 0, backingWidth, backingHeight);
+    
+    // Use shader program
+    widget->getGL()->useProgram(program);
+  }
   
   int timeToRedraw = widget->render();
   
-  // This application only creates a single color renderbuffer which is already bound at this point.
-  // This call is redundant, but needed if dealing with multiple renderbuffers.
-  glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
+  if (_firstRender) {
+    // This application only creates a single color renderbuffer which is already bound at this point.
+    // This call is redundant, but needed if dealing with multiple renderbuffers.
+    glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
+    _firstRender = false;
+  }
   [context presentRenderbuffer:GL_RENDERBUFFER];
   
   return timeToRedraw;
@@ -237,6 +243,8 @@ enum {
 }
 
 - (BOOL)resizeFromLayer:(CAEAGLLayer *)layer {
+  _firstRender = true;
+  
   // Allocate color buffer backing based on the current layer size
   glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
   [context renderbufferStorage:GL_RENDERBUFFER fromDrawable:layer];

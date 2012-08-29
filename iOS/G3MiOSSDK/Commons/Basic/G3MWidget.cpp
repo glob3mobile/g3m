@@ -28,7 +28,7 @@ G3MWidget::G3MWidget(FrameTasksExecutor*              frameTasksExecutor,
                      TexturesHandler*                 texturesHandler,
                      IDownloader*                     downloader,
                      const Planet*                    planet,
-                     std::vector<ICameraConstrainer*> cameraConstraint,
+                     std::vector<ICameraConstrainer*> cameraConstrainers,
                      Renderer*                        renderer,
                      Renderer*                        busyRenderer,
                      EffectsScheduler*                effectsScheduler,
@@ -44,7 +44,7 @@ _logger(logger),
 _gl(gl),
 _texturesHandler(texturesHandler),
 _planet(planet),
-_cameraConstraint(cameraConstraint),
+_cameraConstrainers(cameraConstrainers),
 _renderer(renderer),
 _busyRenderer(busyRenderer),
 _effectsScheduler(effectsScheduler),
@@ -162,8 +162,8 @@ G3MWidget::~G3MWidget() {
   }
   
 #ifdef C_CODE
-  for (unsigned int n=0; n<_cameraConstraint.size(); n++)
-    delete _cameraConstraint[n];
+  for (unsigned int n=0; n<_cameraConstrainers.size(); n++)
+    delete _cameraConstrainers[n];
 #endif
   delete _frameTasksExecutor;
 }
@@ -184,38 +184,30 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
   }
 }
 
-const double clamp(const double value,
-                   const double lower,
-                   const double upper) {
-  if (value < lower) {
-    return lower;
-  }
-  if (value > upper) {
-    return upper;
-  }
-  return value;
-}
+//const double clamp(const double value,
+//                   const double lower,
+//                   const double upper) {
+//  if (value < lower) {
+//    return lower;
+//  }
+//  if (value > upper) {
+//    return upper;
+//  }
+//  return value;
+//}
 
 int G3MWidget::render() {
   _timer->start();
   _renderCounter++;
   
-  
-  // copy next camera to current camera
-  bool acceptedCamera = true;
-  for (int n = 0; n < _cameraConstraint.size(); n++) {
-    ICameraConstrainer* cc = _cameraConstraint[n];
-    if (!cc->acceptsCamera(_nextCamera, _planet)) {
-      acceptedCamera = false;
-      break;
-    }
+  // give to the CameraContrainers the opportunity to change the nextCamera
+  for (int i = 0; i< _cameraConstrainers.size(); i++) {
+    ICameraConstrainer* constrainer =  _cameraConstrainers[i];
+    constrainer->onCameraChange(_planet,
+                                _currentCamera,
+                                _nextCamera);
   }
-  if (acceptedCamera) {
-    _currentCamera->copyFrom(*_nextCamera);
-  }
-  else {
-    _nextCamera->copyFrom(*_currentCamera);
-  }
+  _currentCamera->copyFrom(*_nextCamera);
   
   //  int __removePrint;
   //  printf("Camera Position=%s\n" ,
@@ -286,7 +278,8 @@ int G3MWidget::render() {
   
   const TimeInterval elapsedTime = _timer->elapsedTime();
   if (elapsedTime.milliseconds() > 100) {
-    _logger->logWarning("Frame took too much time: %dms" , elapsedTime.milliseconds());
+    _logger->logWarning("Frame took too much time: %dms" ,
+                        elapsedTime.milliseconds());
   }
   
   if (_logFPS) {

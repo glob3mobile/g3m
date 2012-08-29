@@ -33,7 +33,7 @@ public:
   mutable bool _projectionMatrix;
   mutable bool _modelMatrix;
   mutable bool _modelViewMatrix;
-  mutable bool _cartesiansCenterOfView;
+  mutable bool _cartesianCenterOfView;
   mutable bool _geodeticCenterOfView;
   mutable bool _frustum;
   mutable bool _frustumMC;
@@ -50,7 +50,7 @@ public:
     _projectionMatrix     = other._projectionMatrix;
     _modelMatrix          = other._modelMatrix;
     _modelViewMatrix      = other._modelViewMatrix;
-    _cartesiansCenterOfView      = other._cartesiansCenterOfView;
+    _cartesianCenterOfView      = other._cartesianCenterOfView;
     _geodeticCenterOfView = other._geodeticCenterOfView;
     _frustum              = other._frustum;
     _frustumMC            = other._frustumMC;
@@ -59,25 +59,45 @@ public:
   }
   
   
-  CameraDirtyFlags(const CameraDirtyFlags& other):
-  _frustumData          (other._frustumData),
-  _projectionMatrix     (other._projectionMatrix),
-  _modelMatrix          (other._modelMatrix),
-  _modelViewMatrix      (other._modelViewMatrix),
-  _cartesiansCenterOfView      (other._cartesiansCenterOfView),
-  _geodeticCenterOfView (other._geodeticCenterOfView),
-  _frustum              (other._frustum),
-  _frustumMC            (other._frustumMC),
-  _halfFrustum          (other._halfFrustum),
-  _halfFrustumMC        (other._halfFrustumMC)
-  {}
+  CameraDirtyFlags(const CameraDirtyFlags& other)
+  {
+    _frustumData          = other._frustumData;
+    _projectionMatrix     = other._projectionMatrix;
+    _modelMatrix          = other._modelMatrix;
+    _modelViewMatrix      = other._modelViewMatrix;
+    _cartesianCenterOfView      = other._cartesianCenterOfView;
+    _geodeticCenterOfView = other._geodeticCenterOfView;
+    _frustum              = other._frustum;
+    _frustumMC            = other._frustumMC;
+    _halfFrustum          = other._halfFrustum;
+    _halfFrustumMC        = other._halfFrustumMC;
+  
+  }
+  
+  std::string description(){
+    std::string d = "";
+    
+    if (_frustumData) d+= "FD ";
+    if (_projectionMatrix) d += "PM ";
+    if (_modelMatrix) d+= "MM ";
+    
+    if (_modelViewMatrix) d+= "MVM ";
+    if (_cartesianCenterOfView) d += "CCV ";
+    if (_geodeticCenterOfView) d+= "GCV ";
+    
+    if (_frustum) d+= "F ";
+    if (_frustumMC) d += "FMC ";
+    if (_halfFrustum) d+= "HF ";
+    if (_halfFrustumMC) d+= "HFMC ";
+    return d;
+  }
   
   void setAll(bool value) {
     _frustumData          = value;
     _projectionMatrix     = value;
     _modelMatrix          = value;
     _modelViewMatrix      = value;
-    _cartesiansCenterOfView      = value;
+    _cartesianCenterOfView      = value;
     _geodeticCenterOfView = value;
     _frustum              = value;
     _frustumMC            = value;
@@ -112,21 +132,7 @@ public:
   _halfFrustumInModelCoordinates((that._halfFrustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._halfFrustumInModelCoordinates))
   {
   }
-  
 
-  
-//  bool check(){
-//    if (!_dirtyFlags._frustum && _frustum == NULL){
-//      return true;
-//    }
-//    
-//    if (!_dirtyFlags._frustumMC && _frustumInModelCoordinates == NULL){
-//      return true;
-//    }
-//    return false;
-//  }
-  
-  
   Camera(int width, int height);
   
   ~Camera() {
@@ -173,11 +179,11 @@ public:
     return (float) _width / _height;
   }
   
-  Vector3D getPosition() const { return _position.asVector3D(); }
+  Vector3D getCartesianPosition() const { return _position.asVector3D(); }
   Vector3D getCenter() const { return _center.asVector3D(); }
   Vector3D getUp() const { return _up.asVector3D(); }
   Geodetic3D getGeodeticCenterOfView() const { return *_getGeodeticCenterOfView(); }
-  Vector3D getXYZCenterOfView() const { return _getXYZCenterOfView().asVector3D(); }
+  Vector3D getXYZCenterOfView() const { return _getCartesianCenterOfView().asVector3D(); }
   Vector3D getViewDirection() const { return _center.sub(_position).asVector3D(); }
 
   
@@ -212,6 +218,13 @@ public:
   void initialize(const InitializationContext* ic); 
 
   void reset();
+  
+  void setCartesianPosition(const MutableVector3D& v){
+    if (!v.equalTo(_position)){
+      _position = MutableVector3D(v);
+      _dirtyFlags.setAll(true);
+    }
+  }
     
 private:
   
@@ -240,13 +253,6 @@ private:
   void applyTransform(const MutableMatrix44D& mat);
 
   Vector3D centerOfViewOnPlanet() const;
-  
-  void setPosition(const MutableVector3D& v){
-    if (!v.equalTo(_position)){
-      _position = MutableVector3D(v);
-      _dirtyFlags.setAll(true);
-    }
-  }
   
   void setCenter(const MutableVector3D& v){
     if (!v.equalTo(_center)){
@@ -299,9 +305,9 @@ private:
   }
   
   // intersection of view direction with globe in(x,y,z)
-  MutableVector3D   _getXYZCenterOfView() const {
-    if (_dirtyFlags._cartesiansCenterOfView) {
-      _dirtyFlags._cartesiansCenterOfView = false;
+  MutableVector3D   _getCartesianCenterOfView() const {
+    if (_dirtyFlags._cartesianCenterOfView) {
+      _dirtyFlags._cartesianCenterOfView = false;
       _cartesianCenterOfView = centerOfViewOnPlanet().asMutableVector3D();
     }
     return _cartesianCenterOfView;
