@@ -39,10 +39,10 @@ public class Downloader_Android_Handler {
       }
       catch (MalformedURLException e) {
          if (ILogger.instance() != null) {
-            ILogger.instance().logError("Downloader_Android_Handler: MalformedURLException url=" + _url.getPath());
+            ILogger.instance().logError(TAG + ": MalformedURLException url=" + _url.getPath());
          }
          else {
-            Log.e(TAG, "Url=" + _url.getPath());
+            Log.e(TAG, ": MalformedURLException url=" + _url.getPath());
          }
          e.printStackTrace();
       }
@@ -130,30 +130,35 @@ public class Downloader_Android_Handler {
          connection = (HttpURLConnection) _URL.openConnection();
          connection.setConnectTimeout(60000);
          connection.setReadTimeout(60000);
-         connection.setUseCaches(true);
-
-         BufferedInputStream bis = new BufferedInputStream(connection.getInputStream());
-         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-         byte[] buffer = new byte[1024];
-         int length = 0;
-
-         while ((length = bis.read(buffer)) > 0) {
-            baos.write(buffer, 0, length);
-         }
-
-         baos.flush();
-         _data = baos.toByteArray();
-         baos.close();
-
+         connection.setUseCaches(false);
+         connection.connect();
          statusCode = connection.getResponseCode();
+         
+         if (statusCode == 200) {
+            BufferedInputStream bis = new BufferedInputStream(connection.getInputStream());
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            byte[] buffer = new byte[4096];
+            int length = 0;
+
+            while ((length = bis.read(buffer)) > 0) {
+               baos.write(buffer, 0, length);
+            }
+
+            baos.flush();
+            _data = baos.toByteArray();
+            baos.close();
+         }
+         
+         Log.w(TAG, "statusCode=" + statusCode + " url=" + _url.getPath());
+         
          dataIsValid = (_data != null) && (statusCode == 200);
       }
       catch (IOException e) {
          if (ILogger.instance() != null) {
-            ILogger.instance().logError(TAG + ": url=" + _url.getPath());
+            ILogger.instance().logError(TAG + "runWithDownloader: IOException url=" + _url.getPath());
          }
          else {
-            Log.e(TAG, "url=" + _url.getPath());
+            Log.e(TAG, "runWithDownloader: IOException url=" + _url.getPath());
          }
          e.printStackTrace();
       }
@@ -164,26 +169,25 @@ public class Downloader_Android_Handler {
          if (!dataIsValid) {
             if (ILogger.instance() != null) {
                ILogger.instance().logError(
-                        TAG + ": Error runWithDownloader, StatusCode=" + statusCode + ", URL=" + _url.getPath());
+                        TAG + "Error runWithDownloader: statusCode=" + statusCode + ", url=" + _url.getPath());
             }
             else {
-               Log.e(TAG, "Error runWithDownloader, statusCode=" + statusCode + ", url=" + _url.getPath());
+               Log.e(TAG, "Error runWithDownloader: statusCode=" + statusCode + ", url=" + _url.getPath());
             }
          }
          else {
-            Log.i(TAG, "Success runWithDownloader, statusCode=" + statusCode + ", url=" + _url.getPath());
+            Log.i(TAG, "Success runWithDownloader: statusCode=" + statusCode + ", url=" + _url.getPath());
          }
       }
       // inform downloader to remove myself, to avoid adding new Listener
-      dl.removeDownloadHandlerForUrl(_url.getPath());
+      dl.removeDownloadingHandlerForUrl(_url.getPath());
 
-      Log.i("Handler", "returning dataIsValid=" + dataIsValid);
       return (dataIsValid);
    }
 
 
    public synchronized void processResponse(boolean dataIsValid) {
-      Log.e("Handler", "processingResponse url=" + _url.getPath());
+      Log.i(TAG, "processResponse: url=" + _url.getPath() + " dataIsValid=" + dataIsValid);
       if (dataIsValid) {
          ByteBuffer buffer = new ByteBuffer(_data, 0);
          Response response = new Response(_url, buffer);
