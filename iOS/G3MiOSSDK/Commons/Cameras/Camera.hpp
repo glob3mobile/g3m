@@ -217,7 +217,7 @@ public:
   
   void initialize(const InitializationContext* ic); 
 
-  void reset();
+  void resetPosition();
   
   void setCartesianPosition(const MutableVector3D& v){
     if (!v.equalTo(_position)){

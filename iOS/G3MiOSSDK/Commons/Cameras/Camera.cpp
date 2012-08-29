@@ -92,12 +92,7 @@ _halfFrustum(NULL)
   resizeViewport(width, height);
 }
 
-void Camera::reset() {
-
-  _width = 0;
-  _height = 0;
-  _planet = NULL;
-  
+void Camera::resetPosition() {
   _position = MutableVector3D(0, 0, 0);
   _center = MutableVector3D(0, 0, 0);
   _up = MutableVector3D(0, 0, 1);
