@@ -1,6 +1,7 @@
 package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.IDownloadListener;
+import org.glob3.mobile.generated.ILogger;
 
 import android.util.Log;
 
@@ -13,7 +14,6 @@ public class ListenerEntry {
 
    public ListenerEntry(IDownloadListener listener,
                         long requestId) {
-      // TODO Auto-generated constructor stub
       _listener = listener;
       _requestId = requestId;
       _canceled = false;
@@ -26,19 +26,23 @@ public class ListenerEntry {
 
 
    public IDownloadListener getListener() {
-      // TODO Auto-generated method stub
       return _listener;
    }
 
 
    public void cancel() {
       if (_canceled) {
-         // TODO Logger_Android
-         Log.i("ListenerEntry", "Listener for RequestId=" + _requestId + " already canceled");
+         if (ILogger.instance() != null) {
+            ILogger.instance().logError("ListenerEntry: Listener for requestId=" + _requestId + " already canceled");
+         }
+         else {
+            Log.e("ListenerEntry", "Listener for requestId=" + _requestId + " already canceled");
+         }
       }
       _canceled = true;
    }
-   
+
+
    public boolean isCanceled() {
       return _canceled;
    }

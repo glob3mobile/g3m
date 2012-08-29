@@ -10,10 +10,13 @@ import org.glob3.mobile.generated.IDownloadListener;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.URL;
 
+import android.util.Log;
+
 public class Downloader_Android implements IDownloader {
 
-   private int                                       _requestIdCounter;
-   private int                                       _maxConcurrentOperationCount;
+   private boolean                                    _started;
+   private int                                        _maxConcurrentOperationCount;
+   private int                                        _requestIdCounter;
    private long                                       _requestsCounter;
    private long                                       _cancelsCounter;
    private ArrayList<Downloader_Android_WorkerThread> _workers;
@@ -21,14 +24,9 @@ public class Downloader_Android implements IDownloader {
    private Map<String, Downloader_Android_Handler>    _queuedHandlers;
 
 
-   Downloader_Android(int memoryCapacity,
-                      int diskCapacity,
-                      String diskPath,
-                      int maxConcurrentOperationCount) {
-      // TODO memoryCapacity ??
-      // TODO diskCapacity ??
-      // TODO diskPath ??
-	   _maxConcurrentOperationCount = maxConcurrentOperationCount;
+   public Downloader_Android(int maxConcurrentOperationCount) {
+      _started = false;
+      _maxConcurrentOperationCount = maxConcurrentOperationCount;
       _requestIdCounter = 1;
       _requestsCounter = 0;
       _cancelsCounter = 0;
@@ -36,35 +34,45 @@ public class Downloader_Android implements IDownloader {
       _downloadingHandlers = new HashMap<String, Downloader_Android_Handler>();
       _queuedHandlers = new HashMap<String, Downloader_Android_Handler>();
       _workers = new ArrayList<Downloader_Android_WorkerThread>(maxConcurrentOperationCount);
+
+      for (int i = 0; i < _maxConcurrentOperationCount; i++) {
+         Downloader_Android_WorkerThread da = new Downloader_Android_WorkerThread(this);
+         _workers.add(da);
+      }
    }
 
 
    @Override
    public void start() {
-	      for (int i = 0; i < _maxConcurrentOperationCount; i++) {
-	    	  Downloader_Android_WorkerThread da = new Downloader_Android_WorkerThread(this);
-	         _workers.add(da);
-	      }
-	   
-	   
-      Iterator<Downloader_Android_WorkerThread> iter = _workers.iterator();
-      while (iter.hasNext()) {
-         iter.next().execute();
-      }
-   }
-   
-   // TODO stop()
-//   @Override
-   public void stop() {
-      Iterator<Downloader_Android_WorkerThread> iter = _workers.iterator();
-      while (iter.hasNext()) {
-         iter.next().stop();
+      Log.i("Downloader_Android", "STARTING");
+      if (!_started) {
+         Iterator<Downloader_Android_WorkerThread> iter = _workers.iterator();
+         while (iter.hasNext()) {
+            iter.next().execute();
+         }
+         _started = true;
       }
    }
 
 
    @Override
-   public int request(URL url, int priority, IDownloadListener listener, boolean deleteListener) {
+   public void stop() {
+      if (_started) {
+         Log.e("Downloader_Android", "STOPPING");
+         Iterator<Downloader_Android_WorkerThread> iter = _workers.iterator();
+         while (iter.hasNext()) {
+            iter.next().stop();
+         }
+         _started = false;
+      }
+   }
+
+
+   @Override
+   public int request(URL url,
+                      int priority,
+                      IDownloadListener listener,
+                      boolean deleteListener) {
 
       Downloader_Android_Handler handler = null;
       int requestId;
@@ -168,15 +176,23 @@ public class Downloader_Android implements IDownloader {
             _queuedHandlers.remove(selectedURL);
             _downloadingHandlers.put(selectedURL, selectedHandler);
          }
+         Log.i("Downloader_Android", statistics());
       }
 
       return selectedHandler;
    }
 
+
    @Override
    public String statistics() {
-      // TODO Auto-generated method stub
-      return null;
+      StringBuilder_Android sb = new StringBuilder_Android();
+
+      sb.add("Downloader_Android(downloading=").add(_downloadingHandlers.size());
+      sb.add(", queued=").add(_queuedHandlers.size());
+      sb.add(", totalRequests=").add(_requestsCounter);
+      sb.add(", totalCancels=").add(_cancelsCounter);
+
+      return sb.getString();
    }
 
 }

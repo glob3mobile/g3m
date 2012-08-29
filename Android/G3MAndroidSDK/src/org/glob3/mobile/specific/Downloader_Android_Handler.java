@@ -1,43 +1,55 @@
 package org.glob3.mobile.specific;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.apache.http.HttpConnection;
+import org.glob3.mobile.generated.ByteBuffer;
 import org.glob3.mobile.generated.IDownloadListener;
 import org.glob3.mobile.generated.IDownloader;
+import org.glob3.mobile.generated.ILogger;
+import org.glob3.mobile.generated.Response;
+import org.glob3.mobile.generated.URL;
+
 import android.util.Log;
 
 public class Downloader_Android_Handler {
 
+   final static String              TAG = "Downloader_Android_Handler";
+
    private long                     _priority;
-   private boolean                  _canceled;
-   private org.glob3.mobile.generated.URL                      _url;
-   private URL                      _URL;
+   private URL                      _url;
+   private java.net.URL             _URL;
    private ArrayList<ListenerEntry> _listeners;
+   private byte[]                   _data;
 
 
-   public Downloader_Android_Handler(org.glob3.mobile.generated.URL url,
+   public Downloader_Android_Handler(URL url,
                                      IDownloadListener listener,
                                      int priority,
                                      long requestId) {
-      // TODO Auto-generated constructor stub
+      _priority = priority;
       _url = url;
       try {
-         _URL = new URL(url.getPath());
+         _URL = new java.net.URL(url.getPath());
       }
       catch (MalformedURLException e) {
-         // TODO Logger_Android
-         Log.e("Downloader_Android_Handler", e.getMessage());
+         if (ILogger.instance() != null) {
+            ILogger.instance().logError("Downloader_Android_Handler: MalformedURLException url=" + _url.getPath());
+         }
+         else {
+            Log.e(TAG, "Url=" + _url.getPath());
+         }
          e.printStackTrace();
       }
       _listeners = new ArrayList<ListenerEntry>();
+      ListenerEntry entry = new ListenerEntry(listener, requestId);
+      _listeners.add(entry);
+      _data = null;
    }
 
 
@@ -109,24 +121,95 @@ public class Downloader_Android_Handler {
    }
 
 
-   public void runWithDownloader(IDownloader _downloader) {
-      // TODO finish
-
+   public boolean runWithDownloader(IDownloader downloader) {
+      Downloader_Android dl = (Downloader_Android) downloader;
+      HttpURLConnection connection = null;
+      int statusCode = 0;
+      boolean dataIsValid = false;
       try {
-         URLConnection connection = _URL.openConnection();
-//         connection.setUseCaches(true);
-         int status = ((HttpURLConnection) connection).getResponseCode();
-//         InputStream is = connection.getInputStream();
-         // Bitmap bmp = BitmapFactory.decodeStream(is);
-         
+         connection = (HttpURLConnection) _URL.openConnection();
+         connection.setConnectTimeout(60000);
+         connection.setReadTimeout(60000);
+         connection.setUseCaches(true);
+
+         BufferedInputStream bis = new BufferedInputStream(connection.getInputStream());
+         ByteArrayOutputStream baos = new ByteArrayOutputStream();
+         byte[] buffer = new byte[1024];
+         int length = 0;
+
+         while ((length = bis.read(buffer)) > 0) {
+            baos.write(buffer, 0, length);
+         }
+
+         baos.flush();
+         _data = baos.toByteArray();
+         baos.close();
+
+         statusCode = connection.getResponseCode();
+         dataIsValid = (_data != null) && (statusCode == 200);
       }
       catch (IOException e) {
-         // TODO Logger_Android
-         Log.e("Downloader_Android_Handler", e.getMessage());
+         if (ILogger.instance() != null) {
+            ILogger.instance().logError(TAG + ": url=" + _url.getPath());
+         }
+         else {
+            Log.e(TAG, "url=" + _url.getPath());
+         }
          e.printStackTrace();
       }
+      finally {
+         if (connection != null) {
+            connection.disconnect();
+         }
+         if (!dataIsValid) {
+            if (ILogger.instance() != null) {
+               ILogger.instance().logError(
+                        TAG + ": Error runWithDownloader, StatusCode=" + statusCode + ", URL=" + _url.getPath());
+            }
+            else {
+               Log.e(TAG, "Error runWithDownloader, statusCode=" + statusCode + ", url=" + _url.getPath());
+            }
+         }
+         else {
+            Log.i(TAG, "Success runWithDownloader, statusCode=" + statusCode + ", url=" + _url.getPath());
+         }
+      }
+      // inform downloader to remove myself, to avoid adding new Listener
+      dl.removeDownloadHandlerForUrl(_url.getPath());
 
-
+      Log.i("Handler", "returning dataIsValid=" + dataIsValid);
+      return (dataIsValid);
    }
 
+
+   public synchronized void processResponse(boolean dataIsValid) {
+      Log.e("Handler", "processingResponse url=" + _url.getPath());
+      if (dataIsValid) {
+         ByteBuffer buffer = new ByteBuffer(_data, 0);
+         Response response = new Response(_url, buffer);
+         Iterator<ListenerEntry> iter = _listeners.iterator();
+
+         while (iter.hasNext()) {
+            ListenerEntry entry = iter.next();
+            if (entry.isCanceled()) {
+               entry.getListener().onCanceledDownload(response);
+
+               entry.getListener().onCancel(_url);
+            }
+            else {
+               entry.getListener().onDownload(response);
+            }
+         }
+      }
+      else {
+         ByteBuffer buffer = new ByteBuffer(null, 0);
+         Response response = new Response(_url, buffer);
+         Iterator<ListenerEntry> iter = _listeners.iterator();
+
+         while (iter.hasNext()) {
+            ListenerEntry entry = iter.next();
+            entry.getListener().onError(response);
+         }
+      }
+   }
 }
