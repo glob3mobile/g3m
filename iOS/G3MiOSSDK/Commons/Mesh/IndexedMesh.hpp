@@ -96,7 +96,7 @@ public:
                                          const int numIndex, 
                                          const Color* flatColor = NULL,
                                          const float colors[] = NULL,
-                                         const float colorsIntensity = 0.0,
+                                         const float colorsIntensity = (float)0.0,
                                          const float normals[] = NULL) {
     return new IndexedMesh(owner, primitive, strategy, center, numVertices, vertices,
                            indexes, numIndex, flatColor, colors, colorsIntensity, normals);
@@ -110,7 +110,7 @@ public:
                                          std::vector<int>& indexes,
                                          const Color* flatColor = NULL,
                                          std::vector<Color>* colors = NULL,
-                                         const float colorsIntensity = 0.0,
+                                         const float colorsIntensity = (float)0.0,
                                          std::vector<MutableVector3D>* normals = NULL) {
     return new IndexedMesh(vertices, primitive, strategy, center, indexes,
                            flatColor, colors, colorsIntensity, normals);
@@ -128,7 +128,7 @@ public:
                                            const int numIndex, 
                                            const Color* flatColor = NULL,
                                            const float colors[] = NULL,
-                                           const float colorsIntensity = 0.0,
+                                           const float colorsIntensity = (float)0.0,
                                            const float normals[] = NULL) {
     // convert vertices to latlon coordinates
     for (unsigned int n=0; n<numVertices*3; n+=3) {
