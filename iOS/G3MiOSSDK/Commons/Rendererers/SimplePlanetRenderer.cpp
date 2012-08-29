@@ -147,12 +147,9 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
     int numVertices = res * res * 4;
     colors = new float[numVertices];
     for(int i = 0; i < numVertices; ){
-#ifdef C_CODE
-      float val = (float) (0.5 + sinf( (float) (2.0 * M_PI * ((float) i) / numVertices) ) / 2.0);
-#endif
-#ifdef JAVA_CODE
-      float val = (float)(0.5 + Math.sin(2.0 * Math.PI * ((float) i / numVertices) / 2.0));
-#endif
+    
+      float val = (float) (0.5 + GMath.sin( (float) (2.0 * GMath.pi() * ((float) i) / numVertices) ) / 2.0);
+      
       colors[i++] = val;
       colors[i++] = 0;
       colors[i++] = (float) (1.0 - val);

@@ -24,8 +24,8 @@ std::vector<MutableVector2D> SingleImageTileTexturizer::createTextureCoordinates
     const Geodetic2D g = rc->getPlanet()->toGeodetic2D(pos);
     const Vector3D n = rc->getPlanet()->geodeticSurfaceNormal(g);
     
-    const double s = atan2(n.y(), n.x()) / (M_PI * 2) + 0.5;
-    const double t = asin(n.z()) / M_PI + 0.5;
+    const double s = GMath.atan2(n.y(), n.x()) / (GMath.pi() * 2) + 0.5;
+    const double t = GMath.asin(n.z()) / GMath.pi() + 0.5;
     
     texCoors.push_back(MutableVector2D(s, 1-t));
   }

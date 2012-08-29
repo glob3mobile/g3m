@@ -26,7 +26,7 @@ void Mark::render(const RenderContext* rc,
   if (distanceToCamera <= minDistanceToCamera || true) {
     const Vector3D normalAtMarkPosition = planet->geodeticSurfaceNormal(markPosition);
     
-    if (normalAtMarkPosition.angleBetween(markCameraVector).radians() > M_PI / 2) {
+    if (normalAtMarkPosition.angleBetween(markCameraVector).radians() > GMath.pi() / 2) {
       GL* gl = rc->getGL();
       
       Vector2D tr(0.0,0.0);

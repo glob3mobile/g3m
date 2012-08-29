@@ -9,7 +9,7 @@
 #ifndef G3MiOSSDK_MutableVector3D_hpp
 #define G3MiOSSDK_MutableVector3D_hpp
 
-#include <math.h>
+#include "IMathUtils.hpp"
 
 #include "MutableMatrix44D.hpp"
 
@@ -40,7 +40,7 @@ public:
   MutableVector3D normalized() const;
   
   static MutableVector3D nan() {
-    return MutableVector3D(NAN, NAN, NAN);
+    return MutableVector3D(GMath.NanD(), GMath.NanD(), GMath.NanD());
   }
   
   bool equalTo(const MutableVector3D& v) const{
@@ -48,7 +48,7 @@ public:
   }
   
   bool isNan() const {
-    return (isnan(_x) || isnan(_y) || isnan(_z));
+    return (GMath.isNan(_x) || GMath.isNan(_y) || GMath.isNan(_z));
   }
   
   bool isZero() const {
@@ -60,7 +60,7 @@ public:
   }
   
   double length() const {
-    return sqrt(squaredLength());
+    return GMath.sqrt(squaredLength());
   }
   
   double squaredLength() const {
