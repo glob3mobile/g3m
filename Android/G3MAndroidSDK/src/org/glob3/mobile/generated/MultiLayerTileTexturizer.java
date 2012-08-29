@@ -23,6 +23,8 @@ package org.glob3.mobile.generated;
 //class LayerSet;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IDownloader;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class LeveledTexturedMesh;
 
 public class MultiLayerTileTexturizer extends TileTexturizer
 {
@@ -59,6 +61,14 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 
   private TexturesHandler _texturesHandler;
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: LeveledTexturedMesh* getMesh(Tile* tile) const
+  private LeveledTexturedMesh getMesh(Tile tile)
+  {
+	TileTextureBuilderHolder tileBuilderHolder = (TileTextureBuilderHolder) tile.getTexturizerData();
+	return (tileBuilderHolder == null) ? null : tileBuilderHolder.get().getMesh();
+  }
+
   public MultiLayerTileTexturizer(LayerSet layerSet)
   {
 	  _layerSet = layerSet;
@@ -85,8 +95,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 
   public final boolean isReady(RenderContext rc)
   {
-	final boolean isReady = _pendingTopTileRequests <= 0;
-	return isReady;
+	return (_pendingTopTileRequests <= 0);
   }
 
   public final void initialize(InitializationContext ic, TilesRenderParameters parameters)
@@ -176,10 +185,9 @@ public class MultiLayerTileTexturizer extends TileTexturizer
   {
 	java.util.ArrayList<Petition> petitions = _layerSet.createTileMapPetitions(rc, tile, _parameters._tileTextureWidth, _parameters._tileTextureHeight);
   
-  
 	_pendingTopTileRequests += petitions.size();
   
-	final int priority = 1000000000;
+	final int priority = 1000000000; // very big priority for toplevel tiles
 	for (int i = 0; i < petitions.size(); i++)
 	{
 	  final Petition petition = petitions.get(i);
@@ -192,7 +200,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 
   public final void ancestorTexturedSolvedChanged(Tile tile, Tile ancestorTile, boolean textureSolved)
   {
-	if (textureSolved == false)
+	if (!textureSolved)
 	{
 	  return;
 	}
@@ -202,45 +210,35 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 	  return;
 	}
   
-	TileTextureBuilderHolder ancestorBuilderHolder = (TileTextureBuilderHolder) ancestorTile.getTexturizerData();
-	if (ancestorBuilderHolder == null)
-	{
-	  return;
-	}
-	LeveledTexturedMesh ancestorMesh = ancestorBuilderHolder.get().getMesh();
+	LeveledTexturedMesh ancestorMesh = getMesh(ancestorTile);
 	if (ancestorMesh == null)
 	{
 	  return;
 	}
   
-	TileTextureBuilderHolder tileBuilderHolder = (TileTextureBuilderHolder) tile.getTexturizerData();
-	if (tileBuilderHolder == null)
+	final GLTextureId glTextureId = ancestorMesh.getTopLevelGLTextureId();
+	if (!glTextureId.isValid())
 	{
 	  return;
 	}
-	LeveledTexturedMesh tileMesh = tileBuilderHolder.get().getMesh();
+  
+	LeveledTexturedMesh tileMesh = getMesh(tile);
 	if (tileMesh == null)
 	{
 	  return;
 	}
   
-	final GLTextureId glTextureId = ancestorMesh.getTopLevelGLTextureId();
-	if (glTextureId.isValid())
+	final int level = tile.getLevel() - ancestorTile.getLevel() - _parameters._topLevel;
+	_texturesHandler.retainGLTextureId(glTextureId);
+	if (!tileMesh.setGLTextureIdForLevel(level, glTextureId))
 	{
-	  _texturesHandler.retainGLTextureId(glTextureId);
-  
-	  final int level = tile.getLevel() - ancestorTile.getLevel() - _parameters._topLevel;
-  
-	  if (!tileMesh.setGLTextureIdForLevel(level, glTextureId))
-	  {
-		_texturesHandler.releaseGLTextureId(glTextureId);
-	  }
+	  _texturesHandler.releaseGLTextureId(glTextureId);
 	}
   }
 
   public final GLTextureId getTopLevelGLTextureIdForTile(Tile tile)
   {
-	LeveledTexturedMesh mesh = (LeveledTexturedMesh) tile.getTexturizerMesh();
+	LeveledTexturedMesh mesh = (LeveledTexturedMesh) tile.getTexturizedMesh();
   
 	return (mesh == null) ? GLTextureId.invalid() : mesh.getTopLevelGLTextureId();
   }

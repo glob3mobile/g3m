@@ -58,8 +58,8 @@ public class Mark
 	final Camera camera = rc.getCurrentCamera();
 	final Planet planet = rc.getPlanet();
   
-	final Vector3D cameraPosition = camera.getPosition();
-	final Vector3D markPosition = planet.toVector3D(_position);
+	final Vector3D cameraPosition = camera.getCartesianPosition();
+	final Vector3D markPosition = planet.toCartesian(_position);
   
 	final Vector3D markCameraVector = markPosition.sub(cameraPosition);
 	final double distanceToCamera = markCameraVector.length();

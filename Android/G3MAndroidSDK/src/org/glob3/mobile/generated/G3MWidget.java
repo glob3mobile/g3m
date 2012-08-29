@@ -53,33 +53,31 @@ public class G3MWidget
 		_frameTasksExecutor.dispose();
   }
 
+
+  //const double clamp(const double value,
+  //                   const double lower,
+  //                   const double upper) {
+  //  if (value < lower) {
+  //    return lower;
+  //  }
+  //  if (value > upper) {
+  //    return upper;
+  //  }
+  //  return value;
+  //}
+  
   public final int render()
   {
 	_timer.start();
 	_renderCounter++;
   
-	_nextCamera.check();
-  
-  
-	// copy next camera to current camera
-	boolean acceptedCamera = true;
-	for (int n = 0; n < _cameraConstraint.size(); n++)
+	// give to the CameraContrainers the opportunity to change the nextCamera
+	for (int i = 0; i< _cameraConstrainers.size(); i++)
 	{
-	  ICameraConstrainer cc = _cameraConstraint.get(n);
-	  if (!cc.acceptsCamera(_nextCamera, _planet))
-	  {
-		acceptedCamera = false;
-		break;
-	  }
+	  ICameraConstrainer constrainer = _cameraConstrainers.get(i);
+	  constrainer.onCameraChange(_planet, _currentCamera, _nextCamera);
 	}
-	if (acceptedCamera)
-	{
-	  _currentCamera.copyFrom(_nextCamera);
-	}
-	else
-	{
-	  _nextCamera.copyFrom(_currentCamera);
-	}
+	_currentCamera.copyFrom(_nextCamera);
   
 	//  int __removePrint;
 	//  printf("Camera Position=%s\n" ,
@@ -258,7 +256,7 @@ public class G3MWidget
   private Renderer _busyRenderer;
   private EffectsScheduler _effectsScheduler;
 
-  private java.util.ArrayList<ICameraConstrainer> _cameraConstraint = new java.util.ArrayList<ICameraConstrainer>();
+  private java.util.ArrayList<ICameraConstrainer> _cameraConstrainers = new java.util.ArrayList<ICameraConstrainer>();
 
   private Camera _currentCamera;
   private Camera _nextCamera;
@@ -286,7 +284,7 @@ public class G3MWidget
 	_gl.enableCullFace(GLCullFace.Back);
   }
 
-  private G3MWidget(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, ILogger logger, GL gl, TexturesHandler texturesHandler, IDownloader downloader, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstraint, Renderer renderer, Renderer busyRenderer, EffectsScheduler effectsScheduler, int width, int height, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics)
+  private G3MWidget(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, ILogger logger, GL gl, TexturesHandler texturesHandler, IDownloader downloader, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, Renderer renderer, Renderer busyRenderer, EffectsScheduler effectsScheduler, int width, int height, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics)
   {
 	  _frameTasksExecutor = frameTasksExecutor;
 	  _factory = factory;
@@ -295,7 +293,7 @@ public class G3MWidget
 	  _gl = gl;
 	  _texturesHandler = texturesHandler;
 	  _planet = planet;
-	  _cameraConstraint = cameraConstraint;
+	  _cameraConstrainers = cameraConstrainers;
 	  _renderer = renderer;
 	  _busyRenderer = busyRenderer;
 	  _effectsScheduler = effectsScheduler;

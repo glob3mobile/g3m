@@ -8,54 +8,42 @@ public class Camera
   {
 	  _width = that._width;
 	  _height = that._height;
-	  _modelMatrix = new MutableMatrix44D(that._modelMatrix);
-	  _projectionMatrix = new MutableMatrix44D(that._projectionMatrix);
-	  _modelViewMatrix = new MutableMatrix44D(that._modelViewMatrix);
+	  _planet = that._planet;
 	  _position = new MutableVector3D(that._position);
 	  _center = new MutableVector3D(that._center);
 	  _up = new MutableVector3D(that._up);
-	  _geodeticCenterOfView = (that._geodeticCenterOfView == null) ? null : new Geodetic3D(that._geodeticCenterOfView);
-	  _XYZCenterOfView = new MutableVector3D(that._XYZCenterOfView);
-	  _frustum = (that._frustum == null) ? null : new Frustum(that._frustum);
-	  _frustumInModelCoordinates = (that._frustumInModelCoordinates == null) ? null : new Frustum(that._frustumInModelCoordinates);
-	  _halfFrustumInModelCoordinates = (that._halfFrustumInModelCoordinates == null) ? null : new Frustum(that._halfFrustumInModelCoordinates);
-	  _halfFrustum = (that._halfFrustum == null) ? null : new Frustum(that._halfFrustum);
-	  _logger = that._logger;
 	  _dirtyFlags = new CameraDirtyFlags(that._dirtyFlags);
 	  _frustumData = new FrustumData(that._frustumData);
-	  _planet = that._planet;
-	//cleanCachedValues();
+	  _projectionMatrix = new MutableMatrix44D(that._projectionMatrix);
+	  _modelMatrix = new MutableMatrix44D(that._modelMatrix);
+	  _modelViewMatrix = new MutableMatrix44D(that._modelViewMatrix);
+	  _cartesianCenterOfView = new MutableVector3D(that._cartesianCenterOfView);
+	  _geodeticCenterOfView = (that._geodeticCenterOfView == null) ? null : new Geodetic3D(that._geodeticCenterOfView);
+	  _frustum = (that._frustum == null) ? null : new Frustum(that._frustum);
+	  _frustumInModelCoordinates = (that._frustumInModelCoordinates == null) ? null : new Frustum(that._frustumInModelCoordinates);
+	  _halfFrustum = (that._halfFrustum == null) ? null : new Frustum(that._halfFrustum);
+	  _halfFrustumInModelCoordinates = (that._halfFrustumInModelCoordinates == null) ? null : new Frustum(that._halfFrustumInModelCoordinates);
   }
-
-  public final boolean check()
-  {
-	if (!_dirtyFlags._frustum && _frustum == null)
-	{
-	  return true;
-	}
-
-	if (!_dirtyFlags._frustumMC && _frustumInModelCoordinates == null)
-	{
-	  return true;
-	}
-	return false;
-  }
-
 
   public Camera(int width, int height)
   {
+	  _width = 0;
+	  _height = 0;
+	  _planet = null;
 	  _position = new MutableVector3D(0, 0, 0);
 	  _center = new MutableVector3D(0, 0, 0);
 	  _up = new MutableVector3D(0, 0, 1);
-	  _logger = null;
+	  _dirtyFlags = new CameraDirtyFlags();
+	  _frustumData = new FrustumData();
+	  _projectionMatrix = new MutableMatrix44D();
+	  _modelMatrix = new MutableMatrix44D();
+	  _modelViewMatrix = new MutableMatrix44D();
+	  _cartesianCenterOfView = new MutableVector3D(0,0,0);
+	  _geodeticCenterOfView = null;
 	  _frustum = null;
 	  _frustumInModelCoordinates = null;
 	  _halfFrustumInModelCoordinates = null;
 	  _halfFrustum = null;
-	  _dirtyFlags = new CameraDirtyFlags();
-	  _XYZCenterOfView = new MutableVector3D(0, 0, 0);
-	  _geodeticCenterOfView = null;
-	  _frustumData = new FrustumData();
 	resizeViewport(width, height);
   }
 
@@ -69,29 +57,40 @@ public class Camera
 	_width = that._width;
 	_height = that._height;
   
-	_modelMatrix = that._modelMatrix;
-	_projectionMatrix = that._projectionMatrix;
-	_modelViewMatrix = that._modelViewMatrix;
+	_planet = that._planet;
   
-	_position = that._position;
-	_center = that._center;
-	_up = that._up;
+	_position = new MutableVector3D(that._position);
+	_center = new MutableVector3D(that._center);
+	_up = new MutableVector3D(that._up);
+  
+	_dirtyFlags.copyFrom(that._dirtyFlags);
+  
+	_frustumData = new FrustumData(that._frustumData);
+  
+	_projectionMatrix = new MutableMatrix44D(that._projectionMatrix);
+	_modelMatrix = new MutableMatrix44D(that._modelMatrix);
+	_modelViewMatrix = new MutableMatrix44D(that._modelViewMatrix);
+  
+	_cartesianCenterOfView = new MutableVector3D(that._cartesianCenterOfView);
+  
+	_geodeticCenterOfView = (that._geodeticCenterOfView == null) ? null : new Geodetic3D(that._geodeticCenterOfView);
+  
   
 	_frustum = (that._frustum == null) ? null : new Frustum(that._frustum);
+  
 	_frustumInModelCoordinates = (that._frustumInModelCoordinates == null) ? null : new Frustum(that._frustumInModelCoordinates);
   
-	//_dirtyCachedValues = that._dirtyCachedValues;
-	_dirtyFlags = that._dirtyFlags;
+	_halfFrustum = (that._frustum == null) ? null : new Frustum(that._frustum);
   
-	_logger = that._logger;
-  
-	//cleanCachedValues();
+	_halfFrustumInModelCoordinates = (that._frustumInModelCoordinates == null) ? null : new Frustum(that._frustumInModelCoordinates);
   }
 
   public final void resizeViewport(int width, int height)
   {
 	_width = width;
 	_height = height;
+  
+	_dirtyFlags._projectionMatrix = true;
   
 	//cleanCachedValues();
   }
@@ -159,12 +158,6 @@ public class Camera
 //ORIGINAL LINE: void render(const RenderContext* rc) const
   public final void render(RenderContext rc)
   {
-	_logger = rc.getLogger();
-	/*
-	if (_dirtyCachedValues) {
-	  calculateCachedValues();
-	  _dirtyCachedValues = false;
-	}*/
   
 	GL gl = rc.getGL();
 	gl.setProjection(getProjectionMatrix());
@@ -259,8 +252,8 @@ public class Camera
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Vector3D getPosition() const
-  public final Vector3D getPosition()
+//ORIGINAL LINE: Vector3D getCartesianPosition() const
+  public final Vector3D getCartesianPosition()
   {
 	  return _position.asVector3D();
   }
@@ -286,7 +279,7 @@ public class Camera
 //ORIGINAL LINE: Vector3D getXYZCenterOfView() const
   public final Vector3D getXYZCenterOfView()
   {
-	  return _getXYZCenterOfView().asVector3D();
+	  return _getCartesianCenterOfView().asVector3D();
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Vector3D getViewDirection() const
@@ -334,21 +327,15 @@ public class Camera
   public final void rotateWithAxisAndPoint(Vector3D axis, Vector3D point, Angle delta)
   {
 	final MutableMatrix44D m = MutableMatrix44D.createGeneralRotationMatrix(delta, axis, point);
-  
-	//m.print();
-  
 	applyTransform(m);
   }
 
   public final void print()
   {
-	if (_logger != null)
-	{
-	  getModelMatrix().print("Model Matrix", _logger);
-	  getProjectionMatrix().print("Projection Matrix", _logger);
-	  getModelViewMatrix().print("ModelView Matrix", _logger);
-	  _logger.logInfo("Width: %d, Height %d\n", _width, _height);
-	}
+	getModelMatrix().print("Model Matrix", ILogger.instance());
+	getProjectionMatrix().print("Projection Matrix", ILogger.instance());
+	getModelViewMatrix().print("ModelView Matrix", ILogger.instance());
+	ILogger.instance().logInfo("Width: %d, Height %d\n", _width, _height);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -367,8 +354,7 @@ public class Camera
 
   public final void setPosition(Geodetic3D g3d)
   {
-	_position = _planet.toVector3D(g3d).asMutableVector3D();
-	_dirtyFlags.setAll(true);
+	setCartesianPosition(_planet.toCartesian(g3d).asMutableVector3D());
   }
 
 
@@ -398,15 +384,33 @@ public class Camera
   public final void initialize(InitializationContext ic)
   {
 	_planet = ic.getPlanet();
-	_position = new MutableVector3D(_planet.getRadii().maxAxis() * 5, 0, 0);
+	setCartesianPosition(new MutableVector3D(_planet.getRadii().maxAxis() * 5, 0, 0));
 	_dirtyFlags.setAll(true);
   }
 
   public final void reset()
   {
+  
+	_width = 0;
+	_height = 0;
+	_planet = null;
+  
 	_position = new MutableVector3D(0, 0, 0);
 	_center = new MutableVector3D(0, 0, 0);
 	_up = new MutableVector3D(0, 0, 1);
+  
+	_dirtyFlags.setAll(true);
+  
+	_frustumData = new FrustumData();
+	_projectionMatrix = new MutableMatrix44D();
+	_modelMatrix = new MutableMatrix44D();
+	_modelViewMatrix = new MutableMatrix44D();
+	_cartesianCenterOfView = new MutableVector3D();
+  
+	if (_geodeticCenterOfView != null)
+		if (_geodeticCenterOfView != null)
+			_geodeticCenterOfView.dispose();
+	_geodeticCenterOfView = null;
   
 	if (_frustum != null)
 		if (_frustum != null)
@@ -427,18 +431,19 @@ public class Camera
 		if (_halfFrustum != null)
 			_halfFrustum.dispose();
 	_halfFrustum = null;
-  
-	_dirtyFlags.setAll(true);
-	_XYZCenterOfView = new MutableVector3D(0, 0, 0);
-  
-	if (_geodeticCenterOfView != null)
-		if (_geodeticCenterOfView != null)
-			_geodeticCenterOfView.dispose();
-	_geodeticCenterOfView = null;
-  
-	_frustumData = new FrustumData();
   }
 
+  public final void setCartesianPosition(MutableVector3D v)
+  {
+	if (!v.equalTo(_position))
+	{
+	  _position = new MutableVector3D(v);
+	  _dirtyFlags.setAll(true);
+	}
+  }
+
+
+  //IF A NEW ATTRIBUTE IS ADDED CHECK CONSTRUCTORS AND RESET() !!!!
   private int _width;
   private int _height;
 
@@ -448,19 +453,27 @@ public class Camera
   private MutableVector3D _center = new MutableVector3D(); // point where camera is looking at
   private MutableVector3D _up = new MutableVector3D(); // vertical vector
 
-
-
-  private ILogger _logger;
-
   private CameraDirtyFlags _dirtyFlags = new CameraDirtyFlags();
+  private FrustumData _frustumData = new FrustumData();
+  private MutableMatrix44D _projectionMatrix = new MutableMatrix44D();
+  private MutableMatrix44D _modelMatrix = new MutableMatrix44D();
+  private MutableMatrix44D _modelViewMatrix = new MutableMatrix44D();
+  private MutableVector3D _cartesianCenterOfView = new MutableVector3D();
+  private Geodetic3D _geodeticCenterOfView;
+  private Frustum _frustum;
+  private Frustum _frustumInModelCoordinates;
+  private Frustum _halfFrustum; // ONLY FOR DEBUG
+  private Frustum _halfFrustumInModelCoordinates; // ONLY FOR DEBUG
 
   private void applyTransform(MutableMatrix44D M)
   {
-	_position = _position.transformedBy(M, 1.0);
-	_center = _center.transformedBy(M, 1.0);
-	_up = _up.transformedBy(M, 0.0);
+	setCartesianPosition(_position.transformedBy(M, 1.0));
+	setCenter(_center.transformedBy(M, 1.0));
   
-	_dirtyFlags.setAll(true);
+	int ask_agustin_0;
+	setUp(_up.transformedBy(M, 0.0));
+  
+	//_dirtyFlags.setAll(true);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -471,8 +484,25 @@ public class Camera
 	return _planet.closestIntersection(_position.asVector3D(), ray);
   }
 
-  // data to compute frustum
-  private FrustumData _frustumData = new FrustumData();
+  private void setCenter(MutableVector3D v)
+  {
+	if (!v.equalTo(_center))
+	{
+	  _center = new MutableVector3D(v);
+	  _dirtyFlags.setAll(true);
+	}
+  }
+
+  private void setUp(MutableVector3D v)
+  {
+	if (!v.equalTo(_up))
+	{
+	  _up = new MutableVector3D(v);
+	  _dirtyFlags.setAll(true);
+	}
+  }
+
+  // data to compute frustum                 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: FrustumData getFrustumData() const
   private FrustumData getFrustumData()
@@ -485,8 +515,7 @@ public class Camera
 	return _frustumData;
   }
 
-  // opengl projection matrix 
-  private MutableMatrix44D _projectionMatrix = new MutableMatrix44D();
+  // opengl projection matrix       
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: MutableMatrix44D getProjectionMatrix() const
   private MutableMatrix44D getProjectionMatrix()
@@ -500,7 +529,6 @@ public class Camera
   }
 
   // Model matrix, computed in CPU in double precision
-  private MutableMatrix44D _modelMatrix = new MutableMatrix44D();
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: MutableMatrix44D getModelMatrix() const
   private MutableMatrix44D getModelMatrix()
@@ -513,8 +541,7 @@ public class Camera
 	return _modelMatrix;
   }
 
-  // multiplication of model * projection
-  private MutableMatrix44D _modelViewMatrix = new MutableMatrix44D();
+  // multiplication of model * projection 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: MutableMatrix44D getModelViewMatrix() const
   private MutableMatrix44D getModelViewMatrix()
@@ -528,21 +555,19 @@ public class Camera
   }
 
   // intersection of view direction with globe in(x,y,z)
-  private MutableVector3D _XYZCenterOfView = new MutableVector3D();
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: MutableVector3D _getXYZCenterOfView() const
-  private MutableVector3D _getXYZCenterOfView()
+//ORIGINAL LINE: MutableVector3D _getCartesianCenterOfView() const
+  private MutableVector3D _getCartesianCenterOfView()
   {
-	if (_dirtyFlags._XYZCenterOfView)
+	if (_dirtyFlags._cartesianCenterOfView)
 	{
-	  _dirtyFlags._XYZCenterOfView = false;
-	  _XYZCenterOfView = centerOfViewOnPlanet().asMutableVector3D();
+	  _dirtyFlags._cartesianCenterOfView = false;
+	  _cartesianCenterOfView = centerOfViewOnPlanet().asMutableVector3D();
 	}
-	return _XYZCenterOfView;
+	return _cartesianCenterOfView;
   }
 
   // intersection of view direction with globe in geodetic
-  private Geodetic3D _geodeticCenterOfView;
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Geodetic3D* _getGeodeticCenterOfView() const
   private Geodetic3D _getGeodeticCenterOfView()
@@ -556,7 +581,6 @@ public class Camera
   }
 
   // camera frustum
-  private Frustum _frustum;
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Frustum* getFrustum() const
   private Frustum getFrustum()
@@ -570,7 +594,6 @@ public class Camera
   }
 
   // frustum in Model coordinates
-  private Frustum _frustumInModelCoordinates;
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Frustum* getFrustumMC() const
   private Frustum getFrustumMC()
@@ -585,7 +608,6 @@ public class Camera
 
   private int __temporal_test_for_clipping;
 
-  private Frustum _halfFrustum; // ONLY FOR DEBUG
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Frustum* getHalfFrustum() const
   private Frustum getHalfFrustum()
@@ -599,7 +621,6 @@ public class Camera
 	return _halfFrustum;
   }
 
-  private Frustum _halfFrustumInModelCoordinates; // ONLY FOR DEBUG
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Frustum* getHalfFrustumMC() const
   private Frustum getHalfFrustumMC()
@@ -611,9 +632,6 @@ public class Camera
 	}
 	return _halfFrustumInModelCoordinates;
   }
-
-
-
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: FrustumData calculateFrustumData() const

@@ -68,7 +68,7 @@ public class CameraRenderer extends Renderer
   {
 	if (_cameraContext != null)
 	{
-	  _cameraContext.getCamera().resizeViewport(width, height);
+	  _cameraContext.getNextCamera().resizeViewport(width, height);
 	}
   }
 

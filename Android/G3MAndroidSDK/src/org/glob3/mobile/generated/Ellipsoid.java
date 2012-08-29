@@ -62,7 +62,7 @@ public class Ellipsoid
 //ORIGINAL LINE: Vector3D geodeticSurfaceNormal(const Geodetic3D& geodetic) const
   public final Vector3D geodeticSurfaceNormal(Geodetic3D geodetic)
   {
-	double cosLatitude = geodetic.latitude().cosinus();
+	final double cosLatitude = geodetic.latitude().cosinus();
   
 	return new Vector3D(cosLatitude * geodetic.longitude().cosinus(), cosLatitude * geodetic.longitude().sinus(), geodetic.latitude().sinus());
   }
@@ -71,7 +71,7 @@ public class Ellipsoid
 //ORIGINAL LINE: Vector3D geodeticSurfaceNormal(const Geodetic2D& geodetic) const
   public final Vector3D geodeticSurfaceNormal(Geodetic2D geodetic)
   {
-	double cosLatitude = geodetic.latitude().cosinus();
+	final double cosLatitude = geodetic.latitude().cosinus();
   
 	return new Vector3D(cosLatitude * geodetic.longitude().cosinus(), cosLatitude * geodetic.longitude().sinus(), geodetic.latitude().sinus());
   }
@@ -128,8 +128,8 @@ public class Ellipsoid
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Vector3D toVector3D(const Geodetic3D& geodetic) const
-  public final Vector3D toVector3D(Geodetic3D geodetic)
+//ORIGINAL LINE: Vector3D toCartesian(const Geodetic3D& geodetic) const
+  public final Vector3D toCartesian(Geodetic3D geodetic)
   {
 	final Vector3D n = geodeticSurfaceNormal(geodetic);
 	final Vector3D k = _radiiSquared.times(n);
@@ -140,10 +140,10 @@ public class Ellipsoid
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Vector3D toVector3D(const Geodetic2D& geodetic) const
-  public final Vector3D toVector3D(Geodetic2D geodetic)
+//ORIGINAL LINE: Vector3D toCartesian(const Geodetic2D& geodetic) const
+  public final Vector3D toCartesian(Geodetic2D geodetic)
   {
-	return toVector3D(new Geodetic3D(geodetic, 0.0));
+	return toCartesian(new Geodetic3D(geodetic, 0.0));
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -266,11 +266,11 @@ public class Ellipsoid
 //ORIGINAL LINE: Geodetic2D getMidPoint (const Geodetic2D& P0, const Geodetic2D& P1) const
   public final Geodetic2D getMidPoint (Geodetic2D P0, Geodetic2D P1)
   {
-	Vector3D v0 = toVector3D(P0);
-	Vector3D v1 = toVector3D(P1);
-	Vector3D normal = v0.cross(v1).normalized();
-	Angle theta = v0.angleBetween(v1);
-	Vector3D midPoint = scaleToGeocentricSurface(v0.rotateAroundAxis(normal, theta.times(0.5)));
+	final Vector3D v0 = toCartesian(P0);
+	final Vector3D v1 = toCartesian(P1);
+	final Vector3D normal = v0.cross(v1).normalized();
+	final Angle theta = v0.angleBetween(v1);
+	final Vector3D midPoint = scaleToGeocentricSurface(v0.rotateAroundAxis(normal, theta.times(0.5)));
 	return toGeodetic2D(midPoint);
   }
 
