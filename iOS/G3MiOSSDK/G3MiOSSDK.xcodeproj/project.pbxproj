@@ -117,8 +117,8 @@
 		CFB72A6915E6808900A5BAF4 /* IStringUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFB72A6715E6808900A5BAF4 /* IStringUtils.cpp */; };
 		CFB72A6A15E6808900A5BAF4 /* IStringUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFB72A6815E6808900A5BAF4 /* IStringUtils.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFB72A6E15E682B400A5BAF4 /* StringUtils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFB72A6C15E682B400A5BAF4 /* StringUtils_iOS.mm */; };
-		CFB72A6F15E682B400A5BAF4 /* StringUtils_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFB72A6D15E682B400A5BAF4 /* StringUtils_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
-		CFBCCE9615E709EF00FBF950 /* Downloader_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFFEC11F15C2E9B0003FA986 /* Downloader_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
+		CFB72A6F15E682B400A5BAF4 /* StringUtils_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFB72A6D15E682B400A5BAF4 /* StringUtils_iOS.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CFBCCE9615E709EF00FBF950 /* Downloader_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFFEC11F15C2E9B0003FA986 /* Downloader_iOS.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFD0021B15D3C94C00735FD8 /* TileKey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD0021915D3C94C00735FD8 /* TileKey.cpp */; };
 		CFE0844515E27B9A0004EC0E /* Petition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE0844315E27B9A0004EC0E /* Petition.cpp */; };
 		CFF0999B15C18AAD005EAF12 /* TileTexturizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -128,6 +128,8 @@
 		CFFEC12615C2EBA6003FA986 /* URL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12515C2EBA6003FA986 /* URL.cpp */; };
 		D80D520D15EE2A5100ACEA16 /* IMathUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8FEDAC615E7BD23007633A0 /* IMathUtils.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D80D521215EE2B0100ACEA16 /* IMathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80D521115EE2B0100ACEA16 /* IMathUtils.cpp */; };
+		D80D525615EE66D700ACEA16 /* INativeGL.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D80D525515EE66D700ACEA16 /* INativeGL.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		D80D525915EE698E00ACEA16 /* TileTessellator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80D525815EE698E00ACEA16 /* TileTessellator.cpp */; };
 		D816E7AA15B6C9B2004FA4D6 /* SingleImageTileTexturizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D816E7A815B6C9B1004FA4D6 /* SingleImageTileTexturizer.cpp */; };
 		D816E7AB15B6C9B2004FA4D6 /* SingleImageTileTexturizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D816E7A915B6C9B1004FA4D6 /* SingleImageTileTexturizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D81BA17115CBF19F004EF0B0 /* GL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81BA16F15CBF19E004EF0B0 /* GL.cpp */; };
@@ -188,7 +190,7 @@
 		D8F42FBE15EB6D78000D1822 /* LeveledTexturedMesh.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF8FF98A15D5539F000F79D1 /* LeveledTexturedMesh.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8F42FBF15EB6D78000D1822 /* SQLiteStorage_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF8B21B115DD32820068601A /* SQLiteStorage_iOS.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8F42FD415EB7B95000D1822 /* IStringBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8A723A715E4D2C500ABDF07 /* IStringBuilder.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		D8F42FD515EB7BAB000D1822 /* INativeGL.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8F7662315CAB57300179E08 /* INativeGL.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		D8F42FD515EB7BAB000D1822 /* (null) in Headers */ = {isa = PBXBuildFile; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -338,6 +340,8 @@
 		CFFEC12415C2EB96003FA986 /* URL.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = URL.hpp; path = Commons/Basic/URL.hpp; sourceTree = "<group>"; };
 		CFFEC12515C2EBA6003FA986 /* URL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = URL.cpp; path = Commons/Basic/URL.cpp; sourceTree = "<group>"; };
 		D80D521115EE2B0100ACEA16 /* IMathUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IMathUtils.cpp; path = Commons/Interfaces/IMathUtils.cpp; sourceTree = "<group>"; };
+		D80D525515EE66D700ACEA16 /* INativeGL.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = INativeGL.hpp; path = Commons/Interfaces/INativeGL.hpp; sourceTree = "<group>"; };
+		D80D525815EE698E00ACEA16 /* TileTessellator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileTessellator.cpp; path = Commons/Basic/TileTessellator.cpp; sourceTree = "<group>"; };
 		D816E7A815B6C9B1004FA4D6 /* SingleImageTileTexturizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SingleImageTileTexturizer.cpp; path = Commons/Basic/SingleImageTileTexturizer.cpp; sourceTree = "<group>"; };
 		D816E7A915B6C9B1004FA4D6 /* SingleImageTileTexturizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SingleImageTileTexturizer.hpp; path = Commons/Basic/SingleImageTileTexturizer.hpp; sourceTree = "<group>"; };
 		D81BA16E15CBF19E004EF0B0 /* GL.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GL.hpp; sourceTree = "<group>"; };
@@ -375,7 +379,6 @@
 		D8EEF3B51577924D003FEB5E /* libG3MiOSSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libG3MiOSSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8EEF3B81577924D003FEB5E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D8EEF3BC1577924D003FEB5E /* G3MiOSSDK-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "G3MiOSSDK-Prefix.pch"; sourceTree = "<group>"; };
-		D8F7665715CAD79100179E08 /* INativeGL.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = INativeGL.hpp; path = Commons/Interfaces/INativeGL.hpp; sourceTree = "<group>"; };
 		D8FEDAC615E7BD23007633A0 /* IMathUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IMathUtils.hpp; path = Commons/Interfaces/IMathUtils.hpp; sourceTree = "<group>"; };
 		D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MathUtils_iOS.hpp; path = Specific/Derived/MathUtils_iOS.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -465,6 +468,7 @@
 		383BD3891577EDF40012AC53 /* Basic */ = {
 			isa = PBXGroup;
 			children = (
+				D80D525815EE698E00ACEA16 /* TileTessellator.cpp */,
 				CFE0844015E27A310004EC0E /* TerrainTouchEventListener.hpp */,
 				CFF95F761588E82200B56E11 /* Color.hpp */,
 				383BD38E1577EE500012AC53 /* Context.cpp */,
@@ -490,7 +494,6 @@
 				38D786E41587B3DD003BBC75 /* Tile.hpp */,
 				CFD0021915D3C94C00735FD8 /* TileKey.cpp */,
 				CFD0021A15D3C94C00735FD8 /* TileKey.hpp */,
-				CF9AEBBE159B3BAF004C3558 /* TileTessellator.cpp */,
 				CF9AEBBD159B3B95004C3558 /* TileTessellator.hpp */,
 				CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */,
 				CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */,
@@ -550,6 +553,7 @@
 		383BD38B1577EE040012AC53 /* Interfaces */ = {
 			isa = PBXGroup;
 			children = (
+				D80D525515EE66D700ACEA16 /* INativeGL.hpp */,
 				D8D347B915E5133B00EDB394 /* IStringBuilder.cpp */,
 				D80D521115EE2B0100ACEA16 /* IMathUtils.cpp */,
 				CF08483415D41EF700327171 /* GLTextureId.cpp */,
@@ -575,7 +579,6 @@
 		CC14B636157D34AB00793C92 /* GL */ = {
 			isa = PBXGroup;
 			children = (
-				D8F7662315CAB57300179E08 /* INativeGL.hpp */,
 				D892FBCB15C930CC00E69254 /* NativeGL2_iOS.hpp */,
 			);
 			name = GL;
@@ -797,7 +800,7 @@
 				D88B5E0F15C15C180083A43F /* Response.hpp in Headers */,
 				D88B5E1115C15C180083A43F /* Color.hpp in Headers */,
 				D88B5E1215C15C180083A43F /* Effects.hpp in Headers */,
-				D8F42FD515EB7BAB000D1822 /* INativeGL.hpp in Headers */,
+				D8F42FD515EB7BAB000D1822 /* (null) in Headers */,
 				D88B5E1315C15C180083A43F /* EllipsoidalTileTessellator.hpp in Headers */,
 				D88B5E1515C15C180083A43F /* Mark.hpp in Headers */,
 				D88B5E1815C15C180083A43F /* TexturesHandler.hpp in Headers */,
@@ -833,15 +836,16 @@
 				D88B5E2615C15C850083A43F /* Extent.hpp in Headers */,
 				D88B5E2715C15C850083A43F /* Frustum.hpp in Headers */,
 				D88B5E2815C15C850083A43F /* Plane.hpp in Headers */,
-				CFBCCE9615E709EF00FBF950 /* Downloader_iOS.hpp in Headers */,
-				CFB72A6F15E682B400A5BAF4 /* StringUtils_iOS.hpp in Headers */,
 				383BD37C1577EDC00012AC53 /* Factory_iOS.hpp in Headers */,
 				383BD3861577EDDB0012AC53 /* G3MWidget_iOS.h in Headers */,
 				383BD37E1577EDC00012AC53 /* Logger_iOS.hpp in Headers */,
 				D86DD8A51588945200E25609 /* Image_iOS.hpp in Headers */,
 				CF8A234E15C4306800FD56C9 /* Downloader_iOS_Handler.h in Headers */,
+				D80D525615EE66D700ACEA16 /* INativeGL.hpp in Headers */,
 				CF8A235315C4340900FD56C9 /* Downloader_iOS_Listener.h in Headers */,
 				CF6D404715C8278C008D8D78 /* Downloader_iOS_WorkerThread.h in Headers */,
+				CFBCCE9615E709EF00FBF950 /* Downloader_iOS.hpp in Headers */,
+				CFB72A6F15E682B400A5BAF4 /* StringUtils_iOS.hpp in Headers */,
 				D892FBCC15C930CC00E69254 /* NativeGL2_iOS.hpp in Headers */,
 				D88B5E2315C15C180083A43F /* Timer_iOS.hpp in Headers */,
 				CCC2A03C15CA6C7D00923850 /* SceneGraphRenderer.hpp in Headers */,
@@ -978,6 +982,7 @@
 				CFB72A6915E6808900A5BAF4 /* IStringUtils.cpp in Sources */,
 				CFB72A6E15E682B400A5BAF4 /* StringUtils_iOS.mm in Sources */,
 				D80D521215EE2B0100ACEA16 /* IMathUtils.cpp in Sources */,
+				D80D525915EE698E00ACEA16 /* TileTessellator.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
