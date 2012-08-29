@@ -39,7 +39,7 @@ public:
     const double cameraHeight = cameraPosition3D.height();
     
     if (cameraHeight > radii*9) {
-      nextCamera->reset();
+      nextCamera->resetPosition();
       nextCamera->setPosition(  planet->toGeodetic3D(previousCamera->getCartesianPosition())  );
     }
   }
