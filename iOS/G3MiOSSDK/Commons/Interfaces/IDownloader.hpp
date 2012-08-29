@@ -22,12 +22,12 @@ public:
   
   virtual void stop() = 0;
   
-  virtual long request(const URL& url,
-                       long priority,
-                       IDownloadListener* listener,
-                       bool deleteListener) = 0;
+  virtual long long request(const URL& url,
+                            long long priority,
+                            IDownloadListener* listener,
+                            bool deleteListener) = 0;
   
-  virtual void cancelRequest(long requestId) = 0;
+  virtual void cancelRequest(long long requestId) = 0;
 
 #ifdef C_CODE
   virtual ~IDownloader() {

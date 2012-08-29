@@ -106,8 +106,8 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 
   public final void onDown(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
-	Camera camera = cameraContext.getCamera();
-	_camera0 = new Camera(camera);
+	Camera camera = cameraContext.getNextCamera();
+	_camera0.copyFrom(camera);
 	cameraContext.setCurrentGesture(Gesture.DoubleDrag);
   
 	// double dragging
@@ -128,7 +128,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 	Geodetic2D g0 = planet.toGeodetic2D(_initialPoint0.asVector3D());
 	Geodetic2D g1 = planet.toGeodetic2D(_initialPoint1.asVector3D());
 	Geodetic2D g = planet.getMidPoint(g0, g1);
-	_initialPoint = planet.toVector3D(g).asMutableVector3D();
+	_initialPoint = planet.toCartesian(g).asMutableVector3D();
   
 	// fingers difference
 	Vector2D difPixel = pixel1.sub(pixel0);
@@ -159,7 +159,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   
 	  // compute estimated camera translation
 	  Vector3D centerPoint = tempCamera.getXYZCenterOfView();
-	  double distance = tempCamera.getPosition().sub(centerPoint).length();
+	  double distance = tempCamera.getCartesianPosition().sub(centerPoint).length();
 	  double d = distance*(factor-1)/factor;
 	  tempCamera.moveForward(d);
 	  dAccum += d;
@@ -258,7 +258,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 	Vector3D P1 = tempCamera.pixel2PlanetPoint(pixel1);
 	final Planet planet = eventContext.getPlanet();
 	Geodetic2D g = planet.getMidPoint(planet.toGeodetic2D(P0), planet.toGeodetic2D(P1));
-	Vector3D finalPoint = planet.toVector3D(g);
+	Vector3D finalPoint = planet.toCartesian(g);
   
 	// drag globe from centerPoint to finalPoint
 	final Vector3D rotationAxis = centerPoint2.cross(finalPoint);
@@ -288,7 +288,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   
 	// copy final transformation to camera
 	//tempCamera.updateModelMatrix();
-	cameraContext.getCamera().copyFrom(tempCamera);
+	cameraContext.getNextCamera().copyFrom(tempCamera);
   
 	//printf ("moving 2 fingers\n");
   }

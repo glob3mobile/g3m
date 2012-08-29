@@ -85,11 +85,8 @@ public class TileRenderContext
   private final boolean _isForcedFullRender;
 
   private ITimer _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
-//  ITimer* _lastTexturizerTimer; // timer to start every time the texturizer is called
 
   public TileRenderContext(TileTessellator tessellator, TileTexturizer texturizer, TilesRenderParameters parameters, TilesStatistics statistics, ITimer lastSplitTimer, boolean isForcedFullRender)
-//                    ITimer*                      lastTexturizerTimer,
-//  _lastTexturizerTimer(lastTexturizerTimer),
   {
 	  _tessellator = tessellator;
 	  _texturizer = texturizer;
@@ -135,10 +132,6 @@ public class TileRenderContext
   {
 	return _lastSplitTimer;
   }
-
-//  ITimer* getLastTexturizerTimer() const {
-//    return _lastTexturizerTimer;
-//  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: boolean isForcedFullRender() const

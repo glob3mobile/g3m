@@ -15,14 +15,14 @@
 @implementation ListenerEntry
 
 +(id) entryWithListener: (Downloader_iOS_Listener*) listener
-              requestId: (long) requestId
+              requestId: (long long) requestId
 {
   return [[ListenerEntry alloc] initWithListener: listener
                                        requestId: requestId];
 }
 
 -(id) initWithListener: (Downloader_iOS_Listener*) listener
-             requestId: (long) requestId
+             requestId: (long long) requestId
 {
   self = [super init];
   if (self) {
@@ -38,7 +38,7 @@
   return _listener;
 }
 
--(long) requestId
+-(long long) requestId
 {
   return _requestId;
 }
@@ -46,7 +46,7 @@
 -(void) cancel
 {
   if (_canceled) {
-    NSLog(@"Listener for RequestId=%ld already canceled", _requestId);
+    NSLog(@"Listener for RequestId=%lld already canceled", _requestId);
   }
   _canceled = YES;
 }
@@ -64,8 +64,8 @@
 - (id) initWithNSURL: (NSURL*) nsURL
                  url: (URL*) url
             listener: (Downloader_iOS_Listener*) listener
-            priority: (long) priority
-           requestId: (long) requestId
+            priority: (long long) priority
+           requestId: (long long) requestId
 {
   self = [super init];
   if (self) {
@@ -82,8 +82,8 @@
 }
 
 - (void) addListener: (Downloader_iOS_Listener*) listener
-            priority: (long) priority
-           requestId: (long) requestId
+            priority: (long long) priority
+           requestId: (long long) requestId
 {
   ListenerEntry* entry = [ListenerEntry entryWithListener: listener
                                                 requestId: requestId];
@@ -99,18 +99,18 @@
   [_lock unlock];
 }
 
-- (long) priority
+- (long long) priority
 {
   [_lock lock];
   
-  const long result = _priority;
+  const long long result = _priority;
   
   [_lock unlock];
   
   return result;
 }
 
-- (bool) cancelListenerForRequestId: (long)requestId
+- (bool) cancelListenerForRequestId: (long long)requestId
 {
   bool canceled = false;
   
@@ -135,7 +135,7 @@
   return canceled;
 }
 
-- (bool) removeListenerForRequestId: (long)requestId
+- (bool) removeListenerForRequestId: (long long)requestId
 {
   bool removed = false;
   

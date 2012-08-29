@@ -29,8 +29,6 @@ public class TileTextureBuilder extends RCObject
   private boolean _anyCanceled;
   private boolean _alreadyStarted;
 
-//  static long _sequenceCounter;
-
   public LeveledTexturedMesh _mesh;
 
   public TileTextureBuilder(MultiLayerTileTexturizer texturizer, RenderContext rc, LayerSet layerSet, TilesRenderParameters parameters, IDownloader downloader, Tile tile, Mesh tessellatorMesh, float[] texCoords)
@@ -106,12 +104,12 @@ public class TileTextureBuilder extends RCObject
 //ORIGINAL LINE: Rectangle* getImageRectangleInTexture(const Sector& wholeSector, const Sector& imageSector, int textureWidth, int textureHeight) const
   public final Rectangle getImageRectangleInTexture(Sector wholeSector, Sector imageSector, int textureWidth, int textureHeight)
   {
-	final Vector2D pos = wholeSector.getUVCoordinates(imageSector.lower());
+	final Vector2D lowerFactor = wholeSector.getUVCoordinates(imageSector.lower());
 
-	final double width = imageSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
-	final double height = imageSector.getDeltaLatitude().div(wholeSector.getDeltaLatitude());
+	final double widthFactor = imageSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
+	final double heightFactor = imageSector.getDeltaLatitude().div(wholeSector.getDeltaLatitude());
 
-	return new Rectangle(pos.x() * textureWidth, (1.0 - pos.y()) * textureHeight, width * textureWidth, height * textureHeight);
+	return new Rectangle(lowerFactor.x() * textureWidth, (1.0 - lowerFactor.y()) * textureHeight, widthFactor * textureWidth, heightFactor * textureHeight);
   }
 
   public final void finalize()

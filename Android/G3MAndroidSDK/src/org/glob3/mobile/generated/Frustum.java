@@ -76,9 +76,15 @@ public class Frustum
 	boolean outside;
   
 	// create an array with the 8 corners of the box
-	Vector3D min = box.getLower();
-	Vector3D max = box.getUpper();
+	final Vector3D min = box.getLower();
+	final Vector3D max = box.getUpper();
 	Vector3D[] corners = { new Vector3D(min.x(), min.y(), min.z()), new Vector3D(min.x(), min.y(), max.z()), new Vector3D(min.x(), max.y(), min.z()), new Vector3D(min.x(), max.y(), max.z()), new Vector3D(max.x(), min.y(), min.z()), new Vector3D(max.x(), min.y(), max.z()), new Vector3D(max.x(), max.y(), min.z()), new Vector3D(max.x(), max.y(), max.z()) };
+  
+  //  std::vector<Vector3D> corners = box->getCorners();
+  
+	int __ASK_agustin;
+	/* http: //www.flipcode.com/archives/Frustum_Culling.shtml */
+  
   
 	// test with left plane
 	outside = true;

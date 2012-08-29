@@ -45,8 +45,8 @@ bool Frustum::touchesWithBox(const Box *box) const
   bool outside;
   
   // create an array with the 8 corners of the box
-  Vector3D min = box->getLower();
-  Vector3D max = box->getUpper();   
+  const Vector3D min = box->getLower();
+  const Vector3D max = box->getUpper();
   Vector3D corners[8] = {
     Vector3D(min.x(), min.y(), min.z()),
     Vector3D(min.x(), min.y(), max.z()),
@@ -57,6 +57,12 @@ bool Frustum::touchesWithBox(const Box *box) const
     Vector3D(max.x(), max.y(), min.z()),
     Vector3D(max.x(), max.y(), max.z())
   };
+  
+//  std::vector<Vector3D> corners = box->getCorners();
+  
+  int __ASK_agustin;
+  /* http://www.flipcode.com/archives/Frustum_Culling.shtml */
+  
   
   // test with left plane
   outside = true;

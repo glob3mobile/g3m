@@ -2,7 +2,7 @@ package org.glob3.mobile.generated;
 public class Tile
 {
   private TileTexturizer _texturizer;
-
+  private Tile _parent;
   private final Sector _sector ;
   private final int _level;
   private final int _row;
@@ -10,15 +10,12 @@ public class Tile
 
   private Mesh _tessellatorMesh;
   private Mesh _debugMesh;
-  private Mesh _texturizerMesh;
+  private Mesh _texturizedMesh;
 
-  private Tile _parent;
   private boolean _textureSolved;
   private java.util.ArrayList<Tile> _subtiles;
-
-  private ITimer _texturizerTimer;
-
   private boolean _justCreatedSubtiles;
+
   private boolean _texturizerDirty;
 
   private Mesh getTessellatorMesh(RenderContext rc, TileRenderContext trc)
@@ -155,55 +152,19 @@ public class Tile
 	  }
 	  else
 	  {
-  
-		final boolean needsToCallTexturizer = (!isTextureSolved() || (_texturizerMesh == null)) && isTexturizerDirty();
+  //      const bool needsToCallTexturizer = (!isTextureSolved() || (_texturizedMesh == NULL)) && isTexturizerDirty();
+		final boolean needsToCallTexturizer = (_texturizedMesh == null) || isTexturizerDirty();
   
 		if (needsToCallTexturizer)
 		{
 		  int __TODO_tune_render_budget;
   
-		  //                               (_texturizerTimer->elapsedTime().milliseconds() > 125 &&
-		  //        const bool callTexturizer = ((_texturizerTimer == NULL) ||
-		  //                               (_texturizerTimer->elapsedTime().milliseconds() > 125 &&
-		  //                                lastTexturizerTimer->elapsedTime().milliseconds() > 50));
-		  //        const bool callTexturizer = ((_texturizerTimer == NULL) ||
-		  //                                     (_texturizerTimer->elapsedTime().milliseconds() > 100 &&
-		  //                                      lastTexturizerTimer->elapsedTime().milliseconds() > 10));
-		  //        const bool callTexturizer = ((_texturizerTimer == NULL) ||
-		  //                                     (_texturizerTimer->elapsedTime().milliseconds() > 100));
-		  //        const bool callTexturizer = ((_texturizerTimer == NULL) ||
-		  //                                     (_texturizerTimer->elapsedTime().milliseconds() > 50)) && isTexturizerDirty();
-  
-		  final boolean callTexturizer = true;
-		  //        const bool callTexturizer = (trc->getLastTexturizerTimer()->elapsedTime().milliseconds() > 10);
-		  //        const bool callTexturizer = (trc->getLastTexturizerTimer()->elapsedTime().milliseconds() > 10);
-  
-		  if (callTexturizer)
-		  {
-			_texturizerMesh = texturizer.texturize(rc, trc, this, tessellatorMesh, _texturizerMesh);
-			//trc->getLastTexturizerTimer()->start();
-  
-			if (_texturizerTimer == null)
-			{
-			  _texturizerTimer = rc.getFactory().createTimer();
-			}
-			else
-			{
-			  _texturizerTimer.start();
-			}
-		  }
+		  _texturizedMesh = texturizer.texturize(rc, trc, this, tessellatorMesh, _texturizedMesh);
 		}
   
-		if ((_texturizerTimer != null) && isTextureSolved())
+		if (_texturizedMesh != null)
 		{
-		  if (_texturizerTimer != null)
-			  _texturizerTimer.dispose();
-		  _texturizerTimer = null;
-		}
-  
-		if (_texturizerMesh != null)
-		{
-		  _texturizerMesh.render(rc);
+		  _texturizedMesh.render(rc);
 		}
 		else
 		{
@@ -253,12 +214,12 @@ public class Tile
 	  {
 		Tile subtile = _subtiles.get(i);
   
-		subtile.setIsVisible(false);
+		subtile.setIsVisible(false, trc);
   
 		subtile.prune(trc);
 		if (texturizer != null)
 		{
-		  texturizer.tileToBeDeleted(subtile, subtile._texturizerMesh);
+		  texturizer.tileToBeDeleted(subtile, subtile._texturizedMesh);
 		}
 		if (subtile != null)
 			subtile.dispose();
@@ -297,7 +258,7 @@ public class Tile
   }
 
   private boolean _isVisible;
-  private void setIsVisible(boolean isVisible)
+  private void setIsVisible(boolean isVisible, TileRenderContext trc)
   {
 	if (_isVisible != isVisible)
 	{
@@ -305,20 +266,25 @@ public class Tile
   
 	  if (!_isVisible)
 	  {
-		deleteTexturizerMesh();
+		deleteTexturizedMesh(trc);
 	  }
 	}
   }
 
-  private void deleteTexturizerMesh()
+  private void deleteTexturizedMesh(TileRenderContext trc)
   {
-	if ((_level > 0) && (_texturizerMesh != null))
+	if ((_level > 0) && (_texturizedMesh != null))
 	{
-	  _texturizer.tileMeshToBeDeleted(this, _texturizerMesh);
   
-	  if (_texturizerMesh != null)
-		  _texturizerMesh.dispose();
-	  _texturizerMesh = null;
+	  TileTexturizer texturizer = trc.getTexturizer();
+	  if (texturizer != null)
+	  {
+		texturizer.tileMeshToBeDeleted(this, _texturizedMesh);
+	  }
+  
+	  if (_texturizedMesh != null)
+		  _texturizedMesh.dispose();
+	  _texturizedMesh = null;
   
 	  _texturizerData = null;
   
@@ -339,36 +305,28 @@ public class Tile
 	  _column = column;
 	  _tessellatorMesh = null;
 	  _debugMesh = null;
-	  _texturizerMesh = null;
+	  _texturizedMesh = null;
 	  _textureSolved = false;
 	  _texturizerDirty = true;
 	  _subtiles = null;
 	  _justCreatedSubtiles = false;
-	  _texturizerTimer = null;
 	  _isVisible = false;
 	  _texturizerData = null;
-  //  int __remove_tile_print;
-  //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
-  //         getKey().description().c_str(),
-  //         _sector.getDeltaLatitude().description().c_str(),
-  //         _sector.getDeltaLongitude().description().c_str()
-  //         );
+	//  int __remove_tile_print;
+	//  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
+	//         getKey().description().c_str(),
+	//         _sector.getDeltaLatitude().description().c_str(),
+	//         _sector.getDeltaLongitude().description().c_str()
+	//         );
   }
 
   public void dispose()
   {
-	if (_isVisible)
-	{
-	  deleteTexturizerMesh();
-	}
+  //  if (_isVisible) {
+  //    deleteTexturizedMesh();
+  //  }
   
 	prune(null);
-  
-	if (_texturizerTimer != null)
-	{
-	  if (_texturizerTimer != null)
-		  _texturizerTimer.dispose();
-	}
   
 	if (_debugMesh != null)
 	{
@@ -387,10 +345,10 @@ public class Tile
 	  _texturizerData = null;
 	}
   
-	if (_texturizerMesh != null)
+	if (_texturizedMesh != null)
 	{
-	  if (_texturizerMesh != null)
-		  _texturizerMesh.dispose();
+	  if (_texturizedMesh != null)
+		  _texturizedMesh.dispose();
 	}
   }
 
@@ -424,10 +382,10 @@ public class Tile
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Mesh* getTexturizerMesh() const
-  public final Mesh getTexturizerMesh()
+//ORIGINAL LINE: Mesh* getTexturizedMesh() const
+  public final Mesh getTexturizedMesh()
   {
-	return _texturizerMesh;
+	return _texturizedMesh;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -444,7 +402,7 @@ public class Tile
 	statistics.computeTileProcessed(this);
 	if (isVisible(rc, trc))
 	{
-	  setIsVisible(true);
+	  setIsVisible(true, trc);
   
 	  statistics.computeVisibleTile(this);
   
@@ -480,7 +438,7 @@ public class Tile
 	}
 	else
 	{
-	  setIsVisible(false);
+	  setIsVisible(false, trc);
   
 	  prune(trc);
 	}

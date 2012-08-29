@@ -33,7 +33,7 @@ public class CameraDoubleTapHandler extends CameraEventHandler
   {
 	// compute globe point where user tapped
 	final Vector2D pixel = touchEvent.getTouch(0).getPos();
-	Camera camera = cameraContext.getCamera();
+	Camera camera = cameraContext.getNextCamera();
 	final Vector3D initialPoint = camera.pixel2PlanetPoint(pixel);
 	if (initialPoint.isNan())
 		return;
@@ -46,7 +46,7 @@ public class CameraDoubleTapHandler extends CameraEventHandler
 	final Angle angle = Angle.fromRadians(-Math.asin(axis.length()/initialPoint.length()/centerPoint.length()));
   
 	// compute zoom factor
-	final double height = eventContext.getPlanet().toGeodetic3D(camera.getPosition()).height();
+	final double height = eventContext.getPlanet().toGeodetic3D(camera.getCartesianPosition()).height();
 	final double distance = height * 0.6;
   
 	// create effect

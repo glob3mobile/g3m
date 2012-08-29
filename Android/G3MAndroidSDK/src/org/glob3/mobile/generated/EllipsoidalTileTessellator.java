@@ -17,6 +17,8 @@ package org.glob3.mobile.generated;
 
 
 
+
+
 public class EllipsoidalTileTessellator extends TileTessellator
 {
 
@@ -25,14 +27,13 @@ public class EllipsoidalTileTessellator extends TileTessellator
 
   private static void addVertex(Planet planet, java.util.ArrayList<MutableVector3D> vertices, Geodetic3D g)
   {
-	vertices.add(planet.toVector3D(g).asMutableVector3D());
+	vertices.add(planet.toCartesian(g).asMutableVector3D());
   }
 
   private static void addVertex(Planet planet, java.util.ArrayList<MutableVector3D> vertices, Geodetic2D g)
   {
-	vertices.add(planet.toVector3D(g).asMutableVector3D());
+	vertices.add(planet.toCartesian(g).asMutableVector3D());
   }
-
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Mesh* createDebugMesh(const RenderContext* rc, const Tile* tile) const
@@ -49,8 +50,8 @@ public class EllipsoidalTileTessellator extends TileTessellator
 	  int posS = 0;
     
 	  // compute offset for vertices
-	  final Vector3D sw = planet.toVector3D(sector.getSW());
-	  final Vector3D nw = planet.toVector3D(sector.getNW());
+	  final Vector3D sw = planet.toCartesian(sector.getSW());
+	  final Vector3D nw = planet.toCartesian(sector.getNW());
 	  final double offset = nw.sub(sw).length() * 1e-3;
     
 	  // west side
@@ -86,7 +87,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
 	  }
     
 	  final Color color = new Color(Color.fromRGBA((float) 1.0, (float) 0, (float) 0, (float) 1.0));
-	  final Vector3D center = planet.toVector3D(sector.getCenter());
+	  final Vector3D center = planet.toCartesian(sector.getCenter());
     
 	  return IndexedMesh.createFromVector3D(vertices, GLPrimitive.LineLoop, CenterStrategy.GivenCenter, center, indices, color);
 	}
@@ -95,7 +96,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
   {
 	  _resolution = resolution;
 	  _skirted = skirted;
-
+	int __TODO_with_and_height_resolutions;
   }
 
   public void dispose()
@@ -103,8 +104,8 @@ public class EllipsoidalTileTessellator extends TileTessellator
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual Mesh* createMesh(const RenderContext* rc, const Tile* tile) const
-  public Mesh createMesh(RenderContext rc, Tile tile)
+//ORIGINAL LINE: Mesh* createMesh(const RenderContext* rc, const Tile* tile) const
+  public final Mesh createMesh(RenderContext rc, Tile tile)
   {
   
 	final Sector sector = tile.getSector();
@@ -152,8 +153,8 @@ public class EllipsoidalTileTessellator extends TileTessellator
 	{
   
 	  // compute skirt height
-	  final Vector3D sw = planet.toVector3D(sector.getSW());
-	  final Vector3D nw = planet.toVector3D(sector.getNW());
+	  final Vector3D sw = planet.toCartesian(sector.getSW());
+	  final Vector3D nw = planet.toCartesian(sector.getNW());
 	  final double skirtHeight = nw.sub(sw).length() * 0.05;
   
 	  indices.add(0);
@@ -201,7 +202,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
 	}
   
 	final Color color = new Color(Color.fromRGBA((float) 0.1, (float) 0.1, (float) 0.1, (float) 1.0));
-	final Vector3D center = planet.toVector3D(sector.getCenter());
+	final Vector3D center = planet.toCartesian(sector.getCenter());
   
 	return IndexedMesh.createFromVector3D(vertices, GLPrimitive.TriangleStrip, CenterStrategy.GivenCenter, center, indices, color);
   }
@@ -214,8 +215,8 @@ public class EllipsoidalTileTessellator extends TileTessellator
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual java.util.ArrayList<MutableVector2D>* createUnitTextCoords() const
-  public java.util.ArrayList<MutableVector2D> createUnitTextCoords()
+//ORIGINAL LINE: java.util.ArrayList<MutableVector2D>* createUnitTextCoords() const
+  public final java.util.ArrayList<MutableVector2D> createUnitTextCoords()
   {
   
 	java.util.ArrayList<MutableVector2D> textCoords = new java.util.ArrayList<MutableVector2D>();
@@ -283,6 +284,5 @@ public class EllipsoidalTileTessellator extends TileTessellator
   
 	return textCoords;
   }
-
 
 }

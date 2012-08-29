@@ -53,6 +53,8 @@
 #include "StringUtils_iOS.hpp"
 #include "SingleImageTileTexturizer.hpp"
 
+#include "MathUtils_iOS.hpp"
+
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
 @end
@@ -125,6 +127,8 @@
   ILogger *logger    = new Logger_iOS(ErrorLevel);
   NativeGL2_iOS* nGL = new NativeGL2_iOS();
   GL* gl  = new GL(nGL);
+  
+  IMathUtils::setInstance(new MathUtils_iOS()); //Mathematics utilities
   
   IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
   IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),

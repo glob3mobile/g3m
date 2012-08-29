@@ -9,7 +9,7 @@
 #ifndef G3MiOSSDK_MutableVector2D_hpp
 #define G3MiOSSDK_MutableVector2D_hpp
 
-#include <math.h>
+#include "IMathUtils.hpp"
 
 #include "Angle.hpp"
 #include "Vector2D.hpp"
@@ -38,17 +38,17 @@ public:
   }
   
   static MutableVector2D nan() {
-    return MutableVector2D(NAN, NAN);
+    return MutableVector2D(GMath.NanD(), GMath.NanD());
   }
   
   bool isNan() const {
-    return isnan(_x * _y);
+    return GMath.isNan(_x * _y);
   }
 
   MutableVector2D normalized() const;
   
   double length() const {
-    return sqrt(squaredLength());
+    return GMath.sqrt(squaredLength());
   }
   
   double squaredLength() const {
@@ -86,7 +86,7 @@ public:
   }
   
   Angle angle() const { 
-    double a = atan2(_y, _x);
+    double a = GMath.atan2(_y, _x);
     return Angle::fromRadians(a);
   }
   

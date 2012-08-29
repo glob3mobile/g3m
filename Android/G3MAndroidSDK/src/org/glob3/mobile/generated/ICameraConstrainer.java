@@ -15,6 +15,6 @@ public interface ICameraConstrainer
   //NO DESTRUCTOR FOR INTERFACE
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual boolean acceptsCamera(const Camera* camera, const Planet *planet) const = 0;
-  boolean acceptsCamera(Camera camera, Planet planet);
+//ORIGINAL LINE: virtual void onCameraChange(const Planet *planet, const Camera* previousCamera, Camera* nextCamera) const = 0;
+  void onCameraChange(Planet planet, Camera previousCamera, Camera nextCamera);
 }

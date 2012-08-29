@@ -68,9 +68,6 @@ public class FrameTasksExecutor
   private boolean _stressed;
 
   public FrameTasksExecutor()
-//  _maximumQueuedTasks(128),
-//  _maxTimePerFrameStressed(TimeInterval::fromMilliseconds(30)),
-//  _maxTimePerFrameStressed(TimeInterval::fromMilliseconds(45)),
   {
 	  _minimumExecutionsPerFrame = 1;
 	  _maximumExecutionsPerFrame = 8;

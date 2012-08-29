@@ -275,8 +275,8 @@ public class IndexedMesh extends Mesh
 	// convert vertices to latlon coordinates
 	for (int n = 0; n<numVertices *3; n+=3)
 	{
-	  Geodetic3D g = new Geodetic3D(Angle.fromDegrees(vertices[n]), Angle.fromDegrees(vertices[n+1]), vertices[n+2]);
-	  Vector3D v = planet.toVector3D(g);
+	  final Geodetic3D g = new Geodetic3D(Angle.fromDegrees(vertices[n]), Angle.fromDegrees(vertices[n+1]), vertices[n+2]);
+	  final Vector3D v = planet.toCartesian(g);
 	  vertices[n] = (float) v.x();
 	  vertices[n+1] = (float) v.y();
 	  vertices[n+2] = (float) v.z();

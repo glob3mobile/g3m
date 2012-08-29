@@ -217,14 +217,8 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& g,
   
   //X and Y
   Vector2D pixel = tileSector.getUVCoordinates(g);
-#ifdef C_CODE
-  int x = (int) round( (pixel.x() * width) );
-  int y = (int) round ( ((1.0 - pixel.y()) * height) );
-#endif
-#ifdef JAVA_CODE
-  int x = (int) (pixel.x() * width);
-  int y = (int) ((1.0 - pixel.y()) * height);
-#endif
+  int x = (int) GMath.round( (pixel.x() * width) );
+  int y = (int) GMath.round ( ((1.0 - pixel.y()) * height) );
   
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->add("&X=")->add(x)->add("&Y=")->add(y);

@@ -79,7 +79,7 @@ void CameraSingleDragHandler::onMove(const EventContext *eventContext,
     //INVALID FINAL POINT
     //printf ("--invalid final point in drag!!\n");
     Vector3D ray = _camera0.pixel2Ray(pixel);
-    Vector3D pos = _camera0.getPosition();
+    Vector3D pos = _camera0.getCartesianPosition();
     finalPoint = eventContext->getPlanet()->closestPointToSphere(pos, ray).asMutableVector3D();
   }
 
@@ -92,7 +92,7 @@ void CameraSingleDragHandler::onMove(const EventContext *eventContext,
   // save drag parameters
   _axis = _initialPoint.cross(finalPoint);
   
-  const double radians = -asin(_axis.length()/_initialPoint.length()/finalPoint.length());
+  const double radians = - GMath.asin(_axis.length()/_initialPoint.length()/finalPoint.length());
   _radiansStep = radians - _lastRadians;
   _lastRadians = radians;
 }

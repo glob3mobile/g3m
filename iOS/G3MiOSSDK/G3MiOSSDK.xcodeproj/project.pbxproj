@@ -126,6 +126,8 @@
 		CFFEC11E15C2E645003FA986 /* IDownloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC11D15C2E645003FA986 /* IDownloader.cpp */; };
 		CFFEC12315C2EA5F003FA986 /* Downloader_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12215C2EA5F003FA986 /* Downloader_iOS.mm */; };
 		CFFEC12615C2EBA6003FA986 /* URL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC12515C2EBA6003FA986 /* URL.cpp */; };
+		D80D520D15EE2A5100ACEA16 /* IMathUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8FEDAC615E7BD23007633A0 /* IMathUtils.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		D80D521215EE2B0100ACEA16 /* IMathUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D80D521115EE2B0100ACEA16 /* IMathUtils.cpp */; };
 		D816E7AA15B6C9B2004FA4D6 /* SingleImageTileTexturizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D816E7A815B6C9B1004FA4D6 /* SingleImageTileTexturizer.cpp */; };
 		D816E7AB15B6C9B2004FA4D6 /* SingleImageTileTexturizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D816E7A915B6C9B1004FA4D6 /* SingleImageTileTexturizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D81BA17115CBF19F004EF0B0 /* GL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81BA16F15CBF19E004EF0B0 /* GL.cpp */; };
@@ -335,6 +337,7 @@
 		CFFEC12215C2EA5F003FA986 /* Downloader_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Downloader_iOS.mm; path = Specific/Derived/Downloader_iOS.mm; sourceTree = "<group>"; };
 		CFFEC12415C2EB96003FA986 /* URL.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = URL.hpp; path = Commons/Basic/URL.hpp; sourceTree = "<group>"; };
 		CFFEC12515C2EBA6003FA986 /* URL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = URL.cpp; path = Commons/Basic/URL.cpp; sourceTree = "<group>"; };
+		D80D521115EE2B0100ACEA16 /* IMathUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IMathUtils.cpp; path = Commons/Interfaces/IMathUtils.cpp; sourceTree = "<group>"; };
 		D816E7A815B6C9B1004FA4D6 /* SingleImageTileTexturizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SingleImageTileTexturizer.cpp; path = Commons/Basic/SingleImageTileTexturizer.cpp; sourceTree = "<group>"; };
 		D816E7A915B6C9B1004FA4D6 /* SingleImageTileTexturizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SingleImageTileTexturizer.hpp; path = Commons/Basic/SingleImageTileTexturizer.hpp; sourceTree = "<group>"; };
 		D81BA16E15CBF19E004EF0B0 /* GL.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GL.hpp; sourceTree = "<group>"; };
@@ -372,7 +375,9 @@
 		D8EEF3B51577924D003FEB5E /* libG3MiOSSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libG3MiOSSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8EEF3B81577924D003FEB5E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D8EEF3BC1577924D003FEB5E /* G3MiOSSDK-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "G3MiOSSDK-Prefix.pch"; sourceTree = "<group>"; };
-		D8F7662315CAB57300179E08 /* INativeGL.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = INativeGL.hpp; path = Commons/Interfaces/INativeGL.hpp; sourceTree = "<group>"; };
+		D8F7665715CAD79100179E08 /* INativeGL.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = INativeGL.hpp; path = Commons/Interfaces/INativeGL.hpp; sourceTree = "<group>"; };
+		D8FEDAC615E7BD23007633A0 /* IMathUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IMathUtils.hpp; path = Commons/Interfaces/IMathUtils.hpp; sourceTree = "<group>"; };
+		D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MathUtils_iOS.hpp; path = Specific/Derived/MathUtils_iOS.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -425,6 +430,7 @@
 				D8A723AD15E4D47E00ABDF07 /* StringBuilder_iOS.cpp */,
 				CFB72A6C15E682B400A5BAF4 /* StringUtils_iOS.mm */,
 				CFB72A6D15E682B400A5BAF4 /* StringUtils_iOS.hpp */,
+				D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */,
 			);
 			name = Derived;
 			sourceTree = "<group>";
@@ -545,6 +551,7 @@
 			isa = PBXGroup;
 			children = (
 				D8D347B915E5133B00EDB394 /* IStringBuilder.cpp */,
+				D80D521115EE2B0100ACEA16 /* IMathUtils.cpp */,
 				CF08483415D41EF700327171 /* GLTextureId.cpp */,
 				CF08483515D41EF700327171 /* GLTextureId.hpp */,
 				CFFEC11D15C2E645003FA986 /* IDownloader.cpp */,
@@ -560,6 +567,7 @@
 				D8A723A715E4D2C500ABDF07 /* IStringBuilder.hpp */,
 				CFB72A6715E6808900A5BAF4 /* IStringUtils.cpp */,
 				CFB72A6815E6808900A5BAF4 /* IStringUtils.hpp */,
+				D8FEDAC615E7BD23007633A0 /* IMathUtils.hpp */,
 			);
 			name = Interfaces;
 			sourceTree = "<group>";
@@ -820,6 +828,11 @@
 				D8F42FB615EB6D78000D1822 /* Petition.hpp in Headers */,
 				D8F42FBF15EB6D78000D1822 /* SQLiteStorage_iOS.hpp in Headers */,
 				D8A723AC15E4D42B00ABDF07 /* StringBuilder_iOS.hpp in Headers */,
+				CCC2A03E15CA6C7D00923850 /* SimplePlanetRenderer.hpp in Headers */,
+				D80D520D15EE2A5100ACEA16 /* IMathUtils.hpp in Headers */,
+				D88B5E2615C15C850083A43F /* Extent.hpp in Headers */,
+				D88B5E2715C15C850083A43F /* Frustum.hpp in Headers */,
+				D88B5E2815C15C850083A43F /* Plane.hpp in Headers */,
 				CFBCCE9615E709EF00FBF950 /* Downloader_iOS.hpp in Headers */,
 				CFB72A6F15E682B400A5BAF4 /* StringUtils_iOS.hpp in Headers */,
 				383BD37C1577EDC00012AC53 /* Factory_iOS.hpp in Headers */,
@@ -832,10 +845,6 @@
 				D892FBCC15C930CC00E69254 /* NativeGL2_iOS.hpp in Headers */,
 				D88B5E2315C15C180083A43F /* Timer_iOS.hpp in Headers */,
 				CCC2A03C15CA6C7D00923850 /* SceneGraphRenderer.hpp in Headers */,
-				CCC2A03E15CA6C7D00923850 /* SimplePlanetRenderer.hpp in Headers */,
-				D88B5E2615C15C850083A43F /* Extent.hpp in Headers */,
-				D88B5E2715C15C850083A43F /* Frustum.hpp in Headers */,
-				D88B5E2815C15C850083A43F /* Plane.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -968,6 +977,7 @@
 				CFB72A3D15E65DBC00A5BAF4 /* LevelTileCondition.cpp in Sources */,
 				CFB72A6915E6808900A5BAF4 /* IStringUtils.cpp in Sources */,
 				CFB72A6E15E682B400A5BAF4 /* StringUtils_iOS.mm in Sources */,
+				D80D521215EE2B0100ACEA16 /* IMathUtils.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

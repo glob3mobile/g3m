@@ -64,6 +64,13 @@ public class MutableVector3D
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean equalTo(const MutableVector3D& v) const
+  public final boolean equalTo(MutableVector3D v)
+  {
+	return (v._x == _x && v._y == _y && v._z == _z);
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: boolean isNan() const
   public final boolean isNan()
   {

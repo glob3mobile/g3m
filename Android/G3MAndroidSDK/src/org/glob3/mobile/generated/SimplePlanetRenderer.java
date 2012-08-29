@@ -48,7 +48,7 @@ public class SimplePlanetRenderer extends Renderer
 		final Angle lat = Angle.fromDegrees((j * 180.0 / latRes1) -90.0);
 		final Geodetic2D g = new Geodetic2D(lat, lon);
   
-		final Vector3D v = planet.toVector3D(g);
+		final Vector3D v = planet.toCartesian(g);
 		vertices[verticesIndex++] = (float) v.x(); //Vertices
 		vertices[verticesIndex++] = (float) v.y();
 		vertices[verticesIndex++] = (float) v.z();

@@ -76,8 +76,8 @@ public class CameraSingleDragHandler extends CameraEventHandler
   public final boolean _useInertia;
   public final void onDown(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
-	Camera camera = cameraContext.getCamera();
-	_camera0 = new Camera(camera);
+	Camera camera = cameraContext.getNextCamera();
+	_camera0.copyFrom(camera);
 	cameraContext.setCurrentGesture(Gesture.Drag);
 	_axis = MutableVector3D.nan();
 	_lastRadians = _radiansStep = 0.0;
@@ -112,12 +112,12 @@ public class CameraSingleDragHandler extends CameraEventHandler
 	  //INVALID FINAL POINT
 	  //printf ("--invalid final point in drag!!\n");
 	  Vector3D ray = _camera0.pixel2Ray(pixel);
-	  Vector3D pos = _camera0.getPosition();
+	  Vector3D pos = _camera0.getCartesianPosition();
 	  finalPoint = eventContext.getPlanet().closestPointToSphere(pos, ray).asMutableVector3D();
 	}
   
 	// make drag
-	Camera camera = cameraContext.getCamera();
+	Camera camera = cameraContext.getNextCamera();
 	camera.copyFrom(_camera0);
 	camera.dragCamera(_initialPoint.asVector3D(), finalPoint.asVector3D());
   

@@ -61,7 +61,7 @@ void CameraDoubleDragHandler::onDown(const EventContext *eventContext,
   Geodetic2D g0 = planet->toGeodetic2D(_initialPoint0.asVector3D());
   Geodetic2D g1 = planet->toGeodetic2D(_initialPoint1.asVector3D());
   Geodetic2D g  = planet->getMidPoint(g0, g1);
-  _initialPoint = planet->toVector3D(g).asMutableVector3D();
+  _initialPoint = planet->toCartesian(g).asMutableVector3D();
   
   // fingers difference
   Vector2D difPixel = pixel1.sub(pixel0);
@@ -94,17 +94,17 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
     
     // compute estimated camera translation
     Vector3D centerPoint = tempCamera.getXYZCenterOfView();    
-    double distance = tempCamera.getPosition().sub(centerPoint).length();
+    double distance = tempCamera.getCartesianPosition().sub(centerPoint).length();
     double d = distance*(factor-1)/factor;
     tempCamera.moveForward(d);
     dAccum += d;
     //tempCamera.updateModelMatrix();
     double angle0 = tempCamera.compute3DAngularDistance(pixel0, pixel1).degrees();
-    if (isnan(angle0)) return;
+    if (GMath.isNan(angle0)) return;
     //printf("distancia angular original = %.4f     d=%.1f   angulo step0=%.4f\n", angle, d, angle0);
  
     // step 1
-    d = fabs((distance-d)*0.3);
+    d = GMath.abs((distance-d)*0.3);
     if (angle0 < angle) d*=-1;
     tempCamera.moveForward(d);
     dAccum += d;
@@ -114,8 +114,8 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
     
     // iterations
     int iter=0;
-    double precision = pow(10, log10(distance)-8.5);
-    while (fabs(angle_n-angle) > precision) {
+    double precision = GMath.pow(10, GMath.log10(distance)-8.5);
+    while (GMath.abs(angle_n-angle) > precision) {
       iter++;
       if ((angle_n1-angle_n)/(angle_n-angle) < 0) d*=-0.5;
       tempCamera.moveForward(d);
@@ -137,7 +137,7 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
   {
     Vector3D initialPoint = _initialPoint.asVector3D();
     const Vector3D rotationAxis = initialPoint.cross(centerPoint);
-    const Angle rotationDelta = Angle::fromRadians( - acos(initialPoint.normalized().dot(centerPoint.normalized())) );
+    const Angle rotationDelta = Angle::fromRadians( - GMath.acos(initialPoint.normalized().dot(centerPoint.normalized())) );
     if (rotationDelta.isNan()) return; 
     tempCamera.rotateWithAxis(rotationAxis, rotationDelta);  
   }
@@ -186,11 +186,11 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
   Vector3D P1 = tempCamera.pixel2PlanetPoint(pixel1);
   const Planet *planet = eventContext->getPlanet();
   Geodetic2D g = planet->getMidPoint(planet->toGeodetic2D(P0), planet->toGeodetic2D(P1));
-  Vector3D finalPoint = planet->toVector3D(g);    
+  Vector3D finalPoint = planet->toCartesian(g);    
   
   // drag globe from centerPoint to finalPoint
   const Vector3D rotationAxis = centerPoint2.cross(finalPoint);
-  const Angle rotationDelta = Angle::fromRadians( - acos(centerPoint2.normalized().dot(finalPoint.normalized())) );
+  const Angle rotationDelta = Angle::fromRadians( - GMath.acos(centerPoint2.normalized().dot(finalPoint.normalized())) );
   if (rotationDelta.isNan()) {
     return;
 //>>>>>>> master
