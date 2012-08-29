@@ -13,7 +13,7 @@
 #include "Geodetic3D.hpp"
 #include "Context.hpp"
 
-#include "INativeGL.hpp"
+#include "GLTextureId.hpp"
 
 class Mark {
 private:
@@ -22,7 +22,7 @@ private:
   const Geodetic3D   _position;
 
   GLTextureId _textureId;
-
+  
 public:
   Mark(const std::string name,
        const std::string textureFilename,
@@ -30,7 +30,7 @@ public:
   _name(name),
   _textureFilename(textureFilename),
   _position(position),
-  _textureId(-1)
+  _textureId(GLTextureId::invalid())
   {
     
   }
