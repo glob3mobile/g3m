@@ -9,7 +9,7 @@
 #ifndef G3MiOSSDK_MathUtils_hpp
 #define G3MiOSSDK_MathUtils_hpp
 
-#include <Math.h>
+#include <math.h>
 #include <limits>
 
 #include "IMathUtils.hpp"
