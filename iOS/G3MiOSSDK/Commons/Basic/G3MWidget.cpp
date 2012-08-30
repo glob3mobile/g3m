@@ -19,10 +19,12 @@
 #include "CameraConstraints.hpp"
 #include "FrameTasksExecutor.hpp"
 #include "IStringUtils.hpp"
+#include "IThreadUtils.hpp"
 
 G3MWidget::G3MWidget(FrameTasksExecutor*              frameTasksExecutor,
                      IFactory*                        factory,
                      const IStringUtils*              stringUtils,
+                     IThreadUtils*                    threadUtils,
                      ILogger*                         logger,
                      GL*                              gl,
                      TexturesHandler*                 texturesHandler,
@@ -40,6 +42,7 @@ G3MWidget::G3MWidget(FrameTasksExecutor*              frameTasksExecutor,
 _frameTasksExecutor(frameTasksExecutor),
 _factory(factory),
 _stringUtils(stringUtils),
+_threadUtils(),
 _logger(logger),
 _gl(gl),
 _texturesHandler(texturesHandler),
@@ -66,6 +69,7 @@ _userData(NULL)
   
   InitializationContext ic(_factory,
                            _stringUtils,
+                           _threadUtils,
                            _logger,
                            _planet,
                            _downloader,
@@ -84,6 +88,7 @@ _userData(NULL)
 G3MWidget* G3MWidget::create(FrameTasksExecutor* frameTasksExecutor,
                              IFactory*           factory,
                              const IStringUtils* stringUtils,
+                             IThreadUtils*       threadUtils,
                              ILogger*            logger,
                              GL*                 gl,
                              TexturesHandler*    texturesHandler,
@@ -104,10 +109,12 @@ G3MWidget* G3MWidget::create(FrameTasksExecutor* frameTasksExecutor,
   
   IStringUtils::setInstance(stringUtils);
   ILogger::setInstance(logger);
+  IThreadUtils::setInstance(threadUtils);
   
   return new G3MWidget(frameTasksExecutor,
                        factory,
                        stringUtils,
+                       threadUtils,
                        logger,
                        gl,
                        texturesHandler,
@@ -163,7 +170,13 @@ G3MWidget::~G3MWidget() {
 
 void G3MWidget::onTouchEvent(const TouchEvent* myEvent) {
   if (_rendererReady) {
-    EventContext ec(_factory, _stringUtils, _logger, _planet, _downloader, _effectsScheduler);
+    EventContext ec(_factory,
+                    _stringUtils,
+                    _threadUtils,
+                    _logger,
+                    _planet,
+                    _downloader,
+                    _effectsScheduler);
     
     _renderer->onTouchEvent(&ec, myEvent);
   }
@@ -171,7 +184,13 @@ void G3MWidget::onTouchEvent(const TouchEvent* myEvent) {
 
 void G3MWidget::onResizeViewportEvent(int width, int height) {
   if (_rendererReady) {
-    EventContext ec(_factory, _stringUtils, _logger, _planet, _downloader, _effectsScheduler);
+    EventContext ec(_factory,
+                    _stringUtils,
+                    _threadUtils,
+                    _logger,
+                    _planet,
+                    _downloader,
+                    _effectsScheduler);
     
     _renderer->onResizeViewportEvent(&ec, width, height);
   }
@@ -210,6 +229,7 @@ int G3MWidget::render() {
   RenderContext rc(_frameTasksExecutor,
                    _factory,
                    _stringUtils,
+                   _threadUtils,
                    _logger,
                    _planet,
                    _gl,

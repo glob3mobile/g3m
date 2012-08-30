@@ -20,24 +20,28 @@ class GL;
 class EffectsScheduler;
 class ITimer;
 class IStringUtils;
+class IThreadUtils;
 
 class Context {
 protected:
   const IFactory*     _factory;
   const IStringUtils* _stringUtils;
+  IThreadUtils*       _threadUtils;
   const ILogger*      _logger;
   const Planet*       _planet;
   IDownloader*        _downloader;
   EffectsScheduler*   _effectsScheduler;
   
-  Context(const IFactory *factory,
+  Context(const IFactory*     factory,
           const IStringUtils* stringUtils,
-          const ILogger* logger,
-          const Planet* planet,
-          IDownloader* downloader,
-          EffectsScheduler* effectsScheduler) :
+          IThreadUtils*       threadUtils,
+          const ILogger*      logger,
+          const Planet*       planet,
+          IDownloader*        downloader,
+          EffectsScheduler*   effectsScheduler) :
   _factory(factory),
   _stringUtils(stringUtils),
+  _threadUtils(threadUtils),
   _logger(logger),
   _planet(planet),
   _downloader(downloader),
@@ -70,6 +74,10 @@ public:
   EffectsScheduler* getEffectsScheduler() const {
     return _effectsScheduler;
   }
+  
+  IThreadUtils* getThreadUtils() const {
+    return _threadUtils;
+  }
 };
 
 //************************************************************
@@ -77,13 +85,20 @@ public:
 
 class InitializationContext: public Context {
 public:
-  InitializationContext(IFactory *factory,
+  InitializationContext(IFactory*           factory,
                         const IStringUtils* stringUtils,
-                        ILogger* logger,
-                        const Planet* planet,
-                        IDownloader* downloader,
-                        EffectsScheduler* effectsScheduler) :
-  Context(factory, stringUtils, logger, planet, downloader, effectsScheduler) {
+                        IThreadUtils*       threadUtils,
+                        ILogger*            logger,
+                        const Planet*       planet,
+                        IDownloader*        downloader,
+                        EffectsScheduler*   effectsScheduler) :
+  Context(factory,
+          stringUtils,
+          threadUtils,
+          logger,
+          planet,
+          downloader,
+          effectsScheduler) {
   }
 };
 
@@ -91,13 +106,20 @@ public:
 
 class EventContext: public Context {
 public:
-  EventContext(IFactory *factory,
+  EventContext(IFactory*           factory,
                const IStringUtils* stringUtils,
-               ILogger* logger,
-               const Planet* planet,
-               IDownloader* downloader,
-               EffectsScheduler* scheduler) :
-  Context(factory, stringUtils, logger, planet, downloader, scheduler) {
+               IThreadUtils*       threadUtils,
+               ILogger*            logger,
+               const Planet*       planet,
+               IDownloader*        downloader,
+               EffectsScheduler*   scheduler) :
+  Context(factory,
+          stringUtils,
+          threadUtils,
+          logger,
+          planet,
+          downloader,
+          scheduler) {
   }
 };
 
@@ -118,18 +140,25 @@ private:
   
 public:
   RenderContext(FrameTasksExecutor* frameTasksExecutor,
-                IFactory *factory,
+                IFactory*           factory,
                 const IStringUtils* stringUtils,
-                ILogger* logger,
-                const Planet* planet,
-                GL *gl,
-                const Camera* currentCamera,
-                Camera* nextCamera,
-                TexturesHandler* texturesHandler,
-                IDownloader* downloader,
-                EffectsScheduler* scheduler,
-                ITimer* frameStartTimer) :
-  Context(factory, stringUtils, logger, planet, downloader, scheduler),
+                IThreadUtils*       threadUtils,
+                ILogger*            logger,
+                const Planet*       planet,
+                GL*                 gl,
+                const Camera*       currentCamera,
+                Camera*             nextCamera,
+                TexturesHandler*    texturesHandler,
+                IDownloader*        downloader,
+                EffectsScheduler*   scheduler,
+                ITimer*             frameStartTimer) :
+  Context(factory,
+          stringUtils,
+          threadUtils,
+          logger,
+          planet,
+          downloader,
+          scheduler),
   _frameTasksExecutor(frameTasksExecutor),
   _gl(gl),
   _currentCamera(currentCamera),

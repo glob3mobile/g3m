@@ -6,4 +6,7 @@
 //
 //
 
-#include "IThreadUtils.h"
+#include "IThreadUtils.hpp"
+
+IThreadUtils* IThreadUtils::_instance = 0;
+
