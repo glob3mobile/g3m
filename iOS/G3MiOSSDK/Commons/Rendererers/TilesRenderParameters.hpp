@@ -63,7 +63,7 @@ public:
     const int maxLevel = 17;
     const int tileTextureHeight = 256;
     const int tileTextureWidth = 256;
-    const int tRes = 10;
+    const int tileResolution = 10;
     
     return new TilesRenderParameters(Sector::fullSphere(),
                                      splitsByLatitude,
@@ -72,7 +72,7 @@ public:
                                      maxLevel,
                                      tileTextureHeight,
                                      tileTextureWidth,
-                                     tRes,
+                                     tileResolution,
                                      renderDebug,
                                      useTilesSplitBudget,
                                      forceTopLevelTilesRenderOnStart);
