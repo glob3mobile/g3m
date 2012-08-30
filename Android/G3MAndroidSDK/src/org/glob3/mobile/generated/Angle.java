@@ -43,7 +43,7 @@ public class Angle
 
   public static Angle fromRadians(double radians)
   {
-	return Angle.fromDegrees(radians / *IMathUtils.instance().pi() * 180.0);
+	return Angle.fromDegrees(radians / IMathUtils.instance().pi() * 180.0);
   }
 
   public static Angle getMin(Angle a1, Angle a2)

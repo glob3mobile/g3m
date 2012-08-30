@@ -19,8 +19,8 @@ package org.glob3.mobile.generated;
 
 //C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
 //#if GMath
-  public TODO_GMATH_PREDEFINED!!!! abstract class IMathUtils
-  {
+//  public TODO_GMATH_PREDEFINED!!!! abstract class IMathUtils
+//  {
 //#else
 public abstract class IMathUtils
 {
