@@ -12,9 +12,8 @@ import android.view.MotionEvent.PointerCoords;
 
 public class MotionEventProcessor {
 	
-	
+	//Stores pointer positions, id and event type
 	class EventProcessed{
-		
 		// LAST EVENT PROCESSED
 		public java.util.ArrayList<Integer> _pointersID = new ArrayList<Integer>();
 		public java.util.ArrayList<Touch> _touchs = new ArrayList<Touch>();
@@ -35,23 +34,15 @@ public class MotionEventProcessor {
 		
 	}
 	
+	EventProcessed _prevLastEvent = new EventProcessed();
 	EventProcessed _lastEvent = new EventProcessed();
 
 	public TouchEvent processEvent(MotionEvent event) {
 
-		// SAVING LAST EVENT
-//		ArrayList<Integer> lastPointersID = (ArrayList<Integer>) _pointersID.clone();
-//		ArrayList<Touch> lastTouchs = (ArrayList<Touch>) _touchs.clone();
-//		TouchEventType lastType = _type;
-		
+		// SAVING LAST EVENT TO CREATE A NEW ONE
 		EventProcessed auxEvent = _lastEvent.clone();
-		
 		_lastEvent.clear();
 		
-
-//		_pointersID.clear();
-//		_touchs.clear();
-
 		for (int i = 0; i < event.getPointerCount(); i++) {
 
 			int pointerID = event.getPointerId(i);
@@ -60,51 +51,34 @@ public class MotionEventProcessor {
 			// TOUCH EVENT
 			Vector2D pos = new Vector2D(pc.x, pc.y);
 
-			Vector2D prevPos;
-//			if (lastPointersID.contains(pointerID)) {
-//				Touch lastT = lastTouchs.get(lastPointersID.indexOf(pointerID));
-//				prevPos = new Vector2D(lastT.getPos().x(), lastT.getPos().y());
-//			} else {
-//				prevPos = new Vector2D(0, 0);
-//			}
-			if (auxEvent._pointersID.contains(pointerID)) {
-				Touch lastT = auxEvent._touchs.get(auxEvent._pointersID.indexOf(pointerID));
-				prevPos = new Vector2D(lastT.getPos().x(), lastT.getPos().y());
+			Vector2D prevPos = null;
+			if (event.getAction() != MotionEvent.ACTION_UP) {
+				if (auxEvent._pointersID.contains(pointerID)) {
+					Touch lastT = auxEvent._touchs.get(auxEvent._pointersID.indexOf(pointerID));
+					prevPos = new Vector2D(lastT.getPos().x(), lastT.getPos().y());
+				} else {
+					prevPos = new Vector2D(0, 0);
+				}
 			} else {
-				prevPos = new Vector2D(0, 0);
+				
+				if (_prevLastEvent._pointersID.contains(pointerID)) {
+					Touch lastT = _prevLastEvent._touchs.get(_prevLastEvent._pointersID.indexOf(pointerID));
+					prevPos = new Vector2D(lastT.getPos().x(), lastT.getPos().y());
+				} else {
+					prevPos = new Vector2D(0, 0);
+				}
+				
 			}
 			
 
 			Touch t = new Touch(pos, prevPos);
-//			_touchs.add(t);
-//			_pointersID.add(pointerID);
-			
 			_lastEvent._touchs.add(t);
 			_lastEvent._pointersID.add(pointerID);
 		}
 
 		// If a move event has not change the position of pointers
 		// or if the first two fingers movement just moves one
-		// we dismiss it
-//		if (event.getAction() == MotionEvent.ACTION_MOVE) {
-//
-//			// Log.d("", "TE MOVE");
-//			double dist = 0;
-//			for (int i = 0; i < _touchs.size(); i++) {
-//				double d = _touchs.get(i).getPos()
-//						.sub(_touchs.get(i).getPrevPos()).squaredLength();
-//
-//				if (d == 0 && lastType == TouchEventType.Down)
-//					return null;
-//
-//				dist += d;
-//				// Log.d("", "TE MOVE DIST " + d);
-//			}
-//
-//			if (dist == 0)
-//				return null;
-//		}
-		
+		// we dismiss it		
 		if (event.getAction() == MotionEvent.ACTION_MOVE) {
 
 			// Log.d("", "TE MOVE");
@@ -153,6 +127,9 @@ public class MotionEventProcessor {
 //		for (int i = 0; i < touchs.size(); i++)
 //			Log.d("", "TE P " + touchs.get(i).getPos().x() + " "
 //					+ touchs.get(i).getPrevPos().x());
+		
+		//Saving the last event to use its position in Event Up as previous Position
+		_prevLastEvent = auxEvent.clone(); 
 
 		return te;
 	}
