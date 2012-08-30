@@ -28,9 +28,9 @@ public interface IDownloader
 
   void stop();
 
-  int request(URL url, int priority, IDownloadListener listener, boolean deleteListener);
+  long request(URL url, long priority, IDownloadListener listener, boolean deleteListener);
 
-  void cancelRequest(int requestId);
+  void cancelRequest(long requestId);
 
 
   String statistics();

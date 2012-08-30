@@ -13,7 +13,7 @@ public class SimpleCameraConstrainer implements ICameraConstrainer
 
 	if (cameraHeight > radii *9)
 	{
-	  nextCamera.reset();
+	  nextCamera.resetPosition();
 	  nextCamera.setPosition(planet.toGeodetic3D(previousCamera.getCartesianPosition()));
 	}
   }

@@ -60,7 +60,7 @@ public class MutableVector3D
 
   public static MutableVector3D nan()
   {
-	return new MutableVector3D(Double.NaN, Double.NaN, Double.NaN);
+	return new MutableVector3D(*IMathUtils.instance().NanD(), *IMathUtils.instance().NanD(), *IMathUtils.instance().NanD());
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -74,7 +74,7 @@ public class MutableVector3D
 //ORIGINAL LINE: boolean isNan() const
   public final boolean isNan()
   {
-	return (Double.isNaN(_x) || Double.isNaN(_y) || Double.isNaN(_z));
+	return (*IMathUtils.instance().isNan(_x) || *IMathUtils.instance().isNan(_y) || *IMathUtils.instance().isNan(_z));
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -95,7 +95,7 @@ public class MutableVector3D
 //ORIGINAL LINE: double length() const
   public final double length()
   {
-	return Math.sqrt(squaredLength());
+	return *IMathUtils.instance().sqrt(squaredLength());
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -174,7 +174,7 @@ public class MutableVector3D
 	else if (c < -1.0)
 		c = -1.0;
   
-	return Angle.fromRadians(Math.acos(c));
+	return Angle.fromRadians(*IMathUtils.instance().acos(c));
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -189,7 +189,7 @@ public class MutableVector3D
 	final double sinTheta = theta.sinus();
   
 	final double ms = axis.squaredLength();
-	final double m = Math.sqrt(ms);
+	final double m = *IMathUtils.instance().sqrt(ms);
   
 	return new MutableVector3D(((u * (u * _x + v * _y + w * _z)) + (((_x * (v * v + w * w)) - (u * (v * _y + w * _z))) * cosTheta) + (m * ((-w * _y) + (v * _z)) * sinTheta)) / ms, ((v * (u * _x + v * _y + w * _z)) + (((_y * (u * u + w * w)) - (v * (u * _x + w * _z))) * cosTheta) + (m * ((w * _x) - (u * _z)) * sinTheta)) / ms, ((w * (u * _x + v * _y + w * _z)) + (((_z * (u * u + v * v)) - (w * (u * _x + v * _y))) * cosTheta) + (m * (-(v * _x) + (u * _y)) * sinTheta)) / ms);
   }

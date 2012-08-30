@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public interface EffectTarget
 {
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

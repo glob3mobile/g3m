@@ -297,7 +297,7 @@ public class Camera
   
 	// compute the angle
 	//const Angle rotationDelta = Angle::fromRadians( - acos(p0.normalized().dot(p1.normalized())) );
-	final Angle rotationDelta = Angle.fromRadians(-Math.asin(rotationAxis.length()/p0.length()/p1.length()));
+	final Angle rotationDelta = Angle.fromRadians(-*IMathUtils.instance().asin(rotationAxis.length()/p0.length()/p1.length()));
   
 	if (rotationDelta.isNan())
 	{
@@ -388,13 +388,8 @@ public class Camera
 	_dirtyFlags.setAll(true);
   }
 
-  public final void reset()
+  public final void resetPosition()
   {
-  
-	_width = 0;
-	_height = 0;
-	_planet = null;
-  
 	_position = new MutableVector3D(0, 0, 0);
 	_center = new MutableVector3D(0, 0, 0);
 	_up = new MutableVector3D(0, 0, 1);

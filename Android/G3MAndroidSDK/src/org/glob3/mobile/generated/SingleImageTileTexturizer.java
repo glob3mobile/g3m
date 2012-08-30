@@ -41,8 +41,8 @@ public class SingleImageTileTexturizer extends TileTexturizer
 	  final Geodetic2D g = rc.getPlanet().toGeodetic2D(pos);
 	  final Vector3D n = rc.getPlanet().geodeticSurfaceNormal(g);
   
-	  final double s = Math.atan2(n.y(), n.x()) / (Math.PI * 2) + 0.5;
-	  final double t = Math.asin(n.z()) / Math.PI + 0.5;
+	  final double s = *IMathUtils.instance().atan2(n.y(), n.x()) / (*IMathUtils.instance().pi() * 2) + 0.5;
+	  final double t = *IMathUtils.instance().asin(n.z()) / *IMathUtils.instance().pi() + 0.5;
   
 	  texCoors.add(new MutableVector2D(s, 1-t));
 	}

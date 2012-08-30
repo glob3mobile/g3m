@@ -31,7 +31,7 @@ public class Mark
 	  _name = name;
 	  _textureFilename = textureFilename;
 	  _position = new Geodetic3D(position);
-	  _textureId = new GLTextureId(-1);
+	  _textureId = new GLTextureId(GLTextureId.invalid());
 
   }
 
@@ -68,7 +68,7 @@ public class Mark
 	{
 	  final Vector3D normalAtMarkPosition = planet.geodeticSurfaceNormal(markPosition);
   
-	  if (normalAtMarkPosition.angleBetween(markCameraVector).radians() > Math.PI / 2)
+	  if (normalAtMarkPosition.angleBetween(markCameraVector).radians() > *IMathUtils.instance().pi() / 2)
 	  {
 		GL gl = rc.getGL();
   
