@@ -149,9 +149,8 @@ public class Downloader_Android_Handler {
             baos.close();
          }
          
-         Log.w(TAG, "statusCode=" + statusCode + " url=" + _url.getPath());
-         
          dataIsValid = (_data != null) && (statusCode == 200);
+         Log.w(TAG, "statusCode=" + statusCode + " dataIsValid=" + dataIsValid + " url=" + _url.getPath());
       }
       catch (IOException e) {
          if (ILogger.instance() != null) {
@@ -196,11 +195,14 @@ public class Downloader_Android_Handler {
          while (iter.hasNext()) {
             ListenerEntry entry = iter.next();
             if (entry.isCanceled()) {
+               Log.w(TAG, "triggering onCancel");
                entry.getListener().onCanceledDownload(response);
 
+               Log.w(TAG, "triggering onCancel");
                entry.getListener().onCancel(_url);
             }
             else {
+               Log.i(TAG, "triggering onDownload");
                entry.getListener().onDownload(response);
             }
          }
@@ -212,6 +214,7 @@ public class Downloader_Android_Handler {
 
          while (iter.hasNext()) {
             ListenerEntry entry = iter.next();
+            Log.e(TAG, "triggering onError");
             entry.getListener().onError(response);
          }
       }

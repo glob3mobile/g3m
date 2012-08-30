@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.glob3.mobile.generated.BusyMeshRenderer;
 import org.glob3.mobile.generated.CPUTextureBuilder;
+import org.glob3.mobile.generated.CachedDownloader;
 import org.glob3.mobile.generated.CameraDoubleDragHandler;
 import org.glob3.mobile.generated.CameraDoubleTapHandler;
 import org.glob3.mobile.generated.CameraRenderer;
@@ -479,7 +480,8 @@ public class G3MWidget_Android extends GLSurfaceView implements
 		  GL gl  = new GL(nGL);
 		  
 		  IStorage storage = new SQLiteStorage_Android("g3m.cache");
-		  IDownloader downloader = null;// new CachedDownloader(new Downloader_Android(8), storage);
+//		  IDownloader downloader = null;// new CachedDownloader(new Downloader_Android(8), storage);
+		  IDownloader downloader = new CachedDownloader(new Downloader_Android(8), storage);
 
 		  CompositeRenderer composite = new CompositeRenderer();
 		  
@@ -489,7 +491,7 @@ public class G3MWidget_Android extends GLSurfaceView implements
 
 		      TileTexturizer texturizer;// = new MultiLayerTileTexturizer(layerSet);
 		      
-			    if (false) {
+			    if (true) {
 			    	texturizer = new MultiLayerTileTexturizer(layerSet);
 				}
 				else {

@@ -179,7 +179,7 @@ public class Downloader_Android implements IDownloader {
             _queuedHandlers.remove(selectedURL);
             _downloadingHandlers.put(selectedURL, selectedHandler);
          }
-         Log.i(TAG, statistics());
+//         Log.i(TAG, statistics());
       }
 
       return selectedHandler;
