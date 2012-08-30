@@ -93,10 +93,6 @@ _halfFrustum(NULL)
 }
 
 void Camera::reset() {
-
-  _width = 0;
-  _height = 0;
-  _planet = NULL;
   
   _position = MutableVector3D(0, 0, 0);
   _center = MutableVector3D(0, 0, 0);
