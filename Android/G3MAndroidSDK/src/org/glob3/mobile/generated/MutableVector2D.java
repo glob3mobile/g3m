@@ -54,14 +54,14 @@ public class MutableVector2D
 
   public static MutableVector2D nan()
   {
-	return new MutableVector2D(Double.NaN, Double.NaN);
+	return new MutableVector2D(*IMathUtils.instance().NanD(), *IMathUtils.instance().NanD());
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: boolean isNan() const
   public final boolean isNan()
   {
-	return Double.isNaN(_x * _y);
+	return *IMathUtils.instance().isNan(_x * _y);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -73,7 +73,7 @@ public class MutableVector2D
 //ORIGINAL LINE: double length() const
   public final double length()
   {
-	return Math.sqrt(squaredLength());
+	return *IMathUtils.instance().sqrt(squaredLength());
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -129,7 +129,7 @@ public class MutableVector2D
 //ORIGINAL LINE: Angle angle() const
   public final Angle angle()
   {
-	double a = Math.atan2(_y, _x);
+	double a = *IMathUtils.instance().atan2(_y, _x);
 	return Angle.fromRadians(a);
   }
 

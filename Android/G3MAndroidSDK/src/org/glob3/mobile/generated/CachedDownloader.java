@@ -23,7 +23,7 @@ public class CachedDownloader implements IDownloader
   private IDownloader _downloader;
   private IStorage _cacheStorage;
 
-//  const URL getCacheFileName(const URL& url) const;
+  //  const URL getCacheFileName(const URL& url) const;
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: String removeInvalidChars(const String& path) const
@@ -61,7 +61,7 @@ public class CachedDownloader implements IDownloader
   //  return URL(_cacheDirectory, removeInvalidChars(url.getPath()));
   //}
   
-  public final int request(URL url, int priority, IDownloadListener listener, boolean deleteListener)
+  public final long request(URL url, long priority, IDownloadListener listener, boolean deleteListener)
   {
 	_requestsCounter++;
   
@@ -91,7 +91,7 @@ public class CachedDownloader implements IDownloader
 	}
   }
 
-  public final void cancelRequest(int requestId)
+  public final void cancelRequest(long requestId)
   {
 	_downloader.cancelRequest(requestId);
   }

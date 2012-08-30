@@ -21,7 +21,7 @@ public class TileTextureBuilder extends RCObject
   private final float[] _texCoords;
 
   private java.util.ArrayList<PetitionStatus> _status = new java.util.ArrayList<PetitionStatus>();
-  private java.util.ArrayList<Integer> _requestsIds = new java.util.ArrayList<Integer>();
+  private java.util.ArrayList<Long> _requestsIds = new java.util.ArrayList<Long>();
 
 
   private boolean _finalized;
@@ -82,9 +82,9 @@ public class TileTextureBuilder extends RCObject
 	  final Petition petition = _petitions.get(i);
 
 	  //const long priority = _tile->getLevel() * 1000000 + _tile->getRow() * 1000 + _tile->getColumn();
-	  final int priority = _tile.getLevel();
+	  final long priority = _tile.getLevel();
 
-	  final int requestId = _downloader.request(new URL(petition.getURL()), priority, new BuilderDownloadStepDownloadListener(this, i), true);
+	  final long requestId = _downloader.request(new URL(petition.getURL()), priority, new BuilderDownloadStepDownloadListener(this, i), true);
 
 	  _requestsIds.add(requestId);
 	}
@@ -220,7 +220,7 @@ public class TileTextureBuilder extends RCObject
 	{
 	  for (int i = 0; i < _requestsIds.size(); i++)
 	  {
-		final int requestId = _requestsIds.get(i);
+		final long requestId = _requestsIds.get(i);
 		_downloader.cancelRequest(requestId);
 	  }
 	}

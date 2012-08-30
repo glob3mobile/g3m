@@ -135,7 +135,9 @@ public class SimplePlanetRenderer extends Renderer
 	  colors = new float[numVertices];
 	  for(int i = 0; i < numVertices;)
 	  {
-  	  float val = (float)(0.5 + Math.sin(2.0 * Math.PI * ((float) i / numVertices) / 2.0));
+  
+		float val = (float)(0.5 + *IMathUtils.instance().sin((float)(2.0 **IMathUtils.instance().pi() * ((float) i) / numVertices)) / 2.0);
+  
 		colors[i++] = val;
 		colors[i++] = 0;
 		colors[i++] = (float)(1.0 - val);

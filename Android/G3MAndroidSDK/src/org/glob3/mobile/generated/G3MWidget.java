@@ -81,7 +81,7 @@ public class G3MWidget
   
 	//  int __removePrint;
 	//  printf("Camera Position=%s\n" ,
-	//         _planet->toGeodetic3D(_currentCamera->getPosition()).description().c_str());
+	//         _planet->toGeodetic3D(_currentCamera->getCartesianPosition()).description().c_str());
   
 	// create RenderContext
 	RenderContext rc = new RenderContext(_frameTasksExecutor, _factory, _stringUtils, _logger, _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _downloader, _effectsScheduler, _factory.createTimer());

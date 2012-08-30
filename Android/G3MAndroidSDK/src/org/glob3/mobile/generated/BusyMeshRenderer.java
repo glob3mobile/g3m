@@ -57,9 +57,9 @@ public class BusyMeshRenderer extends Renderer implements EffectTarget
 	float r2 = 18F;
 	for (int step = 0; step<=numStrides; step++)
 	{
-	  double angle = (double) step * 2 * Math.PI / numStrides;
-	  double c = Math.cos(angle);
-	  double s = Math.sin(angle);
+	  double angle = (double) step * 2 **IMathUtils.instance().pi() / numStrides;
+	  double c = *IMathUtils.instance().cos(angle);
+	  double s = *IMathUtils.instance().sin(angle);
 	  vertices[nv++] = (float)(r1 * c);
 	  vertices[nv++] = (float)(r1 * s);
 	  vertices[nv++] = 0.0F;

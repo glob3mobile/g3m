@@ -43,7 +43,7 @@ public class Angle
 
   public static Angle fromRadians(double radians)
   {
-	return Angle.fromDegrees(radians / Math.PI * 180.0);
+	return Angle.fromDegrees(radians / *IMathUtils.instance().pi() * 180.0);
   }
 
   public static Angle getMin(Angle a1, Angle a2)
@@ -69,7 +69,7 @@ public class Angle
 
   public static Angle nan()
   {
-	return Angle.fromDegrees(Double.NaN);
+	return Angle.fromDegrees(*IMathUtils.instance().NanD());
   }
 
   public static Angle midAngle(Angle angle1, Angle angle2)
@@ -82,7 +82,7 @@ public class Angle
 //ORIGINAL LINE: boolean isNan() const
   public final boolean isNan()
   {
-	return Double.isNaN(_degrees);
+	return IMathUtils.instance().isNan(_degrees);
   }
 
   public Angle(Angle angle)
@@ -95,14 +95,14 @@ public class Angle
 //ORIGINAL LINE: double sinus() const
   public final double sinus()
   {
-	return Math.sin(_degrees / 180.0 * Math.PI);
+	return *IMathUtils.instance().sin(_degrees / 180.0 **IMathUtils.instance().pi());
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: double cosinus() const
   public final double cosinus()
   {
-	return Math.cos(_degrees / 180.0 * Math.PI);
+	return *IMathUtils.instance().cos(_degrees / 180.0 **IMathUtils.instance().pi());
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -116,14 +116,14 @@ public class Angle
 //ORIGINAL LINE: double radians() const
   public final double radians()
   {
-	return _degrees / 180.0 * Math.PI;
+	return _degrees / 180.0 **IMathUtils.instance().pi();
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: boolean closeTo(const Angle& other) const
   public final boolean closeTo(Angle other)
   {
-	return (Math.abs(_degrees - other._degrees) < DefineConstants.THRESHOLD);
+	return (*IMathUtils.instance().abs(_degrees - other._degrees) < DefineConstants.THRESHOLD);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -219,7 +219,7 @@ public class Angle
 //ORIGINAL LINE: Angle distanceTo(const Angle& other) const
   public final Angle distanceTo(Angle other)
   {
-	double dif = Math.abs(_degrees - other._degrees);
+	double dif = *IMathUtils.instance().abs(_degrees - other._degrees);
 	if (dif > 180)
 		dif = 360 - dif;
 	return Angle.fromDegrees(dif);

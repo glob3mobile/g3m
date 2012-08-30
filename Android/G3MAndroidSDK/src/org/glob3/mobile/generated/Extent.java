@@ -32,7 +32,7 @@ public abstract class Extent
 //ORIGINAL LINE: virtual double projectedArea(const RenderContext* rc) const
   public double projectedArea(RenderContext rc)
   {
-	return Math.sqrt(squaredProjectedArea(rc));
+	return *IMathUtils.instance().sqrt(squaredProjectedArea(rc));
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
