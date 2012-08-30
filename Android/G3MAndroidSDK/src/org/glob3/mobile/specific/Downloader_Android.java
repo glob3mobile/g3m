@@ -71,13 +71,13 @@ public class Downloader_Android implements IDownloader {
 
 
    @Override
-   public int request(URL url,
-                      int priority,
+   public long request(URL url,
+                      long priority,
                       IDownloadListener listener,
                       boolean deleteListener) {
 
       Downloader_Android_Handler handler = null;
-      int requestId;
+      long requestId;
 
       synchronized (this) {
          _requestsCounter++;
@@ -107,7 +107,7 @@ public class Downloader_Android implements IDownloader {
 
 
    @Override
-   public void cancelRequest(int requestId) {
+   public void cancelRequest(long requestId) {
       if (requestId < 0) {
          return;
       }

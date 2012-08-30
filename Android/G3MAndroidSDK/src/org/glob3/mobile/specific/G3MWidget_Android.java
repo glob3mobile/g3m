@@ -22,6 +22,7 @@ import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.ILogger;
+import org.glob3.mobile.generated.IMathUtils;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.IStringUtils;
@@ -474,6 +475,8 @@ public class G3MWidget_Android extends GLSurfaceView implements
 
 		  IStringBuilder.setInstance(new StringBuilder_Android()); //Setting StringBuilder
 
+		  IMathUtils.setInstance(new MathUtils_Android()); //Setting MathUtils
+		  
 		  IFactory factory  = new Factory_Android(getContext());
 		  ILogger logger    = new Logger_Android(LogLevel.ErrorLevel);
 		  NativeGL2_Android nGL = new NativeGL2_Android();

@@ -30,7 +30,7 @@ public class Downloader_Android_Handler {
 
    public Downloader_Android_Handler(URL url,
                                      IDownloadListener listener,
-                                     int priority,
+                                     long priority,
                                      long requestId) {
       _priority = priority;
       _url = url;
@@ -54,7 +54,7 @@ public class Downloader_Android_Handler {
 
 
    public void addListener(IDownloadListener listener,
-                           int priority,
+		   long priority,
                            long requestId) {
       ListenerEntry entry = new ListenerEntry(listener, requestId);
 
@@ -73,7 +73,7 @@ public class Downloader_Android_Handler {
    }
 
 
-   public boolean cancelListenerForRequestId(int requestId) {
+   public boolean cancelListenerForRequestId(long requestId) {
       boolean canceled = false;
 
       synchronized (this) {
@@ -93,7 +93,7 @@ public class Downloader_Android_Handler {
    }
 
 
-   public boolean removeListenerForRequestId(int requestId) {
+   public boolean removeListenerForRequestId(long requestId) {
       boolean removed = false;
 
       synchronized (this) {
