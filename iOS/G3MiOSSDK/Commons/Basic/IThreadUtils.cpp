@@ -8,5 +8,7 @@
 
 #include "IThreadUtils.hpp"
 
-IThreadUtils* IThreadUtils::_instance = 0;
+#include <cstring>
+
+IThreadUtils* IThreadUtils::_instance = NULL;
 
