@@ -59,4 +59,5 @@ Android/G3MAndroidSDK/bin/*
 Android/G3MAndroidSDK/bin/*/*/*
 
 WebGL/G3MWebGLDemo/.gwt/
+WebGL/G3MWebGLDemo/.gwt/.gwt-log
 
