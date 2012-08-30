@@ -83,7 +83,7 @@
                                 URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?"),
                                 WMS_1_1_0,
                                 Sector::fullSphere(),
-                                "image/png",
+                                "image/jpeg",
                                 "EPSG:4326",
                                 "",
                                 false,
