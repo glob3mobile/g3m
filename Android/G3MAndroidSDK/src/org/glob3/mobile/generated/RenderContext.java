@@ -15,9 +15,9 @@ public class RenderContext extends Context
   private TexturesHandler _texturesHandler;
   private ITimer _frameStartTimer;
 
-  public RenderContext(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, ILogger logger, Planet planet, GL gl, Camera currentCamera, Camera nextCamera, TexturesHandler texturesHandler, IDownloader downloader, EffectsScheduler scheduler, ITimer frameStartTimer)
+  public RenderContext(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, Planet planet, GL gl, Camera currentCamera, Camera nextCamera, TexturesHandler texturesHandler, IDownloader downloader, EffectsScheduler scheduler, ITimer frameStartTimer)
   {
-	  super(factory, stringUtils, logger, planet, downloader, scheduler);
+	  super(factory, stringUtils, threadUtils, logger, planet, downloader, scheduler);
 	  _frameTasksExecutor = frameTasksExecutor;
 	  _gl = gl;
 	  _currentCamera = currentCamera;
