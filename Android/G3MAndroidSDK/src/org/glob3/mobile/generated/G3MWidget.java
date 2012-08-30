@@ -291,7 +291,7 @@ public class G3MWidget
 	  _frameTasksExecutor = frameTasksExecutor;
 	  _factory = factory;
 	  _stringUtils = stringUtils;
-	  _threadUtils = new IThreadUtils();
+	  _threadUtils = threadUtils;
 	  _logger = logger;
 	  _gl = gl;
 	  _texturesHandler = texturesHandler;
