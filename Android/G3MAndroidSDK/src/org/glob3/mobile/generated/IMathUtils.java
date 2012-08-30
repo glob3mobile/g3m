@@ -17,34 +17,32 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
-//#if GMath
-//  public TODO_GMATH_PREDEFINED!!!! abstract class IMathUtils
-//  {
-//#else
-public abstract class IMathUtils
-{
-//#endif
+//This declaration creates an converter issue
+///#ifdef GMath
+//  TODO_GMATH_PREDEFINED!!!!
+///#endif
 
 //C++ TO JAVA CONVERTER NOTE: The following #define macro was replaced in-line:
-//#define GMath (*IMathUtils::instance())
+//#define GMath IMathUtils.instance()
 
+public abstract class IMathUtils
+{
 
 
   private static IMathUtils _instance = null;
 
   public static void setInstance(IMathUtils math)
   {
-    if (_instance != null)
-    {
-      System.out.print("Warning, IMathUtils instance set two times\n");
-    }
-    _instance = math;
+	if (_instance != null)
+	{
+	  System.out.print("Warning, IMathUtils instance set two times\n");
+	}
+	_instance = math;
   }
 
   public static IMathUtils instance()
   {
-    return _instance;
+	return _instance;
   }
 
   public void dispose()
@@ -182,7 +180,3 @@ public abstract class IMathUtils
 //ORIGINAL LINE: virtual float minFloat() const = 0;
   public abstract float minFloat();
 }
-
-
-
-

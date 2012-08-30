@@ -297,7 +297,7 @@ public class Camera
   
 	// compute the angle
 	//const Angle rotationDelta = Angle::fromRadians( - acos(p0.normalized().dot(p1.normalized())) );
-	final Angle rotationDelta = Angle.fromRadians(-*IMathUtils.instance().asin(rotationAxis.length()/p0.length()/p1.length()));
+	final Angle rotationDelta = Angle.fromRadians(-IMathUtils.instance().asin(rotationAxis.length()/p0.length()/p1.length()));
   
 	if (rotationDelta.isNan())
 	{

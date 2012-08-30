@@ -26,7 +26,7 @@ public abstract class EffectWithForce extends Effect
 
   public boolean isDone(RenderContext rc, TimeInterval now)
   {
-	return (*IMathUtils.instance().abs(_force) < 1e-6);
+	return (IMathUtils.instance().abs(_force) < 1e-6);
   }
 
 }

@@ -109,7 +109,7 @@ public class Ellipsoid
 	  return intersections;
 	}
   
-	final double t = -0.5 * (b + (b > 0.0 ? 1.0 : -1.0) **IMathUtils.instance().sqrt(discriminant));
+	final double t = -0.5 * (b + (b > 0.0 ? 1.0 : -1.0) * IMathUtils.instance().sqrt(discriminant));
 	final double root1 = t / a;
 	final double root2 = c / t;
   
@@ -133,7 +133,7 @@ public class Ellipsoid
   {
 	final Vector3D n = geodeticSurfaceNormal(geodetic);
 	final Vector3D k = _radiiSquared.times(n);
-	final double gamma = *IMathUtils.instance().sqrt((k.x() * n.x()) + (k.y() * n.y()) + (k.z() * n.z()));
+	final double gamma = IMathUtils.instance().sqrt((k.x() * n.x()) + (k.y() * n.y()) + (k.z() * n.z()));
   
 	final Vector3D rSurface = k.div(gamma);
 	return rSurface.add(n.times(geodetic.height()));
@@ -152,7 +152,7 @@ public class Ellipsoid
   {
 	final Vector3D n = geodeticSurfaceNormal(positionOnEllipsoid);
   
-	return new Geodetic2D(Angle.fromRadians(*IMathUtils.instance().asin(n.z())), Angle.fromRadians(*IMathUtils.instance().atan2(n.y(), n.x())));
+	return new Geodetic2D(Angle.fromRadians(IMathUtils.instance().asin(n.z())), Angle.fromRadians(IMathUtils.instance().atan2(n.y(), n.x())));
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -179,7 +179,7 @@ public class Ellipsoid
 //ORIGINAL LINE: Vector3D scaleToGeodeticSurface(const Vector3D& position) const
   public final Vector3D scaleToGeodeticSurface(Vector3D position)
   {
-	double beta = 1.0 / *IMathUtils.instance().sqrt((position.x() * position.x()) * _oneOverRadiiSquared.x() + (position.y() * position.y()) * _oneOverRadiiSquared.y() + (position.z() * position.z()) * _oneOverRadiiSquared.z());
+	double beta = 1.0 / IMathUtils.instance().sqrt((position.x() * position.x()) * _oneOverRadiiSquared.x() + (position.y() * position.y()) * _oneOverRadiiSquared.y() + (position.z() * position.z()) * _oneOverRadiiSquared.z());
   
 	double n = new Vector3D(beta * position.x() * _oneOverRadiiSquared.x(), beta * position.y() * _oneOverRadiiSquared.y(), beta * position.z() * _oneOverRadiiSquared.z()).length();
   
@@ -216,7 +216,7 @@ public class Ellipsoid
   
 	  dSdA = -2.0 * (x2 / (_radiiToTheFourth.x() * da3) + y2 / (_radiiToTheFourth.y() * db3) + z2 / (_radiiToTheFourth.z() * dc3));
 	}
-	while (*IMathUtils.instance().abs(s) > 1e-10);
+	while (IMathUtils.instance().abs(s) > 1e-10);
   
 	return new Vector3D(position.x() / da, position.y() / db, position.z() / dc);
   }
@@ -225,7 +225,7 @@ public class Ellipsoid
 //ORIGINAL LINE: Vector3D scaleToGeocentricSurface(const Vector3D& position) const
   public final Vector3D scaleToGeocentricSurface(Vector3D position)
   {
-	double beta = 1.0 / *IMathUtils.instance().sqrt((position.x() * position.x()) * _oneOverRadiiSquared.x() + (position.y() * position.y()) * _oneOverRadiiSquared.y() + (position.z() * position.z()) * _oneOverRadiiSquared.z());
+	double beta = 1.0 / IMathUtils.instance().sqrt((position.x() * position.x()) * _oneOverRadiiSquared.x() + (position.y() * position.y()) * _oneOverRadiiSquared.y() + (position.z() * position.z()) * _oneOverRadiiSquared.z());
   
 	return position.times(beta);
   }
@@ -291,18 +291,18 @@ public class Ellipsoid
 	// theres is a minimum error considering sphere instead of ellipsoid
 	double latP = g2.latitude().radians();
 	double lonP = g2.longitude().radians();
-	double latQ = medLat / 180 **IMathUtils.instance().pi();
-	double lonQ = medLon / 180 **IMathUtils.instance().pi();
-	double coslatP = *IMathUtils.instance().cos(latP);
-	double sinlatP = *IMathUtils.instance().sin(latP);
-	double coslonP = *IMathUtils.instance().cos(lonP);
-	double sinlonP = *IMathUtils.instance().sin(lonP);
-	double coslatQ = *IMathUtils.instance().cos(latQ);
-	double sinlatQ = *IMathUtils.instance().sin(latQ);
-	double coslonQ = *IMathUtils.instance().cos(lonQ);
-	double sinlonQ = *IMathUtils.instance().sin(lonQ);
+	double latQ = medLat / 180 * IMathUtils.instance().pi();
+	double lonQ = medLon / 180 * IMathUtils.instance().pi();
+	double coslatP = IMathUtils.instance().cos(latP);
+	double sinlatP = IMathUtils.instance().sin(latP);
+	double coslonP = IMathUtils.instance().cos(lonP);
+	double sinlonP = IMathUtils.instance().sin(lonP);
+	double coslatQ = IMathUtils.instance().cos(latQ);
+	double sinlatQ = IMathUtils.instance().sin(latQ);
+	double coslonQ = IMathUtils.instance().cos(lonQ);
+	double sinlonQ = IMathUtils.instance().sin(lonQ);
 	double pq = coslatP * sinlonP * coslatQ * sinlonQ + sinlatP * sinlatQ + coslatP * coslonP * coslatQ * coslonQ;
-	return *IMathUtils.instance().acos(pq) * R;
+	return IMathUtils.instance().acos(pq) * R;
   }
 
 
@@ -319,14 +319,14 @@ public class Ellipsoid
   
 	// this way is faster, and works properly further away from the poles
 	//double diflat = fabs(g.latitude()-medLat);
-	double diflat = *IMathUtils.instance().abs(g2.latitude().degrees() - medLat);
+	double diflat = IMathUtils.instance().abs(g2.latitude().degrees() - medLat);
 	if (diflat > 180)
 		diflat = 360 - diflat;
-	double diflon = *IMathUtils.instance().abs(g2.longitude().degrees() - medLon);
+	double diflon = IMathUtils.instance().abs(g2.longitude().degrees() - medLon);
 	if (diflon > 180)
 		diflon = 360 - diflon;
-	double dist = *IMathUtils.instance().sqrt(diflat * diflat + diflon * diflon);
-	return dist **IMathUtils.instance().pi() / 180 * R;
+	double dist = IMathUtils.instance().sqrt(diflat * diflat + diflon * diflon);
+	return dist * IMathUtils.instance().pi() / 180 * R;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -351,9 +351,9 @@ public class Ellipsoid
 	if (rad > 0)
 	{
 	  // compute the final point (the smaller positive t value)
-	  t = (-b - *IMathUtils.instance().sqrt(rad)) / (2 * a);
+	  t = (-b - IMathUtils.instance().sqrt(rad)) / (2 * a);
 	  if (t < 1)
-		  t = (-b + *IMathUtils.instance().sqrt(rad)) / (2 * a);
+		  t = (-b + IMathUtils.instance().sqrt(rad)) / (2 * a);
 	  // if the ideal ray intersects, but not the mesh --> case 2
 	  if (t < 1)
 		  rad = -12345;
@@ -362,13 +362,13 @@ public class Ellipsoid
 	// if no solution found, find a point in the contour line
 	if (rad < 0)
 	{
-	  double D = *IMathUtils.instance().sqrt(O2);
+	  double D = IMathUtils.instance().sqrt(O2);
 	  double co2 = R0 * R0 / (D * D);
 	  double a_ = OU * OU - co2 * O2 * U2;
 	  double b_ = 2 * OU * O2 - co2 * 2 * OU * O2;
 	  double c_ = O2 * O2 - co2 * O2 * O2;
 	  double rad_ = b_ * b_ - 4 * a_ * c_;
-	  t = (-b_ - *IMathUtils.instance().sqrt(rad_)) / (2 * a_);
+	  t = (-b_ - IMathUtils.instance().sqrt(rad_)) / (2 * a_);
 	}
   
 	// compute the final point

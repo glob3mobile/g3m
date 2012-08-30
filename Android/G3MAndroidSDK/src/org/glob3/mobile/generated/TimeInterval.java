@@ -39,7 +39,7 @@ public class TimeInterval
 
   public static TimeInterval nan()
   {
-	return new TimeInterval(*IMathUtils.instance().NanD());
+	return new TimeInterval(IMathUtils.instance().NanD());
   }
 
   public static TimeInterval fromMilliseconds(int milliseconds)
@@ -71,7 +71,7 @@ public class TimeInterval
 //ORIGINAL LINE: boolean isNan() const
   public final boolean isNan()
   {
-	return *IMathUtils.instance().isNan((double)_milliseconds);
+	return IMathUtils.instance().isNan((double)_milliseconds);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

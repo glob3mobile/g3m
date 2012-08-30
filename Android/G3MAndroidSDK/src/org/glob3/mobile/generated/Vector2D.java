@@ -54,14 +54,14 @@ public class Vector2D
 //ORIGINAL LINE: double length() const
   public final double length()
   {
-	return *IMathUtils.instance().sqrt(squaredLength());
+	return IMathUtils.instance().sqrt(squaredLength());
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Angle orientation() const
   public final Angle orientation()
   {
-	  return Angle.fromRadians(*IMathUtils.instance().atan2(_y, _x));
+	  return Angle.fromRadians(IMathUtils.instance().atan2(_y, _x));
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -117,7 +117,7 @@ public class Vector2D
 //ORIGINAL LINE: Angle angle() const
   public final Angle angle()
   {
-	double a = *IMathUtils.instance().atan2(_y, _x);
+	double a = IMathUtils.instance().atan2(_y, _x);
 	return Angle.fromRadians(a);
   }
 
@@ -137,7 +137,7 @@ public class Vector2D
 
   public static Vector2D nan()
   {
-	return new Vector2D(*IMathUtils.instance().NanD(), *IMathUtils.instance().NanD());
+	return new Vector2D(IMathUtils.instance().NanD(), IMathUtils.instance().NanD());
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -165,7 +165,7 @@ public class Vector2D
 //ORIGINAL LINE: boolean isNan() const
   public final boolean isNan()
   {
-	return *IMathUtils.instance().isNan(_x * _y);
+	return IMathUtils.instance().isNan(_x * _y);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

@@ -43,7 +43,7 @@ public class CameraDoubleTapHandler extends CameraEventHandler
   
 	// compute drag parameters
 	final Vector3D axis = initialPoint.cross(centerPoint);
-	final Angle angle = Angle.fromRadians(- *IMathUtils.instance().asin(axis.length()/initialPoint.length()/centerPoint.length()));
+	final Angle angle = Angle.fromRadians(- IMathUtils.instance().asin(axis.length()/initialPoint.length()/centerPoint.length()));
   
 	// compute zoom factor
 	final double height = eventContext.getPlanet().toGeodetic3D(camera.getCartesianPosition()).height();
