@@ -7,6 +7,8 @@ import android.util.Log;
 
 public class ListenerEntry {
 
+   final static String        TAG = "Downloader_Android_ListenerEntry";
+   
    private boolean           _canceled;
    private long              _requestId;
    private IDownloadListener _listener;
@@ -33,10 +35,10 @@ public class ListenerEntry {
    public void cancel() {
       if (_canceled) {
          if (ILogger.instance() != null) {
-            ILogger.instance().logError("ListenerEntry: Listener for requestId=" + _requestId + " already canceled");
+            ILogger.instance().logError(TAG + ": Listener for requestId=" + _requestId + " already canceled");
          }
          else {
-            Log.e("ListenerEntry", "Listener for requestId=" + _requestId + " already canceled");
+            Log.e(TAG, "Listener for requestId=" + _requestId + " already canceled");
          }
       }
       _canceled = true;

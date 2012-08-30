@@ -14,6 +14,8 @@ import android.util.Log;
 
 public class Downloader_Android implements IDownloader {
 
+   final static String                                TAG = "Downloader_Android";
+
    private boolean                                    _started;
    private int                                        _maxConcurrentOperationCount;
    private int                                        _requestIdCounter;
@@ -44,11 +46,11 @@ public class Downloader_Android implements IDownloader {
 
    @Override
    public void start() {
-      Log.i("Downloader_Android", "STARTING");
       if (!_started) {
          Iterator<Downloader_Android_WorkerThread> iter = _workers.iterator();
          while (iter.hasNext()) {
-            iter.next().execute();
+            Downloader_Android_WorkerThread worker = iter.next();
+            worker.execute();
          }
          _started = true;
       }
@@ -58,10 +60,10 @@ public class Downloader_Android implements IDownloader {
    @Override
    public void stop() {
       if (_started) {
-         Log.e("Downloader_Android", "STOPPING");
          Iterator<Downloader_Android_WorkerThread> iter = _workers.iterator();
          while (iter.hasNext()) {
-            iter.next().stop();
+            Downloader_Android_WorkerThread worker = iter.next();
+            worker.stop();
          }
          _started = false;
       }
@@ -87,7 +89,7 @@ public class Downloader_Android implements IDownloader {
             handler.addListener(listener, priority, requestId);
          }
          else {
-            handler = _queuedHandlers.get(url);
+            handler = _queuedHandlers.get(url.getPath());
             if (handler != null) {
                // the URL is queued for future download, just add the new listener
                handler.addListener(listener, priority, requestId);
@@ -122,6 +124,7 @@ public class Downloader_Android implements IDownloader {
             Downloader_Android_Handler handler = e.getValue();
 
             if (handler.removeListenerForRequestId(requestId)) {
+               
                if (!handler.hasListener()) {
                   _queuedHandlers.remove(url);
                }
@@ -145,7 +148,7 @@ public class Downloader_Android implements IDownloader {
    }
 
 
-   public synchronized void removeDownloadHandlerForUrl(String url) {
+   public synchronized void removeDownloadingHandlerForUrl(String url) {
       _downloadingHandlers.remove(url);
    }
 
@@ -176,7 +179,7 @@ public class Downloader_Android implements IDownloader {
             _queuedHandlers.remove(selectedURL);
             _downloadingHandlers.put(selectedURL, selectedHandler);
          }
-         Log.i("Downloader_Android", statistics());
+//         Log.i(TAG, statistics());
       }
 
       return selectedHandler;
