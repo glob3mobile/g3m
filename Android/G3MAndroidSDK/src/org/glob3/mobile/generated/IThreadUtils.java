@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated; 
 public abstract class IThreadUtils
 {
-  private static IThreadUtils _instance = 0;
+  private static IThreadUtils _instance = null;
 
 
   public static void setInstance(IThreadUtils logger)
