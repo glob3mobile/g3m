@@ -22,6 +22,7 @@ class Camera;
 class ITimer;
 class EffectsScheduler;
 class IStringUtils;
+class IThreadUtils;
 
 #include <vector>
 #include <string>
@@ -58,6 +59,7 @@ public:
   static G3MWidget* create(FrameTasksExecutor* frameTasksExecutor,
                            IFactory*           factory,
                            const IStringUtils* stringUtils,
+                           IThreadUtils*       threadUtils,
                            ILogger*            logger,
                            GL*                 gl,
                            TexturesHandler*    texturesHandler,
@@ -111,6 +113,7 @@ private:
   FrameTasksExecutor* _frameTasksExecutor;
   IFactory*           _factory;
   const IStringUtils* _stringUtils;
+  IThreadUtils*       _threadUtils;
   ILogger*            _logger;
   GL*                 _gl;
   const Planet*       _planet;
@@ -145,6 +148,7 @@ private:
   G3MWidget(FrameTasksExecutor* frameTasksExecutor,
             IFactory*           factory,
             const IStringUtils* stringUtils,
+            IThreadUtils*       threadUtils,
             ILogger*            logger,
             GL*                 gl,
             TexturesHandler*    texturesHandler,
