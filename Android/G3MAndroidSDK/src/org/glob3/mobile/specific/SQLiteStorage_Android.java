@@ -35,26 +35,26 @@ public class SQLiteStorage_Android implements IStorage {
 		_databaseName = path;
 		_ctx = ctx;
 		
-//		_db = SQLiteDatabase.openDatabase(getPath(), null, SQLiteDatabase.CREATE_IF_NECESSARY | SQLiteDatabase.OPEN_READWRITE);
-//		
-//		if (_db == null) {
-//		    ILogger.instance().logError("SQL", "Can't open database \"%s\"\n", _databaseName);
-//		} else {
-//			try {
-//				_db.execSQL("CREATE TABLE IF NOT EXISTS entry (name TEXT, contents TEXT);");
-//				_db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS entry_name ON entry(name);");
-//			}catch (SQLException e) {
-//				e.printStackTrace();
-//			}
-//		}
+		_db = SQLiteDatabase.openOrCreateDatabase(getPath(), null);
+		
+		if (_db == null) {
+		    ILogger.instance().logError("SQL", "Can't open database \"%s\"\n", _databaseName);
+		} else {
+			try {
+				_db.execSQL("CREATE TABLE IF NOT EXISTS entry (name TEXT, contents BLOB);");
+				_db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS entry_name ON entry(name);");
+			}catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@Override
 	public boolean contains(URL url) {
 		  String name = url.getPath();
 		  
-		  Cursor cursor = _db.query("entry", new String [] {"contents"}, "name = " + name, 
-				  null, null, null, null);
+		  Cursor cursor = _db.query("entry", new String [] {"contents"}, "name = ?", 
+				  new String [] {name}, null, null, null);
 		  
 		  boolean hasAny = (cursor.getCount() > 0);
 		  
@@ -68,7 +68,8 @@ public class SQLiteStorage_Android implements IStorage {
 		ContentValues values = new ContentValues();
 		values.put("name", url.getPath());
 		values.put("contents", buffer.getData());
-		long r = _db.insert("entry", null, values);
+		
+		long r = _db.insertWithOnConflict("entry", null, values, SQLiteDatabase.CONFLICT_REPLACE);
 		if (r == -1) {
 			ILogger.instance().logError("SQL", "Can't write in database \"%s\"\n", _databaseName);
 		}
@@ -78,10 +79,10 @@ public class SQLiteStorage_Android implements IStorage {
 	public ByteBuffer read(URL url) {
 		String name = url.getPath();
 		  
-		Cursor cursor = _db.query("entry", new String [] {"contents"}, "name = " + name, 
-				  null, null, null, null);
+		Cursor cursor = _db.query("entry", new String [] {"contents"}, "name like ?", 
+				  new String [] {name}, null, null, null);
 		
-		if (cursor.getCount() > 0) {
+		if (cursor.moveToFirst()) {
 			byte[] data = cursor.getBlob(0);
 			ByteBuffer bb = new ByteBuffer(data, data.length);
 			cursor.close();
