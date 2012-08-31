@@ -9,9 +9,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.glob3.mobile.generated.ByteBuffer;
+import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.IDownloadListener;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.ILogger;
+import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.Response;
 import org.glob3.mobile.generated.URL;
 
@@ -124,7 +126,6 @@ public class Downloader_Android_Handler {
       HttpURLConnection connection = null;
       int statusCode = 0;
       byte[] data = null;
-      boolean dataIsValid = false;
       try {
          connection = (HttpURLConnection) _URL.openConnection();
          connection.setConnectTimeout(60000);
@@ -161,58 +162,77 @@ public class Downloader_Android_Handler {
          if (connection != null) {
             connection.disconnect();
          }
-         if (!dataIsValid) {
-            if (ILogger.instance() != null) {
-               ILogger.instance().logError(TAG + "Error runWithDownloader: statusCode=" + statusCode + ", url=" + _url.getPath());
-            }
-            else {
-               Log.e(TAG, "Error runWithDownloader: statusCode=" + statusCode + ", url=" + _url.getPath());
-            }
-         }
-         else {
-            Log.i(TAG, "Success runWithDownloader: statusCode=" + statusCode + ", url=" + _url.getPath());
-         }
+         //         if (!dataIsValid) {
+         //            if (ILogger.instance() != null) {
+         //               ILogger.instance().logError(TAG + "Error runWithDownloader: statusCode=" + statusCode + ", url=" + _url.getPath());
+         //            }
+         //            else {
+         //               Log.e(TAG, "Error runWithDownloader: statusCode=" + statusCode + ", url=" + _url.getPath());
+         //            }
+         //         }
+         //         else {
+         //            Log.i(TAG, "Success runWithDownloader: statusCode=" + statusCode + ", url=" + _url.getPath());
+         //         }
       }
       // inform downloader to remove myself, to avoid adding new Listener
       dl.removeDownloadingHandlerForUrl(_url.getPath());
 
-      // to be sent to render thread
-      // {
-      synchronized (this) {
-         dataIsValid = (data != null) && (statusCode == 200);
-         
-         if (dataIsValid) {
-            ByteBuffer buffer = new ByteBuffer(data, 0);
-            Response response = new Response(_url, buffer);
-            Iterator<ListenerEntry> iter = _listeners.iterator();
+      IThreadUtils.instance().invokeInRendererThread(new ProcessResponseGTask(statusCode, data, this), true);
+   }
 
-            while (iter.hasNext()) {
-               ListenerEntry entry = iter.next();
-               if (entry.isCanceled()) {
-                  Log.w(TAG, "triggering onCanceledDownload");
-                  entry.getListener().onCanceledDownload(response);
+   public class ProcessResponseGTask extends GTask {
 
-                  Log.w(TAG, "triggering onCancel");
-                  entry.getListener().onCancel(_url);
-               }
-               else {
-                  Log.i(TAG, "triggering onDownload");
-                  entry.getListener().onDownload(response);
+      int                        _statusCode = 0;
+      byte[]                     _data       = null;
+      Downloader_Android_Handler _handler;
+
+
+      public ProcessResponseGTask(final int statusCode,
+                                  final byte[] data,
+                                  final Downloader_Android_Handler handler) {
+         _statusCode = statusCode;
+         _data = data;
+         _handler = handler;
+      }
+
+
+      @Override
+      public void run() {
+         synchronized (_handler) {
+            boolean dataIsValid = (_data != null) && (_statusCode == 200);
+
+            if (dataIsValid) {
+               ByteBuffer buffer = new ByteBuffer(_data, 0);
+               Response response = new Response(_url, buffer);
+               Iterator<ListenerEntry> iter = _listeners.iterator();
+
+               while (iter.hasNext()) {
+                  ListenerEntry entry = iter.next();
+                  if (entry.isCanceled()) {
+                     Log.w(TAG, "triggering onCanceledDownload");
+                     entry.getListener().onCanceledDownload(response);
+
+                     Log.w(TAG, "triggering onCancel");
+                     entry.getListener().onCancel(_url);
+                  }
+                  else {
+                     Log.i(TAG, "triggering onDownload");
+                     entry.getListener().onDownload(response);
+                  }
                }
             }
-         }
-         else {
-            ByteBuffer buffer = new ByteBuffer(null, 0);
-            Response response = new Response(_url, buffer);
-            Iterator<ListenerEntry> iter = _listeners.iterator();
+            else {
+               ByteBuffer buffer = new ByteBuffer(null, 0);
+               Response response = new Response(_url, buffer);
+               Iterator<ListenerEntry> iter = _listeners.iterator();
 
-            while (iter.hasNext()) {
-               ListenerEntry entry = iter.next();
-               Log.e(TAG, "triggering onError");
-               entry.getListener().onError(response);
+               while (iter.hasNext()) {
+                  ListenerEntry entry = iter.next();
+                  Log.e(TAG, "triggering onError");
+                  entry.getListener().onError(response);
+               }
             }
          }
       }
-      // }
    }
 }
