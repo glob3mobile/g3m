@@ -260,14 +260,13 @@ public class GL
 
   public final void enableVertexColor(float[] colors, float intensity)
   {
-	if (!_enableVertexColor)
-	{
-	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableColorPerVertex, 1);
-	  _gl.enableVertexAttribArray(GlobalMembersGL.Attributes.Color);
-	  _gl.vertexAttribPointer(GlobalMembersGL.Attributes.Color, 4, GLType.Float, false, 0, colors);
-	  _gl.uniform1f(GlobalMembersGL.Uniforms.ColorPerVertexIntensity, intensity);
-	  _enableVertexColor = true;
-	}
+	//if (!_enableVertexColor) {
+	_gl.uniform1i(GlobalMembersGL.Uniforms.EnableColorPerVertex, 1);
+	_gl.enableVertexAttribArray(GlobalMembersGL.Attributes.Color);
+	_gl.vertexAttribPointer(GlobalMembersGL.Attributes.Color, 4, GLType.Float, false, 0, colors);
+	_gl.uniform1f(GlobalMembersGL.Uniforms.ColorPerVertexIntensity, intensity);
+	  //_enableVertexColor = true;
+	//}
   }
 
   public final void disableVertexColor()
