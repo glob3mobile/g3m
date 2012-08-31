@@ -6,6 +6,7 @@ import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.GLErrorRenderer;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
+import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
@@ -17,6 +18,7 @@ import org.glob3.mobile.generated.UserData;
 import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
 import org.glob3.mobile.specific.G3MWidget_Android;
+import org.glob3.mobile.specific.SQLiteStorage_Android;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -160,7 +162,7 @@ public class G3MAndroidDemoActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         if (_widget == null){ //Just the first time
         	_widget = new G3MWidget_Android(this);
         	

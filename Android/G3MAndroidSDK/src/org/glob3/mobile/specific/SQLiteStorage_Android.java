@@ -1,5 +1,7 @@
 package org.glob3.mobile.specific;
 
+import java.io.File;
+
 import org.glob3.mobile.generated.ByteBuffer;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IStorage;
@@ -10,24 +12,41 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
-import android.database.sqlite.SQLiteOpenHelper;
-
 public class SQLiteStorage_Android implements IStorage {
 	
 	private final String _databaseName;
+	private final Context _ctx;
 	
 	SQLiteDatabase _db;
 	
+	String getPath() {
+		File f = _ctx.getExternalCacheDir();
+		if (!f.exists()){
+			f = _ctx.getCacheDir();
+		}
+		String documentsDirectory = f.getAbsolutePath();
+		
+		File f2 = new File(new File(documentsDirectory), _databaseName);
+		return f2.getAbsolutePath();
+		
+	}
+	
 	SQLiteStorage_Android(String path, Context ctx){
 		_databaseName = path;
+		_ctx = ctx;
 		
-		StorageSQLHelper helper = new StorageSQLHelper(ctx, _databaseName, null, 1);
-		_db = helper.getWritableDatabase();
-
-		if (_db != null) {
-		    ILogger.instance().logError("SQL", "Can't open database \"%s\"\n", _databaseName);
-		}
+//		_db = SQLiteDatabase.openDatabase(getPath(), null, SQLiteDatabase.CREATE_IF_NECESSARY | SQLiteDatabase.OPEN_READWRITE);
+//		
+//		if (_db == null) {
+//		    ILogger.instance().logError("SQL", "Can't open database \"%s\"\n", _databaseName);
+//		} else {
+//			try {
+//				_db.execSQL("CREATE TABLE IF NOT EXISTS entry (name TEXT, contents TEXT);");
+//				_db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS entry_name ON entry(name);");
+//			}catch (SQLException e) {
+//				e.printStackTrace();
+//			}
+//		}
 	}
 
 	@Override
@@ -49,7 +68,10 @@ public class SQLiteStorage_Android implements IStorage {
 		ContentValues values = new ContentValues();
 		values.put("name", url.getPath());
 		values.put("contents", buffer.getData());
-		_db.insert("entry", null, values);
+		long r = _db.insert("entry", null, values);
+		if (r == -1) {
+			ILogger.instance().logError("SQL", "Can't write in database \"%s\"\n", _databaseName);
+		}
 	}
 
 	@Override
@@ -70,29 +92,4 @@ public class SQLiteStorage_Android implements IStorage {
 		}
 	}
 
-}
-
-class StorageSQLHelper extends SQLiteOpenHelper{
-
-	public StorageSQLHelper(Context context, String name, CursorFactory factory,
-			int version) {
-		super(context, name, factory, version);
-		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public void onCreate(SQLiteDatabase db) {
-		try {
-			db.execSQL("CREATE TABLE IF NOT EXISTS entry (name TEXT, contents TEXT);");
-			db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS entry_name ON entry(name);");
-		}catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		int needed_questionmark;
-	}
-	
 }

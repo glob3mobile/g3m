@@ -3,6 +3,7 @@ package org.glob3.mobile.specific;
 import java.util.ArrayList;
 
 import org.glob3.mobile.generated.BusyMeshRenderer;
+import org.glob3.mobile.generated.ByteBuffer;
 import org.glob3.mobile.generated.CPUTextureBuilder;
 import org.glob3.mobile.generated.CachedDownloader;
 import org.glob3.mobile.generated.CameraDoubleDragHandler;
@@ -30,6 +31,7 @@ import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.MultiLayerTileTexturizer;
+import org.glob3.mobile.generated.NullStorage;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.SingleImageTileTexturizer;
 import org.glob3.mobile.generated.TextureBuilder;
@@ -40,6 +42,7 @@ import org.glob3.mobile.generated.TilesRenderParameters;
 import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.TouchEventType;
+import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.UserData;
 import org.glob3.mobile.generated.Vector2D;
 
@@ -484,8 +487,24 @@ public class G3MWidget_Android extends GLSurfaceView implements
 		  GL gl  = new GL(nGL);
 		  
 		  IStorage storage = new SQLiteStorage_Android("g3m.cache", this.getContext());
+		  
+		  //TESTING DB
+		  if (false) {
+			  byte[] b = {1,0,1};
+			  ByteBuffer bb = new ByteBuffer(b, b.length);
+			  URL url = new URL("test");
+			  
+			  storage.save(url, bb);
+			  
+			  if (storage.contains(url)) {
+				  ByteBuffer bb2 = storage.read(url);
+			  }
+			  
+		  }
+		  
+		  
 //		  IDownloader downloader = null;// new CachedDownloader(new Downloader_Android(8), storage);
-		  IDownloader downloader = new CachedDownloader(new Downloader_Android(8), storage);
+		  IDownloader downloader = new CachedDownloader(new Downloader_Android(8), new NullStorage());
 
 		  CompositeRenderer composite = new CompositeRenderer();
 		  
