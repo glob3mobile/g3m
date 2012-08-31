@@ -10,8 +10,6 @@ import org.glob3.mobile.generated.IDownloadListener;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.URL;
 
-import android.util.Log;
-
 public class Downloader_Android implements IDownloader {
 
    final static String                                TAG = "Downloader_Android";
@@ -179,7 +177,6 @@ public class Downloader_Android implements IDownloader {
             _queuedHandlers.remove(selectedURL);
             _downloadingHandlers.put(selectedURL, selectedHandler);
          }
-//         Log.i(TAG, statistics());
       }
 
       return selectedHandler;

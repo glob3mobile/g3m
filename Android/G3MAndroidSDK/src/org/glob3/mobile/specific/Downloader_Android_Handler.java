@@ -40,10 +40,10 @@ public class Downloader_Android_Handler {
       }
       catch (MalformedURLException e) {
          if (ILogger.instance() != null) {
-            ILogger.instance().logError(TAG + ": MalformedURLException url=" + _url.getPath());
+            ILogger.instance().logError(TAG + "Downloader_Android_Handler: MalformedURLException url=" + _url.getPath());
          }
          else {
-            Log.e(TAG, ": MalformedURLException url=" + _url.getPath());
+            Log.e(TAG, "Downloader_Android_Handler: MalformedURLException url=" + _url.getPath());
          }
          e.printStackTrace();
       }
@@ -122,6 +122,8 @@ public class Downloader_Android_Handler {
 
 
    public void runWithDownloader(IDownloader downloader) {
+      Log.i(TAG, "runWithDownloader url=" + _url.getPath());
+      
       Downloader_Android dl = (Downloader_Android) downloader;
       HttpURLConnection connection = null;
       int statusCode = 0;
@@ -162,17 +164,6 @@ public class Downloader_Android_Handler {
          if (connection != null) {
             connection.disconnect();
          }
-         //         if (!dataIsValid) {
-         //            if (ILogger.instance() != null) {
-         //               ILogger.instance().logError(TAG + "Error runWithDownloader: statusCode=" + statusCode + ", url=" + _url.getPath());
-         //            }
-         //            else {
-         //               Log.e(TAG, "Error runWithDownloader: statusCode=" + statusCode + ", url=" + _url.getPath());
-         //            }
-         //         }
-         //         else {
-         //            Log.i(TAG, "Success runWithDownloader: statusCode=" + statusCode + ", url=" + _url.getPath());
-         //         }
       }
       // inform downloader to remove myself, to avoid adding new Listener
       dl.removeDownloadingHandlerForUrl(_url.getPath());
@@ -222,6 +213,13 @@ public class Downloader_Android_Handler {
                }
             }
             else {
+               if (ILogger.instance() != null) {
+                  ILogger.instance().logError(
+                           TAG + "Error runWithDownloader: statusCode=" + _statusCode + ", url=" + _url.getPath());
+               }
+               else {
+                  Log.e(TAG, "Error runWithDownloader: statusCode=" + _statusCode + ", url=" + _url.getPath());
+               }
                ByteBuffer buffer = new ByteBuffer(null, 0);
                Response response = new Response(_url, buffer);
                Iterator<ListenerEntry> iter = _listeners.iterator();
