@@ -7,6 +7,7 @@ import java.util.Locale;
 import org.glob3.mobile.generated.ByteBuffer;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IImage;
+import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.ITimer;
 
 import android.content.Context;
@@ -59,8 +60,11 @@ public class Factory_Android extends IFactory {
 	public IImage createImageFromData(ByteBuffer bb) {
 		
 		Bitmap b = BitmapFactory.decodeByteArray(bb.getData(), 0, bb.getData().length);
+		if (b == null) {
+			ILogger.instance().logError("FACTORY", "Can't create image from data");
+			return null;
+		}
 		return new Image_Android(b);
-		
 	}
 
 	@Override
