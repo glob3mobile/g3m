@@ -26,6 +26,7 @@ import org.glob3.mobile.generated.IMathUtils;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.IStringUtils;
+import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.MultiLayerTileTexturizer;
@@ -532,11 +533,13 @@ public class G3MWidget_Android extends GLSurfaceView implements
 		  FrameTasksExecutor frameTasksExecutor = new FrameTasksExecutor();
 		  
 		  IStringUtils stringUtils = new StringUtils_Android();
+		  
+		  IThreadUtils threadUtils = new ThreadUtils_Android(this);
 
 		  _widget = G3MWidget.create(frameTasksExecutor,
 		                                factory,
 		                                stringUtils,
-		                                logger,
+		                                threadUtils, logger,
 		                                gl,
 		                                texturesHandler,
 		                                downloader,
@@ -551,6 +554,8 @@ public class G3MWidget_Android extends GLSurfaceView implements
 		                                false);
 		  
 		  _widget.setUserData(userData);
+		  
+		  
 		
 	}
 	

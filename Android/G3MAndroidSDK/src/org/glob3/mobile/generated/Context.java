@@ -37,20 +37,24 @@ package org.glob3.mobile.generated;
 //class ITimer;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IStringUtils;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IThreadUtils;
 
 public class Context
 {
   protected final IFactory _factory;
   protected final IStringUtils _stringUtils;
+  protected IThreadUtils _threadUtils;
   protected ILogger _logger;
   protected Planet _planet;
   protected IDownloader _downloader;
   protected EffectsScheduler _effectsScheduler;
 
-  protected Context(IFactory factory, IStringUtils stringUtils, ILogger logger, Planet planet, IDownloader downloader, EffectsScheduler effectsScheduler)
+  protected Context(IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, Planet planet, IDownloader downloader, EffectsScheduler effectsScheduler)
   {
 	  _factory = factory;
 	  _stringUtils = stringUtils;
+	  _threadUtils = threadUtils;
 	  _logger = logger;
 	  _planet = planet;
 	  _downloader = downloader;
@@ -98,5 +102,12 @@ public class Context
   public final EffectsScheduler getEffectsScheduler()
   {
 	return _effectsScheduler;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: IThreadUtils* getThreadUtils() const
+  public final IThreadUtils getThreadUtils()
+  {
+	return _threadUtils;
   }
 }

@@ -54,6 +54,7 @@
 #include "SingleImageTileTexturizer.hpp"
 
 #include "MathUtils_iOS.hpp"
+#include "ThreadUtils_iOS.hpp"
 
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
@@ -187,9 +188,12 @@
 //    printf("\n");
 //  }
   
+  IThreadUtils* threadUtils = new ThreadUtils_iOS();
+  
   _widgetVP = G3MWidget::create(frameTasksExecutor,
                                 factory,
                                 stringUtils,
+                                threadUtils,
                                 logger,
                                 gl,
                                 texturesHandler,

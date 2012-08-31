@@ -1,0 +1,14 @@
+//
+//  IThreadUtils.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 30/08/12.
+//
+//
+
+#include "IThreadUtils.hpp"
+
+#include <cstring>
+
+IThreadUtils* IThreadUtils::_instance = NULL;
+

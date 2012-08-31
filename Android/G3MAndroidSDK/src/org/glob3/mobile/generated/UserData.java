@@ -42,6 +42,8 @@ package org.glob3.mobile.generated;
 //class EffectsScheduler;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IStringUtils;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IThreadUtils;
 
 
 
