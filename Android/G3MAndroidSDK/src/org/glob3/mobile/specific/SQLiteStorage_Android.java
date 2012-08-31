@@ -1,7 +1,5 @@
 package org.glob3.mobile.specific;
 
-import java.io.File;
-
 import org.glob3.mobile.generated.ByteBuffer;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IStorage;
@@ -48,16 +46,28 @@ public class SQLiteStorage_Android implements IStorage {
 
 	@Override
 	public void save(URL url, ByteBuffer buffer) {
-		ContentValues cv = new ContentValues();
-		cv.put("name", url.getPath());
-		//cv.put("contents", buffer.get)
-
+		ContentValues values = new ContentValues();
+		values.put("name", url.getPath());
+		values.put("contents", buffer.getData());
+		_db.insert("entry", null, values);
 	}
 
 	@Override
 	public ByteBuffer read(URL url) {
-		// TODO Auto-generated method stub
-		return null;
+		String name = url.getPath();
+		  
+		Cursor cursor = _db.query("entry", new String [] {"contents"}, "name = " + name, 
+				  null, null, null, null);
+		
+		if (cursor.getCount() > 0) {
+			byte[] data = cursor.getBlob(0);
+			ByteBuffer bb = new ByteBuffer(data, data.length);
+			cursor.close();
+			return bb;
+		} else {
+			cursor.close();
+			return null;
+		}
 	}
 
 }

@@ -483,7 +483,7 @@ public class G3MWidget_Android extends GLSurfaceView implements
 		  NativeGL2_Android nGL = new NativeGL2_Android();
 		  GL gl  = new GL(nGL);
 		  
-		  IStorage storage = new SQLiteStorage_Android("g3m.cache");
+		  IStorage storage = new SQLiteStorage_Android("g3m.cache", this.getContext());
 //		  IDownloader downloader = null;// new CachedDownloader(new Downloader_Android(8), storage);
 		  IDownloader downloader = new CachedDownloader(new Downloader_Android(8), storage);
 
