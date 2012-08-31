@@ -113,10 +113,6 @@ public:
                         const Sector& sector,
                         int width, int height) const;
   
-  
-  bool isAvailable(const RenderContext* rc, const Tile* tile) const;
-  
-  
 };
 
 #endif
