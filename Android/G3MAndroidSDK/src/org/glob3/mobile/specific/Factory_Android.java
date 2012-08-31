@@ -15,7 +15,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 public class Factory_Android extends IFactory {
-	
 	final Context _context;
 	static Locale locale = new Locale("myLocale");
 	
@@ -69,8 +68,9 @@ public class Factory_Android extends IFactory {
 
 	@Override
 	public IImage createImageFromSize(int width, int height) {
-		// TODO Auto-generated method stub
-		return null;
+		Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+		Bitmap bmp = Bitmap.createBitmap(width, height, conf);
+		return new Image_Android(bmp);
 	}
 
 }

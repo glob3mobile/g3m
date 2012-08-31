@@ -19,7 +19,8 @@ public class MotionEventProcessor {
 		public java.util.ArrayList<Touch> _touchs = new ArrayList<Touch>();
 		public TouchEventType _type = TouchEventType.Down;
 		
-		protected EventProcessed clone() {
+		@Override
+      protected EventProcessed clone() {
 			EventProcessed e = new EventProcessed();
 			e._pointersID = (ArrayList<Integer>) this._pointersID.clone();
 			e._touchs = (ArrayList<Touch>) this._touchs.clone();
