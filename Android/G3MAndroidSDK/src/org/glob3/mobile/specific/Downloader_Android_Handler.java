@@ -25,7 +25,6 @@ public class Downloader_Android_Handler {
    private URL                      _url;
    private java.net.URL             _URL;
    private ArrayList<ListenerEntry> _listeners;
-   private byte[]                   _data;
 
 
    public Downloader_Android_Handler(URL url,
@@ -49,12 +48,11 @@ public class Downloader_Android_Handler {
       _listeners = new ArrayList<ListenerEntry>();
       ListenerEntry entry = new ListenerEntry(listener, requestId);
       _listeners.add(entry);
-      _data = null;
    }
 
 
    public void addListener(IDownloadListener listener,
-		   long priority,
+                           long priority,
                            long requestId) {
       ListenerEntry entry = new ListenerEntry(listener, requestId);
 
@@ -121,10 +119,11 @@ public class Downloader_Android_Handler {
    }
 
 
-   public boolean runWithDownloader(IDownloader downloader) {
+   public void runWithDownloader(IDownloader downloader) {
       Downloader_Android dl = (Downloader_Android) downloader;
       HttpURLConnection connection = null;
       int statusCode = 0;
+      byte[] data = null;
       boolean dataIsValid = false;
       try {
          connection = (HttpURLConnection) _URL.openConnection();
@@ -133,7 +132,7 @@ public class Downloader_Android_Handler {
          connection.setUseCaches(false);
          connection.connect();
          statusCode = connection.getResponseCode();
-         
+
          if (statusCode == 200) {
             BufferedInputStream bis = new BufferedInputStream(connection.getInputStream());
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -145,12 +144,9 @@ public class Downloader_Android_Handler {
             }
 
             baos.flush();
-            _data = baos.toByteArray();
+            data = baos.toByteArray();
             baos.close();
          }
-         
-         dataIsValid = (_data != null) && (statusCode == 200);
-         Log.w(TAG, "statusCode=" + statusCode + " dataIsValid=" + dataIsValid + " url=" + _url.getPath());
       }
       catch (IOException e) {
          if (ILogger.instance() != null) {
@@ -167,8 +163,7 @@ public class Downloader_Android_Handler {
          }
          if (!dataIsValid) {
             if (ILogger.instance() != null) {
-               ILogger.instance().logError(
-                        TAG + "Error runWithDownloader: statusCode=" + statusCode + ", url=" + _url.getPath());
+               ILogger.instance().logError(TAG + "Error runWithDownloader: statusCode=" + statusCode + ", url=" + _url.getPath());
             }
             else {
                Log.e(TAG, "Error runWithDownloader: statusCode=" + statusCode + ", url=" + _url.getPath());
@@ -181,42 +176,43 @@ public class Downloader_Android_Handler {
       // inform downloader to remove myself, to avoid adding new Listener
       dl.removeDownloadingHandlerForUrl(_url.getPath());
 
-      return (dataIsValid);
-   }
+      // to be sent to render thread
+      // {
+      synchronized (this) {
+         dataIsValid = (data != null) && (statusCode == 200);
+         
+         if (dataIsValid) {
+            ByteBuffer buffer = new ByteBuffer(data, 0);
+            Response response = new Response(_url, buffer);
+            Iterator<ListenerEntry> iter = _listeners.iterator();
 
+            while (iter.hasNext()) {
+               ListenerEntry entry = iter.next();
+               if (entry.isCanceled()) {
+                  Log.w(TAG, "triggering onCanceledDownload");
+                  entry.getListener().onCanceledDownload(response);
 
-   public synchronized void processResponse(boolean dataIsValid) {
-      Log.i(TAG, "processResponse: url=" + _url.getPath() + " dataIsValid=" + dataIsValid);
-      if (dataIsValid) {
-         ByteBuffer buffer = new ByteBuffer(_data, 0);
-         Response response = new Response(_url, buffer);
-         Iterator<ListenerEntry> iter = _listeners.iterator();
-
-         while (iter.hasNext()) {
-            ListenerEntry entry = iter.next();
-            if (entry.isCanceled()) {
-               Log.w(TAG, "triggering onCancel");
-               entry.getListener().onCanceledDownload(response);
-
-               Log.w(TAG, "triggering onCancel");
-               entry.getListener().onCancel(_url);
+                  Log.w(TAG, "triggering onCancel");
+                  entry.getListener().onCancel(_url);
+               }
+               else {
+                  Log.i(TAG, "triggering onDownload");
+                  entry.getListener().onDownload(response);
+               }
             }
-            else {
-               Log.i(TAG, "triggering onDownload");
-               entry.getListener().onDownload(response);
+         }
+         else {
+            ByteBuffer buffer = new ByteBuffer(null, 0);
+            Response response = new Response(_url, buffer);
+            Iterator<ListenerEntry> iter = _listeners.iterator();
+
+            while (iter.hasNext()) {
+               ListenerEntry entry = iter.next();
+               Log.e(TAG, "triggering onError");
+               entry.getListener().onError(response);
             }
          }
       }
-      else {
-         ByteBuffer buffer = new ByteBuffer(null, 0);
-         Response response = new Response(_url, buffer);
-         Iterator<ListenerEntry> iter = _listeners.iterator();
-
-         while (iter.hasNext()) {
-            ListenerEntry entry = iter.next();
-            Log.e(TAG, "triggering onError");
-            entry.getListener().onError(response);
-         }
-      }
+      // }
    }
 }

@@ -50,7 +50,7 @@ public class Downloader_Android implements IDownloader {
          Iterator<Downloader_Android_WorkerThread> iter = _workers.iterator();
          while (iter.hasNext()) {
             Downloader_Android_WorkerThread worker = iter.next();
-            worker.execute();
+            worker.start();
          }
          _started = true;
       }
@@ -63,7 +63,7 @@ public class Downloader_Android implements IDownloader {
          Iterator<Downloader_Android_WorkerThread> iter = _workers.iterator();
          while (iter.hasNext()) {
             Downloader_Android_WorkerThread worker = iter.next();
-            worker.stop();
+            worker.stopWorkerThread();
          }
          _started = false;
       }
