@@ -51,7 +51,7 @@ public class ByteBuffer
   }
 
 
-  byte[] getData() { return _data;}
+  public byte[] getData() { return _data;}
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: String getDataAsString() const
