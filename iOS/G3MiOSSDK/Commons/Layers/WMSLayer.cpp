@@ -12,11 +12,6 @@
 
 #include "IStringBuilder.hpp"
 
-bool WMSLayer::isAvailable(const RenderContext* rc,
-                           const Tile* tile) const {
-  return true;
-}
-
 std::vector<Petition*> WMSLayer::getMapPetitions(const RenderContext* rc,
                                                  const Tile* tile,
                                                  int width, int height) const {
