@@ -397,17 +397,17 @@ void GL::disableTexture2D() {
 }
 
 void GL::enableVertexColor(float const colors[], float intensity) {
-  if (!_enableVertexColor) {
-    _gl->uniform1i(Uniforms.EnableColorPerVertex, 1);
-    _gl->enableVertexAttribArray(Attributes.Color);
+  //if (!_enableVertexColor) {
+  _gl->uniform1i(Uniforms.EnableColorPerVertex, 1);
+  _gl->enableVertexAttribArray(Attributes.Color);
 #ifdef C_CODE
-    _gl->vertexAttribPointer(Attributes.Color, 4, Float, false, 0, colors);
+  _gl->vertexAttribPointer(Attributes.Color, 4, Float, false, 0, colors);
 #else
-    _gl->vertexAttribPointer(Attributes.Color, 4, GLType.Float, false, 0, colors);
+  _gl->vertexAttribPointer(Attributes.Color, 4, GLType.Float, false, 0, colors);
 #endif
-    _gl->uniform1f(Uniforms.ColorPerVertexIntensity, intensity);
-    _enableVertexColor = true;
-  }
+  _gl->uniform1f(Uniforms.ColorPerVertexIntensity, intensity);
+    //_enableVertexColor = true;
+  //}
 }
 
 void GL::disableVertexColor() {
