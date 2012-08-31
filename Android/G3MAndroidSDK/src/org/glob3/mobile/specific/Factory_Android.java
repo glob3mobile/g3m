@@ -57,8 +57,10 @@ public class Factory_Android extends IFactory {
 
 	@Override
 	public IImage createImageFromData(ByteBuffer bb) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Bitmap b = BitmapFactory.decodeByteArray(bb.getData(), 0, bb.getData().length);
+		return new Image_Android(b);
+		
 	}
 
 	@Override

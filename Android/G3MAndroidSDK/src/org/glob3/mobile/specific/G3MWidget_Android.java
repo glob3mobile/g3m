@@ -493,12 +493,28 @@ public class G3MWidget_Android extends GLSurfaceView implements
 			  byte[] b = {1,0,1};
 			  ByteBuffer bb = new ByteBuffer(b, b.length);
 			  URL url = new URL("test");
+			  URL url2 = new URL("test2");
+			  
+			  if (storage.contains(url)) {
+				  ByteBuffer bb2 = storage.read(url);
+			  }
+
+			  storage.save(url, bb);
+			  
+			  if (storage.contains(url)) {
+				  ByteBuffer bb1 = storage.read(url);
+			  }
 			  
 			  storage.save(url, bb);
 			  
 			  if (storage.contains(url)) {
 				  ByteBuffer bb2 = storage.read(url);
 			  }
+			  
+			  if (storage.contains(url2)) {
+				  ByteBuffer bb2 = storage.read(url2);
+			  }
+			  
 			  
 		  }
 		  
