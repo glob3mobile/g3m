@@ -39,7 +39,6 @@ public class StringUtils_Android extends IStringUtils {
 
 	@Override
 	public String substring(String String, int beginIndex, int endIndex) {
-		// TODO Auto-generated method stub
 		return String.substring(beginIndex, endIndex);
 	}
 

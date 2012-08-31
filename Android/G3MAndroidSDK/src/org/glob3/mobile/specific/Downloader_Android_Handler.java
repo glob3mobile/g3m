@@ -193,7 +193,7 @@ public class Downloader_Android_Handler {
             boolean dataIsValid = (_data != null) && (_statusCode == 200);
 
             if (dataIsValid) {
-               ByteBuffer buffer = new ByteBuffer(_data, 0);
+               ByteBuffer buffer = new ByteBuffer(_data, _data.length);
                Response response = new Response(_url, buffer);
                Iterator<ListenerEntry> iter = _listeners.iterator();
 
