@@ -12,24 +12,41 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
-import android.database.sqlite.SQLiteOpenHelper;
-
 public class SQLiteStorage_Android implements IStorage {
 	
 	private final String _databaseName;
+	private final Context _ctx;
 	
 	SQLiteDatabase _db;
 	
+	String getPath() {
+		File f = _ctx.getExternalCacheDir();
+		if (!f.exists()){
+			f = _ctx.getCacheDir();
+		}
+		String documentsDirectory = f.getAbsolutePath();
+		
+		File f2 = new File(new File(documentsDirectory), _databaseName);
+		return f2.getAbsolutePath();
+		
+	}
+	
 	SQLiteStorage_Android(String path, Context ctx){
 		_databaseName = path;
+		_ctx = ctx;
 		
-		StorageSQLHelper helper = new StorageSQLHelper(ctx, _databaseName, null, 1);
-		_db = helper.getWritableDatabase();
-
-		if (_db != null) {
-		    ILogger.instance().logError("SQL", "Can't open database \"%s\"\n", _databaseName);
-		}
+//		_db = SQLiteDatabase.openDatabase(getPath(), null, SQLiteDatabase.CREATE_IF_NECESSARY | SQLiteDatabase.OPEN_READWRITE);
+//		
+//		if (_db == null) {
+//		    ILogger.instance().logError("SQL", "Can't open database \"%s\"\n", _databaseName);
+//		} else {
+//			try {
+//				_db.execSQL("CREATE TABLE IF NOT EXISTS entry (name TEXT, contents TEXT);");
+//				_db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS entry_name ON entry(name);");
+//			}catch (SQLException e) {
+//				e.printStackTrace();
+//			}
+//		}
 	}
 
 	@Override
@@ -48,41 +65,31 @@ public class SQLiteStorage_Android implements IStorage {
 
 	@Override
 	public void save(URL url, ByteBuffer buffer) {
-		ContentValues cv = new ContentValues();
-		cv.put("name", url.getPath());
-		//cv.put("contents", buffer.get)
-
-	}
-
-	@Override
-	public ByteBuffer read(URL url) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-}
-
-class StorageSQLHelper extends SQLiteOpenHelper{
-
-	public StorageSQLHelper(Context context, String name, CursorFactory factory,
-			int version) {
-		super(context, name, factory, version);
-		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public void onCreate(SQLiteDatabase db) {
-		try {
-			db.execSQL("CREATE TABLE IF NOT EXISTS entry (name TEXT, contents TEXT);");
-			db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS entry_name ON entry(name);");
-		}catch (SQLException e) {
-			e.printStackTrace();
+		ContentValues values = new ContentValues();
+		values.put("name", url.getPath());
+		values.put("contents", buffer.getData());
+		long r = _db.insert("entry", null, values);
+		if (r == -1) {
+			ILogger.instance().logError("SQL", "Can't write in database \"%s\"\n", _databaseName);
 		}
 	}
 
 	@Override
-	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		int needed_questionmark;
+	public ByteBuffer read(URL url) {
+		String name = url.getPath();
+		  
+		Cursor cursor = _db.query("entry", new String [] {"contents"}, "name = " + name, 
+				  null, null, null, null);
+		
+		if (cursor.getCount() > 0) {
+			byte[] data = cursor.getBlob(0);
+			ByteBuffer bb = new ByteBuffer(data, data.length);
+			cursor.close();
+			return bb;
+		} else {
+			cursor.close();
+			return null;
+		}
 	}
-	
+
 }
