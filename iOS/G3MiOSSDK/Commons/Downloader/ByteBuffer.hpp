@@ -59,7 +59,7 @@ public:
 #endif
   
 #ifdef JAVA_CODE
-  byte[] getData() { return _data;}
+  public byte[] getData() { return _data;}
 #endif
 
   std::string getDataAsString() const;
