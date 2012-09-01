@@ -8,6 +8,7 @@ import org.glob3.mobile.generated.Rectangle;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.util.Config;
 import android.util.Log;
 
 public class Image_Android extends IImage {
@@ -60,12 +61,15 @@ public class Image_Android extends IImage {
       Bitmap bm1 = Bitmap.createBitmap(_image, 0, 0, width, height);
       Bitmap bm2 = Bitmap.createBitmap(((Image_Android) other).getBitmap(), (int) rect._x, (int) rect._y, (int) rect._width,
                (int) rect._height);
-      Canvas canvas = new Canvas(bm1);
+      
+      Bitmap copyBmp1 = bm1.copy(Bitmap.Config.ARGB_8888, true); //MAKE MUTABLE
+      
+      Canvas canvas = new Canvas(copyBmp1);
 
       canvas.drawBitmap(bm1, 0, 0, null);
       canvas.drawBitmap(bm2, (int) rect._x, (int) rect._y, null);
 
-      return new Image_Android(bm1);
+      return new Image_Android(copyBmp1);
    }
 
 

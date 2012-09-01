@@ -43,17 +43,16 @@ public class G3MAndroidDemoActivity extends Activity {
 	  layerSet.addLayer(bing);
 
 	  
-	  //  WMSLayer *pnoa = new WMSLayer("PNOA",
-	  //                                "http://www.idee.es/wms/PNOA/PNOA",
-	  //                                WMS_1_1_0,
-	  //                                "image/png",
-	  //                                Sector::fromDegrees(21, -18, 45, 6),
-	  //                                "EPSG:4326",
-	  //                                "",
-	  //                                true,
-	  //                                Angle::nan(),
-	  //                                Angle::nan());
-	  //  layerSet->addLayer(pnoa);
+	    WMSLayer pnoa = new WMSLayer("PNOA",
+	    								new URL("http://www.idee.es/wms/PNOA/PNOA"),
+	                                  WMSServerVersion.WMS_1_1_0,
+	                                  Sector.fromDegrees(21, -18, 45, 6),
+	                                  "image/png",
+	                                  "EPSG:4326",
+	                                  "",
+	                                  true,
+	                                  null);
+	    layerSet.addLayer(pnoa);
 	  
 	  //  WMSLayer *vias = new WMSLayer("VIAS",
 	  //                                "http://idecan2.grafcan.es/ServicioWMS/Callejero",

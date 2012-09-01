@@ -540,7 +540,7 @@ public class G3MWidget_Android extends GLSurfaceView implements OnGestureListene
 
 
       //		  IDownloader downloader = null;// new CachedDownloader(new Downloader_Android(8), storage);
-      IDownloader downloader = new CachedDownloader(new Downloader_Android(8), new NullStorage());
+      IDownloader downloader = new CachedDownloader(new Downloader_Android(8), storage);
 
       CompositeRenderer composite = new CompositeRenderer();
 
