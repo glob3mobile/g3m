@@ -474,7 +474,7 @@ public class G3MWidget_Android extends GLSurfaceView implements OnGestureListene
       cameraRenderer.addHandler(new CameraRotationHandler());
       cameraRenderer.addHandler(new CameraDoubleTapHandler());
 
-      boolean renderDebug = false;
+      boolean renderDebug = true;
       boolean useTilesSplitBudget = true;
       boolean forceTopLevelTilesRenderOnStart = true;
 

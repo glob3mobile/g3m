@@ -8,6 +8,8 @@ import org.glob3.mobile.generated.Rectangle;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Rect;
 import android.util.Config;
 import android.util.Log;
 
@@ -58,18 +60,29 @@ public class Image_Android extends IImage {
                              Rectangle rect,
                              int width,
                              int height) {
-      Bitmap bm1 = Bitmap.createBitmap(_image, 0, 0, width, height);
-      Bitmap bm2 = Bitmap.createBitmap(((Image_Android) other).getBitmap(), (int) rect._x, (int) rect._y, (int) rect._width,
-               (int) rect._height);
-      
-      Bitmap copyBmp1 = bm1.copy(Bitmap.Config.ARGB_8888, true); //MAKE MUTABLE
-      
-      Canvas canvas = new Canvas(copyBmp1);
+	   
+	   Bitmap bm1 = null;
+	   if (_image.getWidth() != width || _image.getHeight() != height) {
+		  bm1 = Bitmap.createBitmap(_image, 0, 0, width, height);
+	   } else {
+		  bm1 = _image;
+	   }
+	   Bitmap canvasBitmap = bm1.copy(Bitmap.Config.ARGB_8888, true); //MAKE MUTABLE
+	   Canvas canvas = new Canvas(canvasBitmap);
+	   
+	   Bitmap bm2 = ((Image_Android) other).getBitmap();
 
-      canvas.drawBitmap(bm1, 0, 0, null);
-      canvas.drawBitmap(bm2, (int) rect._x, (int) rect._y, null);
-
-      return new Image_Android(copyBmp1);
+      int left = (int)rect._x;
+      int right = (int)(rect._x + rect._width);
+      
+      int bottom = height - (int)rect._y;
+      int top =  height - (int)(rect._y + rect._height);
+      
+      Rect dstRect = new Rect(left, top, right, bottom);
+      
+      canvas.drawBitmap(bm2, null, dstRect, null);
+      
+      return new Image_Android(canvasBitmap);
    }
 
 
