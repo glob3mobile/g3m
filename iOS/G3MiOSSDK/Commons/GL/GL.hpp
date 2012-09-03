@@ -50,7 +50,8 @@ private:
   
 #ifdef C_CODE
   GLCullFace _cullFace_face;
-#else
+#endif
+#ifdef JAVA_CODE
   GLCullFace _cullFace_face = GLCullFace.Back;
 #endif
   
