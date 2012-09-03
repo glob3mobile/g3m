@@ -135,5 +135,18 @@ public class MotionEventProcessor {
 		return te;
 	}
 	
+	  public TouchEvent processDoubleTapEvent(MotionEvent event) {
+	      PointerCoords pc = new PointerCoords();
+	      event.getPointerCoords(0, pc);
+         Vector2D pos = new Vector2D(pc.x, pc.y);
+         Touch t = new Touch(pos, pos);
+         
+         final TouchEvent te = TouchEvent.create(TouchEventType.Down, t);
+
+         return te;
+	     
+	  }
+
+	
 
 }
