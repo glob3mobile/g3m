@@ -2,6 +2,8 @@ package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.IMathUtils;
 
+import android.util.FloatMath;
+
 public class MathUtils_Android extends IMathUtils {
 
 	@Override
@@ -36,7 +38,7 @@ public class MathUtils_Android extends IMathUtils {
 
 	@Override
 	public float sin(float v) {
-		return (float) Math.sin(v);
+		return FloatMath.sin(v);
 	}
 
 	@Override
@@ -56,7 +58,7 @@ public class MathUtils_Android extends IMathUtils {
 
 	@Override
 	public float cos(float v) {
-		return (float) Math.cos(v);
+		return FloatMath.cos(v);
 	}
 
 	@Override
@@ -131,7 +133,7 @@ public class MathUtils_Android extends IMathUtils {
 
 	@Override
 	public float sqrt(float v) {
-		return (float) Math.sqrt(v);
+		return FloatMath.sqrt(v);
 	}
 
 	@Override
