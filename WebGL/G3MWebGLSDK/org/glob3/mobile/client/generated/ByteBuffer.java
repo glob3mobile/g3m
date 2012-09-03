@@ -20,7 +20,6 @@ package org.glob3.mobile.generated;
 public class ByteBuffer
 {
 
-
   byte[] _data;
 
   private final int _length;
@@ -51,7 +50,9 @@ public class ByteBuffer
   }
 
 
-  public byte[] getData() { return _data;}
+  public byte[] getData() {
+	return _data;
+  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: String getDataAsString() const

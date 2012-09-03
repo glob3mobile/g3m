@@ -49,7 +49,7 @@ public class GL
 
   private boolean _enableCullFace;
 
-  private GLCullFace _cullFace_face = GLCullFace.Back;
+  GLCullFace _cullFace_face = GLCullFace.Back;
 
 
 
