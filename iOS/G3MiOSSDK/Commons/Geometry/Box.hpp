@@ -49,7 +49,7 @@ private:
   const Vector3D _upper;
   
 #ifdef JAVA_CODE
-  java.util.ArrayList<Vector3D> _corners = null;
+  java.util.ArrayList<Vector3D> _corners = null; // cache for getCorners() method
 #endif
 };
 
