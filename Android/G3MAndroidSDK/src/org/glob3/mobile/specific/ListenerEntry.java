@@ -1,3 +1,5 @@
+
+
 package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.IDownloadListener;
@@ -5,17 +7,18 @@ import org.glob3.mobile.generated.ILogger;
 
 import android.util.Log;
 
+
 public class ListenerEntry {
 
-   final static String        TAG = "Downloader_Android_ListenerEntry";
-   
-   private boolean           _canceled;
-   private long              _requestId;
-   private IDownloadListener _listener;
+   final static String             TAG = "Downloader_Android_ListenerEntry";
+
+   private boolean                 _canceled;
+   private final long              _requestId;
+   private final IDownloadListener _listener;
 
 
-   public ListenerEntry(IDownloadListener listener,
-                        long requestId) {
+   public ListenerEntry(final IDownloadListener listener,
+                        final long requestId) {
       _listener = listener;
       _requestId = requestId;
       _canceled = false;

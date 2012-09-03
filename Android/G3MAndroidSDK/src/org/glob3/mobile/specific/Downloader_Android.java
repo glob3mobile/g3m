@@ -1,3 +1,5 @@
+
+
 package org.glob3.mobile.specific;
 
 
@@ -10,21 +12,24 @@ import org.glob3.mobile.generated.IDownloadListener;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.URL;
 
-public class Downloader_Android implements IDownloader {
 
-   final static String                                TAG = "Downloader_Android";
+public class Downloader_Android
+         implements
+            IDownloader {
 
-   private boolean                                    _started;
-   private int                                        _maxConcurrentOperationCount;
-   private int                                        _requestIdCounter;
-   private long                                       _requestsCounter;
-   private long                                       _cancelsCounter;
-   private ArrayList<Downloader_Android_WorkerThread> _workers;
-   private Map<String, Downloader_Android_Handler>    _downloadingHandlers;
-   private Map<String, Downloader_Android_Handler>    _queuedHandlers;
+   final static String                                      TAG = "Downloader_Android";
+
+   private boolean                                          _started;
+   private final int                                        _maxConcurrentOperationCount;
+   private int                                              _requestIdCounter;
+   private long                                             _requestsCounter;
+   private long                                             _cancelsCounter;
+   private final ArrayList<Downloader_Android_WorkerThread> _workers;
+   private final Map<String, Downloader_Android_Handler>    _downloadingHandlers;
+   private final Map<String, Downloader_Android_Handler>    _queuedHandlers;
 
 
-   public Downloader_Android(int maxConcurrentOperationCount) {
+   public Downloader_Android(final int maxConcurrentOperationCount) {
       _started = false;
       _maxConcurrentOperationCount = maxConcurrentOperationCount;
       _requestIdCounter = 1;
@@ -36,7 +41,7 @@ public class Downloader_Android implements IDownloader {
       _workers = new ArrayList<Downloader_Android_WorkerThread>(maxConcurrentOperationCount);
 
       for (int i = 0; i < _maxConcurrentOperationCount; i++) {
-         Downloader_Android_WorkerThread da = new Downloader_Android_WorkerThread(this);
+         final Downloader_Android_WorkerThread da = new Downloader_Android_WorkerThread(this);
          _workers.add(da);
       }
    }
@@ -45,9 +50,9 @@ public class Downloader_Android implements IDownloader {
    @Override
    public void start() {
       if (!_started) {
-         Iterator<Downloader_Android_WorkerThread> iter = _workers.iterator();
+         final Iterator<Downloader_Android_WorkerThread> iter = _workers.iterator();
          while (iter.hasNext()) {
-            Downloader_Android_WorkerThread worker = iter.next();
+            final Downloader_Android_WorkerThread worker = iter.next();
             worker.start();
          }
          _started = true;
@@ -58,9 +63,9 @@ public class Downloader_Android implements IDownloader {
    @Override
    public void stop() {
       if (_started) {
-         Iterator<Downloader_Android_WorkerThread> iter = _workers.iterator();
+         final Iterator<Downloader_Android_WorkerThread> iter = _workers.iterator();
          while (iter.hasNext()) {
-            Downloader_Android_WorkerThread worker = iter.next();
+            final Downloader_Android_WorkerThread worker = iter.next();
             worker.stopWorkerThread();
          }
          _started = false;
@@ -69,10 +74,10 @@ public class Downloader_Android implements IDownloader {
 
 
    @Override
-   public long request(URL url,
-                      long priority,
-                      IDownloadListener listener,
-                      boolean deleteListener) {
+   public long request(final URL url,
+                       final long priority,
+                       final IDownloadListener listener,
+                       final boolean deleteListener) {
 
       Downloader_Android_Handler handler = null;
       long requestId;
@@ -105,7 +110,7 @@ public class Downloader_Android implements IDownloader {
 
 
    @Override
-   public void cancelRequest(long requestId) {
+   public void cancelRequest(final long requestId) {
       if (requestId < 0) {
          return;
       }
@@ -117,12 +122,12 @@ public class Downloader_Android implements IDownloader {
          Iterator<Map.Entry<String, Downloader_Android_Handler>> iter = _queuedHandlers.entrySet().iterator();
 
          while (iter.hasNext() && !found) {
-            Map.Entry<String, Downloader_Android_Handler> e = iter.next();
-            String url = e.getKey();
-            Downloader_Android_Handler handler = e.getValue();
+            final Map.Entry<String, Downloader_Android_Handler> e = iter.next();
+            final String url = e.getKey();
+            final Downloader_Android_Handler handler = e.getValue();
 
             if (handler.removeListenerForRequestId(requestId)) {
-               
+
                if (!handler.hasListener()) {
                   _queuedHandlers.remove(url);
                }
@@ -134,8 +139,8 @@ public class Downloader_Android implements IDownloader {
             iter = _downloadingHandlers.entrySet().iterator();
 
             while (iter.hasNext() && !found) {
-               Map.Entry<String, Downloader_Android_Handler> e = iter.next();
-               Downloader_Android_Handler handler = e.getValue();
+               final Map.Entry<String, Downloader_Android_Handler> e = iter.next();
+               final Downloader_Android_Handler handler = e.getValue();
 
                if (handler.cancelListenerForRequestId(requestId)) {
                   found = true;
@@ -146,7 +151,7 @@ public class Downloader_Android implements IDownloader {
    }
 
 
-   public synchronized void removeDownloadingHandlerForUrl(String url) {
+   public synchronized void removeDownloadingHandlerForUrl(final String url) {
       _downloadingHandlers.remove(url);
    }
 
@@ -157,13 +162,13 @@ public class Downloader_Android implements IDownloader {
       String selectedURL = null;
 
       synchronized (this) {
-         Iterator<Map.Entry<String, Downloader_Android_Handler>> it = _queuedHandlers.entrySet().iterator();
+         final Iterator<Map.Entry<String, Downloader_Android_Handler>> it = _queuedHandlers.entrySet().iterator();
 
          while (it.hasNext()) {
-            Map.Entry<String, Downloader_Android_Handler> e = it.next();
-            String url = e.getKey();
-            Downloader_Android_Handler handler = e.getValue();
-            long priority = handler.getPriority();
+            final Map.Entry<String, Downloader_Android_Handler> e = it.next();
+            final String url = e.getKey();
+            final Downloader_Android_Handler handler = e.getValue();
+            final long priority = handler.getPriority();
 
             if (priority > selectedPriority) {
                selectedPriority = priority;
@@ -185,7 +190,7 @@ public class Downloader_Android implements IDownloader {
 
    @Override
    public String statistics() {
-      StringBuilder_Android sb = new StringBuilder_Android();
+      final StringBuilder_Android sb = new StringBuilder_Android();
 
       sb.add("Downloader_Android(downloading=").add(_downloadingHandlers.size());
       sb.add(", queued=").add(_queuedHandlers.size());

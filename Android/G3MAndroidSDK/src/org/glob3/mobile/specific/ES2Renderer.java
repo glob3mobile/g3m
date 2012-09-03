@@ -1,3 +1,5 @@
+
+
 package org.glob3.mobile.specific;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -10,7 +12,10 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.os.Looper;
 
-class ES2Renderer implements GLSurfaceView.Renderer {
+
+class ES2Renderer
+         implements
+            GLSurfaceView.Renderer {
 
    final G3MWidget_Android _widget;
 
@@ -19,15 +24,15 @@ class ES2Renderer implements GLSurfaceView.Renderer {
    boolean                 _hasRendered = false;
 
 
-   public ES2Renderer(Context context,
-                      G3MWidget_Android widget) {
+   public ES2Renderer(final Context context,
+                      final G3MWidget_Android widget) {
       _context = context;
       _widget = widget;
    }
 
 
    @Override
-   public void onDrawFrame(GL10 glUnused) {
+   public void onDrawFrame(final GL10 glUnused) {
 
       if (Looper.myLooper() == null) {
          Looper.prepare();
@@ -35,7 +40,7 @@ class ES2Renderer implements GLSurfaceView.Renderer {
 
       _hasRendered = true;
 
-      G3MWidget widget = _widget.getWidget();
+      final G3MWidget widget = _widget.getWidget();
 
       GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
       widget.getGL().useProgram(_program);
@@ -49,9 +54,9 @@ class ES2Renderer implements GLSurfaceView.Renderer {
 
 
    @Override
-   public void onSurfaceChanged(GL10 glUnused,
-                                int width,
-                                int height) {
+   public void onSurfaceChanged(final GL10 glUnused,
+                                final int width,
+                                final int height) {
       // Ignore the passed-in GL10 interface, and use the GLES20
       // class's static methods instead.
       GLES20.glViewport(0, 0, width, height);
@@ -63,8 +68,8 @@ class ES2Renderer implements GLSurfaceView.Renderer {
 
 
    @Override
-   public void onSurfaceCreated(GL10 glUnused,
-                                EGLConfig config) {
+   public void onSurfaceCreated(final GL10 glUnused,
+                                final EGLConfig config) {
       _program = GL2Shaders.createProgram(GL2Shaders.getVertexShader(), GL2Shaders.getFragmentShader());
    }
 

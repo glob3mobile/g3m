@@ -26,7 +26,6 @@ import org.glob3.mobile.generated.GLVariable;
 import org.glob3.mobile.generated.INativeGL;
 
 import android.opengl.GLES20;
-import android.util.Log;
 
 
 public class NativeGL2_Android
@@ -325,19 +324,21 @@ public class NativeGL2_Android
    }
 
 
-//   static private FloatBuffer floatArrayToFloatBuffer(final float[] fv) {
-//      // TODO:
-//      final int ____TODO_;
-//
-//      final ByteBuffer byteBuf = ByteBuffer.allocateDirect(fv.length * 4);
-//      byteBuf.order(ByteOrder.nativeOrder());
-//      final FloatBuffer fb = byteBuf.asFloatBuffer();
-//      fb.put(fv); // <- too slow operation here (dgd)
-//      fb.position(0);
-//      return fb;
-//   }
-   
+   //   static private FloatBuffer floatArrayToFloatBuffer(final float[] fv) {
+   //      // TODO:
+   //      final int ____TODO_;
+   //
+   //      final ByteBuffer byteBuf = ByteBuffer.allocateDirect(fv.length * 4);
+   //      byteBuf.order(ByteOrder.nativeOrder());
+   //      final FloatBuffer fb = byteBuf.asFloatBuffer();
+   //      fb.put(fv); // <- too slow operation here (dgd)
+   //      fb.position(0);
+   //      return fb;
+   //   }
+
    static final WeakHashMap<float[], FloatBuffer> _floatBuffersCache = new WeakHashMap<float[], FloatBuffer>(64);
+
+
    static private FloatBuffer floatArrayToFloatBuffer(final float[] fv) {
       FloatBuffer result = _floatBuffersCache.get(fv);
       if (result == null) {
