@@ -428,6 +428,9 @@ public class NativeGL2_Android
          GLES20.glTexImage2D(getEnum(target), level, getEnum(internalFormat), width, height, border, getEnum(format),
                   getEnum(type), pixels);
       }
+      else {
+         throw new UnsupportedOperationException("Invalid type=" + type);
+      }
    }
 
 
