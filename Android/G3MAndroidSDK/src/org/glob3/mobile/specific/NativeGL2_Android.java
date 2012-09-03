@@ -324,6 +324,18 @@ public class NativeGL2_Android
    }
 
 
+   //   static private FloatBuffer floatArrayToFloatBuffer(final float[] fv) {
+   //      // TODO:
+   //      final int ____TODO_;
+   //
+   //      final ByteBuffer byteBuf = ByteBuffer.allocateDirect(fv.length * 4);
+   //      byteBuf.order(ByteOrder.nativeOrder());
+   //      final FloatBuffer fb = byteBuf.asFloatBuffer();
+   //      fb.put(fv); // <- too slow operation here (dgd)
+   //      fb.position(0);
+   //      return fb;
+   //   }
+
    static final WeakHashMap<float[], FloatBuffer> _floatBuffersCache = new WeakHashMap<float[], FloatBuffer>(64);
 
 
@@ -389,8 +401,7 @@ public class NativeGL2_Android
    @Override
    public void deleteTextures(final int n,
                               final int[] textures) {
-      final IntBuffer tex = IntBuffer.wrap(textures);
-      GLES20.glDeleteTextures(n, tex);
+      GLES20.glDeleteTextures(n, textures, 0);
    }
 
 
@@ -474,7 +485,7 @@ public class NativeGL2_Android
    @Override
    public void getIntegerv(final GLVariable v,
                            final int[] i) {
-      GLES20.glGetIntegerv(getEnum(v), IntBuffer.wrap(i));
+      GLES20.glGetIntegerv(getEnum(v), i, 0);
    }
 
 
