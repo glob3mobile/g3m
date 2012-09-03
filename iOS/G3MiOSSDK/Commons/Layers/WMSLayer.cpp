@@ -23,6 +23,10 @@ std::vector<Petition*> WMSLayer::getMapPetitions(const RenderContext* rc,
   }
   
   const Sector sector = tileSector.intersection(_sector);
+  if (sector.getDeltaLatitude().isZero() ||
+      sector.getDeltaLongitude().isZero() ) {
+    return petitions;
+  }
   
 	//Server name
   std::string req = _mapServerURL.getPath();
@@ -204,7 +208,7 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& g,
     }
   }
   req += "&LAYERS=" + _queryLayer;
-
+  
   //req += "&LAYERS=" + _queryLayers;
   req += "&QUERY_LAYERS=" + _queryLayer;
   

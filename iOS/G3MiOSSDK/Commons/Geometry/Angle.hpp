@@ -127,6 +127,11 @@ public:
   
   Angle distanceTo(const Angle& other) const;
   
+  
+  bool isZero() const {
+    return (_degrees == 0);
+  }
+  
 #ifdef JAVA_CODE
   @Override
 	public int hashCode() {
