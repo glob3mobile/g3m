@@ -33,7 +33,7 @@ public class MotionEventProcessor {
 			_touchs.clear();
 		}
 		
-	}
+	} 
 	
 	EventProcessed _prevLastEvent = new EventProcessed();
 	EventProcessed _lastEvent = new EventProcessed();
@@ -123,17 +123,9 @@ public class MotionEventProcessor {
 		}
 
 		final TouchEvent te = new TouchEvent(TouchEvent.create(_lastEvent._type, (ArrayList<Touch>) _lastEvent._touchs.clone()));
-
-//		Log.d("", "TE " + type.toString());
-//		for (int i = 0; i < touchs.size(); i++)
-//			Log.d("", "TE P " + touchs.get(i).getPos().x() + " "
-//					+ touchs.get(i).getPrevPos().x());
-		
 		//Saving the last event to use its position in Event Up as previous Position
 		_prevLastEvent = auxEvent.clone(); 
 
 		return te;
 	}
-	
-
 }
