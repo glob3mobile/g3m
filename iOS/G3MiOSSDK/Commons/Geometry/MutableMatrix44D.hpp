@@ -134,9 +134,7 @@ public:
     return _m[i];
   }
   
-  //const double * getMatrix() const { return _m;}
-  
-  void copyToFloatMatrix(float M[16]) const { 
+  void copyToFloatMatrix(float M[16]) const {
 //    for (int i = 0; i < 16; i++) {
 //      M[i] = (float) _m[i];
 //    }
