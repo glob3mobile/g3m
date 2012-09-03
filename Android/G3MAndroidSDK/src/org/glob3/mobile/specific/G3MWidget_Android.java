@@ -31,7 +31,6 @@ import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.MultiLayerTileTexturizer;
-import org.glob3.mobile.generated.NullStorage;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.SingleImageTileTexturizer;
 import org.glob3.mobile.generated.TextureBuilder;
@@ -48,6 +47,8 @@ import org.glob3.mobile.generated.Vector2D;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.view.MotionEvent.PointerCoords;
@@ -59,6 +60,8 @@ public class G3MWidget_Android extends GLSurfaceView implements OnGestureListene
 
    final MotionEventProcessor _motionEventProcessor = new MotionEventProcessor();
 
+   private OnDoubleTapListener _doubleTapListener = null;
+   private GestureDetector _gestureDetector = null;
 
    public G3MWidget_Android(Context context) {
       super(context);
@@ -73,6 +76,36 @@ public class G3MWidget_Android extends GLSurfaceView implements OnGestureListene
 
       // Debug flags
       setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
+      
+      
+      //Double Tap Listener
+ _gestureDetector = new GestureDetector(this);
+  _doubleTapListener = new OnDoubleTapListener() {
+
+		@Override
+		public boolean onSingleTapConfirmed(final MotionEvent e) {
+			// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean onDoubleTapEvent(final MotionEvent event) {
+		return true;
+	}
+
+	@Override
+	public boolean onDoubleTap(final MotionEvent event) {
+
+		queueEvent(new Runnable() {
+			@Override
+			public void run() {
+			}
+		});
+
+		return true;
+	}
+};
+_gestureDetector.setOnDoubleTapListener(_doubleTapListener);
    }
 
 
