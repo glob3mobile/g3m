@@ -58,7 +58,7 @@ public class GL
   private float _translationX;
   private float _translationY;
 
-  private final float[] _textureCoordinates;
+  private float[] _textureCoordinates;
 
   private float _flatColorR;
   private float _flatColorG;
@@ -114,7 +114,7 @@ public class GL
 
   private int _lastTextureWidth;
   private int _lastTextureHeight;
-  char[] _lastImageData;
+  byte[] _lastImageData;
 
 
 
