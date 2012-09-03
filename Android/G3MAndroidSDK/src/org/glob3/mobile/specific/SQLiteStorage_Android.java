@@ -12,6 +12,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 public class SQLiteStorage_Android implements IStorage {
 
@@ -29,8 +30,11 @@ public class SQLiteStorage_Android implements IStorage {
       String documentsDirectory = f.getAbsolutePath();
 
       File f2 = new File(new File(documentsDirectory), _databaseName);
-      return f2.getAbsolutePath();
-
+      
+      String path = f2.getAbsolutePath();
+      Log.d("SQLiteStorage_Android", "Creating DB in " + path);
+      
+      return path;
    }
 
 
@@ -60,7 +64,7 @@ public class SQLiteStorage_Android implements IStorage {
    public boolean contains(URL url) {
       String name = url.getPath();
 
-      Cursor cursor = _db.query("entry", new String[] { "contents" }, "name = ?", new String[] { name }, null, null, null);
+      Cursor cursor = _db.query("entry", new String[] { "1" }, "name = ?", new String[] { name }, null, null, null);
 
       boolean hasAny = (cursor.getCount() > 0);
 
@@ -88,7 +92,7 @@ public class SQLiteStorage_Android implements IStorage {
    public ByteBuffer read(URL url) {
       String name = url.getPath();
 
-      Cursor cursor = _db.query("entry", new String[] { "contents" }, "name like ?", new String[] { name }, null, null, null);
+      Cursor cursor = _db.query("entry", new String[] { "contents" }, "name = ?", new String[] { name }, null, null, null);
 
       if (cursor.moveToFirst()) {
          byte[] data = cursor.getBlob(0);
