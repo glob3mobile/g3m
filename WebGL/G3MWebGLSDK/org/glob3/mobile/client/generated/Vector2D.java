@@ -1,4 +1,4 @@
-package org.glob3.mobile.client.generated; 
+package org.glob3.mobile.generated; 
 //
 //  Vector2D.cpp
 //  G3MiOSSDK
@@ -17,6 +17,9 @@ package org.glob3.mobile.client.generated;
 
 
 
+
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class MutableVector2D;
 
 public class Vector2D
 {
@@ -51,7 +54,14 @@ public class Vector2D
 //ORIGINAL LINE: double length() const
   public final double length()
   {
-	return Math.sqrt(squaredLength());
+	return IMathUtils.instance().sqrt(squaredLength());
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Angle orientation() const
+  public final Angle orientation()
+  {
+	  return Angle.fromRadians(IMathUtils.instance().atan2(_y, _x));
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -107,7 +117,7 @@ public class Vector2D
 //ORIGINAL LINE: Angle angle() const
   public final Angle angle()
   {
-	double a = Math.atan2(_y, _x);
+	double a = IMathUtils.instance().atan2(_y, _x);
 	return Angle.fromRadians(a);
   }
 
@@ -123,6 +133,51 @@ public class Vector2D
   public final double y()
   {
 	return _y;
+  }
+
+  public static Vector2D nan()
+  {
+	return new Vector2D(IMathUtils.instance().NanD(), IMathUtils.instance().NanD());
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: double maxAxis() const
+  public final double maxAxis()
+  {
+	return (_x >= _y) ? _x : _y;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: double minAxis() const
+  public final double minAxis()
+  {
+	return (_x <= _y) ? _x : _y;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: MutableVector2D asMutableVector2D() const
+  public final MutableVector2D asMutableVector2D()
+  {
+	return new MutableVector2D(_x, _y);
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isNan() const
+  public final boolean isNan()
+  {
+	return IMathUtils.instance().isNan(_x * _y);
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const String description() const
+  public final String description()
+  {
+	IStringBuilder isb = IStringBuilder.newStringBuilder();
+	isb.add("(V2D ").add(_x).add(", ").add(_y).add(")");
+	String s = isb.getString();
+	if (isb != null)
+		isb.dispose();
+	return s;
   }
 
 }

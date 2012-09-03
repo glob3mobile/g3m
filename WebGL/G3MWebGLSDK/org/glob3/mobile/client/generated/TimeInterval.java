@@ -1,4 +1,4 @@
-package org.glob3.mobile.client.generated; 
+package org.glob3.mobile.generated; 
 //
 //  TimeInterval.hpp
 //  G3MiOSSDK
@@ -32,9 +32,14 @@ public class TimeInterval
 
   }
 
+  public TimeInterval()
+  {
+	  _milliseconds = 0;
+  }
+
   public static TimeInterval nan()
   {
-	return new TimeInterval(Double.NaN);
+	return new TimeInterval(IMathUtils.instance().NanD());
   }
 
   public static TimeInterval fromMilliseconds(int milliseconds)
@@ -56,10 +61,24 @@ public class TimeInterval
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: double seconds() const
+  public final double seconds()
+  {
+	return (double) _milliseconds / 1000.0;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: boolean isNan() const
   public final boolean isNan()
   {
-	return Double.isNaN(_milliseconds);
+	return IMathUtils.instance().isNan((double)_milliseconds);
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean lowerThan(const TimeInterval& that) const
+  public final boolean lowerThan(TimeInterval that)
+  {
+	return _milliseconds < that._milliseconds;
   }
 
 }

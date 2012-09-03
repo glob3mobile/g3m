@@ -1,4 +1,4 @@
-package org.glob3.mobile.client.generated; 
+package org.glob3.mobile.generated; 
 //
 //  IFactory.h
 //  G3MiOSSDK
@@ -30,9 +30,16 @@ public abstract class IFactory
   public abstract IImage createImageFromFileName(String filename);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual IImage* createImageFromData(const ByteBuffer* buffer) const = 0;
+  public abstract IImage createImageFromData(ByteBuffer buffer);
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual IImage* createImageFromSize(int width, int height) const = 0;
+  public abstract IImage createImageFromSize(int width, int height);
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual void deleteImage(const IImage* image) const = 0;
   public abstract void deleteImage(IImage image);
-
   // a virtual destructor is needed for conversion to Java
   public void dispose()
   {

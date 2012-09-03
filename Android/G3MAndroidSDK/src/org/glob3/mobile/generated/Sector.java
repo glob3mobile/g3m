@@ -358,4 +358,17 @@ public class Sector
 	return s;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Sector* shrinkedByPercentP(float percent) const
+  public final Sector shrinkedByPercentP(float percent)
+  {
+	Angle deltaLatitude = _deltaLatitude.times(percent).div(2);
+	Angle deltaLongitude = _deltaLongitude.times(percent).div(2);
+
+	Geodetic2D delta = new Geodetic2D(deltaLatitude, deltaLongitude);
+
+	return new Sector(_lower.add(delta), _upper.sub(delta));
+
+  }
+
 }

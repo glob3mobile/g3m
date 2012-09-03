@@ -63,6 +63,20 @@ public class Geodetic2D
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Geodetic2D add(const Geodetic2D& that) const
+  public final Geodetic2D add(Geodetic2D that)
+  {
+	return new Geodetic2D(_latitude.add(that._latitude), _longitude.add(that._longitude));
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Geodetic2D sub(const Geodetic2D& that) const
+  public final Geodetic2D sub(Geodetic2D that)
+  {
+	return new Geodetic2D(_latitude.sub(that._latitude), _longitude.sub(that._longitude));
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: boolean closeTo(const Geodetic2D &other) const
   public final boolean closeTo(Geodetic2D other)
   {

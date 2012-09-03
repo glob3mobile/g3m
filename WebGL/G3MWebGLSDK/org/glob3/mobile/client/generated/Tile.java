@@ -1,358 +1,537 @@
-package org.glob3.mobile.client.generated; 
-//
-//  Tile.cpp
-//  G3MiOSSDK
-//
-//  Created by Agustín Trujillo Pino on 12/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
-//
-
-
-//
-//  Tile.h
-//  G3MiOSSDK
-//
-//  Created by Agustín Trujillo Pino on 12/06/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
-//
-
-
-
+package org.glob3.mobile.generated; 
 public class Tile
 {
+  private TileTexturizer _texturizer;
+  private Tile _parent;
+  private final Sector _sector ;
+  private final int _level;
+  private final int _row;
+  private final int _column;
 
-  public Tile(Sector bbox)
+  private Mesh _tessellatorMesh;
+  private Mesh _debugMesh;
+  private Mesh _texturizedMesh;
+
+  private boolean _textureSolved;
+  private java.util.ArrayList<Tile> _subtiles;
+  private boolean _justCreatedSubtiles;
+
+  private boolean _texturizerDirty;
+
+  private Mesh getTessellatorMesh(RenderContext rc, TileRenderContext trc)
   {
-	  BBox = bbox;
-	  vertices = null;
+	if (_tessellatorMesh == null)
+	{
+	  _tessellatorMesh = trc.getTessellator().createMesh(rc, this);
+	}
+	return _tessellatorMesh;
   }
+
+  private Mesh getDebugMesh(RenderContext rc, TileRenderContext trc)
+  {
+	if (_debugMesh == null)
+	{
+	  _debugMesh = trc.getTessellator().createDebugMesh(rc, this);
+	}
+	return _debugMesh;
+  }
+
+  private boolean isVisible(RenderContext rc, TileRenderContext trc)
+  {
+	// test if sector is back oriented with respect to the camera
+	//  if (_sector.isBackOriented(rc)) {
+	//    return false;
+	//  }
+  
+	Extent extent = getTessellatorMesh(rc, trc).getExtent();
+	if (extent == null)
+	{
+	  return false;
+	}
+	return extent.touches(rc.getCurrentCamera().getFrustumInModelCoordinates());
+  }
+
+  private boolean meetsRenderCriteria(RenderContext rc, TileRenderContext trc)
+  {
+	final TilesRenderParameters parameters = trc.getParameters();
+  
+	if (_level >= parameters._maxLevel)
+	{
+	  return true;
+	}
+  
+	//  if (timer != NULL) {
+	//    if ( timer->elapsedTime().milliseconds() > 50 ) {
+	//      return true;
+	//    }
+	//  }
+  
+	TileTexturizer texturizer = trc.getTexturizer();
+	if (texturizer != null)
+	{
+	  if (texturizer.tileMeetsRenderCriteria(this))
+	  {
+		return true;
+	  }
+	}
+  
+	Extent extent = getTessellatorMesh(rc, trc).getExtent();
+	if (extent == null)
+	{
+	  return true;
+	}
+	//  const double projectedSize = extent->squaredProjectedArea(rc);
+	//  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
+	//    return true;
+	//  }
+	final Vector2D ex = extent.projectedExtent(rc);
+	//const double t = extent.maxAxis() * 2;
+	final double t = (ex.x() + ex.y());
+	if (t <= ((parameters._tileTextureWidth + parameters._tileTextureHeight) * 1.75))
+	{
+	  return true;
+	}
+  
+  
+	int __TODO_tune_render_budget;
+	if (trc.getParameters()._useTilesSplitBudget)
+	{
+	  if (_subtiles == null) // the tile needs to create the subtiles
+	  {
+		if (trc.getStatistics().getSplitsCountInFrame() > 1)
+		{
+		  // there are not more splitsCount-budget to spend
+		  return true;
+		}
+  
+		if (trc.getLastSplitTimer().elapsedTime().milliseconds() < 25)
+		{
+		  // there are not more time-budget to spend
+		  return true;
+		}
+	  }
+	}
+  
+	return false;
+  }
+
+  private java.util.ArrayList<Tile> createSubTiles()
+  {
+	final Geodetic2D lower = _sector.lower();
+	final Geodetic2D upper = _sector.upper();
+  
+	final Angle midLat = Angle.midAngle(lower.latitude(), upper.latitude());
+	final Angle midLon = Angle.midAngle(lower.longitude(), upper.longitude());
+  
+	final int nextLevel = _level + 1;
+  
+	java.util.ArrayList<Tile> subTiles = new java.util.ArrayList<Tile>();
+	subTiles.add(createSubTile(lower.latitude(), lower.longitude(), midLat, midLon, nextLevel, 2 * _row, 2 * _column));
+  
+	subTiles.add(createSubTile(lower.latitude(), midLon, midLat, upper.longitude(), nextLevel, 2 * _row, 2 * _column + 1));
+  
+	subTiles.add(createSubTile(midLat, lower.longitude(), upper.latitude(), midLon, nextLevel, 2 * _row + 1, 2 * _column));
+  
+	subTiles.add(createSubTile(midLat, midLon, upper.latitude(), upper.longitude(), nextLevel, 2 * _row + 1, 2 * _column + 1));
+  
+	return subTiles;
+  }
+
+  private void rawRender(RenderContext rc, TileRenderContext trc)
+  {
+  
+	Mesh tessellatorMesh = getTessellatorMesh(rc, trc);
+  
+	TileTexturizer texturizer = trc.getTexturizer();
+  
+	if (tessellatorMesh != null)
+	{
+	  if (texturizer == null)
+	  {
+		tessellatorMesh.render(rc);
+	  }
+	  else
+	  {
+  //      const bool needsToCallTexturizer = (!isTextureSolved() || (_texturizedMesh == NULL)) && isTexturizerDirty();
+		final boolean needsToCallTexturizer = (_texturizedMesh == null) || isTexturizerDirty();
+  
+		if (needsToCallTexturizer)
+		{
+		  int __TODO_tune_render_budget;
+  
+		  _texturizedMesh = texturizer.texturize(rc, trc, this, tessellatorMesh, _texturizedMesh);
+		}
+  
+		if (_texturizedMesh != null)
+		{
+		  _texturizedMesh.render(rc);
+		}
+		else
+		{
+		  tessellatorMesh.render(rc);
+		}
+	  }
+	}
+  
+  }
+
+  private void debugRender(RenderContext rc, TileRenderContext trc)
+  {
+	Mesh debugMesh = getDebugMesh(rc, trc);
+	if (debugMesh != null)
+	{
+	  debugMesh.render(rc);
+	}
+  }
+
+  private Tile createSubTile(Angle lowerLat, Angle lowerLon, Angle upperLat, Angle upperLon, int level, int row, int column)
+  {
+	return new Tile(_texturizer, this, new Sector(new Geodetic2D(lowerLat, lowerLon), new Geodetic2D(upperLat, upperLon)), level, row, column);
+  }
+
+
+  private java.util.ArrayList<Tile> getSubTiles()
+  {
+	if (_subtiles == null)
+	{
+	  _subtiles = createSubTiles();
+	  _justCreatedSubtiles = true;
+	}
+	return _subtiles;
+  }
+
+  private void prune(TileRenderContext trc)
+  {
+	if (_subtiles != null)
+	{
+  
+	  //    printf("= pruned tile %s\n", getKey().description().c_str());
+  
+	  TileTexturizer texturizer = (trc == null) ? null : trc.getTexturizer();
+  
+	  final int subtilesSize = _subtiles.size();
+	  for (int i = 0; i < subtilesSize; i++)
+	  {
+		Tile subtile = _subtiles.get(i);
+  
+		subtile.setIsVisible(false, trc);
+  
+		subtile.prune(trc);
+		if (texturizer != null)
+		{
+		  texturizer.tileToBeDeleted(subtile, subtile._texturizedMesh);
+		}
+		if (subtile != null)
+			subtile.dispose();
+	  }
+  
+	  _subtiles = null;
+	  _subtiles = null;
+  
+	}
+  }
+
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  Tile(Tile that);
+
+  private void ancestorTexturedSolvedChanged(Tile ancestor, boolean textureSolved)
+  {
+	if (textureSolved && isTextureSolved())
+	{
+	  return;
+	}
+  
+	if (_texturizer != null)
+	{
+	  _texturizer.ancestorTexturedSolvedChanged(this, ancestor, textureSolved);
+	}
+  
+	if (_subtiles != null)
+	{
+	  final int subtilesSize = _subtiles.size();
+	  for (int i = 0; i < subtilesSize; i++)
+	  {
+		Tile subtile = _subtiles.get(i);
+		subtile.ancestorTexturedSolvedChanged(ancestor, textureSolved);
+	  }
+	}
+  }
+
+  private boolean _isVisible;
+  private void setIsVisible(boolean isVisible, TileRenderContext trc)
+  {
+	if (_isVisible != isVisible)
+	{
+	  _isVisible = isVisible;
+  
+	  if (!_isVisible)
+	  {
+		deleteTexturizedMesh(trc);
+	  }
+	}
+  }
+
+  private void deleteTexturizedMesh(TileRenderContext trc)
+  {
+	if ((_level > 0) && (_texturizedMesh != null))
+	{
+  
+	  TileTexturizer texturizer = trc.getTexturizer();
+	  if (texturizer != null)
+	  {
+		texturizer.tileMeshToBeDeleted(this, _texturizedMesh);
+	  }
+  
+	  if (_texturizedMesh != null)
+		  _texturizedMesh.dispose();
+	  _texturizedMesh = null;
+  
+	  _texturizerData = null;
+  
+	  setTexturizerDirty(true);
+	  setTextureSolved(false);
+	}
+  }
+
+  private ITexturizerData _texturizerData;
+
+  public Tile(TileTexturizer texturizer, Tile parent, Sector sector, int level, int row, int column)
+  {
+	  _texturizer = texturizer;
+	  _parent = parent;
+	  _sector = new Sector(sector);
+	  _level = level;
+	  _row = row;
+	  _column = column;
+	  _tessellatorMesh = null;
+	  _debugMesh = null;
+	  _texturizedMesh = null;
+	  _textureSolved = false;
+	  _texturizerDirty = true;
+	  _subtiles = null;
+	  _justCreatedSubtiles = false;
+	  _isVisible = false;
+	  _texturizerData = null;
+	//  int __remove_tile_print;
+	//  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
+	//         getKey().description().c_str(),
+	//         _sector.getDeltaLatitude().description().c_str(),
+	//         _sector.getDeltaLongitude().description().c_str()
+	//         );
+  }
+
   public void dispose()
   {
-	if (vertices!=null)
-		vertices = null;
+  //  if (_isVisible) {
+  //    deleteTexturizedMesh();
+  //  }
+  
+	prune(null);
+  
+	if (_debugMesh != null)
+	{
+	  if (_debugMesh != null)
+		  _debugMesh.dispose();
+	}
+  
+	if (_tessellatorMesh != null)
+	{
+	  if (_tessellatorMesh != null)
+		  _tessellatorMesh.dispose();
+	}
+  
+	if (_texturizerData != null)
+	{
+	  _texturizerData = null;
+	}
+  
+	if (_texturizedMesh != null)
+	{
+	  if (_texturizedMesh != null)
+		  _texturizedMesh.dispose();
+	}
   }
 
-  public final void createVertices(Planet planet)
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const Sector getSector() const
+  public final Sector getSector()
   {
-	Angle maxLat = BBox.max().latitude();
-	Angle minLat = BBox.min().latitude();
-	Angle minLon = BBox.min().longitude();
-	Angle maxLon = BBox.max().longitude();
-	//Globe *globe = SceneController::GetInstance()->getGlobe();
-	//Ellipsoid *ellipsoid = globe->GetEllipsoid();
-	//bool skirts = globe->SkirtedTiles();
-  
-	int resol = _resolution;
-	int resol2 = resol * resol;
-	int n1 = _resolution - 1;
-	//double exag = globe->GetExagElevFactor();
-	double maxH = 0;
-	double H;
-	Angle latSize = maxLat.sub(minLat);
-	Angle lonSize = maxLon.sub(minLon);
-	final double sizeSkirt = 0.95;
-  
-	// compute number of vertices in the mesh (there are less vertices if the tiles touches one of the poles)
-	int numVertices = resol2;
-	if (_skirts)
-		numVertices += 4 * resol - 4;
-  
-	// if first time for tile, alloc memory
-	if (vertices == null)
-	{
-	  vertices = new float[numVertices * 3];
-	  //textureCoor = new float[numVertices * 2];
-	}
-  
-	// alloc temp memory to create a matrix of coordinates
-	double []x = new double[resol2];
-	double []y = new double [resol2];
-	double []z = new double [resol2];
-	float[] u = new float[resol2];
-	float[] v = new float [resol2];
-  
-	// create mesh coordinates
-	for (int j = 0; j < resol; j++)
-	  for (int i = 0; i < resol; i++)
-	  {
-		int pos = j * resol + i;
-		//H = (elev != NULL) ? elev[pos] * exag : 0;
-		H = 0.0;
-		if (H > maxH)
-			maxH = H;
-		//lat = (maxLat.value - latSize.value*j/n1);
-		//lon = (minLon.value + lonSize.value*i/n1);
-		Angle lat = Angle.fromDegrees((maxLat.degrees() - latSize.degrees() * j / n1));
-		Angle lon = Angle.fromDegrees((minLon.degrees() + lonSize.degrees() * i / n1));
-		Geodetic3D g3 = new Geodetic3D(lat, lon, H);
-		Vector3D P = planet.toVector3D(g3);
-		x[pos] = P.x();
-		y[pos] = P.y();
-		z[pos] = P.z();
-		u[pos] = (float) i / n1;
-		v[pos] = (float) j / n1;
-	  }
-  
-	// compute center of tile
-	Angle lat = Angle.fromDegrees((minLat.degrees() + maxLat.degrees()) / 2);
-	Angle lon = Angle.fromDegrees((minLon.degrees() + maxLon.degrees()) / 2);
-	Geodetic3D g3 = new Geodetic3D(lat, lon, maxH);
-	//Vector3D center = planet->toVector3D(g3);
-	center = planet.toVector3D(g3).asMutableVector3D();
-  
-	// create a nxn mesh
-	int posV = 0;
-	//unsigned int posT = 0;
-	for (int j = 0; j < resol; j++)
-	  for (int i = 0; i < resol; i++)
-	  {
-		int pos = j * resol + i;
-		vertices[posV++] = (float)(x[pos] - center.x());
-		vertices[posV++] = (float)(y[pos] - center.y());
-		vertices[posV++] = (float)(z[pos] - center.z());
-		//textureCoor[posT++] = u[pos];
-		//textureCoor[posT++] = v[pos];
-	  }
-  
-	// create skirts
-	if (_skirts)
-	{
-  
-	  // west side
-	  for (int j = 0; j < resol - 1; j++)
-	  {
-		int pos = j * resol;
-		vertices[posV++] = (float)(x[pos] * sizeSkirt - center.x());
-		vertices[posV++] = (float)(y[pos] * sizeSkirt - center.y());
-		vertices[posV++] = (float)(z[pos] * sizeSkirt - center.z());
-		//textureCoor[posT++] = u[pos];
-		//textureCoor[posT++] = v[pos];
-	  }
-  
-	  // south side
-	  for (int i = 0; i < resol - 1; i++)
-	  {
-		int pos = (resol - 1) * resol + i;
-		vertices[posV++] = (float)(x[pos] * sizeSkirt - center.x());
-		vertices[posV++] = (float)(y[pos] * sizeSkirt - center.y());
-		vertices[posV++] = (float)(z[pos] * sizeSkirt - center.z());
-		//textureCoor[posT++] = u[pos];
-		//textureCoor[posT++] = v[pos];
-	  }
-  
-	  // east side
-	  for (int j = resol - 1; j > 0; j--)
-	  {
-		int pos = j * resol + resol - 1;
-		vertices[posV++] = (float)(x[pos] * sizeSkirt - center.x());
-		vertices[posV++] = (float)(y[pos] * sizeSkirt - center.y());
-		vertices[posV++] = (float)(z[pos] * sizeSkirt - center.z());
-		//textureCoor[posT++] = u[pos];
-		//textureCoor[posT++] = v[pos];
-	  }
-  
-	  // north side
-	  for (int i = resol - 1; i > 0; i--)
-	  {
-		int pos = i;
-		vertices[posV++] = (float)(x[pos] * sizeSkirt - center.x());
-		vertices[posV++] = (float)(y[pos] * sizeSkirt - center.y());
-		vertices[posV++] = (float)(z[pos] * sizeSkirt - center.z());
-		//textureCoor[posT++] = u[pos];
-		//textureCoor[posT++] = v[pos];
-	  }
-	}
-  
-	// free temp memory
-	x = null;
-	y = null;
-	z = null;
-	u = null;
-	v = null;
+	return _sector;
   }
-  public final void render(RenderContext rc)
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: int getLevel() const
+  public final int getLevel()
   {
-	// obtain the gl object
-	IGL gl = rc.getGL();
+	return _level;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: int getRow() const
+  public final int getRow()
+  {
+	return _row;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: int getColumn() const
+  public final int getColumn()
+  {
+	return _column;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Mesh* getTexturizedMesh() const
+  public final Mesh getTexturizedMesh()
+  {
+	return _texturizedMesh;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Tile* getParent() const
+  public final Tile getParent()
+  {
+	return _parent;
+  }
+
+  public final void render(RenderContext rc, TileRenderContext trc, java.util.LinkedList<Tile> toVisitInNextIteration)
+  {
+	TilesStatistics statistics = trc.getStatistics();
   
-	// translate model reference system to tile center
-	gl.pushMatrix();
-	MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(center.asVector3D());
-	gl.multMatrixf(T);
-  
-	// set opengl texture and pointers
-	//gl->BindTexture(idTexture);
-	gl.vertexPointer(3, 0, vertices);
-	//gl->TexCoordPointer(2, 0, textureCoor);
-	gl.color(0.5f,0.5f,0.8f,1.0f);
-  
-	// draw tile geometry
-	if (true) //g->GetWireframe()
+	statistics.computeTileProcessed(this);
+	if (isVisible(rc, trc))
 	{
+	  setIsVisible(true, trc);
   
-	  // draw solid mesh
-	  gl.enablePolygonOffset(5, 5);
-	  gl.drawTriangleStrip(numIndices, indices);
-	  gl.disablePolygonOffset();
+	  statistics.computeVisibleTile(this);
   
-	  // draw wireframe
-	  //gl->disableTexture2D();
-	  //gl->disableTextures();
-	  gl.lineWidth(1);
-	  gl.color(0.0f, 0.0f, 0.0f, 1.0f);
-	  gl.drawLines(numInnerIndices, innerIndices);
-	  gl.lineWidth(2);
-	  gl.color(1.0f, 0.0f, 0.0f, 1.0f);
-	  gl.drawLineLoop(numBorderIndices, borderIndices);
-	  //gl->EnableTextures();
-	  //gl->EnableTexture2D();
+	  if ((toVisitInNextIteration == null) || meetsRenderCriteria(rc, trc))
+	  {
+		rawRender(rc, trc);
+		if (trc.getParameters()._renderDebug)
+		{
+		  debugRender(rc, trc);
+		}
   
+		statistics.computeTileRendered(this);
+  
+		prune(trc);
+	  }
+	  else
+	  {
+		java.util.ArrayList<Tile> subTiles = getSubTiles();
+		if (_justCreatedSubtiles)
+		{
+		  trc.getLastSplitTimer().start();
+		  statistics.computeSplitInFrame();
+		  _justCreatedSubtiles = false;
+		}
+  
+		final int subTilesSize = subTiles.size();
+		for (int i = 0; i < subTilesSize; i++)
+		{
+		  Tile subTile = subTiles.get(i);
+		  toVisitInNextIteration.addLast(subTile);
+		}
+	  }
 	}
 	else
 	{
+	  setIsVisible(false, trc);
   
-	  // draw the mesh
-	  gl.drawTriangleStrip(numIndices, indices);
+	  prune(trc);
 	}
-  
-	// recover original model matrix
-	gl.popMatrix();
   }
 
-  public static void createIndices(int resol, boolean skirts)
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const TileKey getKey() const
+  public final TileKey getKey()
   {
-	_resolution = resol;
-	_skirts = skirts;
-  
-	// alloc memory
-	numIndices = (resol - 1) * (2 * resol + 2) - 1; //remove the first degenerated vertex
-	if (skirts)
-		numIndices += 8 * resol - 4;
-	indices = new byte[numIndices];
-  
-	// create indices vector for the mesh
-	int posI = 0;
-	for (int j = 0; j < resol - 1; j++)
-	{
-	  if (j > 0)
-		  indices[posI++] = (byte)(j * resol);
-	  for (int i = 0; i < resol; i++)
-	  {
-		indices[posI++] = (byte)(j * resol + i);
-		indices[posI++] = (byte)(j * resol + i + resol);
-	  }
-	  indices[posI++] = (byte)(j * resol + 2 * resol - 1);
-	}
-  
-	// create skirts
-	if (skirts)
-	{
-	  indices[posI++] = 0;
-	  int posS = resol * resol;
-  
-	  // west side
-	  for (int j = 0; j < resol - 1; j++)
-	  {
-		int pos = j * resol;
-		indices[posI++] = (byte)(pos);
-		indices[posI++] = (byte)(posS++);
-	  }
-  
-	  // south side
-	  for (int i = 0; i < resol - 1; i++)
-	  {
-		int pos = (resol - 1) * resol + i;
-		indices[posI++] = (byte) pos;
-		indices[posI++] = (byte)(posS++);
-	  }
-  
-	  // east side
-	  for (int j = resol - 1; j > 0; j--)
-	  {
-		int pos = j * resol + resol - 1;
-		indices[posI++] = (byte)(pos);
-		indices[posI++] = (byte)(posS++);
-	  }
-  
-	  // north side
-	  for (int i = resol - 1; i > 0; i--)
-	  {
-		int pos = i;
-		indices[posI++] = (byte) pos;
-		indices[posI++] = (byte)(posS++);
-	  }
-  
-	  // last triangles
-	  indices[posI++] = (byte) 0;
-	  indices[posI++] = (byte)(resol * resol);
-	  indices[posI++] = (byte)(resol * resol);
-	}
-  
-	// create border indices (wireframe mode)
-	numBorderIndices = 4 * (resol - 1);
-	borderIndices = new byte[numBorderIndices];
-	posI = 0;
-	for (int j = 0; j < resol - 1; j++)
-		borderIndices[posI++] = (byte)(j * resol);
-	for (int i = 0; i < resol - 1; i++)
-		borderIndices[posI++] = (byte)((resol - 1) * resol + i);
-	for (int j = resol - 1; j > 0; j--)
-		borderIndices[posI++] = (byte)(j * resol + resol - 1);
-	for (int i = resol - 1; i > 0; i--)
-		borderIndices[posI++] = (byte)(i);
-  
-	// create inner indices (wireframe mode)
-	numInnerIndices = numBorderIndices * (resol - 2);
-	innerIndices = new byte[numInnerIndices];
-	posI = 0;
-	for (int j = 1; j < resol - 1; j++)
-	  for (int i = 0; i < resol - 1; i++)
-	  {
-		int pos = j * resol + i;
-		innerIndices[posI++] = (byte) pos;
-		innerIndices[posI++] = (byte)(pos + 1);
-	  }
-	for (int i = 1; i < resol - 1; i++)
-	  for (int j = 0; j < resol - 1; j++)
-	  {
-		int pos = j * resol + i;
-		innerIndices[posI++] = (byte) pos;
-		innerIndices[posI++] = (byte)(pos + resol);
-	  }
+	return new TileKey(_level, _row, _column);
   }
-  public static void deleteIndices()
+
+  public final void setTextureSolved(boolean textureSolved)
   {
-	if (numIndices != 0)
+	if (textureSolved != _textureSolved)
 	{
-	  indices = null;
-	  numIndices = 0;
-	}
-	if (numInnerIndices != 0)
-	{
-	  innerIndices = null;
-	  numInnerIndices = 0;
-	}
-	if (numBorderIndices != 0)
-	{
-	  borderIndices = null;
-	  numBorderIndices = 0;
+	  _textureSolved = textureSolved;
+  
+	  if (_subtiles != null)
+	  {
+		final int subtilesSize = _subtiles.size();
+		for (int i = 0; i < subtilesSize; i++)
+		{
+		  Tile subtile = _subtiles.get(i);
+		  subtile.ancestorTexturedSolvedChanged(this, _textureSolved);
+		}
+	  }
 	}
   }
 
-  private final Sector BBox ;
-  private float[]vertices;
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isTextureSolved() const
+  public final boolean isTextureSolved()
+  {
+	return _textureSolved;
+  }
 
-  private static int _resolution;
-  private static boolean _skirts;
-  private static int numIndices;
-  private static int numBorderIndices = 0;
-  private static int numInnerIndices = 0;
-  private static byte[]indices;
-  private static byte[]borderIndices;
-  private static byte[]innerIndices;
+  public final void setTexturizerDirty(boolean texturizerDirty)
+  {
+	_texturizerDirty = texturizerDirty;
+  }
 
-  private MutableVector3D center = new MutableVector3D();
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isTexturizerDirty() const
+  public final boolean isTexturizerDirty()
+  {
+	return _texturizerDirty;
+  }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean hasTexturizerData() const
+  public final boolean hasTexturizerData()
+  {
+	return (_texturizerData != null);
+  }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: ITexturizerData* getTexturizerData() const
+  public final ITexturizerData getTexturizerData()
+  {
+	return _texturizerData;
+  }
+
+  public final void setTexturizerData(ITexturizerData texturizerData)
+  {
+	_texturizerData = texturizerData;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const Tile* getDeepestTileContaining(const Geodetic3D& position) const
+  public final Tile getDeepestTileContaining(Geodetic3D position)
+  {
+	if (_sector.contains(position))
+	{
+	  if (_subtiles == null)
+	  {
+		return this;
+	  }
+	  else
+	  {
+		for (int i = 0; i < _subtiles.size(); i++)
+		{
+		  final Tile subtile = _subtiles.get(i);
+		  final Tile subtileResult = subtile.getDeepestTileContaining(position);
+		  if (subtileResult != null)
+		  {
+			return subtileResult;
+		  }
+		}
+	  }
+	}
+  
+	return null;
+  }
 
 }
