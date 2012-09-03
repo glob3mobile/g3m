@@ -193,11 +193,13 @@ public class NativeGL2_Android
 
 
    private FloatBuffer floatArrayToFloatBuffer(final float[] fv) {
+      // TODO:
+      final int ____TODO_;
+
       final ByteBuffer byteBuf = ByteBuffer.allocateDirect(fv.length * 4);
       byteBuf.order(ByteOrder.nativeOrder());
       final FloatBuffer fb = byteBuf.asFloatBuffer();
-      fb.put(fv); // /TOO SLOW UNTIL VERSION GINGERBEAD (BECAUSE OF THIS,
-      // USE HASHMAP)
+      fb.put(fv); // <- too slow operation here (dgd)
       fb.position(0);
       return fb;
    }
@@ -253,11 +255,6 @@ public class NativeGL2_Android
                                 final boolean transpose,
                                 final float[] value) {
       final FloatBuffer fb = floatArrayToFloatBuffer(value);
-
-      for (int i = 0; i < fb.capacity(); i++) {
-         float d = fb.get(i);
-         d++;
-      }
 
       GLES20.glUniformMatrix4fv(location, count, transpose, fb);
    }
@@ -334,6 +331,9 @@ public class NativeGL2_Android
          final int[] ind = (int[]) indices;
          final IntBuffer indexBuffer = IntBuffer.wrap(ind);
          GLES20.glDrawElements(getEnum(mode), count, getEnum(type), indexBuffer);
+      }
+      else {
+         throw new UnsupportedOperationException("Invalid type=" + type);
       }
    }
 
