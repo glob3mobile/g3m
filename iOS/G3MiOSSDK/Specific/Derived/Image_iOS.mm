@@ -11,7 +11,7 @@
 Image_iOS::Image_iOS(int width, int height)
 {
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-  unsigned char *imageData = new unsigned char[height * width * 4 ];
+  unsigned char* imageData = new unsigned char[height * width * 4 ];
   
   CGContextRef context = CGBitmapContextCreate(imageData,
                                                width, height,
@@ -35,7 +35,7 @@ IImage* Image_iOS::combineWith(const IImage& other,
   UIImage* transIm = ((Image_iOS&)other).getUIImage();
   
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-  unsigned char *imageData = new unsigned char[height * width * 4];
+  unsigned char* imageData = new unsigned char[height * width * 4];
   
   CGContextRef context = CGBitmapContextCreate(imageData,
                                                width, height,
@@ -66,7 +66,7 @@ IImage* Image_iOS::combineWith(const IImage& other,
   UIImage* otherIm = ((Image_iOS&)other).getUIImage();
   
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-  unsigned char *imageData = new unsigned char[height * width * 4];
+  unsigned char* imageData = new unsigned char[height * width * 4];
   
   CGContextRef context = CGBitmapContextCreate(imageData,
                                                width, height,

@@ -564,7 +564,7 @@
     
     NSLog(@"----------------------------------------------------------------------------");
     NSLog(@"OpenGL Extensions:");
-    NSString *extensionString = [[NSString stringWithUTF8String:(char *)glGetString(GL_EXTENSIONS)] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString *extensionString = [[NSString stringWithUTF8String:(char*)glGetString(GL_EXTENSIONS)] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     NSArray *extensions = [extensionString componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     for (NSString *extension in extensions) {
       NSLog(@"  %@", extension);

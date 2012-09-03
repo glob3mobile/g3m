@@ -103,7 +103,7 @@ enum {
 
 - (BOOL)compileShader:(GLuint*)shader type:(GLenum)type file:(NSString *)file {
   GLint status;
-  const GLchar *source;
+  const GLchar* source;
   
   source = (GLchar *) [[NSString stringWithContentsOfFile:file encoding:NSUTF8StringEncoding error:nil] UTF8String];
   //NSLog(@"%s\n", source);
@@ -120,7 +120,7 @@ enum {
   GLint logLength;
   glGetShaderiv(*shader, GL_INFO_LOG_LENGTH, &logLength);
   if (logLength > 0) {
-    GLchar *log = (GLchar *) malloc(logLength);
+    GLchar* log = (GLchar* ) malloc(logLength);
     glGetShaderInfoLog(*shader, logLength, &logLength, log);
     NSLog(@"Shader compile log:\n%s", log);
     free(log);
@@ -145,7 +145,7 @@ enum {
   GLint logLength;
   glGetProgramiv(prog, GL_INFO_LOG_LENGTH, &logLength);
   if (logLength > 0) {
-    GLchar *log = (GLchar *) malloc(logLength);
+    GLchar* log = (GLchar* ) malloc(logLength);
     glGetProgramInfoLog(prog, logLength, &logLength, log);
     NSLog(@"Program link log:\n%s", log);
     free(log);
@@ -165,7 +165,7 @@ enum {
   glValidateProgram(prog);
   glGetProgramiv(prog, GL_INFO_LOG_LENGTH, &logLength);
   if (logLength > 0) {
-    GLchar *log = (GLchar *) malloc(logLength);
+    GLchar* log = (GLchar*) malloc(logLength);
     glGetProgramInfoLog(prog, logLength, &logLength, log);
     NSLog(@"Program validate log:\n%s", log);
     free(log);
