@@ -242,13 +242,12 @@ const GLTextureId GL::uploadTexture(const IImage* image,
                                     bool generateMipmap) {
   const GLTextureId texId = getGLTextureId();
   if (texId.isValid()) {
-    
-#ifdef C_CODE
-    unsigned char* imageData;
-    
     const bool lastImageDataIsValid = ((_lastTextureWidth == textureWidth) &&
                                        (_lastTextureHeight == textureHeight) &&
                                        (_lastImageData != NULL));
+
+#ifdef C_CODE
+    unsigned char* imageData;
     
     if (lastImageDataIsValid) {
       imageData = _lastImageData;
@@ -281,7 +280,18 @@ const GLTextureId GL::uploadTexture(const IImage* image,
 #endif
     
 #ifdef JAVA_CODE
-    byte[] imageData = new byte[textureWidth * textureHeight * 4];
+    byte[] imageData;
+    
+    if (lastImageDataIsValid) {
+      imageData = _lastImageData;
+    }
+    else {
+      imageData = new byte[textureWidth * textureHeight * 4];
+      _lastImageData = imageData;
+      _lastTextureWidth = textureWidth;
+      _lastTextureHeight = textureHeight;
+    }
+    
     image.fillWithRGBA8888(imageData, textureWidth, textureHeight);
     
     _gl.blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
