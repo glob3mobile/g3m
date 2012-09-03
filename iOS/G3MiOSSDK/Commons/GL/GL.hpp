@@ -66,7 +66,7 @@ private:
   const float* _textureCoordinates;
 #endif
 #ifdef JAVA_CODE
-  private final float[] _textureCoordinates;
+  private float[] _textureCoordinates;
 #endif
   
   float _flatColorR;
@@ -86,7 +86,7 @@ private:
   unsigned char* _lastImageData;
 #endif
 #ifdef JAVA_CODE
-  char[] _lastImageData;
+  byte[] _lastImageData;
 #endif
 
   
