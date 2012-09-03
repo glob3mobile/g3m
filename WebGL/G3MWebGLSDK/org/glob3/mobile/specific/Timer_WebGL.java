@@ -1,9 +1,9 @@
 
 
-package org.glob3.mobile.client.specific;
+package org.glob3.mobile.specific;
 
-import org.glob3.mobile.client.generated.ITimer;
-import org.glob3.mobile.client.generated.TimeInterval;
+import org.glob3.mobile.generated.ITimer;
+import org.glob3.mobile.generated.TimeInterval;
 
 import com.google.gwt.core.client.Duration;
 
@@ -31,9 +31,9 @@ public class Timer_WebGL
 
    @Override
    public TimeInterval elapsedTime() {
-      final int currentTime = (int) Duration.currentTimeMillis();
+      final double currentTime = Duration.currentTimeMillis();
 
-      return TimeInterval.fromMilliseconds(currentTime - (int) _startTime);
+      return TimeInterval.fromMilliseconds((int) (currentTime - _startTime));
    }
 
 }

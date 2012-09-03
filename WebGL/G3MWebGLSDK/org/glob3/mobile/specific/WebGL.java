@@ -1,4 +1,4 @@
-package org.glob3.mobile.client.specific;
+package org.glob3.mobile.specific;
 
 import java.util.List;
 
@@ -1147,9 +1147,9 @@ public class WebGL {
 	public static native JavaScriptObject jsCreateNewProgram(
 			String fragmentShaderId, String vertexShaderId) /*-{
 
-		@org.glob3.mobile.client.specific.WebGL::jsLoadShaderCode()();
-		var fragmentShader = @org.glob3.mobile.client.specific.WebGL::jsCompileShader(Ljava/lang/String;Ljava/lang/String;)($wnd.fragmentShader,"x-shader/x-fragment");
-		var vertexShader = @org.glob3.mobile.client.specific.WebGL::jsCompileShader(Ljava/lang/String;Ljava/lang/String;)($wnd.vertexShader,"x-shader/x-vertex");
+		@org.glob3.mobile.specific.WebGL::jsLoadShaderCode()();
+		var fragmentShader = @org.glob3.mobile.specific.WebGL::jsCompileShader(Ljava/lang/String;Ljava/lang/String;)($wnd.fragmentShader,"x-shader/x-fragment");
+		var vertexShader = @org.glob3.mobile.specific.WebGL::jsCompileShader(Ljava/lang/String;Ljava/lang/String;)($wnd.vertexShader,"x-shader/x-vertex");
 
 		var newProgram = $wnd.gl.createProgram();
 

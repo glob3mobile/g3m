@@ -9,5 +9,5 @@
 	
 	<inherits name="com.google.gwt.user.User" />
 	
-	<source path="client" />
+	<source path="" />
 </module>

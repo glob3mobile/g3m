@@ -1,19 +1,15 @@
-
-
-package org.glob3.mobile.client.specific;
+package org.glob3.mobile.specific;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.glob3.mobile.client.generated.ILogger;
-import org.glob3.mobile.client.generated.LogLevel;
+import org.glob3.mobile.generated.ILogger;
+import org.glob3.mobile.generated.LogLevel;
 
 import com.google.gwt.regexp.shared.RegExp;
 
 
-public class Logger_WebGL
-         extends
-            ILogger {
+public class Logger_WebGL extends ILogger {
 
    Logger _logger;
 
@@ -28,39 +24,30 @@ public class Logger_WebGL
    @Override
    public void logInfo(final String x,
                        final Object... LegacyParamArray) {
-      if (_level == LogLevel.SilenceLevel) {
-         return;
+      if (_level.getValue() >= LogLevel.InfoLevel.getValue()) {
+         final String res = stringFormat(x, LegacyParamArray);
+         _logger.log(Level.INFO, res);
       }
-
-      final String res = stringFormat(x, LegacyParamArray);
-      _logger.log(Level.INFO, res);
    }
 
 
    @Override
    public void logWarning(final String x,
                           final Object... LegacyParamArray) {
-      if ((_level == LogLevel.SilenceLevel) || (_level == LogLevel.InfoLevel)) {
-         return;
+      if (_level.getValue() >= LogLevel.WarningLevel.getValue()) {
+         final String res = stringFormat(x, LegacyParamArray);
+         _logger.log(Level.WARNING, res);
       }
-
-      final String res = stringFormat(x, LegacyParamArray);
-      _logger.log(Level.WARNING, res);
-      _logger.log(Level.WARNING, x);
    }
 
 
    @Override
    public void logError(final String x,
                         final Object... LegacyParamArray) {
-      if (_level != LogLevel.ErrorLevel) {
-         return;
+      if (_level.getValue() >= LogLevel.ErrorLevel.getValue()) {
+         final String res = stringFormat(x, LegacyParamArray);
+         _logger.log(Level.SEVERE, res);
       }
-
-      final String res = stringFormat(x, LegacyParamArray);
-      _logger.log(Level.SEVERE, res);
-      _logger.log(Level.SEVERE, x);
-
    }
 
 

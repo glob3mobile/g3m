@@ -2,7 +2,7 @@
 
 package org.glob3.mobile.client;
 
-import org.glob3.mobile.client.specific.G3MWidget_WebGL;
+import org.glob3.mobile.specific.G3MWidget_WebGL;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.Panel;

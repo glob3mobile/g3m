@@ -1,13 +1,13 @@
 
 
-package org.glob3.mobile.client.specific;
+package org.glob3.mobile.specific;
 
 import java.util.ArrayList;
 
-import org.glob3.mobile.client.generated.Touch;
-import org.glob3.mobile.client.generated.TouchEvent;
-import org.glob3.mobile.client.generated.TouchEventType;
-import org.glob3.mobile.client.generated.Vector2D;
+import org.glob3.mobile.generated.Touch;
+import org.glob3.mobile.generated.TouchEvent;
+import org.glob3.mobile.generated.TouchEventType;
+import org.glob3.mobile.generated.Vector2D;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
