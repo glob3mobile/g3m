@@ -28,9 +28,9 @@ void BusyMeshRenderer::initialize(const InitializationContext* ic)
   // add number of vertex for the square
   
   // create vertices and indices in dinamic memory
-  float *vertices = new float [numVertices*3];
-  int *indices = new int [numIndices+2];
-  float *colors = new float [numVertices*4];
+  float* vertices = new float[numVertices*3];
+  int*   indices  = new int[numIndices];
+  float* colors   = new float[numVertices*4];
   
   // create vertices
   unsigned int nv=0, ni=0, nc=0;

@@ -28,7 +28,7 @@ enum {
 @interface ES2Renderer (PrivateMethods)
 - (BOOL)loadShaders;
 
-- (BOOL)compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file;
+- (BOOL)compileShader:(GLuint*)shader type:(GLenum)type file:(NSString *)file;
 
 - (BOOL)linkProgram:(GLuint)prog;
 
@@ -101,7 +101,7 @@ enum {
   return timeToRedraw;
 }
 
-- (BOOL)compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file {
+- (BOOL)compileShader:(GLuint*)shader type:(GLenum)type file:(NSString *)file {
   GLint status;
   const GLchar *source;
   

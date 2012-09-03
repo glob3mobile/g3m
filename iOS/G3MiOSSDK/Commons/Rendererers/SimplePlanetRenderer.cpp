@@ -34,9 +34,9 @@ void SimplePlanetRenderer::initialize(const InitializationContext* ic)
 }
 
 #ifdef C_CODE
-float * SimplePlanetRenderer::createVertices(const Planet& planet)
+float* SimplePlanetRenderer::createVertices(const Planet& planet)
 #else
-float [] SimplePlanetRenderer::createVertices(const Planet& planet)
+float[] SimplePlanetRenderer::createVertices(const Planet& planet)
 #endif
 {
   //VERTICES
@@ -71,7 +71,7 @@ int[] SimplePlanetRenderer::createMeshIndex()
   const unsigned int res = _lonRes;
   
   const int numIndexes = (2 * (res - 1) * (res + 1)) -1;
-  int *indexes = new int[numIndexes];
+  int* indexes = new int[numIndexes];
   
   unsigned int n = 0;
   for (unsigned int j = 0; j < res - 1; j++) {
@@ -117,11 +117,11 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   const int numIndexes = (2 * (res - 1) * (res + 1)) -1;
   
 #ifdef C_CODE
-  int * ind = createMeshIndex();
+  int*   ind = createMeshIndex();
   float* ver = createVertices(*planet);
-  float * texC = NULL;
-  float * colors = NULL;
-  float * normals = NULL;
+  float* texC = NULL;
+  float* colors = NULL;
+  float* normals = NULL;
 #endif 
 #ifdef JAVA_CODE
   int ind[] = createMeshIndex();
