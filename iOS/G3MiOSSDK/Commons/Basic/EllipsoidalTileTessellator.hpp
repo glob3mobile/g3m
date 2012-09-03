@@ -35,15 +35,15 @@ private:
   }
   
 public:
-    Mesh* createDebugMesh(const RenderContext* rc,
-                          const Tile* tile) const;
-    
+  Mesh* createDebugMesh(const RenderContext* rc,
+                        const Tile* tile) const;
+  
   EllipsoidalTileTessellator(const unsigned int resolution,
                              const bool skirted) :
   _resolution(resolution),
   _skirted(skirted)
   {
-    int __TODO_with_and_height_resolutions;
+    int __TODO_width_and_height_resolutions;
   }
   
   virtual ~EllipsoidalTileTessellator() { }

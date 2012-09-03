@@ -45,6 +45,16 @@ public:
     return _longitude;
   }
   
+  Geodetic2D add(const Geodetic2D& that) const {
+    return Geodetic2D(_latitude.add(that._latitude),
+                      _longitude.add(that._longitude));
+  }
+
+  Geodetic2D sub(const Geodetic2D& that) const {
+    return Geodetic2D(_latitude.sub(that._latitude),
+                      _longitude.sub(that._longitude));
+  }
+  
   bool closeTo(const Geodetic2D& other) const;
   
   bool isBetween(const Geodetic2D& min, const Geodetic2D& max) const;
