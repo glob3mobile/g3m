@@ -82,7 +82,7 @@ _extent(NULL),
 _centerStrategy(strategy),
 _center(center)
 {
-  float * vert = new float[3* vertices.size()];
+  float* vert = new float[3 * vertices.size()];
   int p = 0;
   
   switch (strategy) {
@@ -108,14 +108,14 @@ _center(center)
   
   _vertices = vert;
   
-  int * ind = new int[indexes.size()];
+  int* ind = new int[indexes.size()];
   for (int i = 0; i < indexes.size(); i++) {
     ind[i] = indexes[i];
   }
   _indexes = ind;
   
   if (normals != NULL) {
-    float * norm = new float[3 * vertices.size()];
+    float* norm = new float[3 * vertices.size()];
     p = 0;
     for (int i = 0; i < vertices.size(); i++) {
       norm[p++] = (float) normals->at(i).x();
@@ -129,7 +129,7 @@ _center(center)
   }
   
   if (colors != NULL) {
-    float * vertexColor = new float[4 * colors->size()];
+    float* vertexColor = new float[4 * colors->size()];
     for (int i = 0; i < colors->size(); i+=4){
       vertexColor[i] = colors->at(i).getRed();
       vertexColor[i+1] = colors->at(i).getGreen();

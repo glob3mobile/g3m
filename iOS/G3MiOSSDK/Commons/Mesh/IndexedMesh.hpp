@@ -57,7 +57,7 @@ private:
   const float*         _vertices;
   const int*           _indexes;
   const float*         _normals;
-  const float *        _colors;
+  const float*         _colors;
   const GLPrimitive    _primitive; 
 #endif
   

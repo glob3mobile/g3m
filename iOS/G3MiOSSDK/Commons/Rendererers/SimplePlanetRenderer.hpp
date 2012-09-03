@@ -28,9 +28,9 @@ private:
   Mesh * _mesh;
   
   
-  float * createVertices(const Planet& planet);
-  int * createMeshIndex();
-  float * createTextureCoordinates();
+  float* createVertices(const Planet& planet);
+  int*   createMeshIndex();
+  float* createTextureCoordinates();
   
   bool initializeMesh(const RenderContext* rc);
   

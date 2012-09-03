@@ -33,9 +33,9 @@ bool BusyQuadRenderer::initMesh(const RenderContext* rc)
   // create quad
   unsigned int numVertices = 4;
   unsigned int numIndices = 4;
-  float *quadVertices = new float [numVertices*3];
-  int *quadIndices = new int [numIndices];
-  float *texC = new float [numVertices*2];
+  float* quadVertices = new float[numVertices*3];
+  int*   quadIndices  = new int[numIndices];
+  float* texC         = new float[numVertices*2];
   
   unsigned int nv = 0;
   float halfSize = 16;
