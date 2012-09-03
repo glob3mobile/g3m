@@ -42,7 +42,7 @@ public:
   }
   
   bool isNan() const {
-    return GMath.isNan(_x * _y);
+    return GMath.isNan(_x) ||  GMath.isNan(_y);
   }
 
   MutableVector2D normalized() const;

@@ -422,30 +422,30 @@ void GL::enableVertexColor(float const colors[], float intensity) {
 }
 
 void GL::disableVertexColor() {
-  if (_enableVertexColor) {
-    _gl->disableVertexAttribArray(Attributes.Color);
-    _gl->uniform1i(Uniforms.EnableColorPerVertex, 0);
-    _enableVertexColor = false;
-  }
+  //  if (_enableVertexColor) {
+  _gl->disableVertexAttribArray(Attributes.Color);
+  _gl->uniform1i(Uniforms.EnableColorPerVertex, 0);
+  //    _enableVertexColor = false;
+  //  }
 }
 
 void GL::enableVertexNormal(float const normals[]) {
-  if (!_enableVertexNormal) {
-    _gl->enableVertexAttribArray(Attributes.Normal);
+  //  if (!_enableVertexNormal) {
+  _gl->enableVertexAttribArray(Attributes.Normal);
 #ifdef C_CODE
-    _gl->vertexAttribPointer(Attributes.Normal, 3, Float, false, 0, normals);
+  _gl->vertexAttribPointer(Attributes.Normal, 3, Float, false, 0, normals);
 #else
-    _gl->vertexAttribPointer(Attributes.Normal, 3, GLType.Float, false, 0, normals);
+  _gl->vertexAttribPointer(Attributes.Normal, 3, GLType.Float, false, 0, normals);
 #endif
-    _enableVertexNormal = true;
-  }
+  //    _enableVertexNormal = true;
+  //  }
 }
 
 void GL::disableVertexNormal() {
-  if (_enableVertexNormal) {
-    _gl->disableVertexAttribArray(Attributes.Normal);
-    _enableVertexNormal = false;
-  }
+  //  if (_enableVertexNormal) {
+  _gl->disableVertexAttribArray(Attributes.Normal);
+  //    _enableVertexNormal = false;
+  //  }
 }
 
 void GL::enableVerticesPosition() {

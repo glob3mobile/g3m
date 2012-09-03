@@ -39,8 +39,8 @@ private:
   // state handling
   bool _enableTextures;
   bool _enableTexture2D;
-  bool _enableVertexColor;
-  bool _enableVertexNormal;
+//  bool _enableVertexColor;
+//  bool _enableVertexNormal;
   bool _enableVerticesPosition;
   bool _enableFlatColor;
   bool _enableDepthTest;
@@ -96,10 +96,10 @@ public:
   _gl(gl),
   _enableTextures(false),
   _enableTexture2D(false),
-  _enableVertexColor(false),
-  _enableVertexNormal(false),
+//  _enableVertexColor(false),
+//  _enableVertexNormal(false),
   _enableVerticesPosition(false),
-  _enableFlatColor(false),
+//  _enableFlatColor(false),
   _enableBlend(false),
   _enableDepthTest(false),
   _enableCullFace(false),
