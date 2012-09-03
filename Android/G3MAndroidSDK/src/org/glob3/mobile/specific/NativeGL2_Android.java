@@ -7,6 +7,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.WeakHashMap;
 
 import org.glob3.mobile.generated.GLAlignment;
 import org.glob3.mobile.generated.GLBlendFactor;
@@ -205,19 +206,6 @@ public class NativeGL2_Android
    }
 
 
-   private FloatBuffer floatArrayToFloatBuffer(final float[] fv) {
-      // TODO:
-      final int ____TODO_;
-
-      final ByteBuffer byteBuf = ByteBuffer.allocateDirect(fv.length * 4);
-      byteBuf.order(ByteOrder.nativeOrder());
-      final FloatBuffer fb = byteBuf.asFloatBuffer();
-      fb.put(fv); // <- too slow operation here (dgd)
-      fb.position(0);
-      return fb;
-   }
-
-
    /////////////////////////////
 
    @Override
@@ -267,9 +255,10 @@ public class NativeGL2_Android
                                 final int count,
                                 final boolean transpose,
                                 final float[] value) {
-      final FloatBuffer fb = floatArrayToFloatBuffer(value);
-
-      GLES20.glUniformMatrix4fv(location, count, transpose, fb);
+      //      final FloatBuffer fb = floatArrayToFloatBuffer(value);
+      //
+      //      GLES20.glUniformMatrix4fv(location, count, transpose, fb);
+      GLES20.glUniformMatrix4fv(location, count, transpose, value, 0);
    }
 
 
@@ -332,6 +321,26 @@ public class NativeGL2_Android
       final float[] floatArray = (float[]) pointer;
       final FloatBuffer fb = floatArrayToFloatBuffer(floatArray);
       GLES20.glVertexAttribPointer(index, size, getEnum(type), normalized, stride, fb);
+   }
+
+
+   static final WeakHashMap<float[], FloatBuffer> _floatBuffersCache = new WeakHashMap<float[], FloatBuffer>(64);
+
+
+   static private FloatBuffer floatArrayToFloatBuffer(final float[] fv) {
+      FloatBuffer result = _floatBuffersCache.get(fv);
+      if (result == null) {
+         // TODO: replace float[] with a framework class
+         final int ____TODO_performance_bottleneck;
+
+         result = ByteBuffer.allocateDirect(fv.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+         result.put(fv); // <- too slow operation here (dgd)
+
+         _floatBuffersCache.put(fv, result);
+      }
+
+      result.rewind();
+      return result;
    }
 
 
