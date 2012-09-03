@@ -37,8 +37,9 @@ public class NativeGL2_Android
             return GLES20.GL_COLOR_BUFFER_BIT;
          case DepthBuffer:
             return GLES20.GL_DEPTH_BUFFER_BIT;
+         default:
+            throw new UnsupportedOperationException("Unsupported GLBufferType=" + b);
       }
-      return 0;
    }
 
 
@@ -52,8 +53,9 @@ public class NativeGL2_Android
             return GLES20.GL_BLEND;
          case CullFacing:
             return GLES20.GL_CULL_FACE;
+         default:
+            throw new UnsupportedOperationException("Unsupported GLFeature=" + f);
       }
-      return 0;
    }
 
 
@@ -65,8 +67,9 @@ public class NativeGL2_Android
             return GLES20.GL_FRONT_AND_BACK;
          case Back:
             return GLES20.GL_BACK;
+         default:
+            throw new UnsupportedOperationException("Unsupported GLCullFace=" + f);
       }
-      return 0;
    }
 
 
@@ -80,8 +83,9 @@ public class NativeGL2_Android
             return GLES20.GL_UNSIGNED_INT;
          case Int:
             return GLES20.GL_INT;
+         default:
+            throw new UnsupportedOperationException("Unsupported GLType=" + t);
       }
-      return 0;
    }
 
 
@@ -95,8 +99,9 @@ public class NativeGL2_Android
             return GLES20.GL_LINE_LOOP;
          case Points:
             return GLES20.GL_POINTS;
+         default:
+            throw new UnsupportedOperationException("Unsupported GLPrimitive=" + p);
       }
-      return 0;
    }
 
 
@@ -112,8 +117,9 @@ public class NativeGL2_Android
             return GLError.InvalidOperation;
          case GLES20.GL_OUT_OF_MEMORY:
             return GLError.OutOfMemory;
+         default:
+            return GLError.UnknownError;
       }
-      return GLError.UnknownError;
    }
 
 
@@ -123,8 +129,9 @@ public class NativeGL2_Android
             return GLES20.GL_SRC_ALPHA;
          case OneMinusSrcAlpha:
             return GLES20.GL_ONE_MINUS_SRC_ALPHA;
+         default:
+            throw new UnsupportedOperationException("Unsupported GLBlendFactor=" + b);
       }
-      return 0;
    }
 
 
@@ -134,8 +141,9 @@ public class NativeGL2_Android
             return GLES20.GL_UNPACK_ALIGNMENT;
          case Pack:
             return GLES20.GL_PACK_ALIGNMENT;
+         default:
+            throw new UnsupportedOperationException("Unsupported GLAlignment=" + a);
       }
-      return 0;
    }
 
 
@@ -143,8 +151,9 @@ public class NativeGL2_Android
       switch (t) {
          case Texture2D:
             return GLES20.GL_TEXTURE_2D;
+         default:
+            throw new UnsupportedOperationException("Unsupported GLTextureType=" + t);
       }
-      return 0;
    }
 
 
@@ -158,8 +167,9 @@ public class NativeGL2_Android
             return GLES20.GL_TEXTURE_WRAP_S;
          case WrapT:
             return GLES20.GL_TEXTURE_WRAP_T;
+         default:
+            throw new UnsupportedOperationException("Unsupported GLTextureParameter=" + t);
       }
-      return 0;
    }
 
 
@@ -169,8 +179,9 @@ public class NativeGL2_Android
             return GLES20.GL_LINEAR;
          case ClampToEdge:
             return GLES20.GL_CLAMP_TO_EDGE;
+         default:
+            throw new UnsupportedOperationException("Unsupported GLTextureParameterValue=" + t);
       }
-      return 0;
    }
 
 
@@ -178,8 +189,9 @@ public class NativeGL2_Android
       switch (f) {
          case RGBA:
             return GLES20.GL_RGBA;
+         default:
+            throw new UnsupportedOperationException("Unsupported GLFormat=" + f);
       }
-      return 0;
    }
 
 
@@ -187,8 +199,9 @@ public class NativeGL2_Android
       switch (v) {
          case Viewport:
             return GLES20.GL_VIEWPORT;
+         default:
+            throw new UnsupportedOperationException("Unsupported GLVariable=" + v);
       }
-      return 0;
    }
 
 
