@@ -19,13 +19,15 @@ public class MathUtils_Android
 
    @Override
    public boolean isNan(final double v) {
-      return Double.isNaN(v);
+      return (v != v);
+      //return Double.isNaN(v);
    }
 
 
    @Override
    public boolean isNan(final float v) {
-      return Float.isNaN(v);
+      return (v != v);
+      //return Float.isNaN(v);
    }
 
 
@@ -37,7 +39,7 @@ public class MathUtils_Android
 
    @Override
    public float NanF() {
-      return (float) Double.NaN;
+      return Float.NaN;
    }
 
 
@@ -85,7 +87,7 @@ public class MathUtils_Android
 
    @Override
    public float acos(final float v) {
-      return (float) Math.cos(v);
+      return (float) Math.acos(v);
    }
 
 

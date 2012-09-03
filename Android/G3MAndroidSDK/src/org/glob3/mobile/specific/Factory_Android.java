@@ -43,26 +43,35 @@ public class Factory_Android
    @Override
    public IImage createImageFromFileName(final String filename) {
 
-      final Bitmap bitmap;
+      Bitmap bitmap = null;
+      InputStream is = null;
       try {
-         final InputStream is = _context.getAssets().open(filename);
+         is = _context.getAssets().open(filename);
+
          final int size = is.available();
          final byte[] imageData = new byte[size];
          is.read(imageData);
          bitmap = BitmapFactory.decodeByteArray(imageData, 0, size);
       }
       catch (final IOException e) {
-         //e.printStackTrace();
+         e.printStackTrace();
+      }
+      finally {
+         if (is != null) {
+            try {
+               is.close();
+            }
+            catch (final IOException e) {
+               // do nothing, just ignore the exception
+            }
+         }
+      }
+
+      if (bitmap == null) {
          return null;
       }
 
-      if (bitmap != null) {
-         return new Image_Android(bitmap);
-      }
-      else {
-         return null;
-      }
-
+      return new Image_Android(bitmap);
    }
 
 

@@ -144,7 +144,7 @@ void GL::color(float r, float g, float b, float a) {
     _flatColorA = a;
   }
   
-//  _gl->uniform4f(Uniforms.FlatColor, r, g, b, a);
+  //  _gl->uniform4f(Uniforms.FlatColor, r, g, b, a);
 }
 
 void GL::transformTexCoords(float scaleX,
@@ -242,13 +242,12 @@ const GLTextureId GL::uploadTexture(const IImage* image,
                                     bool generateMipmap) {
   const GLTextureId texId = getGLTextureId();
   if (texId.isValid()) {
-    
-#ifdef C_CODE
-    unsigned char* imageData;
-    
     const bool lastImageDataIsValid = ((_lastTextureWidth == textureWidth) &&
                                        (_lastTextureHeight == textureHeight) &&
                                        (_lastImageData != NULL));
+    
+#ifdef C_CODE
+    unsigned char* imageData;
     
     if (lastImageDataIsValid) {
       imageData = _lastImageData;
@@ -262,7 +261,7 @@ const GLTextureId GL::uploadTexture(const IImage* image,
       _lastTextureWidth = textureWidth;
       _lastTextureHeight = textureHeight;
     }
-
+    
     image->fillWithRGBA8888(imageData, textureWidth, textureHeight);
     
     _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);
@@ -281,7 +280,18 @@ const GLTextureId GL::uploadTexture(const IImage* image,
 #endif
     
 #ifdef JAVA_CODE
-    byte[] imageData = new byte[textureWidth * textureHeight * 4];
+    byte[] imageData;
+    
+    if (lastImageDataIsValid) {
+      imageData = _lastImageData;
+    }
+    else {
+      imageData = new byte[textureWidth * textureHeight * 4];
+      _lastImageData = imageData;
+      _lastTextureWidth = textureWidth;
+      _lastTextureHeight = textureHeight;
+    }
+    
     image.fillWithRGBA8888(imageData, textureWidth, textureHeight);
     
     _gl.blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
@@ -298,23 +308,24 @@ const GLTextureId GL::uploadTexture(const IImage* image,
       _gl.generateMipmap(GLTextureType.Texture2D);
     }
 #endif
-
+    
   }
   else {
     printf("can't get a valid texture id\n");
   }
-
+  
   return texId;
 }
 
 void GL::setTextureCoordinates(int size, int stride, const float texcoord[]) {
-    if (_textureCoordinates != texcoord) {
+  if (_textureCoordinates != texcoord) {
 #ifdef C_CODE
-  _gl->vertexAttribPointer(Attributes.TextureCoord, size, Float, false, stride, (const void *) texcoord);
+    _gl->vertexAttribPointer(Attributes.TextureCoord, size, Float, false, stride, (const void *) texcoord);
 #else
-  _gl->vertexAttribPointer(Attributes.TextureCoord, size, GLType.Float, false, stride, (const void *) texcoord);
+    _gl->vertexAttribPointer(Attributes.TextureCoord, size, GLType.Float, false, stride, (const void *) texcoord);
 #endif
-    }
+    _textureCoordinates = texcoord;
+  }
 }
 
 void GL::bindTexture(const GLTextureId& textureId) {
@@ -406,7 +417,7 @@ void GL::enableVertexColor(float const colors[], float intensity) {
   _gl->vertexAttribPointer(Attributes.Color, 4, GLType.Float, false, 0, colors);
 #endif
   _gl->uniform1f(Uniforms.ColorPerVertexIntensity, intensity);
-    //_enableVertexColor = true;
+  //_enableVertexColor = true;
   //}
 }
 
@@ -460,7 +471,7 @@ void GL::enableVertexFlatColor(float r, float g, float b, float a,
   
   color(r, g, b, a);
   
-//  _gl->uniform1f(Uniforms.FlatColorIntensity, intensity);
+  //  _gl->uniform1f(Uniforms.FlatColorIntensity, intensity);
   if (_flatColorIntensity != intensity) {
     _gl->uniform1f(Uniforms.FlatColorIntensity, intensity);
     _flatColorIntensity = intensity;
@@ -563,7 +574,7 @@ const GLTextureId GL::getGLTextureId() {
     const std::vector<GLTextureId> ids = _gl->genTextures(bugdetSize);
     
     for (int i = 0; i < bugdetSize; i++) {
-//      _texturesIdBag.push_back(ids[i]);
+      //      _texturesIdBag.push_back(ids[i]);
       _texturesIdBag.push_front(ids[i]);
     }
     
@@ -579,12 +590,12 @@ const GLTextureId GL::getGLTextureId() {
   const GLTextureId result = _texturesIdBag.back();
   _texturesIdBag.pop_back();
   
-//  printf("   - Assigning 1 texturesId (#%d) from bag (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
-//         result.getGLTextureId(),
-//         _texturesIdBag.size(),
-//         _texturesIdGetCounter,
-//         _texturesIdTakeCounter,
-//         _texturesIdGetCounter - _texturesIdTakeCounter);
+  //  printf("   - Assigning 1 texturesId (#%d) from bag (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
+  //         result.getGLTextureId(),
+  //         _texturesIdBag.size(),
+  //         _texturesIdGetCounter,
+  //         _texturesIdTakeCounter,
+  //         _texturesIdGetCounter - _texturesIdTakeCounter);
   
   return result;
 }
