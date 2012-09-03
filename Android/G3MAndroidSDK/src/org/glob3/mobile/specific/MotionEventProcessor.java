@@ -139,7 +139,7 @@ public class MotionEventProcessor {
 	      PointerCoords pc = new PointerCoords();
 	      event.getPointerCoords(0, pc);
          Vector2D pos = new Vector2D(pc.x, pc.y);
-         Touch t = new Touch(pos, pos);
+         Touch t = new Touch(pos, pos, (byte)2);
          
          final TouchEvent te = TouchEvent.create(TouchEventType.Down, t);
 
