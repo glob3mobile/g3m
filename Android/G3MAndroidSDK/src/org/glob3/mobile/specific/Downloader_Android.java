@@ -27,9 +27,13 @@ public class Downloader_Android
    private final ArrayList<Downloader_Android_WorkerThread> _workers;
    private final Map<String, Downloader_Android_Handler>    _downloadingHandlers;
    private final Map<String, Downloader_Android_Handler>    _queuedHandlers;
+   private final int                                        _connectTimeout;
+   private final int                                        _readTimeout;
 
 
-   public Downloader_Android(final int maxConcurrentOperationCount) {
+   public Downloader_Android(final int maxConcurrentOperationCount,
+                             final int connectTimeoutMillis,
+                             final int readTimeoutMillis) {
       _started = false;
       _maxConcurrentOperationCount = maxConcurrentOperationCount;
       _requestIdCounter = 1;
@@ -44,6 +48,8 @@ public class Downloader_Android
          final Downloader_Android_WorkerThread da = new Downloader_Android_WorkerThread(this);
          _workers.add(da);
       }
+      _connectTimeout = connectTimeoutMillis;
+      _readTimeout = readTimeoutMillis;
    }
 
 
@@ -198,6 +204,16 @@ public class Downloader_Android
       sb.add(", totalCancels=").add(_cancelsCounter);
 
       return sb.getString();
+   }
+
+
+   public int getConnectTimeout() {
+      return _connectTimeout;
+   }
+
+
+   public int getReadTimeout() {
+      return _readTimeout;
    }
 
 }

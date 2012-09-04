@@ -17,7 +17,7 @@ public class Timer_Android
 
    @Override
    public TimeInterval now() {
-      final int t = (int) SystemClock.uptimeMillis();
+      final long t = SystemClock.uptimeMillis();
       return TimeInterval.fromMilliseconds(t);
    }
 
@@ -31,7 +31,7 @@ public class Timer_Android
    @Override
    public TimeInterval elapsedTime() {
       final long t = SystemClock.uptimeMillis();
-      return TimeInterval.fromMilliseconds((int) (t - _startTime));
+      return TimeInterval.fromMilliseconds(t - _startTime);
    }
 
 }

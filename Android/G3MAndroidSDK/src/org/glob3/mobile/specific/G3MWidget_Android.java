@@ -62,13 +62,14 @@ public class G3MWidget_Android
          implements
             OnGestureListener {
 
-   G3MWidget                  _widget;
-   ES2Renderer                _es2renderer;
+   G3MWidget                   _widget;
+   ES2Renderer                 _es2renderer;
 
-   final MotionEventProcessor _motionEventProcessor = new MotionEventProcessor();
+   final MotionEventProcessor  _motionEventProcessor = new MotionEventProcessor();
 
-   private OnDoubleTapListener _doubleTapListener = null;
-   private GestureDetector _gestureDetector = null;
+   private OnDoubleTapListener _doubleTapListener    = null;
+   private GestureDetector     _gestureDetector      = null;
+
 
    public G3MWidget_Android(final Context context) {
       super(context);
@@ -83,7 +84,7 @@ public class G3MWidget_Android
 
       // Debug flags
       setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
-      
+
 
       //Double Tap Listener
       _gestureDetector = new GestureDetector(this);
@@ -139,8 +140,8 @@ public class G3MWidget_Android
 
 
    @Override
-   public boolean onTouchEvent(MotionEvent event) {
-      
+   public boolean onTouchEvent(final MotionEvent event) {
+
       //Notifing gestureDetector for DoubleTap recognition
       _gestureDetector.onTouchEvent(event);
 
@@ -326,7 +327,9 @@ public class G3MWidget_Android
 
 
       //		  IDownloader downloader = null;// new CachedDownloader(new Downloader_Android(8), storage);
-      final IDownloader downloader = new CachedDownloader(new Downloader_Android(8), storage);
+      final int connectTimeout = 60000;
+      final int readTimeout = 60000;
+      final IDownloader downloader = new CachedDownloader(new Downloader_Android(8, connectTimeout, readTimeout), storage);
 
       final CompositeRenderer composite = new CompositeRenderer();
 
