@@ -1,9 +1,13 @@
+
+
 package org.glob3.mobile.specific;
 
 import android.util.Log;
 
 
-public class Downloader_Android_WorkerThread extends Thread {
+public class Downloader_Android_WorkerThread
+         extends
+            Thread {
 
    final static String TAG = "Downloader_Android_WorkerThread";
 
@@ -11,7 +15,7 @@ public class Downloader_Android_WorkerThread extends Thread {
    boolean             _stopping;
 
 
-   public Downloader_Android_WorkerThread(Downloader_Android downloader) {
+   public Downloader_Android_WorkerThread(final Downloader_Android downloader) {
       _downloader = downloader;
       _stopping = false;
 
@@ -32,7 +36,7 @@ public class Downloader_Android_WorkerThread extends Thread {
    @Override
    public void run() {
       while (!isStopping()) {
-         Downloader_Android_Handler handler = _downloader.getHandlerToRun();
+         final Downloader_Android_Handler handler = _downloader.getHandlerToRun();
 
          if (handler != null) {
             handler.runWithDownloader(_downloader);
@@ -42,7 +46,7 @@ public class Downloader_Android_WorkerThread extends Thread {
                Thread.sleep(25);
                //               Log.i(TAG, "awake");
             }
-            catch (InterruptedException e) {
+            catch (final InterruptedException e) {
                Log.e(TAG, "InterruptedException worker=" + this.toString());
                e.printStackTrace();
             }

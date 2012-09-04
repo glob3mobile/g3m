@@ -1,3 +1,5 @@
+
+
 package org.glob3.mobile.specific;
 
 import android.opengl.GLES20;
@@ -7,84 +9,66 @@ import android.util.Log;
 public class GL2Shaders {
 
 
-	private final static String _fragmentShader = 
-	"varying mediump vec2 TextureCoordOut;" + 
-	"uniform mediump vec2 TranslationTexCoord;" + 
-	"uniform mediump vec2 ScaleTexCoord;" + 
-	"" + 
-	"varying mediump vec4 VertexColor;" + 
-	"" + 
-	"uniform sampler2D Sampler;" + 
-	"uniform bool EnableTexture;" + 
-	"uniform lowp vec4 FlatColor;" + 
-	"" + 
-	"uniform bool EnableColorPerVertex;" + 
-	"uniform bool EnableFlatColor;" + 
-	"uniform mediump float FlatColorIntensity;" + 
-	"uniform mediump float ColorPerVertexIntensity;" + 
-	"" + 
-	"void main() {" + 
-	"  " + 
-	"  if (EnableTexture) {" + 
-	"    gl_FragColor = texture2D(Sampler, TextureCoordOut * ScaleTexCoord + TranslationTexCoord);" + 
-	"" + 
-	"    if (EnableFlatColor || EnableColorPerVertex){" + 
-	"      lowp vec4 color;" + 
-	"      if (EnableFlatColor) {" + 
-	"        color = FlatColor;" + 
-	"        if (EnableColorPerVertex) {" + 
-	"          color = color * VertexColor;" + 
-	"        }" + 
-	"      }" + 
-	"      else {" + 
-	"        color = VertexColor;" + 
-	"      }" + 
-	"      " + 
-	"      lowp float intensity = (FlatColorIntensity + ColorPerVertexIntensity) / 2.0;" + 
-	"      gl_FragColor = mix(gl_FragColor," + 
-	"                         VertexColor," + 
-	"                         intensity);" + 
-	"    }" + 
-	"  }" + 
-	"  else {" + 
-	"    " + 
-	"    if (EnableColorPerVertex) {" + 
-	"      gl_FragColor = VertexColor;" + 
-	"      if (EnableFlatColor) {" + 
-	"        gl_FragColor = gl_FragColor * FlatColor;" + 
-	"      }" + 
-	"    }" + 
-	"    else {" + 
-	"      gl_FragColor = FlatColor;" + 
-	"    }" +
-	"    " + 
-	"  }" + 
-	"  " + 
-	"}";
+   private final static String _fragmentShader = "varying mediump vec2 TextureCoordOut;"
+                                                 + "uniform mediump vec2 TranslationTexCoord;"
+                                                 + "uniform mediump vec2 ScaleTexCoord;"
+                                                 + ""
+                                                 + "varying mediump vec4 VertexColor;"
+                                                 + ""
+                                                 + "uniform sampler2D Sampler;"
+                                                 + "uniform bool EnableTexture;"
+                                                 + "uniform lowp vec4 FlatColor;"
+                                                 + ""
+                                                 + "uniform bool EnableColorPerVertex;"
+                                                 + "uniform bool EnableFlatColor;"
+                                                 + "uniform mediump float FlatColorIntensity;"
+                                                 + "uniform mediump float ColorPerVertexIntensity;"
+                                                 + ""
+                                                 + "void main() {"
+                                                 + "  "
+                                                 + "  if (EnableTexture) {"
+                                                 + "    gl_FragColor = texture2D(Sampler, TextureCoordOut * ScaleTexCoord + TranslationTexCoord);"
+                                                 + ""
+                                                 + "    if (EnableFlatColor || EnableColorPerVertex){"
+                                                 + "      lowp vec4 color;"
+                                                 + "      if (EnableFlatColor) {"
+                                                 + "        color = FlatColor;"
+                                                 + "        if (EnableColorPerVertex) {"
+                                                 + "          color = color * VertexColor;"
+                                                 + "        }"
+                                                 + "      }"
+                                                 + "      else {"
+                                                 + "        color = VertexColor;"
+                                                 + "      }"
+                                                 + "      "
+                                                 + "      lowp float intensity = (FlatColorIntensity + ColorPerVertexIntensity) / 2.0;"
+                                                 + "      gl_FragColor = mix(gl_FragColor,"
+                                                 + "                         VertexColor,"
+                                                 + "                         intensity);" + "    }" + "  }" + "  else {" + "    "
+                                                 + "    if (EnableColorPerVertex) {" + "      gl_FragColor = VertexColor;"
+                                                 + "      if (EnableFlatColor) {"
+                                                 + "        gl_FragColor = gl_FragColor * FlatColor;" + "      }" + "    }"
+                                                 + "    else {" + "      gl_FragColor = FlatColor;" + "    }" + "    " + "  }"
+                                                 + "  " + "}";
 
-	private final static String _vertexShader = 
-	"attribute vec4 Position;" +
-	"attribute vec2 TextureCoord; " +
-	"attribute vec4 Color;" + 
-	"attribute vec3 Normal;" +
-	"uniform mat4 Projection;" + 
-	"uniform mat4 Modelview;" + 
-	"uniform bool BillBoard;" + 
-	"uniform float ViewPortRatio;" + 
-	"uniform float PointSize;" + 
-	"varying vec4 VertexColor;" + 
-	"varying vec2 TextureCoordOut;" + 
-	"void main() {" + 
-	"  gl_Position = Projection * Modelview * Position;" + 
-	"  if (BillBoard) {" + 
-	"    gl_Position.x += (-0.05 + TextureCoord.x * 0.1) * gl_Position.w;" + 
-	"    gl_Position.y -= (-0.05 + TextureCoord.y * 0.1) * gl_Position.w * ViewPortRatio;" + 
-	"  }" + 
-	"  TextureCoordOut = TextureCoord;" +
-	"  VertexColor = Color;" + 
-	"  gl_PointSize = PointSize;" + 
-	"  vec3 x = Normal;" +
-	"}";
+   private final static String _vertexShader   = "attribute vec4 Position;"
+                                                 + "attribute vec2 TextureCoord; "
+                                                 + "attribute vec4 Color;"
+                                                 + "attribute vec3 Normal;"
+                                                 + "uniform mat4 Projection;"
+                                                 + "uniform mat4 Modelview;"
+                                                 + "uniform bool BillBoard;"
+                                                 + "uniform float ViewPortRatio;"
+                                                 + "uniform float PointSize;"
+                                                 + "varying vec4 VertexColor;"
+                                                 + "varying vec2 TextureCoordOut;"
+                                                 + "void main() {"
+                                                 + "  gl_Position = Projection * Modelview * Position;"
+                                                 + "  if (BillBoard) {"
+                                                 + "    gl_Position.x += (-0.05 + TextureCoord.x * 0.1) * gl_Position.w;"
+                                                 + "    gl_Position.y -= (-0.05 + TextureCoord.y * 0.1) * gl_Position.w * ViewPortRatio;"
+                                                 + "  }" + "  TextureCoordOut = TextureCoord;" + "  VertexColor = Color;"
+                                                 + "  gl_PointSize = PointSize;" + "  vec3 x = Normal;" + "}";
 
 
    public static String getFragmentShader() {
@@ -111,10 +95,11 @@ public class GL2Shaders {
             GLES20.glDeleteShader(shader);
             shader = 0;
          }
-      } else{
-    	  int error = GLES20.glGetError();
-    	  Log.d("GL", "ERROR CREATING SHADER " + error);
-    	  
+      }
+      else {
+         final int error = GLES20.glGetError();
+         Log.d("GL", "ERROR CREATING SHADER " + error);
+
       }
       return shader;
    }

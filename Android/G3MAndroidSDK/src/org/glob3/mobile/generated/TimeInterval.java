@@ -24,6 +24,7 @@ public class TimeInterval
   private TimeInterval(double milliseconds)
   {
 	  _milliseconds = (int)milliseconds;
+	int __ASK_JM_why;
   }
 
   public TimeInterval(TimeInterval other)
@@ -37,11 +38,6 @@ public class TimeInterval
 	  _milliseconds = 0;
   }
 
-  public static TimeInterval nan()
-  {
-	return new TimeInterval(IMathUtils.instance().NanD());
-  }
-
   public static TimeInterval fromMilliseconds(int milliseconds)
   {
 	return new TimeInterval(milliseconds);
@@ -51,7 +47,6 @@ public class TimeInterval
   {
 	return TimeInterval.fromMilliseconds((int)(seconds *1000.0));
   }
-
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: int milliseconds() const
@@ -65,13 +60,6 @@ public class TimeInterval
   public final double seconds()
   {
 	return (double) _milliseconds / 1000.0;
-  }
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isNan() const
-  public final boolean isNan()
-  {
-	return IMathUtils.instance().isNan((double)_milliseconds);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

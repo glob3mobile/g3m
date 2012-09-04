@@ -46,26 +46,40 @@ struct AttributesStruct {
   int Normal;
 } Attributes;
 
+int GL::checkedGetAttribLocation(int program, const std::string& name) const{
+  int l = _gl->getAttribLocation(program, name);
+  if (l == -1){
+    ILogger::instance()->logError("Error fetching Attribute, Program = %d, Variable = %s", program, name.c_str());
+  }
+  return l;
+}
+int GL::checkedGetUniformLocation(int program, const std::string& name) const{
+  int l = _gl->getUniformLocation(program, name);
+  if (l == -1){
+    ILogger::instance()->logError("Error fetching Uniform, Program = %d, Variable = %s", program, name.c_str());
+  }
+  return l;
+}
 
 void GL::useProgram(unsigned int program) {
   // set shaders
   _gl->useProgram(program);
   
   // Extract the handles to attributes
-  Attributes.Position     = _gl->getAttribLocation(program, "Position");
-  Attributes.TextureCoord = _gl->getAttribLocation(program, "TextureCoord");
-  Attributes.Color        = _gl->getAttribLocation(program, "Color");
-  Attributes.Normal       = _gl->getAttribLocation(program, "Normal");
+  Attributes.Position     = checkedGetAttribLocation(program, "Position");
+  Attributes.TextureCoord = checkedGetAttribLocation(program, "TextureCoord");
+  Attributes.Color        = checkedGetAttribLocation(program, "Color");
+  //Attributes.Normal       = checkedGetAttribLocation(program, "Normal");
   
   // Extract the handles to uniforms
-  Uniforms.Projection          = _gl->getUniformLocation(program, "Projection");
-  Uniforms.Modelview           = _gl->getUniformLocation(program, "Modelview");
-  Uniforms.Sampler             = _gl->getUniformLocation(program, "Sampler");
-  Uniforms.EnableTexture       = _gl->getUniformLocation(program, "EnableTexture");
-  Uniforms.FlatColor           = _gl->getUniformLocation(program, "FlatColor");
-  Uniforms.TranslationTexCoord = _gl->getUniformLocation(program, "TranslationTexCoord");
-  Uniforms.ScaleTexCoord       = _gl->getUniformLocation(program, "ScaleTexCoord");
-  Uniforms.PointSize           = _gl->getUniformLocation(program, "PointSize");
+  Uniforms.Projection          = checkedGetUniformLocation(program, "Projection");
+  Uniforms.Modelview           = checkedGetUniformLocation(program, "Modelview");
+  Uniforms.Sampler             = checkedGetUniformLocation(program, "Sampler");
+  Uniforms.EnableTexture       = checkedGetUniformLocation(program, "EnableTexture");
+  Uniforms.FlatColor           = checkedGetUniformLocation(program, "FlatColor");
+  Uniforms.TranslationTexCoord = checkedGetUniformLocation(program, "TranslationTexCoord");
+  Uniforms.ScaleTexCoord       = checkedGetUniformLocation(program, "ScaleTexCoord");
+  Uniforms.PointSize           = checkedGetUniformLocation(program, "PointSize");
   
   // default values
   _gl->uniform2f(Uniforms.ScaleTexCoord, _scaleX, _scaleY);
@@ -73,24 +87,32 @@ void GL::useProgram(unsigned int program) {
   _gl->uniform1f(Uniforms.PointSize, 1);
   
   //BILLBOARDS
-  Uniforms.BillBoard     = _gl->getUniformLocation(program, "BillBoard");
-  Uniforms.ViewPortRatio = _gl->getUniformLocation(program, "ViewPortRatio");
+  Uniforms.BillBoard     = checkedGetUniformLocation(program, "BillBoard");
+  Uniforms.ViewPortRatio = checkedGetUniformLocation(program, "ViewPortRatio");
   _gl->uniform1i(Uniforms.BillBoard, 0); //NOT DRAWING BILLBOARD
   
   //FOR FLAT COLOR MIXING
-  Uniforms.FlatColorIntensity      = _gl->getUniformLocation(program, "FlatColorIntensity");
-  Uniforms.ColorPerVertexIntensity = _gl->getUniformLocation(program, "ColorPerVertexIntensity");
-  Uniforms.EnableColorPerVertex    = _gl->getUniformLocation(program, "EnableColorPerVertex");
-  Uniforms.EnableFlatColor         = _gl->getUniformLocation(program, "EnableFlatColor");
+  Uniforms.FlatColorIntensity      = checkedGetUniformLocation(program, "FlatColorIntensity");
+  Uniforms.ColorPerVertexIntensity = checkedGetUniformLocation(program, "ColorPerVertexIntensity");
+  Uniforms.EnableColorPerVertex    = checkedGetUniformLocation(program, "EnableColorPerVertex");
+  Uniforms.EnableFlatColor         = checkedGetUniformLocation(program, "EnableFlatColor");
 }
 
 void GL::loadModelView() {
+  if (Uniforms.Modelview == -1){
+    ILogger::instance()->logError("Uniforms Modelview Invalid");
+  }
+  
   static float M[16];
   _modelView.copyToFloatMatrix(M);
   _gl->uniformMatrix4fv(Uniforms.Modelview, 1, false, M);
 }
 
 void GL::setProjection(const MutableMatrix44D &projection) {
+  if (Uniforms.Projection == -1){
+    ILogger::instance()->logError("Uniforms Projection Invalid");
+  }
+  
   static float M[16];
   projection.copyToFloatMatrix(M);
   _gl->uniformMatrix4fv(Uniforms.Projection, 1, false, M);
@@ -130,6 +152,10 @@ void GL::clearScreen(float r, float g, float b, float a) {
 }
 
 void GL::color(float r, float g, float b, float a) {
+  if (Uniforms.FlatColor == -1){
+    ILogger::instance()->logError("Uniforms FlatColor Invalid");
+  }
+  
   if (
       (_flatColorR != r) ||
       (_flatColorG != g) ||
@@ -144,13 +170,20 @@ void GL::color(float r, float g, float b, float a) {
     _flatColorA = a;
   }
   
-//  _gl->uniform4f(Uniforms.FlatColor, r, g, b, a);
+  //  _gl->uniform4f(Uniforms.FlatColor, r, g, b, a);
 }
 
 void GL::transformTexCoords(float scaleX,
                             float scaleY,
                             float translationX,
                             float translationY) {
+  if (Uniforms.ScaleTexCoord == -1){
+    ILogger::instance()->logError("Uniforms ScaleTexCoord Invalid");
+  }
+  if (Uniforms.TranslationTexCoord == -1){
+    ILogger::instance()->logError("Uniforms TranslationTexCoord Invalid");
+  }
+  
   if ((_scaleX != scaleX) || (_scaleY != scaleY)) {
     _gl->uniform2f(Uniforms.ScaleTexCoord,
                    scaleX,
@@ -186,6 +219,10 @@ void GL::disablePolygonOffset() {
 }
 
 void GL::vertexPointer(int size, int stride, const float vertex[]) {
+  if (Attributes.Position == -1){
+    ILogger::instance()->logError("Attribute Position Invalid");
+  }
+  
 #ifdef C_CODE
   _gl->vertexAttribPointer(Attributes.Position, size, Float, false, stride, (const void *) vertex);
 #else
@@ -230,6 +267,10 @@ void GL::lineWidth(float width) {
 }
 
 void GL::pointSize(float size) {
+  if (Uniforms.PointSize == -1){
+    ILogger::instance()->logError("Uniforms PointSize Invalid");
+  }
+
   _gl->uniform1f(Uniforms.PointSize, size);
 }
 
@@ -242,13 +283,12 @@ const GLTextureId GL::uploadTexture(const IImage* image,
                                     bool generateMipmap) {
   const GLTextureId texId = getGLTextureId();
   if (texId.isValid()) {
-    
-#ifdef C_CODE
-    unsigned char* imageData;
-    
     const bool lastImageDataIsValid = ((_lastTextureWidth == textureWidth) &&
                                        (_lastTextureHeight == textureHeight) &&
                                        (_lastImageData != NULL));
+    
+#ifdef C_CODE
+    unsigned char* imageData;
     
     if (lastImageDataIsValid) {
       imageData = _lastImageData;
@@ -262,7 +302,7 @@ const GLTextureId GL::uploadTexture(const IImage* image,
       _lastTextureWidth = textureWidth;
       _lastTextureHeight = textureHeight;
     }
-
+    
     image->fillWithRGBA8888(imageData, textureWidth, textureHeight);
     
     _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);
@@ -281,7 +321,18 @@ const GLTextureId GL::uploadTexture(const IImage* image,
 #endif
     
 #ifdef JAVA_CODE
-    byte[] imageData = new byte[textureWidth * textureHeight * 4];
+    byte[] imageData;
+    
+    if (lastImageDataIsValid) {
+      imageData = _lastImageData;
+    }
+    else {
+      imageData = new byte[textureWidth * textureHeight * 4];
+      _lastImageData = imageData;
+      _lastTextureWidth = textureWidth;
+      _lastTextureHeight = textureHeight;
+    }
+    
     image.fillWithRGBA8888(imageData, textureWidth, textureHeight);
     
     _gl.blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
@@ -298,23 +349,28 @@ const GLTextureId GL::uploadTexture(const IImage* image,
       _gl.generateMipmap(GLTextureType.Texture2D);
     }
 #endif
-
+    
   }
   else {
     printf("can't get a valid texture id\n");
   }
-
+  
   return texId;
 }
 
 void GL::setTextureCoordinates(int size, int stride, const float texcoord[]) {
-    if (_textureCoordinates != texcoord) {
+  if (Attributes.TextureCoord == -1){
+    ILogger::instance()->logError("Attribute TextureCoord Invalid");
+  }
+  
+  if (_textureCoordinates != texcoord) {
 #ifdef C_CODE
-  _gl->vertexAttribPointer(Attributes.TextureCoord, size, Float, false, stride, (const void *) texcoord);
+    _gl->vertexAttribPointer(Attributes.TextureCoord, size, Float, false, stride, (const void *) texcoord);
 #else
-  _gl->vertexAttribPointer(Attributes.TextureCoord, size, GLType.Float, false, stride, (const void *) texcoord);
+    _gl->vertexAttribPointer(Attributes.TextureCoord, size, GLType.Float, false, stride, (const void *) texcoord);
 #endif
-    }
+    _textureCoordinates = texcoord;
+  }
 }
 
 void GL::bindTexture(const GLTextureId& textureId) {
@@ -328,6 +384,15 @@ void GL::bindTexture(const GLTextureId& textureId) {
 void GL::drawBillBoard(const GLTextureId& textureId,
                        const Vector3D& pos,
                        const float viewPortRatio) {
+  if (Uniforms.BillBoard == -1){
+    ILogger::instance()->logError("Uniforms BillBoard Invalid");
+  }
+  
+  if (Uniforms.ViewPortRatio == -1){
+    ILogger::instance()->logError("Uniforms ViewPortRatio Invalid");
+  }
+  
+  
   const float vertex[] = {
     (float) pos.x(), (float) pos.y(), (float) pos.z(),
     (float) pos.x(), (float) pos.y(), (float) pos.z(),
@@ -369,6 +434,10 @@ void GL::drawBillBoard(const GLTextureId& textureId,
 
 // state handling
 void GL::enableTextures() {
+  if (Attributes.TextureCoord == -1){
+    ILogger::instance()->logError("Attribute TextureCoord Invalid");
+  }
+  
   if (!_enableTextures) {
     _gl->enableVertexAttribArray(Attributes.TextureCoord);
     _enableTextures = true;
@@ -376,6 +445,10 @@ void GL::enableTextures() {
 }
 
 void GL::disableTextures() {
+  if (Attributes.TextureCoord == -1){
+    ILogger::instance()->logError("Attribute TextureCoord Invalid");
+  }
+  
   if (_enableTextures) {
     _gl->disableVertexAttribArray(Attributes.TextureCoord);
     _enableTextures = false;
@@ -383,6 +456,10 @@ void GL::disableTextures() {
 }
 
 void GL::enableTexture2D() {
+  if (Uniforms.EnableTexture == -1){
+    ILogger::instance()->logError("Uniforms EnableTexture Invalid");
+  }
+  
   if (!_enableTexture2D) {
     _gl->uniform1i(Uniforms.EnableTexture, 1);
     _enableTexture2D = true;
@@ -390,6 +467,10 @@ void GL::enableTexture2D() {
 }
 
 void GL::disableTexture2D() {
+  if (Uniforms.EnableTexture == -1){
+    ILogger::instance()->logError("Uniforms EnableTexture Invalid");
+  }
+  
   if (_enableTexture2D) {
     _gl->uniform1i(Uniforms.EnableTexture, 0);
     _enableTexture2D = false;
@@ -397,6 +478,16 @@ void GL::disableTexture2D() {
 }
 
 void GL::enableVertexColor(float const colors[], float intensity) {
+  if (Attributes.Color == -1){
+    ILogger::instance()->logError("Attribute Color Invalid");
+  }
+  if (Uniforms.EnableColorPerVertex == -1){
+    ILogger::instance()->logError("Uniforms EnableColorPerVertex Invalid");
+  }
+  if (Uniforms.ColorPerVertexIntensity == -1){
+    ILogger::instance()->logError("Uniforms ColorPerVertexIntensity Invalid");
+  }
+  
   //if (!_enableVertexColor) {
   _gl->uniform1i(Uniforms.EnableColorPerVertex, 1);
   _gl->enableVertexAttribArray(Attributes.Color);
@@ -406,38 +497,59 @@ void GL::enableVertexColor(float const colors[], float intensity) {
   _gl->vertexAttribPointer(Attributes.Color, 4, GLType.Float, false, 0, colors);
 #endif
   _gl->uniform1f(Uniforms.ColorPerVertexIntensity, intensity);
-    //_enableVertexColor = true;
+  //_enableVertexColor = true;
   //}
 }
 
 void GL::disableVertexColor() {
-  if (_enableVertexColor) {
-    _gl->disableVertexAttribArray(Attributes.Color);
-    _gl->uniform1i(Uniforms.EnableColorPerVertex, 0);
-    _enableVertexColor = false;
+  if (Attributes.Color == -1){
+    ILogger::instance()->logError("Attribute Color Invalid");
   }
+  if (Uniforms.EnableColorPerVertex == -1){
+    ILogger::instance()->logError("Uniforms EnableColorPerVertex Invalid");
+  }
+  
+  //  if (_enableVertexColor) {
+  _gl->disableVertexAttribArray(Attributes.Color);
+  _gl->uniform1i(Uniforms.EnableColorPerVertex, 0);
+  //    _enableVertexColor = false;
+  //  }
 }
 
 void GL::enableVertexNormal(float const normals[]) {
-  if (!_enableVertexNormal) {
-    _gl->enableVertexAttribArray(Attributes.Normal);
-#ifdef C_CODE
-    _gl->vertexAttribPointer(Attributes.Normal, 3, Float, false, 0, normals);
-#else
-    _gl->vertexAttribPointer(Attributes.Normal, 3, GLType.Float, false, 0, normals);
-#endif
-    _enableVertexNormal = true;
-  }
+  int TODO_No_Normals_In_Shader;
+//  if (Attributes.Normal == -1){
+//    ILogger::instance()->logError("Attribute Normal Invalid");
+//  }
+//  
+//  //  if (!_enableVertexNormal) {
+//  _gl->enableVertexAttribArray(Attributes.Normal);
+//#ifdef C_CODE
+//  _gl->vertexAttribPointer(Attributes.Normal, 3, Float, false, 0, normals);
+//#else
+//  _gl->vertexAttribPointer(Attributes.Normal, 3, GLType.Float, false, 0, normals);
+//#endif
+//  //    _enableVertexNormal = true;
+//  //  }
 }
 
 void GL::disableVertexNormal() {
-  if (_enableVertexNormal) {
-    _gl->disableVertexAttribArray(Attributes.Normal);
-    _enableVertexNormal = false;
-  }
+    int TODO_No_Normals_In_Shader;
+//  if (Attributes.Normal == -1){
+//    ILogger::instance()->logError("Attribute Normal Invalid");
+//  }
+//  
+//  //  if (_enableVertexNormal) {
+//  _gl->disableVertexAttribArray(Attributes.Normal);
+//  //    _enableVertexNormal = false;
+//  //  }
 }
 
 void GL::enableVerticesPosition() {
+  if (Attributes.Position == -1){
+    ILogger::instance()->logError("Attribute Position Invalid");
+  }
+  
   if (!_enableVerticesPosition) {
     _gl->enableVertexAttribArray(Attributes.Position);
     _enableVerticesPosition = true;
@@ -445,6 +557,10 @@ void GL::enableVerticesPosition() {
 }
 
 void GL::disableVerticesPosition() {
+  if (Attributes.Position == -1){
+    ILogger::instance()->logError("Attribute Position Invalid");
+  }
+  
   if (_enableVerticesPosition) {
     _gl->disableVertexAttribArray(Attributes.Position);
     _enableVerticesPosition = false;
@@ -453,6 +569,14 @@ void GL::disableVerticesPosition() {
 
 void GL::enableVertexFlatColor(float r, float g, float b, float a,
                                float intensity) {
+  if (Uniforms.EnableFlatColor == -1){
+    ILogger::instance()->logError("Uniforms EnableFlatColor Invalid");
+  }
+  
+  if (Uniforms.FlatColorIntensity == -1){
+    ILogger::instance()->logError("Uniforms FlatColorIntensity Invalid");
+  }
+  
   if (!_enableFlatColor) {
     _gl->uniform1i(Uniforms.EnableFlatColor, 1);
     _enableFlatColor = true;
@@ -460,7 +584,7 @@ void GL::enableVertexFlatColor(float r, float g, float b, float a,
   
   color(r, g, b, a);
   
-//  _gl->uniform1f(Uniforms.FlatColorIntensity, intensity);
+  //  _gl->uniform1f(Uniforms.FlatColorIntensity, intensity);
   if (_flatColorIntensity != intensity) {
     _gl->uniform1f(Uniforms.FlatColorIntensity, intensity);
     _flatColorIntensity = intensity;
@@ -468,6 +592,11 @@ void GL::enableVertexFlatColor(float r, float g, float b, float a,
 }
 
 void GL::disableVertexFlatColor() {
+  if (Uniforms.EnableFlatColor == -1){
+    ILogger::instance()->logError("Uniforms EnableFlatColor Invalid");
+  }
+  
+  
   if (_enableFlatColor) {
     _gl->uniform1i(Uniforms.EnableFlatColor, 0);
     _enableFlatColor = false;
@@ -563,7 +692,7 @@ const GLTextureId GL::getGLTextureId() {
     const std::vector<GLTextureId> ids = _gl->genTextures(bugdetSize);
     
     for (int i = 0; i < bugdetSize; i++) {
-//      _texturesIdBag.push_back(ids[i]);
+      //      _texturesIdBag.push_back(ids[i]);
       _texturesIdBag.push_front(ids[i]);
     }
     
@@ -579,12 +708,12 @@ const GLTextureId GL::getGLTextureId() {
   const GLTextureId result = _texturesIdBag.back();
   _texturesIdBag.pop_back();
   
-//  printf("   - Assigning 1 texturesId (#%d) from bag (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
-//         result.getGLTextureId(),
-//         _texturesIdBag.size(),
-//         _texturesIdGetCounter,
-//         _texturesIdTakeCounter,
-//         _texturesIdGetCounter - _texturesIdTakeCounter);
+  //  printf("   - Assigning 1 texturesId (#%d) from bag (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
+  //         result.getGLTextureId(),
+  //         _texturesIdBag.size(),
+  //         _texturesIdGetCounter,
+  //         _texturesIdTakeCounter,
+  //         _texturesIdGetCounter - _texturesIdTakeCounter);
   
   return result;
 }

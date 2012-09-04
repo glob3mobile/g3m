@@ -104,7 +104,7 @@ public:
   MutableVector2D asMutableVector2D() const;
 
   bool isNan() const {
-    return GMath.isNan(_x * _y);
+    return GMath.isNan(_x) ||  GMath.isNan(_y);
   }
 
   const std::string description() const;

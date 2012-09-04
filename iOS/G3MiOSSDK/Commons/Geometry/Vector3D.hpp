@@ -40,7 +40,7 @@ public:
   }
   
   bool isNan() const {
-    return GMath.isNan(_x*_y*_z);
+    return (GMath.isNan(_x) || GMath.isNan(_y) || GMath.isNan(_z));
   }
   
   bool isZero() const {
@@ -134,7 +134,7 @@ public:
   Vector3D projectionInPlane(const Vector3D& normal) const;
   
   const std::string description() const;
-
+  
 };
 
 

@@ -1,3 +1,5 @@
+
+
 package org.glob3.mobile.specific;
 
 import java.util.ArrayList;
@@ -10,16 +12,18 @@ import org.glob3.mobile.generated.Vector2D;
 import android.view.MotionEvent;
 import android.view.MotionEvent.PointerCoords;
 
+
 public class MotionEventProcessor {
-	
-	//Stores pointer positions, id and event type
-	class EventProcessed{
-		// LAST EVENT PROCESSED
-		public java.util.ArrayList<Integer> _pointersID = new ArrayList<Integer>();
-		public java.util.ArrayList<Touch> _touchs = new ArrayList<Touch>();
-		public TouchEventType _type = TouchEventType.Down;
-		
-		@Override
+
+   //Stores pointer positions, id and event type
+   class EventProcessed {
+      // LAST EVENT PROCESSED
+      public java.util.ArrayList<Integer> _pointersID = new ArrayList<Integer>();
+      public java.util.ArrayList<Touch>   _touchs     = new ArrayList<Touch>();
+      public TouchEventType               _type       = TouchEventType.Down;
+
+
+      @Override
       protected EventProcessed clone() {
 			EventProcessed e = new EventProcessed();
 			e._pointersID = (ArrayList<Integer>) this._pointersID.clone();
@@ -33,7 +37,7 @@ public class MotionEventProcessor {
 			_touchs.clear();
 		}
 		
-	} 
+	}
 	
 	EventProcessed _prevLastEvent = new EventProcessed();
 	EventProcessed _lastEvent = new EventProcessed();
@@ -123,9 +127,27 @@ public class MotionEventProcessor {
 		}
 
 		final TouchEvent te = new TouchEvent(TouchEvent.create(_lastEvent._type, (ArrayList<Touch>) _lastEvent._touchs.clone()));
+
+//		Log.d("", "TE " + type.toString());
+//		for (int i = 0; i < touchs.size(); i++)
+//			Log.d("", "TE P " + touchs.get(i).getPos().x() + " "
+//					+ touchs.get(i).getPrevPos().x());
+		
 		//Saving the last event to use its position in Event Up as previous Position
 		_prevLastEvent = auxEvent.clone(); 
 
 		return te;
 	}
+	
+	  public TouchEvent processDoubleTapEvent(MotionEvent event) {
+	      PointerCoords pc = new PointerCoords();
+	      event.getPointerCoords(0, pc);
+         Vector2D pos = new Vector2D(pc.x, pc.y);
+         Touch t = new Touch(pos, pos, (byte)2);
+         
+         final TouchEvent te = TouchEvent.create(TouchEventType.Down, t);
+
+         return te;
+	     
+	  }
 }
