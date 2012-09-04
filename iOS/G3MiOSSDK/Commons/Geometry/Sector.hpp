@@ -169,6 +169,17 @@ public:
   
   const std::string description() const;
   
+  Sector* shrinkedByPercentP(float percent) const {
+    Angle deltaLatitude  = _deltaLatitude.times(percent).div(2);
+    Angle deltaLongitude = _deltaLongitude.times(percent).div(2);
+    
+    Geodetic2D delta = Geodetic2D(deltaLatitude, deltaLongitude);
+    
+    return new Sector(_lower.add( delta ),
+                      _upper.sub( delta ) );
+    
+  }
+  
 };
 
 

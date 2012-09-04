@@ -1,3 +1,5 @@
+
+
 package org.glob3.mobile.specific;
 
 import java.util.ArrayList;
@@ -10,16 +12,18 @@ import org.glob3.mobile.generated.Vector2D;
 import android.view.MotionEvent;
 import android.view.MotionEvent.PointerCoords;
 
+
 public class MotionEventProcessor {
-	
-	//Stores pointer positions, id and event type
-	class EventProcessed{
-		// LAST EVENT PROCESSED
-		public java.util.ArrayList<Integer> _pointersID = new ArrayList<Integer>();
-		public java.util.ArrayList<Touch> _touchs = new ArrayList<Touch>();
-		public TouchEventType _type = TouchEventType.Down;
-		
-		@Override
+
+   //Stores pointer positions, id and event type
+   class EventProcessed {
+      // LAST EVENT PROCESSED
+      public java.util.ArrayList<Integer> _pointersID = new ArrayList<Integer>();
+      public java.util.ArrayList<Touch>   _touchs     = new ArrayList<Touch>();
+      public TouchEventType               _type       = TouchEventType.Down;
+
+
+      @Override
       protected EventProcessed clone() {
 			EventProcessed e = new EventProcessed();
 			e._pointersID = (ArrayList<Integer>) this._pointersID.clone();
@@ -146,7 +150,4 @@ public class MotionEventProcessor {
          return te;
 	     
 	  }
-
-	
-
 }

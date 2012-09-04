@@ -1,4 +1,4 @@
-package org.glob3.mobile.client.generated; 
+package org.glob3.mobile.generated; 
 //
 //  Mark.cpp
 //  G3MiOSSDK
@@ -17,20 +17,21 @@ package org.glob3.mobile.client.generated;
 
 
 
+
 public class Mark
 {
   private final String _name;
   private final String _textureFilename;
   private final Geodetic3D _position ;
 
-  private int _textureId;
+  private GLTextureId _textureId = new GLTextureId();
 
   public Mark(String name, String textureFilename, Geodetic3D position)
   {
 	  _name = name;
 	  _textureFilename = textureFilename;
 	  _position = new Geodetic3D(position);
-	  _textureId = -1;
+	  _textureId = new GLTextureId(GLTextureId.invalid());
 
   }
 
@@ -54,11 +55,11 @@ public class Mark
 
   public final void render(RenderContext rc, double minDistanceToCamera)
   {
-	final Camera camera = rc.getCamera();
+	final Camera camera = rc.getCurrentCamera();
 	final Planet planet = rc.getPlanet();
   
-	final Vector3D cameraPosition = camera.getPos();
-	final Vector3D markPosition = planet.toVector3D(_position);
+	final Vector3D cameraPosition = camera.getCartesianPosition();
+	final Vector3D markPosition = planet.toCartesian(_position);
   
 	final Vector3D markCameraVector = markPosition.sub(cameraPosition);
 	final double distanceToCamera = markCameraVector.length();
@@ -67,23 +68,27 @@ public class Mark
 	{
 	  final Vector3D normalAtMarkPosition = planet.geodeticSurfaceNormal(markPosition);
   
-	  if (normalAtMarkPosition.angleBetween(markCameraVector).radians() > Math.PI / 2)
+	  if (normalAtMarkPosition.angleBetween(markCameraVector).radians() > IMathUtils.instance().pi() / 2)
 	  {
-		IGL gl = rc.getGL();
+		GL gl = rc.getGL();
   
-		if (_textureId < 1)
+		Vector2D tr = new Vector2D(0.0,0.0);
+		Vector2D scale = new Vector2D(1.0,1.0);
+		gl.transformTexCoords(scale, tr);
+  
+		if (!_textureId.isValid())
 		{
-		  _textureId = rc.getTexturesHandler().getTextureIdFromFileName(rc, _textureFilename, 128, 128);
+		  _textureId = rc.getTexturesHandler().getGLTextureIdFromFileName(_textureFilename, 128, 128, false);
 		}
   
-		if (_textureId < 1)
+		if (!_textureId.isValid())
 		{
 		  rc.getLogger().logError("Can't load file %s", _textureFilename);
 		  return;
 		}
   
   //    rc->getLogger()->logInfo(" Visible   << %f %f", minDist, distanceToCamera);
-		gl.drawBillBoard(_textureId, (float) markPosition.x(), (float) markPosition.y(), (float) markPosition.z(), camera.getViewPortRatio());
+		gl.drawBillBoard(_textureId, markPosition, camera.getViewPortRatio());
 	  }
   
 	}

@@ -12,13 +12,13 @@
 #include <string>
 
 class ByteBuffer {
-  
-
-#ifdef JAVA_CODE
-  byte[] _data;
-#endif
+private:
 #ifdef C_CODE
   unsigned char* _data;
+#endif
+  
+#ifdef JAVA_CODE
+  byte[] _data;
 #endif
   
   const int _length;
@@ -45,7 +45,7 @@ public:
 #endif
     return new ByteBuffer(newData, _length);
   }
-
+  
   ~ByteBuffer(){
 #ifdef C_CODE
     if (_data != NULL) {
@@ -53,15 +53,19 @@ public:
     }
 #endif
   }
-
+  
 #ifdef C_CODE
-  unsigned char* getData() const{ return _data;}
+  unsigned char* getData() const {
+    return _data;
+  }
 #endif
   
 #ifdef JAVA_CODE
-  public byte[] getData() { return _data;}
+  public byte[] getData() {
+    return _data;
+  }
 #endif
-
+  
   std::string getDataAsString() const;
   
   int getLength() const{

@@ -225,6 +225,14 @@ public class Angle
 	return Angle.fromDegrees(dif);
   }
 
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isZero() const
+  public final boolean isZero()
+  {
+	return (_degrees == 0);
+  }
+
   @Override
 	public int hashCode() {
 		final int prime = 31;

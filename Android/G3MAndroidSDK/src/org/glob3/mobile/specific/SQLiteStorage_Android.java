@@ -1,3 +1,5 @@
+
+
 package org.glob3.mobile.specific;
 
 import java.io.File;
@@ -12,8 +14,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
-public class SQLiteStorage_Android implements IStorage {
+
+public class SQLiteStorage_Android
+         implements
+            IStorage {
 
    private final String  _databaseName;
    private final Context _ctx;
@@ -26,16 +32,19 @@ public class SQLiteStorage_Android implements IStorage {
       if (!f.exists()) {
          f = _ctx.getCacheDir();
       }
-      String documentsDirectory = f.getAbsolutePath();
+      final String documentsDirectory = f.getAbsolutePath();
 
-      File f2 = new File(new File(documentsDirectory), _databaseName);
-      return f2.getAbsolutePath();
+      final File f2 = new File(new File(documentsDirectory), _databaseName);
 
+      final String path = f2.getAbsolutePath();
+      Log.d("SQLiteStorage_Android", "Creating DB in " + path);
+
+      return path;
    }
 
 
-   SQLiteStorage_Android(String path,
-                         Context ctx) {
+   SQLiteStorage_Android(final String path,
+                         final Context ctx) {
       _databaseName = path;
       _ctx = ctx;
 
@@ -49,7 +58,7 @@ public class SQLiteStorage_Android implements IStorage {
             _db.execSQL("CREATE TABLE IF NOT EXISTS entry (name TEXT, contents BLOB);");
             _db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS entry_name ON entry(name);");
          }
-         catch (SQLException e) {
+         catch (final SQLException e) {
             e.printStackTrace();
          }
       }
@@ -57,12 +66,12 @@ public class SQLiteStorage_Android implements IStorage {
 
 
    @Override
-   public boolean contains(URL url) {
-      String name = url.getPath();
+   public boolean contains(final URL url) {
+      final String name = url.getPath();
 
-      Cursor cursor = _db.query("entry", new String[] { "contents" }, "name = ?", new String[] { name }, null, null, null);
+      final Cursor cursor = _db.query("entry", new String[] { "1" }, "name = ?", new String[] { name }, null, null, null);
 
-      boolean hasAny = (cursor.getCount() > 0);
+      final boolean hasAny = (cursor.getCount() > 0);
 
       cursor.close();
 
@@ -71,13 +80,13 @@ public class SQLiteStorage_Android implements IStorage {
 
 
    @Override
-   public void save(URL url,
-                    ByteBuffer buffer) {
-      ContentValues values = new ContentValues();
+   public void save(final URL url,
+                    final ByteBuffer buffer) {
+      final ContentValues values = new ContentValues();
       values.put("name", url.getPath());
       values.put("contents", buffer.getData());
 
-      long r = _db.insertWithOnConflict("entry", null, values, SQLiteDatabase.CONFLICT_REPLACE);
+      final long r = _db.insertWithOnConflict("entry", null, values, SQLiteDatabase.CONFLICT_REPLACE);
       if (r == -1) {
          ILogger.instance().logError("SQL", "Can't write in database \"%s\"\n", _databaseName);
       }
@@ -85,14 +94,14 @@ public class SQLiteStorage_Android implements IStorage {
 
 
    @Override
-   public ByteBuffer read(URL url) {
-      String name = url.getPath();
+   public ByteBuffer read(final URL url) {
+      final String name = url.getPath();
 
-      Cursor cursor = _db.query("entry", new String[] { "contents" }, "name like ?", new String[] { name }, null, null, null);
+      final Cursor cursor = _db.query("entry", new String[] { "contents" }, "name = ?", new String[] { name }, null, null, null);
 
       if (cursor.moveToFirst()) {
-         byte[] data = cursor.getBlob(0);
-         ByteBuffer bb = new ByteBuffer(data, data.length);
+         final byte[] data = cursor.getBlob(0);
+         final ByteBuffer bb = new ByteBuffer(data, data.length);
          cursor.close();
          return bb;
       }

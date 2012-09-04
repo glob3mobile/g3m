@@ -27,18 +27,19 @@ const std::vector<Vector3D> Box::getCorners() const
   return std::vector<Vector3D>(c, c+8);
 #endif
 #ifdef JAVA_CODE
-    final java.util.ArrayList<Vector3D> c = new java.util.ArrayList<Vector3D>(8);
+  if (_corners == null) {
+    _corners = new java.util.ArrayList<Vector3D>(8);
     
-    c.add(new Vector3D(_lower.x(), _lower.y(), _lower.z()));
-    c.add(new Vector3D(_lower.x(), _lower.y(), _upper.z()));
-    c.add(new Vector3D(_lower.x(), _upper.y(), _lower.z()));
-    c.add(new Vector3D(_lower.x(), _upper.y(), _upper.z()));
-    c.add(new Vector3D(_upper.x(), _lower.y(), _lower.z()));
-    c.add(new Vector3D(_upper.x(), _lower.y(), _upper.z()));
-    c.add(new Vector3D(_upper.x(), _upper.y(), _lower.z()));
-    c.add(new Vector3D(_upper.x(), _upper.y(), _upper.z()));
-    
-    return c;
+    _corners.add(new Vector3D(_lower.x(), _lower.y(), _lower.z()));
+    _corners.add(new Vector3D(_lower.x(), _lower.y(), _upper.z()));
+    _corners.add(new Vector3D(_lower.x(), _upper.y(), _lower.z()));
+    _corners.add(new Vector3D(_lower.x(), _upper.y(), _upper.z()));
+    _corners.add(new Vector3D(_upper.x(), _lower.y(), _lower.z()));
+    _corners.add(new Vector3D(_upper.x(), _lower.y(), _upper.z()));
+    _corners.add(new Vector3D(_upper.x(), _upper.y(), _lower.z()));
+    _corners.add(new Vector3D(_upper.x(), _upper.y(), _upper.z()));
+  }
+  return _corners;
 #endif
 }
 

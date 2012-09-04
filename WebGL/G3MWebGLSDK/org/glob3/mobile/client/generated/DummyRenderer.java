@@ -1,4 +1,4 @@
-package org.glob3.mobile.client.generated; 
+package org.glob3.mobile.generated; 
 //
 //  DummyRenderer.cpp
 //  Glob3 Mobile
@@ -20,40 +20,40 @@ package org.glob3.mobile.client.generated;
 public class DummyRenderer extends Renderer
 {
 
-  private int numIndices;
-  private double halfSize;
+  private int _numIndices;
+  private double _halfSize;
 
-  private byte[] index;
-  private float[] vertices;
+  private int[] _index;
+  private float[] _vertices;
 
   public void dispose()
   {
-	index = null;
-	vertices = null;
+	_index = null;
+	_vertices = null;
   }
 
   public final void initialize(InitializationContext ic)
   {
 	int res = 12;
-	vertices = new float[res * res * 3];
-	numIndices = 2 * (res - 1) * (res + 1);
-	index = new byte[numIndices];
+	_vertices = new float[res * res * 3];
+	_numIndices = 2 * (res - 1) * (res + 1);
+	_index = new int[_numIndices];
   
 	// create vertices
   
 	if (ic != null && ic.getPlanet() != null)
-	  halfSize = ic.getPlanet().getRadii().x() / 2.0;
+	  _halfSize = ic.getPlanet().getRadii().x() / 2.0;
 	else
-	  halfSize = 7e6;
+	  _halfSize = 7e6;
   
 	int n = 0;
 	for (int j = 0; j < res; j++)
 	{
 	  for (int i = 0; i < res; i++)
 	  {
-		vertices[n++] = (float) 0;
-		vertices[n++] = (float)(-halfSize + i / (float)(res - 1) * 2 *halfSize);
-		vertices[n++] = (float)(halfSize - j / (float)(res - 1) * 2 *halfSize);
+		_vertices[n++] = (float) 0;
+		_vertices[n++] = (float)(-_halfSize + i / (float)(res - 1) * 2 *_halfSize);
+		_vertices[n++] = (float)(_halfSize - j / (float)(res - 1) * 2 *_halfSize);
 	  }
 	}
   
@@ -61,13 +61,13 @@ public class DummyRenderer extends Renderer
 	for (int j = 0; j < res - 1; j++)
 	{
 	  if (j > 0)
-		  index[n++] = (byte)(j * res);
+		  _index[n++] = (byte)(j * res);
 	  for (int i = 0; i < res; i++)
 	  {
-		index[n++] = (byte)(j * res + i);
-		index[n++] = (byte)(j * res + i + res);
+		_index[n++] = (j * res + i);
+		_index[n++] = (j * res + i + res);
 	  }
-	  index[n++] = (byte)(j * res + 2 * res - 1);
+	  _index[n++] = (j * res + 2 * res - 1);
 	}
   }
 
@@ -75,44 +75,44 @@ public class DummyRenderer extends Renderer
   {
   
 	// obtaing gl object reference
-	IGL gl = rc.getGL();
+	GL gl = rc.getGL();
   
-	gl.enableVertices();
+	gl.enableVerticesPosition();
   
 	// insert pointers
 	gl.disableTextures();
-	gl.vertexPointer(3, 0, vertices);
+	gl.vertexPointer(3, 0, _vertices);
   
 	{
 	  // draw a red square
 	  gl.color((float) 1, (float) 0, (float) 0, 1);
 	  gl.pushMatrix();
 	  //MutableMatrix44D T = GLU::translationMatrix(Vector3D(halfSize,0,0));
-	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(halfSize,0,0));
+	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(_halfSize,0,0));
 	  gl.multMatrixf(T);
-	  gl.drawTriangleStrip(numIndices, index);
+	  gl.drawTriangleStrip(_numIndices, _index);
 	  gl.popMatrix();
 	}
-
+  
 	{
 	  // draw a green square
 	  gl.color((float) 0, (float) 1, (float) 0, 1);
 	  gl.pushMatrix();
-	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(0,halfSize,0));
+	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(0,_halfSize,0));
 	  MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(90), new Vector3D(0,0,1));
-	  gl.multMatrixf(T.multMatrix(R));
-	  gl.drawTriangleStrip(numIndices, index);
+	  gl.multMatrixf(T.multiply(R));
+	  gl.drawTriangleStrip(_numIndices, _index);
 	  gl.popMatrix();
 	}
-	 
+  
 	{
 	  // draw a blue square
 	  gl.color((float) 0, (float) 0, (float) 1, 1);
 	  gl.pushMatrix();
-	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(0,-halfSize,0));
+	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(0,-_halfSize,0));
 	  MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(-90), new Vector3D(0,0,1));
-	  gl.multMatrixf(T.multMatrix(R));
-	  gl.drawTriangleStrip(numIndices, index);
+	  gl.multMatrixf(T.multiply(R));
+	  gl.drawTriangleStrip(_numIndices, _index);
 	  gl.popMatrix();
 	}
   
@@ -120,10 +120,10 @@ public class DummyRenderer extends Renderer
 	  // draw a purple square
 	  gl.color((float) 1, (float) 0, (float) 1, 1);
 	  gl.pushMatrix();
-	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(0,0,-halfSize));
+	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(0,0,-_halfSize));
 	  MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(90), new Vector3D(0,1,0));
-	  gl.multMatrixf(T.multMatrix(R));
-	  gl.drawTriangleStrip(numIndices, index);
+	  gl.multMatrixf(T.multiply(R));
+	  gl.drawTriangleStrip(_numIndices, _index);
 	  gl.popMatrix();
 	}
   
@@ -131,10 +131,10 @@ public class DummyRenderer extends Renderer
 	  // draw a cian square
 	  gl.color((float) 0, (float) 1, (float) 1, 1);
 	  gl.pushMatrix();
-	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(0,0,halfSize));
+	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(0,0,_halfSize));
 	  MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(-90), new Vector3D(0,1,0));
-	  gl.multMatrixf(T.multMatrix(R));
-	  gl.drawTriangleStrip(numIndices, index);
+	  gl.multMatrixf(T.multiply(R));
+	  gl.drawTriangleStrip(_numIndices, _index);
 	  gl.popMatrix();
 	}
   
@@ -142,24 +142,39 @@ public class DummyRenderer extends Renderer
 	  // draw a grey square
 	  gl.color((float) 0.5, (float) 0.5, (float) 0.5, 1);
 	  gl.pushMatrix();
-	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(-halfSize,0,0));
+	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(-_halfSize,0,0));
 	  MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(180), new Vector3D(0,0,1));
-	  gl.multMatrixf(T.multMatrix(R));
-	  gl.drawTriangleStrip(numIndices, index);
+	  gl.multMatrixf(T.multiply(R));
+	  gl.drawTriangleStrip(_numIndices, _index);
 	  gl.popMatrix();
 	}
   
 	gl.enableTextures();
   
-	return DefineConstants.MAX_TIME_TO_RENDER;
+	return Renderer.maxTimeToRender;
   }
 
-  public final boolean onTouchEvent(TouchEvent touchEvent)
+  public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
   {
 	return false;
   }
 
-  public final void onResizeViewportEvent(int width, int height)
+  public final void onResizeViewportEvent(EventContext ec, int width, int height)
+  {
+
+  }
+
+  public final boolean isReadyToRender(RenderContext rc)
+  {
+	return true;
+  }
+
+  public final void start()
+  {
+
+  }
+
+  public final void stop()
   {
 
   }

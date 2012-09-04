@@ -13,17 +13,18 @@
 
 #include <sstream>
 
-class StringBuilder_iOS: public IStringBuilder{
+class StringBuilder_iOS: public IStringBuilder {
   
   std::ostringstream _oss;
   
-protected: 
+protected:
   
   
   IStringBuilder* getNewInstance() const{
     return new StringBuilder_iOS();
   }
-public:  
+  
+public:
   
   IStringBuilder* addBool(bool b){
     _oss << b;

@@ -1,3 +1,5 @@
+
+
 package org.glob3.mobile.specific;
 
 import java.util.ArrayList;
@@ -53,7 +55,12 @@ import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.view.MotionEvent.PointerCoords;
 
-public class G3MWidget_Android extends GLSurfaceView implements OnGestureListener {
+
+public class G3MWidget_Android
+         extends
+            GLSurfaceView
+         implements
+            OnGestureListener {
 
    G3MWidget                  _widget;
    ES2Renderer                _es2renderer;
@@ -63,7 +70,7 @@ public class G3MWidget_Android extends GLSurfaceView implements OnGestureListene
    private OnDoubleTapListener _doubleTapListener = null;
    private GestureDetector _gestureDetector = null;
 
-   public G3MWidget_Android(Context context) {
+   public G3MWidget_Android(final Context context) {
       super(context);
 
       setEGLContextClientVersion(2); // OPENGL ES VERSION MUST BE SPECIFED
@@ -117,10 +124,10 @@ public class G3MWidget_Android extends GLSurfaceView implements OnGestureListene
    // The initialization of _widget occurs when the android widget is resized
    // to the screen size
    @Override
-   protected void onSizeChanged(int w,
-                                int h,
-                                int oldw,
-                                int oldh) {
+   protected void onSizeChanged(final int w,
+                                final int h,
+                                final int oldw,
+                                final int oldh) {
       super.onSizeChanged(w, h, oldw, oldh);
 
       if (_widget == null) {
@@ -154,27 +161,27 @@ public class G3MWidget_Android extends GLSurfaceView implements OnGestureListene
 
 
    @Override
-   public boolean onDown(MotionEvent arg0) {
-   // TODO this method must be implemented
+   public boolean onDown(final MotionEvent arg0) {
+      // TODO this method must be implemented
       return false;
    }
 
 
    @Override
-   public boolean onFling(MotionEvent e1,
-                          MotionEvent e2,
-                          float velocityX,
-                          float velocityY) {
-   // TODO this method must be implemented
+   public boolean onFling(final MotionEvent e1,
+                          final MotionEvent e2,
+                          final float velocityX,
+                          final float velocityY) {
+      // TODO this method must be implemented
       return false;
    }
 
 
    @Override
-   public void onLongPress(MotionEvent e) {
-      PointerCoords pc = new PointerCoords();
+   public void onLongPress(final MotionEvent e) {
+      final PointerCoords pc = new PointerCoords();
       e.getPointerCoords(0, pc);
-      Touch t = new Touch(new Vector2D(pc.x, pc.y), new Vector2D(0, 0));
+      final Touch t = new Touch(new Vector2D(pc.x, pc.y), new Vector2D(0, 0));
       final TouchEvent te = TouchEvent.create(TouchEventType.LongPress, t);
 
       queueEvent(new Runnable() {
@@ -187,24 +194,24 @@ public class G3MWidget_Android extends GLSurfaceView implements OnGestureListene
 
 
    @Override
-   public boolean onScroll(MotionEvent e1,
-                           MotionEvent e2,
-                           float distanceX,
-                           float distanceY) {
-   // TODO this method must be implemented
+   public boolean onScroll(final MotionEvent e1,
+                           final MotionEvent e2,
+                           final float distanceX,
+                           final float distanceY) {
+      // TODO this method must be implemented
       return false;
    }
 
 
    @Override
-   public void onShowPress(MotionEvent e) {
-   // TODO this method must be implemented
+   public void onShowPress(final MotionEvent e) {
+      // TODO this method must be implemented
    }
 
 
    @Override
-   public boolean onSingleTapUp(MotionEvent e) {
-   // TODO this method must be implemented
+   public boolean onSingleTapUp(final MotionEvent e) {
+      // TODO this method must be implemented
       return false;
    }
 
@@ -226,10 +233,10 @@ public class G3MWidget_Android extends GLSurfaceView implements OnGestureListene
    UserData                                       _userData          = null;
 
 
-   public void initWidget(ArrayList<ICameraConstrainer> cameraConstraints,
-                          LayerSet layerSet,
-                          ArrayList<org.glob3.mobile.generated.Renderer> renderers,
-                          UserData userData) {
+   public void initWidget(final ArrayList<ICameraConstrainer> cameraConstraints,
+                          final LayerSet layerSet,
+                          final ArrayList<org.glob3.mobile.generated.Renderer> renderers,
+                          final UserData userData) {
       _cameraConstraints = cameraConstraints;
       _layerSet = layerSet;
       _renderers = renderers;
@@ -242,22 +249,22 @@ public class G3MWidget_Android extends GLSurfaceView implements OnGestureListene
                                   final ArrayList<org.glob3.mobile.generated.Renderer> renderers,
                                   final UserData userData) {
       // creates default camera-renderer and camera-handlers
-      CameraRenderer cameraRenderer = new CameraRenderer();
+      final CameraRenderer cameraRenderer = new CameraRenderer();
 
-      boolean useInertia = true;
+      final boolean useInertia = true;
       cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
 
-      boolean processRotation = true;
-      boolean processZoom = true;
+      final boolean processRotation = true;
+      final boolean processZoom = true;
       cameraRenderer.addHandler(new CameraDoubleDragHandler(processRotation, processZoom));
       cameraRenderer.addHandler(new CameraRotationHandler());
       cameraRenderer.addHandler(new CameraDoubleTapHandler());
 
-      boolean renderDebug = true;
-      boolean useTilesSplitBudget = true;
-      boolean forceTopLevelTilesRenderOnStart = true;
+      final boolean renderDebug = false;
+      final boolean useTilesSplitBudget = true;
+      final boolean forceTopLevelTilesRenderOnStart = true;
 
-      TilesRenderParameters parameters = TilesRenderParameters.createDefault(renderDebug, useTilesSplitBudget,
+      final TilesRenderParameters parameters = TilesRenderParameters.createDefault(renderDebug, useTilesSplitBudget,
                forceTopLevelTilesRenderOnStart);
 
       initWidget(cameraRenderer, cameraConstraints, layerSet, parameters, renderers, userData);
@@ -265,53 +272,53 @@ public class G3MWidget_Android extends GLSurfaceView implements OnGestureListene
    }
 
 
-   private void initWidget(CameraRenderer cameraRenderer,
-                           ArrayList<ICameraConstrainer> cameraConstraints,
-                           LayerSet layerSet,
-                           TilesRenderParameters parameters,
-                           ArrayList<org.glob3.mobile.generated.Renderer> renderers,
-                           UserData userData) {
+   private void initWidget(final CameraRenderer cameraRenderer,
+                           final ArrayList<ICameraConstrainer> cameraConstraints,
+                           final LayerSet layerSet,
+                           final TilesRenderParameters parameters,
+                           final ArrayList<org.glob3.mobile.generated.Renderer> renderers,
+                           final UserData userData) {
 
       // create GLOB3M WIDGET
-      int width = getWidth();
-      int height = getHeight();
+      final int width = getWidth();
+      final int height = getHeight();
 
       IStringBuilder.setInstance(new StringBuilder_Android()); //Setting StringBuilder
 
       IMathUtils.setInstance(new MathUtils_Android()); //Setting MathUtils
 
-      IFactory factory = new Factory_Android(getContext());
-      ILogger logger = new Logger_Android(LogLevel.ErrorLevel);
-      NativeGL2_Android nGL = new NativeGL2_Android();
-      GL gl = new GL(nGL);
+      final IFactory factory = new Factory_Android(getContext());
+      final ILogger logger = new Logger_Android(LogLevel.ErrorLevel);
+      final NativeGL2_Android nGL = new NativeGL2_Android();
+      final GL gl = new GL(nGL);
 
-      IStorage storage = new SQLiteStorage_Android("g3m.cache", this.getContext());
+      final IStorage storage = new SQLiteStorage_Android("g3m.cache", this.getContext());
 
       //TESTING DB
       if (false) {
-         byte[] b = { 1, 0, 1 };
-         ByteBuffer bb = new ByteBuffer(b, b.length);
-         URL url = new URL("test");
-         URL url2 = new URL("test2");
+         final byte[] b = { 1, 0, 1 };
+         final ByteBuffer bb = new ByteBuffer(b, b.length);
+         final URL url = new URL("test");
+         final URL url2 = new URL("test2");
 
          if (storage.contains(url)) {
-            ByteBuffer bb2 = storage.read(url);
+            final ByteBuffer bb2 = storage.read(url);
          }
 
          storage.save(url, bb);
 
          if (storage.contains(url)) {
-            ByteBuffer bb1 = storage.read(url);
+            final ByteBuffer bb1 = storage.read(url);
          }
 
          storage.save(url, bb);
 
          if (storage.contains(url)) {
-            ByteBuffer bb2 = storage.read(url);
+            final ByteBuffer bb2 = storage.read(url);
          }
 
          if (storage.contains(url2)) {
-            ByteBuffer bb2 = storage.read(url2);
+            final ByteBuffer bb2 = storage.read(url2);
          }
 
 
@@ -319,13 +326,13 @@ public class G3MWidget_Android extends GLSurfaceView implements OnGestureListene
 
 
       //		  IDownloader downloader = null;// new CachedDownloader(new Downloader_Android(8), storage);
-      IDownloader downloader = new CachedDownloader(new Downloader_Android(8), storage);
+      final IDownloader downloader = new CachedDownloader(new Downloader_Android(8), storage);
 
-      CompositeRenderer composite = new CompositeRenderer();
+      final CompositeRenderer composite = new CompositeRenderer();
 
       composite.addRenderer(cameraRenderer);
 
-      if (layerSet != null && layerSet.size() > 0) {
+      if ((layerSet != null) && (layerSet.size() > 0)) {
 
          TileTexturizer texturizer;// = new MultiLayerTileTexturizer(layerSet);
 
@@ -334,14 +341,14 @@ public class G3MWidget_Android extends GLSurfaceView implements OnGestureListene
          }
          else {
             //SINGLE IMAGE
-            IImage singleWorldImage = factory.createImageFromFileName("world.jpg");
+            final IImage singleWorldImage = factory.createImageFromFileName("world.jpg");
             texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
          }
 
 
          final boolean showStatistics = false;
 
-         TileRenderer tr = new TileRenderer(new EllipsoidalTileTessellator(parameters._tileResolution, true), texturizer,
+         final TileRenderer tr = new TileRenderer(new EllipsoidalTileTessellator(parameters._tileResolution, true), texturizer,
                   parameters, showStatistics);
 
          composite.addRenderer(tr);
@@ -352,20 +359,20 @@ public class G3MWidget_Android extends GLSurfaceView implements OnGestureListene
       }
 
 
-      TextureBuilder textureBuilder = new CPUTextureBuilder();
-      TexturesHandler texturesHandler = new TexturesHandler(gl, factory, textureBuilder, false);
+      final TextureBuilder textureBuilder = new CPUTextureBuilder();
+      final TexturesHandler texturesHandler = new TexturesHandler(gl, factory, textureBuilder, false);
 
-      Planet planet = Planet.createEarth();
+      final Planet planet = Planet.createEarth();
 
-      org.glob3.mobile.generated.Renderer busyRenderer = new BusyMeshRenderer();
+      final org.glob3.mobile.generated.Renderer busyRenderer = new BusyMeshRenderer();
 
-      EffectsScheduler scheduler = new EffectsScheduler();
+      final EffectsScheduler scheduler = new EffectsScheduler();
 
-      FrameTasksExecutor frameTasksExecutor = new FrameTasksExecutor();
+      final FrameTasksExecutor frameTasksExecutor = new FrameTasksExecutor();
 
-      IStringUtils stringUtils = new StringUtils_Android();
+      final IStringUtils stringUtils = new StringUtils_Android();
 
-      IThreadUtils threadUtils = new ThreadUtils_Android(this);
+      final IThreadUtils threadUtils = new ThreadUtils_Android(this);
 
       _widget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, logger, gl, texturesHandler, downloader,
                planet, cameraConstraints, composite, busyRenderer, scheduler, width, height,

@@ -1,4 +1,4 @@
-package org.glob3.mobile.client.generated; 
+package org.glob3.mobile.generated; 
 public abstract class ILogger
 {
   protected final LogLevel _level;
@@ -7,6 +7,23 @@ public abstract class ILogger
   {
 	  _level = level;
   }
+
+  protected static ILogger _instance = null;
+
+  public static void setInstance(ILogger logger)
+  {
+	if (_instance != null)
+	{
+	  System.out.print("Warning, ILooger instance set two times\n");
+	}
+	_instance = logger;
+  }
+
+  public static ILogger instance()
+  {
+	return _instance;
+  }
+
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual void logInfo(const String x, ...) const = 0;

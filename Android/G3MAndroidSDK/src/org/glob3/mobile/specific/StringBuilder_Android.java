@@ -1,37 +1,47 @@
+
+
 package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.IStringBuilder;
 
-public class StringBuilder_Android extends IStringBuilder {
-	
-	String res = "";
 
-	@Override
-	protected IStringBuilder getNewInstance() {
-		return new StringBuilder_Android();
-	}
+public class StringBuilder_Android
+         extends
+            IStringBuilder {
 
-	@Override
-	public IStringBuilder add(double d) {
-		res += d;
-		return this;
-	}
+   private final StringBuilder _builder = new StringBuilder();
 
-	@Override
-	public IStringBuilder add(String s) {
-		res += s;
-		return this;
-	}
 
-	@Override
-	public IStringBuilder addBool(boolean b) {
-		res += b;
-		return this;
-	}
+   @Override
+   protected IStringBuilder getNewInstance() {
+      return new StringBuilder_Android();
+   }
 
-	@Override
-	public String getString() {
-		return res;
-	}
+
+   @Override
+   public IStringBuilder add(final double d) {
+      _builder.append(d);
+      return this;
+   }
+
+
+   @Override
+   public IStringBuilder add(final String s) {
+      _builder.append(s);
+      return this;
+   }
+
+
+   @Override
+   public IStringBuilder addBool(final boolean b) {
+      _builder.append(b);
+      return this;
+   }
+
+
+   @Override
+   public String getString() {
+      return _builder.toString();
+   }
 
 }

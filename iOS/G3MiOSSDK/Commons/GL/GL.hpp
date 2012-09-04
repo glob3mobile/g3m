@@ -39,8 +39,8 @@ private:
   // state handling
   bool _enableTextures;
   bool _enableTexture2D;
-  bool _enableVertexColor;
-  bool _enableVertexNormal;
+//  bool _enableVertexColor;
+//  bool _enableVertexNormal;
   bool _enableVerticesPosition;
   bool _enableFlatColor;
   bool _enableDepthTest;
@@ -50,7 +50,8 @@ private:
   
 #ifdef C_CODE
   GLCullFace _cullFace_face;
-#else
+#endif
+#ifdef JAVA_CODE
   GLCullFace _cullFace_face = GLCullFace.Back;
 #endif
   
@@ -65,7 +66,7 @@ private:
   const float* _textureCoordinates;
 #endif
 #ifdef JAVA_CODE
-  private final float[] _textureCoordinates;
+  private float[] _textureCoordinates;
 #endif
   
   float _flatColorR;
@@ -85,7 +86,7 @@ private:
   unsigned char* _lastImageData;
 #endif
 #ifdef JAVA_CODE
-  char[] _lastImageData;
+  byte[] _lastImageData;
 #endif
 
   
@@ -95,10 +96,10 @@ public:
   _gl(gl),
   _enableTextures(false),
   _enableTexture2D(false),
-  _enableVertexColor(false),
-  _enableVertexNormal(false),
+//  _enableVertexColor(false),
+//  _enableVertexNormal(false),
   _enableVerticesPosition(false),
-  _enableFlatColor(false),
+//  _enableFlatColor(false),
   _enableBlend(false),
   _enableDepthTest(false),
   _enableCullFace(false),
