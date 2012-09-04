@@ -12,19 +12,12 @@ package org.glob3.mobile.generated;
 
 public class TimeInterval
 {
-  private final int _milliseconds;
+  private final long _milliseconds;
 
-  private TimeInterval(int milliseconds)
+  private TimeInterval(long milliseconds)
   {
 	  _milliseconds = milliseconds;
 
-  }
-
-  // the next function is for compatibility with Java
-  private TimeInterval(double milliseconds)
-  {
-	  _milliseconds = (int)milliseconds;
-	int __ASK_JM_why;
   }
 
   public TimeInterval(TimeInterval other)
@@ -38,19 +31,19 @@ public class TimeInterval
 	  _milliseconds = 0;
   }
 
-  public static TimeInterval fromMilliseconds(int milliseconds)
+  public static TimeInterval fromMilliseconds(long milliseconds)
   {
 	return new TimeInterval(milliseconds);
   }
 
   public static TimeInterval fromSeconds(double seconds)
   {
-	return TimeInterval.fromMilliseconds((int)(seconds *1000.0));
+	return TimeInterval.fromMilliseconds((long)(seconds *1000.0));
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: int milliseconds() const
-  public final int milliseconds()
+//ORIGINAL LINE: long milliseconds() const
+  public final long milliseconds()
   {
 	return _milliseconds;
   }
