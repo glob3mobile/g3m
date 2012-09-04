@@ -56,7 +56,7 @@ public class Vector3D
 //ORIGINAL LINE: boolean isNan() const
   public final boolean isNan()
   {
-	return IMathUtils.instance().isNan(_x *_y *_z);
+	return (IMathUtils.instance().isNan(_x) || IMathUtils.instance().isNan(_y) || IMathUtils.instance().isNan(_z));
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

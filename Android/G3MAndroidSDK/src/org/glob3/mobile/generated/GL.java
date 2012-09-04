@@ -40,8 +40,8 @@ public class GL
   // state handling
   private boolean _enableTextures;
   private boolean _enableTexture2D;
-  private boolean _enableVertexColor;
-  private boolean _enableVertexNormal;
+//  bool _enableVertexColor;
+//  bool _enableVertexNormal;
   private boolean _enableVerticesPosition;
   private boolean _enableFlatColor;
   private boolean _enableDepthTest;
@@ -119,14 +119,14 @@ public class GL
 
 
   public GL(INativeGL gl)
+//  _enableVertexColor(false),
+//  _enableVertexNormal(false),
+//  _enableFlatColor(false),
   {
 	  _gl = gl;
 	  _enableTextures = false;
 	  _enableTexture2D = false;
-	  _enableVertexColor = false;
-	  _enableVertexNormal = false;
 	  _enableVerticesPosition = false;
-	  _enableFlatColor = false;
 	  _enableBlend = false;
 	  _enableDepthTest = false;
 	  _enableCullFace = false;
@@ -271,31 +271,28 @@ public class GL
 
   public final void disableVertexColor()
   {
-	if (_enableVertexColor)
-	{
-	  _gl.disableVertexAttribArray(GlobalMembersGL.Attributes.Color);
-	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableColorPerVertex, 0);
-	  _enableVertexColor = false;
-	}
+	//  if (_enableVertexColor) {
+	_gl.disableVertexAttribArray(GlobalMembersGL.Attributes.Color);
+	_gl.uniform1i(GlobalMembersGL.Uniforms.EnableColorPerVertex, 0);
+	//    _enableVertexColor = false;
+	//  }
   }
 
   public final void enableVertexNormal(float[] normals)
   {
-	if (!_enableVertexNormal)
-	{
-	  _gl.enableVertexAttribArray(GlobalMembersGL.Attributes.Normal);
-	  _gl.vertexAttribPointer(GlobalMembersGL.Attributes.Normal, 3, GLType.Float, false, 0, normals);
-	  _enableVertexNormal = true;
-	}
+	//  if (!_enableVertexNormal) {
+	_gl.enableVertexAttribArray(GlobalMembersGL.Attributes.Normal);
+	_gl.vertexAttribPointer(GlobalMembersGL.Attributes.Normal, 3, GLType.Float, false, 0, normals);
+	//    _enableVertexNormal = true;
+	//  }
   }
 
   public final void disableVertexNormal()
   {
-	if (_enableVertexNormal)
-	{
-	  _gl.disableVertexAttribArray(GlobalMembersGL.Attributes.Normal);
-	  _enableVertexNormal = false;
-	}
+	//  if (_enableVertexNormal) {
+	_gl.disableVertexAttribArray(GlobalMembersGL.Attributes.Normal);
+	//    _enableVertexNormal = false;
+	//  }
   }
 
   public final void pushMatrix()
