@@ -89,6 +89,9 @@ private:
   byte[] _lastImageData;
 #endif
 
+  //Get Locations warning of errors
+  int checkedGetAttribLocation(int program, const std::string& name) const;
+  int checkedGetUniformLocation(int program, const std::string& name) const;
   
 public:
   
