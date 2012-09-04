@@ -69,7 +69,7 @@ void GL::useProgram(unsigned int program) {
   Attributes.Position     = checkedGetAttribLocation(program, "Position");
   Attributes.TextureCoord = checkedGetAttribLocation(program, "TextureCoord");
   Attributes.Color        = checkedGetAttribLocation(program, "Color");
-  Attributes.Normal       = checkedGetAttribLocation(program, "Normal");
+  //Attributes.Normal       = checkedGetAttribLocation(program, "Normal");
   
   // Extract the handles to uniforms
   Uniforms.Projection          = checkedGetUniformLocation(program, "Projection");
