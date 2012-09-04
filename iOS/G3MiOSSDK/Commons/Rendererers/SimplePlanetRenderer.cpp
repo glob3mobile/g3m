@@ -121,14 +121,12 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   float* ver = createVertices(*planet);
   float * texC = NULL;
   float * colors = NULL;
-  float * normals = NULL;
 #endif 
 #ifdef JAVA_CODE
   int ind[] = createMeshIndex();
   float ver[] = createVertices(planet);
   float texC[] = null;
   float colors[] = null;
-  float normals[] = null;
 #endif
   
   //TEXTURED
@@ -162,25 +160,15 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   if (false){
     flatColor = new Color( Color::fromRGBA(0.0, 1.0, 0.0, 1.0) );
   }
-  
-  if (false){
-    int numVertices = res * res * 3;
-    normals = new float[numVertices];
-    for(int i = 0; i < numVertices; ){
-      normals[i++] = (float) 1.0;
-      normals[i++] = (float) 1.0;
-      normals[i++] = (float) 1.0;
-    }
-  }
 
 #ifdef C_CODE
   IndexedMesh *im = IndexedMesh::createFromVector3D(true, TriangleStrip, NoCenter, Vector3D(0,0,0), 
                                                     _latRes *_lonRes, ver, 
-                                                    ind, numIndexes, flatColor, colors, (float)0.5, normals);
+                                                    ind, numIndexes, flatColor, colors, (float)0.5);
 #else
   IndexedMesh *im = IndexedMesh::createFromVector3D(true, GLPrimitive.TriangleStrip, NoCenter, Vector3D(0,0,0), 
                                                     _latRes *_lonRes, ver, 
-                                                    ind, numIndexes, flatColor, colors, (float)0.5, normals);
+                                                    ind, numIndexes, flatColor, colors, (float)0.5);
 #endif
   
   TextureMapping* texMap = new SimpleTextureMapping(texId,

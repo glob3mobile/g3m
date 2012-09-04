@@ -43,7 +43,6 @@ struct AttributesStruct {
   int Position;
   int TextureCoord;
   int Color;
-  int Normal;
 } Attributes;
 
 int GL::checkedGetAttribLocation(int program, const std::string& name) const{
@@ -69,7 +68,6 @@ void GL::useProgram(unsigned int program) {
   Attributes.Position     = checkedGetAttribLocation(program, "Position");
   Attributes.TextureCoord = checkedGetAttribLocation(program, "TextureCoord");
   Attributes.Color        = checkedGetAttribLocation(program, "Color");
-  //Attributes.Normal       = checkedGetAttribLocation(program, "Normal");
   
   // Extract the handles to uniforms
   Uniforms.Projection          = checkedGetUniformLocation(program, "Projection");
@@ -514,35 +512,6 @@ void GL::disableVertexColor() {
   _gl->uniform1i(Uniforms.EnableColorPerVertex, 0);
   //    _enableVertexColor = false;
   //  }
-}
-
-void GL::enableVertexNormal(float const normals[]) {
-  int TODO_No_Normals_In_Shader;
-//  if (Attributes.Normal == -1){
-//    ILogger::instance()->logError("Attribute Normal Invalid");
-//  }
-//  
-//  //  if (!_enableVertexNormal) {
-//  _gl->enableVertexAttribArray(Attributes.Normal);
-//#ifdef C_CODE
-//  _gl->vertexAttribPointer(Attributes.Normal, 3, Float, false, 0, normals);
-//#else
-//  _gl->vertexAttribPointer(Attributes.Normal, 3, GLType.Float, false, 0, normals);
-//#endif
-//  //    _enableVertexNormal = true;
-//  //  }
-}
-
-void GL::disableVertexNormal() {
-    int TODO_No_Normals_In_Shader;
-//  if (Attributes.Normal == -1){
-//    ILogger::instance()->logError("Attribute Normal Invalid");
-//  }
-//  
-//  //  if (_enableVertexNormal) {
-//  _gl->disableVertexAttribArray(Attributes.Normal);
-//  //    _enableVertexNormal = false;
-//  //  }
 }
 
 void GL::enableVerticesPosition() {

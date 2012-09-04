@@ -40,7 +40,6 @@ private:
   bool _enableTextures;
   bool _enableTexture2D;
 //  bool _enableVertexColor;
-//  bool _enableVertexNormal;
   bool _enableVerticesPosition;
   bool _enableFlatColor;
   bool _enableDepthTest;
@@ -100,7 +99,6 @@ public:
   _enableTextures(false),
   _enableTexture2D(false),
 //  _enableVertexColor(false),
-//  _enableVertexNormal(false),
   _enableVerticesPosition(false),
 //  _enableFlatColor(false),
   _enableBlend(false),
@@ -157,10 +155,6 @@ public:
   void enableVertexColor(float const colors[], float intensity);
   
   void disableVertexColor();
-  
-  void enableVertexNormal(float const normals[]);
-  
-  void disableVertexNormal();
   
   void pushMatrix();
   

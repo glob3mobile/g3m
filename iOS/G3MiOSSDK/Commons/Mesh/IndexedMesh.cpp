@@ -22,7 +22,6 @@ IndexedMesh::~IndexedMesh()
   if (_owner){
     delete[] _vertices;
     delete[] _indexes;
-    if (_normals != NULL) delete[] _normals;
     if (_colors != NULL) delete[] _colors;
     if (_flatColor != NULL) delete _flatColor;
   }
@@ -42,8 +41,7 @@ IndexedMesh::IndexedMesh(bool owner,
                          const int numIndex, 
                          const Color* flatColor,
                          const float colors[],
-                         const float colorsIntensity,
-                         const float normals[]):
+                         const float colorsIntensity):
 _owner(owner),
 _primitive(primitive),
 _numVertices(numVertices),
@@ -52,8 +50,7 @@ _indexes(indexes),
 _numIndex(numIndex),
 _flatColor(flatColor),
 _colors(colors),
-_colorsIntensity(colorsIntensity), 
-_normals(normals),
+_colorsIntensity(colorsIntensity),
 _extent(NULL),
 _centerStrategy(strategy),
 _center(center)
@@ -70,8 +67,7 @@ IndexedMesh::IndexedMesh(std::vector<MutableVector3D>& vertices,
                          std::vector<int>& indexes,
                          const Color* flatColor,
                          std::vector<Color>* colors,
-                         const float colorsIntensity,
-                         std::vector<MutableVector3D>* normals):
+                         const float colorsIntensity):
 _owner(true),
 _primitive(primitive),
 _numVertices(vertices.size()),
@@ -114,20 +110,6 @@ _center(center)
   }
   _indexes = ind;
   
-  if (normals != NULL) {
-    float * norm = new float[3 * vertices.size()];
-    p = 0;
-    for (int i = 0; i < vertices.size(); i++) {
-      norm[p++] = (float) normals->at(i).x();
-      norm[p++] = (float) normals->at(i).y();
-      norm[p++] = (float) normals->at(i).z();
-    }
-    _normals = norm;
-  }
-  else {
-    _normals = NULL;
-  }
-  
   if (colors != NULL) {
     float * vertexColor = new float[4 * colors->size()];
     for (int i = 0; i < colors->size(); i+=4){
@@ -160,13 +142,6 @@ void IndexedMesh::render(const RenderContext* rc) const {
   }
   else {
     gl->enableVertexFlatColor(*_flatColor, _colorsIntensity);
-  }
-  
-  if (_normals == NULL) {
-    gl->disableVertexNormal();
-  }
-  else {
-    gl->enableVertexNormal(_normals);
   }
   
   gl->vertexPointer(3, 0, _vertices);
