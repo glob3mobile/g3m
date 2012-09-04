@@ -491,7 +491,7 @@ public class GL
 	GlobalMembersGL.Attributes.Position = checkedGetAttribLocation(program, "Position");
 	GlobalMembersGL.Attributes.TextureCoord = checkedGetAttribLocation(program, "TextureCoord");
 	GlobalMembersGL.Attributes.Color = checkedGetAttribLocation(program, "Color");
-	GlobalMembersGL.Attributes.Normal = checkedGetAttribLocation(program, "Normal");
+	//Attributes.Normal       = checkedGetAttribLocation(program, "Normal");
   
 	// Extract the handles to uniforms
 	GlobalMembersGL.Uniforms.Projection = checkedGetUniformLocation(program, "Projection");
