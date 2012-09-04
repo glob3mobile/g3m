@@ -381,29 +381,33 @@ public class GL
 
   public final void enableVertexNormal(float[] normals)
   {
-	if (GlobalMembersGL.Attributes.Normal == -1)
-	{
-	  ILogger.instance().logError("Attribute Normal Invalid");
-	}
-  
-	//  if (!_enableVertexNormal) {
-	_gl.enableVertexAttribArray(GlobalMembersGL.Attributes.Normal);
-	_gl.vertexAttribPointer(GlobalMembersGL.Attributes.Normal, 3, GLType.Float, false, 0, normals);
-	//    _enableVertexNormal = true;
-	//  }
+	int TODO_No_Normals_In_Shader;
+  //  if (Attributes.Normal == -1){
+  //    ILogger::instance()->logError("Attribute Normal Invalid");
+  //  }
+  //
+  //  //  if (!_enableVertexNormal) {
+  //  _gl->enableVertexAttribArray(Attributes.Normal);
+  ///#ifdef C_CODE
+  //  _gl->vertexAttribPointer(Attributes.Normal, 3, Float, false, 0, normals);
+  ///#else
+  //  _gl->vertexAttribPointer(Attributes.Normal, 3, GLType.Float, false, 0, normals);
+  ///#endif
+  //  //    _enableVertexNormal = true;
+  //  //  }
   }
 
   public final void disableVertexNormal()
   {
-	if (GlobalMembersGL.Attributes.Normal == -1)
-	{
-	  ILogger.instance().logError("Attribute Normal Invalid");
-	}
-  
-	//  if (_enableVertexNormal) {
-	_gl.disableVertexAttribArray(GlobalMembersGL.Attributes.Normal);
-	//    _enableVertexNormal = false;
-	//  }
+	  int TODO_No_Normals_In_Shader;
+  //  if (Attributes.Normal == -1){
+  //    ILogger::instance()->logError("Attribute Normal Invalid");
+  //  }
+  //
+  //  //  if (_enableVertexNormal) {
+  //  _gl->disableVertexAttribArray(Attributes.Normal);
+  //  //    _enableVertexNormal = false;
+  //  //  }
   }
 
   public final void pushMatrix()
