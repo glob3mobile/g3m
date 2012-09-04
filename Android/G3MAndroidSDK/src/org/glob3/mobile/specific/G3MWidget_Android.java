@@ -49,6 +49,8 @@ import org.glob3.mobile.generated.Vector2D;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.view.GestureDetector;
+import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.view.MotionEvent.PointerCoords;
@@ -65,6 +67,8 @@ public class G3MWidget_Android
 
    final MotionEventProcessor _motionEventProcessor = new MotionEventProcessor();
 
+   private OnDoubleTapListener _doubleTapListener = null;
+   private GestureDetector _gestureDetector = null;
 
    public G3MWidget_Android(final Context context) {
       super(context);
@@ -79,6 +83,41 @@ public class G3MWidget_Android
 
       // Debug flags
       setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
+      
+
+      //Double Tap Listener
+      _gestureDetector = new GestureDetector(this);
+      _doubleTapListener = new OnDoubleTapListener() {
+
+         @Override
+         public boolean onSingleTapConfirmed(final MotionEvent e) {
+            // TODO Auto-generated method stub
+            return false;
+         }
+
+
+         @Override
+         public boolean onDoubleTapEvent(final MotionEvent event) {
+            return true;
+         }
+
+
+         @Override
+         public boolean onDoubleTap(final MotionEvent event) {
+
+            final TouchEvent te = _motionEventProcessor.processDoubleTapEvent(event);
+
+            queueEvent(new Runnable() {
+               @Override
+               public void run() {
+                  _widget.onTouchEvent(te);
+               }
+            });
+
+            return true;
+         }
+      };
+      _gestureDetector.setOnDoubleTapListener(_doubleTapListener);
    }
 
 
@@ -100,7 +139,10 @@ public class G3MWidget_Android
 
 
    @Override
-   public boolean onTouchEvent(final MotionEvent event) {
+   public boolean onTouchEvent(MotionEvent event) {
+      
+      //Notifing gestureDetector for DoubleTap recognition
+      _gestureDetector.onTouchEvent(event);
 
       final TouchEvent te = _motionEventProcessor.processEvent(event);
 
@@ -182,268 +224,6 @@ public class G3MWidget_Android
       }
       return _widget;
    }
-
-   /*
-   private void initSimpleWidgetDemo()
-   {
-   	IStringBuilder.setInstance(new StringBuilder_Android());
-   	
-   	int width = getWidth();
-   	int height = getHeight();
-   	Context ctx = getContext();
-   	
-   	File f = getContext().getExternalCacheDir();
-   	if (!f.exists()){
-   		f = getContext().getCacheDir();
-   	}
-   	String documentsDirectory = f.getAbsolutePath();
-   	
-   	IFactory factory = new Factory_Android(ctx);
-   	  ILogger logger = new Logger_Android(LogLevel.ErrorLevel);
-   	  
-   	  NativeGL2_Android nGL = new NativeGL2_Android(); 
-   	  GL gl  = new GL(nGL);
-   	  
-   	  // composite renderer is the father of the rest of renderers
-   	  CompositeRenderer comp = new CompositeRenderer();
-   	  
-   	  // camera renderer and handlers
-   	  CameraRenderer cameraRenderer = new CameraRenderer();
-   	  cameraRenderer.addHandler(new CameraSingleDragHandler());
-   	  cameraRenderer.addHandler(new CameraDoubleDragHandler());
-   	  cameraRenderer.addHandler(new CameraRotationHandler());
-   	  cameraRenderer.addHandler(new CameraDoubleTapHandler());
-   	  comp.addRenderer(cameraRenderer);
-
-   	  
-   	  //STORAGE
-   	  IDownloader downloader = null;
-   //		  IDownloader downloader = new Downloader_Android(1  1024  1024,
-   //		                                               64  1024  1024,
-   //		                                               ".G3M_Cache",
-   //		                                               8);
-
-   	  if (true) {
-   	    // dummy renderer with a simple box
-   	    DummyRenderer dum = new DummyRenderer();
-   	    comp.addRenderer(dum);
-   	  }
-   	  
-   	  if (true) {
-   	    // simple planet renderer, with a basic world image
-   	    SimplePlanetRenderer spr = new SimplePlanetRenderer("world.jpg");
-   	    comp.addRenderer(spr);
-   	  }
-
-   	  EffectsScheduler scheduler = new EffectsScheduler();
-
-   	  comp.addRenderer(new GLErrorRenderer());
-   	  
-   	  
-   	  TextureBuilder texBuilder = new CPUTextureBuilder();
-   	  TexturesHandler texturesHandler = new TexturesHandler(gl, factory, texBuilder, false);
-   	  
-   	  Planet planet = Planet.createEarth();
-   	  
-   	  org.glob3.mobile.generated.Renderer busyRenderer = new NullBusyRender();
-   	  
-   	  ArrayList<ICameraConstrainer> cameraConstraint = new ArrayList<ICameraConstrainer>();
-   	  cameraConstraint.add(new SimpleCameraConstrainer());
-
-   	  FrameTasksExecutor frameTasksExecutor = new FrameTasksExecutor();
-   	  
-   	  _widget = G3MWidget.create(frameTasksExecutor,
-                  factory,
-                  logger,
-                  gl,
-                  texturesHandler,
-                  downloader,
-                  planet, 
-                  cameraConstraint,
-                  comp,
-                  busyRenderer,
-                  scheduler,
-                  width, height,
-                  Color.fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
-                  true,
-                  false);
-   	                              
-   	                             
-   }
-
-   private void initWidgetDemo()
-   {
-   	
-   	IStringBuilder.setInstance(new StringBuilder_Android());
-
-   	int width = getWidth();
-   	int height = getHeight();
-   	Context ctx = getContext();
-   	
-     IFactory factory = new Factory_Android(ctx);
-     ILogger logger = new Logger_Android(LogLevel.ErrorLevel);
-     
-     NativeGL2_Android nGL = new NativeGL2_Android(); 
-     GL gl  = new GL(nGL);
-     
-     // composite renderer is the father of the rest of renderers
-     CompositeRenderer comp = new CompositeRenderer();
-     
-     // camera renderer and handlers
-     CameraRenderer cameraRenderer = new CameraRenderer();
-     cameraRenderer.addHandler(new CameraSingleDragHandler());
-     cameraRenderer.addHandler(new CameraDoubleDragHandler());
-     cameraRenderer.addHandler(new CameraRotationHandler());
-     cameraRenderer.addHandler(new CameraDoubleTapHandler());
-     comp.addRenderer(cameraRenderer);
-
-     
-     //STORAGE
-   //	  IDownloader downloader = null;
-     IDownloader downloader = new Downloader_Android(1  1024  1024,
-                                                  64  1024  1024,
-                                                  ".G3M_Cache",
-                                                  8);
-
-     //LAYERS
-     LayerSet layerSet = new LayerSet();
-     WMSLayer blueMarble = new WMSLayer("bmng200405",
-              "http://www.nasa.network.com/wms?",
-              WMSServerVersion.WMS_1_1_0,
-              "image/jpeg",
-              Sector.fullSphere(),
-              "EPSG:4326",
-              "",
-              false,
-              Angle.nan(),
-              Angle.nan());
-     layerSet.addLayer(blueMarble);
-     
-     // very basic tile renderer
-     if (true) {
-       boolean renderDebug = true;
-       
-       TilesRenderParameters parameters = TilesRenderParameters.createDefault(renderDebug);
-
-       TileTexturizer texturizer = null;
-       if (false) {
-         texturizer = new MultiLayerTileTexturizer(layerSet);
-       }
-       else {
-         //SINGLE IMAGE
-         IImage singleWorldImage = factory.createImageFromFileName("world.jpg");
-         texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
-       }
-       
-       boolean showStatistics = false;
-       TileRenderer tr = new TileRenderer(new EllipsoidalTileTessellator(parameters._tileResolution, true),
-                                           texturizer,
-                                           parameters,
-                                           showStatistics);
-       comp.addRenderer(tr);
-     }
-     
-     if (false) {
-       // dummy renderer with a simple box
-       DummyRenderer dum = new DummyRenderer();
-       comp.addRenderer(dum);
-     }
-     
-     if (true) {
-       // simple planet renderer, with a basic world image
-       SimplePlanetRenderer spr = new SimplePlanetRenderer("world.jpg");
-       comp.addRenderer(spr);
-     }
-     
-     if (true) {
-       // marks renderer
-       MarksRenderer marks = new MarksRenderer();
-       comp.addRenderer(marks);
-       
-       Mark m1 = new Mark("Fuerteventura",
-                           "g3m-marker.png",
-                           new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-14.36), 0));
-       //m1->addTouchListener(listener);
-       marks.addMark(m1);
-       
-       
-       Mark m2 = new Mark("Las Palmas",
-                           "g3m-marker.png",
-                           new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-15.36), 0));
-       //m2->addTouchListener(listener);
-       marks.addMark(m2);
-       
-       if (false) {
-
-       	Random r = new Random();
-         for (int i = 0; i < 500; i++) {
-           final Angle latitude = Angle.fromDegrees( (int) (r.nextInt() % 180) - 90 );
-           final Angle longitude = Angle.fromDegrees( (int) (r.nextInt() % 360) - 180 );
-           //NSLog(@"lat=%f, lon=%f", latitude.degrees(), longitude.degrees());
-           
-           marks.addMark(new Mark("Random",
-                                   "g3m-marker.png",
-                                   new Geodetic3D(latitude, longitude, 0)));
-         }
-       }
-     }
-     
-     if (true) {
-       LatLonMeshRenderer renderer = new LatLonMeshRenderer();
-       comp.addRenderer(renderer);
-     }
-     
-     EffectsScheduler scheduler = new EffectsScheduler();
-     
-     if (false) {
-       EffectTarget target = null;
-       scheduler.startEffect(new SampleEffect(TimeInterval.fromSeconds(2)),
-                              target);
-     }
-     
-     if (false) {
-       SceneGraphRenderer sgr = new SceneGraphRenderer();
-       SGCubeNode cube = new SGCubeNode();
-       // cube->setScale(Vector3D(6378137.0, 6378137.0, 6378137.0));
-       sgr.getRootNode().addChild(cube);
-       comp.addRenderer(sgr);
-     }
-     
-     comp.addRenderer(new GLErrorRenderer());
-     
-     
-     TextureBuilder texBuilder = new CPUTextureBuilder();
-     TexturesHandler texturesHandler = new TexturesHandler(gl, factory, texBuilder, false);
-     
-     Planet planet = Planet.createEarth();
-     
-     org.glob3.mobile.generated.Renderer busyRenderer = new BusyMeshRenderer();// new NullBusyRender();
-     
-     ArrayList<ICameraConstrainer> cameraConstraint = new ArrayList<ICameraConstrainer>();
-     cameraConstraint.add(new SimpleCameraConstrainer());
-     
-     FrameTasksExecutor frameTasksExecutor = new FrameTasksExecutor();
-
-     _widget = G3MWidget.create(frameTasksExecutor,
-              factory,
-              logger,
-              gl,
-              texturesHandler,
-              downloader,
-              planet, 
-              cameraConstraint,
-              comp,
-              busyRenderer,
-              scheduler,
-              width, height,
-              Color.fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
-              true,
-              false);
-                                 
-                                
-   }
-   
-   */
 
    //THIS METHOD SAVES PARAMETERS FOR INITIALIZATION IN RENDER THREAD
 
