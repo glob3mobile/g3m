@@ -15,6 +15,11 @@ public class Timer_Android
    long _startTime;
 
 
+   public Timer_Android() {
+      start();
+   }
+
+
    @Override
    public TimeInterval now() {
       final long t = SystemClock.uptimeMillis();
