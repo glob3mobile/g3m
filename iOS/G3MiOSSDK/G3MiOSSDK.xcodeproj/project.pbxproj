@@ -67,8 +67,6 @@
 		CCC2A03815CA6C7D00923850 /* LatLonMeshRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02515CA6C7D00923850 /* LatLonMeshRenderer.cpp */; };
 		CCC2A03915CA6C7D00923850 /* LatLonMeshRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02615CA6C7D00923850 /* LatLonMeshRenderer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CCC2A03A15CA6C7D00923850 /* Renderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02715CA6C7D00923850 /* Renderer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		CCC2A03B15CA6C7D00923850 /* SceneGraphRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02815CA6C7D00923850 /* SceneGraphRenderer.cpp */; };
-		CCC2A03C15CA6C7D00923850 /* SceneGraphRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02915CA6C7D00923850 /* SceneGraphRenderer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CCC2A03D15CA6C7D00923850 /* SimplePlanetRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02A15CA6C7D00923850 /* SimplePlanetRenderer.cpp */; };
 		CCC2A03E15CA6C7D00923850 /* SimplePlanetRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02B15CA6C7D00923850 /* SimplePlanetRenderer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CCC2A03F15CA6C7D00923850 /* TileRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02C15CA6C7D00923850 /* TileRenderer.cpp */; };
@@ -272,8 +270,6 @@
 		CCC2A02515CA6C7D00923850 /* LatLonMeshRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LatLonMeshRenderer.cpp; path = Commons/Rendererers/LatLonMeshRenderer.cpp; sourceTree = "<group>"; };
 		CCC2A02615CA6C7D00923850 /* LatLonMeshRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LatLonMeshRenderer.h; path = Commons/Rendererers/LatLonMeshRenderer.h; sourceTree = "<group>"; };
 		CCC2A02715CA6C7D00923850 /* Renderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Renderer.hpp; path = Commons/Rendererers/Renderer.hpp; sourceTree = "<group>"; };
-		CCC2A02815CA6C7D00923850 /* SceneGraphRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SceneGraphRenderer.cpp; path = Commons/Rendererers/SceneGraphRenderer.cpp; sourceTree = "<group>"; };
-		CCC2A02915CA6C7D00923850 /* SceneGraphRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SceneGraphRenderer.hpp; path = Commons/Rendererers/SceneGraphRenderer.hpp; sourceTree = "<group>"; };
 		CCC2A02A15CA6C7D00923850 /* SimplePlanetRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SimplePlanetRenderer.cpp; path = Commons/Rendererers/SimplePlanetRenderer.cpp; sourceTree = "<group>"; };
 		CCC2A02B15CA6C7D00923850 /* SimplePlanetRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SimplePlanetRenderer.hpp; path = Commons/Rendererers/SimplePlanetRenderer.hpp; sourceTree = "<group>"; };
 		CCC2A02C15CA6C7D00923850 /* TileRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileRenderer.cpp; path = Commons/Rendererers/TileRenderer.cpp; sourceTree = "<group>"; };
@@ -635,8 +631,6 @@
 				CCC2A02315CA6C7D00923850 /* MarksRenderer.cpp */,
 				CCC2A02415CA6C7D00923850 /* MarksRenderer.hpp */,
 				CCC2A02715CA6C7D00923850 /* Renderer.hpp */,
-				CCC2A02815CA6C7D00923850 /* SceneGraphRenderer.cpp */,
-				CCC2A02915CA6C7D00923850 /* SceneGraphRenderer.hpp */,
 				CCC2A02A15CA6C7D00923850 /* SimplePlanetRenderer.cpp */,
 				CCC2A02B15CA6C7D00923850 /* SimplePlanetRenderer.hpp */,
 				CCC2A02C15CA6C7D00923850 /* TileRenderer.cpp */,
@@ -860,7 +854,6 @@
 				CF6D404715C8278C008D8D78 /* Downloader_iOS_WorkerThread.h in Headers */,
 				D892FBCC15C930CC00E69254 /* NativeGL2_iOS.hpp in Headers */,
 				D88B5E2315C15C180083A43F /* Timer_iOS.hpp in Headers */,
-				CCC2A03C15CA6C7D00923850 /* SceneGraphRenderer.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -967,7 +960,6 @@
 				CCC2A03415CA6C7D00923850 /* GLErrorRenderer.cpp in Sources */,
 				CCC2A03615CA6C7D00923850 /* MarksRenderer.cpp in Sources */,
 				CCC2A03815CA6C7D00923850 /* LatLonMeshRenderer.cpp in Sources */,
-				CCC2A03B15CA6C7D00923850 /* SceneGraphRenderer.cpp in Sources */,
 				CCC2A03D15CA6C7D00923850 /* SimplePlanetRenderer.cpp in Sources */,
 				CCC2A03F15CA6C7D00923850 /* TileRenderer.cpp in Sources */,
 				D81BA17115CBF19F004EF0B0 /* GL.cpp in Sources */,
