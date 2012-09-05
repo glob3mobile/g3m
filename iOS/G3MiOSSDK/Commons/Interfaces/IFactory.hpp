@@ -29,6 +29,7 @@ public:
   virtual IImage* createImageFromSize(int width, int height) const = 0;
 
   virtual void deleteImage(const IImage* image) const = 0;
+  
   // a virtual destructor is needed for conversion to Java
   virtual ~IFactory() {}
 };

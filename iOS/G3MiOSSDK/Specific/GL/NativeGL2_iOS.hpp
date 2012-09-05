@@ -214,12 +214,16 @@ public:
   }
   
   void vertexAttribPointer(int index, int size, GLType type,
-                           bool normalized, int stride, const void*	pointer) const{
+                           bool normalized, int stride,
+                           IFloatBuffer* pointer) const {
+    int ___TODO_use_native_IFloatBuffer;
     GLenum t = getEnum(type);
     glVertexAttribPointer(index, size, t, normalized, stride, pointer);
   }
   
-  void drawElements(GLPrimitive mode, int count, GLType type, const void* indices) const{
+  void drawElements(GLPrimitive mode, int count, GLType type, IIntBuffer* indices) const{
+    int ___TODO_use_native_IFloatBuffer;
+
     glDrawElements(getEnum(mode), count, getEnum(type), indices);
   }
   

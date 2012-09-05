@@ -78,6 +78,10 @@
 		CF47030B15EFB4C000426B8B /* ThreadUtils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */; };
 		CF47030C15EFB4C000426B8B /* ThreadUtils_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF47030A15EFB4C000426B8B /* ThreadUtils_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
 		CF59DF8F15C04AFC002173EC /* ILogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF59DF8E15C04AFC002173EC /* ILogger.cpp */; };
+		CF6873A515F77F54002EDFD0 /* IFloatBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6873A315F77F54002EDFD0 /* IFloatBuffer.cpp */; };
+		CF6873A615F77F54002EDFD0 /* IFloatBuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF6873A415F77F54002EDFD0 /* IFloatBuffer.hpp */; };
+		CF6873AA15F77FFC002EDFD0 /* IIntBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6873A815F77FFC002EDFD0 /* IIntBuffer.cpp */; };
+		CF6873AB15F77FFC002EDFD0 /* IIntBuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF6873A915F77FFC002EDFD0 /* IIntBuffer.hpp */; };
 		CF6D404715C8278C008D8D78 /* Downloader_iOS_WorkerThread.h in Headers */ = {isa = PBXBuildFile; fileRef = CF6D404515C8278C008D8D78 /* Downloader_iOS_WorkerThread.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF6D404815C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF6D404615C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm */; };
 		CF73BFDB15E114E3001CE412 /* FrameTasksExecutor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */; };
@@ -286,6 +290,10 @@
 		CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ThreadUtils_iOS.mm; path = Specific/Derived/ThreadUtils_iOS.mm; sourceTree = "<group>"; };
 		CF47030A15EFB4C000426B8B /* ThreadUtils_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ThreadUtils_iOS.hpp; path = Specific/Derived/ThreadUtils_iOS.hpp; sourceTree = "<group>"; };
 		CF59DF8E15C04AFC002173EC /* ILogger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ILogger.cpp; path = Commons/Interfaces/ILogger.cpp; sourceTree = "<group>"; };
+		CF6873A315F77F54002EDFD0 /* IFloatBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IFloatBuffer.cpp; path = Commons/Basic/IFloatBuffer.cpp; sourceTree = "<group>"; };
+		CF6873A415F77F54002EDFD0 /* IFloatBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IFloatBuffer.hpp; path = Commons/Basic/IFloatBuffer.hpp; sourceTree = "<group>"; };
+		CF6873A815F77FFC002EDFD0 /* IIntBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IIntBuffer.cpp; path = Commons/Basic/IIntBuffer.cpp; sourceTree = "<group>"; };
+		CF6873A915F77FFC002EDFD0 /* IIntBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IIntBuffer.hpp; path = Commons/Basic/IIntBuffer.hpp; sourceTree = "<group>"; };
 		CF6D404515C8278C008D8D78 /* Downloader_iOS_WorkerThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Downloader_iOS_WorkerThread.h; path = Specific/Derived/Downloader_iOS_WorkerThread.h; sourceTree = "<group>"; };
 		CF6D404615C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Downloader_iOS_WorkerThread.mm; path = Specific/Derived/Downloader_iOS_WorkerThread.mm; sourceTree = "<group>"; };
 		CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FrameTasksExecutor.cpp; path = Commons/Basic/FrameTasksExecutor.cpp; sourceTree = "<group>"; };
@@ -517,6 +525,10 @@
 				CFE0844415E27B9A0004EC0E /* Petition.hpp */,
 				CFCE679B15EFB06700B35FE0 /* IThreadUtils.cpp */,
 				CFCE679C15EFB06700B35FE0 /* IThreadUtils.hpp */,
+				CF6873A315F77F54002EDFD0 /* IFloatBuffer.cpp */,
+				CF6873A415F77F54002EDFD0 /* IFloatBuffer.hpp */,
+				CF6873A815F77FFC002EDFD0 /* IIntBuffer.cpp */,
+				CF6873A915F77FFC002EDFD0 /* IIntBuffer.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -854,6 +866,8 @@
 				CF6D404715C8278C008D8D78 /* Downloader_iOS_WorkerThread.h in Headers */,
 				D892FBCC15C930CC00E69254 /* NativeGL2_iOS.hpp in Headers */,
 				D88B5E2315C15C180083A43F /* Timer_iOS.hpp in Headers */,
+				CF6873A615F77F54002EDFD0 /* IFloatBuffer.hpp in Headers */,
+				CF6873AB15F77FFC002EDFD0 /* IIntBuffer.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -989,6 +1003,8 @@
 				D80D525915EE698E00ACEA16 /* TileTessellator.cpp in Sources */,
 				CFCE679D15EFB06700B35FE0 /* IThreadUtils.cpp in Sources */,
 				CF47030B15EFB4C000426B8B /* ThreadUtils_iOS.mm in Sources */,
+				CF6873A515F77F54002EDFD0 /* IFloatBuffer.cpp in Sources */,
+				CF6873AA15F77FFC002EDFD0 /* IIntBuffer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

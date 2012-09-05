@@ -218,19 +218,19 @@ void GL::disablePolygonOffset() {
 #endif
 }
 
-void GL::vertexPointer(int size, int stride, const float vertex[]) {
+void GL::vertexPointer(int size, int stride, IFloatBuffer* vertex) {
   if (Attributes.Position == -1){
     ILogger::instance()->logError("Attribute Position Invalid");
   }
   
 #ifdef C_CODE
-  _gl->vertexAttribPointer(Attributes.Position, size, Float, false, stride, (const void *) vertex);
+  _gl->vertexAttribPointer(Attributes.Position, size, Float, false, stride, vertex);
 #else
-  _gl->vertexAttribPointer(Attributes.Position, size, GLType.Float, false, stride, (const void *) vertex);
+  _gl->vertexAttribPointer(Attributes.Position, size, GLType.Float, false, stride, vertex);
 #endif
 }
 
-void GL::drawTriangleStrip(int n, const int i[]) {
+void GL::drawTriangleStrip(int n, IIntBuffer* i) {
 #ifdef C_CODE
   _gl->drawElements(TriangleStrip, n, UnsignedInt, i);
 #else
@@ -238,7 +238,7 @@ void GL::drawTriangleStrip(int n, const int i[]) {
 #endif
 }
 
-void GL::drawLines(int n, const int i[]) {
+void GL::drawLines(int n, IIntBuffer* i) {
 #ifdef C_CODE
   _gl->drawElements(Lines, n, UnsignedInt, i);
 #else
@@ -246,7 +246,7 @@ void GL::drawLines(int n, const int i[]) {
 #endif
 }
 
-void GL::drawLineLoop(int n, const int i[]) {
+void GL::drawLineLoop(int n, IIntBuffer* i) {
 #ifdef C_CODE
   _gl->drawElements(LineLoop, n, UnsignedInt, i);
 #else
@@ -254,7 +254,7 @@ void GL::drawLineLoop(int n, const int i[]) {
 #endif
 }
 
-void GL::drawPoints(int n, const int i[]) {
+void GL::drawPoints(int n, IIntBuffer* i) {
 #ifdef C_CODE
   _gl->drawElements(Points, n, UnsignedInt, i);
 #else
@@ -358,16 +358,16 @@ const GLTextureId GL::uploadTexture(const IImage* image,
   return texId;
 }
 
-void GL::setTextureCoordinates(int size, int stride, const float texcoord[]) {
+void GL::setTextureCoordinates(int size, int stride, IFloatBuffer* texcoord) {
   if (Attributes.TextureCoord == -1){
     ILogger::instance()->logError("Attribute TextureCoord Invalid");
   }
   
   if (_textureCoordinates != texcoord) {
 #ifdef C_CODE
-    _gl->vertexAttribPointer(Attributes.TextureCoord, size, Float, false, stride, (const void *) texcoord);
+    _gl->vertexAttribPointer(Attributes.TextureCoord, size, Float, false, stride, texcoord);
 #else
-    _gl->vertexAttribPointer(Attributes.TextureCoord, size, GLType.Float, false, stride, (const void *) texcoord);
+    _gl->vertexAttribPointer(Attributes.TextureCoord, size, GLType.Float, false, stride, texcoord);
 #endif
     _textureCoordinates = texcoord;
   }
@@ -477,7 +477,7 @@ void GL::disableTexture2D() {
   }
 }
 
-void GL::enableVertexColor(float const colors[], float intensity) {
+void GL::enableVertexColor(IFloatBuffer* colors, float intensity) {
   if (Attributes.Color == -1){
     ILogger::instance()->logError("Attribute Color Invalid");
   }
@@ -516,7 +516,7 @@ void GL::disableVertexColor() {
   //  }
 }
 
-void GL::enableVertexNormal(float const normals[]) {
+void GL::enableVertexNormal(IFloatBuffer* normals) {
   int TODO_No_Normals_In_Shader;
 //  if (Attributes.Normal == -1){
 //    ILogger::instance()->logError("Attribute Normal Invalid");

@@ -15,8 +15,9 @@
 #include "MutableMatrix44D.hpp"
 #include "Color.hpp"
 #include "MutableVector2D.hpp"
-
 #include "INativeGL.hpp"
+
+#include "IFloatBuffer.hpp"
 
 #include <list>
 
@@ -62,12 +63,13 @@ private:
   float _translationX;
   float _translationY;
   
-#ifdef C_CODE
-  const float* _textureCoordinates;
-#endif
-#ifdef JAVA_CODE
-  private float[] _textureCoordinates;
-#endif
+//#ifdef C_CODE
+//  const float* _textureCoordinates;
+//#endif
+//#ifdef JAVA_CODE
+//  private float[] _textureCoordinates;
+//#endif
+  IFloatBuffer* _textureCoordinates;
   
   float _flatColorR;
   float _flatColorG;
@@ -154,11 +156,11 @@ public:
   
   void color(float r, float g, float b, float a);
   
-  void enableVertexColor(float const colors[], float intensity);
+  void enableVertexColor(IFloatBuffer* colors, float intensity);
   
   void disableVertexColor();
   
-  void enableVertexNormal(float const normals[]);
+  void enableVertexNormal(IFloatBuffer* normals);
   
   void disableVertexNormal();
   
@@ -170,15 +172,15 @@ public:
   
   void multMatrixf(const MutableMatrix44D &m);
   
-  void vertexPointer(int size, int stride, const float vertex[]);
+  void vertexPointer(int size, int stride, IFloatBuffer* vertex);
   
-  void drawTriangleStrip(int n, const int i[]) ;
+  void drawTriangleStrip(int n, IIntBuffer* i) ;
   
-  void drawLines(int n, const int i[]);
+  void drawLines(int n, IIntBuffer* i);
   
-  void drawLineLoop(int n, const int i[]);
+  void drawLineLoop(int n, IIntBuffer* i);
   
-  void drawPoints(int n, const int i[]);
+  void drawPoints(int n, IIntBuffer* i);
   
   void setProjection(const MutableMatrix44D &projection);
   
@@ -200,7 +202,7 @@ public:
   
   void setTextureCoordinates(int size,
                              int stride,
-                             const float texcoord[]);
+                             IFloatBuffer* texcoord);
   
   void bindTexture(const GLTextureId& textureId);
   
@@ -271,7 +273,7 @@ public:
   
   void setBlendFuncSrcAlpha();
   
-  void getViewport(int v[]){
+  void getViewport(IIntBuffer* v){
 #ifdef C_CODE
     _gl->getIntegerv(Viewport, v);
 #else
