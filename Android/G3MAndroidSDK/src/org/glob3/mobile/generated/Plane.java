@@ -56,6 +56,8 @@ public class Plane
 //ORIGINAL LINE: Plane transformedBy(const MutableMatrix44D& M) const
   public final Plane transformedBy(MutableMatrix44D M)
   {
+	int TODO_Multiplication_with_Matrix;
+  
 	double a = _normal.x()*M.get(0) + _normal.y()*M.get(4) + _normal.z()*M.get(8) + _d *M.get(12);
 	double b = _normal.x()*M.get(1) + _normal.y()*M.get(5) + _normal.z()*M.get(9) + _d *M.get(13);
 	double c = _normal.x()*M.get(2) + _normal.y()*M.get(6) + _normal.z()*M.get(10) + _d *M.get(14);

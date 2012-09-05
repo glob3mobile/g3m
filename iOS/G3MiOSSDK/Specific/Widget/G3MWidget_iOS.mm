@@ -209,6 +209,10 @@
                                 false);
   
   [self widget]->setUserData(userData);
+  
+  
+  
+  //Matrix::test();
 }
 
 //- (void) initWidgetDemo

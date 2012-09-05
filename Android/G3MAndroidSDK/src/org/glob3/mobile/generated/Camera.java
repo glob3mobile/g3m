@@ -360,6 +360,7 @@ public class Camera
 
   public final Vector3D getHorizontalVector()
   {
+	int todo_remove_get_in_matrix;
 	MutableMatrix44D M = getModelMatrix();
 	return new Vector3D(M.get(0), M.get(4), M.get(8));
   }
