@@ -11,7 +11,8 @@
 void CompositeRenderer::initialize(const InitializationContext* ic) {
   _ic = ic;
   
-  for (int i = 0; i < _renderers.size(); i++) {
+  const int rendersSize = _renderers.size();
+  for (int i = 0; i < rendersSize; i++) {
     _renderers[i]->initialize(ic);
   }
 }
@@ -23,21 +24,20 @@ void CompositeRenderer::addRenderer(Renderer *renderer) {
   }
 }
 
-int CompositeRenderer::render(const RenderContext* rc) {
+void CompositeRenderer::render(const RenderContext* rc) {
   //rc->getLogger()->logInfo("CompositeRenderer::render()");
   
-  int min = Renderer::maxTimeToRender;
-  for (int i = 0; i < _renderers.size(); i++) {
-    int x = _renderers[i]->render(rc);
-    if (x < min) min = x; 
+  const int rendersSize = _renderers.size();
+  for (int i = 0; i < rendersSize; i++) {
+    _renderers[i]->render(rc);
   }
-  return min;
 }
 
 bool CompositeRenderer::onTouchEvent(const EventContext* ec,
                                      const TouchEvent* touchEvent) {
   // the events are processed bottom to top
-  for (int i = _renderers.size() - 1; i >= 0; i--) {
+  const int rendersSize = _renderers.size();
+  for (int i = rendersSize - 1; i >= 0; i--) {
     if (_renderers[i]->onTouchEvent(ec, touchEvent)) {
       return true;
     }
@@ -49,13 +49,15 @@ void CompositeRenderer::onResizeViewportEvent(const EventContext* ec,
                                               int width, int height)
 {
   // the events are processed bottom to top
-  for (int i = _renderers.size() - 1; i >= 0; i--) {
+  const int rendersSize = _renderers.size();
+  for (int i = rendersSize - 1; i >= 0; i--) {
     _renderers[i]->onResizeViewportEvent(ec, width, height);
   }
 }
 
 bool CompositeRenderer::isReadyToRender(const RenderContext *rc) {
-  for (int i = 0; i < _renderers.size(); i++) {
+  const int rendersSize = _renderers.size();
+  for (int i = 0; i < rendersSize; i++) {
     if (!_renderers[i]->isReadyToRender(rc)) {
       return false;
     }
@@ -65,13 +67,15 @@ bool CompositeRenderer::isReadyToRender(const RenderContext *rc) {
 }
 
 void CompositeRenderer::start() {
-  for (int i = 0; i < _renderers.size(); i++) {
+  const int rendersSize = _renderers.size();
+  for (int i = 0; i < rendersSize; i++) {
     _renderers[i]->start();
   }
 }
 
 void CompositeRenderer::stop() {
-  for (int i = 0; i < _renderers.size(); i++) {
+  const int rendersSize = _renderers.size();
+  for (int i = 0; i < rendersSize; i++) {
     _renderers[i]->stop();
   }
 }

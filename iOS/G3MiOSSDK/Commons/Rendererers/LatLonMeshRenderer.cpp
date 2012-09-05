@@ -56,8 +56,7 @@ void LatLonMeshRenderer::initialize(const InitializationContext* ic)
 }  
 
 
-int LatLonMeshRenderer::render(const RenderContext* rc)
-{  
+void LatLonMeshRenderer::render(const RenderContext* rc) {  
 //  GL *gl = rc->getGL();
   
   mesh->render(rc);
@@ -70,5 +69,4 @@ int LatLonMeshRenderer::render(const RenderContext* rc)
   mesh->render(rc);
   gl->popMatrix();*/
 
-  return Renderer::maxTimeToRender;
 }

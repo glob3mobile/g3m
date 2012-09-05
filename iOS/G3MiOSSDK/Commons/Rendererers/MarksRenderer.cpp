@@ -19,7 +19,7 @@ bool MarksRenderer::onTouchEvent(const EventContext* ec,
   return false;
 }
 
-int MarksRenderer::render(const RenderContext* rc) {
+void MarksRenderer::render(const RenderContext* rc) {
 //  rc.getLogger()->logInfo("MarksRenderer::render()");
   
   GL* gl = rc->getGL();
@@ -48,6 +48,4 @@ int MarksRenderer::render(const RenderContext* rc) {
   gl->disableVerticesPosition();
   gl->disableTexture2D();
   
-  
-  return Renderer::maxTimeToRender;
 }

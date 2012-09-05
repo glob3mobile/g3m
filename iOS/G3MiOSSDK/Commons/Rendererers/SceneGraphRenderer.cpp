@@ -183,8 +183,8 @@ void SceneGraphRenderer::onResizeViewportEvent(const EventContext* ec,
   
 }
 
-int SceneGraphRenderer::render(const RenderContext *rc) {
-  return _rootNode->render(rc);
+void SceneGraphRenderer::render(const RenderContext *rc) {
+  _rootNode->render(rc);
 }
 
 void SGCubeNode::initialize(const RenderContext *rc)
@@ -221,15 +221,13 @@ void SGCubeNode::initialize(const RenderContext *rc)
   }
 }  
 
-int SGCubeNode::rawRender(const RenderContext *rc) {
+void SGCubeNode::rawRender(const RenderContext *rc) {
   GL* gl = rc->getGL();
 
   if (!_initializedGL) {
     initialize(rc);
     _initializedGL = true;
   }
-  
-
   
 //  gl->depthTest(true);
 //  
@@ -329,7 +327,4 @@ int SGCubeNode::rawRender(const RenderContext *rc) {
   
   gl->enableTextures();
 
-  
-  
-  return Renderer::maxTimeToRender;
 }

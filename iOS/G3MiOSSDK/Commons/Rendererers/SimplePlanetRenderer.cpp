@@ -192,14 +192,12 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   return true;
 }
 
-int SimplePlanetRenderer::render(const RenderContext* rc){
+void SimplePlanetRenderer::render(const RenderContext* rc){
   if (_mesh == NULL){
     if (!initializeMesh(rc)) {
-      return Renderer::maxTimeToRender;
+      return;
     }
   }
   
   _mesh->render(rc);
-  
-  return Renderer::maxTimeToRender;
 }

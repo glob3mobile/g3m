@@ -79,13 +79,12 @@ bool BusyQuadRenderer::initMesh(const RenderContext* rc)
 }  
 
 
-int BusyQuadRenderer::render(const RenderContext* rc) 
-{  
+void BusyQuadRenderer::render(const RenderContext* rc) {
   GL* gl = rc->getGL();
   
   if (_quadMesh == NULL){
     if (!initMesh(rc)) {
-      return Renderer::maxTimeToRender;
+      return;
     }
   }
 
@@ -128,6 +127,4 @@ int BusyQuadRenderer::render(const RenderContext* rc)
   
   gl->disableBlend();
   
-  return Renderer::maxTimeToRender;
 }
-

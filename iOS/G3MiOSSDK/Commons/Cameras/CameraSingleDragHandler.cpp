@@ -120,7 +120,7 @@ void CameraSingleDragHandler::onUp(const EventContext *eventContext,
   _initialPixel = MutableVector2D::nan();
 }
 
-int CameraSingleDragHandler::render(const RenderContext* rc, CameraContext *cameraContext) 
+void CameraSingleDragHandler::render(const RenderContext* rc, CameraContext *cameraContext)
 {
   // TEMP TO DRAW A POINT WHERE USER PRESS
   if (false) {
@@ -144,9 +144,4 @@ int CameraSingleDragHandler::render(const RenderContext* rc, CameraContext *came
       //printf ("zoom with initial point = (%f, %f)\n", g.latitude().degrees(), g.longitude().degrees());
     }
   }
-
-  return Renderer::maxTimeToRender;
 }
-
-
-

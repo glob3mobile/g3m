@@ -41,7 +41,7 @@ protected:
   _parent(NULL),
   _localMatrixDirty(true),
   _fullMatrixDirty(true),
-  _translation(0, 0, 0), 
+  _translation(0, 0, 0),
   _scale(1, 1, 1),
   _headingInRadians(0),
   _pitchInRadians(0),
@@ -65,7 +65,7 @@ public:
   }
   
   SGGGroupNode* getParent() const;
-  void setParent(SGGGroupNode* parent);  
+  void setParent(SGGGroupNode* parent);
   
   Vector3D getTranslation() const;
   Vector3D getScale() const;
@@ -73,13 +73,13 @@ public:
   Angle getPitch() const;
   Angle getRoll() const;
   
-  void setTranslation(const Vector3D& translation);  
+  void setTranslation(const Vector3D& translation);
   void setScale(const Vector3D& scale);
-  void setHeading(const Angle& heading);  
+  void setHeading(const Angle& heading);
   void setPitch(const Angle& pitch);
   void setRoll(const Angle& roll);
   
-  virtual int render(const RenderContext *rc) = 0;
+  virtual void render(const RenderContext *rc) = 0;
   
   virtual ~SGNode() {}
 };
@@ -123,18 +123,11 @@ public:
   
   void removeChild(const SGNode* nodeToRemove);
   
-  virtual int render(const RenderContext *rc) {
-    int max = Renderer::maxTimeToRender;
-    
+  void render(const RenderContext *rc) {
     for (int i = 0; i < _children.size(); i++) {
       SGNode* child = _children[i];
-      const int childTimeToRender = child->render(rc);
-      if (childTimeToRender < max) {
-        max = childTimeToRender;
-      }
+      child->render(rc);
     }
-    
-    return max;
   }
   
 };
@@ -146,14 +139,14 @@ protected:
     return true;
   };
   
-  virtual int rawRender(const RenderContext *rc) = 0;
+  virtual void rawRender(const RenderContext *rc) = 0;
   
 public:
   
-  virtual int render(const RenderContext *rc) {
+  void render(const RenderContext *rc) {
     
     if (!isVisible(rc)) {
-      return Renderer::maxTimeToRender;
+      return;
     }
     
     GL* gl = rc->getGL();
@@ -162,11 +155,9 @@ public:
     MutableMatrix44D fullMatrix = getFullMatrix();
     gl->loadMatrixf(fullMatrix);
     
-    int timeToRender = rawRender(rc);
+    rawRender(rc);
     
     gl->pushMatrix();
-    
-    return timeToRender;
   }
   
 };
@@ -190,7 +181,7 @@ public:
   
   void initialize(const RenderContext *rc);
   
-  virtual int rawRender(const RenderContext *rc);
+  virtual void rawRender(const RenderContext *rc);
 };
 
 
@@ -213,7 +204,7 @@ public:
   
   virtual void initialize(const InitializationContext* ic);
   
-  virtual int render(const RenderContext* rc);
+  virtual void render(const RenderContext* rc);
   
   virtual bool onTouchEvent(const EventContext* ec,
                             const TouchEvent* touchEvent);
@@ -234,7 +225,7 @@ public:
   void stop() {
     
   }
-
+  
 };
 
 

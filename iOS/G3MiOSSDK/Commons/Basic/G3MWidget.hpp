@@ -77,7 +77,7 @@ public:
   
   ~G3MWidget();
   
-  int render();
+  void render();
   
   void onTouchEvent(const TouchEvent* myEvent);
   

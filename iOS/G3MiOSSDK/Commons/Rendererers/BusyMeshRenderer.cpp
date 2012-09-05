@@ -95,7 +95,7 @@ void BusyMeshRenderer::stop() {
   //int _TODO_stop_effects;
 }
 
-int BusyMeshRenderer::render(const RenderContext* rc) 
+void BusyMeshRenderer::render(const RenderContext* rc)
 {  
   GL* gl = rc->getGL();
   
@@ -136,6 +136,4 @@ int BusyMeshRenderer::render(const RenderContext* rc)
   gl->popMatrix();
   
   gl->disableBlend();
-  
-  return Renderer::maxTimeToRender;
 }

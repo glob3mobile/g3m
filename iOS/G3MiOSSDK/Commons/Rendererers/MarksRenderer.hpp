@@ -21,8 +21,7 @@ public:
 
   virtual void initialize(const InitializationContext* ic);
   
-  virtual int render(const RenderContext* rc);
-  
+  virtual void render(const RenderContext* rc);
   
   virtual ~MarksRenderer() {
     int marksSize = _marks.size();

@@ -14,11 +14,11 @@
 class GLErrorRenderer : public Renderer {
 public:
   
-  virtual void initialize(const InitializationContext* ic);
+  void initialize(const InitializationContext* ic);
   
-  virtual int render(const RenderContext* rc);
+  void render(const RenderContext* rc);
   
-  virtual bool onTouchEvent(const EventContext* ec,
+  bool onTouchEvent(const EventContext* ec,
                             const TouchEvent* touchEvent);
   
   virtual ~GLErrorRenderer();

@@ -121,7 +121,8 @@ void CameraRotationHandler::onUp(const EventContext *eventContext,
 }
 
 
-int CameraRotationHandler::render(const RenderContext* rc, CameraContext *cameraContext) 
+void CameraRotationHandler::render(const RenderContext* rc,
+                                   CameraContext *cameraContext)
 {
   // TEMP TO DRAW A POINT WHERE USER PRESS
   if (false) {
@@ -144,8 +145,4 @@ int CameraRotationHandler::render(const RenderContext* rc, CameraContext *camera
       //printf ("zoom with initial point = (%f, %f)\n", g.latitude().degrees(), g.longitude().degrees());
     }
   }
-  
-  return Renderer::maxTimeToRender;
 }
-
-
