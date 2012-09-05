@@ -21,7 +21,7 @@ public abstract class CameraEventHandler
 
   public abstract boolean onTouchEvent(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext);
 
-  public abstract int render(RenderContext rc, CameraContext cameraContext);
+  public abstract void render(RenderContext rc, CameraContext cameraContext);
 
   public void dispose()
   {

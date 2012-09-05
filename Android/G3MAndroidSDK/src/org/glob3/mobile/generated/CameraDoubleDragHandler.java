@@ -60,7 +60,8 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   
 	return true;
   }
-  public final int render(RenderContext rc, CameraContext cameraContext)
+
+  public final void render(RenderContext rc, CameraContext cameraContext)
   {
 	// TEMP TO DRAW A POINT WHERE USER PRESS
 	if (false)
@@ -101,7 +102,6 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 	  }
 	}
   
-	return Renderer.maxTimeToRender;
   }
 
   public final void onDown(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)

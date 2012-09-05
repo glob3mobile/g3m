@@ -44,9 +44,9 @@ public class BusyMeshRenderer extends Renderer implements EffectTarget
 	// add number of vertex for the square
   
 	// create vertices and indices in dinamic memory
-	float[] vertices = new float [numVertices *3];
-	int[] indices = new int [numIndices+2];
-	float[] colors = new float [numVertices *4];
+	float[] vertices = new float[numVertices *3];
+	int[] indices = new int[numIndices];
+	float[] colors = new float[numVertices *4];
   
 	// create vertices
 	int nv = 0;
@@ -111,7 +111,7 @@ public class BusyMeshRenderer extends Renderer implements EffectTarget
 
 //C++ TO JAVA CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in Java):
   private boolean render_firstTime = true;
-  public final int render(RenderContext rc)
+  public final void render(RenderContext rc)
   {
 	GL gl = rc.getGL();
   
@@ -152,8 +152,6 @@ public class BusyMeshRenderer extends Renderer implements EffectTarget
 	gl.popMatrix();
   
 	gl.disableBlend();
-  
-	return Renderer.maxTimeToRender;
   }
 
   public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)

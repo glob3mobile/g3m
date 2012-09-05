@@ -58,7 +58,8 @@ public class CameraRotationHandler extends CameraEventHandler
   
 	return true;
   }
-  public final int render(RenderContext rc, CameraContext cameraContext)
+
+  public final void render(RenderContext rc, CameraContext cameraContext)
   {
 	// TEMP TO DRAW A POINT WHERE USER PRESS
 	if (false)
@@ -83,8 +84,6 @@ public class CameraRotationHandler extends CameraEventHandler
 		//printf ("zoom with initial point = (%f, %f)\n", g.latitude().degrees(), g.longitude().degrees());
 	  }
 	}
-  
-	return Renderer.maxTimeToRender;
   }
 
   public final void onDown(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
@@ -173,5 +172,3 @@ public class CameraRotationHandler extends CameraEventHandler
 
 }
 //#endif
-
-

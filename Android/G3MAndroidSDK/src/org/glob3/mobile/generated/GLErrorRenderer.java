@@ -20,12 +20,12 @@ package org.glob3.mobile.generated;
 public class GLErrorRenderer extends Renderer
 {
 
-  public void initialize(InitializationContext ic)
+  public final void initialize(InitializationContext ic)
   {
   
   }
 
-  public int render(RenderContext rc)
+  public final void render(RenderContext rc)
   {
 	GL gl = rc.getGL();
 	final ILogger logger = rc.getLogger();
@@ -37,11 +37,9 @@ public class GLErrorRenderer extends Renderer
 	  error = gl.getError();
 	}
   
-  
-	return Renderer.maxTimeToRender;
   }
 
-  public boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
+  public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
   {
 	return false;
   }

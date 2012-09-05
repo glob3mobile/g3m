@@ -55,7 +55,7 @@ public class LatLonMeshRenderer extends Renderer
   
   }
 
-  public final int render(RenderContext rc)
+  public final void render(RenderContext rc)
   {
   //  GL *gl = rc->getGL();
   
@@ -69,7 +69,6 @@ public class LatLonMeshRenderer extends Renderer
 	mesh->render(rc);
 	gl->popMatrix();*/
   
-	return Renderer.maxTimeToRender;
   }
 
   public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
