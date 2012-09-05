@@ -122,26 +122,26 @@ void CameraSingleDragHandler::onUp(const EventContext *eventContext,
 
 void CameraSingleDragHandler::render(const RenderContext* rc, CameraContext *cameraContext)
 {
-  // TEMP TO DRAW A POINT WHERE USER PRESS
-  if (false) {
-    if (cameraContext->getCurrentGesture() == Drag) {
-      GL *gl = rc->getGL();
-      float vertices[] = { 0,0,0};
-      int indices[] = {0};
-      gl->enableVerticesPosition();
-      gl->disableTexture2D();
-      gl->disableTextures();
-      gl->vertexPointer(3, 0, vertices);
-      gl->color((float) 0, (float) 1, (float) 0, 1);
-      gl->pointSize(60);
-      gl->pushMatrix();
-      MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D());
-      gl->multMatrixf(T);
-      gl->drawPoints(1, indices);
-      gl->popMatrix();
-            
-      //Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
-      //printf ("zoom with initial point = (%f, %f)\n", g.latitude().degrees(), g.longitude().degrees());
-    }
-  }
+//  // TEMP TO DRAW A POINT WHERE USER PRESS
+//  if (false) {
+//    if (cameraContext->getCurrentGesture() == Drag) {
+//      GL *gl = rc->getGL();
+//      float vertices[] = { 0,0,0};
+//      int indices[] = {0};
+//      gl->enableVerticesPosition();
+//      gl->disableTexture2D();
+//      gl->disableTextures();
+//      gl->vertexPointer(3, 0, vertices);
+//      gl->color((float) 0, (float) 1, (float) 0, 1);
+//      gl->pointSize(60);
+//      gl->pushMatrix();
+//      MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D());
+//      gl->multMatrixf(T);
+//      gl->drawPoints(1, indices);
+//      gl->popMatrix();
+//            
+//      //Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
+//      //printf ("zoom with initial point = (%f, %f)\n", g.latitude().degrees(), g.longitude().degrees());
+//    }
+//  }
 }

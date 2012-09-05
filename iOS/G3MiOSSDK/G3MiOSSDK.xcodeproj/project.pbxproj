@@ -99,6 +99,10 @@
 		CF75437015E5172800A0ABC7 /* TilesRenderParameters.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFA71BE715D2F6C500F8C78D /* TilesRenderParameters.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF7A78EC159B9BE300074422 /* MutableVector2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */; };
 		CF7A78ED159B9BE300074422 /* MutableVector2D.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF7A78EB159B9BE300074422 /* MutableVector2D.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CF7E626115F7D6FC0086B71D /* FloatBufferBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7E625F15F7D6FC0086B71D /* FloatBufferBuilder.cpp */; };
+		CF7E626215F7D6FC0086B71D /* FloatBufferBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF7E626015F7D6FC0086B71D /* FloatBufferBuilder.hpp */; };
+		CF7E626615F7DD740086B71D /* IntBufferBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7E626415F7DD740086B71D /* IntBufferBuilder.cpp */; };
+		CF7E626715F7DD740086B71D /* IntBufferBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF7E626515F7DD740086B71D /* IntBufferBuilder.hpp */; };
 		CF883B821590984900AEE39C /* TexturesHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF883B811590984900AEE39C /* TexturesHandler.cpp */; };
 		CF883BCB1594B9A500AEE39C /* Sector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF883BCA1594B9A500AEE39C /* Sector.cpp */; };
 		CF8A234E15C4306800FD56C9 /* Downloader_iOS_Handler.h in Headers */ = {isa = PBXBuildFile; fileRef = CF8A234C15C4306800FD56C9 /* Downloader_iOS_Handler.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -111,6 +115,8 @@
 		CF8FF98B15D5539F000F79D1 /* LeveledTexturedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8FF98915D5539F000F79D1 /* LeveledTexturedMesh.cpp */; };
 		CF9AEBC2159B3FEB004C3558 /* EllipsoidalTileTessellator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9AEBC1159B3FEA004C3558 /* EllipsoidalTileTessellator.cpp */; };
 		CF9CD89A15DBE2C800C6FD7E /* CachedDownloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9CD89815DBE2C800C6FD7E /* CachedDownloader.cpp */; };
+		CF9D2D8815F7D3C100B5CE2E /* IBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9D2D8615F7D3C100B5CE2E /* IBuffer.cpp */; };
+		CF9D2D8915F7D3C100B5CE2E /* IBuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF9D2D8715F7D3C100B5CE2E /* IBuffer.hpp */; };
 		CFA71BE515D2E85600F8C78D /* MultiLayerTileTexturizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA71BE315D2E85600F8C78D /* MultiLayerTileTexturizer.cpp */; };
 		CFA71BEA15D2F6D200F8C78D /* TilesRenderParameters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA71BE815D2F6D200F8C78D /* TilesRenderParameters.cpp */; };
 		CFB72A3515E65B1F00A5BAF4 /* LayerCondition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFB72A3315E65B1F00A5BAF4 /* LayerCondition.cpp */; };
@@ -299,6 +305,10 @@
 		CF73BFDA15E114E3001CE412 /* FrameTasksExecutor.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FrameTasksExecutor.hpp; path = Commons/Basic/FrameTasksExecutor.hpp; sourceTree = "<group>"; };
 		CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector2D.cpp; path = Commons/Geometry/MutableVector2D.cpp; sourceTree = "<group>"; };
 		CF7A78EB159B9BE300074422 /* MutableVector2D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MutableVector2D.hpp; path = Commons/Geometry/MutableVector2D.hpp; sourceTree = "<group>"; };
+		CF7E625F15F7D6FC0086B71D /* FloatBufferBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FloatBufferBuilder.cpp; path = Commons/Basic/FloatBufferBuilder.cpp; sourceTree = "<group>"; };
+		CF7E626015F7D6FC0086B71D /* FloatBufferBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FloatBufferBuilder.hpp; path = Commons/Basic/FloatBufferBuilder.hpp; sourceTree = "<group>"; };
+		CF7E626415F7DD740086B71D /* IntBufferBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IntBufferBuilder.cpp; path = Commons/Basic/IntBufferBuilder.cpp; sourceTree = "<group>"; };
+		CF7E626515F7DD740086B71D /* IntBufferBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IntBufferBuilder.hpp; path = Commons/Basic/IntBufferBuilder.hpp; sourceTree = "<group>"; };
 		CF883B7F1590983B00AEE39C /* TexturesHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TexturesHandler.hpp; path = Commons/Basic/TexturesHandler.hpp; sourceTree = "<group>"; };
 		CF883B811590984900AEE39C /* TexturesHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = TexturesHandler.cpp; path = Commons/Basic/TexturesHandler.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF883BCA1594B9A500AEE39C /* Sector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sector.cpp; path = Commons/Geometry/Sector.cpp; sourceTree = "<group>"; };
@@ -319,6 +329,8 @@
 		CF9AEBC1159B3FEA004C3558 /* EllipsoidalTileTessellator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = EllipsoidalTileTessellator.cpp; path = Commons/Basic/EllipsoidalTileTessellator.cpp; sourceTree = "<group>"; };
 		CF9CD89815DBE2C800C6FD7E /* CachedDownloader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CachedDownloader.cpp; path = Commons/Interfaces/CachedDownloader.cpp; sourceTree = "<group>"; };
 		CF9CD89915DBE2C800C6FD7E /* CachedDownloader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CachedDownloader.hpp; path = Commons/Interfaces/CachedDownloader.hpp; sourceTree = "<group>"; };
+		CF9D2D8615F7D3C100B5CE2E /* IBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IBuffer.cpp; path = Commons/Basic/IBuffer.cpp; sourceTree = "<group>"; };
+		CF9D2D8715F7D3C100B5CE2E /* IBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IBuffer.hpp; path = Commons/Basic/IBuffer.hpp; sourceTree = "<group>"; };
 		CFA71BE115D2E84300F8C78D /* MultiLayerTileTexturizer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MultiLayerTileTexturizer.hpp; path = Commons/Basic/MultiLayerTileTexturizer.hpp; sourceTree = "<group>"; };
 		CFA71BE315D2E85600F8C78D /* MultiLayerTileTexturizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MultiLayerTileTexturizer.cpp; path = Commons/Basic/MultiLayerTileTexturizer.cpp; sourceTree = "<group>"; };
 		CFA71BE715D2F6C500F8C78D /* TilesRenderParameters.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TilesRenderParameters.hpp; path = Commons/Rendererers/TilesRenderParameters.hpp; sourceTree = "<group>"; };
@@ -528,6 +540,12 @@
 				CF6873A415F77F54002EDFD0 /* IFloatBuffer.hpp */,
 				CF6873A815F77FFC002EDFD0 /* IIntBuffer.cpp */,
 				CF6873A915F77FFC002EDFD0 /* IIntBuffer.hpp */,
+				CF9D2D8615F7D3C100B5CE2E /* IBuffer.cpp */,
+				CF9D2D8715F7D3C100B5CE2E /* IBuffer.hpp */,
+				CF7E625F15F7D6FC0086B71D /* FloatBufferBuilder.cpp */,
+				CF7E626015F7D6FC0086B71D /* FloatBufferBuilder.hpp */,
+				CF7E626415F7DD740086B71D /* IntBufferBuilder.cpp */,
+				CF7E626515F7DD740086B71D /* IntBufferBuilder.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -866,6 +884,9 @@
 				D88B5E2315C15C180083A43F /* Timer_iOS.hpp in Headers */,
 				CF6873A615F77F54002EDFD0 /* IFloatBuffer.hpp in Headers */,
 				CF6873AB15F77FFC002EDFD0 /* IIntBuffer.hpp in Headers */,
+				CF9D2D8915F7D3C100B5CE2E /* IBuffer.hpp in Headers */,
+				CF7E626215F7D6FC0086B71D /* FloatBufferBuilder.hpp in Headers */,
+				CF7E626715F7DD740086B71D /* IntBufferBuilder.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1003,6 +1024,9 @@
 				CF47030B15EFB4C000426B8B /* ThreadUtils_iOS.mm in Sources */,
 				CF6873A515F77F54002EDFD0 /* IFloatBuffer.cpp in Sources */,
 				CF6873AA15F77FFC002EDFD0 /* IIntBuffer.cpp in Sources */,
+				CF9D2D8815F7D3C100B5CE2E /* IBuffer.cpp in Sources */,
+				CF7E626115F7D6FC0086B71D /* FloatBufferBuilder.cpp in Sources */,
+				CF7E626615F7DD740086B71D /* IntBufferBuilder.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

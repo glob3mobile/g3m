@@ -15,6 +15,8 @@
 
 class ITimer;
 class IImage;
+class IFloatBuffer;
+class IIntBuffer;
 
 class IFactory {
 public:
@@ -30,6 +32,10 @@ public:
 
   virtual void deleteImage(const IImage* image) const = 0;
   
+  virtual IFloatBuffer* createFloatBuffer(int size) const = 0;
+  
+  virtual IIntBuffer* createIntBuffer(int size) const = 0;
+
   // a virtual destructor is needed for conversion to Java
   virtual ~IFactory() {}
 };

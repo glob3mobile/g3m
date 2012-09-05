@@ -16,6 +16,8 @@
 
 #include "INativeGL.hpp"
 
+#include "IIntBuffer.hpp"
+
 
 struct UniformsStruct {
   int Projection;
@@ -230,35 +232,59 @@ void GL::vertexPointer(int size, int stride, IFloatBuffer* vertex) {
 #endif
 }
 
-void GL::drawTriangleStrip(int n, IIntBuffer* i) {
+void GL::drawTriangleStrip(IIntBuffer* indexes) {
 #ifdef C_CODE
-  _gl->drawElements(TriangleStrip, n, UnsignedInt, i);
+  _gl->drawElements(TriangleStrip,
+                    indexes->size(),
+                    Int,
+                    indexes);
 #else
-  _gl->drawElements(GLPrimitive.TriangleStrip, n, GLType.UnsignedInt, i);
+  _gl->drawElements(GLPrimitive.TriangleStrip,
+                    indexes.size(),
+                    GLType.Int,
+                    indexes);
 #endif
 }
 
-void GL::drawLines(int n, IIntBuffer* i) {
+void GL::drawLines(IIntBuffer* indexes) {
 #ifdef C_CODE
-  _gl->drawElements(Lines, n, UnsignedInt, i);
+  _gl->drawElements(Lines,
+                    indexes->size(),
+                    Int,
+                    indexes);
 #else
-  _gl->drawElements(GLPrimitive.Lines, n, GLType.UnsignedInt, i);
+  _gl->drawElements(GLPrimitive.Lines,
+                    indexes.size(),
+                    GLType.Int,
+                    indexes);
 #endif
 }
 
-void GL::drawLineLoop(int n, IIntBuffer* i) {
+void GL::drawLineLoop(IIntBuffer* indexes) {
 #ifdef C_CODE
-  _gl->drawElements(LineLoop, n, UnsignedInt, i);
+  _gl->drawElements(LineLoop,
+                    indexes->size(),
+                    Int,
+                    indexes);
 #else
-  _gl->drawElements(GLPrimitive.LineLoop, n, GLType.UnsignedInt, i);
+  _gl->drawElements(GLPrimitive.LineLoop,
+                    indexes.size(),
+                    GLType.Int,
+                    indexes);
 #endif
 }
 
-void GL::drawPoints(int n, IIntBuffer* i) {
+void GL::drawPoints(IIntBuffer* indexes) {
 #ifdef C_CODE
-  _gl->drawElements(Points, n, UnsignedInt, i);
+  _gl->drawElements(Points,
+                    indexes->size(),
+                    Int,
+                    indexes);
 #else
-  _gl->drawElements(GLPrimitive.Points, n, GLType.UnsignedInt, i);
+  _gl->drawElements(GLPrimitive.Points,
+                    indexes.size(),
+                    GLType.Int,
+                    indexes);
 #endif
 }
 
@@ -514,35 +540,6 @@ void GL::disableVertexColor() {
   _gl->uniform1i(Uniforms.EnableColorPerVertex, 0);
   //    _enableVertexColor = false;
   //  }
-}
-
-void GL::enableVertexNormal(IFloatBuffer* normals) {
-  int TODO_No_Normals_In_Shader;
-//  if (Attributes.Normal == -1){
-//    ILogger::instance()->logError("Attribute Normal Invalid");
-//  }
-//  
-//  //  if (!_enableVertexNormal) {
-//  _gl->enableVertexAttribArray(Attributes.Normal);
-//#ifdef C_CODE
-//  _gl->vertexAttribPointer(Attributes.Normal, 3, Float, false, 0, normals);
-//#else
-//  _gl->vertexAttribPointer(Attributes.Normal, 3, GLType.Float, false, 0, normals);
-//#endif
-//  //    _enableVertexNormal = true;
-//  //  }
-}
-
-void GL::disableVertexNormal() {
-    int TODO_No_Normals_In_Shader;
-//  if (Attributes.Normal == -1){
-//    ILogger::instance()->logError("Attribute Normal Invalid");
-//  }
-//  
-//  //  if (_enableVertexNormal) {
-//  _gl->disableVertexAttribArray(Attributes.Normal);
-//  //    _enableVertexNormal = false;
-//  //  }
 }
 
 void GL::enableVerticesPosition() {

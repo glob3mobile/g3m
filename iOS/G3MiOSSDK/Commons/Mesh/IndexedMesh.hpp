@@ -11,12 +11,12 @@
 
 #include "Mesh.hpp"
 #include "Color.hpp"
-#include "MutableVector2D.hpp"
-#include "MutableVector3D.hpp"
-#include "Geodetic3D.hpp"
-#include "Planet.hpp"
+//#include "MutableVector2D.hpp"
+//#include "MutableVector3D.hpp"
+//#include "Planet.hpp"
+#include "Vector3D.hpp"
 
-#include <vector>
+//#include <vector>
 
 #include "INativeGL.hpp"
 
@@ -30,136 +30,85 @@ enum CenterStrategy {
 
 class IndexedMesh : public Mesh {
 private:
-  IndexedMesh(std::vector<MutableVector3D>& vertices,
-              const GLPrimitive primitive,
-              CenterStrategy strategy,
-              Vector3D center,
-              std::vector<int>& indexes,
-              const Color* flatColor = NULL,
-              std::vector<Color>* colors = NULL,
-              const float colorsIntensity = (float)0.0,
-              std::vector<MutableVector3D>* normals = NULL);
-  
-  IndexedMesh(bool owner,
-              const GLPrimitive primitive,
-              CenterStrategy strategy,
-              Vector3D center,
-              const int numVertices,
-              const float vertices[],
-              const int indexes[],
-              const int numIndex, 
-              const Color* flatColor = NULL,
-              const float colors[] = NULL,
-              const float colorsIntensity = (float)0.0,
-              const float normals[] = NULL);
-  
-#ifdef C_CODE
-  const float*         _vertices;
-  const int*           _indexes;
-  const float*         _normals;
-  const float*         _colors;
-  const GLPrimitive    _primitive; 
-#endif
-  
-#ifdef JAVA_CODE
-  private final float[]         _vertices;
-  private final int[]           _indexes;
-  private final float[]         _normals;
-  private final float[]         _colors;
-  private final GLPrimitive     _primitive; 
-#endif
+  const GLPrimitive _primitive;
+  const bool        _owner;
+  CenterStrategy    _centerStrategy;
+  Vector3D          _center;
+  IFloatBuffer*     _vertices;
+//  const int         _numVertices;
+  IIntBuffer*       _indexes;
+//  const int         _numIndex;
+  const Color*      _flatColor;
+  IFloatBuffer*     _colors;
+  const float       _colorsIntensity;
 
-  const bool          _owner;
-  const int           _numVertices;
-  const int           _numIndex;
-  const Color*        _flatColor;
-  const float         _colorsIntensity;
-  mutable Extent*     _extent;
+  mutable Extent*   _extent;
   
   Extent* computeExtent() const;
   
-  CenterStrategy      _centerStrategy;
-  Vector3D            _center;
-  
 public:
-  
+  IndexedMesh(const GLPrimitive primitive,
+              bool owner,
+              CenterStrategy centerStrategy,
+              Vector3D center,
+              IFloatBuffer* vertices,
+              IIntBuffer* indexes,
+              const Color* flatColor = NULL,
+              IFloatBuffer* colors = NULL,
+              const float colorsIntensity = (float)0.0);
+
   ~IndexedMesh();
 
     
-  static IndexedMesh* createFromVector3D(bool owner,
-                                         const GLPrimitive primitive,
-                                         CenterStrategy strategy,
-                                         Vector3D center,
-                                         const int numVertices,
-                                         const float vertices[],
-                                         const int indexes[],
-                                         const int numIndex, 
-                                         const Color* flatColor = NULL,
-                                         const float colors[] = NULL,
-                                         const float colorsIntensity = (float)0.0,
-                                         const float normals[] = NULL) {
-    return new IndexedMesh(owner, primitive, strategy, center, numVertices, vertices,
-                           indexes, numIndex, flatColor, colors, colorsIntensity, normals);
-  }
+//  static IndexedMesh* createFromVector3D(bool owner,
+//                                         const GLPrimitive primitive,
+//                                         CenterStrategy strategy,
+//                                         Vector3D center,
+//                                         const int numVertices,
+//                                         IFloatBuffer* vertices,
+//                                         IIntBuffer* indexes,
+//                                         const int numIndex,
+//                                         const Color* flatColor = NULL,
+//                                         IFloatBuffer* colors = NULL,
+//                                         const float colorsIntensity = (float)0.0) {
+//    return new IndexedMesh(owner, primitive, strategy, center, numVertices, vertices,
+//                           indexes, numIndex, flatColor, colors, colorsIntensity);
+//  }
 
     
-  static IndexedMesh* createFromVector3D(std::vector<MutableVector3D>& vertices,
-                                         const GLPrimitive primitive,
-                                         CenterStrategy strategy,
-                                         Vector3D center,
-                                         std::vector<int>& indexes,
-                                         const Color* flatColor = NULL,
-                                         std::vector<Color>* colors = NULL,
-                                         const float colorsIntensity = (float)0.0,
-                                         std::vector<MutableVector3D>* normals = NULL) {
-    return new IndexedMesh(vertices, primitive, strategy, center, indexes,
-                           flatColor, colors, colorsIntensity, normals);
-  }
+//  static IndexedMesh* createFromVector3D(std::vector<MutableVector3D>& vertices,
+//                                         const GLPrimitive primitive,
+//                                         CenterStrategy strategy,
+//                                         Vector3D center,
+//                                         std::vector<int>& indexes,
+//                                         const Color* flatColor = NULL,
+//                                         std::vector<Color>* colors = NULL,
+//                                         const float colorsIntensity = (float)0.0) {
+//    return new IndexedMesh(vertices, primitive, strategy, center, indexes,
+//                           flatColor, colors, colorsIntensity);
+//  }
 
   
-  static IndexedMesh* createFromGeodetic3D(const Planet *planet,
-                                           bool owner,
-                                           const GLPrimitive primitive,
-                                           CenterStrategy strategy,
-                                           Vector3D center,
-                                           const int numVertices,
-                                           float vertices[],
-                                           const int indexes[],
-                                           const int numIndex, 
-                                           const Color* flatColor = NULL,
-                                           const float colors[] = NULL,
-                                           const float colorsIntensity = (float)0.0,
-                                           const float normals[] = NULL) {
-    // convert vertices to latlon coordinates
-    for (unsigned int n=0; n<numVertices*3; n+=3) {
-      const Geodetic3D g(Angle::fromDegrees(vertices[n]), Angle::fromDegrees(vertices[n+1]), vertices[n+2]);
-      const Vector3D v = planet->toCartesian(g);
-      vertices[n]   = (float) v.x();
-      vertices[n+1] = (float) v.y();
-      vertices[n+2] = (float) v.z();
-    }
-    
-    // create indexed mesh
-    return new IndexedMesh(owner, primitive, strategy, center, numVertices, vertices,
-                           indexes, numIndex, flatColor, colors, colorsIntensity, normals);
-  }
-
+//  static IndexedMesh* createFromGeodetic3D(const Planet *planet,
+//                                           bool owner,
+//                                           const GLPrimitive primitive,
+//                                           CenterStrategy strategy,
+//                                           Vector3D center,
+//                                           const int numVertices,
+//                                           IFloatBuffer* vertices,
+//                                           IIntBuffer* indexes,
+//                                           const int numIndex, 
+//                                           const Color* flatColor = NULL,
+//                                           IFloatBuffer* colors = NULL,
+//                                           const float colorsIntensity = (float)0.0);
     
   virtual void render(const RenderContext* rc) const;
   
   Extent* getExtent() const;
   
-  int getVertexCount() const {
-    return _numVertices;
-  }
+  int getVertexCount() const;
   
-  const Vector3D getVertex(int i) const {
-    const int p = i * 3;
-    return Vector3D(_vertices[p  ] + _center.x(),
-                    _vertices[p+1] + _center.y(),
-                    _vertices[p+2] + _center.z());
-  }
-
+  const Vector3D getVertex(int i) const;
   
 };
 

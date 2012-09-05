@@ -12,14 +12,14 @@
 #include "TexturedMesh.hpp"
 #include "Planet.hpp"
 
+#include "FloatBufferBuilder.hpp"
 
-std::vector<MutableVector2D> SingleImageTileTexturizer::createTextureCoordinates(const RenderContext* rc,
-                                                                                 Mesh* mesh) const {
-  std::vector<MutableVector2D> texCoors;
+IFloatBuffer* SingleImageTileTexturizer::createTextureCoordinates(const RenderContext* rc,
+                                                                  Mesh* mesh) const {
+  FloatBufferBuilder texCoors;
   
   for (int i = 0; i < mesh->getVertexCount(); i++) {
-    
-    Vector3D pos = mesh->getVertex(i);
+    const Vector3D pos = mesh->getVertex(i);
     
     const Geodetic2D g = rc->getPlanet()->toGeodetic2D(pos);
     const Vector3D n = rc->getPlanet()->geodeticSurfaceNormal(g);
@@ -27,10 +27,12 @@ std::vector<MutableVector2D> SingleImageTileTexturizer::createTextureCoordinates
     const double s = GMath.atan2(n.y(), n.x()) / (GMath.pi() * 2) + 0.5;
     const double t = GMath.asin(n.z()) / GMath.pi() + 0.5;
     
-    texCoors.push_back(MutableVector2D(s, 1-t));
+    // texCoors.add( Vector2D(s, 1-t) );
+    texCoors.add(s);
+    texCoors.add(1-t);
   }
   
-  return texCoors;
+  return texCoors.create();
 }
 
 Mesh* SingleImageTileTexturizer::texturize(const RenderContext* rc,
@@ -55,9 +57,10 @@ Mesh* SingleImageTileTexturizer::texturize(const RenderContext* rc,
     
     rc->getFactory()->deleteImage(_image);
   }
-
+  
   TextureMapping* texMap = new SimpleTextureMapping(_texId,
-                                                          createTextureCoordinates(rc, mesh));
+                                                    createTextureCoordinates(rc, mesh),
+                                                    true);
   if (previousMesh != NULL) delete previousMesh;
   
   tile->setTextureSolved(true);

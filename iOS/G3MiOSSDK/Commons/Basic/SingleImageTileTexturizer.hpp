@@ -27,8 +27,9 @@ private:
   GLTextureId _texId;
   IImage * const _image;
   
-  std::vector<MutableVector2D> createTextureCoordinates(const RenderContext* rc,
-                                                        Mesh* mesh) const;
+  
+  IFloatBuffer* createTextureCoordinates(const RenderContext* rc,
+                                         Mesh* mesh) const;
   
 public:
   

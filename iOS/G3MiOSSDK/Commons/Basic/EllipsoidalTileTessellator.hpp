@@ -14,7 +14,9 @@
 #include "MutableVector3D.hpp"
 #include "Planet.hpp"
 
-#include <vector>
+//#include <vector>
+//#include "FloatBufferBuilder.hpp"
+
 
 class EllipsoidalTileTessellator : public TileTessellator {
 private:
@@ -22,17 +24,17 @@ private:
   const unsigned int _resolution;
   const bool         _skirted;
   
-  static void addVertex(const Planet* planet,
-                        std::vector<MutableVector3D>* vertices,
-                        const Geodetic3D& g) {
-    vertices->push_back( planet->toCartesian(g).asMutableVector3D() );
-  }
-  
-  static void addVertex(const Planet* planet,
-                        std::vector<MutableVector3D>* vertices,
-                        const Geodetic2D& g) {
-    vertices->push_back( planet->toCartesian(g).asMutableVector3D() );
-  }
+//  static void addVertex(const Planet* planet,
+//                        FloatBufferBuilder* vertices,
+//                        const Geodetic3D& g) {
+//    vertices->add( planet->toCartesian(g) );
+//  }
+//  
+//  static void addVertex(const Planet* planet,
+//                        FloatBufferBuilder* vertices,
+//                        const Geodetic2D& g) {
+//    vertices->add( planet->toCartesian(g) );
+//  }
   
 public:
   Mesh* createDebugMesh(const RenderContext* rc,

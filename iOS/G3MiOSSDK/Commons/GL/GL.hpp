@@ -41,7 +41,6 @@ private:
   bool _enableTextures;
   bool _enableTexture2D;
 //  bool _enableVertexColor;
-//  bool _enableVertexNormal;
   bool _enableVerticesPosition;
   bool _enableFlatColor;
   bool _enableDepthTest;
@@ -102,7 +101,6 @@ public:
   _enableTextures(false),
   _enableTexture2D(false),
 //  _enableVertexColor(false),
-//  _enableVertexNormal(false),
   _enableVerticesPosition(false),
 //  _enableFlatColor(false),
   _enableBlend(false),
@@ -160,10 +158,6 @@ public:
   
   void disableVertexColor();
   
-  void enableVertexNormal(IFloatBuffer* normals);
-  
-  void disableVertexNormal();
-  
   void pushMatrix();
   
   void popMatrix();
@@ -174,13 +168,13 @@ public:
   
   void vertexPointer(int size, int stride, IFloatBuffer* vertex);
   
-  void drawTriangleStrip(int n, IIntBuffer* i) ;
+  void drawTriangleStrip(IIntBuffer* indexes) ;
   
-  void drawLines(int n, IIntBuffer* i);
+  void drawLines(IIntBuffer* indexes);
   
-  void drawLineLoop(int n, IIntBuffer* i);
+  void drawLineLoop(IIntBuffer* indexes);
   
-  void drawPoints(int n, IIntBuffer* i);
+  void drawPoints(IIntBuffer* indexes);
   
   void setProjection(const MutableMatrix44D &projection);
   
@@ -273,7 +267,7 @@ public:
   
   void setBlendFuncSrcAlpha();
   
-  void getViewport(IIntBuffer* v){
+  void getViewport(int v[]){
 #ifdef C_CODE
     _gl->getIntegerv(Viewport, v);
 #else

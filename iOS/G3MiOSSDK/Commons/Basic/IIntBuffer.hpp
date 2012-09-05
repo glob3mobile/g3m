@@ -9,13 +9,19 @@
 #ifndef __G3MiOSSDK__IIntBuffer__
 #define __G3MiOSSDK__IIntBuffer__
 
+#include "IBuffer.hpp"
 
-class IIntBuffer {
+class IIntBuffer : public IBuffer {
 public:
   
   virtual ~IIntBuffer() {
     
   }
+  
+  virtual int get(int i) const = 0;
+  
+  virtual void put(int i, int value) = 0;
+  
 };
 
 #endif
