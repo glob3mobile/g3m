@@ -35,9 +35,9 @@ public class BusyQuadRenderer extends Renderer implements EffectTarget
 	// create quad
 	int numVertices = 4;
 	int numIndices = 4;
-	float[] quadVertices = new float [numVertices *3];
-	int[] quadIndices = new int [numIndices];
-	float[] texC = new float [numVertices *2];
+	float[] quadVertices = new float[numVertices *3];
+	int[] quadIndices = new int[numIndices];
+	float[] texC = new float[numVertices *2];
   
 	int nv = 0;
 	float halfSize = 16F;
@@ -109,7 +109,7 @@ public class BusyQuadRenderer extends Renderer implements EffectTarget
 
 //C++ TO JAVA CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in Java):
   private boolean render_firstTime = true;
-  public final int render(RenderContext rc)
+  public final void render(RenderContext rc)
   {
 	GL gl = rc.getGL();
   
@@ -117,7 +117,7 @@ public class BusyQuadRenderer extends Renderer implements EffectTarget
 	{
 	  if (!initMesh(rc))
 	  {
-		return Renderer.maxTimeToRender;
+		return;
 	  }
 	}
   
@@ -160,7 +160,6 @@ public class BusyQuadRenderer extends Renderer implements EffectTarget
   
 	gl.disableBlend();
   
-	return Renderer.maxTimeToRender;
   }
 
   public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)

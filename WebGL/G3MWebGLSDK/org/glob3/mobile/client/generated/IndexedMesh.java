@@ -30,7 +30,7 @@ public class IndexedMesh extends Mesh
 	  _extent = null;
 	  _centerStrategy = strategy;
 	  _center = new Vector3D(center);
-	float[] vert = new float[3* vertices.size()];
+	float[] vert = new float[3 * vertices.size()];
 	int p = 0;
   
 	switch (strategy)

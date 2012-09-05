@@ -20,13 +20,11 @@ package org.glob3.mobile.generated;
 public abstract class Renderer
 {
 
-  public static final int maxTimeToRender = 1000;
-
   public abstract void initialize(InitializationContext ic);
 
   public abstract boolean isReadyToRender(RenderContext rc);
 
-  public abstract int render(RenderContext rc);
+  public abstract void render(RenderContext rc);
 
   public abstract boolean onTouchEvent(EventContext ec, TouchEvent touchEvent);
 

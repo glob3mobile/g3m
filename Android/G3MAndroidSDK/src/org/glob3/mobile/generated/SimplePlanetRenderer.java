@@ -32,7 +32,7 @@ public class SimplePlanetRenderer extends Renderer
   private Mesh _mesh;
 
 
-  private float [] createVertices(Planet planet)
+  private float[] createVertices(Planet planet)
   {
 	//VERTICES
 	float[] vertices = new float[_latRes *_lonRes * 3];
@@ -194,19 +194,17 @@ public class SimplePlanetRenderer extends Renderer
   
   }
 
-  public final int render(RenderContext rc)
+  public final void render(RenderContext rc)
   {
 	if (_mesh == null)
 	{
 	  if (!initializeMesh(rc))
 	  {
-		return Renderer.maxTimeToRender;
+		return;
 	  }
 	}
   
 	_mesh.render(rc);
-  
-	return Renderer.maxTimeToRender;
   }
 
   public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)

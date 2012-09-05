@@ -89,65 +89,7 @@ public class MutableMatrix44D
 //#undef M
   }
 
-
-
-  public static MutableMatrix44D identity()
-  {
-	float[] I = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
-	return new MutableMatrix44D(I);
-  }
-
-  public static MutableMatrix44D fromRotationX(Angle angle)
-  {
-	double c = angle.cosinus();
-	double s = angle.sinus();
-	return new MutableMatrix44D(1.0, 0.0, 0.0, 0.0, 0.0, c, -s, 0.0, 0.0, s, c, 0.0, 0.0, 0.0, 0.0, 1.0);
-
-  }
-
-  public static MutableMatrix44D fromRotationY(Angle angle)
-  {
-	double c = angle.cosinus();
-	double s = angle.sinus();
-	return new MutableMatrix44D(c, 0.0, s, 0.0, 0.0, 1.0, 0.0, 0.0, -s, 0.0, c, 0.0, 0.0, 0.0, 0.0, 1.0);
-
-  }
-
-  public static MutableMatrix44D fromRotationZ(Angle angle)
-  {
-	double c = angle.cosinus();
-	double s = angle.sinus();
-	return new MutableMatrix44D(c, -s, 0.0, 0.0, s, c, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-  }
-
-  public static MutableMatrix44D fromTranslation(MutableVector3D translation)
-  {
-	return new MutableMatrix44D(1.0, 0.0, 0.0, translation.x(), 0.0, 1.0, 0.0, translation.y(), 0.0, 0.0, 1.0, translation.z(), 0.0, 0.0, 0.0, 1.0);
-  }
-
-  public static MutableMatrix44D fromScale(MutableVector3D scale)
-  {
-	return new MutableMatrix44D(scale.x(), 0.0, 0.0, 0, 0.0, scale.y(), 0.0, 0, 0.0, 0.0, scale.z(), 0, 0.0, 0.0, 0.0, 1.0);
-  
-  }
-
-  public MutableMatrix44D()
-  {
-	for (int i = 0; i < 16; i++)
-	{
-	  _m[i] = 0.0;
-	}
-  }
-
-  public MutableMatrix44D(MutableMatrix44D m)
-  {
-	for (int i = 0; i < 16; i++)
-	{
-	  _m[i] = m._m[i];
-	}
-  }
-
-  public MutableMatrix44D(double[] M)
+  private MutableMatrix44D(double[] M)
   {
 	for (int i = 0; i < 16; i++)
 	{
@@ -155,15 +97,7 @@ public class MutableMatrix44D
 	}
   }
 
-  public MutableMatrix44D(float[] M)
-  {
-	for (int i = 0; i < 16; i++)
-	{
-	  _m[i] = M[i];
-	}
-  }
-
-  public MutableMatrix44D(double m11, double m12, double m13, double m14, double m21, double m22, double m23, double m24, double m31, double m32, double m33, double m34, double m41, double m42, double m43, double m44)
+  private MutableMatrix44D(double m11, double m12, double m13, double m14, double m21, double m22, double m23, double m24, double m31, double m32, double m33, double m34, double m41, double m42, double m43, double m44)
   {
 	_m[0] = m11;
 	_m[1] = m12;
@@ -186,6 +120,29 @@ public class MutableMatrix44D
 	_m[15] = m44;
   }
 
+
+
+  public static MutableMatrix44D identity()
+  {
+	return new MutableMatrix44D(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+  }
+
+  public MutableMatrix44D()
+  {
+	for (int i = 0; i < 16; i++)
+	{
+	  _m[i] = 0.0;
+	}
+  }
+
+  public MutableMatrix44D(MutableMatrix44D m)
+  {
+	for (int i = 0; i < 16; i++)
+	{
+	  _m[i] = m._m[i];
+	}
+  }
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: MutableMatrix44D multiply(const MutableMatrix44D& m) const
   public final MutableMatrix44D multiply(MutableMatrix44D m)
@@ -196,7 +153,7 @@ public class MutableMatrix44D
 	  final int j4 = j *4;
 	  for (int i = 0; i < 4; i++)
 	  {
-  //      R[j * 4 + i] = m.get(j * 4) * _m[i] + m.get(j * 4 + 1) * _m[4 + i] + m.get(j * 4 + 2) * _m[8 + i] + m.get(j * 4 + 3) * _m[12 + i];
+		//      R[j * 4 + i] = m.get(j * 4) * _m[i] + m.get(j * 4 + 1) * _m[4 + i] + m.get(j * 4 + 2) * _m[8 + i] + m.get(j * 4 + 3) * _m[12 + i];
 		R[j4 + i] = m._m[j4] * _m[i] + m._m[j4 + 1] * _m[4 + i] + m._m[j4 + 2] * _m[8 + i] + m._m[j4 + 3] * _m[12 + i];
 	  }
 	}
@@ -218,8 +175,7 @@ public class MutableMatrix44D
 //ORIGINAL LINE: MutableMatrix44D transposed() const
   public final MutableMatrix44D transposed()
   {
-	MutableMatrix44D T = new MutableMatrix44D(_m[0], _m[4], _m[8], _m[12], _m[1], _m[5], _m[9], _m[13], _m[2], _m[6], _m[10], _m[14], _m[3], _m[7], _m[11], _m[15]);
-	return T;
+	return new MutableMatrix44D(_m[0], _m[4], _m[8], _m[12], _m[1], _m[5], _m[9], _m[13], _m[2], _m[6], _m[10], _m[14], _m[3], _m[7], _m[11], _m[15]);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -229,15 +185,13 @@ public class MutableMatrix44D
 	return _m[i];
   }
 
-  //const double * getMatrix() const { return _m;}
-
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void copyToFloatMatrix(float M[16]) const
-  public final void copyToFloatMatrix(float[] M)
+//ORIGINAL LINE: void copyToColumnMajorFloatArray(float M[16]) const
+  public final void copyToColumnMajorFloatArray(float[] M)
   {
-//    for (int i = 0; i < 16; i++) {
-//      M[i] = (float) _m[i];
-//    }
+	//    for (int i = 0; i < 16; i++) {
+	//      M[i] = (float) _m[i];
+	//    }
 	M[0] = (float) _m[0];
 	M[1] = (float) _m[1];
 	M[2] = (float) _m[2];
@@ -298,7 +252,7 @@ public class MutableMatrix44D
 	m.transformPoint(out, in);
 	if (out[3] == 0.0)
 	  return Vector3D.nan();
-  
+  //
 	final double objx = out[0] / out[3];
 	final double objy = out[1] / out[3];
 	final double objz = out[2] / out[3];
@@ -325,17 +279,15 @@ public class MutableMatrix44D
 	out[1] /= out[3];
 	out[2] /= out[3];
   
-	double winx = viewport[0] + (1.0f + out[0]) * viewport[2] / 2.0f;
-	double winy = viewport[1] + (1.0f + out[1]) * viewport[3] / 2.0f;
+	final double winx = viewport[0] + (1.0f + out[0]) * viewport[2] / 2.0f;
+	final double winy = viewport[1] + (1.0f + out[1]) * viewport[3] / 2.0f;
 	//double winz = (1.0f + in[2]) / 2.0f;
 	return new Vector2D(winx, winy);
   }
 
   public static MutableMatrix44D createTranslationMatrix(Vector3D t)
   {
-	double[] T = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, t.x(), t.y(), t.z(), 1 };
-  
-	return new MutableMatrix44D(T);
+	return new MutableMatrix44D(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, t.x(), t.y(), t.z(), 1);
   }
 
   public static MutableMatrix44D createRotationMatrix(Angle angle, Vector3D p)
@@ -345,9 +297,7 @@ public class MutableMatrix44D
 	final double c = angle.cosinus();
 	final double s = angle.sinus();
   
-	double[] R = { p0.x() * p0.x() * (1 - c) + c, p0.x() * p0.y() * (1 - c) + p0.z() * s, p0.x() * p0.z() * (1 - c) - p0.y() * s, 0, p0.y() * p0.x() * (1 - c) - p0.z() * s, p0.y() * p0.y() * (1 - c) + c, p0.y() * p0.z() * (1 - c) + p0.x() * s, 0, p0.x() * p0.z() * (1 - c) + p0.y() * s, p0.y() * p0.z() * (1 - c) - p0.x() * s, p0.z() * p0.z() * (1 - c) + c, 0, 0, 0, 0, 1 };
-  
-	return new MutableMatrix44D(R);
+	return new MutableMatrix44D(p0.x() * p0.x() * (1 - c) + c, p0.x() * p0.y() * (1 - c) + p0.z() * s, p0.x() * p0.z() * (1 - c) - p0.y() * s, 0, p0.y() * p0.x() * (1 - c) - p0.z() * s, p0.y() * p0.y() * (1 - c) + c, p0.y() * p0.z() * (1 - c) + p0.x() * s, 0, p0.x() * p0.z() * (1 - c) + p0.y() * s, p0.y() * p0.z() * (1 - c) - p0.x() * s, p0.z() * p0.z() * (1 - c) + c, 0, 0, 0, 0, 1);
   }
 
   public static MutableMatrix44D createGeneralRotationMatrix(Angle angle, Vector3D axis, Vector3D point)
@@ -364,8 +314,7 @@ public class MutableMatrix44D
 	final double pe = w.dot(up);
 	final MutableVector3D v = up.sub(w.times(pe)).normalized();
 	final MutableVector3D u = w.cross(v);
-	double[] LA = { u.x(), v.x(), -w.x(), 0, u.y(), v.y(), -w.y(), 0, u.z(), v.z(), -w.z(), 0, -pos.dot(u), -pos.dot(v), pos.dot(w), 1 };
-	return new MutableMatrix44D(LA);
+	return new MutableMatrix44D(u.x(), v.x(), -w.x(), 0, u.y(), v.y(), -w.y(), 0, u.z(), v.z(), -w.z(), 0, -pos.dot(u), -pos.dot(v), pos.dot(w), 1);
   }
 
   public static MutableMatrix44D createProjectionMatrix(double left, double right, double bottom, double top, double znear, double zfar)
@@ -375,20 +324,21 @@ public class MutableMatrix44D
 	final double tb = top - bottom;
 	final double fn = zfar - znear;
   
-	double[] P = new double[16];
-	P[0] = 2 * znear / rl;
-	P[1] = P[2] = P[3] = P[4] = 0;
-	P[5] = 2 * znear / tb;
-	P[6] = P[7] = 0;
-	P[8] = (right + left) / rl;
-	P[9] = (top + bottom) / tb;
-	P[10] = -(zfar + znear) / fn;
-	P[11] = -1;
-	P[12] = P[13] = 0;
-	P[14] = -2 * zfar / fn * znear;
-	P[15] = 0;
+	//  double P[16];
+	//  P[0] = 2 * znear / rl;
+	//  P[1] = P[2] = P[3] = P[4] = 0;
+	//  P[5] = 2 * znear / tb;
+	//  P[6] = P[7] = 0;
+	//  P[8] = (right + left) / rl;
+	//  P[9] = (top + bottom) / tb;
+	//  P[10] = -(zfar + znear) / fn;
+	//  P[11] = -1;
+	//  P[12] = P[13] = 0;
+	//  P[14] = -2 * zfar / fn * znear;
+	//  P[15] = 0;
+	//  return MutableMatrix44D(P);
   
-	return new MutableMatrix44D(P);
+	return new MutableMatrix44D(2 * znear / rl, 0, 0, 0, 0, 2 * znear / tb, 0, 0, (right + left) / rl, (top + bottom) / tb, -(zfar + znear) / fn, -1, 0, 0, -2 * zfar / fn * znear, 0);
   }
 
   public static MutableMatrix44D createProjectionMatrix(FrustumData data)
@@ -403,19 +353,7 @@ public class MutableMatrix44D
 	final double tb = top - bottom;
 	final double fn = zfar - znear;
 
-	double[] P = new double[16];
-	P[0] = 2 / rl;
-	P[1] = P[2] = P[3] = P[4] = 0;
-	P[5] = 2 / tb;
-	P[6] = P[7] = P[8] = P[9] = 0;
-	P[10] = -2 / fn;
-	P[11] = 0;
-	P[12] = -(right+left) / rl;
-	P[13] = -(top+bottom) / tb;
-	P[14] = -(zfar+znear) / fn;
-	P[15] = 1;
-
-	return new MutableMatrix44D(P);
+	return new MutableMatrix44D(2 / rl, 0, 0, 0, 0, 2 / tb, 0, 0, 0, 0, -2 / fn, 0, -(right+left) / rl, -(top+bottom) / tb, -(zfar+znear) / fn, 1);
   }
 
 

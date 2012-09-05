@@ -67,7 +67,7 @@ public class G3MWidget
   //  return value;
   //}
   
-  public final int render()
+  public final void render()
   {
 	_timer.start();
 	_renderCounter++;
@@ -134,7 +134,7 @@ public class G3MWidget
   //  }
 	_gl.clearScreen(_backgroundColor);
   
-	final int timeToRedraw = _selectedRenderer.render(rc);
+	_selectedRenderer.render(rc);
   
 	//  _frameTasksExecutor->doPostRenderCycle(&rc);
   
@@ -183,8 +183,6 @@ public class G3MWidget
 		_lastCacheStatistics = cacheStatistics;
 	  }
 	}
-  
-	return timeToRedraw;
   
   }
 
