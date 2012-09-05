@@ -56,8 +56,6 @@
 #include "MathUtils_iOS.hpp"
 #include "ThreadUtils_iOS.hpp"
 
-#include "Matrix.hpp"
-
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
 @end
@@ -214,7 +212,7 @@
   
   
   
-  Matrix::test();
+  //Matrix::test();
 }
 
 //- (void) initWidgetDemo

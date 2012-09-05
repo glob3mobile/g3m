@@ -176,7 +176,6 @@
 		D8A723AC15E4D42B00ABDF07 /* StringBuilder_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8A723AB15E4D42B00ABDF07 /* StringBuilder_iOS.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8A723AE15E4D47E00ABDF07 /* StringBuilder_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A723AD15E4D47E00ABDF07 /* StringBuilder_iOS.cpp */; };
 		D8CD6F7A15A6FFAC00279BE7 /* IDownloadListener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8CD6F7815A6FFAC00279BE7 /* IDownloadListener.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		D8CD747B15F749A300B801CC /* Matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8CD747A15F749A300B801CC /* Matrix.cpp */; };
 		D8D347BA15E5133B00EDB394 /* IStringBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8D347B915E5133B00EDB394 /* IStringBuilder.cpp */; };
 		D8E0EC1515C1B1CD0010A68A /* StaticImageLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8E0EC1415C1B1CD0010A68A /* StaticImageLayer.cpp */; };
 		D8EEF3B91577924D003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF3B81577924D003FEB5E /* Foundation.framework */; };
@@ -192,7 +191,6 @@
 		D8F42FBE15EB6D78000D1822 /* LeveledTexturedMesh.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF8FF98A15D5539F000F79D1 /* LeveledTexturedMesh.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8F42FBF15EB6D78000D1822 /* SQLiteStorage_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF8B21B115DD32820068601A /* SQLiteStorage_iOS.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8F42FD415EB7B95000D1822 /* IStringBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8A723A715E4D2C500ABDF07 /* IStringBuilder.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		D8F42FD515EB7BAB000D1822 /* (null) in Headers */ = {isa = PBXBuildFile; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -377,8 +375,6 @@
 		D8A723AB15E4D42B00ABDF07 /* StringBuilder_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StringBuilder_iOS.hpp; path = Specific/Derived/StringBuilder_iOS.hpp; sourceTree = "<group>"; };
 		D8A723AD15E4D47E00ABDF07 /* StringBuilder_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StringBuilder_iOS.cpp; path = Specific/Derived/StringBuilder_iOS.cpp; sourceTree = "<group>"; };
 		D8CD6F7815A6FFAC00279BE7 /* IDownloadListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IDownloadListener.hpp; path = Commons/Downloader/IDownloadListener.hpp; sourceTree = "<group>"; };
-		D8CD747815F7498600B801CC /* Matrix.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Matrix.hpp; path = Commons/Geometry/Matrix.hpp; sourceTree = "<group>"; };
-		D8CD747A15F749A300B801CC /* Matrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Matrix.cpp; path = Commons/Geometry/Matrix.cpp; sourceTree = "<group>"; };
 		D8D347B915E5133B00EDB394 /* IStringBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IStringBuilder.cpp; path = Commons/Interfaces/IStringBuilder.cpp; sourceTree = "<group>"; };
 		D8E0EC1215C1B1BB0010A68A /* StaticImageLayer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StaticImageLayer.hpp; sourceTree = "<group>"; };
 		D8E0EC1415C1B1CD0010A68A /* StaticImageLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StaticImageLayer.cpp; sourceTree = "<group>"; };
@@ -556,8 +552,6 @@
 				383BD3A81577EE5A0012AC53 /* Vector2D.hpp */,
 				383BD3A91577EE5A0012AC53 /* Vector3D.cpp */,
 				383BD3AA1577EE5A0012AC53 /* Vector3D.hpp */,
-				D8CD747815F7498600B801CC /* Matrix.hpp */,
-				D8CD747A15F749A300B801CC /* Matrix.cpp */,
 			);
 			name = Geometry;
 			sourceTree = "<group>";
@@ -811,17 +805,16 @@
 				D88B5E0F15C15C180083A43F /* Response.hpp in Headers */,
 				D88B5E1115C15C180083A43F /* Color.hpp in Headers */,
 				D88B5E1215C15C180083A43F /* Effects.hpp in Headers */,
-				D8F42FD515EB7BAB000D1822 /* (null) in Headers */,
 				D88B5E1315C15C180083A43F /* EllipsoidalTileTessellator.hpp in Headers */,
 				D88B5E1515C15C180083A43F /* Mark.hpp in Headers */,
 				D88B5E1815C15C180083A43F /* TexturesHandler.hpp in Headers */,
 				D88B5E1915C15C180083A43F /* Tile.hpp in Headers */,
 				D88B5E1C15C15C180083A43F /* TileTessellator.hpp in Headers */,
 				D88B5E1E15C15C180083A43F /* TimeInterval.hpp in Headers */,
-				D88B5E2115C15C180083A43F /* MutableMatrix44D.hpp in Headers */,
 				D88B5E2215C15C180083A43F /* ITimer.hpp in Headers */,
 				D88B5E2515C15C850083A43F /* Box.hpp in Headers */,
 				CFF0999B15C18AAD005EAF12 /* TileTexturizer.hpp in Headers */,
+				D88B5E2115C15C180083A43F /* MutableMatrix44D.hpp in Headers */,
 				D88B5E5215C162AF0083A43F /* G3MWidget.hpp in Headers */,
 				CCC2A02F15CA6C7D00923850 /* BusyMeshRenderer.hpp in Headers */,
 				CCC2A03115CA6C7D00923850 /* CompositeRenderer.hpp in Headers */,
@@ -994,7 +987,6 @@
 				D80D525915EE698E00ACEA16 /* TileTessellator.cpp in Sources */,
 				CFCE679D15EFB06700B35FE0 /* IThreadUtils.cpp in Sources */,
 				CF47030B15EFB4C000426B8B /* ThreadUtils_iOS.mm in Sources */,
-				D8CD747B15F749A300B801CC /* Matrix.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
