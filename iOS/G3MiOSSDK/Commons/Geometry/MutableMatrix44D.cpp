@@ -1,5 +1,5 @@
 //
-//  Mat4.cpp
+//  MutableMatrix44D.cpp
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 06/06/12.
@@ -22,7 +22,7 @@ MutableMatrix44D MutableMatrix44D::multiply(const MutableMatrix44D& m) const {
   for (int j = 0; j < 4; j++) {
     const int j4 = j*4;
     for (int i = 0; i < 4; i++) {
-//      R[j * 4 + i] = m.get(j * 4) * _m[i] + m.get(j * 4 + 1) * _m[4 + i] + m.get(j * 4 + 2) * _m[8 + i] + m.get(j * 4 + 3) * _m[12 + i];
+      //      R[j * 4 + i] = m.get(j * 4) * _m[i] + m.get(j * 4 + 1) * _m[4 + i] + m.get(j * 4 + 2) * _m[8 + i] + m.get(j * 4 + 3) * _m[12 + i];
       R[j4 + i] = m._m[j4] * _m[i] + m._m[j4 + 1] * _m[4 + i] + m._m[j4 + 2] * _m[8 + i] + m._m[j4 + 3] * _m[12 + i];
     }
   }
@@ -36,7 +36,7 @@ void MutableMatrix44D::print(const std::string& name, const ILogger* log) const
   for (int j = 0; j < 4; j++) {
     log->logInfo("%.2f  %.2f %.2f %.2f\n", _m[j * 4], _m[j * 4 + 1],_m[j * 4 + 2], _m[j * 4 + 3] );
   }
-  log->logInfo("\n"); 
+  log->logInfo("\n");
 }
 
 
@@ -96,24 +96,19 @@ bool MutableMatrix44D::invert_matrix(const double m[16], double out[16]) {
   return true;
 }
 
-MutableMatrix44D MutableMatrix44D::inversed() const
-{
+MutableMatrix44D MutableMatrix44D::inversed() const {
   double out[16];
   invert_matrix(_m, out);
   
   return MutableMatrix44D(out);
 }
 
-
-MutableMatrix44D MutableMatrix44D::transposed() const
-{
-  MutableMatrix44D T(_m[0], _m[4], _m[8], _m[12],
-                     _m[1], _m[5], _m[9], _m[13], 
-                     _m[2], _m[6], _m[10], _m[14],
-                     _m[3], _m[7], _m[11], _m[15]);
-  return T;
+MutableMatrix44D MutableMatrix44D::transposed() const {
+  return MutableMatrix44D(_m[0], _m[4], _m[8], _m[12],
+                          _m[1], _m[5], _m[9], _m[13],
+                          _m[2], _m[6], _m[10], _m[14],
+                          _m[3], _m[7], _m[11], _m[15]);
 }
-
 
 void MutableMatrix44D::transformPoint(double out[4], const double in[4]) const {
 #define M(row,col)  _m[col*4+row]
@@ -178,8 +173,8 @@ Vector2D MutableMatrix44D::project(const Vector3D& point, const int viewport[4])
   out[1] /= out[3];
   out[2] /= out[3];
   
-  double winx = viewport[0] + (1.0f + out[0]) * viewport[2] / 2.0f;
-  double winy = viewport[1] + (1.0f + out[1]) * viewport[3] / 2.0f;
+  const double winx = viewport[0] + (1.0f + out[0]) * viewport[2] / 2.0f;
+  const double winy = viewport[1] + (1.0f + out[1]) * viewport[3] / 2.0f;
   //double winz = (1.0f + in[2]) / 2.0f;
   return Vector2D(winx, winy);
 }
@@ -188,14 +183,10 @@ Vector2D MutableMatrix44D::project(const Vector3D& point, const int viewport[4])
 
 
 MutableMatrix44D MutableMatrix44D::createTranslationMatrix(const Vector3D& t) {
-  const double T[16] = {
-    1, 0, 0, 0,
-    0, 1, 0, 0,
-    0, 0, 1, 0,
-    t.x(), t.y(), t.z(), 1
-  };
-  
-  return MutableMatrix44D(T);
+  return MutableMatrix44D(1, 0, 0, 0,
+                          0, 1, 0, 0,
+                          0, 0, 1, 0,
+                          t.x(), t.y(), t.z(), 1);
 }
 
 MutableMatrix44D MutableMatrix44D::createRotationMatrix(const Angle& angle, const Vector3D& p)
@@ -205,18 +196,14 @@ MutableMatrix44D MutableMatrix44D::createRotationMatrix(const Angle& angle, cons
   const double c = angle.cosinus();
   const double s = angle.sinus();
   
-  const double R[16] = {
-    p0.x() * p0.x() * (1 - c) + c, p0.x() * p0.y() * (1 - c) + p0.z() * s, p0.x() * p0.z() * (1 - c) - p0.y() * s, 0,
-    p0.y() * p0.x() * (1 - c) - p0.z() * s, p0.y() * p0.y() * (1 - c) + c, p0.y() * p0.z() * (1 - c) + p0.x() * s, 0,
-    p0.x() * p0.z() * (1 - c) + p0.y() * s, p0.y() * p0.z() * (1 - c) - p0.x() * s, p0.z() * p0.z() * (1 - c) + c, 0,
-    0, 0, 0, 1
-  };
-  
-  return MutableMatrix44D(R);
+  return MutableMatrix44D(p0.x() * p0.x() * (1 - c) + c, p0.x() * p0.y() * (1 - c) + p0.z() * s, p0.x() * p0.z() * (1 - c) - p0.y() * s, 0,
+                          p0.y() * p0.x() * (1 - c) - p0.z() * s, p0.y() * p0.y() * (1 - c) + c, p0.y() * p0.z() * (1 - c) + p0.x() * s, 0,
+                          p0.x() * p0.z() * (1 - c) + p0.y() * s, p0.y() * p0.z() * (1 - c) - p0.x() * s, p0.z() * p0.z() * (1 - c) + c, 0,
+                          0, 0, 0, 1);
 }
 
-MutableMatrix44D MutableMatrix44D::createGeneralRotationMatrix(const Angle& angle, 
-                                                    const Vector3D& axis, const Vector3D& point)
+MutableMatrix44D MutableMatrix44D::createGeneralRotationMatrix(const Angle& angle,
+                                                               const Vector3D& axis, const Vector3D& point)
 {
   MutableMatrix44D T1 = MutableMatrix44D::createTranslationMatrix(point.times(-1.0));
   MutableMatrix44D R  = MutableMatrix44D::createRotationMatrix(angle, axis);
@@ -233,13 +220,10 @@ MutableMatrix44D MutableMatrix44D::createModelMatrix(const MutableVector3D& pos,
   const double pe = w.dot(up);
   const MutableVector3D v = up.sub(w.times(pe)).normalized();
   const MutableVector3D u = w.cross(v);
-  const double LA[16] = {
-    u.x(), v.x(), -w.x(), 0,
-    u.y(), v.y(), -w.y(), 0,
-    u.z(), v.z(), -w.z(), 0,
-    -pos.dot(u), -pos.dot(v), pos.dot(w), 1
-  };
-  return MutableMatrix44D(LA);
+  return MutableMatrix44D(u.x(), v.x(), -w.x(), 0,
+                          u.y(), v.y(), -w.y(), 0,
+                          u.z(), v.z(), -w.z(), 0,
+                          -pos.dot(u), -pos.dot(v), pos.dot(w), 1);
 }
 
 MutableMatrix44D MutableMatrix44D::createProjectionMatrix(double left, double right,
@@ -250,20 +234,24 @@ MutableMatrix44D MutableMatrix44D::createProjectionMatrix(double left, double ri
   const double tb = top - bottom;
   const double fn = zfar - znear;
   
-  double P[16];
-  P[0] = 2 * znear / rl;
-  P[1] = P[2] = P[3] = P[4] = 0;
-  P[5] = 2 * znear / tb;
-  P[6] = P[7] = 0;
-  P[8] = (right + left) / rl;
-  P[9] = (top + bottom) / tb;
-  P[10] = -(zfar + znear) / fn;
-  P[11] = -1;
-  P[12] = P[13] = 0;
-  P[14] = -2 * zfar / fn * znear;
-  P[15] = 0;
+  //  double P[16];
+  //  P[0] = 2 * znear / rl;
+  //  P[1] = P[2] = P[3] = P[4] = 0;
+  //  P[5] = 2 * znear / tb;
+  //  P[6] = P[7] = 0;
+  //  P[8] = (right + left) / rl;
+  //  P[9] = (top + bottom) / tb;
+  //  P[10] = -(zfar + znear) / fn;
+  //  P[11] = -1;
+  //  P[12] = P[13] = 0;
+  //  P[14] = -2 * zfar / fn * znear;
+  //  P[15] = 0;
+  //  return MutableMatrix44D(P);
   
-  return MutableMatrix44D(P);
+  return MutableMatrix44D(2 * znear / rl, 0, 0, 0,
+                          0, 2 * znear / tb, 0, 0,
+                          (right + left) / rl, (top + bottom) / tb, -(zfar + znear) / fn, -1,
+                          0, 0, -2 * zfar / fn * znear, 0);
 }
 
 MutableMatrix44D MutableMatrix44D::createProjectionMatrix(const FrustumData& data)
@@ -271,22 +259,5 @@ MutableMatrix44D MutableMatrix44D::createProjectionMatrix(const FrustumData& dat
   return createProjectionMatrix(data._left, data._right,
                                 data._bottom, data._top,
                                 data._znear, data._zfar);
-}
-
-
-
-MutableMatrix44D MutableMatrix44D::fromTranslation(const MutableVector3D& translation) {
-  return MutableMatrix44D(1.0, 0.0, 0.0, translation.x(),
-                          0.0, 1.0, 0.0, translation.y(),
-                          0.0, 0.0, 1.0, translation.z(),
-                          0.0, 0.0, 0.0, 1.0);
-}
-
-MutableMatrix44D MutableMatrix44D::fromScale(const MutableVector3D& scale) {
-  return MutableMatrix44D(scale.x(), 0.0, 0.0, 0,
-                          0.0, scale.y(), 0.0, 0,
-                          0.0, 0.0, scale.z(), 0,
-                          0.0, 0.0, 0.0, 1.0);
-  
 }
 
