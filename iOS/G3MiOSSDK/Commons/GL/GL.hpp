@@ -89,8 +89,9 @@ private:
 #endif
 
   //Get Locations warning of errors
-  int checkedGetAttribLocation(int program, const std::string& name) const;
-  int checkedGetUniformLocation(int program, const std::string& name) const;
+  bool _errorGettingLocationOcurred;
+  int checkedGetAttribLocation(int program, const std::string& name);
+  int checkedGetUniformLocation(int program, const std::string& name);
   
 public:
   
@@ -176,7 +177,7 @@ public:
   
   void setProjection(const MutableMatrix44D &projection);
   
-  void useProgram(unsigned int program);
+  bool useProgram(unsigned int program);
   
   void enablePolygonOffset(float factor, float units);
   
