@@ -148,7 +148,7 @@ Vector3D MutableMatrix44D::unproject(const Vector3D& pixel3D, const int viewport
   m.transformPoint(out, in);
   if (out[3] == 0.0)
     return Vector3D::nan();
-  
+//  
   const double objx = out[0] / out[3];
   const double objy = out[1] / out[3];
   const double objz = out[2] / out[3];
@@ -233,21 +233,7 @@ MutableMatrix44D MutableMatrix44D::createProjectionMatrix(double left, double ri
   const double rl = right - left;
   const double tb = top - bottom;
   const double fn = zfar - znear;
-  
-  //  double P[16];
-  //  P[0] = 2 * znear / rl;
-  //  P[1] = P[2] = P[3] = P[4] = 0;
-  //  P[5] = 2 * znear / tb;
-  //  P[6] = P[7] = 0;
-  //  P[8] = (right + left) / rl;
-  //  P[9] = (top + bottom) / tb;
-  //  P[10] = -(zfar + znear) / fn;
-  //  P[11] = -1;
-  //  P[12] = P[13] = 0;
-  //  P[14] = -2 * zfar / fn * znear;
-  //  P[15] = 0;
-  //  return MutableMatrix44D(P);
-  
+
   return MutableMatrix44D(2 * znear / rl, 0, 0, 0,
                           0, 2 * znear / tb, 0, 0,
                           (right + left) / rl, (top + bottom) / tb, -(zfar + znear) / fn, -1,
@@ -260,4 +246,3 @@ MutableMatrix44D MutableMatrix44D::createProjectionMatrix(const FrustumData& dat
                                 data._bottom, data._top,
                                 data._znear, data._zfar);
 }
-

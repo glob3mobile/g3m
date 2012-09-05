@@ -89,8 +89,8 @@ public:
 
 class EffectWithDuration : public Effect {
 private:
-  long _started;
-  const long _duration;
+  long long _started;
+  const long long _duration;
   
 protected:
   
@@ -102,7 +102,7 @@ protected:
   }
   
   double percentDone(const TimeInterval& now) const {
-    const long elapsed = now.milliseconds() - _started;
+    const long long elapsed = now.milliseconds() - _started;
     
     const double percent = (double) elapsed / _duration;
     if (percent > 1) return 1;

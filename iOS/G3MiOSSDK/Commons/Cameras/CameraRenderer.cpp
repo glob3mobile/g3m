@@ -18,7 +18,6 @@ void CameraRenderer::initialize(const InitializationContext* ic) {
   //cameraContext = new CameraContext(
 }
 
-
 void CameraRenderer::onResizeViewportEvent(const EventContext* ec,
                                            int width, int height) {
   if (_cameraContext != NULL) {
@@ -26,29 +25,22 @@ void CameraRenderer::onResizeViewportEvent(const EventContext* ec,
   }
 }
 
-
-int CameraRenderer::render(const RenderContext* rc)
-{
+void CameraRenderer::render(const RenderContext* rc) {
   // create the CameraContext
   if (_cameraContext == NULL) {
     _cameraContext = new CameraContext(None, rc->getNextCamera());
   }
-
+  
   // render camera object
   rc->getCurrentCamera()->render(rc);
   
-  int min = Renderer::maxTimeToRender;
   for (unsigned int i=0; i<_handlers.size(); i++) {
-    int x = _handlers[i]->render(rc, _cameraContext);
-    if (x<min) min = x; 
+    _handlers[i]->render(rc, _cameraContext);
   }
-  return min;
 }
 
-
 bool CameraRenderer::onTouchEvent(const EventContext* ec,
-                                  const TouchEvent* touchEvent)
-{  
+                                  const TouchEvent* touchEvent) {
   // abort all the camera effect currently running
   if (touchEvent->getType() == Down)
     ec->getEffectsScheduler()->cancellAllEffectsFor((EffectTarget *) _cameraContext);

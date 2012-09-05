@@ -23,14 +23,14 @@ private:
   double  _degrees;
   const std::string _textureFilename;
   Mesh *  _quadMesh;
-
-  bool initMesh(const RenderContext* rc);
-
-
   
-public:    
-  BusyQuadRenderer(const std::string textureFilename): 
-  _degrees(0), 
+  bool initMesh(const RenderContext* rc);
+  
+  
+  
+public:
+  BusyQuadRenderer(const std::string textureFilename):
+  _degrees(0),
   _quadMesh(NULL),
   _textureFilename(textureFilename)
   {}
@@ -41,7 +41,7 @@ public:
     return true;
   }
   
-  int render(const RenderContext* rc);
+  void render(const RenderContext* rc);
   
   bool onTouchEvent(const EventContext* ec,
                     const TouchEvent* touchEvent) {
@@ -55,8 +55,8 @@ public:
   
   virtual ~BusyQuadRenderer() {}
   
-  void incDegrees(double value) { 
-    _degrees += value; 
+  void incDegrees(double value) {
+    _degrees += value;
     if (_degrees>360) _degrees -= 360;
   }
   
@@ -67,18 +67,18 @@ public:
   bool isEffectable() const{
     return true;
   }
-
+  
 };
 
 //***************************************************************
 
-class BusyEffect : public EffectWithForce {  
+class BusyEffect : public EffectWithForce {
 private:
   BusyQuadRenderer* _renderer;
   
 public:
   
-  BusyEffect(BusyQuadRenderer *renderer): 
+  BusyEffect(BusyQuadRenderer *renderer):
   EffectWithForce(1, 1),
   _renderer(renderer)
   { }

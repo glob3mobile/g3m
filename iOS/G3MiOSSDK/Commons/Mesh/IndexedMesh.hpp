@@ -57,7 +57,7 @@ private:
   const float*         _vertices;
   const int*           _indexes;
   const float*         _normals;
-  const float *        _colors;
+  const float*         _colors;
   const GLPrimitive    _primitive; 
 #endif
   
@@ -69,17 +69,17 @@ private:
   private final GLPrimitive     _primitive; 
 #endif
 
-  const bool           _owner;
-  const int            _numVertices;
-  const int            _numIndex;
-  const Color *        _flatColor;
-  const float          _colorsIntensity;
-  mutable Extent *     _extent;
+  const bool          _owner;
+  const int           _numVertices;
+  const int           _numIndex;
+  const Color*        _flatColor;
+  const float         _colorsIntensity;
+  mutable Extent*     _extent;
   
   Extent* computeExtent() const;
   
-  CenterStrategy       _centerStrategy;
-  Vector3D             _center;
+  CenterStrategy      _centerStrategy;
+  Vector3D            _center;
   
 public:
   

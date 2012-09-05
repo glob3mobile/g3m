@@ -28,9 +28,9 @@ private:
   Mesh * _mesh;
   
   
-  float * createVertices(const Planet& planet);
-  int * createMeshIndex();
-  float * createTextureCoordinates();
+  float* createVertices(const Planet& planet);
+  int*   createMeshIndex();
+  float* createTextureCoordinates();
   
   bool initializeMesh(const RenderContext* rc);
   
@@ -40,7 +40,7 @@ public:
   
   void initialize(const InitializationContext* ic);  
   
-  int render(const RenderContext* rc);
+  void render(const RenderContext* rc);
   
   bool onTouchEvent(const EventContext* ec,
                     const TouchEvent* touchEvent) {

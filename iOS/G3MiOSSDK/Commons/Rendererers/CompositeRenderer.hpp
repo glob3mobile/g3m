@@ -31,7 +31,7 @@ public:
   
   bool isReadyToRender(const RenderContext* rc);
 
-  int render(const RenderContext* rc);
+  void render(const RenderContext* rc);
   
   bool onTouchEvent(const EventContext* ec,
                     const TouchEvent* touchEvent);

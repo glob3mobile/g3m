@@ -19,7 +19,7 @@
 class DoubleTapEffect : public EffectWithDuration {
 public:
   
-  DoubleTapEffect(TimeInterval duration, const Vector3D& axis, 
+  DoubleTapEffect(TimeInterval duration, const Vector3D& axis,
                   const Angle& angle, double distance):
   EffectWithDuration(duration),
   _axis(axis),
@@ -71,24 +71,25 @@ public:
   
   ~CameraDoubleTapHandler() {}
   
-  
   bool onTouchEvent(const EventContext *eventContext,
-                    const TouchEvent* touchEvent, 
+                    const TouchEvent* touchEvent,
                     CameraContext *cameraContext);
-  int render(const RenderContext* rc, CameraContext *cameraContext) {
-    return Renderer::maxTimeToRender;
+  
+  void render(const RenderContext* rc,
+              CameraContext *cameraContext) {
+    
   }
-
+  
   void onDown(const EventContext *eventContext,
-              const TouchEvent& touchEvent, 
+              const TouchEvent& touchEvent,
               CameraContext *cameraContext);
   void onMove(const EventContext *eventContext,
-              const TouchEvent& touchEvent, 
+              const TouchEvent& touchEvent,
               CameraContext *cameraContext) {}
   void onUp(const EventContext *eventContext,
-            const TouchEvent& touchEvent, 
+            const TouchEvent& touchEvent,
             CameraContext *cameraContext) {}
-    
+  
 };
 
 

@@ -230,7 +230,7 @@ void CameraDoubleDragHandler::onUp(const EventContext *eventContext,
 }
 
 
-int CameraDoubleDragHandler::render(const RenderContext* rc, CameraContext *cameraContext) 
+void CameraDoubleDragHandler::render(const RenderContext* rc, CameraContext *cameraContext)
 {  
   // TEMP TO DRAW A POINT WHERE USER PRESS
   if (false) {
@@ -268,8 +268,5 @@ int CameraDoubleDragHandler::render(const RenderContext* rc, CameraContext *came
       //printf ("zoom with initial point = (%f, %f)\n", g.latitude().degrees(), g.longitude().degrees());
     }
   }
-  
-  return Renderer::maxTimeToRender;
+
 }
-
-

@@ -350,6 +350,7 @@ public class NativeGL2_Android
 
          _floatBuffersCache.put(fv, result);
       }
+
       result.rewind();
       return result;
    }

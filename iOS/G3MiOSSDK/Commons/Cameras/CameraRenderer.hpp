@@ -74,7 +74,7 @@ public:
     
   void addHandler(CameraEventHandler *handler) { _handlers.push_back(handler); }
   
-  int render(const RenderContext* rc);
+  void render(const RenderContext* rc);
   void initialize(const InitializationContext* ic);
   
   bool onTouchEvent(const EventContext* ec,

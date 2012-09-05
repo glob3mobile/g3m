@@ -17,13 +17,11 @@ class EventContext;
 class Renderer {
 public:
   
-  static const int maxTimeToRender = 1000;
-  
   virtual void initialize(const InitializationContext* ic) = 0;
   
   virtual bool isReadyToRender(const RenderContext* rc) = 0;
   
-  virtual int render(const RenderContext* rc) = 0;
+  virtual void render(const RenderContext* rc) = 0;
   
   virtual bool onTouchEvent(const EventContext* ec,
                             const TouchEvent* touchEvent) = 0;

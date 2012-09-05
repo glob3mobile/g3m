@@ -59,8 +59,7 @@ bool DummyRenderer::onTouchEvent(const EventContext* ec,
   return false;
 }
 
-int DummyRenderer::render(const RenderContext* rc)
-{
+void DummyRenderer::render(const RenderContext* rc) {
   
   // obtaing gl object reference
   GL *gl = rc->getGL();
@@ -139,5 +138,4 @@ int DummyRenderer::render(const RenderContext* rc)
   
   gl->enableTextures();
   
-  return Renderer::maxTimeToRender;
 }

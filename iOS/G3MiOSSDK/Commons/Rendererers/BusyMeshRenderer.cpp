@@ -28,9 +28,9 @@ void BusyMeshRenderer::initialize(const InitializationContext* ic)
   // add number of vertex for the square
   
   // create vertices and indices in dinamic memory
-  float *vertices = new float [numVertices*3];
-  int *indices = new int [numIndices+2];
-  float *colors = new float [numVertices*4];
+  float* vertices = new float[numVertices*3];
+  int*   indices  = new int[numIndices];
+  float* colors   = new float[numVertices*4];
   
   // create vertices
   unsigned int nv=0, ni=0, nc=0;
@@ -95,7 +95,7 @@ void BusyMeshRenderer::stop() {
   //int _TODO_stop_effects;
 }
 
-int BusyMeshRenderer::render(const RenderContext* rc) 
+void BusyMeshRenderer::render(const RenderContext* rc)
 {  
   GL* gl = rc->getGL();
   
@@ -136,6 +136,4 @@ int BusyMeshRenderer::render(const RenderContext* rc)
   gl->popMatrix();
   
   gl->disableBlend();
-  
-  return Renderer::maxTimeToRender;
 }

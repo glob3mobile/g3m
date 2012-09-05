@@ -9,10 +9,10 @@
 #ifndef G3MiOSSDK_Matrix_hpp
 #define G3MiOSSDK_Matrix_hpp
 
+#include "Vector3D.hpp"
+#include "Vector2D.hpp"
 
-class Vector3D;
-class Vector2D;
-class MutableVector3D;
+#include "MutableVector3D.hpp"
 class FrustumData;
 
 #include "Angle.hpp"
@@ -25,61 +25,40 @@ class FrustumData;
 
 class Matrix{
   
-  double _m00, _m01, _m02, _m03;
-  double _m10, _m11, _m12, _m13;
-  double _m20, _m21, _m22, _m23;
-  double _m30, _m31, _m32, _m33;
+  //_m23 -> row 2, column 3
+  double _m00;
+  double _m01; 
+  double _m02;
+  double _m03;
+  double _m10; 
+  double _m11;
+  double _m12;
+  double _m13;
+  double _m20;
+  double _m21;
+  double _m22;
+  double _m23;
+  double _m30;
+  double _m31;
+  double _m32;
+  double _m33;
   
 public:
   
-  static void test(){
-    
-//    MutableMatrix44D mx = MutableMatrix44D(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16);
-//    MutableMatrix44D mx2 = mx.transposed();
-    
-    
-    MutableMatrix44D m = MutableMatrix44D::identity();
-    Matrix m2 = Matrix::identity();
-    
+  static void compare(MutableMatrix44D& m, Matrix& m2){
     for (int i = 0; i < 16; i++) {
       if (m.get(i) != m2.get(i)){
-        printf("MATRIX FAIL");
-      }
-    }
-
-    
-    m = MutableMatrix44D::createOrthographicProjectionMatrix(1, 2, 3, 4, 5, 6);
-    m2 = Matrix::createOrthographicProjectionMatrix(1, 2, 3, 4, 5, 6);
-    
-    for (int i = 0; i < 16; i++) {
-      if (m.get(i) != m2.get(i)){
-        printf("MATRIX FAIL");
+        printf("MATRIX FAIL %d\n", i);
       }
     }
     
-    m = m.multiply(MutableMatrix44D::identity());
-    m2 = m2.multiply(Matrix::identity());
+    float fm[16];
+    float fm2[16];
+    m.copyToColumnMajorFloatArray(fm);
+    m2.copyToColumnMajorFloatArray(fm2);
     
     for (int i = 0; i < 16; i++) {
-      if (m.get(i) != m2.get(i)){
-        printf("MATRIX FAIL");
-      }
-    }
-    
-    MutableMatrix44D mm1 = MutableMatrix44D::createOrthographicProjectionMatrix(1, 2, 3, 4, 5, 6);
-    Matrix m1 = Matrix::createOrthographicProjectionMatrix(1, 2, 3, 4, 5, 6);
-    
-    for (int i = 0; i < 16; i++) {
-      if (mm1.get(i) != m1.get(i)){
-        printf("MATRIX FAIL");
-      }
-    }
-    
-    m = m.multiply(mm1);
-    m2 = m1.multiply(m2);
-    
-    for (int i = 0; i < 16; i++) {
-      if (m.get(i) != m2.get(i)){
+      if (fm[i] != fm2[i]){
         printf("MATRIX FAIL %d\n", i);
       }
     }
@@ -87,14 +66,85 @@ public:
     
   }
   
+  static void test(){
+    MutableMatrix44D m = MutableMatrix44D::identity();
+    Matrix m2 = Matrix::identity();
+    
+    compare(m, m2);
+
+    
+    m = MutableMatrix44D::createOrthographicProjectionMatrix(1, 2, 3, 4, 5, 6);
+    m2 = Matrix::createOrthographicProjectionMatrix(1, 2, 3, 4, 5, 6);
+    
+    compare(m, m2);
+    
+    m = m.multiply(MutableMatrix44D::identity());
+    m2 = m2.multiply(Matrix::identity());
+    
+    compare(m, m2);
+    
+    m = m.multiply(MutableMatrix44D::createOrthographicProjectionMatrix(1, 2, 3, 4, 5, 6));
+    m2 = m2.multiply(Matrix::createOrthographicProjectionMatrix(1, 2, 3, 4, 5, 6));
+    
+
+    
+    m = m.inversed();
+    m2 = m2.inversed();
+    
+    compare(m, m2);
+    
+    int viewport[] = {4,5,6,7};
+    Vector3D p(1.0,2.0,3.0);
+    Vector3D v1 = m.unproject(p, viewport);
+    Vector3D v2 = m2.unproject(p, viewport);
+    
+    if (v1.x() != v2.x()){
+      printf("MATRIX FAIL\n");
+    }
+    
+    Vector2D v3 = m.project(p, viewport);
+    Vector2D v4 = m2.project(p, viewport);
+    
+    if (v3.x() != v4.x()){
+      printf("MATRIX FAIL\n");
+    }
+    
+    m = MutableMatrix44D::createTranslationMatrix(p);
+    m2 = Matrix::createTranslationMatrix(p);
+    
+    compare(m, m2);
+    
+    Angle a = Angle::fromDegrees(32);
+    m = MutableMatrix44D::createRotationMatrix(a, p);
+    m2 = Matrix::createRotationMatrix(a, p);
+    
+    compare(m, m2);
+    
+    m= MutableMatrix44D::createGeneralRotationMatrix(a, p, p);
+    m2 = Matrix::createGeneralRotationMatrix(a, p, p);
+    
+    MutableVector3D p2(5,6,7);
+    MutableVector3D p3(0,0,0);
+     MutableVector3D p4(1,1,1);
+    
+    m= MutableMatrix44D::createModelMatrix(p2,p3,p4);
+    m2= Matrix::createModelMatrix(p2,p3,p4);
+    
+        compare(m, m2);
+    
+    
+  }
   
   
+  
+
   //CONTRUCTORS
   
-  Matrix(double m00, double m01, double m02, double m03,
-                   double m10, double m11, double m12, double m13,
-                   double m20, double m21, double m22, double m23,
-                   double m30, double m31, double m32, double m33) {
+  //Contructor parameters in column major order
+  Matrix(double m00, double m10, double m20, double m30,
+         double m01, double m11, double m21, double m31,
+         double m02, double m12, double m22, double m32,
+         double m03, double m13, double m23, double m33){
     _m00  = m00;
     _m01  = m01;
     _m02  = m02;
@@ -160,94 +210,42 @@ public:
     _m33  = m._m33;
   }
   
-  Matrix(const double M[16]){
-    _m00  = M[0];
-    _m01  = M[1];
-    _m02  = M[2];
-    _m03  = M[3];
-    
-    _m10  = M[4];
-    _m11  = M[5];
-    _m12  = M[6];
-    _m13  = M[7];
-    
-    _m20  = M[8];
-    _m21  = M[9];
-    _m22  = M[10];
-    _m23  = M[11];
-    
-    _m30  = M[12];
-    _m31  = M[13];
-    _m32  = M[14];
-    _m33  = M[15];
-  }
-  
-  Matrix(const float M[16]){
-    _m00  = (double) M[0];
-    _m01  = (double) M[1];
-    _m02  = (double) M[2];
-    _m03  = (double) M[3];
-    
-    _m10  = (double) M[4];
-    _m11  = (double) M[5];
-    _m12  = (double) M[6];
-    _m13  = (double) M[7];
-    
-    _m20  = (double) M[8];
-    _m21  = (double) M[9];
-    _m22  = (double) M[10];
-    _m23  = (double) M[11];
-    
-    _m30  = (double) M[12];
-    _m31  = (double) M[13];
-    _m32  = (double) M[14];
-    _m33  = (double) M[15];
-  }
-
   //SPECIAL MATRICES
   
   static Matrix identity() {
-    float I[16] = {
-      1, 0, 0, 0,
-      0, 1, 0, 0,
-      0, 0, 1, 0,
-      0, 0, 0, 1
-    };
-    return Matrix(I);
+    return Matrix(1, 0, 0, 0,
+                            0, 1, 0, 0,
+                            0, 0, 1, 0,
+                            0, 0, 0, 1);
   }
-//  
-//  static Matrix fromRotationX(const Angle& angle) {
-//    double c = angle.cosinus();
-//    double s = angle.sinus();
-//    return Matrix(1.0, 0.0, 0.0, 0.0,
-//                  0.0,   c,  -s, 0.0,
-//                  0.0,   s,   c, 0.0,
-//                  0.0, 0.0, 0.0, 1.0);
-//    
-//  }
-//  
-//  static Matrix fromRotationY(const Angle& angle) {
-//    double c = angle.cosinus();
-//    double s = angle.sinus();
-//    return Matrix(c, 0.0,   s, 0.0,
-//                  0.0, 1.0, 0.0, 0.0,
-//                  -s, 0.0,   c, 0.0,
-//                  0.0, 0.0, 0.0, 1.0);
-//    
-//  }
-//  
-//  static Matrix fromRotationZ(const Angle& angle) {
-//    double c = angle.cosinus();
-//    double s = angle.sinus();
-//    return Matrix(c,  -s, 0.0, 0.0,
-//                  s,   c, 0.0, 0.0,
-//                  0.0, 0.0, 1.0, 0.0,
-//                  0.0, 0.0, 0.0, 1.0);
-//  }
-//  
-//  static Matrix fromTranslation(const MutableVector3D& translation);
-//  
-//  static Matrix fromScale(const MutableVector3D& scale);
+  
+  static Matrix invalid() {
+    return Matrix(GMath.NanD(), GMath.NanD(), GMath.NanD(), GMath.NanD(),
+                  GMath.NanD(), GMath.NanD(), GMath.NanD(), GMath.NanD(),
+                  GMath.NanD(), GMath.NanD(), GMath.NanD(), GMath.NanD(),
+                  GMath.NanD(), GMath.NanD(), GMath.NanD(), GMath.NanD());
+  }
+  
+  bool isValid() {
+    if (GMath.isNan(_m00)) return false;
+    if (GMath.isNan(_m01)) return false;
+    if (GMath.isNan(_m02)) return false;
+    if (GMath.isNan(_m03)) return false;
+    if (GMath.isNan(_m10)) return false;
+    if (GMath.isNan(_m11)) return false;
+    if (GMath.isNan(_m12)) return false;
+    if (GMath.isNan(_m13)) return false;
+    if (GMath.isNan(_m20)) return false;
+    if (GMath.isNan(_m21)) return false;
+    if (GMath.isNan(_m22)) return false;
+    if (GMath.isNan(_m23)) return false;
+    if (GMath.isNan(_m30)) return false;
+    if (GMath.isNan(_m31)) return false;
+    if (GMath.isNan(_m32)) return false;
+    if (GMath.isNan(_m33)) return false;
+    return true;
+  }
+
 //  
   //OPERATIONS
   
@@ -257,52 +255,53 @@ public:
   
   Matrix transposed() const;
   
+  //Returns values from 0..15 in column mayor order
   double get(int i) const {
     switch (i) {
       case 0:
         return _m00;
         break;
       case 1:
-        return _m01;
+        return _m10;
         break;
       case 2:
-        return _m02;
+        return _m20;
         break;
       case 3:
-        return _m03;
+        return _m30;
         break;
       case 4:
-        return _m10;
+        return _m01;
         break;
       case 5:
         return _m11;
         break;
       case 6:
-        return _m12;
+        return _m21;
         break;
       case 7:
-        return _m13;
+        return _m31;
         break;
       case 8:
-        return _m20;
+        return _m02;
         break;
       case 9:
-        return _m21;
+        return _m12;
         break;
       case 10:
         return _m22;
         break;
       case 11:
-        return _m23;
+        return _m32;
         break;
       case 12:
-        return _m30;
+        return _m03;
         break;
       case 13:
-        return _m31;
+        return _m13;
         break;
       case 14:
-        return _m32;
+        return _m23;
         break;
       case 15:
         return _m33;
@@ -315,25 +314,25 @@ public:
   }
   
   
-  void copyToFloatMatrix(float M[16]) const { 
+  void copyToColumnMajorFloatArray(float M[16]) const {
     M[ 0] = (float) _m00;
-    M[ 1] = (float) _m01;
-    M[ 2] = (float) _m02;
-    M[ 3] = (float) _m03;
+    M[ 1] = (float) _m10;
+    M[ 2] = (float) _m20;
+    M[ 3] = (float) _m30;
     
-    M[ 4] = (float) _m10;
+    M[ 4] = (float) _m01;
     M[ 5] = (float) _m11;
-    M[ 6] = (float) _m12;
-    M[ 7] = (float) _m13;
+    M[ 6] = (float) _m21;
+    M[ 7] = (float) _m31;
     
-    M[ 8] = (float) _m20;
-    M[ 9] = (float) _m21;
+    M[ 8] = (float) _m02;
+    M[ 9] = (float) _m12;
     M[10] = (float) _m22;
-    M[11] = (float) _m23;
+    M[11] = (float) _m32;
     
-    M[12] = (float) _m30;
-    M[13] = (float) _m31;
-    M[14] = (float) _m32;
+    M[12] = (float) _m03;
+    M[13] = (float) _m13;
+    M[14] = (float) _m23;
     M[15] = (float) _m33;
   }
   
@@ -368,19 +367,10 @@ public:
     const double tb = top - bottom;
     const double fn = zfar - znear;
     
-    double P[16];
-    P[0] = 2 / rl;
-    P[1] = P[2] = P[3] = P[4] = 0;
-    P[5] = 2 / tb;
-    P[6] = P[7] = P[8] = P[9] = 0;
-    P[10] = -2 / fn;
-    P[11] = 0;
-    P[12] = -(right+left) / rl;
-    P[13] = -(top+bottom) / tb;
-    P[14] = -(zfar+znear) / fn;
-    P[15] = 1;
-    
-    return Matrix(P);
+    return Matrix(2 / rl, 0, 0, 0,
+                            0, 2 / tb, 0, 0,
+                            0, 0, -2 / fn, 0,
+                            -(right+left) / rl, -(top+bottom) / tb, -(zfar+znear) / fn, 1 );
   }
 
   

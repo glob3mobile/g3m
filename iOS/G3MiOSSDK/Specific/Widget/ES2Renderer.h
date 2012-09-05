@@ -30,7 +30,7 @@
   BOOL _firstRender;
 }
 
-- (int)render: (void*) widget;
+- (void)render: (void*) widget;
 
 - (BOOL)resizeFromLayer:(CAEAGLLayer *)layer;
 
