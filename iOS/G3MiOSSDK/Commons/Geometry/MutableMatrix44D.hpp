@@ -167,56 +167,39 @@ public:
     switch (i) {
       case 0:
         return _m00;
-        break;
       case 1:
         return _m10;
-        break;
       case 2:
         return _m20;
-        break;
       case 3:
         return _m30;
-        break;
       case 4:
         return _m01;
-        break;
       case 5:
         return _m11;
-        break;
       case 6:
         return _m21;
-        break;
       case 7:
         return _m31;
-        break;
       case 8:
         return _m02;
-        break;
       case 9:
         return _m12;
-        break;
       case 10:
         return _m22;
-        break;
       case 11:
         return _m32;
-        break;
       case 12:
         return _m03;
-        break;
       case 13:
         return _m13;
-        break;
       case 14:
         return _m23;
-        break;
       case 15:
         return _m33;
-        break;
       default:
         ILogger::instance()->logError("Accesing MutableMutableMatrix44D44D out of index");
         return 0;
-        break;
     }
   }
   
