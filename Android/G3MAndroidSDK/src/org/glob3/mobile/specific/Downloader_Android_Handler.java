@@ -125,7 +125,7 @@ public class Downloader_Android_Handler {
 
 
    public void runWithDownloader(final IDownloader downloader) {
-      Log.i(TAG, "runWithDownloader url=" + _url.getPath());
+      //      Log.i(TAG, "runWithDownloader url=" + _url.getPath());
 
       final Downloader_Android dl = (Downloader_Android) downloader;
       HttpURLConnection connection = null;
@@ -133,8 +133,8 @@ public class Downloader_Android_Handler {
       byte[] data = null;
       try {
          connection = (HttpURLConnection) _URL.openConnection();
-         connection.setConnectTimeout(60000);
-         connection.setReadTimeout(60000);
+         connection.setConnectTimeout(dl.getConnectTimeout());
+         connection.setReadTimeout(dl.getReadTimeout());
          connection.setUseCaches(false);
          connection.connect();
          statusCode = connection.getResponseCode();
@@ -152,6 +152,7 @@ public class Downloader_Android_Handler {
             baos.flush();
             data = baos.toByteArray();
             baos.close();
+            bis.close();
          }
       }
       catch (final IOException e) {
@@ -205,14 +206,14 @@ public class Downloader_Android_Handler {
                while (iter.hasNext()) {
                   final ListenerEntry entry = iter.next();
                   if (entry.isCanceled()) {
-                     Log.w(TAG, "triggering onCanceledDownload");
+                     //                     Log.w(TAG, "triggering onCanceledDownload");
                      entry.getListener().onCanceledDownload(response);
 
-                     Log.w(TAG, "triggering onCancel");
+                     //                     Log.w(TAG, "triggering onCancel");
                      entry.getListener().onCancel(_url);
                   }
                   else {
-                     Log.i(TAG, "triggering onDownload");
+                     //                     Log.i(TAG, "triggering onDownload");
                      entry.getListener().onDownload(response);
                   }
                }
@@ -231,7 +232,7 @@ public class Downloader_Android_Handler {
 
                while (iter.hasNext()) {
                   final ListenerEntry entry = iter.next();
-                  Log.e(TAG, "triggering onError");
+                  //                  Log.e(TAG, "triggering onError");
                   entry.getListener().onError(response);
                }
             }

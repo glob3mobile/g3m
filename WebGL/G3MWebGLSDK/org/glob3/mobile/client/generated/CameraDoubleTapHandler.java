@@ -10,7 +10,6 @@ public class CameraDoubleTapHandler extends CameraEventHandler
   {
   }
 
-
   public final boolean onTouchEvent(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	// only one finger needed
@@ -24,9 +23,10 @@ public class CameraDoubleTapHandler extends CameraEventHandler
 	onDown(eventContext, touchEvent, cameraContext);
 	return true;
   }
-  public final int render(RenderContext rc, CameraContext cameraContext)
+
+  public final void render(RenderContext rc, CameraContext cameraContext)
   {
-	return Renderer.maxTimeToRender;
+
   }
 
   public final void onDown(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)

@@ -215,7 +215,7 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
 //  return value;
 //}
 
-int G3MWidget::render() {
+void G3MWidget::render() {
   _timer->start();
   _renderCounter++;
   
@@ -292,7 +292,7 @@ int G3MWidget::render() {
 //  }
   _gl->clearScreen(_backgroundColor);
 
-  const int timeToRedraw = _selectedRenderer->render(&rc);
+  _selectedRenderer->render(&rc);
   
   //  _frameTasksExecutor->doPostRenderCycle(&rc);
   
@@ -335,7 +335,5 @@ int G3MWidget::render() {
       _lastCacheStatistics = cacheStatistics;
     }
   }
-  
-  return timeToRedraw;
   
 }

@@ -28,7 +28,7 @@ void GLErrorRenderer::onResizeViewportEvent(const EventContext* ec,
                                             int width, int height) {
 }
 
-int GLErrorRenderer::render(const RenderContext *rc) {
+void GLErrorRenderer::render(const RenderContext *rc) {
   GL* gl = rc->getGL();
   const ILogger* logger = rc->getLogger();
   
@@ -45,6 +45,4 @@ int GLErrorRenderer::render(const RenderContext *rc) {
   }
 #endif
 
-  
-  return Renderer::maxTimeToRender;
 }

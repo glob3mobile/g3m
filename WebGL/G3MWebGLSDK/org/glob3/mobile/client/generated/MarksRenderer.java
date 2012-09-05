@@ -27,7 +27,7 @@ public class MarksRenderer extends Renderer
   
   }
 
-  public int render(RenderContext rc)
+  public void render(RenderContext rc)
   {
   //  rc.getLogger()->logInfo("MarksRenderer::render()");
   
@@ -58,10 +58,7 @@ public class MarksRenderer extends Renderer
 	gl.disableVerticesPosition();
 	gl.disableTexture2D();
   
-  
-	return Renderer.maxTimeToRender;
   }
-
 
   public void dispose()
   {

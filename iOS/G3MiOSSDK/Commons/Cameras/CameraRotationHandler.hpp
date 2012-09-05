@@ -27,7 +27,9 @@ public:
   bool onTouchEvent(const EventContext *eventContext,
                     const TouchEvent* touchEvent, 
                     CameraContext *cameraContext);
-  int render(const RenderContext* rc, CameraContext *cameraContext);
+  
+  void render(const RenderContext* rc,
+              CameraContext *cameraContext);
   
   void onDown(const EventContext *eventContext,
               const TouchEvent& touchEvent, 

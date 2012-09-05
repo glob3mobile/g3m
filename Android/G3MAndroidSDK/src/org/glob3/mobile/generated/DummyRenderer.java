@@ -71,7 +71,7 @@ public class DummyRenderer extends Renderer
 	}
   }
 
-  public final int render(RenderContext rc)
+  public final void render(RenderContext rc)
   {
   
 	// obtaing gl object reference
@@ -151,7 +151,6 @@ public class DummyRenderer extends Renderer
   
 	gl.enableTextures();
   
-	return Renderer.maxTimeToRender;
   }
 
   public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)

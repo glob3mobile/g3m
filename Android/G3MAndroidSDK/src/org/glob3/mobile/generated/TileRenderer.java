@@ -146,7 +146,7 @@ public class TileRenderer extends Renderer
 	_texturizer.initialize(ic, _parameters);
   }
 
-  public final int render(RenderContext rc)
+  public final void render(RenderContext rc)
   {
 	TilesStatistics statistics = new TilesStatistics();
 	//Saving camera for Long Press Event
@@ -203,7 +203,7 @@ public class TileRenderer extends Renderer
 		statistics.log(rc.getLogger());
 	  }
 	}
-	return Renderer.maxTimeToRender;
+  
   }
 
   public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)

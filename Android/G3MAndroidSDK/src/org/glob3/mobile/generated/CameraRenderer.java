@@ -23,7 +23,7 @@ public class CameraRenderer extends Renderer
 	  _handlers.add(handler);
   }
 
-  public final int render(RenderContext rc)
+  public final void render(RenderContext rc)
   {
 	// create the CameraContext
 	if (_cameraContext == null)
@@ -34,14 +34,10 @@ public class CameraRenderer extends Renderer
 	// render camera object
 	rc.getCurrentCamera().render(rc);
   
-	int min = Renderer.maxTimeToRender;
 	for (int i = 0; i<_handlers.size(); i++)
 	{
-	  int x = _handlers.get(i).render(rc, _cameraContext);
-	  if (x<min)
-		  min = x;
+	  _handlers.get(i).render(rc, _cameraContext);
 	}
-	return min;
   }
   public final void initialize(InitializationContext ic)
   {

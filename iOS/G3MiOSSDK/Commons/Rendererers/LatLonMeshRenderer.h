@@ -24,7 +24,7 @@ public:
   
   void initialize(const InitializationContext* ic);  
   
-  int render(const RenderContext* rc);
+  void render(const RenderContext* rc);
   
   bool onTouchEvent(const EventContext* ec,
                     const TouchEvent* touchEvent) {

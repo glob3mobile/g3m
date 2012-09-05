@@ -32,8 +32,8 @@ void LatLonMeshRenderer::initialize(const InitializationContext* ic)
   int i[] = { 0, 1, 2, 3};
   
   // create vertices and indices in dinamic memory
-  float *vertices = new float [numVertices*3];
-  int *indices = new int [numIndices];
+  float* vertices = new float [numVertices*3];
+  int*   indices  = new int [numIndices];
 
   Color *flatColor = new Color(Color::fromRGBA((float)1.0, (float)1.0, (float)0.0, (float)1.0));
 
@@ -56,8 +56,7 @@ void LatLonMeshRenderer::initialize(const InitializationContext* ic)
 }  
 
 
-int LatLonMeshRenderer::render(const RenderContext* rc)
-{  
+void LatLonMeshRenderer::render(const RenderContext* rc) {  
 //  GL *gl = rc->getGL();
   
   mesh->render(rc);
@@ -70,5 +69,4 @@ int LatLonMeshRenderer::render(const RenderContext* rc)
   mesh->render(rc);
   gl->popMatrix();*/
 
-  return Renderer::maxTimeToRender;
 }
