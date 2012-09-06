@@ -14,9 +14,8 @@
 class IntBuffer_iOS : public IIntBuffer {
 private:
   const int _size;
-  int*    _values;
-  
-  int _timestamp;
+  int*      _values;
+  int       _timestamp;
 
 public:
   IntBuffer_iOS(int size) :
@@ -34,10 +33,9 @@ public:
     return _size;
   }
   
-  long long timestamp() const {
+  int timestamp() const {
     return _timestamp;
   }
-
   
   int get(int i) const {
     return _values[i];

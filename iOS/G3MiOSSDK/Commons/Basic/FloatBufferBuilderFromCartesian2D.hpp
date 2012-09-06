@@ -15,9 +15,8 @@
 class FloatBufferBuilderFromCartesian2D: public FloatBufferBuilder {
 public:
   void add(const Vector2D& vector) {
-    float x = (float) vector.x(), y = (float) vector.y();
-    _values.push_back(x);
-    _values.push_back(y);
+    _values.push_back( (float) vector.x() );
+    _values.push_back( (float) vector.y() );
   }
 };
 

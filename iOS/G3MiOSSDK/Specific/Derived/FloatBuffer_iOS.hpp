@@ -15,8 +15,7 @@ class FloatBuffer_iOS : public IFloatBuffer {
 private:
   const int _size;
   float*    _values;
-  
-  int _timestamp;
+  int       _timestamp;
   
 public:
   FloatBuffer_iOS(int size) :
@@ -25,17 +24,16 @@ public:
   {
     _values = new float[size];
   }
-
+  
   virtual ~FloatBuffer_iOS() {
     delete [] _values;
   }
-  
   
   int size() const {
     return _size;
   }
   
-  long long timestamp() const {
+  int timestamp() const {
     return _timestamp;
   }
   
@@ -49,7 +47,6 @@ public:
       _timestamp++;
     }
   }
-  
   
 };
 

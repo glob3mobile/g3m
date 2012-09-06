@@ -42,7 +42,9 @@ public:
   }
   
   void add(const Vector3D& vector) {
-    float x = (float) vector.x(), y = (float) vector.y(), z = (float) vector.z();
+    float x = (float) vector.x();
+    float y = (float) vector.y();
+    float z = (float) vector.z();
     
     if (_centerStrategy == FirstVertex && _values.size() == 0){
       setCenter(vector);

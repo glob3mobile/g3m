@@ -229,7 +229,7 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
     addVertex(planet, &vertices, g);
     indices.push_back(posS++);
   }
-  
+   
   // north side
   for (int i = resolutionMinus1; i > 0; i--) {
     const Geodetic3D g(sector.getInnerPoint((double)i/resolutionMinus1, 0), offset);
