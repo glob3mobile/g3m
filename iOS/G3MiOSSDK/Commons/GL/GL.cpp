@@ -225,23 +225,17 @@ void GL::vertexPointer(int size, int stride, IFloatBuffer* vertex) {
     ILogger::instance()->logError("Attribute Position Invalid");
   }
   
-#ifdef C_CODE
-  _gl->vertexAttribPointer(Attributes.Position, size, Float, false, stride, vertex);
-#else
-  _gl->vertexAttribPointer(Attributes.Position, size, GLType.Float, false, stride, vertex);
-#endif
+  _gl->vertexAttribPointer(Attributes.Position, size, false, stride, vertex);
 }
 
 void GL::drawTriangleStrip(IIntBuffer* indices) {
 #ifdef C_CODE
   _gl->drawElements(TriangleStrip,
                     indices->size(),
-                    Int,
                     indices);
 #else
   _gl->drawElements(GLPrimitive.TriangleStrip,
                     indices.size(),
-                    GLType.Int,
                     indices);
 #endif
 }
@@ -250,7 +244,6 @@ void GL::drawLines(IIntBuffer* indices) {
 #ifdef C_CODE
   _gl->drawElements(Lines,
                     indices->size(),
-                    Int,
                     indices);
 #else
   _gl->drawElements(GLPrimitive.Lines,
@@ -264,7 +257,6 @@ void GL::drawLineLoop(IIntBuffer* indices) {
 #ifdef C_CODE
   _gl->drawElements(LineLoop,
                     indices->size(),
-                    Int,
                     indices);
 #else
   _gl->drawElements(GLPrimitive.LineLoop,
@@ -278,12 +270,10 @@ void GL::drawPoints(IIntBuffer* indices) {
 #ifdef C_CODE
   _gl->drawElements(Points,
                     indices->size(),
-                    Int,
                     indices);
 #else
   _gl->drawElements(GLPrimitive.Points,
                     indices.size(),
-                    GLType.Int,
                     indices);
 #endif
 }
