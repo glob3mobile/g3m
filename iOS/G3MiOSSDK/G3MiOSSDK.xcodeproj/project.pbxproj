@@ -406,6 +406,7 @@
 		D8CD74D615F8D3F000B801CC /* SimpleFloatBufferBuilder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = SimpleFloatBufferBuilder.hpp; path = Commons/Basic/SimpleFloatBufferBuilder.hpp; sourceTree = "<group>"; };
 		D8CD74D815F8D56800B801CC /* FloatBufferBuilderFromCartesian3D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FloatBufferBuilderFromCartesian3D.hpp; path = Commons/Basic/FloatBufferBuilderFromCartesian3D.hpp; sourceTree = "<group>"; };
 		D8CD74D915F8DBE800B801CC /* FloatBufferBuilderFromCartesian2D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FloatBufferBuilderFromCartesian2D.hpp; path = Commons/Basic/FloatBufferBuilderFromCartesian2D.hpp; sourceTree = "<group>"; };
+		D8CD74DD15F8DE9500B801CC /* FloatBufferBuilderFromGeodetic.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = FloatBufferBuilderFromGeodetic.hpp; path = Commons/Basic/FloatBufferBuilderFromGeodetic.hpp; sourceTree = "<group>"; };
 		D8D347B915E5133B00EDB394 /* IStringBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IStringBuilder.cpp; path = Commons/Interfaces/IStringBuilder.cpp; sourceTree = "<group>"; };
 		D8E0EC1215C1B1BB0010A68A /* StaticImageLayer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StaticImageLayer.hpp; sourceTree = "<group>"; };
 		D8E0EC1415C1B1CD0010A68A /* StaticImageLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StaticImageLayer.cpp; sourceTree = "<group>"; };
@@ -564,6 +565,7 @@
 				D8CD74D615F8D3F000B801CC /* SimpleFloatBufferBuilder.hpp */,
 				D8CD74D815F8D56800B801CC /* FloatBufferBuilderFromCartesian3D.hpp */,
 				D8CD74D915F8DBE800B801CC /* FloatBufferBuilderFromCartesian2D.hpp */,
+				D8CD74DD15F8DE9500B801CC /* FloatBufferBuilderFromGeodetic.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
