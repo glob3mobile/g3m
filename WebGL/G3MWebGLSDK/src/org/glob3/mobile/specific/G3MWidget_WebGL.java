@@ -1,18 +1,28 @@
+
+
 package org.glob3.mobile.specific;
 
+import java.util.ArrayList;
+
+import org.glob3.mobile.generated.CameraDoubleDragHandler;
+import org.glob3.mobile.generated.CameraDoubleTapHandler;
 import org.glob3.mobile.generated.CameraRenderer;
-import org.glob3.mobile.generated.Color;
+import org.glob3.mobile.generated.CameraRotationHandler;
+import org.glob3.mobile.generated.CameraSingleDragHandler;
 import org.glob3.mobile.generated.CompositeRenderer;
 import org.glob3.mobile.generated.DummyRenderer;
 import org.glob3.mobile.generated.G3MWidget;
+import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.INativeGL;
+import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LogLevel;
-import org.glob3.mobile.generated.Planet;
+import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.SimplePlanetRenderer;
-import org.glob3.mobile.generated.TexturesHandler;
+import org.glob3.mobile.generated.TilesRenderParameters;
 import org.glob3.mobile.generated.TouchEvent;
+import org.glob3.mobile.generated.UserData;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.Scheduler;
@@ -26,14 +36,19 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 
 
-public class G3MWidget_WebGL extends Composite {
+public class G3MWidget_WebGL
+         extends
+            Composite {
 
 
    public static final String         canvasId              = "g3m-canvas";
    private final FlowPanel            _panel                = new FlowPanel();
    private Canvas                     _canvas;
    private final MotionEventProcessor _motionEventProcessor = new MotionEventProcessor();
-
+   ArrayList<ICameraConstrainer>      _cameraConstraints    = null;
+   LayerSet                           _layerSet             = null;
+   ArrayList<Renderer>                _renderers            = null;
+   UserData                           _userData             = null;
 
    G3MWidget                          _widget;
 
@@ -76,6 +91,62 @@ public class G3MWidget_WebGL extends Composite {
    }
 
 
+   public G3MWidget getG3MWidget() {
+      if (_widget == null) {
+         initWidgetPrivate(_cameraConstraints, _layerSet, _renderers, _userData);
+      }
+
+      return _widget;
+   }
+
+
+   public void initWidget(final ArrayList<ICameraConstrainer> cameraConstraints,
+                          final LayerSet layerSet,
+                          final ArrayList<Renderer> renderers,
+                          final UserData userData) {
+      _cameraConstraints = cameraConstraints;
+      _layerSet = layerSet;
+      _renderers = renderers;
+      _userData = userData;
+   }
+
+
+   private void initWidgetPrivate(final ArrayList<ICameraConstrainer> cameraConstraints,
+                                  final LayerSet layerSet,
+                                  final ArrayList<Renderer> renderers,
+                                  final UserData userData) {
+      final CameraRenderer cameraRenderer = new CameraRenderer();
+
+      final boolean useInertia = true;
+      cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
+
+      final boolean processRotataion = true;
+      final boolean processZoom = true;
+      cameraRenderer.addHandler(new CameraDoubleDragHandler(processRotataion, processZoom));
+      cameraRenderer.addHandler(new CameraRotationHandler());
+      cameraRenderer.addHandler(new CameraDoubleTapHandler());
+
+      final boolean renderDebug = true;
+      final boolean useTilesSplitBudget = true;
+      final boolean forceTopLevelTilesRenderOnStart = true;
+
+      final TilesRenderParameters parameters = TilesRenderParameters.createDefault(renderDebug, useTilesSplitBudget,
+               forceTopLevelTilesRenderOnStart);
+
+      initWidget(cameraRenderer, cameraConstraints, layerSet, parameters, renderers, userData);
+   }
+
+
+   private void initWidget(final CameraRenderer cameraRenderer,
+                           final ArrayList<ICameraConstrainer> cameraConstraints,
+                           final LayerSet layerSet,
+                           final TilesRendererParameters parameters,
+                           final ArrayList<Renderer> renderers,
+                           final UserData userData) {
+
+   }
+
+
    public void init() {
       //  Creating factory
       final IFactory factory = new Factory_WebGL();
@@ -104,11 +175,11 @@ public class G3MWidget_WebGL extends Composite {
 
       final INativeGL gl = new GL_WebGL();
 
-//      final TexturesHandler texturesHandler = new TexturesHandler();
+      //      final TexturesHandler texturesHandler = new TexturesHandler();
 
-//      _widget = G3MWidget.create(factory, logger, gl, texturesHandler, Planet.createEarth(), comp,
-//               _canvas.getCoordinateSpaceWidth(), _canvas.getCoordinateSpaceHeight(),
-//               Color.fromRGB((float) 0.0, (float) 0.1, (float) 0.2, (float) 1.0), true);
+      //      _widget = G3MWidget.create(factory, logger, gl, texturesHandler, Planet.createEarth(), comp,
+      //               _canvas.getCoordinateSpaceWidth(), _canvas.getCoordinateSpaceHeight(),
+      //               Color.fromRGB((float) 0.0, (float) 0.1, (float) 0.2, (float) 1.0), true);
 
       //CALLING widget.render()
       startRender(this);
@@ -128,8 +199,8 @@ public class G3MWidget_WebGL extends Composite {
             @Override
             public void execute() {
                // TODO: remove next function call when tests are finished
-//               writeOnCanvas("execute " + te.getNumTouch() + ": " + te.getType().toString() + " " + te.getTouch(0).getPos().x()
-//                             + " " + te.getTouch(0).getPos().y());
+               //               writeOnCanvas("execute " + te.getNumTouch() + ": " + te.getType().toString() + " " + te.getTouch(0).getPos().x()
+               //                             + " " + te.getTouch(0).getPos().y());
                // TODO: uncomment next line when _widget is properly created
                _widget.onTouchEvent(te);
             }

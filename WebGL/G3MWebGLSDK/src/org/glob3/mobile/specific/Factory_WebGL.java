@@ -1,3 +1,5 @@
+
+
 package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.ByteBuffer;
@@ -6,7 +8,9 @@ import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.ITimer;
 
 
-public class Factory_WebGL extends IFactory {
+public class Factory_WebGL
+         extends
+            IFactory {
 
    boolean first = true;
 
@@ -19,15 +23,13 @@ public class Factory_WebGL extends IFactory {
 
    @Override
    public void deleteTimer(final ITimer timer) {
-      // TODO this method must be implemented
-
    }
 
 
    @Override
    public IImage createImageFromFileName(final String filename) {
       if (first) {
-         Image_WebGL im = new Image_WebGL();
+         final Image_WebGL im = new Image_WebGL();
          im.loadFromURL(filename);
          first = false;
 
@@ -49,15 +51,15 @@ public class Factory_WebGL extends IFactory {
 
 
    @Override
-   public IImage createImageFromData(ByteBuffer buffer) {
+   public IImage createImageFromData(final ByteBuffer buffer) {
       // TODO this method must be implemented
       return null;
    }
 
 
    @Override
-   public IImage createImageFromSize(int width,
-                                     int height) {
+   public IImage createImageFromSize(final int width,
+                                     final int height) {
       /// TODO this method must be implemented
       return null;
    }
