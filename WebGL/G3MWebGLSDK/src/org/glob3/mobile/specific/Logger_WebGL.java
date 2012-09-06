@@ -1,3 +1,5 @@
+
+
 package org.glob3.mobile.specific;
 
 import java.util.logging.Level;
@@ -9,12 +11,14 @@ import org.glob3.mobile.generated.LogLevel;
 import com.google.gwt.regexp.shared.RegExp;
 
 
-public class Logger_WebGL extends ILogger {
+public class Logger_WebGL
+         extends
+            ILogger {
 
    Logger _logger;
 
 
-   protected Logger_WebGL(final LogLevel level) {
+   public Logger_WebGL(final LogLevel level) {
       super(level);
 
       _logger = Logger.getLogger("");
@@ -24,7 +28,7 @@ public class Logger_WebGL extends ILogger {
    @Override
    public void logInfo(final String x,
                        final Object... LegacyParamArray) {
-      if (_level.getValue() >= LogLevel.InfoLevel.getValue()) {
+      if (_level.getValue() <= LogLevel.InfoLevel.getValue()) {
          final String res = stringFormat(x, LegacyParamArray);
          _logger.log(Level.INFO, res);
       }
@@ -34,7 +38,7 @@ public class Logger_WebGL extends ILogger {
    @Override
    public void logWarning(final String x,
                           final Object... LegacyParamArray) {
-      if (_level.getValue() >= LogLevel.WarningLevel.getValue()) {
+      if (_level.getValue() <= LogLevel.WarningLevel.getValue()) {
          final String res = stringFormat(x, LegacyParamArray);
          _logger.log(Level.WARNING, res);
       }
@@ -44,7 +48,7 @@ public class Logger_WebGL extends ILogger {
    @Override
    public void logError(final String x,
                         final Object... LegacyParamArray) {
-      if (_level.getValue() >= LogLevel.ErrorLevel.getValue()) {
+      if (_level.getValue() <= LogLevel.ErrorLevel.getValue()) {
          final String res = stringFormat(x, LegacyParamArray);
          _logger.log(Level.SEVERE, res);
       }

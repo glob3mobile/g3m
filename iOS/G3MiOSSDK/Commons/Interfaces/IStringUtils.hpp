@@ -59,7 +59,8 @@ public:
   
   virtual std::string substring(const std::string& string,
                                 int beginIndex) const {
-    return substring(string, beginIndex, string.size() + 1);
+//    return substring(string, beginIndex, string.size() + 1);
+      return substring(string, beginIndex, string.size());
   }
   
   virtual std::string left(const std::string& string,

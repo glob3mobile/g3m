@@ -140,7 +140,7 @@ public class G3MWidget_WebGL
    private void initWidget(final CameraRenderer cameraRenderer,
                            final ArrayList<ICameraConstrainer> cameraConstraints,
                            final LayerSet layerSet,
-                           final TilesRendererParameters parameters,
+                           final TilesRenderParameters parameters,
                            final ArrayList<Renderer> renderers,
                            final UserData userData) {
 
