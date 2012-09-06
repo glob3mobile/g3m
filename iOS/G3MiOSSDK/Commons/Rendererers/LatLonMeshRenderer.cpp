@@ -58,7 +58,6 @@ void LatLonMeshRenderer::initialize(const InitializationContext* ic)
 #ifdef C_CODE
   _mesh = new IndexedMesh(TriangleStrip,
                           true,
-                          GivenCenter,
                           vertices.getCenter(),
                           vertices.create(),
                           index.create(),
@@ -67,7 +66,6 @@ void LatLonMeshRenderer::initialize(const InitializationContext* ic)
 #ifdef JAVA_CODE
   _mesh = IndexedMesh(GLPrimitive.TriangleStrip,
                       true,
-                      CenterStrategy.GivenCenter,
                       vertices.getCenter(),
                       vertices.create(),
                       indices.create(),

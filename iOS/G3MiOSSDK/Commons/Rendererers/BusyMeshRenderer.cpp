@@ -100,7 +100,6 @@ void BusyMeshRenderer::initialize(const InitializationContext* ic)
 #ifdef C_CODE
   _mesh = new IndexedMesh(TriangleStrip,
                          true,
-                         NoCenter,
                          vertices.getCenter(),
                          vertices.create(),
                          indices.create());
@@ -108,7 +107,6 @@ void BusyMeshRenderer::initialize(const InitializationContext* ic)
 #ifdef JAVA_CODE
   _mesh = IndexedMesh(GLPrimitive.TriangleStrip,
                          true,
-                         CenterStrategy.NonCenter,
                          vertices.getCenter(),
                          vertices.create(),
                          indices.create());

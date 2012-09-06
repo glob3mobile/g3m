@@ -112,15 +112,11 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
   }
   
   const Color *color = new Color(Color::fromRGBA((float) 0.1, (float) 0.1, (float) 0.1, (float) 1.0));
-  
-  Vector3D center = vertices.getCenter();
-
 
 #ifdef C_CODE
   return new IndexedMesh(TriangleStrip,
                          true,
-                         GivenCenter,
-                         center,
+                         vertices.getCenter(),
                          vertices.create(),
                          indices.create(),
                          color);
@@ -128,8 +124,7 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
 #ifdef JAVA_CODE
   return new IndexedMesh(GLPrimitive.TriangleStrip,
                          true,
-                         CenterStrategy.GivenCenter,
-                         center,
+                         vertices.getCenter(),
                          vertices.create(),
                          indices.create(),
                          color);
@@ -268,7 +263,6 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
 #ifdef C_CODE
   return new IndexedMesh(TriangleStrip,
                          true,
-                         GivenCenter,
                          center,
                          vertices.create(),
                          indices.create(),
@@ -277,7 +271,6 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
 #ifdef JAVA_CODE
   return new IndexedMesh(GLPrimitive.TriangleStrip,
                          true,
-                         CenterStrategy.GivenCenter,
                          center,
                          vertices.create(),
                          indices.create(),

@@ -32,8 +32,7 @@ IndexedMesh::~IndexedMesh()
 
 IndexedMesh::IndexedMesh(const GLPrimitive primitive,
                          bool owner,
-                         CenterStrategy centerStrategy,
-                         Vector3D center,
+                         const Vector3D& center,
                          IFloatBuffer* vertices,
                          IIntBuffer* indices,
                          const Color* flatColor,
@@ -41,8 +40,7 @@ IndexedMesh::IndexedMesh(const GLPrimitive primitive,
                          const float colorsIntensity) :
 _primitive(primitive),
 _owner(owner),
-_centerStrategy(centerStrategy),
-_center(center),
+_center( center.isNan() ? Vector3D::zero() : center ),
 _vertices(vertices),
 _indices(indices),
 _flatColor(flatColor),
@@ -50,9 +48,7 @@ _colors(colors),
 _colorsIntensity(colorsIntensity),
 _extent(NULL)
 {
-  if (centerStrategy != NoCenter) {
-    printf ("IndexedMesh array constructor: this center Strategy is not yet implemented\n");
-  }
+
 }
 
 void IndexedMesh::render(const RenderContext* rc) const {
@@ -76,7 +72,8 @@ void IndexedMesh::render(const RenderContext* rc) const {
   
   gl->vertexPointer(3, 0, _vertices);
   
-  if (_centerStrategy != NoCenter) {
+  const bool pushMatrix = !_center.isZero();
+  if (pushMatrix) {
     gl->pushMatrix();
     gl->multMatrixf(MutableMatrix44D::createTranslationMatrix(_center));
   }
@@ -98,7 +95,7 @@ void IndexedMesh::render(const RenderContext* rc) const {
       break;
   }
   
-  if (_centerStrategy != NoCenter) {
+  if (pushMatrix) {
     gl->popMatrix();
   }
   

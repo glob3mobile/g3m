@@ -64,14 +64,12 @@ bool BusyQuadRenderer::initMesh(const RenderContext* rc) {
 #ifdef C_CODE
   IndexedMesh *im = new IndexedMesh(TriangleStrip,
                                     true,
-                                    NoCenter,
                                     Vector3D::zero(),
                                     vertices.create(),
                                     indices.create());
 #else
   IndexedMesh *im = new IndexedMesh(GLPrimitive.TriangleStrip,
                                     true,
-                                    NoCenter,
                                     Vector3D::zero(),
                                     vertices.create(),
                                     indices.create());

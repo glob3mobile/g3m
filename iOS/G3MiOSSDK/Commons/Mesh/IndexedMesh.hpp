@@ -19,12 +19,9 @@ class IndexedMesh : public Mesh {
 private:
   const GLPrimitive _primitive;
   const bool        _owner;
-  CenterStrategy    _centerStrategy;
   Vector3D          _center;
   IFloatBuffer*     _vertices;
-//  const int         _numVertices;
   IIntBuffer*       _indices;
-//  const int         _numIndex;
   const Color*      _flatColor;
   IFloatBuffer*     _colors;
   const float       _colorsIntensity;
@@ -36,8 +33,7 @@ private:
 public:
   IndexedMesh(const GLPrimitive primitive,
               bool owner,
-              CenterStrategy centerStrategy,
-              Vector3D center,
+              const Vector3D& center,
               IFloatBuffer* vertices,
               IIntBuffer* indices,
               const Color* flatColor = NULL,

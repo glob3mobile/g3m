@@ -205,8 +205,7 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
 #ifdef C_CODE
   IndexedMesh *im = new IndexedMesh(TriangleStrip,
                           true,
-                          GivenCenter,
-                          Vector3D::zero(), //Zero centered
+                          Vector3D::zero(),
                           ver,
                           ind,
                           flatColor,
@@ -215,8 +214,7 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
 #ifdef JAVA_CODE
   IndexedMesh *im = IndexedMesh(GLPrimitive.TriangleStrip,
                       true,
-                      CenterStrategy.GivenCenter,
-                      Vector3D::zero(), //Zero centered
+                      Vector3D::zero(),
                       ver,
                       ind,
                       flatColor,
