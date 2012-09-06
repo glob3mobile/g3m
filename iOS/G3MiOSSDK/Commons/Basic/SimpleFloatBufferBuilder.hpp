@@ -11,7 +11,7 @@
 
 #include "FloatBufferBuilder.hpp"
 
-class FloatBufferBuilder: public FloatBufferBuilder {
+class SimpleFloatBufferBuilder: public FloatBufferBuilder {
 public:
   
   void add(float value) {

@@ -31,20 +31,20 @@ private:
     _cz = (float)center.z();
   }
   
-  Planet * _planet;
+  const Planet * _planet;
   
 public:
   
   
   
-  FloatBufferBuilderFromGeodetic(CenterStrategy cs, Planet* planet, const Geodetic2D& center):
+  FloatBufferBuilderFromGeodetic(CenterStrategy cs, const Planet* planet, const Geodetic2D& center):
   _planet(planet),
   _centerStrategy(cs)
   {
     setCenter( _planet->toCartesian(center));
   }
   
-  FloatBufferBuilderFromGeodetic(CenterStrategy cs, Planet* planet, const Geodetic3D& center):
+  FloatBufferBuilderFromGeodetic(CenterStrategy cs, const Planet* planet, const Geodetic3D& center):
   _planet(planet),
   _centerStrategy(cs)
   {
