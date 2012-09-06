@@ -432,15 +432,6 @@ void GL::drawBillBoard(const GLTextureId& textureId,
     ILogger::instance()->logError("Uniforms ViewPortRatio Invalid");
   }
   
-  
-  //  const float vertex[] = {
-  //    (float) pos.x(), (float) pos.y(), (float) pos.z(),
-  //    (float) pos.x(), (float) pos.y(), (float) pos.z(),
-  //    (float) pos.x(), (float) pos.y(), (float) pos.z(),
-  //    (float) pos.x(), (float) pos.y(), (float) pos.z()
-  //  };
-  
-  
   _gl->uniform1i(Uniforms.BillBoard, 1);
   
   _gl->uniform1f(Uniforms.ViewPortRatio, viewPortRatio);
@@ -455,9 +446,9 @@ void GL::drawBillBoard(const GLTextureId& textureId,
   setTextureCoordinates(2, 0, getBillboardTexCoord());
   
 #ifdef C_CODE
-  _gl->drawArrays(TriangleStrip, 0, 4);
+  _gl->drawArrays(TriangleStrip, 0, vertices->size());
 #else
-  _gl->drawArrays(GLPrimitive.TriangleStrip, 0, 4);
+  _gl->drawArrays(GLPrimitive.TriangleStrip, 0, vertices->size());
 #endif
   
   enableDepthTest();
