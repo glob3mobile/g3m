@@ -36,7 +36,7 @@ private:
   Vector3D          _center;
   IFloatBuffer*     _vertices;
 //  const int         _numVertices;
-  IIntBuffer*       _indexes;
+  IIntBuffer*       _indices;
 //  const int         _numIndex;
   const Color*      _flatColor;
   IFloatBuffer*     _colors;
@@ -52,7 +52,7 @@ public:
               CenterStrategy centerStrategy,
               Vector3D center,
               IFloatBuffer* vertices,
-              IIntBuffer* indexes,
+              IIntBuffer* indices,
               const Color* flatColor = NULL,
               IFloatBuffer* colors = NULL,
               const float colorsIntensity = (float)0.0);
@@ -66,13 +66,13 @@ public:
 //                                         Vector3D center,
 //                                         const int numVertices,
 //                                         IFloatBuffer* vertices,
-//                                         IIntBuffer* indexes,
+//                                         IIntBuffer* indices,
 //                                         const int numIndex,
 //                                         const Color* flatColor = NULL,
 //                                         IFloatBuffer* colors = NULL,
 //                                         const float colorsIntensity = (float)0.0) {
 //    return new IndexedMesh(owner, primitive, strategy, center, numVertices, vertices,
-//                           indexes, numIndex, flatColor, colors, colorsIntensity);
+//                           indices, numIndex, flatColor, colors, colorsIntensity);
 //  }
 
     
@@ -80,11 +80,11 @@ public:
 //                                         const GLPrimitive primitive,
 //                                         CenterStrategy strategy,
 //                                         Vector3D center,
-//                                         std::vector<int>& indexes,
+//                                         std::vector<int>& indices,
 //                                         const Color* flatColor = NULL,
 //                                         std::vector<Color>* colors = NULL,
 //                                         const float colorsIntensity = (float)0.0) {
-//    return new IndexedMesh(vertices, primitive, strategy, center, indexes,
+//    return new IndexedMesh(vertices, primitive, strategy, center, indices,
 //                           flatColor, colors, colorsIntensity);
 //  }
 
@@ -96,7 +96,7 @@ public:
 //                                           Vector3D center,
 //                                           const int numVertices,
 //                                           IFloatBuffer* vertices,
-//                                           IIntBuffer* indexes,
+//                                           IIntBuffer* indices,
 //                                           const int numIndex, 
 //                                           const Color* flatColor = NULL,
 //                                           IFloatBuffer* colors = NULL,

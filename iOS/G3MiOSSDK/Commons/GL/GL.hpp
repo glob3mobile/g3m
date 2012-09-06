@@ -168,13 +168,13 @@ public:
   
   void vertexPointer(int size, int stride, IFloatBuffer* vertex);
   
-  void drawTriangleStrip(IIntBuffer* indexes) ;
+  void drawTriangleStrip(IIntBuffer* indices) ;
   
-  void drawLines(IIntBuffer* indexes);
+  void drawLines(IIntBuffer* indices);
   
-  void drawLineLoop(IIntBuffer* indexes);
+  void drawLineLoop(IIntBuffer* indices);
   
-  void drawPoints(IIntBuffer* indexes);
+  void drawPoints(IIntBuffer* indices);
   
   void setProjection(const MutableMatrix44D &projection);
   

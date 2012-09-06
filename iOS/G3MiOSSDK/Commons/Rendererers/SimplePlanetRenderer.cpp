@@ -70,20 +70,20 @@ int[] SimplePlanetRenderer::createMeshIndex()
 {
   const unsigned int res = _lonRes;
   
-  const int numIndexes = (2 * (res - 1) * (res + 1)) -1;
-  int* indexes = new int[numIndexes];
+  const int numindices = (2 * (res - 1) * (res + 1)) -1;
+  int* indices = new int[numindices];
   
   unsigned int n = 0;
   for (unsigned int j = 0; j < res - 1; j++) {
-    if (j > 0) indexes[n++] = (int) (j * res);
+    if (j > 0) indices[n++] = (int) (j * res);
     for (unsigned int i = 0; i < res; i++) {
-      indexes[n++] = (int) (j * res + i);
-      indexes[n++] = (int) (j * res + i + res);
+      indices[n++] = (int) (j * res + i);
+      indices[n++] = (int) (j * res + i + res);
     }
-    indexes[n++] = (int) (j * res + 2 * res - 1);
+    indices[n++] = (int) (j * res + 2 * res - 1);
   }
   
-  return indexes;
+  return indices;
 }
 
 #ifdef C_CODE
@@ -114,7 +114,7 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   const Planet* planet = rc->getPlanet();
   
   const int res = _lonRes;
-  const int numIndexes = (2 * (res - 1) * (res + 1)) -1;
+  const int numindices = (2 * (res - 1) * (res + 1)) -1;
   
 #ifdef C_CODE
   int*   ind = createMeshIndex();
@@ -176,11 +176,11 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
 #ifdef C_CODE
   IndexedMesh *im = IndexedMesh::createFromVector3D(true, TriangleStrip, NoCenter, Vector3D(0,0,0), 
                                                     _latRes *_lonRes, ver, 
-                                                    ind, numIndexes, flatColor, colors, (float)0.5, normals);
+                                                    ind, numindices, flatColor, colors, (float)0.5, normals);
 #else
   IndexedMesh *im = IndexedMesh::createFromVector3D(true, GLPrimitive.TriangleStrip, NoCenter, Vector3D(0,0,0), 
                                                     _latRes *_lonRes, ver, 
-                                                    ind, numIndexes, flatColor, colors, (float)0.5, normals);
+                                                    ind, numindices, flatColor, colors, (float)0.5, normals);
 #endif
   
   TextureMapping* texMap = new SimpleTextureMapping(texId,

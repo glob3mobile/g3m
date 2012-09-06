@@ -22,7 +22,7 @@
 //                                               Vector3D center,
 //                                               const int numVertices,
 //                                               IFloatBuffer* vertices,
-//                                               IIntBuffer* indexes,
+//                                               IIntBuffer* indices,
 //                                               const int numIndex,
 //                                               const Color* flatColor,
 //                                               IFloatBuffer* colors,
@@ -40,7 +40,7 @@
 //
 //  // create indexed mesh
 //  return new IndexedMesh(owner, primitive, strategy, center, numVertices, vertices,
-//                         indexes, numIndex, flatColor, colors, colorsIntensity);
+//                         indices, numIndex, flatColor, colors, colorsIntensity);
 //}
 
 IndexedMesh::~IndexedMesh()
@@ -48,7 +48,7 @@ IndexedMesh::~IndexedMesh()
 #ifdef C_CODE
   if (_owner){
     delete _vertices;
-    delete _indexes;
+    delete _indices;
     if (_colors != NULL) delete _colors;
     if (_flatColor != NULL) delete _flatColor;
   }
@@ -63,7 +63,7 @@ IndexedMesh::IndexedMesh(const GLPrimitive primitive,
                          CenterStrategy centerStrategy,
                          Vector3D center,
                          IFloatBuffer* vertices,
-                         IIntBuffer* indexes,
+                         IIntBuffer* indices,
                          const Color* flatColor,
                          IFloatBuffer* colors,
                          const float colorsIntensity) :
@@ -72,7 +72,7 @@ _owner(owner),
 _centerStrategy(centerStrategy),
 _center(center),
 _vertices(vertices),
-_indexes(indexes),
+_indices(indices),
 _flatColor(flatColor),
 _colors(colors),
 _colorsIntensity(colorsIntensity),
@@ -87,7 +87,7 @@ _extent(NULL)
 //                         const GLPrimitive primitive,
 //                         CenterStrategy strategy,
 //                         Vector3D center,
-//                         std::vector<int>& indexes,
+//                         std::vector<int>& indices,
 //                         const Color* flatColor,
 //                         std::vector<Color>* colors,
 //                         const float colorsIntensity,
@@ -96,7 +96,7 @@ _extent(NULL)
 //_primitive(primitive),
 //_numVertices(vertices.size()),
 //_flatColor(flatColor),
-//_numIndex(indexes.size()),
+//_numIndex(indices.size()),
 //_colorsIntensity(colorsIntensity),
 //_extent(NULL),
 //_centerStrategy(strategy),
@@ -128,11 +128,11 @@ _extent(NULL)
 //
 //  _vertices = vert;
 //
-//  int* ind = new int[indexes.size()];
-//  for (int i = 0; i < indexes.size(); i++) {
-//    ind[i] = indexes[i];
+//  int* ind = new int[indices.size()];
+//  for (int i = 0; i < indices.size(); i++) {
+//    ind[i] = indices[i];
 //  }
-//  _indexes = ind;
+//  _indices = ind;
 //
 //  if (normals != NULL) {
 //    float* norm = new float[3 * vertices.size()];
@@ -191,16 +191,16 @@ void IndexedMesh::render(const RenderContext* rc) const {
   
   switch (_primitive) {
     case TriangleStrip:
-      gl->drawTriangleStrip(_indexes);
+      gl->drawTriangleStrip(_indices);
       break;
     case Lines:
-      gl->drawLines(_indexes);
+      gl->drawLines(_indices);
       break;
     case LineLoop:
-      gl->drawLineLoop(_indexes);
+      gl->drawLineLoop(_indices);
       break;
     case Points:
-      gl->drawPoints(_indexes);
+      gl->drawPoints(_indices);
       break;
     default:
       break;

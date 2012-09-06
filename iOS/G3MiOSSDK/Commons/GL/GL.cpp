@@ -232,59 +232,59 @@ void GL::vertexPointer(int size, int stride, IFloatBuffer* vertex) {
 #endif
 }
 
-void GL::drawTriangleStrip(IIntBuffer* indexes) {
+void GL::drawTriangleStrip(IIntBuffer* indices) {
 #ifdef C_CODE
   _gl->drawElements(TriangleStrip,
-                    indexes->size(),
+                    indices->size(),
                     Int,
-                    indexes);
+                    indices);
 #else
   _gl->drawElements(GLPrimitive.TriangleStrip,
-                    indexes.size(),
+                    indices.size(),
                     GLType.Int,
-                    indexes);
+                    indices);
 #endif
 }
 
-void GL::drawLines(IIntBuffer* indexes) {
+void GL::drawLines(IIntBuffer* indices) {
 #ifdef C_CODE
   _gl->drawElements(Lines,
-                    indexes->size(),
+                    indices->size(),
                     Int,
-                    indexes);
+                    indices);
 #else
   _gl->drawElements(GLPrimitive.Lines,
-                    indexes.size(),
+                    indices.size(),
                     GLType.Int,
-                    indexes);
+                    indices);
 #endif
 }
 
-void GL::drawLineLoop(IIntBuffer* indexes) {
+void GL::drawLineLoop(IIntBuffer* indices) {
 #ifdef C_CODE
   _gl->drawElements(LineLoop,
-                    indexes->size(),
+                    indices->size(),
                     Int,
-                    indexes);
+                    indices);
 #else
   _gl->drawElements(GLPrimitive.LineLoop,
-                    indexes.size(),
+                    indices.size(),
                     GLType.Int,
-                    indexes);
+                    indices);
 #endif
 }
 
-void GL::drawPoints(IIntBuffer* indexes) {
+void GL::drawPoints(IIntBuffer* indices) {
 #ifdef C_CODE
   _gl->drawElements(Points,
-                    indexes->size(),
+                    indices->size(),
                     Int,
-                    indexes);
+                    indices);
 #else
   _gl->drawElements(GLPrimitive.Points,
-                    indexes.size(),
+                    indices.size(),
                     GLType.Int,
-                    indexes);
+                    indices);
 #endif
 }
 
