@@ -86,16 +86,12 @@ private:
   MutableVector2D _scale;
   MutableVector2D _translation;
   
-#ifdef C_CODE
-  const float* _texCoords;
-#else
-  const float[] _texCoords;
-#endif
+  IFloatBuffer* _texCoords;
   
 public:
   LTMInitializer(const Tile* tile,
                  const Tile* ancestor,
-                 const float texCoords[]) :
+                 IFloatBuffer* texCoords) :
   _tile(tile),
   _ancestor(ancestor),
   _texCoords(texCoords),
@@ -128,18 +124,9 @@ public:
     return _translation;
   }
   
-#ifdef C_CODE
-  float const* getTexCoords() const {
+  IFloatBuffer* getTexCoords() const {
     return _texCoords;
   }
-#endif
-  
-#ifdef JAVA_CODE
-  @Override
-  public float[] getTexCoords() {
-    return _texCoords;
-  }
-#endif
   
 };
 
@@ -186,12 +173,7 @@ private:
   
   const Mesh* _tessellatorMesh;
   
-#ifdef C_CODE
-  const float* _texCoords;
-#endif
-#ifdef JAVA_CODE
-  private final float[] _texCoords;
-#endif
+  IFloatBuffer* _texCoords;
   
   std::vector<PetitionStatus>    _status;
   std::vector<long long>              _requestsIds;
@@ -212,7 +194,7 @@ public:
                      IDownloader*                 downloader,
                      Tile* tile,
                      const Mesh* tessellatorMesh,
-                     float texCoords[]) :
+                     IFloatBuffer* texCoords) :
   _texturizer(texturizer),
   _factory(rc->getFactory()),
   _texturesHandler(rc->getTexturesHandler()),
@@ -549,6 +531,15 @@ void BuilderDownloadStepDownloadListener::onCancel(const URL* url) {
   _builder->stepCanceled(_position);
 }
 
+
+MultiLayerTileTexturizer::~MultiLayerTileTexturizer() {
+  if (_texCoordsCache != NULL) {
+    delete _texCoordsCache;
+    _texCoordsCache = NULL;
+  }
+}
+
+
 void MultiLayerTileTexturizer::initialize(const InitializationContext* ic,
                                           const TilesRenderParameters* parameters) {
   _parameters = parameters;
@@ -713,25 +704,21 @@ void MultiLayerTileTexturizer::ancestorTexturedSolvedChanged(Tile* tile,
   }
 }
 
-#ifdef C_CODE
-float* MultiLayerTileTexturizer::getTextureCoordinates(const TileRenderContext* trc) const {
-#else
-float[] MultiLayerTileTexturizer::getTextureCoordinates(const TileRenderContext* trc) const {
-#endif
+IFloatBuffer* MultiLayerTileTexturizer::getTextureCoordinates(const TileRenderContext* trc) const {
   if (_texCoordsCache == NULL) {
-    std::vector<MutableVector2D>* texCoordsV = trc->getTessellator()->createUnitTextCoords();
+//    std::vector<MutableVector2D>* texCoordsV = trc->getTessellator()->createUnitTextCoords();
+//    
+//    const int texCoordsSize = texCoordsV->size();
+//    float* texCoordsA = new float[2 * texCoordsSize];
+//    int p = 0;
+//    for (int i = 0; i < texCoordsSize; i++) {
+//      texCoordsA[p++] = (float) texCoordsV->at(i).x();
+//      texCoordsA[p++] = (float) texCoordsV->at(i).y();
+//    }
+//    
+//    delete texCoordsV;
     
-    const int texCoordsSize = texCoordsV->size();
-    float* texCoordsA = new float[2 * texCoordsSize];
-    int p = 0;
-    for (int i = 0; i < texCoordsSize; i++) {
-      texCoordsA[p++] = (float) texCoordsV->at(i).x();
-      texCoordsA[p++] = (float) texCoordsV->at(i).y();
-    }
-    
-    delete texCoordsV;
-    
-    _texCoordsCache = texCoordsA;
+    _texCoordsCache = trc->getTessellator()->createUnitTextCoords();
   }
   return _texCoordsCache;
 }

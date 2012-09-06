@@ -11,24 +11,9 @@
 
 #include "Mesh.hpp"
 #include "Color.hpp"
-//#include "MutableVector2D.hpp"
-//#include "MutableVector3D.hpp"
-//#include "Planet.hpp"
 #include "Vector3D.hpp"
-
-//#include <vector>
-
 #include "INativeGL.hpp"
-
 #include "FloatBufferBuilderFromCartesian3D.hpp"
-
-//enum CenterStrategy {
-//  NoCenter,
-//  AveragedVertex,
-//  FirstVertex,
-//  GivenCenter
-//};
-
 
 class IndexedMesh : public Mesh {
 private:
@@ -61,49 +46,6 @@ public:
 
   ~IndexedMesh();
 
-    
-//  static IndexedMesh* createFromVector3D(bool owner,
-//                                         const GLPrimitive primitive,
-//                                         CenterStrategy strategy,
-//                                         Vector3D center,
-//                                         const int numVertices,
-//                                         IFloatBuffer* vertices,
-//                                         IIntBuffer* indices,
-//                                         const int numIndex,
-//                                         const Color* flatColor = NULL,
-//                                         IFloatBuffer* colors = NULL,
-//                                         const float colorsIntensity = (float)0.0) {
-//    return new IndexedMesh(owner, primitive, strategy, center, numVertices, vertices,
-//                           indices, numIndex, flatColor, colors, colorsIntensity);
-//  }
-
-    
-//  static IndexedMesh* createFromVector3D(std::vector<MutableVector3D>& vertices,
-//                                         const GLPrimitive primitive,
-//                                         CenterStrategy strategy,
-//                                         Vector3D center,
-//                                         std::vector<int>& indices,
-//                                         const Color* flatColor = NULL,
-//                                         std::vector<Color>* colors = NULL,
-//                                         const float colorsIntensity = (float)0.0) {
-//    return new IndexedMesh(vertices, primitive, strategy, center, indices,
-//                           flatColor, colors, colorsIntensity);
-//  }
-
-  
-//  static IndexedMesh* createFromGeodetic3D(const Planet *planet,
-//                                           bool owner,
-//                                           const GLPrimitive primitive,
-//                                           CenterStrategy strategy,
-//                                           Vector3D center,
-//                                           const int numVertices,
-//                                           IFloatBuffer* vertices,
-//                                           IIntBuffer* indices,
-//                                           const int numIndex, 
-//                                           const Color* flatColor = NULL,
-//                                           IFloatBuffer* colors = NULL,
-//                                           const float colorsIntensity = (float)0.0);
-    
   virtual void render(const RenderContext* rc) const;
   
   Extent* getExtent() const;

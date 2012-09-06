@@ -394,28 +394,31 @@ void GL::bindTexture(const GLTextureId& textureId) {
 #endif
 }
 
-IFloatBuffer* GL::createBillboardTexCoord() const {
-  //  const static float texcoord[] = {
-  //    1, 1,
-  //    1, 0,
-  //    0, 1,
-  //    0, 0
-  //  };
-
-  IFloatBuffer* result = GFactory.createFloatBuffer(8);
-  result->put(0, 1);
-  result->put(1, 1);
+IFloatBuffer* GL::getBillboardTexCoord() {
   
-  result->put(2, 1);
-  result->put(3, 0);
+  if (_billboardTexCoord == NULL) {
+    //  const static float texcoord[] = {
+    //    1, 1,
+    //    1, 0,
+    //    0, 1,
+    //    0, 0
+    //  };
+    
+    _billboardTexCoord = GFactory.createFloatBuffer(8);
+    _billboardTexCoord->put(0, 1);
+    _billboardTexCoord->put(1, 1);
+    
+    _billboardTexCoord->put(2, 1);
+    _billboardTexCoord->put(3, 0);
+    
+    _billboardTexCoord->put(4, 0);
+    _billboardTexCoord->put(5, 1);
+    
+    _billboardTexCoord->put(6, 0);
+    _billboardTexCoord->put(7, 0);
+  }
   
-  result->put(4, 0);
-  result->put(5, 1);
-  
-  result->put(6, 0);
-  result->put(7, 0);
-  
-  return result;
+  return _billboardTexCoord;
 }
 
 void GL::drawBillBoard(const GLTextureId& textureId,
@@ -449,7 +452,7 @@ void GL::drawBillBoard(const GLTextureId& textureId,
   
   bindTexture(textureId);
   vertexPointer(3, 0, vertices);
-  setTextureCoordinates(2, 0, _billboardTexCoord);
+  setTextureCoordinates(2, 0, getBillboardTexCoord());
   
 #ifdef C_CODE
   _gl->drawArrays(TriangleStrip, 0, 4);

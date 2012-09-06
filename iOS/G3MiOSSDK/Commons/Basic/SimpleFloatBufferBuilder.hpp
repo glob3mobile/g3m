@@ -17,10 +17,23 @@ public:
   void add(float value) {
     _values.push_back(value);
   }
-    
+  
   void add(double value) {
-      _values.push_back((float) value);
+    _values.push_back((float) value);
   }
+  
+  
+  void add(float value1, float value2) {
+    _values.push_back(value1);
+    _values.push_back(value2);
+  }
+
+  void add(float value1, float value2, float value3) {
+    _values.push_back(value1);
+    _values.push_back(value2);
+    _values.push_back(value3);
+  }
+  
 };
 
 #endif

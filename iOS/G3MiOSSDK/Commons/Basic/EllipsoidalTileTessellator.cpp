@@ -20,6 +20,7 @@
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "FloatBufferBuilderFromGeodetic.hpp"
+#include "SimpleFloatBufferBuilder.hpp"
 
 Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
                                              const Tile* tile) const {
@@ -136,9 +137,11 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
 }
 
 
-std::vector<MutableVector2D>* EllipsoidalTileTessellator::createUnitTextCoords() const {
+IFloatBuffer* EllipsoidalTileTessellator::createUnitTextCoords() const {
   
-  std::vector<MutableVector2D>* textCoords = new std::vector<MutableVector2D>();
+//  std::vector<MutableVector2D>* textCoords = new std::vector<MutableVector2D>();
+  
+  SimpleFloatBufferBuilder textCoords;
   
   const int resolution       = _resolution;
   const int resolutionMinus1 = resolution - 1;
@@ -157,7 +160,7 @@ std::vector<MutableVector2D>* EllipsoidalTileTessellator::createUnitTextCoords()
   for (int j = 0; j < resolution; j++) {
     for (int i = 0; i < resolution; i++) {
       const int pos = j*resolution + i;
-      textCoords->push_back(MutableVector2D(u[pos], v[pos]));
+      textCoords.add( u[pos], v[pos] );
     }
   }
   
@@ -166,25 +169,25 @@ std::vector<MutableVector2D>* EllipsoidalTileTessellator::createUnitTextCoords()
     // west side
     for (int j = 0; j < resolutionMinus1; j++) {
       const int pos = j*resolution;
-      textCoords->push_back(MutableVector2D(u[pos], v[pos]));
+      textCoords.add( u[pos], v[pos] );
     }
     
     // south side
     for (int i = 0; i < resolutionMinus1; i++) {
       const int pos = resolutionMinus1 * resolution + i;
-      textCoords->push_back(MutableVector2D(u[pos], v[pos]));
+      textCoords.add( u[pos], v[pos] );
     }
     
     // east side
     for (int j = resolutionMinus1; j > 0; j--) {
       const int pos = j*resolution + resolutionMinus1;
-      textCoords->push_back(MutableVector2D(u[pos], v[pos]));
+      textCoords.add( u[pos], v[pos] );
     }
     
     // north side
     for (int i = resolutionMinus1; i > 0; i--) {
       const int pos = i;
-      textCoords->push_back(MutableVector2D(u[pos], v[pos]));
+      textCoords.add( u[pos], v[pos] );
     }
   }
   
@@ -192,7 +195,7 @@ std::vector<MutableVector2D>* EllipsoidalTileTessellator::createUnitTextCoords()
   delete[] u;
   delete[] v;
   
-  return textCoords;
+  return textCoords.create();
 }
 
 

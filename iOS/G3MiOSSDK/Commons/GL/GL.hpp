@@ -95,7 +95,7 @@ private:
   int checkedGetUniformLocation(int program, const std::string& name) const;
   
   IFloatBuffer* _billboardTexCoord;
-  IFloatBuffer* createBillboardTexCoord() const;
+  IFloatBuffer* getBillboardTexCoord();
   
 public:
   
@@ -129,9 +129,9 @@ public:
   _flatColorIntensity(0),
   _lastTextureWidth(-1),
   _lastTextureHeight(-1),
-  _lastImageData(NULL)
+  _lastImageData(NULL),
+  _billboardTexCoord(NULL)
   {
-    _billboardTexCoord = createBillboardTexCoord();
   }
   
   void enableVerticesPosition();
