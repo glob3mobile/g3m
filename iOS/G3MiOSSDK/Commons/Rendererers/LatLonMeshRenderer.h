@@ -16,7 +16,7 @@
 class LatLonMeshRenderer: public Renderer {
   
 private:
-  Mesh *mesh;
+  Mesh * _mesh;
   
  
 public:

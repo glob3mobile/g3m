@@ -35,7 +35,12 @@ private:
   
 public:
   
-  
+  FloatBufferBuilderFromGeodetic(CenterStrategy cs, const Planet* planet, const Vector3D& center):
+  _planet(planet),
+  _centerStrategy(cs)
+  {
+    setCenter(center);
+  }
   
   FloatBufferBuilderFromGeodetic(CenterStrategy cs, const Planet* planet, const Geodetic2D& center):
   _planet(planet),

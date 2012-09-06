@@ -12,6 +12,12 @@
 #include "Planet.hpp"
 #include "TexturesHandler.hpp"
 
+#include "FloatBufferBuilderFromGeodetic.hpp"
+#include "IntBufferBuilder.hpp"
+#include "FloatBufferBuilderFromCartesian3D.hpp"
+#include "FloatBufferBuilderFromCartesian2D.hpp"
+#include "SimpleFloatBufferBuilder.hpp"
+
 SimplePlanetRenderer::SimplePlanetRenderer(const std::string textureFilename):
 _latRes(30),//FOR NOW THEY MUST BE EQUAL
 _lonRes(30),
@@ -33,79 +39,85 @@ void SimplePlanetRenderer::initialize(const InitializationContext* ic)
   
 }
 
-#ifdef C_CODE
-float* SimplePlanetRenderer::createVertices(const Planet& planet)
-#else
-float[] SimplePlanetRenderer::createVertices(const Planet& planet)
-#endif
+IFloatBuffer* SimplePlanetRenderer::createVertices(const Planet& planet) const
 {
   //VERTICES
-  float* vertices = new float[_latRes *_lonRes * 3];
+  FloatBufferBuilderFromGeodetic vertices(GivenCenter, &planet, Vector3D::zero()); //Center in zero
+  
+  //float* vertices = new float[_latRes *_lonRes * 3];
   
   const double lonRes1 = (double) (_lonRes-1);
   const double latRes1 = (double) (_latRes-1);
-  int verticesIndex = 0;
+ // int verticesIndex = 0;
   for(double i = 0.0; i < _lonRes; i++){
     const Angle lon = Angle::fromDegrees( (i * 360 / lonRes1) -180);
     for (double j = 0.0; j < _latRes; j++) {
       const Angle lat = Angle::fromDegrees( (j * 180.0 / latRes1)  -90.0 );
       const Geodetic2D g(lat, lon);
       
-      const Vector3D v = planet.toCartesian(g);
-      vertices[verticesIndex++] = (float) v.x();//Vertices
-      vertices[verticesIndex++] = (float) v.y();
-      vertices[verticesIndex++] = (float) v.z();
+      vertices.add(g);
+      
+      
+      
+//      const Vector3D v = planet.toCartesian(g);
+//      vertices[verticesIndex++] = (float) v.x();//Vertices
+//      vertices[verticesIndex++] = (float) v.y();
+//      vertices[verticesIndex++] = (float) v.z();
     }
   }
   
-  return vertices;
+  return vertices.create();
 }
 
-
-#ifdef C_CODE
-int* SimplePlanetRenderer::createMeshIndex()
-#else
-int[] SimplePlanetRenderer::createMeshIndex()
-#endif
+IIntBuffer* SimplePlanetRenderer::createMeshIndex() const
 {
-  const unsigned int res = _lonRes;
+  IntBufferBuilder indices;
   
-  const int numindices = (2 * (res - 1) * (res + 1)) -1;
-  int* indices = new int[numindices];
+  const int res = _lonRes;
   
-  unsigned int n = 0;
-  for (unsigned int j = 0; j < res - 1; j++) {
-    if (j > 0) indices[n++] = (int) (j * res);
-    for (unsigned int i = 0; i < res; i++) {
-      indices[n++] = (int) (j * res + i);
-      indices[n++] = (int) (j * res + i + res);
+  //const int numindices = (2 * (res - 1) * (res + 1)) -1;
+  //int* indices = new int[numindices];
+  
+//  unsigned int n = 0;
+  for (int j = 0; j < res - 1; j++) {
+    if (j > 0){
+      indices.add((int) (j * res));
+      //indices[n++] = (int) (j * res);
     }
-    indices[n++] = (int) (j * res + 2 * res - 1);
+    for (int i = 0; i < res; i++) {
+      indices.add(j * res + i);
+      indices.add(j * res + i + res);
+//      indices[n++] = (int) (j * res + i);
+//      indices[n++] = (int) (j * res + i + res);
+    }
+    indices.add(j * res + 2 * res - 1);
+    //indices[n++] = (int) (j * res + 2 * res - 1);
   }
   
-  return indices;
+  return indices.create();
 }
 
-#ifdef C_CODE
-float* SimplePlanetRenderer::createTextureCoordinates()
-#else
-float[] SimplePlanetRenderer::createTextureCoordinates()
-#endif
+IFloatBuffer* SimplePlanetRenderer::createTextureCoordinates() const
 {
-  float* texCoords = new float[_latRes *_lonRes * 2];
+  FloatBufferBuilderFromCartesian2D texCoords;
   
-  const double lonRes1 = (double) (_lonRes-1), latRes1 = (double) (_latRes-1);
-  int p = 0;
+  //float* texCoords = new float[_latRes *_lonRes * 2];
+  
+  const double lonRes1 = (double) (_lonRes-1);
+  const double latRes1 = (double) (_latRes-1);
+  //int p = 0;
   for(double i = 0.0; i < _lonRes; i++){
     double u = (i / lonRes1);
     for (double j = 0.0; j < _latRes; j++) {
       const double v = 1.0 - (j / latRes1);
-      texCoords[p++] = (float) u;
-      texCoords[p++] = (float) v;
+      texCoords.add((float)u, (float)v);
+      
+//      texCoords[p++] = (float) u;
+//      texCoords[p++] = (float) v;
     }
   }
   
-  return texCoords;
+  return texCoords.create();
 }
 
 bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
@@ -113,23 +125,31 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   
   const Planet* planet = rc->getPlanet();
   
-  const int res = _lonRes;
-  const int numindices = (2 * (res - 1) * (res + 1)) -1;
+// const int res = _lonRes;
+//  const int numindices = (2 * (res - 1) * (res + 1)) -1;
   
-#ifdef C_CODE
-  int*   ind = createMeshIndex();
-  float* ver = createVertices(*planet);
-  float* texC = NULL;
-  float* colors = NULL;
-  float* normals = NULL;
-#endif 
-#ifdef JAVA_CODE
-  int ind[] = createMeshIndex();
-  float ver[] = createVertices(planet);
-  float texC[] = null;
-  float colors[] = null;
-  float normals[] = null;
-#endif
+  IIntBuffer* ind = createMeshIndex();
+  IFloatBuffer* ver = createVertices(*planet);  
+  IFloatBuffer* texC = NULL;
+  SimpleFloatBufferBuilder colors;
+  
+  const bool colorPerVertex = false;
+  
+  
+//#ifdef C_CODE
+//  int*   ind = createMeshIndex();
+//  float* ver = createVertices(*planet);
+//  float* texC = NULL;
+//  float* colors = NULL;
+//  float* normals = NULL;
+//#endif 
+//#ifdef JAVA_CODE
+//  int ind[] = createMeshIndex();
+//  float ver[] = createVertices(planet);
+//  float texC[] = null;
+//  float colors[] = null;
+//  float normals[] = null;
+//#endif
   
   //TEXTURED
   GLTextureId texId = GLTextureId::invalid();
@@ -143,18 +163,25 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   }
   
   //COLORS PER VERTEX
-  if (false){
-    int numVertices = res * res * 4;
-    colors = new float[numVertices];
+  IFloatBuffer* vertexColors = NULL;
+  if (colorPerVertex){
+    int numVertices = _lonRes * _lonRes * 4;
+//    colors = new float[numVertices];
     for(int i = 0; i < numVertices; ){
     
       float val = (float) (0.5 + GMath.sin( (float) (2.0 * GMath.pi() * ((float) i) / numVertices) ) / 2.0);
       
-      colors[i++] = val;
-      colors[i++] = 0;
-      colors[i++] = (float) (1.0 - val);
-      colors[i++] = 1;
+      colors.add(val);
+      colors.add(0.0);
+      colors.add(1.0 - val);
+      colors.add(1.0);
+      
+//      colors[i++] = val;
+//      colors[i++] = 0;
+//      colors[i++] = (float) (1.0 - val);
+//      colors[i++] = 1;
     }
+    vertexColors = colors.create();
   }
   
   //FLAT COLOR
@@ -163,25 +190,48 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
     flatColor = new Color( Color::fromRGBA(0.0, 1.0, 0.0, 1.0) );
   }
   
-  if (false){
-    int numVertices = res * res * 3;
-    normals = new float[numVertices];
-    for(int i = 0; i < numVertices; ){
-      normals[i++] = (float) 1.0;
-      normals[i++] = (float) 1.0;
-      normals[i++] = (float) 1.0;
-    }
-  }
-
+//  if (false){
+//    int numVertices = res * res * 3;
+//    normals = new float[numVertices];
+//    for(int i = 0; i < numVertices; ){
+//      normals[i++] = (float) 1.0;
+//      normals[i++] = (float) 1.0;
+//      normals[i++] = (float) 1.0;
+//    }
+//  }
+  
+  
+  
 #ifdef C_CODE
-  IndexedMesh *im = IndexedMesh::createFromVector3D(true, TriangleStrip, NoCenter, Vector3D(0,0,0), 
-                                                    _latRes *_lonRes, ver, 
-                                                    ind, numindices, flatColor, colors, (float)0.5, normals);
-#else
-  IndexedMesh *im = IndexedMesh::createFromVector3D(true, GLPrimitive.TriangleStrip, NoCenter, Vector3D(0,0,0), 
-                                                    _latRes *_lonRes, ver, 
-                                                    ind, numindices, flatColor, colors, (float)0.5, normals);
+  IndexedMesh *im = new IndexedMesh(TriangleStrip,
+                          true,
+                          GivenCenter,
+                          Vector3D::zero(), //Zero centered
+                          ver,
+                          ind,
+                          flatColor,
+                          vertexColors);
 #endif
+#ifdef JAVA_CODE
+  IndexedMesh *im = IndexedMesh(GLPrimitive.TriangleStrip,
+                      true,
+                      CenterStrategy.GivenCenter,
+                      Vector3D::zero(), //Zero centered
+                      ver,
+                      ind,
+                      flatColor,
+                      vertexColors);
+#endif
+
+//#ifdef C_CODE
+//  IndexedMesh *im = IndexedMesh::createFromVector3D(true, TriangleStrip, NoCenter, Vector3D(0,0,0), 
+//                                                    _latRes *_lonRes, ver, 
+//                                                    ind, numindices, flatColor, colors, (float)0.5, normals);
+//#else
+//  IndexedMesh *im = IndexedMesh::createFromVector3D(true, GLPrimitive.TriangleStrip, NoCenter, Vector3D(0,0,0), 
+//                                                    _latRes *_lonRes, ver, 
+//                                                    ind, numindices, flatColor, colors, (float)0.5, normals);
+//#endif
   
   TextureMapping* texMap = new SimpleTextureMapping(texId,
                                                     texC,
