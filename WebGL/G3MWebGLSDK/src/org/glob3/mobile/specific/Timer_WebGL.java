@@ -15,11 +15,16 @@ public class Timer_WebGL
    double _startTime;
 
 
+   public Timer_WebGL() {
+      start();
+   }
+
+
    @Override
    public TimeInterval now() {
-      final int currentTime = (int) Duration.currentTimeMillis();
+      final double currentTime = Duration.currentTimeMillis();
 
-      return TimeInterval.fromMilliseconds(currentTime);
+      return TimeInterval.fromSeconds(currentTime / 1000);
    }
 
 
@@ -33,7 +38,7 @@ public class Timer_WebGL
    public TimeInterval elapsedTime() {
       final double currentTime = Duration.currentTimeMillis();
 
-      return TimeInterval.fromMilliseconds((int) (currentTime - _startTime));
+      return TimeInterval.fromSeconds((currentTime - _startTime) / 1000);
    }
 
 }
