@@ -23,11 +23,11 @@ private:
 public:
   
   void add(float value) {
-    _values.push_back(value);
+    _values.push_back( value );
   }
   
   void add(double value) {
-    _values.push_back((float) value);
+    _values.push_back( (float) value );
   }
   
   void add(const Vector2D& vector) {
