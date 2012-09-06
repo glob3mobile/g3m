@@ -145,14 +145,12 @@ public:
   
   virtual void vertexAttribPointer(int index,
                                    int size,
-                                   GLType type,
                                    bool normalized,
                                    int stride,
                                    IFloatBuffer* buffer) const = 0;
   
   virtual void drawElements(GLPrimitive mode,
                             int count,
-                            GLType type,
                             IIntBuffer* indices) const = 0;
   
   virtual void lineWidth(float width) const = 0;

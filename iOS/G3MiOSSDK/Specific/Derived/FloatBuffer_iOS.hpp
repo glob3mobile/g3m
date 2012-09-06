@@ -48,6 +48,10 @@ public:
     }
   }
   
+  float* getPointer() const {
+    return _values;
+  }
+
 };
 
 #endif

@@ -48,6 +48,11 @@ public:
     }
   }
 
+  
+  int* getPointer() const {
+    return _values;
+  }
+  
 };
 
 #endif
