@@ -31,12 +31,13 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
   const int resolutionMinus1 = resolution - 1;
   
   // create vertices coordinates
-  FloatBufferBuilder vertices;
+  FloatBufferBuilderFromGeodetic vertices(GivenCenter, planet, sector.getCenter());
   for (int j = 0; j < resolution; j++) {
     for (int i = 0; i < resolution; i++) {
-      vertices.add(planet->toCartesian(sector.getInnerPoint((double) i / resolutionMinus1,
-                                                            (double) j / resolutionMinus1)));
+      Geodetic2D innerPoint = sector.getInnerPoint((double) i / resolutionMinus1,
+                                                   (double) j / resolutionMinus1);
       
+      vertices.add(innerPoint);
     }
   }
   
@@ -68,7 +69,7 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
     for (int j = 0; j < resolutionMinus1; j++) {
       const Geodetic3D g(sector.getInnerPoint(0, (double)j/resolutionMinus1),
                          -skirtHeight);
-      vertices.add( planet->toCartesian(g) );
+      vertices.add(g);
       
       indices.add(j*resolution);
       indices.add(posS++);
@@ -78,7 +79,7 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
     for (int i = 0; i < resolutionMinus1; i++) {
       const Geodetic3D g(sector.getInnerPoint((double)i/resolutionMinus1, 1),
                          -skirtHeight);
-      vertices.add( planet->toCartesian(g) );
+      vertices.add(g);
       
       indices.add(resolutionMinus1*resolution + i);
       indices.add(posS++);
@@ -88,7 +89,7 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
     for (int j = resolutionMinus1; j > 0; j--) {
       const Geodetic3D g(sector.getInnerPoint(1, (double)j/resolutionMinus1),
                          -skirtHeight);
-      vertices.add( planet->toCartesian(g) );
+      vertices.add(g);
       
       indices.add(j*resolution + resolutionMinus1);
       indices.add(posS++);
@@ -98,7 +99,7 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
     for (int i = resolutionMinus1; i > 0; i--) {
       const Geodetic3D g(sector.getInnerPoint((double)i/resolutionMinus1, 0),
                          -skirtHeight);
-      vertices.add( planet->toCartesian(g) );
+      vertices.add(g);
       
       indices.add(i);
       indices.add(posS++);
@@ -110,7 +111,9 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
   }
   
   const Color *color = new Color(Color::fromRGBA((float) 0.1, (float) 0.1, (float) 0.1, (float) 1.0));
-  const Vector3D center = planet->toCartesian( sector.getCenter() );
+  
+  Vector3D center = vertices.getCenter();
+
 
 #ifdef C_CODE
   return new IndexedMesh(TriangleStrip,
@@ -200,9 +203,9 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
   const Planet* planet = rc->getPlanet();
   
   // create vectors
-  std::vector<MutableVector3D> vertices;
-  std::vector<MutableVector2D> texCoords;
-  std::vector<int> indices;
+  //std::vector<MutableVector3D> vertices;
+  //std::vector<MutableVector2D> texCoords;
+  //std::vector<int> indices;
   const int resolutionMinus1 = _resolution - 1;
   int posS = 0;
   
@@ -211,40 +214,70 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
   const Vector3D nw = planet->toCartesian(sector.getNW());
   const double offset = nw.sub(sw).length() * 1e-3;
   
+  // create vectors
+  FloatBufferBuilderFromGeodetic vertices(GivenCenter, planet, sector.getCenter());
+  // create indices
+  IntBufferBuilder indices;
+  
   // west side
   for (int j = 0; j < resolutionMinus1; j++) {
     const Geodetic3D g(sector.getInnerPoint(0, (double)j/resolutionMinus1), offset);
-    addVertex(planet, &vertices, g);
-    indices.push_back(posS++);
+    
+    vertices.add(g);
+    indices.add(posS++);
+    //addVertex(planet, &vertices, g);
+    //indices.push_back(posS++);
   }
   
   // south side
   for (int i = 0; i < resolutionMinus1; i++) {
     const Geodetic3D g(sector.getInnerPoint((double)i/resolutionMinus1, 1), offset);
-    addVertex(planet, &vertices, g);
-    indices.push_back(posS++);
+    
+    vertices.add(g);
+    indices.add(posS++);
+    //addVertex(planet, &vertices, g);
+    //indices.push_back(posS++);
   }
   
   // east side
   for (int j = resolutionMinus1; j > 0; j--) {
     const Geodetic3D g(sector.getInnerPoint(1, (double)j/resolutionMinus1), offset);
-    addVertex(planet, &vertices, g);
-    indices.push_back(posS++);
+    
+    vertices.add(g);
+    indices.add(posS++);
+    //addVertex(planet, &vertices, g);
+    //indices.push_back(posS++);
   }
    
   // north side
   for (int i = resolutionMinus1; i > 0; i--) {
     const Geodetic3D g(sector.getInnerPoint((double)i/resolutionMinus1, 0), offset);
-    addVertex(planet, &vertices, g);
-    indices.push_back(posS++);
+    
+    vertices.add(g);
+    indices.add(posS++);
+    //addVertex(planet, &vertices, g);
+    //indices.push_back(posS++);
   }
   
   const Color *color = new Color(Color::fromRGBA((float) 1.0, (float) 0, (float) 0, (float) 1.0));
   const Vector3D center = planet->toCartesian(sector.getCenter());
   
 #ifdef C_CODE
-  return IndexedMesh::createFromVector3D(vertices, LineLoop, GivenCenter, center, indices, color);
-#else
-  return IndexedMesh::createFromVector3D(vertices, GLPrimitive.LineLoop, GivenCenter, center, indices, color);
+  return new IndexedMesh(TriangleStrip,
+                         true,
+                         GivenCenter,
+                         center,
+                         vertices.create(),
+                         indices.create(),
+                         color);
+#endif
+#ifdef JAVA_CODE
+  return new IndexedMesh(GLPrimitive.TriangleStrip,
+                         true,
+                         CenterStrategy.GivenCenter,
+                         center,
+                         vertices.create(),
+                         indices.create(),
+                         color);
 #endif
 }

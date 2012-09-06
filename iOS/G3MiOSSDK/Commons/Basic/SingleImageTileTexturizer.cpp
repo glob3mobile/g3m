@@ -12,11 +12,11 @@
 #include "TexturedMesh.hpp"
 #include "Planet.hpp"
 
-#include "FloatBufferBuilder.hpp"
+#include "SimpleFloatBufferBuilder.hpp"
 
 IFloatBuffer* SingleImageTileTexturizer::createTextureCoordinates(const RenderContext* rc,
                                                                   Mesh* mesh) const {
-  FloatBufferBuilder texCoors;
+  SimpleFloatBufferBuilder texCoors;
   
   for (int i = 0; i < mesh->getVertexCount(); i++) {
     const Vector3D pos = mesh->getVertex(i);
