@@ -61,6 +61,10 @@ public:
     _values.push_back(y);
     _values.push_back(z);
   }
+  
+  Vector3D getCenter(){
+    return Vector3D((double)_cx,(double)_cy,(double)_cz);
+  }
 };
 
 #endif

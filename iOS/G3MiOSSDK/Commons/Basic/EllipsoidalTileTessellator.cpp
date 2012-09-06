@@ -18,6 +18,8 @@
 #include "IntBufferBuilder.hpp"
 
 #include "FloatBufferBuilderFromCartesian3D.hpp"
+#include "FloatBufferBuilderFromCartesian2D.hpp"
+#include "FloatBufferBuilderFromGeodetic.hpp"
 
 Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
                                              const Tile* tile) const {
