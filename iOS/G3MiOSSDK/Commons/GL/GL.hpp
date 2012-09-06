@@ -94,6 +94,9 @@ private:
   int checkedGetAttribLocation(int program, const std::string& name) const;
   int checkedGetUniformLocation(int program, const std::string& name) const;
   
+  IFloatBuffer* _billboardTexCoord;
+  IFloatBuffer* createBillboardTexCoord() const;
+  
 public:
   
   GL(INativeGL* const gl) :
@@ -128,7 +131,7 @@ public:
   _lastTextureHeight(-1),
   _lastImageData(NULL)
   {
-    
+    _billboardTexCoord = createBillboardTexCoord();
   }
   
   void enableVerticesPosition();
@@ -207,7 +210,7 @@ public:
   void disableBlend();
   
   void drawBillBoard(const GLTextureId& textureId,
-                     const Vector3D& pos,
+                     IFloatBuffer* vertices,
                      const float viewPortRatio);
   
   void deleteTexture(const GLTextureId& textureId);

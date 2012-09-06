@@ -25,8 +25,8 @@ void BusyMeshRenderer::initialize(const InitializationContext* ic)
 {  
   // compute number of vertex for the ring
   unsigned int numStrides = 60;
-  unsigned int numVertices = numStrides * 2 + 2;
-  int numIndices = numVertices + 2;
+//  unsigned int numVertices = numStrides * 2 + 2;
+//  int numIndices = numVertices + 2;
   
   // add number of vertex for the square
   
@@ -40,7 +40,8 @@ void BusyMeshRenderer::initialize(const InitializationContext* ic)
   IntBufferBuilder indices;
   
   // create vertices
-  unsigned int nv=0, ni=0, nc=0;
+//  unsigned int nv=0, ni=0, nc=0;
+  unsigned int ni=0;
 //  float r1=200, r2=230;
   float r1=12, r2=18;
   for (unsigned int step=0; step<=numStrides; step++) {
@@ -48,8 +49,8 @@ void BusyMeshRenderer::initialize(const InitializationContext* ic)
     double c = GMath.cos(angle);
     double s = GMath.sin(angle);
     
-    vertices.add((float)(r1 * c), (float)(r1 * s), 0.0);
-    vertices.add((float)(r2 * c), (float)(r2 * s), 0.0);
+    vertices.add((r1 * c), (r1 * s), 0.0);
+    vertices.add((r2 * c), (r2 * s), 0.0);
     
     indices.add(ni);
     indices.add(ni+1);

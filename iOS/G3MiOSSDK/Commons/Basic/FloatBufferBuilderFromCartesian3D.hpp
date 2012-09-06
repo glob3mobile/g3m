@@ -48,6 +48,10 @@ public:
     add(x,y,z);
   }
   
+  void add(double x, double y, double z) {
+    add((float) x, (float) y, (float) z);
+  }
+  
   void add(float x, float y, float z) {
     if (_centerStrategy == FirstVertex && _values.size() == 0){
       setCenter(Vector3D(x,y,z));

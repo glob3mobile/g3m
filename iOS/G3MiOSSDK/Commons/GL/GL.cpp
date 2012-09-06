@@ -18,6 +18,7 @@
 
 #include "IIntBuffer.hpp"
 
+#include "IFactory.hpp"
 
 struct UniformsStruct {
   int Projection;
@@ -286,7 +287,7 @@ void GL::pointSize(float size) {
   if (Uniforms.PointSize == -1){
     ILogger::instance()->logError("Uniforms PointSize Invalid");
   }
-
+  
   _gl->uniform1f(Uniforms.PointSize, size);
 }
 
@@ -393,8 +394,32 @@ void GL::bindTexture(const GLTextureId& textureId) {
 #endif
 }
 
+IFloatBuffer* GL::createBillboardTexCoord() const {
+  //  const static float texcoord[] = {
+  //    1, 1,
+  //    1, 0,
+  //    0, 1,
+  //    0, 0
+  //  };
+
+  IFloatBuffer* result = GFactory.createFloatBuffer(8);
+  result->put(0, 1);
+  result->put(1, 1);
+  
+  result->put(2, 1);
+  result->put(3, 0);
+  
+  result->put(4, 0);
+  result->put(5, 1);
+  
+  result->put(6, 0);
+  result->put(7, 0);
+  
+  return result;
+}
+
 void GL::drawBillBoard(const GLTextureId& textureId,
-                       const Vector3D& pos,
+                       IFloatBuffer* vertices,
                        const float viewPortRatio) {
   if (Uniforms.BillBoard == -1){
     ILogger::instance()->logError("Uniforms BillBoard Invalid");
@@ -405,19 +430,13 @@ void GL::drawBillBoard(const GLTextureId& textureId,
   }
   
   
-  const float vertex[] = {
-    (float) pos.x(), (float) pos.y(), (float) pos.z(),
-    (float) pos.x(), (float) pos.y(), (float) pos.z(),
-    (float) pos.x(), (float) pos.y(), (float) pos.z(),
-    (float) pos.x(), (float) pos.y(), (float) pos.z()
-  };
+  //  const float vertex[] = {
+  //    (float) pos.x(), (float) pos.y(), (float) pos.z(),
+  //    (float) pos.x(), (float) pos.y(), (float) pos.z(),
+  //    (float) pos.x(), (float) pos.y(), (float) pos.z(),
+  //    (float) pos.x(), (float) pos.y(), (float) pos.z()
+  //  };
   
-  const static float texcoord[] = {
-    1, 1,
-    1, 0,
-    0, 1,
-    0, 0
-  };
   
   _gl->uniform1i(Uniforms.BillBoard, 1);
   
@@ -429,9 +448,8 @@ void GL::drawBillBoard(const GLTextureId& textureId,
   color(1, 1, 1, 1);
   
   bindTexture(textureId);
-  
-  vertexPointer(3, 0, vertex);
-  setTextureCoordinates(2, 0, texcoord);
+  vertexPointer(3, 0, vertices);
+  setTextureCoordinates(2, 0, _billboardTexCoord);
   
 #ifdef C_CODE
   _gl->drawArrays(TriangleStrip, 0, 4);
