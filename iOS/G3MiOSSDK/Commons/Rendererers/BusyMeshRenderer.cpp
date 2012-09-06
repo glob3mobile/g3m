@@ -18,6 +18,9 @@
 
 #include "IMathUtils.hpp"
 
+#include "SimpleFloatBufferBuilder.hpp"
+#include "IntBufferBuilder.hpp"
+
 void BusyMeshRenderer::initialize(const InitializationContext* ic)
 {  
   // compute number of vertex for the ring
@@ -28,9 +31,13 @@ void BusyMeshRenderer::initialize(const InitializationContext* ic)
   // add number of vertex for the square
   
   // create vertices and indices in dinamic memory
-  float* vertices = new float[numVertices*3];
-  int*   indices  = new int[numIndices];
-  float* colors   = new float[numVertices*4];
+  //float* vertices = new float[numVertices*3];
+  //int*   indices  = new int[numIndices];
+  //float* colors   = new float[numVertices*4];
+  
+  FloatBufferBuilderFromCartesian3D vertices(NoCenter, Vector3D::zero());
+  SimpleFloatBufferBuilder colors;
+  IntBufferBuilder indices;
   
   // create vertices
   unsigned int nv=0, ni=0, nc=0;
@@ -40,51 +47,81 @@ void BusyMeshRenderer::initialize(const InitializationContext* ic)
     double angle = (double) step * 2 * GMath.pi() / numStrides;
     double c = GMath.cos(angle);
     double s = GMath.sin(angle);
-    vertices[nv++]  = (float) (r1 * c);
-    vertices[nv++]  = (float) (r1 * s);
-    vertices[nv++]  = 0.0;
-    vertices[nv++]  = (float) (r2 * c);
-    vertices[nv++]  = (float) (r2 * s);
-    vertices[nv++]  = 0.0;
-    indices[ni]     = ni;
-    indices[ni+1]   = ni+1;
+    
+    vertices.add((float)(r1 * c), (float)(r1 * s), 0.0);
+    vertices.add((float)(r2 * c), (float)(r2 * s), 0.0);
+    
+    indices.add(ni);
+    indices.add(ni+1);
+    
+//    vertices[nv++]  = (float) (r1 * c);
+//    vertices[nv++]  = (float) (r1 * s);
+//    vertices[nv++]  = 0.0;
+//    vertices[nv++]  = (float) (r2 * c);
+//    vertices[nv++]  = (float) (r2 * s);
+//    vertices[nv++]  = 0.0;
+//    indices[ni]     = ni;
+//    indices[ni+1]   = ni+1;
     ni+=2;    
     float col       = (float) (1.1 * step / numStrides);
     if (col>1) {
-      colors[nc++]    = 255;
-      colors[nc++]    = 255;
-      colors[nc++]    = 255;
-      colors[nc++]    = 0;
-      colors[nc++]    = 255;
-      colors[nc++]    = 255;
-      colors[nc++]    = 255;
-      colors[nc++]    = 0;      
+      colors.add(255.0);
+      colors.add(255.0);
+      colors.add(255.0);
+      colors.add(0.0);
+      
+      colors.add(255.0);
+      colors.add(255.0);
+      colors.add(255.0);
+      colors.add(0.0);  
     } else {
-      colors[nc++]    = 255;
-      colors[nc++]    = 255;
-      colors[nc++]    = 255;
-      colors[nc++]    = 1-col;
-      colors[nc++]    = 255;
-      colors[nc++]    = 255;
-      colors[nc++]    = 255;
-      colors[nc++]    = 1-col;
+      colors.add(255.0);
+      colors.add(255.0);
+      colors.add(255.0);
+      colors.add(1 - col);
+      
+      colors.add(255.0);
+      colors.add(255.0);
+      colors.add(255.0);
+      colors.add(1 - col);
     }
   }
 
   // the two last indices
-  indices[ni++]     = 0;
-  indices[ni++]     = 1;
+  indices.add(ni++);
+  indices.add(ni++);
+//  indices[ni++]     = 0;
+//  indices[ni++]     = 1;
+  
 
   
   // create mesh
-  //Color *flatColor = new Color(Color::fromRGBA(1.0, 1.0, 0.0, 1.0));
 #ifdef C_CODE
-  _mesh = IndexedMesh::createFromVector3D(true, TriangleStrip, NoCenter, Vector3D(0,0,0), 
-                                           numVertices, vertices, indices, numIndices, NULL, colors);
-#else
-  _mesh = IndexedMesh::createFromVector3D(true, GLPrimitive.TriangleStrip, NoCenter, Vector3D(0,0,0), 
-                                          numVertices, vertices, indices, numIndices, NULL, colors);
+  _mesh = new IndexedMesh(TriangleStrip,
+                         true,
+                         GivenCenter,
+                         vertices.getCenter(),
+                         vertices.create(),
+                         indices.create());
 #endif
+#ifdef JAVA_CODE
+  _mesh = IndexedMesh(GLPrimitive.TriangleStrip,
+                         true,
+                         CenterStrategy.GivenCenter,
+                         vertices.getCenter(),
+                         vertices.create(),
+                         indices.create());
+#endif
+  
+  
+  //Color *flatColor = new Color(Color::fromRGBA(1.0, 1.0, 0.0, 1.0));
+//#ifdef C_CODE
+//  _mesh = IndexedMesh::createFromVector3D(true, TriangleStrip, NoCenter, Vector3D(0,0,0), 
+//                                           numVertices, vertices, indices, numIndices, NULL, colors);
+//#else
+//  _mesh = IndexedMesh::createFromVector3D(true, GLPrimitive.TriangleStrip, NoCenter, Vector3D(0,0,0), 
+//                                          numVertices, vertices, indices, numIndices, NULL, colors);
+//#endif
 }  
 
 void BusyMeshRenderer::start() {

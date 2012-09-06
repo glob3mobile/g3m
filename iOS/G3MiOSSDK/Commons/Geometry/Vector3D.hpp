@@ -39,6 +39,10 @@ public:
     return Vector3D(GMath.NanD(), GMath.NanD(), GMath.NanD());
   }
   
+  static Vector3D zero() {
+    return Vector3D(0.0, 0.0, 0.0);
+  }
+  
   bool isNan() const {
     return (GMath.isNan(_x) || GMath.isNan(_y) || GMath.isNan(_z));
   }
