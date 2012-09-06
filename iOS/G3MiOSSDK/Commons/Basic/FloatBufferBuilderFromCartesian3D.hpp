@@ -45,22 +45,26 @@ public:
     float x = (float) vector.x();
     float y = (float) vector.y();
     float z = (float) vector.z();
-    
+    add(x,y,z);
+  }
+  
+  void add(float x, float y, float z) {
     if (_centerStrategy == FirstVertex && _values.size() == 0){
-      setCenter(vector);
+      setCenter(Vector3D(x,y,z));
     }
     
     if (_centerStrategy != NoCenter){
       x -= _cx;
       y -= _cy;
       z -= _cz;
-    } else{
     }
     
     _values.push_back(x);
     _values.push_back(y);
     _values.push_back(z);
   }
+  
+  
   
   Vector3D getCenter(){
     return Vector3D((double)_cx,(double)_cy,(double)_cz);

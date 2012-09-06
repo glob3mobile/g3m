@@ -18,6 +18,11 @@ public:
     _values.push_back( (float) vector.x() );
     _values.push_back( (float) vector.y() );
   }
+  
+  void add(float x, float y) {
+    _values.push_back(x);
+    _values.push_back(y);
+  }
 };
 
 #endif
