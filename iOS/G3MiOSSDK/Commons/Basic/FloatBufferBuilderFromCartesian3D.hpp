@@ -42,10 +42,9 @@ public:
   }
   
   void add(const Vector3D& vector) {
-    float x = (float) vector.x();
-    float y = (float) vector.y();
-    float z = (float) vector.z();
-    add(x,y,z);
+    add((float) vector.x(),
+        (float) vector.y(),
+        (float) vector.z());
   }
   
   void add(double x, double y, double z) {
