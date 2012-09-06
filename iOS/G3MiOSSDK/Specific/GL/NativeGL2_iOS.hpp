@@ -218,7 +218,6 @@ public:
                            bool normalized,
                            int stride,
                            IFloatBuffer* buffer) const {
-    int ___TODO_use_native_IFloatBuffer;
     float* pointer = ((FloatBuffer_iOS*) buffer)->getPointer();
     glVertexAttribPointer(index, size, GL_FLOAT, normalized, stride, pointer);
   }
@@ -226,10 +225,7 @@ public:
   void drawElements(GLPrimitive mode,
                     int count,
                     IIntBuffer* buffer) const {
-    int ___TODO_use_native_IFloatBuffer;
-
     int* pointer = ((IntBuffer_iOS*) buffer)->getPointer();
-    
     glDrawElements(getEnum(mode), count, GL_INT, pointer);
   }
   

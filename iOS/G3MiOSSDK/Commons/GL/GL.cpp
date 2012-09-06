@@ -380,11 +380,7 @@ void GL::setTextureCoordinates(int size, int stride, IFloatBuffer* texcoord) {
   }
   
   if (_textureCoordinates != texcoord) {
-#ifdef C_CODE
-    _gl->vertexAttribPointer(Attributes.TextureCoord, size, Float, false, stride, texcoord);
-#else
-    _gl->vertexAttribPointer(Attributes.TextureCoord, size, GLType.Float, false, stride, texcoord);
-#endif
+    _gl->vertexAttribPointer(Attributes.TextureCoord, size, false, stride, texcoord);
     _textureCoordinates = texcoord;
   }
 }
@@ -507,11 +503,7 @@ void GL::enableVertexColor(IFloatBuffer* colors, float intensity) {
   //if (!_enableVertexColor) {
   _gl->uniform1i(Uniforms.EnableColorPerVertex, 1);
   _gl->enableVertexAttribArray(Attributes.Color);
-#ifdef C_CODE
-  _gl->vertexAttribPointer(Attributes.Color, 4, Float, false, 0, colors);
-#else
-  _gl->vertexAttribPointer(Attributes.Color, 4, GLType.Float, false, 0, colors);
-#endif
+  _gl->vertexAttribPointer(Attributes.Color, 4, false, 0, colors);
   _gl->uniform1f(Uniforms.ColorPerVertexIntensity, intensity);
   //_enableVertexColor = true;
   //}
