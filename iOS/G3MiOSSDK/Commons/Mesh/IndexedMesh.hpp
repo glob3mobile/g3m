@@ -20,12 +20,14 @@
 
 #include "INativeGL.hpp"
 
-enum CenterStrategy {
-  NoCenter,
-  AveragedVertex,
-  FirstVertex,
-  GivenCenter
-};
+#include "FloatBufferBuilderFromCartesian3D.hpp"
+
+//enum CenterStrategy {
+//  NoCenter,
+//  AveragedVertex,
+//  FirstVertex,
+//  GivenCenter
+//};
 
 
 class IndexedMesh : public Mesh {

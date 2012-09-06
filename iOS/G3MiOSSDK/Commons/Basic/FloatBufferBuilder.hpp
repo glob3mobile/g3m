@@ -17,32 +17,11 @@ class IFloatBuffer;
 class IFactory;
 
 class FloatBufferBuilder {
-private:
+protected:
   std::vector<float> _values;
   
 public:
-  
-  void add(float value) {
-    _values.push_back(value);
-  }
-  
-  void add(double value) {
-    _values.push_back((float) value);
-  }
-  
-  void add(const Vector2D& vector) {
-    _values.push_back( (float) vector.x() );
-    _values.push_back( (float) vector.y() );
-  }
-  
-  void add(const Vector3D& vector) {
-    _values.push_back( (float) vector.x() );
-    _values.push_back( (float) vector.y() );
-    _values.push_back( (float) vector.z() );
-  }
-  
   IFloatBuffer* create() const;
-  
 };
 
 #endif

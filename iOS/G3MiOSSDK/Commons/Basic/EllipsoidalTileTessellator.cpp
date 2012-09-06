@@ -17,6 +17,8 @@
 #include "FloatBufferBuilder.hpp"
 #include "IntBufferBuilder.hpp"
 
+#include "FloatBufferBuilderFromCartesian3D.hpp"
+
 Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
                                              const Tile* tile) const {
   
