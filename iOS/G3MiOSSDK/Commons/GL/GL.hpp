@@ -62,13 +62,9 @@ private:
   float _translationX;
   float _translationY;
   
-//#ifdef C_CODE
-//  const float* _textureCoordinates;
-//#endif
-//#ifdef JAVA_CODE
-//  private float[] _textureCoordinates;
-//#endif
+  IFloatBuffer* _vertices;
   IFloatBuffer* _textureCoordinates;
+  IFloatBuffer* _colors;
   
   float _flatColorR;
   float _flatColorG;
@@ -122,7 +118,9 @@ public:
   _translationY(0),
   _texturesIdGetCounter(0),
   _texturesIdTakeCounter(0),
+  _vertices(NULL),
   _textureCoordinates(NULL),
+  _colors(NULL),
   _flatColorR(0),
   _flatColorG(0),
   _flatColorB(0),
@@ -170,7 +168,7 @@ public:
   
   void multMatrixf(const MutableMatrix44D &m);
   
-  void vertexPointer(int size, int stride, IFloatBuffer* vertex);
+  void vertexPointer(int size, int stride, IFloatBuffer* vertices);
   
   void drawTriangleStrip(IIntBuffer* indices) ;
   
@@ -288,6 +286,17 @@ public:
       delete [] _lastImageData;
       _lastImageData = NULL;
     }
+
+    if (_vertices != NULL) {
+      delete _vertices;
+    }
+    if (_textureCoordinates != NULL) {
+      delete _textureCoordinates;
+    }
+    if (_colors != NULL) {
+      delete _colors;
+    }
+     
   }
   
 };

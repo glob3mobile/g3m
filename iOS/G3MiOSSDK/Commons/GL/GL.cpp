@@ -211,8 +211,15 @@ void GL::disablePolygonOffset() {
 #endif
 }
 
-void GL::vertexPointer(int size, int stride, IFloatBuffer* vertex) {
-  _gl->vertexAttribPointer(Attributes.Position, size, false, stride, vertex);
+void GL::vertexPointer(int size, int stride, IFloatBuffer* vertices) {
+  int __TODO_text_cache_buffer;
+  
+  if ((_vertices != vertices) ||
+      (_vertices->timestamp() != vertices->timestamp()) ) {
+
+    _gl->vertexAttribPointer(Attributes.Position, size, false, stride, vertices);
+    _vertices = vertices;
+  }
 }
 
 void GL::drawTriangleStrip(IIntBuffer* indices) {
@@ -358,7 +365,10 @@ const GLTextureId GL::uploadTexture(const IImage* image,
 }
 
 void GL::setTextureCoordinates(int size, int stride, IFloatBuffer* texcoord) {
-  if (_textureCoordinates != texcoord) {
+  int __TODO_cache_buffer;
+  
+  if ((_textureCoordinates != texcoord) ||
+      (_textureCoordinates->timestamp() != texcoord->timestamp()) ) {
     _gl->vertexAttribPointer(Attributes.TextureCoord, size, false, stride, texcoord);
     _textureCoordinates = texcoord;
   }
@@ -408,7 +418,7 @@ void GL::drawBillBoard(const GLTextureId& textureId,
   color(1, 1, 1, 1);
   
   bindTexture(textureId);
-
+  
   vertexPointer(3, 0, vertices);
   setTextureCoordinates(2, 0, getBillboardTexCoord());
   
@@ -453,10 +463,18 @@ void GL::disableTexture2D() {
 }
 
 void GL::enableVertexColor(IFloatBuffer* colors, float intensity) {
+  
   //if (!_enableVertexColor) {
   _gl->uniform1i(Uniforms.EnableColorPerVertex, 1);
   _gl->enableVertexAttribArray(Attributes.Color);
-  _gl->vertexAttribPointer(Attributes.Color, 4, false, 0, colors);
+  
+  int __TODO_cache_buffer;
+  if ((_colors != colors) ||
+      (_colors->timestamp() != colors->timestamp()) ) {
+    _gl->vertexAttribPointer(Attributes.Color, 4, false, 0, colors);
+    _colors = colors;
+  }
+  
   _gl->uniform1f(Uniforms.ColorPerVertexIntensity, intensity);
   //_enableVertexColor = true;
   //}
