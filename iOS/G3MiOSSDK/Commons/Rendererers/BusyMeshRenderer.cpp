@@ -25,7 +25,11 @@ void BusyMeshRenderer::initialize(const InitializationContext* ic)
 {
   unsigned int numStrides = 60;
   
+#ifdef C_CODE
   FloatBufferBuilderFromCartesian3D vertices(NoCenter, Vector3D::zero());
+#else
+  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy.NoCenter, Vector3D::zero());
+#endif
   FloatBufferBuilderFromColor colors;
   IntBufferBuilder indices;
   
@@ -73,7 +77,7 @@ void BusyMeshRenderer::initialize(const InitializationContext* ic)
                       vertices.getCenter(),
                       vertices.create(),
                       indices.create(),
-                      NULL,
+                      null,
                       colors.create());
 #endif
 }

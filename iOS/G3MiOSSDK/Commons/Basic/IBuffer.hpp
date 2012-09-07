@@ -12,9 +12,10 @@
 class IBuffer {
 public:
   
+#ifdef C_CODE
   virtual ~IBuffer() {
-    
   }
+#endif
   
   /**
    Answer the size (the count of elements) of the buffer

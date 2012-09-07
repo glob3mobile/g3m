@@ -44,7 +44,11 @@ bool BusyQuadRenderer::initMesh(const RenderContext* rc) {
   
   const float halfSize = 16;
 
+#ifdef C_CODE
   FloatBufferBuilderFromCartesian3D vertices(NoCenter, Vector3D::zero());
+#else
+  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy.NoCenter, Vector3D::zero());
+#endif
   vertices.add(-halfSize, +halfSize, 0);
   vertices.add(-halfSize, -halfSize, 0);
   vertices.add(+halfSize, +halfSize, 0);

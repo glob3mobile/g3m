@@ -30,7 +30,11 @@ void DummyRenderer::initialize(const InitializationContext* ic)
   //_numIndices = 2 * (res - 1) * (res + 1);
   //_index = new int[_numIndices];
   
+#ifdef C_CODE
   FloatBufferBuilderFromCartesian3D vertices(NoCenter, Vector3D::zero());
+#else
+  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy.NoCenter, Vector3D::zero());
+#endif
   IntBufferBuilder index;
 
   // create vertices

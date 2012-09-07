@@ -35,8 +35,11 @@ IFloatBuffer* Mark::getVertices(const Planet* planet) {
   if (_vertices == NULL) {
     const Vector3D* pos = getCartesianPosition(planet);
 
-    //FloatBufferBuilderFromCartesian3D vertex(FirstVertex, Vector3D::zero());
+#ifdef C_CODE
     FloatBufferBuilderFromCartesian3D vertex(NoCenter, Vector3D::zero());
+#else
+    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy.NoCenter, Vector3D::zero());
+#endif
     vertex.add(*pos);
     vertex.add(*pos);
     vertex.add(*pos);

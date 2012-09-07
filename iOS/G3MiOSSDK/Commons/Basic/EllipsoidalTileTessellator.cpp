@@ -32,7 +32,11 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
   const int resolutionMinus1 = resolution - 1;
   
   // create vertices coordinates
+#ifdef C_CODE
   FloatBufferBuilderFromGeodetic vertices(GivenCenter, planet, sector.getCenter());
+#else
+  FloatBufferBuilderFromGeodetic vertices(CenterStrategy.GivenCenter, planet, sector.getCenter());
+#endif
   for (int j = 0; j < resolution; j++) {
     for (int i = 0; i < resolution; i++) {
       Geodetic2D innerPoint = sector.getInnerPoint((double) i / resolutionMinus1,
@@ -207,7 +211,11 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
   const double offset = nw.sub(sw).length() * 1e-3;
   
   // create vectors
+#ifdef C_CODE
   FloatBufferBuilderFromGeodetic vertices(GivenCenter, planet, sector.getCenter());
+#else
+  FloatBufferBuilderFromGeodetic vertices(CenterStrategy.GivenCenter, planet, sector.getCenter());
+#endif
   // create indices
   IntBufferBuilder indices;
   
