@@ -18,7 +18,7 @@ public class TileTextureBuilder extends RCObject
 
   private final Mesh _tessellatorMesh;
 
-  private final float[] _texCoords;
+  private IFloatBuffer _texCoords;
 
   private java.util.ArrayList<PetitionStatus> _status = new java.util.ArrayList<PetitionStatus>();
   private java.util.ArrayList<Long> _requestsIds = new java.util.ArrayList<Long>();
@@ -31,7 +31,7 @@ public class TileTextureBuilder extends RCObject
 
   public LeveledTexturedMesh _mesh;
 
-  public TileTextureBuilder(MultiLayerTileTexturizer texturizer, RenderContext rc, LayerSet layerSet, TilesRenderParameters parameters, IDownloader downloader, Tile tile, Mesh tessellatorMesh, float[] texCoords)
+  public TileTextureBuilder(MultiLayerTileTexturizer texturizer, RenderContext rc, LayerSet layerSet, TilesRenderParameters parameters, IDownloader downloader, Tile tile, Mesh tessellatorMesh, IFloatBuffer texCoords)
   //_tileKey(tile->getKey()),
   {
 	  _texturizer = texturizer;

@@ -57,7 +57,13 @@ public class GL
   private float _translationX;
   private float _translationY;
 
-  private float[] _textureCoordinates;
+///#ifdef C_CODE
+//  const float* _textureCoordinates;
+///#endif
+///#ifdef JAVA_CODE
+//  private float[] _textureCoordinates;
+///#endif
+  private IFloatBuffer _textureCoordinates;
 
   private float _flatColorR;
   private float _flatColorG;
@@ -143,6 +149,30 @@ public class GL
 	return l;
   }
 
+  private IFloatBuffer _billboardTexCoord;
+  private IFloatBuffer getBillboardTexCoord()
+  {
+  
+	if (_billboardTexCoord == null)
+	{
+	  //  const static float texcoord[] = {
+	  //    1, 1,
+	  //    1, 0,
+	  //    0, 1,
+	  //    0, 0
+	  //  };
+  
+	  FloatBufferBuilderFromCartesian2D texCoor = new FloatBufferBuilderFromCartesian2D();
+	  texCoor.add(1,1);
+	  texCoor.add(1,0);
+	  texCoor.add(0,1);
+	  texCoor.add(0,0);
+	  _billboardTexCoord = texCoor.create();
+	}
+  
+	return _billboardTexCoord;
+  }
+
 
   public GL(INativeGL gl)
 //  _enableVertexColor(false),
@@ -172,7 +202,7 @@ public class GL
 	  _lastTextureWidth = -1;
 	  _lastTextureHeight = -1;
 	  _lastImageData = null;
-
+	  _billboardTexCoord = null;
   }
 
   public final void enableVerticesPosition()
@@ -334,7 +364,7 @@ public class GL
 	//  _gl->uniform4f(Uniforms.FlatColor, r, g, b, a);
   }
 
-  public final void enableVertexColor(float[] colors, float intensity)
+  public final void enableVertexColor(IFloatBuffer colors, float intensity)
   {
 	if (GlobalMembersGL.Attributes.Color == -1)
 	{
@@ -352,7 +382,7 @@ public class GL
 	//if (!_enableVertexColor) {
 	_gl.uniform1i(GlobalMembersGL.Uniforms.EnableColorPerVertex, 1);
 	_gl.enableVertexAttribArray(GlobalMembersGL.Attributes.Color);
-	_gl.vertexAttribPointer(GlobalMembersGL.Attributes.Color, 4, GLType.Float, false, 0, colors);
+	_gl.vertexAttribPointer(GlobalMembersGL.Attributes.Color, 4, false, 0, colors);
 	_gl.uniform1f(GlobalMembersGL.Uniforms.ColorPerVertexIntensity, intensity);
 	//_enableVertexColor = true;
 	//}
@@ -403,34 +433,34 @@ public class GL
 	loadModelView();
   }
 
-  public final void vertexPointer(int size, int stride, float[] vertex)
+  public final void vertexPointer(int size, int stride, IFloatBuffer vertex)
   {
 	if (GlobalMembersGL.Attributes.Position == -1)
 	{
 	  ILogger.instance().logError("Attribute Position Invalid");
 	}
   
-	_gl.vertexAttribPointer(GlobalMembersGL.Attributes.Position, size, GLType.Float, false, stride, (Object) vertex);
+	_gl.vertexAttribPointer(GlobalMembersGL.Attributes.Position, size, false, stride, vertex);
   }
 
-  public final void drawTriangleStrip(int n, int[] i)
+  public final void drawTriangleStrip(IIntBuffer indices)
   {
-	_gl.drawElements(GLPrimitive.TriangleStrip, n, GLType.UnsignedInt, i);
+	_gl.drawElements(GLPrimitive.TriangleStrip, indices.size(), indices);
   }
 
-  public final void drawLines(int n, int[] i)
+  public final void drawLines(IIntBuffer indices)
   {
-	_gl.drawElements(GLPrimitive.Lines, n, GLType.UnsignedInt, i);
+	_gl.drawElements(GLPrimitive.Lines, indices.size(), GLType.Int, indices);
   }
 
-  public final void drawLineLoop(int n, int[] i)
+  public final void drawLineLoop(IIntBuffer indices)
   {
-	_gl.drawElements(GLPrimitive.LineLoop, n, GLType.UnsignedInt, i);
+	_gl.drawElements(GLPrimitive.LineLoop, indices.size(), GLType.Int, indices);
   }
 
-  public final void drawPoints(int n, int[] i)
+  public final void drawPoints(IIntBuffer indices)
   {
-	_gl.drawElements(GLPrimitive.Points, n, GLType.UnsignedInt, i);
+	_gl.drawElements(GLPrimitive.Points, indices.size(), indices);
   }
 
 //C++ TO JAVA CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in Java):
@@ -568,7 +598,7 @@ public class GL
 	return texId;
   }
 
-  public final void setTextureCoordinates(int size, int stride, float[] texcoord)
+  public final void setTextureCoordinates(int size, int stride, IFloatBuffer texcoord)
   {
 	if (GlobalMembersGL.Attributes.TextureCoord == -1)
 	{
@@ -577,7 +607,7 @@ public class GL
   
 	if (_textureCoordinates != texcoord)
 	{
-	  _gl.vertexAttribPointer(GlobalMembersGL.Attributes.TextureCoord, size, GLType.Float, false, stride, (Object) texcoord);
+	  _gl.vertexAttribPointer(GlobalMembersGL.Attributes.TextureCoord, size, false, stride, texcoord);
 	  _textureCoordinates = texcoord;
 	}
   }
@@ -622,8 +652,9 @@ public class GL
   
   }
 
-  public final void drawBillBoard(GLTextureId textureId, Vector3D pos, float viewPortRatio)
+  public final void drawBillBoard(GLTextureId textureId, IFloatBuffer vertices, float viewPortRatio)
   {
+	int TODO_refactor_billboard;
 	if (GlobalMembersGL.Uniforms.BillBoard == -1)
 	{
 	  ILogger.instance().logError("Uniforms BillBoard Invalid");
@@ -633,11 +664,6 @@ public class GL
 	{
 	  ILogger.instance().logError("Uniforms ViewPortRatio Invalid");
 	}
-  
-  
-	float[] vertex = { (float) pos.x(), (float) pos.y(), (float) pos.z(), (float) pos.x(), (float) pos.y(), (float) pos.z(), (float) pos.x(), (float) pos.y(), (float) pos.z(), (float) pos.x(), (float) pos.y(), (float) pos.z() };
-  
-	float[] texcoord = { 1, 1, 1, 0, 0, 1, 0, 0 };
   
 	_gl.uniform1i(GlobalMembersGL.Uniforms.BillBoard, 1);
   
@@ -650,10 +676,10 @@ public class GL
   
 	bindTexture(textureId);
   
-	vertexPointer(3, 0, vertex);
-	setTextureCoordinates(2, 0, texcoord);
+	vertexPointer(3, 0, vertices);
+	setTextureCoordinates(2, 0, getBillboardTexCoord());
   
-	_gl.drawArrays(GLPrimitive.TriangleStrip, 0, 4);
+	_gl.drawArrays(GLPrimitive.TriangleStrip, 0, vertices.size() / 3);
   
 	enableDepthTest();
   

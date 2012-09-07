@@ -52,6 +52,11 @@ public class Vector3D
 	return new Vector3D(IMathUtils.instance().NanD(), IMathUtils.instance().NanD(), IMathUtils.instance().NanD());
   }
 
+  public static Vector3D zero()
+  {
+	return new Vector3D(0.0, 0.0, 0.0);
+  }
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: boolean isNan() const
   public final boolean isNan()

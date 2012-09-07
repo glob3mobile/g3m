@@ -9,6 +9,7 @@ public class G3MWidget
 	  logger.logInfo("Creating G3MWidget...");
 	}
   
+	IFactory.setInstance(factory);
 	IStringUtils.setInstance(stringUtils);
 	ILogger.setInstance(logger);
 	IThreadUtils.setInstance(threadUtils);
