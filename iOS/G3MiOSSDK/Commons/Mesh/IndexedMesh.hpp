@@ -26,7 +26,7 @@ private:
   const Color*      _flatColor;
   IFloatBuffer*     _colors;
   const float       _colorsIntensity;
-
+  
   mutable Extent*   _extent;
   
   Extent* computeExtent() const;
@@ -41,9 +41,9 @@ public:
               const Color* flatColor = NULL,
               IFloatBuffer* colors = NULL,
               const float colorsIntensity = (float)0.0);
-
+  
   ~IndexedMesh();
-
+  
   virtual void render(const RenderContext* rc) const;
   
   Extent* getExtent() const;

@@ -48,33 +48,37 @@ struct AttributesStruct {
   int Position;
   int TextureCoord;
   int Color;
-  int Normal;
 } Attributes;
 
-int GL::checkedGetAttribLocation(int program, const std::string& name) const{
+int GL::checkedGetAttribLocation(int program, const std::string& name){
   int l = _gl->getAttribLocation(program, name);
   if (l == -1){
     ILogger::instance()->logError("Error fetching Attribute, Program = %d, Variable = %s", program, name.c_str());
+    _errorGettingLocationOcurred = true;
   }
   return l;
 }
-int GL::checkedGetUniformLocation(int program, const std::string& name) const{
+int GL::checkedGetUniformLocation(int program, const std::string& name){
   int l = _gl->getUniformLocation(program, name);
   if (l == -1){
     ILogger::instance()->logError("Error fetching Uniform, Program = %d, Variable = %s", program, name.c_str());
+    _errorGettingLocationOcurred = true;
   }
   return l;
 }
 
-void GL::useProgram(unsigned int program) {
+bool GL::useProgram(unsigned int program) {
   // set shaders
   _gl->useProgram(program);
+  
+  //Methods checkedGetAttribLocation and checkedGetUniformLocation
+  //will turn _errorGettingLocationOcurred to true is that happens
+  _errorGettingLocationOcurred = false;
   
   // Extract the handles to attributes
   Attributes.Position     = checkedGetAttribLocation(program, "Position");
   Attributes.TextureCoord = checkedGetAttribLocation(program, "TextureCoord");
   Attributes.Color        = checkedGetAttribLocation(program, "Color");
-  //Attributes.Normal       = checkedGetAttribLocation(program, "Normal");
   
   // Extract the handles to uniforms
   Uniforms.Projection          = checkedGetUniformLocation(program, "Projection");
@@ -101,6 +105,9 @@ void GL::useProgram(unsigned int program) {
   Uniforms.ColorPerVertexIntensity = checkedGetUniformLocation(program, "ColorPerVertexIntensity");
   Uniforms.EnableColorPerVertex    = checkedGetUniformLocation(program, "EnableColorPerVertex");
   Uniforms.EnableFlatColor         = checkedGetUniformLocation(program, "EnableFlatColor");
+  
+  //Return
+  return !_errorGettingLocationOcurred;
 }
 
 void GL::loadModelView() {

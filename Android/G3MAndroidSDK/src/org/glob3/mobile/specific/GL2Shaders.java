@@ -54,7 +54,6 @@ public class GL2Shaders {
    private final static String _vertexShader   = "attribute vec4 Position;"
                                                  + "attribute vec2 TextureCoord; "
                                                  + "attribute vec4 Color;"
-                                                 + "attribute vec3 Normal;"
                                                  + "uniform mat4 Projection;"
                                                  + "uniform mat4 Modelview;"
                                                  + "uniform bool BillBoard;"
@@ -68,7 +67,8 @@ public class GL2Shaders {
                                                  + "    gl_Position.x += (-0.05 + TextureCoord.x * 0.1) * gl_Position.w;"
                                                  + "    gl_Position.y -= (-0.05 + TextureCoord.y * 0.1) * gl_Position.w * ViewPortRatio;"
                                                  + "  }" + "  TextureCoordOut = TextureCoord;" + "  VertexColor = Color;"
-                                                 + "  gl_PointSize = PointSize;" + "  vec3 x = Normal;" + "}";
+                                                 + "  gl_PointSize = PointSize;"
+                                                 + "}";
 
 
    public static String getFragmentShader() {

@@ -8,7 +8,6 @@
 attribute vec4 Position;
 attribute vec2 TextureCoord;
 attribute vec4 Color;
-attribute vec3 Normal;
 
 uniform mat4 Projection;
 uniform mat4 Modelview;
@@ -39,6 +38,4 @@ void main() {
   VertexColor = Color;
   
   gl_PointSize = PointSize;
-  
-  vec3 x = Normal; //This line has been added to avoid compiler taking Normal variable away (Remove when Normal has been used)
 }
