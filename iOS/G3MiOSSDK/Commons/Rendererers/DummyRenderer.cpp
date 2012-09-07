@@ -19,8 +19,10 @@
 
 DummyRenderer::~DummyRenderer()
 {
+#ifdef C_CODE
   delete _index;
   delete _vertices;
+#endif
 }
 
 void DummyRenderer::initialize(const InitializationContext* ic)

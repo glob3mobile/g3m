@@ -242,7 +242,6 @@ void GL::drawLines(IIntBuffer* indices) {
 #else
   _gl->drawElements(GLPrimitive.Lines,
                     indices.size(),
-                    GLType.Int,
                     indices);
 #endif
 }
@@ -255,7 +254,6 @@ void GL::drawLineLoop(IIntBuffer* indices) {
 #else
   _gl->drawElements(GLPrimitive.LineLoop,
                     indices.size(),
-                    GLType.Int,
                     indices);
 #endif
 }

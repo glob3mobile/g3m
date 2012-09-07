@@ -17,7 +17,12 @@
 
 class IndexedMesh : public Mesh {
 private:
+#ifdef C_CODE
   const GLPrimitive _primitive;
+#endif
+#ifdef JAVA_CODE
+  private final GLPrimitive _primitive;
+#endif
   const bool        _owner;
   Vector3D          _center;
   const MutableMatrix44D* _translationMatrix;

@@ -72,7 +72,7 @@ void BusyMeshRenderer::initialize(const InitializationContext* ic)
                           colors.create());
 #endif
 #ifdef JAVA_CODE
-  _mesh = IndexedMesh(GLPrimitive.TriangleStrip,
+  _mesh = new IndexedMesh(GLPrimitive.TriangleStrip,
                       true,
                       vertices.getCenter(),
                       vertices.create(),

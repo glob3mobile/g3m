@@ -148,9 +148,9 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
                                     vertexColors);
 #endif
 #ifdef JAVA_CODE
-  IndexedMesh *im = IndexedMesh(GLPrimitive.TriangleStrip,
+  IndexedMesh im = new IndexedMesh(GLPrimitive.TriangleStrip,
                                 true,
-                                Vector3D::zero(),
+                                Vector3D.zero(),
                                 ver,
                                 ind,
                                 flatColor,
