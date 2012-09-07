@@ -41,7 +41,6 @@ public class GL
   private boolean _enableTextures;
   private boolean _enableTexture2D;
 //  bool _enableVertexColor;
-//  bool _enableVertexNormal;
   private boolean _enableVerticesPosition;
   private boolean _enableFlatColor;
   private boolean _enableDepthTest;
@@ -122,25 +121,24 @@ public class GL
   byte[] _lastImageData;
 
   //Get Locations warning of errors
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: int checkedGetAttribLocation(int program, const String& name) const
+  private boolean _errorGettingLocationOcurred;
   private int checkedGetAttribLocation(int program, String name)
   {
 	int l = _gl.getAttribLocation(program, name);
 	if (l == -1)
 	{
 	  ILogger.instance().logError("Error fetching Attribute, Program = %d, Variable = %s", program, name);
+	  _errorGettingLocationOcurred = true;
 	}
 	return l;
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: int checkedGetUniformLocation(int program, const String& name) const
   private int checkedGetUniformLocation(int program, String name)
   {
 	int l = _gl.getUniformLocation(program, name);
 	if (l == -1)
 	{
 	  ILogger.instance().logError("Error fetching Uniform, Program = %d, Variable = %s", program, name);
+	  _errorGettingLocationOcurred = true;
 	}
 	return l;
   }
@@ -148,7 +146,6 @@ public class GL
 
   public GL(INativeGL gl)
 //  _enableVertexColor(false),
-//  _enableVertexNormal(false),
 //  _enableFlatColor(false),
   {
 	  _gl = gl;
@@ -379,37 +376,6 @@ public class GL
 	//  }
   }
 
-  public final void enableVertexNormal(float[] normals)
-  {
-	int TODO_No_Normals_In_Shader;
-  //  if (Attributes.Normal == -1){
-  //    ILogger::instance()->logError("Attribute Normal Invalid");
-  //  }
-  //
-  //  //  if (!_enableVertexNormal) {
-  //  _gl->enableVertexAttribArray(Attributes.Normal);
-  ///#ifdef C_CODE
-  //  _gl->vertexAttribPointer(Attributes.Normal, 3, Float, false, 0, normals);
-  ///#else
-  //  _gl->vertexAttribPointer(Attributes.Normal, 3, GLType.Float, false, 0, normals);
-  ///#endif
-  //  //    _enableVertexNormal = true;
-  //  //  }
-  }
-
-  public final void disableVertexNormal()
-  {
-	  int TODO_No_Normals_In_Shader;
-  //  if (Attributes.Normal == -1){
-  //    ILogger::instance()->logError("Attribute Normal Invalid");
-  //  }
-  //
-  //  //  if (_enableVertexNormal) {
-  //  _gl->disableVertexAttribArray(Attributes.Normal);
-  //  //    _enableVertexNormal = false;
-  //  //  }
-  }
-
   public final void pushMatrix()
   {
 	_matrixStack.addLast(_modelView);
@@ -482,16 +448,19 @@ public class GL
 	_gl.uniformMatrix4fv(GlobalMembersGL.Uniforms.Projection, 1, false, setProjection_M);
   }
 
-  public final void useProgram(int program)
+  public final boolean useProgram(int program)
   {
 	// set shaders
 	_gl.useProgram(program);
+  
+	//Methods checkedGetAttribLocation and checkedGetUniformLocation
+	//will turn _errorGettingLocationOcurred to true is that happens
+	_errorGettingLocationOcurred = false;
   
 	// Extract the handles to attributes
 	GlobalMembersGL.Attributes.Position = checkedGetAttribLocation(program, "Position");
 	GlobalMembersGL.Attributes.TextureCoord = checkedGetAttribLocation(program, "TextureCoord");
 	GlobalMembersGL.Attributes.Color = checkedGetAttribLocation(program, "Color");
-	//Attributes.Normal       = checkedGetAttribLocation(program, "Normal");
   
 	// Extract the handles to uniforms
 	GlobalMembersGL.Uniforms.Projection = checkedGetUniformLocation(program, "Projection");
@@ -518,6 +487,9 @@ public class GL
 	GlobalMembersGL.Uniforms.ColorPerVertexIntensity = checkedGetUniformLocation(program, "ColorPerVertexIntensity");
 	GlobalMembersGL.Uniforms.EnableColorPerVertex = checkedGetUniformLocation(program, "EnableColorPerVertex");
 	GlobalMembersGL.Uniforms.EnableFlatColor = checkedGetUniformLocation(program, "EnableFlatColor");
+  
+	//Return
+	return !_errorGettingLocationOcurred;
   }
 
   public final void enablePolygonOffset(float factor, float units)

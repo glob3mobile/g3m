@@ -113,7 +113,6 @@ public class SimplePlanetRenderer extends Renderer
 	float ver[] = createVertices(planet);
 	float texC[] = null;
 	float colors[] = null;
-	float normals[] = null;
   
 	//TEXTURED
 	GLTextureId texId = GLTextureId.invalid();
@@ -152,19 +151,7 @@ public class SimplePlanetRenderer extends Renderer
 	  flatColor = new Color(Color.fromRGBA((float) 0.0, (float) 1.0, (float) 0.0, (float) 1.0));
 	}
   
-	if (false)
-	{
-	  int numVertices = res * res * 3;
-	  normals = new float[numVertices];
-	  for(int i = 0; i < numVertices;)
-	  {
-		normals[i++] = (float) 1.0;
-		normals[i++] = (float) 1.0;
-		normals[i++] = (float) 1.0;
-	  }
-	}
-  
-	IndexedMesh im = IndexedMesh.createFromVector3D(true, GLPrimitive.TriangleStrip, CenterStrategy.NoCenter, new Vector3D(0,0,0), _latRes *_lonRes, ver, ind, numIndexes, flatColor, colors, (float)0.5, normals);
+	IndexedMesh im = IndexedMesh.createFromVector3D(true, GLPrimitive.TriangleStrip, CenterStrategy.NoCenter, new Vector3D(0,0,0), _latRes *_lonRes, ver, ind, numIndexes, flatColor, colors, (float)0.5);
   
 	TextureMapping texMap = new SimpleTextureMapping(texId, texC, true);
   

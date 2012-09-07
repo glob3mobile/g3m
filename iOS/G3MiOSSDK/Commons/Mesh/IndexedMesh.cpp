@@ -48,7 +48,7 @@ _colors(colors),
 _colorsIntensity(colorsIntensity),
 _extent(NULL),
 _center(center),
-_translationMatrix(center.isNan()? NULL: 
+_translationMatrix(center.isNan()? NULL:
                    new MutableMatrix44D(MutableMatrix44D::createTranslationMatrix(center)))
 {
 }
