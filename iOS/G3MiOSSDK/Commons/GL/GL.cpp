@@ -20,6 +20,8 @@
 
 #include "IFactory.hpp"
 
+#include "FloatBufferBuilderFromCartesian2D.hpp"
+
 struct UniformsStruct {
   int Projection;
   int Modelview;
@@ -404,18 +406,12 @@ IFloatBuffer* GL::getBillboardTexCoord() {
     //    0, 0
     //  };
     
-    _billboardTexCoord = GFactory.createFloatBuffer(8);
-    _billboardTexCoord->put(0, 1);
-    _billboardTexCoord->put(1, 1);
-    
-    _billboardTexCoord->put(2, 1);
-    _billboardTexCoord->put(3, 0);
-    
-    _billboardTexCoord->put(4, 0);
-    _billboardTexCoord->put(5, 1);
-    
-    _billboardTexCoord->put(6, 0);
-    _billboardTexCoord->put(7, 0);
+    FloatBufferBuilderFromCartesian2D texCoor;
+    texCoor.add(1,1);
+    texCoor.add(1,0);
+    texCoor.add(0,1);
+    texCoor.add(0,0);
+    _billboardTexCoord = texCoor.create();
   }
   
   return _billboardTexCoord;
@@ -443,13 +439,14 @@ void GL::drawBillBoard(const GLTextureId& textureId,
   color(1, 1, 1, 1);
   
   bindTexture(textureId);
+
   vertexPointer(3, 0, vertices);
   setTextureCoordinates(2, 0, getBillboardTexCoord());
   
 #ifdef C_CODE
-  _gl->drawArrays(TriangleStrip, 0, vertices->size());
+  _gl->drawArrays(TriangleStrip, 0, 4);
 #else
-  _gl->drawArrays(GLPrimitive.TriangleStrip, 0, vertices->size());
+  _gl->drawArrays(GLPrimitive.TriangleStrip, 0, 4);
 #endif
   
   enableDepthTest();
