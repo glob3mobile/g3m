@@ -8,7 +8,9 @@ import java.util.Locale;
 
 import org.glob3.mobile.generated.ByteBuffer;
 import org.glob3.mobile.generated.IFactory;
+import org.glob3.mobile.generated.IFloatBuffer;
 import org.glob3.mobile.generated.IImage;
+import org.glob3.mobile.generated.IIntBuffer;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.ITimer;
 
@@ -98,6 +100,18 @@ public class Factory_Android
       final Bitmap.Config conf = Bitmap.Config.ARGB_8888;
       final Bitmap bmp = Bitmap.createBitmap(width, height, conf);
       return new Image_Android(bmp);
+   }
+
+
+   @Override
+   public IFloatBuffer createFloatBuffer(int size) {
+      return new FloatBuffer_Android(size);
+   }
+
+
+   @Override
+   public IIntBuffer createIntBuffer(int size) {
+      return new IntBuffer_Android(size);
    }
 
 }
