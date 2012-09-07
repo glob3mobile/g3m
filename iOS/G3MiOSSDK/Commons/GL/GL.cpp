@@ -423,9 +423,9 @@ void GL::drawBillBoard(const GLTextureId& textureId,
   setTextureCoordinates(2, 0, getBillboardTexCoord());
   
 #ifdef C_CODE
-  _gl->drawArrays(TriangleStrip, 0, 4);
+  _gl->drawArrays(TriangleStrip, 0, vertices->size() / 3);
 #else
-  _gl->drawArrays(GLPrimitive.TriangleStrip, 0, 4);
+  _gl->drawArrays(GLPrimitive.TriangleStrip, 0, vertices->size() / 3);
 #endif
   
   enableDepthTest();
