@@ -26,6 +26,7 @@ IndexedMesh::~IndexedMesh()
   }
   
   if (_extent != NULL) delete _extent;
+  if (_translationMatrix != NULL) delete _translationMatrix;
   
 #endif
 }
@@ -40,15 +41,16 @@ IndexedMesh::IndexedMesh(const GLPrimitive primitive,
                          const float colorsIntensity) :
 _primitive(primitive),
 _owner(owner),
-_center( center.isNan() ? Vector3D::zero() : center ),
 _vertices(vertices),
 _indices(indices),
 _flatColor(flatColor),
 _colors(colors),
 _colorsIntensity(colorsIntensity),
-_extent(NULL)
+_extent(NULL),
+_center(center),
+_translationMatrix(center.isNan()? NULL: 
+                   new MutableMatrix44D(MutableMatrix44D::createTranslationMatrix(center)))
 {
-
 }
 
 void IndexedMesh::render(const RenderContext* rc) const {
@@ -72,10 +74,9 @@ void IndexedMesh::render(const RenderContext* rc) const {
   
   gl->vertexPointer(3, 0, _vertices);
   
-  const bool pushMatrix = !_center.isZero();
-  if (pushMatrix) {
+  if (_translationMatrix != NULL){
     gl->pushMatrix();
-    gl->multMatrixf(MutableMatrix44D::createTranslationMatrix(_center));
+    gl->multMatrixf(*_translationMatrix);
   }
   
   switch (_primitive) {
@@ -95,7 +96,7 @@ void IndexedMesh::render(const RenderContext* rc) const {
       break;
   }
   
-  if (pushMatrix) {
+  if (_translationMatrix != NULL) {
     gl->popMatrix();
   }
   

@@ -94,7 +94,6 @@ void DummyRenderer::render(const RenderContext* rc) {
     // draw a red square
     gl->color((float) 1, (float) 0, (float) 0, 1);
     gl->pushMatrix();
-    //MutableMatrix44D T = GLU::translationMatrix(Vector3D(halfSize,0,0));
     MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(Vector3D(_halfSize,0,0));
     gl->multMatrixf(T);
     gl->drawTriangleStrip(_index);

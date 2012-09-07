@@ -20,6 +20,7 @@ private:
   const GLPrimitive _primitive;
   const bool        _owner;
   Vector3D          _center;
+  const MutableMatrix44D* _translationMatrix;
   IFloatBuffer*     _vertices;
   IIntBuffer*       _indices;
   const Color*      _flatColor;
@@ -29,6 +30,7 @@ private:
   mutable Extent*   _extent;
   
   Extent* computeExtent() const;
+  
   
 public:
   IndexedMesh(const GLPrimitive primitive,
