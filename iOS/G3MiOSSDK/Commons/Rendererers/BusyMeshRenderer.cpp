@@ -18,7 +18,7 @@
 
 #include "IMathUtils.hpp"
 
-#include "SimpleFloatBufferBuilder.hpp"
+#include "FloatBufferBuilderFromColor.hpp"
 #include "IntBufferBuilder.hpp"
 
 void BusyMeshRenderer::initialize(const InitializationContext* ic)
@@ -26,7 +26,7 @@ void BusyMeshRenderer::initialize(const InitializationContext* ic)
   unsigned int numStrides = 60;
   
   FloatBufferBuilderFromCartesian3D vertices(NoCenter, Vector3D::zero());
-  SimpleFloatBufferBuilder colors;
+  FloatBufferBuilderFromColor colors;
   IntBufferBuilder indices;
   
   int indicesCounter=0;

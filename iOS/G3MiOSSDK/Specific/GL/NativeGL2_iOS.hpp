@@ -225,7 +225,7 @@ public:
   void drawElements(GLPrimitive mode,
                     int count,
                     IIntBuffer* buffer) const {
-    int TODO_has_to_set_GL_UNSIGNED_INT; //???????
+    int has_to_set_GL_UNSIGNED_INT; //???????
     int* pointer = ((IntBuffer_iOS*) buffer)->getPointer();
     glDrawElements(getEnum(mode), count, GL_UNSIGNED_INT, pointer);
   }

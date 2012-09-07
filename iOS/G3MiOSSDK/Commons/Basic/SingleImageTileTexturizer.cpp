@@ -12,11 +12,11 @@
 #include "TexturedMesh.hpp"
 #include "Planet.hpp"
 
-#include "SimpleFloatBufferBuilder.hpp"
+#include "FloatBufferBuilderFromCartesian2D.hpp"
 
 IFloatBuffer* SingleImageTileTexturizer::createTextureCoordinates(const RenderContext* rc,
                                                                   Mesh* mesh) const {
-  SimpleFloatBufferBuilder texCoors;
+  FloatBufferBuilderFromCartesian2D texCoors;
   
   for (int i = 0; i < mesh->getVertexCount(); i++) {
     const Vector3D pos = mesh->getVertex(i);
@@ -28,8 +28,9 @@ IFloatBuffer* SingleImageTileTexturizer::createTextureCoordinates(const RenderCo
     const double t = GMath.asin(n.z()) / GMath.pi() + 0.5;
     
     // texCoors.add( Vector2D(s, 1-t) );
-    texCoors.add(s);
-    texCoors.add(1-t);
+    texCoors.add((float)s, (float)(1.0-t));
+//    texCoors.add(s);
+//    texCoors.add(1-t);
   }
   
   return texCoors.create();

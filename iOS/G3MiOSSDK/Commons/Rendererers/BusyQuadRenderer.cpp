@@ -18,7 +18,8 @@
 #include "TextureMapping.hpp"
 #include "TexturedMesh.hpp"
 
-#include "SimpleFloatBufferBuilder.hpp"
+#include "FloatBufferBuilderFromCartesian3D.hpp"
+#include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "IntBufferBuilder.hpp"
 
 void BusyQuadRenderer::start() {
@@ -43,7 +44,7 @@ bool BusyQuadRenderer::initMesh(const RenderContext* rc) {
   
   const float halfSize = 16;
 
-  SimpleFloatBufferBuilder vertices;
+  FloatBufferBuilderFromCartesian3D vertices(NoCenter, Vector3D::zero());
   vertices.add(-halfSize, +halfSize, 0);
   vertices.add(-halfSize, -halfSize, 0);
   vertices.add(+halfSize, +halfSize, 0);
@@ -55,7 +56,7 @@ bool BusyQuadRenderer::initMesh(const RenderContext* rc) {
   indices.add(2);
   indices.add(3);
   
-  SimpleFloatBufferBuilder texCoords;
+  FloatBufferBuilderFromCartesian2D texCoords;
   texCoords.add(0, 0);
   texCoords.add(0, 1);
   texCoords.add(1, 0);

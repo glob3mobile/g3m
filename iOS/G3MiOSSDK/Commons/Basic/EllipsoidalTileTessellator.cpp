@@ -136,7 +136,7 @@ IFloatBuffer* EllipsoidalTileTessellator::createUnitTextCoords() const {
   
 //  std::vector<MutableVector2D>* textCoords = new std::vector<MutableVector2D>();
   
-  SimpleFloatBufferBuilder textCoords;
+  FloatBufferBuilderFromCartesian2D textCoords;
   
   const int resolution       = _resolution;
   const int resolutionMinus1 = resolution - 1;

@@ -16,7 +16,8 @@
 #include "IntBufferBuilder.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "FloatBufferBuilderFromCartesian2D.hpp"
-#include "SimpleFloatBufferBuilder.hpp"
+//#include "SimpleFloatBufferBuilder.hpp"
+#include "FloatBufferBuilderFromColor.hpp"
 
 SimplePlanetRenderer::SimplePlanetRenderer(const std::string textureFilename):
 _latRes(30),//FOR NOW THEY MUST BE EQUAL
@@ -131,7 +132,7 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   IIntBuffer* ind = createMeshIndex();
   IFloatBuffer* ver = createVertices(*planet);  
   IFloatBuffer* texC = NULL;
-  SimpleFloatBufferBuilder colors;
+  FloatBufferBuilderFromColor colors;
   
   const bool colorPerVertex = false;
   
@@ -171,10 +172,7 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
     
       float val = (float) (0.5 + GMath.sin( (float) (2.0 * GMath.pi() * ((float) i) / numVertices) ) / 2.0);
       
-      colors.add(val);
-      colors.add(0.0);
-      colors.add(1.0 - val);
-      colors.add(1.0);
+      colors.add(val, (float)0.0, (float)(1.0 - val), (float)1.0);      
       
 //      colors[i++] = val;
 //      colors[i++] = 0;

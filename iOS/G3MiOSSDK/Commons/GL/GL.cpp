@@ -424,6 +424,7 @@ IFloatBuffer* GL::getBillboardTexCoord() {
 void GL::drawBillBoard(const GLTextureId& textureId,
                        IFloatBuffer* vertices,
                        const float viewPortRatio) {
+  int TODO_refactor_billboard;
   if (Uniforms.BillBoard == -1){
     ILogger::instance()->logError("Uniforms BillBoard Invalid");
   }
