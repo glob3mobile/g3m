@@ -112,7 +112,7 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
   }
   
   const Color *color = new Color(Color::fromRGBA((float) 0.1, (float) 0.1, (float) 0.1, (float) 1.0));
-
+  
 #ifdef C_CODE
   return new IndexedMesh(TriangleStrip,
                          true,
@@ -133,8 +133,6 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
 
 
 IFloatBuffer* EllipsoidalTileTessellator::createUnitTextCoords() const {
-  
-//  std::vector<MutableVector2D>* textCoords = new std::vector<MutableVector2D>();
   
   FloatBufferBuilderFromCartesian2D textCoords;
   
@@ -200,10 +198,6 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
   const Sector sector = tile->getSector();
   const Planet* planet = rc->getPlanet();
   
-  // create vectors
-  //std::vector<MutableVector3D> vertices;
-  //std::vector<MutableVector2D> texCoords;
-  //std::vector<int> indices;
   const int resolutionMinus1 = _resolution - 1;
   int posS = 0;
   
@@ -223,8 +217,6 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
     
     vertices.add(g);
     indices.add(posS++);
-    //addVertex(planet, &vertices, g);
-    //indices.push_back(posS++);
   }
   
   // south side
@@ -233,8 +225,6 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
     
     vertices.add(g);
     indices.add(posS++);
-    //addVertex(planet, &vertices, g);
-    //indices.push_back(posS++);
   }
   
   // east side
@@ -243,25 +233,21 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
     
     vertices.add(g);
     indices.add(posS++);
-    //addVertex(planet, &vertices, g);
-    //indices.push_back(posS++);
   }
-   
+  
   // north side
   for (int i = resolutionMinus1; i > 0; i--) {
     const Geodetic3D g(sector.getInnerPoint((double)i/resolutionMinus1, 0), offset);
     
     vertices.add(g);
     indices.add(posS++);
-    //addVertex(planet, &vertices, g);
-    //indices.push_back(posS++);
   }
   
   const Color *color = new Color(Color::fromRGBA((float) 1.0, (float) 0, (float) 0, (float) 1.0));
   const Vector3D center = planet->toCartesian(sector.getCenter());
   
 #ifdef C_CODE
-  return new IndexedMesh(TriangleStrip,
+  return new IndexedMesh(LineLoop,
                          true,
                          center,
                          vertices.create(),
@@ -269,7 +255,7 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
                          color);
 #endif
 #ifdef JAVA_CODE
-  return new IndexedMesh(GLPrimitive.TriangleStrip,
+  return new IndexedMesh(GLPrimitive.LineLoop,
                          true,
                          center,
                          vertices.create(),

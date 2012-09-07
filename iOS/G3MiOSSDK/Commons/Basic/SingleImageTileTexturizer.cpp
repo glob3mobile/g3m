@@ -27,10 +27,7 @@ IFloatBuffer* SingleImageTileTexturizer::createTextureCoordinates(const RenderCo
     const double s = GMath.atan2(n.y(), n.x()) / (GMath.pi() * 2) + 0.5;
     const double t = GMath.asin(n.z()) / GMath.pi() + 0.5;
     
-    // texCoors.add( Vector2D(s, 1-t) );
     texCoors.add((float)s, (float)(1.0-t));
-//    texCoors.add(s);
-//    texCoors.add(1-t);
   }
   
   return texCoors.create();
