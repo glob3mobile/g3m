@@ -47,8 +47,7 @@ public class Mark
 	{
 	  final Vector3D pos = getCartesianPosition(planet);
   
-	  //FloatBufferBuilderFromCartesian3D vertex(FirstVertex, Vector3D::zero());
-	  FloatBufferBuilderFromCartesian3D vertex = new FloatBufferBuilderFromCartesian3D(NoCenter, Vector3D.zero());
+	  FloatBufferBuilderFromCartesian3D vertex = new FloatBufferBuilderFromCartesian3D(CenterStrategy.NoCenter, Vector3D.zero());
 	  vertex.add(pos);
 	  vertex.add(pos);
 	  vertex.add(pos);

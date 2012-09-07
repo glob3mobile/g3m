@@ -46,7 +46,7 @@ public class BusyQuadRenderer extends Renderer implements EffectTarget
   
 	final float halfSize = 16F;
   
-	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(NoCenter, Vector3D.zero());
+	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.NoCenter, Vector3D.zero());
 	vertices.add(-halfSize, +halfSize, 0);
 	vertices.add(-halfSize, -halfSize, 0);
 	vertices.add(+halfSize, +halfSize, 0);

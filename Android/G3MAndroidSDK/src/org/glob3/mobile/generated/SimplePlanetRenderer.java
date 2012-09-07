@@ -41,9 +41,8 @@ public class SimplePlanetRenderer extends Renderer
 //ORIGINAL LINE: IFloatBuffer* createVertices(const Planet& planet) const
   private IFloatBuffer createVertices(Planet planet)
   {
-	//VERTICES
-	FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(GivenCenter, planet, Vector3D.zero()); //Center in zero
-  
+	//Vertices with Center in zero
+	FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.GivenCenter, planet, Vector3D.zero());
 	final double lonRes1 = (double)(_lonRes-1);
 	final double latRes1 = (double)(_latRes-1);
 	for(double i = 0.0; i < _lonRes; i++)

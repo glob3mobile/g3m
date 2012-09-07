@@ -42,7 +42,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
 	final double offset = nw.sub(sw).length() * 1e-3;
   
 	// create vectors
-	FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(GivenCenter, planet, sector.getCenter());
+	FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.GivenCenter, planet, sector.getCenter());
 	// create indices
 	IntBufferBuilder indices = new IntBufferBuilder();
   
@@ -116,7 +116,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
 	final int resolutionMinus1 = resolution - 1;
   
 	// create vertices coordinates
-	FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(GivenCenter, planet, sector.getCenter());
+	FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.GivenCenter, planet, sector.getCenter());
 	for (int j = 0; j < resolution; j++)
 	{
 	  for (int i = 0; i < resolution; i++)

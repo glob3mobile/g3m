@@ -38,7 +38,7 @@ public class BusyMeshRenderer extends Renderer implements EffectTarget
   {
 	int numStrides = 60;
   
-	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(NoCenter, Vector3D.zero());
+	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.NoCenter, Vector3D.zero());
 	FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
 	IntBufferBuilder indices = new IntBufferBuilder();
   
@@ -80,7 +80,7 @@ public class BusyMeshRenderer extends Renderer implements EffectTarget
   					  vertices.getCenter(),
   					  vertices.create(),
   					  indices.create(),
-  					  NULL,
+  					  null,
   					  colors.create());
   }
 

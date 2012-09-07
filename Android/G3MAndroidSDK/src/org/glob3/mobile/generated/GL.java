@@ -57,13 +57,9 @@ public class GL
   private float _translationX;
   private float _translationY;
 
-///#ifdef C_CODE
-//  const float* _textureCoordinates;
-///#endif
-///#ifdef JAVA_CODE
-//  private float[] _textureCoordinates;
-///#endif
+  private IFloatBuffer _vertices;
   private IFloatBuffer _textureCoordinates;
+  private IFloatBuffer _colors;
 
   private float _flatColorR;
   private float _flatColorG;
@@ -75,11 +71,6 @@ public class GL
   private float[] loadModelView_M = new float[16];
   private void loadModelView()
   {
-	if (GlobalMembersGL.Uniforms.Modelview == -1)
-	{
-	  ILogger.instance().logError("Uniforms Modelview Invalid");
-	}
-  
 //C++ TO JAVA CONVERTER NOTE: This static local variable declaration (not allowed in Java) has been moved just prior to the method:
 //	static float M[16];
 	_modelView.copyToColumnMajorFloatArray(loadModelView_M);
@@ -193,7 +184,9 @@ public class GL
 	  _translationY = 0F;
 	  _texturesIdGetCounter = 0;
 	  _texturesIdTakeCounter = 0;
+	  _vertices = null;
 	  _textureCoordinates = null;
+	  _colors = null;
 	  _flatColorR = 0F;
 	  _flatColorG = 0F;
 	  _flatColorB = 0F;
@@ -207,11 +200,6 @@ public class GL
 
   public final void enableVerticesPosition()
   {
-	if (GlobalMembersGL.Attributes.Position == -1)
-	{
-	  ILogger.instance().logError("Attribute Position Invalid");
-	}
-  
 	if (!_enableVerticesPosition)
 	{
 	  _gl.enableVertexAttribArray(GlobalMembersGL.Attributes.Position);
@@ -223,11 +211,6 @@ public class GL
   // state handling
   public final void enableTextures()
   {
-	if (GlobalMembersGL.Attributes.TextureCoord == -1)
-	{
-	  ILogger.instance().logError("Attribute TextureCoord Invalid");
-	}
-  
 	if (!_enableTextures)
 	{
 	  _gl.enableVertexAttribArray(GlobalMembersGL.Attributes.TextureCoord);
@@ -240,11 +223,6 @@ public class GL
 
   public final void enableTexture2D()
   {
-	if (GlobalMembersGL.Uniforms.EnableTexture == -1)
-	{
-	  ILogger.instance().logError("Uniforms EnableTexture Invalid");
-	}
-  
 	if (!_enableTexture2D)
 	{
 	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableTexture, 1);
@@ -254,16 +232,6 @@ public class GL
 
   public final void enableVertexFlatColor(float r, float g, float b, float a, float intensity)
   {
-	if (GlobalMembersGL.Uniforms.EnableFlatColor == -1)
-	{
-	  ILogger.instance().logError("Uniforms EnableFlatColor Invalid");
-	}
-  
-	if (GlobalMembersGL.Uniforms.FlatColorIntensity == -1)
-	{
-	  ILogger.instance().logError("Uniforms FlatColorIntensity Invalid");
-	}
-  
 	if (!_enableFlatColor)
 	{
 	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableFlatColor, 1);
@@ -282,12 +250,6 @@ public class GL
 
   public final void disableVertexFlatColor()
   {
-	if (GlobalMembersGL.Uniforms.EnableFlatColor == -1)
-	{
-	  ILogger.instance().logError("Uniforms EnableFlatColor Invalid");
-	}
-  
-  
 	if (_enableFlatColor)
 	{
 	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableFlatColor, 0);
@@ -297,11 +259,6 @@ public class GL
 
   public final void disableTexture2D()
   {
-	if (GlobalMembersGL.Uniforms.EnableTexture == -1)
-	{
-	  ILogger.instance().logError("Uniforms EnableTexture Invalid");
-	}
-  
 	if (_enableTexture2D)
 	{
 	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableTexture, 0);
@@ -311,11 +268,6 @@ public class GL
 
   public final void disableVerticesPosition()
   {
-	if (GlobalMembersGL.Attributes.Position == -1)
-	{
-	  ILogger.instance().logError("Attribute Position Invalid");
-	}
-  
 	if (_enableVerticesPosition)
 	{
 	  _gl.disableVertexAttribArray(GlobalMembersGL.Attributes.Position);
@@ -325,11 +277,6 @@ public class GL
 
   public final void disableTextures()
   {
-	if (GlobalMembersGL.Attributes.TextureCoord == -1)
-	{
-	  ILogger.instance().logError("Attribute TextureCoord Invalid");
-	}
-  
 	if (_enableTextures)
 	{
 	  _gl.disableVertexAttribArray(GlobalMembersGL.Attributes.TextureCoord);
@@ -346,11 +293,6 @@ public class GL
 
   public final void color(float r, float g, float b, float a)
   {
-	if (GlobalMembersGL.Uniforms.FlatColor == -1)
-	{
-	  ILogger.instance().logError("Uniforms FlatColor Invalid");
-	}
-  
 	if ((_flatColorR != r) || (_flatColorG != g) || (_flatColorB != b) || (_flatColorA != a))
 	{
 	  _gl.uniform4f(GlobalMembersGL.Uniforms.FlatColor, r, g, b, a);
@@ -366,23 +308,18 @@ public class GL
 
   public final void enableVertexColor(IFloatBuffer colors, float intensity)
   {
-	if (GlobalMembersGL.Attributes.Color == -1)
-	{
-	  ILogger.instance().logError("Attribute Color Invalid");
-	}
-	if (GlobalMembersGL.Uniforms.EnableColorPerVertex == -1)
-	{
-	  ILogger.instance().logError("Uniforms EnableColorPerVertex Invalid");
-	}
-	if (GlobalMembersGL.Uniforms.ColorPerVertexIntensity == -1)
-	{
-	  ILogger.instance().logError("Uniforms ColorPerVertexIntensity Invalid");
-	}
   
 	//if (!_enableVertexColor) {
 	_gl.uniform1i(GlobalMembersGL.Uniforms.EnableColorPerVertex, 1);
 	_gl.enableVertexAttribArray(GlobalMembersGL.Attributes.Color);
-	_gl.vertexAttribPointer(GlobalMembersGL.Attributes.Color, 4, false, 0, colors);
+  
+	int __TODO_cache_buffer;
+	if ((_colors != colors) || (_colors.timestamp() != colors.timestamp()))
+	{
+	  _gl.vertexAttribPointer(GlobalMembersGL.Attributes.Color, 4, false, 0, colors);
+	  _colors = colors;
+	}
+  
 	_gl.uniform1f(GlobalMembersGL.Uniforms.ColorPerVertexIntensity, intensity);
 	//_enableVertexColor = true;
 	//}
@@ -390,15 +327,6 @@ public class GL
 
   public final void disableVertexColor()
   {
-	if (GlobalMembersGL.Attributes.Color == -1)
-	{
-	  ILogger.instance().logError("Attribute Color Invalid");
-	}
-	if (GlobalMembersGL.Uniforms.EnableColorPerVertex == -1)
-	{
-	  ILogger.instance().logError("Uniforms EnableColorPerVertex Invalid");
-	}
-  
 	//  if (_enableVertexColor) {
 	_gl.disableVertexAttribArray(GlobalMembersGL.Attributes.Color);
 	_gl.uniform1i(GlobalMembersGL.Uniforms.EnableColorPerVertex, 0);
@@ -433,14 +361,16 @@ public class GL
 	loadModelView();
   }
 
-  public final void vertexPointer(int size, int stride, IFloatBuffer vertex)
+  public final void vertexPointer(int size, int stride, IFloatBuffer vertices)
   {
-	if (GlobalMembersGL.Attributes.Position == -1)
-	{
-	  ILogger.instance().logError("Attribute Position Invalid");
-	}
+	int __TODO_text_cache_buffer;
   
-	_gl.vertexAttribPointer(GlobalMembersGL.Attributes.Position, size, false, stride, vertex);
+	if ((_vertices != vertices) || (_vertices.timestamp() != vertices.timestamp()))
+	{
+  
+	  _gl.vertexAttribPointer(GlobalMembersGL.Attributes.Position, size, false, stride, vertices);
+	  _vertices = vertices;
+	}
   }
 
   public final void drawTriangleStrip(IIntBuffer indices)
@@ -467,11 +397,6 @@ public class GL
   private float[] setProjection_M = new float[16];
   public final void setProjection(MutableMatrix44D projection)
   {
-	if (GlobalMembersGL.Uniforms.Projection == -1)
-	{
-	  ILogger.instance().logError("Uniforms Projection Invalid");
-	}
-  
 //C++ TO JAVA CONVERTER NOTE: This static local variable declaration (not allowed in Java) has been moved just prior to the method:
 //	static float M[16];
 	projection.copyToColumnMajorFloatArray(setProjection_M);
@@ -540,11 +465,6 @@ public class GL
 
   public final void pointSize(float size)
   {
-	if (GlobalMembersGL.Uniforms.PointSize == -1)
-	{
-	  ILogger.instance().logError("Uniforms PointSize Invalid");
-	}
-  
 	_gl.uniform1f(GlobalMembersGL.Uniforms.PointSize, size);
   }
 
@@ -600,12 +520,9 @@ public class GL
 
   public final void setTextureCoordinates(int size, int stride, IFloatBuffer texcoord)
   {
-	if (GlobalMembersGL.Attributes.TextureCoord == -1)
-	{
-	  ILogger.instance().logError("Attribute TextureCoord Invalid");
-	}
+	int __TODO_cache_buffer;
   
-	if (_textureCoordinates != texcoord)
+	if ((_textureCoordinates != texcoord) || (_textureCoordinates.timestamp() != texcoord.timestamp()))
 	{
 	  _gl.vertexAttribPointer(GlobalMembersGL.Attributes.TextureCoord, size, false, stride, texcoord);
 	  _textureCoordinates = texcoord;
@@ -655,15 +572,6 @@ public class GL
   public final void drawBillBoard(GLTextureId textureId, IFloatBuffer vertices, float viewPortRatio)
   {
 	int TODO_refactor_billboard;
-	if (GlobalMembersGL.Uniforms.BillBoard == -1)
-	{
-	  ILogger.instance().logError("Uniforms BillBoard Invalid");
-	}
-  
-	if (GlobalMembersGL.Uniforms.ViewPortRatio == -1)
-	{
-	  ILogger.instance().logError("Uniforms ViewPortRatio Invalid");
-	}
   
 	_gl.uniform1i(GlobalMembersGL.Uniforms.BillBoard, 1);
   
@@ -725,15 +633,6 @@ public class GL
 
   public final void transformTexCoords(float scaleX, float scaleY, float translationX, float translationY)
   {
-	if (GlobalMembersGL.Uniforms.ScaleTexCoord == -1)
-	{
-	  ILogger.instance().logError("Uniforms ScaleTexCoord Invalid");
-	}
-	if (GlobalMembersGL.Uniforms.TranslationTexCoord == -1)
-	{
-	  ILogger.instance().logError("Uniforms TranslationTexCoord Invalid");
-	}
-  
 	if ((_scaleX != scaleX) || (_scaleY != scaleY))
 	{
 	  _gl.uniform2f(GlobalMembersGL.Uniforms.ScaleTexCoord, scaleX, scaleY);
@@ -798,6 +697,23 @@ public class GL
 	  _lastImageData = null;
 	  _lastImageData = null;
 	}
+
+	if (_vertices != null)
+	{
+	  if (_vertices != null)
+		  _vertices.dispose();
+	}
+	if (_textureCoordinates != null)
+	{
+	  if (_textureCoordinates != null)
+		  _textureCoordinates.dispose();
+	}
+	if (_colors != null)
+	{
+	  if (_colors != null)
+		  _colors.dispose();
+	}
+
   }
 
 }

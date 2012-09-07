@@ -39,6 +39,10 @@ public class Vector3D
 
   }
 
+  public void dispose()
+  {
+  }
+
   public Vector3D(Vector3D v)
   {
 	  _x = v._x;

@@ -50,7 +50,7 @@ public class LatLonMeshRenderer extends Renderer
   					  true,
   					  vertices.getCenter(),
   					  vertices.create(),
-  					  indices.create(),
+  					  index.create(),
   					  flatColor);
   
   }
