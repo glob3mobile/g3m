@@ -110,7 +110,6 @@ void BusyMeshRenderer::render(const RenderContext* rc)
   gl->loadMatrixf(MutableMatrix44D::identity());
   
   // clear screen
-  //gl->clearScreen(0.0f, 0.2f, 0.4f, 1.0f);
   gl->clearScreen(0.0f, 0.0f, 0.0f, 1.0f);
   
   gl->enableBlend();

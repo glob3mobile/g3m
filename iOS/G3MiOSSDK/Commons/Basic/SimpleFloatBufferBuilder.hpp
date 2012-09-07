@@ -26,7 +26,7 @@ public:
     _values.push_back(value1);
     _values.push_back(value2);
   }
-
+  
   void add(float value1, float value2, float value3) {
     _values.push_back(value1);
     _values.push_back(value2);
