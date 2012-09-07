@@ -32,10 +32,6 @@ public class DummyRenderer extends Renderer
 
   public void dispose()
   {
-	if (_index != null)
-		_index.dispose();
-	if (_vertices != null)
-		_vertices.dispose();
   }
 
   public final void initialize(InitializationContext ic)

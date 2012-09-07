@@ -380,12 +380,12 @@ public class GL
 
   public final void drawLines(IIntBuffer indices)
   {
-	_gl.drawElements(GLPrimitive.Lines, indices.size(), GLType.Int, indices);
+	_gl.drawElements(GLPrimitive.Lines, indices.size(), indices);
   }
 
   public final void drawLineLoop(IIntBuffer indices)
   {
-	_gl.drawElements(GLPrimitive.LineLoop, indices.size(), GLType.Int, indices);
+	_gl.drawElements(GLPrimitive.LineLoop, indices.size(), indices);
   }
 
   public final void drawPoints(IIntBuffer indices)

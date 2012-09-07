@@ -75,7 +75,7 @@ public class BusyMeshRenderer extends Renderer implements EffectTarget
 	indices.add(1);
   
 	// create mesh
-	_mesh = IndexedMesh(GLPrimitive.TriangleStrip,
+	_mesh = new IndexedMesh(GLPrimitive.TriangleStrip,
   					  true,
   					  vertices.getCenter(),
   					  vertices.create(),

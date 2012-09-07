@@ -20,7 +20,7 @@ package org.glob3.mobile.generated;
 
 public class IndexedMesh extends Mesh
 {
-  private final GLPrimitive _primitive = new GLPrimitive();
+  private final GLPrimitive _primitive;
   private final boolean _owner;
   private Vector3D _center ;
   private final MutableMatrix44D _translationMatrix;

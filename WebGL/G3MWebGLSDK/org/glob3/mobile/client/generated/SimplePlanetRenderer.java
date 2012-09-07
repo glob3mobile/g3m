@@ -150,9 +150,9 @@ public class SimplePlanetRenderer extends Renderer
 	  flatColor = new Color(Color.fromRGBA((float) 0.0, (float) 1.0, (float) 0.0, (float) 1.0));
 	}
   
-	IndexedMesh *im = IndexedMesh(GLPrimitive.TriangleStrip,
+	IndexedMesh im = new IndexedMesh(GLPrimitive.TriangleStrip,
   								true,
-  								Vector3D::zero(),
+  								Vector3D.zero(),
   								ver,
   								ind,
   								flatColor,
