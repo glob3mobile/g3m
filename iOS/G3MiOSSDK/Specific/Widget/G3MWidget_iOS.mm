@@ -160,7 +160,7 @@
   
   
   TextureBuilder* textureBuilder = new CPUTextureBuilder();
-  TexturesHandler* texturesHandler = new TexturesHandler(gl, factory, textureBuilder, false);
+  TexturesHandler* texturesHandler = new TexturesHandler(gl, factory, false);
   
   const Planet* planet = Planet::createEarth();
   

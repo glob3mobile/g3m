@@ -14,6 +14,8 @@
 #include "TextureBuilder.hpp"
 
 #include "IStringBuilder.hpp"
+#include "GLImage.hpp"
+#include "GL.hpp"
 
 const std::string TextureSpec::description() const {
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
@@ -72,21 +74,21 @@ public:
   }
 };
 
-const GLTextureId TexturesHandler::getGLTextureIdFromFileName(const std::string filename,
-                                                              int               textureWidth,
-                                                              int               textureHeight,
-                                                              const bool        isMipmap) {
-  const IImage* image = _factory->createImageFromFileName(filename);
-  
-  const GLTextureId texId = getGLTextureId(image,
-                                           TextureSpec(filename, // filename as the id
-                                                       textureWidth,
-                                                       textureHeight,
-                                                       isMipmap));
-  _factory->deleteImage(image);
-  
-  return texId;
-}
+//const GLTextureId TexturesHandler::getGLTextureIdFromFileName(const std::string filename,
+//                                                              int               textureWidth,
+//                                                              int               textureHeight,
+//                                                              const bool        isMipmap) {
+//  const IImage* image = _factory->createImageFromFileName(filename);
+//  
+//  const GLTextureId texId = getGLTextureId(image,
+//                                           TextureSpec(filename, // filename as the id
+//                                                       textureWidth,
+//                                                       textureHeight,
+//                                                       isMipmap));
+//  _factory->deleteImage(image);
+//  
+//  return texId;
+//}
 
 void TexturesHandler::showHolders(const std::string message) const {
   if (false) {
@@ -121,6 +123,39 @@ const GLTextureId TexturesHandler::getGLTextureIdIfAvailable(const TextureSpec& 
   return GLTextureId::invalid();
 }
 
+
+const GLTextureId TexturesHandler::getGLTextureId(const GLImage* glImage,
+                                                  const std::string& name,
+                                                  bool hasMipMap) {
+  
+  TextureSpec textureSpec(name, 
+                          glImage->getWidth(), 
+                          glImage->getHeight(),
+                          hasMipMap);
+  
+  GLTextureId previousId = getGLTextureIdIfAvailable(textureSpec);
+  if (previousId.isValid()) {
+    return previousId;
+  }
+  
+  TextureHolder* holder = new TextureHolder(textureSpec);
+  holder->_glTextureId = _gl->uploadTexture(glImage, textureSpec.isMipmap());
+  
+  
+  if (_verbose) {
+    ILogger::instance()->logInfo("Uploaded texture \"%s\" to GPU with texId=%s" ,
+                                 textureSpec.description().c_str(),
+                                 holder->_glTextureId.description().c_str() );
+  }
+  
+  _textureHolders.push_back(holder);
+  
+  showHolders("getGLTextureId(): created holder " + holder->description());
+  
+  return holder->_glTextureId;
+}
+
+/*
 const GLTextureId TexturesHandler::getGLTextureId(const std::vector<const IImage*> images,
                                                   const TextureSpec& textureSpec) {
   GLTextureId previousId = getGLTextureIdIfAvailable(textureSpec);
@@ -177,13 +212,15 @@ const GLTextureId TexturesHandler::getGLTextureId(const std::vector<const IImage
   
   return holder->_glTextureId;
 }
-
+*/
+/*
 const GLTextureId TexturesHandler::getGLTextureId(const IImage *image,
                                                   const TextureSpec& textureSpec) {
   std::vector<const IImage*> images;
   images.push_back(image);
   return getGLTextureId(images, textureSpec);
 }
+ */
 
 void TexturesHandler::retainGLTextureId(const GLTextureId& glTextureId) {
   if (!glTextureId.isValid()) {

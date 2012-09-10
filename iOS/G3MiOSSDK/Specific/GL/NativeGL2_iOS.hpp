@@ -291,7 +291,7 @@ public:
                  0, 
                  getEnum(glImage->getFormat()),
                  GL_UNSIGNED_BYTE, 
-                 glImage->getByteBuffer()->getPointer());
+                 ((ByteBuffer_iOS*)glImage->getByteBuffer())->getPointer());
   }
   
   //  void texImage2D(GLTextureType target,

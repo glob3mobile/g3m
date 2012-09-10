@@ -21,9 +21,6 @@ public:
   virtual unsigned char get(int i) const;
   
   virtual void put(int i, unsigned char value);
-  
-  virtual unsigned char* getPointer() const;
-  
 };
 
 
