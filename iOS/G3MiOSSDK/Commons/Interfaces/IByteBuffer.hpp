@@ -22,7 +22,7 @@ public:
   
   virtual void put(int i, unsigned char value);
   
-  virtual float* getPointer() const;
+  virtual unsigned char* getPointer() const;
   
 };
 

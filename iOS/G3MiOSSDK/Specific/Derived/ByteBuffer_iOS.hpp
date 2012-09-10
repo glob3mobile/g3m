@@ -44,7 +44,7 @@ public:
     return _timestamp;
   }
   
-  float get(int i) const {
+  unsigned char get(int i) const {
     return _values[i];
   }
   
