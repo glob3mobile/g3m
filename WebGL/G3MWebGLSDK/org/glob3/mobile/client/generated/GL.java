@@ -313,7 +313,6 @@ public class GL
 	_gl.uniform1i(GlobalMembersGL.Uniforms.EnableColorPerVertex, 1);
 	_gl.enableVertexAttribArray(GlobalMembersGL.Attributes.Color);
   
-	int __TODO_cache_buffer;
 	if ((_colors != colors) || (_colors.timestamp() != colors.timestamp()))
 	{
 	  _gl.vertexAttribPointer(GlobalMembersGL.Attributes.Color, 4, false, 0, colors);
@@ -363,8 +362,6 @@ public class GL
 
   public final void vertexPointer(int size, int stride, IFloatBuffer vertices)
   {
-	int __TODO_text_cache_buffer;
-  
 	if ((_vertices != vertices) || (_vertices.timestamp() != vertices.timestamp()))
 	{
   
@@ -520,8 +517,6 @@ public class GL
 
   public final void setTextureCoordinates(int size, int stride, IFloatBuffer texcoord)
   {
-	int __TODO_cache_buffer;
-  
 	if ((_textureCoordinates != texcoord) || (_textureCoordinates.timestamp() != texcoord.timestamp()))
 	{
 	  _gl.vertexAttribPointer(GlobalMembersGL.Attributes.TextureCoord, size, false, stride, texcoord);
