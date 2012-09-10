@@ -212,8 +212,6 @@ void GL::disablePolygonOffset() {
 }
 
 void GL::vertexPointer(int size, int stride, IFloatBuffer* vertices) {
-  int __TODO_text_cache_buffer;
-  
   if ((_vertices != vertices) ||
       (_vertices->timestamp() != vertices->timestamp()) ) {
 
@@ -363,8 +361,6 @@ const GLTextureId GL::uploadTexture(const IImage* image,
 }
 
 void GL::setTextureCoordinates(int size, int stride, IFloatBuffer* texcoord) {
-  int __TODO_cache_buffer;
-  
   if ((_textureCoordinates != texcoord) ||
       (_textureCoordinates->timestamp() != texcoord->timestamp()) ) {
     _gl->vertexAttribPointer(Attributes.TextureCoord, size, false, stride, texcoord);
@@ -466,7 +462,6 @@ void GL::enableVertexColor(IFloatBuffer* colors, float intensity) {
   _gl->uniform1i(Uniforms.EnableColorPerVertex, 1);
   _gl->enableVertexAttribArray(Attributes.Color);
   
-  int __TODO_cache_buffer;
   if ((_colors != colors) ||
       (_colors->timestamp() != colors->timestamp()) ) {
     _gl->vertexAttribPointer(Attributes.Color, 4, false, 0, colors);
