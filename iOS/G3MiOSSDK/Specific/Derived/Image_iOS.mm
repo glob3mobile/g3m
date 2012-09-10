@@ -117,7 +117,7 @@ IImage* Image_iOS::subImage(const Rectangle& rect) const
   return image;
 }
 
-ByteBuffer* Image_iOS::getEncodedImage() const
+ByteArrayWrapper* Image_iOS::getEncodedImage() const
 {
   NSData* readData = UIImagePNGRepresentation(_image);
   NSUInteger length = [readData length];
@@ -126,7 +126,7 @@ ByteBuffer* Image_iOS::getEncodedImage() const
   [readData getBytes: data
               length: length];
   
-  return new ByteBuffer(data, length);
+  return new ByteArrayWrapper(data, length);
 }
 
 void Image_iOS::fillWithRGBA8888(unsigned char data[],

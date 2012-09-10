@@ -49,7 +49,7 @@ public:
   
   IImage* subImage(const Rectangle& rect) const;
   
-  ByteBuffer* getEncodedImage() const;
+  ByteArrayWrapper* getEncodedImage() const;
   
   void fillWithRGBA8888(unsigned char data[],
                         int width,

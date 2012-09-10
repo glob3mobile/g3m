@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		382D4B93159DC26000FE9296 /* ByteBuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 382D4B91159DC26000FE9296 /* ByteBuffer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		382D4B93159DC26000FE9296 /* ByteArrayWrapper.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 382D4B91159DC26000FE9296 /* ByteArrayWrapper.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		382D4B94159DC26000FE9296 /* NullStorage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 382D4B92159DC26000FE9296 /* NullStorage.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		382D4B96159DC26B00FE9296 /* IStorage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 382D4B95159DC26B00FE9296 /* IStorage.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		383BD37C1577EDC00012AC53 /* Factory_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 383BD3791577EDC00012AC53 /* Factory_iOS.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -74,7 +74,7 @@
 		CF08483615D41EF700327171 /* GLTextureId.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF08483415D41EF700327171 /* GLTextureId.cpp */; };
 		CF0C396A157F988100646A2F /* Mark.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0C3969157F988100646A2F /* Mark.cpp */; };
 		CF31CBF1158776130085E8F1 /* Effects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF31CBF0158776120085E8F1 /* Effects.cpp */; };
-		CF4274D015DBDCFA003F316D /* ByteBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4274CE15DBDCFA003F316D /* ByteBuffer.cpp */; };
+		CF4274D015DBDCFA003F316D /* ByteArrayWrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4274CE15DBDCFA003F316D /* ByteArrayWrapper.cpp */; };
 		CF47030B15EFB4C000426B8B /* ThreadUtils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */; };
 		CF47030C15EFB4C000426B8B /* ThreadUtils_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF47030A15EFB4C000426B8B /* ThreadUtils_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
 		CF59DF8F15C04AFC002173EC /* ILogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF59DF8E15C04AFC002173EC /* ILogger.cpp */; };
@@ -194,7 +194,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		382D4B91159DC26000FE9296 /* ByteBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ByteBuffer.hpp; path = Commons/Downloader/ByteBuffer.hpp; sourceTree = "<group>"; };
+		382D4B91159DC26000FE9296 /* ByteArrayWrapper.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ByteArrayWrapper.hpp; path = Commons/Downloader/ByteArrayWrapper.hpp; sourceTree = "<group>"; };
 		382D4B92159DC26000FE9296 /* NullStorage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NullStorage.hpp; path = Commons/Downloader/NullStorage.hpp; sourceTree = "<group>"; };
 		382D4B95159DC26B00FE9296 /* IStorage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IStorage.hpp; path = Commons/Interfaces/IStorage.hpp; sourceTree = "<group>"; };
 		383BD3791577EDC00012AC53 /* Factory_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Factory_iOS.hpp; path = Specific/Derived/Factory_iOS.hpp; sourceTree = "<group>"; };
@@ -281,7 +281,7 @@
 		CF31CBF0158776120085E8F1 /* Effects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Effects.cpp; path = Commons/Basic/Effects.cpp; sourceTree = "<group>"; };
 		CF31CBF215878AF90085E8F1 /* ITimer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ITimer.hpp; path = Commons/Interfaces/ITimer.hpp; sourceTree = "<group>"; };
 		CF31CBF315878BE40085E8F1 /* Timer_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Timer_iOS.hpp; path = Specific/Derived/Timer_iOS.hpp; sourceTree = "<group>"; };
-		CF4274CE15DBDCFA003F316D /* ByteBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ByteBuffer.cpp; path = Commons/Downloader/ByteBuffer.cpp; sourceTree = "<group>"; };
+		CF4274CE15DBDCFA003F316D /* ByteArrayWrapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ByteArrayWrapper.cpp; path = Commons/Downloader/ByteArrayWrapper.cpp; sourceTree = "<group>"; };
 		CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ThreadUtils_iOS.mm; path = Specific/Derived/ThreadUtils_iOS.mm; sourceTree = "<group>"; };
 		CF47030A15EFB4C000426B8B /* ThreadUtils_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ThreadUtils_iOS.hpp; path = Specific/Derived/ThreadUtils_iOS.hpp; sourceTree = "<group>"; };
 		CF59DF8E15C04AFC002173EC /* ILogger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ILogger.cpp; path = Commons/Interfaces/ILogger.cpp; sourceTree = "<group>"; };
@@ -379,6 +379,7 @@
 		D8E0EC1215C1B1BB0010A68A /* StaticImageLayer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StaticImageLayer.hpp; sourceTree = "<group>"; };
 		D8E0EC1415C1B1CD0010A68A /* StaticImageLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StaticImageLayer.cpp; sourceTree = "<group>"; };
 		D8E17DD215FE135400C980E6 /* GLImage.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLImage.hpp; sourceTree = "<group>"; };
+		D8E17DD515FE2ABF00C980E6 /* IByteBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IByteBuffer.h; path = Commons/Interfaces/IByteBuffer.h; sourceTree = "<group>"; };
 		D8EEF3B51577924D003FEB5E /* libG3MiOSSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libG3MiOSSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8EEF3B81577924D003FEB5E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D8EEF3BC1577924D003FEB5E /* G3MiOSSDK-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "G3MiOSSDK-Prefix.pch"; sourceTree = "<group>"; };
@@ -579,6 +580,7 @@
 				CFB72A6715E6808900A5BAF4 /* IStringUtils.cpp */,
 				CFB72A6815E6808900A5BAF4 /* IStringUtils.hpp */,
 				D8FEDAC615E7BD23007633A0 /* IMathUtils.hpp */,
+				D8E17DD515FE2ABF00C980E6 /* IByteBuffer.h */,
 			);
 			name = Interfaces;
 			sourceTree = "<group>";
@@ -692,8 +694,8 @@
 		D8AD760F1599B5B900A7D39A /* Downloader */ = {
 			isa = PBXGroup;
 			children = (
-				CF4274CE15DBDCFA003F316D /* ByteBuffer.cpp */,
-				382D4B91159DC26000FE9296 /* ByteBuffer.hpp */,
+				CF4274CE15DBDCFA003F316D /* ByteArrayWrapper.cpp */,
+				382D4B91159DC26000FE9296 /* ByteArrayWrapper.hpp */,
 				D8CD6F7815A6FFAC00279BE7 /* IDownloadListener.hpp */,
 				382D4B92159DC26000FE9296 /* NullStorage.hpp */,
 				38589EBD159C91F700DCC302 /* Response.hpp */,
@@ -787,7 +789,7 @@
 				CC14B64E157D35C100793C92 /* IImage.hpp in Headers */,
 				D84D5A32157E0EAA000C5E35 /* MutableVector3D.hpp in Headers */,
 				CF7A78ED159B9BE300074422 /* MutableVector2D.hpp in Headers */,
-				382D4B93159DC26000FE9296 /* ByteBuffer.hpp in Headers */,
+				382D4B93159DC26000FE9296 /* ByteArrayWrapper.hpp in Headers */,
 				382D4B94159DC26000FE9296 /* NullStorage.hpp in Headers */,
 				382D4B96159DC26B00FE9296 /* IStorage.hpp in Headers */,
 				D8CD6F7A15A6FFAC00279BE7 /* IDownloadListener.hpp in Headers */,
@@ -970,7 +972,7 @@
 				CF08483615D41EF700327171 /* GLTextureId.cpp in Sources */,
 				CF8FF98B15D5539F000F79D1 /* LeveledTexturedMesh.cpp in Sources */,
 				CC041F5315D98FF000D6AC5D /* BusyQuadRenderer.cpp in Sources */,
-				CF4274D015DBDCFA003F316D /* ByteBuffer.cpp in Sources */,
+				CF4274D015DBDCFA003F316D /* ByteArrayWrapper.cpp in Sources */,
 				CF9CD89A15DBE2C800C6FD7E /* CachedDownloader.cpp in Sources */,
 				CF8B21B215DD32820068601A /* SQLiteStorage_iOS.mm in Sources */,
 				CF8B21C015DD345D0068601A /* SQDatabase.m in Sources */,

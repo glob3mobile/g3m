@@ -11,7 +11,7 @@
 
 #include "ILogger.hpp"
 
-#include "ByteBuffer.hpp"
+#include "ByteArrayWrapper.hpp"
 
 class ITimer;
 class IImage;
@@ -24,7 +24,7 @@ public:
 
   virtual IImage* createImageFromFileName(const std::string filename) const = 0;
   
-  virtual IImage* createImageFromData(const ByteBuffer* buffer) const = 0;
+  virtual IImage* createImageFromData(const ByteArrayWrapper* buffer) const = 0;
   
   virtual IImage* createImageFromSize(int width, int height) const = 0;
 

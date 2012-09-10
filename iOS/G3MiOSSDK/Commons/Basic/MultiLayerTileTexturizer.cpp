@@ -313,7 +313,7 @@ public:
       
       for (int i = 0; i < _petitionsCount; i++) {
         Petition* petition       = _petitions[i];
-        const ByteBuffer* buffer = petition->getByteBuffer();
+        const ByteArrayWrapper* buffer = petition->getByteArrayWrapper();
         
         if (buffer != NULL) {
           const IImage* image = _factory->createImageFromData(buffer);
@@ -415,14 +415,14 @@ public:
   }
   
   void stepDownloaded(int position,
-                      const ByteBuffer* buffer) {
+                      const ByteArrayWrapper* buffer) {
     if (_canceled) {
       return;
     }
     checkIsPending(position);
     
     _status[position]  = STATUS_DOWNLOADED;
-    _petitions[position]->setByteBuffer(buffer->copy());
+    _petitions[position]->setByteArrayWrapper(buffer->copy());
     
     stepDone();
   }
@@ -536,7 +536,7 @@ TileTextureBuilderHolder::~TileTextureBuilderHolder() {
 
 void BuilderDownloadStepDownloadListener::onDownload(const Response* response) {
 //  _onDownload++;
-  _builder->stepDownloaded(_position, response->getByteBuffer());
+  _builder->stepDownloaded(_position, response->getByteArrayWrapper());
 }
 
 void BuilderDownloadStepDownloadListener::onError(const Response* response) {

@@ -8,10 +8,14 @@
 
 #include "CPUTextureBuilder.hpp"
 
-const GLTextureId CPUTextureBuilder::createTextureFromImages(GL * gl,
-                                                             const std::vector<const IImage*> images,
-                                                             int width, int height,
-                                                             bool generateMipmap) const {
+const GLImage* CPUTextureBuilder::createTextureFromImages(GL * gl, const IFactory* factory,
+                                                          GLFormat format,
+                                                          const std::vector<const IImage*> images,
+                                                          int width, int height) const {
+  
+  
+  
+  
   const int imagesSize = images.size();
   
   if (imagesSize == 0) {
@@ -33,6 +37,8 @@ const GLTextureId CPUTextureBuilder::createTextureFromImages(GL * gl,
     im = im2;
   }
   
+  
+  
   const GLTextureId texId = gl->uploadTexture(im, width, height, generateMipmap);
   
   if (imagesSize > 1) {
@@ -42,39 +48,39 @@ const GLTextureId CPUTextureBuilder::createTextureFromImages(GL * gl,
   return texId;
 }
 
-const GLTextureId CPUTextureBuilder::createTextureFromImages(GL * gl, const IFactory* factory,
-                                                             const std::vector<const IImage*> images,
-                                                             const std::vector<const Rectangle*> rectangles,
-                                                             int width, int height,
-                                                             bool generateMipmap) const {
+const GLImage* CPUTextureBuilder::createTextureFromImages(GL * gl, const IFactory* factory,
+                                                          GLFormat format,
+                                                          const std::vector<const IImage*> images,
+                                                          const std::vector<const Rectangle*> rectangles,
+                                                          int width, int height) const {
   const int imagesSize = images.size();
   
   if (imagesSize == 0) {
     return GLTextureId::invalid();
   }
-
-//  const Rectangle baseRec(0,0, width, height);
-//  
-//  if ((imagesSize == 1) && (rectangles[0]->equalTo(baseRec))) {
-//    return gl->uploadTexture(images[0], width, height);
-//  }
-//  
-//  
-//  
-//  const IImage* image = factory->createImageFromSize(width, height);
-//  for (int i = 0; i < imagesSize; i++) {
-//    IImage* nextImage = image->combineWith(*images[i], *rectangles[i], width, height);
-//    delete image;
-//    image = nextImage;
-//  }
-//  
-//  const GLTextureId texId = gl->uploadTexture(image, width, height);
-//  
-//  delete image;
-//  
-//  return texId;
-
-
+  
+  //  const Rectangle baseRec(0,0, width, height);
+  //  
+  //  if ((imagesSize == 1) && (rectangles[0]->equalTo(baseRec))) {
+  //    return gl->uploadTexture(images[0], width, height);
+  //  }
+  //  
+  //  
+  //  
+  //  const IImage* image = factory->createImageFromSize(width, height);
+  //  for (int i = 0; i < imagesSize; i++) {
+  //    IImage* nextImage = image->combineWith(*images[i], *rectangles[i], width, height);
+  //    delete image;
+  //    image = nextImage;
+  //  }
+  //  
+  //  const GLTextureId texId = gl->uploadTexture(image, width, height);
+  //  
+  //  delete image;
+  //  
+  //  return texId;
+  
+  
   const IImage* base;
   int i = 0; //First image to merge
   Rectangle baseRec(0,0, width, height);
@@ -85,9 +91,9 @@ const GLTextureId CPUTextureBuilder::createTextureFromImages(GL * gl, const IFac
   else {
     base = factory->createImageFromSize(width, height);
     
-//    printf("IMAGE BASE %d, %d\n", base->getWidth(), base->getHeight());
+    //    printf("IMAGE BASE %d, %d\n", base->getWidth(), base->getHeight());
   }
-
+  
   for (; i < images.size(); i++) {
     const IImage* newIm = images[i];
     const Rectangle* newRect = rectangles[i];

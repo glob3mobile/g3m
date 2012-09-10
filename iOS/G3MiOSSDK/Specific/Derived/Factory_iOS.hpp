@@ -44,13 +44,13 @@ public:
     return new Image_iOS(image);
   }
   
-  virtual IImage* createImageFromData(const ByteBuffer* buffer) const {
+  virtual IImage* createImageFromData(const ByteArrayWrapper* buffer) const {
     NSData* data = [NSData dataWithBytes: buffer->getData()
                                   length: buffer->getLength()];
     
     UIImage* image = [UIImage imageWithData:data];
     if (!image) {
-      printf("Can't read image from ByteBuffer of %d bytes\n", buffer->getLength());
+      printf("Can't read image from ByteArrayWrapper of %d bytes\n", buffer->getLength());
       return NULL;
     }
     

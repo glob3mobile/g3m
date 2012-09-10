@@ -1,17 +1,17 @@
 //
-//  ByteBuffer.hpp
+//  ByteArrayWrapper.hpp
 //  G3MiOSSDK
 //
 //  Created by Agustín Trujillo Pino on 29/06/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#ifndef G3MiOSSDK_ByteBuffer_hpp
-#define G3MiOSSDK_ByteBuffer_hpp
+#ifndef G3MiOSSDK_ByteArrayWrapper_hpp
+#define G3MiOSSDK_ByteArrayWrapper_hpp
 
 #include <string>
 
-class ByteBuffer {
+class ByteArrayWrapper {
 private:
 #ifdef C_CODE
   unsigned char* _data;
@@ -23,19 +23,19 @@ private:
   
   const int _length;
   
-  ByteBuffer(const ByteBuffer& that);
+  ByteArrayWrapper(const ByteArrayWrapper& that);
   
-  ByteBuffer& operator=(const ByteBuffer& that);
+  ByteArrayWrapper& operator=(const ByteArrayWrapper& that);
   
 public:
-  ByteBuffer(unsigned char data[],
+  ByteArrayWrapper(unsigned char data[],
              int dataLength) :
   _data(data),
   _length(dataLength)
   {
   };
   
-  ByteBuffer* copy() const {
+  ByteArrayWrapper* copy() const {
     unsigned char* newData = new unsigned char[_length];
 #ifdef C_CODE
     memcpy(newData, _data, _length * sizeof(unsigned char));
@@ -43,10 +43,10 @@ public:
 #ifdef JAVA_CODE
     System.arraycopy(_data, 0, newData, 0, _length);
 #endif
-    return new ByteBuffer(newData, _length);
+    return new ByteArrayWrapper(newData, _length);
   }
   
-  ~ByteBuffer(){
+  ~ByteArrayWrapper(){
 #ifdef C_CODE
     if (_data != NULL) {
       delete [] _data;

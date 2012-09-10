@@ -283,10 +283,10 @@
 //        _onDownload++;
 //        BOOL isMainThread = [NSThread isMainThread];
 //        if (isMainThread) {
-//          NSLog(@"*** Main-Thread: Downloaded %d bytes ***", response->getByteBuffer()->getLength());
+//          NSLog(@"*** Main-Thread: Downloaded %d bytes ***", response->getByteArrayWrapper()->getLength());
 //        }
 //        else {
-//          NSLog(@"*** NOT IN Main-Thread: Downloaded %d bytes ***", response->getByteBuffer()->getLength());
+//          NSLog(@"*** NOT IN Main-Thread: Downloaded %d bytes ***", response->getByteArrayWrapper()->getLength());
 //        }
 //      }
 //
