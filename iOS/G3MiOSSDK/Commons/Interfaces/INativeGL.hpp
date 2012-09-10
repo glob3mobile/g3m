@@ -11,8 +11,10 @@
 
 #include "GLTextureId.hpp"
 
-#include <vector>
+class IFloatBuffer;
+class IIntBuffer;
 
+#include <vector>
 #include <string>
 
 enum GLCullFace {
@@ -143,15 +145,13 @@ public:
   
   virtual void vertexAttribPointer(int index,
                                    int size,
-                                   GLType type,
                                    bool normalized,
                                    int stride,
-                                   const void*pointer) const = 0;
+                                   IFloatBuffer* buffer) const = 0;
   
   virtual void drawElements(GLPrimitive mode,
                             int count,
-                            GLType type,
-                            const void* indices) const = 0;
+                            IIntBuffer* indices) const = 0;
   
   virtual void lineWidth(float width) const = 0;
   

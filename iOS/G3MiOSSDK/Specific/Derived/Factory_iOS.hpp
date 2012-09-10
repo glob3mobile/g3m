@@ -13,16 +13,19 @@
 
 #include "Timer_iOS.hpp"
 #include "Image_iOS.hpp"
+
 #include "ByteBuffer_iOS.hpp"
+#include "FloatBuffer_iOS.hpp"
+#include "IntBuffer_iOS.hpp"
 
 class Factory_iOS: public IFactory {
 public:
   
-  virtual ITimer* createTimer() const {
+  ITimer* createTimer() const {
     return new Timer_iOS();
   }
   
-  virtual void deleteTimer(const ITimer* timer) const {
+  void deleteTimer(const ITimer* timer) const {
     delete timer;
   }
   
@@ -31,7 +34,7 @@ public:
     return new Image_iOS(width, height);
   }
   
-  virtual IImage* createImageFromFileName(const std::string filename) const {
+  IImage* createImageFromFileName(const std::string filename) const {
     NSString *fn = [NSString stringWithCString:filename.c_str()
                                       encoding:[NSString defaultCStringEncoding]];
     
@@ -41,7 +44,7 @@ public:
       
       return NULL;
     }
-
+    
     return new Image_iOS(image);
   }
   
@@ -58,14 +61,21 @@ public:
     return new Image_iOS(image);
   }
   
-  virtual void deleteImage(const IImage* image) const {
+  void deleteImage(const IImage* image) const {
     delete image;
   }
   
   virtual IByteBuffer* createByteBuffer(unsigned char data[], int length) const{
-    
-    ByteBuffer_iOS* bb = new ByteBu
-    
+    return new ByteBuffer_iOS(data, length);
+  }
+  
+  IFloatBuffer* createFloatBuffer(int size) const {
+    return new FloatBuffer_iOS(size);
+  }
+  
+  IIntBuffer* createIntBuffer(int size) const {
+    return new IntBuffer_iOS(size);
+
   }
   
 };

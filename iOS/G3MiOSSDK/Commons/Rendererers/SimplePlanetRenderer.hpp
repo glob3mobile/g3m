@@ -16,6 +16,9 @@
 #include "IndexedMesh.hpp"
 #include "TexturedMesh.hpp"
 
+class IFloatBuffer;
+class IIntBuffer;
+
 class SimplePlanetRenderer: public Renderer {
 private:
   
@@ -28,9 +31,9 @@ private:
   Mesh * _mesh;
   
   
-  float* createVertices(const Planet& planet);
-  int*   createMeshIndex();
-  float* createTextureCoordinates();
+  IFloatBuffer* createVertices(const Planet& planet) const;
+  IIntBuffer*  createMeshIndex() const;
+  IFloatBuffer* createTextureCoordinates() const;
   
   bool initializeMesh(const RenderContext* rc);
   
@@ -63,7 +66,7 @@ public:
   void stop() {
     
   }
-
+  
   
 };
 

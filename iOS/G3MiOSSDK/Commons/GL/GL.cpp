@@ -16,6 +16,11 @@
 
 #include "INativeGL.hpp"
 
+#include "IIntBuffer.hpp"
+
+#include "IFactory.hpp"
+
+#include "FloatBufferBuilderFromCartesian2D.hpp"
 
 struct UniformsStruct {
   int Projection;
@@ -45,17 +50,17 @@ struct AttributesStruct {
   int Color;
 } Attributes;
 
-int GL::checkedGetAttribLocation(int program, const std::string& name){
+int GL::checkedGetAttribLocation(int program, const std::string& name) {
   int l = _gl->getAttribLocation(program, name);
-  if (l == -1){
+  if (l == -1) {
     ILogger::instance()->logError("Error fetching Attribute, Program = %d, Variable = %s", program, name.c_str());
     _errorGettingLocationOcurred = true;
   }
   return l;
 }
-int GL::checkedGetUniformLocation(int program, const std::string& name){
+int GL::checkedGetUniformLocation(int program, const std::string& name) {
   int l = _gl->getUniformLocation(program, name);
-  if (l == -1){
+  if (l == -1) {
     ILogger::instance()->logError("Error fetching Uniform, Program = %d, Variable = %s", program, name.c_str());
     _errorGettingLocationOcurred = true;
   }
@@ -106,20 +111,12 @@ bool GL::useProgram(unsigned int program) {
 }
 
 void GL::loadModelView() {
-  if (Uniforms.Modelview == -1){
-    ILogger::instance()->logError("Uniforms Modelview Invalid");
-  }
-  
   static float M[16];
   _modelView.copyToColumnMajorFloatArray(M);
   _gl->uniformMatrix4fv(Uniforms.Modelview, 1, false, M);
 }
 
 void GL::setProjection(const MutableMatrix44D &projection) {
-  if (Uniforms.Projection == -1){
-    ILogger::instance()->logError("Uniforms Projection Invalid");
-  }
-  
   static float M[16];
   projection.copyToColumnMajorFloatArray(M);
   _gl->uniformMatrix4fv(Uniforms.Projection, 1, false, M);
@@ -159,10 +156,6 @@ void GL::clearScreen(float r, float g, float b, float a) {
 }
 
 void GL::color(float r, float g, float b, float a) {
-  if (Uniforms.FlatColor == -1){
-    ILogger::instance()->logError("Uniforms FlatColor Invalid");
-  }
-  
   if (
       (_flatColorR != r) ||
       (_flatColorG != g) ||
@@ -184,13 +177,6 @@ void GL::transformTexCoords(float scaleX,
                             float scaleY,
                             float translationX,
                             float translationY) {
-  if (Uniforms.ScaleTexCoord == -1){
-    ILogger::instance()->logError("Uniforms ScaleTexCoord Invalid");
-  }
-  if (Uniforms.TranslationTexCoord == -1){
-    ILogger::instance()->logError("Uniforms TranslationTexCoord Invalid");
-  }
-  
   if ((_scaleX != scaleX) || (_scaleY != scaleY)) {
     _gl->uniform2f(Uniforms.ScaleTexCoord,
                    scaleX,
@@ -225,47 +211,62 @@ void GL::disablePolygonOffset() {
 #endif
 }
 
-void GL::vertexPointer(int size, int stride, const float vertex[]) {
-  if (Attributes.Position == -1){
-    ILogger::instance()->logError("Attribute Position Invalid");
-  }
+void GL::vertexPointer(int size, int stride, IFloatBuffer* vertices) {
+  int __TODO_text_cache_buffer;
   
+  if ((_vertices != vertices) ||
+      (_vertices->timestamp() != vertices->timestamp()) ) {
+
+    _gl->vertexAttribPointer(Attributes.Position, size, false, stride, vertices);
+    _vertices = vertices;
+  }
+}
+
+void GL::drawTriangleStrip(IIntBuffer* indices) {
 #ifdef C_CODE
-  _gl->vertexAttribPointer(Attributes.Position, size, Float, false, stride, (const void *) vertex);
+  _gl->drawElements(TriangleStrip,
+                    indices->size(),
+                    indices);
 #else
-  _gl->vertexAttribPointer(Attributes.Position, size, GLType.Float, false, stride, (const void *) vertex);
+  _gl->drawElements(GLPrimitive.TriangleStrip,
+                    indices.size(),
+                    indices);
 #endif
 }
 
-void GL::drawTriangleStrip(int n, const int i[]) {
+void GL::drawLines(IIntBuffer* indices) {
 #ifdef C_CODE
-  _gl->drawElements(TriangleStrip, n, UnsignedInt, i);
+  _gl->drawElements(Lines,
+                    indices->size(),
+                    indices);
 #else
-  _gl->drawElements(GLPrimitive.TriangleStrip, n, GLType.UnsignedInt, i);
+  _gl->drawElements(GLPrimitive.Lines,
+                    indices.size(),
+                    indices);
 #endif
 }
 
-void GL::drawLines(int n, const int i[]) {
+void GL::drawLineLoop(IIntBuffer* indices) {
 #ifdef C_CODE
-  _gl->drawElements(Lines, n, UnsignedInt, i);
+  _gl->drawElements(LineLoop,
+                    indices->size(),
+                    indices);
 #else
-  _gl->drawElements(GLPrimitive.Lines, n, GLType.UnsignedInt, i);
+  _gl->drawElements(GLPrimitive.LineLoop,
+                    indices.size(),
+                    indices);
 #endif
 }
 
-void GL::drawLineLoop(int n, const int i[]) {
+void GL::drawPoints(IIntBuffer* indices) {
 #ifdef C_CODE
-  _gl->drawElements(LineLoop, n, UnsignedInt, i);
+  _gl->drawElements(Points,
+                    indices->size(),
+                    indices);
 #else
-  _gl->drawElements(GLPrimitive.LineLoop, n, GLType.UnsignedInt, i);
-#endif
-}
-
-void GL::drawPoints(int n, const int i[]) {
-#ifdef C_CODE
-  _gl->drawElements(Points, n, UnsignedInt, i);
-#else
-  _gl->drawElements(GLPrimitive.Points, n, GLType.UnsignedInt, i);
+  _gl->drawElements(GLPrimitive.Points,
+                    indices.size(),
+                    indices);
 #endif
 }
 
@@ -274,10 +275,6 @@ void GL::lineWidth(float width) {
 }
 
 void GL::pointSize(float size) {
-  if (Uniforms.PointSize == -1){
-    ILogger::instance()->logError("Uniforms PointSize Invalid");
-  }
-
   _gl->uniform1f(Uniforms.PointSize, size);
 }
 
@@ -365,17 +362,12 @@ const GLTextureId GL::uploadTexture(const IImage* image,
   return texId;
 }
 
-void GL::setTextureCoordinates(int size, int stride, const float texcoord[]) {
-  if (Attributes.TextureCoord == -1){
-    ILogger::instance()->logError("Attribute TextureCoord Invalid");
-  }
+void GL::setTextureCoordinates(int size, int stride, IFloatBuffer* texcoord) {
+  int __TODO_cache_buffer;
   
-  if (_textureCoordinates != texcoord) {
-#ifdef C_CODE
-    _gl->vertexAttribPointer(Attributes.TextureCoord, size, Float, false, stride, (const void *) texcoord);
-#else
-    _gl->vertexAttribPointer(Attributes.TextureCoord, size, GLType.Float, false, stride, (const void *) texcoord);
-#endif
+  if ((_textureCoordinates != texcoord) ||
+      (_textureCoordinates->timestamp() != texcoord->timestamp()) ) {
+    _gl->vertexAttribPointer(Attributes.TextureCoord, size, false, stride, texcoord);
     _textureCoordinates = texcoord;
   }
 }
@@ -388,31 +380,31 @@ void GL::bindTexture(const GLTextureId& textureId) {
 #endif
 }
 
+IFloatBuffer* GL::getBillboardTexCoord() {
+  
+  if (_billboardTexCoord == NULL) {
+    //  const static float texcoord[] = {
+    //    1, 1,
+    //    1, 0,
+    //    0, 1,
+    //    0, 0
+    //  };
+    
+    FloatBufferBuilderFromCartesian2D texCoor;
+    texCoor.add(1,1);
+    texCoor.add(1,0);
+    texCoor.add(0,1);
+    texCoor.add(0,0);
+    _billboardTexCoord = texCoor.create();
+  }
+  
+  return _billboardTexCoord;
+}
+
 void GL::drawBillBoard(const GLTextureId& textureId,
-                       const Vector3D& pos,
+                       IFloatBuffer* vertices,
                        const float viewPortRatio) {
-  if (Uniforms.BillBoard == -1){
-    ILogger::instance()->logError("Uniforms BillBoard Invalid");
-  }
-  
-  if (Uniforms.ViewPortRatio == -1){
-    ILogger::instance()->logError("Uniforms ViewPortRatio Invalid");
-  }
-  
-  
-  const float vertex[] = {
-    (float) pos.x(), (float) pos.y(), (float) pos.z(),
-    (float) pos.x(), (float) pos.y(), (float) pos.z(),
-    (float) pos.x(), (float) pos.y(), (float) pos.z(),
-    (float) pos.x(), (float) pos.y(), (float) pos.z()
-  };
-  
-  const static float texcoord[] = {
-    1, 1,
-    1, 0,
-    0, 1,
-    0, 0
-  };
+  int TODO_refactor_billboard;
   
   _gl->uniform1i(Uniforms.BillBoard, 1);
   
@@ -425,13 +417,13 @@ void GL::drawBillBoard(const GLTextureId& textureId,
   
   bindTexture(textureId);
   
-  vertexPointer(3, 0, vertex);
-  setTextureCoordinates(2, 0, texcoord);
+  vertexPointer(3, 0, vertices);
+  setTextureCoordinates(2, 0, getBillboardTexCoord());
   
 #ifdef C_CODE
-  _gl->drawArrays(TriangleStrip, 0, 4);
+  _gl->drawArrays(TriangleStrip, 0, vertices->size() / 3);
 #else
-  _gl->drawArrays(GLPrimitive.TriangleStrip, 0, 4);
+  _gl->drawArrays(GLPrimitive.TriangleStrip, 0, vertices->size() / 3);
 #endif
   
   enableDepthTest();
@@ -441,10 +433,6 @@ void GL::drawBillBoard(const GLTextureId& textureId,
 
 // state handling
 void GL::enableTextures() {
-  if (Attributes.TextureCoord == -1){
-    ILogger::instance()->logError("Attribute TextureCoord Invalid");
-  }
-  
   if (!_enableTextures) {
     _gl->enableVertexAttribArray(Attributes.TextureCoord);
     _enableTextures = true;
@@ -452,10 +440,6 @@ void GL::enableTextures() {
 }
 
 void GL::disableTextures() {
-  if (Attributes.TextureCoord == -1){
-    ILogger::instance()->logError("Attribute TextureCoord Invalid");
-  }
-  
   if (_enableTextures) {
     _gl->disableVertexAttribArray(Attributes.TextureCoord);
     _enableTextures = false;
@@ -463,10 +447,6 @@ void GL::disableTextures() {
 }
 
 void GL::enableTexture2D() {
-  if (Uniforms.EnableTexture == -1){
-    ILogger::instance()->logError("Uniforms EnableTexture Invalid");
-  }
-  
   if (!_enableTexture2D) {
     _gl->uniform1i(Uniforms.EnableTexture, 1);
     _enableTexture2D = true;
@@ -474,48 +454,31 @@ void GL::enableTexture2D() {
 }
 
 void GL::disableTexture2D() {
-  if (Uniforms.EnableTexture == -1){
-    ILogger::instance()->logError("Uniforms EnableTexture Invalid");
-  }
-  
   if (_enableTexture2D) {
     _gl->uniform1i(Uniforms.EnableTexture, 0);
     _enableTexture2D = false;
   }
 }
 
-void GL::enableVertexColor(float const colors[], float intensity) {
-  if (Attributes.Color == -1){
-    ILogger::instance()->logError("Attribute Color Invalid");
-  }
-  if (Uniforms.EnableColorPerVertex == -1){
-    ILogger::instance()->logError("Uniforms EnableColorPerVertex Invalid");
-  }
-  if (Uniforms.ColorPerVertexIntensity == -1){
-    ILogger::instance()->logError("Uniforms ColorPerVertexIntensity Invalid");
-  }
+void GL::enableVertexColor(IFloatBuffer* colors, float intensity) {
   
   //if (!_enableVertexColor) {
   _gl->uniform1i(Uniforms.EnableColorPerVertex, 1);
   _gl->enableVertexAttribArray(Attributes.Color);
-#ifdef C_CODE
-  _gl->vertexAttribPointer(Attributes.Color, 4, Float, false, 0, colors);
-#else
-  _gl->vertexAttribPointer(Attributes.Color, 4, GLType.Float, false, 0, colors);
-#endif
+  
+  int __TODO_cache_buffer;
+  if ((_colors != colors) ||
+      (_colors->timestamp() != colors->timestamp()) ) {
+    _gl->vertexAttribPointer(Attributes.Color, 4, false, 0, colors);
+    _colors = colors;
+  }
+  
   _gl->uniform1f(Uniforms.ColorPerVertexIntensity, intensity);
   //_enableVertexColor = true;
   //}
 }
 
 void GL::disableVertexColor() {
-  if (Attributes.Color == -1){
-    ILogger::instance()->logError("Attribute Color Invalid");
-  }
-  if (Uniforms.EnableColorPerVertex == -1){
-    ILogger::instance()->logError("Uniforms EnableColorPerVertex Invalid");
-  }
-  
   //  if (_enableVertexColor) {
   _gl->disableVertexAttribArray(Attributes.Color);
   _gl->uniform1i(Uniforms.EnableColorPerVertex, 0);
@@ -524,10 +487,6 @@ void GL::disableVertexColor() {
 }
 
 void GL::enableVerticesPosition() {
-  if (Attributes.Position == -1){
-    ILogger::instance()->logError("Attribute Position Invalid");
-  }
-  
   if (!_enableVerticesPosition) {
     _gl->enableVertexAttribArray(Attributes.Position);
     _enableVerticesPosition = true;
@@ -535,10 +494,6 @@ void GL::enableVerticesPosition() {
 }
 
 void GL::disableVerticesPosition() {
-  if (Attributes.Position == -1){
-    ILogger::instance()->logError("Attribute Position Invalid");
-  }
-  
   if (_enableVerticesPosition) {
     _gl->disableVertexAttribArray(Attributes.Position);
     _enableVerticesPosition = false;
@@ -547,14 +502,6 @@ void GL::disableVerticesPosition() {
 
 void GL::enableVertexFlatColor(float r, float g, float b, float a,
                                float intensity) {
-  if (Uniforms.EnableFlatColor == -1){
-    ILogger::instance()->logError("Uniforms EnableFlatColor Invalid");
-  }
-  
-  if (Uniforms.FlatColorIntensity == -1){
-    ILogger::instance()->logError("Uniforms FlatColorIntensity Invalid");
-  }
-  
   if (!_enableFlatColor) {
     _gl->uniform1i(Uniforms.EnableFlatColor, 1);
     _enableFlatColor = true;
@@ -570,11 +517,6 @@ void GL::enableVertexFlatColor(float r, float g, float b, float a,
 }
 
 void GL::disableVertexFlatColor() {
-  if (Uniforms.EnableFlatColor == -1){
-    ILogger::instance()->logError("Uniforms EnableFlatColor Invalid");
-  }
-  
-  
   if (_enableFlatColor) {
     _gl->uniform1i(Uniforms.EnableFlatColor, 0);
     _enableFlatColor = false;
@@ -626,7 +568,7 @@ void GL::disableBlend() {
   
 }
 
-void GL::setBlendFuncSrcAlpha(){
+void GL::setBlendFuncSrcAlpha() {
 #ifdef C_CODE
   _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);
 #else

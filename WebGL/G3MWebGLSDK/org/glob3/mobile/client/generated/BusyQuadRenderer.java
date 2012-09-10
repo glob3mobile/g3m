@@ -32,42 +32,6 @@ public class BusyQuadRenderer extends Renderer implements EffectTarget
 
   private boolean initMesh(RenderContext rc)
   {
-	// create quad
-	int numVertices = 4;
-	int numIndices = 4;
-	float[] quadVertices = new float[numVertices *3];
-	int[] quadIndices = new int[numIndices];
-	float[] texC = new float[numVertices *2];
-  
-	int nv = 0;
-	float halfSize = 16F;
-	quadVertices[nv++] = -halfSize;
-	quadVertices[nv++] = halfSize;
-	quadVertices[nv++] = 0F;
-	quadVertices[nv++] = -halfSize;
-	quadVertices[nv++] = -halfSize;
-	quadVertices[nv++] = 0F;
-	quadVertices[nv++] = halfSize;
-	quadVertices[nv++] = halfSize;
-	quadVertices[nv++] = 0F;
-	quadVertices[nv++] = halfSize;
-	quadVertices[nv++] = -halfSize;
-	quadVertices[nv++] = 0F;
-  
-	for (int n = 0; n<numIndices; n++)
-		quadIndices[n] = n;
-  
-	int nc = 0;
-	texC[nc++] = 0F;
-	texC[nc++] = 0.0F;
-	texC[nc++] = 0F;
-	texC[nc++] = 1.0F;
-	texC[nc++] = 1F;
-	texC[nc++] = 0.0F;
-	texC[nc++] = 1F;
-	texC[nc++] = 1.0F;
-  
-  
 	//TEXTURED
 	GLTextureId texId = GLTextureId.invalid();
 	if (true)
@@ -80,9 +44,29 @@ public class BusyQuadRenderer extends Renderer implements EffectTarget
 	  }
 	}
   
-	IndexedMesh im = IndexedMesh.createFromVector3D(true, GLPrimitive.TriangleStrip, CenterStrategy.NoCenter, new Vector3D(0,0,0), numVertices, quadVertices, quadIndices, numIndices, null);
+	final float halfSize = 16F;
   
-	TextureMapping texMap = new SimpleTextureMapping(texId, texC, true);
+	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.NoCenter, Vector3D.zero());
+	vertices.add(-halfSize, +halfSize, 0);
+	vertices.add(-halfSize, -halfSize, 0);
+	vertices.add(+halfSize, +halfSize, 0);
+	vertices.add(+halfSize, -halfSize, 0);
+  
+	IntBufferBuilder indices = new IntBufferBuilder();
+	indices.add(0);
+	indices.add(1);
+	indices.add(2);
+	indices.add(3);
+  
+	FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
+	texCoords.add(0, 0);
+	texCoords.add(0, 1);
+	texCoords.add(1, 0);
+	texCoords.add(1, 1);
+  
+	IndexedMesh im = new IndexedMesh(GLPrimitive.TriangleStrip, true, Vector3D.zero(), vertices.create(), indices.create());
+  
+	TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true);
   
 	_quadMesh = new TexturedMesh(im, true, texMap, true);
   
@@ -142,7 +126,6 @@ public class BusyQuadRenderer extends Renderer implements EffectTarget
 	gl.loadMatrixf(MutableMatrix44D.identity());
   
 	// clear screen
-	//gl->clearScreen(0.0f, 0.2f, 0.4f, 1.0f);
 	gl.clearScreen(0.0f, 0.0f, 0.0f, 1.0f);
   
 	gl.enableBlend();

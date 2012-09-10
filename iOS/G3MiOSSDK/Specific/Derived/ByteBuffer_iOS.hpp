@@ -9,7 +9,7 @@
 #ifndef G3MiOSSDK_ByteBuffer_iOS_hpp
 #define G3MiOSSDK_ByteBuffer_iOS_hpp
 
-#include "IByteBuffer.h"
+#include "IByteBuffer.hpp"
 
 class ByteBuffer_iOS : public IByteBuffer {
 private:
@@ -32,7 +32,7 @@ public:
     _values = new unsigned char[size];
   }
   
-  virtual ByteBuffer_iOS() {
+  ~ByteBuffer_iOS() {
     delete [] _values;
   }
   

@@ -7,9 +7,9 @@ public class LTMInitializer extends LazyTextureMappingInitializer
   private MutableVector2D _scale = new MutableVector2D();
   private MutableVector2D _translation = new MutableVector2D();
 
-  private final float[] _texCoords;
+  private IFloatBuffer _texCoords;
 
-  public LTMInitializer(Tile tile, Tile ancestor, float[] texCoords)
+  public LTMInitializer(Tile tile, Tile ancestor, IFloatBuffer texCoords)
   {
 	  _tile = tile;
 	  _ancestor = ancestor;
@@ -51,9 +51,10 @@ public class LTMInitializer extends LazyTextureMappingInitializer
 	return _translation;
   }
 
-
-  @Override
-  public float[] getTexCoords() {
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: IFloatBuffer* getTexCoords() const
+  public final IFloatBuffer getTexCoords()
+  {
 	return _texCoords;
   }
 

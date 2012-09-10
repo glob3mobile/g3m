@@ -109,6 +109,7 @@ G3MWidget* G3MWidget::create(FrameTasksExecutor* frameTasksExecutor,
     logger->logInfo("Creating G3MWidget...");
   }
   
+  IFactory::setInstance(factory);
   IStringUtils::setInstance(stringUtils);
   ILogger::setInstance(logger);
   IThreadUtils::setInstance(threadUtils);

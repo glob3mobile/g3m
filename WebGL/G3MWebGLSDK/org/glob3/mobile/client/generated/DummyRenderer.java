@@ -17,27 +17,32 @@ package org.glob3.mobile.generated;
 
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IFloatBuffer;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IIntBuffer;
+
 public class DummyRenderer extends Renderer
 {
 
-  private int _numIndices;
   private double _halfSize;
 
-  private int[] _index;
-  private float[] _vertices;
+  private IIntBuffer _index;
+  private IFloatBuffer _vertices;
 
   public void dispose()
   {
-	_index = null;
-	_vertices = null;
   }
 
   public final void initialize(InitializationContext ic)
   {
 	int res = 12;
-	_vertices = new float[res * res * 3];
-	_numIndices = 2 * (res - 1) * (res + 1);
-	_index = new int[_numIndices];
+	//_vertices = new float[res * res * 3];
+	//_numIndices = 2 * (res - 1) * (res + 1);
+	//_index = new int[_numIndices];
+  
+	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.NoCenter, Vector3D.zero());
+	IntBufferBuilder index = new IntBufferBuilder();
   
 	// create vertices
   
@@ -46,29 +51,40 @@ public class DummyRenderer extends Renderer
 	else
 	  _halfSize = 7e6;
   
-	int n = 0;
+	//int n = 0;
 	for (int j = 0; j < res; j++)
 	{
 	  for (int i = 0; i < res; i++)
 	  {
-		_vertices[n++] = (float) 0;
-		_vertices[n++] = (float)(-_halfSize + i / (float)(res - 1) * 2 *_halfSize);
-		_vertices[n++] = (float)(_halfSize - j / (float)(res - 1) * 2 *_halfSize);
+  
+		vertices.add((float)0, (float)(-_halfSize + i / (float)(res - 1) * 2 *_halfSize), (float)(_halfSize - j / (float)(res - 1) * 2 *_halfSize));
+  //      _vertices[n++] = (float) 0;
+  //      _vertices[n++] = (float) (-_halfSize + i / (float) (res - 1) * 2*_halfSize);
+  //      _vertices[n++] = (float) (_halfSize - j / (float) (res - 1) * 2*_halfSize);
 	  }
 	}
   
-	n = 0;
+	//n = 0;
 	for (int j = 0; j < res - 1; j++)
 	{
 	  if (j > 0)
-		  _index[n++] = (byte)(j * res);
+	  {
+		//_index[n++] = (char) (j * res);
+		index.add(j * res);
+	  }
 	  for (int i = 0; i < res; i++)
 	  {
-		_index[n++] = (j * res + i);
-		_index[n++] = (j * res + i + res);
+		index.add(j * res + i);
+		index.add(j * res + i + res);
+  //      _index[n++] = (j * res + i);
+  //      _index[n++] = (j * res + i + res);
 	  }
-	  _index[n++] = (j * res + 2 * res - 1);
+	  index.add(j * res + 2 * res - 1);
+	  //_index[n++] = (j * res + 2 * res - 1);
 	}
+  
+	_index = index.create();
+	_vertices = vertices.create();
   }
 
   public final void render(RenderContext rc)
@@ -87,10 +103,9 @@ public class DummyRenderer extends Renderer
 	  // draw a red square
 	  gl.color((float) 1, (float) 0, (float) 0, 1);
 	  gl.pushMatrix();
-	  //MutableMatrix44D T = GLU::translationMatrix(Vector3D(halfSize,0,0));
 	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(_halfSize,0,0));
 	  gl.multMatrixf(T);
-	  gl.drawTriangleStrip(_numIndices, _index);
+	  gl.drawTriangleStrip(_index);
 	  gl.popMatrix();
 	}
   
@@ -101,7 +116,7 @@ public class DummyRenderer extends Renderer
 	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(0,_halfSize,0));
 	  MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(90), new Vector3D(0,0,1));
 	  gl.multMatrixf(T.multiply(R));
-	  gl.drawTriangleStrip(_numIndices, _index);
+	  gl.drawTriangleStrip(_index);
 	  gl.popMatrix();
 	}
   
@@ -112,7 +127,7 @@ public class DummyRenderer extends Renderer
 	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(0,-_halfSize,0));
 	  MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(-90), new Vector3D(0,0,1));
 	  gl.multMatrixf(T.multiply(R));
-	  gl.drawTriangleStrip(_numIndices, _index);
+	  gl.drawTriangleStrip(_index);
 	  gl.popMatrix();
 	}
   
@@ -123,7 +138,7 @@ public class DummyRenderer extends Renderer
 	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(0,0,-_halfSize));
 	  MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(90), new Vector3D(0,1,0));
 	  gl.multMatrixf(T.multiply(R));
-	  gl.drawTriangleStrip(_numIndices, _index);
+	  gl.drawTriangleStrip(_index);
 	  gl.popMatrix();
 	}
   
@@ -134,7 +149,7 @@ public class DummyRenderer extends Renderer
 	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(0,0,_halfSize));
 	  MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(-90), new Vector3D(0,1,0));
 	  gl.multMatrixf(T.multiply(R));
-	  gl.drawTriangleStrip(_numIndices, _index);
+	  gl.drawTriangleStrip(_index);
 	  gl.popMatrix();
 	}
   
@@ -145,7 +160,7 @@ public class DummyRenderer extends Renderer
 	  MutableMatrix44D T = MutableMatrix44D.createTranslationMatrix(new Vector3D(-_halfSize,0,0));
 	  MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(180), new Vector3D(0,0,1));
 	  gl.multMatrixf(T.multiply(R));
-	  gl.drawTriangleStrip(_numIndices, _index);
+	  gl.drawTriangleStrip(_index);
 	  gl.popMatrix();
 	}
   

@@ -1,5 +1,13 @@
 package org.glob3.mobile.generated; 
 //
+//  IFactory.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 06/09/12.
+//
+//
+
+//
 //  IFactory.h
 //  G3MiOSSDK
 //
@@ -10,13 +18,41 @@ package org.glob3.mobile.generated;
 
 
 
+//C++ TO JAVA CONVERTER NOTE: The following #define macro was replaced in-line:
+//#define GFactory IFactory.instance()
+
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class ITimer;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IImage;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IFloatBuffer;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IIntBuffer;
 
 public abstract class IFactory
 {
+  private static IFactory _instance = null;
+
+  public static void setInstance(IFactory logger)
+  {
+	if (_instance != null)
+	{
+	  System.out.print("Warning, ILooger instance set two times\n");
+	}
+	_instance = logger;
+  }
+
+  public static IFactory instance()
+  {
+	return _instance;
+  }
+
+  public void dispose()
+  {
+
+  }
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual ITimer* createTimer() const = 0;
   public abstract ITimer createTimer();
@@ -40,8 +76,13 @@ public abstract class IFactory
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual void deleteImage(const IImage* image) const = 0;
   public abstract void deleteImage(IImage image);
-  // a virtual destructor is needed for conversion to Java
-  public void dispose()
-  {
-  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual IFloatBuffer* createFloatBuffer(int size) const = 0;
+  public abstract IFloatBuffer createFloatBuffer(int size);
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual IIntBuffer* createIntBuffer(int size) const = 0;
+  public abstract IIntBuffer createIntBuffer(int size);
+
 }

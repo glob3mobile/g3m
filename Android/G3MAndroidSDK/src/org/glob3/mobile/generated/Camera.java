@@ -163,29 +163,33 @@ public class Camera
 	gl.setProjection(getProjectionMatrix());
 	gl.loadMatrixf(getModelMatrix());
   
-	// TEMP: TEST TO SEE HALF SIZE FRUSTUM CLIPPING
-	if (false)
-	{
-	  final MutableMatrix44D inversed = getModelMatrix().inversed();
-  
-	  final FrustumData data = calculateFrustumData();
-	  final Vector3D p0 = new Vector3D(new Vector3D(data._left/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
-	  final Vector3D p1 = new Vector3D(new Vector3D(data._left/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
-	  final Vector3D p2 = new Vector3D(new Vector3D(data._right/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
-	  final Vector3D p3 = new Vector3D(new Vector3D(data._right/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
-  
-	  float[] vertices = { (float) p0.x(), (float) p0.y(), (float) p0.z(), (float) p1.x(), (float) p1.y(), (float) p1.z(), (float) p2.x(), (float) p2.y(), (float) p2.z(), (float) p3.x(), (float) p3.y(), (float) p3.z()};
-	  int[] indices = {0, 1, 2, 3};
-  
-	  gl.enableVerticesPosition();
-	  gl.vertexPointer(3, 0, vertices);
-	  gl.lineWidth(2);
-	  gl.color(1, 0, 1, 1);
-	  gl.drawLineLoop(4, indices);
-  
-	  gl.lineWidth(1);
-	  gl.color(1, 1, 1, 1);
-	}
+  //  // TEMP: TEST TO SEE HALF SIZE FRUSTUM CLIPPING
+  //  if (false) {
+  //    const MutableMatrix44D inversed = getModelMatrix().inversed();
+  //
+  //    const FrustumData data = calculateFrustumData();
+  //    const Vector3D p0(Vector3D(data._left/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
+  //    const Vector3D p1(Vector3D(data._left/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
+  //    const Vector3D p2(Vector3D(data._right/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
+  //    const Vector3D p3(Vector3D(data._right/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
+  //
+  //    const float vertices[] = {
+  //      (float) p0.x(), (float) p0.y(), (float) p0.z(),
+  //      (float) p1.x(), (float) p1.y(), (float) p1.z(),
+  //      (float) p2.x(), (float) p2.y(), (float) p2.z(),
+  //      (float) p3.x(), (float) p3.y(), (float) p3.z(),
+  //    };
+  //    const int indices[] = {0, 1, 2, 3};
+  //
+  //    gl->enableVerticesPosition();
+  //    gl->vertexPointer(3, 0, vertices);
+  //    gl->lineWidth(2);
+  //    gl->color(1, 0, 1, 1);
+  //    gl->drawLineLoop(4, indices);
+  //
+  //    gl->lineWidth(1);
+  //    gl->color(1, 1, 1, 1);
+  //  }
   
   
   }

@@ -13,19 +13,32 @@
 #include "Planet.hpp"
 #include "Vector3D.hpp"
 
+#include "FloatBufferBuilderFromCartesian3D.hpp"
+#include "IntBufferBuilder.hpp"
+#include "IIntBuffer.hpp"
+
 DummyRenderer::~DummyRenderer()
 {
-  delete[] _index;
-  delete[] _vertices;
+#ifdef C_CODE
+  delete _index;
+  delete _vertices;
+#endif
 }
 
 void DummyRenderer::initialize(const InitializationContext* ic)
 {
   int res = 12;
-  _vertices = new float[res * res * 3];
-  _numIndices = 2 * (res - 1) * (res + 1);
-  _index = new int[_numIndices];
+  //_vertices = new float[res * res * 3];
+  //_numIndices = 2 * (res - 1) * (res + 1);
+  //_index = new int[_numIndices];
   
+#ifdef C_CODE
+  FloatBufferBuilderFromCartesian3D vertices(NoCenter, Vector3D::zero());
+#else
+  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy.NoCenter, Vector3D::zero());
+#endif
+  IntBufferBuilder index;
+
   // create vertices
   
   if (ic != NULL && ic->getPlanet() != NULL)
@@ -33,24 +46,37 @@ void DummyRenderer::initialize(const InitializationContext* ic)
   else     
     _halfSize = 7e6;
   
-  int n = 0;
+  //int n = 0;
   for (int j = 0; j < res; j++) {
     for (int i = 0; i < res; i++) {
-      _vertices[n++] = (float) 0;
-      _vertices[n++] = (float) (-_halfSize + i / (float) (res - 1) * 2*_halfSize);
-      _vertices[n++] = (float) (_halfSize - j / (float) (res - 1) * 2*_halfSize);
+      
+      vertices.add((float)0, 
+                   (float)(-_halfSize + i / (float) (res - 1) * 2*_halfSize),
+                   (float)(_halfSize - j / (float) (res - 1) * 2*_halfSize));
+//      _vertices[n++] = (float) 0;
+//      _vertices[n++] = (float) (-_halfSize + i / (float) (res - 1) * 2*_halfSize);
+//      _vertices[n++] = (float) (_halfSize - j / (float) (res - 1) * 2*_halfSize);
     }
   }
   
-  n = 0;
+  //n = 0;
   for (int j = 0; j < res - 1; j++) {
-    if (j > 0) _index[n++] = (char) (j * res);
-    for (int i = 0; i < res; i++) {
-      _index[n++] = (j * res + i);
-      _index[n++] = (j * res + i + res);
+    if (j > 0){
+      //_index[n++] = (char) (j * res);
+      index.add(j * res);
     }
-    _index[n++] = (j * res + 2 * res - 1);
+    for (int i = 0; i < res; i++) {
+      index.add(j * res + i);
+      index.add(j * res + i + res);
+//      _index[n++] = (j * res + i);
+//      _index[n++] = (j * res + i + res);
+    }
+    index.add(j * res + 2 * res - 1);
+    //_index[n++] = (j * res + 2 * res - 1);
   }
+  
+  _index = index.create();
+  _vertices = vertices.create();
 }  
 
 
@@ -74,10 +100,9 @@ void DummyRenderer::render(const RenderContext* rc) {
     // draw a red square
     gl->color((float) 1, (float) 0, (float) 0, 1);
     gl->pushMatrix();
-    //MutableMatrix44D T = GLU::translationMatrix(Vector3D(halfSize,0,0));
     MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(Vector3D(_halfSize,0,0));
     gl->multMatrixf(T);
-    gl->drawTriangleStrip(_numIndices, _index);
+    gl->drawTriangleStrip(_index);
     gl->popMatrix();
   }
   
@@ -88,7 +113,7 @@ void DummyRenderer::render(const RenderContext* rc) {
     MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(Vector3D(0,_halfSize,0));
     MutableMatrix44D R = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(90), Vector3D(0,0,1));
     gl->multMatrixf(T.multiply(R));
-    gl->drawTriangleStrip(_numIndices, _index);
+    gl->drawTriangleStrip(_index);
     gl->popMatrix();
   }
   
@@ -99,7 +124,7 @@ void DummyRenderer::render(const RenderContext* rc) {
     MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(Vector3D(0,-_halfSize,0));
     MutableMatrix44D R = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(-90), Vector3D(0,0,1));
     gl->multMatrixf(T.multiply(R));
-    gl->drawTriangleStrip(_numIndices, _index);
+    gl->drawTriangleStrip(_index);
     gl->popMatrix();
   }
   
@@ -110,7 +135,7 @@ void DummyRenderer::render(const RenderContext* rc) {
     MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(Vector3D(0,0,-_halfSize));
     MutableMatrix44D R = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(90), Vector3D(0,1,0));
     gl->multMatrixf(T.multiply(R));
-    gl->drawTriangleStrip(_numIndices, _index);
+    gl->drawTriangleStrip(_index);
     gl->popMatrix();
   }
     
@@ -121,7 +146,7 @@ void DummyRenderer::render(const RenderContext* rc) {
     MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(Vector3D(0,0,_halfSize));
     MutableMatrix44D R = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(-90), Vector3D(0,1,0));
     gl->multMatrixf(T.multiply(R));
-    gl->drawTriangleStrip(_numIndices, _index);
+    gl->drawTriangleStrip(_index);
     gl->popMatrix();
   }
   
@@ -132,7 +157,7 @@ void DummyRenderer::render(const RenderContext* rc) {
     MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(Vector3D(-_halfSize,0,0));
     MutableMatrix44D R = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(180), Vector3D(0,0,1));
     gl->multMatrixf(T.multiply(R));
-    gl->drawTriangleStrip(_numIndices, _index);
+    gl->drawTriangleStrip(_index);
     gl->popMatrix();
   }
   

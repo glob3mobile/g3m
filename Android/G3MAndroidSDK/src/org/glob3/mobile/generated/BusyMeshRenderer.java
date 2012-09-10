@@ -36,72 +36,52 @@ public class BusyMeshRenderer extends Renderer implements EffectTarget
 
   public final void initialize(InitializationContext ic)
   {
-	// compute number of vertex for the ring
 	int numStrides = 60;
-	int numVertices = numStrides * 2 + 2;
-	int numIndices = numVertices + 2;
   
-	// add number of vertex for the square
+	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.NoCenter, Vector3D.zero());
+	FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
+	IntBufferBuilder indices = new IntBufferBuilder();
   
-	// create vertices and indices in dinamic memory
-	float[] vertices = new float[numVertices *3];
-	int[] indices = new int[numIndices];
-	float[] colors = new float[numVertices *4];
-  
-	// create vertices
-	int nv = 0;
-	int ni = 0;
-	int nc = 0;
-  //  float r1=200, r2=230;
-	float r1 = 12F;
-	float r2 = 18F;
+	int indicesCounter = 0;
+	final float r1 = 12F;
+	final float r2 = 18F;
 	for (int step = 0; step<=numStrides; step++)
 	{
-	  double angle = (double) step * 2 * IMathUtils.instance().pi() / numStrides;
-	  double c = IMathUtils.instance().cos(angle);
-	  double s = IMathUtils.instance().sin(angle);
-	  vertices[nv++] = (float)(r1 * c);
-	  vertices[nv++] = (float)(r1 * s);
-	  vertices[nv++] = 0.0F;
-	  vertices[nv++] = (float)(r2 * c);
-	  vertices[nv++] = (float)(r2 * s);
-	  vertices[nv++] = 0.0F;
-	  indices[ni] = ni;
-	  indices[ni+1] = ni+1;
-	  ni+=2;
+	  final double angle = (double) step * 2 * IMathUtils.instance().pi() / numStrides;
+	  final double c = IMathUtils.instance().cos(angle);
+	  final double s = IMathUtils.instance().sin(angle);
+  
+	  vertices.add((r1 * c), (r1 * s), 0);
+	  vertices.add((r2 * c), (r2 * s), 0);
+  
+	  indices.add(indicesCounter++);
+	  indices.add(indicesCounter++);
+  
 	  float col = (float)(1.1 * step / numStrides);
 	  if (col>1)
 	  {
-		colors[nc++] = 255F;
-		colors[nc++] = 255F;
-		colors[nc++] = 255F;
-		colors[nc++] = 0F;
-		colors[nc++] = 255F;
-		colors[nc++] = 255F;
-		colors[nc++] = 255F;
-		colors[nc++] = 0F;
+		colors.add(255, 255, 255, 0);
+		colors.add(255, 255, 255, 0);
 	  }
 	  else
 	  {
-		colors[nc++] = 255F;
-		colors[nc++] = 255F;
-		colors[nc++] = 255F;
-		colors[nc++] = 1-col;
-		colors[nc++] = 255F;
-		colors[nc++] = 255F;
-		colors[nc++] = 255F;
-		colors[nc++] = 1-col;
+		colors.add(255, 255, 255, 1 - col);
+		colors.add(255, 255, 255, 1 - col);
 	  }
 	}
   
 	// the two last indices
-	indices[ni++] = 0;
-	indices[ni++] = 1;
-  
+	indices.add(0);
+	indices.add(1);
   
 	// create mesh
-	//Color *flatColor = new Color(Color::fromRGBA(1.0, 1.0, 0.0, 1.0));
-	_mesh = IndexedMesh.createFromVector3D(true, GLPrimitive.TriangleStrip, CenterStrategy.NoCenter, new Vector3D(0,0,0), numVertices, vertices, indices, numIndices, null, colors);
+	_mesh = new IndexedMesh(GLPrimitive.TriangleStrip,
+  					  true,
+  					  vertices.getCenter(),
+  					  vertices.create(),
+  					  indices.create(),
+  					  null,
+  					  colors.create());
   }
 
   public final boolean isReadyToRender(RenderContext rc)
@@ -135,7 +115,6 @@ public class BusyMeshRenderer extends Renderer implements EffectTarget
 	gl.loadMatrixf(MutableMatrix44D.identity());
   
 	// clear screen
-	//gl->clearScreen(0.0f, 0.2f, 0.4f, 1.0f);
 	gl.clearScreen(0.0f, 0.0f, 0.0f, 1.0f);
   
 	gl.enableBlend();

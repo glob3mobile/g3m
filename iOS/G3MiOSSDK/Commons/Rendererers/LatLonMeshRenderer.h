@@ -16,9 +16,8 @@
 class LatLonMeshRenderer: public Renderer {
   
 private:
-  Mesh *mesh;
+  Mesh * _mesh;
   
- 
 public:
   ~LatLonMeshRenderer();
   
@@ -37,7 +36,7 @@ public:
   bool isReadyToRender(const RenderContext* rc) {
     return true;
   }
-
+  
   void start() {
     
   }
@@ -45,7 +44,7 @@ public:
   void stop() {
     
   }
-
+  
 };
 
 #endif

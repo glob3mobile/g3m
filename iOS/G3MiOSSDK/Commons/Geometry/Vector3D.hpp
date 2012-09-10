@@ -31,12 +31,18 @@ public:
     
   }
   
+  ~Vector3D() {}
+  
   Vector3D(const Vector3D &v): _x(v._x), _y(v._y), _z(v._z) {
     
   }
   
   static Vector3D nan() {
     return Vector3D(GMath.NanD(), GMath.NanD(), GMath.NanD());
+  }
+  
+  static Vector3D zero() {
+    return Vector3D(0.0, 0.0, 0.0);
   }
   
   bool isNan() const {
@@ -120,13 +126,7 @@ public:
     return _z;
   }
   
-  Vector3D transformedBy(const MutableMatrix44D &m,
-                         const double homogeneus) const {
-    int todo_move_to_matrix;
-    return Vector3D(_x * m.get(0) + _y * m.get(4) + _z * m.get(8) + homogeneus * m.get(12),
-                    _x * m.get(1) + _y * m.get(5) + _z * m.get(9) + homogeneus * m.get(13),
-                    _x * m.get(2) + _y * m.get(6) + _z * m.get(10) + homogeneus * m.get(14));
-  }
+  Vector3D transformedBy(const MutableMatrix44D &m, const double homogeneus) const;
   
   MutableVector3D asMutableVector3D() const;
   

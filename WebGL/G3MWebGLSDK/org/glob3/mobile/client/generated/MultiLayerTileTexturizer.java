@@ -25,34 +25,35 @@ package org.glob3.mobile.generated;
 //class IDownloader;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class LeveledTexturedMesh;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IFloatBuffer;
 
 public class MultiLayerTileTexturizer extends TileTexturizer
 {
   private final LayerSet _layerSet;
   private TilesRenderParameters _parameters;
 
-  private float[] _texCoordsCache;
+  private IFloatBuffer _texCoordsCache;
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: float[] getTextureCoordinates(const TileRenderContext* trc) const
-  private float[] getTextureCoordinates(TileRenderContext trc)
+//ORIGINAL LINE: IFloatBuffer* getTextureCoordinates(const TileRenderContext* trc) const
+  private IFloatBuffer getTextureCoordinates(TileRenderContext trc)
   {
 	if (_texCoordsCache == null)
 	{
-	  java.util.ArrayList<MutableVector2D> texCoordsV = trc.getTessellator().createUnitTextCoords();
+  //    std::vector<MutableVector2D>* texCoordsV = trc->getTessellator()->createUnitTextCoords();
+  //
+  //    const int texCoordsSize = texCoordsV->size();
+  //    float* texCoordsA = new float[2 * texCoordsSize];
+  //    int p = 0;
+  //    for (int i = 0; i < texCoordsSize; i++) {
+  //      texCoordsA[p++] = (float) texCoordsV->at(i).x();
+  //      texCoordsA[p++] = (float) texCoordsV->at(i).y();
+  //    }
+  //
+  //    delete texCoordsV;
   
-	  final int texCoordsSize = texCoordsV.size();
-	  float[] texCoordsA = new float[2 * texCoordsSize];
-	  int p = 0;
-	  for (int i = 0; i < texCoordsSize; i++)
-	  {
-		texCoordsA[p++] = (float) texCoordsV.get(i).x();
-		texCoordsA[p++] = (float) texCoordsV.get(i).y();
-	  }
-  
-	  texCoordsV = null;
-  
-	  _texCoordsCache = texCoordsA;
+	  _texCoordsCache = trc.getTessellator().createUnitTextCoords();
 	}
 	return _texCoordsCache;
   }
@@ -88,7 +89,8 @@ public class MultiLayerTileTexturizer extends TileTexturizer
   {
 	if (_texCoordsCache != null)
 	{
-	  _texCoordsCache = null;
+	  if (_texCoordsCache != null)
+		  _texCoordsCache.dispose();
 	  _texCoordsCache = null;
 	}
   }

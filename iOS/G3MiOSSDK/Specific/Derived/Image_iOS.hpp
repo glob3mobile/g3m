@@ -51,7 +51,7 @@ public:
   
   ByteArrayWrapper* getEncodedImage() const;
   
-  void createByteBufferRGBA8888(int width, int height) const;
+  IByteBuffer* createByteBufferRGBA8888(int width, int height) const;
 
 };
 

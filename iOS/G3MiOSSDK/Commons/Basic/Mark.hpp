@@ -14,15 +14,24 @@
 #include "Context.hpp"
 
 #include "GLTextureId.hpp"
+#include "Vector3D.hpp"
+
+class IFloatBuffer;
 
 class Mark {
 private:
   const std::string  _name;
   const std::string  _textureFilename;
   const Geodetic3D   _position;
-
+  
   GLTextureId _textureId;
   
+  Vector3D* _cartesianPosition;
+  Vector3D* getCartesianPosition(const Planet* planet);
+
+  IFloatBuffer* _vertices;
+  IFloatBuffer* getVertices(const Planet* planet);
+
 public:
   Mark(const std::string name,
        const std::string textureFilename,
@@ -30,12 +39,14 @@ public:
   _name(name),
   _textureFilename(textureFilename),
   _position(position),
-  _textureId(GLTextureId::invalid())
+  _textureId(GLTextureId::invalid()),
+  _cartesianPosition(NULL),
+  _vertices(NULL)
   {
     
   }
   
-  ~Mark() {}
+  ~Mark();
   
   const std::string getName() const {
     return _name;

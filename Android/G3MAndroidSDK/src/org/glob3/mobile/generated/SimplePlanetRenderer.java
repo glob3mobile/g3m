@@ -19,6 +19,11 @@ package org.glob3.mobile.generated;
 
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IFloatBuffer;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IIntBuffer;
+
 public class SimplePlanetRenderer extends Renderer
 {
 
@@ -32,14 +37,14 @@ public class SimplePlanetRenderer extends Renderer
   private Mesh _mesh;
 
 
-  private float[] createVertices(Planet planet)
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: IFloatBuffer* createVertices(const Planet& planet) const
+  private IFloatBuffer createVertices(Planet planet)
   {
-	//VERTICES
-	float[] vertices = new float[_latRes *_lonRes * 3];
-  
+	//Vertices with Center in zero
+	FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.GivenCenter, planet, Vector3D.zero());
 	final double lonRes1 = (double)(_lonRes-1);
 	final double latRes1 = (double)(_latRes-1);
-	int verticesIndex = 0;
 	for(double i = 0.0; i < _lonRes; i++)
 	{
 	  final Angle lon = Angle.fromDegrees((i * 360 / lonRes1) -180);
@@ -48,56 +53,54 @@ public class SimplePlanetRenderer extends Renderer
 		final Angle lat = Angle.fromDegrees((j * 180.0 / latRes1) -90.0);
 		final Geodetic2D g = new Geodetic2D(lat, lon);
   
-		final Vector3D v = planet.toCartesian(g);
-		vertices[verticesIndex++] = (float) v.x(); //Vertices
-		vertices[verticesIndex++] = (float) v.y();
-		vertices[verticesIndex++] = (float) v.z();
+		vertices.add(g);
 	  }
 	}
   
-	return vertices;
+	return vertices.create();
   }
-  private int[] createMeshIndex()
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: IIntBuffer* createMeshIndex() const
+  private IIntBuffer createMeshIndex()
   {
+	IntBufferBuilder indices = new IntBufferBuilder();
+  
 	final int res = _lonRes;
-  
-	final int numIndexes = (2 * (res - 1) * (res + 1)) -1;
-	int[] indexes = new int[numIndexes];
-  
-	int n = 0;
 	for (int j = 0; j < res - 1; j++)
 	{
 	  if (j > 0)
-		  indexes[n++] = (int)(j * res);
+	  {
+		indices.add((int)(j * res));
+	  }
 	  for (int i = 0; i < res; i++)
 	  {
-		indexes[n++] = (int)(j * res + i);
-		indexes[n++] = (int)(j * res + i + res);
+		indices.add(j * res + i);
+		indices.add(j * res + i + res);
 	  }
-	  indexes[n++] = (int)(j * res + 2 * res - 1);
+	  indices.add(j * res + 2 * res - 1);
 	}
   
-	return indexes;
+	return indices.create();
   }
-  private float[] createTextureCoordinates()
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: IFloatBuffer* createTextureCoordinates() const
+  private IFloatBuffer createTextureCoordinates()
   {
-	float[] texCoords = new float[_latRes *_lonRes * 2];
-  
+	FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
 	final double lonRes1 = (double)(_lonRes-1);
 	final double latRes1 = (double)(_latRes-1);
-	int p = 0;
+	//int p = 0;
 	for(double i = 0.0; i < _lonRes; i++)
 	{
 	  double u = (i / lonRes1);
 	  for (double j = 0.0; j < _latRes; j++)
 	  {
 		final double v = 1.0 - (j / latRes1);
-		texCoords[p++] = (float) u;
-		texCoords[p++] = (float) v;
+		texCoords.add((float)u, (float)v);
 	  }
 	}
   
-	return texCoords;
+	return texCoords.create();
   }
 
   private boolean initializeMesh(RenderContext rc)
@@ -105,14 +108,12 @@ public class SimplePlanetRenderer extends Renderer
   
   
 	final Planet planet = rc.getPlanet();
+	IIntBuffer ind = createMeshIndex();
+	IFloatBuffer ver = createVertices(planet);
+	IFloatBuffer texC = null;
+	FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
   
-	final int res = _lonRes;
-	final int numIndexes = (2 * (res - 1) * (res + 1)) -1;
-  
-	int ind[] = createMeshIndex();
-	float ver[] = createVertices(planet);
-	float texC[] = null;
-	float colors[] = null;
+	final boolean colorPerVertex = false;
   
 	//TEXTURED
 	GLTextureId texId = GLTextureId.invalid();
@@ -128,20 +129,18 @@ public class SimplePlanetRenderer extends Renderer
 	}
   
 	//COLORS PER VERTEX
-	if (false)
+	IFloatBuffer vertexColors = null;
+	if (colorPerVertex)
 	{
-	  int numVertices = res * res * 4;
-	  colors = new float[numVertices];
+	  int numVertices = _lonRes * _lonRes * 4;
 	  for(int i = 0; i < numVertices;)
 	  {
   
 		float val = (float)(0.5 + IMathUtils.instance().sin((float)(2.0 * IMathUtils.instance().pi() * ((float) i) / numVertices)) / 2.0);
   
-		colors[i++] = val;
-		colors[i++] = 0;
-		colors[i++] = (float)(1.0 - val);
-		colors[i++] = 1;
+		colors.add(val, (float)0.0, (float)(1.0 - val), (float)1.0);
 	  }
+	  vertexColors = colors.create();
 	}
   
 	//FLAT COLOR
@@ -151,7 +150,13 @@ public class SimplePlanetRenderer extends Renderer
 	  flatColor = new Color(Color.fromRGBA((float) 0.0, (float) 1.0, (float) 0.0, (float) 1.0));
 	}
   
-	IndexedMesh im = IndexedMesh.createFromVector3D(true, GLPrimitive.TriangleStrip, CenterStrategy.NoCenter, new Vector3D(0,0,0), _latRes *_lonRes, ver, ind, numIndexes, flatColor, colors, (float)0.5);
+	IndexedMesh im = new IndexedMesh(GLPrimitive.TriangleStrip,
+  								true,
+  								Vector3D.zero(),
+  								ver,
+  								ind,
+  								flatColor,
+  								vertexColors);
   
 	TextureMapping texMap = new SimpleTextureMapping(texId, texC, true);
   
@@ -161,7 +166,6 @@ public class SimplePlanetRenderer extends Renderer
   }
 
   public SimplePlanetRenderer(String textureFilename)
-  //_texWidth(2048 / 2),
   {
 	  _latRes = 30;
 	  _lonRes = 30;

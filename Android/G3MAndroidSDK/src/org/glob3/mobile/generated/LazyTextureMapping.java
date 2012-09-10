@@ -8,7 +8,7 @@ public class LazyTextureMapping extends TextureMapping
   private boolean _initialized;
 
   private boolean _ownedTexCoords;
-  private float[]    _texCoords; //NOT VALID MUTABLE AND CONST IN JAVA CONVERSION
+  private IFloatBuffer _texCoords;
   private MutableVector2D _translation = new MutableVector2D();
   private MutableVector2D _scale = new MutableVector2D();
 
@@ -57,7 +57,8 @@ public class LazyTextureMapping extends TextureMapping
 	{
 	  if (_ownedTexCoords)
 	  {
-		_texCoords = null;
+		if (_texCoords != null)
+			_texCoords.dispose();
 	  }
 	  _texCoords = null;
 	}

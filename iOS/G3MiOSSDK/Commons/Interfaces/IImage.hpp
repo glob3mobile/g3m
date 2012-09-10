@@ -13,6 +13,8 @@
 #include "Rectangle.hpp"
 #include "ByteArrayWrapper.hpp"
 
+class IByteBuffer;
+
 class IImage {
 public:
   // a virtual destructor is needed for conversion to Java
@@ -32,7 +34,7 @@ public:
   
   virtual ByteArrayWrapper* getEncodedImage() const = 0;
   
-  virtual void createByteBufferRGBA8888(int width, int height) const = 0;
+  virtual IByteBuffer* createByteBufferRGBA8888(int width, int height) const = 0;
   
 };
 

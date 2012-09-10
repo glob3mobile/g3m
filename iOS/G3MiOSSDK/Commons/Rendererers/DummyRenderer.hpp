@@ -11,14 +11,16 @@
 
 #include "Renderer.hpp"
 
+class IFloatBuffer;
+class IIntBuffer;
+
 class DummyRenderer: public Renderer {
 
 private:
-  int _numIndices;
   double _halfSize;
   
-  int* _index;
-  float* _vertices;
+  IIntBuffer* _index;
+  IFloatBuffer* _vertices;
 
 public:
   ~DummyRenderer();

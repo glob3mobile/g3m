@@ -16,7 +16,6 @@ package org.glob3.mobile.generated;
 //
 
 
-
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class RenderContext;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
@@ -25,6 +24,8 @@ package org.glob3.mobile.generated;
 //class Tile;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class MutableVector2D;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IFloatBuffer;
 
 public abstract class TileTessellator
 {
@@ -45,7 +46,7 @@ public abstract class TileTessellator
   public abstract Mesh createDebugMesh(RenderContext rc, Tile tile);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual java.util.ArrayList<MutableVector2D>* createUnitTextCoords() const = 0;
-  public abstract java.util.ArrayList<MutableVector2D> createUnitTextCoords();
+//ORIGINAL LINE: virtual IFloatBuffer* createUnitTextCoords() const = 0;
+  public abstract IFloatBuffer createUnitTextCoords();
 
 }

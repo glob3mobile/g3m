@@ -10,13 +10,13 @@
 #define G3MiOSSDK_GLImage_hpp
 
 #include "INativeGL.hpp"
-#include "IByteBuffer.h"
+#include "IByteBuffer.hpp"
 
 class GLImage{
   
   const GLFormat _format;
   
-  const IByteBuffer* _data;
+  IByteBuffer* const _data;
   
   int _width;
   int _height;
@@ -33,12 +33,16 @@ public:
     delete _data;
   }
   
-  bool isTransparent(){
+  bool isTransparent() const{
     if (_format == RGBA){
       return true;        //Always true
     }
     
     return false;
+  }
+  
+  IByteBuffer* getByteBuffer() const{
+    return _data;
   }
   
 };

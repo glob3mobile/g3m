@@ -29,7 +29,7 @@ public class MarksRenderer extends Renderer
 
   public void render(RenderContext rc)
   {
-  //  rc.getLogger()->logInfo("MarksRenderer::render()");
+	//  rc.getLogger()->logInfo("MarksRenderer::render()");
   
 	GL gl = rc.getGL();
   

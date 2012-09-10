@@ -18,6 +18,9 @@
 #include "TextureMapping.hpp"
 #include "TexturedMesh.hpp"
 
+#include "FloatBufferBuilderFromCartesian3D.hpp"
+#include "FloatBufferBuilderFromCartesian2D.hpp"
+#include "IntBufferBuilder.hpp"
 
 void BusyQuadRenderer::start() {
   //int _TODO_start_effects;
@@ -28,31 +31,7 @@ void BusyQuadRenderer::stop() {
 }
 
 
-bool BusyQuadRenderer::initMesh(const RenderContext* rc)
-{  
-  // create quad
-  unsigned int numVertices = 4;
-  unsigned int numIndices = 4;
-  float* quadVertices = new float[numVertices*3];
-  int*   quadIndices  = new int[numIndices];
-  float* texC         = new float[numVertices*2];
-  
-  unsigned int nv = 0;
-  float halfSize = 16;
-  quadVertices[nv++] = -halfSize;    quadVertices[nv++] = halfSize;   quadVertices[nv++] = 0;
-  quadVertices[nv++] = -halfSize;    quadVertices[nv++] = -halfSize;  quadVertices[nv++] = 0;
-  quadVertices[nv++] = halfSize;     quadVertices[nv++] = halfSize;   quadVertices[nv++] = 0;
-  quadVertices[nv++] = halfSize;     quadVertices[nv++] = -halfSize;  quadVertices[nv++] = 0;
-  
-  for (unsigned int n=0; n<numIndices; n++) quadIndices[n] = n;
-  
-  unsigned int nc = 0;
-  texC[nc++] = 0;    texC[nc++] = 0.0;
-  texC[nc++] = 0;    texC[nc++] = 1.0;
-  texC[nc++] = 1;    texC[nc++] = 0.0;
-  texC[nc++] = 1;    texC[nc++] = 1.0;
-  
-  
+bool BusyQuadRenderer::initMesh(const RenderContext* rc) {
   //TEXTURED
   GLTextureId texId = GLTextureId::invalid();
   if (true){
@@ -62,16 +41,48 @@ bool BusyQuadRenderer::initMesh(const RenderContext* rc)
       return false;
     }
   }
+  
+  const float halfSize = 16;
 
 #ifdef C_CODE
-  IndexedMesh *im = IndexedMesh::createFromVector3D(true, TriangleStrip, NoCenter, Vector3D(0,0,0), 
-                                                    numVertices, quadVertices, quadIndices, numIndices, NULL);
+  FloatBufferBuilderFromCartesian3D vertices(NoCenter, Vector3D::zero());
 #else
-  IndexedMesh *im = IndexedMesh::createFromVector3D(true, GLPrimitive.TriangleStrip, NoCenter, Vector3D(0,0,0), 
-                                                    numVertices, quadVertices, quadIndices, numIndices, NULL);
+  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy.NoCenter, Vector3D::zero());
+#endif
+  vertices.add(-halfSize, +halfSize, 0);
+  vertices.add(-halfSize, -halfSize, 0);
+  vertices.add(+halfSize, +halfSize, 0);
+  vertices.add(+halfSize, -halfSize, 0);
+  
+  IntBufferBuilder indices;
+  indices.add(0);
+  indices.add(1);
+  indices.add(2);
+  indices.add(3);
+  
+  FloatBufferBuilderFromCartesian2D texCoords;
+  texCoords.add(0, 0);
+  texCoords.add(0, 1);
+  texCoords.add(1, 0);
+  texCoords.add(1, 1);
+  
+#ifdef C_CODE
+  IndexedMesh *im = new IndexedMesh(TriangleStrip,
+                                    true,
+                                    Vector3D::zero(),
+                                    vertices.create(),
+                                    indices.create());
+#else
+  IndexedMesh *im = new IndexedMesh(GLPrimitive.TriangleStrip,
+                                    true,
+                                    Vector3D::zero(),
+                                    vertices.create(),
+                                    indices.create());
 #endif
   
-  TextureMapping* texMap = new SimpleTextureMapping(texId, texC, true);
+  TextureMapping* texMap = new SimpleTextureMapping(texId,
+                                                    texCoords.create(),
+                                                    true);
   
   _quadMesh = new TexturedMesh(im, true, texMap, true);
 
@@ -109,7 +120,6 @@ void BusyQuadRenderer::render(const RenderContext* rc) {
   gl->loadMatrixf(MutableMatrix44D::identity());
   
   // clear screen
-  //gl->clearScreen(0.0f, 0.2f, 0.4f, 1.0f);
   gl->clearScreen(0.0f, 0.0f, 0.0f, 1.0f);
 
   gl->enableBlend();

@@ -39,6 +39,10 @@ public class Vector3D
 
   }
 
+  public void dispose()
+  {
+  }
+
   public Vector3D(Vector3D v)
   {
 	  _x = v._x;
@@ -50,6 +54,11 @@ public class Vector3D
   public static Vector3D nan()
   {
 	return new Vector3D(IMathUtils.instance().NanD(), IMathUtils.instance().NanD(), IMathUtils.instance().NanD());
+  }
+
+  public static Vector3D zero()
+  {
+	return new Vector3D(0.0, 0.0, 0.0);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

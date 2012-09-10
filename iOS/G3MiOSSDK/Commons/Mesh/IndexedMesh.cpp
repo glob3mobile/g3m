@@ -11,118 +11,46 @@
 #include "IndexedMesh.hpp"
 #include "Box.hpp"
 #include "GL.hpp"
-
 #include "INativeGL.hpp"
-
+#include "IFloatBuffer.hpp"
+#include "IIntBuffer.hpp"
 
 IndexedMesh::~IndexedMesh()
 {
 #ifdef C_CODE
-  
   if (_owner){
-    delete[] _vertices;
-    delete[] _indexes;
-    if (_colors != NULL) delete[] _colors;
+    delete _vertices;
+    delete _indices;
+    if (_colors != NULL) delete _colors;
     if (_flatColor != NULL) delete _flatColor;
   }
   
   if (_extent != NULL) delete _extent;
+  if (_translationMatrix != NULL) delete _translationMatrix;
   
 #endif
 }
 
-IndexedMesh::IndexedMesh(bool owner,
-                         const GLPrimitive primitive,
-                         CenterStrategy strategy,
-                         Vector3D center,
-                         const int numVertices,
-                         const float vertices[],
-                         const int indexes[],
-                         const int numIndex, 
+IndexedMesh::IndexedMesh(const GLPrimitive primitive,
+                         bool owner,
+                         const Vector3D& center,
+                         IFloatBuffer* vertices,
+                         IIntBuffer* indices,
                          const Color* flatColor,
-                         const float colors[],
-                         const float colorsIntensity):
-_owner(owner),
+                         IFloatBuffer* colors,
+                         const float colorsIntensity) :
 _primitive(primitive),
-_numVertices(numVertices),
+_owner(owner),
 _vertices(vertices),
-_indexes(indexes),
-_numIndex(numIndex),
+_indices(indices),
 _flatColor(flatColor),
 _colors(colors),
 _colorsIntensity(colorsIntensity),
 _extent(NULL),
-_centerStrategy(strategy),
-_center(center)
+_center(center),
+_translationMatrix(center.isNan()? NULL:
+                   new MutableMatrix44D(MutableMatrix44D::createTranslationMatrix(center)))
 {
-  if (strategy!=NoCenter) 
-    printf ("IndexedMesh array constructor: this center Strategy is not yet implemented\n");
-}
-
-
-IndexedMesh::IndexedMesh(std::vector<MutableVector3D>& vertices, 
-                         const GLPrimitive primitive,
-                         CenterStrategy strategy,
-                         Vector3D center,                         
-                         std::vector<int>& indexes,
-                         const Color* flatColor,
-                         std::vector<Color>* colors,
-                         const float colorsIntensity):
-_owner(true),
-_primitive(primitive),
-_numVertices(vertices.size()),
-_flatColor(flatColor),
-_numIndex(indexes.size()),
-_colorsIntensity(colorsIntensity),
-_extent(NULL),
-_centerStrategy(strategy),
-_center(center)
-{
-  float* vert = new float[3 * vertices.size()];
-  int p = 0;
-  
-  switch (strategy) {
-    case NoCenter:
-      for (int i = 0; i < vertices.size(); i++) {
-        vert[p++] = (float) vertices[i].x();
-        vert[p++] = (float) vertices[i].y();
-        vert[p++] = (float) vertices[i].z();
-      }      
-      break;
-      
-    case GivenCenter:
-      for (int i = 0; i < vertices.size(); i++) {
-        vert[p++] = (float) (vertices[i].x() - center.x());
-        vert[p++] = (float) (vertices[i].y() - center.y());
-        vert[p++] = (float) (vertices[i].z() - center.z());
-      }      
-      break;
-      
-    default:
-      printf ("IndexedMesh vector constructor: this center Strategy is not yet implemented\n");
-  }
-  
-  _vertices = vert;
-  
-  int* ind = new int[indexes.size()];
-  for (int i = 0; i < indexes.size(); i++) {
-    ind[i] = indexes[i];
-  }
-  _indexes = ind;
-
-  if (colors != NULL) {
-    float* vertexColor = new float[4 * colors->size()];
-    for (int i = 0; i < colors->size(); i+=4){
-      vertexColor[i] = colors->at(i).getRed();
-      vertexColor[i+1] = colors->at(i).getGreen();
-      vertexColor[i+2] = colors->at(i).getBlue();
-      vertexColor[i+3] = colors->at(i).getAlpha();
-    }
-    _colors = vertexColor;
-  }
-  else {
-    _colors = NULL; 
-  }
 }
 
 void IndexedMesh::render(const RenderContext* rc) const {
@@ -146,26 +74,29 @@ void IndexedMesh::render(const RenderContext* rc) const {
   
   gl->vertexPointer(3, 0, _vertices);
   
-  if (_centerStrategy != NoCenter) {
+  if (_translationMatrix != NULL){
     gl->pushMatrix();
-    gl->multMatrixf(MutableMatrix44D::createTranslationMatrix(_center));
+    gl->multMatrixf(*_translationMatrix);
   }
   
   switch (_primitive) {
     case TriangleStrip:
-      gl->drawTriangleStrip(_numIndex, _indexes);
+      gl->drawTriangleStrip(_indices);
       break;
     case Lines:
-      gl->drawLines(_numIndex, _indexes);
+      gl->drawLines(_indices);
       break;
     case LineLoop:
-      gl->drawLineLoop(_numIndex, _indexes);
+      gl->drawLineLoop(_indices);
+      break;
+    case Points:
+      gl->drawPoints(_indices);
       break;
     default:
       break;
   }
   
-  if (_centerStrategy != NoCenter) {
+  if (_translationMatrix != NULL) {
     gl->popMatrix();
   }
   
@@ -174,23 +105,26 @@ void IndexedMesh::render(const RenderContext* rc) const {
 
 
 Extent* IndexedMesh::computeExtent() const {
-  if (_numVertices <= 0) {
+  
+  const int vertexCount = getVertexCount();
+  
+  if (vertexCount <= 0) {
     return NULL;
   }
   
   double minx=1e10, miny=1e10, minz=1e10;
   double maxx=-1e10, maxy=-1e10, maxz=-1e10;
   
-  for (int i=0; i < _numVertices; i++) {
+  for (int i=0; i < vertexCount; i++) {
     const int p = i * 3;
     
-    const double x = _vertices[p  ] + _center.x();
-    const double y = _vertices[p+1] + _center.y();
-    const double z = _vertices[p+2] + _center.z();
+    const double x = _vertices->get(p  ) + _center.x();
+    const double y = _vertices->get(p+1) + _center.y();
+    const double z = _vertices->get(p+2) + _center.z();
     
     if (x < minx) minx = x;
     if (x > maxx) maxx = x;
-
+    
     if (y < miny) miny = y;
     if (y > maxy) maxy = y;
     
@@ -201,10 +135,20 @@ Extent* IndexedMesh::computeExtent() const {
   return new Box(Vector3D(minx, miny, minz), Vector3D(maxx, maxy, maxz));
 }
 
-
 Extent* IndexedMesh::getExtent() const {
   if (_extent == NULL) {
-    _extent = computeExtent(); 
+    _extent = computeExtent();
   }
   return _extent;
+}
+
+const Vector3D IndexedMesh::getVertex(int i) const {
+  const int p = i * 3;
+  return Vector3D(_vertices->get(p  ) + _center.x(),
+                  _vertices->get(p+1) + _center.y(),
+                  _vertices->get(p+2) + _center.z());
+}
+
+int IndexedMesh::getVertexCount() const {
+  return _vertices->size() / 3;
 }

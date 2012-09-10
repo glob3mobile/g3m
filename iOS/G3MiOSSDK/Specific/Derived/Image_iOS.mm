@@ -8,6 +8,8 @@
 
 #include "Image_iOS.hpp"
 
+#include "IFactory.hpp"
+
 Image_iOS::Image_iOS(int width, int height)
 {
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
@@ -129,8 +131,10 @@ ByteArrayWrapper* Image_iOS::getEncodedImage() const
   return new ByteArrayWrapper(data, length);
 }
 
-void Image_iOS::createByteBufferRGBA8888(int width, int height) const
+IByteBuffer* Image_iOS::createByteBufferRGBA8888(int width, int height) const
 {
+  unsigned char* data = new unsigned char[4 * width * height];
+  
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
   CGContextRef context = CGBitmapContextCreate(data,
                                                width, height,
@@ -145,4 +149,6 @@ void Image_iOS::createByteBufferRGBA8888(int width, int height) const
   CGContextDrawImage( context, bounds, _image.CGImage );
   
   CGContextRelease(context);
+  
+  return GFactory.createByteBuffer(data, 4 * width * height);
 }

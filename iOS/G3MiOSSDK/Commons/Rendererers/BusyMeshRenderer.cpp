@@ -18,74 +18,69 @@
 
 #include "IMathUtils.hpp"
 
+#include "FloatBufferBuilderFromColor.hpp"
+#include "IntBufferBuilder.hpp"
+
 void BusyMeshRenderer::initialize(const InitializationContext* ic)
-{  
-  // compute number of vertex for the ring
+{
   unsigned int numStrides = 60;
-  unsigned int numVertices = numStrides * 2 + 2;
-  int numIndices = numVertices + 2;
   
-  // add number of vertex for the square
+#ifdef C_CODE
+  FloatBufferBuilderFromCartesian3D vertices(NoCenter, Vector3D::zero());
+#else
+  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy.NoCenter, Vector3D::zero());
+#endif
+  FloatBufferBuilderFromColor colors;
+  IntBufferBuilder indices;
   
-  // create vertices and indices in dinamic memory
-  float* vertices = new float[numVertices*3];
-  int*   indices  = new int[numIndices];
-  float* colors   = new float[numVertices*4];
-  
-  // create vertices
-  unsigned int nv=0, ni=0, nc=0;
-//  float r1=200, r2=230;
-  float r1=12, r2=18;
-  for (unsigned int step=0; step<=numStrides; step++) {
-    double angle = (double) step * 2 * GMath.pi() / numStrides;
-    double c = GMath.cos(angle);
-    double s = GMath.sin(angle);
-    vertices[nv++]  = (float) (r1 * c);
-    vertices[nv++]  = (float) (r1 * s);
-    vertices[nv++]  = 0.0;
-    vertices[nv++]  = (float) (r2 * c);
-    vertices[nv++]  = (float) (r2 * s);
-    vertices[nv++]  = 0.0;
-    indices[ni]     = ni;
-    indices[ni+1]   = ni+1;
-    ni+=2;    
-    float col       = (float) (1.1 * step / numStrides);
+  int indicesCounter=0;
+  const float r1=12;
+  const float r2=18;
+  for (int step=0; step<=numStrides; step++) {
+    const double angle = (double) step * 2 * GMath.pi() / numStrides;
+    const double c = GMath.cos(angle);
+    const double s = GMath.sin(angle);
+    
+    vertices.add( (r1 * c), (r1 * s), 0);
+    vertices.add( (r2 * c), (r2 * s), 0);
+    
+    indices.add(indicesCounter++);
+    indices.add(indicesCounter++);
+    
+    float col = (float) (1.1 * step / numStrides);
     if (col>1) {
-      colors[nc++]    = 255;
-      colors[nc++]    = 255;
-      colors[nc++]    = 255;
-      colors[nc++]    = 0;
-      colors[nc++]    = 255;
-      colors[nc++]    = 255;
-      colors[nc++]    = 255;
-      colors[nc++]    = 0;      
+      colors.add(255, 255, 255, 0);
+      colors.add(255, 255, 255, 0);
     } else {
-      colors[nc++]    = 255;
-      colors[nc++]    = 255;
-      colors[nc++]    = 255;
-      colors[nc++]    = 1-col;
-      colors[nc++]    = 255;
-      colors[nc++]    = 255;
-      colors[nc++]    = 255;
-      colors[nc++]    = 1-col;
+      colors.add(255, 255, 255, 1 - col);
+      colors.add(255, 255, 255, 1 - col);
     }
   }
-
+  
   // the two last indices
-  indices[ni++]     = 0;
-  indices[ni++]     = 1;
-
+  indices.add(0);
+  indices.add(1);
   
   // create mesh
-  //Color *flatColor = new Color(Color::fromRGBA(1.0, 1.0, 0.0, 1.0));
 #ifdef C_CODE
-  _mesh = IndexedMesh::createFromVector3D(true, TriangleStrip, NoCenter, Vector3D(0,0,0), 
-                                           numVertices, vertices, indices, numIndices, NULL, colors);
-#else
-  _mesh = IndexedMesh::createFromVector3D(true, GLPrimitive.TriangleStrip, NoCenter, Vector3D(0,0,0), 
-                                          numVertices, vertices, indices, numIndices, NULL, colors);
+  _mesh = new IndexedMesh(TriangleStrip,
+                          true,
+                          vertices.getCenter(),
+                          vertices.create(),
+                          indices.create(),
+                          NULL,
+                          colors.create());
 #endif
-}  
+#ifdef JAVA_CODE
+  _mesh = new IndexedMesh(GLPrimitive.TriangleStrip,
+                      true,
+                      vertices.getCenter(),
+                      vertices.create(),
+                      indices.create(),
+                      null,
+                      colors.create());
+#endif
+}
 
 void BusyMeshRenderer::start() {
   //int _TODO_start_effects;
@@ -96,7 +91,7 @@ void BusyMeshRenderer::stop() {
 }
 
 void BusyMeshRenderer::render(const RenderContext* rc)
-{  
+{
   GL* gl = rc->getGL();
   
   // init effect in the first render
@@ -106,7 +101,7 @@ void BusyMeshRenderer::render(const RenderContext* rc)
     Effect *effect = new BusyMeshEffect(this);
     rc->getEffectsScheduler()->startEffect(effect, this);
   }
-
+  
   // init modelview matrix
   int currentViewport[4];
   gl->getViewport(currentViewport);
@@ -119,9 +114,8 @@ void BusyMeshRenderer::render(const RenderContext* rc)
   gl->loadMatrixf(MutableMatrix44D::identity());
   
   // clear screen
-  //gl->clearScreen(0.0f, 0.2f, 0.4f, 1.0f);
   gl->clearScreen(0.0f, 0.0f, 0.0f, 1.0f);
-
+  
   gl->enableBlend();
   gl->setBlendFuncSrcAlpha();
   
