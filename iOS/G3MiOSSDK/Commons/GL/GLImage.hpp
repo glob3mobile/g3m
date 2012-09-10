@@ -45,6 +45,18 @@ public:
     return _data;
   }
   
+  int getWidth() const {
+    return _width;
+  }
+  
+  int getHeight() const {
+    return _height;
+  }
+  
+  GLFormat getFormat() const {
+    return _format;
+  }
+  
 };
 
 #endif

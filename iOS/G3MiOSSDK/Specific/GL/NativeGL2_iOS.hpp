@@ -282,18 +282,31 @@ public:
     glTexParameteri(getEnum(target), getEnum(par), getValue(v));
   }
   
-  void texImage2D(GLTextureType target,
-                  int         level,
-                  GLFormat    internalFormat,
-                  int         width,
-                  int         height,
-                  int         border,
-                  GLFormat    format,
-                  GLType      type,
-                  const void* data) const {
-    glTexImage2D(getEnum(target), level, getEnum(internalFormat),
-                 width, height, border, getEnum(format), getEnum(type), data);
+  void texImage2D(const GLImage* glImage) const {
+    glTexImage2D(GL_TEXTURE_2D, 
+                 0, 
+                 getEnum(glImage->getFormat()),
+                 glImage->getWidth(), 
+                 glImage->getHeight(), 
+                 0, 
+                 getEnum(glImage->getFormat()),
+                 GL_UNSIGNED_BYTE, 
+                 glImage->getByteBuffer()->getPointer());
   }
+  
+  //  void texImage2D(GLTextureType target,
+  //                  int         level,
+  //                  GLFormat    internalFormat,
+  //                  int         width,
+  //                  int         height,
+  //                  int         border,
+  //                  GLFormat    format,
+  //                  GLType      type,
+  //                  const void* data) const {
+  //    glTexImage2D(getEnum(target), level, getEnum(internalFormat),
+  //                 width, height, border, getEnum(format), getEnum(type), data);
+  //  }
+
   
   void generateMipmap(GLTextureType target) const {
     glGenerateMipmap(getEnum(target));

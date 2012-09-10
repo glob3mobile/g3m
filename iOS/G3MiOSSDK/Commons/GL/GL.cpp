@@ -216,7 +216,7 @@ void GL::vertexPointer(int size, int stride, IFloatBuffer* vertices) {
   
   if ((_vertices != vertices) ||
       (_vertices->timestamp() != vertices->timestamp()) ) {
-
+    
     _gl->vertexAttribPointer(Attributes.Position, size, false, stride, vertices);
     _vertices = vertices;
   }
@@ -282,33 +282,11 @@ GLError GL::getError() {
   return _gl->getError();
 }
 
-const GLTextureId GL::uploadTexture(const IImage* image,
-                                    int textureWidth, int textureHeight,
-                                    bool generateMipmap) {
+const GLTextureId GL::uploadTexture(const GLImage* glImage, bool generateMipmap){
   const GLTextureId texId = getGLTextureId();
   if (texId.isValid()) {
-    const bool lastImageDataIsValid = ((_lastTextureWidth == textureWidth) &&
-                                       (_lastTextureHeight == textureHeight) &&
-                                       (_lastImageData != NULL));
     
 #ifdef C_CODE
-    unsigned char* imageData;
-    
-    if (lastImageDataIsValid) {
-      imageData = _lastImageData;
-    }
-    else {
-      imageData = new unsigned char[textureWidth * textureHeight * 4];
-      if (_lastImageData != NULL) {
-        delete [] _lastImageData;
-      }
-      _lastImageData = imageData;
-      _lastTextureWidth = textureWidth;
-      _lastTextureHeight = textureHeight;
-    }
-    
-    image->fillWithRGBA8888(imageData, textureWidth, textureHeight);
-    
     _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);
     _gl->pixelStorei(Unpack, 1);
     
@@ -317,7 +295,7 @@ const GLTextureId GL::uploadTexture(const IImage* image,
     _gl->texParameteri(Texture2D, MagFilter, Linear);
     _gl->texParameteri(Texture2D, WrapS, ClampToEdge);
     _gl->texParameteri(Texture2D, WrapT, ClampToEdge);
-    _gl->texImage2D(Texture2D, 0, RGBA, textureWidth, textureHeight, 0, RGBA, UnsignedByte, imageData);
+    _gl->texImage2D(glImage);
     
     if (generateMipmap) {
       _gl->generateMipmap(Texture2D);
@@ -325,20 +303,6 @@ const GLTextureId GL::uploadTexture(const IImage* image,
 #endif
     
 #ifdef JAVA_CODE
-    byte[] imageData;
-    
-    if (lastImageDataIsValid) {
-      imageData = _lastImageData;
-    }
-    else {
-      imageData = new byte[textureWidth * textureHeight * 4];
-      _lastImageData = imageData;
-      _lastTextureWidth = textureWidth;
-      _lastTextureHeight = textureHeight;
-    }
-    
-    image.fillWithRGBA8888(imageData, textureWidth, textureHeight);
-    
     _gl.blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
     _gl.pixelStorei(GLAlignment.Unpack, 1);
     
@@ -347,7 +311,7 @@ const GLTextureId GL::uploadTexture(const IImage* image,
     _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MagFilter, GLTextureParameterValue.Linear);
     _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapS, GLTextureParameterValue.ClampToEdge);
     _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapT, GLTextureParameterValue.ClampToEdge);
-    _gl.texImage2D(GLTextureType.Texture2D, 0, GLFormat.RGBA, textureWidth, textureHeight, 0, GLFormat.RGBA, GLType.UnsignedByte, imageData);
+    _gl->texImage2D(glImage);
     
     if (generateMipmap) {
       _gl.generateMipmap(GLTextureType.Texture2D);
@@ -360,7 +324,89 @@ const GLTextureId GL::uploadTexture(const IImage* image,
   }
   
   return texId;
+  
+  
 }
+//
+//const GLTextureId GL::uploadTexture(const IImage* image,
+//                                    int textureWidth, int textureHeight,
+//                                    bool generateMipmap) {
+//  const GLTextureId texId = getGLTextureId();
+//  if (texId.isValid()) {
+//    const bool lastImageDataIsValid = ((_lastTextureWidth == textureWidth) &&
+//                                       (_lastTextureHeight == textureHeight) &&
+//                                       (_lastImageData != NULL));
+//    
+//#ifdef C_CODE
+//    unsigned char* imageData;
+//    
+//    if (lastImageDataIsValid) {
+//      imageData = _lastImageData;
+//    }
+//    else {
+//      imageData = new unsigned char[textureWidth * textureHeight * 4];
+//      if (_lastImageData != NULL) {
+//        delete [] _lastImageData;
+//      }
+//      _lastImageData = imageData;
+//      _lastTextureWidth = textureWidth;
+//      _lastTextureHeight = textureHeight;
+//    }
+//    
+//    image->fillWithRGBA8888(imageData, textureWidth, textureHeight);
+//    
+//    _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);
+//    _gl->pixelStorei(Unpack, 1);
+//    
+//    _gl->bindTexture(Texture2D, texId.getGLTextureId());
+//    _gl->texParameteri(Texture2D, MinFilter, Linear);
+//    _gl->texParameteri(Texture2D, MagFilter, Linear);
+//    _gl->texParameteri(Texture2D, WrapS, ClampToEdge);
+//    _gl->texParameteri(Texture2D, WrapT, ClampToEdge);
+//    _gl->texImage2D(Texture2D, 0, RGBA, textureWidth, textureHeight, 0, RGBA, UnsignedByte, imageData);
+//    
+//    if (generateMipmap) {
+//      _gl->generateMipmap(Texture2D);
+//    }
+//#endif
+//    
+//#ifdef JAVA_CODE
+//    byte[] imageData;
+//    
+//    if (lastImageDataIsValid) {
+//      imageData = _lastImageData;
+//    }
+//    else {
+//      imageData = new byte[textureWidth * textureHeight * 4];
+//      _lastImageData = imageData;
+//      _lastTextureWidth = textureWidth;
+//      _lastTextureHeight = textureHeight;
+//    }
+//    
+//    image.fillWithRGBA8888(imageData, textureWidth, textureHeight);
+//    
+//    _gl.blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
+//    _gl.pixelStorei(GLAlignment.Unpack, 1);
+//    
+//    _gl.bindTexture(GLTextureType.Texture2D, texId.getGLTextureId());
+//    _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MinFilter, GLTextureParameterValue.Linear);
+//    _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MagFilter, GLTextureParameterValue.Linear);
+//    _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapS, GLTextureParameterValue.ClampToEdge);
+//    _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapT, GLTextureParameterValue.ClampToEdge);
+//    _gl.texImage2D(GLTextureType.Texture2D, 0, GLFormat.RGBA, textureWidth, textureHeight, 0, GLFormat.RGBA, GLType.UnsignedByte, imageData);
+//    
+//    if (generateMipmap) {
+//      _gl.generateMipmap(GLTextureType.Texture2D);
+//    }
+//#endif
+//    
+//  }
+//  else {
+//    printf("can't get a valid texture id\n");
+//  }
+//  
+//  return texId;
+//}
 
 void GL::setTextureCoordinates(int size, int stride, IFloatBuffer* texcoord) {
   int __TODO_cache_buffer;
