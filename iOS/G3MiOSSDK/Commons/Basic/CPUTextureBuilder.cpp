@@ -13,8 +13,7 @@ const GLImage* CPUTextureBuilder::createTextureFromImages(GL * gl,
                                                           GLFormat format,
                                                           const std::vector<const IImage*> images,
                                                           int width,
-                                                          int height,
-                                                          bool generateMipmap) const{
+                                                          int height) const{
   
   const int imagesSize = images.size();
   
@@ -62,13 +61,12 @@ const GLImage* CPUTextureBuilder::createTextureFromImages(GL * gl,
                                                           const std::vector<const IImage*> images,
                                                           const std::vector<const Rectangle*> rectangles,
                                                           int width,
-                                                          int height,
-                                                          bool generateMipmap) const{
+                                                          int height) const{
   
   
   const int imagesSize = images.size();
   
-  if (imagesSize == 0) {
+  if (imagesSize == 0 || images.size() != rectangles.size()) {
     
     ILogger::instance()->logWarning("Creating blank GLImage");
     int imageBytes = 4* width*height;

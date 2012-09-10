@@ -19,8 +19,7 @@ public:
                                          GLFormat format,
                                          const std::vector<const IImage*> images,
                                          int width,
-                                         int height,
-                                         bool generateMipmap) const;
+                                         int height) const;
   
   const GLImage* createTextureFromImages(GL * gl,
                                          const IFactory* factory,
@@ -28,8 +27,7 @@ public:
                                          const std::vector<const IImage*> images,
                                          const std::vector<const Rectangle*> rectangles,
                                          int width,
-                                         int height,
-                                         bool generateMipmap) const;
+                                         int height) const;
   
 };
 
