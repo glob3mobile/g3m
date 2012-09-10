@@ -13,6 +13,7 @@
 
 #include "Timer_iOS.hpp"
 #include "Image_iOS.hpp"
+#include "ByteBuffer_iOS.hpp"
 
 class Factory_iOS: public IFactory {
 public:
@@ -61,7 +62,11 @@ public:
     delete image;
   }
   
-  
+  virtual IByteBuffer* createByteBuffer(unsigned char data[], int length) const{
+    
+    ByteBuffer_iOS* bb = new ByteBu
+    
+  }
   
 };
 

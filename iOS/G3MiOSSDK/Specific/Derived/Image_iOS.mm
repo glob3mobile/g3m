@@ -129,9 +129,7 @@ ByteArrayWrapper* Image_iOS::getEncodedImage() const
   return new ByteArrayWrapper(data, length);
 }
 
-void Image_iOS::fillWithRGBA8888(unsigned char data[],
-                                 int width,
-                                 int height) const
+void Image_iOS::createByteBufferRGBA8888(int width, int height) const
 {
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
   CGContextRef context = CGBitmapContextCreate(data,

@@ -10,30 +10,27 @@
 #define G3MiOSSDK_GLImage_hpp
 
 #include "INativeGL.hpp"
+#include "IByteBuffer.h"
 
 class GLImage{
   
   const GLFormat _format;
   
-  const void* _data;
+  const IByteBuffer* _data;
   
   int _width;
   int _height;
   
 public:
   
-  GLImage(GLFormat format, void* data):
-  _format(format), _data(data)
+  GLImage(GLFormat format, IByteBuffer* data, int width, int height):
+  _format(format), _data(data), _width(width), _height(height)
   {
     
   }
   
-  static GLImage invalid(){
-    return GLImage(RGBA, NULL);
-  }
-  
-  bool isValid(){
-    return _data != NULL;
+  ~GLImage(){
+    delete _data;
   }
   
   bool isTransparent(){

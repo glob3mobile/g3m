@@ -13,6 +13,8 @@
 
 #include "ByteArrayWrapper.hpp"
 
+#include "IByteBuffer.hpp"
+
 class ITimer;
 class IImage;
 
@@ -27,6 +29,8 @@ public:
   virtual IImage* createImageFromData(const ByteArrayWrapper* buffer) const = 0;
   
   virtual IImage* createImageFromSize(int width, int height) const = 0;
+  
+  virtual IByteBuffer* createByteBuffer(unsigned char data[], int length) const = 0;
 
   virtual void deleteImage(const IImage* image) const = 0;
   // a virtual destructor is needed for conversion to Java

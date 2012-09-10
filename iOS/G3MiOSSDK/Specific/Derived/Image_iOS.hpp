@@ -51,9 +51,7 @@ public:
   
   ByteArrayWrapper* getEncodedImage() const;
   
-  void fillWithRGBA8888(unsigned char data[],
-                        int width,
-                        int height) const;
+  void createByteBufferRGBA8888(int width, int height) const;
 
 };
 
