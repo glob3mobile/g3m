@@ -4,22 +4,43 @@ package org.glob3.mobile.specific;
 
 import java.util.ArrayList;
 
+import org.glob3.mobile.generated.BusyMeshRenderer;
+import org.glob3.mobile.generated.CPUTextureBuilder;
 import org.glob3.mobile.generated.CameraDoubleDragHandler;
 import org.glob3.mobile.generated.CameraDoubleTapHandler;
 import org.glob3.mobile.generated.CameraRenderer;
 import org.glob3.mobile.generated.CameraRotationHandler;
 import org.glob3.mobile.generated.CameraSingleDragHandler;
+import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
 import org.glob3.mobile.generated.DummyRenderer;
+import org.glob3.mobile.generated.EffectsScheduler;
+import org.glob3.mobile.generated.EllipsoidalTileTessellator;
+import org.glob3.mobile.generated.FrameTasksExecutor;
 import org.glob3.mobile.generated.G3MWidget;
+import org.glob3.mobile.generated.GL;
 import org.glob3.mobile.generated.ICameraConstrainer;
+import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
+import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.ILogger;
+import org.glob3.mobile.generated.IMathUtils;
 import org.glob3.mobile.generated.INativeGL;
+import org.glob3.mobile.generated.IStorage;
+import org.glob3.mobile.generated.IStringBuilder;
+import org.glob3.mobile.generated.IStringUtils;
+import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LogLevel;
+import org.glob3.mobile.generated.NullStorage;
+import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.SimplePlanetRenderer;
+import org.glob3.mobile.generated.SingleImageTileTexturizer;
+import org.glob3.mobile.generated.TextureBuilder;
+import org.glob3.mobile.generated.TexturesHandler;
+import org.glob3.mobile.generated.TileRenderer;
+import org.glob3.mobile.generated.TileTexturizer;
 import org.glob3.mobile.generated.TilesRenderParameters;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.UserData;
@@ -51,6 +72,9 @@ public class G3MWidget_WebGL
    UserData                           _userData             = null;
 
    G3MWidget                          _widget;
+   int                                _width;
+   int                                _height;
+   final int                          _delayMillis          = 10;
 
 
    public G3MWidget_WebGL() {
@@ -67,7 +91,7 @@ public class G3MWidget_WebGL
       _panel.add(_canvas);
 
       // Events
-      sinkEvents(Event.MOUSEEVENTS | Event.ONMOUSEWHEEL | Event.ONCONTEXTMENU | Event.KEYEVENTS);
+      sinkEvents(Event.MOUSEEVENTS | Event.ONMOUSEWHEEL | Event.ONCONTEXTMENU | Event.KEYEVENTS | Event.ONDBLCLICK);
 
       Window.addResizeHandler(new ResizeHandler() {
 
@@ -84,6 +108,8 @@ public class G3MWidget_WebGL
 
    protected void onSizeChanged(final int w,
                                 final int h) {
+      _width = w;
+      _height = h;
       _panel.setPixelSize(w, h);
       setPixelSize(w, h);
       _canvas.setCoordinateSpaceWidth(w);
@@ -144,6 +170,67 @@ public class G3MWidget_WebGL
                            final ArrayList<Renderer> renderers,
                            final UserData userData) {
 
+      IStringBuilder.setInstance(new StringBuilder_WebGL());
+      IMathUtils.setInstance(new MathUtils_WebGL());
+
+      final IFactory factory = new Factory_WebGL();
+      final ILogger logger = new Logger_WebGL(LogLevel.InfoLevel);
+      final IStorage storage = new NullStorage();
+      final IDownloader downloader = new Downloader_WebGL();
+      final IStringUtils stringUtils = new StringUtils_WebGL();
+      // TODO add delayMillis to G3MWidget constructor
+      final IThreadUtils threadUtils = new ThreadUtils_WebGL(this, _delayMillis);
+
+      final GL_WebGL nGL = new GL_WebGL();
+      final GL gl = new GL(nGL);
+
+      final CompositeRenderer composite = new CompositeRenderer();
+      composite.addRenderer(cameraRenderer);
+
+      if ((layerSet != null) && (layerSet.size() > 0)) {
+
+         TileTexturizer texturizer;// = new MultiLayerTileTexturizer(layerSet);
+
+         //         if (true) {
+         //            texturizer = new MultiLayerTileTexturizer(layerSet);
+         //         }
+         //         else {
+         //SINGLE IMAGE
+         final IImage singleWorldImage = factory.createImageFromFileName("world.jpg");
+         texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
+         //         }
+
+
+         final boolean showStatistics = false;
+
+         final TileRenderer tr = new TileRenderer(new EllipsoidalTileTessellator(parameters._tileResolution, true), texturizer,
+                  parameters, showStatistics);
+
+         composite.addRenderer(tr);
+      }
+
+      for (int i = 0; i < renderers.size(); i++) {
+         composite.addRenderer(renderers.get(i));
+      }
+
+
+      final TextureBuilder textureBuilder = new CPUTextureBuilder();
+      final TexturesHandler texturesHandler = new TexturesHandler(gl, factory, textureBuilder, false);
+
+      final Planet planet = Planet.createEarth();
+
+      final org.glob3.mobile.generated.Renderer busyRenderer = new BusyMeshRenderer();
+
+      final EffectsScheduler scheduler = new EffectsScheduler();
+
+      final FrameTasksExecutor frameTasksExecutor = new FrameTasksExecutor();
+
+
+      _widget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, logger, gl, texturesHandler, downloader,
+               planet, cameraConstraints, composite, busyRenderer, scheduler, _width, _height,
+               Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false);
+
+      _widget.setUserData(userData);
    }
 
 

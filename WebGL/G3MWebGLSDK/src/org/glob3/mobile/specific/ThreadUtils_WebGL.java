@@ -42,7 +42,6 @@ public class ThreadUtils_WebGL
       else {
          ILogger.instance().logError("ThreadUtils_WebGL: _g3mWidget is null");
       }
-      // TODO review and test
    }
 
 }

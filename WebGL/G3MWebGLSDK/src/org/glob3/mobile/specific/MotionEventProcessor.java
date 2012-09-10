@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.TouchEventType;
-import org.glob3.mobile.generated.Vector2D;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
@@ -16,6 +15,61 @@ import com.google.gwt.user.client.Event;
 
 public class MotionEventProcessor {
 
+   //Stores pointer positions, id and event type
+   class EventProcessed {
+
+      public java.util.ArrayList<Integer> _pointersID = new ArrayList<Integer>();
+      public java.util.ArrayList<Touch>   _touchs     = new ArrayList<Touch>();
+      public TouchEventType               _type       = TouchEventType.Down;
+
+
+      @Override
+      protected EventProcessed clone() {
+         final EventProcessed e = new EventProcessed();
+         //         e._pointersID = (ArrayList<Integer>) this._pointersID.clone();
+         e._pointersID = new ArrayList<Integer>(this._pointersID);
+         //         e._touchs = (ArrayList<Touch>) this._touchs.clone();
+         e._touchs = new ArrayList<Touch>(this._touchs);
+         e._type = this._type;
+         return e;
+      }
+
+
+      public void clear() {
+         _pointersID.clear();
+         _touchs.clear();
+      }
+
+   }
+
+   EventProcessed _prevLastEvent = new EventProcessed();
+   EventProcessed _lastEvent     = new EventProcessed();
+
+
+   public TouchEvent processEvent(final Event event) {
+      final EventProcessed auxEvent = _lastEvent.clone();
+      _lastEvent.clear();
+
+      switch (DOM.eventGetType(event)) {
+         case Event.ONKEYDOWN:
+            log("onKeyDown");
+            break;
+         case Event.ONKEYUP:
+            log("onKeyUp");
+            break;
+         case Event.ONMOUSEWHEEL:
+            log("onMousewheel");
+            break;
+
+         default:
+            break;
+      }
+
+      return new TouchEvent(null);
+   }
+
+
+   /*
    ArrayList<Touch> _touches   = new ArrayList<Touch>();
    TouchEventType   _type      = TouchEventType.Down;
    boolean          _mouseDown = false;
@@ -98,6 +152,13 @@ public class MotionEventProcessor {
       return new TouchEvent(TouchEvent.create(_type, new ArrayList<Touch>(_touches)));
    }
 
+
+   // test
+   public void log(final String msg) {
+      GWT.log(msg);
+   }
+   
+   */
 
    // test
    public void log(final String msg) {
