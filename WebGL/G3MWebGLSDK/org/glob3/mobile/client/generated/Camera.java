@@ -95,65 +95,6 @@ public class Camera
 	//cleanCachedValues();
   }
 
-
-  /*
-  void Camera::calculateCachedValues() {
-	const FrustumData data = calculateFrustumData();
-    
-	_projectionMatrix = MutableMatrix44D::createProjectionMatrix(data._left, data._right,
-																 data._bottom, data._top,
-																 data._znear, data._zfar);
-    
-	_modelMatrix = MutableMatrix44D::createModelMatrix(_position, _center, _up);
-    
-    
-  //  _modelViewMatrix = _projectionMatrix.multiply(_modelMatrix);
-    
-    
-	// compute center of view on planet
-  #ifdef C_CODE
-	if (_centerOfView) delete _centerOfView;
-  #endif
-	const Planet *planet = rc->getPlanet();
-	const Vector3D centerV = centerOfViewOnPlanet();
-	const Geodetic3D centerG = _planet->toGeodetic3D(centerV);
-	_centerOfView = new Geodetic3D(centerG);
-    
-  #ifdef C_CODE
-	if (_frustum != NULL) {
-	  delete _frustum;
-	}
-  #endif
-	_frustum = new Frustum(data._left, data._right,
-						   data._bottom, data._top,
-						   data._znear, data._zfar);
-  
-  #ifdef C_CODE    
-	if (_frustumInModelCoordinates != NULL) {
-	  delete _frustumInModelCoordinates;
-	}
-	_frustumInModelCoordinates = _frustum->_frustum->transformedBy_P(_modelMatrix.transposed());(_modelMatrix.transposed());
-    
-    
-  >>>>>>> origin/master
-	if (_halfFrustum != NULL) {
-	  delete _halfFrustum;
-	}
-  #endif
-	_halfFrustum =  new Frustum(data._left/2, data._right/2,
-								data._bottom/2, data._top/2,
-								data._znear, data._zfar);
-    
-  #ifdef C_CODE
-	if (_halfFrustumInModelCoordinates != NULL) {
-	  delete _halfFrustumInModelCoordinates;
-	}
-  #endif
-	_halfFrustumInModelCoordinates = _halfFrustum->transformedBy_P(_modelMatrix.transposed());
-  
-  
-  }*/
-  
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: void render(const RenderContext* rc) const
   public final void render(RenderContext rc)
@@ -470,7 +411,6 @@ public class Camera
 	setCartesianPosition(_position.transformedBy(M, 1.0));
 	setCenter(_center.transformedBy(M, 1.0));
   
-	int ask_agustin_0;
 	setUp(_up.transformedBy(M, 0.0));
   
 	//_dirtyFlags.setAll(true);
