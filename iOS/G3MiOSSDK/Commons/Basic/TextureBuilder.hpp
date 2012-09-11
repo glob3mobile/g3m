@@ -20,14 +20,14 @@ class TextureBuilder
 {
 public:
   
-  virtual const GLImage* createTextureFromImages(GL * gl,  
-                                                 const IFactory* factory,
-                                                 GLFormat format,
-                                                 const IImage* image,
-                                                 int width,
-                                                 int height) const = 0;
+  virtual const GLImage* createTextureFromImage(GL * gl,
+                                                const IFactory* factory,
+                                                GLFormat format,
+                                                const IImage* image,
+                                                int width,
+                                                int height) const = 0;
   
-  virtual const GLImage* createTextureFromImages(GL * gl,  
+  virtual const GLImage* createTextureFromImages(GL * gl,
                                                  const IFactory* factory,
                                                  GLFormat format,
                                                  const std::vector<const IImage*> images,
