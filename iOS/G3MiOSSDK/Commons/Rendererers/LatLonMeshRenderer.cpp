@@ -7,7 +7,7 @@
 //
 
 
-#include "LatLonMeshRenderer.h"
+#include "LatLonMeshRenderer.hpp"
 #include "GL.hpp"
 
 #include "FloatBufferBuilderFromGeodetic.hpp"
