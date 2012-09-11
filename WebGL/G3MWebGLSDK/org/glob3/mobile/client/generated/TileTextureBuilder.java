@@ -12,6 +12,8 @@ public class TileTextureBuilder extends RCObject
 
   private IFactory _factory; // FINAL WORD REMOVE BY CONVERSOR RULE
   private TexturesHandler _texturesHandler;
+  private TextureBuilder _textureBuilder;
+  private GL _gl;
 
   private final TilesRenderParameters _parameters;
   private IDownloader _downloader;
@@ -37,6 +39,8 @@ public class TileTextureBuilder extends RCObject
 	  _texturizer = texturizer;
 	  _factory = rc.getFactory();
 	  _texturesHandler = rc.getTexturesHandler();
+	  _textureBuilder = rc.getTextureBuilder();
+	  _gl = rc.getGL();
 	  _parameters = parameters;
 	  _downloader = downloader;
 	  _tile = tile;
@@ -135,7 +139,7 @@ public class TileTextureBuilder extends RCObject
 	  for (int i = 0; i < _petitionsCount; i++)
 	  {
 		Petition petition = _petitions.get(i);
-		final ByteBuffer buffer = petition.getByteBuffer();
+		final ByteArrayWrapper buffer = petition.getByteArrayWrapper();
 
 		if (buffer != null)
 		{
@@ -159,7 +163,12 @@ public class TileTextureBuilder extends RCObject
 	  {
 //        int __TESTING_mipmapping;
 		final boolean isMipmap = false;
-		final GLTextureId glTextureId = _texturesHandler.getGLTextureId(images, rectangles, new TextureSpec(petitionsID, textureWidth, textureHeight, isMipmap));
+		final GLImage glImage = _textureBuilder.createTextureFromImages(_gl, _factory, RGBA, images, rectangles, textureWidth, textureHeight);
+
+		final GLTextureId glTextureId = _texturesHandler.getGLTextureId(glImage, petitionsID, isMipmap);
+		if (glImage != null)
+			glImage.dispose();
+
 		if (glTextureId.isValid())
 		{
 		  if (!_mesh.setGLTextureIdForLevel(0, glTextureId))
@@ -244,7 +253,7 @@ public class TileTextureBuilder extends RCObject
 	}
   }
 
-  public final void stepDownloaded(int position, ByteBuffer buffer)
+  public final void stepDownloaded(int position, ByteArrayWrapper buffer)
   {
 	if (_canceled)
 	{
@@ -253,7 +262,7 @@ public class TileTextureBuilder extends RCObject
 	checkIsPending(position);
 
 	_status.set(position, PetitionStatus.STATUS_DOWNLOADED);
-	_petitions.get(position).setByteBuffer(buffer.copy());
+	_petitions.get(position).setByteArrayWrapper(buffer.copy());
 
 	stepDone();
   }

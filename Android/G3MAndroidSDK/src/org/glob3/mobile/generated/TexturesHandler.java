@@ -5,7 +5,6 @@ public class TexturesHandler
 
   private final GL _gl;
   private IFactory _factory; // FINAL WORD REMOVE BY CONVERSOR RULE
-  private final TextureBuilder _textureBuilder;
 
   private final boolean _verbose;
 
@@ -33,11 +32,10 @@ public class TexturesHandler
   }
 
 
-  public TexturesHandler(GL gl, IFactory factory, TextureBuilder texBuilder, boolean verbose)
+  public TexturesHandler(GL gl, IFactory factory, boolean verbose)
   {
 	  _gl = gl;
 	  _factory = factory;
-	  _textureBuilder = texBuilder;
 	  _verbose = verbose;
   }
 
@@ -49,18 +47,11 @@ public class TexturesHandler
 	}
   }
 
-  public final GLTextureId getGLTextureIdFromFileName(String filename, int textureWidth, int textureHeight, boolean isMipmap)
+  public final GLTextureId getGLTextureId(GLImage glImage, String name, boolean hasMipMap)
   {
-	IImage image = _factory.createImageFromFileName(filename);
   
-	final GLTextureId texId = getGLTextureId(image, new TextureSpec(filename, textureWidth, textureHeight, isMipmap)); // filename as the id
-	_factory.deleteImage(image);
+	TextureSpec textureSpec = new TextureSpec(name, glImage.getWidth(), glImage.getHeight(), hasMipMap);
   
-	return texId;
-  }
-
-  public final GLTextureId getGLTextureId(java.util.ArrayList<IImage> images, TextureSpec textureSpec)
-  {
 	GLTextureId previousId = getGLTextureIdIfAvailable(textureSpec);
 	if (previousId.isValid())
 	{
@@ -68,7 +59,8 @@ public class TexturesHandler
 	}
   
 	TextureHolder holder = new TextureHolder(textureSpec);
-	holder._glTextureId = _textureBuilder.createTextureFromImages(_gl, images, textureSpec.getWidth(), textureSpec.getHeight(), textureSpec.isMipmap());
+	holder._glTextureId = _gl.uploadTexture(glImage, textureSpec.isMipmap());
+  
   
 	if (_verbose)
 	{
@@ -80,36 +72,6 @@ public class TexturesHandler
 	showHolders("getGLTextureId(): created holder " + holder.description());
   
 	return holder._glTextureId;
-  }
-
-  public final GLTextureId getGLTextureId(java.util.ArrayList<IImage> images, java.util.ArrayList<Rectangle> rectangles, TextureSpec textureSpec)
-  {
-	GLTextureId previousId = getGLTextureIdIfAvailable(textureSpec);
-	if (previousId.isValid())
-	{
-	  return previousId;
-	}
-  
-	TextureHolder holder = new TextureHolder(textureSpec);
-	holder._glTextureId = _textureBuilder.createTextureFromImages(_gl, _factory, images, rectangles, textureSpec.getWidth(), textureSpec.getHeight(), textureSpec.isMipmap());
-  
-	if (_verbose)
-	{
-	  ILogger.instance().logInfo("Uploaded texture \"%s\" to GPU with texId=%s", textureSpec.description(), holder._glTextureId.description());
-	}
-  
-	_textureHolders.add(holder);
-  
-	showHolders("getGLTextureId(): created holder " + holder.description());
-  
-	return holder._glTextureId;
-  }
-
-  public final GLTextureId getGLTextureId(IImage image, TextureSpec textureSpec)
-  {
-	final java.util.ArrayList<IImage> images = new java.util.ArrayList<IImage>();
-	images.add(image);
-	return getGLTextureId(images, textureSpec);
   }
 
   public final GLTextureId getGLTextureIdIfAvailable(TextureSpec textureSpec)

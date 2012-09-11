@@ -9,6 +9,9 @@ package org.glob3.mobile.generated;
 
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IByteBuffer;
+
 public abstract class IImage
 {
   // a virtual destructor is needed for conversion to Java
@@ -36,11 +39,11 @@ public abstract class IImage
   public abstract IImage subImage(Rectangle rect);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual ByteBuffer* getEncodedImage() const = 0;
-  public abstract ByteBuffer getEncodedImage();
+//ORIGINAL LINE: virtual ByteArrayWrapper* getEncodedImage() const = 0;
+  public abstract ByteArrayWrapper getEncodedImage();
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void fillWithRGBA8888(byte data[], int width, int height) const = 0;
-  public abstract void fillWithRGBA8888(byte[] data, int width, int height);
+//ORIGINAL LINE: virtual IByteBuffer* createByteBufferRGBA8888(int width, int height) const = 0;
+  public abstract IByteBuffer createByteBufferRGBA8888(int width, int height);
 
 }

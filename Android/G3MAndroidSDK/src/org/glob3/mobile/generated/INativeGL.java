@@ -107,8 +107,18 @@ public abstract class INativeGL
   public abstract void texParameteri(GLTextureType target, GLTextureParameter par, GLTextureParameterValue v);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void texImage2D(GLTextureType target, int level, GLFormat internalFormat, int width, int height, int border, GLFormat format, GLType type, const Object* data) const = 0;
-  public abstract void texImage2D(GLTextureType target, int level, GLFormat internalFormat, int width, int height, int border, GLFormat format, GLType type, Object data);
+//ORIGINAL LINE: virtual void texImage2D(const GLImage* glImage) const = 0;
+  public abstract void texImage2D(GLImage glImage);
+
+  //  virtual void texImage2D(GLTextureType target,
+  //                          int         level,
+  //                          GLFormat    internalFormat,
+  //                          int         width,
+  //                          int         height,
+  //                          int         border,
+  //                          GLFormat    format,
+  //                          GLType      type,
+  //                          const void* data) const = 0;
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual void generateMipmap(GLTextureType target) const = 0;

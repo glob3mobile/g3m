@@ -119,7 +119,16 @@ public class SimplePlanetRenderer extends Renderer
 	GLTextureId texId = GLTextureId.invalid();
 	if (true)
 	{
-	  texId = rc.getTexturesHandler().getGLTextureIdFromFileName(_textureFilename, _texWidth, _texHeight, true);
+  
+	  IImage image = rc.getFactory().createImageFromFileName(_textureFilename);
+	  final GLImage glImage = rc.getTextureBuilder().createTextureFromImages(rc.getGL(), rc.getFactory(), RGBA, image, _texWidth, _texHeight);
+  
+	  texId = rc.getTexturesHandler().getGLTextureId(glImage, _textureFilename, false);
+  
+	  rc.getFactory().deleteImage(image);
+	  if (glImage != null)
+		  glImage.dispose();
+  
 	  if (!texId.isValid())
 	  {
 		rc.getLogger().logError("Can't load file %s", _textureFilename);

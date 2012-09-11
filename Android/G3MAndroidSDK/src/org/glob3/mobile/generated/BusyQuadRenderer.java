@@ -36,7 +36,17 @@ public class BusyQuadRenderer extends Renderer implements EffectTarget
 	GLTextureId texId = GLTextureId.invalid();
 	if (true)
 	{
-	  texId = rc.getTexturesHandler().getGLTextureIdFromFileName(_textureFilename, 256, 256, false);
+	  IImage image = rc.getFactory().createImageFromFileName(_textureFilename);
+  
+	  final GLImage glImage = rc.getTextureBuilder().createTextureFromImages(rc.getGL(), rc.getFactory(), RGBA, image, 128, 128);
+  
+	  texId = rc.getTexturesHandler().getGLTextureId(glImage, _textureFilename, false);
+  
+	  rc.getFactory().deleteImage(image);
+	  if (glImage != null)
+		  glImage.dispose();
+  
+  
 	  if (!texId.isValid())
 	  {
 		rc.getLogger().logError("Can't load file %s", _textureFilename);

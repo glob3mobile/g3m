@@ -32,6 +32,7 @@ package org.glob3.mobile.generated;
 public class MutableMatrix44D
 {
 
+
   //_m23 -> row 2, column 3
   private double _m00;
   private double _m01;
@@ -50,9 +51,13 @@ public class MutableMatrix44D
   private double _m32;
   private double _m33;
 
+  private float[] _columnMajorFloatArray;
+  private boolean _isValid;
+
   //Contructor parameters in column major order
   private MutableMatrix44D(double m00, double m10, double m20, double m30, double m01, double m11, double m21, double m31, double m02, double m12, double m22, double m32, double m03, double m13, double m23, double m33)
   {
+	  _isValid = true;
 	_m00 = m00;
 	_m01 = m01;
 	_m02 = m02;
@@ -72,12 +77,21 @@ public class MutableMatrix44D
 	_m31 = m31;
 	_m32 = m32;
 	_m33 = m33;
+
+	_columnMajorFloatArray = null;
+  }
+
+  private MutableMatrix44D(boolean isValid)
+  {
+	  _isValid = isValid;
+	_columnMajorFloatArray = null;
   }
 
 
   //CONTRUCTORS
   public MutableMatrix44D()
   {
+	  _isValid = true;
 	_m00 = 0.0;
 	_m01 = 0.0;
 	_m02 = 0.0;
@@ -97,10 +111,13 @@ public class MutableMatrix44D
 	_m31 = 0.0;
 	_m32 = 0.0;
 	_m33 = 0.0;
+
+	_columnMajorFloatArray = null;
   }
 
   public MutableMatrix44D(MutableMatrix44D m)
   {
+	  _isValid = m._isValid;
 	_m00 = m._m00;
 	_m01 = m._m01;
 	_m02 = m._m02;
@@ -120,6 +137,54 @@ public class MutableMatrix44D
 	_m31 = m._m31;
 	_m32 = m._m32;
 	_m33 = m._m33;
+
+	_columnMajorFloatArray = null;
+  }
+
+//C++ TO JAVA CONVERTER NOTE: This 'copyFrom' method was converted from the original C++ copy assignment operator:
+//ORIGINAL LINE: MutableMatrix44D& operator =(const MutableMatrix44D &m)
+  public final MutableMatrix44D copyFrom(MutableMatrix44D m)
+  {
+	if (this != m)
+	{
+	  _m00 = m._m00;
+	  _m01 = m._m01;
+	  _m02 = m._m02;
+	  _m03 = m._m03;
+
+	  _m10 = m._m10;
+	  _m11 = m._m11;
+	  _m12 = m._m12;
+	  _m13 = m._m13;
+
+	  _m20 = m._m20;
+	  _m21 = m._m21;
+	  _m22 = m._m22;
+	  _m23 = m._m23;
+
+	  _m30 = m._m30;
+	  _m31 = m._m31;
+	  _m32 = m._m32;
+	  _m33 = m._m33;
+
+	  _isValid = m._isValid;
+
+	  if (_columnMajorFloatArray != null)
+	  {
+		_columnMajorFloatArray = null;
+		_columnMajorFloatArray = null;
+	  }
+	}
+
+	return this;
+  }
+
+  public void dispose()
+  {
+	if (_columnMajorFloatArray != null)
+	{
+	  _columnMajorFloatArray = null;
+	}
   }
 
   //SPECIAL MATRICES
@@ -131,47 +196,17 @@ public class MutableMatrix44D
 
   public static MutableMatrix44D invalid()
   {
-	return new MutableMatrix44D(IMathUtils.instance().NanD(), IMathUtils.instance().NanD(), IMathUtils.instance().NanD(), IMathUtils.instance().NanD(), IMathUtils.instance().NanD(), IMathUtils.instance().NanD(), IMathUtils.instance().NanD(), IMathUtils.instance().NanD(), IMathUtils.instance().NanD(), IMathUtils.instance().NanD(), IMathUtils.instance().NanD(), IMathUtils.instance().NanD(), IMathUtils.instance().NanD(), IMathUtils.instance().NanD(), IMathUtils.instance().NanD(), IMathUtils.instance().NanD());
+	return new MutableMatrix44D(false);
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isValid() const
   public final boolean isValid()
   {
-	if (IMathUtils.instance().isNan(_m00))
-		return false;
-	if (IMathUtils.instance().isNan(_m01))
-		return false;
-	if (IMathUtils.instance().isNan(_m02))
-		return false;
-	if (IMathUtils.instance().isNan(_m03))
-		return false;
-	if (IMathUtils.instance().isNan(_m10))
-		return false;
-	if (IMathUtils.instance().isNan(_m11))
-		return false;
-	if (IMathUtils.instance().isNan(_m12))
-		return false;
-	if (IMathUtils.instance().isNan(_m13))
-		return false;
-	if (IMathUtils.instance().isNan(_m20))
-		return false;
-	if (IMathUtils.instance().isNan(_m21))
-		return false;
-	if (IMathUtils.instance().isNan(_m22))
-		return false;
-	if (IMathUtils.instance().isNan(_m23))
-		return false;
-	if (IMathUtils.instance().isNan(_m30))
-		return false;
-	if (IMathUtils.instance().isNan(_m31))
-		return false;
-	if (IMathUtils.instance().isNan(_m32))
-		return false;
-	if (IMathUtils.instance().isNan(_m33))
-		return false;
-	return true;
+	return _isValid;
   }
 
-//  
+  //
   //OPERATIONS
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -323,28 +358,35 @@ public class MutableMatrix44D
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void copyToColumnMajorFloatArray(float M[16]) const
-  public final void copyToColumnMajorFloatArray(float[] M)
+//ORIGINAL LINE: float* getColumnMajorFloatArray() const
+//C++ TO JAVA CONVERTER WARNING: Java has no equivalent to methods returning pointers to value types:
+  public final float getColumnMajorFloatArray()
   {
-	M[0] = (float) _m00;
-	M[1] = (float) _m10;
-	M[2] = (float) _m20;
-	M[3] = (float) _m30;
+	if (_columnMajorFloatArray == null)
+	{
+	  _columnMajorFloatArray = new float[16];
 
-	M[4] = (float) _m01;
-	M[5] = (float) _m11;
-	M[6] = (float) _m21;
-	M[7] = (float) _m31;
+	  _columnMajorFloatArray[0] = (float) _m00;
+	  _columnMajorFloatArray[1] = (float) _m10;
+	  _columnMajorFloatArray[2] = (float) _m20;
+	  _columnMajorFloatArray[3] = (float) _m30;
 
-	M[8] = (float) _m02;
-	M[9] = (float) _m12;
-	M[10] = (float) _m22;
-	M[11] = (float) _m32;
+	  _columnMajorFloatArray[4] = (float) _m01;
+	  _columnMajorFloatArray[5] = (float) _m11;
+	  _columnMajorFloatArray[6] = (float) _m21;
+	  _columnMajorFloatArray[7] = (float) _m31;
 
-	M[12] = (float) _m03;
-	M[13] = (float) _m13;
-	M[14] = (float) _m23;
-	M[15] = (float) _m33;
+	  _columnMajorFloatArray[8] = (float) _m02;
+	  _columnMajorFloatArray[9] = (float) _m12;
+	  _columnMajorFloatArray[10] = (float) _m22;
+	  _columnMajorFloatArray[11] = (float) _m32;
+
+	  _columnMajorFloatArray[12] = (float) _m03;
+	  _columnMajorFloatArray[13] = (float) _m13;
+	  _columnMajorFloatArray[14] = (float) _m23;
+	  _columnMajorFloatArray[15] = (float) _m33;
+	}
+	return _columnMajorFloatArray;
   }
 
   //OTHER OPERATIONS
@@ -423,15 +465,15 @@ public class MutableMatrix44D
 	out[2] = _m20 * in[0] + _m21 * in[1] + _m22 * in[2] + _m23 * in[3];
 	out[3] = _m30 * in[0] + _m31 * in[1] + _m32 * in[2] + _m33 * in[3];
   
-	if (out[3] == 0.0f)
+	if (out[3] == 0.0)
 	  return Vector2D.nan();
   
 	out[0] /= out[3];
 	out[1] /= out[3];
 	out[2] /= out[3];
   
-	final double winx = viewport[0] + (1.0f + out[0]) * viewport[2] / 2.0f;
-	final double winy = viewport[1] + (1.0f + out[1]) * viewport[3] / 2.0f;
+	final double winx = viewport[0] + (1.0f + out[0]) * viewport[2] / 2.0;
+	final double winy = viewport[1] + (1.0f + out[1]) * viewport[3] / 2.0;
 	//double winz = (1.0f + in[2]) / 2.0f;
 	return new Vector2D(winx, winy);
   }

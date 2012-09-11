@@ -51,7 +51,7 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
 
   public final void add(Geodetic3D g)
   {
-	Vector3D vector = _planet.toCartesian(g);
+	final Vector3D vector = _planet.toCartesian(g);
 
 	float x = (float) vector.x();
 	float y = (float) vector.y();
@@ -76,7 +76,7 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
 
   public final void add(Geodetic2D g)
   {
-	Vector3D vector = _planet.toCartesian(g);
+	final Vector3D vector = _planet.toCartesian(g);
 
 	float x = (float) vector.x();
 	float y = (float) vector.y();

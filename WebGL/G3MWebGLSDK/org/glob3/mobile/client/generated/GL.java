@@ -22,6 +22,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class GL
 {
 
@@ -40,7 +41,7 @@ public class GL
   // state handling
   private boolean _enableTextures;
   private boolean _enableTexture2D;
-//  bool _enableVertexColor;
+  private boolean _enableVertexColor;
   private boolean _enableVerticesPosition;
   private boolean _enableFlatColor;
   private boolean _enableDepthTest;
@@ -67,14 +68,10 @@ public class GL
   private float _flatColorA;
   private float _flatColorIntensity;
 
-//C++ TO JAVA CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in Java):
-  private float[] loadModelView_M = new float[16];
   private void loadModelView()
   {
-//C++ TO JAVA CONVERTER NOTE: This static local variable declaration (not allowed in Java) has been moved just prior to the method:
-//	static float M[16];
-	_modelView.copyToColumnMajorFloatArray(loadModelView_M);
-	_gl.uniformMatrix4fv(GlobalMembersGL.Uniforms.Modelview, 1, false, loadModelView_M);
+	float M = _modelView.getColumnMajorFloatArray();
+	_gl.uniformMatrix4fv(GlobalMembersGL.Uniforms.Modelview, 1, false, M);
   }
 
   private GLTextureId getGLTextureId()
@@ -112,10 +109,14 @@ public class GL
 	return result;
   }
 
-
-  private int _lastTextureWidth;
-  private int _lastTextureHeight;
-  byte[] _lastImageData;
+//  int _lastTextureWidth;
+//  int _lastTextureHeight;
+///#ifdef C_CODE
+//  unsigned char* _lastImageData;
+///#endif
+///#ifdef JAVA_CODE
+//  byte[] _lastImageData;
+///#endif
 
   //Get Locations warning of errors
   private boolean _errorGettingLocationOcurred;
@@ -146,13 +147,6 @@ public class GL
   
 	if (_billboardTexCoord == null)
 	{
-	  //  const static float texcoord[] = {
-	  //    1, 1,
-	  //    1, 0,
-	  //    0, 1,
-	  //    0, 0
-	  //  };
-  
 	  FloatBufferBuilderFromCartesian2D texCoor = new FloatBufferBuilderFromCartesian2D();
 	  texCoor.add(1,1);
 	  texCoor.add(1,0);
@@ -166,12 +160,12 @@ public class GL
 
 
   public GL(INativeGL gl)
-//  _enableVertexColor(false),
 //  _enableFlatColor(false),
   {
 	  _gl = gl;
 	  _enableTextures = false;
 	  _enableTexture2D = false;
+	  _enableVertexColor = false;
 	  _enableVerticesPosition = false;
 	  _enableBlend = false;
 	  _enableDepthTest = false;
@@ -192,9 +186,6 @@ public class GL
 	  _flatColorB = 0F;
 	  _flatColorA = 0F;
 	  _flatColorIntensity = 0F;
-	  _lastTextureWidth = -1;
-	  _lastTextureHeight = -1;
-	  _lastImageData = null;
 	  _billboardTexCoord = null;
   }
 
@@ -302,16 +293,17 @@ public class GL
 	  _flatColorB = b;
 	  _flatColorA = a;
 	}
-  
-	//  _gl->uniform4f(Uniforms.FlatColor, r, g, b, a);
   }
 
   public final void enableVertexColor(IFloatBuffer colors, float intensity)
   {
   
-	//if (!_enableVertexColor) {
-	_gl.uniform1i(GlobalMembersGL.Uniforms.EnableColorPerVertex, 1);
-	_gl.enableVertexAttribArray(GlobalMembersGL.Attributes.Color);
+	if (!_enableVertexColor)
+	{
+	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableColorPerVertex, 1);
+	  _gl.enableVertexAttribArray(GlobalMembersGL.Attributes.Color);
+	  _enableVertexColor = true;
+	}
   
 	if ((_colors != colors) || (_colors.timestamp() != colors.timestamp()))
 	{
@@ -320,17 +312,16 @@ public class GL
 	}
   
 	_gl.uniform1f(GlobalMembersGL.Uniforms.ColorPerVertexIntensity, intensity);
-	//_enableVertexColor = true;
-	//}
   }
 
   public final void disableVertexColor()
   {
-	//  if (_enableVertexColor) {
-	_gl.disableVertexAttribArray(GlobalMembersGL.Attributes.Color);
-	_gl.uniform1i(GlobalMembersGL.Uniforms.EnableColorPerVertex, 0);
-	//    _enableVertexColor = false;
-	//  }
+	if (_enableVertexColor)
+	{
+	  _gl.disableVertexAttribArray(GlobalMembersGL.Attributes.Color);
+	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableColorPerVertex, 0);
+	  _enableVertexColor = false;
+	}
   }
 
   public final void pushMatrix()
@@ -390,14 +381,10 @@ public class GL
 	_gl.drawElements(GLPrimitive.Points, indices.size(), indices);
   }
 
-//C++ TO JAVA CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in Java):
-  private float[] setProjection_M = new float[16];
   public final void setProjection(MutableMatrix44D projection)
   {
-//C++ TO JAVA CONVERTER NOTE: This static local variable declaration (not allowed in Java) has been moved just prior to the method:
-//	static float M[16];
-	projection.copyToColumnMajorFloatArray(setProjection_M);
-	_gl.uniformMatrix4fv(GlobalMembersGL.Uniforms.Projection, 1, false, setProjection_M);
+	float M = projection.getColumnMajorFloatArray();
+	_gl.uniformMatrix4fv(GlobalMembersGL.Uniforms.Projection, 1, false, M);
   }
 
   public final boolean useProgram(int program)
@@ -470,27 +457,12 @@ public class GL
 	return _gl.getError();
   }
 
-  public final GLTextureId uploadTexture(IImage image, int textureWidth, int textureHeight, boolean generateMipmap)
+  public final GLTextureId uploadTexture(GLImage glImage, boolean generateMipmap)
   {
 	final GLTextureId texId = getGLTextureId();
 	if (texId.isValid())
 	{
-	  final boolean lastImageDataIsValid = ((_lastTextureWidth == textureWidth) && (_lastTextureHeight == textureHeight) && (_lastImageData != null));
   
-  
-  	byte[] imageData;
-  
-  	if (lastImageDataIsValid) {
-  	  imageData = _lastImageData;
-  	}
-  	else {
-  	  imageData = new byte[textureWidth * textureHeight * 4];
-  	  _lastImageData = imageData;
-  	  _lastTextureWidth = textureWidth;
-  	  _lastTextureHeight = textureHeight;
-  	}
-  
-  	image.fillWithRGBA8888(imageData, textureWidth, textureHeight);
   
   	_gl.blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
   	_gl.pixelStorei(GLAlignment.Unpack, 1);
@@ -500,7 +472,7 @@ public class GL
   	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MagFilter, GLTextureParameterValue.Linear);
   	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapS, GLTextureParameterValue.ClampToEdge);
   	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapT, GLTextureParameterValue.ClampToEdge);
-  	_gl.texImage2D(GLTextureType.Texture2D, 0, GLFormat.RGBA, textureWidth, textureHeight, 0, GLFormat.RGBA, GLType.UnsignedByte, imageData);
+  	_gl->texImage2D(glImage);
   
   	if (generateMipmap) {
   	  _gl.generateMipmap(GLTextureType.Texture2D);
@@ -513,7 +485,13 @@ public class GL
 	}
   
 	return texId;
+  
+  
   }
+
+  //  const GLTextureId uploadTexture(const IImage* image,
+  //                                  int textureWidth, int textureHeight,
+  //                                  bool generateMipmap);
 
   public final void setTextureCoordinates(int size, int stride, IFloatBuffer texcoord)
   {
@@ -687,11 +665,10 @@ public class GL
   public void dispose()
   {
 
-	if (_lastImageData != null)
-	{
-	  _lastImageData = null;
-	  _lastImageData = null;
-	}
+//    if (_lastImageData != NULL) {
+//      delete [] _lastImageData;
+//      _lastImageData = NULL;
+//    }
 
 	if (_vertices != null)
 	{

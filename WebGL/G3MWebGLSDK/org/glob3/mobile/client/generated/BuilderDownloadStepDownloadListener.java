@@ -21,7 +21,7 @@ public class BuilderDownloadStepDownloadListener implements IDownloadListener
   public final void onDownload(Response response)
   {
   //  _onDownload++;
-	_builder.stepDownloaded(_position, response.getByteBuffer());
+	_builder.stepDownloaded(_position, response.getByteArrayWrapper());
   }
 
   public final void onError(Response response)

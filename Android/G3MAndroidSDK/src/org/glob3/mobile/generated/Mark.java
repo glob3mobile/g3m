@@ -103,7 +103,7 @@ public class Mark
 	final Planet planet = rc.getPlanet();
   
 	final Vector3D cameraPosition = camera.getCartesianPosition();
-  //  const Vector3D markPosition = planet->toCartesian(_position);
+	//  const Vector3D markPosition = planet->toCartesian(_position);
 	final Vector3D markPosition = getCartesianPosition(planet);
   
 	final Vector3D markCameraVector = markPosition.sub(cameraPosition);
@@ -123,7 +123,16 @@ public class Mark
   
 		if (!_textureId.isValid())
 		{
-		  _textureId = rc.getTexturesHandler().getGLTextureIdFromFileName(_textureFilename, 128, 128, false);
+  
+		  IImage image = rc.getFactory().createImageFromFileName(_textureFilename);
+  
+		  final GLImage glImage = rc.getTextureBuilder().createTextureFromImages(rc.getGL(), rc.getFactory(), RGBA, image, 128, 128);
+  
+		  _textureId = rc.getTexturesHandler().getGLTextureId(glImage, _textureFilename, false);
+  
+		  rc.getFactory().deleteImage(image);
+		  if (glImage != null)
+			  glImage.dispose();
 		}
   
 		if (!_textureId.isValid())
@@ -132,7 +141,7 @@ public class Mark
 		  return;
 		}
   
-  //    rc->getLogger()->logInfo(" Visible   << %f %f", minDist, distanceToCamera);
+		//    rc->getLogger()->logInfo(" Visible   << %f %f", minDist, distanceToCamera);
 		gl.drawBillBoard(_textureId, getVertices(planet), camera.getViewPortRatio());
 	  }
   

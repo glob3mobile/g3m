@@ -13,9 +13,10 @@ public class RenderContext extends Context
   private final Camera _currentCamera;
   private Camera _nextCamera;
   private TexturesHandler _texturesHandler;
+  private TextureBuilder _textureBuilder;
   private ITimer _frameStartTimer;
 
-  public RenderContext(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, Planet planet, GL gl, Camera currentCamera, Camera nextCamera, TexturesHandler texturesHandler, IDownloader downloader, EffectsScheduler scheduler, ITimer frameStartTimer)
+  public RenderContext(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, Planet planet, GL gl, Camera currentCamera, Camera nextCamera, TexturesHandler texturesHandler, TextureBuilder textureBuilder, IDownloader downloader, EffectsScheduler scheduler, ITimer frameStartTimer)
   {
 	  super(factory, stringUtils, threadUtils, logger, planet, downloader, scheduler);
 	  _frameTasksExecutor = frameTasksExecutor;
@@ -23,6 +24,7 @@ public class RenderContext extends Context
 	  _currentCamera = currentCamera;
 	  _nextCamera = nextCamera;
 	  _texturesHandler = texturesHandler;
+	  _textureBuilder = textureBuilder;
 	  _frameStartTimer = frameStartTimer;
 
   }
@@ -53,6 +55,13 @@ public class RenderContext extends Context
   public final TexturesHandler getTexturesHandler()
   {
 	return _texturesHandler;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: TextureBuilder* getTextureBuilder() const
+  public final TextureBuilder getTextureBuilder()
+  {
+	return _textureBuilder;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
