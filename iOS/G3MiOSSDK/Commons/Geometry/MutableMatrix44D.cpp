@@ -149,7 +149,11 @@ void MutableMatrix44D::print(const std::string& name, const ILogger* log) const
 /*
  This function is intended to be used on a ModelView MutableMatrix44D. ModelView = Projection * Model
  */
-Vector3D MutableMatrix44D::unproject(const Vector3D& pixel3D, const int viewport[4]) const {
+Vector3D MutableMatrix44D::unproject(const Vector3D& pixel3D,
+                                     const int vpLeft,
+                                     const int vpTop,
+                                     const int vpWidth,
+                                     const int vpHeight) const {
   
   int TODO_Remove_UNPROJECT;//!!!!
   
@@ -157,8 +161,8 @@ Vector3D MutableMatrix44D::unproject(const Vector3D& pixel3D, const int viewport
   const double winy = pixel3D.y();
   const double winz = pixel3D.z();
   
-  const double in0 = (winx - viewport[0]) * 2 / viewport[2] - 1.0;
-  const double in1 = (winy - viewport[1]) * 2 / viewport[3] - 1.0;
+  const double in0 = (winx - vpLeft) * 2 / vpWidth - 1.0;
+  const double in1 = (winy - vpTop) * 2 / vpHeight - 1.0;
   const double in2 = 2 * winz - 1.0;
   const double in3 = 1.0;
   
@@ -184,8 +188,11 @@ Vector3D MutableMatrix44D::unproject(const Vector3D& pixel3D, const int viewport
   return Vector3D(objx, objy, objz);
 }
 
-Vector2D MutableMatrix44D::project(const Vector3D& point, const int viewport[4]) const
-{
+Vector2D MutableMatrix44D::project(const Vector3D& point,
+                                   const int vpLeft,
+                                   const int vpTop,
+                                   const int vpWidth,
+                                   const int vpHeight) const {
   const double in0 = point.x();
   const double in1 = point.y();
   const double in2 = point.z();
@@ -205,8 +212,8 @@ Vector2D MutableMatrix44D::project(const Vector3D& point, const int viewport[4])
   out1 /= out3;
   //out2 /= out3;
   
-  const double winx = viewport[0] + (1.0 + out0) * viewport[2] / 2.0;
-  const double winy = viewport[1] + (1.0 + out1) * viewport[3] / 2.0;
+  const double winx = vpLeft + (1.0 + out0) * vpWidth / 2.0;
+  const double winy = vpTop  + (1.0 + out1) * vpHeight / 2.0;
   //double winz = (1.0 + in2) / 2.0;
   return Vector2D(winx, winy);
 }
