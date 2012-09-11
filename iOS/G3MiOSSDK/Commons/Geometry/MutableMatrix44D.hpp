@@ -28,10 +28,10 @@ private:
   
   //_m23 -> row 2, column 3
   double _m00;
-  double _m01; 
+  double _m01;
   double _m02;
   double _m03;
-  double _m10; 
+  double _m10;
   double _m11;
   double _m12;
   double _m13;
@@ -89,25 +89,25 @@ public:
   MutableMatrix44D():
   _isValid(true)
   {
-    _m00  = 0.0;
-    _m01  = 0.0;
-    _m02  = 0.0;
-    _m03  = 0.0;
+    _m00 = 0.0;
+    _m01 = 0.0;
+    _m02 = 0.0;
+    _m03 = 0.0;
     
-    _m10  = 0.0;
-    _m11  = 0.0;
-    _m12  = 0.0;
-    _m13  = 0.0;
+    _m10 = 0.0;
+    _m11 = 0.0;
+    _m12 = 0.0;
+    _m13 = 0.0;
     
-    _m20  = 0.0;
-    _m21  = 0.0;
-    _m22  = 0.0;
-    _m23  = 0.0;
+    _m20 = 0.0;
+    _m21 = 0.0;
+    _m22 = 0.0;
+    _m23 = 0.0;
     
-    _m30  = 0.0;
-    _m31  = 0.0;
-    _m32  = 0.0;
-    _m33  = 0.0;
+    _m30 = 0.0;
+    _m31 = 0.0;
+    _m32 = 0.0;
+    _m33 = 0.0;
     
     _columnMajorFloatArray = NULL;
   }
@@ -115,51 +115,51 @@ public:
   MutableMatrix44D(const MutableMatrix44D &m):
   _isValid(m._isValid)
   {
-    _m00  = m._m00;
-    _m01  = m._m01;
-    _m02  = m._m02;
-    _m03  = m._m03;
+    _m00 = m._m00;
+    _m01 = m._m01;
+    _m02 = m._m02;
+    _m03 = m._m03;
     
-    _m10  = m._m10;
-    _m11  = m._m11;
-    _m12  = m._m12;
-    _m13  = m._m13;
+    _m10 = m._m10;
+    _m11 = m._m11;
+    _m12 = m._m12;
+    _m13 = m._m13;
     
-    _m20  = m._m20;
-    _m21  = m._m21;
-    _m22  = m._m22;
-    _m23  = m._m23;
+    _m20 = m._m20;
+    _m21 = m._m21;
+    _m22 = m._m22;
+    _m23 = m._m23;
     
-    _m30  = m._m30;
-    _m31  = m._m31;
-    _m32  = m._m32;
-    _m33  = m._m33;
+    _m30 = m._m30;
+    _m31 = m._m31;
+    _m32 = m._m32;
+    _m33 = m._m33;
     
     _columnMajorFloatArray = NULL;
   }
-
+  
   MutableMatrix44D& operator=(const MutableMatrix44D &m)
   {
     if (this != &m){
-      _m00  = m._m00;
-      _m01  = m._m01;
-      _m02  = m._m02;
-      _m03  = m._m03;
+      _m00 = m._m00;
+      _m01 = m._m01;
+      _m02 = m._m02;
+      _m03 = m._m03;
       
-      _m10  = m._m10;
-      _m11  = m._m11;
-      _m12  = m._m12;
-      _m13  = m._m13;
+      _m10 = m._m10;
+      _m11 = m._m11;
+      _m12 = m._m12;
+      _m13 = m._m13;
       
-      _m20  = m._m20;
-      _m21  = m._m21;
-      _m22  = m._m22;
-      _m23  = m._m23;
+      _m20 = m._m20;
+      _m21 = m._m21;
+      _m22 = m._m22;
+      _m23 = m._m23;
       
-      _m30  = m._m30;
-      _m31  = m._m31;
-      _m32  = m._m32;
-      _m33  = m._m33;
+      _m30 = m._m30;
+      _m31 = m._m31;
+      _m32 = m._m32;
+      _m33 = m._m33;
       
       _isValid = m._isValid;
       
@@ -195,7 +195,7 @@ public:
     return _isValid;
   }
   
-  //  
+  //
   //OPERATIONS
   
   MutableMatrix44D multiply(const MutableMatrix44D& that) const;
@@ -248,10 +248,9 @@ public:
   }
   
   float* getColumnMajorFloatArray() const {
-    
     if (_columnMajorFloatArray == NULL){
-      
       _columnMajorFloatArray = new float[16];
+      
       _columnMajorFloatArray[ 0] = (float) _m00;
       _columnMajorFloatArray[ 1] = (float) _m10;
       _columnMajorFloatArray[ 2] = (float) _m20;
@@ -287,10 +286,10 @@ public:
   
   static MutableMatrix44D createRotationMatrix(const Angle& angle, const Vector3D& p);
   
-  static MutableMatrix44D createGeneralRotationMatrix(const Angle& angle, 
+  static MutableMatrix44D createGeneralRotationMatrix(const Angle& angle,
                                                       const Vector3D& axis, const Vector3D& point);
   
-  static MutableMatrix44D createModelMatrix(const MutableVector3D& pos, 
+  static MutableMatrix44D createModelMatrix(const MutableVector3D& pos,
                                             const MutableVector3D& center,
                                             const MutableVector3D& up);
   

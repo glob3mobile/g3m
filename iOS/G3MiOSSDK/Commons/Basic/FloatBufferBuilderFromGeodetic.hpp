@@ -57,7 +57,7 @@ public:
   }
   
   void add(const Geodetic3D& g) {
-    Vector3D vector = _planet->toCartesian(g);
+    const Vector3D vector = _planet->toCartesian(g);
     
     float x = (float) vector.x();
     float y = (float) vector.y();
@@ -79,7 +79,7 @@ public:
   }
   
   void add(const Geodetic2D& g) {
-    Vector3D vector = _planet->toCartesian(g);
+    const Vector3D vector = _planet->toCartesian(g);
     
     float x = (float) vector.x();
     float y = (float) vector.y();
