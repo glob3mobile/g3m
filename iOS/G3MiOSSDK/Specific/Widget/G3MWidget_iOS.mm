@@ -197,6 +197,7 @@
                                 logger,
                                 gl,
                                 texturesHandler,
+                                textureBuilder,
                                 downloader,
                                 planet,
                                 cameraConstraints,

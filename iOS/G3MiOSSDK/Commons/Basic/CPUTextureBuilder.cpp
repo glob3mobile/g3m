@@ -8,6 +8,36 @@
 
 #include "CPUTextureBuilder.hpp"
 
+const GLImage* CPUTextureBuilder::createTextureFromImages(GL * gl,  
+                                       const IFactory* factory,
+                                       GLFormat format,
+                                       const IImage* image,
+                                       int width,
+                                       int height) const{
+  
+  if (image == NULL) {
+    
+    ILogger::instance()->logWarning("Creating blank GLImage");
+    int imageBytes = 4* width*height;
+    unsigned char* data = new unsigned char[imageBytes];
+    for (int i = 0; i < imageBytes; i++) {
+      data[i] = 255; //WHITE
+    }
+    
+    IByteBuffer *bb = factory->createByteBuffer(data, imageBytes);
+    GLImage* glImage = new GLImage(RGBA, bb, width, height);
+    
+    return glImage;
+  } else{  
+    
+    IByteBuffer* bb = image->createByteBufferRGBA8888(width, height);
+    GLImage* glImage = new GLImage(RGBA, bb, width, height);
+    return glImage;
+  }
+  
+  
+}
+
 const GLImage* CPUTextureBuilder::createTextureFromImages(GL * gl, 
                                                           const IFactory* factory,
                                                           GLFormat format,

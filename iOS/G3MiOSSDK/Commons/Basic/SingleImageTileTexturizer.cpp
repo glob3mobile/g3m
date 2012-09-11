@@ -11,6 +11,7 @@
 #include "TextureMapping.hpp"
 #include "TexturedMesh.hpp"
 #include "Planet.hpp"
+#include "TextureBuilder.hpp"
 
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 
@@ -41,12 +42,17 @@ Mesh* SingleImageTileTexturizer::texturize(const RenderContext* rc,
   _renderContext = rc; //SAVING CONTEXT
   
   if (!_texId.isValid()) {
-    _texId = rc->getTexturesHandler()->getGLTextureId(_image,
-                                                      TextureSpec("SINGLE_IMAGE_TEX",
-                                                                  _image->getWidth(),
-                                                                  _image->getHeight(),
-                                                                  true)
-                                                      );
+    
+    const GLImage* glImage = rc->getTextureBuilder()->createTextureFromImages(rc->getGL(), 
+                                                                              rc->getFactory(), 
+                                                                              RGBA, _image, 
+                                                                              _image->getWidth(), 
+                                                                              _image->getHeight());
+    
+    _texId = rc->getTexturesHandler()->getGLTextureId(glImage, "SINGLE_IMAGE_TEX", false);
+    
+    rc->getFactory()->deleteImage(_image);
+    delete glImage;
     
     if (!_texId.isValid()) {
       rc->getLogger()->logError("Can't upload texture to GPU");
