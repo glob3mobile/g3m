@@ -413,9 +413,11 @@ void GL::disableTexture2D() {
 
 void GL::enableVertexColor(IFloatBuffer* colors, float intensity) {
   
-  //if (!_enableVertexColor) {
-  _gl->uniform1i(Uniforms.EnableColorPerVertex, 1);
-  _gl->enableVertexAttribArray(Attributes.Color);
+  if (!_enableVertexColor) {
+    _gl->uniform1i(Uniforms.EnableColorPerVertex, 1);
+    _gl->enableVertexAttribArray(Attributes.Color);
+    _enableVertexColor = true;
+  }
   
   if ((_colors != colors) ||
       (_colors->timestamp() != colors->timestamp()) ) {
@@ -424,16 +426,14 @@ void GL::enableVertexColor(IFloatBuffer* colors, float intensity) {
   }
   
   _gl->uniform1f(Uniforms.ColorPerVertexIntensity, intensity);
-  //_enableVertexColor = true;
-  //}
 }
 
 void GL::disableVertexColor() {
-  //  if (_enableVertexColor) {
-  _gl->disableVertexAttribArray(Attributes.Color);
-  _gl->uniform1i(Uniforms.EnableColorPerVertex, 0);
-  //    _enableVertexColor = false;
-  //  }
+  if (_enableVertexColor) {
+    _gl->disableVertexAttribArray(Attributes.Color);
+    _gl->uniform1i(Uniforms.EnableColorPerVertex, 0);
+    _enableVertexColor = false;
+  }
 }
 
 void GL::enableVerticesPosition() {

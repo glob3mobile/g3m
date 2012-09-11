@@ -42,7 +42,7 @@ private:
   // state handling
   bool _enableTextures;
   bool _enableTexture2D;
-//  bool _enableVertexColor;
+  bool _enableVertexColor;
   bool _enableVerticesPosition;
   bool _enableFlatColor;
   bool _enableDepthTest;
@@ -78,7 +78,6 @@ private:
   
   const GLTextureId getGLTextureId();
   
-  
 //  int _lastTextureWidth;
 //  int _lastTextureHeight;
 //#ifdef C_CODE
@@ -102,7 +101,7 @@ public:
   _gl(gl),
   _enableTextures(false),
   _enableTexture2D(false),
-//  _enableVertexColor(false),
+  _enableVertexColor(false),
   _enableVerticesPosition(false),
 //  _enableFlatColor(false),
   _enableBlend(false),
@@ -128,9 +127,6 @@ public:
   _flatColorB(0),
   _flatColorA(0),
   _flatColorIntensity(0),
-//  _lastTextureWidth(-1),
-//  _lastTextureHeight(-1),
-//  _lastImageData(NULL),
   _billboardTexCoord(NULL)
   {
   }
