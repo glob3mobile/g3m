@@ -417,13 +417,10 @@ public class MutableMatrix44D
 	final double winy = pixel3D.y();
 	final double winz = pixel3D.z();
   
-	double[] in = new double[4];
-	double[] out = new double[4];
-  
-	in[0] = (winx - viewport[0]) * 2 / viewport[2] - 1.0;
-	in[1] = (winy - viewport[1]) * 2 / viewport[3] - 1.0;
-	in[2] = 2 * winz - 1.0;
-	in[3] = 1.0;
+	final double in0 = (winx - viewport[0]) * 2 / viewport[2] - 1.0;
+	final double in1 = (winy - viewport[1]) * 2 / viewport[3] - 1.0;
+	final double in2 = 2 * winz - 1.0;
+	final double in3 = 1.0;
   
 	//Inverse
 	MutableMatrix44D m = inversed();
@@ -431,17 +428,19 @@ public class MutableMatrix44D
 	//To object coordinates
   
 	//Transformating point
-	out[0] = m._m00 * in[0] + m._m01 * in[1] + m._m02 * in[2] + m._m03 * in[3];
-	out[1] = m._m10 * in[0] + m._m11 * in[1] + m._m12 * in[2] + m._m13 * in[3];
-	out[2] = m._m20 * in[0] + m._m21 * in[1] + m._m22 * in[2] + m._m23 * in[3];
-	out[3] = m._m30 * in[0] + m._m31 * in[1] + m._m32 * in[2] + m._m33 * in[3];
+	final double out0 = m._m00 * in0 + m._m01 * in1 + m._m02 * in2 + m._m03 * in3;
+	final double out1 = m._m10 * in0 + m._m11 * in1 + m._m12 * in2 + m._m13 * in3;
+	final double out2 = m._m20 * in0 + m._m21 * in1 + m._m22 * in2 + m._m23 * in3;
+	final double out3 = m._m30 * in0 + m._m31 * in1 + m._m32 * in2 + m._m33 * in3;
   
-	if (out[3] == 0.0)
+	if (out3 == 0.0)
+	{
 	  return Vector3D.nan();
+	}
   
-	final double objx = out[0] / out[3];
-	final double objy = out[1] / out[3];
-	final double objz = out[2] / out[3];
+	final double objx = out0 / out3;
+	final double objy = out1 / out3;
+	final double objz = out2 / out3;
   
 	return new Vector3D(objx, objy, objz);
   }
@@ -450,30 +449,29 @@ public class MutableMatrix44D
 //ORIGINAL LINE: Vector2D project(const Vector3D& point, const int viewport[4]) const
   public final Vector2D project(Vector3D point, int[] viewport)
   {
-	double[] in = new double[4];
-	double[] out = new double[4];
-  
-	in[0] = point.x();
-	in[1] = point.y();
-	in[2] = point.z();
-	in[3] = 1.0f;
+	final double in0 = point.x();
+	final double in1 = point.y();
+	final double in2 = point.z();
+	final double in3 = 1.0;
   
 	//Transformating point
-	out[0] = _m00 * in[0] + _m01 * in[1] + _m02 * in[2] + _m03 * in[3];
-	out[1] = _m10 * in[0] + _m11 * in[1] + _m12 * in[2] + _m13 * in[3];
-	out[2] = _m20 * in[0] + _m21 * in[1] + _m22 * in[2] + _m23 * in[3];
-	out[3] = _m30 * in[0] + _m31 * in[1] + _m32 * in[2] + _m33 * in[3];
+	double out0 = _m00 * in0 + _m01 * in1 + _m02 * in2 + _m03 * in3;
+	double out1 = _m10 * in0 + _m11 * in1 + _m12 * in2 + _m13 * in3;
+	//double out2 = _m20 * in0 + _m21 * in1 + _m22 * in2 + _m23 * in3;
+	final double out3 = _m30 * in0 + _m31 * in1 + _m32 * in2 + _m33 * in3;
   
-	if (out[3] == 0.0)
+	if (out3 == 0.0)
+	{
 	  return Vector2D.nan();
+	}
   
-	out[0] /= out[3];
-	out[1] /= out[3];
-	out[2] /= out[3];
+	out0 /= out3;
+	out1 /= out3;
+	//out2 /= out3;
   
-	final double winx = viewport[0] + (1.0f + out[0]) * viewport[2] / 2.0;
-	final double winy = viewport[1] + (1.0f + out[1]) * viewport[3] / 2.0;
-	//double winz = (1.0f + in[2]) / 2.0f;
+	final double winx = viewport[0] + (1.0 + out0) * viewport[2] / 2.0;
+	final double winy = viewport[1] + (1.0 + out1) * viewport[3] / 2.0;
+	//double winz = (1.0 + in2) / 2.0;
 	return new Vector2D(winx, winy);
   }
 

@@ -166,7 +166,7 @@ public class Camera
   public final Vector2D point2Pixel(Vector3D point)
   {
 	int[] viewport = { 0, 0, _width, _height };
-	Vector2D p = getModelViewMatrix().project(point, viewport);
+	final Vector2D p = getModelViewMatrix().project(point, viewport);
   
 	if (p.isNan())
 	{
@@ -287,7 +287,13 @@ public class Camera
 //ORIGINAL LINE: const Frustum* const getFrustumInModelCoordinates() const
   public final Frustum getFrustumInModelCoordinates()
   {
-	return getFrustumMC();
+//    return getFrustumMC();
+	if (_dirtyFlags._frustumMC)
+	{
+	  _dirtyFlags._frustumMC = false;
+	  _frustumInModelCoordinates = getFrustum().transformedBy_P(getModelMatrix().transposed());
+	}
+	return _frustumInModelCoordinates;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -533,18 +539,6 @@ public class Camera
 	return _frustum;
   }
 
-  // frustum in Model coordinates
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Frustum* getFrustumMC() const
-  private Frustum getFrustumMC()
-  {
-	if (_dirtyFlags._frustumMC)
-	{
-	  _dirtyFlags._frustumMC = false;
-	  _frustumInModelCoordinates = getFrustum().transformedBy_P(getModelMatrix().transposed());
-	}
-	return _frustumInModelCoordinates;
-  }
 
   private int __temporal_test_for_clipping;
 
