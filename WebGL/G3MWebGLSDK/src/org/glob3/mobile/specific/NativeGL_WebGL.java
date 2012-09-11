@@ -26,7 +26,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.user.client.DOM;
 
 
-public class GL_WebGL
+public class NativeGL_WebGL
          extends
             INativeGL {
 
@@ -38,7 +38,7 @@ public class GL_WebGL
    public static List<JavaScriptObject> _programList;
 
 
-   public GL_WebGL() {
+   public NativeGL_WebGL() {
       webGLStart();
    }
 

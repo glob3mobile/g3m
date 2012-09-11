@@ -176,12 +176,12 @@ public class G3MWidget_WebGL
       final IFactory factory = new Factory_WebGL();
       final ILogger logger = new Logger_WebGL(LogLevel.InfoLevel);
       final IStorage storage = new NullStorage();
-      final IDownloader downloader = new Downloader_WebGL();
+      final IDownloader downloader = new Downloader_WebGL(8);
       final IStringUtils stringUtils = new StringUtils_WebGL();
       // TODO add delayMillis to G3MWidget constructor
       final IThreadUtils threadUtils = new ThreadUtils_WebGL(this, _delayMillis);
 
-      final GL_WebGL nGL = new GL_WebGL();
+      final NativeGL_WebGL nGL = new NativeGL_WebGL();
       final GL gl = new GL(nGL);
 
       final CompositeRenderer composite = new CompositeRenderer();
@@ -260,7 +260,7 @@ public class G3MWidget_WebGL
       // Logger
       final ILogger logger = new Logger_WebGL(LogLevel.ErrorLevel);
 
-      final INativeGL gl = new GL_WebGL();
+      final INativeGL gl = new NativeGL_WebGL();
 
       //      final TexturesHandler texturesHandler = new TexturesHandler();
 

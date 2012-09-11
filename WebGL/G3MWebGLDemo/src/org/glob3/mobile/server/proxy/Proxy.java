@@ -81,7 +81,6 @@ public class Proxy
          }
 
          // Set maxAge
-         System.out.println("setting maxage");
          connection.setRequestProperty("Cache-Control", "max-age=" + CACHE_DURATION_IN_SECOND);
 
          // Send request
