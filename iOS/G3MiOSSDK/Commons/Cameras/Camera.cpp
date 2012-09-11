@@ -270,7 +270,6 @@ void Camera::applyTransform(const MutableMatrix44D& M) {
   setCartesianPosition( _position.transformedBy(M, 1.0) );
   setCenter( _center.transformedBy(M, 1.0) );
   
-  int ask_agustin_0;
   setUp(  _up.transformedBy(M, 0.0) );
   
   //_dirtyFlags.setAll(true);

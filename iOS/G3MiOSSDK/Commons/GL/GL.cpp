@@ -167,8 +167,6 @@ void GL::color(float r, float g, float b, float a) {
     _flatColorB = b;
     _flatColorA = a;
   }
-  
-  //  _gl->uniform4f(Uniforms.FlatColor, r, g, b, a);
 }
 
 void GL::transformTexCoords(float scaleX,
@@ -210,8 +208,6 @@ void GL::disablePolygonOffset() {
 }
 
 void GL::vertexPointer(int size, int stride, IFloatBuffer* vertices) {
-  int __TODO_text_cache_buffer;
-  
   if ((_vertices != vertices) ||
       (_vertices->timestamp() != vertices->timestamp()) ) {
     
@@ -325,90 +321,8 @@ const GLTextureId GL::uploadTexture(const GLImage* glImage, bool generateMipmap)
   
   
 }
-//
-//const GLTextureId GL::uploadTexture(const IImage* image,
-//                                    int textureWidth, int textureHeight,
-//                                    bool generateMipmap) {
-//  const GLTextureId texId = getGLTextureId();
-//  if (texId.isValid()) {
-//    const bool lastImageDataIsValid = ((_lastTextureWidth == textureWidth) &&
-//                                       (_lastTextureHeight == textureHeight) &&
-//                                       (_lastImageData != NULL));
-//    
-//#ifdef C_CODE
-//    unsigned char* imageData;
-//    
-//    if (lastImageDataIsValid) {
-//      imageData = _lastImageData;
-//    }
-//    else {
-//      imageData = new unsigned char[textureWidth * textureHeight * 4];
-//      if (_lastImageData != NULL) {
-//        delete [] _lastImageData;
-//      }
-//      _lastImageData = imageData;
-//      _lastTextureWidth = textureWidth;
-//      _lastTextureHeight = textureHeight;
-//    }
-//    
-//    image->fillWithRGBA8888(imageData, textureWidth, textureHeight);
-//    
-//    _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);
-//    _gl->pixelStorei(Unpack, 1);
-//    
-//    _gl->bindTexture(Texture2D, texId.getGLTextureId());
-//    _gl->texParameteri(Texture2D, MinFilter, Linear);
-//    _gl->texParameteri(Texture2D, MagFilter, Linear);
-//    _gl->texParameteri(Texture2D, WrapS, ClampToEdge);
-//    _gl->texParameteri(Texture2D, WrapT, ClampToEdge);
-//    _gl->texImage2D(Texture2D, 0, RGBA, textureWidth, textureHeight, 0, RGBA, UnsignedByte, imageData);
-//    
-//    if (generateMipmap) {
-//      _gl->generateMipmap(Texture2D);
-//    }
-//#endif
-//    
-//#ifdef JAVA_CODE
-//    byte[] imageData;
-//    
-//    if (lastImageDataIsValid) {
-//      imageData = _lastImageData;
-//    }
-//    else {
-//      imageData = new byte[textureWidth * textureHeight * 4];
-//      _lastImageData = imageData;
-//      _lastTextureWidth = textureWidth;
-//      _lastTextureHeight = textureHeight;
-//    }
-//    
-//    image.fillWithRGBA8888(imageData, textureWidth, textureHeight);
-//    
-//    _gl.blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
-//    _gl.pixelStorei(GLAlignment.Unpack, 1);
-//    
-//    _gl.bindTexture(GLTextureType.Texture2D, texId.getGLTextureId());
-//    _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MinFilter, GLTextureParameterValue.Linear);
-//    _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MagFilter, GLTextureParameterValue.Linear);
-//    _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapS, GLTextureParameterValue.ClampToEdge);
-//    _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapT, GLTextureParameterValue.ClampToEdge);
-//    _gl.texImage2D(GLTextureType.Texture2D, 0, GLFormat.RGBA, textureWidth, textureHeight, 0, GLFormat.RGBA, GLType.UnsignedByte, imageData);
-//    
-//    if (generateMipmap) {
-//      _gl.generateMipmap(GLTextureType.Texture2D);
-//    }
-//#endif
-//    
-//  }
-//  else {
-//    printf("can't get a valid texture id\n");
-//  }
-//  
-//  return texId;
-//}
 
 void GL::setTextureCoordinates(int size, int stride, IFloatBuffer* texcoord) {
-  int __TODO_cache_buffer;
-  
   if ((_textureCoordinates != texcoord) ||
       (_textureCoordinates->timestamp() != texcoord->timestamp()) ) {
     _gl->vertexAttribPointer(Attributes.TextureCoord, size, false, stride, texcoord);
@@ -427,13 +341,6 @@ void GL::bindTexture(const GLTextureId& textureId) {
 IFloatBuffer* GL::getBillboardTexCoord() {
   
   if (_billboardTexCoord == NULL) {
-    //  const static float texcoord[] = {
-    //    1, 1,
-    //    1, 0,
-    //    0, 1,
-    //    0, 0
-    //  };
-    
     FloatBufferBuilderFromCartesian2D texCoor;
     texCoor.add(1,1);
     texCoor.add(1,0);
@@ -510,7 +417,6 @@ void GL::enableVertexColor(IFloatBuffer* colors, float intensity) {
   _gl->uniform1i(Uniforms.EnableColorPerVertex, 1);
   _gl->enableVertexAttribArray(Attributes.Color);
   
-  int __TODO_cache_buffer;
   if ((_colors != colors) ||
       (_colors->timestamp() != colors->timestamp()) ) {
     _gl->vertexAttribPointer(Attributes.Color, 4, false, 0, colors);

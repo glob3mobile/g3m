@@ -189,33 +189,10 @@ public:
   
   static MutableMatrix44D invalid() {
     return MutableMatrix44D(false);
-    
-//    return MutableMatrix44D(GMath.NanD(), GMath.NanD(), GMath.NanD(), GMath.NanD(),
-//                            GMath.NanD(), GMath.NanD(), GMath.NanD(), GMath.NanD(),
-//                            GMath.NanD(), GMath.NanD(), GMath.NanD(), GMath.NanD(),
-//                            GMath.NanD(), GMath.NanD(), GMath.NanD(), GMath.NanD());
   }
   
   bool isValid() const {
     return _isValid;
-    
-//    if (GMath.isNan(_m00)) return false;
-//    if (GMath.isNan(_m01)) return false;
-//    if (GMath.isNan(_m02)) return false;
-//    if (GMath.isNan(_m03)) return false;
-//    if (GMath.isNan(_m10)) return false;
-//    if (GMath.isNan(_m11)) return false;
-//    if (GMath.isNan(_m12)) return false;
-//    if (GMath.isNan(_m13)) return false;
-//    if (GMath.isNan(_m20)) return false;
-//    if (GMath.isNan(_m21)) return false;
-//    if (GMath.isNan(_m22)) return false;
-//    if (GMath.isNan(_m23)) return false;
-//    if (GMath.isNan(_m30)) return false;
-//    if (GMath.isNan(_m31)) return false;
-//    if (GMath.isNan(_m32)) return false;
-//    if (GMath.isNan(_m33)) return false;
-//    return true;
   }
   
   //  
