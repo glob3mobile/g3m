@@ -200,15 +200,15 @@ Vector2D MutableMatrix44D::project(const Vector3D& point, const int viewport[4])
   out[2] = _m20 * in[0] + _m21 * in[1] + _m22 * in[2] + _m23 * in[3];
   out[3] = _m30 * in[0] + _m31 * in[1] + _m32 * in[2] + _m33 * in[3];
 
-  if (out[3] == 0.0f)
+  if (out[3] == 0.0)
     return Vector2D::nan();
   
   out[0] /= out[3];
   out[1] /= out[3];
   out[2] /= out[3];
   
-  const double winx = viewport[0] + (1.0f + out[0]) * viewport[2] / 2.0f;
-  const double winy = viewport[1] + (1.0f + out[1]) * viewport[3] / 2.0f;
+  const double winx = viewport[0] + (1.0f + out[0]) * viewport[2] / 2.0;
+  const double winy = viewport[1] + (1.0f + out[1]) * viewport[3] / 2.0;
   //double winz = (1.0f + in[2]) / 2.0f;
   return Vector2D(winx, winy);
 }
