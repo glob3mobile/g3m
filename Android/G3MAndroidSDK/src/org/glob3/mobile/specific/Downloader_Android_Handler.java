@@ -10,7 +10,7 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.glob3.mobile.generated.ByteBuffer;
+import org.glob3.mobile.generated.ByteArrayWrapper;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.IDownloadListener;
 import org.glob3.mobile.generated.IDownloader;
@@ -199,7 +199,7 @@ public class Downloader_Android_Handler {
             final boolean dataIsValid = (_data != null) && (_statusCode == 200);
 
             if (dataIsValid) {
-               final ByteBuffer buffer = new ByteBuffer(_data, _data.length);
+               final ByteArrayWrapper buffer = new ByteArrayWrapper(_data, _data.length);
                final Response response = new Response(_url, buffer);
                final Iterator<ListenerEntry> iter = _listeners.iterator();
 
@@ -226,7 +226,7 @@ public class Downloader_Android_Handler {
                else {
                   Log.e(TAG, "Error runWithDownloader: statusCode=" + _statusCode + ", url=" + _url.getPath());
                }
-               final ByteBuffer buffer = new ByteBuffer(null, 0);
+               final ByteArrayWrapper buffer = new ByteArrayWrapper(null, 0);
                final Response response = new Response(_url, buffer);
                final Iterator<ListenerEntry> iter = _listeners.iterator();
 

@@ -4,14 +4,14 @@ package org.glob3.mobile.specific;
 
 import java.io.ByteArrayOutputStream;
 
-import org.glob3.mobile.generated.ByteBuffer;
+import org.glob3.mobile.generated.ByteArrayWrapper;
+import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.Rectangle;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.util.Log;
 
 
 public class Image_Android
@@ -99,19 +99,18 @@ public class Image_Android
 
 
    @Override
-   public ByteBuffer getEncodedImage() {
+   public ByteArrayWrapper getEncodedImage() {
       final ByteArrayOutputStream baos = new ByteArrayOutputStream();
       _image.compress(Bitmap.CompressFormat.PNG, 100, baos);
       final byte[] b = baos.toByteArray();
 
-      return new ByteBuffer(b, b.length);
+      return new ByteArrayWrapper(b, b.length);
    }
 
-
    @Override
-   public void fillWithRGBA8888(final byte[] data,
-                                final int width,
-                                final int height) {
+   public IByteBuffer createByteBufferRGBA8888(int width,
+                                               int height) {
+      
       //Scaling
       Bitmap scaledImage = null;
       if ((_image.getWidth() != width) || (_image.getHeight() != height)) {
@@ -126,10 +125,7 @@ public class Image_Android
       scaledImage.getPixels(pixels, 0, scaledImage.getWidth(), 0, 0, scaledImage.getWidth(), scaledImage.getHeight());
 
       //To RGBA
-      if (data.length != (pixels.length * 4)) {
-         Log.d("", "FAILURE FillWithRGBA");
-         return;
-      }
+      byte[] data = new byte[pixels.length * 4];
       int p = 0;
       for (final int color : pixels) {
          data[p++] = (byte) ((color >> 16) & 0xFF); //R
@@ -137,6 +133,8 @@ public class Image_Android
          data[p++] = (byte) (color & 0xFF); //B
          data[p++] = (byte) (color >>> 24); //A
       }
+      
+      return new ByteBuffer_Android(data);
    }
 
 }

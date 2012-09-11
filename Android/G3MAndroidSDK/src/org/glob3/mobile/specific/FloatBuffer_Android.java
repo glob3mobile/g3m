@@ -3,7 +3,6 @@ package org.glob3.mobile.specific;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 
 import org.glob3.mobile.generated.IFloatBuffer;
 
