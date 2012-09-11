@@ -462,8 +462,6 @@ public class GL
 	final GLTextureId texId = getGLTextureId();
 	if (texId.isValid())
 	{
-  
-  
   	_gl.blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
   	_gl.pixelStorei(GLAlignment.Unpack, 1);
   
@@ -472,12 +470,11 @@ public class GL
   	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MagFilter, GLTextureParameterValue.Linear);
   	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapS, GLTextureParameterValue.ClampToEdge);
   	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapT, GLTextureParameterValue.ClampToEdge);
-  	_gl->texImage2D(glImage);
+  	_gl.texImage2D(glImage);
   
   	if (generateMipmap) {
   	  _gl.generateMipmap(GLTextureType.Texture2D);
   	}
-  
 	}
 	else
 	{

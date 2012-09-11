@@ -44,7 +44,8 @@ public class CPUTextureBuilder extends TextureBuilder
 	{
   
 	  IByteBuffer bb = image.createByteBufferRGBA8888(width, height);
-	  GLImage glImage = new GLImage(RGBA, bb, width, height);
+	  GLImage glImage = new GLImage(GLFormat.RGBA, bb, width, height);
+  
 	  return glImage;
 	}
   }
@@ -68,7 +69,7 @@ public class CPUTextureBuilder extends TextureBuilder
 	  }
   
 	  IByteBuffer bb = factory.createByteBuffer(data, imageBytes);
-	  GLImage glImage = new GLImage(RGBA, bb, width, height);
+	  GLImage glImage = new GLImage(GLFormat.RGBA, bb, width, height);
   
 	  return glImage;
 	}
@@ -124,7 +125,7 @@ public class CPUTextureBuilder extends TextureBuilder
 	  }
   
 	  IByteBuffer bb = factory.createByteBuffer(data, imageBytes);
-	  GLImage glImage = new GLImage(RGBA, bb, width, height);
+	  GLImage glImage = new GLImage(GLFormat.RGBA, bb, width, height);
   
 	  return glImage;
 	}
