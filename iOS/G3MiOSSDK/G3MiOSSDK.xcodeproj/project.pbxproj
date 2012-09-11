@@ -183,6 +183,7 @@
 		D88B5E2815C15C850083A43F /* Plane.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC41E39D15B1FD1300B5581C /* Plane.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D88B5E5215C162AF0083A43F /* G3MWidget.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D88B5E5115C162AF0083A43F /* G3MWidget.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D892FBCC15C930CC00E69254 /* NativeGL2_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D892FBCB15C930CC00E69254 /* NativeGL2_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
+		D89DA20815FF3886008CD5F5 /* IByteBuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8E17DD515FE2ABF00C980E6 /* IByteBuffer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8A5601F15AEF64E00035086 /* IndexedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A5601B15AEF64E00035086 /* IndexedMesh.cpp */; };
 		D8A5602015AEF64E00035086 /* IndexedMesh.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8A5601C15AEF64E00035086 /* IndexedMesh.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8A5602115AEF64E00035086 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A5601D15AEF64E00035086 /* Mesh.cpp */; };
@@ -414,7 +415,7 @@
 		D8E0EC1215C1B1BB0010A68A /* StaticImageLayer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StaticImageLayer.hpp; sourceTree = "<group>"; };
 		D8E0EC1415C1B1CD0010A68A /* StaticImageLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StaticImageLayer.cpp; sourceTree = "<group>"; };
 		D8E17DD215FE135400C980E6 /* GLImage.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLImage.hpp; sourceTree = "<group>"; };
-		D8E17DD515FE2ABF00C980E6 /* IByteBuffer.hpp */ = {isa = PBXFileReference; name = IByteBuffer.hpp; path = Commons/Interfaces/IByteBuffer.hpp; sourceTree = "<group>"; };
+		D8E17DD515FE2ABF00C980E6 /* IByteBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IByteBuffer.hpp; path = Commons/Interfaces/IByteBuffer.hpp; sourceTree = "<group>"; };
 		D8E17DDC15FE2B4F00C980E6 /* ByteBuffer_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ByteBuffer_iOS.hpp; path = Specific/Derived/ByteBuffer_iOS.hpp; sourceTree = "<group>"; };
 		D8EEF3B51577924D003FEB5E /* libG3MiOSSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libG3MiOSSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8EEF3B81577924D003FEB5E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -839,6 +840,7 @@
 				CC596F2315C46D4F008FC230 /* Camera.hpp in Headers */,
 				383BD3841577EDDB0012AC53 /* ES2Renderer.h in Headers */,
 				383BD3981577EE500012AC53 /* Context.hpp in Headers */,
+				D89DA20815FF3886008CD5F5 /* IByteBuffer.hpp in Headers */,
 				383BD39D1577EE500012AC53 /* TouchEvent.hpp in Headers */,
 				383BD3AC1577EE5A0012AC53 /* Angle.hpp in Headers */,
 				383BD3AE1577EE5A0012AC53 /* Ellipsoid.hpp in Headers */,

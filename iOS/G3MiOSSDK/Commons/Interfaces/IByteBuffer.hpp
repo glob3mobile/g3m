@@ -14,13 +14,13 @@ public:
   
   virtual ~IByteBuffer() { }
   
-  virtual int size() const;
+  virtual int size() const = 0;
   
-  virtual int timestamp() const;
+  virtual int timestamp() const = 0;
   
-  virtual unsigned char get(int i) const;
+  virtual unsigned char get(int i) const = 0;
   
-  virtual void put(int i, unsigned char value);
+  virtual void put(int i, unsigned char value) = 0;
 };
 
 

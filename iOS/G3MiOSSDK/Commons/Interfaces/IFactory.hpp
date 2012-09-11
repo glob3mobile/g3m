@@ -11,10 +11,6 @@
 
 #include "ILogger.hpp"
 
-#include "ByteArrayWrapper.hpp"
-
-#include "IByteBuffer.hpp"
-
 #ifdef C_CODE
 #define GFactory (*IFactory::instance())
 #else
@@ -25,16 +21,19 @@ class ITimer;
 class IImage;
 class IFloatBuffer;
 class IIntBuffer;
+class IByteBuffer;
+class ByteArrayWrapper;
+class ILogger;
 
 class IFactory {
   static IFactory* _instance;
   
 public:
-  static void setInstance(IFactory* logger) {
+  static void setInstance(IFactory* factory) {
     if (_instance != NULL) {
       printf("Warning, ILooger instance set two times\n");
     }
-    _instance = logger;
+    _instance = factory;
   }
   
   static IFactory* instance() {
