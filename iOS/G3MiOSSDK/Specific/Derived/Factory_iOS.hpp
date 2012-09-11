@@ -13,6 +13,8 @@
 
 #include "Timer_iOS.hpp"
 #include "Image_iOS.hpp"
+
+#include "ByteBuffer_iOS.hpp"
 #include "FloatBuffer_iOS.hpp"
 #include "IntBuffer_iOS.hpp"
 
@@ -46,13 +48,13 @@ public:
     return new Image_iOS(image);
   }
   
-  IImage* createImageFromData(const ByteBuffer* buffer) const {
+  virtual IImage* createImageFromData(const ByteArrayWrapper* buffer) const {
     NSData* data = [NSData dataWithBytes: buffer->getData()
                                   length: buffer->getLength()];
     
     UIImage* image = [UIImage imageWithData:data];
     if (!image) {
-      printf("Can't read image from ByteBuffer of %d bytes\n", buffer->getLength());
+      printf("Can't read image from ByteArrayWrapper of %d bytes\n", buffer->getLength());
       return NULL;
     }
     
@@ -63,6 +65,9 @@ public:
     delete image;
   }
   
+  virtual IByteBuffer* createByteBuffer(unsigned char data[], int length) const{
+    return new ByteBuffer_iOS(data, length);
+  }
   
   IFloatBuffer* createFloatBuffer(int size) const {
     return new FloatBuffer_iOS(size);
@@ -70,6 +75,7 @@ public:
   
   IIntBuffer* createIntBuffer(int size) const {
     return new IntBuffer_iOS(size);
+
   }
   
 };

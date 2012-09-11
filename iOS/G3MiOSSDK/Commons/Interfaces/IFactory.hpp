@@ -11,8 +11,6 @@
 
 #include "ILogger.hpp"
 
-#include "ByteBuffer.hpp"
-
 #ifdef C_CODE
 #define GFactory (*IFactory::instance())
 #else
@@ -23,16 +21,19 @@ class ITimer;
 class IImage;
 class IFloatBuffer;
 class IIntBuffer;
+class IByteBuffer;
+class ByteArrayWrapper;
+class ILogger;
 
 class IFactory {
   static IFactory* _instance;
   
 public:
-  static void setInstance(IFactory* logger) {
+  static void setInstance(IFactory* factory) {
     if (_instance != NULL) {
       printf("Warning, ILooger instance set two times\n");
     }
-    _instance = logger;
+    _instance = factory;
   }
   
   static IFactory* instance() {
@@ -49,15 +50,17 @@ public:
   
   virtual IImage* createImageFromFileName(const std::string filename) const = 0;
   
-  virtual IImage* createImageFromData(const ByteBuffer* buffer) const = 0;
+  virtual IImage* createImageFromData(const ByteArrayWrapper* buffer) const = 0;
   
   virtual IImage* createImageFromSize(int width, int height) const = 0;
-  
+
   virtual void deleteImage(const IImage* image) const = 0;
   
   virtual IFloatBuffer* createFloatBuffer(int size) const = 0;
   
   virtual IIntBuffer* createIntBuffer(int size) const = 0;
+  
+  virtual IByteBuffer* createByteBuffer(unsigned char data[], int length) const = 0;
   
 };
 

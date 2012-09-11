@@ -11,6 +11,8 @@
 #include "Geodetic2D.hpp"
 #include "Planet.hpp"
 #include "TexturesHandler.hpp"
+#include "IFactory.hpp"
+#include "TextureBuilder.hpp"
 
 #include "FloatBufferBuilderFromGeodetic.hpp"
 #include "IntBufferBuilder.hpp"
@@ -111,7 +113,19 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   //TEXTURED
   GLTextureId texId = GLTextureId::invalid();
   if (true){
-    texId = rc->getTexturesHandler()->getGLTextureIdFromFileName(_textureFilename, _texWidth, _texHeight, true);
+    
+    IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
+    const GLImage* glImage = rc->getTextureBuilder()->createTextureFromImages(rc->getGL(), 
+                                                                              rc->getFactory(), 
+                                                                              RGBA, image, 
+                                                                              _texWidth, 
+                                                                              _texHeight);
+    
+    texId = rc->getTexturesHandler()->getGLTextureId(glImage, _textureFilename, false);
+    
+    rc->getFactory()->deleteImage(image);
+    delete glImage;
+    
     if (!texId.isValid()) {
       rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
       return false;

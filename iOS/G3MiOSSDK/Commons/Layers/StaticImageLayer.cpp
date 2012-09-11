@@ -41,8 +41,8 @@ std::vector<Petition*> StaticImageLayer::getMapPetitions(const RenderContext* rc
   
   if (_storage != NULL) {
     if (_storage->contains(id)) {
-      const ByteBuffer* buffer = _storage->read(id);
-      pet->setByteBuffer(buffer);        //FILLING DATA
+      const ByteArrayWrapper* buffer = _storage->read(id);
+      pet->setByteArrayWrapper(buffer);        //FILLING DATA
       res.push_back(pet);
       return res;
     }
@@ -61,8 +61,8 @@ std::vector<Petition*> StaticImageLayer::getMapPetitions(const RenderContext* rc
   
   const IImage* subImage = _image->subImage(r);
   
-  const ByteBuffer* buffer = subImage->getEncodedImage(); //Image Encoding PNG
-  pet->setByteBuffer(buffer);        //FILLING DATA
+  const ByteArrayWrapper* buffer = subImage->getEncodedImage(); //Image Encoding PNG
+  pet->setByteArrayWrapper(buffer);        //FILLING DATA
   delete subImage;
   
   res.push_back(pet);

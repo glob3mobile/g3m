@@ -18,10 +18,10 @@ public:
   }
   
   void save(const URL& url,
-            const ByteBuffer& buffer) {
+            const ByteArrayWrapper& buffer) {
   }
   
-  const ByteBuffer* read(const URL& url) {
+  const ByteArrayWrapper* read(const URL& url) {
     return NULL;
   }
 };

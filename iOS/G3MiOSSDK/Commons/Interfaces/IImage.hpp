@@ -11,7 +11,9 @@
 
 #include <vector>
 #include "Rectangle.hpp"
-#include "ByteBuffer.hpp"
+#include "ByteArrayWrapper.hpp"
+
+class IByteBuffer;
 
 class IImage {
 public:
@@ -30,10 +32,9 @@ public:
   
   virtual IImage* subImage(const Rectangle& rect) const = 0;
   
-  virtual ByteBuffer* getEncodedImage() const = 0;
+  virtual ByteArrayWrapper* getEncodedImage() const = 0;
   
-  virtual void fillWithRGBA8888(unsigned char data[],
-                                int width, int height) const = 0;
+  virtual IByteBuffer* createByteBufferRGBA8888(int width, int height) const = 0;
   
 };
 

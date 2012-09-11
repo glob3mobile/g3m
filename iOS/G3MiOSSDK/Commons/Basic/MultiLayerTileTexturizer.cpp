@@ -14,6 +14,7 @@
 #include "LeveledTexturedMesh.hpp"
 #include "Rectangle.hpp"
 #include "TexturesHandler.hpp"
+#include "TextureBuilder.hpp"
 
 #include "TileRenderer.hpp"
 #include "TileTessellator.hpp"
@@ -167,6 +168,8 @@ private:
   
   const IFactory*  _factory;
   TexturesHandler* _texturesHandler;
+  TextureBuilder*  _textureBuilder;
+  GL*              _gl;
   
   const TilesRenderParameters* _parameters;
   IDownloader*                 _downloader;
@@ -198,6 +201,8 @@ public:
   _texturizer(texturizer),
   _factory(rc->getFactory()),
   _texturesHandler(rc->getTexturesHandler()),
+  _textureBuilder(rc->getTextureBuilder()),
+  _gl(rc->getGL()),
   _parameters(parameters),
   _downloader(downloader),
   _tile(tile),
@@ -295,7 +300,7 @@ public:
       
       for (int i = 0; i < _petitionsCount; i++) {
         Petition* petition       = _petitions[i];
-        const ByteBuffer* buffer = petition->getByteBuffer();
+        const ByteArrayWrapper* buffer = petition->getByteArrayWrapper();
         
         if (buffer != NULL) {
           const IImage* image = _factory->createImageFromData(buffer);
@@ -318,13 +323,17 @@ public:
       
       if (images.size() > 0) {
 //        int __TESTING_mipmapping;
-        const bool isMipmap = false;
-        const GLTextureId glTextureId = _texturesHandler->getGLTextureId(images,
-                                                                         rectangles,
-                                                                         TextureSpec(petitionsID,
-                                                                                     textureWidth,
-                                                                                     textureHeight,
-                                                                                     isMipmap));
+        const bool isMipmap = false;  
+        const GLImage* glImage = _textureBuilder->createTextureFromImages(_gl, 
+                                                                          _factory, 
+                                                                          RGBA, 
+                                                                          images, 
+                                                                          rectangles,
+                                                                          textureWidth, textureHeight);
+        
+        const GLTextureId glTextureId = _texturesHandler->getGLTextureId(glImage, petitionsID, isMipmap);
+        delete glImage;
+        
         if (glTextureId.isValid()) {
           if (!_mesh->setGLTextureIdForLevel(0, glTextureId)) {
             _texturesHandler->releaseGLTextureId(glTextureId);
@@ -397,14 +406,14 @@ public:
   }
   
   void stepDownloaded(int position,
-                      const ByteBuffer* buffer) {
+                      const ByteArrayWrapper* buffer) {
     if (_canceled) {
       return;
     }
     checkIsPending(position);
     
     _status[position]  = STATUS_DOWNLOADED;
-    _petitions[position]->setByteBuffer(buffer->copy());
+    _petitions[position]->setByteArrayWrapper(buffer->copy());
     
     stepDone();
   }
@@ -518,7 +527,7 @@ TileTextureBuilderHolder::~TileTextureBuilderHolder() {
 
 void BuilderDownloadStepDownloadListener::onDownload(const Response* response) {
 //  _onDownload++;
-  _builder->stepDownloaded(_position, response->getByteBuffer());
+  _builder->stepDownloaded(_position, response->getByteArrayWrapper());
 }
 
 void BuilderDownloadStepDownloadListener::onError(const Response* response) {

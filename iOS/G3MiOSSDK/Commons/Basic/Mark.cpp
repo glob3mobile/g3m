@@ -10,6 +10,7 @@
 #include "Camera.hpp"
 #include "GL.hpp"
 #include "TexturesHandler.hpp"
+#include "TextureBuilder.hpp"
 
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 
@@ -31,10 +32,10 @@ Vector3D* Mark::getCartesianPosition(const Planet* planet) {
 }
 
 IFloatBuffer* Mark::getVertices(const Planet* planet) {
-
+  
   if (_vertices == NULL) {
     const Vector3D* pos = getCartesianPosition(planet);
-
+    
 #ifdef C_CODE
     FloatBufferBuilderFromCartesian3D vertex(NoCenter, Vector3D::zero());
 #else
@@ -56,7 +57,7 @@ void Mark::render(const RenderContext* rc,
   const Planet* planet = rc->getPlanet();
   
   const Vector3D cameraPosition = camera->getCartesianPosition();
-//  const Vector3D markPosition = planet->toCartesian(_position);
+  //  const Vector3D markPosition = planet->toCartesian(_position);
   const Vector3D* markPosition = getCartesianPosition(planet);
   
   const Vector3D markCameraVector = markPosition->sub(cameraPosition);
@@ -73,7 +74,18 @@ void Mark::render(const RenderContext* rc,
       gl->transformTexCoords(scale, tr);
       
       if (!_textureId.isValid()) {
-        _textureId = rc->getTexturesHandler()->getGLTextureIdFromFileName(_textureFilename, 128, 128, false);
+        
+        IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
+        
+        const GLImage* glImage = rc->getTextureBuilder()->createTextureFromImages(rc->getGL(), 
+                                                                                  rc->getFactory(), 
+                                                                                  RGBA, image, 
+                                                                                  128, 128);
+        
+        _textureId = rc->getTexturesHandler()->getGLTextureId(glImage, _textureFilename, false);
+        
+        rc->getFactory()->deleteImage(image);
+        delete glImage;
       }
       
       if (!_textureId.isValid()) {
@@ -81,7 +93,7 @@ void Mark::render(const RenderContext* rc,
         return;
       }
       
-//    rc->getLogger()->logInfo(" Visible   << %f %f", minDist, distanceToCamera);
+      //    rc->getLogger()->logInfo(" Visible   << %f %f", minDist, distanceToCamera);
       gl->drawBillBoard(_textureId,
                         getVertices(planet),
                         camera->getViewPortRatio());

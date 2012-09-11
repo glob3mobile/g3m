@@ -14,19 +14,28 @@
 class CPUTextureBuilder:public TextureBuilder
 {
 public:
-  const GLTextureId createTextureFromImages(GL * gl,
-                                            const std::vector<const IImage*> images,
-                                            int width,
-                                            int height,
-                                            bool generateMipmap) const;
   
-  const GLTextureId createTextureFromImages(GL * gl,
-                                            const IFactory* factory,
-                                            const std::vector<const IImage*> images,
-                                            const std::vector<const Rectangle*> rectangles,
-                                            int width,
-                                            int height,
-                                            bool generateMipmap) const;
+  const GLImage* createTextureFromImages(GL * gl,  
+                                         const IFactory* factory,
+                                         GLFormat format,
+                                         const IImage* image,
+                                         int width,
+                                         int height) const;
+  
+  const GLImage* createTextureFromImages(GL * gl, 
+                                         const IFactory* factory,
+                                         GLFormat format,
+                                         const std::vector<const IImage*> images,
+                                         int width,
+                                         int height) const;
+  
+  const GLImage* createTextureFromImages(GL * gl,
+                                         const IFactory* factory,
+                                         GLFormat format,
+                                         const std::vector<const IImage*> images,
+                                         const std::vector<const Rectangle*> rectangles,
+                                         int width,
+                                         int height) const;
   
 };
 

@@ -14,22 +14,33 @@
 #include "IFactory.hpp"
 #include <vector>
 
+#include "GLImage.hpp"
+
 class TextureBuilder
 {
 public:
-  virtual const GLTextureId createTextureFromImages(GL * gl,
-                                                    const std::vector<const IImage*> images,
-                                                    int width,
-                                                    int height,
-                                                    bool generateMipmap) const = 0;
   
-  virtual const GLTextureId createTextureFromImages(GL * gl,
-                                                    const IFactory* factory,
-                                                    const std::vector<const IImage*> images,
-                                                    const std::vector<const Rectangle*> rectangles,
-                                                    int width,
-                                                    int height,
-                                                    bool generateMipmap) const = 0;
+  virtual const GLImage* createTextureFromImages(GL * gl,  
+                                                 const IFactory* factory,
+                                                 GLFormat format,
+                                                 const IImage* image,
+                                                 int width,
+                                                 int height) const = 0;
+  
+  virtual const GLImage* createTextureFromImages(GL * gl,  
+                                                 const IFactory* factory,
+                                                 GLFormat format,
+                                                 const std::vector<const IImage*> images,
+                                                 int width,
+                                                 int height) const = 0;
+  
+  virtual const GLImage* createTextureFromImages(GL * gl,
+                                                 const IFactory* factory,
+                                                 GLFormat format,
+                                                 const std::vector<const IImage*> images,
+                                                 const std::vector<const Rectangle*> rectangles,
+                                                 int width,
+                                                 int height) const = 0;
   virtual ~TextureBuilder() {}
 };
 

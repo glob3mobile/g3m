@@ -31,6 +31,7 @@ class IThreadUtils;
 
 class ICameraConstrainer;
 class FrameTasksExecutor;
+class TextureBuilder;
 
 class G3MWidget;
 
@@ -63,6 +64,7 @@ public:
                            ILogger*            logger,
                            GL*                 gl,
                            TexturesHandler*    texturesHandler,
+                           TextureBuilder*     textureBuilder,
                            IDownloader*        downloader,
                            const Planet*       planet,
                            std::vector<ICameraConstrainer*> cameraConstraint,
@@ -127,6 +129,7 @@ private:
   Camera*          _nextCamera;
   IDownloader*     _downloader;
   TexturesHandler* _texturesHandler;
+  TextureBuilder*  _textureBuilder;
   const Color      _backgroundColor;
   
   ITimer*          _timer;
@@ -152,6 +155,7 @@ private:
             ILogger*            logger,
             GL*                 gl,
             TexturesHandler*    texturesHandler,
+            TextureBuilder*     textureBuilder,
             IDownloader*        downloader,
             const Planet*       planet,
             std::vector<ICameraConstrainer*> cameraConstraint,

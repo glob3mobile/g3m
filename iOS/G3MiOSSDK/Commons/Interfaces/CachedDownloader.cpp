@@ -52,7 +52,7 @@ public:
     if (!_cacheStorage->contains(_url)) {
       _downloader->countSave();
       
-      const ByteBuffer* bb = response->getByteBuffer();
+      const ByteArrayWrapper* bb = response->getByteArrayWrapper();
       _cacheStorage->save(_url, *bb);
     }
   }
@@ -122,7 +122,7 @@ long long CachedDownloader::request(const URL& url,
                                     bool deleteListener) {
   _requestsCounter++;
   
-  const ByteBuffer* cachedBuffer = _cacheStorage->read(url);
+  const ByteArrayWrapper* cachedBuffer = _cacheStorage->read(url);
   if (cachedBuffer == NULL) {
     // cache miss
     return _downloader->request(url,

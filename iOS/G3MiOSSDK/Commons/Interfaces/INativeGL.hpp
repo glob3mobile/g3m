@@ -13,6 +13,7 @@
 
 class IFloatBuffer;
 class IIntBuffer;
+class GLImage;
 
 #include <vector>
 #include <string>
@@ -179,15 +180,17 @@ public:
                              GLTextureParameter par,
                              GLTextureParameterValue v) const = 0;
   
-  virtual void texImage2D(GLTextureType target,
-                          int         level,
-                          GLFormat    internalFormat,
-                          int         width,
-                          int         height,
-                          int         border,
-                          GLFormat    format,
-                          GLType      type,
-                          const void* data) const = 0;
+  virtual void texImage2D(const GLImage* glImage) const = 0;
+  
+  //  virtual void texImage2D(GLTextureType target,
+  //                          int         level,
+  //                          GLFormat    internalFormat,
+  //                          int         width,
+  //                          int         height,
+  //                          int         border,
+  //                          GLFormat    format,
+  //                          GLType      type,
+  //                          const void* data) const = 0;
   
   virtual void generateMipmap(GLTextureType target) const = 0;
   

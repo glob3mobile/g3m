@@ -160,7 +160,7 @@
   
   
   TextureBuilder* textureBuilder = new CPUTextureBuilder();
-  TexturesHandler* texturesHandler = new TexturesHandler(gl, factory, textureBuilder, false);
+  TexturesHandler* texturesHandler = new TexturesHandler(gl, factory, false);
   
   const Planet* planet = Planet::createEarth();
   
@@ -197,6 +197,7 @@
                                 logger,
                                 gl,
                                 texturesHandler,
+                                textureBuilder,
                                 downloader,
                                 planet,
                                 cameraConstraints,
@@ -279,10 +280,10 @@
 //        _onDownload++;
 //        BOOL isMainThread = [NSThread isMainThread];
 //        if (isMainThread) {
-//          NSLog(@"*** Main-Thread: Downloaded %d bytes ***", response->getByteBuffer()->getLength());
+//          NSLog(@"*** Main-Thread: Downloaded %d bytes ***", response->getByteArrayWrapper()->getLength());
 //        }
 //        else {
-//          NSLog(@"*** NOT IN Main-Thread: Downloaded %d bytes ***", response->getByteBuffer()->getLength());
+//          NSLog(@"*** NOT IN Main-Thread: Downloaded %d bytes ***", response->getByteArrayWrapper()->getLength());
 //        }
 //      }
 //
