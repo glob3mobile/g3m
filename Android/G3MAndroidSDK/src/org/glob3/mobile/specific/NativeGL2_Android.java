@@ -1,3 +1,5 @@
+
+
 package org.glob3.mobile.specific;
 
 import java.nio.FloatBuffer;
@@ -26,7 +28,9 @@ import org.glob3.mobile.generated.INativeGL;
 import android.opengl.GLES20;
 
 
-public class NativeGL2_Android extends INativeGL {
+public class NativeGL2_Android
+         extends
+            INativeGL {
 
    final int getBitField(final GLBufferType b) {
       switch (b) {
@@ -306,6 +310,7 @@ public class NativeGL2_Android extends INativeGL {
       GLES20.glPolygonOffset(factor, units);
    }
 
+
    @Override
    public void lineWidth(final float width) {
       GLES20.glLineWidth(width);
@@ -430,35 +435,28 @@ public class NativeGL2_Android extends INativeGL {
 
 
    @Override
-   public void vertexAttribPointer(int index,
-                                   int size,
-                                   boolean normalized,
-                                   int stride,
-                                   IFloatBuffer buffer) {
-      FloatBuffer fb = ((FloatBuffer_Android) buffer).getBuffer();
+   public void vertexAttribPointer(final int index,
+                                   final int size,
+                                   final boolean normalized,
+                                   final int stride,
+                                   final IFloatBuffer buffer) {
+      final FloatBuffer fb = ((FloatBuffer_Android) buffer).getBuffer();
       GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized, stride, fb);
    }
 
 
    @Override
-   public void drawElements(GLPrimitive mode,
-                            int count,
-                            IIntBuffer indices) {
-      IntBuffer indexBuffer = ((IntBuffer_Android) indices).getBuffer();
+   public void drawElements(final GLPrimitive mode,
+                            final int count,
+                            final IIntBuffer indices) {
+      final IntBuffer indexBuffer = ((IntBuffer_Android) indices).getBuffer();
       GLES20.glDrawElements(getEnum(mode), count, GLES20.GL_UNSIGNED_INT, indexBuffer);
    }
 
 
    @Override
-   public void texImage2D(GLImage glImage) {
-      GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 
-               0, 
-               getEnum(glImage.getFormat()),
-               glImage.getWidth(), 
-               glImage.getHeight(), 
-               0, 
-               getEnum(glImage.getFormat()),
-               GLES20.GL_UNSIGNED_BYTE, 
-               ((ByteBuffer_Android)glImage.getByteBuffer()).getBuffer());
+   public void texImage2D(final GLImage glImage) {
+      GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, getEnum(glImage.getFormat()), glImage.getWidth(), glImage.getHeight(), 0,
+               getEnum(glImage.getFormat()), GLES20.GL_UNSIGNED_BYTE, ((ByteBuffer_Android) glImage.getByteBuffer()).getBuffer());
    }
 }

@@ -67,8 +67,7 @@ public class GL2Shaders {
                                                  + "    gl_Position.x += (-0.05 + TextureCoord.x * 0.1) * gl_Position.w;"
                                                  + "    gl_Position.y -= (-0.05 + TextureCoord.y * 0.1) * gl_Position.w * ViewPortRatio;"
                                                  + "  }" + "  TextureCoordOut = TextureCoord;" + "  VertexColor = Color;"
-                                                 + "  gl_PointSize = PointSize;"
-                                                 + "}";
+                                                 + "  gl_PointSize = PointSize;" + "}";
 
 
    public static String getFragmentShader() {

@@ -107,10 +107,11 @@ public class Image_Android
       return new ByteArrayWrapper(b, b.length);
    }
 
+
    @Override
-   public IByteBuffer createByteBufferRGBA8888(int width,
-                                               int height) {
-      
+   public IByteBuffer createByteBufferRGBA8888(final int width,
+                                               final int height) {
+
       //Scaling
       Bitmap scaledImage = null;
       if ((_image.getWidth() != width) || (_image.getHeight() != height)) {
@@ -125,7 +126,7 @@ public class Image_Android
       scaledImage.getPixels(pixels, 0, scaledImage.getWidth(), 0, 0, scaledImage.getWidth(), scaledImage.getHeight());
 
       //To RGBA
-      byte[] data = new byte[pixels.length * 4];
+      final byte[] data = new byte[pixels.length * 4];
       int p = 0;
       for (final int color : pixels) {
          data[p++] = (byte) ((color >> 16) & 0xFF); //R
@@ -133,7 +134,7 @@ public class Image_Android
          data[p++] = (byte) (color & 0xFF); //B
          data[p++] = (byte) (color >>> 24); //A
       }
-      
+
       return new ByteBuffer_Android(data);
    }
 

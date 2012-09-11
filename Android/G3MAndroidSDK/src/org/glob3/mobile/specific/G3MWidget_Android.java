@@ -293,35 +293,35 @@ public class G3MWidget_Android
 
       final IStorage storage = new SQLiteStorage_Android("g3m.cache", this.getContext());
 
-//      //TESTING DB
-//      if (false) {
-//         final byte[] b = { 1, 0, 1 };
-//         final ByteBuffer bb = new ByteBuffer(b, b.length);
-//         final URL url = new URL("test");
-//         final URL url2 = new URL("test2");
-//
-//         if (storage.contains(url)) {
-//            final ByteBuffer bb2 = storage.read(url);
-//         }
-//
-//         storage.save(url, bb);
-//
-//         if (storage.contains(url)) {
-//            final ByteBuffer bb1 = storage.read(url);
-//         }
-//
-//         storage.save(url, bb);
-//
-//         if (storage.contains(url)) {
-//            final ByteBuffer bb2 = storage.read(url);
-//         }
-//
-//         if (storage.contains(url2)) {
-//            final ByteBuffer bb2 = storage.read(url2);
-//         }
-//
-//
-//      }
+      //      //TESTING DB
+      //      if (false) {
+      //         final byte[] b = { 1, 0, 1 };
+      //         final ByteBuffer bb = new ByteBuffer(b, b.length);
+      //         final URL url = new URL("test");
+      //         final URL url2 = new URL("test2");
+      //
+      //         if (storage.contains(url)) {
+      //            final ByteBuffer bb2 = storage.read(url);
+      //         }
+      //
+      //         storage.save(url, bb);
+      //
+      //         if (storage.contains(url)) {
+      //            final ByteBuffer bb1 = storage.read(url);
+      //         }
+      //
+      //         storage.save(url, bb);
+      //
+      //         if (storage.contains(url)) {
+      //            final ByteBuffer bb2 = storage.read(url);
+      //         }
+      //
+      //         if (storage.contains(url2)) {
+      //            final ByteBuffer bb2 = storage.read(url2);
+      //         }
+      //
+      //
+      //      }
 
 
       //		  IDownloader downloader = null;// new CachedDownloader(new Downloader_Android(8), storage);
@@ -375,24 +375,9 @@ public class G3MWidget_Android
 
       final IThreadUtils threadUtils = new ThreadUtils_Android(this);
 
-      _widget = G3MWidget.create(frameTasksExecutor, 
-               factory, 
-               stringUtils,
-               threadUtils, 
-               logger,
-               gl, 
-               texturesHandler, 
-               textureBuilder,
-               downloader,
-               planet, 
-               cameraConstraints, 
-               composite, 
-               busyRenderer, 
-               scheduler, 
-               width, height,
-               Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1),
-               true, 
-               false);
+      _widget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, logger, gl, texturesHandler,
+               textureBuilder, downloader, planet, cameraConstraints, composite, busyRenderer, scheduler, width, height,
+               Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false);
 
       _widget.setUserData(userData);
 

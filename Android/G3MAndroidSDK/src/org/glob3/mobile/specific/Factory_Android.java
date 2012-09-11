@@ -82,6 +82,7 @@ public class Factory_Android
    public void deleteImage(final IImage image) {
    }
 
+
    @Override
    public IImage createImageFromSize(final int width,
                                      final int height) {
@@ -92,19 +93,19 @@ public class Factory_Android
 
 
    @Override
-   public IFloatBuffer createFloatBuffer(int size) {
+   public IFloatBuffer createFloatBuffer(final int size) {
       return new FloatBuffer_Android(size);
    }
 
 
    @Override
-   public IIntBuffer createIntBuffer(int size) {
+   public IIntBuffer createIntBuffer(final int size) {
       return new IntBuffer_Android(size);
    }
 
 
    @Override
-   public IImage createImageFromData(ByteArrayWrapper buffer) {
+   public IImage createImageFromData(final ByteArrayWrapper buffer) {
       final Bitmap b = BitmapFactory.decodeByteArray(buffer.getData(), 0, buffer.getData().length);
       if (b == null) {
          ILogger.instance().logError("FACTORY", "Can't create image from data");
@@ -115,8 +116,8 @@ public class Factory_Android
 
 
    @Override
-   public IByteBuffer createByteBuffer(byte[] data,
-                                       int length) {
+   public IByteBuffer createByteBuffer(final byte[] data,
+                                       final int length) {
       return new ByteBuffer_Android(data);
    }
 
