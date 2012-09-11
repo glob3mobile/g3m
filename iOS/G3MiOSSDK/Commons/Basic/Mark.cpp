@@ -86,8 +86,6 @@ void Mark::render(const RenderContext* rc,
         
         rc->getFactory()->deleteImage(image);
         delete glImage;
-        
-        //_textureId = rc->getTexturesHandler()->getGLTextureIdFromFileName(_textureFilename, 128, 128, false);
       }
       
       if (!_textureId.isValid()) {

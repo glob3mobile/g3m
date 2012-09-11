@@ -323,14 +323,7 @@ public:
       
       if (images.size() > 0) {
 //        int __TESTING_mipmapping;
-        const bool isMipmap = false;
-//        const GLTextureId glTextureId = _texturesHandler->getGLTextureId(images,
-//                                                                         rectangles,
-//                                                                         TextureSpec(petitionsID,
-//                                                                                     textureWidth,
-//                                                                                     textureHeight,
-//                                                                                     isMipmap));
-//        
+        const bool isMipmap = false;  
         const GLImage* glImage = _textureBuilder->createTextureFromImages(_gl, 
                                                                           _factory, 
                                                                           RGBA, 

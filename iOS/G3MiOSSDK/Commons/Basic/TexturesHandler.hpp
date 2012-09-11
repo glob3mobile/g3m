@@ -160,23 +160,6 @@ public:
   
   ~TexturesHandler();
   
-//  const GLTextureId getGLTextureIdFromFileName(const std::string filename,
-//                                               int               textureWidth,
-//                                               int               textureHeight,
-//                                               const bool        isMipmap);
-  /*
-   const GLTextureId getGLTextureId(const std::vector<const IImage*> images,
-   const TextureSpec& textureSpec);
-   
-   const GLTextureId getGLTextureId(const std::vector<const IImage*> images,
-   const std::vector<const Rectangle*> rectangles,
-   const TextureSpec& textureSpec);
-   
-   
-   const GLTextureId getGLTextureId(const IImage* image,
-   const TextureSpec& textureSpec);
-   */
-  
   const GLTextureId getGLTextureId(const GLImage* glImage,
                                    const std::string& name,
                                    bool hasMipMap);

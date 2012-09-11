@@ -14,7 +14,6 @@ const GLImage* CPUTextureBuilder::createTextureFromImages(GL * gl,
                                        const IImage* image,
                                        int width,
                                        int height) const{
-  
   if (image == NULL) {
     
     ILogger::instance()->logWarning("Creating blank GLImage");
@@ -34,8 +33,6 @@ const GLImage* CPUTextureBuilder::createTextureFromImages(GL * gl,
     GLImage* glImage = new GLImage(RGBA, bb, width, height);
     return glImage;
   }
-  
-  
 }
 
 const GLImage* CPUTextureBuilder::createTextureFromImages(GL * gl, 

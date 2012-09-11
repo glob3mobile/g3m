@@ -36,8 +36,6 @@ bool BusyQuadRenderer::initMesh(const RenderContext* rc) {
   //TEXTURED
   GLTextureId texId = GLTextureId::invalid();
   if (true){
-//    texId = rc->getTexturesHandler()->getGLTextureIdFromFileName(_textureFilename, 256, 256, false);
-    
     IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
     
     const GLImage* glImage = rc->getTextureBuilder()->createTextureFromImages(rc->getGL(), 

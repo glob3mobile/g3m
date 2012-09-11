@@ -23,7 +23,7 @@ public:
   virtual const GLImage* createTextureFromImages(GL * gl,  
                                                  const IFactory* factory,
                                                  GLFormat format,
-                                                 const IImage* images,
+                                                 const IImage* image,
                                                  int width,
                                                  int height) const = 0;
   

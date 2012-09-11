@@ -126,7 +126,6 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
     rc->getFactory()->deleteImage(image);
     delete glImage;
     
-//    texId = rc->getTexturesHandler()->getGLTextureIdFromFileName(_textureFilename, _texWidth, _texHeight, true);
     if (!texId.isValid()) {
       rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
       return false;
