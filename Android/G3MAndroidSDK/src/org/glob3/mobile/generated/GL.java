@@ -70,7 +70,7 @@ public class GL
 
   private void loadModelView()
   {
-	float M = _modelView.getColumnMajorFloatArray();
+	float[] M = _modelView.getColumnMajorFloatArray();
 	_gl.uniformMatrix4fv(GlobalMembersGL.Uniforms.Modelview, 1, false, M);
   }
 
@@ -383,7 +383,7 @@ public class GL
 
   public final void setProjection(MutableMatrix44D projection)
   {
-	float M = projection.getColumnMajorFloatArray();
+	float[] M = projection.getColumnMajorFloatArray();
 	_gl.uniformMatrix4fv(GlobalMembersGL.Uniforms.Projection, 1, false, M);
   }
 

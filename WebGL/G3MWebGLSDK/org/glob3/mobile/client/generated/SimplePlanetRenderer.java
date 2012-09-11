@@ -121,7 +121,8 @@ public class SimplePlanetRenderer extends Renderer
 	{
   
 	  IImage image = rc.getFactory().createImageFromFileName(_textureFilename);
-	  final GLImage glImage = rc.getTextureBuilder().createTextureFromImages(rc.getGL(), rc.getFactory(), RGBA, image, _texWidth, _texHeight);
+  
+	  final GLImage glImage = rc.getTextureBuilder().createTextureFromImage(rc.getGL(), rc.getFactory(), GLFormat.RGBA, image, _texWidth, _texHeight);
   
 	  texId = rc.getTexturesHandler().getGLTextureId(glImage, _textureFilename, false);
   
@@ -160,12 +161,12 @@ public class SimplePlanetRenderer extends Renderer
 	}
   
 	IndexedMesh im = new IndexedMesh(GLPrimitive.TriangleStrip,
-  								true,
-  								Vector3D.zero(),
-  								ver,
-  								ind,
-  								flatColor,
-  								vertexColors);
+  								   true,
+  								   Vector3D.zero(),
+  								   ver,
+  								   ind,
+  								   flatColor,
+  								   vertexColors);
   
 	TextureMapping texMap = new SimpleTextureMapping(texId, texC, true);
   

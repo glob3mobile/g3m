@@ -163,7 +163,7 @@ public class TileTextureBuilder extends RCObject
 	  {
 //        int __TESTING_mipmapping;
 		final boolean isMipmap = false;
-		final GLImage glImage = _textureBuilder.createTextureFromImages(_gl, _factory, RGBA, images, rectangles, textureWidth, textureHeight);
+		final GLImage glImage = _textureBuilder.createTextureFromImages(_gl, _factory, GLFormat.RGBA, images, rectangles, textureWidth, textureHeight);
 
 		final GLTextureId glTextureId = _texturesHandler.getGLTextureId(glImage, petitionsID, isMipmap);
 		if (glImage != null)

@@ -38,7 +38,7 @@ public class BusyQuadRenderer extends Renderer implements EffectTarget
 	{
 	  IImage image = rc.getFactory().createImageFromFileName(_textureFilename);
   
-	  final GLImage glImage = rc.getTextureBuilder().createTextureFromImages(rc.getGL(), rc.getFactory(), RGBA, image, 128, 128);
+	  final GLImage glImage = rc.getTextureBuilder().createTextureFromImage(rc.getGL(), rc.getFactory(), RGBA, image, 128, 128);
   
 	  texId = rc.getTexturesHandler().getGLTextureId(glImage, _textureFilename, false);
   
