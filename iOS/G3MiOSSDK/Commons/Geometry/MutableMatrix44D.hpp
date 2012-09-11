@@ -24,6 +24,8 @@ class MutableVector3D;
 
 class MutableMatrix44D{
   
+private:
+  
   //_m23 -> row 2, column 3
   double _m00;
   double _m01; 
@@ -43,12 +45,15 @@ class MutableMatrix44D{
   double _m33;
   
   mutable float * _columnMajorFloatArray;
+  bool _isValid;
   
   //Contructor parameters in column major order
   MutableMatrix44D(double m00, double m10, double m20, double m30,
                    double m01, double m11, double m21, double m31,
                    double m02, double m12, double m22, double m32,
-                   double m03, double m13, double m23, double m33){
+                   double m03, double m13, double m23, double m33):
+  _isValid(true)
+  {
     _m00  = m00;
     _m01  = m01;
     _m02  = m02;
@@ -72,10 +77,18 @@ class MutableMatrix44D{
     _columnMajorFloatArray = NULL;
   }
   
+  MutableMatrix44D(bool isValid):
+  _isValid(isValid)
+  {
+    _columnMajorFloatArray = NULL;
+  }
+  
 public:
   
   //CONTRUCTORS
-  MutableMatrix44D() {
+  MutableMatrix44D():
+  _isValid(true)
+  {
     _m00  = 0.0;
     _m01  = 0.0;
     _m02  = 0.0;
@@ -99,7 +112,9 @@ public:
     _columnMajorFloatArray = NULL;
   }
   
-  MutableMatrix44D(const MutableMatrix44D &m){
+  MutableMatrix44D(const MutableMatrix44D &m):
+  _isValid(m._isValid)
+  {
     _m00  = m._m00;
     _m01  = m._m01;
     _m02  = m._m02;
@@ -139,30 +154,34 @@ public:
   }
   
   static MutableMatrix44D invalid() {
-    return MutableMatrix44D(GMath.NanD(), GMath.NanD(), GMath.NanD(), GMath.NanD(),
-                            GMath.NanD(), GMath.NanD(), GMath.NanD(), GMath.NanD(),
-                            GMath.NanD(), GMath.NanD(), GMath.NanD(), GMath.NanD(),
-                            GMath.NanD(), GMath.NanD(), GMath.NanD(), GMath.NanD());
+    return MutableMatrix44D(false);
+    
+//    return MutableMatrix44D(GMath.NanD(), GMath.NanD(), GMath.NanD(), GMath.NanD(),
+//                            GMath.NanD(), GMath.NanD(), GMath.NanD(), GMath.NanD(),
+//                            GMath.NanD(), GMath.NanD(), GMath.NanD(), GMath.NanD(),
+//                            GMath.NanD(), GMath.NanD(), GMath.NanD(), GMath.NanD());
   }
   
-  bool isValid() {
-    if (GMath.isNan(_m00)) return false;
-    if (GMath.isNan(_m01)) return false;
-    if (GMath.isNan(_m02)) return false;
-    if (GMath.isNan(_m03)) return false;
-    if (GMath.isNan(_m10)) return false;
-    if (GMath.isNan(_m11)) return false;
-    if (GMath.isNan(_m12)) return false;
-    if (GMath.isNan(_m13)) return false;
-    if (GMath.isNan(_m20)) return false;
-    if (GMath.isNan(_m21)) return false;
-    if (GMath.isNan(_m22)) return false;
-    if (GMath.isNan(_m23)) return false;
-    if (GMath.isNan(_m30)) return false;
-    if (GMath.isNan(_m31)) return false;
-    if (GMath.isNan(_m32)) return false;
-    if (GMath.isNan(_m33)) return false;
-    return true;
+  bool isValid() const {
+    return _isValid;
+    
+//    if (GMath.isNan(_m00)) return false;
+//    if (GMath.isNan(_m01)) return false;
+//    if (GMath.isNan(_m02)) return false;
+//    if (GMath.isNan(_m03)) return false;
+//    if (GMath.isNan(_m10)) return false;
+//    if (GMath.isNan(_m11)) return false;
+//    if (GMath.isNan(_m12)) return false;
+//    if (GMath.isNan(_m13)) return false;
+//    if (GMath.isNan(_m20)) return false;
+//    if (GMath.isNan(_m21)) return false;
+//    if (GMath.isNan(_m22)) return false;
+//    if (GMath.isNan(_m23)) return false;
+//    if (GMath.isNan(_m30)) return false;
+//    if (GMath.isNan(_m31)) return false;
+//    if (GMath.isNan(_m32)) return false;
+//    if (GMath.isNan(_m33)) return false;
+//    return true;
   }
   
   //  
