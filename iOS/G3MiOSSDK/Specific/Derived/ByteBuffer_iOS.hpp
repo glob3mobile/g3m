@@ -14,23 +14,19 @@
 class ByteBuffer_iOS : public IByteBuffer {
 private:
   const int _size;
-  unsigned char*    _values;
+  unsigned char* const _values;
   int       _timestamp;
   
 public:
   ByteBuffer_iOS(int size) :
+  _values(new unsigned char[size]),
   _size(size),
-  _timestamp(0)
-  {
-    _values = new unsigned char[size];
-  }
+  _timestamp(0){}
   
   ByteBuffer_iOS(unsigned char*  values, int size) :
+  _values(values),
   _size(size),
-  _timestamp(0)
-  {
-    _values = new unsigned char[size];
-  }
+  _timestamp(0){}
   
   ~ByteBuffer_iOS() {
     delete [] _values;
