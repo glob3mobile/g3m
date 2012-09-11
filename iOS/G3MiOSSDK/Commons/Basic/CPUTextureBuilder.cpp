@@ -34,7 +34,12 @@ const GLImage* CPUTextureBuilder::createTextureFromImage(GL * gl,
   } else{
     
     IByteBuffer* bb = image->createByteBufferRGBA8888(width, height);
+#ifdef C_CODE
     GLImage* glImage = new GLImage(RGBA, bb, width, height);
+#else
+    GLImage* glImage = new GLImage(GLFormat.RGBA, bb, width, height);
+#endif
+    
     return glImage;
   }
 }
@@ -58,7 +63,11 @@ const GLImage* CPUTextureBuilder::createTextureFromImages(GL * gl,
     }
     
     IByteBuffer *bb = factory->createByteBuffer(data, imageBytes);
+#ifdef C_CODE
     GLImage* glImage = new GLImage(RGBA, bb, width, height);
+#else
+    GLImage* glImage = new GLImage(GLFormat.RGBA, bb, width, height);
+#endif
     
     return glImage;
   } else{
@@ -112,7 +121,11 @@ const GLImage* CPUTextureBuilder::createTextureFromImages(GL * gl,
     }
     
     IByteBuffer *bb = factory->createByteBuffer(data, imageBytes);
+#ifdef C_CODE
     GLImage* glImage = new GLImage(RGBA, bb, width, height);
+#else
+    GLImage* glImage = new GLImage(GLFormat.RGBA, bb, width, height);
+#endif
     
     return glImage;
   } else{
