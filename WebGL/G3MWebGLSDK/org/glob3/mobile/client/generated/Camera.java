@@ -143,9 +143,7 @@ public class Camera
 	final int py = _height - (int) pixel.y();
 	final Vector3D pixel3D = new Vector3D(px, py, 0);
   
-	int[] viewport = { 0, 0, _width, _height };
-  
-	final Vector3D obj = getModelViewMatrix().unproject(pixel3D, viewport);
+	final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _width, _height);
 	if (obj.isNan())
 	{
 	  return obj;
@@ -165,8 +163,7 @@ public class Camera
 //ORIGINAL LINE: Vector2D point2Pixel(const Vector3D& point) const
   public final Vector2D point2Pixel(Vector3D point)
   {
-	int[] viewport = { 0, 0, _width, _height };
-	final Vector2D p = getModelViewMatrix().project(point, viewport);
+	final Vector2D p = getModelViewMatrix().project(point, 0, 0, _width, _height);
   
 	if (p.isNan())
 	{

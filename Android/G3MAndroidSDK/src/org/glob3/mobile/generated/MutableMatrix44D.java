@@ -407,8 +407,8 @@ public class MutableMatrix44D
    This function is intended to be used on a ModelView MutableMatrix44D. ModelView = Projection * Model
    */
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Vector3D unproject(const Vector3D& pixel3D, const int viewport[4]) const
-  public final Vector3D unproject(Vector3D pixel3D, int[] viewport)
+//ORIGINAL LINE: Vector3D unproject(const Vector3D& pixel3D, const int vpLeft, const int vpTop, const int vpWidth, const int vpHeight) const
+  public final Vector3D unproject(Vector3D pixel3D, int vpLeft, int vpTop, int vpWidth, int vpHeight)
   {
   
 	int TODO_Remove_UNPROJECT; //!!!!
@@ -417,8 +417,8 @@ public class MutableMatrix44D
 	final double winy = pixel3D.y();
 	final double winz = pixel3D.z();
   
-	final double in0 = (winx - viewport[0]) * 2 / viewport[2] - 1.0;
-	final double in1 = (winy - viewport[1]) * 2 / viewport[3] - 1.0;
+	final double in0 = (winx - vpLeft) * 2 / vpWidth - 1.0;
+	final double in1 = (winy - vpTop) * 2 / vpHeight - 1.0;
 	final double in2 = 2 * winz - 1.0;
 	final double in3 = 1.0;
   
@@ -446,8 +446,8 @@ public class MutableMatrix44D
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Vector2D project(const Vector3D& point, const int viewport[4]) const
-  public final Vector2D project(Vector3D point, int[] viewport)
+//ORIGINAL LINE: Vector2D project(const Vector3D& point, const int vpLeft, const int vpTop, const int vpWidth, const int vpHeight) const
+  public final Vector2D project(Vector3D point, int vpLeft, int vpTop, int vpWidth, int vpHeight)
   {
 	final double in0 = point.x();
 	final double in1 = point.y();
@@ -469,8 +469,8 @@ public class MutableMatrix44D
 	out1 /= out3;
 	//out2 /= out3;
   
-	final double winx = viewport[0] + (1.0 + out0) * viewport[2] / 2.0;
-	final double winy = viewport[1] + (1.0 + out1) * viewport[3] / 2.0;
+	final double winx = vpLeft + (1.0 + out0) * vpWidth / 2.0;
+	final double winy = vpTop + (1.0 + out1) * vpHeight / 2.0;
 	//double winz = (1.0 + in2) / 2.0;
 	return new Vector2D(winx, winy);
   }
