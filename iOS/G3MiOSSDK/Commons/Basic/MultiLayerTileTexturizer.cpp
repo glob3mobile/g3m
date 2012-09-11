@@ -324,12 +324,21 @@ public:
       if (images.size() > 0) {
 //        int __TESTING_mipmapping;
         const bool isMipmap = false;  
+#ifdef C_CODE
         const GLImage* glImage = _textureBuilder->createTextureFromImages(_gl, 
                                                                           _factory, 
                                                                           RGBA, 
                                                                           images, 
                                                                           rectangles,
                                                                           textureWidth, textureHeight);
+#else
+        const GLImage* glImage = _textureBuilder->createTextureFromImages(_gl, 
+                                                                          _factory, 
+                                                                          GLFormat.RGBA, 
+                                                                          images, 
+                                                                          rectangles,
+                                                                          textureWidth, textureHeight);
+#endif
         
         const GLTextureId glTextureId = _texturesHandler->getGLTextureId(glImage, petitionsID, isMipmap);
         delete glImage;

@@ -115,11 +115,19 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   if (true){
     
     IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
+#ifdef C_CODE    
     const GLImage* glImage = rc->getTextureBuilder()->createTextureFromImages(rc->getGL(), 
                                                                               rc->getFactory(), 
                                                                               RGBA, image, 
                                                                               _texWidth, 
                                                                               _texHeight);
+#else
+    const GLImage* glImage = rc->getTextureBuilder()->createTextureFromImages(rc->getGL(), 
+                                                                              rc->getFactory(), 
+                                                                              GLFormat.RGBA, image, 
+                                                                              _texWidth, 
+                                                                              _texHeight);
+#endif
     
     texId = rc->getTexturesHandler()->getGLTextureId(glImage, _textureFilename, false);
     

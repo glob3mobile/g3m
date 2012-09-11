@@ -111,12 +111,20 @@ bool GL::useProgram(unsigned int program) {
 }
 
 void GL::loadModelView() {
+#ifdef C_CODE
   float* M = _modelView.getColumnMajorFloatArray();
+#else
+  float[] M = _modelView.getColumnMajorFloatArray();
+#endif
   _gl->uniformMatrix4fv(Uniforms.Modelview, 1, false, M);
 }
 
 void GL::setProjection(const MutableMatrix44D &projection) {
+#ifdef C_CODE
   float* M = projection.getColumnMajorFloatArray();
+#else
+  float[] M = projection.getColumnMajorFloatArray();
+#endif
   _gl->uniformMatrix4fv(Uniforms.Projection, 1, false, M);
 }
 

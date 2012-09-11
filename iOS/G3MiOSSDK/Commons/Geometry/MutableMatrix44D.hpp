@@ -247,7 +247,11 @@ public:
     }
   }
   
+#ifdef C_CODE
   float* getColumnMajorFloatArray() const {
+#else
+  float[] getColumnMajorFloatArray() const {
+#endif
     if (_columnMajorFloatArray == NULL){
       _columnMajorFloatArray = new float[16];
       

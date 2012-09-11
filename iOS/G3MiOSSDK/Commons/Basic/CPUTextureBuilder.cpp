@@ -20,11 +20,16 @@ const GLImage* CPUTextureBuilder::createTextureFromImages(GL * gl,
     int imageBytes = 4* width*height;
     unsigned char* data = new unsigned char[imageBytes];
     for (int i = 0; i < imageBytes; i++) {
-      data[i] = 255; //WHITE
+      data[i] = (unsigned char) 255; //WHITE
     }
     
     IByteBuffer *bb = factory->createByteBuffer(data, imageBytes);
+    
+#ifdef C_CODE
     GLImage* glImage = new GLImage(RGBA, bb, width, height);
+#else
+    GLImage* glImage = new GLImage(GLFormat.RGBA, bb, width, height);
+#endif
     
     return glImage;
   } else{  
@@ -50,7 +55,7 @@ const GLImage* CPUTextureBuilder::createTextureFromImages(GL * gl,
     int imageBytes = 4* width*height;
     unsigned char* data = new unsigned char[imageBytes];
     for (int i = 0; i < imageBytes; i++) {
-      data[i] = 255; //WHITE
+      data[i] = (unsigned char) 255; //WHITE
     }
     
     IByteBuffer *bb = factory->createByteBuffer(data, imageBytes);
@@ -70,7 +75,12 @@ const GLImage* CPUTextureBuilder::createTextureFromImages(GL * gl,
     }
     
     IByteBuffer* bb = im->createByteBufferRGBA8888(width, height);
+    
+#ifdef C_CODE
     GLImage* glImage = new GLImage(RGBA, bb, width, height);
+#else
+    GLImage* glImage = new GLImage(GLFormat.RGBA, bb, width, height);
+#endif
     
     if (imagesSize > 1) {
       delete im;
@@ -99,7 +109,7 @@ const GLImage* CPUTextureBuilder::createTextureFromImages(GL * gl,
     int imageBytes = 4* width*height;
     unsigned char* data = new unsigned char[imageBytes];
     for (int i = 0; i < imageBytes; i++) {
-      data[i] = 255; //WHITE
+      data[i] = (unsigned char) 255; //WHITE
     }
     
     IByteBuffer *bb = factory->createByteBuffer(data, imageBytes);
@@ -131,7 +141,12 @@ const GLImage* CPUTextureBuilder::createTextureFromImages(GL * gl,
     }
     
     IByteBuffer* bb = base->createByteBufferRGBA8888(width, height);
+    
+#ifdef C_CODE
     GLImage* glImage = new GLImage(RGBA, bb, width, height);
+#else
+    GLImage* glImage = new GLImage(GLFormat.RGBA, bb, width, height);
+#endif
     
     if (rectangles.size() > 0 && base != images[0]) {
       delete base;
