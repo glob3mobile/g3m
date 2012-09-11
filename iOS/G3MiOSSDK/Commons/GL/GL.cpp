@@ -111,14 +111,12 @@ bool GL::useProgram(unsigned int program) {
 }
 
 void GL::loadModelView() {
-  static float M[16];
-  _modelView.copyToColumnMajorFloatArray(M);
+  float* M = _modelView.getColumnMajorFloatArray();
   _gl->uniformMatrix4fv(Uniforms.Modelview, 1, false, M);
 }
 
 void GL::setProjection(const MutableMatrix44D &projection) {
-  static float M[16];
-  projection.copyToColumnMajorFloatArray(M);
+  float* M = projection.getColumnMajorFloatArray();
   _gl->uniformMatrix4fv(Uniforms.Projection, 1, false, M);
 }
 

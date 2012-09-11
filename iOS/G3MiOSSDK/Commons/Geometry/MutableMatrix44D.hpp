@@ -42,11 +42,13 @@ class MutableMatrix44D{
   double _m32;
   double _m33;
   
+  mutable float * _columnMajorFloatArray;
+  
   //Contructor parameters in column major order
   MutableMatrix44D(double m00, double m10, double m20, double m30,
-         double m01, double m11, double m21, double m31,
-         double m02, double m12, double m22, double m32,
-         double m03, double m13, double m23, double m33){
+                   double m01, double m11, double m21, double m31,
+                   double m02, double m12, double m22, double m32,
+                   double m03, double m13, double m23, double m33){
     _m00  = m00;
     _m01  = m01;
     _m02  = m02;
@@ -66,10 +68,12 @@ class MutableMatrix44D{
     _m31  = m31;
     _m32  = m32;
     _m33  = m33;
+    
+    _columnMajorFloatArray = NULL;
   }
   
 public:
- 
+  
   //CONTRUCTORS
   MutableMatrix44D() {
     _m00  = 0.0;
@@ -91,6 +95,8 @@ public:
     _m31  = 0.0;
     _m32  = 0.0;
     _m33  = 0.0;
+    
+    _columnMajorFloatArray = NULL;
   }
   
   MutableMatrix44D(const MutableMatrix44D &m){
@@ -113,6 +119,14 @@ public:
     _m31  = m._m31;
     _m32  = m._m32;
     _m33  = m._m33;
+    
+    _columnMajorFloatArray = NULL;
+  }
+  
+  ~MutableMatrix44D(){
+    if (_columnMajorFloatArray != NULL){
+      delete[] _columnMajorFloatArray;
+    }
   }
   
   //SPECIAL MATRICES
@@ -126,9 +140,9 @@ public:
   
   static MutableMatrix44D invalid() {
     return MutableMatrix44D(GMath.NanD(), GMath.NanD(), GMath.NanD(), GMath.NanD(),
-                  GMath.NanD(), GMath.NanD(), GMath.NanD(), GMath.NanD(),
-                  GMath.NanD(), GMath.NanD(), GMath.NanD(), GMath.NanD(),
-                  GMath.NanD(), GMath.NanD(), GMath.NanD(), GMath.NanD());
+                            GMath.NanD(), GMath.NanD(), GMath.NanD(), GMath.NanD(),
+                            GMath.NanD(), GMath.NanD(), GMath.NanD(), GMath.NanD(),
+                            GMath.NanD(), GMath.NanD(), GMath.NanD(), GMath.NanD());
   }
   
   bool isValid() {
@@ -150,8 +164,8 @@ public:
     if (GMath.isNan(_m33)) return false;
     return true;
   }
-
-//  
+  
+  //  
   //OPERATIONS
   
   MutableMatrix44D multiply(const MutableMatrix44D& that) const;
@@ -203,26 +217,32 @@ public:
     }
   }
   
-  void copyToColumnMajorFloatArray(float M[16]) const {
-    M[ 0] = (float) _m00;
-    M[ 1] = (float) _m10;
-    M[ 2] = (float) _m20;
-    M[ 3] = (float) _m30;
+  float* getColumnMajorFloatArray() const {
     
-    M[ 4] = (float) _m01;
-    M[ 5] = (float) _m11;
-    M[ 6] = (float) _m21;
-    M[ 7] = (float) _m31;
-    
-    M[ 8] = (float) _m02;
-    M[ 9] = (float) _m12;
-    M[10] = (float) _m22;
-    M[11] = (float) _m32;
-    
-    M[12] = (float) _m03;
-    M[13] = (float) _m13;
-    M[14] = (float) _m23;
-    M[15] = (float) _m33;
+    if (_columnMajorFloatArray == NULL){
+      
+      _columnMajorFloatArray = new float[16];
+      _columnMajorFloatArray[ 0] = (float) _m00;
+      _columnMajorFloatArray[ 1] = (float) _m10;
+      _columnMajorFloatArray[ 2] = (float) _m20;
+      _columnMajorFloatArray[ 3] = (float) _m30;
+      
+      _columnMajorFloatArray[ 4] = (float) _m01;
+      _columnMajorFloatArray[ 5] = (float) _m11;
+      _columnMajorFloatArray[ 6] = (float) _m21;
+      _columnMajorFloatArray[ 7] = (float) _m31;
+      
+      _columnMajorFloatArray[ 8] = (float) _m02;
+      _columnMajorFloatArray[ 9] = (float) _m12;
+      _columnMajorFloatArray[10] = (float) _m22;
+      _columnMajorFloatArray[11] = (float) _m32;
+      
+      _columnMajorFloatArray[12] = (float) _m03;
+      _columnMajorFloatArray[13] = (float) _m13;
+      _columnMajorFloatArray[14] = (float) _m23;
+      _columnMajorFloatArray[15] = (float) _m33;
+    }
+    return _columnMajorFloatArray;
   }
   
   //OTHER OPERATIONS
