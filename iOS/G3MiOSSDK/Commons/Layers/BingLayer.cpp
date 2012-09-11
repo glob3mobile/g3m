@@ -9,6 +9,7 @@
 #include "BingLayer.hpp"
 #include "Tile.hpp"
 #include "Petition.hpp"
+#include "IMathUtils.hpp"
 
 #include <sstream>
 #include <iostream>
@@ -26,6 +27,8 @@ std::vector<Petition*> BingLayer::getMapPetitions(const RenderContext* rc,
   }
   
   const Sector sector = tileSector.intersection(_sector);
+  
+  
   
   
   //Server name
@@ -144,7 +147,7 @@ URL BingLayer::getFeatureInfoURL(const Geodetic2D& g,
                                 const IFactory* factory,
                                 const Sector& tileSector,
                                 int width, int height) const {
-  return URL::null();
+  return URL::nullURL();
   
 }
 
@@ -153,6 +156,7 @@ int* BingLayer::getTileXY(const Geodetic2D latLon, const int level)const{
   
   
   //LatLon to Pixels XY
+  IMathUtils *math = IMathUtils::instance();
   unsigned int mapSize = (unsigned int) 256 << level;
   double lonDeg = latLon.longitude().degrees();
   double latDeg = latLon.latitude().degrees();
@@ -164,8 +168,8 @@ int* BingLayer::getTileXY(const Geodetic2D latLon, const int level)const{
   }
   
   double x = (lonDeg +180.0)/360;
-  double sinLat = sin(latDeg*M_PI/180.0);
-  double y = 0.5-log((1+sinLat)/(1-sinLat))/(4.0*M_PI);
+  double sinLat = math->sin(latDeg*math->pi()/180.0);
+  double y = 0.5-math->log((1+sinLat)/(1-sinLat))/(4.0*math->pi());
   
   x = x * mapSize +0.5;
   y = y * mapSize +0.5;
@@ -220,9 +224,9 @@ std::string BingLayer::getQuadKey(const int tileXY[], const int level)const{
 Sector BingLayer::getBingTileAsSector(const int tileXY[], const int level)const{
   
   
-  
+  IMathUtils *math = IMathUtils::instance();
   Geodetic2D topLeft = getLatLon(tileXY, level);
-  int maxTile = ((int)pow(2, level))-1;
+  int maxTile = ((int)math->pow((double)2, (double)level))-1;
   
   Angle lowerLon = topLeft.longitude();
   Angle upperLat = topLeft.latitude();
@@ -259,6 +263,8 @@ Sector BingLayer::getBingTileAsSector(const int tileXY[], const int level)const{
 
 Geodetic2D BingLayer::getLatLon(const int tileXY[], const int level)const{
   
+  IMathUtils *math = IMathUtils::instance();
+  
   int pixelX = tileXY[0]*256;
   int pixelY = tileXY[1]*256;
   
@@ -271,7 +277,7 @@ Geodetic2D BingLayer::getLatLon(const int tileXY[], const int level)const{
   double x = (((double)pixelX)/((double)mapSize)) - 0.5;
   double y = 0.5 - (((double)pixelY)/((double)mapSize));
   
-  double latDeg = 90.0 - 360.0 * atan(exp(-y*2.0*M_PI)) / M_PI;
+  double latDeg = 90.0 - 360.0 * math->atan(math->exp(-y*2.0*math->pi())) / math->pi();
   double lonDeg = 360.0 * x;
   
   return *new Geodetic2D(Angle::fromDegrees(latDeg), Angle::fromDegrees(lonDeg));

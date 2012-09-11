@@ -90,6 +90,9 @@ public:
   virtual double log10(double v) const = 0;
   virtual float log10(float v) const = 0;
   
+  virtual double log(double v) const = 0;
+  virtual float log(float v) const = 0;
+  
   virtual int maxInt() const = 0;
   virtual int minInt() const = 0;
   virtual double maxDouble() const = 0;

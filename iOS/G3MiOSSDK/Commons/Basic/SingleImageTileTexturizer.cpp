@@ -22,17 +22,18 @@ IFloatBuffer* SingleImageTileTexturizer::createTextureCoordinates(const RenderCo
   
   //double originShift = 2 * M_PI *6378137.0 /2.0;
   //const double originShift = 6378137.0;
+  IMathUtils *math = IMathUtils::instance();
   
   for (int i = 0; i < mesh->getVertexCount(); i++) {
     const Vector3D pos = mesh->getVertex(i);
     
     const Geodetic2D g = rc->getPlanet()->toGeodetic2D(pos);
     
-<<<<<<< HEAD
+//<<<<<<< HEAD
     if (_isMercatorImage){
       
       const double latRad = g.latitude().radians();
-      const double sec = 1.0/(cos(g.latitude().radians()));
+      const double sec = 1.0/(math->cos(g.latitude().radians()));
       
       //double tLatRad = 2*atan(exp(latRad)) - M_PI/2.0;
       
@@ -41,12 +42,13 @@ IFloatBuffer* SingleImageTileTexturizer::createTextureCoordinates(const RenderCo
       //double tLatRad = atanh(sin(latRad));
       //double tLatRad = asinh(tan(latRad));
       
-      double tLatRad = log(tan(M_PI/4.0)+latRad/2.0);
+      
+      double tLatRad = math->log(math->tan(math->pi()/4.0)+latRad/2.0);
       
       tLatRad = tLatRad*sec;
       std::cout<<" Lat: "<<g.latitude().degrees()<<"\n";
       std::cout<<"tLatRad: "<<tLatRad<<"\n";
-      double limit = 85.5 * M_PI/180.0;
+      double limit = 85.5 * math->pi()/180.0;
       //std::cout<<"limit: "<<limit<<"\n";
       if (tLatRad > limit) {
         tLatRad = limit;
@@ -58,23 +60,29 @@ IFloatBuffer* SingleImageTileTexturizer::createTextureCoordinates(const RenderCo
       
       Geodetic2D mercg = *new Geodetic2D(Angle::fromRadians(tLatRad),g.longitude());
       //const Vector3D n = rc->getPlanet()->geodeticSurfaceNormal(mercg);
-      const Vector3D m = rc->getPlanet()->toVector3D(mercg);
+      const Vector3D m = rc->getPlanet()->toCartesian(mercg);
       const Vector3D n = rc->getPlanet()->centricSurfaceNormal(m);
       
     
       
-      const double s = atan2(n.y(), n.x()) / (M_PI * 2) + 0.5;
+      const double s = math->atan2(n.y(), n.x()) / (math->pi() * 2) + 0.5;
       
       //double t = (tLatRad*sec + M_PI/2.0)/M_PI ;
-      double t = asin(n.z()) / M_PI + 0.5 ;
-      texCoors.push_back(MutableVector2D(s, 1-t));
+      double t = GMath.asin(n.z()) / math->pi() + 0.5 ;
+      //texCoors.push_back(MutableVector2D(s, 1-t));
+      texCoors.add((float)s, (float)(1.0-t));
       
     }
     else {
       const Vector3D n = rc->getPlanet()->geodeticSurfaceNormal(g);
-      const double s = atan2(n.y(), n.x()) / (M_PI * 2) + 0.5;
-      double t = asin(n.z()) / M_PI + 0.5 ;
-      texCoors.push_back(MutableVector2D(s, 1-t));
+      //const double s = atan2(n.y(), n.x()) / (M_PI * 2) + 0.5;
+      //double t = asin(n.z()) / M_PI + 0.5 ;
+      //texCoors.push_back(MutableVector2D(s, 1-t));
+      
+      const double s = math->atan2(n.y(), n.x()) / (GMath.pi() * 2) + 0.5;
+      const double t = math->asin(n.z()) / math->pi() + 0.5;
+      
+      texCoors.add((float)s, (float)(1.0-t));
     }
     
     /*const double seq = 1.0/(cos(g.latitude().radians()));
@@ -150,12 +158,12 @@ IFloatBuffer* SingleImageTileTexturizer::createTextureCoordinates(const RenderCo
     
     
     
-=======
+/*=======
     const double s = GMath.atan2(n.y(), n.x()) / (GMath.pi() * 2) + 0.5;
     const double t = GMath.asin(n.z()) / GMath.pi() + 0.5;
     
     texCoors.add((float)s, (float)(1.0-t));
->>>>>>> android-port
+>>>>>>> android-port*/
   }
   
   return texCoors.create();

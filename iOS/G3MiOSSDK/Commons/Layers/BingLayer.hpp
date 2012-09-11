@@ -15,6 +15,7 @@
 const static double _originShift = 20037508.342789244;
 const static double _initialResolution = _originShift*256.0;
 
+
 class BingLayer:public Layer{
 
 private:
