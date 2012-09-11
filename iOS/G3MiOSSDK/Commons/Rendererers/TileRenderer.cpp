@@ -20,18 +20,21 @@
 TileRenderer::~TileRenderer() {
   clearTopLevelTiles();
   
+#ifdef C_CODE
   delete _tessellator;
   delete _texturizer;
   delete _parameters;
   
   delete _lastSplitTimer;
-  //  delete _lastTexturizerTimer;
+#endif
 }
 
 void TileRenderer::clearTopLevelTiles() {
   for (int i = 0; i < _topLevelTiles.size(); i++) {
     Tile* tile = _topLevelTiles[i];
+#ifdef C_CODE
     delete tile;
+#endif
   }
   
   _topLevelTiles.clear();
@@ -64,7 +67,7 @@ void TileRenderer::createTopLevelTiles(const InitializationContext* ic) {
     }
   }
   
-  ic->getLogger()->logInfo("Created %i top level tiles", _topLevelTiles.size());
+  ic->getLogger()->logInfo("Created %d top level tiles", _topLevelTiles.size());
   
   _topTilesJustCreated = true;
 }
@@ -78,13 +81,7 @@ void TileRenderer::initialize(const InitializationContext* ic) {
   }
   _lastSplitTimer      = ic->getFactory()->createTimer();
   
-  //  if (_lastTexturizerTimer != NULL) {
-  //    delete _lastTexturizerTimer;
-  //  }
-  //  _lastTexturizerTimer = ic->getFactory()->createTimer();
-  
   _texturizer->initialize(ic, _parameters);
-  
 }
 
 bool TileRenderer::isReadyToRender(const RenderContext *rc) {
@@ -116,9 +113,8 @@ bool TileRenderer::isReadyToRender(const RenderContext *rc) {
   return true;
 }
 
-int TileRenderer::render(const RenderContext* rc) {
+void TileRenderer::render(const RenderContext* rc) {
   TilesStatistics statistics;
-  
   //Saving camera for Long Press Event
   _lastCamera = rc->getCurrentCamera();
   
@@ -127,12 +123,11 @@ int TileRenderer::render(const RenderContext* rc) {
                         _parameters,
                         &statistics,
                         _lastSplitTimer,
-                        // _lastTexturizerTimer,
                         _firstRender /* if first render, force full render */);
   
   if (_firstRender && _parameters->_forceTopLevelTilesRenderOnStart) {
     // force one render of the topLevel tiles to make the (toplevel) textures loaded as they
-    // will be used as last-change fallback texture for any tile.
+    // will be used as last-chance fallback texture for any tile.
     _firstRender = false;
     
     for (int i = 0; i < _topLevelTiles.size(); i++) {
@@ -177,8 +172,7 @@ int TileRenderer::render(const RenderContext* rc) {
       statistics.log(rc->getLogger());
     }
   }
-  
-  return MAX_TIME_TO_RENDER;
+
 }
 
 
@@ -191,7 +185,7 @@ bool TileRenderer::onTouchEvent(const EventContext* ec,
     if (_lastCamera != NULL) {
       const Vector2D pixel = touchEvent->getTouch(0)->getPos();
       const Vector3D ray = _lastCamera->pixel2Ray(pixel);
-      const Vector3D origin = _lastCamera->getPosition();
+      const Vector3D origin = _lastCamera->getCartesianPosition();
       
       const Planet* planet = ec->getPlanet();
       

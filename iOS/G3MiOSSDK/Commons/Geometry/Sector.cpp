@@ -10,7 +10,7 @@
 #include "Camera.hpp"
 #include "Planet.hpp"
 
-#include <sstream>
+#include "IStringBuilder.hpp"
 
 
 bool Sector::contains(const Geodetic2D &position) const {
@@ -137,11 +137,9 @@ const Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const
 
 
 const std::string Sector::description() const {
-  std::ostringstream buffer;
-  buffer << "(Sector ";
-  buffer << _lower.description();
-  buffer << " - ";
-  buffer << _upper.description();
-  buffer << ")";
-  return buffer.str();
+  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  isb->add("(Sector ")->add(_lower.description())->add(" - ")->add(_upper.description())->add(")");
+  std::string s = isb->getString();
+  delete isb;
+  return s;  
 }

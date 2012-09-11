@@ -8,21 +8,20 @@
 
 #include "Petition.hpp"
 
-#include <sstream>
+#include "IStringBuilder.hpp"
 
 const std::string Petition::description() const {
-  std::ostringstream buffer;
-  buffer << "Petition(url=";
-  buffer << _url.description();
-  buffer << ", sector=";
-  buffer << _sector->description();
-  buffer << ", buffer=";
+  
+  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  isb->add("Petition(url=")->add(_url.description())->add(", sector=")->add(_sector->description())->add(", buffer=");
   if (_buffer == NULL) {
-    buffer << "NULL";
+    isb->add("NULL");
   }
   else {
-    buffer << _buffer->description();
+    isb->add(_buffer->description() );
   }
-  buffer << ")";
-  return buffer.str();
+  std::string s = isb->getString();
+  
+  delete isb;
+  return s;
 }

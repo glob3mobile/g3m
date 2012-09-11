@@ -16,6 +16,8 @@
 #include "Effects.hpp"
 
 
+#include "Effects.hpp"
+
 class CameraEventHandler;
 
 
@@ -33,21 +35,26 @@ enum Gesture {
   DoubleDrag
 };
 
-
-class CameraContext : public EffectTarget {
+class CameraContext: public EffectTarget {
 private:
   Gesture _currentGesture;
-  Camera* _camera;         
+  Camera* _nextCamera;         
 
 public:
-  CameraContext(Gesture gesture, Camera* camera): 
+  CameraContext(Gesture gesture, Camera* nextCamera): 
   _currentGesture(gesture),
-  _camera(camera)
+  _nextCamera(nextCamera)
   {}
   
-  Gesture getCurrentGesture() const { return _currentGesture; }
-  void setCurrentGesture(Gesture gesture) { _currentGesture = gesture; }
-  Camera* getCamera() { return _camera; }
+  ~CameraContext(){}
+  
+  const Gesture getCurrentGesture() const { return _currentGesture; }
+  void setCurrentGesture(const Gesture& gesture) { _currentGesture = gesture; }
+  Camera* getNextCamera() { return _nextCamera; }
+  
+  bool isEffectable() const{
+    return true;
+  }
 };
 
 
@@ -67,7 +74,7 @@ public:
     
   void addHandler(CameraEventHandler *handler) { _handlers.push_back(handler); }
   
-  int render(const RenderContext* rc);
+  void render(const RenderContext* rc);
   void initialize(const InitializationContext* ic);
   
   bool onTouchEvent(const EventContext* ec,

@@ -8,11 +8,12 @@
 
 #include "GLTextureId.hpp"
 
-#include <sstream>
+#include "IStringBuilder.hpp"
 
 const std::string GLTextureId::description() const {
-  std::ostringstream buffer;
-  buffer << "GLTextureId #";
-  buffer << _textureId;
-  return buffer.str();
+  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  isb->add("GLTextureId #")->add(_textureId);
+  std::string s = isb->getString();
+  delete isb;
+  return s;
 }

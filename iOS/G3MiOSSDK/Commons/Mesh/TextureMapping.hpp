@@ -9,12 +9,12 @@
 #ifndef G3MiOSSDK_TextureMapping_hpp
 #define G3MiOSSDK_TextureMapping_hpp
 
-#include <vector>
+//#include <vector>
 #include "MutableVector2D.hpp"
 #include "GLTextureId.hpp"
 
 class RenderContext;
-
+class IFloatBuffer;
 
 class TextureMapping {
 public:
@@ -30,9 +30,13 @@ public:
 
 class SimpleTextureMapping : public TextureMapping {
 private:
+#ifdef C_CODE
   const GLTextureId  _glTextureId;
-  const float const* _texCoords;
-  const bool _ownedTexCoords;
+#else
+  GLTextureId  _glTextureId;
+#endif
+  IFloatBuffer* _texCoords;
+  const bool    _ownedTexCoords;
 
   MutableVector2D    _translation;
   MutableVector2D    _scale;
@@ -40,7 +44,7 @@ private:
 public:
   
   SimpleTextureMapping(const GLTextureId& glTextureId,
-                       float texCoords[],
+                       IFloatBuffer* texCoords,
                        bool ownedTexCoords) :
   _glTextureId(glTextureId),
   _texCoords(texCoords),
@@ -51,8 +55,8 @@ public:
     
   }
   
-  SimpleTextureMapping(const GLTextureId& glTextureId,
-                       std::vector<MutableVector2D> texCoords);
+//  SimpleTextureMapping(const GLTextureId& glTextureId,
+//                       std::vector<MutableVector2D> texCoords);
   
   void setTranslationAndScale(const Vector2D& translation,
                               const Vector2D& scale) {
@@ -60,25 +64,15 @@ public:
     _scale       = scale.asMutableVector2D();
   }
   
-  virtual ~SimpleTextureMapping() {
-#ifdef C_CODE
-    if (_ownedTexCoords) {
-      delete[] _texCoords;
-    }
-#endif
-  }
+  virtual ~SimpleTextureMapping();
   
   const GLTextureId getGLTextureId() const {
     return _glTextureId;
   }
-  
-//  const float* getTexCoords() const {
-//    return _texCoords;
-//  }
+
+  IFloatBuffer* getTexCoords() const { return _texCoords;}
   
   void bind(const RenderContext* rc) const;
   
 };
-
-
 #endif

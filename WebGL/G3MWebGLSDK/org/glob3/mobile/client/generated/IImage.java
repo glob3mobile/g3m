@@ -1,4 +1,4 @@
-package org.glob3.mobile.client.generated; 
+package org.glob3.mobile.generated; 
 //
 //  IImage.h
 //  G3MiOSSDK
@@ -8,10 +8,42 @@ package org.glob3.mobile.client.generated;
 //
 
 
-public class IImage
+
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IByteBuffer;
+
+public abstract class IImage
 {
   // a virtual destructor is needed for conversion to Java
   public void dispose()
   {
   }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual int getWidth() const = 0;
+  public abstract int getWidth();
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual int getHeight() const = 0;
+  public abstract int getHeight();
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual IImage* combineWith(const IImage& other, int width, int height) const = 0;
+  public abstract IImage combineWith(IImage other, int width, int height);
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual IImage* combineWith(const IImage& other, const Rectangle& rect, int width, int height) const = 0;
+  public abstract IImage combineWith(IImage other, Rectangle rect, int width, int height);
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual IImage* subImage(const Rectangle& rect) const = 0;
+  public abstract IImage subImage(Rectangle rect);
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual ByteArrayWrapper* getEncodedImage() const = 0;
+  public abstract ByteArrayWrapper getEncodedImage();
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual IByteBuffer* createByteBufferRGBA8888(int width, int height) const = 0;
+  public abstract IByteBuffer createByteBufferRGBA8888(int width, int height);
+
 }

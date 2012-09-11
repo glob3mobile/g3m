@@ -28,7 +28,7 @@ enum {
 @interface ES2Renderer (PrivateMethods)
 - (BOOL)loadShaders;
 
-- (BOOL)compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file;
+- (BOOL)compileShader:(GLuint*)shader type:(GLenum)type file:(NSString *)file;
 
 - (BOOL)linkProgram:(GLuint)prog;
 
@@ -42,6 +42,7 @@ enum {
   self = [super init];
   
   if (self) {
+    _firstRender = true;
     context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
     
     if (!context || ![EAGLContext setCurrentContext:context] || ![self loadShaders]) {
@@ -55,7 +56,7 @@ enum {
     glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorRenderbuffer);
     
-    // creamos el depth_buffer
+    // Create the depthbuffer
     glGenRenderbuffers(1, &depthRenderbuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, depthRenderbuffer);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderbuffer);
@@ -65,39 +66,42 @@ enum {
 }
 
 
-- (int)render: (void*) widgetV
+- (void)render: (void*) widgetV
 {
   if (widgetV == NULL) {
-    return 0;
+    return;
   }
   
   G3MWidget* widget = (G3MWidget*) widgetV;
   
-  // This application only creates a single context which is already set current at this point.
-  // This call is redundant, but needed if dealing with multiple contexts.
-  [EAGLContext setCurrentContext:context];
+  if (_firstRender) {
+    // This application only creates a single context which is already set current at this point.
+    // This call is redundant, but needed if dealing with multiple contexts.
+    [EAGLContext setCurrentContext:context];
+    
+    // This application only creates a single default framebuffer which is already bound at this point.
+    // This call is redundant, but needed if dealing with multiple framebuffers.
+    glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);
+    glViewport(0, 0, backingWidth, backingHeight);
+    
+    // Use shader program
+    widget->getGL()->useProgram(program);
+  }
   
-  // This application only creates a single default framebuffer which is already bound at this point.
-  // This call is redundant, but needed if dealing with multiple framebuffers.
-  glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);
-  glViewport(0, 0, backingWidth, backingHeight);
+  widget->render();
   
-  // Use shader program
-  widget->getGL()->useProgram(program);
-  
-  int timeToRedraw = widget->render();
-  
-  // This application only creates a single color renderbuffer which is already bound at this point.
-  // This call is redundant, but needed if dealing with multiple renderbuffers.
-  glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
+  if (_firstRender) {
+    // This application only creates a single color renderbuffer which is already bound at this point.
+    // This call is redundant, but needed if dealing with multiple renderbuffers.
+    glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
+    _firstRender = false;
+  }
   [context presentRenderbuffer:GL_RENDERBUFFER];
-  
-  return timeToRedraw;
 }
 
-- (BOOL)compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file {
+- (BOOL)compileShader:(GLuint*)shader type:(GLenum)type file:(NSString *)file {
   GLint status;
-  const GLchar *source;
+  const GLchar* source;
   
   source = (GLchar *) [[NSString stringWithContentsOfFile:file encoding:NSUTF8StringEncoding error:nil] UTF8String];
   //NSLog(@"%s\n", source);
@@ -114,7 +118,7 @@ enum {
   GLint logLength;
   glGetShaderiv(*shader, GL_INFO_LOG_LENGTH, &logLength);
   if (logLength > 0) {
-    GLchar *log = (GLchar *) malloc(logLength);
+    GLchar* log = (GLchar* ) malloc(logLength);
     glGetShaderInfoLog(*shader, logLength, &logLength, log);
     NSLog(@"Shader compile log:\n%s", log);
     free(log);
@@ -139,7 +143,7 @@ enum {
   GLint logLength;
   glGetProgramiv(prog, GL_INFO_LOG_LENGTH, &logLength);
   if (logLength > 0) {
-    GLchar *log = (GLchar *) malloc(logLength);
+    GLchar* log = (GLchar* ) malloc(logLength);
     glGetProgramInfoLog(prog, logLength, &logLength, log);
     NSLog(@"Program link log:\n%s", log);
     free(log);
@@ -159,7 +163,7 @@ enum {
   glValidateProgram(prog);
   glGetProgramiv(prog, GL_INFO_LOG_LENGTH, &logLength);
   if (logLength > 0) {
-    GLchar *log = (GLchar *) malloc(logLength);
+    GLchar* log = (GLchar*) malloc(logLength);
     glGetProgramInfoLog(prog, logLength, &logLength, log);
     NSLog(@"Program validate log:\n%s", log);
     free(log);
@@ -237,6 +241,8 @@ enum {
 }
 
 - (BOOL)resizeFromLayer:(CAEAGLLayer *)layer {
+  _firstRender = true;
+  
   // Allocate color buffer backing based on the current layer size
   glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
   [context renderbufferStorage:GL_RENDERBUFFER fromDrawable:layer];

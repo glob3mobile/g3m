@@ -1,23 +1,4 @@
 package org.glob3.mobile.generated; 
-//
-//  Effects.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 12/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
-//
-
-//
-//  Effects.hpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 12/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
-//
-
-
-
-
 public abstract class Effect
 {
 
@@ -30,8 +11,9 @@ public abstract class Effect
 	if (f > 1)
 		return 1;
 
-	//return sigmoid(f);
-	return gently(f, 0.6, 0.85);
+//    return sigmoid(f);
+//    return gently(f, 0.6, 0.85);
+	return gently(f, 0.25, 0.75);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -39,7 +21,7 @@ public abstract class Effect
   protected final double sigmoid(double x)
   {
 	x = 12.0 *x - 6.0;
-	return (1.0 / (1.0 + Math.exp(-1.0 * x)));
+	return (1.0 / (1.0 + IMathUtils.instance().exp(-1.0 * x)));
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -75,6 +57,8 @@ public abstract class Effect
   public abstract boolean isDone(RenderContext rc, TimeInterval now);
 
   public abstract void stop(RenderContext rc, TimeInterval now);
+
+  public abstract void cancel(TimeInterval now);
 
   public void dispose()
   {

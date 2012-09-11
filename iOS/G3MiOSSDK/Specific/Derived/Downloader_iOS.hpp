@@ -24,11 +24,11 @@ private:
   NSMutableDictionary* _downloadingHandlers; // downloads current in progress
   NSMutableDictionary* _queuedHandlers;      // queued downloads
   
-  long _requestIdCounter;
+  long long _requestIdCounter;
   
-  long _requestsCounter;
-  long _cancelsCounter;
-
+  long long _requestsCounter;
+  long long _cancelsCounter;
+  
   NSString* toNSString(const std::string& cppStr) const {
     return [ NSString stringWithCString: cppStr.c_str()
                                encoding: NSUTF8StringEncoding ];
@@ -42,12 +42,12 @@ public:
   
   Downloader_iOS(int maxConcurrentOperationCount);
   
-  long request(const URL& url,
-               long priority,
-               IDownloadListener* listener,
-               bool deleteListener);
+  long long request(const URL& url,
+                    long long priority,
+                    IDownloadListener* listener,
+                    bool deleteListener);
   
-  void cancelRequest(long requestId);
+  void cancelRequest(long long requestId);
   
   Downloader_iOS_Handler* getHandlerToRun();
   
@@ -56,9 +56,9 @@ public:
   void start();
   
   void stop();
-
+  
   const std::string statistics();
-
+  
 };
 
 

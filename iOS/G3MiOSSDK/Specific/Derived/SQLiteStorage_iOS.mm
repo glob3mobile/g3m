@@ -80,7 +80,7 @@ bool SQLiteStorage_iOS::contains(const URL& url) {
 }
 
 void SQLiteStorage_iOS::save(const URL& url,
-                             const ByteBuffer& buffer) {
+                             const ByteArrayWrapper& buffer) {
   //  insert or replace into Book (Name, TypeID, Level, Seen) values ( ... )
   
   NSString* name = toNSString(url.getPath());
@@ -92,8 +92,8 @@ void SQLiteStorage_iOS::save(const URL& url,
   }
 }
 
-const ByteBuffer* SQLiteStorage_iOS::read(const URL& url) {
-  ByteBuffer* result = NULL;
+const ByteArrayWrapper* SQLiteStorage_iOS::read(const URL& url) {
+  ByteArrayWrapper* result = NULL;
   
   NSString* name = toNSString(url.getPath());
   SQResultSet* rs = [_db executeQuery:@"SELECT contents FROM entry WHERE (name = ?)", name];
@@ -104,8 +104,7 @@ const ByteBuffer* SQLiteStorage_iOS::read(const URL& url) {
     unsigned char* bytes = new unsigned char[length];
     [nsData getBytes: bytes
               length: length];
-    
-    result = new ByteBuffer(bytes, length);
+    result = new ByteArrayWrapper(bytes, length);
   }
   
   [rs close];

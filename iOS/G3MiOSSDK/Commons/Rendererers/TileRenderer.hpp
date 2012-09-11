@@ -9,6 +9,8 @@
 #ifndef G3MiOSSDK_TileRenderer_h
 #define G3MiOSSDK_TileRenderer_h
 
+#include "IStringBuilder.hpp"
+
 #include "Renderer.hpp"
 
 class Tile;
@@ -17,7 +19,6 @@ class TileTexturizer;
 
 #include "Sector.hpp"
 #include <map>
-#include <sstream>
 
 #include "Tile.hpp"
 #include "TileKey.hpp"
@@ -81,7 +82,6 @@ private:
   const bool _isForcedFullRender;
   
   ITimer* _lastSplitTimer;      // timer to start every time a tile get splitted into subtiles
-//  ITimer* _lastTexturizerTimer; // timer to start every time the texturizer is called
   
 public:
   TileRenderContext(const TileTessellator*       tessellator,
@@ -89,14 +89,12 @@ public:
                     const TilesRenderParameters* parameters,
                     TilesStatistics*             statistics,
                     ITimer*                      lastSplitTimer,
-//                    ITimer*                      lastTexturizerTimer,
                     bool                         isForcedFullRender) :
   _tessellator(tessellator),
   _texturizer(texturizer),
   _parameters(parameters),
   _statistics(statistics),
   _lastSplitTimer(lastSplitTimer),
-//  _lastTexturizerTimer(lastTexturizerTimer),
   _isForcedFullRender(isForcedFullRender)
   {
     
@@ -123,10 +121,6 @@ public:
     return _lastSplitTimer;
   }
   
-//  ITimer* getLastTexturizerTimer() const {
-//    return _lastTexturizerTimer;
-//  }
-  
   bool isForcedFullRender() const {
     return _isForcedFullRender;
   }
@@ -137,18 +131,25 @@ public:
 class TilesStatistics {
 private:
   long               _tilesProcessed;
-  std::map<int, int> _tilesProcessedByLevel;
+  //std::map<int, int> _tilesProcessedByLevel;
   
   long               _tilesVisible;
-  std::map<int, int> _tilesVisibleByLevel;
+  //std::map<int, int> _tilesVisibleByLevel;
   
   long               _tilesRendered;
-  std::map<int, int> _tilesRenderedByLevel;
+  //std::map<int, int> _tilesRenderedByLevel;
+  
+  static const int _maxLOD = 30;
+  
+  int _tilesProcessedByLevel[_maxLOD];
+  int _tilesVisibleByLevel[_maxLOD];
+  int _tilesRenderedByLevel[_maxLOD];
   
   int _splitsCountInFrame;
   int _buildersStartsInFrame;
   
 public:
+  
   TilesStatistics() :
   _tilesProcessed(0),
   _tilesVisible(0),
@@ -156,7 +157,9 @@ public:
   _splitsCountInFrame(0),
   _buildersStartsInFrame(0)
   {
-    
+    for(int i = 0; i < _maxLOD; i++){
+      _tilesProcessedByLevel[i] = _tilesVisibleByLevel[i] = _tilesRenderedByLevel[i] = 0;
+    }
   }
   
   ~TilesStatistics() {
@@ -218,33 +221,75 @@ public:
     return true;
   }
   
-  static std::string asLogString(std::map<int, int> map) {
-    std::ostringstream buffer;
+//  static std::string asLogString(std::map<int, int> map) {
+//    
+//    bool first = true;
+//#ifdef C_CODE
+//    
+//    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+//    for(std::map<int, int>::const_iterator i = map.begin();
+//        i != map.end();
+//        ++i ) {
+//      const int level   = i->first;
+//      const int counter = i->second;
+//      
+//      if (first) {
+//        first = false;
+//      }
+//      else {
+//        isb->add(",");
+//      }
+//      isb->add("L")->add(level)->add(":")->add(counter);
+//    }
+//    
+//    std::string s = isb->getString();
+//    delete isb;
+//    return s;  
+//#endif
+//#ifdef JAVA_CODE
+//    String res = "";
+//    for (java.util.Map.Entry<Integer, Integer> i: map.entrySet()){
+//		  final int level = i.getKey();
+//		  final int counter = i.getValue();
+//		  if (first){
+//        first = false;
+//		  }else{
+//        res += ",";
+//		  }
+//		  res += "L" + level + ":" + counter;
+//    }
+//    return res;
+//#endif
+//  }
+  
+  static std::string asLogString(const int m[], const int nMax) {
     
     bool first = true;
-    for(std::map<int, int>::const_iterator i = map.begin();
-        i != map.end();
-        ++i ) {
-      const int level   = i->first;
-      const int counter = i->second;
-      
-      if (first) {
-        first = false;
+    IStringBuilder *isb = IStringBuilder::newStringBuilder();
+    for(int i = 0; i < nMax; i++) {
+      const int level   = i;
+      const int counter = m[i];
+      if (counter != 0){
+        if (first) {
+          first = false;
+        }
+        else {
+          isb->add(",");
+        }
+        isb->add("L")->add(level)->add(":")->add(counter);
       }
-      else {
-        buffer << ",";
-      }
-      buffer << "L" << level << ":" << counter;
     }
     
-    return buffer.str();
+    std::string s = isb->getString();
+    delete isb;
+    return s;  
   }
   
   void log(const ILogger* logger) const {
     logger->logInfo("Tiles processed:%d (%s), visible:%d (%s), rendered:%d (%s).",
-                    _tilesProcessed, asLogString(_tilesProcessedByLevel).c_str(),
-                    _tilesVisible,   asLogString(_tilesVisibleByLevel).c_str(),
-                    _tilesRendered,  asLogString(_tilesRenderedByLevel).c_str());
+                    _tilesProcessed, asLogString(_tilesProcessedByLevel, _maxLOD).c_str(),
+                    _tilesVisible,   asLogString(_tilesVisibleByLevel, _maxLOD).c_str(),
+                    _tilesRendered,  asLogString(_tilesRenderedByLevel, _maxLOD).c_str());
   }
   
 };
@@ -257,12 +302,16 @@ private:
   const TilesRenderParameters* _parameters;
   const bool                   _showStatistics;
   bool                         _topTilesJustCreated;
+  
+#ifdef C_CODE
   const Camera*                _lastCamera;
+#else
+  Camera*                _lastCamera;
+#endif 
   
   std::vector<Tile*>     _topLevelTiles;
   
   ITimer* _lastSplitTimer;      // timer to start every time a tile get splitted into subtiles
-//  ITimer* _lastTexturizerTimer; // timer to start every time the texturizer is called
   
   void clearTopLevelTiles();
   void createTopLevelTiles(const InitializationContext* ic);
@@ -271,58 +320,55 @@ private:
   
   bool _firstRender;
   
-  class DistanceToCenterTileComparison {
-  private:
-    const Camera* _camera;
-    const Planet* _planet;
-    std::map<TileKey, double> _distancesCache;
-    
-  public:
-    DistanceToCenterTileComparison(const Camera *camera,
-                                   const Planet *planet):
-    _camera(camera),
-    _planet(planet)
-    {}
-    
-    void initialize() {
-      _distancesCache.clear();
-    }
-    
-    double getSquaredDistanceToCamera(const Tile* tile) {
-      const TileKey key = tile->getKey();
-      double distance = _distancesCache[key];
-      if (distance == 0) {
-        const Geodetic2D center = tile->getSector().getCenter();
-        const Vector3D cameraPosition = _camera->getPosition();
-        const Vector3D centerVec3 = _planet->toVector3D(center);
-        
-        distance = centerVec3.sub(cameraPosition).squaredLength();
-        
-        _distancesCache[key] = distance;
-      }
-      
-      return distance;
-
-    }
-    
-    inline bool operator()(const Tile *t1,
-                           const Tile *t2) {
-      //      const Vector3D cameraPos = _camera->getPosition();
-      //
-      //      const Vector3D center1 = _planet->toVector3D(t1->getSector().getCenter());
-      //      const Vector3D center2 = _planet->toVector3D(t2->getSector().getCenter());
-      //
-      //      const double dist1 = center1.sub(cameraPos).squaredLength();
-      //      const double dist2 = center2.sub(cameraPos).squaredLength();
-      
-      const double dist1 = getSquaredDistanceToCamera(t1);
-      const double dist2 = getSquaredDistanceToCamera(t2);
-      return (dist1 < dist2);
-    }
-  };
-  
-  
-
+//  class DistanceToCenterTileComparison {
+//  private:
+//    const Camera* _camera;
+//    const Planet* _planet;
+//    std::map<TileKey, double> _distancesCache;
+//    
+//  public:
+//    DistanceToCenterTileComparison(const Camera *camera,
+//                                   const Planet *planet):
+//    _camera(camera),
+//    _planet(planet)
+//    {}
+//    
+//    void initialize() {
+//      _distancesCache.clear();
+//    }
+//    
+//    double getSquaredDistanceToCamera(const Tile* tile) {
+//      const TileKey key = tile->getKey();
+//      double distance = _distancesCache[key];
+//      if (distance == 0) {
+//        const Geodetic2D center = tile->getSector().getCenter();
+//        const Vector3D cameraPosition = _camera->getPosition();
+//        const Vector3D centerVec3 = _planet->toVector3D(center);
+//        
+//        distance = centerVec3.sub(cameraPosition).squaredLength();
+//        
+//        _distancesCache[key] = distance;
+//      }
+//      
+//      return distance;
+//
+//    }
+//    
+//    inline bool operator()(const Tile *t1,
+//                           const Tile *t2) {
+//      //      const Vector3D cameraPos = _camera->getPosition();
+//      //
+//      //      const Vector3D center1 = _planet->toVector3D(t1->getSector().getCenter());
+//      //      const Vector3D center2 = _planet->toVector3D(t2->getSector().getCenter());
+//      //
+//      //      const double dist1 = center1.sub(cameraPos).squaredLength();
+//      //      const double dist2 = center2.sub(cameraPos).squaredLength();
+//      
+//      const double dist1 = getSquaredDistanceToCamera(t1);
+//      const double dist2 = getSquaredDistanceToCamera(t2);
+//      return (dist1 < dist2);
+//    }
+//  };
   
 public:
   TileRenderer(const TileTessellator* tessellator,
@@ -336,7 +382,6 @@ public:
   _lastStatistics(),
   _topTilesJustCreated(false),
   _lastSplitTimer(NULL),
-//  _lastTexturizerTimer(NULL),
   _lastCamera(NULL),
   _firstRender(false)
   {
@@ -347,7 +392,7 @@ public:
   
   void initialize(const InitializationContext* ic);
   
-  int render(const RenderContext* rc);
+  void render(const RenderContext* rc);
   
   bool onTouchEvent(const EventContext* ec,
                     const TouchEvent* touchEvent);

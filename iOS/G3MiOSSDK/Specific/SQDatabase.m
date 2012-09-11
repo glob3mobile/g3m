@@ -113,7 +113,7 @@
 		return nil;
   }
   
-  return [NSString stringWithUTF8String:(const char *) sqlite3_column_text(_stmt, index)];
+  return [NSString stringWithUTF8String:(const char* ) sqlite3_column_text(_stmt, index)];
 }
 
 //-(NSString *)compressedStringColumnByIndex:(NSInteger)index
@@ -177,7 +177,7 @@
 {
   [self close];
   
-  const char *dbpathC = [self.dbPath UTF8String];
+  const char* dbpathC = [self.dbPath UTF8String];
   
   if (sqlite3_open(dbpathC, &_db) == SQLITE_OK) {
     return YES;

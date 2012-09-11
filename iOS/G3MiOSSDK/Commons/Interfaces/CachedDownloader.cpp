@@ -9,14 +9,20 @@
 #include "CachedDownloader.hpp"
 #include "IDownloadListener.hpp"
 
-#include <sstream>
+#include "IStringBuilder.hpp"
 
 class SaverDownloadListener : public IDownloadListener {
   CachedDownloader*  _downloader;
   IDownloadListener* _listener;
   const bool         _deleteListener;
   IStorage*          _cacheStorage;
+  
+#ifdef C_CODE
   const URL          _url;
+#endif
+#ifdef JAVA_CODE
+  private URL _url = new URL();
+#endif
   
 public:
   SaverDownloadListener(CachedDownloader* downloader,
@@ -35,7 +41,9 @@ public:
   
   void deleteListener() {
     if (_deleteListener && (_listener != NULL)) {
+#ifdef C_CODE
       delete _listener;
+#endif
       _listener = NULL;
     }
   }
@@ -43,8 +51,9 @@ public:
   void saveResponse(const Response* response) {
     if (!_cacheStorage->contains(_url)) {
       _downloader->countSave();
-      _cacheStorage->save(_url,
-                          *response->getByteBuffer());
+      
+      const ByteArrayWrapper* bb = response->getByteArrayWrapper();
+      _cacheStorage->save(_url, *bb);
     }
   }
   
@@ -61,7 +70,7 @@ public:
     
     deleteListener();
   }
-
+  
   void onCanceledDownload(const Response* response) {
     saveResponse(response);
     
@@ -69,7 +78,7 @@ public:
     
     // no deleteListener() call, onCanceledDownload() is always called before onCancel().
   }
-
+  
   void onCancel(const URL* url) {
     _listener->onCancel(url);
     
@@ -87,14 +96,19 @@ void CachedDownloader::stop() {
   _downloader->stop();
 }
 
-void CachedDownloader::cancelRequest(long requestId) {
+void CachedDownloader::cancelRequest(long long requestId) {
   _downloader->cancelRequest(requestId);
 }
 
 std::string CachedDownloader::removeInvalidChars(const std::string& path) const {
+#ifdef C_CODE
   std::string result = path;
   std::replace(result.begin(), result.end(), '/', '_');
   return result;
+#endif
+#ifdef JAVA_CODE
+  return path.replaceAll("/", "_");
+#endif
 }
 
 
@@ -102,13 +116,13 @@ std::string CachedDownloader::removeInvalidChars(const std::string& path) const 
 //  return URL(_cacheDirectory, removeInvalidChars(url.getPath()));
 //}
 
-long CachedDownloader::request(const URL& url,
-                               long priority,
-                               IDownloadListener* listener,
-                               bool deleteListener) {
+long long CachedDownloader::request(const URL& url,
+                                    long long priority,
+                                    IDownloadListener* listener,
+                                    bool deleteListener) {
   _requestsCounter++;
   
-  const ByteBuffer* cachedBuffer = _cacheStorage->read(url);
+  const ByteArrayWrapper* cachedBuffer = _cacheStorage->read(url);
   if (cachedBuffer == NULL) {
     // cache miss
     return _downloader->request(url,
@@ -129,7 +143,11 @@ long CachedDownloader::request(const URL& url,
     listener->onDownload(&response);
     
     if (deleteListener) {
+#ifdef C_CODE
       delete listener;
+#else
+      listener = NULL;
+#endif
     }
     
     delete cachedBuffer;
@@ -139,17 +157,11 @@ long CachedDownloader::request(const URL& url,
 
 
 const std::string CachedDownloader::statistics() {
-  std::ostringstream buffer;
   
-  buffer << "CachedDownloader(cache hits=";
-  buffer << _cacheHitsCounter;
-  buffer << "/";
-  buffer << _requestsCounter;
-  buffer << ", saves=";
-  buffer << _savesCounter;
-  buffer << ", downloader=";
-  buffer << _downloader->statistics();
-  buffer << ")";
-  
-  return buffer.str();
+  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  isb->add("CachedDownloader(cache hits=")->add(_cacheHitsCounter)->add("/")->add(_requestsCounter)->add(", saves=");
+  isb->add(_savesCounter)->add(", downloader=")->add(_downloader->statistics());
+  std::string s = isb->getString();
+  delete isb;
+  return s;
 }

@@ -27,6 +27,9 @@ public class Vector3D
   private final double _y;
   private final double _z;
 
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  Vector3D operator =(Vector3D that);
+
 
   public Vector3D(double x, double y, double z)
   {
@@ -34,6 +37,10 @@ public class Vector3D
 	  _y = y;
 	  _z = z;
 
+  }
+
+  public void dispose()
+  {
   }
 
   public Vector3D(Vector3D v)
@@ -46,29 +53,41 @@ public class Vector3D
 
   public static Vector3D nan()
   {
-	return new Vector3D(Double.NaN, Double.NaN, Double.NaN);
+	return new Vector3D(IMathUtils.instance().NanD(), IMathUtils.instance().NanD(), IMathUtils.instance().NanD());
+  }
+
+  public static Vector3D zero()
+  {
+	return new Vector3D(0.0, 0.0, 0.0);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: boolean isNan() const
   public final boolean isNan()
   {
-	return Double.isNaN(_x *_y *_z);
+	return (IMathUtils.instance().isNan(_x) || IMathUtils.instance().isNan(_y) || IMathUtils.instance().isNan(_z));
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isZero() const
+  public final boolean isZero()
+  {
+	return (_x == 0) && (_y == 0) && (_z == 0);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Vector3D normalized() const
   public final Vector3D normalized()
   {
-	  double d = length();
-	  return new Vector3D(_x / d, _y /d, _z / d);
+	double d = length();
+	return new Vector3D(_x / d, _y /d, _z / d);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: double length() const
   public final double length()
   {
-	return Math.sqrt(squaredLength());
+	return IMathUtils.instance().sqrt(squaredLength());
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -138,32 +157,31 @@ public class Vector3D
 //ORIGINAL LINE: Angle angleBetween(const Vector3D& other) const
   public final Angle angleBetween(Vector3D other)
   {
-	Vector3D v1 = normalized();
-	Vector3D v2 = other.normalized();
+	final Vector3D v1 = normalized();
+	final Vector3D v2 = other.normalized();
+  
 	double c = v1.dot(v2);
 	if (c > 1.0)
 		c = 1.0;
 	else if (c < -1.0)
 		c = -1.0;
   
-	Angle a = Angle.fromRadians(Math.acos(c));
-  
-	return a;
+	return Angle.fromRadians(IMathUtils.instance().acos(c));
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Vector3D rotateAroundAxis(const Vector3D& axis, double theta) const
-  public final Vector3D rotateAroundAxis(Vector3D axis, double theta)
+//ORIGINAL LINE: Vector3D rotateAroundAxis(const Vector3D& axis, const Angle& theta) const
+  public final Vector3D rotateAroundAxis(Vector3D axis, Angle theta)
   {
 	final double u = axis.x();
 	final double v = axis.y();
 	final double w = axis.z();
   
-	final double cosTheta = Math.cos(theta);
-	final double sinTheta = Math.sin(theta);
+	final double cosTheta = theta.cosinus();
+	final double sinTheta = theta.sinus();
   
 	final double ms = axis.squaredLength();
-	final double m = Math.sqrt(ms);
+	final double m = IMathUtils.instance().sqrt(ms);
   
 	return new Vector3D(((u * (u * _x + v * _y + w * _z)) + (((_x * (v * v + w * w)) - (u * (v * _y + w * _z))) * cosTheta) + (m * ((-w * _y) + (v * _z)) * sinTheta)) / ms, ((v * (u * _x + v * _y + w * _z)) + (((_y * (u * u + w * w)) - (v * (u * _x + w * _z))) * cosTheta) + (m * ((w * _x) - (u * _z)) * sinTheta)) / ms, ((w * (u * _x + v * _y + w * _z)) + (((_z * (u * u + v * v)) - (w * (u * _x + v * _y))) * cosTheta) + (m * (-(v * _x) + (u * _y)) * sinTheta)) / ms);
   }
@@ -190,14 +208,11 @@ public class Vector3D
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Vector3D applyTransform(const MutableMatrix44D &m) const
-  public final Vector3D applyTransform(MutableMatrix44D m)
+//ORIGINAL LINE: Vector3D transformedBy(const MutableMatrix44D &m, const double homogeneus) const
+  public final Vector3D transformedBy(MutableMatrix44D m, double homogeneus)
   {
-	//const double * M = m.getMatrix();
-
-	Vector3D v = new Vector3D(_x * m.get(0) + _y * m.get(4) + _z * m.get(8) + m.get(12), _x * m.get(1) + _y * m.get(5) + _z * m.get(9) + m.get(13), _x * m.get(2) + _y * m.get(6) + _z * m.get(10) + m.get(14));
-
-	return v;
+	int todo_move_to_matrix;
+	return new Vector3D(_x * m.get(0) + _y * m.get(4) + _z * m.get(8) + homogeneus * m.get(12), _x * m.get(1) + _y * m.get(5) + _z * m.get(9) + homogeneus * m.get(13), _x * m.get(2) + _y * m.get(6) + _z * m.get(10) + homogeneus * m.get(14));
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -205,6 +220,46 @@ public class Vector3D
   public final MutableVector3D asMutableVector3D()
   {
 	return new MutableVector3D(_x, _y, _z);
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: double maxAxis() const
+  public final double maxAxis()
+  {
+	if (_x >= _y && _x >= _z)
+	{
+	  return _x;
+	}
+	else if (_y >= _z)
+	{
+	  return _y;
+	}
+	else
+	{
+	  return _z;
+	}
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector3D projectionInPlane(const Vector3D& normal) const
+  public final Vector3D projectionInPlane(Vector3D normal)
+  {
+	Vector3D axis = normal.cross(this);
+	MutableMatrix44D m = MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(90), axis);
+	Vector3D projected = normal.transformedBy(m, 0).normalized();
+	return projected.times(this.length());
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const String description() const
+  public final String description()
+  {
+	IStringBuilder isb = IStringBuilder.newStringBuilder();
+	isb.add("(V2D ").add(_x).add(", ").add(_y).add(", ").add(_z).add(")");
+	String s = isb.getString();
+	if (isb != null)
+		isb.dispose();
+	return s;
   }
 
 }

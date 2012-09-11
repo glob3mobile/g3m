@@ -9,48 +9,38 @@
 #ifndef G3MiOSSDK_TimeInterval_hpp
 #define G3MiOSSDK_TimeInterval_hpp
 
-#include <math.h>
+#include "IMathUtils.hpp"
 
 
 class TimeInterval {
 private:
-  const long _milliseconds;
+  const long long _milliseconds;
   
-  TimeInterval(const long milliseconds) : _milliseconds(milliseconds) {
+  TimeInterval(const long long milliseconds) : _milliseconds(milliseconds) {
     
   }
-  
-  // the next function is for compatibility with Java
-  TimeInterval(const double milliseconds) : _milliseconds((long)milliseconds) {}  
   
 public:
   TimeInterval(const TimeInterval& other) : _milliseconds(other._milliseconds) {
     
   }
   
-  static TimeInterval nan() {
-    return TimeInterval(NAN);
-  }
+  TimeInterval() : _milliseconds(0) {}
   
-  static TimeInterval fromMilliseconds(const long milliseconds) {
+  static TimeInterval fromMilliseconds(const long long milliseconds) {
     return TimeInterval(milliseconds);
   }
   
   static TimeInterval fromSeconds(const double seconds) {
-    return TimeInterval::fromMilliseconds((long)(seconds*1000.0));
+    return TimeInterval::fromMilliseconds((long long)(seconds*1000.0));
   }
   
-  
-  long milliseconds() const {
+  long long milliseconds() const {
     return _milliseconds;
   }
 
   double seconds() const {
     return (double) _milliseconds / 1000.0;
-  }
-  
-  bool isNan() const {
-    return isnan(_milliseconds);
   }
   
   bool lowerThan(const TimeInterval& that) const {

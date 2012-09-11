@@ -84,6 +84,7 @@ LazyTextureMapping* LeveledTexturedMesh::getCurrentTextureMapping() const {
       LazyTextureMapping* mapping = _mappings->at(i);
       if (mapping != NULL) {
         if (mapping->isValid()) {
+          //ILogger::instance()->logInfo("LeveledTexturedMesh changed from level %d to %d", _currentLevel, i);
           _currentLevel = i;
           _currentLevelIsValid = true;
           break;

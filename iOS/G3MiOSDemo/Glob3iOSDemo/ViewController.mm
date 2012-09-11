@@ -70,29 +70,29 @@
                                        new LevelTileCondition(7, 100));
     layerSet->addLayer(i3Landsat);
   }
-
-//  WMSLayer* political = new WMSLayer("topp:cia",
-//                                     URL("http://worldwind22.arc.nasa.gov/geoserver/wms?"),
-//                                     WMS_1_1_0,
-//                                     Sector::fullSphere(),
-//                                     "image/png",
-//                                     "EPSG:4326",
-//                                     "countryboundaries",
-//                                     true,
-//                                     NULL);
-//  layerSet->addLayer(political);
+  
+  //  WMSLayer* political = new WMSLayer("topp:cia",
+  //                                     URL("http://worldwind22.arc.nasa.gov/geoserver/wms?"),
+  //                                     WMS_1_1_0,
+  //                                     Sector::fullSphere(),
+  //                                     "image/png",
+  //                                     "EPSG:4326",
+  //                                     "countryboundaries",
+  //                                     true,
+  //                                     NULL);
+  //  layerSet->addLayer(political);
   
   WMSLayer* bing = new WMSLayer("ve",
                                 URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?"),
                                 WMS_1_1_0,
                                 Sector::fullSphere(),
-                                "image/png",
+                                "image/jpeg",
                                 "EPSG:4326",
                                 "",
                                 false,
                                 NULL);
   layerSet->addLayer(bing);
-
+  
   
   if (false) {
     WMSLayer *osm = new WMSLayer("osm",
@@ -107,18 +107,19 @@
     layerSet->addLayer(osm);
   }
   
-  
-  //  WMSLayer *pnoa = new WMSLayer("PNOA",
-  //                                "http://www.idee.es/wms/PNOA/PNOA",
-  //                                WMS_1_1_0,
-  //                                "image/png",
-  //                                Sector::fromDegrees(21, -18, 45, 6),
-  //                                "EPSG:4326",
-  //                                "",
-  //                                true,
-  //                                Angle::nan(),
-  //                                Angle::nan());
-  //  layerSet->addLayer(pnoa);
+  const bool usePnoaLayer = false;
+  if (usePnoaLayer) {
+    WMSLayer *pnoa = new WMSLayer("PNOA",
+                                  URL("http://www.idee.es/wms/PNOA/PNOA"),
+                                  WMS_1_1_0,
+                                  Sector::fromDegrees(21, -18, 45, 6),
+                                  "image/png",
+                                  "EPSG:4326",
+                                  "",
+                                  true,
+                                  NULL);
+    layerSet->addLayer(pnoa);
+  }
   
   //  WMSLayer *vias = new WMSLayer("VIAS",
   //                                "http://idecan2.grafcan.es/ServicioWMS/Callejero",
@@ -174,7 +175,7 @@
   
   
   std::vector<Renderer*> renderers;
-
+  
   //  if (false) {
   //    // dummy renderer with a simple box
   //    DummyRenderer* dum = new DummyRenderer();
@@ -232,10 +233,11 @@
   //    renderers.push_back(sgr);
   //  }
   
-  renderers.push_back(new GLErrorRenderer());
+//  renderers.push_back(new GLErrorRenderer());
   
   std::vector <ICameraConstrainer*> cameraConstraints;
-  cameraConstraints.push_back(new SimpleCameraConstrainer());
+  SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
+  cameraConstraints.push_back(scc);
   
   UserData* userData = NULL;
   [[self G3MWidget] initWidgetWithCameraConstraints: cameraConstraints

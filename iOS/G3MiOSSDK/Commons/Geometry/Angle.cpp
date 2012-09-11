@@ -8,7 +8,7 @@
 
 #include "Angle.hpp"
 
-#include <sstream>
+#include "IStringBuilder.hpp"
 
 Angle Angle::clampedTo(const Angle& min,
                        const Angle& max) const {
@@ -31,7 +31,7 @@ bool Angle::isBetween(const Angle& min,
 
 Angle Angle::distanceTo(const Angle& other) const
 {
-  double dif = fabs(_degrees - other._degrees);
+  double dif = GMath.abs(_degrees - other._degrees);
   if (dif > 180) dif = 360 - dif;
   return Angle::fromDegrees(dif);
 }
@@ -51,8 +51,10 @@ Angle Angle::nearestAngleInInterval(const Angle& min,
 }
 
 const std::string Angle::description() const {
-  std::ostringstream buffer;
-  buffer << _degrees;
-  buffer << "°";
-  return buffer.str();
+  
+  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  isb->add(_degrees)->add("°");
+  std::string s = isb->getString();
+  delete isb;
+  return s;
 }

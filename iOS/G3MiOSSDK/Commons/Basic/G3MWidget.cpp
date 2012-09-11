@@ -12,23 +12,26 @@
 #include "Renderer.hpp"
 #include "Camera.hpp"
 #include "GL.hpp"
-#include "TexturesHandler.cpp"
+#include "TexturesHandler.hpp"
 #include "IDownloader.hpp"
 #include "Effects.hpp"
 #include "Context.hpp"
 #include "CameraConstraints.hpp"
 #include "FrameTasksExecutor.hpp"
 #include "IStringUtils.hpp"
+#include "IThreadUtils.hpp"
 
 G3MWidget::G3MWidget(FrameTasksExecutor*              frameTasksExecutor,
                      IFactory*                        factory,
                      const IStringUtils*              stringUtils,
+                     IThreadUtils*                    threadUtils,
                      ILogger*                         logger,
                      GL*                              gl,
                      TexturesHandler*                 texturesHandler,
+                     TextureBuilder*                  textureBuilder,
                      IDownloader*                     downloader,
                      const Planet*                    planet,
-                     std::vector<ICameraConstrainer*> cameraConstraint,
+                     std::vector<ICameraConstrainer*> cameraConstrainers,
                      Renderer*                        renderer,
                      Renderer*                        busyRenderer,
                      EffectsScheduler*                effectsScheduler,
@@ -40,11 +43,13 @@ G3MWidget::G3MWidget(FrameTasksExecutor*              frameTasksExecutor,
 _frameTasksExecutor(frameTasksExecutor),
 _factory(factory),
 _stringUtils(stringUtils),
+_threadUtils(threadUtils),
 _logger(logger),
 _gl(gl),
 _texturesHandler(texturesHandler),
+_textureBuilder(textureBuilder),
 _planet(planet),
-_cameraConstraint(cameraConstraint),
+_cameraConstrainers(cameraConstrainers),
 _renderer(renderer),
 _busyRenderer(busyRenderer),
 _effectsScheduler(effectsScheduler),
@@ -66,6 +71,7 @@ _userData(NULL)
   
   InitializationContext ic(_factory,
                            _stringUtils,
+                           _threadUtils,
                            _logger,
                            _planet,
                            _downloader,
@@ -77,16 +83,20 @@ _userData(NULL)
   _currentCamera->initialize(&ic);
   _nextCamera->initialize(&ic);
   
-  _downloader->start();
+  if (_downloader != NULL){
+    _downloader->start();
+  }
 }
 
 
 G3MWidget* G3MWidget::create(FrameTasksExecutor* frameTasksExecutor,
                              IFactory*           factory,
                              const IStringUtils* stringUtils,
+                             IThreadUtils*       threadUtils,
                              ILogger*            logger,
                              GL*                 gl,
                              TexturesHandler*    texturesHandler,
+                             TextureBuilder*     textureBuilder,
                              IDownloader*        downloader,
                              const Planet*       planet,
                              std::vector<ICameraConstrainer*> cameraConstraint,
@@ -102,15 +112,19 @@ G3MWidget* G3MWidget::create(FrameTasksExecutor* frameTasksExecutor,
     logger->logInfo("Creating G3MWidget...");
   }
   
+  IFactory::setInstance(factory);
   IStringUtils::setInstance(stringUtils);
   ILogger::setInstance(logger);
+  IThreadUtils::setInstance(threadUtils);
   
   return new G3MWidget(frameTasksExecutor,
                        factory,
                        stringUtils,
+                       threadUtils,
                        logger,
                        gl,
                        texturesHandler,
+                       textureBuilder,
                        downloader,
                        planet,
                        cameraConstraint,
@@ -129,7 +143,7 @@ void G3MWidget::initializeGL() {
   _gl->enableCullFace(Back);
 #endif
 #ifdef JAVA_CODE
-  _gl.enableCullFace(CullFace.Back);
+  _gl.enableCullFace(GLCullFace.Back);
 #endif
 }
 
@@ -141,7 +155,9 @@ G3MWidget::~G3MWidget() {
   delete _factory;
   delete _logger;
   delete _gl;
+#ifdef C_CODE
   delete _planet;
+#endif
   delete _renderer;
   delete _busyRenderer;
   delete _effectsScheduler;
@@ -149,21 +165,30 @@ G3MWidget::~G3MWidget() {
   delete _nextCamera;
   delete _texturesHandler;
   delete _timer;
+
   if (_downloader != NULL) {
     _downloader->stop();
+#ifdef C_CODE
     delete _downloader;
+#endif
   }
   
-  for (unsigned int n=0; n<_cameraConstraint.size(); n++) {
-    delete _cameraConstraint[n];
-  }
-  
+#ifdef C_CODE
+  for (unsigned int n=0; n<_cameraConstrainers.size(); n++)
+    delete _cameraConstrainers[n];
+#endif
   delete _frameTasksExecutor;
 }
 
 void G3MWidget::onTouchEvent(const TouchEvent* myEvent) {
   if (_rendererReady) {
-    EventContext ec(_factory, _stringUtils, _logger, _planet, _downloader, _effectsScheduler);
+    EventContext ec(_factory,
+                    _stringUtils,
+                    _threadUtils,
+                    _logger,
+                    _planet,
+                    _downloader,
+                    _effectsScheduler);
     
     _renderer->onTouchEvent(&ec, myEvent);
   }
@@ -171,58 +196,59 @@ void G3MWidget::onTouchEvent(const TouchEvent* myEvent) {
 
 void G3MWidget::onResizeViewportEvent(int width, int height) {
   if (_rendererReady) {
-    EventContext ec(_factory, _stringUtils, _logger, _planet, _downloader, _effectsScheduler);
+    EventContext ec(_factory,
+                    _stringUtils,
+                    _threadUtils,
+                    _logger,
+                    _planet,
+                    _downloader,
+                    _effectsScheduler);
     
     _renderer->onResizeViewportEvent(&ec, width, height);
   }
 }
 
-const double clamp(const double value,
-                   const double lower,
-                   const double upper) {
-  if (value < lower) {
-    return lower;
-  }
-  if (value > upper) {
-    return upper;
-  }
-  return value;
-}
+//const double clamp(const double value,
+//                   const double lower,
+//                   const double upper) {
+//  if (value < lower) {
+//    return lower;
+//  }
+//  if (value > upper) {
+//    return upper;
+//  }
+//  return value;
+//}
 
-int G3MWidget::render() {
+void G3MWidget::render() {
   _timer->start();
   _renderCounter++;
   
-  
-  // copy next camera to current camera
-  bool acceptedCamera = true;
-  for (int n = 0; n < _cameraConstraint.size(); n++) {
-    if (!_cameraConstraint[n]->acceptsCamera(_nextCamera, _planet)) {
-      acceptedCamera = false;
-      break;
-    }
+  // give to the CameraContrainers the opportunity to change the nextCamera
+  for (int i = 0; i< _cameraConstrainers.size(); i++) {
+    ICameraConstrainer* constrainer =  _cameraConstrainers[i];
+    constrainer->onCameraChange(_planet,
+                                _currentCamera,
+                                _nextCamera);
   }
-  if (acceptedCamera) {
-    _currentCamera->copyFrom(*_nextCamera);
-  }
-  else {
-    _nextCamera->copyFrom(*_currentCamera);
-  }
+  _currentCamera->copyFrom(*_nextCamera);
   
   //  int __removePrint;
   //  printf("Camera Position=%s\n" ,
-  //         _planet->toGeodetic3D(_currentCamera->getPosition()).description().c_str());
+  //         _planet->toGeodetic3D(_currentCamera->getCartesianPosition()).description().c_str());
   
   // create RenderContext
   RenderContext rc(_frameTasksExecutor,
                    _factory,
                    _stringUtils,
+                   _threadUtils,
                    _logger,
                    _planet,
                    _gl,
                    _currentCamera,
                    _nextCamera,
                    _texturesHandler,
+                   _textureBuilder,
                    _downloader,
                    _effectsScheduler,
                    _factory->createTimer());
@@ -272,13 +298,14 @@ int G3MWidget::render() {
 //  }
   _gl->clearScreen(_backgroundColor);
 
-  const int timeToRedraw = _selectedRenderer->render(&rc);
+  _selectedRenderer->render(&rc);
   
   //  _frameTasksExecutor->doPostRenderCycle(&rc);
   
   const TimeInterval elapsedTime = _timer->elapsedTime();
   if (elapsedTime.milliseconds() > 100) {
-    _logger->logWarning("Frame took too much time: %dms" , elapsedTime.milliseconds());
+    _logger->logWarning("Frame took too much time: %dms" ,
+                        elapsedTime.milliseconds());
   }
   
   if (_logFPS) {
@@ -295,7 +322,7 @@ int G3MWidget::render() {
       
       if (_renderStatisticsTimer == NULL) {
         _renderStatisticsTimer = _factory->createTimer();
-      }
+      } 
       else {
         _renderStatisticsTimer->start();
       }
@@ -303,14 +330,16 @@ int G3MWidget::render() {
   }
   
   if (_logDownloaderStatistics) {
-    const std::string cacheStatistics = _downloader->statistics();
+    std::string cacheStatistics = "";
+    
+    if (_downloader != NULL){
+      cacheStatistics = _downloader->statistics();
+    }
     
     if (cacheStatistics != _lastCacheStatistics) {
       _logger->logInfo("%s" , cacheStatistics.c_str());
       _lastCacheStatistics = cacheStatistics;
     }
   }
-  
-  return timeToRedraw;
   
 }

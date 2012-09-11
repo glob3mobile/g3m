@@ -38,7 +38,9 @@ public:
   }
   
   ~StaticImageLayer(){
+#ifdef C_CODE
     delete _image;
+#endif
   }
   
   std::vector<Petition*> getMapPetitions(const RenderContext* rc,
@@ -48,12 +50,12 @@ public:
   bool isTransparent() const {
     return true;
   }
-  
+
   URL getFeatureInfoURL(const Geodetic2D& g,
                         const IFactory* factory,
                         const Sector& sector,
                         int width, int height) const {
-    return URL::null();
+    return URL::nullURL();
   }
   
 };

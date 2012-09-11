@@ -11,7 +11,7 @@
 
 #include <string>
 #include <vector>
-//#include "TextureBuilder.hpp"
+
 #include "GLTextureId.hpp"
 
 class TextureBuilder;
@@ -21,6 +21,7 @@ class TextureHolder;
 class GL;
 class IFactory;
 class Rectangle;
+class GLImage;
 
 
 class TextureSpec {
@@ -46,6 +47,8 @@ public:
     
   }
   
+  TextureSpec():_id(""), _width(0),_height(0), _isMipmap(false){}
+  
   TextureSpec(const TextureSpec& that):
   _id(that._id),
   _width(that._width),
@@ -55,10 +58,10 @@ public:
     
   }
   
-  int isMipmap() const {
+  bool isMipmap() const {
     return _isMipmap;
   }
-
+  
   int getWidth() const {
     return _width;
   }
@@ -100,11 +103,38 @@ public:
 #endif
   
 #ifdef JAVA_CODE
-  TODO_implements_equals;
-  TODO_implements_hashcode;
+  @Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + _height;
+		result = prime * result + ((_id == null) ? 0 : _id.hashCode());
+		result = prime * result + _width;
+		return result;
+	}
+  
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TextureSpec other = (TextureSpec) obj;
+		if (_height != other._height)
+			return false;
+		if (_id == null) {
+			if (other._id != null)
+				return false;
+		} else if (!_id.equals(other._id))
+			return false;
+		if (_width != other._width)
+			return false;
+		return true;
+	}
 #endif
 };
-
 
 class TexturesHandler {
 private:
@@ -112,7 +142,6 @@ private:
   
   GL * const _gl;
   const IFactory * const _factory;
-  const TextureBuilder* _textureBuilder;
   
   const bool _verbose;
   
@@ -122,31 +151,18 @@ public:
   
   TexturesHandler(GL* const  gl,
                   const IFactory const * factory,
-                  const TextureBuilder* texBuilder,
                   bool verbose):
   _gl(gl),
   _factory(factory),
-  _textureBuilder(texBuilder),
   _verbose(verbose)
   {
   }
   
   ~TexturesHandler();
   
-  const GLTextureId getGLTextureIdFromFileName(const std::string filename,
-                                               int               textureWidth,
-                                               int               textureHeight,
-                                               const bool        isMipmap);
-  
-  const GLTextureId getGLTextureId(const std::vector<const IImage*> images,
-                                   const TextureSpec& textureSpec);
-  
-  const GLTextureId getGLTextureId(const std::vector<const IImage*> images,
-                                   const std::vector<const Rectangle*> rectangles,
-                                   const TextureSpec& textureSpec);
-  
-  const GLTextureId getGLTextureId(const IImage* image,
-                                   const TextureSpec& textureSpec);
+  const GLTextureId getGLTextureId(const GLImage* glImage,
+                                   const std::string& name,
+                                   bool hasMipMap);
   
   const GLTextureId getGLTextureIdIfAvailable(const TextureSpec& textureSpec);
   

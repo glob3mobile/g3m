@@ -9,12 +9,11 @@
 #ifndef G3MiOSSDK_TileTessellator_hpp
 #define G3MiOSSDK_TileTessellator_hpp
 
-#include <vector>
-
 class RenderContext;
 class Mesh;
 class Tile;
 class MutableVector2D;
+class IFloatBuffer;
 
 class TileTessellator {
 public:
@@ -22,11 +21,13 @@ public:
   
   virtual bool isReady(const RenderContext *rc) const = 0;
   
-  virtual Mesh* createMesh(const RenderContext* rc, const Tile* tile) const = 0;
+  virtual Mesh* createMesh(const RenderContext* rc,
+                           const Tile* tile) const = 0;
   
-  virtual Mesh* createDebugMesh(const RenderContext* rc, const Tile* tile) const = 0;
+  virtual Mesh* createDebugMesh(const RenderContext* rc,
+                                const Tile* tile) const = 0;
 
-  virtual std::vector<MutableVector2D>* createUnitTextCoords() const = 0;
+  virtual IFloatBuffer* createUnitTextCoords() const = 0;
 
 };
 

@@ -20,7 +20,7 @@ private:
   }
 
 public:
-  std::string createString(unsigned char* data,
+  std::string createString(unsigned char data[],
                            int            length) const;
   
   std::vector<std::string> splitLines(const std::string& string) const;

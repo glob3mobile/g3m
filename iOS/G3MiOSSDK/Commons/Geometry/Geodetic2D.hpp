@@ -45,11 +45,27 @@ public:
     return _longitude;
   }
   
+  Geodetic2D add(const Geodetic2D& that) const {
+    return Geodetic2D(_latitude.add(that._latitude),
+                      _longitude.add(that._longitude));
+  }
+
+  Geodetic2D sub(const Geodetic2D& that) const {
+    return Geodetic2D(_latitude.sub(that._latitude),
+                      _longitude.sub(that._longitude));
+  }
+  
   bool closeTo(const Geodetic2D& other) const;
   
   bool isBetween(const Geodetic2D& min, const Geodetic2D& max) const;
   
+#ifdef C_CODE
   bool operator<(const Geodetic2D& that) const {
+    return lowerThan(that);
+  }
+#endif
+  
+  bool lowerThan(const Geodetic2D& that) const {
     if (_latitude.lowerThan(that._latitude)) {
       return true;
     }
@@ -62,8 +78,37 @@ public:
   const std::string description() const;
 
 #ifdef JAVA_CODE
-  TODO_java_equals;
-  TODO_java_hashcode;
+  @Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+    + ((_latitude == null) ? 0 : _latitude.hashCode());
+		result = prime * result
+    + ((_longitude == null) ? 0 : _longitude.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Geodetic2D other = (Geodetic2D) obj;
+		if (_latitude == null) {
+			if (other._latitude != null)
+				return false;
+		} else if (!_latitude.equals(other._latitude))
+			return false;
+		if (_longitude == null) {
+			if (other._longitude != null)
+				return false;
+		} else if (!_longitude.equals(other._longitude))
+			return false;
+		return true;
+	}
 #endif
   
 };

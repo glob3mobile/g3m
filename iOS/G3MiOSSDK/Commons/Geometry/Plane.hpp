@@ -14,6 +14,9 @@
 class Plane {
   
 public:  
+  
+  Plane(): _normal(0.0,0.0,0.0), _d(0.0){} //Empty constructor
+  
   Plane(const Vector3D& point0,
         const Vector3D& point1,
         const Vector3D& point2):

@@ -30,33 +30,28 @@ _row(row),
 _column(column),
 _tessellatorMesh(NULL),
 _debugMesh(NULL),
-_texturizerMesh(NULL),
+_texturizedMesh(NULL),
 _textureSolved(false),
 _texturizerDirty(true),
 _subtiles(NULL),
 _justCreatedSubtiles(false),
-_texturizerTimer(NULL),
 _isVisible(false),
 _texturizerData(NULL)
 {
-//  int __remove_tile_print;
-//  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
-//         getKey().description().c_str(),
-//         _sector.getDeltaLatitude().description().c_str(),
-//         _sector.getDeltaLongitude().description().c_str()
-//         );
+  //  int __remove_tile_print;
+  //  printf("Created tile=%s\n deltaLat=%s deltaLon=%s\n",
+  //         getKey().description().c_str(),
+  //         _sector.getDeltaLatitude().description().c_str(),
+  //         _sector.getDeltaLongitude().description().c_str()
+  //         );
 }
 
 Tile::~Tile() {
-  if (_isVisible) {
-    deleteTexturizerMesh();
-  }
+//  if (_isVisible) {
+//    deleteTexturizedMesh();
+//  }
   
   prune(NULL);
-  
-  if (_texturizerTimer != NULL) {
-    delete _texturizerTimer;
-  }
   
   if (_debugMesh != NULL) {
     delete _debugMesh;
@@ -67,12 +62,14 @@ Tile::~Tile() {
   }
   
   if (_texturizerData != NULL) {
+#ifdef C_CODE
     delete _texturizerData;
+#endif
     _texturizerData = NULL;
   }
   
-  if (_texturizerMesh != NULL) {
-    delete _texturizerMesh;
+  if (_texturizedMesh != NULL) {
+    delete _texturizedMesh;
   }
 }
 
@@ -206,52 +203,21 @@ void Tile::rawRender(const RenderContext *rc,
       tessellatorMesh->render(rc);
     }
     else {
-      
-      const bool needsToCallTexturizer = (!isTextureSolved() || (_texturizerMesh == NULL)) && isTexturizerDirty();
+//      const bool needsToCallTexturizer = (!isTextureSolved() || (_texturizedMesh == NULL)) && isTexturizerDirty();
+      const bool needsToCallTexturizer = (_texturizedMesh == NULL) || isTexturizerDirty();
       
       if (needsToCallTexturizer) {
         int __TODO_tune_render_budget;
         
-        //                               (_texturizerTimer->elapsedTime().milliseconds() > 125 &&
-        //        const bool callTexturizer = ((_texturizerTimer == NULL) ||
-        //                               (_texturizerTimer->elapsedTime().milliseconds() > 125 &&
-        //                                lastTexturizerTimer->elapsedTime().milliseconds() > 50));
-        //        const bool callTexturizer = ((_texturizerTimer == NULL) ||
-        //                                     (_texturizerTimer->elapsedTime().milliseconds() > 100 &&
-        //                                      lastTexturizerTimer->elapsedTime().milliseconds() > 10));
-        //        const bool callTexturizer = ((_texturizerTimer == NULL) ||
-        //                                     (_texturizerTimer->elapsedTime().milliseconds() > 100));
-        //        const bool callTexturizer = ((_texturizerTimer == NULL) ||
-        //                                     (_texturizerTimer->elapsedTime().milliseconds() > 50)) && isTexturizerDirty();
-        
-        const bool callTexturizer = true;
-        //        const bool callTexturizer = (trc->getLastTexturizerTimer()->elapsedTime().milliseconds() > 10);
-        //        const bool callTexturizer = (trc->getLastTexturizerTimer()->elapsedTime().milliseconds() > 10);
-        
-        if (callTexturizer) {
-          _texturizerMesh = texturizer->texturize(rc,
-                                                  trc,
-                                                  this,
-                                                  tessellatorMesh,
-                                                  _texturizerMesh);
-          //trc->getLastTexturizerTimer()->start();
-          
-          if (_texturizerTimer == NULL) {
-            _texturizerTimer = rc->getFactory()->createTimer();
-          }
-          else {
-            _texturizerTimer->start();
-          }
-        }
+        _texturizedMesh = texturizer->texturize(rc,
+                                                trc,
+                                                this,
+                                                tessellatorMesh,
+                                                _texturizedMesh);
       }
       
-      if ((_texturizerTimer != NULL) && isTextureSolved()) {
-        delete _texturizerTimer;
-        _texturizerTimer = NULL;
-      }
-      
-      if (_texturizerMesh != NULL) {
-        _texturizerMesh->render(rc);
+      if (_texturizedMesh != NULL) {
+        _texturizedMesh->render(rc);
       }
       else {
         tessellatorMesh->render(rc);
@@ -288,11 +254,11 @@ void Tile::prune(const TileRenderContext* trc) {
     for (int i = 0; i < subtilesSize; i++) {
       Tile* subtile = _subtiles->at(i);
       
-      subtile->setIsVisible(false);
+      subtile->setIsVisible(false, trc);
       
       subtile->prune(trc);
       if (texturizer != NULL) {
-        texturizer->tileToBeDeleted(subtile, subtile->_texturizerMesh);
+        texturizer->tileToBeDeleted(subtile, subtile->_texturizedMesh);
       }
       delete subtile;
     }
@@ -303,24 +269,31 @@ void Tile::prune(const TileRenderContext* trc) {
   }
 }
 
-void Tile::setIsVisible(bool isVisible) {
+void Tile::setIsVisible(bool isVisible,
+                        const TileRenderContext* trc) {
   if (_isVisible != isVisible) {
     _isVisible = isVisible;
     
     if (!_isVisible) {
-      deleteTexturizerMesh();
+      deleteTexturizedMesh(trc);
     }
   }
 }
 
-void Tile::deleteTexturizerMesh() {
-  if ((_level > 0) && (_texturizerMesh != NULL)) {
-    _texturizer->tileMeshToBeDeleted(this, _texturizerMesh);
+void Tile::deleteTexturizedMesh(const TileRenderContext* trc) {
+  if ((_level > 0) && (_texturizedMesh != NULL)) {
     
-    delete _texturizerMesh;
-    _texturizerMesh = NULL;
+    TileTexturizer* texturizer = trc->getTexturizer();
+    if (texturizer != NULL) {
+      texturizer->tileMeshToBeDeleted(this, _texturizedMesh);
+    }
     
+    delete _texturizedMesh;
+    _texturizedMesh = NULL;
+    
+#ifdef C_CODE
     delete _texturizerData;
+#endif
     _texturizerData = NULL;
     
     setTexturizerDirty(true);
@@ -335,7 +308,7 @@ void Tile::render(const RenderContext* rc,
   
   statistics->computeTileProcessed(this);
   if (isVisible(rc, trc)) {
-    setIsVisible(true);
+    setIsVisible(true, trc);
     
     statistics->computeVisibleTile(this);
     
@@ -365,7 +338,7 @@ void Tile::render(const RenderContext* rc,
     }
   }
   else {
-    setIsVisible(false);
+    setIsVisible(false, trc);
     
     prune(trc);
   }

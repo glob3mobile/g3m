@@ -41,8 +41,8 @@ void CameraRotationHandler::onDown(const EventContext *eventContext,
                                    const TouchEvent& touchEvent, 
                                    CameraContext *cameraContext) 
 {  
-  Camera *camera = cameraContext->getCamera();
-  _camera0 = Camera(*camera);
+  Camera *camera = cameraContext->getNextCamera();
+  _camera0.copyFrom(*camera);
   cameraContext->setCurrentGesture(Rotate);
   
   // middle pixel in 2D 
@@ -81,7 +81,7 @@ void CameraRotationHandler::onMove(const EventContext *eventContext,
   Vector3D normal = eventContext->getPlanet()->geodeticSurfaceNormal(_initialPoint.asVector3D());
   
   // vertical rotation around normal vector to globe
-  Camera *camera = cameraContext->getCamera();
+  Camera *camera = cameraContext->getNextCamera();
   camera->copyFrom(_camera0);
   Angle angle_v             = Angle::fromDegrees((_initialPixel.x()-cm.x())*0.25);
   camera->rotateWithAxisAndPoint(normal, _initialPoint.asVector3D(), angle_v);
@@ -89,7 +89,7 @@ void CameraRotationHandler::onMove(const EventContext *eventContext,
   // compute angle between normal and view direction
   Vector3D view = camera->getViewDirection();
   double dot = normal.normalized().dot(view.normalized().times(-1));
-  double initialAngle = acos(dot) / M_PI * 180;
+  double initialAngle = GMath.acos(dot) / GMath.pi() * 180;
   
   // rotate more than 85 degrees or less than 0 degrees is not allowed
   double delta = (cm.y() - _initialPixel.y()) * 0.25;
@@ -121,31 +121,28 @@ void CameraRotationHandler::onUp(const EventContext *eventContext,
 }
 
 
-int CameraRotationHandler::render(const RenderContext* rc, CameraContext *cameraContext) 
+void CameraRotationHandler::render(const RenderContext* rc,
+                                   CameraContext *cameraContext)
 {
-  // TEMP TO DRAW A POINT WHERE USER PRESS
-  if (false) {
-    if (cameraContext->getCurrentGesture() == Rotate) {
-      GL *gl = rc->getGL();
-      float vertices[] = { 0,0,0};
-      int indices[] = {0};
-      gl->enableVerticesPosition();
-      gl->disableTexture2D();
-      gl->disableTextures();
-      gl->vertexPointer(3, 0, vertices);
-      gl->color((float) 1, (float) 1, (float) 0, 1);
-      gl->pointSize(10);
-      gl->pushMatrix();
-      MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D());
-      gl->multMatrixf(T);
-      gl->drawPoints(1, indices);
-      gl->popMatrix();
-      //Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
-      //printf ("zoom with initial point = (%f, %f)\n", g.latitude().degrees(), g.longitude().degrees());
-    }
-  }
-  
-  return MAX_TIME_TO_RENDER;
+//  // TEMP TO DRAW A POINT WHERE USER PRESS
+//  if (false) {
+//    if (cameraContext->getCurrentGesture() == Rotate) {
+//      GL *gl = rc->getGL();
+//      float vertices[] = { 0,0,0};
+//      int indices[] = {0};
+//      gl->enableVerticesPosition();
+//      gl->disableTexture2D();
+//      gl->disableTextures();
+//      gl->vertexPointer(3, 0, vertices);
+//      gl->color((float) 1, (float) 1, (float) 0, 1);
+//      gl->pointSize(10);
+//      gl->pushMatrix();
+//      MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D());
+//      gl->multMatrixf(T);
+//      gl->drawPoints(1, indices);
+//      gl->popMatrix();
+//      //Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
+//      //printf ("zoom with initial point = (%f, %f)\n", g.latitude().degrees(), g.longitude().degrees());
+//    }
+//  }
 }
-
-

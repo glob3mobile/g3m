@@ -51,6 +51,7 @@ public:
     return _column;
   }
   
+#ifdef C_CODE
   bool operator<(const TileKey& that) const {
     if (_level < that._level) {
       return true;
@@ -68,6 +69,37 @@ public:
 
     return (_row < that._row);
   }
+#endif
+  
+#ifdef JAVA_CODE
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + _column;
+    result = prime * result + _level;
+    result = prime * result + _row;
+    return result;
+  }
+  
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TileKey other = (TileKey) obj;
+		if (_column != other._column)
+			return false;
+		if (_level != other._level)
+			return false;
+		if (_row != other._row)
+			return false;
+		return true;
+	}
+#endif
   
   const std::string description() const;
   

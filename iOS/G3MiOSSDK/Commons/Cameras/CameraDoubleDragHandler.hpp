@@ -34,20 +34,20 @@ public:
   
   
   bool onTouchEvent(const EventContext *eventContext,
-                    const TouchEvent* touchEvent, 
+                    const TouchEvent* touchEvent,
                     CameraContext *cameraContext);
-  int render(const RenderContext* rc, CameraContext *cameraContext);
   
+  void render(const RenderContext* rc,
+              CameraContext *cameraContext);
   
-private:
   void onDown(const EventContext *eventContext,
-              const TouchEvent& touchEvent, 
+              const TouchEvent& touchEvent,
               CameraContext *cameraContext);
   void onMove(const EventContext *eventContext,
-              const TouchEvent& touchEvent, 
+              const TouchEvent& touchEvent,
               CameraContext *cameraContext);
   void onUp(const EventContext *eventContext,
-            const TouchEvent& touchEvent, 
+            const TouchEvent& touchEvent,
             CameraContext *cameraContext);
   
   MutableVector3D _initialPoint;  //Initial point at dragging
@@ -57,7 +57,7 @@ private:
   double _initialFingerInclination;
   
   Camera _camera0;         //Initial Camera saved on Down event
-        
+  
 };
 
 #endif

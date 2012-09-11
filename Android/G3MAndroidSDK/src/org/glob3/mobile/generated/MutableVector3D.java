@@ -54,34 +54,48 @@ public class MutableVector3D
 //ORIGINAL LINE: MutableVector3D normalized() const
   public final MutableVector3D normalized()
   {
-	  double d = length();
-	  return new MutableVector3D(_x / d, _y /d, _z / d);
+	double d = length();
+	return new MutableVector3D(_x / d, _y /d, _z / d);
   }
 
-  public static Vector3D nan()
+  public static MutableVector3D nan()
   {
-	return new Vector3D(Double.NaN, Double.NaN, Double.NaN);
+	return new MutableVector3D(IMathUtils.instance().NanD(), IMathUtils.instance().NanD(), IMathUtils.instance().NanD());
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean equalTo(const MutableVector3D& v) const
+  public final boolean equalTo(MutableVector3D v)
+  {
+	return (v._x == _x && v._y == _y && v._z == _z);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: boolean isNan() const
   public final boolean isNan()
   {
-	return Double.isNaN(_x *_y *_z);
+	return (IMathUtils.instance().isNan(_x) || IMathUtils.instance().isNan(_y) || IMathUtils.instance().isNan(_z));
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isZero() const
+  public final boolean isZero()
+  {
+	return (_x == 0) && (_y == 0) && (_z == 0);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: void print() const
   public final void print()
   {
-	  System.out.printf("%.2f  %.2f %.2f\n", _x, _y, _z);
+	System.out.printf("%.2f  %.2f %.2f\n", _x, _y, _z);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: double length() const
   public final double length()
   {
-	return Math.sqrt(squaredLength());
+	return IMathUtils.instance().sqrt(squaredLength());
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -148,23 +162,37 @@ public class MutableVector3D
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double angleBetween(const MutableVector3D& other) const
-  public final double angleBetween(MutableVector3D other)
+//ORIGINAL LINE: Angle angleBetween(const MutableVector3D& other) const
+  public final Angle angleBetween(MutableVector3D other)
   {
-	MutableVector3D v1 = normalized();
-	MutableVector3D v2 = other.normalized();
+	final MutableVector3D v1 = normalized();
+	final MutableVector3D v2 = other.normalized();
+  
 	double c = v1.dot(v2);
 	if (c > 1.0)
 		c = 1.0;
 	else if (c < -1.0)
 		c = -1.0;
-	return Math.acos(c);
+  
+	return Angle.fromRadians(IMathUtils.instance().acos(c));
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: MutableVector3D rotatedAroundAxis(const MutableVector3D& other, const double theta) const;
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  MutableVector3D rotatedAroundAxis(MutableVector3D other, double theta);
+//ORIGINAL LINE: MutableVector3D rotatedAroundAxis(const MutableVector3D& axis, const Angle& theta) const
+  public final MutableVector3D rotatedAroundAxis(MutableVector3D axis, Angle theta)
+  {
+	final double u = axis.x();
+	final double v = axis.y();
+	final double w = axis.z();
+  
+	final double cosTheta = theta.cosinus();
+	final double sinTheta = theta.sinus();
+  
+	final double ms = axis.squaredLength();
+	final double m = IMathUtils.instance().sqrt(ms);
+  
+	return new MutableVector3D(((u * (u * _x + v * _y + w * _z)) + (((_x * (v * v + w * w)) - (u * (v * _y + w * _z))) * cosTheta) + (m * ((-w * _y) + (v * _z)) * sinTheta)) / ms, ((v * (u * _x + v * _y + w * _z)) + (((_y * (u * u + w * w)) - (v * (u * _x + w * _z))) * cosTheta) + (m * ((w * _x) - (u * _z)) * sinTheta)) / ms, ((w * (u * _x + v * _y + w * _z)) + (((_z * (u * u + v * v)) - (w * (u * _x + v * _y))) * cosTheta) + (m * (-(v * _x) + (u * _y)) * sinTheta)) / ms);
+  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: double x() const
@@ -188,14 +216,10 @@ public class MutableVector3D
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: MutableVector3D applyTransform(const MutableMatrix44D &m) const
-  public final MutableVector3D applyTransform(MutableMatrix44D m)
+//ORIGINAL LINE: MutableVector3D transformedBy(const MutableMatrix44D &m, const double homogeneus) const
+  public final MutableVector3D transformedBy(MutableMatrix44D m, double homogeneus)
   {
-	//const double * M = m.getMatrix();
-
-	MutableVector3D v = new MutableVector3D(_x * m.get(0) + _y * m.get(4) + _z * m.get(8) + m.get(12), _x * m.get(1) + _y * m.get(5) + _z * m.get(9) + m.get(13), _x * m.get(2) + _y * m.get(6) + _z * m.get(10) + m.get(14));
-
-	return v;
+	return new MutableVector3D(_x * m.get(0) + _y * m.get(4) + _z * m.get(8) + homogeneus * m.get(12), _x * m.get(1) + _y * m.get(5) + _z * m.get(9) + homogeneus * m.get(13), _x * m.get(2) + _y * m.get(6) + _z * m.get(10) + homogeneus * m.get(14));
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

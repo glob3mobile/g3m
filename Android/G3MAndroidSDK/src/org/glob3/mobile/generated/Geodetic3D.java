@@ -28,9 +28,30 @@ public class Geodetic3D
   private final double _height;
 
 
+  public void dispose()
+  {
+  }
+
+  public static Geodetic3D nan()
+  {
+	return new Geodetic3D(Angle.nan(), Angle.nan(), 0);
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isNan() const
+  public final boolean isNan()
+  {
+	return _latitude.isNan() || _longitude.isNan();
+  }
+
   public static Geodetic3D zero()
   {
 	return new Geodetic3D(Angle.zero(), Angle.zero(), 0);
+  }
+
+  public static Geodetic3D fromDegrees(double lat, double lon, double height)
+  {
+	return new Geodetic3D(Angle.fromDegrees(lat), Angle.fromDegrees(lon), height);
   }
 
   public Geodetic3D(Angle latitude, Angle longitude, double height)
@@ -80,6 +101,19 @@ public class Geodetic3D
   public final Geodetic2D asGeodetic2D()
   {
 	return new Geodetic2D(_latitude, _longitude);
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const String description() const
+  public final String description()
+  {
+	IStringBuilder isb = IStringBuilder.newStringBuilder();
+	isb.add("(lat=").add(_latitude.description()).add(", lon=").add(_longitude.description());
+	isb.add(", height=").add(_height).add(")");
+	String s = isb.getString();
+	if (isb != null)
+		isb.dispose();
+	return s;
   }
 
 }

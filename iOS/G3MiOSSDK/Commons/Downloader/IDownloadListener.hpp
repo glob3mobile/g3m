@@ -9,24 +9,20 @@
 #ifndef G3MiOSSDK_IDownloadListener_h
 #define G3MiOSSDK_IDownloadListener_h
 
-#include <string>
-
 #include "Response.hpp"
 
 class IDownloadListener {
 public:
+#ifdef C_CODE
+  virtual ~IDownloadListener() {  }
+#endif
+
   virtual void onDownload(const Response* response) = 0;
   virtual void onError(const Response* response) = 0;
   virtual void onCancel(const URL* url) = 0;
   
   /* this method will be call, before onCancel, when the data arrived before the cancelation */
   virtual void onCanceledDownload(const Response* response) = 0;
-
-  
-  virtual ~IDownloadListener() {
-//    printf("**>> deleting listener=%x\n", (int) this);
-  }
-  
 };
 
 #endif

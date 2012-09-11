@@ -1,4 +1,4 @@
-package org.glob3.mobile.client.generated; 
+package org.glob3.mobile.generated; 
 //
 //  CompositeRenderer.cpp
 //  G3MiOSSDK
@@ -14,7 +14,6 @@ package org.glob3.mobile.client.generated;
 //  Created by José Miguel S N on 31/05/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
-
 
 
 
@@ -38,37 +37,60 @@ public class CompositeRenderer extends Renderer
   {
 	_ic = ic;
   
-	for (int i = 0; i < _renderers.size(); i++)
+	final int rendersSize = _renderers.size();
+	for (int i = 0; i < rendersSize; i++)
 	{
 	  _renderers.get(i).initialize(ic);
 	}
   }
 
-  public final int render(RenderContext rc)
+  public final boolean isReadyToRender(RenderContext rc)
+  {
+	final int rendersSize = _renderers.size();
+	for (int i = 0; i < rendersSize; i++)
+	{
+	  if (!_renderers.get(i).isReadyToRender(rc))
+	  {
+		return false;
+	  }
+	}
+  
+	return true;
+  }
+
+  public final void render(RenderContext rc)
   {
 	//rc->getLogger()->logInfo("CompositeRenderer::render()");
   
-	int min = DefineConstants.MAX_TIME_TO_RENDER;
-	for (int i = 0; i < _renderers.size(); i++)
+	final int rendersSize = _renderers.size();
+	for (int i = 0; i < rendersSize; i++)
 	{
-	  int x = _renderers.get(i).render(rc);
-	  if (x < min)
-		  min = x;
+	  _renderers.get(i).render(rc);
 	}
-	return min;
   }
 
-  public final boolean onTouchEvent(TouchEvent touchEvent)
+  public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
   {
 	// the events are processed bottom to top
-	for (int i = _renderers.size() - 1; i >= 0; i--)
+	final int rendersSize = _renderers.size();
+	for (int i = rendersSize - 1; i >= 0; i--)
 	{
-	  if (_renderers.get(i).onTouchEvent(touchEvent))
+	  if (_renderers.get(i).onTouchEvent(ec, touchEvent))
 	  {
 		return true;
 	  }
 	}
 	return false;
+  }
+
+  public final void onResizeViewportEvent(EventContext ec, int width, int height)
+  {
+	// the events are processed bottom to top
+	final int rendersSize = _renderers.size();
+	for (int i = rendersSize - 1; i >= 0; i--)
+	{
+	  _renderers.get(i).onResizeViewportEvent(ec, width, height);
+	}
   }
 
   public final void addRenderer(Renderer renderer)
@@ -80,12 +102,22 @@ public class CompositeRenderer extends Renderer
 	}
   }
 
-  public final void onResizeViewportEvent(int width, int height)
+  public final void start()
   {
-	// the events are processed bottom to top
-	for (int i = _renderers.size() - 1; i >= 0; i--)
+	final int rendersSize = _renderers.size();
+	for (int i = 0; i < rendersSize; i++)
 	{
-	  _renderers.get(i).onResizeViewportEvent(width, height);
+	  _renderers.get(i).start();
 	}
   }
+
+  public final void stop()
+  {
+	final int rendersSize = _renderers.size();
+	for (int i = 0; i < rendersSize; i++)
+	{
+	  _renderers.get(i).stop();
+	}
+  }
+
 }

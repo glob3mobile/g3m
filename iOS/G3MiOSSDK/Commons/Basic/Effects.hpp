@@ -14,8 +14,15 @@
 #include "ITimer.hpp"
 #include "Camera.hpp"
 
+#include "IMathUtils.hpp"
 
 class EffectTarget {
+public:  
+  virtual bool isEffectable() const = 0;
+  
+#ifdef C_CODE
+  virtual ~EffectTarget(){}
+#endif
   
 };
 
@@ -34,7 +41,7 @@ protected:
   
   double sigmoid(double x) const {
     x = 12.0*x - 6.0;
-    return (1.0 / (1.0 + exp(-1.0 * x)));
+    return (1.0 / (1.0 + GMath.exp(-1.0 * x)));
   }
   
   double gently(const double x,
@@ -82,8 +89,8 @@ public:
 
 class EffectWithDuration : public Effect {
 private:
-  long _started;
-  const long _duration;
+  long long _started;
+  const long long _duration;
   
 protected:
   
@@ -95,7 +102,7 @@ protected:
   }
   
   double percentDone(const TimeInterval& now) const {
-    const long elapsed = now.milliseconds() - _started;
+    const long long elapsed = now.milliseconds() - _started;
     
     const double percent = (double) elapsed / _duration;
     if (percent > 1) return 1;
@@ -145,7 +152,7 @@ public:
   
   virtual bool isDone(const RenderContext *rc,
                       const TimeInterval& now) {
-    return (fabs(_force) < 1e-6);
+    return (GMath.abs(_force) < 1e-6);
   }
   
 };

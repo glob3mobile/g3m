@@ -22,6 +22,7 @@ class Camera;
 class ITimer;
 class EffectsScheduler;
 class IStringUtils;
+class IThreadUtils;
 
 #include <vector>
 #include <string>
@@ -30,6 +31,7 @@ class IStringUtils;
 
 class ICameraConstrainer;
 class FrameTasksExecutor;
+class TextureBuilder;
 
 class G3MWidget;
 
@@ -58,9 +60,11 @@ public:
   static G3MWidget* create(FrameTasksExecutor* frameTasksExecutor,
                            IFactory*           factory,
                            const IStringUtils* stringUtils,
+                           IThreadUtils*       threadUtils,
                            ILogger*            logger,
                            GL*                 gl,
                            TexturesHandler*    texturesHandler,
+                           TextureBuilder*     textureBuilder,
                            IDownloader*        downloader,
                            const Planet*       planet,
                            std::vector<ICameraConstrainer*> cameraConstraint,
@@ -75,7 +79,7 @@ public:
   
   ~G3MWidget();
   
-  int render();
+  void render();
   
   void onTouchEvent(const TouchEvent* myEvent);
   
@@ -111,6 +115,7 @@ private:
   FrameTasksExecutor* _frameTasksExecutor;
   IFactory*           _factory;
   const IStringUtils* _stringUtils;
+  IThreadUtils*       _threadUtils;
   ILogger*            _logger;
   GL*                 _gl;
   const Planet*       _planet;
@@ -118,12 +123,13 @@ private:
   Renderer*           _busyRenderer;
   EffectsScheduler*   _effectsScheduler;
   
-  std::vector<ICameraConstrainer*> _cameraConstraint;
+  std::vector<ICameraConstrainer*> _cameraConstrainers;
   
   Camera*          _currentCamera;
   Camera*          _nextCamera;
   IDownloader*     _downloader;
   TexturesHandler* _texturesHandler;
+  TextureBuilder*  _textureBuilder;
   const Color      _backgroundColor;
   
   ITimer*          _timer;
@@ -145,9 +151,11 @@ private:
   G3MWidget(FrameTasksExecutor* frameTasksExecutor,
             IFactory*           factory,
             const IStringUtils* stringUtils,
+            IThreadUtils*       threadUtils,
             ILogger*            logger,
             GL*                 gl,
             TexturesHandler*    texturesHandler,
+            TextureBuilder*     textureBuilder,
             IDownloader*        downloader,
             const Planet*       planet,
             std::vector<ICameraConstrainer*> cameraConstraint,

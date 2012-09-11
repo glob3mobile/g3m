@@ -8,12 +8,13 @@
 
 #include "URL.hpp"
 
-#include <sstream>
+#include "IStringBuilder.hpp"
 
 const std::string URL::description() const {
-  std::ostringstream buffer;
-  buffer << "URL(";
-  buffer << getPath();
-  buffer << ")";
-  return buffer.str();
+  
+  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  isb->add("URL(")->add(getPath())->add(")");
+  std::string s = isb->getString();
+  delete isb;
+  return s; 
 }

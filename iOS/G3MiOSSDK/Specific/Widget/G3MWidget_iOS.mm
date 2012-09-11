@@ -40,6 +40,11 @@
 #include "TilesRenderParameters.hpp"
 #include "FrameTasksExecutor.hpp"
 
+#include "IStringBuilder.hpp"
+#include "StringBuilder_iOS.hpp"
+
+#include "Box.hpp"
+
 #include "TexturesHandler.hpp"
 
 #include "Logger_iOS.hpp"
@@ -49,6 +54,9 @@
 #include "SingleImageTileTexturizer.hpp"
 #include "WMSLayer.hpp"
 #include "BingLayer.hpp"
+
+#include "MathUtils_iOS.hpp"
+#include "ThreadUtils_iOS.hpp"
 
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
@@ -115,16 +123,20 @@
   // create GLOB3M WIDGET
   int width = (int) [self frame].size.width;
   int height = (int) [self frame].size.height;
-  
+
+  IStringBuilder::setInstance(new StringBuilder_iOS()); //Setting StringBuilder
+
   IFactory *factory  = new Factory_iOS();
   ILogger *logger    = new Logger_iOS(ErrorLevel);
   NativeGL2_iOS* nGL = new NativeGL2_iOS();
   GL* gl  = new GL(nGL);
   
+  IMathUtils::setInstance(new MathUtils_iOS()); //Mathematics utilities
+  
   IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
   IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
                                                  storage);
-  
+
   CompositeRenderer* composite = new CompositeRenderer();
   
   composite->addRenderer(cameraRenderer);
@@ -173,7 +185,7 @@
   
   
   TextureBuilder* textureBuilder = new CPUTextureBuilder();
-  TexturesHandler* texturesHandler = new TexturesHandler(gl, factory, textureBuilder, false);
+  TexturesHandler* texturesHandler = new TexturesHandler(gl, factory, false);
   
   const Planet* planet = Planet::createEarth();
   
@@ -201,12 +213,16 @@
 //    printf("\n");
 //  }
   
+  IThreadUtils* threadUtils = new ThreadUtils_iOS();
+  
   _widgetVP = G3MWidget::create(frameTasksExecutor,
                                 factory,
                                 stringUtils,
+                                threadUtils,
                                 logger,
                                 gl,
                                 texturesHandler,
+                                textureBuilder,
                                 downloader,
                                 planet,
                                 cameraConstraints,
@@ -289,10 +305,10 @@
 //        _onDownload++;
 //        BOOL isMainThread = [NSThread isMainThread];
 //        if (isMainThread) {
-//          NSLog(@"*** Main-Thread: Downloaded %d bytes ***", response->getByteBuffer()->getLength());
+//          NSLog(@"*** Main-Thread: Downloaded %d bytes ***", response->getByteArrayWrapper()->getLength());
 //        }
 //        else {
-//          NSLog(@"*** NOT IN Main-Thread: Downloaded %d bytes ***", response->getByteBuffer()->getLength());
+//          NSLog(@"*** NOT IN Main-Thread: Downloaded %d bytes ***", response->getByteArrayWrapper()->getLength());
 //        }
 //      }
 //
@@ -574,7 +590,7 @@
     
     NSLog(@"----------------------------------------------------------------------------");
     NSLog(@"OpenGL Extensions:");
-    NSString *extensionString = [[NSString stringWithUTF8String:(char *)glGetString(GL_EXTENSIONS)] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString *extensionString = [[NSString stringWithUTF8String:(char*)glGetString(GL_EXTENSIONS)] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     NSArray *extensions = [extensionString componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     for (NSString *extension in extensions) {
       NSLog(@"  %@", extension);

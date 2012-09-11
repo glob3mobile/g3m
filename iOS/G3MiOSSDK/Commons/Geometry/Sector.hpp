@@ -31,6 +31,8 @@ private:
   
 public:
   
+  ~Sector(){}
+  
 //  static Sector fromLowerAndUpper(const Geodetic2D& lower,
 //                           const Geodetic2D& upper){
 //    
@@ -109,8 +111,7 @@ public:
   
   bool contains(const Geodetic2D& position) const;
   
-  bool contains(const Geodetic3D& position) const
-  {
+  bool contains(const Geodetic3D& position) const {
     return contains(position.asGeodetic2D());
   }
   
@@ -167,6 +168,17 @@ public:
   const Geodetic2D getApproximatedClosestPoint(const Geodetic2D& pos) const;
   
   const std::string description() const;
+  
+  Sector* shrinkedByPercentP(float percent) const {
+    Angle deltaLatitude  = _deltaLatitude.times(percent).div(2);
+    Angle deltaLongitude = _deltaLongitude.times(percent).div(2);
+    
+    Geodetic2D delta = Geodetic2D(deltaLatitude, deltaLongitude);
+    
+    return new Sector(_lower.add( delta ),
+                      _upper.sub( delta ) );
+    
+  }
   
 };
 

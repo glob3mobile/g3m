@@ -9,8 +9,8 @@
 #include "Downloader_iOS.hpp"
 
 #import "Downloader_iOS_Handler.h"
+#include "IStringBuilder.hpp"
 
-#include <sstream>
 #include <UIKit/UIKit.h>
 
 void Downloader_iOS::start() {
@@ -58,7 +58,7 @@ _started(false)
   }
 }
 
-void Downloader_iOS::cancelRequest(long requestId) {
+void Downloader_iOS::cancelRequest(long long requestId) {
   if (requestId < 0) {
     return;
   }
@@ -127,7 +127,7 @@ void Downloader_iOS::removeDownloadingHandlerForNSURL(const NSURL* url) {
 
 Downloader_iOS_Handler* Downloader_iOS::getHandlerToRun() {
   
-  __block long                    selectedPriority = -100000000; // TODO: LONG_MAX_VALUE;
+  __block long long                   selectedPriority = -100000000; // TODO: LONG_MAX_VALUE;
   __block Downloader_iOS_Handler* selectedHandler  = nil;
   __block NSURL*                  selectedURL      = nil;
   
@@ -139,7 +139,7 @@ Downloader_iOS_Handler* Downloader_iOS::getHandlerToRun() {
     NSURL*                  url     = key;
     Downloader_iOS_Handler* handler = obj;
     
-    const long priority = [handler priority];
+    const long long priority = [handler priority];
     
     if (priority > selectedPriority) {
       selectedPriority = priority;
@@ -167,10 +167,10 @@ Downloader_iOS_Handler* Downloader_iOS::getHandlerToRun() {
   return selectedHandler;
 }
 
-long Downloader_iOS::request(const URL &url,
-                             long priority,
-                             IDownloadListener* cppListener,
-                             bool deleteListener) {
+long long Downloader_iOS::request(const URL &url,
+                                  long long priority,
+                                  IDownloadListener* cppListener,
+                                  bool deleteListener) {
   
   NSURL* nsURL = [NSURL URLWithString: toNSString(url.getPath())];
   
@@ -185,7 +185,7 @@ long Downloader_iOS::request(const URL &url,
   
   _requestsCounter++;
   
-  const long requestId = _requestIdCounter++;
+  const long long requestId = _requestIdCounter++;
   
   handler = [_downloadingHandlers objectForKey: nsURL];
   if (handler) {
@@ -220,23 +220,11 @@ long Downloader_iOS::request(const URL &url,
 }
 
 const std::string Downloader_iOS::statistics() {
-  std::ostringstream buffer;
-  
-  buffer << "Downloader_iOS(downloading=";
-  
-  [_lock lock];
-  
-  buffer << [_downloadingHandlers count];
-  buffer << ", queued=";
-  buffer << [_queuedHandlers count];
-  buffer << ", totalRequests=";
-  buffer << _requestsCounter;
-  buffer << ", totalCancels=";
-  buffer << _cancelsCounter;
-  
-  [_lock unlock];
-  
-  buffer << ")";
-  
-  return buffer.str();
+  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  isb->add("Downloader_iOS(downloading=")->add([_downloadingHandlers count])->add(", queued=")->add([_queuedHandlers count]);
+  isb->add(", totalRequests=")->add(_requestsCounter);
+  isb->add(", totalCancels=")->add(_cancelsCounter);
+  std::string s = isb->getString();
+  delete isb;
+  return s;  
 }

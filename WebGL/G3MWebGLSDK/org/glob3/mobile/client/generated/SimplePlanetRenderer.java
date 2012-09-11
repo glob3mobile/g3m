@@ -1,4 +1,4 @@
-package org.glob3.mobile.client.generated; 
+package org.glob3.mobile.generated; 
 //
 //  SimplePlanetRenderer.cpp
 //  G3MiOSSDK
@@ -18,157 +18,216 @@ package org.glob3.mobile.client.generated;
 
 
 
+
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IFloatBuffer;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IIntBuffer;
+
 public class SimplePlanetRenderer extends Renderer
 {
 
   private final String _textureFilename;
-  private int _textureId;
-
-  private int _numIndexes;
-
-  private byte[] _indexes;
-  private float[] _vertices;
-  private float[] _texCoors;
+  private final int _texWidth;
+  private final int _texHeight;
 
   private final int _latRes;
   private final int _lonRes;
 
+  private Mesh _mesh;
 
-  private void createVertices(Planet planet)
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: IFloatBuffer* createVertices(const Planet& planet) const
+  private IFloatBuffer createVertices(Planet planet)
   {
-	//VERTICES
-	_vertices = new float[_latRes *_lonRes * 3];
-  
-	double lonRes1 = (double)(_lonRes-1);
-	double latRes1 = (double)(_latRes-1);
-	int p = 0;
+	//Vertices with Center in zero
+	FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.GivenCenter, planet, Vector3D.zero());
+	final double lonRes1 = (double)(_lonRes-1);
+	final double latRes1 = (double)(_latRes-1);
 	for(double i = 0.0; i < _lonRes; i++)
 	{
-	  Angle lon = Angle.fromDegrees((i * 360 / lonRes1) -180);
+	  final Angle lon = Angle.fromDegrees((i * 360 / lonRes1) -180);
 	  for (double j = 0.0; j < _latRes; j++)
 	  {
-		Angle lat = Angle.fromDegrees((j * 180.0 / latRes1) -90.0);
-		Geodetic2D g = new Geodetic2D(lat, lon);
+		final Angle lat = Angle.fromDegrees((j * 180.0 / latRes1) -90.0);
+		final Geodetic2D g = new Geodetic2D(lat, lon);
   
-		Vector3D v = planet.toVector3D(g);
-		_vertices[p++] = (float) v.x(); //Vertices
-		_vertices[p++] = (float) v.y();
-		_vertices[p++] = (float) v.z();
+		vertices.add(g);
 	  }
 	}
+  
+	return vertices.create();
   }
-  private void createMeshIndex()
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: IIntBuffer* createMeshIndex() const
+  private IIntBuffer createMeshIndex()
   {
-	int res = _lonRes;
+	IntBufferBuilder indices = new IntBufferBuilder();
   
-	_numIndexes = 2 * (res - 1) * (res + 1);
-	_indexes = new byte[_numIndexes];
-  
-	int n = 0;
+	final int res = _lonRes;
 	for (int j = 0; j < res - 1; j++)
 	{
 	  if (j > 0)
-		  _indexes[n++] = (byte)(j * res);
+	  {
+		indices.add((int)(j * res));
+	  }
 	  for (int i = 0; i < res; i++)
 	  {
-		_indexes[n++] = (byte)(j * res + i);
-		_indexes[n++] = (byte)(j * res + i + res);
+		indices.add(j * res + i);
+		indices.add(j * res + i + res);
 	  }
-	  _indexes[n++] = (byte)(j * res + 2 * res - 1);
+	  indices.add(j * res + 2 * res - 1);
 	}
-  }
-  private void createTextureCoordinates()
-  {
-	_texCoors = new float[_latRes *_lonRes * 2];
   
-	double lonRes1 = (double)(_lonRes-1);
-	double latRes1 = (double)(_latRes-1);
-	int p = 0;
+	return indices.create();
+  }
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: IFloatBuffer* createTextureCoordinates() const
+  private IFloatBuffer createTextureCoordinates()
+  {
+	FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
+	final double lonRes1 = (double)(_lonRes-1);
+	final double latRes1 = (double)(_latRes-1);
+	//int p = 0;
 	for(double i = 0.0; i < _lonRes; i++)
 	{
 	  double u = (i / lonRes1);
 	  for (double j = 0.0; j < _latRes; j++)
 	  {
-		double v = 1.0 - (j / latRes1);
-		_texCoors[p++] = (float) u;
-		_texCoors[p++] = (float) v;
+		final double v = 1.0 - (j / latRes1);
+		texCoords.add((float)u, (float)v);
 	  }
 	}
+  
+	return texCoords.create();
+  }
+
+  private boolean initializeMesh(RenderContext rc)
+  {
+  
+  
+	final Planet planet = rc.getPlanet();
+	IIntBuffer ind = createMeshIndex();
+	IFloatBuffer ver = createVertices(planet);
+	IFloatBuffer texC = null;
+	FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
+  
+	final boolean colorPerVertex = false;
+  
+	//TEXTURED
+	GLTextureId texId = GLTextureId.invalid();
+	if (true)
+	{
+  
+	  IImage image = rc.getFactory().createImageFromFileName(_textureFilename);
+	  final GLImage glImage = rc.getTextureBuilder().createTextureFromImages(rc.getGL(), rc.getFactory(), RGBA, image, _texWidth, _texHeight);
+  
+	  texId = rc.getTexturesHandler().getGLTextureId(glImage, _textureFilename, false);
+  
+	  rc.getFactory().deleteImage(image);
+	  if (glImage != null)
+		  glImage.dispose();
+  
+	  if (!texId.isValid())
+	  {
+		rc.getLogger().logError("Can't load file %s", _textureFilename);
+		return false;
+	  }
+	  texC = createTextureCoordinates();
+	}
+  
+	//COLORS PER VERTEX
+	IFloatBuffer vertexColors = null;
+	if (colorPerVertex)
+	{
+	  int numVertices = _lonRes * _lonRes * 4;
+	  for(int i = 0; i < numVertices;)
+	  {
+  
+		float val = (float)(0.5 + IMathUtils.instance().sin((float)(2.0 * IMathUtils.instance().pi() * ((float) i) / numVertices)) / 2.0);
+  
+		colors.add(val, (float)0.0, (float)(1.0 - val), (float)1.0);
+	  }
+	  vertexColors = colors.create();
+	}
+  
+	//FLAT COLOR
+	Color flatColor = null;
+	if (false)
+	{
+	  flatColor = new Color(Color.fromRGBA((float) 0.0, (float) 1.0, (float) 0.0, (float) 1.0));
+	}
+  
+	IndexedMesh im = new IndexedMesh(GLPrimitive.TriangleStrip,
+  								true,
+  								Vector3D.zero(),
+  								ver,
+  								ind,
+  								flatColor,
+  								vertexColors);
+  
+	TextureMapping texMap = new SimpleTextureMapping(texId, texC, true);
+  
+	_mesh = new TexturedMesh(im, true, texMap, true);
+  
+	return true;
   }
 
   public SimplePlanetRenderer(String textureFilename)
   {
-	  _latRes = 16;
-	  _lonRes = 16;
+	  _latRes = 30;
+	  _lonRes = 30;
 	  _textureFilename = textureFilename;
-	  _textureId = -1;
-	_indexes = null;
-	_vertices = null;
+	  _mesh = null;
+	  _texWidth = 2048;
+	  _texHeight = 1024;
   }
   public void dispose()
   {
-	_indexes = null;
-	_vertices = null;
+	if (_mesh != null)
+		_mesh.dispose();
   }
 
   public final void initialize(InitializationContext ic)
   {
-	if (ic == null)
-		return;
-	final Planet planet = ic.getPlanet();
-  
-	createVertices(planet);
-  
-	createMeshIndex();
-  
-	createTextureCoordinates();
   
   }
 
-  public final int render(RenderContext rc)
+  public final void render(RenderContext rc)
   {
-  
-	// obtaing gl object reference
-	IGL gl = rc.getGL();
-  
-	if (_textureId < 1)
+	if (_mesh == null)
 	{
-	  _textureId = rc.getTexturesHandler().getTextureIdFromFileName(rc, _textureFilename, 2048, 1024);
+	  if (!initializeMesh(rc))
+	  {
+		return;
+	  }
 	}
   
-	if (_textureId < 1)
-	{
-	  rc.getLogger().logError("Can't load file %s", _textureFilename);
-	  return DefineConstants.MAX_TIME_TO_RENDER;
-	}
-  
-  
-	// insert pointers
-	gl.enableVertices();
-	gl.enableTextures();
-	gl.enableTexture2D();
-  
-	gl.bindTexture(_textureId);
-	gl.vertexPointer(3, 0, _vertices);
-	gl.setTextureCoordinates(2, 0, _texCoors);
-  
-	// draw a red sphere
-	gl.color((float) 1, (float) 0, (float) 0, 1);
-	gl.drawTriangleStrip(_numIndexes, _indexes);
-  
-	gl.disableTexture2D();
-	gl.disableTextures();
-	gl.disableVertices();
-  
-	return DefineConstants.MAX_TIME_TO_RENDER;
+	_mesh.render(rc);
   }
 
-  public final boolean onTouchEvent(TouchEvent touchEvent)
+  public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
   {
 	return false;
   }
 
-  public final void onResizeViewportEvent(int width, int height)
+  public final void onResizeViewportEvent(EventContext ec, int width, int height)
+  {
+
+  }
+
+  public final boolean isReadyToRender(RenderContext rc)
+  {
+	return true;
+  }
+
+  public final void start()
+  {
+
+  }
+
+  public final void stop()
   {
 
   }

@@ -10,7 +10,7 @@
 #include "MutableVector3D.hpp"
 #include "Angle.hpp"
 
-#include <sstream>
+#include "IStringBuilder.hpp"
 
 
 Vector3D Vector3D::normalized() const {
@@ -26,7 +26,7 @@ Angle Vector3D::angleBetween(const Vector3D& other) const {
   if (c > 1.0) c = 1.0;
   else if (c < -1.0) c = -1.0;
   
-  return Angle::fromRadians(acos(c));
+  return Angle::fromRadians(GMath.acos(c));
 }
 
 Vector3D Vector3D::rotateAroundAxis(const Vector3D& axis,
@@ -39,7 +39,7 @@ Vector3D Vector3D::rotateAroundAxis(const Vector3D& axis,
   const double sinTheta = theta.sinus();
   
   const double ms = axis.squaredLength();
-  const double m = sqrt(ms);
+  const double m = GMath.sqrt(ms);
   
   return Vector3D(
                   ((u * (u * _x + v * _y + w * _z)) +
@@ -82,16 +82,20 @@ Vector3D Vector3D::projectionInPlane(const Vector3D& normal) const
   return projected.times(this->length());
 }
 
+Vector3D Vector3D::transformedBy(const MutableMatrix44D &m,
+                       const double homogeneus) const {
+  int todo_move_to_matrix;
+  return Vector3D(_x * m.get(0) + _y * m.get(4) + _z * m.get(8) + homogeneus * m.get(12),
+                  _x * m.get(1) + _y * m.get(5) + _z * m.get(9) + homogeneus * m.get(13),
+                  _x * m.get(2) + _y * m.get(6) + _z * m.get(10) + homogeneus * m.get(14));
+}
 
-const std::string Vector3D::description() const {
-  std::ostringstream buffer;
-  buffer << "(V3D ";
-  buffer << _x;
-  buffer << ", ";
-  buffer << _y;
-  buffer << ", ";
-  buffer << _z;
-  buffer << ")";
-  return buffer.str();
+
+const std::string Vector3D::description() const {  
+  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  isb->add("(V2D ")->add(_x)->add(", ")->add(_y)->add(", ")->add(_z)->add(")");
+  std::string s = isb->getString();
+  delete isb;
+  return s;
 }
 

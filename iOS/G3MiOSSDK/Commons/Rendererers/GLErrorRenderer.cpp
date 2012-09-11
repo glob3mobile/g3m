@@ -28,15 +28,21 @@ void GLErrorRenderer::onResizeViewportEvent(const EventContext* ec,
                                             int width, int height) {
 }
 
-int GLErrorRenderer::render(const RenderContext *rc) {
+void GLErrorRenderer::render(const RenderContext *rc) {
   GL* gl = rc->getGL();
   const ILogger* logger = rc->getLogger();
   
-  int error = gl->getError();
-  while (error != 0) {
-    logger->logError("GL Error: %i", error);
+  GLError error = gl->getError();
+#ifdef C_CODE
+  while (error != NoError) {
+    logger->logError("GL Error: %d", error);
     error = gl->getError();
   }
-  
-  return MAX_TIME_TO_RENDER;
+#else
+  while (error != GLError.NoError) { 
+    logger->logError("GL Error: %d", error.getValue());
+    error = gl->getError();
+  }
+#endif
+
 }

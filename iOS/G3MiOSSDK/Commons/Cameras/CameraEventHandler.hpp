@@ -22,12 +22,11 @@ public:
                             const TouchEvent* touchEvent,
                             CameraContext *cameraContext) = 0;
   
-  virtual int render(const RenderContext* rc,
-                     CameraContext *cameraContext) = 0;
+  virtual void render(const RenderContext* rc,
+                      CameraContext *cameraContext) = 0;
   
   virtual ~CameraEventHandler() {}
   
-private:
   virtual void onDown(const EventContext *eventContext,
                       const TouchEvent& touchEvent,
                       CameraContext *cameraContext) = 0;

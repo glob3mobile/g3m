@@ -7,11 +7,10 @@
 //
 
 #include "WMSLayer.hpp"
-
-#include <sstream>
-
 #include "Tile.hpp"
 #include "Petition.hpp"
+
+#include "IStringBuilder.hpp"
 
 std::vector<Petition*> WMSLayer::getMapPetitions(const RenderContext* rc,
                                                  const Tile* tile,
@@ -24,6 +23,10 @@ std::vector<Petition*> WMSLayer::getMapPetitions(const RenderContext* rc,
   }
   
   const Sector sector = tileSector.intersection(_sector);
+  if (sector.getDeltaLatitude().isZero() ||
+      sector.getDeltaLongitude().isZero() ) {
+    return petitions;
+  }
   
 	//Server name
   std::string req = _mapServerURL.getPath();
@@ -50,44 +53,41 @@ std::vector<Petition*> WMSLayer::getMapPetitions(const RenderContext* rc,
     {
       req += "&VERSION=1.3.0";
       
-      std::ostringstream oss1;
-      oss1 << "&WIDTH=" << width;
-      oss1 << "&HEIGHT=" << height;
+      IStringBuilder* isb = IStringBuilder::newStringBuilder();
       
-      oss1 << "&BBOX=";
-      oss1 << sector.lower().latitude().degrees();
-      oss1 << ",";
-      oss1 << sector.lower().longitude().degrees();
-      oss1 << ",";
-      oss1 << sector.upper().latitude().degrees();
-      oss1 << ",";
-      oss1 << sector.upper().longitude().degrees();
-      req += oss1.str();
+      isb->add("&WIDTH=")->add(width);
+      isb->add("&HEIGHT=")->add(height);
+      
+      isb->add("&BBOX=")->add(sector.lower().latitude().degrees())->add(",");
+      isb->add(sector.lower().longitude().degrees())->add(",");
+      isb->add(sector.upper().latitude().degrees())->add(",");
+      isb->add(sector.upper().longitude().degrees());
+      
+      req += isb->getString();
+      delete isb;
       
       req += "&CRS=EPSG:4326";
-    }
-      break;
       
+      break;
+    }
     case WMS_1_1_0:
     default:
     {
       // default is 1.1.1
       req += "&VERSION=1.1.1";
       
-      std::ostringstream oss2;
-      oss2 << "&WIDTH=" << width;
-      oss2 << "&HEIGHT=" << height;
+      IStringBuilder* isb = IStringBuilder::newStringBuilder();
       
-      oss2 << "&BBOX=";
-      oss2 << sector.lower().longitude().degrees();
-      oss2 << ",";
-      oss2 << sector.lower().latitude().degrees();
-      oss2 << ",";
-      oss2 << sector.upper().longitude().degrees();
-      oss2 << ",";
-      oss2 << sector.upper().latitude().degrees();
-      req += oss2.str();
+      isb->add("&WIDTH=")->add(width);
+      isb->add("&HEIGHT=")->add(height);
       
+      isb->add("&BBOX=")->add(sector.lower().longitude().degrees())->add(",");
+      isb->add(sector.lower().latitude().degrees())->add(",");
+      isb->add(sector.upper().longitude().degrees())->add(",");
+      isb->add(sector.upper().latitude().degrees());
+      
+      req += isb->getString();
+      delete isb;
       break;
     }
   }
@@ -122,8 +122,6 @@ std::vector<Petition*> WMSLayer::getMapPetitions(const RenderContext* rc,
   Petition *petition = new Petition(sector, URL(req));
   petitions.push_back(petition);
   
-  //  printf("%s\n", petition->description().c_str());
-  
 	return petitions;
 }
 
@@ -132,7 +130,7 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& g,
                                 const Sector& tileSector,
                                 int width, int height) const {
   if (!_sector.touchesWith(tileSector)) {
-    return URL::null();
+    return URL::nullURL();
   }
   
   const Sector sector = tileSector.intersection(_sector);
@@ -169,49 +167,48 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& g,
     {
       req += "&VERSION=1.3.0";
       
-      std::ostringstream oss1;
-      oss1 << "&WIDTH=" << width;
-      oss1 << "&HEIGHT=" << height;
+      IStringBuilder* isb = IStringBuilder::newStringBuilder();
       
-      oss1 << "&BBOX=";
-      oss1 << sector.lower().latitude().degrees();
-      oss1 << ",";
-      oss1 << sector.lower().longitude().degrees();
-      oss1 << ",";
-      oss1 << sector.upper().latitude().degrees();
-      oss1 << ",";
-      oss1 << sector.upper().longitude().degrees();
-      req += oss1.str();
+      isb->add("&WIDTH=")->add(width);
+      isb->add("&HEIGHT=")->add(height);
+      
+      isb->add("&BBOX=")->add(sector.lower().latitude().degrees())->add(",");
+      isb->add(sector.lower().longitude().degrees())->add(",");
+      isb->add(sector.upper().latitude().degrees())->add(",");
+      isb->add(sector.upper().longitude().degrees());
+      
+      req += isb->getString();
+      
+      delete isb;
       
       req += "&CRS=EPSG:4326";
-    }
-      break;
       
+      break;
+    }
     case WMS_1_1_0:
     default:
     {
       // default is 1.1.1
       req += "&VERSION=1.1.1";
       
-      std::ostringstream oss2;
-      oss2 << "&WIDTH=" << width;
-      oss2 << "&HEIGHT=" << height;
+      IStringBuilder* isb = IStringBuilder::newStringBuilder();
       
-      oss2 << "&BBOX=";
-      oss2 << sector.lower().longitude().degrees();
-      oss2 << ",";
-      oss2 << sector.lower().latitude().degrees();
-      oss2 << ",";
-      oss2 << sector.upper().longitude().degrees();
-      oss2 << ",";
-      oss2 << sector.upper().latitude().degrees();
-      req += oss2.str();
+      isb->add("&WIDTH=")->add(width);
+      isb->add("&HEIGHT=")->add(height);
       
+      isb->add("&BBOX=")->add(sector.lower().longitude().degrees())->add(",");
+      isb->add(sector.lower().latitude().degrees())->add(",");
+      isb->add(sector.upper().longitude().degrees())->add(",");
+      isb->add(sector.upper().latitude().degrees());
+      
+      req += isb->getString();
+      
+      delete isb;
       break;
     }
   }
-	
   req += "&LAYERS=" + _queryLayer;
+  
   //req += "&LAYERS=" + _queryLayers;
   req += "&QUERY_LAYERS=" + _queryLayer;
   
@@ -219,9 +216,13 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& g,
   
   //X and Y
   Vector2D pixel = tileSector.getUVCoordinates(g);
-  int x = (int) round( (pixel.x() * width) );
-  int y = (int) round ( ((1.0 - pixel.y()) * height) );
-  req += factory->stringFormat("&X=%d&Y=%d", x, y);
+  int x = (int) GMath.round( (pixel.x() * width) );
+  int y = (int) GMath.round ( ((1.0 - pixel.y()) * height) );
+  
+  IStringBuilder* isb = IStringBuilder::newStringBuilder();
+  isb->add("&X=")->add(x)->add("&Y=")->add(y);
+  req += isb->getString();
+  delete isb;
   
 	return URL(req);
 }

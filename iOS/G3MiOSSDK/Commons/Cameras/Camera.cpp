@@ -8,7 +8,7 @@
  */
 
 
-#include <math.h>
+#include "IMathUtils.hpp"
 #include <string.h>
 
 #include "Camera.hpp"
@@ -19,7 +19,7 @@
 void Camera::initialize(const InitializationContext* ic)
 {
   _planet = ic->getPlanet();
-  _position = MutableVector3D(_planet->getRadii().maxAxis() * 5, 0, 0);
+  setCartesianPosition( MutableVector3D(_planet->getRadii().maxAxis() * 5, 0, 0) );
   _dirtyFlags.setAll(true);
 }
 
@@ -28,52 +28,85 @@ void Camera::copyFrom(const Camera &that) {
   _width  = that._width;
   _height = that._height;
   
-  _modelMatrix      = that._modelMatrix;
-  _projectionMatrix = that._projectionMatrix;
-  _modelViewMatrix  = that._modelViewMatrix;
+  _planet = that._planet;
   
-  _position = that._position;
-  _center   = that._center;
-  _up       = that._up;
+  _position = MutableVector3D(that._position);
+  _center   = MutableVector3D(that._center);
+  _up       = MutableVector3D(that._up);
   
+  _dirtyFlags.copyFrom(that._dirtyFlags);
+  
+  _frustumData = FrustumData(that._frustumData);
+  
+  _projectionMatrix = MutableMatrix44D(that._projectionMatrix);
+  _modelMatrix      = MutableMatrix44D(that._modelMatrix);
+  _modelViewMatrix  = MutableMatrix44D(that._modelViewMatrix);
+  
+  _cartesianCenterOfView = MutableVector3D(that._cartesianCenterOfView);
+  
+  _geodeticCenterOfView = (that._geodeticCenterOfView == NULL) ? NULL : new Geodetic3D(*that._geodeticCenterOfView);
+  
+#ifdef C_CODE
   if (_frustum != NULL) {
     delete _frustum;
   }
   if (_frustumInModelCoordinates != NULL) {
     delete _frustumInModelCoordinates;
   }
+  if (_halfFrustum != NULL) {
+    delete _halfFrustum;
+  }
+  if (_halfFrustumInModelCoordinates != NULL) {
+    delete _halfFrustumInModelCoordinates;
+  }
+#endif
+  
   _frustum = (that._frustum == NULL) ? NULL : new Frustum(*that._frustum);
+  
   _frustumInModelCoordinates = (that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates);
   
-  //_dirtyCachedValues = that._dirtyCachedValues;
-  _dirtyFlags = that._dirtyFlags;
+  _halfFrustum = (that._frustum == NULL) ? NULL : new Frustum(*that._frustum);
   
-  _logger = that._logger;
-  
-  //cleanCachedValues();
+  _halfFrustumInModelCoordinates = (that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates);
 }
 
 Camera::Camera(int width, int height) :
+_width(0),
+_height(0),
+_planet(NULL),
 _position(0, 0, 0),
 _center(0, 0, 0),
 _up(0, 0, 1),
-_logger(NULL),
+_dirtyFlags(),
+_frustumData(),
+_projectionMatrix(),
+_modelMatrix(),
+_modelViewMatrix(),
+_cartesianCenterOfView(0,0,0),
+_geodeticCenterOfView(NULL),
 _frustum(NULL),
 _frustumInModelCoordinates(NULL),
 _halfFrustumInModelCoordinates(NULL),
-_halfFrustum(NULL),
-_dirtyFlags(),
-_XYZCenterOfView(0, 0, 0),
-_geodeticCenterOfView(NULL),
-_frustumData()
+_halfFrustum(NULL)
 {
   resizeViewport(width, height);
 }
 
-void Camera::reset() {
+void Camera::resetPosition() {
   _position = MutableVector3D(0, 0, 0);
   _center = MutableVector3D(0, 0, 0);
   _up = MutableVector3D(0, 0, 1);
+  
+  _dirtyFlags.setAll(true);
+  
+  _frustumData = FrustumData();
+  _projectionMatrix = MutableMatrix44D();
+  _modelMatrix = MutableMatrix44D();
+  _modelViewMatrix = MutableMatrix44D();
+  _cartesianCenterOfView = MutableVector3D();
+  
+  if (_geodeticCenterOfView != NULL) delete _geodeticCenterOfView;
+  _geodeticCenterOfView = NULL;
   
   if (_frustum != NULL) delete _frustum;
   _frustum = NULL;
@@ -86,122 +119,57 @@ void Camera::reset() {
   
   if (_halfFrustum != NULL) delete _halfFrustum;
   _halfFrustum = NULL;
-  
-  _dirtyFlags.setAll(true);
-  _XYZCenterOfView = MutableVector3D(0, 0, 0);
-  
-  if (_geodeticCenterOfView != NULL) delete _geodeticCenterOfView;
-  _geodeticCenterOfView = NULL;
-  
-  _frustumData = FrustumData();
 }
 
 void Camera::resizeViewport(int width, int height) {
   _width = width;
   _height = height;
   
+  _dirtyFlags._projectionMatrix = true;
+  
   //cleanCachedValues();
 }
 
 void Camera::print() {
-  if (_logger != NULL){ 
-    getModelMatrix().print("Model Matrix", _logger);
-    getProjectionMatrix().print("Projection Matrix", _logger);
-    getModelViewMatrix().print("ModelView Matrix", _logger);
-    _logger->logInfo("Width: %d, Height %d\n", _width, _height);
-  }
+  getModelMatrix().print("Model Matrix", ILogger::instance());
+  getProjectionMatrix().print("Projection Matrix", ILogger::instance());
+  getModelViewMatrix().print("ModelView Matrix", ILogger::instance());
+  ILogger::instance()->logInfo("Width: %d, Height %d\n", _width, _height);
 }
 
-/*
-void Camera::calculateCachedValues() {
-  const FrustumData data = calculateFrustumData();
-  
-  _projectionMatrix = MutableMatrix44D::createProjectionMatrix(data._left, data._right,
-                                                               data._bottom, data._top,
-                                                               data._znear, data._zfar);
-  
-  _modelMatrix = MutableMatrix44D::createModelMatrix(_position, _center, _up);
-  
-  
-//  _modelViewMatrix = _projectionMatrix.multiply(_modelMatrix);
-  
-  
-  // compute center of view on planet
-  if (_centerOfView) {
-    delete _centerOfView;
-  }
-  const Vector3D centerV = centerOfViewOnPlanet();
-  const Geodetic3D centerG = _planet->toGeodetic3D(centerV);
-  _centerOfView = new Geodetic3D(centerG);
-  
-  
-  if (_frustum != NULL) {
-    delete _frustum;
-  }
-  _frustum = new Frustum(data._left, data._right,
-                         data._bottom, data._top,
-                         data._znear, data._zfar);
-  
-  if (_frustumInModelCoordinates != NULL) {
-    delete _frustumInModelCoordinates;
-  }
-  _frustumInModelCoordinates = _frustum->_frustum->transformedBy_P(_modelMatrix.transposed());(_modelMatrix.transposed());
-  
-  
-  if (_halfFrustum != NULL) {
-    delete _halfFrustum;
-  }
-  _halfFrustum =  new Frustum(data._left/2, data._right/2,
-                              data._bottom/2, data._top/2,
-                              data._znear, data._zfar);
-  
-  if (_halfFrustumInModelCoordinates != NULL) {
-    delete _halfFrustumInModelCoordinates;
-  }
-  _halfFrustumInModelCoordinates = _halfFrustum->transformedBy_P(_modelMatrix.transposed());
-
-
-}*/
-
 void Camera::render(const RenderContext* rc) const {
-  _logger = rc->getLogger();
-  /*
-  if (_dirtyCachedValues) {
-    calculateCachedValues();
-    _dirtyCachedValues = false;
-  }*/
-  
+
   GL *gl = rc->getGL();
   gl->setProjection(getProjectionMatrix());
   gl->loadMatrixf(getModelMatrix());
     
-  // TEMP: TEST TO SEE HALF SIZE FRUSTUM CLIPPING 
-  if (false) {
-    const MutableMatrix44D inversed = getModelMatrix().inversed();
-    
-    const FrustumData data = calculateFrustumData();
-    const Vector3D p0(Vector3D(data._left/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
-    const Vector3D p1(Vector3D(data._left/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
-    const Vector3D p2(Vector3D(data._right/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
-    const Vector3D p3(Vector3D(data._right/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
-    
-    const float vertices[] = {
-      (float) p0.x(), (float) p0.y(), (float) p0.z(),
-      (float) p1.x(), (float) p1.y(), (float) p1.z(),
-      (float) p2.x(), (float) p2.y(), (float) p2.z(),
-      (float) p3.x(), (float) p3.y(), (float) p3.z(),    
-    };
-    const int indices[] = {0, 1, 2, 3};
-    
-    gl->enableVerticesPosition();
-    gl->vertexPointer(3, 0, vertices);
-    gl->lineWidth(2);
-    gl->color(1, 0, 1, 1);
-    gl->drawLineLoop(4, indices);
-    
-    gl->lineWidth(1);
-    gl->color(1, 1, 1, 1);
-  }
+//  // TEMP: TEST TO SEE HALF SIZE FRUSTUM CLIPPING 
+//  if (false) {
+//    const MutableMatrix44D inversed = getModelMatrix().inversed();
+//    
+//    const FrustumData data = calculateFrustumData();
+//    const Vector3D p0(Vector3D(data._left/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
+//    const Vector3D p1(Vector3D(data._left/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
+//    const Vector3D p2(Vector3D(data._right/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
+//    const Vector3D p3(Vector3D(data._right/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
+//    
+//    const float vertices[] = {
+//      (float) p0.x(), (float) p0.y(), (float) p0.z(),
+//      (float) p1.x(), (float) p1.y(), (float) p1.z(),
+//      (float) p2.x(), (float) p2.y(), (float) p2.z(),
+//      (float) p3.x(), (float) p3.y(), (float) p3.z(),    
+//    };
+//    const int indices[] = {0, 1, 2, 3};
+//    
+//    gl->enableVerticesPosition();
+//    gl->vertexPointer(3, 0, vertices);
+//    gl->lineWidth(2);
+//    gl->color(1, 0, 1, 1);
+//    gl->drawLineLoop(4, indices);
+//    
+//    gl->lineWidth(1);
+//    gl->color(1, 1, 1, 1);
+//  }
   
 
 }
@@ -241,11 +209,12 @@ Vector2D Camera::point2Pixel(const Vector3D& point) const {
 }
 
 void Camera::applyTransform(const MutableMatrix44D& M) {
-  _position = _position.transformedBy(M, 1.0);
-  _center   = _center.transformedBy(M, 1.0);
-  _up       = _up.transformedBy(M, 0.0);
+  setCartesianPosition( _position.transformedBy(M, 1.0) );
+  setCenter( _center.transformedBy(M, 1.0) );
   
-  _dirtyFlags.setAll(true);
+  setUp(  _up.transformedBy(M, 0.0) );
+  
+  //_dirtyFlags.setAll(true);
 }
 
 void Camera::dragCamera(const Vector3D& p0, const Vector3D& p1) {
@@ -254,7 +223,7 @@ void Camera::dragCamera(const Vector3D& p0, const Vector3D& p1) {
   
   // compute the angle
   //const Angle rotationDelta = Angle::fromRadians( - acos(p0.normalized().dot(p1.normalized())) );
-  const Angle rotationDelta = Angle::fromRadians(-asin(rotationAxis.length()/p0.length()/p1.length()));
+  const Angle rotationDelta = Angle::fromRadians(-GMath.asin(rotationAxis.length()/p0.length()/p1.length()));
   
   if (rotationDelta.isNan()) {
     return; 
@@ -280,15 +249,11 @@ void Camera::pivotOnCenter(const Angle& a) {
 
 void Camera::rotateWithAxisAndPoint(const Vector3D& axis, const Vector3D& point, const Angle& delta) {
   const MutableMatrix44D m = MutableMatrix44D::createGeneralRotationMatrix(delta, axis, point);
-  
-  //m.print();
-  
   applyTransform(m);
 }
 
 void Camera::setPosition(const Geodetic3D& g3d) {
-  _position = _planet->toVector3D(g3d).asMutableVector3D();
-  _dirtyFlags.setAll(true);
+  setCartesianPosition( _planet->toCartesian(g3d).asMutableVector3D() );
 }
 
 Vector3D Camera::centerOfViewOnPlanet() const {
@@ -297,6 +262,7 @@ Vector3D Camera::centerOfViewOnPlanet() const {
 }
 
 Vector3D Camera::getHorizontalVector() {
+  int todo_remove_get_in_matrix;
   MutableMatrix44D M = getModelMatrix();
   return Vector3D(M.get(0), M.get(4), M.get(8));
 }

@@ -14,7 +14,11 @@
 
 class IStringUtils {
 private:
+#ifdef C_CODE
   static const IStringUtils* _instance;
+#else
+  static IStringUtils* _instance;
+#endif
   
 public:
   static void setInstance(const IStringUtils* instance) {
@@ -32,7 +36,7 @@ public:
     
   }
   
-  virtual std::string createString(unsigned char* data,
+  virtual std::string createString(unsigned char data[],
                                    int            length) const = 0;
   
   

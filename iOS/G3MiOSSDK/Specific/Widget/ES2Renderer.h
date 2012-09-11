@@ -16,19 +16,21 @@
 
 @interface ES2Renderer :NSObject  {
 @private
-    EAGLContext *context;
-
-    // The pixel dimensions of the CAEAGLLayer
-    GLint backingWidth;
-    GLint backingHeight;
-
-    // The OpenGL ES names for the framebuffer and renderbuffer used to render to this view
-    GLuint defaultFramebuffer, colorRenderbuffer, depthRenderbuffer;
-
-    GLuint program;
+  EAGLContext *context;
+  
+  // The pixel dimensions of the CAEAGLLayer
+  GLint backingWidth;
+  GLint backingHeight;
+  
+  // The OpenGL ES names for the framebuffer and renderbuffer used to render to this view
+  GLuint defaultFramebuffer, colorRenderbuffer, depthRenderbuffer;
+  
+  GLuint program;
+  
+  BOOL _firstRender;
 }
 
-- (int)render: (void*) widget;
+- (void)render: (void*) widget;
 
 - (BOOL)resizeFromLayer:(CAEAGLLayer *)layer;
 

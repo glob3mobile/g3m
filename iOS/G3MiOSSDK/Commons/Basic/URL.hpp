@@ -14,7 +14,6 @@
 class URL {
 private:
   const std::string _path;
-  
   URL& operator=(const URL& that);
   
 public:
@@ -23,6 +22,8 @@ public:
   _path(that._path) {
     
   }
+  
+  URL():_path(""){}
   
   explicit URL(const std::string& path):
   _path(path)
@@ -39,7 +40,7 @@ public:
     return _path;
   }
   
-  static URL null() {
+  static URL nullURL() {
     return URL("__NULL__");
   }
   

@@ -27,7 +27,7 @@ public:
   _tapCount(other._tapCount)
   {}
   
-  Touch(const Vector2D& pos, const Vector2D& prev, const unsigned char tapCount=0): 
+  Touch(const Vector2D& pos, const Vector2D& prev, const unsigned char tapCount= (unsigned char)0): 
   _pos(pos), 
   _prevPos(prev),
   _tapCount(tapCount)

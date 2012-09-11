@@ -39,7 +39,7 @@ public:
   {
     
   }
-  
+
   FrustumData(const FrustumData& fd) :
   _left(fd._left),
   _right(fd._right),
@@ -141,6 +141,8 @@ public:
                        _nearPlane.transformedBy(matrix),
                        _farPlane.transformedBy(matrix));
   }
+  
+  ~Frustum(){}
 };
 
 

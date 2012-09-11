@@ -43,8 +43,8 @@ void CameraSingleDragHandler::onDown(const EventContext *eventContext,
                                      const TouchEvent& touchEvent, 
                                      CameraContext *cameraContext) 
 {  
-  Camera *camera = cameraContext->getCamera();
-  _camera0 = Camera(*camera);
+  Camera *camera = cameraContext->getNextCamera();
+  _camera0.copyFrom(*camera);
   cameraContext->setCurrentGesture(Drag); 
   _axis = MutableVector3D::nan();
   _lastRadians = _radiansStep = 0.0;
@@ -79,12 +79,12 @@ void CameraSingleDragHandler::onMove(const EventContext *eventContext,
     //INVALID FINAL POINT
     //printf ("--invalid final point in drag!!\n");
     Vector3D ray = _camera0.pixel2Ray(pixel);
-    Vector3D pos = _camera0.getPosition();
+    Vector3D pos = _camera0.getCartesianPosition();
     finalPoint = eventContext->getPlanet()->closestPointToSphere(pos, ray).asMutableVector3D();
   }
 
   // make drag
-  Camera *camera = cameraContext->getCamera();
+  Camera *camera = cameraContext->getNextCamera();
   camera->copyFrom(_camera0);
   camera->dragCamera(_initialPoint.asVector3D(), finalPoint.asVector3D());
   
@@ -92,7 +92,7 @@ void CameraSingleDragHandler::onMove(const EventContext *eventContext,
   // save drag parameters
   _axis = _initialPoint.cross(finalPoint);
   
-  const double radians = -asin(_axis.length()/_initialPoint.length()/finalPoint.length());
+  const double radians = - GMath.asin(_axis.length()/_initialPoint.length()/finalPoint.length());
   _radiansStep = radians - _lastRadians;
   _lastRadians = radians;
 }
@@ -120,33 +120,28 @@ void CameraSingleDragHandler::onUp(const EventContext *eventContext,
   _initialPixel = MutableVector2D::nan();
 }
 
-int CameraSingleDragHandler::render(const RenderContext* rc, CameraContext *cameraContext) 
+void CameraSingleDragHandler::render(const RenderContext* rc, CameraContext *cameraContext)
 {
-  // TEMP TO DRAW A POINT WHERE USER PRESS
-  if (false) {
-    if (cameraContext->getCurrentGesture() == Drag) {
-      GL *gl = rc->getGL();
-      float vertices[] = { 0,0,0};
-      int indices[] = {0};
-      gl->enableVerticesPosition();
-      gl->disableTexture2D();
-      gl->disableTextures();
-      gl->vertexPointer(3, 0, vertices);
-      gl->color((float) 0, (float) 1, (float) 0, 1);
-      gl->pointSize(60);
-      gl->pushMatrix();
-      MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D());
-      gl->multMatrixf(T);
-      gl->drawPoints(1, indices);
-      gl->popMatrix();
-            
-      //Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
-      //printf ("zoom with initial point = (%f, %f)\n", g.latitude().degrees(), g.longitude().degrees());
-    }
-  }
-
-  return MAX_TIME_TO_RENDER;
+//  // TEMP TO DRAW A POINT WHERE USER PRESS
+//  if (false) {
+//    if (cameraContext->getCurrentGesture() == Drag) {
+//      GL *gl = rc->getGL();
+//      float vertices[] = { 0,0,0};
+//      int indices[] = {0};
+//      gl->enableVerticesPosition();
+//      gl->disableTexture2D();
+//      gl->disableTextures();
+//      gl->vertexPointer(3, 0, vertices);
+//      gl->color((float) 0, (float) 1, (float) 0, 1);
+//      gl->pointSize(60);
+//      gl->pushMatrix();
+//      MutableMatrix44D T = MutableMatrix44D::createTranslationMatrix(_initialPoint.asVector3D());
+//      gl->multMatrixf(T);
+//      gl->drawPoints(1, indices);
+//      gl->popMatrix();
+//            
+//      //Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
+//      //printf ("zoom with initial point = (%f, %f)\n", g.latitude().degrees(), g.longitude().degrees());
+//    }
+//  }
 }
-
-
-

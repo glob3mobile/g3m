@@ -9,15 +9,17 @@
 /* Begin PBXBuildFile section */
 		443BBC8315A5C22000EAE280 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 443BBC8215A5C21F00EAE280 /* CoreData.framework */; };
 		44EEB5E0159B2B8B0086F243 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 44EEB5DF159B2B8B0086F243 /* libsqlite3.dylib */; };
+<<<<<<< HEAD
 		44F44D0515A6CCC40071595E /* test.db in Resources */ = {isa = PBXBuildFile; fileRef = 44F44D0415A6CCC40071595E /* test.db */; };
 		A717C99615EBA71D00EEC830 /* mercator.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A717C99515EBA71D00EEC830 /* mercator.jpg */; };
 		A717C9A115EEA45200EEC830 /* tissot.png in Resources */ = {isa = PBXBuildFile; fileRef = A717C9A015EEA45200EEC830 /* tissot.png */; };
 		A717C9A315EEA45D00EEC830 /* mercator2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A717C9A215EEA45D00EEC830 /* mercator2.jpg */; };
+=======
+>>>>>>> android-port
 		CCD7885415D9A3FA0065A7E1 /* ProgressWheel.png in Resources */ = {isa = PBXBuildFile; fileRef = CCD7885315D9A3FA0065A7E1 /* ProgressWheel.png */; };
 		CF7A708815CFD0A50086FDE6 /* g3m-marker.png in Resources */ = {isa = PBXBuildFile; fileRef = CF7A708715CFD0A50086FDE6 /* g3m-marker.png */; };
 		CF883B841591053100AEE39C /* mark.png in Resources */ = {isa = PBXBuildFile; fileRef = CF883B831591053100AEE39C /* mark.png */; };
 		CFF95F7D158A748F00B56E11 /* plane.png in Resources */ = {isa = PBXBuildFile; fileRef = CFF95F7C158A748F00B56E11 /* plane.png */; };
-		D816E7A315B6C478004FA4D6 /* NoImage.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D816E7A215B6C478004FA4D6 /* NoImage.jpg */; };
 		D8E93BE01588A171009D497C /* world.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D8E93BDF1588A171009D497C /* world.jpg */; };
 		D8EEF38B1577920B003FEB5E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF38A1577920B003FEB5E /* UIKit.framework */; };
 		D8EEF38D1577920B003FEB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EEF38C1577920B003FEB5E /* Foundation.framework */; };
@@ -56,15 +58,17 @@
 /* Begin PBXFileReference section */
 		443BBC8215A5C21F00EAE280 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		44EEB5DF159B2B8B0086F243 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+<<<<<<< HEAD
 		44F44D0415A6CCC40071595E /* test.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = test.db; path = ../../G3MiOSSDK/DBStorage/test.db; sourceTree = "<group>"; };
 		A717C99515EBA71D00EEC830 /* mercator.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = mercator.jpg; sourceTree = "<group>"; };
 		A717C9A015EEA45200EEC830 /* tissot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tissot.png; sourceTree = "<group>"; };
 		A717C9A215EEA45D00EEC830 /* mercator2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = mercator2.jpg; sourceTree = "<group>"; };
+=======
+>>>>>>> android-port
 		CCD7885315D9A3FA0065A7E1 /* ProgressWheel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ProgressWheel.png; sourceTree = "<group>"; };
 		CF7A708715CFD0A50086FDE6 /* g3m-marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g3m-marker.png"; sourceTree = "<group>"; };
 		CF883B831591053100AEE39C /* mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mark.png; sourceTree = "<group>"; };
 		CFF95F7C158A748F00B56E11 /* plane.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plane.png; sourceTree = "<group>"; };
-		D816E7A215B6C478004FA4D6 /* NoImage.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = NoImage.jpg; sourceTree = "<group>"; };
 		D8E93BDF1588A171009D497C /* world.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = world.jpg; sourceTree = "<group>"; };
 		D8EEF3861577920B003FEB5E /* G3MiOSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = G3MiOSDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8EEF38A1577920B003FEB5E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -111,10 +115,10 @@
 		D8EEF37B1577920A003FEB5E = {
 			isa = PBXGroup;
 			children = (
-				D8EEF3871577920B003FEB5E /* Products */,
 				D8EEF3891577920B003FEB5E /* Frameworks */,
 				D8EEF3901577920B003FEB5E /* G3MiOSDemo */,
 				D8EEF4161577AEC8003FEB5E /* G3MiOSSDK.xcodeproj */,
+				D8EEF3871577920B003FEB5E /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -185,8 +189,6 @@
 				A717C99515EBA71D00EEC830 /* mercator.jpg */,
 				CCD7885315D9A3FA0065A7E1 /* ProgressWheel.png */,
 				CF7A708715CFD0A50086FDE6 /* g3m-marker.png */,
-				D816E7A215B6C478004FA4D6 /* NoImage.jpg */,
-				44F44D0415A6CCC40071595E /* test.db */,
 				CF883B831591053100AEE39C /* mark.png */,
 				CFF95F7C158A748F00B56E11 /* plane.png */,
 				D8E93BDF1588A171009D497C /* world.jpg */,
@@ -271,8 +273,6 @@
 				D8E93BE01588A171009D497C /* world.jpg in Resources */,
 				CFF95F7D158A748F00B56E11 /* plane.png in Resources */,
 				CF883B841591053100AEE39C /* mark.png in Resources */,
-				44F44D0515A6CCC40071595E /* test.db in Resources */,
-				D816E7A315B6C478004FA4D6 /* NoImage.jpg in Resources */,
 				CF7A708815CFD0A50086FDE6 /* g3m-marker.png in Resources */,
 				CCD7885415D9A3FA0065A7E1 /* ProgressWheel.png in Resources */,
 				A717C99615EBA71D00EEC830 /* mercator.jpg in Resources */,
@@ -392,6 +392,11 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Glob3iOSDemo/G3MiOSDemo-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					C_CODE,
+				);
 				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = NO;
 				GCC_WARN_UNUSED_FUNCTION = NO;
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";
@@ -409,6 +414,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Glob3iOSDemo/G3MiOSDemo-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = C_CODE;
 				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = NO;
 				GCC_WARN_UNUSED_FUNCTION = NO;
 				HEADER_SEARCH_PATHS = "$(BUILT_PRODUCTS_DIR)/**";

@@ -1,4 +1,4 @@
-package org.glob3.mobile.client.generated; 
+package org.glob3.mobile.generated; 
 //
 //  Ellipsoid.cpp
 //  G3MiOSSDK
@@ -62,30 +62,40 @@ public class Ellipsoid
 //ORIGINAL LINE: Vector3D geodeticSurfaceNormal(const Geodetic3D& geodetic) const
   public final Vector3D geodeticSurfaceNormal(Geodetic3D geodetic)
   {
-	double cosLatitude = geodetic.latitude().cosinus();
+	final double cosLatitude = geodetic.latitude().cosinus();
   
 	return new Vector3D(cosLatitude * geodetic.longitude().cosinus(), cosLatitude * geodetic.longitude().sinus(), geodetic.latitude().sinus());
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: java.util.ArrayList<double> intersections(const Vector3D& origin, const Vector3D& direction) const
-  public final java.util.ArrayList<Double> intersections(Vector3D origin, Vector3D direction)
+//ORIGINAL LINE: Vector3D geodeticSurfaceNormal(const Geodetic2D& geodetic) const
+  public final Vector3D geodeticSurfaceNormal(Geodetic2D geodetic)
+  {
+	final double cosLatitude = geodetic.latitude().cosinus();
+  
+	return new Vector3D(cosLatitude * geodetic.longitude().cosinus(), cosLatitude * geodetic.longitude().sinus(), geodetic.latitude().sinus());
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: java.util.ArrayList<double> intersectionsDistances(const Vector3D& origin, const Vector3D& direction) const
+  public final java.util.ArrayList<Double> intersectionsDistances(Vector3D origin, Vector3D direction)
   {
 	java.util.ArrayList<Double> intersections = new java.util.ArrayList<Double>();
   
+	int __ASK_Normalized_or_not;
 	//direction.Normalize();
   
 	// By laborious algebraic manipulation....
-	double a = direction.x() * direction.x() * _oneOverRadiiSquared.x() + direction.y() * direction.y() * _oneOverRadiiSquared.y() + direction.z() * direction.z() * _oneOverRadiiSquared.z();
+	final double a = (direction.x() * direction.x() * _oneOverRadiiSquared.x() + direction.y() * direction.y() * _oneOverRadiiSquared.y() + direction.z() * direction.z() * _oneOverRadiiSquared.z());
   
-	double b = 2.0 * (origin.x() * direction.x() * _oneOverRadiiSquared.x() + origin.y() * direction.y() * _oneOverRadiiSquared.y() + origin.z() * direction.z() * _oneOverRadiiSquared.z());
+	final double b = 2.0 * (origin.x() * direction.x() * _oneOverRadiiSquared.x() + origin.y() * direction.y() * _oneOverRadiiSquared.y() + origin.z() * direction.z() * _oneOverRadiiSquared.z());
   
-	double c = origin.x() * origin.x() * _oneOverRadiiSquared.x() + origin.y() * origin.y() * _oneOverRadiiSquared.y() + origin.z() * origin.z() * _oneOverRadiiSquared.z() - 1.0;
+	final double c = (origin.x() * origin.x() * _oneOverRadiiSquared.x() + origin.y() * origin.y() * _oneOverRadiiSquared.y() + origin.z() * origin.z() * _oneOverRadiiSquared.z() - 1.0);
   
 	// Solve the quadratic equation: ax^2 + bx + c = 0.
 	// Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
 	// Numerical Recipes in C, section 5.6: "Quadratic and Cubic Equations"
-	double discriminant = b * b - 4 * a * c;
+	final double discriminant = b * b - 4 * a * c;
 	if (discriminant < 0.0)
 	{
 	  // no intersections
@@ -99,51 +109,50 @@ public class Ellipsoid
 	  return intersections;
 	}
   
-	double t = -0.5 * (b + (b > 0.0 ? 1.0 : -1.0) * Math.sqrt(discriminant));
-	double root1 = t / a;
-	double root2 = c / t;
+	final double t = -0.5 * (b + (b > 0.0 ? 1.0 : -1.0) * IMathUtils.instance().sqrt(discriminant));
+	final double root1 = t / a;
+	final double root2 = c / t;
   
 	// Two intersections - return the smallest first.
 	if (root1 < root2)
 	{
 	  intersections.add(root1);
 	  intersections.add(root2);
-	  return intersections;
 	}
 	else
 	{
 	  intersections.add(root2);
 	  intersections.add(root1);
-	  return intersections;
 	}
+	return intersections;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Vector3D toVector3D(const Geodetic3D& geodetic) const
-  public final Vector3D toVector3D(Geodetic3D geodetic)
+//ORIGINAL LINE: Vector3D toCartesian(const Geodetic3D& geodetic) const
+  public final Vector3D toCartesian(Geodetic3D geodetic)
   {
-	Vector3D n = geodeticSurfaceNormal(geodetic);
-	Vector3D k = _radiiSquared.times(n);
-	double gamma = Math.sqrt((k.x() * n.x()) + (k.y() * n.y()) + (k.z() * n.z()));
+	final Vector3D n = geodeticSurfaceNormal(geodetic);
+	final Vector3D k = _radiiSquared.times(n);
+	final double gamma = IMathUtils.instance().sqrt((k.x() * n.x()) + (k.y() * n.y()) + (k.z() * n.z()));
   
-	Vector3D rSurface = k.div(gamma);
+	final Vector3D rSurface = k.div(gamma);
 	return rSurface.add(n.times(geodetic.height()));
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Vector3D toVector3D(const Geodetic2D& geodetic) const
-  public final Vector3D toVector3D(Geodetic2D geodetic)
+//ORIGINAL LINE: Vector3D toCartesian(const Geodetic2D& geodetic) const
+  public final Vector3D toCartesian(Geodetic2D geodetic)
   {
-	return toVector3D(new Geodetic3D(geodetic, 0.0));
+	return toCartesian(new Geodetic3D(geodetic, 0.0));
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Geodetic2D toGeodetic2D(const Vector3D& positionOnEllipsoid) const
   public final Geodetic2D toGeodetic2D(Vector3D positionOnEllipsoid)
   {
-	Vector3D n = geodeticSurfaceNormal(positionOnEllipsoid);
+	final Vector3D n = geodeticSurfaceNormal(positionOnEllipsoid);
   
-	return new Geodetic2D(Angle.fromDegrees(Math.asin(n.z() / n.length()) * 180 / Math.PI), Angle.fromDegrees(Math.atan2(n.y(), n.x()) * 180 / Math.PI));
+	return new Geodetic2D(Angle.fromRadians(IMathUtils.instance().asin(n.z())), Angle.fromRadians(IMathUtils.instance().atan2(n.y(), n.x())));
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -170,7 +179,7 @@ public class Ellipsoid
 //ORIGINAL LINE: Vector3D scaleToGeodeticSurface(const Vector3D& position) const
   public final Vector3D scaleToGeodeticSurface(Vector3D position)
   {
-	double beta = 1.0 / Math.sqrt((position.x() * position.x()) * _oneOverRadiiSquared.x() + (position.y() * position.y()) * _oneOverRadiiSquared.y() + (position.z() * position.z()) * _oneOverRadiiSquared.z());
+	double beta = 1.0 / IMathUtils.instance().sqrt((position.x() * position.x()) * _oneOverRadiiSquared.x() + (position.y() * position.y()) * _oneOverRadiiSquared.y() + (position.z() * position.z()) * _oneOverRadiiSquared.z());
   
 	double n = new Vector3D(beta * position.x() * _oneOverRadiiSquared.x(), beta * position.y() * _oneOverRadiiSquared.y(), beta * position.z() * _oneOverRadiiSquared.z()).length();
   
@@ -207,7 +216,7 @@ public class Ellipsoid
   
 	  dSdA = -2.0 * (x2 / (_radiiToTheFourth.x() * da3) + y2 / (_radiiToTheFourth.y() * db3) + z2 / (_radiiToTheFourth.z() * dc3));
 	}
-	while (Math.abs(s) > 1e-10);
+	while (IMathUtils.instance().abs(s) > 1e-10);
   
 	return new Vector3D(position.x() / da, position.y() / db, position.z() / dc);
   }
@@ -216,7 +225,7 @@ public class Ellipsoid
 //ORIGINAL LINE: Vector3D scaleToGeocentricSurface(const Vector3D& position) const
   public final Vector3D scaleToGeocentricSurface(Vector3D position)
   {
-	double beta = 1.0 / Math.sqrt((position.x() * position.x()) * _oneOverRadiiSquared.x() + (position.y() * position.y()) * _oneOverRadiiSquared.y() + (position.z() * position.z()) * _oneOverRadiiSquared.z());
+	double beta = 1.0 / IMathUtils.instance().sqrt((position.x() * position.x()) * _oneOverRadiiSquared.x() + (position.y() * position.y()) * _oneOverRadiiSquared.y() + (position.z() * position.z()) * _oneOverRadiiSquared.z());
   
 	return position.times(beta);
   }
@@ -245,13 +254,26 @@ public class Ellipsoid
 	{
 	  double phi = (i * granularity);
   
-	  positions.addLast(scaleToGeocentricSurface(start.rotateAroundAxis(normal, phi)));
+	  positions.addLast(scaleToGeocentricSurface(start.rotateAroundAxis(normal, Angle.fromRadians(phi))));
 	}
   
 	positions.addLast(stop);
   
 	return positions;
   }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Geodetic2D getMidPoint (const Geodetic2D& P0, const Geodetic2D& P1) const
+  public final Geodetic2D getMidPoint (Geodetic2D P0, Geodetic2D P1)
+  {
+	final Vector3D v0 = toCartesian(P0);
+	final Vector3D v1 = toCartesian(P1);
+	final Vector3D normal = v0.cross(v1).normalized();
+	final Angle theta = v0.angleBetween(v1);
+	final Vector3D midPoint = scaleToGeocentricSurface(v0.rotateAroundAxis(normal, theta.times(0.5)));
+	return toGeodetic2D(midPoint);
+  }
+
 
 
   // compute distance from two points
@@ -261,30 +283,26 @@ public class Ellipsoid
   {
 	final Vector3D radius = _radii;
 	double R = (radius.x() + radius.y() + radius.z()) / 3;
-	//double medLat = BBox.getMidLatitude().degrees();
-	//double medLon = BBox.getMidLongitude().degrees();
 	double medLat = g1.latitude().degrees();
 	double medLon = g1.longitude().degrees();
   
 	// spheric distance from P to Q
 	// this is the right form, but it's the most complex
 	// theres is a minimum error considering sphere instead of ellipsoid
-	//double latP=lat/180*PI, lonP=lon/180*PI;
-	//double latP=g.latitude()/180*PI, lonP=g.longitude()/180*PI;
 	double latP = g2.latitude().radians();
 	double lonP = g2.longitude().radians();
-	double latQ = medLat / 180 * Math.PI;
-	double lonQ = medLon / 180 * Math.PI;
-	double coslatP = Math.cos(latP);
-	double sinlatP = Math.sin(latP);
-	double coslonP = Math.cos(lonP);
-	double sinlonP = Math.sin(lonP);
-	double coslatQ = Math.cos(latQ);
-	double sinlatQ = Math.sin(latQ);
-	double coslonQ = Math.cos(lonQ);
-	double sinlonQ = Math.sin(lonQ);
+	double latQ = medLat / 180 * IMathUtils.instance().pi();
+	double lonQ = medLon / 180 * IMathUtils.instance().pi();
+	double coslatP = IMathUtils.instance().cos(latP);
+	double sinlatP = IMathUtils.instance().sin(latP);
+	double coslonP = IMathUtils.instance().cos(lonP);
+	double sinlonP = IMathUtils.instance().sin(lonP);
+	double coslatQ = IMathUtils.instance().cos(latQ);
+	double sinlatQ = IMathUtils.instance().sin(latQ);
+	double coslonQ = IMathUtils.instance().cos(lonQ);
+	double sinlonQ = IMathUtils.instance().sin(lonQ);
 	double pq = coslatP * sinlonP * coslatQ * sinlonQ + sinlatP * sinlatQ + coslatP * coslonP * coslatQ * coslonQ;
-	return Math.acos(pq) * R;
+	return IMathUtils.instance().acos(pq) * R;
   }
 
 
@@ -295,21 +313,20 @@ public class Ellipsoid
   {
 	final Vector3D radius = _radii;
 	double R = (radius.x() + radius.y() + radius.z()) / 3;
-	//double medLat = BBox.getMidLatitude().degrees();
-	//double medLon = BBox.getMidLongitude().degrees();
+  
 	double medLat = g1.latitude().degrees();
 	double medLon = g1.longitude().degrees();
   
 	// this way is faster, and works properly further away from the poles
 	//double diflat = fabs(g.latitude()-medLat);
-	double diflat = Math.abs(g2.latitude().degrees() - medLat);
+	double diflat = IMathUtils.instance().abs(g2.latitude().degrees() - medLat);
 	if (diflat > 180)
 		diflat = 360 - diflat;
-	double diflon = Math.abs(g2.longitude().degrees() - medLon);
+	double diflon = IMathUtils.instance().abs(g2.longitude().degrees() - medLon);
 	if (diflon > 180)
 		diflon = 360 - diflon;
-	double dist = Math.sqrt(diflat * diflat + diflon * diflon);
-	return dist * Math.PI / 180 * R;
+	double dist = IMathUtils.instance().sqrt(diflat * diflat + diflon * diflon);
+	return dist * IMathUtils.instance().pi() / 180 * R;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -334,9 +351,9 @@ public class Ellipsoid
 	if (rad > 0)
 	{
 	  // compute the final point (the smaller positive t value)
-	  t = (-b - Math.sqrt(rad)) / (2 * a);
+	  t = (-b - IMathUtils.instance().sqrt(rad)) / (2 * a);
 	  if (t < 1)
-		  t = (-b + Math.sqrt(rad)) / (2 * a);
+		  t = (-b + IMathUtils.instance().sqrt(rad)) / (2 * a);
 	  // if the ideal ray intersects, but not the mesh --> case 2
 	  if (t < 1)
 		  rad = -12345;
@@ -345,13 +362,13 @@ public class Ellipsoid
 	// if no solution found, find a point in the contour line
 	if (rad < 0)
 	{
-	  double D = Math.sqrt(O2);
+	  double D = IMathUtils.instance().sqrt(O2);
 	  double co2 = R0 * R0 / (D * D);
 	  double a_ = OU * OU - co2 * O2 * U2;
 	  double b_ = 2 * OU * O2 - co2 * 2 * OU * O2;
 	  double c_ = O2 * O2 - co2 * O2 * O2;
 	  double rad_ = b_ * b_ - 4 * a_ * c_;
-	  t = (-b_ - Math.sqrt(rad_)) / (2 * a_);
+	  t = (-b_ - IMathUtils.instance().sqrt(rad_)) / (2 * a_);
 	}
   
 	// compute the final point
@@ -363,11 +380,11 @@ public class Ellipsoid
 //ORIGINAL LINE: Vector3D closestIntersection(const Vector3D& pos, const Vector3D& ray) const
   public final Vector3D closestIntersection(Vector3D pos, Vector3D ray)
   {
-	java.util.ArrayList<Double> t = intersections(pos, ray);
-	if (t.isEmpty())
-		return Vector3D.nan();
-	Vector3D solution = pos.add(ray.times(t.get(0)));
-	return solution;
+	java.util.ArrayList<Double> distances = intersectionsDistances(pos, ray);
+	if (distances.isEmpty())
+	{
+	  return Vector3D.nan();
+	}
+	return pos.add(ray.times(distances.get(0)));
   }
-
 }

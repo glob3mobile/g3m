@@ -25,9 +25,15 @@ class MutableVector2D;
 
 class Petition {
 private:
-  const URL         _url;
-  const Sector*     _sector;
-  const ByteBuffer* _buffer;
+#ifdef C_CODE
+  const URL             _url;
+  const ByteArrayWrapper* _buffer;
+#endif
+#ifdef JAVA_CODE
+  private URL _url = new URL(); //Conversor creates class "Url"
+  private ByteArrayWrapper _buffer;
+#endif
+  const Sector*       _sector;
   
 public:
   
@@ -40,7 +46,9 @@ public:
   }
   
   ~Petition(){
+#ifdef C_CODE
     delete _sector;
+#endif
     releaseBuffer();
   }
   
@@ -51,7 +59,7 @@ public:
     }
   }
   
-  bool hasByteBuffer() const {
+  bool hasByteArrayWrapper() const {
     return _buffer != NULL;
   }
   
@@ -63,12 +71,12 @@ public:
     return *_sector;
   }
   
-  void setByteBuffer(const ByteBuffer* buffer) {
+  void setByteArrayWrapper(const ByteArrayWrapper* buffer) {
     releaseBuffer();
     _buffer = buffer;
   }
   
-  const ByteBuffer* getByteBuffer() const {
+  const ByteArrayWrapper* getByteArrayWrapper() const {
     return _buffer;
   }
   

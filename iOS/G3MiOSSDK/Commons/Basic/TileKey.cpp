@@ -8,26 +8,20 @@
 
 #include "TileKey.hpp"
 
-#include <sstream>
+#include "IStringBuilder.hpp"
 
-const std::string TileKey::description() const {
-  std::ostringstream buffer;
-  buffer << "(level=";
-  buffer << _level;
-  buffer << ", row=";
-  buffer << _row;
-  buffer << ", col=";
-  buffer << _column;
-  buffer << ")";
-  return buffer.str();
+const std::string TileKey::description() const {  
+  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  isb->add("(level=")->add(_level)->add(", row=")->add(_row)->add(", col=")->add(_column)->add(")");
+  std::string s = isb->getString();
+  delete isb;
+  return s;  
 }
 
 const std::string TileKey::tinyDescription() const {
-  std::ostringstream buffer;
-  buffer << _level;
-  buffer << "-";
-  buffer << _row;
-  buffer << "/";
-  buffer << _column;
-  return buffer.str();
+  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  isb->add(_level)->add("-")->add(_row)->add("/")->add(_column);
+  std::string s = isb->getString();
+  delete isb;
+  return s; 
 }

@@ -1,15 +1,21 @@
 package org.glob3.mobile.generated; 
-public class EffectsScheduler extends Renderer
+//***************************************************************
+
+
+public class EffectsScheduler
 {
 
   private static class EffectRun
   {
 	public Effect _effect;
+	public EffectTarget _target;
+
 	public boolean _started;
 
-	public EffectRun(Effect effect)
+	public EffectRun(Effect effect, EffectTarget target)
 	{
 		_effect = effect;
+		_target = target;
 		_started = false;
 	}
 
@@ -25,27 +31,6 @@ public class EffectsScheduler extends Renderer
   private ITimer _timer;
   private IFactory _factory; // FINAL WORD REMOVE BY CONVERSOR RULE
 
-  private void doOneCyle(RenderContext rc)
-  {
-	final TimeInterval now = _timer.now();
-  
-  
-	processFinishedEffects(rc, now);
-  
-  
-	for (int i = 0; i < _effectsRuns.size(); i++)
-	{
-	  EffectRun effectRun = _effectsRuns.get(i);
-  
-	  if (effectRun._started == false)
-	  {
-		effectRun._effect.start(rc, now);
-		effectRun._started = true;
-	  }
-  
-	  effectRun._effect.doStep(rc, now);
-	}
-  }
 
   private void processFinishedEffects(RenderContext rc, TimeInterval now)
   {
@@ -72,8 +57,7 @@ public class EffectsScheduler extends Renderer
 	  if (_effectsRuns.get(indexToRemove) != null)
 		  _effectsRuns.get(indexToRemove).dispose();
   
-//C++ TO JAVA CONVERTER TODO TASK: There is no direct equivalent to the STL vector 'erase' method in Java:
-	  _effectsRuns.remove(indexToRemove);
+  	_effectsRuns.remove(indexToRemove);
 	}
   }
 
@@ -83,33 +67,32 @@ public class EffectsScheduler extends Renderer
 
   }
 
-  public void initialize(InitializationContext ic)
+  public final void doOneCyle(RenderContext rc)
+  {
+	final TimeInterval now = _timer.now();
+  
+  
+	processFinishedEffects(rc, now);
+  
+  
+	for (int i = 0; i < _effectsRuns.size(); i++)
+	{
+	  EffectRun effectRun = _effectsRuns.get(i);
+  
+	  if (effectRun._started == false)
+	  {
+		effectRun._effect.start(rc, now);
+		effectRun._started = true;
+	  }
+  
+	  effectRun._effect.doStep(rc, now);
+	}
+  }
+
+  public final void initialize(InitializationContext ic)
   {
 	_factory = ic.getFactory();
 	_timer = _factory.createTimer();
-  }
-
-  public int render(RenderContext rc)
-  {
-	doOneCyle(rc);
-	if (_effectsRuns.size() == 0)
-	{
-	  return DefineConstants.MAX_TIME_TO_RENDER;
-	}
-	else
-	{
-	  return 0;
-	}
-  }
-
-  public boolean onTouchEvent(TouchEvent touchEvent)
-  {
-	return false;
-  }
-
-  public void onResizeViewportEvent(int width, int height)
-  {
-  
   }
 
   public void dispose()
@@ -124,8 +107,41 @@ public class EffectsScheduler extends Renderer
 	}
   }
 
-  public final void startEffect(Effect effect)
+  public final void startEffect(Effect effect, EffectTarget target)
   {
-	_effectsRuns.add(new EffectRun(effect));
+	_effectsRuns.add(new EffectRun(effect, target));
   }
+
+  public final void cancellAllEffectsFor(EffectTarget target)
+  {
+	java.util.ArrayList<Integer> indicesToRemove = new java.util.ArrayList<Integer>();
+	final TimeInterval now = _timer.now();
+  
+	for (int i = 0; i < _effectsRuns.size(); i++)
+	{
+	  EffectRun effectRun = _effectsRuns.get(i);
+  
+	  if (effectRun._started == true)
+	  {
+		if (effectRun._target == target)
+		{
+		  effectRun._effect.cancel(now);
+  
+		  indicesToRemove.add(i);
+		}
+	  }
+	}
+  
+	// backward iteration, to remove from bottom to top
+	for (int i = indicesToRemove.size() - 1; i >= 0; i--)
+	{
+	  final int indexToRemove = indicesToRemove.get(i);
+	  if (_effectsRuns.get(indexToRemove) != null)
+		  _effectsRuns.get(indexToRemove).dispose();
+  
+  	_effectsRuns.remove(indexToRemove);
+	}
+  
+  }
+
 }

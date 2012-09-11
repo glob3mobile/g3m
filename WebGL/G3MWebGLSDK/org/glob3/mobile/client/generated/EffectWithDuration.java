@@ -1,8 +1,10 @@
-package org.glob3.mobile.client.generated; 
+package org.glob3.mobile.generated; 
+//***************************************************************
+
 public abstract class EffectWithDuration extends Effect
 {
-  private int _started;
-  private final int _duration;
+  private long _started;
+  private final long _duration;
 
 
   protected EffectWithDuration(TimeInterval duration)
@@ -16,7 +18,7 @@ public abstract class EffectWithDuration extends Effect
 //ORIGINAL LINE: double percentDone(const TimeInterval& now) const
   protected final double percentDone(TimeInterval now)
   {
-	final int elapsed = now.milliseconds() - _started;
+	final long elapsed = now.milliseconds() - _started;
 
 	final double percent = (double) elapsed / _duration;
 	if (percent > 1)

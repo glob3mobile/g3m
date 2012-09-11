@@ -28,8 +28,9 @@ private:
   IImage * const _image;
     const bool _isMercatorImage;  
   
-  std::vector<MutableVector2D> createTextureCoordinates(const RenderContext* rc,
-                                                        Mesh* mesh) const;
+  
+  IFloatBuffer* createTextureCoordinates(const RenderContext* rc,
+                                         Mesh* mesh) const;
   
 public:
   

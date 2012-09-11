@@ -21,7 +21,7 @@
 class SingleDragEffect : public EffectWithForce {
 public:
   
-  SingleDragEffect(const Vector3D& axis, const Angle& angle): 
+  SingleDragEffect(const Vector3D& axis, const Angle& angle):
   EffectWithForce(angle.degrees(), 0.975),
   _axis(axis)
   { }
@@ -34,11 +34,11 @@ public:
   }
   
   virtual void stop(const RenderContext *rc, const TimeInterval& now) { }
-    
+  
   virtual void cancel(const TimeInterval& now) {
     // do nothing, just leave the effect in the intermediate state
   }
-    
+  
 private:
   Vector3D  _axis;
   
@@ -58,27 +58,25 @@ public:
   {}
   
   ~CameraSingleDragHandler() {}
-
-
+  
+  
   bool onTouchEvent(const EventContext *eventContext,
-                    const TouchEvent* touchEvent, 
+                    const TouchEvent* touchEvent,
                     CameraContext *cameraContext);
-  int render(const RenderContext* rc, CameraContext *cameraContext);
   
+  void render(const RenderContext* rc, CameraContext *cameraContext);
   
-private:
   const bool _useInertia;
-  
   void onDown(const EventContext *eventContext,
-              const TouchEvent& touchEvent, 
+              const TouchEvent& touchEvent,
               CameraContext *cameraContext);
   void onMove(const EventContext *eventContext,
-              const TouchEvent& touchEvent, 
+              const TouchEvent& touchEvent,
               CameraContext *cameraContext);
   void onUp(const EventContext *eventContext,
-            const TouchEvent& touchEvent, 
+            const TouchEvent& touchEvent,
             CameraContext *cameraContext);
-  
+private:
   
   Camera _camera0;         //Initial Camera saved on Down event
   

@@ -1,4 +1,4 @@
-package org.glob3.mobile.client.generated; 
+package org.glob3.mobile.generated; 
 //
 //  TimeInterval.hpp
 //  G3MiOSSDK
@@ -12,18 +12,12 @@ package org.glob3.mobile.client.generated;
 
 public class TimeInterval
 {
-  private final int _milliseconds;
+  private final long _milliseconds;
 
-  private TimeInterval(int milliseconds)
+  private TimeInterval(long milliseconds)
   {
 	  _milliseconds = milliseconds;
 
-  }
-
-  // the next function is for compatibility with Java
-  private TimeInterval(double milliseconds)
-  {
-	  _milliseconds = (int)milliseconds;
   }
 
   public TimeInterval(TimeInterval other)
@@ -32,34 +26,40 @@ public class TimeInterval
 
   }
 
-  public static TimeInterval nan()
+  public TimeInterval()
   {
-	return new TimeInterval(Double.NaN);
+	  _milliseconds = 0;
   }
 
-  public static TimeInterval fromMilliseconds(int milliseconds)
+  public static TimeInterval fromMilliseconds(long milliseconds)
   {
 	return new TimeInterval(milliseconds);
   }
 
   public static TimeInterval fromSeconds(double seconds)
   {
-	return TimeInterval.fromMilliseconds((int)(seconds *1000.0));
+	return TimeInterval.fromMilliseconds((long)(seconds *1000.0));
   }
 
-
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: int milliseconds() const
-  public final int milliseconds()
+//ORIGINAL LINE: long milliseconds() const
+  public final long milliseconds()
   {
 	return _milliseconds;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isNan() const
-  public final boolean isNan()
+//ORIGINAL LINE: double seconds() const
+  public final double seconds()
   {
-	return Double.isNaN(_milliseconds);
+	return (double) _milliseconds / 1000.0;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean lowerThan(const TimeInterval& that) const
+  public final boolean lowerThan(TimeInterval that)
+  {
+	return _milliseconds < that._milliseconds;
   }
 
 }

@@ -9,7 +9,7 @@
 #ifndef G3MiOSSDK_Angle_hpp
 #define G3MiOSSDK_Angle_hpp
 
-#include <math.h>
+#include "IMathUtils.hpp"
 
 #define THRESHOLD               1e-5
 #define ISBETWEEN_THRESHOLD     1e-2
@@ -35,7 +35,7 @@ public:
   }
   
   static Angle fromRadians(const double radians) {
-    return Angle::fromDegrees(radians / M_PI * 180.0);
+    return Angle::fromDegrees(radians / GMath.pi() * 180.0);
   }
   
   static Angle getMin(const Angle& a1, const Angle& a2) {
@@ -53,7 +53,7 @@ public:
   }
   
   static Angle nan() {
-    return Angle::fromDegrees(NAN);
+    return Angle::fromDegrees(GMath.NanD());
   }
   
   static Angle midAngle(const Angle& angle1, const Angle& angle2) {
@@ -62,7 +62,7 @@ public:
 
   
   bool isNan() const {
-    return isnan(_degrees);
+    return IMathUtils::instance()->isNan(_degrees);
   }
   
   Angle(const Angle& angle): _degrees(angle._degrees) {
@@ -70,11 +70,11 @@ public:
   }
   
   double sinus() const {
-    return sin(_degrees / 180.0 * M_PI);
+    return GMath.sin( _degrees / 180.0 * GMath.pi());
   }
   
   double cosinus() const {
-    return cos(_degrees / 180.0 * M_PI);
+    return GMath.cos(_degrees / 180.0 * GMath.pi());
   }
   
   double degrees() const {
@@ -82,11 +82,11 @@ public:
   }
   
   double radians() const {
-    return _degrees / 180.0 * M_PI;
+    return _degrees / 180.0 * GMath.pi();
   }
   
   bool closeTo(const Angle& other) const {
-    return (fabs(_degrees - other._degrees) < THRESHOLD);
+    return (GMath.abs(_degrees - other._degrees) < THRESHOLD);
   }
     
   Angle add(const Angle& a) const {
@@ -127,8 +127,39 @@ public:
   
   Angle distanceTo(const Angle& other) const;
   
+  
+  bool isZero() const {
+    return (_degrees == 0);
+  }
+  
+#ifdef JAVA_CODE
+  @Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		long temp;
+		temp = Double.doubleToLongBits(_degrees);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
+  
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Angle other = (Angle) obj;
+		if (Double.doubleToLongBits(_degrees) != Double
+				.doubleToLongBits(other._degrees))
+			return false;
+		return true;
+	}
+#endif
+  
   const std::string description() const;
-
 };
 
 #endif
