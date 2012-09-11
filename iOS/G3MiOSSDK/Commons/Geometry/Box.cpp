@@ -9,6 +9,9 @@
 #include "Box.hpp"
 #include "Vector2D.hpp"
 #include "Camera.hpp"
+#include "FloatBufferBuilderFromCartesian3D.hpp"
+#include "IntBufferBuilder.hpp"
+
 
 const std::vector<Vector3D> Box::getCorners() const
 {
@@ -138,3 +141,71 @@ Vector3D Box::intersectionWithRay(const Vector3D& origin, const Vector3D& direct
   
   return Vector3D::nan();  
 }
+
+
+void Box::createMesh()
+{
+  unsigned int numVertices = 8;
+  int numIndices = 48;
+  
+  float v[] = {
+    (float) _lower.x(), (float) _lower.y(), (float) _lower.z(),
+    (float) _lower.x(), (float) _upper.y(), (float) _lower.z(),
+    (float) _lower.x(), (float) _upper.y(), (float) _upper.z(),
+    (float) _lower.x(), (float) _lower.y(), (float) _upper.z(),
+    (float) _upper.x(), (float) _lower.y(), (float) _lower.z(),
+    (float) _upper.x(), (float) _upper.y(), (float) _lower.z(),
+    (float) _upper.x(), (float) _upper.y(), (float) _upper.z(),
+    (float) _upper.x(), (float) _lower.y(), (float) _upper.z(),
+  };
+  
+  int i[] = { 
+    0, 1, 1, 2, 2, 3, 3, 0,
+    1, 5, 5, 6, 6, 2, 2, 1,
+    5, 4, 4, 7, 7, 6, 6, 5,
+    4, 0, 0, 3, 3, 7, 7, 4,
+    3, 2, 2, 6, 6, 7, 7, 3,
+    0, 1, 1, 5, 5, 4, 4, 0
+  };
+  
+#ifdef C_CODE
+  FloatBufferBuilderFromCartesian3D vertices(NoCenter, Vector3D::zero());
+#else
+  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy.NoCenter, Vector3D::zero());
+#endif
+  IntBufferBuilder indices;
+  
+  for (unsigned int n=0; n<numVertices; n++)
+    vertices.add(v[n*3], v[n*3+1], v[n*3+2]);
+  
+  for (unsigned int n=0; n<numIndices; n++)
+    indices.add(i[n]);
+  
+  Color *flatColor = new Color(Color::fromRGBA((float)1.0, (float)1.0, (float)0.0, (float)1.0));
+    
+  // create mesh
+#ifdef C_CODE
+  _mesh = new IndexedMesh(Lines,
+                          true,
+                          vertices.getCenter(),
+                          vertices.create(),
+                          indices.create(),
+                          flatColor);
+#else
+  _mesh = new IndexedMesh(GLPrimitive.TriangleStrip,
+                          true,
+                          vertices.getCenter(),
+                          vertices.create(),
+                          indices.create(),
+                          flatColor);
+#endif
+}
+
+
+void Box::render(const RenderContext* rc)
+{
+  if (_mesh == NULL) createMesh(); 
+  _mesh->render(rc);
+}
+
+
