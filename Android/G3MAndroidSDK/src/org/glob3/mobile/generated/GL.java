@@ -462,6 +462,8 @@ public class GL
 	final GLTextureId texId = getGLTextureId();
 	if (texId.isValid())
 	{
+  
+  
   	_gl.blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
   	_gl.pixelStorei(GLAlignment.Unpack, 1);
   
@@ -475,6 +477,7 @@ public class GL
   	if (generateMipmap) {
   	  _gl.generateMipmap(GLTextureType.Texture2D);
   	}
+  
 	}
 	else
 	{
