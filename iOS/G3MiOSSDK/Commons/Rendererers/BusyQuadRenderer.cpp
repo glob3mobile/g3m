@@ -38,10 +38,10 @@ bool BusyQuadRenderer::initMesh(const RenderContext* rc) {
   if (true){
     IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
     
-    const GLImage* glImage = rc->getTextureBuilder()->createTextureFromImages(rc->getGL(), 
-                                                                              rc->getFactory(), 
-                                                                              RGBA, image, 
-                                                                              128, 128);
+    const GLImage* glImage = rc->getTextureBuilder()->createTextureFromImage(rc->getGL(),
+                                                                             rc->getFactory(),
+                                                                             RGBA, image,
+                                                                             128, 128);
     
     texId = rc->getTexturesHandler()->getGLTextureId(glImage, _textureFilename, false);
     
@@ -56,7 +56,7 @@ bool BusyQuadRenderer::initMesh(const RenderContext* rc) {
   }
   
   const float halfSize = 16;
-
+  
 #ifdef C_CODE
   FloatBufferBuilderFromCartesian3D vertices(NoCenter, Vector3D::zero());
 #else
@@ -98,9 +98,9 @@ bool BusyQuadRenderer::initMesh(const RenderContext* rc) {
                                                     true);
   
   _quadMesh = new TexturedMesh(im, true, texMap, true);
-
+  
   return true;
-}  
+}
 
 
 void BusyQuadRenderer::render(const RenderContext* rc) {
@@ -111,7 +111,7 @@ void BusyQuadRenderer::render(const RenderContext* rc) {
       return;
     }
   }
-
+  
   
   // init effect in the first render
   static bool firstTime = true;
@@ -134,7 +134,7 @@ void BusyQuadRenderer::render(const RenderContext* rc) {
   
   // clear screen
   gl->clearScreen(0.0f, 0.0f, 0.0f, 1.0f);
-
+  
   gl->enableBlend();
   gl->setBlendFuncSrcAlpha();
   
@@ -143,7 +143,7 @@ void BusyQuadRenderer::render(const RenderContext* rc) {
   MutableMatrix44D R2 = MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_degrees), Vector3D(0, 0, 1));
   gl->multMatrixf(R1.multiply(R2));
   
-  // draw mesh  
+  // draw mesh
   _quadMesh->render(rc);
   
   gl->popMatrix();

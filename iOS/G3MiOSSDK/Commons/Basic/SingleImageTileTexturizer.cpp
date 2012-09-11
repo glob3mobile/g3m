@@ -43,17 +43,17 @@ Mesh* SingleImageTileTexturizer::texturize(const RenderContext* rc,
   
   if (!_texId.isValid()) {
 #ifdef C_CODE    
-    const GLImage* glImage = rc->getTextureBuilder()->createTextureFromImages(rc->getGL(), 
-                                                                              rc->getFactory(), 
-                                                                              RGBA, _image, 
-                                                                              _image->getWidth(), 
-                                                                              _image->getHeight());
+    const GLImage* glImage = rc->getTextureBuilder()->createTextureFromImage(rc->getGL(), 
+                                                                             rc->getFactory(), 
+                                                                             RGBA, _image, 
+                                                                             _image->getWidth(), 
+                                                                             _image->getHeight());
 #else
-    const GLImage* glImage = rc->getTextureBuilder()->createTextureFromImages(rc->getGL(), 
-                                                                              rc->getFactory(), 
-                                                                              GLFormat.RGBA, _image, 
-                                                                              _image->getWidth(), 
-                                                                              _image->getHeight());
+    const GLImage* glImage = rc->getTextureBuilder()->createTextureFromImage(rc->getGL(), 
+                                                                             rc->getFactory(), 
+                                                                             GLFormat.RGBA, _image, 
+                                                                             _image->getWidth(), 
+                                                                             _image->getHeight());
 #endif
     
     _texId = rc->getTexturesHandler()->getGLTextureId(glImage, "SINGLE_IMAGE_TEX", false);

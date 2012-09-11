@@ -77,10 +77,10 @@ void Mark::render(const RenderContext* rc,
         
         IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
         
-        const GLImage* glImage = rc->getTextureBuilder()->createTextureFromImages(rc->getGL(), 
-                                                                                  rc->getFactory(), 
-                                                                                  RGBA, image, 
-                                                                                  128, 128);
+        const GLImage* glImage = rc->getTextureBuilder()->createTextureFromImage(rc->getGL(),
+                                                                                 rc->getFactory(),
+                                                                                 RGBA, image,
+                                                                                 128, 128);
         
         _textureId = rc->getTexturesHandler()->getGLTextureId(glImage, _textureFilename, false);
         

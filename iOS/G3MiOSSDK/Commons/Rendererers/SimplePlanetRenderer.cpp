@@ -104,7 +104,7 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   
   const Planet* planet = rc->getPlanet();
   IIntBuffer* ind = createMeshIndex();
-  IFloatBuffer* ver = createVertices(*planet);  
+  IFloatBuffer* ver = createVertices(*planet);
   IFloatBuffer* texC = NULL;
   FloatBufferBuilderFromColor colors;
   
@@ -115,18 +115,19 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   if (true){
     
     IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
+    
 #ifdef C_CODE    
-    const GLImage* glImage = rc->getTextureBuilder()->createTextureFromImages(rc->getGL(), 
-                                                                              rc->getFactory(), 
-                                                                              RGBA, image, 
-                                                                              _texWidth, 
-                                                                              _texHeight);
+    const GLImage* glImage = rc->getTextureBuilder()->createTextureFromImage(rc->getGL(), 
+                                                                             rc->getFactory(), 
+                                                                             RGBA, image, 
+                                                                             _texWidth, 
+                                                                             _texHeight);
 #else
-    const GLImage* glImage = rc->getTextureBuilder()->createTextureFromImages(rc->getGL(), 
-                                                                              rc->getFactory(), 
-                                                                              GLFormat.RGBA, image, 
-                                                                              _texWidth, 
-                                                                              _texHeight);
+    const GLImage* glImage = rc->getTextureBuilder()->createTextureFromImage(rc->getGL(), 
+                                                                             rc->getFactory(), 
+                                                                             GLFormat.RGBA, image, 
+                                                                             _texWidth, 
+                                                                             _texHeight);
 #endif
     
     texId = rc->getTexturesHandler()->getGLTextureId(glImage, _textureFilename, false);
@@ -171,12 +172,12 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
 #endif
 #ifdef JAVA_CODE
   IndexedMesh im = new IndexedMesh(GLPrimitive.TriangleStrip,
-                                true,
-                                Vector3D.zero(),
-                                ver,
-                                ind,
-                                flatColor,
-                                vertexColors);
+                                   true,
+                                   Vector3D.zero(),
+                                   ver,
+                                   ind,
+                                   flatColor,
+                                   vertexColors);
 #endif
   
   TextureMapping* texMap = new SimpleTextureMapping(texId,

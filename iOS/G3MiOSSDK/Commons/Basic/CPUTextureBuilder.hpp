@@ -15,14 +15,14 @@ class CPUTextureBuilder:public TextureBuilder
 {
 public:
   
-  const GLImage* createTextureFromImages(GL * gl,  
-                                         const IFactory* factory,
-                                         GLFormat format,
-                                         const IImage* image,
-                                         int width,
-                                         int height) const;
+  const GLImage* createTextureFromImage(GL * gl,
+                                        const IFactory* factory,
+                                        GLFormat format,
+                                        const IImage* image,
+                                        int width,
+                                        int height) const;
   
-  const GLImage* createTextureFromImages(GL * gl, 
+  const GLImage* createTextureFromImages(GL * gl,
                                          const IFactory* factory,
                                          GLFormat format,
                                          const std::vector<const IImage*> images,

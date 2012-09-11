@@ -117,6 +117,15 @@
 		CF9CD89A15DBE2C800C6FD7E /* CachedDownloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9CD89815DBE2C800C6FD7E /* CachedDownloader.cpp */; };
 		CF9D2D8815F7D3C100B5CE2E /* IBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9D2D8615F7D3C100B5CE2E /* IBuffer.cpp */; };
 		CF9D2D8915F7D3C100B5CE2E /* IBuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF9D2D8715F7D3C100B5CE2E /* IBuffer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CF9D832415FF7A1C0069B555 /* GLImage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8E17DD215FE135400C980E6 /* GLImage.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CF9D832515FF7A1C0069B555 /* FloatBufferBuilderFromCartesian2D.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8CD74D915F8DBE800B801CC /* FloatBufferBuilderFromCartesian2D.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CF9D832615FF7A1C0069B555 /* FloatBufferBuilderFromCartesian3D.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8CD74D815F8D56800B801CC /* FloatBufferBuilderFromCartesian3D.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CF9D832715FF7A1C0069B555 /* FloatBufferBuilderFromGeodetic.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8CD74DD15F8DE9500B801CC /* FloatBufferBuilderFromGeodetic.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CF9D832815FF7A1C0069B555 /* SimpleFloatBufferBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8CD74D615F8D3F000B801CC /* SimpleFloatBufferBuilder.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CF9D832915FF7A1C0069B555 /* FloatBufferBuilderFromColor.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8C912D915F9FE78003F92A4 /* FloatBufferBuilderFromColor.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CF9D832A15FF7A1C0069B555 /* Downloader_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFFEC11F15C2E9B0003FA986 /* Downloader_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
+		CF9D832B15FF7A1C0069B555 /* StringUtils_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFB72A6D15E682B400A5BAF4 /* StringUtils_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
+		CF9D832C15FF7A1C0069B555 /* ByteBuffer_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8E17DDC15FE2B4F00C980E6 /* ByteBuffer_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
 		CFA1899A15F8D7CA0048BF46 /* FloatBuffer_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA1899815F8D7CA0048BF46 /* FloatBuffer_iOS.cpp */; };
 		CFA1899B15F8D7CA0048BF46 /* FloatBuffer_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFA1899915F8D7CA0048BF46 /* FloatBuffer_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
 		CFA1899F15F8D9F80048BF46 /* IntBuffer_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA1899D15F8D9F80048BF46 /* IntBuffer_iOS.cpp */; };
@@ -182,7 +191,7 @@
 		D88B5E5215C162AF0083A43F /* G3MWidget.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D88B5E5115C162AF0083A43F /* G3MWidget.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D892FBCC15C930CC00E69254 /* NativeGL2_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D892FBCB15C930CC00E69254 /* NativeGL2_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
 		D89DA20815FF3886008CD5F5 /* IByteBuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8E17DD515FE2ABF00C980E6 /* IByteBuffer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		D89DA21915FF6C32008CD5F5 /* Image_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D89DA21715FF6C31008CD5F5 /* Image_iOS.hpp */; };
+		D89DA21915FF6C32008CD5F5 /* Image_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D89DA21715FF6C31008CD5F5 /* Image_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
 		D89DA21A15FF6C32008CD5F5 /* Image_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = D89DA21815FF6C31008CD5F5 /* Image_iOS.mm */; };
 		D8A5601F15AEF64E00035086 /* IndexedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A5601B15AEF64E00035086 /* IndexedMesh.cpp */; };
 		D8A5602015AEF64E00035086 /* IndexedMesh.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8A5601C15AEF64E00035086 /* IndexedMesh.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -807,6 +816,12 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF9D832415FF7A1C0069B555 /* GLImage.hpp in Headers */,
+				CF9D832515FF7A1C0069B555 /* FloatBufferBuilderFromCartesian2D.hpp in Headers */,
+				CF9D832615FF7A1C0069B555 /* FloatBufferBuilderFromCartesian3D.hpp in Headers */,
+				CF9D832715FF7A1C0069B555 /* FloatBufferBuilderFromGeodetic.hpp in Headers */,
+				CF9D832815FF7A1C0069B555 /* SimpleFloatBufferBuilder.hpp in Headers */,
+				CF9D832915FF7A1C0069B555 /* FloatBufferBuilderFromColor.hpp in Headers */,
 				CF6873A615F77F54002EDFD0 /* IFloatBuffer.hpp in Headers */,
 				CF6873AB15F77FFC002EDFD0 /* IIntBuffer.hpp in Headers */,
 				CF9D2D8915F7D3C100B5CE2E /* IBuffer.hpp in Headers */,
@@ -901,6 +916,10 @@
 				D88B5E2715C15C850083A43F /* Frustum.hpp in Headers */,
 				D88B5E2815C15C850083A43F /* Plane.hpp in Headers */,
 				CFB73CDE15EFC51B00261631 /* MathUtils_iOS.hpp in Headers */,
+				CF9D832A15FF7A1C0069B555 /* Downloader_iOS.hpp in Headers */,
+				CF9D832B15FF7A1C0069B555 /* StringUtils_iOS.hpp in Headers */,
+				CF9D832C15FF7A1C0069B555 /* ByteBuffer_iOS.hpp in Headers */,
+				D89DA21915FF6C32008CD5F5 /* Image_iOS.hpp in Headers */,
 				CF47030C15EFB4C000426B8B /* ThreadUtils_iOS.hpp in Headers */,
 				D80D525615EE66D700ACEA16 /* INativeGL.hpp in Headers */,
 				D8F42FBF15EB6D78000D1822 /* SQLiteStorage_iOS.hpp in Headers */,
@@ -915,7 +934,6 @@
 				D88B5E2315C15C180083A43F /* Timer_iOS.hpp in Headers */,
 				CFA1899B15F8D7CA0048BF46 /* FloatBuffer_iOS.hpp in Headers */,
 				CFA189A015F8D9F80048BF46 /* IntBuffer_iOS.hpp in Headers */,
-				D89DA21915FF6C32008CD5F5 /* Image_iOS.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
