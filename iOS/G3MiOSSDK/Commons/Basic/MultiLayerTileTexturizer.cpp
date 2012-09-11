@@ -323,7 +323,7 @@ public:
       
       if (images.size() > 0) {
 //        int __TESTING_mipmapping;
-        const bool isMipmap = false;  
+        const bool isMipmap = false;
 #ifdef C_CODE
         const GLImage* glImage = _textureBuilder->createTextureFromImages(_gl, 
                                                                           _factory, 

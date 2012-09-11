@@ -180,10 +180,7 @@ Vector3D Camera::pixel2Ray(const Vector2D& pixel) const {
   const int py = _height - (int) pixel.y();
   const Vector3D pixel3D(px, py, 0);
     
-  const int viewport[4] = {
-    0, 0,
-    _width, _height
-  };
+  const int viewport[4] = { 0, 0, _width, _height };
     
   const Vector3D obj = getModelViewMatrix().unproject(pixel3D, viewport);
   if (obj.isNan()) {
@@ -199,7 +196,7 @@ Vector3D Camera::pixel2PlanetPoint(const Vector2D& pixel) const {
 
 Vector2D Camera::point2Pixel(const Vector3D& point) const {  
   const int viewport[4] = { 0, 0, _width, _height };
-  Vector2D p = getModelViewMatrix().project(point, viewport);
+  const Vector2D p = getModelViewMatrix().project(point, viewport);
   
   if (p.isNan()) {
     return p;
