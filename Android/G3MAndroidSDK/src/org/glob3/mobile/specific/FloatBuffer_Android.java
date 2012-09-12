@@ -13,8 +13,8 @@ public class FloatBuffer_Android
          extends
             IFloatBuffer {
 
-   FloatBuffer _buffer;
-   int         _timestamp;
+   private final FloatBuffer _buffer;
+   private int               _timestamp;
 
 
    public FloatBuffer_Android(final int size) {
