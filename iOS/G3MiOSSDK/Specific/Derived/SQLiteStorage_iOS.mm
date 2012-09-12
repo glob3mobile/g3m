@@ -67,7 +67,7 @@ void SQLiteStorage_iOS::showStatistics() const {
 }
 
 
-bool SQLiteStorage_iOS::contains(const URL& url) {
+bool SQLiteStorage_iOS::containsBuffer(const URL& url) {
   NSString* name = toNSString(url.getPath());
   
   SQResultSet* rs = [_db executeQuery:@"SELECT 1 FROM entry WHERE (name = ?)", name];
@@ -79,7 +79,7 @@ bool SQLiteStorage_iOS::contains(const URL& url) {
   return hasAny;
 }
 
-void SQLiteStorage_iOS::save(const URL& url,
+void SQLiteStorage_iOS::saveBuffer(const URL& url,
                              const IByteBuffer& buffer) {
   
   const ByteBuffer_iOS* buffer_iOS = (const ByteBuffer_iOS*) &buffer;
@@ -93,7 +93,7 @@ void SQLiteStorage_iOS::save(const URL& url,
   }
 }
 
-const IByteBuffer* SQLiteStorage_iOS::read(const URL& url) {
+const IByteBuffer* SQLiteStorage_iOS::readBuffer(const URL& url) {
   IByteBuffer* result = NULL;
   
   NSString* name = toNSString(url.getPath());

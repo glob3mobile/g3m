@@ -48,7 +48,7 @@ public:
     return new Image_iOS(image);
   }
   
-  virtual IImage* createImageFromData(const IByteBuffer* buffer) const {
+  IImage* createImageFromData(const IByteBuffer* buffer) const {
     
     ByteBuffer_iOS* buffer_iOS = (ByteBuffer_iOS*) buffer;
     
@@ -68,8 +68,12 @@ public:
     delete image;
   }
   
-  virtual IByteBuffer* createByteBuffer(unsigned char data[], int length) const{
+  IByteBuffer* createByteBuffer(unsigned char data[], int length) const{
     return new ByteBuffer_iOS(data, length);
+  }
+  
+  IByteBuffer* createByteBuffer(int size) const{
+    return new ByteBuffer_iOS(size);
   }
   
   IFloatBuffer* createFloatBuffer(int size) const {
@@ -78,7 +82,6 @@ public:
   
   IIntBuffer* createIntBuffer(int size) const {
     return new IntBuffer_iOS(size);
-
   }
   
 };

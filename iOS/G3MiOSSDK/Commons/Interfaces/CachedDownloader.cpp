@@ -40,10 +40,10 @@ public:
   
   void saveResponse(const URL& url,
                     const IByteBuffer& data) {
-    if (!_cacheStorage->contains(url)) {
+    if (!_cacheStorage->containsBuffer(url)) {
       _downloader->countSave();
       
-      _cacheStorage->save(url, data);
+      _cacheStorage->saveBuffer(url, data);
     }
   }
   
@@ -103,22 +103,22 @@ std::string CachedDownloader::removeInvalidChars(const std::string& path) const 
 #endif
 }
 
-long long CachedDownloader::request(const URL& url,
-                                    long long priority,
-                                    IDownloadListener* listener,
-                                    bool deleteListener) {
+long long CachedDownloader::requestBuffer(const URL& url,
+                                          long long priority,
+                                          IDownloadListener* listener,
+                                          bool deleteListener) {
   _requestsCounter++;
   
-  const IByteBuffer* cachedBuffer = _cacheStorage->read(url);
+  const IByteBuffer* cachedBuffer = _cacheStorage->readBuffer(url);
   if (cachedBuffer == NULL) {
     // cache miss
-    return _downloader->request(url,
-                                priority,
-                                new SaverDownloadListener(this,
-                                                          _cacheStorage,
-                                                          listener,
-                                                          deleteListener),
-                                true);
+    return _downloader->requestBuffer(url,
+                                      priority,
+                                      new SaverDownloadListener(this,
+                                                                _cacheStorage,
+                                                                listener,
+                                                                deleteListener),
+                                      true);
   }
   else {
     // cache hit

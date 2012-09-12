@@ -42,10 +42,10 @@ public:
   
   Downloader_iOS(int maxConcurrentOperationCount);
   
-  long long request(const URL& url,
-                    long long priority,
-                    IDownloadListener* listener,
-                    bool deleteListener);
+  long long requestBuffer(const URL& url,
+                          long long priority,
+                          IDownloadListener* listener,
+                          bool deleteListener);
   
   void cancelRequest(long long requestId);
   

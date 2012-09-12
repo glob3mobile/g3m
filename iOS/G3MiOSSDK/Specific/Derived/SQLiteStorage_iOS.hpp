@@ -31,12 +31,12 @@ private:
 public:
   SQLiteStorage_iOS(const std::string &databaseName);
   
-  bool contains(const URL& url);
+  bool containsBuffer(const URL& url);
   
-  void save(const URL& url,
-            const IByteBuffer& buffer);
+  void saveBuffer(const URL& url,
+                  const IByteBuffer& buffer);
   
-  const IByteBuffer* read(const URL& url);
+  const IByteBuffer* readBuffer(const URL& url);
   
   virtual ~SQLiteStorage_iOS() {}
   
