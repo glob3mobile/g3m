@@ -24,7 +24,7 @@
 #include "ITimer.hpp"
 
 #include "FrameTasksExecutor.hpp"
-#include "IDownloadListener.hpp"
+#include "IImageDownloadListener.hpp"
 #include "IDownloader.hpp"
 #include "Petition.hpp"
 
@@ -35,47 +35,26 @@ enum PetitionStatus {
 };
 
 
-class BuilderDownloadStepDownloadListener : public IDownloadListener {
+class BuilderDownloadStepDownloadListener : public IImageDownloadListener {
 private:
   TileTextureBuilder* _builder;
   const int           _position;
-  
-  //  int _onDownload;
-  //  int _onError;
-  //  int _onCancel;
   
 public:
   BuilderDownloadStepDownloadListener(TileTextureBuilder* builder,
                                       int position);
   
   void onDownload(const URL& url,
-                  const IByteBuffer& data);
+                  const IImage& image);
   
   void onError(const URL& url,
-               const IByteBuffer& data);
+               const IImage& image);
   
   void onCanceledDownload(const URL& url,
-                          const IByteBuffer& data) {
+                          const IImage& image) {
   }
   
   void onCancel(const URL& url);
-  
-  //  void showInvalidState() const {
-  //    printf("onDownload=%d, onCancel=%d, onError=%d\n", _onDownload, _onCancel, _onError);
-  //  }
-  
-  //  void testState() const {
-  //    if ((_onDownload == 1) && (_onCancel == 0) && (_onError == 0)) {
-  //      return;
-  //    }
-  //    if ((_onDownload == 0) && (_onCancel == 1) && (_onError == 0)) {
-  //      return;
-  //    }
-  //    if ((_onDownload == 0) && (_onCancel == 0) && (_onError == 1)) {
-  //      return;
-  //    }
-  //    showInvalidState();
-  //  }
   
   virtual ~BuilderDownloadStepDownloadListener();
   
@@ -252,10 +231,10 @@ public:
       //const long priority = _tile->getLevel() * 1000000 + _tile->getRow() * 1000 + _tile->getColumn();
       const long long priority = _tile->getLevel();
       
-      const long long requestId = _downloader->request(URL(petition->getURL()),
-                                                       priority,
-                                                       new BuilderDownloadStepDownloadListener(this, i),
-                                                       true);
+      const long long requestId = _downloader->requestImage(URL(petition->getURL()),
+                                                            priority,
+                                                            new BuilderDownloadStepDownloadListener(this, i),
+                                                            true);
       
       _requestsIds.push_back(requestId);
     }
@@ -303,24 +282,21 @@ public:
       
       for (int i = 0; i < _petitionsCount; i++) {
         Petition* petition       = _petitions[i];
-        const ByteArrayWrapper* buffer = petition->getByteArrayWrapper();
+        const IImage* image = petition->getImage();
         
-        if (buffer != NULL) {
-          const IImage* image = _factory->createImageFromData(buffer);
-          if (image != NULL) {
-            images.push_back(image);
-            
-            const Sector petitionSector = petition->getSector();
-            
-            Rectangle* rectangle = getImageRectangleInTexture(tileSector,
-                                                              petitionSector,
-                                                              textureWidth,
-                                                              textureHeight);
-            rectangles.push_back(rectangle);
-            
-            petitionsID += petition->getURL().getPath();
-            petitionsID += "_";
-          }
+        if (image != NULL) {
+          images.push_back(image);
+          
+          const Sector petitionSector = petition->getSector();
+          
+          Rectangle* rectangle = getImageRectangleInTexture(tileSector,
+                                                            petitionSector,
+                                                            textureWidth,
+                                                            textureHeight);
+          rectangles.push_back(rectangle);
+          
+          petitionsID += petition->getURL().getPath();
+          petitionsID += "_";
         }
       }
       
@@ -418,14 +394,14 @@ public:
   }
   
   void stepDownloaded(int position,
-                      const IByteBuffer& data) {
+                      const IImage& image) {
     if (_canceled) {
       return;
     }
     checkIsPending(position);
     
     _status[position]  = STATUS_DOWNLOADED;
-    _petitions[position]->setByteArrayWrapper(buffer->copy());
+    _petitions[position]->setImage(image.copy());
     
     stepDone();
   }
@@ -538,13 +514,13 @@ TileTextureBuilderHolder::~TileTextureBuilderHolder() {
 
 
 void BuilderDownloadStepDownloadListener::onDownload(const URL& url,
-                                                     const IByteBuffer& data) {
+                                                     const IImage& image) {
   //  _onDownload++;
-  _builder->stepDownloaded(_position, data);
+  _builder->stepDownloaded(_position, image);
 }
 
 void BuilderDownloadStepDownloadListener::onError(const URL& url,
-                                                  const IByteBuffer& data) {
+                                                  const IImage& image) {
   //  _onError++;
   _builder->stepCanceled(_position);
 }
@@ -746,7 +722,7 @@ IFloatBuffer* MultiLayerTileTexturizer::getTextureCoordinates(const TileRenderCo
   return _texCoordsCache;
 }
 
-class TopTileDownloadListener : public IDownloadListener {
+class TopTileDownloadListener : public IImageDownloadListener {
 private:
   MultiLayerTileTexturizer* _texturizer;
   
@@ -761,17 +737,17 @@ public:
   }
   
   void onDownload(const URL& url,
-                  const IByteBuffer& data) {
+                  const IImage& image) {
     _texturizer->countTopTileRequest();
   }
   
   void onError(const URL& url,
-               const IByteBuffer& data) {
+               const IImage& image) {
     _texturizer->countTopTileRequest();
   }
   
   void onCanceledDownload(const URL& url,
-                          const IByteBuffer& data) {
+                          const IImage& image) {
   }
   
   void onCancel(const URL& url) {
@@ -792,10 +768,10 @@ void MultiLayerTileTexturizer::justCreatedTopTile(const RenderContext* rc,
   const long priority = 1000000000;  // very big priority for toplevel tiles
   for (int i = 0; i < petitions.size(); i++) {
     const Petition* petition = petitions[i];
-    rc->getDownloader()->request(URL(petition->getURL()),
-                                 priority,
-                                 new TopTileDownloadListener(this),
-                                 true);
+    rc->getDownloader()->requestImage(URL(petition->getURL()),
+                                      priority,
+                                      new TopTileDownloadListener(this),
+                                      true);
     
     delete petition;
   }

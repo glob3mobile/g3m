@@ -13,7 +13,7 @@
 
 #include <string>
 
-class IDownloadListener;
+class IBufferDownloadListener;
 class IImageDownloadListener;
 
 class IDownloader {
@@ -24,7 +24,7 @@ public:
   
   virtual long long requestBuffer(const URL& url,
                                   long long priority,
-                                  IDownloadListener* listener,
+                                  IBufferDownloadListener* listener,
                                   bool deleteListener) = 0;
   
   virtual long long requestImage(const URL& url,

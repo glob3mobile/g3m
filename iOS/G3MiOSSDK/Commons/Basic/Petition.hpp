@@ -12,9 +12,8 @@
 #include <string>
 #include <vector>
 
+#include "URL.hpp"
 #include "Sector.hpp"
-#include "IDownloadListener.hpp"
-#include "IDownloader.hpp"
 #include "GLTextureId.hpp"
 #include "IImage.hpp"
 

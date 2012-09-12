@@ -8,8 +8,9 @@
 
 #include "SQLiteStorage_iOS.hpp"
 
-#include "ByteBuffer_iOS.hpp"
 #include "IFactory.hpp"
+#include "ByteBuffer_iOS.hpp"
+#include "Image_iOS.hpp"
 
 NSString* SQLiteStorage_iOS::getDBPath() const {
   
@@ -34,14 +35,26 @@ _databaseName(databaseName)
   
   [_db open];
   
-  if (![_db executeNonQuery:@"CREATE TABLE IF NOT EXISTS entry (name TEXT, contents TEXT);"]) {
-    printf("Can't create table \"entry\" on database \"%s\"\n",
+  if (![_db executeNonQuery:@"CREATE TABLE IF NOT EXISTS buffer (name TEXT, contents TEXT);"]) {
+    printf("Can't create table \"buffer\" on database \"%s\"\n",
            databaseName.c_str());
     return;
   }
   
-  if (![_db executeNonQuery:@"CREATE UNIQUE INDEX IF NOT EXISTS entry_name ON entry(name);"]) {
-    printf("Can't create index \"entry_name\" on database \"%s\"\n",
+  if (![_db executeNonQuery:@"CREATE UNIQUE INDEX IF NOT EXISTS buffer_name ON buffer(name);"]) {
+    printf("Can't create index \"buffer_name\" on database \"%s\"\n",
+           databaseName.c_str());
+    return;
+  }
+  
+  if (![_db executeNonQuery:@"CREATE TABLE IF NOT EXISTS image (name TEXT, contents TEXT);"]) {
+    printf("Can't create table \"image\" on database \"%s\"\n",
+           databaseName.c_str());
+    return;
+  }
+  
+  if (![_db executeNonQuery:@"CREATE UNIQUE INDEX IF NOT EXISTS image_name ON image(name);"]) {
+    printf("Can't create index \"image_name\" on database \"%s\"\n",
            databaseName.c_str());
     return;
   }
@@ -52,25 +65,39 @@ _databaseName(databaseName)
 }
 
 void SQLiteStorage_iOS::showStatistics() const {
-  SQResultSet* rs = [_db executeQuery:@"SELECT COUNT(*), SUM(LENGTH(contents)) FROM entry"];
-  if ([rs next]) {
-    NSInteger count     = [rs integerColumnByIndex: 0];
-    NSInteger usedSpace = [rs integerColumnByIndex: 1];
+  SQResultSet* rs1 = [_db executeQuery:@"SELECT COUNT(*), SUM(LENGTH(contents)) FROM buffer"];
+  if ([rs1 next]) {
+    NSInteger count     = [rs1 integerColumnByIndex: 0];
+    NSInteger usedSpace = [rs1 integerColumnByIndex: 1];
     
-    NSLog(@"Initialized Storage on DB \"%@\", entries=%d, usedSpace=%fMb",
+    NSLog(@"Initialized Storage on DB \"%@\", buffers=%d, usedSpace=%fMb",
           toNSString(_databaseName), //getDBPath(),
           count,
           (float) ((double)usedSpace / 1024 / 1024));
   }
   
-  [rs close];
+  [rs1 close];
+  
+  
+  SQResultSet* rs2 = [_db executeQuery:@"SELECT COUNT(*), SUM(LENGTH(contents)) FROM image"];
+  if ([rs2 next]) {
+    NSInteger count     = [rs2 integerColumnByIndex: 0];
+    NSInteger usedSpace = [rs2 integerColumnByIndex: 1];
+    
+    NSLog(@"Initialized Storage on DB \"%@\", images=%d, usedSpace=%fMb",
+          toNSString(_databaseName), //getDBPath(),
+          count,
+          (float) ((double)usedSpace / 1024 / 1024));
+  }
+  
+  [rs2 close];
 }
 
 
 bool SQLiteStorage_iOS::containsBuffer(const URL& url) {
   NSString* name = toNSString(url.getPath());
   
-  SQResultSet* rs = [_db executeQuery:@"SELECT 1 FROM entry WHERE (name = ?)", name];
+  SQResultSet* rs = [_db executeQuery:@"SELECT 1 FROM buffer WHERE (name = ?)", name];
   
   BOOL hasAny = [rs next];
   
@@ -79,8 +106,21 @@ bool SQLiteStorage_iOS::containsBuffer(const URL& url) {
   return hasAny;
 }
 
+bool SQLiteStorage_iOS::containsImage(const URL& url) {
+  NSString* name = toNSString(url.getPath());
+  
+  SQResultSet* rs = [_db executeQuery:@"SELECT 1 FROM image WHERE (name = ?)", name];
+  
+  BOOL hasAny = [rs next];
+  
+  [rs close];
+  
+  return hasAny;
+}
+
+
 void SQLiteStorage_iOS::saveBuffer(const URL& url,
-                             const IByteBuffer& buffer) {
+                                   const IByteBuffer& buffer) {
   
   const ByteBuffer_iOS* buffer_iOS = (const ByteBuffer_iOS*) &buffer;
   
@@ -88,16 +128,31 @@ void SQLiteStorage_iOS::saveBuffer(const URL& url,
   NSData* contents = [NSData dataWithBytes: buffer_iOS->getPointer()
                                     length: buffer_iOS->size()];
   
-  if (![_db executeNonQuery:@"INSERT OR REPLACE INTO entry (name, contents) VALUES (?, ?)", name, contents]) {
+  if (![_db executeNonQuery:@"INSERT OR REPLACE INTO buffer (name, contents) VALUES (?, ?)", name, contents]) {
     printf("Can't save \"%s\"\n", url.getPath().c_str());
   }
 }
+
+void SQLiteStorage_iOS::saveImage(const URL& url,
+                                  const IImage& image) {
+  
+  const Image_iOS* image_iOS = (const Image_iOS*) &image;
+  
+  NSString* name = toNSString(url.getPath());
+  NSData* contents = [NSData dataWithBytes: buffer_iOS->getPointer()
+                                    length: buffer_iOS->size()];
+  
+  if (![_db executeNonQuery:@"INSERT OR REPLACE INTO buffer (name, contents) VALUES (?, ?)", name, contents]) {
+    printf("Can't save \"%s\"\n", url.getPath().c_str());
+  }
+}
+
 
 const IByteBuffer* SQLiteStorage_iOS::readBuffer(const URL& url) {
   IByteBuffer* result = NULL;
   
   NSString* name = toNSString(url.getPath());
-  SQResultSet* rs = [_db executeQuery:@"SELECT contents FROM entry WHERE (name = ?)", name];
+  SQResultSet* rs = [_db executeQuery:@"SELECT contents FROM buffer WHERE (name = ?)", name];
   if ([rs next]) {
     NSData* nsData = [rs dataColumnByIndex: 0];
     

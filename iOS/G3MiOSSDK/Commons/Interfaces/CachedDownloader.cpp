@@ -7,19 +7,19 @@
 //
 
 #include "CachedDownloader.hpp"
-#include "IDownloadListener.hpp"
+#include "IBufferDownloadListener.hpp"
 #include "IStringBuilder.hpp"
 
-class SaverDownloadListener : public IDownloadListener {
-  CachedDownloader*  _downloader;
-  IDownloadListener* _listener;
-  const bool         _deleteListener;
-  IStorage*          _cacheStorage;
+class SaverDownloadListener : public IBufferDownloadListener {
+  CachedDownloader*        _downloader;
+  IBufferDownloadListener* _listener;
+  const bool               _deleteListener;
+  IStorage*                _cacheStorage;
   
 public:
   SaverDownloadListener(CachedDownloader* downloader,
                         IStorage* cacheStorage,
-                        IDownloadListener* listener,
+                        IBufferDownloadListener* listener,
                         bool deleteListener) :
   _downloader(downloader),
   _cacheStorage(cacheStorage),
@@ -105,7 +105,7 @@ std::string CachedDownloader::removeInvalidChars(const std::string& path) const 
 
 long long CachedDownloader::requestBuffer(const URL& url,
                                           long long priority,
-                                          IDownloadListener* listener,
+                                          IBufferDownloadListener* listener,
                                           bool deleteListener) {
   _requestsCounter++;
   

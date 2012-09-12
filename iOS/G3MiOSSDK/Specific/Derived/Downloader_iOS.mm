@@ -169,7 +169,7 @@ Downloader_iOS_Handler* Downloader_iOS::getHandlerToRun() {
 
 long long Downloader_iOS::requestBuffer(const URL &url,
                                         long long priority,
-                                        IDownloadListener* cppListener,
+                                        IBufferDownloadListener* cppListener,
                                         bool deleteListener) {
   
   NSURL* nsURL = [NSURL URLWithString: toNSString(url.getPath())];

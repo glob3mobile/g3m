@@ -45,7 +45,7 @@ public:
   
   long long requestBuffer(const URL& url,
                           long long priority,
-                          IDownloadListener* listener,
+                          IBufferDownloadListener* listener,
                           bool deleteListener);
   
   void cancelRequest(long long requestId);

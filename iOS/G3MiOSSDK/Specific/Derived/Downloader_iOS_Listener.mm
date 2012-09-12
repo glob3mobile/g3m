@@ -10,7 +10,7 @@
 
 @implementation Downloader_iOS_Listener
 
--(id)initWithCPPListener:(IDownloadListener*)cppListener
+-(id)initWithCPPListener:(IBufferDownloadListener*)cppListener
           deleteListener:(bool)deleteListener
 {
   self = [super init];

@@ -31,6 +31,9 @@ private:
 public:
   SQLiteStorage_iOS(const std::string &databaseName);
   
+  virtual ~SQLiteStorage_iOS() {
+  }
+  
   bool containsBuffer(const URL& url);
   
   void saveBuffer(const URL& url,
@@ -38,7 +41,13 @@ public:
   
   const IByteBuffer* readBuffer(const URL& url);
   
-  virtual ~SQLiteStorage_iOS() {}
+  
+  bool containsImage(const URL& url);
+  
+  void saveImage(const URL& url,
+                 const IImage& buffer);
+  
+  const IImage* readImage(const URL& url);
   
 };
 

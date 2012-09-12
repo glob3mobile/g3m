@@ -8,16 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
-#include "IDownloadListener.hpp"
+#include "IBufferDownloadListener.hpp"
 
-// Objective-C wrapper for C++ IDownloadListener
+// Objective-C wrapper for C++ IBufferDownloadListener
 @interface Downloader_iOS_Listener : NSObject
 {
-  IDownloadListener* _cppListener;
-  bool               _deleteListener;
+  IBufferDownloadListener* _cppListener;
+  bool                     _deleteListener;
 }
 
--(id)initWithCPPListener:(IDownloadListener*)cppListener
+-(id)initWithCPPListener:(IBufferDownloadListener*)cppListener
           deleteListener: (bool)deleteListener;
 
 
