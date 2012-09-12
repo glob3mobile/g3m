@@ -15,6 +15,7 @@ import org.glob3.mobile.generated.URL;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsArrayInteger;
 
 
 public class Downloader_WebGL_Handler {
@@ -166,12 +167,13 @@ public class Downloader_WebGL_Handler {
 
 
    public void processResponse(final int statusCode,
-                               final byte[] data) {
+                               final JsArrayInteger data) {
+      final byte[] dataByteArray = toJavaArrayBytes(data);
 
-      final boolean dataIsValid = (data != null) && (statusCode == 200);
+      final boolean dataIsValid = (dataByteArray != null) && (statusCode == 200);
 
       if (dataIsValid) {
-         final ByteBuffer buffer = new ByteBuffer(data, data.length);
+         final ByteBuffer buffer = new ByteBuffer(dataByteArray, dataByteArray.length);
          final Response response = new Response(_url, buffer);
          final Iterator<ListenerEntry> iter = _listeners.iterator();
 
@@ -227,25 +229,34 @@ public class Downloader_WebGL_Handler {
 
 
    public native void jsProcessResponse(JavaScriptObject xhr) /*-{
-		//		debugger;
+		debugger;
 		console.log("jsProcessResponse");
 
 		var thisInstance = this;
 		// inform downloader to remove myself, to avoid adding new Listener
 		thisInstance.@org.glob3.mobile.specific.Downloader_WebGL_Handler::removeFromDownloaderDownloadingHandlers()();
-		var bytes;
+		var uint8array;
 		if (xhr.status == 200) {
-			bytes = new Uint8Array(xhr.response);
-			for ( var i = 0; i < bytes.length; i++) {
-				bytes[i] = 0xFF;
-			}
+			uint8array = new Uint8Array(xhr.response);
 		} else {
-			bytes = null;
+			uint8array = null;
 			console.log("Error Retriving Data!");
 		}
-
-		thisInstance.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(I[B)(xhr.status, bytes);
+		thisInstance.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JsArrayInteger;)(xhr.status, uint8array);
    }-*/;
+
+
+   // take too much time (15-20 sec per array)
+   public byte[] toJavaArrayBytes(final JsArrayInteger bytes) {
+      log(LogLevel.InfoLevel, "in toJavaArrayBytes");
+      final int length = bytes.length();
+      final byte[] byteArray = new byte[length];
+      for (int i = 0; i < length; i++) {
+         byteArray[i] = (byte) bytes.get(i);
+      }
+      log(LogLevel.InfoLevel, "out toJavaArrayBytes");
+      return byteArray;
+   }
 
 
    public void log(final LogLevel level,

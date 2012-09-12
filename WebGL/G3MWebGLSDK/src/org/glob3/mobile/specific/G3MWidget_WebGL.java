@@ -13,7 +13,6 @@ import org.glob3.mobile.generated.CameraRotationHandler;
 import org.glob3.mobile.generated.CameraSingleDragHandler;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
-import org.glob3.mobile.generated.DummyRenderer;
 import org.glob3.mobile.generated.EffectsScheduler;
 import org.glob3.mobile.generated.EllipsoidalTileTessellator;
 import org.glob3.mobile.generated.FrameTasksExecutor;
@@ -25,7 +24,6 @@ import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
-import org.glob3.mobile.generated.INativeGL;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.IStringUtils;
@@ -35,7 +33,6 @@ import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.NullStorage;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Renderer;
-import org.glob3.mobile.generated.SimplePlanetRenderer;
 import org.glob3.mobile.generated.SingleImageTileTexturizer;
 import org.glob3.mobile.generated.TextureBuilder;
 import org.glob3.mobile.generated.TexturesHandler;
@@ -234,44 +231,45 @@ public class G3MWidget_WebGL
    }
 
 
-   public void init() {
-      //  Creating factory
-      final IFactory factory = new Factory_WebGL();
+   /* old
+      public void init() {
+         //  Creating factory
+         final IFactory factory = new Factory_WebGL();
 
-      // RENDERERS
-      final CompositeRenderer comp = new CompositeRenderer();
+         // RENDERERS
+         final CompositeRenderer comp = new CompositeRenderer();
 
-      // Camera must be first
-      final CameraRenderer cr = new CameraRenderer();
-      comp.addRenderer(cr);
+         // Camera must be first
+         final CameraRenderer cr = new CameraRenderer();
+         comp.addRenderer(cr);
 
-      if (true) {
-         final DummyRenderer dr = new DummyRenderer();
-         comp.addRenderer(dr);
+         if (true) {
+            final DummyRenderer dr = new DummyRenderer();
+            comp.addRenderer(dr);
+         }
+
+         if (true) {
+            //final SimplePlanetRenderer spr = new SimplePlanetRenderer("world.jpg");
+
+            final SimplePlanetRenderer spr = new SimplePlanetRenderer("http://www.arkive.org/images/browse/world-map.jpg");
+            comp.addRenderer(spr);
+         }
+
+         // Logger
+         final ILogger logger = new Logger_WebGL(LogLevel.ErrorLevel);
+
+         final INativeGL gl = new NativeGL_WebGL();
+
+         //      final TexturesHandler texturesHandler = new TexturesHandler();
+
+         //      _widget = G3MWidget.create(factory, logger, gl, texturesHandler, Planet.createEarth(), comp,
+         //               _canvas.getCoordinateSpaceWidth(), _canvas.getCoordinateSpaceHeight(),
+         //               Color.fromRGB((float) 0.0, (float) 0.1, (float) 0.2, (float) 1.0), true);
+
+         //CALLING widget.render()
+         startRender(this);
       }
-
-      if (true) {
-         //final SimplePlanetRenderer spr = new SimplePlanetRenderer("world.jpg");
-
-         final SimplePlanetRenderer spr = new SimplePlanetRenderer("http://www.arkive.org/images/browse/world-map.jpg");
-         comp.addRenderer(spr);
-      }
-
-      // Logger
-      final ILogger logger = new Logger_WebGL(LogLevel.ErrorLevel);
-
-      final INativeGL gl = new NativeGL_WebGL();
-
-      //      final TexturesHandler texturesHandler = new TexturesHandler();
-
-      //      _widget = G3MWidget.create(factory, logger, gl, texturesHandler, Planet.createEarth(), comp,
-      //               _canvas.getCoordinateSpaceWidth(), _canvas.getCoordinateSpaceHeight(),
-      //               Color.fromRGB((float) 0.0, (float) 0.1, (float) 0.2, (float) 1.0), true);
-
-      //CALLING widget.render()
-      startRender(this);
-   }
-
+   */
 
    @Override
    public void onBrowserEvent(final Event event) {
@@ -289,7 +287,7 @@ public class G3MWidget_WebGL
                //               writeOnCanvas("execute " + te.getNumTouch() + ": " + te.getType().toString() + " " + te.getTouch(0).getPos().x()
                //                             + " " + te.getTouch(0).getPos().y());
                // TODO: uncomment next line when _widget is properly created
-               _widget.onTouchEvent(te);
+               //               _widget.onTouchEvent(te);
             }
          });
       }
@@ -307,17 +305,17 @@ public class G3MWidget_WebGL
       line = line + 15;
    }
 
-
-   private void renderWidget() {
-      _widget.render();
-   }
-
-
-   private native void startRender(G3MWidget_WebGL instance) /*-{
-		var tick = function() {
-			$wnd.requestAnimFrame(tick);
-			$entry(instance.@org.glob3.mobile.specific.G3MWidget_WebGL::renderWidget()());
-		};
-		tick();
-   }-*/;
+   /*
+      private void renderWidget() {
+         _widget.render();
+      }
+   */
+   //
+   //   private native void startRender(G3MWidget_WebGL instance) /*-{
+   //		var tick = function() {
+   //			$wnd.requestAnimFrame(tick);
+   //			$entry(instance.@org.glob3.mobile.specific.G3MWidget_WebGL::renderWidget()());
+   //		};
+   //		tick();
+   //   }-*/;
 }

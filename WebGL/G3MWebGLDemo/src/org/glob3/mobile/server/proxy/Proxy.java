@@ -92,9 +92,7 @@ public class Proxy
          final String contentType = connection.getContentType();
          if (contentType != null) {
             response.setContentType(contentType);
-         }
 
-         if ((contentType != null) && contentType.contains("image/")) {
             final int responseCode = connection.getResponseCode();
             response.setStatus(responseCode);
             BufferedInputStream in;
@@ -119,7 +117,7 @@ public class Proxy
             in.close();
          }
          else {
-
+            System.out.println("Content type is null");
          }
       }
       catch (final Exception e) {
