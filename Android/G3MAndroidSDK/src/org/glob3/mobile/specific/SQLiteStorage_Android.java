@@ -21,10 +21,10 @@ public class SQLiteStorage_Android
          implements
             IStorage {
 
-   private final String  _databaseName;
-   private final Context _ctx;
+   private final String         _databaseName;
+   private final Context        _ctx;
 
-   SQLiteDatabase        _db;
+   private final SQLiteDatabase _db;
 
 
    String getPath() {

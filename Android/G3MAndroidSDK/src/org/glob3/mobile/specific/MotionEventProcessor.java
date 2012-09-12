@@ -40,8 +40,8 @@ public class MotionEventProcessor {
 
    }
 
-   EventProcessed _prevLastEvent = new EventProcessed();
-   EventProcessed _lastEvent     = new EventProcessed();
+   private EventProcessed       _prevLastEvent = new EventProcessed();
+   private final EventProcessed _lastEvent     = new EventProcessed();
 
 
    public TouchEvent processEvent(final MotionEvent event) {

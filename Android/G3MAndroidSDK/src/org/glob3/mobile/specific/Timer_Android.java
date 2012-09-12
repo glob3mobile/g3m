@@ -12,7 +12,7 @@ public class Timer_Android
          extends
             ITimer {
 
-   long _startTime;
+   private long _startTime;
 
 
    public Timer_Android() {

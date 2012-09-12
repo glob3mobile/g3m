@@ -60,13 +60,13 @@ public class G3MWidget_Android
          implements
             OnGestureListener {
 
-   G3MWidget                   _widget;
-   ES2Renderer                 _es2renderer;
+   private G3MWidget                  _widget;
+   private ES2Renderer                _es2renderer;
 
-   final MotionEventProcessor  _motionEventProcessor = new MotionEventProcessor();
+   private final MotionEventProcessor _motionEventProcessor = new MotionEventProcessor();
 
-   private OnDoubleTapListener _doubleTapListener    = null;
-   private GestureDetector     _gestureDetector      = null;
+   private OnDoubleTapListener        _doubleTapListener    = null;
+   private GestureDetector            _gestureDetector      = null;
 
 
    public G3MWidget_Android(final Context context) {

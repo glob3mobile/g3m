@@ -23,8 +23,8 @@ import android.graphics.BitmapFactory;
 public class Factory_Android
          extends
             IFactory {
-   final Context _context;
-   static Locale locale = new Locale("myLocale");
+   private final Context _context;
+   private static Locale locale = new Locale("myLocale");
 
 
    public Factory_Android(final Context c) {

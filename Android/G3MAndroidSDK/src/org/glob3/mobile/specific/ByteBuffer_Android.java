@@ -24,9 +24,10 @@ public class ByteBuffer_Android
    }
 
 
-   //   public ByteBuffer_Android(int size) {
-   //      _buffer = ByteBuffer.allocateDirect(size);
-   //   }
+   public ByteBuffer_Android(final int size) {
+      //         _buffer = ByteBuffer.allocateDirect(size);
+      _buffer = ByteBuffer.allocate(size);
+   }
 
 
    @Override

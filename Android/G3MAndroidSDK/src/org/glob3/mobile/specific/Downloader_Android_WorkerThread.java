@@ -9,10 +9,10 @@ public class Downloader_Android_WorkerThread
          extends
             Thread {
 
-   final static String TAG = "Downloader_Android_WorkerThread";
+   final static String              TAG = "Downloader_Android_WorkerThread";
 
-   Downloader_Android  _downloader;
-   boolean             _stopping;
+   private final Downloader_Android _downloader;
+   private boolean                  _stopping;
 
 
    public Downloader_Android_WorkerThread(final Downloader_Android downloader) {

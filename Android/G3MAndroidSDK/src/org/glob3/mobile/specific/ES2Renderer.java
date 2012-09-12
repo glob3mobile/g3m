@@ -20,8 +20,8 @@ class ES2Renderer
    final G3MWidget_Android _widget;
 
    private int             _program;
-   final Context           _context;
-   boolean                 _hasRendered = false;
+   private final Context   _context;
+   private boolean         _hasRendered = false;
 
 
    public ES2Renderer(final Context context,
