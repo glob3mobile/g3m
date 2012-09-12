@@ -13,7 +13,7 @@
 
 class IFloatBuffer;
 class IIntBuffer;
-class GLImage;
+class IImage;
 
 #include <vector>
 #include <string>
@@ -180,7 +180,7 @@ public:
                              GLTextureParameter par,
                              GLTextureParameterValue v) const = 0;
   
-  virtual void texImage2D(const GLImage* glImage) const = 0;
+  virtual void texImage2D(const IImage* image, GLFormat format) const = 0;
   
   //  virtual void texImage2D(GLTextureType target,
   //                          int         level,

@@ -117,7 +117,6 @@
 		CF9CD89A15DBE2C800C6FD7E /* CachedDownloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9CD89815DBE2C800C6FD7E /* CachedDownloader.cpp */; };
 		CF9D2D8815F7D3C100B5CE2E /* IBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9D2D8615F7D3C100B5CE2E /* IBuffer.cpp */; };
 		CF9D2D8915F7D3C100B5CE2E /* IBuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF9D2D8715F7D3C100B5CE2E /* IBuffer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		CF9D832415FF7A1C0069B555 /* GLImage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8E17DD215FE135400C980E6 /* GLImage.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF9D832515FF7A1C0069B555 /* FloatBufferBuilderFromCartesian2D.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8CD74D915F8DBE800B801CC /* FloatBufferBuilderFromCartesian2D.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF9D832615FF7A1C0069B555 /* FloatBufferBuilderFromCartesian3D.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8CD74D815F8D56800B801CC /* FloatBufferBuilderFromCartesian3D.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF9D832715FF7A1C0069B555 /* FloatBufferBuilderFromGeodetic.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8CD74DD15F8DE9500B801CC /* FloatBufferBuilderFromGeodetic.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -420,7 +419,6 @@
 		D8D347B915E5133B00EDB394 /* IStringBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IStringBuilder.cpp; path = Commons/Interfaces/IStringBuilder.cpp; sourceTree = "<group>"; };
 		D8E0EC1215C1B1BB0010A68A /* StaticImageLayer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StaticImageLayer.hpp; sourceTree = "<group>"; };
 		D8E0EC1415C1B1CD0010A68A /* StaticImageLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StaticImageLayer.cpp; sourceTree = "<group>"; };
-		D8E17DD215FE135400C980E6 /* GLImage.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GLImage.hpp; sourceTree = "<group>"; };
 		D8E17DD515FE2ABF00C980E6 /* IByteBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IByteBuffer.hpp; path = Commons/Interfaces/IByteBuffer.hpp; sourceTree = "<group>"; };
 		D8E17DDC15FE2B4F00C980E6 /* ByteBuffer_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ByteBuffer_iOS.hpp; path = Specific/Derived/ByteBuffer_iOS.hpp; sourceTree = "<group>"; };
 		D8EEF3B51577924D003FEB5E /* libG3MiOSSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libG3MiOSSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -730,7 +728,6 @@
 			children = (
 				D81BA16E15CBF19E004EF0B0 /* GL.hpp */,
 				D81BA16F15CBF19E004EF0B0 /* GL.cpp */,
-				D8E17DD215FE135400C980E6 /* GLImage.hpp */,
 			);
 			name = GL;
 			path = Commons/GL;
@@ -816,7 +813,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CF9D832415FF7A1C0069B555 /* GLImage.hpp in Headers */,
 				CF9D832515FF7A1C0069B555 /* FloatBufferBuilderFromCartesian2D.hpp in Headers */,
 				CF9D832615FF7A1C0069B555 /* FloatBufferBuilderFromCartesian3D.hpp in Headers */,
 				CF9D832715FF7A1C0069B555 /* FloatBufferBuilderFromGeodetic.hpp in Headers */,

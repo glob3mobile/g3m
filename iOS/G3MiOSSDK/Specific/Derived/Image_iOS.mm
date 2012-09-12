@@ -152,3 +152,15 @@ IByteBuffer* Image_iOS::createByteBufferRGBA8888(int width, int height) const
   
   return GFactory.createByteBuffer(data, 4 * width * height);
 }
+
+IImage* Image_iOS::scale(int width, int height) const{
+  
+  CGSize newSize = CGSizeMake(width, height);
+  
+  UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
+  [_image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+  UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();    
+  UIGraphicsEndImageContext();
+  
+  return new Image_iOS(newImage);
+}

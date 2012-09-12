@@ -52,6 +52,8 @@ public:
   ByteArrayWrapper* getEncodedImage() const;
   
   IByteBuffer* createByteBufferRGBA8888(int width, int height) const;
+  
+  IImage* scale(int width, int height) const;
 
 };
 
