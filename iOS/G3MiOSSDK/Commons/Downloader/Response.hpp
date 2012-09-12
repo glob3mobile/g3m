@@ -18,7 +18,7 @@ private:
   const URL         _url;
 #endif
 #ifdef JAVA_CODE
-  private URL _url = new URL();     //Converter puts "Url"
+  final private URL _url;     //Converter puts "Url"
 #endif
   const ByteArrayWrapper* _data;
 
