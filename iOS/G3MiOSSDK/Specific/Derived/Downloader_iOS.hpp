@@ -15,7 +15,6 @@
 #include "IDownloader.hpp"
 
 
-
 class Downloader_iOS : public IDownloader {
 private:
   NSMutableArray*      _workers;
@@ -46,6 +45,11 @@ public:
                           long long priority,
                           IBufferDownloadListener* listener,
                           bool deleteListener);
+  
+//  long long requestImage(const URL& url,
+//                         long long priority,
+//                         IImageDownloadListener* listener,
+//                         bool deleteListener);
   
   void cancelRequest(long long requestId);
   
