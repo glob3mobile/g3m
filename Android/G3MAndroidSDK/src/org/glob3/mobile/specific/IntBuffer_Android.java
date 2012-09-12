@@ -17,7 +17,7 @@ public class IntBuffer_Android
 
 
    public IntBuffer_Android(final int size) {
-      //      _buffer = ByteBuffer.allocateDirect(size * 4).order(ByteOrder.nativeOrder()).asIntBuffer();
+      // _buffer = ByteBuffer.allocateDirect(size * 4).order(ByteOrder.nativeOrder()).asIntBuffer();
       _buffer = ByteBuffer.allocate(size * 4).asIntBuffer();
    }
 
