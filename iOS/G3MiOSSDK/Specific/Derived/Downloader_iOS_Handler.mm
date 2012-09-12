@@ -204,7 +204,7 @@
     
     if (dataIsValid) {
       const int length = [data length];
-      unsigned char* bytes = new unsigned char[ length ]; // will be deleted by ByteArrayWrapper's destructor
+      unsigned char* bytes = new unsigned char[ length ]; // will be deleted by IByteBuffer's destructor
       [data getBytes: bytes
               length: length];
       
