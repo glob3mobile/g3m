@@ -49,9 +49,11 @@ public:
   
   IImage* subImage(const Rectangle& rect) const;
   
-  ByteArrayWrapper* getEncodedImage() const;
+//  ByteArrayWrapper* getEncodedImage() const;
   
   IByteBuffer* createByteBufferRGBA8888(int width, int height) const;
+
+  const std::string description() const;
 
 };
 

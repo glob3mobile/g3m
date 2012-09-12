@@ -21,31 +21,34 @@
   return self;
 }
 
--(void) onDownload:(Response*)response
+-(void) onDownloadURL:(const URL&)url
+               buffer:(const IByteBuffer&)data
 {
   if (_cppListener) {
-    _cppListener->onDownload(response);
+    _cppListener->onDownload(url, data);
   }
 }
 
--(void) onError:(Response*)response
+-(void) onErrorURL:(const URL&)url
+            buffer:(const IByteBuffer&)data
 {
   if (_cppListener) {
-    _cppListener->onError(response);
+    _cppListener->onError(url, data);
   }
 }
 
--(void) onCancel:(const URL*)url
+-(void) onCancel:(const URL&)url
 {
   if (_cppListener) {
     _cppListener->onCancel(url);
   }
 }
 
--(void) onCanceledDownload:(Response*)response
+-(void) onCanceledDownloadURL:(const URL&)url
+                       buffer:(const IByteBuffer&)data
 {
   if (_cppListener) {
-    _cppListener->onCanceledDownload(response);
+    _cppListener->onCanceledDownload(url, data);
   }
 }
 

@@ -8,16 +8,16 @@
 
 #include "SQLiteStorage_iOS.hpp"
 
+#include "ByteBuffer_iOS.hpp"
+#include "IFactory.hpp"
+
 NSString* SQLiteStorage_iOS::getDBPath() const {
   
   NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
   NSString *documentsDirectory = [paths objectAtIndex:0];
   NSString *dbPath = [documentsDirectory stringByAppendingPathComponent: toNSString(_databaseName)];
   
-//  NSString *tmpDirectory = NSTemporaryDirectory();
-//  NSString *dbPath = [tmpDirectory stringByAppendingPathComponent: toNSString(_databaseName)];
-  
-//  NSLog(@"dbPath=%@", dbPath);
+  //NSLog(@"dbPath=%@", dbPath);
   
   return dbPath;
 }
@@ -56,7 +56,7 @@ void SQLiteStorage_iOS::showStatistics() const {
   if ([rs next]) {
     NSInteger count     = [rs integerColumnByIndex: 0];
     NSInteger usedSpace = [rs integerColumnByIndex: 1];
-
+    
     NSLog(@"Initialized Storage on DB \"%@\", entries=%d, usedSpace=%fMb",
           toNSString(_databaseName), //getDBPath(),
           count,
@@ -80,20 +80,21 @@ bool SQLiteStorage_iOS::contains(const URL& url) {
 }
 
 void SQLiteStorage_iOS::save(const URL& url,
-                             const ByteArrayWrapper& buffer) {
-  //  insert or replace into Book (Name, TypeID, Level, Seen) values ( ... )
+                             const IByteBuffer& buffer) {
+  
+  const ByteBuffer_iOS* buffer_iOS = (const ByteBuffer_iOS*) &buffer;
   
   NSString* name = toNSString(url.getPath());
-  NSData* contents = [NSData dataWithBytes: buffer.getData()
-                                    length: buffer.getLength()];
+  NSData* contents = [NSData dataWithBytes: buffer_iOS->getPointer()
+                                    length: buffer_iOS->size()];
   
   if (![_db executeNonQuery:@"INSERT OR REPLACE INTO entry (name, contents) VALUES (?, ?)", name, contents]) {
     printf("Can't save \"%s\"\n", url.getPath().c_str());
   }
 }
 
-const ByteArrayWrapper* SQLiteStorage_iOS::read(const URL& url) {
-  ByteArrayWrapper* result = NULL;
+const IByteBuffer* SQLiteStorage_iOS::read(const URL& url) {
+  IByteBuffer* result = NULL;
   
   NSString* name = toNSString(url.getPath());
   SQResultSet* rs = [_db executeQuery:@"SELECT contents FROM entry WHERE (name = ?)", name];
@@ -104,7 +105,8 @@ const ByteArrayWrapper* SQLiteStorage_iOS::read(const URL& url) {
     unsigned char* bytes = new unsigned char[length];
     [nsData getBytes: bytes
               length: length];
-    result = new ByteArrayWrapper(bytes, length);
+    
+    result = GFactory.createByteBuffer(bytes, length);
   }
   
   [rs close];

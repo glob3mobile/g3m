@@ -40,39 +40,42 @@ private:
   TileTextureBuilder* _builder;
   const int           _position;
   
-//  int _onDownload;
-//  int _onError;
-//  int _onCancel;
+  //  int _onDownload;
+  //  int _onError;
+  //  int _onCancel;
   
 public:
   BuilderDownloadStepDownloadListener(TileTextureBuilder* builder,
                                       int position);
   
-  void onDownload(const Response* response);
+  void onDownload(const URL& url,
+                  const IByteBuffer& data);
   
-  void onError(const Response* response);
+  void onError(const URL& url,
+               const IByteBuffer& data);
   
-  void onCanceledDownload(const Response* response) {
+  void onCanceledDownload(const URL& url,
+                          const IByteBuffer& data) {
   }
   
-  void onCancel(const URL* url);
+  void onCancel(const URL& url);
   
-//  void showInvalidState() const {
-//    printf("onDownload=%d, onCancel=%d, onError=%d\n", _onDownload, _onCancel, _onError);
-//  }
+  //  void showInvalidState() const {
+  //    printf("onDownload=%d, onCancel=%d, onError=%d\n", _onDownload, _onCancel, _onError);
+  //  }
   
-//  void testState() const {
-//    if ((_onDownload == 1) && (_onCancel == 0) && (_onError == 0)) {
-//      return;
-//    }
-//    if ((_onDownload == 0) && (_onCancel == 1) && (_onError == 0)) {
-//      return;
-//    }
-//    if ((_onDownload == 0) && (_onCancel == 0) && (_onError == 1)) {
-//      return;
-//    }
-//    showInvalidState();
-//  }
+  //  void testState() const {
+  //    if ((_onDownload == 1) && (_onCancel == 0) && (_onError == 0)) {
+  //      return;
+  //    }
+  //    if ((_onDownload == 0) && (_onCancel == 1) && (_onError == 0)) {
+  //      return;
+  //    }
+  //    if ((_onDownload == 0) && (_onCancel == 0) && (_onError == 1)) {
+  //      return;
+  //    }
+  //    showInvalidState();
+  //  }
   
   virtual ~BuilderDownloadStepDownloadListener();
   
@@ -159,9 +162,9 @@ class TileTextureBuilder : public RCObject {
 private:
   MultiLayerTileTexturizer* _texturizer;
   Tile*                     _tile;
-
-//  const TileKey             _tileKey;
-
+  
+  //  const TileKey             _tileKey;
+  
   std::vector<Petition*>    _petitions;
   int                       _petitionsCount;
   int                       _stepsDone;
@@ -250,9 +253,9 @@ public:
       const long long priority = _tile->getLevel();
       
       const long long requestId = _downloader->request(URL(petition->getURL()),
-                                                  priority,
-                                                  new BuilderDownloadStepDownloadListener(this, i),
-                                                  true);
+                                                       priority,
+                                                       new BuilderDownloadStepDownloadListener(this, i),
+                                                       true);
       
       _requestsIds.push_back(requestId);
     }
@@ -322,20 +325,20 @@ public:
       }
       
       if (images.size() > 0) {
-//        int __TESTING_mipmapping;
+        //        int __TESTING_mipmapping;
         const bool isMipmap = false;
 #ifdef C_CODE
-        const GLImage* glImage = _textureBuilder->createTextureFromImages(_gl, 
-                                                                          _factory, 
-                                                                          RGBA, 
-                                                                          images, 
+        const GLImage* glImage = _textureBuilder->createTextureFromImages(_gl,
+                                                                          _factory,
+                                                                          RGBA,
+                                                                          images,
                                                                           rectangles,
                                                                           textureWidth, textureHeight);
 #else
-        const GLImage* glImage = _textureBuilder->createTextureFromImages(_gl, 
-                                                                          _factory, 
-                                                                          GLFormat.RGBA, 
-                                                                          images, 
+        const GLImage* glImage = _textureBuilder->createTextureFromImages(_gl,
+                                                                          _factory,
+                                                                          GLFormat.RGBA,
+                                                                          images,
                                                                           rectangles,
                                                                           textureWidth, textureHeight);
 #endif
@@ -415,7 +418,7 @@ public:
   }
   
   void stepDownloaded(int position,
-                      const ByteArrayWrapper* buffer) {
+                      const IByteBuffer& data) {
     if (_canceled) {
       return;
     }
@@ -519,7 +522,7 @@ _position(position)
 }
 
 BuilderDownloadStepDownloadListener::~BuilderDownloadStepDownloadListener() {
-//  testState();
+  //  testState();
   
   if (_builder != NULL) {
     _builder->_release();
@@ -534,18 +537,20 @@ TileTextureBuilderHolder::~TileTextureBuilderHolder() {
 }
 
 
-void BuilderDownloadStepDownloadListener::onDownload(const Response* response) {
-//  _onDownload++;
-  _builder->stepDownloaded(_position, response->getByteArrayWrapper());
+void BuilderDownloadStepDownloadListener::onDownload(const URL& url,
+                                                     const IByteBuffer& data) {
+  //  _onDownload++;
+  _builder->stepDownloaded(_position, data);
 }
 
-void BuilderDownloadStepDownloadListener::onError(const Response* response) {
-//  _onError++;
+void BuilderDownloadStepDownloadListener::onError(const URL& url,
+                                                  const IByteBuffer& data) {
+  //  _onError++;
   _builder->stepCanceled(_position);
 }
 
-void BuilderDownloadStepDownloadListener::onCancel(const URL* url) {
-//  _onCancel++;
+void BuilderDownloadStepDownloadListener::onCancel(const URL& url) {
+  //  _onCancel++;
   _builder->stepCanceled(_position);
 }
 
@@ -709,12 +714,12 @@ void MultiLayerTileTexturizer::ancestorTexturedSolvedChanged(Tile* tile,
   if (!glTextureId.isValid()) {
     return;
   }
-
+  
   LeveledTexturedMesh* tileMesh = getMesh(tile);
   if (tileMesh == NULL) {
     return;
   }
-
+  
   const int level = tile->getLevel() - ancestorTile->getLevel() - _parameters->_topLevel;
   _texturesHandler->retainGLTextureId(glTextureId);
   if (!tileMesh->setGLTextureIdForLevel(level, glTextureId)) {
@@ -724,17 +729,17 @@ void MultiLayerTileTexturizer::ancestorTexturedSolvedChanged(Tile* tile,
 
 IFloatBuffer* MultiLayerTileTexturizer::getTextureCoordinates(const TileRenderContext* trc) const {
   if (_texCoordsCache == NULL) {
-//    std::vector<MutableVector2D>* texCoordsV = trc->getTessellator()->createUnitTextCoords();
-//    
-//    const int texCoordsSize = texCoordsV->size();
-//    float* texCoordsA = new float[2 * texCoordsSize];
-//    int p = 0;
-//    for (int i = 0; i < texCoordsSize; i++) {
-//      texCoordsA[p++] = (float) texCoordsV->at(i).x();
-//      texCoordsA[p++] = (float) texCoordsV->at(i).y();
-//    }
-//    
-//    delete texCoordsV;
+    //    std::vector<MutableVector2D>* texCoordsV = trc->getTessellator()->createUnitTextCoords();
+    //
+    //    const int texCoordsSize = texCoordsV->size();
+    //    float* texCoordsA = new float[2 * texCoordsSize];
+    //    int p = 0;
+    //    for (int i = 0; i < texCoordsSize; i++) {
+    //      texCoordsA[p++] = (float) texCoordsV->at(i).x();
+    //      texCoordsA[p++] = (float) texCoordsV->at(i).y();
+    //    }
+    //
+    //    delete texCoordsV;
     
     _texCoordsCache = trc->getTessellator()->createUnitTextCoords();
   }
@@ -751,18 +756,25 @@ public:
   {
   }
   
-  void onDownload(const Response* response) {
+  virtual ~TopTileDownloadListener() {
+    
+  }
+  
+  void onDownload(const URL& url,
+                  const IByteBuffer& data) {
     _texturizer->countTopTileRequest();
   }
   
-  void onError(const Response* response) {
+  void onError(const URL& url,
+               const IByteBuffer& data) {
     _texturizer->countTopTileRequest();
   }
   
-  void onCanceledDownload(const Response* response) {
+  void onCanceledDownload(const URL& url,
+                          const IByteBuffer& data) {
   }
   
-  void onCancel(const URL* url) {
+  void onCancel(const URL& url) {
     _texturizer->countTopTileRequest();
   }
   
@@ -781,9 +793,9 @@ void MultiLayerTileTexturizer::justCreatedTopTile(const RenderContext* rc,
   for (int i = 0; i < petitions.size(); i++) {
     const Petition* petition = petitions[i];
     rc->getDownloader()->request(URL(petition->getURL()),
-                         priority,
-                         new TopTileDownloadListener(this),
-                         true);
+                                 priority,
+                                 new TopTileDownloadListener(this),
+                                 true);
     
     delete petition;
   }

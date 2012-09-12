@@ -32,9 +32,11 @@ public:
   
   virtual IImage* subImage(const Rectangle& rect) const = 0;
   
-  virtual ByteArrayWrapper* getEncodedImage() const = 0;
+//  virtual ByteArrayWrapper* getEncodedImage() const = 0;
   
   virtual IByteBuffer* createByteBufferRGBA8888(int width, int height) const = 0;
+  
+  virtual const std::string description() const = 0;
   
 };
 

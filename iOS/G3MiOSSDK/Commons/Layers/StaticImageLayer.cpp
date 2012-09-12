@@ -9,16 +9,12 @@
 #include "StaticImageLayer.hpp"
 
 #include "IStringBuilder.hpp"
-
 #include "IStorage.hpp"
-
 #include "Tile.hpp"
 #include "Petition.hpp"
 
-
 std::vector<Petition*> StaticImageLayer::getMapPetitions(const RenderContext* rc,
-                                                         const Tile* tile, int width, int height) const
-{
+                                                         const Tile* tile, int width, int height) const {
   std::vector<Petition*> res;
   
   Sector tileSector = tile->getSector();
@@ -29,20 +25,26 @@ std::vector<Petition*> StaticImageLayer::getMapPetitions(const RenderContext* rc
   
   //CREATING ID FOR PETITION
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
-  isb->add(_layerID)->add("_")->add(tileSector.lower().latitude().degrees());
-  isb->add("_")->add(tileSector.lower().longitude().degrees());
-  isb->add("_")->add(tileSector.upper().latitude().degrees());
-  isb->add("_")->add(tileSector.upper().longitude().degrees());
-  
+  isb->add(_layerID);
+  isb->add("_");
+  isb->add(tileSector.lower().latitude().degrees());
+  isb->add("_");
+  isb->add(tileSector.lower().longitude().degrees());
+  isb->add("_");
+  isb->add(tileSector.upper().latitude().degrees());
+  isb->add("_");
+  isb->add(tileSector.upper().longitude().degrees());
   
   const URL id = URL(isb->getString());
+  
+  delete isb;
   
   Petition *pet = new Petition(tileSector, id);
   
   if (_storage != NULL) {
-    if (_storage->contains(id)) {
-      const ByteArrayWrapper* buffer = _storage->read(id);
-      pet->setByteArrayWrapper(buffer);        //FILLING DATA
+    if (_storage->containsImage(id)) {
+      const IImage* image = _storage->readImage(id);
+      pet->setImage(image);        //FILLING DATA
       res.push_back(pet);
       return res;
     }
@@ -61,14 +63,12 @@ std::vector<Petition*> StaticImageLayer::getMapPetitions(const RenderContext* rc
   
   const IImage* subImage = _image->subImage(r);
   
-  const ByteArrayWrapper* buffer = subImage->getEncodedImage(); //Image Encoding PNG
-  pet->setByteArrayWrapper(buffer);        //FILLING DATA
-  delete subImage;
+  pet->setImage(subImage);
   
   res.push_back(pet);
   
   if (_storage != NULL) {
-    _storage->save(id, *buffer);
+    _storage->saveImage(id, *subImage);
   }
   
   return res;

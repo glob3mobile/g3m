@@ -11,7 +11,7 @@
 
 #include <string>
 
-class ByteArrayWrapper {
+class OLDByteArrayWrapper {
 private:
 #ifdef C_CODE
   unsigned char* _data;
@@ -23,19 +23,20 @@ private:
   
   const int _length;
   
-  ByteArrayWrapper(const ByteArrayWrapper& that);
+  OLDByteArrayWrapper(const OLDByteArrayWrapper& that);
   
-  ByteArrayWrapper& operator=(const ByteArrayWrapper& that);
+  OLDByteArrayWrapper& operator=(const OLDByteArrayWrapper& that);
   
 public:
-  ByteArrayWrapper(unsigned char data[],
-             int dataLength) :
+  OLDByteArrayWrapper(unsigned char data[],
+                      int dataLength) :
   _data(data),
   _length(dataLength)
   {
+    int ___REMOVE_this;
   };
   
-  ByteArrayWrapper* copy() const {
+  OLDByteArrayWrapper* copy() const {
     unsigned char* newData = new unsigned char[_length];
 #ifdef C_CODE
     memcpy(newData, _data, _length * sizeof(unsigned char));
@@ -43,10 +44,10 @@ public:
 #ifdef JAVA_CODE
     System.arraycopy(_data, 0, newData, 0, _length);
 #endif
-    return new ByteArrayWrapper(newData, _length);
+    return new OLDByteArrayWrapper(newData, _length);
   }
   
-  ~ByteArrayWrapper(){
+  ~OLDByteArrayWrapper(){
 #ifdef C_CODE
     if (_data != NULL) {
       delete [] _data;

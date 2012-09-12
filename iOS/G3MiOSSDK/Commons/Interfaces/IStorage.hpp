@@ -9,19 +9,27 @@
 #ifndef G3MiOSSDK_Storage_h
 #define G3MiOSSDK_Storage_h
 
-//#include <string>
-
-#include "ByteArrayWrapper.hpp"
 #include "URL.hpp"
+#include "IByteBuffer.hpp"
+#include "IImage.hpp"
 
 class IStorage {
 public:
   
   virtual bool contains(const URL& url) = 0;
-  virtual void save(const URL& url,
-                    const ByteArrayWrapper& buffer) = 0;
+
+  virtual bool containsImage(const URL& url) = 0;
   
-  virtual const ByteArrayWrapper* read(const URL& url) = 0;
+  virtual void save(const URL& url,
+                    const IByteBuffer& buffer) = 0;
+  
+  virtual void saveImage(const URL& url,
+                         const IImage& buffer) = 0;
+  
+  virtual const IByteBuffer* read(const URL& url) = 0;
+  
+  virtual const IImage* readImage(const URL& url) = 0;
+  
 #ifdef C_CODE
   virtual ~IStorage() {}
 #endif

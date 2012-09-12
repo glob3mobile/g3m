@@ -13,9 +13,9 @@
 
 class ByteBuffer_iOS : public IByteBuffer {
 private:
-  const int _size;
+  const int            _size;
   unsigned char* const _values;
-  int       _timestamp;
+  int                  _timestamp;
   
 public:
   ByteBuffer_iOS(int size) :
@@ -55,6 +55,7 @@ public:
     return _values;
   }
   
+  const std::string description() const;
 };
 
 #endif

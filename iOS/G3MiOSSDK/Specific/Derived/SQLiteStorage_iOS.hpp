@@ -23,9 +23,9 @@ private:
     return [ NSString stringWithCString: cppStr.c_str()
                                encoding: NSUTF8StringEncoding ];
   }
-
+  
   NSString* getDBPath() const;
-
+  
   void showStatistics() const;
   
 public:
@@ -34,12 +34,12 @@ public:
   bool contains(const URL& url);
   
   void save(const URL& url,
-                    const ByteArrayWrapper& buffer);
+            const IByteBuffer& buffer);
   
-  const ByteArrayWrapper* read(const URL& url);
+  const IByteBuffer* read(const URL& url);
   
   virtual ~SQLiteStorage_iOS() {}
-
+  
 };
 
 #endif

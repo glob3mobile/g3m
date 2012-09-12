@@ -10,9 +10,10 @@
 #define G3MiOSSDK_Response_h
 
 #include "URL.hpp"
-#include "ByteArrayWrapper.hpp"
+//#include "ByteArrayWrapper.hpp"
+#include "IByteBuffer.hpp"
 
-class Response {
+class OLDResponse {
 private:
 #ifdef C_CODE
   const URL         _url;
@@ -20,28 +21,29 @@ private:
 #ifdef JAVA_CODE
   final private URL _url;     //Converter puts "Url"
 #endif
-  const ByteArrayWrapper* _data;
-
-#ifdef C_CODE
-  Response& operator=(const Response& that);
+  const IByteBuffer* _data;
   
-  Response(const Response& that);
+#ifdef C_CODE
+  OLDResponse& operator=(const OLDResponse& that);
+  
+  OLDResponse(const OLDResponse& that);
 #endif
   
 public:
   
-  Response(const URL& url,
-           const ByteArrayWrapper* data):
+  OLDResponse(const URL& url,
+              const IByteBuffer* data):
   _url(url),
   _data(data)
   {
+    int _____REMOVE_OLDResponse;
   }
   
   URL getURL() const {
     return _url;
   }
   
-  const ByteArrayWrapper* getByteArrayWrapper() const {
+  const IByteBuffer* getByteArrayWrapper() const {
     return _data;
   }
   

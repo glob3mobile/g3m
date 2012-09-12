@@ -12,7 +12,7 @@
 
 #include "IStringUtils.hpp"
 
-const std::string ByteArrayWrapper::description() const {
+const std::string OLDByteArrayWrapper::description() const {
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
   isb->add("ByteArrayWrapper(length=")->add(_length)->add(")");
   std::string s = isb->getString();
@@ -20,6 +20,6 @@ const std::string ByteArrayWrapper::description() const {
   return s;
 }
 
-std::string ByteArrayWrapper::getDataAsString() const {
+std::string OLDByteArrayWrapper::getDataAsString() const {
   return IStringUtils::instance()->createString(_data, _length);
 }
