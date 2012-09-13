@@ -11,22 +11,26 @@
 #include "Petition.hpp"
 #include "IMathUtils.hpp"
 
+#include "IBufferDownloadListener.hpp"
+
 #include <sstream>
 //#include <iostream>
 
 
-class TokenDownloadListener : public IDownloadListener {
+class TokenDownloadListener : public IBufferDownloadListener {
 private:
   BingLayer* _bingLayer;
  
 public:
   TokenDownloadListener(BingLayer* bingLayer);
   
-  void onDownload(const Response* response);
+  void onDownload(const URL& url,
+                  const IByteBuffer* buffer);
   
-  void onError(const Response* response){}
+  void onError(const URL& url){}
   
-  void onCanceledDownload(const Response* response) {
+  void onCanceledDownload(const URL& url,
+                          const IByteBuffer* data) {
   }
   
   void onCancel(const URL* url){}
@@ -38,9 +42,10 @@ public:
 TokenDownloadListener::TokenDownloadListener(BingLayer* bingLayer):
 _bingLayer(bingLayer){}
 
-void TokenDownloadListener::onDownload(const Response* response){
-  std::string string = response->getByteArrayWrapper()->getDataAsString();
-  //std::cout << string<<"\n";
+void TokenDownloadListener::onDownload(const URL& url,
+                                       const IByteBuffer* buffer){
+
+  //std::string string = response->getByteArrayWrapper()->getDataAsString();
 }
 
 
@@ -48,13 +53,13 @@ void TokenDownloadListener::onDownload(const Response* response){
 
 
 void BingLayer::initialize(const InitializationContext* ic){
-  std::ostringstream strs;
+  /*std::ostringstream strs;
   strs << _mapServerURL.getPath();
   strs << "/";
   strs << getMapTypeString();
   strs << "?key=";
   strs << _key;
-  ic->getDownloader()->request(URL(strs.str()), 100000000L, new TokenDownloadListener(this), true);
+  ic->getDownloader()->request(URL(strs.str()), 100000000L, new TokenDownloadListener(this), true);*/
   
 }
 
