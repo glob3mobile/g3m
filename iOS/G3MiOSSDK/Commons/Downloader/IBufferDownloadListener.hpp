@@ -21,8 +21,7 @@ public:
   virtual void onDownload(const URL& url,
                           const IByteBuffer& data) = 0;
   
-  virtual void onError(const URL& url,
-                       const IByteBuffer& data) = 0;
+  virtual void onError(const URL& url) = 0;
   
   virtual void onCancel(const URL& url) = 0;
   

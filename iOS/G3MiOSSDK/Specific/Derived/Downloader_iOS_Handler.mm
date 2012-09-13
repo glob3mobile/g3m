@@ -229,16 +229,15 @@
       delete buffer;
     }
     else {
-      IByteBuffer* buffer = GFactory.createByteBuffer(0);
+//      IByteBuffer* buffer = GFactory.createByteBuffer(0);
       
       for (int i = 0; i < listenersCount; i++) {
         ListenerEntry* entry = [_listeners objectAtIndex: i];
         
-        [[entry listener] onErrorURL:url
-                              buffer:*buffer];
+        [[entry listener] onErrorURL:url];
       }
       
-      delete buffer;
+//      delete buffer;
     }
     
     [_lock unlock];

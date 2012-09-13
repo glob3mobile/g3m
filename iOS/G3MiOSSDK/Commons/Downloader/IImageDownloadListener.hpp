@@ -20,8 +20,7 @@ public:
   virtual void onDownload(const URL& url,
                           const IImage& image) = 0;
   
-  virtual void onError(const URL& url,
-                       const IImage& image) = 0;
+  virtual void onError(const URL& url) = 0;
   
   virtual void onCancel(const URL& url) = 0;
   

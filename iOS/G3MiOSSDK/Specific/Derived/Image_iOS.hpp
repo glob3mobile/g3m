@@ -21,7 +21,7 @@ private:
   UIImage* _image;
   
 public:
-
+  
   Image_iOS(UIImage* image) : _image(image) {
     
   }
@@ -50,9 +50,11 @@ public:
   IImage* subImage(const Rectangle& rect) const;
   
   IByteBuffer* createByteBufferRGBA8888(int width, int height) const;
-
+  
   const std::string description() const;
-
+  
+  IImage* copy() const;
+  
 };
 
 #endif

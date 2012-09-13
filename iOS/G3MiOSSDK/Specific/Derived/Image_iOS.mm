@@ -138,7 +138,6 @@ IByteBuffer* Image_iOS::createByteBufferRGBA8888(int width, int height) const {
   return GFactory.createByteBuffer(data, 4 * width * height);
 }
 
-
 const std::string Image_iOS::description() const {
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
   isb->add("Image_iOS ");
@@ -151,4 +150,8 @@ const std::string Image_iOS::description() const {
   std::string s = isb->getString();
   delete isb;
   return s;
+}
+
+IImage* Image_iOS::copy() const {
+  return new Image_iOS(_image);
 }

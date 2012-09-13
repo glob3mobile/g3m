@@ -47,8 +47,7 @@ public:
   void onDownload(const URL& url,
                   const IImage& image);
   
-  void onError(const URL& url,
-               const IImage& image);
+  void onError(const URL& url);
   
   void onCanceledDownload(const URL& url,
                           const IImage& image) {
@@ -519,8 +518,7 @@ void BuilderDownloadStepDownloadListener::onDownload(const URL& url,
   _builder->stepDownloaded(_position, image);
 }
 
-void BuilderDownloadStepDownloadListener::onError(const URL& url,
-                                                  const IImage& image) {
+void BuilderDownloadStepDownloadListener::onError(const URL& url) {
   //  _onError++;
   _builder->stepCanceled(_position);
 }
@@ -741,8 +739,7 @@ public:
     _texturizer->countTopTileRequest();
   }
   
-  void onError(const URL& url,
-               const IImage& image) {
+  void onError(const URL& url) {
     _texturizer->countTopTileRequest();
   }
   

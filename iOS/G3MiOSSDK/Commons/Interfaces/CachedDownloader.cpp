@@ -56,9 +56,8 @@ public:
     deleteListener();
   }
   
-  void onError(const URL& url,
-               const IByteBuffer& data) {
-    _listener->onError(url, data);
+  void onError(const URL& url) {
+    _listener->onError(url);
     
     deleteListener();
   }

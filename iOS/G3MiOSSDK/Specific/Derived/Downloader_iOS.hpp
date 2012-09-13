@@ -35,6 +35,11 @@ private:
   
   bool _started;
   
+  long long request(const URL &url,
+                    long long priority,
+                    Downloader_iOS_Listener* iosListener);
+  
+  
 public:
   
   void removeDownloadingHandlerForNSURL(const NSURL* url);
@@ -46,10 +51,10 @@ public:
                           IBufferDownloadListener* listener,
                           bool deleteListener);
   
-//  long long requestImage(const URL& url,
-//                         long long priority,
-//                         IImageDownloadListener* listener,
-//                         bool deleteListener);
+  long long requestImage(const URL& url,
+                         long long priority,
+                         IImageDownloadListener* listener,
+                         bool deleteListener);
   
   void cancelRequest(long long requestId);
   

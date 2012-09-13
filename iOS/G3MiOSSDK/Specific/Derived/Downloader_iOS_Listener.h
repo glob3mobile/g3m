@@ -9,31 +9,35 @@
 #import <Foundation/Foundation.h>
 
 #include "IBufferDownloadListener.hpp"
+#include "IImageDownloadListener.hpp"
 
 // Objective-C wrapper for C++ IBufferDownloadListener
 @interface Downloader_iOS_Listener : NSObject
 {
-  IBufferDownloadListener* _cppListener;
+  IBufferDownloadListener* _cppBufferListener;
+  IImageDownloadListener*  _cppImageListener;
   bool                     _deleteListener;
 }
 
--(id)initWithCPPListener:(IBufferDownloadListener*)cppListener
-          deleteListener: (bool)deleteListener;
+-(id)initWithCPPBufferListener:(IBufferDownloadListener*)cppListener
+                deleteListener:(bool)deleteListener;
+
+-(id)initWithCPPImageListener:(IImageDownloadListener*)cppListener
+               deleteListener:(bool)deleteListener;
 
 
 //const URL& url,
 //const IByteBuffer& data
 
 -(void) onDownloadURL:(const URL&) url
-               buffer:(const IByteBuffer&) data;
+               buffer:(const IByteBuffer&) buffer;
 
--(void) onErrorURL:(const URL&) url
-            buffer:(const IByteBuffer&) data;
+-(void) onErrorURL:(const URL&) url;
 
 -(void) onCancel:(const URL&) url;
 
 -(void) onCanceledDownloadURL:(const URL&) url
-                       buffer:(const IByteBuffer&) data;
+                       buffer:(const IByteBuffer&) buffer;
 
 -(void) dealloc;
 
