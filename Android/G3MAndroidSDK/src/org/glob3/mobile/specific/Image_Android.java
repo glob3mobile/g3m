@@ -15,7 +15,7 @@ public class Image_Android
             IImage {
 
    final private Bitmap _image;
-   final private byte[] _source;
+   private byte[]       _source;
 
 
    public Image_Android(final Bitmap image,
