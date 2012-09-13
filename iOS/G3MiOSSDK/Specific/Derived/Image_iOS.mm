@@ -117,25 +117,26 @@ IImage* Image_iOS::subImage(const Rectangle& rect) const {
   return image;
 }
 
-IByteBuffer* Image_iOS::createByteBufferRGBA8888(int width, int height) const {
-  unsigned char* data = new unsigned char[4 * width * height];
-  
-  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-  CGContextRef context = CGBitmapContextCreate(data,
-                                               width, height,
-                                               8, 4 * width,
-                                               colorSpace,
-                                               kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
-  
-  CGColorSpaceRelease( colorSpace );
-  CGRect bounds = CGRectMake( 0, 0, width, height );
-  CGContextClearRect( context, bounds );
-  
-  CGContextDrawImage( context, bounds, _image.CGImage );
-  
-  CGContextRelease(context);
-  
-  return GFactory.createByteBuffer(data, 4 * width * height);
+unsigned char* Image_iOS::getByteArrayRGBA8888(int width, int height) const{
+  if (_rgba8888 == NULL){
+    _rgba8888 = new unsigned char[4 * width * height];
+    
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef context = CGBitmapContextCreate(_rgba8888,
+                                                 width, height,
+                                                 8, 4 * width,
+                                                 colorSpace,
+                                                 kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
+    
+    CGColorSpaceRelease( colorSpace );
+    CGRect bounds = CGRectMake( 0, 0, width, height );
+    CGContextClearRect( context, bounds );
+    
+    CGContextDrawImage( context, bounds, _image.CGImage );
+    
+    CGContextRelease(context);
+  }
+  return _rgba8888;
 }
 
 IImage* Image_iOS::scale(int width, int height) const{
