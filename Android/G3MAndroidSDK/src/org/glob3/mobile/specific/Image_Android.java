@@ -15,7 +15,7 @@ public class Image_Android
             IImage {
 
    final private Bitmap _image;
-   final private byte[] _source;
+   private byte[]       _source;
 
 
    public Image_Android(final Bitmap image,
@@ -146,6 +146,16 @@ public class Image_Android
    @Override
    public IImage copy() {
       return new Image_Android(_image, null);
+   }
+
+
+   public byte[] getSourceBuffer() {
+      return _source;
+   }
+
+
+   public void releaseSourceBuffer() {
+      _source = null;
    }
 
 }
