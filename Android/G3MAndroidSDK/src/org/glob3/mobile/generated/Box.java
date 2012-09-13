@@ -91,7 +91,9 @@ public class Box extends Extent
   {
 	final java.util.ArrayList<Vector3D> corners = getCorners();
   
-	final Vector2D pixel0 = rc.getCurrentCamera().point2Pixel(corners.get(0));
+	final Camera currentCamera = rc.getCurrentCamera();
+  
+	final Vector2D pixel0 = currentCamera.point2Pixel(corners.get(0));
   
 	double lowerX = pixel0.x();
 	double upperX = pixel0.x();
@@ -101,7 +103,7 @@ public class Box extends Extent
 	final int cornersSize = corners.size();
 	for (int i = 1; i < cornersSize; i++)
 	{
-	  final Vector2D pixel = rc.getCurrentCamera().point2Pixel(corners.get(i));
+	  final Vector2D pixel = currentCamera.point2Pixel(corners.get(i));
   
 	  final double x = pixel.x();
 	  final double y = pixel.y();

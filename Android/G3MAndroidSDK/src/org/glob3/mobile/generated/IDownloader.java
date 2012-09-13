@@ -19,8 +19,9 @@ package org.glob3.mobile.generated;
 
 
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class IDownloadListener;
-
+//class IBufferDownloadListener;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IImageDownloadListener;
 
 public interface IDownloader
 {
@@ -28,7 +29,9 @@ public interface IDownloader
 
   void stop();
 
-  long request(URL url, long priority, IDownloadListener listener, boolean deleteListener);
+  long requestBuffer(URL url, long priority, IBufferDownloadListener listener, boolean deleteListener);
+
+  long requestImage(URL url, long priority, IImageDownloadListener listener, boolean deleteListener);
 
   void cancelRequest(long requestId);
 

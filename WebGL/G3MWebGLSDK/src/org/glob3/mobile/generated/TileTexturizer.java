@@ -32,8 +32,6 @@ package org.glob3.mobile.generated;
 //class TileRenderContext;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Geodetic3D;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class IDownloadListener;
 
 
 public abstract class TileTexturizer

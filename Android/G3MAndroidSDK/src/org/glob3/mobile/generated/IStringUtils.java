@@ -44,7 +44,6 @@ public abstract class IStringUtils
 //ORIGINAL LINE: virtual String createString(byte data[], int length) const = 0;
   public abstract String createString(byte[] data, int length);
 
-
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual java.util.ArrayList<String> splitLines(const String& String) const = 0;
   public abstract java.util.ArrayList<String> splitLines(String String);

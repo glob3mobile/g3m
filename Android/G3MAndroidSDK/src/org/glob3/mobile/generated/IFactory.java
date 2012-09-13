@@ -31,8 +31,6 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IByteBuffer;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class ByteArrayWrapper;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class ILogger;
 
 public abstract class IFactory
@@ -71,8 +69,8 @@ public abstract class IFactory
   public abstract IImage createImageFromFileName(String filename);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual IImage* createImageFromData(const ByteArrayWrapper* buffer) const = 0;
-  public abstract IImage createImageFromData(ByteArrayWrapper buffer);
+//ORIGINAL LINE: virtual IImage* createImageFromBuffer(const IByteBuffer* buffer) const = 0;
+  public abstract IImage createImageFromBuffer(IByteBuffer buffer);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual IImage* createImageFromSize(int width, int height) const = 0;
@@ -89,6 +87,10 @@ public abstract class IFactory
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual IIntBuffer* createIntBuffer(int size) const = 0;
   public abstract IIntBuffer createIntBuffer(int size);
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual IByteBuffer* createByteBuffer(int length) const = 0;
+  public abstract IByteBuffer createByteBuffer(int length);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual IByteBuffer* createByteBuffer(byte data[], int length) const = 0;

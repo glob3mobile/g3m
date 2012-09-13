@@ -31,37 +31,44 @@ package org.glob3.mobile.generated;
 
 public class Petition
 {
-  private URL _url = new URL(); //Conversor creates class "Url"
-  private ByteArrayWrapper _buffer;
   private final Sector _sector;
+  final private URL _url; //Conversor creates class "Url"
+  private final IImage _image;
+
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  Petition(Petition that);
+
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  void operator =(Petition that);
 
 
   public Petition(Sector sector, URL url)
   {
 	  _sector = new Sector(sector);
 	  _url = url;
-	  _buffer = null;
+	  _image = null;
   }
 
   public void dispose()
   {
-	releaseBuffer();
+	releaseImage();
   }
 
-  public final void releaseBuffer()
+  public final void releaseImage()
   {
-	if (_buffer != null)
+	if (_image != null)
 	{
-	  _buffer = null;
-	  _buffer = null;
+	  if (_image != null)
+		  _image.dispose();
+	  _image = null;
 	}
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean hasByteArrayWrapper() const
-  public final boolean hasByteArrayWrapper()
+//ORIGINAL LINE: boolean hasImage() const
+  public final boolean hasImage()
   {
-	return _buffer != null;
+	return (_image != null);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -78,17 +85,17 @@ public class Petition
 	return _sector;
   }
 
-  public final void setByteArrayWrapper(ByteArrayWrapper buffer)
+  public final void setImage(IImage image)
   {
-	releaseBuffer();
-	_buffer = buffer;
+	releaseImage();
+	_image = image;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const ByteArrayWrapper* getByteArrayWrapper() const
-  public final ByteArrayWrapper getByteArrayWrapper()
+//ORIGINAL LINE: const IImage* getImage() const
+  public final IImage getImage()
   {
-	return _buffer;
+	return _image;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -97,14 +104,18 @@ public class Petition
   {
   
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.add("Petition(url=").add(_url.description()).add(", sector=").add(_sector.description()).add(", buffer=");
-	if (_buffer == null)
+	isb.add("Petition(url=");
+	isb.add(_url.description());
+	isb.add(", sector=");
+	isb.add(_sector.description());
+	isb.add(", buffer=");
+	if (_image == null)
 	{
 	  isb.add("NULL");
 	}
 	else
 	{
-	  isb.add(_buffer.description());
+	  isb.add(_image.description());
 	}
 	String s = isb.getString();
   

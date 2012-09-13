@@ -47,10 +47,10 @@ public class TexturesHandler
 	}
   }
 
-  public final GLTextureId getGLTextureId(GLImage glImage, String name, boolean hasMipMap)
+  public final GLTextureId getGLTextureId(IImage image, GLFormat format, String name, boolean hasMipMap)
   {
   
-	TextureSpec textureSpec = new TextureSpec(name, glImage.getWidth(), glImage.getHeight(), hasMipMap);
+	TextureSpec textureSpec = new TextureSpec(name, image.getWidth(), image.getHeight(), hasMipMap);
   
 	GLTextureId previousId = getGLTextureIdIfAvailable(textureSpec);
 	if (previousId.isValid())
@@ -59,7 +59,7 @@ public class TexturesHandler
 	}
   
 	TextureHolder holder = new TextureHolder(textureSpec);
-	holder._glTextureId = _gl.uploadTexture(glImage, textureSpec.isMipmap());
+	holder._glTextureId = _gl.uploadTexture(image, format, textureSpec.isMipmap());
   
   
 	if (_verbose)

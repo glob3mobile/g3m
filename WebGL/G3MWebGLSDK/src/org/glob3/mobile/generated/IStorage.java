@@ -8,14 +8,21 @@ package org.glob3.mobile.generated;
 //
 
 
-///#include <string>
-
 
 public interface IStorage
 {
 
-  boolean contains(URL url);
-  void save(URL url, ByteArrayWrapper buffer);
+  boolean containsBuffer(URL url);
 
-  ByteArrayWrapper read(URL url);
+  void saveBuffer(URL url, IByteBuffer buffer);
+
+  IByteBuffer readBuffer(URL url);
+
+  boolean containsImage(URL url);
+
+  void saveImage(URL url, IImage image);
+
+  IImage readImage(URL url);
+
+
 }

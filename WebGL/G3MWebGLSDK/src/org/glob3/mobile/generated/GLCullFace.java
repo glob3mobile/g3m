@@ -14,7 +14,7 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IIntBuffer;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class GLImage;
+//class IImage;
 
 
 public enum GLCullFace

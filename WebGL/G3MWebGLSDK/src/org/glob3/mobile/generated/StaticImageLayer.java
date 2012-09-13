@@ -56,22 +56,29 @@ public class StaticImageLayer extends Layer
   
 	//CREATING ID FOR PETITION
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.add(_layerID).add("_").add(tileSector.lower().latitude().degrees());
-	isb.add("_").add(tileSector.lower().longitude().degrees());
-	isb.add("_").add(tileSector.upper().latitude().degrees());
-	isb.add("_").add(tileSector.upper().longitude().degrees());
-  
+	isb.add(_layerID);
+	isb.add("_");
+	isb.add(tileSector.lower().latitude().degrees());
+	isb.add("_");
+	isb.add(tileSector.lower().longitude().degrees());
+	isb.add("_");
+	isb.add(tileSector.upper().latitude().degrees());
+	isb.add("_");
+	isb.add(tileSector.upper().longitude().degrees());
   
 	final URL id = new URL(isb.getString());
+  
+	if (isb != null)
+		isb.dispose();
   
 	Petition pet = new Petition(tileSector, id);
   
 	if (_storage != null)
 	{
-	  if (_storage.contains(id))
+	  if (_storage.containsImage(id))
 	  {
-		final ByteArrayWrapper buffer = _storage.read(id);
-		pet.setByteArrayWrapper(buffer); //FILLING DATA
+		IImage image = _storage.readImage(id);
+		pet.setImage(image); //FILLING DATA
 		res.add(pet);
 		return res;
 	  }
@@ -87,16 +94,13 @@ public class StaticImageLayer extends Layer
   
 	final IImage subImage = _image.subImage(r);
   
-	final ByteArrayWrapper buffer = subImage.getEncodedImage(); //Image Encoding PNG
-	pet.setByteArrayWrapper(buffer); //FILLING DATA
-	if (subImage != null)
-		subImage.dispose();
+	pet.setImage(subImage);
   
 	res.add(pet);
   
 	if (_storage != null)
 	{
-	  _storage.save(id, buffer);
+	  _storage.saveImage(id, subImage);
 	}
   
 	return res;
