@@ -237,39 +237,19 @@ public class Downloader_Android_Handler {
             final boolean dataIsValid = (_data != null) && (_statusCode == 200);
 
             if (dataIsValid) {
-               //               final ByteArrayWrapper buffer = new ByteArrayWrapper(_data, _data.length);
-               //               final Response response = new Response(_url, buffer);
-
                for (final ListenerEntry entry : _listeners) {
                   if (entry.isCanceled()) {
-                     //                     Log.w(TAG, "triggering onCanceledDownload");
+                     // Log.w(TAG, "triggering onCanceledDownload");
                      entry.onCanceledDownload(_url, _data);
 
-                     //                     Log.w(TAG, "triggering onCancel");
+                     // Log.w(TAG, "triggering onCancel");
                      entry.onCancel(_url);
                   }
                   else {
-                     //                     Log.i(TAG, "triggering onDownload");
+                     // Log.i(TAG, "triggering onDownload");
                      entry.onDownload(_url, _data);
                   }
                }
-
-               //               final Iterator<ListenerEntry> iter = _listeners.iterator();
-               //
-               //               while (iter.hasNext()) {
-               //                  final ListenerEntry entry = iter.next();
-               //                  if (entry.isCanceled()) {
-               //                     //                     Log.w(TAG, "triggering onCanceledDownload");
-               //                     entry.getListener().onCanceledDownload(response);
-               //
-               //                     //                     Log.w(TAG, "triggering onCancel");
-               //                     entry.getListener().onCancel(_url);
-               //                  }
-               //                  else {
-               //                     //                     Log.i(TAG, "triggering onDownload");
-               //                     entry.getListener().onDownload(response);
-               //                  }
-               //               }
             }
             else {
                if (ILogger.instance() != null) {
@@ -279,21 +259,10 @@ public class Downloader_Android_Handler {
                else {
                   Log.e(TAG, "Error runWithDownloader: statusCode=" + _statusCode + ", url=" + _url.getPath());
                }
-               //               final ByteArrayWrapper buffer = new ByteArrayWrapper(null, 0);
-               //               final Response response = new Response(_url, buffer);
-
 
                for (final ListenerEntry entry : _listeners) {
                   entry.onError(_url);
                }
-
-               //               final Iterator<ListenerEntry> iter = _listeners.iterator();
-               //
-               //               while (iter.hasNext()) {
-               //                  final ListenerEntry entry = iter.next();
-               //                  //                  Log.e(TAG, "triggering onError");
-               //                  entry.getListener().onError(response);
-               //               }
             }
          }
       }

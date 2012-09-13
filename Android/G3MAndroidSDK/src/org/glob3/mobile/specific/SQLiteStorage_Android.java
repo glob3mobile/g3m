@@ -160,7 +160,6 @@ public class SQLiteStorage_Android
          final Bitmap b = BitmapFactory.decodeByteArray(data, 0, data.length);
          cursor.close();
 
-
          return new Image_Android(b, null);
       }
       cursor.close();
