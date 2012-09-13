@@ -141,7 +141,6 @@ const IByteBuffer* SQLiteStorage_iOS::readBuffer(const URL& url) {
   return result;
 }
 
-
 bool SQLiteStorage_iOS::containsImage(const URL& url) {
   NSString* name = toNSString(url.getPath());
   
@@ -172,7 +171,6 @@ void SQLiteStorage_iOS::saveImage(const URL& url,
   }
 }
 
-
 const IImage* SQLiteStorage_iOS::readImage(const URL& url) {
   IImage* result = NULL;
   
@@ -182,7 +180,7 @@ const IImage* SQLiteStorage_iOS::readImage(const URL& url) {
     NSData* nsData = [rs dataColumnByIndex: 0];
     
     result = new Image_iOS([UIImage imageWithData:nsData],
-                           nsData);
+                           NULL/* nsData is not needed */);
   }
   
   [rs close];

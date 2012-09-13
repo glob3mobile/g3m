@@ -9,6 +9,7 @@
 #import "Downloader_iOS_Listener.h"
 
 #import "IFactory.hpp"
+#import "Image_iOS.hpp"
 
 @implementation Downloader_iOS_Listener
 
@@ -37,14 +38,27 @@
 }
 
 -(void) onDownloadURL:(const URL&)url
-               buffer:(const IByteBuffer*)buffer
+                 data:(NSData*) data
 {
   if (_cppBufferListener) {
+    const int length = [data length];
+    unsigned char* bytes = new unsigned char[ length ]; // will be deleted by IByteBuffer's destructor
+    [data getBytes: bytes
+            length: length];
+    
+    IByteBuffer* buffer = GFactory.createByteBuffer(bytes, length);
+    
     _cppBufferListener->onDownload(url, buffer);
+    
+    delete buffer;
   }
   if (_cppImageListener) {
-    IImage* image = GFactory.createImageFromBuffer(buffer);
+    //IImage* image = GFactory.createImageFromBuffer(buffer);
+    IImage* image = new Image_iOS([UIImage imageWithData:data],
+                                  data);
+    
     _cppImageListener->onDownload(url, image);
+    
     delete image;
   }
 }
@@ -70,14 +84,27 @@
 }
 
 -(void) onCanceledDownloadURL:(const URL&)url
-                       buffer:(const IByteBuffer*)buffer
+                         data:(NSData*) data
 {
   if (_cppBufferListener) {
+    const int length = [data length];
+    unsigned char* bytes = new unsigned char[ length ]; // will be deleted by IByteBuffer's destructor
+    [data getBytes: bytes
+            length: length];
+    
+    IByteBuffer* buffer = GFactory.createByteBuffer(bytes, length);
+    
     _cppBufferListener->onCanceledDownload(url, buffer);
+    
+    delete buffer;
   }
   if (_cppImageListener) {
-    IImage* image = GFactory.createImageFromBuffer(buffer);
+    //IImage* image = GFactory.createImageFromBuffer(buffer);
+    IImage* image = new Image_iOS([UIImage imageWithData:data],
+                                  data);
+
     _cppImageListener->onCanceledDownload(url, image);
+    
     delete image;
   }
 }
