@@ -117,8 +117,11 @@ IImage* Image_iOS::subImage(const Rectangle& rect) const {
   return image;
 }
 
-unsigned char* Image_iOS::getByteArrayRGBA8888(int width, int height) const{
+unsigned char* Image_iOS::getByteArrayRGBA8888() const{
   if (_rgba8888 == NULL){
+    const int width  = getWidth();
+    const int height = getHeight();
+    
     _rgba8888 = new unsigned char[4 * width * height];
     
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();

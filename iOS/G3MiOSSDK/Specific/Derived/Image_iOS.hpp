@@ -71,7 +71,7 @@ public:
   
   IImage* subImage(const Rectangle& rect) const;
   
-  unsigned char* getByteArrayRGBA8888(int width, int height) const;
+  unsigned char* getByteArrayRGBA8888() const;
   
   IImage* scale(int width, int height) const;
 

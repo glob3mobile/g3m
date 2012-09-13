@@ -53,7 +53,6 @@
     delete buffer;
   }
   if (_cppImageListener) {
-    //IImage* image = GFactory.createImageFromBuffer(buffer);
     IImage* image = new Image_iOS([UIImage imageWithData:data],
                                   data);
     
@@ -99,7 +98,6 @@
     delete buffer;
   }
   if (_cppImageListener) {
-    //IImage* image = GFactory.createImageFromBuffer(buffer);
     IImage* image = new Image_iOS([UIImage imageWithData:data],
                                   data);
 
