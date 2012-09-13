@@ -43,7 +43,7 @@
     _cppBufferListener->onDownload(url, buffer);
   }
   if (_cppImageListener) {
-    IImage* image = GFactory.createImageFromData(buffer);
+    IImage* image = GFactory.createImageFromBuffer(buffer);
     _cppImageListener->onDownload(url, image);
     delete image;
   }
@@ -76,7 +76,7 @@
     _cppBufferListener->onCanceledDownload(url, buffer);
   }
   if (_cppImageListener) {
-    IImage* image = GFactory.createImageFromData(buffer);
+    IImage* image = GFactory.createImageFromBuffer(buffer);
     _cppImageListener->onCanceledDownload(url, image);
     delete image;
   }
