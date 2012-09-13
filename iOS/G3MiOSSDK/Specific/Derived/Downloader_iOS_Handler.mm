@@ -216,13 +216,13 @@
         
         if ([entry isCanceled]) {
           [listener onCanceledDownloadURL:url
-                                   buffer:*buffer];
+                                   buffer:buffer];
           
           [listener onCancel: url];
         }
         else {
           [listener onDownloadURL:url
-                           buffer:*buffer];
+                           buffer:buffer];
         }
       }
       

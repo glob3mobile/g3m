@@ -41,7 +41,7 @@ public:
   }
   
   void saveResponse(const URL& url,
-                    const IByteBuffer& data) {
+                    const IByteBuffer* data) {
     if (!_cacheStorage->containsBuffer(url)) {
       _downloader->countSave();
       
@@ -50,7 +50,7 @@ public:
   }
   
   void onDownload(const URL& url,
-                  const IByteBuffer& data) {
+                  const IByteBuffer* data) {
     saveResponse(url, data);
     
     _listener->onDownload(url, data);
@@ -65,10 +65,10 @@ public:
   }
   
   void onCanceledDownload(const URL& url,
-                          const IByteBuffer& data) {
-    saveResponse(url, data);
+                          const IByteBuffer* buffer) {
+    saveResponse(url, buffer);
     
-    _listener->onCanceledDownload(url, data);
+    _listener->onCanceledDownload(url, buffer);
     
     // no deleteListener() call, onCanceledDownload() is always called before onCancel().
   }
@@ -110,7 +110,7 @@ public:
   }
   
   void saveResponse(const URL& url,
-                    const IImage& image) {
+                    const IImage* image) {
     if (!_cacheStorage->containsImage(url)) {
       _downloader->countSave();
       
@@ -119,7 +119,7 @@ public:
   }
   
   void onDownload(const URL& url,
-                  const IImage& image) {
+                  const IImage* image) {
     saveResponse(url, image);
     
     _listener->onDownload(url, image);
@@ -134,7 +134,7 @@ public:
   }
   
   void onCanceledDownload(const URL& url,
-                          const IImage& image) {
+                          const IImage* image) {
     saveResponse(url, image);
     
     _listener->onCanceledDownload(url, image);
@@ -184,7 +184,7 @@ long long CachedDownloader::requestImage(const URL& url,
     // cache hit
     _cacheHitsCounter++;
     
-    listener->onDownload(url, *cachedImage);
+    listener->onDownload(url, cachedImage);
     
     if (deleteListener) {
 #ifdef C_CODE
@@ -220,7 +220,7 @@ long long CachedDownloader::requestBuffer(const URL& url,
     // cache hit
     _cacheHitsCounter++;
     
-    listener->onDownload(url, *cachedBuffer);
+    listener->onDownload(url, cachedBuffer);
     
     if (deleteListener) {
 #ifdef C_CODE

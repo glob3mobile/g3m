@@ -20,6 +20,10 @@ class Image_iOS: public IImage {
 private:
   UIImage* _image;
   
+  Image_iOS(const Image_iOS& that);
+  
+  void operator=(const Image_iOS& that);
+  
 public:
   
   Image_iOS(UIImage* image) : _image(image) {

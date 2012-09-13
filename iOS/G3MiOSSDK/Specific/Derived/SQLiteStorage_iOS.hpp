@@ -37,7 +37,7 @@ public:
   bool containsBuffer(const URL& url);
   
   void saveBuffer(const URL& url,
-                  const IByteBuffer& buffer);
+                  const IByteBuffer* buffer);
   
   const IByteBuffer* readBuffer(const URL& url);
   
@@ -45,7 +45,7 @@ public:
   bool containsImage(const URL& url);
   
   void saveImage(const URL& url,
-                 const IImage& buffer);
+                 const IImage* buffer);
   
   const IImage* readImage(const URL& url);
   

@@ -19,7 +19,7 @@ public:
 #endif
   
   virtual void onDownload(const URL& url,
-                          const IByteBuffer& data) = 0;
+                          const IByteBuffer* buffer) = 0;
   
   virtual void onError(const URL& url) = 0;
   
@@ -27,7 +27,7 @@ public:
   
   /* this method will be call, before onCancel, when the data arrived before the cancelation */
   virtual void onCanceledDownload(const URL& url,
-                                  const IByteBuffer& data) = 0;
+                                  const IByteBuffer* data) = 0;
   
 };
 

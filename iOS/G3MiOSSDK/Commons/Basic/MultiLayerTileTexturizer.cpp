@@ -45,12 +45,12 @@ public:
                                       int position);
   
   void onDownload(const URL& url,
-                  const IImage& image);
+                  const IImage* image);
   
   void onError(const URL& url);
   
   void onCanceledDownload(const URL& url,
-                          const IImage& image) {
+                          const IImage* image) {
   }
   
   void onCancel(const URL& url);
@@ -393,14 +393,14 @@ public:
   }
   
   void stepDownloaded(int position,
-                      const IImage& image) {
+                      const IImage* image) {
     if (_canceled) {
       return;
     }
     checkIsPending(position);
     
     _status[position]  = STATUS_DOWNLOADED;
-    _petitions[position]->setImage(image.copy());
+    _petitions[position]->setImage( image->copy() );
     
     stepDone();
   }
@@ -513,7 +513,7 @@ TileTextureBuilderHolder::~TileTextureBuilderHolder() {
 
 
 void BuilderDownloadStepDownloadListener::onDownload(const URL& url,
-                                                     const IImage& image) {
+                                                     const IImage* image) {
   //  _onDownload++;
   _builder->stepDownloaded(_position, image);
 }
@@ -735,7 +735,7 @@ public:
   }
   
   void onDownload(const URL& url,
-                  const IImage& image) {
+                  const IImage* image) {
     _texturizer->countTopTileRequest();
   }
   
@@ -744,7 +744,7 @@ public:
   }
   
   void onCanceledDownload(const URL& url,
-                          const IImage& image) {
+                          const IImage* image) {
   }
   
   void onCancel(const URL& url) {

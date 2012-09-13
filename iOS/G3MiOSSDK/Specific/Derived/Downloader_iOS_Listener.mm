@@ -37,14 +37,14 @@
 }
 
 -(void) onDownloadURL:(const URL&)url
-               buffer:(const IByteBuffer&)buffer
+               buffer:(const IByteBuffer*)buffer
 {
   if (_cppBufferListener) {
     _cppBufferListener->onDownload(url, buffer);
   }
   if (_cppImageListener) {
-    IImage* image = GFactory.createImageFromData(&buffer);
-    _cppImageListener->onDownload(url, *image);
+    IImage* image = GFactory.createImageFromData(buffer);
+    _cppImageListener->onDownload(url, image);
     delete image;
   }
 }
@@ -70,14 +70,14 @@
 }
 
 -(void) onCanceledDownloadURL:(const URL&)url
-                       buffer:(const IByteBuffer&)buffer
+                       buffer:(const IByteBuffer*)buffer
 {
   if (_cppBufferListener) {
     _cppBufferListener->onCanceledDownload(url, buffer);
   }
   if (_cppImageListener) {
-    IImage* image = GFactory.createImageFromData(&buffer);
-    _cppImageListener->onCanceledDownload(url, *image);
+    IImage* image = GFactory.createImageFromData(buffer);
+    _cppImageListener->onCanceledDownload(url, image);
     delete image;
   }
 }

@@ -18,7 +18,7 @@ public:
 #endif
   
   virtual void onDownload(const URL& url,
-                          const IImage& image) = 0;
+                          const IImage* image) = 0;
   
   virtual void onError(const URL& url) = 0;
   
@@ -26,7 +26,7 @@ public:
   
   /* this method will be call, before onCancel, when the data arrived before the cancelation */
   virtual void onCanceledDownload(const URL& url,
-                                  const IImage& image) = 0;
+                                  const IImage* image) = 0;
   
 };
 

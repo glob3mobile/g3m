@@ -68,7 +68,7 @@ std::vector<Petition*> StaticImageLayer::getMapPetitions(const RenderContext* rc
   res.push_back(pet);
   
   if (_storage != NULL) {
-    _storage->saveImage(id, *subImage);
+    _storage->saveImage(id, subImage);
   }
   
   return res;

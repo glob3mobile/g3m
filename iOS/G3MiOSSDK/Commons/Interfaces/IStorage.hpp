@@ -19,14 +19,14 @@ public:
   virtual bool containsBuffer(const URL& url) = 0;
   
   virtual void saveBuffer(const URL& url,
-                          const IByteBuffer& buffer) = 0;
+                          const IByteBuffer* buffer) = 0;
   
   virtual const IByteBuffer* readBuffer(const URL& url) = 0;
   
   virtual bool containsImage(const URL& url) = 0;
   
   virtual void saveImage(const URL& url,
-                         const IImage& buffer) = 0;
+                         const IImage* image) = 0;
   
   virtual const IImage* readImage(const URL& url) = 0;
   

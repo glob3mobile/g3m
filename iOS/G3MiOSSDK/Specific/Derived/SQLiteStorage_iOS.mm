@@ -107,7 +107,7 @@ bool SQLiteStorage_iOS::containsBuffer(const URL& url) {
 }
 
 void SQLiteStorage_iOS::saveBuffer(const URL& url,
-                                   const IByteBuffer& buffer) {
+                                   const IByteBuffer* buffer) {
   
   const ByteBuffer_iOS* buffer_iOS = (const ByteBuffer_iOS*) &buffer;
   
@@ -155,7 +155,7 @@ bool SQLiteStorage_iOS::containsImage(const URL& url) {
 }
 
 void SQLiteStorage_iOS::saveImage(const URL& url,
-                                  const IImage& image) {
+                                  const IImage* image) {
   
   const Image_iOS* image_iOS = (const Image_iOS*) &image;
   UIImage* uiImage = image_iOS->getUIImage();
