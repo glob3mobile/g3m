@@ -28,11 +28,12 @@ private:
   const Sector* _sector;
 #ifdef C_CODE
   const URL     _url;
+  const IImage* _image;
 #endif
 #ifdef JAVA_CODE
   final private URL _url; //Conversor creates class "Url"
+  private IImage _image;
 #endif
-  const IImage* _image;
   
   Petition(const Petition& that);
   
