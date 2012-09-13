@@ -180,10 +180,13 @@ const IImage* SQLiteStorage_iOS::readImage(const URL& url) {
   NSString* name = toNSString(url.getPath());
   SQResultSet* rs = [_db executeQuery:@"SELECT contents FROM image WHERE (name = ?)", name];
   if ([rs next]) {
-    NSData* nsData = [rs dataColumnByIndex: 0];
+    NSData* data = [rs dataColumnByIndex: 0];
     
-    result = new Image_iOS([UIImage imageWithData:nsData],
-                           NULL/* nsData is not needed */);
+    UIImage* uiImage = [UIImage imageWithData:data];
+    if (uiImage) {
+      result = new Image_iOS(uiImage,
+                             NULL/* data is not needed */);
+    }
   }
   
   [rs close];
