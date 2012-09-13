@@ -34,6 +34,10 @@ private:
 #endif
   const IImage* _image;
   
+  Petition(const Petition& that);
+  
+  void operator=(const Petition& that);
+  
 public:
   
   Petition(const Sector& sector,

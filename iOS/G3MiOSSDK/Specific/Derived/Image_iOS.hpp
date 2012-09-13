@@ -26,6 +26,10 @@ private:
   
 public:
   
+  virtual ~Image_iOS() {
+//    printf("break (point) on me!\n");
+  }
+  
   Image_iOS(UIImage* image) : _image(image) {
     
   }
