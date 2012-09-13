@@ -23,6 +23,7 @@ public class MotionEventProcessor {
       public TouchEventType               _type       = TouchEventType.Down;
 
 
+      @SuppressWarnings("unchecked")
       @Override
       protected EventProcessed clone() {
          final EventProcessed e = new EventProcessed();
@@ -132,6 +133,7 @@ public class MotionEventProcessor {
             break;
       }
 
+      @SuppressWarnings("unchecked")
       final TouchEvent te = new TouchEvent(TouchEvent.create(_lastEvent._type, (ArrayList<Touch>) _lastEvent._touchs.clone()));
 
       //		Log.d("", "TE " + type.toString());

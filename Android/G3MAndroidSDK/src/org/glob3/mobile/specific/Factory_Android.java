@@ -111,12 +111,12 @@ public class Factory_Android
    @Override
    public IImage createImageFromBuffer(final IByteBuffer buffer) {
       final byte[] data = ((ByteBuffer_Android) buffer).getBuffer().array();
-      final Bitmap b = BitmapFactory.decodeByteArray(data, 0, data.length);
-      if (b == null) {
+      final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+      if (bitmap == null) {
          ILogger.instance().logError("FACTORY", "Can't create image from data");
          return null;
       }
-      return new Image_Android(b, null);
+      return new Image_Android(bitmap, data);
    }
 
 
