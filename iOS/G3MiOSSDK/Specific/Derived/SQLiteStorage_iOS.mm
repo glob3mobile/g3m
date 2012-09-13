@@ -181,15 +181,8 @@ const IImage* SQLiteStorage_iOS::readImage(const URL& url) {
   if ([rs next]) {
     NSData* nsData = [rs dataColumnByIndex: 0];
     
-    NSUInteger length = [nsData length];
-    unsigned char* bytes = new unsigned char[length];
-    [nsData getBytes: bytes
-              length: length];
-    
-    IByteBuffer* buffer = GFactory.createByteBuffer(bytes, length);
-    result = GFactory.createImageFromBuffer(buffer);
-    
-    delete buffer;
+    result = new Image_iOS([UIImage imageWithData:nsData],
+                           nsData);
   }
   
   [rs close];
