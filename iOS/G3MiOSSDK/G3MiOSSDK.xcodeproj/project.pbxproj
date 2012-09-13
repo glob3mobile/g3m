@@ -39,6 +39,8 @@
 		383BD3BB1577EE630012AC53 /* ILogger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 383BD3B91577EE630012AC53 /* ILogger.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		385827FE15C6FACE00B3E68B /* CameraRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 385827FD15C6FACD00B3E68B /* CameraRenderer.cpp */; };
 		38D786E61587B446003BBC75 /* Tile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 38D786E51587B446003BBC75 /* Tile.cpp */; };
+		A728D4251601EB3600F0A4B0 /* OSMLayer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A728D4241601EB3600F0A4B0 /* OSMLayer.hpp */; };
+		A728D4271601EC6900F0A4B0 /* OSMLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A728D4261601EC6900F0A4B0 /* OSMLayer.cpp */; };
 		A7954AA215EFA1AB00F34E1A /* BingLayer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A7954AA115EFA1AB00F34E1A /* BingLayer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		A7954AA415EFE96400F34E1A /* BingLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A7954AA315EFE96400F34E1A /* BingLayer.cpp */; };
 		CC041F5315D98FF000D6AC5D /* BusyQuadRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC041F5215D98FF000D6AC5D /* BusyQuadRenderer.cpp */; };
@@ -256,7 +258,8 @@
 		38D786E41587B3DD003BBC75 /* Tile.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Tile.hpp; path = Commons/Basic/Tile.hpp; sourceTree = "<group>"; };
 		38D786E51587B446003BBC75 /* Tile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Tile.cpp; path = Commons/Basic/Tile.cpp; sourceTree = "<group>"; };
 		38D786E71587B52F003BBC75 /* Sector.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Sector.hpp; path = Commons/Geometry/Sector.hpp; sourceTree = "<group>"; };
-		443BBC8115A59AC200EAE280 /* DBStorage */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DBStorage; sourceTree = "<group>"; };
+		A728D4241601EB3600F0A4B0 /* OSMLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = OSMLayer.hpp; sourceTree = "<group>"; };
+		A728D4261601EC6900F0A4B0 /* OSMLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OSMLayer.cpp; sourceTree = "<group>"; };
 		A7954AA115EFA1AB00F34E1A /* BingLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BingLayer.hpp; sourceTree = "<group>"; };
 		A7954AA315EFE96400F34E1A /* BingLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BingLayer.cpp; sourceTree = "<group>"; };
 		CC041F5015D98EAD00D6AC5D /* BusyQuadRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = BusyQuadRenderer.hpp; path = Commons/Rendererers/BusyQuadRenderer.hpp; sourceTree = "<group>"; };
@@ -727,6 +730,8 @@
 				D87EC5C515BEB12F00E38C36 /* WMSLayer.hpp */,
 				A7954AA115EFA1AB00F34E1A /* BingLayer.hpp */,
 				A7954AA315EFE96400F34E1A /* BingLayer.cpp */,
+				A728D4241601EB3600F0A4B0 /* OSMLayer.hpp */,
+				A728D4261601EC6900F0A4B0 /* OSMLayer.cpp */,
 			);
 			name = Layers;
 			path = Commons/Layers;
@@ -942,6 +947,7 @@
 				A7954AA215EFA1AB00F34E1A /* BingLayer.hpp in Headers */,
 				CFA1899B15F8D7CA0048BF46 /* FloatBuffer_iOS.hpp in Headers */,
 				CFA189A015F8D9F80048BF46 /* IntBuffer_iOS.hpp in Headers */,
+				A728D4251601EB3600F0A4B0 /* OSMLayer.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1085,6 +1091,7 @@
 				CFA1899F15F8D9F80048BF46 /* IntBuffer_iOS.cpp in Sources */,
 				CFA189AF15F926CA0048BF46 /* IFactory.cpp in Sources */,
 				D89DA21A15FF6C32008CD5F5 /* Image_iOS.mm in Sources */,
+				A728D4271601EC6900F0A4B0 /* OSMLayer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

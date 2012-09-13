@@ -54,6 +54,7 @@
 #include "SingleImageTileTexturizer.hpp"
 #include "WMSLayer.hpp"
 #include "BingLayer.hpp"
+#include "OSMLayer.hpp"
 
 #include "MathUtils_iOS.hpp"
 #include "ThreadUtils_iOS.hpp"
@@ -96,7 +97,7 @@
   cameraRenderer->addHandler(new CameraRotationHandler());
   cameraRenderer->addHandler(new CameraDoubleTapHandler());
   
-  const bool renderDebug = true;
+  const bool renderDebug = false;
   const bool useTilesSplitBudget = true;
   const bool forceTopLevelTilesRenderOnStart = true;
   
@@ -172,7 +173,11 @@
       layerSet->addLayer(osm);*/
     
     
-    BingLayer *bing = new BingLayer(URL("http://ecn.t0.tiles.virtualearth.net/tiles/"),NULL, Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0));
+    //BingLayer *bing = new BingLayer(URL("http://ecn.t0.tiles.virtualearth.net/tiles/"),NULL, Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0));
+    
+    BingLayer *bing = new BingLayer(URL("http://dev.virtualearth.net/REST/v1/Imagery/Metadata"),NULL, Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0), Hybrid);
+    
+    //OSMLayer *osm = new OSMLayer(URL("http://a.tile.openstreetmap.org"),NULL, Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0));
     
     layerSet->addLayer(bing);
   }

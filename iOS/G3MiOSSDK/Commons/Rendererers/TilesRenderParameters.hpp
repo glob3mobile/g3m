@@ -57,7 +57,7 @@ public:
                                               const bool useTilesSplitBudget,
                                               const bool forceTopLevelTilesRenderOnStart) {
     const int K = 1;
-    const int _TODO_RESET_K_TO_1 = 0;
+    //const int _TODO_RESET_K_TO_1 = 0;
     const int splitsByLatitude = 2 * K;
     const int splitsByLongitude = 4 * K;
     const int topLevel = 0;

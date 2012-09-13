@@ -39,6 +39,10 @@ public:
                            const Geodetic3D& g3d,
                            const Tile* tile) const;
   
+  bool isReady() const;
+  
+  void initialize(const InitializationContext* ic)const;
+  
   int size() const {
     return _layers.size();
   }
