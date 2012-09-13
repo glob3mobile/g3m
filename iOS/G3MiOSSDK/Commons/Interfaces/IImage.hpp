@@ -34,8 +34,6 @@ public:
   
   virtual ByteArrayWrapper* getEncodedImage() const = 0;
   
-  virtual IByteBuffer* createByteBufferRGBA8888(int width, int height) const = 0;
-  
   virtual IImage* scale(int width, int height) const = 0;
 };
 
