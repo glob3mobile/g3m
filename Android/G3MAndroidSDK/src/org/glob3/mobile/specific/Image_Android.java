@@ -148,4 +148,14 @@ public class Image_Android
       return new Image_Android(_image, null);
    }
 
+
+   public byte[] getSourceBuffer() {
+      return _source;
+   }
+
+
+   public void releaseSourceBuffer() {
+      _source = null;
+   }
+
 }
