@@ -1,0 +1,59 @@
+
+
+package org.glob3.mobile.specific;
+
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.IntBuffer;
+
+import org.glob3.mobile.generated.IIntBuffer;
+
+
+public class IntBuffer_WebGL
+         extends
+            IIntBuffer {
+
+   private final IntBuffer _buffer;
+   private int             _timestamp;
+
+
+   public IntBuffer_WebGL(final int size) {
+      // _buffer = ByteBuffer.allocateDirect(size * 4).order(ByteOrder.nativeOrder()).asIntBuffer();
+      //_buffer = ByteBuffer.allocate(size * 4).order(ByteOrder.nativeOrder()).asIntBuffer();
+      _buffer = IntBuffer.wrap(new int[size]);
+   }
+
+
+   @Override
+   public int size() {
+      return _buffer.capacity();
+   }
+
+
+   @Override
+   public int timestamp() {
+      return _timestamp;
+   }
+
+
+   @Override
+   public int get(final int i) {
+      return _buffer.get(i);
+   }
+
+
+   @Override
+   public void put(final int i,
+                   final int value) {
+      if (_buffer.get(i) != value) {
+         _buffer.put(i, value);
+         _timestamp++;
+      }
+   }
+
+
+   public IntBuffer getBuffer() {
+      return _buffer;
+   }
+
+}
