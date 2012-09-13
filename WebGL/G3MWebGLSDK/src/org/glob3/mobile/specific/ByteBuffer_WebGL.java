@@ -2,8 +2,6 @@
 
 package org.glob3.mobile.specific;
 
-import java.nio.ByteBuffer;
-
 import org.glob3.mobile.generated.IByteBuffer;
 
 
@@ -11,50 +9,57 @@ public class ByteBuffer_WebGL
          extends
             IByteBuffer {
 
-   private final ByteBuffer _buffer;
-   private int              _timestamp = 0;
+   //   private final ByteBuffer _buffer;
+   private final int _timestamp = 0;
 
 
    ByteBuffer_WebGL(final byte[] data) {
-      _buffer = ByteBuffer.wrap(data);
+      //      TODO this method must be implemented
    }
 
 
    public ByteBuffer_WebGL(final int size) {
-      _buffer = ByteBuffer.wrap(new byte[size]);
+      //    TODO this method must be implemented
    }
 
 
    @Override
    public int size() {
-      return _buffer.capacity();
+      //    TODO this method must be implemented
+      return 0;
    }
 
 
    @Override
    public int timestamp() {
-      return _timestamp;
+      //    TODO this method must be implemented
+      return 0;
    }
 
 
    @Override
    public byte get(final int i) {
-      return _buffer.get(i);
+      //    TODO this method must be implemented
+      return 0;
    }
 
 
    @Override
    public void put(final int i,
                    final byte value) {
-      if (_buffer.get(i) != value) {
-         _buffer.put(i, value);
-         _timestamp++;
-      }
+      //    TODO this method must be implemented
    }
 
 
-   public ByteBuffer getBuffer() {
-      return _buffer;
+   //   public ByteBuffer getBuffer() {
+   //      //    TODO this method must be implemented
+   //   }
+
+
+   @Override
+   public String description() {
+      //    TODO this method must be implemented
+      return "";
    }
 
 }

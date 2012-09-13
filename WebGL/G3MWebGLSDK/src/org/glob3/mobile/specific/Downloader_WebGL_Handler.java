@@ -19,58 +19,12 @@ import com.google.gwt.core.client.JsArrayInteger;
 
 public class Downloader_WebGL_Handler {
 
-
-   class ListenerEntry {
-
-      private boolean                        _canceled;
-      private final long                     _requestId;
-      public final Downloader_WebGL_Listener _listener;
-
-
-      public ListenerEntry(final IBufferDownloadListener bufferListener,
-                           final long requestId) {
-         _listener = new Downloader_WebGL_Listener(bufferListener);
-         _requestId = requestId;
-         _canceled = false;
-      }
-
-
-      public ListenerEntry(final IImageDownloadListener imageListener,
-                           final long requestId) {
-         _listener = new Downloader_WebGL_Listener(imageListener);
-         _requestId = requestId;
-         _canceled = false;
-      }
-
-
-      public long getRequestId() {
-         return _requestId;
-      }
-
-
-      public void cancel() {
-         if (_canceled) {
-            log(LogLevel.ErrorLevel, ": Listener for requestId=" + _requestId + " already canceled");
-         }
-         _canceled = true;
-      }
-
-
-      public boolean isCanceled() {
-         return _canceled;
-      }
-
-   }
-
-
-   /*
-    * Downloader_WebGL_Handler
-    */
    final static String                    TAG = "Downloader_WebGL_Handler";
 
    private long                           _priority;
    private final URL                      _url;
    private final ArrayList<ListenerEntry> _listeners;
+   private final boolean                  _requestingImage;
 
    private Downloader_WebGL               _dl;
 
@@ -82,8 +36,9 @@ public class Downloader_WebGL_Handler {
       _priority = priority;
       _url = url;
       _listeners = new ArrayList<ListenerEntry>();
-      final ListenerEntry entry = new ListenerEntry(bufferListener, requestId);
+      final ListenerEntry entry = new ListenerEntry(bufferListener, null, requestId);
       _listeners.add(entry);
+      _requestingImage = false;
    }
 
 
@@ -94,15 +49,34 @@ public class Downloader_WebGL_Handler {
       _priority = priority;
       _url = url;
       _listeners = new ArrayList<ListenerEntry>();
-      final ListenerEntry entry = new ListenerEntry(imageListener, requestId);
+      final ListenerEntry entry = new ListenerEntry(null, imageListener, requestId);
       _listeners.add(entry);
+      _requestingImage = true;
    }
 
 
-   public void addListener(final IDownloadListener listener,
+   public boolean isRequestingImage() {
+      return _requestingImage;
+   }
+
+
+   public void addListener(final IBufferDownloadListener listener,
                            final long priority,
                            final long requestId) {
-      final ListenerEntry entry = new ListenerEntry(listener, requestId);
+      final ListenerEntry entry = new ListenerEntry(listener, null, requestId);
+
+      _listeners.add(entry);
+
+      if (priority > _priority) {
+         _priority = priority;
+      }
+   }
+
+
+   public void addListener(final IImageDownloadListener listener,
+                           final long priority,
+                           final long requestId) {
+      final ListenerEntry entry = new ListenerEntry(null, listener, requestId);
 
       _listeners.add(entry);
 
@@ -144,7 +118,7 @@ public class Downloader_WebGL_Handler {
          final ListenerEntry entry = iter.next();
 
          if (entry.getRequestId() == requestId) {
-            entry.getListener().onCancel(_url);
+            entry.onCancel(_url);
             iter.remove();
             removed = true;
 
@@ -167,8 +141,11 @@ public class Downloader_WebGL_Handler {
 
       _dl = (Downloader_WebGL) downloader;
 
-      jsRequest(_url.getPath());
-
+      if (_requestingImage) {
+      }
+      else {
+         jsRequestBuffer(_url.getPath());
+      }
       //      IThreadUtils.instance().invokeInRendererThread(new ProcessResponseGTask(statusCode, data, this), true);
    }
 
@@ -180,49 +157,45 @@ public class Downloader_WebGL_Handler {
    }
 
 
-   public void processResponse(final int statusCode,
-                               final JsArrayInteger data) {
+   public void processBufferResponse(final int statusCode,
+                                     final JsArrayInteger data) {
       final byte[] dataByteArray = toJavaArrayBytes(data);
 
       final boolean dataIsValid = (dataByteArray != null) && (statusCode == 200);
 
       if (dataIsValid) {
-         final ByteBuffer buffer = new ByteBuffer(dataByteArray, dataByteArray.length);
-         final Response response = new Response(_url, buffer);
-         final Iterator<ListenerEntry> iter = _listeners.iterator();
-
-         while (iter.hasNext()) {
-            final ListenerEntry entry = iter.next();
+         for (final ListenerEntry entry : _listeners) {
             if (entry.isCanceled()) {
-               log(LogLevel.WarningLevel, ": triggering onCanceledDownload");
-               entry.getListener().onCanceledDownload(response);
-
-               log(LogLevel.WarningLevel, ": triggering onCancel");
-               entry.getListener().onCancel(_url);
+               entry.onCanceledDownload(_url, dataByteArray);
+               entry.onCancel(_url);
             }
             else {
-               log(LogLevel.InfoLevel, ": triggering onDownload");
-               entry.getListener().onDownload(response);
+               entry.onDownload(_url, dataByteArray);
             }
          }
       }
       else {
          log(LogLevel.ErrorLevel, ": Error runWithDownloader: statusCode=" + statusCode + ", url=" + _url.getPath());
 
-         final ByteBuffer buffer = new ByteBuffer(null, 0);
-         final Response response = new Response(_url, buffer);
-         final Iterator<ListenerEntry> iter = _listeners.iterator();
-
-         while (iter.hasNext()) {
-            final ListenerEntry entry = iter.next();
-            log(LogLevel.ErrorLevel, ": triggering onError");
-            entry.getListener().onError(response);
+         for (final ListenerEntry entry : _listeners) {
+            entry.onError(_url);
          }
       }
    }
 
 
-   private native void jsRequest(String url) /*-{
+   // take too much time (15-20 sec per array)
+   public byte[] toJavaArrayBytes(final JsArrayInteger bytes) {
+      final int length = bytes.length();
+      final byte[] byteArray = new byte[length];
+      for (int i = 0; i < length; i++) {
+         byteArray[i] = (byte) bytes.get(i);
+      }
+      return byteArray;
+   }
+
+
+   private native void jsRequestBuffer(String url) /*-{
 		//		debugger;
 		console.log("jsRequest url=" + url);
 
@@ -235,14 +208,14 @@ public class Downloader_WebGL_Handler {
 		xhReq.onload = function() {
 			console.log("onload");
 			if (xhReq.readyState == 4) {
-				thisInstance.@org.glob3.mobile.specific.Downloader_WebGL_Handler::jsProcessResponse(Lcom/google/gwt/core/client/JavaScriptObject;)(xhReq);
+				thisInstance.@org.glob3.mobile.specific.Downloader_WebGL_Handler::jsProcessBufferResponse(Lcom/google/gwt/core/client/JavaScriptObject;)(xhReq);
 			}
 		};
 		xhReq.send(buf);
    }-*/;
 
 
-   public native void jsProcessResponse(JavaScriptObject xhr) /*-{
+   public native void jsProcessBufferResponse(JavaScriptObject xhr) /*-{
 		debugger;
 		console.log("jsProcessResponse");
 
@@ -256,21 +229,14 @@ public class Downloader_WebGL_Handler {
 			uint8array = null;
 			console.log("Error Retriving Data!");
 		}
-		thisInstance.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JsArrayInteger;)(xhr.status, uint8array);
+		thisInstance.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processBufferResponse(ILcom/google/gwt/core/client/JsArrayInteger;)(xhr.status, uint8array);
    }-*/;
 
 
-   // take too much time (15-20 sec per array)
-   public byte[] toJavaArrayBytes(final JsArrayInteger bytes) {
-      log(LogLevel.InfoLevel, "in toJavaArrayBytes");
-      final int length = bytes.length();
-      final byte[] byteArray = new byte[length];
-      for (int i = 0; i < length; i++) {
-         byteArray[i] = (byte) bytes.get(i);
-      }
-      log(LogLevel.InfoLevel, "out toJavaArrayBytes");
-      return byteArray;
-   }
+   private native void jsRequestImage(String url) /*-{
+		debugger;
+
+   }-*/;
 
 
    public void log(final LogLevel level,

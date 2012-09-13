@@ -2,9 +2,11 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.ByteBuffer;
+import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.IFactory;
+import org.glob3.mobile.generated.IFloatBuffer;
 import org.glob3.mobile.generated.IImage;
+import org.glob3.mobile.generated.IIntBuffer;
 import org.glob3.mobile.generated.ITimer;
 
 
@@ -51,16 +53,45 @@ public class Factory_WebGL
 
 
    @Override
-   public IImage createImageFromData(final ByteBuffer buffer) {
-      // TODO this method must be implemented
+   public IImage createImageFromSize(final int width,
+                                     final int height) {
+      /// TODO this method must be implemented
       return null;
    }
 
 
    @Override
-   public IImage createImageFromSize(final int width,
-                                     final int height) {
-      /// TODO this method must be implemented
+   public IImage createImageFromBuffer(final IByteBuffer buffer) {
+      // TODO Auto-generated method stub
+      return null;
+   }
+
+
+   @Override
+   public IFloatBuffer createFloatBuffer(final int size) {
+      // TODO Auto-generated method stub
+      return null;
+   }
+
+
+   @Override
+   public IIntBuffer createIntBuffer(final int size) {
+      // TODO Auto-generated method stub
+      return null;
+   }
+
+
+   @Override
+   public IByteBuffer createByteBuffer(final int length) {
+      // TODO Auto-generated method stub
+      return null;
+   }
+
+
+   @Override
+   public IByteBuffer createByteBuffer(final byte[] data,
+                                       final int length) {
+      // TODO Auto-generated method stub
       return null;
    }
 

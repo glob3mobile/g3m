@@ -173,7 +173,7 @@ public class G3MWidget_WebGL
       final IFactory factory = new Factory_WebGL();
       final ILogger logger = new Logger_WebGL(LogLevel.InfoLevel);
       final IStorage storage = new NullStorage();
-      final IDownloader downloader = new Downloader_WebGL(8);
+      final IDownloader downloader = new Downloader_WebGL(8, _delayMillis);
       final IStringUtils stringUtils = new StringUtils_WebGL();
       // TODO add delayMillis to G3MWidget constructor
       final IThreadUtils threadUtils = new ThreadUtils_WebGL(this, _delayMillis);

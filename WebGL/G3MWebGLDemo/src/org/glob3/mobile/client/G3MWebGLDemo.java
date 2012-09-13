@@ -14,6 +14,8 @@ public class G3MWebGLDemo
             EntryPoint {
 
    String          g3mWidgetHolderId = "g3mWidgetHolder";
+
+
    G3MWidget_WebGL _widget           = null;
 
 
@@ -23,7 +25,7 @@ public class G3MWebGLDemo
          final Panel g3mWidgetHolder = RootPanel.get(g3mWidgetHolderId);
          _widget = new G3MWidget_WebGL();
          g3mWidgetHolder.add(_widget);
-         _widget.init();
+         _widget.initWidget(null, null, null, null);
       }
 
    }
