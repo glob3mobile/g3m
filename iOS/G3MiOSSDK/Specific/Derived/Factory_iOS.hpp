@@ -45,10 +45,10 @@ public:
       return NULL;
     }
     
-    return new Image_iOS(image);
+    return new Image_iOS(image, NULL);
   }
   
-  IImage* createImageFromData(const IByteBuffer* buffer) const {
+  IImage* createImageFromBuffer(const IByteBuffer* buffer) const {
     
     ByteBuffer_iOS* buffer_iOS = (ByteBuffer_iOS*) buffer;
     
@@ -61,7 +61,7 @@ public:
       return NULL;
     }
     
-    return new Image_iOS(image);
+    return new Image_iOS(image, data);
   }
   
   void deleteImage(const IImage* image) const {

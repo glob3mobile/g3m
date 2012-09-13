@@ -161,7 +161,11 @@ void SQLiteStorage_iOS::saveImage(const URL& url,
   UIImage* uiImage = image_iOS->getUIImage();
   
   NSString* name = toNSString(url.getPath());
-  NSData* contents = UIImagePNGRepresentation(uiImage);
+  
+  NSData* contents = image_iOS->getSourceBuffer();
+  if (contents == NULL) {
+    contents = UIImagePNGRepresentation(uiImage);
+  }
   
   if (![_db executeNonQuery:@"INSERT OR REPLACE INTO image (name, contents) VALUES (?, ?)", name, contents]) {
     printf("Can't save \"%s\"\n", url.getPath().c_str());
@@ -183,7 +187,7 @@ const IImage* SQLiteStorage_iOS::readImage(const URL& url) {
               length: length];
     
     IByteBuffer* buffer = GFactory.createByteBuffer(bytes, length);
-    result = GFactory.createImageFromData(buffer);
+    result = GFactory.createImageFromBuffer(buffer);
     
     delete buffer;
   }

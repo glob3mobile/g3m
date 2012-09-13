@@ -19,6 +19,7 @@
 class Image_iOS: public IImage {
 private:
   UIImage* _image;
+  NSData*  _sourceBuffer;
   
   Image_iOS(const Image_iOS& that);
   
@@ -30,7 +31,11 @@ public:
 //    printf("break (point) on me!\n");
   }
   
-  Image_iOS(UIImage* image) : _image(image) {
+  Image_iOS(UIImage* image,
+            NSData* sourceBuffer) :
+  _image(image),
+  _sourceBuffer(sourceBuffer)
+  {
     
   }
   
@@ -38,6 +43,10 @@ public:
   
   UIImage* getUIImage() const {
     return _image;
+  }
+  
+  NSData* getSourceBuffer() const {
+    return _sourceBuffer;
   }
   
   int getWidth() const {

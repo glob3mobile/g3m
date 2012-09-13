@@ -58,7 +58,7 @@ IImage* Image_iOS::combineWith(const IImage& other,
   
   delete[] imageData;
   
-  return new Image_iOS(img);
+  return new Image_iOS(img, NULL);
 }
 
 IImage* Image_iOS::combineWith(const IImage& other,
@@ -99,7 +99,7 @@ IImage* Image_iOS::combineWith(const IImage& other,
   
   delete[] imageData;
   
-  return new Image_iOS(img);
+  return new Image_iOS(img, NULL);
 }
 
 IImage* Image_iOS::subImage(const Rectangle& rect) const {
@@ -111,7 +111,7 @@ IImage* Image_iOS::subImage(const Rectangle& rect) const {
   //Cropping image
   CGImageRef imageRef = CGImageCreateWithImageInRect([this->_image CGImage], cropRect);
   
-  Image_iOS* image = new Image_iOS([UIImage imageWithCGImage:imageRef]); //Create IImage
+  Image_iOS* image = new Image_iOS([UIImage imageWithCGImage:imageRef], NULL);
   
   CGImageRelease(imageRef);
   return image;
@@ -153,5 +153,5 @@ const std::string Image_iOS::description() const {
 }
 
 IImage* Image_iOS::copy() const {
-  return new Image_iOS(_image);
+  return new Image_iOS(_image, _sourceBuffer);
 }
