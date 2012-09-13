@@ -295,6 +295,8 @@ public:
                  getEnum(format),
                  GL_UNSIGNED_BYTE, 
                  ((ByteBuffer_iOS*)bb)->getPointer());
+    
+    delete bb;
   }
   
   //  void texImage2D(GLTextureType target,
