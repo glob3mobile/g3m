@@ -10,8 +10,6 @@
 		443BBC8315A5C22000EAE280 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 443BBC8215A5C21F00EAE280 /* CoreData.framework */; };
 		44EEB5E0159B2B8B0086F243 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 44EEB5DF159B2B8B0086F243 /* libsqlite3.dylib */; };
 		A717C99615EBA71D00EEC830 /* mercator.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A717C99515EBA71D00EEC830 /* mercator.jpg */; };
-		A717C9A115EEA45200EEC830 /* tissot.png in Resources */ = {isa = PBXBuildFile; fileRef = A717C9A015EEA45200EEC830 /* tissot.png */; };
-		A717C9A315EEA45D00EEC830 /* mercator2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A717C9A215EEA45D00EEC830 /* mercator2.jpg */; };
 		CCD7885415D9A3FA0065A7E1 /* ProgressWheel.png in Resources */ = {isa = PBXBuildFile; fileRef = CCD7885315D9A3FA0065A7E1 /* ProgressWheel.png */; };
 		CF7A708815CFD0A50086FDE6 /* g3m-marker.png in Resources */ = {isa = PBXBuildFile; fileRef = CF7A708715CFD0A50086FDE6 /* g3m-marker.png */; };
 		CF883B841591053100AEE39C /* mark.png in Resources */ = {isa = PBXBuildFile; fileRef = CF883B831591053100AEE39C /* mark.png */; };
@@ -55,8 +53,6 @@
 		443BBC8215A5C21F00EAE280 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		44EEB5DF159B2B8B0086F243 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		A717C99515EBA71D00EEC830 /* mercator.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = mercator.jpg; sourceTree = "<group>"; };
-		A717C9A015EEA45200EEC830 /* tissot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tissot.png; sourceTree = "<group>"; };
-		A717C9A215EEA45D00EEC830 /* mercator2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = mercator2.jpg; sourceTree = "<group>"; };
 		CCD7885315D9A3FA0065A7E1 /* ProgressWheel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ProgressWheel.png; sourceTree = "<group>"; };
 		CF7A708715CFD0A50086FDE6 /* g3m-marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "g3m-marker.png"; sourceTree = "<group>"; };
 		CF883B831591053100AEE39C /* mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mark.png; sourceTree = "<group>"; };
@@ -176,8 +172,6 @@
 		D8EEF4271577B0D6003FEB5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				A717C9A215EEA45D00EEC830 /* mercator2.jpg */,
-				A717C9A015EEA45200EEC830 /* tissot.png */,
 				A717C99515EBA71D00EEC830 /* mercator.jpg */,
 				CCD7885315D9A3FA0065A7E1 /* ProgressWheel.png */,
 				CF7A708715CFD0A50086FDE6 /* g3m-marker.png */,
@@ -268,8 +262,6 @@
 				CF7A708815CFD0A50086FDE6 /* g3m-marker.png in Resources */,
 				CCD7885415D9A3FA0065A7E1 /* ProgressWheel.png in Resources */,
 				A717C99615EBA71D00EEC830 /* mercator.jpg in Resources */,
-				A717C9A115EEA45200EEC830 /* tissot.png in Resources */,
-				A717C9A315EEA45D00EEC830 /* mercator2.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

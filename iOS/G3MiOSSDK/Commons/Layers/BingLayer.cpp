@@ -12,7 +12,7 @@
 #include "IMathUtils.hpp"
 
 #include <sstream>
-#include <iostream>
+//#include <iostream>
 
 
 class TokenDownloadListener : public IDownloadListener {
@@ -40,7 +40,7 @@ _bingLayer(bingLayer){}
 
 void TokenDownloadListener::onDownload(const Response* response){
   std::string string = response->getByteArrayWrapper()->getDataAsString();
-  std::cout << string<<"\n";
+  //std::cout << string<<"\n";
 }
 
 
