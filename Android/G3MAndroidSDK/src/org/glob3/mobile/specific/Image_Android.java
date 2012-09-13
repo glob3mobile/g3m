@@ -3,6 +3,7 @@
 package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.IImage;
+import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.Rectangle;
 
 import android.graphics.Bitmap;
@@ -138,6 +139,10 @@ public class Image_Android
    public IImage scale(final int width,
                        final int height) {
       final Bitmap b = Bitmap.createScaledBitmap(_image, width, height, false);
+      if (b == null) {
+         ILogger.instance().logError("Can't scale Image");
+         return null;
+      }
       return new Image_Android(b, null);
    }
 
@@ -150,7 +155,7 @@ public class Image_Android
 
    @Override
    public IImage copy() {
-      return new Image_Android(_image, null);
+      return new Image_Android(_image, _source);
    }
 
 

@@ -55,9 +55,9 @@ public:
     NSData* data = [NSData dataWithBytes: buffer_iOS->getPointer()
                                   length: buffer_iOS->size()];
     
-    UIImage* image = [UIImage imageWithData:data];
-    if (image) {
-      return new Image_iOS(image, data);
+    UIImage* uiImage = [UIImage imageWithData:data];
+    if (uiImage) {
+      return new Image_iOS(uiImage, data);
     }
     else {
       printf("Can't read image from IByteBuffer %s\n", buffer->description().c_str());

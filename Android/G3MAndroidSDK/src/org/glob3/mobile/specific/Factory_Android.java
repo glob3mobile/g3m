@@ -68,6 +68,8 @@ public class Factory_Android
       }
 
       if (bitmap == null) {
+         ILogger.instance().logError("FACTORY: Can't create image from fileName");
+
          return null;
       }
 
@@ -85,6 +87,10 @@ public class Factory_Android
                                      final int height) {
       final Bitmap.Config conf = Bitmap.Config.ARGB_8888;
       final Bitmap bmp = Bitmap.createBitmap(width, height, conf);
+      if (bmp == null) {
+         ILogger.instance().logError("FACTORY: Can't create empty image");
+         return null;
+      }
       return new Image_Android(bmp, null);
    }
 
