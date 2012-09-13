@@ -8,8 +8,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.glob3.mobile.generated.IDownloadListener;
+import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IDownloader;
+import org.glob3.mobile.generated.IImageDownloadListener;
 import org.glob3.mobile.generated.URL;
 
 
@@ -80,10 +81,10 @@ public class Downloader_Android
 
 
    @Override
-   public long request(final URL url,
-                       final long priority,
-                       final IDownloadListener listener,
-                       final boolean deleteListener) {
+   public long requestBuffer(final URL url,
+                             final long priority,
+                             final IBufferDownloadListener listener,
+                             final boolean deleteListener) {
 
       Downloader_Android_Handler handler = null;
       long requestId;
@@ -93,21 +94,57 @@ public class Downloader_Android
          requestId = _requestIdCounter++;
          handler = _downloadingHandlers.get(url.getPath());
 
-         if (handler != null) {
-            // the URL is being downloaded, just add the new listener
-            handler.addListener(listener, priority, requestId);
-         }
-         else {
+         if (handler == null) {
             handler = _queuedHandlers.get(url.getPath());
-            if (handler != null) {
-               // the URL is queued for future download, just add the new listener
-               handler.addListener(listener, priority, requestId);
-            }
-            else {
+            if (handler == null) {
                // new handler, queue it
                handler = new Downloader_Android_Handler(url, listener, priority, requestId);
                _queuedHandlers.put(url.getPath(), handler);
             }
+            else {
+               // the URL is queued for future download, just add the new listener
+               handler.addListener(listener, priority, requestId);
+            }
+         }
+         else {
+            // the URL is being downloaded, just add the new listener
+            handler.addListener(listener, priority, requestId);
+         }
+      }
+
+      return requestId;
+   }
+
+
+   @Override
+   public long requestImage(final URL url,
+                            final long priority,
+                            final IImageDownloadListener listener,
+                            final boolean deleteListener) {
+
+      Downloader_Android_Handler handler = null;
+      long requestId;
+
+      synchronized (this) {
+         _requestsCounter++;
+         requestId = _requestIdCounter++;
+         handler = _downloadingHandlers.get(url.getPath());
+
+         if (handler == null) {
+            handler = _queuedHandlers.get(url.getPath());
+            if (handler == null) {
+               // new handler, queue it
+               handler = new Downloader_Android_Handler(url, listener, priority, requestId);
+               _queuedHandlers.put(url.getPath(), handler);
+            }
+            else {
+               // the URL is queued for future download, just add the new listener
+               handler.addListener(listener, priority, requestId);
+            }
+         }
+         else {
+            // the URL is being downloaded, just add the new listener
+            handler.addListener(listener, priority, requestId);
          }
       }
 
