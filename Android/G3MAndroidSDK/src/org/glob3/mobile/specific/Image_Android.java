@@ -20,6 +20,12 @@ public class Image_Android
 
    public Image_Android(final Bitmap image,
                         final byte[] source) {
+
+      if (image == null) {
+         final int ____REMOVE;
+         new Throwable().printStackTrace();
+      }
+
       _image = image;
       _source = source;
    }
@@ -32,13 +38,13 @@ public class Image_Android
 
    @Override
    public int getWidth() {
-      return _image.getWidth();
+      return (_image == null) ? 0 : _image.getWidth();
    }
 
 
    @Override
    public int getHeight() {
-      return _image.getHeight();
+      return (_image == null) ? 0 : _image.getHeight();
    }
 
 
