@@ -85,13 +85,12 @@ public class Factory_Android
    @Override
    public IImage createImageFromSize(final int width,
                                      final int height) {
-      final Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-      final Bitmap bmp = Bitmap.createBitmap(width, height, conf);
-      if (bmp == null) {
+      final Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+      if (bitmap == null) {
          ILogger.instance().logError("FACTORY: Can't create empty image");
          return null;
       }
-      return new Image_Android(bmp, null);
+      return new Image_Android(bitmap, null);
    }
 
 

@@ -160,7 +160,12 @@ public class SQLiteStorage_Android
          final Bitmap b = BitmapFactory.decodeByteArray(data, 0, data.length);
          cursor.close();
 
-         return new Image_Android(b, null);
+         if (b == null) {
+            ILogger.instance().logError("Can't create bitmap from content of storage");
+         }
+         else {
+            return new Image_Android(b, null);
+         }
       }
       cursor.close();
       return null;
