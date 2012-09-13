@@ -165,6 +165,9 @@ void SQLiteStorage_iOS::saveImage(const URL& url,
   if (contents == NULL) {
     contents = UIImagePNGRepresentation(uiImage);
   }
+  else {
+    image_iOS->releaseSourceBuffer();
+  }
   
   if (![_db executeNonQuery:@"INSERT OR REPLACE INTO image (name, contents) VALUES (?, ?)", name, contents]) {
     printf("Can't save \"%s\"\n", url.getPath().c_str());

@@ -19,7 +19,7 @@
 class Image_iOS: public IImage {
 private:
   UIImage* _image;
-  NSData*  _sourceBuffer;
+  mutable NSData*  _sourceBuffer;
   
   Image_iOS(const Image_iOS& that);
   
@@ -52,6 +52,10 @@ public:
   
   NSData* getSourceBuffer() const {
     return _sourceBuffer;
+  }
+  
+  void releaseSourceBuffer() const {
+    _sourceBuffer = NULL;
   }
   
   int getWidth() const {
