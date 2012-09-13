@@ -33,7 +33,7 @@ public class Petition
 {
   private final Sector _sector;
   final private URL _url; //Conversor creates class "Url"
-  private final IImage _image;
+  private IImage _image;
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  Petition(Petition that);
@@ -58,8 +58,7 @@ public class Petition
   {
 	if (_image != null)
 	{
-	  if (_image != null)
-		  _image.dispose();
+	  _image = null;
 	  _image = null;
 	}
   }
