@@ -48,13 +48,16 @@ public:
     return new Image_iOS(image);
   }
   
-  virtual IImage* createImageFromData(const ByteArrayWrapper* buffer) const {
-    NSData* data = [NSData dataWithBytes: buffer->getData()
-                                  length: buffer->getLength()];
+  IImage* createImageFromData(const IByteBuffer* buffer) const {
+    
+    ByteBuffer_iOS* buffer_iOS = (ByteBuffer_iOS*) buffer;
+    
+    NSData* data = [NSData dataWithBytes: buffer_iOS->getPointer()
+                                  length: buffer_iOS->size()];
     
     UIImage* image = [UIImage imageWithData:data];
     if (!image) {
-      printf("Can't read image from ByteArrayWrapper of %d bytes\n", buffer->getLength());
+      printf("Can't read image from IByteBuffer %s\n", buffer->description().c_str());
       return NULL;
     }
     
@@ -65,8 +68,12 @@ public:
     delete image;
   }
   
-  virtual IByteBuffer* createByteBuffer(unsigned char data[], int length) const{
+  IByteBuffer* createByteBuffer(unsigned char data[], int length) const{
     return new ByteBuffer_iOS(data, length);
+  }
+  
+  IByteBuffer* createByteBuffer(int size) const{
+    return new ByteBuffer_iOS(size);
   }
   
   IFloatBuffer* createFloatBuffer(int size) const {
@@ -75,7 +82,6 @@ public:
   
   IIntBuffer* createIntBuffer(int size) const {
     return new IntBuffer_iOS(size);
-
   }
   
 };

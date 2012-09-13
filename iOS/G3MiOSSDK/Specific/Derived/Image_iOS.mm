@@ -9,9 +9,9 @@
 #include "Image_iOS.hpp"
 
 #include "IFactory.hpp"
+#include "IStringBuilder.hpp"
 
-Image_iOS::Image_iOS(int width, int height)
-{
+Image_iOS::Image_iOS(int width, int height) {
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
   unsigned char* imageData = new unsigned char[height * width * 4 ];
   
@@ -32,8 +32,7 @@ Image_iOS::Image_iOS(int width, int height)
 }
 
 IImage* Image_iOS::combineWith(const IImage& other,
-                               int width, int height) const
-{
+                               int width, int height) const {
   UIImage* transIm = ((Image_iOS&)other).getUIImage();
   
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
@@ -103,8 +102,7 @@ IImage* Image_iOS::combineWith(const IImage& other,
   return new Image_iOS(img);
 }
 
-IImage* Image_iOS::subImage(const Rectangle& rect) const
-{
+IImage* Image_iOS::subImage(const Rectangle& rect) const {
   CGRect cropRect = CGRectMake((float) rect._x,
                                (float) rect._y,
                                (float) rect._width,
@@ -119,20 +117,7 @@ IImage* Image_iOS::subImage(const Rectangle& rect) const
   return image;
 }
 
-ByteArrayWrapper* Image_iOS::getEncodedImage() const
-{
-  NSData* readData = UIImagePNGRepresentation(_image);
-  NSUInteger length = [readData length];
-  
-  unsigned char* data = new unsigned char[length];
-  [readData getBytes: data
-              length: length];
-  
-  return new ByteArrayWrapper(data, length);
-}
-
-IByteBuffer* Image_iOS::createByteBufferRGBA8888(int width, int height) const
-{
+IByteBuffer* Image_iOS::createByteBufferRGBA8888(int width, int height) const {
   unsigned char* data = new unsigned char[4 * width * height];
   
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
@@ -163,4 +148,22 @@ IImage* Image_iOS::scale(int width, int height) const{
   UIGraphicsEndImageContext();
   
   return new Image_iOS(newImage);
+}
+
+const std::string Image_iOS::description() const {
+  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  isb->add("Image_iOS ");
+  isb->add(getWidth());
+  isb->add("x");
+  isb->add(getHeight());
+  isb->add(", _image=(");
+  isb->add( [[_image description] cStringUsingEncoding:NSUTF8StringEncoding] );
+  isb->add(")");
+  std::string s = isb->getString();
+  delete isb;
+  return s;
+}
+
+IImage* Image_iOS::copy() const {
+  return new Image_iOS(_image);
 }
