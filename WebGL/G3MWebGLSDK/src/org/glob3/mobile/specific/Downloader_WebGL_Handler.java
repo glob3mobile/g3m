@@ -5,12 +5,11 @@ package org.glob3.mobile.specific;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.glob3.mobile.generated.ByteBuffer;
-import org.glob3.mobile.generated.IDownloadListener;
+import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IDownloader;
+import org.glob3.mobile.generated.IImageDownloadListener;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.LogLevel;
-import org.glob3.mobile.generated.Response;
 import org.glob3.mobile.generated.URL;
 
 import com.google.gwt.core.client.GWT;
@@ -23,14 +22,22 @@ public class Downloader_WebGL_Handler {
 
    class ListenerEntry {
 
-      private boolean                 _canceled;
-      private final long              _requestId;
-      private final IDownloadListener _listener;
+      private boolean                        _canceled;
+      private final long                     _requestId;
+      public final Downloader_WebGL_Listener _listener;
 
 
-      public ListenerEntry(final IDownloadListener listener,
+      public ListenerEntry(final IBufferDownloadListener bufferListener,
                            final long requestId) {
-         _listener = listener;
+         _listener = new Downloader_WebGL_Listener(bufferListener);
+         _requestId = requestId;
+         _canceled = false;
+      }
+
+
+      public ListenerEntry(final IImageDownloadListener imageListener,
+                           final long requestId) {
+         _listener = new Downloader_WebGL_Listener(imageListener);
          _requestId = requestId;
          _canceled = false;
       }
@@ -38,11 +45,6 @@ public class Downloader_WebGL_Handler {
 
       public long getRequestId() {
          return _requestId;
-      }
-
-
-      public IDownloadListener getListener() {
-         return _listener;
       }
 
 
@@ -74,13 +76,25 @@ public class Downloader_WebGL_Handler {
 
 
    public Downloader_WebGL_Handler(final URL url,
-                                   final IDownloadListener listener,
+                                   final IBufferDownloadListener bufferListener,
                                    final long priority,
                                    final long requestId) {
       _priority = priority;
       _url = url;
       _listeners = new ArrayList<ListenerEntry>();
-      final ListenerEntry entry = new ListenerEntry(listener, requestId);
+      final ListenerEntry entry = new ListenerEntry(bufferListener, requestId);
+      _listeners.add(entry);
+   }
+
+
+   public Downloader_WebGL_Handler(final URL url,
+                                   final IImageDownloadListener imageListener,
+                                   final long priority,
+                                   final long requestId) {
+      _priority = priority;
+      _url = url;
+      _listeners = new ArrayList<ListenerEntry>();
+      final ListenerEntry entry = new ListenerEntry(imageListener, requestId);
       _listeners.add(entry);
    }
 

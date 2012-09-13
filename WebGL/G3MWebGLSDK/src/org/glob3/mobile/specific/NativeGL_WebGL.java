@@ -17,8 +17,10 @@ import org.glob3.mobile.generated.GLTextureId;
 import org.glob3.mobile.generated.GLTextureParameter;
 import org.glob3.mobile.generated.GLTextureParameterValue;
 import org.glob3.mobile.generated.GLTextureType;
-import org.glob3.mobile.generated.GLType;
 import org.glob3.mobile.generated.GLVariable;
+import org.glob3.mobile.generated.IFloatBuffer;
+import org.glob3.mobile.generated.IImage;
+import org.glob3.mobile.generated.IIntBuffer;
 import org.glob3.mobile.generated.INativeGL;
 import org.glob3.mobile.generated.MutableMatrix44D;
 
@@ -52,7 +54,7 @@ public class NativeGL_WebGL
       WebGL.loadGlobalVars();
       CreateProgram();
       WebGL.jsEnable3D();
-      WebGL.jsUseProgram();  //USING SHADING PROGRAM
+      WebGL.jsUseProgram(); //USING SHADING PROGRAM
       WebGL.jsIdentity();
    }
 
@@ -67,252 +69,213 @@ public class NativeGL_WebGL
       return 1;
    }
 
-   
-   
 
    @Override
-   public int getAttribLocation(int program,
-                                String name) {
+   public int getAttribLocation(final int program,
+                                final String name) {
       // TODO this method must be implemented
       return 0;
    }
 
 
    @Override
-   public int getUniformLocation(int program,
-                                 String name) {
+   public int getUniformLocation(final int program,
+                                 final String name) {
       // TODO this method must be implemented
       return 0;
    }
 
 
    @Override
-   public void uniform2f(int loc,
-                         float x,
-                         float y) {
+   public void uniform2f(final int loc,
+                         final float x,
+                         final float y) {
       // TODO this method must be implemented
-      
+
    }
 
 
    @Override
-   public void uniform1f(int loc,
-                         float x) {
+   public void uniform1f(final int loc,
+                         final float x) {
       // TODO this method must be implemented
-      
+
    }
 
 
    @Override
-   public void uniform1i(int loc,
-                         int v) {
+   public void uniform1i(final int loc,
+                         final int v) {
       // TODO this method must be implemented
-      
+
    }
 
 
    @Override
-   public void uniformMatrix4fv(int location,
-                                int count,
-                                boolean transpose,
-                                float[] value) {
+   public void uniformMatrix4fv(final int location,
+                                final int count,
+                                final boolean transpose,
+                                final float[] value) {
       // TODO this method must be implemented
-      
+
    }
 
 
    @Override
-   public void clearColor(float red,
-                          float green,
-                          float blue,
-                          float alpha) {
+   public void clearColor(final float red,
+                          final float green,
+                          final float blue,
+                          final float alpha) {
       // TODO this method must be implemented
-      
+
    }
 
 
    @Override
-   public void clear(int nBuffer,
-                     GLBufferType[] buffers) {
+   public void clear(final int nBuffer,
+                     final GLBufferType[] buffers) {
       // TODO this method must be implemented
-      
+
    }
 
 
    @Override
-   public void uniform4f(int location,
-                         float v0,
-                         float v1,
-                         float v2,
-                         float v3) {
+   public void uniform4f(final int location,
+                         final float v0,
+                         final float v1,
+                         final float v2,
+                         final float v3) {
       // TODO this method must be implemented
-      
+
    }
 
 
    @Override
-   public void enable(GLFeature feature) {
+   public void enable(final GLFeature feature) {
       // TODO this method must be implemented
-      
+
    }
 
 
    @Override
-   public void disable(GLFeature feature) {
+   public void disable(final GLFeature feature) {
       // TODO this method must be implemented
-      
+
    }
 
 
    @Override
-   public void polygonOffset(float factor,
-                             float units) {
+   public void polygonOffset(final float factor,
+                             final float units) {
       // TODO this method must be implemented
-      
+
    }
 
 
    @Override
-   public void vertexAttribPointer(int index,
-                                   int size,
-                                   GLType type,
-                                   boolean normalized,
-                                   int stride,
-                                   Object pointer) {
+   public void blendFunc(final GLBlendFactor sfactor,
+                         final GLBlendFactor dfactor) {
       // TODO this method must be implemented
-      
+
    }
 
 
    @Override
-   public void drawElements(GLPrimitive mode,
-                            int count,
-                            GLType type,
-                            Object indices) {
+   public void bindTexture(final GLTextureType target,
+                           final int texture) {
       // TODO this method must be implemented
-      
+
    }
 
 
    @Override
-   public void blendFunc(GLBlendFactor sfactor,
-                         GLBlendFactor dfactor) {
+   public void deleteTextures(final int n,
+                              final int[] textures) {
       // TODO this method must be implemented
-      
+
    }
 
 
    @Override
-   public void bindTexture(GLTextureType target,
-                           int texture) {
+   public void enableVertexAttribArray(final int location) {
       // TODO this method must be implemented
-      
+
    }
 
 
    @Override
-   public void deleteTextures(int n,
-                              int[] textures) {
+   public void disableVertexAttribArray(final int location) {
       // TODO this method must be implemented
-      
+
    }
 
 
    @Override
-   public void enableVertexAttribArray(int location) {
+   public void pixelStorei(final GLAlignment pname,
+                           final int param) {
       // TODO this method must be implemented
-      
+
    }
 
 
    @Override
-   public void disableVertexAttribArray(int location) {
-      // TODO this method must be implemented
-      
-   }
-
-
-   @Override
-   public void pixelStorei(GLAlignment pname,
-                           int param) {
-      // TODO this method must be implemented
-      
-   }
-
-
-   @Override
-   public ArrayList<GLTextureId> genTextures(int n) {
+   public ArrayList<GLTextureId> genTextures(final int n) {
       // TODO this method must be implemented
       return null;
    }
 
 
    @Override
-   public void texParameteri(GLTextureType target,
-                             GLTextureParameter par,
-                             GLTextureParameterValue v) {
+   public void texParameteri(final GLTextureType target,
+                             final GLTextureParameter par,
+                             final GLTextureParameterValue v) {
       // TODO this method must be implemented
-      
+
    }
 
 
    @Override
-   public void texImage2D(GLTextureType target,
-                          int level,
-                          GLFormat internalFormat,
-                          int width,
-                          int height,
-                          int border,
-                          GLFormat format,
-                          GLType type,
-                          Object data) {
+   public void generateMipmap(final GLTextureType target) {
       // TODO this method must be implemented
-      
+
    }
 
 
    @Override
-   public void generateMipmap(GLTextureType target) {
+   public void drawArrays(final GLPrimitive mode,
+                          final int first,
+                          final int count) {
       // TODO this method must be implemented
-      
+
    }
 
 
    @Override
-   public void drawArrays(GLPrimitive mode,
-                          int first,
-                          int count) {
+   public void cullFace(final GLCullFace c) {
       // TODO this method must be implemented
-      
+
    }
 
 
    @Override
-   public void cullFace(GLCullFace c) {
+   public void getIntegerv(final GLVariable v,
+                           final int[] i) {
       // TODO this method must be implemented
-      
+
    }
 
 
    @Override
-   public void getIntegerv(GLVariable v,
-                           int[] i) {
+   public void useProgram(final int program) {
       // TODO this method must be implemented
-      
+
    }
 
 
    @Override
-   public void useProgram(int program) {
+   public void lineWidth(final float width) {
       // TODO this method must be implemented
-      
-   }
 
-
-   @Override
-   public void lineWidth(float width) {
-      // TODO this method must be implemented
-      
    }
 
 
@@ -321,257 +284,285 @@ public class NativeGL_WebGL
       // TODO this method must be implemented
       return null;
    }
-   
-   
+
+
+   @Override
+   public void vertexAttribPointer(final int index,
+                                   final int size,
+                                   final boolean normalized,
+                                   final int stride,
+                                   final IFloatBuffer buffer) {
+      // TODO Auto-generated method stub
+
+   }
+
+
+   @Override
+   public void drawElements(final GLPrimitive mode,
+                            final int count,
+                            final IIntBuffer indices) {
+      // TODO Auto-generated method stub
+
+   }
+
+
+   @Override
+   public void texImage2D(final IImage image,
+                          final GLFormat format) {
+      // TODO Auto-generated method stub
+
+   }
+
+
    //////////////////////////////////
 
-//   @Override
-//   public void enableVertices() {
-//      jsEnableVertices();
-//   }
+   //   @Override
+   //   public void enableVertices() {
+   //      jsEnableVertices();
+   //   }
 
 
-//   public native void jsEnableVertices() /*-{
-//		$wnd.gl.enableVertexAttribArray($wnd.shaderProgram.Position);
-//   }-*/;
+   //   public native void jsEnableVertices() /*-{
+   //		$wnd.gl.enableVertexAttribArray($wnd.shaderProgram.Position);
+   //   }-*/;
 
 
-//   @Override
-//   public void enableTextures() {
-//      jsEnableTextures();
-//   }
+   //   @Override
+   //   public void enableTextures() {
+   //      jsEnableTextures();
+   //   }
 
 
-//   public static native void jsEnableTextures()/*-{
-//		$wnd.gl.enableVertexAttribArray($wnd.shaderProgram.textureCoord);
-//   }-*/;
+   //   public static native void jsEnableTextures()/*-{
+   //		$wnd.gl.enableVertexAttribArray($wnd.shaderProgram.textureCoord);
+   //   }-*/;
 
 
-//   @Override
-//   public void enableTexture2D() {
-//      WebGL.jsEnableTexture2D();
-//   }
+   //   @Override
+   //   public void enableTexture2D() {
+   //      WebGL.jsEnableTexture2D();
+   //   }
 
 
-//   @Override
-//   public void disableTexture2D() {
-//      WebGL.jsDisableTexture2D();
-//   }
+   //   @Override
+   //   public void disableTexture2D() {
+   //      WebGL.jsDisableTexture2D();
+   //   }
 
 
-//   @Override
-//   public void disableVertices() {
-//      WebGL.jsDisableVertices();
-//   }
+   //   @Override
+   //   public void disableVertices() {
+   //      WebGL.jsDisableVertices();
+   //   }
 
 
-//   @Override
-//   public void disableTextures() {
-//      WebGL.jsDisableTextures();
-//   }
+   //   @Override
+   //   public void disableTextures() {
+   //      WebGL.jsDisableTextures();
+   //   }
 
 
-//   @Override
-//   public void clearScreen(final float r,
-//                           final float g,
-//                           final float b,
-//                           final float a) {
-//      WebGL.jsClearScreen(r, g, b);
-//   }
+   //   @Override
+   //   public void clearScreen(final float r,
+   //                           final float g,
+   //                           final float b,
+   //                           final float a) {
+   //      WebGL.jsClearScreen(r, g, b);
+   //   }
 
 
-//   @Override
-//   public void color(final float r,
-//                     final float g,
-//                     final float b,
-//                     final float a) {
-//      WebGL.jsColor(r, g, b);
-//   }
+   //   @Override
+   //   public void color(final float r,
+   //                     final float g,
+   //                     final float b,
+   //                     final float a) {
+   //      WebGL.jsColor(r, g, b);
+   //   }
 
 
-//   @Override
-//   public void pushMatrix() {
-//      WebGL.jsPushMatrix();
-//   }
+   //   @Override
+   //   public void pushMatrix() {
+   //      WebGL.jsPushMatrix();
+   //   }
 
 
-//   @Override
-//   public void popMatrix() {
-//      WebGL.jsPopMatrix();
-//   }
+   //   @Override
+   //   public void popMatrix() {
+   //      WebGL.jsPopMatrix();
+   //   }
 
 
-//   @Override
-//   public void loadMatrixf(final MutableMatrix44D m) {
-//      _modelView = m; // SAVING MODELVIEW
-//
-//      final JsArrayNumber arrayJs = (JsArrayNumber) JsArrayNumber.createArray();
-//      for (int i = 0; i < 16; i++) {
-//         arrayJs.push((float) m.get(i));
-//      }
-//      WebGL.jsLoadMatrixf(arrayJs);
-//   }
+   //   @Override
+   //   public void loadMatrixf(final MutableMatrix44D m) {
+   //      _modelView = m; // SAVING MODELVIEW
+   //
+   //      final JsArrayNumber arrayJs = (JsArrayNumber) JsArrayNumber.createArray();
+   //      for (int i = 0; i < 16; i++) {
+   //         arrayJs.push((float) m.get(i));
+   //      }
+   //      WebGL.jsLoadMatrixf(arrayJs);
+   //   }
 
 
-//   @Override
-//   public void multMatrixf(final MutableMatrix44D m) {
-//	   final JsArrayNumber arrayJs = (JsArrayNumber) JsArrayNumber.createArray();
-//	      for (int i = 0; i < 16; i++) {
-//	         arrayJs.push((float) m.get(i));
-//	      }
-//      WebGL.jsMultiplyModelViewMatrix(arrayJs);
-//   }
+   //   @Override
+   //   public void multMatrixf(final MutableMatrix44D m) {
+   //	   final JsArrayNumber arrayJs = (JsArrayNumber) JsArrayNumber.createArray();
+   //	      for (int i = 0; i < 16; i++) {
+   //	         arrayJs.push((float) m.get(i));
+   //	      }
+   //      WebGL.jsMultiplyModelViewMatrix(arrayJs);
+   //   }
 
 
-//   @Override
-//   public void vertexPointer(final int size,
-//                             final int stride,
-//                             final float[] vertex) {
-//      final JsArrayNumber jsArray = (JsArrayNumber) JsArrayNumber.createArray();
-//      for (final float element : vertex) {
-//         jsArray.push(element);
-//      }
-//      WebGL.jsVertexPointer(size, stride, jsArray);
-//   }
+   //   @Override
+   //   public void vertexPointer(final int size,
+   //                             final int stride,
+   //                             final float[] vertex) {
+   //      final JsArrayNumber jsArray = (JsArrayNumber) JsArrayNumber.createArray();
+   //      for (final float element : vertex) {
+   //         jsArray.push(element);
+   //      }
+   //      WebGL.jsVertexPointer(size, stride, jsArray);
+   //   }
 
 
-//   @Override
-//   public void drawTriangleStrip(final int n,
-//                                 final byte[] i) {
-//      _numIndex = n;
-//      _index = new int[i.length];
-//      for (int j = 0; j < i.length; j++) {
-//         _index[j] = i[j];
-//      }
-//      final JsArrayInteger jsNumberArray = (JsArrayInteger) JsArrayInteger.createArray();
-//      for (int j = 0; j < _index.length; j++) {
-//         jsNumberArray.set(j, _index[j]);
-//      }
-//      WebGL.jsDrawIndexedMesh(_numIndex, jsNumberArray);
-//   }
+   //   @Override
+   //   public void drawTriangleStrip(final int n,
+   //                                 final byte[] i) {
+   //      _numIndex = n;
+   //      _index = new int[i.length];
+   //      for (int j = 0; j < i.length; j++) {
+   //         _index[j] = i[j];
+   //      }
+   //      final JsArrayInteger jsNumberArray = (JsArrayInteger) JsArrayInteger.createArray();
+   //      for (int j = 0; j < _index.length; j++) {
+   //         jsNumberArray.set(j, _index[j]);
+   //      }
+   //      WebGL.jsDrawIndexedMesh(_numIndex, jsNumberArray);
+   //   }
 
 
-//   @Override
-//   public void drawLines(final int n,
-//                         final byte[] i) {
-//      _numIndex = n;
-//      _index = new int[i.length];
-//      for (int j = 0; j < i.length; j++) {
-//         _index[j] = i[j];
-//      }
-//      final JsArrayInteger jsNumberArray = (JsArrayInteger) JsArrayInteger.createArray();
-//      for (int j = 0; j < _index.length; j++) {
-//         jsNumberArray.set(j, _index[j]);
-//      }
-//      WebGL.jsDrawLines(_numIndex, jsNumberArray);
-//   }
+   //   @Override
+   //   public void drawLines(final int n,
+   //                         final byte[] i) {
+   //      _numIndex = n;
+   //      _index = new int[i.length];
+   //      for (int j = 0; j < i.length; j++) {
+   //         _index[j] = i[j];
+   //      }
+   //      final JsArrayInteger jsNumberArray = (JsArrayInteger) JsArrayInteger.createArray();
+   //      for (int j = 0; j < _index.length; j++) {
+   //         jsNumberArray.set(j, _index[j]);
+   //      }
+   //      WebGL.jsDrawLines(_numIndex, jsNumberArray);
+   //   }
 
 
-//   @Override
-//   public void drawLineLoop(final int n,
-//                            final byte[] i) {
-//      _numIndex = n;
-//      _index = new int[i.length];
-//      for (int j = 0; j < i.length; j++) {
-//         _index[j] = i[j];
-//      }
-//      final JsArrayInteger jsNumberArray = (JsArrayInteger) JsArrayInteger.createArray();
-//      for (int j = 0; j < _index.length; j++) {
-//         jsNumberArray.set(j, _index[j]);
-//      }
-//      WebGL.jsDrawLineLoop(_numIndex, jsNumberArray);
-//   }
+   //   @Override
+   //   public void drawLineLoop(final int n,
+   //                            final byte[] i) {
+   //      _numIndex = n;
+   //      _index = new int[i.length];
+   //      for (int j = 0; j < i.length; j++) {
+   //         _index[j] = i[j];
+   //      }
+   //      final JsArrayInteger jsNumberArray = (JsArrayInteger) JsArrayInteger.createArray();
+   //      for (int j = 0; j < _index.length; j++) {
+   //         jsNumberArray.set(j, _index[j]);
+   //      }
+   //      WebGL.jsDrawLineLoop(_numIndex, jsNumberArray);
+   //   }
 
 
-//   @Override
-//   public void setProjection(final MutableMatrix44D projection) {
-//      // Conversion a un array JavaScript
-//      final JsArrayNumber arrayJs = (JsArrayNumber) JsArrayNumber.createArray();
-//      for (int i = 0; i < 16; i++) {
-//         arrayJs.push(projection.get(i));
-//      }
-//
-//      WebGL.jsSetProjection(arrayJs);
-//   }
+   //   @Override
+   //   public void setProjection(final MutableMatrix44D projection) {
+   //      // Conversion a un array JavaScript
+   //      final JsArrayNumber arrayJs = (JsArrayNumber) JsArrayNumber.createArray();
+   //      for (int i = 0; i < 16; i++) {
+   //         arrayJs.push(projection.get(i));
+   //      }
+   //
+   //      WebGL.jsSetProjection(arrayJs);
+   //   }
 
 
-//   @Override
-//   public void useProgram(final int program) {
-//      WebGL.jsUseProgram();
-//   }
+   //   @Override
+   //   public void useProgram(final int program) {
+   //      WebGL.jsUseProgram();
+   //   }
 
 
-//   @Override
-//   public void enablePolygonOffset(final float factor,
-//                                   final float units) {
-//      WebGL.jsEnablePolygonOffset(factor, units);
-//   }
+   //   @Override
+   //   public void enablePolygonOffset(final float factor,
+   //                                   final float units) {
+   //      WebGL.jsEnablePolygonOffset(factor, units);
+   //   }
 
 
-//   @Override
-//   public void disablePolygonOffset() {
-//      WebGL.jsDisablePolygonOffset();
-//   }
+   //   @Override
+   //   public void disablePolygonOffset() {
+   //      WebGL.jsDisablePolygonOffset();
+   //   }
 
 
-//   @Override
-//   public void lineWidth(final float width) {
-//      WebGL.jsLineWidth(width);
-//
-//   }
+   //   @Override
+   //   public void lineWidth(final float width) {
+   //      WebGL.jsLineWidth(width);
+   //
+   //   }
 
 
-//   @Override
-//   public int uploadTexture(final IImage image,
-//                            final int textureWidth,
-//                            final int textureHeight) {
-//      //		final JsArray<JavaScriptObject> jsTextures = (JsArray<JavaScriptObject>) JsArray
-//      //				.createArray();
-//      //		final Image_WebGL image = (Image_WebGL) image;
-//      //		jsTextures.set(0, image.imgObject);
-//      //
-//      //		// Boolean parameter indicates whether its a billboard (true) or not
-//      //		if (false) {
-//      //			return WebGL.jsUploadBillboardTexture(jsTextures);
-//      //		}
-//      //
-//      //		// Regular texture uploading:
-//      //		return WebGL.jsUploadMultipleTextures(jsTextures);
-//      return 0;
-//   }
+   //   @Override
+   //   public int uploadTexture(final IImage image,
+   //                            final int textureWidth,
+   //                            final int textureHeight) {
+   //      //		final JsArray<JavaScriptObject> jsTextures = (JsArray<JavaScriptObject>) JsArray
+   //      //				.createArray();
+   //      //		final Image_WebGL image = (Image_WebGL) image;
+   //      //		jsTextures.set(0, image.imgObject);
+   //      //
+   //      //		// Boolean parameter indicates whether its a billboard (true) or not
+   //      //		if (false) {
+   //      //			return WebGL.jsUploadBillboardTexture(jsTextures);
+   //      //		}
+   //      //
+   //      //		// Regular texture uploading:
+   //      //		return WebGL.jsUploadMultipleTextures(jsTextures);
+   //      return 0;
+   //   }
 
 
-//   @Override
-//   public void setTextureCoordinates(final int size,
-//                                     final int stride,
-//                                     final float[] texcoord) {
-//      final JsArrayNumber jsArray = (JsArrayNumber) JsArrayNumber.createArray();
-//      for (final float element : texcoord) {
-//         jsArray.push(element);
-//      }
-//      WebGL.jsTexCoordPointer(size, stride, jsArray);
-//   }
+   //   @Override
+   //   public void setTextureCoordinates(final int size,
+   //                                     final int stride,
+   //                                     final float[] texcoord) {
+   //      final JsArrayNumber jsArray = (JsArrayNumber) JsArrayNumber.createArray();
+   //      for (final float element : texcoord) {
+   //         jsArray.push(element);
+   //      }
+   //      WebGL.jsTexCoordPointer(size, stride, jsArray);
+   //   }
 
 
-//   @Override
-//   public void bindTexture(final int n) {
-//      WebGL.jsBindTexture(n);
-//   }
+   //   @Override
+   //   public void bindTexture(final int n) {
+   //      WebGL.jsBindTexture(n);
+   //   }
 
 
-//   @Override
-//   public void drawBillBoard(final int textureId,
-//                             final float x,
-//                             final float y,
-//                             final float z,
-//                             final float viewPortRatio) {
-//      WebGL.jsDrawBillBoard(textureId, x, y, z, viewPortRatio); // No rotation
-//   }
+   //   @Override
+   //   public void drawBillBoard(final int textureId,
+   //                             final float x,
+   //                             final float y,
+   //                             final float z,
+   //                             final float viewPortRatio) {
+   //      WebGL.jsDrawBillBoard(textureId, x, y, z, viewPortRatio); // No rotation
+   //   }
 
 
-//   @Override
-//   public void deleteTexture(final int glTextureId) {
-//      WebGL.jsDeleteTextures(glTextureId - 1);
-//   }
+   //   @Override
+   //   public void deleteTexture(final int glTextureId) {
+   //      WebGL.jsDeleteTextures(glTextureId - 1);
+   //   }
 
 }

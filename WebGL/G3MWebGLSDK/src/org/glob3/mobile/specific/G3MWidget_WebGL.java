@@ -212,7 +212,7 @@ public class G3MWidget_WebGL
 
 
       final TextureBuilder textureBuilder = new CPUTextureBuilder();
-      final TexturesHandler texturesHandler = new TexturesHandler(gl, factory, textureBuilder, false);
+      final TexturesHandler texturesHandler = new TexturesHandler(gl, factory, false);
 
       final Planet planet = Planet.createEarth();
 
@@ -223,8 +223,8 @@ public class G3MWidget_WebGL
       final FrameTasksExecutor frameTasksExecutor = new FrameTasksExecutor();
 
 
-      _widget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, logger, gl, texturesHandler, downloader,
-               planet, cameraConstraints, composite, busyRenderer, scheduler, _width, _height,
+      _widget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, logger, gl, texturesHandler,
+               textureBuilder, downloader, planet, cameraConstraints, composite, busyRenderer, scheduler, _width, _height,
                Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false);
 
       _widget.setUserData(userData);

@@ -1,13 +1,16 @@
+
+
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.ByteBuffer;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.Rectangle;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
 
-public class Image_WebGL extends IImage {
+public class Image_WebGL
+         extends
+            IImage {
 
    private JavaScriptObject _imgObject;
 
@@ -27,7 +30,7 @@ public class Image_WebGL extends IImage {
    }
 
 
-   public void loadFromURL(String url) {
+   public void loadFromURL(final String url) {
       _imgObject = jsCreateImgObject(this, url);
    }
 
@@ -90,44 +93,50 @@ public class Image_WebGL extends IImage {
 
 
    @Override
-   public IImage combineWith(IImage other,
-                             int width,
-                             int height) {
+   public IImage combineWith(final IImage other,
+                             final int width,
+                             final int height) {
       // TODO Auto-generated method stub
       return null;
    }
 
 
    @Override
-   public IImage combineWith(IImage other,
-                             Rectangle rect,
-                             int width,
-                             int height) {
+   public IImage combineWith(final IImage other,
+                             final Rectangle rect,
+                             final int width,
+                             final int height) {
       // TODO Auto-generated method stub
       return null;
    }
 
 
    @Override
-   public IImage subImage(Rectangle rect) {
+   public IImage subImage(final Rectangle rect) {
       // TODO Auto-generated method stub
       return null;
    }
 
 
    @Override
-   public ByteBuffer getEncodedImage() {
+   public IImage scale(final int width,
+                       final int height) {
       // TODO Auto-generated method stub
       return null;
    }
 
 
    @Override
-   public void fillWithRGBA8888(byte[] data,
-                                int width,
-                                int height) {
+   public String description() {
       // TODO Auto-generated method stub
+      return null;
+   }
 
+
+   @Override
+   public IImage copy() {
+      // TODO Auto-generated method stub
+      return null;
    }
 
 }

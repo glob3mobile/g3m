@@ -6,8 +6,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.glob3.mobile.generated.IDownloadListener;
+import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IDownloader;
+import org.glob3.mobile.generated.IImageDownloadListener;
 import org.glob3.mobile.generated.URL;
 
 import com.google.gwt.user.client.Timer;
@@ -51,10 +52,10 @@ public class Downloader_WebGL
 
 
    @Override
-   public long request(final URL url,
-                       final long priority,
-                       final IDownloadListener listener,
-                       final boolean deleteListener) {
+   public long requestBuffer(final URL url,
+                             final long priority,
+                             final IBufferDownloadListener listener,
+                             final boolean deleteListener) {
 
       final long requestId;
       Downloader_WebGL_Handler handler = null;
@@ -81,7 +82,6 @@ public class Downloader_WebGL
       }
 
       return requestId;
-      //      jsRequest(url.getPath());
    }
 
 
@@ -162,83 +162,14 @@ public class Downloader_WebGL
    }
 
 
-   //   private native static void jsRequest(String url) /*-{
-   //		//                debugger;
-   //
-   //		//		function processResponse(xhr) {
-   //		//			debugger;
-   //		//			if (xhr.readyState == 4) {
-   //		//				if (xhr.status == 200) {
-   //		//
-   //		//					var blob = xhr.response;
-   //		//
-   //		//					var img = @org.glob3.mobile.specific.Downloader_WebGL::jsCreateImage()();
-   //		//					img.src = $wnd.urlUtil.createObjectURL(blob);
-   //		//
-   //		//				} else {
-   //		//					alert("Error Retriving Data!");
-   //		//				}
-   //		//			}
-   //		//		}
-   //
-   //		var xhReq = new XMLHttpRequest();
-   //		var buf = new ArrayBuffer();
-   //		xhReq.open("GET", url, true);
-   //		xhReq.responseType = "arraybuffer";
-   //		//		xhReq.responseType = "blob";
-   //		//		if (xhReq.overrideMimeType) {
-   //		//			xhReq.overrideMimeType("text/plain; charset=x-user-defined");
-   //		//		} else {
-   //		//			xhReq.setRequestHeader("Accept-Charset', 'x-user-defined");
-   //		//		}
-   //		xhReq.setRequestHeader("Cache-Control", "max-age=31536000");
-   //		// onreadystate throws exception on firefox
-   //		//		xhReq.onreadystatechange = function() {
-   //		//			if (xhReq.readyState == 4) {
-   //		//				@org.glob3.mobile.specific.Downloader_WebGL::jsProcessResponse(Lcom/google/gwt/core/client/JavaScriptObject;)(xhReq);
-   //		//			}
-   //		//		};
-   //		xhReq.onload = function() {
-   //			if (xhReq.readyState == 4) {
-   //				@org.glob3.mobile.specific.Downloader_WebGL::jsProcessResponse(Lcom/google/gwt/core/client/JavaScriptObject;)(xhReq);
-   //			}
-   //		};
-   //		console.log("sending ajax request");
-   //		xhReq.send(buf);
-   //   }-*/;
-   //
-   //
-   //   private static native void jsProcessResponse(JavaScriptObject xhr) /*-{
-   //		//            debugger;
-   //		console.log("processing response");
-   //		// TODO trigger events
-   //		if (xhr.status == 200) {
-   //			var bytes = new Uint8Array(xhr.response);
-   //			for ( var i = 0; i < bytes.length; i++) {
-   //				bytes[i] = 0xFF;
-   //			}
-   //
-   //		} else {
-   //			alert("Error Retriving Data!");
-   //		}
-   //   }-*/;
+   @Override
+   public long requestImage(final URL url,
+                            final long priority,
+                            final IImageDownloadListener listener,
+                            final boolean deleteListener) {
+      // TODO Auto-generated method stub
+      return 0;
+   }
 
 
-   //   private native static void jsDefineURLObject() /*-{
-   //		$wnd.urlUtil = ($wnd.webkitURL != "undefined") ? $wnd.webkitURL
-   //				: $wnd.URL;
-   //   }-*/;
-
-
-   //   private native static JavaScriptObject jsCreateImage() /*-{
-   //		debugger;
-   //		var img = $doc.createElement('img');
-   //		img.onload = function(e) {
-   //			console.log("img load");
-   //			$wnd.urlUtil.revokeObjectURL(img.src);
-   //			$doc.body.appendChild(img);
-   //		};
-   //
-   //		return img;
-   //   }-*/;
 }
