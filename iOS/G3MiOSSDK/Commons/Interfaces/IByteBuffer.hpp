@@ -9,10 +9,14 @@
 #ifndef G3MiOSSDK_IByteBuffer_h
 #define G3MiOSSDK_IByteBuffer_h
 
+#include <string>
+
 class IByteBuffer {
 public:
   
-  virtual ~IByteBuffer() { }
+  virtual ~IByteBuffer() {
+    
+  }
   
   virtual int size() const = 0;
   

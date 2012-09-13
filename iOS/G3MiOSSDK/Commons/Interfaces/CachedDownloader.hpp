@@ -19,10 +19,6 @@ private:
   IDownloader* _downloader;
   IStorage*    _cacheStorage;
   
-  //  const URL getCacheFileName(const URL& url) const;
-  
-  std::string removeInvalidChars(const std::string& path) const;
-  
   long _requestsCounter;
   long _cacheHitsCounter;
   long _savesCounter;
@@ -47,6 +43,11 @@ public:
                           long long priority,
                           IBufferDownloadListener* listener,
                           bool deleteListener);
+  
+  long long requestImage(const URL& url,
+                         long long priority,
+                         IImageDownloadListener* listener,
+                         bool deleteListener);
   
   void cancelRequest(long long requestId);
   

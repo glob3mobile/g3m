@@ -106,19 +106,6 @@ bool SQLiteStorage_iOS::containsBuffer(const URL& url) {
   return hasAny;
 }
 
-bool SQLiteStorage_iOS::containsImage(const URL& url) {
-  NSString* name = toNSString(url.getPath());
-  
-  SQResultSet* rs = [_db executeQuery:@"SELECT 1 FROM image WHERE (name = ?)", name];
-  
-  BOOL hasAny = [rs next];
-  
-  [rs close];
-  
-  return hasAny;
-}
-
-
 void SQLiteStorage_iOS::saveBuffer(const URL& url,
                                    const IByteBuffer& buffer) {
   
@@ -132,21 +119,6 @@ void SQLiteStorage_iOS::saveBuffer(const URL& url,
     printf("Can't save \"%s\"\n", url.getPath().c_str());
   }
 }
-
-void SQLiteStorage_iOS::saveImage(const URL& url,
-                                  const IImage& image) {
-  
-  const Image_iOS* image_iOS = (const Image_iOS*) &image;
-  
-  NSString* name = toNSString(url.getPath());
-  NSData* contents = [NSData dataWithBytes: buffer_iOS->getPointer()
-                                    length: buffer_iOS->size()];
-  
-  if (![_db executeNonQuery:@"INSERT OR REPLACE INTO buffer (name, contents) VALUES (?, ?)", name, contents]) {
-    printf("Can't save \"%s\"\n", url.getPath().c_str());
-  }
-}
-
 
 const IByteBuffer* SQLiteStorage_iOS::readBuffer(const URL& url) {
   IByteBuffer* result = NULL;
@@ -162,6 +134,58 @@ const IByteBuffer* SQLiteStorage_iOS::readBuffer(const URL& url) {
               length: length];
     
     result = GFactory.createByteBuffer(bytes, length);
+  }
+  
+  [rs close];
+  
+  return result;
+}
+
+
+bool SQLiteStorage_iOS::containsImage(const URL& url) {
+  NSString* name = toNSString(url.getPath());
+  
+  SQResultSet* rs = [_db executeQuery:@"SELECT 1 FROM image WHERE (name = ?)", name];
+  
+  BOOL hasAny = [rs next];
+  
+  [rs close];
+  
+  return hasAny;
+}
+
+void SQLiteStorage_iOS::saveImage(const URL& url,
+                                  const IImage& image) {
+  
+  const Image_iOS* image_iOS = (const Image_iOS*) &image;
+  UIImage* uiImage = image_iOS->getUIImage();
+  
+  NSString* name = toNSString(url.getPath());
+  NSData* contents = UIImagePNGRepresentation(uiImage);
+  
+  if (![_db executeNonQuery:@"INSERT OR REPLACE INTO image (name, contents) VALUES (?, ?)", name, contents]) {
+    printf("Can't save \"%s\"\n", url.getPath().c_str());
+  }
+}
+
+
+const IImage* SQLiteStorage_iOS::readImage(const URL& url) {
+  IImage* result = NULL;
+  
+  NSString* name = toNSString(url.getPath());
+  SQResultSet* rs = [_db executeQuery:@"SELECT contents FROM image WHERE (name = ?)", name];
+  if ([rs next]) {
+    NSData* nsData = [rs dataColumnByIndex: 0];
+    
+    NSUInteger length = [nsData length];
+    unsigned char* bytes = new unsigned char[length];
+    [nsData getBytes: bytes
+              length: length];
+    
+    IByteBuffer* buffer = GFactory.createByteBuffer(bytes, length);
+    result = GFactory.createImageFromData(buffer);
+    
+    delete buffer;
   }
   
   [rs close];
