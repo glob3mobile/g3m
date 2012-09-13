@@ -37,8 +37,7 @@ public:
   }
   
   virtual std::string createString(unsigned char data[],
-                                   int            length) const = 0;
-  
+                                   int           length) const = 0;
   
   virtual std::vector<std::string> splitLines(const std::string& string) const = 0;
   

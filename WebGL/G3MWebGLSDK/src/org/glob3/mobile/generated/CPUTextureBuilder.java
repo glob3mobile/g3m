@@ -20,58 +20,40 @@ package org.glob3.mobile.generated;
 public class CPUTextureBuilder extends TextureBuilder
 {
 
+  //Scales but may return the same image
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const GLImage* createTextureFromImage(GL * gl, const IFactory* factory, GLFormat format, const IImage* image, int width, int height) const
-  public final GLImage createTextureFromImage(GL gl, IFactory factory, GLFormat format, IImage image, int width, int height)
+//ORIGINAL LINE: const IImage* createTextureFromImage(GL * gl, const IFactory* factory, const IImage* image, int width, int height) const
+  public final IImage createTextureFromImage(GL gl, IFactory factory, IImage image, int width, int height)
   {
 	if (image == null)
 	{
-	  ILogger.instance().logWarning("Creating blank GLImage");
-	  int imageBytes = 4* width *height;
-	  byte[] data = new byte[imageBytes];
-	  for (int i = 0; i < imageBytes; i++)
-	  {
-		data[i] = (byte) 255; //WHITE
-	  }
-  
-	  IByteBuffer bb = factory.createByteBuffer(data, imageBytes);
-  
-	  GLImage glImage = new GLImage(GLFormat.RGBA, bb, width, height);
-  
-	  return glImage;
+	  ILogger.instance().logWarning("Creating blank Image");
+	  return factory.createImageFromSize(width, height);
 	}
 	else
 	{
-  
-	  IByteBuffer bb = image.createByteBufferRGBA8888(width, height);
-	  GLImage glImage = new GLImage(GLFormat.RGBA, bb, width, height);
-  
-	  return glImage;
+	  if (image.getHeight() == height && image.getWidth() == width)
+	  {
+		return image;
+	  }
+	  else
+	  {
+		return image.scale(width, height);
+	  }
 	}
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const GLImage* createTextureFromImages(GL * gl, const IFactory* factory, GLFormat format, const java.util.ArrayList<const IImage*> images, int width, int height) const
-  public final GLImage createTextureFromImages(GL gl, IFactory factory, GLFormat format, java.util.ArrayList<IImage> images, int width, int height)
+//ORIGINAL LINE: const IImage* createTextureFromImages(GL * gl, const IFactory* factory, const java.util.ArrayList<const IImage*> images, int width, int height) const
+  public final IImage createTextureFromImages(GL gl, IFactory factory, java.util.ArrayList<IImage> images, int width, int height)
   {
   
 	final int imagesSize = images.size();
   
 	if (imagesSize == 0)
 	{
-  
-	  ILogger.instance().logWarning("Creating blank GLImage");
-	  int imageBytes = 4* width *height;
-	  byte[] data = new byte[imageBytes];
-	  for (int i = 0; i < imageBytes; i++)
-	  {
-		data[i] = (byte) 255; //WHITE
-	  }
-  
-	  IByteBuffer bb = factory.createByteBuffer(data, imageBytes);
-	  GLImage glImage = new GLImage(GLFormat.RGBA, bb, width, height);
-  
-	  return glImage;
+	  ILogger.instance().logWarning("Creating blank Image");
+	  return factory.createImageFromSize(width, height);
 	}
 	else
 	{
@@ -88,26 +70,13 @@ public class CPUTextureBuilder extends TextureBuilder
 		}
 		im = im2;
 	  }
-  
-	  IByteBuffer bb = im.createByteBufferRGBA8888(width, height);
-  
-	  GLImage glImage = new GLImage(GLFormat.RGBA, bb, width, height);
-  
-	  if (imagesSize > 1)
-	  {
-		if (im != null)
-			im.dispose();
-	  }
-  
-	  return glImage;
-  
+	  return im;
 	}
-  
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const GLImage* createTextureFromImages(GL * gl, const IFactory* factory, GLFormat format, const java.util.ArrayList<const IImage*> images, const java.util.ArrayList<const Rectangle*> rectangles, int width, int height) const
-  public final GLImage createTextureFromImages(GL gl, IFactory factory, GLFormat format, java.util.ArrayList<IImage> images, java.util.ArrayList<Rectangle> rectangles, int width, int height)
+//ORIGINAL LINE: const IImage* createTextureFromImages(GL * gl, const IFactory* factory, const java.util.ArrayList<const IImage*> images, const java.util.ArrayList<const Rectangle*> rectangles, int width, int height) const
+  public final IImage createTextureFromImages(GL gl, IFactory factory, java.util.ArrayList<IImage> images, java.util.ArrayList<Rectangle> rectangles, int width, int height)
   {
   
   
@@ -115,19 +84,8 @@ public class CPUTextureBuilder extends TextureBuilder
   
 	if (imagesSize == 0 || images.size() != rectangles.size())
 	{
-  
-	  ILogger.instance().logWarning("Creating blank GLImage");
-	  int imageBytes = 4* width *height;
-	  byte[] data = new byte[imageBytes];
-	  for (int i = 0; i < imageBytes; i++)
-	  {
-		data[i] = (byte) 255; //WHITE
-	  }
-  
-	  IByteBuffer bb = factory.createByteBuffer(data, imageBytes);
-	  GLImage glImage = new GLImage(GLFormat.RGBA, bb, width, height);
-  
-	  return glImage;
+	  ILogger.instance().logWarning("Creating blank Image");
+	  return factory.createImageFromSize(width, height);
 	}
 	else
 	{
@@ -158,19 +116,7 @@ public class CPUTextureBuilder extends TextureBuilder
 		}
 		base = im2;
 	  }
-  
-	  IByteBuffer bb = base.createByteBufferRGBA8888(width, height);
-  
-	  GLImage glImage = new GLImage(GLFormat.RGBA, bb, width, height);
-  
-	  if (rectangles.size() > 0 && base != images.get(0))
-	  {
-		if (base != null)
-			base.dispose();
-	  }
-  
-	  return glImage;
-  
+	  return base;
 	}
   }
 

@@ -1,13 +1,8 @@
 package org.glob3.mobile.generated; 
-public class BuilderDownloadStepDownloadListener implements IDownloadListener
+public class BuilderDownloadStepDownloadListener implements IImageDownloadListener
 {
   private TileTextureBuilder _builder;
   private final int _position;
-
-//  int _onDownload;
-//  int _onError;
-//  int _onCancel;
-
   public BuilderDownloadStepDownloadListener(TileTextureBuilder builder, int position)
   //_onDownload(0),
   //_onError(0),
@@ -18,48 +13,31 @@ public class BuilderDownloadStepDownloadListener implements IDownloadListener
 	_builder._retain();
   }
 
-  public final void onDownload(Response response)
+  public final void onDownload(URL url, IImage image)
   {
-  //  _onDownload++;
-	_builder.stepDownloaded(_position, response.getByteArrayWrapper());
+	//  _onDownload++;
+	_builder.stepDownloaded(_position, image);
   }
 
-  public final void onError(Response response)
+  public final void onError(URL url)
   {
-  //  _onError++;
+	//  _onError++;
 	_builder.stepCanceled(_position);
   }
 
-  public final void onCanceledDownload(Response response)
+  public final void onCanceledDownload(URL url, IImage image)
   {
   }
 
   public final void onCancel(URL url)
   {
-  //  _onCancel++;
+	//  _onCancel++;
 	_builder.stepCanceled(_position);
   }
 
-//  void showInvalidState() const {
-//    printf("onDownload=%d, onCancel=%d, onError=%d\n", _onDownload, _onCancel, _onError);
-//  }
-
-//  void testState() const {
-//    if ((_onDownload == 1) && (_onCancel == 0) && (_onError == 0)) {
-//      return;
-//    }
-//    if ((_onDownload == 0) && (_onCancel == 1) && (_onError == 0)) {
-//      return;
-//    }
-//    if ((_onDownload == 0) && (_onCancel == 0) && (_onError == 1)) {
-//      return;
-//    }
-//    showInvalidState();
-//  }
-
   public void dispose()
   {
-  //  testState();
+	//  testState();
   
 	if (_builder != null)
 	{

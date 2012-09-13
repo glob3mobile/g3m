@@ -262,7 +262,6 @@ public class Angle
 //ORIGINAL LINE: const String description() const
   public final String description()
   {
-  
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
 	isb.add(_degrees).add("°");
 	String s = isb.getString();

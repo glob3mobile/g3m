@@ -1,4 +1,4 @@
-//
+ //
 //  ByteBuffer_iOS.hpp
 //  G3MiOSSDK
 //
@@ -13,22 +13,26 @@
 
 class ByteBuffer_iOS : public IByteBuffer {
 private:
-  const int _size;
+  const int            _size;
   unsigned char* const _values;
-  int       _timestamp;
+  int                  _timestamp;
   
 public:
   ByteBuffer_iOS(int size) :
   _values(new unsigned char[size]),
   _size(size),
-  _timestamp(0){}
+  _timestamp(0) {
+    
+  }
   
   ByteBuffer_iOS(unsigned char*  values, int size) :
   _values(values),
   _size(size),
-  _timestamp(0){}
+  _timestamp(0) {
+    
+  }
   
-  ~ByteBuffer_iOS() {
+  virtual ~ByteBuffer_iOS() {
     delete [] _values;
   }
   
@@ -55,6 +59,8 @@ public:
     return _values;
   }
   
+  const std::string description() const;
+
 };
 
 #endif

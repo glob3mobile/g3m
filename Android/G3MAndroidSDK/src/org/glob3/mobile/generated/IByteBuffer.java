@@ -8,11 +8,13 @@ package org.glob3.mobile.generated;
 //
 
 
+
 public abstract class IByteBuffer
 {
 
   public void dispose()
   {
+
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -28,4 +30,9 @@ public abstract class IByteBuffer
   public abstract byte get(int i);
 
   public abstract void put(int i, byte value);
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual const String description() const = 0;
+  public abstract String description();
+
 }

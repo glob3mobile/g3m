@@ -13,12 +13,16 @@
 const std::string Petition::description() const {
   
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
-  isb->add("Petition(url=")->add(_url.description())->add(", sector=")->add(_sector->description())->add(", buffer=");
-  if (_buffer == NULL) {
+  isb->add("Petition(url=");
+  isb->add(_url.description());
+  isb->add(", sector=");
+  isb->add(_sector->description());
+  isb->add(", buffer=");
+  if (_image == NULL) {
     isb->add("NULL");
   }
   else {
-    isb->add(_buffer->description() );
+    isb->add(_image->description() );
   }
   std::string s = isb->getString();
   

@@ -23,15 +23,6 @@ public class CachedDownloader implements IDownloader
   private IDownloader _downloader;
   private IStorage _cacheStorage;
 
-  //  const URL getCacheFileName(const URL& url) const;
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: String removeInvalidChars(const String& path) const
-  private String removeInvalidChars(String path)
-  {
-	return path.replaceAll("/", "_");
-  }
-
   private int _requestsCounter;
   private int _cacheHitsCounter;
   private int _savesCounter;
@@ -56,29 +47,22 @@ public class CachedDownloader implements IDownloader
 	_downloader.stop();
   }
 
-
-  //const URL CachedDownloader::getCacheFileName(const URL& url) const {
-  //  return URL(_cacheDirectory, removeInvalidChars(url.getPath()));
-  //}
-  
-  public final long request(URL url, long priority, IDownloadListener listener, boolean deleteListener)
+  public final long requestBuffer(URL url, long priority, IBufferDownloadListener listener, boolean deleteListener)
   {
 	_requestsCounter++;
   
-	final ByteArrayWrapper cachedBuffer = _cacheStorage.read(url);
+	final IByteBuffer cachedBuffer = _cacheStorage.readBuffer(url);
 	if (cachedBuffer == null)
 	{
 	  // cache miss
-	  return _downloader.request(url, priority, new SaverDownloadListener(this, _cacheStorage, url, listener, deleteListener), true);
+	  return _downloader.requestBuffer(url, priority, new BufferSaverDownloadListener(this, _cacheStorage, listener, deleteListener), true);
 	}
 	else
 	{
 	  // cache hit
 	  _cacheHitsCounter++;
   
-	  Response response = new Response(url, cachedBuffer);
-  
-	  listener.onDownload(response);
+	  listener.onDownload(url, cachedBuffer);
   
 	  if (deleteListener)
 	  {
@@ -87,6 +71,34 @@ public class CachedDownloader implements IDownloader
   
 	  if (cachedBuffer != null)
 		  cachedBuffer.dispose();
+	  return -1;
+	}
+  }
+
+  public final long requestImage(URL url, long priority, IImageDownloadListener listener, boolean deleteListener)
+  {
+	_requestsCounter++;
+  
+	final IImage cachedImage = _cacheStorage.readImage(url);
+	if (cachedImage == null)
+	{
+	  // cache miss
+	  return _downloader.requestImage(url, priority, new ImageSaverDownloadListener(this, _cacheStorage, listener, deleteListener), true);
+	}
+	else
+	{
+	  // cache hit
+	  _cacheHitsCounter++;
+  
+	  listener.onDownload(url, cachedImage);
+  
+	  if (deleteListener)
+	  {
+		listener = null;
+	  }
+  
+	  if (cachedImage != null)
+		  cachedImage.dispose();
 	  return -1;
 	}
   }
@@ -102,10 +114,15 @@ public class CachedDownloader implements IDownloader
 
   public final String statistics()
   {
-  
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.add("CachedDownloader(cache hits=").add(_cacheHitsCounter).add("/").add(_requestsCounter).add(", saves=");
-	isb.add(_savesCounter).add(", downloader=").add(_downloader.statistics());
+	isb.add("CachedDownloader(cache hits=");
+	isb.add(_cacheHitsCounter);
+	isb.add("/");
+	isb.add(_requestsCounter);
+	isb.add(", saves=");
+	isb.add(_savesCounter);
+	isb.add(", downloader=");
+	isb.add(_downloader.statistics());
 	String s = isb.getString();
 	if (isb != null)
 		isb.dispose();

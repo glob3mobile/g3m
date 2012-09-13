@@ -19,10 +19,28 @@
 class Image_iOS: public IImage {
 private:
   UIImage* _image;
+  NSData*  _sourceBuffer;
+  
+  Image_iOS(const Image_iOS& that);
+  
+  void operator=(const Image_iOS& that);
+  
+  mutable unsigned char* _rgba8888;
   
 public:
-
-  Image_iOS(UIImage* image) : _image(image) {
+  
+  virtual ~Image_iOS() {
+    if (_rgba8888 != NULL){
+      delete[] _rgba8888;
+    }
+  }
+  
+  Image_iOS(UIImage* image,
+            NSData* sourceBuffer) :
+  _image(image),
+  _sourceBuffer(sourceBuffer),
+  _rgba8888(NULL)
+  {
     
   }
   
@@ -30,6 +48,10 @@ public:
   
   UIImage* getUIImage() const {
     return _image;
+  }
+  
+  NSData* getSourceBuffer() const {
+    return _sourceBuffer;
   }
   
   int getWidth() const {
@@ -49,10 +71,14 @@ public:
   
   IImage* subImage(const Rectangle& rect) const;
   
-  ByteArrayWrapper* getEncodedImage() const;
+  unsigned char* getByteArrayRGBA8888(int width, int height) const;
   
-  IByteBuffer* createByteBufferRGBA8888(int width, int height) const;
+  IImage* scale(int width, int height) const;
 
+  const std::string description() const;
+  
+  IImage* copy() const;
+  
 };
 
 #endif

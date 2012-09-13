@@ -37,7 +37,4 @@ public class Rectangle
   {
 	return _x == r._x && _y == r._y && _width == r._width && _height == r._height;
   }
-
-
-
 }

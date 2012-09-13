@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  IDownloadListener.h
+//  IBufferDownloadListener.h
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 26/06/12.
@@ -9,13 +9,16 @@ package org.glob3.mobile.generated;
 
 
 
-public interface IDownloadListener
+public interface IImageDownloadListener
 {
 
-  void onDownload(Response response);
-  void onError(Response response);
+  void onDownload(URL url, IImage image);
+
+  void onError(URL url);
+
   void onCancel(URL url);
 
   /* this method will be call, before onCancel, when the data arrived before the cancelation */
-  void onCanceledDownload(Response response);
+  void onCanceledDownload(URL url, IImage image);
+
 }

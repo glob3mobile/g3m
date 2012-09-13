@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class TopTileDownloadListener implements IDownloadListener
+public class TopTileDownloadListener implements IImageDownloadListener
 {
   private MultiLayerTileTexturizer _texturizer;
 
@@ -8,17 +8,22 @@ public class TopTileDownloadListener implements IDownloadListener
 	  _texturizer = texturizer;
   }
 
-  public final void onDownload(Response response)
+  public void dispose()
+  {
+
+  }
+
+  public final void onDownload(URL url, IImage image)
   {
 	_texturizer.countTopTileRequest();
   }
 
-  public final void onError(Response response)
+  public final void onError(URL url)
   {
 	_texturizer.countTopTileRequest();
   }
 
-  public final void onCanceledDownload(Response response)
+  public final void onCanceledDownload(URL url, IImage image)
   {
   }
 

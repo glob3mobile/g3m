@@ -39,11 +39,14 @@ public abstract class IImage
   public abstract IImage subImage(Rectangle rect);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual ByteArrayWrapper* getEncodedImage() const = 0;
-  public abstract ByteArrayWrapper getEncodedImage();
+//ORIGINAL LINE: virtual IImage* scale(int width, int height) const = 0;
+  public abstract IImage scale(int width, int height);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual IByteBuffer* createByteBufferRGBA8888(int width, int height) const = 0;
-  public abstract IByteBuffer createByteBufferRGBA8888(int width, int height);
+//ORIGINAL LINE: virtual const String description() const = 0;
+  public abstract String description();
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual IImage* copy() const = 0;
+  public abstract IImage copy();
 }

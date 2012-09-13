@@ -11,17 +11,34 @@ package org.glob3.mobile.generated;
 
 public class NullStorage implements IStorage
 {
-  public final boolean contains(URL url)
+  public final boolean containsBuffer(URL url)
   {
 	return false;
   }
 
-  public final void save(URL url, ByteArrayWrapper buffer)
+  public final void saveBuffer(URL url, IByteBuffer buffer)
   {
+
   }
 
-  public final ByteArrayWrapper read(URL url)
+  public final IByteBuffer readBuffer(URL url)
   {
 	return null;
   }
+
+  public final boolean containsImage(URL url)
+  {
+	return false;
+  }
+
+  public final void saveImage(URL url, IImage buffer)
+  {
+
+  }
+
+  public final IImage readImage(URL url)
+  {
+	return null;
+  }
+
 }

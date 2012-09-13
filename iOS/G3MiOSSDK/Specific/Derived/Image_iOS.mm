@@ -9,9 +9,9 @@
 #include "Image_iOS.hpp"
 
 #include "IFactory.hpp"
+#include "IStringBuilder.hpp"
 
-Image_iOS::Image_iOS(int width, int height)
-{
+Image_iOS::Image_iOS(int width, int height) {
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
   unsigned char* imageData = new unsigned char[height * width * 4 ];
   
@@ -32,8 +32,7 @@ Image_iOS::Image_iOS(int width, int height)
 }
 
 IImage* Image_iOS::combineWith(const IImage& other,
-                               int width, int height) const
-{
+                               int width, int height) const {
   UIImage* transIm = ((Image_iOS&)other).getUIImage();
   
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
@@ -59,7 +58,7 @@ IImage* Image_iOS::combineWith(const IImage& other,
   
   delete[] imageData;
   
-  return new Image_iOS(img);
+  return new Image_iOS(img, NULL);
 }
 
 IImage* Image_iOS::combineWith(const IImage& other,
@@ -100,11 +99,10 @@ IImage* Image_iOS::combineWith(const IImage& other,
   
   delete[] imageData;
   
-  return new Image_iOS(img);
+  return new Image_iOS(img, NULL);
 }
 
-IImage* Image_iOS::subImage(const Rectangle& rect) const
-{
+IImage* Image_iOS::subImage(const Rectangle& rect) const {
   CGRect cropRect = CGRectMake((float) rect._x,
                                (float) rect._y,
                                (float) rect._width,
@@ -113,42 +111,60 @@ IImage* Image_iOS::subImage(const Rectangle& rect) const
   //Cropping image
   CGImageRef imageRef = CGImageCreateWithImageInRect([this->_image CGImage], cropRect);
   
-  Image_iOS* image = new Image_iOS([UIImage imageWithCGImage:imageRef]); //Create IImage
+  Image_iOS* image = new Image_iOS([UIImage imageWithCGImage:imageRef], NULL);
   
   CGImageRelease(imageRef);
   return image;
 }
 
-ByteArrayWrapper* Image_iOS::getEncodedImage() const
-{
-  NSData* readData = UIImagePNGRepresentation(_image);
-  NSUInteger length = [readData length];
-  
-  unsigned char* data = new unsigned char[length];
-  [readData getBytes: data
-              length: length];
-  
-  return new ByteArrayWrapper(data, length);
+unsigned char* Image_iOS::getByteArrayRGBA8888(int width, int height) const{
+  if (_rgba8888 == NULL){
+    _rgba8888 = new unsigned char[4 * width * height];
+    
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef context = CGBitmapContextCreate(_rgba8888,
+                                                 width, height,
+                                                 8, 4 * width,
+                                                 colorSpace,
+                                                 kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
+    
+    CGColorSpaceRelease( colorSpace );
+    CGRect bounds = CGRectMake( 0, 0, width, height );
+    CGContextClearRect( context, bounds );
+    
+    CGContextDrawImage( context, bounds, _image.CGImage );
+    
+    CGContextRelease(context);
+  }
+  return _rgba8888;
 }
 
-IByteBuffer* Image_iOS::createByteBufferRGBA8888(int width, int height) const
-{
-  unsigned char* data = new unsigned char[4 * width * height];
+IImage* Image_iOS::scale(int width, int height) const{
   
-  CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-  CGContextRef context = CGBitmapContextCreate(data,
-                                               width, height,
-                                               8, 4 * width,
-                                               colorSpace,
-                                               kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
+  CGSize newSize = CGSizeMake(width, height);
   
-  CGColorSpaceRelease( colorSpace );
-  CGRect bounds = CGRectMake( 0, 0, width, height );
-  CGContextClearRect( context, bounds );
+  UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
+  [_image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+  UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();    
+  UIGraphicsEndImageContext();
   
-  CGContextDrawImage( context, bounds, _image.CGImage );
-  
-  CGContextRelease(context);
-  
-  return GFactory.createByteBuffer(data, 4 * width * height);
+  return new Image_iOS(newImage, NULL);
+}
+
+const std::string Image_iOS::description() const {
+  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+  isb->add("Image_iOS ");
+  isb->add(getWidth());
+  isb->add("x");
+  isb->add(getHeight());
+  isb->add(", _image=(");
+  isb->add( [[_image description] cStringUsingEncoding:NSUTF8StringEncoding] );
+  isb->add(")");
+  std::string s = isb->getString();
+  delete isb;
+  return s;
+}
+
+IImage* Image_iOS::copy() const {
+  return new Image_iOS(_image, _sourceBuffer);
 }

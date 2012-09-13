@@ -123,16 +123,11 @@ public class Mark
   
 		if (!_textureId.isValid())
 		{
-  
 		  IImage image = rc.getFactory().createImageFromFileName(_textureFilename);
   
-		  final GLImage glImage = rc.getTextureBuilder().createTextureFromImage(rc.getGL(), rc.getFactory(), GLFormat.RGBA, image, 128, 128);
-  
-		  _textureId = rc.getTexturesHandler().getGLTextureId(glImage, _textureFilename, false);
+		  _textureId = rc.getTexturesHandler().getGLTextureId(image, GLFormat.RGBA, _textureFilename, false);
   
 		  rc.getFactory().deleteImage(image);
-		  if (glImage != null)
-			  glImage.dispose();
 		}
   
 		if (!_textureId.isValid())

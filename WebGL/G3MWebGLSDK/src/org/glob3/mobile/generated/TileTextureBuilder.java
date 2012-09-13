@@ -4,7 +4,7 @@ public class TileTextureBuilder extends RCObject
   private MultiLayerTileTexturizer _texturizer;
   private Tile _tile;
 
-//  const TileKey             _tileKey;
+  //  const TileKey             _tileKey;
 
   private java.util.ArrayList<Petition> _petitions = new java.util.ArrayList<Petition>();
   private int _petitionsCount;
@@ -88,7 +88,7 @@ public class TileTextureBuilder extends RCObject
 	  //const long priority = _tile->getLevel() * 1000000 + _tile->getRow() * 1000 + _tile->getColumn();
 	  final long priority = _tile.getLevel();
 
-	  final long requestId = _downloader.request(new URL(petition.getURL()), priority, new BuilderDownloadStepDownloadListener(this, i), true);
+	  final long requestId = _downloader.requestImage(new URL(petition.getURL()), priority, new BuilderDownloadStepDownloadListener(this, i), true);
 
 	  _requestsIds.add(requestId);
 	}
@@ -139,35 +139,30 @@ public class TileTextureBuilder extends RCObject
 	  for (int i = 0; i < _petitionsCount; i++)
 	  {
 		Petition petition = _petitions.get(i);
-		final ByteArrayWrapper buffer = petition.getByteArrayWrapper();
+		IImage image = petition.getImage();
 
-		if (buffer != null)
+		if (image != null)
 		{
-		  IImage image = _factory.createImageFromData(buffer);
-		  if (image != null)
-		  {
-			images.add(image);
+		  images.add(image);
 
-			final Sector petitionSector = petition.getSector();
+		  final Sector petitionSector = petition.getSector();
 
-			Rectangle rectangle = getImageRectangleInTexture(tileSector, petitionSector, textureWidth, textureHeight);
-			rectangles.add(rectangle);
+		  Rectangle rectangle = getImageRectangleInTexture(tileSector, petitionSector, textureWidth, textureHeight);
+		  rectangles.add(rectangle);
 
-			petitionsID += petition.getURL().getPath();
-			petitionsID += "_";
-		  }
+		  petitionsID += petition.getURL().getPath();
+		  petitionsID += "_";
 		}
 	  }
 
 	  if (images.size() > 0)
 	  {
-//        int __TESTING_mipmapping;
+		//        int __TESTING_mipmapping;
 		final boolean isMipmap = false;
-		final GLImage glImage = _textureBuilder.createTextureFromImages(_gl, _factory, GLFormat.RGBA, images, rectangles, textureWidth, textureHeight);
 
-		final GLTextureId glTextureId = _texturesHandler.getGLTextureId(glImage, petitionsID, isMipmap);
-		if (glImage != null)
-			glImage.dispose();
+		IImage image = _textureBuilder.createTextureFromImages(_gl, _factory, images, rectangles, textureWidth, textureHeight);
+
+		GLTextureId glTextureId = _texturesHandler.getGLTextureId(image, GLFormat.RGBA, petitionsID, isMipmap);
 
 		if (glTextureId.isValid())
 		{
@@ -177,11 +172,6 @@ public class TileTextureBuilder extends RCObject
 		  }
 		}
 
-	  }
-
-	  for (int i = 0; i < images.size(); i++)
-	  {
-		_factory.deleteImage(images.get(i));
 	  }
 
 	}
@@ -253,7 +243,7 @@ public class TileTextureBuilder extends RCObject
 	}
   }
 
-  public final void stepDownloaded(int position, ByteArrayWrapper buffer)
+  public final void stepDownloaded(int position, IImage image)
   {
 	if (_canceled)
 	{
@@ -262,7 +252,7 @@ public class TileTextureBuilder extends RCObject
 	checkIsPending(position);
 
 	_status.set(position, PetitionStatus.STATUS_DOWNLOADED);
-	_petitions.get(position).setByteArrayWrapper(buffer.copy());
+	_petitions.get(position).setImage(image.copy());
 
 	stepDone();
   }

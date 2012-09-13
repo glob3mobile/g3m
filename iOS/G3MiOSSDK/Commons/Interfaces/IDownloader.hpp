@@ -13,8 +13,8 @@
 
 #include <string>
 
-class IDownloadListener;
-
+class IBufferDownloadListener;
+class IImageDownloadListener;
 
 class IDownloader {
 public:
@@ -22,18 +22,23 @@ public:
   
   virtual void stop() = 0;
   
-  virtual long long request(const URL& url,
-                            long long priority,
-                            IDownloadListener* listener,
-                            bool deleteListener) = 0;
+  virtual long long requestBuffer(const URL& url,
+                                  long long priority,
+                                  IBufferDownloadListener* listener,
+                                  bool deleteListener) = 0;
+  
+  virtual long long requestImage(const URL& url,
+                                 long long priority,
+                                 IImageDownloadListener* listener,
+                                 bool deleteListener) = 0;
   
   virtual void cancelRequest(long long requestId) = 0;
-
+  
 #ifdef C_CODE
   virtual ~IDownloader() {
   }
 #endif
-
+  
   virtual const std::string statistics() = 0;
   
 };

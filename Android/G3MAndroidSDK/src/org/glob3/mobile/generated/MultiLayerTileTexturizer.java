@@ -41,18 +41,6 @@ public class MultiLayerTileTexturizer extends TileTexturizer
   {
 	if (_texCoordsCache == null)
 	{
-  //    std::vector<MutableVector2D>* texCoordsV = trc->getTessellator()->createUnitTextCoords();
-  //
-  //    const int texCoordsSize = texCoordsV->size();
-  //    float* texCoordsA = new float[2 * texCoordsSize];
-  //    int p = 0;
-  //    for (int i = 0; i < texCoordsSize; i++) {
-  //      texCoordsA[p++] = (float) texCoordsV->at(i).x();
-  //      texCoordsA[p++] = (float) texCoordsV->at(i).y();
-  //    }
-  //
-  //    delete texCoordsV;
-  
 	  _texCoordsCache = trc.getTessellator().createUnitTextCoords();
 	}
 	return _texCoordsCache;
@@ -193,7 +181,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 	for (int i = 0; i < petitions.size(); i++)
 	{
 	  final Petition petition = petitions.get(i);
-	  rc.getDownloader().request(new URL(petition.getURL()), priority, new TopTileDownloadListener(this), true);
+	  rc.getDownloader().requestImage(new URL(petition.getURL()), priority, new TopTileDownloadListener(this), true);
   
 	  if (petition != null)
 		  petition.dispose();

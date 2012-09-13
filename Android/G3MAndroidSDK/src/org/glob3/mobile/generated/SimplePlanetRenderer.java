@@ -122,13 +122,15 @@ public class SimplePlanetRenderer extends Renderer
   
 	  IImage image = rc.getFactory().createImageFromFileName(_textureFilename);
   
-	  final GLImage glImage = rc.getTextureBuilder().createTextureFromImage(rc.getGL(), rc.getFactory(), GLFormat.RGBA, image, _texWidth, _texHeight);
+	  final IImage scaledImage = rc.getTextureBuilder().createTextureFromImage(rc.getGL(), rc.getFactory(), image, _texWidth, _texHeight);
+	  if (image != scaledImage)
+	  {
+		rc.getFactory().deleteImage(image);
+	  }
   
-	  texId = rc.getTexturesHandler().getGLTextureId(glImage, _textureFilename, false);
+	  texId = rc.getTexturesHandler().getGLTextureId(scaledImage, GLFormat.RGBA, _textureFilename, false);
   
-	  rc.getFactory().deleteImage(image);
-	  if (glImage != null)
-		  glImage.dispose();
+	  rc.getFactory().deleteImage(scaledImage);
   
 	  if (!texId.isValid())
 	  {

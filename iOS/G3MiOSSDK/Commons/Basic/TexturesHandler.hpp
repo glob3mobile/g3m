@@ -13,6 +13,7 @@
 #include <vector>
 
 #include "GLTextureId.hpp"
+#include "INativeGL.hpp"
 
 class TextureBuilder;
 class IImage;
@@ -21,7 +22,6 @@ class TextureHolder;
 class GL;
 class IFactory;
 class Rectangle;
-class GLImage;
 
 
 class TextureSpec {
@@ -160,7 +160,8 @@ public:
   
   ~TexturesHandler();
   
-  const GLTextureId getGLTextureId(const GLImage* glImage,
+  const GLTextureId getGLTextureId(const IImage* image,
+                                   GLFormat format,
                                    const std::string& name,
                                    bool hasMipMap);
   

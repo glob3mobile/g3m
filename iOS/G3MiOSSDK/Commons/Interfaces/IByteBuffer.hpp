@@ -9,10 +9,14 @@
 #ifndef G3MiOSSDK_IByteBuffer_h
 #define G3MiOSSDK_IByteBuffer_h
 
+#include <string>
+
 class IByteBuffer {
 public:
   
-  virtual ~IByteBuffer() { }
+  virtual ~IByteBuffer() {
+    
+  }
   
   virtual int size() const = 0;
   
@@ -21,6 +25,9 @@ public:
   virtual unsigned char get(int i) const = 0;
   
   virtual void put(int i, unsigned char value) = 0;
+  
+  virtual const std::string description() const = 0;
+  
 };
 
 

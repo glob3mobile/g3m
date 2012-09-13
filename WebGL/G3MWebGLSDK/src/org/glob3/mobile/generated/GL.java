@@ -22,7 +22,6 @@ package org.glob3.mobile.generated;
 
 
 
-
 public class GL
 {
 
@@ -457,7 +456,7 @@ public class GL
 	return _gl.getError();
   }
 
-  public final GLTextureId uploadTexture(GLImage glImage, boolean generateMipmap)
+  public final GLTextureId uploadTexture(IImage image, GLFormat format, boolean generateMipmap)
   {
 	final GLTextureId texId = getGLTextureId();
 	if (texId.isValid())
@@ -470,7 +469,7 @@ public class GL
   	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MagFilter, GLTextureParameterValue.Linear);
   	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapS, GLTextureParameterValue.ClampToEdge);
   	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapT, GLTextureParameterValue.ClampToEdge);
-  	_gl.texImage2D(glImage);
+  	_gl.texImage2D(image, format);
   
   	if (generateMipmap) {
   	  _gl.generateMipmap(GLTextureType.Texture2D);

@@ -282,16 +282,19 @@ public:
     glTexParameteri(getEnum(target), getEnum(par), getValue(v));
   }
   
-  void texImage2D(const GLImage* glImage) const {
+  void texImage2D(const IImage* image, GLFormat format) const {
+    
+    unsigned char* data = ((Image_iOS*) image)->getByteArrayRGBA8888(image->getWidth(), 
+                                                                     image->getHeight());
     glTexImage2D(GL_TEXTURE_2D, 
                  0, 
-                 getEnum(glImage->getFormat()),
-                 glImage->getWidth(), 
-                 glImage->getHeight(), 
+                 getEnum(format),
+                 image->getWidth(), 
+                 image->getHeight(), 
                  0, 
-                 getEnum(glImage->getFormat()),
+                 getEnum(format),
                  GL_UNSIGNED_BYTE, 
-                 ((ByteBuffer_iOS*)glImage->getByteBuffer())->getPointer());
+                 data);
   }
   
   //  void texImage2D(GLTextureType target,
