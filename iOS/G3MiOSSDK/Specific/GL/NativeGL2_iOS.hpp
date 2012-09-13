@@ -284,7 +284,7 @@ public:
   
   void texImage2D(const IImage* image, GLFormat format) const {
     
-    IByteBuffer* bb = ((Image_iOS*) image)->createByteBufferRGBA8888(image->getWidth(), 
+    unsigned char* data = ((Image_iOS*) image)->getByteArrayRGBA8888(image->getWidth(), 
                                                                      image->getHeight());
     glTexImage2D(GL_TEXTURE_2D, 
                  0, 
@@ -294,9 +294,7 @@ public:
                  0, 
                  getEnum(format),
                  GL_UNSIGNED_BYTE, 
-                 ((ByteBuffer_iOS*)bb)->getPointer());
-    
-    delete bb;
+                 data);
   }
   
   //  void texImage2D(GLTextureType target,

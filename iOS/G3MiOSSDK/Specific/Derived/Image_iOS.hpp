@@ -25,16 +25,21 @@ private:
   
   void operator=(const Image_iOS& that);
   
+  mutable unsigned char* _rgba8888;
+  
 public:
   
   virtual ~Image_iOS() {
-//    printf("break (point) on me!\n");
+    if (_rgba8888 != NULL){
+      delete[] _rgba8888;
+    }
   }
   
   Image_iOS(UIImage* image,
             NSData* sourceBuffer) :
   _image(image),
-  _sourceBuffer(sourceBuffer)
+  _sourceBuffer(sourceBuffer),
+  _rgba8888(NULL)
   {
     
   }
@@ -66,7 +71,7 @@ public:
   
   IImage* subImage(const Rectangle& rect) const;
   
-  IByteBuffer* createByteBufferRGBA8888(int width, int height) const;
+  unsigned char* getByteArrayRGBA8888(int width, int height) const;
   
   IImage* scale(int width, int height) const;
 
