@@ -147,7 +147,7 @@ IImage* Image_iOS::scale(int width, int height) const{
   UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();    
   UIGraphicsEndImageContext();
   
-  return new Image_iOS(newImage);
+  return new Image_iOS(newImage, NULL);
 }
 
 const std::string Image_iOS::description() const {
