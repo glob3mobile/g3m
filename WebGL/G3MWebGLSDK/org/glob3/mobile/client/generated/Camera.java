@@ -143,9 +143,7 @@ public class Camera
 	final int py = _height - (int) pixel.y();
 	final Vector3D pixel3D = new Vector3D(px, py, 0);
   
-	int[] viewport = { 0, 0, _width, _height };
-  
-	final Vector3D obj = getModelViewMatrix().unproject(pixel3D, viewport);
+	final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _width, _height);
 	if (obj.isNan())
 	{
 	  return obj;
@@ -165,8 +163,7 @@ public class Camera
 //ORIGINAL LINE: Vector2D point2Pixel(const Vector3D& point) const
   public final Vector2D point2Pixel(Vector3D point)
   {
-	int[] viewport = { 0, 0, _width, _height };
-	Vector2D p = getModelViewMatrix().project(point, viewport);
+	final Vector2D p = getModelViewMatrix().project(point, 0, 0, _width, _height);
   
 	if (p.isNan())
 	{
@@ -287,7 +284,13 @@ public class Camera
 //ORIGINAL LINE: const Frustum* const getFrustumInModelCoordinates() const
   public final Frustum getFrustumInModelCoordinates()
   {
-	return getFrustumMC();
+//    return getFrustumMC();
+	if (_dirtyFlags._frustumMC)
+	{
+	  _dirtyFlags._frustumMC = false;
+	  _frustumInModelCoordinates = getFrustum().transformedBy_P(getModelMatrix().transposed());
+	}
+	return _frustumInModelCoordinates;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -533,18 +536,6 @@ public class Camera
 	return _frustum;
   }
 
-  // frustum in Model coordinates
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Frustum* getFrustumMC() const
-  private Frustum getFrustumMC()
-  {
-	if (_dirtyFlags._frustumMC)
-	{
-	  _dirtyFlags._frustumMC = false;
-	  _frustumInModelCoordinates = getFrustum().transformedBy_P(getModelMatrix().transposed());
-	}
-	return _frustumInModelCoordinates;
-  }
 
   private int __temporal_test_for_clipping;
 

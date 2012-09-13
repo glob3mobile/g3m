@@ -133,7 +133,7 @@ bool Tile::isVisible(const RenderContext *rc,
   if (extent == NULL) {
     return false;
   }
-  return extent->touches(rc->getCurrentCamera()->getFrustumInModelCoordinates());
+  return extent->touches( rc->getCurrentCamera()->getFrustumInModelCoordinates() );
 }
 
 bool Tile::meetsRenderCriteria(const RenderContext *rc,
@@ -317,6 +317,10 @@ void Tile::render(const RenderContext* rc,
       if (trc->getParameters()->_renderDebug) {
         debugRender(rc, trc);
       }
+      
+      // render extent
+      if (false)
+        getTessellatorMesh(rc, trc)->getExtent()->render(rc);
       
       statistics->computeTileRendered(this);
       

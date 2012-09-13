@@ -115,16 +115,24 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   if (true){
     
     IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
-    const GLImage* glImage = rc->getTextureBuilder()->createTextureFromImage(rc->getGL(),
-                                                                             rc->getFactory(),
-                                                                             RGBA, image,
-                                                                             _texWidth,
-                                                                             _texHeight);
     
-    texId = rc->getTexturesHandler()->getGLTextureId(glImage, _textureFilename, false);
+    const IImage* scaledImage = rc->getTextureBuilder()->createTextureFromImage(rc->getGL(), 
+                                                                                rc->getFactory(), 
+                                                                                image, _texWidth,
+                                                                                _texHeight);
+    if (image != scaledImage){
+      rc->getFactory()->deleteImage(image);
+    }
     
-    rc->getFactory()->deleteImage(image);
-    delete glImage;
+#ifdef C_CODE
+    texId = rc->getTexturesHandler()->getGLTextureId(scaledImage, RGBA,
+                                                     _textureFilename, false);
+#else
+    texId = rc->getTexturesHandler()->getGLTextureId(scaledImage, GLFormat.RGBA,
+                                                     _textureFilename, false);
+#endif
+    
+    rc->getFactory()->deleteImage(scaledImage);
     
     if (!texId.isValid()) {
       rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());

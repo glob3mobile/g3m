@@ -8,35 +8,25 @@
 
 #include "CPUTextureBuilder.hpp"
 
-const GLImage* CPUTextureBuilder::createTextureFromImage(GL * gl,
+const IImage* CPUTextureBuilder::createTextureFromImage(GL * gl,
                                                          const IFactory* factory,
-                                                         GLFormat format,
                                                          const IImage* image,
                                                          int width,
                                                          int height) const{
   if (image == NULL) {
-    ILogger::instance()->logWarning("Creating blank GLImage");
-    int imageBytes = 4* width*height;
-    unsigned char* data = new unsigned char[imageBytes];
-    for (int i = 0; i < imageBytes; i++) {
-      data[i] = 255; //WHITE
-    }
-    
-    IByteBuffer *bb = factory->createByteBuffer(data, imageBytes);
-    GLImage* glImage = new GLImage(RGBA, bb, width, height);
-    
-    return glImage;
+    ILogger::instance()->logWarning("Creating blank Image");
+    return factory->createImageFromSize(width, height);
   } else{
-    
-    IByteBuffer* bb = image->createByteBufferRGBA8888(width, height);
-    GLImage* glImage = new GLImage(RGBA, bb, width, height);
-    return glImage;
+    if (image->getHeight() == height && image->getWidth() == width){
+      return image;
+    } else {
+      return image->scale(width, height);
+    }
   }
 }
 
-const GLImage* CPUTextureBuilder::createTextureFromImages(GL * gl,
+const IImage* CPUTextureBuilder::createTextureFromImages(GL * gl,
                                                           const IFactory* factory,
-                                                          GLFormat format,
                                                           const std::vector<const IImage*> images,
                                                           int width,
                                                           int height) const{
@@ -44,18 +34,8 @@ const GLImage* CPUTextureBuilder::createTextureFromImages(GL * gl,
   const int imagesSize = images.size();
   
   if (imagesSize == 0) {
-    
-    ILogger::instance()->logWarning("Creating blank GLImage");
-    int imageBytes = 4* width*height;
-    unsigned char* data = new unsigned char[imageBytes];
-    for (int i = 0; i < imageBytes; i++) {
-      data[i] = 255; //WHITE
-    }
-    
-    IByteBuffer *bb = factory->createByteBuffer(data, imageBytes);
-    GLImage* glImage = new GLImage(RGBA, bb, width, height);
-    
-    return glImage;
+    ILogger::instance()->logWarning("Creating blank Image");
+    return factory->createImageFromSize(width, height);
   } else{
     const IImage* im = images[0];
     const IImage* im2 = NULL;
@@ -67,23 +47,12 @@ const GLImage* CPUTextureBuilder::createTextureFromImages(GL * gl,
       }
       im = im2;
     }
-    
-    IByteBuffer* bb = im->createByteBufferRGBA8888(width, height);
-    GLImage* glImage = new GLImage(RGBA, bb, width, height);
-    
-    if (imagesSize > 1) {
-      delete im;
-    }
-    
-    return glImage;
-    
+    return im;
   }
-  
 }
 
-const GLImage* CPUTextureBuilder::createTextureFromImages(GL * gl,
+const IImage* CPUTextureBuilder::createTextureFromImages(GL * gl,
                                                           const IFactory* factory,
-                                                          GLFormat format,
                                                           const std::vector<const IImage*> images,
                                                           const std::vector<const Rectangle*> rectangles,
                                                           int width,
@@ -93,18 +62,8 @@ const GLImage* CPUTextureBuilder::createTextureFromImages(GL * gl,
   const int imagesSize = images.size();
   
   if (imagesSize == 0 || images.size() != rectangles.size()) {
-    
-    ILogger::instance()->logWarning("Creating blank GLImage");
-    int imageBytes = 4* width*height;
-    unsigned char* data = new unsigned char[imageBytes];
-    for (int i = 0; i < imageBytes; i++) {
-      data[i] = 255; //WHITE
-    }
-    
-    IByteBuffer *bb = factory->createByteBuffer(data, imageBytes);
-    GLImage* glImage = new GLImage(RGBA, bb, width, height);
-    
-    return glImage;
+    ILogger::instance()->logWarning("Creating blank Image");
+    return factory->createImageFromSize(width, height);
   } else{
     
     const IImage* base;
@@ -128,15 +87,6 @@ const GLImage* CPUTextureBuilder::createTextureFromImages(GL * gl,
       }
       base = im2;
     }
-    
-    IByteBuffer* bb = base->createByteBufferRGBA8888(width, height);
-    GLImage* glImage = new GLImage(RGBA, bb, width, height);
-    
-    if (rectangles.size() > 0 && base != images[0]) {
-      delete base;
-    }
-    
-    return glImage;
-    
+    return base;
   }
 }

@@ -74,18 +74,17 @@ void Mark::render(const RenderContext* rc,
       gl->transformTexCoords(scale, tr);
       
       if (!_textureId.isValid()) {
-        
         IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
-        
-        const GLImage* glImage = rc->getTextureBuilder()->createTextureFromImage(rc->getGL(),
-                                                                                 rc->getFactory(),
-                                                                                 RGBA, image,
-                                                                                 128, 128);
-        
-        _textureId = rc->getTexturesHandler()->getGLTextureId(glImage, _textureFilename, false);
+     
+#ifdef C_CODE
+        _textureId = rc->getTexturesHandler()->getGLTextureId(image, RGBA,
+                                                              _textureFilename, false);
+#else
+        _textureId = rc->getTexturesHandler()->getGLTextureId(image, GLFormat.RGBA,
+                                                              _textureFilename, false);
+#endif
         
         rc->getFactory()->deleteImage(image);
-        delete glImage;
       }
       
       if (!_textureId.isValid()) {

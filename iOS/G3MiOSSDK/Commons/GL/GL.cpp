@@ -111,12 +111,20 @@ bool GL::useProgram(unsigned int program) {
 }
 
 void GL::loadModelView() {
+#ifdef C_CODE
   float* M = _modelView.getColumnMajorFloatArray();
+#else
+  float[] M = _modelView.getColumnMajorFloatArray();
+#endif
   _gl->uniformMatrix4fv(Uniforms.Modelview, 1, false, M);
 }
 
 void GL::setProjection(const MutableMatrix44D &projection) {
+#ifdef C_CODE
   float* M = projection.getColumnMajorFloatArray();
+#else
+  float[] M = projection.getColumnMajorFloatArray();
+#endif
   _gl->uniformMatrix4fv(Uniforms.Projection, 1, false, M);
 }
 
@@ -276,10 +284,9 @@ GLError GL::getError() {
   return _gl->getError();
 }
 
-const GLTextureId GL::uploadTexture(const GLImage* glImage, bool generateMipmap){
+const GLTextureId GL::uploadTexture(const IImage* image, GLFormat format, bool generateMipmap){
   const GLTextureId texId = getGLTextureId();
   if (texId.isValid()) {
-    
 #ifdef C_CODE
     _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);
     _gl->pixelStorei(Unpack, 1);
@@ -289,13 +296,12 @@ const GLTextureId GL::uploadTexture(const GLImage* glImage, bool generateMipmap)
     _gl->texParameteri(Texture2D, MagFilter, Linear);
     _gl->texParameteri(Texture2D, WrapS, ClampToEdge);
     _gl->texParameteri(Texture2D, WrapT, ClampToEdge);
-    _gl->texImage2D(glImage);
+    _gl->texImage2D(image, format);
     
     if (generateMipmap) {
       _gl->generateMipmap(Texture2D);
     }
 #endif
-    
 #ifdef JAVA_CODE
     _gl.blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
     _gl.pixelStorei(GLAlignment.Unpack, 1);
@@ -305,13 +311,12 @@ const GLTextureId GL::uploadTexture(const GLImage* glImage, bool generateMipmap)
     _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MagFilter, GLTextureParameterValue.Linear);
     _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapS, GLTextureParameterValue.ClampToEdge);
     _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapT, GLTextureParameterValue.ClampToEdge);
-    _gl->texImage2D(glImage);
+    _gl.texImage2D(image, format);
     
     if (generateMipmap) {
       _gl.generateMipmap(GLTextureType.Texture2D);
     }
 #endif
-    
   }
   else {
     printf("can't get a valid texture id\n");

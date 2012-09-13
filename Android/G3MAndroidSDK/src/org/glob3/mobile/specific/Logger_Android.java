@@ -16,7 +16,7 @@ public class Logger_Android
             ILogger {
 
 
-   Locale _locale = new Locale("myLocale");
+   private final Locale _locale = new Locale("myLocale");
 
 
    protected Logger_Android(final LogLevel level) {

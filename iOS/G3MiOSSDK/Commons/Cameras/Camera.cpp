@@ -14,6 +14,8 @@
 #include "Camera.hpp"
 #include "Plane.hpp"
 #include "GL.hpp"
+#include "FloatBufferBuilderFromCartesian3D.hpp"
+#include "IntBufferBuilder.hpp"
 
 
 void Camera::initialize(const InitializationContext* ic)
@@ -143,33 +145,49 @@ void Camera::render(const RenderContext* rc) const {
   gl->setProjection(getProjectionMatrix());
   gl->loadMatrixf(getModelMatrix());
     
-//  // TEMP: TEST TO SEE HALF SIZE FRUSTUM CLIPPING 
-//  if (false) {
-//    const MutableMatrix44D inversed = getModelMatrix().inversed();
-//    
-//    const FrustumData data = calculateFrustumData();
-//    const Vector3D p0(Vector3D(data._left/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
-//    const Vector3D p1(Vector3D(data._left/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
-//    const Vector3D p2(Vector3D(data._right/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
-//    const Vector3D p3(Vector3D(data._right/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
-//    
-//    const float vertices[] = {
-//      (float) p0.x(), (float) p0.y(), (float) p0.z(),
-//      (float) p1.x(), (float) p1.y(), (float) p1.z(),
-//      (float) p2.x(), (float) p2.y(), (float) p2.z(),
-//      (float) p3.x(), (float) p3.y(), (float) p3.z(),    
-//    };
-//    const int indices[] = {0, 1, 2, 3};
-//    
-//    gl->enableVerticesPosition();
-//    gl->vertexPointer(3, 0, vertices);
-//    gl->lineWidth(2);
-//    gl->color(1, 0, 1, 1);
-//    gl->drawLineLoop(4, indices);
-//    
-//    gl->lineWidth(1);
-//    gl->color(1, 1, 1, 1);
-//  }
+  // TEMP: TEST TO SEE HALF SIZE FRUSTUM CLIPPING 
+  if (false) {
+    const MutableMatrix44D inversed = getModelMatrix().inversed();
+    
+    const FrustumData data = calculateFrustumData();
+    const Vector3D p0(Vector3D(data._left/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
+    const Vector3D p1(Vector3D(data._left/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
+    const Vector3D p2(Vector3D(data._right/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
+    const Vector3D p3(Vector3D(data._right/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
+    
+    const float v[] = {
+      (float) p0.x(), (float) p0.y(), (float) p0.z(),
+      (float) p1.x(), (float) p1.y(), (float) p1.z(),
+      (float) p2.x(), (float) p2.y(), (float) p2.z(),
+      (float) p3.x(), (float) p3.y(), (float) p3.z(),    
+    };
+    const int i[] = {0, 1, 2, 3};
+    
+#ifdef C_CODE
+    FloatBufferBuilderFromCartesian3D vertices(NoCenter, Vector3D::zero());
+#else
+    FloatBufferBuilderFromCartesian3D vertices(CenterStrategy.NoCenter, Vector3D::zero());
+#endif
+    IntBufferBuilder index;
+    
+    for (unsigned int n=0; n<4; n++) 
+      vertices.add(v[3*n], v[3*n+1], v[3*n+2]);
+    
+    for (unsigned int n=0; n<4; n++)
+      index.add(i[n]);
+
+    IIntBuffer* _indices = index.create();
+    IFloatBuffer* _vertices = vertices.create();
+
+    gl->enableVerticesPosition();
+    gl->vertexPointer(3, 0, _vertices);
+    gl->lineWidth(2);
+    gl->color(1, 0, 1, 1);
+    gl->drawLineLoop(_indices);
+    
+    gl->lineWidth(1);
+    gl->color(1, 1, 1, 1);
+  }
   
 
 }
@@ -180,12 +198,8 @@ Vector3D Camera::pixel2Ray(const Vector2D& pixel) const {
   const int py = _height - (int) pixel.y();
   const Vector3D pixel3D(px, py, 0);
     
-  const int viewport[4] = {
-    0, 0,
-    _width, _height
-  };
-    
-  const Vector3D obj = getModelViewMatrix().unproject(pixel3D, viewport);
+  const Vector3D obj = getModelViewMatrix().unproject(pixel3D,
+                                                      0, 0, _width, _height);
   if (obj.isNan()) {
     return obj; 
   }
@@ -198,8 +212,8 @@ Vector3D Camera::pixel2PlanetPoint(const Vector2D& pixel) const {
 }
 
 Vector2D Camera::point2Pixel(const Vector3D& point) const {  
-  const int viewport[4] = { 0, 0, _width, _height };
-  Vector2D p = getModelViewMatrix().project(point, viewport);
+  const Vector2D p = getModelViewMatrix().project(point,
+                                                  0, 0, _width, _height);
   
   if (p.isNan()) {
     return p;

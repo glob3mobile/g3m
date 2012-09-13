@@ -70,7 +70,7 @@ public class GL
 
   private void loadModelView()
   {
-	float M = _modelView.getColumnMajorFloatArray();
+	float[] M = _modelView.getColumnMajorFloatArray();
 	_gl.uniformMatrix4fv(GlobalMembersGL.Uniforms.Modelview, 1, false, M);
   }
 
@@ -383,7 +383,7 @@ public class GL
 
   public final void setProjection(MutableMatrix44D projection)
   {
-	float M = projection.getColumnMajorFloatArray();
+	float[] M = projection.getColumnMajorFloatArray();
 	_gl.uniformMatrix4fv(GlobalMembersGL.Uniforms.Projection, 1, false, M);
   }
 
@@ -462,8 +462,6 @@ public class GL
 	final GLTextureId texId = getGLTextureId();
 	if (texId.isValid())
 	{
-  
-  
   	_gl.blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
   	_gl.pixelStorei(GLAlignment.Unpack, 1);
   
@@ -472,12 +470,11 @@ public class GL
   	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MagFilter, GLTextureParameterValue.Linear);
   	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapS, GLTextureParameterValue.ClampToEdge);
   	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapT, GLTextureParameterValue.ClampToEdge);
-  	_gl->texImage2D(glImage);
+  	_gl.texImage2D(glImage);
   
   	if (generateMipmap) {
   	  _gl.generateMipmap(GLTextureType.Texture2D);
   	}
-  
 	}
 	else
 	{

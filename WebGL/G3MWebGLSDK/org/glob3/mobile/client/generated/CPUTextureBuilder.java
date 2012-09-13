@@ -21,22 +21,22 @@ public class CPUTextureBuilder extends TextureBuilder
 {
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const GLImage* createTextureFromImages(GL * gl, const IFactory* factory, GLFormat format, const IImage* image, int width, int height) const
-  public final GLImage createTextureFromImages(GL gl, IFactory factory, GLFormat format, IImage image, int width, int height)
+//ORIGINAL LINE: const GLImage* createTextureFromImage(GL * gl, const IFactory* factory, GLFormat format, const IImage* image, int width, int height) const
+  public final GLImage createTextureFromImage(GL gl, IFactory factory, GLFormat format, IImage image, int width, int height)
   {
 	if (image == null)
 	{
-  
 	  ILogger.instance().logWarning("Creating blank GLImage");
 	  int imageBytes = 4* width *height;
 	  byte[] data = new byte[imageBytes];
 	  for (int i = 0; i < imageBytes; i++)
 	  {
-		data[i] = 255; //WHITE
+		data[i] = (byte) 255; //WHITE
 	  }
   
 	  IByteBuffer bb = factory.createByteBuffer(data, imageBytes);
-	  GLImage glImage = new GLImage(RGBA, bb, width, height);
+  
+	  GLImage glImage = new GLImage(GLFormat.RGBA, bb, width, height);
   
 	  return glImage;
 	}
@@ -44,7 +44,8 @@ public class CPUTextureBuilder extends TextureBuilder
 	{
   
 	  IByteBuffer bb = image.createByteBufferRGBA8888(width, height);
-	  GLImage glImage = new GLImage(RGBA, bb, width, height);
+	  GLImage glImage = new GLImage(GLFormat.RGBA, bb, width, height);
+  
 	  return glImage;
 	}
   }
@@ -64,11 +65,11 @@ public class CPUTextureBuilder extends TextureBuilder
 	  byte[] data = new byte[imageBytes];
 	  for (int i = 0; i < imageBytes; i++)
 	  {
-		data[i] = 255; //WHITE
+		data[i] = (byte) 255; //WHITE
 	  }
   
 	  IByteBuffer bb = factory.createByteBuffer(data, imageBytes);
-	  GLImage glImage = new GLImage(RGBA, bb, width, height);
+	  GLImage glImage = new GLImage(GLFormat.RGBA, bb, width, height);
   
 	  return glImage;
 	}
@@ -89,7 +90,8 @@ public class CPUTextureBuilder extends TextureBuilder
 	  }
   
 	  IByteBuffer bb = im.createByteBufferRGBA8888(width, height);
-	  GLImage glImage = new GLImage(RGBA, bb, width, height);
+  
+	  GLImage glImage = new GLImage(GLFormat.RGBA, bb, width, height);
   
 	  if (imagesSize > 1)
 	  {
@@ -119,11 +121,11 @@ public class CPUTextureBuilder extends TextureBuilder
 	  byte[] data = new byte[imageBytes];
 	  for (int i = 0; i < imageBytes; i++)
 	  {
-		data[i] = 255; //WHITE
+		data[i] = (byte) 255; //WHITE
 	  }
   
 	  IByteBuffer bb = factory.createByteBuffer(data, imageBytes);
-	  GLImage glImage = new GLImage(RGBA, bb, width, height);
+	  GLImage glImage = new GLImage(GLFormat.RGBA, bb, width, height);
   
 	  return glImage;
 	}
@@ -158,7 +160,8 @@ public class CPUTextureBuilder extends TextureBuilder
 	  }
   
 	  IByteBuffer bb = base.createByteBufferRGBA8888(width, height);
-	  GLImage glImage = new GLImage(RGBA, bb, width, height);
+  
+	  GLImage glImage = new GLImage(GLFormat.RGBA, bb, width, height);
   
 	  if (rectangles.size() > 0 && base != images.get(0))
 	  {

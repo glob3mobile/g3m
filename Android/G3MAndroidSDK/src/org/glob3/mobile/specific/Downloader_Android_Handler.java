@@ -10,13 +10,12 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.glob3.mobile.generated.ByteBuffer;
 import org.glob3.mobile.generated.GTask;
-import org.glob3.mobile.generated.IDownloadListener;
+import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IDownloader;
+import org.glob3.mobile.generated.IImageDownloadListener;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IThreadUtils;
-import org.glob3.mobile.generated.Response;
 import org.glob3.mobile.generated.URL;
 
 import android.util.Log;
@@ -24,16 +23,16 @@ import android.util.Log;
 
 public class Downloader_Android_Handler {
 
-   final static String                    TAG = "Downloader_Android_Handler";
+   final static String                    TAG        = "Downloader_Android_Handler";
 
    private long                           _priority;
    private final URL                      _url;
    private java.net.URL                   _URL;
-   private final ArrayList<ListenerEntry> _listeners;
+   private final ArrayList<ListenerEntry> _listeners = new ArrayList<ListenerEntry>();
 
 
    public Downloader_Android_Handler(final URL url,
-                                     final IDownloadListener listener,
+                                     final IBufferDownloadListener listener,
                                      final long priority,
                                      final long requestId) {
       _priority = priority;
@@ -50,16 +49,55 @@ public class Downloader_Android_Handler {
          }
          e.printStackTrace();
       }
-      _listeners = new ArrayList<ListenerEntry>();
-      final ListenerEntry entry = new ListenerEntry(listener, requestId);
+
+      final ListenerEntry entry = new ListenerEntry(listener, null, requestId);
       _listeners.add(entry);
    }
 
 
-   public void addListener(final IDownloadListener listener,
+   public Downloader_Android_Handler(final URL url,
+                                     final IImageDownloadListener listener,
+                                     final long priority,
+                                     final long requestId) {
+      _priority = priority;
+      _url = url;
+      try {
+         _URL = new java.net.URL(url.getPath());
+      }
+      catch (final MalformedURLException e) {
+         if (ILogger.instance() != null) {
+            ILogger.instance().logError(TAG + "Downloader_Android_Handler: MalformedURLException url=" + _url.getPath());
+         }
+         else {
+            Log.e(TAG, "Downloader_Android_Handler: MalformedURLException url=" + _url.getPath());
+         }
+         e.printStackTrace();
+      }
+
+      final ListenerEntry entry = new ListenerEntry(null, listener, requestId);
+      _listeners.add(entry);
+   }
+
+
+   public void addListener(final IBufferDownloadListener listener,
                            final long priority,
                            final long requestId) {
-      final ListenerEntry entry = new ListenerEntry(listener, requestId);
+      final ListenerEntry entry = new ListenerEntry(listener, null, requestId);
+
+      synchronized (this) {
+         _listeners.add(entry);
+
+         if (priority > _priority) {
+            _priority = priority;
+         }
+      }
+   }
+
+
+   public void addListener(final IImageDownloadListener listener,
+                           final long priority,
+                           final long requestId) {
+      final ListenerEntry entry = new ListenerEntry(null, listener, requestId);
 
       synchronized (this) {
          _listeners.add(entry);
@@ -106,7 +144,7 @@ public class Downloader_Android_Handler {
             final ListenerEntry entry = iter.next();
 
             if (entry.getRequestId() == requestId) {
-               entry.getListener().onCancel(_url);
+               entry.onCancel(_url);
                _listeners.remove(entry);
                removed = true;
 
@@ -199,22 +237,17 @@ public class Downloader_Android_Handler {
             final boolean dataIsValid = (_data != null) && (_statusCode == 200);
 
             if (dataIsValid) {
-               final ByteBuffer buffer = new ByteBuffer(_data, _data.length);
-               final Response response = new Response(_url, buffer);
-               final Iterator<ListenerEntry> iter = _listeners.iterator();
-
-               while (iter.hasNext()) {
-                  final ListenerEntry entry = iter.next();
+               for (final ListenerEntry entry : _listeners) {
                   if (entry.isCanceled()) {
-                     //                     Log.w(TAG, "triggering onCanceledDownload");
-                     entry.getListener().onCanceledDownload(response);
+                     // Log.w(TAG, "triggering onCanceledDownload");
+                     entry.onCanceledDownload(_url, _data);
 
-                     //                     Log.w(TAG, "triggering onCancel");
-                     entry.getListener().onCancel(_url);
+                     // Log.w(TAG, "triggering onCancel");
+                     entry.onCancel(_url);
                   }
                   else {
-                     //                     Log.i(TAG, "triggering onDownload");
-                     entry.getListener().onDownload(response);
+                     // Log.i(TAG, "triggering onDownload");
+                     entry.onDownload(_url, _data);
                   }
                }
             }
@@ -226,14 +259,9 @@ public class Downloader_Android_Handler {
                else {
                   Log.e(TAG, "Error runWithDownloader: statusCode=" + _statusCode + ", url=" + _url.getPath());
                }
-               final ByteBuffer buffer = new ByteBuffer(null, 0);
-               final Response response = new Response(_url, buffer);
-               final Iterator<ListenerEntry> iter = _listeners.iterator();
 
-               while (iter.hasNext()) {
-                  final ListenerEntry entry = iter.next();
-                  //                  Log.e(TAG, "triggering onError");
-                  entry.getListener().onError(response);
+               for (final ListenerEntry entry : _listeners) {
+                  entry.onError(_url);
                }
             }
          }

@@ -15,27 +15,25 @@ class CPUTextureBuilder:public TextureBuilder
 {
 public:
   
-  const GLImage* createTextureFromImage(GL * gl,
+  //Scales but may return the same image
+  const IImage* createTextureFromImage(GL * gl,
+                                       const IFactory* factory,
+                                       const IImage* image,
+                                       int width,
+                                       int height) const;
+  
+  const IImage* createTextureFromImages(GL * gl,
                                         const IFactory* factory,
-                                        GLFormat format,
-                                        const IImage* image,
+                                        const std::vector<const IImage*> images,
                                         int width,
                                         int height) const;
   
-  const GLImage* createTextureFromImages(GL * gl,
-                                         const IFactory* factory,
-                                         GLFormat format,
-                                         const std::vector<const IImage*> images,
-                                         int width,
-                                         int height) const;
-  
-  const GLImage* createTextureFromImages(GL * gl,
-                                         const IFactory* factory,
-                                         GLFormat format,
-                                         const std::vector<const IImage*> images,
-                                         const std::vector<const Rectangle*> rectangles,
-                                         int width,
-                                         int height) const;
+  const IImage* createTextureFromImages(GL * gl,
+                                        const IFactory* factory,
+                                        const std::vector<const IImage*> images,
+                                        const std::vector<const Rectangle*> rectangles,
+                                        int width,
+                                        int height) const;
   
 };
 

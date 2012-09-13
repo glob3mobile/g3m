@@ -38,16 +38,15 @@ bool BusyQuadRenderer::initMesh(const RenderContext* rc) {
   if (true){
     IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
     
-    const GLImage* glImage = rc->getTextureBuilder()->createTextureFromImage(rc->getGL(),
-                                                                             rc->getFactory(),
-                                                                             RGBA, image,
-                                                                             128, 128);
-    
-    texId = rc->getTexturesHandler()->getGLTextureId(glImage, _textureFilename, false);
+#ifdef C_CODE
+    texId = rc->getTexturesHandler()->getGLTextureId(image, RGBA,
+                                                     _textureFilename, false);
+#else
+    texId = rc->getTexturesHandler()->getGLTextureId(image, GLFormat.RGBA,
+                                                     _textureFilename, false);
+#endif
     
     rc->getFactory()->deleteImage(image);
-    delete glImage;
-    
     
     if (!texId.isValid()) {
       rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());

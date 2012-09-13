@@ -5,7 +5,6 @@ package org.glob3.mobile.specific;
 import java.util.ArrayList;
 
 import org.glob3.mobile.generated.BusyMeshRenderer;
-import org.glob3.mobile.generated.ByteBuffer;
 import org.glob3.mobile.generated.CPUTextureBuilder;
 import org.glob3.mobile.generated.CachedDownloader;
 import org.glob3.mobile.generated.CameraDoubleDragHandler;
@@ -43,7 +42,6 @@ import org.glob3.mobile.generated.TilesRenderParameters;
 import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.TouchEventType;
-import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.UserData;
 import org.glob3.mobile.generated.Vector2D;
 
@@ -62,13 +60,13 @@ public class G3MWidget_Android
          implements
             OnGestureListener {
 
-   G3MWidget                   _widget;
-   ES2Renderer                 _es2renderer;
+   private G3MWidget                  _widget;
+   private ES2Renderer                _es2renderer;
 
-   final MotionEventProcessor  _motionEventProcessor = new MotionEventProcessor();
+   private final MotionEventProcessor _motionEventProcessor = new MotionEventProcessor();
 
-   private OnDoubleTapListener _doubleTapListener    = null;
-   private GestureDetector     _gestureDetector      = null;
+   private OnDoubleTapListener        _doubleTapListener    = null;
+   private GestureDetector            _gestureDetector      = null;
 
 
    public G3MWidget_Android(final Context context) {
@@ -295,35 +293,35 @@ public class G3MWidget_Android
 
       final IStorage storage = new SQLiteStorage_Android("g3m.cache", this.getContext());
 
-      //TESTING DB
-      if (false) {
-         final byte[] b = { 1, 0, 1 };
-         final ByteBuffer bb = new ByteBuffer(b, b.length);
-         final URL url = new URL("test");
-         final URL url2 = new URL("test2");
-
-         if (storage.contains(url)) {
-            final ByteBuffer bb2 = storage.read(url);
-         }
-
-         storage.save(url, bb);
-
-         if (storage.contains(url)) {
-            final ByteBuffer bb1 = storage.read(url);
-         }
-
-         storage.save(url, bb);
-
-         if (storage.contains(url)) {
-            final ByteBuffer bb2 = storage.read(url);
-         }
-
-         if (storage.contains(url2)) {
-            final ByteBuffer bb2 = storage.read(url2);
-         }
-
-
-      }
+      //      //TESTING DB
+      //      if (false) {
+      //         final byte[] b = { 1, 0, 1 };
+      //         final ByteBuffer bb = new ByteBuffer(b, b.length);
+      //         final URL url = new URL("test");
+      //         final URL url2 = new URL("test2");
+      //
+      //         if (storage.contains(url)) {
+      //            final ByteBuffer bb2 = storage.read(url);
+      //         }
+      //
+      //         storage.save(url, bb);
+      //
+      //         if (storage.contains(url)) {
+      //            final ByteBuffer bb1 = storage.read(url);
+      //         }
+      //
+      //         storage.save(url, bb);
+      //
+      //         if (storage.contains(url)) {
+      //            final ByteBuffer bb2 = storage.read(url);
+      //         }
+      //
+      //         if (storage.contains(url2)) {
+      //            final ByteBuffer bb2 = storage.read(url2);
+      //         }
+      //
+      //
+      //      }
 
 
       //		  IDownloader downloader = null;// new CachedDownloader(new Downloader_Android(8), storage);
@@ -363,7 +361,7 @@ public class G3MWidget_Android
 
 
       final TextureBuilder textureBuilder = new CPUTextureBuilder();
-      final TexturesHandler texturesHandler = new TexturesHandler(gl, factory, textureBuilder, false);
+      final TexturesHandler texturesHandler = new TexturesHandler(gl, factory, false);
 
       final Planet planet = Planet.createEarth();
 
@@ -377,8 +375,8 @@ public class G3MWidget_Android
 
       final IThreadUtils threadUtils = new ThreadUtils_Android(this);
 
-      _widget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, logger, gl, texturesHandler, downloader,
-               planet, cameraConstraints, composite, busyRenderer, scheduler, width, height,
+      _widget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, logger, gl, texturesHandler,
+               textureBuilder, downloader, planet, cameraConstraints, composite, busyRenderer, scheduler, width, height,
                Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false);
 
       _widget.setUserData(userData);

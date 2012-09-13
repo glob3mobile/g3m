@@ -12,6 +12,7 @@
 #include "Extent.hpp"
 #include "Vector3D.hpp"
 #include "Frustum.hpp"
+#include "IndexedMesh.hpp"
 
 #include <vector>
 
@@ -24,8 +25,13 @@ public:
   Box(const Vector3D& lower,
       const Vector3D& upper):
   _lower(lower),
-  _upper(upper)
+  _upper(upper),
+  _mesh(NULL)
   {}
+  
+  ~Box() {
+    if (_mesh) delete _mesh;
+  };
   
   bool touches(const Frustum* frustum) const {
     return frustum->touchesWithBox(this);
@@ -42,6 +48,8 @@ public:
   bool contains(const Vector3D& p) const;
   
   Vector3D intersectionWithRay(const Vector3D& origin, const Vector3D& direction) const;
+  
+  void render(const RenderContext* rc);
 
   
 private:
@@ -51,6 +59,10 @@ private:
 #ifdef JAVA_CODE
   java.util.ArrayList<Vector3D> _corners = null; // cache for getCorners() method
 #endif
+  
+  Mesh *_mesh;  
+  void createMesh();
+
 };
 
 #endif

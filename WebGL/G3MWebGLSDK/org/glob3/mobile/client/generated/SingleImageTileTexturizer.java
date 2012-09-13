@@ -81,8 +81,7 @@ public class SingleImageTileTexturizer extends TileTexturizer
   
 	if (!_texId.isValid())
 	{
-  
-	  final GLImage glImage = rc.getTextureBuilder().createTextureFromImages(rc.getGL(), rc.getFactory(), RGBA, _image, _image.getWidth(), _image.getHeight());
+	  final GLImage glImage = rc.getTextureBuilder().createTextureFromImage(rc.getGL(), rc.getFactory(), GLFormat.RGBA, _image, _image.getWidth(), _image.getHeight());
   
 	  _texId = rc.getTexturesHandler().getGLTextureId(glImage, "SINGLE_IMAGE_TEX", false);
   

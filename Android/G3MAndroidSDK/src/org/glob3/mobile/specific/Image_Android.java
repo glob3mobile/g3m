@@ -2,16 +2,12 @@
 
 package org.glob3.mobile.specific;
 
-import java.io.ByteArrayOutputStream;
-
-import org.glob3.mobile.generated.ByteBuffer;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.Rectangle;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.util.Log;
 
 
 public class Image_Android
@@ -19,10 +15,19 @@ public class Image_Android
             IImage {
 
    final private Bitmap _image;
+   private byte[]       _source;
 
 
-   public Image_Android(final Bitmap image) {
+   public Image_Android(final Bitmap image,
+                        final byte[] source) {
+
+      if (image == null) {
+         final int ____REMOVE;
+         new Throwable().printStackTrace();
+      }
+
       _image = image;
+      _source = source;
    }
 
 
@@ -33,13 +38,13 @@ public class Image_Android
 
    @Override
    public int getWidth() {
-      return _image.getWidth();
+      return (_image == null) ? 0 : _image.getWidth();
    }
 
 
    @Override
    public int getHeight() {
-      return _image.getHeight();
+      return (_image == null) ? 0 : _image.getHeight();
    }
 
 
@@ -54,7 +59,7 @@ public class Image_Android
       canvas.drawBitmap(bm1, 0, 0, null);
       canvas.drawBitmap(bm2, 0, 0, null);
 
-      return new Image_Android(bm1);
+      return new Image_Android(bm1, null);
    }
 
 
@@ -86,7 +91,7 @@ public class Image_Android
 
       canvas.drawBitmap(bm2, null, dstRect, null);
 
-      return new Image_Android(canvasBitmap);
+      return new Image_Android(canvasBitmap, null);
    }
 
 
@@ -94,49 +99,68 @@ public class Image_Android
    public IImage subImage(final Rectangle rect) {
       final Bitmap bm = Bitmap.createBitmap(_image, (int) rect._x, (int) rect._y, (int) rect._width, (int) rect._height);
 
-      return new Image_Android(bm);
+      return new Image_Android(bm, null);
+   }
+
+
+   //
+   //   public IByteBuffer createByteBufferRGBA8888(final int width,
+   //                                               final int height) {
+   //
+   //      //Scaling
+   //      Bitmap scaledImage = null;
+   //      if ((_image.getWidth() != width) || (_image.getHeight() != height)) {
+   //         scaledImage = Bitmap.createScaledBitmap(_image, width, height, true);
+   //      }
+   //      else {
+   //         scaledImage = _image;
+   //      }
+   //
+   //      //Getting pixels in Color format
+   //      final int[] pixels = new int[scaledImage.getWidth() * scaledImage.getHeight()];
+   //      scaledImage.getPixels(pixels, 0, scaledImage.getWidth(), 0, 0, scaledImage.getWidth(), scaledImage.getHeight());
+   //
+   //      //To RGBA
+   //      final byte[] data = new byte[pixels.length * 4];
+   //      int p = 0;
+   //      for (final int color : pixels) {
+   //         data[p++] = (byte) ((color >> 16) & 0xFF); //R
+   //         data[p++] = (byte) ((color >> 8) & 0xFF); //G
+   //         data[p++] = (byte) (color & 0xFF); //B
+   //         data[p++] = (byte) (color >>> 24); //A
+   //      }
+   //
+   //      return new ByteBuffer_Android(data);
+   //   }
+
+
+   @Override
+   public IImage scale(final int width,
+                       final int height) {
+      final Bitmap b = Bitmap.createScaledBitmap(_image, width, height, false);
+      return new Image_Android(b, null);
    }
 
 
    @Override
-   public ByteBuffer getEncodedImage() {
-      final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      _image.compress(Bitmap.CompressFormat.PNG, 100, baos);
-      final byte[] b = baos.toByteArray();
-
-      return new ByteBuffer(b, b.length);
+   public String description() {
+      return "Image Android " + getWidth() + " x " + getHeight() + ", _image=(" + _image.describeContents() + ")";
    }
 
 
    @Override
-   public void fillWithRGBA8888(final byte[] data,
-                                final int width,
-                                final int height) {
-      //Scaling
-      Bitmap scaledImage = null;
-      if ((_image.getWidth() != width) || (_image.getHeight() != height)) {
-         scaledImage = Bitmap.createScaledBitmap(_image, width, height, true);
-      }
-      else {
-         scaledImage = _image;
-      }
+   public IImage copy() {
+      return new Image_Android(_image, null);
+   }
 
-      //Getting pixels in Color format
-      final int[] pixels = new int[scaledImage.getWidth() * scaledImage.getHeight()];
-      scaledImage.getPixels(pixels, 0, scaledImage.getWidth(), 0, 0, scaledImage.getWidth(), scaledImage.getHeight());
 
-      //To RGBA
-      if (data.length != (pixels.length * 4)) {
-         Log.d("", "FAILURE FillWithRGBA");
-         return;
-      }
-      int p = 0;
-      for (final int color : pixels) {
-         data[p++] = (byte) ((color >> 16) & 0xFF); //R
-         data[p++] = (byte) ((color >> 8) & 0xFF); //G
-         data[p++] = (byte) (color & 0xFF); //B
-         data[p++] = (byte) (color >>> 24); //A
-      }
+   public byte[] getSourceBuffer() {
+      return _source;
+   }
+
+
+   public void releaseSourceBuffer() {
+      _source = null;
    }
 
 }

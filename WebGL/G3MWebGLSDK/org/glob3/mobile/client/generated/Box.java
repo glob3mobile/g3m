@@ -29,6 +29,14 @@ public class Box extends Extent
   {
 	  _lower = new Vector3D(lower);
 	  _upper = new Vector3D(upper);
+	  _mesh = null;
+  }
+
+  public void dispose()
+  {
+	if (_mesh != null)
+		if (_mesh != null)
+			_mesh.dispose();
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -58,14 +66,14 @@ public class Box extends Extent
 	if (_corners == null) {
   	_corners = new java.util.ArrayList<Vector3D>(8);
   
-  	_corners.add(new Vector3D(_lower.x(), _lower.y(), _lower.z()));
+  	_corners.add(_lower);
   	_corners.add(new Vector3D(_lower.x(), _lower.y(), _upper.z()));
   	_corners.add(new Vector3D(_lower.x(), _upper.y(), _lower.z()));
   	_corners.add(new Vector3D(_lower.x(), _upper.y(), _upper.z()));
   	_corners.add(new Vector3D(_upper.x(), _lower.y(), _lower.z()));
   	_corners.add(new Vector3D(_upper.x(), _lower.y(), _upper.z()));
   	_corners.add(new Vector3D(_upper.x(), _upper.y(), _lower.z()));
-  	_corners.add(new Vector3D(_upper.x(), _upper.y(), _upper.z()));
+  	_corners.add(_upper);
 	}
 	return _corners;
   }
@@ -202,9 +210,42 @@ public class Box extends Extent
 	return Vector3D.nan();
   }
 
+  public final void render(RenderContext rc)
+  {
+	if (_mesh == null)
+		createMesh();
+	_mesh.render(rc);
+  }
+
 
   private final Vector3D _lower ;
   private final Vector3D _upper ;
 
   java.util.ArrayList<Vector3D> _corners = null; // cache for getCorners() method
+
+  private Mesh _mesh;
+  private void createMesh()
+  {
+	int numVertices = 8;
+	int numIndices = 48;
+  
+	float[] v = { (float) _lower.x(), (float) _lower.y(), (float) _lower.z(), (float) _lower.x(), (float) _upper.y(), (float) _lower.z(), (float) _lower.x(), (float) _upper.y(), (float) _upper.z(), (float) _lower.x(), (float) _lower.y(), (float) _upper.z(), (float) _upper.x(), (float) _lower.y(), (float) _lower.z(), (float) _upper.x(), (float) _upper.y(), (float) _lower.z(), (float) _upper.x(), (float) _upper.y(), (float) _upper.z(), (float) _upper.x(), (float) _lower.y(), (float) _upper.z()};
+  
+	int[] i = { 0, 1, 1, 2, 2, 3, 3, 0, 1, 5, 5, 6, 6, 2, 2, 1, 5, 4, 4, 7, 7, 6, 6, 5, 4, 0, 0, 3, 3, 7, 7, 4, 3, 2, 2, 6, 6, 7, 7, 3, 0, 1, 1, 5, 5, 4, 4, 0 };
+  
+	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.NoCenter, Vector3D.zero());
+	IntBufferBuilder indices = new IntBufferBuilder();
+  
+	for (int n = 0; n<numVertices; n++)
+	  vertices.add(v[n *3], v[n *3+1], v[n *3+2]);
+  
+	for (int n = 0; n<numIndices; n++)
+	  indices.add(i[n]);
+  
+	Color flatColor = new Color(Color.fromRGBA((float)1.0, (float)1.0, (float)0.0, (float)1.0));
+  
+	// create mesh
+	_mesh = new IndexedMesh(GLPrimitive.TriangleStrip, true, vertices.getCenter(), vertices.create(), indices.create(), flatColor);
+  }
+
 }

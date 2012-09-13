@@ -247,7 +247,11 @@ public:
     }
   }
   
+#ifdef C_CODE
   float* getColumnMajorFloatArray() const {
+#else
+  float[] getColumnMajorFloatArray() const {
+#endif
     if (_columnMajorFloatArray == NULL){
       _columnMajorFloatArray = new float[16];
       
@@ -278,9 +282,17 @@ public:
   
   void print(const std::string& name, const ILogger* log) const;
   
-  Vector3D unproject(const Vector3D& pixel3D, const int viewport[4]) const;
+  Vector3D unproject(const Vector3D& pixel3D,
+                     const int vpLeft,
+                     const int vpTop,
+                     const int vpWidth,
+                     const int vpHeight) const;
   
-  Vector2D project(const Vector3D& point, const int viewport[4]) const;
+  Vector2D project(const Vector3D& point,
+                   const int vpLeft,
+                   const int vpTop,
+                   const int vpWidth,
+                   const int vpHeight) const;
   
   static MutableMatrix44D createTranslationMatrix(const Vector3D& t);
   

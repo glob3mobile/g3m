@@ -201,7 +201,15 @@ public:
   void print();
   
   const Frustum* const getFrustumInModelCoordinates() const {
-    return getFrustumMC();
+//    return getFrustumMC();
+    if (_dirtyFlags._frustumMC) {
+      _dirtyFlags._frustumMC = false;
+#ifdef C_CODE
+      if (_frustumInModelCoordinates!=NULL) delete _frustumInModelCoordinates;
+#endif
+      _frustumInModelCoordinates = getFrustum()->transformedBy_P( getModelMatrix().transposed() );
+    }
+    return _frustumInModelCoordinates;
   }
   
   const Frustum* const getHalfFrustuminModelCoordinates() const {
@@ -337,17 +345,6 @@ private:
     return _frustum;
   }
 
-  // frustum in Model coordinates
-  Frustum*  getFrustumMC() const {
-    if (_dirtyFlags._frustumMC) {
-      _dirtyFlags._frustumMC = false;
-#ifdef C_CODE
-      if (_frustumInModelCoordinates!=NULL) delete _frustumInModelCoordinates;
-#endif
-      _frustumInModelCoordinates = getFrustum()->transformedBy_P(getModelMatrix().transposed());
-    }
-    return _frustumInModelCoordinates;
-  }
 
   int __temporal_test_for_clipping;
 
