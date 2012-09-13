@@ -19,27 +19,21 @@
 class Image_iOS: public IImage {
 private:
   UIImage* _image;
-  NSData*  _sourceBuffer;
+  mutable NSData*  _sourceBuffer;
   
   Image_iOS(const Image_iOS& that);
-  
   void operator=(const Image_iOS& that);
-  
-  mutable unsigned char* _rgba8888;
   
 public:
   
   virtual ~Image_iOS() {
-    if (_rgba8888 != NULL){
-      delete[] _rgba8888;
-    }
+
   }
   
   Image_iOS(UIImage* image,
             NSData* sourceBuffer) :
   _image(image),
-  _sourceBuffer(sourceBuffer),
-  _rgba8888(NULL)
+  _sourceBuffer(sourceBuffer)
   {
     
   }
@@ -52,6 +46,10 @@ public:
   
   NSData* getSourceBuffer() const {
     return _sourceBuffer;
+  }
+  
+  void releaseSourceBuffer() const {
+    _sourceBuffer = NULL;
   }
   
   int getWidth() const {
@@ -71,7 +69,7 @@ public:
   
   IImage* subImage(const Rectangle& rect) const;
   
-  unsigned char* getByteArrayRGBA8888(int width, int height) const;
+  unsigned char* createByteArrayRGBA8888() const;
   
   IImage* scale(int width, int height) const;
 
