@@ -283,10 +283,9 @@ public:
   }
   
   void texImage2D(const IImage* image, GLFormat format) const {
+    unsigned char* data = ((Image_iOS*) image)->createByteArrayRGBA8888();
     
-    unsigned char* data = ((Image_iOS*) image)->getByteArrayRGBA8888(image->getWidth(), 
-                                                                     image->getHeight());
-    glTexImage2D(GL_TEXTURE_2D, 
+    glTexImage2D(GL_TEXTURE_2D,
                  0, 
                  getEnum(format),
                  image->getWidth(), 
@@ -295,21 +294,9 @@ public:
                  getEnum(format),
                  GL_UNSIGNED_BYTE, 
                  data);
+    
+    delete [] data;
   }
-  
-  //  void texImage2D(GLTextureType target,
-  //                  int         level,
-  //                  GLFormat    internalFormat,
-  //                  int         width,
-  //                  int         height,
-  //                  int         border,
-  //                  GLFormat    format,
-  //                  GLType      type,
-  //                  const void* data) const {
-  //    glTexImage2D(getEnum(target), level, getEnum(internalFormat),
-  //                 width, height, border, getEnum(format), getEnum(type), data);
-  //  }
-
   
   void generateMipmap(GLTextureType target) const {
     glGenerateMipmap(getEnum(target));
