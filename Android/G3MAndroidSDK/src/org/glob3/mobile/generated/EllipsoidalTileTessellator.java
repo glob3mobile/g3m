@@ -140,7 +140,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
 		indices.add(j *resolution + i);
 		indices.add(j *resolution + i + resolution);
 	  }
-	  indices.add(j *resolution + 2 *resolutionMinus1);
+	  indices.add(j *resolution + 2 *resolution - 1);
 	}
   
 	// create skirts
