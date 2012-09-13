@@ -56,12 +56,13 @@ public:
                                   length: buffer_iOS->size()];
     
     UIImage* image = [UIImage imageWithData:data];
-    if (!image) {
+    if (image) {
+      return new Image_iOS(image, data);
+    }
+    else {
       printf("Can't read image from IByteBuffer %s\n", buffer->description().c_str());
       return NULL;
     }
-    
-    return new Image_iOS(image, data);
   }
   
   void deleteImage(const IImage* image) const {

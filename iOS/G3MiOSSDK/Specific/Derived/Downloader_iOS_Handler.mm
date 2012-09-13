@@ -203,41 +203,28 @@
     const URL url( [[_nsURL absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] );
     
     if (dataIsValid) {
-//      const int length = [data length];
-//      unsigned char* bytes = new unsigned char[ length ]; // will be deleted by IByteBuffer's destructor
-//      [data getBytes: bytes
-//              length: length];
-//      
-//      IByteBuffer* buffer = GFactory.createByteBuffer(bytes, length);
-      
       for (int i = 0; i < listenersCount; i++) {
         ListenerEntry* entry = [_listeners objectAtIndex: i];
         Downloader_iOS_Listener* listener = [entry listener];
         
         if ([entry isCanceled]) {
           [listener onCanceledDownloadURL:url
-                                   data:data];
+                                     data:data];
           
           [listener onCancel: url];
         }
         else {
           [listener onDownloadURL:url
-                           data:data];
+                             data:data];
         }
       }
-      
-//      delete buffer;
     }
     else {
-//      IByteBuffer* buffer = GFactory.createByteBuffer(0);
-      
       for (int i = 0; i < listenersCount; i++) {
         ListenerEntry* entry = [_listeners objectAtIndex: i];
         
         [[entry listener] onErrorURL:url];
       }
-      
-//      delete buffer;
     }
     
     [_lock unlock];

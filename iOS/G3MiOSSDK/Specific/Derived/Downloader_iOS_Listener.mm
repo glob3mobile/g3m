@@ -52,13 +52,17 @@
     
     delete buffer;
   }
+  
   if (_cppImageListener) {
-    IImage* image = new Image_iOS([UIImage imageWithData:data],
-                                  data);
-    
-    _cppImageListener->onDownload(url, image);
-    
-    delete image;
+    UIImage* uiImage = [UIImage imageWithData:data];
+    if (uiImage) {
+      IImage* image = new Image_iOS(uiImage, data);
+      _cppImageListener->onDownload(url, image);
+      delete image;
+    }
+    else {
+      _cppImageListener->onError(url);
+    }
   }
 }
 
@@ -67,6 +71,7 @@
   if (_cppBufferListener) {
     _cppBufferListener->onError(url);
   }
+  
   if (_cppImageListener) {
     _cppImageListener->onError(url);
   }
@@ -77,6 +82,7 @@
   if (_cppBufferListener) {
     _cppBufferListener->onCancel(url);
   }
+  
   if (_cppImageListener) {
     _cppImageListener->onCancel(url);
   }
@@ -97,13 +103,14 @@
     
     delete buffer;
   }
+  
   if (_cppImageListener) {
-    IImage* image = new Image_iOS([UIImage imageWithData:data],
-                                  data);
-
-    _cppImageListener->onCanceledDownload(url, image);
-    
-    delete image;
+    UIImage* uiImage = [UIImage imageWithData:data];
+    if (uiImage) {
+      IImage* image = new Image_iOS(uiImage, data);
+      _cppImageListener->onCanceledDownload(url, image);
+      delete image;
+    }
   }
 }
 
@@ -113,6 +120,7 @@
     if (_cppBufferListener) {
       delete _cppBufferListener;
     }
+    
     if (_cppImageListener) {
       delete _cppImageListener;
     }
