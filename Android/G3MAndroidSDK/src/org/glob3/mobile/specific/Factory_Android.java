@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
 
-import org.glob3.mobile.generated.ByteArrayWrapper;
 import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IFloatBuffer;
@@ -105,8 +104,12 @@ public class Factory_Android
 
 
    @Override
-   public IImage createImageFromData(final ByteArrayWrapper buffer) {
-      final Bitmap b = BitmapFactory.decodeByteArray(buffer.getData(), 0, buffer.getData().length);
+   public IImage createImageFromBuffer(final IByteBuffer buffer) {
+      final ByteBuffer_Android buffer_Android = (ByteBuffer_Android) buffer;
+
+      final byte[] bytes = buffer_Android.getBuffer().array();
+
+      final Bitmap b = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
       if (b == null) {
          ILogger.instance().logError("FACTORY", "Can't create image from data");
          return null;
