@@ -30,14 +30,14 @@
 //const IByteBuffer& data
 
 -(void) onDownloadURL:(const URL&) url
-               buffer:(const IByteBuffer*) buffer;
+                 data:(NSData*) data;
 
 -(void) onErrorURL:(const URL&) url;
 
 -(void) onCancel:(const URL&) url;
 
 -(void) onCanceledDownloadURL:(const URL&) url
-                       buffer:(const IByteBuffer*) buffer;
+                         data:(NSData*) data;
 
 -(void) dealloc;
 

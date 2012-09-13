@@ -203,12 +203,12 @@
     const URL url( [[_nsURL absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] );
     
     if (dataIsValid) {
-      const int length = [data length];
-      unsigned char* bytes = new unsigned char[ length ]; // will be deleted by IByteBuffer's destructor
-      [data getBytes: bytes
-              length: length];
-      
-      IByteBuffer* buffer = GFactory.createByteBuffer(bytes, length);
+//      const int length = [data length];
+//      unsigned char* bytes = new unsigned char[ length ]; // will be deleted by IByteBuffer's destructor
+//      [data getBytes: bytes
+//              length: length];
+//      
+//      IByteBuffer* buffer = GFactory.createByteBuffer(bytes, length);
       
       for (int i = 0; i < listenersCount; i++) {
         ListenerEntry* entry = [_listeners objectAtIndex: i];
@@ -216,17 +216,17 @@
         
         if ([entry isCanceled]) {
           [listener onCanceledDownloadURL:url
-                                   buffer:buffer];
+                                   data:data];
           
           [listener onCancel: url];
         }
         else {
           [listener onDownloadURL:url
-                           buffer:buffer];
+                           data:data];
         }
       }
       
-      delete buffer;
+//      delete buffer;
     }
     else {
 //      IByteBuffer* buffer = GFactory.createByteBuffer(0);
