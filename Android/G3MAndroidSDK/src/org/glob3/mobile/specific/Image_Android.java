@@ -98,7 +98,6 @@ public class Image_Android
 
 
    //
-   //   @Override
    //   public IByteBuffer createByteBufferRGBA8888(final int width,
    //                                               final int height) {
    //
