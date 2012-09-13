@@ -283,8 +283,9 @@ public:
   }
   
   void texImage2D(const IImage* image, GLFormat format) const {
-    unsigned char* data = ((Image_iOS*) image)->getByteArrayRGBA8888();
-    glTexImage2D(GL_TEXTURE_2D, 
+    unsigned char* data = ((Image_iOS*) image)->createByteArrayRGBA8888();
+    
+    glTexImage2D(GL_TEXTURE_2D,
                  0, 
                  getEnum(format),
                  image->getWidth(), 
@@ -293,6 +294,8 @@ public:
                  getEnum(format),
                  GL_UNSIGNED_BYTE, 
                  data);
+    
+    delete [] data;
   }
   
   void generateMipmap(GLTextureType target) const {

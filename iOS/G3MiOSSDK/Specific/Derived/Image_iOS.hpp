@@ -22,24 +22,18 @@ private:
   mutable NSData*  _sourceBuffer;
   
   Image_iOS(const Image_iOS& that);
-  
   void operator=(const Image_iOS& that);
-  
-  mutable unsigned char* _rgba8888;
   
 public:
   
   virtual ~Image_iOS() {
-    if (_rgba8888 != NULL){
-      delete[] _rgba8888;
-    }
+
   }
   
   Image_iOS(UIImage* image,
             NSData* sourceBuffer) :
   _image(image),
-  _sourceBuffer(sourceBuffer),
-  _rgba8888(NULL)
+  _sourceBuffer(sourceBuffer)
   {
     
   }
@@ -75,7 +69,7 @@ public:
   
   IImage* subImage(const Rectangle& rect) const;
   
-  unsigned char* getByteArrayRGBA8888() const;
+  unsigned char* createByteArrayRGBA8888() const;
   
   IImage* scale(int width, int height) const;
 
