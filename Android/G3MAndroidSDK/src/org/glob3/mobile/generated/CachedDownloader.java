@@ -65,7 +65,7 @@ public class CachedDownloader implements IDownloader
   {
 	_requestsCounter++;
   
-	final ByteBuffer cachedBuffer = _cacheStorage.read(url);
+	final ByteArrayWrapper cachedBuffer = _cacheStorage.read(url);
 	if (cachedBuffer == null)
 	{
 	  // cache miss

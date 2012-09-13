@@ -10,7 +10,7 @@
 #define G3MiOSSDK_Response_h
 
 #include "URL.hpp"
-#include "ByteBuffer.hpp"
+#include "ByteArrayWrapper.hpp"
 
 class Response {
 private:
@@ -20,7 +20,7 @@ private:
 #ifdef JAVA_CODE
   private URL _url = new URL();     //Converter puts "Url"
 #endif
-  const ByteBuffer* _data;
+  const ByteArrayWrapper* _data;
 
 #ifdef C_CODE
   Response& operator=(const Response& that);
@@ -31,7 +31,7 @@ private:
 public:
   
   Response(const URL& url,
-           const ByteBuffer* data):
+           const ByteArrayWrapper* data):
   _url(url),
   _data(data)
   {
@@ -41,7 +41,7 @@ public:
     return _url;
   }
   
-  const ByteBuffer* getByteBuffer() const {
+  const ByteArrayWrapper* getByteArrayWrapper() const {
     return _data;
   }
   

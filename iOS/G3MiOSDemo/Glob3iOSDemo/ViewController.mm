@@ -217,7 +217,7 @@
   //    renderers.push_back(sgr);
   //  }
   
-  renderers.push_back(new GLErrorRenderer());
+//  renderers.push_back(new GLErrorRenderer());
   
   std::vector <ICameraConstrainer*> cameraConstraints;
   SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();

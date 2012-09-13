@@ -11,21 +11,23 @@
 
 #include "Renderer.hpp"
 
+class IFloatBuffer;
+class IIntBuffer;
+
 class DummyRenderer: public Renderer {
 
 private:
-  int _numIndices;
   double _halfSize;
   
-  int* _index;
-  float* _vertices;
+  IIntBuffer* _index;
+  IFloatBuffer* _vertices;
 
 public:
   ~DummyRenderer();
   
   void initialize(const InitializationContext* ic);  
   
-  int render(const RenderContext* rc);
+  void render(const RenderContext* rc);
   
   bool onTouchEvent(const EventContext* ec,
                     const TouchEvent* touchEvent);

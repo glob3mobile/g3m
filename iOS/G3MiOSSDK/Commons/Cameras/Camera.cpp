@@ -137,97 +137,39 @@ void Camera::print() {
   ILogger::instance()->logInfo("Width: %d, Height %d\n", _width, _height);
 }
 
-/*
-void Camera::calculateCachedValues() {
-  const FrustumData data = calculateFrustumData();
-  
-  _projectionMatrix = MutableMatrix44D::createProjectionMatrix(data._left, data._right,
-                                                               data._bottom, data._top,
-                                                               data._znear, data._zfar);
-  
-  _modelMatrix = MutableMatrix44D::createModelMatrix(_position, _center, _up);
-  
-  
-//  _modelViewMatrix = _projectionMatrix.multiply(_modelMatrix);
-  
-  
-  // compute center of view on planet
-#ifdef C_CODE
-  if (_centerOfView) delete _centerOfView;
-#endif
-  const Planet *planet = rc->getPlanet();
-  const Vector3D centerV = centerOfViewOnPlanet();
-  const Geodetic3D centerG = _planet->toGeodetic3D(centerV);
-  _centerOfView = new Geodetic3D(centerG);
-  
-#ifdef C_CODE
-  if (_frustum != NULL) {
-    delete _frustum;
-  }
-#endif
-  _frustum = new Frustum(data._left, data._right,
-                         data._bottom, data._top,
-                         data._znear, data._zfar);
-
-#ifdef C_CODE    
-  if (_frustumInModelCoordinates != NULL) {
-    delete _frustumInModelCoordinates;
-  }
-  _frustumInModelCoordinates = _frustum->_frustum->transformedBy_P(_modelMatrix.transposed());(_modelMatrix.transposed());
-  
-  
->>>>>>> origin/master
-  if (_halfFrustum != NULL) {
-    delete _halfFrustum;
-  }
-#endif
-  _halfFrustum =  new Frustum(data._left/2, data._right/2,
-                              data._bottom/2, data._top/2,
-                              data._znear, data._zfar);
-  
-#ifdef C_CODE
-  if (_halfFrustumInModelCoordinates != NULL) {
-    delete _halfFrustumInModelCoordinates;
-  }
-#endif
-  _halfFrustumInModelCoordinates = _halfFrustum->transformedBy_P(_modelMatrix.transposed());
-
-
-}*/
-
 void Camera::render(const RenderContext* rc) const {
 
   GL *gl = rc->getGL();
   gl->setProjection(getProjectionMatrix());
   gl->loadMatrixf(getModelMatrix());
     
-  // TEMP: TEST TO SEE HALF SIZE FRUSTUM CLIPPING 
-  if (false) {
-    const MutableMatrix44D inversed = getModelMatrix().inversed();
-    
-    const FrustumData data = calculateFrustumData();
-    const Vector3D p0(Vector3D(data._left/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
-    const Vector3D p1(Vector3D(data._left/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
-    const Vector3D p2(Vector3D(data._right/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
-    const Vector3D p3(Vector3D(data._right/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
-    
-    const float vertices[] = {
-      (float) p0.x(), (float) p0.y(), (float) p0.z(),
-      (float) p1.x(), (float) p1.y(), (float) p1.z(),
-      (float) p2.x(), (float) p2.y(), (float) p2.z(),
-      (float) p3.x(), (float) p3.y(), (float) p3.z(),    
-    };
-    const int indices[] = {0, 1, 2, 3};
-    
-    gl->enableVerticesPosition();
-    gl->vertexPointer(3, 0, vertices);
-    gl->lineWidth(2);
-    gl->color(1, 0, 1, 1);
-    gl->drawLineLoop(4, indices);
-    
-    gl->lineWidth(1);
-    gl->color(1, 1, 1, 1);
-  }
+//  // TEMP: TEST TO SEE HALF SIZE FRUSTUM CLIPPING 
+//  if (false) {
+//    const MutableMatrix44D inversed = getModelMatrix().inversed();
+//    
+//    const FrustumData data = calculateFrustumData();
+//    const Vector3D p0(Vector3D(data._left/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
+//    const Vector3D p1(Vector3D(data._left/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
+//    const Vector3D p2(Vector3D(data._right/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
+//    const Vector3D p3(Vector3D(data._right/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
+//    
+//    const float vertices[] = {
+//      (float) p0.x(), (float) p0.y(), (float) p0.z(),
+//      (float) p1.x(), (float) p1.y(), (float) p1.z(),
+//      (float) p2.x(), (float) p2.y(), (float) p2.z(),
+//      (float) p3.x(), (float) p3.y(), (float) p3.z(),    
+//    };
+//    const int indices[] = {0, 1, 2, 3};
+//    
+//    gl->enableVerticesPosition();
+//    gl->vertexPointer(3, 0, vertices);
+//    gl->lineWidth(2);
+//    gl->color(1, 0, 1, 1);
+//    gl->drawLineLoop(4, indices);
+//    
+//    gl->lineWidth(1);
+//    gl->color(1, 1, 1, 1);
+//  }
   
 
 }
@@ -238,12 +180,8 @@ Vector3D Camera::pixel2Ray(const Vector2D& pixel) const {
   const int py = _height - (int) pixel.y();
   const Vector3D pixel3D(px, py, 0);
     
-  const int viewport[4] = {
-    0, 0,
-    _width, _height
-  };
-    
-  const Vector3D obj = getModelViewMatrix().unproject(pixel3D, viewport);
+  const Vector3D obj = getModelViewMatrix().unproject(pixel3D,
+                                                      0, 0, _width, _height);
   if (obj.isNan()) {
     return obj; 
   }
@@ -256,8 +194,8 @@ Vector3D Camera::pixel2PlanetPoint(const Vector2D& pixel) const {
 }
 
 Vector2D Camera::point2Pixel(const Vector3D& point) const {  
-  const int viewport[4] = { 0, 0, _width, _height };
-  Vector2D p = getModelViewMatrix().project(point, viewport);
+  const Vector2D p = getModelViewMatrix().project(point,
+                                                  0, 0, _width, _height);
   
   if (p.isNan()) {
     return p;
@@ -270,7 +208,6 @@ void Camera::applyTransform(const MutableMatrix44D& M) {
   setCartesianPosition( _position.transformedBy(M, 1.0) );
   setCenter( _center.transformedBy(M, 1.0) );
   
-  int ask_agustin_0;
   setUp(  _up.transformedBy(M, 0.0) );
   
   //_dirtyFlags.setAll(true);
@@ -321,6 +258,7 @@ Vector3D Camera::centerOfViewOnPlanet() const {
 }
 
 Vector3D Camera::getHorizontalVector() {
+  int todo_remove_get_in_matrix;
   MutableMatrix44D M = getModelMatrix();
   return Vector3D(M.get(0), M.get(4), M.get(8));
 }

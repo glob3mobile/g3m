@@ -4,7 +4,7 @@ package org.glob3.mobile.specific;
 
 import java.io.File;
 
-import org.glob3.mobile.generated.ByteBuffer;
+import org.glob3.mobile.generated.ByteArrayWrapper;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.URL;
@@ -21,10 +21,10 @@ public class SQLiteStorage_Android
          implements
             IStorage {
 
-   private final String  _databaseName;
-   private final Context _ctx;
+   private final String         _databaseName;
+   private final Context        _ctx;
 
-   SQLiteDatabase        _db;
+   private final SQLiteDatabase _db;
 
 
    String getPath() {
@@ -81,7 +81,7 @@ public class SQLiteStorage_Android
 
    @Override
    public void save(final URL url,
-                    final ByteBuffer buffer) {
+                    final ByteArrayWrapper buffer) {
       final ContentValues values = new ContentValues();
       values.put("name", url.getPath());
       values.put("contents", buffer.getData());
@@ -94,14 +94,14 @@ public class SQLiteStorage_Android
 
 
    @Override
-   public ByteBuffer read(final URL url) {
+   public ByteArrayWrapper read(final URL url) {
       final String name = url.getPath();
 
       final Cursor cursor = _db.query("entry", new String[] { "contents" }, "name = ?", new String[] { name }, null, null, null);
 
       if (cursor.moveToFirst()) {
          final byte[] data = cursor.getBlob(0);
-         final ByteBuffer bb = new ByteBuffer(data, data.length);
+         final ByteArrayWrapper bb = new ByteArrayWrapper(data, data.length);
          cursor.close();
          return bb;
       }

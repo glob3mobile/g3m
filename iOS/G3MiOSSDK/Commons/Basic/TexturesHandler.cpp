@@ -14,6 +14,8 @@
 #include "TextureBuilder.hpp"
 
 #include "IStringBuilder.hpp"
+#include "GLImage.hpp"
+#include "GL.hpp"
 
 const std::string TextureSpec::description() const {
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
@@ -72,22 +74,6 @@ public:
   }
 };
 
-const GLTextureId TexturesHandler::getGLTextureIdFromFileName(const std::string filename,
-                                                              int               textureWidth,
-                                                              int               textureHeight,
-                                                              const bool        isMipmap) {
-  const IImage* image = _factory->createImageFromFileName(filename);
-  
-  const GLTextureId texId = getGLTextureId(image,
-                                           TextureSpec(filename, // filename as the id
-                                                       textureWidth,
-                                                       textureHeight,
-                                                       isMipmap));
-  _factory->deleteImage(image);
-  
-  return texId;
-}
-
 void TexturesHandler::showHolders(const std::string message) const {
   if (false) {
     std::string holdersString = ">>>> " + message + ", Holders=(";
@@ -105,7 +91,6 @@ void TexturesHandler::showHolders(const std::string message) const {
   }
 }
 
-
 const GLTextureId TexturesHandler::getGLTextureIdIfAvailable(const TextureSpec& textureSpec) {
   for (int i = 0; i < _textureHolders.size(); i++) {
     TextureHolder* holder = _textureHolders[i];
@@ -121,19 +106,24 @@ const GLTextureId TexturesHandler::getGLTextureIdIfAvailable(const TextureSpec& 
   return GLTextureId::invalid();
 }
 
-const GLTextureId TexturesHandler::getGLTextureId(const std::vector<const IImage*> images,
-                                                  const TextureSpec& textureSpec) {
+
+const GLTextureId TexturesHandler::getGLTextureId(const GLImage* glImage,
+                                                  const std::string& name,
+                                                  bool hasMipMap) {
+  
+  TextureSpec textureSpec(name, 
+                          glImage->getWidth(), 
+                          glImage->getHeight(),
+                          hasMipMap);
+  
   GLTextureId previousId = getGLTextureIdIfAvailable(textureSpec);
   if (previousId.isValid()) {
     return previousId;
   }
   
   TextureHolder* holder = new TextureHolder(textureSpec);
-  holder->_glTextureId = _textureBuilder->createTextureFromImages(_gl,
-                                                                  images,
-                                                                  textureSpec.getWidth(),
-                                                                  textureSpec.getHeight(),
-                                                                  textureSpec.isMipmap());
+  holder->_glTextureId = _gl->uploadTexture(glImage, textureSpec.isMipmap());
+  
   
   if (_verbose) {
     ILogger::instance()->logInfo("Uploaded texture \"%s\" to GPU with texId=%s" ,
@@ -146,43 +136,6 @@ const GLTextureId TexturesHandler::getGLTextureId(const std::vector<const IImage
   showHolders("getGLTextureId(): created holder " + holder->description());
   
   return holder->_glTextureId;
-}
-
-const GLTextureId TexturesHandler::getGLTextureId(const std::vector<const IImage*> images,
-                                                  const std::vector<const Rectangle*> rectangles,
-                                                  const TextureSpec& textureSpec) {
-  GLTextureId previousId = getGLTextureIdIfAvailable(textureSpec);
-  if (previousId.isValid()) {
-    return previousId;
-  }
-  
-  TextureHolder* holder = new TextureHolder(textureSpec);
-  holder->_glTextureId = _textureBuilder->createTextureFromImages(_gl,
-                                                                  _factory,
-                                                                  images,
-                                                                  rectangles,
-                                                                  textureSpec.getWidth(),
-                                                                  textureSpec.getHeight(),
-                                                                  textureSpec.isMipmap());
-  
-  if (_verbose) {
-    ILogger::instance()->logInfo("Uploaded texture \"%s\" to GPU with texId=%s" ,
-                                 textureSpec.description().c_str(),
-                                 holder->_glTextureId.description().c_str());
-  }
-  
-  _textureHolders.push_back(holder);
-  
-  showHolders("getGLTextureId(): created holder " + holder->description());
-  
-  return holder->_glTextureId;
-}
-
-const GLTextureId TexturesHandler::getGLTextureId(const IImage *image,
-                                                  const TextureSpec& textureSpec) {
-  std::vector<const IImage*> images;
-  images.push_back(image);
-  return getGLTextureId(images, textureSpec);
 }
 
 void TexturesHandler::retainGLTextureId(const GLTextureId& glTextureId) {

@@ -2,18 +2,19 @@ package org.glob3.mobile.generated;
 public class G3MWidget
 {
 
-  public static G3MWidget create(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, GL gl, TexturesHandler texturesHandler, IDownloader downloader, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstraint, Renderer renderer, Renderer busyRenderer, EffectsScheduler scheduler, int width, int height, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics)
+  public static G3MWidget create(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, GL gl, TexturesHandler texturesHandler, TextureBuilder textureBuilder, IDownloader downloader, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstraint, Renderer renderer, Renderer busyRenderer, EffectsScheduler scheduler, int width, int height, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics)
   {
 	if (logger != null)
 	{
 	  logger.logInfo("Creating G3MWidget...");
 	}
   
+	IFactory.setInstance(factory);
 	IStringUtils.setInstance(stringUtils);
 	ILogger.setInstance(logger);
 	IThreadUtils.setInstance(threadUtils);
   
-	return new G3MWidget(frameTasksExecutor, factory, stringUtils, threadUtils, logger, gl, texturesHandler, downloader, planet, cameraConstraint, renderer, busyRenderer, scheduler, width, height, backgroundColor, logFPS, logDownloaderStatistics);
+	return new G3MWidget(frameTasksExecutor, factory, stringUtils, threadUtils, logger, gl, texturesHandler, textureBuilder, downloader, planet, cameraConstraint, renderer, busyRenderer, scheduler, width, height, backgroundColor, logFPS, logDownloaderStatistics);
   }
 
   public void dispose()
@@ -67,7 +68,7 @@ public class G3MWidget
   //  return value;
   //}
   
-  public final int render()
+  public final void render()
   {
 	_timer.start();
 	_renderCounter++;
@@ -85,7 +86,7 @@ public class G3MWidget
 	//         _planet->toGeodetic3D(_currentCamera->getCartesianPosition()).description().c_str());
   
 	// create RenderContext
-	RenderContext rc = new RenderContext(_frameTasksExecutor, _factory, _stringUtils, _threadUtils, _logger, _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _downloader, _effectsScheduler, _factory.createTimer());
+	RenderContext rc = new RenderContext(_frameTasksExecutor, _factory, _stringUtils, _threadUtils, _logger, _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _textureBuilder, _downloader, _effectsScheduler, _factory.createTimer());
   
 	_effectsScheduler.doOneCyle(rc);
   
@@ -134,7 +135,7 @@ public class G3MWidget
   //  }
 	_gl.clearScreen(_backgroundColor);
   
-	final int timeToRedraw = _selectedRenderer.render(rc);
+	_selectedRenderer.render(rc);
   
 	//  _frameTasksExecutor->doPostRenderCycle(&rc);
   
@@ -183,8 +184,6 @@ public class G3MWidget
 		_lastCacheStatistics = cacheStatistics;
 	  }
 	}
-  
-	return timeToRedraw;
   
   }
 
@@ -264,6 +263,7 @@ public class G3MWidget
   private Camera _nextCamera;
   private IDownloader _downloader;
   private TexturesHandler _texturesHandler;
+  private TextureBuilder _textureBuilder;
   private final Color _backgroundColor ;
 
   private ITimer _timer;
@@ -286,7 +286,7 @@ public class G3MWidget
 	_gl.enableCullFace(GLCullFace.Back);
   }
 
-  private G3MWidget(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, GL gl, TexturesHandler texturesHandler, IDownloader downloader, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, Renderer renderer, Renderer busyRenderer, EffectsScheduler effectsScheduler, int width, int height, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics)
+  private G3MWidget(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, GL gl, TexturesHandler texturesHandler, TextureBuilder textureBuilder, IDownloader downloader, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, Renderer renderer, Renderer busyRenderer, EffectsScheduler effectsScheduler, int width, int height, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics)
   {
 	  _frameTasksExecutor = frameTasksExecutor;
 	  _factory = factory;
@@ -295,6 +295,7 @@ public class G3MWidget
 	  _logger = logger;
 	  _gl = gl;
 	  _texturesHandler = texturesHandler;
+	  _textureBuilder = textureBuilder;
 	  _planet = planet;
 	  _cameraConstrainers = cameraConstrainers;
 	  _renderer = renderer;

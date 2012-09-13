@@ -11,8 +11,11 @@
 
 #include "GLTextureId.hpp"
 
-#include <vector>
+class IFloatBuffer;
+class IIntBuffer;
+class GLImage;
 
+#include <vector>
 #include <string>
 
 enum GLCullFace {
@@ -143,15 +146,13 @@ public:
   
   virtual void vertexAttribPointer(int index,
                                    int size,
-                                   GLType type,
                                    bool normalized,
                                    int stride,
-                                   const void*pointer) const = 0;
+                                   IFloatBuffer* buffer) const = 0;
   
   virtual void drawElements(GLPrimitive mode,
                             int count,
-                            GLType type,
-                            const void* indices) const = 0;
+                            IIntBuffer* indices) const = 0;
   
   virtual void lineWidth(float width) const = 0;
   
@@ -179,15 +180,17 @@ public:
                              GLTextureParameter par,
                              GLTextureParameterValue v) const = 0;
   
-  virtual void texImage2D(GLTextureType target,
-                          int         level,
-                          GLFormat    internalFormat,
-                          int         width,
-                          int         height,
-                          int         border,
-                          GLFormat    format,
-                          GLType      type,
-                          const void* data) const = 0;
+  virtual void texImage2D(const GLImage* glImage) const = 0;
+  
+  //  virtual void texImage2D(GLTextureType target,
+  //                          int         level,
+  //                          GLFormat    internalFormat,
+  //                          int         width,
+  //                          int         height,
+  //                          int         border,
+  //                          GLFormat    format,
+  //                          GLType      type,
+  //                          const void* data) const = 0;
   
   virtual void generateMipmap(GLTextureType target) const = 0;
   

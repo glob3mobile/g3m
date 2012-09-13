@@ -15,7 +15,7 @@ public interface IStorage
 {
 
   boolean contains(URL url);
-  void save(URL url, ByteBuffer buffer);
+  void save(URL url, ByteArrayWrapper buffer);
 
-  ByteBuffer read(URL url);
+  ByteArrayWrapper read(URL url);
 }

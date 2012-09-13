@@ -15,8 +15,11 @@
 #include "MutableMatrix44D.hpp"
 #include "Color.hpp"
 #include "MutableVector2D.hpp"
-
 #include "INativeGL.hpp"
+
+#include "IFloatBuffer.hpp"
+
+#include "GLImage.hpp"
 
 #include <list>
 
@@ -40,7 +43,6 @@ private:
   bool _enableTextures;
   bool _enableTexture2D;
   bool _enableVertexColor;
-  bool _enableVertexNormal;
   bool _enableVerticesPosition;
   bool _enableFlatColor;
   bool _enableDepthTest;
@@ -62,12 +64,9 @@ private:
   float _translationX;
   float _translationY;
   
-#ifdef C_CODE
-  const float* _textureCoordinates;
-#endif
-#ifdef JAVA_CODE
-  private final float[] _textureCoordinates;
-#endif
+  IFloatBuffer* _vertices;
+  IFloatBuffer* _textureCoordinates;
+  IFloatBuffer* _colors;
   
   float _flatColorR;
   float _flatColorG;
@@ -79,16 +78,22 @@ private:
   
   const GLTextureId getGLTextureId();
   
-  
-  int _lastTextureWidth;
-  int _lastTextureHeight;
-#ifdef C_CODE
-  unsigned char* _lastImageData;
-#endif
-#ifdef JAVA_CODE
-  char[] _lastImageData;
-#endif
+//  int _lastTextureWidth;
+//  int _lastTextureHeight;
+//#ifdef C_CODE
+//  unsigned char* _lastImageData;
+//#endif
+//#ifdef JAVA_CODE
+//  byte[] _lastImageData;
+//#endif
 
+  //Get Locations warning of errors
+  bool _errorGettingLocationOcurred;
+  int checkedGetAttribLocation(int program, const std::string& name);
+  int checkedGetUniformLocation(int program, const std::string& name);
+  
+  IFloatBuffer* _billboardTexCoord;
+  IFloatBuffer* getBillboardTexCoord();
   
 public:
   
@@ -97,9 +102,8 @@ public:
   _enableTextures(false),
   _enableTexture2D(false),
   _enableVertexColor(false),
-  _enableVertexNormal(false),
   _enableVerticesPosition(false),
-  _enableFlatColor(false),
+//  _enableFlatColor(false),
   _enableBlend(false),
   _enableDepthTest(false),
   _enableCullFace(false),
@@ -115,17 +119,16 @@ public:
   _translationY(0),
   _texturesIdGetCounter(0),
   _texturesIdTakeCounter(0),
+  _vertices(NULL),
   _textureCoordinates(NULL),
+  _colors(NULL),
   _flatColorR(0),
   _flatColorG(0),
   _flatColorB(0),
   _flatColorA(0),
   _flatColorIntensity(0),
-  _lastTextureWidth(-1),
-  _lastTextureHeight(-1),
-  _lastImageData(NULL)
+  _billboardTexCoord(NULL)
   {
-    
   }
   
   void enableVerticesPosition();
@@ -151,13 +154,9 @@ public:
   
   void color(float r, float g, float b, float a);
   
-  void enableVertexColor(float const colors[], float intensity);
+  void enableVertexColor(IFloatBuffer* colors, float intensity);
   
   void disableVertexColor();
-  
-  void enableVertexNormal(float const normals[]);
-  
-  void disableVertexNormal();
   
   void pushMatrix();
   
@@ -167,19 +166,19 @@ public:
   
   void multMatrixf(const MutableMatrix44D &m);
   
-  void vertexPointer(int size, int stride, const float vertex[]);
+  void vertexPointer(int size, int stride, IFloatBuffer* vertices);
   
-  void drawTriangleStrip(int n, const int i[]) ;
+  void drawTriangleStrip(IIntBuffer* indices) ;
   
-  void drawLines(int n, const int i[]);
+  void drawLines(IIntBuffer* indices);
   
-  void drawLineLoop(int n, const int i[]);
+  void drawLineLoop(IIntBuffer* indices);
   
-  void drawPoints(int n, const int i[]);
+  void drawPoints(IIntBuffer* indices);
   
   void setProjection(const MutableMatrix44D &projection);
   
-  void useProgram(unsigned int program);
+  bool useProgram(unsigned int program);
   
   void enablePolygonOffset(float factor, float units);
   
@@ -191,13 +190,15 @@ public:
   
   GLError getError();
   
-  const GLTextureId uploadTexture(const IImage* image,
-                                  int textureWidth, int textureHeight,
-                                  bool generateMipmap);
+  const GLTextureId uploadTexture(const GLImage* glImage, bool generateMipmap);
+  
+  //  const GLTextureId uploadTexture(const IImage* image,
+  //                                  int textureWidth, int textureHeight,
+  //                                  bool generateMipmap);
   
   void setTextureCoordinates(int size,
                              int stride,
-                             const float texcoord[]);
+                             IFloatBuffer* texcoord);
   
   void bindTexture(const GLTextureId& textureId);
   
@@ -208,7 +209,7 @@ public:
   void disableBlend();
   
   void drawBillBoard(const GLTextureId& textureId,
-                     const Vector3D& pos,
+                     IFloatBuffer* vertices,
                      const float viewPortRatio);
   
   void deleteTexture(const GLTextureId& textureId);
@@ -281,10 +282,21 @@ public:
     delete _gl;
 #endif
     
-    if (_lastImageData != NULL) {
-      delete [] _lastImageData;
-      _lastImageData = NULL;
+//    if (_lastImageData != NULL) {
+//      delete [] _lastImageData;
+//      _lastImageData = NULL;
+//    }
+
+    if (_vertices != NULL) {
+      delete _vertices;
     }
+    if (_textureCoordinates != NULL) {
+      delete _textureCoordinates;
+    }
+    if (_colors != NULL) {
+      delete _colors;
+    }
+     
   }
   
 };

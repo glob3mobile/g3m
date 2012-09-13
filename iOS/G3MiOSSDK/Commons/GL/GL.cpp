@@ -16,6 +16,11 @@
 
 #include "INativeGL.hpp"
 
+#include "IIntBuffer.hpp"
+
+#include "IFactory.hpp"
+
+#include "FloatBufferBuilderFromCartesian2D.hpp"
 
 struct UniformsStruct {
   int Projection;
@@ -43,29 +48,47 @@ struct AttributesStruct {
   int Position;
   int TextureCoord;
   int Color;
-  int Normal;
 } Attributes;
 
+int GL::checkedGetAttribLocation(int program, const std::string& name) {
+  int l = _gl->getAttribLocation(program, name);
+  if (l == -1) {
+    ILogger::instance()->logError("Error fetching Attribute, Program = %d, Variable = %s", program, name.c_str());
+    _errorGettingLocationOcurred = true;
+  }
+  return l;
+}
+int GL::checkedGetUniformLocation(int program, const std::string& name) {
+  int l = _gl->getUniformLocation(program, name);
+  if (l == -1) {
+    ILogger::instance()->logError("Error fetching Uniform, Program = %d, Variable = %s", program, name.c_str());
+    _errorGettingLocationOcurred = true;
+  }
+  return l;
+}
 
-void GL::useProgram(unsigned int program) {
+bool GL::useProgram(unsigned int program) {
   // set shaders
   _gl->useProgram(program);
   
+  //Methods checkedGetAttribLocation and checkedGetUniformLocation
+  //will turn _errorGettingLocationOcurred to true is that happens
+  _errorGettingLocationOcurred = false;
+  
   // Extract the handles to attributes
-  Attributes.Position     = _gl->getAttribLocation(program, "Position");
-  Attributes.TextureCoord = _gl->getAttribLocation(program, "TextureCoord");
-  Attributes.Color        = _gl->getAttribLocation(program, "Color");
-  Attributes.Normal       = _gl->getAttribLocation(program, "Normal");
+  Attributes.Position     = checkedGetAttribLocation(program, "Position");
+  Attributes.TextureCoord = checkedGetAttribLocation(program, "TextureCoord");
+  Attributes.Color        = checkedGetAttribLocation(program, "Color");
   
   // Extract the handles to uniforms
-  Uniforms.Projection          = _gl->getUniformLocation(program, "Projection");
-  Uniforms.Modelview           = _gl->getUniformLocation(program, "Modelview");
-  Uniforms.Sampler             = _gl->getUniformLocation(program, "Sampler");
-  Uniforms.EnableTexture       = _gl->getUniformLocation(program, "EnableTexture");
-  Uniforms.FlatColor           = _gl->getUniformLocation(program, "FlatColor");
-  Uniforms.TranslationTexCoord = _gl->getUniformLocation(program, "TranslationTexCoord");
-  Uniforms.ScaleTexCoord       = _gl->getUniformLocation(program, "ScaleTexCoord");
-  Uniforms.PointSize           = _gl->getUniformLocation(program, "PointSize");
+  Uniforms.Projection          = checkedGetUniformLocation(program, "Projection");
+  Uniforms.Modelview           = checkedGetUniformLocation(program, "Modelview");
+  Uniforms.Sampler             = checkedGetUniformLocation(program, "Sampler");
+  Uniforms.EnableTexture       = checkedGetUniformLocation(program, "EnableTexture");
+  Uniforms.FlatColor           = checkedGetUniformLocation(program, "FlatColor");
+  Uniforms.TranslationTexCoord = checkedGetUniformLocation(program, "TranslationTexCoord");
+  Uniforms.ScaleTexCoord       = checkedGetUniformLocation(program, "ScaleTexCoord");
+  Uniforms.PointSize           = checkedGetUniformLocation(program, "PointSize");
   
   // default values
   _gl->uniform2f(Uniforms.ScaleTexCoord, _scaleX, _scaleY);
@@ -73,26 +96,35 @@ void GL::useProgram(unsigned int program) {
   _gl->uniform1f(Uniforms.PointSize, 1);
   
   //BILLBOARDS
-  Uniforms.BillBoard     = _gl->getUniformLocation(program, "BillBoard");
-  Uniforms.ViewPortRatio = _gl->getUniformLocation(program, "ViewPortRatio");
+  Uniforms.BillBoard     = checkedGetUniformLocation(program, "BillBoard");
+  Uniforms.ViewPortRatio = checkedGetUniformLocation(program, "ViewPortRatio");
   _gl->uniform1i(Uniforms.BillBoard, 0); //NOT DRAWING BILLBOARD
   
   //FOR FLAT COLOR MIXING
-  Uniforms.FlatColorIntensity      = _gl->getUniformLocation(program, "FlatColorIntensity");
-  Uniforms.ColorPerVertexIntensity = _gl->getUniformLocation(program, "ColorPerVertexIntensity");
-  Uniforms.EnableColorPerVertex    = _gl->getUniformLocation(program, "EnableColorPerVertex");
-  Uniforms.EnableFlatColor         = _gl->getUniformLocation(program, "EnableFlatColor");
+  Uniforms.FlatColorIntensity      = checkedGetUniformLocation(program, "FlatColorIntensity");
+  Uniforms.ColorPerVertexIntensity = checkedGetUniformLocation(program, "ColorPerVertexIntensity");
+  Uniforms.EnableColorPerVertex    = checkedGetUniformLocation(program, "EnableColorPerVertex");
+  Uniforms.EnableFlatColor         = checkedGetUniformLocation(program, "EnableFlatColor");
+  
+  //Return
+  return !_errorGettingLocationOcurred;
 }
 
 void GL::loadModelView() {
-  static float M[16];
-  _modelView.copyToFloatMatrix(M);
+#ifdef C_CODE
+  float* M = _modelView.getColumnMajorFloatArray();
+#else
+  float[] M = _modelView.getColumnMajorFloatArray();
+#endif
   _gl->uniformMatrix4fv(Uniforms.Modelview, 1, false, M);
 }
 
 void GL::setProjection(const MutableMatrix44D &projection) {
-  static float M[16];
-  projection.copyToFloatMatrix(M);
+#ifdef C_CODE
+  float* M = projection.getColumnMajorFloatArray();
+#else
+  float[] M = projection.getColumnMajorFloatArray();
+#endif
   _gl->uniformMatrix4fv(Uniforms.Projection, 1, false, M);
 }
 
@@ -143,8 +175,6 @@ void GL::color(float r, float g, float b, float a) {
     _flatColorB = b;
     _flatColorA = a;
   }
-  
-//  _gl->uniform4f(Uniforms.FlatColor, r, g, b, a);
 }
 
 void GL::transformTexCoords(float scaleX,
@@ -185,43 +215,60 @@ void GL::disablePolygonOffset() {
 #endif
 }
 
-void GL::vertexPointer(int size, int stride, const float vertex[]) {
+void GL::vertexPointer(int size, int stride, IFloatBuffer* vertices) {
+  if ((_vertices != vertices) ||
+      (_vertices->timestamp() != vertices->timestamp()) ) {
+    
+    _gl->vertexAttribPointer(Attributes.Position, size, false, stride, vertices);
+    _vertices = vertices;
+  }
+}
+
+void GL::drawTriangleStrip(IIntBuffer* indices) {
 #ifdef C_CODE
-  _gl->vertexAttribPointer(Attributes.Position, size, Float, false, stride, (const void *) vertex);
+  _gl->drawElements(TriangleStrip,
+                    indices->size(),
+                    indices);
 #else
-  _gl->vertexAttribPointer(Attributes.Position, size, GLType.Float, false, stride, (const void *) vertex);
+  _gl->drawElements(GLPrimitive.TriangleStrip,
+                    indices.size(),
+                    indices);
 #endif
 }
 
-void GL::drawTriangleStrip(int n, const int i[]) {
+void GL::drawLines(IIntBuffer* indices) {
 #ifdef C_CODE
-  _gl->drawElements(TriangleStrip, n, UnsignedInt, i);
+  _gl->drawElements(Lines,
+                    indices->size(),
+                    indices);
 #else
-  _gl->drawElements(GLPrimitive.TriangleStrip, n, GLType.UnsignedInt, i);
+  _gl->drawElements(GLPrimitive.Lines,
+                    indices.size(),
+                    indices);
 #endif
 }
 
-void GL::drawLines(int n, const int i[]) {
+void GL::drawLineLoop(IIntBuffer* indices) {
 #ifdef C_CODE
-  _gl->drawElements(Lines, n, UnsignedInt, i);
+  _gl->drawElements(LineLoop,
+                    indices->size(),
+                    indices);
 #else
-  _gl->drawElements(GLPrimitive.Lines, n, GLType.UnsignedInt, i);
+  _gl->drawElements(GLPrimitive.LineLoop,
+                    indices.size(),
+                    indices);
 #endif
 }
 
-void GL::drawLineLoop(int n, const int i[]) {
+void GL::drawPoints(IIntBuffer* indices) {
 #ifdef C_CODE
-  _gl->drawElements(LineLoop, n, UnsignedInt, i);
+  _gl->drawElements(Points,
+                    indices->size(),
+                    indices);
 #else
-  _gl->drawElements(GLPrimitive.LineLoop, n, GLType.UnsignedInt, i);
-#endif
-}
-
-void GL::drawPoints(int n, const int i[]) {
-#ifdef C_CODE
-  _gl->drawElements(Points, n, UnsignedInt, i);
-#else
-  _gl->drawElements(GLPrimitive.Points, n, GLType.UnsignedInt, i);
+  _gl->drawElements(GLPrimitive.Points,
+                    indices.size(),
+                    indices);
 #endif
 }
 
@@ -237,34 +284,10 @@ GLError GL::getError() {
   return _gl->getError();
 }
 
-const GLTextureId GL::uploadTexture(const IImage* image,
-                                    int textureWidth, int textureHeight,
-                                    bool generateMipmap) {
+const GLTextureId GL::uploadTexture(const GLImage* glImage, bool generateMipmap){
   const GLTextureId texId = getGLTextureId();
   if (texId.isValid()) {
-    
 #ifdef C_CODE
-    unsigned char* imageData;
-    
-    const bool lastImageDataIsValid = ((_lastTextureWidth == textureWidth) &&
-                                       (_lastTextureHeight == textureHeight) &&
-                                       (_lastImageData != NULL));
-    
-    if (lastImageDataIsValid) {
-      imageData = _lastImageData;
-    }
-    else {
-      imageData = new unsigned char[textureWidth * textureHeight * 4];
-      if (_lastImageData != NULL) {
-        delete [] _lastImageData;
-      }
-      _lastImageData = imageData;
-      _lastTextureWidth = textureWidth;
-      _lastTextureHeight = textureHeight;
-    }
-
-    image->fillWithRGBA8888(imageData, textureWidth, textureHeight);
-    
     _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);
     _gl->pixelStorei(Unpack, 1);
     
@@ -273,17 +296,13 @@ const GLTextureId GL::uploadTexture(const IImage* image,
     _gl->texParameteri(Texture2D, MagFilter, Linear);
     _gl->texParameteri(Texture2D, WrapS, ClampToEdge);
     _gl->texParameteri(Texture2D, WrapT, ClampToEdge);
-    _gl->texImage2D(Texture2D, 0, RGBA, textureWidth, textureHeight, 0, RGBA, UnsignedByte, imageData);
+    _gl->texImage2D(glImage);
     
     if (generateMipmap) {
       _gl->generateMipmap(Texture2D);
     }
 #endif
-    
 #ifdef JAVA_CODE
-    byte[] imageData = new byte[textureWidth * textureHeight * 4];
-    image.fillWithRGBA8888(imageData, textureWidth, textureHeight);
-    
     _gl.blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
     _gl.pixelStorei(GLAlignment.Unpack, 1);
     
@@ -292,29 +311,28 @@ const GLTextureId GL::uploadTexture(const IImage* image,
     _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MagFilter, GLTextureParameterValue.Linear);
     _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapS, GLTextureParameterValue.ClampToEdge);
     _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapT, GLTextureParameterValue.ClampToEdge);
-    _gl.texImage2D(GLTextureType.Texture2D, 0, GLFormat.RGBA, textureWidth, textureHeight, 0, GLFormat.RGBA, GLType.UnsignedByte, imageData);
+    _gl.texImage2D(glImage);
     
     if (generateMipmap) {
       _gl.generateMipmap(GLTextureType.Texture2D);
     }
 #endif
-
   }
   else {
     printf("can't get a valid texture id\n");
   }
-
+  
   return texId;
+  
+  
 }
 
-void GL::setTextureCoordinates(int size, int stride, const float texcoord[]) {
-    if (_textureCoordinates != texcoord) {
-#ifdef C_CODE
-  _gl->vertexAttribPointer(Attributes.TextureCoord, size, Float, false, stride, (const void *) texcoord);
-#else
-  _gl->vertexAttribPointer(Attributes.TextureCoord, size, GLType.Float, false, stride, (const void *) texcoord);
-#endif
-    }
+void GL::setTextureCoordinates(int size, int stride, IFloatBuffer* texcoord) {
+  if ((_textureCoordinates != texcoord) ||
+      (_textureCoordinates->timestamp() != texcoord->timestamp()) ) {
+    _gl->vertexAttribPointer(Attributes.TextureCoord, size, false, stride, texcoord);
+    _textureCoordinates = texcoord;
+  }
 }
 
 void GL::bindTexture(const GLTextureId& textureId) {
@@ -325,22 +343,24 @@ void GL::bindTexture(const GLTextureId& textureId) {
 #endif
 }
 
-void GL::drawBillBoard(const GLTextureId& textureId,
-                       const Vector3D& pos,
-                       const float viewPortRatio) {
-  const float vertex[] = {
-    (float) pos.x(), (float) pos.y(), (float) pos.z(),
-    (float) pos.x(), (float) pos.y(), (float) pos.z(),
-    (float) pos.x(), (float) pos.y(), (float) pos.z(),
-    (float) pos.x(), (float) pos.y(), (float) pos.z()
-  };
+IFloatBuffer* GL::getBillboardTexCoord() {
   
-  const static float texcoord[] = {
-    1, 1,
-    1, 0,
-    0, 1,
-    0, 0
-  };
+  if (_billboardTexCoord == NULL) {
+    FloatBufferBuilderFromCartesian2D texCoor;
+    texCoor.add(1,1);
+    texCoor.add(1,0);
+    texCoor.add(0,1);
+    texCoor.add(0,0);
+    _billboardTexCoord = texCoor.create();
+  }
+  
+  return _billboardTexCoord;
+}
+
+void GL::drawBillBoard(const GLTextureId& textureId,
+                       IFloatBuffer* vertices,
+                       const float viewPortRatio) {
+  int TODO_refactor_billboard;
   
   _gl->uniform1i(Uniforms.BillBoard, 1);
   
@@ -353,13 +373,13 @@ void GL::drawBillBoard(const GLTextureId& textureId,
   
   bindTexture(textureId);
   
-  vertexPointer(3, 0, vertex);
-  setTextureCoordinates(2, 0, texcoord);
+  vertexPointer(3, 0, vertices);
+  setTextureCoordinates(2, 0, getBillboardTexCoord());
   
 #ifdef C_CODE
-  _gl->drawArrays(TriangleStrip, 0, 4);
+  _gl->drawArrays(TriangleStrip, 0, vertices->size() / 3);
 #else
-  _gl->drawArrays(GLPrimitive.TriangleStrip, 0, 4);
+  _gl->drawArrays(GLPrimitive.TriangleStrip, 0, vertices->size() / 3);
 #endif
   
   enableDepthTest();
@@ -396,18 +416,21 @@ void GL::disableTexture2D() {
   }
 }
 
-void GL::enableVertexColor(float const colors[], float intensity) {
-  //if (!_enableVertexColor) {
-  _gl->uniform1i(Uniforms.EnableColorPerVertex, 1);
-  _gl->enableVertexAttribArray(Attributes.Color);
-#ifdef C_CODE
-  _gl->vertexAttribPointer(Attributes.Color, 4, Float, false, 0, colors);
-#else
-  _gl->vertexAttribPointer(Attributes.Color, 4, GLType.Float, false, 0, colors);
-#endif
+void GL::enableVertexColor(IFloatBuffer* colors, float intensity) {
+  
+  if (!_enableVertexColor) {
+    _gl->uniform1i(Uniforms.EnableColorPerVertex, 1);
+    _gl->enableVertexAttribArray(Attributes.Color);
+    _enableVertexColor = true;
+  }
+  
+  if ((_colors != colors) ||
+      (_colors->timestamp() != colors->timestamp()) ) {
+    _gl->vertexAttribPointer(Attributes.Color, 4, false, 0, colors);
+    _colors = colors;
+  }
+  
   _gl->uniform1f(Uniforms.ColorPerVertexIntensity, intensity);
-    //_enableVertexColor = true;
-  //}
 }
 
 void GL::disableVertexColor() {
@@ -415,25 +438,6 @@ void GL::disableVertexColor() {
     _gl->disableVertexAttribArray(Attributes.Color);
     _gl->uniform1i(Uniforms.EnableColorPerVertex, 0);
     _enableVertexColor = false;
-  }
-}
-
-void GL::enableVertexNormal(float const normals[]) {
-  if (!_enableVertexNormal) {
-    _gl->enableVertexAttribArray(Attributes.Normal);
-#ifdef C_CODE
-    _gl->vertexAttribPointer(Attributes.Normal, 3, Float, false, 0, normals);
-#else
-    _gl->vertexAttribPointer(Attributes.Normal, 3, GLType.Float, false, 0, normals);
-#endif
-    _enableVertexNormal = true;
-  }
-}
-
-void GL::disableVertexNormal() {
-  if (_enableVertexNormal) {
-    _gl->disableVertexAttribArray(Attributes.Normal);
-    _enableVertexNormal = false;
   }
 }
 
@@ -460,7 +464,7 @@ void GL::enableVertexFlatColor(float r, float g, float b, float a,
   
   color(r, g, b, a);
   
-//  _gl->uniform1f(Uniforms.FlatColorIntensity, intensity);
+  //  _gl->uniform1f(Uniforms.FlatColorIntensity, intensity);
   if (_flatColorIntensity != intensity) {
     _gl->uniform1f(Uniforms.FlatColorIntensity, intensity);
     _flatColorIntensity = intensity;
@@ -519,7 +523,7 @@ void GL::disableBlend() {
   
 }
 
-void GL::setBlendFuncSrcAlpha(){
+void GL::setBlendFuncSrcAlpha() {
 #ifdef C_CODE
   _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);
 #else
@@ -563,7 +567,7 @@ const GLTextureId GL::getGLTextureId() {
     const std::vector<GLTextureId> ids = _gl->genTextures(bugdetSize);
     
     for (int i = 0; i < bugdetSize; i++) {
-//      _texturesIdBag.push_back(ids[i]);
+      //      _texturesIdBag.push_back(ids[i]);
       _texturesIdBag.push_front(ids[i]);
     }
     
@@ -579,12 +583,12 @@ const GLTextureId GL::getGLTextureId() {
   const GLTextureId result = _texturesIdBag.back();
   _texturesIdBag.pop_back();
   
-//  printf("   - Assigning 1 texturesId (#%d) from bag (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
-//         result.getGLTextureId(),
-//         _texturesIdBag.size(),
-//         _texturesIdGetCounter,
-//         _texturesIdTakeCounter,
-//         _texturesIdGetCounter - _texturesIdTakeCounter);
+  //  printf("   - Assigning 1 texturesId (#%d) from bag (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
+  //         result.getGLTextureId(),
+  //         _texturesIdBag.size(),
+  //         _texturesIdGetCounter,
+  //         _texturesIdTakeCounter,
+  //         _texturesIdGetCounter - _texturesIdTakeCounter);
   
   return result;
 }

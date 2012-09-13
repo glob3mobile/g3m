@@ -11,7 +11,7 @@
 
 //#include <string>
 
-#include "ByteBuffer.hpp"
+#include "ByteArrayWrapper.hpp"
 #include "URL.hpp"
 
 class IStorage {
@@ -19,9 +19,9 @@ public:
   
   virtual bool contains(const URL& url) = 0;
   virtual void save(const URL& url,
-                    const ByteBuffer& buffer) = 0;
+                    const ByteArrayWrapper& buffer) = 0;
   
-  virtual const ByteBuffer* read(const URL& url) = 0;
+  virtual const ByteArrayWrapper* read(const URL& url) = 0;
 #ifdef C_CODE
   virtual ~IStorage() {}
 #endif

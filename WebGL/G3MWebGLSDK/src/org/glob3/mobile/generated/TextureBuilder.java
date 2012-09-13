@@ -9,15 +9,21 @@ package org.glob3.mobile.generated;
 
 
 
+
 public abstract class TextureBuilder
 {
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual const GLTextureId createTextureFromImages(GL * gl, const java.util.ArrayList<const IImage*> images, int width, int height, boolean generateMipmap) const = 0;
-  public abstract GLTextureId createTextureFromImages(GL gl, java.util.ArrayList<IImage> images, int width, int height, boolean generateMipmap);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual const GLTextureId createTextureFromImages(GL * gl, const IFactory* factory, const java.util.ArrayList<const IImage*> images, const java.util.ArrayList<const Rectangle*> rectangles, int width, int height, boolean generateMipmap) const = 0;
-  public abstract GLTextureId createTextureFromImages(GL gl, IFactory factory, java.util.ArrayList<IImage> images, java.util.ArrayList<Rectangle> rectangles, int width, int height, boolean generateMipmap);
+//ORIGINAL LINE: virtual const GLImage* createTextureFromImage(GL * gl, const IFactory* factory, GLFormat format, const IImage* image, int width, int height) const = 0;
+  public abstract GLImage createTextureFromImage(GL gl, IFactory factory, GLFormat format, IImage image, int width, int height);
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual const GLImage* createTextureFromImages(GL * gl, const IFactory* factory, GLFormat format, const java.util.ArrayList<const IImage*> images, int width, int height) const = 0;
+  public abstract GLImage createTextureFromImages(GL gl, IFactory factory, GLFormat format, java.util.ArrayList<IImage> images, int width, int height);
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual const GLImage* createTextureFromImages(GL * gl, const IFactory* factory, GLFormat format, const java.util.ArrayList<const IImage*> images, const java.util.ArrayList<const Rectangle*> rectangles, int width, int height) const = 0;
+  public abstract GLImage createTextureFromImages(GL gl, IFactory factory, GLFormat format, java.util.ArrayList<IImage> images, java.util.ArrayList<Rectangle> rectangles, int width, int height);
   public void dispose()
   {
   }

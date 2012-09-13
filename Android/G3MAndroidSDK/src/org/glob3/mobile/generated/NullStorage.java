@@ -16,11 +16,11 @@ public class NullStorage implements IStorage
 	return false;
   }
 
-  public final void save(URL url, ByteBuffer buffer)
+  public final void save(URL url, ByteArrayWrapper buffer)
   {
   }
 
-  public final ByteBuffer read(URL url)
+  public final ByteArrayWrapper read(URL url)
   {
 	return null;
   }

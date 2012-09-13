@@ -27,11 +27,11 @@ class Petition {
 private:
 #ifdef C_CODE
   const URL             _url;
-  const ByteBuffer* _buffer;
+  const ByteArrayWrapper* _buffer;
 #endif
 #ifdef JAVA_CODE
   private URL _url = new URL(); //Conversor creates class "Url"
-  private ByteBuffer _buffer;
+  private ByteArrayWrapper _buffer;
 #endif
   const Sector*       _sector;
   
@@ -59,7 +59,7 @@ public:
     }
   }
   
-  bool hasByteBuffer() const {
+  bool hasByteArrayWrapper() const {
     return _buffer != NULL;
   }
   
@@ -71,12 +71,12 @@ public:
     return *_sector;
   }
   
-  void setByteBuffer(const ByteBuffer* buffer) {
+  void setByteArrayWrapper(const ByteArrayWrapper* buffer) {
     releaseBuffer();
     _buffer = buffer;
   }
   
-  const ByteBuffer* getByteBuffer() const {
+  const ByteArrayWrapper* getByteArrayWrapper() const {
     return _buffer;
   }
   

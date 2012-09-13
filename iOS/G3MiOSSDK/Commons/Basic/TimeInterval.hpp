@@ -14,14 +14,11 @@
 
 class TimeInterval {
 private:
-  const long _milliseconds;
+  const long long _milliseconds;
   
-  TimeInterval(const long milliseconds) : _milliseconds(milliseconds) {
+  TimeInterval(const long long milliseconds) : _milliseconds(milliseconds) {
     
   }
-  
-  // the next function is for compatibility with Java
-  TimeInterval(const double milliseconds) : _milliseconds((long)milliseconds) {}  
   
 public:
   TimeInterval(const TimeInterval& other) : _milliseconds(other._milliseconds) {
@@ -30,29 +27,20 @@ public:
   
   TimeInterval() : _milliseconds(0) {}
   
-  static TimeInterval nan() {
-    return TimeInterval(GMath.NanD());
-  }
-  
-  static TimeInterval fromMilliseconds(const long milliseconds) {
+  static TimeInterval fromMilliseconds(const long long milliseconds) {
     return TimeInterval(milliseconds);
   }
   
   static TimeInterval fromSeconds(const double seconds) {
-    return TimeInterval::fromMilliseconds((long)(seconds*1000.0));
+    return TimeInterval::fromMilliseconds((long long)(seconds*1000.0));
   }
   
-  
-  long milliseconds() const {
+  long long milliseconds() const {
     return _milliseconds;
   }
 
   double seconds() const {
     return (double) _milliseconds / 1000.0;
-  }
-  
-  bool isNan() const {
-    return GMath.isNan((double)_milliseconds);
   }
   
   bool lowerThan(const TimeInterval& that) const {

@@ -19,118 +19,159 @@ package org.glob3.mobile.generated;
 
 public class CPUTextureBuilder extends TextureBuilder
 {
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const GLTextureId createTextureFromImages(GL * gl, const java.util.ArrayList<const IImage*> images, int width, int height, boolean generateMipmap) const
-  public final GLTextureId createTextureFromImages(GL gl, java.util.ArrayList<IImage> images, int width, int height, boolean generateMipmap)
+//ORIGINAL LINE: const GLImage* createTextureFromImage(GL * gl, const IFactory* factory, GLFormat format, const IImage* image, int width, int height) const
+  public final GLImage createTextureFromImage(GL gl, IFactory factory, GLFormat format, IImage image, int width, int height)
   {
+	if (image == null)
+	{
+	  ILogger.instance().logWarning("Creating blank GLImage");
+	  int imageBytes = 4* width *height;
+	  byte[] data = new byte[imageBytes];
+	  for (int i = 0; i < imageBytes; i++)
+	  {
+		data[i] = (byte) 255; //WHITE
+	  }
+  
+	  IByteBuffer bb = factory.createByteBuffer(data, imageBytes);
+  
+	  GLImage glImage = new GLImage(GLFormat.RGBA, bb, width, height);
+  
+	  return glImage;
+	}
+	else
+	{
+  
+	  IByteBuffer bb = image.createByteBufferRGBA8888(width, height);
+	  GLImage glImage = new GLImage(GLFormat.RGBA, bb, width, height);
+  
+	  return glImage;
+	}
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const GLImage* createTextureFromImages(GL * gl, const IFactory* factory, GLFormat format, const java.util.ArrayList<const IImage*> images, int width, int height) const
+  public final GLImage createTextureFromImages(GL gl, IFactory factory, GLFormat format, java.util.ArrayList<IImage> images, int width, int height)
+  {
+  
 	final int imagesSize = images.size();
   
 	if (imagesSize == 0)
 	{
-	  return GLTextureId.invalid();
-	}
   
-	if (imagesSize == 1)
-	{
-	  return gl.uploadTexture(images.get(0), width, height, generateMipmap);
-	}
+	  ILogger.instance().logWarning("Creating blank GLImage");
+	  int imageBytes = 4* width *height;
+	  byte[] data = new byte[imageBytes];
+	  for (int i = 0; i < imageBytes; i++)
+	  {
+		data[i] = (byte) 255; //WHITE
+	  }
   
-	IImage im = images.get(0);
-	IImage im2 = null;
-	for (int i = 1; i < imagesSize; i++)
+	  IByteBuffer bb = factory.createByteBuffer(data, imageBytes);
+	  GLImage glImage = new GLImage(GLFormat.RGBA, bb, width, height);
+  
+	  return glImage;
+	}
+	else
 	{
-	  IImage imTrans = images.get(i);
-	  im2 = im.combineWith(imTrans, width, height);
-	  if (i > 1)
+	  IImage im = images.get(0);
+	  IImage im2 = null;
+	  for (int i = 1; i < imagesSize; i++)
+	  {
+		IImage imTrans = images.get(i);
+		im2 = im.combineWith(imTrans, width, height);
+		if (i > 1)
+		{
+		  if (im != null)
+			  im.dispose();
+		}
+		im = im2;
+	  }
+  
+	  IByteBuffer bb = im.createByteBufferRGBA8888(width, height);
+  
+	  GLImage glImage = new GLImage(GLFormat.RGBA, bb, width, height);
+  
+	  if (imagesSize > 1)
 	  {
 		if (im != null)
 			im.dispose();
 	  }
-	  im = im2;
+  
+	  return glImage;
+  
 	}
   
-	final GLTextureId texId = gl.uploadTexture(im, width, height, generateMipmap);
-  
-	if (imagesSize > 1)
-	{
-	  if (im != null)
-		  im.dispose();
-	}
-  
-	return texId;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const GLTextureId createTextureFromImages(GL * gl, const IFactory* factory, const java.util.ArrayList<const IImage*> images, const java.util.ArrayList<const Rectangle*> rectangles, int width, int height, boolean generateMipmap) const
-  public final GLTextureId createTextureFromImages(GL gl, IFactory factory, java.util.ArrayList<IImage> images, java.util.ArrayList<Rectangle> rectangles, int width, int height, boolean generateMipmap)
+//ORIGINAL LINE: const GLImage* createTextureFromImages(GL * gl, const IFactory* factory, GLFormat format, const java.util.ArrayList<const IImage*> images, const java.util.ArrayList<const Rectangle*> rectangles, int width, int height) const
+  public final GLImage createTextureFromImages(GL gl, IFactory factory, GLFormat format, java.util.ArrayList<IImage> images, java.util.ArrayList<Rectangle> rectangles, int width, int height)
   {
+  
+  
 	final int imagesSize = images.size();
   
-	if (imagesSize == 0)
+	if (imagesSize == 0 || images.size() != rectangles.size())
 	{
-	  return GLTextureId.invalid();
-	}
   
-  //  const Rectangle baseRec(0,0, width, height);
-  //
-  //  if ((imagesSize == 1) && (rectangles[0]->equalTo(baseRec))) {
-  //    return gl->uploadTexture(images[0], width, height);
-  //  }
-  //
-  //
-  //
-  //  const IImage* image = factory->createImageFromSize(width, height);
-  //  for (int i = 0; i < imagesSize; i++) {
-  //    IImage* nextImage = image->combineWith(*images[i], *rectangles[i], width, height);
-  //    delete image;
-  //    image = nextImage;
-  //  }
-  //
-  //  const GLTextureId texId = gl->uploadTexture(image, width, height);
-  //
-  //  delete image;
-  //
-  //  return texId;
+	  ILogger.instance().logWarning("Creating blank GLImage");
+	  int imageBytes = 4* width *height;
+	  byte[] data = new byte[imageBytes];
+	  for (int i = 0; i < imageBytes; i++)
+	  {
+		data[i] = (byte) 255; //WHITE
+	  }
   
+	  IByteBuffer bb = factory.createByteBuffer(data, imageBytes);
+	  GLImage glImage = new GLImage(GLFormat.RGBA, bb, width, height);
   
-	IImage base;
-	int i = 0; //First image to merge
-	Rectangle baseRec = new Rectangle(0,0, width, height);
-	if (rectangles.size() > 0 && rectangles.get(0).equalTo(baseRec))
-	{
-	  base = images.get(0);
-	  i = 1;
+	  return glImage;
 	}
 	else
 	{
-	  base = factory.createImageFromSize(width, height);
   
-  //    printf("IMAGE BASE %d, %d\n", base->getWidth(), base->getHeight());
-	}
+	  IImage base;
+	  int i = 0; //First image to merge
+	  Rectangle baseRec = new Rectangle(0,0, width, height);
+	  if (rectangles.size() > 0 && rectangles.get(0).equalTo(baseRec))
+	  {
+		base = images.get(0);
+		i = 1;
+	  }
+	  else
+	  {
+		base = factory.createImageFromSize(width, height);
+	  }
   
-	for (; i < images.size(); i++)
-	{
-	  final IImage newIm = images.get(i);
-	  final Rectangle newRect = rectangles.get(i);
+	  for (; i < images.size(); i++)
+	  {
+		final IImage newIm = images.get(i);
+		final Rectangle newRect = rectangles.get(i);
   
-	  IImage im2 = base.combineWith(newIm, newRect, width, height);
-	  if (base != images.get(0))
+		IImage im2 = base.combineWith(newIm, newRect, width, height);
+		if (base != images.get(0))
+		{
+		  if (base != null)
+			  base.dispose();
+		}
+		base = im2;
+	  }
+  
+	  IByteBuffer bb = base.createByteBufferRGBA8888(width, height);
+  
+	  GLImage glImage = new GLImage(GLFormat.RGBA, bb, width, height);
+  
+	  if (rectangles.size() > 0 && base != images.get(0))
 	  {
 		if (base != null)
 			base.dispose();
 	  }
-	  base = im2;
+  
+	  return glImage;
+  
 	}
-  
-	final GLTextureId texId = gl.uploadTexture(base, width, height, generateMipmap);
-  
-	if (rectangles.size() > 0 && base != images.get(0))
-	{
-	  if (base != null)
-		  base.dispose();
-	}
-  
-	return texId;
   }
 
 }

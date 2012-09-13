@@ -27,7 +27,7 @@ class NativeGL2_iOS: public INativeGL
     }
   }
   
-  inline GLenum getEnum(GLFeature f) const{
+  inline GLenum getEnum(GLFeature f) const {
     switch (f) {
       case PolygonOffsetFill:
         return GL_POLYGON_OFFSET_FILL;
@@ -40,7 +40,7 @@ class NativeGL2_iOS: public INativeGL
     }
   }
   
-  inline GLenum getEnum(GLCullFace f) const{
+  inline GLenum getEnum(GLCullFace f) const {
     switch (f) {
       case Front:
         return GL_FRONT;
@@ -51,7 +51,7 @@ class NativeGL2_iOS: public INativeGL
     }
   }
   
-  inline GLenum getEnum(GLType t) const{
+  inline GLenum getEnum(GLType t) const {
     switch (t) {
       case Float:
         return GL_FLOAT;
@@ -64,7 +64,7 @@ class NativeGL2_iOS: public INativeGL
     }
   }
   
-  inline GLenum getEnum(GLPrimitive p) const{
+  inline GLenum getEnum(GLPrimitive p) const {
     switch (p) {
       case TriangleStrip:
         return GL_TRIANGLE_STRIP;
@@ -93,7 +93,7 @@ class NativeGL2_iOS: public INativeGL
     return UnknownError;
   }
   
-  inline GLenum getEnum(GLBlendFactor b) const{
+  inline GLenum getEnum(GLBlendFactor b) const {
     switch (b) {
       case SrcAlpha:
         return GL_SRC_ALPHA;
@@ -102,7 +102,7 @@ class NativeGL2_iOS: public INativeGL
     }
   }
   
-  inline GLenum getEnum(GLAlignment a) const{
+  inline GLenum getEnum(GLAlignment a) const {
     switch (a) {
       case Unpack:
         return GL_UNPACK_ALIGNMENT;
@@ -111,14 +111,14 @@ class NativeGL2_iOS: public INativeGL
     }
   }
   
-  inline GLenum getEnum(GLTextureType t) const{
+  inline GLenum getEnum(GLTextureType t) const {
     switch (t) {
       case Texture2D:
         return GL_TEXTURE_2D;
     }
   }
   
-  inline GLenum getEnum(GLTextureParameter t) const{
+  inline GLenum getEnum(GLTextureParameter t) const {
     switch (t) {
       case MinFilter:
         return GL_TEXTURE_MIN_FILTER;
@@ -131,7 +131,7 @@ class NativeGL2_iOS: public INativeGL
     }
   }
   
-  inline GLint getValue(GLTextureParameterValue t) const{
+  inline GLint getValue(GLTextureParameterValue t) const {
     switch (t) {
       case Linear:
         return GL_LINEAR;
@@ -140,14 +140,14 @@ class NativeGL2_iOS: public INativeGL
     }
   }
   
-  inline GLenum getEnum(GLFormat f) const{
+  inline GLenum getEnum(GLFormat f) const {
     switch (f) {
       case RGBA:
         return GL_RGBA;
     }
   }
   
-  inline GLenum getEnum(GLVariable f) const{
+  inline GLenum getEnum(GLVariable f) const {
     switch (f) {
       case Viewport:
         return GL_VIEWPORT;
@@ -155,39 +155,39 @@ class NativeGL2_iOS: public INativeGL
   }
   
 public:
-  void useProgram(int program) const{
+  void useProgram(int program) const {
     glUseProgram(program);
   }
   
-  int getAttribLocation(int program, const std::string& name) const{
+  int getAttribLocation(int program, const std::string& name) const {
     return glGetAttribLocation(program, name.c_str());
   }
   
-  int getUniformLocation(int program, const std::string& name) const{
+  int getUniformLocation(int program, const std::string& name) const {
     return glGetUniformLocation(program, name.c_str());
   }
   
-  void uniform2f(int loc, float x, float y) const{
+  void uniform2f(int loc, float x, float y) const {
     glUniform2f(loc, x, y);
   }
   
-  void uniform1f(int loc, float x) const{
+  void uniform1f(int loc, float x) const {
     glUniform1f(loc, x);
   }
   
-  void uniform1i(int loc, int v) const{
+  void uniform1i(int loc, int v) const {
     glUniform1i(loc, v);
   }
   
-  void uniformMatrix4fv(int location, int count, bool transpose, const float value[]) const{
+  void uniformMatrix4fv(int location, int count, bool transpose, const float value[]) const {
     glUniformMatrix4fv(location, count, transpose, value);
   }
   
-  void clearColor(float red, float green, float blue, float alpha) const{
+  void clearColor(float red, float green, float blue, float alpha) const {
     glClearColor(red, green, blue, alpha);
   }
   
-  void clear(int nBuffer, GLBufferType buffers[]) const{
+  void clear(int nBuffer, GLBufferType buffers[]) const {
     GLbitfield b = 0x000000;
     for (int i = 0; i < nBuffer; i++) {
       b |= getBitField(buffers[i]);
@@ -195,51 +195,58 @@ public:
     glClear(b);
   }
   
-  void uniform4f(int location, float v0, float v1, float v2, float v3) const{
+  void uniform4f(int location, float v0, float v1, float v2, float v3) const {
     glUniform4f(location, v0, v1, v2, v3);
   }
   
-  void enable(GLFeature feature) const{
+  void enable(GLFeature feature) const {
     GLenum v = getEnum(feature);
     glEnable(v);
   }
   
-  void disable(GLFeature feature) const{
+  void disable(GLFeature feature) const {
     GLenum v = getEnum(feature);
     glDisable(v);
   }
   
-  void polygonOffset(float factor, float units) const{
+  void polygonOffset(float factor, float units) const {
     glPolygonOffset(factor, units);
   }
   
-  void vertexAttribPointer(int index, int size, GLType type,
-                           bool normalized, int stride, const void*	pointer) const{
-    GLenum t = getEnum(type);
-    glVertexAttribPointer(index, size, t, normalized, stride, pointer);
+  void vertexAttribPointer(int index,
+                           int size,
+                           bool normalized,
+                           int stride,
+                           IFloatBuffer* buffer) const {
+    float* pointer = ((FloatBuffer_iOS*) buffer)->getPointer();
+    glVertexAttribPointer(index, size, GL_FLOAT, normalized, stride, pointer);
   }
   
-  void drawElements(GLPrimitive mode, int count, GLType type, const void* indices) const{
-    glDrawElements(getEnum(mode), count, getEnum(type), indices);
+  void drawElements(GLPrimitive mode,
+                    int count,
+                    IIntBuffer* buffer) const {
+    int has_to_set_GL_UNSIGNED_INT; //???????
+    int* pointer = ((IntBuffer_iOS*) buffer)->getPointer();
+    glDrawElements(getEnum(mode), count, GL_UNSIGNED_INT, pointer);
   }
   
-  void lineWidth(float width) const{
+  void lineWidth(float width) const {
     glLineWidth(width);
   }
   
-  GLError getError() const{
+  GLError getError() const {
     return getError(glGetError());
   }
   
-  void blendFunc(GLBlendFactor sfactor, GLBlendFactor dfactor) const{
+  void blendFunc(GLBlendFactor sfactor, GLBlendFactor dfactor) const {
     glBlendFunc(getEnum(sfactor), getEnum(dfactor));
   }
   
-  void bindTexture(GLTextureType target, int texture) const{
+  void bindTexture(GLTextureType target, int texture) const {
     glBindTexture(getEnum(target), texture);
   }
   
-  void deleteTextures(int n, const int textures[]) const{
+  void deleteTextures(int n, const int textures[]) const {
     unsigned int ts[n];
     for(int i = 0; i < n; i++){
       ts[i] = textures[i];
@@ -275,32 +282,45 @@ public:
     glTexParameteri(getEnum(target), getEnum(par), getValue(v));
   }
   
-  void texImage2D(GLTextureType target,
-                  int         level,
-                  GLFormat    internalFormat,
-                  int         width,
-                  int         height,
-                  int         border,
-                  GLFormat    format,
-                  GLType      type,
-                  const void* data) const{
-    glTexImage2D(getEnum(target), level, getEnum(internalFormat),
-                 width, height, border, getEnum(format), getEnum(type), data);
+  void texImage2D(const GLImage* glImage) const {
+    glTexImage2D(GL_TEXTURE_2D, 
+                 0, 
+                 getEnum(glImage->getFormat()),
+                 glImage->getWidth(), 
+                 glImage->getHeight(), 
+                 0, 
+                 getEnum(glImage->getFormat()),
+                 GL_UNSIGNED_BYTE, 
+                 ((ByteBuffer_iOS*)glImage->getByteBuffer())->getPointer());
   }
+  
+  //  void texImage2D(GLTextureType target,
+  //                  int         level,
+  //                  GLFormat    internalFormat,
+  //                  int         width,
+  //                  int         height,
+  //                  int         border,
+  //                  GLFormat    format,
+  //                  GLType      type,
+  //                  const void* data) const {
+  //    glTexImage2D(getEnum(target), level, getEnum(internalFormat),
+  //                 width, height, border, getEnum(format), getEnum(type), data);
+  //  }
+
   
   void generateMipmap(GLTextureType target) const {
     glGenerateMipmap(getEnum(target));
   }
   
-  void drawArrays(GLPrimitive mode, int first, int count) const{
+  void drawArrays(GLPrimitive mode, int first, int count) const {
     glDrawArrays(getEnum(mode), first, count);
   }
   
-  void cullFace(GLCullFace c) const{
+  void cullFace(GLCullFace c) const {
     glCullFace(getEnum(c));
   }
   
-  void getIntegerv(GLVariable v, int i[]) const{
+  void getIntegerv(GLVariable v, int i[]) const {
     glGetIntegerv(getEnum(v), i);
   }
   

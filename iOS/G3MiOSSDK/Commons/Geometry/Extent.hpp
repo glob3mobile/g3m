@@ -33,6 +33,8 @@ public:
   virtual Vector2D projectedExtent(const RenderContext* rc) const = 0;
   
   virtual Vector3D intersectionWithRay(const Vector3D& origin, const Vector3D& direction) const = 0;
+  
+  virtual void render(const RenderContext* rc) = 0;
 
 };
 

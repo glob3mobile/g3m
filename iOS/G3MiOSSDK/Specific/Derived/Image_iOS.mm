@@ -8,10 +8,12 @@
 
 #include "Image_iOS.hpp"
 
+#include "IFactory.hpp"
+
 Image_iOS::Image_iOS(int width, int height)
 {
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-  unsigned char *imageData = new unsigned char[height * width * 4 ];
+  unsigned char* imageData = new unsigned char[height * width * 4 ];
   
   CGContextRef context = CGBitmapContextCreate(imageData,
                                                width, height,
@@ -35,7 +37,7 @@ IImage* Image_iOS::combineWith(const IImage& other,
   UIImage* transIm = ((Image_iOS&)other).getUIImage();
   
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-  unsigned char *imageData = new unsigned char[height * width * 4];
+  unsigned char* imageData = new unsigned char[height * width * 4];
   
   CGContextRef context = CGBitmapContextCreate(imageData,
                                                width, height,
@@ -66,7 +68,7 @@ IImage* Image_iOS::combineWith(const IImage& other,
   UIImage* otherIm = ((Image_iOS&)other).getUIImage();
   
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-  unsigned char *imageData = new unsigned char[height * width * 4];
+  unsigned char* imageData = new unsigned char[height * width * 4];
   
   CGContextRef context = CGBitmapContextCreate(imageData,
                                                width, height,
@@ -117,7 +119,7 @@ IImage* Image_iOS::subImage(const Rectangle& rect) const
   return image;
 }
 
-ByteBuffer* Image_iOS::getEncodedImage() const
+ByteArrayWrapper* Image_iOS::getEncodedImage() const
 {
   NSData* readData = UIImagePNGRepresentation(_image);
   NSUInteger length = [readData length];
@@ -126,13 +128,13 @@ ByteBuffer* Image_iOS::getEncodedImage() const
   [readData getBytes: data
               length: length];
   
-  return new ByteBuffer(data, length);
+  return new ByteArrayWrapper(data, length);
 }
 
-void Image_iOS::fillWithRGBA8888(unsigned char data[],
-                                 int width,
-                                 int height) const
+IByteBuffer* Image_iOS::createByteBufferRGBA8888(int width, int height) const
 {
+  unsigned char* data = new unsigned char[4 * width * height];
+  
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
   CGContextRef context = CGBitmapContextCreate(data,
                                                width, height,
@@ -147,4 +149,6 @@ void Image_iOS::fillWithRGBA8888(unsigned char data[],
   CGContextDrawImage( context, bounds, _image.CGImage );
   
   CGContextRelease(context);
+  
+  return GFactory.createByteBuffer(data, 4 * width * height);
 }

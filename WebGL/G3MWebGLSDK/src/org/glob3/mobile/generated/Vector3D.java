@@ -39,6 +39,10 @@ public class Vector3D
 
   }
 
+  public void dispose()
+  {
+  }
+
   public Vector3D(Vector3D v)
   {
 	  _x = v._x;
@@ -52,11 +56,16 @@ public class Vector3D
 	return new Vector3D(IMathUtils.instance().NanD(), IMathUtils.instance().NanD(), IMathUtils.instance().NanD());
   }
 
+  public static Vector3D zero()
+  {
+	return new Vector3D(0.0, 0.0, 0.0);
+  }
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: boolean isNan() const
   public final boolean isNan()
   {
-	return IMathUtils.instance().isNan(_x *_y *_z);
+	return (IMathUtils.instance().isNan(_x) || IMathUtils.instance().isNan(_y) || IMathUtils.instance().isNan(_z));
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -202,6 +211,7 @@ public class Vector3D
 //ORIGINAL LINE: Vector3D transformedBy(const MutableMatrix44D &m, const double homogeneus) const
   public final Vector3D transformedBy(MutableMatrix44D m, double homogeneus)
   {
+	int todo_move_to_matrix;
 	return new Vector3D(_x * m.get(0) + _y * m.get(4) + _z * m.get(8) + homogeneus * m.get(12), _x * m.get(1) + _y * m.get(5) + _z * m.get(9) + homogeneus * m.get(13), _x * m.get(2) + _y * m.get(6) + _z * m.get(10) + homogeneus * m.get(14));
   }
 

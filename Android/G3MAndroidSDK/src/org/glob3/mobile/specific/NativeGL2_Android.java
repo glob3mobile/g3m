@@ -2,12 +2,9 @@
 
 package org.glob3.mobile.specific;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
-import java.util.WeakHashMap;
 
 import org.glob3.mobile.generated.GLAlignment;
 import org.glob3.mobile.generated.GLBlendFactor;
@@ -16,6 +13,7 @@ import org.glob3.mobile.generated.GLCullFace;
 import org.glob3.mobile.generated.GLError;
 import org.glob3.mobile.generated.GLFeature;
 import org.glob3.mobile.generated.GLFormat;
+import org.glob3.mobile.generated.GLImage;
 import org.glob3.mobile.generated.GLPrimitive;
 import org.glob3.mobile.generated.GLTextureId;
 import org.glob3.mobile.generated.GLTextureParameter;
@@ -23,10 +21,11 @@ import org.glob3.mobile.generated.GLTextureParameterValue;
 import org.glob3.mobile.generated.GLTextureType;
 import org.glob3.mobile.generated.GLType;
 import org.glob3.mobile.generated.GLVariable;
+import org.glob3.mobile.generated.IFloatBuffer;
+import org.glob3.mobile.generated.IIntBuffer;
 import org.glob3.mobile.generated.INativeGL;
 
 import android.opengl.GLES20;
-import android.util.Log;
 
 
 public class NativeGL2_Android
@@ -313,64 +312,6 @@ public class NativeGL2_Android
 
 
    @Override
-   public void vertexAttribPointer(final int index,
-                                   final int size,
-                                   final GLType type,
-                                   final boolean normalized,
-                                   final int stride,
-                                   final Object pointer) {
-      final float[] floatArray = (float[]) pointer;
-      final FloatBuffer fb = floatArrayToFloatBuffer(floatArray);
-      GLES20.glVertexAttribPointer(index, size, getEnum(type), normalized, stride, fb);
-   }
-
-
-//   static private FloatBuffer floatArrayToFloatBuffer(final float[] fv) {
-//      // TODO:
-//      final int ____TODO_;
-//
-//      final ByteBuffer byteBuf = ByteBuffer.allocateDirect(fv.length * 4);
-//      byteBuf.order(ByteOrder.nativeOrder());
-//      final FloatBuffer fb = byteBuf.asFloatBuffer();
-//      fb.put(fv); // <- too slow operation here (dgd)
-//      fb.position(0);
-//      return fb;
-//   }
-   
-   static final WeakHashMap<float[], FloatBuffer> _floatBuffersCache = new WeakHashMap<float[], FloatBuffer>(64);
-   static private FloatBuffer floatArrayToFloatBuffer(final float[] fv) {
-      FloatBuffer result = _floatBuffersCache.get(fv);
-      if (result == null) {
-         // TODO: replace float[] with a framework class
-         final int ____TODO_performance_bottleneck;
-
-         result = ByteBuffer.allocateDirect(fv.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
-         result.put(fv); // <- too slow operation here (dgd)
-
-         _floatBuffersCache.put(fv, result);
-      }
-      result.rewind();
-      return result;
-   }
-
-
-   @Override
-   public void drawElements(final GLPrimitive mode,
-                            final int count,
-                            final GLType type,
-                            final Object indices) {
-      if ((type == GLType.Int) || (type == GLType.UnsignedInt)) {
-         final int[] ind = (int[]) indices;
-         final IntBuffer indexBuffer = IntBuffer.wrap(ind);
-         GLES20.glDrawElements(getEnum(mode), count, getEnum(type), indexBuffer);
-      }
-      else {
-         throw new UnsupportedOperationException("Invalid type=" + type);
-      }
-   }
-
-
-   @Override
    public void lineWidth(final float width) {
       GLES20.glLineWidth(width);
    }
@@ -442,27 +383,27 @@ public class NativeGL2_Android
    }
 
 
-   @Override
-   public void texImage2D(final GLTextureType target,
-                          final int level,
-                          final GLFormat internalFormat,
-                          final int width,
-                          final int height,
-                          final int border,
-                          final GLFormat format,
-                          final GLType type,
-                          final Object data) {
-
-      if (type == GLType.UnsignedByte) {
-         final byte[] array = (byte[]) data;
-         final ByteBuffer pixels = ByteBuffer.wrap(array);
-         GLES20.glTexImage2D(getEnum(target), level, getEnum(internalFormat), width, height, border, getEnum(format),
-                  getEnum(type), pixels);
-      }
-      else {
-         throw new UnsupportedOperationException("Invalid type=" + type);
-      }
-   }
+   //   @Override
+   //   public void texImage2D(final GLTextureType target,
+   //                          final int level,
+   //                          final GLFormat internalFormat,
+   //                          final int width,
+   //                          final int height,
+   //                          final int border,
+   //                          final GLFormat format,
+   //                          final GLType type,
+   //                          final Object data) {
+   //
+   //      if (type == GLType.UnsignedByte) {
+   //         final byte[] array = (byte[]) data;
+   //         final ByteBuffer pixels = ByteBuffer.wrap(array);
+   //         GLES20.glTexImage2D(getEnum(target), level, getEnum(internalFormat), width, height, border, getEnum(format),
+   //                  getEnum(type), pixels);
+   //      }
+   //      else {
+   //         throw new UnsupportedOperationException("Invalid type=" + type);
+   //      }
+   //   }
 
 
    @Override
@@ -492,4 +433,30 @@ public class NativeGL2_Android
       GLES20.glGenerateMipmap(getEnum(target));
    }
 
+
+   @Override
+   public void vertexAttribPointer(final int index,
+                                   final int size,
+                                   final boolean normalized,
+                                   final int stride,
+                                   final IFloatBuffer buffer) {
+      final FloatBuffer fb = ((FloatBuffer_Android) buffer).getBuffer();
+      GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized, stride, fb);
+   }
+
+
+   @Override
+   public void drawElements(final GLPrimitive mode,
+                            final int count,
+                            final IIntBuffer indices) {
+      final IntBuffer indexBuffer = ((IntBuffer_Android) indices).getBuffer();
+      GLES20.glDrawElements(getEnum(mode), count, GLES20.GL_UNSIGNED_INT, indexBuffer);
+   }
+
+
+   @Override
+   public void texImage2D(final GLImage glImage) {
+      GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, getEnum(glImage.getFormat()), glImage.getWidth(), glImage.getHeight(), 0,
+               getEnum(glImage.getFormat()), GLES20.GL_UNSIGNED_BYTE, ((ByteBuffer_Android) glImage.getByteBuffer()).getBuffer());
+   }
 }

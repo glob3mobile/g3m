@@ -16,10 +16,12 @@ package org.glob3.mobile.generated;
 //
 
 
+///#include <vector>
 
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class RenderContext;
-
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IFloatBuffer;
 
 public abstract class TextureMapping
 {

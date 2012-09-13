@@ -47,4 +47,6 @@ public abstract class Extent
 //ORIGINAL LINE: virtual Vector3D intersectionWithRay(const Vector3D& origin, const Vector3D& direction) const = 0;
   public abstract Vector3D intersectionWithRay(Vector3D origin, Vector3D direction);
 
+  public abstract void render(RenderContext rc);
+
 }

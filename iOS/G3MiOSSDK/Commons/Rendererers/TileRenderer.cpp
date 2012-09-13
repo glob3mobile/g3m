@@ -113,7 +113,7 @@ bool TileRenderer::isReadyToRender(const RenderContext *rc) {
   return true;
 }
 
-int TileRenderer::render(const RenderContext* rc) {
+void TileRenderer::render(const RenderContext* rc) {
   TilesStatistics statistics;
   //Saving camera for Long Press Event
   _lastCamera = rc->getCurrentCamera();
@@ -172,7 +172,7 @@ int TileRenderer::render(const RenderContext* rc) {
       statistics.log(rc->getLogger());
     }
   }
-  return Renderer::maxTimeToRender;
+
 }
 
 

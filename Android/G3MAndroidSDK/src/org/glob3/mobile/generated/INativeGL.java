@@ -59,12 +59,12 @@ public abstract class INativeGL
   public abstract void polygonOffset(float factor, float units);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void vertexAttribPointer(int index, int size, GLType type, boolean normalized, int stride, const Object* pointer) const = 0;
-  public abstract void vertexAttribPointer(int index, int size, GLType type, boolean normalized, int stride, Object pointer);
+//ORIGINAL LINE: virtual void vertexAttribPointer(int index, int size, boolean normalized, int stride, IFloatBuffer* buffer) const = 0;
+  public abstract void vertexAttribPointer(int index, int size, boolean normalized, int stride, IFloatBuffer buffer);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void drawElements(GLPrimitive mode, int count, GLType type, const Object* indices) const = 0;
-  public abstract void drawElements(GLPrimitive mode, int count, GLType type, Object indices);
+//ORIGINAL LINE: virtual void drawElements(GLPrimitive mode, int count, IIntBuffer* indices) const = 0;
+  public abstract void drawElements(GLPrimitive mode, int count, IIntBuffer indices);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual void lineWidth(float width) const = 0;
@@ -107,8 +107,18 @@ public abstract class INativeGL
   public abstract void texParameteri(GLTextureType target, GLTextureParameter par, GLTextureParameterValue v);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void texImage2D(GLTextureType target, int level, GLFormat internalFormat, int width, int height, int border, GLFormat format, GLType type, const Object* data) const = 0;
-  public abstract void texImage2D(GLTextureType target, int level, GLFormat internalFormat, int width, int height, int border, GLFormat format, GLType type, Object data);
+//ORIGINAL LINE: virtual void texImage2D(const GLImage* glImage) const = 0;
+  public abstract void texImage2D(GLImage glImage);
+
+  //  virtual void texImage2D(GLTextureType target,
+  //                          int         level,
+  //                          GLFormat    internalFormat,
+  //                          int         width,
+  //                          int         height,
+  //                          int         border,
+  //                          GLFormat    format,
+  //                          GLType      type,
+  //                          const void* data) const = 0;
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual void generateMipmap(GLTextureType target) const = 0;

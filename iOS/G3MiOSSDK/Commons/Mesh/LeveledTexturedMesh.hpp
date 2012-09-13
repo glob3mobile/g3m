@@ -13,6 +13,7 @@
 #include "GLTextureId.hpp"
 
 #include "TextureMapping.hpp"
+#include "IFloatBuffer.hpp"
 
 #include <vector>
 
@@ -27,13 +28,7 @@ public:
   
   virtual const MutableVector2D getTranslation() const = 0;
   
-#ifdef C_CODE
-  virtual float const* getTexCoords() const = 0;
-#endif
-#ifdef JAVA_CODE
-  public abstract float[] getTexCoords();
-#endif
-  
+  virtual IFloatBuffer* getTexCoords() const = 0;
 };
 
 class LazyTextureMapping : public TextureMapping {
@@ -44,15 +39,10 @@ private:
   
   mutable bool _initialized;
 
-  mutable bool            _ownedTexCoords;
-#ifdef C_CODE
-  mutable float const*    _texCoords;
-#endif
-#ifdef JAVA_CODE
-  private float[]    _texCoords;        //NOT VALID MUTABLE AND CONST IN JAVA CONVERSION
-#endif
-  mutable MutableVector2D _translation;
-  mutable MutableVector2D _scale;
+  mutable bool             _ownedTexCoords;
+  mutable IFloatBuffer*    _texCoords;
+  mutable MutableVector2D  _translation;
+  mutable MutableVector2D  _scale;
   
   TexturesHandler* _texturesHandler;
   
@@ -85,7 +75,7 @@ public:
 
     if (_texCoords != NULL) {
       if (_ownedTexCoords) {
-        delete [] _texCoords;
+        delete _texCoords;
       }
       _texCoords = NULL;
     }

@@ -32,7 +32,7 @@ public class SaverDownloadListener implements IDownloadListener
 	{
 	  _downloader.countSave();
 
-	  final ByteBuffer bb = response.getByteBuffer();
+	  final ByteArrayWrapper bb = response.getByteArrayWrapper();
 	  _cacheStorage.save(_url, bb);
 	}
   }

@@ -27,16 +27,16 @@ public class SingleImageTileTexturizer extends TileTexturizer
   private GLTextureId _texId = new GLTextureId();
   private final IImage _image;
 
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: java.util.ArrayList<MutableVector2D> createTextureCoordinates(const RenderContext* rc, Mesh* mesh) const
-  private java.util.ArrayList<MutableVector2D> createTextureCoordinates(RenderContext rc, Mesh mesh)
+//ORIGINAL LINE: IFloatBuffer* createTextureCoordinates(const RenderContext* rc, Mesh* mesh) const
+  private IFloatBuffer createTextureCoordinates(RenderContext rc, Mesh mesh)
   {
-	java.util.ArrayList<MutableVector2D> texCoors = new java.util.ArrayList<MutableVector2D>();
+	FloatBufferBuilderFromCartesian2D texCoors = new FloatBufferBuilderFromCartesian2D();
   
 	for (int i = 0; i < mesh.getVertexCount(); i++)
 	{
-  
-	  Vector3D pos = mesh.getVertex(i);
+	  final Vector3D pos = mesh.getVertex(i);
   
 	  final Geodetic2D g = rc.getPlanet().toGeodetic2D(pos);
 	  final Vector3D n = rc.getPlanet().geodeticSurfaceNormal(g);
@@ -44,10 +44,10 @@ public class SingleImageTileTexturizer extends TileTexturizer
 	  final double s = IMathUtils.instance().atan2(n.y(), n.x()) / (IMathUtils.instance().pi() * 2) + 0.5;
 	  final double t = IMathUtils.instance().asin(n.z()) / IMathUtils.instance().pi() + 0.5;
   
-	  texCoors.add(new MutableVector2D(s, 1-t));
+	  texCoors.add((float)s, (float)(1.0-t));
 	}
   
-	return texCoors;
+	return texCoors.create();
   }
 
 
@@ -81,7 +81,13 @@ public class SingleImageTileTexturizer extends TileTexturizer
   
 	if (!_texId.isValid())
 	{
-	  _texId = rc.getTexturesHandler().getGLTextureId(_image, new TextureSpec("SINGLE_IMAGE_TEX", _image.getWidth(), _image.getHeight(), true));
+	  final GLImage glImage = rc.getTextureBuilder().createTextureFromImage(rc.getGL(), rc.getFactory(), GLFormat.RGBA, _image, _image.getWidth(), _image.getHeight());
+  
+	  _texId = rc.getTexturesHandler().getGLTextureId(glImage, "SINGLE_IMAGE_TEX", false);
+  
+	  rc.getFactory().deleteImage(_image);
+	  if (glImage != null)
+		  glImage.dispose();
   
 	  if (!_texId.isValid())
 	  {
@@ -92,7 +98,7 @@ public class SingleImageTileTexturizer extends TileTexturizer
 	  rc.getFactory().deleteImage(_image);
 	}
   
-	TextureMapping texMap = new SimpleTextureMapping(_texId, createTextureCoordinates(rc, mesh));
+	TextureMapping texMap = new SimpleTextureMapping(_texId, createTextureCoordinates(rc, mesh), true);
 	if (previousMesh != null)
 		if (previousMesh != null)
 			previousMesh.dispose();

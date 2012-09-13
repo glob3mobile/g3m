@@ -32,7 +32,7 @@ package org.glob3.mobile.generated;
 public class Petition
 {
   private URL _url = new URL(); //Conversor creates class "Url"
-  private ByteBuffer _buffer;
+  private ByteArrayWrapper _buffer;
   private final Sector _sector;
 
 
@@ -58,8 +58,8 @@ public class Petition
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean hasByteBuffer() const
-  public final boolean hasByteBuffer()
+//ORIGINAL LINE: boolean hasByteArrayWrapper() const
+  public final boolean hasByteArrayWrapper()
   {
 	return _buffer != null;
   }
@@ -78,15 +78,15 @@ public class Petition
 	return _sector;
   }
 
-  public final void setByteBuffer(ByteBuffer buffer)
+  public final void setByteArrayWrapper(ByteArrayWrapper buffer)
   {
 	releaseBuffer();
 	_buffer = buffer;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const ByteBuffer* getByteBuffer() const
-  public final ByteBuffer getByteBuffer()
+//ORIGINAL LINE: const ByteArrayWrapper* getByteArrayWrapper() const
+  public final ByteArrayWrapper getByteArrayWrapper()
   {
 	return _buffer;
   }

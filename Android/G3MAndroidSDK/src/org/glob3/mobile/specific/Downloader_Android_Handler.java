@@ -1,3 +1,5 @@
+
+
 package org.glob3.mobile.specific;
 
 import java.io.BufferedInputStream;
@@ -8,7 +10,7 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.glob3.mobile.generated.ByteBuffer;
+import org.glob3.mobile.generated.ByteArrayWrapper;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.IDownloadListener;
 import org.glob3.mobile.generated.IDownloader;
@@ -19,26 +21,27 @@ import org.glob3.mobile.generated.URL;
 
 import android.util.Log;
 
+
 public class Downloader_Android_Handler {
 
-   final static String              TAG = "Downloader_Android_Handler";
+   final static String                    TAG = "Downloader_Android_Handler";
 
-   private long                     _priority;
-   private URL                      _url;
-   private java.net.URL             _URL;
-   private ArrayList<ListenerEntry> _listeners;
+   private long                           _priority;
+   private final URL                      _url;
+   private java.net.URL                   _URL;
+   private final ArrayList<ListenerEntry> _listeners;
 
 
-   public Downloader_Android_Handler(URL url,
-                                     IDownloadListener listener,
-                                     long priority,
-                                     long requestId) {
+   public Downloader_Android_Handler(final URL url,
+                                     final IDownloadListener listener,
+                                     final long priority,
+                                     final long requestId) {
       _priority = priority;
       _url = url;
       try {
          _URL = new java.net.URL(url.getPath());
       }
-      catch (MalformedURLException e) {
+      catch (final MalformedURLException e) {
          if (ILogger.instance() != null) {
             ILogger.instance().logError(TAG + "Downloader_Android_Handler: MalformedURLException url=" + _url.getPath());
          }
@@ -48,15 +51,15 @@ public class Downloader_Android_Handler {
          e.printStackTrace();
       }
       _listeners = new ArrayList<ListenerEntry>();
-      ListenerEntry entry = new ListenerEntry(listener, requestId);
+      final ListenerEntry entry = new ListenerEntry(listener, requestId);
       _listeners.add(entry);
    }
 
 
-   public void addListener(IDownloadListener listener,
-                           long priority,
-                           long requestId) {
-      ListenerEntry entry = new ListenerEntry(listener, requestId);
+   public void addListener(final IDownloadListener listener,
+                           final long priority,
+                           final long requestId) {
+      final ListenerEntry entry = new ListenerEntry(listener, requestId);
 
       synchronized (this) {
          _listeners.add(entry);
@@ -73,14 +76,14 @@ public class Downloader_Android_Handler {
    }
 
 
-   public boolean cancelListenerForRequestId(long requestId) {
+   public boolean cancelListenerForRequestId(final long requestId) {
       boolean canceled = false;
 
       synchronized (this) {
-         Iterator<ListenerEntry> iter = _listeners.iterator();
+         final Iterator<ListenerEntry> iter = _listeners.iterator();
 
          while (iter.hasNext() && !canceled) {
-            ListenerEntry entry = iter.next();
+            final ListenerEntry entry = iter.next();
 
             if (entry.getRequestId() == requestId) {
                entry.cancel();
@@ -93,14 +96,14 @@ public class Downloader_Android_Handler {
    }
 
 
-   public boolean removeListenerForRequestId(long requestId) {
+   public boolean removeListenerForRequestId(final long requestId) {
       boolean removed = false;
 
       synchronized (this) {
-         Iterator<ListenerEntry> iter = _listeners.iterator();
+         final Iterator<ListenerEntry> iter = _listeners.iterator();
 
          while (iter.hasNext()) {
-            ListenerEntry entry = iter.next();
+            final ListenerEntry entry = iter.next();
 
             if (entry.getRequestId() == requestId) {
                entry.getListener().onCancel(_url);
@@ -121,25 +124,25 @@ public class Downloader_Android_Handler {
    }
 
 
-   public void runWithDownloader(IDownloader downloader) {
-      Log.i(TAG, "runWithDownloader url=" + _url.getPath());
-      
-      Downloader_Android dl = (Downloader_Android) downloader;
+   public void runWithDownloader(final IDownloader downloader) {
+      //      Log.i(TAG, "runWithDownloader url=" + _url.getPath());
+
+      final Downloader_Android dl = (Downloader_Android) downloader;
       HttpURLConnection connection = null;
       int statusCode = 0;
       byte[] data = null;
       try {
          connection = (HttpURLConnection) _URL.openConnection();
-         connection.setConnectTimeout(60000);
-         connection.setReadTimeout(60000);
+         connection.setConnectTimeout(dl.getConnectTimeout());
+         connection.setReadTimeout(dl.getReadTimeout());
          connection.setUseCaches(false);
          connection.connect();
          statusCode = connection.getResponseCode();
 
          if (statusCode == 200) {
-            BufferedInputStream bis = new BufferedInputStream(connection.getInputStream());
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            byte[] buffer = new byte[4096];
+            final BufferedInputStream bis = new BufferedInputStream(connection.getInputStream());
+            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            final byte[] buffer = new byte[4096];
             int length = 0;
 
             while ((length = bis.read(buffer)) > 0) {
@@ -149,9 +152,10 @@ public class Downloader_Android_Handler {
             baos.flush();
             data = baos.toByteArray();
             baos.close();
+            bis.close();
          }
       }
-      catch (IOException e) {
+      catch (final IOException e) {
          if (ILogger.instance() != null) {
             ILogger.instance().logError(TAG + "runWithDownloader: IOException url=" + _url.getPath());
          }
@@ -171,7 +175,9 @@ public class Downloader_Android_Handler {
       IThreadUtils.instance().invokeInRendererThread(new ProcessResponseGTask(statusCode, data, this), true);
    }
 
-   public class ProcessResponseGTask extends GTask {
+   public class ProcessResponseGTask
+            extends
+               GTask {
 
       int                        _statusCode = 0;
       byte[]                     _data       = null;
@@ -190,24 +196,24 @@ public class Downloader_Android_Handler {
       @Override
       public void run() {
          synchronized (_handler) {
-            boolean dataIsValid = (_data != null) && (_statusCode == 200);
+            final boolean dataIsValid = (_data != null) && (_statusCode == 200);
 
             if (dataIsValid) {
-               ByteBuffer buffer = new ByteBuffer(_data, _data.length);
-               Response response = new Response(_url, buffer);
-               Iterator<ListenerEntry> iter = _listeners.iterator();
+               final ByteArrayWrapper buffer = new ByteArrayWrapper(_data, _data.length);
+               final Response response = new Response(_url, buffer);
+               final Iterator<ListenerEntry> iter = _listeners.iterator();
 
                while (iter.hasNext()) {
-                  ListenerEntry entry = iter.next();
+                  final ListenerEntry entry = iter.next();
                   if (entry.isCanceled()) {
-                     Log.w(TAG, "triggering onCanceledDownload");
+                     //                     Log.w(TAG, "triggering onCanceledDownload");
                      entry.getListener().onCanceledDownload(response);
 
-                     Log.w(TAG, "triggering onCancel");
+                     //                     Log.w(TAG, "triggering onCancel");
                      entry.getListener().onCancel(_url);
                   }
                   else {
-                     Log.i(TAG, "triggering onDownload");
+                     //                     Log.i(TAG, "triggering onDownload");
                      entry.getListener().onDownload(response);
                   }
                }
@@ -220,13 +226,13 @@ public class Downloader_Android_Handler {
                else {
                   Log.e(TAG, "Error runWithDownloader: statusCode=" + _statusCode + ", url=" + _url.getPath());
                }
-               ByteBuffer buffer = new ByteBuffer(null, 0);
-               Response response = new Response(_url, buffer);
-               Iterator<ListenerEntry> iter = _listeners.iterator();
+               final ByteArrayWrapper buffer = new ByteArrayWrapper(null, 0);
+               final Response response = new Response(_url, buffer);
+               final Iterator<ListenerEntry> iter = _listeners.iterator();
 
                while (iter.hasNext()) {
-                  ListenerEntry entry = iter.next();
-                  Log.e(TAG, "triggering onError");
+                  final ListenerEntry entry = iter.next();
+                  //                  Log.e(TAG, "triggering onError");
                   entry.getListener().onError(response);
                }
             }

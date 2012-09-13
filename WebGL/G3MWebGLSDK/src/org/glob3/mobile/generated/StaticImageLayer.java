@@ -70,8 +70,8 @@ public class StaticImageLayer extends Layer
 	{
 	  if (_storage.contains(id))
 	  {
-		final ByteBuffer buffer = _storage.read(id);
-		pet.setByteBuffer(buffer); //FILLING DATA
+		final ByteArrayWrapper buffer = _storage.read(id);
+		pet.setByteArrayWrapper(buffer); //FILLING DATA
 		res.add(pet);
 		return res;
 	  }
@@ -87,8 +87,8 @@ public class StaticImageLayer extends Layer
   
 	final IImage subImage = _image.subImage(r);
   
-	final ByteBuffer buffer = subImage.getEncodedImage(); //Image Encoding PNG
-	pet.setByteBuffer(buffer); //FILLING DATA
+	final ByteArrayWrapper buffer = subImage.getEncodedImage(); //Image Encoding PNG
+	pet.setByteArrayWrapper(buffer); //FILLING DATA
 	if (subImage != null)
 		subImage.dispose();
   

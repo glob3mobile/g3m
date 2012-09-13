@@ -18,11 +18,10 @@ private:
   std::vector<Mark*> _marks;
   
 public:
-
+  
   virtual void initialize(const InitializationContext* ic);
   
-  virtual int render(const RenderContext* rc);
-  
+  virtual void render(const RenderContext* rc);
   
   virtual ~MarksRenderer() {
     int marksSize = _marks.size();
@@ -30,14 +29,14 @@ public:
       delete _marks[i];
     }
   };
-
+  
   void addMark(Mark* mark) {
     _marks.push_back(mark);
   }
   
   virtual bool onTouchEvent(const EventContext* ec,
                             const TouchEvent* touchEvent);
-
+  
   void onResizeViewportEvent(const EventContext* ec,
                              int width, int height) {
     

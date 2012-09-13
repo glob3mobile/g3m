@@ -51,6 +51,8 @@ package org.glob3.mobile.generated;
 //class ICameraConstrainer;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class FrameTasksExecutor;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class TextureBuilder;
 
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class G3MWidget;

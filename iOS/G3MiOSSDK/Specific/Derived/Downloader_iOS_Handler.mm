@@ -219,10 +219,10 @@
     
     if (dataIsValid) {
       const int length = [data length];
-      unsigned char *bytes = new unsigned char[ length ]; // will be deleted by ByteBuffer's destructor
+      unsigned char* bytes = new unsigned char[ length ]; // will be deleted by ByteArrayWrapper's destructor
       [data getBytes: bytes
               length: length];
-      ByteBuffer* buffer = new ByteBuffer(bytes, length);
+      ByteArrayWrapper* buffer = new ByteArrayWrapper(bytes, length);
       
       Response* response = new Response(url, buffer);
       
@@ -244,7 +244,7 @@
       delete buffer;
     }
     else {
-      ByteBuffer* buffer = new ByteBuffer(NULL, 0);
+      ByteArrayWrapper* buffer = new ByteArrayWrapper(NULL, 0);
       
       Response* response = new Response(url, buffer);
       

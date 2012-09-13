@@ -18,6 +18,9 @@ package org.glob3.mobile.generated;
 
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IFloatBuffer;
+
 public class Mark
 {
   private final String _name;
@@ -26,17 +29,58 @@ public class Mark
 
   private GLTextureId _textureId = new GLTextureId();
 
+  private Vector3D _cartesianPosition;
+  private Vector3D getCartesianPosition(Planet planet)
+  {
+	if (_cartesianPosition == null)
+	{
+	  _cartesianPosition = new Vector3D(planet.toCartesian(_position));
+	}
+	return _cartesianPosition;
+  }
+
+  private IFloatBuffer _vertices;
+  private IFloatBuffer getVertices(Planet planet)
+  {
+  
+	if (_vertices == null)
+	{
+	  final Vector3D pos = getCartesianPosition(planet);
+  
+	  FloatBufferBuilderFromCartesian3D vertex = new FloatBufferBuilderFromCartesian3D(CenterStrategy.NoCenter, Vector3D.zero());
+	  vertex.add(pos);
+	  vertex.add(pos);
+	  vertex.add(pos);
+	  vertex.add(pos);
+  
+	  _vertices = vertex.create();
+	}
+	return _vertices;
+  }
+
   public Mark(String name, String textureFilename, Geodetic3D position)
   {
 	  _name = name;
 	  _textureFilename = textureFilename;
 	  _position = new Geodetic3D(position);
 	  _textureId = new GLTextureId(GLTextureId.invalid());
+	  _cartesianPosition = null;
+	  _vertices = null;
 
   }
 
   public void dispose()
   {
+	if (_cartesianPosition != null)
+	{
+	  if (_cartesianPosition != null)
+		  _cartesianPosition.dispose();
+	}
+	if (_vertices != null)
+	{
+	  if (_vertices != null)
+		  _vertices.dispose();
+	}
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -59,7 +103,8 @@ public class Mark
 	final Planet planet = rc.getPlanet();
   
 	final Vector3D cameraPosition = camera.getCartesianPosition();
-	final Vector3D markPosition = planet.toCartesian(_position);
+	//  const Vector3D markPosition = planet->toCartesian(_position);
+	final Vector3D markPosition = getCartesianPosition(planet);
   
 	final Vector3D markCameraVector = markPosition.sub(cameraPosition);
 	final double distanceToCamera = markCameraVector.length();
@@ -78,7 +123,16 @@ public class Mark
   
 		if (!_textureId.isValid())
 		{
-		  _textureId = rc.getTexturesHandler().getGLTextureIdFromFileName(_textureFilename, 128, 128, false);
+  
+		  IImage image = rc.getFactory().createImageFromFileName(_textureFilename);
+  
+		  final GLImage glImage = rc.getTextureBuilder().createTextureFromImage(rc.getGL(), rc.getFactory(), GLFormat.RGBA, image, 128, 128);
+  
+		  _textureId = rc.getTexturesHandler().getGLTextureId(glImage, _textureFilename, false);
+  
+		  rc.getFactory().deleteImage(image);
+		  if (glImage != null)
+			  glImage.dispose();
 		}
   
 		if (!_textureId.isValid())
@@ -87,8 +141,8 @@ public class Mark
 		  return;
 		}
   
-  //    rc->getLogger()->logInfo(" Visible   << %f %f", minDist, distanceToCamera);
-		gl.drawBillBoard(_textureId, markPosition, camera.getViewPortRatio());
+		//    rc->getLogger()->logInfo(" Visible   << %f %f", minDist, distanceToCamera);
+		gl.drawBillBoard(_textureId, getVertices(planet), camera.getViewPortRatio());
 	  }
   
 	}

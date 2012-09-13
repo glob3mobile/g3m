@@ -18,6 +18,7 @@ class TileTextureBuilder;
 class LayerSet;
 class IDownloader;
 class LeveledTexturedMesh;
+class IFloatBuffer;
 
 class MultiLayerTileTexturizer : public TileTexturizer {
 private:
@@ -29,13 +30,9 @@ private:
   TilesRenderParameters* _parameters;
 #endif
 
-  mutable float* _texCoordsCache;
+  mutable IFloatBuffer* _texCoordsCache;
   
-#ifdef C_CODE
-  float* getTextureCoordinates(const TileRenderContext* trc) const;
-#else
-  float[] getTextureCoordinates(const TileRenderContext* trc) const;
-#endif
+  IFloatBuffer* getTextureCoordinates(const TileRenderContext* trc) const;
   
   long _pendingTopTileRequests;
   
@@ -58,12 +55,7 @@ public:
     _pendingTopTileRequests--;
   }
   
-  virtual ~MultiLayerTileTexturizer() {
-    if (_texCoordsCache != NULL) {
-      delete [] _texCoordsCache;
-      _texCoordsCache = NULL;
-    }
-  }
+  virtual ~MultiLayerTileTexturizer();
   
   bool isReady(const RenderContext *rc);
   
