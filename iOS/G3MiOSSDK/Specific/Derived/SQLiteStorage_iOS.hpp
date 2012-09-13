@@ -23,23 +23,32 @@ private:
     return [ NSString stringWithCString: cppStr.c_str()
                                encoding: NSUTF8StringEncoding ];
   }
-
+  
   NSString* getDBPath() const;
-
+  
   void showStatistics() const;
   
 public:
   SQLiteStorage_iOS(const std::string &databaseName);
   
-  bool contains(const URL& url);
+  virtual ~SQLiteStorage_iOS() {
+  }
   
-  void save(const URL& url,
-                    const ByteArrayWrapper& buffer);
+  bool containsBuffer(const URL& url);
   
-  const ByteArrayWrapper* read(const URL& url);
+  void saveBuffer(const URL& url,
+                  const IByteBuffer* buffer);
   
-  virtual ~SQLiteStorage_iOS() {}
-
+  const IByteBuffer* readBuffer(const URL& url);
+  
+  
+  bool containsImage(const URL& url);
+  
+  void saveImage(const URL& url,
+                 const IImage* buffer);
+  
+  const IImage* readImage(const URL& url);
+  
 };
 
 #endif

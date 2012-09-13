@@ -14,7 +14,6 @@
 #include "TextureBuilder.hpp"
 
 #include "IStringBuilder.hpp"
-#include "GLImage.hpp"
 #include "GL.hpp"
 
 const std::string TextureSpec::description() const {
@@ -107,13 +106,14 @@ const GLTextureId TexturesHandler::getGLTextureIdIfAvailable(const TextureSpec& 
 }
 
 
-const GLTextureId TexturesHandler::getGLTextureId(const GLImage* glImage,
+const GLTextureId TexturesHandler::getGLTextureId(const IImage* image,
+                                                  GLFormat format,
                                                   const std::string& name,
                                                   bool hasMipMap) {
   
   TextureSpec textureSpec(name, 
-                          glImage->getWidth(), 
-                          glImage->getHeight(),
+                          image->getWidth(), 
+                          image->getHeight(),
                           hasMipMap);
   
   GLTextureId previousId = getGLTextureIdIfAvailable(textureSpec);
@@ -122,7 +122,7 @@ const GLTextureId TexturesHandler::getGLTextureId(const GLImage* glImage,
   }
   
   TextureHolder* holder = new TextureHolder(textureSpec);
-  holder->_glTextureId = _gl->uploadTexture(glImage, textureSpec.isMipmap());
+  holder->_glTextureId = _gl->uploadTexture(image, format, textureSpec.isMipmap());
   
   
   if (_verbose) {

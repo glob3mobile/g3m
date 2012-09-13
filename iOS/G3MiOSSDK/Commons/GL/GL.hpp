@@ -19,8 +19,6 @@
 
 #include "IFloatBuffer.hpp"
 
-#include "GLImage.hpp"
-
 #include <list>
 
 
@@ -190,7 +188,7 @@ public:
   
   GLError getError();
   
-  const GLTextureId uploadTexture(const GLImage* glImage, bool generateMipmap);
+  const GLTextureId uploadTexture(const IImage* image, GLFormat format, bool generateMipmap);
   
   //  const GLTextureId uploadTexture(const IImage* image,
   //                                  int textureWidth, int textureHeight,

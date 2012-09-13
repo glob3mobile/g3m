@@ -42,24 +42,15 @@ Mesh* SingleImageTileTexturizer::texturize(const RenderContext* rc,
   _renderContext = rc; //SAVING CONTEXT
   
   if (!_texId.isValid()) {
-#ifdef C_CODE    
-    const GLImage* glImage = rc->getTextureBuilder()->createTextureFromImage(rc->getGL(), 
-                                                                             rc->getFactory(), 
-                                                                             RGBA, _image, 
-                                                                             _image->getWidth(), 
-                                                                             _image->getHeight());
+#ifdef C_CODE
+    _texId = rc->getTexturesHandler()->getGLTextureId(_image, RGBA,
+                                                      "SINGLE_IMAGE_TEX", false);
 #else
-    const GLImage* glImage = rc->getTextureBuilder()->createTextureFromImage(rc->getGL(), 
-                                                                             rc->getFactory(), 
-                                                                             GLFormat.RGBA, _image, 
-                                                                             _image->getWidth(), 
-                                                                             _image->getHeight());
+    _texId = rc->getTexturesHandler()->getGLTextureId(_image, GLFormat.RGBA,
+                                                      "SINGLE_IMAGE_TEX", false);
 #endif
     
-    _texId = rc->getTexturesHandler()->getGLTextureId(glImage, "SINGLE_IMAGE_TEX", false);
-    
     rc->getFactory()->deleteImage(_image);
-    delete glImage;
     
     if (!_texId.isValid()) {
       rc->getLogger()->logError("Can't upload texture to GPU");

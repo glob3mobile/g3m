@@ -19,10 +19,23 @@
 class Image_iOS: public IImage {
 private:
   UIImage* _image;
+  NSData*  _sourceBuffer;
+  
+  Image_iOS(const Image_iOS& that);
+  
+  void operator=(const Image_iOS& that);
   
 public:
-
-  Image_iOS(UIImage* image) : _image(image) {
+  
+  virtual ~Image_iOS() {
+//    printf("break (point) on me!\n");
+  }
+  
+  Image_iOS(UIImage* image,
+            NSData* sourceBuffer) :
+  _image(image),
+  _sourceBuffer(sourceBuffer)
+  {
     
   }
   
@@ -30,6 +43,10 @@ public:
   
   UIImage* getUIImage() const {
     return _image;
+  }
+  
+  NSData* getSourceBuffer() const {
+    return _sourceBuffer;
   }
   
   int getWidth() const {
@@ -49,10 +66,14 @@ public:
   
   IImage* subImage(const Rectangle& rect) const;
   
-  ByteArrayWrapper* getEncodedImage() const;
-  
   IByteBuffer* createByteBufferRGBA8888(int width, int height) const;
+  
+  IImage* scale(int width, int height) const;
 
+  const std::string description() const;
+  
+  IImage* copy() const;
+  
 };
 
 #endif

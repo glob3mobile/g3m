@@ -8,52 +8,88 @@
 
 #import "Downloader_iOS_Listener.h"
 
+#import "IFactory.hpp"
+
 @implementation Downloader_iOS_Listener
 
--(id)initWithCPPListener:(IDownloadListener*)cppListener
-          deleteListener:(bool)deleteListener
+-(id)initWithCPPBufferListener:(IBufferDownloadListener*)cppListener
+                deleteListener:(bool)deleteListener
 {
   self = [super init];
   if (self) {
-    _cppListener    = cppListener;
-    _deleteListener = deleteListener;
+    _cppBufferListener = cppListener;
+    _cppImageListener  = NULL;
+    _deleteListener    = deleteListener;
   }
   return self;
 }
 
--(void) onDownload:(Response*)response
+-(id)initWithCPPImageListener:(IImageDownloadListener*)cppListener
+               deleteListener:(bool)deleteListener
 {
-  if (_cppListener) {
-    _cppListener->onDownload(response);
+  self = [super init];
+  if (self) {
+    _cppBufferListener = NULL;
+    _cppImageListener  = cppListener;
+    _deleteListener    = deleteListener;
+  }
+  return self;
+}
+
+-(void) onDownloadURL:(const URL&)url
+               buffer:(const IByteBuffer*)buffer
+{
+  if (_cppBufferListener) {
+    _cppBufferListener->onDownload(url, buffer);
+  }
+  if (_cppImageListener) {
+    IImage* image = GFactory.createImageFromBuffer(buffer);
+    _cppImageListener->onDownload(url, image);
+    delete image;
   }
 }
 
--(void) onError:(Response*)response
+-(void) onErrorURL:(const URL&)url
 {
-  if (_cppListener) {
-    _cppListener->onError(response);
+  if (_cppBufferListener) {
+    _cppBufferListener->onError(url);
+  }
+  if (_cppImageListener) {
+    _cppImageListener->onError(url);
   }
 }
 
--(void) onCancel:(const URL*)url
+-(void) onCancel:(const URL&)url
 {
-  if (_cppListener) {
-    _cppListener->onCancel(url);
+  if (_cppBufferListener) {
+    _cppBufferListener->onCancel(url);
+  }
+  if (_cppImageListener) {
+    _cppImageListener->onCancel(url);
   }
 }
 
--(void) onCanceledDownload:(Response*)response
+-(void) onCanceledDownloadURL:(const URL&)url
+                       buffer:(const IByteBuffer*)buffer
 {
-  if (_cppListener) {
-    _cppListener->onCanceledDownload(response);
+  if (_cppBufferListener) {
+    _cppBufferListener->onCanceledDownload(url, buffer);
+  }
+  if (_cppImageListener) {
+    IImage* image = GFactory.createImageFromBuffer(buffer);
+    _cppImageListener->onCanceledDownload(url, image);
+    delete image;
   }
 }
 
 -(void) dealloc
 {
-  if (_cppListener) {
-    if (_deleteListener) {
-      delete _cppListener;
+  if (_deleteListener) {
+    if (_cppBufferListener) {
+      delete _cppBufferListener;
+    }
+    if (_cppImageListener) {
+      delete _cppImageListener;
     }
   }
 }

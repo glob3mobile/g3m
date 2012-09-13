@@ -51,7 +51,6 @@ Angle Angle::nearestAngleInInterval(const Angle& min,
 }
 
 const std::string Angle::description() const {
-  
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
   isb->add(_degrees)->add("°");
   std::string s = isb->getString();
