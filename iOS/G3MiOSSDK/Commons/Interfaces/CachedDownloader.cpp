@@ -41,11 +41,13 @@ public:
   }
   
   void saveResponse(const URL& url,
-                    const IByteBuffer* data) {
-    if (!_cacheStorage->containsBuffer(url)) {
-      _downloader->countSave();
-      
-      _cacheStorage->saveBuffer(url, data);
+                    const IByteBuffer* buffer) {
+    if (buffer != NULL) {
+      if (!_cacheStorage->containsBuffer(url)) {
+        _downloader->countSave();
+        
+        _cacheStorage->saveBuffer(url, buffer);
+      }
     }
   }
   
@@ -111,10 +113,12 @@ public:
   
   void saveResponse(const URL& url,
                     const IImage* image) {
-    if (!_cacheStorage->containsImage(url)) {
-      _downloader->countSave();
-      
-      _cacheStorage->saveImage(url, image);
+    if (image != NULL) {
+      if (!_cacheStorage->containsImage(url)) {
+        _downloader->countSave();
+        
+        _cacheStorage->saveImage(url, image);
+      }
     }
   }
   

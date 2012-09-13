@@ -25,11 +25,14 @@ public class ImageSaverDownloadListener implements IImageDownloadListener
 
   public final void saveResponse(URL url, IImage image)
   {
-	if (!_cacheStorage.containsImage(url))
+	if (image != null)
 	{
-	  _downloader.countSave();
+	  if (!_cacheStorage.containsImage(url))
+	  {
+		_downloader.countSave();
 
-	  _cacheStorage.saveImage(url, image);
+		_cacheStorage.saveImage(url, image);
+	  }
 	}
   }
 

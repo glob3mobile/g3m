@@ -62,4 +62,10 @@ public class ByteBuffer_Android
       return _buffer;
    }
 
+
+   @Override
+   public String description() {
+      return "ByteBuffer_iOS (size=" + _buffer.capacity() + ")";
+   }
+
 }

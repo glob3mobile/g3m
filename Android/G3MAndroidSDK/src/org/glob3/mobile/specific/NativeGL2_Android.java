@@ -6,6 +6,8 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 
+import javax.microedition.khronos.opengles.GL10;
+
 import org.glob3.mobile.generated.GLAlignment;
 import org.glob3.mobile.generated.GLBlendFactor;
 import org.glob3.mobile.generated.GLBufferType;
@@ -13,7 +15,6 @@ import org.glob3.mobile.generated.GLCullFace;
 import org.glob3.mobile.generated.GLError;
 import org.glob3.mobile.generated.GLFeature;
 import org.glob3.mobile.generated.GLFormat;
-import org.glob3.mobile.generated.GLImage;
 import org.glob3.mobile.generated.GLPrimitive;
 import org.glob3.mobile.generated.GLTextureId;
 import org.glob3.mobile.generated.GLTextureParameter;
@@ -22,10 +23,13 @@ import org.glob3.mobile.generated.GLTextureType;
 import org.glob3.mobile.generated.GLType;
 import org.glob3.mobile.generated.GLVariable;
 import org.glob3.mobile.generated.IFloatBuffer;
+import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IIntBuffer;
 import org.glob3.mobile.generated.INativeGL;
 
+import android.graphics.Bitmap;
 import android.opengl.GLES20;
+import android.opengl.GLUtils;
 
 
 public class NativeGL2_Android
@@ -455,8 +459,10 @@ public class NativeGL2_Android
 
 
    @Override
-   public void texImage2D(final GLImage glImage) {
-      GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, getEnum(glImage.getFormat()), glImage.getWidth(), glImage.getHeight(), 0,
-               getEnum(glImage.getFormat()), GLES20.GL_UNSIGNED_BYTE, ((ByteBuffer_Android) glImage.getByteBuffer()).getBuffer());
+   public void texImage2D(final IImage image,
+                          final GLFormat format) {
+
+      final Bitmap b = ((Image_Android) image).getBitmap();
+      GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, getEnum(format), b, 0);
    }
 }

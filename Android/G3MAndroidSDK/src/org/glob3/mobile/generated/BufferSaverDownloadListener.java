@@ -23,13 +23,16 @@ public class BufferSaverDownloadListener implements IBufferDownloadListener
 	}
   }
 
-  public final void saveResponse(URL url, IByteBuffer data)
+  public final void saveResponse(URL url, IByteBuffer buffer)
   {
-	if (!_cacheStorage.containsBuffer(url))
+	if (buffer != null)
 	{
-	  _downloader.countSave();
+	  if (!_cacheStorage.containsBuffer(url))
+	  {
+		_downloader.countSave();
 
-	  _cacheStorage.saveBuffer(url, data);
+		_cacheStorage.saveBuffer(url, buffer);
+	  }
 	}
   }
 
