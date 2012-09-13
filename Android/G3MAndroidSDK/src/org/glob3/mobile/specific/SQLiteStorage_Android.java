@@ -55,7 +55,7 @@ public class SQLiteStorage_Android
       _db = SQLiteDatabase.openOrCreateDatabase(getPath(), null);
 
       if (_db == null) {
-         ILogger.instance().logError("SQL", "Can't open database \"%s\"\n", _databaseName);
+         ILogger.instance().logError("SQL: Can't open database \"%s\"\n", _databaseName);
       }
       else {
          try {
@@ -90,7 +90,7 @@ public class SQLiteStorage_Android
 
       final long r = _db.insertWithOnConflict("entry", null, values, SQLiteDatabase.CONFLICT_REPLACE);
       if (r == -1) {
-         ILogger.instance().logError("SQL", "Can't write in database \"%s\"\n", _databaseName);
+         ILogger.instance().logError("SQL: Can't write in database \"%s\"\n", _databaseName);
       }
    }
 
@@ -144,7 +144,7 @@ public class SQLiteStorage_Android
 
       final long r = _db.insertWithOnConflict("entry", null, values, SQLiteDatabase.CONFLICT_REPLACE);
       if (r == -1) {
-         ILogger.instance().logError("SQL", "Can't write image in database \"%s\"\n", _databaseName);
+         ILogger.instance().logError("SQL: Can't write image in database \"%s\"\n", _databaseName);
       }
    }
 
@@ -160,7 +160,12 @@ public class SQLiteStorage_Android
          final Bitmap b = BitmapFactory.decodeByteArray(data, 0, data.length);
          cursor.close();
 
-         return new Image_Android(b, null);
+         if (b == null) {
+            ILogger.instance().logError("Can't create bitmap from content of storage");
+         }
+         else {
+            return new Image_Android(b, null);
+         }
       }
       cursor.close();
       return null;
