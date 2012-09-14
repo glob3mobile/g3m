@@ -11,6 +11,7 @@ import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.URL;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JavaScriptObject;
 
 
 class ListenerEntry {
@@ -82,40 +83,42 @@ class ListenerEntry {
 
 
    void onDownload(final URL url,
-                   final byte[] data) {
+                   final JavaScriptObject data) {
       if (_bufferListener != null) {
-         final IByteBuffer buffer = new ByteBuffer_WebGL(data);
-         _bufferListener.onDownload(url, buffer);
+         // TODO create bytebuffer from data
+         final IByteBuffer byteBuffer = null;
+         _bufferListener.onDownload(url, byteBuffer);
       }
       if (_imageListener != null) {
-         //            final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-         //            if (bitmap == null) {
-         //               ILogger.instance().logError("Downloader_Android", "Can't create image from data");
-         //               return;
-         //            }
-         // TODO create js Image
-         final IImage image = new Image_WebGL();
-         _imageListener.onDownload(url, image);
+         // TODO create image from data
+         final IImage img = null;
+         if (img == null) {
+            log(LogLevel.ErrorLevel, ": Can't create image from data");
+            return;
+         }
+         _imageListener.onDownload(url, img);
       }
+
    }
 
 
    void onCanceledDownload(final URL url,
-                           final byte[] data) {
-      // TODO implement onCanceledDownload
+                           final JavaScriptObject data) {
       if (_bufferListener != null) {
-         final IByteBuffer buffer = new ByteBuffer_WebGL(data);
-         _bufferListener.onCanceledDownload(url, buffer);
+         // TODO create bytebuffer from data
+         final IByteBuffer byteBuffer = null;
+         _bufferListener.onCanceledDownload(url, byteBuffer);
       }
       if (_imageListener != null) {
-         //            final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-         //            if (bitmap == null) {
-         //               ILogger.instance().logError("Downloader_Android", "Can't create image from data");
-         //               return;
-         //            }
-         //            final IImage image = new Image_Android(bitmap, data);
-         //            _imageListener.onCanceledDownload(url, image);
+         // TODO create image from data
+         final IImage img = null;
+         if (img == null) {
+            log(LogLevel.ErrorLevel, ": Can't create image from data");
+            return;
+         }
+         _imageListener.onDownload(url, img);
       }
+
    }
 
 

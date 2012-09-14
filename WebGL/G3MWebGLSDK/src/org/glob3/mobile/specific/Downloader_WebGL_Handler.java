@@ -142,10 +142,12 @@ public class Downloader_WebGL_Handler {
       _dl = (Downloader_WebGL) downloader;
 
       if (_requestingImage) {
+         jsRequestImage(_url.getPath());
       }
       else {
          jsRequestBuffer(_url.getPath());
       }
+
       //      IThreadUtils.instance().invokeInRendererThread(new ProcessResponseGTask(statusCode, data, this), true);
    }
 
@@ -157,20 +159,30 @@ public class Downloader_WebGL_Handler {
    }
 
 
-   public void processBufferResponse(final int statusCode,
-                                     final JsArrayInteger data) {
-      final byte[] dataByteArray = toJavaArrayBytes(data);
+   public void processResponse(final int statusCode,
+                               final JavaScriptObject response) {
+      boolean dataIsValid;
+      JavaScriptObject data;
 
-      final boolean dataIsValid = (dataByteArray != null) && (statusCode == 200);
+      if (_requestingImage) {
+         // TODO: create img from response
+         data = response;
+      }
+      else {
+         // TODO: create bytearray from response
+         data = response;
+      }
+
+      dataIsValid = (data != null) && (statusCode == 200);
 
       if (dataIsValid) {
          for (final ListenerEntry entry : _listeners) {
             if (entry.isCanceled()) {
-               entry.onCanceledDownload(_url, dataByteArray);
+               entry.onCanceledDownload(_url, data);
                entry.onCancel(_url);
             }
             else {
-               entry.onDownload(_url, dataByteArray);
+               entry.onDownload(_url, data);
             }
          }
       }
@@ -200,42 +212,52 @@ public class Downloader_WebGL_Handler {
 		console.log("jsRequest url=" + url);
 
 		var thisInstance = this;
-		var xhReq = new XMLHttpRequest();
+		var xhr = new XMLHttpRequest();
 		var buf = new ArrayBuffer();
-		xhReq.open("GET", url, true);
-		xhReq.responseType = "arraybuffer";
-		xhReq.setRequestHeader("Cache-Control", "max-age=31536000");
-		xhReq.onload = function() {
+		xhr.open("GET", url, true);
+		xhr.responseType = "arraybuffer";
+		xhr.setRequestHeader("Cache-Control", "max-age=31536000");
+		xhr.onload = function() {
 			console.log("onload");
-			if (xhReq.readyState == 4) {
-				thisInstance.@org.glob3.mobile.specific.Downloader_WebGL_Handler::jsProcessBufferResponse(Lcom/google/gwt/core/client/JavaScriptObject;)(xhReq);
+			if (xhr.readyState == 4) {
+				// inform downloader to remove myself, to avoid adding new Listener
+				thisInstance.@org.glob3.mobile.specific.Downloader_WebGL_Handler::removeFromDownloaderDownloadingHandlers()();
+				var response;
+				if (xhr.status == 200) {
+					response = xhr.response;
+				} else {
+					response = null;
+					console.log("Error Retriving Data!");
+				}
+				thisInstance.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, response);
+				//				thisInstance.@org.glob3.mobile.specific.Downloader_WebGL_Handler::jsProcessBufferResponse(Lcom/google/gwt/core/client/JavaScriptObject;)(xhReq);
 			}
 		};
-		xhReq.send(buf);
+		xhr.send(buf);
    }-*/;
 
 
-   public native void jsProcessBufferResponse(JavaScriptObject xhr) /*-{
-		debugger;
-		console.log("jsProcessResponse");
-
-		var thisInstance = this;
-		// inform downloader to remove myself, to avoid adding new Listener
-		thisInstance.@org.glob3.mobile.specific.Downloader_WebGL_Handler::removeFromDownloaderDownloadingHandlers()();
-		var uint8array;
-		if (xhr.status == 200) {
-			uint8array = new Uint8Array(xhr.response);
-		} else {
-			uint8array = null;
-			console.log("Error Retriving Data!");
-		}
-		thisInstance.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processBufferResponse(ILcom/google/gwt/core/client/JsArrayInteger;)(xhr.status, uint8array);
-   }-*/;
+   //   public native void jsProcessBufferResponse(JavaScriptObject xhr) /*-{
+   //		debugger;
+   //		console.log("jsProcessResponse");
+   //
+   //		var thisInstance = this;
+   //		// inform downloader to remove myself, to avoid adding new Listener
+   //		thisInstance.@org.glob3.mobile.specific.Downloader_WebGL_Handler::removeFromDownloaderDownloadingHandlers()();
+   //		var uint8array;
+   //		if (xhr.status == 200) {
+   //			uint8array = new Uint8Array(xhr.response);
+   //		} else {
+   //			uint8array = null;
+   //			console.log("Error Retriving Data!");
+   //		}
+   //		thisInstance.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processBufferResponse(ILcom/google/gwt/core/client/JsArrayInteger;)(xhr.status, uint8array);
+   //   }-*/;
 
 
    private native void jsRequestImage(String url) /*-{
 		debugger;
-
+		// TODO implements jsRequestImage
    }-*/;
 
 
