@@ -85,8 +85,9 @@ public class G3MWidget_Android
       setLongClickable(true);
 
       // Debug flags
-      setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
-
+      if (false) {
+         setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
+      }
 
       //Double Tap Listener
       _gestureDetector = new GestureDetector(this);
