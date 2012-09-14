@@ -60,13 +60,17 @@ public class G3MWidget_Android
          implements
             OnGestureListener {
 
-   private G3MWidget                  _widget;
-   private ES2Renderer                _es2renderer;
+   private G3MWidget                                      _widget;
+   private ES2Renderer                                    _es2renderer;
 
-   private final MotionEventProcessor _motionEventProcessor = new MotionEventProcessor();
+   private final MotionEventProcessor                     _motionEventProcessor = new MotionEventProcessor();
+   private final OnDoubleTapListener                      _doubleTapListener;
+   private final GestureDetector                          _gestureDetector;
 
-   private OnDoubleTapListener        _doubleTapListener    = null;
-   private GestureDetector            _gestureDetector      = null;
+   private ArrayList<ICameraConstrainer>                  _cameraConstraints;
+   private LayerSet                                       _layerSet;
+   private ArrayList<org.glob3.mobile.generated.Renderer> _renderers;
+   private UserData                                       _userData;
 
 
    public G3MWidget_Android(final Context context) {
@@ -223,13 +227,6 @@ public class G3MWidget_Android
       }
       return _widget;
    }
-
-   //THIS METHOD SAVES PARAMETERS FOR INITIALIZATION IN RENDER THREAD
-
-   ArrayList<ICameraConstrainer>                  _cameraConstraints = null;
-   LayerSet                                       _layerSet          = null;
-   ArrayList<org.glob3.mobile.generated.Renderer> _renderers         = null;
-   UserData                                       _userData          = null;
 
 
    public void initWidget(final ArrayList<ICameraConstrainer> cameraConstraints,

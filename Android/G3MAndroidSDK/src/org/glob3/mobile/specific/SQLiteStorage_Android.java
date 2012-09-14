@@ -151,24 +151,25 @@ public class SQLiteStorage_Android
 
    @Override
    public IImage readImage(final URL url) {
+      IImage result = null;
+
       final String name = url.getPath();
 
       final Cursor cursor = _db.query("entry", new String[] { "contents" }, "name = ?", new String[] { name }, null, null, null);
 
       if (cursor.moveToFirst()) {
          final byte[] data = cursor.getBlob(0);
-         final Bitmap b = BitmapFactory.decodeByteArray(data, 0, data.length);
-         cursor.close();
+         final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
 
-         if (b == null) {
+         if (bitmap == null) {
             ILogger.instance().logError("Can't create bitmap from content of storage");
          }
          else {
-            return new Image_Android(b, null);
+            result = new Image_Android(bitmap, null);
          }
       }
       cursor.close();
-      return null;
+      return result;
    }
 
 }
