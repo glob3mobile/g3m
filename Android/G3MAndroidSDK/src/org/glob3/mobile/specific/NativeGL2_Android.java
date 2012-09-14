@@ -6,8 +6,6 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 
-import javax.microedition.khronos.opengles.GL10;
-
 import org.glob3.mobile.generated.GLAlignment;
 import org.glob3.mobile.generated.GLBlendFactor;
 import org.glob3.mobile.generated.GLBufferType;
@@ -444,8 +442,8 @@ public class NativeGL2_Android
                                    final boolean normalized,
                                    final int stride,
                                    final IFloatBuffer buffer) {
-      final FloatBuffer fb = ((FloatBuffer_Android) buffer).getBuffer();
-      GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized, stride, fb);
+      final FloatBuffer floatBuffer = ((FloatBuffer_Android) buffer).getBuffer();
+      GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized, stride, floatBuffer);
    }
 
 
@@ -463,6 +461,13 @@ public class NativeGL2_Android
                           final GLFormat format) {
 
       final Bitmap b = ((Image_Android) image).getBitmap();
-      GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, getEnum(format), b, 0);
+      GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, b, 0);
+
+      //      final ByteBuffer_Android bb = (ByteBuffer_Android) ((Image_Android) image).createByteBufferRGBA8888(image.getWidth(),
+      //               image.getHeight());
+      //
+      //      GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, getEnum(format), image.getWidth(), image.getHeight(), 0, getEnum(format),
+      //               GLES20.GL_UNSIGNED_BYTE, bb.getBuffer());
+
    }
 }

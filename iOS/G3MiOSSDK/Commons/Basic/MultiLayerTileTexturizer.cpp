@@ -228,7 +228,7 @@ public:
       
       //const long priority = _tile->getLevel() * 1000000 + _tile->getRow() * 1000 + _tile->getColumn();
       const long long priority = _tile->getLevel();
-
+      
       const long long requestId = _downloader->requestImage(URL(petition->getURL()),
                                                             priority,
                                                             new BuilderDownloadStepDownloadListener(this, i),
@@ -302,9 +302,9 @@ public:
         //        int __TESTING_mipmapping;
         const bool isMipmap = false;
         
-        const IImage* image = _textureBuilder->createTextureFromImages(_gl, 
-                                                                       _factory, 
-                                                                       images, 
+        const IImage* image = _textureBuilder->createTextureFromImages(_gl,
+                                                                       _factory,
+                                                                       images,
                                                                        rectangles,
                                                                        textureWidth, textureHeight);
         
