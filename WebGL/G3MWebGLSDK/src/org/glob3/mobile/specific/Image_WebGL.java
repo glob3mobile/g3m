@@ -17,7 +17,7 @@ public class Image_WebGL
    private boolean          _arrived = false;
 
 
-   public Image_WebGL() {
+   public Image_WebGL(final JavaScriptObject data) {
    }
 
 

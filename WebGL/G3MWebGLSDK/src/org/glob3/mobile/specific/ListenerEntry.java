@@ -85,15 +85,16 @@ class ListenerEntry {
    void onDownload(final URL url,
                    final JavaScriptObject data) {
       if (_bufferListener != null) {
-         // TODO create bytebuffer from data
-         final IByteBuffer byteBuffer = null;
+         final IByteBuffer byteBuffer = new ByteBuffer_WebGL(data);
+
          _bufferListener.onDownload(url, byteBuffer);
       }
       if (_imageListener != null) {
-         // TODO create image from data
-         final IImage img = null;
-         if (img == null) {
+         final IImage img = new Image_WebGL(data);
+
+         if ((img.getWidth() <= 0) || (img.getHeight() <= 0)) {
             log(LogLevel.ErrorLevel, ": Can't create image from data");
+
             return;
          }
          _imageListener.onDownload(url, img);
@@ -105,18 +106,19 @@ class ListenerEntry {
    void onCanceledDownload(final URL url,
                            final JavaScriptObject data) {
       if (_bufferListener != null) {
-         // TODO create bytebuffer from data
-         final IByteBuffer byteBuffer = null;
+         final IByteBuffer byteBuffer = new ByteBuffer_WebGL(data);
+
          _bufferListener.onCanceledDownload(url, byteBuffer);
       }
       if (_imageListener != null) {
-         // TODO create image from data
-         final IImage img = null;
-         if (img == null) {
+         final IImage img = new Image_WebGL(data);
+
+         if ((img.getWidth() <= 0) || (img.getHeight() <= 0)) {
             log(LogLevel.ErrorLevel, ": Can't create image from data");
+
             return;
          }
-         _imageListener.onDownload(url, img);
+         _imageListener.onCanceledDownload(url, img);
       }
 
    }

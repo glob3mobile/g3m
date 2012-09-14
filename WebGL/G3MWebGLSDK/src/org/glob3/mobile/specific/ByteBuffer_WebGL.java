@@ -4,6 +4,8 @@ package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.IByteBuffer;
 
+import com.google.gwt.core.client.JavaScriptObject;
+
 
 public class ByteBuffer_WebGL
          extends
@@ -20,6 +22,12 @@ public class ByteBuffer_WebGL
 
    public ByteBuffer_WebGL(final int size) {
       //    TODO this method must be implemented
+   }
+
+
+   public ByteBuffer_WebGL(final JavaScriptObject data) {
+      // TODO Auto-generated constructor stub
+      //      _uint8array = new Uint8Array(data);
    }
 
 
