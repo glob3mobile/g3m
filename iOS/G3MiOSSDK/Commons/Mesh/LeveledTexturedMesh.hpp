@@ -14,6 +14,7 @@
 
 #include "TextureMapping.hpp"
 #include "IFloatBuffer.hpp"
+#include "ILogger.hpp"
 
 #include <vector>
 
@@ -129,7 +130,7 @@ public:
   _currentLevelIsValid(false)
   {
     if (_mappings->size() <= 0) {
-      printf("LOGIC ERROR\n");
+      ILogger::instance()->logError("LOGIC ERROR\n");
     }
   }
   

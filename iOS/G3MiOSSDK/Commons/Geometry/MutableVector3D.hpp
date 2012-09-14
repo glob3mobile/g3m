@@ -55,10 +55,6 @@ public:
     return (_x == 0) && (_y == 0) && (_z == 0);
   }
   
-  void print() const {
-    printf("%.2f  %.2f %.2f\n", _x, _y, _z );
-  }
-  
   double length() const {
     return GMath.sqrt(squaredLength());
   }

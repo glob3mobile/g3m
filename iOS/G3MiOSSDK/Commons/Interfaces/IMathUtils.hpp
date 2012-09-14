@@ -11,6 +11,7 @@
 
 #include <string.h>
 #include <cstdio>
+#include "ILogger.hpp"
 
 //This declaration creates an converter issue
 //#ifdef GMath
@@ -31,7 +32,7 @@ class IMathUtils{
 public:
   static void setInstance(IMathUtils* math) {
     if (_instance != NULL) {
-      printf("Warning, IMathUtils instance set two times\n");
+      ILogger::instance()->logWarning("Warning, IMathUtils instance set two times\n");
     }
     _instance = math;
   }
