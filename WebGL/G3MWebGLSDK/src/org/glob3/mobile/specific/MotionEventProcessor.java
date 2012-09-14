@@ -23,8 +23,7 @@ public class MotionEventProcessor {
       public TouchEventType               _type       = TouchEventType.Down;
 
 
-      @Override
-      protected EventProcessed clone() {
+      protected EventProcessed createCopy() {
          final EventProcessed e = new EventProcessed();
          //         e._pointersID = (ArrayList<Integer>) this._pointersID.clone();
          e._pointersID = new ArrayList<Integer>(this._pointersID);
@@ -47,7 +46,7 @@ public class MotionEventProcessor {
 
 
    public TouchEvent processEvent(final Event event) {
-      final EventProcessed auxEvent = _lastEvent.clone();
+      final EventProcessed auxEvent = _lastEvent.createCopy();
       _lastEvent.clear();
 
       switch (DOM.eventGetType(event)) {

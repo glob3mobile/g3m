@@ -2,72 +2,70 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.IByteBuffer;
+import java.nio.ByteBuffer;
 
-import com.google.gwt.core.client.JavaScriptObject;
+import org.glob3.mobile.generated.IByteBuffer;
 
 
 public class ByteBuffer_WebGL
          extends
             IByteBuffer {
 
-   //   private final ByteBuffer _buffer;
-   private final int _timestamp = 0;
+   private final ByteBuffer _buffer;
+   private int              _timestamp = 0;
 
 
    ByteBuffer_WebGL(final byte[] data) {
-      //      TODO this method must be implemented
+      _buffer = ByteBuffer.wrap(data);
+
+      //_buffer = ByteBuffer.allocateDirect(data.length);
+      //_buffer.put(data);
+      //_buffer.rewind();
    }
 
 
    public ByteBuffer_WebGL(final int size) {
-      //    TODO this method must be implemented
-   }
-
-
-   public ByteBuffer_WebGL(final JavaScriptObject data) {
-      // TODO Auto-generated constructor stub
-      //      _uint8array = new Uint8Array(data);
+      //_buffer = ByteBuffer.allocate(size);
+      _buffer = ByteBuffer.wrap(new byte[size]);
    }
 
 
    @Override
    public int size() {
-      //    TODO this method must be implemented
-      return 0;
+      return _buffer.capacity();
    }
 
 
    @Override
    public int timestamp() {
-      //    TODO this method must be implemented
-      return 0;
+      return _timestamp;
    }
 
 
    @Override
    public byte get(final int i) {
-      //    TODO this method must be implemented
-      return 0;
+      return _buffer.get(i);
    }
 
 
    @Override
    public void put(final int i,
                    final byte value) {
-      //    TODO this method must be implemented
+      if (_buffer.get(i) != value) {
+         _buffer.put(i, value);
+         _timestamp++;
+      }
    }
 
 
-   //   public ByteBuffer getBuffer() {
-   //      //    TODO this method must be implemented
-   //   }
+   public ByteBuffer getBuffer() {
+      return _buffer;
+   }
 
 
    @Override
    public String description() {
-      //    TODO this method must be implemented
-      return "";
+      return "ByteBuffer_iOS (size=" + _buffer.capacity() + ")";
    }
 
 }

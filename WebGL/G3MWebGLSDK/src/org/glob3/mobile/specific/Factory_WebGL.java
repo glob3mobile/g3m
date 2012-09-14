@@ -30,18 +30,22 @@ public class Factory_WebGL
 
    @Override
    public IImage createImageFromFileName(final String filename) {
-      if (first) {
-         final Image_WebGL im = new Image_WebGL();
-         im.loadFromURL(filename);
-         first = false;
 
-         while (!im.isLoadedFromURL()) {
-            //WAIT UNTIL LOADED
-         }
+      throw new RuntimeException("NOT IMPLEMENTED FROM FILENAME");
 
-         return im;
-      }
-      return null;
+      //      if (first) {
+      //         final int TODO_IMPLEMENT; //!!!!
+      //         final Image_WebGL im = new Image_WebGL(null);
+      //         im.loadFromURL(filename);
+      //         first = false;
+      //
+      //         while (!im.isLoadedFromURL()) {
+      //            //WAIT UNTIL LOADED
+      //         }
+      //
+      //         return im;
+      //      }
+      //      return null;
    }
 
 
