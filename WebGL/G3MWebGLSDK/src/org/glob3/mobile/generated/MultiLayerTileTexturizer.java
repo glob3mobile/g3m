@@ -161,7 +161,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 	{
 	  if (mesh != null)
 	  {
-		System.out.print("break (point) on me 4\n");
+		ILogger.instance().logInfo("break (point) on me 4\n");
 	  }
 	}
   }
@@ -250,7 +250,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 	{
 	  if (mesh != null)
 	  {
-		System.out.print("break (point) on me 5\n");
+		ILogger.instance().logInfo("break (point) on me 5\n");
 	  }
 	}
   }

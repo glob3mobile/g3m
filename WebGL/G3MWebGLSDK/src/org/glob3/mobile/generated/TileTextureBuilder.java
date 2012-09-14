@@ -199,7 +199,7 @@ public class TileTextureBuilder extends RCObject
 	{
 	  if (_anyCanceled)
 	  {
-		System.out.print("Completed with cancelation\n");
+		ILogger.instance().logInfo("Completed with cancelation\n");
 	  }
 
 	  finalize();
@@ -239,7 +239,7 @@ public class TileTextureBuilder extends RCObject
   {
 	if (_status.get(position) != PetitionStatus.STATUS_PENDING)
 	{
-	  System.out.printf("Logic error: Expected STATUS_PENDING at position #%d but found status: %d\n", position, _status.get(position));
+	  ILogger.instance().logError("Logic error: Expected STATUS_PENDING at position #%d but found status: %d\n", position, _status.get(position));
 	}
   }
 
@@ -309,7 +309,7 @@ public class TileTextureBuilder extends RCObject
 	  {
 		if (mapping.getGLTextureId().isValid())
 		{
-		  System.out.print("break (point) on me 3\n");
+		  ILogger.instance().logInfo("break (point) on me 3\n");
 		}
 	  }
 
@@ -319,7 +319,7 @@ public class TileTextureBuilder extends RCObject
 
 	if (mappings.size() != _tile.getLevel() + 1)
 	{
-	  System.out.print("pleae break (point) me\n");
+	  ILogger.instance().logInfo("pleae break (point) me\n");
 	}
 
 	return new LeveledTexturedMesh(_tessellatorMesh, false, mappings);

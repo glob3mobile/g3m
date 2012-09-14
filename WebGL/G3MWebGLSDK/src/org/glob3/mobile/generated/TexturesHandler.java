@@ -27,7 +27,7 @@ public class TexturesHandler
 	  }
 	  holdersString += ")";
   
-	  System.out.printf("%s\n", holdersString);
+	  ILogger.instance().logInfo("%s\n", holdersString);
 	}
   }
 
@@ -43,7 +43,7 @@ public class TexturesHandler
   {
 	if (_textureHolders.size() > 0)
 	{
-	  System.out.print("WARNING: The TexturesHandler is destroyed, but the inner textures were not released.\n");
+	  ILogger.instance().logWarning("WARNING: The TexturesHandler is destroyed, but the inner textures were not released.\n");
 	}
   }
 
@@ -145,7 +145,7 @@ public class TexturesHandler
 	  }
 	}
   
-	System.out.print("break (point) on me 6\n");
+	ILogger.instance().logInfo("break (point) on me 6\n");
   }
 
 }

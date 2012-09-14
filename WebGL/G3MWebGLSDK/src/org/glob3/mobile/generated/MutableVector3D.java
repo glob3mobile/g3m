@@ -85,13 +85,6 @@ public class MutableVector3D
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void print() const
-  public final void print()
-  {
-	System.out.printf("%.2f  %.2f %.2f\n", _x, _y, _z);
-  }
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: double length() const
   public final double length()
   {

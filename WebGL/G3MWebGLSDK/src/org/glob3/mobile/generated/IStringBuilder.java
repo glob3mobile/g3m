@@ -32,7 +32,7 @@ public abstract class IStringBuilder
   {
 	if (_instance != null)
 	{
-	  System.out.print("Warning, ISB instance set two times\n");
+	  ILogger.instance().logWarning("Warning, ISB instance set two times\n");
 	}
 	_instance = isb;
   }
