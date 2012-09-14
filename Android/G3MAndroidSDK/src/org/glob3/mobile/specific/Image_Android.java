@@ -21,10 +21,8 @@ public class Image_Android
 
    public Image_Android(final Bitmap image,
                         final byte[] source) {
-
       if (image == null) {
-         final int ____REMOVE;
-         new Throwable().printStackTrace();
+         throw new RuntimeException("Can't create an Image_Android with a null bitmap");
       }
 
       _image = image;
