@@ -7,12 +7,13 @@
 //
 
 #include "IStringBuilder.hpp"
+#include "ILogger.hpp"
 
 IStringBuilder* IStringBuilder::_instance = NULL;
 
 void IStringBuilder::setInstance(IStringBuilder* isb) {
   if (_instance != NULL) {
-    printf("Warning, ISB instance set two times\n");
+    ILogger::instance()->logWarning("Warning, ISB instance set two times\n");
   }
   _instance = isb;
 }

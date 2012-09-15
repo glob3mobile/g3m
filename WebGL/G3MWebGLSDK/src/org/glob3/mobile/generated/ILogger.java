@@ -14,7 +14,7 @@ public abstract class ILogger
   {
 	if (_instance != null)
 	{
-	  System.out.print("Warning, ILooger instance set two times\n");
+	  ILogger.instance().logWarning("Warning, ILooger instance set two times\n");
 	}
 	_instance = logger;
   }

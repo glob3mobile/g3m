@@ -348,7 +348,7 @@ public:
     
     if (_stepsDone == _petitionsCount) {
       if (_anyCanceled) {
-        printf("Completed with cancelation\n");
+        ILogger::instance()->logInfo("Completed with cancelation\n");
       }
       
       finalize();
@@ -377,7 +377,7 @@ public:
   
   void checkIsPending(int position) const {
     if (_status[position] != STATUS_PENDING) {
-      printf("Logic error: Expected STATUS_PENDING at position #%d but found status: %d\n",
+      ILogger::instance()->logError("Logic error: Expected STATUS_PENDING at position #%d but found status: %d\n",
              position,
              _status[position]);
     }
@@ -439,7 +439,7 @@ public:
       }
       else {
         if ( mapping->getGLTextureId().isValid() ) {
-          printf("break (point) on me 3\n");
+          ILogger::instance()->logInfo("break (point) on me 3\n");
         }
       }
       
@@ -448,7 +448,7 @@ public:
     }
     
     if (mappings->size() != _tile->getLevel() + 1) {
-      printf("pleae break (point) me\n");
+      ILogger::instance()->logInfo("pleae break (point) me\n");
     }
     
     return new LeveledTexturedMesh(_tessellatorMesh,
@@ -625,7 +625,7 @@ void MultiLayerTileTexturizer::tileToBeDeleted(Tile* tile,
   }
   else {
     if (mesh != NULL) {
-      printf("break (point) on me 4\n");
+      ILogger::instance()->logInfo("break (point) on me 4\n");
     }
   }
 }
@@ -639,7 +639,7 @@ void MultiLayerTileTexturizer::tileMeshToBeDeleted(Tile* tile,
   }
   else {
     if (mesh != NULL) {
-      printf("break (point) on me 5\n");
+      ILogger::instance()->logInfo("break (point) on me 5\n");
     }
   }
 }

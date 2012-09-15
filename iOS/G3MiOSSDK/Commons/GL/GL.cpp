@@ -319,7 +319,7 @@ const GLTextureId GL::uploadTexture(const IImage* image, GLFormat format, bool g
 #endif
   }
   else {
-    printf("can't get a valid texture id\n");
+    ILogger::instance()->logError("can't get a valid texture id\n");
   }
   
   return texId;
@@ -562,7 +562,7 @@ const GLTextureId GL::getGLTextureId() {
   if (_texturesIdBag.size() == 0) {
     const int bugdetSize = 256;
     
-    printf("= Creating %d texturesIds...\n", bugdetSize);
+    ILogger::instance()->logInfo("= Creating %d texturesIds...\n", bugdetSize);
     
     const std::vector<GLTextureId> ids = _gl->genTextures(bugdetSize);
     
@@ -573,9 +573,7 @@ const GLTextureId GL::getGLTextureId() {
     
     _texturesIdAllocationCounter += bugdetSize;
     
-#ifdef C_CODE
-    printf("= Created %d texturesIds (accumulated %ld).\n", bugdetSize, _texturesIdAllocationCounter);
-#endif
+    ILogger::instance()->logInfo("= Created %d texturesIds (accumulated %ld).\n", bugdetSize, _texturesIdAllocationCounter);
   }
   
   _texturesIdGetCounter++;
