@@ -2,37 +2,38 @@
 
 package org.glob3.mobile.specific;
 
-import java.nio.ByteBuffer;
-
 import org.glob3.mobile.generated.IByteBuffer;
+
+import com.google.gwt.core.client.JavaScriptObject;
 
 
 public class ByteBuffer_WebGL
          extends
             IByteBuffer {
 
-   private final ByteBuffer _buffer;
-   private int              _timestamp = 0;
+   private final JavaScriptObject _buffer;
+   private final int              _timestamp = 0;
 
 
-   ByteBuffer_WebGL(final byte[] data) {
-      _buffer = ByteBuffer.wrap(data);
-
-      //_buffer = ByteBuffer.allocateDirect(data.length);
-      //_buffer.put(data);
-      //_buffer.rewind();
+   public ByteBuffer_WebGL(final JavaScriptObject data) {
+      _buffer = jsCreateBuffer(data);
    }
 
 
    public ByteBuffer_WebGL(final int size) {
-      //_buffer = ByteBuffer.allocate(size);
-      _buffer = ByteBuffer.wrap(new byte[size]);
+      _buffer = jsCreateBuffer(size);
+   }
+
+
+   ByteBuffer_WebGL(final byte[] data) {
+      //      TODO needed??
+      throw new RuntimeException("ByteBuffer_WebGL(final byte[] data) IS NOT IMPLEMENTED");
    }
 
 
    @Override
    public int size() {
-      return _buffer.capacity();
+      return jsSize();
    }
 
 
@@ -44,28 +45,57 @@ public class ByteBuffer_WebGL
 
    @Override
    public byte get(final int i) {
-      return _buffer.get(i);
+      return jsGet(i);
    }
 
 
    @Override
    public void put(final int i,
                    final byte value) {
-      if (_buffer.get(i) != value) {
-         _buffer.put(i, value);
-         _timestamp++;
-      }
-   }
-
-
-   public ByteBuffer getBuffer() {
-      return _buffer;
+      jsPut(i, value);
    }
 
 
    @Override
    public String description() {
-      return "ByteBuffer_iOS (size=" + _buffer.capacity() + ")";
+      return "ByteBuffer_WebGL (size=" + size() + ")";
    }
+
+
+   public JavaScriptObject getBuffer() {
+      return _buffer;
+   }
+
+
+   private native JavaScriptObject jsCreateBuffer(final JavaScriptObject data) /*-{
+		return new Uint8Array(data);
+   }-*/;
+
+
+   private native JavaScriptObject jsCreateBuffer(final int size) /*-{
+		return new Uint8Array(size);
+   }-*/;
+
+
+   private native int jsSize() /*-{
+		return this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer.length;
+   }-*/;
+
+
+   private native byte jsGet(int i) /*-{
+		this.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer.get(i);
+   }-*/;
+
+
+   private native void jsPut(int i,
+                             byte value) /*-{
+		var thisInstance = this;
+		if (thisInstance.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer
+				.get(i) != value) {
+			thisInstance.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer
+					.set(i, value);
+			thisInstance.@org.glob3.mobile.specific.ByteBuffer_WebGL::_timestamp++;
+		}
+   }-*/;
 
 }

@@ -2,29 +2,38 @@
 
 package org.glob3.mobile.specific;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-
 import org.glob3.mobile.generated.IFloatBuffer;
+
+import com.google.gwt.core.client.JavaScriptObject;
 
 
 public class FloatBuffer_WebGL
          extends
             IFloatBuffer {
 
-   private final FloatBuffer _buffer;
-   private int               _timestamp;
+   private final JavaScriptObject _buffer;
+   private final int              _timestamp = 0;
+
+
+   public FloatBuffer_WebGL(final JavaScriptObject data) {
+      _buffer = jsCreateBuffer(data);
+   }
 
 
    public FloatBuffer_WebGL(final int size) {
-      _buffer = ByteBuffer.allocateDirect(size * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
+      _buffer = jsCreateBuffer(size);
+   }
+
+
+   FloatBuffer_WebGL(final byte[] data) {
+      //      TODO needed??
+      throw new RuntimeException("ByteBuffer_WebGL(final byte[] data) IS NOT IMPLEMENTED");
    }
 
 
    @Override
    public int size() {
-      return _buffer.capacity();
+      return jsSize();
    }
 
 
@@ -36,22 +45,49 @@ public class FloatBuffer_WebGL
 
    @Override
    public float get(final int i) {
-      return _buffer.get(i);
+      return jsGet(i);
    }
 
 
    @Override
    public void put(final int i,
                    final float value) {
-      if (_buffer.get(i) != value) {
-         _buffer.put(i, value);
-         _timestamp++;
-      }
+      jsPut(i, value);
    }
 
 
-   public FloatBuffer getBuffer() {
+   public JavaScriptObject getBuffer() {
       return _buffer;
    }
+
+
+   private native JavaScriptObject jsCreateBuffer(final JavaScriptObject data) /*-{
+		return new Float32Array(data);
+   }-*/;
+
+
+   private native JavaScriptObject jsCreateBuffer(final int size) /*-{
+		return new Float32Array(size);
+   }-*/;
+
+
+   private native int jsSize() /*-{
+		return this.@org.glob3.mobile.specific.FloatBuffer_WebGL::_buffer.length;
+   }-*/;
+
+
+   private native byte jsGet(int i) /*-{
+		this.@org.glob3.mobile.specific.FloatBuffer_WebGL::_buffer[i];
+   }-*/;
+
+
+   private native void jsPut(int i,
+                             float value) /*-{
+		var thisInstance = this;
+		if (thisInstance.@org.glob3.mobile.specific.FloatBuffer_WebGL::_buffer[i] != value) {
+			thisInstance.@org.glob3.mobile.specific.FloatBuffer_WebGL::_buffer[i] = value;
+			thisInstance.@org.glob3.mobile.specific.FloatBuffer_WebGL::_timestamp++;
+		}
+   }-*/;
 
 }

@@ -3,6 +3,8 @@
 package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.IBufferDownloadListener;
+import org.glob3.mobile.generated.IByteBuffer;
+import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IImageDownloadListener;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.LogLevel;
@@ -82,52 +84,42 @@ class ListenerEntry {
 
    void onDownload(final URL url,
                    final JavaScriptObject data) {
+      if (_bufferListener != null) {
+         final IByteBuffer byteBuffer = new ByteBuffer_WebGL(data);
 
+         _bufferListener.onDownload(url, byteBuffer);
+      }
+      if (_imageListener != null) {
+         final IImage img = new Image_WebGL(data);
 
-      throw new RuntimeException("NOT IMPLEMENTED ONDOWNLOAD LISTENER ENTRY");
-
-
-      //      if (_bufferListener != null) {
-      //         final IByteBuffer byteBuffer = new ByteBuffer_WebGL(data);
-      //
-      //         _bufferListener.onDownload(url, byteBuffer);
-      //      }
-      //      if (_imageListener != null) {
-      //         final IImage img = new Image_WebGL(data);
-      //
-      //         if ((img.getWidth() <= 0) || (img.getHeight() <= 0)) {
-      //            log(LogLevel.ErrorLevel, ": Can't create image from data");
-      //
-      //            return;
-      //         }
-      //         _imageListener.onDownload(url, img);
-      //      }
-
+         if ((img.getWidth() <= 0) || (img.getHeight() <= 0)) {
+            log(LogLevel.ErrorLevel, ": Can't create image from data");
+            _imageListener.onError(url);
+         }
+         else {
+            _imageListener.onDownload(url, img);
+         }
+      }
    }
 
 
    void onCanceledDownload(final URL url,
                            final JavaScriptObject data) {
+      if (_bufferListener != null) {
+         final IByteBuffer byteBuffer = new ByteBuffer_WebGL(data);
 
+         _bufferListener.onCanceledDownload(url, byteBuffer);
+      }
+      if (_imageListener != null) {
+         final IImage img = new Image_WebGL(data);
 
-      throw new RuntimeException("NOT IMPLEMENTED ONCANCELED DOWNLOAD LISTENER ENTRY");
-
-      //      
-      //      if (_bufferListener != null) {
-      //         final IByteBuffer byteBuffer = new ByteBuffer_WebGL(data);
-      //
-      //         _bufferListener.onCanceledDownload(url, byteBuffer);
-      //      }
-      //      if (_imageListener != null) {
-      //         final IImage img = new Image_WebGL(data);
-      //
-      //         if ((img.getWidth() <= 0) || (img.getHeight() <= 0)) {
-      //            log(LogLevel.ErrorLevel, ": Can't create image from data");
-      //
-      //            return;
-      //         }
-      //         _imageListener.onCanceledDownload(url, img);
-      //      }
+         if ((img.getWidth() <= 0) || (img.getHeight() <= 0)) {
+            log(LogLevel.ErrorLevel, ": Can't create image from data");
+         }
+         else {
+            _imageListener.onCanceledDownload(url, img);
+         }
+      }
 
    }
 
