@@ -24,7 +24,8 @@ package org.glob3.mobile.generated;
 //***************************************************************
 
 
-public class BusyQuadRenderer extends Renderer implements EffectTarget
+//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
+public class BusyQuadRenderer extends Renderer, EffectTarget
 {
   private double _degrees;
   private final String _textureFilename;
@@ -181,11 +182,14 @@ public class BusyQuadRenderer extends Renderer implements EffectTarget
 	//int _TODO_stop_effects;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isEffectable() const
-  public final boolean isEffectable()
+  public final void onResume(InitializationContext ic)
   {
-	return true;
+
+  }
+
+  public final void onPause(InitializationContext ic)
+  {
+
   }
 
 }

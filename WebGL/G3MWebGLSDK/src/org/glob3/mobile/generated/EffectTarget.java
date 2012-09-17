@@ -18,11 +18,8 @@ package org.glob3.mobile.generated;
 
 
 
-public interface EffectTarget
+public class EffectTarget
 {
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual boolean isEffectable() const = 0;
-  boolean isEffectable();
 
 
 }

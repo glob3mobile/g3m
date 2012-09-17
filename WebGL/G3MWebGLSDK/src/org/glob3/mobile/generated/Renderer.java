@@ -19,6 +19,9 @@ package org.glob3.mobile.generated;
 
 public abstract class Renderer
 {
+  public abstract void onResume(InitializationContext ic);
+
+  public abstract void onPause(InitializationContext ic);
 
   public abstract void initialize(InitializationContext ic);
 

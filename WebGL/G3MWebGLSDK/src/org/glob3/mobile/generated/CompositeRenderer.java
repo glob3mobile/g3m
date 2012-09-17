@@ -120,4 +120,22 @@ public class CompositeRenderer extends Renderer
 	}
   }
 
+  public final void onResume(InitializationContext ic)
+  {
+	final int rendersSize = _renderers.size();
+	for (int i = 0; i < rendersSize; i++)
+	{
+	  _renderers.get(i).onResume(ic);
+	}
+  }
+
+  public final void onPause(InitializationContext ic)
+  {
+	final int rendersSize = _renderers.size();
+	for (int i = 0; i < rendersSize; i++)
+	{
+	  _renderers.get(i).onPause(ic);
+	}
+  }
+
 }

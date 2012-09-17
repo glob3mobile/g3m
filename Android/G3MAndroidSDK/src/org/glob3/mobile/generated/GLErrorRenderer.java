@@ -67,4 +67,14 @@ public class GLErrorRenderer extends Renderer
 
   }
 
+  public final void onResume(InitializationContext ic)
+  {
+
+  }
+
+  public final void onPause(InitializationContext ic)
+  {
+
+  }
+
 }
