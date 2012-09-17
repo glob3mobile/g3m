@@ -157,6 +157,7 @@
 		D816E7AA15B6C9B2004FA4D6 /* SingleImageTileTexturizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D816E7A815B6C9B1004FA4D6 /* SingleImageTileTexturizer.cpp */; };
 		D816E7AB15B6C9B2004FA4D6 /* SingleImageTileTexturizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D816E7A915B6C9B1004FA4D6 /* SingleImageTileTexturizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D81BA17115CBF19F004EF0B0 /* GL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81BA16F15CBF19E004EF0B0 /* GL.cpp */; };
+		D81D2072160748EA009A8BA6 /* GLConstants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81D2071160748EA009A8BA6 /* GLConstants.cpp */; };
 		D8228EBF157F7F7900BBAF60 /* MutableMatrix44D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */; };
 		D84D5A31157E0EAA000C5E35 /* MutableVector3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */; };
 		D84D5A32157E0EAA000C5E35 /* MutableVector3D.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D84D5A30157E0EAA000C5E35 /* MutableVector3D.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -384,6 +385,7 @@
 		D816E7A915B6C9B1004FA4D6 /* SingleImageTileTexturizer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SingleImageTileTexturizer.hpp; path = Commons/Basic/SingleImageTileTexturizer.hpp; sourceTree = "<group>"; };
 		D81BA16E15CBF19E004EF0B0 /* GL.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GL.hpp; sourceTree = "<group>"; };
 		D81BA16F15CBF19E004EF0B0 /* GL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = GL.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		D81D2071160748EA009A8BA6 /* GLConstants.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLConstants.cpp; sourceTree = "<group>"; };
 		D8228EBC157F7F6100BBAF60 /* MutableMatrix44D.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MutableMatrix44D.hpp; path = Commons/Geometry/MutableMatrix44D.hpp; sourceTree = "<group>"; };
 		D8228EBE157F7F7900BBAF60 /* MutableMatrix44D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = MutableMatrix44D.cpp; path = Commons/Geometry/MutableMatrix44D.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector3D.cpp; path = Commons/Geometry/MutableVector3D.cpp; sourceTree = "<group>"; };
@@ -730,6 +732,7 @@
 				D8E76950160742FD008EC7B9 /* GLConstants.hpp */,
 				D81BA16E15CBF19E004EF0B0 /* GL.hpp */,
 				D81BA16F15CBF19E004EF0B0 /* GL.cpp */,
+				D81D2071160748EA009A8BA6 /* GLConstants.cpp */,
 			);
 			name = GL;
 			path = Commons/GL;
@@ -1072,6 +1075,7 @@
 				CFA189AF15F926CA0048BF46 /* IFactory.cpp in Sources */,
 				D89DA21A15FF6C32008CD5F5 /* Image_iOS.mm in Sources */,
 				CF0D9BB41601F46B00F28B7D /* ByteBuffer_iOS.cpp in Sources */,
+				D81D2072160748EA009A8BA6 /* GLConstants.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
