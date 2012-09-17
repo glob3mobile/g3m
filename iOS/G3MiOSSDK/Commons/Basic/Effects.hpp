@@ -18,7 +18,6 @@
 
 class EffectTarget {
 public:  
-  virtual bool isEffectable() const = 0;
   
 #ifdef C_CODE
   virtual ~EffectTarget(){}
@@ -215,6 +214,15 @@ public:
   
   void cancellAllEffectsFor(EffectTarget* target);
   
+  void onResume(const InitializationContext* ic) {
+    
+  }
+  
+  void onPause(const InitializationContext* ic) {
+    
+  }
+  
+
 };
 
 //***************************************************************

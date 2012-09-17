@@ -52,9 +52,6 @@ public:
   void setCurrentGesture(const Gesture& gesture) { _currentGesture = gesture; }
   Camera* getNextCamera() { return _nextCamera; }
   
-  bool isEffectable() const{
-    return true;
-  }
 };
 
 
@@ -92,6 +89,14 @@ public:
   }
   
   void stop() {
+    
+  }
+  
+  void onResume(const InitializationContext* ic) {
+    
+  }
+  
+  void onPause(const InitializationContext* ic) {
     
   }
 

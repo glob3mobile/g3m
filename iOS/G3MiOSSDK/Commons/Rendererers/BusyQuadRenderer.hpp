@@ -64,8 +64,12 @@ public:
   
   void stop();
   
-  bool isEffectable() const{
-    return true;
+  void onResume(const InitializationContext* ic) {
+    
+  }
+  
+  void onPause(const InitializationContext* ic) {
+    
   }
   
 };

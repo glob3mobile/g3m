@@ -49,6 +49,14 @@ public:
   
   const IImage* readImage(const URL& url);
   
+  void onResume(const InitializationContext* ic) {
+    
+  }
+  
+  void onPause(const InitializationContext* ic) {
+    
+  }
+
 };
 
 #endif

@@ -12,6 +12,7 @@
 #include "URL.hpp"
 #include "IByteBuffer.hpp"
 #include "IImage.hpp"
+class InitializationContext;
 
 class IStorage {
 public:
@@ -30,6 +31,10 @@ public:
   
   virtual const IImage* readImage(const URL& url) = 0;
   
+  virtual void onResume(const InitializationContext* ic) = 0;
+  
+  virtual void onPause(const InitializationContext* ic) = 0;
+
 #ifdef C_CODE
   virtual ~IStorage() {}
 #endif
