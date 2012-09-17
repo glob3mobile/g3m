@@ -13,7 +13,6 @@ import org.glob3.mobile.generated.GLCullFace;
 import org.glob3.mobile.generated.GLError;
 import org.glob3.mobile.generated.GLFeature;
 import org.glob3.mobile.generated.GLFormat;
-import org.glob3.mobile.generated.GLImage;
 import org.glob3.mobile.generated.GLPrimitive;
 import org.glob3.mobile.generated.GLTextureId;
 import org.glob3.mobile.generated.GLTextureParameter;
@@ -22,10 +21,13 @@ import org.glob3.mobile.generated.GLTextureType;
 import org.glob3.mobile.generated.GLType;
 import org.glob3.mobile.generated.GLVariable;
 import org.glob3.mobile.generated.IFloatBuffer;
+import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IIntBuffer;
 import org.glob3.mobile.generated.INativeGL;
 
+import android.graphics.Bitmap;
 import android.opengl.GLES20;
+import android.opengl.GLUtils;
 
 
 public class NativeGL2_Android
@@ -440,8 +442,8 @@ public class NativeGL2_Android
                                    final boolean normalized,
                                    final int stride,
                                    final IFloatBuffer buffer) {
-      final FloatBuffer fb = ((FloatBuffer_Android) buffer).getBuffer();
-      GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized, stride, fb);
+      final FloatBuffer floatBuffer = ((FloatBuffer_Android) buffer).getBuffer();
+      GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized, stride, floatBuffer);
    }
 
 
@@ -455,8 +457,17 @@ public class NativeGL2_Android
 
 
    @Override
-   public void texImage2D(final GLImage glImage) {
-      GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, getEnum(glImage.getFormat()), glImage.getWidth(), glImage.getHeight(), 0,
-               getEnum(glImage.getFormat()), GLES20.GL_UNSIGNED_BYTE, ((ByteBuffer_Android) glImage.getByteBuffer()).getBuffer());
+   public void texImage2D(final IImage image,
+                          final GLFormat format) {
+
+      final Bitmap b = ((Image_Android) image).getBitmap();
+      GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, b, 0);
+
+      //      final ByteBuffer_Android bb = (ByteBuffer_Android) ((Image_Android) image).createByteBufferRGBA8888(image.getWidth(),
+      //               image.getHeight());
+      //
+      //      GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, getEnum(format), image.getWidth(), image.getHeight(), 0, getEnum(format),
+      //               GLES20.GL_UNSIGNED_BYTE, bb.getBuffer());
+
    }
 }

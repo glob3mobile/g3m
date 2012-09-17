@@ -12,10 +12,10 @@
 #include <string>
 #include <vector>
 
+#include "URL.hpp"
 #include "Sector.hpp"
-#include "IDownloadListener.hpp"
-#include "IDownloader.hpp"
 #include "GLTextureId.hpp"
+#include "IImage.hpp"
 
 class Tile;
 class Rectangle;
@@ -25,15 +25,19 @@ class MutableVector2D;
 
 class Petition {
 private:
+  const Sector* _sector;
 #ifdef C_CODE
-  const URL             _url;
-  const ByteArrayWrapper* _buffer;
+  const URL     _url;
+  const IImage* _image;
 #endif
 #ifdef JAVA_CODE
-  private URL _url = new URL(); //Conversor creates class "Url"
-  private ByteArrayWrapper _buffer;
+  final private URL _url; //Conversor creates class "Url"
+  private IImage _image;
 #endif
-  const Sector*       _sector;
+  
+  Petition(const Petition& that);
+  
+  void operator=(const Petition& that);
   
 public:
   
@@ -41,7 +45,7 @@ public:
            const URL& url):
   _sector(new Sector(sector)),
   _url(url),
-  _buffer(NULL)
+  _image(NULL)
   {
   }
   
@@ -49,18 +53,18 @@ public:
 #ifdef C_CODE
     delete _sector;
 #endif
-    releaseBuffer();
+    releaseImage();
   }
   
-  void releaseBuffer() {
-    if (_buffer != NULL) {
-      delete _buffer;
-      _buffer = NULL;
+  void releaseImage() {
+    if (_image != NULL) {
+      delete _image;
+      _image = NULL;
     }
   }
   
-  bool hasByteArrayWrapper() const {
-    return _buffer != NULL;
+  bool hasImage() const {
+    return (_image != NULL);
   }
   
   const URL getURL() const {
@@ -71,13 +75,13 @@ public:
     return *_sector;
   }
   
-  void setByteArrayWrapper(const ByteArrayWrapper* buffer) {
-    releaseBuffer();
-    _buffer = buffer;
+  void setImage(const IImage* image) {
+    releaseImage();
+    _image = image;
   }
   
-  const ByteArrayWrapper* getByteArrayWrapper() const {
-    return _buffer;
+  const IImage* getImage() const {
+    return _image;
   }
   
   const std::string description() const;

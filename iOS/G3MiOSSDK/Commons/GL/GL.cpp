@@ -284,7 +284,7 @@ GLError GL::getError() {
   return _gl->getError();
 }
 
-const GLTextureId GL::uploadTexture(const GLImage* glImage, bool generateMipmap){
+const GLTextureId GL::uploadTexture(const IImage* image, GLFormat format, bool generateMipmap){
   const GLTextureId texId = getGLTextureId();
   if (texId.isValid()) {
 #ifdef C_CODE
@@ -296,7 +296,7 @@ const GLTextureId GL::uploadTexture(const GLImage* glImage, bool generateMipmap)
     _gl->texParameteri(Texture2D, MagFilter, Linear);
     _gl->texParameteri(Texture2D, WrapS, ClampToEdge);
     _gl->texParameteri(Texture2D, WrapT, ClampToEdge);
-    _gl->texImage2D(glImage);
+    _gl->texImage2D(image, format);
     
     if (generateMipmap) {
       _gl->generateMipmap(Texture2D);
@@ -311,7 +311,7 @@ const GLTextureId GL::uploadTexture(const GLImage* glImage, bool generateMipmap)
     _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MagFilter, GLTextureParameterValue.Linear);
     _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapS, GLTextureParameterValue.ClampToEdge);
     _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapT, GLTextureParameterValue.ClampToEdge);
-    _gl.texImage2D(glImage);
+    _gl.texImage2D(image, format);
     
     if (generateMipmap) {
       _gl.generateMipmap(GLTextureType.Texture2D);
@@ -319,7 +319,7 @@ const GLTextureId GL::uploadTexture(const GLImage* glImage, bool generateMipmap)
 #endif
   }
   else {
-    printf("can't get a valid texture id\n");
+    ILogger::instance()->logError("can't get a valid texture id\n");
   }
   
   return texId;
@@ -562,7 +562,7 @@ const GLTextureId GL::getGLTextureId() {
   if (_texturesIdBag.size() == 0) {
     const int bugdetSize = 256;
     
-    printf("= Creating %d texturesIds...\n", bugdetSize);
+    ILogger::instance()->logInfo("= Creating %d texturesIds...\n", bugdetSize);
     
     const std::vector<GLTextureId> ids = _gl->genTextures(bugdetSize);
     
@@ -573,9 +573,7 @@ const GLTextureId GL::getGLTextureId() {
     
     _texturesIdAllocationCounter += bugdetSize;
     
-#ifdef C_CODE
-    printf("= Created %d texturesIds (accumulated %ld).\n", bugdetSize, _texturesIdAllocationCounter);
-#endif
+    ILogger::instance()->logInfo("= Created %d texturesIds (accumulated %d).\n", bugdetSize, _texturesIdAllocationCounter);
   }
   
   _texturesIdGetCounter++;

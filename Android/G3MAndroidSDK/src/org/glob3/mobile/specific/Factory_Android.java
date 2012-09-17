@@ -4,9 +4,7 @@ package org.glob3.mobile.specific;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Locale;
 
-import org.glob3.mobile.generated.ByteArrayWrapper;
 import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IFloatBuffer;
@@ -24,7 +22,6 @@ public class Factory_Android
          extends
             IFactory {
    private final Context _context;
-   private static Locale locale = new Locale("myLocale");
 
 
    public Factory_Android(final Context c) {
@@ -71,10 +68,12 @@ public class Factory_Android
       }
 
       if (bitmap == null) {
+         ILogger.instance().logError("FACTORY: Can't create image from fileName");
+
          return null;
       }
 
-      return new Image_Android(bitmap);
+      return new Image_Android(bitmap, null);
    }
 
 
@@ -86,9 +85,12 @@ public class Factory_Android
    @Override
    public IImage createImageFromSize(final int width,
                                      final int height) {
-      final Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-      final Bitmap bmp = Bitmap.createBitmap(width, height, conf);
-      return new Image_Android(bmp);
+      final Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+      if (bitmap == null) {
+         ILogger.instance().logError("FACTORY: Can't create empty image");
+         return null;
+      }
+      return new Image_Android(bitmap, null);
    }
 
 
@@ -105,20 +107,27 @@ public class Factory_Android
 
 
    @Override
-   public IImage createImageFromData(final ByteArrayWrapper buffer) {
-      final Bitmap b = BitmapFactory.decodeByteArray(buffer.getData(), 0, buffer.getData().length);
-      if (b == null) {
-         ILogger.instance().logError("FACTORY", "Can't create image from data");
-         return null;
-      }
-      return new Image_Android(b);
+   public IByteBuffer createByteBuffer(final byte[] data,
+                                       final int length) {
+      return new ByteBuffer_Android(data);
    }
 
 
    @Override
-   public IByteBuffer createByteBuffer(final byte[] data,
-                                       final int length) {
-      return new ByteBuffer_Android(data);
+   public IImage createImageFromBuffer(final IByteBuffer buffer) {
+      final byte[] data = ((ByteBuffer_Android) buffer).getBuffer().array();
+      final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+      if (bitmap == null) {
+         ILogger.instance().logError("FACTORY", "Can't create image from data");
+         return null;
+      }
+      return new Image_Android(bitmap, data);
+   }
+
+
+   @Override
+   public IByteBuffer createByteBuffer(final int length) {
+      return new ByteBuffer_Android(length);
    }
 
 }

@@ -31,7 +31,7 @@ protected:
 public:
   static void setInstance(ILogger* logger) {
     if (_instance != NULL) {
-      printf("Warning, ILooger instance set two times\n");
+      ILogger::instance()->logWarning("Warning, ILooger instance set two times\n");
     }
     _instance = logger;
   }

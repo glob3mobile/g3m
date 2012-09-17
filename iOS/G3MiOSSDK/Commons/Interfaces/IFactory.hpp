@@ -22,7 +22,6 @@ class IImage;
 class IFloatBuffer;
 class IIntBuffer;
 class IByteBuffer;
-class ByteArrayWrapper;
 class ILogger;
 
 class IFactory {
@@ -31,7 +30,7 @@ class IFactory {
 public:
   static void setInstance(IFactory* factory) {
     if (_instance != NULL) {
-      printf("Warning, ILooger instance set two times\n");
+      ILogger::instance()->logWarning("Warning, ILooger instance set two times\n");
     }
     _instance = factory;
   }
@@ -50,7 +49,7 @@ public:
   
   virtual IImage* createImageFromFileName(const std::string filename) const = 0;
   
-  virtual IImage* createImageFromData(const ByteArrayWrapper* buffer) const = 0;
+  virtual IImage* createImageFromBuffer(const IByteBuffer* buffer) const = 0;
   
   virtual IImage* createImageFromSize(int width, int height) const = 0;
 
@@ -59,6 +58,8 @@ public:
   virtual IFloatBuffer* createFloatBuffer(int size) const = 0;
   
   virtual IIntBuffer* createIntBuffer(int size) const = 0;
+  
+  virtual IByteBuffer* createByteBuffer(int length) const = 0;
   
   virtual IByteBuffer* createByteBuffer(unsigned char data[], int length) const = 0;
   

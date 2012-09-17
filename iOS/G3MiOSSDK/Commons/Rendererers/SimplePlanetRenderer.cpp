@@ -116,24 +116,23 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
     
     IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
     
-#ifdef C_CODE    
-    const GLImage* glImage = rc->getTextureBuilder()->createTextureFromImage(rc->getGL(), 
-                                                                             rc->getFactory(), 
-                                                                             RGBA, image, 
-                                                                             _texWidth, 
-                                                                             _texHeight);
+    const IImage* scaledImage = rc->getTextureBuilder()->createTextureFromImage(rc->getGL(), 
+                                                                                rc->getFactory(), 
+                                                                                image, _texWidth,
+                                                                                _texHeight);
+    if (image != scaledImage){
+      rc->getFactory()->deleteImage(image);
+    }
+    
+#ifdef C_CODE
+    texId = rc->getTexturesHandler()->getGLTextureId(scaledImage, RGBA,
+                                                     _textureFilename, false);
 #else
-    const GLImage* glImage = rc->getTextureBuilder()->createTextureFromImage(rc->getGL(), 
-                                                                             rc->getFactory(), 
-                                                                             GLFormat.RGBA, image, 
-                                                                             _texWidth, 
-                                                                             _texHeight);
+    texId = rc->getTexturesHandler()->getGLTextureId(scaledImage, GLFormat.RGBA,
+                                                     _textureFilename, false);
 #endif
     
-    texId = rc->getTexturesHandler()->getGLTextureId(glImage, _textureFilename, false);
-    
-    rc->getFactory()->deleteImage(image);
-    delete glImage;
+    rc->getFactory()->deleteImage(scaledImage);
     
     if (!texId.isValid()) {
       rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());

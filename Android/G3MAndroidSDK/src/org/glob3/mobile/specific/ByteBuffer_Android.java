@@ -18,15 +18,15 @@ public class ByteBuffer_Android
    ByteBuffer_Android(final byte[] data) {
       _buffer = ByteBuffer.wrap(data);
 
-      //      _buffer = ByteBuffer.allocateDirect(data.length);
-      //      _buffer.put(data);
-      //      _buffer.rewind();
+      //_buffer = ByteBuffer.allocateDirect(data.length);
+      //_buffer.put(data);
+      //_buffer.rewind();
    }
 
 
    public ByteBuffer_Android(final int size) {
-      //         _buffer = ByteBuffer.allocateDirect(size);
-      _buffer = ByteBuffer.allocate(size);
+      //_buffer = ByteBuffer.allocate(size);
+      _buffer = ByteBuffer.wrap(new byte[size]);
    }
 
 
@@ -60,6 +60,12 @@ public class ByteBuffer_Android
 
    public ByteBuffer getBuffer() {
       return _buffer;
+   }
+
+
+   @Override
+   public String description() {
+      return "ByteBuffer_iOS (size=" + _buffer.capacity() + ")";
    }
 
 }

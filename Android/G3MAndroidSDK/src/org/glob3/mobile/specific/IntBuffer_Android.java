@@ -2,7 +2,6 @@
 
 package org.glob3.mobile.specific;
 
-import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 import org.glob3.mobile.generated.IIntBuffer;
@@ -18,7 +17,8 @@ public class IntBuffer_Android
 
    public IntBuffer_Android(final int size) {
       // _buffer = ByteBuffer.allocateDirect(size * 4).order(ByteOrder.nativeOrder()).asIntBuffer();
-      _buffer = ByteBuffer.allocate(size * 4).asIntBuffer();
+      //_buffer = ByteBuffer.allocate(size * 4).order(ByteOrder.nativeOrder()).asIntBuffer();
+      _buffer = IntBuffer.wrap(new int[size]);
    }
 
 

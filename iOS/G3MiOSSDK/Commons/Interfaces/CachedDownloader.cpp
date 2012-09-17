@@ -7,32 +7,24 @@
 //
 
 #include "CachedDownloader.hpp"
-#include "IDownloadListener.hpp"
-
+#include "IBufferDownloadListener.hpp"
+#include "IImageDownloadListener.hpp"
 #include "IStringBuilder.hpp"
 
-class SaverDownloadListener : public IDownloadListener {
-  CachedDownloader*  _downloader;
-  IDownloadListener* _listener;
-  const bool         _deleteListener;
-  IStorage*          _cacheStorage;
-  
-#ifdef C_CODE
-  const URL          _url;
-#endif
-#ifdef JAVA_CODE
-  private URL _url = new URL();
-#endif
+
+class BufferSaverDownloadListener : public IBufferDownloadListener {
+  CachedDownloader*        _downloader;
+  IBufferDownloadListener* _listener;
+  const bool               _deleteListener;
+  IStorage*                _cacheStorage;
   
 public:
-  SaverDownloadListener(CachedDownloader* downloader,
-                        IStorage* cacheStorage,
-                        const URL url,
-                        IDownloadListener* listener,
-                        bool deleteListener) :
+  BufferSaverDownloadListener(CachedDownloader* downloader,
+                              IStorage* cacheStorage,
+                              IBufferDownloadListener* listener,
+                              bool deleteListener) :
   _downloader(downloader),
   _cacheStorage(cacheStorage),
-  _url(url),
   _listener(listener),
   _deleteListener(deleteListener)
   {
@@ -48,38 +40,113 @@ public:
     }
   }
   
-  void saveResponse(const Response* response) {
-    if (!_cacheStorage->contains(_url)) {
-      _downloader->countSave();
-      
-      const ByteArrayWrapper* bb = response->getByteArrayWrapper();
-      _cacheStorage->save(_url, *bb);
+  void saveResponse(const URL& url,
+                    const IByteBuffer* buffer) {
+    if (buffer != NULL) {
+      if (!_cacheStorage->containsBuffer(url)) {
+        _downloader->countSave();
+        
+        _cacheStorage->saveBuffer(url, buffer);
+      }
     }
   }
   
-  void onDownload(const Response* response) {
-    saveResponse(response);
+  void onDownload(const URL& url,
+                  const IByteBuffer* data) {
+    saveResponse(url, data);
     
-    _listener->onDownload(response);
-    
-    deleteListener();
-  }
-  
-  void onError(const Response* response) {
-    _listener->onError(response);
+    _listener->onDownload(url, data);
     
     deleteListener();
   }
   
-  void onCanceledDownload(const Response* response) {
-    saveResponse(response);
+  void onError(const URL& url) {
+    _listener->onError(url);
     
-    _listener->onCanceledDownload(response);
+    deleteListener();
+  }
+  
+  void onCanceledDownload(const URL& url,
+                          const IByteBuffer* buffer) {
+    saveResponse(url, buffer);
+    
+    _listener->onCanceledDownload(url, buffer);
     
     // no deleteListener() call, onCanceledDownload() is always called before onCancel().
   }
   
-  void onCancel(const URL* url) {
+  void onCancel(const URL& url) {
+    _listener->onCancel(url);
+    
+    deleteListener();
+  }
+  
+};
+
+class ImageSaverDownloadListener : public IImageDownloadListener {
+  CachedDownloader*       _downloader;
+  IImageDownloadListener* _listener;
+  const bool              _deleteListener;
+  IStorage*               _cacheStorage;
+  
+public:
+  ImageSaverDownloadListener(CachedDownloader* downloader,
+                             IStorage* cacheStorage,
+                             IImageDownloadListener* listener,
+                             bool deleteListener) :
+  _downloader(downloader),
+  _cacheStorage(cacheStorage),
+  _listener(listener),
+  _deleteListener(deleteListener)
+  {
+    
+  }
+  
+  void deleteListener() {
+    if (_deleteListener && (_listener != NULL)) {
+#ifdef C_CODE
+      delete _listener;
+#endif
+      _listener = NULL;
+    }
+  }
+  
+  void saveResponse(const URL& url,
+                    const IImage* image) {
+    if (image != NULL) {
+      if (!_cacheStorage->containsImage(url)) {
+        _downloader->countSave();
+        
+        _cacheStorage->saveImage(url, image);
+      }
+    }
+  }
+  
+  void onDownload(const URL& url,
+                  const IImage* image) {
+    saveResponse(url, image);
+    
+    _listener->onDownload(url, image);
+    
+    deleteListener();
+  }
+  
+  void onError(const URL& url) {
+    _listener->onError(url);
+    
+    deleteListener();
+  }
+  
+  void onCanceledDownload(const URL& url,
+                          const IImage* image) {
+    saveResponse(url, image);
+    
+    _listener->onCanceledDownload(url, image);
+    
+    // no deleteListener() call, onCanceledDownload() is always called before onCancel().
+  }
+  
+  void onCancel(const URL& url) {
     _listener->onCancel(url);
     
     deleteListener();
@@ -100,47 +167,64 @@ void CachedDownloader::cancelRequest(long long requestId) {
   _downloader->cancelRequest(requestId);
 }
 
-std::string CachedDownloader::removeInvalidChars(const std::string& path) const {
-#ifdef C_CODE
-  std::string result = path;
-  std::replace(result.begin(), result.end(), '/', '_');
-  return result;
-#endif
-#ifdef JAVA_CODE
-  return path.replaceAll("/", "_");
-#endif
-}
-
-
-//const URL CachedDownloader::getCacheFileName(const URL& url) const {
-//  return URL(_cacheDirectory, removeInvalidChars(url.getPath()));
-//}
-
-long long CachedDownloader::request(const URL& url,
-                                    long long priority,
-                                    IDownloadListener* listener,
-                                    bool deleteListener) {
+long long CachedDownloader::requestImage(const URL& url,
+                                         long long priority,
+                                         IImageDownloadListener* listener,
+                                         bool deleteListener) {
   _requestsCounter++;
   
-  const ByteArrayWrapper* cachedBuffer = _cacheStorage->read(url);
-  if (cachedBuffer == NULL) {
+  const IImage* cachedImage = _cacheStorage->readImage(url);
+  if (cachedImage == NULL) {
     // cache miss
-    return _downloader->request(url,
-                                priority,
-                                new SaverDownloadListener(this,
-                                                          _cacheStorage,
-                                                          url,
-                                                          listener,
-                                                          deleteListener),
-                                true);
+    return _downloader->requestImage(url,
+                                     priority,
+                                     new ImageSaverDownloadListener(this,
+                                                                    _cacheStorage,
+                                                                    listener,
+                                                                    deleteListener),
+                                     true);
   }
   else {
     // cache hit
     _cacheHitsCounter++;
     
-    Response response(url, cachedBuffer);
+    listener->onDownload(url, cachedImage);
     
-    listener->onDownload(&response);
+    if (deleteListener) {
+#ifdef C_CODE
+      delete listener;
+#else
+      listener = NULL;
+#endif
+    }
+    
+    delete cachedImage;
+    return -1;
+  }
+}
+
+long long CachedDownloader::requestBuffer(const URL& url,
+                                          long long priority,
+                                          IBufferDownloadListener* listener,
+                                          bool deleteListener) {
+  _requestsCounter++;
+  
+  const IByteBuffer* cachedBuffer = _cacheStorage->readBuffer(url);
+  if (cachedBuffer == NULL) {
+    // cache miss
+    return _downloader->requestBuffer(url,
+                                      priority,
+                                      new BufferSaverDownloadListener(this,
+                                                                      _cacheStorage,
+                                                                      listener,
+                                                                      deleteListener),
+                                      true);
+  }
+  else {
+    // cache hit
+    _cacheHitsCounter++;
+    
+    listener->onDownload(url, cachedBuffer);
     
     if (deleteListener) {
 #ifdef C_CODE
@@ -155,12 +239,16 @@ long long CachedDownloader::request(const URL& url,
   }
 }
 
-
 const std::string CachedDownloader::statistics() {
-  
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
-  isb->add("CachedDownloader(cache hits=")->add(_cacheHitsCounter)->add("/")->add(_requestsCounter)->add(", saves=");
-  isb->add(_savesCounter)->add(", downloader=")->add(_downloader->statistics());
+  isb->add("CachedDownloader(cache hits=");
+  isb->add(_cacheHitsCounter);
+  isb->add("/");
+  isb->add(_requestsCounter);
+  isb->add(", saves=");
+  isb->add(_savesCounter);
+  isb->add(", downloader=");
+  isb->add(_downloader->statistics());
   std::string s = isb->getString();
   delete isb;
   return s;

@@ -10,7 +10,7 @@
 
 #include "ILogger.hpp"
 #include "Downloader_iOS.hpp"
-
+#include "IFactory.hpp"
 
 @implementation ListenerEntry
 
@@ -72,7 +72,6 @@
     _nsURL     = nsURL;
     _url       = url;
     _priority  = priority;
-    //    _canceled  = false;
     
     ListenerEntry* entry = [ListenerEntry entryWithListener: listener
                                                   requestId: requestId];
@@ -120,9 +119,6 @@
   for (int i = 0; i < listenersCount; i++) {
     ListenerEntry* entry = [_listeners objectAtIndex: i];
     if ([entry requestId] == requestId) {
-      //      [[entry listener] onCancel:_url];
-      //
-      //      [_listeners removeObjectAtIndex: i];
       [entry cancel];
       
       canceled = true;
@@ -145,7 +141,7 @@
   for (int i = 0; i < listenersCount; i++) {
     ListenerEntry* entry = [_listeners objectAtIndex: i];
     if ([entry requestId] == requestId) {
-      [[entry listener] onCancel:_url];
+      [[entry listener] onCancel:*_url];
       
       [_listeners removeObjectAtIndex: i];
       
@@ -169,17 +165,6 @@
   
   return hasListeners;
 }
-
-//-(bool)isCanceled
-//{
-//  [_lock lock];
-//
-//  const bool result = _canceled;
-//
-//  [_lock unlock];
-//
-//  return result;
-//}
 
 - (void) runWithDownloader:(void*)downloaderV
 {
@@ -218,62 +203,34 @@
     const URL url( [[_nsURL absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] );
     
     if (dataIsValid) {
-      const int length = [data length];
-      unsigned char* bytes = new unsigned char[ length ]; // will be deleted by ByteArrayWrapper's destructor
-      [data getBytes: bytes
-              length: length];
-      ByteArrayWrapper* buffer = new ByteArrayWrapper(bytes, length);
-      
-      Response* response = new Response(url, buffer);
-      
       for (int i = 0; i < listenersCount; i++) {
         ListenerEntry* entry = [_listeners objectAtIndex: i];
         Downloader_iOS_Listener* listener = [entry listener];
-
+        
         if ([entry isCanceled]) {
-          [listener onCanceledDownload: response];
+          [listener onCanceledDownloadURL:url
+                                     data:data];
           
-          [listener onCancel: &url];
+          [listener onCancel: url];
         }
         else {
-          [listener onDownload: response];
+          [listener onDownloadURL:url
+                             data:data];
         }
       }
-      
-      delete response;
-      delete buffer;
     }
     else {
-      ByteArrayWrapper* buffer = new ByteArrayWrapper(NULL, 0);
-      
-      Response* response = new Response(url, buffer);
-      
       for (int i = 0; i < listenersCount; i++) {
         ListenerEntry* entry = [_listeners objectAtIndex: i];
         
-        [[entry listener] onError: response];
+        [[entry listener] onErrorURL:url];
       }
-      
-      delete response;
-      delete buffer;
     }
-    //    }
-    
-    //  [_listeners removeAllObjects];
     
     [_lock unlock];
   });
   
 }
-
-//- (void) cancel
-//{
-//  [_lock lock];
-//
-//  _canceled = true;
-//
-//  [_lock unlock];
-//}
 
 - (void)dealloc
 {

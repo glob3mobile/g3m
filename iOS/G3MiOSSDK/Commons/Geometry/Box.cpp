@@ -49,7 +49,9 @@ const std::vector<Vector3D> Box::getCorners() const
 Vector2D Box::projectedExtent(const RenderContext *rc) const {
   const std::vector<Vector3D> corners = getCorners();
 
-  const Vector2D pixel0 = rc->getCurrentCamera()->point2Pixel(corners[0]);
+  const Camera* currentCamera = rc->getCurrentCamera();
+  
+  const Vector2D pixel0 = currentCamera->point2Pixel(corners[0]);
 
   double lowerX = pixel0.x();
   double upperX = pixel0.x();
@@ -58,7 +60,7 @@ Vector2D Box::projectedExtent(const RenderContext *rc) const {
   
   const int cornersSize = corners.size();
   for (int i = 1; i < cornersSize; i++) {
-    const Vector2D pixel = rc->getCurrentCamera()->point2Pixel(corners[i]);
+    const Vector2D pixel = currentCamera->point2Pixel(corners[i]);
     
     const double x = pixel.x();
     const double y = pixel.y();

@@ -17,7 +17,6 @@ class InitializationContext;
 class TilesRenderParameters;
 class TileRenderContext;
 class Geodetic3D;
-class IDownloadListener;
 
 #include "TerrainTouchEventListener.hpp"
 
