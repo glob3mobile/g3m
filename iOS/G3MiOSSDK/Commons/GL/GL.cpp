@@ -573,7 +573,7 @@ const GLTextureId GL::getGLTextureId() {
     
     _texturesIdAllocationCounter += bugdetSize;
     
-    ILogger::instance()->logInfo("= Created %d texturesIds (accumulated %ld).\n", bugdetSize, _texturesIdAllocationCounter);
+    ILogger::instance()->logInfo("= Created %d texturesIds (accumulated %d).\n", bugdetSize, _texturesIdAllocationCounter);
   }
   
   _texturesIdGetCounter++;

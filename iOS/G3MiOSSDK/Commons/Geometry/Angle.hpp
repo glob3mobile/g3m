@@ -135,27 +135,25 @@ public:
 #ifdef JAVA_CODE
   @Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		long temp;
-		temp = Double.doubleToLongBits(_degrees);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		return result;
+		return Double.toString(_degrees).hashCode();
 	}
   
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Angle other = (Angle) obj;
-		if (Double.doubleToLongBits(_degrees) != Double
-				.doubleToLongBits(other._degrees))
-			return false;
-		return true;
+		if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Angle other = (Angle) obj;
+        if (_degrees != other._degrees) {
+            return false;
+        }
+        return true;
 	}
 #endif
   

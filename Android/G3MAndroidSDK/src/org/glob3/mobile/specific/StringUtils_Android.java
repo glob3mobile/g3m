@@ -64,7 +64,7 @@ public class StringUtils_Android
       while ((index > 0) && (String.charAt(index) == ' ')) {
          index--;
       }
-      return String.substring(0, index);
+      return String.substring(0, index + 1);
    }
 
 
