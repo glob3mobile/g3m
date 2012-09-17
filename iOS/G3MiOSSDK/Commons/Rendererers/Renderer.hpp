@@ -16,6 +16,9 @@ class EventContext;
 
 class Renderer {
 public:
+  virtual void onResume(const InitializationContext* ic) = 0;
+  
+  virtual void onPause(const InitializationContext* ic) = 0;
   
   virtual void initialize(const InitializationContext* ic) = 0;
   

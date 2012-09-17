@@ -68,4 +68,11 @@ public class ByteBuffer_Android
       return "ByteBuffer_iOS (size=" + _buffer.capacity() + ")";
    }
 
+
+   @Override
+   public String getAsString() {
+      final byte[] bytes = _buffer.array();
+      return new String(bytes);
+   }
+
 }

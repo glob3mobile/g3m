@@ -61,6 +61,8 @@ public:
   
   const std::string description() const;
 
+  const std::string getAsString() const;
+
 };
 
 #endif

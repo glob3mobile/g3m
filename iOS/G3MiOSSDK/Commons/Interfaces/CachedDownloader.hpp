@@ -63,6 +63,10 @@ public:
     _savesCounter++;
   }
   
+  void onResume(const InitializationContext* ic);
+  
+  void onPause(const InitializationContext* ic);
+
 };
 
 #endif

@@ -165,7 +165,7 @@ G3MWidget::~G3MWidget() {
   delete _nextCamera;
   delete _texturesHandler;
   delete _timer;
-
+  
   if (_downloader != NULL) {
     _downloader->stop();
 #ifdef C_CODE
@@ -268,36 +268,36 @@ void G3MWidget::render() {
     _selectedRenderer->start();
   }
   
-//  const Vector3D ray = _currentCamera->getCenter();
-//  const Vector3D origin = _currentCamera->getPosition();
-//  
-//  const Vector3D intersection = _planet->closestIntersection(origin, ray);
-//  if (!intersection.isNan()) {
-//    const Vector3D cameraPosition = _currentCamera->getPosition();
-//    
-//    const double minDistance = 1000;
-//    const double maxDistance = 20000;
-//    
-//    const double distanceToTerrain = clamp(intersection.sub(cameraPosition).length(),
-//                                           minDistance,
-//                                           maxDistance + minDistance) - minDistance;
-//    
-//    printf("Camera to terrain distance=%f\n", distanceToTerrain);
-//    
-//    const float factor = (float) (distanceToTerrain / maxDistance);
-//    
-//    // Clear the scene
-//    const Color dayColor = Color::fromRGBA((float) 0.5, (float) 0.5, 1, 1);
-//    _gl->clearScreen(_backgroundColor.mixedWith(dayColor, factor));
-//    //    _gl->clearScreen(_backgroundColor);
-//    
-//  }
-//  else {
-//    // Clear the scene
-//    _gl->clearScreen(_backgroundColor);
-//  }
+  //  const Vector3D ray = _currentCamera->getCenter();
+  //  const Vector3D origin = _currentCamera->getPosition();
+  //
+  //  const Vector3D intersection = _planet->closestIntersection(origin, ray);
+  //  if (!intersection.isNan()) {
+  //    const Vector3D cameraPosition = _currentCamera->getPosition();
+  //
+  //    const double minDistance = 1000;
+  //    const double maxDistance = 20000;
+  //
+  //    const double distanceToTerrain = clamp(intersection.sub(cameraPosition).length(),
+  //                                           minDistance,
+  //                                           maxDistance + minDistance) - minDistance;
+  //
+  //    printf("Camera to terrain distance=%f\n", distanceToTerrain);
+  //
+  //    const float factor = (float) (distanceToTerrain / maxDistance);
+  //
+  //    // Clear the scene
+  //    const Color dayColor = Color::fromRGBA((float) 0.5, (float) 0.5, 1, 1);
+  //    _gl->clearScreen(_backgroundColor.mixedWith(dayColor, factor));
+  //    //    _gl->clearScreen(_backgroundColor);
+  //
+  //  }
+  //  else {
+  //    // Clear the scene
+  //    _gl->clearScreen(_backgroundColor);
+  //  }
   _gl->clearScreen(_backgroundColor);
-
+  
   _selectedRenderer->render(&rc);
   
   //  _frameTasksExecutor->doPostRenderCycle(&rc);
@@ -322,7 +322,7 @@ void G3MWidget::render() {
       
       if (_renderStatisticsTimer == NULL) {
         _renderStatisticsTimer = _factory->createTimer();
-      } 
+      }
       else {
         _renderStatisticsTimer->start();
       }
@@ -342,4 +342,42 @@ void G3MWidget::render() {
     }
   }
   
+}
+
+void G3MWidget::onPause() {
+  InitializationContext ic(_factory,
+                           _stringUtils,
+                           _threadUtils,
+                           _logger,
+                           _planet,
+                           _downloader,
+                           _effectsScheduler);
+  
+  _renderer->onPause(&ic);
+  _busyRenderer->onPause(&ic);
+  
+  _effectsScheduler->onPause(&ic);
+  
+  if (_downloader != NULL) {
+    _downloader->onPause(&ic);
+  }
+}
+
+void G3MWidget::onResume() {
+  InitializationContext ic(_factory,
+                           _stringUtils,
+                           _threadUtils,
+                           _logger,
+                           _planet,
+                           _downloader,
+                           _effectsScheduler);
+  
+  _renderer->onResume(&ic);
+  _busyRenderer->onResume(&ic);
+  
+  _effectsScheduler->onResume(&ic);
+  
+  if (_downloader != NULL) {
+    _downloader->onResume(&ic);
+  }
 }

@@ -54,10 +54,18 @@ public:
   
   void stop();
   
-  bool isEffectable() const{
-    return true;
+  void onResume(const InitializationContext* ic) {
+    
+  }
+  
+  void onPause(const InitializationContext* ic) {
+    
   }
 
+  void unusedMethod() const {
+    
+  }
+  
 };
 
 //***************************************************************
@@ -85,11 +93,7 @@ public:
   virtual void cancel(const TimeInterval& now) {
     // do nothing, just leave the effect in the intermediate state
   }
-  
-  bool isEffectable() const{
-    return true;
-  }
-  
+ 
 };
 
 

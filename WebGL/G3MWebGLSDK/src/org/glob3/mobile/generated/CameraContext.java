@@ -30,9 +30,9 @@ public class CameraContext implements EffectTarget
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isEffectable() const
-  public final boolean isEffectable()
+//ORIGINAL LINE: void unusedMethod() const
+  public final void unusedMethod()
   {
-	return true;
   }
+
 }

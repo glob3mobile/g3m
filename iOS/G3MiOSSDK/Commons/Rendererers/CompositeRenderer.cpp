@@ -79,3 +79,17 @@ void CompositeRenderer::stop() {
     _renderers[i]->stop();
   }
 }
+
+void CompositeRenderer::onResume(const InitializationContext* ic) {
+  const int rendersSize = _renderers.size();
+  for (int i = 0; i < rendersSize; i++) {
+    _renderers[i]->onResume(ic);
+  }
+}
+
+void CompositeRenderer::onPause(const InitializationContext* ic) {
+  const int rendersSize = _renderers.size();
+  for (int i = 0; i < rendersSize; i++) {
+    _renderers[i]->onPause(ic);
+  }
+}

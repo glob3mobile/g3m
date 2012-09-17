@@ -11,6 +11,7 @@ import java.util.Map;
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IImageDownloadListener;
+import org.glob3.mobile.generated.InitializationContext;
 import org.glob3.mobile.generated.URL;
 
 
@@ -251,6 +252,16 @@ public class Downloader_Android
 
    public int getReadTimeout() {
       return _readTimeout;
+   }
+
+
+   @Override
+   public void onResume(final InitializationContext ic) {
+   }
+
+
+   @Override
+   public void onPause(final InitializationContext ic) {
    }
 
 }

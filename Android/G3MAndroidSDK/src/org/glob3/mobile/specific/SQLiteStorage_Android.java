@@ -9,6 +9,7 @@ import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IStorage;
+import org.glob3.mobile.generated.InitializationContext;
 import org.glob3.mobile.generated.URL;
 
 import android.content.ContentValues;
@@ -25,10 +26,10 @@ public class SQLiteStorage_Android
          implements
             IStorage {
 
-   private final String         _databaseName;
-   private final Context        _ctx;
+   private final String   _databaseName;
+   private final Context  _ctx;
 
-   private final SQLiteDatabase _db;
+   private SQLiteDatabase _db;
 
 
    String getPath() {
@@ -173,6 +174,22 @@ public class SQLiteStorage_Android
       }
       cursor.close();
       return result;
+   }
+
+
+   @Override
+   public void onResume(final InitializationContext ic) {
+      if ((_db != null) && !_db.isOpen()) {
+         _db = SQLiteDatabase.openOrCreateDatabase(getPath(), null);
+      }
+   }
+
+
+   @Override
+   public void onPause(final InitializationContext ic) {
+      if ((_db != null) && _db.isOpen()) {
+         _db.close();
+      }
    }
 
 }
