@@ -52,6 +52,9 @@ public:
   void setCurrentGesture(const Gesture& gesture) { _currentGesture = gesture; }
   Camera* getNextCamera() { return _nextCamera; }
   
+  void unusedMethod() const {
+  }
+
 };
 
 

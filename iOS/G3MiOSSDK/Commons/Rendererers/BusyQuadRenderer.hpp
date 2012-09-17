@@ -71,7 +71,11 @@ public:
   void onPause(const InitializationContext* ic) {
     
   }
-  
+
+  void unusedMethod() const {
+    
+  }
+
 };
 
 //***************************************************************
