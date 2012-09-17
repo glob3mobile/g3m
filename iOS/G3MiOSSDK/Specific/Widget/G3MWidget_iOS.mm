@@ -53,7 +53,6 @@
 #include "StringUtils_iOS.hpp"
 #include "SingleImageTileTexturizer.hpp"
 #include "WMSLayer.hpp"
-#include "OSMLayer.hpp"
 
 #include "MathUtils_iOS.hpp"
 #include "ThreadUtils_iOS.hpp"
