@@ -123,20 +123,22 @@
   // create GLOB3M WIDGET
   int width = (int) [self frame].size.width;
   int height = (int) [self frame].size.height;
-
+  
+  int __TODO_move_to_G3MWidget_create1;
   IStringBuilder::setInstance(new StringBuilder_iOS()); //Setting StringBuilder
-
+  
   IFactory *factory  = new Factory_iOS();
   ILogger *logger    = new Logger_iOS(ErrorLevel);
   NativeGL2_iOS* nGL = new NativeGL2_iOS();
   GL* gl  = new GL(nGL);
   
+  int __TODO_move_to_G3MWidget_create2;
   IMathUtils::setInstance(new MathUtils_iOS()); //Mathematics utilities
   
   IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
   IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
                                                  storage);
-
+  
   CompositeRenderer* composite = new CompositeRenderer();
   
   composite->addRenderer(cameraRenderer);
@@ -150,7 +152,7 @@
       //Single Mercator image
       //IImage *singleWorldImage = factory->createImageFromFileName("tissot.png");
       //TileTexturizer* texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage, true);
-
+      
       const bool showStatistics = false;
       TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
                                           texturizer,
@@ -179,22 +181,22 @@
   FrameTasksExecutor* frameTasksExecutor = new FrameTasksExecutor();
   
   const IStringUtils* stringUtils = new StringUtils_iOS();
-//  if (true) {
-//    int __REMOVE_STRING_UTILS_TESTS;
-//    
-//    std::vector<std::string> lines = stringUtils->splitLines("line1\nline2");
-//    
-//    printf("%s\n", stringUtils->left("Diego", 1).c_str());
-//    printf("%s\n", stringUtils->substring("Diego", 1).c_str());
-//
-//    std::string line = "name=value";
-//    int equalsPosition = stringUtils->indexOf(line, "=");
-//    std::string name = stringUtils->left(line, equalsPosition);
-//    std::string value = stringUtils->substring(line, equalsPosition+1);
-//    printf("\"%s\"=\"%s\"\n", name.c_str(), value.c_str());
-//    
-//    printf("\n");
-//  }
+  //  if (true) {
+  //    int __REMOVE_STRING_UTILS_TESTS;
+  //
+  //    std::vector<std::string> lines = stringUtils->splitLines("line1\nline2");
+  //
+  //    printf("%s\n", stringUtils->left("Diego", 1).c_str());
+  //    printf("%s\n", stringUtils->substring("Diego", 1).c_str());
+  //
+  //    std::string line = "name=value";
+  //    int equalsPosition = stringUtils->indexOf(line, "=");
+  //    std::string name = stringUtils->left(line, equalsPosition);
+  //    std::string value = stringUtils->substring(line, equalsPosition+1);
+  //    printf("\"%s\"=\"%s\"\n", name.c_str(), value.c_str());
+  //
+  //    printf("\n");
+  //  }
   
   IThreadUtils* threadUtils = new ThreadUtils_iOS();
   
@@ -283,11 +285,11 @@
 //** Agustin cancelled lonpressgesture because touchedmoved and touchedended event don't work
 - (IBAction)handleLongPress:(UIGestureRecognizer *)sender {
   
-//  printf ("Longpress. state=%d\n", sender.state);
-//  
-//  if (sender.state == UIGestureRecognizerStateEnded) {
-//    NSLog(@"LONG PRESS");
-//  }
+  //  printf ("Longpress. state=%d\n", sender.state);
+  //
+  //  if (sender.state == UIGestureRecognizerStateEnded) {
+  //    NSLog(@"LONG PRESS");
+  //  }
   
   if (sender.state == 1){
     
