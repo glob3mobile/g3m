@@ -53,15 +53,15 @@ public class Plane
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Plane transformedBy(const MutableMatrix44D& M) const
-  public final Plane transformedBy(MutableMatrix44D M)
+//ORIGINAL LINE: Plane transformedByTranspose(const MutableMatrix44D& M) const
+  public final Plane transformedByTranspose(MutableMatrix44D M)
   {
 	int TODO_Multiplication_with_Matrix;
   
-	double a = _normal.x()*M.get(0) + _normal.y()*M.get(4) + _normal.z()*M.get(8) + _d *M.get(12);
-	double b = _normal.x()*M.get(1) + _normal.y()*M.get(5) + _normal.z()*M.get(9) + _d *M.get(13);
-	double c = _normal.x()*M.get(2) + _normal.y()*M.get(6) + _normal.z()*M.get(10) + _d *M.get(14);
-	double d = _normal.x()*M.get(3) + _normal.y()*M.get(7) + _normal.z()*M.get(11) + _d *M.get(15);
+	double a = _normal.x()*M.get(0) + _normal.y()*M.get(1) + _normal.z()*M.get(2) + _d *M.get(3);
+	double b = _normal.x()*M.get(4) + _normal.y()*M.get(5) + _normal.z()*M.get(6) + _d *M.get(7);
+	double c = _normal.x()*M.get(8) + _normal.y()*M.get(9) + _normal.z()*M.get(10) + _d *M.get(11);
+	double d = _normal.x()*M.get(12) + _normal.y()*M.get(13) + _normal.z()*M.get(14) + _d *M.get(15);
   
 	return new Plane(a, b, c, d);
   }

@@ -257,6 +257,14 @@ public class MutableMatrix44D
 	return new MutableMatrix44D(m00, m10, m20, m30, m01, m11, m21, m31, m02, m12, m22, m32, m03, m13, m23, m33);
   }
 
+
+  /*MutableMatrix44D MutableMatrix44D::transposed() const {
+	return MutableMatrix44D(_m00, _m01, _m02, _m03,
+							_m10, _m11, _m12, _m13,
+							_m20, _m21, _m22, _m23,
+							_m30, _m31, _m32, _m33);
+  }*/
+  
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: MutableMatrix44D inversed() const
   public final MutableMatrix44D inversed()
@@ -303,12 +311,7 @@ public class MutableMatrix44D
 	return new MutableMatrix44D(m00, m10, m20, m30, m01, m11, m21, m31, m02, m12, m22, m32, m03, m13, m23, m33);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: MutableMatrix44D transposed() const
-  public final MutableMatrix44D transposed()
-  {
-	return new MutableMatrix44D(_m00, _m01, _m02, _m03, _m10, _m11, _m12, _m13, _m20, _m21, _m22, _m23, _m30, _m31, _m32, _m33);
-  }
+  //MutableMatrix44D transposed() const;
 
   //METHODS TO EXTRACT VALUES FROM THE MATRIX
 

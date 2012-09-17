@@ -53,7 +53,6 @@
 #include "StringUtils_iOS.hpp"
 #include "SingleImageTileTexturizer.hpp"
 #include "WMSLayer.hpp"
-#include "BingLayer.hpp"
 #include "OSMLayer.hpp"
 
 #include "MathUtils_iOS.hpp"
@@ -159,27 +158,6 @@
                                           showStatistics);
       composite->addRenderer(tr);
     }
-    
-    
-     /* WMSLayer *osm = new WMSLayer("osm",
-                                   URL("http://wms.latlon.org/"),
-                                   WMS_1_1_0,
-                                   Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
-                                   "image/jpeg",
-                                   "EPSG:4326",
-                                   "",
-                                   false,
-                                   NULL);
-      layerSet->addLayer(osm);*/
-    
-    
-    //BingLayer *bing = new BingLayer(URL("http://ecn.t0.tiles.virtualearth.net/tiles/"),NULL, Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0));
-    
-    BingLayer *bing = new BingLayer(URL("http://dev.virtualearth.net/REST/v1/Imagery/Metadata"),NULL, Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0), Hybrid);
-    
-    //OSMLayer *osm = new OSMLayer(URL("http://a.tile.openstreetmap.org"),NULL, Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0));
-    
-    layerSet->addLayer(bing);
   }
   
   for (int i = 0; i < renderers.size(); i++) {
