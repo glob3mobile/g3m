@@ -11,6 +11,7 @@
 #include "IFactory.hpp"
 #include "ByteBuffer_iOS.hpp"
 #include "Image_iOS.hpp"
+#include "ILogger.hpp"
 
 NSString* SQLiteStorage_iOS::getDBPath() const {
   
@@ -186,6 +187,9 @@ const IImage* SQLiteStorage_iOS::readImage(const URL& url) {
     if (uiImage) {
       result = new Image_iOS(uiImage,
                              NULL/* data is not needed */);
+    }
+    else {
+      ILogger::instance()->logError("Can't create image with contents of storage.");
     }
   }
   

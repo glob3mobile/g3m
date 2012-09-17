@@ -9,10 +9,10 @@
 #include "CPUTextureBuilder.hpp"
 
 const IImage* CPUTextureBuilder::createTextureFromImage(GL * gl,
-                                                         const IFactory* factory,
-                                                         const IImage* image,
-                                                         int width,
-                                                         int height) const{
+                                                        const IFactory* factory,
+                                                        const IImage* image,
+                                                        int width,
+                                                        int height) const{
   if (image == NULL) {
     ILogger::instance()->logWarning("Creating blank Image");
     return factory->createImageFromSize(width, height);
@@ -26,10 +26,10 @@ const IImage* CPUTextureBuilder::createTextureFromImage(GL * gl,
 }
 
 const IImage* CPUTextureBuilder::createTextureFromImages(GL * gl,
-                                                          const IFactory* factory,
-                                                          const std::vector<const IImage*> images,
-                                                          int width,
-                                                          int height) const{
+                                                         const IFactory* factory,
+                                                         const std::vector<const IImage*> images,
+                                                         int width,
+                                                         int height) const{
   
   const int imagesSize = images.size();
   
@@ -52,11 +52,11 @@ const IImage* CPUTextureBuilder::createTextureFromImages(GL * gl,
 }
 
 const IImage* CPUTextureBuilder::createTextureFromImages(GL * gl,
-                                                          const IFactory* factory,
-                                                          const std::vector<const IImage*> images,
-                                                          const std::vector<const Rectangle*> rectangles,
-                                                          int width,
-                                                          int height) const{
+                                                         const IFactory* factory,
+                                                         const std::vector<const IImage*> images,
+                                                         const std::vector<const Rectangle*> rectangles,
+                                                         int width,
+                                                         int height) const{
   
   
   const int imagesSize = images.size();
@@ -64,8 +64,8 @@ const IImage* CPUTextureBuilder::createTextureFromImages(GL * gl,
   if (imagesSize == 0 || images.size() != rectangles.size()) {
     ILogger::instance()->logWarning("Creating blank Image");
     return factory->createImageFromSize(width, height);
-  } else{
-    
+  }
+  else {
     const IImage* base;
     int i = 0; //First image to merge
     Rectangle baseRec(0,0, width, height);

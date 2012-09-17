@@ -86,7 +86,7 @@ void TexturesHandler::showHolders(const std::string message) const {
     }
     holdersString += ")";
     
-    printf("%s\n", holdersString.c_str() );
+    ILogger::instance()->logInfo("%s\n", holdersString.c_str() );
   }
 }
 
@@ -155,7 +155,7 @@ void TexturesHandler::retainGLTextureId(const GLTextureId& glTextureId) {
     }
   }
   
-  printf("break (point) on me 6\n");
+  ILogger::instance()->logInfo("break (point) on me 6\n");
 }
 
 void TexturesHandler::releaseGLTextureId(const GLTextureId& glTextureId) {
@@ -191,6 +191,6 @@ void TexturesHandler::releaseGLTextureId(const GLTextureId& glTextureId) {
 
 TexturesHandler::~TexturesHandler() {
   if (_textureHolders.size() > 0) {
-    printf("WARNING: The TexturesHandler is destroyed, but the inner textures were not released.\n");
+    ILogger::instance()->logWarning("WARNING: The TexturesHandler is destroyed, but the inner textures were not released.\n");
   }
 }

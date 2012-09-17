@@ -144,4 +144,15 @@ public class EffectsScheduler
   
   }
 
+  public final void onResume(InitializationContext ic)
+  {
+
+  }
+
+  public final void onPause(InitializationContext ic)
+  {
+
+  }
+
+
 }

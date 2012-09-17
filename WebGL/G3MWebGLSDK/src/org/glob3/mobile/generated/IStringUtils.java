@@ -17,6 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public abstract class IStringUtils
 {
   private static IStringUtils _instance;
@@ -25,7 +26,7 @@ public abstract class IStringUtils
   {
 	if (_instance != null)
 	{
-	  System.out.print("Warning, IStringUtils instance set two times\n");
+	  ILogger.instance().logWarning("Warning, IStringUtils instance set two times\n");
 	}
 	_instance = instance;
   }

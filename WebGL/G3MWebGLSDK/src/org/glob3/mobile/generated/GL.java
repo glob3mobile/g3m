@@ -79,7 +79,7 @@ public class GL
 	{
 	  final int bugdetSize = 256;
   
-	  System.out.printf("= Creating %d texturesIds...\n", bugdetSize);
+	  ILogger.instance().logInfo("= Creating %d texturesIds...\n", bugdetSize);
   
 	  final java.util.ArrayList<GLTextureId> ids = _gl.genTextures(bugdetSize);
   
@@ -91,6 +91,7 @@ public class GL
   
 	  _texturesIdAllocationCounter += bugdetSize;
   
+	  ILogger.instance().logInfo("= Created %d texturesIds (accumulated %d).\n", bugdetSize, _texturesIdAllocationCounter);
 	}
   
 	_texturesIdGetCounter++;
@@ -477,7 +478,7 @@ public class GL
 	}
 	else
 	{
-	  System.out.print("can't get a valid texture id\n");
+	  ILogger.instance().logError("can't get a valid texture id\n");
 	}
   
 	return texId;

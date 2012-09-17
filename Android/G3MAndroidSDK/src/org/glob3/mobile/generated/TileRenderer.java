@@ -299,4 +299,14 @@ public class TileRenderer extends Renderer
 	_firstRender = false;
   }
 
+  public final void onResume(InitializationContext ic)
+  {
+
+  }
+
+  public final void onPause(InitializationContext ic)
+  {
+
+  }
+
 }

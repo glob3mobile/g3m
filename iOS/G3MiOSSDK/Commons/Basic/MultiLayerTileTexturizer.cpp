@@ -261,77 +261,78 @@ public:
                          heightFactor * textureHeight);
   }
   
-  void finalize() {
-    if (_finalized) {
-      return;
+  void composeAndUploadTexture() const {
+    std::vector<const IImage*>    images;
+    std::vector<const Rectangle*> rectangles;
+    std::string petitionsID = _tile->getKey().tinyDescription();
+    
+    const int textureWidth  = _parameters->_tileTextureWidth;
+    const int textureHeight = _parameters->_tileTextureHeight;
+    
+    const Sector tileSector = _tile->getSector();
+    
+    for (int i = 0; i < _petitionsCount; i++) {
+      const Petition* petition = _petitions[i];
+      const IImage* image = petition->getImage();
+      
+      if (image != NULL) {
+        images.push_back(image);
+        
+        rectangles.push_back(getImageRectangleInTexture(tileSector,
+                                                        petition->getSector(),
+                                                        textureWidth,
+                                                        textureHeight));
+        
+        petitionsID += petition->getURL().getPath();
+        petitionsID += "_";
+      }
     }
     
-    _finalized = true;
-    
-    if (!_canceled && (_tile != NULL) && (_mesh != NULL)) {
-      std::vector<const IImage*>    images;
-      std::vector<const Rectangle*> rectangles;
-      std::string petitionsID = _tile->getKey().tinyDescription();
+    if (images.size() > 0) {
+      //        int __TESTING_mipmapping;
+      const bool isMipmap = false;
       
-      const int textureWidth  = _parameters->_tileTextureWidth;
-      const int textureHeight = _parameters->_tileTextureHeight;
+      const IImage* image = _textureBuilder->createTextureFromImages(_gl,
+                                                                     _factory,
+                                                                     images,
+                                                                     rectangles,
+                                                                     textureWidth,
+                                                                     textureHeight);
       
-      const Sector tileSector = _tile->getSector();
-      
-      for (int i = 0; i < _petitionsCount; i++) {
-        Petition* petition       = _petitions[i];
-        const IImage* image = petition->getImage();
-        
-        if (image != NULL) {
-          images.push_back(image);
-          
-          const Sector petitionSector = petition->getSector();
-          
-          Rectangle* rectangle = getImageRectangleInTexture(tileSector,
-                                                            petitionSector,
-                                                            textureWidth,
-                                                            textureHeight);
-          rectangles.push_back(rectangle);
-          
-          petitionsID += petition->getURL().getPath();
-          petitionsID += "_";
-        }
-      }
-      
-      if (images.size() > 0) {
-        //        int __TESTING_mipmapping;
-        const bool isMipmap = false;
-        
-        const IImage* image = _textureBuilder->createTextureFromImages(_gl,
-                                                                       _factory,
-                                                                       images,
-                                                                       rectangles,
-                                                                       textureWidth, textureHeight);
-        
 #ifdef C_CODE
-        GLTextureId glTextureId = _texturesHandler->getGLTextureId(image, RGBA,
-                                                                   petitionsID, isMipmap);
+      GLTextureId glTextureId = _texturesHandler->getGLTextureId(image, RGBA,
+                                                                 petitionsID, isMipmap);
 #else
-        GLTextureId glTextureId = _texturesHandler->getGLTextureId(image, GLFormat.RGBA,
-                                                                   petitionsID, isMipmap);
+      GLTextureId glTextureId = _texturesHandler->getGLTextureId(image, GLFormat.RGBA,
+                                                                 petitionsID, isMipmap);
 #endif
-        
-        if (glTextureId.isValid()) {
-          if (!_mesh->setGLTextureIdForLevel(0, glTextureId)) {
-            _texturesHandler->releaseGLTextureId(glTextureId);
-          }
+      
+      if (glTextureId.isValid()) {
+        if (!_mesh->setGLTextureIdForLevel(0, glTextureId)) {
+          _texturesHandler->releaseGLTextureId(glTextureId);
         }
-        
       }
       
-#ifdef C_CODE
-      for (int i = 0; i < rectangles.size(); i++) {
-        delete rectangles[i];
-      }
-#endif
     }
     
-    _tile->setTextureSolved(true);
+#ifdef C_CODE
+    for (int i = 0; i < rectangles.size(); i++) {
+      delete rectangles[i];
+    }
+#endif
+    
+  }
+  
+  void finalize() {
+    if (!_finalized) {
+      _finalized = true;
+      
+      if (!_canceled && (_tile != NULL) && (_mesh != NULL)) {
+        composeAndUploadTexture();
+      }
+      
+      _tile->setTextureSolved(true);
+    }
   }
   
   void deletePetitions() {
@@ -348,7 +349,7 @@ public:
     
     if (_stepsDone == _petitionsCount) {
       if (_anyCanceled) {
-        printf("Completed with cancelation\n");
+        ILogger::instance()->logInfo("Completed with cancelation\n");
       }
       
       finalize();
@@ -377,9 +378,9 @@ public:
   
   void checkIsPending(int position) const {
     if (_status[position] != STATUS_PENDING) {
-      printf("Logic error: Expected STATUS_PENDING at position #%d but found status: %d\n",
-             position,
-             _status[position]);
+      ILogger::instance()->logError("Logic error: Expected STATUS_PENDING at position #%d but found status: %d\n",
+                                    position,
+                                    _status[position]);
     }
   }
   
@@ -439,7 +440,7 @@ public:
       }
       else {
         if ( mapping->getGLTextureId().isValid() ) {
-          printf("break (point) on me 3\n");
+          ILogger::instance()->logInfo("break (point) on me 3\n");
         }
       }
       
@@ -448,7 +449,7 @@ public:
     }
     
     if (mappings->size() != _tile->getLevel() + 1) {
-      printf("pleae break (point) me\n");
+      ILogger::instance()->logInfo("pleae break (point) me\n");
     }
     
     return new LeveledTexturedMesh(_tessellatorMesh,
@@ -626,7 +627,7 @@ void MultiLayerTileTexturizer::tileToBeDeleted(Tile* tile,
   }
   else {
     if (mesh != NULL) {
-      printf("break (point) on me 4\n");
+      ILogger::instance()->logInfo("break (point) on me 4\n");
     }
   }
 }
@@ -640,7 +641,7 @@ void MultiLayerTileTexturizer::tileMeshToBeDeleted(Tile* tile,
   }
   else {
     if (mesh != NULL) {
-      printf("break (point) on me 5\n");
+      ILogger::instance()->logInfo("break (point) on me 5\n");
     }
   }
 }

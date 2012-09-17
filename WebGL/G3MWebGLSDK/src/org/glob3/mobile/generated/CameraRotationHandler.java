@@ -102,7 +102,7 @@ public class CameraRotationHandler extends CameraEventHandler
 	_initialPoint = camera.getXYZCenterOfView().asMutableVector3D();
 	if (_initialPoint.isNan())
 	{
-	  System.out.print("CAMERA ERROR: center point does not intersect globe!!\n");
+	  ILogger.instance().logError("CAMERA ERROR: center point does not intersect globe!!\n");
 	  cameraContext.setCurrentGesture(Gesture.None);
 	}
   

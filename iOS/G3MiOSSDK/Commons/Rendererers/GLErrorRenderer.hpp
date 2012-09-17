@@ -37,6 +37,14 @@ public:
   void stop() {
     
   }
+  
+  void onResume(const InitializationContext* ic) {
+    
+  }
+  
+  void onPause(const InitializationContext* ic) {
+    
+  }
 
 };
 

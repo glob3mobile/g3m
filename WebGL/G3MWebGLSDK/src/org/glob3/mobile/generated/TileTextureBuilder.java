@@ -116,6 +116,60 @@ public class TileTextureBuilder extends RCObject
 	return new Rectangle(lowerFactor.x() * textureWidth, (1.0 - lowerFactor.y()) * textureHeight, widthFactor * textureWidth, heightFactor * textureHeight);
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: void composeAndUploadTexture() const
+  public final void composeAndUploadTexture()
+  {
+	final java.util.ArrayList<IImage> images = new java.util.ArrayList<IImage>();
+	final java.util.ArrayList<Rectangle> rectangles = new java.util.ArrayList<Rectangle>();
+	String petitionsID = _tile.getKey().tinyDescription();
+
+	final int textureWidth = _parameters._tileTextureWidth;
+	final int textureHeight = _parameters._tileTextureHeight;
+
+	final Sector tileSector = _tile.getSector();
+
+	for (int i = 0; i < _petitionsCount; i++)
+	{
+	  Petition petition = _petitions.get(i);
+	  IImage image = petition.getImage();
+
+	  if (image != null)
+	  {
+		images.add(image);
+
+		final Sector petitionSector = petition.getSector();
+
+		Rectangle rectangle = getImageRectangleInTexture(tileSector, petitionSector, textureWidth, textureHeight);
+		rectangles.add(rectangle);
+
+		petitionsID += petition.getURL().getPath();
+		petitionsID += "_";
+	  }
+	}
+
+	if (images.size() > 0)
+	{
+	  //        int __TESTING_mipmapping;
+	  final boolean isMipmap = false;
+
+	  IImage image = _textureBuilder.createTextureFromImages(_gl, _factory, images, rectangles, textureWidth, textureHeight);
+
+	  GLTextureId glTextureId = _texturesHandler.getGLTextureId(image, GLFormat.RGBA, petitionsID, isMipmap);
+
+	  if (glTextureId.isValid())
+	  {
+		if (!_mesh.setGLTextureIdForLevel(0, glTextureId))
+		{
+		  _texturesHandler.releaseGLTextureId(glTextureId);
+		}
+	  }
+
+	}
+
+
+  }
+
   public final void finalize()
   {
 	if (_finalized)
@@ -127,53 +181,7 @@ public class TileTextureBuilder extends RCObject
 
 	if (!_canceled && (_tile != null) && (_mesh != null))
 	{
-	  final java.util.ArrayList<IImage> images = new java.util.ArrayList<IImage>();
-	  final java.util.ArrayList<Rectangle> rectangles = new java.util.ArrayList<Rectangle>();
-	  String petitionsID = _tile.getKey().tinyDescription();
-
-	  final int textureWidth = _parameters._tileTextureWidth;
-	  final int textureHeight = _parameters._tileTextureHeight;
-
-	  final Sector tileSector = _tile.getSector();
-
-	  for (int i = 0; i < _petitionsCount; i++)
-	  {
-		Petition petition = _petitions.get(i);
-		IImage image = petition.getImage();
-
-		if (image != null)
-		{
-		  images.add(image);
-
-		  final Sector petitionSector = petition.getSector();
-
-		  Rectangle rectangle = getImageRectangleInTexture(tileSector, petitionSector, textureWidth, textureHeight);
-		  rectangles.add(rectangle);
-
-		  petitionsID += petition.getURL().getPath();
-		  petitionsID += "_";
-		}
-	  }
-
-	  if (images.size() > 0)
-	  {
-		//        int __TESTING_mipmapping;
-		final boolean isMipmap = false;
-
-		IImage image = _textureBuilder.createTextureFromImages(_gl, _factory, images, rectangles, textureWidth, textureHeight);
-
-		GLTextureId glTextureId = _texturesHandler.getGLTextureId(image, GLFormat.RGBA, petitionsID, isMipmap);
-
-		if (glTextureId.isValid())
-		{
-		  if (!_mesh.setGLTextureIdForLevel(0, glTextureId))
-		  {
-			_texturesHandler.releaseGLTextureId(glTextureId);
-		  }
-		}
-
-	  }
-
+	  composeAndUploadTexture();
 	}
 
 	_tile.setTextureSolved(true);
@@ -199,7 +207,7 @@ public class TileTextureBuilder extends RCObject
 	{
 	  if (_anyCanceled)
 	  {
-		System.out.print("Completed with cancelation\n");
+		ILogger.instance().logInfo("Completed with cancelation\n");
 	  }
 
 	  finalize();
@@ -239,7 +247,7 @@ public class TileTextureBuilder extends RCObject
   {
 	if (_status.get(position) != PetitionStatus.STATUS_PENDING)
 	{
-	  System.out.printf("Logic error: Expected STATUS_PENDING at position #%d but found status: %d\n", position, _status.get(position));
+	  ILogger.instance().logError("Logic error: Expected STATUS_PENDING at position #%d but found status: %d\n", position, _status.get(position));
 	}
   }
 
@@ -309,7 +317,7 @@ public class TileTextureBuilder extends RCObject
 	  {
 		if (mapping.getGLTextureId().isValid())
 		{
-		  System.out.print("break (point) on me 3\n");
+		  ILogger.instance().logInfo("break (point) on me 3\n");
 		}
 	  }
 
@@ -319,7 +327,7 @@ public class TileTextureBuilder extends RCObject
 
 	if (mappings.size() != _tile.getLevel() + 1)
 	{
-	  System.out.print("pleae break (point) me\n");
+	  ILogger.instance().logInfo("pleae break (point) me\n");
 	}
 
 	return new LeveledTexturedMesh(_tessellatorMesh, false, mappings);

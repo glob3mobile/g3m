@@ -85,6 +85,10 @@ public:
   
   void onResizeViewportEvent(int width, int height);
   
+  void onPause();
+  
+  void onResume();
+  
   GL* getGL() const {
     return _gl;
   }

@@ -30,7 +30,7 @@ class IFactory {
 public:
   static void setInstance(IFactory* factory) {
     if (_instance != NULL) {
-      printf("Warning, ILooger instance set two times\n");
+      ILogger::instance()->logWarning("Warning, ILooger instance set two times\n");
     }
     _instance = factory;
   }

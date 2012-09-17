@@ -235,5 +235,15 @@ public class SimplePlanetRenderer extends Renderer
 
   }
 
+  public final void onResume(InitializationContext ic)
+  {
+
+  }
+
+  public final void onPause(InitializationContext ic)
+  {
+
+  }
+
 
 }

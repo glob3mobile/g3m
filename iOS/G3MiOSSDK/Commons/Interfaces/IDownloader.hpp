@@ -15,9 +15,14 @@
 
 class IBufferDownloadListener;
 class IImageDownloadListener;
+class InitializationContext;
 
 class IDownloader {
 public:
+  virtual void onResume(const InitializationContext* ic) = 0;
+  
+  virtual void onPause(const InitializationContext* ic) = 0;
+  
   virtual void start() = 0;
   
   virtual void stop() = 0;

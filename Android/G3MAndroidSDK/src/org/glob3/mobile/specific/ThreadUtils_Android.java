@@ -11,11 +11,11 @@ public class ThreadUtils_Android
          extends
             IThreadUtils {
 
-   private G3MWidget_Android _g3mWidget = null;
+   private final G3MWidget_Android _g3mWidget;
 
 
-   public ThreadUtils_Android(final G3MWidget_Android w) {
-      _g3mWidget = w;
+   public ThreadUtils_Android(final G3MWidget_Android widget) {
+      _g3mWidget = widget;
    }
 
 
@@ -23,7 +23,10 @@ public class ThreadUtils_Android
    public void invokeInRendererThread(final GTask task,
                                       final boolean autoDelete) {
 
-      if (_g3mWidget != null) {
+      if (_g3mWidget == null) {
+         ILogger.instance().logError("ThreadUtils_Android ERROR");
+      }
+      else {
          final GTask t = task;
          _g3mWidget.queueEvent(new Runnable() {
             @Override
@@ -31,12 +34,7 @@ public class ThreadUtils_Android
                t.run();
             }
          });
-
       }
-      else {
-         ILogger.instance().logError("ThreadUtils_Android ERROR");
-      }
-
    }
 
 }

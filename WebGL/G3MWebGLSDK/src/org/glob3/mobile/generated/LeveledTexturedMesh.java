@@ -61,7 +61,7 @@ public class LeveledTexturedMesh extends Mesh
 	  _currentLevelIsValid = false;
 	if (_mappings.size() <= 0)
 	{
-	  System.out.print("LOGIC ERROR\n");
+	  ILogger.instance().logError("LOGIC ERROR\n");
 	}
   }
 

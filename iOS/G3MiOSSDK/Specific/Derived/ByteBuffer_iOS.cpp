@@ -20,3 +20,8 @@ const std::string ByteBuffer_iOS::description() const {
   delete isb;
   return s;
 }
+
+
+const std::string ByteBuffer_iOS::getAsString() const {
+  return std::string(_values, _values + _size);
+}

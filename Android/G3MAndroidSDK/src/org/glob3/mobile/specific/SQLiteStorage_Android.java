@@ -9,6 +9,7 @@ import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IStorage;
+import org.glob3.mobile.generated.InitializationContext;
 import org.glob3.mobile.generated.URL;
 
 import android.content.ContentValues;
@@ -25,10 +26,10 @@ public class SQLiteStorage_Android
          implements
             IStorage {
 
-   private final String         _databaseName;
-   private final Context        _ctx;
+   private final String   _databaseName;
+   private final Context  _ctx;
 
-   private final SQLiteDatabase _db;
+   private SQLiteDatabase _db;
 
 
    String getPath() {
@@ -59,8 +60,11 @@ public class SQLiteStorage_Android
       }
       else {
          try {
-            _db.execSQL("CREATE TABLE IF NOT EXISTS entry (name TEXT, contents BLOB);");
-            _db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS entry_name ON entry(name);");
+            _db.execSQL("CREATE TABLE IF NOT EXISTS buffer (name TEXT, contents TEXT);");
+            _db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS buffer_name ON buffer(name);");
+
+            _db.execSQL("CREATE TABLE IF NOT EXISTS image (name TEXT, contents TEXT);");
+            _db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS image_name ON image(name);");
          }
          catch (final SQLException e) {
             e.printStackTrace();
@@ -72,7 +76,7 @@ public class SQLiteStorage_Android
    @Override
    public boolean containsBuffer(final URL url) {
       final String name = url.getPath();
-      final Cursor cursor = _db.query("entry", new String[] { "1" }, "name = ?", new String[] { name }, null, null, null);
+      final Cursor cursor = _db.query("buffer", new String[] { "1" }, "name = ?", new String[] { name }, null, null, null);
       final boolean hasAny = (cursor.getCount() > 0);
       cursor.close();
       return hasAny;
@@ -99,7 +103,7 @@ public class SQLiteStorage_Android
    public IByteBuffer readBuffer(final URL url) {
       final String name = url.getPath();
 
-      final Cursor cursor = _db.query("entry", new String[] { "contents" }, "name = ?", new String[] { name }, null, null, null);
+      final Cursor cursor = _db.query("buffer", new String[] { "contents" }, "name = ?", new String[] { name }, null, null, null);
 
       if (cursor.moveToFirst()) {
          final byte[] data = cursor.getBlob(0);
@@ -115,7 +119,7 @@ public class SQLiteStorage_Android
    @Override
    public boolean containsImage(final URL url) {
       final String name = url.getPath();
-      final Cursor cursor = _db.query("entry", new String[] { "1" }, "name = ?", new String[] { name }, null, null, null);
+      final Cursor cursor = _db.query("image", new String[] { "1" }, "name = ?", new String[] { name }, null, null, null);
       final boolean hasAny = (cursor.getCount() > 0);
       cursor.close();
       return hasAny;
@@ -131,7 +135,7 @@ public class SQLiteStorage_Android
       byte[] contents = image_android.getSourceBuffer();
       if (contents == null) {
          final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-         bitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+         bitmap.compress(Bitmap.CompressFormat.PNG, 70, baos);
          contents = baos.toByteArray();
       }
       else {
@@ -142,7 +146,7 @@ public class SQLiteStorage_Android
       values.put("name", url.getPath());
       values.put("contents", contents);
 
-      final long r = _db.insertWithOnConflict("entry", null, values, SQLiteDatabase.CONFLICT_REPLACE);
+      final long r = _db.insertWithOnConflict("image", null, values, SQLiteDatabase.CONFLICT_REPLACE);
       if (r == -1) {
          ILogger.instance().logError("SQL: Can't write image in database \"%s\"\n", _databaseName);
       }
@@ -151,19 +155,41 @@ public class SQLiteStorage_Android
 
    @Override
    public IImage readImage(final URL url) {
+      IImage result = null;
+
       final String name = url.getPath();
 
-      final Cursor cursor = _db.query("entry", new String[] { "contents" }, "name = ?", new String[] { name }, null, null, null);
+      final Cursor cursor = _db.query("image", new String[] { "contents" }, "name = ?", new String[] { name }, null, null, null);
 
       if (cursor.moveToFirst()) {
          final byte[] data = cursor.getBlob(0);
-         final Bitmap b = BitmapFactory.decodeByteArray(data, 0, data.length);
-         cursor.close();
+         final Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
 
-         return new Image_Android(b, null);
+         if (bitmap == null) {
+            ILogger.instance().logError("Can't create bitmap from content of storage");
+         }
+         else {
+            result = new Image_Android(bitmap, null);
+         }
       }
       cursor.close();
-      return null;
+      return result;
+   }
+
+
+   @Override
+   public void onResume(final InitializationContext ic) {
+      if ((_db != null) && !_db.isOpen()) {
+         _db = SQLiteDatabase.openOrCreateDatabase(getPath(), null);
+      }
+   }
+
+
+   @Override
+   public void onPause(final InitializationContext ic) {
+      if ((_db != null) && _db.isOpen()) {
+         _db.close();
+      }
    }
 
 }

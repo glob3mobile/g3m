@@ -442,8 +442,8 @@ public class NativeGL2_Android
                                    final boolean normalized,
                                    final int stride,
                                    final IFloatBuffer buffer) {
-      final FloatBuffer fb = ((FloatBuffer_Android) buffer).getBuffer();
-      GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized, stride, fb);
+      final FloatBuffer floatBuffer = ((FloatBuffer_Android) buffer).getBuffer();
+      GLES20.glVertexAttribPointer(index, size, GLES20.GL_FLOAT, normalized, stride, floatBuffer);
    }
 
 

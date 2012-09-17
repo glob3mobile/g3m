@@ -12,6 +12,8 @@
 #include <vector>
 #include <string>
 
+#include "ILogger.hpp"
+
 class IStringUtils {
 private:
 #ifdef C_CODE
@@ -23,7 +25,7 @@ private:
 public:
   static void setInstance(const IStringUtils* instance) {
     if (_instance != NULL) {
-      printf("Warning, IStringUtils instance set two times\n");
+      ILogger::instance()->logWarning("Warning, IStringUtils instance set two times\n");
     }
     _instance = instance;
   }
