@@ -155,9 +155,9 @@ Extent* Frustum::computeExtent()
   if (_rbn.y()<miny) miny=_rbn.y();     if (_rbn.y()>maxy) maxy=_rbn.y();
   if (_rbn.z()<minz) minz=_rbn.z();     if (_rbn.z()>maxz) maxz=_rbn.z();
   
-  if (_ltf.x()<minx) minx=_ltn.x();     if (_ltn.x()>maxx) maxx=_ltn.x();
-  if (_ltf.y()<miny) miny=_ltn.y();     if (_ltn.y()>maxy) maxy=_ltn.y();
-  if (_ltf.z()<minz) minz=_ltn.z();     if (_ltn.z()>maxz) maxz=_ltn.z();
+  if (_ltf.x()<minx) minx=_ltf.x();     if (_ltn.x()>maxx) maxx=_ltf.x();
+  if (_ltf.y()<miny) miny=_ltf.y();     if (_ltn.y()>maxy) maxy=_ltf.y();
+  if (_ltf.z()<minz) minz=_ltf.z();     if (_ltn.z()>maxz) maxz=_ltf.z();
   
   if (_rtf.x()<minx) minx=_rtf.x();     if (_rtf.x()>maxx) maxx=_rtf.x();
   if (_rtf.y()<miny) miny=_rtf.y();     if (_rtf.y()>maxy) maxy=_rtf.y();
