@@ -341,7 +341,7 @@ public class G3MWidget_Android
          else {
             //SINGLE IMAGE
             final IImage singleWorldImage = factory.createImageFromFileName("world.jpg");
-            texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
+            texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage, false);
          }
 
 
