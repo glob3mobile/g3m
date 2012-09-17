@@ -117,17 +117,17 @@ public class Frustum
 			maxz = _rbn.z();
   
 	if (_ltf.x()<minx)
-		minx = _ltn.x();
-		if (_ltn.x()>maxx)
-			maxx = _ltn.x();
+		minx = _ltf.x();
+		if (_ltf.x()>maxx)
+			maxx = _ltf.x();
 	if (_ltf.y()<miny)
-		miny = _ltn.y();
-		if (_ltn.y()>maxy)
-			maxy = _ltn.y();
+		miny = _ltf.y();
+		if (_ltf.y()>maxy)
+			maxy = _ltf.y();
 	if (_ltf.z()<minz)
-		minz = _ltn.z();
-		if (_ltn.z()>maxz)
-			maxz = _ltn.z();
+		minz = _ltf.z();
+		if (_ltf.z()>maxz)
+			maxz = _ltf.z();
   
 	if (_rtf.x()<minx)
 		minx = _rtf.x();
