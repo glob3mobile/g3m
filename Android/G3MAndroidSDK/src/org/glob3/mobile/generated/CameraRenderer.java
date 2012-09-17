@@ -38,6 +38,10 @@ public class CameraRenderer extends Renderer
 	{
 	  _handlers.get(i).render(rc, _cameraContext);
 	}
+  
+  
+  
+  
   }
   public final void initialize(InitializationContext ic)
   {
