@@ -187,7 +187,7 @@ public class SQLiteStorage_Android
 
    @Override
    public void onPause(final InitializationContext ic) {
-      if (_db != null) {
+      if ((_db != null) && _db.isOpen()) {
          _db.close();
       }
    }
