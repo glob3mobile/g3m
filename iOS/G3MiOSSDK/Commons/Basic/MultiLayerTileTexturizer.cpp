@@ -272,19 +272,16 @@ public:
     const Sector tileSector = _tile->getSector();
     
     for (int i = 0; i < _petitionsCount; i++) {
-      Petition* petition = _petitions[i];
+      const Petition* petition = _petitions[i];
       const IImage* image = petition->getImage();
       
       if (image != NULL) {
         images.push_back(image);
         
-        const Sector petitionSector = petition->getSector();
-        
-        Rectangle* rectangle = getImageRectangleInTexture(tileSector,
-                                                          petitionSector,
-                                                          textureWidth,
-                                                          textureHeight);
-        rectangles.push_back(rectangle);
+        rectangles.push_back(getImageRectangleInTexture(tileSector,
+                                                        petition->getSector(),
+                                                        textureWidth,
+                                                        textureHeight));
         
         petitionsID += petition->getURL().getPath();
         petitionsID += "_";
@@ -299,7 +296,8 @@ public:
                                                                      _factory,
                                                                      images,
                                                                      rectangles,
-                                                                     textureWidth, textureHeight);
+                                                                     textureWidth,
+                                                                     textureHeight);
       
 #ifdef C_CODE
       GLTextureId glTextureId = _texturesHandler->getGLTextureId(image, RGBA,
@@ -326,17 +324,15 @@ public:
   }
   
   void finalize() {
-    if (_finalized) {
-      return;
+    if (!_finalized) {
+      _finalized = true;
+      
+      if (!_canceled && (_tile != NULL) && (_mesh != NULL)) {
+        composeAndUploadTexture();
+      }
+      
+      _tile->setTextureSolved(true);
     }
-    
-    _finalized = true;
-    
-    if (!_canceled && (_tile != NULL) && (_mesh != NULL)) {
-      composeAndUploadTexture();
-    }
-    
-    _tile->setTextureSolved(true);
   }
   
   void deletePetitions() {
