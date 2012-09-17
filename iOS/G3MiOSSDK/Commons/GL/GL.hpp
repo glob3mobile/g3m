@@ -133,7 +133,7 @@ public:
     GLAlignment::init(gl);
     GLFormat::init(gl);
     GLVariable::init(gl);
-    
+    GLError::init(gl);
   }
   
   void enableVerticesPosition();
@@ -193,7 +193,7 @@ public:
   
   void pointSize(float size);
   
-  GLError getError();
+  int getError();
   
   const GLTextureId uploadTexture(const IImage* image, int format, bool generateMipmap);
   

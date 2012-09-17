@@ -163,11 +163,7 @@ void Camera::render(const RenderContext* rc) const {
     };
     const int i[] = {0, 1, 2, 3};
     
-#ifdef C_CODE
-    FloatBufferBuilderFromCartesian3D vertices(NoCenter, Vector3D::zero());
-#else
-    FloatBufferBuilderFromCartesian3D vertices(CenterStrategy.NoCenter, Vector3D::zero());
-#endif
+    FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
     IntBufferBuilder index;
     
     for (unsigned int n=0; n<4; n++) 

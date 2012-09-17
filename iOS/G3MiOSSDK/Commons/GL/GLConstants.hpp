@@ -197,4 +197,15 @@ public:
   }
 };
 
+class GLError{
+  static int _noError;
+  
+public:
+  static int noError(){ return _noError;}
+  
+  static void init(const INativeGL* ngl){
+    _noError = ngl->Error_NoError();
+  }
+};
+
 #endif

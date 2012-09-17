@@ -15,23 +15,6 @@
 
 class NativeGL2_iOS: public INativeGL
 {
-  
-  inline GLError getError(GLenum e) const {
-    switch (e) {
-      case GL_NO_ERROR:
-        return NoError;
-      case GL_INVALID_ENUM:
-        return InvalidEnum;
-      case GL_INVALID_VALUE:
-        return InvalidValue;
-      case GL_INVALID_OPERATION:
-        return InvalidOperation;
-      case GL_OUT_OF_MEMORY:
-        return OutOfMemory;
-    }
-    return UnknownError;
-  }
-  
 public:
   
   void useProgram(int program) const {
@@ -107,8 +90,8 @@ public:
     glLineWidth(width);
   }
   
-  GLError getError() const {
-    return getError(glGetError());
+  int getError() const {
+    return glGetError();
   }
   
   void blendFunc(int sfactor, int dfactor) const {
@@ -276,6 +259,9 @@ public:
   }
   int Variable_Viewport() const{
     return GL_VIEWPORT;
+  }
+  int Error_NoError() const{
+    return GL_NO_ERROR;
   }
   
 };

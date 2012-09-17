@@ -43,11 +43,7 @@ void SimplePlanetRenderer::initialize(const InitializationContext* ic)
 IFloatBuffer* SimplePlanetRenderer::createVertices(const Planet& planet) const
 {
   //Vertices with Center in zero
-#ifdef C_CODE
-  FloatBufferBuilderFromGeodetic vertices(GivenCenter, &planet, Vector3D::zero());
-#else
-  FloatBufferBuilderFromGeodetic vertices(CenterStrategy.GivenCenter, planet, Vector3D::zero());
-#endif
+  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::givenCenter(), &planet, Vector3D::zero());
   const double lonRes1 = (double) (_lonRes-1);
   const double latRes1 = (double) (_latRes-1);
   for(double i = 0.0; i < _lonRes; i++){

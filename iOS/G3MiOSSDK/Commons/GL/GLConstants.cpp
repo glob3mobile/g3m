@@ -49,3 +49,5 @@ int GLAlignment::_unpack = 0;
 int GLFormat::_rgba = 0;
 
 int GLVariable::_viewport = 0;
+
+int GLError::_noError = 0;

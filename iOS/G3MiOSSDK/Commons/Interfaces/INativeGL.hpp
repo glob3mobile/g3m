@@ -18,15 +18,6 @@ class IImage;
 #include <vector>
 #include <string>
 
-enum GLError {
-  NoError,
-  InvalidEnum,
-  InvalidValue,
-  InvalidOperation,
-  OutOfMemory,
-  UnknownError
-};
-
 class INativeGL {
 public:
   
@@ -87,7 +78,7 @@ public:
   
   virtual void lineWidth(float width) const = 0;
   
-  virtual GLError getError() const = 0;
+  virtual int getError() const = 0;
   
   virtual void blendFunc(int sfactor,
                          int dfactor) const = 0;
@@ -175,6 +166,8 @@ public:
   virtual int Format_RGBA() const = 0;
   
   virtual int Variable_Viewport() const = 0;
+  
+  virtual int Error_NoError() const = 0;
 
 };
 

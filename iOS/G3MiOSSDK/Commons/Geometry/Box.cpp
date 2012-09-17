@@ -172,11 +172,7 @@ void Box::createMesh()
     0, 1, 1, 5, 5, 4, 4, 0
   };
   
-#ifdef C_CODE
-  FloatBufferBuilderFromCartesian3D vertices(NoCenter, Vector3D::zero());
-#else
-  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy.NoCenter, Vector3D::zero());
-#endif
+  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
   IntBufferBuilder indices;
   
   for (unsigned int n=0; n<numVertices; n++)

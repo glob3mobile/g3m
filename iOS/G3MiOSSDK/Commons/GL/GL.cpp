@@ -243,7 +243,7 @@ void GL::pointSize(float size) {
   _gl->uniform1f(Uniforms.PointSize, size);
 }
 
-GLError GL::getError() {
+int GL::getError() {
   return _gl->getError();
 }
 
@@ -252,7 +252,6 @@ const GLTextureId GL::uploadTexture(const IImage* image, int format, bool genera
   if (texId.isValid()) {
 
     _gl->blendFunc(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
-#ifdef C_CODE
     _gl->pixelStorei(GLAlignment::unpack(), 1);
     
     _gl->bindTexture(GLTextureType::texture2D(), texId.getGLTextureId());
@@ -265,21 +264,6 @@ const GLTextureId GL::uploadTexture(const IImage* image, int format, bool genera
     if (generateMipmap) {
       _gl->generateMipmap(GLTextureType::texture2D());
     }
-#endif
-#ifdef JAVA_CODE
-    _gl.pixelStorei(GLAlignment.Unpack, 1);
-    
-    _gl.bindTexture(GLTextureType.Texture2D, texId.getGLTextureId());
-    _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MinFilter, GLTextureParameterValue.Linear);
-    _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MagFilter, GLTextureParameterValue.Linear);
-    _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapS, GLTextureParameterValue.ClampToEdge);
-    _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapT, GLTextureParameterValue.ClampToEdge);
-    _gl.texImage2D(image, format);
-    
-    if (generateMipmap) {
-      _gl.generateMipmap(GLTextureType.Texture2D);
-    }
-#endif
   }
   else {
     ILogger::instance()->logError("can't get a valid texture id\n");

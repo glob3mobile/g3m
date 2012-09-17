@@ -27,11 +27,7 @@ void BusyMeshRenderer::initialize(const InitializationContext* ic)
 {
   unsigned int numStrides = 60;
   
-#ifdef C_CODE
-  FloatBufferBuilderFromCartesian3D vertices(NoCenter, Vector3D::zero());
-#else
-  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy.NoCenter, Vector3D::zero());
-#endif
+  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
   FloatBufferBuilderFromColor colors;
   IntBufferBuilder indices;
   
