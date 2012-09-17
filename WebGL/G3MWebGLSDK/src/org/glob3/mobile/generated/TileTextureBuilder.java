@@ -131,17 +131,14 @@ public class TileTextureBuilder extends RCObject
 
 	for (int i = 0; i < _petitionsCount; i++)
 	{
-	  Petition petition = _petitions.get(i);
+	  final Petition petition = _petitions.get(i);
 	  IImage image = petition.getImage();
 
 	  if (image != null)
 	  {
 		images.add(image);
 
-		final Sector petitionSector = petition.getSector();
-
-		Rectangle rectangle = getImageRectangleInTexture(tileSector, petitionSector, textureWidth, textureHeight);
-		rectangles.add(rectangle);
+		rectangles.add(getImageRectangleInTexture(tileSector, petition.getSector(), textureWidth, textureHeight));
 
 		petitionsID += petition.getURL().getPath();
 		petitionsID += "_";
@@ -172,19 +169,17 @@ public class TileTextureBuilder extends RCObject
 
   public final void finalize()
   {
-	if (_finalized)
+	if (!_finalized)
 	{
-	  return;
+	  _finalized = true;
+
+	  if (!_canceled && (_tile != null) && (_mesh != null))
+	  {
+		composeAndUploadTexture();
+	  }
+
+	  _tile.setTextureSolved(true);
 	}
-
-	_finalized = true;
-
-	if (!_canceled && (_tile != null) && (_mesh != null))
-	{
-	  composeAndUploadTexture();
-	}
-
-	_tile.setTextureSolved(true);
   }
 
   public final void deletePetitions()
