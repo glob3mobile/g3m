@@ -35,4 +35,8 @@ public abstract class IByteBuffer
 //ORIGINAL LINE: virtual const String description() const = 0;
   public abstract String description();
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual const String getAsString() const = 0;
+  public abstract String getAsString();
+
 }
