@@ -68,6 +68,9 @@ private:
   const Plane _nearPlane;
   const Plane _farPlane;
   
+  // the eight vertices of the frustum, i.e: ltn = left,top,near
+  const Vector3D _ltn, _rtn, _lbn, _rbn, _ltf, _rtf, _lbf, _rbf;
+  
 /*  Frustum(const Plane& leftPlane,
           const Plane& rightPlane,
           const Plane& bottomPlane,
@@ -84,7 +87,15 @@ private:
     
   }*/
   
-  Frustum(const Frustum *that, const MutableMatrix44D& matrix): 
+  Frustum(const Frustum *that, const MutableMatrix44D& matrix, const MutableMatrix44D& inverse): 
+  _ltn(that->_ltn.transformedBy(inverse, 1)),
+  _rtn(that->_rtn.transformedBy(inverse, 1)),
+  _lbn(that->_lbn.transformedBy(inverse, 1)),
+  _rbn(that->_rbn.transformedBy(inverse, 1)),
+  _ltf(that->_ltf.transformedBy(inverse, 1)),
+  _rtf(that->_rtf.transformedBy(inverse, 1)),
+  _lbf(that->_lbf.transformedBy(inverse, 1)),
+  _rbf(that->_rbf.transformedBy(inverse, 1)),
   _leftPlane(that->_leftPlane.transformedByTranspose(matrix)),
   _rightPlane(that->_rightPlane.transformedByTranspose(matrix)),
   _bottomPlane(that->_bottomPlane.transformedByTranspose(matrix)),
@@ -92,6 +103,9 @@ private:
   _nearPlane(that->_nearPlane.transformedByTranspose(matrix)),
   _farPlane(that->_farPlane.transformedByTranspose(matrix))
   {
+    printf ("ltn = (%f, %f, %f)   rtn = (%f, %f, %f)\n", _ltn.x(), _ltn.y(), _ltn.z(), _rtn.x(), _rtn.y(), _rtn.z());
+    printf ("lbn = (%f, %f, %f)   rbn = (%f, %f, %f)\n", _lbn.x(), _lbn.y(), _lbn.z(), _rbn.x(), _rbn.y(), _rbn.z());
+    printf ("\n");
     
   }
   
@@ -111,6 +125,14 @@ public:
   Frustum(double left, double right,
           double bottom, double top,
           double znear, double zfar):
+  _ltn(Vector3D(left,   top,      -znear)),
+  _rtn(Vector3D(right,  top,      -znear)),
+  _lbn(Vector3D(left,   bottom,   -znear)),
+  _rbn(Vector3D(right,  bottom,   -znear)),
+  _ltf(Vector3D(zfar/znear*left,  zfar/znear*top,     -zfar)),
+  _rtf(Vector3D(zfar/znear*right, zfar/znear*top,     -zfar)),
+  _lbf(Vector3D(zfar/znear*left,  zfar/znear*bottom,  -zfar)),
+  _rbf(Vector3D(zfar/znear*right, zfar/znear*bottom,  -zfar)),
   _leftPlane(Plane(Vector3D(0, 0, 0), 
                    Vector3D(left, top, -znear), 
                    Vector3D(left, bottom, -znear))),
@@ -156,7 +178,7 @@ public:
   
   
   Frustum* transformedBy_P(const MutableMatrix44D& matrix) const {
-    return new Frustum(this, matrix);
+    return new Frustum(this, matrix, matrix.inversed());
   }
   
   ~Frustum(){}

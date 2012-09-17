@@ -11,6 +11,14 @@
 
 
 Frustum::Frustum (const FrustumData& data):
+_ltn(Vector3D(data._left, data._top, -data._znear)),
+_rtn(Vector3D(data._right, data._top, -data._znear)),
+_lbn(Vector3D(data._left, data._bottom, -data._znear)),
+_rbn(Vector3D(data._right, data._bottom, -data._znear)),
+_ltf(Vector3D(data._zfar/data._znear*data._left,  data._zfar/data._znear*data._top,     -data._zfar)),
+_rtf(Vector3D(data._zfar/data._znear*data._right, data._zfar/data._znear*data._top,     -data._zfar)),
+_lbf(Vector3D(data._zfar/data._znear*data._left,  data._zfar/data._znear*data._bottom,  -data._zfar)),
+_rbf(Vector3D(data._zfar/data._znear*data._right, data._zfar/data._znear*data._bottom,  -data._zfar)),
 _leftPlane(Plane(Vector3D(0, 0, 0), 
                  Vector3D(data._left, data._top, -data._znear), 
                  Vector3D(data._left, data._bottom, -data._znear))),

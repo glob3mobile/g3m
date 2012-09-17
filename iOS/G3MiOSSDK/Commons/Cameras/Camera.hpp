@@ -207,7 +207,7 @@ public:
 #ifdef C_CODE
       if (_frustumInModelCoordinates!=NULL) delete _frustumInModelCoordinates;
 #endif
-      _frustumInModelCoordinates = getFrustum()->transformedBy_P( getModelMatrix());
+      _frustumInModelCoordinates = getFrustum()->transformedBy_P(getModelMatrix());
     }
     return _frustumInModelCoordinates;
   }
