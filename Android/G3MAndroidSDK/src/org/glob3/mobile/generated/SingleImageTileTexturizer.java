@@ -75,13 +75,10 @@ public class SingleImageTileTexturizer extends TileTexturizer
 		  tLatRad = -limit;
 		}
   
-  
-		Geodetic2D mercg = *new Geodetic2D(Angle.fromRadians(tLatRad),g.longitude());
+		final Geodetic2D mercg = new Geodetic2D(Angle.fromRadians(tLatRad), g.longitude());
 		//const Vector3D n = rc->getPlanet()->geodeticSurfaceNormal(mercg);
 		final Vector3D m = rc.getPlanet().toCartesian(mercg);
 		final Vector3D n = rc.getPlanet().centricSurfaceNormal(m);
-  
-  
   
 		final double s = IMathUtils.instance().atan2(n.y(), n.x()) / (IMathUtils.instance().pi() * 2) + 0.5;
   
