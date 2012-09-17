@@ -12,6 +12,7 @@
 #include "Vector3D.hpp"
 #include "MutableMatrix44D.hpp"
 #include "Plane.hpp"
+#include "Extent.hpp"
 
 class Box;
 
@@ -71,6 +72,8 @@ private:
   // the eight vertices of the frustum, i.e: ltn = left,top,near
   const Vector3D _ltn, _rtn, _lbn, _rbn, _ltf, _rtf, _lbf, _rbf;
   
+  Extent*   _extent;
+  
 /*  Frustum(const Plane& leftPlane,
           const Plane& rightPlane,
           const Plane& bottomPlane,
@@ -103,8 +106,18 @@ private:
   _nearPlane(that->_nearPlane.transformedByTranspose(matrix)),
   _farPlane(that->_farPlane.transformedByTranspose(matrix))
   {
-
+    _extent = computeExtent();
+    
+    printf ("ltn = (%f, %f, %f)   rtn = (%f, %f, %f)\n", _ltn.x(), _ltn.y(), _ltn.z(), _rtn.x(), _rtn.y(), _rtn.z());
+    printf ("lbn = (%f, %f, %f)   rbn = (%f, %f, %f)\n", _lbn.x(), _lbn.y(), _lbn.z(), _rbn.x(), _rbn.y(), _rbn.z());
+    printf ("ltf = (%f, %f, %f)   rtf = (%f, %f, %f)\n", _ltf.x(), _ltf.y(), _ltf.z(), _rtf.x(), _rtf.y(), _rtf.z());
+    printf ("lbf = (%f, %f, %f)   rbf = (%f, %f, %f)\n", _lbf.x(), _lbf.y(), _lbf.z(), _rbf.x(), _rbf.y(), _rbf.z());
+    //Box *box = (Box *) _extent;
+    printf ("\n");
+    
   }
+  
+  Extent* computeExtent();
   
   
 public:
@@ -143,7 +156,8 @@ public:
                   Vector3D(right, top, -znear), 
                   Vector3D(left, top, -znear))),
   _nearPlane(Plane(Vector3D(0, 0, 1), znear)),
-  _farPlane(Plane(Vector3D(0, 0, -1), -zfar))
+  _farPlane(Plane(Vector3D(0, 0, -1), -zfar)),
+  _extent(NULL)
   {
   }
   
@@ -178,7 +192,9 @@ public:
     return new Frustum(this, matrix, matrix.inversed());
   }
   
-  ~Frustum(){}
+  ~Frustum(){ if (_extent) delete _extent; }
+  
+  Extent *getExtent() { return _extent; }
 };
 
 
