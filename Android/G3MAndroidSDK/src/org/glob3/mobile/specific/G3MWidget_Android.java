@@ -384,14 +384,16 @@ public class G3MWidget_Android
 
    @Override
    public void onPause() {
-      super.onPause();
-      _widget.onPause();
+      if (_widget != null) {
+         _widget.onPause();
+      }
    }
 
 
    @Override
    public void onResume() {
-      super.onResume();
-      _widget.onResume();
+      if (_widget != null) {
+         _widget.onResume();
+      }
    }
 }

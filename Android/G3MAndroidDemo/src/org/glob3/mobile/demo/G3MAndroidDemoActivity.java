@@ -18,6 +18,7 @@ import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.UserData;
 import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
+import org.glob3.mobile.specific.G3MBaseActivity;
 import org.glob3.mobile.specific.G3MWidget_Android;
 
 
@@ -25,7 +26,8 @@ public class G3MAndroidDemoActivity
          extends
             G3MBaseActivity {
 
-   void initializeWidget(final G3MWidget_Android widget) {
+   @Override
+   protected void initializeWidget(final G3MWidget_Android widget) {
       final LayerSet layerSet = new LayerSet();
 
       final WMSLayer bing = new WMSLayer("ve", new URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?"),
