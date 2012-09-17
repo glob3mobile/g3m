@@ -68,7 +68,7 @@ private:
   const Plane _nearPlane;
   const Plane _farPlane;
   
-  Frustum(const Plane& leftPlane,
+/*  Frustum(const Plane& leftPlane,
           const Plane& rightPlane,
           const Plane& bottomPlane,
           const Plane& topPlane,
@@ -82,10 +82,22 @@ private:
   _farPlane(farPlane)
   {
     
+  }*/
+  
+  Frustum(const Frustum *that, const MutableMatrix44D& matrix): 
+  _leftPlane(that->_leftPlane.transformedByTranspose(matrix)),
+  _rightPlane(that->_rightPlane.transformedByTranspose(matrix)),
+  _bottomPlane(that->_bottomPlane.transformedByTranspose(matrix)),
+  _topPlane(that->_topPlane.transformedByTranspose(matrix)),
+  _nearPlane(that->_nearPlane.transformedByTranspose(matrix)),
+  _farPlane(that->_farPlane.transformedByTranspose(matrix))
+  {
+    
   }
   
+  
 public:
-  Frustum(const Frustum& that) :
+  /*Frustum(const Frustum& that) :
   _leftPlane(that._leftPlane),
   _rightPlane(that._rightPlane),
   _bottomPlane(that._bottomPlane),
@@ -94,7 +106,7 @@ public:
   _farPlane(that._farPlane)
   {
     
-  }
+  }*/
   
   Frustum(double left, double right,
           double bottom, double top,
@@ -122,7 +134,7 @@ public:
   
   bool touchesWithBox(const Box *box) const;
   
-  
+/*  
   Frustum transformedBy(const MutableMatrix44D& matrix) const {
     return Frustum(_leftPlane.transformedBy(matrix),
                    _rightPlane.transformedBy(matrix),
@@ -140,6 +152,11 @@ public:
                        _topPlane.transformedBy(matrix),
                        _nearPlane.transformedBy(matrix),
                        _farPlane.transformedBy(matrix));
+  }*/
+  
+  
+  Frustum* transformedBy_P(const MutableMatrix44D& matrix) const {
+    return new Frustum(this, matrix);
   }
   
   ~Frustum(){}

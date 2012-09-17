@@ -84,12 +84,12 @@ MutableMatrix44D MutableMatrix44D::createProjectionMatrix(double left, double ri
   
 }
 
-MutableMatrix44D MutableMatrix44D::transposed() const {
+/*MutableMatrix44D MutableMatrix44D::transposed() const {
   return MutableMatrix44D(_m00, _m01, _m02, _m03,
                           _m10, _m11, _m12, _m13,
                           _m20, _m21, _m22, _m23,
                           _m30, _m31, _m32, _m33);
-}
+}*/
 
 MutableMatrix44D MutableMatrix44D::inversed() const {
   

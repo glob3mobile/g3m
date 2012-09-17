@@ -146,14 +146,14 @@ void Camera::render(const RenderContext* rc) const {
   gl->loadMatrixf(getModelMatrix());
     
   // TEMP: TEST TO SEE HALF SIZE FRUSTUM CLIPPING 
-  if (false) {
+  if (true) {
     const MutableMatrix44D inversed = getModelMatrix().inversed();
     
     const FrustumData data = calculateFrustumData();
-    const Vector3D p0(Vector3D(data._left/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
-    const Vector3D p1(Vector3D(data._left/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
-    const Vector3D p2(Vector3D(data._right/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
-    const Vector3D p3(Vector3D(data._right/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
+    const Vector3D p0(Vector3D(data._left/4, data._top/4, -data._znear-10).transformedBy(inversed, 1));
+    const Vector3D p1(Vector3D(data._left/4, data._bottom/4, -data._znear-10).transformedBy(inversed, 1));
+    const Vector3D p2(Vector3D(data._right/4, data._bottom/4, -data._znear-10).transformedBy(inversed, 1));
+    const Vector3D p3(Vector3D(data._right/4, data._top/4, -data._znear-10).transformedBy(inversed, 1));
     
     const float v[] = {
       (float) p0.x(), (float) p0.y(), (float) p0.z(),
