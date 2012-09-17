@@ -8,6 +8,8 @@ package org.glob3.mobile.generated;
 //
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class InitializationContext;
 
 public interface IStorage
 {
@@ -23,6 +25,10 @@ public interface IStorage
   void saveImage(URL url, IImage image);
 
   IImage readImage(URL url);
+
+  void onResume(InitializationContext ic);
+
+  void onPause(InitializationContext ic);
 
 
 }

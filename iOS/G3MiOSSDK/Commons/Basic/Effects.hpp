@@ -18,7 +18,9 @@
 
 class EffectTarget {
 public:  
-  virtual bool isEffectable() const = 0;
+  
+  // added this method only to force the java-translator to consider EffectTarget as an interface (dgd)
+  virtual void unusedMethod() const = 0;
   
 #ifdef C_CODE
   virtual ~EffectTarget(){}
@@ -215,6 +217,15 @@ public:
   
   void cancellAllEffectsFor(EffectTarget* target);
   
+  void onResume(const InitializationContext* ic) {
+    
+  }
+  
+  void onPause(const InitializationContext* ic) {
+    
+  }
+  
+
 };
 
 //***************************************************************

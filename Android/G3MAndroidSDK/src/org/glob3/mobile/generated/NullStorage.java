@@ -9,7 +9,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class NullStorage implements IStorage
+public abstract class NullStorage implements IStorage
 {
   public final boolean containsBuffer(URL url)
   {

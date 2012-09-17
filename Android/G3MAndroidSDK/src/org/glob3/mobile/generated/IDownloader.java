@@ -22,9 +22,15 @@ package org.glob3.mobile.generated;
 //class IBufferDownloadListener;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IImageDownloadListener;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class InitializationContext;
 
 public interface IDownloader
 {
+  void onResume(InitializationContext ic);
+
+  void onPause(InitializationContext ic);
+
   void start();
 
   void stop();

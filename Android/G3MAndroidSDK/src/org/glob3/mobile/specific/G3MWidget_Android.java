@@ -381,4 +381,19 @@ public class G3MWidget_Android
 
    }
 
+
+   @Override
+   public void onPause() {
+      if (_widget != null) {
+         _widget.onPause();
+      }
+   }
+
+
+   @Override
+   public void onResume() {
+      if (_widget != null) {
+         _widget.onResume();
+      }
+   }
 }

@@ -68,6 +68,14 @@ public:
   
   const std::string statistics();
   
+  void onResume(const InitializationContext* ic) {
+    
+  }
+  
+  void onPause(const InitializationContext* ic) {
+    
+  }
+
 };
 
 

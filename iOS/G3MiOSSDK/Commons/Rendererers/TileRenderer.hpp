@@ -412,6 +412,14 @@ public:
   void stop() {
     _firstRender = false;
   }
+  
+  void onResume(const InitializationContext* ic) {
+    
+  }
+  
+  void onPause(const InitializationContext* ic) {
+    
+  }
 
 };
 

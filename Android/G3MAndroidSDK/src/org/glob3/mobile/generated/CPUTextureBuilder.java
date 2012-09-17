@@ -89,7 +89,6 @@ public class CPUTextureBuilder extends TextureBuilder
 	}
 	else
 	{
-  
 	  IImage base;
 	  int i = 0; //First image to merge
 	  Rectangle baseRec = new Rectangle(0,0, width, height);

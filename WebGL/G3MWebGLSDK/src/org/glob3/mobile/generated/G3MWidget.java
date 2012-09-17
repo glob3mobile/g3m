@@ -105,34 +105,34 @@ public class G3MWidget
 	  _selectedRenderer.start();
 	}
   
-  //  const Vector3D ray = _currentCamera->getCenter();
-  //  const Vector3D origin = _currentCamera->getPosition();
-  //
-  //  const Vector3D intersection = _planet->closestIntersection(origin, ray);
-  //  if (!intersection.isNan()) {
-  //    const Vector3D cameraPosition = _currentCamera->getPosition();
-  //
-  //    const double minDistance = 1000;
-  //    const double maxDistance = 20000;
-  //
-  //    const double distanceToTerrain = clamp(intersection.sub(cameraPosition).length(),
-  //                                           minDistance,
-  //                                           maxDistance + minDistance) - minDistance;
-  //
-  //    printf("Camera to terrain distance=%f\n", distanceToTerrain);
-  //
-  //    const float factor = (float) (distanceToTerrain / maxDistance);
-  //
-  //    // Clear the scene
-  //    const Color dayColor = Color::fromRGBA((float) 0.5, (float) 0.5, 1, 1);
-  //    _gl->clearScreen(_backgroundColor.mixedWith(dayColor, factor));
-  //    //    _gl->clearScreen(_backgroundColor);
-  //
-  //  }
-  //  else {
-  //    // Clear the scene
-  //    _gl->clearScreen(_backgroundColor);
-  //  }
+	//  const Vector3D ray = _currentCamera->getCenter();
+	//  const Vector3D origin = _currentCamera->getPosition();
+	//
+	//  const Vector3D intersection = _planet->closestIntersection(origin, ray);
+	//  if (!intersection.isNan()) {
+	//    const Vector3D cameraPosition = _currentCamera->getPosition();
+	//
+	//    const double minDistance = 1000;
+	//    const double maxDistance = 20000;
+	//
+	//    const double distanceToTerrain = clamp(intersection.sub(cameraPosition).length(),
+	//                                           minDistance,
+	//                                           maxDistance + minDistance) - minDistance;
+	//
+	//    printf("Camera to terrain distance=%f\n", distanceToTerrain);
+	//
+	//    const float factor = (float) (distanceToTerrain / maxDistance);
+	//
+	//    // Clear the scene
+	//    const Color dayColor = Color::fromRGBA((float) 0.5, (float) 0.5, 1, 1);
+	//    _gl->clearScreen(_backgroundColor.mixedWith(dayColor, factor));
+	//    //    _gl->clearScreen(_backgroundColor);
+	//
+	//  }
+	//  else {
+	//    // Clear the scene
+	//    _gl->clearScreen(_backgroundColor);
+	//  }
 	_gl.clearScreen(_backgroundColor);
   
 	_selectedRenderer.render(rc);
@@ -204,6 +204,36 @@ public class G3MWidget
 	  EventContext ec = new EventContext(_factory, _stringUtils, _threadUtils, _logger, _planet, _downloader, _effectsScheduler);
   
 	  _renderer.onResizeViewportEvent(ec, width, height);
+	}
+  }
+
+  public final void onPause()
+  {
+	InitializationContext ic = new InitializationContext(_factory, _stringUtils, _threadUtils, _logger, _planet, _downloader, _effectsScheduler);
+  
+	_renderer.onPause(ic);
+	_busyRenderer.onPause(ic);
+  
+	_effectsScheduler.onPause(ic);
+  
+	if (_downloader != null)
+	{
+	  _downloader.onPause(ic);
+	}
+  }
+
+  public final void onResume()
+  {
+	InitializationContext ic = new InitializationContext(_factory, _stringUtils, _threadUtils, _logger, _planet, _downloader, _effectsScheduler);
+  
+	_renderer.onResume(ic);
+	_busyRenderer.onResume(ic);
+  
+	_effectsScheduler.onResume(ic);
+  
+	if (_downloader != null)
+	{
+	  _downloader.onResume(ic);
 	}
   }
 

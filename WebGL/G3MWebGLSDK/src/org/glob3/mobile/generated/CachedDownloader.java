@@ -134,4 +134,16 @@ public class CachedDownloader implements IDownloader
 	_savesCounter++;
   }
 
+  public final void onResume(InitializationContext ic)
+  {
+	_downloader.onResume(ic);
+	_cacheStorage.onResume(ic);
+  }
+
+  public final void onPause(InitializationContext ic)
+  {
+	_downloader.onPause(ic);
+	_cacheStorage.onPause(ic);
+  }
+
 }
