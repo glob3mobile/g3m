@@ -197,21 +197,4 @@ public:
   }
 };
 
-/*
-
-enum GLAlignment {
-  Unpack,
-  Pack
-};
-
-enum GLFormat {
-  RGBA
-};
-
-enum GLVariable {
-  Viewport
-};
-
-*/
-
 #endif
