@@ -103,10 +103,7 @@ private:
   _nearPlane(that->_nearPlane.transformedByTranspose(matrix)),
   _farPlane(that->_farPlane.transformedByTranspose(matrix))
   {
-    printf ("ltn = (%f, %f, %f)   rtn = (%f, %f, %f)\n", _ltn.x(), _ltn.y(), _ltn.z(), _rtn.x(), _rtn.y(), _rtn.z());
-    printf ("lbn = (%f, %f, %f)   rbn = (%f, %f, %f)\n", _lbn.x(), _lbn.y(), _lbn.z(), _rbn.x(), _rbn.y(), _rbn.z());
-    printf ("\n");
-    
+
   }
   
   

@@ -133,8 +133,8 @@ bool Tile::isVisible(const RenderContext *rc,
   if (extent == NULL) {
     return false;
   }
-  //return extent->touches( rc->getCurrentCamera()->getFrustumInModelCoordinates() );
-  return extent->touches( rc->getCurrentCamera()->getHalfFrustuminModelCoordinates() );
+  return extent->touches( rc->getCurrentCamera()->getFrustumInModelCoordinates() );
+  //return extent->touches( rc->getCurrentCamera()->getHalfFrustuminModelCoordinates() );
 }
 
 bool Tile::meetsRenderCriteria(const RenderContext *rc,
