@@ -202,7 +202,7 @@ public:
   
   MutableMatrix44D inversed() const;
   
-  MutableMatrix44D transposed() const;
+  //MutableMatrix44D transposed() const;
   
   //METHODS TO EXTRACT VALUES FROM THE MATRIX
   

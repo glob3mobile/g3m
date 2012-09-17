@@ -10,6 +10,9 @@
 
 #include "LayerSet.hpp"
 #include "WMSLayer.hpp"
+#include "Factory_iOS.hpp"
+#include "SingleImageTileTexturizer.hpp"
+#include "EllipsoidalTileTessellator.hpp"
 #include "TileRenderer.hpp"
 #include "TilesRenderParameters.hpp"
 #include "MarksRenderer.hpp"

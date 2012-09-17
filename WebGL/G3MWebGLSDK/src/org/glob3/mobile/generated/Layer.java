@@ -75,6 +75,17 @@ public abstract class Layer
 //ORIGINAL LINE: virtual URL getFeatureInfoURL(const Geodetic2D& g, const IFactory* factory, const Sector& sector, int width, int height) const = 0;
   public abstract URL getFeatureInfoURL(Geodetic2D g, IFactory factory, Sector sector, int width, int height);
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual boolean isReady() const
+  public boolean isReady()
+  {
+	return true;
+  }
+
+  public void initialize(InitializationContext ic)
+  {
+  }
+
   public final void addTerrainTouchEventListener(TerrainTouchEventListener listener)
   {
 	_listeners.add(listener);

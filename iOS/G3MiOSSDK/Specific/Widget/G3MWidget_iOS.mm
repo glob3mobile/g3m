@@ -52,6 +52,8 @@
 #include "NativeGL2_iOS.hpp"
 #include "StringUtils_iOS.hpp"
 #include "SingleImageTileTexturizer.hpp"
+#include "WMSLayer.hpp"
+#include "OSMLayer.hpp"
 
 #include "MathUtils_iOS.hpp"
 #include "ThreadUtils_iOS.hpp"
@@ -142,8 +144,12 @@
   if (layerSet != NULL) {
     if (layerSet->size() > 0) {
       TileTexturizer* texturizer = new MultiLayerTileTexturizer(layerSet);
-//      IImage *singleWorldImage = factory->createImageFromFileName("world.jpg");
-//      TileTexturizer* texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
+      //IImage *singleWorldImage = factory->createImageFromFileName("mercator.jpg");
+      //TileTexturizer* texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage, false);
+      
+      //Single Mercator image
+      //IImage *singleWorldImage = factory->createImageFromFileName("tissot.png");
+      //TileTexturizer* texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage, true);
 
       const bool showStatistics = false;
       TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
@@ -157,6 +163,8 @@
   for (int i = 0; i < renderers.size(); i++) {
     composite->addRenderer(renderers[i]);
   }
+  
+  
   
   
   TextureBuilder* textureBuilder = new CPUTextureBuilder();

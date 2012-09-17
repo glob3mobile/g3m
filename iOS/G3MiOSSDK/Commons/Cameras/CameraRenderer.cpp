@@ -37,6 +37,10 @@ void CameraRenderer::render(const RenderContext* rc) {
   for (unsigned int i=0; i<_handlers.size(); i++) {
     _handlers[i]->render(rc, _cameraContext);
   }
+  
+  
+  
+  
 }
 
 bool CameraRenderer::onTouchEvent(const EventContext* ec,
