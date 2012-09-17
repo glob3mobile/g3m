@@ -18,11 +18,11 @@ class IImage;
 #include <vector>
 #include <string>
 
-enum GLCullFace {
-  Front,
-  Back,
-  FrontAndBack
-};
+//enum GLCullFace {
+//  Front,
+//  Back,
+//  FrontAndBack
+//};
 
 enum GLBufferType {
   ColorBuffer,
@@ -198,9 +198,14 @@ public:
                           int first,
                           int count) const = 0;
   
-  virtual void cullFace(GLCullFace c) const = 0;
+  virtual void cullFace(int c) const = 0;
   
   virtual void getIntegerv(GLVariable v, int i[]) const = 0;
+  
+  
+  virtual int CullFace_Front() const = 0;
+  virtual int CullFace_Back() const = 0;
+  virtual int CullFace_FrontAndBack() const = 0;
   
 };
 

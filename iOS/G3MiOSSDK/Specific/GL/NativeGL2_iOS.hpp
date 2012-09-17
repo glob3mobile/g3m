@@ -39,7 +39,7 @@ class NativeGL2_iOS: public INativeGL
         return GL_CULL_FACE;
     }
   }
-  
+ /* 
   inline GLenum getEnum(GLCullFace f) const {
     switch (f) {
       case Front:
@@ -50,7 +50,7 @@ class NativeGL2_iOS: public INativeGL
         return GL_BACK;
     }
   }
-  
+  */
   inline GLenum getEnum(GLType t) const {
     switch (t) {
       case Float:
@@ -306,12 +306,22 @@ public:
     glDrawArrays(getEnum(mode), first, count);
   }
   
-  void cullFace(GLCullFace c) const {
-    glCullFace(getEnum(c));
+  void cullFace(int c) const {
+    glCullFace(c);
   }
   
   void getIntegerv(GLVariable v, int i[]) const {
     glGetIntegerv(getEnum(v), i);
+  }
+  
+  int CullFace_Front() const{
+    return GL_FRONT;
+  }
+  int CullFace_Back() const{
+    return GL_BACK;
+  }
+  int CullFace_FrontAndBack() const{
+    return GL_FRONT_AND_BACK;
   }
   
 };

@@ -531,7 +531,7 @@ void GL::setBlendFuncSrcAlpha() {
 #endif
 }
 
-void GL::enableCullFace(GLCullFace face) {
+void GL::enableCullFace(int face) {
   if (!_enableCullFace) {
 #ifdef C_CODE
     _gl->enable(CullFacing);

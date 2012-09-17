@@ -19,6 +19,8 @@
 
 #include "IFloatBuffer.hpp"
 
+#include "GLConstants.hpp"
+
 #include <list>
 
 
@@ -48,12 +50,8 @@ private:
   
   bool _enableCullFace;
   
-#ifdef C_CODE
-  GLCullFace _cullFace_face;
-#endif
-#ifdef JAVA_CODE
-  GLCullFace _cullFace_face = GLCullFace.Back;
-#endif
+  int _cullFace_face;
+
   
   
   
@@ -105,11 +103,7 @@ public:
   _enableBlend(false),
   _enableDepthTest(false),
   _enableCullFace(false),
-#ifdef C_CODE
-  _cullFace_face(Back),
-#else
-  _cullFace_face(GLCullFace.Back),
-#endif
+  _cullFace_face(GLCullFace::back()),
   _texturesIdAllocationCounter(0),
   _scaleX(1),
   _scaleY(1),
@@ -212,7 +206,7 @@ public:
   
   void deleteTexture(const GLTextureId& textureId);
   
-  void enableCullFace(GLCullFace face);
+  void enableCullFace(int face);
   void disableCullFace();
   
   void transformTexCoords(float scaleX,

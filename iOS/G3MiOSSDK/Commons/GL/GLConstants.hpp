@@ -13,19 +13,22 @@
 
 class GLCullFace {
   static int _front;
-  static int _back,
+  static int _back;
   static int _frontAndBack;
   
+public:
   static int front(){ return _front;}
   static int back(){ return _back;}
   static int frontAndBack(){ return _frontAndBack;}
   
   static void init(const INativeGL* ngl){
+    _front = ngl->CullFace_Front();
+    _back = ngl->CullFace_Back();
+    _frontAndBack = ngl->CullFace_FrontAndBack();
   }
-  
-  
 };
 
+/*
 enum GLBufferType {
   ColorBuffer,
   DepthBuffer
@@ -95,6 +98,6 @@ enum GLVariable {
   Viewport
 };
 
-
+*/
 
 #endif
