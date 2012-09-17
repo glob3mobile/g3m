@@ -53,6 +53,9 @@ bool Frustum::touchesWithBox(const Box *box) const
 {
   bool outside;
   
+  // test first if frustum extent intersect with box
+  if (!getExtent()->touchesBox(box)) return false;
+  
   // create an array with the 8 corners of the box
   const Vector3D min = box->getLower();
   const Vector3D max = box->getUpper();

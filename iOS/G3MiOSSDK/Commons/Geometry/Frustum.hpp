@@ -107,14 +107,6 @@ private:
   _farPlane(that->_farPlane.transformedByTranspose(matrix))
   {
     _extent = computeExtent();
-    
-    printf ("ltn = (%f, %f, %f)   rtn = (%f, %f, %f)\n", _ltn.x(), _ltn.y(), _ltn.z(), _rtn.x(), _rtn.y(), _rtn.z());
-    printf ("lbn = (%f, %f, %f)   rbn = (%f, %f, %f)\n", _lbn.x(), _lbn.y(), _lbn.z(), _rbn.x(), _rbn.y(), _rbn.z());
-    printf ("ltf = (%f, %f, %f)   rtf = (%f, %f, %f)\n", _ltf.x(), _ltf.y(), _ltf.z(), _rtf.x(), _rtf.y(), _rtf.z());
-    printf ("lbf = (%f, %f, %f)   rbf = (%f, %f, %f)\n", _lbf.x(), _lbf.y(), _lbf.z(), _rbf.x(), _rbf.y(), _rbf.z());
-    //Box *box = (Box *) _extent;
-    printf ("\n");
-    
   }
   
   Extent* computeExtent();
@@ -194,7 +186,7 @@ public:
   
   ~Frustum(){ if (_extent) delete _extent; }
   
-  Extent *getExtent() { return _extent; }
+  Extent *getExtent() const { return _extent; }
 };
 
 

@@ -211,3 +211,15 @@ void Box::render(const RenderContext* rc)
 }
 
 
+bool Box::touchesBox(const Box* box) const
+{
+  if (_lower.x() > box->_upper.x()) return false;
+  if (_upper.x() < box->_lower.x()) return false;
+  if (_lower.y() > box->_upper.y()) return false;
+  if (_upper.y() < box->_lower.y()) return false;
+  if (_lower.z() > box->_upper.z()) return false;
+  if (_upper.z() < box->_lower.z()) return false;
+  return true;
+}
+
+
