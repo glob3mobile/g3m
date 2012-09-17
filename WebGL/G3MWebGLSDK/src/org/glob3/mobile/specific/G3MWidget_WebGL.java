@@ -131,6 +131,8 @@ public class G3MWidget_WebGL
       _layerSet = layerSet;
       _renderers = renderers;
       _userData = userData;
+
+      initWidgetPrivate(cameraConstraints, layerSet, renderers, userData);
    }
 
 
@@ -228,6 +230,10 @@ public class G3MWidget_WebGL
                Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false);
 
       _widget.setUserData(userData);
+
+
+      //CALLING widget.render()
+      startRender(this);
    }
 
 
@@ -305,17 +311,17 @@ public class G3MWidget_WebGL
       line = line + 15;
    }
 
-   /*
-      private void renderWidget() {
-         _widget.render();
-      }
-   */
-   //
-   //   private native void startRender(G3MWidget_WebGL instance) /*-{
-   //		var tick = function() {
-   //			$wnd.requestAnimFrame(tick);
-   //			$entry(instance.@org.glob3.mobile.specific.G3MWidget_WebGL::renderWidget()());
-   //		};
-   //		tick();
-   //   }-*/;
+
+   private void renderWidget() {
+      _widget.render();
+   }
+
+
+   private native void startRender(G3MWidget_WebGL instance) /*-{
+		var tick = function() {
+			$wnd.requestAnimFrame(tick);
+			$entry(instance.@org.glob3.mobile.specific.G3MWidget_WebGL::renderWidget()());
+		};
+		tick();
+   }-*/;
 }

@@ -13,17 +13,28 @@ public class Image_WebGL
             IImage {
 
    private JavaScriptObject _imgObject;
-
    private boolean          _arrived = false;
 
 
+   public Image_WebGL() {
+      _imgObject = null;
+   }
+
+
    public Image_WebGL(final JavaScriptObject data) {
+      _imgObject = data;
+      if ((jsGetWidth() <= 0) || (jsGetHeight() <= 0)) {
+         _imgObject = null;
+      }
+      else {
+         _arrived = true;
+      }
    }
 
 
    public JavaScriptObject getImage() {
       if (_arrived) {
-         return jsGetImage(_imgObject);
+         return _imgObject;
       }
 
       return null;
@@ -50,16 +61,70 @@ public class Image_WebGL
    }
 
 
-   private native JavaScriptObject jsGetImage(JavaScriptObject imgObject) /*-{
-		return imgObject.image;
-   }-*/;
+   @Override
+   public int getWidth() {
+      return jsGetWidth();
+   }
+
+
+   @Override
+   public int getHeight() {
+      return jsGetHeight();
+   }
+
+
+   @Override
+   public IImage combineWith(final IImage other,
+                             final int width,
+                             final int height) {
+      // TODO this method must be implemented
+      throw new RuntimeException("NOT IMPLEMENTED FROM FILENAME");
+   }
+
+
+   @Override
+   public IImage combineWith(final IImage other,
+                             final Rectangle rect,
+                             final int width,
+                             final int height) {
+      // TODO this method must be implemented
+      throw new RuntimeException("NOT IMPLEMENTED FROM FILENAME");
+   }
+
+
+   @Override
+   public IImage subImage(final Rectangle rect) {
+      // TODO this method must be implemented
+      throw new RuntimeException("NOT IMPLEMENTED FROM FILENAME");
+   }
+
+
+   @Override
+   public IImage scale(final int width,
+                       final int height) {
+      // TODO this method must be implemented
+      throw new RuntimeException("NOT IMPLEMENTED FROM FILENAME");
+   }
+
+
+   @Override
+   public String description() {
+      // TODO this method must be implemented
+      throw new RuntimeException("NOT IMPLEMENTED FROM FILENAME");
+   }
+
+
+   @Override
+   public IImage copy() {
+      // TODO this method must be implemented
+      throw new RuntimeException("NOT IMPLEMENTED FROM FILENAME");
+   }
 
 
    private native JavaScriptObject jsCreateImgObject(Image_WebGL instance,
                                                      String url) /*-{
-		imgObject = new Object();
-		imgObject.image = new Image();
-		imgObject.image.onload = function() {
+		var imgObject = new Image();
+		imgObject.onload = function() {
 			debugger;
 			$entry(instance.@org.glob3.mobile.specific.Image_WebGL::onArrive()());
 		}
@@ -72,71 +137,18 @@ public class Image_WebGL
 			$entry(instance.@org.glob3.mobile.specific.Image_WebGL::onError()());
 		}
 
-		imgObject.image.src = url;
+		imgObject.src = url;
 
 		return imgObject;
    }-*/;
 
 
-   @Override
-   public int getWidth() {
-      // TODO Auto-generated method stub
-      return 0;
-   }
+   private native int jsGetWidth() /*-{
+		return this.@org.glob3.mobile.specific.Image_WebGL::_imgObject.width;
+   }-*/;
 
 
-   @Override
-   public int getHeight() {
-      // TODO Auto-generated method stub
-      return 0;
-   }
-
-
-   @Override
-   public IImage combineWith(final IImage other,
-                             final int width,
-                             final int height) {
-      // TODO Auto-generated method stub
-      return null;
-   }
-
-
-   @Override
-   public IImage combineWith(final IImage other,
-                             final Rectangle rect,
-                             final int width,
-                             final int height) {
-      // TODO Auto-generated method stub
-      return null;
-   }
-
-
-   @Override
-   public IImage subImage(final Rectangle rect) {
-      // TODO Auto-generated method stub
-      return null;
-   }
-
-
-   @Override
-   public IImage scale(final int width,
-                       final int height) {
-      // TODO Auto-generated method stub
-      return null;
-   }
-
-
-   @Override
-   public String description() {
-      // TODO Auto-generated method stub
-      return null;
-   }
-
-
-   @Override
-   public IImage copy() {
-      // TODO Auto-generated method stub
-      return null;
-   }
-
+   private native int jsGetHeight() /*-{
+		return this.@org.glob3.mobile.specific.Image_WebGL::_imgObject.height;
+   }-*/;
 }

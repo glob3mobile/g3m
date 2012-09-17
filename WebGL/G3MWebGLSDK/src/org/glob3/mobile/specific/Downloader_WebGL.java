@@ -47,10 +47,9 @@ public class Downloader_WebGL
 
                if (handler != null) {
                   handler.runWithDownloader(thisDownloader);
-                  sendRequest();
                }
             }
-
+            sendRequest();
          }
       };
    }

@@ -90,14 +90,16 @@ class ListenerEntry {
          _bufferListener.onDownload(url, byteBuffer);
       }
       if (_imageListener != null) {
-         final IImage img = new Image_WebGL(data);
+         final Image_WebGL imageGL = new Image_WebGL(data);
 
-         if ((img.getWidth() <= 0) || (img.getHeight() <= 0)) {
+         if (imageGL.getImage() == null) {
             log(LogLevel.ErrorLevel, ": Can't create image from data");
             _imageListener.onError(url);
          }
          else {
-            _imageListener.onDownload(url, img);
+            final IImage image = imageGL;
+
+            _imageListener.onDownload(url, image);
          }
       }
    }
@@ -111,13 +113,15 @@ class ListenerEntry {
          _bufferListener.onCanceledDownload(url, byteBuffer);
       }
       if (_imageListener != null) {
-         final IImage img = new Image_WebGL(data);
+         final Image_WebGL imageGL = new Image_WebGL(data);
 
-         if ((img.getWidth() <= 0) || (img.getHeight() <= 0)) {
+         if (imageGL.getImage() == null) {
             log(LogLevel.ErrorLevel, ": Can't create image from data");
          }
          else {
-            _imageListener.onCanceledDownload(url, img);
+            final IImage image = imageGL;
+
+            _imageListener.onCanceledDownload(url, image);
          }
       }
 

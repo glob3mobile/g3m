@@ -12,7 +12,7 @@ public class IntBuffer_WebGL
             IIntBuffer {
 
    private final JavaScriptObject _buffer;
-   private final int              _timestamp = 0;
+   private int                    _timestamp = 0;
 
 
    public IntBuffer_WebGL(final JavaScriptObject data) {
@@ -61,6 +61,11 @@ public class IntBuffer_WebGL
    }
 
 
+   private void incTimestamp() {
+      _timestamp++;
+   }
+
+
    private native JavaScriptObject jsCreateBuffer(final JavaScriptObject data) /*-{
 		return new Int32Array(data);
    }-*/;
@@ -86,7 +91,7 @@ public class IntBuffer_WebGL
 		var thisInstance = this;
 		if (thisInstance.@org.glob3.mobile.specific.IntBuffer_WebGL::_buffer[i] != value) {
 			thisInstance.@org.glob3.mobile.specific.IntBuffer_WebGL::_buffer[i] = value;
-			thisInstance.@org.glob3.mobile.specific.IntBuffer_WebGL::_timestamp++;
+			thisInstance.@org.glob3.mobile.specific.IntBuffer_WebGL::incTimestamp()();
 		}
    }-*/;
 

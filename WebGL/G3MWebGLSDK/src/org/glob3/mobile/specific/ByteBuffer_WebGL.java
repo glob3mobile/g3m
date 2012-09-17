@@ -12,7 +12,7 @@ public class ByteBuffer_WebGL
             IByteBuffer {
 
    private final JavaScriptObject _buffer;
-   private final int              _timestamp = 0;
+   private int                    _timestamp = 0;
 
 
    public ByteBuffer_WebGL(final JavaScriptObject data) {
@@ -26,8 +26,11 @@ public class ByteBuffer_WebGL
 
 
    ByteBuffer_WebGL(final byte[] data) {
-      //      TODO needed??
-      throw new RuntimeException("ByteBuffer_WebGL(final byte[] data) IS NOT IMPLEMENTED");
+      _buffer = jsCreateBuffer(data.length);
+
+      for (int i = 0; i < data.length; i++) {
+         put(i, data[i]);
+      }
    }
 
 
@@ -67,6 +70,11 @@ public class ByteBuffer_WebGL
    }
 
 
+   private void incTimestamp() {
+      _timestamp++;
+   }
+
+
    private native JavaScriptObject jsCreateBuffer(final JavaScriptObject data) /*-{
 		return new Uint8Array(data);
    }-*/;
@@ -94,7 +102,7 @@ public class ByteBuffer_WebGL
 				.get(i) != value) {
 			thisInstance.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer
 					.set(i, value);
-			thisInstance.@org.glob3.mobile.specific.ByteBuffer_WebGL::_timestamp++;
+			thisInstance.@org.glob3.mobile.specific.ByteBuffer_WebGL::incTimestamp()();
 		}
    }-*/;
 
