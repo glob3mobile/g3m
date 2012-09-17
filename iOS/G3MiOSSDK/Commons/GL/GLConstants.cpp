@@ -29,3 +29,23 @@ int GLPrimitive::_triangleStrip = 0;
 int GLPrimitive::_lines = 0;
 int GLPrimitive::_lineLoop = 0;
 int GLPrimitive::_points = 0;
+
+int GLBlendFactor::_srcAlpha = 0;
+int GLBlendFactor::_oneMinusSrcAlpha = 0;
+
+int GLTextureType::_texture2D = 0;
+
+int GLTextureParameter::_minFilter = 0;
+int GLTextureParameter::_magFilter = 0;
+int GLTextureParameter::_wrapS = 0;
+int GLTextureParameter::_wrapT = 0;
+
+int GLTextureParameterValue::_linear = 0;
+int GLTextureParameterValue::_clampToEdge = 0;
+
+int GLAlignment::_pack = 0;
+int GLAlignment::_unpack = 0;
+
+int GLFormat::_rgba = 0;
+
+int GLVariable::_viewport = 0;

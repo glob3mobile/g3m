@@ -18,6 +18,9 @@ class IImage;
 #include <vector>
 #include <string>
 
+
+
+
 enum GLError {
   NoError,
   InvalidEnum,
@@ -26,42 +29,6 @@ enum GLError {
   OutOfMemory,
   UnknownError
 };
-
-enum GLBlendFactor {
-  SrcAlpha,
-  OneMinusSrcAlpha
-};
-
-enum GLTextureType {
-  Texture2D
-};
-
-enum GLTextureParameter {
-  MinFilter,
-  MagFilter,
-  WrapS,
-  WrapT
-};
-
-enum GLTextureParameterValue {
-  Linear,
-  ClampToEdge
-};
-
-enum GLAlignment {
-  Unpack,
-  Pack
-};
-
-enum GLFormat {
-  RGBA
-};
-
-enum GLVariable {
-  Viewport
-};
-
-
 
 class INativeGL {
 public:
@@ -125,10 +92,10 @@ public:
   
   virtual GLError getError() const = 0;
   
-  virtual void blendFunc(GLBlendFactor sfactor,
-                         GLBlendFactor dfactor) const = 0;
+  virtual void blendFunc(int sfactor,
+                         int dfactor) const = 0;
   
-  virtual void bindTexture(GLTextureType target,
+  virtual void bindTexture(int target,
                            int texture) const = 0;
   
   virtual void deleteTextures(int n,
@@ -138,16 +105,16 @@ public:
   
   virtual void disableVertexAttribArray(int location) const = 0;
   
-  virtual void pixelStorei(GLAlignment pname,
+  virtual void pixelStorei(int pname,
                            int param) const = 0;
   
   virtual std::vector<GLTextureId> genTextures(int	n) const = 0;
   
-  virtual void texParameteri(GLTextureType target,
-                             GLTextureParameter par,
-                             GLTextureParameterValue v) const = 0;
+  virtual void texParameteri(int target,
+                             int par,
+                             int v) const = 0;
   
-  virtual void texImage2D(const IImage* image, GLFormat format) const = 0;
+  virtual void texImage2D(const IImage* image, int format) const = 0;
   
   //  virtual void texImage2D(GLTextureType target,
   //                          int         level,
@@ -159,7 +126,7 @@ public:
   //                          GLType      type,
   //                          const void* data) const = 0;
   
-  virtual void generateMipmap(GLTextureType target) const = 0;
+  virtual void generateMipmap(int target) const = 0;
   
   virtual void drawArrays(int mode,
                           int first,
@@ -167,7 +134,7 @@ public:
   
   virtual void cullFace(int c) const = 0;
   
-  virtual void getIntegerv(GLVariable v, int i[]) const = 0;
+  virtual void getIntegerv(int v, int i[]) const = 0;
   
   
   virtual int CullFace_Front() const = 0;
@@ -191,9 +158,27 @@ public:
   virtual int Primitive_Lines() const = 0;
   virtual int Primitive_LineLoop() const = 0;
   virtual int Primitive_Points() const = 0;
-
-
   
+  virtual int BlendFactor_SrcAlpha() const = 0;
+  virtual int BlendFactor_OneMinusSrcAlpha() const = 0;
+  
+  virtual int TextureType_Texture2D() const = 0;
+  
+  virtual int TextureParameter_MinFilter() const = 0;
+  virtual int TextureParameter_MagFilter() const = 0;
+  virtual int TextureParameter_WrapS() const = 0;
+  virtual int TextureParameter_WrapT() const = 0;
+  
+  virtual int TextureParameterValue_Linear() const = 0;
+  virtual int TextureParameterValue_ClampToEdge() const = 0;
+  
+  virtual int Alignment_Pack() const = 0;
+  virtual int Alignment_Unpack() const = 0;
+  
+  virtual int Format_RGBA() const = 0;
+  
+  virtual int Variable_Viewport() const = 0;
+
 };
 
 #endif

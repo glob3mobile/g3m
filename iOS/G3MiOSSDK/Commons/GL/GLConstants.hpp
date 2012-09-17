@@ -102,45 +102,102 @@ public:
   }
 };
 
+class GLBlendFactor {
+  static int _srcAlpha;
+  static int _oneMinusSrcAlpha;
+  
+  
+public:
+  static int srcAlpha(){ return _srcAlpha;}
+  static int oneMinusSrcAlpha(){ return _oneMinusSrcAlpha;}
+  
+  static void init(const INativeGL* ngl){
+    _srcAlpha = ngl->BlendFactor_SrcAlpha();
+    _oneMinusSrcAlpha = ngl->BlendFactor_OneMinusSrcAlpha();
+  }
+};
+
+class GLTextureType {
+  static int _texture2D;
+public:
+  static int texture2D(){ return _texture2D;}
+  
+  static void init(const INativeGL* ngl){
+    _texture2D = ngl->TextureType_Texture2D();
+  }
+};
+
+class GLTextureParameter {
+  static int _minFilter;
+  static int _magFilter;
+  static int _wrapS;
+  static int _wrapT;
+  
+public:
+  static int minFilter(){ return _minFilter;}
+  static int magFilter(){ return _magFilter;}
+  static int wrapS(){ return _wrapS;}
+  static int wrapT(){ return _wrapT;}
+  
+  static void init(const INativeGL* ngl){
+    _minFilter = ngl->TextureParameter_MinFilter();
+    _magFilter = ngl->TextureParameter_MagFilter();
+    _wrapS = ngl->TextureParameter_WrapS();
+    _wrapT = ngl->TextureParameter_WrapT();
+  }
+};
+
+class GLTextureParameterValue {
+  static int _linear;
+  static int _clampToEdge;
+  
+public:
+  static int linear(){ return _linear;}
+  static int clampToEdge(){ return _clampToEdge;}
+  
+  static void init(const INativeGL* ngl){
+    _linear = ngl->TextureParameterValue_Linear();
+    _clampToEdge = ngl->TextureParameterValue_ClampToEdge();
+  }
+};
+
+class GLAlignment {
+  static int _pack;
+  static int _unpack;
+  
+public:
+  static int pack(){ return _pack;}
+  static int unpack(){ return _unpack;}
+  
+  static void init(const INativeGL* ngl){
+    _pack = ngl->Alignment_Pack();
+    _unpack = ngl->Alignment_Unpack();
+  }
+};
+
+class GLFormat{
+  static int _rgba;
+  
+public:
+  static int rgba(){ return _rgba;}
+  
+  static void init(const INativeGL* ngl){
+    _rgba = ngl->Format_RGBA();
+  }
+};
+
+class GLVariable{
+  static int _viewport;
+  
+public:
+  static int viewport(){ return _viewport;}
+  
+  static void init(const INativeGL* ngl){
+    _viewport = ngl->Variable_Viewport();
+  }
+};
+
 /*
-
-
-enum GLPrimitive {
-  TriangleStrip,
-  Lines,
-  LineLoop,
-  Points
-};
-
-enum GLError {
-  NoError,
-  InvalidEnum,
-  InvalidValue,
-  InvalidOperation,
-  OutOfMemory,
-  UnknownError
-};
-
-enum GLBlendFactor {
-  SrcAlpha,
-  OneMinusSrcAlpha
-};
-
-enum GLTextureType {
-  Texture2D
-};
-
-enum GLTextureParameter {
-  MinFilter,
-  MagFilter,
-  WrapS,
-  WrapT
-};
-
-enum GLTextureParameterValue {
-  Linear,
-  ClampToEdge
-};
 
 enum GLAlignment {
   Unpack,

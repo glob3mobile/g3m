@@ -35,67 +35,6 @@ class NativeGL2_iOS: public INativeGL
     return UnknownError;
   }
   
-  inline GLenum getEnum(GLBlendFactor b) const {
-    switch (b) {
-      case SrcAlpha:
-        return GL_SRC_ALPHA;
-      case OneMinusSrcAlpha:
-        return GL_ONE_MINUS_SRC_ALPHA;
-    }
-  }
-  
-  inline GLenum getEnum(GLAlignment a) const {
-    switch (a) {
-      case Unpack:
-        return GL_UNPACK_ALIGNMENT;
-      case Pack:
-        return GL_PACK_ALIGNMENT;
-    }
-  }
-  
-  inline GLenum getEnum(GLTextureType t) const {
-    switch (t) {
-      case Texture2D:
-        return GL_TEXTURE_2D;
-    }
-  }
-  
-  inline GLenum getEnum(GLTextureParameter t) const {
-    switch (t) {
-      case MinFilter:
-        return GL_TEXTURE_MIN_FILTER;
-      case MagFilter:
-        return GL_TEXTURE_MAG_FILTER;
-      case WrapS:
-        return GL_TEXTURE_WRAP_S;
-      case WrapT:
-        return GL_TEXTURE_WRAP_T;
-    }
-  }
-  
-  inline GLint getValue(GLTextureParameterValue t) const {
-    switch (t) {
-      case Linear:
-        return GL_LINEAR;
-      case ClampToEdge:
-        return GL_CLAMP_TO_EDGE;
-    }
-  }
-  
-  inline GLenum getEnum(GLFormat f) const {
-    switch (f) {
-      case RGBA:
-        return GL_RGBA;
-    }
-  }
-  
-  inline GLenum getEnum(GLVariable f) const {
-    switch (f) {
-      case Viewport:
-        return GL_VIEWPORT;
-    }
-  }
-  
 public:
   
   void useProgram(int program) const {
@@ -175,12 +114,12 @@ public:
     return getError(glGetError());
   }
   
-  void blendFunc(GLBlendFactor sfactor, GLBlendFactor dfactor) const {
-    glBlendFunc(getEnum(sfactor), getEnum(dfactor));
+  void blendFunc(int sfactor, int dfactor) const {
+    glBlendFunc(sfactor, dfactor);
   }
   
-  void bindTexture(GLTextureType target, int texture) const {
-    glBindTexture(getEnum(target), texture);
+  void bindTexture(int target, int texture) const {
+    glBindTexture(target, texture);
   }
   
   void deleteTextures(int n, const int textures[]) const {
@@ -199,8 +138,8 @@ public:
     glDisableVertexAttribArray(location);
   }
   
-  void pixelStorei(GLAlignment pname, int param) const {
-    glPixelStorei(getEnum(pname), param);
+  void pixelStorei(int pname, int param) const {
+    glPixelStorei(pname, param);
   }
   
   std::vector<GLTextureId> genTextures(int n) const {
@@ -213,30 +152,30 @@ public:
     return ts;
   }
   
-  void texParameteri(GLTextureType target,
-                     GLTextureParameter par,
-                     GLTextureParameterValue v) const {
-    glTexParameteri(getEnum(target), getEnum(par), getValue(v));
+  void texParameteri(int target,
+                     int par,
+                     int v) const {
+    glTexParameteri(target, par, v);
   }
   
-  void texImage2D(const IImage* image, GLFormat format) const {
+  void texImage2D(const IImage* image, int format) const {
     unsigned char* data = ((Image_iOS*) image)->createByteArrayRGBA8888();
     
     glTexImage2D(GL_TEXTURE_2D,
                  0, 
-                 getEnum(format),
+                 format,
                  image->getWidth(), 
                  image->getHeight(), 
                  0, 
-                 getEnum(format),
+                 format,
                  GL_UNSIGNED_BYTE, 
                  data);
     
     delete [] data;
   }
   
-  void generateMipmap(GLTextureType target) const {
-    glGenerateMipmap(getEnum(target));
+  void generateMipmap(int target) const {
+    glGenerateMipmap(target);
   }
   
   void drawArrays(int mode, int first, int count) const {
@@ -247,8 +186,8 @@ public:
     glCullFace(c);
   }
   
-  void getIntegerv(GLVariable v, int i[]) const {
-    glGetIntegerv(getEnum(v), i);
+  void getIntegerv(int v, int i[]) const {
+    glGetIntegerv(v, i);
   }
   
   int CullFace_Front() const{
@@ -293,14 +232,53 @@ public:
   int Primitive_TriangleStrip() const{
     return GL_TRIANGLE_STRIP;
   }
-  virtual int Primitive_Lines() const{
+  int Primitive_Lines() const{
     return GL_LINES;
   }
-  virtual int Primitive_LineLoop() const{
+  int Primitive_LineLoop() const{
     return GL_LINE_LOOP;
   }
-  virtual int Primitive_Points() const{
+  int Primitive_Points() const{
     return GL_POINTS;
+  }
+  int BlendFactor_SrcAlpha() const{
+    return GL_SRC_ALPHA;
+  }
+  int BlendFactor_OneMinusSrcAlpha() const{
+    return GL_ONE_MINUS_SRC_ALPHA;
+  }
+  int TextureType_Texture2D() const{
+    return GL_TEXTURE_2D;
+  }
+  int TextureParameter_MinFilter() const{
+    return GL_TEXTURE_MIN_FILTER;
+  }
+  int TextureParameter_MagFilter() const{
+    return GL_TEXTURE_MAG_FILTER;
+  }
+  int TextureParameter_WrapS() const{
+    return GL_TEXTURE_WRAP_S;
+  }
+  int TextureParameter_WrapT() const{
+    return GL_TEXTURE_WRAP_T;
+  }
+  int TextureParameterValue_Linear() const{
+    return GL_LINEAR;
+  }
+  int TextureParameterValue_ClampToEdge() const{
+    return GL_CLAMP_TO_EDGE;
+  }
+  int Alignment_Pack() const{
+    return GL_PACK_ALIGNMENT;
+  }
+  int Alignment_Unpack() const{
+    return GL_UNPACK_ALIGNMENT;
+  }
+  int Format_RGBA() const{
+    return GL_RGBA;
+  }
+  int Variable_Viewport() const{
+    return GL_VIEWPORT;
   }
   
 };

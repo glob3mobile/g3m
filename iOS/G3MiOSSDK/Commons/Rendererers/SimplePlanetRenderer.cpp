@@ -124,13 +124,8 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
       rc->getFactory()->deleteImage(image);
     }
     
-#ifdef C_CODE
-    texId = rc->getTexturesHandler()->getGLTextureId(scaledImage, RGBA,
+    texId = rc->getTexturesHandler()->getGLTextureId(scaledImage, GLFormat::rgba(),
                                                      _textureFilename, false);
-#else
-    texId = rc->getTexturesHandler()->getGLTextureId(scaledImage, GLFormat.RGBA,
-                                                     _textureFilename, false);
-#endif
     
     rc->getFactory()->deleteImage(scaledImage);
     

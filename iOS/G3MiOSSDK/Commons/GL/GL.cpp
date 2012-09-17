@@ -247,26 +247,26 @@ GLError GL::getError() {
   return _gl->getError();
 }
 
-const GLTextureId GL::uploadTexture(const IImage* image, GLFormat format, bool generateMipmap){
+const GLTextureId GL::uploadTexture(const IImage* image, int format, bool generateMipmap){
   const GLTextureId texId = getGLTextureId();
   if (texId.isValid()) {
+
+    _gl->blendFunc(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
 #ifdef C_CODE
-    _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);
-    _gl->pixelStorei(Unpack, 1);
+    _gl->pixelStorei(GLAlignment::unpack(), 1);
     
-    _gl->bindTexture(Texture2D, texId.getGLTextureId());
-    _gl->texParameteri(Texture2D, MinFilter, Linear);
-    _gl->texParameteri(Texture2D, MagFilter, Linear);
-    _gl->texParameteri(Texture2D, WrapS, ClampToEdge);
-    _gl->texParameteri(Texture2D, WrapT, ClampToEdge);
+    _gl->bindTexture(GLTextureType::texture2D(), texId.getGLTextureId());
+    _gl->texParameteri(GLTextureType::texture2D(), GLTextureParameter::minFilter(), GLTextureParameterValue::linear());
+    _gl->texParameteri(GLTextureType::texture2D(), GLTextureParameter::magFilter(), GLTextureParameterValue::linear());
+    _gl->texParameteri(GLTextureType::texture2D(), GLTextureParameter::wrapS(), GLTextureParameterValue::clampToEdge());
+    _gl->texParameteri(GLTextureType::texture2D(), GLTextureParameter::wrapT(), GLTextureParameterValue::clampToEdge());
     _gl->texImage2D(image, format);
     
     if (generateMipmap) {
-      _gl->generateMipmap(Texture2D);
+      _gl->generateMipmap(GLTextureType::texture2D());
     }
 #endif
 #ifdef JAVA_CODE
-    _gl.blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
     _gl.pixelStorei(GLAlignment.Unpack, 1);
     
     _gl.bindTexture(GLTextureType.Texture2D, texId.getGLTextureId());
@@ -299,11 +299,7 @@ void GL::setTextureCoordinates(int size, int stride, IFloatBuffer* texcoord) {
 }
 
 void GL::bindTexture(const GLTextureId& textureId) {
-#ifdef C_CODE
-  _gl->bindTexture(Texture2D, textureId.getGLTextureId());
-#else
-  _gl->bindTexture(GLTextureType.Texture2D, textureId.getGLTextureId());
-#endif
+  _gl->bindTexture(GLTextureType::texture2D(), textureId.getGLTextureId());
 }
 
 IFloatBuffer* GL::getBillboardTexCoord() {
@@ -467,11 +463,7 @@ void GL::disableBlend() {
 }
 
 void GL::setBlendFuncSrcAlpha() {
-#ifdef C_CODE
-  _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);
-#else
-  _gl->blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
-#endif
+  _gl->blendFunc(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
 }
 
 void GL::enableCullFace(int face) {

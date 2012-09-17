@@ -307,14 +307,9 @@ public:
                                                                        images,
                                                                        rectangles,
                                                                        textureWidth, textureHeight);
-        
-#ifdef C_CODE
-        GLTextureId glTextureId = _texturesHandler->getGLTextureId(image, RGBA,
+
+        GLTextureId glTextureId = _texturesHandler->getGLTextureId(image, GLFormat::rgba(),
                                                                    petitionsID, isMipmap);
-#else
-        GLTextureId glTextureId = _texturesHandler->getGLTextureId(image, GLFormat.RGBA,
-                                                                   petitionsID, isMipmap);
-#endif
         
         if (glTextureId.isValid()) {
           if (!_mesh->setGLTextureIdForLevel(0, glTextureId)) {

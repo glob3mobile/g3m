@@ -76,13 +76,8 @@ void Mark::render(const RenderContext* rc,
       if (!_textureId.isValid()) {
         IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
      
-#ifdef C_CODE
-        _textureId = rc->getTexturesHandler()->getGLTextureId(image, RGBA,
+        _textureId = rc->getTexturesHandler()->getGLTextureId(image, GLFormat::rgba(),
                                                               _textureFilename, false);
-#else
-        _textureId = rc->getTexturesHandler()->getGLTextureId(image, GLFormat.RGBA,
-                                                              _textureFilename, false);
-#endif
         
         rc->getFactory()->deleteImage(image);
       }

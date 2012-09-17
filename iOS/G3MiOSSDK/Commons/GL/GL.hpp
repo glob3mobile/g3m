@@ -127,6 +127,13 @@ public:
     GLFeature::init(gl);
     GLType::init(gl);
     GLPrimitive::init(gl);
+    GLBlendFactor::init(gl);
+    GLTextureType::init(gl);
+    GLTextureParameter::init(gl);
+    GLTextureParameterValue::init(gl);
+    GLAlignment::init(gl);
+    GLFormat::init(gl);
+    GLVariable::init(gl);
     
   }
   
@@ -189,7 +196,7 @@ public:
   
   GLError getError();
   
-  const GLTextureId uploadTexture(const IImage* image, GLFormat format, bool generateMipmap);
+  const GLTextureId uploadTexture(const IImage* image, int format, bool generateMipmap);
   
   //  const GLTextureId uploadTexture(const IImage* image,
   //                                  int textureWidth, int textureHeight,
@@ -269,11 +276,7 @@ public:
   void setBlendFuncSrcAlpha();
   
   void getViewport(int v[]){
-#ifdef C_CODE
-    _gl->getIntegerv(Viewport, v);
-#else
-    _gl->getIntegerv(GLVariable.Viewport, v);
-#endif
+    _gl->getIntegerv(GLVariable::viewport(), v);
   }
   
   ~GL() {
