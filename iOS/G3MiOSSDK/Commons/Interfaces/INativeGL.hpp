@@ -18,9 +18,6 @@ class IImage;
 #include <vector>
 #include <string>
 
-
-
-
 enum GLError {
   NoError,
   InvalidEnum,

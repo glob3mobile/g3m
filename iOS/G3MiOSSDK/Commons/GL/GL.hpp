@@ -15,7 +15,6 @@
 #include "MutableMatrix44D.hpp"
 #include "Color.hpp"
 #include "MutableVector2D.hpp"
-#include "INativeGL.hpp"
 
 #include "IFloatBuffer.hpp"
 

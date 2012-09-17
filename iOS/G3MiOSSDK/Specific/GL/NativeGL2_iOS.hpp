@@ -13,9 +13,6 @@
 
 #include "INativeGL.hpp"
 
-
-
-
 class NativeGL2_iOS: public INativeGL
 {
   

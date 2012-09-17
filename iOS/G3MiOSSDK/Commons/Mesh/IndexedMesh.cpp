@@ -11,7 +11,6 @@
 #include "IndexedMesh.hpp"
 #include "Box.hpp"
 #include "GL.hpp"
-#include "INativeGL.hpp"
 #include "IFloatBuffer.hpp"
 #include "IIntBuffer.hpp"
 

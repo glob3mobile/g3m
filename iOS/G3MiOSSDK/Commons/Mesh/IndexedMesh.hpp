@@ -12,8 +12,9 @@
 #include "Mesh.hpp"
 #include "Color.hpp"
 #include "Vector3D.hpp"
-#include "INativeGL.hpp"
 #include "FloatBufferBuilderFromCartesian3D.hpp"
+
+class IIntBuffer;
 
 class IndexedMesh : public Mesh {
 private:
