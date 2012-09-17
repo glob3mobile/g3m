@@ -28,6 +28,8 @@ public:
   
   virtual const std::string description() const = 0;
   
+  virtual const std::string getAsString() const = 0;
+  
 };
 
 
