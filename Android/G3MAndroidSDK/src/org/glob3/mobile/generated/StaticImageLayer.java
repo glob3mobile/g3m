@@ -120,4 +120,5 @@ public class StaticImageLayer extends Layer
 	return URL.nullURL();
   }
 
+
 }
