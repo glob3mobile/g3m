@@ -85,12 +85,13 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 
   public final boolean isReady(RenderContext rc)
   {
-	return (_pendingTopTileRequests <= 0);
+	return (_pendingTopTileRequests <= 0) && _layerSet.isReady();
   }
 
   public final void initialize(InitializationContext ic, TilesRenderParameters parameters)
   {
 	_parameters = parameters;
+	_layerSet.initialize(ic);
   }
 
   public final Mesh texturize(RenderContext rc, TileRenderContext trc, Tile tile, Mesh tessellatorMesh, Mesh previousMesh)

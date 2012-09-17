@@ -10,6 +10,9 @@
 
 #include "LayerSet.hpp"
 #include "WMSLayer.hpp"
+#include "Factory_iOS.hpp"
+#include "SingleImageTileTexturizer.hpp"
+#include "EllipsoidalTileTessellator.hpp"
 #include "TileRenderer.hpp"
 #include "TilesRenderParameters.hpp"
 #include "MarksRenderer.hpp"
@@ -155,6 +158,19 @@
   //                               Angle::nan(),
   //                               Angle::nan());
   //  layerSet->addLayer(osm);
+  
+  WMSLayer *osm = new WMSLayer("osm", URL("http://wms.latlon.org./"), WMS_1_1_0, Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0), "image/jpeg", "EPSG:4326", "", false, NULL);
+  layerSet->addLayer(osm);
+  
+//  IFactory *factory = new Factory_iOS();
+//  const bool renderDebug = false;
+//  TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug, false, true);
+//  TileTexturizer* texturizer = NULL;
+//  IImage *singleWorldImage = factory->createImageFromFileName("world.jpg");
+//  texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage, true);
+//  const bool showStatistics = false;
+//  TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),texturizer,parameters,showStatistics);
+//  renderers.push_back(tr);
   
   
   

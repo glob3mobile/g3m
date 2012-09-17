@@ -38,6 +38,11 @@
 		383BD3BB1577EE630012AC53 /* ILogger.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 383BD3B91577EE630012AC53 /* ILogger.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		385827FE15C6FACE00B3E68B /* CameraRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 385827FD15C6FACD00B3E68B /* CameraRenderer.cpp */; };
 		38D786E61587B446003BBC75 /* Tile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 38D786E51587B446003BBC75 /* Tile.cpp */; };
+		A728D4251601EB3600F0A4B0 /* OSMLayer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A728D4241601EB3600F0A4B0 /* OSMLayer.hpp */; };
+		A728D4271601EC6900F0A4B0 /* OSMLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A728D4261601EC6900F0A4B0 /* OSMLayer.cpp */; };
+		A7954AA215EFA1AB00F34E1A /* BingLayer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A7954AA115EFA1AB00F34E1A /* BingLayer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		A7954AA415EFE96400F34E1A /* BingLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A7954AA315EFE96400F34E1A /* BingLayer.cpp */; };
+		A7BF53851607643400662135 /* JSONBaseObject.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A7BF53841607643400662135 /* JSONBaseObject.hpp */; };
 		CC041F5315D98FF000D6AC5D /* BusyQuadRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC041F5215D98FF000D6AC5D /* BusyQuadRenderer.cpp */; };
 		CC14B64E157D35C100793C92 /* IImage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC14B64C157D35C100793C92 /* IImage.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CC41E3A015B1FD5B00B5581C /* Plane.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC41E39F15B1FD5B00B5581C /* Plane.cpp */; };
@@ -250,6 +255,11 @@
 		38D786E41587B3DD003BBC75 /* Tile.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Tile.hpp; path = Commons/Basic/Tile.hpp; sourceTree = "<group>"; };
 		38D786E51587B446003BBC75 /* Tile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Tile.cpp; path = Commons/Basic/Tile.cpp; sourceTree = "<group>"; };
 		38D786E71587B52F003BBC75 /* Sector.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Sector.hpp; path = Commons/Geometry/Sector.hpp; sourceTree = "<group>"; };
+		A728D4241601EB3600F0A4B0 /* OSMLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = OSMLayer.hpp; sourceTree = "<group>"; };
+		A728D4261601EC6900F0A4B0 /* OSMLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OSMLayer.cpp; sourceTree = "<group>"; };
+		A7954AA115EFA1AB00F34E1A /* BingLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BingLayer.hpp; sourceTree = "<group>"; };
+		A7954AA315EFE96400F34E1A /* BingLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BingLayer.cpp; sourceTree = "<group>"; };
+		A7BF53841607643400662135 /* JSONBaseObject.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONBaseObject.hpp; sourceTree = "<group>"; };
 		CC041F5015D98EAD00D6AC5D /* BusyQuadRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = BusyQuadRenderer.hpp; path = Commons/Rendererers/BusyQuadRenderer.hpp; sourceTree = "<group>"; };
 		CC041F5215D98FF000D6AC5D /* BusyQuadRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = BusyQuadRenderer.cpp; path = Commons/Rendererers/BusyQuadRenderer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CC14B64C157D35C100793C92 /* IImage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IImage.hpp; path = Commons/Interfaces/IImage.hpp; sourceTree = "<group>"; };
@@ -500,6 +510,7 @@
 		383BD3881577EDE30012AC53 /* Commons */ = {
 			isa = PBXGroup;
 			children = (
+				A7BF53831607643400662135 /* JSON */,
 				D892FBCD15C930E600E69254 /* GL */,
 				383BD3891577EDF40012AC53 /* Basic */,
 				CC596F1B15C46CD7008FC230 /* Cameras */,
@@ -644,6 +655,15 @@
 			name = Interfaces;
 			sourceTree = "<group>";
 		};
+		A7BF53831607643400662135 /* JSON */ = {
+			isa = PBXGroup;
+			children = (
+				A7BF53841607643400662135 /* JSONBaseObject.hpp */,
+			);
+			name = JSON;
+			path = Commons/JSON;
+			sourceTree = "<group>";
+		};
 		CC14B636157D34AB00793C92 /* GL */ = {
 			isa = PBXGroup;
 			children = (
@@ -717,6 +737,10 @@
 				D8E0EC1215C1B1BB0010A68A /* StaticImageLayer.hpp */,
 				D87EC5C415BEB12F00E38C36 /* WMSLayer.cpp */,
 				D87EC5C515BEB12F00E38C36 /* WMSLayer.hpp */,
+				A7954AA115EFA1AB00F34E1A /* BingLayer.hpp */,
+				A7954AA315EFE96400F34E1A /* BingLayer.cpp */,
+				A728D4241601EB3600F0A4B0 /* OSMLayer.hpp */,
+				A728D4261601EC6900F0A4B0 /* OSMLayer.cpp */,
 			);
 			name = Layers;
 			path = Commons/Layers;
@@ -811,7 +835,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				CFE029541601367100D1E75B /* IImageDownloadListener.hpp in Headers */,
-				CF9D832415FF7A1C0069B555 /* GLImage.hpp in Headers */,
 				CF9D832515FF7A1C0069B555 /* FloatBufferBuilderFromCartesian2D.hpp in Headers */,
 				CF9D832615FF7A1C0069B555 /* FloatBufferBuilderFromCartesian3D.hpp in Headers */,
 				CF9D832715FF7A1C0069B555 /* FloatBufferBuilderFromGeodetic.hpp in Headers */,
@@ -925,8 +948,11 @@
 				CF6D404715C8278C008D8D78 /* Downloader_iOS_WorkerThread.h in Headers */,
 				D892FBCC15C930CC00E69254 /* NativeGL2_iOS.hpp in Headers */,
 				D88B5E2315C15C180083A43F /* Timer_iOS.hpp in Headers */,
+				A7954AA215EFA1AB00F34E1A /* BingLayer.hpp in Headers */,
 				CFA1899B15F8D7CA0048BF46 /* FloatBuffer_iOS.hpp in Headers */,
 				CFA189A015F8D9F80048BF46 /* IntBuffer_iOS.hpp in Headers */,
+				A728D4251601EB3600F0A4B0 /* OSMLayer.hpp in Headers */,
+				A7BF53851607643400662135 /* JSONBaseObject.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1055,6 +1081,7 @@
 				CFB72A3D15E65DBC00A5BAF4 /* LevelTileCondition.cpp in Sources */,
 				CFB72A6915E6808900A5BAF4 /* IStringUtils.cpp in Sources */,
 				CFB72A6E15E682B400A5BAF4 /* StringUtils_iOS.mm in Sources */,
+				A7954AA415EFE96400F34E1A /* BingLayer.cpp in Sources */,
 				D80D521215EE2B0100ACEA16 /* IMathUtils.cpp in Sources */,
 				D80D525915EE698E00ACEA16 /* TileTessellator.cpp in Sources */,
 				CFCE679D15EFB06700B35FE0 /* IThreadUtils.cpp in Sources */,
@@ -1068,6 +1095,7 @@
 				CFA1899F15F8D9F80048BF46 /* IntBuffer_iOS.cpp in Sources */,
 				CFA189AF15F926CA0048BF46 /* IFactory.cpp in Sources */,
 				D89DA21A15FF6C32008CD5F5 /* Image_iOS.mm in Sources */,
+				A728D4271601EC6900F0A4B0 /* OSMLayer.cpp in Sources */,
 				CF0D9BB41601F46B00F28B7D /* ByteBuffer_iOS.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

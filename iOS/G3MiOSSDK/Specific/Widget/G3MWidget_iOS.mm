@@ -52,6 +52,9 @@
 #include "NativeGL2_iOS.hpp"
 #include "StringUtils_iOS.hpp"
 #include "SingleImageTileTexturizer.hpp"
+#include "WMSLayer.hpp"
+#include "BingLayer.hpp"
+#include "OSMLayer.hpp"
 
 #include "MathUtils_iOS.hpp"
 #include "ThreadUtils_iOS.hpp"
@@ -142,8 +145,12 @@
   if (layerSet != NULL) {
     if (layerSet->size() > 0) {
       TileTexturizer* texturizer = new MultiLayerTileTexturizer(layerSet);
-//      IImage *singleWorldImage = factory->createImageFromFileName("world.jpg");
-//      TileTexturizer* texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
+      //IImage *singleWorldImage = factory->createImageFromFileName("mercator.jpg");
+      //TileTexturizer* texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage, false);
+      
+      //Single Mercator image
+      //IImage *singleWorldImage = factory->createImageFromFileName("tissot.png");
+      //TileTexturizer* texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage, true);
 
       const bool showStatistics = false;
       TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
@@ -152,11 +159,34 @@
                                           showStatistics);
       composite->addRenderer(tr);
     }
+    
+    
+     /* WMSLayer *osm = new WMSLayer("osm",
+                                   URL("http://wms.latlon.org/"),
+                                   WMS_1_1_0,
+                                   Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
+                                   "image/jpeg",
+                                   "EPSG:4326",
+                                   "",
+                                   false,
+                                   NULL);
+      layerSet->addLayer(osm);*/
+    
+    
+    //BingLayer *bing = new BingLayer(URL("http://ecn.t0.tiles.virtualearth.net/tiles/"),NULL, Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0));
+    
+    BingLayer *bing = new BingLayer(URL("http://dev.virtualearth.net/REST/v1/Imagery/Metadata"),NULL, Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0), Hybrid);
+    
+    //OSMLayer *osm = new OSMLayer(URL("http://a.tile.openstreetmap.org"),NULL, Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0));
+    
+    layerSet->addLayer(bing);
   }
   
   for (int i = 0; i < renderers.size(); i++) {
     composite->addRenderer(renderers[i]);
   }
+  
+  
   
   
   TextureBuilder* textureBuilder = new CPUTextureBuilder();
