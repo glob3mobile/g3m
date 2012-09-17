@@ -219,6 +219,25 @@ public class Box extends Extent
 	_mesh.render(rc);
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean touchesBox(const Box* box) const
+  public final boolean touchesBox(Box box)
+  {
+	if (_lower.x() > box._upper.x())
+		return false;
+	if (_upper.x() < box._lower.x())
+		return false;
+	if (_lower.y() > box._upper.y())
+		return false;
+	if (_upper.y() < box._lower.y())
+		return false;
+	if (_lower.z() > box._upper.z())
+		return false;
+	if (_upper.z() < box._lower.z())
+		return false;
+	return true;
+  }
+
 
   private final Vector3D _lower ;
   private final Vector3D _upper ;

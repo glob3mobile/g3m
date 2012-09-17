@@ -110,10 +110,10 @@ public class Camera
 	  final MutableMatrix44D inversed = getModelMatrix().inversed();
   
 	  final FrustumData data = calculateFrustumData();
-	  final Vector3D p0 = new Vector3D(new Vector3D(data._left/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
-	  final Vector3D p1 = new Vector3D(new Vector3D(data._left/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
-	  final Vector3D p2 = new Vector3D(new Vector3D(data._right/2, data._bottom/2, -data._znear-10).transformedBy(inversed, 1));
-	  final Vector3D p3 = new Vector3D(new Vector3D(data._right/2, data._top/2, -data._znear-10).transformedBy(inversed, 1));
+	  final Vector3D p0 = new Vector3D(new Vector3D(data._left/4, data._top/4, -data._znear-10).transformedBy(inversed, 1));
+	  final Vector3D p1 = new Vector3D(new Vector3D(data._left/4, data._bottom/4, -data._znear-10).transformedBy(inversed, 1));
+	  final Vector3D p2 = new Vector3D(new Vector3D(data._right/4, data._bottom/4, -data._znear-10).transformedBy(inversed, 1));
+	  final Vector3D p3 = new Vector3D(new Vector3D(data._right/4, data._top/4, -data._znear-10).transformedBy(inversed, 1));
   
 	  float[] v = { (float) p0.x(), (float) p0.y(), (float) p0.z(), (float) p1.x(), (float) p1.y(), (float) p1.z(), (float) p2.x(), (float) p2.y(), (float) p2.z(), (float) p3.x(), (float) p3.y(), (float) p3.z()};
 	  int[] i = {0, 1, 2, 3};
@@ -296,7 +296,7 @@ public class Camera
 	if (_dirtyFlags._frustumMC)
 	{
 	  _dirtyFlags._frustumMC = false;
-	  _frustumInModelCoordinates = getFrustum().transformedBy_P(getModelMatrix().transposed());
+	  _frustumInModelCoordinates = getFrustum().transformedBy_P(getModelMatrix());
 	}
 	return _frustumInModelCoordinates;
   }
@@ -555,7 +555,7 @@ public class Camera
 	{
 	  _dirtyFlags._halfFrustum = false;
 	  FrustumData data = getFrustumData();
-	  _halfFrustum = new Frustum(data._left/2, data._right/2, data._bottom/2, data._top/2, data._znear, data._zfar);
+	  _halfFrustum = new Frustum(data._left/4, data._right/4, data._bottom/4, data._top/4, data._znear, data._zfar);
 	}
 	return _halfFrustum;
   }
@@ -567,7 +567,7 @@ public class Camera
 	if (_dirtyFlags._halfFrustumMC)
 	{
 	  _dirtyFlags._halfFrustumMC = false;
-	  _halfFrustumInModelCoordinates = getHalfFrustum().transformedBy_P(getModelMatrix().transposed());
+	  _halfFrustumInModelCoordinates = getHalfFrustum().transformedBy_P(getModelMatrix());
 	}
 	return _halfFrustumInModelCoordinates;
   }
