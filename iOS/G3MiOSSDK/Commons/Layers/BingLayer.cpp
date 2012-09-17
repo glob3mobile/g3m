@@ -46,7 +46,8 @@ void TokenDownloadListener::onDownload(const URL& url,
                                        const IByteBuffer* buffer){
   
 
-  //std::string string = response->getByteArrayWrapper()->getDataAsString();
+  //std::string string = buffer->getAsString();
+  //std::cout<<string<<"\n";
 }
 
 
@@ -59,8 +60,11 @@ void BingLayer::initialize(const InitializationContext* ic){
   strs << "/";
   strs << getMapTypeString();
   strs << "?key=";
-  strs << _key;
-  ic->getDownloader()->request(URL(strs.str()), 100000000L, new TokenDownloadListener(this), true);*/
+  strs << _key;*/
+
+  //downloader->re
+  //ic->getDownloader()
+  //ic->getDownloader()->request(URL(strs.str()), 100000000L, new TokenDownloadListener(this), true);
   
 }
 
