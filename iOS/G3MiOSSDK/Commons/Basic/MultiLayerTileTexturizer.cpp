@@ -261,6 +261,70 @@ public:
                          heightFactor * textureHeight);
   }
   
+  void composeAndUploadTexture() const {
+    std::vector<const IImage*>    images;
+    std::vector<const Rectangle*> rectangles;
+    std::string petitionsID = _tile->getKey().tinyDescription();
+    
+    const int textureWidth  = _parameters->_tileTextureWidth;
+    const int textureHeight = _parameters->_tileTextureHeight;
+    
+    const Sector tileSector = _tile->getSector();
+    
+    for (int i = 0; i < _petitionsCount; i++) {
+      Petition* petition = _petitions[i];
+      const IImage* image = petition->getImage();
+      
+      if (image != NULL) {
+        images.push_back(image);
+        
+        const Sector petitionSector = petition->getSector();
+        
+        Rectangle* rectangle = getImageRectangleInTexture(tileSector,
+                                                          petitionSector,
+                                                          textureWidth,
+                                                          textureHeight);
+        rectangles.push_back(rectangle);
+        
+        petitionsID += petition->getURL().getPath();
+        petitionsID += "_";
+      }
+    }
+    
+    if (images.size() > 0) {
+      //        int __TESTING_mipmapping;
+      const bool isMipmap = false;
+      
+      const IImage* image = _textureBuilder->createTextureFromImages(_gl,
+                                                                     _factory,
+                                                                     images,
+                                                                     rectangles,
+                                                                     textureWidth, textureHeight);
+      
+#ifdef C_CODE
+      GLTextureId glTextureId = _texturesHandler->getGLTextureId(image, RGBA,
+                                                                 petitionsID, isMipmap);
+#else
+      GLTextureId glTextureId = _texturesHandler->getGLTextureId(image, GLFormat.RGBA,
+                                                                 petitionsID, isMipmap);
+#endif
+      
+      if (glTextureId.isValid()) {
+        if (!_mesh->setGLTextureIdForLevel(0, glTextureId)) {
+          _texturesHandler->releaseGLTextureId(glTextureId);
+        }
+      }
+      
+    }
+    
+#ifdef C_CODE
+    for (int i = 0; i < rectangles.size(); i++) {
+      delete rectangles[i];
+    }
+#endif
+    
+  }
+  
   void finalize() {
     if (_finalized) {
       return;
@@ -269,66 +333,7 @@ public:
     _finalized = true;
     
     if (!_canceled && (_tile != NULL) && (_mesh != NULL)) {
-      std::vector<const IImage*>    images;
-      std::vector<const Rectangle*> rectangles;
-      std::string petitionsID = _tile->getKey().tinyDescription();
-      
-      const int textureWidth  = _parameters->_tileTextureWidth;
-      const int textureHeight = _parameters->_tileTextureHeight;
-      
-      const Sector tileSector = _tile->getSector();
-      
-      for (int i = 0; i < _petitionsCount; i++) {
-        Petition* petition       = _petitions[i];
-        const IImage* image = petition->getImage();
-        
-        if (image != NULL) {
-          images.push_back(image);
-          
-          const Sector petitionSector = petition->getSector();
-          
-          Rectangle* rectangle = getImageRectangleInTexture(tileSector,
-                                                            petitionSector,
-                                                            textureWidth,
-                                                            textureHeight);
-          rectangles.push_back(rectangle);
-          
-          petitionsID += petition->getURL().getPath();
-          petitionsID += "_";
-        }
-      }
-      
-      if (images.size() > 0) {
-        //        int __TESTING_mipmapping;
-        const bool isMipmap = false;
-        
-        const IImage* image = _textureBuilder->createTextureFromImages(_gl,
-                                                                       _factory,
-                                                                       images,
-                                                                       rectangles,
-                                                                       textureWidth, textureHeight);
-        
-#ifdef C_CODE
-        GLTextureId glTextureId = _texturesHandler->getGLTextureId(image, RGBA,
-                                                                   petitionsID, isMipmap);
-#else
-        GLTextureId glTextureId = _texturesHandler->getGLTextureId(image, GLFormat.RGBA,
-                                                                   petitionsID, isMipmap);
-#endif
-        
-        if (glTextureId.isValid()) {
-          if (!_mesh->setGLTextureIdForLevel(0, glTextureId)) {
-            _texturesHandler->releaseGLTextureId(glTextureId);
-          }
-        }
-        
-      }
-      
-#ifdef C_CODE
-      for (int i = 0; i < rectangles.size(); i++) {
-        delete rectangles[i];
-      }
-#endif
+      composeAndUploadTexture();
     }
     
     _tile->setTextureSolved(true);
@@ -378,8 +383,8 @@ public:
   void checkIsPending(int position) const {
     if (_status[position] != STATUS_PENDING) {
       ILogger::instance()->logError("Logic error: Expected STATUS_PENDING at position #%d but found status: %d\n",
-             position,
-             _status[position]);
+                                    position,
+                                    _status[position]);
     }
   }
   
