@@ -19,7 +19,6 @@
 IFloatBuffer* SingleImageTileTexturizer::createTextureCoordinates(const RenderContext* rc,
                                                                   Mesh* mesh) const {
   FloatBufferBuilderFromCartesian2D texCoors;
-  IMathUtils *math = IMathUtils::instance();
   
   for (int i = 0; i < mesh->getVertexCount(); i++) {
     const Vector3D pos = mesh->getVertex(i);
@@ -29,7 +28,7 @@ IFloatBuffer* SingleImageTileTexturizer::createTextureCoordinates(const RenderCo
     if (_isMercatorImage){
       
       const double latRad = g.latitude().radians();
-      const double sec = 1.0/(math->cos(g.latitude().radians()));
+      const double sec = 1.0/(GMath.cos(g.latitude().radians()));
       
       //double tLatRad = 2*atan(exp(latRad)) - M_PI/2.0;
       
@@ -39,12 +38,12 @@ IFloatBuffer* SingleImageTileTexturizer::createTextureCoordinates(const RenderCo
       //double tLatRad = asinh(tan(latRad));
       
       
-      double tLatRad = math->log(math->tan(math->pi()/4.0)+latRad/2.0);
+      double tLatRad = GMath.log(GMath.tan(GMath.pi()/4.0)+latRad/2.0);
       
       tLatRad = tLatRad*sec;
       //std::cout<<" Lat: "<<g.latitude().degrees()<<"\n";
       //std::cout<<"tLatRad: "<<tLatRad<<"\n";
-      double limit = 85.5 * math->pi()/180.0;
+      double limit = 85.5 * GMath.pi()/180.0;
       //std::cout<<"limit: "<<limit<<"\n";
       if (tLatRad > limit) {
         tLatRad = limit;
@@ -61,10 +60,10 @@ IFloatBuffer* SingleImageTileTexturizer::createTextureCoordinates(const RenderCo
       
     
       
-      const double s = math->atan2(n.y(), n.x()) / (math->pi() * 2) + 0.5;
+      const double s = GMath.atan2(n.y(), n.x()) / (GMath.pi() * 2) + 0.5;
       
       //double t = (tLatRad*sec + M_PI/2.0)/M_PI ;
-      double t = GMath.asin(n.z()) / math->pi() + 0.5 ;
+      double t = GMath.asin(n.z()) / GMath.pi() + 0.5 ;
       //texCoors.push_back(MutableVector2D(s, 1-t));
       texCoors.add((float)s, (float)(1.0-t));
       
@@ -75,8 +74,8 @@ IFloatBuffer* SingleImageTileTexturizer::createTextureCoordinates(const RenderCo
       //double t = asin(n.z()) / M_PI + 0.5 ;
       //texCoors.push_back(MutableVector2D(s, 1-t));
       
-      const double s = math->atan2(n.y(), n.x()) / (GMath.pi() * 2) + 0.5;
-      const double t = math->asin(n.z()) / math->pi() + 0.5;
+      const double s = GMath.atan2(n.y(), n.x()) / (GMath.pi() * 2) + 0.5;
+      const double t = GMath.asin(n.z()) / GMath.pi() + 0.5;
       
       texCoors.add((float)s, (float)(1.0-t));
     }

@@ -42,6 +42,7 @@
 		A728D4271601EC6900F0A4B0 /* OSMLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A728D4261601EC6900F0A4B0 /* OSMLayer.cpp */; };
 		A7954AA215EFA1AB00F34E1A /* BingLayer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A7954AA115EFA1AB00F34E1A /* BingLayer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		A7954AA415EFE96400F34E1A /* BingLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A7954AA315EFE96400F34E1A /* BingLayer.cpp */; };
+		A7BF53851607643400662135 /* JSONBaseObject.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A7BF53841607643400662135 /* JSONBaseObject.hpp */; };
 		CC041F5315D98FF000D6AC5D /* BusyQuadRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC041F5215D98FF000D6AC5D /* BusyQuadRenderer.cpp */; };
 		CC14B64E157D35C100793C92 /* IImage.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC14B64C157D35C100793C92 /* IImage.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CC41E3A015B1FD5B00B5581C /* Plane.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CC41E39F15B1FD5B00B5581C /* Plane.cpp */; };
@@ -258,6 +259,7 @@
 		A728D4261601EC6900F0A4B0 /* OSMLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OSMLayer.cpp; sourceTree = "<group>"; };
 		A7954AA115EFA1AB00F34E1A /* BingLayer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BingLayer.hpp; sourceTree = "<group>"; };
 		A7954AA315EFE96400F34E1A /* BingLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BingLayer.cpp; sourceTree = "<group>"; };
+		A7BF53841607643400662135 /* JSONBaseObject.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONBaseObject.hpp; sourceTree = "<group>"; };
 		CC041F5015D98EAD00D6AC5D /* BusyQuadRenderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = BusyQuadRenderer.hpp; path = Commons/Rendererers/BusyQuadRenderer.hpp; sourceTree = "<group>"; };
 		CC041F5215D98FF000D6AC5D /* BusyQuadRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = BusyQuadRenderer.cpp; path = Commons/Rendererers/BusyQuadRenderer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CC14B64C157D35C100793C92 /* IImage.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IImage.hpp; path = Commons/Interfaces/IImage.hpp; sourceTree = "<group>"; };
@@ -508,6 +510,7 @@
 		383BD3881577EDE30012AC53 /* Commons */ = {
 			isa = PBXGroup;
 			children = (
+				A7BF53831607643400662135 /* JSON */,
 				D892FBCD15C930E600E69254 /* GL */,
 				383BD3891577EDF40012AC53 /* Basic */,
 				CC596F1B15C46CD7008FC230 /* Cameras */,
@@ -650,6 +653,15 @@
 				CF31CBF215878AF90085E8F1 /* ITimer.hpp */,
 			);
 			name = Interfaces;
+			sourceTree = "<group>";
+		};
+		A7BF53831607643400662135 /* JSON */ = {
+			isa = PBXGroup;
+			children = (
+				A7BF53841607643400662135 /* JSONBaseObject.hpp */,
+			);
+			name = JSON;
+			path = Commons/JSON;
 			sourceTree = "<group>";
 		};
 		CC14B636157D34AB00793C92 /* GL */ = {
@@ -823,7 +835,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				CFE029541601367100D1E75B /* IImageDownloadListener.hpp in Headers */,
-				CF9D832415FF7A1C0069B555 /* GLImage.hpp in Headers */,
 				CF9D832515FF7A1C0069B555 /* FloatBufferBuilderFromCartesian2D.hpp in Headers */,
 				CF9D832615FF7A1C0069B555 /* FloatBufferBuilderFromCartesian3D.hpp in Headers */,
 				CF9D832715FF7A1C0069B555 /* FloatBufferBuilderFromGeodetic.hpp in Headers */,
@@ -941,6 +952,7 @@
 				CFA1899B15F8D7CA0048BF46 /* FloatBuffer_iOS.hpp in Headers */,
 				CFA189A015F8D9F80048BF46 /* IntBuffer_iOS.hpp in Headers */,
 				A728D4251601EB3600F0A4B0 /* OSMLayer.hpp in Headers */,
+				A7BF53851607643400662135 /* JSONBaseObject.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
