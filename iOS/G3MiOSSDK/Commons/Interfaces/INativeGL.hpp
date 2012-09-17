@@ -18,27 +18,6 @@ class IImage;
 #include <vector>
 #include <string>
 
-enum GLFeature {
-  PolygonOffsetFill,
-  DepthTest,
-  Blend,
-  CullFacing
-};
-
-enum GLType {
-  Float,
-  UnsignedByte,
-  UnsignedInt,
-  Int
-};
-
-enum GLPrimitive {
-  TriangleStrip,
-  Lines,
-  LineLoop,
-  Points
-};
-
 enum GLError {
   NoError,
   InvalidEnum,
@@ -125,9 +104,9 @@ public:
                          float v2,
                          float v3) const = 0;
   
-  virtual void enable(GLFeature feature) const = 0;
+  virtual void enable(int feature) const = 0;
   
-  virtual void disable(GLFeature feature) const = 0;
+  virtual void disable(int feature) const = 0;
   
   virtual void polygonOffset(float factor,
                              float units) const = 0;
@@ -138,7 +117,7 @@ public:
                                    int stride,
                                    IFloatBuffer* buffer) const = 0;
   
-  virtual void drawElements(GLPrimitive mode,
+  virtual void drawElements(int mode,
                             int count,
                             IIntBuffer* indices) const = 0;
   
@@ -182,7 +161,7 @@ public:
   
   virtual void generateMipmap(GLTextureType target) const = 0;
   
-  virtual void drawArrays(GLPrimitive mode,
+  virtual void drawArrays(int mode,
                           int first,
                           int count) const = 0;
   
@@ -197,6 +176,23 @@ public:
   
   virtual int BufferType_ColorBuffer() const = 0;
   virtual int BufferType_DepthBuffer() const = 0;
+  
+  virtual int Feature_PolygonOffsetFill() const = 0;
+  virtual int Feature_DepthTest() const = 0;
+  virtual int Feature_Blend() const = 0;
+  virtual int Feature_CullFace() const = 0;
+  
+  virtual int Type_Float() const = 0;
+  virtual int Type_UnsignedByte() const = 0;
+  virtual int Type_UnsignedInt() const = 0;
+  virtual int Type_Int() const = 0;
+  
+  virtual int Primitive_TriangleStrip() const = 0;
+  virtual int Primitive_Lines() const = 0;
+  virtual int Primitive_LineLoop() const = 0;
+  virtual int Primitive_Points() const = 0;
+
+
   
 };
 

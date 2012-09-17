@@ -19,56 +19,6 @@
 class NativeGL2_iOS: public INativeGL
 {
   
-  inline GLenum getEnum(GLFeature f) const {
-    switch (f) {
-      case PolygonOffsetFill:
-        return GL_POLYGON_OFFSET_FILL;
-      case DepthTest:
-        return GL_DEPTH_TEST;
-      case Blend:
-        return GL_BLEND;
-      case CullFacing:
-        return GL_CULL_FACE;
-    }
-  }
- /* 
-  inline GLenum getEnum(GLCullFace f) const {
-    switch (f) {
-      case Front:
-        return GL_FRONT;
-      case FrontAndBack:
-        return GL_FRONT_AND_BACK;
-      case Back:
-        return GL_BACK;
-    }
-  }
-  */
-  inline GLenum getEnum(GLType t) const {
-    switch (t) {
-      case Float:
-        return GL_FLOAT;
-      case UnsignedByte:
-        return GL_UNSIGNED_BYTE;
-      case UnsignedInt:
-        return GL_UNSIGNED_INT;
-      case Int:
-        return GL_INT;
-    }
-  }
-  
-  inline GLenum getEnum(GLPrimitive p) const {
-    switch (p) {
-      case TriangleStrip:
-        return GL_TRIANGLE_STRIP;
-      case Lines:
-        return GL_LINES;
-      case LineLoop:
-        return GL_LINE_LOOP;
-      case Points:
-        return GL_POINTS;
-    }
-  }
-  
   inline GLError getError(GLenum e) const {
     switch (e) {
       case GL_NO_ERROR:
@@ -147,6 +97,7 @@ class NativeGL2_iOS: public INativeGL
   }
   
 public:
+  
   void useProgram(int program) const {
     glUseProgram(program);
   }
@@ -187,14 +138,12 @@ public:
     glUniform4f(location, v0, v1, v2, v3);
   }
   
-  void enable(GLFeature feature) const {
-    GLenum v = getEnum(feature);
-    glEnable(v);
+  void enable(int feature) const {
+    glEnable(feature);
   }
   
-  void disable(GLFeature feature) const {
-    GLenum v = getEnum(feature);
-    glDisable(v);
+  void disable(int feature) const {
+    glDisable(feature);
   }
   
   void polygonOffset(float factor, float units) const {
@@ -210,12 +159,12 @@ public:
     glVertexAttribPointer(index, size, GL_FLOAT, normalized, stride, pointer);
   }
   
-  void drawElements(GLPrimitive mode,
+  void drawElements(int mode,
                     int count,
                     IIntBuffer* buffer) const {
     int has_to_set_GL_UNSIGNED_INT; //???????
     int* pointer = ((IntBuffer_iOS*) buffer)->getPointer();
-    glDrawElements(getEnum(mode), count, GL_UNSIGNED_INT, pointer);
+    glDrawElements(mode, count, GL_UNSIGNED_INT, pointer);
   }
   
   void lineWidth(float width) const {
@@ -290,8 +239,8 @@ public:
     glGenerateMipmap(getEnum(target));
   }
   
-  void drawArrays(GLPrimitive mode, int first, int count) const {
-    glDrawArrays(getEnum(mode), first, count);
+  void drawArrays(int mode, int first, int count) const {
+    glDrawArrays(mode, first, count);
   }
   
   void cullFace(int c) const {
@@ -316,6 +265,42 @@ public:
   }
   int BufferType_DepthBuffer() const{
     return GL_DEPTH_BUFFER_BIT;
+  }
+  int Feature_PolygonOffsetFill() const{
+    return GL_POLYGON_OFFSET_FILL;
+  }
+  int Feature_DepthTest() const{
+    return GL_DEPTH_TEST;
+  }
+  int Feature_Blend() const{
+    return GL_BLEND;
+  }
+  int Feature_CullFace() const{
+    return GL_CULL_FACE;
+  }
+  int Type_Float() const{
+    return GL_FLOAT;
+  }
+  int Type_UnsignedByte() const{
+    return GL_UNSIGNED_BYTE;
+  }
+  int Type_UnsignedInt() const{
+    return GL_UNSIGNED_INT;
+  }
+  int Type_Int() const{
+    return GL_INT;
+  }
+  int Primitive_TriangleStrip() const{
+    return GL_TRIANGLE_STRIP;
+  }
+  virtual int Primitive_Lines() const{
+    return GL_LINES;
+  }
+  virtual int Primitive_LineLoop() const{
+    return GL_LINE_LOOP;
+  }
+  virtual int Primitive_Points() const{
+    return GL_POINTS;
   }
   
 };

@@ -160,24 +160,13 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
     flatColor = new Color( Color::fromRGBA(0.0, 1.0, 0.0, 1.0) );
   }
   
-#ifdef C_CODE
-  IndexedMesh *im = new IndexedMesh(TriangleStrip,
+  IndexedMesh *im = new IndexedMesh(GLPrimitive::triangleStrip(),
                                     true,
                                     Vector3D::zero(),
                                     ver,
                                     ind,
                                     flatColor,
                                     vertexColors);
-#endif
-#ifdef JAVA_CODE
-  IndexedMesh im = new IndexedMesh(GLPrimitive.TriangleStrip,
-                                   true,
-                                   Vector3D.zero(),
-                                   ver,
-                                   ind,
-                                   flatColor,
-                                   vertexColors);
-#endif
   
   TextureMapping* texMap = new SimpleTextureMapping(texId,
                                                     texC,

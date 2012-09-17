@@ -194,20 +194,12 @@ void GL::transformTexCoords(float scaleX,
 }
 
 void GL::enablePolygonOffset(float factor, float units) {
-#ifdef C_CODE
-  _gl->enable(PolygonOffsetFill);
-#else
-  _gl->enable(GLFeature.PolygonOffsetFill);
-#endif
+  _gl->enable(GLFeature::polygonOffsetFill());
   _gl->polygonOffset(factor, units);
 }
 
 void GL::disablePolygonOffset() {
-#ifdef C_CODE
-  _gl->disable(PolygonOffsetFill);
-#else
-  _gl->disable(GLFeature.PolygonOffsetFill);
-#endif
+  _gl->disable(GLFeature::polygonOffsetFill());
 }
 
 void GL::vertexPointer(int size, int stride, IFloatBuffer* vertices) {
@@ -220,51 +212,27 @@ void GL::vertexPointer(int size, int stride, IFloatBuffer* vertices) {
 }
 
 void GL::drawTriangleStrip(IIntBuffer* indices) {
-#ifdef C_CODE
-  _gl->drawElements(TriangleStrip,
+  _gl->drawElements(GLPrimitive::triangleStrip(),
                     indices->size(),
                     indices);
-#else
-  _gl->drawElements(GLPrimitive.TriangleStrip,
-                    indices.size(),
-                    indices);
-#endif
 }
 
 void GL::drawLines(IIntBuffer* indices) {
-#ifdef C_CODE
-  _gl->drawElements(Lines,
+  _gl->drawElements(GLPrimitive::lineLoop(),
                     indices->size(),
                     indices);
-#else
-  _gl->drawElements(GLPrimitive.Lines,
-                    indices.size(),
-                    indices);
-#endif
 }
 
 void GL::drawLineLoop(IIntBuffer* indices) {
-#ifdef C_CODE
-  _gl->drawElements(LineLoop,
+  _gl->drawElements(GLPrimitive::lineLoop(),
                     indices->size(),
                     indices);
-#else
-  _gl->drawElements(GLPrimitive.LineLoop,
-                    indices.size(),
-                    indices);
-#endif
 }
 
 void GL::drawPoints(IIntBuffer* indices) {
-#ifdef C_CODE
-  _gl->drawElements(Points,
+  _gl->drawElements(GLPrimitive::points(),
                     indices->size(),
                     indices);
-#else
-  _gl->drawElements(GLPrimitive.Points,
-                    indices.size(),
-                    indices);
-#endif
 }
 
 void GL::lineWidth(float width) {
@@ -371,11 +339,7 @@ void GL::drawBillBoard(const GLTextureId& textureId,
   vertexPointer(3, 0, vertices);
   setTextureCoordinates(2, 0, getBillboardTexCoord());
   
-#ifdef C_CODE
-  _gl->drawArrays(TriangleStrip, 0, vertices->size() / 3);
-#else
-  _gl->drawArrays(GLPrimitive.TriangleStrip, 0, vertices->size() / 3);
-#endif
+  _gl->drawArrays(GLPrimitive::triangleStrip(), 0, vertices->size() / 3);
   
   enableDepthTest();
   
@@ -475,44 +439,28 @@ void GL::disableVertexFlatColor() {
 
 void GL::enableDepthTest() {
   if (!_enableDepthTest) {
-#ifdef C_CODE
-    _gl->enable(DepthTest);
-#else
-    _gl->enable(GLFeature.DepthTest);
-#endif
+    _gl->enable(GLFeature::depthTest());
     _enableDepthTest = true;
   }
 }
 
 void GL::disableDepthTest() {
   if (_enableDepthTest) {
-#ifdef C_CODE
-    _gl->disable(DepthTest);
-#else
-    _gl->disable(GLFeature.DepthTest);
-#endif
+    _gl->disable(GLFeature::depthTest());
     _enableDepthTest = false;
   }
 }
 
 void GL::enableBlend() {
   if (!_enableBlend) {
-#ifdef C_CODE
-    _gl->enable(Blend);
-#else
-    _gl->enable(GLFeature.Blend);
-#endif
+    _gl->enable(GLFeature::blend());
     _enableBlend = true;
   }
 }
 
 void GL::disableBlend() {
   if (_enableBlend) {
-#ifdef C_CODE
-    _gl->disable(Blend);
-#else
-    _gl->disable(GLFeature.Blend);
-#endif
+    _gl->disable(GLFeature::blend());
     _enableBlend = false;
   }
   
@@ -528,11 +476,7 @@ void GL::setBlendFuncSrcAlpha() {
 
 void GL::enableCullFace(int face) {
   if (!_enableCullFace) {
-#ifdef C_CODE
-    _gl->enable(CullFacing);
-#else
-    _gl->enable(GLFeature.CullFacing);
-#endif
+    _gl->enable(GLFeature::cullFace());
     _enableCullFace = true;
   }
   
@@ -544,11 +488,7 @@ void GL::enableCullFace(int face) {
 
 void GL::disableCullFace() {
   if (_enableCullFace) {
-#ifdef C_CODE
-    _gl->disable(CullFacing);
-#else
-    _gl->disable(GLFeature.CullFacing);
-#endif
+    _gl->disable(GLFeature::cullFace());
     _enableCullFace = false;
   }
 }

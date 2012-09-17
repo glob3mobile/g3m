@@ -121,6 +121,13 @@ public:
   _flatColorIntensity(0),
   _billboardTexCoord(NULL)
   {
+    //Init Constants
+    GLCullFace::init(gl);
+    GLBufferType::init(gl);
+    GLFeature::init(gl);
+    GLType::init(gl);
+    GLPrimitive::init(gl);
+    
   }
   
   void enableVerticesPosition();

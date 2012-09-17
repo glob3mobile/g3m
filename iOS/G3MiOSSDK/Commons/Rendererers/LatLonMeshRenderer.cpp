@@ -40,22 +40,12 @@ void LatLonMeshRenderer::initialize(const InitializationContext* ic)
 
   Color *flatColor = new Color(Color::fromRGBA((float)1.0, (float)1.0, (float)0.0, (float)1.0));
   
-#ifdef C_CODE
-  _mesh = new IndexedMesh(TriangleStrip,
+  _mesh = new IndexedMesh(GLPrimitive::triangleStrip(),
                           true,
                           vertices.getCenter(),
                           vertices.create(),
                           index.create(),
                           flatColor);
-#endif
-#ifdef JAVA_CODE
-  _mesh = new IndexedMesh(GLPrimitive.TriangleStrip,
-                      true,
-                      vertices.getCenter(),
-                      vertices.create(),
-                      index.create(),
-                      flatColor);
-#endif
 
 }  
 

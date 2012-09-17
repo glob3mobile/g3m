@@ -17,12 +17,7 @@
 
 class IndexedMesh : public Mesh {
 private:
-#ifdef C_CODE
-  const GLPrimitive _primitive;
-#endif
-#ifdef JAVA_CODE
-  private final GLPrimitive _primitive;
-#endif
+  const int _primitive;
   const bool        _owner;
   Vector3D          _center;
   const MutableMatrix44D* _translationMatrix;
@@ -38,7 +33,7 @@ private:
   
   
 public:
-  IndexedMesh(const GLPrimitive primitive,
+  IndexedMesh(const int primitive,
               bool owner,
               const Vector3D& center,
               IFloatBuffer* vertices,

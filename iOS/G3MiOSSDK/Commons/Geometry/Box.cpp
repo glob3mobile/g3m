@@ -12,6 +12,8 @@
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "IntBufferBuilder.hpp"
 
+#include "GLConstants.hpp"
+
 
 const std::vector<Vector3D> Box::getCorners() const
 {
@@ -186,21 +188,12 @@ void Box::createMesh()
   Color *flatColor = new Color(Color::fromRGBA((float)1.0, (float)1.0, (float)0.0, (float)1.0));
     
   // create mesh
-#ifdef C_CODE
-  _mesh = new IndexedMesh(Lines,
+  _mesh = new IndexedMesh(GLPrimitive::triangleStrip(),
                           true,
                           vertices.getCenter(),
                           vertices.create(),
                           indices.create(),
                           flatColor);
-#else
-  _mesh = new IndexedMesh(GLPrimitive.TriangleStrip,
-                          true,
-                          vertices.getCenter(),
-                          vertices.create(),
-                          indices.create(),
-                          flatColor);
-#endif
 }
 
 

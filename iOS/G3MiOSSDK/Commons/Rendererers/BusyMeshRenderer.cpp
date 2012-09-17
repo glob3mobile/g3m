@@ -21,6 +21,8 @@
 #include "FloatBufferBuilderFromColor.hpp"
 #include "IntBufferBuilder.hpp"
 
+#include "GLConstants.hpp"
+
 void BusyMeshRenderer::initialize(const InitializationContext* ic)
 {
   unsigned int numStrides = 60;
@@ -62,24 +64,13 @@ void BusyMeshRenderer::initialize(const InitializationContext* ic)
   indices.add(1);
   
   // create mesh
-#ifdef C_CODE
-  _mesh = new IndexedMesh(TriangleStrip,
+  _mesh = new IndexedMesh(GLPrimitive::triangleStrip(),
                           true,
                           vertices.getCenter(),
                           vertices.create(),
                           indices.create(),
                           NULL,
                           colors.create());
-#endif
-#ifdef JAVA_CODE
-  _mesh = new IndexedMesh(GLPrimitive.TriangleStrip,
-                      true,
-                      vertices.getCenter(),
-                      vertices.create(),
-                      indices.create(),
-                      null,
-                      colors.create());
-#endif
 }
 
 void BusyMeshRenderer::start() {

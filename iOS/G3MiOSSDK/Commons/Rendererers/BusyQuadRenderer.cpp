@@ -23,6 +23,8 @@
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "IntBufferBuilder.hpp"
 
+#include "GLConstants.hpp"
+
 void BusyQuadRenderer::start() {
   //int _TODO_start_effects;
 }
@@ -78,19 +80,11 @@ bool BusyQuadRenderer::initMesh(const RenderContext* rc) {
   texCoords.add(1, 0);
   texCoords.add(1, 1);
   
-#ifdef C_CODE
-  IndexedMesh *im = new IndexedMesh(TriangleStrip,
+  IndexedMesh *im = new IndexedMesh(GLPrimitive::triangleStrip(),
                                     true,
                                     Vector3D::zero(),
                                     vertices.create(),
                                     indices.create());
-#else
-  IndexedMesh *im = new IndexedMesh(GLPrimitive.TriangleStrip,
-                                    true,
-                                    Vector3D::zero(),
-                                    vertices.create(),
-                                    indices.create());
-#endif
   
   TextureMapping* texMap = new SimpleTextureMapping(texId,
                                                     texCoords.create(),

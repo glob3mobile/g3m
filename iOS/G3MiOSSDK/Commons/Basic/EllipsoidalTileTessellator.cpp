@@ -22,6 +22,8 @@
 #include "FloatBufferBuilderFromGeodetic.hpp"
 #include "SimpleFloatBufferBuilder.hpp"
 
+#include "GLConstants.hpp"
+
 Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
                                              const Tile* tile) const {
   
@@ -117,22 +119,12 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
   
   const Color *color = new Color(Color::fromRGBA((float) 0.1, (float) 0.1, (float) 0.1, (float) 1.0));
   
-#ifdef C_CODE
-  return new IndexedMesh(TriangleStrip,
+  return new IndexedMesh(GLPrimitive::triangleStrip(),
                          true,
                          vertices.getCenter(),
                          vertices.create(),
                          indices.create(),
                          color);
-#endif
-#ifdef JAVA_CODE
-  return new IndexedMesh(GLPrimitive.TriangleStrip,
-                         true,
-                         vertices.getCenter(),
-                         vertices.create(),
-                         indices.create(),
-                         color);
-#endif
 }
 
 
@@ -254,20 +246,10 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
   const Color *color = new Color(Color::fromRGBA((float) 1.0, (float) 0, (float) 0, (float) 1.0));
   const Vector3D center = planet->toCartesian(sector.getCenter());
   
-#ifdef C_CODE
-  return new IndexedMesh(LineLoop,
+  return new IndexedMesh(GLPrimitive::lineLoop(),
                          true,
                          center,
                          vertices.create(),
                          indices.create(),
                          color);
-#endif
-#ifdef JAVA_CODE
-  return new IndexedMesh(GLPrimitive.LineLoop,
-                         true,
-                         center,
-                         vertices.create(),
-                         indices.create(),
-                         color);
-#endif
 }
