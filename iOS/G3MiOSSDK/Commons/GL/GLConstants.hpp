@@ -28,11 +28,21 @@ public:
   }
 };
 
-/*
-enum GLBufferType {
-  ColorBuffer,
-  DepthBuffer
+class GLBufferType {
+  static int _colorBuffer;
+  static int _depthBuffer;
+  
+public:
+  static int colorBuffer(){ return _colorBuffer;}
+  static int depthBuffer(){ return _depthBuffer;}
+  
+  static void init(const INativeGL* ngl){
+    _colorBuffer = ngl->BufferType_ColorBuffer();
+    _depthBuffer = ngl->BufferType_DepthBuffer();
+  }
 };
+
+/*
 
 enum GLFeature {
   PolygonOffsetFill,

@@ -18,17 +18,6 @@ class IImage;
 #include <vector>
 #include <string>
 
-//enum GLCullFace {
-//  Front,
-//  Back,
-//  FrontAndBack
-//};
-
-enum GLBufferType {
-  ColorBuffer,
-  DepthBuffer
-};
-
 enum GLFeature {
   PolygonOffsetFill,
   DepthTest,
@@ -128,8 +117,7 @@ public:
                           float blue,
                           float alpha) const = 0;
   
-  virtual void clear(int nBuffer,
-                     GLBufferType buffers[]) const = 0;
+  virtual void clear(int buffers) const = 0;
   
   virtual void uniform4f(int location,
                          float v0,
@@ -206,6 +194,9 @@ public:
   virtual int CullFace_Front() const = 0;
   virtual int CullFace_Back() const = 0;
   virtual int CullFace_FrontAndBack() const = 0;
+  
+  virtual int BufferType_ColorBuffer() const = 0;
+  virtual int BufferType_DepthBuffer() const = 0;
   
 };
 

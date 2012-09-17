@@ -18,14 +18,6 @@
 
 class NativeGL2_iOS: public INativeGL
 {
-  inline GLbitfield getBitField(GLBufferType b) const {
-    switch (b) {
-      case ColorBuffer:
-        return GL_COLOR_BUFFER_BIT;
-      case DepthBuffer:
-        return GL_DEPTH_BUFFER_BIT;
-    }
-  }
   
   inline GLenum getEnum(GLFeature f) const {
     switch (f) {
@@ -187,12 +179,8 @@ public:
     glClearColor(red, green, blue, alpha);
   }
   
-  void clear(int nBuffer, GLBufferType buffers[]) const {
-    GLbitfield b = 0x000000;
-    for (int i = 0; i < nBuffer; i++) {
-      b |= getBitField(buffers[i]);
-    }
-    glClear(b);
+  void clear(int buffers) const {
+    glClear(buffers);
   }
   
   void uniform4f(int location, float v0, float v1, float v2, float v3) const {
@@ -322,6 +310,12 @@ public:
   }
   int CullFace_FrontAndBack() const{
     return GL_FRONT_AND_BACK;
+  }
+  int BufferType_ColorBuffer() const{
+    return GL_COLOR_BUFFER_BIT;
+  }
+  int BufferType_DepthBuffer() const{
+    return GL_DEPTH_BUFFER_BIT;
   }
   
 };

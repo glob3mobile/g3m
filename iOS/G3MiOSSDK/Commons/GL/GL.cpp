@@ -153,12 +153,7 @@ void GL::pushMatrix() {
 
 void GL::clearScreen(float r, float g, float b, float a) {
   _gl->clearColor(r, g, b, a);
-#ifdef C_CODE
-  GLBufferType buffers[] = { ColorBuffer, DepthBuffer };
-#else
-  GLBufferType buffers[] = { GLBufferType.ColorBuffer, GLBufferType.DepthBuffer };
-#endif
-  _gl->clear(2, buffers);
+  _gl->clear(GLBufferType::colorBuffer() | GLBufferType::depthBuffer());
 }
 
 void GL::color(float r, float g, float b, float a) {
