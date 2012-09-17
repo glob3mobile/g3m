@@ -52,7 +52,7 @@ IFloatBuffer* SingleImageTileTexturizer::createTextureCoordinates(const RenderCo
         tLatRad = -limit;
       }
       
-      Geodetic2D mercg(Angle::fromRadians(tLatRad), g.longitude());
+      const Geodetic2D mercg(Angle::fromRadians(tLatRad), g.longitude());
       //const Vector3D n = rc->getPlanet()->geodeticSurfaceNormal(mercg);
       const Vector3D m = rc->getPlanet()->toCartesian(mercg);
       const Vector3D n = rc->getPlanet()->centricSurfaceNormal(m);
