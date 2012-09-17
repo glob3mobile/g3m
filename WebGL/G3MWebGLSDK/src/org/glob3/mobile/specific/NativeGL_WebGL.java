@@ -3,7 +3,6 @@
 package org.glob3.mobile.specific;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.glob3.mobile.generated.GLAlignment;
 import org.glob3.mobile.generated.GLBlendFactor;
@@ -22,10 +21,6 @@ import org.glob3.mobile.generated.IFloatBuffer;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IIntBuffer;
 import org.glob3.mobile.generated.INativeGL;
-import org.glob3.mobile.generated.MutableMatrix44D;
-
-import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.user.client.DOM;
 
 
 public class NativeGL_WebGL
@@ -33,110 +28,105 @@ public class NativeGL_WebGL
             INativeGL {
 
    // stack of ModelView matrices
-   MutableMatrix44D                     _modelView = new MutableMatrix44D();
-   int                                  _numIndex  = 0;
-   int                                  _index[];
-
-   public static List<JavaScriptObject> _programList;
-
-
-   public NativeGL_WebGL() {
-      webGLStart();
-   }
+   //   MutableMatrix44D                     _modelView = new MutableMatrix44D();
+   //   int                                  _numIndex  = 0;
+   //   int                                  _index[];
+   //
+   //   public static List<JavaScriptObject> _programList;
 
 
-   // WebGL loading function
-   private void webGLStart() {
-      final JavaScriptObject canvas = DOM.getElementById(G3MWidget_WebGL.canvasId);
-      WebGL.jsInitGL(canvas);
-      WebGL.jsLoadWebGlUtils();
-      WebGL.jsLoadGlMatrix();
-      WebGL.loadGlobalVars();
-      CreateProgram();
-      WebGL.jsEnable3D();
-      WebGL.jsUseProgram(); //USING SHADING PROGRAM
-      WebGL.jsIdentity();
-   }
+   //   public NativeGL_WebGL() {
+   //      webGLStart();
+   //   }
 
 
-   // WebGL program creation function
-   private int CreateProgram() {
-      final JavaScriptObject newWebGLProgram = WebGL.jsCreateNewProgram("shader-fs", "shader-vs");
-      if (newWebGLProgram == null) {
-         return 0;
-      }
+   //   // WebGL loading function
+   //   private void webGLStart() {
+   //      final JavaScriptObject canvas = DOM.getElementById(G3MWidget_WebGL.canvasId);
+   //      WebGL.jsInitGL(canvas);
+   //      WebGL.jsLoadWebGlUtils();
+   //      WebGL.jsLoadGlMatrix();
+   //      WebGL.loadGlobalVars();
+   //      CreateProgram();
+   //      WebGL.jsEnable3D();
+   //      WebGL.jsUseProgram(); //USING SHADING PROGRAM
+   //      WebGL.jsIdentity();
+   //   }
 
-      return 1;
-   }
 
-
-   @Override
-   public int getAttribLocation(final int program,
-                                final String name) {
-      // TODO this method must be implemented
-      return 0;
-   }
+   //   // WebGL program creation function
+   //   private int CreateProgram() {
+   //      final JavaScriptObject newWebGLProgram = WebGL.jsCreateNewProgram("shader-fs", "shader-vs");
+   //      if (newWebGLProgram == null) {
+   //         return 0;
+   //      }
+   //
+   //      return 1;
+   //   }
 
 
    @Override
-   public int getUniformLocation(final int program,
-                                 final String name) {
-      // TODO this method must be implemented
-      return 0;
-   }
+   public native int getAttribLocation(final int program,
+                                       final String name)/*-{
+		return $wnd.gl.getAttribLocation(program, name);
+   }-*/;
 
 
    @Override
-   public void uniform2f(final int loc,
-                         final float x,
-                         final float y) {
-      // TODO this method must be implemented
-
-   }
+   public native int getUniformLocation(final int program,
+                                        final String name) /*-{
+		return $wnd.gl.getUniformLocation(program, name);
+   }-*/;
 
 
    @Override
-   public void uniform1f(final int loc,
-                         final float x) {
-      // TODO this method must be implemented
-
-   }
-
-
-   @Override
-   public void uniform1i(final int loc,
-                         final int v) {
-      // TODO this method must be implemented
-
-   }
+   public native void uniform2f(final int loc,
+                                final float x,
+                                final float y) /*-{
+		$wnd.gl.uniform2f(loc, x, y);
+   }-*/;
 
 
    @Override
-   public void uniformMatrix4fv(final int location,
-                                final int count,
-                                final boolean transpose,
-                                final float[] value) {
-      // TODO this method must be implemented
-
-   }
+   public native void uniform1f(final int loc,
+                                final float x)/*-{
+		$wnd.gl.uniform1f(loc, x);
+   }-*/;
 
 
    @Override
-   public void clearColor(final float red,
-                          final float green,
-                          final float blue,
-                          final float alpha) {
-      // TODO this method must be implemented
+   public native void uniform1i(final int loc,
+                                final int v) /*-{
+		$wnd.gl.uniform1i(loc, v);
+   }-*/;
 
-   }
+
+   int TODO_ignoring_count;
 
 
    @Override
-   public void clear(final int nBuffer,
-                     final GLBufferType[] buffers) {
-      // TODO this method must be implemented
+   public native void uniformMatrix4fv(final int location,
+                                       final int count,
+                                       final boolean transpose,
+                                       final float[] value) /*-{
+		$wnd.gl.uniformMatrix4fv(location, transpose, matrix);
+   }-*/;
 
-   }
+
+   @Override
+   public native void clearColor(final float red,
+                                 final float green,
+                                 final float blue,
+                                 final float alpha)/*-{
+		$wnd.gl.clearColor(red, green, blue, alpha);
+   }-*/;
+
+
+   @Override
+   public native void clear(final int nBuffer,
+                            final GLBufferType[] buffers) /*-{
+		$wnd.gl.clear($wnd.gl.COLOR_BUFFER_BIT | $wnd.gl.DEPTH_BUFFER_BIT);
+   }-*/;
 
 
    @Override
