@@ -20,21 +20,21 @@ public class Frustum
 
   private Extent _extent;
 
-/*  Frustum(const Plane& leftPlane,
-		  const Plane& rightPlane,
-		  const Plane& bottomPlane,
-		  const Plane& topPlane,
-		  const Plane& nearPlane,
-		  const Plane& farPlane) :
-  _leftPlane(leftPlane),
-  _rightPlane(rightPlane),
-  _bottomPlane(bottomPlane),
-  _topPlane(topPlane),
-  _nearPlane(nearPlane),
-  _farPlane(farPlane)
-  {
-    
-  }*/
+  /*  Frustum(const Plane& leftPlane,
+   const Plane& rightPlane,
+   const Plane& bottomPlane,
+   const Plane& topPlane,
+   const Plane& nearPlane,
+   const Plane& farPlane) :
+   _leftPlane(leftPlane),
+   _rightPlane(rightPlane),
+   _bottomPlane(bottomPlane),
+   _topPlane(topPlane),
+   _nearPlane(nearPlane),
+   _farPlane(farPlane)
+   {
+   
+   }*/
 
   private Frustum(Frustum that, MutableMatrix44D matrix, MutableMatrix44D inverse)
   {
@@ -173,16 +173,25 @@ public class Frustum
   }
 
 
-  /*Frustum(const Frustum& that) :
-  _leftPlane(that._leftPlane),
-  _rightPlane(that._rightPlane),
-  _bottomPlane(that._bottomPlane),
-  _topPlane(that._topPlane),
-  _nearPlane(that._nearPlane),
-  _farPlane(that._farPlane)
+  public Frustum(Frustum that)
   {
-    
-  }*/
+	  _leftPlane = new Plane(that._leftPlane);
+	  _rightPlane = new Plane(that._rightPlane);
+	  _bottomPlane = new Plane(that._bottomPlane);
+	  _topPlane = new Plane(that._topPlane);
+	  _nearPlane = new Plane(that._nearPlane);
+	  _farPlane = new Plane(that._farPlane);
+	  _ltn = new Vector3D(that._ltn);
+	  _rtn = new Vector3D(that._rtn);
+	  _lbn = new Vector3D(that._lbn);
+	  _rbn = new Vector3D(that._rbn);
+	  _ltf = new Vector3D(that._ltf);
+	  _rtf = new Vector3D(that._rtf);
+	  _lbf = new Vector3D(that._lbf);
+	  _rbf = new Vector3D(that._rbf);
+	  _extent = null;
+
+  }
 
   public Frustum(double left, double right, double bottom, double top, double znear, double zfar)
   {
@@ -331,25 +340,25 @@ public class Frustum
 	return true;
   }
 
-/*  
-  Frustum transformedBy(const MutableMatrix44D& matrix) const {
-	return Frustum(_leftPlane.transformedBy(matrix),
-				   _rightPlane.transformedBy(matrix),
-				   _bottomPlane.transformedBy(matrix),
-				   _topPlane.transformedBy(matrix),
-				   _nearPlane.transformedBy(matrix),
-				   _farPlane.transformedBy(matrix));
-  }
-  
-  
-  Frustum* transformedBy_P(const MutableMatrix44D& matrix) const {
-	return new Frustum(_leftPlane.transformedBy(matrix),
-					   _rightPlane.transformedBy(matrix),
-					   _bottomPlane.transformedBy(matrix),
-					   _topPlane.transformedBy(matrix),
-					   _nearPlane.transformedBy(matrix),
-					   _farPlane.transformedBy(matrix));
-  }*/
+  /*
+   Frustum transformedBy(const MutableMatrix44D& matrix) const {
+   return Frustum(_leftPlane.transformedBy(matrix),
+   _rightPlane.transformedBy(matrix),
+   _bottomPlane.transformedBy(matrix),
+   _topPlane.transformedBy(matrix),
+   _nearPlane.transformedBy(matrix),
+   _farPlane.transformedBy(matrix));
+   }
+   
+   
+   Frustum* transformedBy_P(const MutableMatrix44D& matrix) const {
+   return new Frustum(_leftPlane.transformedBy(matrix),
+   _rightPlane.transformedBy(matrix),
+   _bottomPlane.transformedBy(matrix),
+   _topPlane.transformedBy(matrix),
+   _nearPlane.transformedBy(matrix),
+   _farPlane.transformedBy(matrix));
+   }*/
 
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
