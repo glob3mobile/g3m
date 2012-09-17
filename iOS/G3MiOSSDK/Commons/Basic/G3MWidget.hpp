@@ -35,6 +35,10 @@ class TextureBuilder;
 
 class G3MWidget;
 
+class IStringBuilder;
+class IMathUtils;
+
+
 class UserData {
 private:
   G3MWidget* _widget;
@@ -61,6 +65,8 @@ public:
                            IFactory*           factory,
                            const IStringUtils* stringUtils,
                            IThreadUtils*       threadUtils,
+                           IStringBuilder*     stringBuilder,
+                           IMathUtils*         mathUtils,
                            ILogger*            logger,
                            GL*                 gl,
                            TexturesHandler*    texturesHandler,

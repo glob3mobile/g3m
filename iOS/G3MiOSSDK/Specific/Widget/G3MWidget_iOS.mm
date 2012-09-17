@@ -123,16 +123,13 @@
   int width = (int) [self frame].size.width;
   int height = (int) [self frame].size.height;
   
-  int __TODO_move_to_G3MWidget_create1;
-  IStringBuilder::setInstance(new StringBuilder_iOS()); //Setting StringBuilder
-  
-  IFactory *factory  = new Factory_iOS();
-  ILogger *logger    = new Logger_iOS(ErrorLevel);
-  NativeGL2_iOS* nGL = new NativeGL2_iOS();
-  GL* gl  = new GL(nGL);
-  
-  int __TODO_move_to_G3MWidget_create2;
-  IMathUtils::setInstance(new MathUtils_iOS()); //Mathematics utilities
+  IStringBuilder* stringBuilder = new StringBuilder_iOS();
+  IMathUtils*     mathUtils = new MathUtils_iOS();
+  IFactory*       factory  = new Factory_iOS();
+  ILogger*        logger    = new Logger_iOS(ErrorLevel);
+  NativeGL2_iOS*  nGL = new NativeGL2_iOS();
+
+  GL* gl = new GL(nGL);
   
   IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
   IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
@@ -203,6 +200,8 @@
                                 factory,
                                 stringUtils,
                                 threadUtils,
+                                stringBuilder,
+                                mathUtils,
                                 logger,
                                 gl,
                                 texturesHandler,
