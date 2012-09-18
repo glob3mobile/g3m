@@ -124,8 +124,6 @@ public class G3MWidget_Android
    }
 
 
-   // The initialization of _widget occurs when the android widget is resized
-   // to the screen size
    @Override
    protected void onSizeChanged(final int w,
                                 final int h,
@@ -134,7 +132,6 @@ public class G3MWidget_Android
       super.onSizeChanged(w, h, oldw, oldh);
 
       if (_g3mWidget == null) {
-         // SETTING RENDERER
          _es2renderer = new ES2Renderer(this.getContext(), this);
          setRenderer(_es2renderer);
       }
@@ -148,18 +145,17 @@ public class G3MWidget_Android
       _gestureDetector.onTouchEvent(event);
 
       final TouchEvent te = _motionEventProcessor.processEvent(event);
-
-      if (te != null) {
-         // SEND MESSAGE TO RENDER THREAD
-         queueEvent(new Runnable() {
-            @Override
-            public void run() {
-               _g3mWidget.onTouchEvent(te);
-            }
-         });
-         return true;
+      if (te == null) {
+         return false;
       }
-      return false;
+
+      queueEvent(new Runnable() {
+         @Override
+         public void run() {
+            _g3mWidget.onTouchEvent(te);
+         }
+      });
+      return true;
    }
 
 
