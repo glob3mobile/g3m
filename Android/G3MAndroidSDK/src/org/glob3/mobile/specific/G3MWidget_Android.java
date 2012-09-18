@@ -165,7 +165,6 @@ public class G3MWidget_Android
 
    @Override
    public boolean onDown(final MotionEvent arg0) {
-      // TODO this method must be implemented
       return false;
    }
 
@@ -175,7 +174,6 @@ public class G3MWidget_Android
                           final MotionEvent e2,
                           final float velocityX,
                           final float velocityY) {
-      // TODO this method must be implemented
       return false;
    }
 
@@ -201,27 +199,25 @@ public class G3MWidget_Android
                            final MotionEvent e2,
                            final float distanceX,
                            final float distanceY) {
-      // TODO this method must be implemented
       return false;
    }
 
 
    @Override
    public void onShowPress(final MotionEvent e) {
-      // TODO this method must be implemented
+
    }
 
 
    @Override
    public boolean onSingleTapUp(final MotionEvent e) {
-      // TODO this method must be implemented
       return false;
    }
 
 
    public G3MWidget getG3MWidget() {
       if (_g3mWidget == null) {
-         initWidgetPrivate(_cameraConstraints, _layerSet, _renderers, _userData);
+         initWidget();
       }
       return _g3mWidget;
    }
@@ -238,10 +234,7 @@ public class G3MWidget_Android
    }
 
 
-   private void initWidgetPrivate(final ArrayList<ICameraConstrainer> cameraConstraints,
-                                  final LayerSet layerSet,
-                                  final ArrayList<org.glob3.mobile.generated.Renderer> renderers,
-                                  final UserData userData) {
+   private void initWidget() {
       // creates default camera-renderer and camera-handlers
       final CameraRenderer cameraRenderer = new CameraRenderer();
 
@@ -261,16 +254,12 @@ public class G3MWidget_Android
       final TilesRenderParameters parameters = TilesRenderParameters.createDefault(renderDebug, useTilesSplitBudget,
                forceTopLevelTilesRenderOnStart);
 
-      initWidget(cameraRenderer, cameraConstraints, layerSet, parameters, renderers, userData);
+      initWidget(cameraRenderer, parameters);
    }
 
 
    private void initWidget(final CameraRenderer cameraRenderer,
-                           final ArrayList<ICameraConstrainer> cameraConstraints,
-                           final LayerSet layerSet,
-                           final TilesRenderParameters parameters,
-                           final ArrayList<org.glob3.mobile.generated.Renderer> renderers,
-                           final UserData userData) {
+                           final TilesRenderParameters parameters) {
 
       // create GLOB3M WIDGET
       final int width = getWidth();
@@ -291,12 +280,12 @@ public class G3MWidget_Android
 
       composite.addRenderer(cameraRenderer);
 
-      if ((layerSet != null) && (layerSet.size() > 0)) {
+      if ((_layerSet != null) && (_layerSet.size() > 0)) {
 
          TileTexturizer texturizer;// = new MultiLayerTileTexturizer(layerSet);
 
          if (true) {
-            texturizer = new MultiLayerTileTexturizer(layerSet);
+            texturizer = new MultiLayerTileTexturizer(_layerSet);
          }
          else {
             //SINGLE IMAGE
@@ -313,10 +302,9 @@ public class G3MWidget_Android
          composite.addRenderer(tr);
       }
 
-      for (int i = 0; i < renderers.size(); i++) {
-         composite.addRenderer(renderers.get(i));
+      for (final org.glob3.mobile.generated.Renderer renderer : _renderers) {
+         composite.addRenderer(renderer);
       }
-
 
       final TextureBuilder textureBuilder = new CPUTextureBuilder();
       final TexturesHandler texturesHandler = new TexturesHandler(gl, factory, false);
@@ -338,10 +326,10 @@ public class G3MWidget_Android
       final IMathUtils math = new MathUtils_Android();
 
       _g3mWidget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, stringBuilder, math, logger, gl,
-               texturesHandler, textureBuilder, downloader, planet, cameraConstraints, composite, busyRenderer, scheduler, width,
-               height, Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false);
+               texturesHandler, textureBuilder, downloader, planet, _cameraConstraints, composite, busyRenderer, scheduler,
+               width, height, Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false);
 
-      _g3mWidget.setUserData(userData);
+      _g3mWidget.setUserData(_userData);
    }
 
 
