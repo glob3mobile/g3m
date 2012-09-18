@@ -11,7 +11,6 @@
 #include "IndexedMesh.hpp"
 #include "Box.hpp"
 #include "GL.hpp"
-#include "INativeGL.hpp"
 #include "IFloatBuffer.hpp"
 #include "IIntBuffer.hpp"
 
@@ -31,7 +30,7 @@ IndexedMesh::~IndexedMesh()
 #endif
 }
 
-IndexedMesh::IndexedMesh(const GLPrimitive primitive,
+IndexedMesh::IndexedMesh(const int primitive,
                          bool owner,
                          const Vector3D& center,
                          IFloatBuffer* vertices,
@@ -79,22 +78,16 @@ void IndexedMesh::render(const RenderContext* rc) const {
     gl->multMatrixf(*_translationMatrix);
   }
   
-  switch (_primitive) {
-    case TriangleStrip:
-      gl->drawTriangleStrip(_indices);
-      break;
-    case Lines:
-      gl->drawLines(_indices);
-      break;
-    case LineLoop:
-      gl->drawLineLoop(_indices);
-      break;
-    case Points:
-      gl->drawPoints(_indices);
-      break;
-    default:
-      break;
+  if (_primitive == GLPrimitive::triangleStrip()){
+    gl->drawTriangleStrip(_indices);
+  } else if (_primitive == GLPrimitive::lines() ){
+    gl->drawLines(_indices);
+  }else if (_primitive == GLPrimitive::lineLoop() ){
+    gl->drawLineLoop(_indices);
+  }else if (_primitive == GLPrimitive::points() ){
+    gl->drawPoints(_indices);
   }
+  
   
   if (_translationMatrix != NULL) {
     gl->popMatrix();

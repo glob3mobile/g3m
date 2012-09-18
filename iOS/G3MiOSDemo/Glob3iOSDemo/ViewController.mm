@@ -10,6 +10,9 @@
 
 #include "LayerSet.hpp"
 #include "WMSLayer.hpp"
+#include "Factory_iOS.hpp"
+#include "SingleImageTileTexturizer.hpp"
+#include "EllipsoidalTileTessellator.hpp"
 #include "TileRenderer.hpp"
 #include "TilesRenderParameters.hpp"
 #include "MarksRenderer.hpp"
@@ -142,21 +145,6 @@
   //                               Angle::nan(),
   //                               Angle::nan());
   //  layerSet->addLayer(osm);
-  
-  //  WMSLayer *osm = new WMSLayer("osm",
-  //                               "osm",
-  //                               "http://wms.latlon.org/",
-  //                               WMS_1_1_0,
-  //                               "image/jpeg",
-  //                               Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
-  //                               "EPSG:4326",
-  //                               "",
-  //                               false,
-  //                               Angle::nan(),
-  //                               Angle::nan());
-  //  layerSet->addLayer(osm);
-  
-  
   
   std::vector<Renderer*> renderers;
   

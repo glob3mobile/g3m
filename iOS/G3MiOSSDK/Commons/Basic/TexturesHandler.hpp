@@ -161,7 +161,7 @@ public:
   ~TexturesHandler();
   
   const GLTextureId getGLTextureId(const IImage* image,
-                                   GLFormat format,
+                                   int format,
                                    const std::string& name,
                                    bool hasMipMap);
   

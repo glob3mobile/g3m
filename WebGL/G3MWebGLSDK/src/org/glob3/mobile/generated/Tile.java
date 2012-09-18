@@ -49,6 +49,7 @@ public class Tile
 	  return false;
 	}
 	return extent.touches(rc.getCurrentCamera().getFrustumInModelCoordinates());
+	//return extent->touches( rc->getCurrentCamera()->getHalfFrustuminModelCoordinates() );
   }
 
   private boolean meetsRenderCriteria(RenderContext rc, TileRenderContext trc)

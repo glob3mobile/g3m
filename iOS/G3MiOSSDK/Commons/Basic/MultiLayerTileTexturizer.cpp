@@ -299,13 +299,8 @@ public:
                                                                      textureWidth,
                                                                      textureHeight);
       
-#ifdef C_CODE
-      GLTextureId glTextureId = _texturesHandler->getGLTextureId(image, RGBA,
+      GLTextureId glTextureId = _texturesHandler->getGLTextureId(image, GLFormat::rgba(),
                                                                  petitionsID, isMipmap);
-#else
-      GLTextureId glTextureId = _texturesHandler->getGLTextureId(image, GLFormat.RGBA,
-                                                                 petitionsID, isMipmap);
-#endif
       
       if (glTextureId.isValid()) {
         if (!_mesh->setGLTextureIdForLevel(0, glTextureId)) {
@@ -532,6 +527,7 @@ MultiLayerTileTexturizer::~MultiLayerTileTexturizer() {
 void MultiLayerTileTexturizer::initialize(const InitializationContext* ic,
                                           const TilesRenderParameters* parameters) {
   _parameters = parameters;
+  _layerSet->initialize(ic);
 }
 
 class BuilderStartTask : public FrameTask {
@@ -755,7 +751,7 @@ void MultiLayerTileTexturizer::justCreatedTopTile(const RenderContext* rc,
 }
 
 bool MultiLayerTileTexturizer::isReady(const RenderContext *rc) {
-  return (_pendingTopTileRequests <= 0);
+  return (_pendingTopTileRequests <= 0) && _layerSet->isReady();
 }
 
 void MultiLayerTileTexturizer::onTerrainTouchEvent(const EventContext* ec,

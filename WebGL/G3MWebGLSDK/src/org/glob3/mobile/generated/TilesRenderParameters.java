@@ -52,6 +52,7 @@ public class TilesRenderParameters
   public static TilesRenderParameters createDefault(boolean renderDebug, boolean useTilesSplitBudget, boolean forceTopLevelTilesRenderOnStart)
   {
 	final int K = 1;
+	//const int _TODO_RESET_K_TO_1 = 0;
 	final int splitsByLatitude = 2 * K;
 	final int splitsByLongitude = 4 * K;
 	final int topLevel = 0;

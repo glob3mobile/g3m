@@ -20,6 +20,9 @@
 #include "FrameTasksExecutor.hpp"
 #include "IStringUtils.hpp"
 #include "IThreadUtils.hpp"
+#include "IStringBuilder.hpp"
+
+#include "GLConstants.hpp"
 
 G3MWidget::G3MWidget(FrameTasksExecutor*              frameTasksExecutor,
                      IFactory*                        factory,
@@ -93,6 +96,8 @@ G3MWidget* G3MWidget::create(FrameTasksExecutor* frameTasksExecutor,
                              IFactory*           factory,
                              const IStringUtils* stringUtils,
                              IThreadUtils*       threadUtils,
+                             IStringBuilder*     stringBuilder,
+                             IMathUtils*         mathUtils,
                              ILogger*            logger,
                              GL*                 gl,
                              TexturesHandler*    texturesHandler,
@@ -116,7 +121,9 @@ G3MWidget* G3MWidget::create(FrameTasksExecutor* frameTasksExecutor,
   IStringUtils::setInstance(stringUtils);
   ILogger::setInstance(logger);
   IThreadUtils::setInstance(threadUtils);
-  
+  IStringBuilder::setInstance(stringBuilder);
+  IMathUtils::setInstance(mathUtils);
+
   return new G3MWidget(frameTasksExecutor,
                        factory,
                        stringUtils,
@@ -139,12 +146,8 @@ G3MWidget* G3MWidget::create(FrameTasksExecutor* frameTasksExecutor,
 
 void G3MWidget::initializeGL() {
   _gl->enableDepthTest();
-#ifdef C_CODE
-  _gl->enableCullFace(Back);
-#endif
-#ifdef JAVA_CODE
-  _gl.enableCullFace(GLCullFace.Back);
-#endif
+  
+  _gl->enableCullFace(GLCullFace::back());
 }
 
 G3MWidget::~G3MWidget() {

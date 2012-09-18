@@ -49,3 +49,18 @@ void LayerSet::onTerrainTouchEvent(const EventContext* ec,
   }
   
 }
+
+void LayerSet::initialize(const InitializationContext* ic)const{
+  for (int i = 0; i<_layers.size(); i++){
+    _layers[i]->initialize(ic);
+  }
+}
+
+bool LayerSet::isReady()const{
+  for (int i = 0; i<_layers.size(); i++){
+    if (!(_layers[i]->isReady())) {
+      return false;
+    }
+  }
+  return true;
+}

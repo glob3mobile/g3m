@@ -12,6 +12,8 @@
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 #include "IntBufferBuilder.hpp"
 
+#include "GLConstants.hpp"
+
 
 const std::vector<Vector3D> Box::getCorners() const
 {
@@ -170,11 +172,7 @@ void Box::createMesh()
     0, 1, 1, 5, 5, 4, 4, 0
   };
   
-#ifdef C_CODE
-  FloatBufferBuilderFromCartesian3D vertices(NoCenter, Vector3D::zero());
-#else
-  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy.NoCenter, Vector3D::zero());
-#endif
+  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
   IntBufferBuilder indices;
   
   for (unsigned int n=0; n<numVertices; n++)
@@ -186,21 +184,12 @@ void Box::createMesh()
   Color *flatColor = new Color(Color::fromRGBA((float)1.0, (float)1.0, (float)0.0, (float)1.0));
     
   // create mesh
-#ifdef C_CODE
-  _mesh = new IndexedMesh(Lines,
+  _mesh = new IndexedMesh(GLPrimitive::triangleStrip(),
                           true,
                           vertices.getCenter(),
                           vertices.create(),
                           indices.create(),
                           flatColor);
-#else
-  _mesh = new IndexedMesh(GLPrimitive.TriangleStrip,
-                          true,
-                          vertices.getCenter(),
-                          vertices.create(),
-                          indices.create(),
-                          flatColor);
-#endif
 }
 
 
@@ -208,6 +197,18 @@ void Box::render(const RenderContext* rc)
 {
   if (_mesh == NULL) createMesh(); 
   _mesh->render(rc);
+}
+
+
+bool Box::touchesBox(const Box* box) const
+{
+  if (_lower.x() > box->_upper.x()) return false;
+  if (_upper.x() < box->_lower.x()) return false;
+  if (_lower.y() > box->_upper.y()) return false;
+  if (_upper.y() < box->_lower.y()) return false;
+  if (_lower.z() > box->_upper.z()) return false;
+  if (_upper.z() < box->_lower.z()) return false;
+  return true;
 }
 
 

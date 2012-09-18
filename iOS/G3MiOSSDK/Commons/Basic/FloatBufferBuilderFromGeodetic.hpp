@@ -20,7 +20,7 @@
 class FloatBufferBuilderFromGeodetic: public FloatBufferBuilder {
 private:
   
-  const CenterStrategy _centerStrategy;
+  const int _centerStrategy;
   float _cx;
   float _cy;
   float _cz;
@@ -35,21 +35,21 @@ private:
   
 public:
   
-  FloatBufferBuilderFromGeodetic(CenterStrategy cs, const Planet* planet, const Vector3D& center):
+  FloatBufferBuilderFromGeodetic(int cs, const Planet* planet, const Vector3D& center):
   _planet(planet),
   _centerStrategy(cs)
   {
     setCenter(center);
   }
   
-  FloatBufferBuilderFromGeodetic(CenterStrategy cs, const Planet* planet, const Geodetic2D& center):
+  FloatBufferBuilderFromGeodetic(int cs, const Planet* planet, const Geodetic2D& center):
   _planet(planet),
   _centerStrategy(cs)
   {
     setCenter( _planet->toCartesian(center) );
   }
   
-  FloatBufferBuilderFromGeodetic(CenterStrategy cs, const Planet* planet, const Geodetic3D& center):
+  FloatBufferBuilderFromGeodetic(int cs, const Planet* planet, const Geodetic3D& center):
   _planet(planet),
   _centerStrategy(cs)
   {
@@ -63,11 +63,11 @@ public:
     float y = (float) vector.y();
     float z = (float) vector.z();
     
-    if (_centerStrategy == FirstVertex && _values.size() == 0) {
+    if (_centerStrategy == CenterStrategy::firstVertex() && _values.size() == 0) {
       setCenter(vector);
     }
     
-    if (_centerStrategy != NoCenter) {
+    if (_centerStrategy != CenterStrategy::noCenter()) {
       x -= _cx;
       y -= _cy;
       z -= _cz;
@@ -85,11 +85,11 @@ public:
     float y = (float) vector.y();
     float z = (float) vector.z();
     
-    if (_centerStrategy == FirstVertex && _values.size() == 0) {
+    if (_centerStrategy == CenterStrategy::firstVertex() && _values.size() == 0) {
       setCenter(vector);
     }
     
-    if (_centerStrategy != NoCenter) {
+    if (_centerStrategy != CenterStrategy::noCenter()) {
       x -= _cx;
       y -= _cy;
       z -= _cz;

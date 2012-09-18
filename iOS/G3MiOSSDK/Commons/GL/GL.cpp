@@ -153,12 +153,7 @@ void GL::pushMatrix() {
 
 void GL::clearScreen(float r, float g, float b, float a) {
   _gl->clearColor(r, g, b, a);
-#ifdef C_CODE
-  GLBufferType buffers[] = { ColorBuffer, DepthBuffer };
-#else
-  GLBufferType buffers[] = { GLBufferType.ColorBuffer, GLBufferType.DepthBuffer };
-#endif
-  _gl->clear(2, buffers);
+  _gl->clear(GLBufferType::colorBuffer() | GLBufferType::depthBuffer());
 }
 
 void GL::color(float r, float g, float b, float a) {
@@ -199,20 +194,12 @@ void GL::transformTexCoords(float scaleX,
 }
 
 void GL::enablePolygonOffset(float factor, float units) {
-#ifdef C_CODE
-  _gl->enable(PolygonOffsetFill);
-#else
-  _gl->enable(GLFeature.PolygonOffsetFill);
-#endif
+  _gl->enable(GLFeature::polygonOffsetFill());
   _gl->polygonOffset(factor, units);
 }
 
 void GL::disablePolygonOffset() {
-#ifdef C_CODE
-  _gl->disable(PolygonOffsetFill);
-#else
-  _gl->disable(GLFeature.PolygonOffsetFill);
-#endif
+  _gl->disable(GLFeature::polygonOffsetFill());
 }
 
 void GL::vertexPointer(int size, int stride, IFloatBuffer* vertices) {
@@ -225,51 +212,27 @@ void GL::vertexPointer(int size, int stride, IFloatBuffer* vertices) {
 }
 
 void GL::drawTriangleStrip(IIntBuffer* indices) {
-#ifdef C_CODE
-  _gl->drawElements(TriangleStrip,
+  _gl->drawElements(GLPrimitive::triangleStrip(),
                     indices->size(),
                     indices);
-#else
-  _gl->drawElements(GLPrimitive.TriangleStrip,
-                    indices.size(),
-                    indices);
-#endif
 }
 
 void GL::drawLines(IIntBuffer* indices) {
-#ifdef C_CODE
-  _gl->drawElements(Lines,
+  _gl->drawElements(GLPrimitive::lineLoop(),
                     indices->size(),
                     indices);
-#else
-  _gl->drawElements(GLPrimitive.Lines,
-                    indices.size(),
-                    indices);
-#endif
 }
 
 void GL::drawLineLoop(IIntBuffer* indices) {
-#ifdef C_CODE
-  _gl->drawElements(LineLoop,
+  _gl->drawElements(GLPrimitive::lineLoop(),
                     indices->size(),
                     indices);
-#else
-  _gl->drawElements(GLPrimitive.LineLoop,
-                    indices.size(),
-                    indices);
-#endif
 }
 
 void GL::drawPoints(IIntBuffer* indices) {
-#ifdef C_CODE
-  _gl->drawElements(Points,
+  _gl->drawElements(GLPrimitive::points(),
                     indices->size(),
                     indices);
-#else
-  _gl->drawElements(GLPrimitive.Points,
-                    indices.size(),
-                    indices);
-#endif
 }
 
 void GL::lineWidth(float width) {
@@ -280,43 +243,27 @@ void GL::pointSize(float size) {
   _gl->uniform1f(Uniforms.PointSize, size);
 }
 
-GLError GL::getError() {
+int GL::getError() {
   return _gl->getError();
 }
 
-const GLTextureId GL::uploadTexture(const IImage* image, GLFormat format, bool generateMipmap){
+const GLTextureId GL::uploadTexture(const IImage* image, int format, bool generateMipmap){
   const GLTextureId texId = getGLTextureId();
   if (texId.isValid()) {
-#ifdef C_CODE
-    _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);
-    _gl->pixelStorei(Unpack, 1);
+
+    _gl->blendFunc(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
+    _gl->pixelStorei(GLAlignment::unpack(), 1);
     
-    _gl->bindTexture(Texture2D, texId.getGLTextureId());
-    _gl->texParameteri(Texture2D, MinFilter, Linear);
-    _gl->texParameteri(Texture2D, MagFilter, Linear);
-    _gl->texParameteri(Texture2D, WrapS, ClampToEdge);
-    _gl->texParameteri(Texture2D, WrapT, ClampToEdge);
+    _gl->bindTexture(GLTextureType::texture2D(), texId.getGLTextureId());
+    _gl->texParameteri(GLTextureType::texture2D(), GLTextureParameter::minFilter(), GLTextureParameterValue::linear());
+    _gl->texParameteri(GLTextureType::texture2D(), GLTextureParameter::magFilter(), GLTextureParameterValue::linear());
+    _gl->texParameteri(GLTextureType::texture2D(), GLTextureParameter::wrapS(), GLTextureParameterValue::clampToEdge());
+    _gl->texParameteri(GLTextureType::texture2D(), GLTextureParameter::wrapT(), GLTextureParameterValue::clampToEdge());
     _gl->texImage2D(image, format);
     
     if (generateMipmap) {
-      _gl->generateMipmap(Texture2D);
+      _gl->generateMipmap(GLTextureType::texture2D());
     }
-#endif
-#ifdef JAVA_CODE
-    _gl.blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
-    _gl.pixelStorei(GLAlignment.Unpack, 1);
-    
-    _gl.bindTexture(GLTextureType.Texture2D, texId.getGLTextureId());
-    _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MinFilter, GLTextureParameterValue.Linear);
-    _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MagFilter, GLTextureParameterValue.Linear);
-    _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapS, GLTextureParameterValue.ClampToEdge);
-    _gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapT, GLTextureParameterValue.ClampToEdge);
-    _gl.texImage2D(image, format);
-    
-    if (generateMipmap) {
-      _gl.generateMipmap(GLTextureType.Texture2D);
-    }
-#endif
   }
   else {
     ILogger::instance()->logError("can't get a valid texture id\n");
@@ -336,11 +283,7 @@ void GL::setTextureCoordinates(int size, int stride, IFloatBuffer* texcoord) {
 }
 
 void GL::bindTexture(const GLTextureId& textureId) {
-#ifdef C_CODE
-  _gl->bindTexture(Texture2D, textureId.getGLTextureId());
-#else
-  _gl->bindTexture(GLTextureType.Texture2D, textureId.getGLTextureId());
-#endif
+  _gl->bindTexture(GLTextureType::texture2D(), textureId.getGLTextureId());
 }
 
 IFloatBuffer* GL::getBillboardTexCoord() {
@@ -376,11 +319,7 @@ void GL::drawBillBoard(const GLTextureId& textureId,
   vertexPointer(3, 0, vertices);
   setTextureCoordinates(2, 0, getBillboardTexCoord());
   
-#ifdef C_CODE
-  _gl->drawArrays(TriangleStrip, 0, vertices->size() / 3);
-#else
-  _gl->drawArrays(GLPrimitive.TriangleStrip, 0, vertices->size() / 3);
-#endif
+  _gl->drawArrays(GLPrimitive::triangleStrip(), 0, vertices->size() / 3);
   
   enableDepthTest();
   
@@ -480,64 +419,40 @@ void GL::disableVertexFlatColor() {
 
 void GL::enableDepthTest() {
   if (!_enableDepthTest) {
-#ifdef C_CODE
-    _gl->enable(DepthTest);
-#else
-    _gl->enable(GLFeature.DepthTest);
-#endif
+    _gl->enable(GLFeature::depthTest());
     _enableDepthTest = true;
   }
 }
 
 void GL::disableDepthTest() {
   if (_enableDepthTest) {
-#ifdef C_CODE
-    _gl->disable(DepthTest);
-#else
-    _gl->disable(GLFeature.DepthTest);
-#endif
+    _gl->disable(GLFeature::depthTest());
     _enableDepthTest = false;
   }
 }
 
 void GL::enableBlend() {
   if (!_enableBlend) {
-#ifdef C_CODE
-    _gl->enable(Blend);
-#else
-    _gl->enable(GLFeature.Blend);
-#endif
+    _gl->enable(GLFeature::blend());
     _enableBlend = true;
   }
 }
 
 void GL::disableBlend() {
   if (_enableBlend) {
-#ifdef C_CODE
-    _gl->disable(Blend);
-#else
-    _gl->disable(GLFeature.Blend);
-#endif
+    _gl->disable(GLFeature::blend());
     _enableBlend = false;
   }
   
 }
 
 void GL::setBlendFuncSrcAlpha() {
-#ifdef C_CODE
-  _gl->blendFunc(SrcAlpha, OneMinusSrcAlpha);
-#else
-  _gl->blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
-#endif
+  _gl->blendFunc(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
 }
 
-void GL::enableCullFace(GLCullFace face) {
+void GL::enableCullFace(int face) {
   if (!_enableCullFace) {
-#ifdef C_CODE
-    _gl->enable(CullFacing);
-#else
-    _gl->enable(GLFeature.CullFacing);
-#endif
+    _gl->enable(GLFeature::cullFace());
     _enableCullFace = true;
   }
   
@@ -549,11 +464,7 @@ void GL::enableCullFace(GLCullFace face) {
 
 void GL::disableCullFace() {
   if (_enableCullFace) {
-#ifdef C_CODE
-    _gl->disable(CullFacing);
-#else
-    _gl->disable(GLFeature.CullFacing);
-#endif
+    _gl->disable(GLFeature::cullFace());
     _enableCullFace = false;
   }
 }

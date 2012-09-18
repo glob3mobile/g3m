@@ -107,7 +107,7 @@ const GLTextureId TexturesHandler::getGLTextureIdIfAvailable(const TextureSpec& 
 
 
 const GLTextureId TexturesHandler::getGLTextureId(const IImage* image,
-                                                  GLFormat format,
+                                                  int format,
                                                   const std::string& name,
                                                   bool hasMipMap) {
   

@@ -57,6 +57,12 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class G3MWidget;
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IStringBuilder;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IMathUtils;
+
+
 public class UserData
 {
   private G3MWidget _widget;

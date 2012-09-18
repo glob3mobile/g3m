@@ -15,9 +15,10 @@
 #include "MutableMatrix44D.hpp"
 #include "Color.hpp"
 #include "MutableVector2D.hpp"
-#include "INativeGL.hpp"
 
 #include "IFloatBuffer.hpp"
+
+#include "GLConstants.hpp"
 
 #include <list>
 
@@ -48,12 +49,8 @@ private:
   
   bool _enableCullFace;
   
-#ifdef C_CODE
-  GLCullFace _cullFace_face;
-#endif
-#ifdef JAVA_CODE
-  GLCullFace _cullFace_face = GLCullFace.Back;
-#endif
+  int _cullFace_face;
+
   
   
   
@@ -105,11 +102,7 @@ public:
   _enableBlend(false),
   _enableDepthTest(false),
   _enableCullFace(false),
-#ifdef C_CODE
-  _cullFace_face(Back),
-#else
-  _cullFace_face(GLCullFace.Back),
-#endif
+  _cullFace_face(GLCullFace::back()),
   _texturesIdAllocationCounter(0),
   _scaleX(1),
   _scaleY(1),
@@ -127,6 +120,20 @@ public:
   _flatColorIntensity(0),
   _billboardTexCoord(NULL)
   {
+    //Init Constants
+    GLCullFace::init(gl);
+    GLBufferType::init(gl);
+    GLFeature::init(gl);
+    GLType::init(gl);
+    GLPrimitive::init(gl);
+    GLBlendFactor::init(gl);
+    GLTextureType::init(gl);
+    GLTextureParameter::init(gl);
+    GLTextureParameterValue::init(gl);
+    GLAlignment::init(gl);
+    GLFormat::init(gl);
+    GLVariable::init(gl);
+    GLError::init(gl);
   }
   
   void enableVerticesPosition();
@@ -186,9 +193,9 @@ public:
   
   void pointSize(float size);
   
-  GLError getError();
+  int getError();
   
-  const GLTextureId uploadTexture(const IImage* image, GLFormat format, bool generateMipmap);
+  const GLTextureId uploadTexture(const IImage* image, int format, bool generateMipmap);
   
   //  const GLTextureId uploadTexture(const IImage* image,
   //                                  int textureWidth, int textureHeight,
@@ -212,7 +219,7 @@ public:
   
   void deleteTexture(const GLTextureId& textureId);
   
-  void enableCullFace(GLCullFace face);
+  void enableCullFace(int face);
   void disableCullFace();
   
   void transformTexCoords(float scaleX,
@@ -268,11 +275,7 @@ public:
   void setBlendFuncSrcAlpha();
   
   void getViewport(int v[]){
-#ifdef C_CODE
-    _gl->getIntegerv(Viewport, v);
-#else
-    _gl->getIntegerv(GLVariable.Viewport, v);
-#endif
+    _gl->getIntegerv(GLVariable::viewport(), v);
   }
   
   ~GL() {

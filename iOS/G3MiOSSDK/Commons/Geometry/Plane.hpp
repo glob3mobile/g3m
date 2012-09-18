@@ -40,7 +40,7 @@ public:
     
   }
   
-  Plane transformedBy(const MutableMatrix44D& M) const;
+  Plane transformedByTranspose(const MutableMatrix44D& M) const;
   
   double signedDistance(const Vector3D& point) const {
     return point.dot(_normal) + _d;
