@@ -386,11 +386,13 @@ public class G3MWidget_Android
       if (_g3mWidget != null) {
          _g3mWidget.onPause();
       }
+      super.onPause();
    }
 
 
    @Override
    public void onResume() {
+      super.onResume();
       if (_g3mWidget != null) {
          _g3mWidget.onResume();
       }

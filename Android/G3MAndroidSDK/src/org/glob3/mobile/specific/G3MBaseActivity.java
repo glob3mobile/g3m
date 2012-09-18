@@ -59,11 +59,11 @@ public abstract class G3MBaseActivity
 
    @Override
    protected void onPause() {
-      super.onPause();
       Log.d("Demo", "Activity paused");
       if (_widgetAndroid != null) {
          _widgetAndroid.onPause();
       }
+      super.onPause();
    }
 
 
