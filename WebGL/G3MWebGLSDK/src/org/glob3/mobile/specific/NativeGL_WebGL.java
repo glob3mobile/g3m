@@ -51,9 +51,9 @@ public class NativeGL_WebGL
 
    private native int jsGetAttribLocation(JavaScriptObject gl,
                                           final int program,
-                                          final String name)/*- {
-                                                            return gl.getAttribLocation(program, name);
-                                                            }-*/;
+                                          final String name) /*-{
+		return gl.getAttribLocation(program, name);
+   }-*/;
 
 
    @Override
@@ -393,13 +393,13 @@ public class NativeGL_WebGL
       // TODO Auto-generated method stub
 
    }
-   
-   @Override
+
+
    public native void jsGetIntegerv(final int v,
-                           final int[] i) {
+                                    final int[] i) /*-{
       // TODO Auto-generated method stub
 
-   }
+   }-*/;
 
 
    @Override
@@ -475,7 +475,7 @@ public class NativeGL_WebGL
 
 
    @Override
-   public int Type_Int() /*-{
+   public native int Type_Int() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.INT;
    }-*/;
 
@@ -592,6 +592,13 @@ public class NativeGL_WebGL
    public void useProgram(final int program) {
       // TODO Auto-generated method stub
 
+   }
+
+
+   @Override
+   public int getError() {
+      // TODO Auto-generated method stub
+      return 0;
    }
 
 

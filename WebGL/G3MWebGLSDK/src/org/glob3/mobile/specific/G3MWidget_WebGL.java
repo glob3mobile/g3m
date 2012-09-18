@@ -42,6 +42,7 @@ import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.UserData;
 
 import com.google.gwt.canvas.client.Canvas;
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
@@ -180,7 +181,8 @@ public class G3MWidget_WebGL
       // TODO add delayMillis to G3MWidget constructor
       final IThreadUtils threadUtils = new ThreadUtils_WebGL(this, _delayMillis);
 
-      final NativeGL_WebGL nGL = new NativeGL_WebGL();
+      final JavaScriptObject jsCanvas = jsGetCanvasObject();
+      final NativeGL_WebGL nGL = new NativeGL_WebGL(jsCanvas);
       final GL gl = new GL(nGL);
 
       final CompositeRenderer composite = new CompositeRenderer();
@@ -330,6 +332,7 @@ public class G3MWidget_WebGL
 
 
    private native void jsDefineG3MBrowserObjects() /*-{
+		//		debugger;
 		// URL Object
 		$wnd.g3mURL = $wnd.URL || $wnd.webkitURL;
 
@@ -341,5 +344,13 @@ public class G3MWidget_WebGL
 				|| $wnd.msIDBTransaction;
 		$wnd.g3mDBVersion = 1;
 
+   }-*/;
+
+
+   private native JavaScriptObject jsGetCanvasObject() /*-{
+		//		debugger;
+		var canvas = $doc
+				.getElementById(@org.glob3.mobile.specific.G3MWidget_WebGL::canvasId);
+		return canvas;
    }-*/;
 }
