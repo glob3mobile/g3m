@@ -26,7 +26,6 @@ import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
 import org.glob3.mobile.generated.IStorage;
-import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.IStringUtils;
 import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LayerSet;
@@ -280,10 +279,6 @@ public class G3MWidget_Android
       final int width = getWidth();
       final int height = getHeight();
 
-      IStringBuilder.setInstance(new StringBuilder_Android()); //Setting StringBuilder
-
-      IMathUtils.setInstance(new MathUtils_Android()); //Setting MathUtils
-
       final IFactory factory = new Factory_Android(getContext());
       final ILogger logger = new Logger_Android(LogLevel.ErrorLevel);
       final NativeGL2_Android nGL = new NativeGL2_Android();
@@ -373,9 +368,13 @@ public class G3MWidget_Android
 
       final IThreadUtils threadUtils = new ThreadUtils_Android(this);
 
-      _widget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, logger, gl, texturesHandler,
-               textureBuilder, downloader, planet, cameraConstraints, composite, busyRenderer, scheduler, width, height,
-               Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false);
+      final StringBuilder_Android stringBuilder = new StringBuilder_Android(); //StringBuilder
+
+      final IMathUtils math = new MathUtils_Android(); //MathUtils
+
+      _widget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, stringBuilder, math, logger, gl,
+               texturesHandler, textureBuilder, downloader, planet, cameraConstraints, composite, busyRenderer, scheduler, width,
+               height, Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false);
 
       _widget.setUserData(userData);
 
