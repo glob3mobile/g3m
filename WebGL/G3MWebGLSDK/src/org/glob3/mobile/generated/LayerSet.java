@@ -87,6 +87,30 @@ public class LayerSet
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isReady()const
+  public final boolean isReady()
+  {
+	for (int i = 0; i<_layers.size(); i++)
+	{
+	  if (!(_layers.get(i).isReady()))
+	  {
+		return false;
+	  }
+	}
+	return true;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: void initialize(const InitializationContext* ic)const
+  public final void initialize(InitializationContext ic)
+  {
+	for (int i = 0; i<_layers.size(); i++)
+	{
+	  _layers.get(i).initialize(ic);
+	}
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: int size() const
   public final int size()
   {

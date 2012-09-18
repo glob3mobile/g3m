@@ -46,6 +46,8 @@ public:
   
   static inline double log10_(double v) { return log10(v); }
   
+  static inline double log_(double v) { return log(v); }
+  
 };
 
 class MathUtils_iOS: public IMathUtils{
@@ -99,6 +101,9 @@ public:
   
   double log10(double v) const { return MathAux::log10_(v);}
   float log10(float v) const { return log10f(v); }
+  
+  double log(double v) const { return MathAux::log_(v); }
+  float log(float v) const { return log(v); }
   
   int maxInt() const{ return std::numeric_limits<int>::max(); }
   int minInt() const{ return std::numeric_limits<int>::min(); }

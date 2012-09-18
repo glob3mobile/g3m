@@ -57,6 +57,7 @@ public:
                         int width, int height) const {
     return URL::nullURL();
   }
+
   
 };
 

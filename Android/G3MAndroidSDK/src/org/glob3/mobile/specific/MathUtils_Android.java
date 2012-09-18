@@ -245,4 +245,16 @@ public class MathUtils_Android
    }
 
 
+   @Override
+   public double log(final double v) {
+      return Math.log(v);
+   }
+
+
+   @Override
+   public float log(final float v) {
+      return (float) Math.log(v);
+   }
+
+
 }

@@ -53,6 +53,12 @@ public:
                                 const Sector& sector,
                                 int width, int height) const = 0;
   
+  virtual bool isReady() const { 
+    return true;
+  }
+  
+  virtual void initialize(const InitializationContext* ic) {}
+  
   void addTerrainTouchEventListener(TerrainTouchEventListener* listener) {
     _listeners.push_back(listener);
   }

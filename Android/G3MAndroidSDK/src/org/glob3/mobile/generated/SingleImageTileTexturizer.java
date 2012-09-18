@@ -26,8 +26,13 @@ public class SingleImageTileTexturizer extends TileTexturizer
   private final TilesRenderParameters _parameters;
   private GLTextureId _texId = new GLTextureId();
   private final IImage _image;
+	private final boolean _isMercatorImage;
 
 
+
+  ///#include <iostream>
+  
+  
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: IFloatBuffer* createTextureCoordinates(const RenderContext* rc, Mesh* mesh) const
   private IFloatBuffer createTextureCoordinates(RenderContext rc, Mesh mesh)
@@ -39,24 +44,76 @@ public class SingleImageTileTexturizer extends TileTexturizer
 	  final Vector3D pos = mesh.getVertex(i);
   
 	  final Geodetic2D g = rc.getPlanet().toGeodetic2D(pos);
-	  final Vector3D n = rc.getPlanet().geodeticSurfaceNormal(g);
   
-	  final double s = IMathUtils.instance().atan2(n.y(), n.x()) / (IMathUtils.instance().pi() * 2) + 0.5;
-	  final double t = IMathUtils.instance().asin(n.z()) / IMathUtils.instance().pi() + 0.5;
+	  if (_isMercatorImage)
+	  {
   
-	  texCoors.add((float)s, (float)(1.0-t));
+		final double latRad = g.latitude().radians();
+		final double sec = 1.0/(IMathUtils.instance().cos(g.latitude().radians()));
+  
+		//double tLatRad = 2*atan(exp(latRad)) - M_PI/2.0;
+  
+		//double tLatRad = log(tan(latRad)+sec);
+		//double tLatRad = 0.5*log((1.0+sin(latRad))/(1.0-sin(latRad)));
+		//double tLatRad = atanh(sin(latRad));
+		//double tLatRad = asinh(tan(latRad));
+  
+  
+		double tLatRad = IMathUtils.instance().log(IMathUtils.instance().tan(IMathUtils.instance().pi()/4.0)+latRad/2.0);
+  
+		tLatRad = tLatRad *sec;
+		//std::cout<<" Lat: "<<g.latitude().degrees()<<"\n";
+		//std::cout<<"tLatRad: "<<tLatRad<<"\n";
+		double limit = 85.5 * IMathUtils.instance().pi()/180.0;
+		//std::cout<<"limit: "<<limit<<"\n";
+		if (tLatRad > limit)
+		{
+		  tLatRad = limit;
+		}
+		if (tLatRad<-limit)
+		{
+		  tLatRad = -limit;
+		}
+  
+		final Geodetic2D mercg = new Geodetic2D(Angle.fromRadians(tLatRad), g.longitude());
+		//const Vector3D n = rc->getPlanet()->geodeticSurfaceNormal(mercg);
+		final Vector3D m = rc.getPlanet().toCartesian(mercg);
+		final Vector3D n = rc.getPlanet().centricSurfaceNormal(m);
+  
+		final double s = IMathUtils.instance().atan2(n.y(), n.x()) / (IMathUtils.instance().pi() * 2) + 0.5;
+  
+		//double t = (tLatRad*sec + M_PI/2.0)/M_PI ;
+		double t = IMathUtils.instance().asin(n.z()) / IMathUtils.instance().pi() + 0.5;
+		//texCoors.push_back(MutableVector2D(s, 1-t));
+		texCoors.add((float)s, (float)(1.0-t));
+  
+	  }
+	  else
+	  {
+		final Vector3D n = rc.getPlanet().geodeticSurfaceNormal(g);
+		//const double s = atan2(n.y(), n.x()) / (M_PI * 2) + 0.5;
+		//double t = asin(n.z()) / M_PI + 0.5 ;
+		//texCoors.push_back(MutableVector2D(s, 1-t));
+  
+		final double s = IMathUtils.instance().atan2(n.y(), n.x()) / (IMathUtils.instance().pi() * 2) + 0.5;
+		final double t = IMathUtils.instance().asin(n.z()) / IMathUtils.instance().pi() + 0.5;
+  
+		texCoors.add((float)s, (float)(1.0-t));
+	  }
+  
 	}
   
 	return texCoors.create();
   }
 
 
-  public SingleImageTileTexturizer(TilesRenderParameters parameters, IImage image)
+  public SingleImageTileTexturizer(TilesRenderParameters parameters, IImage image, boolean isMercatorImage)
   {
 	  _texId = new GLTextureId(-1);
 	  _image = image;
 	  _parameters = parameters;
 	  _renderContext = null;
+	  _isMercatorImage = isMercatorImage;
   }
 
   public void dispose()

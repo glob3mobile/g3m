@@ -113,6 +113,7 @@ public:
                         const Sector& sector,
                         int width, int height) const;
   
+  
 };
 
 #endif

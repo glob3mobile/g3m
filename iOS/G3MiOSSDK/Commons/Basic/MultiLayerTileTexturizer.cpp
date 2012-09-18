@@ -527,6 +527,7 @@ MultiLayerTileTexturizer::~MultiLayerTileTexturizer() {
 void MultiLayerTileTexturizer::initialize(const InitializationContext* ic,
                                           const TilesRenderParameters* parameters) {
   _parameters = parameters;
+  _layerSet->initialize(ic);
 }
 
 class BuilderStartTask : public FrameTask {
@@ -750,7 +751,7 @@ void MultiLayerTileTexturizer::justCreatedTopTile(const RenderContext* rc,
 }
 
 bool MultiLayerTileTexturizer::isReady(const RenderContext *rc) {
-  return (_pendingTopTileRequests <= 0);
+  return (_pendingTopTileRequests <= 0) && _layerSet->isReady();
 }
 
 void MultiLayerTileTexturizer::onTerrainTouchEvent(const EventContext* ec,

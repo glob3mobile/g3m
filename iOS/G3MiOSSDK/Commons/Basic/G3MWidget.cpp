@@ -20,6 +20,7 @@
 #include "FrameTasksExecutor.hpp"
 #include "IStringUtils.hpp"
 #include "IThreadUtils.hpp"
+#include "IStringBuilder.hpp"
 
 #include "GLConstants.hpp"
 
@@ -95,6 +96,8 @@ G3MWidget* G3MWidget::create(FrameTasksExecutor* frameTasksExecutor,
                              IFactory*           factory,
                              const IStringUtils* stringUtils,
                              IThreadUtils*       threadUtils,
+                             IStringBuilder*     stringBuilder,
+                             IMathUtils*         mathUtils,
                              ILogger*            logger,
                              GL*                 gl,
                              TexturesHandler*    texturesHandler,
@@ -118,7 +121,9 @@ G3MWidget* G3MWidget::create(FrameTasksExecutor* frameTasksExecutor,
   IStringUtils::setInstance(stringUtils);
   ILogger::setInstance(logger);
   IThreadUtils::setInstance(threadUtils);
-  
+  IStringBuilder::setInstance(stringBuilder);
+  IMathUtils::setInstance(mathUtils);
+
   return new G3MWidget(frameTasksExecutor,
                        factory,
                        stringUtils,
