@@ -3,6 +3,7 @@
 package org.glob3.mobile.specific;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import org.glob3.mobile.generated.BusyMeshRenderer;
 import org.glob3.mobile.generated.CPUTextureBuilder;
@@ -70,6 +71,10 @@ public class G3MWidget_Android
    private LayerSet                                       _layerSet;
    private ArrayList<org.glob3.mobile.generated.Renderer> _renderers;
    private UserData                                       _userData;
+
+   private boolean                                        _isPaused             = false;
+   private final LinkedList<Runnable>                     _queue                = new LinkedList<Runnable>();
+   private final Object                                   _queueMutex           = new Object();
 
 
    public G3MWidget_Android(final Context context) {
@@ -331,6 +336,9 @@ public class G3MWidget_Android
 
    @Override
    public void onPause() {
+      synchronized (_queueMutex) {
+         _isPaused = true;
+      }
 
       final int __TODO_check_onpause;
       //      if (_g3mWidget != null) {
@@ -352,6 +360,28 @@ public class G3MWidget_Android
          super.onResume();
          _g3mWidget.onResume();
       }
+
+      synchronized (_queueMutex) {
+         _isPaused = false;
+
+         // drain queue
+         for (final Runnable runnable : _queue) {
+            super.queueEvent(runnable);
+         }
+         _queue.clear();
+      }
    }
 
+
+   @Override
+   public void queueEvent(final Runnable runnable) {
+      synchronized (_queueMutex) {
+         if (_isPaused) {
+            _queue.add(runnable);
+         }
+         else {
+            super.queueEvent(runnable);
+         }
+      }
+   }
 }
