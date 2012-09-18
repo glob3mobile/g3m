@@ -341,9 +341,9 @@ public class G3MWidget_Android
       }
 
       final int __TODO_check_onpause;
-      //      if (_g3mWidget != null) {
-      //         _g3mWidget.onPause();
-      //      }
+      if (_g3mWidget != null) {
+         _g3mWidget.onPause();
+      }
 
       /*
       if (_g3mWidget == null) {
