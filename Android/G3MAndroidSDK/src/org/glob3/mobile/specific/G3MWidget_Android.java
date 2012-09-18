@@ -3,7 +3,6 @@
 package org.glob3.mobile.specific;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import org.glob3.mobile.generated.BusyMeshRenderer;
 import org.glob3.mobile.generated.CPUTextureBuilder;
@@ -72,9 +71,10 @@ public class G3MWidget_Android
    private ArrayList<org.glob3.mobile.generated.Renderer> _renderers;
    private UserData                                       _userData;
 
-   private boolean                                        _isPaused             = false;
-   private final LinkedList<Runnable>                     _queue                = new LinkedList<Runnable>();
-   private final Object                                   _queueMutex           = new Object();
+
+   //   private boolean                                        _isPaused             = false;
+   //   private final LinkedList<Runnable>                     _pausedRunnableQueue  = new LinkedList<Runnable>();
+   //   private final Object                                   _pausedMutex          = new Object();
 
 
    public G3MWidget_Android(final Context context) {
@@ -336,9 +336,9 @@ public class G3MWidget_Android
 
    @Override
    public void onPause() {
-      synchronized (_queueMutex) {
-         _isPaused = true;
-      }
+      //      synchronized (_pausedMutex) {
+      //         _isPaused = true;
+      //      }
 
       final int __TODO_check_onpause;
       if (_es2renderer != null) {
@@ -361,27 +361,29 @@ public class G3MWidget_Android
          _g3mWidget.onResume();
       }
 
-      synchronized (_queueMutex) {
-         _isPaused = false;
-
-         // drain queue
-         for (final Runnable runnable : _queue) {
-            super.queueEvent(runnable);
-         }
-         _queue.clear();
-      }
+      //      synchronized (_pausedMutex) {
+      //         _isPaused = false;
+      //
+      //         // drain queue
+      //         for (final Runnable runnable : _pausedRunnableQueue) {
+      //            super.queueEvent(runnable);
+      //         }
+      //         _pausedRunnableQueue.clear();
+      //      }
    }
 
 
    @Override
    public void queueEvent(final Runnable runnable) {
-      synchronized (_queueMutex) {
-         if (_isPaused) {
-            _queue.add(runnable);
-         }
-         else {
-            super.queueEvent(runnable);
-         }
-      }
+      //      synchronized (_pausedMutex) {
+      //         if (_isPaused) {
+      //            _pausedRunnableQueue.add(runnable);
+      //         }
+      //         else {
+      super.queueEvent(runnable);
+      //         }
+      //      }
    }
+
+
 }
