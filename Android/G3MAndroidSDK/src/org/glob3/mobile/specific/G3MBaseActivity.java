@@ -52,7 +52,8 @@ public abstract class G3MBaseActivity
       super.onResume();
       Log.d("Demo", "Activity resumed");
       if (_widgetAndroid != null) {
-         _widgetAndroid.onResume();
+         //TODO MUST CALL ONPAUSE TO RESTART RENDER THREAD
+         //_widgetAndroid.onResume();
       }
    }
 
@@ -61,7 +62,8 @@ public abstract class G3MBaseActivity
    protected void onPause() {
       Log.d("Demo", "Activity paused");
       if (_widgetAndroid != null) {
-         _widgetAndroid.onPause();
+         //TODO MUST CALL ONPAUSE TO STOP RENDER THREAD
+         //_widgetAndroid.onPause();
       }
       super.onPause();
    }
@@ -78,6 +80,8 @@ public abstract class G3MBaseActivity
    protected void onDestroy() {
       super.onDestroy();
       Log.d("Demo", "Activity destroyed");
+      //TODO HACK TO CLOSE SQL DB
+      _widgetAndroid.closeStorage();
    }
 
 }

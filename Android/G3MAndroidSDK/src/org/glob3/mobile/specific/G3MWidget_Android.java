@@ -25,7 +25,6 @@ import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
-import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IStringUtils;
 import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LayerSet;
@@ -61,6 +60,7 @@ public class G3MWidget_Android
 
    private G3MWidget                                      _g3mWidget;
    private ES2Renderer                                    _es2renderer;
+   private SQLiteStorage_Android                          _storage              = null;
 
    private final MotionEventProcessor                     _motionEventProcessor = new MotionEventProcessor();
    private final OnDoubleTapListener                      _doubleTapListener;
@@ -271,11 +271,11 @@ public class G3MWidget_Android
       final NativeGL2_Android nGL = new NativeGL2_Android();
       final GL gl = new GL(nGL);
 
-      final IStorage storage = new SQLiteStorage_Android("g3m.cache", this.getContext());
+      _storage = new SQLiteStorage_Android("g3m.cache", this.getContext());
 
       final int connectTimeout = 60000;
       final int readTimeout = 60000;
-      final IDownloader downloader = new CachedDownloader(new Downloader_Android(8, connectTimeout, readTimeout), storage);
+      final IDownloader downloader = new CachedDownloader(new Downloader_Android(8, connectTimeout, readTimeout), _storage);
 
       final CompositeRenderer composite = new CompositeRenderer();
 
@@ -383,6 +383,13 @@ public class G3MWidget_Android
       super.queueEvent(runnable);
       //         }
       //      }
+   }
+
+
+   public void closeStorage() {
+      if (_storage != null) {
+         _storage.onPause(null);
+      }
    }
 
 
