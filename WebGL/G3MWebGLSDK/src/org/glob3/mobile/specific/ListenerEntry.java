@@ -124,7 +124,6 @@ class ListenerEntry {
             _imageListener.onCanceledDownload(url, image);
          }
       }
-
    }
 
 

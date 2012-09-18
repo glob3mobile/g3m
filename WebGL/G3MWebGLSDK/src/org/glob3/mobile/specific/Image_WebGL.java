@@ -63,13 +63,19 @@ public class Image_WebGL
 
    @Override
    public int getWidth() {
-      return jsGetWidth();
+      if (_arrived) {
+         return jsGetWidth();
+      }
+      return 0;
    }
 
 
    @Override
    public int getHeight() {
-      return jsGetHeight();
+      if (_arrived) {
+         return jsGetHeight();
+      }
+      return 0;
    }
 
 

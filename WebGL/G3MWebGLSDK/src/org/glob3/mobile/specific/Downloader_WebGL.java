@@ -9,6 +9,7 @@ import java.util.Map;
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IImageDownloadListener;
+import org.glob3.mobile.generated.InitializationContext;
 import org.glob3.mobile.generated.URL;
 
 import com.google.gwt.user.client.Timer;
@@ -223,6 +224,20 @@ public class Downloader_WebGL
       }
 
       return selectedHandler;
+   }
+
+
+   @Override
+   public void onResume(final InitializationContext ic) {
+      // TODO Auto-generated method stub
+
+   }
+
+
+   @Override
+   public void onPause(final InitializationContext ic) {
+      // TODO Auto-generated method stub
+
    }
 
 }

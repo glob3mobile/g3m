@@ -30,7 +30,6 @@ import org.glob3.mobile.generated.IStringUtils;
 import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LogLevel;
-import org.glob3.mobile.generated.NullStorage;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.SingleImageTileTexturizer;
@@ -174,7 +173,7 @@ public class G3MWidget_WebGL
 
       final IFactory factory = new Factory_WebGL();
       final ILogger logger = new Logger_WebGL(LogLevel.InfoLevel);
-      final IStorage storage = new NullStorage();
+      final IStorage storage = new IndexedDBStorage_WebGL();
       final IDownloader downloader = new Downloader_WebGL(8, _delayMillis);
       final IStringUtils stringUtils = new StringUtils_WebGL();
       // TODO add delayMillis to G3MWidget constructor

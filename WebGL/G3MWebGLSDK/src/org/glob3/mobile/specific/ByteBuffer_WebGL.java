@@ -65,6 +65,12 @@ public class ByteBuffer_WebGL
    }
 
 
+   @Override
+   public String getAsString() {
+      return jsGetAsString();
+   }
+
+
    public JavaScriptObject getBuffer() {
       return _buffer;
    }
@@ -106,4 +112,12 @@ public class ByteBuffer_WebGL
 		}
    }-*/;
 
+
+   private native String jsGetAsString() /*-{
+		var thisInstance = this;
+		return String.fromCharCode
+				.apply(
+						null,
+						thisInstance.@org.glob3.mobile.specific.ByteBuffer_WebGL::_buffer);
+   }-*/;
 }
