@@ -25,7 +25,6 @@ import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
-import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IStringUtils;
 import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LayerSet;
@@ -59,8 +58,9 @@ public class G3MWidget_Android
          implements
             OnGestureListener {
 
-   private G3MWidget                                      _widget;
+   private G3MWidget                                      _g3mWidget;
    private ES2Renderer                                    _es2renderer;
+   private SQLiteStorage_Android                          _storage              = null;
 
    private final MotionEventProcessor                     _motionEventProcessor = new MotionEventProcessor();
    private final OnDoubleTapListener                      _doubleTapListener;
@@ -70,6 +70,11 @@ public class G3MWidget_Android
    private LayerSet                                       _layerSet;
    private ArrayList<org.glob3.mobile.generated.Renderer> _renderers;
    private UserData                                       _userData;
+
+
+   //   private boolean                                        _isPaused             = false;
+   //   private final LinkedList<Runnable>                     _pausedRunnableQueue  = new LinkedList<Runnable>();
+   //   private final Object                                   _pausedMutex          = new Object();
 
 
    public G3MWidget_Android(final Context context) {
@@ -113,7 +118,7 @@ public class G3MWidget_Android
             queueEvent(new Runnable() {
                @Override
                public void run() {
-                  _widget.onTouchEvent(te);
+                  _g3mWidget.onTouchEvent(te);
                }
             });
 
@@ -124,8 +129,6 @@ public class G3MWidget_Android
    }
 
 
-   // The initialization of _widget occurs when the android widget is resized
-   // to the screen size
    @Override
    protected void onSizeChanged(final int w,
                                 final int h,
@@ -133,8 +136,7 @@ public class G3MWidget_Android
                                 final int oldh) {
       super.onSizeChanged(w, h, oldw, oldh);
 
-      if (_widget == null) {
-         // SETTING RENDERER
+      if (_es2renderer == null) {
          _es2renderer = new ES2Renderer(this.getContext(), this);
          setRenderer(_es2renderer);
       }
@@ -148,24 +150,22 @@ public class G3MWidget_Android
       _gestureDetector.onTouchEvent(event);
 
       final TouchEvent te = _motionEventProcessor.processEvent(event);
-
-      if (te != null) {
-         // SEND MESSAGE TO RENDER THREAD
-         queueEvent(new Runnable() {
-            @Override
-            public void run() {
-               _widget.onTouchEvent(te);
-            }
-         });
-         return true;
+      if (te == null) {
+         return false;
       }
-      return false;
+
+      queueEvent(new Runnable() {
+         @Override
+         public void run() {
+            _g3mWidget.onTouchEvent(te);
+         }
+      });
+      return true;
    }
 
 
    @Override
    public boolean onDown(final MotionEvent arg0) {
-      // TODO this method must be implemented
       return false;
    }
 
@@ -175,7 +175,6 @@ public class G3MWidget_Android
                           final MotionEvent e2,
                           final float velocityX,
                           final float velocityY) {
-      // TODO this method must be implemented
       return false;
    }
 
@@ -190,7 +189,7 @@ public class G3MWidget_Android
       queueEvent(new Runnable() {
          @Override
          public void run() {
-            _widget.onTouchEvent(te);
+            _g3mWidget.onTouchEvent(te);
          }
       });
    }
@@ -201,31 +200,27 @@ public class G3MWidget_Android
                            final MotionEvent e2,
                            final float distanceX,
                            final float distanceY) {
-      // TODO this method must be implemented
       return false;
    }
 
 
    @Override
    public void onShowPress(final MotionEvent e) {
-      // TODO this method must be implemented
+
    }
 
 
    @Override
    public boolean onSingleTapUp(final MotionEvent e) {
-      // TODO this method must be implemented
       return false;
    }
 
 
-   public G3MWidget getWidget() {
-      if (_widget == null) {
-         //initWidgetDemo();
-         //initSimpleWidgetDemo();
-         initWidgetPrivate(_cameraConstraints, _layerSet, _renderers, _userData);
+   public G3MWidget getG3MWidget() {
+      if (_g3mWidget == null) {
+         initWidget();
       }
-      return _widget;
+      return _g3mWidget;
    }
 
 
@@ -240,10 +235,7 @@ public class G3MWidget_Android
    }
 
 
-   private void initWidgetPrivate(final ArrayList<ICameraConstrainer> cameraConstraints,
-                                  final LayerSet layerSet,
-                                  final ArrayList<org.glob3.mobile.generated.Renderer> renderers,
-                                  final UserData userData) {
+   private void initWidget() {
       // creates default camera-renderer and camera-handlers
       final CameraRenderer cameraRenderer = new CameraRenderer();
 
@@ -263,17 +255,12 @@ public class G3MWidget_Android
       final TilesRenderParameters parameters = TilesRenderParameters.createDefault(renderDebug, useTilesSplitBudget,
                forceTopLevelTilesRenderOnStart);
 
-      initWidget(cameraRenderer, cameraConstraints, layerSet, parameters, renderers, userData);
-
+      initWidget(cameraRenderer, parameters);
    }
 
 
    private void initWidget(final CameraRenderer cameraRenderer,
-                           final ArrayList<ICameraConstrainer> cameraConstraints,
-                           final LayerSet layerSet,
-                           final TilesRenderParameters parameters,
-                           final ArrayList<org.glob3.mobile.generated.Renderer> renderers,
-                           final UserData userData) {
+                           final TilesRenderParameters parameters) {
 
       // create GLOB3M WIDGET
       final int width = getWidth();
@@ -284,54 +271,22 @@ public class G3MWidget_Android
       final NativeGL2_Android nGL = new NativeGL2_Android();
       final GL gl = new GL(nGL);
 
-      final IStorage storage = new SQLiteStorage_Android("g3m.cache", this.getContext());
+      _storage = new SQLiteStorage_Android("g3m.cache", this.getContext());
 
-      //      //TESTING DB
-      //      if (false) {
-      //         final byte[] b = { 1, 0, 1 };
-      //         final ByteBuffer bb = new ByteBuffer(b, b.length);
-      //         final URL url = new URL("test");
-      //         final URL url2 = new URL("test2");
-      //
-      //         if (storage.contains(url)) {
-      //            final ByteBuffer bb2 = storage.read(url);
-      //         }
-      //
-      //         storage.save(url, bb);
-      //
-      //         if (storage.contains(url)) {
-      //            final ByteBuffer bb1 = storage.read(url);
-      //         }
-      //
-      //         storage.save(url, bb);
-      //
-      //         if (storage.contains(url)) {
-      //            final ByteBuffer bb2 = storage.read(url);
-      //         }
-      //
-      //         if (storage.contains(url2)) {
-      //            final ByteBuffer bb2 = storage.read(url2);
-      //         }
-      //
-      //
-      //      }
-
-
-      //		  IDownloader downloader = null;// new CachedDownloader(new Downloader_Android(8), storage);
       final int connectTimeout = 60000;
       final int readTimeout = 60000;
-      final IDownloader downloader = new CachedDownloader(new Downloader_Android(8, connectTimeout, readTimeout), storage);
+      final IDownloader downloader = new CachedDownloader(new Downloader_Android(8, connectTimeout, readTimeout), _storage);
 
       final CompositeRenderer composite = new CompositeRenderer();
 
       composite.addRenderer(cameraRenderer);
 
-      if ((layerSet != null) && (layerSet.size() > 0)) {
+      if ((_layerSet != null) && (_layerSet.size() > 0)) {
 
          TileTexturizer texturizer;// = new MultiLayerTileTexturizer(layerSet);
 
          if (true) {
-            texturizer = new MultiLayerTileTexturizer(layerSet);
+            texturizer = new MultiLayerTileTexturizer(_layerSet);
          }
          else {
             //SINGLE IMAGE
@@ -348,10 +303,9 @@ public class G3MWidget_Android
          composite.addRenderer(tr);
       }
 
-      for (int i = 0; i < renderers.size(); i++) {
-         composite.addRenderer(renderers.get(i));
+      for (final org.glob3.mobile.generated.Renderer renderer : _renderers) {
+         composite.addRenderer(renderer);
       }
-
 
       final TextureBuilder textureBuilder = new CPUTextureBuilder();
       final TexturesHandler texturesHandler = new TexturesHandler(gl, factory, false);
@@ -368,31 +322,75 @@ public class G3MWidget_Android
 
       final IThreadUtils threadUtils = new ThreadUtils_Android(this);
 
-      final StringBuilder_Android stringBuilder = new StringBuilder_Android(); //StringBuilder
+      final StringBuilder_Android stringBuilder = new StringBuilder_Android();
 
-      final IMathUtils math = new MathUtils_Android(); //MathUtils
+      final IMathUtils math = new MathUtils_Android();
 
-      _widget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, stringBuilder, math, logger, gl,
-               texturesHandler, textureBuilder, downloader, planet, cameraConstraints, composite, busyRenderer, scheduler, width,
-               height, Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false);
+      _g3mWidget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, stringBuilder, math, logger, gl,
+               texturesHandler, textureBuilder, downloader, planet, _cameraConstraints, composite, busyRenderer, scheduler,
+               width, height, Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false);
 
-      _widget.setUserData(userData);
-
+      _g3mWidget.setUserData(_userData);
    }
 
 
    @Override
    public void onPause() {
-      if (_widget != null) {
-         _widget.onPause();
+      //      synchronized (_pausedMutex) {
+      //         _isPaused = true;
+      //      }
+
+      final int __TODO_check_onpause;
+      if (_es2renderer != null) {
+         _g3mWidget.onPause();
       }
+
+      /*
+      if (_g3mWidget == null) {
+         System.err.println("break (point) on me");
+      }
+      */
+      super.onPause();
    }
 
 
    @Override
    public void onResume() {
-      if (_widget != null) {
-         _widget.onResume();
+      if (_es2renderer != null) {
+         super.onResume();
+         _g3mWidget.onResume();
+      }
+
+      //      synchronized (_pausedMutex) {
+      //         _isPaused = false;
+      //
+      //         // drain queue
+      //         for (final Runnable runnable : _pausedRunnableQueue) {
+      //            super.queueEvent(runnable);
+      //         }
+      //         _pausedRunnableQueue.clear();
+      //      }
+   }
+
+
+   @Override
+   public void queueEvent(final Runnable runnable) {
+      //      synchronized (_pausedMutex) {
+      //         if (_isPaused) {
+      //            _pausedRunnableQueue.add(runnable);
+      //         }
+      //         else {
+      super.queueEvent(runnable);
+      //         }
+      //      }
+   }
+
+
+   public void closeStorage() {
+      if (_storage != null) {
+         _storage.onPause(null);
       }
    }
+
+
 }

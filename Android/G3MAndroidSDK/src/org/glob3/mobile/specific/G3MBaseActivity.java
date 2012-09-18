@@ -13,7 +13,7 @@ public abstract class G3MBaseActivity
 
    protected abstract void initializeWidget(G3MWidget_Android widget);
 
-   private G3MWidget_Android _widget = null;
+   private G3MWidget_Android _widgetAndroid = null;
 
 
    /** Called when the activity is first created. */
@@ -22,12 +22,12 @@ public abstract class G3MBaseActivity
       super.onCreate(savedInstanceState);
       Log.d("Demo", "Activity created");
 
-      if (_widget == null) { //Just the first time
-         _widget = new G3MWidget_Android(this);
+      if (_widgetAndroid == null) { //Just the first time
+         _widgetAndroid = new G3MWidget_Android(this);
 
-         initializeWidget(_widget);
+         initializeWidget(_widgetAndroid);
 
-         setContentView(_widget);
+         setContentView(_widgetAndroid);
       }
    }
 
@@ -51,19 +51,21 @@ public abstract class G3MBaseActivity
    protected void onResume() {
       super.onResume();
       Log.d("Demo", "Activity resumed");
-      if (_widget != null) {
-         _widget.onResume();
+      if (_widgetAndroid != null) {
+         //TODO MUST CALL ONPAUSE TO RESTART RENDER THREAD
+         //_widgetAndroid.onResume();
       }
    }
 
 
    @Override
    protected void onPause() {
-      super.onPause();
       Log.d("Demo", "Activity paused");
-      if (_widget != null) {
-         _widget.onPause();
+      if (_widgetAndroid != null) {
+         //TODO MUST CALL ONPAUSE TO STOP RENDER THREAD
+         //_widgetAndroid.onPause();
       }
+      super.onPause();
    }
 
 
@@ -78,6 +80,8 @@ public abstract class G3MBaseActivity
    protected void onDestroy() {
       super.onDestroy();
       Log.d("Demo", "Activity destroyed");
+      //TODO HACK TO CLOSE SQL DB
+      _widgetAndroid.closeStorage();
    }
 
 }

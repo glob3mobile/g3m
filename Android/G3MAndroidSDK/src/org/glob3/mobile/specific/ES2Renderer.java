@@ -17,7 +17,7 @@ class ES2Renderer
          implements
             GLSurfaceView.Renderer {
 
-   final G3MWidget_Android _widget;
+   final G3MWidget_Android _widgetAndroid;
 
    private int             _program;
    private final Context   _context;
@@ -27,7 +27,7 @@ class ES2Renderer
    public ES2Renderer(final Context context,
                       final G3MWidget_Android widget) {
       _context = context;
-      _widget = widget;
+      _widgetAndroid = widget;
    }
 
 
@@ -40,7 +40,7 @@ class ES2Renderer
 
       _hasRendered = true;
 
-      final G3MWidget widget = _widget.getWidget();
+      final G3MWidget widget = _widgetAndroid.getG3MWidget();
 
       GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
       widget.getGL().useProgram(_program);
@@ -62,7 +62,7 @@ class ES2Renderer
       GLES20.glViewport(0, 0, width, height);
 
       if (_hasRendered) {
-         _widget.getWidget().onResizeViewportEvent(width, height);
+         _widgetAndroid.getG3MWidget().onResizeViewportEvent(width, height);
       }
    }
 
