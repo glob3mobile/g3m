@@ -8,10 +8,15 @@ import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.InitializationContext;
 import org.glob3.mobile.generated.URL;
 
+import com.google.gwt.core.client.JavaScriptObject;
+
 
 public class IndexedDBStorage_WebGL
          implements
             IStorage {
+
+   private JavaScriptObject _db;
+
 
    @Override
    public boolean containsBuffer(final URL url) {
@@ -69,5 +74,51 @@ public class IndexedDBStorage_WebGL
       // TODO Auto-generated method stub
 
    }
+
+
+   private native void jsCreateOrOpenDB() /*-{
+		debugger;
+		var thisInstance = this;
+
+		var request = g3mIDB.open("g3mCache", dbVersion);
+		var db;
+
+		request.onerror = function(event) {
+			console.log("Error creating/accessing IndexedDB database");
+		};
+
+		request.onsuccess = function(event) {
+			console.log("Success creating/accessing IndexedDB database");
+			db = request.result;
+
+			db.onerror = function(event) {
+				console.log("Error creating/accessing IndexedDB database");
+			};
+
+			db.onsuccess = function() {
+				console.log("Success creating/accessing IDB database");
+			};
+
+			// Interim solution for Google Chrome to create an objectStore. Will be deprecated
+			//			if (db.setVersion) {
+			//				if (db.version != g3mDBVersion) {
+			//					var setVersion = db.setVersion(g3mDBVersion);
+			//					setVersion.onsuccess = function() {
+			//						createObjectStore(db);
+			//						getImageFile();
+			//					};
+			//				} else {
+			//					getImageFile();
+			//				}
+			//			} else {
+			//				getImageFile();
+			//			}
+		}
+
+		// For future use. Currently only in latest Firefox versions
+		request.onupgradeneeded = function(event) {
+			//			createObjectStore(event.target.result);
+		};
+   }-*/;
 
 }

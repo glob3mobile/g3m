@@ -1,8 +1,13 @@
+
+
 package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.IMathUtils;
 
-public class MathUtils_WebGL extends IMathUtils {
+
+public class MathUtils_WebGL
+         extends
+            IMathUtils {
 
    @Override
    public double pi() {
@@ -11,13 +16,13 @@ public class MathUtils_WebGL extends IMathUtils {
 
 
    @Override
-   public boolean isNan(double v) {
+   public boolean isNan(final double v) {
       return Double.isNaN(v);
    }
 
 
    @Override
-   public boolean isNan(float v) {
+   public boolean isNan(final float v) {
       return Float.isNaN(v);
    }
 
@@ -35,167 +40,167 @@ public class MathUtils_WebGL extends IMathUtils {
 
 
    @Override
-   public double sin(double v) {
+   public double sin(final double v) {
       return Math.sin(v);
    }
 
 
    @Override
-   public float sin(float v) {
+   public float sin(final float v) {
       return (float) Math.sin(v);
    }
 
 
    @Override
-   public double asin(double v) {
+   public double asin(final double v) {
       return Math.asin(v);
    }
 
 
    @Override
-   public float asin(float v) {
+   public float asin(final float v) {
       return (float) Math.asin(v);
    }
 
 
    @Override
-   public double cos(double v) {
+   public double cos(final double v) {
       return Math.cos(v);
    }
 
 
    @Override
-   public float cos(float v) {
+   public float cos(final float v) {
       return (float) Math.cos(v);
    }
 
 
    @Override
-   public double acos(double v) {
+   public double acos(final double v) {
       return Math.acos(v);
    }
 
 
    @Override
-   public float acos(float v) {
+   public float acos(final float v) {
       return (float) Math.cos(v);
    }
 
 
    @Override
-   public double tan(double v) {
+   public double tan(final double v) {
       return Math.tan(v);
    }
 
 
    @Override
-   public float tan(float v) {
+   public float tan(final float v) {
       return (float) Math.tan(v);
    }
 
 
    @Override
-   public double atan(double v) {
+   public double atan(final double v) {
       return Math.atan(v);
    }
 
 
    @Override
-   public float atan(float v) {
+   public float atan(final float v) {
       return (float) Math.atan(v);
    }
 
 
    @Override
-   public double atan2(double u,
-                       double v) {
+   public double atan2(final double u,
+                       final double v) {
       return Math.atan2(u, v);
    }
 
 
    @Override
-   public float atan2(float u,
-                      float v) {
+   public float atan2(final float u,
+                      final float v) {
       return (float) Math.atan2(u, v);
    }
 
 
    @Override
-   public double round(double v) {
+   public double round(final double v) {
       return Math.round(v);
    }
 
 
    @Override
-   public float round(float v) {
+   public float round(final float v) {
       return Math.round(v);
    }
 
 
    @Override
-   public int abs(int v) {
+   public int abs(final int v) {
       return Math.abs(v);
    }
 
 
    @Override
-   public double abs(double v) {
+   public double abs(final double v) {
       return Math.abs(v);
    }
 
 
    @Override
-   public float abs(float v) {
+   public float abs(final float v) {
       return Math.abs(v);
    }
 
 
    @Override
-   public double sqrt(double v) {
+   public double sqrt(final double v) {
       return Math.sqrt(v);
    }
 
 
    @Override
-   public float sqrt(float v) {
+   public float sqrt(final float v) {
       return (float) Math.sqrt(v);
    }
 
 
    @Override
-   public double pow(double v,
-                     double u) {
+   public double pow(final double v,
+                     final double u) {
       return Math.pow(v, u);
    }
 
 
    @Override
-   public float pow(float v,
-                    float u) {
+   public float pow(final float v,
+                    final float u) {
       return (float) Math.pow(v, u);
    }
 
 
    @Override
-   public double exp(double v) {
+   public double exp(final double v) {
       return Math.exp(v);
    }
 
 
    @Override
-   public float exp(float v) {
+   public float exp(final float v) {
       return (float) Math.exp(v);
    }
 
 
    @Override
-   public double log10(double v) {
+   public double log10(final double v) {
       return Math.log10(v);
    }
 
 
    @Override
-   public float log10(float v) {
+   public float log10(final float v) {
       return (float) Math.log10(v);
    }
 
@@ -233,6 +238,18 @@ public class MathUtils_WebGL extends IMathUtils {
    @Override
    public float minFloat() {
       return Float.MIN_VALUE;
+   }
+
+
+   @Override
+   public double log(final double v) {
+      return Math.log(v);
+   }
+
+
+   @Override
+   public float log(final float v) {
+      return (float) Math.log(v);
    }
 
 }

@@ -99,6 +99,7 @@ public class G3MWidget_WebGL
 
       onSizeChanged(Window.getClientWidth(), Window.getClientHeight());
 
+      jsDefineG3MBrowserObjects();
    }
 
 
@@ -195,7 +196,7 @@ public class G3MWidget_WebGL
          //         else {
          //SINGLE IMAGE
          final IImage singleWorldImage = factory.createImageFromFileName("world.jpg");
-         texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
+         texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage, false);
          //         }
 
 
@@ -223,10 +224,13 @@ public class G3MWidget_WebGL
 
       final FrameTasksExecutor frameTasksExecutor = new FrameTasksExecutor();
 
+      final IStringBuilder stringBuilder = new StringBuilder_WebGL();
 
-      _widget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, logger, gl, texturesHandler,
-               textureBuilder, downloader, planet, cameraConstraints, composite, busyRenderer, scheduler, _width, _height,
-               Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false);
+      final IMathUtils mathUtils = new MathUtils_WebGL();
+
+      _widget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, stringBuilder, mathUtils, logger, gl,
+               texturesHandler, textureBuilder, downloader, planet, cameraConstraints, cameraRenderer, busyRenderer, scheduler,
+               _width, _height, Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false);
 
       _widget.setUserData(userData);
 
@@ -322,5 +326,20 @@ public class G3MWidget_WebGL
 			$entry(instance.@org.glob3.mobile.specific.G3MWidget_WebGL::renderWidget()());
 		};
 		tick();
+   }-*/;
+
+
+   private native void jsDefineG3MBrowserObjects() /*-{
+		// URL Object
+		$wnd.g3mURL = $wnd.URL || $wnd.webkitURL;
+
+		// IndexedDB
+		$wnd.g3mIDB = $wnd.indexedDB || $wnd.webkitIndexedDB
+				|| $wnd.mozIndexedDB || $wnd.OIndexedDB || $wnd.msIndexedDB;
+		$wnd.g3mIDBTransaction = $wnd.IDBTransaction
+				|| $wnd.webkitIDBTransaction || $wnd.OIDBTransaction
+				|| $wnd.msIDBTransaction;
+		$wnd.g3mDBVersion = 1;
+
    }-*/;
 }
