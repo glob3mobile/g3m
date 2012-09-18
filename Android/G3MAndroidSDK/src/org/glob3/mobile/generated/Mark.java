@@ -47,7 +47,7 @@ public class Mark
 	{
 	  final Vector3D pos = getCartesianPosition(planet);
   
-	  FloatBufferBuilderFromCartesian3D vertex = new FloatBufferBuilderFromCartesian3D(CenterStrategy.NoCenter, Vector3D.zero());
+	  FloatBufferBuilderFromCartesian3D vertex = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
 	  vertex.add(pos);
 	  vertex.add(pos);
 	  vertex.add(pos);
@@ -125,7 +125,7 @@ public class Mark
 		{
 		  IImage image = rc.getFactory().createImageFromFileName(_textureFilename);
   
-		  _textureId = rc.getTexturesHandler().getGLTextureId(image, GLFormat.RGBA, _textureFilename, false);
+		  _textureId = rc.getTexturesHandler().getGLTextureId(image, GLFormat.rgba(), _textureFilename, false);
   
 		  rc.getFactory().deleteImage(image);
 		}

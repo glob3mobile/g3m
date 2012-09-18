@@ -47,7 +47,7 @@ public class TexturesHandler
 	}
   }
 
-  public final GLTextureId getGLTextureId(IImage image, GLFormat format, String name, boolean hasMipMap)
+  public final GLTextureId getGLTextureId(IImage image, int format, String name, boolean hasMipMap)
   {
   
 	TextureSpec textureSpec = new TextureSpec(name, image.getWidth(), image.getHeight(), hasMipMap);

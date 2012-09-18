@@ -152,7 +152,7 @@ public class TileTextureBuilder extends RCObject
 
 	  IImage image = _textureBuilder.createTextureFromImages(_gl, _factory, images, rectangles, textureWidth, textureHeight);
 
-	  GLTextureId glTextureId = _texturesHandler.getGLTextureId(image, GLFormat.RGBA, petitionsID, isMipmap);
+	  GLTextureId glTextureId = _texturesHandler.getGLTextureId(image, GLFormat.rgba(), petitionsID, isMipmap);
 
 	  if (glTextureId.isValid())
 	  {

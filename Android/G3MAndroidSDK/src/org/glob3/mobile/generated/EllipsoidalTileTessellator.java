@@ -42,7 +42,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
 	final double offset = nw.sub(sw).length() * 1e-3;
   
 	// create vectors
-	FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.GivenCenter, planet, sector.getCenter());
+	FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector.getCenter());
 	// create indices
 	IntBufferBuilder indices = new IntBufferBuilder();
   
@@ -85,12 +85,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
 	final Color color = new Color(Color.fromRGBA((float) 1.0, (float) 0, (float) 0, (float) 1.0));
 	final Vector3D center = planet.toCartesian(sector.getCenter());
   
-	return new IndexedMesh(GLPrimitive.LineLoop,
-  						 true,
-  						 center,
-  						 vertices.create(),
-  						 indices.create(),
-  						 color);
+	return new IndexedMesh(GLPrimitive.lineLoop(), true, center, vertices.create(), indices.create(), color);
   }
 
   public EllipsoidalTileTessellator(int resolution, boolean skirted)
@@ -116,7 +111,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
 	final int resolutionMinus1 = resolution - 1;
   
 	// create vertices coordinates
-	FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.GivenCenter, planet, sector.getCenter());
+	FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, sector.getCenter());
 	for (int j = 0; j < resolution; j++)
 	{
 	  for (int i = 0; i < resolution; i++)
@@ -202,12 +197,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
   
 	final Color color = new Color(Color.fromRGBA((float) 0.1, (float) 0.1, (float) 0.1, (float) 1.0));
   
-	return new IndexedMesh(GLPrimitive.TriangleStrip,
-  						 true,
-  						 vertices.getCenter(),
-  						 vertices.create(),
-  						 indices.create(),
-  						 color);
+	return new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), color);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

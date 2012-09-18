@@ -2,7 +2,7 @@ package org.glob3.mobile.generated;
 public class FloatBufferBuilderFromCartesian3D extends FloatBufferBuilder
 {
 
-  private final CenterStrategy _centerStrategy;
+  private final int _centerStrategy;
   private float _cx;
   private float _cy;
   private float _cz;
@@ -15,7 +15,7 @@ public class FloatBufferBuilderFromCartesian3D extends FloatBufferBuilder
   }
 
 
-  public FloatBufferBuilderFromCartesian3D(CenterStrategy cs, Vector3D center)
+  public FloatBufferBuilderFromCartesian3D(int cs, Vector3D center)
   {
 	  _centerStrategy = cs;
 	setCenter(center);
@@ -33,12 +33,12 @@ public class FloatBufferBuilderFromCartesian3D extends FloatBufferBuilder
 
   public final void add(float x, float y, float z)
   {
-	if (_centerStrategy == CenterStrategy.FirstVertex && _values.size() == 0)
+	if (_centerStrategy == CenterStrategy.firstVertex() && _values.size() == 0)
 	{
 	  setCenter(new Vector3D(x,y,z));
 	}
 
-	if (_centerStrategy != CenterStrategy.NoCenter)
+	if (_centerStrategy != CenterStrategy.noCenter())
 	{
 	  x -= _cx;
 	  y -= _cy;

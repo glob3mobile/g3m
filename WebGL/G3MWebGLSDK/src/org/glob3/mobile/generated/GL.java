@@ -22,6 +22,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class GL
 {
 
@@ -48,7 +49,8 @@ public class GL
 
   private boolean _enableCullFace;
 
-  GLCullFace _cullFace_face = GLCullFace.Back;
+  private int _cullFace_face;
+
 
 
 
@@ -170,7 +172,7 @@ public class GL
 	  _enableBlend = false;
 	  _enableDepthTest = false;
 	  _enableCullFace = false;
-	  _cullFace_face = GLCullFace.Back;
+	  _cullFace_face = GLCullFace.back();
 	  _texturesIdAllocationCounter = 0;
 	  _scaleX = 1F;
 	  _scaleY = 1F;
@@ -187,6 +189,20 @@ public class GL
 	  _flatColorA = 0F;
 	  _flatColorIntensity = 0F;
 	  _billboardTexCoord = null;
+	//Init Constants
+	GLCullFace.init(gl);
+	GLBufferType.init(gl);
+	GLFeature.init(gl);
+	GLType.init(gl);
+	GLPrimitive.init(gl);
+	GLBlendFactor.init(gl);
+	GLTextureType.init(gl);
+	GLTextureParameter.init(gl);
+	GLTextureParameterValue.init(gl);
+	GLAlignment.init(gl);
+	GLFormat.init(gl);
+	GLVariable.init(gl);
+	GLError.init(gl);
   }
 
   public final void enableVerticesPosition()
@@ -278,8 +294,7 @@ public class GL
   public final void clearScreen(float r, float g, float b, float a)
   {
 	_gl.clearColor(r, g, b, a);
-	GLBufferType[] buffers = { GLBufferType.ColorBuffer, GLBufferType.DepthBuffer };
-	_gl.clear(2, buffers);
+	_gl.clear(GLBufferType.colorBuffer() | GLBufferType.depthBuffer());
   }
 
   public final void color(float r, float g, float b, float a)
@@ -363,22 +378,22 @@ public class GL
 
   public final void drawTriangleStrip(IIntBuffer indices)
   {
-	_gl.drawElements(GLPrimitive.TriangleStrip, indices.size(), indices);
+	_gl.drawElements(GLPrimitive.triangleStrip(), indices.size(), indices);
   }
 
   public final void drawLines(IIntBuffer indices)
   {
-	_gl.drawElements(GLPrimitive.Lines, indices.size(), indices);
+	_gl.drawElements(GLPrimitive.lineLoop(), indices.size(), indices);
   }
 
   public final void drawLineLoop(IIntBuffer indices)
   {
-	_gl.drawElements(GLPrimitive.LineLoop, indices.size(), indices);
+	_gl.drawElements(GLPrimitive.lineLoop(), indices.size(), indices);
   }
 
   public final void drawPoints(IIntBuffer indices)
   {
-	_gl.drawElements(GLPrimitive.Points, indices.size(), indices);
+	_gl.drawElements(GLPrimitive.points(), indices.size(), indices);
   }
 
   public final void setProjection(MutableMatrix44D projection)
@@ -433,13 +448,13 @@ public class GL
 
   public final void enablePolygonOffset(float factor, float units)
   {
-	_gl.enable(GLFeature.PolygonOffsetFill);
+	_gl.enable(GLFeature.polygonOffsetFill());
 	_gl.polygonOffset(factor, units);
   }
 
   public final void disablePolygonOffset()
   {
-	_gl.disable(GLFeature.PolygonOffsetFill);
+	_gl.disable(GLFeature.polygonOffsetFill());
   }
 
   public final void lineWidth(float width)
@@ -452,29 +467,31 @@ public class GL
 	_gl.uniform1f(GlobalMembersGL.Uniforms.PointSize, size);
   }
 
-  public final GLError getError()
+  public final int getError()
   {
 	return _gl.getError();
   }
 
-  public final GLTextureId uploadTexture(IImage image, GLFormat format, boolean generateMipmap)
+  public final GLTextureId uploadTexture(IImage image, int format, boolean generateMipmap)
   {
 	final GLTextureId texId = getGLTextureId();
 	if (texId.isValid())
 	{
-  	_gl.blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
-  	_gl.pixelStorei(GLAlignment.Unpack, 1);
   
-  	_gl.bindTexture(GLTextureType.Texture2D, texId.getGLTextureId());
-  	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MinFilter, GLTextureParameterValue.Linear);
-  	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MagFilter, GLTextureParameterValue.Linear);
-  	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapS, GLTextureParameterValue.ClampToEdge);
-  	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapT, GLTextureParameterValue.ClampToEdge);
-  	_gl.texImage2D(image, format);
+	  _gl.blendFunc(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
+	  _gl.pixelStorei(GLAlignment.unpack(), 1);
   
-  	if (generateMipmap) {
-  	  _gl.generateMipmap(GLTextureType.Texture2D);
-  	}
+	  _gl.bindTexture(GLTextureType.texture2D(), texId.getGLTextureId());
+	  _gl.texParameteri(GLTextureType.texture2D(), GLTextureParameter.minFilter(), GLTextureParameterValue.linear());
+	  _gl.texParameteri(GLTextureType.texture2D(), GLTextureParameter.magFilter(), GLTextureParameterValue.linear());
+	  _gl.texParameteri(GLTextureType.texture2D(), GLTextureParameter.wrapS(), GLTextureParameterValue.clampToEdge());
+	  _gl.texParameteri(GLTextureType.texture2D(), GLTextureParameter.wrapT(), GLTextureParameterValue.clampToEdge());
+	  _gl.texImage2D(image, format);
+  
+	  if (generateMipmap)
+	  {
+		_gl.generateMipmap(GLTextureType.texture2D());
+	  }
 	}
 	else
 	{
@@ -501,14 +518,14 @@ public class GL
 
   public final void bindTexture(GLTextureId textureId)
   {
-	_gl.bindTexture(GLTextureType.Texture2D, textureId.getGLTextureId());
+	_gl.bindTexture(GLTextureType.texture2D(), textureId.getGLTextureId());
   }
 
   public final void enableDepthTest()
   {
 	if (!_enableDepthTest)
 	{
-	  _gl.enable(GLFeature.DepthTest);
+	  _gl.enable(GLFeature.depthTest());
 	  _enableDepthTest = true;
 	}
   }
@@ -516,7 +533,7 @@ public class GL
   {
 	if (_enableDepthTest)
 	{
-	  _gl.disable(GLFeature.DepthTest);
+	  _gl.disable(GLFeature.depthTest());
 	  _enableDepthTest = false;
 	}
   }
@@ -525,7 +542,7 @@ public class GL
   {
 	if (!_enableBlend)
 	{
-	  _gl.enable(GLFeature.Blend);
+	  _gl.enable(GLFeature.blend());
 	  _enableBlend = true;
 	}
   }
@@ -533,7 +550,7 @@ public class GL
   {
 	if (_enableBlend)
 	{
-	  _gl.disable(GLFeature.Blend);
+	  _gl.disable(GLFeature.blend());
 	  _enableBlend = false;
 	}
   
@@ -557,7 +574,7 @@ public class GL
 	vertexPointer(3, 0, vertices);
 	setTextureCoordinates(2, 0, getBillboardTexCoord());
   
-	_gl.drawArrays(GLPrimitive.TriangleStrip, 0, vertices.size() / 3);
+	_gl.drawArrays(GLPrimitive.triangleStrip(), 0, vertices.size() / 3);
   
 	enableDepthTest();
   
@@ -578,11 +595,11 @@ public class GL
 	_texturesIdTakeCounter++;
   }
 
-  public final void enableCullFace(GLCullFace face)
+  public final void enableCullFace(int face)
   {
 	if (!_enableCullFace)
 	{
-	  _gl.enable(GLFeature.CullFacing);
+	  _gl.enable(GLFeature.cullFace());
 	  _enableCullFace = true;
 	}
   
@@ -596,7 +613,7 @@ public class GL
   {
 	if (_enableCullFace)
 	{
-	  _gl.disable(GLFeature.CullFacing);
+	  _gl.disable(GLFeature.cullFace());
 	  _enableCullFace = false;
 	}
   }
@@ -651,12 +668,12 @@ public class GL
 
   public final void setBlendFuncSrcAlpha()
   {
-	_gl.blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
+	_gl.blendFunc(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
   }
 
   public final void getViewport(int[] v)
   {
-	_gl.getIntegerv(GLVariable.Viewport, v);
+	_gl.getIntegerv(GLVariable.viewport(), v);
   }
 
   public void dispose()

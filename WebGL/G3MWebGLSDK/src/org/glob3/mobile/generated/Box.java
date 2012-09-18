@@ -254,7 +254,7 @@ public class Box extends Extent
   
 	int[] i = { 0, 1, 1, 2, 2, 3, 3, 0, 1, 5, 5, 6, 6, 2, 2, 1, 5, 4, 4, 7, 7, 6, 6, 5, 4, 0, 0, 3, 3, 7, 7, 4, 3, 2, 2, 6, 6, 7, 7, 3, 0, 1, 1, 5, 5, 4, 4, 0 };
   
-	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.NoCenter, Vector3D.zero());
+	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
 	IntBufferBuilder indices = new IntBufferBuilder();
   
 	for (int n = 0; n<numVertices; n++)
@@ -266,7 +266,7 @@ public class Box extends Extent
 	Color flatColor = new Color(Color.fromRGBA((float)1.0, (float)1.0, (float)0.0, (float)1.0));
   
 	// create mesh
-	_mesh = new IndexedMesh(GLPrimitive.TriangleStrip, true, vertices.getCenter(), vertices.create(), indices.create(), flatColor);
+	_mesh = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), flatColor);
   }
 
 }

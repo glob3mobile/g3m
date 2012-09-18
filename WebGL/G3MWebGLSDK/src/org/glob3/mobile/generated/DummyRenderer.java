@@ -41,7 +41,7 @@ public class DummyRenderer extends Renderer
 	//_numIndices = 2 * (res - 1) * (res + 1);
 	//_index = new int[_numIndices];
   
-	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.NoCenter, Vector3D.zero());
+	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
 	IntBufferBuilder index = new IntBufferBuilder();
   
 	// create vertices

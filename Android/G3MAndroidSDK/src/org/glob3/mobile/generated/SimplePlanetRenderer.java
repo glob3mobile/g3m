@@ -42,7 +42,7 @@ public class SimplePlanetRenderer extends Renderer
   private IFloatBuffer createVertices(Planet planet)
   {
 	//Vertices with Center in zero
-	FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.GivenCenter, planet, Vector3D.zero());
+	FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.givenCenter(), planet, Vector3D.zero());
 	final double lonRes1 = (double)(_lonRes-1);
 	final double latRes1 = (double)(_latRes-1);
 	for(double i = 0.0; i < _lonRes; i++)
@@ -128,7 +128,7 @@ public class SimplePlanetRenderer extends Renderer
 		rc.getFactory().deleteImage(image);
 	  }
   
-	  texId = rc.getTexturesHandler().getGLTextureId(scaledImage, GLFormat.RGBA, _textureFilename, false);
+	  texId = rc.getTexturesHandler().getGLTextureId(scaledImage, GLFormat.rgba(), _textureFilename, false);
   
 	  rc.getFactory().deleteImage(scaledImage);
   
@@ -162,13 +162,7 @@ public class SimplePlanetRenderer extends Renderer
 	  flatColor = new Color(Color.fromRGBA((float) 0.0, (float) 1.0, (float) 0.0, (float) 1.0));
 	}
   
-	IndexedMesh im = new IndexedMesh(GLPrimitive.TriangleStrip,
-  								   true,
-  								   Vector3D.zero(),
-  								   ver,
-  								   ind,
-  								   flatColor,
-  								   vertexColors);
+	IndexedMesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, Vector3D.zero(), ver, ind, flatColor, vertexColors);
   
 	TextureMapping texMap = new SimpleTextureMapping(texId, texC, true);
   

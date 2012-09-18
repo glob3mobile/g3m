@@ -38,7 +38,7 @@ public class BusyQuadRenderer extends Renderer implements EffectTarget
 	{
 	  IImage image = rc.getFactory().createImageFromFileName(_textureFilename);
   
-	  texId = rc.getTexturesHandler().getGLTextureId(image, GLFormat.RGBA, _textureFilename, false);
+	  texId = rc.getTexturesHandler().getGLTextureId(image, GLFormat.rgba(), _textureFilename, false);
   
 	  rc.getFactory().deleteImage(image);
   
@@ -50,8 +50,7 @@ public class BusyQuadRenderer extends Renderer implements EffectTarget
 	}
   
 	final float halfSize = 16F;
-  
-	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.NoCenter, Vector3D.zero());
+	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
 	vertices.add(-halfSize, +halfSize, 0);
 	vertices.add(-halfSize, -halfSize, 0);
 	vertices.add(+halfSize, +halfSize, 0);
@@ -69,7 +68,7 @@ public class BusyQuadRenderer extends Renderer implements EffectTarget
 	texCoords.add(1, 0);
 	texCoords.add(1, 1);
   
-	IndexedMesh im = new IndexedMesh(GLPrimitive.TriangleStrip, true, Vector3D.zero(), vertices.create(), indices.create());
+	IndexedMesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, Vector3D.zero(), vertices.create(), indices.create());
   
 	TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true);
   
