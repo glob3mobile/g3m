@@ -335,9 +335,17 @@ public class G3MWidget_Android
 
    @Override
    public void onPause() {
-      if (_g3mWidget != null) {
-         _g3mWidget.onPause();
+
+      final int __TODO_check_onpause;
+      //      if (_g3mWidget != null) {
+      //         _g3mWidget.onPause();
+      //      }
+
+      /*
+      if (_g3mWidget == null) {
+         System.err.println("break (point) on me");
       }
+      */
       super.onPause();
    }
 
