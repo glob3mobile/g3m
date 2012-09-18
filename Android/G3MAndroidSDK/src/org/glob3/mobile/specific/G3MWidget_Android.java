@@ -59,7 +59,7 @@ public class G3MWidget_Android
          implements
             OnGestureListener {
 
-   private G3MWidget                                      _widget;
+   private G3MWidget                                      _g3mWidget;
    private ES2Renderer                                    _es2renderer;
 
    private final MotionEventProcessor                     _motionEventProcessor = new MotionEventProcessor();
@@ -113,7 +113,7 @@ public class G3MWidget_Android
             queueEvent(new Runnable() {
                @Override
                public void run() {
-                  _widget.onTouchEvent(te);
+                  _g3mWidget.onTouchEvent(te);
                }
             });
 
@@ -133,7 +133,7 @@ public class G3MWidget_Android
                                 final int oldh) {
       super.onSizeChanged(w, h, oldw, oldh);
 
-      if (_widget == null) {
+      if (_g3mWidget == null) {
          // SETTING RENDERER
          _es2renderer = new ES2Renderer(this.getContext(), this);
          setRenderer(_es2renderer);
@@ -154,7 +154,7 @@ public class G3MWidget_Android
          queueEvent(new Runnable() {
             @Override
             public void run() {
-               _widget.onTouchEvent(te);
+               _g3mWidget.onTouchEvent(te);
             }
          });
          return true;
@@ -190,7 +190,7 @@ public class G3MWidget_Android
       queueEvent(new Runnable() {
          @Override
          public void run() {
-            _widget.onTouchEvent(te);
+            _g3mWidget.onTouchEvent(te);
          }
       });
    }
@@ -220,12 +220,12 @@ public class G3MWidget_Android
 
 
    public G3MWidget getWidget() {
-      if (_widget == null) {
+      if (_g3mWidget == null) {
          //initWidgetDemo();
          //initSimpleWidgetDemo();
          initWidgetPrivate(_cameraConstraints, _layerSet, _renderers, _userData);
       }
-      return _widget;
+      return _g3mWidget;
    }
 
 
@@ -368,31 +368,31 @@ public class G3MWidget_Android
 
       final IThreadUtils threadUtils = new ThreadUtils_Android(this);
 
-      final StringBuilder_Android stringBuilder = new StringBuilder_Android(); //StringBuilder
+      final StringBuilder_Android stringBuilder = new StringBuilder_Android();
 
-      final IMathUtils math = new MathUtils_Android(); //MathUtils
+      final IMathUtils math = new MathUtils_Android();
 
-      _widget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, stringBuilder, math, logger, gl,
+      _g3mWidget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, stringBuilder, math, logger, gl,
                texturesHandler, textureBuilder, downloader, planet, cameraConstraints, composite, busyRenderer, scheduler, width,
                height, Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false);
 
-      _widget.setUserData(userData);
+      _g3mWidget.setUserData(userData);
 
    }
 
 
    @Override
    public void onPause() {
-      if (_widget != null) {
-         _widget.onPause();
+      if (_g3mWidget != null) {
+         _g3mWidget.onPause();
       }
    }
 
 
    @Override
    public void onResume() {
-      if (_widget != null) {
-         _widget.onResume();
+      if (_g3mWidget != null) {
+         _g3mWidget.onResume();
       }
    }
 }
