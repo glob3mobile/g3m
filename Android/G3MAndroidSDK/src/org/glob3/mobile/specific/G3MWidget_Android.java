@@ -336,9 +336,9 @@ public class G3MWidget_Android
 
    @Override
    public void onPause() {
-      synchronized (_pausedMutex) {
-         _isPaused = true;
-      }
+      //      synchronized (_pausedMutex) {
+      //         _isPaused = true;
+      //      }
 
       final int __TODO_check_onpause;
       if (_es2renderer != null) {
@@ -361,28 +361,28 @@ public class G3MWidget_Android
          _g3mWidget.onResume();
       }
 
-      synchronized (_pausedMutex) {
-         _isPaused = false;
-
-         // drain queue
-         for (final Runnable runnable : _pausedRunnableQueue) {
-            super.queueEvent(runnable);
-         }
-         _pausedRunnableQueue.clear();
-      }
+      //      synchronized (_pausedMutex) {
+      //         _isPaused = false;
+      //
+      //         // drain queue
+      //         for (final Runnable runnable : _pausedRunnableQueue) {
+      //            super.queueEvent(runnable);
+      //         }
+      //         _pausedRunnableQueue.clear();
+      //      }
    }
 
 
    @Override
    public void queueEvent(final Runnable runnable) {
-      synchronized (_pausedMutex) {
-         if (_isPaused) {
-            _pausedRunnableQueue.add(runnable);
-         }
-         else {
-            super.queueEvent(runnable);
-         }
-      }
+      //      synchronized (_pausedMutex) {
+      //         if (_isPaused) {
+      //            _pausedRunnableQueue.add(runnable);
+      //         }
+      //         else {
+      super.queueEvent(runnable);
+      //         }
+      //      }
    }
 
 
