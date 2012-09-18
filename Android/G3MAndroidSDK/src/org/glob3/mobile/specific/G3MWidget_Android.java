@@ -219,10 +219,8 @@ public class G3MWidget_Android
    }
 
 
-   public G3MWidget getWidget() {
+   public G3MWidget getG3MWidget() {
       if (_g3mWidget == null) {
-         //initWidgetDemo();
-         //initSimpleWidgetDemo();
          initWidgetPrivate(_cameraConstraints, _layerSet, _renderers, _userData);
       }
       return _g3mWidget;
@@ -264,7 +262,6 @@ public class G3MWidget_Android
                forceTopLevelTilesRenderOnStart);
 
       initWidget(cameraRenderer, cameraConstraints, layerSet, parameters, renderers, userData);
-
    }
 
 
@@ -286,38 +283,6 @@ public class G3MWidget_Android
 
       final IStorage storage = new SQLiteStorage_Android("g3m.cache", this.getContext());
 
-      //      //TESTING DB
-      //      if (false) {
-      //         final byte[] b = { 1, 0, 1 };
-      //         final ByteBuffer bb = new ByteBuffer(b, b.length);
-      //         final URL url = new URL("test");
-      //         final URL url2 = new URL("test2");
-      //
-      //         if (storage.contains(url)) {
-      //            final ByteBuffer bb2 = storage.read(url);
-      //         }
-      //
-      //         storage.save(url, bb);
-      //
-      //         if (storage.contains(url)) {
-      //            final ByteBuffer bb1 = storage.read(url);
-      //         }
-      //
-      //         storage.save(url, bb);
-      //
-      //         if (storage.contains(url)) {
-      //            final ByteBuffer bb2 = storage.read(url);
-      //         }
-      //
-      //         if (storage.contains(url2)) {
-      //            final ByteBuffer bb2 = storage.read(url2);
-      //         }
-      //
-      //
-      //      }
-
-
-      //		  IDownloader downloader = null;// new CachedDownloader(new Downloader_Android(8), storage);
       final int connectTimeout = 60000;
       final int readTimeout = 60000;
       final IDownloader downloader = new CachedDownloader(new Downloader_Android(8, connectTimeout, readTimeout), storage);
@@ -377,7 +342,6 @@ public class G3MWidget_Android
                height, Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false);
 
       _g3mWidget.setUserData(userData);
-
    }
 
 
@@ -392,9 +356,10 @@ public class G3MWidget_Android
 
    @Override
    public void onResume() {
-      super.onResume();
       if (_g3mWidget != null) {
+         super.onResume();
          _g3mWidget.onResume();
       }
    }
+
 }
