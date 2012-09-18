@@ -22,110 +22,158 @@ import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IIntBuffer;
 import org.glob3.mobile.generated.INativeGL;
 
+import com.google.gwt.core.client.JavaScriptObject;
+
 
 public class NativeGL_WebGL
          extends
             INativeGL {
 
-   // stack of ModelView matrices
-   //   MutableMatrix44D                     _modelView = new MutableMatrix44D();
-   //   int                                  _numIndex  = 0;
-   //   int                                  _index[];
-   //
-   //   public static List<JavaScriptObject> _programList;
+   /////////////////////////////
 
 
-   //   public NativeGL_WebGL() {
-   //      webGLStart();
-   //   }
+   JavaScriptObject _gl; //WebGL context
 
 
-   //   // WebGL loading function
-   //   private void webGLStart() {
-   //      final JavaScriptObject canvas = DOM.getElementById(G3MWidget_WebGL.canvasId);
-   //      WebGL.jsInitGL(canvas);
-   //      WebGL.jsLoadWebGlUtils();
-   //      WebGL.jsLoadGlMatrix();
-   //      WebGL.loadGlobalVars();
-   //      CreateProgram();
-   //      WebGL.jsEnable3D();
-   //      WebGL.jsUseProgram(); //USING SHADING PROGRAM
-   //      WebGL.jsIdentity();
-   //   }
+   public NativeGL_WebGL(final JavaScriptObject canvas) {
+      _gl = jsCreateContext(canvas);
+   }
 
 
-   //   // WebGL program creation function
-   //   private int CreateProgram() {
-   //      final JavaScriptObject newWebGLProgram = WebGL.jsCreateNewProgram("shader-fs", "shader-vs");
-   //      if (newWebGLProgram == null) {
-   //         return 0;
-   //      }
-   //
-   //      return 1;
-   //   }
-
-
-   @Override
-   public native int getAttribLocation(final int program,
-                                       final String name)/*-{
-		return $wnd.gl.getAttribLocation(program, name);
+   public static native JavaScriptObject jsCreateContext(JavaScriptObject canvas) /*-{
+		gl = canvas.getContext("experimental-webgl");
+		gl.viewportWidth = canvas.width;
+		gl.viewportHeight = canvas.height;
+		if (!gl) {
+			alert("Could not initialise WebGL");
+		}
+		return gl;
    }-*/;
 
 
    @Override
-   public native int getUniformLocation(final int program,
-                                        final String name) /*-{
-		return $wnd.gl.getUniformLocation(program, name);
+   public int getAttribLocation(final int program,
+                                final String name) {
+
+      return jsGetAttribLocation(_gl, program, name);
+
+   }
+
+
+   private native int jsGetAttribLocation(JavaScriptObject gl,
+                                          final int program,
+                                          final String name)/*- {
+                                                            return gl.getAttribLocation(program, name);
+                                                            }-*/;
+
+
+   @Override
+   public int getUniformLocation(final int program,
+                                 final String name) {
+      return jsGetUniformLocation(_gl, program, name);
+   }
+
+
+   private native int jsGetUniformLocation(JavaScriptObject gl,
+                                           final int program,
+                                           final String name) /*-{
+		return gl.getUniformLocation(program, name);
    }-*/;
 
 
    @Override
-   public native void uniform2f(final int loc,
-                                final float x,
-                                final float y) /*-{
-		$wnd.gl.uniform2f(loc, x, y);
+   public void uniform2f(final int loc,
+                         final float x,
+                         final float y) {
+      jsUniform2f(_gl, loc, x, y);
+   }
+
+
+   private native void jsUniform2f(JavaScriptObject gl,
+                                   final int loc,
+                                   final float x,
+                                   final float y) /*-{
+		gl.uniform2f(loc, x, y);
    }-*/;
 
 
    @Override
-   public native void uniform1f(final int loc,
-                                final float x)/*-{
-		$wnd.gl.uniform1f(loc, x);
+   public void uniform1f(final int loc,
+                         final float x) {
+      jsUniform1f(_gl, loc, x);
+   }
+
+
+   private native void jsUniform1f(JavaScriptObject gl,
+                                   final int loc,
+                                   final float x) /*-{
+		gl.uniform1f(loc, x);
    }-*/;
 
 
    @Override
-   public native void uniform1i(final int loc,
-                                final int v) /*-{
-		$wnd.gl.uniform1i(loc, v);
+   public void uniform1i(final int loc,
+                         final int v) {
+      jsUniform1i(_gl, loc, v);
+   }
+
+
+   private native void jsUniform1i(JavaScriptObject gl,
+                                   final int loc,
+                                   final float x) /*-{
+		gl.uniform1i(loc, x);
    }-*/;
 
+
+   @Override
+   public void uniformMatrix4fv(final int location,
+                                final int count,
+                                final boolean transpose,
+                                final float[] value) {
+      jsUniformMatrix4fv(_gl, location, count, transpose, value);
+   }
 
    int TODO_ignoring_count;
 
 
-   @Override
-   public native void uniformMatrix4fv(final int location,
-                                       final int count,
-                                       final boolean transpose,
-                                       final float[] value) /*-{
-		$wnd.gl.uniformMatrix4fv(location, transpose, matrix);
+   private native void jsUniformMatrix4fv(JavaScriptObject gl,
+                                          final int location,
+                                          final int count,
+                                          final boolean transpose,
+                                          final float[] value) /*-{
+		gl.uniformMatrix4fv(location, transpose, matrix);
    }-*/;
 
 
    @Override
-   public native void clearColor(final float red,
-                                 final float green,
-                                 final float blue,
-                                 final float alpha)/*-{
-		$wnd.gl.clearColor(red, green, blue, alpha);
+   public void clearColor(final float red,
+                          final float green,
+                          final float blue,
+                          final float alpha) {
+      jsClearColor(_gl, red, green, blue, alpha);
+   }
+
+
+   private native void jsClearColor(JavaScriptObject gl,
+                                    final float red,
+                                    final float green,
+                                    final float blue,
+                                    final float alpha)/*-{
+		gl.clearColor(red, green, blue, alpha);
    }-*/;
 
 
    @Override
-   public native void clear(final int nBuffer,
-                            final GLBufferType[] buffers) /*-{
-		$wnd.gl.clear($wnd.gl.COLOR_BUFFER_BIT | $wnd.gl.DEPTH_BUFFER_BIT);
+   public void clear(final int nBuffer,
+                     final GLBufferType[] buffers) {
+      jsClear(_gl, 2, buffers);
+   }
+
+
+   private native void jsClear(JavaScriptObject gl,
+                               final int nBuffer,
+                               final GLBufferType[] buffers) /*-{
+		gl.clear($wnd.gl.COLOR_BUFFER_BIT | $wnd.gl.DEPTH_BUFFER_BIT);
    }-*/;
 
 
@@ -135,39 +183,73 @@ public class NativeGL_WebGL
                          final float v1,
                          final float v2,
                          final float v3) {
-      // TODO this method must be implemented
-
+      jsUniform4f(_gl, location, v0, v1, v2, v3);
    }
+
+
+   private native void jsUniform4f(JavaScriptObject gl,
+                                   final int location,
+                                   final float v0,
+                                   final float v1,
+                                   final float v2,
+                                   final float v3) /*-{
+		gl.uniform4f(location, v0, v1, v2, v3);
+   }-*/;
 
 
    @Override
    public void enable(final GLFeature feature) {
-      // TODO this method must be implemented
-
+      //TODO
+      //    jsEnable(_gl, jsGetEnum(_gl, feature));
    }
+
+
+   private native void jsEnable(JavaScriptObject gl,
+                                int feature) /*-{
+		gl.enable(feature);
+   }-*/;
 
 
    @Override
    public void disable(final GLFeature feature) {
-      // TODO this method must be implemented
-
+      //TODO
+      //    jsDisable(_gl, jsGetEnum(_gl, feature));
    }
+
+
+   private native void jsDisable(JavaScriptObject gl,
+                                 int feature) /*-{
+		gl.disable(feature);
+   }-*/;
 
 
    @Override
    public void polygonOffset(final float factor,
                              final float units) {
-      // TODO this method must be implemented
-
+      jsPolygonOffset(_gl, factor, units);
    }
+
+
+   private native void jsPolygonOffset(JavaScriptObject gl,
+                                       final float factor,
+                                       final float units) /*-{
+		gl.polygonOffset(factor, units);
+   }-*/;
 
 
    @Override
    public void blendFunc(final GLBlendFactor sfactor,
                          final GLBlendFactor dfactor) {
-      // TODO this method must be implemented
-
+      //TODO
+      //     jsBlendFunc(_gl, TODO_ignoring_count, TODO_ignoring_count)
    }
+
+
+   private native void jsBlendFunc(JavaScriptObject gl,
+                                   int sfactor,
+                                   int dfactor) /*-{
+		gl.blendFunc(sfactor, dfactor);
+   }-*/;
 
 
    @Override
