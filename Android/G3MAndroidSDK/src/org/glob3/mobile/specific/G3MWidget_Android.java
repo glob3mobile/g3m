@@ -136,7 +136,7 @@ public class G3MWidget_Android
                                 final int oldh) {
       super.onSizeChanged(w, h, oldw, oldh);
 
-      if (_g3mWidget == null) {
+      if (_es2renderer == null) {
          _es2renderer = new ES2Renderer(this.getContext(), this);
          setRenderer(_es2renderer);
       }
@@ -341,7 +341,7 @@ public class G3MWidget_Android
       }
 
       final int __TODO_check_onpause;
-      if (_g3mWidget != null) {
+      if (_es2renderer != null) {
          _g3mWidget.onPause();
       }
 
@@ -356,7 +356,7 @@ public class G3MWidget_Android
 
    @Override
    public void onResume() {
-      if (_g3mWidget != null) {
+      if (_es2renderer != null) {
          super.onResume();
          _g3mWidget.onResume();
       }
