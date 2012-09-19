@@ -19,7 +19,7 @@ public class IndexedDBStorage_WebGL
 
 
    public IndexedDBStorage_WebGL() {
-      //      jsCreateOrOpenDB();
+      jsCreateOrOpenDB();
    }
 
 
@@ -124,9 +124,9 @@ public class IndexedDBStorage_WebGL
 		}
 
 		// For future use. Currently only in latest Firefox versions
-		request.onupgradeneeded = function(event) {
-			//			createObjectStore(event.target.result);
-		};
+		//		request.onupgradeneeded = function(event) {
+		//			//			createObjectStore(event.target.result);
+		//		};
    }-*/;
 
 }

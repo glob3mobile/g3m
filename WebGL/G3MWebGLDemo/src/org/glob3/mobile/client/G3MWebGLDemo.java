@@ -6,13 +6,11 @@ import java.util.ArrayList;
 
 import org.glob3.mobile.generated.DummyRenderer;
 import org.glob3.mobile.generated.ICameraConstrainer;
-import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
 import org.glob3.mobile.generated.UserData;
 import org.glob3.mobile.specific.G3MWidget_WebGL;
-import org.glob3.mobile.specific.IndexedDBStorage_WebGL;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.Panel;
@@ -36,9 +34,8 @@ public class G3MWebGLDemo
          _widget = new G3MWidget_WebGL();
          g3mWidgetHolder.add(_widget);
 
-         //         initWidgetDemo();
+         initWidgetDemo();
       }
-      final IStorage storage = new IndexedDBStorage_WebGL();
    }
 
 
