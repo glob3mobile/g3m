@@ -562,7 +562,7 @@ const GLTextureId GL::getGLTextureId() {
   if (_texturesIdBag.size() == 0) {
     const int bugdetSize = 256;
     
-    ILogger::instance()->logInfo("= Creating %d texturesIds...\n", bugdetSize);
+    ILogger::instance()->logInfo("= Creating %d texturesIds...", bugdetSize);
     
     const std::vector<GLTextureId> ids = _gl->genTextures(bugdetSize);
     
@@ -573,7 +573,7 @@ const GLTextureId GL::getGLTextureId() {
     
     _texturesIdAllocationCounter += bugdetSize;
     
-    ILogger::instance()->logInfo("= Created %d texturesIds (accumulated %d).\n", bugdetSize, _texturesIdAllocationCounter);
+    ILogger::instance()->logInfo("= Created %d texturesIds (accumulated %d).", bugdetSize, _texturesIdAllocationCounter);
   }
   
   _texturesIdGetCounter++;

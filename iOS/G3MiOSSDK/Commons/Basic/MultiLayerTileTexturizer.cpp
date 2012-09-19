@@ -313,6 +313,7 @@ public:
         }
       }
       
+      delete image;
     }
     
 #ifdef C_CODE
@@ -392,7 +393,7 @@ public:
     checkIsPending(position);
     
     _status[position]  = STATUS_DOWNLOADED;
-    _petitions[position]->setImage( image->copy() );
+    _petitions[position]->setImage( image->shallowCopy() );
     
     stepDone();
   }

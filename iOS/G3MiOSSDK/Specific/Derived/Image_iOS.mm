@@ -13,7 +13,7 @@
 
 Image_iOS::Image_iOS(int width, int height) {
   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-  unsigned char* imageData = new unsigned char[height * width * 4 ];
+  unsigned char* imageData = new unsigned char[height * width * 4];
   
   CGContextRef context = CGBitmapContextCreate(imageData,
                                                width, height,
@@ -167,6 +167,6 @@ const std::string Image_iOS::description() const {
   return s;
 }
 
-IImage* Image_iOS::copy() const {
+IImage* Image_iOS::shallowCopy() const {
   return new Image_iOS(_image, _sourceBuffer);
 }

@@ -16,19 +16,19 @@ class CPUTextureBuilder:public TextureBuilder
 public:
   
   //Scales but may return the same image
-  const IImage* createTextureFromImage(GL * gl,
+  const IImage* createTextureFromImage(GL* gl,
                                        const IFactory* factory,
                                        const IImage* image,
                                        int width,
                                        int height) const;
   
-  const IImage* createTextureFromImages(GL * gl,
+  const IImage* createTextureFromImages(GL* gl,
                                         const IFactory* factory,
                                         const std::vector<const IImage*> images,
                                         int width,
                                         int height) const;
   
-  const IImage* createTextureFromImages(GL * gl,
+  const IImage* createTextureFromImages(GL* gl,
                                         const IFactory* factory,
                                         const std::vector<const IImage*> images,
                                         const std::vector<const Rectangle*> rectangles,

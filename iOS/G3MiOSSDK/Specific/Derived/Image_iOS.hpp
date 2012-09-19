@@ -18,8 +18,8 @@
 
 class Image_iOS: public IImage {
 private:
-  UIImage* _image;
-  mutable NSData*  _sourceBuffer;
+  UIImage*        _image;
+  mutable NSData* _sourceBuffer;
   
   Image_iOS(const Image_iOS& that);
   void operator=(const Image_iOS& that);
@@ -27,7 +27,8 @@ private:
 public:
   
   virtual ~Image_iOS() {
-
+    _image        = NULL;
+    _sourceBuffer = NULL;
   }
   
   Image_iOS(UIImage* image,
@@ -75,7 +76,7 @@ public:
 
   const std::string description() const;
   
-  IImage* copy() const;
+  IImage* shallowCopy() const;
   
 };
 
