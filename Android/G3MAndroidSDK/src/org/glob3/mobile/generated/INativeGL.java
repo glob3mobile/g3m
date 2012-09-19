@@ -19,6 +19,9 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IImage;
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IGLUniformID;
+
 
 public abstract class INativeGL
 {
@@ -36,24 +39,24 @@ public abstract class INativeGL
   public abstract int getAttribLocation(IGLProgramId program, String name);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual int getUniformLocation(IGLProgramId* program, const String& name) const = 0;
-  public abstract int getUniformLocation(IGLProgramId program, String name);
+//ORIGINAL LINE: virtual IGLUniformID* getUniformLocation(IGLProgramId* program, const String& name) const = 0;
+  public abstract IGLUniformID getUniformLocation(IGLProgramId program, String name);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void uniform2f(int loc, float x, float y) const = 0;
-  public abstract void uniform2f(int loc, float x, float y);
+//ORIGINAL LINE: virtual void uniform2f(IGLUniformID* loc, float x, float y) const = 0;
+  public abstract void uniform2f(IGLUniformID loc, float x, float y);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void uniform1f(int loc, float x) const = 0;
-  public abstract void uniform1f(int loc, float x);
+//ORIGINAL LINE: virtual void uniform1f(IGLUniformID* loc, float x) const = 0;
+  public abstract void uniform1f(IGLUniformID loc, float x);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void uniform1i(int loc, int v) const = 0;
-  public abstract void uniform1i(int loc, int v);
+//ORIGINAL LINE: virtual void uniform1i(IGLUniformID* loc, int v) const = 0;
+  public abstract void uniform1i(IGLUniformID loc, int v);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void uniformMatrix4fv(int location, int count, boolean transpose, const float value[]) const = 0;
-  public abstract void uniformMatrix4fv(int location, int count, boolean transpose, float[] value);
+//ORIGINAL LINE: virtual void uniformMatrix4fv(IGLUniformID* location, int count, boolean transpose, const float value[]) const = 0;
+  public abstract void uniformMatrix4fv(IGLUniformID location, int count, boolean transpose, float[] value);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual void clearColor(float red, float green, float blue, float alpha) const = 0;
@@ -64,8 +67,8 @@ public abstract class INativeGL
   public abstract void clear(int buffers);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void uniform4f(int location, float v0, float v1, float v2, float v3) const = 0;
-  public abstract void uniform4f(int location, float v0, float v1, float v2, float v3);
+//ORIGINAL LINE: virtual void uniform4f(IGLUniformID* location, float v0, float v1, float v2, float v3) const = 0;
+  public abstract void uniform4f(IGLUniformID location, float v0, float v1, float v2, float v3);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual void enable(int feature) const = 0;
