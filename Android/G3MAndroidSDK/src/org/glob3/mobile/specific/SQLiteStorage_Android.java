@@ -221,7 +221,7 @@ public class SQLiteStorage_Android
 
 
    @Override
-   public void onResume(final InitializationContext ic) {
+   public synchronized void onResume(final InitializationContext ic) {
       if (_db == null) {
          _db = _dbHelper.getWritableDatabase();
       }
@@ -229,11 +229,17 @@ public class SQLiteStorage_Android
 
 
    @Override
-   public void onPause(final InitializationContext ic) {
+   public synchronized void onPause(final InitializationContext ic) {
       if (_db != null) {
          _db.close();
          _db = null;
       }
+   }
+
+
+   @Override
+   public synchronized boolean isAvailable() {
+      return (_db != null);
    }
 
 }
