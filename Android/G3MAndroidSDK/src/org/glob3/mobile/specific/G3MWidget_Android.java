@@ -393,8 +393,8 @@ public class G3MWidget_Android
          _downloader.stop();
       }
       if (_storage != null) {
-         _storage.onPause(null);
-
+         // _storage.onPause(null);
+         _storage.close();
       }
    }
 

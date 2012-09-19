@@ -220,6 +220,14 @@ public class SQLiteStorage_Android
    }
 
 
+   public synchronized void close() {
+      if (_db != null) {
+         _db.close();
+         _db = null;
+      }
+   }
+
+
    @Override
    public synchronized void onResume(final InitializationContext ic) {
       if (_db == null) {
@@ -230,10 +238,7 @@ public class SQLiteStorage_Android
 
    @Override
    public synchronized void onPause(final InitializationContext ic) {
-      if (_db != null) {
-         _db.close();
-         _db = null;
-      }
+      close();
    }
 
 

@@ -59,7 +59,7 @@ public class Downloader_Android_WorkerThread
    }
 
 
-   public boolean isStopped() {
+   public synchronized boolean isStopped() {
       return _isStopped;
    }
 
