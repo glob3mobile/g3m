@@ -45,52 +45,6 @@ public class UniformsStruct
 
   public final void deleteUniformsIDs()
   {
-	if (Projection == null)
-		if (Projection != null)
-			Projection.dispose();
-	if (Modelview == null)
-		if (Modelview != null)
-			Modelview.dispose();
-	if (Sampler == null)
-		if (Sampler != null)
-			Sampler.dispose();
-	if (EnableTexture == null)
-		if (EnableTexture != null)
-			EnableTexture.dispose();
-	if (FlatColor == null)
-		if (FlatColor != null)
-			FlatColor.dispose();
-	if (TranslationTexCoord == null)
-		if (TranslationTexCoord != null)
-			TranslationTexCoord.dispose();
-	if (ScaleTexCoord == null)
-		if (ScaleTexCoord != null)
-			ScaleTexCoord.dispose();
-	if (PointSize == null)
-		if (PointSize != null)
-			PointSize.dispose();
-
-	//FOR BILLBOARDING
-	if (BillBoard == null)
-		if (BillBoard != null)
-			BillBoard.dispose();
-	if (ViewPortRatio == null)
-		if (ViewPortRatio != null)
-			ViewPortRatio.dispose();
-
-	//FOR COLOR MIXING
-	if (FlatColorIntensity == null)
-		if (FlatColorIntensity != null)
-			FlatColorIntensity.dispose();
-	if (EnableColorPerVertex == null)
-		if (EnableColorPerVertex != null)
-			EnableColorPerVertex.dispose();
-	if (EnableFlatColor == null)
-		if (EnableFlatColor != null)
-			EnableFlatColor.dispose();
-	if (ColorPerVertexIntensity == null)
-		if (ColorPerVertexIntensity != null)
-			ColorPerVertexIntensity.dispose();
   }
 
   public void dispose()
