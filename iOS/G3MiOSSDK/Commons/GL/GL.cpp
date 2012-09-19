@@ -24,25 +24,75 @@
 
 #include "IGLProgramId.hpp"
 
-struct UniformsStruct {
-  int Projection;
-  int Modelview;
-  int Sampler;
-  int EnableTexture;
-  int FlatColor;
-  int TranslationTexCoord;
-  int ScaleTexCoord;
-  int PointSize;
+#include "IGLUniformID.hpp"
+
+class UniformsStruct {
+public:
+  
+  IGLUniformID* Projection;
+  IGLUniformID* Modelview;
+  IGLUniformID* Sampler;
+  IGLUniformID* EnableTexture;
+  IGLUniformID* FlatColor;
+  IGLUniformID* TranslationTexCoord;
+  IGLUniformID* ScaleTexCoord;
+  IGLUniformID* PointSize;
   
   //FOR BILLBOARDING
-  int BillBoard;
-  int ViewPortRatio;
+  IGLUniformID* BillBoard;
+  IGLUniformID* ViewPortRatio;
   
   //FOR COLOR MIXING
-  int FlatColorIntensity;
-  int EnableColorPerVertex;
-  int EnableFlatColor;
-  int ColorPerVertexIntensity;
+  IGLUniformID* FlatColorIntensity;
+  IGLUniformID* EnableColorPerVertex;
+  IGLUniformID* EnableFlatColor;
+  IGLUniformID* ColorPerVertexIntensity;
+  
+  UniformsStruct(){
+    Projection = NULL;
+    Modelview= NULL;
+    Sampler= NULL;
+    EnableTexture= NULL;
+    FlatColor= NULL;
+    TranslationTexCoord= NULL;
+    ScaleTexCoord= NULL;
+    PointSize= NULL;
+    
+    //FOR BILLBOARDING
+    BillBoard= NULL;
+    ViewPortRatio= NULL;
+    
+    //FOR COLOR MIXING
+    FlatColorIntensity= NULL;
+    EnableColorPerVertex= NULL;
+    EnableFlatColor= NULL;
+    ColorPerVertexIntensity= NULL;
+  }
+  
+  void deleteUniformsIDs(){
+    if (Projection == NULL) delete Projection;
+    if (Modelview == NULL) delete Modelview;
+    if (Sampler == NULL) delete Sampler;
+    if (EnableTexture == NULL) delete EnableTexture;
+    if (FlatColor == NULL) delete FlatColor;
+    if (TranslationTexCoord == NULL) delete TranslationTexCoord;
+    if (ScaleTexCoord == NULL) delete ScaleTexCoord;
+    if (PointSize == NULL) delete PointSize;
+    
+    //FOR BILLBOARDING
+    if (BillBoard == NULL) delete BillBoard;
+    if (ViewPortRatio == NULL) delete ViewPortRatio;
+    
+    //FOR COLOR MIXING
+    if (FlatColorIntensity == NULL) delete FlatColorIntensity;
+    if (EnableColorPerVertex == NULL) delete EnableColorPerVertex;
+    if (EnableFlatColor == NULL) delete EnableFlatColor;
+    if (ColorPerVertexIntensity == NULL) delete ColorPerVertexIntensity;
+  }
+  
+  ~UniformsStruct(){
+    deleteUniformsIDs();
+  }
 } Uniforms;
 
 
@@ -60,13 +110,13 @@ int GL::checkedGetAttribLocation(IGLProgramId* program, const std::string& name)
   }
   return l;
 }
-int GL::checkedGetUniformLocation(IGLProgramId* program, const std::string& name) {
-  int l = _gl->getUniformLocation(program, name);
-  if (l == -1) {
+IGLUniformID* GL::checkedGetUniformLocation(IGLProgramId* program, const std::string& name) {
+  IGLUniformID* uID = _gl->getUniformLocation(program, name);
+  if (!uID->isValid()) {
     ILogger::instance()->logError("Error fetching Uniform, Program = %d, Variable = %s", program, name.c_str());
     _errorGettingLocationOcurred = true;
   }
-  return l;
+  return uID;
 }
 
 bool GL::useProgram(IGLProgramId* program) {
@@ -81,6 +131,8 @@ bool GL::useProgram(IGLProgramId* program) {
   Attributes.Position     = checkedGetAttribLocation(program, "Position");
   Attributes.TextureCoord = checkedGetAttribLocation(program, "TextureCoord");
   Attributes.Color        = checkedGetAttribLocation(program, "Color");
+  
+  Uniforms.deleteUniformsIDs(); //DELETING
   
   // Extract the handles to uniforms
   Uniforms.Projection          = checkedGetUniformLocation(program, "Projection");
@@ -252,7 +304,7 @@ int GL::getError() {
 const GLTextureId GL::uploadTexture(const IImage* image, int format, bool generateMipmap){
   const GLTextureId texId = getGLTextureId();
   if (texId.isValid()) {
-
+    
     _gl->blendFunc(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
     _gl->pixelStorei(GLAlignment::unpack(), 1);
     

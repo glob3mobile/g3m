@@ -173,9 +173,6 @@ public class G3MWidget_WebGL
                            final ArrayList<Renderer> renderers,
                            final UserData userData) {
 
-      IStringBuilder.setInstance(new StringBuilder_WebGL());
-      IMathUtils.setInstance(new MathUtils_WebGL());
-
       final IFactory factory = new Factory_WebGL();
       final ILogger logger = new Logger_WebGL(LogLevel.InfoLevel);
       final IStorage storage = new IndexedDBStorage_WebGL();
@@ -340,8 +337,10 @@ public class G3MWidget_WebGL
 
 
    private native void startRender(G3MWidget_WebGL instance) /*-{
+		debugger;
 		var tick = function() {
-			$wnd.requestAnimFrame(tick);
+			//TODO CHECK DONT RUN
+			//$wnd.requestAnimFrame(tick);
 			$entry(instance.@org.glob3.mobile.specific.G3MWidget_WebGL::renderWidget()());
 		};
 		tick();

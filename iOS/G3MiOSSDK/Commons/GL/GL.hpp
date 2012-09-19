@@ -23,6 +23,7 @@
 #include <list>
 
 class IGLProgramId;
+class IGLUniformID;
 
 class GL {
 private:
@@ -86,7 +87,7 @@ private:
   //Get Locations warning of errors
   bool _errorGettingLocationOcurred;
   int checkedGetAttribLocation(IGLProgramId* program, const std::string& name);
-  int checkedGetUniformLocation(IGLProgramId* program, const std::string& name);
+  IGLUniformID* checkedGetUniformLocation(IGLProgramId* program, const std::string& name);
   
   IFloatBuffer* _billboardTexCoord;
   IFloatBuffer* getBillboardTexCoord();

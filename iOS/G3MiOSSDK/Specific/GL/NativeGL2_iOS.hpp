@@ -14,6 +14,7 @@
 #include "INativeGL.hpp"
 
 #include "GLProgramId_iOS.hpp"
+#include "GLUniformID_iOS.hpp"
 
 class NativeGL2_iOS: public INativeGL
 {
@@ -27,24 +28,29 @@ public:
     return glGetAttribLocation(((GLProgramId_iOS*)program)->getID(), name.c_str());
   }
   
-  int getUniformLocation(IGLProgramId* program, const std::string& name) const {
-    return glGetUniformLocation(((GLProgramId_iOS*)program)->getID(), name.c_str());
+  IGLUniformID* getUniformLocation(IGLProgramId* program, const std::string& name) const {
+    int id = glGetUniformLocation(((GLProgramId_iOS*)program)->getID(), name.c_str());
+    return (IGLUniformID*) new GLUniformID_iOS(id);
   }
   
-  void uniform2f(int loc, float x, float y) const {
-    glUniform2f(loc, x, y);
+  void uniform2f(IGLUniformID* loc, float x, float y) const {
+    int location = ((GLUniformID_iOS*)loc)->getID();
+    glUniform2f(location, x, y);
   }
   
-  void uniform1f(int loc, float x) const {
-    glUniform1f(loc, x);
+  void uniform1f(IGLUniformID* loc, float x) const {
+    int location = ((GLUniformID_iOS*)loc)->getID();
+    glUniform1f(location, x);
   }
   
-  void uniform1i(int loc, int v) const {
-    glUniform1i(loc, v);
+  void uniform1i(IGLUniformID* loc, int v) const {
+    int location = ((GLUniformID_iOS*)loc)->getID();
+    glUniform1i(location, v);
   }
   
-  void uniformMatrix4fv(int location, int count, bool transpose, const float value[]) const {
-    glUniformMatrix4fv(location, count, transpose, value);
+  void uniformMatrix4fv(IGLUniformID* location, int count, bool transpose, const float value[]) const {
+    int loc = ((GLUniformID_iOS*)location)->getID();
+    glUniformMatrix4fv(loc, count, transpose, value);
   }
   
   void clearColor(float red, float green, float blue, float alpha) const {
@@ -55,8 +61,9 @@ public:
     glClear(buffers);
   }
   
-  void uniform4f(int location, float v0, float v1, float v2, float v3) const {
-    glUniform4f(location, v0, v1, v2, v3);
+  void uniform4f(IGLUniformID* location, float v0, float v1, float v2, float v3) const {
+    int loc = ((GLUniformID_iOS*)location)->getID();
+    glUniform4f(loc, v0, v1, v2, v3);
   }
   
   void enable(int feature) const {

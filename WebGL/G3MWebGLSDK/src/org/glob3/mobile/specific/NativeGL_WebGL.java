@@ -600,6 +600,7 @@ public class NativeGL_WebGL
 
    public native int jsGetUniformLocation(final JavaScriptObject program,
                                           final String name) /*-{
+		debugger;
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 		return gl.getUniformLocation(program, name);
    }-*/;
