@@ -150,12 +150,6 @@ public class Image_Android
    }
 
 
-   @Override
-   public IImage copy() {
-      return new Image_Android(_bitmap, _source);
-   }
-
-
    public byte[] getSourceBuffer() {
       return _source;
    }
@@ -163,6 +157,12 @@ public class Image_Android
 
    public void releaseSourceBuffer() {
       _source = null;
+   }
+
+
+   @Override
+   public IImage shallowCopy() {
+      return new Image_Android(_bitmap, _source);
    }
 
 }
