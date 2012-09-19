@@ -25,8 +25,8 @@ public class NativeGL_WebGL
    JavaScriptObject _gl; //WebGL context
 
 
-   public NativeGL_WebGL(final JavaScriptObject canvas) {
-      _gl = jsCreateContext(canvas);
+   public NativeGL_WebGL(final JavaScriptObject webGLContext) {
+      _gl = webGLContext;
    }
 
 
