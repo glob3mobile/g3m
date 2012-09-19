@@ -71,6 +71,8 @@ public class G3MWidget_Android
    private ArrayList<org.glob3.mobile.generated.Renderer> _renderers;
    private UserData                                       _userData;
 
+   private IDownloader                                    _downloader;
+
 
    //   private boolean                                        _isPaused             = false;
    //   private final LinkedList<Runnable>                     _pausedRunnableQueue  = new LinkedList<Runnable>();
@@ -275,7 +277,7 @@ public class G3MWidget_Android
 
       final int connectTimeout = 60000;
       final int readTimeout = 60000;
-      final IDownloader downloader = new CachedDownloader(new Downloader_Android(8, connectTimeout, readTimeout), _storage);
+      _downloader = new CachedDownloader(new Downloader_Android(8, connectTimeout, readTimeout), _storage);
 
       final CompositeRenderer composite = new CompositeRenderer();
 
@@ -327,7 +329,7 @@ public class G3MWidget_Android
       final IMathUtils math = new MathUtils_Android();
 
       _g3mWidget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, stringBuilder, math, logger, gl,
-               texturesHandler, textureBuilder, downloader, planet, _cameraConstraints, composite, busyRenderer, scheduler,
+               texturesHandler, textureBuilder, _downloader, planet, _cameraConstraints, composite, busyRenderer, scheduler,
                width, height, Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false);
 
       _g3mWidget.setUserData(_userData);
@@ -387,8 +389,12 @@ public class G3MWidget_Android
 
 
    public void closeStorage() {
+      if (_downloader != null) {
+         _downloader.stop();
+      }
       if (_storage != null) {
          _storage.onPause(null);
+
       }
    }
 
