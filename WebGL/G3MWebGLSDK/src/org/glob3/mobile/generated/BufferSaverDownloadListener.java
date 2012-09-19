@@ -23,22 +23,29 @@ public class BufferSaverDownloadListener implements IBufferDownloadListener
 	}
   }
 
-  public final void saveResponse(URL url, IByteBuffer buffer)
+  public final void saveBuffer(URL url, IByteBuffer buffer)
   {
 	if (buffer != null)
 	{
-	  if (!_cacheStorage.containsBuffer(url))
+	  if (_cacheStorage.isAvailable())
 	  {
-		_downloader.countSave();
+		if (!_cacheStorage.containsBuffer(url))
+		{
+		  _downloader.countSave();
 
-		_cacheStorage.saveBuffer(url, buffer);
+		  _cacheStorage.saveBuffer(url, buffer);
+		}
+	  }
+	  else
+	  {
+		ILogger.instance().logWarning("The cacheStorage is not available, skipping buffer save.");
 	  }
 	}
   }
 
   public final void onDownload(URL url, IByteBuffer data)
   {
-	saveResponse(url, data);
+	saveBuffer(url, data);
 
 	_listener.onDownload(url, data);
 
@@ -54,7 +61,7 @@ public class BufferSaverDownloadListener implements IBufferDownloadListener
 
   public final void onCanceledDownload(URL url, IByteBuffer buffer)
   {
-	saveResponse(url, buffer);
+	saveBuffer(url, buffer);
 
 	_listener.onCanceledDownload(url, buffer);
 

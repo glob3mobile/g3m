@@ -23,22 +23,29 @@ public class ImageSaverDownloadListener implements IImageDownloadListener
 	}
   }
 
-  public final void saveResponse(URL url, IImage image)
+  public final void saveImage(URL url, IImage image)
   {
 	if (image != null)
 	{
-	  if (!_cacheStorage.containsImage(url))
+	  if (_cacheStorage.isAvailable())
 	  {
-		_downloader.countSave();
+		if (!_cacheStorage.containsImage(url))
+		{
+		  _downloader.countSave();
 
-		_cacheStorage.saveImage(url, image);
+		  _cacheStorage.saveImage(url, image);
+		}
+	  }
+	  else
+	  {
+		ILogger.instance().logWarning("The cacheStorage is not available, skipping image save.");
 	  }
 	}
   }
 
   public final void onDownload(URL url, IImage image)
   {
-	saveResponse(url, image);
+	saveImage(url, image);
 
 	_listener.onDownload(url, image);
 
@@ -54,7 +61,7 @@ public class ImageSaverDownloadListener implements IImageDownloadListener
 
   public final void onCanceledDownload(URL url, IImage image)
   {
-	saveResponse(url, image);
+	saveImage(url, image);
 
 	_listener.onCanceledDownload(url, image);
 
