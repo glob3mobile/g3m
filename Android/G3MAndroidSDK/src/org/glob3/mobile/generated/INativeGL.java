@@ -10,6 +10,9 @@ package org.glob3.mobile.generated;
 
 
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IGLProgramId;
+
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IFloatBuffer;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IIntBuffer;
@@ -25,16 +28,16 @@ public abstract class INativeGL
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void useProgram(int program) const = 0;
-  public abstract void useProgram(int program);
+//ORIGINAL LINE: virtual void useProgram(IGLProgramId* program) const = 0;
+  public abstract void useProgram(IGLProgramId program);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual int getAttribLocation(int program, const String& name) const = 0;
-  public abstract int getAttribLocation(int program, String name);
+//ORIGINAL LINE: virtual int getAttribLocation(IGLProgramId* program, const String& name) const = 0;
+  public abstract int getAttribLocation(IGLProgramId program, String name);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual int getUniformLocation(int program, const String& name) const = 0;
-  public abstract int getUniformLocation(int program, String name);
+//ORIGINAL LINE: virtual int getUniformLocation(IGLProgramId* program, const String& name) const = 0;
+  public abstract int getUniformLocation(IGLProgramId program, String name);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual void uniform2f(int loc, float x, float y) const = 0;

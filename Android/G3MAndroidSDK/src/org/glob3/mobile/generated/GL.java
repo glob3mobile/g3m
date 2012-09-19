@@ -22,6 +22,8 @@ package org.glob3.mobile.generated;
 
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IGLProgramId;
 
 public class GL
 {
@@ -122,7 +124,7 @@ public class GL
 
   //Get Locations warning of errors
   private boolean _errorGettingLocationOcurred;
-  private int checkedGetAttribLocation(int program, String name)
+  private int checkedGetAttribLocation(IGLProgramId program, String name)
   {
 	int l = _gl.getAttribLocation(program, name);
 	if (l == -1)
@@ -132,7 +134,7 @@ public class GL
 	}
 	return l;
   }
-  private int checkedGetUniformLocation(int program, String name)
+  private int checkedGetUniformLocation(IGLProgramId program, String name)
   {
 	int l = _gl.getUniformLocation(program, name);
 	if (l == -1)
@@ -402,7 +404,7 @@ public class GL
 	_gl.uniformMatrix4fv(GlobalMembersGL.Uniforms.Projection, 1, false, M);
   }
 
-  public final boolean useProgram(int program)
+  public final boolean useProgram(IGLProgramId program)
   {
 	// set shaders
 	_gl.useProgram(program);
