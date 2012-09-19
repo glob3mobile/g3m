@@ -73,8 +73,21 @@ public class Downloader_Android
       if (_started) {
          for (final Downloader_Android_WorkerThread worker : _workers) {
             worker.stopWorkerThread();
-            _started = false;
          }
+         _started = false;
+
+         boolean allWorkersStopped;
+         do {
+            allWorkersStopped = true;
+            for (final Downloader_Android_WorkerThread worker : _workers) {
+               if (!worker.isStopped()) {
+                  allWorkersStopped = false;
+                  break;
+               }
+            }
+         }
+         while (!allWorkersStopped);
+
          //         boolean allStopped = true;
          //         while (_started) {
          //            for (final Downloader_Android_WorkerThread worker : _workers) {
