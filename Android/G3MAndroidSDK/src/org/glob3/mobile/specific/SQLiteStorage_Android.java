@@ -236,4 +236,10 @@ public class SQLiteStorage_Android
       }
    }
 
+
+   @Override
+   public boolean isAvailable() {
+      return _db != null;
+   }
+
 }
