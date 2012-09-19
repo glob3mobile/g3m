@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.glob3.mobile.generated.GLBufferType;
 import org.glob3.mobile.generated.GLTextureId;
 import org.glob3.mobile.generated.IFloatBuffer;
+import org.glob3.mobile.generated.IGLProgramId;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IIntBuffer;
 import org.glob3.mobile.generated.INativeGL;
@@ -37,35 +38,6 @@ public class NativeGL_WebGL
 			alert("Could not initialise WebGL");
 		}
 		return gl;
-   }-*/;
-
-
-   @Override
-   public native int getAttribLocation(final int program,
-                                       final String name) /*-{
-		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
-		return gl.getAttribLocation(program, name);
-   }-*/;
-
-
-   private native int jsGetAttribLocation(JavaScriptObject gl,
-                                          final int program,
-                                          final String name) /*-{
-		return gl.getAttribLocation(program, name);
-   }-*/;
-
-
-   @Override
-   public int getUniformLocation(final int program,
-                                 final String name) {
-      return jsGetUniformLocation(_gl, program, name);
-   }
-
-
-   private native int jsGetUniformLocation(JavaScriptObject gl,
-                                           final int program,
-                                           final String name) /*-{
-		return gl.getUniformLocation(program, name);
    }-*/;
 
 
@@ -584,17 +556,53 @@ public class NativeGL_WebGL
 
 
    @Override
-   public void useProgram(final int program) {
-      // TODO Auto-generated method stub
-
-   }
+   public native int getError() /*-{
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+		gl.getError();
+   }-*/;
 
 
    @Override
-   public int getError() {
-      // TODO Auto-generated method stub
-      return 0;
+   public void useProgram(final IGLProgramId program) {
+      final JavaScriptObject p = ((GLProgramId_WebGL) program).getProgram();
+      jsUseProgram(p);
    }
+
+
+   public native void jsUseProgram(JavaScriptObject program) /*-{
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+		gl.useProgram(program);
+   }-*/;
+
+
+   @Override
+   public int getAttribLocation(final IGLProgramId program,
+                                final String name) {
+      final JavaScriptObject p = ((GLProgramId_WebGL) program).getProgram();
+      return jsGetAttribLocation(p, name);
+   }
+
+
+   public native int jsGetAttribLocation(final JavaScriptObject program,
+                                         final String name) /*-{
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+		return gl.getAttribLocation(program, name);
+   }-*/;
+
+
+   @Override
+   public int getUniformLocation(final IGLProgramId program,
+                                 final String name) {
+      final JavaScriptObject p = ((GLProgramId_WebGL) program).getProgram();
+      return jsGetUniformLocation(p, name);
+   }
+
+
+   public native int jsGetUniformLocation(final JavaScriptObject program,
+                                          final String name) /*-{
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+		return gl.getUniformLocation(program, name);
+   }-*/;
 
 
    //////////////////////////////////
