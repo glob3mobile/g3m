@@ -42,6 +42,7 @@ import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.UserData;
 
 import com.google.gwt.canvas.client.Canvas;
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
@@ -99,6 +100,7 @@ public class G3MWidget_WebGL
 
       onSizeChanged(Window.getClientWidth(), Window.getClientHeight());
 
+      jsDefineG3MBrowserObjects();
    }
 
 
@@ -179,7 +181,8 @@ public class G3MWidget_WebGL
       // TODO add delayMillis to G3MWidget constructor
       final IThreadUtils threadUtils = new ThreadUtils_WebGL(this, _delayMillis);
 
-      final NativeGL_WebGL nGL = new NativeGL_WebGL();
+      final JavaScriptObject jsCanvas = jsGetCanvasObject();
+      final NativeGL_WebGL nGL = new NativeGL_WebGL(jsCanvas);
       final GL gl = new GL(nGL);
 
       final CompositeRenderer composite = new CompositeRenderer();
@@ -195,7 +198,7 @@ public class G3MWidget_WebGL
          //         else {
          //SINGLE IMAGE
          final IImage singleWorldImage = factory.createImageFromFileName("world.jpg");
-         texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage);
+         texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage, false);
          //         }
 
 
@@ -223,10 +226,13 @@ public class G3MWidget_WebGL
 
       final FrameTasksExecutor frameTasksExecutor = new FrameTasksExecutor();
 
+      final IStringBuilder stringBuilder = new StringBuilder_WebGL();
 
-      _widget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, logger, gl, texturesHandler,
-               textureBuilder, downloader, planet, cameraConstraints, composite, busyRenderer, scheduler, _width, _height,
-               Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false);
+      final IMathUtils mathUtils = new MathUtils_WebGL();
+
+      _widget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, stringBuilder, mathUtils, logger, gl,
+               texturesHandler, textureBuilder, downloader, planet, cameraConstraints, cameraRenderer, busyRenderer, scheduler,
+               _width, _height, Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false);
 
       _widget.setUserData(userData);
 
@@ -322,5 +328,29 @@ public class G3MWidget_WebGL
 			$entry(instance.@org.glob3.mobile.specific.G3MWidget_WebGL::renderWidget()());
 		};
 		tick();
+   }-*/;
+
+
+   private native void jsDefineG3MBrowserObjects() /*-{
+		//		debugger;
+		// URL Object
+		$wnd.g3mURL = $wnd.URL || $wnd.webkitURL;
+
+		// IndexedDB
+		$wnd.g3mIDB = $wnd.indexedDB || $wnd.webkitIndexedDB
+				|| $wnd.mozIndexedDB || $wnd.OIndexedDB || $wnd.msIndexedDB;
+		$wnd.g3mIDBTransaction = $wnd.IDBTransaction
+				|| $wnd.webkitIDBTransaction || $wnd.OIDBTransaction
+				|| $wnd.msIDBTransaction;
+		$wnd.g3mDBVersion = 1;
+
+   }-*/;
+
+
+   private native JavaScriptObject jsGetCanvasObject() /*-{
+		//		debugger;
+		var canvas = $doc
+				.getElementById(@org.glob3.mobile.specific.G3MWidget_WebGL::canvasId);
+		return canvas;
    }-*/;
 }
