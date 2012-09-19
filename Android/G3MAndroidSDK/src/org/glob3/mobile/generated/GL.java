@@ -22,6 +22,10 @@ package org.glob3.mobile.generated;
 
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IGLProgramId;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IGLUniformID;
 
 public class GL
 {
@@ -122,7 +126,7 @@ public class GL
 
   //Get Locations warning of errors
   private boolean _errorGettingLocationOcurred;
-  private int checkedGetAttribLocation(int program, String name)
+  private int checkedGetAttribLocation(IGLProgramId program, String name)
   {
 	int l = _gl.getAttribLocation(program, name);
 	if (l == -1)
@@ -132,15 +136,15 @@ public class GL
 	}
 	return l;
   }
-  private int checkedGetUniformLocation(int program, String name)
+  private IGLUniformID checkedGetUniformLocation(IGLProgramId program, String name)
   {
-	int l = _gl.getUniformLocation(program, name);
-	if (l == -1)
+	IGLUniformID uID = _gl.getUniformLocation(program, name);
+	if (!uID.isValid())
 	{
 	  ILogger.instance().logError("Error fetching Uniform, Program = %d, Variable = %s", program, name);
 	  _errorGettingLocationOcurred = true;
 	}
-	return l;
+	return uID;
   }
 
   private IFloatBuffer _billboardTexCoord;
@@ -402,7 +406,7 @@ public class GL
 	_gl.uniformMatrix4fv(GlobalMembersGL.Uniforms.Projection, 1, false, M);
   }
 
-  public final boolean useProgram(int program)
+  public final boolean useProgram(IGLProgramId program)
   {
 	// set shaders
 	_gl.useProgram(program);
@@ -415,6 +419,8 @@ public class GL
 	GlobalMembersGL.Attributes.Position = checkedGetAttribLocation(program, "Position");
 	GlobalMembersGL.Attributes.TextureCoord = checkedGetAttribLocation(program, "TextureCoord");
 	GlobalMembersGL.Attributes.Color = checkedGetAttribLocation(program, "Color");
+  
+	GlobalMembersGL.Uniforms.deleteUniformsIDs(); //DELETING
   
 	// Extract the handles to uniforms
 	GlobalMembersGL.Uniforms.Projection = checkedGetUniformLocation(program, "Projection");

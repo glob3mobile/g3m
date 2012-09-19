@@ -11,9 +11,13 @@
 
 #include "GLTextureId.hpp"
 
+class IGLProgramId;
+
 class IFloatBuffer;
 class IIntBuffer;
 class IImage;
+
+class IGLUniformID;
 
 #include <vector>
 #include <string>
@@ -23,25 +27,25 @@ public:
   
   virtual ~INativeGL() { };
   
-  virtual void useProgram(int program) const = 0;
+  virtual void useProgram(IGLProgramId* program) const = 0;
 
-  virtual int getAttribLocation(int program,
+  virtual int getAttribLocation(IGLProgramId* program,
                                 const std::string& name) const = 0;
   
-  virtual int getUniformLocation(int program,
+  virtual IGLUniformID* getUniformLocation(IGLProgramId* program,
                                  const std::string& name) const = 0;
 
-  virtual void uniform2f(int loc,
+  virtual void uniform2f(IGLUniformID* loc,
                          float x,
                          float y) const = 0;
   
-  virtual void uniform1f(int loc,
+  virtual void uniform1f(IGLUniformID* loc,
                          float x) const = 0;
   
-  virtual void uniform1i(int loc,
+  virtual void uniform1i(IGLUniformID* loc,
                          int v) const = 0;
   
-  virtual void uniformMatrix4fv(int location,
+  virtual void uniformMatrix4fv(IGLUniformID* location,
                                 int count,
                                 bool transpose,
                                 const float value[]) const = 0;
@@ -53,7 +57,7 @@ public:
   
   virtual void clear(int buffers) const = 0;
   
-  virtual void uniform4f(int location,
+  virtual void uniform4f(IGLUniformID* location,
                          float v0,
                          float v1,
                          float v2,

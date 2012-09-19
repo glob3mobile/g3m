@@ -25,9 +25,11 @@ public class FloatBuffer_WebGL
    }
 
 
-   FloatBuffer_WebGL(final byte[] data) {
-      //      TODO needed??
-      throw new RuntimeException("ByteBuffer_WebGL(final byte[] data) IS NOT IMPLEMENTED");
+   FloatBuffer_WebGL(final float[] data) {
+      _buffer = jsCreateBuffer(data.length);
+      for (int i = 0; i < data.length; i++) {
+         put(i, data[i]);
+      }
    }
 
 

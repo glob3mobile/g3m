@@ -21,6 +21,7 @@ import org.glob3.mobile.generated.GL;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
+import org.glob3.mobile.generated.IGLProgramId;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
@@ -64,6 +65,8 @@ public class G3MWidget_WebGL
    LayerSet                           _layerSet             = null;
    ArrayList<Renderer>                _renderers            = null;
    UserData                           _userData             = null;
+
+   private IGLProgramId               _program              = null;
 
    G3MWidget                          _widget;
    int                                _width;
@@ -167,9 +170,6 @@ public class G3MWidget_WebGL
                            final ArrayList<Renderer> renderers,
                            final UserData userData) {
 
-      IStringBuilder.setInstance(new StringBuilder_WebGL());
-      IMathUtils.setInstance(new MathUtils_WebGL());
-
       final IFactory factory = new Factory_WebGL();
       final ILogger logger = new Logger_WebGL(LogLevel.InfoLevel);
       final IStorage storage = new IndexedDBStorage_WebGL();
@@ -178,8 +178,15 @@ public class G3MWidget_WebGL
       // TODO add delayMillis to G3MWidget constructor
       final IThreadUtils threadUtils = new ThreadUtils_WebGL(this, _delayMillis);
 
-      final JavaScriptObject jsCanvas = jsGetCanvasObject();
-      final NativeGL_WebGL nGL = new NativeGL_WebGL(jsCanvas);
+      final JavaScriptObject webGLContext = jsGetWebGLContext();
+      if (webGLContext == null) {
+         throw new RuntimeException("webGLContext null");
+      }
+
+      //CREATING SHADERS PROGRAM
+      _program = new Shaders_WebGL(webGLContext).createProgram();
+
+      final NativeGL_WebGL nGL = new NativeGL_WebGL(webGLContext);
       final GL gl = new GL(nGL);
 
       final CompositeRenderer composite = new CompositeRenderer();
@@ -228,7 +235,7 @@ public class G3MWidget_WebGL
       final IMathUtils mathUtils = new MathUtils_WebGL();
 
       _widget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, stringBuilder, mathUtils, logger, gl,
-               texturesHandler, textureBuilder, downloader, planet, cameraConstraints, cameraRenderer, busyRenderer, scheduler,
+               texturesHandler, textureBuilder, downloader, planet, cameraConstraints, composite, busyRenderer, scheduler,
                _width, _height, Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false);
 
       _widget.setUserData(userData);
@@ -315,13 +322,22 @@ public class G3MWidget_WebGL
 
 
    private void renderWidget() {
-      _widget.render();
+      //USING PROGRAM
+      if (_program != null) {
+         _widget.getGL().useProgram(_program);
+         _widget.render();
+      }
+      else {
+         throw new RuntimeException("PROGRAM INVALID");
+      }
    }
 
 
    private native void startRender(G3MWidget_WebGL instance) /*-{
+		debugger;
 		var tick = function() {
-			$wnd.requestAnimFrame(tick);
+			//TODO CHECK DONT RUN
+			//$wnd.requestAnimFrame(tick);
 			$entry(instance.@org.glob3.mobile.specific.G3MWidget_WebGL::renderWidget()());
 		};
 		tick();
@@ -344,10 +360,20 @@ public class G3MWidget_WebGL
    }-*/;
 
 
-   private native JavaScriptObject jsGetCanvasObject() /*-{
+   private native JavaScriptObject jsGetWebGLContext() /*-{
 		//		debugger;
 		var canvas = $doc
 				.getElementById(@org.glob3.mobile.specific.G3MWidget_WebGL::canvasId);
-		return canvas;
+
+		if (canvas == null) {
+			alert("NO CANVAS");
+		}
+
+		var context = canvas.getContext("experimental-webgl");
+		if (context == null) {
+			alert("NO GL CONTEXT");
+		}
+
+		return context;
    }-*/;
 }
