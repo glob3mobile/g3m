@@ -10,6 +10,7 @@
 #include "IBufferDownloadListener.hpp"
 #include "IImageDownloadListener.hpp"
 #include "IStringBuilder.hpp"
+#include "ILogger.hpp"
 
 
 class BufferSaverDownloadListener : public IBufferDownloadListener {
@@ -40,20 +41,25 @@ public:
     }
   }
   
-  void saveResponse(const URL& url,
-                    const IByteBuffer* buffer) {
+  void saveBuffer(const URL& url,
+                  const IByteBuffer* buffer) {
     if (buffer != NULL) {
-      if (!_cacheStorage->containsBuffer(url)) {
-        _downloader->countSave();
-        
-        _cacheStorage->saveBuffer(url, buffer);
+      if (_cacheStorage->isAvailable()) {
+        if (!_cacheStorage->containsBuffer(url)) {
+          _downloader->countSave();
+          
+          _cacheStorage->saveBuffer(url, buffer);
+        }
+      }
+      else {
+        ILogger::instance()->logWarning("The cacheStorage is not available, skipping buffer save.");
       }
     }
   }
   
   void onDownload(const URL& url,
                   const IByteBuffer* data) {
-    saveResponse(url, data);
+    saveBuffer(url, data);
     
     _listener->onDownload(url, data);
     
@@ -68,7 +74,7 @@ public:
   
   void onCanceledDownload(const URL& url,
                           const IByteBuffer* buffer) {
-    saveResponse(url, buffer);
+    saveBuffer(url, buffer);
     
     _listener->onCanceledDownload(url, buffer);
     
@@ -111,20 +117,25 @@ public:
     }
   }
   
-  void saveResponse(const URL& url,
-                    const IImage* image) {
+  void saveImage(const URL& url,
+                 const IImage* image) {
     if (image != NULL) {
-      if (!_cacheStorage->containsImage(url)) {
-        _downloader->countSave();
-        
-        _cacheStorage->saveImage(url, image);
+      if (_cacheStorage->isAvailable()) {
+        if (!_cacheStorage->containsImage(url)) {
+          _downloader->countSave();
+          
+          _cacheStorage->saveImage(url, image);
+        }
+      }
+      else {
+        ILogger::instance()->logWarning("The cacheStorage is not available, skipping image save.");
       }
     }
   }
   
   void onDownload(const URL& url,
                   const IImage* image) {
-    saveResponse(url, image);
+    saveImage(url, image);
     
     _listener->onDownload(url, image);
     
@@ -139,7 +150,7 @@ public:
   
   void onCanceledDownload(const URL& url,
                           const IImage* image) {
-    saveResponse(url, image);
+    saveImage(url, image);
     
     _listener->onCanceledDownload(url, image);
     
@@ -173,7 +184,7 @@ long long CachedDownloader::requestImage(const URL& url,
                                          bool deleteListener) {
   _requestsCounter++;
   
-  const IImage* cachedImage = _cacheStorage->readImage(url);
+  const IImage* cachedImage = _cacheStorage->isAvailable() ? _cacheStorage->readImage(url) : NULL;
   if (cachedImage == NULL) {
     // cache miss
     return _downloader->requestImage(url,
@@ -209,7 +220,7 @@ long long CachedDownloader::requestBuffer(const URL& url,
                                           bool deleteListener) {
   _requestsCounter++;
   
-  const IByteBuffer* cachedBuffer = _cacheStorage->readBuffer(url);
+  const IByteBuffer* cachedBuffer = _cacheStorage->isAvailable() ? _cacheStorage->readBuffer(url) : NULL;
   if (cachedBuffer == NULL) {
     // cache miss
     return _downloader->requestBuffer(url,

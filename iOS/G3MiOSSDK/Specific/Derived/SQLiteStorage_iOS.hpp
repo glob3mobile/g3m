@@ -57,6 +57,10 @@ public:
     
   }
 
+  bool isAvailable() {
+    return _db != NULL;
+  }
+  
 };
 
 #endif
