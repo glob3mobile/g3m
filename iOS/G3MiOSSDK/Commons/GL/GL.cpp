@@ -22,6 +22,8 @@
 
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 
+#include "IGLProgramId.hpp"
+
 struct UniformsStruct {
   int Projection;
   int Modelview;
@@ -50,7 +52,7 @@ struct AttributesStruct {
   int Color;
 } Attributes;
 
-int GL::checkedGetAttribLocation(int program, const std::string& name) {
+int GL::checkedGetAttribLocation(IGLProgramId* program, const std::string& name) {
   int l = _gl->getAttribLocation(program, name);
   if (l == -1) {
     ILogger::instance()->logError("Error fetching Attribute, Program = %d, Variable = %s", program, name.c_str());
@@ -58,7 +60,7 @@ int GL::checkedGetAttribLocation(int program, const std::string& name) {
   }
   return l;
 }
-int GL::checkedGetUniformLocation(int program, const std::string& name) {
+int GL::checkedGetUniformLocation(IGLProgramId* program, const std::string& name) {
   int l = _gl->getUniformLocation(program, name);
   if (l == -1) {
     ILogger::instance()->logError("Error fetching Uniform, Program = %d, Variable = %s", program, name.c_str());
@@ -67,7 +69,7 @@ int GL::checkedGetUniformLocation(int program, const std::string& name) {
   return l;
 }
 
-bool GL::useProgram(unsigned int program) {
+bool GL::useProgram(IGLProgramId* program) {
   // set shaders
   _gl->useProgram(program);
   

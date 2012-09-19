@@ -22,6 +22,7 @@
 
 #include <list>
 
+class IGLProgramId;
 
 class GL {
 private:
@@ -84,8 +85,8 @@ private:
 
   //Get Locations warning of errors
   bool _errorGettingLocationOcurred;
-  int checkedGetAttribLocation(int program, const std::string& name);
-  int checkedGetUniformLocation(int program, const std::string& name);
+  int checkedGetAttribLocation(IGLProgramId* program, const std::string& name);
+  int checkedGetUniformLocation(IGLProgramId* program, const std::string& name);
   
   IFloatBuffer* _billboardTexCoord;
   IFloatBuffer* getBillboardTexCoord();
@@ -183,7 +184,7 @@ public:
   
   void setProjection(const MutableMatrix44D &projection);
   
-  bool useProgram(unsigned int program);
+  bool useProgram(IGLProgramId* program);
   
   void enablePolygonOffset(float factor, float units);
   

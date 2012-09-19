@@ -11,6 +11,8 @@
 
 #include "GLTextureId.hpp"
 
+class IGLProgramId;
+
 class IFloatBuffer;
 class IIntBuffer;
 class IImage;
@@ -23,12 +25,12 @@ public:
   
   virtual ~INativeGL() { };
   
-  virtual void useProgram(int program) const = 0;
+  virtual void useProgram(IGLProgramId* program) const = 0;
 
-  virtual int getAttribLocation(int program,
+  virtual int getAttribLocation(IGLProgramId* program,
                                 const std::string& name) const = 0;
   
-  virtual int getUniformLocation(int program,
+  virtual int getUniformLocation(IGLProgramId* program,
                                  const std::string& name) const = 0;
 
   virtual void uniform2f(int loc,

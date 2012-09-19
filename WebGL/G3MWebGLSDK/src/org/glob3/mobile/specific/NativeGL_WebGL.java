@@ -12,7 +12,6 @@ import org.glob3.mobile.generated.IIntBuffer;
 import org.glob3.mobile.generated.INativeGL;
 
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.core.client.JsArrayNumber;
 
 
 public class NativeGL_WebGL
@@ -254,11 +253,8 @@ public class NativeGL_WebGL
                                    final boolean normalized,
                                    final int stride,
                                    final IFloatBuffer buffer) {
-      //TODO CHECK
-      final JsArrayNumber array = (JsArrayNumber) ((FloatBuffer_WebGL) buffer).getBuffer();
-
-      jsVertexAttribPointer(index, size, normalized, stride, array);
-
+      //TODO CHECK NO CLIENT SIDE ARRAYS
+      jsVertexAttribPointer(index, size, normalized, stride, ((FloatBuffer_WebGL) buffer).getBuffer());
    }
 
 
@@ -266,12 +262,12 @@ public class NativeGL_WebGL
                                             final int size,
                                             final boolean normalized,
                                             final int stride,
-                                            final JsArrayNumber array) /*-{
+                                            final JavaScriptObject array) /*-{
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 
 		var buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, array);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(array), gl.STATIC_DRAW);
+		gl.bufferData(gl.ARRAY_BUFFER, array, gl.STATIC_DRAW);
 
 		gl.vertexAttribPointer(index, size, gl.FLOAT, normalized, stride, 0);
 
@@ -304,20 +300,18 @@ public class NativeGL_WebGL
                             final int count,
                             final IIntBuffer indices) {
       //TODO CHECK
-      final JsArrayNumber array = (JsArrayNumber) ((IntBuffer_WebGL) indices).getBuffer();
-      jsDrawElements(mode, count, array);
+      jsDrawElements(mode, count, ((IntBuffer_WebGL) indices).getBuffer());
    }
 
 
    public native void jsDrawElements(final int mode,
                                      final int count,
-                                     final JsArrayNumber array) /*-{
+                                     final JavaScriptObject array) /*-{
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 
 		var buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, array);
-		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Int32Array(array),
-				gl.STATIC_DRAW);
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, array, gl.STATIC_DRAW);
 
 		gl.drawElements(mode, count, gl.INT, 0);
    }-*/;
@@ -391,13 +385,7 @@ public class NativeGL_WebGL
    public void getIntegerv(final int v,
                            final int[] i) {
       // TODO Auto-generated method stub
-
-   }
-   
-   @Override
-   public native void jsGetIntegerv(final int v,
-                           final int[] i) {
-      // TODO Auto-generated method stub
+      //NO implemented in webgl???
 
    }
 
