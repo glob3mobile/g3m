@@ -38,15 +38,12 @@ import org.glob3.mobile.generated.TexturesHandler;
 import org.glob3.mobile.generated.TileRenderer;
 import org.glob3.mobile.generated.TileTexturizer;
 import org.glob3.mobile.generated.TilesRenderParameters;
-import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.UserData;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
@@ -284,24 +281,24 @@ public class G3MWidget_WebGL
 
    @Override
    public void onBrowserEvent(final Event event) {
-      _canvas.setFocus(true);
-
-      final TouchEvent te = _motionEventProcessor.processEvent(event);
-
-      if (te != null) {
-         event.preventDefault();
-         Scheduler.get().scheduleDeferred(new Command() {
-
-            @Override
-            public void execute() {
-               // TODO: remove next function call when tests are finished
-               //               writeOnCanvas("execute " + te.getNumTouch() + ": " + te.getType().toString() + " " + te.getTouch(0).getPos().x()
-               //                             + " " + te.getTouch(0).getPos().y());
-               // TODO: uncomment next line when _widget is properly created
-               //               _widget.onTouchEvent(te);
-            }
-         });
-      }
+      //      _canvas.setFocus(true);
+      //
+      //      final TouchEvent te = _motionEventProcessor.processEvent(event);
+      //
+      //      if (te != null) {
+      //         event.preventDefault();
+      //         Scheduler.get().scheduleDeferred(new Command() {
+      //
+      //            @Override
+      //            public void execute() {
+      //               // TODO: remove next function call when tests are finished
+      //               //               writeOnCanvas("execute " + te.getNumTouch() + ": " + te.getType().toString() + " " + te.getTouch(0).getPos().x()
+      //               //                             + " " + te.getTouch(0).getPos().y());
+      //               // TODO: uncomment next line when _widget is properly created
+      //               //               _widget.onTouchEvent(te);
+      //            }
+      //         });
+      //      }
 
       super.onBrowserEvent(event);
    }

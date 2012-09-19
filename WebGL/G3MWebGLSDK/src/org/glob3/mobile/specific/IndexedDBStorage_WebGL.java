@@ -18,6 +18,11 @@ public class IndexedDBStorage_WebGL
    private JavaScriptObject _db;
 
 
+   public IndexedDBStorage_WebGL() {
+      //      jsCreateOrOpenDB();
+   }
+
+
    @Override
    public boolean containsBuffer(final URL url) {
       // TODO Auto-generated method stub
@@ -77,10 +82,12 @@ public class IndexedDBStorage_WebGL
 
 
    private native void jsCreateOrOpenDB() /*-{
-		debugger;
+		//		debugger;
 		var thisInstance = this;
 
-		var request = g3mIDB.open("g3mCache", dbVersion);
+		console.log($wnd.g3mIDB);
+
+		var request = $wnd.g3mIDB.open("g3mCache", $wnd.g3mDBVersion);
 		var db;
 
 		request.onerror = function(event) {
@@ -96,6 +103,7 @@ public class IndexedDBStorage_WebGL
 			};
 
 			db.onsuccess = function() {
+				thisInstance.@org.glob3.mobile.specific.IndexedDBStorage_WebGL::_db = db;
 				console.log("Success creating/accessing IDB database");
 			};
 
