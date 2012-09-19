@@ -70,6 +70,7 @@ public:
   }
   
   void deleteUniformsIDs(){
+#ifdef C_CODE
     if (Projection == NULL) delete Projection;
     if (Modelview == NULL) delete Modelview;
     if (Sampler == NULL) delete Sampler;
@@ -88,6 +89,7 @@ public:
     if (EnableColorPerVertex == NULL) delete EnableColorPerVertex;
     if (EnableFlatColor == NULL) delete EnableFlatColor;
     if (ColorPerVertexIntensity == NULL) delete ColorPerVertexIntensity;
+#endif
   }
   
   ~UniformsStruct(){
