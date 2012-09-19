@@ -75,26 +75,19 @@ public class Shaders_WebGL {
 
    public Shaders_WebGL(final JavaScriptObject webGLContext) {
       _gl = webGLContext;
-      test(_gl);
    }
-
-
-   //TODO REMOVE
-   public static native void test(JavaScriptObject gl) /*-{
-		var x = gl.FRAGMENT_SHADER;
-   }-*/;
 
 
    public IGLProgramId createProgram() {
 
-      final JavaScriptObject vertexS = jsCompileShader(_vertexShader, "x-shader/x-vertex");
-      final JavaScriptObject fragmentS = jsCompileShader(_fragmentShader, "x-shader/x-fragment");
+      final JavaScriptObject vertexS = jsCompileShader(_gl, _vertexShader, "x-shader/x-vertex");
+      final JavaScriptObject fragmentS = jsCompileShader(_gl, _fragmentShader, "x-shader/x-fragment");
 
       if ((vertexS == null) || (fragmentS == null)) {
          throw new RuntimeException("FAILURE CREATING SHADERS");
       }
 
-      final JavaScriptObject program = jsCreateNewProgram(vertexS, fragmentS);
+      final JavaScriptObject program = jsCreateNewProgram(_gl, vertexS, fragmentS);
       if (program == null) {
          throw new RuntimeException("FAILURE CREATING PROGRAM");
       }
@@ -104,11 +97,9 @@ public class Shaders_WebGL {
 
 
    // Shader compiler function
-   public static native JavaScriptObject jsCompileShader(String shaderContent,
+   public static native JavaScriptObject jsCompileShader(JavaScriptObject gl,
+                                                         String shaderContent,
                                                          String shaderType) /*-{
-
-		var gl = this.@org.glob3.mobile.specific.Shaders_WebGL::_gl;
-
 		var shader;
 		if (shaderType == "x-shader/x-fragment") {
 			shader = gl.createShader(gl.FRAGMENT_SHADER);
@@ -132,10 +123,9 @@ public class Shaders_WebGL {
 
    // Program and shader compiling, uniform variables, attributes and buffers
    // creation
-   public static native JavaScriptObject jsCreateNewProgram(JavaScriptObject vertexShader,
-                                                            JavaScriptObject fragment) /*-{
-		var gl = this.@org.glob3.mobile.specific.Shaders_WebGL::_gl;
-
+   public static native JavaScriptObject jsCreateNewProgram(JavaScriptObject gl,
+                                                            JavaScriptObject vertexShader,
+                                                            JavaScriptObject fragmentShader) /*-{
 		var newProgram = gl.createProgram();
 
 		gl.attachShader(newProgram, vertexShader);

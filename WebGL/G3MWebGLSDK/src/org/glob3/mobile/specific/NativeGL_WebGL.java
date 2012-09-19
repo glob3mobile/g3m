@@ -449,7 +449,7 @@ public class NativeGL_WebGL
 
    @Override
    public native int Primitive_TriangleStrip() /*-{
-		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.TIRANGLE_STRIP;
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.TRIANGLE_STRIP;
    }-*/;
 
 
@@ -491,25 +491,25 @@ public class NativeGL_WebGL
 
    @Override
    public native int TextureParameter_MinFilter() /*-{
-		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.MIN_FILTER;
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.TEXTURE_MIN_FILTER;
    }-*/;
 
 
    @Override
    public native int TextureParameter_MagFilter() /*-{
-		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.MAG_FILTER;
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.TEXTURE_MAG_FILTER;
    }-*/;
 
 
    @Override
    public native int TextureParameter_WrapS() /*-{
-		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.WRAP_S;
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.TEXTURE_WRAP_S;
    }-*/;
 
 
    @Override
    public native int TextureParameter_WrapT() /*-{
-		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.WRAP_T;
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.TEXTURE_WRAP_T;
    }-*/;
 
 
