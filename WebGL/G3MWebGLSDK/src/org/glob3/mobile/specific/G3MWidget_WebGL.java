@@ -238,7 +238,7 @@ public class G3MWidget_WebGL
       final IMathUtils mathUtils = new MathUtils_WebGL();
 
       _widget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, stringBuilder, mathUtils, logger, gl,
-               texturesHandler, textureBuilder, downloader, planet, cameraConstraints, cameraRenderer, busyRenderer, scheduler,
+               texturesHandler, textureBuilder, downloader, planet, cameraConstraints, composite, busyRenderer, scheduler,
                _width, _height, Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false);
 
       _widget.setUserData(userData);

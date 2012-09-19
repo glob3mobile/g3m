@@ -8,6 +8,7 @@ import org.glob3.mobile.generated.GLBufferType;
 import org.glob3.mobile.generated.GLTextureId;
 import org.glob3.mobile.generated.IFloatBuffer;
 import org.glob3.mobile.generated.IGLProgramId;
+import org.glob3.mobile.generated.IGLUniformID;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IIntBuffer;
 import org.glob3.mobile.generated.INativeGL;
@@ -39,59 +40,6 @@ public class NativeGL_WebGL
 		}
 		return gl;
    }-*/;
-
-
-   @Override
-   public void uniform2f(final int loc,
-                         final float x,
-                         final float y) {
-      jsUniform2f(_gl, loc, x, y);
-   }
-
-
-   private native void jsUniform2f(JavaScriptObject gl,
-                                   final int loc,
-                                   final float x,
-                                   final float y) /*-{
-		gl.uniform2f(loc, x, y);
-   }-*/;
-
-
-   @Override
-   public void uniform1f(final int loc,
-                         final float x) {
-      jsUniform1f(_gl, loc, x);
-   }
-
-
-   private native void jsUniform1f(JavaScriptObject gl,
-                                   final int loc,
-                                   final float x) /*-{
-		gl.uniform1f(loc, x);
-   }-*/;
-
-
-   @Override
-   public void uniform1i(final int loc,
-                         final int v) {
-      jsUniform1i(_gl, loc, v);
-   }
-
-
-   private native void jsUniform1i(JavaScriptObject gl,
-                                   final int loc,
-                                   final float x) /*-{
-		gl.uniform1i(loc, x);
-   }-*/;
-
-
-   @Override
-   public void uniformMatrix4fv(final int location,
-                                final int count,
-                                final boolean transpose,
-                                final float[] value) {
-      jsUniformMatrix4fv(_gl, location, count, transpose, value);
-   }
 
    int TODO_ignoring_count;
 
@@ -128,16 +76,6 @@ public class NativeGL_WebGL
                                final GLBufferType[] buffers) /*-{
 		gl.clear($wnd.gl.COLOR_BUFFER_BIT | $wnd.gl.DEPTH_BUFFER_BIT);
    }-*/;
-
-
-   @Override
-   public void uniform4f(final int location,
-                         final float v0,
-                         final float v1,
-                         final float v2,
-                         final float v3) {
-      jsUniform4f(_gl, location, v0, v1, v2, v3);
-   }
 
 
    private native void jsUniform4f(JavaScriptObject gl,
@@ -226,19 +164,22 @@ public class NativeGL_WebGL
                                    final int stride,
                                    final IFloatBuffer buffer) {
       //TODO CHECK NO CLIENT SIDE ARRAYS
-      jsVertexAttribPointer(index, size, normalized, stride, ((FloatBuffer_WebGL) buffer).getBuffer());
+      final JavaScriptObject jsbuffer = ((FloatBuffer_WebGL) buffer).getBuffer();
+      jsVertexAttribPointer(index, size, normalized, stride, jsbuffer);
    }
 
 
-   public native void jsVertexAttribPointer(final int index,
-                                            final int size,
-                                            final boolean normalized,
-                                            final int stride,
-                                            final JavaScriptObject array) /*-{
+   private native void jsVertexAttribPointer(final int index,
+                                             final int size,
+                                             final boolean normalized,
+                                             final int stride,
+                                             final JavaScriptObject array) /*-{
+
+		debugger;
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 
 		var buffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, array);
+		gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 		gl.bufferData(gl.ARRAY_BUFFER, array, gl.STATIC_DRAW);
 
 		gl.vertexAttribPointer(index, size, gl.FLOAT, normalized, stride, 0);
@@ -276,13 +217,13 @@ public class NativeGL_WebGL
    }
 
 
-   public native void jsDrawElements(final int mode,
-                                     final int count,
-                                     final JavaScriptObject array) /*-{
+   private native void jsDrawElements(final int mode,
+                                      final int count,
+                                      final JavaScriptObject array) /*-{
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 
 		var buffer = gl.createBuffer();
-		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, array);
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
 		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, array, gl.STATIC_DRAW);
 
 		gl.drawElements(mode, count, gl.INT, 0);
@@ -363,8 +304,8 @@ public class NativeGL_WebGL
    }
 
 
-   public native void jsGetIntegerv(final int v,
-                                    final int[] i) /*-{
+   private native void jsGetIntegerv(final int v,
+                                     final int[] i) /*-{
       // TODO Auto-generated method stub
    }-*/;
 
@@ -591,270 +532,113 @@ public class NativeGL_WebGL
 
 
    @Override
-   public int getUniformLocation(final IGLProgramId program,
-                                 final String name) {
-      final JavaScriptObject p = ((GLProgramId_WebGL) program).getProgram();
-      return jsGetUniformLocation(p, name);
+   public void uniform2f(final IGLUniformID loc,
+                         final float x,
+                         final float y) {
+      final JavaScriptObject l = ((GLUniformID_WebGL) loc).getId();
+      jsUniform2f(l, x, y);
    }
 
 
-   public native int jsGetUniformLocation(final JavaScriptObject program,
-                                          final String name) /*-{
-		debugger;
+   public native void jsUniform2f(final JavaScriptObject loc,
+                                  final float x,
+                                  final float y) /*-{
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
-		return gl.getUniformLocation(program, name);
+		gl.uniform2f(loc, x, y);
    }-*/;
 
 
-   //////////////////////////////////
-
-   //   @Override
-   //   public void enableVertices() {
-   //      jsEnableVertices();
-   //   }
-
-
-   //   public native void jsEnableVertices() /*-{
-   //		$wnd.gl.enableVertexAttribArray($wnd.shaderProgram.Position);
-   //   }-*/;
+   @Override
+   public void uniform1f(final IGLUniformID loc,
+                         final float x) {
+      final JavaScriptObject l = ((GLUniformID_WebGL) loc).getId();
+      jsUniform1f(l, x);
+   }
 
 
-   //   @Override
-   //   public void enableTextures() {
-   //      jsEnableTextures();
-   //   }
+   public native void jsUniform1f(final JavaScriptObject loc,
+                                  final float x) /*-{
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+		gl.uniform1f(loc, x);
+   }-*/;
 
 
-   //   public static native void jsEnableTextures()/*-{
-   //		$wnd.gl.enableVertexAttribArray($wnd.shaderProgram.textureCoord);
-   //   }-*/;
+   @Override
+   public void uniform1i(final IGLUniformID loc,
+                         final int v) {
+      final JavaScriptObject l = ((GLUniformID_WebGL) loc).getId();
+      jsUniform1f(l, v);
+   }
 
 
-   //   @Override
-   //   public void enableTexture2D() {
-   //      WebGL.jsEnableTexture2D();
-   //   }
+   public native void jsUniform1i(final JavaScriptObject loc,
+                                  final int x) /*-{
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+		gl.uniform1i(loc, x);
+   }-*/;
 
 
-   //   @Override
-   //   public void disableTexture2D() {
-   //      WebGL.jsDisableTexture2D();
-   //   }
+   @Override
+   public void uniformMatrix4fv(final IGLUniformID location,
+                                final int count,
+                                final boolean transpose,
+                                final float[] value) {
+      final JavaScriptObject l = ((GLUniformID_WebGL) location).getId();
+
+      final FloatBuffer_WebGL array = new FloatBuffer_WebGL(value);
+      final JavaScriptObject buffer = array.getBuffer(); //Float32Array
+
+      jsUniformMatrix4fv(l, count, transpose, buffer);
+
+   }
 
 
-   //   @Override
-   //   public void disableVertices() {
-   //      WebGL.jsDisableVertices();
-   //   }
+   public native void jsUniformMatrix4fv(final JavaScriptObject loc,
+                                         final int count,
+                                         final boolean transpose,
+                                         final JavaScriptObject value) /*-{
+		//TODO IGNORING COUNT
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+		gl.uniformMatrix4fv(loc, transpose, value);
+   }-*/;
 
 
-   //   @Override
-   //   public void disableTextures() {
-   //      WebGL.jsDisableTextures();
-   //   }
+   @Override
+   public void uniform4f(final IGLUniformID location,
+                         final float v0,
+                         final float v1,
+                         final float v2,
+                         final float v3) {
+      final JavaScriptObject l = ((GLUniformID_WebGL) location).getId();
+      jsUniform4f(l, v0, v1, v2, v3);
+   }
 
 
-   //   @Override
-   //   public void clearScreen(final float r,
-   //                           final float g,
-   //                           final float b,
-   //                           final float a) {
-   //      WebGL.jsClearScreen(r, g, b);
-   //   }
+   private native void jsUniform4f(final JavaScriptObject loc,
+                                   final float v0,
+                                   final float v1,
+                                   final float v2,
+                                   final float v3) /*-{
+		//TODO IGNORING COUNT
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+		gl.uniform4f(loc, v0, v1, v2, v3);
+   }-*/;
 
 
-   //   @Override
-   //   public void color(final float r,
-   //                     final float g,
-   //                     final float b,
-   //                     final float a) {
-   //      WebGL.jsColor(r, g, b);
-   //   }
+   @Override
+   public IGLUniformID getUniformLocation(final IGLProgramId program,
+                                          final String name) {
+      final JavaScriptObject p = ((GLProgramId_WebGL) program).getProgram();
+      final JavaScriptObject u = jsGetUniformLocation(p, name);
+      return new GLUniformID_WebGL(u);
+   }
 
 
-   //   @Override
-   //   public void pushMatrix() {
-   //      WebGL.jsPushMatrix();
-   //   }
-
-
-   //   @Override
-   //   public void popMatrix() {
-   //      WebGL.jsPopMatrix();
-   //   }
-
-
-   //   @Override
-   //   public void loadMatrixf(final MutableMatrix44D m) {
-   //      _modelView = m; // SAVING MODELVIEW
-   //
-   //      final JsArrayNumber arrayJs = (JsArrayNumber) JsArrayNumber.createArray();
-   //      for (int i = 0; i < 16; i++) {
-   //         arrayJs.push((float) m.get(i));
-   //      }
-   //      WebGL.jsLoadMatrixf(arrayJs);
-   //   }
-
-
-   //   @Override
-   //   public void multMatrixf(final MutableMatrix44D m) {
-   //	   final JsArrayNumber arrayJs = (JsArrayNumber) JsArrayNumber.createArray();
-   //	      for (int i = 0; i < 16; i++) {
-   //	         arrayJs.push((float) m.get(i));
-   //	      }
-   //      WebGL.jsMultiplyModelViewMatrix(arrayJs);
-   //   }
-
-
-   //   @Override
-   //   public void vertexPointer(final int size,
-   //                             final int stride,
-   //                             final float[] vertex) {
-   //      final JsArrayNumber jsArray = (JsArrayNumber) JsArrayNumber.createArray();
-   //      for (final float element : vertex) {
-   //         jsArray.push(element);
-   //      }
-   //      WebGL.jsVertexPointer(size, stride, jsArray);
-   //   }
-
-
-   //   @Override
-   //   public void drawTriangleStrip(final int n,
-   //                                 final byte[] i) {
-   //      _numIndex = n;
-   //      _index = new int[i.length];
-   //      for (int j = 0; j < i.length; j++) {
-   //         _index[j] = i[j];
-   //      }
-   //      final JsArrayInteger jsNumberArray = (JsArrayInteger) JsArrayInteger.createArray();
-   //      for (int j = 0; j < _index.length; j++) {
-   //         jsNumberArray.set(j, _index[j]);
-   //      }
-   //      WebGL.jsDrawIndexedMesh(_numIndex, jsNumberArray);
-   //   }
-
-
-   //   @Override
-   //   public void drawLines(final int n,
-   //                         final byte[] i) {
-   //      _numIndex = n;
-   //      _index = new int[i.length];
-   //      for (int j = 0; j < i.length; j++) {
-   //         _index[j] = i[j];
-   //      }
-   //      final JsArrayInteger jsNumberArray = (JsArrayInteger) JsArrayInteger.createArray();
-   //      for (int j = 0; j < _index.length; j++) {
-   //         jsNumberArray.set(j, _index[j]);
-   //      }
-   //      WebGL.jsDrawLines(_numIndex, jsNumberArray);
-   //   }
-
-
-   //   @Override
-   //   public void drawLineLoop(final int n,
-   //                            final byte[] i) {
-   //      _numIndex = n;
-   //      _index = new int[i.length];
-   //      for (int j = 0; j < i.length; j++) {
-   //         _index[j] = i[j];
-   //      }
-   //      final JsArrayInteger jsNumberArray = (JsArrayInteger) JsArrayInteger.createArray();
-   //      for (int j = 0; j < _index.length; j++) {
-   //         jsNumberArray.set(j, _index[j]);
-   //      }
-   //      WebGL.jsDrawLineLoop(_numIndex, jsNumberArray);
-   //   }
-
-
-   //   @Override
-   //   public void setProjection(final MutableMatrix44D projection) {
-   //      // Conversion a un array JavaScript
-   //      final JsArrayNumber arrayJs = (JsArrayNumber) JsArrayNumber.createArray();
-   //      for (int i = 0; i < 16; i++) {
-   //         arrayJs.push(projection.get(i));
-   //      }
-   //
-   //      WebGL.jsSetProjection(arrayJs);
-   //   }
-
-
-   //   @Override
-   //   public void useProgram(final int program) {
-   //      WebGL.jsUseProgram();
-   //   }
-
-
-   //   @Override
-   //   public void enablePolygonOffset(final float factor,
-   //                                   final float units) {
-   //      WebGL.jsEnablePolygonOffset(factor, units);
-   //   }
-
-
-   //   @Override
-   //   public void disablePolygonOffset() {
-   //      WebGL.jsDisablePolygonOffset();
-   //   }
-
-
-   //   @Override
-   //   public void lineWidth(final float width) {
-   //      WebGL.jsLineWidth(width);
-   //
-   //   }
-
-
-   //   @Override
-   //   public int uploadTexture(final IImage image,
-   //                            final int textureWidth,
-   //                            final int textureHeight) {
-   //      //		final JsArray<JavaScriptObject> jsTextures = (JsArray<JavaScriptObject>) JsArray
-   //      //				.createArray();
-   //      //		final Image_WebGL image = (Image_WebGL) image;
-   //      //		jsTextures.set(0, image.imgObject);
-   //      //
-   //      //		// Boolean parameter indicates whether its a billboard (true) or not
-   //      //		if (false) {
-   //      //			return WebGL.jsUploadBillboardTexture(jsTextures);
-   //      //		}
-   //      //
-   //      //		// Regular texture uploading:
-   //      //		return WebGL.jsUploadMultipleTextures(jsTextures);
-   //      return 0;
-   //   }
-
-
-   //   @Override
-   //   public void setTextureCoordinates(final int size,
-   //                                     final int stride,
-   //                                     final float[] texcoord) {
-   //      final JsArrayNumber jsArray = (JsArrayNumber) JsArrayNumber.createArray();
-   //      for (final float element : texcoord) {
-   //         jsArray.push(element);
-   //      }
-   //      WebGL.jsTexCoordPointer(size, stride, jsArray);
-   //   }
-
-
-   //   @Override
-   //   public void bindTexture(final int n) {
-   //      WebGL.jsBindTexture(n);
-   //   }
-
-
-   //   @Override
-   //   public void drawBillBoard(final int textureId,
-   //                             final float x,
-   //                             final float y,
-   //                             final float z,
-   //                             final float viewPortRatio) {
-   //      WebGL.jsDrawBillBoard(textureId, x, y, z, viewPortRatio); // No rotation
-   //   }
-
-
-   //   @Override
-   //   public void deleteTexture(final int glTextureId) {
-   //      WebGL.jsDeleteTextures(glTextureId - 1);
-   //   }
-
+   private native JavaScriptObject jsGetUniformLocation(final JavaScriptObject program,
+                                                        final String name)
+   /*-{
+		//TODO IGNORING COUNT
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+		return gl.getUniformLocation(program, name);
+   }-*/;
 }
