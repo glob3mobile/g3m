@@ -67,6 +67,7 @@ public class G3MWidget_WebGL
    UserData                           _userData             = null;
 
    private IGLProgramId               _program              = null;
+   private JavaScriptObject           _webGLContext         = null;
 
    G3MWidget                          _widget;
    int                                _width;
@@ -178,15 +179,15 @@ public class G3MWidget_WebGL
       // TODO add delayMillis to G3MWidget constructor
       final IThreadUtils threadUtils = new ThreadUtils_WebGL(this, _delayMillis);
 
-      final JavaScriptObject webGLContext = jsGetWebGLContext();
-      if (webGLContext == null) {
+      _webGLContext = jsGetWebGLContext();
+      if (_webGLContext == null) {
          throw new RuntimeException("webGLContext null");
       }
 
       //CREATING SHADERS PROGRAM
-      _program = new Shaders_WebGL(webGLContext).createProgram();
+      _program = new Shaders_WebGL(_webGLContext).createProgram();
 
-      final NativeGL_WebGL nGL = new NativeGL_WebGL(webGLContext);
+      final NativeGL_WebGL nGL = new NativeGL_WebGL(_webGLContext);
       final GL gl = new GL(nGL);
 
       final CompositeRenderer composite = new CompositeRenderer();
@@ -281,9 +282,21 @@ public class G3MWidget_WebGL
    }
 
 
+   //TODO INIT MOVE TO COMMON
+   private native void jsGLInit(JavaScriptObject gl) /*-{
+		var error = gl.getError()
+		if (error != 0) {
+			debugger;
+		}
+		gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+   }-*/;
+
+
    private void renderWidget() {
       //USING PROGRAM
       if (_program != null) {
+         jsGLInit(_webGLContext);
          _widget.getGL().useProgram(_program);
          _widget.render();
       }
@@ -294,7 +307,6 @@ public class G3MWidget_WebGL
 
 
    private native void startRender(G3MWidget_WebGL instance) /*-{
-		//		debugger;
 		var tick = function() {
 			//TODO CHECK DONT RUN
 			$wnd.g3mRequestAnimFrame(tick);
@@ -305,7 +317,6 @@ public class G3MWidget_WebGL
 
 
    private native void jsDefineG3MBrowserObjects() /*-{
-		//		debugger;
 		// URL Object
 		$wnd.g3mURL = $wnd.URL || $wnd.webkitURL;
 
@@ -332,7 +343,6 @@ public class G3MWidget_WebGL
 
 
    private native JavaScriptObject jsGetWebGLContext() /*-{
-		debugger;
 		var canvas = null, context = null;
 		var contextNames = [ "experimental-webgl", "webgl", "webkit-3d",
 				"moz-webgl" ];
@@ -344,6 +354,9 @@ public class G3MWidget_WebGL
 			for ( var cn in contextNames) {
 				try {
 					context = canvas.getContext(contextNames[cn]);
+					//STORING SIZE FOR GLVIEWPORT
+					context.viewportWidth = canvas.width;
+					context.viewportHeight = canvas.height;
 				} catch (e) {
 					alert("No WebGL context available");
 				}

@@ -4,7 +4,6 @@ package org.glob3.mobile.specific;
 
 import java.util.ArrayList;
 
-import org.glob3.mobile.generated.GLBufferType;
 import org.glob3.mobile.generated.GLTextureId;
 import org.glob3.mobile.generated.IFloatBuffer;
 import org.glob3.mobile.generated.IGLProgramId;
@@ -29,17 +28,6 @@ public class NativeGL_WebGL
    public NativeGL_WebGL(final JavaScriptObject webGLContext) {
       _gl = webGLContext;
    }
-
-
-   public static native JavaScriptObject jsCreateContext(JavaScriptObject canvas) /*-{
-		gl = canvas.getContext("experimental-webgl");
-		gl.viewportWidth = canvas.width;
-		gl.viewportHeight = canvas.height;
-		if (!gl) {
-			alert("Could not initialise WebGL");
-		}
-		return gl;
-   }-*/;
 
    int TODO_ignoring_count;
 
@@ -68,13 +56,6 @@ public class NativeGL_WebGL
                                     final float blue,
                                     final float alpha)/*-{
 		gl.clearColor(red, green, blue, alpha);
-   }-*/;
-
-
-   private native void jsClear(JavaScriptObject gl,
-                               final int nBuffer,
-                               final GLBufferType[] buffers) /*-{
-		gl.clear($wnd.gl.COLOR_BUFFER_BIT | $wnd.gl.DEPTH_BUFFER_BIT);
    }-*/;
 
 
@@ -174,8 +155,6 @@ public class NativeGL_WebGL
                                              final boolean normalized,
                                              final int stride,
                                              final JavaScriptObject array) /*-{
-
-		debugger;
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 
 		var buffer = gl.createBuffer();
@@ -217,16 +196,15 @@ public class NativeGL_WebGL
    }
 
 
+   //TODO CHECK UNSIGNED SHORT
    private native void jsDrawElements(final int mode,
                                       final int count,
                                       final JavaScriptObject array) /*-{
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
-
 		var buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
 		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, array, gl.STATIC_DRAW);
-
-		gl.drawElements(mode, count, gl.INT, 0);
+		gl.drawElements(mode, count, gl.UNSIGNED_SHORT, 0);
    }-*/;
 
 
@@ -499,7 +477,26 @@ public class NativeGL_WebGL
    @Override
    public native int getError() /*-{
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
-		gl.getError();
+		var e = gl.getError();
+
+		if (e == gl.INVALID_ENUM) {
+			debugger;
+		}
+
+		if (e == gl.INVALID_VALUE) {
+			debugger;
+		}
+
+		if (e == gl.INVALID_OPERATION) {
+			debugger;
+		}
+
+		if (e == gl.OUT_OF_MEMORY) {
+			debugger;
+		}
+
+		return e;
+
    }-*/;
 
 

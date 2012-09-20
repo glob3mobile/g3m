@@ -66,13 +66,14 @@ public class IntBuffer_WebGL
    }
 
 
+   //TODO _CHANGED_TO_UINT16;
    private native JavaScriptObject jsCreateBuffer(final JavaScriptObject data) /*-{
-		return new Int32Array(data);
+		return new Uint16Array(data);
    }-*/;
 
 
    private native JavaScriptObject jsCreateBuffer(final int size) /*-{
-		return new Int32Array(size);
+		return new Uint16Array(size);
    }-*/;
 
 
