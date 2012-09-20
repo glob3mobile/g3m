@@ -89,6 +89,11 @@ public class IntBuffer_WebGL
 
    private native void jsPut(int i,
                              int value) /*-{
+
+		if (value < 0 || value > 65535) {
+			alert("EXCEDING SHORT RANGE IN UINT16 JAVASCRIPT BUFFER");
+		}
+
 		var thisInstance = this;
 		if (thisInstance.@org.glob3.mobile.specific.IntBuffer_WebGL::_buffer[i] != value) {
 			thisInstance.@org.glob3.mobile.specific.IntBuffer_WebGL::_buffer[i] = value;
