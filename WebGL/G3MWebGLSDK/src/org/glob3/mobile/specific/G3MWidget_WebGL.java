@@ -246,46 +246,6 @@ public class G3MWidget_WebGL
    }
 
 
-   /* old
-      public void init() {
-         //  Creating factory
-         final IFactory factory = new Factory_WebGL();
-
-         // RENDERERS
-         final CompositeRenderer comp = new CompositeRenderer();
-
-         // Camera must be first
-         final CameraRenderer cr = new CameraRenderer();
-         comp.addRenderer(cr);
-
-         if (true) {
-            final DummyRenderer dr = new DummyRenderer();
-            comp.addRenderer(dr);
-         }
-
-         if (true) {
-            //final SimplePlanetRenderer spr = new SimplePlanetRenderer("world.jpg");
-
-            final SimplePlanetRenderer spr = new SimplePlanetRenderer("http://www.arkive.org/images/browse/world-map.jpg");
-            comp.addRenderer(spr);
-         }
-
-         // Logger
-         final ILogger logger = new Logger_WebGL(LogLevel.ErrorLevel);
-
-         final INativeGL gl = new NativeGL_WebGL();
-
-         //      final TexturesHandler texturesHandler = new TexturesHandler();
-
-         //      _widget = G3MWidget.create(factory, logger, gl, texturesHandler, Planet.createEarth(), comp,
-         //               _canvas.getCoordinateSpaceWidth(), _canvas.getCoordinateSpaceHeight(),
-         //               Color.fromRGB((float) 0.0, (float) 0.1, (float) 0.2, (float) 1.0), true);
-
-         //CALLING widget.render()
-         startRender(this);
-      }
-   */
-
    @Override
    public void onBrowserEvent(final Event event) {
       //      _canvas.setFocus(true);
@@ -334,10 +294,10 @@ public class G3MWidget_WebGL
 
 
    private native void startRender(G3MWidget_WebGL instance) /*-{
-		debugger;
+		//		debugger;
 		var tick = function() {
 			//TODO CHECK DONT RUN
-			//$wnd.requestAnimFrame(tick);
+			$wnd.g3mRequestAnimFrame(tick);
 			$entry(instance.@org.glob3.mobile.specific.G3MWidget_WebGL::renderWidget()());
 		};
 		tick();
@@ -357,21 +317,42 @@ public class G3MWidget_WebGL
 				|| $wnd.msIDBTransaction;
 		$wnd.g3mDBVersion = 1;
 
+		// Animation
+		$wnd.g3mRequestAnimFrame = (function() {
+			return $wnd.requestAnimationFrame
+					|| $wnd.webkitRequestAnimationFrame
+					|| $wnd.mozRequestAnimationFrame
+					|| $wnd.oRequestAnimationFrame
+					|| $wnd.msRequestAnimationFrame || function(callback) {
+						$wnd.setTimeout(callback, 1000 / 60);
+					};
+		})();
+
    }-*/;
 
 
    private native JavaScriptObject jsGetWebGLContext() /*-{
-		//		debugger;
+		debugger;
+		var canvas = null, context = null;
+		var contextNames = [ "experimental-webgl", "webgl", "webkit-3d",
+				"moz-webgl" ];
+
 		var canvas = $doc
 				.getElementById(@org.glob3.mobile.specific.G3MWidget_WebGL::canvasId);
 
-		if (canvas == null) {
-			alert("NO CANVAS");
-		}
-
-		var context = canvas.getContext("experimental-webgl");
-		if (context == null) {
-			alert("NO GL CONTEXT");
+		if (canvas != null) {
+			for ( var cn in contextNames) {
+				try {
+					context = canvas.getContext(contextNames[cn]);
+				} catch (e) {
+					alert("No WebGL context available");
+				}
+				if (context) {
+					break;
+				}
+			}
+		} else {
+			alert("No canvas available");
 		}
 
 		return context;
