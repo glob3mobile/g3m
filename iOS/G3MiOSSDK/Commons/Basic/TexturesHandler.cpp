@@ -33,7 +33,7 @@ public:
 #endif
 #ifdef JAVA_CODE
   public final TextureSpec _textureSpec;
-  private IGLTextureId _glTextureId;
+  public IGLTextureId _glTextureId;
 #endif
 
   long _referenceCounter;
