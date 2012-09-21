@@ -3,6 +3,8 @@
 <module>
 	<inherits name="com.google.gwt.user.User" />
 	<inherits name="org.glob3.mobile.G3MWebGLSDK" />
+	
+	<inherits name="com.google.gwt.resources.Resources" />
 
 	<source path="client" />
 	<entry-point class="org.glob3.mobile.client.G3MWebGLDemo" />

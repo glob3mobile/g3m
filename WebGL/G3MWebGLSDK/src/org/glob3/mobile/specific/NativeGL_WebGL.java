@@ -176,7 +176,6 @@ public class NativeGL_WebGL
    public void drawElements(final int mode,
                             final int count,
                             final IIntBuffer indices) {
-      //TODO CHECK
       jsDrawElements(mode, count, ((IntBuffer_WebGL) indices).getBuffer());
    }
 
@@ -221,9 +220,17 @@ public class NativeGL_WebGL
    @Override
    public void texImage2D(final IImage image,
                           final int format) {
-      // TODO Auto-generated method stub
-
+      final JavaScriptObject im = ((Image_WebGL) image).getImage(); //IMAGE JS
+      jsTexImage2D(im, format);
    }
+
+
+   private native void jsTexImage2D(final JavaScriptObject image,
+                                    final int format) /*-{
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+
+		gl.texImage2D(GL_TEXTURE_2D, 0, format, format, gl.UNSIGNED_BYTE, data);
+   }-*/;
 
 
    @Override

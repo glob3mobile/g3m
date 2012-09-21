@@ -12,12 +12,17 @@ public class Image_WebGL
          extends
             IImage {
 
-   private JavaScriptObject _imgObject;
+   private JavaScriptObject _imgObject;      //IMAGE JS
    private boolean          _arrived = false;
 
 
    public Image_WebGL() {
       _imgObject = null;
+   }
+
+
+   public Image_WebGL(final String url) {
+      loadFromURL(url);
    }
 
 
@@ -129,16 +134,17 @@ public class Image_WebGL
 
    private native JavaScriptObject jsCreateImgObject(Image_WebGL instance,
                                                      String url) /*-{
+		debugger;
 		var imgObject = new Image();
 		imgObject.onload = function() {
 			debugger;
 			$entry(instance.@org.glob3.mobile.specific.Image_WebGL::onArrive()());
 		}
-		imgObject.image.onabort = function() {
+		imgObject.onabort = function() {
 			debugger;
 			$entry(instance.@org.glob3.mobile.specific.Image_WebGL::onError()());
 		}
-		imgObject.image.onerror = function() {
+		imgObject.onerror = function() {
 			debugger;
 			$entry(instance.@org.glob3.mobile.specific.Image_WebGL::onError()());
 		}
@@ -150,6 +156,8 @@ public class Image_WebGL
 
 
    private native int jsGetWidth() /*-{
+		debugger;
+		var im = this.@org.glob3.mobile.specific.Image_WebGL::_imgObject;
 		return this.@org.glob3.mobile.specific.Image_WebGL::_imgObject.width;
    }-*/;
 
