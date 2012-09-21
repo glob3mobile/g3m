@@ -24,7 +24,12 @@ private:
   const std::string  _textureFilename;
   const Geodetic3D   _position;
   
+#ifdef C_CODE
   const IGLTextureId* _textureId;
+#endif
+#ifdef JAVA_CODE
+  private IGLTextureId _textureId;
+#endif
   
   Vector3D* _cartesianPosition;
   Vector3D* getCartesianPosition(const Planet* planet);

@@ -26,9 +26,17 @@ private:
   
   const RenderContext*         _renderContext;
   TilesRenderParameters* const _parameters;
+
+#ifdef C_CODE
   const IGLTextureId* _texId;
+#endif
+#ifdef JAVA_CODE
+  private IGLTextureId _texId;
+#endif
+  
+  
   IImage * const _image;
-    const bool _isMercatorImage;  
+  const bool _isMercatorImage;  
   
   
   IFloatBuffer* createTextureCoordinates(const RenderContext* rc,
@@ -37,7 +45,7 @@ private:
 public:
   
   SingleImageTileTexturizer(TilesRenderParameters* const parameters,
-
+                            
                             IImage* image, const bool isMercatorImage) :
   _texId(NULL),
   _image(image),

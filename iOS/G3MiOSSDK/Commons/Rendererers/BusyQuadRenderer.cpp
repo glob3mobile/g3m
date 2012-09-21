@@ -36,7 +36,12 @@ void BusyQuadRenderer::stop() {
 
 bool BusyQuadRenderer::initMesh(const RenderContext* rc) {
   //TEXTURED
+#ifdef C_CODE
   const IGLTextureId* texId = NULL;
+#endif
+#ifdef JAVA_CODE
+  IGLTextureId texId = null;
+#endif
   if (true){
     IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
     

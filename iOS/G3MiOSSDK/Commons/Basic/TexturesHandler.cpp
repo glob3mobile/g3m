@@ -29,11 +29,12 @@ class TextureHolder {
 public:
 #ifdef C_CODE
   const TextureSpec _textureSpec;
+  const IGLTextureId* _glTextureId;
 #endif
 #ifdef JAVA_CODE
   public final TextureSpec _textureSpec;
+  private IGLTextureId _glTextureId;
 #endif
-  const IGLTextureId* _glTextureId;
 
   long _referenceCounter;
   

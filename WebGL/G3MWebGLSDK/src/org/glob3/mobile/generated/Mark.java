@@ -1,4 +1,7 @@
-package org.glob3.mobile.generated; 
+
+
+package org.glob3.mobile.generated;
+
 //
 //  Mark.cpp
 //  G3MiOSSDK
@@ -16,134 +19,131 @@ package org.glob3.mobile.generated;
 //
 
 
-
-
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IFloatBuffer;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IGLTextureId;
 
-public class Mark
-{
-  private final String _name;
-  private final String _textureFilename;
-  private final Geodetic3D _position ;
+public class Mark {
+   private final String     _name;
+   private final String     _textureFilename;
+   private final Geodetic3D _position;
 
-  private final IGLTextureId _textureId;
+   private IGLTextureId     _textureId;
 
-  private Vector3D _cartesianPosition;
-  private Vector3D getCartesianPosition(Planet planet)
-  {
-	if (_cartesianPosition == null)
-	{
-	  _cartesianPosition = new Vector3D(planet.toCartesian(_position));
-	}
-	return _cartesianPosition;
-  }
+   private Vector3D         _cartesianPosition;
 
-  private IFloatBuffer _vertices;
-  private IFloatBuffer getVertices(Planet planet)
-  {
-  
-	if (_vertices == null)
-	{
-	  final Vector3D pos = getCartesianPosition(planet);
-  
-	  FloatBufferBuilderFromCartesian3D vertex = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
-	  vertex.add(pos);
-	  vertex.add(pos);
-	  vertex.add(pos);
-	  vertex.add(pos);
-  
-	  _vertices = vertex.create();
-	}
-	return _vertices;
-  }
 
-  public Mark(String name, String textureFilename, Geodetic3D position)
-  {
-	  _name = name;
-	  _textureFilename = textureFilename;
-	  _position = new Geodetic3D(position);
-	  _textureId = null;
-	  _cartesianPosition = null;
-	  _vertices = null;
+   private Vector3D getCartesianPosition(final Planet planet) {
+      if (_cartesianPosition == null) {
+         _cartesianPosition = new Vector3D(planet.toCartesian(_position));
+      }
+      return _cartesianPosition;
+   }
 
-  }
+   private IFloatBuffer _vertices;
 
-  public void dispose()
-  {
-	if (_cartesianPosition != null)
-	{
-	  if (_cartesianPosition != null)
-		  _cartesianPosition.dispose();
-	}
-	if (_vertices != null)
-	{
-	  if (_vertices != null)
-		  _vertices.dispose();
-	}
-  }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const String getName() const
-  public final String getName()
-  {
-	return _name;
-  }
+   private IFloatBuffer getVertices(final Planet planet) {
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const Geodetic3D getPosition() const
-  public final Geodetic3D getPosition()
-  {
-	return _position;
-  }
+      if (_vertices == null) {
+         final Vector3D pos = getCartesianPosition(planet);
 
-  public final void render(RenderContext rc, double minDistanceToCamera)
-  {
-	final Camera camera = rc.getCurrentCamera();
-	final Planet planet = rc.getPlanet();
-  
-	final Vector3D cameraPosition = camera.getCartesianPosition();
-	//  const Vector3D markPosition = planet->toCartesian(_position);
-	final Vector3D markPosition = getCartesianPosition(planet);
-  
-	final Vector3D markCameraVector = markPosition.sub(cameraPosition);
-	final double distanceToCamera = markCameraVector.length();
-  
-	if (distanceToCamera <= minDistanceToCamera || true)
-	{
-	  final Vector3D normalAtMarkPosition = planet.geodeticSurfaceNormal(markPosition);
-  
-	  if (normalAtMarkPosition.angleBetween(markCameraVector).radians() > IMathUtils.instance().pi() / 2)
-	  {
-		GL gl = rc.getGL();
-  
-		Vector2D tr = new Vector2D(0.0,0.0);
-		Vector2D scale = new Vector2D(1.0,1.0);
-		gl.transformTexCoords(scale, tr);
-  
-		if (_textureId == null)
-		{
-		  IImage image = rc.getFactory().createImageFromFileName(_textureFilename);
-  
-		  _textureId = rc.getTexturesHandler().getGLTextureId(image, GLFormat.rgba(), _textureFilename, false);
-  
-		  rc.getFactory().deleteImage(image);
-		}
-  
-		if (_textureId == null)
-		{
-		  rc.getLogger().logError("Can't load file %s", _textureFilename);
-		  return;
-		}
-  
-		//    rc->getLogger()->logInfo(" Visible   << %f %f", minDist, distanceToCamera);
-		gl.drawBillBoard(_textureId, getVertices(planet), camera.getViewPortRatio());
-	  }
-  
-	}
-  
-  }
+         final FloatBufferBuilderFromCartesian3D vertex = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(),
+                  Vector3D.zero());
+         vertex.add(pos);
+         vertex.add(pos);
+         vertex.add(pos);
+         vertex.add(pos);
+
+         _vertices = vertex.create();
+      }
+      return _vertices;
+   }
+
+
+   public Mark(final String name,
+               final String textureFilename,
+               final Geodetic3D position) {
+      _name = name;
+      _textureFilename = textureFilename;
+      _position = new Geodetic3D(position);
+      _textureId = null;
+      _cartesianPosition = null;
+      _vertices = null;
+
+   }
+
+
+   public void dispose() {
+      if (_cartesianPosition != null) {
+         if (_cartesianPosition != null) {
+            _cartesianPosition.dispose();
+         }
+      }
+      if (_vertices != null) {
+         if (_vertices != null) {
+            _vertices.dispose();
+         }
+      }
+   }
+
+
+   //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+   //ORIGINAL LINE: const String getName() const
+   public final String getName() {
+      return _name;
+   }
+
+
+   //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+   //ORIGINAL LINE: const Geodetic3D getPosition() const
+   public final Geodetic3D getPosition() {
+      return _position;
+   }
+
+
+   public final void render(final RenderContext rc,
+                            final double minDistanceToCamera) {
+      final Camera camera = rc.getCurrentCamera();
+      final Planet planet = rc.getPlanet();
+
+      final Vector3D cameraPosition = camera.getCartesianPosition();
+      //  const Vector3D markPosition = planet->toCartesian(_position);
+      final Vector3D markPosition = getCartesianPosition(planet);
+
+      final Vector3D markCameraVector = markPosition.sub(cameraPosition);
+      final double distanceToCamera = markCameraVector.length();
+
+      if ((distanceToCamera <= minDistanceToCamera) || true) {
+         final Vector3D normalAtMarkPosition = planet.geodeticSurfaceNormal(markPosition);
+
+         if (normalAtMarkPosition.angleBetween(markCameraVector).radians() > IMathUtils.instance().pi() / 2) {
+            final GL gl = rc.getGL();
+
+            final Vector2D tr = new Vector2D(0.0, 0.0);
+            final Vector2D scale = new Vector2D(1.0, 1.0);
+            gl.transformTexCoords(scale, tr);
+
+            if (_textureId == null) {
+               final IImage image = rc.getFactory().createImageFromFileName(_textureFilename);
+
+               _textureId = rc.getTexturesHandler().getGLTextureId(image, GLFormat.rgba(), _textureFilename, false);
+
+               rc.getFactory().deleteImage(image);
+            }
+
+            if (_textureId == null) {
+               rc.getLogger().logError("Can't load file %s", _textureFilename);
+               return;
+            }
+
+            //    rc->getLogger()->logInfo(" Visible   << %f %f", minDist, distanceToCamera);
+            gl.drawBillBoard(_textureId, getVertices(planet), camera.getViewPortRatio());
+         }
+
+      }
+
+   }
 
 }

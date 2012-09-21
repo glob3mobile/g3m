@@ -563,9 +563,14 @@ void GL::deleteTexture(const IGLTextureId* textureId) {
   if (textureId == NULL) {
     return;
   }
+#ifdef C_CODE
   const IGLTextureId* textures[] = {
     textureId
   };
+#endif
+#ifdef JAVA_CODE
+  IGLTextureId textures[] = { textureId };
+#endif
   _gl->deleteTextures(1, textures);
   
   _texturesIdBag.push_back(textureId);

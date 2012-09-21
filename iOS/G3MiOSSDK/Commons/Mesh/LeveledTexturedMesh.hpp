@@ -37,7 +37,12 @@ class LazyTextureMapping : public TextureMapping {
 private:
   mutable LazyTextureMappingInitializer* _initializer;
   
+#ifdef C_CODE
   const IGLTextureId* _glTextureId;
+#endif
+#ifdef JAVA_CODE
+  private IGLTextureId _glTextureId;
+#endif
   
   mutable bool _initialized;
 
