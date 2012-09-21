@@ -593,8 +593,7 @@ public class GL
 	{
 	  return;
 	}
-//C++ TO JAVA CONVERTER TODO TASK: The following line could not be converted:
-	const IGLTextureId* textures[] = { textureId };
+	IGLTextureId textures[] = { textureId };
 	_gl.deleteTextures(1, textures);
   
 	_texturesIdBag.addLast(textureId);

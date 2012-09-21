@@ -3,7 +3,7 @@ public class LazyTextureMapping extends TextureMapping
 {
   private LazyTextureMappingInitializer _initializer;
 
-  private final IGLTextureId _glTextureId;
+  private IGLTextureId _glTextureId;
 
   private boolean _initialized;
 

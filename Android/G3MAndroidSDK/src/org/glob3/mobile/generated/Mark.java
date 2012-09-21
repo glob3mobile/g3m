@@ -29,7 +29,7 @@ public class Mark
   private final String _textureFilename;
   private final Geodetic3D _position ;
 
-  private final IGLTextureId _textureId;
+  private IGLTextureId _textureId;
 
   private Vector3D _cartesianPosition;
   private Vector3D getCartesianPosition(Planet planet)

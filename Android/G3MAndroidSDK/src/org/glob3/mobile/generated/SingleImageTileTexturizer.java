@@ -25,9 +25,12 @@ public class SingleImageTileTexturizer extends TileTexturizer
 
   private RenderContext _renderContext;
   private final TilesRenderParameters _parameters;
-  private final IGLTextureId _texId;
+
+  private IGLTextureId _texId;
+
+
   private final IImage _image;
-	private final boolean _isMercatorImage;
+  private final boolean _isMercatorImage;
 
 
 

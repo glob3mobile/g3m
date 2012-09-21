@@ -33,7 +33,7 @@ public class BusyQuadRenderer extends Renderer implements EffectTarget
   private boolean initMesh(RenderContext rc)
   {
 	//TEXTURED
-	final IGLTextureId texId = null;
+	IGLTextureId texId = null;
 	if (true)
 	{
 	  IImage image = rc.getFactory().createImageFromFileName(_textureFilename);

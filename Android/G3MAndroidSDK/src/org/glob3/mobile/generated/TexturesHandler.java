@@ -59,7 +59,7 @@ public class TexturesHandler
 	}
   
 	TextureHolder holder = new TextureHolder(textureSpec);
-	holder._glTextureId = _gl.uploadTexture(image, format, textureSpec.isMipmap());
+	holder._glTextureId= _gl.uploadTexture(image, format, textureSpec.isMipmap());
   
   
 	if (_verbose)
