@@ -14,6 +14,8 @@
 
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 
+#include "IGLTextureId.hpp"
+
 
 Mark::~Mark() {
   if (_cartesianPosition != NULL) {
@@ -69,7 +71,7 @@ void Mark::render(const RenderContext* rc,
       Vector2D scale(1.0,1.0);
       gl->transformTexCoords(scale, tr);
       
-      if (!_textureId.isValid()) {
+      if (_textureId == NULL) {
         IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
      
         _textureId = rc->getTexturesHandler()->getGLTextureId(image, GLFormat::rgba(),
@@ -78,7 +80,7 @@ void Mark::render(const RenderContext* rc,
         rc->getFactory()->deleteImage(image);
       }
       
-      if (!_textureId.isValid()) {
+      if (_textureId == NULL) {
         rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
         return;
       }

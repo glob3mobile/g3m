@@ -19,12 +19,14 @@
 
 #include <vector>
 
+#include "IGLTextureId.hpp"
+
 class SingleImageTileTexturizer : public TileTexturizer {
 private:
   
   const RenderContext*         _renderContext;
   TilesRenderParameters* const _parameters;
-  GLTextureId _texId;
+  const IGLTextureId* _texId;
   IImage * const _image;
     const bool _isMercatorImage;  
   
@@ -37,7 +39,7 @@ public:
   SingleImageTileTexturizer(TilesRenderParameters* const parameters,
 
                             IImage* image, const bool isMercatorImage) :
-  _texId(-1),
+  _texId(NULL),
   _image(image),
   _parameters(parameters),
   _renderContext(NULL),
@@ -46,7 +48,7 @@ public:
   }
   
   ~SingleImageTileTexturizer() {
-    if (_texId.isValid()){
+    if (_texId != NULL){
       if (_renderContext != NULL) {
         _renderContext->getTexturesHandler()->releaseGLTextureId(_texId);
       }

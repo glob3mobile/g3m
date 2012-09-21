@@ -15,6 +15,7 @@
 
 #include "GLProgramId_iOS.hpp"
 #include "GLUniformID_iOS.hpp"
+#include "GLTextureId_iOS.hpp"
 
 class NativeGL2_iOS: public INativeGL
 {
@@ -107,14 +108,19 @@ public:
     glBlendFunc(sfactor, dfactor);
   }
   
-  void bindTexture(int target, int texture) const {
-    glBindTexture(target, texture);
+  void bindTexture(int target, const IGLTextureId* texture) const {
+    int id = ((GLTextureId_iOS*)texture)->getGLTextureId();
+    if (id < 0){
+      ILogger::instance()->logError("Trying to bind invalid IGLTextureId");
+    } else{
+      glBindTexture(target, id);
+    }
   }
   
-  void deleteTextures(int n, const int textures[]) const {
+  void deleteTextures(int n, const IGLTextureId* textures[]) const {
     unsigned int ts[n];
     for(int i = 0; i < n; i++){
-      ts[i] = textures[i];
+      ts[i] = ((GLTextureId_iOS*)textures[i])->getGLTextureId();
     }
     glDeleteTextures(n, ts);
   }
@@ -131,12 +137,12 @@ public:
     glPixelStorei(pname, param);
   }
   
-  std::vector<GLTextureId> genTextures(int n) const {
+  std::vector<IGLTextureId*> genTextures(int n) const {
     GLuint textures[n];
     glGenTextures(n, textures);
-    std::vector<GLTextureId> ts;
+    std::vector<IGLTextureId*> ts;
     for(int i = 0; i < n; i++){
-      ts.push_back( GLTextureId(textures[i]) );
+      ts.push_back( new GLTextureId_iOS(textures[i]) );
     }
     return ts;
   }

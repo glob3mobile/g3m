@@ -26,6 +26,8 @@
 
 #include "IGLUniformID.hpp"
 
+#include "IGLTextureId.hpp"
+
 class UniformsStruct {
 public:
   
@@ -303,14 +305,14 @@ int GL::getError() {
   return _gl->getError();
 }
 
-const GLTextureId GL::uploadTexture(const IImage* image, int format, bool generateMipmap){
-  const GLTextureId texId = getGLTextureId();
-  if (texId.isValid()) {
+const IGLTextureId* GL::uploadTexture(const IImage* image, int format, bool generateMipmap){
+  const IGLTextureId* texId = getGLTextureId();
+  if (texId != NULL) {
     
     _gl->blendFunc(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
     _gl->pixelStorei(GLAlignment::unpack(), 1);
     
-    _gl->bindTexture(GLTextureType::texture2D(), texId.getGLTextureId());
+    _gl->bindTexture(GLTextureType::texture2D(), texId);
     _gl->texParameteri(GLTextureType::texture2D(), GLTextureParameter::minFilter(), GLTextureParameterValue::linear());
     _gl->texParameteri(GLTextureType::texture2D(), GLTextureParameter::magFilter(), GLTextureParameterValue::linear());
     _gl->texParameteri(GLTextureType::texture2D(), GLTextureParameter::wrapS(), GLTextureParameterValue::clampToEdge());
@@ -323,11 +325,10 @@ const GLTextureId GL::uploadTexture(const IImage* image, int format, bool genera
   }
   else {
     ILogger::instance()->logError("can't get a valid texture id\n");
+    return NULL;
   }
   
   return texId;
-  
-  
 }
 
 void GL::setTextureCoordinates(int size, int stride, IFloatBuffer* texcoord) {
@@ -338,8 +339,8 @@ void GL::setTextureCoordinates(int size, int stride, IFloatBuffer* texcoord) {
   }
 }
 
-void GL::bindTexture(const GLTextureId& textureId) {
-  _gl->bindTexture(GLTextureType::texture2D(), textureId.getGLTextureId());
+void GL::bindTexture(const IGLTextureId* textureId) {
+  _gl->bindTexture(GLTextureType::texture2D(), textureId);
 }
 
 IFloatBuffer* GL::getBillboardTexCoord() {
@@ -356,7 +357,7 @@ IFloatBuffer* GL::getBillboardTexCoord() {
   return _billboardTexCoord;
 }
 
-void GL::drawBillBoard(const GLTextureId& textureId,
+void GL::drawBillBoard(const IGLTextureId* textureId,
                        IFloatBuffer* vertices,
                        const float viewPortRatio) {
   int TODO_refactor_billboard;
@@ -525,13 +526,13 @@ void GL::disableCullFace() {
   }
 }
 
-const GLTextureId GL::getGLTextureId() {
+const IGLTextureId* GL::getGLTextureId() {
   if (_texturesIdBag.size() == 0) {
     const int bugdetSize = 256;
     
     ILogger::instance()->logInfo("= Creating %d texturesIds...\n", bugdetSize);
     
-    const std::vector<GLTextureId> ids = _gl->genTextures(bugdetSize);
+    const std::vector<IGLTextureId*> ids = _gl->genTextures(bugdetSize);
     
     for (int i = 0; i < bugdetSize; i++) {
       //      _texturesIdBag.push_back(ids[i]);
@@ -545,7 +546,7 @@ const GLTextureId GL::getGLTextureId() {
   
   _texturesIdGetCounter++;
   
-  const GLTextureId result = _texturesIdBag.back();
+  const IGLTextureId* result = _texturesIdBag.back();
   _texturesIdBag.pop_back();
   
   //  printf("   - Assigning 1 texturesId (#%d) from bag (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
@@ -558,12 +559,12 @@ const GLTextureId GL::getGLTextureId() {
   return result;
 }
 
-void GL::deleteTexture(const GLTextureId& textureId) {
-  if (!textureId.isValid()) {
+void GL::deleteTexture(const IGLTextureId* textureId) {
+  if (textureId == NULL) {
     return;
   }
-  const int textures[] = {
-    textureId.getGLTextureId()
+  const IGLTextureId* textures[] = {
+    textureId
   };
   _gl->deleteTextures(1, textures);
   

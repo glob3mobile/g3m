@@ -14,7 +14,6 @@
 
 #include "URL.hpp"
 #include "Sector.hpp"
-#include "GLTextureId.hpp"
 #include "IImage.hpp"
 
 class Tile;

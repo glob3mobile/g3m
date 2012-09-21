@@ -36,7 +36,7 @@ void BusyQuadRenderer::stop() {
 
 bool BusyQuadRenderer::initMesh(const RenderContext* rc) {
   //TEXTURED
-  GLTextureId texId = GLTextureId::invalid();
+  const IGLTextureId* texId = NULL;
   if (true){
     IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
     
@@ -45,7 +45,7 @@ bool BusyQuadRenderer::initMesh(const RenderContext* rc) {
     
     rc->getFactory()->deleteImage(image);
     
-    if (!texId.isValid()) {
+    if (texId == NULL) {
       rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
       return false;
     }

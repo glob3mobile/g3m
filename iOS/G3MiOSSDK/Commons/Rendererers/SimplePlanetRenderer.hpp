@@ -18,6 +18,7 @@
 
 class IFloatBuffer;
 class IIntBuffer;
+class IGLTextureId;
 
 class SimplePlanetRenderer: public Renderer {
 private:

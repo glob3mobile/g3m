@@ -9,8 +9,6 @@
 #ifndef G3MiOSSDK_INativeGL_hpp
 #define G3MiOSSDK_INativeGL_hpp
 
-#include "GLTextureId.hpp"
-
 class IGLProgramId;
 
 class IFloatBuffer;
@@ -18,6 +16,8 @@ class IIntBuffer;
 class IImage;
 
 class IGLUniformID;
+
+class IGLTextureId;
 
 #include <vector>
 #include <string>
@@ -88,10 +88,10 @@ public:
                          int dfactor) const = 0;
   
   virtual void bindTexture(int target,
-                           int texture) const = 0;
+                           const IGLTextureId* texture) const = 0;
   
   virtual void deleteTextures(int n,
-                              const int textures[]) const = 0;
+                              const IGLTextureId* textures[]) const = 0;
   
   virtual void enableVertexAttribArray(int location) const = 0;
   
@@ -100,7 +100,7 @@ public:
   virtual void pixelStorei(int pname,
                            int param) const = 0;
   
-  virtual std::vector<GLTextureId> genTextures(int	n) const = 0;
+  virtual std::vector<IGLTextureId*> genTextures(int	n) const = 0;
   
   virtual void texParameteri(int target,
                              int par,
