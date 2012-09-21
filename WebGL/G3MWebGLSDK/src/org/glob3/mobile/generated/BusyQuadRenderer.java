@@ -33,7 +33,7 @@ public class BusyQuadRenderer extends Renderer implements EffectTarget
   private boolean initMesh(RenderContext rc)
   {
 	//TEXTURED
-	GLTextureId texId = GLTextureId.invalid();
+	final IGLTextureId texId = null;
 	if (true)
 	{
 	  IImage image = rc.getFactory().createImageFromFileName(_textureFilename);
@@ -42,7 +42,7 @@ public class BusyQuadRenderer extends Renderer implements EffectTarget
   
 	  rc.getFactory().deleteImage(image);
   
-	  if (!texId.isValid())
+	  if (texId == null)
 	  {
 		rc.getLogger().logError("Can't load file %s", _textureFilename);
 		return false;

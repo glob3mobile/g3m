@@ -47,13 +47,13 @@ public class TexturesHandler
 	}
   }
 
-  public final GLTextureId getGLTextureId(IImage image, int format, String name, boolean hasMipMap)
+  public final IGLTextureId getGLTextureId(IImage image, int format, String name, boolean hasMipMap)
   {
   
 	TextureSpec textureSpec = new TextureSpec(name, image.getWidth(), image.getHeight(), hasMipMap);
   
-	GLTextureId previousId = getGLTextureIdIfAvailable(textureSpec);
-	if (previousId.isValid())
+	final IGLTextureId previousId = getGLTextureIdIfAvailable(textureSpec);
+	if (previousId != null)
 	{
 	  return previousId;
 	}
@@ -74,7 +74,7 @@ public class TexturesHandler
 	return holder._glTextureId;
   }
 
-  public final GLTextureId getGLTextureIdIfAvailable(TextureSpec textureSpec)
+  public final IGLTextureId getGLTextureIdIfAvailable(TextureSpec textureSpec)
   {
 	for (int i = 0; i < _textureHolders.size(); i++)
 	{
@@ -89,12 +89,12 @@ public class TexturesHandler
 	  }
 	}
   
-	return GLTextureId.invalid();
+	return null;
   }
 
-  public final void releaseGLTextureId(GLTextureId glTextureId)
+  public final void releaseGLTextureId(IGLTextureId glTextureId)
   {
-	if (!glTextureId.isValid())
+	if (glTextureId == null)
 	{
 	  return;
 	}
@@ -124,9 +124,9 @@ public class TexturesHandler
 	}
   }
 
-  public final void retainGLTextureId(GLTextureId glTextureId)
+  public final void retainGLTextureId(IGLTextureId glTextureId)
   {
-	if (!glTextureId.isValid())
+	if (glTextureId == null)
 	{
 	  return;
 	}

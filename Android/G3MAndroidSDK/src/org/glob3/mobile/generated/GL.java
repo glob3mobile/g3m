@@ -27,6 +27,7 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IGLUniformID;
 
+
 public class GL
 {
 
@@ -37,7 +38,7 @@ public class GL
   // stack of ModelView matrices
   private java.util.LinkedList<MutableMatrix44D> _matrixStack = new java.util.LinkedList<MutableMatrix44D>();
 
-  private java.util.LinkedList<GLTextureId> _texturesIdBag = new java.util.LinkedList<GLTextureId>();
+  private final java.util.LinkedList<IGLTextureId> _texturesIdBag = new java.util.LinkedList<IGLTextureId>();
   private int _texturesIdAllocationCounter;
   private int _texturesIdGetCounter;
   private int _texturesIdTakeCounter;
@@ -79,7 +80,7 @@ public class GL
 	_gl.uniformMatrix4fv(GlobalMembersGL.Uniforms.Modelview, 1, false, M);
   }
 
-  private GLTextureId getGLTextureId()
+  private IGLTextureId getGLTextureId()
   {
 	if (_texturesIdBag.size() == 0)
 	{
@@ -87,7 +88,7 @@ public class GL
   
 	  ILogger.instance().logInfo("= Creating %d texturesIds...\n", bugdetSize);
   
-	  final java.util.ArrayList<GLTextureId> ids = _gl.genTextures(bugdetSize);
+	  final java.util.ArrayList<IGLTextureId> ids = _gl.genTextures(bugdetSize);
   
 	  for (int i = 0; i < bugdetSize; i++)
 	  {
@@ -102,7 +103,7 @@ public class GL
   
 	_texturesIdGetCounter++;
   
-	final GLTextureId result = _texturesIdBag.getLast();
+	final IGLTextureId result = _texturesIdBag.getLast();
 	_texturesIdBag.removeLast();
   
 	//  printf("   - Assigning 1 texturesId (#%d) from bag (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
@@ -478,16 +479,16 @@ public class GL
 	return _gl.getError();
   }
 
-  public final GLTextureId uploadTexture(IImage image, int format, boolean generateMipmap)
+  public final IGLTextureId uploadTexture(IImage image, int format, boolean generateMipmap)
   {
-	final GLTextureId texId = getGLTextureId();
-	if (texId.isValid())
+	final IGLTextureId texId = getGLTextureId();
+	if (texId != null)
 	{
   
 	  _gl.blendFunc(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
 	  _gl.pixelStorei(GLAlignment.unpack(), 1);
   
-	  _gl.bindTexture(GLTextureType.texture2D(), texId.getGLTextureId());
+	  _gl.bindTexture(GLTextureType.texture2D(), texId);
 	  _gl.texParameteri(GLTextureType.texture2D(), GLTextureParameter.minFilter(), GLTextureParameterValue.linear());
 	  _gl.texParameteri(GLTextureType.texture2D(), GLTextureParameter.magFilter(), GLTextureParameterValue.linear());
 	  _gl.texParameteri(GLTextureType.texture2D(), GLTextureParameter.wrapS(), GLTextureParameterValue.clampToEdge());
@@ -502,14 +503,13 @@ public class GL
 	else
 	{
 	  ILogger.instance().logError("can't get a valid texture id\n");
+	  return null;
 	}
   
 	return texId;
-  
-  
   }
 
-  //  const GLTextureId uploadTexture(const IImage* image,
+  //  const const GLTextureId*uploadTexture(const IImage* image,
   //                                  int textureWidth, int textureHeight,
   //                                  bool generateMipmap);
 
@@ -522,9 +522,9 @@ public class GL
 	}
   }
 
-  public final void bindTexture(GLTextureId textureId)
+  public final void bindTexture(IGLTextureId textureId)
   {
-	_gl.bindTexture(GLTextureType.texture2D(), textureId.getGLTextureId());
+	_gl.bindTexture(GLTextureType.texture2D(), textureId);
   }
 
   public final void enableDepthTest()
@@ -562,7 +562,7 @@ public class GL
   
   }
 
-  public final void drawBillBoard(GLTextureId textureId, IFloatBuffer vertices, float viewPortRatio)
+  public final void drawBillBoard(IGLTextureId textureId, IFloatBuffer vertices, float viewPortRatio)
   {
 	int TODO_refactor_billboard;
   
@@ -587,13 +587,14 @@ public class GL
 	_gl.uniform1i(GlobalMembersGL.Uniforms.BillBoard, 0);
   }
 
-  public final void deleteTexture(GLTextureId textureId)
+  public final void deleteTexture(IGLTextureId textureId)
   {
-	if (!textureId.isValid())
+	if (textureId == null)
 	{
 	  return;
 	}
-	int[] textures = { textureId.getGLTextureId() };
+//C++ TO JAVA CONVERTER TODO TASK: The following line could not be converted:
+	const IGLTextureId* textures[] = { textureId };
 	_gl.deleteTextures(1, textures);
   
 	_texturesIdBag.addLast(textureId);
