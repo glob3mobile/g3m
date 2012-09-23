@@ -42,7 +42,7 @@ public class Image_WebGL
 
 
    public void loadFromURL(final String url) {
-      _imgObject = jsCreateImgObject(this, url);
+      _imgObject = jsCreateImgObject(url);
    }
 
 
@@ -127,20 +127,24 @@ public class Image_WebGL
    }
 
 
-   private native JavaScriptObject jsCreateImgObject(Image_WebGL instance,
-                                                     String url) /*-{
+   private native JavaScriptObject jsCreateImgObject(String url) /*-{
+		debugger;
+		var thisInstance = this;
 		var imgObject = new Image();
 		imgObject.onload = function() {
-			debugger;
-			$entry(instance.@org.glob3.mobile.specific.Image_WebGL::onArrive()());
+			//			debugger;
+			thisInstance.@org.glob3.mobile.specific.Image_WebGL::onArrive()();
+			console.log("loaded");
 		}
-		imgObject.image.onabort = function() {
-			debugger;
-			$entry(instance.@org.glob3.mobile.specific.Image_WebGL::onError()());
+		imgObject.onabort = function() {
+			//			debugger;
+			thisInstance.@org.glob3.mobile.specific.Image_WebGL::onError()();
+			console.log("abort");
 		}
-		imgObject.image.onerror = function() {
-			debugger;
-			$entry(instance.@org.glob3.mobile.specific.Image_WebGL::onError()());
+		imgObject.onerror = function() {
+			//			debugger;
+			thisInstance.@org.glob3.mobile.specific.Image_WebGL::onError()();
+			console.log("error");
 		}
 
 		imgObject.src = url;

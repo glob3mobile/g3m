@@ -39,15 +39,12 @@ import org.glob3.mobile.generated.TexturesHandler;
 import org.glob3.mobile.generated.TileRenderer;
 import org.glob3.mobile.generated.TileTexturizer;
 import org.glob3.mobile.generated.TilesRenderParameters;
-import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.UserData;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
@@ -60,22 +57,22 @@ public class G3MWidget_WebGL
             Composite {
 
 
-   public static final String         canvasId              = "g3m-canvas";
-   private final FlowPanel            _panel                = new FlowPanel();
-   private Canvas                     _canvas;
-   private final MotionEventProcessor _motionEventProcessor = new MotionEventProcessor();
-   ArrayList<ICameraConstrainer>      _cameraConstraints    = null;
-   LayerSet                           _layerSet             = null;
-   ArrayList<Renderer>                _renderers            = null;
-   UserData                           _userData             = null;
+   public static final String    canvasId              = "g3m-canvas";
+   private final FlowPanel       _panel                = new FlowPanel();
+   private Canvas                _canvas;
+   private MotionEventProcessor  _motionEventProcessor = null;
+   ArrayList<ICameraConstrainer> _cameraConstraints    = null;
+   LayerSet                      _layerSet             = null;
+   ArrayList<Renderer>           _renderers            = null;
+   UserData                      _userData             = null;
 
-   private IGLProgramId               _program              = null;
-   private JavaScriptObject           _webGLContext         = null;
+   private IGLProgramId          _program              = null;
+   private JavaScriptObject      _webGLContext         = null;
 
-   G3MWidget                          _widget;
-   int                                _width;
-   int                                _height;
-   final int                          _delayMillis          = 10;
+   G3MWidget                     _widget;
+   int                           _width;
+   int                           _height;
+   final int                     _delayMillis          = 10;
 
 
    public G3MWidget_WebGL() {
@@ -92,7 +89,7 @@ public class G3MWidget_WebGL
       _panel.add(_canvas);
 
       // Events
-      sinkEvents(Event.MOUSEEVENTS | Event.ONMOUSEWHEEL | Event.ONCONTEXTMENU | Event.KEYEVENTS | Event.ONDBLCLICK);
+      sinkEvents(Event.MOUSEEVENTS | Event.ONCONTEXTMENU | Event.KEYEVENTS | Event.ONDBLCLICK);
 
       Window.addResizeHandler(new ResizeHandler() {
 
@@ -245,6 +242,8 @@ public class G3MWidget_WebGL
       _widget.setUserData(userData);
 
 
+      _motionEventProcessor = new MotionEventProcessor(_widget);
+
       //CALLING widget.render()
       startRender(this);
    }
@@ -253,22 +252,8 @@ public class G3MWidget_WebGL
    @Override
    public void onBrowserEvent(final Event event) {
       _canvas.setFocus(true);
-      event.preventDefault();
 
-      final TouchEvent te = _motionEventProcessor.processEvent(event);
-
-      if (te != null) {
-
-         Scheduler.get().scheduleDeferred(new Command() {
-
-            @Override
-            public void execute() {
-               _widget.onTouchEvent(te);
-            }
-
-         });
-
-      }
+      _motionEventProcessor.processEvent(event);
 
       super.onBrowserEvent(event);
    }
@@ -278,7 +263,7 @@ public class G3MWidget_WebGL
    private native void jsGLInit(JavaScriptObject gl) /*-{
 		var error = gl.getError()
 		if (error != 0) {
-			debugger;
+			//			debugger;
 		}
 		gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -362,4 +347,5 @@ public class G3MWidget_WebGL
 
 		return context;
    }-*/;
+
 }
