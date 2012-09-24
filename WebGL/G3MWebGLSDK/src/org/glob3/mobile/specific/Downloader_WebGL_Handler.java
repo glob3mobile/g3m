@@ -180,7 +180,7 @@ public class Downloader_WebGL_Handler {
 
    private native void jsRequest(String url) /*-{
 		//		debugger;
-		console.log("jsRequest url=" + url);
+		//		console.log("jsRequest url=" + url);
 
 		var thisInstance = this;
 		if (thisInstance.@org.glob3.mobile.specific.Downloader_WebGL_Handler::_requestingImage) {

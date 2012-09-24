@@ -22,7 +22,6 @@ import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IGLProgramId;
-import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
 import org.glob3.mobile.generated.IStorage;
@@ -31,9 +30,9 @@ import org.glob3.mobile.generated.IStringUtils;
 import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LogLevel;
+import org.glob3.mobile.generated.MultiLayerTileTexturizer;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Renderer;
-import org.glob3.mobile.generated.SingleImageTileTexturizer;
 import org.glob3.mobile.generated.TextureBuilder;
 import org.glob3.mobile.generated.TexturesHandler;
 import org.glob3.mobile.generated.TileRenderer;
@@ -72,11 +71,17 @@ public class G3MWidget_WebGL
    G3MWidget                     _widget;
    int                           _width;
    int                           _height;
-   final int                     _delayMillis          = 10;
+   final int                     _delayMillis;
+   final String                  _proxy;
 
 
-   public G3MWidget_WebGL() {
+   public G3MWidget_WebGL(final int delayMillis,
+                          final String proxy) {
       initWidget(_panel);
+
+      // downloader
+      _delayMillis = delayMillis;
+      _proxy = proxy;
 
       _canvas = Canvas.createIfSupported();
 
@@ -174,7 +179,7 @@ public class G3MWidget_WebGL
       final IFactory factory = new Factory_WebGL();
       final ILogger logger = new Logger_WebGL(LogLevel.InfoLevel);
       final IStorage storage = new IndexedDBStorage_WebGL();
-      final IDownloader downloader = new Downloader_WebGL(8, _delayMillis);
+      final IDownloader downloader = new Downloader_WebGL(8, _delayMillis, _proxy);
       final IStringUtils stringUtils = new StringUtils_WebGL();
       // TODO add delayMillis to G3MWidget constructor
       final IThreadUtils threadUtils = new ThreadUtils_WebGL(this, _delayMillis);
@@ -195,15 +200,15 @@ public class G3MWidget_WebGL
 
       if ((layerSet != null) && (layerSet.size() > 0)) {
 
-         TileTexturizer texturizer;// = new MultiLayerTileTexturizer(layerSet);
+         TileTexturizer texturizer = new MultiLayerTileTexturizer(layerSet);
 
          //         if (true) {
-         //            texturizer = new MultiLayerTileTexturizer(layerSet);
+         texturizer = new MultiLayerTileTexturizer(layerSet);
          //         }
          //         else {
          //SINGLE IMAGE
-         final IImage singleWorldImage = factory.createImageFromFileName("world.jpg");
-         texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage, false);
+         //         final IImage singleWorldImage = factory.createImageFromFileName("world.jpg");
+         //         texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage, false);
          //         }
 
 
@@ -335,11 +340,13 @@ public class G3MWidget_WebGL
 					context.viewportWidth = canvas.width;
 					context.viewportHeight = canvas.height;
 				} catch (e) {
-					alert("No WebGL context available");
 				}
 				if (context) {
 					break;
 				}
+			}
+			if (context == null) {
+				alert("No WebGL context available");
 			}
 		} else {
 			alert("No canvas available");

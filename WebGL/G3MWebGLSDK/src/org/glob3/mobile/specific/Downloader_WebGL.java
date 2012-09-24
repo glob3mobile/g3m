@@ -28,9 +28,12 @@ public class Downloader_WebGL
    private final Timer                              _timer;
    private final int                                _delayMillis;
 
+   private final String                             _proxy;
+
 
    public Downloader_WebGL(final int maxConcurrentOperationCount,
-                           final int delayMillis) {
+                           final int delayMillis,
+                           final String proxy) {
       _maxConcurrentOperationCount = maxConcurrentOperationCount;
       _requestIdCounter = 1;
       _requestsCounter = 0;
@@ -38,6 +41,7 @@ public class Downloader_WebGL
       _downloadingHandlers = new HashMap<URL, Downloader_WebGL_Handler>();
       _queuedHandlers = new HashMap<URL, Downloader_WebGL_Handler>();
       _delayMillis = delayMillis;
+      _proxy = proxy;
 
       final Downloader_WebGL thisDownloader = this;
       _timer = new Timer() {
@@ -81,25 +85,26 @@ public class Downloader_WebGL
 
       final long requestId;
       Downloader_WebGL_Handler handler = null;
+      final URL proxyUrl = new URL(_proxy + url.getPath());
 
       _requestsCounter++;
       requestId = _requestIdCounter++;
-      handler = _downloadingHandlers.get(url);
+      handler = _downloadingHandlers.get(proxyUrl);
 
       if ((handler != null) && !handler.isRequestingImage()) {
          // the URL is being downloaded, just add the new listener
          handler.addListener(listener, priority, requestId);
       }
       else {
-         handler = _queuedHandlers.get(url);
+         handler = _queuedHandlers.get(proxyUrl);
          if ((handler != null) && !handler.isRequestingImage()) {
             // the URL is queued for future download, just add the new listener
             handler.addListener(listener, priority, requestId);
          }
          else {
             // new handler, queue it
-            handler = new Downloader_WebGL_Handler(url, listener, priority, requestId);
-            _queuedHandlers.put(url, handler);
+            handler = new Downloader_WebGL_Handler(proxyUrl, listener, priority, requestId);
+            _queuedHandlers.put(proxyUrl, handler);
          }
       }
 
@@ -114,25 +119,26 @@ public class Downloader_WebGL
                             final boolean deleteListener) {
       final long requestId;
       Downloader_WebGL_Handler handler = null;
+      final URL proxyUrl = new URL(_proxy + url.getPath());
 
       _requestsCounter++;
       requestId = _requestIdCounter++;
-      handler = _downloadingHandlers.get(url);
+      handler = _downloadingHandlers.get(proxyUrl);
 
       if ((handler != null) && handler.isRequestingImage()) {
          // the URL is being downloaded, just add the new listener
          handler.addListener(listener, priority, requestId);
       }
       else {
-         handler = _queuedHandlers.get(url);
+         handler = _queuedHandlers.get(proxyUrl);
          if ((handler != null) && handler.isRequestingImage()) {
             // the URL is queued for future download, just add the new listener
             handler.addListener(listener, priority, requestId);
          }
          else {
             // new handler, queue it
-            handler = new Downloader_WebGL_Handler(url, listener, priority, requestId);
-            _queuedHandlers.put(url, handler);
+            handler = new Downloader_WebGL_Handler(proxyUrl, listener, priority, requestId);
+            _queuedHandlers.put(proxyUrl, handler);
          }
       }
 

@@ -160,8 +160,6 @@ public class Image_WebGL
 
 
    private native int jsGetWidth() /*-{
-		debugger;
-		var im = this.@org.glob3.mobile.specific.Image_WebGL::_imgObject;
 		return this.@org.glob3.mobile.specific.Image_WebGL::_imgObject.width;
    }-*/;
 
