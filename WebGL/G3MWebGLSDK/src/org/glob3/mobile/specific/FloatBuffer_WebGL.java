@@ -83,8 +83,8 @@ public class FloatBuffer_WebGL
    }-*/;
 
 
-   private native byte jsGet(int i) /*-{
-		this.@org.glob3.mobile.specific.FloatBuffer_WebGL::_buffer[i];
+   private native float jsGet(int i) /*-{
+		return this.@org.glob3.mobile.specific.FloatBuffer_WebGL::_buffer[i];
    }-*/;
 
 

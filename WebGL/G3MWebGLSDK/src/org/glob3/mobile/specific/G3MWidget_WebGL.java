@@ -56,7 +56,7 @@ public class G3MWidget_WebGL
             Composite {
 
 
-   public static final String    canvasId              = "g3m-canvas";
+   public static final String    CANVAS_ID             = "g3m-canvas";
    private final FlowPanel       _panel                = new FlowPanel();
    private Canvas                _canvas;
    private MotionEventProcessor  _motionEventProcessor = null;
@@ -90,7 +90,7 @@ public class G3MWidget_WebGL
          return;
       }
 
-      _canvas.getCanvasElement().setId(canvasId);
+      _canvas.getCanvasElement().setId(CANVAS_ID);
       _panel.add(_canvas);
 
       // Events
@@ -269,6 +269,7 @@ public class G3MWidget_WebGL
 		var error = gl.getError()
 		if (error != 0) {
 			//			debugger;
+			console.error("jsGLInit error=" + error);
 		}
 		gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -325,12 +326,13 @@ public class G3MWidget_WebGL
 
 
    private native JavaScriptObject jsGetWebGLContext() /*-{
+		//		debugger;
 		var canvas = null, context = null;
 		var contextNames = [ "experimental-webgl", "webgl", "webkit-3d",
 				"moz-webgl" ];
 
 		var canvas = $doc
-				.getElementById(@org.glob3.mobile.specific.G3MWidget_WebGL::canvasId);
+				.getElementById(@org.glob3.mobile.specific.G3MWidget_WebGL::CANVAS_ID);
 
 		if (canvas != null) {
 			for ( var cn in contextNames) {

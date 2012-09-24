@@ -37,6 +37,7 @@ public class NativeGL_WebGL
                                           final int count,
                                           final boolean transpose,
                                           final float[] value) /*-{
+		debugger;
 		gl.uniformMatrix4fv(location, transpose, matrix);
    }-*/;
 
@@ -229,7 +230,8 @@ public class NativeGL_WebGL
                                     final int format) /*-{
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 
-		gl.texImage2D(GL_TEXTURE_2D, 0, format, format, gl.UNSIGNED_BYTE, data);
+		gl.texImage2D(gl.GL_TEXTURE_2D, 0, format, format, gl.UNSIGNED_BYTE,
+				image);
    }-*/;
 
 
@@ -464,23 +466,26 @@ public class NativeGL_WebGL
 		var e = gl.getError();
 
 		if (e == gl.INVALID_ENUM) {
-			debugger;
+			//			debugger;
+			console.error("INVALID_ENUM");
 		}
 
 		if (e == gl.INVALID_VALUE) {
-			debugger;
+			//                   debugger;
+			console.error("INVALID_VALUE");
 		}
 
 		if (e == gl.INVALID_OPERATION) {
-			debugger;
+			//                   debugger;
+			console.error("INVALID_OPERATION");
 		}
 
 		if (e == gl.OUT_OF_MEMORY) {
-			debugger;
+			//                   debugger;
+			console.error("INVALID_OPERATION");
 		}
 
-		return e;
-
+		return Number(e);
    }-*/;
 
 

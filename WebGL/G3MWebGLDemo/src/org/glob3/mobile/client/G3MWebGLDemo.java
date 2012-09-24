@@ -17,6 +17,7 @@ import org.glob3.mobile.generated.WMSServerVersion;
 import org.glob3.mobile.specific.G3MWidget_WebGL;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 
@@ -37,12 +38,21 @@ public class G3MWebGLDemo
          final Panel g3mWidgetHolder = RootPanel.get(g3mWidgetHolderId);
 
          final int delayMillis = 10;
-         final String proxy = "http://192.168.1.23:8080/G3MWebGLDemo/proxy?url=";
+         final String proxy = jsDefineDefaultProxy();
+
          _widget = new G3MWidget_WebGL(delayMillis, proxy);
          g3mWidgetHolder.add(_widget);
+
          initWidgetDemo();
       }
    }
+
+
+   private native void jsAppendImg(JavaScriptObject image) /*-{
+		var divId = this.@org.glob3.mobile.client.G3MWebGLDemo::g3mWidgetHolderId;
+		var div = $doc.getElementById(divId);
+		div.appendChild(image);
+   }-*/;
 
 
    public void initWidgetDemo() {
@@ -78,4 +88,25 @@ public class G3MWebGLDemo
       _widget.initWidget(cameraConstraints, layerSet, renderers, userData);
 
    }
+
+
+   private native String jsDefineDefaultProxy() /*-{
+		//		debugger;
+		var hostedMode = false;
+		var proxy = "";
+		try {
+			var query = $wnd.location.search;
+			hostedMode = (query.indexOf('gwt.codesvr=') != -1 || (query
+					.indexOf('gwt.hosted=') != -1 || $wnd.external
+					&& $wnd.external.gwtOnLoad))
+					&& query.indexOf('gwt.hybrid') == -1;
+		} catch (e) {
+		}
+
+		proxy = $wnd.location.protocol + "//" + $wnd.location.hostname + ":"
+				+ $wnd.location.port + ((hostedMode) ? "" : "/G3MWebGLDemo")
+				+ "/proxy?url=";
+		console.log("proxy=" + proxy);
+		return proxy;
+   }-*/;
 }

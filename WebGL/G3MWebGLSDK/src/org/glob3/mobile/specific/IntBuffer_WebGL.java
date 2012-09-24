@@ -27,7 +27,7 @@ public class IntBuffer_WebGL
 
    IntBuffer_WebGL(final byte[] data) {
       //      TODO needed??
-      throw new RuntimeException("ByteBuffer_WebGL(final byte[] data) IS NOT IMPLEMENTED");
+      throw new RuntimeException("IntBuffer_WebGL(final byte[] data) IS NOT IMPLEMENTED");
    }
 
 
@@ -82,8 +82,8 @@ public class IntBuffer_WebGL
    }-*/;
 
 
-   private native byte jsGet(int i) /*-{
-		this.@org.glob3.mobile.specific.IntBuffer_WebGL::_buffer[i];
+   private native int jsGet(int i) /*-{
+		return this.@org.glob3.mobile.specific.IntBuffer_WebGL::_buffer[i];
    }-*/;
 
 

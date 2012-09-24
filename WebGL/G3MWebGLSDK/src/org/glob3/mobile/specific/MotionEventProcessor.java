@@ -228,7 +228,7 @@ public class MotionEventProcessor {
 		var thisInstance = this;
 
 		var canvas = $doc
-				.getElementById(@org.glob3.mobile.specific.G3MWidget_WebGL::canvasId);
+				.getElementById(@org.glob3.mobile.specific.G3MWidget_WebGL::CANVAS_ID);
 
 		$wnd.g3mMouseWheelHandler = function(e) {
 			// cross-browser wheel delta

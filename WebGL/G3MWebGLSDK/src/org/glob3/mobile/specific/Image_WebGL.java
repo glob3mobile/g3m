@@ -89,7 +89,7 @@ public class Image_WebGL
                              final int width,
                              final int height) {
       // TODO this method must be implemented
-      throw new RuntimeException("NOT IMPLEMENTED FROM FILENAME");
+      throw new RuntimeException("NOT IMPLEMENTED Image_WebGL::combineWith");
    }
 
 
@@ -99,14 +99,14 @@ public class Image_WebGL
                              final int width,
                              final int height) {
       // TODO this method must be implemented
-      throw new RuntimeException("NOT IMPLEMENTED FROM FILENAME");
+      throw new RuntimeException("NOT IMPLEMENTED Image_WebGL::combineWith rect");
    }
 
 
    @Override
    public IImage subImage(final Rectangle rect) {
       // TODO this method must be implemented
-      throw new RuntimeException("NOT IMPLEMENTED FROM FILENAME");
+      throw new RuntimeException("NOT IMPLEMENTED Image_WebGL::subImage");
    }
 
 
@@ -114,21 +114,23 @@ public class Image_WebGL
    public IImage scale(final int width,
                        final int height) {
       // TODO this method must be implemented
-      throw new RuntimeException("NOT IMPLEMENTED FROM FILENAME");
+      throw new RuntimeException("NOT IMPLEMENTED Image_WebGL::scale");
    }
 
 
    @Override
    public String description() {
       // TODO this method must be implemented
-      throw new RuntimeException("NOT IMPLEMENTED FROM FILENAME");
+      throw new RuntimeException("NOT IMPLEMENTED Image_WebGL::description");
    }
 
 
    @Override
    public IImage copy() {
-      // TODO this method must be implemented
-      throw new RuntimeException("NOT IMPLEMENTED FROM FILENAME");
+      //    throw new RuntimeException("NOT IMPLEMENTED Image_WebGL::copy");
+      final IImage imgCopy = new Image_WebGL(_imgObject);
+
+      return imgCopy;
    }
 
 

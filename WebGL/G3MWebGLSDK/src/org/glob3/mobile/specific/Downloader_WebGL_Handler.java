@@ -160,7 +160,7 @@ public class Downloader_WebGL_Handler {
       if (dataIsValid) {
          for (final ListenerEntry entry : _listeners) {
             if (entry.isCanceled()) {
-               //               entry.onCanceledDownload(_url, data);
+               entry.onCanceledDownload(_url, data);
                entry.onCancel(_url);
             }
             else {
@@ -187,6 +187,7 @@ public class Downloader_WebGL_Handler {
 
 			var createImageFromBlob = function(blob) {
 				var auxImg = new Image();
+				auxImg.id = url;
 				var imgURL = $wnd.g3mURL.createObjectURL(blob);
 
 				auxImg.onload = function() {
@@ -232,7 +233,6 @@ public class Downloader_WebGL_Handler {
 			xhr.responseType = "arraybuffer";
 			xhr.setRequestHeader("Cache-Control", "max-age=31536000");
 			xhr.onload = function() {
-				console.log("onload");
 				if (xhr.readyState == 4) {
 					// inform downloader to remove myself, to avoid adding new Listener
 					thisInstance.@org.glob3.mobile.specific.Downloader_WebGL_Handler::removeFromDownloaderDownloadingHandlers()();
