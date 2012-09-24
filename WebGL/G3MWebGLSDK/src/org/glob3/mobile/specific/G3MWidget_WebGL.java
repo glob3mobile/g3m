@@ -89,7 +89,7 @@ public class G3MWidget_WebGL
       _panel.add(_canvas);
 
       // Events
-      sinkEvents(Event.MOUSEEVENTS | Event.ONCONTEXTMENU | Event.KEYEVENTS | Event.ONDBLCLICK);
+      sinkEvents(Event.MOUSEEVENTS | Event.ONCONTEXTMENU | Event.KEYEVENTS | Event.ONDBLCLICK | Event.ONMOUSEWHEEL);
 
       Window.addResizeHandler(new ResizeHandler() {
 
