@@ -33,13 +33,13 @@ public class G3MWebGLDemo
          final Panel g3mWidgetHolder = RootPanel.get(g3mWidgetHolderId);
          _widget = new G3MWidget_WebGL();
          g3mWidgetHolder.add(_widget);
-
          initWidgetDemo();
       }
    }
 
 
    public void initWidgetDemo() {
+
       final ArrayList<ICameraConstrainer> cameraConstraints = new ArrayList<ICameraConstrainer>();
       final SimpleCameraConstrainer scc = new SimpleCameraConstrainer();
       cameraConstraints.add(scc);
@@ -50,12 +50,19 @@ public class G3MWebGLDemo
       if (true) {
          // dummy renderer with a simple box
          final DummyRenderer dum = new DummyRenderer();
+
+
          renderers.add(dum);
+
+         //TODO CAN'T EXECUTE UNTIL LoadImageFromFileName IS IMPLEMENTED
+         //         final String imageURL = "world.jpg";
+         //         final SimplePlanetRenderer spr = new SimplePlanetRenderer(imageURL);
+         //         renderers.add(spr);
       }
 
       final UserData userData = null;
 
       _widget.initWidget(cameraConstraints, layerSet, renderers, userData);
-   }
 
+   }
 }

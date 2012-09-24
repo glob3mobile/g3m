@@ -12,7 +12,6 @@
 #include <string>
 #include <vector>
 
-#include "GLTextureId.hpp"
 #include "INativeGL.hpp"
 
 class TextureBuilder;
@@ -22,6 +21,7 @@ class TextureHolder;
 class GL;
 class IFactory;
 class Rectangle;
+class IGLTextureId;
 
 
 class TextureSpec {
@@ -160,16 +160,16 @@ public:
   
   ~TexturesHandler();
   
-  const GLTextureId getGLTextureId(const IImage* image,
+  const IGLTextureId* getGLTextureId(const IImage* image,
                                    int format,
                                    const std::string& name,
                                    bool hasMipMap);
   
-  const GLTextureId getGLTextureIdIfAvailable(const TextureSpec& textureSpec);
+  const IGLTextureId* getGLTextureIdIfAvailable(const TextureSpec& textureSpec);
   
-  void releaseGLTextureId(const GLTextureId& glTextureId);
+  void releaseGLTextureId(const IGLTextureId* glTextureId);
   
-  void retainGLTextureId(const GLTextureId& glTextureId);
+  void retainGLTextureId(const IGLTextureId* glTextureId);
   
 };
 

@@ -4,9 +4,9 @@ package org.glob3.mobile.specific;
 
 import java.util.ArrayList;
 
-import org.glob3.mobile.generated.GLTextureId;
 import org.glob3.mobile.generated.IFloatBuffer;
 import org.glob3.mobile.generated.IGLProgramId;
+import org.glob3.mobile.generated.IGLTextureId;
 import org.glob3.mobile.generated.IGLUniformID;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IIntBuffer;
@@ -103,14 +103,6 @@ public class NativeGL_WebGL
 
 
    @Override
-   public void deleteTextures(final int n,
-                              final int[] textures) {
-      // TODO this method must be implemented
-
-   }
-
-
-   @Override
    public native void enableVertexAttribArray(final int location) /*-{
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 		gl.enableVertexAttribArray(location);
@@ -122,13 +114,6 @@ public class NativeGL_WebGL
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 		gl.disableVertexAttribArray(location);
    }-*/;
-
-
-   @Override
-   public ArrayList<GLTextureId> genTextures(final int n) {
-      // TODO this method must be implemented
-      return null;
-   }
 
 
    @Override
@@ -191,7 +176,6 @@ public class NativeGL_WebGL
    public void drawElements(final int mode,
                             final int count,
                             final IIntBuffer indices) {
-      //TODO CHECK
       jsDrawElements(mode, count, ((IntBuffer_WebGL) indices).getBuffer());
    }
 
@@ -217,14 +201,6 @@ public class NativeGL_WebGL
 
 
    @Override
-   public void bindTexture(final int target,
-                           final int texture) {
-      // TODO Auto-generated method stub
-
-   }
-
-
-   @Override
    public native void pixelStorei(final int pname,
                                   final int param) /*-{
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
@@ -244,9 +220,17 @@ public class NativeGL_WebGL
    @Override
    public void texImage2D(final IImage image,
                           final int format) {
-      // TODO Auto-generated method stub
-
+      final JavaScriptObject im = ((Image_WebGL) image).getImage(); //IMAGE JS
+      jsTexImage2D(im, format);
    }
+
+
+   private native void jsTexImage2D(final JavaScriptObject image,
+                                    final int format) /*-{
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+
+		gl.texImage2D(GL_TEXTURE_2D, 0, format, format, gl.UNSIGNED_BYTE, data);
+   }-*/;
 
 
    @Override
@@ -637,5 +621,56 @@ public class NativeGL_WebGL
 		//TODO IGNORING COUNT
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 		return gl.getUniformLocation(program, name);
+   }-*/;
+
+
+   @Override
+   public void bindTexture(final int target,
+                           final IGLTextureId texture) {
+      final JavaScriptObject id = ((GLTextureId_WebGL) texture).getWebGLTexture();
+      jsBindTexture(target, id);
+   }
+
+
+   public native void jsBindTexture(final int target,
+                                    final JavaScriptObject id) /*-{
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+		gl.bindTexture(target, id);
+   }-*/;
+
+
+   @Override
+   public void deleteTextures(final int n,
+                              final IGLTextureId[] textures) {
+      for (int i = 0; i < n; i++) {
+         final JavaScriptObject id = ((GLTextureId_WebGL) textures[i]).getWebGLTexture();
+         jsDeleteTexture(id);
+      }
+   }
+
+
+   public native void jsDeleteTexture(final JavaScriptObject id) /*-{
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+		gl.deleteTexture(target, id);
+   }-*/;
+
+
+   @Override
+   public ArrayList<IGLTextureId> genTextures(final int n) {
+
+      final ArrayList<IGLTextureId> array = new ArrayList<IGLTextureId>();
+
+      for (int i = 0; i < n; i++) {
+         final JavaScriptObject id = jsCreateTexture(); //WebGLTextureID
+         array.add(new GLTextureId_WebGL(id));
+      }
+
+      return array;
+   }
+
+
+   public native JavaScriptObject jsCreateTexture() /*-{
+		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+		return gl.createTexture();
    }-*/;
 }

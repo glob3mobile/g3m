@@ -30,29 +30,26 @@ public class Factory_WebGL
 
    @Override
    public IImage createImageFromFileName(final String filename) {
-
+      //TODO CHECK IMPLEMENTATION
       throw new RuntimeException("NOT IMPLEMENTED FROM FILENAME");
-
-      //      if (first) {
-      //         final int TODO_IMPLEMENT; //!!!!
-      //         final Image_WebGL im = new Image_WebGL(null);
-      //         im.loadFromURL(filename);
-      //         first = false;
-      //
-      //         while (!im.isLoadedFromURL()) {
-      //            //WAIT UNTIL LOADED
+      //      final Image_WebGL im = new Image_WebGL(filename);
+      //      while (!im.isLoadedFromURL()) {
+      //         //WAIT UNTIL LOADED
+      //         try {
+      //            Thread.sleep(100);
       //         }
-      //
-      //         return im;
+      //         catch (final InterruptedException e) {
+      //            // TODO Auto-generated catch block
+      //            e.printStackTrace();
+      //         }
       //      }
-      //      return null;
+      //
+      //      return im;
    }
 
 
    @Override
    public void deleteImage(final IImage image) {
-      // TODO this method must be implemented
-      throw new RuntimeException("NOT IMPLEMENTED FROM FILENAME");
    }
 
 
@@ -60,14 +57,14 @@ public class Factory_WebGL
    public IImage createImageFromSize(final int width,
                                      final int height) {
       /// TODO this method must be implemented
-      throw new RuntimeException("NOT IMPLEMENTED FROM FILENAME");
+      throw new RuntimeException("NOT IMPLEMENTED IMAGE FROM SIZE");
    }
 
 
    @Override
    public IImage createImageFromBuffer(final IByteBuffer buffer) {
       // TODO Auto-generated method stub
-      throw new RuntimeException("NOT IMPLEMENTED FROM FILENAME");
+      throw new RuntimeException("NOT IMPLEMENTED IMAGE FORM BUFFER");
    }
 
 
@@ -92,8 +89,7 @@ public class Factory_WebGL
    @Override
    public IByteBuffer createByteBuffer(final byte[] data,
                                        final int length) {
-      // TODO Auto-generated method stub
-      throw new RuntimeException("NOT IMPLEMENTED FROM FILENAME");
+      return new ByteBuffer_WebGL(data);
    }
 
 }

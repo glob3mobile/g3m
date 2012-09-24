@@ -20,6 +20,8 @@ package org.glob3.mobile.generated;
 
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IFloatBuffer;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IGLTextureId;
 
 public class Mark
 {
@@ -27,7 +29,7 @@ public class Mark
   private final String _textureFilename;
   private final Geodetic3D _position ;
 
-  private GLTextureId _textureId = new GLTextureId();
+  private IGLTextureId _textureId;
 
   private Vector3D _cartesianPosition;
   private Vector3D getCartesianPosition(Planet planet)
@@ -63,7 +65,7 @@ public class Mark
 	  _name = name;
 	  _textureFilename = textureFilename;
 	  _position = new Geodetic3D(position);
-	  _textureId = new GLTextureId(GLTextureId.invalid());
+	  _textureId = null;
 	  _cartesianPosition = null;
 	  _vertices = null;
 
@@ -121,7 +123,7 @@ public class Mark
 		Vector2D scale = new Vector2D(1.0,1.0);
 		gl.transformTexCoords(scale, tr);
   
-		if (!_textureId.isValid())
+		if (_textureId == null)
 		{
 		  IImage image = rc.getFactory().createImageFromFileName(_textureFilename);
   
@@ -130,7 +132,7 @@ public class Mark
 		  rc.getFactory().deleteImage(image);
 		}
   
-		if (!_textureId.isValid())
+		if (_textureId == null)
 		{
 		  rc.getLogger().logError("Can't load file %s", _textureFilename);
 		  return;

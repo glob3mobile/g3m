@@ -19,14 +19,18 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class SingleImageTileTexturizer extends TileTexturizer
 {
 
   private RenderContext _renderContext;
   private final TilesRenderParameters _parameters;
-  private GLTextureId _texId = new GLTextureId();
+
+  private IGLTextureId _texId;
+
+
   private final IImage _image;
-	private final boolean _isMercatorImage;
+  private final boolean _isMercatorImage;
 
 
 
@@ -109,7 +113,7 @@ public class SingleImageTileTexturizer extends TileTexturizer
 
   public SingleImageTileTexturizer(TilesRenderParameters parameters, IImage image, boolean isMercatorImage)
   {
-	  _texId = new GLTextureId(-1);
+	  _texId = null;
 	  _image = image;
 	  _parameters = parameters;
 	  _renderContext = null;
@@ -118,7 +122,7 @@ public class SingleImageTileTexturizer extends TileTexturizer
 
   public void dispose()
   {
-	if (_texId.isValid())
+	if (_texId != null)
 	{
 	  if (_renderContext != null)
 	  {
@@ -136,13 +140,13 @@ public class SingleImageTileTexturizer extends TileTexturizer
   {
 	_renderContext = rc; //SAVING CONTEXT
   
-	if (!_texId.isValid())
+	if (_texId == null)
 	{
 	  _texId = rc.getTexturesHandler().getGLTextureId(_image, GLFormat.rgba(), "SINGLE_IMAGE_TEX", false);
   
 	  rc.getFactory().deleteImage(_image);
   
-	  if (!_texId.isValid())
+	  if (_texId == null)
 	  {
 		rc.getLogger().logError("Can't upload texture to GPU");
 		return null;

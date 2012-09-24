@@ -8,7 +8,6 @@ package org.glob3.mobile.generated;
 //
 
 
-
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IGLProgramId;
 
@@ -21,6 +20,9 @@ package org.glob3.mobile.generated;
 
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IGLUniformID;
+
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IGLTextureId;
 
 
 public abstract class INativeGL
@@ -103,12 +105,12 @@ public abstract class INativeGL
   public abstract void blendFunc(int sfactor, int dfactor);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void bindTexture(int target, int texture) const = 0;
-  public abstract void bindTexture(int target, int texture);
+//ORIGINAL LINE: virtual void bindTexture(int target, const IGLTextureId* texture) const = 0;
+  public abstract void bindTexture(int target, IGLTextureId texture);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void deleteTextures(int n, const int textures[]) const = 0;
-  public abstract void deleteTextures(int n, int[] textures);
+//ORIGINAL LINE: virtual void deleteTextures(int n, const IGLTextureId* textures[]) const = 0;
+  public abstract void deleteTextures(int n, IGLTextureId[] textures);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual void enableVertexAttribArray(int location) const = 0;
@@ -123,8 +125,8 @@ public abstract class INativeGL
   public abstract void pixelStorei(int pname, int param);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual java.util.ArrayList<GLTextureId> genTextures(int n) const = 0;
-  public abstract java.util.ArrayList<GLTextureId> genTextures(int n);
+//ORIGINAL LINE: virtual java.util.ArrayList<IGLTextureId*> genTextures(int n) const = 0;
+  public abstract java.util.ArrayList<IGLTextureId> genTextures(int n);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual void texParameteri(int target, int par, int v) const = 0;

@@ -20,6 +20,8 @@
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "FloatBufferBuilderFromColor.hpp"
 
+#include "IGLTextureId.hpp"
+
 SimplePlanetRenderer::SimplePlanetRenderer(const std::string textureFilename):
 _latRes(30),//FOR NOW THEY MUST BE EQUAL
 _lonRes(30),
@@ -106,31 +108,7 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   
   const bool colorPerVertex = false;
   
-  //TEXTURED
-  GLTextureId texId = GLTextureId::invalid();
-  if (true){
-    
-    IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
-    
-    const IImage* scaledImage = rc->getTextureBuilder()->createTextureFromImage(rc->getGL(), 
-                                                                                rc->getFactory(), 
-                                                                                image, _texWidth,
-                                                                                _texHeight);
-    if (image != scaledImage){
-      rc->getFactory()->deleteImage(image);
-    }
-    
-    texId = rc->getTexturesHandler()->getGLTextureId(scaledImage, GLFormat::rgba(),
-                                                     _textureFilename, false);
-    
-    rc->getFactory()->deleteImage(scaledImage);
-    
-    if (!texId.isValid()) {
-      rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
-      return false;
-    }
-    texC = createTextureCoordinates();
-  }
+
   
   //COLORS PER VERTEX
   IFloatBuffer* vertexColors = NULL;
@@ -159,11 +137,38 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
                                     flatColor,
                                     vertexColors);
   
-  TextureMapping* texMap = new SimpleTextureMapping(texId,
-                                                    texC,
-                                                    true);
+  //TEXTURED
+  if (true){
+    
+    IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
+    
+    const IImage* scaledImage = rc->getTextureBuilder()->createTextureFromImage(rc->getGL(), 
+                                                                                rc->getFactory(), 
+                                                                                image, _texWidth,
+                                                                                _texHeight);
+    if (image != scaledImage){
+      rc->getFactory()->deleteImage(image);
+    }
+    
+    const IGLTextureId* texId = rc->getTexturesHandler()->getGLTextureId(scaledImage, GLFormat::rgba(),
+                                                                         _textureFilename, false);
+    
+    rc->getFactory()->deleteImage(scaledImage);
+    
+    if (texId == NULL) {
+      rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
+      return false;
+    }
+    texC = createTextureCoordinates();
+    
+    TextureMapping* texMap = new SimpleTextureMapping(texId,
+                                                      texC,
+                                                      true);
+    
+    _mesh = new TexturedMesh(im, true, texMap, true);
+  }
   
-  _mesh = new TexturedMesh(im, true, texMap, true);
+
   
   return true;
 }

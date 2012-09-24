@@ -138,9 +138,9 @@ public class LeveledTexturedMesh extends Mesh
 	return (_mesh == null) ? null : _mesh.getExtent();
   }
 
-  public final boolean setGLTextureIdForLevel(int level, GLTextureId glTextureId)
+  public final boolean setGLTextureIdForLevel(int level, IGLTextureId glTextureId)
   {
-	if (glTextureId.isValid())
+	if (glTextureId != null)
 	{
 	  if (!_currentLevelIsValid || (level < _currentLevel))
 	  {
@@ -154,11 +154,11 @@ public class LeveledTexturedMesh extends Mesh
   }
 
 //  void setGLTextureIdForInversedLevel(int inversedLevel,
-//                                      const GLTextureId glTextureId);
+//                                      const const GLTextureId*glTextureId);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const GLTextureId getTopLevelGLTextureId() const
-  public final GLTextureId getTopLevelGLTextureId()
+//ORIGINAL LINE: const IGLTextureId* getTopLevelGLTextureId() const
+  public final IGLTextureId getTopLevelGLTextureId()
   {
 	final LazyTextureMapping mapping = getCurrentTextureMapping();
 	if (mapping != null)
@@ -169,12 +169,12 @@ public class LeveledTexturedMesh extends Mesh
 	  }
 	}
   
-	return GLTextureId.invalid();
+	return null;
   }
 
 }
 //void LeveledTexturedMesh::setGLTextureIdForInversedLevel(int inversedLevel,
-//                                                         const GLTextureId glTextureId) {
+//                                                         const const GLTextureId*glTextureId) {
 //  const int level = _mappings->size() - inversedLevel - 1;
 //  setGLTextureIdForLevel(level, glTextureId);
 //}

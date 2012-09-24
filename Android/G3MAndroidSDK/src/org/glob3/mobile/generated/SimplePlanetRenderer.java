@@ -23,6 +23,8 @@ package org.glob3.mobile.generated;
 //class IFloatBuffer;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IIntBuffer;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IGLTextureId;
 
 public class SimplePlanetRenderer extends Renderer
 {
@@ -115,30 +117,7 @@ public class SimplePlanetRenderer extends Renderer
   
 	final boolean colorPerVertex = false;
   
-	//TEXTURED
-	GLTextureId texId = GLTextureId.invalid();
-	if (true)
-	{
   
-	  IImage image = rc.getFactory().createImageFromFileName(_textureFilename);
-  
-	  final IImage scaledImage = rc.getTextureBuilder().createTextureFromImage(rc.getGL(), rc.getFactory(), image, _texWidth, _texHeight);
-	  if (image != scaledImage)
-	  {
-		rc.getFactory().deleteImage(image);
-	  }
-  
-	  texId = rc.getTexturesHandler().getGLTextureId(scaledImage, GLFormat.rgba(), _textureFilename, false);
-  
-	  rc.getFactory().deleteImage(scaledImage);
-  
-	  if (!texId.isValid())
-	  {
-		rc.getLogger().logError("Can't load file %s", _textureFilename);
-		return false;
-	  }
-	  texC = createTextureCoordinates();
-	}
   
 	//COLORS PER VERTEX
 	IFloatBuffer vertexColors = null;
@@ -164,9 +143,35 @@ public class SimplePlanetRenderer extends Renderer
   
 	IndexedMesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, Vector3D.zero(), ver, ind, flatColor, vertexColors);
   
-	TextureMapping texMap = new SimpleTextureMapping(texId, texC, true);
+	//TEXTURED
+	if (true)
+	{
   
-	_mesh = new TexturedMesh(im, true, texMap, true);
+	  IImage image = rc.getFactory().createImageFromFileName(_textureFilename);
+  
+	  final IImage scaledImage = rc.getTextureBuilder().createTextureFromImage(rc.getGL(), rc.getFactory(), image, _texWidth, _texHeight);
+	  if (image != scaledImage)
+	  {
+		rc.getFactory().deleteImage(image);
+	  }
+  
+	  final IGLTextureId texId = rc.getTexturesHandler().getGLTextureId(scaledImage, GLFormat.rgba(), _textureFilename, false);
+  
+	  rc.getFactory().deleteImage(scaledImage);
+  
+	  if (texId == null)
+	  {
+		rc.getLogger().logError("Can't load file %s", _textureFilename);
+		return false;
+	  }
+	  texC = createTextureCoordinates();
+  
+	  TextureMapping texMap = new SimpleTextureMapping(texId, texC, true);
+  
+	  _mesh = new TexturedMesh(im, true, texMap, true);
+	}
+  
+  
   
 	return true;
   }

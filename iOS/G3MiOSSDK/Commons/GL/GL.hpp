@@ -25,6 +25,8 @@
 class IGLProgramId;
 class IGLUniformID;
 
+#include "IGLTextureId.hpp"
+
 class GL {
 private:
   
@@ -35,7 +37,7 @@ private:
   // stack of ModelView matrices
   std::list<MutableMatrix44D> _matrixStack;
   
-  std::list<GLTextureId>      _texturesIdBag;
+  std::list<const IGLTextureId*>      _texturesIdBag;
   long                        _texturesIdAllocationCounter;
   long                        _texturesIdGetCounter;
   long                        _texturesIdTakeCounter;
@@ -73,7 +75,7 @@ private:
   
   inline void loadModelView();
   
-  const GLTextureId getGLTextureId();
+  const IGLTextureId* getGLTextureId();
   
 //  int _lastTextureWidth;
 //  int _lastTextureHeight;
@@ -197,9 +199,9 @@ public:
   
   int getError();
   
-  const GLTextureId uploadTexture(const IImage* image, int format, bool generateMipmap);
+  const IGLTextureId* uploadTexture(const IImage* image, int format, bool generateMipmap);
   
-  //  const GLTextureId uploadTexture(const IImage* image,
+  //  const const GLTextureId*uploadTexture(const IImage* image,
   //                                  int textureWidth, int textureHeight,
   //                                  bool generateMipmap);
   
@@ -207,7 +209,7 @@ public:
                              int stride,
                              IFloatBuffer* texcoord);
   
-  void bindTexture(const GLTextureId& textureId);
+  void bindTexture(const IGLTextureId* textureId);
   
   void enableDepthTest();
   void disableDepthTest();
@@ -215,11 +217,11 @@ public:
   void enableBlend();
   void disableBlend();
   
-  void drawBillBoard(const GLTextureId& textureId,
+  void drawBillBoard(const IGLTextureId* textureId,
                      IFloatBuffer* vertices,
                      const float viewPortRatio);
   
-  void deleteTexture(const GLTextureId& textureId);
+  void deleteTexture(const IGLTextureId* textureId);
   
   void enableCullFace(int face);
   void disableCullFace();
