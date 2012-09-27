@@ -47,6 +47,6 @@ public abstract class IImage
   public abstract String description();
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual IImage* copy() const = 0;
-  public abstract IImage copy();
+//ORIGINAL LINE: virtual IImage* shallowCopy() const = 0;
+  public abstract IImage shallowCopy();
 }

@@ -86,7 +86,7 @@ public class GL
 	{
 	  final int bugdetSize = 256;
   
-	  ILogger.instance().logInfo("= Creating %d texturesIds...\n", bugdetSize);
+	  ILogger.instance().logInfo("= Creating %d texturesIds...", bugdetSize);
   
 	  final java.util.ArrayList<IGLTextureId> ids = _gl.genTextures(bugdetSize);
   
@@ -98,7 +98,7 @@ public class GL
   
 	  _texturesIdAllocationCounter += bugdetSize;
   
-	  ILogger.instance().logInfo("= Created %d texturesIds (accumulated %d).\n", bugdetSize, _texturesIdAllocationCounter);
+	  ILogger.instance().logInfo("= Created %d texturesIds (accumulated %d).", bugdetSize, _texturesIdAllocationCounter);
 	}
   
 	_texturesIdGetCounter++;

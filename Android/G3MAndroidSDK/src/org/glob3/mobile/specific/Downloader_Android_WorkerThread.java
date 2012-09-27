@@ -9,10 +9,12 @@ public class Downloader_Android_WorkerThread
          extends
             Thread {
 
-   final static String              TAG = "Downloader_Android_WorkerThread";
+   final static String              TAG        = "Downloader_Android_WorkerThread";
 
    private final Downloader_Android _downloader;
    private boolean                  _stopping;
+
+   private boolean                  _isStopped = false;
 
 
    public Downloader_Android_WorkerThread(final Downloader_Android downloader) {
@@ -52,7 +54,13 @@ public class Downloader_Android_WorkerThread
             }
          }
       }
+      _isStopped = true;
       Log.i(TAG, "finish run");
+   }
+
+
+   public synchronized boolean isStopped() {
+      return _isStopped;
    }
 
 }

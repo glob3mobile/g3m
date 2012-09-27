@@ -162,6 +162,8 @@ public class TileTextureBuilder extends RCObject
 		}
 	  }
 
+	  if (image != null)
+		  image.dispose();
 	}
 
 
@@ -255,7 +257,7 @@ public class TileTextureBuilder extends RCObject
 	checkIsPending(position);
 
 	_status.set(position, PetitionStatus.STATUS_DOWNLOADED);
-	_petitions.get(position).setImage(image.copy());
+	_petitions.get(position).setImage(image.shallowCopy());
 
 	stepDone();
   }

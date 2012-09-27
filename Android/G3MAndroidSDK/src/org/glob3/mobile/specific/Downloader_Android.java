@@ -71,12 +71,30 @@ public class Downloader_Android
    @Override
    public void stop() {
       if (_started) {
-         final Iterator<Downloader_Android_WorkerThread> iter = _workers.iterator();
-         while (iter.hasNext()) {
-            final Downloader_Android_WorkerThread worker = iter.next();
+         for (final Downloader_Android_WorkerThread worker : _workers) {
             worker.stopWorkerThread();
          }
          _started = false;
+
+         boolean allWorkersStopped;
+         do {
+            allWorkersStopped = true;
+            for (final Downloader_Android_WorkerThread worker : _workers) {
+               if (!worker.isStopped()) {
+                  allWorkersStopped = false;
+                  break;
+               }
+            }
+         }
+         while (!allWorkersStopped);
+
+         //         boolean allStopped = true;
+         //         while (_started) {
+         //            for (final Downloader_Android_WorkerThread worker : _workers) {
+         //               allStopped = allStopped && worker.isStopping();
+         //            }
+         //         _started = allStopped;
+         //         }
       }
    }
 

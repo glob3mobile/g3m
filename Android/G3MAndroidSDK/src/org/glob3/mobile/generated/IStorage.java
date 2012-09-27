@@ -30,5 +30,7 @@ public interface IStorage
 
   void onPause(InitializationContext ic);
 
+  boolean isAvailable();
+
 
 }

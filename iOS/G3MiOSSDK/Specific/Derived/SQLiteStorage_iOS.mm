@@ -33,35 +33,36 @@ _databaseName(databaseName)
     printf("Can't open database \"%s\"\n",
            databaseName.c_str());
   }
-  
-  [_db open];
-  
-  if (![_db executeNonQuery:@"CREATE TABLE IF NOT EXISTS buffer (name TEXT, contents TEXT);"]) {
-    printf("Can't create table \"buffer\" on database \"%s\"\n",
-           databaseName.c_str());
-    return;
-  }
-  
-  if (![_db executeNonQuery:@"CREATE UNIQUE INDEX IF NOT EXISTS buffer_name ON buffer(name);"]) {
-    printf("Can't create index \"buffer_name\" on database \"%s\"\n",
-           databaseName.c_str());
-    return;
-  }
-  
-  if (![_db executeNonQuery:@"CREATE TABLE IF NOT EXISTS image (name TEXT, contents TEXT);"]) {
-    printf("Can't create table \"image\" on database \"%s\"\n",
-           databaseName.c_str());
-    return;
-  }
-  
-  if (![_db executeNonQuery:@"CREATE UNIQUE INDEX IF NOT EXISTS image_name ON image(name);"]) {
-    printf("Can't create index \"image_name\" on database \"%s\"\n",
-           databaseName.c_str());
-    return;
-  }
-  
-  if (false) {
-    showStatistics();
+  else {
+    [_db open];
+    
+    if (![_db executeNonQuery:@"CREATE TABLE IF NOT EXISTS buffer (name TEXT, contents TEXT);"]) {
+      printf("Can't create table \"buffer\" on database \"%s\"\n",
+             databaseName.c_str());
+      return;
+    }
+    
+    if (![_db executeNonQuery:@"CREATE UNIQUE INDEX IF NOT EXISTS buffer_name ON buffer(name);"]) {
+      printf("Can't create index \"buffer_name\" on database \"%s\"\n",
+             databaseName.c_str());
+      return;
+    }
+    
+    if (![_db executeNonQuery:@"CREATE TABLE IF NOT EXISTS image (name TEXT, contents TEXT);"]) {
+      printf("Can't create table \"image\" on database \"%s\"\n",
+             databaseName.c_str());
+      return;
+    }
+    
+    if (![_db executeNonQuery:@"CREATE UNIQUE INDEX IF NOT EXISTS image_name ON image(name);"]) {
+      printf("Can't create index \"image_name\" on database \"%s\"\n",
+             databaseName.c_str());
+      return;
+    }
+    
+    if (false) {
+      showStatistics();
+    }
   }
 }
 

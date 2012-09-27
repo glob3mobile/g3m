@@ -35,6 +35,8 @@ public:
   
   virtual void onPause(const InitializationContext* ic) = 0;
 
+  virtual bool isAvailable() = 0;
+  
 #ifdef C_CODE
   virtual ~IStorage() {}
 #endif

@@ -35,7 +35,7 @@ public:
 
   virtual const std::string description() const = 0;
   
-  virtual IImage* copy() const = 0;
+  virtual IImage* shallowCopy() const = 0;
 };
 
 #endif

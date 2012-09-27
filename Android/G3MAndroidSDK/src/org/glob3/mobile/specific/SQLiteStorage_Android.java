@@ -15,8 +15,8 @@ import org.glob3.mobile.generated.URL;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -26,16 +26,53 @@ public class SQLiteStorage_Android
          implements
             IStorage {
 
-   private final String   _databaseName;
-   private final Context  _ctx;
-
-   private SQLiteDatabase _db;
+   private final String             _databaseName;
+   private final Context            _context;
 
 
-   String getPath() {
-      File f = _ctx.getExternalCacheDir();
+   private final MySQLiteOpenHelper _dbHelper;
+   private SQLiteDatabase           _db;
+
+
+   private class MySQLiteOpenHelper
+            extends
+               SQLiteOpenHelper {
+
+      public MySQLiteOpenHelper(final Context context,
+                                final String name) {
+         super(context, name, null, 1);
+      }
+
+
+      private void createTables(final SQLiteDatabase db) {
+         db.execSQL("CREATE TABLE IF NOT EXISTS buffer (name TEXT, contents TEXT);");
+         db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS buffer_name ON buffer(name);");
+
+         db.execSQL("CREATE TABLE IF NOT EXISTS image (name TEXT, contents TEXT);");
+         db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS image_name ON image(name);");
+      }
+
+
+      @Override
+      public void onCreate(final SQLiteDatabase db) {
+         createTables(db);
+      }
+
+
+      @Override
+      public void onUpgrade(final SQLiteDatabase db,
+                            final int oldVersion,
+                            final int newVersion) {
+         createTables(db);
+      }
+
+   }
+
+
+   private String getPath() {
+      File f = _context.getExternalCacheDir();
       if (!f.exists()) {
-         f = _ctx.getCacheDir();
+         f = _context.getCacheDir();
       }
       final String documentsDirectory = f.getAbsolutePath();
 
@@ -49,27 +86,32 @@ public class SQLiteStorage_Android
 
 
    SQLiteStorage_Android(final String path,
-                         final Context ctx) {
+                         final Context context) {
       _databaseName = path;
-      _ctx = ctx;
+      _context = context;
 
-      _db = SQLiteDatabase.openOrCreateDatabase(getPath(), null);
 
-      if (_db == null) {
-         ILogger.instance().logError("SQL: Can't open database \"%s\"\n", _databaseName);
-      }
-      else {
-         try {
-            _db.execSQL("CREATE TABLE IF NOT EXISTS buffer (name TEXT, contents TEXT);");
-            _db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS buffer_name ON buffer(name);");
+      _dbHelper = new MySQLiteOpenHelper(context, getPath());
+      _db = _dbHelper.getWritableDatabase();
 
-            _db.execSQL("CREATE TABLE IF NOT EXISTS image (name TEXT, contents TEXT);");
-            _db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS image_name ON image(name);");
-         }
-         catch (final SQLException e) {
-            e.printStackTrace();
-         }
-      }
+      //      _db = SQLiteDatabase.openOrCreateDatabase(getPath(), null);
+      //
+      //
+      //      if (_db == null) {
+      //         ILogger.instance().logError("SQL: Can't open database \"%s\"\n", _databaseName);
+      //      }
+      //      else {
+      //         try {
+      //            _db.execSQL("CREATE TABLE IF NOT EXISTS buffer (name TEXT, contents TEXT);");
+      //            _db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS buffer_name ON buffer(name);");
+      //
+      //            _db.execSQL("CREATE TABLE IF NOT EXISTS image (name TEXT, contents TEXT);");
+      //            _db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS image_name ON image(name);");
+      //         }
+      //         catch (final SQLException e) {
+      //            e.printStackTrace();
+      //         }
+      //      }
    }
 
 
@@ -86,6 +128,7 @@ public class SQLiteStorage_Android
    @Override
    public void saveBuffer(final URL url,
                           final IByteBuffer buffer) {
+
       final byte[] data = ((ByteBuffer_Android) buffer).getBuffer().array();
 
       final ContentValues values = new ContentValues();
@@ -177,19 +220,31 @@ public class SQLiteStorage_Android
    }
 
 
-   @Override
-   public void onResume(final InitializationContext ic) {
-      if ((_db != null) && !_db.isOpen()) {
-         _db = SQLiteDatabase.openOrCreateDatabase(getPath(), null);
+   public synchronized void close() {
+      if (_db != null) {
+         _db.close();
+         _db = null;
       }
    }
 
 
    @Override
-   public void onPause(final InitializationContext ic) {
-      if ((_db != null) && _db.isOpen()) {
-         _db.close();
+   public synchronized void onResume(final InitializationContext ic) {
+      if (_db == null) {
+         _db = _dbHelper.getWritableDatabase();
       }
+   }
+
+
+   @Override
+   public synchronized void onPause(final InitializationContext ic) {
+      close();
+   }
+
+
+   @Override
+   public synchronized boolean isAvailable() {
+      return (_db != null);
    }
 
 }

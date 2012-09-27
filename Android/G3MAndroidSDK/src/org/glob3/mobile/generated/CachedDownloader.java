@@ -51,7 +51,7 @@ public class CachedDownloader implements IDownloader
   {
 	_requestsCounter++;
   
-	final IByteBuffer cachedBuffer = _cacheStorage.readBuffer(url);
+	final IByteBuffer cachedBuffer = _cacheStorage.isAvailable() ? _cacheStorage.readBuffer(url) : null;
 	if (cachedBuffer == null)
 	{
 	  // cache miss
@@ -79,7 +79,7 @@ public class CachedDownloader implements IDownloader
   {
 	_requestsCounter++;
   
-	final IImage cachedImage = _cacheStorage.readImage(url);
+	final IImage cachedImage = _cacheStorage.isAvailable() ? _cacheStorage.readImage(url) : null;
 	if (cachedImage == null)
 	{
 	  // cache miss
