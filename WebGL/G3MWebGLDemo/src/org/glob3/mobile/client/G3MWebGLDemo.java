@@ -4,7 +4,6 @@ package org.glob3.mobile.client;
 
 import java.util.ArrayList;
 
-import org.glob3.mobile.generated.GLErrorRenderer;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.Renderer;
@@ -17,7 +16,6 @@ import org.glob3.mobile.generated.WMSServerVersion;
 import org.glob3.mobile.specific.G3MWidget_WebGL;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 
@@ -48,13 +46,6 @@ public class G3MWebGLDemo
    }
 
 
-   private native void jsAppendImg(JavaScriptObject image) /*-{
-		var divId = this.@org.glob3.mobile.client.G3MWebGLDemo::g3mWidgetHolderId;
-		var div = $doc.getElementById(divId);
-		div.appendChild(image);
-   }-*/;
-
-
    public void initWidgetDemo() {
 
       final ArrayList<ICameraConstrainer> cameraConstraints = new ArrayList<ICameraConstrainer>();
@@ -70,22 +61,20 @@ public class G3MWebGLDemo
 
       final ArrayList<Renderer> renderers = new ArrayList<Renderer>();
       //      if (true) {
-      //         // dummy renderer with a simple box
-      //         final DummyRenderer dum = new DummyRenderer();
+      // dummy renderer with final a simple box
+      //      final DummyRenderer dum = new DummyRenderer();
+      //      renderers.add(dum);
       //
-      //
-      //         renderers.add(dum);
-      //
-      //         //TODO CAN'T EXECUTE UNTIL LoadImageFromFileName IS IMPLEMENTED
-      //         //         final String imageURL = "world.jpg";
-      //         //         final SimplePlanetRenderer spr = new SimplePlanetRenderer(imageURL);
-      //         //         renderers.add(spr);
       //      }
-      renderers.add(new GLErrorRenderer());
+      //      renderers.add(new GLErrorRenderer());
 
       final UserData userData = null;
 
-      _widget.initWidget(cameraConstraints, layerSet, renderers, userData);
+      //      _widget.initWidget(cameraConstraints, layerSet, renderers, userData);
+
+      final ArrayList<String> imagesToPreload = new ArrayList<String>();
+      //      imagesToPreload.add("../images/world.jpg");
+      _widget.initWidget(cameraConstraints, layerSet, renderers, userData, imagesToPreload);
 
    }
 
@@ -100,13 +89,13 @@ public class G3MWebGLDemo
 					.indexOf('gwt.hosted=') != -1 || $wnd.external
 					&& $wnd.external.gwtOnLoad))
 					&& query.indexOf('gwt.hybrid') == -1;
+			hostedModeNoDebug = query.indexOf("G3MWebGLDemo") != -1;
 		} catch (e) {
 		}
 
 		proxy = $wnd.location.protocol + "//" + $wnd.location.hostname + ":"
-				+ $wnd.location.port + ((hostedMode) ? "" : "/G3MWebGLDemo")
-				+ "/proxy?url=";
-		console.log("proxy=" + proxy);
+				+ $wnd.location.port
+				+ ((!hostedModeNoDebug) ? "" : "/G3MWebGLDemo") + "/proxy?url=";
 		return proxy;
    }-*/;
 }

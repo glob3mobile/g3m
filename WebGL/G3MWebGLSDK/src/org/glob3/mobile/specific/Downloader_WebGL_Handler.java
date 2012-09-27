@@ -136,7 +136,7 @@ public class Downloader_WebGL_Handler {
 
    public void runWithDownloader(final IDownloader downloader) {
 
-      log(LogLevel.InfoLevel, ": runWithDownloader url=" + _url.getPath());
+      //      log(LogLevel.InfoLevel, ": runWithDownloader url=" + _url.getPath());
 
       _dl = (Downloader_WebGL) downloader;
 

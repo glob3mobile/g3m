@@ -2,12 +2,16 @@
 
 package org.glob3.mobile.specific;
 
+import java.util.HashMap;
+
 import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IFloatBuffer;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IIntBuffer;
 import org.glob3.mobile.generated.ITimer;
+
+import com.google.gwt.core.client.JavaScriptObject;
 
 
 public class Factory_WebGL
@@ -27,25 +31,30 @@ public class Factory_WebGL
    public void deleteTimer(final ITimer timer) {
    }
 
+   // TODO TEMP HACK TO PRELOAD IMAGES
+
+   final HashMap<String, IImage> _downloadedImages = new HashMap<String, IImage>();
+
 
    @Override
    public IImage createImageFromFileName(final String filename) {
-      //TODO CHECK IMPLEMENTATION
-      throw new RuntimeException("NOT IMPLEMENTED FROM FILENAME");
-      //      final Image_WebGL im = new Image_WebGL(filename);
-      //      while (!im.isLoadedFromURL()) {
-      //         //WAIT UNTIL LOADED
-      //         try {
-      //            Thread.sleep(100);
-      //         }
-      //         catch (final InterruptedException e) {
-      //            // TODO Auto-generated catch block
-      //            e.printStackTrace();
-      //         }
-      //      }
-      //
-      //      return im;
+      return _downloadedImages.get(filename);
+
+      //      throw new RuntimeException("NOT IMPLEMENTED FROM FILENAME");
    }
+
+
+   public void storeDownloadedImage(final String url,
+                                    final JavaScriptObject imgJS) {
+      final IImage img = new Image_WebGL(imgJS);
+
+      if (((Image_WebGL) img).getImage() != null) {
+         _downloadedImages.put(url, img);
+      }
+   }
+
+
+   // END TEMP HACK TO PRELOAD IMAGES
 
 
    @Override
