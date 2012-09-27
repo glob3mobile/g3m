@@ -129,4 +129,11 @@ public class IndexedDBStorage_WebGL
 		//		};
    }-*/;
 
+
+   @Override
+   public boolean isAvailable() {
+      // TODO Auto-generated method stub
+      return false;
+   }
+
 }

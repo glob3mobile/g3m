@@ -126,7 +126,7 @@ public class Image_WebGL
 
 
    @Override
-   public IImage copy() {
+   public IImage shallowCopy() {
       //    throw new RuntimeException("NOT IMPLEMENTED Image_WebGL::copy");
       final IImage imgCopy = new Image_WebGL(_imgObject);
 
