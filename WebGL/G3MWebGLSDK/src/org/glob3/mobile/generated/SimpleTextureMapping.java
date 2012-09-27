@@ -11,7 +11,7 @@ public class SimpleTextureMapping extends TextureMapping
 
   public SimpleTextureMapping(IGLTextureId glTextureId, IFloatBuffer texCoords, boolean ownedTexCoords)
   {
-	  _glTextureId = null;
+	  _glTextureId = glTextureId;
 	  _texCoords = texCoords;
 	  _translation = new MutableVector2D(0, 0);
 	  _scale = new MutableVector2D(1, 1);
