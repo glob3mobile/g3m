@@ -31,11 +31,7 @@ public:
 
 class SimpleTextureMapping : public TextureMapping {
 private:
-#ifdef C_CODE
-  const IGLTextureId*  _glTextureId;
-#else
   const IGLTextureId* _glTextureId;
-#endif
   IFloatBuffer* _texCoords;
   const bool    _ownedTexCoords;
 
@@ -47,7 +43,7 @@ public:
   SimpleTextureMapping(const IGLTextureId* glTextureId,
                        IFloatBuffer* texCoords,
                        bool ownedTexCoords) :
-  _glTextureId(NULL),
+  _glTextureId(glTextureId),
   _texCoords(texCoords),
   _translation(0, 0),
   _scale(1, 1),
