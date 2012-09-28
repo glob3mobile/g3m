@@ -34,7 +34,7 @@ public class G3MAndroidDemoActivity
                WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/png", "EPSG:4326", "", false, null);
       layerSet.addLayer(bing);
 
-      final boolean usePnoa = false;
+      final boolean usePnoa = true;
       if (usePnoa) {
          final WMSLayer pnoa = new WMSLayer("PNOA", new URL("http://www.idee.es/wms/PNOA/PNOA"), WMSServerVersion.WMS_1_1_0,
                   Sector.fromDegrees(21, -18, 45, 6), "image/png", "EPSG:4326", "", true, null);
@@ -84,14 +84,14 @@ public class G3MAndroidDemoActivity
 
       //  if (false) {
       //    // dummy renderer with a simple box
-      //    DummyRenderer* dum = new DummyRenderer();
-      //    comp->addRenderer(dum);
+      //      final DummyRenderer dum = new DummyRenderer();
+      //      renderers.add(dum);
       //  }
 
       //  if (false) {
       //    // simple planet renderer, with a basic world image
-      //    SimplePlanetRenderer* spr = new SimplePlanetRenderer("world.jpg");
-      //    comp->addRenderer(spr);
+      //      final SimplePlanetRenderer spr = new SimplePlanetRenderer("world.jpg");
+      //      renderers.add(spr);
       //  }
 
 
