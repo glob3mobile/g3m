@@ -13,6 +13,7 @@ import org.glob3.mobile.generated.IIntBuffer;
 import org.glob3.mobile.generated.INativeGL;
 
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.client.JsArrayInteger;
 
 
 public class NativeGL_WebGL
@@ -196,7 +197,6 @@ public class NativeGL_WebGL
                                    final float v1,
                                    final float v2,
                                    final float v3) /*-{
-		//TODO IGNORING COUNT
 		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniform4f(loc, v0,
 				v1, v2, v3);
    }-*/;
@@ -546,18 +546,24 @@ public class NativeGL_WebGL
    @Override
    public void getIntegerv(final int v,
                            final int[] i) {
-      // TODO Auto-generated method stub
+      // TODO getIntegerv is not implemented in WebGL. Check with v!=viewport
 
-      //NO implemented in webgl???
-      //      throw new RuntimeException("NativeGL_WebGL::getIntegerv IS NOT IMPLEMENTED");
-      jsGetIntegerv(v, i);
+      final JsArrayInteger aux = jsGetIntegerv(v);
+      for (int j = 0; j < aux.length(); j++) {
+         i[j] = aux.get(j);
+      }
       println("" + jsGetError());
    }
 
 
-   private native void jsGetIntegerv(final int v,
-                                     final int[] i) /*-{
-		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.getParameter(v, i);
+   private native JsArrayInteger jsGetIntegerv(final int v) /*-{
+		var result = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+				.getParameter(v);
+		var intArray = new Array();
+		for (i = 0; i < result.length; i++) {
+			intArray.push(result[i]);
+		}
+		return intArray;
    }-*/;
 
 
@@ -989,7 +995,9 @@ public class NativeGL_WebGL
 
 
    private void println(final String msg) {
-      //      System.out.println(msg);
+      if (!msg.equals("0")) {
+         System.out.println(msg);
+      }
    }
 
 }

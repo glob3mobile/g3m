@@ -34,7 +34,7 @@ public class G3MAndroidDemoActivity
                WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/png", "EPSG:4326", "", false, null);
       layerSet.addLayer(bing);
 
-      final boolean usePnoa = true;
+      final boolean usePnoa = false;
       if (usePnoa) {
          final WMSLayer pnoa = new WMSLayer("PNOA", new URL("http://www.idee.es/wms/PNOA/PNOA"), WMSServerVersion.WMS_1_1_0,
                   Sector.fromDegrees(21, -18, 45, 6), "image/png", "EPSG:4326", "", true, null);

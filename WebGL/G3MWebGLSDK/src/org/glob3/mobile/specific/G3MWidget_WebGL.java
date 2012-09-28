@@ -449,7 +449,7 @@ public class G3MWidget_WebGL
       final CompositeRenderer composite = new CompositeRenderer();
       composite.addRenderer(cameraRenderer);
 
-      final TileTexturizer texturizer;
+      TileTexturizer texturizer = null;
 
       if ((_layerSet != null) && (_layerSet.size() > 0)) {
          texturizer = new MultiLayerTileTexturizer(_layerSet);
@@ -457,20 +457,23 @@ public class G3MWidget_WebGL
       else {
          //SINGLE IMAGE
          final IImage singleWorldImage = _factory.createImageFromFileName("../images/world.jpg");
-         texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage, false);
+         if (singleWorldImage != null) {
+            texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage, false);
+         }
       }
 
-      final boolean showStatistics = false;
+      if (texturizer != null) {
+         final boolean showStatistics = false;
 
-      final TileRenderer tr = new TileRenderer(new EllipsoidalTileTessellator(parameters._tileResolution, true), texturizer,
-               parameters, showStatistics);
+         final TileRenderer tr = new TileRenderer(new EllipsoidalTileTessellator(parameters._tileResolution, true), texturizer,
+                  parameters, showStatistics);
 
-      composite.addRenderer(tr);
+         composite.addRenderer(tr);
 
-      for (int i = 0; i < _renderers.size(); i++) {
-         composite.addRenderer(_renderers.get(i));
+         for (int i = 0; i < _renderers.size(); i++) {
+            composite.addRenderer(_renderers.get(i));
+         }
       }
-
 
       final TextureBuilder textureBuilder = new CPUTextureBuilder();
       final TexturesHandler texturesHandler = new TexturesHandler(gl, _factory, false);
@@ -546,6 +549,7 @@ public class G3MWidget_WebGL
 
 
    private native void jsGLInit() /*-{
+		//		debugger;
 		var that = this;
 		var error = 0;
 		try {
