@@ -21,6 +21,15 @@
 
 #include "LevelTileCondition.hpp"
 
+/*#include "IJSONParser.hpp"
+#include "JSONParser_iOS.hpp"
+#include "JSONBaseObject.hpp"
+#include "JSONNumber.hpp"
+#include "JSONObject.hpp"
+#include "JSONArray.hpp"
+#include "JSONString.hpp"
+#include "JSONBoolean.hpp"*/
+
 @implementation ViewController
 
 @synthesize G3MWidget;
@@ -46,6 +55,9 @@
 - (void) initWidgetDemo
 {
   LayerSet* layerSet = new LayerSet();
+  
+  
+  
   
   if (false) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
@@ -190,6 +202,21 @@
                                 Geodetic3D(latitude, longitude, 0)));
       }
     }
+    
+    //Tests for JSON
+    /*if (true){
+      IJSONParser* parser = new JSONParser_iOS();
+      JSONParser.setInstance(parser);
+      std::string testString = "{\"a\": [1, false, \"hola\"]}";
+    
+      JSONBaseObject* testObj = IJSONParser::instance()->parse(testString);
+      JSONObject* object = testObj->getObject();
+    
+      JSONArray* array = object->getObjectForKey("a")->getArray();
+      int element0 = array->getElement(0)->getNumber()->getIntValue();
+      bool element1 = array->getElement(1)->getBoolean()->getValue();
+      std::string element2 = array->getElement(2)->getString()->getValue();
+    }*/
   }
   
   //  if (false) {

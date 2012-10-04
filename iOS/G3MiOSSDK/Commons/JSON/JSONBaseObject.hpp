@@ -9,7 +9,23 @@
 #ifndef G3MiOSSDK_JSONBaseObject_hpp
 #define G3MiOSSDK_JSONBaseObject_hpp
 
+class JSONObject;
+class JSONArray;
+class JSONBoolean;
+class JSONNumber;
+class JSONString;
+
 class JSONBaseObject{
+  
+public:
+  
+  virtual ~JSONBaseObject(){};
+  
+  virtual JSONObject* getObject(); 
+  virtual JSONArray* getArray();
+  virtual JSONBoolean* getBoolean();
+  virtual JSONNumber* getNumber();
+  virtual JSONString* getString();
 
   
 };
