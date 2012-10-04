@@ -43,6 +43,7 @@ public class G3MWebGLDemo
 
          initWidgetDemo();
       }
+
    }
 
 
@@ -53,10 +54,20 @@ public class G3MWebGLDemo
       cameraConstraints.add(scc);
 
       final LayerSet layerSet = new LayerSet();
-      final WMSLayer bing = new WMSLayer("ve", new URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?"),
-               WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/png", "EPSG:4326", "", false, null);
+      final boolean useBing = true;
+      if (useBing) {
+         final WMSLayer bing = new WMSLayer("ve", new URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?"),
+                  WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/png", "EPSG:4326", "", false, null);
 
-      layerSet.addLayer(bing);
+         layerSet.addLayer(bing);
+      }
+
+      final boolean usePnoa = false;
+      if (usePnoa) {
+         final WMSLayer pnoa = new WMSLayer("PNOA", new URL("http://www.idee.es/wms/PNOA/PNOA"), WMSServerVersion.WMS_1_1_0,
+                  Sector.fromDegrees(21, -18, 45, 6), "image/png", "EPSG:4326", "", true, null);
+         layerSet.addLayer(pnoa);
+      }
 
 
       final ArrayList<Renderer> renderers = new ArrayList<Renderer>();

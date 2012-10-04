@@ -350,6 +350,10 @@ public class NativeGL_WebGL
 			console.error("NativeGL_WebGL: INVALID_OPERATION");
 		}
 
+		if (e == gl.CONTEXT_LOST_WEBGL) {
+			console.error("NativeGL_WebGL: CONTEXT_LOST_WEBGL");
+		}
+
 		return Number(e);
    }-*/;
 
@@ -450,7 +454,7 @@ public class NativeGL_WebGL
 
       String error = "";
       for (int i = 0; i < n; i++) {
-         final JavaScriptObject id = jsCreateTexture(); //WebGLTextureID
+         final JavaScriptObject id = jsCreateTexture(i); //WebGLTextureID
          error += jsGetError();
          array.add(new GLTextureId_WebGL(id));
       }
@@ -459,9 +463,11 @@ public class NativeGL_WebGL
    }
 
 
-   private native JavaScriptObject jsCreateTexture() /*-{
-		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
+   private native JavaScriptObject jsCreateTexture(final int i) /*-{
+		var texture = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl
 				.createTexture();
+		texture.id = i;
+		return texture;
    }-*/;
 
 
@@ -996,7 +1002,7 @@ public class NativeGL_WebGL
 
    private void println(final String msg) {
       if (!msg.equals("0")) {
-         System.out.println(msg);
+         //         System.out.println(msg);
       }
    }
 
