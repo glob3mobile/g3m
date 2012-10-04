@@ -84,4 +84,28 @@ public class URL
 	return s;
   }
 
+
+	@Override
+	public int hashCode() {
+		return _path.hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final URL other = (URL) obj;
+		if (_path.equals(other._path)) {
+			return true;
+		}
+		return false;
+	}
+
 }
