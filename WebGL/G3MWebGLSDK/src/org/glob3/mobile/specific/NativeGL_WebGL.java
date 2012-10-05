@@ -32,7 +32,7 @@ public class NativeGL_WebGL
    public void useProgram(final IGLProgramId program) {
       final JavaScriptObject p = ((GLProgramId_WebGL) program).getProgram();
       jsUseProgram(p);
-      println("" + jsGetError());
+      //  printGLError();
    }
 
 
@@ -46,9 +46,14 @@ public class NativeGL_WebGL
                                 final String name) {
       final JavaScriptObject p = ((GLProgramId_WebGL) program).getProgram();
       final int result = jsGetAttribLocation(p, name);
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
+
+
+   //   private void printGLError() {
+   //      println("" + jsGetError());
+   //   }
 
 
    private native int jsGetAttribLocation(final JavaScriptObject program,
@@ -64,7 +69,7 @@ public class NativeGL_WebGL
       final JavaScriptObject p = ((GLProgramId_WebGL) program).getProgram();
       final JavaScriptObject u = jsGetUniformLocation(p, name);
       final IGLUniformID result = new GLUniformID_WebGL(u);
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 
@@ -82,7 +87,7 @@ public class NativeGL_WebGL
                          final float y) {
       final JavaScriptObject l = ((GLUniformID_WebGL) loc).getId();
       jsUniform2f(l, x, y);
-      println("" + jsGetError());
+      //  printGLError();
    }
 
 
@@ -99,7 +104,7 @@ public class NativeGL_WebGL
                          final float x) {
       final JavaScriptObject l = ((GLUniformID_WebGL) loc).getId();
       jsUniform1f(l, x);
-      println("" + jsGetError());
+      //  printGLError();
    }
 
 
@@ -114,7 +119,7 @@ public class NativeGL_WebGL
                          final int v) {
       final JavaScriptObject l = ((GLUniformID_WebGL) loc).getId();
       jsUniform1i(l, v);
-      println("" + jsGetError());
+      //  printGLError();
    }
 
 
@@ -135,7 +140,7 @@ public class NativeGL_WebGL
       final JavaScriptObject buffer = array.getBuffer(); //Float32Array
 
       jsUniformMatrix4fv(l, count, transpose, buffer);
-      println("" + jsGetError());
+      //  printGLError();
    }
 
 
@@ -155,7 +160,7 @@ public class NativeGL_WebGL
                           final float blue,
                           final float alpha) {
       jsClearColor(red, green, blue, alpha);
-      println("" + jsGetError());
+      //  printGLError();
    }
 
 
@@ -171,7 +176,7 @@ public class NativeGL_WebGL
    @Override
    public void clear(final int buffers) {
       jsClear(buffers);
-      println("" + jsGetError());
+      //  printGLError();
    }
 
 
@@ -188,7 +193,7 @@ public class NativeGL_WebGL
                          final float v3) {
       final JavaScriptObject l = ((GLUniformID_WebGL) location).getId();
       jsUniform4f(l, v0, v1, v2, v3);
-      println("" + jsGetError());
+      //  printGLError();
    }
 
 
@@ -205,7 +210,7 @@ public class NativeGL_WebGL
    @Override
    public void enable(final int feature) {
       jsEnable(feature);
-      println("" + jsGetError());
+      //  printGLError();
    }
 
 
@@ -217,7 +222,7 @@ public class NativeGL_WebGL
    @Override
    public void disable(final int feature) {
       jsDisable(feature);
-      println("" + jsGetError());
+      //  printGLError();
    }
 
 
@@ -230,7 +235,7 @@ public class NativeGL_WebGL
    public void polygonOffset(final float factor,
                              final float units) {
       jsPolygonOffset(factor, units);
-      println("" + jsGetError());
+      //  printGLError();
    }
 
 
@@ -250,7 +255,7 @@ public class NativeGL_WebGL
       //TODO CHECK NO CLIENT SIDE ARRAYS
       final JavaScriptObject jsbuffer = ((FloatBuffer_WebGL) buffer).getBuffer();
       jsVertexAttribPointer(index, size, normalized, stride, jsbuffer);
-      println("" + jsGetError());
+      //  printGLError();
    }
 
 
@@ -283,7 +288,7 @@ public class NativeGL_WebGL
                             final int count,
                             final IIntBuffer indices) {
       jsDrawElements(mode, count, ((IntBuffer_WebGL) indices).getBuffer());
-      println("" + jsGetError());
+      //  printGLError();
    }
 
 
@@ -311,7 +316,7 @@ public class NativeGL_WebGL
    @Override
    public void lineWidth(final float width) {
       jsLineWidth(width);
-      println("" + jsGetError());
+      //  printGLError();
    }
 
 
@@ -362,7 +367,7 @@ public class NativeGL_WebGL
    public void blendFunc(final int sfactor,
                          final int dfactor) {
       jsBlendFunc(sfactor, dfactor);
-      println("" + jsGetError());
+      //  printGLError();
    }
 
 
@@ -378,7 +383,7 @@ public class NativeGL_WebGL
                            final IGLTextureId texture) {
       final JavaScriptObject id = ((GLTextureId_WebGL) texture).getWebGLTexture();
       jsBindTexture(target, id);
-      println("" + jsGetError());
+      //  printGLError();
    }
 
 
@@ -392,13 +397,13 @@ public class NativeGL_WebGL
    @Override
    public void deleteTextures(final int n,
                               final IGLTextureId[] textures) {
-      String error = "";
+      //      String error = "";
       for (int i = 0; i < n; i++) {
          final JavaScriptObject id = ((GLTextureId_WebGL) textures[i]).getWebGLTexture();
          jsDeleteTexture(id);
-         error += jsGetError();
+         //         error += jsGetError();
       }
-      println(error);
+      //      println(error);
    }
 
 
@@ -410,7 +415,7 @@ public class NativeGL_WebGL
    @Override
    public void enableVertexAttribArray(final int location) {
       jsEnableVertexAttribArray(location);
-      println("" + jsGetError());
+      //  printGLError();
    }
 
 
@@ -423,7 +428,7 @@ public class NativeGL_WebGL
    @Override
    public void disableVertexAttribArray(final int location) {
       jsDisableVertexAttribArray(location);
-      println("" + jsGetError());
+      //  printGLError();
    }
 
 
@@ -437,7 +442,7 @@ public class NativeGL_WebGL
    public void pixelStorei(final int pname,
                            final int param) {
       jsPixelStorei(pname, param);
-      println("" + jsGetError());
+      //  printGLError();
    }
 
 
@@ -452,13 +457,13 @@ public class NativeGL_WebGL
    public ArrayList<IGLTextureId> genTextures(final int n) {
       final ArrayList<IGLTextureId> array = new ArrayList<IGLTextureId>();
 
-      String error = "";
+      //      String error = "";
       for (int i = 0; i < n; i++) {
          final JavaScriptObject id = jsCreateTexture(i); //WebGLTextureID
-         error += jsGetError();
+         //         error += jsGetError();
          array.add(new GLTextureId_WebGL(id));
       }
-      println(error);
+      //      println(error);
       return array;
    }
 
@@ -476,7 +481,7 @@ public class NativeGL_WebGL
                              final int par,
                              final int v) {
       jsTextParameteri(target, par, v);
-      println("" + jsGetError());
+      //  printGLError();
    }
 
 
@@ -493,7 +498,7 @@ public class NativeGL_WebGL
                           final int format) {
       final JavaScriptObject im = ((Image_WebGL) image).getImage(); //IMAGE JS
       jsTexImage2D(im, format);
-      println("" + jsGetError());
+      //  printGLError();
    }
 
 
@@ -510,7 +515,7 @@ public class NativeGL_WebGL
    @Override
    public void generateMipmap(final int target) {
       jsGenerateMipmap(target);
-      println("" + jsGetError());
+      //  printGLError();
    }
 
 
@@ -525,7 +530,7 @@ public class NativeGL_WebGL
                           final int first,
                           final int count) {
       jsDrawArrays(mode, first, count);
-      println("" + jsGetError());
+      //  printGLError();
    }
 
 
@@ -540,7 +545,7 @@ public class NativeGL_WebGL
    @Override
    public void cullFace(final int c) {
       jsCullFace(c);
-      println("" + jsGetError());
+      //  printGLError();
    }
 
 
@@ -558,7 +563,7 @@ public class NativeGL_WebGL
       for (int j = 0; j < aux.length(); j++) {
          i[j] = aux.get(j);
       }
-      println("" + jsGetError());
+      //  printGLError();
    }
 
 
@@ -576,7 +581,7 @@ public class NativeGL_WebGL
    @Override
    public int CullFace_Front() {
       final int result = jsCullFace_Front();
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 
@@ -589,7 +594,7 @@ public class NativeGL_WebGL
    @Override
    public int CullFace_Back() {
       final int result = jsCullFace_Back();
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 
@@ -602,7 +607,7 @@ public class NativeGL_WebGL
    @Override
    public int CullFace_FrontAndBack() {
       final int result = jsCullFace_FrontAndBack();
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 
@@ -615,7 +620,7 @@ public class NativeGL_WebGL
    @Override
    public int BufferType_ColorBuffer() {
       final int result = jsBufferType_ColorBuffer();
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 
@@ -628,7 +633,7 @@ public class NativeGL_WebGL
    @Override
    public int BufferType_DepthBuffer() {
       final int result = jsBufferType_DepthBuffer();
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 
@@ -641,7 +646,7 @@ public class NativeGL_WebGL
    @Override
    public int Feature_PolygonOffsetFill() {
       final int result = jsFeature_PolygonOffsetFill();
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 
@@ -655,7 +660,7 @@ public class NativeGL_WebGL
    public int Feature_DepthTest() {
       //      return jsFeature_DepthTest();
       final int result = jsFeature_DepthTest();
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 
@@ -669,7 +674,7 @@ public class NativeGL_WebGL
    public int Feature_Blend() {
       //      return jsFeature_Blend();
       final int result = jsFeature_Blend();
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 
@@ -683,7 +688,7 @@ public class NativeGL_WebGL
    public int Feature_CullFace() {
       //      return jsFeature_CullFace();
       final int result = jsFeature_CullFace();
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 
@@ -697,7 +702,7 @@ public class NativeGL_WebGL
    public int Type_Float() {
       //      return jsType_Float();
       final int result = jsType_Float();
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 
@@ -711,7 +716,7 @@ public class NativeGL_WebGL
    public int Type_UnsignedByte() {
       //      return jsType_UnsignedByte();
       final int result = jsType_UnsignedByte();
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 
@@ -725,7 +730,7 @@ public class NativeGL_WebGL
    public int Type_UnsignedInt() {
       //      return jsType_UnsignedInt();
       final int result = jsType_UnsignedInt();
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 
@@ -739,7 +744,7 @@ public class NativeGL_WebGL
    public int Type_Int() {
       //      return jsType_Int();
       final int result = jsType_Int();
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 
@@ -753,7 +758,7 @@ public class NativeGL_WebGL
    public int Primitive_TriangleStrip() {
       //      return jsPrimitive_TriangleStrip();
       final int result = jsPrimitive_TriangleStrip();
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 
@@ -767,7 +772,7 @@ public class NativeGL_WebGL
    public int Primitive_Lines() {
       //      return jsPrimitive_Lines();
       final int result = jsPrimitive_Lines();
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 
@@ -781,7 +786,7 @@ public class NativeGL_WebGL
    public int Primitive_LineLoop() {
       //      return jsPrimitive_LineLoop();
       final int result = jsPrimitive_LineLoop();
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 
@@ -795,7 +800,7 @@ public class NativeGL_WebGL
    public int Primitive_Points() {
       //      return jsPrimitive_Points();
       final int result = jsPrimitive_Points();
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 
@@ -809,7 +814,7 @@ public class NativeGL_WebGL
    public int BlendFactor_SrcAlpha() {
       //      return jsBlendFactor_SrcAlpha();
       final int result = jsBlendFactor_SrcAlpha();
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 
@@ -823,7 +828,7 @@ public class NativeGL_WebGL
    public int BlendFactor_OneMinusSrcAlpha() {
       //      return jsBlendFactor_OneMinusSrcAlpha();
       final int result = jsBlendFactor_OneMinusSrcAlpha();
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 
@@ -837,7 +842,7 @@ public class NativeGL_WebGL
    public int TextureType_Texture2D() {
       //      return jsTextureType_Texture2D();
       final int result = jsTextureType_Texture2D();
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 
@@ -851,7 +856,7 @@ public class NativeGL_WebGL
    public int TextureParameter_MinFilter() {
       //      return jsTextureParameter_MinFilter();
       final int result = jsTextureParameter_MinFilter();
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 
@@ -865,7 +870,7 @@ public class NativeGL_WebGL
    public int TextureParameter_MagFilter() {
       //      return jsTextureParameter_MagFilter();
       final int result = jsTextureParameter_MagFilter();
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 
@@ -879,7 +884,7 @@ public class NativeGL_WebGL
    public int TextureParameter_WrapS() {
       //      return jsTextureParameter_WrapS();
       final int result = jsTextureParameter_WrapS();
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 
@@ -893,7 +898,7 @@ public class NativeGL_WebGL
    public int TextureParameter_WrapT() {
       //      return jsTextureParameter_WrapT();
       final int result = jsTextureParameter_WrapT();
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 
@@ -907,7 +912,7 @@ public class NativeGL_WebGL
    public int TextureParameterValue_Linear() {
       //      return jsTextureParameterValue_Linear();
       final int result = jsTextureParameterValue_Linear();
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 
@@ -920,7 +925,7 @@ public class NativeGL_WebGL
    @Override
    public int TextureParameterValue_ClampToEdge() {
       final int result = jsTextureParameterValue_ClampToEdge();
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 
@@ -934,7 +939,7 @@ public class NativeGL_WebGL
    public int Alignment_Pack() {
       //      return jsAlignment_Pack();
       final int result = jsAlignment_Pack();
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 
@@ -948,7 +953,7 @@ public class NativeGL_WebGL
    public int Alignment_Unpack() {
       //      return jsAlignment_Unpack();
       final int result = jsAlignment_Unpack();
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 
@@ -962,7 +967,7 @@ public class NativeGL_WebGL
    public int Format_RGBA() {
       //      return jsFormat_RGBA();
       final int result = jsFormat_RGBA();
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 
@@ -976,7 +981,7 @@ public class NativeGL_WebGL
    public int Variable_Viewport() {
       //      return jsVariable_Viewport();
       final int result = jsVariable_Viewport();
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 
@@ -990,7 +995,7 @@ public class NativeGL_WebGL
    public int Error_NoError() {
       //      return jsError_NoError();
       final int result = jsError_NoError();
-      println("" + jsGetError());
+      //  printGLError();
       return result;
    }
 

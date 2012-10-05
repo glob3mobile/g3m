@@ -225,7 +225,7 @@ enum {
     }
     if (program) {
       glDeleteProgram(programNum);
-      programNum = 0;
+//      programNum = 0;
     }
 
     return FALSE;
