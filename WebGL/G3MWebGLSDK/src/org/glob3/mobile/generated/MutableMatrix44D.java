@@ -24,9 +24,12 @@ package org.glob3.mobile.generated;
 //class Vector2D;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class MutableVector3D;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IFloatBuffer;
 
 
 
+///#include "MutableMatrix44D.hpp"
 
 
 public class MutableMatrix44D
@@ -51,7 +54,9 @@ public class MutableMatrix44D
   private double _m32;
   private double _m33;
 
-  private float[] _columnMajorFloatArray;
+  private IFloatBuffer _columnMajorFloatBuffer;
+//  mutable float* _columnMajorFloatArray;
+
   private boolean _isValid;
 
   //Contructor parameters in column major order
@@ -78,13 +83,15 @@ public class MutableMatrix44D
 	_m32 = m32;
 	_m33 = m33;
 
-	_columnMajorFloatArray = null;
+	_columnMajorFloatBuffer = null;
+//    _columnMajorFloatArray = NULL;
   }
 
   private MutableMatrix44D(boolean isValid)
   {
 	  _isValid = isValid;
-	_columnMajorFloatArray = null;
+   _columnMajorFloatBuffer = null;
+//    _columnMajorFloatArray = NULL;
   }
 
 
@@ -112,7 +119,8 @@ public class MutableMatrix44D
 	_m32 = 0.0;
 	_m33 = 0.0;
 
-	_columnMajorFloatArray = null;
+	_columnMajorFloatBuffer = null;
+//    _columnMajorFloatArray = NULL;
   }
 
   public MutableMatrix44D(MutableMatrix44D m)
@@ -138,7 +146,8 @@ public class MutableMatrix44D
 	_m32 = m._m32;
 	_m33 = m._m33;
 
-	_columnMajorFloatArray = null;
+	_columnMajorFloatBuffer = null;
+//    _columnMajorFloatArray = NULL;
   }
 
 //C++ TO JAVA CONVERTER NOTE: This 'copyFrom' method was converted from the original C++ copy assignment operator:
@@ -151,43 +160,50 @@ public class MutableMatrix44D
 	  _m01 = m._m01;
 	  _m02 = m._m02;
 	  _m03 = m._m03;
-
+  
 	  _m10 = m._m10;
 	  _m11 = m._m11;
 	  _m12 = m._m12;
 	  _m13 = m._m13;
-
+  
 	  _m20 = m._m20;
 	  _m21 = m._m21;
 	  _m22 = m._m22;
 	  _m23 = m._m23;
-
+  
 	  _m30 = m._m30;
 	  _m31 = m._m31;
 	  _m32 = m._m32;
 	  _m33 = m._m33;
-
+  
 	  _isValid = m._isValid;
-
-	  if (_columnMajorFloatArray != null)
+  
+	  if (_columnMajorFloatBuffer != null)
 	  {
-		_columnMajorFloatArray = null;
-		_columnMajorFloatArray = null;
+		if (_columnMajorFloatBuffer != null)
+			_columnMajorFloatBuffer.dispose();
+		_columnMajorFloatBuffer = null;
 	  }
+  //    if (_columnMajorFloatArray != NULL){
+  //      delete [] _columnMajorFloatArray;
+  //      _columnMajorFloatArray = NULL;
+  //    }
 	}
-
+  
 	return this;
   }
 
   public void dispose()
   {
-	if (_columnMajorFloatArray != null)
+	if (_columnMajorFloatBuffer != null)
 	{
-	  _columnMajorFloatArray = null;
+	  if (_columnMajorFloatBuffer != null)
+		  _columnMajorFloatBuffer.dispose();
 	}
+  //  if (_columnMajorFloatArray != NULL){
+  //    delete _columnMajorFloatArray;
+  //  }
   }
-
-  //SPECIAL MATRICES
 
   public static MutableMatrix44D identity()
   {
@@ -259,11 +275,11 @@ public class MutableMatrix44D
 
 
   /*MutableMatrix44D MutableMatrix44D::transposed() const {
-	return MutableMatrix44D(_m00, _m01, _m02, _m03,
-							_m10, _m11, _m12, _m13,
-							_m20, _m21, _m22, _m23,
-							_m30, _m31, _m32, _m33);
-  }*/
+   return MutableMatrix44D(_m00, _m01, _m02, _m03,
+   _m10, _m11, _m12, _m13,
+   _m20, _m21, _m22, _m23,
+   _m30, _m31, _m32, _m33);
+   }*/
   
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: MutableMatrix44D inversed() const
@@ -361,35 +377,87 @@ public class MutableMatrix44D
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: float[] getColumnMajorFloatArray() const
-  public final float[] getColumnMajorFloatArray()
+//ORIGINAL LINE: const IFloatBuffer* getColumnMajorFloatBuffer() const
+  public final IFloatBuffer getColumnMajorFloatBuffer()
   {
-	if (_columnMajorFloatArray == null)
+	if (_columnMajorFloatBuffer == null)
 	{
-	  _columnMajorFloatArray = new float[16];
-
-	  _columnMajorFloatArray[0] = (float) _m00;
-	  _columnMajorFloatArray[1] = (float) _m10;
-	  _columnMajorFloatArray[2] = (float) _m20;
-	  _columnMajorFloatArray[3] = (float) _m30;
-
-	  _columnMajorFloatArray[4] = (float) _m01;
-	  _columnMajorFloatArray[5] = (float) _m11;
-	  _columnMajorFloatArray[6] = (float) _m21;
-	  _columnMajorFloatArray[7] = (float) _m31;
-
-	  _columnMajorFloatArray[8] = (float) _m02;
-	  _columnMajorFloatArray[9] = (float) _m12;
-	  _columnMajorFloatArray[10] = (float) _m22;
-	  _columnMajorFloatArray[11] = (float) _m32;
-
-	  _columnMajorFloatArray[12] = (float) _m03;
-	  _columnMajorFloatArray[13] = (float) _m13;
-	  _columnMajorFloatArray[14] = (float) _m23;
-	  _columnMajorFloatArray[15] = (float) _m33;
+	  _columnMajorFloatBuffer = IFactory.instance().createFloatBuffer(16);
+  
+	  _columnMajorFloatBuffer.put(0, (float) _m00);
+	  _columnMajorFloatBuffer.put(1, (float) _m10);
+	  _columnMajorFloatBuffer.put(2, (float) _m20);
+	  _columnMajorFloatBuffer.put(3, (float) _m30);
+  
+	  _columnMajorFloatBuffer.put(4, (float) _m01);
+	  _columnMajorFloatBuffer.put(5, (float) _m11);
+	  _columnMajorFloatBuffer.put(6, (float) _m21);
+	  _columnMajorFloatBuffer.put(7, (float) _m31);
+  
+	  _columnMajorFloatBuffer.put(8, (float) _m02);
+	  _columnMajorFloatBuffer.put(9, (float) _m12);
+	  _columnMajorFloatBuffer.put(10, (float) _m22);
+	  _columnMajorFloatBuffer.put(11, (float) _m32);
+  
+	  _columnMajorFloatBuffer.put(12, (float) _m03);
+	  _columnMajorFloatBuffer.put(13, (float) _m13);
+	  _columnMajorFloatBuffer.put(14, (float) _m23);
+	  _columnMajorFloatBuffer.put(15, (float) _m33);
+  
+  //    _columnMajorFloatBuffer->put( 0, (float) _m00);
+  //    _columnMajorFloatBuffer->put( 1, (float) _m01);
+  //    _columnMajorFloatBuffer->put( 2, (float) _m02);
+  //    _columnMajorFloatBuffer->put( 3, (float) _m03);
+  //
+  //    _columnMajorFloatBuffer->put( 4, (float) _m10);
+  //    _columnMajorFloatBuffer->put( 5, (float) _m11);
+  //    _columnMajorFloatBuffer->put( 6, (float) _m12);
+  //    _columnMajorFloatBuffer->put( 7, (float) _m13);
+  //
+  //    _columnMajorFloatBuffer->put( 8, (float) _m20);
+  //    _columnMajorFloatBuffer->put( 9, (float) _m21);
+  //    _columnMajorFloatBuffer->put(10, (float) _m22);
+  //    _columnMajorFloatBuffer->put(11, (float) _m23);
+  //
+  //    _columnMajorFloatBuffer->put(12, (float) _m30);
+  //    _columnMajorFloatBuffer->put(13, (float) _m31);
+  //    _columnMajorFloatBuffer->put(14, (float) _m32);
+  //    _columnMajorFloatBuffer->put(15, (float) _m33);
+  
 	}
-	return _columnMajorFloatArray;
+	return _columnMajorFloatBuffer;
   }
+
+///#ifdef C_CODE
+//  float* getColumnMajorFloatArray() const {
+///#else
+//  float[] getColumnMajorFloatArray() const {
+///#endif
+//    if (_columnMajorFloatArray == NULL){
+//      _columnMajorFloatArray = new float[16];
+//      
+//      _columnMajorFloatArray[ 0] = (float) _m00;
+//      _columnMajorFloatArray[ 1] = (float) _m10;
+//      _columnMajorFloatArray[ 2] = (float) _m20;
+//      _columnMajorFloatArray[ 3] = (float) _m30;
+//      
+//      _columnMajorFloatArray[ 4] = (float) _m01;
+//      _columnMajorFloatArray[ 5] = (float) _m11;
+//      _columnMajorFloatArray[ 6] = (float) _m21;
+//      _columnMajorFloatArray[ 7] = (float) _m31;
+//      
+//      _columnMajorFloatArray[ 8] = (float) _m02;
+//      _columnMajorFloatArray[ 9] = (float) _m12;
+//      _columnMajorFloatArray[10] = (float) _m22;
+//      _columnMajorFloatArray[11] = (float) _m32;
+//      
+//      _columnMajorFloatArray[12] = (float) _m03;
+//      _columnMajorFloatArray[13] = (float) _m13;
+//      _columnMajorFloatArray[14] = (float) _m23;
+//      _columnMajorFloatArray[15] = (float) _m33;
+//    }
+//    return _columnMajorFloatArray;
+//  }
 
   //OTHER OPERATIONS
 

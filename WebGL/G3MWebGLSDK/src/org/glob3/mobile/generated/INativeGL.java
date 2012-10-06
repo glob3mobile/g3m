@@ -57,8 +57,13 @@ public abstract class INativeGL
   public abstract void uniform1i(IGLUniformID loc, int v);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void uniformMatrix4fv(IGLUniformID* location, int count, boolean transpose, const float value[]) const = 0;
-  public abstract void uniformMatrix4fv(IGLUniformID location, int count, boolean transpose, float[] value);
+//ORIGINAL LINE: virtual void uniformMatrix4fv(IGLUniformID* location, boolean transpose, const IFloatBuffer* buffer) const = 0;
+  public abstract void uniformMatrix4fv(IGLUniformID location, boolean transpose, IFloatBuffer buffer);
+
+//  virtual void uniformMatrix4fv(IGLUniformID* location,
+//                                int count,
+//                                bool transpose,
+//                                const float value[]) const = 0;
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual void clearColor(float red, float green, float blue, float alpha) const = 0;
