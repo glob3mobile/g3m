@@ -25,10 +25,10 @@ public final class IntBuffer_WebGL
    }
 
 
-   IntBuffer_WebGL(final byte[] data) {
-      //      TODO needed??
-      throw new RuntimeException("IntBuffer_WebGL(final byte[] data) IS NOT IMPLEMENTED");
-   }
+   //   IntBuffer_WebGL(final byte[] data) {
+   //      //      TODO needed??
+   //      throw new RuntimeException("IntBuffer_WebGL(final byte[] data) IS NOT IMPLEMENTED");
+   //   }
 
 
    @Override

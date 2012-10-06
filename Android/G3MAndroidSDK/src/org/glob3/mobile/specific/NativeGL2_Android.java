@@ -242,15 +242,26 @@ public class NativeGL2_Android
    }
 
 
+   //   @Override
+   //   public void uniformMatrix4fv(final IGLUniformID location,
+   //                                final int count,
+   //                                final boolean transpose,
+   //                                final float[] value) {
+   //      //      final FloatBuffer fb = floatArrayToFloatBuffer(value);
+   //      //
+   //      //      GLES20.glUniformMatrix4fv(location, count, transpose, fb);
+   //      GLES20.glUniformMatrix4fv(((GLUniformID_Android) location).getID(), count, transpose, value, 0);
+   //   }
+
    @Override
    public void uniformMatrix4fv(final IGLUniformID location,
-                                final int count,
                                 final boolean transpose,
-                                final float[] value) {
+                                final IFloatBuffer buffer) {
       //      final FloatBuffer fb = floatArrayToFloatBuffer(value);
       //
       //      GLES20.glUniformMatrix4fv(location, count, transpose, fb);
-      GLES20.glUniformMatrix4fv(((GLUniformID_Android) location).getID(), count, transpose, value, 0);
+      GLES20.glUniformMatrix4fv(((GLUniformID_Android) location).getID(), 1, transpose,
+               ((FloatBuffer_Android) buffer).getBuffer());
    }
 
 
