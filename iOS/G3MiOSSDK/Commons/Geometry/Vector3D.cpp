@@ -93,9 +93,8 @@ Vector3D Vector3D::transformedBy(const MutableMatrix44D &m,
 
 const std::string Vector3D::description() const {  
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
-  isb->add("(V2D ")->add(_x)->add(", ")->add(_y)->add(", ")->add(_z)->add(")");
+  isb->add("(V3D ")->add(_x)->add(", ")->add(_y)->add(", ")->add(_z)->add(")");
   std::string s = isb->getString();
   delete isb;
   return s;
 }
-

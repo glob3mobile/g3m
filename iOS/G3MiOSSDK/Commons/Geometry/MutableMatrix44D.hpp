@@ -46,8 +46,7 @@ private:
   double _m33;
   
   mutable IFloatBuffer* _columnMajorFloatBuffer;
-//  mutable float* _columnMajorFloatArray;
-
+  
   bool _isValid;
   
   //Contructor parameters in column major order
@@ -78,14 +77,12 @@ private:
     _m33  = m33;
     
     _columnMajorFloatBuffer = NULL;
-//    _columnMajorFloatArray = NULL;
   }
   
   MutableMatrix44D(bool isValid):
   _isValid(isValid)
   {
-   _columnMajorFloatBuffer = NULL;
-//    _columnMajorFloatArray = NULL;
+    _columnMajorFloatBuffer = NULL;
   }
   
 public:
@@ -115,7 +112,6 @@ public:
     _m33 = 0.0;
     
     _columnMajorFloatBuffer = NULL;
-//    _columnMajorFloatArray = NULL;
   }
   
   MutableMatrix44D(const MutableMatrix44D &m):
@@ -142,7 +138,6 @@ public:
     _m33 = m._m33;
     
     _columnMajorFloatBuffer = NULL;
-//    _columnMajorFloatArray = NULL;
   }
   
   MutableMatrix44D& operator=(const MutableMatrix44D &m);
@@ -217,39 +212,6 @@ public:
   }
   
   const IFloatBuffer* getColumnMajorFloatBuffer() const;
-  
-//#ifdef C_CODE
-//  float* getColumnMajorFloatArray() const {
-//#else
-//  float[] getColumnMajorFloatArray() const {
-//#endif
-//    if (_columnMajorFloatArray == NULL){
-//      _columnMajorFloatArray = new float[16];
-//      
-//      _columnMajorFloatArray[ 0] = (float) _m00;
-//      _columnMajorFloatArray[ 1] = (float) _m10;
-//      _columnMajorFloatArray[ 2] = (float) _m20;
-//      _columnMajorFloatArray[ 3] = (float) _m30;
-//      
-//      _columnMajorFloatArray[ 4] = (float) _m01;
-//      _columnMajorFloatArray[ 5] = (float) _m11;
-//      _columnMajorFloatArray[ 6] = (float) _m21;
-//      _columnMajorFloatArray[ 7] = (float) _m31;
-//      
-//      _columnMajorFloatArray[ 8] = (float) _m02;
-//      _columnMajorFloatArray[ 9] = (float) _m12;
-//      _columnMajorFloatArray[10] = (float) _m22;
-//      _columnMajorFloatArray[11] = (float) _m32;
-//      
-//      _columnMajorFloatArray[12] = (float) _m03;
-//      _columnMajorFloatArray[13] = (float) _m13;
-//      _columnMajorFloatArray[14] = (float) _m23;
-//      _columnMajorFloatArray[15] = (float) _m33;
-//    }
-//    return _columnMajorFloatArray;
-//  }
-  
-  //OTHER OPERATIONS
   
   void print(const std::string& name, const ILogger* log) const;
   
