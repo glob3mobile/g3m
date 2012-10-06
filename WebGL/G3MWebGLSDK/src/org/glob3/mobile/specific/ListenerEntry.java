@@ -14,7 +14,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 
 
-class ListenerEntry {
+public final class ListenerEntry {
 
    final static String                   TAG = "ListenerEntry";
 

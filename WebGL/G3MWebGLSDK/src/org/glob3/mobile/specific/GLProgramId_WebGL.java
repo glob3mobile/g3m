@@ -7,7 +7,7 @@ import org.glob3.mobile.generated.IGLProgramId;
 import com.google.gwt.core.client.JavaScriptObject;
 
 
-public class GLProgramId_WebGL
+public final class GLProgramId_WebGL
          implements
             IGLProgramId {
 

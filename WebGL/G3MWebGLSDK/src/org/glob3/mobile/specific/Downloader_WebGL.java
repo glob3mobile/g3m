@@ -15,7 +15,7 @@ import org.glob3.mobile.generated.URL;
 import com.google.gwt.user.client.Timer;
 
 
-public class Downloader_WebGL
+public final class Downloader_WebGL
          implements
             IDownloader {
 

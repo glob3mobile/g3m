@@ -46,10 +46,14 @@ public:
                          int v) const = 0;
   
   virtual void uniformMatrix4fv(IGLUniformID* location,
-                                int count,
                                 bool transpose,
-                                const float value[]) const = 0;
-  
+                                const IFloatBuffer* buffer) const = 0;
+
+//  virtual void uniformMatrix4fv(IGLUniformID* location,
+//                                int count,
+//                                bool transpose,
+//                                const float value[]) const = 0;
+
   virtual void clearColor(float red,
                           float green,
                           float blue,

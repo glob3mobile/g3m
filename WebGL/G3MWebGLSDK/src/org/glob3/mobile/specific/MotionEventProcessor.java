@@ -19,7 +19,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 
 
-public class MotionEventProcessor {
+public final class MotionEventProcessor {
 
    final static String TAG        = "MotionEventProcessor";
 

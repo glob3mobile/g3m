@@ -52,7 +52,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 
 
-public class G3MWidget_WebGL
+public final class G3MWidget_WebGL
          extends
             Composite {
 

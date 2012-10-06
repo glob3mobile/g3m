@@ -7,7 +7,7 @@ import org.glob3.mobile.generated.IGLUniformID;
 import com.google.gwt.core.client.JavaScriptObject;
 
 
-public class GLUniformID_WebGL
+public final class GLUniformID_WebGL
          implements
             IGLUniformID {
 

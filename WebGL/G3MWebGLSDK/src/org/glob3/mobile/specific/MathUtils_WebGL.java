@@ -5,7 +5,7 @@ package org.glob3.mobile.specific;
 import org.glob3.mobile.generated.IMathUtils;
 
 
-public class MathUtils_WebGL
+public final class MathUtils_WebGL
          extends
             IMathUtils {
 

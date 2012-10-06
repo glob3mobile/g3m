@@ -11,7 +11,7 @@ import org.glob3.mobile.generated.URL;
 import com.google.gwt.core.client.JavaScriptObject;
 
 
-public class IndexedDBStorage_WebGL
+public final class IndexedDBStorage_WebGL
          implements
             IStorage {
 

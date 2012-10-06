@@ -8,7 +8,7 @@ import org.glob3.mobile.generated.TimeInterval;
 import com.google.gwt.core.client.Duration;
 
 
-public class Timer_WebGL
+public final class Timer_WebGL
          extends
             ITimer {
 

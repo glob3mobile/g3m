@@ -7,7 +7,7 @@ import org.glob3.mobile.generated.IByteBuffer;
 import com.google.gwt.core.client.JavaScriptObject;
 
 
-public class ByteBuffer_WebGL
+public final class ByteBuffer_WebGL
          extends
             IByteBuffer {
 

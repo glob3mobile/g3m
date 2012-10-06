@@ -9,7 +9,7 @@ import org.glob3.mobile.generated.IThreadUtils;
 import com.google.gwt.user.client.Timer;
 
 
-public class ThreadUtils_WebGL
+public final class ThreadUtils_WebGL
          extends
             IThreadUtils {
 

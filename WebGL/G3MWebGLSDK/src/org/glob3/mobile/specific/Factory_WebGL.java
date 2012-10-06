@@ -14,7 +14,7 @@ import org.glob3.mobile.generated.ITimer;
 import com.google.gwt.core.client.JavaScriptObject;
 
 
-public class Factory_WebGL
+public final class Factory_WebGL
          extends
             IFactory {
 

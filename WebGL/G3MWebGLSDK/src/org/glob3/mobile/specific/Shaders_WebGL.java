@@ -7,7 +7,7 @@ import org.glob3.mobile.generated.IGLProgramId;
 import com.google.gwt.core.client.JavaScriptObject;
 
 
-public class Shaders_WebGL {
+public final class Shaders_WebGL {
 
 
    private final static String    _fragmentShader = "varying mediump vec2 TextureCoordOut;"

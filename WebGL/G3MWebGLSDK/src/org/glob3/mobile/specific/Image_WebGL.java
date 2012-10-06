@@ -8,7 +8,7 @@ import org.glob3.mobile.generated.Rectangle;
 import com.google.gwt.core.client.JavaScriptObject;
 
 
-public class Image_WebGL
+public final class Image_WebGL
          extends
             IImage {
 

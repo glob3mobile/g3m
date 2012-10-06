@@ -16,7 +16,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayInteger;
 
 
-public class NativeGL_WebGL
+public final class NativeGL_WebGL
          extends
             INativeGL {
 

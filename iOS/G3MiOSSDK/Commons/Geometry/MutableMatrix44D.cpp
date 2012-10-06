@@ -12,7 +12,103 @@
 #include "MutableVector3D.hpp"
 
 #include "Vector2D.hpp"
+#include "IFloatBuffer.hpp"
+#include "IFactory.hpp"
 
+MutableMatrix44D& MutableMatrix44D::operator=(const MutableMatrix44D &m)
+{
+  if (this != &m){
+    _m00 = m._m00;
+    _m01 = m._m01;
+    _m02 = m._m02;
+    _m03 = m._m03;
+    
+    _m10 = m._m10;
+    _m11 = m._m11;
+    _m12 = m._m12;
+    _m13 = m._m13;
+    
+    _m20 = m._m20;
+    _m21 = m._m21;
+    _m22 = m._m22;
+    _m23 = m._m23;
+    
+    _m30 = m._m30;
+    _m31 = m._m31;
+    _m32 = m._m32;
+    _m33 = m._m33;
+    
+    _isValid = m._isValid;
+    
+    if (_columnMajorFloatBuffer != NULL){
+      delete _columnMajorFloatBuffer;
+      _columnMajorFloatBuffer = NULL;
+    }
+//    if (_columnMajorFloatArray != NULL){
+//      delete [] _columnMajorFloatArray;
+//      _columnMajorFloatArray = NULL;
+//    }
+  }
+  
+  return *this;
+}
+
+MutableMatrix44D::~MutableMatrix44D(){
+  if (_columnMajorFloatBuffer != NULL){
+    delete _columnMajorFloatBuffer;
+  }
+//  if (_columnMajorFloatArray != NULL){
+//    delete _columnMajorFloatArray;
+//  }
+}
+
+const IFloatBuffer* MutableMatrix44D::getColumnMajorFloatBuffer() const {
+  if (_columnMajorFloatBuffer == NULL){
+    _columnMajorFloatBuffer = IFactory::instance()->createFloatBuffer(16);
+    
+    _columnMajorFloatBuffer->put( 0, (float) _m00);
+    _columnMajorFloatBuffer->put( 1, (float) _m10);
+    _columnMajorFloatBuffer->put( 2, (float) _m20);
+    _columnMajorFloatBuffer->put( 3, (float) _m30);
+    
+    _columnMajorFloatBuffer->put( 4, (float) _m01);
+    _columnMajorFloatBuffer->put( 5, (float) _m11);
+    _columnMajorFloatBuffer->put( 6, (float) _m21);
+    _columnMajorFloatBuffer->put( 7, (float) _m31);
+    
+    _columnMajorFloatBuffer->put( 8, (float) _m02);
+    _columnMajorFloatBuffer->put( 9, (float) _m12);
+    _columnMajorFloatBuffer->put(10, (float) _m22);
+    _columnMajorFloatBuffer->put(11, (float) _m32);
+    
+    _columnMajorFloatBuffer->put(12, (float) _m03);
+    _columnMajorFloatBuffer->put(13, (float) _m13);
+    _columnMajorFloatBuffer->put(14, (float) _m23);
+    _columnMajorFloatBuffer->put(15, (float) _m33);
+    
+//    _columnMajorFloatBuffer->put( 0, (float) _m00);
+//    _columnMajorFloatBuffer->put( 1, (float) _m01);
+//    _columnMajorFloatBuffer->put( 2, (float) _m02);
+//    _columnMajorFloatBuffer->put( 3, (float) _m03);
+//    
+//    _columnMajorFloatBuffer->put( 4, (float) _m10);
+//    _columnMajorFloatBuffer->put( 5, (float) _m11);
+//    _columnMajorFloatBuffer->put( 6, (float) _m12);
+//    _columnMajorFloatBuffer->put( 7, (float) _m13);
+//    
+//    _columnMajorFloatBuffer->put( 8, (float) _m20);
+//    _columnMajorFloatBuffer->put( 9, (float) _m21);
+//    _columnMajorFloatBuffer->put(10, (float) _m22);
+//    _columnMajorFloatBuffer->put(11, (float) _m23);
+//    
+//    _columnMajorFloatBuffer->put(12, (float) _m30);
+//    _columnMajorFloatBuffer->put(13, (float) _m31);
+//    _columnMajorFloatBuffer->put(14, (float) _m32);
+//    _columnMajorFloatBuffer->put(15, (float) _m33);
+
+  }
+  return _columnMajorFloatBuffer;
+}
 
 MutableMatrix44D MutableMatrix44D::multiply(const MutableMatrix44D &that) const{
   double that00 = that._m00;
@@ -85,11 +181,11 @@ MutableMatrix44D MutableMatrix44D::createProjectionMatrix(double left, double ri
 }
 
 /*MutableMatrix44D MutableMatrix44D::transposed() const {
-  return MutableMatrix44D(_m00, _m01, _m02, _m03,
-                          _m10, _m11, _m12, _m13,
-                          _m20, _m21, _m22, _m23,
-                          _m30, _m31, _m32, _m33);
-}*/
+ return MutableMatrix44D(_m00, _m01, _m02, _m03,
+ _m10, _m11, _m12, _m13,
+ _m20, _m21, _m22, _m23,
+ _m30, _m31, _m32, _m33);
+ }*/
 
 MutableMatrix44D MutableMatrix44D::inversed() const {
   

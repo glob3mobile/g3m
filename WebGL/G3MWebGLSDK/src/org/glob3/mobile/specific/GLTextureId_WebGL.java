@@ -7,7 +7,7 @@ import org.glob3.mobile.generated.IGLTextureId;
 import com.google.gwt.core.client.JavaScriptObject;
 
 
-public class GLTextureId_WebGL
+public final class GLTextureId_WebGL
          implements
             IGLTextureId {
 

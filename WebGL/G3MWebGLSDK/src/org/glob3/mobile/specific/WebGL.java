@@ -1,3 +1,5 @@
+
+
 package org.glob3.mobile.specific;
 
 import java.util.List;
@@ -7,15 +9,17 @@ import com.google.gwt.core.client.JsArray;
 import com.google.gwt.core.client.JsArrayInteger;
 import com.google.gwt.core.client.JsArrayNumber;
 
-public class WebGL {
 
-	int numIndices = 0;
-	int[] indices;
+public final class WebGL {
 
-	public static List<JavaScriptObject> programList;
+   int                                  numIndices = 0;
+   int[]                                indices;
 
-	public static native void jsInitGL(JavaScriptObject canvas) /*-{
-		
+   public static List<JavaScriptObject> programList;
+
+
+   public static native void jsInitGL(JavaScriptObject canvas) /*-{
+
 		$wnd.gl = canvas.getContext("experimental-webgl");
 		$wnd.gl.viewportWidth = canvas.width;
 		$wnd.gl.viewportHeight = canvas.height;
@@ -27,9 +31,10 @@ public class WebGL {
 		$wnd.gl.clearColor(0.6, 0.6, 0.6, 1.0);
 		$wnd.gl.enable($wnd.gl.DEPTH_TEST);
 		$wnd.gl.enable($wnd.gl.CULL_FACE);
-	}-*/;
+   }-*/;
 
-	public static native void jsLoadWebGlUtils() /*-{
+
+   public static native void jsLoadWebGlUtils() /*-{
 		$wnd.WebGLUtils = function() {
 			var makeFailHTML = function(msg) {
 				return ''
@@ -113,10 +118,11 @@ public class WebGL {
 						$wnd.setTimeout(callback, 1000 / 60);
 					};
 		})();
-	}-*/;
+   }-*/;
 
-	// Enables matrix manipulation functions
-	public static native void jsLoadGlMatrix() /*-{
+
+   // Enables matrix manipulation functions
+   public static native void jsLoadGlMatrix() /*-{
 		var glMatrixArrayType = typeof Float32Array != "undefined" ? Float32Array
 				: typeof WebGLFloatArray != "undefined" ? WebGLFloatArray
 						: Array;
@@ -1019,10 +1025,11 @@ public class WebGL {
 		$wnd.quat4.str = function(a) {
 			return "[" + a[0] + ", " + a[1] + ", " + a[2] + ", " + a[3] + "]"
 		};
-	}-*/;
+   }-*/;
 
-	// Shader code
-	public static native void jsLoadShaderCode() /*-{
+
+   // Shader code
+   public static native void jsLoadShaderCode() /*-{
 		$wnd.fragmentShader = "//																								\n"
 				+ "//  Shader.fsh																					\n"
 				+ "//  Prueba Opengl iPad																			\n"
@@ -1095,11 +1102,12 @@ public class WebGL {
 				+ "   }                                                                                                                                                                                          \n"
 				+ "}																								\n";
 
-	}-*/;
+   }-*/;
 
-	// Shader compiler function
-	public static native JavaScriptObject jsCompileShader(String shaderContent,
-			String shaderType) /*-{
+
+   // Shader compiler function
+   public static native JavaScriptObject jsCompileShader(String shaderContent,
+                                                         String shaderType) /*-{
 
 		var shader;
 		if (shaderType == "x-shader/x-fragment") {
@@ -1117,12 +1125,13 @@ public class WebGL {
 			alert("Error: " + $wnd.gl.getShaderInfoLog(shader));
 			return null;
 		}
-		
-		return shader;
-	}-*/;
 
-	// Global variables loading
-	public static native void loadGlobalVars() /*-{
+		return shader;
+   }-*/;
+
+
+   // Global variables loading
+   public static native void loadGlobalVars() /*-{
 		$wnd.shaderProgram = null;
 		$wnd.mvMatrix = $wnd.mat4.create();
 		$wnd.mat4.identity($wnd.mvMatrix);
@@ -1140,12 +1149,13 @@ public class WebGL {
 
 		$wnd.vertexIndexBuffer = null; //Indices for drawElements 
 
-	}-*/;
+   }-*/;
 
-	// Program and shader compiling, uniform variables, attributes and buffers
-	// creation
-	public static native JavaScriptObject jsCreateNewProgram(
-			String fragmentShaderId, String vertexShaderId) /*-{
+
+   // Program and shader compiling, uniform variables, attributes and buffers
+   // creation
+   public static native JavaScriptObject jsCreateNewProgram(String fragmentShaderId,
+                                                            String vertexShaderId) /*-{
 
 		@org.glob3.mobile.specific.WebGL::jsLoadShaderCode()();
 		var fragmentShader = @org.glob3.mobile.specific.WebGL::jsCompileShader(Ljava/lang/String;Ljava/lang/String;)($wnd.fragmentShader,"x-shader/x-fragment");
@@ -1200,84 +1210,102 @@ public class WebGL {
 		$wnd.vertexBuffer = $wnd.gl.createBuffer();
 		$wnd.texBuffer = $wnd.gl.createBuffer();
 		$wnd.vertexIndexBuffer = $wnd.gl.createBuffer();
-		
-		
+
 		console.log("PROGRAM CREATED ");
 		console.log(newProgram);
 
 		return newProgram;
 
-	}-*/;
+   }-*/;
 
-	public static native void jsEnableVertices() /*-{
+
+   public static native void jsEnableVertices() /*-{
 		$wnd.gl.enableVertexAttribArray($wnd.shaderProgram.Position);
-	}-*/;
+   }-*/;
 
-	public static native void jsEnableTextures()/*-{
+
+   public static native void jsEnableTextures()/*-{
 		$wnd.gl.enableVertexAttribArray($wnd.shaderProgram.textureCoord);
-	}-*/;
+   }-*/;
 
-	public static native void jsEnable3D() /*-{
+
+   public static native void jsEnable3D() /*-{
 		$wnd.gl.uniform1i($wnd.shaderProgram.Enable3D, 1);
-	}-*/;
+   }-*/;
 
-	public static native void jsDisable3D() /*-{
+
+   public static native void jsDisable3D() /*-{
 		$wnd.gl.uniform1i($wnd.shaderProgram.Enable3D, 0);
-	}-*/;
+   }-*/;
 
-	public static native void jsEnableTexture2D() /*-{
+
+   public static native void jsEnableTexture2D() /*-{
 		$wnd.gl.uniform1i($wnd.shaderProgram.EnableTexture, 1);
-	}-*/;
+   }-*/;
 
-	public static native void jsDisableTexture2D() /*-{
+
+   public static native void jsDisableTexture2D() /*-{
 		$wnd.gl.uniform1i($wnd.shaderProgram.EnableTexture, 0);
-	}-*/;
+   }-*/;
 
-	public static native void jsDisableVertices() /*-{
+
+   public static native void jsDisableVertices() /*-{
 		$wnd.gl.disableVertexAttribArray($wnd.shaderProgram.Position);
-	}-*/;
+   }-*/;
 
-	public static native void jsDisableTextures() /*-{
+
+   public static native void jsDisableTextures() /*-{
 		$wnd.gl.disableVertexAttribArray($wnd.shaderProgram.textureCoord);
-	}-*/;
+   }-*/;
 
-	public static native void jsClearScreen(float r, float g, float b) /*-{
+
+   public static native void jsClearScreen(float r,
+                                           float g,
+                                           float b) /*-{
 		$wnd.gl.clearColor(r, g, b, 1);
 		$wnd.gl.clear($wnd.gl.COLOR_BUFFER_BIT | $wnd.gl.DEPTH_BUFFER_BIT);
-	}-*/;
+   }-*/;
 
-	public static native void jsColor(float r, float g, float b) /*-{
+
+   public static native void jsColor(float r,
+                                     float g,
+                                     float b) /*-{
 		$wnd.gl.uniform4f($wnd.shaderProgram.FlatColor, r, g, b, 1);
-	}-*/;
-	
-	public static native void jsPushMatrix() /*-{
+   }-*/;
+
+
+   public static native void jsPushMatrix() /*-{
 		var copy = $wnd.mat4.create();
 		$wnd.mat4.set($wnd.mvMatrix, copy);
 		$wnd.mvMatrixStack.push(copy);
-	}-*/;
+   }-*/;
 
-	public static native void jsPopMatrix() /*-{
+
+   public static native void jsPopMatrix() /*-{
 		if ($wnd.mvMatrixStack.length == 0) {
 			throw "Invalid popMatrix!";
 		}
 		$wnd.mvMatrix = $wnd.mvMatrixStack.pop();
 		$wnd.gl.uniformMatrix4fv($wnd.shaderProgram.Modelview, false,
 				$wnd.mvMatrix);
-	}-*/;
+   }-*/;
 
-	public static native boolean jsIsTexture(int texture) /*-{
+
+   public static native boolean jsIsTexture(int texture) /*-{
 		if (texture < 1 || texture > 32)
 			return false;
 		var glTexture = $wnd.textureStack[texture];
 		return $wnd.gl.isTexture(glTexture);
-	}-*/;
+   }-*/;
 
-	public static native void jsLoadMatrixf(JsArrayNumber matrix) /*-{
+
+   public static native void jsLoadMatrixf(JsArrayNumber matrix) /*-{
 		$wnd.gl.uniformMatrix4fv($wnd.shaderProgram.Modelview, false, matrix);
 		$wnd.mat4.set(matrix, $wnd.mvMatrix);
-	}-*/;
+   }-*/;
 
-	public static native void jsBindTexture(int idTexture) /*-{
+
+   public static native void jsBindTexture(int idTexture) /*-{
 
 		//Version texturas simples:
 		//var texture = $wnd.textureStack[idTexture - 1];
@@ -1316,66 +1344,83 @@ public class WebGL {
 			//$wnd.gl.texParameteri($wnd.gl.TEXTURE_2D, $wnd.gl.TEXTURE_MIN_FILTER, $wnd.gl.NEAREST);
 		}
 
-	}-*/;
+   }-*/;
 
-	public static native void jsVertexPointer(int size, int stride,
-			JsArrayNumber vertex) /*-{
+
+   public static native void jsVertexPointer(int size,
+                                             int stride,
+                                             JsArrayNumber vertex) /*-{
 		$wnd.gl.bindBuffer($wnd.gl.ARRAY_BUFFER, $wnd.vertexBuffer);
 		$wnd.gl.bufferData($wnd.gl.ARRAY_BUFFER, new Float32Array(vertex),
 				$wnd.gl.STATIC_DRAW);
 		$wnd.gl.vertexAttribPointer($wnd.shaderProgram.Position, size,
 				$wnd.gl.FLOAT, false, stride, 0);
-	}-*/;
+   }-*/;
 
-	public static native void jsTexCoordPointer(int size, int stride,
-			JsArrayNumber texcoord) /*-{
+
+   public static native void jsTexCoordPointer(int size,
+                                               int stride,
+                                               JsArrayNumber texcoord) /*-{
 		$wnd.gl.bindBuffer($wnd.gl.ARRAY_BUFFER, $wnd.texBuffer);
 		$wnd.gl.bufferData($wnd.gl.ARRAY_BUFFER, new Float32Array(texcoord),
 				$wnd.gl.STATIC_DRAW);
 		$wnd.gl.bindBuffer($wnd.gl.ARRAY_BUFFER, $wnd.texBuffer);
 		$wnd.gl.vertexAttribPointer($wnd.shaderProgram.textureCoord, size,
 				$wnd.gl.FLOAT, false, stride, 0);
-	}-*/;
+   }-*/;
 
-	public static native void jsDrawTriangleFan(int first, int count) /*-{
+
+   public static native void jsDrawTriangleFan(int first,
+                                               int count) /*-{
 		$wnd.gl.drawArrays($wnd.gl.TRIANGLE_FAN, first, count);
-	}-*/;
+   }-*/;
 
-	public static native void jsDrawTriangleStrip(int first, int count) /*-{
+
+   public static native void jsDrawTriangleStrip(int first,
+                                                 int count) /*-{
 		$wnd.gl.drawArrays($wnd.gl.TRIANGLE_STRIP, first, count);
-	}-*/;
+   }-*/;
 
-	public static native float[] jsSetProjection(JsArrayNumber projectionMatrix) /*-{
+
+   public static native float[] jsSetProjection(JsArrayNumber projectionMatrix) /*-{
 		$wnd.gl.uniformMatrix4fv($wnd.shaderProgram.Projection, false,
 				projectionMatrix);
-	}-*/;
+   }-*/;
 
-	public static native void jsUseProgram() /*-{
+
+   public static native void jsUseProgram() /*-{
 		$wnd.gl.useProgram($wnd.shaderProgram);
-	}-*/;
+   }-*/;
 
-	public static native void jsTranslate(float x, float y, float z) /*-{
+
+   public static native void jsTranslate(float x,
+                                         float y,
+                                         float z) /*-{
 		$wnd.mat4.translate($wnd.mvMatrix, [ x, y, z ]);
 		$wnd.gl.uniformMatrix4fv($wnd.shaderProgram.Modelview, false,
 				$wnd.mvMatrix);
-	}-*/;
-	
-	public static native void jsMultiplyModelViewMatrix(JsArrayNumber matrix) /*-{
+   }-*/;
+
+
+   public static native void jsMultiplyModelViewMatrix(JsArrayNumber matrix) /*-{
 		var mvCopy = $wnd.mvMatrix;
 		$wnd.mat4.multiply(mvCopy, matrix, $wnd.mvMatrix);
-		$wnd.gl.uniformMatrix4fv($wnd.shaderProgram.Modelview, false, $wnd.mvMatrix);
-	}-*/;
-
-	public static native void jsIdentity() /*-{
-		$wnd.mat4.identity($wnd.mvMatrix);
-		
-		console.log($wnd.shaderProgram.Modelview);
-		
 		$wnd.gl.uniformMatrix4fv($wnd.shaderProgram.Modelview, false,
 				$wnd.mvMatrix);
-	}-*/;
+   }-*/;
 
-	public static native void jsDeleteTextures(int n) /*-{
+
+   public static native void jsIdentity() /*-{
+		$wnd.mat4.identity($wnd.mvMatrix);
+
+		console.log($wnd.shaderProgram.Modelview);
+
+		$wnd.gl.uniformMatrix4fv($wnd.shaderProgram.Modelview, false,
+				$wnd.mvMatrix);
+   }-*/;
+
+
+   public static native void jsDeleteTextures(int n) /*-{
 		var texture = $wnd.textureStack[n];
 		for (i = 0; i < texture.length; i++)
 			$wnd.gl.deleteTexture(texture[i]);
@@ -1384,14 +1429,16 @@ public class WebGL {
 		//texture.image = null;
 		$wnd.textureStack[n] = null;
 		$wnd.numFreeTexIds++;
-	}-*/;
+   }-*/;
 
-	public static native int jsGetNumFreeIdTextures() /*-{
+
+   public static native int jsGetNumFreeIdTextures() /*-{
 		return $wnd.numFreeTexIds;
-	}-*/;
+   }-*/;
 
-	public static native void jsDrawIndexedMesh(int num_Indices,
-			JsArrayInteger jsArray) /*-{
+
+   public static native void jsDrawIndexedMesh(int num_Indices,
+                                               JsArrayInteger jsArray) /*-{
 		$wnd.gl
 				.bindBuffer($wnd.gl.ELEMENT_ARRAY_BUFFER,
 						$wnd.vertexIndexBuffer);
@@ -1402,10 +1449,14 @@ public class WebGL {
 						$wnd.vertexIndexBuffer);
 		$wnd.gl.drawElements($wnd.gl.TRIANGLE_STRIP, num_Indices,
 				$wnd.gl.UNSIGNED_BYTE, 0);
-	}-*/;
+   }-*/;
 
-	public static native void jsDrawBillBoard(int tex, float x, float y,
-			float z, float ratio) /*-{
+
+   public static native void jsDrawBillBoard(int tex,
+                                             float x,
+                                             float y,
+                                             float z,
+                                             float ratio) /*-{
 		$wnd.gl.uniform1i($wnd.shaderProgram.BillBoard, 1);
 		$wnd.gl.uniform1f($wnd.shaderProgram.ViewPortRatio, ratio);
 
@@ -1437,9 +1488,10 @@ public class WebGL {
 
 		$wnd.gl.uniform1i($wnd.shaderProgram.BillBoard, 0);
 
-	}-*/;
+   }-*/;
 
-	public static native int jsUploadTexture(JavaScriptObject texture) /*-{
+
+   public static native int jsUploadTexture(JavaScriptObject texture) /*-{
 		debugger;
 		var i = 0, idTexture = 0;
 		var assignedPosition = false;
@@ -1458,22 +1510,26 @@ public class WebGL {
 		var minFilter = $wnd.gl.LINEAR;
 		$wnd.gl.bindTexture($wnd.gl.TEXTURE_2D, texture);
 
-		$wnd.gl.texImage2D($wnd.gl.TEXTURE_2D, 0, $wnd.gl.RGBA, $wnd.gl.RGBA, $wnd.gl.UNSIGNED_BYTE, texture.image);
+		$wnd.gl.texImage2D($wnd.gl.TEXTURE_2D, 0, $wnd.gl.RGBA, $wnd.gl.RGBA,
+				$wnd.gl.UNSIGNED_BYTE, texture.image);
 
-		$wnd.gl.texParameteri($wnd.gl.TEXTURE_2D, $wnd.gl.TEXTURE_MAG_FILTER, magFilter);
-		$wnd.gl.texParameteri($wnd.gl.TEXTURE_2D, $wnd.gl.TEXTURE_MIN_FILTER, minFilter);
-		$wnd.gl.texParameteri($wnd.gl.TEXTURE_2D, $wnd.gl.TEXTURE_WRAP_S, $wnd.gl.CLAMP_TO_EDGE);
-		$wnd.gl.texParameteri($wnd.gl.TEXTURE_2D, $wnd.gl.TEXTURE_WRAP_T, $wnd.gl.CLAMP_TO_EDGE);
+		$wnd.gl.texParameteri($wnd.gl.TEXTURE_2D, $wnd.gl.TEXTURE_MAG_FILTER,
+				magFilter);
+		$wnd.gl.texParameteri($wnd.gl.TEXTURE_2D, $wnd.gl.TEXTURE_MIN_FILTER,
+				minFilter);
+		$wnd.gl.texParameteri($wnd.gl.TEXTURE_2D, $wnd.gl.TEXTURE_WRAP_S,
+				$wnd.gl.CLAMP_TO_EDGE);
+		$wnd.gl.texParameteri($wnd.gl.TEXTURE_2D, $wnd.gl.TEXTURE_WRAP_T,
+				$wnd.gl.CLAMP_TO_EDGE);
 		$wnd.gl.generateMipmap($wnd.gl.TEXTURE_2D);
 		$wnd.gl.bindTexture($wnd.gl.TEXTURE_2D, null);
 
 		return idTexture;
 
-	}-*/;
-	
+   }-*/;
 
-	public static native int jsUploadMultipleTextures(
-			JsArray<JavaScriptObject> images) /*-{
+
+   public static native int jsUploadMultipleTextures(JsArray<JavaScriptObject> images) /*-{
 		var i = 0, idTexture = 0;
 		var assignedPosition = false;
 
@@ -1540,9 +1596,10 @@ public class WebGL {
 		}
 		return idTexture;
 
-	}-*/;
+   }-*/;
 
-	public static native int jsUploadBillboardTexture(JavaScriptObject images) /*-{
+
+   public static native int jsUploadBillboardTexture(JavaScriptObject images) /*-{
 		var i = 0, idTexture = 0;
 		var assignedPosition = false;
 
@@ -1584,10 +1641,11 @@ public class WebGL {
 
 		return idTexture;
 
-	}-*/;
+   }-*/;
 
-	public static native void jsDrawLines(int num_Indices,
-			JsArrayInteger jsArray) /*-{
+
+   public static native void jsDrawLines(int num_Indices,
+                                         JsArrayInteger jsArray) /*-{
 		$wnd.gl
 				.bindBuffer($wnd.gl.ELEMENT_ARRAY_BUFFER,
 						$wnd.vertexIndexBuffer);
@@ -1598,10 +1656,11 @@ public class WebGL {
 						$wnd.vertexIndexBuffer);
 		$wnd.gl.drawElements($wnd.gl.LINES, num_Indices, $wnd.gl.UNSIGNED_BYTE,
 				0);
-	}-*/;
+   }-*/;
 
-	public static native void jsDrawLineLoop(int num_Indices,
-			JsArrayInteger jsArray) /*-{
+
+   public static native void jsDrawLineLoop(int num_Indices,
+                                            JsArrayInteger jsArray) /*-{
 		$wnd.gl
 				.bindBuffer($wnd.gl.ELEMENT_ARRAY_BUFFER,
 						$wnd.vertexIndexBuffer);
@@ -1612,19 +1671,23 @@ public class WebGL {
 						$wnd.vertexIndexBuffer);
 		$wnd.gl.drawElements($wnd.gl.LINE_LOOP, num_Indices,
 				$wnd.gl.UNSIGNED_BYTE, 0);
-	}-*/;
+   }-*/;
 
-	public static native void jsEnablePolygonOffset(float factor, float units) /*-{
+
+   public static native void jsEnablePolygonOffset(float factor,
+                                                   float units) /*-{
 		$wnd.gl.enable($wnd.gl.POLYGON_OFFSET_FILL);
 		$wnd.gl.polygonOffset(factor, units);
-	}-*/;
+   }-*/;
 
-	public static native void jsDisablePolygonOffset() /*-{
+
+   public static native void jsDisablePolygonOffset() /*-{
 		$wnd.gl.disable($wnd.gl.POLYGON_OFFSET_FILL);
-	}-*/;
+   }-*/;
 
-	public static native void jsLineWidth(float width) /*-{
+
+   public static native void jsLineWidth(float width) /*-{
 		$wnd.gl.lineWidth(width);
-	}-*/;
+   }-*/;
 
 }

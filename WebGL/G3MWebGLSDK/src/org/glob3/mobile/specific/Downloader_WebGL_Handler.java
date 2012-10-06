@@ -16,7 +16,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 
 
-public class Downloader_WebGL_Handler {
+public final class Downloader_WebGL_Handler {
 
    final static String                    TAG = "Downloader_WebGL_Handler";
 

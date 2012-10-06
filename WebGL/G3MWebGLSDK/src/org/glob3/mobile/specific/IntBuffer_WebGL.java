@@ -7,7 +7,7 @@ import org.glob3.mobile.generated.IIntBuffer;
 import com.google.gwt.core.client.JavaScriptObject;
 
 
-public class IntBuffer_WebGL
+public final class IntBuffer_WebGL
          extends
             IIntBuffer {
 
