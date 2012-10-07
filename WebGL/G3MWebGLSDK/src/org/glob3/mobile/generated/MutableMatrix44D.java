@@ -55,7 +55,6 @@ public class MutableMatrix44D
   private double _m33;
 
   private IFloatBuffer _columnMajorFloatBuffer;
-//  mutable float* _columnMajorFloatArray;
 
   private boolean _isValid;
 
@@ -84,14 +83,12 @@ public class MutableMatrix44D
 	_m33 = m33;
 
 	_columnMajorFloatBuffer = null;
-//    _columnMajorFloatArray = NULL;
   }
 
   private MutableMatrix44D(boolean isValid)
   {
 	  _isValid = isValid;
-   _columnMajorFloatBuffer = null;
-//    _columnMajorFloatArray = NULL;
+	_columnMajorFloatBuffer = null;
   }
 
 
@@ -120,7 +117,6 @@ public class MutableMatrix44D
 	_m33 = 0.0;
 
 	_columnMajorFloatBuffer = null;
-//    _columnMajorFloatArray = NULL;
   }
 
   public MutableMatrix44D(MutableMatrix44D m)
@@ -147,36 +143,35 @@ public class MutableMatrix44D
 	_m33 = m._m33;
 
 	_columnMajorFloatBuffer = null;
-//    _columnMajorFloatArray = NULL;
   }
 
 //C++ TO JAVA CONVERTER NOTE: This 'copyFrom' method was converted from the original C++ copy assignment operator:
-//ORIGINAL LINE: MutableMatrix44D& operator =(const MutableMatrix44D &m)
-  public final MutableMatrix44D copyFrom(MutableMatrix44D m)
+//ORIGINAL LINE: MutableMatrix44D& operator =(const MutableMatrix44D &that)
+  public final MutableMatrix44D copyFrom(MutableMatrix44D that)
   {
-	if (this != m)
+	if (this != that)
 	{
-	  _m00 = m._m00;
-	  _m01 = m._m01;
-	  _m02 = m._m02;
-	  _m03 = m._m03;
+	  _m00 = that._m00;
+	  _m01 = that._m01;
+	  _m02 = that._m02;
+	  _m03 = that._m03;
   
-	  _m10 = m._m10;
-	  _m11 = m._m11;
-	  _m12 = m._m12;
-	  _m13 = m._m13;
+	  _m10 = that._m10;
+	  _m11 = that._m11;
+	  _m12 = that._m12;
+	  _m13 = that._m13;
   
-	  _m20 = m._m20;
-	  _m21 = m._m21;
-	  _m22 = m._m22;
-	  _m23 = m._m23;
+	  _m20 = that._m20;
+	  _m21 = that._m21;
+	  _m22 = that._m22;
+	  _m23 = that._m23;
   
-	  _m30 = m._m30;
-	  _m31 = m._m31;
-	  _m32 = m._m32;
-	  _m33 = m._m33;
+	  _m30 = that._m30;
+	  _m31 = that._m31;
+	  _m32 = that._m32;
+	  _m33 = that._m33;
   
-	  _isValid = m._isValid;
+	  _isValid = that._isValid;
   
 	  if (_columnMajorFloatBuffer != null)
 	  {
@@ -184,10 +179,6 @@ public class MutableMatrix44D
 			_columnMajorFloatBuffer.dispose();
 		_columnMajorFloatBuffer = null;
 	  }
-  //    if (_columnMajorFloatArray != NULL){
-  //      delete [] _columnMajorFloatArray;
-  //      _columnMajorFloatArray = NULL;
-  //    }
 	}
   
 	return this;
@@ -200,9 +191,6 @@ public class MutableMatrix44D
 	  if (_columnMajorFloatBuffer != null)
 		  _columnMajorFloatBuffer.dispose();
 	}
-  //  if (_columnMajorFloatArray != NULL){
-  //    delete _columnMajorFloatArray;
-  //  }
   }
 
   public static MutableMatrix44D identity()
@@ -229,46 +217,46 @@ public class MutableMatrix44D
 //ORIGINAL LINE: MutableMatrix44D multiply(const MutableMatrix44D &that) const
   public final MutableMatrix44D multiply(MutableMatrix44D that)
   {
-	double that00 = that._m00;
-	double that10 = that._m10;
-	double that20 = that._m20;
-	double that30 = that._m30;
+	final double that00 = that._m00;
+	final double that10 = that._m10;
+	final double that20 = that._m20;
+	final double that30 = that._m30;
   
-	double that01 = that._m01;
-	double that11 = that._m11;
-	double that21 = that._m21;
-	double that31 = that._m31;
+	final double that01 = that._m01;
+	final double that11 = that._m11;
+	final double that21 = that._m21;
+	final double that31 = that._m31;
   
-	double that02 = that._m02;
-	double that12 = that._m12;
-	double that22 = that._m22;
-	double that32 = that._m32;
+	final double that02 = that._m02;
+	final double that12 = that._m12;
+	final double that22 = that._m22;
+	final double that32 = that._m32;
   
-	double that03 = that._m03;
-	double that13 = that._m13;
-	double that23 = that._m23;
-	double that33 = that._m33;
+	final double that03 = that._m03;
+	final double that13 = that._m13;
+	final double that23 = that._m23;
+	final double that33 = that._m33;
   
 	//Rows of this X Columns of that
-	double m00 = (_m00 * that00) + (_m01 * that10) + (_m02 * that20) + (_m03 * that30);
-	double m01 = (_m00 * that01) + (_m01 * that11) + (_m02 * that21) + (_m03 * that31);
-	double m02 = (_m00 * that02) + (_m01 * that12) + (_m02 * that22) + (_m03 * that32);
-	double m03 = (_m00 * that03) + (_m01 * that13) + (_m02 * that23) + (_m03 * that33);
+	final double m00 = (_m00 * that00) + (_m01 * that10) + (_m02 * that20) + (_m03 * that30);
+	final double m01 = (_m00 * that01) + (_m01 * that11) + (_m02 * that21) + (_m03 * that31);
+	final double m02 = (_m00 * that02) + (_m01 * that12) + (_m02 * that22) + (_m03 * that32);
+	final double m03 = (_m00 * that03) + (_m01 * that13) + (_m02 * that23) + (_m03 * that33);
   
-	double m10 = (_m10 * that00) + (_m11 * that10) + (_m12 * that20) + (_m13 * that30);
-	double m11 = (_m10 * that01) + (_m11 * that11) + (_m12 * that21) + (_m13 * that31);
-	double m12 = (_m10 * that02) + (_m11 * that12) + (_m12 * that22) + (_m13 * that32);
-	double m13 = (_m10 * that03) + (_m11 * that13) + (_m12 * that23) + (_m13 * that33);
+	final double m10 = (_m10 * that00) + (_m11 * that10) + (_m12 * that20) + (_m13 * that30);
+	final double m11 = (_m10 * that01) + (_m11 * that11) + (_m12 * that21) + (_m13 * that31);
+	final double m12 = (_m10 * that02) + (_m11 * that12) + (_m12 * that22) + (_m13 * that32);
+	final double m13 = (_m10 * that03) + (_m11 * that13) + (_m12 * that23) + (_m13 * that33);
   
-	double m20 = (_m20 * that00) + (_m21 * that10) + (_m22 * that20) + (_m23 * that30);
-	double m21 = (_m20 * that01) + (_m21 * that11) + (_m22 * that21) + (_m23 * that31);
-	double m22 = (_m20 * that02) + (_m21 * that12) + (_m22 * that22) + (_m23 * that32);
-	double m23 = (_m20 * that03) + (_m21 * that13) + (_m22 * that23) + (_m23 * that33);
+	final double m20 = (_m20 * that00) + (_m21 * that10) + (_m22 * that20) + (_m23 * that30);
+	final double m21 = (_m20 * that01) + (_m21 * that11) + (_m22 * that21) + (_m23 * that31);
+	final double m22 = (_m20 * that02) + (_m21 * that12) + (_m22 * that22) + (_m23 * that32);
+	final double m23 = (_m20 * that03) + (_m21 * that13) + (_m22 * that23) + (_m23 * that33);
   
-	double m30 = (_m30 * that00) + (_m31 * that10) + (_m32 * that20) + (_m33 * that30);
-	double m31 = (_m30 * that01) + (_m31 * that11) + (_m32 * that21) + (_m33 * that31);
-	double m32 = (_m30 * that02) + (_m31 * that12) + (_m32 * that22) + (_m33 * that32);
-	double m33 = (_m30 * that03) + (_m31 * that13) + (_m32 * that23) + (_m33 * that33);
+	final double m30 = (_m30 * that00) + (_m31 * that10) + (_m32 * that20) + (_m33 * that30);
+	final double m31 = (_m30 * that01) + (_m31 * that11) + (_m32 * that21) + (_m33 * that31);
+	final double m32 = (_m30 * that02) + (_m31 * that12) + (_m32 * that22) + (_m33 * that32);
+	final double m33 = (_m30 * that03) + (_m31 * that13) + (_m32 * that23) + (_m33 * that33);
   
 	return new MutableMatrix44D(m00, m10, m20, m30, m01, m11, m21, m31, m02, m12, m22, m32, m03, m13, m23, m33);
   }
@@ -285,44 +273,43 @@ public class MutableMatrix44D
 //ORIGINAL LINE: MutableMatrix44D inversed() const
   public final MutableMatrix44D inversed()
   {
+	final double a0 = (_m00 * _m11) - (_m01 * _m10);
+	final double a1 = (_m00 * _m12) - (_m02 * _m10);
+	final double a2 = (_m00 * _m13) - (_m03 * _m10);
+	final double a3 = (_m01 * _m12) - (_m02 * _m11);
+	final double a4 = (_m01 * _m13) - (_m03 * _m11);
+	final double a5 = (_m02 * _m13) - (_m03 * _m12);
   
-	double a0 = (_m00 * _m11) - (_m01 * _m10);
-	double a1 = (_m00 * _m12) - (_m02 * _m10);
-	double a2 = (_m00 * _m13) - (_m03 * _m10);
-	double a3 = (_m01 * _m12) - (_m02 * _m11);
-	double a4 = (_m01 * _m13) - (_m03 * _m11);
-	double a5 = (_m02 * _m13) - (_m03 * _m12);
+	final double b0 = (_m20 * _m31) - (_m21 * _m30);
+	final double b1 = (_m20 * _m32) - (_m22 * _m30);
+	final double b2 = (_m20 * _m33) - (_m23 * _m30);
+	final double b3 = (_m21 * _m32) - (_m22 * _m31);
+	final double b4 = (_m21 * _m33) - (_m23 * _m31);
+	final double b5 = (_m22 * _m33) - (_m23 * _m32);
   
-	double b0 = (_m20 * _m31) - (_m21 * _m30);
-	double b1 = (_m20 * _m32) - (_m22 * _m30);
-	double b2 = (_m20 * _m33) - (_m23 * _m30);
-	double b3 = (_m21 * _m32) - (_m22 * _m31);
-	double b4 = (_m21 * _m33) - (_m23 * _m31);
-	double b5 = (_m22 * _m33) - (_m23 * _m32);
-  
-	double determinant = ((((a0 * b5) - (a1 * b4)) + (a2 * b3) + (a3 * b2)) - (a4 * b1)) + (a5 * b0);
+	final double determinant = ((((a0 * b5) - (a1 * b4)) + (a2 * b3) + (a3 * b2)) - (a4 * b1)) + (a5 * b0);
   
 	if (determinant == 0.0)
 	{
 	  return MutableMatrix44D.invalid();
 	}
   
-	double m00 = (((+_m11 * b5) - (_m12 * b4)) + (_m13 * b3)) / determinant;
-	double m10 = (((-_m10 * b5) + (_m12 * b2)) - (_m13 * b1)) / determinant;
-	double m20 = (((+_m10 * b4) - (_m11 * b2)) + (_m13 * b0)) / determinant;
-	double m30 = (((-_m10 * b3) + (_m11 * b1)) - (_m12 * b0)) / determinant;
-	double m01 = (((-_m01 * b5) + (_m02 * b4)) - (_m03 * b3)) / determinant;
-	double m11 = (((+_m00 * b5) - (_m02 * b2)) + (_m03 * b1)) / determinant;
-	double m21 = (((-_m00 * b4) + (_m01 * b2)) - (_m03 * b0)) / determinant;
-	double m31 = (((+_m00 * b3) - (_m01 * b1)) + (_m02 * b0)) / determinant;
-	double m02 = (((+_m31 * a5) - (_m32 * a4)) + (_m33 * a3)) / determinant;
-	double m12 = (((-_m30 * a5) + (_m32 * a2)) - (_m33 * a1)) / determinant;
-	double m22 = (((+_m30 * a4) - (_m31 * a2)) + (_m33 * a0)) / determinant;
-	double m32 = (((-_m30 * a3) + (_m31 * a1)) - (_m32 * a0)) / determinant;
-	double m03 = (((-_m21 * a5) + (_m22 * a4)) - (_m23 * a3)) / determinant;
-	double m13 = (((+_m20 * a5) - (_m22 * a2)) + (_m23 * a1)) / determinant;
-	double m23 = (((-_m20 * a4) + (_m21 * a2)) - (_m23 * a0)) / determinant;
-	double m33 = (((+_m20 * a3) - (_m21 * a1)) + (_m22 * a0)) / determinant;
+	final double m00 = (((+_m11 * b5) - (_m12 * b4)) + (_m13 * b3)) / determinant;
+	final double m10 = (((-_m10 * b5) + (_m12 * b2)) - (_m13 * b1)) / determinant;
+	final double m20 = (((+_m10 * b4) - (_m11 * b2)) + (_m13 * b0)) / determinant;
+	final double m30 = (((-_m10 * b3) + (_m11 * b1)) - (_m12 * b0)) / determinant;
+	final double m01 = (((-_m01 * b5) + (_m02 * b4)) - (_m03 * b3)) / determinant;
+	final double m11 = (((+_m00 * b5) - (_m02 * b2)) + (_m03 * b1)) / determinant;
+	final double m21 = (((-_m00 * b4) + (_m01 * b2)) - (_m03 * b0)) / determinant;
+	final double m31 = (((+_m00 * b3) - (_m01 * b1)) + (_m02 * b0)) / determinant;
+	final double m02 = (((+_m31 * a5) - (_m32 * a4)) + (_m33 * a3)) / determinant;
+	final double m12 = (((-_m30 * a5) + (_m32 * a2)) - (_m33 * a1)) / determinant;
+	final double m22 = (((+_m30 * a4) - (_m31 * a2)) + (_m33 * a0)) / determinant;
+	final double m32 = (((-_m30 * a3) + (_m31 * a1)) - (_m32 * a0)) / determinant;
+	final double m03 = (((-_m21 * a5) + (_m22 * a4)) - (_m23 * a3)) / determinant;
+	final double m13 = (((+_m20 * a5) - (_m22 * a2)) + (_m23 * a1)) / determinant;
+	final double m23 = (((-_m20 * a4) + (_m21 * a2)) - (_m23 * a0)) / determinant;
+	final double m33 = (((+_m20 * a3) - (_m21 * a1)) + (_m22 * a0)) / determinant;
   
 	return new MutableMatrix44D(m00, m10, m20, m30, m01, m11, m21, m31, m02, m12, m22, m32, m03, m13, m23, m33);
   }
@@ -403,63 +390,9 @@ public class MutableMatrix44D
 	  _columnMajorFloatBuffer.put(13, (float) _m13);
 	  _columnMajorFloatBuffer.put(14, (float) _m23);
 	  _columnMajorFloatBuffer.put(15, (float) _m33);
-  
-  //    _columnMajorFloatBuffer->put( 0, (float) _m00);
-  //    _columnMajorFloatBuffer->put( 1, (float) _m01);
-  //    _columnMajorFloatBuffer->put( 2, (float) _m02);
-  //    _columnMajorFloatBuffer->put( 3, (float) _m03);
-  //
-  //    _columnMajorFloatBuffer->put( 4, (float) _m10);
-  //    _columnMajorFloatBuffer->put( 5, (float) _m11);
-  //    _columnMajorFloatBuffer->put( 6, (float) _m12);
-  //    _columnMajorFloatBuffer->put( 7, (float) _m13);
-  //
-  //    _columnMajorFloatBuffer->put( 8, (float) _m20);
-  //    _columnMajorFloatBuffer->put( 9, (float) _m21);
-  //    _columnMajorFloatBuffer->put(10, (float) _m22);
-  //    _columnMajorFloatBuffer->put(11, (float) _m23);
-  //
-  //    _columnMajorFloatBuffer->put(12, (float) _m30);
-  //    _columnMajorFloatBuffer->put(13, (float) _m31);
-  //    _columnMajorFloatBuffer->put(14, (float) _m32);
-  //    _columnMajorFloatBuffer->put(15, (float) _m33);
-  
 	}
 	return _columnMajorFloatBuffer;
   }
-
-///#ifdef C_CODE
-//  float* getColumnMajorFloatArray() const {
-///#else
-//  float[] getColumnMajorFloatArray() const {
-///#endif
-//    if (_columnMajorFloatArray == NULL){
-//      _columnMajorFloatArray = new float[16];
-//      
-//      _columnMajorFloatArray[ 0] = (float) _m00;
-//      _columnMajorFloatArray[ 1] = (float) _m10;
-//      _columnMajorFloatArray[ 2] = (float) _m20;
-//      _columnMajorFloatArray[ 3] = (float) _m30;
-//      
-//      _columnMajorFloatArray[ 4] = (float) _m01;
-//      _columnMajorFloatArray[ 5] = (float) _m11;
-//      _columnMajorFloatArray[ 6] = (float) _m21;
-//      _columnMajorFloatArray[ 7] = (float) _m31;
-//      
-//      _columnMajorFloatArray[ 8] = (float) _m02;
-//      _columnMajorFloatArray[ 9] = (float) _m12;
-//      _columnMajorFloatArray[10] = (float) _m22;
-//      _columnMajorFloatArray[11] = (float) _m32;
-//      
-//      _columnMajorFloatArray[12] = (float) _m03;
-//      _columnMajorFloatArray[13] = (float) _m13;
-//      _columnMajorFloatArray[14] = (float) _m23;
-//      _columnMajorFloatArray[15] = (float) _m33;
-//    }
-//    return _columnMajorFloatArray;
-//  }
-
-  //OTHER OPERATIONS
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: void print(const String& name, const ILogger* log) const
@@ -565,15 +498,14 @@ public class MutableMatrix44D
 
   public static MutableMatrix44D createGeneralRotationMatrix(Angle angle, Vector3D axis, Vector3D point)
   {
-	MutableMatrix44D T1 = MutableMatrix44D.createTranslationMatrix(point.times(-1.0));
-	MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(angle, axis);
-	MutableMatrix44D T2 = MutableMatrix44D.createTranslationMatrix(point);
+	final MutableMatrix44D T1 = MutableMatrix44D.createTranslationMatrix(point.times(-1.0));
+	final MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(angle, axis);
+	final MutableMatrix44D T2 = MutableMatrix44D.createTranslationMatrix(point);
 	return T2.multiply(R).multiply(T1);
   }
 
   public static MutableMatrix44D createModelMatrix(MutableVector3D pos, MutableVector3D center, MutableVector3D up)
   {
-  
 	final MutableVector3D w = center.sub(pos).normalized();
 	final double pe = w.dot(up);
 	final MutableVector3D v = up.sub(w.times(pe)).normalized();

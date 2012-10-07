@@ -255,7 +255,7 @@ public class Vector3D
   public final String description()
   {
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.add("(V2D ").add(_x).add(", ").add(_y).add(", ").add(_z).add(")");
+	isb.add("(V3D ").add(_x).add(", ").add(_y).add(", ").add(_z).add(")");
 	String s = isb.getString();
 	if (isb != null)
 		isb.dispose();
