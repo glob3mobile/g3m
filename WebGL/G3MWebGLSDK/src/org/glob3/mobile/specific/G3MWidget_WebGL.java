@@ -549,28 +549,30 @@ public final class G3MWidget_WebGL
 
 
    private native void jsGLInit() /*-{
-		//		debugger;
-		var that = this;
-		var error = 0;
-		try {
-			error = that.@org.glob3.mobile.specific.G3MWidget_WebGL::_webGLContext
-					.getError();
-		} catch (e) {
-			console.log("jsGLInit catch " + e);
-		}
-		if (error != 0) {
-			//                        debugger;
-			console.error("jsGLInit error=" + error);
-		}
-		//		debugger;
-		var viewportWidth = that.@org.glob3.mobile.specific.G3MWidget_WebGL::_webGLContext.viewportWidth;
-		var viewportHeight = that.@org.glob3.mobile.specific.G3MWidget_WebGL::_webGLContext.viewportHeight;
-		var COLOR_BUFFER_BIT = that.@org.glob3.mobile.specific.G3MWidget_WebGL::_webGLContext.COLOR_BUFFER_BIT;
-		var DEPTH_BUFFER_BIT = that.@org.glob3.mobile.specific.G3MWidget_WebGL::_webGLContext.DEPTH_BUFFER_BIT;
+		//    debugger;
 
-		that.@org.glob3.mobile.specific.G3MWidget_WebGL::_webGLContext
-				.viewport(0, 0, viewportWidth, viewportHeight);
-		that.@org.glob3.mobile.specific.G3MWidget_WebGL::_webGLContext
-				.clear(COLOR_BUFFER_BIT | DEPTH_BUFFER_BIT);
+		var webGLContext = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_webGLContext;
+
+		//		var error = 0;
+		//		try {
+		//			error = webGLContext.getError();
+		//		} catch (e) {
+		//			console.log("jsGLInit catch " + e);
+		//		}
+		//		if (error != 0) {
+		//			//                        debugger;
+		//			console.error("jsGLInit error=" + error);
+		//		}
+
+		//    debugger;
+		var viewportWidth = webGLContext.viewportWidth;
+		var viewportHeight = webGLContext.viewportHeight;
+		var COLOR_BUFFER_BIT = webGLContext.COLOR_BUFFER_BIT;
+		var DEPTH_BUFFER_BIT = webGLContext.DEPTH_BUFFER_BIT;
+
+		webGLContext.viewport(0, 0, viewportWidth, viewportHeight);
+		webGLContext.clear(COLOR_BUFFER_BIT | DEPTH_BUFFER_BIT);
    }-*/;
+
+
 }
