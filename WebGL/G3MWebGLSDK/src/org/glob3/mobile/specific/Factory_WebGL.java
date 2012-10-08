@@ -107,7 +107,7 @@ public final class Factory_WebGL
    @Override
    public IByteBuffer createByteBuffer(final byte[] data,
                                        final int length) {
-      return new ByteBuffer_WebGL(data);
+      return new ByteBuffer_WebGL(data, length);
    }
 
 }

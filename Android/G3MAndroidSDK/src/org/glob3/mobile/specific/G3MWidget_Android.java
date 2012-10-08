@@ -310,7 +310,7 @@ public class G3MWidget_Android
       }
 
       final TextureBuilder textureBuilder = new CPUTextureBuilder();
-      final TexturesHandler texturesHandler = new TexturesHandler(gl, factory, false);
+      final TexturesHandler texturesHandler = new TexturesHandler(gl, factory, true);
 
       final Planet planet = Planet.createEarth();
 

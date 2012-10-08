@@ -140,8 +140,7 @@ class TexturesHandler {
 private:
   std::vector<TextureHolder*> _textureHolders;
   
-  GL * const _gl;
-  const IFactory * const _factory;
+  GL* const _gl;
   
   const bool _verbose;
   
@@ -150,10 +149,8 @@ private:
 public:
   
   TexturesHandler(GL* const  gl,
-                  const IFactory const * factory,
                   bool verbose):
   _gl(gl),
-  _factory(factory),
   _verbose(verbose)
   {
   }
@@ -161,9 +158,9 @@ public:
   ~TexturesHandler();
   
   const IGLTextureId* getGLTextureId(const IImage* image,
-                                   int format,
-                                   const std::string& name,
-                                   bool hasMipMap);
+                                     int format,
+                                     const std::string& name,
+                                     bool hasMipMap);
   
   const IGLTextureId* getGLTextureIdIfAvailable(const TextureSpec& textureSpec);
   
