@@ -101,7 +101,6 @@ public final class G3MWidget_WebGL
       sinkEvents(Event.MOUSEEVENTS | Event.ONCONTEXTMENU | Event.KEYEVENTS | Event.ONDBLCLICK | Event.ONMOUSEWHEEL);
 
       Window.addResizeHandler(new ResizeHandler() {
-
          @Override
          public void onResize(final ResizeEvent event) {
             onSizeChanged(event.getWidth(), event.getHeight());

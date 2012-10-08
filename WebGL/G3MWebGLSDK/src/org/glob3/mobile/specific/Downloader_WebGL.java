@@ -20,15 +20,16 @@ public final class Downloader_WebGL
             IDownloader {
 
    final private int                                _maxConcurrentOperationCount;
-   private long                                     _requestIdCounter;
-   private long                                     _requestsCounter;
-   private long                                     _cancelsCounter;
    private final Map<URL, Downloader_WebGL_Handler> _downloadingHandlers;
    private final Map<URL, Downloader_WebGL_Handler> _queuedHandlers;
    private final Timer                              _timer;
    private final int                                _delayMillis;
 
    private final String                             _proxy;
+
+   private long                                     _requestIdCounter;
+   private long                                     _requestsCounter;
+   private long                                     _cancelsCounter;
 
 
    public Downloader_WebGL(final int maxConcurrentOperationCount,
@@ -235,14 +236,12 @@ public final class Downloader_WebGL
 
    @Override
    public void onResume(final InitializationContext ic) {
-      // TODO Auto-generated method stub
 
    }
 
 
    @Override
    public void onPause(final InitializationContext ic) {
-      // TODO Auto-generated method stub
 
    }
 

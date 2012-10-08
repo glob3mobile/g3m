@@ -108,10 +108,12 @@ public class Proxy
             final BufferedOutputStream out = new BufferedOutputStream(response.getOutputStream());
             final byte[] buffer = new byte[4096];
             int length = 0;
+            int totalLength = 0;
             while ((length = in.read(buffer)) > 0) {
                out.write(buffer, 0, length);
+               totalLength += length;
             }
-            response.setContentLength(length);
+            response.setContentLength(totalLength);
             out.flush();
             out.close();
             in.close();
