@@ -18,7 +18,7 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 public final class Downloader_WebGL_Handler {
 
-   final static String                    TAG = "Downloader_WebGL_Handler";
+   private final static String            TAG = "Downloader_WebGL_Handler";
 
    private long                           _priority;
    private final URL                      _url;
@@ -169,7 +169,8 @@ public final class Downloader_WebGL_Handler {
          }
       }
       else {
-         log(LogLevel.ErrorLevel, ": Error runWithDownloader: statusCode=" + statusCode + ", url=" + _url.getPath());
+         log(LogLevel.ErrorLevel,
+                  ": Error runWithDownloader: statusCode=" + statusCode + ", data=" + data + ", url=" + _url.getPath());
 
          for (final ListenerEntry entry : _listeners) {
             entry.onError(_url);
@@ -194,7 +195,6 @@ public final class Downloader_WebGL_Handler {
 					thisInstance.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, auxImg);
 					$wnd.g3mURL.revokeObjectURL(imgURL);
 				};
-
 				auxImg.onerror = function() {
 					thisInstance.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, null);
 					$wnd.g3mURL.revokeObjectURL(imgURL);
@@ -219,7 +219,7 @@ public final class Downloader_WebGL_Handler {
 					if (xhr.status === 200) {
 						createImageFromBlob(xhr.response);
 					} else {
-						console.log("Error Retriving Data!");
+						console.log("Error Retrieving Data!");
 						response = null;
 						thisInstance.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, response);
 					}
@@ -240,7 +240,7 @@ public final class Downloader_WebGL_Handler {
 					if (xhr.status == 200) {
 						response = xhr.response;
 					} else {
-						console.log("Error Retriving Data!");
+						console.log("Error Retrieving Data!");
 						response = null;
 					}
 					thisInstance.@org.glob3.mobile.specific.Downloader_WebGL_Handler::processResponse(ILcom/google/gwt/core/client/JavaScriptObject;)(xhr.status, response);
@@ -271,6 +271,6 @@ public final class Downloader_WebGL_Handler {
       else {
          GWT.log(TAG + msg);
       }
-
    }
+
 }
