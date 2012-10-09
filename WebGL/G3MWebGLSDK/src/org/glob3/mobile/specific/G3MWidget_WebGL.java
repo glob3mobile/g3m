@@ -425,7 +425,11 @@ public final class G3MWidget_WebGL
       final boolean useTilesSplitBudget = true;
       final boolean forceTopLevelTilesRenderOnStart = true;
 
-      final TilesRenderParameters parameters = TilesRenderParameters.createDefault(renderDebug, useTilesSplitBudget,
+      //      final TilesRenderParameters parameters = TilesRenderParameters.createDefault(renderDebug, useTilesSplitBudget,
+      //               forceTopLevelTilesRenderOnStart);
+
+      final int _____TODO_put_complete_planet;
+      final TilesRenderParameters parameters = TilesRenderParameters.createSingleSector(renderDebug, useTilesSplitBudget,
                forceTopLevelTilesRenderOnStart);
 
       final ILogger logger = new Logger_WebGL(LogLevel.InfoLevel);

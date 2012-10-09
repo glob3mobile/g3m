@@ -94,8 +94,7 @@ public:
   virtual void bindTexture(int target,
                            const IGLTextureId* texture) const = 0;
   
-  virtual void deleteTextures(int n,
-                              const IGLTextureId* textures[]) const = 0;
+  virtual void deleteTexture(const IGLTextureId* texture) const = 0;
   
   virtual void enableVertexAttribArray(int location) const = 0;
   

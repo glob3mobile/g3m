@@ -128,12 +128,12 @@ public:
     }
   }
   
-  void deleteTextures(int n, const IGLTextureId* textures[]) const {
-    unsigned int ts[n];
-    for(int i = 0; i < n; i++){
-      ts[i] = ((GLTextureId_iOS*)textures[i])->getGLTextureId();
-    }
-    glDeleteTextures(n, ts);
+  void deleteTexture(const IGLTextureId* texture) const {
+    const unsigned int textures[] = {
+      ((GLTextureId_iOS*) texture)->getGLTextureId()
+    };
+    
+    glDeleteTextures(1, textures);
   }
   
   void enableVertexAttribArray(int location) const {
