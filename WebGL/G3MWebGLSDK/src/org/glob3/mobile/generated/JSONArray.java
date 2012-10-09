@@ -26,9 +26,22 @@ public class JSONArray extends JSONBaseObject
   {
 	return this;
   }
+  public void dispose()
+  {
+	for (int i = 0; i<_entries.size(); i++)
+	{
+	  if (_entries.get(i) != null)
+		  _entries.get(i).dispose();
+	}
+	_entries.clear();
+  }
   public final JSONBaseObject getElement(int index)
   {
 	return _entries.get(index);
+  }
+  public final int getSize()
+  {
+	return _entries.size();
   }
 
   public final void appendElement (JSONBaseObject object)
