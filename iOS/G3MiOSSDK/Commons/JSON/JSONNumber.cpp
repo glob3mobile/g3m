@@ -13,7 +13,7 @@ int JSONNumber::getIntValue(){
     ILogger::instance()->logError("The value you are requesting is not of type int - returning 0!");
     return 0;
   }
-  return _value._int_value;
+  return _int_value;
 }
 
 /*const long JSONNumber::getLongValue()const{
@@ -29,7 +29,7 @@ float JSONNumber::getFloatValue(){
     ILogger::instance()->logError("The value you are requesting is not of type float - returning 0!");
     return 0;
   }
-  return _value._float_value;
+  return _float_value;
 }
 
 double JSONNumber::getDoubleValue(){
@@ -37,5 +37,5 @@ double JSONNumber::getDoubleValue(){
     ILogger::instance()->logError("The value you are requesting is not of type double - returning 0!");
     return 0;
   }
-  return _value._double_value;  
+  return _double_value;  
 }

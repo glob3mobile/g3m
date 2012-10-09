@@ -10,10 +10,12 @@
 #include <string>
 
 JSONObject::~JSONObject(){
+#ifdef C_CODE
   for (std::map<std::string, JSONBaseObject*>::iterator it=_entries.begin(); it!=_entries.end(); it++){
     delete it->second;
   }
   _entries.clear();
+#endif
 }
 
 JSONBaseObject* JSONObject::getObjectForKey(const std::string key){

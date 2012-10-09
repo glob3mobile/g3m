@@ -23,7 +23,7 @@
   number_value(double d):double_value(d){}
 };*/
 
-class Number_value{
+/*class Number_value{
 private:
   
   
@@ -36,7 +36,7 @@ public:
   Number_value(float f):_int_value(0), _float_value(f), _double_value(0.0){};
   Number_value(double d):_int_value(0), _float_value(0.0), _double_value(d){};
   
-};
+};*/
 
 enum number_type{
   int_type, long_type, float_type, double_type
@@ -44,14 +44,20 @@ enum number_type{
 
 class JSONNumber : public JSONBaseObject{
 private:
-  const Number_value _value;
+  //const Number_value _value;
+  int _int_value;
+  float _float_value;
+  double _double_value;
   const number_type _type;
   
 public:
-  JSONNumber(int value):_value(Number_value(value)), _type(int_type){}
-  //JSONNumber(long value):_value(Number_value(value)), _type(long_type){}
+  /*JSONNumber(int value):_value(Number_value(value)), _type(int_type){}
+  JSONNumber(long value):_value(Number_value(value)), _type(long_type){}
   JSONNumber(float value):_value(Number_value(value)), _type(float_type){}
-  JSONNumber(double value):_value(Number_value(value)), _type(double_type){}
+  JSONNumber(double value):_value(Number_value(value)), _type(double_type){}*/
+  JSONNumber(int value):_int_value(value), _float_value(0.0), _double_value(0.0), _type(int_type){}
+  JSONNumber(float value):_int_value(0), _float_value(value), _double_value(0.0), _type(float_type){}
+  JSONNumber(double value):_int_value(0), _float_value(0.0), _double_value(value), _type(double_type){}
   int getIntValue();
   //const long getLongValue()const;
   float getFloatValue();

@@ -110,7 +110,7 @@
   
   IJSONParser* parser = new JSONParser_iOS();
   JSONParser.setInstance(parser);
-  BingLayer* realBing = new BingLayer(URL("http://dev.virtualearth.net/REST/v1/Imagery/Metadata"), NULL, Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0), Hybrid, "AgOLISvN2b3012i-odPJjVxhB1dyU6avZ2vG9Ub6Z9-mEpgZHre-1rE8o-DUinUH");
+  BingLayer* realBing = new BingLayer(URL("http://dev.virtualearth.net/REST/v1/Imagery/Metadata"), NULL, Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0), Road, "AgOLISvN2b3012i-odPJjVxhB1dyU6avZ2vG9Ub6Z9-mEpgZHre-1rE8o-DUinUH");
   layerSet->addLayer(realBing);
   
   
