@@ -252,20 +252,18 @@ long long CachedDownloader::requestBuffer(const URL& url,
 
 const std::string CachedDownloader::statistics() {
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
-  isb->add("CachedDownloader(cache hits=");
-  isb->add(_cacheHitsCounter);
-  isb->add("/");
-  isb->add(_requestsCounter);
-  isb->add(", saves=");
-  isb->add(_savesCounter);
-  isb->add(", downloader=");
-  isb->add(_downloader->statistics());
-  std::string s = isb->getString();
+  isb->addString("CachedDownloader(cache hits=");
+  isb->addInt(_cacheHitsCounter);
+  isb->addString("/");
+  isb->addInt(_requestsCounter);
+  isb->addString(", saves=");
+  isb->addInt(_savesCounter);
+  isb->addString(", downloader=");
+  isb->addString(_downloader->statistics());
+  const std::string s = isb->getString();
   delete isb;
   return s;
 }
-
-
 
 void CachedDownloader::onResume(const InitializationContext* ic) {
   _downloader->onResume(ic);

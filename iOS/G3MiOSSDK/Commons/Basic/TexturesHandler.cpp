@@ -18,8 +18,14 @@
 
 const std::string TextureSpec::description() const {
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
-  isb->add("(")->add(_id)->add(" ")->add(_width)->add("x")->add(_height)->add(")");
-  std::string s = isb->getString();
+  isb->addString("(");
+  isb->addString(_id);
+  isb->addString(" ");
+  isb->addInt(_width);
+  isb->addString("x");
+  isb->addInt(_height);
+  isb->addString(")");
+  const std::string s = isb->getString();
   delete isb;
   return s;
 }
@@ -67,8 +73,12 @@ public:
   
   const std::string description() const {
     IStringBuilder *isb = IStringBuilder::newStringBuilder();
-    isb->add("(#")->add(_glTextureId->description())->add(", counter=")->add(_referenceCounter)->add(")");
-    std::string s = isb->getString();
+    isb->addString("(#");
+    isb->addString(_glTextureId->description());
+    isb->addString(", counter=");
+    isb->addInt(_referenceCounter);
+    isb->addString(")");
+    const std::string s = isb->getString();
     delete isb;
     return s;
   }

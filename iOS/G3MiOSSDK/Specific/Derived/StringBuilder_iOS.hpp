@@ -31,19 +31,35 @@ public:
     return this;
   }
   
-  IStringBuilder* add(double d){
+  IStringBuilder* addDouble(double d){
     _oss << d;
     return this;
   }
   
-  IStringBuilder* add(const std::string& s){
+  IStringBuilder* addFloat(float f){
+    _oss << f;
+    return this;
+  }
+  
+  IStringBuilder* addInt(int i){
+    _oss << i;
+    return this;
+  }
+  
+  IStringBuilder* addLong(long long l){
+    _oss << l;
+    return this;
+  }
+  
+  IStringBuilder* addString(const std::string& s){
     _oss << s;
     return this;
   }
   
-  std::string getString() const{
+  const std::string getString() const{
     return _oss.str();
   }
+  
 };
 
 #endif

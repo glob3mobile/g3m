@@ -135,11 +135,14 @@ const Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const
   return Geodetic2D(lat, lon);*/
 }
 
-
 const std::string Sector::description() const {
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
-  isb->add("(Sector ")->add(_lower.description())->add(" - ")->add(_upper.description())->add(")");
-  std::string s = isb->getString();
+  isb->addString("(Sector ");
+  isb->addString(_lower.description());
+  isb->addString(" - ");
+  isb->addString(_upper.description());
+  isb->addString(")");
+  const std::string s = isb->getString();
   delete isb;
   return s;  
 }

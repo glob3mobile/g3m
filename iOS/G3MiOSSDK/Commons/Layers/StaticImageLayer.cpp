@@ -25,15 +25,15 @@ std::vector<Petition*> StaticImageLayer::getMapPetitions(const RenderContext* rc
   
   //CREATING ID FOR PETITION
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
-  isb->add(_layerID);
-  isb->add("_");
-  isb->add(tileSector.lower().latitude().degrees());
-  isb->add("_");
-  isb->add(tileSector.lower().longitude().degrees());
-  isb->add("_");
-  isb->add(tileSector.upper().latitude().degrees());
-  isb->add("_");
-  isb->add(tileSector.upper().longitude().degrees());
+  isb->addString(_layerID);
+  isb->addString("_");
+  isb->addDouble(tileSector.lower().latitude().degrees());
+  isb->addString("_");
+  isb->addDouble(tileSector.lower().longitude().degrees());
+  isb->addString("_");
+  isb->addDouble(tileSector.upper().latitude().degrees());
+  isb->addString("_");
+  isb->addDouble(tileSector.upper().longitude().degrees());
   
   const URL id = URL(isb->getString());
   

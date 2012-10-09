@@ -18,8 +18,12 @@ MutableVector2D Vector2D::asMutableVector2D() const {
 
 const std::string Vector2D::description() const {
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
-  isb->add("(V2D ")->add(_x)->add(", ")->add(_y)->add(")");
-  std::string s = isb->getString();
+  isb->addString("(V2D ");
+  isb->addDouble(_x);
+  isb->addString(", ");
+  isb->addDouble(_y);
+  isb->addString(")");
+  const std::string s = isb->getString();
   delete isb;
   return s;
 }

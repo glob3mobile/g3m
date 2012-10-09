@@ -38,10 +38,11 @@ public:
     return _textureId;
   }
   
-  const std::string description() const{
+  const std::string description() const {
     IStringBuilder *isb = IStringBuilder::newStringBuilder();
-    isb->add("const GLTextureId*#")->add(_textureId);
-    std::string s = isb->getString();
+    isb->addString("const GLTextureId*#");
+    isb->addInt(_textureId);
+    const std::string s = isb->getString();
     delete isb;
     return s;
   }
@@ -50,6 +51,5 @@ public:
     return (_textureId == ((GLTextureId_iOS*)that)->_textureId);
   }
 };
-
 
 #endif

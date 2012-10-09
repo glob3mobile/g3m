@@ -25,12 +25,17 @@ public:
   
   static IStringBuilder* newStringBuilder();
   
-  virtual IStringBuilder* add(double d) = 0;
-  virtual IStringBuilder* add(const std::string& s) = 0;
+  virtual IStringBuilder* addDouble(double d) = 0;
+  virtual IStringBuilder* addFloat(float f) = 0;
+  
+  virtual IStringBuilder* addInt(int i) = 0;
+  virtual IStringBuilder* addLong(long long l) = 0;
+  
+  virtual IStringBuilder* addString(const std::string& s) = 0;
   virtual IStringBuilder* addBool(bool b) = 0;
   
-  virtual std::string getString() const = 0;
-
+  virtual const std::string getString() const = 0;
+  
   // a virtual destructor is needed for conversion to Java
   virtual ~IStringBuilder() {}
   
