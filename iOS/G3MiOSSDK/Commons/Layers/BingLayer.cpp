@@ -15,7 +15,6 @@
 #include "IBufferDownloadListener.hpp"
 
 #include "IJSONParser.hpp"
-//#include "JSONParser_iOS.hpp"
 #include "JSONBaseObject.hpp"
 #include "JSONNumber.hpp"
 #include "JSONObject.hpp"
@@ -68,18 +67,15 @@ void TokenDownloadListener::onDownload(const URL& url,
     JSONObject* data = json->getObject()->getObjectForKey("resourceSets")->getArray()->getElement(0)->getObject()->getObjectForKey("resources")->getArray()->getElement(0)->getObject();
     
     std::string rawTileURL = data->getObjectForKey("imageUrl")->getString()->getValue();
-    std::cout<<"rawURL:"<<rawTileURL<<"\n";
     
     int TODO_read_subdomains_and_somehow_choose_one;
+
     
-    //remove unneeded final part:&mkt={culture}
-    int lastValidChar = IStringUtils::instance()->indexOf(rawTileURL, "&mkt");
-    rawTileURL = IStringUtils::instance()->substring(rawTileURL, 0,lastValidChar);
-    std::cout<<"rawURL (after cropping):"<<rawTileURL<<"\n";
-    
+    //set language
+    rawTileURL = IStringUtils::instance()->replaceSubstring(rawTileURL, "{culture}", _bingLayer->getLocale());
     
     std::string tileURL = IStringUtils::instance()->replaceSubstring(rawTileURL, "{subdomain}", "t0");
-    std::cout<<"With StringUtils: "<<tileURL<<"\n";
+    //std::cout<<"final URL: "<<tileURL<<"\n";
     _bingLayer->setTilePetitionString(tileURL);
     
     IJSONParser::instance()->deleteJSONData(json);
@@ -103,6 +99,42 @@ void BingLayer::initialize(const InitializationContext* ic){
 bool BingLayer::isReady()const{
   return _isReady;
 }
+
+std::string BingLayer::getLocale()const{
+  if (_locale == English){
+    return "en-US";
+  }
+  if (_locale == Spanish){
+    return "es-ES";
+  }
+  if (_locale == German){
+    return "de-DE";
+  }
+  if (_locale == French){
+    return "fr-FR";
+  }
+  if (_locale == Dutch){
+    return "nl-BE";
+  }
+  if (_locale == Italian){
+    return "it-IT";
+  }
+  return "en-US";
+}
+
+std::string BingLayer::getMapTypeString() const {
+  if (_mapType == Road){
+    return "Road";
+  }
+  if (_mapType == Aerial){
+    return "Aerial";
+  }
+  if (_mapType == Hybrid){
+    return "AerialWithLabels";
+  }
+  return "Aerial";
+}
+
 
 
 std::vector<Petition*> BingLayer::getMapPetitions(const RenderContext* rc,
@@ -131,8 +163,6 @@ std::vector<Petition*> BingLayer::getMapPetitions(const RenderContext* rc,
     std::string newHost = req.substr(0, pos2);
     
     req = newHost + req;
-    
-    
   }
   
   //Key:AgOLISvN2b3012i-odPJjVxhB1dyU6avZ2vG9Ub6Z9-mEpgZHre-1rE8o-DUinUH
@@ -159,12 +189,7 @@ std::vector<Petition*> BingLayer::getMapPetitions(const RenderContext* rc,
         continue;
       }
       
-      //std::string url = req + getQuadKey(tileXY, level)+".png?g=1";
-      //std::string url = "http://ecn.t1.tiles.virtualearth.net/tiles/h" +getQuadKey(tileXY, level)+".png?g=1036";
-      //std::cout<<url<<"\n";
-      
       std::string url = IStringUtils::instance()->replaceSubstring(_tilePetitionString, "{quadkey}", getQuadKey(tileXY, level));
-      std::cout<<"final URL:"<<url<<"\n";
       petitions.push_back(new Petition(bingSector, URL(url)));
       
     }
@@ -230,7 +255,7 @@ std::string BingLayer::getQuadKey(const int tileXY[], const int level)const{
   
   int tileX = tileXY[0];
   int tileY = tileXY[1];
-  std::string quadKey = std::string();
+  std::string quadKey;// = std::string();
   //std::ostringstream stream;
   for (int i =level; i>0; i--){
     char digit = '0';

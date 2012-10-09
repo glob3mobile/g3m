@@ -17,6 +17,15 @@ enum MapType{
   Hybrid
 };
 
+enum Language{
+  English,
+  Spanish,
+  German,
+  French,
+  Italian,
+  Dutch
+};
+
 
 const double _originShift = 20037508.342789244;
 const double _initialResolution = _originShift*256.0;
@@ -28,6 +37,7 @@ private:
   const Sector              _sector;
   const URL              _mapServerURL;
   const std::string _key;
+  const Language _locale;
   const MapType _mapType;
   std::string _tilePetitionString;
   bool _isReady;
@@ -38,11 +48,12 @@ private:
   
 public:
   
-  BingLayer(const URL& mapServerURL, LayerCondition* condition, const Sector& sector, const MapType mapType, const std::string key):
+  BingLayer(const URL& mapServerURL, LayerCondition* condition, const Sector& sector, const MapType mapType, Language locale, const std::string key):
   Layer(condition),
   _sector(sector),
-  _mapServerURL(mapServerURL), //http://ecn.t0.tiles.virtualearth.net/tiles/r093129.png?g=392
+  _mapServerURL(mapServerURL),
   _mapType(mapType),
+  _locale(locale),
   _key(key),
   _tilePetitionString(),
   _isReady(false)
@@ -57,18 +68,9 @@ public:
     _isReady = true;
   }
   
-  std::string getMapTypeString() const {
-    if (_mapType == Road){
-      return "Road";
-    }
-    if (_mapType == Aerial){
-      return "Aerial";
-    }
-    if (_mapType == Hybrid){
-      return "AerialWithLabels";
-    }
-    return "Aerial";
-  }
+  std::string getLocale()const;
+  
+  std::string getMapTypeString() const;
   
   void initialize(const InitializationContext* ic);
   
