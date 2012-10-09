@@ -351,8 +351,12 @@ public class Sector
   public final String description()
   {
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.add("(Sector ").add(_lower.description()).add(" - ").add(_upper.description()).add(")");
-	String s = isb.getString();
+	isb.addString("(Sector ");
+	isb.addString(_lower.description());
+	isb.addString(" - ");
+	isb.addString(_upper.description());
+	isb.addString(")");
+	final String s = isb.getString();
 	if (isb != null)
 		isb.dispose();
 	return s;

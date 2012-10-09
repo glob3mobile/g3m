@@ -107,8 +107,16 @@ public class Vector4D
   public final String description()
   {
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.add("(V4D ").add(_x).add(", ").add(_y).add(", ").add(_z).add(", ").add(_w).add(")");
-	String s = isb.getString();
+	isb.addString("(V4D ");
+	isb.addDouble(_x);
+	isb.addString(", ");
+	isb.addDouble(_y);
+	isb.addString(", ");
+	isb.addDouble(_z);
+	isb.addString(", ");
+	isb.addDouble(_w);
+	isb.addString(")");
+	final String s = isb.getString();
 	if (isb != null)
 		isb.dispose();
 	return s;

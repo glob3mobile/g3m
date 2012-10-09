@@ -75,10 +75,11 @@ public class URL
 //ORIGINAL LINE: const String description() const
   public final String description()
   {
-  
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.add("URL(").add(getPath()).add(")");
-	String s = isb.getString();
+	isb.addString("URL(");
+	isb.addString(getPath());
+	isb.addString(")");
+	final String s = isb.getString();
 	if (isb != null)
 		isb.dispose();
 	return s;

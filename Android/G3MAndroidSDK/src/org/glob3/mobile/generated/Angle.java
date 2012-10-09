@@ -261,8 +261,9 @@ public class Angle
   public final String description()
   {
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.add(_degrees).add("°");
-	String s = isb.getString();
+	isb.addDouble(_degrees);
+	isb.addString("°");
+	final String s = isb.getString();
 	if (isb != null)
 		isb.dispose();
 	return s;

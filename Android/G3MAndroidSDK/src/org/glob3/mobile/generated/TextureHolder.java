@@ -43,8 +43,12 @@ public class TextureHolder
   public final String description()
   {
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.add("(#").add(_glTextureId.description()).add(", counter=").add(_referenceCounter).add(")");
-	String s = isb.getString();
+	isb.addString("(#");
+	isb.addString(_glTextureId.description());
+	isb.addString(", counter=");
+	isb.addInt(_referenceCounter);
+	isb.addString(")");
+	final String s = isb.getString();
 	if (isb != null)
 		isb.dispose();
 	return s;

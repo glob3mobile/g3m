@@ -4,7 +4,6 @@ public class TexturesHandler
   private java.util.ArrayList<TextureHolder> _textureHolders = new java.util.ArrayList<TextureHolder>();
 
   private final GL _gl;
-  private IFactory _factory; // FINAL WORD REMOVE BY CONVERSOR RULE
 
   private final boolean _verbose;
 
@@ -32,10 +31,9 @@ public class TexturesHandler
   }
 
 
-  public TexturesHandler(GL gl, IFactory factory, boolean verbose)
+  public TexturesHandler(GL gl, boolean verbose)
   {
 	  _gl = gl;
-	  _factory = factory;
 	  _verbose = verbose;
   }
 

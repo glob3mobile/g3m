@@ -122,7 +122,7 @@ public class TileTextureBuilder extends RCObject
   {
 	final java.util.ArrayList<IImage> images = new java.util.ArrayList<IImage>();
 	final java.util.ArrayList<Rectangle> rectangles = new java.util.ArrayList<Rectangle>();
-	String petitionsID = _tile.getKey().tinyDescription();
+	String textureId = _tile.getKey().tinyDescription();
 
 	final int textureWidth = _parameters._tileTextureWidth;
 	final int textureHeight = _parameters._tileTextureHeight;
@@ -140,8 +140,8 @@ public class TileTextureBuilder extends RCObject
 
 		rectangles.add(getImageRectangleInTexture(tileSector, petition.getSector(), textureWidth, textureHeight));
 
-		petitionsID += petition.getURL().getPath();
-		petitionsID += "_";
+		textureId += petition.getURL().getPath();
+		textureId += "_";
 	  }
 	}
 
@@ -152,7 +152,7 @@ public class TileTextureBuilder extends RCObject
 
 	  IImage image = _textureBuilder.createTextureFromImages(_gl, _factory, images, rectangles, textureWidth, textureHeight);
 
-	  final IGLTextureId glTextureId = _texturesHandler.getGLTextureId(image, GLFormat.rgba(), petitionsID, isMipmap);
+	  final IGLTextureId glTextureId = _texturesHandler.getGLTextureId(image, GLFormat.rgba(), textureId, isMipmap);
 
 	  if (glTextureId != null)
 	  {

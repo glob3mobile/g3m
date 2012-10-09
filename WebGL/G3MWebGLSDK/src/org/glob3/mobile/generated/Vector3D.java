@@ -255,8 +255,14 @@ public class Vector3D
   public final String description()
   {
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.add("(V3D ").add(_x).add(", ").add(_y).add(", ").add(_z).add(")");
-	String s = isb.getString();
+	isb.addString("(V3D ");
+	isb.addDouble(_x);
+	isb.addString(", ");
+	isb.addDouble(_y);
+	isb.addString(", ");
+	isb.addDouble(_z);
+	isb.addString(")");
+	final String s = isb.getString();
 	if (isb != null)
 		isb.dispose();
 	return s;
