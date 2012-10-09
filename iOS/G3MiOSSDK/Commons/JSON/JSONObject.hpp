@@ -28,6 +28,8 @@ public:
   
   void putObject(const std::string key, JSONBaseObject* object);
   
+  int getSize();
+  
 };
 
 
