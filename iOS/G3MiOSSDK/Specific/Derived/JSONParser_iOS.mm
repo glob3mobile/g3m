@@ -88,11 +88,11 @@ JSONBaseObject* JSONParser_iOS::makeJSONElement(NSObject* object){
       JSONNumber* numberObj = new JSONNumber([jsonNumber intValue]);
       return numberObj;
     }
-    //Long
+    /*//Long
     else if (strcmp([jsonNumber objCType], @encode(long))==0) {
       JSONNumber* numberObj = new JSONNumber([jsonNumber longValue]);
       return numberObj;
-    }
+    }*/
     //Float
     else if (strcmp([jsonNumber objCType], @encode(float))==0) {
       JSONNumber* numberObj = new JSONNumber([jsonNumber floatValue]);
