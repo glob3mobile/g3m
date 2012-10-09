@@ -24,7 +24,7 @@ public:
     return this;
   }
   
-  JSONBaseObject* getObjectForKey(std::string key);
+  JSONBaseObject* getObjectForKey(const std::string key);
   
   void putObject(const std::string key, JSONBaseObject* object);
   
