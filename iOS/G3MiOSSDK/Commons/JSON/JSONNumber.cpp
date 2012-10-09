@@ -8,7 +8,7 @@
 
 #include "JSONNumber.hpp"
 
-const int JSONNumber::getIntValue()const{
+int JSONNumber::getIntValue(){
   if (_type != int_type) {
     ILogger::instance()->logError("The value you are requesting is not of type int - returning 0!");
     return 0;
@@ -24,7 +24,7 @@ const int JSONNumber::getIntValue()const{
   return _value.long_value;
 }*/
 
-const float JSONNumber::getFloatValue()const{
+float JSONNumber::getFloatValue(){
   if (_type != float_type){
     ILogger::instance()->logError("The value you are requesting is not of type float - returning 0!");
     return 0;
@@ -32,7 +32,7 @@ const float JSONNumber::getFloatValue()const{
   return _value._float_value;
 }
 
-const double JSONNumber::getDoubleValue()const{
+double JSONNumber::getDoubleValue(){
   if (_type != double_type){
     ILogger::instance()->logError("The value you are requesting is not of type double - returning 0!");
     return 0;

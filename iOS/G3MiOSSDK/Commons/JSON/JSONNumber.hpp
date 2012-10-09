@@ -31,18 +31,10 @@ public:
   int _int_value;
   float _float_value;
   double _double_value;
-  Number_value(int n):_int_value(n), _float_value(), _double_value(){};
-  Number_value(float f):_int_value(), _float_value(f), _double_value(){};
-  Number_value(double d):_int_value(), _float_value(), _double_value(d){};
-  /*int getInt_value(){
-    return _int_value;
-  }
-  float getFloat_value(){
-    return _float_value;
-  }
-  double getDouble_value(){
-    return _double_value;
-  }*/
+  Number_value():_int_value(0), _float_value(0.0), _double_value(0.0){};
+  Number_value(int n):_int_value(n), _float_value(0.0), _double_value(0.0){};
+  Number_value(float f):_int_value(0), _float_value(f), _double_value(0.0){};
+  Number_value(double d):_int_value(0), _float_value(0.0), _double_value(d){};
   
 };
 
@@ -60,10 +52,10 @@ public:
   //JSONNumber(long value):_value(Number_value(value)), _type(long_type){}
   JSONNumber(float value):_value(Number_value(value)), _type(float_type){}
   JSONNumber(double value):_value(Number_value(value)), _type(double_type){}
-  const int getIntValue()const;
+  int getIntValue();
   //const long getLongValue()const;
-  const float getFloatValue()const;
-  const double getDoubleValue()const;
+  float getFloatValue();
+  double getDoubleValue();
   JSONNumber* getNumber(){
     return this;
   }
