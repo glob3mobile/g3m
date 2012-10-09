@@ -600,25 +600,14 @@ public class GL
 
   public final void deleteTexture(IGLTextureId texture)
   {
-	if (texture == null)
+	if (texture != null)
 	{
-	  return;
+	  _gl.deleteTexture(texture);
+  
+	  _texturesIdBag.addLast(texture);
+  
+	  _texturesIdTakeCounter++;
 	}
-  
-  ///#ifdef C_CODE
-  //  const IGLTextureId* textures[] = {
-  //    texture
-  //  };
-  ///#endif
-  ///#ifdef JAVA_CODE
-  //  final IGLTextureId textures[] = { textureId };
-  ///#endif
-  
-	_gl.deleteTexture(texture);
-  
-	_texturesIdBag.addLast(texture);
-  
-	_texturesIdTakeCounter++;
   }
 
   public final void enableCullFace(int face)
