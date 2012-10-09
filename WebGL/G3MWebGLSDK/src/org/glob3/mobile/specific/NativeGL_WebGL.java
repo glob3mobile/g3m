@@ -371,9 +371,9 @@ public final class NativeGL_WebGL
 
       //      String error = "";
       for (int i = 0; i < n; i++) {
-         final JavaScriptObject id = jsCreateTexture(i); //WebGLTextureID
+         final JavaScriptObject webGLTexture = jsCreateTexture(i); //WebGLTexture
          //         error += jsGetError();
-         array.add(new GLTextureId_WebGL(id));
+         array.add(new GLTextureId_WebGL(webGLTexture));
       }
       //      println(error);
       return array;

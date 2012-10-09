@@ -568,9 +568,9 @@ const IGLTextureId* GL::getGLTextureId() {
 
 void GL::deleteTexture(const IGLTextureId* texture) {
   if (texture != NULL) {
-    _gl->deleteTexture(texture);
-    
-    _texturesIdBag.push_back(texture);
+    if ( _gl->deleteTexture(texture) ) {
+      _texturesIdBag.push_back(texture);
+    }
     
     _texturesIdTakeCounter++;
   }
