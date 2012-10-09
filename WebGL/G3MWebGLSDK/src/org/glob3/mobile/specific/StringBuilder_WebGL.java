@@ -9,7 +9,7 @@ public final class StringBuilder_WebGL
          extends
             IStringBuilder {
 
-   String res = "";
+   private String _string = "";
 
 
    @Override
@@ -19,29 +19,50 @@ public final class StringBuilder_WebGL
 
 
    @Override
-   public IStringBuilder add(final double d) {
-      res += d;
+   public IStringBuilder addDouble(final double d) {
+      _string += d;
       return this;
    }
 
 
    @Override
-   public IStringBuilder add(final String s) {
-      res += s;
+   public IStringBuilder addString(final String s) {
+      _string += s;
       return this;
    }
 
 
    @Override
    public IStringBuilder addBool(final boolean b) {
-      res += b;
+      _string += b;
       return this;
    }
 
 
    @Override
    public String getString() {
-      return res;
+      return _string;
+   }
+
+
+   @Override
+   public IStringBuilder addFloat(final float f) {
+      _string += f;
+      return this;
+   }
+
+
+   @Override
+   public IStringBuilder addInt(final int i) {
+      _string += i;
+      return this;
+   }
+
+
+   @Override
+   public IStringBuilder addLong(final long l) {
+      _string += l;
+      return this;
    }
 
 }

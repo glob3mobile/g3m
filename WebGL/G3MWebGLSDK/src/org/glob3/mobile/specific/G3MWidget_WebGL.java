@@ -475,7 +475,7 @@ public final class G3MWidget_WebGL
       }
 
       final TextureBuilder textureBuilder = new CPUTextureBuilder();
-      final TexturesHandler texturesHandler = new TexturesHandler(gl, _factory, true);
+      final TexturesHandler texturesHandler = new TexturesHandler(gl, true);
 
       final Planet planet = Planet.createEarth();
 

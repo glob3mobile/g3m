@@ -190,10 +190,14 @@ public final class Downloader_WebGL
    public String statistics() {
       final StringBuilder_WebGL sb = new StringBuilder_WebGL();
 
-      sb.add("Downloader_WebGL(downloading=").add(_downloadingHandlers.size());
-      sb.add(", queued=").add(_queuedHandlers.size());
-      sb.add(", totalRequests=").add(_requestsCounter);
-      sb.add(", totalCancels=").add(_cancelsCounter);
+      sb.addString("Downloader_WebGL(downloading=");
+      sb.addInt(_downloadingHandlers.size());
+      sb.addString(", queued=");
+      sb.addInt(_queuedHandlers.size());
+      sb.addString(", totalRequests=");
+      sb.addLong(_requestsCounter);
+      sb.addString(", totalCancels=");
+      sb.addLong(_cancelsCounter);
 
       return sb.getString();
    }
