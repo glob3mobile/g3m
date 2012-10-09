@@ -19,6 +19,7 @@ private:
   std::map<std::string, JSONBaseObject*> _entries;
   
 public:
+  ~JSONObject();
   JSONObject* getObject(){
     return this;
   }

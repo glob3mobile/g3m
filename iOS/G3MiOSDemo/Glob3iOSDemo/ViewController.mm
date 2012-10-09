@@ -21,9 +21,11 @@
 
 #include "LevelTileCondition.hpp"
 
-/*#include "IJSONParser.hpp"
+#include "BingLayer.hpp"
+
+#include "IJSONParser.hpp"
 #include "JSONParser_iOS.hpp"
-#include "JSONBaseObject.hpp"
+/*#include "JSONBaseObject.hpp"
 #include "JSONNumber.hpp"
 #include "JSONObject.hpp"
 #include "JSONArray.hpp"
@@ -94,7 +96,7 @@
   //                                     NULL);
   //  layerSet->addLayer(political);
   
-  WMSLayer* bing = new WMSLayer("ve",
+  /*WMSLayer* bing = new WMSLayer("ve",
                                 URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?"),
                                 WMS_1_1_0,
                                 Sector::fullSphere(),
@@ -103,7 +105,13 @@
                                 "",
                                 false,
                                 NULL);
-  layerSet->addLayer(bing);
+  layerSet->addLayer(bing);*/
+  
+  
+  IJSONParser* parser = new JSONParser_iOS();
+  JSONParser.setInstance(parser);
+  BingLayer* realBing = new BingLayer(URL("http://dev.virtualearth.net/REST/v1/Imagery/Metadata"), NULL, Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0), Hybrid, "AgOLISvN2b3012i-odPJjVxhB1dyU6avZ2vG9Ub6Z9-mEpgZHre-1rE8o-DUinUH");
+  layerSet->addLayer(realBing);
   
   
   if (false) {

@@ -21,7 +21,9 @@ public:
   JSONArray* getArray(){
     return this;
   }
+  ~JSONArray();
   JSONBaseObject* getElement(const int index);
+  int getSize();
   
   void appendElement( JSONBaseObject* object);
 };

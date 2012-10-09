@@ -41,6 +41,9 @@ public:
   
   virtual JSONBaseObject* parse(std::string) =0;
   virtual JSONBaseObject* parse(IByteBuffer* buffer) =0;
+  virtual void deleteJSONData(JSONBaseObject* object){
+    delete object;
+  }
   
 };
 

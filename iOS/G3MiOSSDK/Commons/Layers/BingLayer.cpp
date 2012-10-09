@@ -1,0 +1,308 @@
+//
+//  BingLayer.cpp
+//  G3MiOSSDK
+//
+//  Created by Oliver Koehler on 05/10/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//
+
+#include "BingLayer.hpp"
+#include "Tile.hpp"
+#include "Petition.hpp"
+#include "IMathUtils.hpp"
+#include "IDownloader.hpp"
+
+#include "IBufferDownloadListener.hpp"
+
+#include "IJSONParser.hpp"
+//#include "JSONParser_iOS.hpp"
+#include "JSONBaseObject.hpp"
+#include "JSONNumber.hpp"
+#include "JSONObject.hpp"
+#include "JSONArray.hpp"
+#include "JSONString.hpp"
+#include "JSONBoolean.hpp"
+
+#include "IStringUtils.hpp"
+
+#include <iostream>
+
+
+class TokenDownloadListener : public IBufferDownloadListener {
+private:
+  BingLayer* _bingLayer;
+  
+public:
+  TokenDownloadListener(BingLayer* bingLayer);
+  
+  void onDownload(const URL& url,
+                  const IByteBuffer* buffer);
+  
+  void onError(const URL& url){}
+  
+  void onCancel(const URL& url){}
+  
+  void onCanceledDownload(const URL& url,
+                          const IByteBuffer* data) {
+  }
+  
+  ~TokenDownloadListener(){}
+  
+};
+
+TokenDownloadListener::TokenDownloadListener(BingLayer* bingLayer):
+_bingLayer(bingLayer){}
+
+void TokenDownloadListener::onDownload(const URL& url,
+                                       const IByteBuffer* buffer){
+  
+  
+  std::string string = buffer->getAsString();
+  JSONBaseObject* json = IJSONParser::instance()->parse(string);
+  
+  std::string authentication = json->getObject()->getObjectForKey("authenticationResultCode")->getString()->getValue();
+  if (authentication.compare("ValidCredentials")!=0){
+    ILogger::instance()->logError("Could not validate against Bing. Please check your key!");
+  }
+  else {
+    JSONObject* data = json->getObject()->getObjectForKey("resourceSets")->getArray()->getElement(0)->getObject()->getObjectForKey("resources")->getArray()->getElement(0)->getObject();
+    
+    std::string rawTileURL = data->getObjectForKey("imageUrl")->getString()->getValue();
+    std::cout<<"rawURL:"<<rawTileURL<<"\n";
+    
+    int TODO_read_subdomains_and_somehow_choose_one;
+    
+    //remove unneeded final part:&mkt={culture}
+    int lastValidChar = IStringUtils::instance()->indexOf(rawTileURL, "&mkt");
+    rawTileURL = IStringUtils::instance()->substring(rawTileURL, 0,lastValidChar);
+    std::cout<<"rawURL (after cropping):"<<rawTileURL<<"\n";
+    
+    
+    std::string tileURL = IStringUtils::instance()->replaceSubstring(rawTileURL, "{subdomain}", "t0");
+    std::cout<<"With StringUtils: "<<tileURL<<"\n";
+    _bingLayer->setTilePetitionString(tileURL);
+    
+    IJSONParser::instance()->deleteJSONData(json);
+  }
+}
+
+void BingLayer::initialize(const InitializationContext* ic){
+  
+  std::string tileURL = std::string();
+  tileURL+=_mapServerURL.getPath();
+  tileURL+="/";
+  tileURL+=getMapTypeString();
+  tileURL+="?key=";
+  tileURL+=_key;
+
+  const URL url = URL(tileURL);
+  ic->getDownloader()->requestBuffer(url, 100000000L, new TokenDownloadListener(this), true);
+  
+}
+
+bool BingLayer::isReady()const{
+  return _isReady;
+}
+
+
+std::vector<Petition*> BingLayer::getMapPetitions(const RenderContext* rc,
+                                                  const Tile* tile,
+                                                  int width, int height) const {
+  
+  std::vector<Petition*> petitions;
+  const Sector tileSector = tile->getSector();
+  
+  if (!_sector.touchesWith(tileSector)) {
+    return petitions;
+  }
+  
+  const Sector sector = tileSector.intersection(_sector);
+  
+  
+  //Server name
+  std::string req = _mapServerURL.getPath();
+  
+  //If the server refer to itself as localhost...
+  int pos = req.find("localhost");
+  if (pos != -1) {
+    req = req.substr(pos+9);
+    
+    int pos2 = req.find("/", 8);
+    std::string newHost = req.substr(0, pos2);
+    
+    req = newHost + req;
+    
+    
+  }
+  
+  //Key:AgOLISvN2b3012i-odPJjVxhB1dyU6avZ2vG9Ub6Z9-mEpgZHre-1rE8o-DUinUH
+  
+  //TODO: calculate the level correctly 
+  int level = tile->getLevel()+2;
+  
+  int* lowerTileXY = getTileXY(tileSector.lower(), level);
+  int* upperTileXY = getTileXY(tileSector.upper(), level);
+  
+  int deltaX = upperTileXY[0] - lowerTileXY[0];
+  int deltaY = lowerTileXY[1] - upperTileXY[1];
+  
+  std::vector<int*> requiredTiles;
+  
+  for(int x =lowerTileXY[0]; x<= lowerTileXY[0]+deltaX; x++){
+    for(int y =upperTileXY[1]; y<=upperTileXY[1]+deltaY; y++){
+      int tileXY[2];
+      tileXY[0] = x;
+      tileXY[1] = y;
+      Sector bingSector = getBingTileAsSector(tileXY, level);
+      
+      if (!bingSector.touchesWith(tileSector)) {
+        continue;
+      }
+      
+      //std::string url = req + getQuadKey(tileXY, level)+".png?g=1";
+      //std::string url = "http://ecn.t1.tiles.virtualearth.net/tiles/h" +getQuadKey(tileXY, level)+".png?g=1036";
+      //std::cout<<url<<"\n";
+      
+      std::string url = IStringUtils::instance()->replaceSubstring(_tilePetitionString, "{quadkey}", getQuadKey(tileXY, level));
+      std::cout<<"final URL:"<<url<<"\n";
+      petitions.push_back(new Petition(bingSector, URL(url)));
+      
+    }
+    
+  }
+  return petitions;
+}
+
+
+
+URL BingLayer::getFeatureInfoURL(const Geodetic2D& g,
+                                 const IFactory* factory,
+                                 const Sector& tileSector,
+                                 int width, int height) const {
+  return URL::nullURL();
+  
+}
+
+int *BingLayer::getTileXY(const Geodetic2D latLon, const int level)const{
+  
+  //LatLon to Pixels XY
+  unsigned int mapSize = (unsigned int) 256 << level;
+  double lonDeg = latLon.longitude().degrees();
+  double latDeg = latLon.latitude().degrees();
+  if (latDeg < -85.05112878){
+    latDeg = -85.05112878;
+  }
+  if (latDeg > 85.05112878){
+    latDeg = 85.05112878;
+  }
+  
+  double x = (lonDeg +180.0)/360;
+  double sinLat = GMath.sin(latDeg*GMath.pi()/180.0);
+  double y = 0.5-GMath.log((1+sinLat)/(1-sinLat))/(4.0*GMath.pi());
+  
+  x = x * mapSize +0.5;
+  y = y * mapSize +0.5;
+  
+  
+  if (x<0) x=0;
+  if (y<0) y=0;
+  if (x>(mapSize-1)) x = mapSize-1;
+  if (y>(mapSize-1)) y = mapSize-1;
+  
+  int pixelX = (int)x;
+  int pixelY = (int)y;
+  
+  //Pixel XY to Tile XY
+  int tileX = pixelX / 256;
+  int tileY = pixelY / 256;
+  
+  int* tileXY = new int[2];
+  //int tileXY[2];
+  
+  tileXY[0] = tileX;
+  tileXY[1] = tileY;
+  
+  return tileXY;
+}
+
+
+std::string BingLayer::getQuadKey(const int tileXY[], const int level)const{
+  
+  int tileX = tileXY[0];
+  int tileY = tileXY[1];
+  std::string quadKey = std::string();
+  //std::ostringstream stream;
+  for (int i =level; i>0; i--){
+    char digit = '0';
+    int mask = 1 << (i-1);
+    if ((tileX & mask) != 0){
+      digit++;
+    }
+    if ((tileY & mask) != 0){
+      digit++;
+      digit++;
+    }
+    quadKey+=digit;
+  }
+  //quadKey+=stream.str();
+  
+  return quadKey;
+}
+
+Sector BingLayer::getBingTileAsSector(const int tileXY[], const int level)const{
+  
+  
+  Geodetic2D topLeft = getLatLon(tileXY, level);
+  int maxTile = ((int)GMath.pow((double)2, (double)level))-1;
+  
+  Angle lowerLon = topLeft.longitude();
+  Angle upperLat = topLeft.latitude();
+
+  int tileBelow[2];
+  tileBelow[0] = tileXY[0];
+  double lowerLatDeg;
+  if (tileXY[1]+1 > maxTile) {
+    lowerLatDeg = -85.05112878;
+  }
+  else {
+    tileBelow[1] = tileXY[1]+1;
+    lowerLatDeg = getLatLon(tileBelow, level).latitude().degrees();
+  }
+  
+  
+  int tileRight[2];
+  double upperLonDeg;
+  tileRight[1] = tileXY[1];
+  if (tileXY[0]+1 > maxTile) {
+    upperLonDeg = 180.0;
+  }
+  else {
+    tileRight[0] = tileXY[0]+1;
+    upperLonDeg = getLatLon(tileRight, level).longitude().degrees();
+  }
+  
+  return Sector(Geodetic2D(Angle::fromDegrees(lowerLatDeg), lowerLon), Geodetic2D(upperLat, Angle::fromDegrees(upperLonDeg)));
+  
+}
+
+Geodetic2D BingLayer::getLatLon(const int tileXY[], const int level)const{
+  
+  
+  int pixelX = tileXY[0]*256;
+  int pixelY = tileXY[1]*256;
+  
+  //Pixel XY to LatLon
+  unsigned int mapSize = (unsigned int) 256 << level;
+  if (pixelX < 0) pixelX = 0;
+  if (pixelY < 0) pixelY = 0;
+  if (pixelX > mapSize-1) pixelX = mapSize-1;
+  if (pixelY > mapSize-1) pixelY = mapSize-1;
+  double x = (((double)pixelX)/((double)mapSize)) - 0.5;
+  double y = 0.5 - (((double)pixelY)/((double)mapSize));
+  
+  double latDeg = 90.0 - 360.0 * GMath.atan(GMath.exp(-y*2.0*GMath.pi())) / GMath.pi();
+  double lonDeg = 360.0 * x;
+  
+  return Geodetic2D(Angle::fromDegrees(latDeg), Angle::fromDegrees(lonDeg));
+  
+}
