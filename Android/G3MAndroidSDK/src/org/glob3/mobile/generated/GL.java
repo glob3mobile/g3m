@@ -598,16 +598,25 @@ public class GL
 	_gl.uniform1i(GlobalMembersGL.Uniforms.BillBoard, 0);
   }
 
-  public final void deleteTexture(IGLTextureId textureId)
+  public final void deleteTexture(IGLTextureId texture)
   {
-	if (textureId == null)
+	if (texture == null)
 	{
 	  return;
 	}
-	IGLTextureId textures[] = { textureId };
-	_gl.deleteTextures(1, textures);
   
-	_texturesIdBag.addLast(textureId);
+  ///#ifdef C_CODE
+  //  const IGLTextureId* textures[] = {
+  //    texture
+  //  };
+  ///#endif
+  ///#ifdef JAVA_CODE
+  //  final IGLTextureId textures[] = { textureId };
+  ///#endif
+  
+	_gl.deleteTexture(texture);
+  
+	_texturesIdBag.addLast(texture);
   
 	_texturesIdTakeCounter++;
   }
