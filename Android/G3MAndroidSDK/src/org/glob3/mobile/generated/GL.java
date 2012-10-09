@@ -602,9 +602,10 @@ public class GL
   {
 	if (texture != null)
 	{
-	  _gl.deleteTexture(texture);
-  
-	  _texturesIdBag.addLast(texture);
+	  if (_gl.deleteTexture(texture))
+	  {
+		_texturesIdBag.addLast(texture);
+	  }
   
 	  _texturesIdTakeCounter++;
 	}
