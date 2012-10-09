@@ -20,8 +20,6 @@ public class JSONNumber extends JSONBaseObject
 	  _value = new Number_value(new Number_value(value));
 	  _type = number_type.double_type;
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const int getIntValue()const
   public final int getIntValue()
   {
 	if (_type != number_type.int_type)
@@ -41,8 +39,6 @@ public class JSONNumber extends JSONBaseObject
 	return _value.long_value;
   }*/
   
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const float getFloatValue()const
   public final float getFloatValue()
   {
 	if (_type != number_type.float_type)
@@ -52,8 +48,6 @@ public class JSONNumber extends JSONBaseObject
 	}
 	return _value._float_value;
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const double getDoubleValue()const
   public final double getDoubleValue()
   {
 	if (_type != number_type.double_type)
