@@ -226,16 +226,11 @@ public final class NativeGL_WebGL
                                              final JavaScriptObject array) /*-{
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 
-		//		var ARRAY_BUFFER = gl.ARRAY_BUFFER;
-		//		var STATIC_DRAW = gl.STATIC_DRAW;
-		//		var FLOAT = gl.FLOAT;
-
 		var buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 		gl.bufferData(gl.ARRAY_BUFFER, array, gl.STATIC_DRAW);
 
 		gl.vertexAttribPointer(index, size, gl.FLOAT, normalized, stride, 0);
-
    }-*/;
 
 
@@ -258,6 +253,8 @@ public final class NativeGL_WebGL
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
 		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, array, gl.STATIC_DRAW);
 		gl.drawElements(mode, count, gl.UNSIGNED_SHORT, 0);
+
+		gl.deleteBuffer(buffer);
    }-*/;
 
 
@@ -325,7 +322,7 @@ public final class NativeGL_WebGL
 
 
    @Override
-   public void deleteTexture(final IGLTextureId texture) {
+   public boolean deleteTexture(final IGLTextureId texture) {
       //      String error = "";
       //      for (int i = 0; i < n; i++) {
       //         final JavaScriptObject id = ((GLTextureId_WebGL) textures[i]).getWebGLTexture();
@@ -335,6 +332,7 @@ public final class NativeGL_WebGL
       //      println(error);
 
       jsDeleteTexture(((GLTextureId_WebGL) texture).getWebGLTexture());
+      return false;
    }
 
 

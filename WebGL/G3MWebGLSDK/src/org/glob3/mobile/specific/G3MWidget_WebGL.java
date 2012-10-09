@@ -421,16 +421,14 @@ public final class G3MWidget_WebGL
       cameraRenderer.addHandler(new CameraRotationHandler());
       cameraRenderer.addHandler(new CameraDoubleTapHandler());
 
-      final boolean renderDebug = true;
+      final boolean renderDebug = false;
       final boolean useTilesSplitBudget = true;
       final boolean forceTopLevelTilesRenderOnStart = true;
 
-      //      final TilesRenderParameters parameters = TilesRenderParameters.createDefault(renderDebug, useTilesSplitBudget,
-      //               forceTopLevelTilesRenderOnStart);
-
-      final int _____TODO_put_complete_planet;
-      final TilesRenderParameters parameters = TilesRenderParameters.createSingleSector(renderDebug, useTilesSplitBudget,
+      final TilesRenderParameters parameters = TilesRenderParameters.createDefault(renderDebug, useTilesSplitBudget,
                forceTopLevelTilesRenderOnStart);
+
+      // final TilesRenderParameters parameters = TilesRenderParameters.createSingleSector(renderDebug, useTilesSplitBudget, forceTopLevelTilesRenderOnStart);
 
       final ILogger logger = new Logger_WebGL(LogLevel.InfoLevel);
       //      final IStorage storage = new IndexedDBStorage_WebGL();
@@ -479,7 +477,7 @@ public final class G3MWidget_WebGL
       }
 
       final TextureBuilder textureBuilder = new CPUTextureBuilder();
-      final TexturesHandler texturesHandler = new TexturesHandler(gl, true);
+      final TexturesHandler texturesHandler = new TexturesHandler(gl, false);
 
       final Planet planet = Planet.createEarth();
 
@@ -494,7 +492,7 @@ public final class G3MWidget_WebGL
       final IMathUtils mathUtils = new MathUtils_WebGL();
 
       final Color backgroundColor = Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1);
-      final boolean logFPS = false;
+      final boolean logFPS = true;
       final boolean logDownloaderStatistics = false;
       _widget = G3MWidget.create( //
                frameTasksExecutor, //
