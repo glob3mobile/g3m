@@ -1,27 +1,23 @@
 package org.glob3.mobile.generated; 
 public class JSONNumber extends JSONBaseObject
 {
-  private final number_value _value = new number_value();
+  private final Number_value _value = new Number_value();
   private final number_type _type;
 
   public JSONNumber(int value)
   {
-	  _value = new number_value(new number_value(value));
+	  _value = new Number_value(new Number_value(value));
 	  _type = number_type.int_type;
   }
-  public JSONNumber(int value)
-  {
-	  _value = new number_value(new number_value(value));
-	  _type = number_type.long_type;
-  }
+  //JSONNumber(long value):_value(Number_value(value)), _type(long_type){}
   public JSONNumber(float value)
   {
-	  _value = new number_value(new number_value(value));
+	  _value = new Number_value(new Number_value(value));
 	  _type = number_type.float_type;
   }
   public JSONNumber(double value)
   {
-	  _value = new number_value(new number_value(value));
+	  _value = new Number_value(new Number_value(value));
 	  _type = number_type.double_type;
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -33,19 +29,18 @@ public class JSONNumber extends JSONBaseObject
 	  ILogger.instance().logError("The value you are requesting is not of type int - returning 0!");
 	  return 0;
 	}
-	return _value.int_value;
+	return _value._int_value;
   }
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const int getLongValue()const
-  public final int getLongValue()
-  {
-	if (_type != number_type.long_type)
-	{
-	  ILogger.instance().logError("The value you are requesting is not of type long - returning 0!");
+  //const long getLongValue()const;
+
+  /*const long JSONNumber::getLongValue()const{
+	if (_type != long_type){
+	  ILogger::instance()->logError("The value you are requesting is not of type long - returning 0!");
 	  return 0;
 	}
 	return _value.long_value;
-  }
+  }*/
+  
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: const float getFloatValue()const
   public final float getFloatValue()
@@ -55,7 +50,7 @@ public class JSONNumber extends JSONBaseObject
 	  ILogger.instance().logError("The value you are requesting is not of type float - returning 0!");
 	  return 0;
 	}
-	return _value.float_value;
+	return _value._float_value;
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: const double getDoubleValue()const
@@ -66,7 +61,7 @@ public class JSONNumber extends JSONBaseObject
 	  ILogger.instance().logError("The value you are requesting is not of type double - returning 0!");
 	  return 0;
 	}
-	return _value.double_value;
+	return _value._double_value;
   }
   public final JSONNumber getNumber()
   {

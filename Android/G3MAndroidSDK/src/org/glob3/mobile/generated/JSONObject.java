@@ -22,6 +22,14 @@ public class JSONObject extends JSONBaseObject
 {
   private java.util.HashMap<String, JSONBaseObject> _entries = new java.util.HashMap<String, JSONBaseObject>();
 
+  public void dispose()
+  {
+	for (java.util.Iterator<String, JSONBaseObject> it = _entries.iterator(); it.hasNext();)
+	{
+	  it.next().getValue() = null;
+	}
+	_entries.clear();
+  }
   public final JSONObject getObject()
   {
 	return this;
@@ -32,7 +40,7 @@ public class JSONObject extends JSONBaseObject
 
   public final void putObject(String key, JSONBaseObject object)
   {
-	_entries.insert(std.make_pair(key, object));
+	_entries.put(key, object);
   }
 
 }
