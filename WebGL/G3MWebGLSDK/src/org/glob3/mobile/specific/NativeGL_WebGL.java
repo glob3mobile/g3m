@@ -325,15 +325,16 @@ public final class NativeGL_WebGL
 
 
    @Override
-   public void deleteTextures(final int n,
-                              final IGLTextureId[] textures) {
+   public void deleteTexture(final IGLTextureId texture) {
       //      String error = "";
-      for (int i = 0; i < n; i++) {
-         final JavaScriptObject id = ((GLTextureId_WebGL) textures[i]).getWebGLTexture();
-         jsDeleteTexture(id);
-         //         error += jsGetError();
-      }
+      //      for (int i = 0; i < n; i++) {
+      //         final JavaScriptObject id = ((GLTextureId_WebGL) textures[i]).getWebGLTexture();
+      //         jsDeleteTexture(id);
+      //         //         error += jsGetError();
+      //      }
       //      println(error);
+
+      jsDeleteTexture(((GLTextureId_WebGL) texture).getWebGLTexture());
    }
 
 

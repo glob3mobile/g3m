@@ -567,22 +567,11 @@ const IGLTextureId* GL::getGLTextureId() {
 }
 
 void GL::deleteTexture(const IGLTextureId* texture) {
-  if (texture == NULL) {
-    return;
+  if (texture != NULL) {
+    _gl->deleteTexture(texture);
+    
+    _texturesIdBag.push_back(texture);
+    
+    _texturesIdTakeCounter++;
   }
-  
-//#ifdef C_CODE
-//  const IGLTextureId* textures[] = {
-//    texture
-//  };
-//#endif
-//#ifdef JAVA_CODE
-//  final IGLTextureId textures[] = { textureId };
-//#endif
-  
-  _gl->deleteTexture(texture);
-  
-  _texturesIdBag.push_back(texture);
-  
-  _texturesIdTakeCounter++;
 }

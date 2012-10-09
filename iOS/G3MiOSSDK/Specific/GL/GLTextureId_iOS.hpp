@@ -16,7 +16,7 @@
 
 class GLTextureId_iOS: public IGLTextureId{
 private:
-  int _textureId;
+  unsigned int _textureId;
 public:
   
   
@@ -24,8 +24,8 @@ public:
     _textureId = -1;
   }
   
-  GLTextureId_iOS(int x) {
-    _textureId = x;
+  GLTextureId_iOS(unsigned int textureId) {
+    _textureId = textureId;
   }
 
   GLTextureId_iOS(const GLTextureId_iOS* that) :
@@ -34,21 +34,22 @@ public:
     
   }
 
-  int getGLTextureId() const {
+  unsigned int getGLTextureId() const {
     return _textureId;
   }
   
   const std::string description() const {
     IStringBuilder *isb = IStringBuilder::newStringBuilder();
-    isb->addString("const GLTextureId*#");
+    isb->addString("(GLTextureId_iOS #");
     isb->addInt(_textureId);
+    isb->addString(")");
     const std::string s = isb->getString();
     delete isb;
     return s;
   }
   
   bool isEqualsTo(const IGLTextureId* that) const {
-    return (_textureId == ((GLTextureId_iOS*)that)->_textureId);
+    return (_textureId == ((GLTextureId_iOS*) that)->_textureId);
   }
 };
 

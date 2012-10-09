@@ -342,8 +342,7 @@ public class NativeGL2_Android
 
 
    @Override
-   public void deleteTextures(final int n,
-                              final IGLTextureId[] textures) {
+   public void deleteTexture(final IGLTextureId texture) {
       final int[] texIds = new int[n];
       for (int i = 0; i < n; i++) {
          texIds[i] = ((GLTextureId_Android) textures[i]).getGLTextureId();
