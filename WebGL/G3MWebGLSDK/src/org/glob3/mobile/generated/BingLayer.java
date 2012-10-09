@@ -5,6 +5,7 @@ public class BingLayer extends Layer
   private final Sector _sector ;
   private final URL _mapServerURL = new URL();
   private final String _key;
+  private final Language _locale;
   private final MapType _mapType;
   private String _tilePetitionString;
   private boolean _isReady;
@@ -14,12 +15,13 @@ public class BingLayer extends Layer
 
 
 
-  public BingLayer(URL mapServerURL, LayerCondition condition, Sector sector, MapType mapType, String key) //http://ecn.t0.tiles.virtualearth.net/tiles/r093129.png?g=392
+  public BingLayer(URL mapServerURL, LayerCondition condition, Sector sector, MapType mapType, Language locale, String key)
   {
 	  super(condition);
 	  _sector = new Sector(sector);
 	  _mapServerURL = new URL(mapServerURL);
 	  _mapType = mapType;
+	  _locale = locale;
 	  _key = key;
 	  _tilePetitionString = new String();
 	  _isReady = false;
@@ -37,6 +39,37 @@ public class BingLayer extends Layer
   {
 	_tilePetitionString = tilePetitionString;
 	_isReady = true;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: String getLocale()const
+  public final String getLocale()
+  {
+	if (_locale == Language.English)
+	{
+	  return "en-US";
+	}
+	if (_locale == Language.Spanish)
+	{
+	  return "es-ES";
+	}
+	if (_locale == Language.German)
+	{
+	  return "de-DE";
+	}
+	if (_locale == Language.French)
+	{
+	  return "fr-FR";
+	}
+	if (_locale == Language.Dutch)
+	{
+	  return "nl-BE";
+	}
+	if (_locale == Language.Italian)
+	{
+	  return "it-IT";
+	}
+	return "en-US";
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -102,8 +135,6 @@ public class BingLayer extends Layer
 	  String newHost = req.substring(0, pos2);
   
 	  req = newHost + req;
-  
-  
 	}
   
 	//Key:AgOLISvN2b3012i-odPJjVxhB1dyU6avZ2vG9Ub6Z9-mEpgZHre-1rE8o-DUinUH
@@ -133,14 +164,7 @@ public class BingLayer extends Layer
 		  continue;
 		}
   
-		//std::string url = req + getQuadKey(tileXY, level)+".png?g=1";
-		//std::string url = "http://ecn.t1.tiles.virtualearth.net/tiles/h" +getQuadKey(tileXY, level)+".png?g=1036";
-		//std::cout<<url<<"\n";
-  
 		String url = IStringUtils.instance().replaceSubstring(_tilePetitionString, "{quadkey}", getQuadKey(tileXY, level));
-		System.out.print("final URL:");
-		System.out.print(url);
-		System.out.print("\n");
 		petitions.add(new Petition(bingSector, new URL(url)));
   
 	  }
@@ -156,7 +180,7 @@ public class BingLayer extends Layer
   
 	int tileX = tileXY[0];
 	int tileY = tileXY[1];
-	String quadKey = ;
+	String quadKey; // = std::string();
 	//std::ostringstream stream;
 	for (int i = level; i>0; i--)
 	{

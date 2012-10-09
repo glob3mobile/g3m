@@ -24,6 +24,8 @@ public class JSONObject extends JSONBaseObject
 
   public void dispose()
   {
+	_entries.clear();
+  
   }
   public final JSONObject getObject()
   {
@@ -36,6 +38,11 @@ public class JSONObject extends JSONBaseObject
   public final void putObject(String key, JSONBaseObject object)
   {
 	_entries.put(key, object);
+  }
+
+  public final int getSize()
+  {
+	return _entries.size();
   }
 
 }

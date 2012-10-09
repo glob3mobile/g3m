@@ -1,9 +1,4 @@
 package org.glob3.mobile.generated; 
-///#include "JSONParser_iOS.hpp"
-
-
-
-
 public class TokenDownloadListener implements IBufferDownloadListener
 {
   private BingLayer _bingLayer;
@@ -30,24 +25,15 @@ public class TokenDownloadListener implements IBufferDownloadListener
 	  JSONObject data = json.getObject().getObjectForKey("resourceSets").getArray().getElement(0).getObject().getObjectForKey("resources").getArray().getElement(0).getObject();
   
 	  String rawTileURL = data.getObjectForKey("imageUrl").getString().getValue();
-	  System.out.print("rawURL:");
-	  System.out.print(rawTileURL);
-	  System.out.print("\n");
   
 	  int TODO_read_subdomains_and_somehow_choose_one;
   
-	  //remove unneeded final part:&mkt={culture}
-	  int lastValidChar = IStringUtils.instance().indexOf(rawTileURL, "&mkt");
-	  rawTileURL = IStringUtils.instance().substring(rawTileURL, 0, lastValidChar);
-	  System.out.print("rawURL (after cropping):");
-	  System.out.print(rawTileURL);
-	  System.out.print("\n");
   
+	  //set language
+	  rawTileURL = IStringUtils.instance().replaceSubstring(rawTileURL, "{culture}", _bingLayer.getLocale());
   
 	  String tileURL = IStringUtils.instance().replaceSubstring(rawTileURL, "{subdomain}", "t0");
-	  System.out.print("With StringUtils: ");
-	  System.out.print(tileURL);
-	  System.out.print("\n");
+	  //std::cout<<"final URL: "<<tileURL<<"\n";
 	  _bingLayer.setTilePetitionString(tileURL);
   
 	  IJSONParser.instance().deleteJSONData(json);
