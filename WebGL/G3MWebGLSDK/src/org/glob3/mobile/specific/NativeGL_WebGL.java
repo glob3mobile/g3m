@@ -129,22 +129,30 @@ public final class NativeGL_WebGL
    }-*/;
 
 
+   //   @Override
+   //   public void uniformMatrix4fv(final IGLUniformID location,
+   //                                final boolean transpose,
+   //                                final IFloatBuffer buffer) {
+   //      final JavaScriptObject l = ((GLUniformID_WebGL) location).getId();
+   //
+   //      jsUniformMatrix4fv(l, transpose, ((FloatBuffer_WebGL) buffer).getBuffer());
+   //      //  printGLError(); 
+   //   }
+   //   private native void jsUniformMatrix4fv(final JavaScriptObject loc,
+   //                                          final boolean transpose,
+   //                                          final JavaScriptObject value) /*-{
+   //		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniformMatrix4fv(
+   //				loc, transpose, value);
+   //   }-*/;
+
    @Override
-   public void uniformMatrix4fv(final IGLUniformID location,
-                                final boolean transpose,
-                                final IFloatBuffer buffer) {
-      final JavaScriptObject l = ((GLUniformID_WebGL) location).getId();
-
-      jsUniformMatrix4fv(l, transpose, ((FloatBuffer_WebGL) buffer).getBuffer());
-      //  printGLError(); 
-   }
-
-
-   private native void jsUniformMatrix4fv(final JavaScriptObject loc,
-                                          final boolean transpose,
-                                          final JavaScriptObject value) /*-{
+   public native void uniformMatrix4fv(final IGLUniformID location,
+                                       final boolean transpose,
+                                       final IFloatBuffer buffer) /*-{
+		var id = location.@org.glob3.mobile.specific.GLUniformID_WebGL::getId()();
+		var value = buffer.@org.glob3.mobile.specific.FloatBuffer_WebGL::getBuffer()();
 		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniformMatrix4fv(
-				loc, transpose, value);
+				id, transpose, value);
    }-*/;
 
 
@@ -206,52 +214,84 @@ public final class NativeGL_WebGL
    }-*/;
 
 
+   //   @Override
+   //   public void vertexAttribPointer(final int index,
+   //                                   final int size,
+   //                                   final boolean normalized,
+   //                                   final int stride,
+   //                                   final IFloatBuffer buffer) {
+   //      //TODO CHECK NO CLIENT SIDE ARRAYS
+   //      final JavaScriptObject jsbuffer = ((FloatBuffer_WebGL) buffer).getBuffer();
+   //      jsVertexAttribPointer(index, size, normalized, stride, jsbuffer);
+   //      //  printGLError();
+   //   }
+   //   private native void jsVertexAttribPointer(final int index,
+   //                                             final int size,
+   //                                             final boolean normalized,
+   //                                             final int stride,
+   //                                             final JavaScriptObject array) /*-{
+   //		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+   //
+   //		var buffer = gl.createBuffer();
+   //		gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+   //		gl.bufferData(gl.ARRAY_BUFFER, array, gl.STATIC_DRAW);
+   //
+   //		gl.vertexAttribPointer(index, size, gl.FLOAT, normalized, stride, 0);
+   //   }-*/;
+
    @Override
-   public void vertexAttribPointer(final int index,
-                                   final int size,
-                                   final boolean normalized,
-                                   final int stride,
-                                   final IFloatBuffer buffer) {
-      //TODO CHECK NO CLIENT SIDE ARRAYS
-      final JavaScriptObject jsbuffer = ((FloatBuffer_WebGL) buffer).getBuffer();
-      jsVertexAttribPointer(index, size, normalized, stride, jsbuffer);
-      //  printGLError();
-   }
-
-
-   private native void jsVertexAttribPointer(final int index,
-                                             final int size,
-                                             final boolean normalized,
-                                             final int stride,
-                                             final JavaScriptObject array) /*-{
+   public native void vertexAttribPointer(final int index,
+                                          final int size,
+                                          final boolean normalized,
+                                          final int stride,
+                                          final IFloatBuffer buffer) /*-{
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 
-		var buffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+		var webGLBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, webGLBuffer);
+
+		var array = buffer.@org.glob3.mobile.specific.FloatBuffer_WebGL::getBuffer()();
 		gl.bufferData(gl.ARRAY_BUFFER, array, gl.STATIC_DRAW);
 
 		gl.vertexAttribPointer(index, size, gl.FLOAT, normalized, stride, 0);
    }-*/;
 
 
+   //   @Override
+   //   public void drawElements(final int mode,
+   //                            final int count,
+   //                            final IIntBuffer indices) {
+   //      jsDrawElements(mode, count, ((IntBuffer_WebGL) indices).getBuffer());
+   //      //  printGLError();
+   //   }
+   //   private native void jsDrawElements(final int mode,
+   //                                      final int count,
+   //                                      final JavaScriptObject array) /*-{
+   //		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
+   //
+   //		var buffer = gl.createBuffer();
+   //		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
+   //		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, array, gl.STATIC_DRAW);
+   //
+   //		//TODO CHECK UNSIGNED SHORT
+   //		gl.drawElements(mode, count, gl.UNSIGNED_SHORT, 0);
+   //
+   //		gl.deleteBuffer(buffer);
+   //   }-*/;
+
    @Override
-   public void drawElements(final int mode,
-                            final int count,
-                            final IIntBuffer indices) {
-      jsDrawElements(mode, count, ((IntBuffer_WebGL) indices).getBuffer());
-      //  printGLError();
-   }
-
-
-   //TODO CHECK UNSIGNED SHORT
-   private native void jsDrawElements(final int mode,
-                                      final int count,
-                                      final JavaScriptObject array) /*-{
+   public native void drawElements(final int mode,
+                                   final int count,
+                                   final IIntBuffer indices) /*-{
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 
 		var buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
+
+		var array = indices.@org.glob3.mobile.specific.IntBuffer_WebGL::getBuffer()();
 		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, array, gl.STATIC_DRAW);
+
+		//TODO CHECK UNSIGNED SHORT
 		gl.drawElements(mode, count, gl.UNSIGNED_SHORT, 0);
 
 		gl.deleteBuffer(buffer);
@@ -305,17 +345,26 @@ public final class NativeGL_WebGL
    }-*/;
 
 
+   //   @Override
+   //   public void bindTexture(final int target,
+   //                           final IGLTextureId texture) {
+   //      final JavaScriptObject id = ((GLTextureId_WebGL) texture).getWebGLTexture();
+   //      jsBindTexture(target, id);
+   //      //  printGLError();
+   //   }
+   //   private native void jsBindTexture(final int target,
+   //                                     final JavaScriptObject id) /*-{
+   //		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.bindTexture(target,
+   //				id);
+   //   }-*/;
+
+
    @Override
-   public void bindTexture(final int target,
-                           final IGLTextureId texture) {
-      final JavaScriptObject id = ((GLTextureId_WebGL) texture).getWebGLTexture();
-      jsBindTexture(target, id);
-      //  printGLError();
-   }
+   public native void bindTexture(final int target,
+                                  final IGLTextureId texture) /*-{
+		// [instance-expr.]@class-name::method-name(param-signature)(arguments)
 
-
-   private native void jsBindTexture(final int target,
-                                     final JavaScriptObject id) /*-{
+		var id = texture.@org.glob3.mobile.specific.GLTextureId_WebGL::getWebGLTexture()();
 		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.bindTexture(target,
 				id);
    }-*/;
