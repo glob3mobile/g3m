@@ -40,6 +40,7 @@ private:
   const Language _locale;
   const MapType _mapType;
   std::string _tilePetitionString;
+  std::vector<std::string> _subDomains;
   bool _isReady;
   
   
@@ -67,6 +68,11 @@ public:
     _tilePetitionString = tilePetitionString;
     _isReady = true;
   }
+  
+  void setSubDomains(std::vector<std::string> subDomains){
+    _subDomains = subDomains;
+  }
+
   
   std::string getLocale()const;
   

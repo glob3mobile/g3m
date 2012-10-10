@@ -66,15 +66,21 @@ void TokenDownloadListener::onDownload(const URL& url,
   else {
     JSONObject* data = json->getObject()->getObjectForKey("resourceSets")->getArray()->getElement(0)->getObject()->getObjectForKey("resources")->getArray()->getElement(0)->getObject();
     
-    std::string rawTileURL = data->getObjectForKey("imageUrl")->getString()->getValue();
-    
-    int TODO_read_subdomains_and_somehow_choose_one;
+    JSONArray* subDomArray = data->getObjectForKey("imageUrlSubdomains")->getArray();
+    std::vector<std::string> subdomains;
+    int numSubdomains = subDomArray->getSize();
+    for (int i = 0; i<numSubdomains; i++){
+      subdomains.push_back(subDomArray->getElement(i)->getString()->getValue());
+    }
+    _bingLayer->setSubDomains(subdomains);
 
     
-    //set language
-    rawTileURL = IStringUtils::instance()->replaceSubstring(rawTileURL, "{culture}", _bingLayer->getLocale());
+    std::string tileURL = data->getObjectForKey("imageUrl")->getString()->getValue();
     
-    std::string tileURL = IStringUtils::instance()->replaceSubstring(rawTileURL, "{subdomain}", "t0");
+    //set language
+    tileURL = IStringUtils::instance()->replaceSubstring(tileURL, "{culture}", _bingLayer->getLocale());
+    
+    
     //std::cout<<"final URL: "<<tileURL<<"\n";
     _bingLayer->setTilePetitionString(tileURL);
     
@@ -178,6 +184,9 @@ std::vector<Petition*> BingLayer::getMapPetitions(const RenderContext* rc,
   
   std::vector<int*> requiredTiles;
   
+  int currentSubDomain = 0;
+  int numSubDomains = _subDomains.size();
+  
   for(int x =lowerTileXY[0]; x<= lowerTileXY[0]+deltaX; x++){
     for(int y =upperTileXY[1]; y<=upperTileXY[1]+deltaY; y++){
       int tileXY[2];
@@ -189,7 +198,12 @@ std::vector<Petition*> BingLayer::getMapPetitions(const RenderContext* rc,
         continue;
       }
       
+      //set the quadkey
       std::string url = IStringUtils::instance()->replaceSubstring(_tilePetitionString, "{quadkey}", getQuadKey(tileXY, level));
+      
+      //set the subDomain (round-robbin)
+      url = IStringUtils::instance()->replaceSubstring(url, "{subdomain}",_subDomains[currentSubDomain % numSubDomains]);
+      currentSubDomain++;
       petitions.push_back(new Petition(bingSector, URL(url)));
       
     }
