@@ -21,12 +21,12 @@ import com.google.gwt.user.client.Event;
 
 public final class MotionEventProcessor {
 
-   final static String TAG        = "MotionEventProcessor";
+   final static String     TAG        = "MotionEventProcessor";
 
-   final G3MWidget     _widget;
-   boolean             _mouseDown = false;
-   boolean             _keyDown   = false;
-   Vector2D            _prevPos   = null;
+   private final G3MWidget _widget;
+   private boolean         _mouseDown = false;
+   private boolean         _keyDown   = false;
+   private Vector2D        _prevPos   = null;
 
 
    public MotionEventProcessor(final G3MWidget widget) {

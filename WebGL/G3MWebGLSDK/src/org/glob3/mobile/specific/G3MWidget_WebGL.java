@@ -57,26 +57,27 @@ public final class G3MWidget_WebGL
             Composite {
 
 
-   public static final String    CANVAS_ID             = "g3m-canvas";
-   private final FlowPanel       _panel                = new FlowPanel();
-   private Canvas                _canvas;
-   private MotionEventProcessor  _motionEventProcessor = null;
-   ArrayList<ICameraConstrainer> _cameraConstraints    = null;
-   LayerSet                      _layerSet             = null;
-   ArrayList<Renderer>           _renderers            = null;
-   UserData                      _userData             = null;
+   public static final String            CANVAS_ID             = "g3m-canvas";
 
-   private IGLProgramId          _program              = null;
-   private JavaScriptObject      _webGLContext         = null;
+   private final FlowPanel               _panel                = new FlowPanel();
+   private Canvas                        _canvas;
+   private MotionEventProcessor          _motionEventProcessor = null;
+   private ArrayList<ICameraConstrainer> _cameraConstraints    = null;
+   private LayerSet                      _layerSet             = null;
+   private ArrayList<Renderer>           _renderers            = null;
+   private UserData                      _userData             = null;
 
-   G3MWidget                     _widget;
-   int                           _width;
-   int                           _height;
-   final int                     _delayMillis;
-   final String                  _proxy;
+   private IGLProgramId                  _program              = null;
+   private JavaScriptObject              _webGLContext         = null;
 
-   ArrayList<String>             _imagesToPreload;
-   IFactory                      _factory;
+   private G3MWidget                     _widget;
+   private int                           _width;
+   private int                           _height;
+   private final int                     _delayMillis;
+   private final String                  _proxy;
+
+   private ArrayList<String>             _imagesToPreload;
+   private IFactory                      _factory;
 
 
    public G3MWidget_WebGL(final int delayMillis,
