@@ -32,8 +32,11 @@ public class JSONObject extends JSONBaseObject
 	return this;
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  JSONBaseObject getObjectForKey(String key);
+  public final JSONBaseObject getObjectForKey(String key)
+  {
+  
+	return _entries.get(key);
+  }
 
   public final void putObject(String key, JSONBaseObject object)
   {
