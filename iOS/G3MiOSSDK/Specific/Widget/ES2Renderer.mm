@@ -251,7 +251,7 @@ enum {
   [context renderbufferStorage:GL_RENDERBUFFER fromDrawable:layer];
   glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &backingWidth);
   glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &backingHeight);
-  
+
   // damos tamaño al buffer de profundidad
   glBindRenderbuffer(GL_RENDERBUFFER, depthRenderbuffer);
   glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, backingWidth, backingHeight);
