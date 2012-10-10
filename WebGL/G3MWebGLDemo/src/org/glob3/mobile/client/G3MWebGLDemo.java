@@ -5,6 +5,7 @@ package org.glob3.mobile.client;
 import java.util.ArrayList;
 
 import org.glob3.mobile.generated.ICameraConstrainer;
+import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.Sector;
@@ -24,10 +25,10 @@ public class G3MWebGLDemo
          implements
             EntryPoint {
 
-   String          g3mWidgetHolderId = "g3mWidgetHolder";
+   private final String    g3mWidgetHolderId = "g3mWidgetHolder";
 
 
-   G3MWidget_WebGL _widget           = null;
+   private G3MWidget_WebGL _widget           = null;
 
 
    @Override
@@ -42,8 +43,9 @@ public class G3MWebGLDemo
          g3mWidgetHolder.add(_widget);
 
          initWidgetDemo();
-      }
 
+         ILogger.instance().logInfo("** Using proxy=" + proxy);
+      }
    }
 
 
@@ -56,17 +58,47 @@ public class G3MWebGLDemo
       final LayerSet layerSet = new LayerSet();
       final boolean useBing = true;
       if (useBing) {
-         final WMSLayer bing = new WMSLayer("ve", new URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?"),
-                  WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/png", "EPSG:4326", "", false, null);
+         final WMSLayer bing = new WMSLayer( //
+                  "ve", //
+                  new URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?"), //
+                  WMSServerVersion.WMS_1_1_0, //
+                  Sector.fullSphere(), //
+                  "image/png", //
+                  "EPSG:4326", //
+                  "", //
+                  false, //
+                  null);
 
          layerSet.addLayer(bing);
       }
 
       final boolean usePnoa = false;
       if (usePnoa) {
-         final WMSLayer pnoa = new WMSLayer("PNOA", new URL("http://www.idee.es/wms/PNOA/PNOA"), WMSServerVersion.WMS_1_1_0,
-                  Sector.fromDegrees(21, -18, 45, 6), "image/png", "EPSG:4326", "", true, null);
+         final WMSLayer pnoa = new WMSLayer( //
+                  "PNOA", //
+                  new URL("http://www.idee.es/wms/PNOA/PNOA"), //
+                  WMSServerVersion.WMS_1_1_0, Sector.fromDegrees(21, -18, 45, 6), //
+                  "image/png", //
+                  "EPSG:4326", //
+                  "", //
+                  true, //
+                  null);
          layerSet.addLayer(pnoa);
+      }
+
+      final boolean useOSMLatLon = false;
+      if (useOSMLatLon) {
+         final WMSLayer osm = new WMSLayer( //
+                  "osm", //
+                  new URL("http://wms.latlon.org/"), //
+                  WMSServerVersion.WMS_1_1_0, //
+                  Sector.fromDegrees(-85.05, -180.0, 85.5, 180.0), //
+                  "image/jpeg", //
+                  "EPSG:4326", //
+                  "", //
+                  false, //
+                  null);
+         layerSet.addLayer(osm);
       }
 
 
@@ -86,7 +118,6 @@ public class G3MWebGLDemo
       final ArrayList<String> imagesToPreload = new ArrayList<String>();
       //      imagesToPreload.add("../images/world.jpg");
       _widget.initWidget(cameraConstraints, layerSet, renderers, userData, imagesToPreload);
-
    }
 
 

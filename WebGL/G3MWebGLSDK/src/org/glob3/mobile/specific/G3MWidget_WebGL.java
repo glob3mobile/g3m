@@ -497,7 +497,7 @@ public final class G3MWidget_WebGL
       final IMathUtils mathUtils = new MathUtils_WebGL();
 
       final Color backgroundColor = Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1);
-      final boolean logFPS = true;
+      final boolean logFPS = false;
       final boolean logDownloaderStatistics = false;
       _widget = G3MWidget.create( //
                frameTasksExecutor, //

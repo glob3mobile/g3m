@@ -82,19 +82,22 @@
   //                                     NULL);
   //  layerSet->addLayer(political);
   
-  WMSLayer* bing = new WMSLayer("ve",
-                                URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?"),
-                                WMS_1_1_0,
-                                Sector::fullSphere(),
-                                "image/jpeg",
-                                "EPSG:4326",
-                                "",
-                                false,
-                                NULL);
-  layerSet->addLayer(bing);
+  bool useBing = false;
+  if (useBing) {
+    WMSLayer* bing = new WMSLayer("ve",
+                                  URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?"),
+                                  WMS_1_1_0,
+                                  Sector::fullSphere(),
+                                  "image/jpeg",
+                                  "EPSG:4326",
+                                  "",
+                                  false,
+                                  NULL);
+    layerSet->addLayer(bing);
+  }
   
-  
-  if (false) {
+  bool useOSMLatLon = true;
+  if (useOSMLatLon) {
     WMSLayer *osm = new WMSLayer("osm",
                                  URL("http://wms.latlon.org/"),
                                  WMS_1_1_0,
