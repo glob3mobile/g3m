@@ -120,6 +120,10 @@ public final class G3MWidget_WebGL
       setPixelSize(w, h);
       _canvas.setCoordinateSpaceWidth(w);
       _canvas.setCoordinateSpaceHeight(h);
+      if (_widget != null) {
+         _widget.onResizeViewportEvent(w, h);
+         jsOnResizeViewport(w, h);
+      }
    }
 
 
@@ -522,6 +526,13 @@ public final class G3MWidget_WebGL
 
       _motionEventProcessor = new MotionEventProcessor(_widget);
 
+      if (_program != null) {
+         _widget.getGL().useProgram(_program);
+      }
+      else {
+         throw new RuntimeException("PROGRAM INVALID");
+      }
+
       startRenderLoop();
    }
 
@@ -561,42 +572,50 @@ public final class G3MWidget_WebGL
 
    private void renderG3MWidget() {
       //USING PROGRAM
-      if (_program != null) {
-         jsGLInit();
-         _widget.getGL().useProgram(_program);
-         _widget.render();
-      }
-      else {
-         throw new RuntimeException("PROGRAM INVALID");
-      }
+      //      if (_program != null) {
+      //jsGLInit();
+      //         _widget.getGL().useProgram(_program);
+      _widget.render();
+      //      }
+      //      else {
+      //         throw new RuntimeException("PROGRAM INVALID");
+      //      }
    }
 
 
-   private native void jsGLInit() /*-{
-		//    debugger;
+   //   private native void jsGLInit() /*-{
+   //		//    debugger;
+   //
+   //		var webGLContext = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_webGLContext;
+   //
+   //		//		var error = 0;
+   //		//		try {
+   //		//			error = webGLContext.getError();
+   //		//		} catch (e) {
+   //		//			console.log("jsGLInit catch " + e);
+   //		//		}
+   //		//		if (error != 0) {
+   //		//			//                        debugger;
+   //		//			console.error("jsGLInit error=" + error);
+   //		//		}
+   //
+   //		//    debugger;
+   //		var viewportWidth = webGLContext.viewportWidth;
+   //		var viewportHeight = webGLContext.viewportHeight;
+   //		var COLOR_BUFFER_BIT = webGLContext.COLOR_BUFFER_BIT;
+   //		var DEPTH_BUFFER_BIT = webGLContext.DEPTH_BUFFER_BIT;
+   //
+   //		webGLContext.viewport(0, 0, viewportWidth, viewportHeight);
+   //		webGLContext.clear(COLOR_BUFFER_BIT | DEPTH_BUFFER_BIT);
+   //   }-*/;
 
+
+   private native void jsOnResizeViewport(final int width,
+                                          final int height) /*-{
 		var webGLContext = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_webGLContext;
 
-		//		var error = 0;
-		//		try {
-		//			error = webGLContext.getError();
-		//		} catch (e) {
-		//			console.log("jsGLInit catch " + e);
-		//		}
-		//		if (error != 0) {
-		//			//                        debugger;
-		//			console.error("jsGLInit error=" + error);
-		//		}
-
-		//    debugger;
-		var viewportWidth = webGLContext.viewportWidth;
-		var viewportHeight = webGLContext.viewportHeight;
-		var COLOR_BUFFER_BIT = webGLContext.COLOR_BUFFER_BIT;
-		var DEPTH_BUFFER_BIT = webGLContext.DEPTH_BUFFER_BIT;
-
-		webGLContext.viewport(0, 0, viewportWidth, viewportHeight);
-		webGLContext.clear(COLOR_BUFFER_BIT | DEPTH_BUFFER_BIT);
+		webGLContext.viewport(0, 0, width, height);
+		webGLContext.clear(webGLContext.COLOR_BUFFER_BIT
+				| webGLContext.DEPTH_BUFFER_BIT);
    }-*/;
-
-
 }
