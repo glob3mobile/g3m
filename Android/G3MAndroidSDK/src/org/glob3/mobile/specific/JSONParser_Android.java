@@ -50,19 +50,22 @@ public class JSONParser_Android
             }
          }
          else if (rawJson instanceof String) {
-            return new org.glob3.mobile.generated.JSONString((String) rawJson);
+            //g3mJSONBaseObject = new org.glob3.mobile.generated.JSONString((String) rawJson);
+
+            //TODO Hack to return the full string if it contain ":"
+            g3mJSONBaseObject = new org.glob3.mobile.generated.JSONString(NamelessParameter);
          }
          else if (rawJson instanceof Boolean) {
-            return new org.glob3.mobile.generated.JSONBoolean((Boolean) rawJson);
+            g3mJSONBaseObject = new org.glob3.mobile.generated.JSONBoolean((Boolean) rawJson);
          }
          else if (rawJson instanceof Long) {
-            return new org.glob3.mobile.generated.JSONNumber((Integer) rawJson);
+            g3mJSONBaseObject = new org.glob3.mobile.generated.JSONNumber((Integer) rawJson);
          }
          else if (rawJson instanceof Double) {
-            return new org.glob3.mobile.generated.JSONNumber((Double) rawJson);
+            g3mJSONBaseObject = new org.glob3.mobile.generated.JSONNumber((Double) rawJson);
          }
          else if (rawJson instanceof Integer) {
-            return new org.glob3.mobile.generated.JSONNumber((Integer) rawJson);
+            g3mJSONBaseObject = new org.glob3.mobile.generated.JSONNumber((Integer) rawJson);
          }
       }
       catch (final JSONException e) {
@@ -70,14 +73,12 @@ public class JSONParser_Android
       }
 
       return g3mJSONBaseObject;
-
    }
 
 
    @Override
    public JSONBaseObject parse(final IByteBuffer buffer) {
-      // TODO Auto-generated method stub
-      return null;
+      return parse(buffer.getAsString());
    }
 
 }
