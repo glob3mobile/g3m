@@ -3,7 +3,7 @@ public class BingLayer extends Layer
 {
 
   private final Sector _sector ;
-  private final URL _mapServerURL = new URL();
+  private URL _mapServerURL = new URL();
   private final String _key;
   private final Language _locale;
   private final MapType _mapType;
