@@ -30,6 +30,7 @@ class xyTuple{
 public:
   int x;
   int y;
+  virtual ~xyTuple(){}
 };
 
 
