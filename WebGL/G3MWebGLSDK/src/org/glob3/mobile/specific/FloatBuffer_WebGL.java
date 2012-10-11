@@ -29,12 +29,13 @@ public final class FloatBuffer_WebGL
 
 
    @Override
-   public void finalize() {
+   public void dispose() {
       if (_webGLBuffer != null) {
          jsDeleteWebGLBuffer();
          _webGLBuffer = null;
          _gl = null;
       }
+      super.dispose();
    }
 
 
