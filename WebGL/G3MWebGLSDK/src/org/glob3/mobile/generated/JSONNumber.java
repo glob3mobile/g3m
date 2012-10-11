@@ -7,10 +7,7 @@ public class JSONNumber extends JSONBaseObject
   private double _double_value;
   private final number_type _type;
 
-  /*JSONNumber(int value):_value(Number_value(value)), _type(int_type){}
-  JSONNumber(long value):_value(Number_value(value)), _type(long_type){}
-  JSONNumber(float value):_value(Number_value(value)), _type(float_type){}
-  JSONNumber(double value):_value(Number_value(value)), _type(double_type){}*/
+
   public JSONNumber(int value)
   {
 	  _int_value = value;

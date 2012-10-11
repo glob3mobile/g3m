@@ -24,16 +24,21 @@ public class TokenDownloadListener implements IBufferDownloadListener
 	{
 	  JSONObject data = json.getObject().getObjectForKey("resourceSets").getArray().getElement(0).getObject().getObjectForKey("resources").getArray().getElement(0).getObject();
   
-	  String rawTileURL = data.getObjectForKey("imageUrl").getString().getValue();
+	  JSONArray subDomArray = data.getObjectForKey("imageUrlSubdomains").getArray();
+	  java.util.ArrayList<String> subdomains = new java.util.ArrayList<String>();
+	  int numSubdomains = subDomArray.getSize();
+	  for (int i = 0; i<numSubdomains; i++)
+	  {
+		subdomains.add(subDomArray.getElement(i).getString().getValue());
+	  }
+	  _bingLayer.setSubDomains(subdomains);
   
-	  int TODO_read_subdomains_and_somehow_choose_one;
   
+	  String tileURL = data.getObjectForKey("imageUrl").getString().getValue();
   
 	  //set language
-	  rawTileURL = IStringUtils.instance().replaceSubstring(rawTileURL, "{culture}", _bingLayer.getLocale());
+	  tileURL = IStringUtils.instance().replaceSubstring(tileURL, "{culture}", _bingLayer.getLocale());
   
-	  String tileURL = IStringUtils.instance().replaceSubstring(rawTileURL, "{subdomain}", "t0");
-	  //std::cout<<"final URL: "<<tileURL<<"\n";
 	  _bingLayer.setTilePetitionString(tileURL);
   
 	  IJSONParser.instance().deleteJSONData(json);
