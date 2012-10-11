@@ -9,7 +9,6 @@ import org.glob3.mobile.generated.GLErrorRenderer;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.LayerSet;
-import org.glob3.mobile.generated.LevelTileCondition;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.Renderer;
@@ -45,8 +44,8 @@ public class G3MAndroidDemoActivity
          layerSet.addLayer(pnoa);
       }
 
-      final boolean useOSMLatLon = true;
-      if (useOSMLatLon) {
+      final boolean useOSM = true;
+      if (useOSM) {
          //         final WMSLayer osm = new WMSLayer( //
          //                  "osm", //
          //                  new URL("http://wms.latlon.org/"), //
@@ -68,7 +67,7 @@ public class G3MAndroidDemoActivity
                   "EPSG:4326", //
                   "", //
                   false, //
-                  new LevelTileCondition(3, 100));
+                  null);
          layerSet.addLayer(osm);
       }
 
