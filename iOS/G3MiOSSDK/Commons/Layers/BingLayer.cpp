@@ -89,7 +89,7 @@ void TokenDownloadListener::onDownload(const URL& url,
 
 void BingLayer::initialize(const InitializationContext* ic){
   
-  std::string tileURL = std::string();
+  std::string tileURL = "";
   tileURL+=_mapServerURL.getPath();
   tileURL+="/";
   tileURL+=getMapTypeString();
