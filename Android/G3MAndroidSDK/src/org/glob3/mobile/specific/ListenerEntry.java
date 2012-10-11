@@ -14,7 +14,7 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 
 
-public class ListenerEntry {
+public final class ListenerEntry {
 
    final static String                   TAG = "Downloader_Android_ListenerEntry";
 

@@ -9,7 +9,7 @@ import java.nio.FloatBuffer;
 import org.glob3.mobile.generated.IFloatBuffer;
 
 
-public class FloatBuffer_Android
+public final class FloatBuffer_Android
          extends
             IFloatBuffer {
 

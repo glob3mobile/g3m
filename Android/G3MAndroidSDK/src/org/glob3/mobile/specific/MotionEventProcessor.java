@@ -13,7 +13,7 @@ import android.view.MotionEvent;
 import android.view.MotionEvent.PointerCoords;
 
 
-public class MotionEventProcessor {
+public final class MotionEventProcessor {
 
    //Stores pointer positions, id and event type
    class EventProcessed {

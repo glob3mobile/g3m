@@ -5,7 +5,7 @@ package org.glob3.mobile.specific;
 import org.glob3.mobile.generated.IGLTextureId;
 
 
-public class GLTextureId_Android
+public final class GLTextureId_Android
          implements
             IGLTextureId {
 

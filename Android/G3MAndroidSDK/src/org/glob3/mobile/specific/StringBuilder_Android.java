@@ -5,7 +5,7 @@ package org.glob3.mobile.specific;
 import org.glob3.mobile.generated.IStringBuilder;
 
 
-public class StringBuilder_Android
+public final class StringBuilder_Android
          extends
             IStringBuilder {
 

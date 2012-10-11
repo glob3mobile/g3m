@@ -19,185 +19,10 @@ import android.opengl.GLES20;
 import android.opengl.GLUtils;
 
 
-public class NativeGL2_Android
+public final class NativeGL2_Android
          extends
             INativeGL {
 
-   //   final int getBitField(final GLBufferType b) {
-   //      switch (b) {
-   //         case ColorBuffer:
-   //            return GLES20.GL_COLOR_BUFFER_BIT;
-   //         case DepthBuffer:
-   //            return GLES20.GL_DEPTH_BUFFER_BIT;
-   //         default:
-   //            throw new UnsupportedOperationException("Unsupported GLBufferType=" + b);
-   //      }
-   //   }
-   //
-   //
-   //   int getEnum(final GLFeature f) {
-   //      switch (f) {
-   //         case PolygonOffsetFill:
-   //            return GLES20.GL_POLYGON_OFFSET_FILL;
-   //         case DepthTest:
-   //            return GLES20.GL_DEPTH_TEST;
-   //         case Blend:
-   //            return GLES20.GL_BLEND;
-   //         case CullFacing:
-   //            return GLES20.GL_CULL_FACE;
-   //         default:
-   //            throw new UnsupportedOperationException("Unsupported GLFeature=" + f);
-   //      }
-   //   }
-   //
-   //
-   //   final int getEnum(final GLCullFace f) {
-   //      switch (f) {
-   //         case Front:
-   //            return GLES20.GL_FRONT;
-   //         case FrontAndBack:
-   //            return GLES20.GL_FRONT_AND_BACK;
-   //         case Back:
-   //            return GLES20.GL_BACK;
-   //         default:
-   //            throw new UnsupportedOperationException("Unsupported GLCullFace=" + f);
-   //      }
-   //   }
-   //
-   //
-   //   final int getEnum(final GLType t) {
-   //      switch (t) {
-   //         case Float:
-   //            return GLES20.GL_FLOAT;
-   //         case UnsignedByte:
-   //            return GLES20.GL_UNSIGNED_BYTE;
-   //         case UnsignedInt:
-   //            return GLES20.GL_UNSIGNED_INT;
-   //         case Int:
-   //            return GLES20.GL_INT;
-   //         default:
-   //            throw new UnsupportedOperationException("Unsupported GLType=" + t);
-   //      }
-   //   }
-   //
-   //
-   //   final int getEnum(final GLPrimitive p) {
-   //      switch (p) {
-   //         case TriangleStrip:
-   //            return GLES20.GL_TRIANGLE_STRIP;
-   //         case Lines:
-   //            return GLES20.GL_LINES;
-   //         case LineLoop:
-   //            return GLES20.GL_LINE_LOOP;
-   //         case Points:
-   //            return GLES20.GL_POINTS;
-   //         default:
-   //            throw new UnsupportedOperationException("Unsupported GLPrimitive=" + p);
-   //      }
-   //   }
-   //
-   //
-   //   final GLError getError(final int e) {
-   //      switch (e) {
-   //         case GLES20.GL_NO_ERROR:
-   //            return GLError.NoError;
-   //         case GLES20.GL_INVALID_ENUM:
-   //            return GLError.InvalidEnum;
-   //         case GLES20.GL_INVALID_VALUE:
-   //            return GLError.InvalidValue;
-   //         case GLES20.GL_INVALID_OPERATION:
-   //            return GLError.InvalidOperation;
-   //         case GLES20.GL_OUT_OF_MEMORY:
-   //            return GLError.OutOfMemory;
-   //         default:
-   //            return GLError.UnknownError;
-   //      }
-   //   }
-   //
-   //
-   //   final int getEnum(final GLBlendFactor b) {
-   //      switch (b) {
-   //         case SrcAlpha:
-   //            return GLES20.GL_SRC_ALPHA;
-   //         case OneMinusSrcAlpha:
-   //            return GLES20.GL_ONE_MINUS_SRC_ALPHA;
-   //         default:
-   //            throw new UnsupportedOperationException("Unsupported GLBlendFactor=" + b);
-   //      }
-   //   }
-   //
-   //
-   //   final int getEnum(final GLAlignment a) {
-   //      switch (a) {
-   //         case Unpack:
-   //            return GLES20.GL_UNPACK_ALIGNMENT;
-   //         case Pack:
-   //            return GLES20.GL_PACK_ALIGNMENT;
-   //         default:
-   //            throw new UnsupportedOperationException("Unsupported GLAlignment=" + a);
-   //      }
-   //   }
-   //
-   //
-   //   final int getEnum(final GLTextureType t) {
-   //      switch (t) {
-   //         case Texture2D:
-   //            return GLES20.GL_TEXTURE_2D;
-   //         default:
-   //            throw new UnsupportedOperationException("Unsupported GLTextureType=" + t);
-   //      }
-   //   }
-   //
-   //
-   //   final int getEnum(final GLTextureParameter t) {
-   //      switch (t) {
-   //         case MinFilter:
-   //            return GLES20.GL_TEXTURE_MIN_FILTER;
-   //         case MagFilter:
-   //            return GLES20.GL_TEXTURE_MAG_FILTER;
-   //         case WrapS:
-   //            return GLES20.GL_TEXTURE_WRAP_S;
-   //         case WrapT:
-   //            return GLES20.GL_TEXTURE_WRAP_T;
-   //         default:
-   //            throw new UnsupportedOperationException("Unsupported GLTextureParameter=" + t);
-   //      }
-   //   }
-   //
-   //
-   //   final int getValue(final GLTextureParameterValue t) {
-   //      switch (t) {
-   //         case Linear:
-   //            return GLES20.GL_LINEAR;
-   //         case ClampToEdge:
-   //            return GLES20.GL_CLAMP_TO_EDGE;
-   //         default:
-   //            throw new UnsupportedOperationException("Unsupported GLTextureParameterValue=" + t);
-   //      }
-   //   }
-   //
-   //
-   //   final int getEnum(final GLFormat f) {
-   //      switch (f) {
-   //         case RGBA:
-   //            return GLES20.GL_RGBA;
-   //         default:
-   //            throw new UnsupportedOperationException("Unsupported GLFormat=" + f);
-   //      }
-   //   }
-   //
-   //
-   //   final int getEnum(final GLVariable v) {
-   //      switch (v) {
-   //         case Viewport:
-   //            return GLES20.GL_VIEWPORT;
-   //         default:
-   //            throw new UnsupportedOperationException("Unsupported GLVariable=" + v);
-   //      }
-   //   }
-
-
-   /////////////////////////////
 
    @Override
    public void useProgram(final IGLProgramId program) {
@@ -242,24 +67,10 @@ public class NativeGL2_Android
    }
 
 
-   //   @Override
-   //   public void uniformMatrix4fv(final IGLUniformID location,
-   //                                final int count,
-   //                                final boolean transpose,
-   //                                final float[] value) {
-   //      //      final FloatBuffer fb = floatArrayToFloatBuffer(value);
-   //      //
-   //      //      GLES20.glUniformMatrix4fv(location, count, transpose, fb);
-   //      GLES20.glUniformMatrix4fv(((GLUniformID_Android) location).getID(), count, transpose, value, 0);
-   //   }
-
    @Override
    public void uniformMatrix4fv(final IGLUniformID location,
                                 final boolean transpose,
                                 final IFloatBuffer buffer) {
-      //      final FloatBuffer fb = floatArrayToFloatBuffer(value);
-      //
-      //      GLES20.glUniformMatrix4fv(location, count, transpose, fb);
       GLES20.glUniformMatrix4fv(((GLUniformID_Android) location).getID(), 1, transpose,
                ((FloatBuffer_Android) buffer).getBuffer());
    }
@@ -276,12 +87,6 @@ public class NativeGL2_Android
 
    @Override
    public void clear(final int buffers) {
-      //   public void clear(final int nBuffer,
-      //                     final GLBufferType[] buffers) {
-      //      int b = 0x00000000;
-      //      for (final GLBufferType buffer : buffers) {
-      //         b |= getBitField(buffer);
-      //      }
       GLES20.glClear(buffers);
    }
 
@@ -387,29 +192,6 @@ public class NativeGL2_Android
    }
 
 
-   //   @Override
-   //   public void texImage2D(final GLTextureType target,
-   //                          final int level,
-   //                          final GLFormat internalFormat,
-   //                          final int width,
-   //                          final int height,
-   //                          final int border,
-   //                          final GLFormat format,
-   //                          final GLType type,
-   //                          final Object data) {
-   //
-   //      if (type == GLType.UnsignedByte) {
-   //         final byte[] array = (byte[]) data;
-   //         final ByteBuffer pixels = ByteBuffer.wrap(array);
-   //         GLES20.glTexImage2D(getEnum(target), level, getEnum(internalFormat), width, height, border, getEnum(format),
-   //                  getEnum(type), pixels);
-   //      }
-   //      else {
-   //         throw new UnsupportedOperationException("Invalid type=" + type);
-   //      }
-   //   }
-
-
    @Override
    public void drawArrays(final int mode,
                           final int first,
@@ -461,16 +243,8 @@ public class NativeGL2_Android
    @Override
    public void texImage2D(final IImage image,
                           final int format) {
-
       final Bitmap b = ((Image_Android) image).getBitmap();
       GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, b, 0);
-
-      //      final ByteBuffer_Android bb = (ByteBuffer_Android) ((Image_Android) image).createByteBufferRGBA8888(image.getWidth(),
-      //               image.getHeight());
-      //
-      //      GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, getEnum(format), image.getWidth(), image.getHeight(), 0, getEnum(format),
-      //               GLES20.GL_UNSIGNED_BYTE, bb.getBuffer());
-
    }
 
 

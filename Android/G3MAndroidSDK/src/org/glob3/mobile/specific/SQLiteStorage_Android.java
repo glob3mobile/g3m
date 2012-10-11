@@ -22,7 +22,7 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 
 
-public class SQLiteStorage_Android
+public final class SQLiteStorage_Android
          implements
             IStorage {
 

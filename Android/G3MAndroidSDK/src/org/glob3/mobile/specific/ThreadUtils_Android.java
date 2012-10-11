@@ -6,7 +6,7 @@ import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.IThreadUtils;
 
 
-public class ThreadUtils_Android
+public final class ThreadUtils_Android
          extends
             IThreadUtils {
 

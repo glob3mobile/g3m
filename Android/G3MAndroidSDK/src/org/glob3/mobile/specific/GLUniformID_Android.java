@@ -5,7 +5,7 @@ package org.glob3.mobile.specific;
 import org.glob3.mobile.generated.IGLUniformID;
 
 
-public class GLUniformID_Android
+public final class GLUniformID_Android
          implements
             IGLUniformID {
 

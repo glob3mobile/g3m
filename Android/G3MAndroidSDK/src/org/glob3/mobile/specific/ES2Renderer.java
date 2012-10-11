@@ -14,7 +14,7 @@ import android.opengl.GLSurfaceView;
 import android.os.Looper;
 
 
-class ES2Renderer
+public final class ES2Renderer
          implements
             GLSurfaceView.Renderer {
 

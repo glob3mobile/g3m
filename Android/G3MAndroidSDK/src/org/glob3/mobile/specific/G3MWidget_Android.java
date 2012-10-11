@@ -52,7 +52,7 @@ import android.view.MotionEvent;
 import android.view.MotionEvent.PointerCoords;
 
 
-public class G3MWidget_Android
+public final class G3MWidget_Android
          extends
             GLSurfaceView
          implements

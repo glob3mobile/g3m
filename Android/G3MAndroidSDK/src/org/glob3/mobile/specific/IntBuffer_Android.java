@@ -7,7 +7,7 @@ import java.nio.IntBuffer;
 import org.glob3.mobile.generated.IIntBuffer;
 
 
-public class IntBuffer_Android
+public final class IntBuffer_Android
          extends
             IIntBuffer {
 

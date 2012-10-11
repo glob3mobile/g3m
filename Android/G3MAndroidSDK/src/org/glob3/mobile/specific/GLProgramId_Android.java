@@ -5,7 +5,7 @@ package org.glob3.mobile.specific;
 import org.glob3.mobile.generated.IGLProgramId;
 
 
-public class GLProgramId_Android
+public final class GLProgramId_Android
          implements
             IGLProgramId {
 

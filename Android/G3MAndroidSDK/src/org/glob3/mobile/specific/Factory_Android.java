@@ -18,7 +18,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 
-public class Factory_Android
+public final class Factory_Android
          extends
             IFactory {
    private final Context _context;

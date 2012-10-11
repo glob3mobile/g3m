@@ -15,7 +15,7 @@ import org.glob3.mobile.generated.InitializationContext;
 import org.glob3.mobile.generated.URL;
 
 
-public class Downloader_Android
+public final class Downloader_Android
          implements
             IDownloader {
 
