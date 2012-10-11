@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.LayerSet;
+import org.glob3.mobile.generated.LevelTileCondition;
 import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
@@ -67,7 +68,7 @@ public class G3MWebGLDemo
                   "EPSG:4326", //
                   "", //
                   false, //
-                  null);
+                  new LevelTileCondition(0, 2));
 
          layerSet.addLayer(bing);
       }
@@ -86,18 +87,30 @@ public class G3MWebGLDemo
          layerSet.addLayer(pnoa);
       }
 
-      final boolean useOSMLatLon = false;
+      final boolean useOSMLatLon = true;
       if (useOSMLatLon) {
+         //         final WMSLayer osm = new WMSLayer( //
+         //                  "osm", //
+         //                  new URL("http://wms.latlon.org/"), //
+         //                  WMSServerVersion.WMS_1_1_0, //
+         //                  Sector.fromDegrees(-85.05, -180.0, 85.5, 180.0), //
+         //                  "image/jpeg", //
+         //                  "EPSG:4326", //
+         //                  "", //
+         //                  false, //
+         //                  null);
+         //         layerSet.addLayer(osm);
+
          final WMSLayer osm = new WMSLayer( //
-                  "osm", //
-                  new URL("http://wms.latlon.org/"), //
+                  "osm_auto:all", //
+                  new URL("http://129.206.228.72/cached/osm"), //
                   WMSServerVersion.WMS_1_1_0, //
-                  Sector.fromDegrees(-85.05, -180.0, 85.5, 180.0), //
+                  Sector.fromDegrees(-85.05, -180.0, 85.05, 180.0), //
                   "image/jpeg", //
                   "EPSG:4326", //
                   "", //
                   false, //
-                  null);
+                  new LevelTileCondition(3, 100));
          layerSet.addLayer(osm);
       }
 

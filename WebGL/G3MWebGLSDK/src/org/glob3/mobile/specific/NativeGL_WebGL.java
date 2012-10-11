@@ -206,7 +206,8 @@ public final class NativeGL_WebGL
                                           final IFloatBuffer buffer) /*-{
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 
-		var webGLBuffer = gl.createBuffer();
+		// var webGLBuffer = gl.createBuffer();
+		var webGLBuffer = buffer.@org.glob3.mobile.specific.FloatBuffer_WebGL::getWebGLBuffer(Lcom/google/gwt/core/client/JavaScriptObject;)(gl);
 		gl.bindBuffer(gl.ARRAY_BUFFER, webGLBuffer);
 
 		var array = buffer.@org.glob3.mobile.specific.FloatBuffer_WebGL::getBuffer()();
@@ -222,8 +223,9 @@ public final class NativeGL_WebGL
                                    final IIntBuffer indices) /*-{
 		var gl = this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl;
 
-		var buffer = gl.createBuffer();
-		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
+		// var buffer = gl.createBuffer();
+		var webGLBuffer = indices.@org.glob3.mobile.specific.IntBuffer_WebGL::getWebGLBuffer(Lcom/google/gwt/core/client/JavaScriptObject;)(gl);
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, webGLBuffer);
 
 		var array = indices.@org.glob3.mobile.specific.IntBuffer_WebGL::getBuffer()();
 		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, array, gl.STATIC_DRAW);
@@ -231,7 +233,7 @@ public final class NativeGL_WebGL
 		//TODO CHECK UNSIGNED SHORT
 		gl.drawElements(mode, count, gl.UNSIGNED_SHORT, 0);
 
-		gl.deleteBuffer(buffer);
+		//		gl.deleteBuffer(buffer);
    }-*/;
 
 

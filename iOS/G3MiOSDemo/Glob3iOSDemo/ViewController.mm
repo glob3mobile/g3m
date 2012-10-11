@@ -98,16 +98,27 @@
   
   bool useOSMLatLon = true;
   if (useOSMLatLon) {
-    WMSLayer *osm = new WMSLayer("osm",
-                                 URL("http://wms.latlon.org/"),
+//    WMSLayer *osm = new WMSLayer("osm",
+//                                 URL("http://wms.latlon.org/"),
+//                                 WMS_1_1_0,
+//                                 Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
+//                                 "image/jpeg",
+//                                 "EPSG:4326",
+//                                 "",
+//                                 false,
+//                                 NULL);
+//    layerSet->addLayer(osm);
+    WMSLayer *osm = new WMSLayer("osm_auto:all",
+                                 URL("http://129.206.228.72/cached/osm"),
                                  WMS_1_1_0,
-                                 Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
+                                 Sector::fromDegrees(-85.05, -180.0, 85.05, 180.0),
                                  "image/jpeg",
                                  "EPSG:4326",
                                  "",
                                  false,
                                  NULL);
     layerSet->addLayer(osm);
+
   }
   
   const bool usePnoaLayer = false;

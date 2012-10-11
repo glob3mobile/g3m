@@ -64,6 +64,8 @@ public:
     const int maxLevel = 17;
     const int tileTextureHeight = 256;
     const int tileTextureWidth = 256;
+//    const int tileTextureHeight = 128;
+//    const int tileTextureWidth = 128;
     const int tileResolution = 10;
     
     return new TilesRenderParameters(Sector::fullSphere(),

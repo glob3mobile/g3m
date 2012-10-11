@@ -12,7 +12,41 @@ public final class IntBuffer_WebGL
             IIntBuffer {
 
    private final JavaScriptObject _buffer;
-   private int                    _timestamp = 0;
+   private int                    _timestamp   = 0;
+
+   private JavaScriptObject       _webGLBuffer = null;
+   private JavaScriptObject       _gl          = null;
+
+
+   public JavaScriptObject getWebGLBuffer(final JavaScriptObject gl) {
+      if (_webGLBuffer == null) {
+         _gl = gl;
+         _webGLBuffer = jsCreateWebGLBuffer();
+      }
+      return _webGLBuffer;
+   }
+
+
+   @Override
+   public void finalize() {
+      if (_webGLBuffer != null) {
+         jsDeleteWebGLBuffer();
+         _webGLBuffer = null;
+         _gl = null;
+      }
+   }
+
+
+   private native JavaScriptObject jsCreateWebGLBuffer() /*-{
+		return this.@org.glob3.mobile.specific.IntBuffer_WebGL::_gl
+				.createBuffer();
+   }-*/;
+
+
+   private native JavaScriptObject jsDeleteWebGLBuffer() /*-{
+		return this.@org.glob3.mobile.specific.IntBuffer_WebGL::_gl
+				.deleteBuffer(this.@org.glob3.mobile.specific.IntBuffer_WebGL::_webGLBuffer);
+   }-*/;
 
 
    public IntBuffer_WebGL(final JavaScriptObject data) {
