@@ -112,6 +112,26 @@ public class IndexedMesh extends Mesh
 
   public void dispose()
   {
+  ///#ifdef C_CODE
+	if (_owner)
+	{
+	  if (_vertices != null)
+		  _vertices.dispose();
+	  if (_indices != null)
+		  _indices.dispose();
+	  if (_colors != null)
+		  if (_colors != null)
+			  _colors.dispose();
+	  if (_flatColor != null)
+		  _flatColor = null;
+	}
+  
+	if (_extent != null)
+		_extent = null;
+	if (_translationMatrix != null)
+		if (_translationMatrix != null)
+			_translationMatrix.dispose();
+  ///#endif
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -164,7 +184,6 @@ public class IndexedMesh extends Mesh
 	{
 	  gl.drawPoints(_indices);
 	}
-  
   
 	if (_translationMatrix != null)
 	{

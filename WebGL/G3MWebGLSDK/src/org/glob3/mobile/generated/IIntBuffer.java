@@ -20,6 +20,9 @@ package org.glob3.mobile.generated;
 public abstract class IIntBuffer implements IBuffer
 {
 
+  public void dispose()
+  {
+  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual int get(int i) const = 0;

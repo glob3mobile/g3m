@@ -16,16 +16,19 @@ package org.glob3.mobile.generated;
 //
 
 
-public interface IBuffer
+public abstract class IBuffer
 {
 
+  public void dispose()
+  {
+  }
 
   /**
    Answer the size (the count of elements) of the buffer
    **/
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual int size() const = 0;
-  int size();
+  public abstract int size();
 
   /**
    Answer the timestamp of the buffer.
@@ -35,6 +38,6 @@ public interface IBuffer
    **/
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual int timestamp() const = 0;
-  int timestamp();
+  public abstract int timestamp();
 
 }
