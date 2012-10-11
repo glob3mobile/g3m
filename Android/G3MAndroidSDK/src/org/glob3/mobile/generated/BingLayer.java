@@ -101,7 +101,7 @@ public class BingLayer extends Layer
   public final void initialize(InitializationContext ic)
   {
   
-	String tileURL = ;
+	String tileURL = "";
 	tileURL+=_mapServerURL.getPath();
 	tileURL+="/";
 	tileURL+=getMapTypeString();
