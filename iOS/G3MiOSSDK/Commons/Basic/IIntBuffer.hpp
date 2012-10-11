@@ -14,10 +14,8 @@
 class IIntBuffer : public IBuffer {
 public:
   
-#ifdef C_CODE
   virtual ~IIntBuffer() {
   }
-#endif
   
   virtual int get(int i) const = 0;
   

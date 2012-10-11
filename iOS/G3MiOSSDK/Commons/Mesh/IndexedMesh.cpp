@@ -16,7 +16,7 @@
 
 IndexedMesh::~IndexedMesh()
 {
-#ifdef C_CODE
+//#ifdef C_CODE
   if (_owner){
     delete _vertices;
     delete _indices;
@@ -26,8 +26,7 @@ IndexedMesh::~IndexedMesh()
   
   if (_extent != NULL) delete _extent;
   if (_translationMatrix != NULL) delete _translationMatrix;
-  
-#endif
+//#endif
 }
 
 IndexedMesh::IndexedMesh(const int primitive,
