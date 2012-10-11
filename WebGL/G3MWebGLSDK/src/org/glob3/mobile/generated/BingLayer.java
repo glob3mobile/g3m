@@ -199,7 +199,7 @@ public class BingLayer extends Layer
   
 	int tileX = tileXY[0];
 	int tileY = tileXY[1];
-	String quadKey;
+	String quadKey = "";
 	for (int i = level; i>0; i--)
 	{
 	  byte digit = (byte)'0';
