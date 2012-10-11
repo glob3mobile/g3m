@@ -269,7 +269,7 @@ std::string BingLayer::getQuadKey(const int tileXY[], const int level)const{
   
   int tileX = tileXY[0];
   int tileY = tileXY[1];
-  std::string quadKey;
+  std::string quadKey = "";
   for (int i =level; i>0; i--){
     char digit = '0';
     int mask = 1 << (i-1);
