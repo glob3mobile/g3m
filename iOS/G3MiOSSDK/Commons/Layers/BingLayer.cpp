@@ -24,7 +24,6 @@
 
 #include "IStringUtils.hpp"
 
-#include <iostream>
 
 
 class TokenDownloadListener : public IBufferDownloadListener {
@@ -66,25 +65,31 @@ void TokenDownloadListener::onDownload(const URL& url,
   else {
     JSONObject* data = json->getObject()->getObjectForKey("resourceSets")->getArray()->getElement(0)->getObject()->getObjectForKey("resources")->getArray()->getElement(0)->getObject();
     
-    std::string rawTileURL = data->getObjectForKey("imageUrl")->getString()->getValue();
-    
-    int TODO_read_subdomains_and_somehow_choose_one;
+    JSONArray* subDomArray = data->getObjectForKey("imageUrlSubdomains")->getArray();
+    std::vector<std::string> subdomains;
+    int numSubdomains = subDomArray->getSize();
+    for (int i = 0; i<numSubdomains; i++){
+      subdomains.push_back(subDomArray->getElement(i)->getString()->getValue());
+    }
+    _bingLayer->setSubDomains(subdomains);
 
     
-    //set language
-    rawTileURL = IStringUtils::instance()->replaceSubstring(rawTileURL, "{culture}", _bingLayer->getLocale());
+    std::string tileURL = data->getObjectForKey("imageUrl")->getString()->getValue();
     
-    std::string tileURL = IStringUtils::instance()->replaceSubstring(rawTileURL, "{subdomain}", "t0");
-    //std::cout<<"final URL: "<<tileURL<<"\n";
+    //set language
+    tileURL = IStringUtils::instance()->replaceSubstring(tileURL, "{culture}", _bingLayer->getLocale());
+
     _bingLayer->setTilePetitionString(tileURL);
     
     IJSONParser::instance()->deleteJSONData(json);
   }
 }
 
+
+
 void BingLayer::initialize(const InitializationContext* ic){
   
-  std::string tileURL = std::string();
+  std::string tileURL = "";
   tileURL+=_mapServerURL.getPath();
   tileURL+="/";
   tileURL+=getMapTypeString();
@@ -170,16 +175,19 @@ std::vector<Petition*> BingLayer::getMapPetitions(const RenderContext* rc,
   //TODO: calculate the level correctly 
   int level = tile->getLevel()+2;
   
-  int* lowerTileXY = getTileXY(tileSector.lower(), level);
-  int* upperTileXY = getTileXY(tileSector.upper(), level);
+  xyTuple* lowerTileXY = getTileXY(tileSector.lower(), level);
+  xyTuple* upperTileXY = getTileXY(tileSector.upper(), level);
   
-  int deltaX = upperTileXY[0] - lowerTileXY[0];
-  int deltaY = lowerTileXY[1] - upperTileXY[1];
+  int deltaX = upperTileXY->x - lowerTileXY->x;
+  int deltaY = lowerTileXY->y - upperTileXY->y;
   
   std::vector<int*> requiredTiles;
   
-  for(int x =lowerTileXY[0]; x<= lowerTileXY[0]+deltaX; x++){
-    for(int y =upperTileXY[1]; y<=upperTileXY[1]+deltaY; y++){
+  int currentSubDomain = 0;
+  int numSubDomains = _subDomains.size();
+      
+  for(int x =lowerTileXY->x; x<= lowerTileXY->x+deltaX; x++){
+    for(int y =upperTileXY->y; y<=upperTileXY->y+deltaY; y++){
       int tileXY[2];
       tileXY[0] = x;
       tileXY[1] = y;
@@ -189,12 +197,19 @@ std::vector<Petition*> BingLayer::getMapPetitions(const RenderContext* rc,
         continue;
       }
       
+      //set the quadkey
       std::string url = IStringUtils::instance()->replaceSubstring(_tilePetitionString, "{quadkey}", getQuadKey(tileXY, level));
+      
+      //set the subDomain (round-robbin)
+      url = IStringUtils::instance()->replaceSubstring(url, "{subdomain}",_subDomains[currentSubDomain % numSubDomains]);
+      currentSubDomain++;
       petitions.push_back(new Petition(bingSector, URL(url)));
       
     }
     
   }
+  delete lowerTileXY;
+  delete upperTileXY;
   return petitions;
 }
 
@@ -208,7 +223,7 @@ URL BingLayer::getFeatureInfoURL(const Geodetic2D& g,
   
 }
 
-int *BingLayer::getTileXY(const Geodetic2D latLon, const int level)const{
+xyTuple* BingLayer::getTileXY(const Geodetic2D latLon, const int level)const{
   
   //LatLon to Pixels XY
   unsigned int mapSize = (unsigned int) 256 << level;
@@ -241,11 +256,10 @@ int *BingLayer::getTileXY(const Geodetic2D latLon, const int level)const{
   int tileX = pixelX / 256;
   int tileY = pixelY / 256;
   
-  int* tileXY = new int[2];
-  //int tileXY[2];
+  xyTuple* tileXY = new xyTuple();
   
-  tileXY[0] = tileX;
-  tileXY[1] = tileY;
+  tileXY->x = tileX;
+  tileXY->y = tileY;
   
   return tileXY;
 }
@@ -255,8 +269,7 @@ std::string BingLayer::getQuadKey(const int tileXY[], const int level)const{
   
   int tileX = tileXY[0];
   int tileY = tileXY[1];
-  std::string quadKey;// = std::string();
-  //std::ostringstream stream;
+  std::string quadKey = "";
   for (int i =level; i>0; i--){
     char digit = '0';
     int mask = 1 << (i-1);
@@ -269,7 +282,6 @@ std::string BingLayer::getQuadKey(const int tileXY[], const int level)const{
     }
     quadKey+=digit;
   }
-  //quadKey+=stream.str();
   
   return quadKey;
 }

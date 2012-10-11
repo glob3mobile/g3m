@@ -51,10 +51,7 @@ private:
   const number_type _type;
   
 public:
-  /*JSONNumber(int value):_value(Number_value(value)), _type(int_type){}
-  JSONNumber(long value):_value(Number_value(value)), _type(long_type){}
-  JSONNumber(float value):_value(Number_value(value)), _type(float_type){}
-  JSONNumber(double value):_value(Number_value(value)), _type(double_type){}*/
+
   JSONNumber(int value):_int_value(value), _float_value(0.0), _double_value(0.0), _type(int_type){}
   JSONNumber(float value):_int_value(0), _float_value(value), _double_value(0.0), _type(float_type){}
   JSONNumber(double value):_int_value(0), _float_value(0.0), _double_value(value), _type(double_type){}

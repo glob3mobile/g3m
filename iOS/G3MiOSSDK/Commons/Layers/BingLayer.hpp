@@ -26,6 +26,13 @@ enum Language{
   Dutch
 };
 
+class xyTuple{
+public:
+  int x;
+  int y;
+  virtual ~xyTuple(){}
+};
+
 
 const double _originShift = 20037508.342789244;
 const double _initialResolution = _originShift*256.0;
@@ -35,11 +42,12 @@ class BingLayer:public Layer{
   
 private:
   const Sector              _sector;
-  const URL              _mapServerURL;
+  URL              _mapServerURL;
   const std::string _key;
   const Language _locale;
   const MapType _mapType;
   std::string _tilePetitionString;
+  std::vector<std::string> _subDomains;
   bool _isReady;
   
   
@@ -68,6 +76,11 @@ public:
     _isReady = true;
   }
   
+  void setSubDomains(std::vector<std::string> subDomains){
+    _subDomains = subDomains;
+  }
+
+  
   std::string getLocale()const;
   
   std::string getMapTypeString() const;
@@ -80,7 +93,7 @@ public:
   
   std::string getQuadKey(const int tileXY[], const int level)const;
   
-  int* getTileXY(const Geodetic2D latLon, const int level)const;
+  xyTuple* getTileXY(const Geodetic2D latLon, const int level)const;
   
   Sector getBingTileAsSector(const int tileXY[], const int level)const;
   

@@ -80,13 +80,11 @@ JSONBaseObject* JSONParser_iOS::makeJSONElement(NSObject* object){
     
     //Booleans are also encoded as NSNumbers
     if(strcmp([jsonNumber objCType], @encode(BOOL))==0){
-      JSONBoolean* boolean = new JSONBoolean([jsonNumber boolValue]);
-      return boolean;
+      return new JSONBoolean([jsonNumber boolValue]);
     }
     //Integer
     else if (strcmp([jsonNumber objCType], @encode(int))==0) {
-      JSONNumber* numberObj = new JSONNumber([jsonNumber intValue]);
-      return numberObj;
+      return new JSONNumber([jsonNumber intValue]);
     }
     /*//Long
     else if (strcmp([jsonNumber objCType], @encode(long))==0) {
@@ -95,8 +93,7 @@ JSONBaseObject* JSONParser_iOS::makeJSONElement(NSObject* object){
     }*/
     //Float
     else if (strcmp([jsonNumber objCType], @encode(float))==0) {
-      JSONNumber* numberObj = new JSONNumber([jsonNumber floatValue]);
-      return numberObj;
+      return new JSONNumber([jsonNumber floatValue]);
     }
     //Default: double
     else{
@@ -105,9 +102,7 @@ JSONBaseObject* JSONParser_iOS::makeJSONElement(NSObject* object){
     }
   }
   else if ([object isKindOfClass:[NSString class]]){
-    NSString *jsonString = (NSString *) object;
-    JSONString* string = new JSONString([jsonString UTF8String]);
-    return string;    
+    return new JSONString([(NSString *) object UTF8String]);
   }
    
    return NULL; 

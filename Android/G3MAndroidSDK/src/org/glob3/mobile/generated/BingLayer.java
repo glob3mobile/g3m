@@ -3,11 +3,12 @@ public class BingLayer extends Layer
 {
 
   private final Sector _sector ;
-  private final URL _mapServerURL = new URL();
+  private URL _mapServerURL = new URL();
   private final String _key;
   private final Language _locale;
   private final MapType _mapType;
   private String _tilePetitionString;
+  private java.util.ArrayList<String> _subDomains = new java.util.ArrayList<String>();
   private boolean _isReady;
 
 
@@ -40,6 +41,12 @@ public class BingLayer extends Layer
 	_tilePetitionString = tilePetitionString;
 	_isReady = true;
   }
+
+  public final void setSubDomains(java.util.ArrayList<String> subDomains)
+  {
+	_subDomains = subDomains;
+  }
+
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: String getLocale()const
@@ -94,7 +101,7 @@ public class BingLayer extends Layer
   public final void initialize(InitializationContext ic)
   {
   
-	String tileURL = ;
+	String tileURL = "";
 	tileURL+=_mapServerURL.getPath();
 	tileURL+="/";
 	tileURL+=getMapTypeString();
@@ -142,17 +149,20 @@ public class BingLayer extends Layer
 	//TODO: calculate the level correctly
 	int level = tile.getLevel()+2;
   
-	int[] lowerTileXY = getTileXY(tileSector.lower(), level);
-	int[] upperTileXY = getTileXY(tileSector.upper(), level);
+	xyTuple lowerTileXY = getTileXY(tileSector.lower(), level);
+	xyTuple upperTileXY = getTileXY(tileSector.upper(), level);
   
-	int deltaX = upperTileXY[0] - lowerTileXY[0];
-	int deltaY = lowerTileXY[1] - upperTileXY[1];
+	int deltaX = upperTileXY.x - lowerTileXY.x;
+	int deltaY = lowerTileXY.y - upperTileXY.y;
   
 	java.util.ArrayList<Integer> requiredTiles = new java.util.ArrayList<Integer>();
   
-	for(int x = lowerTileXY[0]; x<= lowerTileXY[0]+deltaX; x++)
+	int currentSubDomain = 0;
+	int numSubDomains = _subDomains.size();
+  
+	for(int x = lowerTileXY.x; x<= lowerTileXY.x+deltaX; x++)
 	{
-	  for(int y = upperTileXY[1]; y<=upperTileXY[1]+deltaY; y++)
+	  for(int y = upperTileXY.y; y<=upperTileXY.y+deltaY; y++)
 	  {
 		int[] tileXY = new int[2];
 		tileXY[0] = x;
@@ -164,12 +174,21 @@ public class BingLayer extends Layer
 		  continue;
 		}
   
+		//set the quadkey
 		String url = IStringUtils.instance().replaceSubstring(_tilePetitionString, "{quadkey}", getQuadKey(tileXY, level));
+  
+		//set the subDomain (round-robbin)
+		url = IStringUtils.instance().replaceSubstring(url, "{subdomain}", _subDomains.get(currentSubDomain % numSubDomains));
+		currentSubDomain++;
 		petitions.add(new Petition(bingSector, new URL(url)));
   
 	  }
   
 	}
+	if (lowerTileXY != null)
+		lowerTileXY.dispose();
+	if (upperTileXY != null)
+		upperTileXY.dispose();
 	return petitions;
   }
 
@@ -180,8 +199,7 @@ public class BingLayer extends Layer
   
 	int tileX = tileXY[0];
 	int tileY = tileXY[1];
-	String quadKey; // = std::string();
-	//std::ostringstream stream;
+	String quadKey = "";
 	for (int i = level; i>0; i--)
 	{
 	  byte digit = (byte)'0';
@@ -197,15 +215,13 @@ public class BingLayer extends Layer
 	  }
 	  quadKey+=digit;
 	}
-	//quadKey+=stream.str();
   
 	return quadKey;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: int *getTileXY(const Geodetic2D latLon, const int level)const
-//C++ TO JAVA CONVERTER WARNING: Java has no equivalent to methods returning pointers to value types:
-  public final int getTileXY(Geodetic2D latLon, int level)
+//ORIGINAL LINE: xyTuple* getTileXY(const Geodetic2D latLon, const int level)const
+  public final xyTuple getTileXY(Geodetic2D latLon, int level)
   {
   
 	//LatLon to Pixels XY
@@ -245,11 +261,10 @@ public class BingLayer extends Layer
 	int tileX = pixelX / 256;
 	int tileY = pixelY / 256;
   
-	int[] tileXY = new int[2];
-	//int tileXY[2];
+	xyTuple tileXY = new xyTuple();
   
-	tileXY[0] = tileX;
-	tileXY[1] = tileY;
+	tileXY.x = tileX;
+	tileXY.y = tileY;
   
 	return tileXY;
   }

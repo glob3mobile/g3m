@@ -21,6 +21,7 @@
 #include "IStringUtils.hpp"
 #include "IThreadUtils.hpp"
 #include "IStringBuilder.hpp"
+#include "IJSONParser.hpp"
 
 G3MWidget::G3MWidget(FrameTasksExecutor*              frameTasksExecutor,
                      IFactory*                        factory,
@@ -96,6 +97,7 @@ G3MWidget* G3MWidget::create(FrameTasksExecutor* frameTasksExecutor,
                              IThreadUtils*       threadUtils,
                              IStringBuilder*     stringBuilder,
                              IMathUtils*         mathUtils,
+                             IJSONParser*        jsonParser,
                              ILogger*            logger,
                              GL*                 gl,
                              TexturesHandler*    texturesHandler,
@@ -121,6 +123,7 @@ G3MWidget* G3MWidget::create(FrameTasksExecutor* frameTasksExecutor,
   IThreadUtils::setInstance(threadUtils);
   IStringBuilder::setInstance(stringBuilder);
   IMathUtils::setInstance(mathUtils);
+  IJSONParser::setInstance(jsonParser);
 
   return new G3MWidget(frameTasksExecutor,
                        factory,

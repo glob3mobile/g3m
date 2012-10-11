@@ -51,6 +51,7 @@
 #include "Factory_iOS.hpp"
 #include "NativeGL2_iOS.hpp"
 #include "StringUtils_iOS.hpp"
+#include "JSONParser_iOS.hpp"
 #include "SingleImageTileTexturizer.hpp"
 #include "WMSLayer.hpp"
 
@@ -126,6 +127,7 @@
   IStringBuilder* stringBuilder = new StringBuilder_iOS();
   IMathUtils*     mathUtils = new MathUtils_iOS();
   IFactory*       factory  = new Factory_iOS();
+  IJSONParser*    jsonParser = new JSONParser_iOS();
   ILogger*        logger    = new Logger_iOS(ErrorLevel);
   NativeGL2_iOS*  nGL = new NativeGL2_iOS();
 
@@ -202,6 +204,7 @@
                                 threadUtils,
                                 stringBuilder,
                                 mathUtils,
+                                jsonParser,
                                 logger,
                                 gl,
                                 texturesHandler,

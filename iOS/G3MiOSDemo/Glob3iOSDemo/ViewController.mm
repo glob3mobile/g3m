@@ -22,15 +22,11 @@
 #include "LevelTileCondition.hpp"
 
 #include "BingLayer.hpp"
+//#include "OSMLayer.hpp"
 
 #include "IJSONParser.hpp"
 #include "JSONParser_iOS.hpp"
-/*#include "JSONBaseObject.hpp"
-#include "JSONNumber.hpp"
-#include "JSONObject.hpp"
-#include "JSONArray.hpp"
-#include "JSONString.hpp"
-#include "JSONBoolean.hpp"*/
+
 
 @implementation ViewController
 
@@ -108,11 +104,19 @@
   layerSet->addLayer(bing);*/
   
   
-  IJSONParser* parser = new JSONParser_iOS();
-  JSONParser.setInstance(parser);
+  //IJSONParser* parser = new JSONParser_iOS();
+  //JSONParser.setInstance(parser);
   
+  //Map styles: Road, Aerial, Hybrid
+  //Languages: English, Spanish, German, Italian, French, Dutch
   BingLayer* realBing = new BingLayer(URL("http://dev.virtualearth.net/REST/v1/Imagery/Metadata"), NULL, Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0), Hybrid, Dutch,"AgOLISvN2b3012i-odPJjVxhB1dyU6avZ2vG9Ub6Z9-mEpgZHre-1rE8o-DUinUH");
   layerSet->addLayer(realBing);
+  
+  
+  /*OSMLayer* osm = new OSMLayer(URL("http://a.tile.openstreetmap.org"), NULL, Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0));
+  
+  layerSet->addLayer(osm);*/
+  
   
   
   if (false) {
