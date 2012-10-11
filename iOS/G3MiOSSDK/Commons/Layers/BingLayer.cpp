@@ -24,7 +24,6 @@
 
 #include "IStringUtils.hpp"
 
-#include <iostream>
 
 
 class TokenDownloadListener : public IBufferDownloadListener {
@@ -79,14 +78,14 @@ void TokenDownloadListener::onDownload(const URL& url,
     
     //set language
     tileURL = IStringUtils::instance()->replaceSubstring(tileURL, "{culture}", _bingLayer->getLocale());
-    
-    
-    //std::cout<<"final URL: "<<tileURL<<"\n";
+
     _bingLayer->setTilePetitionString(tileURL);
     
     IJSONParser::instance()->deleteJSONData(json);
   }
 }
+
+
 
 void BingLayer::initialize(const InitializationContext* ic){
   
@@ -176,19 +175,19 @@ std::vector<Petition*> BingLayer::getMapPetitions(const RenderContext* rc,
   //TODO: calculate the level correctly 
   int level = tile->getLevel()+2;
   
-  int* lowerTileXY = getTileXY(tileSector.lower(), level);
-  int* upperTileXY = getTileXY(tileSector.upper(), level);
+  xyTuple* lowerTileXY = getTileXY(tileSector.lower(), level);
+  xyTuple* upperTileXY = getTileXY(tileSector.upper(), level);
   
-  int deltaX = upperTileXY[0] - lowerTileXY[0];
-  int deltaY = lowerTileXY[1] - upperTileXY[1];
+  int deltaX = upperTileXY->x - lowerTileXY->x;
+  int deltaY = lowerTileXY->y - upperTileXY->y;
   
   std::vector<int*> requiredTiles;
   
   int currentSubDomain = 0;
   int numSubDomains = _subDomains.size();
-  
-  for(int x =lowerTileXY[0]; x<= lowerTileXY[0]+deltaX; x++){
-    for(int y =upperTileXY[1]; y<=upperTileXY[1]+deltaY; y++){
+      
+  for(int x =lowerTileXY->x; x<= lowerTileXY->x+deltaX; x++){
+    for(int y =upperTileXY->y; y<=upperTileXY->y+deltaY; y++){
       int tileXY[2];
       tileXY[0] = x;
       tileXY[1] = y;
@@ -209,6 +208,8 @@ std::vector<Petition*> BingLayer::getMapPetitions(const RenderContext* rc,
     }
     
   }
+  delete lowerTileXY;
+  delete upperTileXY;
   return petitions;
 }
 
@@ -222,7 +223,7 @@ URL BingLayer::getFeatureInfoURL(const Geodetic2D& g,
   
 }
 
-int *BingLayer::getTileXY(const Geodetic2D latLon, const int level)const{
+xyTuple* BingLayer::getTileXY(const Geodetic2D latLon, const int level)const{
   
   //LatLon to Pixels XY
   unsigned int mapSize = (unsigned int) 256 << level;
@@ -255,11 +256,10 @@ int *BingLayer::getTileXY(const Geodetic2D latLon, const int level)const{
   int tileX = pixelX / 256;
   int tileY = pixelY / 256;
   
-  int* tileXY = new int[2];
-  //int tileXY[2];
+  xyTuple* tileXY = new xyTuple();
   
-  tileXY[0] = tileX;
-  tileXY[1] = tileY;
+  tileXY->x = tileX;
+  tileXY->y = tileY;
   
   return tileXY;
 }
@@ -269,8 +269,7 @@ std::string BingLayer::getQuadKey(const int tileXY[], const int level)const{
   
   int tileX = tileXY[0];
   int tileY = tileXY[1];
-  std::string quadKey;// = std::string();
-  //std::ostringstream stream;
+  std::string quadKey;
   for (int i =level; i>0; i--){
     char digit = '0';
     int mask = 1 << (i-1);
@@ -283,7 +282,6 @@ std::string BingLayer::getQuadKey(const int tileXY[], const int level)const{
     }
     quadKey+=digit;
   }
-  //quadKey+=stream.str();
   
   return quadKey;
 }

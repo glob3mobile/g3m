@@ -37,6 +37,7 @@ class G3MWidget;
 
 class IStringBuilder;
 class IMathUtils;
+class IJSONParser;
 
 
 class UserData {
@@ -67,6 +68,7 @@ public:
                            IThreadUtils*       threadUtils,
                            IStringBuilder*     stringBuilder,
                            IMathUtils*         mathUtils,
+                           IJSONParser*        jsonParser,
                            ILogger*            logger,
                            GL*                 gl,
                            TexturesHandler*    texturesHandler,

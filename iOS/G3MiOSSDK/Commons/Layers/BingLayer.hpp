@@ -26,6 +26,12 @@ enum Language{
   Dutch
 };
 
+class xyTuple{
+public:
+  int x;
+  int y;
+};
+
 
 const double _originShift = 20037508.342789244;
 const double _initialResolution = _originShift*256.0;
@@ -86,7 +92,7 @@ public:
   
   std::string getQuadKey(const int tileXY[], const int level)const;
   
-  int* getTileXY(const Geodetic2D latLon, const int level)const;
+  xyTuple* getTileXY(const Geodetic2D latLon, const int level)const;
   
   Sector getBingTileAsSector(const int tileXY[], const int level)const;
   
