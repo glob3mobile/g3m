@@ -96,4 +96,10 @@ public class Color
 
 	return Color.fromRGBA(newRed, newGreen, newBlue, newAlpha);
   }
+
+  public void dispose()
+  {
+
+  }
+
 }
