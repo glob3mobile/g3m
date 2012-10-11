@@ -42,7 +42,7 @@ class BingLayer:public Layer{
   
 private:
   const Sector              _sector;
-  const URL              _mapServerURL;
+  URL              _mapServerURL;
   const std::string _key;
   const Language _locale;
   const MapType _mapType;
