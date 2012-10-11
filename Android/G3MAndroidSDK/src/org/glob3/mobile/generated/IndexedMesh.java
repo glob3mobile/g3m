@@ -122,8 +122,6 @@ public class IndexedMesh extends Mesh
 	  if (_colors != null)
 		  if (_colors != null)
 			  _colors.dispose();
-	  if (_flatColor != null)
-		  _flatColor = null;
 	}
   
 	if (_extent != null)
