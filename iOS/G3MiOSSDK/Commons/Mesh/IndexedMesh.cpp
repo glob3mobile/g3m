@@ -21,7 +21,9 @@ IndexedMesh::~IndexedMesh()
     delete _vertices;
     delete _indices;
     if (_colors != NULL) delete _colors;
+#ifdef C_CODE
     if (_flatColor != NULL) delete _flatColor;
+#endif
   }
   
   if (_extent != NULL) delete _extent;

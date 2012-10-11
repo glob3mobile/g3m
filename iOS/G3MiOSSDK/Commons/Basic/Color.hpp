@@ -80,11 +80,7 @@ public:
     
     return Color::fromRGBA(newRed, newGreen, newBlue, newAlpha);
   }
-  
-  ~Color() {
     
-  }
-  
 };
 
 #endif
