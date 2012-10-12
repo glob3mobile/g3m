@@ -22,6 +22,8 @@ class IGLTextureId;
 #include <vector>
 #include <string>
 
+class MutableMatrix44D;
+
 class INativeGL {
 public:
   
@@ -45,10 +47,15 @@ public:
   virtual void uniform1i(IGLUniformID* loc,
                          int v) const = 0;
   
+//  virtual void uniformMatrix4fv(IGLUniformID* location,
+//                                bool transpose,
+//                                const IFloatBuffer* buffer) const = 0;
+
   virtual void uniformMatrix4fv(IGLUniformID* location,
                                 bool transpose,
-                                const IFloatBuffer* buffer) const = 0;
+                                const MutableMatrix44D* matrix) const = 0;
 
+  
 //  virtual void uniformMatrix4fv(IGLUniformID* location,
 //                                int count,
 //                                bool transpose,

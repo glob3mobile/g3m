@@ -174,10 +174,15 @@ void GL::loadModelView() {
 //#else
 //  float[] M = _modelView.getColumnMajorFloatArray();
 //#endif
+
 //  _gl->uniformMatrix4fv(Uniforms.Modelview, 1, false, M);
+//  _gl->uniformMatrix4fv(Uniforms.Modelview,
+//                        false,
+//                        _modelView.getColumnMajorFloatBuffer());
+
   _gl->uniformMatrix4fv(Uniforms.Modelview,
                         false,
-                        _modelView.getColumnMajorFloatBuffer());
+                        &_modelView);
 }
 
 void GL::setProjection(const MutableMatrix44D &projection) {
@@ -188,9 +193,13 @@ void GL::setProjection(const MutableMatrix44D &projection) {
 //#endif
 //  _gl->uniformMatrix4fv(Uniforms.Projection, 1, false, M);
 
+//  _gl->uniformMatrix4fv(Uniforms.Projection,
+//                        false,
+//                        projection.getColumnMajorFloatBuffer());
+
   _gl->uniformMatrix4fv(Uniforms.Projection,
                         false,
-                        projection.getColumnMajorFloatBuffer());
+                        &projection);
 }
 
 void GL::loadMatrixf(const MutableMatrix44D &modelView) {

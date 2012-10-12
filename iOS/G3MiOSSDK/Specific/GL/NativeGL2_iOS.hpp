@@ -49,14 +49,26 @@ public:
     glUniform1i(location, v);
   }
   
+//  void uniformMatrix4fv(IGLUniformID* location,
+//                        bool transpose,
+//                        const IFloatBuffer* buffer) const {
+//    const int loc = ((GLUniformID_iOS*)location)->getID();
+//    GLfloat* pointer = ((FloatBuffer_iOS*) buffer)->getPointer();
+//    glUniformMatrix4fv(loc, 1, transpose, pointer);
+//  }
+
   void uniformMatrix4fv(IGLUniformID* location,
                         bool transpose,
-                        const IFloatBuffer* buffer) const {
+                        const MutableMatrix44D* matrix) const {
     const int loc = ((GLUniformID_iOS*)location)->getID();
-    GLfloat* pointer = ((FloatBuffer_iOS*) buffer)->getPointer();
+//    GLfloat* pointer = ((FloatBuffer_iOS*) buffer)->getPointer();
+    
+    GLfloat* pointer = matrix->getColumnMajorFloatArray();
+
     glUniformMatrix4fv(loc, 1, transpose, pointer);
   }
 
+  
 //  void uniformMatrix4fv(IGLUniformID* location,
 //                        int count,
 //                        bool transpose,

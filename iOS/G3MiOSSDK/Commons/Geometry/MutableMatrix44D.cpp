@@ -43,6 +43,11 @@ MutableMatrix44D& MutableMatrix44D::operator=(const MutableMatrix44D &that) {
       delete _columnMajorFloatBuffer;
       _columnMajorFloatBuffer = NULL;
     }
+
+    if (_columnMajorFloatArray != NULL) {
+      delete [] _columnMajorFloatArray;
+      _columnMajorFloatArray = NULL;
+    }
   }
   
   return *this;
@@ -51,6 +56,10 @@ MutableMatrix44D& MutableMatrix44D::operator=(const MutableMatrix44D &that) {
 MutableMatrix44D::~MutableMatrix44D() {
   if (_columnMajorFloatBuffer != NULL) {
     delete _columnMajorFloatBuffer;
+  }
+  
+  if (_columnMajorFloatArray != NULL) {
+    delete [] _columnMajorFloatArray;
   }
 }
 
