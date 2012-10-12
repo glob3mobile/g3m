@@ -20,8 +20,13 @@
 class Angle {
 private:
   const double _degrees;
+  const double _radians;
   
-  Angle(const double degrees) : _degrees(degrees) {  }
+  Angle(const double degrees) :
+  _degrees( degrees ),
+  _radians( degrees / 180.0 * /*GMath.pi()*/ 3.14159265358979323846264338327950288 )
+  {
+  }
   
 public:
   static Angle lerp(const Angle& start,
@@ -65,16 +70,19 @@ public:
     return IMathUtils::instance()->isNan(_degrees);
   }
   
-  Angle(const Angle& angle): _degrees(angle._degrees) {
+  Angle(const Angle& angle):
+  _degrees(angle._degrees),
+  _radians(angle._radians)
+  {
     
   }
   
   double sinus() const {
-    return GMath.sin( _degrees / 180.0 * GMath.pi());
+    return GMath.sin( _radians );
   }
   
   double cosinus() const {
-    return GMath.cos(_degrees / 180.0 * GMath.pi());
+    return GMath.cos( _radians );
   }
   
   double degrees() const {
@@ -82,7 +90,8 @@ public:
   }
   
   double radians() const {
-    return _degrees / 180.0 * GMath.pi();
+    //return _degrees / 180.0 * GMath.pi();
+    return _radians;
   }
   
   bool closeTo(const Angle& other) const {

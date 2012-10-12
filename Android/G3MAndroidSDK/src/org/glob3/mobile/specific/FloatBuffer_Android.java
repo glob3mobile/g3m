@@ -40,13 +40,19 @@ public final class FloatBuffer_Android
    }
 
 
+   //   @Override
+   //   public void put(final int i,
+   //                   final float value) {
+   //      if (_buffer.get(i) != value) {
+   //         _buffer.put(i, value);
+   //         _timestamp++;
+   //      }
+   //   }
+
    @Override
-   public void put(final int i,
-                   final float value) {
-      if (_buffer.get(i) != value) {
-         _buffer.put(i, value);
-         _timestamp++;
-      }
+   public void rawPut(final int i,
+                      final float value) {
+      _buffer.put(i, value);
    }
 
 

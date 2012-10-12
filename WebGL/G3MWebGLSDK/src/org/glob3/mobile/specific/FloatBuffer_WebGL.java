@@ -79,13 +79,19 @@ public final class FloatBuffer_WebGL
    }-*/;
 
 
+   //   @Override
+   //   public native void put(final int i,
+   //                          final float value) /*-{
+   //		if (this.@org.glob3.mobile.specific.FloatBuffer_WebGL::_buffer[i] != value) {
+   //			this.@org.glob3.mobile.specific.FloatBuffer_WebGL::_buffer[i] = value;
+   //			this.@org.glob3.mobile.specific.FloatBuffer_WebGL::incTimestamp();
+   //		}
+   //   }-*/;
+
    @Override
-   public native void put(final int i,
-                          final float value) /*-{
-		if (this.@org.glob3.mobile.specific.FloatBuffer_WebGL::_buffer[i] != value) {
-			this.@org.glob3.mobile.specific.FloatBuffer_WebGL::_buffer[i] = value;
-			this.@org.glob3.mobile.specific.FloatBuffer_WebGL::incTimestamp();
-		}
+   public native void rawPut(final int i,
+                             final float value) /*-{
+		this.@org.glob3.mobile.specific.FloatBuffer_WebGL::_buffer[i] = value;
    }-*/;
 
 

@@ -81,6 +81,41 @@ public:
     return new FloatBuffer_iOS(size);
   }
   
+  IFloatBuffer* createFloatBuffer(float f0,
+                                  float f1,
+                                  float f2,
+                                  float f3,
+                                  float f4,
+                                  float f5,
+                                  float f6,
+                                  float f7,
+                                  float f8,
+                                  float f9,
+                                  float f10,
+                                  float f11,
+                                  float f12,
+                                  float f13,
+                                  float f14,
+                                  float f15) const {
+    return new FloatBuffer_iOS(f0,
+                               f1,
+                               f2,
+                               f3,
+                               f4,
+                               f5,
+                               f6,
+                               f7,
+                               f8,
+                               f9,
+                               f10,
+                               f11,
+                               f12,
+                               f13,
+                               f14,
+                               f15);
+  }
+  
+  
   IIntBuffer* createIntBuffer(int size) const {
     return new IntBuffer_iOS(size);
   }
