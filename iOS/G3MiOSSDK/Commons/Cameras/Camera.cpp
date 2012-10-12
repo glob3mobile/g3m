@@ -210,10 +210,11 @@ Vector3D Camera::pixel2PlanetPoint(const Vector2D& pixel) const {
 Vector2D Camera::point2Pixel(const Vector3D& point) const {  
   const Vector2D p = getModelViewMatrix().project(point,
                                                   0, 0, _width, _height);
-  
-  if (p.isNan()) {
-    return p;
-  }
+
+  int __TODO_check_isNan_is_needed;
+//  if (p.isNan()) {
+//    return p;
+//  }
   
   return Vector2D(p._x, _height-p._y);
 }
