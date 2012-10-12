@@ -11,6 +11,7 @@ import org.glob3.mobile.generated.IGLUniformID;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IIntBuffer;
 import org.glob3.mobile.generated.INativeGL;
+import org.glob3.mobile.generated.MutableMatrix44D;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayInteger;
@@ -134,12 +135,28 @@ public final class NativeGL_WebGL
    }-*/;
 
 
+   //   @Override
+   //   public native void uniformMatrix4fv(final IGLUniformID location,
+   //                                       final boolean transpose,
+   //                                       final IFloatBuffer buffer) /*-{
+   //		var id = location.@org.glob3.mobile.specific.GLUniformID_WebGL::getId()();
+   //		var value = buffer.@org.glob3.mobile.specific.FloatBuffer_WebGL::getBuffer()();
+   //		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniformMatrix4fv(
+   //				id, transpose, value);
+   //   }-*/;
+
    @Override
    public native void uniformMatrix4fv(final IGLUniformID location,
                                        final boolean transpose,
-                                       final IFloatBuffer buffer) /*-{
+                                       final MutableMatrix44D matrix) /*-{
 		var id = location.@org.glob3.mobile.specific.GLUniformID_WebGL::getId()();
+		//      var value = buffer.@org.glob3.mobile.specific.FloatBuffer_WebGL::getBuffer()();
+
+		var buffer = matrix
+				.@org.glob3.mobile.generated.MutableMatrix44D::getColumnMajorFloatBuffer();
+
 		var value = buffer.@org.glob3.mobile.specific.FloatBuffer_WebGL::getBuffer()();
+
 		this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.uniformMatrix4fv(
 				id, transpose, value);
    }-*/;

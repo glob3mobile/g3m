@@ -13,6 +13,7 @@ import org.glob3.mobile.generated.IGLUniformID;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IIntBuffer;
 import org.glob3.mobile.generated.INativeGL;
+import org.glob3.mobile.generated.MutableMatrix44D;
 
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
@@ -67,12 +68,26 @@ public final class NativeGL2_Android
    }
 
 
+   //   @Override
+   //   public void uniformMatrix4fv(final IGLUniformID location,
+   //                                final boolean transpose,
+   //                                final IFloatBuffer buffer) {
+   //      GLES20.glUniformMatrix4fv(((GLUniformID_Android) location).getID(), 1, transpose,
+   //               ((FloatBuffer_Android) buffer).getBuffer());
+   //   }
+
+
    @Override
    public void uniformMatrix4fv(final IGLUniformID location,
                                 final boolean transpose,
-                                final IFloatBuffer buffer) {
-      GLES20.glUniformMatrix4fv(((GLUniformID_Android) location).getID(), 1, transpose,
-               ((FloatBuffer_Android) buffer).getBuffer());
+                                final MutableMatrix44D matrix) {
+      GLES20.glUniformMatrix4fv( //
+               ((GLUniformID_Android) location).getID(), //
+               1, //
+               transpose, //
+               matrix.getColumnMajorFloatArray(), //
+               0 //
+      );
    }
 
 
