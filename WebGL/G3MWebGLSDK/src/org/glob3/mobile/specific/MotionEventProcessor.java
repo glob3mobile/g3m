@@ -106,9 +106,9 @@ public final class MotionEventProcessor {
 
       if (_mouseDown) {
          if (_keyDown) {
-            touches.add(new Touch(new Vector2D(pos.x() - 10, pos.y()), _prevPos));
+            touches.add(new Touch(new Vector2D(pos._x - 10, pos._y), _prevPos));
             touches.add(new Touch(pos, _prevPos));
-            touches.add(new Touch(new Vector2D(pos.x() + 10, pos.y()), _prevPos));
+            touches.add(new Touch(new Vector2D(pos._x + 10, pos._y), _prevPos));
          }
          else {
             touches.add(new Touch(pos, _prevPos));
@@ -129,9 +129,9 @@ public final class MotionEventProcessor {
       _mouseDown = true;
       _prevPos = pos;
       if (_keyDown) {
-         touches.add(new Touch(new Vector2D(pos.x() - 10, pos.y()), _prevPos));
+         touches.add(new Touch(new Vector2D(pos._x - 10, pos._y), _prevPos));
          touches.add(new Touch(pos, _prevPos));
-         touches.add(new Touch(new Vector2D(pos.x() + 10, pos.y()), _prevPos));
+         touches.add(new Touch(new Vector2D(pos._x + 10, pos._y), _prevPos));
       }
       else {
          touches.add(new Touch(pos, _prevPos));
@@ -148,9 +148,9 @@ public final class MotionEventProcessor {
 
       _mouseDown = false;
       if (_keyDown) {
-         touches.add(new Touch(new Vector2D(pos.x() - 10, pos.y()), _prevPos));
+         touches.add(new Touch(new Vector2D(pos._x - 10, pos._y), _prevPos));
          touches.add(new Touch(pos, _prevPos));
-         touches.add(new Touch(new Vector2D(pos.x() + 10, pos.y()), _prevPos));
+         touches.add(new Touch(new Vector2D(pos._x + 10, pos._y), _prevPos));
       }
       else {
          touches.add(new Touch(pos, _prevPos));
@@ -201,14 +201,14 @@ public final class MotionEventProcessor {
       Vector2D firstPointerPos = new Vector2D(x, y);
       Vector2D secondPointerPos = new Vector2D(x + 20, y + 20);
 
-      beginTouches.add(new Touch(new Vector2D(firstPointerPos.x(), firstPointerPos.y()), new Vector2D(x, y)));
-      beginTouches.add(new Touch(new Vector2D(secondPointerPos.x(), secondPointerPos.y()), new Vector2D(x, y)));
+      beginTouches.add(new Touch(new Vector2D(firstPointerPos._x, firstPointerPos._y), new Vector2D(x, y)));
+      beginTouches.add(new Touch(new Vector2D(secondPointerPos._x, secondPointerPos._y), new Vector2D(x, y)));
 
       _prevPos = firstPointerPos;
       final Vector2D prevSecondPos = secondPointerPos;
 
-      firstPointerPos = new Vector2D(firstPointerPos.x() - delta, firstPointerPos.y() - delta);
-      secondPointerPos = new Vector2D(secondPointerPos.x() + delta, secondPointerPos.y() + delta);
+      firstPointerPos = new Vector2D(firstPointerPos._x - delta, firstPointerPos._y - delta);
+      secondPointerPos = new Vector2D(secondPointerPos._x + delta, secondPointerPos._y + delta);
 
       endTouches.add(new Touch(firstPointerPos, _prevPos));
       endTouches.add(new Touch(secondPointerPos, prevSecondPos));

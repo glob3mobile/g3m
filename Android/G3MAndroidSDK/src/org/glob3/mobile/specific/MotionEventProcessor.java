@@ -63,7 +63,7 @@ public final class MotionEventProcessor {
          if (event.getAction() != MotionEvent.ACTION_UP) {
             if (auxEvent._pointersID.contains(pointerID)) {
                final Touch lastT = auxEvent._touchs.get(auxEvent._pointersID.indexOf(pointerID));
-               prevPos = new Vector2D(lastT.getPos().x(), lastT.getPos().y());
+               prevPos = new Vector2D(lastT.getPos()._x, lastT.getPos()._y);
             }
             else {
                prevPos = new Vector2D(0, 0);
@@ -73,7 +73,7 @@ public final class MotionEventProcessor {
 
             if (_prevLastEvent._pointersID.contains(pointerID)) {
                final Touch lastT = _prevLastEvent._touchs.get(_prevLastEvent._pointersID.indexOf(pointerID));
-               prevPos = new Vector2D(lastT.getPos().x(), lastT.getPos().y());
+               prevPos = new Vector2D(lastT.getPos()._x, lastT.getPos()._y);
             }
             else {
                prevPos = new Vector2D(0, 0);
