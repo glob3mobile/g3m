@@ -61,6 +61,64 @@ public final class FloatBuffer_WebGL
    }
 
 
+   public FloatBuffer_WebGL(final float f0,
+                            final float f1,
+                            final float f2,
+                            final float f3,
+                            final float f4,
+                            final float f5,
+                            final float f6,
+                            final float f7,
+                            final float f8,
+                            final float f9,
+                            final float f10,
+                            final float f11,
+                            final float f12,
+                            final float f13,
+                            final float f14,
+                            final float f15) {
+      _buffer = jsCreateBuffer(f0, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15);
+   }
+
+
+   private native JavaScriptObject jsCreateBuffer(final float f0,
+                                                  final float f1,
+                                                  final float f2,
+                                                  final float f3,
+                                                  final float f4,
+                                                  final float f5,
+                                                  final float f6,
+                                                  final float f7,
+                                                  final float f8,
+                                                  final float f9,
+                                                  final float f10,
+                                                  final float f11,
+                                                  final float f12,
+                                                  final float f13,
+                                                  final float f14,
+                                                  final float f15) /*-{
+		var buffer = new Float32Array(16);
+		buffer[0] = f0;
+		buffer[1] = f1;
+		buffer[2] = f2;
+		buffer[3] = f3;
+		buffer[4] = f4;
+		buffer[5] = f5;
+		buffer[6] = f6;
+		buffer[7] = f7;
+		buffer[8] = f8;
+		buffer[9] = f9;
+		buffer[10] = f10;
+		buffer[11] = f11;
+		buffer[12] = f12;
+		buffer[13] = f13;
+		buffer[14] = f14;
+		buffer[15] = f15;
+
+		return buffer;
+   }-*/;
+
+
    @Override
    public native int size() /*-{
 		return this.@org.glob3.mobile.specific.FloatBuffer_WebGL::_buffer.length;
