@@ -160,7 +160,17 @@ public class Vector2D
 //ORIGINAL LINE: boolean isNan() const
   public final boolean isNan()
   {
-	return IMathUtils.instance().isNan(_x) || IMathUtils.instance().isNan(_y);
+//    return GMath.isNan(_x) || GMath.isNan(_y);
+
+	if (_x != _x)
+	{
+	  return true;
+	}
+	if (_y != _y)
+	{
+	  return true;
+	}
+	return false;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

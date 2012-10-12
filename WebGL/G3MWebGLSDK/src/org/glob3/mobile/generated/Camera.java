@@ -173,10 +173,10 @@ public class Camera
   {
 	final Vector2D p = getModelViewMatrix().project(point, 0, 0, _width, _height);
   
-	if (p.isNan())
-	{
-	  return p;
-	}
+	int __TODO_check_isNan_is_needed;
+  //  if (p.isNan()) {
+  //    return p;
+  //  }
   
 	return new Vector2D(p._x, _height-p._y);
   }
