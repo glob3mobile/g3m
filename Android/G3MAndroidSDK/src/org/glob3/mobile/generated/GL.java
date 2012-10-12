@@ -81,8 +81,13 @@ public class GL
   ///#else
   //  float[] M = _modelView.getColumnMajorFloatArray();
   ///#endif
+  
   //  _gl->uniformMatrix4fv(Uniforms.Modelview, 1, false, M);
-	_gl.uniformMatrix4fv(GlobalMembersGL.Uniforms.Modelview, false, _modelView.getColumnMajorFloatBuffer());
+  //  _gl->uniformMatrix4fv(Uniforms.Modelview,
+  //                        false,
+  //                        _modelView.getColumnMajorFloatBuffer());
+  
+	_gl.uniformMatrix4fv(GlobalMembersGL.Uniforms.Modelview, false, _modelView);
   }
 
   private IGLTextureId getGLTextureId()
@@ -415,7 +420,11 @@ public class GL
   ///#endif
   //  _gl->uniformMatrix4fv(Uniforms.Projection, 1, false, M);
   
-	_gl.uniformMatrix4fv(GlobalMembersGL.Uniforms.Projection, false, projection.getColumnMajorFloatBuffer());
+  //  _gl->uniformMatrix4fv(Uniforms.Projection,
+  //                        false,
+  //                        projection.getColumnMajorFloatBuffer());
+  
+	_gl.uniformMatrix4fv(GlobalMembersGL.Uniforms.Projection, false, projection);
   }
 
   public final boolean useProgram(IGLProgramId program)

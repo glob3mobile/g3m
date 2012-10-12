@@ -25,6 +25,9 @@ package org.glob3.mobile.generated;
 //class IGLTextureId;
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class MutableMatrix44D;
+
 public abstract class INativeGL
 {
 
@@ -56,9 +59,14 @@ public abstract class INativeGL
 //ORIGINAL LINE: virtual void uniform1i(IGLUniformID* loc, int v) const = 0;
   public abstract void uniform1i(IGLUniformID loc, int v);
 
+//  virtual void uniformMatrix4fv(IGLUniformID* location,
+//                                bool transpose,
+//                                const IFloatBuffer* buffer) const = 0;
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void uniformMatrix4fv(IGLUniformID* location, boolean transpose, const IFloatBuffer* buffer) const = 0;
-  public abstract void uniformMatrix4fv(IGLUniformID location, boolean transpose, IFloatBuffer buffer);
+//ORIGINAL LINE: virtual void uniformMatrix4fv(IGLUniformID* location, boolean transpose, const MutableMatrix44D* matrix) const = 0;
+  public abstract void uniformMatrix4fv(IGLUniformID location, boolean transpose, MutableMatrix44D matrix);
+
 
 //  virtual void uniformMatrix4fv(IGLUniformID* location,
 //                                int count,

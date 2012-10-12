@@ -55,6 +55,7 @@ public class MutableMatrix44D
   private double _m33;
 
   private IFloatBuffer _columnMajorFloatBuffer;
+  private float[] _columnMajorFloatArray;
 
   private boolean _isValid;
 
@@ -83,12 +84,14 @@ public class MutableMatrix44D
 	_m33 = m33;
 
 	_columnMajorFloatBuffer = null;
+	_columnMajorFloatArray = null;
   }
 
   private MutableMatrix44D(boolean isValid)
   {
 	  _isValid = isValid;
 	_columnMajorFloatBuffer = null;
+	_columnMajorFloatArray = null;
   }
 
 
@@ -117,6 +120,7 @@ public class MutableMatrix44D
 	_m33 = 0.0;
 
 	_columnMajorFloatBuffer = null;
+	_columnMajorFloatArray = null;
   }
 
   public MutableMatrix44D(MutableMatrix44D m)
@@ -143,6 +147,7 @@ public class MutableMatrix44D
 	_m33 = m._m33;
 
 	_columnMajorFloatBuffer = null;
+	_columnMajorFloatArray = null;
   }
 
 //C++ TO JAVA CONVERTER NOTE: This 'copyFrom' method was converted from the original C++ copy assignment operator:
@@ -179,6 +184,12 @@ public class MutableMatrix44D
 			_columnMajorFloatBuffer.dispose();
 		_columnMajorFloatBuffer = null;
 	  }
+  
+	  if (_columnMajorFloatArray != null)
+	  {
+		_columnMajorFloatArray = null;
+		_columnMajorFloatArray = null;
+	  }
 	}
   
 	return this;
@@ -190,6 +201,11 @@ public class MutableMatrix44D
 	{
 	  if (_columnMajorFloatBuffer != null)
 		  _columnMajorFloatBuffer.dispose();
+	}
+  
+	if (_columnMajorFloatArray != null)
+	{
+	  _columnMajorFloatArray = null;
 	}
   }
 
@@ -396,149 +412,182 @@ public class MutableMatrix44D
 	return _columnMajorFloatBuffer;
   }
 
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: float[] getColumnMajorFloatArray() const
+  public final float[] getColumnMajorFloatArray()
+  {
+	  if (_columnMajorFloatArray == null)
+	  {
+		_columnMajorFloatArray = new float[16];
+
+		_columnMajorFloatArray[0] = (float) _m00;
+		_columnMajorFloatArray[1] = (float) _m10;
+		_columnMajorFloatArray[2] = (float) _m20;
+		_columnMajorFloatArray[3] = (float) _m30;
+
+		_columnMajorFloatArray[4] = (float) _m01;
+		_columnMajorFloatArray[5] = (float) _m11;
+		_columnMajorFloatArray[6] = (float) _m21;
+		_columnMajorFloatArray[7] = (float) _m31;
+
+		_columnMajorFloatArray[8] = (float) _m02;
+		_columnMajorFloatArray[9] = (float) _m12;
+		_columnMajorFloatArray[10] = (float) _m22;
+		_columnMajorFloatArray[11] = (float) _m32;
+
+		_columnMajorFloatArray[12] = (float) _m03;
+		_columnMajorFloatArray[13] = (float) _m13;
+		_columnMajorFloatArray[14] = (float) _m23;
+		_columnMajorFloatArray[15] = (float) _m33;
+	  }
+	  return _columnMajorFloatArray;
+	}
+
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: void print(const String& name, const ILogger* log) const
-  public final void print(String name, ILogger log)
-  {
-	log.logInfo("MutableMatrix44D %s:\n", name);
-	log.logInfo("%.2f  %.2f %.2f %.2f\n", _m00, _m01,_m02, _m03);
-	log.logInfo("%.2f  %.2f %.2f %.2f\n", _m10, _m11,_m12, _m13);
-	log.logInfo("%.2f  %.2f %.2f %.2f\n", _m20, _m21,_m22, _m23);
-	log.logInfo("%.2f  %.2f %.2f %.2f\n", _m30, _m31,_m32, _m33);
-	log.logInfo("\n");
-  }
+	public final void print(String name, ILogger log)
+	{
+	  log.logInfo("MutableMatrix44D %s:\n", name);
+	  log.logInfo("%.2f  %.2f %.2f %.2f\n", _m00, _m01,_m02, _m03);
+	  log.logInfo("%.2f  %.2f %.2f %.2f\n", _m10, _m11,_m12, _m13);
+	  log.logInfo("%.2f  %.2f %.2f %.2f\n", _m20, _m21,_m22, _m23);
+	  log.logInfo("%.2f  %.2f %.2f %.2f\n", _m30, _m31,_m32, _m33);
+	  log.logInfo("\n");
+	}
 
 
-  /*
-   This function is intended to be used on a ModelView MutableMatrix44D. ModelView = Projection * Model
-   */
+	/*
+	 This function is intended to be used on a ModelView MutableMatrix44D. ModelView = Projection * Model
+	 */
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Vector3D unproject(const Vector3D& pixel3D, const int vpLeft, const int vpTop, const int vpWidth, const int vpHeight) const
-  public final Vector3D unproject(Vector3D pixel3D, int vpLeft, int vpTop, int vpWidth, int vpHeight)
-  {
-  
-	int TODO_Remove_UNPROJECT; //!!!!
-  
-	final double winx = pixel3D.x();
-	final double winy = pixel3D.y();
-	final double winz = pixel3D.z();
-  
-	final double in0 = (winx - vpLeft) * 2 / vpWidth - 1.0;
-	final double in1 = (winy - vpTop) * 2 / vpHeight - 1.0;
-	final double in2 = 2 * winz - 1.0;
-	final double in3 = 1.0;
-  
-	//Inverse
-	MutableMatrix44D m = inversed();
-  
-	//To object coordinates
-  
-	//Transformating point
-	final double out0 = m._m00 * in0 + m._m01 * in1 + m._m02 * in2 + m._m03 * in3;
-	final double out1 = m._m10 * in0 + m._m11 * in1 + m._m12 * in2 + m._m13 * in3;
-	final double out2 = m._m20 * in0 + m._m21 * in1 + m._m22 * in2 + m._m23 * in3;
-	final double out3 = m._m30 * in0 + m._m31 * in1 + m._m32 * in2 + m._m33 * in3;
-  
-	if (out3 == 0.0)
+	public final Vector3D unproject(Vector3D pixel3D, int vpLeft, int vpTop, int vpWidth, int vpHeight)
 	{
-	  return Vector3D.nan();
+    
+	  int TODO_Remove_UNPROJECT; //!!!!
+    
+	  final double winx = pixel3D.x();
+	  final double winy = pixel3D.y();
+	  final double winz = pixel3D.z();
+    
+	  final double in0 = (winx - vpLeft) * 2 / vpWidth - 1.0;
+	  final double in1 = (winy - vpTop) * 2 / vpHeight - 1.0;
+	  final double in2 = 2 * winz - 1.0;
+	  final double in3 = 1.0;
+    
+	  //Inverse
+	  MutableMatrix44D m = inversed();
+    
+	  //To object coordinates
+    
+	  //Transformating point
+	  final double out0 = m._m00 * in0 + m._m01 * in1 + m._m02 * in2 + m._m03 * in3;
+	  final double out1 = m._m10 * in0 + m._m11 * in1 + m._m12 * in2 + m._m13 * in3;
+	  final double out2 = m._m20 * in0 + m._m21 * in1 + m._m22 * in2 + m._m23 * in3;
+	  final double out3 = m._m30 * in0 + m._m31 * in1 + m._m32 * in2 + m._m33 * in3;
+    
+	  if (out3 == 0.0)
+	  {
+		return Vector3D.nan();
+	  }
+    
+	  final double objx = out0 / out3;
+	  final double objy = out1 / out3;
+	  final double objz = out2 / out3;
+    
+	  return new Vector3D(objx, objy, objz);
 	}
-  
-	final double objx = out0 / out3;
-	final double objy = out1 / out3;
-	final double objz = out2 / out3;
-  
-	return new Vector3D(objx, objy, objz);
-  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Vector2D project(const Vector3D& point, const int vpLeft, const int vpTop, const int vpWidth, const int vpHeight) const
-  public final Vector2D project(Vector3D point, int vpLeft, int vpTop, int vpWidth, int vpHeight)
-  {
-	final double in0 = point.x();
-	final double in1 = point.y();
-	final double in2 = point.z();
-	final double in3 = 1.0;
-  
-	//Transformating point
-	double out0 = _m00 * in0 + _m01 * in1 + _m02 * in2 + _m03 * in3;
-	double out1 = _m10 * in0 + _m11 * in1 + _m12 * in2 + _m13 * in3;
-	//double out2 = _m20 * in0 + _m21 * in1 + _m22 * in2 + _m23 * in3;
-	final double out3 = _m30 * in0 + _m31 * in1 + _m32 * in2 + _m33 * in3;
-  
-	if (out3 == 0.0)
+	public final Vector2D project(Vector3D point, int vpLeft, int vpTop, int vpWidth, int vpHeight)
 	{
-	  return Vector2D.nan();
+	  final double in0 = point.x();
+	  final double in1 = point.y();
+	  final double in2 = point.z();
+	  final double in3 = 1.0;
+    
+	  //Transformating point
+	  double out0 = _m00 * in0 + _m01 * in1 + _m02 * in2 + _m03 * in3;
+	  double out1 = _m10 * in0 + _m11 * in1 + _m12 * in2 + _m13 * in3;
+	  //double out2 = _m20 * in0 + _m21 * in1 + _m22 * in2 + _m23 * in3;
+	  final double out3 = _m30 * in0 + _m31 * in1 + _m32 * in2 + _m33 * in3;
+    
+	  if (out3 == 0.0)
+	  {
+		return Vector2D.nan();
+	  }
+    
+	  out0 /= out3;
+	  out1 /= out3;
+	  //out2 /= out3;
+    
+	  final double winx = vpLeft + (1.0 + out0) * vpWidth / 2.0;
+	  final double winy = vpTop + (1.0 + out1) * vpHeight / 2.0;
+	  //double winz = (1.0 + in2) / 2.0;
+	  return new Vector2D(winx, winy);
 	}
-  
-	out0 /= out3;
-	out1 /= out3;
-	//out2 /= out3;
-  
-	final double winx = vpLeft + (1.0 + out0) * vpWidth / 2.0;
-	final double winy = vpTop + (1.0 + out1) * vpHeight / 2.0;
-	//double winz = (1.0 + in2) / 2.0;
-	return new Vector2D(winx, winy);
-  }
 
-  public static MutableMatrix44D createTranslationMatrix(Vector3D t)
-  {
-	return new MutableMatrix44D(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, t.x(), t.y(), t.z(), 1);
-  
-  }
+	public static MutableMatrix44D createTranslationMatrix(Vector3D t)
+	{
+	  return new MutableMatrix44D(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, t.x(), t.y(), t.z(), 1);
+    
+	}
 
-  public static MutableMatrix44D createRotationMatrix(Angle angle, Vector3D p)
-  {
-	final Vector3D p0 = p.normalized();
-  
-	final double c = angle.cosinus();
-	final double s = angle.sinus();
-  
-	return new MutableMatrix44D(p0.x() * p0.x() * (1 - c) + c, p0.x() * p0.y() * (1 - c) + p0.z() * s, p0.x() * p0.z() * (1 - c) - p0.y() * s, 0, p0.y() * p0.x() * (1 - c) - p0.z() * s, p0.y() * p0.y() * (1 - c) + c, p0.y() * p0.z() * (1 - c) + p0.x() * s, 0, p0.x() * p0.z() * (1 - c) + p0.y() * s, p0.y() * p0.z() * (1 - c) - p0.x() * s, p0.z() * p0.z() * (1 - c) + c, 0, 0, 0, 0, 1);
-  
-  }
+	public static MutableMatrix44D createRotationMatrix(Angle angle, Vector3D p)
+	{
+	  final Vector3D p0 = p.normalized();
+    
+	  final double c = angle.cosinus();
+	  final double s = angle.sinus();
+    
+	  return new MutableMatrix44D(p0.x() * p0.x() * (1 - c) + c, p0.x() * p0.y() * (1 - c) + p0.z() * s, p0.x() * p0.z() * (1 - c) - p0.y() * s, 0, p0.y() * p0.x() * (1 - c) - p0.z() * s, p0.y() * p0.y() * (1 - c) + c, p0.y() * p0.z() * (1 - c) + p0.x() * s, 0, p0.x() * p0.z() * (1 - c) + p0.y() * s, p0.y() * p0.z() * (1 - c) - p0.x() * s, p0.z() * p0.z() * (1 - c) + c, 0, 0, 0, 0, 1);
+    
+	}
 
-  public static MutableMatrix44D createGeneralRotationMatrix(Angle angle, Vector3D axis, Vector3D point)
-  {
-	final MutableMatrix44D T1 = MutableMatrix44D.createTranslationMatrix(point.times(-1.0));
-	final MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(angle, axis);
-	final MutableMatrix44D T2 = MutableMatrix44D.createTranslationMatrix(point);
-	return T2.multiply(R).multiply(T1);
-  }
+	public static MutableMatrix44D createGeneralRotationMatrix(Angle angle, Vector3D axis, Vector3D point)
+	{
+	  final MutableMatrix44D T1 = MutableMatrix44D.createTranslationMatrix(point.times(-1.0));
+	  final MutableMatrix44D R = MutableMatrix44D.createRotationMatrix(angle, axis);
+	  final MutableMatrix44D T2 = MutableMatrix44D.createTranslationMatrix(point);
+	  return T2.multiply(R).multiply(T1);
+	}
 
-  public static MutableMatrix44D createModelMatrix(MutableVector3D pos, MutableVector3D center, MutableVector3D up)
-  {
-	final MutableVector3D w = center.sub(pos).normalized();
-	final double pe = w.dot(up);
-	final MutableVector3D v = up.sub(w.times(pe)).normalized();
-	final MutableVector3D u = w.cross(v);
-	return new MutableMatrix44D(u.x(), v.x(), -w.x(), 0, u.y(), v.y(), -w.y(), 0, u.z(), v.z(), -w.z(), 0, -pos.dot(u), -pos.dot(v), pos.dot(w), 1);
-  
-  }
+	public static MutableMatrix44D createModelMatrix(MutableVector3D pos, MutableVector3D center, MutableVector3D up)
+	{
+	  final MutableVector3D w = center.sub(pos).normalized();
+	  final double pe = w.dot(up);
+	  final MutableVector3D v = up.sub(w.times(pe)).normalized();
+	  final MutableVector3D u = w.cross(v);
+	  return new MutableMatrix44D(u.x(), v.x(), -w.x(), 0, u.y(), v.y(), -w.y(), 0, u.z(), v.z(), -w.z(), 0, -pos.dot(u), -pos.dot(v), pos.dot(w), 1);
+    
+	}
 
-  public static MutableMatrix44D createProjectionMatrix(double left, double right, double bottom, double top, double znear, double zfar)
-  {
-	// set frustum MutableMatrix44D in double
-	final double rl = right - left;
-	final double tb = top - bottom;
-	final double fn = zfar - znear;
-  
-	return new MutableMatrix44D(2 * znear / rl, 0, 0, 0, 0, 2 * znear / tb, 0, 0, (right + left) / rl, (top + bottom) / tb, -(zfar + znear) / fn, -1, 0, 0, -2 * zfar / fn * znear, 0);
-  
-  }
+	public static MutableMatrix44D createProjectionMatrix(double left, double right, double bottom, double top, double znear, double zfar)
+	{
+	  // set frustum MutableMatrix44D in double
+	  final double rl = right - left;
+	  final double tb = top - bottom;
+	  final double fn = zfar - znear;
+    
+	  return new MutableMatrix44D(2 * znear / rl, 0, 0, 0, 0, 2 * znear / tb, 0, 0, (right + left) / rl, (top + bottom) / tb, -(zfar + znear) / fn, -1, 0, 0, -2 * zfar / fn * znear, 0);
+    
+	}
 
-  public static MutableMatrix44D createProjectionMatrix(FrustumData data)
-  {
-	return createProjectionMatrix(data._left, data._right, data._bottom, data._top, data._znear, data._zfar);
-  }
+	public static MutableMatrix44D createProjectionMatrix(FrustumData data)
+	{
+	  return createProjectionMatrix(data._left, data._right, data._bottom, data._top, data._znear, data._zfar);
+	}
 
-  public static MutableMatrix44D createOrthographicProjectionMatrix(double left, double right, double bottom, double top, double znear, double zfar)
-  {
-	// set frustum MutableMatrix44D in double
-	final double rl = right - left;
-	final double tb = top - bottom;
-	final double fn = zfar - znear;
-  
-	return new MutableMatrix44D(2 / rl, 0, 0, 0, 0, 2 / tb, 0, 0, 0, 0, -2 / fn, 0, -(right+left) / rl, -(top+bottom) / tb, -(zfar+znear) / fn, 1);
+	public static MutableMatrix44D createOrthographicProjectionMatrix(double left, double right, double bottom, double top, double znear, double zfar)
+	{
+	  // set frustum MutableMatrix44D in double
+	  final double rl = right - left;
+	  final double tb = top - bottom;
+	  final double fn = zfar - znear;
+    
+	  return new MutableMatrix44D(2 / rl, 0, 0, 0, 0, 2 / tb, 0, 0, 0, 0, -2 / fn, 0, -(right+left) / rl, -(top+bottom) / tb, -(zfar+znear) / fn, 1);
+	}
   }
-}
