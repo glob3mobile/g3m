@@ -29,6 +29,8 @@ public abstract class IFloatBuffer implements IBuffer
 //ORIGINAL LINE: virtual float get(int i) const = 0;
   public abstract float get(int i);
 
-  public abstract void put(int i, float value);
+//  virtual void put(int i, float value) = 0;
+
+  public abstract void rawPut(int i, float value);
 
 }

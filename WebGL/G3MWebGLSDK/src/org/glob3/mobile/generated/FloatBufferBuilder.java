@@ -36,7 +36,7 @@ public class FloatBufferBuilder
   
 	for (int i = 0; i < size; i++)
 	{
-	  result.put(i, _values.get(i));
+	  result.rawPut(i, _values.get(i));
 	}
   
 	return result;

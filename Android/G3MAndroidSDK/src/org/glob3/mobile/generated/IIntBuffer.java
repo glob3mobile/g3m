@@ -28,6 +28,8 @@ public abstract class IIntBuffer implements IBuffer
 //ORIGINAL LINE: virtual int get(int i) const = 0;
   public abstract int get(int i);
 
-  public abstract void put(int i, int value);
+//  virtual void put(int i, int value) = 0;
+
+  public abstract void rawPut(int i, int value);
 
 }
