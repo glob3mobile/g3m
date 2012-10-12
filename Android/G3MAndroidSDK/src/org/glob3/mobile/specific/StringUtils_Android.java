@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import org.glob3.mobile.generated.IStringUtils;
 
 
-public class StringUtils_Android
+public final class StringUtils_Android
          extends
             IStringUtils {
 

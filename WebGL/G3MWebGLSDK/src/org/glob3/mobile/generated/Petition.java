@@ -101,23 +101,22 @@ public class Petition
 //ORIGINAL LINE: const String description() const
   public final String description()
   {
-  
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.add("Petition(url=");
-	isb.add(_url.description());
-	isb.add(", sector=");
-	isb.add(_sector.description());
-	isb.add(", buffer=");
+	isb.addString("Petition(url=");
+	isb.addString(_url.description());
+	isb.addString(", sector=");
+	isb.addString(_sector.description());
+	isb.addString(", buffer=");
 	if (_image == null)
 	{
-	  isb.add("NULL");
+	  isb.addString("NULL");
 	}
 	else
 	{
-	  isb.add(_image.description());
+	  isb.addString(_image.description());
 	}
-	String s = isb.getString();
   
+	final String s = isb.getString();
 	if (isb != null)
 		isb.dispose();
 	return s;

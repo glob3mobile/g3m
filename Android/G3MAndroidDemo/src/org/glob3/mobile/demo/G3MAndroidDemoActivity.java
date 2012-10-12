@@ -30,15 +30,45 @@ public class G3MAndroidDemoActivity
    protected void initializeWidget(final G3MWidget_Android widget) {
       final LayerSet layerSet = new LayerSet();
 
-      final WMSLayer bing = new WMSLayer("ve", new URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?"),
-               WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/png", "EPSG:4326", "", false, null);
-      layerSet.addLayer(bing);
+      final boolean useBing = false;
+      if (useBing) {
+         final WMSLayer bing = new WMSLayer("ve", new URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?"),
+                  WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/png", "EPSG:4326", "", false, null);
+         layerSet.addLayer(bing);
+      }
 
       final boolean usePnoa = false;
       if (usePnoa) {
          final WMSLayer pnoa = new WMSLayer("PNOA", new URL("http://www.idee.es/wms/PNOA/PNOA"), WMSServerVersion.WMS_1_1_0,
                   Sector.fromDegrees(21, -18, 45, 6), "image/png", "EPSG:4326", "", true, null);
          layerSet.addLayer(pnoa);
+      }
+
+      final boolean useOSM = true;
+      if (useOSM) {
+         //         final WMSLayer osm = new WMSLayer( //
+         //                  "osm", //
+         //                  new URL("http://wms.latlon.org/"), //
+         //                  WMSServerVersion.WMS_1_1_0, //
+         //                  Sector.fromDegrees(-85.05, -180.0, 85.5, 180.0), //
+         //                  "image/jpeg", //
+         //                  "EPSG:4326", //
+         //                  "", //
+         //                  false, //
+         //                  null);
+         //         layerSet.addLayer(osm);
+
+         final WMSLayer osm = new WMSLayer( //
+                  "osm_auto:all", //
+                  new URL("http://129.206.228.72/cached/osm"), //
+                  WMSServerVersion.WMS_1_1_0, //
+                  Sector.fromDegrees(-85.05, -180.0, 85.05, 180.0), //
+                  "image/jpeg", //
+                  "EPSG:4326", //
+                  "", //
+                  false, //
+                  null);
+         layerSet.addLayer(osm);
       }
 
       //  WMSLayer *vias = new WMSLayer("VIAS",
@@ -66,32 +96,18 @@ public class G3MAndroidDemoActivity
       //                               Angle::nan());
       //  layerSet->addLayer(osm);
 
-      //  WMSLayer *osm = new WMSLayer("osm",
-      //                               "osm",
-      //                               "http://wms.latlon.org/",
-      //                               WMS_1_1_0,
-      //                               "image/jpeg",
-      //                               Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
-      //                               "EPSG:4326",
-      //                               "",
-      //                               false,
-      //                               Angle::nan(),
-      //                               Angle::nan());
-      //  layerSet->addLayer(osm);
-
-
       final ArrayList<Renderer> renderers = new ArrayList<Renderer>();
 
       //  if (false) {
       //    // dummy renderer with a simple box
-      //    DummyRenderer* dum = new DummyRenderer();
-      //    comp->addRenderer(dum);
+      //      final DummyRenderer dum = new DummyRenderer();
+      //      renderers.add(dum);
       //  }
 
       //  if (false) {
       //    // simple planet renderer, with a basic world image
-      //    SimplePlanetRenderer* spr = new SimplePlanetRenderer("world.jpg");
-      //    comp->addRenderer(spr);
+      //      final SimplePlanetRenderer spr = new SimplePlanetRenderer("world.jpg");
+      //      renderers.add(spr);
       //  }
 
 

@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated; 
 public class SimpleTextureMapping extends TextureMapping
 {
-  private GLTextureId _glTextureId = new GLTextureId();
+  private final IGLTextureId _glTextureId;
   private IFloatBuffer _texCoords;
   private final boolean _ownedTexCoords;
 
@@ -9,9 +9,9 @@ public class SimpleTextureMapping extends TextureMapping
   private MutableVector2D _scale = new MutableVector2D();
 
 
-  public SimpleTextureMapping(GLTextureId glTextureId, IFloatBuffer texCoords, boolean ownedTexCoords)
+  public SimpleTextureMapping(IGLTextureId glTextureId, IFloatBuffer texCoords, boolean ownedTexCoords)
   {
-	  _glTextureId = new GLTextureId(glTextureId);
+	  _glTextureId = glTextureId;
 	  _texCoords = texCoords;
 	  _translation = new MutableVector2D(0, 0);
 	  _scale = new MutableVector2D(1, 1);
@@ -38,8 +38,8 @@ public class SimpleTextureMapping extends TextureMapping
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const GLTextureId getGLTextureId() const
-  public final GLTextureId getGLTextureId()
+//ORIGINAL LINE: const IGLTextureId* getGLTextureId() const
+  public final IGLTextureId getGLTextureId()
   {
 	return _glTextureId;
   }

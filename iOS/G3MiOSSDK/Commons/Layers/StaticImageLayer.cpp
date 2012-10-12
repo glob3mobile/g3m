@@ -25,15 +25,15 @@ std::vector<Petition*> StaticImageLayer::getMapPetitions(const RenderContext* rc
   
   //CREATING ID FOR PETITION
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
-  isb->add(_layerID);
-  isb->add("_");
-  isb->add(tileSector.lower().latitude().degrees());
-  isb->add("_");
-  isb->add(tileSector.lower().longitude().degrees());
-  isb->add("_");
-  isb->add(tileSector.upper().latitude().degrees());
-  isb->add("_");
-  isb->add(tileSector.upper().longitude().degrees());
+  isb->addString(_layerID);
+  isb->addString("_");
+  isb->addDouble(tileSector.lower().latitude().degrees());
+  isb->addString("_");
+  isb->addDouble(tileSector.lower().longitude().degrees());
+  isb->addString("_");
+  isb->addDouble(tileSector.upper().latitude().degrees());
+  isb->addString("_");
+  isb->addDouble(tileSector.upper().longitude().degrees());
   
   const URL id = URL(isb->getString());
   
@@ -54,10 +54,10 @@ std::vector<Petition*> StaticImageLayer::getMapPetitions(const RenderContext* rc
   const double heightUV = tileSector.getDeltaLatitude().degrees() / _sector.getDeltaLatitude().degrees();
   
   const Vector2D p = _sector.getUVCoordinates(tileSector.lower());
-  const Vector2D pos(p.x(), p.y() - heightUV);
+  const Vector2D pos(p._x, p._y - heightUV);
   
-  Rectangle r(pos.x() * _image->getWidth(),
-              pos.y() * _image->getHeight(),
+  Rectangle r(pos._x * _image->getWidth(),
+              pos._y * _image->getHeight(),
               widthUV * _image->getWidth(),
               heightUV * _image->getHeight());
   

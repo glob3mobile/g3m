@@ -11,7 +11,7 @@ import org.glob3.mobile.generated.LogLevel;
 import android.util.Log;
 
 
-public class Logger_Android
+public final class Logger_Android
          extends
             ILogger {
 

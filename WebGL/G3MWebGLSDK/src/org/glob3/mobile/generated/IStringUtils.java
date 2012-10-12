@@ -70,7 +70,8 @@ public abstract class IStringUtils
 //ORIGINAL LINE: virtual String substring(const String& String, int beginIndex) const
   public String substring(String String, int beginIndex)
   {
-	return substring(String, beginIndex, String.length() + 1);
+//    return substring(string, beginIndex, string.size() + 1);
+	  return substring(String, beginIndex, String.length());
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

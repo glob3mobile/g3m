@@ -255,8 +255,8 @@ public:
     const double widthFactor  = imageSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
     const double heightFactor = imageSector.getDeltaLatitude().div(wholeSector.getDeltaLatitude());
     
-    return new Rectangle(lowerFactor.x()         * textureWidth,
-                         (1.0 - lowerFactor.y()) * textureHeight,
+    return new Rectangle(lowerFactor._x         * textureWidth,
+                         (1.0 - lowerFactor._y) * textureHeight,
                          widthFactor  * textureWidth,
                          heightFactor * textureHeight);
   }
@@ -264,7 +264,7 @@ public:
   void composeAndUploadTexture() const {
     std::vector<const IImage*>    images;
     std::vector<const Rectangle*> rectangles;
-    std::string petitionsID = _tile->getKey().tinyDescription();
+    std::string textureId = _tile->getKey().tinyDescription();
     
     const int textureWidth  = _parameters->_tileTextureWidth;
     const int textureHeight = _parameters->_tileTextureHeight;
@@ -283,8 +283,8 @@ public:
                                                         textureWidth,
                                                         textureHeight));
         
-        petitionsID += petition->getURL().getPath();
-        petitionsID += "_";
+        textureId += petition->getURL().getPath();
+        textureId += "_";
       }
     }
     
@@ -299,15 +299,12 @@ public:
                                                                      textureWidth,
                                                                      textureHeight);
       
-#ifdef C_CODE
-      GLTextureId glTextureId = _texturesHandler->getGLTextureId(image, RGBA,
-                                                                 petitionsID, isMipmap);
-#else
-      GLTextureId glTextureId = _texturesHandler->getGLTextureId(image, GLFormat.RGBA,
-                                                                 petitionsID, isMipmap);
-#endif
+      const IGLTextureId* glTextureId = _texturesHandler->getGLTextureId(image,
+                                                                         GLFormat::rgba(),
+                                                                         textureId,
+                                                                         isMipmap);
       
-      if (glTextureId.isValid()) {
+      if (glTextureId != NULL) {
         if (!_mesh->setGLTextureIdForLevel(0, glTextureId)) {
           _texturesHandler->releaseGLTextureId(glTextureId);
         }
@@ -431,8 +428,8 @@ public:
       
       if (ancestor != _tile) {
         if (!fallbackSolved) {
-          const GLTextureId glTextureId = _texturizer->getTopLevelGLTextureIdForTile(ancestor);
-          if (glTextureId.isValid()) {
+          const IGLTextureId* glTextureId= _texturizer->getTopLevelGLTextureIdForTile(ancestor);
+          if (glTextureId != NULL) {
             _texturesHandler->retainGLTextureId(glTextureId);
             mapping->setGLTextureId(glTextureId);
             fallbackSolved = true;
@@ -440,7 +437,7 @@ public:
         }
       }
       else {
-        if ( mapping->getGLTextureId().isValid() ) {
+        if ( mapping->getGLTextureId() != NULL ) {
           ILogger::instance()->logInfo("break (point) on me 3\n");
         }
       }
@@ -647,10 +644,10 @@ void MultiLayerTileTexturizer::tileMeshToBeDeleted(Tile* tile,
   }
 }
 
-const GLTextureId MultiLayerTileTexturizer::getTopLevelGLTextureIdForTile(Tile* tile) {
+const const IGLTextureId* MultiLayerTileTexturizer::getTopLevelGLTextureIdForTile(Tile* tile) {
   LeveledTexturedMesh* mesh = (LeveledTexturedMesh*) tile->getTexturizedMesh();
   
-  return (mesh == NULL) ? GLTextureId::invalid() : mesh->getTopLevelGLTextureId();
+  return (mesh == NULL) ? NULL : mesh->getTopLevelGLTextureId();
 }
 
 bool MultiLayerTileTexturizer::tileMeetsRenderCriteria(Tile* tile) {
@@ -678,8 +675,8 @@ void MultiLayerTileTexturizer::ancestorTexturedSolvedChanged(Tile* tile,
     return;
   }
   
-  const GLTextureId glTextureId = ancestorMesh->getTopLevelGLTextureId();
-  if (!glTextureId.isValid()) {
+  const IGLTextureId* glTextureId = ancestorMesh->getTopLevelGLTextureId();
+  if (glTextureId == NULL) {
     return;
   }
   

@@ -6,7 +6,7 @@ import android.opengl.GLES20;
 import android.util.Log;
 
 
-public class GL2Shaders {
+public final class GL2Shaders {
 
 
    private final static String _fragmentShader = "varying mediump vec2 TextureCoordOut;"

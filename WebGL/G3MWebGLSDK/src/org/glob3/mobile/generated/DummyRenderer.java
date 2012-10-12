@@ -41,13 +41,13 @@ public class DummyRenderer extends Renderer
 	//_numIndices = 2 * (res - 1) * (res + 1);
 	//_index = new int[_numIndices];
   
-	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.NoCenter, Vector3D.zero());
+	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
 	IntBufferBuilder index = new IntBufferBuilder();
   
 	// create vertices
   
 	if (ic != null && ic.getPlanet() != null)
-	  _halfSize = ic.getPlanet().getRadii().x() / 2.0;
+	  _halfSize = ic.getPlanet().getRadii()._x / 2.0;
 	else
 	  _halfSize = 7e6;
   

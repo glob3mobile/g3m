@@ -1,16 +1,21 @@
 package org.glob3.mobile.generated; 
-public enum GLAlignment
+public class GLAlignment
 {
-  Unpack,
-  Pack;
+  private static int _pack = 0;
+  private static int _unpack = 0;
 
-	public int getValue()
-	{
-		return this.ordinal();
-	}
+  public static int pack()
+  {
+	  return _pack;
+  }
+  public static int unpack()
+  {
+	  return _unpack;
+  }
 
-	public static GLAlignment forValue(int value)
-	{
-		return values()[value];
-	}
+  public static void init(INativeGL ngl)
+  {
+	_pack = ngl.Alignment_Pack();
+	_unpack = ngl.Alignment_Unpack();
+  }
 }

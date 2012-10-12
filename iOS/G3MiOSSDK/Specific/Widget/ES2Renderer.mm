@@ -181,7 +181,7 @@ enum {
   NSString *vertShaderPathname, *fragShaderPathname;
   
   // Create shader program
-  program = glCreateProgram();
+  int programNum = glCreateProgram();
   
   // Create and compile vertex shader
   vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"Shader" ofType:@"vsh"];
@@ -198,19 +198,22 @@ enum {
   }
   
   // Attach vertex shader to program
-  glAttachShader(program, vertShader);
+  glAttachShader(programNum, vertShader);
   
   // Attach fragment shader to program
-  glAttachShader(program, fragShader);
+  glAttachShader(programNum, fragShader);
   
   // Bind attribute locations
   // this needs to be done prior to linking
   //glBindAttribLocation(program, ATTRIB_VERTEX, "position");
   //glBindAttribLocation(program, ATTRIB_COLOR, "color");
   
+  
+  program = (IGLProgramId*) new GLProgramId_iOS(programNum);
+  
   // Link program
-  if (![self linkProgram:program]) {
-    NSLog(@"Failed to link program: %d", program);
+  if (![self linkProgram:programNum]) {
+    NSLog(@"Failed to link program: %d", programNum);
     
     if (vertShader) {
       glDeleteShader(vertShader);
@@ -221,10 +224,10 @@ enum {
       fragShader = 0;
     }
     if (program) {
-      glDeleteProgram(program);
-      program = 0;
+      glDeleteProgram(programNum);
+//      programNum = 0;
     }
-    
+
     return FALSE;
   }
   
@@ -248,7 +251,7 @@ enum {
   [context renderbufferStorage:GL_RENDERBUFFER fromDrawable:layer];
   glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &backingWidth);
   glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &backingHeight);
-  
+
   // damos tamaño al buffer de profundidad
   glBindRenderbuffer(GL_RENDERBUFFER, depthRenderbuffer);
   glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, backingWidth, backingHeight);
@@ -279,7 +282,8 @@ enum {
   }
   
   if (program) {
-    glDeleteProgram(program);
+    glDeleteProgram(((GLProgramId_iOS*)program)->getID());
+    delete program;
     program = 0;
   }
   

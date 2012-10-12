@@ -6,6 +6,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import org.glob3.mobile.generated.G3MWidget;
+import org.glob3.mobile.generated.IGLProgramId;
 
 import android.content.Context;
 import android.opengl.GLES20;
@@ -13,13 +14,13 @@ import android.opengl.GLSurfaceView;
 import android.os.Looper;
 
 
-class ES2Renderer
+public final class ES2Renderer
          implements
             GLSurfaceView.Renderer {
 
    final G3MWidget_Android _widgetAndroid;
 
-   private int             _program;
+   private IGLProgramId    _program;
    private final Context   _context;
    private boolean         _hasRendered = false;
 
@@ -70,7 +71,7 @@ class ES2Renderer
    @Override
    public void onSurfaceCreated(final GL10 glUnused,
                                 final EGLConfig config) {
-      _program = GL2Shaders.createProgram(GL2Shaders.getVertexShader(), GL2Shaders.getFragmentShader());
+      _program = new GLProgramId_Android(GL2Shaders.createProgram(GL2Shaders.getVertexShader(), GL2Shaders.getFragmentShader()));
    }
 
 

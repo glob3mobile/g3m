@@ -14,6 +14,8 @@
 
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 
+#include "IGLTextureId.hpp"
+
 
 Mark::~Mark() {
   if (_cartesianPosition != NULL) {
@@ -36,11 +38,7 @@ IFloatBuffer* Mark::getVertices(const Planet* planet) {
   if (_vertices == NULL) {
     const Vector3D* pos = getCartesianPosition(planet);
     
-#ifdef C_CODE
-    FloatBufferBuilderFromCartesian3D vertex(NoCenter, Vector3D::zero());
-#else
-    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy.NoCenter, Vector3D::zero());
-#endif
+    FloatBufferBuilderFromCartesian3D vertex(CenterStrategy::noCenter(), Vector3D::zero());
     vertex.add(*pos);
     vertex.add(*pos);
     vertex.add(*pos);
@@ -73,21 +71,16 @@ void Mark::render(const RenderContext* rc,
       Vector2D scale(1.0,1.0);
       gl->transformTexCoords(scale, tr);
       
-      if (!_textureId.isValid()) {
+      if (_textureId == NULL) {
         IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
      
-#ifdef C_CODE
-        _textureId = rc->getTexturesHandler()->getGLTextureId(image, RGBA,
+        _textureId = rc->getTexturesHandler()->getGLTextureId(image, GLFormat::rgba(),
                                                               _textureFilename, false);
-#else
-        _textureId = rc->getTexturesHandler()->getGLTextureId(image, GLFormat.RGBA,
-                                                              _textureFilename, false);
-#endif
         
         rc->getFactory()->deleteImage(image);
       }
       
-      if (!_textureId.isValid()) {
+      if (_textureId == NULL) {
         rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
         return;
       }

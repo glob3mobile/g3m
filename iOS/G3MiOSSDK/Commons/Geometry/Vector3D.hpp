@@ -17,13 +17,14 @@ class MutableVector3D;
 
 class Vector3D {
 private:
-  const double _x;
-  const double _y;
-  const double _z;
   
   Vector3D& operator=(const Vector3D& that);
   
 public:
+  const double _x;
+  const double _y;
+  const double _z;
+  
   
   Vector3D(const double x,
            const double y,
@@ -114,17 +115,17 @@ public:
   Vector3D rotateAroundAxis(const Vector3D& axis,
                             const Angle& theta) const;
   
-  double x() const {
-    return _x;
-  }
-  
-  double y() const {
-    return _y;
-  }
-  
-  double z() const {
-    return _z;
-  }
+  //  double x() const {
+  //    return _x;
+  //  }
+  //
+  //  double y() const {
+  //    return _y;
+  //  }
+  //
+  //  double z() const {
+  //    return _z;
+  //  }
   
   Vector3D transformedBy(const MutableMatrix44D &m, const double homogeneus) const;
   

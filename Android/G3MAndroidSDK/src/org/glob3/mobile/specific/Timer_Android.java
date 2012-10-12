@@ -8,7 +8,7 @@ import org.glob3.mobile.generated.TimeInterval;
 import android.os.SystemClock;
 
 
-public class Timer_Android
+public final class Timer_Android
          extends
             ITimer {
 

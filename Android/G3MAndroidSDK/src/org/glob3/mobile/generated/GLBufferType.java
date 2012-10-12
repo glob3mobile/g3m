@@ -1,16 +1,21 @@
 package org.glob3.mobile.generated; 
-public enum GLBufferType
+public class GLBufferType
 {
-  ColorBuffer,
-  DepthBuffer;
+  private static int _colorBuffer = 0;
+  private static int _depthBuffer = 0;
 
-	public int getValue()
-	{
-		return this.ordinal();
-	}
+  public static int colorBuffer()
+  {
+	  return _colorBuffer;
+  }
+  public static int depthBuffer()
+  {
+	  return _depthBuffer;
+  }
 
-	public static GLBufferType forValue(int value)
-	{
-		return values()[value];
-	}
+  public static void init(INativeGL ngl)
+  {
+	_colorBuffer = ngl.BufferType_ColorBuffer();
+	_depthBuffer = ngl.BufferType_DepthBuffer();
+  }
 }

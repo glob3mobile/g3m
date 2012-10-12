@@ -32,17 +32,13 @@ void DummyRenderer::initialize(const InitializationContext* ic)
   //_numIndices = 2 * (res - 1) * (res + 1);
   //_index = new int[_numIndices];
   
-#ifdef C_CODE
-  FloatBufferBuilderFromCartesian3D vertices(NoCenter, Vector3D::zero());
-#else
-  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy.NoCenter, Vector3D::zero());
-#endif
+  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
   IntBufferBuilder index;
 
   // create vertices
   
   if (ic != NULL && ic->getPlanet() != NULL)
-    _halfSize = ic->getPlanet()->getRadii().x() / 2.0;
+    _halfSize = ic->getPlanet()->getRadii()._x / 2.0;
   else     
     _halfSize = 7e6;
   

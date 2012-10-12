@@ -42,12 +42,17 @@ public abstract class IStringBuilder
 	return _instance.getNewInstance();
   }
 
-  public abstract IStringBuilder add(double d);
-  public abstract IStringBuilder add(String s);
+  public abstract IStringBuilder addDouble(double d);
+  public abstract IStringBuilder addFloat(float f);
+
+  public abstract IStringBuilder addInt(int i);
+  public abstract IStringBuilder addLong(long l);
+
+  public abstract IStringBuilder addString(String s);
   public abstract IStringBuilder addBool(boolean b);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual String getString() const = 0;
+//ORIGINAL LINE: virtual const String getString() const = 0;
   public abstract String getString();
 
   // a virtual destructor is needed for conversion to Java

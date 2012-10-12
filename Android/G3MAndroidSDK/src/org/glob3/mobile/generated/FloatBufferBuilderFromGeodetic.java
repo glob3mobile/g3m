@@ -13,36 +13,36 @@ package org.glob3.mobile.generated;
 public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
 {
 
-  private final CenterStrategy _centerStrategy;
+  private final int _centerStrategy;
   private float _cx;
   private float _cy;
   private float _cz;
 
   private void setCenter(Vector3D center)
   {
-	_cx = (float)center.x();
-	_cy = (float)center.y();
-	_cz = (float)center.z();
+	_cx = (float)center._x;
+	_cy = (float)center._y;
+	_cz = (float)center._z;
   }
 
   private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
 
 
-  public FloatBufferBuilderFromGeodetic(CenterStrategy cs, Planet planet, Vector3D center)
+  public FloatBufferBuilderFromGeodetic(int cs, Planet planet, Vector3D center)
   {
 	  _planet = planet;
 	  _centerStrategy = cs;
 	setCenter(center);
   }
 
-  public FloatBufferBuilderFromGeodetic(CenterStrategy cs, Planet planet, Geodetic2D center)
+  public FloatBufferBuilderFromGeodetic(int cs, Planet planet, Geodetic2D center)
   {
 	  _planet = planet;
 	  _centerStrategy = cs;
 	setCenter(_planet.toCartesian(center));
   }
 
-  public FloatBufferBuilderFromGeodetic(CenterStrategy cs, Planet planet, Geodetic3D center)
+  public FloatBufferBuilderFromGeodetic(int cs, Planet planet, Geodetic3D center)
   {
 	  _planet = planet;
 	  _centerStrategy = cs;
@@ -53,16 +53,16 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
   {
 	final Vector3D vector = _planet.toCartesian(g);
 
-	float x = (float) vector.x();
-	float y = (float) vector.y();
-	float z = (float) vector.z();
+	float x = (float) vector._x;
+	float y = (float) vector._y;
+	float z = (float) vector._z;
 
-	if (_centerStrategy == CenterStrategy.FirstVertex && _values.size() == 0)
+	if (_centerStrategy == CenterStrategy.firstVertex() && _values.size() == 0)
 	{
 	  setCenter(vector);
 	}
 
-	if (_centerStrategy != CenterStrategy.NoCenter)
+	if (_centerStrategy != CenterStrategy.noCenter())
 	{
 	  x -= _cx;
 	  y -= _cy;
@@ -78,16 +78,16 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
   {
 	final Vector3D vector = _planet.toCartesian(g);
 
-	float x = (float) vector.x();
-	float y = (float) vector.y();
-	float z = (float) vector.z();
+	float x = (float) vector._x;
+	float y = (float) vector._y;
+	float z = (float) vector._z;
 
-	if (_centerStrategy == CenterStrategy.FirstVertex && _values.size() == 0)
+	if (_centerStrategy == CenterStrategy.firstVertex() && _values.size() == 0)
 	{
 	  setCenter(vector);
 	}
 
-	if (_centerStrategy != CenterStrategy.NoCenter)
+	if (_centerStrategy != CenterStrategy.noCenter())
 	{
 	  x -= _cx;
 	  y -= _cy;

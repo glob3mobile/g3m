@@ -18,6 +18,8 @@ package org.glob3.mobile.generated;
 
 
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IGLTextureId;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TileTextureBuilder;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class LayerSet;
@@ -207,8 +209,8 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 	  return;
 	}
   
-	final GLTextureId glTextureId = ancestorMesh.getTopLevelGLTextureId();
-	if (!glTextureId.isValid())
+	final IGLTextureId glTextureId = ancestorMesh.getTopLevelGLTextureId();
+	if (glTextureId == null)
 	{
 	  return;
 	}
@@ -227,11 +229,11 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 	}
   }
 
-  public final GLTextureId getTopLevelGLTextureIdForTile(Tile tile)
+  public final IGLTextureId getTopLevelGLTextureIdForTile(Tile tile)
   {
 	LeveledTexturedMesh mesh = (LeveledTexturedMesh) tile.getTexturizedMesh();
   
-	return (mesh == null) ? GLTextureId.invalid() : mesh.getTopLevelGLTextureId();
+	return (mesh == null) ? null : mesh.getTopLevelGLTextureId();
   }
 
   public final void onTerrainTouchEvent(EventContext ec, Geodetic3D position, Tile tile)

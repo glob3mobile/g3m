@@ -67,12 +67,12 @@ public class Box extends Extent
   	_corners = new java.util.ArrayList<Vector3D>(8);
   
   	_corners.add(_lower);
-  	_corners.add(new Vector3D(_lower.x(), _lower.y(), _upper.z()));
-  	_corners.add(new Vector3D(_lower.x(), _upper.y(), _lower.z()));
-  	_corners.add(new Vector3D(_lower.x(), _upper.y(), _upper.z()));
-  	_corners.add(new Vector3D(_upper.x(), _lower.y(), _lower.z()));
-  	_corners.add(new Vector3D(_upper.x(), _lower.y(), _upper.z()));
-  	_corners.add(new Vector3D(_upper.x(), _upper.y(), _lower.z()));
+  	_corners.add(new Vector3D(_lower._x, _lower._y, _upper._z));
+  	_corners.add(new Vector3D(_lower._x, _upper._y, _lower._z));
+  	_corners.add(new Vector3D(_lower._x, _upper._y, _upper._z));
+  	_corners.add(new Vector3D(_upper._x, _lower._y, _lower._z));
+  	_corners.add(new Vector3D(_upper._x, _lower._y, _upper._z));
+  	_corners.add(new Vector3D(_upper._x, _upper._y, _lower._z));
   	_corners.add(_upper);
 	}
 	return _corners;
@@ -83,7 +83,7 @@ public class Box extends Extent
   public final double squaredProjectedArea(RenderContext rc)
   {
 	final Vector2D extent = projectedExtent(rc);
-	return extent.x() * extent.y();
+	return extent._x * extent._y;
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Vector2D projectedExtent(const RenderContext *rc) const
@@ -95,18 +95,18 @@ public class Box extends Extent
   
 	final Vector2D pixel0 = currentCamera.point2Pixel(corners.get(0));
   
-	double lowerX = pixel0.x();
-	double upperX = pixel0.x();
-	double lowerY = pixel0.y();
-	double upperY = pixel0.y();
+	double lowerX = pixel0._x;
+	double upperX = pixel0._x;
+	double lowerY = pixel0._y;
+	double upperY = pixel0._y;
   
 	final int cornersSize = corners.size();
 	for (int i = 1; i < cornersSize; i++)
 	{
 	  final Vector2D pixel = currentCamera.point2Pixel(corners.get(i));
   
-	  final double x = pixel.x();
-	  final double y = pixel.y();
+	  final double x = pixel._x;
+	  final double y = pixel._y;
   
 	  if (x < lowerX)
 	  {
@@ -138,19 +138,19 @@ public class Box extends Extent
   public final boolean contains(Vector3D p)
   {
 	final double margin = 1e-3;
-	if (p.x() < _lower.x() - margin)
+	if (p._x < _lower._x - margin)
 		return false;
-	if (p.x() > _upper.x() + margin)
-		return false;
-  
-	if (p.y() < _lower.y() - margin)
-		return false;
-	if (p.y() > _upper.y() + margin)
+	if (p._x > _upper._x + margin)
 		return false;
   
-	if (p.z() < _lower.z() - margin)
+	if (p._y < _lower._y - margin)
 		return false;
-	if (p.z() > _upper.z() + margin)
+	if (p._y > _upper._y + margin)
+		return false;
+  
+	if (p._z < _lower._z - margin)
+		return false;
+	if (p._z > _upper._z + margin)
 		return false;
   
 	return true;
@@ -163,7 +163,7 @@ public class Box extends Extent
   
 	//MIN X
 	{
-	  Plane p = new Plane(new Vector3D(1.0, 0.0, 0.0), _lower.x());
+	  Plane p = new Plane(new Vector3D(1.0, 0.0, 0.0), _lower._x);
 	  Vector3D inter = p.intersectionWithRay(origin, direction);
 	  if (!inter.isNan() && contains(inter))
 		  return inter;
@@ -171,7 +171,7 @@ public class Box extends Extent
   
 	//MAX X
 	{
-	  Plane p = new Plane(new Vector3D(1.0, 0.0, 0.0), _upper.x());
+	  Plane p = new Plane(new Vector3D(1.0, 0.0, 0.0), _upper._x);
 	  Vector3D inter = p.intersectionWithRay(origin, direction);
 	  if (!inter.isNan() && contains(inter))
 		  return inter;
@@ -179,7 +179,7 @@ public class Box extends Extent
   
 	//MIN Y
 	{
-	  Plane p = new Plane(new Vector3D(0.0, 1.0, 0.0), _lower.y());
+	  Plane p = new Plane(new Vector3D(0.0, 1.0, 0.0), _lower._y);
 	  Vector3D inter = p.intersectionWithRay(origin, direction);
 	  if (!inter.isNan() && contains(inter))
 		  return inter;
@@ -187,7 +187,7 @@ public class Box extends Extent
   
 	//MAX Y
 	{
-	  Plane p = new Plane(new Vector3D(0.0, 1.0, 0.0), _upper.y());
+	  Plane p = new Plane(new Vector3D(0.0, 1.0, 0.0), _upper._y);
 	  Vector3D inter = p.intersectionWithRay(origin, direction);
 	  if (!inter.isNan() && contains(inter))
 		  return inter;
@@ -195,7 +195,7 @@ public class Box extends Extent
   
 	//MIN Z
 	{
-	  Plane p = new Plane(new Vector3D(0.0, 0.0, 1.0), _lower.z());
+	  Plane p = new Plane(new Vector3D(0.0, 0.0, 1.0), _lower._z);
 	  Vector3D inter = p.intersectionWithRay(origin, direction);
 	  if (!inter.isNan() && contains(inter))
 		  return inter;
@@ -203,7 +203,7 @@ public class Box extends Extent
   
 	//MAX Z
 	{
-	  Plane p = new Plane(new Vector3D(0.0, 0.0, 1.0), _upper.z());
+	  Plane p = new Plane(new Vector3D(0.0, 0.0, 1.0), _upper._z);
 	  Vector3D inter = p.intersectionWithRay(origin, direction);
 	  if (!inter.isNan() && contains(inter))
 		  return inter;
@@ -223,17 +223,17 @@ public class Box extends Extent
 //ORIGINAL LINE: boolean touchesBox(const Box* box) const
   public final boolean touchesBox(Box box)
   {
-	if (_lower.x() > box._upper.x())
+	if (_lower._x > box._upper._x)
 		return false;
-	if (_upper.x() < box._lower.x())
+	if (_upper._x < box._lower._x)
 		return false;
-	if (_lower.y() > box._upper.y())
+	if (_lower._y > box._upper._y)
 		return false;
-	if (_upper.y() < box._lower.y())
+	if (_upper._y < box._lower._y)
 		return false;
-	if (_lower.z() > box._upper.z())
+	if (_lower._z > box._upper._z)
 		return false;
-	if (_upper.z() < box._lower.z())
+	if (_upper._z < box._lower._z)
 		return false;
 	return true;
   }
@@ -250,11 +250,11 @@ public class Box extends Extent
 	int numVertices = 8;
 	int numIndices = 48;
   
-	float[] v = { (float) _lower.x(), (float) _lower.y(), (float) _lower.z(), (float) _lower.x(), (float) _upper.y(), (float) _lower.z(), (float) _lower.x(), (float) _upper.y(), (float) _upper.z(), (float) _lower.x(), (float) _lower.y(), (float) _upper.z(), (float) _upper.x(), (float) _lower.y(), (float) _lower.z(), (float) _upper.x(), (float) _upper.y(), (float) _lower.z(), (float) _upper.x(), (float) _upper.y(), (float) _upper.z(), (float) _upper.x(), (float) _lower.y(), (float) _upper.z()};
+	float[] v = { (float) _lower._x, (float) _lower._y, (float) _lower._z, (float) _lower._x, (float) _upper._y, (float) _lower._z, (float) _lower._x, (float) _upper._y, (float) _upper._z, (float) _lower._x, (float) _lower._y, (float) _upper._z, (float) _upper._x, (float) _lower._y, (float) _lower._z, (float) _upper._x, (float) _upper._y, (float) _lower._z, (float) _upper._x, (float) _upper._y, (float) _upper._z, (float) _upper._x, (float) _lower._y, (float) _upper._z };
   
 	int[] i = { 0, 1, 1, 2, 2, 3, 3, 0, 1, 5, 5, 6, 6, 2, 2, 1, 5, 4, 4, 7, 7, 6, 6, 5, 4, 0, 0, 3, 3, 7, 7, 4, 3, 2, 2, 6, 6, 7, 7, 3, 0, 1, 1, 5, 5, 4, 4, 0 };
   
-	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.NoCenter, Vector3D.zero());
+	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
 	IntBufferBuilder indices = new IntBufferBuilder();
   
 	for (int n = 0; n<numVertices; n++)
@@ -266,7 +266,7 @@ public class Box extends Extent
 	Color flatColor = new Color(Color.fromRGBA((float)1.0, (float)1.0, (float)0.0, (float)1.0));
   
 	// create mesh
-	_mesh = new IndexedMesh(GLPrimitive.TriangleStrip, true, vertices.getCenter(), vertices.create(), indices.create(), flatColor);
+	_mesh = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), flatColor);
   }
 
 }

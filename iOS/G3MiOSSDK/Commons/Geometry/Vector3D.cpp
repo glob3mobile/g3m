@@ -31,9 +31,9 @@ Angle Vector3D::angleBetween(const Vector3D& other) const {
 
 Vector3D Vector3D::rotateAroundAxis(const Vector3D& axis,
                                     const Angle& theta) const {
-  const double u = axis.x();
-  const double v = axis.y();
-  const double w = axis.z();
+  const double u = axis._x;
+  const double v = axis._y;
+  const double w = axis._z;
   
   const double cosTheta = theta.cosinus();
   const double sinTheta = theta.sinus();
@@ -93,9 +93,14 @@ Vector3D Vector3D::transformedBy(const MutableMatrix44D &m,
 
 const std::string Vector3D::description() const {  
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
-  isb->add("(V2D ")->add(_x)->add(", ")->add(_y)->add(", ")->add(_z)->add(")");
-  std::string s = isb->getString();
+  isb->addString("(V3D ");
+  isb->addDouble(_x);
+  isb->addString(", ");
+  isb->addDouble(_y);
+  isb->addString(", ");
+  isb->addDouble(_z);
+  isb->addString(")");
+  const std::string s = isb->getString();
   delete isb;
   return s;
 }
-

@@ -75,13 +75,38 @@ public class URL
 //ORIGINAL LINE: const String description() const
   public final String description()
   {
-  
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.add("URL(").add(getPath()).add(")");
-	String s = isb.getString();
+	isb.addString("URL(");
+	isb.addString(getPath());
+	isb.addString(")");
+	final String s = isb.getString();
 	if (isb != null)
 		isb.dispose();
 	return s;
   }
+
+
+	@Override
+	public int hashCode() {
+		return _path.hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final URL other = (URL) obj;
+		if (_path.equals(other._path)) {
+			return true;
+		}
+		return false;
+	}
 
 }

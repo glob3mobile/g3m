@@ -22,6 +22,12 @@ package org.glob3.mobile.generated;
 
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IGLProgramId;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IGLUniformID;
+
+
 public class GL
 {
 
@@ -32,7 +38,7 @@ public class GL
   // stack of ModelView matrices
   private java.util.LinkedList<MutableMatrix44D> _matrixStack = new java.util.LinkedList<MutableMatrix44D>();
 
-  private java.util.LinkedList<GLTextureId> _texturesIdBag = new java.util.LinkedList<GLTextureId>();
+  private final java.util.LinkedList<IGLTextureId> _texturesIdBag = new java.util.LinkedList<IGLTextureId>();
   private int _texturesIdAllocationCounter;
   private int _texturesIdGetCounter;
   private int _texturesIdTakeCounter;
@@ -48,7 +54,8 @@ public class GL
 
   private boolean _enableCullFace;
 
-  GLCullFace _cullFace_face = GLCullFace.Back;
+  private int _cullFace_face;
+
 
 
 
@@ -69,11 +76,21 @@ public class GL
 
   private void loadModelView()
   {
-	float[] M = _modelView.getColumnMajorFloatArray();
-	_gl.uniformMatrix4fv(GlobalMembersGL.Uniforms.Modelview, 1, false, M);
+  ///#ifdef C_CODE
+  //  float* M = _modelView.getColumnMajorFloatArray();
+  ///#else
+  //  float[] M = _modelView.getColumnMajorFloatArray();
+  ///#endif
+  
+  //  _gl->uniformMatrix4fv(Uniforms.Modelview, 1, false, M);
+  //  _gl->uniformMatrix4fv(Uniforms.Modelview,
+  //                        false,
+  //                        _modelView.getColumnMajorFloatBuffer());
+  
+	_gl.uniformMatrix4fv(GlobalMembersGL.Uniforms.Modelview, false, _modelView);
   }
 
-  private GLTextureId getGLTextureId()
+  private IGLTextureId getGLTextureId()
   {
 	if (_texturesIdBag.size() == 0)
 	{
@@ -81,7 +98,7 @@ public class GL
   
 	  ILogger.instance().logInfo("= Creating %d texturesIds...", bugdetSize);
   
-	  final java.util.ArrayList<GLTextureId> ids = _gl.genTextures(bugdetSize);
+	  final java.util.ArrayList<IGLTextureId> ids = _gl.genTextures(bugdetSize);
   
 	  for (int i = 0; i < bugdetSize; i++)
 	  {
@@ -96,7 +113,7 @@ public class GL
   
 	_texturesIdGetCounter++;
   
-	final GLTextureId result = _texturesIdBag.getLast();
+	final IGLTextureId result = _texturesIdBag.getLast();
 	_texturesIdBag.removeLast();
   
 	//  printf("   - Assigning 1 texturesId (#%d) from bag (bag size=%ld). Gets:%ld, Takes:%ld, Delta:%ld.\n",
@@ -120,7 +137,7 @@ public class GL
 
   //Get Locations warning of errors
   private boolean _errorGettingLocationOcurred;
-  private int checkedGetAttribLocation(int program, String name)
+  private int checkedGetAttribLocation(IGLProgramId program, String name)
   {
 	int l = _gl.getAttribLocation(program, name);
 	if (l == -1)
@@ -130,15 +147,15 @@ public class GL
 	}
 	return l;
   }
-  private int checkedGetUniformLocation(int program, String name)
+  private IGLUniformID checkedGetUniformLocation(IGLProgramId program, String name)
   {
-	int l = _gl.getUniformLocation(program, name);
-	if (l == -1)
+	IGLUniformID uID = _gl.getUniformLocation(program, name);
+	if (!uID.isValid())
 	{
 	  ILogger.instance().logError("Error fetching Uniform, Program = %d, Variable = %s", program, name);
 	  _errorGettingLocationOcurred = true;
 	}
-	return l;
+	return uID;
   }
 
   private IFloatBuffer _billboardTexCoord;
@@ -170,7 +187,7 @@ public class GL
 	  _enableBlend = false;
 	  _enableDepthTest = false;
 	  _enableCullFace = false;
-	  _cullFace_face = GLCullFace.Back;
+	  _cullFace_face = GLCullFace.back();
 	  _texturesIdAllocationCounter = 0;
 	  _scaleX = 1F;
 	  _scaleY = 1F;
@@ -187,6 +204,20 @@ public class GL
 	  _flatColorA = 0F;
 	  _flatColorIntensity = 0F;
 	  _billboardTexCoord = null;
+	//Init Constants
+	GLCullFace.init(gl);
+	GLBufferType.init(gl);
+	GLFeature.init(gl);
+	GLType.init(gl);
+	GLPrimitive.init(gl);
+	GLBlendFactor.init(gl);
+	GLTextureType.init(gl);
+	GLTextureParameter.init(gl);
+	GLTextureParameterValue.init(gl);
+	GLAlignment.init(gl);
+	GLFormat.init(gl);
+	GLVariable.init(gl);
+	GLError.init(gl);
   }
 
   public final void enableVerticesPosition()
@@ -278,8 +309,7 @@ public class GL
   public final void clearScreen(float r, float g, float b, float a)
   {
 	_gl.clearColor(r, g, b, a);
-	GLBufferType[] buffers = { GLBufferType.ColorBuffer, GLBufferType.DepthBuffer };
-	_gl.clear(2, buffers);
+	_gl.clear(GLBufferType.colorBuffer() | GLBufferType.depthBuffer());
   }
 
   public final void color(float r, float g, float b, float a)
@@ -363,31 +393,41 @@ public class GL
 
   public final void drawTriangleStrip(IIntBuffer indices)
   {
-	_gl.drawElements(GLPrimitive.TriangleStrip, indices.size(), indices);
+	_gl.drawElements(GLPrimitive.triangleStrip(), indices.size(), indices);
   }
 
   public final void drawLines(IIntBuffer indices)
   {
-	_gl.drawElements(GLPrimitive.Lines, indices.size(), indices);
+	_gl.drawElements(GLPrimitive.lineLoop(), indices.size(), indices);
   }
 
   public final void drawLineLoop(IIntBuffer indices)
   {
-	_gl.drawElements(GLPrimitive.LineLoop, indices.size(), indices);
+	_gl.drawElements(GLPrimitive.lineLoop(), indices.size(), indices);
   }
 
   public final void drawPoints(IIntBuffer indices)
   {
-	_gl.drawElements(GLPrimitive.Points, indices.size(), indices);
+	_gl.drawElements(GLPrimitive.points(), indices.size(), indices);
   }
 
   public final void setProjection(MutableMatrix44D projection)
   {
-	float[] M = projection.getColumnMajorFloatArray();
-	_gl.uniformMatrix4fv(GlobalMembersGL.Uniforms.Projection, 1, false, M);
+  ///#ifdef C_CODE
+  //  float* M = projection.getColumnMajorFloatArray();
+  ///#else
+  //  float[] M = projection.getColumnMajorFloatArray();
+  ///#endif
+  //  _gl->uniformMatrix4fv(Uniforms.Projection, 1, false, M);
+  
+  //  _gl->uniformMatrix4fv(Uniforms.Projection,
+  //                        false,
+  //                        projection.getColumnMajorFloatBuffer());
+  
+	_gl.uniformMatrix4fv(GlobalMembersGL.Uniforms.Projection, false, projection);
   }
 
-  public final boolean useProgram(int program)
+  public final boolean useProgram(IGLProgramId program)
   {
 	// set shaders
 	_gl.useProgram(program);
@@ -400,6 +440,8 @@ public class GL
 	GlobalMembersGL.Attributes.Position = checkedGetAttribLocation(program, "Position");
 	GlobalMembersGL.Attributes.TextureCoord = checkedGetAttribLocation(program, "TextureCoord");
 	GlobalMembersGL.Attributes.Color = checkedGetAttribLocation(program, "Color");
+  
+	GlobalMembersGL.Uniforms.deleteUniformsIDs(); //DELETING
   
 	// Extract the handles to uniforms
 	GlobalMembersGL.Uniforms.Projection = checkedGetUniformLocation(program, "Projection");
@@ -433,13 +475,13 @@ public class GL
 
   public final void enablePolygonOffset(float factor, float units)
   {
-	_gl.enable(GLFeature.PolygonOffsetFill);
+	_gl.enable(GLFeature.polygonOffsetFill());
 	_gl.polygonOffset(factor, units);
   }
 
   public final void disablePolygonOffset()
   {
-	_gl.disable(GLFeature.PolygonOffsetFill);
+	_gl.disable(GLFeature.polygonOffsetFill());
   }
 
   public final void lineWidth(float width)
@@ -452,41 +494,42 @@ public class GL
 	_gl.uniform1f(GlobalMembersGL.Uniforms.PointSize, size);
   }
 
-  public final GLError getError()
+  public final int getError()
   {
 	return _gl.getError();
   }
 
-  public final GLTextureId uploadTexture(IImage image, GLFormat format, boolean generateMipmap)
+  public final IGLTextureId uploadTexture(IImage image, int format, boolean generateMipmap)
   {
-	final GLTextureId texId = getGLTextureId();
-	if (texId.isValid())
+	final IGLTextureId texId = getGLTextureId();
+	if (texId != null)
 	{
-  	_gl.blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
-  	_gl.pixelStorei(GLAlignment.Unpack, 1);
   
-  	_gl.bindTexture(GLTextureType.Texture2D, texId.getGLTextureId());
-  	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MinFilter, GLTextureParameterValue.Linear);
-  	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.MagFilter, GLTextureParameterValue.Linear);
-  	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapS, GLTextureParameterValue.ClampToEdge);
-  	_gl.texParameteri(GLTextureType.Texture2D, GLTextureParameter.WrapT, GLTextureParameterValue.ClampToEdge);
-  	_gl.texImage2D(image, format);
+	  _gl.blendFunc(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
+	  _gl.pixelStorei(GLAlignment.unpack(), 1);
   
-  	if (generateMipmap) {
-  	  _gl.generateMipmap(GLTextureType.Texture2D);
-  	}
+	  _gl.bindTexture(GLTextureType.texture2D(), texId);
+	  _gl.texParameteri(GLTextureType.texture2D(), GLTextureParameter.minFilter(), GLTextureParameterValue.linear());
+	  _gl.texParameteri(GLTextureType.texture2D(), GLTextureParameter.magFilter(), GLTextureParameterValue.linear());
+	  _gl.texParameteri(GLTextureType.texture2D(), GLTextureParameter.wrapS(), GLTextureParameterValue.clampToEdge());
+	  _gl.texParameteri(GLTextureType.texture2D(), GLTextureParameter.wrapT(), GLTextureParameterValue.clampToEdge());
+	  _gl.texImage2D(image, format);
+  
+	  if (generateMipmap)
+	  {
+		_gl.generateMipmap(GLTextureType.texture2D());
+	  }
 	}
 	else
 	{
 	  ILogger.instance().logError("can't get a valid texture id\n");
+	  return null;
 	}
   
 	return texId;
-  
-  
   }
 
-  //  const GLTextureId uploadTexture(const IImage* image,
+  //  const const GLTextureId*uploadTexture(const IImage* image,
   //                                  int textureWidth, int textureHeight,
   //                                  bool generateMipmap);
 
@@ -499,16 +542,16 @@ public class GL
 	}
   }
 
-  public final void bindTexture(GLTextureId textureId)
+  public final void bindTexture(IGLTextureId textureId)
   {
-	_gl.bindTexture(GLTextureType.Texture2D, textureId.getGLTextureId());
+	_gl.bindTexture(GLTextureType.texture2D(), textureId);
   }
 
   public final void enableDepthTest()
   {
 	if (!_enableDepthTest)
 	{
-	  _gl.enable(GLFeature.DepthTest);
+	  _gl.enable(GLFeature.depthTest());
 	  _enableDepthTest = true;
 	}
   }
@@ -516,7 +559,7 @@ public class GL
   {
 	if (_enableDepthTest)
 	{
-	  _gl.disable(GLFeature.DepthTest);
+	  _gl.disable(GLFeature.depthTest());
 	  _enableDepthTest = false;
 	}
   }
@@ -525,7 +568,7 @@ public class GL
   {
 	if (!_enableBlend)
 	{
-	  _gl.enable(GLFeature.Blend);
+	  _gl.enable(GLFeature.blend());
 	  _enableBlend = true;
 	}
   }
@@ -533,13 +576,13 @@ public class GL
   {
 	if (_enableBlend)
 	{
-	  _gl.disable(GLFeature.Blend);
+	  _gl.disable(GLFeature.blend());
 	  _enableBlend = false;
 	}
   
   }
 
-  public final void drawBillBoard(GLTextureId textureId, IFloatBuffer vertices, float viewPortRatio)
+  public final void drawBillBoard(IGLTextureId textureId, IFloatBuffer vertices, float viewPortRatio)
   {
 	int TODO_refactor_billboard;
   
@@ -557,32 +600,31 @@ public class GL
 	vertexPointer(3, 0, vertices);
 	setTextureCoordinates(2, 0, getBillboardTexCoord());
   
-	_gl.drawArrays(GLPrimitive.TriangleStrip, 0, vertices.size() / 3);
+	_gl.drawArrays(GLPrimitive.triangleStrip(), 0, vertices.size() / 3);
   
 	enableDepthTest();
   
 	_gl.uniform1i(GlobalMembersGL.Uniforms.BillBoard, 0);
   }
 
-  public final void deleteTexture(GLTextureId textureId)
+  public final void deleteTexture(IGLTextureId texture)
   {
-	if (!textureId.isValid())
+	if (texture != null)
 	{
-	  return;
+	  if (_gl.deleteTexture(texture))
+	  {
+		_texturesIdBag.addLast(texture);
+	  }
+  
+	  _texturesIdTakeCounter++;
 	}
-	int[] textures = { textureId.getGLTextureId() };
-	_gl.deleteTextures(1, textures);
-  
-	_texturesIdBag.addLast(textureId);
-  
-	_texturesIdTakeCounter++;
   }
 
-  public final void enableCullFace(GLCullFace face)
+  public final void enableCullFace(int face)
   {
 	if (!_enableCullFace)
 	{
-	  _gl.enable(GLFeature.CullFacing);
+	  _gl.enable(GLFeature.cullFace());
 	  _enableCullFace = true;
 	}
   
@@ -596,7 +638,7 @@ public class GL
   {
 	if (_enableCullFace)
 	{
-	  _gl.disable(GLFeature.CullFacing);
+	  _gl.disable(GLFeature.cullFace());
 	  _enableCullFace = false;
 	}
   }
@@ -625,7 +667,7 @@ public class GL
 
   public final void transformTexCoords(Vector2D scale, Vector2D translation)
   {
-	transformTexCoords((float) scale.x(), (float) scale.y(), (float) translation.x(), (float) translation.y());
+	transformTexCoords((float) scale._x, (float) scale._y, (float) translation._x, (float) translation._y);
   }
 
   public final void transformTexCoords(MutableVector2D scale, MutableVector2D translation)
@@ -651,12 +693,12 @@ public class GL
 
   public final void setBlendFuncSrcAlpha()
   {
-	_gl.blendFunc(GLBlendFactor.SrcAlpha, GLBlendFactor.OneMinusSrcAlpha);
+	_gl.blendFunc(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
   }
 
   public final void getViewport(int[] v)
   {
-	_gl.getIntegerv(GLVariable.Viewport, v);
+	_gl.getIntegerv(GLVariable.viewport(), v);
   }
 
   public void dispose()

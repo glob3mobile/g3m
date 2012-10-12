@@ -19,14 +19,18 @@ package org.glob3.mobile.generated;
 
 
 
+
 public class SingleImageTileTexturizer extends TileTexturizer
 {
 
   private RenderContext _renderContext;
   private final TilesRenderParameters _parameters;
-  private GLTextureId _texId = new GLTextureId();
+
+  private IGLTextureId _texId;
+
+
   private final IImage _image;
-	private final boolean _isMercatorImage;
+  private final boolean _isMercatorImage;
 
 
 
@@ -80,10 +84,10 @@ public class SingleImageTileTexturizer extends TileTexturizer
 		final Vector3D m = rc.getPlanet().toCartesian(mercg);
 		final Vector3D n = rc.getPlanet().centricSurfaceNormal(m);
   
-		final double s = IMathUtils.instance().atan2(n.y(), n.x()) / (IMathUtils.instance().pi() * 2) + 0.5;
+		final double s = IMathUtils.instance().atan2(n._y, n._x) / (IMathUtils.instance().pi() * 2) + 0.5;
   
 		//double t = (tLatRad*sec + M_PI/2.0)/M_PI ;
-		double t = IMathUtils.instance().asin(n.z()) / IMathUtils.instance().pi() + 0.5;
+		double t = IMathUtils.instance().asin(n._z) / IMathUtils.instance().pi() + 0.5;
 		//texCoors.push_back(MutableVector2D(s, 1-t));
 		texCoors.add((float)s, (float)(1.0-t));
   
@@ -95,8 +99,8 @@ public class SingleImageTileTexturizer extends TileTexturizer
 		//double t = asin(n.z()) / M_PI + 0.5 ;
 		//texCoors.push_back(MutableVector2D(s, 1-t));
   
-		final double s = IMathUtils.instance().atan2(n.y(), n.x()) / (IMathUtils.instance().pi() * 2) + 0.5;
-		final double t = IMathUtils.instance().asin(n.z()) / IMathUtils.instance().pi() + 0.5;
+		final double s = IMathUtils.instance().atan2(n._y, n._x) / (IMathUtils.instance().pi() * 2) + 0.5;
+		final double t = IMathUtils.instance().asin(n._z) / IMathUtils.instance().pi() + 0.5;
   
 		texCoors.add((float)s, (float)(1.0-t));
 	  }
@@ -109,7 +113,7 @@ public class SingleImageTileTexturizer extends TileTexturizer
 
   public SingleImageTileTexturizer(TilesRenderParameters parameters, IImage image, boolean isMercatorImage)
   {
-	  _texId = new GLTextureId(-1);
+	  _texId = null;
 	  _image = image;
 	  _parameters = parameters;
 	  _renderContext = null;
@@ -118,7 +122,7 @@ public class SingleImageTileTexturizer extends TileTexturizer
 
   public void dispose()
   {
-	if (_texId.isValid())
+	if (_texId != null)
 	{
 	  if (_renderContext != null)
 	  {
@@ -136,13 +140,13 @@ public class SingleImageTileTexturizer extends TileTexturizer
   {
 	_renderContext = rc; //SAVING CONTEXT
   
-	if (!_texId.isValid())
+	if (_texId == null)
 	{
-	  _texId = rc.getTexturesHandler().getGLTextureId(_image, GLFormat.RGBA, "SINGLE_IMAGE_TEX", false);
+	  _texId = rc.getTexturesHandler().getGLTextureId(_image, GLFormat.rgba(), "SINGLE_IMAGE_TEX", false);
   
 	  rc.getFactory().deleteImage(_image);
   
-	  if (!_texId.isValid())
+	  if (_texId == null)
 	  {
 		rc.getLogger().logError("Can't upload texture to GPU");
 		return null;

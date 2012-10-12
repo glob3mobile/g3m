@@ -12,8 +12,12 @@
 
 const std::string MutableVector2D::description() const {
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
-  isb->add("(MV2D ")->add(_x)->add(", ")->add(_y)->add(")");
-  std::string s = isb->getString();
+  isb->addString("(MV2D ");
+  isb->addDouble(_x);
+  isb->addString(", ");
+  isb->addDouble(_y);
+  isb->addString(")");
+  const std::string s = isb->getString();
   delete isb;
   return s;
 }

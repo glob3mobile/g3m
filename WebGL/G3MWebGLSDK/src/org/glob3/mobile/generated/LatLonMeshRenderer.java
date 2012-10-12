@@ -32,7 +32,7 @@ public class LatLonMeshRenderer extends Renderer
 
   public final void initialize(InitializationContext ic)
   {
-	FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.FirstVertex, ic.getPlanet(), Geodetic2D.zero());
+	FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), ic.getPlanet(), Geodetic2D.zero());
 	vertices.add(Geodetic3D.fromDegrees(28.753213, -17.898788, 500));
 	vertices.add(Geodetic3D.fromDegrees(28.680347, -17.898788, 500));
 	vertices.add(Geodetic3D.fromDegrees(28.753213, -17.83287, 500));
@@ -46,12 +46,7 @@ public class LatLonMeshRenderer extends Renderer
   
 	Color flatColor = new Color(Color.fromRGBA((float)1.0, (float)1.0, (float)0.0, (float)1.0));
   
-	_mesh = new IndexedMesh(GLPrimitive.TriangleStrip,
-  					  true,
-  					  vertices.getCenter(),
-  					  vertices.create(),
-  					  index.create(),
-  					  flatColor);
+	_mesh = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), index.create(), flatColor);
   
   }
 

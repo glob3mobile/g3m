@@ -17,7 +17,7 @@ IIntBuffer* IntBufferBuilder::create() const {
   IIntBuffer* result = GFactory.createIntBuffer(size);
   
   for (int i = 0; i < size; i++) {
-    result->put(i, _values[i]);
+    result->rawPut(i, _values[i]);
   }
   
   return result;

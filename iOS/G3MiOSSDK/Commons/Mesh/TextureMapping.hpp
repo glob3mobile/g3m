@@ -11,7 +11,8 @@
 
 //#include <vector>
 #include "MutableVector2D.hpp"
-#include "GLTextureId.hpp"
+
+class IGLTextureId;
 
 class RenderContext;
 class IFloatBuffer;
@@ -30,11 +31,7 @@ public:
 
 class SimpleTextureMapping : public TextureMapping {
 private:
-#ifdef C_CODE
-  const GLTextureId  _glTextureId;
-#else
-  GLTextureId  _glTextureId;
-#endif
+  const IGLTextureId* _glTextureId;
   IFloatBuffer* _texCoords;
   const bool    _ownedTexCoords;
 
@@ -43,7 +40,7 @@ private:
   
 public:
   
-  SimpleTextureMapping(const GLTextureId& glTextureId,
+  SimpleTextureMapping(const IGLTextureId* glTextureId,
                        IFloatBuffer* texCoords,
                        bool ownedTexCoords) :
   _glTextureId(glTextureId),
@@ -66,7 +63,7 @@ public:
   
   virtual ~SimpleTextureMapping();
   
-  const GLTextureId getGLTextureId() const {
+  const IGLTextureId* getGLTextureId() const {
     return _glTextureId;
   }
 

@@ -18,9 +18,12 @@ package org.glob3.mobile.generated;
 
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IIntBuffer;
+
 public class IndexedMesh extends Mesh
 {
-  private final GLPrimitive _primitive;
+  private final int _primitive;
   private final boolean _owner;
   private Vector3D _center ;
   private final MutableMatrix44D _translationMatrix;
@@ -55,9 +58,9 @@ public class IndexedMesh extends Mesh
 	{
 	  final int p = i * 3;
   
-	  final double x = _vertices.get(p) + _center.x();
-	  final double y = _vertices.get(p+1) + _center.y();
-	  final double z = _vertices.get(p+2) + _center.z();
+	  final double x = _vertices.get(p) + _center._x;
+	  final double y = _vertices.get(p+1) + _center._y;
+	  final double z = _vertices.get(p+2) + _center._z;
   
 	  if (x < minx)
 		  minx = x;
@@ -79,21 +82,21 @@ public class IndexedMesh extends Mesh
   }
 
 
-  public IndexedMesh(GLPrimitive primitive, boolean owner, Vector3D center, IFloatBuffer vertices, IIntBuffer indices, Color flatColor, IFloatBuffer colors)
+  public IndexedMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, IIntBuffer indices, Color flatColor, IFloatBuffer colors)
   {
 	  this(primitive, owner, center, vertices, indices, flatColor, colors, (float)0.0);
   }
-  public IndexedMesh(GLPrimitive primitive, boolean owner, Vector3D center, IFloatBuffer vertices, IIntBuffer indices, Color flatColor)
+  public IndexedMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, IIntBuffer indices, Color flatColor)
   {
 	  this(primitive, owner, center, vertices, indices, flatColor, null, (float)0.0);
   }
-  public IndexedMesh(GLPrimitive primitive, boolean owner, Vector3D center, IFloatBuffer vertices, IIntBuffer indices)
+  public IndexedMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, IIntBuffer indices)
   {
 	  this(primitive, owner, center, vertices, indices, null, null, (float)0.0);
   }
 //C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
-//ORIGINAL LINE: IndexedMesh(const GLPrimitive primitive, boolean owner, const Vector3D& center, IFloatBuffer* vertices, IIntBuffer* indices, const Color* flatColor = null, IFloatBuffer* colors = null, const float colorsIntensity = (float)0.0) : _primitive(primitive), _owner(owner), _vertices(vertices), _indices(indices), _flatColor(flatColor), _colors(colors), _colorsIntensity(colorsIntensity), _extent(null), _center(center), _translationMatrix(center.isNan()? null: new MutableMatrix44D(MutableMatrix44D::createTranslationMatrix(center)))
-  public IndexedMesh(GLPrimitive primitive, boolean owner, Vector3D center, IFloatBuffer vertices, IIntBuffer indices, Color flatColor, IFloatBuffer colors, float colorsIntensity)
+//ORIGINAL LINE: IndexedMesh(const int primitive, boolean owner, const Vector3D& center, IFloatBuffer* vertices, IIntBuffer* indices, const Color* flatColor = null, IFloatBuffer* colors = null, const float colorsIntensity = (float)0.0) : _primitive(primitive), _owner(owner), _vertices(vertices), _indices(indices), _flatColor(flatColor), _colors(colors), _colorsIntensity(colorsIntensity), _extent(null), _center(center), _translationMatrix(center.isNan()? null: new MutableMatrix44D(MutableMatrix44D::createTranslationMatrix(center)))
+  public IndexedMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, IIntBuffer indices, Color flatColor, IFloatBuffer colors, float colorsIntensity)
   {
 	  _primitive = primitive;
 	  _owner = owner;
@@ -109,6 +112,24 @@ public class IndexedMesh extends Mesh
 
   public void dispose()
   {
+  ///#ifdef C_CODE
+	if (_owner)
+	{
+	  if (_vertices != null)
+		  _vertices.dispose();
+	  if (_indices != null)
+		  _indices.dispose();
+	  if (_colors != null)
+		  if (_colors != null)
+			  _colors.dispose();
+	}
+  
+	if (_extent != null)
+		_extent = null;
+	if (_translationMatrix != null)
+		if (_translationMatrix != null)
+			_translationMatrix.dispose();
+  ///#endif
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -145,22 +166,21 @@ public class IndexedMesh extends Mesh
 	  gl.multMatrixf(_translationMatrix);
 	}
   
-	switch (_primitive)
+	if (_primitive == GLPrimitive.triangleStrip())
 	{
-	  case TriangleStrip:
-		gl.drawTriangleStrip(_indices);
-		break;
-	  case Lines:
-		gl.drawLines(_indices);
-		break;
-	  case LineLoop:
-		gl.drawLineLoop(_indices);
-		break;
-	  case Points:
-		gl.drawPoints(_indices);
-		break;
-	  default:
-		break;
+	  gl.drawTriangleStrip(_indices);
+	}
+	else if (_primitive == GLPrimitive.lines())
+	{
+	  gl.drawLines(_indices);
+	}
+	else if (_primitive == GLPrimitive.lineLoop())
+	{
+	  gl.drawLineLoop(_indices);
+	}
+	else if (_primitive == GLPrimitive.points())
+	{
+	  gl.drawPoints(_indices);
 	}
   
 	if (_translationMatrix != null)
@@ -194,7 +214,7 @@ public class IndexedMesh extends Mesh
   public final Vector3D getVertex(int i)
   {
 	final int p = i * 3;
-	return new Vector3D(_vertices.get(p) + _center.x(), _vertices.get(p+1) + _center.y(), _vertices.get(p+2) + _center.z());
+	return new Vector3D(_vertices.get(p) + _center._x, _vertices.get(p+1) + _center._y, _vertices.get(p+2) + _center._z);
   }
 
 }

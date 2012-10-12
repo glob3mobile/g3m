@@ -97,7 +97,13 @@ public class TileKey
   public final String description()
   {
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.add("(level=").add(_level).add(", row=").add(_row).add(", col=").add(_column).add(")");
+	isb.addString("(level=");
+	isb.addInt(_level);
+	isb.addString(", row=");
+	isb.addInt(_row);
+	isb.addString(", col=");
+	isb.addInt(_column);
+	isb.addString(")");
 	String s = isb.getString();
 	if (isb != null)
 		isb.dispose();
@@ -109,7 +115,11 @@ public class TileKey
   public final String tinyDescription()
   {
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.add(_level).add("-").add(_row).add("/").add(_column);
+	isb.addInt(_level);
+	isb.addString("-");
+	isb.addInt(_row);
+	isb.addString("/");
+	isb.addInt(_column);
 	String s = isb.getString();
 	if (isb != null)
 		isb.dispose();

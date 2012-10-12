@@ -316,7 +316,8 @@ public class G3MWidget
   private void initializeGL()
   {
 	_gl.enableDepthTest();
-	_gl.enableCullFace(GLCullFace.Back);
+  
+	_gl.enableCullFace(GLCullFace.back());
   }
 
   private G3MWidget(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, GL gl, TexturesHandler texturesHandler, TextureBuilder textureBuilder, IDownloader downloader, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, Renderer renderer, Renderer busyRenderer, EffectsScheduler effectsScheduler, int width, int height, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics)

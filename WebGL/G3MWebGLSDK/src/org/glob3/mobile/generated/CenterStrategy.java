@@ -9,19 +9,27 @@ package org.glob3.mobile.generated;
 
 
 
-public enum CenterStrategy
+public class CenterStrategy
 {
-  NoCenter,
-  FirstVertex,
-  GivenCenter;
+  private static final int _noCenter = 0;
+  private static final int _firstVertex = 1;
+  private static final int _givenCenter = 2;
 
-	public int getValue()
-	{
-		return this.ordinal();
-	}
+  private CenterStrategy()
+  {
+  }
 
-	public static CenterStrategy forValue(int value)
-	{
-		return values()[value];
-	}
+
+  public static int noCenter()
+  {
+	  return _noCenter;
+  }
+  public static int firstVertex()
+  {
+	  return _firstVertex;
+  }
+  public static int givenCenter()
+  {
+	  return _givenCenter;
+  }
 }

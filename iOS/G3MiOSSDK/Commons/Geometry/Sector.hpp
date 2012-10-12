@@ -89,7 +89,7 @@ public:
     const double diff = _deltaLongitude.div(that._deltaLongitude);
     const Vector2D uv = that.getUVCoordinates(_lower);
     
-    return Vector2D(uv.x(), uv.y() - diff);
+    return Vector2D(uv._x, uv._y - diff);
   }
   
   bool fullContains(const Sector& s) const;

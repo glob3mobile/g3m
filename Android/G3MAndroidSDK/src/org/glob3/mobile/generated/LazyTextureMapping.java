@@ -3,7 +3,7 @@ public class LazyTextureMapping extends TextureMapping
 {
   private LazyTextureMappingInitializer _initializer;
 
-  private GLTextureId _glTextureId = new GLTextureId();
+  private IGLTextureId _glTextureId;
 
   private boolean _initialized;
 
@@ -23,10 +23,10 @@ public class LazyTextureMapping extends TextureMapping
   {
 	if (_texturesHandler != null)
 	{
-	  if (_glTextureId.isValid())
+	  if (_glTextureId != null)
 	  {
 		_texturesHandler.releaseGLTextureId(_glTextureId);
-		_glTextureId = GLTextureId.invalid();
+		_glTextureId = null;
 	  }
 	}
   }
@@ -34,7 +34,7 @@ public class LazyTextureMapping extends TextureMapping
   public LazyTextureMapping(LazyTextureMappingInitializer initializer, TexturesHandler texturesHandler, boolean ownedTexCoords)
   {
 	  _initializer = initializer;
-	  _glTextureId = new GLTextureId(GLTextureId.invalid());
+	  _glTextureId = null;
 	  _initialized = false;
 	  _texCoords = null;
 	  _translation = new MutableVector2D(0,0);
@@ -96,10 +96,10 @@ public class LazyTextureMapping extends TextureMapping
 //ORIGINAL LINE: boolean isValid() const
   public final boolean isValid()
   {
-	return _glTextureId.isValid();
+	return _glTextureId != null;
   }
 
-  public final void setGLTextureId(GLTextureId glTextureId)
+  public final void setGLTextureId(IGLTextureId glTextureId)
   {
 	releaseGLTextureId();
 	_glTextureId = glTextureId;
@@ -107,8 +107,8 @@ public class LazyTextureMapping extends TextureMapping
 
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const GLTextureId getGLTextureId() const
-  public final GLTextureId getGLTextureId()
+//ORIGINAL LINE: const const IGLTextureId* getGLTextureId() const
+  public final IGLTextureId getGLTextureId()
   {
 	return _glTextureId;
   }

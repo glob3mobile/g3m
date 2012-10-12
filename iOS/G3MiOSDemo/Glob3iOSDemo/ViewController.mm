@@ -92,44 +92,58 @@
   //                                     NULL);
   //  layerSet->addLayer(political);
   
-  /*WMSLayer* bing = new WMSLayer("ve",
-                                URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?"),
-                                WMS_1_1_0,
-                                Sector::fullSphere(),
-                                "image/jpeg",
-                                "EPSG:4326",
-                                "",
-                                false,
-                                NULL);
-  layerSet->addLayer(bing);*/
-  
   
   //IJSONParser* parser = new JSONParser_iOS();
   //JSONParser.setInstance(parser);
   
-  //Map styles: Road, Aerial, Hybrid
-  //Languages: English, Spanish, German, Italian, French, Dutch
-  BingLayer* realBing = new BingLayer(URL("http://dev.virtualearth.net/REST/v1/Imagery/Metadata"), NULL, Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0), Hybrid, Dutch,"AgOLISvN2b3012i-odPJjVxhB1dyU6avZ2vG9Ub6Z9-mEpgZHre-1rE8o-DUinUH");
-  layerSet->addLayer(realBing);
-  
+//  //Map styles: Road, Aerial, Hybrid
+//  //Languages: English, Spanish, German, Italian, French, Dutch
+//  BingLayer* realBing = new BingLayer(URL("http://dev.virtualearth.net/REST/v1/Imagery/Metadata"), NULL, Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0), Hybrid, Dutch,"AgOLISvN2b3012i-odPJjVxhB1dyU6avZ2vG9Ub6Z9-mEpgZHre-1rE8o-DUinUH");
+//  layerSet->addLayer(realBing);
+//  
   
   /*OSMLayer* osm = new OSMLayer(URL("http://a.tile.openstreetmap.org"), NULL, Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0));
   
   layerSet->addLayer(osm);*/
   
   
+  bool useBing = false;
+  if (useBing) {
+    WMSLayer* bing = new WMSLayer("ve",
+                                  URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?"),
+                                  WMS_1_1_0,
+                                  Sector::fullSphere(),
+                                  "image/jpeg",
+                                  "EPSG:4326",
+                                  "",
+                                  false,
+                                  NULL);
+    layerSet->addLayer(bing);
+  }
   
-  if (false) {
-    WMSLayer *osm = new WMSLayer("osm",
-                                 URL("http://wms.latlon.org/"),
+  bool useOSMLatLon = true;
+  if (useOSMLatLon) {
+//    WMSLayer *osm = new WMSLayer("osm",
+//                                 URL("http://wms.latlon.org/"),
+//                                 WMS_1_1_0,
+//                                 Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
+//                                 "image/jpeg",
+//                                 "EPSG:4326",
+//                                 "",
+//                                 false,
+//                                 NULL);
+//    layerSet->addLayer(osm);
+    WMSLayer *osm = new WMSLayer("osm_auto:all",
+                                 URL("http://129.206.228.72/cached/osm"),
                                  WMS_1_1_0,
-                                 Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
+                                 Sector::fromDegrees(-85.05, -180.0, 85.05, 180.0),
                                  "image/jpeg",
                                  "EPSG:4326",
                                  "",
                                  false,
                                  NULL);
     layerSet->addLayer(osm);
+
   }
   
   const bool usePnoaLayer = false;

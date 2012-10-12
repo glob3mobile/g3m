@@ -24,6 +24,7 @@ public:
   
   virtual const IByteBuffer* readBuffer(const URL& url) = 0;
   
+  
   virtual bool containsImage(const URL& url) = 0;
   
   virtual void saveImage(const URL& url,
@@ -31,10 +32,11 @@ public:
   
   virtual const IImage* readImage(const URL& url) = 0;
   
+  
   virtual void onResume(const InitializationContext* ic) = 0;
   
   virtual void onPause(const InitializationContext* ic) = 0;
-
+  
   virtual bool isAvailable() = 0;
   
 #ifdef C_CODE

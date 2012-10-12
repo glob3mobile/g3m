@@ -7,7 +7,7 @@ import org.glob3.mobile.generated.IMathUtils;
 import android.util.FloatMath;
 
 
-public class MathUtils_Android
+public final class MathUtils_Android
          extends
             IMathUtils {
 

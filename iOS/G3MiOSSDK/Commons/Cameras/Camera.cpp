@@ -156,18 +156,14 @@ void Camera::render(const RenderContext* rc) const {
     const Vector3D p3(Vector3D(data._right/4, data._top/4, -data._znear-10).transformedBy(inversed, 1));
     
     const float v[] = {
-      (float) p0.x(), (float) p0.y(), (float) p0.z(),
-      (float) p1.x(), (float) p1.y(), (float) p1.z(),
-      (float) p2.x(), (float) p2.y(), (float) p2.z(),
-      (float) p3.x(), (float) p3.y(), (float) p3.z(),    
+      (float) p0._x, (float) p0._y, (float) p0._z,
+      (float) p1._x, (float) p1._y, (float) p1._z,
+      (float) p2._x, (float) p2._y, (float) p2._z,
+      (float) p3._x, (float) p3._y, (float) p3._z
     };
     const int i[] = {0, 1, 2, 3};
     
-#ifdef C_CODE
-    FloatBufferBuilderFromCartesian3D vertices(NoCenter, Vector3D::zero());
-#else
-    FloatBufferBuilderFromCartesian3D vertices(CenterStrategy.NoCenter, Vector3D::zero());
-#endif
+    FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
     IntBufferBuilder index;
     
     for (unsigned int n=0; n<4; n++) 
@@ -194,8 +190,8 @@ void Camera::render(const RenderContext* rc) const {
 
 
 Vector3D Camera::pixel2Ray(const Vector2D& pixel) const {
-  const int px = (int) pixel.x();
-  const int py = _height - (int) pixel.y();
+  const int px = (int) pixel._x;
+  const int py = _height - (int) pixel._y;
   const Vector3D pixel3D(px, py, 0);
     
   const Vector3D obj = getModelViewMatrix().unproject(pixel3D,
@@ -214,12 +210,13 @@ Vector3D Camera::pixel2PlanetPoint(const Vector2D& pixel) const {
 Vector2D Camera::point2Pixel(const Vector3D& point) const {  
   const Vector2D p = getModelViewMatrix().project(point,
                                                   0, 0, _width, _height);
+
+  int __TODO_check_isNan_is_needed;
+//  if (p.isNan()) {
+//    return p;
+//  }
   
-  if (p.isNan()) {
-    return p;
-  }
-  
-  return Vector2D(p.x(), _height-p.y());
+  return Vector2D(p._x, _height-p._y);
 }
 
 void Camera::applyTransform(const MutableMatrix44D& M) {

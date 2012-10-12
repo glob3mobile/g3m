@@ -29,12 +29,11 @@ public class BufferSaverDownloadListener implements IBufferDownloadListener
 	{
 	  if (_cacheStorage.isAvailable())
 	  {
-		if (!_cacheStorage.containsBuffer(url))
-		{
-		  _downloader.countSave();
+		//if (!_cacheStorage->containsBuffer(url)) {
+		_downloader.countSave();
 
-		  _cacheStorage.saveBuffer(url, buffer);
-		}
+		_cacheStorage.saveBuffer(url, buffer);
+		//}
 	  }
 	  else
 	  {

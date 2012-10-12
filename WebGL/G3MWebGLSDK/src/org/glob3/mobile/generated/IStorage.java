@@ -20,11 +20,13 @@ public interface IStorage
 
   IByteBuffer readBuffer(URL url);
 
+
   boolean containsImage(URL url);
 
   void saveImage(URL url, IImage image);
 
   IImage readImage(URL url);
+
 
   void onResume(InitializationContext ic);
 

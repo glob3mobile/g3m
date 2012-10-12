@@ -12,9 +12,14 @@
 
 const std::string Geodetic3D::description() const {
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
-  isb->add("(lat=")->add(_latitude.description())->add(", lon=")->add(_longitude.description());
-  isb->add(", height=")->add(_height)->add(")");
-  std::string s = isb->getString();
+  isb->addString("(lat=");
+  isb->addString(_latitude.description());
+  isb->addString(", lon=");
+  isb->addString(_longitude.description());
+  isb->addString(", height=");
+  isb->addDouble(_height);
+  isb->addString(")");
+  const std::string s = isb->getString();
   delete isb;
   return s;
 }

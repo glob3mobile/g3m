@@ -59,6 +59,8 @@ public class TilesRenderParameters
 	final int maxLevel = 17;
 	final int tileTextureHeight = 256;
 	final int tileTextureWidth = 256;
+//    const int tileTextureHeight = 128;
+//    const int tileTextureWidth = 128;
 	final int tileResolution = 10;
 
 	return new TilesRenderParameters(Sector.fullSphere(), splitsByLatitude, splitsByLongitude, topLevel, maxLevel, tileTextureHeight, tileTextureWidth, tileResolution, renderDebug, useTilesSplitBudget, forceTopLevelTilesRenderOnStart);

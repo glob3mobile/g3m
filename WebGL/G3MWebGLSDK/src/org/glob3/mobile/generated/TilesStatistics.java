@@ -169,9 +169,12 @@ public class TilesStatistics
 		}
 		else
 		{
-		  isb.add(",");
+		  isb.addString(",");
 		}
-		isb.add("L").add(level).add(":").add(counter);
+		isb.addString("L");
+		isb.addInt(level);
+		isb.addString(":");
+		isb.addInt(counter);
 	  }
 	}
 

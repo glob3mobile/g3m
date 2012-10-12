@@ -25,10 +25,12 @@ package org.glob3.mobile.generated;
 public class Angle
 {
   private final double _degrees;
+  private final double _radians;
 
-  private Angle(double degrees)
+  private Angle(double degrees) //GMath.pi()
   {
 	  _degrees = degrees;
+	  _radians = degrees / 180.0 * 3.14159265358979323846264338327950288;
   }
 
   public static Angle lerp(Angle start, Angle end, float percent)
@@ -88,6 +90,7 @@ public class Angle
   public Angle(Angle angle)
   {
 	  _degrees = angle._degrees;
+	  _radians = angle._radians;
 
   }
 
@@ -95,14 +98,14 @@ public class Angle
 //ORIGINAL LINE: double sinus() const
   public final double sinus()
   {
-	return IMathUtils.instance().sin(_degrees / 180.0 * IMathUtils.instance().pi());
+	return IMathUtils.instance().sin(_radians);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: double cosinus() const
   public final double cosinus()
   {
-	return IMathUtils.instance().cos(_degrees / 180.0 * IMathUtils.instance().pi());
+	return IMathUtils.instance().cos(_radians);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -116,7 +119,8 @@ public class Angle
 //ORIGINAL LINE: double radians() const
   public final double radians()
   {
-	return _degrees / 180.0 * IMathUtils.instance().pi();
+	//return _degrees / 180.0 * GMath.pi();
+	return _radians;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -261,8 +265,9 @@ public class Angle
   public final String description()
   {
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.add(_degrees).add("°");
-	String s = isb.getString();
+	isb.addDouble(_degrees);
+	isb.addString("°");
+	final String s = isb.getString();
 	if (isb != null)
 		isb.dispose();
 	return s;

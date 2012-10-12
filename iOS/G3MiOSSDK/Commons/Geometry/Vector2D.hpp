@@ -17,20 +17,21 @@ class MutableVector2D;
 
 class Vector2D {
 private:
-  const double _x;
-  const double _y;
-    
-    
-    Vector2D& operator=(const Vector2D& v);
+  
+  
+  Vector2D& operator=(const Vector2D& v);
   
 public:
+  const double _x;
+  const double _y;
+
   
   Vector2D(const double x,
            const double y): _x(x), _y(y) {
     
   }
   
-  Vector2D(const Vector2D &v): _x(v.x()), _y(v.y()) {
+  Vector2D(const Vector2D &v): _x(v._x), _y(v._y) {
     
   }
   
@@ -76,18 +77,18 @@ public:
                     _y / v);
   }
   
-  Angle angle() const { 
+  Angle angle() const {
     double a = GMath.atan2(_y, _x);
     return Angle::fromRadians(a);
   }
   
-  double x() const {
-    return _x;
-  }
-  
-  double y() const {
-    return _y;
-  }
+  //  double x() const {
+  //    return _x;
+  //  }
+  //
+  //  double y() const {
+  //    return _y;
+  //  }
   
   static Vector2D nan() {
     return Vector2D(GMath.NanD(), GMath.NanD());
@@ -102,13 +103,21 @@ public:
   }
   
   MutableVector2D asMutableVector2D() const;
-
+  
   bool isNan() const {
-    return GMath.isNan(_x) || GMath.isNan(_y);
+//    return GMath.isNan(_x) || GMath.isNan(_y);
+    
+    if (_x != _x) {
+      return true;
+    }
+    if (_y != _y) {
+      return true;
+    }
+    return false;
   }
-
+  
   const std::string description() const;
-
+  
 };
 
 

@@ -30,10 +30,10 @@ public class GLErrorRenderer extends Renderer
 	GL gl = rc.getGL();
 	final ILogger logger = rc.getLogger();
   
-	GLError error = gl.getError();
-	while (error != GLError.NoError)
+	int error = gl.getError();
+	while (error != GLError.noError())
 	{
-	  logger.logError("GL Error: %d", error.getValue());
+	  logger.logError("GL Error: %d", error);
 	  error = gl.getError();
 	}
   

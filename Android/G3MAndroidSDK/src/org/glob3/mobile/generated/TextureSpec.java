@@ -32,6 +32,8 @@ package org.glob3.mobile.generated;
 //class IFactory;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Rectangle;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IGLTextureId;
 
 
 public class TextureSpec
@@ -129,8 +131,14 @@ public class TextureSpec
   public final String description()
   {
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.add("(").add(_id).add(" ").add(_width).add("x").add(_height).add(")");
-	String s = isb.getString();
+	isb.addString("(");
+	isb.addString(_id);
+	isb.addString(" ");
+	isb.addInt(_width);
+	isb.addString("x");
+	isb.addInt(_height);
+	isb.addString(")");
+	final String s = isb.getString();
 	if (isb != null)
 		isb.dispose();
 	return s;

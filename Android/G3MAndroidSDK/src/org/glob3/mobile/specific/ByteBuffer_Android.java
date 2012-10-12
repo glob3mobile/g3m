@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 import org.glob3.mobile.generated.IByteBuffer;
 
 
-public class ByteBuffer_Android
+public final class ByteBuffer_Android
          extends
             IByteBuffer {
 

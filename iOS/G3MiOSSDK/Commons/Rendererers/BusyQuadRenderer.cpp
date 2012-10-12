@@ -23,6 +23,8 @@
 #include "FloatBufferBuilderFromCartesian2D.hpp"
 #include "IntBufferBuilder.hpp"
 
+#include "GLConstants.hpp"
+
 void BusyQuadRenderer::start() {
   //int _TODO_start_effects;
 }
@@ -34,33 +36,28 @@ void BusyQuadRenderer::stop() {
 
 bool BusyQuadRenderer::initMesh(const RenderContext* rc) {
   //TEXTURED
-  GLTextureId texId = GLTextureId::invalid();
+#ifdef C_CODE
+  const IGLTextureId* texId = NULL;
+#endif
+#ifdef JAVA_CODE
+  IGLTextureId texId = null;
+#endif
   if (true){
     IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
     
-#ifdef C_CODE
-    texId = rc->getTexturesHandler()->getGLTextureId(image, RGBA,
+    texId = rc->getTexturesHandler()->getGLTextureId(image, GLFormat::rgba(),
                                                      _textureFilename, false);
-#else
-    texId = rc->getTexturesHandler()->getGLTextureId(image, GLFormat.RGBA,
-                                                     _textureFilename, false);
-#endif
     
     rc->getFactory()->deleteImage(image);
     
-    if (!texId.isValid()) {
+    if (texId == NULL) {
       rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
       return false;
     }
   }
   
   const float halfSize = 16;
-  
-#ifdef C_CODE
-  FloatBufferBuilderFromCartesian3D vertices(NoCenter, Vector3D::zero());
-#else
-  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy.NoCenter, Vector3D::zero());
-#endif
+  FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
   vertices.add(-halfSize, +halfSize, 0);
   vertices.add(-halfSize, -halfSize, 0);
   vertices.add(+halfSize, +halfSize, 0);
@@ -78,19 +75,11 @@ bool BusyQuadRenderer::initMesh(const RenderContext* rc) {
   texCoords.add(1, 0);
   texCoords.add(1, 1);
   
-#ifdef C_CODE
-  IndexedMesh *im = new IndexedMesh(TriangleStrip,
+  IndexedMesh *im = new IndexedMesh(GLPrimitive::triangleStrip(),
                                     true,
                                     Vector3D::zero(),
                                     vertices.create(),
                                     indices.create());
-#else
-  IndexedMesh *im = new IndexedMesh(GLPrimitive.TriangleStrip,
-                                    true,
-                                    Vector3D::zero(),
-                                    vertices.create(),
-                                    indices.create());
-#endif
   
   TextureMapping* texMap = new SimpleTextureMapping(texId,
                                                     texCoords.create(),

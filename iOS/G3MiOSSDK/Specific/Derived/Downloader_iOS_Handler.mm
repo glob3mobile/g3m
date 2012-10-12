@@ -208,14 +208,14 @@
         Downloader_iOS_Listener* listener = [entry listener];
         
         if ([entry isCanceled]) {
-          [listener onCanceledDownloadURL:url
-                                     data:data];
+          [listener onCanceledDownloadURL: url
+                                     data: data];
           
           [listener onCancel: url];
         }
         else {
-          [listener onDownloadURL:url
-                             data:data];
+          [listener onDownloadURL: url
+                             data: data];
         }
       }
     }
@@ -223,7 +223,7 @@
       for (int i = 0; i < listenersCount; i++) {
         ListenerEntry* entry = [_listeners objectAtIndex: i];
         
-        [[entry listener] onErrorURL:url];
+        [[entry listener] onErrorURL: url];
       }
     }
     
