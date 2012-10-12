@@ -184,65 +184,22 @@ long long Downloader_iOS::requestBuffer(const URL &url,
                                         IBufferDownloadListener* cppListener,
                                         bool deleteListener) {
   
-  //  NSURL* nsURL = [NSURL URLWithString: toNSString(url.getPath())];
-  
-  //  NSLog(@"Downloading %@", [nsURL absoluteString]);
-  
   Downloader_iOS_Listener* iosListener = [[Downloader_iOS_Listener alloc]
                                           initWithCPPBufferListener: cppListener
                                           deleteListener: deleteListener];
   
   return request(url, priority, iosListener);
-  
-  //  Downloader_iOS_Handler* handler = nil;
-  //
-  //  [_lock lock];
-  //
-  //  _requestsCounter++;
-  //
-  //  const long long requestId = _requestIdCounter++;
-  //
-  //  handler = [_downloadingHandlers objectForKey: nsURL];
-  //  if (handler) {
-  //    // the URL is being downloaded, just add the new listener.
-  //    [handler addListener: iosListener
-  //                priority: priority
-  //               requestId: requestId];
-  //  }
-  //  else {
-  //    handler = [_queuedHandlers objectForKey: nsURL];
-  //    if (handler) {
-  //      // the URL is queued for future download, just add the new listener.
-  //      [handler addListener: iosListener
-  //                  priority: priority
-  //                 requestId: requestId];
-  //    }
-  //    else {
-  //      // new handler and queue it
-  //      handler = [[Downloader_iOS_Handler alloc] initWithNSURL: nsURL
-  //                                                          url: new URL(url)
-  //                                                     listener: iosListener
-  //                                                     priority: priority
-  //                                                    requestId: requestId];
-  //      [_queuedHandlers setObject: handler
-  //                          forKey: nsURL];
-  //    }
-  //  }
-  //
-  //  [_lock unlock];
-  //
-  //  return requestId;
 }
 
 long long Downloader_iOS::request(const URL &url,
                                   long long priority,
                                   Downloader_iOS_Listener* iosListener) {
   
-//  printf("URL=%s\n", url.getPath().c_str());
+  //printf("URL=%s\n", url.getPath().c_str());
   
   NSURL* nsURL = [NSURL URLWithString: toNSString(url.getPath())];
   
-  //  NSLog(@"Downloading %@", [nsURL absoluteString]);
+  //NSLog(@"Downloading %@", [nsURL absoluteString]);
   
   
   Downloader_iOS_Handler* handler = nil;

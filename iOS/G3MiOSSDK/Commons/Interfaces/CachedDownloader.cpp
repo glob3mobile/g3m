@@ -45,11 +45,11 @@ public:
                   const IByteBuffer* buffer) {
     if (buffer != NULL) {
       if (_cacheStorage->isAvailable()) {
-        if (!_cacheStorage->containsBuffer(url)) {
-          _downloader->countSave();
-          
-          _cacheStorage->saveBuffer(url, buffer);
-        }
+        //if (!_cacheStorage->containsBuffer(url)) {
+        _downloader->countSave();
+        
+        _cacheStorage->saveBuffer(url, buffer);
+        //}
       }
       else {
         ILogger::instance()->logWarning("The cacheStorage is not available, skipping buffer save.");
@@ -121,11 +121,11 @@ public:
                  const IImage* image) {
     if (image != NULL) {
       if (_cacheStorage->isAvailable()) {
-        if (!_cacheStorage->containsImage(url)) {
-          _downloader->countSave();
-          
-          _cacheStorage->saveImage(url, image);
-        }
+        //if (!_cacheStorage->containsImage(url)) {
+        _downloader->countSave();
+        
+        _cacheStorage->saveImage(url, image);
+        //}
       }
       else {
         ILogger::instance()->logWarning("The cacheStorage is not available, skipping image save.");
