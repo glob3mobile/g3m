@@ -23,6 +23,7 @@ import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IGLProgramId;
 import org.glob3.mobile.generated.IImage;
+import org.glob3.mobile.generated.IJSONParser;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
 import org.glob3.mobile.generated.IStringBuilder;
@@ -499,6 +500,9 @@ public final class G3MWidget_WebGL
       final Color backgroundColor = Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1);
       final boolean logFPS = false;
       final boolean logDownloaderStatistics = false;
+
+      // TODO: implements JSONParser_WebGL
+      final IJSONParser jsonParser = null;
       _widget = G3MWidget.create( //
                frameTasksExecutor, //
                _factory, //
@@ -506,6 +510,7 @@ public final class G3MWidget_WebGL
                threadUtils, //
                stringBuilder, //
                mathUtils, //
+               jsonParser, //
                logger, //
                gl, //
                texturesHandler, //
