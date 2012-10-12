@@ -6,10 +6,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 import org.glob3.mobile.generated.IByteBuffer;
+import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IStorage;
+import org.glob3.mobile.generated.ITimer;
 import org.glob3.mobile.generated.InitializationContext;
+import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 
 import android.content.ContentValues;
@@ -172,6 +175,10 @@ public final class SQLiteStorage_Android
    @Override
    public void saveImage(final URL url,
                          final IImage image) {
+
+      final ITimer timer = IFactory.instance().createTimer();
+
+
       final Image_Android image_android = (Image_Android) image;
       final Bitmap bitmap = image_android.getBitmap();
 
@@ -193,6 +200,12 @@ public final class SQLiteStorage_Android
       if (r == -1) {
          ILogger.instance().logError("SQL: Can't write image in database \"%s\"\n", _databaseName);
       }
+
+      final TimeInterval elapsedTime = timer.elapsedTime();
+
+      System.out.println("** Saved image in " + elapsedTime.milliseconds() + "ms");
+
+      IFactory.instance().deleteTimer(timer);
    }
 
 
