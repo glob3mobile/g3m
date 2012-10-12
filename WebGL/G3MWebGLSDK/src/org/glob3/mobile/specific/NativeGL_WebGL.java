@@ -19,6 +19,11 @@ import com.google.gwt.core.client.JsArrayInteger;
 public final class NativeGL_WebGL
          extends
             INativeGL {
+   /*      
+   Warning: Error: WebGL: Drawing without vertex attrib 0 array enabled forces the browser to do expensive emulation
+   work when running on desktop OpenGL platforms, for example on Mac. It is preferable to always draw with vertex 
+   attrib 0 array enabled, by using bindAttribLocation to bind some always-used attribute to location 0.
+   */
 
    private final JavaScriptObject _gl;
 

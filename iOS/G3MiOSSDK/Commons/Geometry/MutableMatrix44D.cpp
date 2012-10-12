@@ -58,25 +58,25 @@ const IFloatBuffer* MutableMatrix44D::getColumnMajorFloatBuffer() const {
   if (_columnMajorFloatBuffer == NULL){
     _columnMajorFloatBuffer = IFactory::instance()->createFloatBuffer(16);
     
-    _columnMajorFloatBuffer->put( 0, (float) _m00);
-    _columnMajorFloatBuffer->put( 1, (float) _m10);
-    _columnMajorFloatBuffer->put( 2, (float) _m20);
-    _columnMajorFloatBuffer->put( 3, (float) _m30);
+    _columnMajorFloatBuffer->rawPut( 0, (float) _m00);
+    _columnMajorFloatBuffer->rawPut( 1, (float) _m10);
+    _columnMajorFloatBuffer->rawPut( 2, (float) _m20);
+    _columnMajorFloatBuffer->rawPut( 3, (float) _m30);
     
-    _columnMajorFloatBuffer->put( 4, (float) _m01);
-    _columnMajorFloatBuffer->put( 5, (float) _m11);
-    _columnMajorFloatBuffer->put( 6, (float) _m21);
-    _columnMajorFloatBuffer->put( 7, (float) _m31);
+    _columnMajorFloatBuffer->rawPut( 4, (float) _m01);
+    _columnMajorFloatBuffer->rawPut( 5, (float) _m11);
+    _columnMajorFloatBuffer->rawPut( 6, (float) _m21);
+    _columnMajorFloatBuffer->rawPut( 7, (float) _m31);
     
-    _columnMajorFloatBuffer->put( 8, (float) _m02);
-    _columnMajorFloatBuffer->put( 9, (float) _m12);
-    _columnMajorFloatBuffer->put(10, (float) _m22);
-    _columnMajorFloatBuffer->put(11, (float) _m32);
+    _columnMajorFloatBuffer->rawPut( 8, (float) _m02);
+    _columnMajorFloatBuffer->rawPut( 9, (float) _m12);
+    _columnMajorFloatBuffer->rawPut(10, (float) _m22);
+    _columnMajorFloatBuffer->rawPut(11, (float) _m32);
     
-    _columnMajorFloatBuffer->put(12, (float) _m03);
-    _columnMajorFloatBuffer->put(13, (float) _m13);
-    _columnMajorFloatBuffer->put(14, (float) _m23);
-    _columnMajorFloatBuffer->put(15, (float) _m33);
+    _columnMajorFloatBuffer->rawPut(12, (float) _m03);
+    _columnMajorFloatBuffer->rawPut(13, (float) _m13);
+    _columnMajorFloatBuffer->rawPut(14, (float) _m23);
+    _columnMajorFloatBuffer->rawPut(15, (float) _m33);
   }
   return _columnMajorFloatBuffer;
 }

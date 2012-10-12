@@ -41,17 +41,23 @@ public:
     return _values[i];
   }
   
-  void put(int i, float value) {
+  void put(int i,
+           float value) {
     if (_values[i] != value) {
       _values[i] = value;
       _timestamp++;
     }
   }
   
+  void rawPut(int i,
+              float value) {
+    _values[i] = value;
+  }
+  
   float* getPointer() const {
     return _values;
   }
-
+  
 };
 
 #endif
