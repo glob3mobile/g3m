@@ -60,14 +60,14 @@ bool Frustum::touchesWithBox(const Box *box) const
   const Vector3D min = box->getLower();
   const Vector3D max = box->getUpper();
   Vector3D corners[8] = {
-    Vector3D(min.x(), min.y(), min.z()),
-    Vector3D(min.x(), min.y(), max.z()),
-    Vector3D(min.x(), max.y(), min.z()),
-    Vector3D(min.x(), max.y(), max.z()),
-    Vector3D(max.x(), min.y(), min.z()),
-    Vector3D(max.x(), min.y(), max.z()),
-    Vector3D(max.x(), max.y(), min.z()),
-    Vector3D(max.x(), max.y(), max.z())
+    Vector3D(min._x, min._y, min._z),
+    Vector3D(min._x, min._y, max._z),
+    Vector3D(min._x, max._y, min._z),
+    Vector3D(min._x, max._y, max._z),
+    Vector3D(max._x, min._y, min._z),
+    Vector3D(max._x, min._y, max._z),
+    Vector3D(max._x, max._y, min._z),
+    Vector3D(max._x, max._y, max._z)
   };
   
 //  std::vector<Vector3D> corners = box->getCorners();
@@ -139,38 +139,37 @@ Extent* Frustum::computeExtent()
   double minx=1e10, miny=1e10, minz=1e10;
   double maxx=-1e10, maxy=-1e10, maxz=-1e10;
   
-  if (_ltn.x()<minx) minx=_ltn.x();     if (_ltn.x()>maxx) maxx=_ltn.x();
-  if (_ltn.y()<miny) miny=_ltn.y();     if (_ltn.y()>maxy) maxy=_ltn.y();
-  if (_ltn.z()<minz) minz=_ltn.z();     if (_ltn.z()>maxz) maxz=_ltn.z();
+  if (_ltn._x<minx) minx=_ltn._x;     if (_ltn._x>maxx) maxx=_ltn._x;
+  if (_ltn._y<miny) miny=_ltn._y;     if (_ltn._y>maxy) maxy=_ltn._y;
+  if (_ltn._z<minz) minz=_ltn._z;     if (_ltn._z>maxz) maxz=_ltn._z;
   
-  if (_rtn.x()<minx) minx=_rtn.x();     if (_rtn.x()>maxx) maxx=_rtn.x();
-  if (_rtn.y()<miny) miny=_rtn.y();     if (_rtn.y()>maxy) maxy=_rtn.y();
-  if (_rtn.z()<minz) minz=_rtn.z();     if (_rtn.z()>maxz) maxz=_rtn.z();
+  if (_rtn._x<minx) minx=_rtn._x;     if (_rtn._x>maxx) maxx=_rtn._x;
+  if (_rtn._y<miny) miny=_rtn._y;     if (_rtn._y>maxy) maxy=_rtn._y;
+  if (_rtn._z<minz) minz=_rtn._z;     if (_rtn._z>maxz) maxz=_rtn._z;
   
-  if (_lbn.x()<minx) minx=_lbn.x();     if (_lbn.x()>maxx) maxx=_lbn.x();
-  if (_lbn.y()<miny) miny=_lbn.y();     if (_lbn.y()>maxy) maxy=_lbn.y();
-  if (_lbn.z()<minz) minz=_lbn.z();     if (_lbn.z()>maxz) maxz=_lbn.z();
+  if (_lbn._x<minx) minx=_lbn._x;     if (_lbn._x>maxx) maxx=_lbn._x;
+  if (_lbn._y<miny) miny=_lbn._y;     if (_lbn._y>maxy) maxy=_lbn._y;
+  if (_lbn._z<minz) minz=_lbn._z;     if (_lbn._z>maxz) maxz=_lbn._z;
   
-  if (_rbn.x()<minx) minx=_rbn.x();     if (_rbn.x()>maxx) maxx=_rbn.x();
-  if (_rbn.y()<miny) miny=_rbn.y();     if (_rbn.y()>maxy) maxy=_rbn.y();
-  if (_rbn.z()<minz) minz=_rbn.z();     if (_rbn.z()>maxz) maxz=_rbn.z();
+  if (_rbn._x<minx) minx=_rbn._x;     if (_rbn._x>maxx) maxx=_rbn._x;
+  if (_rbn._y<miny) miny=_rbn._y;     if (_rbn._y>maxy) maxy=_rbn._y;
+  if (_rbn._z<minz) minz=_rbn._z;     if (_rbn._z>maxz) maxz=_rbn._z;
   
-  if (_ltf.x()<minx) minx=_ltf.x();     if (_ltf.x()>maxx) maxx=_ltf.x();
-  if (_ltf.y()<miny) miny=_ltf.y();     if (_ltf.y()>maxy) maxy=_ltf.y();
-  if (_ltf.z()<minz) minz=_ltf.z();     if (_ltf.z()>maxz) maxz=_ltf.z();
+  if (_ltf._x<minx) minx=_ltf._x;     if (_ltf._x>maxx) maxx=_ltf._x;
+  if (_ltf._y<miny) miny=_ltf._y;     if (_ltf._y>maxy) maxy=_ltf._y;
+  if (_ltf._z<minz) minz=_ltf._z;     if (_ltf._z>maxz) maxz=_ltf._z;
   
-  if (_rtf.x()<minx) minx=_rtf.x();     if (_rtf.x()>maxx) maxx=_rtf.x();
-  if (_rtf.y()<miny) miny=_rtf.y();     if (_rtf.y()>maxy) maxy=_rtf.y();
-  if (_rtf.z()<minz) minz=_rtf.z();     if (_rtf.z()>maxz) maxz=_rtf.z();
+  if (_rtf._x<minx) minx=_rtf._x;     if (_rtf._x>maxx) maxx=_rtf._x;
+  if (_rtf._y<miny) miny=_rtf._y;     if (_rtf._y>maxy) maxy=_rtf._y;
+  if (_rtf._z<minz) minz=_rtf._z;     if (_rtf._z>maxz) maxz=_rtf._z;
 
-  if (_lbf.x()<minx) minx=_lbf.x();     if (_lbf.x()>maxx) maxx=_lbf.x();
-  if (_lbf.y()<miny) miny=_lbf.y();     if (_lbf.y()>maxy) maxy=_lbf.y();
-  if (_lbf.z()<minz) minz=_lbf.z();     if (_lbf.z()>maxz) maxz=_lbf.z();
+  if (_lbf._x<minx) minx=_lbf._x;     if (_lbf._x>maxx) maxx=_lbf._x;
+  if (_lbf._y<miny) miny=_lbf._y;     if (_lbf._y>maxy) maxy=_lbf._y;
+  if (_lbf._z<minz) minz=_lbf._z;     if (_lbf._z>maxz) maxz=_lbf._z;
   
-  if (_rbf.x()<minx) minx=_rbf.x();     if (_rbf.x()>maxx) maxx=_rbf.x();
-  if (_rbf.y()<miny) miny=_rbf.y();     if (_rbf.y()>maxy) maxy=_rbf.y();
-  if (_rbf.z()<minz) minz=_rbf.z();     if (_rbf.z()>maxz) maxz=_rbf.z();
-  
+  if (_rbf._x<minx) minx=_rbf._x;     if (_rbf._x>maxx) maxx=_rbf._x;
+  if (_rbf._y<miny) miny=_rbf._y;     if (_rbf._y>maxy) maxy=_rbf._y;
+  if (_rbf._z<minz) minz=_rbf._z;     if (_rbf._z>maxz) maxz=_rbf._z;
   
   return new Box(Vector3D(minx, miny, minz), Vector3D(maxx, maxy, maxz));
 }

@@ -255,8 +255,8 @@ public:
     const double widthFactor  = imageSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
     const double heightFactor = imageSector.getDeltaLatitude().div(wholeSector.getDeltaLatitude());
     
-    return new Rectangle(lowerFactor.x()         * textureWidth,
-                         (1.0 - lowerFactor.y()) * textureHeight,
+    return new Rectangle(lowerFactor._x         * textureWidth,
+                         (1.0 - lowerFactor._y) * textureHeight,
                          widthFactor  * textureWidth,
                          heightFactor * textureHeight);
   }

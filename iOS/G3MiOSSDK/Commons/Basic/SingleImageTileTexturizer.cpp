@@ -57,10 +57,10 @@ IFloatBuffer* SingleImageTileTexturizer::createTextureCoordinates(const RenderCo
       const Vector3D m = rc->getPlanet()->toCartesian(mercg);
       const Vector3D n = rc->getPlanet()->centricSurfaceNormal(m);
       
-      const double s = GMath.atan2(n.y(), n.x()) / (GMath.pi() * 2) + 0.5;
+      const double s = GMath.atan2(n._y, n._x) / (GMath.pi() * 2) + 0.5;
       
       //double t = (tLatRad*sec + M_PI/2.0)/M_PI ;
-      double t = GMath.asin(n.z()) / GMath.pi() + 0.5 ;
+      double t = GMath.asin(n._z) / GMath.pi() + 0.5 ;
       //texCoors.push_back(MutableVector2D(s, 1-t));
       texCoors.add((float)s, (float)(1.0-t));
       
@@ -71,8 +71,8 @@ IFloatBuffer* SingleImageTileTexturizer::createTextureCoordinates(const RenderCo
       //double t = asin(n.z()) / M_PI + 0.5 ;
       //texCoors.push_back(MutableVector2D(s, 1-t));
       
-      const double s = GMath.atan2(n.y(), n.x()) / (GMath.pi() * 2) + 0.5;
-      const double t = GMath.asin(n.z()) / GMath.pi() + 0.5;
+      const double s = GMath.atan2(n._y, n._x) / (GMath.pi() * 2) + 0.5;
+      const double t = GMath.asin(n._z) / GMath.pi() + 0.5;
       
       texCoors.add((float)s, (float)(1.0-t));
     }

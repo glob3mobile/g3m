@@ -38,7 +38,7 @@ void DummyRenderer::initialize(const InitializationContext* ic)
   // create vertices
   
   if (ic != NULL && ic->getPlanet() != NULL)
-    _halfSize = ic->getPlanet()->getRadii().x() / 2.0;
+    _halfSize = ic->getPlanet()->getRadii()._x / 2.0;
   else     
     _halfSize = 7e6;
   

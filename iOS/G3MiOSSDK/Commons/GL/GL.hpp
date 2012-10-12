@@ -243,10 +243,10 @@ public:
   
   void transformTexCoords(const Vector2D& scale,
                           const Vector2D& translation) {
-    transformTexCoords((float) scale.x(),
-                       (float) scale.y(),
-                       (float) translation.x(),
-                       (float) translation.y());
+    transformTexCoords((float) scale._x,
+                       (float) scale._y,
+                       (float) translation._x,
+                       (float) translation._y);
   }
   
   void transformTexCoords(const MutableVector2D& scale,

@@ -31,7 +31,7 @@ void MarksRenderer::render(const RenderContext* rc) {
   gl->enableBlend();
   
   const Vector3D radius = rc->getPlanet()->getRadii();
-  const double minDistanceToCamera = (radius.x() + radius.y() + radius.z()) * 2;
+  const double minDistanceToCamera = (radius._x + radius._y + radius._z) * 2;
   
   int marksSize = _marks.size();
   for (int i = 0; i < marksSize; i++) {

@@ -20,12 +20,12 @@ const std::vector<Vector3D> Box::getCorners() const
 #ifdef C_CODE
   const Vector3D c[8] = {
     _lower,
-    Vector3D(_lower.x(), _lower.y(), _upper.z()),
-    Vector3D(_lower.x(), _upper.y(), _lower.z()),
-    Vector3D(_lower.x(), _upper.y(), _upper.z()),
-    Vector3D(_upper.x(), _lower.y(), _lower.z()),
-    Vector3D(_upper.x(), _lower.y(), _upper.z()),
-    Vector3D(_upper.x(), _upper.y(), _lower.z()),
+    Vector3D(_lower._x, _lower._y, _upper._z),
+    Vector3D(_lower._x, _upper._y, _lower._z),
+    Vector3D(_lower._x, _upper._y, _upper._z),
+    Vector3D(_upper._x, _lower._y, _lower._z),
+    Vector3D(_upper._x, _lower._y, _upper._z),
+    Vector3D(_upper._x, _upper._y, _lower._z),
     _upper
   };
   
@@ -36,12 +36,12 @@ const std::vector<Vector3D> Box::getCorners() const
     _corners = new java.util.ArrayList<Vector3D>(8);
     
     _corners.add(_lower);
-    _corners.add(new Vector3D(_lower.x(), _lower.y(), _upper.z()));
-    _corners.add(new Vector3D(_lower.x(), _upper.y(), _lower.z()));
-    _corners.add(new Vector3D(_lower.x(), _upper.y(), _upper.z()));
-    _corners.add(new Vector3D(_upper.x(), _lower.y(), _lower.z()));
-    _corners.add(new Vector3D(_upper.x(), _lower.y(), _upper.z()));
-    _corners.add(new Vector3D(_upper.x(), _upper.y(), _lower.z()));
+    _corners.add(new Vector3D(_lower._x, _lower._y, _upper._z));
+    _corners.add(new Vector3D(_lower._x, _upper._y, _lower._z));
+    _corners.add(new Vector3D(_lower._x, _upper._y, _upper._z));
+    _corners.add(new Vector3D(_upper._x, _lower._y, _lower._z));
+    _corners.add(new Vector3D(_upper._x, _lower._y, _upper._z));
+    _corners.add(new Vector3D(_upper._x, _upper._y, _lower._z));
     _corners.add(_upper);
   }
   return _corners;
@@ -55,17 +55,17 @@ Vector2D Box::projectedExtent(const RenderContext *rc) const {
   
   const Vector2D pixel0 = currentCamera->point2Pixel(corners[0]);
 
-  double lowerX = pixel0.x();
-  double upperX = pixel0.x();
-  double lowerY = pixel0.y();
-  double upperY = pixel0.y();
+  double lowerX = pixel0._x;
+  double upperX = pixel0._x;
+  double lowerY = pixel0._y;
+  double upperY = pixel0._y;
   
   const int cornersSize = corners.size();
   for (int i = 1; i < cornersSize; i++) {
     const Vector2D pixel = currentCamera->point2Pixel(corners[i]);
     
-    const double x = pixel.x();
-    const double y = pixel.y();
+    const double x = pixel._x;
+    const double y = pixel._y;
     
     if (x < lowerX) { lowerX = x; }
     if (y < lowerY) { lowerY = y; }
@@ -82,19 +82,19 @@ Vector2D Box::projectedExtent(const RenderContext *rc) const {
 
 double Box::squaredProjectedArea(const RenderContext* rc) const {
   const Vector2D extent = projectedExtent(rc);
-  return extent.x() * extent.y();
+  return extent._x * extent._y;
 }
 
 bool Box::contains(const Vector3D& p) const{
   const static double margin = 1e-3;
-  if (p.x() < _lower.x() - margin) return false;
-  if (p.x() > _upper.x() + margin) return false;
+  if (p._x < _lower._x - margin) return false;
+  if (p._x > _upper._x + margin) return false;
   
-  if (p.y() < _lower.y() - margin) return false;
-  if (p.y() > _upper.y() + margin) return false;
+  if (p._y < _lower._y - margin) return false;
+  if (p._y > _upper._y + margin) return false;
   
-  if (p.z() < _lower.z() - margin) return false;
-  if (p.z() > _upper.z() + margin) return false;
+  if (p._z < _lower._z - margin) return false;
+  if (p._z > _upper._z + margin) return false;
   
   return true;
 }
@@ -103,42 +103,42 @@ Vector3D Box::intersectionWithRay(const Vector3D& origin, const Vector3D& direct
   
   //MIN X
   {
-    Plane p( Vector3D(1.0, 0.0, 0.0), _lower.x());
+    Plane p( Vector3D(1.0, 0.0, 0.0), _lower._x);
     Vector3D inter = p.intersectionWithRay(origin, direction);
     if (!inter.isNan() && contains(inter)) return inter;
   }
   
   //MAX X
   {
-    Plane p( Vector3D(1.0, 0.0, 0.0), _upper.x());
+    Plane p( Vector3D(1.0, 0.0, 0.0), _upper._x);
     Vector3D inter = p.intersectionWithRay(origin, direction);
     if (!inter.isNan() && contains(inter)) return inter;
   }
   
   //MIN Y
   {
-    Plane p( Vector3D(0.0, 1.0, 0.0), _lower.y());
+    Plane p( Vector3D(0.0, 1.0, 0.0), _lower._y);
     Vector3D inter = p.intersectionWithRay(origin, direction);
     if (!inter.isNan() && contains(inter)) return inter;
   }
   
   //MAX Y
   {
-    Plane p( Vector3D(0.0, 1.0, 0.0), _upper.y());
+    Plane p( Vector3D(0.0, 1.0, 0.0), _upper._y);
     Vector3D inter = p.intersectionWithRay(origin, direction);
     if (!inter.isNan() && contains(inter)) return inter;
   }
   
   //MIN Z
   {
-    Plane p( Vector3D(0.0, 0.0, 1.0), _lower.z());
+    Plane p( Vector3D(0.0, 0.0, 1.0), _lower._z);
     Vector3D inter = p.intersectionWithRay(origin, direction);
     if (!inter.isNan() && contains(inter)) return inter;
   }
   
   //MAX Z
   {
-    Plane p( Vector3D(0.0, 0.0, 1.0), _upper.z());
+    Plane p( Vector3D(0.0, 0.0, 1.0), _upper._z);
     Vector3D inter = p.intersectionWithRay(origin, direction);
     if (!inter.isNan() && contains(inter)) return inter;
   }
@@ -153,14 +153,14 @@ void Box::createMesh()
   int numIndices = 48;
   
   float v[] = {
-    (float) _lower.x(), (float) _lower.y(), (float) _lower.z(),
-    (float) _lower.x(), (float) _upper.y(), (float) _lower.z(),
-    (float) _lower.x(), (float) _upper.y(), (float) _upper.z(),
-    (float) _lower.x(), (float) _lower.y(), (float) _upper.z(),
-    (float) _upper.x(), (float) _lower.y(), (float) _lower.z(),
-    (float) _upper.x(), (float) _upper.y(), (float) _lower.z(),
-    (float) _upper.x(), (float) _upper.y(), (float) _upper.z(),
-    (float) _upper.x(), (float) _lower.y(), (float) _upper.z(),
+    (float) _lower._x, (float) _lower._y, (float) _lower._z,
+    (float) _lower._x, (float) _upper._y, (float) _lower._z,
+    (float) _lower._x, (float) _upper._y, (float) _upper._z,
+    (float) _lower._x, (float) _lower._y, (float) _upper._z,
+    (float) _upper._x, (float) _lower._y, (float) _lower._z,
+    (float) _upper._x, (float) _upper._y, (float) _lower._z,
+    (float) _upper._x, (float) _upper._y, (float) _upper._z,
+    (float) _upper._x, (float) _lower._y, (float) _upper._z
   };
   
   int i[] = { 
@@ -202,13 +202,11 @@ void Box::render(const RenderContext* rc)
 
 bool Box::touchesBox(const Box* box) const
 {
-  if (_lower.x() > box->_upper.x()) return false;
-  if (_upper.x() < box->_lower.x()) return false;
-  if (_lower.y() > box->_upper.y()) return false;
-  if (_upper.y() < box->_lower.y()) return false;
-  if (_lower.z() > box->_upper.z()) return false;
-  if (_upper.z() < box->_lower.z()) return false;
+  if (_lower._x > box->_upper._x) return false;
+  if (_upper._x < box->_lower._x) return false;
+  if (_lower._y > box->_upper._y) return false;
+  if (_upper._y < box->_lower._y) return false;
+  if (_lower._z > box->_upper._z) return false;
+  if (_upper._z < box->_lower._z) return false;
   return true;
 }
-
-

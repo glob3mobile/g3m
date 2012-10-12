@@ -240,8 +240,8 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& g,
   
   //X and Y
   Vector2D pixel = tileSector.getUVCoordinates(g);
-  int x = (int) GMath.round( (pixel.x() * width) );
-  int y = (int) GMath.round ( ((1.0 - pixel.y()) * height) );
+  int x = (int) GMath.round( (pixel._x * width) );
+  int y = (int) GMath.round ( ((1.0 - pixel._y) * height) );
   
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
   isb->addString("&X=");

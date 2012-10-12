@@ -26,9 +26,9 @@ private:
   float _cz;
   
   void setCenter(const Vector3D& center) {
-    _cx = (float)center.x();
-    _cy = (float)center.y();
-    _cz = (float)center.z();
+    _cx = (float)center._x;
+    _cy = (float)center._y;
+    _cz = (float)center._z;
   }
   
   const Planet * _planet;
@@ -59,9 +59,9 @@ public:
   void add(const Geodetic3D& g) {
     const Vector3D vector = _planet->toCartesian(g);
     
-    float x = (float) vector.x();
-    float y = (float) vector.y();
-    float z = (float) vector.z();
+    float x = (float) vector._x;
+    float y = (float) vector._y;
+    float z = (float) vector._z;
     
     if (_centerStrategy == CenterStrategy::firstVertex() && _values.size() == 0) {
       setCenter(vector);
@@ -81,9 +81,9 @@ public:
   void add(const Geodetic2D& g) {
     const Vector3D vector = _planet->toCartesian(g);
     
-    float x = (float) vector.x();
-    float y = (float) vector.y();
-    float z = (float) vector.z();
+    float x = (float) vector._x;
+    float y = (float) vector._y;
+    float z = (float) vector._z;
     
     if (_centerStrategy == CenterStrategy::firstVertex() && _values.size() == 0) {
       setCenter(vector);

@@ -31,9 +31,9 @@ Angle Vector3D::angleBetween(const Vector3D& other) const {
 
 Vector3D Vector3D::rotateAroundAxis(const Vector3D& axis,
                                     const Angle& theta) const {
-  const double u = axis.x();
-  const double v = axis.y();
-  const double w = axis.z();
+  const double u = axis._x;
+  const double v = axis._y;
+  const double w = axis._z;
   
   const double cosTheta = theta.cosinus();
   const double sinTheta = theta.sinus();
