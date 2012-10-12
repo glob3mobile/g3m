@@ -32,7 +32,7 @@ public class BufferSaverDownloadListener implements IBufferDownloadListener
 		//if (!_cacheStorage->containsBuffer(url)) {
 		_downloader.countSave();
 
-		_cacheStorage.saveBuffer(url, buffer);
+		_cacheStorage.saveBuffer(url, buffer, _downloader.saveInBackground());
 		//}
 	  }
 	  else

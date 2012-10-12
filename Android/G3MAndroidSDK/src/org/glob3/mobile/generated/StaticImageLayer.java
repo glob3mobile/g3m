@@ -27,13 +27,17 @@ public class StaticImageLayer extends Layer
   private final String _layerID;
   private final IStorage _storage;
 
-  public StaticImageLayer(String layerID, IImage image, Sector sector, IStorage storage, LayerCondition condition)
+  private final boolean _saveInBackground;
+
+
+  public StaticImageLayer(String layerID, IImage image, Sector sector, IStorage storage, LayerCondition condition, boolean saveInBackground)
   {
 	  super(condition);
 	  _image = image;
 	  _sector = new Sector(sector);
 	  _layerID = layerID;
 	  _storage = storage;
+	  _saveInBackground = saveInBackground;
 
   }
 
@@ -100,7 +104,7 @@ public class StaticImageLayer extends Layer
   
 	if (_storage != null)
 	{
-	  _storage.saveImage(id, subImage);
+	  _storage.saveImage(id, subImage, _saveInBackground);
 	}
   
 	return res;

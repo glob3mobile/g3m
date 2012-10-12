@@ -16,14 +16,14 @@ public interface IStorage
 
   boolean containsBuffer(URL url);
 
-  void saveBuffer(URL url, IByteBuffer buffer);
+  void saveBuffer(URL url, IByteBuffer buffer, boolean saveInBackground);
 
   IByteBuffer readBuffer(URL url);
 
 
   boolean containsImage(URL url);
 
-  void saveImage(URL url, IImage image);
+  void saveImage(URL url, IImage image, boolean saveInBackground);
 
   IImage readImage(URL url);
 

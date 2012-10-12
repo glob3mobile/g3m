@@ -27,14 +27,24 @@ public class CachedDownloader implements IDownloader
   private int _cacheHitsCounter;
   private int _savesCounter;
 
-  public CachedDownloader(IDownloader downloader, IStorage cacheStorage)
+  private final boolean _saveInBackground;
+
+  public CachedDownloader(IDownloader downloader, IStorage cacheStorage, boolean saveInBackground)
   {
 	  _downloader = downloader;
 	  _cacheStorage = cacheStorage;
 	  _requestsCounter = 0;
 	  _cacheHitsCounter = 0;
 	  _savesCounter = 0;
+	  _saveInBackground = saveInBackground;
 
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean saveInBackground() const
+  public final boolean saveInBackground()
+  {
+	return _saveInBackground;
   }
 
   public final void start()

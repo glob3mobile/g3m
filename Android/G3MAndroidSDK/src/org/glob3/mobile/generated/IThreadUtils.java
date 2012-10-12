@@ -6,9 +6,9 @@ public abstract class IThreadUtils
 
   public static void setInstance(IThreadUtils logger)
   {
-//    if (_instance != NULL) {
-//      printf("Warning, IThreadUtils instance set two times\n");
-//    }
+	//    if (_instance != NULL) {
+	//      printf("Warning, IThreadUtils instance set two times\n");
+	//    }
 	_instance = logger;
   }
 
@@ -23,5 +23,7 @@ public abstract class IThreadUtils
   }
 
   public abstract void invokeInRendererThread(GTask task, boolean autoDelete);
+
+  public abstract void invokeInBackground(GTask task, boolean autoDelete);
 
 }
