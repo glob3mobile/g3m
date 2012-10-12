@@ -150,10 +150,8 @@ public final class NativeGL_WebGL
                                        final boolean transpose,
                                        final MutableMatrix44D matrix) /*-{
 		var id = location.@org.glob3.mobile.specific.GLUniformID_WebGL::getId()();
-		//      var value = buffer.@org.glob3.mobile.specific.FloatBuffer_WebGL::getBuffer()();
 
-		var buffer = matrix
-				.@org.glob3.mobile.generated.MutableMatrix44D::getColumnMajorFloatBuffer();
+		var buffer = matrix.@org.glob3.mobile.generated.MutableMatrix44D::getColumnMajorFloatBuffer()();
 
 		var value = buffer.@org.glob3.mobile.specific.FloatBuffer_WebGL::getBuffer()();
 
