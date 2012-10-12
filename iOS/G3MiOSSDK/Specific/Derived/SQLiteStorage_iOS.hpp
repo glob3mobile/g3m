@@ -29,6 +29,9 @@ private:
   void showStatistics() const;
   
 public:
+  void rawSaveBuffer(NSString* name,
+                     NSData* contents);
+  
   SQLiteStorage_iOS(const std::string &databaseName);
   
   virtual ~SQLiteStorage_iOS() {
@@ -37,7 +40,8 @@ public:
   bool containsBuffer(const URL& url);
   
   void saveBuffer(const URL& url,
-                  const IByteBuffer* buffer);
+                  const IByteBuffer* buffer,
+                  bool saveInBackground);
   
   const IByteBuffer* readBuffer(const URL& url);
   
@@ -45,7 +49,8 @@ public:
   bool containsImage(const URL& url);
   
   void saveImage(const URL& url,
-                 const IImage* buffer);
+                 const IImage* buffer,
+                 bool saveInBackground);
   
   const IImage* readImage(const URL& url);
   
@@ -56,7 +61,7 @@ public:
   void onPause(const InitializationContext* ic) {
     
   }
-
+  
   bool isAvailable() {
     return _db != NULL;
   }

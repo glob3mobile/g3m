@@ -12,7 +12,18 @@
 #include "IThreadUtils.hpp"
 
 class ThreadUtils_iOS : public IThreadUtils {
+private:
+  dispatch_queue_t _backgroundQueue;
+  
 public:
+  
+  ThreadUtils_iOS() {
+    _backgroundQueue = dispatch_queue_create("G3M Background queue", NULL);
+  }
+  
+  ~ThreadUtils_iOS() {
+    dispatch_release(_backgroundQueue);
+  }
   
   void invokeInRendererThread(GTask* task,
                               bool autoDelete) {
@@ -24,6 +35,17 @@ public:
       }
     });
     
+  }
+  
+  
+  void invokeInBackground(GTask* task,
+                          bool autoDelete) {
+    dispatch_async( _backgroundQueue, ^{
+      task->run();
+      if (autoDelete) {
+        delete task;
+      }
+    });
   }
   
 };

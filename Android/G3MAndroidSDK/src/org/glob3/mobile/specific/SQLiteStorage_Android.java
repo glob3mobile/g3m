@@ -180,7 +180,7 @@ public final class SQLiteStorage_Android
       byte[] contents = image_android.getSourceBuffer();
       if (contents == null) {
          final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-         bitmap.compress(Bitmap.CompressFormat.PNG, 70, baos);
+         bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
          contents = baos.toByteArray();
       }
       else {

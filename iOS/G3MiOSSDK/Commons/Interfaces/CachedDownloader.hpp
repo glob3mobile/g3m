@@ -23,16 +23,24 @@ private:
   long _cacheHitsCounter;
   long _savesCounter;
   
+  const bool _saveInBackground;
+  
 public:
   CachedDownloader(IDownloader* downloader,
-                   IStorage*    cacheStorage) :
+                   IStorage*    cacheStorage,
+                   bool         saveInBackground) :
   _downloader(downloader),
   _cacheStorage(cacheStorage),
   _requestsCounter(0),
   _cacheHitsCounter(0),
-  _savesCounter(0)
+  _savesCounter(0),
+  _saveInBackground(saveInBackground)
   {
     
+  }
+  
+  bool saveInBackground() const {
+    return _saveInBackground;
   }
   
   void start();

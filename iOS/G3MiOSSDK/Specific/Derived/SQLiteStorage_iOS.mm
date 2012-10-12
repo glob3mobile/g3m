@@ -13,6 +13,8 @@
 #include "Image_iOS.hpp"
 #include "ILogger.hpp"
 
+#include "IThreadUtils.hpp"
+
 NSString* SQLiteStorage_iOS::getDBPath() const {
   
   NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -108,8 +110,46 @@ bool SQLiteStorage_iOS::containsBuffer(const URL& url) {
   return hasAny;
 }
 
+void SQLiteStorage_iOS::rawSaveBuffer(NSString* name,
+                                      NSData* contents) {
+  if (![_db executeNonQuery:@"INSERT OR REPLACE INTO buffer (name, contents) VALUES (?, ?)", name, contents]) {
+    printf("Can't save \"%s\"\n",  [name cStringUsingEncoding:NSUTF8StringEncoding ] );
+  }
+}
+
+class BufferSaverTask : public GTask {
+private:
+  SQLiteStorage_iOS* _storage;
+  NSString*          _name;
+  NSData*            _contents;
+  
+public:
+  BufferSaverTask(SQLiteStorage_iOS* storage,
+                  NSString* name,
+                  NSData* contents) :
+  _storage(storage),
+  _name(name),
+  _contents(contents) {
+    
+  }
+  
+  void run() {
+    _storage->rawSaveBuffer(_name, _contents);
+  }
+};
+
 void SQLiteStorage_iOS::saveBuffer(const URL& url,
-                                   const IByteBuffer* buffer) {
+                                   const IByteBuffer* buffer,
+                                   bool saveInBackground) {
+  //  const ByteBuffer_iOS* buffer_iOS = (const ByteBuffer_iOS*) buffer;
+  //
+  //  NSString* name = toNSString(url.getPath());
+  //  NSData* contents = [NSData dataWithBytes: buffer_iOS->getPointer()
+  //                                    length: buffer_iOS->size()];
+  //
+  //  if (![_db executeNonQuery:@"INSERT OR REPLACE INTO buffer (name, contents) VALUES (?, ?)", name, contents]) {
+  //    printf("Can't save \"%s\"\n", url.getPath().c_str());
+  //  }
   
   const ByteBuffer_iOS* buffer_iOS = (const ByteBuffer_iOS*) buffer;
   
@@ -117,8 +157,12 @@ void SQLiteStorage_iOS::saveBuffer(const URL& url,
   NSData* contents = [NSData dataWithBytes: buffer_iOS->getPointer()
                                     length: buffer_iOS->size()];
   
-  if (![_db executeNonQuery:@"INSERT OR REPLACE INTO buffer (name, contents) VALUES (?, ?)", name, contents]) {
-    printf("Can't save \"%s\"\n", url.getPath().c_str());
+  if (saveInBackground) {
+    IThreadUtils::instance()->invokeInBackground(new BufferSaverTask(this, name, contents),
+                                                 true);
+  }
+  else {
+    rawSaveBuffer(name, contents);
   }
 }
 
@@ -156,8 +200,8 @@ bool SQLiteStorage_iOS::containsImage(const URL& url) {
 }
 
 void SQLiteStorage_iOS::saveImage(const URL& url,
-                                  const IImage* image) {
-  
+                                  const IImage* image,
+                                  bool saveInBackground) {
   const Image_iOS* image_iOS = (const Image_iOS*) image;
   UIImage* uiImage = image_iOS->getUIImage();
   
@@ -171,8 +215,16 @@ void SQLiteStorage_iOS::saveImage(const URL& url,
     image_iOS->releaseSourceBuffer();
   }
   
-  if (![_db executeNonQuery:@"INSERT OR REPLACE INTO image (name, contents) VALUES (?, ?)", name, contents]) {
-    printf("Can't save \"%s\"\n", url.getPath().c_str());
+  //  if (![_db executeNonQuery:@"INSERT OR REPLACE INTO image (name, contents) VALUES (?, ?)", name, contents]) {
+  //    printf("Can't save \"%s\"\n", url.getPath().c_str());
+  //  }
+  
+  if (saveInBackground) {
+    IThreadUtils::instance()->invokeInBackground(new BufferSaverTask(this, name, contents),
+                                                 true);
+  }
+  else {
+    rawSaveBuffer(name, contents);
   }
 }
 

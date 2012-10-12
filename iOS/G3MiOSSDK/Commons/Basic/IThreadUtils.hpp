@@ -23,26 +23,29 @@ public:
 class IThreadUtils {
 private:
   static IThreadUtils* _instance;
-
+  
 public:
   
   static void setInstance(IThreadUtils* logger) {
-//    if (_instance != NULL) {
-//      printf("Warning, IThreadUtils instance set two times\n");
-//    }
+    //    if (_instance != NULL) {
+    //      printf("Warning, IThreadUtils instance set two times\n");
+    //    }
     _instance = logger;
   }
   
   static IThreadUtils* instance() {
     return _instance;
   }
-
+  
   virtual ~IThreadUtils() {
     
   }
   
   virtual void invokeInRendererThread(GTask* task,
                                       bool autoDelete) = 0;
+  
+  virtual void invokeInBackground(GTask* task,
+                                  bool autoDelete) = 0;
   
 };
 

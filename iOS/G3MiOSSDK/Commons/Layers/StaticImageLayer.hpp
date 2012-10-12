@@ -22,18 +22,24 @@ private:
   const IImage*     _image;
   const std::string _layerID;
   IStorage* const   _storage;
+  
+  const bool _saveInBackground;
+  
 public:
   
   StaticImageLayer(std::string layerID,
                    IImage* image,
                    const Sector& sector,
                    IStorage* storage,
-                   LayerCondition* condition):
+                   LayerCondition* condition,
+                   bool saveInBackground):
   Layer(condition),
   _image(image),
   _sector(sector),
   _layerID(layerID),
-  _storage(storage) {
+  _storage(storage),
+  _saveInBackground(saveInBackground)
+  {
     
   }
   

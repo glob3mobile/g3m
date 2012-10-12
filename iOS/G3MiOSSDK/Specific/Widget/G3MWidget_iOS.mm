@@ -132,8 +132,10 @@
   GL* gl = new GL(nGL);
   
   IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
+  const bool saveInBackground = true;
   IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
-                                                 storage);
+                                                 storage,
+                                                 saveInBackground);
   
   CompositeRenderer* composite = new CompositeRenderer();
   
