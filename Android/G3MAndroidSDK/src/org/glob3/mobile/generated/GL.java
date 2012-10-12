@@ -667,7 +667,7 @@ public class GL
 
   public final void transformTexCoords(Vector2D scale, Vector2D translation)
   {
-	transformTexCoords((float) scale.x(), (float) scale.y(), (float) translation.x(), (float) translation.y());
+	transformTexCoords((float) scale._x, (float) scale._y, (float) translation._x, (float) translation._y);
   }
 
   public final void transformTexCoords(MutableVector2D scale, MutableVector2D translation)

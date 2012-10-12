@@ -97,7 +97,7 @@ public class Sector
 	final double diff = _deltaLongitude.div(that._deltaLongitude);
 	final Vector2D uv = that.getUVCoordinates(_lower);
 
-	return new Vector2D(uv.x(), uv.y() - diff);
+	return new Vector2D(uv._x, uv._y - diff);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

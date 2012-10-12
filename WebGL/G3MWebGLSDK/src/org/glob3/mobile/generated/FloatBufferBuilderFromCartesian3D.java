@@ -9,9 +9,9 @@ public class FloatBufferBuilderFromCartesian3D extends FloatBufferBuilder
 
   private void setCenter(Vector3D center)
   {
-	_cx = (float)center.x();
-	_cy = (float)center.y();
-	_cz = (float)center.z();
+	_cx = (float)center._x;
+	_cy = (float)center._y;
+	_cz = (float)center._z;
   }
 
 
@@ -23,7 +23,7 @@ public class FloatBufferBuilderFromCartesian3D extends FloatBufferBuilder
 
   public final void add(Vector3D vector)
   {
-	add((float) vector.x(), (float) vector.y(), (float) vector.z());
+	add((float) vector._x, (float) vector._y, (float) vector._z);
   }
 
   public final void add(double x, double y, double z)

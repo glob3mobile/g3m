@@ -468,9 +468,9 @@ public class MutableMatrix44D
     
 	  int TODO_Remove_UNPROJECT; //!!!!
     
-	  final double winx = pixel3D.x();
-	  final double winy = pixel3D.y();
-	  final double winz = pixel3D.z();
+	  final double winx = pixel3D._x;
+	  final double winy = pixel3D._y;
+	  final double winz = pixel3D._z;
     
 	  final double in0 = (winx - vpLeft) * 2 / vpWidth - 1.0;
 	  final double in1 = (winy - vpTop) * 2 / vpHeight - 1.0;
@@ -504,9 +504,9 @@ public class MutableMatrix44D
 //ORIGINAL LINE: Vector2D project(const Vector3D& point, const int vpLeft, const int vpTop, const int vpWidth, const int vpHeight) const
 	public final Vector2D project(Vector3D point, int vpLeft, int vpTop, int vpWidth, int vpHeight)
 	{
-	  final double in0 = point.x();
-	  final double in1 = point.y();
-	  final double in2 = point.z();
+	  final double in0 = point._x;
+	  final double in1 = point._y;
+	  final double in2 = point._z;
 	  final double in3 = 1.0;
     
 	  //Transformating point
@@ -532,7 +532,7 @@ public class MutableMatrix44D
 
 	public static MutableMatrix44D createTranslationMatrix(Vector3D t)
 	{
-	  return new MutableMatrix44D(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, t.x(), t.y(), t.z(), 1);
+	  return new MutableMatrix44D(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, t._x, t._y, t._z, 1);
     
 	}
 
@@ -543,8 +543,7 @@ public class MutableMatrix44D
 	  final double c = angle.cosinus();
 	  final double s = angle.sinus();
     
-	  return new MutableMatrix44D(p0.x() * p0.x() * (1 - c) + c, p0.x() * p0.y() * (1 - c) + p0.z() * s, p0.x() * p0.z() * (1 - c) - p0.y() * s, 0, p0.y() * p0.x() * (1 - c) - p0.z() * s, p0.y() * p0.y() * (1 - c) + c, p0.y() * p0.z() * (1 - c) + p0.x() * s, 0, p0.x() * p0.z() * (1 - c) + p0.y() * s, p0.y() * p0.z() * (1 - c) - p0.x() * s, p0.z() * p0.z() * (1 - c) + c, 0, 0, 0, 0, 1);
-    
+	  return new MutableMatrix44D(p0._x * p0._x * (1 - c) + c, p0._x * p0._y * (1 - c) + p0._z * s, p0._x * p0._z * (1 - c) - p0._y * s, 0, p0._y * p0._x * (1 - c) - p0._z * s, p0._y * p0._y * (1 - c) + c, p0._y * p0._z * (1 - c) + p0._x * s, 0, p0._x * p0._z * (1 - c) + p0._y * s, p0._y * p0._z * (1 - c) - p0._x * s, p0._z * p0._z * (1 - c) + c, 0, 0, 0, 0, 1);
 	}
 
 	public static MutableMatrix44D createGeneralRotationMatrix(Angle angle, Vector3D axis, Vector3D point)

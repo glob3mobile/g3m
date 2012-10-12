@@ -47,7 +47,7 @@ public class DummyRenderer extends Renderer
 	// create vertices
   
 	if (ic != null && ic.getPlanet() != null)
-	  _halfSize = ic.getPlanet().getRadii().x() / 2.0;
+	  _halfSize = ic.getPlanet().getRadii()._x / 2.0;
 	else
 	  _halfSize = 7e6;
   

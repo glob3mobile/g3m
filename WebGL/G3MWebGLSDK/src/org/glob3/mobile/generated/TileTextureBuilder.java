@@ -113,7 +113,7 @@ public class TileTextureBuilder extends RCObject
 	final double widthFactor = imageSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
 	final double heightFactor = imageSector.getDeltaLatitude().div(wholeSector.getDeltaLatitude());
 
-	return new Rectangle(lowerFactor.x() * textureWidth, (1.0 - lowerFactor.y()) * textureHeight, widthFactor * textureWidth, heightFactor * textureHeight);
+	return new Rectangle(lowerFactor._x * textureWidth, (1.0 - lowerFactor._y) * textureHeight, widthFactor * textureWidth, heightFactor * textureHeight);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

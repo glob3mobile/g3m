@@ -84,10 +84,10 @@ public class SingleImageTileTexturizer extends TileTexturizer
 		final Vector3D m = rc.getPlanet().toCartesian(mercg);
 		final Vector3D n = rc.getPlanet().centricSurfaceNormal(m);
   
-		final double s = IMathUtils.instance().atan2(n.y(), n.x()) / (IMathUtils.instance().pi() * 2) + 0.5;
+		final double s = IMathUtils.instance().atan2(n._y, n._x) / (IMathUtils.instance().pi() * 2) + 0.5;
   
 		//double t = (tLatRad*sec + M_PI/2.0)/M_PI ;
-		double t = IMathUtils.instance().asin(n.z()) / IMathUtils.instance().pi() + 0.5;
+		double t = IMathUtils.instance().asin(n._z) / IMathUtils.instance().pi() + 0.5;
 		//texCoors.push_back(MutableVector2D(s, 1-t));
 		texCoors.add((float)s, (float)(1.0-t));
   
@@ -99,8 +99,8 @@ public class SingleImageTileTexturizer extends TileTexturizer
 		//double t = asin(n.z()) / M_PI + 0.5 ;
 		//texCoors.push_back(MutableVector2D(s, 1-t));
   
-		final double s = IMathUtils.instance().atan2(n.y(), n.x()) / (IMathUtils.instance().pi() * 2) + 0.5;
-		final double t = IMathUtils.instance().asin(n.z()) / IMathUtils.instance().pi() + 0.5;
+		final double s = IMathUtils.instance().atan2(n._y, n._x) / (IMathUtils.instance().pi() * 2) + 0.5;
+		final double t = IMathUtils.instance().asin(n._z) / IMathUtils.instance().pi() + 0.5;
   
 		texCoors.add((float)s, (float)(1.0-t));
 	  }

@@ -95,7 +95,7 @@ public class CameraRotationHandler extends CameraEventHandler
 	Vector2D pixel1 = touchEvent.getTouch(1).getPos();
 	Vector2D pixel2 = touchEvent.getTouch(2).getPos();
 	Vector2D averagePixel = pixel0.add(pixel1).add(pixel2).div(3);
-	_initialPixel = new MutableVector3D(averagePixel.x(), averagePixel.y(), 0);
+	_initialPixel = new MutableVector3D(averagePixel._x, averagePixel._y, 0);
 	lastYValid = _initialPixel.y();
   
 	// compute center of view
@@ -126,7 +126,7 @@ public class CameraRotationHandler extends CameraEventHandler
 	// vertical rotation around normal vector to globe
 	Camera camera = cameraContext.getNextCamera();
 	camera.copyFrom(_camera0);
-	Angle angle_v = Angle.fromDegrees((_initialPixel.x()-cm.x())*0.25);
+	Angle angle_v = Angle.fromDegrees((_initialPixel.x()-cm._x)*0.25);
 	camera.rotateWithAxisAndPoint(normal, _initialPoint.asVector3D(), angle_v);
   
 	// compute angle between normal and view direction
@@ -135,7 +135,7 @@ public class CameraRotationHandler extends CameraEventHandler
 	double initialAngle = IMathUtils.instance().acos(dot) / IMathUtils.instance().pi() * 180;
   
 	// rotate more than 85 degrees or less than 0 degrees is not allowed
-	double delta = (cm.y() - _initialPixel.y()) * 0.25;
+	double delta = (cm._y - _initialPixel.y()) * 0.25;
 	double finalAngle = initialAngle + delta;
 	if (finalAngle > 85)
 		delta = 85 - initialAngle;

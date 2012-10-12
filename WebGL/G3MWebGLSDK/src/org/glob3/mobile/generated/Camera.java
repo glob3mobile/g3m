@@ -115,7 +115,7 @@ public class Camera
 	  final Vector3D p2 = new Vector3D(new Vector3D(data._right/4, data._bottom/4, -data._znear-10).transformedBy(inversed, 1));
 	  final Vector3D p3 = new Vector3D(new Vector3D(data._right/4, data._top/4, -data._znear-10).transformedBy(inversed, 1));
   
-	  float[] v = { (float) p0.x(), (float) p0.y(), (float) p0.z(), (float) p1.x(), (float) p1.y(), (float) p1.z(), (float) p2.x(), (float) p2.y(), (float) p2.z(), (float) p3.x(), (float) p3.y(), (float) p3.z()};
+	  float[] v = { (float) p0._x, (float) p0._y, (float) p0._z, (float) p1._x, (float) p1._y, (float) p1._z, (float) p2._x, (float) p2._y, (float) p2._z, (float) p3._x, (float) p3._y, (float) p3._z };
 	  int[] i = {0, 1, 2, 3};
   
 	  FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
@@ -147,8 +147,8 @@ public class Camera
 //ORIGINAL LINE: Vector3D pixel2Ray(const Vector2D& pixel) const
   public final Vector3D pixel2Ray(Vector2D pixel)
   {
-	final int px = (int) pixel.x();
-	final int py = _height - (int) pixel.y();
+	final int px = (int) pixel._x;
+	final int py = _height - (int) pixel._y;
 	final Vector3D pixel3D = new Vector3D(px, py, 0);
   
 	final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _width, _height);
@@ -178,7 +178,7 @@ public class Camera
 	  return p;
 	}
   
-	return new Vector2D(p.x(), _height-p.y());
+	return new Vector2D(p._x, _height-p._y);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

@@ -74,33 +74,21 @@ public class Vector4D
 	return (_x == 0) && (_y == 0) && (_z == 0) && (_w == 0);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double x() const
-  public final double x()
-  {
-	return _x;
-  }
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double y() const
-  public final double y()
-  {
-	return _y;
-  }
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double z() const
-  public final double z()
-  {
-	return _z;
-  }
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double w() const
-  public final double w()
-  {
-	return _w;
-  }
+//  double x() const {
+//    return _x;
+//  }
+//  
+//  double y() const {
+//    return _y;
+//  }
+//  
+//  double z() const {
+//    return _z;
+//  }
+//  
+//  double w() const {
+//    return _w;
+//  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: const String description() const

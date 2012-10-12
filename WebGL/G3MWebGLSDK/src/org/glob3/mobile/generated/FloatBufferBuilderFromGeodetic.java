@@ -20,9 +20,9 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
 
   private void setCenter(Vector3D center)
   {
-	_cx = (float)center.x();
-	_cy = (float)center.y();
-	_cz = (float)center.z();
+	_cx = (float)center._x;
+	_cy = (float)center._y;
+	_cz = (float)center._z;
   }
 
   private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
@@ -53,9 +53,9 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
   {
 	final Vector3D vector = _planet.toCartesian(g);
 
-	float x = (float) vector.x();
-	float y = (float) vector.y();
-	float z = (float) vector.z();
+	float x = (float) vector._x;
+	float y = (float) vector._y;
+	float z = (float) vector._z;
 
 	if (_centerStrategy == CenterStrategy.firstVertex() && _values.size() == 0)
 	{
@@ -78,9 +78,9 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
   {
 	final Vector3D vector = _planet.toCartesian(g);
 
-	float x = (float) vector.x();
-	float y = (float) vector.y();
-	float z = (float) vector.z();
+	float x = (float) vector._x;
+	float y = (float) vector._y;
+	float z = (float) vector._z;
 
 	if (_centerStrategy == CenterStrategy.firstVertex() && _values.size() == 0)
 	{

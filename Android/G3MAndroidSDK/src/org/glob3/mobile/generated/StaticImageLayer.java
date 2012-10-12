@@ -88,9 +88,9 @@ public class StaticImageLayer extends Layer
 	final double heightUV = tileSector.getDeltaLatitude().degrees() / _sector.getDeltaLatitude().degrees();
   
 	final Vector2D p = _sector.getUVCoordinates(tileSector.lower());
-	final Vector2D pos = new Vector2D(p.x(), p.y() - heightUV);
+	final Vector2D pos = new Vector2D(p._x, p._y - heightUV);
   
-	Rectangle r = new Rectangle(pos.x() * _image.getWidth(), pos.y() * _image.getHeight(), widthUV * _image.getWidth(), heightUV * _image.getHeight());
+	Rectangle r = new Rectangle(pos._x * _image.getWidth(), pos._y * _image.getHeight(), widthUV * _image.getWidth(), heightUV * _image.getHeight());
   
 	final IImage subImage = _image.subImage(r);
   

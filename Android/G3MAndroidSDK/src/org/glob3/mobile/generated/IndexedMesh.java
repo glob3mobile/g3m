@@ -58,9 +58,9 @@ public class IndexedMesh extends Mesh
 	{
 	  final int p = i * 3;
   
-	  final double x = _vertices.get(p) + _center.x();
-	  final double y = _vertices.get(p+1) + _center.y();
-	  final double z = _vertices.get(p+2) + _center.z();
+	  final double x = _vertices.get(p) + _center._x;
+	  final double y = _vertices.get(p+1) + _center._y;
+	  final double z = _vertices.get(p+2) + _center._z;
   
 	  if (x < minx)
 		  minx = x;
@@ -214,7 +214,7 @@ public class IndexedMesh extends Mesh
   public final Vector3D getVertex(int i)
   {
 	final int p = i * 3;
-	return new Vector3D(_vertices.get(p) + _center.x(), _vertices.get(p+1) + _center.y(), _vertices.get(p+2) + _center.z());
+	return new Vector3D(_vertices.get(p) + _center._x, _vertices.get(p+1) + _center._y, _vertices.get(p+2) + _center._z);
   }
 
 }

@@ -23,12 +23,13 @@ package org.glob3.mobile.generated;
 
 public class Vector2D
 {
-  private final double _x;
-  private final double _y;
 
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//	Vector2D operator =(Vector2D v);
+//  Vector2D operator =(Vector2D v);
+
+  public final double _x;
+  public final double _y;
 
 
   public Vector2D(double x, double y)
@@ -40,8 +41,8 @@ public class Vector2D
 
   public Vector2D(Vector2D v)
   {
-	  _x = v.x();
-	  _y = v.y();
+	  _x = v._x;
+	  _y = v._y;
 
   }
 
@@ -121,19 +122,13 @@ public class Vector2D
 	return Angle.fromRadians(a);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double x() const
-  public final double x()
-  {
-	return _x;
-  }
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double y() const
-  public final double y()
-  {
-	return _y;
-  }
+  //  double x() const {
+  //    return _x;
+  //  }
+  //
+  //  double y() const {
+  //    return _y;
+  //  }
 
   public static Vector2D nan()
   {
