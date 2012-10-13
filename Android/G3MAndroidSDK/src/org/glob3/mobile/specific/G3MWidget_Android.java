@@ -277,7 +277,8 @@ public final class G3MWidget_Android
 
       final int connectTimeout = 60000;
       final int readTimeout = 60000;
-      _downloader = new CachedDownloader(new Downloader_Android(8, connectTimeout, readTimeout), _storage);
+      final boolean saveInBackground = true;
+      _downloader = new CachedDownloader(new Downloader_Android(8, connectTimeout, readTimeout), _storage, saveInBackground);
 
       final CompositeRenderer composite = new CompositeRenderer();
 
@@ -328,32 +329,14 @@ public final class G3MWidget_Android
 
       final IMathUtils math = new MathUtils_Android();
 
-      _g3mWidget = G3MWidget.create(frameTasksExecutor,
-                                    factory,
-                                    stringUtils,
-                                    threadUtils,
-                                    stringBuilder,
-                                    math,
-                                    logger,
-                                    gl,
-                                    texturesHandler,
-                                    textureBuilder,
-                                    _downloader,
-                                    planet,
-                                    _cameraConstraints,
-                                    composite,
-                                    busyRenderer,
-                                    scheduler,
-                                    width,
-                                    height,
-                                    Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1),
-                                    true,
-                                    false);
-//      final IJSONParser jsonParser = new JSONParser_Android();
-//
-//      _g3mWidget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, stringBuilder, math, jsonParser,
-//               logger, gl, texturesHandler, textureBuilder, _downloader, planet, _cameraConstraints, composite, busyRenderer,
-//               scheduler, width, height, Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false);
+      _g3mWidget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, stringBuilder, math, logger, gl,
+               texturesHandler, textureBuilder, _downloader, planet, _cameraConstraints, composite, busyRenderer, scheduler,
+               width, height, Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false);
+      //      final IJSONParser jsonParser = new JSONParser_Android();
+      //
+      //      _g3mWidget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, stringBuilder, math, jsonParser,
+      //               logger, gl, texturesHandler, textureBuilder, _downloader, planet, _cameraConstraints, composite, busyRenderer,
+      //               scheduler, width, height, Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false);
 
       _g3mWidget.setUserData(_userData);
    }

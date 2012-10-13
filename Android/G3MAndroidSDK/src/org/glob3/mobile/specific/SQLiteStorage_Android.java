@@ -127,15 +127,18 @@ public final class SQLiteStorage_Android
 
    @Override
    public void saveBuffer(final URL url,
-                          final IByteBuffer buffer) {
+                          final IByteBuffer buffer, final boolean saveInBackground) {
 
-      final byte[] data = ((ByteBuffer_Android) buffer).getBuffer().array();
+      totototo;
+      
+      final byte[] contents = ((ByteBuffer_Android) buffer).getBuffer().array();
+      final String name = url.getPath();
 
       final ContentValues values = new ContentValues();
-      values.put("name", url.getPath());
-      values.put("contents", data);
+      values.put("name", name);
+      values.put("contents", contents);
 
-      final long r = _db.insertWithOnConflict("entry", null, values, SQLiteDatabase.CONFLICT_REPLACE);
+      final long r = _db.insertWithOnConflict("buffer", null, values, SQLiteDatabase.CONFLICT_REPLACE);
       if (r == -1) {
          ILogger.instance().logError("SQL: Can't write in database \"%s\"\n", _databaseName);
       }
@@ -171,7 +174,10 @@ public final class SQLiteStorage_Android
 
    @Override
    public void saveImage(final URL url,
-                         final IImage image) {
+                         final IImage image, final boolean saveInBackground) {
+      
+      afdfasdfasdf;
+      
       //final ITimer timer = IFactory.instance().createTimer();
 
       final Image_Android image_android = (Image_Android) image;
@@ -187,8 +193,10 @@ public final class SQLiteStorage_Android
          image_android.releaseSourceBuffer();
       }
 
+      final String name = url.getPath();
+
       final ContentValues values = new ContentValues();
-      values.put("name", url.getPath());
+      values.put("name", name);
       values.put("contents", contents);
 
       final long r = _db.insertWithOnConflict("image", null, values, SQLiteDatabase.CONFLICT_REPLACE);

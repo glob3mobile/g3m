@@ -82,7 +82,7 @@
   //                                     NULL);
   //  layerSet->addLayer(political);
   
-  bool useBing = false;
+  bool useBing = true;
   if (useBing) {
     WMSLayer* bing = new WMSLayer("ve",
                                   URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?"),
@@ -96,8 +96,8 @@
     layerSet->addLayer(bing);
   }
   
-  bool useOSMLatLon = true;
-  if (useOSMLatLon) {
+  bool useOSM = false;
+  if (useOSM) {
 //    WMSLayer *osm = new WMSLayer("osm",
 //                                 URL("http://wms.latlon.org/"),
 //                                 WMS_1_1_0,

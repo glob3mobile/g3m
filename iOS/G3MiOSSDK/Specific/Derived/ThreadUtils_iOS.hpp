@@ -13,16 +13,23 @@
 
 class ThreadUtils_iOS : public IThreadUtils {
 private:
-  dispatch_queue_t _backgroundQueue;
+  //  dispatch_queue_t _backgroundQueue;
+  NSOperationQueue* _backgroundQueue;
   
 public:
   
   ThreadUtils_iOS() {
-    _backgroundQueue = dispatch_queue_create("G3M Background queue", NULL);
+    //    _backgroundQueue = dispatch_queue_create("com.glob3.backgroundqueue", NULL);
+    _backgroundQueue = [[NSOperationQueue alloc] init];
+    
+    [_backgroundQueue setMaxConcurrentOperationCount: 1];
+    [_backgroundQueue setName:@"com.glob3.backgroundqueue"];
   }
   
   ~ThreadUtils_iOS() {
-    dispatch_release(_backgroundQueue);
+    [_backgroundQueue waitUntilAllOperationsAreFinished];
+    
+    //    dispatch_release(_backgroundQueue);
   }
   
   void invokeInRendererThread(GTask* task,
@@ -40,12 +47,23 @@ public:
   
   void invokeInBackground(GTask* task,
                           bool autoDelete) {
-    dispatch_async( _backgroundQueue, ^{
+    //    dispatch_async( _backgroundQueue, ^{
+    //      task->run();
+    //      if (autoDelete) {
+    //        delete task;
+    //      }
+    //    });
+    
+    
+    
+    
+    [ _backgroundQueue addOperationWithBlock:^{
       task->run();
       if (autoDelete) {
         delete task;
       }
-    });
+     }];
+    
   }
   
 };
