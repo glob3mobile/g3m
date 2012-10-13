@@ -5,10 +5,12 @@ package org.glob3.mobile.specific;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 
+import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IStorage;
+import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.InitializationContext;
 import org.glob3.mobile.generated.URL;
 
@@ -31,7 +33,8 @@ public final class SQLiteStorage_Android
 
 
    private final MySQLiteOpenHelper _dbHelper;
-   private SQLiteDatabase           _db;
+   private SQLiteDatabase           _writeDB;
+   private SQLiteDatabase           _readDB;
 
 
    private class MySQLiteOpenHelper
@@ -71,7 +74,7 @@ public final class SQLiteStorage_Android
 
    private String getPath() {
       File f = _context.getExternalCacheDir();
-      if (!f.exists()) {
+      if ((f == null) || !f.exists()) {
          f = _context.getCacheDir();
       }
       final String documentsDirectory = f.getAbsolutePath();
@@ -92,7 +95,8 @@ public final class SQLiteStorage_Android
 
 
       _dbHelper = new MySQLiteOpenHelper(context, getPath());
-      _db = _dbHelper.getWritableDatabase();
+      _writeDB = _dbHelper.getWritableDatabase();
+      _readDB = _dbHelper.getReadableDatabase();
 
       //      _db = SQLiteDatabase.openOrCreateDatabase(getPath(), null);
       //
@@ -118,7 +122,7 @@ public final class SQLiteStorage_Android
    @Override
    public boolean containsBuffer(final URL url) {
       final String name = url.getPath();
-      final Cursor cursor = _db.query("buffer", new String[] { "1" }, "name = ?", new String[] { name }, null, null, null);
+      final Cursor cursor = _readDB.query("buffer", new String[] { "1" }, "name = ?", new String[] { name }, null, null, null);
       final boolean hasAny = (cursor.getCount() > 0);
       cursor.close();
       return hasAny;
@@ -127,20 +131,40 @@ public final class SQLiteStorage_Android
 
    @Override
    public void saveBuffer(final URL url,
-                          final IByteBuffer buffer, final boolean saveInBackground) {
+                          final IByteBuffer buffer,
+                          final boolean saveInBackground) {
+      final String table = "buffer";
 
-      totototo;
-      
       final byte[] contents = ((ByteBuffer_Android) buffer).getBuffer().array();
       final String name = url.getPath();
 
+      if (saveInBackground) {
+         IThreadUtils.instance().invokeInBackground( //
+                  new GTask() {
+                     @Override
+                     public void run() {
+                        rawSave(table, name, contents);
+                     }
+                  }, //
+                  true //
+         );
+      }
+      else {
+         rawSave(table, name, contents);
+      }
+   }
+
+
+   private void rawSave(final String table,
+                        final String name,
+                        final byte[] contents) {
       final ContentValues values = new ContentValues();
       values.put("name", name);
       values.put("contents", contents);
 
-      final long r = _db.insertWithOnConflict("buffer", null, values, SQLiteDatabase.CONFLICT_REPLACE);
+      final long r = _writeDB.insertWithOnConflict(table, null, values, SQLiteDatabase.CONFLICT_REPLACE);
       if (r == -1) {
-         ILogger.instance().logError("SQL: Can't write in database \"%s\"\n", _databaseName);
+         ILogger.instance().logError("SQL: Can't write " + table + "in database \"%s\"\n", _databaseName);
       }
    }
 
@@ -149,7 +173,8 @@ public final class SQLiteStorage_Android
    public IByteBuffer readBuffer(final URL url) {
       final String name = url.getPath();
 
-      final Cursor cursor = _db.query("buffer", new String[] { "contents" }, "name = ?", new String[] { name }, null, null, null);
+      final Cursor cursor = _readDB.query("buffer", new String[] { "contents" }, "name = ?", new String[] { name }, null, null,
+               null);
 
       if (cursor.moveToFirst()) {
          final byte[] data = cursor.getBlob(0);
@@ -165,7 +190,7 @@ public final class SQLiteStorage_Android
    @Override
    public boolean containsImage(final URL url) {
       final String name = url.getPath();
-      final Cursor cursor = _db.query("image", new String[] { "1" }, "name = ?", new String[] { name }, null, null, null);
+      final Cursor cursor = _readDB.query("image", new String[] { "1" }, "name = ?", new String[] { name }, null, null, null);
       final boolean hasAny = (cursor.getCount() > 0);
       cursor.close();
       return hasAny;
@@ -174,10 +199,8 @@ public final class SQLiteStorage_Android
 
    @Override
    public void saveImage(final URL url,
-                         final IImage image, final boolean saveInBackground) {
-      
-      afdfasdfasdf;
-      
+                         final IImage image,
+                         final boolean saveInBackground) {
       //final ITimer timer = IFactory.instance().createTimer();
 
       final Image_Android image_android = (Image_Android) image;
@@ -193,16 +216,33 @@ public final class SQLiteStorage_Android
          image_android.releaseSourceBuffer();
       }
 
+      final String table = "image";
       final String name = url.getPath();
 
-      final ContentValues values = new ContentValues();
-      values.put("name", name);
-      values.put("contents", contents);
-
-      final long r = _db.insertWithOnConflict("image", null, values, SQLiteDatabase.CONFLICT_REPLACE);
-      if (r == -1) {
-         ILogger.instance().logError("SQL: Can't write image in database \"%s\"\n", _databaseName);
+      final byte[] contentsF = contents;
+      if (saveInBackground) {
+         IThreadUtils.instance().invokeInBackground( //
+                  new GTask() {
+                     @Override
+                     public void run() {
+                        rawSave(table, name, contentsF);
+                     }
+                  }, //
+                  true //
+         );
       }
+      else {
+         rawSave(table, name, contents);
+      }
+
+      //      final ContentValues values = new ContentValues();
+      //      values.put("name", name);
+      //      values.put("contents", contents);
+      //
+      //      final long r = _db.insertWithOnConflict(table, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+      //      if (r == -1) {
+      //         ILogger.instance().logError("SQL: Can't write " + table + " in database \"%s\"\n", _databaseName);
+      //      }
 
       //final TimeInterval elapsedTime = timer.elapsedTime();
       //System.out.println("** Saved image in " + elapsedTime.milliseconds() + "ms");
@@ -216,7 +256,8 @@ public final class SQLiteStorage_Android
 
       final String name = url.getPath();
 
-      final Cursor cursor = _db.query("image", new String[] { "contents" }, "name = ?", new String[] { name }, null, null, null);
+      final Cursor cursor = _readDB.query("image", new String[] { "contents" }, "name = ?", new String[] { name }, null, null,
+               null);
 
       if (cursor.moveToFirst()) {
          final byte[] data = cursor.getBlob(0);
@@ -235,17 +276,24 @@ public final class SQLiteStorage_Android
 
 
    public synchronized void close() {
-      if (_db != null) {
-         _db.close();
-         _db = null;
+      if (_readDB != null) {
+         _readDB.close();
+         _readDB = null;
+      }
+      if (_writeDB != null) {
+         _writeDB.close();
+         _writeDB = null;
       }
    }
 
 
    @Override
    public synchronized void onResume(final InitializationContext ic) {
-      if (_db == null) {
-         _db = _dbHelper.getWritableDatabase();
+      if (_writeDB == null) {
+         _writeDB = _dbHelper.getWritableDatabase();
+      }
+      if (_readDB == null) {
+         _readDB = _dbHelper.getReadableDatabase();
       }
    }
 
@@ -258,7 +306,7 @@ public final class SQLiteStorage_Android
 
    @Override
    public synchronized boolean isAvailable() {
-      return (_db != null);
+      return (_readDB != null) && (_writeDB != null);
    }
 
 }
