@@ -439,7 +439,7 @@ public final class G3MWidget_WebGL
       //      final IStorage storage = new IndexedDBStorage_WebGL();
       final IDownloader downloader = new Downloader_WebGL(8, _delayMillis, _proxy);
       final IStringUtils stringUtils = new StringUtils_WebGL();
-      final IThreadUtils threadUtils = new ThreadUtils_WebGL(this, _delayMillis);
+      final IThreadUtils threadUtils = new ThreadUtils_WebGL(_delayMillis);
 
       _webGLContext = jsGetWebGLContext();
       if (_webGLContext == null) {

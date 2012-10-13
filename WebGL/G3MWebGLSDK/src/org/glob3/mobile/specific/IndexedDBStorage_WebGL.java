@@ -25,16 +25,7 @@ public final class IndexedDBStorage_WebGL
 
    @Override
    public boolean containsBuffer(final URL url) {
-      // TODO Auto-generated method stub
       return false;
-   }
-
-
-   @Override
-   public void saveBuffer(final URL url,
-                          final IByteBuffer buffer) {
-      // TODO Auto-generated method stub
-
    }
 
 
@@ -47,37 +38,23 @@ public final class IndexedDBStorage_WebGL
 
    @Override
    public boolean containsImage(final URL url) {
-      // TODO Auto-generated method stub
       return false;
    }
 
 
    @Override
-   public void saveImage(final URL url,
-                         final IImage image) {
-      // TODO Auto-generated method stub
-
-   }
-
-
-   @Override
    public IImage readImage(final URL url) {
-      // TODO Auto-generated method stub
       return null;
    }
 
 
    @Override
    public void onResume(final InitializationContext ic) {
-      // TODO Auto-generated method stub
-
    }
 
 
    @Override
    public void onPause(final InitializationContext ic) {
-      // TODO Auto-generated method stub
-
    }
 
 
@@ -132,8 +109,21 @@ public final class IndexedDBStorage_WebGL
 
    @Override
    public boolean isAvailable() {
-      // TODO Auto-generated method stub
       return false;
+   }
+
+
+   @Override
+   public void saveBuffer(final URL url,
+                          final IByteBuffer buffer,
+                          final boolean saveInBackground) {
+   }
+
+
+   @Override
+   public void saveImage(final URL url,
+                         final IImage image,
+                         final boolean saveInBackground) {
    }
 
 }

@@ -3,7 +3,6 @@
 package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.GTask;
-import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IThreadUtils;
 
 import com.google.gwt.user.client.Timer;
@@ -13,35 +12,40 @@ public final class ThreadUtils_WebGL
          extends
             IThreadUtils {
 
-   private final int       _delayMillis;
-   private G3MWidget_WebGL _g3mWidget = null;
+   private final int _delayMillis;
 
 
-   public ThreadUtils_WebGL(final G3MWidget_WebGL w,
-                            final int delayMillis) {
-      _g3mWidget = w;
+   public ThreadUtils_WebGL(final int delayMillis) {
       _delayMillis = delayMillis;
+   }
+
+
+   private void invokeTask(final GTask task,
+                           final boolean autoDelete) {
+      final Timer timer = new Timer() {
+         @Override
+         public void run() {
+            task.run();
+            if (autoDelete) {
+               task.dispose();
+            }
+         }
+      };
+      timer.schedule(_delayMillis);
    }
 
 
    @Override
    public void invokeInRendererThread(final GTask task,
                                       final boolean autoDelete) {
-      if (_g3mWidget != null) {
-         final GTask t = task;
+      invokeTask(task, autoDelete);
+   }
 
-         final Timer timer = new Timer() {
-            @Override
-            public void run() {
-               t.run();
-            }
-         };
 
-         timer.schedule(_delayMillis);
-      }
-      else {
-         ILogger.instance().logError("ThreadUtils_WebGL: _g3mWidget is null");
-      }
+   @Override
+   public void invokeInBackground(final GTask task,
+                                  final boolean autoDelete) {
+      invokeTask(task, autoDelete);
    }
 
 }
