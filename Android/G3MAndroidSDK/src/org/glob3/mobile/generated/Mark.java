@@ -25,6 +25,10 @@ package org.glob3.mobile.generated;
 
 public class Mark
 {
+  private static Vector2D _textureTranslation ;
+  private static Vector2D _textureScale ;
+
+
   private final String _name;
   private final String _textureFilename;
   private final Geodetic3D _position ;
@@ -44,7 +48,6 @@ public class Mark
   private IFloatBuffer _vertices;
   private IFloatBuffer getVertices(Planet planet)
   {
-  
 	if (_vertices == null)
 	{
 	  final Vector3D pos = getCartesianPosition(planet);
@@ -99,29 +102,33 @@ public class Mark
 	return _position;
   }
 
+  public final void initialize(InitializationContext ic)
+  {
+  //  todo;
+  }
+
   public final void render(RenderContext rc, double minDistanceToCamera)
   {
 	final Camera camera = rc.getCurrentCamera();
 	final Planet planet = rc.getPlanet();
   
 	final Vector3D cameraPosition = camera.getCartesianPosition();
-	//  const Vector3D markPosition = planet->toCartesian(_position);
 	final Vector3D markPosition = getCartesianPosition(planet);
   
 	final Vector3D markCameraVector = markPosition.sub(cameraPosition);
-	final double distanceToCamera = markCameraVector.length();
+	//  const double distanceToCamera = markCameraVector.length();
+	//  const bool renderMark = distanceToCamera <= minDistanceToCamera;
+	final boolean renderMark = true;
   
-	if (distanceToCamera <= minDistanceToCamera || true)
+	if (renderMark)
 	{
 	  final Vector3D normalAtMarkPosition = planet.geodeticSurfaceNormal(markPosition);
   
-	  if (normalAtMarkPosition.angleBetween(markCameraVector).radians() > IMathUtils.instance().pi() / 2)
+	  if (normalAtMarkPosition.angleBetween(markCameraVector).radians() > IMathUtils.instance().halfPi())
 	  {
 		GL gl = rc.getGL();
   
-		Vector2D tr = new Vector2D(0.0,0.0);
-		Vector2D scale = new Vector2D(1.0,1.0);
-		gl.transformTexCoords(scale, tr);
+		gl.transformTexCoords(_textureScale, _textureTranslation);
   
 		if (_textureId == null)
 		{
@@ -135,15 +142,25 @@ public class Mark
 		if (_textureId == null)
 		{
 		  rc.getLogger().logError("Can't load file %s", _textureFilename);
-		  return;
 		}
-  
-		//    rc->getLogger()->logInfo(" Visible   << %f %f", minDist, distanceToCamera);
-		gl.drawBillBoard(_textureId, getVertices(planet), camera.getViewPortRatio());
+		else
+		{
+		  gl.drawBillBoard(_textureId, getVertices(planet), camera.getViewPortRatio());
+		}
 	  }
-  
 	}
   
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isReady() const
+  public final boolean isReady()
+  {
+  //  todo;
+  }
+
 }
+//C++ TO JAVA CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
+Vector2D Mark._textureTranslation(0.0, 0.0);
+//C++ TO JAVA CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
+Vector2D Mark._textureScale(1.0, 1.0);
