@@ -177,7 +177,7 @@
   
   if (true) {
     // marks renderer
-    const bool readyWhenMarksReady = true;
+    const bool readyWhenMarksReady = false;
     MarksRenderer* marks = new MarksRenderer(readyWhenMarksReady);
     renderers.push_back(marks);
     

@@ -19,12 +19,38 @@ package org.glob3.mobile.generated;
 
 public class MarksRenderer extends Renderer
 {
+  private boolean _readyWhenMarksReady;
   private java.util.ArrayList<Mark> _marks = new java.util.ArrayList<Mark>();
 
+  private final InitializationContext _initializationContext;
+
+
+  public MarksRenderer(boolean readyWhenMarksReady)
+  {
+	  _readyWhenMarksReady = readyWhenMarksReady;
+	  _initializationContext = null;
+  }
+
+  public void dispose()
+  {
+	int marksSize = _marks.size();
+	for (int i = 0; i < marksSize; i++)
+	{
+	  if (_marks.get(i) != null)
+		  _marks.get(i).dispose();
+	}
+  }
 
   public void initialize(InitializationContext ic)
   {
+	_initializationContext = ic;
   
+	int marksSize = _marks.size();
+	for (int i = 0; i < marksSize; i++)
+	{
+	  Mark mark = _marks.get(i);
+	  mark.initialize(_initializationContext);
+	}
   }
 
   public void render(RenderContext rc)
@@ -48,7 +74,10 @@ public class MarksRenderer extends Renderer
 	  Mark mark = _marks.get(i);
 	  //rc->getLogger()->logInfo("Rendering Mark: \"%s\"", mark->getName().c_str());
   
-	  mark.render(rc, minDistanceToCamera);
+	  if (mark.isReady())
+	  {
+		mark.render(rc, minDistanceToCamera);
+	  }
 	}
   
 	gl.enableDepthTest();
@@ -57,22 +86,15 @@ public class MarksRenderer extends Renderer
 	gl.disableTextures();
 	gl.disableVerticesPosition();
 	gl.disableTexture2D();
-  
-  }
-
-  public void dispose()
-  {
-	int marksSize = _marks.size();
-	for (int i = 0; i < marksSize; i++)
-	{
-	  if (_marks.get(i) != null)
-		  _marks.get(i).dispose();
-	}
   }
 
   public final void addMark(Mark mark)
   {
 	_marks.add(mark);
+	if (_initializationContext != null)
+	{
+	  mark.initialize(_initializationContext);
+	}
   }
 
   public boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
@@ -87,6 +109,18 @@ public class MarksRenderer extends Renderer
 
   public final boolean isReadyToRender(RenderContext rc)
   {
+	if (_readyWhenMarksReady)
+	{
+	  int marksSize = _marks.size();
+	  for (int i = 0; i < marksSize; i++)
+	  {
+		if (!_marks.get(i).isReady())
+		{
+		  return false;
+		}
+	  }
+	}
+  
 	return true;
   }
 
