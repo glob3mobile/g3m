@@ -19,18 +19,17 @@ package org.glob3.mobile.generated;
 
 
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IImage;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IFloatBuffer;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IGLTextureId;
 
 public class Mark
 {
-  private static Vector2D _textureTranslation ;
-  private static Vector2D _textureScale ;
-
 
   private final String _name;
-  private final String _textureFilename;
+  private final URL _textureURL = new URL();
   private final Geodetic3D _position ;
 
   private IGLTextureId _textureId;
@@ -63,14 +62,19 @@ public class Mark
 	return _vertices;
   }
 
-  public Mark(String name, String textureFilename, Geodetic3D position)
+  private boolean _textureSolved;
+  private IImage _textureImage;
+
+  public Mark(String name, URL textureURL, Geodetic3D position)
   {
 	  _name = name;
-	  _textureFilename = textureFilename;
+	  _textureURL = new URL(textureURL);
 	  _position = new Geodetic3D(position);
 	  _textureId = null;
 	  _cartesianPosition = null;
 	  _vertices = null;
+	  _textureSolved = false;
+	  _textureImage = null;
 
   }
 
@@ -104,9 +108,19 @@ public class Mark
 
   public final void initialize(InitializationContext ic)
   {
-  //  todo;
+	//  todo;
+	if (!_textureSolved)
+	{
+	  IDownloader downloader = ic.getDownloader();
+  
+	  downloader.requestImage(_textureURL, 1000000, new TextureDownloadListener(this), true);
+	}
   }
 
+//C++ TO JAVA CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in Java):
+  private Vector2D render_textureTranslation = new Vector2D(0.0, 0.0);
+//C++ TO JAVA CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in Java):
+  private Vector2D render_textureScale = new Vector2D(1.0, 1.0);
   public final void render(RenderContext rc, double minDistanceToCamera)
   {
 	final Camera camera = rc.getCurrentCamera();
@@ -128,22 +142,33 @@ public class Mark
 	  {
 		GL gl = rc.getGL();
   
-		gl.transformTexCoords(_textureScale, _textureTranslation);
+//C++ TO JAVA CONVERTER NOTE: This static local variable declaration (not allowed in Java) has been moved just prior to the method:
+//		static Vector2D textureTranslation(0.0, 0.0);
+//C++ TO JAVA CONVERTER NOTE: This static local variable declaration (not allowed in Java) has been moved just prior to the method:
+//		static Vector2D textureScale(1.0, 1.0);
+		gl.transformTexCoords(render_textureScale, render_textureTranslation);
   
 		if (_textureId == null)
 		{
-		  IImage image = rc.getFactory().createImageFromFileName(_textureFilename);
+		  //        IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
+		  //
+		  //        _textureId = rc->getTexturesHandler()->getGLTextureId(image,
+		  //                                                              GLFormat::rgba(),
+		  //                                                              _textureFilename,
+		  //                                                              false);
+		  //
+		  //        rc->getFactory()->deleteImage(image);
   
-		  _textureId = rc.getTexturesHandler().getGLTextureId(image, GLFormat.rgba(), _textureFilename, false);
+		  if (_textureImage != null)
+		  {
+			_textureId = rc.getTexturesHandler().getGLTextureId(_textureImage, GLFormat.rgba(), _textureURL.getPath(), false);
   
-		  rc.getFactory().deleteImage(image);
+			rc.getFactory().deleteImage(_textureImage);
+			_textureImage = null;
+		  }
 		}
   
-		if (_textureId == null)
-		{
-		  rc.getLogger().logError("Can't load file %s", _textureFilename);
-		}
-		else
+		if (_textureId != null)
 		{
 		  gl.drawBillBoard(_textureId, getVertices(planet), camera.getViewPortRatio());
 		}
@@ -156,11 +181,21 @@ public class Mark
 //ORIGINAL LINE: boolean isReady() const
   public final boolean isReady()
   {
-  //  todo;
+	return _textureSolved;
+  }
+
+
+  public final void onTextureDownloadError()
+  {
+	_textureSolved = true;
+  
+	ILogger.instance().logError("Can't load image \"%s\"", _textureURL.getPath());
+  }
+
+  public final void onTextureDownload(IImage image)
+  {
+	_textureSolved = true;
+	_textureImage = image.shallowCopy();
   }
 
 }
-//C++ TO JAVA CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
-Vector2D Mark._textureTranslation(0.0, 0.0);
-//C++ TO JAVA CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
-Vector2D Mark._textureScale(1.0, 1.0);
