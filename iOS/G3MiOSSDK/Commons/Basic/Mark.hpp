@@ -20,9 +20,13 @@ class IGLTextureId;
 
 class Mark {
 private:
-  const std::string  _name;
-  const std::string  _textureFilename;
-  const Geodetic3D   _position;
+  static Vector2D _textureTranslation;
+  static Vector2D _textureScale;
+  
+  
+  const std::string _name;
+  const std::string _textureFilename;
+  const Geodetic3D  _position;
   
 #ifdef C_CODE
   const IGLTextureId* _textureId;
@@ -33,10 +37,10 @@ private:
   
   Vector3D* _cartesianPosition;
   Vector3D* getCartesianPosition(const Planet* planet);
-
+  
   IFloatBuffer* _vertices;
   IFloatBuffer* getVertices(const Planet* planet);
-
+  
 public:
   Mark(const std::string name,
        const std::string textureFilename,
@@ -61,8 +65,12 @@ public:
     return _position;
   }
   
+  void initialize(const InitializationContext* ic);
+  
   void render(const RenderContext* rc,
               const double minDistanceToCamera);
+  
+  bool isReady() const;
   
 };
 

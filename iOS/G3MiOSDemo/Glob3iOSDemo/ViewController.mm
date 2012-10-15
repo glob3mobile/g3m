@@ -177,7 +177,8 @@
   
   if (true) {
     // marks renderer
-    MarksRenderer* marks = new MarksRenderer();
+    const bool readyWhenMarksReady = true;
+    MarksRenderer* marks = new MarksRenderer(readyWhenMarksReady);
     renderers.push_back(marks);
     
     Mark* m1 = new Mark("Fuerteventura",

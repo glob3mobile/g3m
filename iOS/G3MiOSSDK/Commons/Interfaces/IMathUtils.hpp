@@ -44,6 +44,7 @@ public:
   virtual ~IMathUtils(){}
   
   virtual double pi() const = 0;
+  virtual double halfPi() const = 0;
   
   virtual bool isNan(double v) const = 0;
   virtual bool isNan(float v) const = 0;

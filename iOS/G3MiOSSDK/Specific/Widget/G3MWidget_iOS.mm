@@ -124,10 +124,10 @@
   int height = (int) [self frame].size.height;
   
   IStringBuilder* stringBuilder = new StringBuilder_iOS();
-  IMathUtils*     mathUtils = new MathUtils_iOS();
-  IFactory*       factory  = new Factory_iOS();
-  ILogger*        logger    = new Logger_iOS(ErrorLevel);
-  NativeGL2_iOS*  nGL = new NativeGL2_iOS();
+  IMathUtils*     mathUtils     = new MathUtils_iOS();
+  IFactory*       factory       = new Factory_iOS();
+  ILogger*        logger        = new Logger_iOS(ErrorLevel);
+  NativeGL2_iOS*  nGL           = new NativeGL2_iOS();
 
   GL* gl = new GL(nGL);
   

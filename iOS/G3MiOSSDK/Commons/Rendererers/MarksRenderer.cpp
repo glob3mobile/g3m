@@ -11,12 +11,38 @@
 #include "GL.hpp"
 
 void MarksRenderer::initialize(const InitializationContext* ic) {
+  _initializationContext = ic;
   
+  int marksSize = _marks.size();
+  for (int i = 0; i < marksSize; i++) {
+    Mark* mark = _marks[i];
+    mark->initialize(_initializationContext);
+  }
+}
+
+void MarksRenderer::addMark(Mark* mark) {
+  _marks.push_back(mark);
+  if (_initializationContext != NULL) {
+    mark->initialize(_initializationContext);
+  }
 }
 
 bool MarksRenderer::onTouchEvent(const EventContext* ec,
                                  const TouchEvent* touchEvent) {
   return false;
+}
+
+bool MarksRenderer::isReadyToRender(const RenderContext* rc) {
+  if (_readyWhenMarksReady) {
+    int marksSize = _marks.size();
+    for (int i = 0; i < marksSize; i++) {
+      if (!_marks[i]->isReady()) {
+        return false;
+      }
+    }
+  }
+  
+  return true;
 }
 
 void MarksRenderer::render(const RenderContext* rc) {
@@ -38,7 +64,9 @@ void MarksRenderer::render(const RenderContext* rc) {
     Mark* mark = _marks[i];
     //rc->getLogger()->logInfo("Rendering Mark: \"%s\"", mark->getName().c_str());
     
-    mark->render(rc, minDistanceToCamera);
+    if (mark->isReady()) {
+      mark->render(rc, minDistanceToCamera);
+    }
   }
   
   gl->enableDepthTest();
@@ -46,6 +74,5 @@ void MarksRenderer::render(const RenderContext* rc) {
   
   gl->disableTextures();
   gl->disableVerticesPosition();
-  gl->disableTexture2D();
-  
+  gl->disableTexture2D(); 
 }

@@ -16,6 +16,16 @@
 
 #include "IGLTextureId.hpp"
 
+Vector2D Mark::_textureTranslation(0.0, 0.0);
+Vector2D Mark::_textureScale(1.0, 1.0);
+
+void Mark::initialize(const InitializationContext* ic) {
+//  todo;
+}
+
+bool Mark::isReady() const {
+//  todo;
+}
 
 Mark::~Mark() {
   if (_cartesianPosition != NULL) {
@@ -34,7 +44,6 @@ Vector3D* Mark::getCartesianPosition(const Planet* planet) {
 }
 
 IFloatBuffer* Mark::getVertices(const Planet* planet) {
-  
   if (_vertices == NULL) {
     const Vector3D* pos = getCartesianPosition(planet);
     
@@ -55,42 +64,41 @@ void Mark::render(const RenderContext* rc,
   const Planet* planet = rc->getPlanet();
   
   const Vector3D cameraPosition = camera->getCartesianPosition();
-  //  const Vector3D markPosition = planet->toCartesian(_position);
   const Vector3D* markPosition = getCartesianPosition(planet);
   
   const Vector3D markCameraVector = markPosition->sub(cameraPosition);
-  const double distanceToCamera = markCameraVector.length();
+  //  const double distanceToCamera = markCameraVector.length();
+  //  const bool renderMark = distanceToCamera <= minDistanceToCamera;
+  const bool renderMark = true;
   
-  if (distanceToCamera <= minDistanceToCamera || true) {
+  if (renderMark) {
     const Vector3D normalAtMarkPosition = planet->geodeticSurfaceNormal(*markPosition);
     
-    if (normalAtMarkPosition.angleBetween(markCameraVector).radians() > GMath.pi() / 2) {
+    if (normalAtMarkPosition.angleBetween(markCameraVector).radians() > GMath.halfPi()) {
       GL* gl = rc->getGL();
       
-      Vector2D tr(0.0,0.0);
-      Vector2D scale(1.0,1.0);
-      gl->transformTexCoords(scale, tr);
+      gl->transformTexCoords(_textureScale, _textureTranslation);
       
       if (_textureId == NULL) {
         IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
-     
-        _textureId = rc->getTexturesHandler()->getGLTextureId(image, GLFormat::rgba(),
-                                                              _textureFilename, false);
+        
+        _textureId = rc->getTexturesHandler()->getGLTextureId(image,
+                                                              GLFormat::rgba(),
+                                                              _textureFilename,
+                                                              false);
         
         rc->getFactory()->deleteImage(image);
       }
       
       if (_textureId == NULL) {
         rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
-        return;
       }
-      
-      //    rc->getLogger()->logInfo(" Visible   << %f %f", minDist, distanceToCamera);
-      gl->drawBillBoard(_textureId,
-                        getVertices(planet),
-                        camera->getViewPortRatio());
+      else {
+        gl->drawBillBoard(_textureId,
+                          getVertices(planet),
+                          camera->getViewPortRatio());
+      }
     }
-    
   }
   
 }
