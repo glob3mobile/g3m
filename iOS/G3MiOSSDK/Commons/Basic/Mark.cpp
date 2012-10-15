@@ -15,16 +15,73 @@
 #include "FloatBufferBuilderFromCartesian3D.hpp"
 
 #include "IGLTextureId.hpp"
+#include "IDownloader.hpp"
+#include "IImageDownloadListener.hpp"
+
 
 Vector2D Mark::_textureTranslation(0.0, 0.0);
 Vector2D Mark::_textureScale(1.0, 1.0);
 
+
+class TextureDownloadListener : public IImageDownloadListener {
+private:
+  Mark* _mark;
+  
+public:
+  TextureDownloadListener(Mark* mark) :
+  _mark(mark)
+  {
+    
+  }
+  
+  void onDownload(const URL& url,
+                  const IImage* image) {
+    _mark->onTextureDownload(image);
+  }
+  
+  void onError(const URL& url) {
+//    ILogger::instance()->logError("Error trying to download image \"%s\"", url.getPath().c_str());
+    _mark->onTextureDownloadError();
+  }
+  
+  void onCancel(const URL& url) {
+//    ILogger::instance()->logError("Download canceled for image \"%s\"", url.getPath().c_str());
+    _mark->onTextureDownloadError();
+  }
+  
+  void onCanceledDownload(const URL& url,
+                          const IImage* image) {
+    // do nothing
+  }
+};
+
+
 void Mark::initialize(const InitializationContext* ic) {
-//  todo;
+  //  todo;
+  if (!_textureSolved) {
+    IDownloader* downloader = ic->getDownloader();
+    
+    downloader->requestImage(_textureURL,
+                             1000000,
+                             new TextureDownloadListener(this),
+                             true);
+  }
 }
 
+void Mark::onTextureDownloadError() {
+  _textureSolved = true;
+  
+  ILogger::instance()->logError("Can't load image \"%s\"", _textureURL.getPath().c_str());
+}
+
+void Mark::onTextureDownload(const IImage* image) {
+  _textureSolved = true;
+  _textureImage = image->shallowCopy();
+}
+
+
 bool Mark::isReady() const {
-//  todo;
+  return _textureSolved;
 }
 
 Mark::~Mark() {
@@ -80,20 +137,27 @@ void Mark::render(const RenderContext* rc,
       gl->transformTexCoords(_textureScale, _textureTranslation);
       
       if (_textureId == NULL) {
-        IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
+//        IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
+//        
+//        _textureId = rc->getTexturesHandler()->getGLTextureId(image,
+//                                                              GLFormat::rgba(),
+//                                                              _textureFilename,
+//                                                              false);
+//        
+//        rc->getFactory()->deleteImage(image);
         
-        _textureId = rc->getTexturesHandler()->getGLTextureId(image,
-                                                              GLFormat::rgba(),
-                                                              _textureFilename,
-                                                              false);
-        
-        rc->getFactory()->deleteImage(image);
+        if (_textureImage != NULL) {
+          _textureId = rc->getTexturesHandler()->getGLTextureId(_textureImage,
+                                                                GLFormat::rgba(),
+                                                                _textureURL.getPath(),
+                                                                false);
+          
+          rc->getFactory()->deleteImage(_textureImage);
+          _textureImage = NULL;
+        }
       }
       
-      if (_textureId == NULL) {
-        rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
-      }
-      else {
+      if (_textureId != NULL) {
         gl->drawBillBoard(_textureId,
                           getVertices(planet),
                           camera->getViewPortRatio());
