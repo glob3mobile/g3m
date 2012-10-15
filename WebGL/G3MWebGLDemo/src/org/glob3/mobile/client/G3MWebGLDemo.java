@@ -3,6 +3,7 @@
 package org.glob3.mobile.client;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.Geodetic3D;
@@ -129,19 +130,19 @@ public class G3MWebGLDemo
       //      renderers.add(new GLErrorRenderer());
 
 
-      if (true) {
+      final boolean useMarkers = true;
+      if (useMarkers) {
          // marks renderer
          final boolean readyWhenMarksReady = false;
          final MarksRenderer marks = new MarksRenderer(readyWhenMarksReady);
          renderers.add(marks);
 
-         final Mark m1 = new Mark( //
+         final Mark m1 = new Mark(//
                   "Fuerteventura", //
                   new URL("http://www.glob3mobile.com/wp-content/themes/glob3mobile/images/logo_s.png"), //
                   new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-14.36), 0));
          //m1->addTouchListener(listener);
          marks.addMark(m1);
-
 
          final Mark m2 = new Mark( //
                   "Las Palmas", //
@@ -149,6 +150,21 @@ public class G3MWebGLDemo
                   new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-15.36), 0));
          //m2->addTouchListener(listener);
          marks.addMark(m2);
+
+         final boolean randomMarkers = false;
+         if (randomMarkers) {
+            final Random random = new Random();
+            for (int i = 0; i < 500; i++) {
+               final Angle latitude = Angle.fromDegrees((random.nextInt() % 180) - 90);
+               final Angle longitude = Angle.fromDegrees((random.nextInt() % 360) - 180);
+               //NSLog(@"lat=%f, lon=%f", latitude.degrees(), longitude.degrees());
+
+               marks.addMark(new Mark("Random", new URL(
+                        "http://www.glob3mobile.com/wp-content/themes/glob3mobile/images/logo_s.png"), new Geodetic3D(latitude,
+                        longitude, 0)));
+            }
+         }
+
       }
 
 
