@@ -22,9 +22,6 @@ class IGLTextureId;
 
 class Mark {
 private:
-  static Vector2D _textureTranslation;
-  static Vector2D _textureScale;
-  
   
   const std::string _name;
   const URL         _textureURL;

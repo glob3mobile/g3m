@@ -19,10 +19,6 @@
 #include "IImageDownloadListener.hpp"
 
 
-Vector2D Mark::_textureTranslation(0.0, 0.0);
-Vector2D Mark::_textureScale(1.0, 1.0);
-
-
 class TextureDownloadListener : public IImageDownloadListener {
 private:
   Mark* _mark;
@@ -40,12 +36,12 @@ public:
   }
   
   void onError(const URL& url) {
-//    ILogger::instance()->logError("Error trying to download image \"%s\"", url.getPath().c_str());
+    //    ILogger::instance()->logError("Error trying to download image \"%s\"", url.getPath().c_str());
     _mark->onTextureDownloadError();
   }
   
   void onCancel(const URL& url) {
-//    ILogger::instance()->logError("Download canceled for image \"%s\"", url.getPath().c_str());
+    //    ILogger::instance()->logError("Download canceled for image \"%s\"", url.getPath().c_str());
     _mark->onTextureDownloadError();
   }
   
@@ -134,17 +130,19 @@ void Mark::render(const RenderContext* rc,
     if (normalAtMarkPosition.angleBetween(markCameraVector).radians() > GMath.halfPi()) {
       GL* gl = rc->getGL();
       
-      gl->transformTexCoords(_textureScale, _textureTranslation);
+      static Vector2D textureTranslation(0.0, 0.0);
+      static Vector2D textureScale(1.0, 1.0);
+      gl->transformTexCoords(textureScale, textureTranslation);
       
       if (_textureId == NULL) {
-//        IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
-//        
-//        _textureId = rc->getTexturesHandler()->getGLTextureId(image,
-//                                                              GLFormat::rgba(),
-//                                                              _textureFilename,
-//                                                              false);
-//        
-//        rc->getFactory()->deleteImage(image);
+        //        IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
+        //
+        //        _textureId = rc->getTexturesHandler()->getGLTextureId(image,
+        //                                                              GLFormat::rgba(),
+        //                                                              _textureFilename,
+        //                                                              false);
+        //
+        //        rc->getFactory()->deleteImage(image);
         
         if (_textureImage != NULL) {
           _textureId = rc->getTexturesHandler()->getGLTextureId(_textureImage,
