@@ -29,7 +29,7 @@ public class Mark
 {
 
   private final String _name;
-  private final URL _textureURL = new URL();
+  private URL _textureURL = new URL();
   private final Geodetic3D _position ;
 
   private IGLTextureId _textureId;

@@ -22,7 +22,7 @@ public class MarksRenderer extends Renderer
   private boolean _readyWhenMarksReady;
   private java.util.ArrayList<Mark> _marks = new java.util.ArrayList<Mark>();
 
-  private final InitializationContext _initializationContext;
+  private InitializationContext _initializationContext;
 
 
   public MarksRenderer(boolean readyWhenMarksReady)
