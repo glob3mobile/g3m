@@ -24,7 +24,7 @@ class Mark {
 private:
   
   const std::string _name;
-  const URL         _textureURL;
+  URL               _textureURL;
   const Geodetic3D  _position;
   
 #ifdef C_CODE

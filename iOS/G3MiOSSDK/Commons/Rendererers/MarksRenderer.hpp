@@ -18,7 +18,12 @@ private:
   bool               _readyWhenMarksReady;
   std::vector<Mark*> _marks;
   
+#ifdef C_CODE
   const InitializationContext* _initializationContext;
+#endif
+#ifdef JAVA_CODE
+  private InitializationContext _initializationContext;
+#endif
   
 public:
   
