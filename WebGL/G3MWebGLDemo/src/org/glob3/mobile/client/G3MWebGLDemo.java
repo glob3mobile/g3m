@@ -4,10 +4,14 @@ package org.glob3.mobile.client;
 
 import java.util.ArrayList;
 
+import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LevelTileCondition;
+import org.glob3.mobile.generated.Mark;
+import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
@@ -123,6 +127,28 @@ public class G3MWebGLDemo
       //
       //      }
       //      renderers.add(new GLErrorRenderer());
+
+
+      if (true) {
+         // marks renderer
+         final boolean readyWhenMarksReady = false;
+         final MarksRenderer marks = new MarksRenderer(readyWhenMarksReady);
+         renderers.add(marks);
+
+         final Mark m1 = new Mark("Fuerteventura", new URL(
+                  "http://www.glob3mobile.com/wp-content/themes/glob3mobile/images/logo_s.png"), new Geodetic3D(
+                  Angle.fromDegrees(28.05), Angle.fromDegrees(-14.36), 0));
+         //m1->addTouchListener(listener);
+         marks.addMark(m1);
+
+
+         final Mark m2 = new Mark("Las Palmas", new URL(
+                  "http://www.glob3mobile.com/wp-content/themes/glob3mobile/images/logo_s.png"), new Geodetic3D(
+                  Angle.fromDegrees(28.05), Angle.fromDegrees(-15.36), 0));
+         //m2->addTouchListener(listener);
+         marks.addMark(m2);
+      }
+
 
       final UserData userData = null;
 
