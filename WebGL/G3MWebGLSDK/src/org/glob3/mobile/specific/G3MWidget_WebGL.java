@@ -22,7 +22,6 @@ import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IGLProgramId;
-import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
 import org.glob3.mobile.generated.IStringBuilder;
@@ -33,11 +32,9 @@ import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.MultiLayerTileTexturizer;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Renderer;
-import org.glob3.mobile.generated.SingleImageTileTexturizer;
 import org.glob3.mobile.generated.TextureBuilder;
 import org.glob3.mobile.generated.TexturesHandler;
 import org.glob3.mobile.generated.TileRenderer;
-import org.glob3.mobile.generated.TileTexturizer;
 import org.glob3.mobile.generated.TilesRenderParameters;
 import org.glob3.mobile.generated.UserData;
 
@@ -290,24 +287,16 @@ public final class G3MWidget_WebGL
       final CompositeRenderer composite = new CompositeRenderer();
       composite.addRenderer(cameraRenderer);
 
-      TileTexturizer texturizer = null;
 
-      if ((_layerSet != null) && (_layerSet.size() > 0)) {
-         texturizer = new MultiLayerTileTexturizer(_layerSet);
-      }
-      else {
-         //SINGLE IMAGE
-         final IImage singleWorldImage = _factory.createImageFromFileName("../images/world.jpg");
-         if (singleWorldImage != null) {
-            texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage, false);
-         }
-      }
-
-      if (texturizer != null) {
+      if (_layerSet != null) {
          final boolean showStatistics = false;
 
-         final TileRenderer tr = new TileRenderer(new EllipsoidalTileTessellator(parameters._tileResolution, true), texturizer,
-                  parameters, showStatistics);
+         final TileRenderer tr = new TileRenderer( //
+                  new EllipsoidalTileTessellator(parameters._tileResolution, true), //
+                  new MultiLayerTileTexturizer(), //
+                  _layerSet, //
+                  parameters, //
+                  showStatistics);
 
          composite.addRenderer(tr);
 

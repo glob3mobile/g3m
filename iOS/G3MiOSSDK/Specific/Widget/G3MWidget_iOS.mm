@@ -141,7 +141,6 @@
   composite->addRenderer(cameraRenderer);
   
   if (layerSet != NULL) {
-    if (layerSet->size() > 0) {
       TileTexturizer* texturizer = new MultiLayerTileTexturizer();
       
       const bool showStatistics = false;
@@ -151,7 +150,6 @@
                                           parameters,
                                           showStatistics);
       composite->addRenderer(tr);
-    }
   }
   
   for (int i = 0; i < renderers.size(); i++) {
