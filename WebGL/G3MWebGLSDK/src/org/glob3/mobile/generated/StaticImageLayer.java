@@ -110,12 +110,9 @@ public class StaticImageLayer extends Layer
 	return res;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isTransparent() const
-  public final boolean isTransparent()
-  {
-	return true;
-  }
+//  bool isTransparent() const {
+//    return true;
+//  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: URL getFeatureInfoURL(const Geodetic2D& g, const IFactory* factory, const Sector& sector, int width, int height) const

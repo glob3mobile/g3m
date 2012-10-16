@@ -30,9 +30,11 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IFloatBuffer;
 
+
 public class MultiLayerTileTexturizer extends TileTexturizer
 {
-  private final LayerSet _layerSet;
+  private LayerSet _layerSet;
+
   private TilesRenderParameters _parameters;
 
   private IFloatBuffer _texCoordsCache;
@@ -67,7 +69,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 	  _texCoordsCache = null;
 	  _pendingTopTileRequests = 0;
 	  _texturesHandler = null;
-
+  
   }
 
   public final void countTopTileRequest()
