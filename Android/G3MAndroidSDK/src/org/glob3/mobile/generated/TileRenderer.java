@@ -3,6 +3,7 @@ public class TileRenderer extends Renderer
 {
   private final TileTessellator _tessellator;
   private TileTexturizer _texturizer;
+  private LayerSet _layerSet;
   private final TilesRenderParameters _parameters;
   private final boolean _showStatistics;
   private boolean _topTilesJustCreated;
@@ -61,60 +62,12 @@ public class TileRenderer extends Renderer
 
   private boolean _firstRender;
 
-//  class DistanceToCenterTileComparison {
-//  private:
-//    const Camera* _camera;
-//    const Planet* _planet;
-//    std::map<TileKey, double> _distancesCache;
-//    
-//  public:
-//    DistanceToCenterTileComparison(const Camera *camera,
-//                                   const Planet *planet):
-//    _camera(camera),
-//    _planet(planet)
-//    {}
-//    
-//    void initialize() {
-//      _distancesCache.clear();
-//    }
-//    
-//    double getSquaredDistanceToCamera(const Tile* tile) {
-//      const TileKey key = tile->getKey();
-//      double distance = _distancesCache[key];
-//      if (distance == 0) {
-//        const Geodetic2D center = tile->getSector().getCenter();
-//        const Vector3D cameraPosition = _camera->getPosition();
-//        const Vector3D centerVec3 = _planet->toVector3D(center);
-//        
-//        distance = centerVec3.sub(cameraPosition).squaredLength();
-//        
-//        _distancesCache[key] = distance;
-//      }
-//      
-//      return distance;
-//
-//    }
-//    
-//    inline bool operator()(const Tile *t1,
-//                           const Tile *t2) {
-//      //      const Vector3D cameraPos = _camera->getPosition();
-//      //
-//      //      const Vector3D center1 = _planet->toVector3D(t1->getSector().getCenter());
-//      //      const Vector3D center2 = _planet->toVector3D(t2->getSector().getCenter());
-//      //
-//      //      const double dist1 = center1.sub(cameraPos).squaredLength();
-//      //      const double dist2 = center2.sub(cameraPos).squaredLength();
-//      
-//      const double dist1 = getSquaredDistanceToCamera(t1);
-//      const double dist2 = getSquaredDistanceToCamera(t2);
-//      return (dist1 < dist2);
-//    }
-//  };
 
-  public TileRenderer(TileTessellator tessellator, TileTexturizer texturizer, TilesRenderParameters parameters, boolean showStatistics)
+  public TileRenderer(TileTessellator tessellator, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics)
   {
 	  _tessellator = tessellator;
 	  _texturizer = texturizer;
+	  _layerSet = layerSet;
 	  _parameters = parameters;
 	  _showStatistics = showStatistics;
 	  _lastStatistics = new TilesStatistics();
@@ -143,6 +96,7 @@ public class TileRenderer extends Renderer
 	}
 	_lastSplitTimer = ic.getFactory().createTimer();
   
+	_layerSet.initialize(ic);
 	_texturizer.initialize(ic, _parameters);
   }
 
@@ -152,7 +106,7 @@ public class TileRenderer extends Renderer
 	//Saving camera for Long Press Event
 	_lastCamera = rc.getCurrentCamera();
   
-	TileRenderContext trc = new TileRenderContext(_tessellator, _texturizer, _parameters, statistics, _lastSplitTimer, _firstRender); // if first render, force full render
+	TileRenderContext trc = new TileRenderContext(_tessellator, _texturizer, _layerSet, _parameters, statistics, _lastSplitTimer, _firstRender); // if first render, force full render
   
 	if (_firstRender && _parameters._forceTopLevelTilesRenderOnStart)
 	{
@@ -234,7 +188,7 @@ public class TileRenderer extends Renderer
 		  final Tile tile = _topLevelTiles.get(i).getDeepestTileContaining(position);
 		  if (tile != null)
 		  {
-			_texturizer.onTerrainTouchEvent(ec, position, tile);
+			_texturizer.onTerrainTouchEvent(ec, position, tile, _layerSet);
 			handled = true;
 		  }
 		}
@@ -260,7 +214,7 @@ public class TileRenderer extends Renderer
 		for (int i = 0; i < topLevelTilesSize; i++)
 		{
 		  Tile tile = _topLevelTiles.get(i);
-		  _texturizer.justCreatedTopTile(rc, tile);
+		  _texturizer.justCreatedTopTile(rc, tile, _layerSet);
 		}
 	  }
 	  _topTilesJustCreated = false;
@@ -278,7 +232,7 @@ public class TileRenderer extends Renderer
   
 	  if (_texturizer != null)
 	  {
-		if (!_texturizer.isReady(rc))
+		if (!_texturizer.isReady(rc, _layerSet))
 		{
 		  return false;
 		}

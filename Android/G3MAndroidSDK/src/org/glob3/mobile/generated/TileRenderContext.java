@@ -24,6 +24,8 @@ package org.glob3.mobile.generated;
 //class TileTessellator;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TileTexturizer;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class LayerSet;
 
 
 
@@ -82,14 +84,17 @@ public class TileRenderContext
   private final TilesRenderParameters _parameters;
   private TilesStatistics _statistics;
 
+  private final LayerSet _layerSet;
+
   private final boolean _isForcedFullRender;
 
   private ITimer _lastSplitTimer; // timer to start every time a tile get splitted into subtiles
 
-  public TileRenderContext(TileTessellator tessellator, TileTexturizer texturizer, TilesRenderParameters parameters, TilesStatistics statistics, ITimer lastSplitTimer, boolean isForcedFullRender)
+  public TileRenderContext(TileTessellator tessellator, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, TilesStatistics statistics, ITimer lastSplitTimer, boolean isForcedFullRender)
   {
 	  _tessellator = tessellator;
 	  _texturizer = texturizer;
+	  _layerSet = layerSet;
 	  _parameters = parameters;
 	  _statistics = statistics;
 	  _lastSplitTimer = lastSplitTimer;
@@ -97,6 +102,12 @@ public class TileRenderContext
 
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const LayerSet* getLayerSet() const
+  public final LayerSet getLayerSet()
+  {
+	return _layerSet;
+  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: const TileTessellator* getTessellator() const
