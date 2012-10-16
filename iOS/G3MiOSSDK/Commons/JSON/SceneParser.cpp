@@ -30,10 +30,10 @@
 
 using namespace std;
 
-SceneParser* SceneParser::_instance = 0;
+SceneParser* SceneParser::_instance = NULL;
 
 SceneParser* SceneParser::instance(){
-  if (_instance == 0){
+  if (_instance == NULL){
     _instance = new SceneParser();
   }
   return _instance;
@@ -78,14 +78,15 @@ void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, JSONObject* jsonLayer){
   cout << "Parsing WMS Layer " << jsonLayer->getObjectForKey(name)->getString()->getValue() << "..." << endl;
   
   const std::string jsonDatasource = jsonLayer->getObjectForKey(datasource)->getString()->getValue();
-  const std::string jsonURL = IStringUtils::instance()->substring(jsonDatasource, 0, jsonDatasource.find_first_of("?")+1);
+  const int lastIndex = IStringUtils::instance()->indexOf(jsonDatasource,"?");
+  const std::string jsonURL = IStringUtils::instance()->substring(jsonDatasource, 0, lastIndex+1);
   const std::string jsonVersion = jsonLayer->getObjectForKey(version)->getString()->getValue();
   
   JSONArray* jsonItems = jsonLayer->getObjectForKey(items)->getArray();
   IStringBuilder *layersName = IStringBuilder::newStringBuilder();
     
   for (int i = 0; i<jsonItems->getSize(); i++) {
-    if(jsonItems->getElement(i)->getObject()->getObjectForKey(status)->getString()->getValue().compare(btrue)==0){
+    if (jsonItems->getElement(i)->getObject()->getObjectForKey(status)->getString()->getValue() == "true") {
       layersName->add(jsonItems->getElement(i)->getObject()->getObjectForKey(name)->getString()->getValue());
       layersName->add(",");
     }    
