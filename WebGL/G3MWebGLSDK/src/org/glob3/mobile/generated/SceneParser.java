@@ -2,13 +2,13 @@ package org.glob3.mobile.generated;
 public class SceneParser
 {
 
-  private static SceneParser _instance = 0;
+  private static SceneParser _instance = null;
   private java.util.HashMap<String, layer_type> mapLayerType = new java.util.HashMap<String, layer_type>();
 
 
   public static SceneParser instance()
   {
-	if (_instance == 0)
+	if (_instance == null)
 	{
 	  _instance = new SceneParser();
 	}
@@ -53,7 +53,8 @@ public class SceneParser
 	System.out.print("\n");
   
 	final String jsonDatasource = jsonLayer.getObjectForKey(GlobalMembersSceneParser.datasource).getString().getValue();
-	final String jsonURL = IStringUtils.instance().substring(jsonDatasource, 0, jsonDatasource.find_first_of("?")+1);
+	final int lastIndex = IStringUtils.instance().indexOf(jsonDatasource, "?");
+	final String jsonURL = IStringUtils.instance().substring(jsonDatasource, 0, lastIndex+1);
 	final String jsonVersion = jsonLayer.getObjectForKey(GlobalMembersSceneParser.version).getString().getValue();
   
 	JSONArray jsonItems = jsonLayer.getObjectForKey(GlobalMembersSceneParser.items).getArray();
@@ -61,7 +62,7 @@ public class SceneParser
   
 	for (int i = 0; i<jsonItems.getSize(); i++)
 	{
-	  if(jsonItems.getElement(i).getObject().getObjectForKey(GlobalMembersSceneParser.status).getString().getValue().compare(GlobalMembersSceneParser.btrue)==0)
+	  if (jsonItems.getElement(i).getObject().getObjectForKey(GlobalMembersSceneParser.status).getString().getValue().equals("true"))
 	  {
 		layersName.add(jsonItems.getElement(i).getObject().getObjectForKey(GlobalMembersSceneParser.name).getString().getValue());
 		layersName.add(",");
