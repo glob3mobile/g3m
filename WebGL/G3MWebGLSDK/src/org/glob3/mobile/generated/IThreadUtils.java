@@ -1,4 +1,22 @@
 package org.glob3.mobile.generated; 
+//
+//  IThreadUtils.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 30/08/12.
+//
+//
+
+//
+//  IThreadUtils.hpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 30/08/12.
+//
+//
+
+
+
 public abstract class IThreadUtils
 {
   private static IThreadUtils _instance = null;

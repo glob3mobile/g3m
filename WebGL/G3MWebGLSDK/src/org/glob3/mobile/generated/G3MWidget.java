@@ -2,7 +2,7 @@ package org.glob3.mobile.generated;
 public class G3MWidget
 {
 
-  public static G3MWidget create(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, IStringBuilder stringBuilder, IMathUtils mathUtils, IJSONParser jsonParser, ILogger logger, GL gl, TexturesHandler texturesHandler, TextureBuilder textureBuilder, IDownloader downloader, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstraint, Renderer renderer, Renderer busyRenderer, EffectsScheduler scheduler, int width, int height, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics)
+  public static G3MWidget create(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, IStringBuilder stringBuilder, IMathUtils mathUtils, IJSONParser jsonParser, ILogger logger, GL gl, TexturesHandler texturesHandler, TextureBuilder textureBuilder, IDownloader downloader, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, Renderer renderer, Renderer busyRenderer, EffectsScheduler effectsScheduler, int width, int height, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GTask initializationTask, boolean autoDeleteInitializationTask)
   {
 	if (logger != null)
 	{
@@ -17,7 +17,7 @@ public class G3MWidget
 	IMathUtils.setInstance(mathUtils);
 	IJSONParser.setInstance(jsonParser);
   
-	return new G3MWidget(frameTasksExecutor, factory, stringUtils, threadUtils, logger, gl, texturesHandler, textureBuilder, downloader, planet, cameraConstraint, renderer, busyRenderer, scheduler, width, height, backgroundColor, logFPS, logDownloaderStatistics);
+	return new G3MWidget(frameTasksExecutor, factory, stringUtils, threadUtils, logger, gl, texturesHandler, textureBuilder, downloader, planet, cameraConstrainers, renderer, busyRenderer, effectsScheduler, width, height, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask);
   }
 
   public void dispose()
@@ -58,19 +58,6 @@ public class G3MWidget
 		_frameTasksExecutor.dispose();
   }
 
-
-  //const double clamp(const double value,
-  //                   const double lower,
-  //                   const double upper) {
-  //  if (value < lower) {
-  //    return lower;
-  //  }
-  //  if (value > upper) {
-  //    return upper;
-  //  }
-  //  return value;
-  //}
-  
   public final void render()
   {
 	_timer.start();
@@ -84,11 +71,18 @@ public class G3MWidget
 	}
 	_currentCamera.copyFrom(_nextCamera);
   
-	//  int __removePrint;
-	//  printf("Camera Position=%s\n" ,
-	//         _planet->toGeodetic3D(_currentCamera->getCartesianPosition()).description().c_str());
   
-	// create RenderContext
+	if (_initializationTask != null)
+	{
+	  _initializationTask.run();
+	  if (_autoDeleteInitializationTask)
+	  {
+		if (_initializationTask != null)
+			_initializationTask.dispose();
+	  }
+	  _initializationTask = null;
+	}
+  
 	RenderContext rc = new RenderContext(_frameTasksExecutor, _factory, _stringUtils, _threadUtils, _logger, _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _textureBuilder, _downloader, _effectsScheduler, _factory.createTimer());
   
 	_effectsScheduler.doOneCyle(rc);
@@ -108,34 +102,6 @@ public class G3MWidget
 	  _selectedRenderer.start();
 	}
   
-	//  const Vector3D ray = _currentCamera->getCenter();
-	//  const Vector3D origin = _currentCamera->getPosition();
-	//
-	//  const Vector3D intersection = _planet->closestIntersection(origin, ray);
-	//  if (!intersection.isNan()) {
-	//    const Vector3D cameraPosition = _currentCamera->getPosition();
-	//
-	//    const double minDistance = 1000;
-	//    const double maxDistance = 20000;
-	//
-	//    const double distanceToTerrain = clamp(intersection.sub(cameraPosition).length(),
-	//                                           minDistance,
-	//                                           maxDistance + minDistance) - minDistance;
-	//
-	//    printf("Camera to terrain distance=%f\n", distanceToTerrain);
-	//
-	//    const float factor = (float) (distanceToTerrain / maxDistance);
-	//
-	//    // Clear the scene
-	//    const Color dayColor = Color::fromRGBA((float) 0.5, (float) 0.5, 1, 1);
-	//    _gl->clearScreen(_backgroundColor.mixedWith(dayColor, factor));
-	//    //    _gl->clearScreen(_backgroundColor);
-	//
-	//  }
-	//  else {
-	//    // Clear the scene
-	//    _gl->clearScreen(_backgroundColor);
-	//  }
 	_gl.clearScreen(_backgroundColor);
   
 	_selectedRenderer.render(rc);
@@ -247,9 +213,9 @@ public class G3MWidget
 	return _gl;
   }
 
-  /*  const Camera* getCurrentCamera() const {
-   return _currentCamera;
-   }*/
+//  const Camera* getCurrentCamera() const {
+//    return _currentCamera;
+//  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Camera* getNextCamera() const
@@ -313,6 +279,9 @@ public class G3MWidget
 
   private UserData _userData;
 
+  private GTask _initializationTask;
+  private boolean _autoDeleteInitializationTask;
+
   private void initializeGL()
   {
 	_gl.enableDepthTest();
@@ -320,7 +289,7 @@ public class G3MWidget
 	_gl.enableCullFace(GLCullFace.back());
   }
 
-  private G3MWidget(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, GL gl, TexturesHandler texturesHandler, TextureBuilder textureBuilder, IDownloader downloader, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, Renderer renderer, Renderer busyRenderer, EffectsScheduler effectsScheduler, int width, int height, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics)
+  private G3MWidget(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, GL gl, TexturesHandler texturesHandler, TextureBuilder textureBuilder, IDownloader downloader, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, Renderer renderer, Renderer busyRenderer, EffectsScheduler effectsScheduler, int width, int height, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GTask initializationTask, boolean autoDeleteInitializationTask)
   {
 	  _frameTasksExecutor = frameTasksExecutor;
 	  _factory = factory;
@@ -348,6 +317,8 @@ public class G3MWidget
 	  _renderStatisticsTimer = null;
 	  _logDownloaderStatistics = logDownloaderStatistics;
 	  _userData = null;
+	  _initializationTask = initializationTask;
+	  _autoDeleteInitializationTask = autoDeleteInitializationTask;
 	initializeGL();
   
 	InitializationContext ic = new InitializationContext(_factory, _stringUtils, _threadUtils, _logger, _planet, _downloader, _effectsScheduler);
