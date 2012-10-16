@@ -59,7 +59,7 @@ public final class G3MWidget_WebGL
 
    public static final String            CANVAS_ID             = "g3m-canvas";
 
-   private final FlowPanel               _panel                = new FlowPanel();
+   private final FlowPanel               _panel;
    private Canvas                        _canvas;
    private MotionEventProcessor          _motionEventProcessor = null;
    private ArrayList<ICameraConstrainer> _cameraConstraints    = null;
@@ -82,6 +82,8 @@ public final class G3MWidget_WebGL
 
    public G3MWidget_WebGL(final int delayMillis,
                           final String proxy) {
+      _panel = new FlowPanel();
+
       initWidget(_panel);
 
       // downloader
@@ -116,13 +118,17 @@ public final class G3MWidget_WebGL
                                 final int h) {
       _width = w;
       _height = h;
-      _panel.setPixelSize(w, h);
-      setPixelSize(w, h);
-      _canvas.setCoordinateSpaceWidth(w);
-      _canvas.setCoordinateSpaceHeight(h);
+
+      //      _width = _canvas.getOffsetWidth();
+      //      _height = _canvas.getOffsetHeight();
+
+      _panel.setPixelSize(_width, _height);
+      setPixelSize(_width, _height);
+      _canvas.setCoordinateSpaceWidth(_width);
+      _canvas.setCoordinateSpaceHeight(_height);
       if (_widget != null) {
-         _widget.onResizeViewportEvent(w, h);
-         jsOnResizeViewport(w, h);
+         _widget.onResizeViewportEvent(_width, _height);
+         jsOnResizeViewport(_width, _height);
       }
    }
 
@@ -137,174 +143,6 @@ public final class G3MWidget_WebGL
 
       super.onBrowserEvent(event);
    }
-
-
-   //   public G3MWidget getG3MWidget() {
-   //      if (_widget == null) {
-   //         initWidgetPrivate(_cameraConstraints, _layerSet, _renderers, _userData);
-   //      }
-   //
-   //      return _widget;
-   //   }
-
-
-   //   public void initWidget(final ArrayList<ICameraConstrainer> cameraConstraints,
-   //                          final LayerSet layerSet,
-   //                          final ArrayList<Renderer> renderers,
-   //                          final UserData userData) {
-   //      _cameraConstraints = cameraConstraints;
-   //      _layerSet = layerSet;
-   //      _renderers = renderers;
-   //      _userData = userData;
-   //
-   //      initWidgetPrivate(cameraConstraints, layerSet, renderers, userData);
-   //   }
-
-
-   //   private void initWidgetPrivate(final ArrayList<ICameraConstrainer> cameraConstraints,
-   //                                  final LayerSet layerSet,
-   //                                  final ArrayList<Renderer> renderers,
-   //                                  final UserData userData) {
-   //      final CameraRenderer cameraRenderer = new CameraRenderer();
-   //
-   //      final boolean useInertia = true;
-   //      cameraRenderer.addHandler(new CameraSingleDragHandler(useInertia));
-   //
-   //      final boolean processRotataion = true;
-   //      final boolean processZoom = true;
-   //      cameraRenderer.addHandler(new CameraDoubleDragHandler(processRotataion, processZoom));
-   //      cameraRenderer.addHandler(new CameraRotationHandler());
-   //      cameraRenderer.addHandler(new CameraDoubleTapHandler());
-   //
-   //      final boolean renderDebug = true;
-   //      final boolean useTilesSplitBudget = true;
-   //      final boolean forceTopLevelTilesRenderOnStart = true;
-   //
-   //      final TilesRenderParameters parameters = TilesRenderParameters.createDefault(renderDebug, useTilesSplitBudget,
-   //               forceTopLevelTilesRenderOnStart);
-   //
-   //      initWidget(cameraRenderer, cameraConstraints, layerSet, parameters, renderers, userData);
-   //   }
-
-
-   //   private void initWidget(final CameraRenderer cameraRenderer,
-   //                           final ArrayList<ICameraConstrainer> cameraConstraints,
-   //                           final LayerSet layerSet,
-   //                           final TilesRenderParameters parameters,
-   //                           final ArrayList<Renderer> renderers,
-   //                           final UserData userData) {
-   //
-   //      final IFactory factory = new Factory_WebGL();
-   //      final ILogger logger = new Logger_WebGL(LogLevel.InfoLevel);
-   //      final IStorage storage = new IndexedDBStorage_WebGL();
-   //      final IDownloader downloader = new Downloader_WebGL(8, _delayMillis, _proxy);
-   //      final IStringUtils stringUtils = new StringUtils_WebGL();
-   //      // TODO add delayMillis to G3MWidget constructor
-   //      final IThreadUtils threadUtils = new ThreadUtils_WebGL(this, _delayMillis);
-   //
-   //      _webGLContext = jsGetWebGLContext();
-   //      if (_webGLContext == null) {
-   //         throw new RuntimeException("webGLContext null");
-   //      }
-   //
-   //      //CREATING SHADERS PROGRAM
-   //      _program = new Shaders_WebGL(_webGLContext).createProgram();
-   //
-   //      final NativeGL_WebGL nGL = new NativeGL_WebGL(_webGLContext);
-   //      final GL gl = new GL(nGL);
-   //
-   //      final CompositeRenderer composite = new CompositeRenderer();
-   //      composite.addRenderer(cameraRenderer);
-   //
-   //      if ((layerSet != null) && (layerSet.size() > 0)) {
-   //
-   //         TileTexturizer texturizer = new MultiLayerTileTexturizer(layerSet);
-   //
-   //         //         if (true) {
-   //         texturizer = new MultiLayerTileTexturizer(layerSet);
-   //         //         }
-   //         //         else {
-   //         //SINGLE IMAGE
-   //         //         final IImage singleWorldImage = factory.createImageFromFileName("world.jpg");
-   //         //         texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage, false);
-   //         //         }
-   //
-   //
-   //         final boolean showStatistics = false;
-   //
-   //         final TileRenderer tr = new TileRenderer(new EllipsoidalTileTessellator(parameters._tileResolution, true), texturizer,
-   //                  parameters, showStatistics);
-   //
-   //         composite.addRenderer(tr);
-   //      }
-   //
-   //      for (int i = 0; i < renderers.size(); i++) {
-   //         composite.addRenderer(renderers.get(i));
-   //      }
-   //
-   //
-   //      final TextureBuilder textureBuilder = new CPUTextureBuilder();
-   //      final TexturesHandler texturesHandler = new TexturesHandler(gl, factory, false);
-   //
-   //      final Planet planet = Planet.createEarth();
-   //
-   //      final org.glob3.mobile.generated.Renderer busyRenderer = new BusyMeshRenderer();
-   //
-   //      final EffectsScheduler scheduler = new EffectsScheduler();
-   //
-   //      final FrameTasksExecutor frameTasksExecutor = new FrameTasksExecutor();
-   //
-   //      final IStringBuilder stringBuilder = new StringBuilder_WebGL();
-   //
-   //      final IMathUtils mathUtils = new MathUtils_WebGL();
-   //
-   //      _widget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, stringBuilder, mathUtils, logger, gl,
-   //               texturesHandler, textureBuilder, downloader, planet, cameraConstraints, composite, busyRenderer, scheduler,
-   //               _width, _height, Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false);
-   //
-   //      _widget.setUserData(userData);
-   //
-   //
-   //      _motionEventProcessor = new MotionEventProcessor(_widget);
-   //
-   //      //CALLING widget.render()
-   //      startRender(this);
-   //   }
-
-
-   //   //TODO INIT MOVE TO COMMON
-   //   private native void jsGLInit(JavaScriptObject gl) /*-{
-   //		var error = gl.getError()
-   //		if (error != 0) {
-   //			debugger;
-   //			console.error("jsGLInit error=" + error);
-   //		}
-   //		gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
-   //		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-   //   }-*/;
-   //
-   //
-   //   private void renderWidget() {
-   //      //USING PROGRAM
-   //      if (_program != null) {
-   //         jsGLInit(_webGLContext);
-   //         _widget.getGL().useProgram(_program);
-   //         _widget.render();
-   //      }
-   //      else {
-   //         throw new RuntimeException("PROGRAM INVALID");
-   //      }
-   //   }
-   //
-   //
-   //   private native void startRender(G3MWidget_WebGL instance) /*-{
-   //		var tick = function() {
-   //			//TODO CHECK DONT RUN
-   //			$wnd.g3mRequestAnimFrame(tick);
-   //			$entry(instance.@org.glob3.mobile.specific.G3MWidget_WebGL::renderWidget()());
-   //		};
-   //		tick();
-   //   }-*/;
 
 
    private native void jsDefineG3MBrowserObjects() /*-{
@@ -581,33 +419,6 @@ public final class G3MWidget_WebGL
       //         throw new RuntimeException("PROGRAM INVALID");
       //      }
    }
-
-
-   //   private native void jsGLInit() /*-{
-   //		//    debugger;
-   //
-   //		var webGLContext = this.@org.glob3.mobile.specific.G3MWidget_WebGL::_webGLContext;
-   //
-   //		//		var error = 0;
-   //		//		try {
-   //		//			error = webGLContext.getError();
-   //		//		} catch (e) {
-   //		//			console.log("jsGLInit catch " + e);
-   //		//		}
-   //		//		if (error != 0) {
-   //		//			//                        debugger;
-   //		//			console.error("jsGLInit error=" + error);
-   //		//		}
-   //
-   //		//    debugger;
-   //		var viewportWidth = webGLContext.viewportWidth;
-   //		var viewportHeight = webGLContext.viewportHeight;
-   //		var COLOR_BUFFER_BIT = webGLContext.COLOR_BUFFER_BIT;
-   //		var DEPTH_BUFFER_BIT = webGLContext.DEPTH_BUFFER_BIT;
-   //
-   //		webGLContext.viewport(0, 0, viewportWidth, viewportHeight);
-   //		webGLContext.clear(COLOR_BUFFER_BIT | DEPTH_BUFFER_BIT);
-   //   }-*/;
 
 
    private native void jsOnResizeViewport(final int width,

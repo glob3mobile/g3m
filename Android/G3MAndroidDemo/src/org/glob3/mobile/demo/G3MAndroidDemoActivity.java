@@ -121,14 +121,14 @@ public class G3MAndroidDemoActivity
 
          final Mark m1 = new Mark(//
                   "Fuerteventura", //
-                  new URL("http://www.glob3mobile.com/wp-content/themes/glob3mobile/images/logo_s.png"), //
+                  new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png"), //
                   new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-14.36), 0));
          //m1->addTouchListener(listener);
          marks.addMark(m1);
 
          final Mark m2 = new Mark( //
                   "Las Palmas", //
-                  new URL("http://www.glob3mobile.com/wp-content/themes/glob3mobile/images/logo_s.png"), //
+                  new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png"), //
                   new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-15.36), 0));
          //m2->addTouchListener(listener);
          marks.addMark(m2);
@@ -141,9 +141,9 @@ public class G3MAndroidDemoActivity
                final Angle longitude = Angle.fromDegrees((random.nextInt() % 360) - 180);
                //NSLog(@"lat=%f, lon=%f", latitude.degrees(), longitude.degrees());
 
-               marks.addMark(new Mark("Random", new URL(
-                        "http://www.glob3mobile.com/wp-content/themes/glob3mobile/images/logo_s.png"), new Geodetic3D(latitude,
-                        longitude, 0)));
+               marks.addMark(new Mark( //
+                        "Random", //
+                        new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png"), new Geodetic3D(latitude, longitude, 0)));
             }
          }
 

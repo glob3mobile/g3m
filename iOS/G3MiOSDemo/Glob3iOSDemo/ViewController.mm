@@ -182,14 +182,14 @@
     renderers.push_back(marks);
     
     Mark* m1 = new Mark("Fuerteventura",
-                        URL("http://www.glob3mobile.com/wp-content/themes/glob3mobile/images/logo_s.png"),
+                        URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png"),
                         Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0));
     //m1->addTouchListener(listener);
     marks->addMark(m1);
     
     
     Mark* m2 = new Mark("Las Palmas",
-                        URL("http://www.glob3mobile.com/wp-content/themes/glob3mobile/images/logo_s.png"),
+                        URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png"),
                         Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0));
     //m2->addTouchListener(listener);
     marks->addMark(m2);
@@ -201,7 +201,7 @@
         //NSLog(@"lat=%f, lon=%f", latitude.degrees(), longitude.degrees());
         
         marks->addMark(new Mark("Random",
-                                URL("http://www.glob3mobile.com/wp-content/themes/glob3mobile/images/logo_s.png"),
+                                URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png"),
                                 Geodetic3D(latitude, longitude, 0)));
       }
     }
