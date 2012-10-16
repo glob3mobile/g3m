@@ -93,8 +93,8 @@
 		CF3F3FF11620FB2A00A92CC8 /* Vector4D.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF3F3FEF1620FB2A00A92CC8 /* Vector4D.hpp */; };
 		CF47030B15EFB4C000426B8B /* ThreadUtils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */; };
 		CF47030C15EFB4C000426B8B /* ThreadUtils_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF47030A15EFB4C000426B8B /* ThreadUtils_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
-		CF527E16162E178200E0BDE0 /* GTask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF527E14162E178200E0BDE0 /* GTask.cpp */; };
-		CF527E17162E178200E0BDE0 /* GTask.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF527E15162E178200E0BDE0 /* GTask.hpp */; };
+		CF527E1B162E2B4200E0BDE0 /* GTask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF527E19162E2B4200E0BDE0 /* GTask.cpp */; };
+		CF527E1C162E2B4200E0BDE0 /* GTask.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF527E1A162E2B4200E0BDE0 /* GTask.hpp */; };
 		CF59DF8F15C04AFC002173EC /* ILogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF59DF8E15C04AFC002173EC /* ILogger.cpp */; };
 		CF6873A515F77F54002EDFD0 /* IFloatBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6873A315F77F54002EDFD0 /* IFloatBuffer.cpp */; };
 		CF6873A615F77F54002EDFD0 /* IFloatBuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF6873A415F77F54002EDFD0 /* IFloatBuffer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -341,8 +341,8 @@
 		CF3F3FEF1620FB2A00A92CC8 /* Vector4D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Vector4D.hpp; path = Commons/Geometry/Vector4D.hpp; sourceTree = "<group>"; };
 		CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ThreadUtils_iOS.mm; path = Specific/Derived/ThreadUtils_iOS.mm; sourceTree = "<group>"; };
 		CF47030A15EFB4C000426B8B /* ThreadUtils_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ThreadUtils_iOS.hpp; path = Specific/Derived/ThreadUtils_iOS.hpp; sourceTree = "<group>"; };
-		CF527E14162E178200E0BDE0 /* GTask.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GTask.cpp; sourceTree = "<group>"; };
-		CF527E15162E178200E0BDE0 /* GTask.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GTask.hpp; sourceTree = "<group>"; };
+		CF527E19162E2B4200E0BDE0 /* GTask.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GTask.cpp; path = Commons/Basic/GTask.cpp; sourceTree = "<group>"; };
+		CF527E1A162E2B4200E0BDE0 /* GTask.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GTask.hpp; path = Commons/Basic/GTask.hpp; sourceTree = "<group>"; };
 		CF59DF8E15C04AFC002173EC /* ILogger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ILogger.cpp; path = Commons/Interfaces/ILogger.cpp; sourceTree = "<group>"; };
 		CF6873A315F77F54002EDFD0 /* IFloatBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IFloatBuffer.cpp; path = Commons/Basic/IFloatBuffer.cpp; sourceTree = "<group>"; };
 		CF6873A415F77F54002EDFD0 /* IFloatBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IFloatBuffer.hpp; path = Commons/Basic/IFloatBuffer.hpp; sourceTree = "<group>"; };
@@ -621,8 +621,8 @@
 				CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */,
 				CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */,
 				D8C912D915F9FE78003F92A4 /* FloatBufferBuilderFromColor.hpp */,
-				CF527E14162E178200E0BDE0 /* GTask.cpp */,
-				CF527E15162E178200E0BDE0 /* GTask.hpp */,
+				CF527E19162E2B4200E0BDE0 /* GTask.cpp */,
+				CF527E1A162E2B4200E0BDE0 /* GTask.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -1017,7 +1017,7 @@
 				D8B3A962160B69620085D553 /* GLProgramId_iOS.hpp in Headers */,
 				D8B3A963160B69620085D553 /* GLUniformID_iOS.hpp in Headers */,
 				CF3F3FF11620FB2A00A92CC8 /* Vector4D.hpp in Headers */,
-				CF527E17162E178200E0BDE0 /* GTask.hpp in Headers */,
+				CF527E1C162E2B4200E0BDE0 /* GTask.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1167,7 +1167,7 @@
 				A74072D1161EEEB900182A39 /* BingLayer.cpp in Sources */,
 				D81D2072160748EA009A8BA6 /* GLConstants.cpp in Sources */,
 				CF3F3FF01620FB2A00A92CC8 /* Vector4D.cpp in Sources */,
-				CF527E16162E178200E0BDE0 /* GTask.cpp in Sources */,
+				CF527E1B162E2B4200E0BDE0 /* GTask.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
