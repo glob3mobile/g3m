@@ -51,7 +51,6 @@
 #include "Factory_iOS.hpp"
 #include "NativeGL2_iOS.hpp"
 #include "StringUtils_iOS.hpp"
-#include "SingleImageTileTexturizer.hpp"
 #include "WMSLayer.hpp"
 
 #include "MathUtils_iOS.hpp"
@@ -143,17 +142,12 @@
   
   if (layerSet != NULL) {
     if (layerSet->size() > 0) {
-      TileTexturizer* texturizer = new MultiLayerTileTexturizer(layerSet);
-      //IImage *singleWorldImage = factory->createImageFromFileName("mercator.jpg");
-      //TileTexturizer* texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage, false);
-      
-      //Single Mercator image
-      //IImage *singleWorldImage = factory->createImageFromFileName("tissot.png");
-      //TileTexturizer* texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage, true);
+      TileTexturizer* texturizer = new MultiLayerTileTexturizer();
       
       const bool showStatistics = false;
       TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
                                           texturizer,
+                                          layerSet,
                                           parameters,
                                           showStatistics);
       composite->addRenderer(tr);

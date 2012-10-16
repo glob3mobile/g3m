@@ -518,14 +518,13 @@ void BuilderDownloadStepDownloadListener::onCancel(const URL& url) {
   _builder->stepCanceled(_position);
 }
 
-MultiLayerTileTexturizer::MultiLayerTileTexturizer(LayerSet* layerSet) :
-_layerSet(layerSet),
+MultiLayerTileTexturizer::MultiLayerTileTexturizer() :
 _parameters(NULL),
 _texCoordsCache(NULL),
 _pendingTopTileRequests(0),
 _texturesHandler(NULL)
 {
-
+  
 }
 
 MultiLayerTileTexturizer::~MultiLayerTileTexturizer() {
@@ -538,7 +537,7 @@ MultiLayerTileTexturizer::~MultiLayerTileTexturizer() {
 void MultiLayerTileTexturizer::initialize(const InitializationContext* ic,
                                           const TilesRenderParameters* parameters) {
   _parameters = parameters;
-  _layerSet->initialize(ic);
+//  _layerSet->initialize(ic);
 }
 
 class BuilderStartTask : public FrameTask {
@@ -578,7 +577,7 @@ Mesh* MultiLayerTileTexturizer::texturize(const RenderContext* rc,
   if (builderHolder == NULL) {
     builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this,
                                                                         rc,
-                                                                        _layerSet,
+                                                                        trc->getLayerSet(),
                                                                         _parameters,
                                                                         rc->getDownloader(),
                                                                         tile,
@@ -741,11 +740,12 @@ public:
 };
 
 void MultiLayerTileTexturizer::justCreatedTopTile(const RenderContext* rc,
-                                                  Tile* tile) {
-  std::vector<Petition*> petitions = _layerSet->createTileMapPetitions(rc,
-                                                                       tile,
-                                                                       _parameters->_tileTextureWidth,
-                                                                       _parameters->_tileTextureHeight);
+                                                  Tile* tile,
+                                                  LayerSet* layerSet) {
+  std::vector<Petition*> petitions = layerSet->createTileMapPetitions(rc,
+                                                                      tile,
+                                                                      _parameters->_tileTextureWidth,
+                                                                      _parameters->_tileTextureHeight);
   
   _pendingTopTileRequests += petitions.size();
   
@@ -761,12 +761,23 @@ void MultiLayerTileTexturizer::justCreatedTopTile(const RenderContext* rc,
   }
 }
 
-bool MultiLayerTileTexturizer::isReady(const RenderContext *rc) {
-  return (_pendingTopTileRequests <= 0) && _layerSet->isReady();
+bool MultiLayerTileTexturizer::isReady(const RenderContext *rc,
+                                       LayerSet* layerSet) {
+  if (_pendingTopTileRequests > 0) {
+    return false;
+  }
+  if (layerSet != NULL) {
+    return layerSet->isReady();
+  }
+  return true;
+  //  return (_pendingTopTileRequests <= 0) && _layerSet->isReady();
 }
 
 void MultiLayerTileTexturizer::onTerrainTouchEvent(const EventContext* ec,
                                                    const Geodetic3D& position,
-                                                   const Tile* tile){
-  _layerSet->onTerrainTouchEvent(ec, position, tile);
+                                                   const Tile* tile,
+                                                   LayerSet* layerSet){
+  if (layerSet != NULL) {
+    layerSet->onTerrainTouchEvent(ec, position, tile);
+  }
 }

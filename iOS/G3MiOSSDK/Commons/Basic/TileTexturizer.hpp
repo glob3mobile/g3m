@@ -17,6 +17,7 @@ class InitializationContext;
 class TilesRenderParameters;
 class TileRenderContext;
 class Geodetic3D;
+class LayerSet;
 
 #include "TerrainTouchEventListener.hpp"
 
@@ -25,7 +26,8 @@ public:
   virtual ~TileTexturizer() {
   }
   
-  virtual bool isReady(const RenderContext *rc) = 0;
+  virtual bool isReady(const RenderContext *rc,
+                       LayerSet* layerSet) = 0;
   
   virtual void initialize(const InitializationContext* ic,
                           const TilesRenderParameters* parameters) = 0;
@@ -45,7 +47,8 @@ public:
   virtual bool tileMeetsRenderCriteria(Tile* tile) = 0;
   
   virtual void justCreatedTopTile(const RenderContext* rc,
-                                  Tile* tile) = 0;
+                                  Tile* tile,
+                                  LayerSet* layerSet) = 0;
   
   virtual void ancestorTexturedSolvedChanged(Tile* tile,
                                              Tile* ancestorTile,
@@ -53,7 +56,8 @@ public:
   
   virtual void onTerrainTouchEvent(const EventContext* ec,
                                    const Geodetic3D& position,
-                                   const Tile* tile) = 0;
+                                   const Tile* tile,
+                                   LayerSet* layerSet) = 0;
   
 };
 
