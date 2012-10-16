@@ -325,8 +325,7 @@ public final class G3MWidget_WebGL
       final boolean logFPS = false;
       final boolean logDownloaderStatistics = false;
 
-      // TODO: implements JSONParser_WebGL
-      final IJSONParser jsonParser = null;
+      final IJSONParser jsonParser = new JSONParser_WebGL();
       _widget = G3MWidget.create( //
                frameTasksExecutor, //
                _factory, //
