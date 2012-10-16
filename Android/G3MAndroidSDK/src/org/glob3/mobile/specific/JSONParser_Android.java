@@ -10,23 +10,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import android.util.Log;
-
 
 public class JSONParser_Android
          extends
             IJSONParser {
 
    @Override
-   public JSONBaseObject parse(final String NamelessParameter) {
-
+   public JSONBaseObject parse(final String string) {
       org.glob3.mobile.generated.JSONBaseObject g3mJSONBaseObject = new JSONBaseObject();
-
-      Log.d("Debug", NamelessParameter);
 
       Object rawJson;
       try {
-         rawJson = new JSONTokener(NamelessParameter).nextValue();
+         rawJson = new JSONTokener(string).nextValue();
 
          if (rawJson instanceof JSONArray) {
 
@@ -53,7 +48,7 @@ public class JSONParser_Android
             //g3mJSONBaseObject = new org.glob3.mobile.generated.JSONString((String) rawJson);
 
             //TODO Hack to return the full string if it contain ":"
-            g3mJSONBaseObject = new org.glob3.mobile.generated.JSONString(NamelessParameter);
+            g3mJSONBaseObject = new org.glob3.mobile.generated.JSONString(string);
          }
          else if (rawJson instanceof Boolean) {
             g3mJSONBaseObject = new org.glob3.mobile.generated.JSONBoolean((Boolean) rawJson);

@@ -192,6 +192,16 @@
   
   IThreadUtils* threadUtils = new ThreadUtils_iOS();
   
+  class SampleInitializationTask : public GTask {
+  public:
+    void run() {
+//      ILogger::instance()->logInfo("Running initialization Task");
+      printf("Running initialization Task\n");
+    }
+  };
+  
+  GTask* initializationTask = new SampleInitializationTask();
+  
   _widgetVP = G3MWidget::create(frameTasksExecutor,
                                 factory,
                                 stringUtils,
@@ -212,7 +222,9 @@
                                 width, height,
                                 Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
                                 true,
-                                false);
+                                false,
+                                initializationTask,
+                                true);
   
   [self widget]->setUserData(userData);
 }

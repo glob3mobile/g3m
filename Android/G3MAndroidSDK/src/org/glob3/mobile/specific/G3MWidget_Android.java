@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.glob3.mobile.generated.BusyMeshRenderer;
 import org.glob3.mobile.generated.CPUTextureBuilder;
 import org.glob3.mobile.generated.CachedDownloader;
+import org.glob3.mobile.generated.Camera;
 import org.glob3.mobile.generated.CameraDoubleDragHandler;
 import org.glob3.mobile.generated.CameraDoubleTapHandler;
 import org.glob3.mobile.generated.CameraRenderer;
@@ -384,5 +385,14 @@ public final class G3MWidget_Android
       }
    }
 
+
+   public Camera getNextCamera() {
+      return getG3MWidget().getNextCamera();
+   }
+
+
+   public UserData getUserData() {
+      return getG3MWidget().getUserData();
+   }
 
 }

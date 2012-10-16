@@ -9,16 +9,7 @@
 #ifndef __G3MiOSSDK__IThreadUtils__
 #define __G3MiOSSDK__IThreadUtils__
 
-
-class GTask {
-public:
-  virtual ~GTask() {
-    
-  }
-  
-  virtual void run() = 0;
-};
-
+#include "GTask.hpp"
 
 class IThreadUtils {
 private:

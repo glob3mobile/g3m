@@ -43,7 +43,9 @@ G3MWidget::G3MWidget(FrameTasksExecutor*              frameTasksExecutor,
                      int                              height,
                      Color                            backgroundColor,
                      const bool                       logFPS,
-                     const bool                       logDownloaderStatistics):
+                     const bool                       logDownloaderStatistics,
+                     GTask*                           initializationTask,
+                     bool                             autoDeleteInitializationTask):
 _frameTasksExecutor(frameTasksExecutor),
 _factory(factory),
 _stringUtils(stringUtils),
@@ -69,7 +71,9 @@ _rendererReady(false), // false until first call to G3MWidget::render()
 _selectedRenderer(NULL),
 _renderStatisticsTimer(NULL),
 _logDownloaderStatistics(logDownloaderStatistics),
-_userData(NULL)
+_userData(NULL),
+_initializationTask(initializationTask),
+_autoDeleteInitializationTask(autoDeleteInitializationTask)
 {
   initializeGL();
   
@@ -93,28 +97,30 @@ _userData(NULL)
 }
 
 
-G3MWidget* G3MWidget::create(FrameTasksExecutor* frameTasksExecutor,
-                             IFactory*           factory,
-                             const IStringUtils* stringUtils,
-                             IThreadUtils*       threadUtils,
-                             IStringBuilder*     stringBuilder,
-                             IMathUtils*         mathUtils,
-                             IJSONParser*        jsonParser,
-                             ILogger*            logger,
-                             GL*                 gl,
-                             TexturesHandler*    texturesHandler,
-                             TextureBuilder*     textureBuilder,
-                             IDownloader*        downloader,
-                             const Planet*       planet,
-                             std::vector<ICameraConstrainer*> cameraConstraint,
-                             Renderer*           renderer,
-                             Renderer*           busyRenderer,
-                             EffectsScheduler*   scheduler,
-                             int                 width,
-                             int                 height,
-                             Color               backgroundColor,
-                             const bool          logFPS,
-                             const bool          logDownloaderStatistics) {
+G3MWidget* G3MWidget::create(FrameTasksExecutor*              frameTasksExecutor,
+                             IFactory*                        factory,
+                             const IStringUtils*              stringUtils,
+                             IThreadUtils*                    threadUtils,
+                             IStringBuilder*                  stringBuilder,
+                             IMathUtils*                      mathUtils,
+                             IJSONParser*                     jsonParser,
+                             ILogger*                         logger,
+                             GL*                              gl,
+                             TexturesHandler*                 texturesHandler,
+                             TextureBuilder*                  textureBuilder,
+                             IDownloader*                     downloader,
+                             const Planet*                    planet,
+                             std::vector<ICameraConstrainer*> cameraConstrainers,
+                             Renderer*                        renderer,
+                             Renderer*                        busyRenderer,
+                             EffectsScheduler*                effectsScheduler,
+                             int                              width,
+                             int                              height,
+                             Color                            backgroundColor,
+                             const bool                       logFPS,
+                             const bool                       logDownloaderStatistics,
+                             GTask*                           initializationTask,
+                             bool                             autoDeleteInitializationTask) {
   if (logger != NULL) {
     logger->logInfo("Creating G3MWidget...");
   }
@@ -137,14 +143,16 @@ G3MWidget* G3MWidget::create(FrameTasksExecutor* frameTasksExecutor,
                        textureBuilder,
                        downloader,
                        planet,
-                       cameraConstraint,
+                       cameraConstrainers,
                        renderer,
                        busyRenderer,
-                       scheduler,
+                       effectsScheduler,
                        width, height,
                        backgroundColor,
                        logFPS,
-                       logDownloaderStatistics);
+                       logDownloaderStatistics,
+                       initializationTask,
+                       autoDeleteInitializationTask);
 }
 
 void G3MWidget::initializeGL() {
@@ -214,18 +222,6 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
   }
 }
 
-//const double clamp(const double value,
-//                   const double lower,
-//                   const double upper) {
-//  if (value < lower) {
-//    return lower;
-//  }
-//  if (value > upper) {
-//    return upper;
-//  }
-//  return value;
-//}
-
 void G3MWidget::render() {
   _timer->start();
   _renderCounter++;
@@ -239,11 +235,15 @@ void G3MWidget::render() {
   }
   _currentCamera->copyFrom(*_nextCamera);
   
-  //  int __removePrint;
-  //  printf("Camera Position=%s\n" ,
-  //         _planet->toGeodetic3D(_currentCamera->getCartesianPosition()).description().c_str());
   
-  // create RenderContext
+  if (_initializationTask != NULL) {
+    _initializationTask->run();
+    if (_autoDeleteInitializationTask) {
+      delete _initializationTask;
+    }
+    _initializationTask = NULL;
+  }
+  
   RenderContext rc(_frameTasksExecutor,
                    _factory,
                    _stringUtils,
@@ -273,35 +273,7 @@ void G3MWidget::render() {
     _selectedRenderer = selectedRenderer;
     _selectedRenderer->start();
   }
-  
-  //  const Vector3D ray = _currentCamera->getCenter();
-  //  const Vector3D origin = _currentCamera->getPosition();
-  //
-  //  const Vector3D intersection = _planet->closestIntersection(origin, ray);
-  //  if (!intersection.isNan()) {
-  //    const Vector3D cameraPosition = _currentCamera->getPosition();
-  //
-  //    const double minDistance = 1000;
-  //    const double maxDistance = 20000;
-  //
-  //    const double distanceToTerrain = clamp(intersection.sub(cameraPosition).length(),
-  //                                           minDistance,
-  //                                           maxDistance + minDistance) - minDistance;
-  //
-  //    printf("Camera to terrain distance=%f\n", distanceToTerrain);
-  //
-  //    const float factor = (float) (distanceToTerrain / maxDistance);
-  //
-  //    // Clear the scene
-  //    const Color dayColor = Color::fromRGBA((float) 0.5, (float) 0.5, 1, 1);
-  //    _gl->clearScreen(_backgroundColor.mixedWith(dayColor, factor));
-  //    //    _gl->clearScreen(_backgroundColor);
-  //
-  //  }
-  //  else {
-  //    // Clear the scene
-  //    _gl->clearScreen(_backgroundColor);
-  //  }
+
   _gl->clearScreen(_backgroundColor);
   
   _selectedRenderer->render(&rc);

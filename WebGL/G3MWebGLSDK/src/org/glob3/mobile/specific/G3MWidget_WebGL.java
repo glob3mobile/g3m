@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import org.glob3.mobile.generated.BusyMeshRenderer;
 import org.glob3.mobile.generated.CPUTextureBuilder;
+import org.glob3.mobile.generated.Camera;
 import org.glob3.mobile.generated.CameraDoubleDragHandler;
 import org.glob3.mobile.generated.CameraDoubleTapHandler;
 import org.glob3.mobile.generated.CameraRenderer;
@@ -69,6 +70,8 @@ public final class G3MWidget_WebGL
    private JavaScriptObject              _webGLContext         = null;
 
    private G3MWidget                     _widget;
+
+
    private int                           _width;
    private int                           _height;
    private final int                     _delayMillis;
@@ -419,4 +422,21 @@ public final class G3MWidget_WebGL
 		webGLContext.clear(webGLContext.COLOR_BUFFER_BIT
 				| webGLContext.DEPTH_BUFFER_BIT);
    }-*/;
+
+
+   public G3MWidget getG3MWidget() {
+      return _widget;
+   }
+
+
+   public Camera getNextCamera() {
+      return getG3MWidget().getNextCamera();
+   }
+
+
+   public UserData getUserData() {
+      return getG3MWidget().getUserData();
+   }
+
+
 }

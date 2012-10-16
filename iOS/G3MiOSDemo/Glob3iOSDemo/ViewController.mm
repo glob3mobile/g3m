@@ -211,34 +211,11 @@
                                 Geodetic3D(latitude, longitude, 0)));
       }
     }
-    
-    //Tests for JSON
-    /*if (true){
-      IJSONParser* parser = new JSONParser_iOS();
-      JSONParser.setInstance(parser);
-      std::string testString = "{\"a\": [1, false, \"hola\"]}";
-    
-      JSONBaseObject* testObj = IJSONParser::instance()->parse(testString);
-      JSONObject* object = testObj->getObject();
-    
-      JSONArray* array = object->getObjectForKey("a")->getArray();
-      int element0 = array->getElement(0)->getNumber()->getIntValue();
-      bool element1 = array->getElement(1)->getBoolean()->getValue();
-      std::string element2 = array->getElement(2)->getString()->getValue();
-    }*/
   }
   
   //  if (false) {
   //    LatLonMeshRenderer *renderer = new LatLonMeshRenderer();
   //    renderers.push_back(renderer);
-  //  }
-  
-  //  if (false) {
-  //    SceneGraphRenderer* sgr = new SceneGraphRenderer();
-  //    SGCubeNode* cube = new SGCubeNode();
-  //    // cube->setScale(Vector3D(6378137.0, 6378137.0, 6378137.0));
-  //    sgr->getRootNode()->addChild(cube);
-  //    renderers.push_back(sgr);
   //  }
   
 //  renderers.push_back(new GLErrorRenderer());

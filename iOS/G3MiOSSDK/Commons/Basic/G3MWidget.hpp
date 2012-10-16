@@ -23,6 +23,7 @@ class ITimer;
 class EffectsScheduler;
 class IStringUtils;
 class IThreadUtils;
+class GTask;
 
 #include <vector>
 #include <string>
@@ -62,28 +63,30 @@ public:
 class G3MWidget {
 public:
   
-  static G3MWidget* create(FrameTasksExecutor* frameTasksExecutor,
-                           IFactory*           factory,
-                           const IStringUtils* stringUtils,
-                           IThreadUtils*       threadUtils,
-                           IStringBuilder*     stringBuilder,
-                           IMathUtils*         mathUtils,
-                           IJSONParser*        jsonParser,
-                           ILogger*            logger,
-                           GL*                 gl,
-                           TexturesHandler*    texturesHandler,
-                           TextureBuilder*     textureBuilder,
-                           IDownloader*        downloader,
-                           const Planet*       planet,
-                           std::vector<ICameraConstrainer*> cameraConstraint,
-                           Renderer*           renderer,
-                           Renderer*           busyRenderer,
-                           EffectsScheduler*   scheduler,
-                           int                 width,
-                           int                 height,
-                           Color               backgroundColor,
-                           const bool          logFPS,
-                           const bool          logDownloaderStatistics);
+  static G3MWidget* create(FrameTasksExecutor*              frameTasksExecutor,
+                           IFactory*                        factory,
+                           const IStringUtils*              stringUtils,
+                           IThreadUtils*                    threadUtils,
+                           IStringBuilder*                  stringBuilder,
+                           IMathUtils*                      mathUtils,
+                           IJSONParser*                     jsonParser,
+                           ILogger*                         logger,
+                           GL*                              gl,
+                           TexturesHandler*                 texturesHandler,
+                           TextureBuilder*                  textureBuilder,
+                           IDownloader*                     downloader,
+                           const Planet*                    planet,
+                           std::vector<ICameraConstrainer*> cameraConstrainers,
+                           Renderer*                        renderer,
+                           Renderer*                        busyRenderer,
+                           EffectsScheduler*                effectsScheduler,
+                           int                              width,
+                           int                              height,
+                           Color                            backgroundColor,
+                           const bool                       logFPS,
+                           const bool                       logDownloaderStatistics,
+                           GTask*                           initializationTask,
+                           bool                             autoDeleteInitializationTask);
   
   ~G3MWidget();
   
@@ -158,6 +161,9 @@ private:
   
   UserData* _userData;
   
+  GTask* _initializationTask;
+  bool   _autoDeleteInitializationTask;
+  
   void initializeGL();
   
   G3MWidget(FrameTasksExecutor* frameTasksExecutor,
@@ -178,7 +184,9 @@ private:
             int                 height,
             Color               backgroundColor,
             const bool          logFPS,
-            const bool          logDownloaderStatistics);
+            const bool          logDownloaderStatistics,
+            GTask*                           initializationTask,
+            bool                             autoDeleteInitializationTask);
   
 };
 
