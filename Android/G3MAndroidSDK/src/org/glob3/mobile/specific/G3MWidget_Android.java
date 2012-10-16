@@ -22,6 +22,7 @@ import org.glob3.mobile.generated.GL;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
+import org.glob3.mobile.generated.IJSONParser;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
 import org.glob3.mobile.generated.IStringUtils;
@@ -306,25 +307,16 @@ public final class G3MWidget_Android
       final org.glob3.mobile.generated.Renderer busyRenderer = new BusyMeshRenderer();
 
       final EffectsScheduler scheduler = new EffectsScheduler();
-
       final FrameTasksExecutor frameTasksExecutor = new FrameTasksExecutor();
-
       final IStringUtils stringUtils = new StringUtils_Android();
-
       final IThreadUtils threadUtils = new ThreadUtils_Android(this);
-
       final StringBuilder_Android stringBuilder = new StringBuilder_Android();
-
       final IMathUtils math = new MathUtils_Android();
+      final IJSONParser jsonParser = new JSONParser_Android();
 
-      _g3mWidget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, stringBuilder, math, logger, gl,
-               texturesHandler, textureBuilder, _downloader, planet, _cameraConstraints, composite, busyRenderer, scheduler,
-               width, height, Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false);
-      //      final IJSONParser jsonParser = new JSONParser_Android();
-      //
-      //      _g3mWidget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, stringBuilder, math, jsonParser,
-      //               logger, gl, texturesHandler, textureBuilder, _downloader, planet, _cameraConstraints, composite, busyRenderer,
-      //               scheduler, width, height, Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false);
+      _g3mWidget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, stringBuilder, math, jsonParser,
+               logger, gl, texturesHandler, textureBuilder, _downloader, planet, _cameraConstraints, composite, busyRenderer,
+               scheduler, width, height, Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false);
 
       _g3mWidget.setUserData(_userData);
    }

@@ -75,6 +75,32 @@ public abstract class IStringUtils
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual String replaceSubstring(const String& originalString, const String& toReplace, const String& replaceWith) const
+  public String replaceSubstring(String originalString, String toReplace, String replaceWith)
+  {
+	int startIndex = indexOf(originalString, toReplace);
+	//The part to replace was not found. Return original String
+	if (startIndex == -1)
+	{
+	  return originalString;
+	}
+	int endIndex = startIndex+toReplace.length();
+	String left = substring(originalString, 0, startIndex);
+	String right = substring(originalString, endIndex);
+	String result = left+replaceWith+right;
+	startIndex = indexOf(result, toReplace);
+	if (startIndex != -1)
+	{
+	  //recursive call to replace other ocurrences
+	  return replaceSubstring(result, toReplace, replaceWith);
+	}
+	else
+	{
+	  return result;
+	}
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual String left(const String& String, int endIndex) const
   public String left(String String, int endIndex)
   {

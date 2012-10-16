@@ -64,6 +64,26 @@ public:
       return substring(string, beginIndex, string.size());
   }
   
+  virtual std::string replaceSubstring(const std::string& originalString, const std::string& toReplace, const std::string& replaceWith) const {
+    int startIndex = indexOf(originalString, toReplace);
+    //The part to replace was not found. Return original String
+    if (startIndex==-1) {
+      return originalString;
+    }
+    int endIndex = startIndex+toReplace.size();
+    std::string left = substring(originalString, 0, startIndex);
+    std::string right = substring(originalString, endIndex);
+    std::string result = left+replaceWith+right;
+    startIndex = indexOf(result, toReplace);
+    if (startIndex != -1){
+      //recursive call to replace other ocurrences
+      return replaceSubstring(result, toReplace, replaceWith);
+    }
+    else{
+      return result;
+    } 
+  }
+  
   virtual std::string left(const std::string& string,
                            int endIndex) const {
     return substring(string, 0, endIndex);

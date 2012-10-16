@@ -20,6 +20,13 @@
 
 #include "LevelTileCondition.hpp"
 
+#include "BingLayer.hpp"
+//#include "OSMLayer.hpp"
+
+#include "IJSONParser.hpp"
+#include "JSONParser_iOS.hpp"
+
+
 @implementation ViewController
 
 @synthesize G3MWidget;
@@ -80,8 +87,8 @@
   //                                     true,
   //                                     NULL);
   //  layerSet->addLayer(political);
-  
-  bool useBing = true;
+    
+  bool useBing = false;
   if (useBing) {
     WMSLayer* bing = new WMSLayer("ve",
                                   URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?"),
@@ -95,7 +102,7 @@
     layerSet->addLayer(bing);
   }
   
-  bool useOSM = false;
+  bool useOSM = true;
   if (useOSM) {
 //    WMSLayer *osm = new WMSLayer("osm",
 //                                 URL("http://wms.latlon.org/"),
@@ -204,6 +211,21 @@
                                 Geodetic3D(latitude, longitude, 0)));
       }
     }
+    
+    //Tests for JSON
+    /*if (true){
+      IJSONParser* parser = new JSONParser_iOS();
+      JSONParser.setInstance(parser);
+      std::string testString = "{\"a\": [1, false, \"hola\"]}";
+    
+      JSONBaseObject* testObj = IJSONParser::instance()->parse(testString);
+      JSONObject* object = testObj->getObject();
+    
+      JSONArray* array = object->getObjectForKey("a")->getArray();
+      int element0 = array->getElement(0)->getNumber()->getIntValue();
+      bool element1 = array->getElement(1)->getBoolean()->getValue();
+      std::string element2 = array->getElement(2)->getString()->getValue();
+    }*/
   }
   
   //  if (false) {
