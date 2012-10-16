@@ -101,9 +101,9 @@ public:
     return _gl;
   }
   
-  /*  const Camera* getCurrentCamera() const {
-   return _currentCamera;
-   }*/
+//  const Camera* getCurrentCamera() const {
+//    return _currentCamera;
+//  }
   
   Camera* getNextCamera() const {
     return _nextCamera;
