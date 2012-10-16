@@ -20,13 +20,14 @@ class IDownloader;
 class LeveledTexturedMesh;
 class IFloatBuffer;
 
+
 class MultiLayerTileTexturizer : public TileTexturizer {
 private:
+  LayerSet* _layerSet;
+  
 #ifdef C_CODE
-  const LayerSet* const        _layerSet;
   const TilesRenderParameters* _parameters;
 #else
-  const LayerSet*              _layerSet;
   TilesRenderParameters* _parameters;
 #endif
 
@@ -41,15 +42,7 @@ private:
   inline LeveledTexturedMesh* getMesh(Tile* tile) const;
 
 public:
-  MultiLayerTileTexturizer(LayerSet* layerSet) :
-  _layerSet(layerSet),
-  _parameters(NULL),
-  _texCoordsCache(NULL),
-  _pendingTopTileRequests(0),
-  _texturesHandler(NULL)
-  {
-    
-  }
+  MultiLayerTileTexturizer(LayerSet* layerSet) ;
   
   void countTopTileRequest() {
     _pendingTopTileRequests--;

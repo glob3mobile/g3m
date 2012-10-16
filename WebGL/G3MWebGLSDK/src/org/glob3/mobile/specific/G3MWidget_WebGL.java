@@ -119,9 +119,6 @@ public final class G3MWidget_WebGL
       _width = w;
       _height = h;
 
-      //      _width = _canvas.getOffsetWidth();
-      //      _height = _canvas.getOffsetHeight();
-
       _panel.setPixelSize(_width, _height);
       setPixelSize(_width, _height);
       _canvas.setCoordinateSpaceWidth(_width);

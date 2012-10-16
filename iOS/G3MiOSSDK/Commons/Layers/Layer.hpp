@@ -20,6 +20,7 @@
 class Petition;
 class Tile;
 class LayerCondition;
+class LayerSet;
 
 class Layer {
 private:
@@ -34,7 +35,8 @@ public:
     
   }
   
-  virtual ~Layer(){};
+  virtual ~Layer() {
+  };
   
   virtual std::vector<Petition*> getMapPetitions(const RenderContext* rc,
                                                  const Tile* tile,
@@ -46,7 +48,7 @@ public:
   virtual bool isAvailable(const EventContext* ec,
                            const Tile* tile) const;
   
-  virtual bool isTransparent() const = 0;
+//  virtual bool isTransparent() const = 0;
   
   virtual URL getFeatureInfoURL(const Geodetic2D& g,
                                 const IFactory* factory,

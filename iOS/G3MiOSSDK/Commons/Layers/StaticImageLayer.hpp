@@ -53,9 +53,9 @@ public:
                                          const Tile* tile,
                                          int width, int height) const;
   
-  bool isTransparent() const {
-    return true;
-  }
+//  bool isTransparent() const {
+//    return true;
+//  }
 
   URL getFeatureInfoURL(const Geodetic2D& g,
                         const IFactory* factory,

@@ -159,7 +159,7 @@ private:
   IFloatBuffer* _texCoords;
   
   std::vector<PetitionStatus>    _status;
-  std::vector<long long>              _requestsIds;
+  std::vector<long long>         _requestsIds;
   
   
   bool _finalized;
@@ -172,7 +172,7 @@ public:
   
   TileTextureBuilder(MultiLayerTileTexturizer*    texturizer,
                      const RenderContext*         rc,
-                     const LayerSet*        layerSet,
+                     const LayerSet*              layerSet,
                      const TilesRenderParameters* parameters,
                      IDownloader*                 downloader,
                      Tile* tile,
@@ -518,6 +518,15 @@ void BuilderDownloadStepDownloadListener::onCancel(const URL& url) {
   _builder->stepCanceled(_position);
 }
 
+MultiLayerTileTexturizer::MultiLayerTileTexturizer(LayerSet* layerSet) :
+_layerSet(layerSet),
+_parameters(NULL),
+_texCoordsCache(NULL),
+_pendingTopTileRequests(0),
+_texturesHandler(NULL)
+{
+
+}
 
 MultiLayerTileTexturizer::~MultiLayerTileTexturizer() {
   if (_texCoordsCache != NULL) {
@@ -525,7 +534,6 @@ MultiLayerTileTexturizer::~MultiLayerTileTexturizer() {
     _texCoordsCache = NULL;
   }
 }
-
 
 void MultiLayerTileTexturizer::initialize(const InitializationContext* ic,
                                           const TilesRenderParameters* parameters) {
