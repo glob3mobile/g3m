@@ -62,8 +62,8 @@ public class SceneParser
   
 	for (int i = 0; i<jsonItems.getSize(); i++)
 	{
-	  if (jsonItems.getElement(i).getObject().getObjectForKey(GlobalMembersSceneParser.status).getString().getValue().equals("true"))
-	  {
+		if (jsonItems.getElement(i).getObject().getObjectForKey(GlobalMembersSceneParser.status).getBoolean().getValue())
+		{
 		layersName.addString(jsonItems.getElement(i).getObject().getObjectForKey(GlobalMembersSceneParser.name).getString().getValue());
 		layersName.addString(",");
 	  }
