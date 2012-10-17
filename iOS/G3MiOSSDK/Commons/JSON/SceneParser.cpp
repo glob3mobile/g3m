@@ -86,7 +86,7 @@ void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, JSONObject* jsonLayer){
   IStringBuilder *layersName = IStringBuilder::newStringBuilder();
     
   for (int i = 0; i<jsonItems->getSize(); i++) {
-    if (jsonItems->getElement(i)->getObject()->getObjectForKey(status)->getString()->getValue() == "true") {
+      if (jsonItems->getElement(i)->getObject()->getObjectForKey(status)->getBoolean()->getValue()) {
       layersName->addString(jsonItems->getElement(i)->getObject()->getObjectForKey(name)->getString()->getValue());
       layersName->addString(",");
     }    
