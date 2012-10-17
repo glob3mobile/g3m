@@ -78,10 +78,16 @@ public final class G3MWidget_WebGL
    private final int                     _delayMillis;
    private final String                  _proxy;
 
-   private ArrayList<String>             _imagesToPreload;
-   private IFactory                      _factory;
 
-   private GTask                         _initializationTask;
+   public String getProxy() {
+      return _proxy;
+   }
+
+
+   private ArrayList<String> _imagesToPreload;
+   private IFactory          _factory;
+
+   private GTask             _initializationTask;
 
 
    public G3MWidget_WebGL(final int delayMillis,

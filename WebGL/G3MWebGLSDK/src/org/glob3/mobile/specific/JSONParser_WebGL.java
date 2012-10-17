@@ -70,6 +70,7 @@ public class JSONParser_WebGL
          for (final String key : jsonObject.keySet()) {
             object.putObject(key, convert(jsonObject.get(key)));
          }
+         return object;
       }
 
       ILogger.instance().logError("Invalid type in \"" + value + "\"");
