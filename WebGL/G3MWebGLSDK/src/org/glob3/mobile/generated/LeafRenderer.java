@@ -33,6 +33,11 @@ public class LeafRenderer extends Renderer
 
   }
 
+  public void dispose()
+  {
+
+  }
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: boolean isEnable() const
   public final boolean isEnable()
