@@ -132,7 +132,7 @@ G3MWidget* G3MWidget::create(FrameTasksExecutor*              frameTasksExecutor
   IStringBuilder::setInstance(stringBuilder);
   IMathUtils::setInstance(mathUtils);
   IJSONParser::setInstance(jsonParser);
-
+  
   return new G3MWidget(frameTasksExecutor,
                        factory,
                        stringUtils,
@@ -196,29 +196,33 @@ G3MWidget::~G3MWidget() {
 
 void G3MWidget::onTouchEvent(const TouchEvent* myEvent) {
   if (_rendererReady) {
-    EventContext ec(_factory,
-                    _stringUtils,
-                    _threadUtils,
-                    _logger,
-                    _planet,
-                    _downloader,
-                    _effectsScheduler);
-    
-    _renderer->onTouchEvent(&ec, myEvent);
+    if (_renderer->isEnable()) {
+      EventContext ec(_factory,
+                      _stringUtils,
+                      _threadUtils,
+                      _logger,
+                      _planet,
+                      _downloader,
+                      _effectsScheduler);
+      
+      _renderer->onTouchEvent(&ec, myEvent);
+    }
   }
 }
 
 void G3MWidget::onResizeViewportEvent(int width, int height) {
   if (_rendererReady) {
-    EventContext ec(_factory,
-                    _stringUtils,
-                    _threadUtils,
-                    _logger,
-                    _planet,
-                    _downloader,
-                    _effectsScheduler);
-    
-    _renderer->onResizeViewportEvent(&ec, width, height);
+    if (_renderer->isEnable()) {
+      EventContext ec(_factory,
+                      _stringUtils,
+                      _threadUtils,
+                      _logger,
+                      _planet,
+                      _downloader,
+                      _effectsScheduler);
+      
+      _renderer->onResizeViewportEvent(&ec, width, height);
+    }
   }
 }
 
@@ -273,10 +277,12 @@ void G3MWidget::render() {
     _selectedRenderer = selectedRenderer;
     _selectedRenderer->start();
   }
-
+  
   _gl->clearScreen(_backgroundColor);
   
-  _selectedRenderer->render(&rc);
+  if (_selectedRenderer->isEnable()) {
+    _selectedRenderer->render(&rc);
+  }
   
   //  _frameTasksExecutor->doPostRenderCycle(&rc);
   

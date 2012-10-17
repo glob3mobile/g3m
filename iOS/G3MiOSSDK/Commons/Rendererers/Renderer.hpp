@@ -16,6 +16,10 @@ class EventContext;
 
 class Renderer {
 public:
+  virtual bool isEnable() const = 0;
+  
+  virtual void setEnable(bool enable) = 0;
+  
   virtual void onResume(const InitializationContext* ic) = 0;
   
   virtual void onPause(const InitializationContext* ic) = 0;

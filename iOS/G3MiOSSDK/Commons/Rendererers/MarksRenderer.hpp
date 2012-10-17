@@ -10,10 +10,10 @@
 #define G3MiOSSDK_MarksRenderer_hpp
 
 #include <vector>
-#include "Renderer.hpp"
+#include "LeafRenderer.hpp"
 #include "Mark.hpp"
-
-class MarksRenderer : public Renderer {
+ 
+class MarksRenderer : public LeafRenderer {
 private:
   bool               _readyWhenMarksReady;
   std::vector<Mark*> _marks;

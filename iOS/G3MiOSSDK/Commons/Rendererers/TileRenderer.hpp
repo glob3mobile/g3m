@@ -11,7 +11,7 @@
 
 #include "IStringBuilder.hpp"
 
-#include "Renderer.hpp"
+#include "LeafRenderer.hpp"
 
 class Tile;
 class TileTessellator;
@@ -306,7 +306,7 @@ public:
 };
 
 
-class TileRenderer: public Renderer {
+class TileRenderer: public LeafRenderer {
 private:
   const TileTessellator*       _tessellator;
   TileTexturizer*              _texturizer;

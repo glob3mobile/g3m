@@ -93,3 +93,21 @@ void CompositeRenderer::onPause(const InitializationContext* ic) {
     _renderers[i]->onPause(ic);
   }
 }
+
+bool CompositeRenderer::isEnable() const {
+  if (!_enable) {
+    return false;
+  }
+  
+  const int rendersSize = _renderers.size();
+  for (int i = 0; i < rendersSize; i++) {
+    if (_renderers[i]->isEnable()) {
+      return true;
+    }
+  }
+  return false;
+}
+
+void CompositeRenderer::setEnable(bool enable) {
+  _enable = enable;
+}

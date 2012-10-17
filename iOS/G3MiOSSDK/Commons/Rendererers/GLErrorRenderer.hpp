@@ -9,9 +9,9 @@
 #ifndef G3MiOSSDK_GLErrorRenderer_hpp
 #define G3MiOSSDK_GLErrorRenderer_hpp
 
-#include "Renderer.hpp"
+#include "LeafRenderer.hpp"
 
-class GLErrorRenderer : public Renderer {
+class GLErrorRenderer : public LeafRenderer {
 public:
   
   void initialize(const InitializationContext* ic);

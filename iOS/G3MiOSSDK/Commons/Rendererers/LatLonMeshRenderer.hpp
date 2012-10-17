@@ -9,11 +9,11 @@
 #ifndef G3MiOSSDK_LatLonMeshRenderer_h
 #define G3MiOSSDK_LatLonMeshRenderer_h
 
-#include "Renderer.hpp"
+#include "LeafRenderer.hpp"
 #include "IndexedMesh.hpp"
 
 
-class LatLonMeshRenderer: public Renderer {
+class LatLonMeshRenderer: public LeafRenderer {
   
 private:
   Mesh * _mesh;

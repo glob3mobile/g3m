@@ -11,7 +11,7 @@
 
 #include <vector>
 
-#include "Renderer.hpp"
+#include "LeafRenderer.hpp"
 #include "Context.hpp"
 #include "Effects.hpp"
 
@@ -59,7 +59,7 @@ public:
 
 
 
-class CameraRenderer: public Renderer
+class CameraRenderer: public LeafRenderer
 {
   
 private:      
