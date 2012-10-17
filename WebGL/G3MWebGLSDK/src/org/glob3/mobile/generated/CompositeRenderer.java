@@ -77,9 +77,13 @@ public class CompositeRenderer extends Renderer
 	final int rendersSize = _renderers.size();
 	for (int i = 0; i < rendersSize; i++)
 	{
-	  if (!_renderers.get(i).isReadyToRender(rc))
+	  Renderer renderer = _renderers.get(i);
+	  if (renderer.isEnable())
 	  {
-		return false;
+		if (!renderer.isReadyToRender(rc))
+		{
+		  return false;
+		}
 	  }
 	}
   
@@ -93,7 +97,11 @@ public class CompositeRenderer extends Renderer
 	final int rendersSize = _renderers.size();
 	for (int i = 0; i < rendersSize; i++)
 	{
-	  _renderers.get(i).render(rc);
+	  Renderer renderer = _renderers.get(i);
+	  if (renderer.isEnable())
+	  {
+		renderer.render(rc);
+	  }
 	}
   }
 
@@ -103,9 +111,13 @@ public class CompositeRenderer extends Renderer
 	final int rendersSize = _renderers.size();
 	for (int i = rendersSize - 1; i >= 0; i--)
 	{
-	  if (_renderers.get(i).onTouchEvent(ec, touchEvent))
+	  Renderer renderer = _renderers.get(i);
+	  if (renderer.isEnable())
 	  {
-		return true;
+		if (renderer.onTouchEvent(ec, touchEvent))
+		{
+		  return true;
+		}
 	  }
 	}
 	return false;
