@@ -26,7 +26,7 @@ public class SceneParser
 	for (int i = 0; i < jsonLayers.getObject().getSize(); i++)
 	{
 	  IStringBuilder isb = IStringBuilder.newStringBuilder();
-	  isb.add(i);
+	  isb.addInt(i);
 	  JSONObject jsonLayer = jsonLayers.getObjectForKey(isb.getString()).getObject();
 	  final layer_type layerType = mapLayerType.get(jsonLayer.getObjectForKey(GlobalMembersSceneParser.type).getString().getValue());
   
@@ -64,8 +64,8 @@ public class SceneParser
 	{
 	  if (jsonItems.getElement(i).getObject().getObjectForKey(GlobalMembersSceneParser.status).getString().getValue().equals("true"))
 	  {
-		layersName.add(jsonItems.getElement(i).getObject().getObjectForKey(GlobalMembersSceneParser.name).getString().getValue());
-		layersName.add(",");
+		layersName.addString(jsonItems.getElement(i).getObject().getObjectForKey(GlobalMembersSceneParser.name).getString().getValue());
+		layersName.addString(",");
 	  }
 	}
 	String layersSecuence = layersName.getString();
