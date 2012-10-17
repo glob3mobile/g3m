@@ -130,9 +130,9 @@ public class Mark
 	final Vector3D markPosition = getCartesianPosition(planet);
   
 	final Vector3D markCameraVector = markPosition.sub(cameraPosition);
-	//  const double distanceToCamera = markCameraVector.length();
-	//  const bool renderMark = distanceToCamera <= minDistanceToCamera;
-	final boolean renderMark = true;
+	final double distanceToCamera = markCameraVector.length();
+	final boolean renderMark = distanceToCamera <= minDistanceToCamera;
+  //  const bool renderMark = true;
   
 	if (renderMark)
 	{

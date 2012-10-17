@@ -66,7 +66,7 @@ public class MarksRenderer extends LeafRenderer
 	gl.enableBlend();
   
 	final Vector3D radius = rc.getPlanet().getRadii();
-	final double minDistanceToCamera = (radius._x + radius._y + radius._z) * 2;
+	final double minDistanceToCamera = (radius._x + radius._y + radius._z) * 0.25;
   
 	int marksSize = _marks.size();
 	for (int i = 0; i < marksSize; i++)
