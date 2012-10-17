@@ -31,9 +31,9 @@ public class Ellipsoid
   public Ellipsoid(Vector3D radii)
   {
 	  _radii = new Vector3D(radii);
-	  _radiiSquared = new Vector3D(new Vector3D(radii.x() * radii.x(), radii.y() * radii.y(), radii.z() * radii.z()));
-	  _radiiToTheFourth = new Vector3D(new Vector3D(_radiiSquared.x() * _radiiSquared.x(), _radiiSquared.y() * _radiiSquared.y(), _radiiSquared.z() * _radiiSquared.z()));
-	  _oneOverRadiiSquared = new Vector3D(new Vector3D(1.0 / (radii.x() * radii.x()), 1.0 / (radii.y() * radii.y()), 1.0 / (radii.z() * radii.z())));
+	  _radiiSquared = new Vector3D(new Vector3D(radii._x * radii._x, radii._y * radii._y, radii._z * radii._z));
+	  _radiiToTheFourth = new Vector3D(new Vector3D(_radiiSquared._x * _radiiSquared._x, _radiiSquared._y * _radiiSquared._y, _radiiSquared._z * _radiiSquared._z));
+	  _oneOverRadiiSquared = new Vector3D(new Vector3D(1.0 / (radii._x * radii._x), 1.0 / (radii._y * radii._y), 1.0 / (radii._z * radii._z)));
   
   }
 
@@ -86,11 +86,11 @@ public class Ellipsoid
 	//direction.Normalize();
   
 	// By laborious algebraic manipulation....
-	final double a = (direction.x() * direction.x() * _oneOverRadiiSquared.x() + direction.y() * direction.y() * _oneOverRadiiSquared.y() + direction.z() * direction.z() * _oneOverRadiiSquared.z());
+	final double a = (direction._x * direction._x * _oneOverRadiiSquared._x + direction._y * direction._y * _oneOverRadiiSquared._y + direction._z * direction._z * _oneOverRadiiSquared._z);
   
-	final double b = 2.0 * (origin.x() * direction.x() * _oneOverRadiiSquared.x() + origin.y() * direction.y() * _oneOverRadiiSquared.y() + origin.z() * direction.z() * _oneOverRadiiSquared.z());
+	final double b = 2.0 * (origin._x * direction._x * _oneOverRadiiSquared._x + origin._y * direction._y * _oneOverRadiiSquared._y + origin._z * direction._z * _oneOverRadiiSquared._z);
   
-	final double c = (origin.x() * origin.x() * _oneOverRadiiSquared.x() + origin.y() * origin.y() * _oneOverRadiiSquared.y() + origin.z() * origin.z() * _oneOverRadiiSquared.z() - 1.0);
+	final double c = (origin._x * origin._x * _oneOverRadiiSquared._x + origin._y * origin._y * _oneOverRadiiSquared._y + origin._z * origin._z * _oneOverRadiiSquared._z - 1.0);
   
 	// Solve the quadratic equation: ax^2 + bx + c = 0.
 	// Algorithm is from Wikipedia's "Quadratic equation" topic, and Wikipedia credits
@@ -133,7 +133,7 @@ public class Ellipsoid
   {
 	final Vector3D n = geodeticSurfaceNormal(geodetic);
 	final Vector3D k = _radiiSquared.times(n);
-	final double gamma = IMathUtils.instance().sqrt((k.x() * n.x()) + (k.y() * n.y()) + (k.z() * n.z()));
+	final double gamma = IMathUtils.instance().sqrt((k._x * n._x) + (k._y * n._y) + (k._z * n._z));
   
 	final Vector3D rSurface = k.div(gamma);
 	return rSurface.add(n.times(geodetic.height()));
@@ -152,7 +152,7 @@ public class Ellipsoid
   {
 	final Vector3D n = geodeticSurfaceNormal(positionOnEllipsoid);
   
-	return new Geodetic2D(Angle.fromRadians(IMathUtils.instance().asin(n.z())), Angle.fromRadians(IMathUtils.instance().atan2(n.y(), n.x())));
+	return new Geodetic2D(Angle.fromRadians(IMathUtils.instance().asin(n._z)), Angle.fromRadians(IMathUtils.instance().atan2(n._y, n._x)));
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -179,15 +179,15 @@ public class Ellipsoid
 //ORIGINAL LINE: Vector3D scaleToGeodeticSurface(const Vector3D& position) const
   public final Vector3D scaleToGeodeticSurface(Vector3D position)
   {
-	double beta = 1.0 / IMathUtils.instance().sqrt((position.x() * position.x()) * _oneOverRadiiSquared.x() + (position.y() * position.y()) * _oneOverRadiiSquared.y() + (position.z() * position.z()) * _oneOverRadiiSquared.z());
+	double beta = 1.0 / IMathUtils.instance().sqrt((position._x * position._x) * _oneOverRadiiSquared._x + (position._y * position._y) * _oneOverRadiiSquared._y + (position._z * position._z) * _oneOverRadiiSquared._z);
   
-	double n = new Vector3D(beta * position.x() * _oneOverRadiiSquared.x(), beta * position.y() * _oneOverRadiiSquared.y(), beta * position.z() * _oneOverRadiiSquared.z()).length();
+	double n = new Vector3D(beta * position._x * _oneOverRadiiSquared._x, beta * position._y * _oneOverRadiiSquared._y, beta * position._z * _oneOverRadiiSquared._z).length();
   
 	double alpha = (1.0 - beta) * (position.length() / n);
   
-	double x2 = position.x() * position.x();
-	double y2 = position.y() * position.y();
-	double z2 = position.z() * position.z();
+	double x2 = position._x * position._x;
+	double y2 = position._y * position._y;
+	double z2 = position._z * position._z;
   
 	double da = 0.0;
 	double db = 0.0;
@@ -200,9 +200,9 @@ public class Ellipsoid
 	{
 	  alpha -= (s / dSdA);
   
-	  da = 1.0 + (alpha * _oneOverRadiiSquared.x());
-	  db = 1.0 + (alpha * _oneOverRadiiSquared.y());
-	  dc = 1.0 + (alpha * _oneOverRadiiSquared.z());
+	  da = 1.0 + (alpha * _oneOverRadiiSquared._x);
+	  db = 1.0 + (alpha * _oneOverRadiiSquared._y);
+	  dc = 1.0 + (alpha * _oneOverRadiiSquared._z);
   
 	  double da2 = da * da;
 	  double db2 = db * db;
@@ -212,20 +212,20 @@ public class Ellipsoid
 	  double db3 = db * db2;
 	  double dc3 = dc * dc2;
   
-	  s = x2 / (_radiiSquared.x() * da2) + y2 / (_radiiSquared.y() * db2) + z2 / (_radiiSquared.z() * dc2) - 1.0;
+	  s = x2 / (_radiiSquared._x * da2) + y2 / (_radiiSquared._y * db2) + z2 / (_radiiSquared._z * dc2) - 1.0;
   
-	  dSdA = -2.0 * (x2 / (_radiiToTheFourth.x() * da3) + y2 / (_radiiToTheFourth.y() * db3) + z2 / (_radiiToTheFourth.z() * dc3));
+	  dSdA = -2.0 * (x2 / (_radiiToTheFourth._x * da3) + y2 / (_radiiToTheFourth._y * db3) + z2 / (_radiiToTheFourth._z * dc3));
 	}
 	while (IMathUtils.instance().abs(s) > 1e-10);
   
-	return new Vector3D(position.x() / da, position.y() / db, position.z() / dc);
+	return new Vector3D(position._x / da, position._y / db, position._z / dc);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Vector3D scaleToGeocentricSurface(const Vector3D& position) const
   public final Vector3D scaleToGeocentricSurface(Vector3D position)
   {
-	double beta = 1.0 / IMathUtils.instance().sqrt((position.x() * position.x()) * _oneOverRadiiSquared.x() + (position.y() * position.y()) * _oneOverRadiiSquared.y() + (position.z() * position.z()) * _oneOverRadiiSquared.z());
+	double beta = 1.0 / IMathUtils.instance().sqrt((position._x * position._x) * _oneOverRadiiSquared._x + (position._y * position._y) * _oneOverRadiiSquared._y + (position._z * position._z) * _oneOverRadiiSquared._z);
   
 	return position.times(beta);
   }
@@ -282,7 +282,7 @@ public class Ellipsoid
   public final double computePreciseLatLonDistance(Geodetic2D g1, Geodetic2D g2)
   {
 	final Vector3D radius = _radii;
-	double R = (radius.x() + radius.y() + radius.z()) / 3;
+	double R = (radius._x + radius._y + radius._z) / 3;
 	double medLat = g1.latitude().degrees();
 	double medLon = g1.longitude().degrees();
   
@@ -312,7 +312,7 @@ public class Ellipsoid
   public final double computeFastLatLonDistance(Geodetic2D g1, Geodetic2D g2)
   {
 	final Vector3D radius = _radii;
-	double R = (radius.x() + radius.y() + radius.z()) / 3;
+	double R = (radius._x + radius._y + radius._z) / 3;
   
 	double medLat = g1.latitude().degrees();
 	double medLon = g1.longitude().degrees();
@@ -336,7 +336,7 @@ public class Ellipsoid
 	double t = 0;
   
 	// compute radius for the rotation
-	double R0 = (_radii.x() + _radii.y() + _radii.y()) /3;
+	double R0 = (_radii._x + _radii._y + _radii._y) /3;
   
 	// compute the point in this ray that are to a distance R from the origin.
 	double U2 = ray.squaredLength();

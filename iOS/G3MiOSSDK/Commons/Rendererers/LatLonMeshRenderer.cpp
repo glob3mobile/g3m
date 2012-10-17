@@ -23,11 +23,7 @@ LatLonMeshRenderer::~LatLonMeshRenderer()
 
 void LatLonMeshRenderer::initialize(const InitializationContext* ic)
 {
-#ifdef C_CODE
-  FloatBufferBuilderFromGeodetic vertices(FirstVertex, ic->getPlanet(), Geodetic2D::zero());
-#else
-  FloatBufferBuilderFromGeodetic vertices(CenterStrategy.FirstVertex, ic->getPlanet(), Geodetic2D::zero());  
-#endif
+  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(), ic->getPlanet(), Geodetic2D::zero());
   vertices.add(Geodetic3D::fromDegrees(28.753213, -17.898788, 500) );
   vertices.add(Geodetic3D::fromDegrees(28.680347, -17.898788, 500) );
   vertices.add(Geodetic3D::fromDegrees(28.753213, -17.83287,  500) );
@@ -40,22 +36,12 @@ void LatLonMeshRenderer::initialize(const InitializationContext* ic)
 
   Color *flatColor = new Color(Color::fromRGBA((float)1.0, (float)1.0, (float)0.0, (float)1.0));
   
-#ifdef C_CODE
-  _mesh = new IndexedMesh(TriangleStrip,
+  _mesh = new IndexedMesh(GLPrimitive::triangleStrip(),
                           true,
                           vertices.getCenter(),
                           vertices.create(),
                           index.create(),
                           flatColor);
-#endif
-#ifdef JAVA_CODE
-  _mesh = new IndexedMesh(GLPrimitive.TriangleStrip,
-                      true,
-                      vertices.getCenter(),
-                      vertices.create(),
-                      index.create(),
-                      flatColor);
-#endif
 
 }  
 

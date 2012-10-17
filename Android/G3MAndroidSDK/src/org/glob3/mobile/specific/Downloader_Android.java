@@ -15,7 +15,7 @@ import org.glob3.mobile.generated.InitializationContext;
 import org.glob3.mobile.generated.URL;
 
 
-public class Downloader_Android
+public final class Downloader_Android
          implements
             IDownloader {
 
@@ -254,10 +254,14 @@ public class Downloader_Android
    public String statistics() {
       final StringBuilder_Android sb = new StringBuilder_Android();
 
-      sb.add("Downloader_Android(downloading=").add(_downloadingHandlers.size());
-      sb.add(", queued=").add(_queuedHandlers.size());
-      sb.add(", totalRequests=").add(_requestsCounter);
-      sb.add(", totalCancels=").add(_cancelsCounter);
+      sb.addString("Downloader_Android(downloading=");
+      sb.addInt(_downloadingHandlers.size());
+      sb.addString(", queued=");
+      sb.addInt(_queuedHandlers.size());
+      sb.addString(", totalRequests=");
+      sb.addLong(_requestsCounter);
+      sb.addString(", totalCancels=");
+      sb.addLong(_cancelsCounter);
 
       return sb.getString();
    }

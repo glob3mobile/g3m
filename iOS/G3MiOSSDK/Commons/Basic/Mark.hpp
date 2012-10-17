@@ -13,10 +13,10 @@
 #include "Geodetic3D.hpp"
 #include "Context.hpp"
 
-#include "GLTextureId.hpp"
 #include "Vector3D.hpp"
 
 class IFloatBuffer;
+class IGLTextureId;
 
 class Mark {
 private:
@@ -24,7 +24,12 @@ private:
   const std::string  _textureFilename;
   const Geodetic3D   _position;
   
-  GLTextureId _textureId;
+#ifdef C_CODE
+  const IGLTextureId* _textureId;
+#endif
+#ifdef JAVA_CODE
+  private IGLTextureId _textureId;
+#endif
   
   Vector3D* _cartesianPosition;
   Vector3D* getCartesianPosition(const Planet* planet);
@@ -39,7 +44,7 @@ public:
   _name(name),
   _textureFilename(textureFilename),
   _position(position),
-  _textureId(GLTextureId::invalid()),
+  _textureId(NULL),
   _cartesianPosition(NULL),
   _vertices(NULL)
   {

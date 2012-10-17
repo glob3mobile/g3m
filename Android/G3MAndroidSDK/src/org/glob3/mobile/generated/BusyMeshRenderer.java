@@ -38,7 +38,7 @@ public class BusyMeshRenderer extends Renderer implements EffectTarget
   {
 	int numStrides = 60;
   
-	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.NoCenter, Vector3D.zero());
+	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
 	FloatBufferBuilderFromColor colors = new FloatBufferBuilderFromColor();
 	IntBufferBuilder indices = new IntBufferBuilder();
   
@@ -75,13 +75,7 @@ public class BusyMeshRenderer extends Renderer implements EffectTarget
 	indices.add(1);
   
 	// create mesh
-	_mesh = new IndexedMesh(GLPrimitive.TriangleStrip,
-  					  true,
-  					  vertices.getCenter(),
-  					  vertices.create(),
-  					  indices.create(),
-  					  null,
-  					  colors.create());
+	_mesh = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), null, colors.create());
   }
 
   public final boolean isReadyToRender(RenderContext rc)

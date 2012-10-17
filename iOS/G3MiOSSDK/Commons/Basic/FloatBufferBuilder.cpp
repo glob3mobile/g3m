@@ -17,7 +17,7 @@ IFloatBuffer* FloatBufferBuilder::create() const {
   IFloatBuffer* result = GFactory.createFloatBuffer(size);
   
   for (int i = 0; i < size; i++) {
-    result->put(i, _values[i]);
+    result->rawPut(i, _values[i]);
   }
   
   return result;

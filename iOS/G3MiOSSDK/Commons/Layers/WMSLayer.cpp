@@ -55,13 +55,19 @@ std::vector<Petition*> WMSLayer::getMapPetitions(const RenderContext* rc,
       
       IStringBuilder* isb = IStringBuilder::newStringBuilder();
       
-      isb->add("&WIDTH=")->add(width);
-      isb->add("&HEIGHT=")->add(height);
+      isb->addString("&WIDTH=");
+      isb->addInt(width);
+      isb->addString("&HEIGHT=");
+      isb->addInt(height);
       
-      isb->add("&BBOX=")->add(sector.lower().latitude().degrees())->add(",");
-      isb->add(sector.lower().longitude().degrees())->add(",");
-      isb->add(sector.upper().latitude().degrees())->add(",");
-      isb->add(sector.upper().longitude().degrees());
+      isb->addString("&BBOX=");
+      isb->addDouble(sector.lower().latitude().degrees());
+      isb->addString(",");
+      isb->addDouble(sector.lower().longitude().degrees());
+      isb->addString(",");
+      isb->addDouble(sector.upper().latitude().degrees());
+      isb->addString(",");
+      isb->addDouble(sector.upper().longitude().degrees());
       
       req += isb->getString();
       delete isb;
@@ -78,13 +84,19 @@ std::vector<Petition*> WMSLayer::getMapPetitions(const RenderContext* rc,
       
       IStringBuilder* isb = IStringBuilder::newStringBuilder();
       
-      isb->add("&WIDTH=")->add(width);
-      isb->add("&HEIGHT=")->add(height);
+      isb->addString("&WIDTH=");
+      isb->addInt(width);
+      isb->addString("&HEIGHT=");
+      isb->addInt(height);
       
-      isb->add("&BBOX=")->add(sector.lower().longitude().degrees())->add(",");
-      isb->add(sector.lower().latitude().degrees())->add(",");
-      isb->add(sector.upper().longitude().degrees())->add(",");
-      isb->add(sector.upper().latitude().degrees());
+      isb->addString("&BBOX=");
+      isb->addDouble(sector.lower().longitude().degrees());
+      isb->addString(",");
+      isb->addDouble(sector.lower().latitude().degrees());
+      isb->addString(",");
+      isb->addDouble(sector.upper().longitude().degrees());
+      isb->addString(",");
+      isb->addDouble(sector.upper().latitude().degrees());
       
       req += isb->getString();
       delete isb;
@@ -169,13 +181,19 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& g,
       
       IStringBuilder* isb = IStringBuilder::newStringBuilder();
       
-      isb->add("&WIDTH=")->add(width);
-      isb->add("&HEIGHT=")->add(height);
+      isb->addString("&WIDTH=");
+      isb->addInt(width);
+      isb->addString("&HEIGHT=");
+      isb->addInt(height);
       
-      isb->add("&BBOX=")->add(sector.lower().latitude().degrees())->add(",");
-      isb->add(sector.lower().longitude().degrees())->add(",");
-      isb->add(sector.upper().latitude().degrees())->add(",");
-      isb->add(sector.upper().longitude().degrees());
+      isb->addString("&BBOX=");
+      isb->addDouble(sector.lower().latitude().degrees());
+      isb->addString(",");
+      isb->addDouble(sector.lower().longitude().degrees());
+      isb->addString(",");
+      isb->addDouble(sector.upper().latitude().degrees());
+      isb->addString(",");
+      isb->addDouble(sector.upper().longitude().degrees());
       
       req += isb->getString();
       
@@ -193,13 +211,19 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& g,
       
       IStringBuilder* isb = IStringBuilder::newStringBuilder();
       
-      isb->add("&WIDTH=")->add(width);
-      isb->add("&HEIGHT=")->add(height);
+      isb->addString("&WIDTH=");
+      isb->addInt(width);
+      isb->addString("&HEIGHT=");
+      isb->addInt(height);
       
-      isb->add("&BBOX=")->add(sector.lower().longitude().degrees())->add(",");
-      isb->add(sector.lower().latitude().degrees())->add(",");
-      isb->add(sector.upper().longitude().degrees())->add(",");
-      isb->add(sector.upper().latitude().degrees());
+      isb->addString("&BBOX=");
+      isb->addDouble(sector.lower().longitude().degrees());
+      isb->addString(",");
+      isb->addDouble(sector.lower().latitude().degrees());
+      isb->addString(",");
+      isb->addDouble(sector.upper().longitude().degrees());
+      isb->addString(",");
+      isb->addDouble(sector.upper().latitude().degrees());
       
       req += isb->getString();
       
@@ -216,11 +240,14 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& g,
   
   //X and Y
   Vector2D pixel = tileSector.getUVCoordinates(g);
-  int x = (int) GMath.round( (pixel.x() * width) );
-  int y = (int) GMath.round ( ((1.0 - pixel.y()) * height) );
+  int x = (int) GMath.round( (pixel._x * width) );
+  int y = (int) GMath.round ( ((1.0 - pixel._y) * height) );
   
   IStringBuilder* isb = IStringBuilder::newStringBuilder();
-  isb->add("&X=")->add(x)->add("&Y=")->add(y);
+  isb->addString("&X=");
+  isb->addInt(x);
+  isb->addString("&Y=");
+  isb->addInt(y);
   req += isb->getString();
   delete isb;
   

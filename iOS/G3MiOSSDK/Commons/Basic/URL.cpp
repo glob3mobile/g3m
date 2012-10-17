@@ -11,10 +11,11 @@
 #include "IStringBuilder.hpp"
 
 const std::string URL::description() const {
-  
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
-  isb->add("URL(")->add(getPath())->add(")");
-  std::string s = isb->getString();
+  isb->addString("URL(");
+  isb->addString(getPath());
+  isb->addString(")");
+  const std::string s = isb->getString();
   delete isb;
   return s; 
 }

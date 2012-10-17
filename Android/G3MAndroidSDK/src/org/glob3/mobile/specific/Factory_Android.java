@@ -18,7 +18,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 
-public class Factory_Android
+public final class Factory_Android
          extends
             IFactory {
    private final Context _context;
@@ -128,6 +128,27 @@ public class Factory_Android
    @Override
    public IByteBuffer createByteBuffer(final int length) {
       return new ByteBuffer_Android(length);
+   }
+
+
+   @Override
+   public IFloatBuffer createFloatBuffer(final float f0,
+                                         final float f1,
+                                         final float f2,
+                                         final float f3,
+                                         final float f4,
+                                         final float f5,
+                                         final float f6,
+                                         final float f7,
+                                         final float f8,
+                                         final float f9,
+                                         final float f10,
+                                         final float f11,
+                                         final float f12,
+                                         final float f13,
+                                         final float f14,
+                                         final float f15) {
+      return new FloatBuffer_Android(f0, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15);
    }
 
 }

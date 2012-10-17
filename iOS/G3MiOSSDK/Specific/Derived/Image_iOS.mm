@@ -155,13 +155,13 @@ IImage* Image_iOS::scale(int width, int height) const{
 
 const std::string Image_iOS::description() const {
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
-  isb->add("Image_iOS ");
-  isb->add(getWidth());
-  isb->add("x");
-  isb->add(getHeight());
-  isb->add(", _image=(");
-  isb->add( [[_image description] cStringUsingEncoding:NSUTF8StringEncoding] );
-  isb->add(")");
+  isb->addString("Image_iOS ");
+  isb->addInt(getWidth());
+  isb->addString("x");
+  isb->addInt(getHeight());
+  isb->addString(", _image=(");
+  isb->addString( [[_image description] cStringUsingEncoding:NSUTF8StringEncoding] );
+  isb->addString(")");
   std::string s = isb->getString();
   delete isb;
   return s;

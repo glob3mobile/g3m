@@ -40,7 +40,7 @@ public class MarksRenderer extends Renderer
 	gl.enableBlend();
   
 	final Vector3D radius = rc.getPlanet().getRadii();
-	final double minDistanceToCamera = (radius.x() + radius.y() + radius.z()) * 2;
+	final double minDistanceToCamera = (radius._x + radius._y + radius._z) * 2;
   
 	int marksSize = _marks.size();
 	for (int i = 0; i < marksSize; i++)

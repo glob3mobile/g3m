@@ -108,9 +108,14 @@ public class Geodetic3D
   public final String description()
   {
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.add("(lat=").add(_latitude.description()).add(", lon=").add(_longitude.description());
-	isb.add(", height=").add(_height).add(")");
-	String s = isb.getString();
+	isb.addString("(lat=");
+	isb.addString(_latitude.description());
+	isb.addString(", lon=");
+	isb.addString(_longitude.description());
+	isb.addString(", height=");
+	isb.addDouble(_height);
+	isb.addString(")");
+	final String s = isb.getString();
 	if (isb != null)
 		isb.dispose();
 	return s;

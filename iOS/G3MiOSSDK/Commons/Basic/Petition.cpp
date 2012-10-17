@@ -11,21 +11,20 @@
 #include "IStringBuilder.hpp"
 
 const std::string Petition::description() const {
-  
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
-  isb->add("Petition(url=");
-  isb->add(_url.description());
-  isb->add(", sector=");
-  isb->add(_sector->description());
-  isb->add(", buffer=");
+  isb->addString("Petition(url=");
+  isb->addString(_url.description());
+  isb->addString(", sector=");
+  isb->addString(_sector->description());
+  isb->addString(", buffer=");
   if (_image == NULL) {
-    isb->add("NULL");
+    isb->addString("NULL");
   }
   else {
-    isb->add(_image->description() );
+    isb->addString( _image->description() );
   }
-  std::string s = isb->getString();
-  
+
+  const std::string s = isb->getString();
   delete isb;
   return s;
 }

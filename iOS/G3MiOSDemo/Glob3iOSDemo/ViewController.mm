@@ -54,9 +54,6 @@
 {
   LayerSet* layerSet = new LayerSet();
   
-  
-  
-  
   if (false) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
                                         URL("http://www.nasa.network.com/wms?"),
@@ -92,16 +89,19 @@
   //                                     NULL);
   //  layerSet->addLayer(political);
   
-  /*WMSLayer* bing = new WMSLayer("ve",
-                                URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?"),
-                                WMS_1_1_0,
-                                Sector::fullSphere(),
-                                "image/jpeg",
-                                "EPSG:4326",
-                                "",
-                                false,
-                                NULL);
-  layerSet->addLayer(bing);*/
+  bool useBing = false;
+  if (useBing) {
+    WMSLayer* bing = new WMSLayer("ve",
+                                  URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?"),
+                                  WMS_1_1_0,
+                                  Sector::fullSphere(),
+                                  "image/jpeg",
+                                  "EPSG:4326",
+                                  "",
+                                  false,
+                                  NULL);
+    layerSet->addLayer(bing);
+  }
   
   
   //IJSONParser* parser = new JSONParser_iOS();

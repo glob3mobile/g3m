@@ -21,7 +21,7 @@ import org.glob3.mobile.generated.URL;
 import android.util.Log;
 
 
-public class Downloader_Android_Handler {
+public final class Downloader_Android_Handler {
 
    final static String                    TAG        = "Downloader_Android_Handler";
 

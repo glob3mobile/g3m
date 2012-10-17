@@ -5,7 +5,7 @@ package org.glob3.mobile.specific;
 import org.glob3.mobile.generated.IStringBuilder;
 
 
-public class StringBuilder_Android
+public final class StringBuilder_Android
          extends
             IStringBuilder {
 
@@ -19,14 +19,14 @@ public class StringBuilder_Android
 
 
    @Override
-   public IStringBuilder add(final double d) {
+   public IStringBuilder addDouble(final double d) {
       _builder.append(d);
       return this;
    }
 
 
    @Override
-   public IStringBuilder add(final String s) {
+   public IStringBuilder addString(final String s) {
       _builder.append(s);
       return this;
    }
@@ -42,6 +42,27 @@ public class StringBuilder_Android
    @Override
    public String getString() {
       return _builder.toString();
+   }
+
+
+   @Override
+   public IStringBuilder addFloat(final float f) {
+      _builder.append(f);
+      return this;
+   }
+
+
+   @Override
+   public IStringBuilder addInt(final int i) {
+      _builder.append(i);
+      return this;
+   }
+
+
+   @Override
+   public IStringBuilder addLong(final long l) {
+      _builder.append(l);
+      return this;
    }
 
 }

@@ -87,7 +87,7 @@ public class Tile
 	//  }
 	final Vector2D ex = extent.projectedExtent(rc);
 	//const double t = extent.maxAxis() * 2;
-	final double t = (ex.x() + ex.y());
+	final double t = (ex._x + ex._y);
 	if (t <= ((parameters._tileTextureWidth + parameters._tileTextureHeight) * 1.75))
 	{
 	  return true;
@@ -414,10 +414,6 @@ public class Tile
 		{
 		  debugRender(rc, trc);
 		}
-  
-		// render extent
-		if (false)
-		  getTessellatorMesh(rc, trc).getExtent().render(rc);
   
 		statistics.computeTileRendered(this);
   

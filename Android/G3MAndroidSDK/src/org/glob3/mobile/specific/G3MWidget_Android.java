@@ -53,7 +53,7 @@ import android.view.MotionEvent;
 import android.view.MotionEvent.PointerCoords;
 
 
-public class G3MWidget_Android
+public final class G3MWidget_Android
          extends
             GLSurfaceView
          implements
@@ -311,7 +311,7 @@ public class G3MWidget_Android
       }
 
       final TextureBuilder textureBuilder = new CPUTextureBuilder();
-      final TexturesHandler texturesHandler = new TexturesHandler(gl, factory, false);
+      final TexturesHandler texturesHandler = new TexturesHandler(gl, false);
 
       final Planet planet = Planet.createEarth();
 

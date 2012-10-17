@@ -1,20 +1,15 @@
 package org.glob3.mobile.generated; 
-public enum GLError
+public class GLError
 {
-  NoError,
-  InvalidEnum,
-  InvalidValue,
-  InvalidOperation,
-  OutOfMemory,
-  UnknownError;
+  private static int _noError = 0;
 
-	public int getValue()
-	{
-		return this.ordinal();
-	}
+  public static int noError()
+  {
+	  return _noError;
+  }
 
-	public static GLError forValue(int value)
-	{
-		return values()[value];
-	}
+  public static void init(INativeGL ngl)
+  {
+	_noError = ngl.Error_NoError();
+  }
 }

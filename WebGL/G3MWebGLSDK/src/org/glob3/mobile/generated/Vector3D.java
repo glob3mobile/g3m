@@ -23,12 +23,13 @@ package org.glob3.mobile.generated;
 
 public class Vector3D
 {
-  private final double _x;
-  private final double _y;
-  private final double _z;
 
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  Vector3D operator =(Vector3D that);
+
+  public final double _x;
+  public final double _y;
+  public final double _z;
 
 
   public Vector3D(double x, double y, double z)
@@ -173,9 +174,9 @@ public class Vector3D
 //ORIGINAL LINE: Vector3D rotateAroundAxis(const Vector3D& axis, const Angle& theta) const
   public final Vector3D rotateAroundAxis(Vector3D axis, Angle theta)
   {
-	final double u = axis.x();
-	final double v = axis.y();
-	final double w = axis.z();
+	final double u = axis._x;
+	final double v = axis._y;
+	final double w = axis._z;
   
 	final double cosTheta = theta.cosinus();
 	final double sinTheta = theta.sinus();
@@ -186,26 +187,17 @@ public class Vector3D
 	return new Vector3D(((u * (u * _x + v * _y + w * _z)) + (((_x * (v * v + w * w)) - (u * (v * _y + w * _z))) * cosTheta) + (m * ((-w * _y) + (v * _z)) * sinTheta)) / ms, ((v * (u * _x + v * _y + w * _z)) + (((_y * (u * u + w * w)) - (v * (u * _x + w * _z))) * cosTheta) + (m * ((w * _x) - (u * _z)) * sinTheta)) / ms, ((w * (u * _x + v * _y + w * _z)) + (((_z * (u * u + v * v)) - (w * (u * _x + v * _y))) * cosTheta) + (m * (-(v * _x) + (u * _y)) * sinTheta)) / ms);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double x() const
-  public final double x()
-  {
-	return _x;
-  }
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double y() const
-  public final double y()
-  {
-	return _y;
-  }
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double z() const
-  public final double z()
-  {
-	return _z;
-  }
+  //  double x() const {
+  //    return _x;
+  //  }
+  //
+  //  double y() const {
+  //    return _y;
+  //  }
+  //
+  //  double z() const {
+  //    return _z;
+  //  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Vector3D transformedBy(const MutableMatrix44D &m, const double homogeneus) const
@@ -255,8 +247,14 @@ public class Vector3D
   public final String description()
   {
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.add("(V2D ").add(_x).add(", ").add(_y).add(", ").add(_z).add(")");
-	String s = isb.getString();
+	isb.addString("(V3D ");
+	isb.addDouble(_x);
+	isb.addString(", ");
+	isb.addDouble(_y);
+	isb.addString(", ");
+	isb.addDouble(_z);
+	isb.addString(")");
+	final String s = isb.getString();
 	if (isb != null)
 		isb.dispose();
 	return s;

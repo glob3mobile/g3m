@@ -55,7 +55,7 @@ void SceneParser::parse(LayerSet* layerSet, std::string namelessParameter){
 void SceneParser::parserJSONLayerList(LayerSet* layerSet, JSONObject* jsonLayers){
   for (int i = 0; i < jsonLayers->getObject()->getSize(); i++) {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
-    isb->add(i);
+    isb->addInt(i);
     JSONObject* jsonLayer = jsonLayers->getObjectForKey(isb->getString())->getObject();
     const layer_type layerType = mapLayerType[jsonLayer->getObjectForKey(type)->getString()->getValue()];
     
@@ -87,8 +87,8 @@ void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, JSONObject* jsonLayer){
     
   for (int i = 0; i<jsonItems->getSize(); i++) {
     if (jsonItems->getElement(i)->getObject()->getObjectForKey(status)->getString()->getValue() == "true") {
-      layersName->add(jsonItems->getElement(i)->getObject()->getObjectForKey(name)->getString()->getValue());
-      layersName->add(",");
+      layersName->addString(jsonItems->getElement(i)->getObject()->getObjectForKey(name)->getString()->getValue());
+      layersName->addString(",");
     }    
   }
   std::string layersSecuence = layersName->getString();

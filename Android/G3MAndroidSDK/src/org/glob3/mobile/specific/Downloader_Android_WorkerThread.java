@@ -5,7 +5,7 @@ package org.glob3.mobile.specific;
 import android.util.Log;
 
 
-public class Downloader_Android_WorkerThread
+public final class Downloader_Android_WorkerThread
          extends
             Thread {
 

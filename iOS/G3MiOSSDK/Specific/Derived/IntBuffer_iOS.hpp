@@ -47,7 +47,10 @@ public:
       _timestamp++;
     }
   }
-
+  
+  void rawPut(int i, int value) {
+    _values[i] = value;
+  }
   
   int* getPointer() const {
     return _values;

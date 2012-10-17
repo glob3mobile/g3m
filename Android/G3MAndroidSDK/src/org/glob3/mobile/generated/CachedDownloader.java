@@ -115,15 +115,15 @@ public class CachedDownloader implements IDownloader
   public final String statistics()
   {
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.add("CachedDownloader(cache hits=");
-	isb.add(_cacheHitsCounter);
-	isb.add("/");
-	isb.add(_requestsCounter);
-	isb.add(", saves=");
-	isb.add(_savesCounter);
-	isb.add(", downloader=");
-	isb.add(_downloader.statistics());
-	String s = isb.getString();
+	isb.addString("CachedDownloader(cache hits=");
+	isb.addInt(_cacheHitsCounter);
+	isb.addString("/");
+	isb.addInt(_requestsCounter);
+	isb.addString(", saves=");
+	isb.addInt(_savesCounter);
+	isb.addString(", downloader=");
+	isb.addString(_downloader.statistics());
+	final String s = isb.getString();
 	if (isb != null)
 		isb.dispose();
 	return s;

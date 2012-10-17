@@ -84,6 +84,11 @@ public abstract class IFactory
 //ORIGINAL LINE: virtual IFloatBuffer* createFloatBuffer(int size) const = 0;
   public abstract IFloatBuffer createFloatBuffer(int size);
 
+  /* special factory method for creating floatbuffers from matrix */
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual IFloatBuffer* createFloatBuffer(float f0, float f1, float f2, float f3, float f4, float f5, float f6, float f7, float f8, float f9, float f10, float f11, float f12, float f13, float f14, float f15) const = 0;
+  public abstract IFloatBuffer createFloatBuffer(float f0, float f1, float f2, float f3, float f4, float f5, float f6, float f7, float f8, float f9, float f10, float f11, float f12, float f13, float f14, float f15);
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual IIntBuffer* createIntBuffer(int size) const = 0;
   public abstract IIntBuffer createIntBuffer(int size);

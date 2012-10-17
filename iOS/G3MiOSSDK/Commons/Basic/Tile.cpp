@@ -168,7 +168,7 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
   //  }
   const Vector2D ex = extent->projectedExtent(rc);
   //const double t = extent.maxAxis() * 2;
-  const double t = (ex.x() + ex.y());
+  const double t = (ex._x + ex._y);
   if ( t <= ((parameters->_tileTextureWidth + parameters->_tileTextureHeight) * 1.75) ) {
     return true;
   }
@@ -318,10 +318,6 @@ void Tile::render(const RenderContext* rc,
       if (trc->getParameters()->_renderDebug) {
         debugRender(rc, trc);
       }
-      
-      // render extent
-      if (false)
-        getTessellatorMesh(rc, trc)->getExtent()->render(rc);
       
       statistics->computeTileRendered(this);
       

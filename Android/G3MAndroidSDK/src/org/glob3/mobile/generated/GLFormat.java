@@ -1,15 +1,15 @@
 package org.glob3.mobile.generated; 
-public enum GLFormat
+public class GLFormat
 {
-  RGBA;
+  private static int _rgba = 0;
 
-	public int getValue()
-	{
-		return this.ordinal();
-	}
+  public static int rgba()
+  {
+	  return _rgba;
+  }
 
-	public static GLFormat forValue(int value)
-	{
-		return values()[value];
-	}
+  public static void init(INativeGL ngl)
+  {
+	_rgba = ngl.Format_RGBA();
+  }
 }

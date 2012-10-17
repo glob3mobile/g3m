@@ -20,36 +20,36 @@
 class FloatBufferBuilderFromGeodetic: public FloatBufferBuilder {
 private:
   
-  const CenterStrategy _centerStrategy;
+  const int _centerStrategy;
   float _cx;
   float _cy;
   float _cz;
   
   void setCenter(const Vector3D& center) {
-    _cx = (float)center.x();
-    _cy = (float)center.y();
-    _cz = (float)center.z();
+    _cx = (float)center._x;
+    _cy = (float)center._y;
+    _cz = (float)center._z;
   }
   
   const Planet * _planet;
   
 public:
   
-  FloatBufferBuilderFromGeodetic(CenterStrategy cs, const Planet* planet, const Vector3D& center):
+  FloatBufferBuilderFromGeodetic(int cs, const Planet* planet, const Vector3D& center):
   _planet(planet),
   _centerStrategy(cs)
   {
     setCenter(center);
   }
   
-  FloatBufferBuilderFromGeodetic(CenterStrategy cs, const Planet* planet, const Geodetic2D& center):
+  FloatBufferBuilderFromGeodetic(int cs, const Planet* planet, const Geodetic2D& center):
   _planet(planet),
   _centerStrategy(cs)
   {
     setCenter( _planet->toCartesian(center) );
   }
   
-  FloatBufferBuilderFromGeodetic(CenterStrategy cs, const Planet* planet, const Geodetic3D& center):
+  FloatBufferBuilderFromGeodetic(int cs, const Planet* planet, const Geodetic3D& center):
   _planet(planet),
   _centerStrategy(cs)
   {
@@ -59,15 +59,15 @@ public:
   void add(const Geodetic3D& g) {
     const Vector3D vector = _planet->toCartesian(g);
     
-    float x = (float) vector.x();
-    float y = (float) vector.y();
-    float z = (float) vector.z();
+    float x = (float) vector._x;
+    float y = (float) vector._y;
+    float z = (float) vector._z;
     
-    if (_centerStrategy == FirstVertex && _values.size() == 0) {
+    if (_centerStrategy == CenterStrategy::firstVertex() && _values.size() == 0) {
       setCenter(vector);
     }
     
-    if (_centerStrategy != NoCenter) {
+    if (_centerStrategy != CenterStrategy::noCenter()) {
       x -= _cx;
       y -= _cy;
       z -= _cz;
@@ -81,15 +81,15 @@ public:
   void add(const Geodetic2D& g) {
     const Vector3D vector = _planet->toCartesian(g);
     
-    float x = (float) vector.x();
-    float y = (float) vector.y();
-    float z = (float) vector.z();
+    float x = (float) vector._x;
+    float y = (float) vector._y;
+    float z = (float) vector._z;
     
-    if (_centerStrategy == FirstVertex && _values.size() == 0) {
+    if (_centerStrategy == CenterStrategy::firstVertex() && _values.size() == 0) {
       setCenter(vector);
     }
     
-    if (_centerStrategy != NoCenter) {
+    if (_centerStrategy != CenterStrategy::noCenter()) {
       x -= _cx;
       y -= _cy;
       z -= _cz;

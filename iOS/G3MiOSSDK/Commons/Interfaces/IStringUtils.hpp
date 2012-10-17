@@ -60,7 +60,8 @@ public:
   
   virtual std::string substring(const std::string& string,
                                 int beginIndex) const {
-    return substring(string, beginIndex, string.size() + 1);
+//    return substring(string, beginIndex, string.size() + 1);
+      return substring(string, beginIndex, string.size());
   }
   
   virtual std::string replaceSubstring(const std::string& originalString, const std::string& toReplace, const std::string& replaceWith) const {

@@ -11,27 +11,27 @@
 #include "IndexedMesh.hpp"
 #include "Box.hpp"
 #include "GL.hpp"
-#include "INativeGL.hpp"
 #include "IFloatBuffer.hpp"
 #include "IIntBuffer.hpp"
 
 IndexedMesh::~IndexedMesh()
 {
-#ifdef C_CODE
+//#ifdef C_CODE
   if (_owner){
     delete _vertices;
     delete _indices;
     if (_colors != NULL) delete _colors;
+#ifdef C_CODE
     if (_flatColor != NULL) delete _flatColor;
+#endif
   }
   
   if (_extent != NULL) delete _extent;
   if (_translationMatrix != NULL) delete _translationMatrix;
-  
-#endif
+//#endif
 }
 
-IndexedMesh::IndexedMesh(const GLPrimitive primitive,
+IndexedMesh::IndexedMesh(const int primitive,
                          bool owner,
                          const Vector3D& center,
                          IFloatBuffer* vertices,
@@ -79,21 +79,17 @@ void IndexedMesh::render(const RenderContext* rc) const {
     gl->multMatrixf(*_translationMatrix);
   }
   
-  switch (_primitive) {
-    case TriangleStrip:
-      gl->drawTriangleStrip(_indices);
-      break;
-    case Lines:
-      gl->drawLines(_indices);
-      break;
-    case LineLoop:
-      gl->drawLineLoop(_indices);
-      break;
-    case Points:
-      gl->drawPoints(_indices);
-      break;
-    default:
-      break;
+  if (_primitive == GLPrimitive::triangleStrip()) {
+    gl->drawTriangleStrip(_indices);
+  }
+  else if (_primitive == GLPrimitive::lines()) {
+    gl->drawLines(_indices);
+  }
+  else if (_primitive == GLPrimitive::lineLoop()) {
+    gl->drawLineLoop(_indices);
+  }
+  else if (_primitive == GLPrimitive::points()) {
+    gl->drawPoints(_indices);
   }
   
   if (_translationMatrix != NULL) {
@@ -118,9 +114,9 @@ Extent* IndexedMesh::computeExtent() const {
   for (int i=0; i < vertexCount; i++) {
     const int p = i * 3;
     
-    const double x = _vertices->get(p  ) + _center.x();
-    const double y = _vertices->get(p+1) + _center.y();
-    const double z = _vertices->get(p+2) + _center.z();
+    const double x = _vertices->get(p  ) + _center._x;
+    const double y = _vertices->get(p+1) + _center._y;
+    const double z = _vertices->get(p+2) + _center._z;
     
     if (x < minx) minx = x;
     if (x > maxx) maxx = x;
@@ -144,9 +140,9 @@ Extent* IndexedMesh::getExtent() const {
 
 const Vector3D IndexedMesh::getVertex(int i) const {
   const int p = i * 3;
-  return Vector3D(_vertices->get(p  ) + _center.x(),
-                  _vertices->get(p+1) + _center.y(),
-                  _vertices->get(p+2) + _center.z());
+  return Vector3D(_vertices->get(p  ) + _center._x,
+                  _vertices->get(p+1) + _center._y,
+                  _vertices->get(p+2) + _center._z);
 }
 
 int IndexedMesh::getVertexCount() const {

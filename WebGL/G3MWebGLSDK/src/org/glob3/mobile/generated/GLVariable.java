@@ -1,15 +1,15 @@
 package org.glob3.mobile.generated; 
-public enum GLVariable
+public class GLVariable
 {
-  Viewport;
+  private static int _viewport = 0;
 
-	public int getValue()
-	{
-		return this.ordinal();
-	}
+  public static int viewport()
+  {
+	  return _viewport;
+  }
 
-	public static GLVariable forValue(int value)
-	{
-		return values()[value];
-	}
+  public static void init(INativeGL ngl)
+  {
+	_viewport = ngl.Variable_Viewport();
+  }
 }

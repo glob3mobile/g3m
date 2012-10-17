@@ -1,16 +1,22 @@
 package org.glob3.mobile.generated; 
-public enum GLBlendFactor
+public class GLBlendFactor
 {
-  SrcAlpha,
-  OneMinusSrcAlpha;
+  private static int _srcAlpha = 0;
+  private static int _oneMinusSrcAlpha = 0;
 
-	public int getValue()
-	{
-		return this.ordinal();
-	}
 
-	public static GLBlendFactor forValue(int value)
-	{
-		return values()[value];
-	}
+  public static int srcAlpha()
+  {
+	  return _srcAlpha;
+  }
+  public static int oneMinusSrcAlpha()
+  {
+	  return _oneMinusSrcAlpha;
+  }
+
+  public static void init(INativeGL ngl)
+  {
+	_srcAlpha = ngl.BlendFactor_SrcAlpha();
+	_oneMinusSrcAlpha = ngl.BlendFactor_OneMinusSrcAlpha();
+  }
 }

@@ -1,16 +1,21 @@
 package org.glob3.mobile.generated; 
-public enum GLTextureParameterValue
+public class GLTextureParameterValue
 {
-  Linear,
-  ClampToEdge;
+  private static int _linear = 0;
+  private static int _clampToEdge = 0;
 
-	public int getValue()
-	{
-		return this.ordinal();
-	}
+  public static int linear()
+  {
+	  return _linear;
+  }
+  public static int clampToEdge()
+  {
+	  return _clampToEdge;
+  }
 
-	public static GLTextureParameterValue forValue(int value)
-	{
-		return values()[value];
-	}
+  public static void init(INativeGL ngl)
+  {
+	_linear = ngl.TextureParameterValue_Linear();
+	_clampToEdge = ngl.TextureParameterValue_ClampToEdge();
+  }
 }

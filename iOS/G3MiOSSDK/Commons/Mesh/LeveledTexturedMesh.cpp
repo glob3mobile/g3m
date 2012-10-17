@@ -38,9 +38,9 @@ void LazyTextureMapping::bind(const RenderContext* rc) const {
 
 void LazyTextureMapping::releaseGLTextureId() {
   if (_texturesHandler) {
-    if (_glTextureId.isValid()) {
+    if (_glTextureId != NULL) {
       _texturesHandler->releaseGLTextureId(_glTextureId);
-      _glTextureId = GLTextureId::invalid();
+      _glTextureId = NULL;
     }
   }
 }
@@ -106,7 +106,7 @@ LazyTextureMapping* LeveledTexturedMesh::getCurrentTextureMapping() const {
   return _currentLevelIsValid ? _mappings->at(_currentLevel) : NULL;
 }
 
-const GLTextureId LeveledTexturedMesh::getTopLevelGLTextureId() const {
+const IGLTextureId* LeveledTexturedMesh::getTopLevelGLTextureId() const {
   const LazyTextureMapping* mapping = getCurrentTextureMapping();
   if (mapping != NULL) {
     if (_currentLevel == 0) {
@@ -114,7 +114,7 @@ const GLTextureId LeveledTexturedMesh::getTopLevelGLTextureId() const {
     }
   }
   
-  return GLTextureId::invalid();
+  return NULL;
 }
 
 
@@ -140,8 +140,8 @@ void LeveledTexturedMesh::render(const RenderContext* rc) const {
 }
 
 bool LeveledTexturedMesh::setGLTextureIdForLevel(int level,
-                                                 const GLTextureId glTextureId) {
-  if (glTextureId.isValid()) {
+                                                 const IGLTextureId* glTextureId) {
+  if (glTextureId != NULL) {
     if (!_currentLevelIsValid || (level < _currentLevel)) {
       _mappings->at(level)->setGLTextureId(glTextureId);
       _currentLevelIsValid = false;
@@ -153,7 +153,7 @@ bool LeveledTexturedMesh::setGLTextureIdForLevel(int level,
 }
 
 //void LeveledTexturedMesh::setGLTextureIdForInversedLevel(int inversedLevel,
-//                                                         const GLTextureId glTextureId) {
+//                                                         const const GLTextureId*glTextureId) {
 //  const int level = _mappings->size() - inversedLevel - 1;
 //  setGLTextureIdForLevel(level, glTextureId);
 //}

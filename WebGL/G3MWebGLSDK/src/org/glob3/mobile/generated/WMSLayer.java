@@ -103,13 +103,19 @@ public class WMSLayer extends Layer
   
 		IStringBuilder isb = IStringBuilder.newStringBuilder();
   
-		isb.add("&WIDTH=").add(width);
-		isb.add("&HEIGHT=").add(height);
+		isb.addString("&WIDTH=");
+		isb.addInt(width);
+		isb.addString("&HEIGHT=");
+		isb.addInt(height);
   
-		isb.add("&BBOX=").add(sector.lower().latitude().degrees()).add(",");
-		isb.add(sector.lower().longitude().degrees()).add(",");
-		isb.add(sector.upper().latitude().degrees()).add(",");
-		isb.add(sector.upper().longitude().degrees());
+		isb.addString("&BBOX=");
+		isb.addDouble(sector.lower().latitude().degrees());
+		isb.addString(",");
+		isb.addDouble(sector.lower().longitude().degrees());
+		isb.addString(",");
+		isb.addDouble(sector.upper().latitude().degrees());
+		isb.addString(",");
+		isb.addDouble(sector.upper().longitude().degrees());
   
 		req += isb.getString();
 		if (isb != null)
@@ -127,13 +133,19 @@ public class WMSLayer extends Layer
   
 		IStringBuilder isb = IStringBuilder.newStringBuilder();
   
-		isb.add("&WIDTH=").add(width);
-		isb.add("&HEIGHT=").add(height);
+		isb.addString("&WIDTH=");
+		isb.addInt(width);
+		isb.addString("&HEIGHT=");
+		isb.addInt(height);
   
-		isb.add("&BBOX=").add(sector.lower().longitude().degrees()).add(",");
-		isb.add(sector.lower().latitude().degrees()).add(",");
-		isb.add(sector.upper().longitude().degrees()).add(",");
-		isb.add(sector.upper().latitude().degrees());
+		isb.addString("&BBOX=");
+		isb.addDouble(sector.lower().longitude().degrees());
+		isb.addString(",");
+		isb.addDouble(sector.lower().latitude().degrees());
+		isb.addString(",");
+		isb.addDouble(sector.upper().longitude().degrees());
+		isb.addString(",");
+		isb.addDouble(sector.upper().latitude().degrees());
   
 		req += isb.getString();
 		if (isb != null)
@@ -238,13 +250,19 @@ public class WMSLayer extends Layer
   
 		IStringBuilder isb = IStringBuilder.newStringBuilder();
   
-		isb.add("&WIDTH=").add(width);
-		isb.add("&HEIGHT=").add(height);
+		isb.addString("&WIDTH=");
+		isb.addInt(width);
+		isb.addString("&HEIGHT=");
+		isb.addInt(height);
   
-		isb.add("&BBOX=").add(sector.lower().latitude().degrees()).add(",");
-		isb.add(sector.lower().longitude().degrees()).add(",");
-		isb.add(sector.upper().latitude().degrees()).add(",");
-		isb.add(sector.upper().longitude().degrees());
+		isb.addString("&BBOX=");
+		isb.addDouble(sector.lower().latitude().degrees());
+		isb.addString(",");
+		isb.addDouble(sector.lower().longitude().degrees());
+		isb.addString(",");
+		isb.addDouble(sector.upper().latitude().degrees());
+		isb.addString(",");
+		isb.addDouble(sector.upper().longitude().degrees());
   
 		req += isb.getString();
   
@@ -263,13 +281,19 @@ public class WMSLayer extends Layer
   
 		IStringBuilder isb = IStringBuilder.newStringBuilder();
   
-		isb.add("&WIDTH=").add(width);
-		isb.add("&HEIGHT=").add(height);
+		isb.addString("&WIDTH=");
+		isb.addInt(width);
+		isb.addString("&HEIGHT=");
+		isb.addInt(height);
   
-		isb.add("&BBOX=").add(sector.lower().longitude().degrees()).add(",");
-		isb.add(sector.lower().latitude().degrees()).add(",");
-		isb.add(sector.upper().longitude().degrees()).add(",");
-		isb.add(sector.upper().latitude().degrees());
+		isb.addString("&BBOX=");
+		isb.addDouble(sector.lower().longitude().degrees());
+		isb.addString(",");
+		isb.addDouble(sector.lower().latitude().degrees());
+		isb.addString(",");
+		isb.addDouble(sector.upper().longitude().degrees());
+		isb.addString(",");
+		isb.addDouble(sector.upper().latitude().degrees());
   
 		req += isb.getString();
   
@@ -287,11 +311,14 @@ public class WMSLayer extends Layer
   
 	//X and Y
 	Vector2D pixel = tileSector.getUVCoordinates(g);
-	int x = (int) IMathUtils.instance().round((pixel.x() * width));
-	int y = (int) IMathUtils.instance().round(((1.0 - pixel.y()) * height));
+	int x = (int) IMathUtils.instance().round((pixel._x * width));
+	int y = (int) IMathUtils.instance().round(((1.0 - pixel._y) * height));
   
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.add("&X=").add(x).add("&Y=").add(y);
+	isb.addString("&X=");
+	isb.addInt(x);
+	isb.addString("&Y=");
+	isb.addInt(y);
 	req += isb.getString();
 	if (isb != null)
 		isb.dispose();

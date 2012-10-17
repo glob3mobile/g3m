@@ -2,7 +2,7 @@ package org.glob3.mobile.generated;
 public class TextureHolder
 {
   public final TextureSpec _textureSpec;
-  public GLTextureId _glTextureId = new GLTextureId();
+  public IGLTextureId _glTextureId;
 
   public int _referenceCounter;
 
@@ -10,7 +10,7 @@ public class TextureHolder
   {
 	  _referenceCounter = 1;
 	  _textureSpec = textureSpec;
-	  _glTextureId = new GLTextureId(GLTextureId.invalid());
+	  _glTextureId = null;
 
   }
 
@@ -43,8 +43,12 @@ public class TextureHolder
   public final String description()
   {
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
-	isb.add("(#").add(_glTextureId.getGLTextureId()).add(", counter=").add(_referenceCounter).add(")");
-	String s = isb.getString();
+	isb.addString("(#");
+	isb.addString(_glTextureId.description());
+	isb.addString(", counter=");
+	isb.addInt(_referenceCounter);
+	isb.addString(")");
+	final String s = isb.getString();
 	if (isb != null)
 		isb.dispose();
 	return s;

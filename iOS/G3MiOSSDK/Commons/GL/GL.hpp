@@ -15,12 +15,17 @@
 #include "MutableMatrix44D.hpp"
 #include "Color.hpp"
 #include "MutableVector2D.hpp"
-#include "INativeGL.hpp"
 
 #include "IFloatBuffer.hpp"
 
+#include "GLConstants.hpp"
+
 #include <list>
 
+class IGLProgramId;
+class IGLUniformID;
+
+#include "IGLTextureId.hpp"
 
 class GL {
 private:
@@ -32,7 +37,7 @@ private:
   // stack of ModelView matrices
   std::list<MutableMatrix44D> _matrixStack;
   
-  std::list<GLTextureId>      _texturesIdBag;
+  std::list<const IGLTextureId*>      _texturesIdBag;
   long                        _texturesIdAllocationCounter;
   long                        _texturesIdGetCounter;
   long                        _texturesIdTakeCounter;
@@ -48,12 +53,8 @@ private:
   
   bool _enableCullFace;
   
-#ifdef C_CODE
-  GLCullFace _cullFace_face;
-#endif
-#ifdef JAVA_CODE
-  GLCullFace _cullFace_face = GLCullFace.Back;
-#endif
+  int _cullFace_face;
+
   
   
   
@@ -74,7 +75,7 @@ private:
   
   inline void loadModelView();
   
-  const GLTextureId getGLTextureId();
+  const IGLTextureId* getGLTextureId();
   
 //  int _lastTextureWidth;
 //  int _lastTextureHeight;
@@ -87,8 +88,8 @@ private:
 
   //Get Locations warning of errors
   bool _errorGettingLocationOcurred;
-  int checkedGetAttribLocation(int program, const std::string& name);
-  int checkedGetUniformLocation(int program, const std::string& name);
+  int checkedGetAttribLocation(IGLProgramId* program, const std::string& name);
+  IGLUniformID* checkedGetUniformLocation(IGLProgramId* program, const std::string& name);
   
   IFloatBuffer* _billboardTexCoord;
   IFloatBuffer* getBillboardTexCoord();
@@ -105,11 +106,7 @@ public:
   _enableBlend(false),
   _enableDepthTest(false),
   _enableCullFace(false),
-#ifdef C_CODE
-  _cullFace_face(Back),
-#else
-  _cullFace_face(GLCullFace.Back),
-#endif
+  _cullFace_face(GLCullFace::back()),
   _texturesIdAllocationCounter(0),
   _scaleX(1),
   _scaleY(1),
@@ -127,6 +124,20 @@ public:
   _flatColorIntensity(0),
   _billboardTexCoord(NULL)
   {
+    //Init Constants
+    GLCullFace::init(gl);
+    GLBufferType::init(gl);
+    GLFeature::init(gl);
+    GLType::init(gl);
+    GLPrimitive::init(gl);
+    GLBlendFactor::init(gl);
+    GLTextureType::init(gl);
+    GLTextureParameter::init(gl);
+    GLTextureParameterValue::init(gl);
+    GLAlignment::init(gl);
+    GLFormat::init(gl);
+    GLVariable::init(gl);
+    GLError::init(gl);
   }
   
   void enableVerticesPosition();
@@ -176,7 +187,7 @@ public:
   
   void setProjection(const MutableMatrix44D &projection);
   
-  bool useProgram(unsigned int program);
+  bool useProgram(IGLProgramId* program);
   
   void enablePolygonOffset(float factor, float units);
   
@@ -186,11 +197,11 @@ public:
   
   void pointSize(float size);
   
-  GLError getError();
+  int getError();
   
-  const GLTextureId uploadTexture(const IImage* image, GLFormat format, bool generateMipmap);
+  const IGLTextureId* uploadTexture(const IImage* image, int format, bool generateMipmap);
   
-  //  const GLTextureId uploadTexture(const IImage* image,
+  //  const const GLTextureId*uploadTexture(const IImage* image,
   //                                  int textureWidth, int textureHeight,
   //                                  bool generateMipmap);
   
@@ -198,7 +209,7 @@ public:
                              int stride,
                              IFloatBuffer* texcoord);
   
-  void bindTexture(const GLTextureId& textureId);
+  void bindTexture(const IGLTextureId* textureId);
   
   void enableDepthTest();
   void disableDepthTest();
@@ -206,13 +217,13 @@ public:
   void enableBlend();
   void disableBlend();
   
-  void drawBillBoard(const GLTextureId& textureId,
+  void drawBillBoard(const IGLTextureId* textureId,
                      IFloatBuffer* vertices,
                      const float viewPortRatio);
   
-  void deleteTexture(const GLTextureId& textureId);
+  void deleteTexture(const IGLTextureId* textureId);
   
-  void enableCullFace(GLCullFace face);
+  void enableCullFace(int face);
   void disableCullFace();
   
   void transformTexCoords(float scaleX,
@@ -232,10 +243,10 @@ public:
   
   void transformTexCoords(const Vector2D& scale,
                           const Vector2D& translation) {
-    transformTexCoords((float) scale.x(),
-                       (float) scale.y(),
-                       (float) translation.x(),
-                       (float) translation.y());
+    transformTexCoords((float) scale._x,
+                       (float) scale._y,
+                       (float) translation._x,
+                       (float) translation._y);
   }
   
   void transformTexCoords(const MutableVector2D& scale,
@@ -268,11 +279,7 @@ public:
   void setBlendFuncSrcAlpha();
   
   void getViewport(int v[]){
-#ifdef C_CODE
-    _gl->getIntegerv(Viewport, v);
-#else
-    _gl->getIntegerv(GLVariable.Viewport, v);
-#endif
+    _gl->getIntegerv(GLVariable::viewport(), v);
   }
   
   ~GL() {
