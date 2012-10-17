@@ -120,9 +120,9 @@ void Mark::render(const RenderContext* rc,
   const Vector3D* markPosition = getCartesianPosition(planet);
   
   const Vector3D markCameraVector = markPosition->sub(cameraPosition);
-  //  const double distanceToCamera = markCameraVector.length();
-  //  const bool renderMark = distanceToCamera <= minDistanceToCamera;
-  const bool renderMark = true;
+  const double distanceToCamera = markCameraVector.length();
+  const bool renderMark = distanceToCamera <= minDistanceToCamera;
+//  const bool renderMark = true;
   
   if (renderMark) {
     const Vector3D normalAtMarkPosition = planet->geodeticSurfaceNormal(*markPosition);
