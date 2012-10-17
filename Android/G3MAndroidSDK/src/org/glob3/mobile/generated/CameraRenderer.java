@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class CameraRenderer extends Renderer
+public class CameraRenderer extends LeafRenderer
 {
 
 

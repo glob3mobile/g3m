@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class TileRenderer extends Renderer
+public class TileRenderer extends LeafRenderer
 {
   private final TileTessellator _tessellator;
   private TileTexturizer _texturizer;

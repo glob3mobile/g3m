@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class MarksRenderer extends Renderer
+public class MarksRenderer extends LeafRenderer
 {
   private boolean _readyWhenMarksReady;
   private java.util.ArrayList<Mark> _marks = new java.util.ArrayList<Mark>();

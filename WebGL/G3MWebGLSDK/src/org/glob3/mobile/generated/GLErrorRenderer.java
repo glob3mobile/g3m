@@ -17,7 +17,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class GLErrorRenderer extends Renderer
+public class GLErrorRenderer extends LeafRenderer
 {
 
   public final void initialize(InitializationContext ic)

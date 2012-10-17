@@ -104,7 +104,10 @@ public class G3MWidget
   
 	_gl.clearScreen(_backgroundColor);
   
-	_selectedRenderer.render(rc);
+	if (_selectedRenderer.isEnable())
+	{
+	  _selectedRenderer.render(rc);
+	}
   
 	//  _frameTasksExecutor->doPostRenderCycle(&rc);
   
@@ -160,9 +163,12 @@ public class G3MWidget
   {
 	if (_rendererReady)
 	{
-	  EventContext ec = new EventContext(_factory, _stringUtils, _threadUtils, _logger, _planet, _downloader, _effectsScheduler);
+	  if (_renderer.isEnable())
+	  {
+		EventContext ec = new EventContext(_factory, _stringUtils, _threadUtils, _logger, _planet, _downloader, _effectsScheduler);
   
-	  _renderer.onTouchEvent(ec, myEvent);
+		_renderer.onTouchEvent(ec, myEvent);
+	  }
 	}
   }
 
@@ -170,9 +176,12 @@ public class G3MWidget
   {
 	if (_rendererReady)
 	{
-	  EventContext ec = new EventContext(_factory, _stringUtils, _threadUtils, _logger, _planet, _downloader, _effectsScheduler);
+	  if (_renderer.isEnable())
+	  {
+		EventContext ec = new EventContext(_factory, _stringUtils, _threadUtils, _logger, _planet, _downloader, _effectsScheduler);
   
-	  _renderer.onResizeViewportEvent(ec, width, height);
+		_renderer.onResizeViewportEvent(ec, width, height);
+	  }
 	}
   }
 

@@ -22,7 +22,7 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IIntBuffer;
 
-public class DummyRenderer extends Renderer
+public class DummyRenderer extends LeafRenderer
 {
 
   private double _halfSize;

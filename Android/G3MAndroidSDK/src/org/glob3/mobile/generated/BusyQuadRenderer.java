@@ -24,7 +24,7 @@ package org.glob3.mobile.generated;
 //***************************************************************
 
 
-public class BusyQuadRenderer extends Renderer implements EffectTarget
+public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
 {
   private double _degrees;
   private final String _textureFilename;
