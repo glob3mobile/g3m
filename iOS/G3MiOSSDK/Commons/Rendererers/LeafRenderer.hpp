@@ -28,6 +28,10 @@ public:
     
   }
   
+  ~LeafRenderer() {
+    
+  }
+  
   bool isEnable() const {
     return _enable;
   }
