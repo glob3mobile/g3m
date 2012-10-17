@@ -20,6 +20,7 @@ import org.glob3.mobile.generated.EllipsoidalTileTessellator;
 import org.glob3.mobile.generated.FrameTasksExecutor;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GL;
+import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
@@ -71,6 +72,7 @@ public final class G3MWidget_Android
    private UserData                                       _userData;
 
    private IDownloader                                    _downloader;
+   private GTask                                          _initializationTask;
 
 
    //   private boolean                                        _isPaused             = false;
@@ -228,11 +230,13 @@ public final class G3MWidget_Android
    public void initWidget(final ArrayList<ICameraConstrainer> cameraConstraints,
                           final LayerSet layerSet,
                           final ArrayList<org.glob3.mobile.generated.Renderer> renderers,
-                          final UserData userData) {
+                          final UserData userData,
+                          final GTask initializationTask) {
       _cameraConstraints = cameraConstraints;
       _layerSet = layerSet;
       _renderers = renderers;
       _userData = userData;
+      _initializationTask = initializationTask;
    }
 
 
@@ -256,12 +260,13 @@ public final class G3MWidget_Android
       final TilesRenderParameters parameters = TilesRenderParameters.createDefault(renderDebug, useTilesSplitBudget,
                forceTopLevelTilesRenderOnStart);
 
-      initWidget(cameraRenderer, parameters);
+      initWidget(cameraRenderer, parameters, _initializationTask);
    }
 
 
    private void initWidget(final CameraRenderer cameraRenderer,
-                           final TilesRenderParameters parameters) {
+                           final TilesRenderParameters parameters,
+                           final GTask initializationTask) {
 
       // create GLOB3M WIDGET
       final int width = getWidth();
@@ -317,7 +322,7 @@ public final class G3MWidget_Android
 
       _g3mWidget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, stringBuilder, math, jsonParser,
                logger, gl, texturesHandler, textureBuilder, _downloader, planet, _cameraConstraints, composite, busyRenderer,
-               scheduler, width, height, Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false);
+               scheduler, width, height, Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false, initializationTask, true);
 
       _g3mWidget.setUserData(_userData);
    }

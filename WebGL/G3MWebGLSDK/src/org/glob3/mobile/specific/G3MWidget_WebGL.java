@@ -19,6 +19,7 @@ import org.glob3.mobile.generated.EllipsoidalTileTessellator;
 import org.glob3.mobile.generated.FrameTasksExecutor;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GL;
+import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
@@ -79,6 +80,8 @@ public final class G3MWidget_WebGL
 
    private ArrayList<String>             _imagesToPreload;
    private IFactory                      _factory;
+
+   private GTask                         _initializationTask;
 
 
    public G3MWidget_WebGL(final int delayMillis,
@@ -225,7 +228,8 @@ public final class G3MWidget_WebGL
                           final LayerSet layerSet,
                           final ArrayList<Renderer> renderers,
                           final UserData userData,
-                          final ArrayList<String> images) {
+                          final ArrayList<String> images,
+                          final GTask initializationTask) {
       jsDefineG3MBrowserObjects();
 
       _cameraConstraints = cameraConstraints;
@@ -233,7 +237,7 @@ public final class G3MWidget_WebGL
       _renderers = renderers;
       _userData = userData;
       _imagesToPreload = images;
-
+      _initializationTask = initializationTask;
       _factory = new Factory_WebGL();
 
       preloadImagesAndInitWidget();
@@ -351,7 +355,9 @@ public final class G3MWidget_WebGL
                _height, //
                backgroundColor, //
                logFPS, //
-               logDownloaderStatistics);
+               logDownloaderStatistics, //
+               _initializationTask, //
+               true);
 
       _widget.setUserData(_userData);
 

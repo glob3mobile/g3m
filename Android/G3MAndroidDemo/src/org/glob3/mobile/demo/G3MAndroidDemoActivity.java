@@ -7,6 +7,7 @@ import java.util.Random;
 
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.GLErrorRenderer;
+import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.LayerSet;
@@ -170,7 +171,8 @@ public class G3MAndroidDemoActivity
 
       final UserData userData = null;
 
-      widget.initWidget(cameraConstraints, layerSet, renderers, userData);
+      final GTask initializationTask = null;
+      widget.initWidget(cameraConstraints, layerSet, renderers, userData, initializationTask);
 
    }
 

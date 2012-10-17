@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.ILogger;
@@ -175,7 +176,8 @@ public class G3MWebGLDemo
 
       final ArrayList<String> imagesToPreload = new ArrayList<String>();
       //      imagesToPreload.add("../images/world.jpg");
-      _widget.initWidget(cameraConstraints, layerSet, renderers, userData, imagesToPreload);
+      final GTask initializationTask = null;
+      _widget.initWidget(cameraConstraints, layerSet, renderers, userData, imagesToPreload, initializationTask);
    }
 
 
