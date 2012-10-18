@@ -1,7 +1,7 @@
 package org.glob3.mobile.generated; 
 public class MarksRenderer extends LeafRenderer
 {
-  private static final double DISTANCE_THRESHOLD = 30 *30 *30 *30;
+  private static final double SQUARED_DISTANCE_THRESHOLD = 50 *50;
 
   private boolean _readyWhenMarksReady;
   private java.util.ArrayList<Mark> _marks = new java.util.ArrayList<Mark>();
@@ -167,7 +167,7 @@ public class MarksRenderer extends LeafRenderer
   
 		if (nearestMark != null)
 		{
-		  if (minDistance <= DISTANCE_THRESHOLD)
+		  if (minDistance <= SQUARED_DISTANCE_THRESHOLD)
 		  {
 			handled = _markTouchListener.touchedMark(nearestMark);
 		  }
