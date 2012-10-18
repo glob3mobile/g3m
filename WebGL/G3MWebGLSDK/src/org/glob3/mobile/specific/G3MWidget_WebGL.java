@@ -78,10 +78,16 @@ public final class G3MWidget_WebGL
    private final int                     _delayMillis;
    private final String                  _proxy;
 
-   private ArrayList<String>             _imagesToPreload;
-   private IFactory                      _factory;
 
-   private GTask                         _initializationTask;
+   public String getProxy() {
+      return _proxy;
+   }
+
+
+   private ArrayList<String> _imagesToPreload;
+   private IFactory          _factory;
+
+   private GTask             _initializationTask;
 
 
    public G3MWidget_WebGL(final int delayMillis,
@@ -222,8 +228,6 @@ public final class G3MWidget_WebGL
    }-*/;
 
 
-   // TODO TEMP HACK TO PRELOAD IMAGES
-
    public void initWidget(final ArrayList<ICameraConstrainer> cameraConstraints,
                           final LayerSet layerSet,
                           final ArrayList<Renderer> renderers,
@@ -240,6 +244,7 @@ public final class G3MWidget_WebGL
       _initializationTask = initializationTask;
       _factory = new Factory_WebGL();
 
+      // TODO TEMP HACK TO PRELOAD IMAGES
       preloadImagesAndInitWidget();
    }
 
@@ -280,6 +285,9 @@ public final class G3MWidget_WebGL
       final IDownloader downloader = new Downloader_WebGL(8, _delayMillis, _proxy);
       final IStringUtils stringUtils = new StringUtils_WebGL();
       final IThreadUtils threadUtils = new ThreadUtils_WebGL(_delayMillis);
+      final IStringBuilder stringBuilder = new StringBuilder_WebGL();
+      final IMathUtils mathUtils = new MathUtils_WebGL();
+
 
       _webGLContext = jsGetWebGLContext();
       if (_webGLContext == null) {
@@ -307,26 +315,19 @@ public final class G3MWidget_WebGL
                   showStatistics);
 
          composite.addRenderer(tr);
+      }
 
-         for (int i = 0; i < _renderers.size(); i++) {
-            composite.addRenderer(_renderers.get(i));
-         }
+      for (int i = 0; i < _renderers.size(); i++) {
+         composite.addRenderer(_renderers.get(i));
       }
 
       final TextureBuilder textureBuilder = new CPUTextureBuilder();
       final TexturesHandler texturesHandler = new TexturesHandler(gl, false);
-
       final Planet planet = Planet.createEarth();
-
-      final org.glob3.mobile.generated.Renderer busyRenderer = new BusyMeshRenderer();
-
+      final BusyMeshRenderer busyRenderer = new BusyMeshRenderer();
       final EffectsScheduler scheduler = new EffectsScheduler();
-
       final FrameTasksExecutor frameTasksExecutor = new FrameTasksExecutor();
 
-      final IStringBuilder stringBuilder = new StringBuilder_WebGL();
-
-      final IMathUtils mathUtils = new MathUtils_WebGL();
 
       final Color backgroundColor = Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1);
       final boolean logFPS = false;
