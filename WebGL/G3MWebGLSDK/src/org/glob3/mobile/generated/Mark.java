@@ -65,6 +65,8 @@ public class Mark
   private boolean _textureSolved;
   private IImage _textureImage;
 
+  private boolean _renderedMark;
+
   public Mark(String name, URL textureURL, Geodetic3D position)
   {
 	  _name = name;
@@ -75,6 +77,7 @@ public class Mark
 	  _vertices = null;
 	  _textureSolved = false;
 	  _textureImage = null;
+	  _renderedMark = false;
 
   }
 
@@ -131,10 +134,10 @@ public class Mark
   
 	final Vector3D markCameraVector = markPosition.sub(cameraPosition);
 	final double distanceToCamera = markCameraVector.length();
-	final boolean renderMark = distanceToCamera <= minDistanceToCamera;
+	_renderedMark = distanceToCamera <= minDistanceToCamera;
   //  const bool renderMark = true;
   
-	if (renderMark)
+	if (_renderedMark)
 	{
 	  final Vector3D normalAtMarkPosition = planet.geodeticSurfaceNormal(markPosition);
   
@@ -184,6 +187,12 @@ public class Mark
 	return _textureSolved;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isRendered() const
+  public final boolean isRendered()
+  {
+	return _renderedMark;
+  }
 
   public final void onTextureDownloadError()
   {

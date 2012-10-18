@@ -1,34 +1,35 @@
 package org.glob3.mobile.generated; 
-//
-//  MarksRenderer.cpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 05/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
-//
-
-//
-//  MarksRenderer.hpp
-//  G3MiOSSDK
-//
-//  Created by Diego Gomez Deck on 05/06/12.
-//  Copyright (c) 2012 IGO Software SL. All rights reserved.
-//
-
-
-
 public class MarksRenderer extends LeafRenderer
 {
   private boolean _readyWhenMarksReady;
   private java.util.ArrayList<Mark> _marks = new java.util.ArrayList<Mark>();
 
   private InitializationContext _initializationContext;
+  private Camera*                _lastCamera;
+
+  private MarkTouchListener _markTouchListener;
+  private boolean _autoDeleteMarkTouchListener;
 
 
   public MarksRenderer(boolean readyWhenMarksReady)
   {
 	  _readyWhenMarksReady = readyWhenMarksReady;
 	  _initializationContext = null;
+	  _lastCamera = null;
+	  _markTouchListener = null;
+	  _autoDeleteMarkTouchListener = false;
+  }
+
+  public final void setMarkTouchListener(MarkTouchListener markTouchListener, boolean autoDelete)
+  {
+	if ((_markTouchListener != null) && _autoDeleteMarkTouchListener)
+	{
+	  if (_markTouchListener != null)
+		  _markTouchListener.dispose();
+	}
+
+	_markTouchListener = markTouchListener;
+	_autoDeleteMarkTouchListener = autoDelete;
   }
 
   public void dispose()
@@ -39,6 +40,13 @@ public class MarksRenderer extends LeafRenderer
 	  if (_marks.get(i) != null)
 		  _marks.get(i).dispose();
 	}
+
+	if ((_markTouchListener != null) && _autoDeleteMarkTouchListener)
+	{
+	  if (_markTouchListener != null)
+		  _markTouchListener.dispose();
+	}
+	_markTouchListener = null;
   }
 
   public void initialize(InitializationContext ic)
@@ -56,6 +64,10 @@ public class MarksRenderer extends LeafRenderer
   public void render(RenderContext rc)
   {
 	//  rc.getLogger()->logInfo("MarksRenderer::render()");
+  
+	// Saving camera for use in onTouchEvent
+	_lastCamera = rc.getCurrentCamera();
+  
   
 	GL gl = rc.getGL();
   
@@ -99,7 +111,76 @@ public class MarksRenderer extends LeafRenderer
 
   public boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
   {
-	return false;
+	if (_markTouchListener == null)
+	{
+	  return false;
+	}
+  
+	boolean handled = false;
+  
+	// if (touchEvent->getType() == LongPress) {
+	if (touchEvent.getType() == TouchEventType.Down)
+	{
+  
+	  if (_lastCamera != null)
+	  {
+		final Vector2D touchedPixel = touchEvent.getTouch(0).getPos();
+		final Vector3D ray = _lastCamera.pixel2Ray(touchedPixel);
+		final Vector3D origin = _lastCamera.getCartesianPosition();
+  
+		final Planet planet = ec.getPlanet();
+  
+		final Vector3D positionCartesian = planet.closestIntersection(origin, ray);
+		if (positionCartesian.isNan())
+		{
+		  return false;
+		}
+  
+		// const Geodetic3D position = planet->toGeodetic3D(positionCartesian);
+  
+		double minDistance = IMathUtils.instance().maxDouble();
+		Mark nearestMark = null;
+  
+		int marksSize = _marks.size();
+		for (int i = 0; i < marksSize; i++)
+		{
+		  Mark mark = _marks.get(i);
+  
+		  if (mark.isReady())
+		  {
+			if (mark.isRendered())
+			{
+			  final Vector3D cartesianMarkPosition = planet.toCartesian(mark.getPosition());
+			  final Vector2D markPixel = _lastCamera.point2Pixel(cartesianMarkPosition);
+  
+			  final double distance = markPixel.sub(touchedPixel).squaredLength();
+			  if (distance < minDistance)
+			  {
+				nearestMark = mark;
+				minDistance = distance;
+			  }
+			}
+		  }
+		}
+  
+		if (nearestMark != null)
+		{
+		  if (minDistance <= 30 *30)
+		  {
+  
+			handled = _markTouchListener.touchedMark(nearestMark);
+		  }
+		}
+  
+	  }
+  
+	}
+  
+	return handled;
+  
+  
+  
+  
   }
 
   public final void onResizeViewportEvent(EventContext ec, int width, int height)

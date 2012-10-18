@@ -8,7 +8,7 @@ public class TileRenderer extends LeafRenderer
   private final boolean _showStatistics;
   private boolean _topTilesJustCreated;
 
-  private Camera _lastCamera;
+  private Camera               _lastCamera;
 
   private java.util.ArrayList<Tile> _topLevelTiles = new java.util.ArrayList<Tile>();
 
@@ -102,9 +102,10 @@ public class TileRenderer extends LeafRenderer
 
   public final void render(RenderContext rc)
   {
-	TilesStatistics statistics = new TilesStatistics();
-	//Saving camera for Long Press Event
+	// Saving camera for use in onTouchEvent
 	_lastCamera = rc.getCurrentCamera();
+  
+	TilesStatistics statistics = new TilesStatistics();
   
 	TileRenderContext trc = new TileRenderContext(_tessellator, _texturizer, _layerSet, _parameters, statistics, _lastSplitTimer, _firstRender); // if first render, force full render
   
