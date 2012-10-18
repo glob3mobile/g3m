@@ -50,6 +50,8 @@
 		A74072D1161EEEB900182A39 /* BingLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A74072D0161EEEB900182A39 /* BingLayer.cpp */; };
 		A7BE9EE9162EF99C00E86B91 /* SceneParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A7BE9EE8162EF99C00E86B91 /* SceneParser.cpp */; };
 		A7BE9EEC162EF9B600E86B91 /* SceneParser.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A7BE9EEB162EF9B600E86B91 /* SceneParser.hpp */; };
+		A7BE9EF016300B9900E86B91 /* AppParser.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A7BE9EEF16300B9900E86B91 /* AppParser.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		A7BE9EF216300BB300E86B91 /* AppParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A7BE9EF116300BB300E86B91 /* AppParser.cpp */; };
 		A7BF53851607643400662135 /* JSONBaseObject.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A7BF53841607643400662135 /* JSONBaseObject.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		A7EE00181619CE2B00C77604 /* JSONObject.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A7EE00171619CE2B00C77604 /* JSONObject.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		A7EE001A1619D01900C77604 /* JSONObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A7EE00191619D01900C77604 /* JSONObject.cpp */; };
@@ -285,6 +287,8 @@
 		A74072D0161EEEB900182A39 /* BingLayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BingLayer.cpp; sourceTree = "<group>"; };
 		A7BE9EE8162EF99C00E86B91 /* SceneParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneParser.cpp; sourceTree = "<group>"; };
 		A7BE9EEB162EF9B600E86B91 /* SceneParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SceneParser.hpp; sourceTree = "<group>"; };
+		A7BE9EEF16300B9900E86B91 /* AppParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AppParser.hpp; sourceTree = "<group>"; };
+		A7BE9EF116300BB300E86B91 /* AppParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppParser.cpp; sourceTree = "<group>"; };
 		A7BF53841607643400662135 /* JSONBaseObject.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONBaseObject.hpp; sourceTree = "<group>"; };
 		A7EE00171619CE2B00C77604 /* JSONObject.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = JSONObject.hpp; sourceTree = "<group>"; };
 		A7EE00191619D01900C77604 /* JSONObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONObject.cpp; sourceTree = "<group>"; };
@@ -716,6 +720,8 @@
 				A70F5611161C4F8F00340256 /* JSONNumber.cpp */,
 				A70F5613161C4FD000340256 /* JSONNumber.hpp */,
 				A70F5615161C8F9A00340256 /* JSONBoolean.hpp */,
+				A7BE9EEF16300B9900E86B91 /* AppParser.hpp */,
+				A7BE9EF116300BB300E86B91 /* AppParser.cpp */,
 			);
 			name = JSON;
 			path = Commons/JSON;
@@ -894,6 +900,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7BE9EF016300B9900E86B91 /* AppParser.hpp in Headers */,
 				CFE029541601367100D1E75B /* IImageDownloadListener.hpp in Headers */,
 				CF9D832515FF7A1C0069B555 /* FloatBufferBuilderFromCartesian2D.hpp in Headers */,
 				CF9D832615FF7A1C0069B555 /* FloatBufferBuilderFromCartesian3D.hpp in Headers */,
@@ -1175,6 +1182,7 @@
 				D81D2072160748EA009A8BA6 /* GLConstants.cpp in Sources */,
 				CF3F3FF01620FB2A00A92CC8 /* Vector4D.cpp in Sources */,
 				A7BE9EE9162EF99C00E86B91 /* SceneParser.cpp in Sources */,
+				A7BE9EF216300BB300E86B91 /* AppParser.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

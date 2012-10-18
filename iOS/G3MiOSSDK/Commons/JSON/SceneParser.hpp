@@ -22,7 +22,6 @@ const std::string items = "items";
 const std::string status = "status";
 const std::string name = "name";
 
-const std::string btrue = "true";
 const std::string wms110 = "1.1.0";
 const std::string wms111 = "1.1.1";
 const std::string wms130 = "1.3.0";
@@ -32,8 +31,6 @@ enum layer_type {
 };
 
 class SceneParser{
-
-private:
   static SceneParser* _instance;
   std::map<std::string, layer_type> mapLayerType;
   
