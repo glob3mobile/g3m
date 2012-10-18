@@ -5,7 +5,7 @@ public class MarksRenderer extends LeafRenderer
   private java.util.ArrayList<Mark> _marks = new java.util.ArrayList<Mark>();
 
   private InitializationContext _initializationContext;
-  private Camera*                _lastCamera;
+  private Camera                _lastCamera;
 
   private MarkTouchListener _markTouchListener;
   private boolean _autoDeleteMarkTouchListener;
