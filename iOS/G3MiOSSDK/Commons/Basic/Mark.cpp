@@ -121,10 +121,10 @@ void Mark::render(const RenderContext* rc,
   
   const Vector3D markCameraVector = markPosition->sub(cameraPosition);
   const double distanceToCamera = markCameraVector.length();
-  const bool renderMark = distanceToCamera <= minDistanceToCamera;
+  _renderedMark = distanceToCamera <= minDistanceToCamera;
 //  const bool renderMark = true;
   
-  if (renderMark) {
+  if (_renderedMark) {
     const Vector3D normalAtMarkPosition = planet->geodeticSurfaceNormal(*markPosition);
     
     if (normalAtMarkPosition.angleBetween(markCameraVector).radians() > GMath.halfPi()) {

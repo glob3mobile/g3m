@@ -9,6 +9,7 @@
 #include "MarksRenderer.hpp"
 #include "Camera.hpp"
 #include "GL.hpp"
+#include "TouchEvent.hpp"
 
 void MarksRenderer::initialize(const InitializationContext* ic) {
   _initializationContext = ic;
@@ -29,7 +30,66 @@ void MarksRenderer::addMark(Mark* mark) {
 
 bool MarksRenderer::onTouchEvent(const EventContext* ec,
                                  const TouchEvent* touchEvent) {
-  return false;
+  if (_markTouchListener == NULL) {
+    return false;
+  }
+  
+  bool handled = false;
+  
+  // if (touchEvent->getType() == LongPress) {
+  if (touchEvent->getType() == Down) {
+    
+    if (_lastCamera != NULL) {
+      const Vector2D touchedPixel = touchEvent->getTouch(0)->getPos();
+      const Vector3D ray = _lastCamera->pixel2Ray(touchedPixel);
+      const Vector3D origin = _lastCamera->getCartesianPosition();
+      
+      const Planet* planet = ec->getPlanet();
+      
+      const Vector3D positionCartesian = planet->closestIntersection(origin, ray);
+      if (positionCartesian.isNan()) {
+        return false;
+      }
+      
+      // const Geodetic3D position = planet->toGeodetic3D(positionCartesian);
+      
+      double minDistance = IMathUtils::instance()->maxDouble();
+      Mark* nearestMark = NULL;
+      
+      int marksSize = _marks.size();
+      for (int i = 0; i < marksSize; i++) {
+        Mark* mark = _marks[i];
+        
+        if (mark->isReady()) {
+          if (mark->isRendered()) {
+            const Vector3D cartesianMarkPosition = planet->toCartesian( mark->getPosition() );
+            const Vector2D markPixel = _lastCamera->point2Pixel(cartesianMarkPosition);
+            
+            const double distance = markPixel.sub(touchedPixel).squaredLength();
+            if (distance < minDistance) {
+              nearestMark = mark;
+              minDistance = distance;
+            }
+          }
+        }
+      }
+      
+      if (nearestMark != NULL) {
+        if (minDistance <= 30*30) {
+          
+          handled = _markTouchListener->touchedMark(nearestMark);
+        }
+      }
+      
+    }
+    
+  }
+  
+  return handled;
+  
+  
+  
+  
 }
 
 bool MarksRenderer::isReadyToRender(const RenderContext* rc) {
@@ -47,6 +107,10 @@ bool MarksRenderer::isReadyToRender(const RenderContext* rc) {
 
 void MarksRenderer::render(const RenderContext* rc) {
   //  rc.getLogger()->logInfo("MarksRenderer::render()");
+  
+  // Saving camera for use in onTouchEvent
+  _lastCamera = rc->getCurrentCamera();
+  
   
   GL* gl = rc->getGL();
   
@@ -74,5 +138,5 @@ void MarksRenderer::render(const RenderContext* rc) {
   
   gl->disableTextures();
   gl->disableVerticesPosition();
-  gl->disableTexture2D(); 
+  gl->disableTexture2D();
 }

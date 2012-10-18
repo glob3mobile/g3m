@@ -12,7 +12,17 @@
 #include <vector>
 #include "LeafRenderer.hpp"
 #include "Mark.hpp"
- 
+
+class MarkTouchListener {
+public:
+  virtual ~MarkTouchListener() {
+    
+  }
+  
+  virtual bool touchedMark(Mark* mark) = 0;
+};
+
+
 class MarksRenderer : public LeafRenderer {
 private:
   bool               _readyWhenMarksReady;
@@ -20,17 +30,35 @@ private:
   
 #ifdef C_CODE
   const InitializationContext* _initializationContext;
+  const Camera*                _lastCamera;
 #endif
 #ifdef JAVA_CODE
   private InitializationContext _initializationContext;
+  private Camera*                _lastCamera;
 #endif
+  
+  MarkTouchListener* _markTouchListener;
+  bool               _autoDeleteMarkTouchListener;
   
 public:
   
   MarksRenderer(bool readyWhenMarksReady) :
   _readyWhenMarksReady(readyWhenMarksReady),
-  _initializationContext(NULL)
+  _initializationContext(NULL),
+  _lastCamera(NULL),
+  _markTouchListener(NULL),
+  _autoDeleteMarkTouchListener(false)
   {
+  }
+  
+  void setMarkTouchListener(MarkTouchListener* markTouchListener,
+                            bool autoDelete) {
+    if ( (_markTouchListener != NULL) && _autoDeleteMarkTouchListener ) {
+      delete _markTouchListener;
+    }
+    
+    _markTouchListener = markTouchListener;
+    _autoDeleteMarkTouchListener = autoDelete;
   }
   
   virtual ~MarksRenderer() {
@@ -38,6 +66,11 @@ public:
     for (int i = 0; i < marksSize; i++) {
       delete _marks[i];
     }
+    
+    if ( (_markTouchListener != NULL) && _autoDeleteMarkTouchListener ) {
+      delete _markTouchListener;
+    }
+    _markTouchListener = NULL;
   };
   
   virtual void initialize(const InitializationContext* ic);

@@ -115,9 +115,10 @@ bool TileRenderer::isReadyToRender(const RenderContext *rc) {
 }
 
 void TileRenderer::render(const RenderContext* rc) {
-  TilesStatistics statistics;
-  //Saving camera for Long Press Event
+  // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
+
+  TilesStatistics statistics;
   
   TileRenderContext trc(_tessellator,
                         _texturizer,

@@ -43,6 +43,8 @@ private:
   bool    _textureSolved;
   IImage* _textureImage;
   
+  bool    _renderedMark;
+  
 public:
   Mark(const std::string name,
        const URL         textureURL,
@@ -54,7 +56,8 @@ public:
   _cartesianPosition(NULL),
   _vertices(NULL),
   _textureSolved(false),
-  _textureImage(NULL)
+  _textureImage(NULL),
+  _renderedMark(false)
   {
     
   }
@@ -76,6 +79,9 @@ public:
   
   bool isReady() const;
   
+  bool isRendered() const {
+    return _renderedMark;
+  }
   
   void onTextureDownloadError();
   
