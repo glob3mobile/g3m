@@ -34,7 +34,7 @@ private:
 #endif
 #ifdef JAVA_CODE
   private InitializationContext _initializationContext;
-  private Camera*                _lastCamera;
+  private Camera                _lastCamera;
 #endif
   
   MarkTouchListener* _markTouchListener;
