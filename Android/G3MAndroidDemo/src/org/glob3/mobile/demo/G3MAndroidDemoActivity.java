@@ -124,12 +124,18 @@ public class G3MAndroidDemoActivity
          marksRenderer.setMarkTouchListener(new MarkTouchListener() {
             @Override
             public boolean touchedMark(final Mark mark) {
-               final AlertDialog.Builder builder = new AlertDialog.Builder(G3MAndroidDemoActivity.this);
-               builder.setMessage("Touched on mark \"" + mark.getName() + "\"");
-               builder.setTitle("G3M Demo");
 
-               final AlertDialog dialog = builder.create();
-               dialog.show();
+               G3MAndroidDemoActivity.this.runOnUiThread(new Runnable() {
+                  @Override
+                  public void run() {
+                     final AlertDialog.Builder builder = new AlertDialog.Builder(G3MAndroidDemoActivity.this);
+                     builder.setMessage("Touched on mark \"" + mark.getName() + "\"");
+                     builder.setTitle("G3M Demo");
+
+                     final AlertDialog dialog = builder.create();
+                     dialog.show();
+                  }
+               });
 
                return true;
             }

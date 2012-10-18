@@ -11,7 +11,7 @@
 #include "GL.hpp"
 #include "TouchEvent.hpp"
 
-const double MarksRenderer::DISTANCE_THRESHOLD = 30*30*30*30;
+const double MarksRenderer::SQUARED_DISTANCE_THRESHOLD = 50*50;
 
 void MarksRenderer::initialize(const InitializationContext* ic) {
   _initializationContext = ic;
@@ -77,7 +77,7 @@ bool MarksRenderer::onTouchEvent(const EventContext* ec,
       }
       
       if (nearestMark != NULL) {
-        if (minDistance <= DISTANCE_THRESHOLD) {
+        if (minDistance <= SQUARED_DISTANCE_THRESHOLD) {
           handled = _markTouchListener->touchedMark(nearestMark);
         }
       }
