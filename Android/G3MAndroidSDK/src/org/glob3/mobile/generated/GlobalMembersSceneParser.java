@@ -29,7 +29,6 @@ public class GlobalMembersSceneParser
 	public static final String status = "status";
 	public static final String name = "name";
 
-	public static final String btrue = "true";
 	public static final String wms110 = "1.1.0";
 	public static final String wms111 = "1.1.1";
 	public static final String wms130 = "1.3.0";

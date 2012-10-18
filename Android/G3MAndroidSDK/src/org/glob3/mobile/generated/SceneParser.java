@@ -1,7 +1,6 @@
 package org.glob3.mobile.generated; 
 public class SceneParser
 {
-
   private static SceneParser _instance = null;
   private java.util.HashMap<String, layer_type> mapLayerType = new java.util.HashMap<String, layer_type>();
 
@@ -28,7 +27,7 @@ public class SceneParser
 	  IStringBuilder isb = IStringBuilder.newStringBuilder();
 	  isb.addInt(i);
 	  JSONObject jsonLayer = jsonLayers.getObjectForKey(isb.getString()).getObject();
-	  final layer_type layerType = mapLayerType.get(jsonLayer.getObjectForKey(GlobalMembersSceneParser.type).getString().getValue());
+	  final layer_type layerType = mapLayerType.get(jsonLayer.getObjectForKey(GlobalMembersAppParser.type).getString().getValue());
   
 	  switch (layerType)
 	  {
@@ -48,7 +47,7 @@ public class SceneParser
   public final void parserJSONWMSLayer(LayerSet layerSet, JSONObject jsonLayer)
   {
 	System.out.print("Parsing WMS Layer ");
-	System.out.print(jsonLayer.getObjectForKey(GlobalMembersSceneParser.name).getString().getValue());
+	System.out.print(jsonLayer.getObjectForKey(GlobalMembersAppParser.name).getString().getValue());
 	System.out.print("...");
 	System.out.print("\n");
   
@@ -64,7 +63,7 @@ public class SceneParser
 	{
 		if (jsonItems.getElement(i).getObject().getObjectForKey(GlobalMembersSceneParser.status).getBoolean().getValue())
 		{
-		layersName.addString(jsonItems.getElement(i).getObject().getObjectForKey(GlobalMembersSceneParser.name).getString().getValue());
+		layersName.addString(jsonItems.getElement(i).getObject().getObjectForKey(GlobalMembersAppParser.name).getString().getValue());
 		layersName.addString(",");
 	  }
 	}
@@ -87,14 +86,14 @@ public class SceneParser
   public final void parserJSON3DLayer(LayerSet layerSet, JSONObject jsonLayer)
   {
 	System.out.print("Parsing 3D Layer ");
-	System.out.print(jsonLayer.getObjectForKey(GlobalMembersSceneParser.name).getString().getValue());
+	System.out.print(jsonLayer.getObjectForKey(GlobalMembersAppParser.name).getString().getValue());
 	System.out.print("...");
 	System.out.print("\n");
   }
   public final void parserJSONPanoLayer(LayerSet layerSet, JSONObject jsonLayer)
   {
 	System.out.print("Parsing Pano Layer ");
-	System.out.print(jsonLayer.getObjectForKey(GlobalMembersSceneParser.name).getString().getValue());
+	System.out.print(jsonLayer.getObjectForKey(GlobalMembersAppParser.name).getString().getValue());
 	System.out.print("...");
 	System.out.print("\n");
   }
