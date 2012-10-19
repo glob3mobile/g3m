@@ -12,12 +12,12 @@ public class AppParser
   
 	if (jsonBaseLayer.equals("BING"))
 	{
-	  WMSLayer bing = new WMSLayer("ve", new URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?"), WMSServerVersion.WMS_1_1_0, Sector.fromDegrees(jsonBbox.getElement(0).getNumber().getDoubleValue(), jsonBbox.getElement(1).getNumber().getDoubleValue(), jsonBbox.getElement(2).getNumber().getDoubleValue(), jsonBbox.getElement(3).getNumber().getDoubleValue()), "image/jpeg", "EPSG:4326", "", false, null);
+	  WMSLayer bing = new WMSLayer("ve", new URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?"), WMSServerVersion.WMS_1_1_0, Sector.fromDegrees(jsonBbox.getElement(1).getNumber().getDoubleValue(), jsonBbox.getElement(0).getNumber().getDoubleValue(), jsonBbox.getElement(3).getNumber().getDoubleValue(), jsonBbox.getElement(2).getNumber().getDoubleValue()), "image/jpeg", "EPSG:4326", "", false, null);
 	  layerSet.addLayer(bing);
 	}
 	else
 	{
-	  WMSLayer osm = new WMSLayer("osm", new URL("http://wms.latlon.org/"), WMSServerVersion.WMS_1_1_0, Sector.fromDegrees(jsonBbox.getElement(0).getNumber().getDoubleValue(), jsonBbox.getElement(1).getNumber().getDoubleValue(), jsonBbox.getElement(2).getNumber().getDoubleValue(), jsonBbox.getElement(3).getNumber().getDoubleValue()), "image/jpeg", "EPSG:4326", "", false, null);
+	  WMSLayer osm = new WMSLayer("osm", new URL("http://wms.latlon.org/"), WMSServerVersion.WMS_1_1_0, Sector.fromDegrees(jsonBbox.getElement(1).getNumber().getDoubleValue(), jsonBbox.getElement(0).getNumber().getDoubleValue(), jsonBbox.getElement(3).getNumber().getDoubleValue(), jsonBbox.getElement(2).getNumber().getDoubleValue()), "image/jpeg", "EPSG:4326", "", false, null);
 	  layerSet.addLayer(osm);
 	}
 	parseCustomData(marks, jsonWorld.getObjectForKey(GlobalMembersAppParser.customdata).getObject());
