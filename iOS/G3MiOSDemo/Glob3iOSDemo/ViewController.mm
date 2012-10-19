@@ -187,7 +187,14 @@
     class TestMarkTouchListener : public MarkTouchListener {
     public:
       bool touchedMark(Mark* mark) {
-        printf("Touched on mark \"%s\"\n", mark->getName().c_str());
+        NSString* message = [NSString stringWithFormat: @"Touched on mark \"%s\"", mark->getName().c_str()];
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Glob3 Demo"
+                                                        message:message
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
         
         return true;
       }
