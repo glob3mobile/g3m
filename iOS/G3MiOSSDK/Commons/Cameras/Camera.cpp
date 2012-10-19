@@ -207,7 +207,7 @@ Vector3D Camera::pixel2PlanetPoint(const Vector2D& pixel) const {
   return _planet->closestIntersection(_position.asVector3D(), pixel2Ray(pixel));
 }
 
-Vector2D Camera::point2Pixel(const Vector3D& point) const {  
+Vector2D Camera::point2Pixel(const Vector3D& point) const {
   const Vector2D p = getModelViewMatrix().project(point,
                                                   0, 0, _width, _height);
 
