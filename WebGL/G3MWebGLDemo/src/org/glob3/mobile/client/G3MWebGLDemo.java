@@ -25,10 +25,7 @@ import org.glob3.mobile.generated.WMSServerVersion;
 import org.glob3.mobile.specific.G3MWidget_WebGL;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 
@@ -57,27 +54,6 @@ public class G3MWebGLDemo
          initWidgetDemo();
 
          ILogger.instance().logInfo("** Using proxy=" + proxy);
-      }
-   }
-
-   private static class MyDialog
-            extends
-               DialogBox {
-
-      private MyDialog(final Mark mark) {
-         // Set the dialog box's caption.
-         setText("Clicked on mark: " + mark.getName());
-
-         // DialogBox is a SimplePanel, so you have to set its widget property to
-         // whatever you want its contents to be.
-         final Button ok = new Button("OK");
-         ok.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(final ClickEvent event) {
-               MyDialog.this.hide();
-            }
-         });
-         setWidget(ok);
       }
    }
 
@@ -167,8 +143,7 @@ public class G3MWebGLDemo
          marksRenderer.setMarkTouchListener(new MarkTouchListener() {
             @Override
             public boolean touchedMark(final Mark mark) {
-               new MyDialog(mark).show();
-
+               Window.alert("Touched on mark: " + mark.getName());
                return true;
             }
          }, true);
