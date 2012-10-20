@@ -166,9 +166,9 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
   //  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
   //    return true;
   //  }
-  const Vector2D ex = extent->projectedExtent(rc);
+  const Vector2I ex = extent->projectedExtent(rc);
   //const double t = extent.maxAxis() * 2;
-  const double t = (ex._x + ex._y);
+  const int t = (ex._x + ex._y);
   if ( t <= ((parameters->_tileTextureWidth + parameters->_tileTextureHeight) * 1.75) ) {
     return true;
   }

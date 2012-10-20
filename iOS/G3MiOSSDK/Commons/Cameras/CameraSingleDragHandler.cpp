@@ -50,8 +50,8 @@ void CameraSingleDragHandler::onDown(const EventContext *eventContext,
   _lastRadians = _radiansStep = 0.0;
   
   // dragging
-  const Vector2D pixel = touchEvent.getTouch(0)->getPos();
-  _initialPixel = pixel.asMutableVector2D();
+  const Vector2I pixel = touchEvent.getTouch(0)->getPos();
+  _initialPixel = pixel.asMutableVector2I();
   _initialPoint = _camera0.pixel2PlanetPoint(pixel).asMutableVector3D();
   
   //printf ("down 1 finger. Initial point = %f %f %f\n", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
@@ -70,7 +70,7 @@ void CameraSingleDragHandler::onMove(const EventContext *eventContext,
     return;
   }
       
-  const Vector2D pixel = touchEvent.getTouch(0)->getPos();
+  const Vector2I pixel = touchEvent.getTouch(0)->getPos();
   
 //  const Vector2D pixel = Vector2D(touchEvent.getTouch(0)->getPos().x(), _initialPixel.y());
   
@@ -104,8 +104,8 @@ void CameraSingleDragHandler::onUp(const EventContext *eventContext,
   if (_useInertia) {
     // test if animation is needed
     const Touch *touch = touchEvent.getTouch(0);
-    Vector2D currPixel = touch->getPos();
-    Vector2D prevPixel = touch->getPrevPos();
+    Vector2I currPixel = touch->getPos();
+    Vector2I prevPixel = touch->getPrevPos();
     double desp        = currPixel.sub(prevPixel).length();
 
     if (cameraContext->getCurrentGesture()==Drag && !_axis.isNan() && desp>2) {
@@ -117,7 +117,7 @@ void CameraSingleDragHandler::onUp(const EventContext *eventContext,
   
   // update gesture
   cameraContext->setCurrentGesture(None);
-  _initialPixel = MutableVector2D::nan();
+  _initialPixel = MutableVector2I::zero();
 }
 
 void CameraSingleDragHandler::render(const RenderContext* rc, CameraContext *cameraContext)

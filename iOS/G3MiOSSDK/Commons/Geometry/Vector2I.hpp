@@ -9,6 +9,9 @@
 #ifndef __G3MiOSSDK__Vector2I__
 #define __G3MiOSSDK__Vector2I__
 
+#include "Angle.hpp"
+#include "MutableVector2I.hpp"
+
 class Vector2I {
 public:
   const int _x;
@@ -27,7 +30,7 @@ public:
   {
     
   }
-
+  
   static Vector2I zero() {
     return Vector2I(0, 0);
   }
@@ -35,6 +38,31 @@ public:
   bool isZero() const {
     return (_x == 0) && (_y == 0);
   }
+  
+  Vector2I add(const Vector2I& that) const {
+    return Vector2I(_x + that._x,
+                    _y + that._y);
+  }
+  
+  Vector2I sub(const Vector2I& that) const {
+    return Vector2I(_x - that._x,
+                    _y - that._y);
+  }
+  
+  Vector2I div(double v) const;
+  
+  double length() const;
+  
+  double squaredLength() const {
+    return _x * _x + _y * _y ;
+  }
+  
+  Angle orientation() const;
+  
+  MutableVector2I asMutableVector2I() const {
+    return MutableVector2I(_x, _y);
+  }
+  
 };
 
 #endif

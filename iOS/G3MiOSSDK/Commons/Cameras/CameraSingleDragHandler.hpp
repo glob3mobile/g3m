@@ -13,9 +13,7 @@
 #include "CameraEventHandler.hpp"
 #include "Camera.hpp"
 #include "Effects.hpp"
-#include "MutableVector2D.hpp"
-
-//***************************************************************
+#include "MutableVector2I.hpp"
 
 
 class SingleDragEffect : public EffectWithForce {
@@ -43,8 +41,6 @@ private:
   Vector3D  _axis;
   
 };
-
-//***************************************************************
 
 
 class CameraSingleDragHandler: public CameraEventHandler {
@@ -81,7 +77,7 @@ private:
   Camera _camera0;         //Initial Camera saved on Down event
   
   MutableVector3D _initialPoint;  //Initial point at dragging
-  MutableVector2D _initialPixel;  //Initial pixel at start of gesture
+  MutableVector2I _initialPixel;  //Initial pixel at start of gesture
   
   MutableVector3D _axis;
   double          _lastRadians;

@@ -33,7 +33,7 @@ void CameraDoubleTapHandler::onDown(const EventContext *eventContext,
                                     CameraContext *cameraContext) 
 {  
   // compute globe point where user tapped
-  const Vector2D pixel = touchEvent.getTouch(0)->getPos();
+  const Vector2I pixel = touchEvent.getTouch(0)->getPos();
   Camera* camera = cameraContext->getNextCamera();
   const Vector3D initialPoint = camera->pixel2PlanetPoint(pixel);
   if (initialPoint.isNan()) return;

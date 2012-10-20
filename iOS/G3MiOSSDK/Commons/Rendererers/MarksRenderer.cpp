@@ -42,16 +42,16 @@ bool MarksRenderer::onTouchEvent(const EventContext* ec,
   if (touchEvent->getType() == Down) {
     
     if (_lastCamera != NULL) {
-      const Vector2D touchedPixel = touchEvent->getTouch(0)->getPos();
-      const Vector3D ray = _lastCamera->pixel2Ray(touchedPixel);
-      const Vector3D origin = _lastCamera->getCartesianPosition();
+      const Vector2I touchedPixel = touchEvent->getTouch(0)->getPos();
+//      const Vector3D ray = _lastCamera->pixel2Ray(touchedPixel);
+//      const Vector3D origin = _lastCamera->getCartesianPosition();
       
       const Planet* planet = ec->getPlanet();
       
-      const Vector3D positionCartesian = planet->closestIntersection(origin, ray);
-      if (positionCartesian.isNan()) {
-        return false;
-      }
+//      const Vector3D positionCartesian = planet->closestIntersection(origin, ray);
+//      if (positionCartesian.isNan()) {
+//        return false;
+//      }
       
       // const Geodetic3D position = planet->toGeodetic3D(positionCartesian);
       
@@ -65,7 +65,7 @@ bool MarksRenderer::onTouchEvent(const EventContext* ec,
         if (mark->isReady()) {
           if (mark->isRendered()) {
             const Vector3D cartesianMarkPosition = planet->toCartesian( mark->getPosition() );
-            const Vector2D markPixel = _lastCamera->point2Pixel(cartesianMarkPosition);
+            const Vector2I markPixel = _lastCamera->point2Pixel(cartesianMarkPosition);
             
             const double distance = markPixel.sub(touchedPixel).squaredLength();
             if (distance < minDistance) {
