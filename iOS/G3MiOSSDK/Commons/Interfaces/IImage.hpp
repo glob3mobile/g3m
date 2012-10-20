@@ -11,8 +11,7 @@
 
 #include <vector>
 #include "Rectangle.hpp"
-
-class IByteBuffer;
+#include "Vector2I.hpp"
 
 class IImage {
 public:
@@ -21,6 +20,7 @@ public:
   
   virtual int getWidth() const = 0;
   virtual int getHeight() const = 0;
+  virtual Vector2I getExtent() const = 0;
   
   virtual IImage* combineWith(const IImage& other,
                               int width, int height) const = 0;

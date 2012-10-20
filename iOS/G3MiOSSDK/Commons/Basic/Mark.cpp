@@ -164,3 +164,15 @@ void Mark::render(const RenderContext* rc,
   }
   
 }
+
+int Mark::getTextureWidth() const {
+  return (_textureImage == NULL) ? 0 : _textureImage->getWidth();
+}
+
+int Mark::getTextureHeight() const {
+  return (_textureImage == NULL) ? 0 : _textureImage->getHeight();
+}
+
+Vector2I Mark::getTextureExtent() const {
+  return (_textureImage == NULL) ? Vector2I::zero() : _textureImage->getExtent();
+}

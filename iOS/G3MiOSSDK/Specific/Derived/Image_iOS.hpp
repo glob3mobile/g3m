@@ -61,6 +61,10 @@ public:
     return (_image == NULL) ? 0 : (int) _image.size.height;
   }
   
+  Vector2I getExtent() const {
+    return Vector2I(getWidth(), getHeight());
+  }
+  
   IImage* combineWith(const IImage& other,
                       int width, int height) const;
   

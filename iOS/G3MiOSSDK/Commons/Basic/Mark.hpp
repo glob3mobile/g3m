@@ -15,6 +15,7 @@
 
 #include "Vector3D.hpp"
 #include "URL.hpp"
+#include "Vector2I.hpp"
 
 class IImage;
 class IFloatBuffer;
@@ -86,6 +87,10 @@ public:
   void onTextureDownloadError();
   
   void onTextureDownload(const IImage* image);
+  
+  int getTextureWidth() const;
+  int getTextureHeight() const;
+  Vector2I getTextureExtent() const;
   
 };
 
