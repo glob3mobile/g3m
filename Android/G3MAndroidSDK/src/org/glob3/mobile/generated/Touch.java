@@ -21,8 +21,8 @@ package org.glob3.mobile.generated;
 
 public class Touch
 {
-  private final Vector2I _pos = new Vector2I();
-  private final Vector2I _prevPos = new Vector2I();
+  private Vector2I _pos = new Vector2I();
+  private Vector2I _prevPos = new Vector2I();
   private final byte _tapCount;
 
   public Touch(Touch other)
