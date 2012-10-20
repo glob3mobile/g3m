@@ -15,6 +15,13 @@ private:
   int _y;
   
 public:
+  MutableVector2I() :
+  _x(0),
+  _y(0)
+  {
+    
+  }
+
   MutableVector2I(int x, int y) :
   _x(x),
   _y(y)
