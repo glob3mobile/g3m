@@ -21,6 +21,13 @@ public class MutableVector2I
   private int _x;
   private int _y;
 
+  public MutableVector2I()
+  {
+	  _x = 0;
+	  _y = 0;
+
+  }
+
   public MutableVector2I(int x, int y)
   {
 	  _x = x;
