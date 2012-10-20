@@ -16,8 +16,8 @@
 
 class Touch {
 private:
-  const Vector2I _pos;
-  const Vector2I _prevPos;
+  Vector2I _pos;
+  Vector2I _prevPos;
   const unsigned char _tapCount;
 
 public:
