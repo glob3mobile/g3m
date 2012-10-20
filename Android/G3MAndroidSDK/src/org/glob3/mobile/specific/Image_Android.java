@@ -5,6 +5,7 @@ package org.glob3.mobile.specific;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.Rectangle;
+import org.glob3.mobile.generated.Vector2I;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -44,6 +45,12 @@ public final class Image_Android
    @Override
    public int getHeight() {
       return (_bitmap == null) ? 0 : _bitmap.getHeight();
+   }
+
+
+   @Override
+   public Vector2I getExtent() {
+      return new Vector2I(getWidth(), getHeight());
    }
 
 
@@ -164,5 +171,6 @@ public final class Image_Android
    public IImage shallowCopy() {
       return new Image_Android(_bitmap, _source);
    }
+
 
 }

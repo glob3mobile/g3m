@@ -41,7 +41,7 @@ import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.TouchEventType;
 import org.glob3.mobile.generated.UserData;
-import org.glob3.mobile.generated.Vector2D;
+import org.glob3.mobile.generated.Vector2I;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
@@ -186,7 +186,7 @@ public final class G3MWidget_Android
    public void onLongPress(final MotionEvent e) {
       final PointerCoords pc = new PointerCoords();
       e.getPointerCoords(0, pc);
-      final Touch t = new Touch(new Vector2D(pc.x, pc.y), new Vector2D(0, 0));
+      final Touch t = new Touch(new Vector2I((int) pc.x, (int) pc.y), new Vector2I(0, 0));
       final TouchEvent te = TouchEvent.create(TouchEventType.LongPress, t);
 
       queueEvent(new Runnable() {

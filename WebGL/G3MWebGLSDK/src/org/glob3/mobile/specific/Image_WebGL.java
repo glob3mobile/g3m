@@ -4,6 +4,7 @@ package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.Rectangle;
+import org.glob3.mobile.generated.Vector2I;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
@@ -97,6 +98,12 @@ public final class Image_WebGL
    @Override
    public int getHeight() {
       return jsGetHeight();
+   }
+
+
+   @Override
+   public Vector2I getExtent() {
+      return new Vector2I(getWidth(), getHeight());
    }
 
 
