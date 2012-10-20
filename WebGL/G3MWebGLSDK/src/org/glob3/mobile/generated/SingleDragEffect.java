@@ -19,8 +19,6 @@ package org.glob3.mobile.generated;
 
 
 
-//***************************************************************
-
 
 public class SingleDragEffect extends EffectWithForce
 {

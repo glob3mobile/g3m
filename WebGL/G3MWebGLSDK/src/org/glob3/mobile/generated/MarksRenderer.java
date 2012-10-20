@@ -126,17 +126,16 @@ public class MarksRenderer extends LeafRenderer
   
 	  if (_lastCamera != null)
 	  {
-		final Vector2D touchedPixel = touchEvent.getTouch(0).getPos();
-		final Vector3D ray = _lastCamera.pixel2Ray(touchedPixel);
-		final Vector3D origin = _lastCamera.getCartesianPosition();
+		final Vector2I touchedPixel = touchEvent.getTouch(0).getPos();
+  //      const Vector3D ray = _lastCamera->pixel2Ray(touchedPixel);
+  //      const Vector3D origin = _lastCamera->getCartesianPosition();
   
 		final Planet planet = ec.getPlanet();
   
-		final Vector3D positionCartesian = planet.closestIntersection(origin, ray);
-		if (positionCartesian.isNan())
-		{
-		  return false;
-		}
+  //      const Vector3D positionCartesian = planet->closestIntersection(origin, ray);
+  //      if (positionCartesian.isNan()) {
+  //        return false;
+  //      }
   
 		// const Geodetic3D position = planet->toGeodetic3D(positionCartesian);
   
@@ -153,7 +152,7 @@ public class MarksRenderer extends LeafRenderer
 			if (mark.isRendered())
 			{
 			  final Vector3D cartesianMarkPosition = planet.toCartesian(mark.getPosition());
-			  final Vector2D markPixel = _lastCamera.point2Pixel(cartesianMarkPosition);
+			  final Vector2I markPixel = _lastCamera.point2Pixel(cartesianMarkPosition);
   
 			  final double distance = markPixel.sub(touchedPixel).squaredLength();
 			  if (distance < minDistance)

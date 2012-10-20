@@ -207,4 +207,23 @@ public class Mark
 	_textureImage = image.shallowCopy();
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: int getTextureWidth() const
+  public final int getTextureWidth()
+  {
+	return (_textureImage == null) ? 0 : _textureImage.getWidth();
+  }
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: int getTextureHeight() const
+  public final int getTextureHeight()
+  {
+	return (_textureImage == null) ? 0 : _textureImage.getHeight();
+  }
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector2I getTextureExtent() const
+  public final Vector2I getTextureExtent()
+  {
+	return (_textureImage == null) ? Vector2I.zero() : _textureImage.getExtent();
+  }
+
 }

@@ -170,7 +170,7 @@ public class TileRenderer extends LeafRenderer
   
 	  if (_lastCamera != null)
 	  {
-		final Vector2D pixel = touchEvent.getTouch(0).getPos();
+		final Vector2I pixel = touchEvent.getTouch(0).getPos();
 		final Vector3D ray = _lastCamera.pixel2Ray(pixel);
 		final Vector3D origin = _lastCamera.getCartesianPosition();
   
