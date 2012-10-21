@@ -1,9 +1,7 @@
 package org.glob3.mobile.generated; 
 public class MarksRenderer extends LeafRenderer
 {
-  private static final double SQUARED_DISTANCE_THRESHOLD = 50 *50;
-
-  private boolean _readyWhenMarksReady;
+  private final boolean _readyWhenMarksReady;
   private java.util.ArrayList<Mark> _marks = new java.util.ArrayList<Mark>();
 
   private InitializationContext _initializationContext;
@@ -127,19 +125,19 @@ public class MarksRenderer extends LeafRenderer
 	  if (_lastCamera != null)
 	  {
 		final Vector2I touchedPixel = touchEvent.getTouch(0).getPos();
-  //      const Vector3D ray = _lastCamera->pixel2Ray(touchedPixel);
-  //      const Vector3D origin = _lastCamera->getCartesianPosition();
+		//      const Vector3D ray = _lastCamera->pixel2Ray(touchedPixel);
+		//      const Vector3D origin = _lastCamera->getCartesianPosition();
   
 		final Planet planet = ec.getPlanet();
   
-  //      const Vector3D positionCartesian = planet->closestIntersection(origin, ray);
-  //      if (positionCartesian.isNan()) {
-  //        return false;
-  //      }
+		//      const Vector3D positionCartesian = planet->closestIntersection(origin, ray);
+		//      if (positionCartesian.isNan()) {
+		//        return false;
+		//      }
   
 		// const Geodetic3D position = planet->toGeodetic3D(positionCartesian);
   
-		double minDistance = IMathUtils.instance().maxDouble();
+		double minSqDistance = IMathUtils.instance().maxDouble();
 		Mark nearestMark = null;
   
 		int marksSize = _marks.size();
@@ -147,29 +145,46 @@ public class MarksRenderer extends LeafRenderer
 		{
 		  Mark mark = _marks.get(i);
   
-		  if (mark.isReady())
+		  if (!mark.isReady())
 		  {
-			if (mark.isRendered())
-			{
-			  final Vector3D cartesianMarkPosition = planet.toCartesian(mark.getPosition());
-			  final Vector2I markPixel = _lastCamera.point2Pixel(cartesianMarkPosition);
+			continue;
+		  }
+		  if (!mark.isRendered())
+		  {
+			continue;
+		  }
   
-			  final double distance = markPixel.sub(touchedPixel).squaredLength();
-			  if (distance < minDistance)
-			  {
-				nearestMark = mark;
-				minDistance = distance;
-			  }
+		  final int textureWidth = mark.getTextureWidth();
+		  if (textureWidth <= 0)
+		  {
+			continue;
+		  }
+  
+		  final int textureHeight = mark.getTextureHeight();
+		  if (textureHeight <= 0)
+		  {
+			continue;
+		  }
+  
+		  final Vector3D cartesianMarkPosition = planet.toCartesian(mark.getPosition());
+		  final Vector2I markPixel = _lastCamera.point2Pixel(cartesianMarkPosition);
+  
+		  final RectangleI markPixelBounds = new RectangleI(markPixel._x - (textureWidth / 2), markPixel._y - (textureHeight / 2), textureWidth, textureHeight);
+  
+		  if (markPixelBounds.contains(touchedPixel._x, touchedPixel._y))
+		  {
+			final double distance = markPixel.sub(touchedPixel).squaredLength();
+			if (distance < minSqDistance)
+			{
+			  nearestMark = mark;
+			  minSqDistance = distance;
 			}
 		  }
 		}
   
 		if (nearestMark != null)
 		{
-		  if (minDistance <= SQUARED_DISTANCE_THRESHOLD)
-		  {
-			handled = _markTouchListener.touchedMark(nearestMark);
-		  }
+		  handled = _markTouchListener.touchedMark(nearestMark);
 		}
   
 	  }
@@ -177,10 +192,6 @@ public class MarksRenderer extends LeafRenderer
 	}
   
 	return handled;
-  
-  
-  
-  
   }
 
   public final void onResizeViewportEvent(EventContext ec, int width, int height)

@@ -64,6 +64,8 @@ public class Mark
 
   private boolean _textureSolved;
   private IImage _textureImage;
+  private int _textureWidth;
+  private int _textureHeight;
 
   private boolean _renderedMark;
 
@@ -78,6 +80,8 @@ public class Mark
 	  _textureSolved = false;
 	  _textureImage = null;
 	  _renderedMark = false;
+	  _textureWidth = 0;
+	  _textureHeight = 0;
 
   }
 
@@ -205,25 +209,30 @@ public class Mark
   {
 	_textureSolved = true;
 	_textureImage = image.shallowCopy();
+	_textureWidth = _textureImage.getWidth();
+	_textureHeight = _textureImage.getHeight();
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: int getTextureWidth() const
   public final int getTextureWidth()
   {
-	return (_textureImage == null) ? 0 : _textureImage.getWidth();
+  //  return (_textureImage == NULL) ? 0 : _textureImage->getWidth();
+	return _textureWidth;
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: int getTextureHeight() const
   public final int getTextureHeight()
   {
-	return (_textureImage == null) ? 0 : _textureImage.getHeight();
+  //  return (_textureImage == NULL) ? 0 : _textureImage->getHeight();
+	return _textureHeight;
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Vector2I getTextureExtent() const
   public final Vector2I getTextureExtent()
   {
-	return (_textureImage == null) ? Vector2I.zero() : _textureImage.getExtent();
+  //  return (_textureImage == NULL) ? Vector2I::zero() : _textureImage->getExtent();
+	return new Vector2I(_textureWidth, _textureHeight);
   }
 
 }

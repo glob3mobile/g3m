@@ -31,12 +31,12 @@ public abstract class IImage
   public abstract IImage combineWith(IImage other, int width, int height);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual IImage* combineWith(const IImage& other, const Rectangle& rect, int width, int height) const = 0;
-  public abstract IImage combineWith(IImage other, Rectangle rect, int width, int height);
+//ORIGINAL LINE: virtual IImage* combineWith(const IImage& other, const RectangleD& rect, int width, int height) const = 0;
+  public abstract IImage combineWith(IImage other, RectangleD rect, int width, int height);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual IImage* subImage(const Rectangle& rect) const = 0;
-  public abstract IImage subImage(Rectangle rect);
+//ORIGINAL LINE: virtual IImage* subImage(const RectangleD& rect) const = 0;
+  public abstract IImage subImage(RectangleD rect);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual IImage* scale(int width, int height) const = 0;
