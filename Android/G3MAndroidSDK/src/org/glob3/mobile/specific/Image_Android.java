@@ -4,7 +4,7 @@ package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.ILogger;
-import org.glob3.mobile.generated.Rectangle;
+import org.glob3.mobile.generated.RectangleD;
 import org.glob3.mobile.generated.Vector2I;
 
 import android.graphics.Bitmap;
@@ -71,7 +71,7 @@ public final class Image_Android
 
    @Override
    public IImage combineWith(final IImage other,
-                             final Rectangle rect,
+                             final RectangleD rect,
                              final int width,
                              final int height) {
 
@@ -102,7 +102,7 @@ public final class Image_Android
 
 
    @Override
-   public IImage subImage(final Rectangle rect) {
+   public IImage subImage(final RectangleD rect) {
       final Bitmap bm = Bitmap.createBitmap(_bitmap, (int) rect._x, (int) rect._y, (int) rect._width, (int) rect._height);
 
       return new Image_Android(bm, null);
