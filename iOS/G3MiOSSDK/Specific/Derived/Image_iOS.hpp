@@ -69,10 +69,10 @@ public:
                       int width, int height) const;
   
   IImage* combineWith(const IImage& other,
-                      const Rectangle& rect,
+                      const RectangleD& rect,
                       int width, int height) const;
   
-  IImage* subImage(const Rectangle& rect) const;
+  IImage* subImage(const RectangleD& rect) const;
   
   unsigned char* createByteArrayRGBA8888() const;
   

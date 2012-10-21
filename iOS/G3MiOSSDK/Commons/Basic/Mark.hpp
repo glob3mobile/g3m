@@ -43,7 +43,9 @@ private:
   
   bool    _textureSolved;
   IImage* _textureImage;
-  
+  int _textureWidth;
+  int _textureHeight;
+
   bool    _renderedMark;
   
 public:
@@ -58,7 +60,9 @@ public:
   _vertices(NULL),
   _textureSolved(false),
   _textureImage(NULL),
-  _renderedMark(false)
+  _renderedMark(false),
+  _textureWidth(0),
+  _textureHeight(0)
   {
     
   }

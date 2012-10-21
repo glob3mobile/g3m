@@ -10,7 +10,7 @@
 #define G3MiOSSDK_IImage_h
 
 #include <vector>
-#include "Rectangle.hpp"
+#include "RectangleD.hpp"
 #include "Vector2I.hpp"
 
 class IImage {
@@ -26,10 +26,10 @@ public:
                               int width, int height) const = 0;
   
   virtual IImage* combineWith(const IImage& other,
-                              const Rectangle& rect,
+                              const RectangleD& rect,
                               int width, int height) const = 0;
   
-  virtual IImage* subImage(const Rectangle& rect) const = 0;
+  virtual IImage* subImage(const RectangleD& rect) const = 0;
   
   virtual IImage* scale(int width, int height) const = 0;
 

@@ -12,7 +12,7 @@
 #include "TilesRenderParameters.hpp"
 #include "Tile.hpp"
 #include "LeveledTexturedMesh.hpp"
-#include "Rectangle.hpp"
+#include "RectangleD.hpp"
 #include "TexturesHandler.hpp"
 #include "TextureBuilder.hpp"
 
@@ -246,24 +246,24 @@ public:
     deletePetitions();
   }
   
-  Rectangle* getImageRectangleInTexture(const Sector& wholeSector,
-                                        const Sector& imageSector,
-                                        int textureWidth,
-                                        int textureHeight) const {
+  RectangleD* getImageRectangleInTexture(const Sector& wholeSector,
+                                         const Sector& imageSector,
+                                         int textureWidth,
+                                         int textureHeight) const {
     const Vector2D lowerFactor = wholeSector.getUVCoordinates(imageSector.lower());
     
     const double widthFactor  = imageSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
     const double heightFactor = imageSector.getDeltaLatitude().div(wholeSector.getDeltaLatitude());
     
-    return new Rectangle(lowerFactor._x         * textureWidth,
-                         (1.0 - lowerFactor._y) * textureHeight,
-                         widthFactor  * textureWidth,
-                         heightFactor * textureHeight);
+    return new RectangleD(lowerFactor._x         * textureWidth,
+                          (1.0 - lowerFactor._y) * textureHeight,
+                          widthFactor  * textureWidth,
+                          heightFactor * textureHeight);
   }
   
   void composeAndUploadTexture() const {
-    std::vector<const IImage*>    images;
-    std::vector<const Rectangle*> rectangles;
+    std::vector<const IImage*>     images;
+    std::vector<const RectangleD*> rectangles;
     std::string textureId = _tile->getKey().tinyDescription();
     
     const int textureWidth  = _parameters->_tileTextureWidth;

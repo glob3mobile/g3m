@@ -73,6 +73,8 @@ void Mark::onTextureDownloadError() {
 void Mark::onTextureDownload(const IImage* image) {
   _textureSolved = true;
   _textureImage = image->shallowCopy();
+  _textureWidth = _textureImage->getWidth();
+  _textureHeight = _textureImage->getHeight();
 }
 
 
@@ -166,13 +168,16 @@ void Mark::render(const RenderContext* rc,
 }
 
 int Mark::getTextureWidth() const {
-  return (_textureImage == NULL) ? 0 : _textureImage->getWidth();
+//  return (_textureImage == NULL) ? 0 : _textureImage->getWidth();
+  return _textureWidth;
 }
 
 int Mark::getTextureHeight() const {
-  return (_textureImage == NULL) ? 0 : _textureImage->getHeight();
+//  return (_textureImage == NULL) ? 0 : _textureImage->getHeight();
+  return _textureHeight;
 }
 
 Vector2I Mark::getTextureExtent() const {
-  return (_textureImage == NULL) ? Vector2I::zero() : _textureImage->getExtent();
+//  return (_textureImage == NULL) ? Vector2I::zero() : _textureImage->getExtent();
+  return Vector2I(_textureWidth, _textureHeight);
 }

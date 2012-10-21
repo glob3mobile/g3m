@@ -56,10 +56,10 @@ std::vector<Petition*> StaticImageLayer::getMapPetitions(const RenderContext* rc
   const Vector2D p = _sector.getUVCoordinates(tileSector.lower());
   const Vector2D pos(p._x, p._y - heightUV);
   
-  Rectangle r(pos._x * _image->getWidth(),
-              pos._y * _image->getHeight(),
-              widthUV * _image->getWidth(),
-              heightUV * _image->getHeight());
+  RectangleD r(pos._x * _image->getWidth(),
+               pos._y * _image->getHeight(),
+               widthUV * _image->getWidth(),
+               heightUV * _image->getHeight());
   
   const IImage* subImage = _image->subImage(r);
   

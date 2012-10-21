@@ -62,7 +62,7 @@ IImage* Image_iOS::combineWith(const IImage& other,
 }
 
 IImage* Image_iOS::combineWith(const IImage& other,
-                               const Rectangle& rect,
+                               const RectangleD& rect,
                                int width, int height) const {
   UIImage* otherIm = ((Image_iOS&)other).getUIImage();
   
@@ -102,7 +102,7 @@ IImage* Image_iOS::combineWith(const IImage& other,
   return new Image_iOS(img, NULL);
 }
 
-IImage* Image_iOS::subImage(const Rectangle& rect) const {
+IImage* Image_iOS::subImage(const RectangleD& rect) const {
   CGRect cropRect = CGRectMake((float) rect._x,
                                (float) rect._y,
                                (float) rect._width,

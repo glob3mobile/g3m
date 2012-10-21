@@ -25,9 +25,7 @@ public:
 
 class MarksRenderer : public LeafRenderer {
 private:
-  static const double SQUARED_DISTANCE_THRESHOLD;
-  
-  bool               _readyWhenMarksReady;
+  const bool         _readyWhenMarksReady;
   std::vector<Mark*> _marks;
   
 #ifdef C_CODE
