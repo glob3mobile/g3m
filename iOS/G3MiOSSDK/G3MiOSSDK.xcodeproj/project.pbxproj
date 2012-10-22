@@ -168,7 +168,7 @@
 		CFCE679D15EFB06700B35FE0 /* IThreadUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCE679B15EFB06700B35FE0 /* IThreadUtils.cpp */; };
 		CFCE679E15EFB06700B35FE0 /* IThreadUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFCE679C15EFB06700B35FE0 /* IThreadUtils.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFCEFF26163476F100FC4AB0 /* RectangleI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCEFF24163476F100FC4AB0 /* RectangleI.cpp */; };
-		CFCEFF27163476F100FC4AB0 /* RectangleI.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFCEFF25163476F100FC4AB0 /* RectangleI.hpp */; };
+		CFCEFF27163476F100FC4AB0 /* RectangleI.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFCEFF25163476F100FC4AB0 /* RectangleI.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFD0021B15D3C94C00735FD8 /* TileKey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD0021915D3C94C00735FD8 /* TileKey.cpp */; };
 		CFD314531631FFAD00B54ED3 /* Vector2I.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD314511631FFAD00B54ED3 /* Vector2I.cpp */; };
 		CFD314541631FFAD00B54ED3 /* Vector2I.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFD314521631FFAD00B54ED3 /* Vector2I.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -914,6 +914,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CFCEFF27163476F100FC4AB0 /* RectangleI.hpp in Headers */,
 				CF0A8184163303E800036277 /* MutableVector2I.hpp in Headers */,
 				CFD314541631FFAD00B54ED3 /* Vector2I.hpp in Headers */,
 				CF527E21162E359900E0BDE0 /* JSONBaseObject.hpp in Headers */,
@@ -1048,7 +1049,6 @@
 				A70F560A161B5C6000340256 /* JSONParser_iOS.hpp in Headers */,
 				CFA189A015F8D9F80048BF46 /* IntBuffer_iOS.hpp in Headers */,
 				A74072CF161EEEA300182A39 /* BingLayer.hpp in Headers */,
-				CFCEFF27163476F100FC4AB0 /* RectangleI.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
