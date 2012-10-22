@@ -19,12 +19,15 @@
 class SingleDragEffect : public EffectWithForce {
 public:
   
-  SingleDragEffect(const Vector3D& axis, const Angle& angle):
+  SingleDragEffect(const Vector3D& axis,
+                   const Angle& angle):
   EffectWithForce(angle.degrees(), 0.975),
   _axis(axis)
-  { }
+  {
+  }
   
-  virtual void start(const RenderContext *rc, const TimeInterval& now) {}
+  virtual void start(const RenderContext *rc, const TimeInterval& now) {
+  }
   
   virtual void doStep(const RenderContext *rc, const TimeInterval& now) {
     EffectWithForce::doStep(rc, now);
@@ -38,8 +41,7 @@ public:
   }
   
 private:
-  Vector3D  _axis;
-  
+  Vector3D _axis;
 };
 
 

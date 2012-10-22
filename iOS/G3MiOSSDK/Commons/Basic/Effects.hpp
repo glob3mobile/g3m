@@ -87,7 +87,8 @@ public:
   virtual ~Effect() { }
 };
 
-//***************************************************************
+
+
 
 class EffectWithDuration : public Effect {
 private:
@@ -132,19 +133,24 @@ public:
   
 };
 
-//***************************************************************
+
+
 
 class EffectWithForce : public Effect {
-  double _force;
-  double _friction;
+private:
+  double       _force;
+  const double _friction;
   
 protected:
-  EffectWithForce(double force, double friction): 
+  EffectWithForce(double force,
+                  double friction):
   _force(force),
   _friction(friction)
   {}
   
-  double getForce() const { return _force; }  
+  double getForce() const {
+    return _force;
+  }
   
 public:
   virtual void doStep(const RenderContext *rc,
@@ -159,7 +165,7 @@ public:
   
 };
 
-//***************************************************************
+
 
 
 class EffectsScheduler {
@@ -224,44 +230,42 @@ public:
   void onPause(const InitializationContext* ic) {
     
   }
-  
 
 };
 
-//***************************************************************
 
 
-class SampleEffect : public EffectWithDuration {
-public:
-  
-  SampleEffect(TimeInterval duration) : EffectWithDuration(duration) {
-  }
-  
-  virtual void start(const RenderContext *rc,
-                     const TimeInterval& now) {
-    EffectWithDuration::start(rc, now);
-    _lastPercent = 0;
-  }
-  
-  virtual void doStep(const RenderContext *rc,
-                      const TimeInterval& now) {
-    const double percent = pace( percentDone(now) );
-    rc->getNextCamera()->moveForward((percent-_lastPercent)*1e7);
-    _lastPercent = percent;
-  }
-  
-  virtual void stop(const RenderContext *rc,
-                    const TimeInterval& now) {
-    EffectWithDuration::stop(rc, now);
-  }
-  
-  virtual void cancel(const TimeInterval& now) {
-    // do nothing, just leave the effect in the intermediate state
-  }
-
-private:
-  double _lastPercent;
-};
+//class SampleEffect : public EffectWithDuration {
+//public:
+//  
+//  SampleEffect(TimeInterval duration) : EffectWithDuration(duration) {
+//  }
+//  
+//  virtual void start(const RenderContext *rc,
+//                     const TimeInterval& now) {
+//    EffectWithDuration::start(rc, now);
+//    _lastPercent = 0;
+//  }
+//  
+//  virtual void doStep(const RenderContext *rc,
+//                      const TimeInterval& now) {
+//    const double percent = pace( percentDone(now) );
+//    rc->getNextCamera()->moveForward((percent-_lastPercent)*1e7);
+//    _lastPercent = percent;
+//  }
+//  
+//  virtual void stop(const RenderContext *rc,
+//                    const TimeInterval& now) {
+//    EffectWithDuration::stop(rc, now);
+//  }
+//  
+//  virtual void cancel(const TimeInterval& now) {
+//    // do nothing, just leave the effect in the intermediate state
+//  }
+//
+//private:
+//  double _lastPercent;
+//};
 
 
 #endif
