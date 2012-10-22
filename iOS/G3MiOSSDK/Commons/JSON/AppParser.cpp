@@ -90,7 +90,7 @@ void AppParser::parseGEOJSONPointObject(MarksRenderer* marks, JSONObject* point)
     JSONArray* jsonCoordinates = jsonGeometry->getObjectForKey(coordinates)->getArray();
     
     Mark* mark = new Mark(jsonProperties->getObjectForKey(name)->getString()->getValue(),
-                        "g3m-marker.png",
+                        URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png"),
                           Geodetic3D(Angle::fromDegrees(jsonCoordinates->getElement(1)->getNumber()->getDoubleValue()), Angle::fromDegrees(jsonCoordinates->getElement(0)->getNumber()->getDoubleValue()), 0));
     marks->addMark(mark);
 }
