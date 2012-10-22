@@ -49,5 +49,4 @@ public class SingleDragEffect extends EffectWithForce
   }
 
   private Vector3D _axis ;
-
 }
