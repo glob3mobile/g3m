@@ -10,7 +10,7 @@ import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.TouchEventType;
-import org.glob3.mobile.generated.Vector2D;
+import org.glob3.mobile.generated.Vector2I;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
@@ -26,7 +26,7 @@ public final class MotionEventProcessor {
    private final G3MWidget _widget;
    private boolean         _mouseDown = false;
    private boolean         _keyDown   = false;
-   private Vector2D        _prevPos   = null;
+   private Vector2I        _prevPos   = null;
 
 
    public MotionEventProcessor(final G3MWidget widget) {
@@ -38,7 +38,7 @@ public final class MotionEventProcessor {
 
    public void processEvent(final Event event) {
 
-      final Vector2D pos = new Vector2D(event.getClientX(), event.getClientY());
+      final Vector2I pos = new Vector2I(event.getClientX(), event.getClientY());
       TouchEvent touchEvent = null;
 
       switch (DOM.eventGetType(event)) {
@@ -98,7 +98,7 @@ public final class MotionEventProcessor {
    }
 
 
-   private TouchEvent mouseMoveHandler(final Vector2D pos) {
+   private TouchEvent mouseMoveHandler(final Vector2I pos) {
       //            log(LogLevel.InfoLevel, " onMouseMove");
 
       final ArrayList<Touch> touches = new ArrayList<Touch>();
@@ -106,9 +106,9 @@ public final class MotionEventProcessor {
 
       if (_mouseDown) {
          if (_keyDown) {
-            touches.add(new Touch(new Vector2D(pos._x - 10, pos._y), _prevPos));
+            touches.add(new Touch(new Vector2I(pos._x - 10, pos._y), _prevPos));
             touches.add(new Touch(pos, _prevPos));
-            touches.add(new Touch(new Vector2D(pos._x + 10, pos._y), _prevPos));
+            touches.add(new Touch(new Vector2I(pos._x + 10, pos._y), _prevPos));
          }
          else {
             touches.add(new Touch(pos, _prevPos));
@@ -121,7 +121,7 @@ public final class MotionEventProcessor {
    }
 
 
-   private TouchEvent mouseDownHandler(final Vector2D pos) {
+   private TouchEvent mouseDownHandler(final Vector2I pos) {
       //            log(LogLevel.InfoLevel, " onMouseDown");
 
       final ArrayList<Touch> touches = new ArrayList<Touch>();
@@ -129,9 +129,9 @@ public final class MotionEventProcessor {
       _mouseDown = true;
       _prevPos = pos;
       if (_keyDown) {
-         touches.add(new Touch(new Vector2D(pos._x - 10, pos._y), _prevPos));
+         touches.add(new Touch(new Vector2I(pos._x - 10, pos._y), _prevPos));
          touches.add(new Touch(pos, _prevPos));
-         touches.add(new Touch(new Vector2D(pos._x + 10, pos._y), _prevPos));
+         touches.add(new Touch(new Vector2I(pos._x + 10, pos._y), _prevPos));
       }
       else {
          touches.add(new Touch(pos, _prevPos));
@@ -141,16 +141,16 @@ public final class MotionEventProcessor {
    }
 
 
-   private TouchEvent mouseUpHandler(final Vector2D pos) {
+   private TouchEvent mouseUpHandler(final Vector2I pos) {
       //    log(LogLevel.InfoLevel, " onMouseUp");
 
       final ArrayList<Touch> touches = new ArrayList<Touch>();
 
       _mouseDown = false;
       if (_keyDown) {
-         touches.add(new Touch(new Vector2D(pos._x - 10, pos._y), _prevPos));
+         touches.add(new Touch(new Vector2I(pos._x - 10, pos._y), _prevPos));
          touches.add(new Touch(pos, _prevPos));
-         touches.add(new Touch(new Vector2D(pos._x + 10, pos._y), _prevPos));
+         touches.add(new Touch(new Vector2I(pos._x + 10, pos._y), _prevPos));
       }
       else {
          touches.add(new Touch(pos, _prevPos));
@@ -161,7 +161,7 @@ public final class MotionEventProcessor {
    }
 
 
-   private TouchEvent doubleClickHanler(final Vector2D pos) {
+   private TouchEvent doubleClickHanler(final Vector2I pos) {
       //          log(LogLevel.InfoLevel, " onDoubleClick");
 
       final Touch touch = new Touch(pos, pos, (byte) 2);
@@ -198,17 +198,17 @@ public final class MotionEventProcessor {
       final ArrayList<Touch> beginTouches = new ArrayList<Touch>();
       final ArrayList<Touch> endTouches = new ArrayList<Touch>();
 
-      Vector2D firstPointerPos = new Vector2D(x, y);
-      Vector2D secondPointerPos = new Vector2D(x + 20, y + 20);
+      Vector2I firstPointerPos = new Vector2I(x, y);
+      Vector2I secondPointerPos = new Vector2I(x + 20, y + 20);
 
-      beginTouches.add(new Touch(new Vector2D(firstPointerPos._x, firstPointerPos._y), new Vector2D(x, y)));
-      beginTouches.add(new Touch(new Vector2D(secondPointerPos._x, secondPointerPos._y), new Vector2D(x, y)));
+      beginTouches.add(new Touch(new Vector2I(firstPointerPos._x, firstPointerPos._y), new Vector2I(x, y)));
+      beginTouches.add(new Touch(new Vector2I(secondPointerPos._x, secondPointerPos._y), new Vector2I(x, y)));
 
       _prevPos = firstPointerPos;
-      final Vector2D prevSecondPos = secondPointerPos;
+      final Vector2I prevSecondPos = secondPointerPos;
 
-      firstPointerPos = new Vector2D(firstPointerPos._x - delta, firstPointerPos._y - delta);
-      secondPointerPos = new Vector2D(secondPointerPos._x + delta, secondPointerPos._y + delta);
+      firstPointerPos = new Vector2I(firstPointerPos._x - delta, firstPointerPos._y - delta);
+      secondPointerPos = new Vector2I(secondPointerPos._x + delta, secondPointerPos._y + delta);
 
       endTouches.add(new Touch(firstPointerPos, _prevPos));
       endTouches.add(new Touch(secondPointerPos, prevSecondPos));

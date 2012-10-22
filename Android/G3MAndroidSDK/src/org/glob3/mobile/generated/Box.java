@@ -82,31 +82,31 @@ public class Box extends Extent
 //ORIGINAL LINE: double squaredProjectedArea(const RenderContext* rc) const
   public final double squaredProjectedArea(RenderContext rc)
   {
-	final Vector2D extent = projectedExtent(rc);
+	final Vector2I extent = projectedExtent(rc);
 	return extent._x * extent._y;
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Vector2D projectedExtent(const RenderContext *rc) const
-  public final Vector2D projectedExtent(RenderContext rc)
+//ORIGINAL LINE: Vector2I projectedExtent(const RenderContext *rc) const
+  public final Vector2I projectedExtent(RenderContext rc)
   {
 	final java.util.ArrayList<Vector3D> corners = getCorners();
   
 	final Camera currentCamera = rc.getCurrentCamera();
   
-	final Vector2D pixel0 = currentCamera.point2Pixel(corners.get(0));
+	final Vector2I pixel0 = currentCamera.point2Pixel(corners.get(0));
   
-	double lowerX = pixel0._x;
-	double upperX = pixel0._x;
-	double lowerY = pixel0._y;
-	double upperY = pixel0._y;
+	int lowerX = pixel0._x;
+	int upperX = pixel0._x;
+	int lowerY = pixel0._y;
+	int upperY = pixel0._y;
   
 	final int cornersSize = corners.size();
 	for (int i = 1; i < cornersSize; i++)
 	{
-	  final Vector2D pixel = currentCamera.point2Pixel(corners.get(i));
+	  final Vector2I pixel = currentCamera.point2Pixel(corners.get(i));
   
-	  final double x = pixel._x;
-	  final double y = pixel._y;
+	  final int x = pixel._x;
+	  final int y = pixel._y;
   
 	  if (x < lowerX)
 	  {
@@ -127,10 +127,10 @@ public class Box extends Extent
 	  }
 	}
   
-	final double width = upperX - lowerX;
-	final double height = upperY - lowerY;
+	final int width = upperX - lowerX;
+	final int height = upperY - lowerY;
   
-	return new Vector2D(width, height);
+	return new Vector2I(width, height);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

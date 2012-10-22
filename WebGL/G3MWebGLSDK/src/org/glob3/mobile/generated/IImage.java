@@ -9,9 +9,6 @@ package org.glob3.mobile.generated;
 
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class IByteBuffer;
-
 public abstract class IImage
 {
   // a virtual destructor is needed for conversion to Java
@@ -25,18 +22,21 @@ public abstract class IImage
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual int getHeight() const = 0;
   public abstract int getHeight();
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual Vector2I getExtent() const = 0;
+  public abstract Vector2I getExtent();
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual IImage* combineWith(const IImage& other, int width, int height) const = 0;
   public abstract IImage combineWith(IImage other, int width, int height);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual IImage* combineWith(const IImage& other, const Rectangle& rect, int width, int height) const = 0;
-  public abstract IImage combineWith(IImage other, Rectangle rect, int width, int height);
+//ORIGINAL LINE: virtual IImage* combineWith(const IImage& other, const RectangleD& rect, int width, int height) const = 0;
+  public abstract IImage combineWith(IImage other, RectangleD rect, int width, int height);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual IImage* subImage(const Rectangle& rect) const = 0;
-  public abstract IImage subImage(Rectangle rect);
+//ORIGINAL LINE: virtual IImage* subImage(const RectangleD& rect) const = 0;
+  public abstract IImage subImage(RectangleD rect);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual IImage* scale(int width, int height) const = 0;

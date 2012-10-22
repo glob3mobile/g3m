@@ -53,7 +53,7 @@ const IImage* CPUTextureBuilder::createTextureFromImages(GL* gl,
 const IImage* CPUTextureBuilder::createTextureFromImages(GL* gl,
                                                          const IFactory* factory,
                                                          const std::vector<const IImage*> images,
-                                                         const std::vector<const Rectangle*> rectangles,
+                                                         const std::vector<const RectangleD*> rectangles,
                                                          int width,
                                                          int height) const{
   
@@ -66,7 +66,7 @@ const IImage* CPUTextureBuilder::createTextureFromImages(GL* gl,
   else {
     const IImage* base;
     int i;
-    const Rectangle baseRec(0,0, width, height);
+    const RectangleD baseRec(0,0, width, height);
     if (rectangles.size() > 0 && rectangles[0]->equalTo(baseRec)){
       base = images[0]->shallowCopy();
       i = 1;
@@ -78,7 +78,7 @@ const IImage* CPUTextureBuilder::createTextureFromImages(GL* gl,
     
     for (; i < images.size(); i++) {
       const IImage* newIm = images[i];
-      const Rectangle* newRect = rectangles[i];
+      const RectangleD* newRect = rectangles[i];
       
       IImage* im2 = base->combineWith(*newIm, *newRect, width, height);
       delete base;

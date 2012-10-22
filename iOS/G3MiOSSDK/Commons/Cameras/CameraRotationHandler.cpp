@@ -46,11 +46,11 @@ void CameraRotationHandler::onDown(const EventContext *eventContext,
   cameraContext->setCurrentGesture(Rotate);
   
   // middle pixel in 2D 
-  Vector2D pixel0 = touchEvent.getTouch(0)->getPos();
-  Vector2D pixel1 = touchEvent.getTouch(1)->getPos();
-  Vector2D pixel2 = touchEvent.getTouch(2)->getPos();
-  Vector2D averagePixel = pixel0.add(pixel1).add(pixel2).div(3);
-  _initialPixel = MutableVector3D(averagePixel._x, averagePixel._y, 0);
+  Vector2I pixel0 = touchEvent.getTouch(0)->getPos();
+  Vector2I pixel1 = touchEvent.getTouch(1)->getPos();
+  Vector2I pixel2 = touchEvent.getTouch(2)->getPos();
+  Vector2I averagePixel = pixel0.add(pixel1).add(pixel2).div(3);
+  _initialPixel = MutableVector2I(averagePixel._x, averagePixel._y);
   lastYValid = _initialPixel.y();
   
   // compute center of view
@@ -72,11 +72,11 @@ void CameraRotationHandler::onMove(const EventContext *eventContext,
   if (cameraContext->getCurrentGesture() != Rotate) return;
   
   // current middle pixel in 2D 
-  Vector2D c0 = touchEvent.getTouch(0)->getPos();
-  Vector2D c1 = touchEvent.getTouch(1)->getPos();
-  Vector2D c2 = touchEvent.getTouch(2)->getPos();
-  Vector2D cm = c0.add(c1).add(c2).div(3);
-    
+  const Vector2I c0 = touchEvent.getTouch(0)->getPos();
+  const Vector2I c1 = touchEvent.getTouch(1)->getPos();
+  const Vector2I c2 = touchEvent.getTouch(2)->getPos();
+  const Vector2I cm = c0.add(c1).add(c2).div(3);
+  
   // compute normal to Initial point
   Vector3D normal = eventContext->getPlanet()->geodeticSurfaceNormal(_initialPoint.asVector3D());
   
@@ -117,7 +117,7 @@ void CameraRotationHandler::onUp(const EventContext *eventContext,
                                  CameraContext *cameraContext) 
 {
   cameraContext->setCurrentGesture(None);
-  _initialPixel = Vector3D::nan().asMutableVector3D();
+  _initialPixel = MutableVector2I::zero();
 }
 
 

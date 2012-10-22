@@ -43,7 +43,7 @@ public:
   inline const std::vector<Vector3D> getCorners() const;
   
   double squaredProjectedArea(const RenderContext* rc) const;
-  Vector2D projectedExtent(const RenderContext* rc) const;
+  Vector2I projectedExtent(const RenderContext* rc) const;
   
   bool contains(const Vector3D& p) const;
   

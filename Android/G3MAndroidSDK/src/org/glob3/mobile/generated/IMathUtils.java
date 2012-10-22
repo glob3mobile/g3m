@@ -189,4 +189,12 @@ public abstract class IMathUtils
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual float minFloat() const = 0;
   public abstract float minFloat();
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual int toInt(double value) const = 0;
+  public abstract int toInt(double value);
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual int toInt(float value) const = 0;
+  public abstract int toInt(float value);
+
 }

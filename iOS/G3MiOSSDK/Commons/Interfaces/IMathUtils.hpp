@@ -101,6 +101,10 @@ public:
   virtual double minDouble() const = 0;
   virtual float maxFloat() const = 0;
   virtual float minFloat() const = 0;
+  
+  virtual int toInt(double value) const = 0;
+  virtual int toInt(float value) const = 0;
+  
 };
 
 

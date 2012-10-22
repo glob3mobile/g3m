@@ -144,11 +144,11 @@ public class Camera
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Vector3D pixel2Ray(const Vector2D& pixel) const
-  public final Vector3D pixel2Ray(Vector2D pixel)
+//ORIGINAL LINE: Vector3D pixel2Ray(const Vector2I& pixel) const
+  public final Vector3D pixel2Ray(Vector2I pixel)
   {
-	final int px = (int) pixel._x;
-	final int py = _height - (int) pixel._y;
+	final int px = pixel._x;
+	final int py = _height - pixel._y;
 	final Vector3D pixel3D = new Vector3D(px, py, 0);
   
 	final Vector3D obj = getModelViewMatrix().unproject(pixel3D, 0, 0, _width, _height);
@@ -161,24 +161,26 @@ public class Camera
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Vector3D pixel2PlanetPoint(const Vector2D& pixel) const
-  public final Vector3D pixel2PlanetPoint(Vector2D pixel)
+//ORIGINAL LINE: Vector3D pixel2PlanetPoint(const Vector2I& pixel) const
+  public final Vector3D pixel2PlanetPoint(Vector2I pixel)
   {
 	return _planet.closestIntersection(_position.asVector3D(), pixel2Ray(pixel));
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Vector2D point2Pixel(const Vector3D& point) const
-  public final Vector2D point2Pixel(Vector3D point)
+//ORIGINAL LINE: Vector2I point2Pixel(const Vector3D& point) const
+  public final Vector2I point2Pixel(Vector3D point)
   {
 	final Vector2D p = getModelViewMatrix().project(point, 0, 0, _width, _height);
   
-	int __TODO_check_isNan_is_needed;
+  //  int __TODO_check_isNan_is_needed;
   //  if (p.isNan()) {
   //    return p;
   //  }
   
-	return new Vector2D(p._x, _height-p._y);
+	IMathUtils math = IMathUtils.instance();
+  
+	return new Vector2I(math.toInt(p._x), math.toInt(_height-p._y));
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -321,7 +323,7 @@ public class Camera
 	return new Vector3D(M.get(0), M.get(4), M.get(8));
   }
 
-  public final Angle compute3DAngularDistance(Vector2D pixel0, Vector2D pixel1)
+  public final Angle compute3DAngularDistance(Vector2I pixel0, Vector2I pixel1)
   {
 	final Vector3D point0 = pixel2PlanetPoint(pixel0);
 	if (point0.isNan())

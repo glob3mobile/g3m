@@ -42,8 +42,8 @@ public abstract class Extent
   public abstract double squaredProjectedArea(RenderContext rc);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual Vector2D projectedExtent(const RenderContext* rc) const = 0;
-  public abstract Vector2D projectedExtent(RenderContext rc);
+//ORIGINAL LINE: virtual Vector2I projectedExtent(const RenderContext* rc) const = 0;
+  public abstract Vector2I projectedExtent(RenderContext rc);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual Vector3D intersectionWithRay(const Vector3D& origin, const Vector3D& direction) const = 0;

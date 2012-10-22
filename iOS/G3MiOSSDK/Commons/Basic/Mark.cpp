@@ -73,6 +73,8 @@ void Mark::onTextureDownloadError() {
 void Mark::onTextureDownload(const IImage* image) {
   _textureSolved = true;
   _textureImage = image->shallowCopy();
+  _textureWidth = _textureImage->getWidth();
+  _textureHeight = _textureImage->getHeight();
 }
 
 
@@ -121,10 +123,10 @@ void Mark::render(const RenderContext* rc,
   
   const Vector3D markCameraVector = markPosition->sub(cameraPosition);
   const double distanceToCamera = markCameraVector.length();
-  const bool renderMark = distanceToCamera <= minDistanceToCamera;
+  _renderedMark = distanceToCamera <= minDistanceToCamera;
 //  const bool renderMark = true;
   
-  if (renderMark) {
+  if (_renderedMark) {
     const Vector3D normalAtMarkPosition = planet->geodeticSurfaceNormal(*markPosition);
     
     if (normalAtMarkPosition.angleBetween(markCameraVector).radians() > GMath.halfPi()) {
@@ -163,4 +165,19 @@ void Mark::render(const RenderContext* rc,
     }
   }
   
+}
+
+int Mark::getTextureWidth() const {
+//  return (_textureImage == NULL) ? 0 : _textureImage->getWidth();
+  return _textureWidth;
+}
+
+int Mark::getTextureHeight() const {
+//  return (_textureImage == NULL) ? 0 : _textureImage->getHeight();
+  return _textureHeight;
+}
+
+Vector2I Mark::getTextureExtent() const {
+//  return (_textureImage == NULL) ? Vector2I::zero() : _textureImage->getExtent();
+  return Vector2I(_textureWidth, _textureHeight);
 }

@@ -267,4 +267,16 @@ public final class MathUtils_Android
    }
 
 
+   @Override
+   public int toInt(final double value) {
+      return (int) value;
+   }
+
+
+   @Override
+   public int toInt(final float value) {
+      return (int) value;
+   }
+
+
 }

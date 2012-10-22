@@ -115,9 +115,10 @@ bool TileRenderer::isReadyToRender(const RenderContext *rc) {
 }
 
 void TileRenderer::render(const RenderContext* rc) {
-  TilesStatistics statistics;
-  //Saving camera for Long Press Event
+  // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
+
+  TilesStatistics statistics;
   
   TileRenderContext trc(_tessellator,
                         _texturizer,
@@ -185,7 +186,7 @@ bool TileRenderer::onTouchEvent(const EventContext* ec,
   if (touchEvent->getType() == LongPress) {
     
     if (_lastCamera != NULL) {
-      const Vector2D pixel = touchEvent->getTouch(0)->getPos();
+      const Vector2I pixel = touchEvent->getTouch(0)->getPos();
       const Vector3D ray = _lastCamera->pixel2Ray(pixel);
       const Vector3D origin = _lastCamera->getCartesianPosition();
       
