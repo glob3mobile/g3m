@@ -28,7 +28,7 @@ protected:
   const IFactory*     _factory;
   const IStringUtils* _stringUtils;
   IThreadUtils*       _threadUtils;
-  const ILogger*      _logger;
+//  const ILogger*      _logger;
   const Planet*       _planet;
   IDownloader*        _downloader;
   EffectsScheduler*   _effectsScheduler;
@@ -36,14 +36,14 @@ protected:
   Context(const IFactory*     factory,
           const IStringUtils* stringUtils,
           IThreadUtils*       threadUtils,
-          const ILogger*      logger,
+//          const ILogger*      logger,
           const Planet*       planet,
           IDownloader*        downloader,
           EffectsScheduler*   effectsScheduler) :
   _factory(factory),
   _stringUtils(stringUtils),
   _threadUtils(threadUtils),
-  _logger(logger),
+//  _logger(logger),
   _planet(planet),
   _downloader(downloader),
   _effectsScheduler(effectsScheduler)
@@ -60,9 +60,10 @@ public:
     return _stringUtils;
   }
   
-  const ILogger* getLogger() const {
-    return _logger;
-  }
+    const ILogger* getLogger() const;
+//  const ILogger* getLogger() const {
+//    return _logger;
+//  }
   
   const Planet* getPlanet() const {
     return _planet;
@@ -96,7 +97,7 @@ public:
   Context(factory,
           stringUtils,
           threadUtils,
-          logger,
+//          logger,
           planet,
           downloader,
           effectsScheduler) {
@@ -117,7 +118,7 @@ public:
   Context(factory,
           stringUtils,
           threadUtils,
-          logger,
+//          logger,
           planet,
           downloader,
           scheduler) {
@@ -158,7 +159,7 @@ public:
   Context(factory,
           stringUtils,
           threadUtils,
-          logger,
+//          logger,
           planet,
           downloader,
           scheduler),

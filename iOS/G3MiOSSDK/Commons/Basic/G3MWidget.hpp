@@ -62,15 +62,17 @@ public:
 
 class G3MWidget {
 public:
+    
+    static void initSingletons(ILogger*             logger,
+                               IFactory*            factory,
+                               const IStringUtils*  stringUtils,
+                               IThreadUtils*        threadUtils,
+                               IStringBuilder*      stringBuilder,
+                               IMathUtils*          mathUtils,
+                               IJSONParser*         jsonParser);
+                               
   
   static G3MWidget* create(FrameTasksExecutor*              frameTasksExecutor,
-                           IFactory*                        factory,
-                           const IStringUtils*              stringUtils,
-                           IThreadUtils*                    threadUtils,
-                           IStringBuilder*                  stringBuilder,
-                           IMathUtils*                      mathUtils,
-                           IJSONParser*                     jsonParser,
-                           ILogger*                         logger,
                            GL*                              gl,
                            TexturesHandler*                 texturesHandler,
                            TextureBuilder*                  textureBuilder,
@@ -128,10 +130,6 @@ public:
   
 private:
   FrameTasksExecutor* _frameTasksExecutor;
-  IFactory*           _factory;
-  const IStringUtils* _stringUtils;
-  IThreadUtils*       _threadUtils;
-  ILogger*            _logger;
   GL*                 _gl;
   const Planet*       _planet;
   Renderer*           _renderer;
@@ -167,10 +165,6 @@ private:
   void initializeGL();
   
   G3MWidget(FrameTasksExecutor* frameTasksExecutor,
-            IFactory*           factory,
-            const IStringUtils* stringUtils,
-            IThreadUtils*       threadUtils,
-            ILogger*            logger,
             GL*                 gl,
             TexturesHandler*    texturesHandler,
             TextureBuilder*     textureBuilder,

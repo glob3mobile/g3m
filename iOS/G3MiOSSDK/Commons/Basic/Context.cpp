@@ -14,3 +14,8 @@
 RenderContext::~RenderContext() {
   delete _frameStartTimer;
 }
+
+
+const ILogger* Context::getLogger() const {
+    return ILogger::instance();
+}
