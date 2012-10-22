@@ -148,7 +148,7 @@
     
     const bool testURLescape = true;
     if (testURLescape) {
-        WMSLayer *ayto = new WMSLayer("Ejes de via",
+        WMSLayer *ayto = new WMSLayer(URL::escape("Ejes de via"),
                                       URL("http://sig.caceres.es/wms_callejero.mapdef?", false),
                                       WMS_1_1_0,
                                       Sector::fullSphere(),
