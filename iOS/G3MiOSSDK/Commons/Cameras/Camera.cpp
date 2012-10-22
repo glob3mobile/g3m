@@ -189,9 +189,9 @@ void Camera::render(const RenderContext* rc) const {
 }
 
 
-Vector3D Camera::pixel2Ray(const Vector2D& pixel) const {
-  const int px = (int) pixel._x;
-  const int py = _height - (int) pixel._y;
+Vector3D Camera::pixel2Ray(const Vector2I& pixel) const {
+  const int px = pixel._x;
+  const int py = _height - pixel._y;
   const Vector3D pixel3D(px, py, 0);
     
   const Vector3D obj = getModelViewMatrix().unproject(pixel3D,
@@ -203,20 +203,22 @@ Vector3D Camera::pixel2Ray(const Vector2D& pixel) const {
   return obj.sub(_position.asVector3D());
 }
 
-Vector3D Camera::pixel2PlanetPoint(const Vector2D& pixel) const {
+Vector3D Camera::pixel2PlanetPoint(const Vector2I& pixel) const {
   return _planet->closestIntersection(_position.asVector3D(), pixel2Ray(pixel));
 }
 
-Vector2D Camera::point2Pixel(const Vector3D& point) const {  
+Vector2I Camera::point2Pixel(const Vector3D& point) const {
   const Vector2D p = getModelViewMatrix().project(point,
                                                   0, 0, _width, _height);
 
-  int __TODO_check_isNan_is_needed;
+//  int __TODO_check_isNan_is_needed;
 //  if (p.isNan()) {
 //    return p;
 //  }
   
-  return Vector2D(p._x, _height-p._y);
+  IMathUtils* math = IMathUtils::instance();
+  
+  return Vector2I( math->toInt(p._x), math->toInt(_height-p._y) );
 }
 
 void Camera::applyTransform(const MutableMatrix44D& M) {
@@ -278,8 +280,8 @@ Vector3D Camera::getHorizontalVector() {
   return Vector3D(M.get(0), M.get(4), M.get(8));
 }
 
-Angle Camera::compute3DAngularDistance(const Vector2D& pixel0,
-                                       const Vector2D& pixel1) {
+Angle Camera::compute3DAngularDistance(const Vector2I& pixel0,
+                                       const Vector2I& pixel1) {
   const Vector3D point0 = pixel2PlanetPoint(pixel0);
   if (point0.isNan()) {
     return Angle::nan();

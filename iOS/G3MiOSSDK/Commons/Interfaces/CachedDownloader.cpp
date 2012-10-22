@@ -48,7 +48,7 @@ public:
         //if (!_cacheStorage->containsBuffer(url)) {
         _downloader->countSave();
         
-        _cacheStorage->saveBuffer(url, buffer);
+        _cacheStorage->saveBuffer(url, buffer, _downloader->saveInBackground());
         //}
       }
       else {
@@ -124,7 +124,7 @@ public:
         //if (!_cacheStorage->containsImage(url)) {
         _downloader->countSave();
         
-        _cacheStorage->saveImage(url, image);
+        _cacheStorage->saveImage(url, image, _downloader->saveInBackground());
         //}
       }
       else {

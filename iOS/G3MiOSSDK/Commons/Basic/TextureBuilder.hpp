@@ -33,12 +33,10 @@ public:
   virtual const IImage* createTextureFromImages(GL * gl,
                                                 const IFactory* factory,
                                                 const std::vector<const IImage*> images,
-                                                const std::vector<const Rectangle*> rectangles,
+                                                const std::vector<const RectangleD*> rectangles,
                                                 int width,
                                                 int height) const = 0;
   virtual ~TextureBuilder() {}
 };
-
-
 
 #endif

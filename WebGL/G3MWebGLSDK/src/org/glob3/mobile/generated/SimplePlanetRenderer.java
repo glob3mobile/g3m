@@ -26,7 +26,7 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IGLTextureId;
 
-public class SimplePlanetRenderer extends Renderer
+public class SimplePlanetRenderer extends LeafRenderer
 {
 
   private final String _textureFilename;

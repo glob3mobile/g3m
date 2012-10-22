@@ -72,8 +72,8 @@ public class CPUTextureBuilder extends TextureBuilder
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const IImage* createTextureFromImages(GL* gl, const IFactory* factory, const java.util.ArrayList<const IImage*> images, const java.util.ArrayList<const Rectangle*> rectangles, int width, int height) const
-  public final IImage createTextureFromImages(GL gl, IFactory factory, java.util.ArrayList<IImage> images, java.util.ArrayList<Rectangle> rectangles, int width, int height)
+//ORIGINAL LINE: const IImage* createTextureFromImages(GL* gl, const IFactory* factory, const java.util.ArrayList<const IImage*> images, const java.util.ArrayList<const RectangleD*> rectangles, int width, int height) const
+  public final IImage createTextureFromImages(GL gl, IFactory factory, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleD> rectangles, int width, int height)
   {
   
 	final int imagesSize = images.size();
@@ -87,7 +87,7 @@ public class CPUTextureBuilder extends TextureBuilder
 	{
 	  IImage base;
 	  int i;
-	  final Rectangle baseRec = new Rectangle(0,0, width, height);
+	  final RectangleD baseRec = new RectangleD(0,0, width, height);
 	  if (rectangles.size() > 0 && rectangles.get(0).equalTo(baseRec))
 	  {
 		base = images.get(0).shallowCopy();
@@ -102,7 +102,7 @@ public class CPUTextureBuilder extends TextureBuilder
 	  for (; i < images.size(); i++)
 	  {
 		final IImage newIm = images.get(i);
-		final Rectangle newRect = rectangles.get(i);
+		final RectangleD newRect = rectangles.get(i);
   
 		IImage im2 = base.combineWith(newIm, newRect, width, height);
 		if (base != null)

@@ -13,20 +13,21 @@
 #include "CameraEventHandler.hpp"
 #include "Camera.hpp"
 #include "Effects.hpp"
-#include "MutableVector2D.hpp"
-
-//***************************************************************
+#include "MutableVector2I.hpp"
 
 
 class SingleDragEffect : public EffectWithForce {
 public:
   
-  SingleDragEffect(const Vector3D& axis, const Angle& angle):
+  SingleDragEffect(const Vector3D& axis,
+                   const Angle& angle):
   EffectWithForce(angle.degrees(), 0.975),
   _axis(axis)
-  { }
+  {
+  }
   
-  virtual void start(const RenderContext *rc, const TimeInterval& now) {}
+  virtual void start(const RenderContext *rc, const TimeInterval& now) {
+  }
   
   virtual void doStep(const RenderContext *rc, const TimeInterval& now) {
     EffectWithForce::doStep(rc, now);
@@ -40,11 +41,8 @@ public:
   }
   
 private:
-  Vector3D  _axis;
-  
+  Vector3D _axis;
 };
-
-//***************************************************************
 
 
 class CameraSingleDragHandler: public CameraEventHandler {
@@ -81,7 +79,7 @@ private:
   Camera _camera0;         //Initial Camera saved on Down event
   
   MutableVector3D _initialPoint;  //Initial point at dragging
-  MutableVector2D _initialPixel;  //Initial pixel at start of gesture
+  MutableVector2I _initialPixel;  //Initial pixel at start of gesture
   
   MutableVector3D _axis;
   double          _lastRadians;

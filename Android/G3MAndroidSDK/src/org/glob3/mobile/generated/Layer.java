@@ -24,6 +24,8 @@ package org.glob3.mobile.generated;
 //class Tile;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class LayerCondition;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class LayerSet;
 
 public abstract class Layer
 {
@@ -67,9 +69,7 @@ public abstract class Layer
 	return _condition.isAvailable(ec, tile);
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual boolean isTransparent() const = 0;
-  public abstract boolean isTransparent();
+//  virtual bool isTransparent() const = 0;
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual URL getFeatureInfoURL(const Geodetic2D& g, const IFactory* factory, const Sector& sector, int width, int height) const = 0;

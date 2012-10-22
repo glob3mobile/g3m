@@ -10,7 +10,7 @@
 #define G3MiOSSDK_BusyQuadRenderer_hpp
 
 
-#include "Renderer.hpp"
+#include "LeafRenderer.hpp"
 #include "IndexedMesh.hpp"
 #include "Effects.hpp"
 
@@ -18,7 +18,7 @@
 //***************************************************************
 
 
-class BusyQuadRenderer : public Renderer, EffectTarget {
+class BusyQuadRenderer : public LeafRenderer, EffectTarget {
 private:
   double  _degrees;
   const std::string _textureFilename;

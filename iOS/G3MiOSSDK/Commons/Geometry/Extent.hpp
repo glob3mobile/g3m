@@ -11,6 +11,7 @@
 
 #include "Context.hpp"
 #include "IMathUtils.hpp"
+#include "Vector2I.hpp"
 
 class Vector2D;
 class Vector3D;
@@ -31,7 +32,7 @@ public:
 
   virtual double squaredProjectedArea(const RenderContext* rc) const = 0;
   
-  virtual Vector2D projectedExtent(const RenderContext* rc) const = 0;
+  virtual Vector2I projectedExtent(const RenderContext* rc) const = 0;
   
   virtual Vector3D intersectionWithRay(const Vector3D& origin, const Vector3D& direction) const = 0;
   

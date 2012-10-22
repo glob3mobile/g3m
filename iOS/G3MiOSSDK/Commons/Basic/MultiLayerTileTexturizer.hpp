@@ -20,13 +20,14 @@ class IDownloader;
 class LeveledTexturedMesh;
 class IFloatBuffer;
 
+
 class MultiLayerTileTexturizer : public TileTexturizer {
 private:
+//  LayerSet* _layerSet;
+  
 #ifdef C_CODE
-  const LayerSet* const        _layerSet;
   const TilesRenderParameters* _parameters;
 #else
-  const LayerSet*              _layerSet;
   TilesRenderParameters* _parameters;
 #endif
 
@@ -41,15 +42,7 @@ private:
   inline LeveledTexturedMesh* getMesh(Tile* tile) const;
 
 public:
-  MultiLayerTileTexturizer(LayerSet* layerSet) :
-  _layerSet(layerSet),
-  _parameters(NULL),
-  _texCoordsCache(NULL),
-  _pendingTopTileRequests(0),
-  _texturesHandler(NULL)
-  {
-    
-  }
+  MultiLayerTileTexturizer() ;
   
   void countTopTileRequest() {
     _pendingTopTileRequests--;
@@ -57,7 +50,8 @@ public:
   
   virtual ~MultiLayerTileTexturizer();
   
-  bool isReady(const RenderContext *rc);
+  bool isReady(const RenderContext *rc,
+               LayerSet* layerSet);
   
   void initialize(const InitializationContext* ic,
                   const TilesRenderParameters* parameters);
@@ -74,7 +68,8 @@ public:
   bool tileMeetsRenderCriteria(Tile* tile);
   
   void justCreatedTopTile(const RenderContext* rc,
-                          Tile* tile);
+                          Tile* tile,
+                          LayerSet* layerSet);
   
   void ancestorTexturedSolvedChanged(Tile* tile,
                                      Tile* ancestorTile,
@@ -84,7 +79,8 @@ public:
   
   void onTerrainTouchEvent(const EventContext* ec,
                            const Geodetic3D& g3d,
-                           const Tile* tile);
+                           const Tile* tile,
+                           LayerSet* layerSet);
   
   void tileMeshToBeDeleted(Tile* tile,
                            Mesh* mesh);

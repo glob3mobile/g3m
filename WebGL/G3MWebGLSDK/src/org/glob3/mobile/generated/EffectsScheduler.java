@@ -1,7 +1,4 @@
 package org.glob3.mobile.generated; 
-//***************************************************************
-
-
 public class EffectsScheduler
 {
 
@@ -89,6 +86,43 @@ public class EffectsScheduler
 	}
   }
 
+
+  //class SampleEffect : public EffectWithDuration {
+  //public:
+  //  
+  //  SampleEffect(TimeInterval duration) : EffectWithDuration(duration) {
+  //  }
+  //  
+  //  virtual void start(const RenderContext *rc,
+  //                     const TimeInterval& now) {
+  //    EffectWithDuration::start(rc, now);
+  //    _lastPercent = 0;
+  //  }
+  //  
+  //  virtual void doStep(const RenderContext *rc,
+  //                      const TimeInterval& now) {
+  //    const double percent = pace( percentDone(now) );
+  //    rc->getNextCamera()->moveForward((percent-_lastPercent)*1e7);
+  //    _lastPercent = percent;
+  //  }
+  //  
+  //  virtual void stop(const RenderContext *rc,
+  //                    const TimeInterval& now) {
+  //    EffectWithDuration::stop(rc, now);
+  //  }
+  //  
+  //  virtual void cancel(const TimeInterval& now) {
+  //    // do nothing, just leave the effect in the intermediate state
+  //  }
+  //
+  //private:
+  //  double _lastPercent;
+  //};
+  
+  
+  
+  
+  
   public final void initialize(InitializationContext ic)
   {
 	_factory = ic.getFactory();
@@ -153,6 +187,5 @@ public class EffectsScheduler
   {
 
   }
-
 
 }

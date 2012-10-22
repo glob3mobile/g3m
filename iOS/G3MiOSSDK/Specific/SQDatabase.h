@@ -54,11 +54,13 @@
 
 - (BOOL)isOpen;
 
-- (BOOL)open;
+- (BOOL)openReadWrite;
+
+- (BOOL)openReadOnly;
 
 - (void)close;
 
-- (BOOL)doWithOpenedDB:(void (^)())behaviour;
+//- (BOOL)doWithOpenedDB:(void (^)())behaviour;
 
 - (SQResultSet *)executeQuery:(NSString *)sql, ...;
 - (SQResultSet *)executeQuery:(NSString *)sql arguments:(NSArray *)args;

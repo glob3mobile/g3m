@@ -21,15 +21,19 @@ package org.glob3.mobile.generated;
 //#define G3MiOSSDK_CameraRotationHandler_h
 
 
-
 public class CameraRotationHandler extends CameraEventHandler
 {
+  private MutableVector3D _initialPoint = new MutableVector3D(); //Initial point at dragging
+  private MutableVector2I _initialPixel = new MutableVector2I(); //Initial pixel at start of gesture
+
+  private int lastYValid;
+  private Camera _camera0 ; //Initial Camera saved on Down event
 
   public CameraRotationHandler()
   {
 	  _camera0 = new Camera(new Camera(0, 0));
-	  _initialPoint = new MutableVector3D(0,0,0);
-	  _initialPixel = new MutableVector3D(0,0,0);
+	  _initialPoint = new MutableVector3D(0, 0, 0);
+	  _initialPixel = new MutableVector2I(0, 0);
   }
 
   public void dispose()
@@ -91,11 +95,11 @@ public class CameraRotationHandler extends CameraEventHandler
 	cameraContext.setCurrentGesture(Gesture.Rotate);
   
 	// middle pixel in 2D
-	Vector2D pixel0 = touchEvent.getTouch(0).getPos();
-	Vector2D pixel1 = touchEvent.getTouch(1).getPos();
-	Vector2D pixel2 = touchEvent.getTouch(2).getPos();
-	Vector2D averagePixel = pixel0.add(pixel1).add(pixel2).div(3);
-	_initialPixel = new MutableVector3D(averagePixel._x, averagePixel._y, 0);
+	Vector2I pixel0 = touchEvent.getTouch(0).getPos();
+	Vector2I pixel1 = touchEvent.getTouch(1).getPos();
+	Vector2I pixel2 = touchEvent.getTouch(2).getPos();
+	Vector2I averagePixel = pixel0.add(pixel1).add(pixel2).div(3);
+	_initialPixel = new MutableVector2I(averagePixel._x, averagePixel._y);
 	lastYValid = _initialPixel.y();
   
 	// compute center of view
@@ -115,10 +119,10 @@ public class CameraRotationHandler extends CameraEventHandler
 		return;
   
 	// current middle pixel in 2D
-	Vector2D c0 = touchEvent.getTouch(0).getPos();
-	Vector2D c1 = touchEvent.getTouch(1).getPos();
-	Vector2D c2 = touchEvent.getTouch(2).getPos();
-	Vector2D cm = c0.add(c1).add(c2).div(3);
+	final Vector2I c0 = touchEvent.getTouch(0).getPos();
+	final Vector2I c1 = touchEvent.getTouch(1).getPos();
+	final Vector2I c2 = touchEvent.getTouch(2).getPos();
+	final Vector2I cm = c0.add(c1).add(c2).div(3);
   
 	// compute normal to Initial point
 	Vector3D normal = eventContext.getPlanet().geodeticSurfaceNormal(_initialPoint.asVector3D());
@@ -159,14 +163,10 @@ public class CameraRotationHandler extends CameraEventHandler
   public final void onUp(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	cameraContext.setCurrentGesture(Gesture.None);
-	_initialPixel = Vector3D.nan().asMutableVector3D();
+	_initialPixel = MutableVector2I.zero();
   }
 
-  public double lastYValid;
-  public Camera _camera0 ; //Initial Camera saved on Down event
 
-  public MutableVector3D _initialPoint = new MutableVector3D(); //Initial point at dragging
-  public MutableVector3D _initialPixel = new MutableVector3D(); //Initial pixel at start of gesture
 
 }
 //#endif

@@ -29,7 +29,10 @@ void CompositeRenderer::render(const RenderContext* rc) {
   
   const int rendersSize = _renderers.size();
   for (int i = 0; i < rendersSize; i++) {
-    _renderers[i]->render(rc);
+    Renderer* renderer = _renderers[i];
+    if (renderer->isEnable()) {
+      renderer->render(rc);
+    }
   }
 }
 
@@ -38,8 +41,11 @@ bool CompositeRenderer::onTouchEvent(const EventContext* ec,
   // the events are processed bottom to top
   const int rendersSize = _renderers.size();
   for (int i = rendersSize - 1; i >= 0; i--) {
-    if (_renderers[i]->onTouchEvent(ec, touchEvent)) {
-      return true;
+    Renderer* renderer = _renderers[i];
+    if (renderer->isEnable()) {
+      if (renderer->onTouchEvent(ec, touchEvent)) {
+        return true;
+      }
     }
   }
   return false;
@@ -58,8 +64,11 @@ void CompositeRenderer::onResizeViewportEvent(const EventContext* ec,
 bool CompositeRenderer::isReadyToRender(const RenderContext *rc) {
   const int rendersSize = _renderers.size();
   for (int i = 0; i < rendersSize; i++) {
-    if (!_renderers[i]->isReadyToRender(rc)) {
-      return false;
+    Renderer* renderer = _renderers[i];
+    if (renderer->isEnable()) {
+      if (!renderer->isReadyToRender(rc)) {
+        return false;
+      }
     }
   }
   
@@ -92,4 +101,22 @@ void CompositeRenderer::onPause(const InitializationContext* ic) {
   for (int i = 0; i < rendersSize; i++) {
     _renderers[i]->onPause(ic);
   }
+}
+
+bool CompositeRenderer::isEnable() const {
+  if (!_enable) {
+    return false;
+  }
+  
+  const int rendersSize = _renderers.size();
+  for (int i = 0; i < rendersSize; i++) {
+    if (_renderers[i]->isEnable()) {
+      return true;
+    }
+  }
+  return false;
+}
+
+void CompositeRenderer::setEnable(bool enable) {
+  _enable = enable;
 }

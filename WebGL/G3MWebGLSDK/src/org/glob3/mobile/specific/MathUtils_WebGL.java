@@ -9,9 +9,19 @@ public final class MathUtils_WebGL
          extends
             IMathUtils {
 
+   private static final double PI      = Math.PI;
+   private static final double HALF_PI = PI / 2;
+
+
    @Override
    public double pi() {
-      return Math.PI;
+      return PI;
+   }
+
+
+   @Override
+   public double halfPi() {
+      return HALF_PI;
    }
 
 
@@ -250,6 +260,18 @@ public final class MathUtils_WebGL
    @Override
    public float log(final float v) {
       return (float) Math.log(v);
+   }
+
+
+   @Override
+   public int toInt(final double value) {
+      return (int) value;
+   }
+
+
+   @Override
+   public int toInt(final float value) {
+      return (int) value;
    }
 
 }

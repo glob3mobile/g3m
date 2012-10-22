@@ -9,7 +9,7 @@
 #ifndef G3MiOSSDK_SimplePlanetRenderer_h
 #define G3MiOSSDK_SimplePlanetRenderer_h
 
-#include "Renderer.hpp"
+#include "LeafRenderer.hpp"
 
 #include "IImage.hpp"
 
@@ -20,7 +20,7 @@ class IFloatBuffer;
 class IIntBuffer;
 class IGLTextureId;
 
-class SimplePlanetRenderer: public Renderer {
+class SimplePlanetRenderer: public LeafRenderer {
 private:
   
   const std::string _textureFilename;

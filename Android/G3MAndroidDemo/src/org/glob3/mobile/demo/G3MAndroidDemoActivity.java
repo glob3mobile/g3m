@@ -3,13 +3,16 @@
 package org.glob3.mobile.demo;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.GLErrorRenderer;
+import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.Mark;
+import org.glob3.mobile.generated.MarkTouchListener;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.Sector;
@@ -20,6 +23,8 @@ import org.glob3.mobile.generated.WMSLayer;
 import org.glob3.mobile.generated.WMSServerVersion;
 import org.glob3.mobile.specific.G3MBaseActivity;
 import org.glob3.mobile.specific.G3MWidget_Android;
+
+import android.app.AlertDialog;
 
 
 public class G3MAndroidDemoActivity
@@ -111,21 +116,59 @@ public class G3MAndroidDemoActivity
       //  }
 
 
-      if (true) {
-         // marks renderer
-         final MarksRenderer marks = new MarksRenderer();
-         renderers.add(marks);
+      final boolean useMarkers = true;
+      if (useMarkers) {
+         final boolean readyWhenMarksReady = false;
+         final MarksRenderer marksRenderer = new MarksRenderer(readyWhenMarksReady);
 
-         final Mark m1 = new Mark("Fuerteventura", "g3m-marker.png", new Geodetic3D(Angle.fromDegrees(28.05),
-                  Angle.fromDegrees(-14.36), 0));
-         //m1->addTouchListener(listener);
-         marks.addMark(m1);
+         marksRenderer.setMarkTouchListener(new MarkTouchListener() {
+            @Override
+            public boolean touchedMark(final Mark mark) {
 
+               G3MAndroidDemoActivity.this.runOnUiThread(new Runnable() {
+                  @Override
+                  public void run() {
+                     final AlertDialog.Builder builder = new AlertDialog.Builder(G3MAndroidDemoActivity.this);
+                     builder.setMessage("Touched on mark \"" + mark.getName() + "\"");
+                     builder.setTitle("G3M Demo");
 
-         final Mark m2 = new Mark("Las Palmas", "g3m-marker.png", new Geodetic3D(Angle.fromDegrees(28.05),
-                  Angle.fromDegrees(-15.36), 0));
-         //m2->addTouchListener(listener);
-         marks.addMark(m2);
+                     final AlertDialog dialog = builder.create();
+                     dialog.show();
+                  }
+               });
+
+               return true;
+            }
+         }, true);
+
+         renderers.add(marksRenderer);
+
+         final Mark m1 = new Mark(//
+                  "Fuerteventura", //
+                  new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png"), //
+                  new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-14.36), 0));
+         marksRenderer.addMark(m1);
+
+         final Mark m2 = new Mark( //
+                  "Las Palmas", //
+                  new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png"), //
+                  new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-15.36), 0));
+         marksRenderer.addMark(m2);
+
+         final boolean randomMarkers = false;
+         if (randomMarkers) {
+            final Random random = new Random();
+            for (int i = 0; i < 500; i++) {
+               final Angle latitude = Angle.fromDegrees((random.nextInt() % 180) - 90);
+               final Angle longitude = Angle.fromDegrees((random.nextInt() % 360) - 180);
+
+               marksRenderer.addMark(new Mark( //
+                        "Random #" + i, //
+                        new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png"), //
+                        new Geodetic3D(latitude, longitude, 0)));
+            }
+         }
+
       }
 
       //  if (false) {
@@ -149,8 +192,8 @@ public class G3MAndroidDemoActivity
 
       final UserData userData = null;
 
-      widget.initWidget(cameraConstraints, layerSet, renderers, userData);
+      final GTask initializationTask = null;
+      widget.initWidget(cameraConstraints, layerSet, renderers, userData, initializationTask);
 
    }
-
 }

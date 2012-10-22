@@ -19,6 +19,12 @@ package org.glob3.mobile.generated;
 
 public abstract class Renderer
 {
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual boolean isEnable() const = 0;
+  public abstract boolean isEnable();
+
+  public abstract void setEnable(boolean enable);
+
   public abstract void onResume(InitializationContext ic);
 
   public abstract void onPause(InitializationContext ic);

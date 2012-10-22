@@ -52,7 +52,6 @@
 #include "NativeGL2_iOS.hpp"
 #include "StringUtils_iOS.hpp"
 #include "JSONParser_iOS.hpp"
-#include "SingleImageTileTexturizer.hpp"
 #include "WMSLayer.hpp"
 
 #include "MathUtils_iOS.hpp"
@@ -125,39 +124,34 @@
   int height = (int) [self frame].size.height;
   
   IStringBuilder* stringBuilder = new StringBuilder_iOS();
-  IMathUtils*     mathUtils = new MathUtils_iOS();
-  IFactory*       factory  = new Factory_iOS();
-  IJSONParser*    jsonParser = new JSONParser_iOS();
-  ILogger*        logger    = new Logger_iOS(ErrorLevel);
-  NativeGL2_iOS*  nGL = new NativeGL2_iOS();
+  IMathUtils*     mathUtils     = new MathUtils_iOS();
+  IFactory*       factory       = new Factory_iOS();
+  ILogger*        logger        = new Logger_iOS(ErrorLevel);
+  NativeGL2_iOS*  nGL           = new NativeGL2_iOS();
+  IJSONParser*    jsonParser    = new JSONParser_iOS();
 
   GL* gl = new GL(nGL);
   
   IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
+  const bool saveInBackground = true;
   IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
-                                                 storage);
+                                                 storage,
+                                                 saveInBackground);
   
   CompositeRenderer* composite = new CompositeRenderer();
   
   composite->addRenderer(cameraRenderer);
   
   if (layerSet != NULL) {
-    if (layerSet->size() > 0) {
-      TileTexturizer* texturizer = new MultiLayerTileTexturizer(layerSet);
-      //IImage *singleWorldImage = factory->createImageFromFileName("mercator.jpg");
-      //TileTexturizer* texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage, false);
-      
-      //Single Mercator image
-      //IImage *singleWorldImage = factory->createImageFromFileName("tissot.png");
-      //TileTexturizer* texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage, true);
+      TileTexturizer* texturizer = new MultiLayerTileTexturizer();
       
       const bool showStatistics = false;
       TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
                                           texturizer,
+                                          layerSet,
                                           parameters,
                                           showStatistics);
       composite->addRenderer(tr);
-    }
   }
   
   for (int i = 0; i < renderers.size(); i++) {
@@ -198,6 +192,16 @@
   
   IThreadUtils* threadUtils = new ThreadUtils_iOS();
   
+  class SampleInitializationTask : public GTask {
+  public:
+    void run() {
+//      ILogger::instance()->logInfo("Running initialization Task");
+      printf("Running initialization Task\n");
+    }
+  };
+  
+  GTask* initializationTask = new SampleInitializationTask();
+  
   _widgetVP = G3MWidget::create(frameTasksExecutor,
                                 factory,
                                 stringUtils,
@@ -218,7 +222,9 @@
                                 width, height,
                                 Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
                                 true,
-                                false);
+                                false,
+                                initializationTask,
+                                true);
   
   [self widget]->setUserData(userData);
 }
@@ -297,7 +303,9 @@
     CGPoint tapPoint = [sender locationInView:sender.view.superview];
     
     std::vector<const Touch*> pointers = std::vector<const Touch*>();
-    Touch *touch = new Touch(Vector2D(tapPoint.x, tapPoint.y), Vector2D(0.0, 0.0), 1);
+    Touch *touch = new Touch(Vector2I( GMath.toInt(tapPoint.x), GMath.toInt(tapPoint.y)),
+                             Vector2I(0, 0),
+                             1);
     pointers.push_back(touch);
     lastTouchEvent = TouchEvent::create(LongPress, pointers);
     [self widget]->onTouchEvent(lastTouchEvent);
@@ -393,8 +401,8 @@
     CGPoint previous        = [touch previousLocationInView:self];
     unsigned char tapCount  = (unsigned char) [touch tapCount];
     
-    Touch *touch = new Touch(Vector2D(current.x, current.y),
-                             Vector2D(previous.x, previous.y),
+    Touch *touch = new Touch(Vector2I( GMath.toInt(current.x), GMath.toInt(current.y) ),
+                             Vector2I( GMath.toInt(previous.x), GMath.toInt(previous.y) ),
                              tapCount);
     
     pointers.push_back(touch);
@@ -421,8 +429,8 @@
     CGPoint current  = [touch locationInView:self];
     CGPoint previous = [touch previousLocationInView:self];
     
-    Touch *touch = new Touch(Vector2D(current.x, current.y),
-                             Vector2D(previous.x, previous.y));
+    Touch *touch = new Touch(Vector2I( GMath.toInt(current.x), GMath.toInt(current.y) ),
+                             Vector2I( GMath.toInt(previous.x), GMath.toInt(previous.y) ));
     
     pointers.push_back(touch);
   }
@@ -430,9 +438,9 @@
   // test if finger orders are the same that in the previous gesture
   if (lastTouchEvent!=NULL) {
     if (pointers.size()==2 && lastTouchEvent->getTouchCount()==2) {
-      Vector2D current0 = pointers[0]->getPrevPos();
-      Vector2D last0 = lastTouchEvent->getTouch(0)->getPos();
-      Vector2D last1 = lastTouchEvent->getTouch(1)->getPos();
+      Vector2I current0 = pointers[0]->getPrevPos();
+      Vector2I last0 = lastTouchEvent->getTouch(0)->getPos();
+      Vector2I last1 = lastTouchEvent->getTouch(1)->getPos();
       delete lastTouchEvent;
       double dist0 = current0.sub(last0).squaredLength();
       double dist1 = current0.sub(last1).squaredLength();
@@ -474,8 +482,8 @@
     
     [touch timestamp];
     
-    Touch *touch = new Touch(Vector2D(current.x, current.y),
-                             Vector2D(previous.x, previous.y));
+    Touch *touch = new Touch(Vector2I( GMath.toInt(current.x), GMath.toInt(current.y) ),
+                             Vector2I( GMath.toInt(previous.x), GMath.toInt(previous.y) ) );
     
     pointers.push_back(touch);
   }

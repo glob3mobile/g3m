@@ -14,15 +14,19 @@
 #include "Context.hpp"
 
 #include "Vector3D.hpp"
+#include "URL.hpp"
+#include "Vector2I.hpp"
 
+class IImage;
 class IFloatBuffer;
 class IGLTextureId;
 
 class Mark {
 private:
-  const std::string  _name;
-  const std::string  _textureFilename;
-  const Geodetic3D   _position;
+  
+  const std::string _name;
+  URL               _textureURL;
+  const Geodetic3D  _position;
   
 #ifdef C_CODE
   const IGLTextureId* _textureId;
@@ -33,20 +37,32 @@ private:
   
   Vector3D* _cartesianPosition;
   Vector3D* getCartesianPosition(const Planet* planet);
-
+  
   IFloatBuffer* _vertices;
   IFloatBuffer* getVertices(const Planet* planet);
+  
+  bool    _textureSolved;
+  IImage* _textureImage;
+  int _textureWidth;
+  int _textureHeight;
 
+  bool    _renderedMark;
+  
 public:
   Mark(const std::string name,
-       const std::string textureFilename,
+       const URL         textureURL,
        const Geodetic3D  position) :
   _name(name),
-  _textureFilename(textureFilename),
+  _textureURL(textureURL),
   _position(position),
   _textureId(NULL),
   _cartesianPosition(NULL),
-  _vertices(NULL)
+  _vertices(NULL),
+  _textureSolved(false),
+  _textureImage(NULL),
+  _renderedMark(false),
+  _textureWidth(0),
+  _textureHeight(0)
   {
     
   }
@@ -61,8 +77,24 @@ public:
     return _position;
   }
   
+  void initialize(const InitializationContext* ic);
+  
   void render(const RenderContext* rc,
               const double minDistanceToCamera);
+  
+  bool isReady() const;
+  
+  bool isRendered() const {
+    return _renderedMark;
+  }
+  
+  void onTextureDownloadError();
+  
+  void onTextureDownload(const IImage* image);
+  
+  int getTextureWidth() const;
+  int getTextureHeight() const;
+  Vector2I getTextureExtent() const;
   
 };
 

@@ -30,9 +30,11 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IFloatBuffer;
 
+
 public class MultiLayerTileTexturizer extends TileTexturizer
 {
-  private final LayerSet _layerSet;
+//  LayerSet* _layerSet;
+
   private TilesRenderParameters _parameters;
 
   private IFloatBuffer _texCoordsCache;
@@ -60,14 +62,13 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 	return (tileBuilderHolder == null) ? null : tileBuilderHolder.get().getMesh();
   }
 
-  public MultiLayerTileTexturizer(LayerSet layerSet)
+  public MultiLayerTileTexturizer()
   {
-	  _layerSet = layerSet;
 	  _parameters = null;
 	  _texCoordsCache = null;
 	  _pendingTopTileRequests = 0;
 	  _texturesHandler = null;
-
+  
   }
 
   public final void countTopTileRequest()
@@ -85,15 +86,24 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 	}
   }
 
-  public final boolean isReady(RenderContext rc)
+  public final boolean isReady(RenderContext rc, LayerSet layerSet)
   {
-	return (_pendingTopTileRequests <= 0) && _layerSet.isReady();
+	if (_pendingTopTileRequests > 0)
+	{
+	  return false;
+	}
+	if (layerSet != null)
+	{
+	  return layerSet.isReady();
+	}
+	return true;
+	//  return (_pendingTopTileRequests <= 0) && _layerSet->isReady();
   }
 
   public final void initialize(InitializationContext ic, TilesRenderParameters parameters)
   {
 	_parameters = parameters;
-	_layerSet.initialize(ic);
+  //  _layerSet->initialize(ic);
   }
 
   public final Mesh texturize(RenderContext rc, TileRenderContext trc, Tile tile, Mesh tessellatorMesh, Mesh previousMesh)
@@ -105,7 +115,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
   
 	if (builderHolder == null)
 	{
-	  builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, rc, _layerSet, _parameters, rc.getDownloader(), tile, tessellatorMesh, getTextureCoordinates(trc)));
+	  builderHolder = new TileTextureBuilderHolder(new TileTextureBuilder(this, rc, trc.getLayerSet(), _parameters, rc.getDownloader(), tile, tessellatorMesh, getTextureCoordinates(trc)));
 	  tile.setTexturizerData(builderHolder);
 	}
   
@@ -174,9 +184,9 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 	return false;
   }
 
-  public final void justCreatedTopTile(RenderContext rc, Tile tile)
+  public final void justCreatedTopTile(RenderContext rc, Tile tile, LayerSet layerSet)
   {
-	java.util.ArrayList<Petition> petitions = _layerSet.createTileMapPetitions(rc, tile, _parameters._tileTextureWidth, _parameters._tileTextureHeight);
+	java.util.ArrayList<Petition> petitions = layerSet.createTileMapPetitions(rc, tile, _parameters._tileTextureWidth, _parameters._tileTextureHeight);
   
 	_pendingTopTileRequests += petitions.size();
   
@@ -236,9 +246,12 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 	return (mesh == null) ? null : mesh.getTopLevelGLTextureId();
   }
 
-  public final void onTerrainTouchEvent(EventContext ec, Geodetic3D position, Tile tile)
+  public final void onTerrainTouchEvent(EventContext ec, Geodetic3D position, Tile tile, LayerSet layerSet)
   {
-	_layerSet.onTerrainTouchEvent(ec, position, tile);
+	if (layerSet != null)
+	{
+	  layerSet.onTerrainTouchEvent(ec, position, tile);
+	}
   }
 
   public final void tileMeshToBeDeleted(Tile tile, Mesh mesh)

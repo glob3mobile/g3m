@@ -27,13 +27,17 @@ public class StaticImageLayer extends Layer
   private final String _layerID;
   private final IStorage _storage;
 
-  public StaticImageLayer(String layerID, IImage image, Sector sector, IStorage storage, LayerCondition condition)
+  private final boolean _saveInBackground;
+
+
+  public StaticImageLayer(String layerID, IImage image, Sector sector, IStorage storage, LayerCondition condition, boolean saveInBackground)
   {
 	  super(condition);
 	  _image = image;
 	  _sector = new Sector(sector);
 	  _layerID = layerID;
 	  _storage = storage;
+	  _saveInBackground = saveInBackground;
 
   }
 
@@ -90,7 +94,7 @@ public class StaticImageLayer extends Layer
 	final Vector2D p = _sector.getUVCoordinates(tileSector.lower());
 	final Vector2D pos = new Vector2D(p._x, p._y - heightUV);
   
-	Rectangle r = new Rectangle(pos._x * _image.getWidth(), pos._y * _image.getHeight(), widthUV * _image.getWidth(), heightUV * _image.getHeight());
+	RectangleD r = new RectangleD(pos._x * _image.getWidth(), pos._y * _image.getHeight(), widthUV * _image.getWidth(), heightUV * _image.getHeight());
   
 	final IImage subImage = _image.subImage(r);
   
@@ -100,18 +104,15 @@ public class StaticImageLayer extends Layer
   
 	if (_storage != null)
 	{
-	  _storage.saveImage(id, subImage);
+	  _storage.saveImage(id, subImage, _saveInBackground);
 	}
   
 	return res;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isTransparent() const
-  public final boolean isTransparent()
-  {
-	return true;
-  }
+//  bool isTransparent() const {
+//    return true;
+//  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: URL getFeatureInfoURL(const Geodetic2D& g, const IFactory* factory, const Sector& sector, int width, int height) const

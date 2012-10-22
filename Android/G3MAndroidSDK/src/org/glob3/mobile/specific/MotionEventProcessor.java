@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.TouchEventType;
-import org.glob3.mobile.generated.Vector2D;
+import org.glob3.mobile.generated.Vector2I;
 
 import android.view.MotionEvent;
 import android.view.MotionEvent.PointerCoords;
@@ -57,26 +57,26 @@ public final class MotionEventProcessor {
          final PointerCoords pc = new PointerCoords();
          event.getPointerCoords(i, pc);
          // TOUCH EVENT
-         final Vector2D pos = new Vector2D(pc.x, pc.y);
+         final Vector2I pos = new Vector2I((int) pc.x, (int) pc.y);
 
-         Vector2D prevPos = null;
+         Vector2I prevPos = null;
          if (event.getAction() != MotionEvent.ACTION_UP) {
             if (auxEvent._pointersID.contains(pointerID)) {
                final Touch lastT = auxEvent._touchs.get(auxEvent._pointersID.indexOf(pointerID));
-               prevPos = new Vector2D(lastT.getPos()._x, lastT.getPos()._y);
+               prevPos = new Vector2I(lastT.getPos()._x, lastT.getPos()._y);
             }
             else {
-               prevPos = new Vector2D(0, 0);
+               prevPos = new Vector2I(0, 0);
             }
          }
          else {
 
             if (_prevLastEvent._pointersID.contains(pointerID)) {
                final Touch lastT = _prevLastEvent._touchs.get(_prevLastEvent._pointersID.indexOf(pointerID));
-               prevPos = new Vector2D(lastT.getPos()._x, lastT.getPos()._y);
+               prevPos = new Vector2I(lastT.getPos()._x, lastT.getPos()._y);
             }
             else {
-               prevPos = new Vector2D(0, 0);
+               prevPos = new Vector2I(0, 0);
             }
 
          }
@@ -151,7 +151,7 @@ public final class MotionEventProcessor {
    public TouchEvent processDoubleTapEvent(final MotionEvent event) {
       final PointerCoords pc = new PointerCoords();
       event.getPointerCoords(0, pc);
-      final Vector2D pos = new Vector2D(pc.x, pc.y);
+      final Vector2I pos = new Vector2I((int) pc.x, (int) pc.y);
       final Touch t = new Touch(pos, pos, (byte) 2);
 
       final TouchEvent te = TouchEvent.create(TouchEventType.Down, t);

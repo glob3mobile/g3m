@@ -85,9 +85,9 @@ public class Tile
 	//  if (projectedSize <= (parameters->_tileTextureWidth * parameters->_tileTextureHeight * 2)) {
 	//    return true;
 	//  }
-	final Vector2D ex = extent.projectedExtent(rc);
+	final Vector2I ex = extent.projectedExtent(rc);
 	//const double t = extent.maxAxis() * 2;
-	final double t = (ex._x + ex._y);
+	final int t = (ex._x + ex._y);
 	if (t <= ((parameters._tileTextureWidth + parameters._tileTextureHeight) * 1.75))
 	{
 	  return true;

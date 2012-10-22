@@ -1,10 +1,8 @@
 package org.glob3.mobile.generated; 
-//***************************************************************
-
 public abstract class EffectWithForce extends Effect
 {
   private double _force;
-  private double _friction;
+  private final double _friction;
 
   protected EffectWithForce(double force, double friction)
   {
@@ -16,7 +14,7 @@ public abstract class EffectWithForce extends Effect
 //ORIGINAL LINE: double getForce() const
   protected final double getForce()
   {
-	  return _force;
+	return _force;
   }
 
   public void doStep(RenderContext rc, TimeInterval now)

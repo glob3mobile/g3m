@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.glob3.mobile.generated.BusyMeshRenderer;
 import org.glob3.mobile.generated.CPUTextureBuilder;
 import org.glob3.mobile.generated.CachedDownloader;
+import org.glob3.mobile.generated.Camera;
 import org.glob3.mobile.generated.CameraDoubleDragHandler;
 import org.glob3.mobile.generated.CameraDoubleTapHandler;
 import org.glob3.mobile.generated.CameraRenderer;
@@ -19,10 +20,10 @@ import org.glob3.mobile.generated.EllipsoidalTileTessellator;
 import org.glob3.mobile.generated.FrameTasksExecutor;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GL;
+import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
-import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IJSONParser;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
@@ -32,17 +33,15 @@ import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.MultiLayerTileTexturizer;
 import org.glob3.mobile.generated.Planet;
-import org.glob3.mobile.generated.SingleImageTileTexturizer;
 import org.glob3.mobile.generated.TextureBuilder;
 import org.glob3.mobile.generated.TexturesHandler;
 import org.glob3.mobile.generated.TileRenderer;
-import org.glob3.mobile.generated.TileTexturizer;
 import org.glob3.mobile.generated.TilesRenderParameters;
 import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.TouchEventType;
 import org.glob3.mobile.generated.UserData;
-import org.glob3.mobile.generated.Vector2D;
+import org.glob3.mobile.generated.Vector2I;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
@@ -73,6 +72,7 @@ public final class G3MWidget_Android
    private UserData                                       _userData;
 
    private IDownloader                                    _downloader;
+   private GTask                                          _initializationTask;
 
 
    //   private boolean                                        _isPaused             = false;
@@ -186,7 +186,7 @@ public final class G3MWidget_Android
    public void onLongPress(final MotionEvent e) {
       final PointerCoords pc = new PointerCoords();
       e.getPointerCoords(0, pc);
-      final Touch t = new Touch(new Vector2D(pc.x, pc.y), new Vector2D(0, 0));
+      final Touch t = new Touch(new Vector2I((int) pc.x, (int) pc.y), new Vector2I(0, 0));
       final TouchEvent te = TouchEvent.create(TouchEventType.LongPress, t);
 
       queueEvent(new Runnable() {
@@ -230,11 +230,13 @@ public final class G3MWidget_Android
    public void initWidget(final ArrayList<ICameraConstrainer> cameraConstraints,
                           final LayerSet layerSet,
                           final ArrayList<org.glob3.mobile.generated.Renderer> renderers,
-                          final UserData userData) {
+                          final UserData userData,
+                          final GTask initializationTask) {
       _cameraConstraints = cameraConstraints;
       _layerSet = layerSet;
       _renderers = renderers;
       _userData = userData;
+      _initializationTask = initializationTask;
    }
 
 
@@ -258,12 +260,13 @@ public final class G3MWidget_Android
       final TilesRenderParameters parameters = TilesRenderParameters.createDefault(renderDebug, useTilesSplitBudget,
                forceTopLevelTilesRenderOnStart);
 
-      initWidget(cameraRenderer, parameters);
+      initWidget(cameraRenderer, parameters, _initializationTask);
    }
 
 
    private void initWidget(final CameraRenderer cameraRenderer,
-                           final TilesRenderParameters parameters) {
+                           final TilesRenderParameters parameters,
+                           final GTask initializationTask) {
 
       // create GLOB3M WIDGET
       final int width = getWidth();
@@ -278,30 +281,22 @@ public final class G3MWidget_Android
 
       final int connectTimeout = 60000;
       final int readTimeout = 60000;
-      _downloader = new CachedDownloader(new Downloader_Android(8, connectTimeout, readTimeout), _storage);
+      final boolean saveInBackground = true;
+      _downloader = new CachedDownloader(new Downloader_Android(8, connectTimeout, readTimeout), _storage, saveInBackground);
 
       final CompositeRenderer composite = new CompositeRenderer();
 
       composite.addRenderer(cameraRenderer);
 
-      if ((_layerSet != null) && (_layerSet.size() > 0)) {
-
-         TileTexturizer texturizer;// = new MultiLayerTileTexturizer(layerSet);
-
-         if (true) {
-            texturizer = new MultiLayerTileTexturizer(_layerSet);
-         }
-         else {
-            //SINGLE IMAGE
-            final IImage singleWorldImage = factory.createImageFromFileName("world.jpg");
-            texturizer = new SingleImageTileTexturizer(parameters, singleWorldImage, false);
-         }
-
-
+      if (_layerSet != null) {
          final boolean showStatistics = false;
 
-         final TileRenderer tr = new TileRenderer(new EllipsoidalTileTessellator(parameters._tileResolution, true), texturizer,
-                  parameters, showStatistics);
+         final TileRenderer tr = new TileRenderer( //
+                  new EllipsoidalTileTessellator(parameters._tileResolution, true), //
+                  new MultiLayerTileTexturizer(), //
+                  _layerSet, //
+                  parameters, //
+                  showStatistics);
 
          composite.addRenderer(tr);
       }
@@ -318,23 +313,16 @@ public final class G3MWidget_Android
       final org.glob3.mobile.generated.Renderer busyRenderer = new BusyMeshRenderer();
 
       final EffectsScheduler scheduler = new EffectsScheduler();
-
       final FrameTasksExecutor frameTasksExecutor = new FrameTasksExecutor();
-
       final IStringUtils stringUtils = new StringUtils_Android();
-
       final IThreadUtils threadUtils = new ThreadUtils_Android(this);
-
       final StringBuilder_Android stringBuilder = new StringBuilder_Android();
-
       final IMathUtils math = new MathUtils_Android();
-
       final IJSONParser jsonParser = new JSONParser_Android();
-
 
       _g3mWidget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, stringBuilder, math, jsonParser,
                logger, gl, texturesHandler, textureBuilder, _downloader, planet, _cameraConstraints, composite, busyRenderer,
-               scheduler, width, height, Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false);
+               scheduler, width, height, Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false, initializationTask, true);
 
       _g3mWidget.setUserData(_userData);
    }
@@ -402,5 +390,14 @@ public final class G3MWidget_Android
       }
    }
 
+
+   public Camera getNextCamera() {
+      return getG3MWidget().getNextCamera();
+   }
+
+
+   public UserData getUserData() {
+      return getG3MWidget().getUserData();
+   }
 
 }

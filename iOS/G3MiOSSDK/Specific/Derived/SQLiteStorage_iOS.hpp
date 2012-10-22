@@ -17,7 +17,10 @@ class SQLiteStorage_iOS : public IStorage {
 private:
   const std::string _databaseName;
   
-  SQDatabase* _db;
+  SQDatabase* _readDB;
+  SQDatabase* _writeDB;
+  
+  NSLock* _lock;
   
   NSString* toNSString(const std::string& cppStr) const {
     return [ NSString stringWithCString: cppStr.c_str()
@@ -29,6 +32,10 @@ private:
   void showStatistics() const;
   
 public:
+  void rawSave(NSString* table,
+               NSString* name,
+               NSData* contents);
+  
   SQLiteStorage_iOS(const std::string &databaseName);
   
   virtual ~SQLiteStorage_iOS() {
@@ -37,7 +44,8 @@ public:
   bool containsBuffer(const URL& url);
   
   void saveBuffer(const URL& url,
-                  const IByteBuffer* buffer);
+                  const IByteBuffer* buffer,
+                  bool saveInBackground);
   
   const IByteBuffer* readBuffer(const URL& url);
   
@@ -45,7 +53,8 @@ public:
   bool containsImage(const URL& url);
   
   void saveImage(const URL& url,
-                 const IImage* buffer);
+                 const IImage* buffer,
+                 bool saveInBackground);
   
   const IImage* readImage(const URL& url);
   
@@ -56,9 +65,9 @@ public:
   void onPause(const InitializationContext* ic) {
     
   }
-
+  
   bool isAvailable() {
-    return _db != NULL;
+    return (_readDB != NULL) && (_writeDB != NULL);
   }
   
 };

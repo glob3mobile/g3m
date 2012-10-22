@@ -44,6 +44,7 @@ public:
   virtual ~IMathUtils(){}
   
   virtual double pi() const = 0;
+  virtual double halfPi() const = 0;
   
   virtual bool isNan(double v) const = 0;
   virtual bool isNan(float v) const = 0;
@@ -100,6 +101,10 @@ public:
   virtual double minDouble() const = 0;
   virtual float maxFloat() const = 0;
   virtual float minFloat() const = 0;
+  
+  virtual int toInt(double value) const = 0;
+  virtual int toInt(float value) const = 0;
+  
 };
 
 

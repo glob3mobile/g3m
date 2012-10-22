@@ -161,6 +161,7 @@
   if (self) {
     _db = NULL;
     _dbPath = dbPath;
+    _busyRetryTimeout = 10;
   }
   return self;
 }
@@ -173,22 +174,42 @@
     return NO;
 }
 
-- (BOOL) open
+- (BOOL) openReadWrite
 {
   [self close];
   
   const char* dbpathC = [self.dbPath UTF8String];
   
-  if (sqlite3_open(dbpathC, &_db) == SQLITE_OK) {
+//  if (sqlite3_open(dbpathC, &_db) == SQLITE_OK) {
+  if (sqlite3_open_v2 (dbpathC, &_db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL) == SQLITE_OK) {
     return YES;
   }
   else {
     _db = NULL;
     
-    NSLog(@"Can't open database \"%@\"", self.dbPath);
+    NSLog(@"Can't open readwrite database \"%@\"", self.dbPath);
     return NO;
   }
 }
+
+- (BOOL) openReadOnly
+{
+  [self close];
+  
+  const char* dbpathC = [self.dbPath UTF8String];
+  
+//  if (sqlite3_open(dbpathC, &_db, SQLITE_OPEN_READONLY) == SQLITE_OK) {
+  if (sqlite3_open_v2(dbpathC, &_db, SQLITE_OPEN_READONLY, NULL) == SQLITE_OK) {
+    return YES;
+  }
+  else {
+    _db = NULL;
+    
+    NSLog(@"Can't open readonly database \"%@\"", self.dbPath);
+    return NO;
+  }
+}
+
 
 - (void) close
 {
@@ -215,10 +236,10 @@
     }
     
 		if (rc == SQLITE_BUSY) {
-			usleep(20);
+			usleep(10000 /* 10ms */);
       
 			if (numOfRetries == _busyRetryTimeout) {
-				NSLog(@"SQLite Busy: %@", _dbPath);
+				NSLog(@"SQLite Busy 1: %@", _dbPath);
 				break;
 			}
 		}
@@ -228,7 +249,7 @@
 			break;
 		}
 	}
-  while (numOfRetries++ > _busyRetryTimeout);
+  while (numOfRetries++ <= _busyRetryTimeout);
   
 	return NO;
 }
@@ -261,6 +282,10 @@
 	int numOfRetries = 0;
   
 	do {
+//    if (numOfRetries > 0) {
+//      NSLog(@"SQLite Busy, step %i: %@", numOfRetries, _dbPath);
+//    }
+    
 		int rc = sqlite3_step(stmt);
     
 		if (rc == SQLITE_ROW) {
@@ -272,10 +297,10 @@
     }
     
 		if (rc == SQLITE_BUSY) {
-			usleep(20);
+			usleep(10000 /* 10ms */);
       
 			if (numOfRetries == _busyRetryTimeout) {
-				NSLog(@"SQLite Busy: %@", _db);
+				NSLog(@"SQLite Busy 2: %@", _dbPath);
 				break;
 			}
 		}
@@ -284,23 +309,23 @@
 			break;
 		}
 	}
-  while (numOfRetries++ > _busyRetryTimeout);
+  while (numOfRetries++ <= _busyRetryTimeout);
   
 	return NO;
 }
 
--(BOOL)doWithOpenedDB:(void (^)())behaviour
-{
-  if ([self open]) {
-    behaviour();
-    
-    [self close];
-    return YES;
-  }
-  else {
-    return NO;
-  }
-}
+//-(BOOL)doWithOpenedDB:(void (^)())behaviour
+//{
+//  if ([self openReadWrite]) {
+//    behaviour();
+//    
+//    [self close];
+//    return YES;
+//  }
+//  else {
+//    return NO;
+//  }
+//}
 
 - (NSInteger)errorCode {
 	return sqlite3_errcode(_db);
@@ -355,10 +380,10 @@
 			return YES;
     
 		if (rc == SQLITE_BUSY) {
-			usleep(20);
+			usleep(10000 /* 10ms */);
       
 			if (numOfRetries == _busyRetryTimeout) {
-				NSLog(@"SQLite Busy: %@", _dbPath);
+				NSLog(@"SQLite Busy 3: %@", _dbPath);
 				break;
 			}
 		}
@@ -366,7 +391,7 @@
 			NSLog(@"SQLite Step Failed: %s", sqlite3_errmsg(_db));
 			break;
 		}
-	} while (numOfRetries++ > _busyRetryTimeout);
+	} while (numOfRetries++ <= _busyRetryTimeout);
   
 	return NO;
 }

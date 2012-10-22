@@ -1,20 +1,19 @@
 package org.glob3.mobile.generated; 
 //
-//  IThreadUtils.cpp
+//  GTask.cpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 30/08/12.
+//  Created by Diego Gomez Deck on 10/16/12.
 //
 //
 
 //
-//  IThreadUtils.hpp
+//  GTask.hpp
 //  G3MiOSSDK
 //
-//  Created by Diego Gomez Deck on 30/08/12.
+//  Created by Diego Gomez Deck on 10/16/12.
 //
 //
-
 
 
 public abstract class GTask

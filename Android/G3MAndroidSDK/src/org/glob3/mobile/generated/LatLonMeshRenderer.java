@@ -19,7 +19,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class LatLonMeshRenderer extends Renderer
+public class LatLonMeshRenderer extends LeafRenderer
 {
 
   private Mesh _mesh;

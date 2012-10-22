@@ -9,7 +9,7 @@
 #ifndef G3MiOSSDK_BusyMeshRenderer_hpp
 #define G3MiOSSDK_BusyMeshRenderer_hpp
 
-#include "Renderer.hpp"
+#include "LeafRenderer.hpp"
 #include "IndexedMesh.hpp"
 #include "Effects.hpp"
 
@@ -17,7 +17,7 @@
 //***************************************************************
 
 
-class BusyMeshRenderer : public Renderer, EffectTarget {
+class BusyMeshRenderer : public LeafRenderer, EffectTarget {
 private:
   Mesh    *_mesh;
   double  _degrees;

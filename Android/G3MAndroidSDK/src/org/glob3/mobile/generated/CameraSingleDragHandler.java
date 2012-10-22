@@ -1,7 +1,4 @@
 package org.glob3.mobile.generated; 
-//***************************************************************
-
-
 public class CameraSingleDragHandler extends CameraEventHandler
 {
 
@@ -9,7 +6,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
   {
 	  _camera0 = new Camera(new Camera(0, 0));
 	  _initialPoint = new MutableVector3D(0,0,0);
-	  _initialPixel = new MutableVector2D(0,0);
+	  _initialPixel = new MutableVector2I(0,0);
 	  _useInertia = useInertia;
   }
 
@@ -79,8 +76,8 @@ public class CameraSingleDragHandler extends CameraEventHandler
 	_lastRadians = _radiansStep = 0.0;
   
 	// dragging
-	final Vector2D pixel = touchEvent.getTouch(0).getPos();
-	_initialPixel = pixel.asMutableVector2D();
+	final Vector2I pixel = touchEvent.getTouch(0).getPos();
+	_initialPixel = pixel.asMutableVector2I();
 	_initialPoint = _camera0.pixel2PlanetPoint(pixel).asMutableVector3D();
   
 	//printf ("down 1 finger. Initial point = %f %f %f\n", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
@@ -98,7 +95,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
 	  return;
 	}
   
-	final Vector2D pixel = touchEvent.getTouch(0).getPos();
+	final Vector2I pixel = touchEvent.getTouch(0).getPos();
   
   //  const Vector2D pixel = Vector2D(touchEvent.getTouch(0)->getPos().x(), _initialPixel.y());
   
@@ -131,8 +128,8 @@ public class CameraSingleDragHandler extends CameraEventHandler
 	{
 	  // test if animation is needed
 	  final Touch touch = touchEvent.getTouch(0);
-	  Vector2D currPixel = touch.getPos();
-	  Vector2D prevPixel = touch.getPrevPos();
+	  Vector2I currPixel = touch.getPos();
+	  Vector2I prevPixel = touch.getPrevPos();
 	  double desp = currPixel.sub(prevPixel).length();
   
 	  if (cameraContext.getCurrentGesture() == Gesture.Drag && !_axis.isNan() && desp>2)
@@ -145,13 +142,13 @@ public class CameraSingleDragHandler extends CameraEventHandler
   
 	// update gesture
 	cameraContext.setCurrentGesture(Gesture.None);
-	_initialPixel = MutableVector2D.nan();
+	_initialPixel = MutableVector2I.zero();
   }
 
   private Camera _camera0 ; //Initial Camera saved on Down event
 
   private MutableVector3D _initialPoint = new MutableVector3D(); //Initial point at dragging
-  private MutableVector2D _initialPixel = new MutableVector2D(); //Initial pixel at start of gesture
+  private MutableVector2I _initialPixel = new MutableVector2I(); //Initial pixel at start of gesture
 
   private MutableVector3D _axis = new MutableVector3D();
   private double _lastRadians;

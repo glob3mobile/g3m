@@ -19,8 +19,6 @@ package org.glob3.mobile.generated;
 
 
 
-//***************************************************************
-
 
 public class SingleDragEffect extends EffectWithForce
 {
@@ -51,5 +49,4 @@ public class SingleDragEffect extends EffectWithForce
   }
 
   private Vector3D _axis ;
-
 }

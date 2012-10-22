@@ -19,15 +19,24 @@ private:
   
   const InitializationContext* _ic;
   
+  bool _enable;
+  
 public:
-  CompositeRenderer(): _ic(NULL) {
+  CompositeRenderer():
+  _ic(NULL),
+  _enable(true)
+  {
     _renderers = std::vector<Renderer*>();
   }
   
   virtual ~CompositeRenderer() {
   }
   
-  void initialize(const InitializationContext* ic);  
+  bool isEnable() const;
+
+  void setEnable(bool enable);
+  
+  void initialize(const InitializationContext* ic);
   
   bool isReadyToRender(const RenderContext* rc);
 

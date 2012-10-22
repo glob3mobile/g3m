@@ -10,20 +10,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import android.util.Log;
-
 
 public class JSONParser_Android
          extends
             IJSONParser {
 
    @Override
-   public JSONBaseObject parse(final String NamelessParameter) {
-
+   public JSONBaseObject parse(final String string) {
       org.glob3.mobile.generated.JSONBaseObject g3mJSONBaseObject = new JSONBaseObject();
 
+      Object rawJson;
       try {
-         final Object rawJson = new JSONTokener(NamelessParameter).nextValue();
+         rawJson = new JSONTokener(string).nextValue();
 
          if (rawJson instanceof JSONArray) {
 
@@ -42,7 +40,6 @@ public class JSONParser_Android
             g3mJSONBaseObject = new org.glob3.mobile.generated.JSONObject();
 
             for (int i = 0; i < attributes.length(); i++) {
-               Log.d("Parsing attibute", attributes.getString(i));
                g3mJSONBaseObject.getObject().putObject(attributes.getString(i),
                         makeJSONElement(jsonObj.get(attributes.getString(i))));
             }
@@ -84,7 +81,6 @@ public class JSONParser_Android
          g3mJSONBaseObject = new org.glob3.mobile.generated.JSONObject();
 
          for (int i = 0; i < attributes.length(); i++) {
-            Log.d("Parsing attibute", attributes.getString(i));
             g3mJSONBaseObject.getObject().putObject(attributes.getString(i),
                      makeJSONElement(jsonObj.get(attributes.getString(i))));
          }

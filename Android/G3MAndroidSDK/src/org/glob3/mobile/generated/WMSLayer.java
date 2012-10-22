@@ -193,12 +193,9 @@ public class WMSLayer extends Layer
 	  return petitions;
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isTransparent() const
-  public final boolean isTransparent()
-  {
-	return _isTransparent;
-  }
+//  bool isTransparent() const{
+//    return _isTransparent;
+//  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: URL getFeatureInfoURL(const Geodetic2D& g, const IFactory* factory, const Sector& tileSector, int width, int height) const

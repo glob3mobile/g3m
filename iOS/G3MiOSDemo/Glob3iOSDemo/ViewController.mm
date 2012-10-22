@@ -11,7 +11,6 @@
 #include "LayerSet.hpp"
 #include "WMSLayer.hpp"
 #include "Factory_iOS.hpp"
-#include "SingleImageTileTexturizer.hpp"
 #include "EllipsoidalTileTessellator.hpp"
 #include "TileRenderer.hpp"
 #include "TilesRenderParameters.hpp"
@@ -88,7 +87,7 @@
   //                                     true,
   //                                     NULL);
   //  layerSet->addLayer(political);
-  
+
   bool useBing = false;
   if (useBing) {
     WMSLayer* bing = new WMSLayer("ve",
@@ -103,27 +102,23 @@
     layerSet->addLayer(bing);
   }
   
-  
-  //IJSONParser* parser = new JSONParser_iOS();
-  //JSONParser.setInstance(parser);
-  
-  //Map styles: Road, Aerial, Hybrid
-  //Languages: English, Spanish, German, Italian, French, Dutch
-  BingLayer* realBing = new BingLayer(URL("http://dev.virtualearth.net/REST/v1/Imagery/Metadata"), NULL, Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0), Hybrid, Dutch,"AgOLISvN2b3012i-odPJjVxhB1dyU6avZ2vG9Ub6Z9-mEpgZHre-1rE8o-DUinUH");
-  layerSet->addLayer(realBing);
-  
-  
-  /*OSMLayer* osm = new OSMLayer(URL("http://a.tile.openstreetmap.org"), NULL, Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0));
-  
-  layerSet->addLayer(osm);*/
-  
-  
-  
-  if (false) {
-    WMSLayer *osm = new WMSLayer("osm",
-                                 URL("http://wms.latlon.org/"),
+  bool useOSM = true;
+  if (useOSM) {
+//    WMSLayer *osm = new WMSLayer("osm",
+//                                 URL("http://wms.latlon.org/"),
+//                                 WMS_1_1_0,
+//                                 Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
+//                                 "image/jpeg",
+//                                 "EPSG:4326",
+//                                 "",
+//                                 false,
+//                                 NULL);
+//    layerSet->addLayer(osm);
+    WMSLayer *osm = new WMSLayer("osm_auto:all",
+                                 URL("http://129.206.228.72/cached/osm"),
                                  WMS_1_1_0,
-                                 Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
+                                // Sector::fromDegrees(-85.05, -180.0, 85.05, 180.0),
+                                 Sector::fullSphere(),
                                  "image/jpeg",
                                  "EPSG:4326",
                                  "",
@@ -187,22 +182,41 @@
   
   
   if (true) {
+    
+    class TestMarkTouchListener : public MarkTouchListener {
+    public:
+      bool touchedMark(Mark* mark) {
+        NSString* message = [NSString stringWithFormat: @"Touched on mark \"%s\"", mark->getName().c_str()];
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Glob3 Demo"
+                                                        message:message
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+        
+        return true;
+      }
+    };
+    
+    
     // marks renderer
-    MarksRenderer* marks = new MarksRenderer();
-    renderers.push_back(marks);
+    const bool readyWhenMarksReady = false;
+    MarksRenderer* marksRenderer = new MarksRenderer(readyWhenMarksReady);
+    renderers.push_back(marksRenderer);
+    
+    marksRenderer->setMarkTouchListener(new TestMarkTouchListener(), true);
     
     Mark* m1 = new Mark("Fuerteventura",
-                        "g3m-marker.png",
+                        URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png"),
                         Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0));
-    //m1->addTouchListener(listener);
-    marks->addMark(m1);
+    marksRenderer->addMark(m1);
     
     
     Mark* m2 = new Mark("Las Palmas",
-                        "g3m-marker.png",
+                        URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png"),
                         Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0));
-    //m2->addTouchListener(listener);
-    marks->addMark(m2);
+    marksRenderer->addMark(m2);
     
     if (false) {
       for (int i = 0; i < 500; i++) {
@@ -210,39 +224,16 @@
         const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
         //NSLog(@"lat=%f, lon=%f", latitude.degrees(), longitude.degrees());
         
-        marks->addMark(new Mark("Random",
-                                "g3m-marker.png",
-                                Geodetic3D(latitude, longitude, 0)));
+        marksRenderer->addMark(new Mark("Random",
+                                        URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png"),
+                                        Geodetic3D(latitude, longitude, 0)));
       }
     }
-    
-    //Tests for JSON
-    /*if (true){
-      IJSONParser* parser = new JSONParser_iOS();
-      JSONParser.setInstance(parser);
-      std::string testString = "{\"a\": [1, false, \"hola\"]}";
-    
-      JSONBaseObject* testObj = IJSONParser::instance()->parse(testString);
-      JSONObject* object = testObj->getObject();
-    
-      JSONArray* array = object->getObjectForKey("a")->getArray();
-      int element0 = array->getElement(0)->getNumber()->getIntValue();
-      bool element1 = array->getElement(1)->getBoolean()->getValue();
-      std::string element2 = array->getElement(2)->getString()->getValue();
-    }*/
   }
   
   //  if (false) {
   //    LatLonMeshRenderer *renderer = new LatLonMeshRenderer();
   //    renderers.push_back(renderer);
-  //  }
-  
-  //  if (false) {
-  //    SceneGraphRenderer* sgr = new SceneGraphRenderer();
-  //    SGCubeNode* cube = new SGCubeNode();
-  //    // cube->setScale(Vector3D(6378137.0, 6378137.0, 6378137.0));
-  //    sgr->getRootNode()->addChild(cube);
-  //    renderers.push_back(sgr);
   //  }
   
 //  renderers.push_back(new GLErrorRenderer());

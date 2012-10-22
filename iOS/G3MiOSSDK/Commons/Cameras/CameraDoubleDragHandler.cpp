@@ -45,9 +45,9 @@ void CameraDoubleDragHandler::onDown(const EventContext *eventContext,
   cameraContext->setCurrentGesture(DoubleDrag);  
   
   // double dragging
-  Vector2D pixel0 = touchEvent.getTouch(0)->getPos();
+  Vector2I pixel0 = touchEvent.getTouch(0)->getPos();
   _initialPoint0  = _camera0.pixel2PlanetPoint(pixel0).asMutableVector3D();
-  Vector2D pixel1 = touchEvent.getTouch(1)->getPos();
+  Vector2I pixel1 = touchEvent.getTouch(1)->getPos();
   _initialPoint1  = _camera0.pixel2PlanetPoint(pixel1).asMutableVector3D();
   
   // both pixels must intersect globe
@@ -64,7 +64,7 @@ void CameraDoubleDragHandler::onDown(const EventContext *eventContext,
   _initialPoint = planet->toCartesian(g).asMutableVector3D();
   
   // fingers difference
-  Vector2D difPixel = pixel1.sub(pixel0);
+  Vector2I difPixel = pixel1.sub(pixel0);
   _initialFingerSeparation = difPixel.length();
   _initialFingerInclination = difPixel.orientation().radians();
   
@@ -79,9 +79,9 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
   if (cameraContext->getCurrentGesture() != DoubleDrag) return;
   if (_initialPoint.isNan()) return;
     
-  Vector2D pixel0 = touchEvent.getTouch(0)->getPos();
-  Vector2D pixel1 = touchEvent.getTouch(1)->getPos();    
-  Vector2D difPixel = pixel1.sub(pixel0);
+  Vector2I pixel0 = touchEvent.getTouch(0)->getPos();
+  Vector2I pixel1 = touchEvent.getTouch(1)->getPos();    
+  Vector2I difPixel = pixel1.sub(pixel0);
   double finalFingerSeparation = difPixel.length();
   double factor = finalFingerSeparation/_initialFingerSeparation;
   

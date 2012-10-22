@@ -23,14 +23,42 @@ public class CompositeRenderer extends Renderer
 
   private InitializationContext _ic; // CHANGED BY CONVERSOR RULE
 
+  private boolean _enable;
+
   public CompositeRenderer()
   {
 	  _ic = null;
+	  _enable = true;
 	_renderers = new java.util.ArrayList<Renderer>();
   }
 
   public void dispose()
   {
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isEnable() const
+  public final boolean isEnable()
+  {
+	if (!_enable)
+	{
+	  return false;
+	}
+  
+	final int rendersSize = _renderers.size();
+	for (int i = 0; i < rendersSize; i++)
+	{
+	  if (_renderers.get(i).isEnable())
+	  {
+		return true;
+	  }
+	}
+	return false;
+  }
+
+  public final void setEnable(boolean enable)
+  {
+	_enable = enable;
   }
 
   public final void initialize(InitializationContext ic)
@@ -49,9 +77,13 @@ public class CompositeRenderer extends Renderer
 	final int rendersSize = _renderers.size();
 	for (int i = 0; i < rendersSize; i++)
 	{
-	  if (!_renderers.get(i).isReadyToRender(rc))
+	  Renderer renderer = _renderers.get(i);
+	  if (renderer.isEnable())
 	  {
-		return false;
+		if (!renderer.isReadyToRender(rc))
+		{
+		  return false;
+		}
 	  }
 	}
   
@@ -65,7 +97,11 @@ public class CompositeRenderer extends Renderer
 	final int rendersSize = _renderers.size();
 	for (int i = 0; i < rendersSize; i++)
 	{
-	  _renderers.get(i).render(rc);
+	  Renderer renderer = _renderers.get(i);
+	  if (renderer.isEnable())
+	  {
+		renderer.render(rc);
+	  }
 	}
   }
 
@@ -75,9 +111,13 @@ public class CompositeRenderer extends Renderer
 	final int rendersSize = _renderers.size();
 	for (int i = rendersSize - 1; i >= 0; i--)
 	{
-	  if (_renderers.get(i).onTouchEvent(ec, touchEvent))
+	  Renderer renderer = _renderers.get(i);
+	  if (renderer.isEnable())
 	  {
-		return true;
+		if (renderer.onTouchEvent(ec, touchEvent))
+		{
+		  return true;
+		}
 	  }
 	}
 	return false;

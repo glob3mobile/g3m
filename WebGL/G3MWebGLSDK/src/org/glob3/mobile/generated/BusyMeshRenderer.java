@@ -24,7 +24,7 @@ package org.glob3.mobile.generated;
 //***************************************************************
 
 
-public class BusyMeshRenderer extends Renderer implements EffectTarget
+public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
 {
   private Mesh _mesh;
   private double _degrees;
