@@ -96,7 +96,7 @@ private:
   
 protected:
   
-  EffectWithDuration(TimeInterval duration) :
+  EffectWithDuration(const TimeInterval& duration) :
   _started(0),
   _duration(duration.milliseconds())
   {
