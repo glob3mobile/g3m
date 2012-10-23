@@ -37,7 +37,8 @@ public class Trail
   
 	for (int i = 0; i < _positions.size(); i++)
 	{
-	  vertices.add(*(_positions.get(i)));
+  //    vertices.add(*(_positions[i]));
+  	  vertices.add( _positions.get(i) );
 	  indices.add(i);
 	  if (i > 0)
 	  {
