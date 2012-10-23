@@ -197,7 +197,10 @@ G3MWidget::~G3MWidget() {
   
 #ifdef C_CODE
   for (int i = 0; i < _periodicalTasks.size(); i++){
-    _periodicalTasks[i].releaseTask();
+    //    _periodicalTasks[i].releaseTask();
+    
+    PeriodicalTask* periodicalTask =  _periodicalTasks[i];
+    delete periodicalTask;
   }
 #endif
 }
@@ -240,8 +243,8 @@ void G3MWidget::render() {
   
   //Start periodical task
   for (int i = 0; i < _periodicalTasks.size(); i++) {
-    PeriodicalTask& pt = _periodicalTasks[i];
-    pt.executeIfNecessary();
+    PeriodicalTask* pt = _periodicalTasks[i];
+    pt->executeIfNecessary();
   }
   
   // give to the CameraContrainers the opportunity to change the nextCamera
@@ -380,7 +383,11 @@ void G3MWidget::onResume() {
   }
 }
 
-void G3MWidget::addPeriodicalTasks(const TimeInterval& interval, GTask* task){
-  PeriodicalTask pt(interval, task);
-  _periodicalTasks.push_back(pt);
+void G3MWidget::addPeriodicalTask(PeriodicalTask* periodicalTask) {
+  _periodicalTasks.push_back(periodicalTask);
+}
+
+void G3MWidget::addPeriodicalTask(const TimeInterval& interval,
+                                  GTask* task) {
+  addPeriodicalTask( new PeriodicalTask(interval, task) );
 }

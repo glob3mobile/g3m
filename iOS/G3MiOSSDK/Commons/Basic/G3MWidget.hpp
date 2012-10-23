@@ -107,9 +107,9 @@ public:
     return _gl;
   }
   
-//  const Camera* getCurrentCamera() const {
-//    return _currentCamera;
-//  }
+  //  const Camera* getCurrentCamera() const {
+  //    return _currentCamera;
+  //  }
   
   Camera* getNextCamera() const {
     return _nextCamera;
@@ -129,8 +129,10 @@ public:
     return _userData;
   }
   
-  //Periodical Tasks
-  void addPeriodicalTasks(const TimeInterval& interval, GTask* task);
+  void addPeriodicalTask(PeriodicalTask* periodicalTask);
+  
+  void addPeriodicalTask(const TimeInterval& interval,
+                         GTask* task);
   
 private:
   FrameTasksExecutor* _frameTasksExecutor;
@@ -170,8 +172,7 @@ private:
   GTask* _initializationTask;
   bool   _autoDeleteInitializationTask;
   
-  //Storing Scheduled Tasks
-  std::vector<PeriodicalTask> _periodicalTasks;
+  std::vector<PeriodicalTask*> _periodicalTasks;
   
   void initializeGL();
   

@@ -126,7 +126,7 @@
   IStringBuilder* stringBuilder = new StringBuilder_iOS();
   IMathUtils*     mathUtils     = new MathUtils_iOS();
   IFactory*       factory       = new Factory_iOS();
-  ILogger*        logger        = new Logger_iOS(ErrorLevel);
+  ILogger*        logger        = new Logger_iOS(InfoLevel);
   NativeGL2_iOS*  nGL           = new NativeGL2_iOS();
   IJSONParser*    jsonParser    = new JSONParser_iOS();
   
@@ -231,24 +231,24 @@
   //Testing Periodical Tasks
   if (true){
     
-    class PeriodicTask : public GTask {
+    class TestPeriodicTask : public GTask {
       long long _lastExec;
       int _number;
     public:
-      PeriodicTask(int n):_number(n){}
+      TestPeriodicTask(int n):_number(n){}
       
       void run() {
         ITimer* t = IFactory::instance()->createTimer();
         long long now = t->now().milliseconds();
-        ILogger::instance()->logInfo("Running periodical Task %d - %lld ms.\n", _number,  now - _lastExec);
+        ILogger::instance()->logInfo("Running periodical Task %d - %lld ms.", _number,  now - _lastExec);
         _lastExec = now;
         IFactory::instance()->deleteTimer(t);
       }
     };
     
-    [self widget]->addPeriodicalTasks(TimeInterval::fromMilliseconds(4000), new PeriodicTask(1));
-    [self widget]->addPeriodicalTasks(TimeInterval::fromMilliseconds(6000), new PeriodicTask(2));
-    [self widget]->addPeriodicalTasks(TimeInterval::fromMilliseconds(500), new PeriodicTask(3));
+    [self widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(4000), new TestPeriodicTask(1));
+    [self widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(6000), new TestPeriodicTask(2));
+    [self widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(500), new TestPeriodicTask(3));
   }
 }
 

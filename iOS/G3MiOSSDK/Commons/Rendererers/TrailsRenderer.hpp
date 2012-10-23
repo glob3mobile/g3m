@@ -67,7 +67,7 @@ public:
   
   bool onTouchEvent(const EventContext* ec,
                     const TouchEvent* touchEvent) {
-    return true;
+    return false;
   }
   
   void onResizeViewportEvent(const EventContext* ec,

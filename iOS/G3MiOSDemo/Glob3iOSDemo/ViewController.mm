@@ -85,7 +85,7 @@
   //                                     true,
   //                                     NULL);
   //  layerSet->addLayer(political);
-    
+  
   bool useBing = false;
   if (useBing) {
     WMSLayer* bing = new WMSLayer("ve",
@@ -102,20 +102,20 @@
   
   bool useOSM = true;
   if (useOSM) {
-//    WMSLayer *osm = new WMSLayer("osm",
-//                                 URL("http://wms.latlon.org/"),
-//                                 WMS_1_1_0,
-//                                 Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
-//                                 "image/jpeg",
-//                                 "EPSG:4326",
-//                                 "",
-//                                 false,
-//                                 NULL);
-//    layerSet->addLayer(osm);
+    //    WMSLayer *osm = new WMSLayer("osm",
+    //                                 URL("http://wms.latlon.org/"),
+    //                                 WMS_1_1_0,
+    //                                 Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
+    //                                 "image/jpeg",
+    //                                 "EPSG:4326",
+    //                                 "",
+    //                                 false,
+    //                                 NULL);
+    //    layerSet->addLayer(osm);
     WMSLayer *osm = new WMSLayer("osm_auto:all",
                                  URL("http://129.206.228.72/cached/osm"),
                                  WMS_1_1_0,
-                                // Sector::fromDegrees(-85.05, -180.0, 85.05, 180.0),
+                                 // Sector::fromDegrees(-85.05, -180.0, 85.05, 180.0),
                                  Sector::fullSphere(),
                                  "image/jpeg",
                                  "EPSG:4326",
@@ -123,7 +123,7 @@
                                  false,
                                  NULL);
     layerSet->addLayer(osm);
-
+    
   }
   
   const bool usePnoaLayer = false;
@@ -234,11 +234,11 @@
   TrailsRenderer* trailsRenderer = new TrailsRenderer();
   renderers.push_back(trailsRenderer);
   
-//  Trail* trail = new Trail(10);
-//  trail->addPosition(Geodetic3D(const Angle &latitude,
-//                                const Angle &longitude,
-//                                const double height));
-//  trailsRenderer->addTrail(trail);
+  //  Trail* trail = new Trail(10);
+  //  trail->addPosition(Geodetic3D(const Angle &latitude,
+  //                                const Angle &longitude,
+  //                                const double height));
+  //  trailsRenderer->addTrail(trail);
   
   
   //  if (false) {
@@ -246,7 +246,7 @@
   //    renderers.push_back(renderer);
   //  }
   
-//  renderers.push_back(new GLErrorRenderer());
+  //  renderers.push_back(new GLErrorRenderer());
   
   std::vector <ICameraConstrainer*> cameraConstraints;
   SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
