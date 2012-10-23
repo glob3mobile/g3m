@@ -34,7 +34,7 @@ public final class Logger_Android
 
       try {
          final String res = String.format(_locale, x, legacyParamArray);
-         Log.d("Info: ", res);
+         Log.i("Info: ", res);
       }
       catch (final IllegalFormatException e) {
          Log.e("Info: ", x + " " + Arrays.toString(legacyParamArray));

@@ -13,6 +13,7 @@ import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LevelTileCondition;
 import org.glob3.mobile.generated.Mark;
+import org.glob3.mobile.generated.MarkTouchListener;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.Sector;
@@ -24,6 +25,7 @@ import org.glob3.mobile.generated.WMSServerVersion;
 import org.glob3.mobile.specific.G3MWidget_WebGL;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 
@@ -151,22 +153,31 @@ public class G3MWebGLDemo
       if (useMarkers) {
          // marks renderer
          final boolean readyWhenMarksReady = false;
-         final MarksRenderer marks = new MarksRenderer(readyWhenMarksReady);
-         renderers.add(marks);
+         final MarksRenderer marksRenderer = new MarksRenderer(readyWhenMarksReady);
+         renderers.add(marksRenderer);
+
+         marksRenderer.setMarkTouchListener(new MarkTouchListener() {
+            @Override
+            public boolean touchedMark(final Mark mark) {
+               Window.alert("Touched on mark: " + mark.getName());
+               return true;
+            }
+         }, true);
+
 
          final Mark m1 = new Mark(//
                   "Fuerteventura", //
                   new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
                   new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-14.36), 0));
          //m1->addTouchListener(listener);
-         marks.addMark(m1);
+         marksRenderer.addMark(m1);
 
          final Mark m2 = new Mark( //
                   "Las Palmas", //
                   new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
                   new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-15.36), 0));
          //m2->addTouchListener(listener);
-         marks.addMark(m2);
+         marksRenderer.addMark(m2);
 
          final boolean randomMarkers = false;
          if (randomMarkers) {
@@ -176,7 +187,7 @@ public class G3MWebGLDemo
                final Angle longitude = Angle.fromDegrees((random.nextInt() % 360) - 180);
                //NSLog(@"lat=%f, lon=%f", latitude.degrees(), longitude.degrees());
 
-               marks.addMark(new Mark( //
+               marksRenderer.addMark(new Mark( //
                         "Random", //
                         new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
                         new Geodetic3D(latitude, longitude, 0)));

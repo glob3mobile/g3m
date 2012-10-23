@@ -48,24 +48,24 @@ const std::vector<Vector3D> Box::getCorners() const
 #endif
 }
 
-Vector2D Box::projectedExtent(const RenderContext *rc) const {
+Vector2I Box::projectedExtent(const RenderContext *rc) const {
   const std::vector<Vector3D> corners = getCorners();
 
   const Camera* currentCamera = rc->getCurrentCamera();
   
-  const Vector2D pixel0 = currentCamera->point2Pixel(corners[0]);
+  const Vector2I pixel0 = currentCamera->point2Pixel(corners[0]);
 
-  double lowerX = pixel0._x;
-  double upperX = pixel0._x;
-  double lowerY = pixel0._y;
-  double upperY = pixel0._y;
+  int lowerX = pixel0._x;
+  int upperX = pixel0._x;
+  int lowerY = pixel0._y;
+  int upperY = pixel0._y;
   
   const int cornersSize = corners.size();
   for (int i = 1; i < cornersSize; i++) {
-    const Vector2D pixel = currentCamera->point2Pixel(corners[i]);
+    const Vector2I pixel = currentCamera->point2Pixel(corners[i]);
     
-    const double x = pixel._x;
-    const double y = pixel._y;
+    const int x = pixel._x;
+    const int y = pixel._y;
     
     if (x < lowerX) { lowerX = x; }
     if (y < lowerY) { lowerY = y; }
@@ -74,14 +74,14 @@ Vector2D Box::projectedExtent(const RenderContext *rc) const {
     if (y > upperY) { upperY = y; }
   }
   
-  const double width = upperX - lowerX;
-  const double height = upperY - lowerY;
+  const int width = upperX - lowerX;
+  const int height = upperY - lowerY;
   
-  return Vector2D(width, height);
+  return Vector2I(width, height);
 }
 
 double Box::squaredProjectedArea(const RenderContext* rc) const {
-  const Vector2D extent = projectedExtent(rc);
+  const Vector2I extent = projectedExtent(rc);
   return extent._x * extent._y;
 }
 

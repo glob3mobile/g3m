@@ -15,6 +15,7 @@
 
 #include "Vector3D.hpp"
 #include "URL.hpp"
+#include "Vector2I.hpp"
 
 class IImage;
 class IFloatBuffer;
@@ -42,6 +43,10 @@ private:
   
   bool    _textureSolved;
   IImage* _textureImage;
+  int _textureWidth;
+  int _textureHeight;
+
+  bool    _renderedMark;
   
 public:
   Mark(const std::string name,
@@ -54,7 +59,10 @@ public:
   _cartesianPosition(NULL),
   _vertices(NULL),
   _textureSolved(false),
-  _textureImage(NULL)
+  _textureImage(NULL),
+  _renderedMark(false),
+  _textureWidth(0),
+  _textureHeight(0)
   {
     
   }
@@ -76,10 +84,17 @@ public:
   
   bool isReady() const;
   
+  bool isRendered() const {
+    return _renderedMark;
+  }
   
   void onTextureDownloadError();
   
   void onTextureDownload(const IImage* image);
+  
+  int getTextureWidth() const;
+  int getTextureHeight() const;
+  Vector2I getTextureExtent() const;
   
 };
 

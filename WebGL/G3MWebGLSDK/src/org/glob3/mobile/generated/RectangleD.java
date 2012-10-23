@@ -1,6 +1,6 @@
 package org.glob3.mobile.generated; 
 //
-//  Rectangle.hpp
+//  RectangleD.hpp
 //  G3MiOSSDK
 //
 //  Created by José Miguel S N on 24/07/12.
@@ -8,14 +8,14 @@ package org.glob3.mobile.generated;
 //
 
 
-public class Rectangle
+public class RectangleD
 {
   public final double _x;
   public final double _y;
   public final double _width;
   public final double _height;
 
-  public Rectangle(double x, double y, double width, double height)
+  public RectangleD(double x, double y, double width, double height)
   {
 	  _x = x;
 	  _y = y;
@@ -23,18 +23,19 @@ public class Rectangle
 	  _height = height;
   }
 
-  public Rectangle(Rectangle rec)
+  public RectangleD(RectangleD that)
   {
-	  _x = rec._x;
-	  _y = rec._y;
-	  _width = rec._width;
-	  _height = rec._height;
+	  _x = that._x;
+	  _y = that._y;
+	  _width = that._width;
+	  _height = that._height;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean equalTo(const Rectangle& r) const
-  public final boolean equalTo(Rectangle r)
+//ORIGINAL LINE: boolean equalTo(const RectangleD& that) const
+  public final boolean equalTo(RectangleD that)
   {
-	return _x == r._x && _y == r._y && _width == r._width && _height == r._height;
+	return (_x == that._x) && (_y == that._y) && (_width == that._width) && (_height == that._height);
   }
+
 }

@@ -317,8 +317,9 @@ private:
   
 #ifdef C_CODE
   const Camera*                _lastCamera;
-#else
-  Camera*                _lastCamera;
+#endif
+#ifdef JAVA_CODE
+  private Camera               _lastCamera;
 #endif 
   
   std::vector<Tile*>     _topLevelTiles;

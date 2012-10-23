@@ -105,15 +105,15 @@ public class TileTextureBuilder extends RCObject
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Rectangle* getImageRectangleInTexture(const Sector& wholeSector, const Sector& imageSector, int textureWidth, int textureHeight) const
-  public final Rectangle getImageRectangleInTexture(Sector wholeSector, Sector imageSector, int textureWidth, int textureHeight)
+//ORIGINAL LINE: RectangleD* getImageRectangleInTexture(const Sector& wholeSector, const Sector& imageSector, int textureWidth, int textureHeight) const
+  public final RectangleD getImageRectangleInTexture(Sector wholeSector, Sector imageSector, int textureWidth, int textureHeight)
   {
 	final Vector2D lowerFactor = wholeSector.getUVCoordinates(imageSector.lower());
 
 	final double widthFactor = imageSector.getDeltaLongitude().div(wholeSector.getDeltaLongitude());
 	final double heightFactor = imageSector.getDeltaLatitude().div(wholeSector.getDeltaLatitude());
 
-	return new Rectangle(lowerFactor._x * textureWidth, (1.0 - lowerFactor._y) * textureHeight, widthFactor * textureWidth, heightFactor * textureHeight);
+	return new RectangleD(lowerFactor._x * textureWidth, (1.0 - lowerFactor._y) * textureHeight, widthFactor * textureWidth, heightFactor * textureHeight);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -121,7 +121,7 @@ public class TileTextureBuilder extends RCObject
   public final void composeAndUploadTexture()
   {
 	final java.util.ArrayList<IImage> images = new java.util.ArrayList<IImage>();
-	final java.util.ArrayList<Rectangle> rectangles = new java.util.ArrayList<Rectangle>();
+	final java.util.ArrayList<RectangleD> rectangles = new java.util.ArrayList<RectangleD>();
 	String textureId = _tile.getKey().tinyDescription();
 
 	final int textureWidth = _parameters._tileTextureWidth;

@@ -32,7 +32,7 @@ public class CameraDoubleTapHandler extends CameraEventHandler
   public final void onDown(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	// compute globe point where user tapped
-	final Vector2D pixel = touchEvent.getTouch(0).getPos();
+	final Vector2I pixel = touchEvent.getTouch(0).getPos();
 	Camera camera = cameraContext.getNextCamera();
 	final Vector3D initialPoint = camera.pixel2PlanetPoint(pixel);
 	if (initialPoint.isNan())

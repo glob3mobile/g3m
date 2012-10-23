@@ -23,9 +23,6 @@
 #include "BingLayer.hpp"
 //#include "OSMLayer.hpp"
 
-#include "IJSONParser.hpp"
-#include "JSONParser_iOS.hpp"
-
 
 @implementation ViewController
 
@@ -146,7 +143,7 @@
     layerSet->addLayer(pnoa);
   }
     
-    const bool testURLescape = true;
+    const bool testURLescape = false;
     if (testURLescape) {
         WMSLayer *ayto = new WMSLayer(URL::escape("Ejes de via"),
                                       URL("http://sig.caceres.es/wms_callejero.mapdef?", false),
@@ -202,33 +199,51 @@
   
   
   if (true) {
+    
+    class TestMarkTouchListener : public MarkTouchListener {
+    public:
+      bool touchedMark(Mark* mark) {
+        NSString* message = [NSString stringWithFormat: @"Touched on mark \"%s\"", mark->getName().c_str()];
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Glob3 Demo"
+                                                        message:message
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+        
+        return true;
+      }
+    };
+    
+    
     // marks renderer
     const bool readyWhenMarksReady = false;
-    MarksRenderer* marks = new MarksRenderer(readyWhenMarksReady);
-    renderers.push_back(marks);
+    MarksRenderer* marksRenderer = new MarksRenderer(readyWhenMarksReady);
+    renderers.push_back(marksRenderer);
+    
+    marksRenderer->setMarkTouchListener(new TestMarkTouchListener(), true);
     
     Mark* m1 = new Mark("Fuerteventura",
                         URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
                         Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0));
-    //m1->addTouchListener(listener);
-    marks->addMark(m1);
+    marksRenderer->addMark(m1);
     
     
     Mark* m2 = new Mark("Las Palmas",
                         URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
                         Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0));
-    //m2->addTouchListener(listener);
-    marks->addMark(m2);
+    marksRenderer->addMark(m2);
     
     if (false) {
       for (int i = 0; i < 500; i++) {
         const Angle latitude = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
         const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
         //NSLog(@"lat=%f, lon=%f", latitude.degrees(), longitude.degrees());
-        
-        marks->addMark(new Mark("Random",
-                                URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
-                                Geodetic3D(latitude, longitude, 0)));
+
+        marksRenderer->addMark(new Mark("Random",
+                                        URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
+                                        Geodetic3D(latitude, longitude, 0)));
       }
     }
   }

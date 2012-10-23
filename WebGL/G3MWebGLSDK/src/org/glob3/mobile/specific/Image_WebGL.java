@@ -3,7 +3,8 @@
 package org.glob3.mobile.specific;
 
 import org.glob3.mobile.generated.IImage;
-import org.glob3.mobile.generated.Rectangle;
+import org.glob3.mobile.generated.RectangleD;
+import org.glob3.mobile.generated.Vector2I;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
@@ -100,6 +101,12 @@ public final class Image_WebGL
    }
 
 
+   @Override
+   public Vector2I getExtent() {
+      return new Vector2I(getWidth(), getHeight());
+   }
+
+
    private native int jsGetHeight() /*-{
 		if (this.@org.glob3.mobile.specific.Image_WebGL::_imgObject) {
 			return this.@org.glob3.mobile.specific.Image_WebGL::_imgObject.height;
@@ -157,7 +164,7 @@ public final class Image_WebGL
 
    @Override
    public IImage combineWith(final IImage other,
-                             final Rectangle rect,
+                             final RectangleD rect,
                              final int width,
                              final int height) {
       jsInitImgHandlingObjects(width, height);
@@ -206,7 +213,7 @@ public final class Image_WebGL
 
 
    @Override
-   public IImage subImage(final Rectangle rect) {
+   public IImage subImage(final RectangleD rect) {
       jsInitImgHandlingObjects((int) rect._width, (int) rect._height);
 
       final JavaScriptObject subImgJs = jsSubImage(rect._x, rect._y, rect._width, rect._height);

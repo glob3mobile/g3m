@@ -112,6 +112,10 @@ public:
   double minDouble() const{ return std::numeric_limits<double>::min(); }
   float maxFloat() const{ return std::numeric_limits<float>::max(); }
   float minFloat() const{ return std::numeric_limits<float>::min(); }
+  
+  int toInt(double value) const { return (int) value; }
+  int toInt(float value) const { return (int) value; }
+
 };
 
 #endif

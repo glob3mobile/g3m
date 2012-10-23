@@ -85,6 +85,8 @@
 		CCC2A03E15CA6C7D00923850 /* SimplePlanetRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02B15CA6C7D00923850 /* SimplePlanetRenderer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CCC2A03F15CA6C7D00923850 /* TileRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02C15CA6C7D00923850 /* TileRenderer.cpp */; };
 		CCC2A04015CA6C7D00923850 /* TileRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02D15CA6C7D00923850 /* TileRenderer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CF0A8183163303E800036277 /* MutableVector2I.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0A8181163303E800036277 /* MutableVector2I.cpp */; };
+		CF0A8184163303E800036277 /* MutableVector2I.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF0A8182163303E800036277 /* MutableVector2I.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF0C396A157F988100646A2F /* Mark.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0C3969157F988100646A2F /* Mark.cpp */; };
 		CF0D9BB41601F46B00F28B7D /* ByteBuffer_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0D9BB31601F46A00F28B7D /* ByteBuffer_iOS.cpp */; };
 		CF31CBF1158776130085E8F1 /* Effects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF31CBF0158776120085E8F1 /* Effects.cpp */; };
@@ -165,7 +167,11 @@
 		CFB73CDE15EFC51B00261631 /* MathUtils_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
 		CFCE679D15EFB06700B35FE0 /* IThreadUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCE679B15EFB06700B35FE0 /* IThreadUtils.cpp */; };
 		CFCE679E15EFB06700B35FE0 /* IThreadUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFCE679C15EFB06700B35FE0 /* IThreadUtils.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CFCEFF26163476F100FC4AB0 /* RectangleI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCEFF24163476F100FC4AB0 /* RectangleI.cpp */; };
+		CFCEFF27163476F100FC4AB0 /* RectangleI.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFCEFF25163476F100FC4AB0 /* RectangleI.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFD0021B15D3C94C00735FD8 /* TileKey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD0021915D3C94C00735FD8 /* TileKey.cpp */; };
+		CFD314531631FFAD00B54ED3 /* Vector2I.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD314511631FFAD00B54ED3 /* Vector2I.cpp */; };
+		CFD314541631FFAD00B54ED3 /* Vector2I.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFD314521631FFAD00B54ED3 /* Vector2I.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFE029541601367100D1E75B /* IImageDownloadListener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFE029531601367100D1E75B /* IImageDownloadListener.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFE0844515E27B9A0004EC0E /* Petition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE0844315E27B9A0004EC0E /* Petition.cpp */; };
 		CFF0999B15C18AAD005EAF12 /* TileTexturizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -190,7 +196,7 @@
 		D87EC5CE15BEB31000E38C36 /* CPUTextureBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EC5CB15BEB31000E38C36 /* CPUTextureBuilder.cpp */; };
 		D87EC5CF15BEB31000E38C36 /* CPUTextureBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D87EC5CC15BEB31000E38C36 /* CPUTextureBuilder.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D87EC5D015BEB31000E38C36 /* TextureBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D87EC5CD15BEB31000E38C36 /* TextureBuilder.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		D87EC5D315BEC73500E38C36 /* Rectangle.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D87EC5D215BEC73400E38C36 /* Rectangle.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		D87EC5D315BEC73500E38C36 /* RectangleD.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D87EC5D215BEC73400E38C36 /* RectangleD.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D88B5E0D15C15BFC0083A43F /* Sector.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 38D786E71587B52F003BBC75 /* Sector.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D88B5E0E15C15C180083A43F /* TexturedMesh.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8A5602315AEF69200035086 /* TexturedMesh.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D88B5E1115C15C180083A43F /* Color.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFF95F761588E82200B56E11 /* Color.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -334,6 +340,8 @@
 		CCC2A02C15CA6C7D00923850 /* TileRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileRenderer.cpp; path = Commons/Rendererers/TileRenderer.cpp; sourceTree = "<group>"; };
 		CCC2A02D15CA6C7D00923850 /* TileRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileRenderer.hpp; path = Commons/Rendererers/TileRenderer.hpp; sourceTree = "<group>"; };
 		CF08483515D41EF700327171 /* IGLTextureId.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IGLTextureId.hpp; path = Commons/Interfaces/IGLTextureId.hpp; sourceTree = "<group>"; };
+		CF0A8181163303E800036277 /* MutableVector2I.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector2I.cpp; path = Commons/Geometry/MutableVector2I.cpp; sourceTree = "<group>"; };
+		CF0A8182163303E800036277 /* MutableVector2I.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MutableVector2I.hpp; path = Commons/Geometry/MutableVector2I.hpp; sourceTree = "<group>"; };
 		CF0C3967157F987200646A2F /* Mark.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = Mark.hpp; path = Commons/Basic/Mark.hpp; sourceTree = "<group>"; };
 		CF0C3969157F988100646A2F /* Mark.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Mark.cpp; path = Commons/Basic/Mark.cpp; sourceTree = "<group>"; };
 		CF0D9BB31601F46A00F28B7D /* ByteBuffer_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ByteBuffer_iOS.cpp; path = Specific/Derived/ByteBuffer_iOS.cpp; sourceTree = "<group>"; };
@@ -406,8 +414,12 @@
 		CFB72A6D15E682B400A5BAF4 /* StringUtils_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StringUtils_iOS.hpp; path = Specific/Derived/StringUtils_iOS.hpp; sourceTree = "<group>"; };
 		CFCE679B15EFB06700B35FE0 /* IThreadUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IThreadUtils.cpp; path = Commons/Basic/IThreadUtils.cpp; sourceTree = "<group>"; };
 		CFCE679C15EFB06700B35FE0 /* IThreadUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IThreadUtils.hpp; path = Commons/Basic/IThreadUtils.hpp; sourceTree = "<group>"; };
+		CFCEFF24163476F100FC4AB0 /* RectangleI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RectangleI.cpp; path = Commons/Geometry/RectangleI.cpp; sourceTree = "<group>"; };
+		CFCEFF25163476F100FC4AB0 /* RectangleI.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RectangleI.hpp; path = Commons/Geometry/RectangleI.hpp; sourceTree = "<group>"; };
 		CFD0021915D3C94C00735FD8 /* TileKey.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileKey.cpp; path = Commons/Basic/TileKey.cpp; sourceTree = "<group>"; };
 		CFD0021A15D3C94C00735FD8 /* TileKey.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileKey.hpp; path = Commons/Basic/TileKey.hpp; sourceTree = "<group>"; };
+		CFD314511631FFAD00B54ED3 /* Vector2I.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Vector2I.cpp; path = Commons/Geometry/Vector2I.cpp; sourceTree = "<group>"; };
+		CFD314521631FFAD00B54ED3 /* Vector2I.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Vector2I.hpp; path = Commons/Geometry/Vector2I.hpp; sourceTree = "<group>"; };
 		CFE029531601367100D1E75B /* IImageDownloadListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IImageDownloadListener.hpp; path = Commons/Downloader/IImageDownloadListener.hpp; sourceTree = "<group>"; };
 		CFE0844015E27A310004EC0E /* TerrainTouchEventListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TerrainTouchEventListener.hpp; path = Commons/Basic/TerrainTouchEventListener.hpp; sourceTree = "<group>"; };
 		CFE0844315E27B9A0004EC0E /* Petition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Petition.cpp; path = Commons/Basic/Petition.cpp; sourceTree = "<group>"; };
@@ -442,7 +454,7 @@
 		D87EC5CB15BEB31000E38C36 /* CPUTextureBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = CPUTextureBuilder.cpp; path = Commons/Basic/CPUTextureBuilder.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D87EC5CC15BEB31000E38C36 /* CPUTextureBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; name = CPUTextureBuilder.hpp; path = Commons/Basic/CPUTextureBuilder.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		D87EC5CD15BEB31000E38C36 /* TextureBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TextureBuilder.hpp; path = Commons/Basic/TextureBuilder.hpp; sourceTree = "<group>"; };
-		D87EC5D215BEC73400E38C36 /* Rectangle.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Rectangle.hpp; path = Commons/Geometry/Rectangle.hpp; sourceTree = "<group>"; };
+		D87EC5D215BEC73400E38C36 /* RectangleD.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RectangleD.hpp; path = Commons/Geometry/RectangleD.hpp; sourceTree = "<group>"; };
 		D88B5E5115C162AF0083A43F /* G3MWidget.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = G3MWidget.hpp; path = Commons/Basic/G3MWidget.hpp; sourceTree = "<group>"; };
 		D892FBCB15C930CC00E69254 /* NativeGL2_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = NativeGL2_iOS.hpp; path = Specific/GL/NativeGL2_iOS.hpp; sourceTree = "<group>"; };
 		D89DA21715FF6C31008CD5F5 /* Image_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Image_iOS.hpp; path = Specific/Derived/Image_iOS.hpp; sourceTree = "<group>"; };
@@ -658,7 +670,7 @@
 				CC41E39F15B1FD5B00B5581C /* Plane.cpp */,
 				CC41E39D15B1FD1300B5581C /* Plane.hpp */,
 				383BD3A61577EE5A0012AC53 /* Planet.hpp */,
-				D87EC5D215BEC73400E38C36 /* Rectangle.hpp */,
+				D87EC5D215BEC73400E38C36 /* RectangleD.hpp */,
 				CF883BCA1594B9A500AEE39C /* Sector.cpp */,
 				38D786E71587B52F003BBC75 /* Sector.hpp */,
 				383BD3A71577EE5A0012AC53 /* Vector2D.cpp */,
@@ -667,6 +679,12 @@
 				383BD3AA1577EE5A0012AC53 /* Vector3D.hpp */,
 				CF3F3FEE1620FB2A00A92CC8 /* Vector4D.cpp */,
 				CF3F3FEF1620FB2A00A92CC8 /* Vector4D.hpp */,
+				CFD314511631FFAD00B54ED3 /* Vector2I.cpp */,
+				CFD314521631FFAD00B54ED3 /* Vector2I.hpp */,
+				CF0A8181163303E800036277 /* MutableVector2I.cpp */,
+				CF0A8182163303E800036277 /* MutableVector2I.hpp */,
+				CFCEFF24163476F100FC4AB0 /* RectangleI.cpp */,
+				CFCEFF25163476F100FC4AB0 /* RectangleI.hpp */,
 			);
 			name = Geometry;
 			sourceTree = "<group>";
@@ -896,6 +914,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CFCEFF27163476F100FC4AB0 /* RectangleI.hpp in Headers */,
+				CF0A8184163303E800036277 /* MutableVector2I.hpp in Headers */,
+				CFD314541631FFAD00B54ED3 /* Vector2I.hpp in Headers */,
 				CF527E21162E359900E0BDE0 /* JSONBaseObject.hpp in Headers */,
 				CF527E22162E35BA00E0BDE0 /* IGLProgramId.hpp in Headers */,
 				CF527E23162E35BA00E0BDE0 /* IGLUniformID.hpp in Headers */,
@@ -964,7 +985,7 @@
 				D8F42FD415EB7B95000D1822 /* IStringBuilder.hpp in Headers */,
 				D87EC5CF15BEB31000E38C36 /* CPUTextureBuilder.hpp in Headers */,
 				D87EC5D015BEB31000E38C36 /* TextureBuilder.hpp in Headers */,
-				D87EC5D315BEC73500E38C36 /* Rectangle.hpp in Headers */,
+				D87EC5D315BEC73500E38C36 /* RectangleD.hpp in Headers */,
 				D88B5E0E15C15C180083A43F /* TexturedMesh.hpp in Headers */,
 				D88B5E1115C15C180083A43F /* Color.hpp in Headers */,
 				D88B5E1215C15C180083A43F /* Effects.hpp in Headers */,
@@ -1179,6 +1200,9 @@
 				CF3F3FF01620FB2A00A92CC8 /* Vector4D.cpp in Sources */,
 				CF527E1B162E2B4200E0BDE0 /* GTask.cpp in Sources */,
 				CF527E1F162E33F500E0BDE0 /* LeafRenderer.cpp in Sources */,
+				CFD314531631FFAD00B54ED3 /* Vector2I.cpp in Sources */,
+				CF0A8183163303E800036277 /* MutableVector2I.cpp in Sources */,
+				CFCEFF26163476F100FC4AB0 /* RectangleI.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

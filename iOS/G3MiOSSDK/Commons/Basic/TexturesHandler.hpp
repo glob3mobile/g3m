@@ -20,7 +20,6 @@ class RenderContext;
 class TextureHolder;
 class GL;
 class IFactory;
-class Rectangle;
 class IGLTextureId;
 
 

@@ -11,13 +11,13 @@
 
 #include <vector>
 
-#include "Vector2D.hpp"
+#include "Vector2I.hpp"
 
 
 class Touch {
 private:
-  const Vector2D _pos;
-  const Vector2D _prevPos;
+  Vector2I _pos;
+  Vector2I _prevPos;
   const unsigned char _tapCount;
 
 public:
@@ -27,14 +27,16 @@ public:
   _tapCount(other._tapCount)
   {}
   
-  Touch(const Vector2D& pos, const Vector2D& prev, const unsigned char tapCount= (unsigned char)0): 
+  Touch(const Vector2I& pos,
+        const Vector2I& prev,
+        const unsigned char tapCount= (unsigned char)0):
   _pos(pos), 
   _prevPos(prev),
   _tapCount(tapCount)
   { }
   
-  const Vector2D getPos() const { return _pos; }
-  const Vector2D getPrevPos() const { return _prevPos; }
+  const Vector2I getPos() const { return _pos; }
+  const Vector2I getPrevPos() const { return _prevPos; }
   const unsigned char getTapCount() const { return _tapCount; }
   ~Touch(){}
 };

@@ -19,8 +19,10 @@
 class DoubleTapEffect : public EffectWithDuration {
 public:
   
-  DoubleTapEffect(TimeInterval duration, const Vector3D& axis,
-                  const Angle& angle, double distance):
+  DoubleTapEffect(const TimeInterval& duration,
+                  const Vector3D& axis,
+                  const Angle& angle,
+                  double distance):
   EffectWithDuration(duration),
   _axis(axis),
   _angle(angle),
@@ -55,11 +57,10 @@ public:
   }
   
 private:
-  Vector3D  _axis;
-  Angle     _angle;
-  double    _distance;
-  double    _lastPercent;
-  
+  Vector3D _axis;
+  Angle    _angle;
+  double   _distance;
+  double   _lastPercent;
 };
 
 //***************************************************************
