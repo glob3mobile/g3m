@@ -129,7 +129,7 @@
   ILogger*        logger        = new Logger_iOS(ErrorLevel);
   NativeGL2_iOS*  nGL           = new NativeGL2_iOS();
   IJSONParser*    jsonParser    = new JSONParser_iOS();
-
+  
   GL* gl = new GL(nGL);
   
   IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
@@ -143,15 +143,15 @@
   composite->addRenderer(cameraRenderer);
   
   if (layerSet != NULL) {
-      TileTexturizer* texturizer = new MultiLayerTileTexturizer();
-      
-      const bool showStatistics = false;
-      TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
-                                          texturizer,
-                                          layerSet,
-                                          parameters,
-                                          showStatistics);
-      composite->addRenderer(tr);
+    TileTexturizer* texturizer = new MultiLayerTileTexturizer();
+    
+    const bool showStatistics = false;
+    TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
+                                        texturizer,
+                                        layerSet,
+                                        parameters,
+                                        showStatistics);
+    composite->addRenderer(tr);
   }
   
   for (int i = 0; i < renderers.size(); i++) {
@@ -195,7 +195,7 @@
   class SampleInitializationTask : public GTask {
   public:
     void run() {
-//      ILogger::instance()->logInfo("Running initialization Task");
+      //      ILogger::instance()->logInfo("Running initialization Task");
       printf("Running initialization Task\n");
     }
   };
@@ -227,6 +227,29 @@
                                 true);
   
   [self widget]->setUserData(userData);
+  
+  //Testing Periodical Tasks
+  if (true){
+    
+    class PeriodicTask : public GTask {
+      long long _lastExec;
+      int _number;
+    public:
+      PeriodicTask(int n):_number(n){}
+      
+      void run() {
+        ITimer* t = IFactory::instance()->createTimer();
+        long long now = t->now().milliseconds();
+        ILogger::instance()->logInfo("Running periodical Task %d - %lld ms.\n", _number,  now - _lastExec);
+        _lastExec = now;
+        IFactory::instance()->deleteTimer(t);
+      }
+    };
+    
+    [self widget]->addPeriodicalTasks(TimeInterval::fromMilliseconds(4000), new PeriodicTask(1));
+    [self widget]->addPeriodicalTasks(TimeInterval::fromMilliseconds(6000), new PeriodicTask(2));
+    [self widget]->addPeriodicalTasks(TimeInterval::fromMilliseconds(500), new PeriodicTask(3));
+  }
 }
 
 //The EAGL view is stored in the nib file. When it's unarchived it's sent -initWithCoder:

@@ -13,17 +13,20 @@ class Renderer;
 class TouchEvent;
 class Planet;
 class ILogger;
-class IFactory;
 class GL;
 class TexturesHandler;
 class Downloader;
 class IDownloader;
 class Camera;
-class ITimer;
 class EffectsScheduler;
 class IStringUtils;
 class IThreadUtils;
 class GTask;
+class TimeInterval;
+class IFactory;
+class ITimer;
+
+class PeriodicalTask;
 
 #include <vector>
 #include <string>
@@ -126,6 +129,9 @@ public:
     return _userData;
   }
   
+  //Periodical Tasks
+  void addPeriodicalTasks(const TimeInterval& interval, GTask* task);
+  
 private:
   FrameTasksExecutor* _frameTasksExecutor;
   IFactory*           _factory;
@@ -163,6 +169,9 @@ private:
   
   GTask* _initializationTask;
   bool   _autoDeleteInitializationTask;
+  
+  //Storing Scheduled Tasks
+  std::vector<PeriodicalTask> _periodicalTasks;
   
   void initializeGL();
   

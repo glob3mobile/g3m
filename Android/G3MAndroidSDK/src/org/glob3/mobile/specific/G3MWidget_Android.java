@@ -29,6 +29,7 @@ import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
 import org.glob3.mobile.generated.IStringUtils;
 import org.glob3.mobile.generated.IThreadUtils;
+import org.glob3.mobile.generated.ITimer;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.MultiLayerTileTexturizer;
@@ -37,6 +38,7 @@ import org.glob3.mobile.generated.TextureBuilder;
 import org.glob3.mobile.generated.TexturesHandler;
 import org.glob3.mobile.generated.TileRenderer;
 import org.glob3.mobile.generated.TilesRenderParameters;
+import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.TouchEventType;
@@ -325,6 +327,36 @@ public final class G3MWidget_Android
                scheduler, width, height, Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false, initializationTask, true);
 
       _g3mWidget.setUserData(_userData);
+
+      //Testing Periodical Tasks
+      if (true) {
+         class PeriodicTask
+                  extends
+                     GTask {
+            private long      _lastExec;
+            private final int _number;
+
+
+            public PeriodicTask(final int n) {
+               _number = n;
+            }
+
+
+            @Override
+            public void run() {
+               final ITimer t = IFactory.instance().createTimer();
+               final long now = t.now().milliseconds();
+               ILogger.instance().logInfo("Running periodical Task " + _number + " - " + (now - _lastExec) + " ms.\n");
+               _lastExec = now;
+               IFactory.instance().deleteTimer(t);
+            }
+         }
+
+         _g3mWidget.addPeriodicalTasks(TimeInterval.fromMilliseconds(4000), new PeriodicTask(1));
+         _g3mWidget.addPeriodicalTasks(TimeInterval.fromMilliseconds(6000), new PeriodicTask(2));
+         _g3mWidget.addPeriodicalTasks(TimeInterval.fromMilliseconds(500), new PeriodicTask(3));
+      }
+
    }
 
 
@@ -343,7 +375,7 @@ public final class G3MWidget_Android
       if (_g3mWidget == null) {
          System.err.println("break (point) on me");
       }
-      */
+       */
       super.onPause();
    }
 
