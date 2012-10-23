@@ -22,6 +22,7 @@
 
 #include "BingLayer.hpp"
 //#include "OSMLayer.hpp"
+#include "TrailsRenderer.hpp"
 
 
 @implementation ViewController
@@ -228,6 +229,17 @@
       }
     }
   }
+  
+  
+  TrailsRenderer* trailsRenderer = new TrailsRenderer();
+  renderers.push_back(trailsRenderer);
+  
+//  Trail* trail = new Trail(10);
+//  trail->addPosition(Geodetic3D(const Angle &latitude,
+//                                const Angle &longitude,
+//                                const double height));
+//  trailsRenderer->addTrail(trail);
+  
   
   //  if (false) {
   //    LatLonMeshRenderer *renderer = new LatLonMeshRenderer();
