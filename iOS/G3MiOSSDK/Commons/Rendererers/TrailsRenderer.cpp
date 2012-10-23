@@ -28,7 +28,13 @@ Mesh* Trail::createMesh(const Planet* planet) {
   IntBufferBuilder indices;
   
   for (int i = 0; i < _positions.size(); i++) {
+//    vertices.add(*(_positions[i]));
+#ifdef C_CODE
     vertices.add(*(_positions[i]));
+#endif
+#ifdef JAVA_CODE
+	  vertices.add( _positions.get(i) );
+#endif
     indices.add(i);
     if (i > 0) {
       indices.add(i);

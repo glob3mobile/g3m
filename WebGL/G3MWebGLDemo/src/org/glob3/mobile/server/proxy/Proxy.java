@@ -50,6 +50,7 @@ public class Proxy
          return;
       }
 
+
       reqUrl = URLDecoder.decode(reqUrl, "UTF-8");
       //      reqUrl = reqUrl.replaceFirst("url=", "");
       if (reqUrl.toLowerCase().startsWith("url=")) {
