@@ -69,7 +69,7 @@ public class G3MWebGLDemo
       if (useBing) {
          final WMSLayer bing = new WMSLayer( //
                   "ve", //
-                  new URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?"), //
+                  new URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false), //
                   WMSServerVersion.WMS_1_1_0, //
                   Sector.fullSphere(), //
                   "image/png", //
@@ -85,7 +85,7 @@ public class G3MWebGLDemo
       if (usePnoa) {
          final WMSLayer pnoa = new WMSLayer( //
                   "PNOA", //
-                  new URL("http://www.idee.es/wms/PNOA/PNOA"), //
+                  new URL("http://www.idee.es/wms/PNOA/PNOA", false), //
                   WMSServerVersion.WMS_1_1_0, Sector.fromDegrees(21, -18, 45, 6), //
                   "image/png", //
                   "EPSG:4326", //
@@ -99,7 +99,7 @@ public class G3MWebGLDemo
       if (useOSMLatLon) {
          //         final WMSLayer osm = new WMSLayer( //
          //                  "osm", //
-         //                  new URL("http://wms.latlon.org/"), //
+         //                  new URL("http://wms.latlon.org/", false), //
          //                  WMSServerVersion.WMS_1_1_0, //
          //                  Sector.fromDegrees(-85.05, -180.0, 85.5, 180.0), //
          //                  "image/jpeg", //
@@ -111,7 +111,7 @@ public class G3MWebGLDemo
 
          final WMSLayer osm = new WMSLayer( //
                   "osm_auto:all", //
-                  new URL("http://129.206.228.72/cached/osm"), //
+                  new URL("http://129.206.228.72/cached/osm", false), //
                   WMSServerVersion.WMS_1_1_0, //
                   Sector.fromDegrees(-85.05, -180.0, 85.05, 180.0), //
                   "image/jpeg", //
@@ -120,6 +120,22 @@ public class G3MWebGLDemo
                   false, //
                   new LevelTileCondition(3, 100));
          layerSet.addLayer(osm);
+      }
+
+
+      final boolean testURLescape = false;
+      if (testURLescape) {
+         final WMSLayer ayto = new WMSLayer(URL.escape("Ejes de via"), //
+                  new URL("http://sig.caceres.es/wms_callejero.mapdef?", false), //
+                  WMSServerVersion.WMS_1_1_0,//  
+                  Sector.fullSphere(), //
+                  "image/png", //
+                  "EPSG:4326", //
+                  "", //
+                  true, //
+                  null);
+         layerSet.addLayer(ayto);
+
       }
 
 
@@ -151,14 +167,14 @@ public class G3MWebGLDemo
 
          final Mark m1 = new Mark(//
                   "Fuerteventura", //
-                  new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png"), //
+                  new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
                   new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-14.36), 0));
          //m1->addTouchListener(listener);
          marksRenderer.addMark(m1);
 
          final Mark m2 = new Mark( //
                   "Las Palmas", //
-                  new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png"), //
+                  new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
                   new Geodetic3D(Angle.fromDegrees(28.05), Angle.fromDegrees(-15.36), 0));
          //m2->addTouchListener(listener);
          marksRenderer.addMark(m2);
@@ -173,7 +189,7 @@ public class G3MWebGLDemo
 
                marksRenderer.addMark(new Mark( //
                         "Random", //
-                        new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png"), //
+                        new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false), //
                         new Geodetic3D(latitude, longitude, 0)));
             }
          }

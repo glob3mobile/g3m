@@ -73,4 +73,6 @@ enum GL_version {
 
 - (G3MWidget*) widget;
 
+- (void)initSingletons;
+
 @end

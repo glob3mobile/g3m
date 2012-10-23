@@ -25,8 +25,8 @@ public:
   
   URL():_path(""){}
   
-  explicit URL(const std::string& path):
-  _path(path)
+  URL(const std::string& path, const bool needToEscape):
+    _path(  needToEscape ? escape(path) : path  )
   {
   };
   
@@ -41,7 +41,7 @@ public:
   }
   
   static URL nullURL() {
-    return URL("__NULL__");
+    return URL("__NULL__", false);
   }
   
   bool isNull() const {
@@ -53,6 +53,9 @@ public:
   }
   
   const std::string description() const;
+    
+    const static std::string escape(const std::string& path);
+    
     
 #ifdef C_CODE
     bool operator<(const URL& that) const {

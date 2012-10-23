@@ -126,13 +126,7 @@
   int width = (int) [self frame].size.width;
   int height = (int) [self frame].size.height;
   
-  IStringBuilder* stringBuilder = new StringBuilder_iOS();
-  IMathUtils*     mathUtils     = new MathUtils_iOS();
-  IFactory*       factory       = new Factory_iOS();
-  ILogger*        logger        = new Logger_iOS(InfoLevel);
-  NativeGL2_iOS*  nGL           = new NativeGL2_iOS();
-  IJSONParser*    jsonParser    = new JSONParser_iOS();
-  
+  NativeGL2_iOS* nGL = new NativeGL2_iOS();
   GL* gl = new GL(nGL);
   
   IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
@@ -175,7 +169,6 @@
   
   FrameTasksExecutor* frameTasksExecutor = new FrameTasksExecutor();
   
-  const IStringUtils* stringUtils = new StringUtils_iOS();
   //  if (true) {
   //    int __REMOVE_STRING_UTILS_TESTS;
   //
@@ -193,8 +186,7 @@
   //    printf("\n");
   //  }
   
-  IThreadUtils* threadUtils = new ThreadUtils_iOS();
-  
+    
   class SampleInitializationTask : public GTask {
   public:
     void run() {
@@ -206,13 +198,6 @@
   GTask* initializationTask = new SampleInitializationTask();
   
   _widgetVP = G3MWidget::create(frameTasksExecutor,
-                                factory,
-                                stringUtils,
-                                threadUtils,
-                                stringBuilder,
-                                mathUtils,
-                                jsonParser,
-                                logger,
                                 gl,
                                 texturesHandler,
                                 textureBuilder,
@@ -532,6 +517,19 @@
 
 - (G3MWidget*) widget {
   return (G3MWidget*) _widgetVP;
+}
+
+- (void)initSingletons {
+
+    ILogger*            logger          = new Logger_iOS(WarningLevel);
+    IFactory*           factory         = new Factory_iOS();
+    const IStringUtils* stringUtils     = new StringUtils_iOS();
+    IThreadUtils*       threadUtils     = new ThreadUtils_iOS();
+    IStringBuilder*     stringBuilder   = new StringBuilder_iOS();
+    IMathUtils*         mathUtils       = new MathUtils_iOS();
+    IJSONParser*        jsonParser      = new JSONParser_iOS();
+    
+    G3MWidget::initSingletons(logger, factory, stringUtils, threadUtils, stringBuilder, mathUtils, jsonParser);
 }
 
 @end

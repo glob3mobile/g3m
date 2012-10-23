@@ -27,11 +27,25 @@
 
 #include "PeriodicalTask.hpp"
 
+void G3MWidget::initSingletons(ILogger*             logger,
+                               IFactory*            factory,
+                               const IStringUtils*  stringUtils,
+                               IThreadUtils*        threadUtils,
+                               IStringBuilder*      stringBuilder,
+                               IMathUtils*          mathUtils,
+                               IJSONParser*         jsonParser) {
+  if(ILogger::instance() == NULL) {
+    ILogger::setInstance(logger);
+    IFactory::setInstance(factory);
+    IStringUtils::setInstance(stringUtils);
+    IThreadUtils::setInstance(threadUtils);
+    IStringBuilder::setInstance(stringBuilder);
+    IMathUtils::setInstance(mathUtils);
+    IJSONParser::setInstance(jsonParser);
+  }
+}
+
 G3MWidget::G3MWidget(FrameTasksExecutor*              frameTasksExecutor,
-                     IFactory*                        factory,
-                     const IStringUtils*              stringUtils,
-                     IThreadUtils*                    threadUtils,
-                     ILogger*                         logger,
                      GL*                              gl,
                      TexturesHandler*                 texturesHandler,
                      TextureBuilder*                  textureBuilder,
@@ -50,10 +64,6 @@ G3MWidget::G3MWidget(FrameTasksExecutor*              frameTasksExecutor,
                      bool                             autoDeleteInitializationTask,
                      std::vector<PeriodicalTask*>     periodicalTasks):
 _frameTasksExecutor(frameTasksExecutor),
-_factory(factory),
-_stringUtils(stringUtils),
-_threadUtils(threadUtils),
-_logger(logger),
 _gl(gl),
 _texturesHandler(texturesHandler),
 _textureBuilder(textureBuilder),
@@ -65,7 +75,7 @@ _effectsScheduler(effectsScheduler),
 _currentCamera(new Camera(width, height)),
 _nextCamera(new Camera(width, height)),
 _backgroundColor(backgroundColor),
-_timer(factory->createTimer()),
+_timer(IFactory::instance()->createTimer()),
 _renderCounter(0),
 _totalRenderTime(0),
 _logFPS(logFPS),
@@ -80,10 +90,12 @@ _autoDeleteInitializationTask(autoDeleteInitializationTask)
 {
   initializeGL();
   
-  InitializationContext ic(_factory,
-                           _stringUtils,
-                           _threadUtils,
-                           _logger,
+  InitializationContext ic(IFactory::instance(),
+                           IStringUtils::instance(),
+                           IThreadUtils::instance(),
+                           ILogger::instance(),
+                           IMathUtils::instance(),
+                           IJSONParser::instance(),
                            _planet,
                            _downloader,
                            _effectsScheduler);
@@ -105,13 +117,6 @@ _autoDeleteInitializationTask(autoDeleteInitializationTask)
 
 
 G3MWidget* G3MWidget::create(FrameTasksExecutor*              frameTasksExecutor,
-                             IFactory*                        factory,
-                             const IStringUtils*              stringUtils,
-                             IThreadUtils*                    threadUtils,
-                             IStringBuilder*                  stringBuilder,
-                             IMathUtils*                      mathUtils,
-                             IJSONParser*                     jsonParser,
-                             ILogger*                         logger,
                              GL*                              gl,
                              TexturesHandler*                 texturesHandler,
                              TextureBuilder*                  textureBuilder,
@@ -129,23 +134,8 @@ G3MWidget* G3MWidget::create(FrameTasksExecutor*              frameTasksExecutor
                              GTask*                           initializationTask,
                              bool                             autoDeleteInitializationTask,
                              std::vector<PeriodicalTask*>     periodicalTasks) {
-  if (logger != NULL) {
-    logger->logInfo("Creating G3MWidget...");
-  }
-  
-  IFactory::setInstance(factory);
-  IStringUtils::setInstance(stringUtils);
-  ILogger::setInstance(logger);
-  IThreadUtils::setInstance(threadUtils);
-  IStringBuilder::setInstance(stringBuilder);
-  IMathUtils::setInstance(mathUtils);
-  IJSONParser::setInstance(jsonParser);
   
   return new G3MWidget(frameTasksExecutor,
-                       factory,
-                       stringUtils,
-                       threadUtils,
-                       logger,
                        gl,
                        texturesHandler,
                        textureBuilder,
@@ -175,8 +165,7 @@ G3MWidget::~G3MWidget() {
     delete _userData;
   }
   
-  delete _factory;
-  delete _logger;
+  
   delete _gl;
 #ifdef C_CODE
   delete _planet;
@@ -215,10 +204,12 @@ G3MWidget::~G3MWidget() {
 void G3MWidget::onTouchEvent(const TouchEvent* myEvent) {
   if (_rendererReady) {
     if (_renderer->isEnable()) {
-      EventContext ec(_factory,
-                      _stringUtils,
-                      _threadUtils,
-                      _logger,
+      EventContext ec(IFactory::instance(),
+                      IStringUtils::instance(),
+                      IThreadUtils::instance(),
+                      ILogger::instance(),
+                      IMathUtils::instance(),
+                      IJSONParser::instance(),
                       _planet,
                       _downloader,
                       _effectsScheduler);
@@ -231,10 +222,12 @@ void G3MWidget::onTouchEvent(const TouchEvent* myEvent) {
 void G3MWidget::onResizeViewportEvent(int width, int height) {
   if (_rendererReady) {
     if (_renderer->isEnable()) {
-      EventContext ec(_factory,
-                      _stringUtils,
-                      _threadUtils,
-                      _logger,
+      EventContext ec(IFactory::instance(),
+                      IStringUtils::instance(),
+                      IThreadUtils::instance(),
+                      ILogger::instance(),
+                      IMathUtils::instance(),
+                      IJSONParser::instance(),
                       _planet,
                       _downloader,
                       _effectsScheduler);
@@ -273,10 +266,12 @@ void G3MWidget::render() {
   }
   
   RenderContext rc(_frameTasksExecutor,
-                   _factory,
-                   _stringUtils,
-                   _threadUtils,
-                   _logger,
+                   IFactory::instance(),
+                   IStringUtils::instance(),
+                   IThreadUtils::instance(),
+                   ILogger::instance(),
+                   IMathUtils::instance(),
+                   IJSONParser::instance(),
                    _planet,
                    _gl,
                    _currentCamera,
@@ -285,7 +280,8 @@ void G3MWidget::render() {
                    _textureBuilder,
                    _downloader,
                    _effectsScheduler,
-                   _factory->createTimer());
+                   IFactory::instance()->createTimer()
+                   );
   
   _effectsScheduler->doOneCyle(&rc);
   
@@ -312,8 +308,7 @@ void G3MWidget::render() {
   
   const TimeInterval elapsedTime = _timer->elapsedTime();
   if (elapsedTime.milliseconds() > 100) {
-    _logger->logWarning("Frame took too much time: %dms" ,
-                        elapsedTime.milliseconds());
+    ILogger::instance()->logWarning("Frame took too much time: %dms", elapsedTime.milliseconds());
   }
   
   if (_logFPS) {
@@ -323,13 +318,13 @@ void G3MWidget::render() {
         (_renderStatisticsTimer->elapsedTime().seconds() > 2)) {
       const double averageTimePerRender = (double) _totalRenderTime / _renderCounter;
       const double fps = 1000.0 / averageTimePerRender;
-      _logger->logInfo("FPS=%f" , fps);
+      ILogger::instance()->logInfo("FPS=%f" , fps);
       
       _renderCounter = 0;
       _totalRenderTime = 0;
       
       if (_renderStatisticsTimer == NULL) {
-        _renderStatisticsTimer = _factory->createTimer();
+        _renderStatisticsTimer = IFactory::instance()->createTimer();
       }
       else {
         _renderStatisticsTimer->start();
@@ -345,7 +340,7 @@ void G3MWidget::render() {
     }
     
     if (cacheStatistics != _lastCacheStatistics) {
-      _logger->logInfo("%s" , cacheStatistics.c_str());
+      ILogger::instance()->logInfo("%s" , cacheStatistics.c_str());
       _lastCacheStatistics = cacheStatistics;
     }
   }
@@ -353,10 +348,13 @@ void G3MWidget::render() {
 }
 
 void G3MWidget::onPause() {
-  InitializationContext ic(_factory,
-                           _stringUtils,
-                           _threadUtils,
-                           _logger,
+  InitializationContext ic(
+                           IFactory::instance(),
+                           IStringUtils::instance(),
+                           IThreadUtils::instance(),
+                           ILogger::instance(),
+                           IMathUtils::instance(),
+                           IJSONParser::instance(),
                            _planet,
                            _downloader,
                            _effectsScheduler);
@@ -372,10 +370,13 @@ void G3MWidget::onPause() {
 }
 
 void G3MWidget::onResume() {
-  InitializationContext ic(_factory,
-                           _stringUtils,
-                           _threadUtils,
-                           _logger,
+  InitializationContext ic(
+                           IFactory::instance(),
+                           IStringUtils::instance(),
+                           IThreadUtils::instance(),
+                           ILogger::instance(),
+                           IMathUtils::instance(),
+                           IJSONParser::instance(),
                            _planet,
                            _downloader,
                            _effectsScheduler);

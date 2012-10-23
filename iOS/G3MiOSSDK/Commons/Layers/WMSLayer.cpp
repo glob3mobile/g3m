@@ -131,7 +131,7 @@ std::vector<Petition*> WMSLayer::getMapPetitions(const RenderContext* rc,
     req += "&TRANSPARENT=FALSE";
   }
   
-  Petition *petition = new Petition(sector, URL(req));
+  Petition *petition = new Petition(sector, URL(req, false));
   petitions.push_back(petition);
   
 	return petitions;
@@ -251,5 +251,5 @@ URL WMSLayer::getFeatureInfoURL(const Geodetic2D& g,
   req += isb->getString();
   delete isb;
   
-	return URL(req);
+	return URL(req, false);
 }

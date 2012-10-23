@@ -27,6 +27,7 @@ import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IJSONParser;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
+import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.IStringUtils;
 import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.ITimer;
@@ -85,6 +86,8 @@ public final class G3MWidget_Android
    public G3MWidget_Android(final Context context) {
       super(context);
 
+      initSingletons();
+
       setEGLContextClientVersion(2); // OPENGL ES VERSION MUST BE SPECIFED
       setEGLConfigChooser(true); // IT GIVES US A RGB DEPTH OF 8 BITS PER
       // CHANNEL, HAVING TO FORCE PROPER BUFFER
@@ -131,6 +134,19 @@ public final class G3MWidget_Android
          }
       };
       _gestureDetector.setOnDoubleTapListener(_doubleTapListener);
+   }
+
+
+   public void initSingletons() {
+      final ILogger logger = new Logger_Android(LogLevel.ErrorLevel);
+      final IFactory factory = new Factory_Android(getContext());
+      final IStringUtils stringUtils = new StringUtils_Android();
+      final IThreadUtils threadUtils = new ThreadUtils_Android(this);
+      final IStringBuilder stringBuilder = new StringBuilder_Android();
+      final IMathUtils mathUtils = new MathUtils_Android();
+      final IJSONParser jsonParser = new JSONParser_Android();
+
+      G3MWidget.initSingletons(logger, factory, stringUtils, threadUtils, stringBuilder, mathUtils, jsonParser);
    }
 
 
@@ -274,8 +290,6 @@ public final class G3MWidget_Android
       final int width = getWidth();
       final int height = getHeight();
 
-      final IFactory factory = new Factory_Android(getContext());
-      final ILogger logger = new Logger_Android(LogLevel.ErrorLevel);
       final NativeGL2_Android nGL = new NativeGL2_Android();
       final GL gl = new GL(nGL);
 
@@ -316,15 +330,24 @@ public final class G3MWidget_Android
 
       final EffectsScheduler scheduler = new EffectsScheduler();
       final FrameTasksExecutor frameTasksExecutor = new FrameTasksExecutor();
-      final IStringUtils stringUtils = new StringUtils_Android();
-      final IThreadUtils threadUtils = new ThreadUtils_Android(this);
-      final StringBuilder_Android stringBuilder = new StringBuilder_Android();
-      final IMathUtils math = new MathUtils_Android();
-      final IJSONParser jsonParser = new JSONParser_Android();
 
-      _g3mWidget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, stringBuilder, math, jsonParser,
-               logger, gl, texturesHandler, textureBuilder, _downloader, planet, _cameraConstraints, composite, busyRenderer,
-               scheduler, width, height, Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false, initializationTask, true);
+      _g3mWidget = G3MWidget.create(frameTasksExecutor, //
+               gl, //
+               texturesHandler, //
+               textureBuilder, //
+               _downloader, //
+               planet, //
+               _cameraConstraints, //
+               composite, //
+               busyRenderer, //
+               scheduler, // 
+               width, //
+               height, //
+               Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), //
+               true, // 
+               false, // 
+               initializationTask, //
+               true);
 
       _g3mWidget.setUserData(_userData);
 
