@@ -194,6 +194,12 @@ G3MWidget::~G3MWidget() {
     delete _cameraConstrainers[n];
 #endif
   delete _frameTasksExecutor;
+  
+#ifdef C_CODE
+  for (int i = 0; i < _periodicalTasks.size(); i++){
+    _periodicalTasks[i].releaseTask();
+  }
+#endif
 }
 
 void G3MWidget::onTouchEvent(const TouchEvent* myEvent) {

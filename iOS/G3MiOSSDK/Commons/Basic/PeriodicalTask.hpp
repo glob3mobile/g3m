@@ -21,6 +21,10 @@ public:
   _interval(interval.milliseconds()), _task(task), _lastExecution(0){
   }
   
+  void releaseTask(){
+    delete _task;
+  }
+  
   void executeIfNecessary(){
     ITimer* t = IFactory::instance()->createTimer();
     long long now = t->now().milliseconds();
