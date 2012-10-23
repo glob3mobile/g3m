@@ -32,11 +32,12 @@ public class G3MWidget
 		  _userData.dispose();
 	}
   
-	  IFactory.instance() = null;
-	  ILogger.instance() = null;
 	  int __TODO_delete_other_instances;
-	if (_gl != null)
-		_gl.dispose();
+  //    delete _factory;
+  //    delete _logger;
+  
+	  if (_gl != null)
+		  _gl.dispose();
 	if (_renderer != null)
 		_renderer.dispose();
 	if (_busyRenderer != null)
