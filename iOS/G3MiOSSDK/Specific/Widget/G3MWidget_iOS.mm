@@ -231,45 +231,24 @@
   //Testing Periodical Tasks
   if (true){
     
-    class PeriodicTask1 : public GTask {
+    class PeriodicTask : public GTask {
       long long _lastExec;
+      int _number;
     public:
+      PeriodicTask(int n):_number(n){}
+      
       void run() {
         ITimer* t = IFactory::instance()->createTimer();
         long long now = t->now().milliseconds();
-        printf("Running periodical Task 1 %lld ms.\n", now - _lastExec);
+        ILogger::instance()->logInfo("Running periodical Task %d %lld ms.\n", _number,  now - _lastExec);
         _lastExec = now;
         IFactory::instance()->deleteTimer(t);
       }
     };
     
-    class PeriodicTask2 : public GTask {
-      long long _lastExec;
-    public:
-      void run() {
-        ITimer* t = IFactory::instance()->createTimer();
-        long long now = t->now().milliseconds();
-        printf("Running periodical Task 2 %lld ms.\n", now - _lastExec);
-        _lastExec = now;
-        IFactory::instance()->deleteTimer(t);
-      }
-    };
-    
-    class PeriodicTask3 : public GTask {
-      long long _lastExec;
-    public:
-      void run() {
-        ITimer* t = IFactory::instance()->createTimer();
-        long long now = t->now().milliseconds();
-        printf("Running periodical Task 3 %lld ms.\n", now - _lastExec);
-        _lastExec = now;
-        IFactory::instance()->deleteTimer(t);
-      }
-    };
-    
-    [self widget]->addPeriodicalTasks(TimeInterval::fromMilliseconds(4000), new PeriodicTask1());
-    [self widget]->addPeriodicalTasks(TimeInterval::fromMilliseconds(6000), new PeriodicTask2());
-    [self widget]->addPeriodicalTasks(TimeInterval::fromMilliseconds(500), new PeriodicTask3());
+    [self widget]->addPeriodicalTasks(TimeInterval::fromMilliseconds(4000), new PeriodicTask(1));
+    [self widget]->addPeriodicalTasks(TimeInterval::fromMilliseconds(6000), new PeriodicTask(2));
+    [self widget]->addPeriodicalTasks(TimeInterval::fromMilliseconds(500), new PeriodicTask(3));
   }
 }
 
