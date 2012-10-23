@@ -8,7 +8,7 @@
 
 #include "G3MWidget.hpp"
 
-#include "ITimer.hpp"
+//#include "ITimer.hpp"
 #include "Renderer.hpp"
 #include "Camera.hpp"
 #include "GL.hpp"
@@ -24,6 +24,8 @@
 #include "IJSONParser.hpp"
 
 #include "GLConstants.hpp"
+
+#include "PeriodicalTask.hpp"
 
 G3MWidget::G3MWidget(FrameTasksExecutor*              frameTasksExecutor,
                      IFactory*                        factory,
@@ -230,6 +232,12 @@ void G3MWidget::render() {
   _timer->start();
   _renderCounter++;
   
+  //Start periodical task
+  for (int i = 0; i < _periodicalTasks.size(); i++) {
+    PeriodicalTask& pt = _periodicalTasks[i];
+    pt.executeIfNecessary();
+  }
+  
   // give to the CameraContrainers the opportunity to change the nextCamera
   for (int i = 0; i< _cameraConstrainers.size(); i++) {
     ICameraConstrainer* constrainer =  _cameraConstrainers[i];
@@ -364,4 +372,9 @@ void G3MWidget::onResume() {
   if (_downloader != NULL) {
     _downloader->onResume(&ic);
   }
+}
+
+void G3MWidget::addPeriodicalTasks(const TimeInterval& interval, GTask* task){
+  PeriodicalTask pt(interval, task);
+  _periodicalTasks.push_back(pt);
 }
