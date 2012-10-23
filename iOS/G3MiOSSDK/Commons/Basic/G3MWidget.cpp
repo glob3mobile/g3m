@@ -92,6 +92,8 @@ _autoDeleteInitializationTask(autoDeleteInitializationTask)
                            IStringUtils::instance(),
                            IThreadUtils::instance(),
                            ILogger::instance(),
+                           IMathUtils::instance(),
+                           IJSONParser::instance(),
                            _planet,
                            _downloader,
                            _effectsScheduler);
@@ -192,6 +194,8 @@ void G3MWidget::onTouchEvent(const TouchEvent* myEvent) {
                       IStringUtils::instance(),
                       IThreadUtils::instance(),
                       ILogger::instance(),
+                      IMathUtils::instance(),
+                      IJSONParser::instance(),
                       _planet,
                       _downloader,
                       _effectsScheduler);
@@ -208,6 +212,8 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
                         IStringUtils::instance(),
                         IThreadUtils::instance(),
                         ILogger::instance(),
+                        IMathUtils::instance(),
+                        IJSONParser::instance(),
                       _planet,
                       _downloader,
                       _effectsScheduler);
@@ -244,6 +250,8 @@ void G3MWidget::render() {
                    IStringUtils::instance(),
                    IThreadUtils::instance(),
                    ILogger::instance(),
+                   IMathUtils::instance(),
+                   IJSONParser::instance(),
                    _planet,
                    _gl,
                    _currentCamera,
@@ -325,6 +333,8 @@ void G3MWidget::onPause() {
                            IStringUtils::instance(),
                            IThreadUtils::instance(),
                            ILogger::instance(),
+                           IMathUtils::instance(),
+                           IJSONParser::instance(),
                            _planet,
                            _downloader,
                            _effectsScheduler);
@@ -345,6 +355,8 @@ void G3MWidget::onResume() {
                            IStringUtils::instance(),
                            IThreadUtils::instance(),
                            ILogger::instance(),
+                           IMathUtils::instance(),
+                           IJSONParser::instance(),
                            _planet,
                            _downloader,
                            _effectsScheduler);
