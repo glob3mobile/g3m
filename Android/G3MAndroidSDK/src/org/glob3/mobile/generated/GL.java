@@ -398,7 +398,7 @@ public class GL
 
   public final void drawLines(IIntBuffer indices)
   {
-	_gl.drawElements(GLPrimitive.lineLoop(), indices.size(), indices);
+	_gl.drawElements(GLPrimitive.lines(), indices.size(), indices);
   }
 
   public final void drawLineLoop(IIntBuffer indices)

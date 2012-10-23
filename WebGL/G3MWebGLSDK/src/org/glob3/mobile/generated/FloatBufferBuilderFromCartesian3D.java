@@ -15,9 +15,9 @@ public class FloatBufferBuilderFromCartesian3D extends FloatBufferBuilder
   }
 
 
-  public FloatBufferBuilderFromCartesian3D(int cs, Vector3D center)
+  public FloatBufferBuilderFromCartesian3D(int centerStrategy, Vector3D center)
   {
-	  _centerStrategy = cs;
+	  _centerStrategy = centerStrategy;
 	setCenter(center);
   }
 

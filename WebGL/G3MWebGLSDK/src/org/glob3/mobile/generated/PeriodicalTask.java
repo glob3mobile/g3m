@@ -9,39 +9,56 @@ package org.glob3.mobile.generated;
 
 
 
-//Storing Scheduled Tasks
 public class PeriodicalTask
 {
-  public PeriodicalTask(TimeInterval interval, GTask task)
+  private long _intervalMS;
+  private long _lastExecutionMS;
+  private GTask _task;
+
+  private ITimer _timer;
+
+  private ITimer getTimer()
   {
-	  _interval = interval.milliseconds();
-	  _task = task;
-	  _lastExecution = 0;
+	if (_timer == null)
+	{
+	  _timer = IFactory.instance().createTimer();
+	}
+	return _timer;
   }
 
-  public final void releaseTask()
+  public PeriodicalTask(TimeInterval interval, GTask task)
+  {
+	  _intervalMS = interval.milliseconds();
+	  _task = task;
+	  _lastExecutionMS = 0;
+	  _timer = null;
+  }
+
+  public void dispose()
   {
 	if (_task != null)
-		_task.dispose();
+	{
+	  if (_task != null)
+		  _task.dispose();
+	}
+
+	if (_timer != null)
+	{
+	  IFactory.instance().deleteTimer(_timer);
+	}
   }
 
   public final void executeIfNecessary()
   {
-	ITimer t = IFactory.instance().createTimer();
-	long now = t.now().milliseconds();
-	IFactory.instance().deleteTimer(t);
+	long now = getTimer().now().milliseconds();
 
-	long interval = now - _lastExecution;
+	long interval = now - _lastExecutionMS;
 
-	if (interval >= _interval)
+	if (interval >= _intervalMS)
 	{
 	  _task.run();
-	  _lastExecution = now;
+	  _lastExecutionMS = now;
 	}
   }
 
-  //Milliseconds
-  private long _interval;
-  private long _lastExecution;
-  private GTask _task;
 }
