@@ -64,5 +64,4 @@ public class DoubleTapEffect extends EffectWithDuration
   private Angle _angle ;
   private double _distance;
   private double _lastPercent;
-
 }

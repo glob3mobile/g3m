@@ -23,9 +23,6 @@
 #include "BingLayer.hpp"
 //#include "OSMLayer.hpp"
 
-#include "IJSONParser.hpp"
-#include "JSONParser_iOS.hpp"
-
 
 @implementation ViewController
 
