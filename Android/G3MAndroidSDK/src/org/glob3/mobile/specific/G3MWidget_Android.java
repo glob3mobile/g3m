@@ -34,6 +34,7 @@ import org.glob3.mobile.generated.ITimer;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.MultiLayerTileTexturizer;
+import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.TextureBuilder;
 import org.glob3.mobile.generated.TexturesHandler;
@@ -331,6 +332,8 @@ public final class G3MWidget_Android
       final EffectsScheduler scheduler = new EffectsScheduler();
       final FrameTasksExecutor frameTasksExecutor = new FrameTasksExecutor();
 
+      final ArrayList<PeriodicalTask> periodicalTasks = new ArrayList<PeriodicalTask>();
+
       _g3mWidget = G3MWidget.create(frameTasksExecutor, //
                gl, //
                texturesHandler, //
@@ -347,7 +350,8 @@ public final class G3MWidget_Android
                true, // 
                false, // 
                initializationTask, //
-               true);
+               true, //
+               periodicalTasks);
 
       _g3mWidget.setUserData(_userData);
 
@@ -375,9 +379,9 @@ public final class G3MWidget_Android
             }
          }
 
-         _g3mWidget.addPeriodicalTasks(TimeInterval.fromMilliseconds(4000), new PeriodicTask(1));
-         _g3mWidget.addPeriodicalTasks(TimeInterval.fromMilliseconds(6000), new PeriodicTask(2));
-         _g3mWidget.addPeriodicalTasks(TimeInterval.fromMilliseconds(500), new PeriodicTask(3));
+         _g3mWidget.addPeriodicalTask(TimeInterval.fromMilliseconds(4000), new PeriodicTask(1));
+         _g3mWidget.addPeriodicalTask(TimeInterval.fromMilliseconds(6000), new PeriodicTask(2));
+         _g3mWidget.addPeriodicalTask(TimeInterval.fromMilliseconds(500), new PeriodicTask(3));
       }
 
    }

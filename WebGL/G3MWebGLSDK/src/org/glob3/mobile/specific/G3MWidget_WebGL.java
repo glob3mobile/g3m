@@ -34,6 +34,7 @@ import org.glob3.mobile.generated.ITimer;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.MultiLayerTileTexturizer;
+import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.TextureBuilder;
@@ -340,6 +341,7 @@ public final class G3MWidget_WebGL
       final boolean logFPS = false;
       final boolean logDownloaderStatistics = false;
 
+      final ArrayList<PeriodicalTask> periodicalTasks = new ArrayList<PeriodicalTask>();
       _widget = G3MWidget.create( //
                frameTasksExecutor, //
                gl, //
@@ -357,7 +359,8 @@ public final class G3MWidget_WebGL
                logFPS, //
                logDownloaderStatistics, //
                _initializationTask, //
-               true);
+               true, //
+               periodicalTasks);
 
       _widget.setUserData(_userData);
 
@@ -385,9 +388,9 @@ public final class G3MWidget_WebGL
             }
          }
 
-         _widget.addPeriodicalTasks(TimeInterval.fromMilliseconds(4000), new PeriodicTask(1));
-         _widget.addPeriodicalTasks(TimeInterval.fromMilliseconds(6000), new PeriodicTask(2));
-         _widget.addPeriodicalTasks(TimeInterval.fromMilliseconds(500), new PeriodicTask(3));
+         _widget.addPeriodicalTask(TimeInterval.fromMilliseconds(4000), new PeriodicTask(1));
+         _widget.addPeriodicalTask(TimeInterval.fromMilliseconds(6000), new PeriodicTask(2));
+         _widget.addPeriodicalTask(TimeInterval.fromMilliseconds(500), new PeriodicTask(3));
       }
 
       _motionEventProcessor = new MotionEventProcessor(_widget);
