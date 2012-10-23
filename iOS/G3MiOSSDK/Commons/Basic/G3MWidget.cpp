@@ -158,10 +158,11 @@ G3MWidget::~G3MWidget() {
     delete _userData;
   }
   
-    delete IFactory::instance();
-    delete ILogger::instance();
     int __TODO_delete_other_instances;
-  delete _gl;
+//    delete _factory;
+//    delete _logger;
+
+    delete _gl;
 #ifdef C_CODE
   delete _planet;
 #endif
