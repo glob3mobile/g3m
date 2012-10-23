@@ -56,6 +56,7 @@ public class G3MWidget
   
 	if (_frameTasksExecutor != null)
 		_frameTasksExecutor.dispose();
+  
   }
 
   public final void render()

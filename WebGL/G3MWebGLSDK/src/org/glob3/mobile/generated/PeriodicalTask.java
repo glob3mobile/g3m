@@ -19,6 +19,12 @@ public class PeriodicalTask
 	  _lastExecution = 0;
   }
 
+  public final void releaseTask()
+  {
+	if (_task != null)
+		_task.dispose();
+  }
+
   public final void executeIfNecessary()
   {
 	ITimer t = IFactory.instance().createTimer();
