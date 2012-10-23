@@ -81,6 +81,7 @@
                                 layerSet: (LayerSet*) layerSet
                                renderers: (std::vector<Renderer*>) renderers
                                 userData: (UserData*) userData
+                         periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
 {
   // creates default camera-renderer and camera-handlers
   CameraRenderer *cameraRenderer = new CameraRenderer();
@@ -108,7 +109,8 @@
                             layerSet: layerSet
                tilesRenderParameters: parameters
                            renderers: renderers
-                            userData: userData];
+                            userData: userData
+                     periodicalTasks: periodicalTasks];
 }
 
 - (void) initWidgetWithCameraRenderer: (CameraRenderer*) cameraRenderer
@@ -117,6 +119,7 @@
                 tilesRenderParameters: (TilesRenderParameters*) parameters
                             renderers: (std::vector<Renderer*>) renderers
                              userData: (UserData*) userData
+                      periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
 {
   
   // create GLOB3M WIDGET
@@ -224,32 +227,35 @@
                                 true,
                                 false,
                                 initializationTask,
-                                true);
+                                true,
+                                periodicalTasks);
   
   [self widget]->setUserData(userData);
   
-  //Testing Periodical Tasks
-  if (true){
-    
-    class TestPeriodicTask : public GTask {
-      long long _lastExec;
-      int _number;
-    public:
-      TestPeriodicTask(int n):_number(n){}
-      
-      void run() {
-        ITimer* t = IFactory::instance()->createTimer();
-        long long now = t->now().milliseconds();
-        ILogger::instance()->logInfo("Running periodical Task %d - %lld ms.", _number,  now - _lastExec);
-        _lastExec = now;
-        IFactory::instance()->deleteTimer(t);
-      }
-    };
-    
-    [self widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(4000), new TestPeriodicTask(1));
-    [self widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(6000), new TestPeriodicTask(2));
-    [self widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(500), new TestPeriodicTask(3));
-  }
+//  //Testing Periodical Tasks
+//  if (true){
+//    
+//    class TestPeriodicTask : public GTask {
+//      long long _lastExec;
+//      int _number;
+//    public:
+//      TestPeriodicTask(int n):_number(n){}
+//      
+//      void run() {
+//        ITimer* t = IFactory::instance()->createTimer();
+//        long long now = t->now().milliseconds();
+//        ILogger::instance()->logInfo("Running periodical Task %d - %lld ms.", _number,  now - _lastExec);
+//        _lastExec = now;
+//        IFactory::instance()->deleteTimer(t);
+//      }
+//    };
+//    
+//    [self widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(4000), new TestPeriodicTask(1));
+//    [self widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(6000), new TestPeriodicTask(2));
+//    [self widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(500), new TestPeriodicTask(3));
+//  }
+  
+  
 }
 
 //The EAGL view is stored in the nib file. When it's unarchived it's sent -initWithCoder:

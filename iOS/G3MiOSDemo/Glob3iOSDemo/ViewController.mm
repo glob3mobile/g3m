@@ -23,7 +23,7 @@
 #include "BingLayer.hpp"
 //#include "OSMLayer.hpp"
 #include "TrailsRenderer.hpp"
-
+#include "PeriodicalTask.hpp"
 
 @implementation ViewController
 
@@ -230,23 +230,62 @@
     }
   }
   
-  
   TrailsRenderer* trailsRenderer = new TrailsRenderer();
   renderers.push_back(trailsRenderer);
   
-  //  Trail* trail = new Trail(10);
-  //  trail->addPosition(Geodetic3D(const Angle &latitude,
-  //                                const Angle &longitude,
-  //                                const double height));
-  //  trailsRenderer->addTrail(trail);
+  Trail* trail = new Trail(10);
+  
+//  37°47′/N 122°25′W
+  
+  Geodetic3D position(Angle::fromDegrees(37.78333333),
+                      Angle::fromDegrees(-122.41666666666667),
+                      5000);
+  trail->addPosition(position);
+  trailsRenderer->addTrail(trail);
   
   
   //  if (false) {
   //    LatLonMeshRenderer *renderer = new LatLonMeshRenderer();
   //    renderers.push_back(renderer);
   //  }
+
   
   //  renderers.push_back(new GLErrorRenderer());
+  
+  class TestTrailTask : public GTask {
+  private:
+    Trail* _trail;
+    
+    double _lastLatitudeDegrees;
+    double _lastLongitudeDegrees;
+    double _lastHeight;
+    
+  public:
+    TestTrailTask(Trail* trail,
+                  Geodetic3D lastPosition) :
+    _trail(trail),
+    _lastLatitudeDegrees(lastPosition.latitude().degrees()),
+    _lastLongitudeDegrees(lastPosition.longitude().degrees()),
+    _lastHeight(lastPosition.height())
+    {
+      
+    }
+    
+    void run() {
+      _lastLatitudeDegrees += 0.05;
+      _lastLongitudeDegrees += 0.05;
+      _lastHeight += 200;
+
+      _trail->addPosition(Geodetic3D(Angle::fromDegrees(_lastLatitudeDegrees),
+                                     Angle::fromDegrees(_lastLongitudeDegrees),
+                                     _lastHeight));
+    }
+  };
+  
+  std::vector<PeriodicalTask*> periodicalTasks;
+  periodicalTasks.push_back( new PeriodicalTask(TimeInterval::fromSeconds(1),
+                                                new TestTrailTask(trail, position)));
+  
   
   std::vector <ICameraConstrainer*> cameraConstraints;
   SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
@@ -256,8 +295,8 @@
   [[self G3MWidget] initWidgetWithCameraConstraints: cameraConstraints
                                            layerSet: layerSet
                                           renderers: renderers
-                                           userData: userData];
-  
+                                           userData: userData
+                                    periodicalTasks: periodicalTasks];
 }
 
 - (void)viewDidUnload

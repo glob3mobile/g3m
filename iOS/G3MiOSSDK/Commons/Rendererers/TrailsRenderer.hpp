@@ -10,19 +10,35 @@
 #define __G3MiOSSDK__TrailsRenderer__
 
 #include "LeafRenderer.hpp"
-
+#include "Geodetic3D.hpp"
 #include <vector>
+
+class Mesh;
+class Planet;
 
 class Trail {
 private:
   bool _visible;
-  const int _maxSteps;
+  const unsigned long _maxSteps;
+  bool _positionsDirty;
+  
+  std::vector<Geodetic3D*> _positions;
+  
+  Mesh* createMesh(const Planet* planet);
+  
+  Mesh* _mesh;
+  Mesh* getMesh(const Planet* planet);
   
 public:
   Trail(int maxSteps):
   _maxSteps(maxSteps),
-  _visible(true) {
+  _visible(true),
+  _positionsDirty(true),
+  _mesh(NULL)
+  {
   }
+  
+  ~Trail();
   
   void render(const RenderContext* rc);
   
@@ -32,6 +48,26 @@ public:
   
   bool isVisible() const {
     return _visible;
+  }
+  
+  void addPosition(const Geodetic3D& position) {
+    _positionsDirty = true;
+    
+    while (_positions.size() >= _maxSteps) {
+      // const int lastIndex = _positions.size() - 1;
+      const int index = 0;
+      
+      delete _positions[index];
+      
+#ifdef C_CODE
+      _positions.erase( _positions.begin() + index );
+#endif
+#ifdef JAVA_CODE
+      _positions.remove( index );
+#endif
+    }
+    
+    _positions.push_back(new Geodetic3D(position));
   }
   
 };

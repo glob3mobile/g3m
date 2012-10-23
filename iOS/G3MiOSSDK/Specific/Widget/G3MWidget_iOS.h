@@ -22,6 +22,7 @@ class Renderer;
 class UserData;
 class TilesRenderParameters;
 class G3MWidget;
+class PeriodicalTask;
 
 // opengl versions value
 enum GL_version {
@@ -59,14 +60,16 @@ enum GL_version {
 - (void)initWidgetWithCameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
                                layerSet: (LayerSet*) layerSet
                               renderers: (std::vector<Renderer*>) renderers
-                               userData: (UserData*) userData;
+                               userData: (UserData*) userData
+                        periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks;
 
 - (void)initWidgetWithCameraRenderer: (CameraRenderer*) cameraRenderer
                    cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
                             layerSet: (LayerSet*) layerSet
                tilesRenderParameters: (TilesRenderParameters*) parameters
                            renderers: (std::vector<Renderer*>) renderers
-                            userData: (UserData*) userData;
+                            userData: (UserData*) userData
+                     periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks;
 
 - (G3MWidget*) widget;
 

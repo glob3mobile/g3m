@@ -108,6 +108,8 @@
 		CF6873AB15F77FFC002EDFD0 /* IIntBuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF6873A915F77FFC002EDFD0 /* IIntBuffer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF6D404715C8278C008D8D78 /* Downloader_iOS_WorkerThread.h in Headers */ = {isa = PBXBuildFile; fileRef = CF6D404515C8278C008D8D78 /* Downloader_iOS_WorkerThread.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		CF6D404815C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF6D404615C8278C008D8D78 /* Downloader_iOS_WorkerThread.mm */; };
+		CF6DD7851637488300685212 /* PeriodicalTask.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D81FB47C1636A5AE00CC2CA7 /* PeriodicalTask.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CF6DD7861637488300685212 /* GLTextureId_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8B3A95F160B691C0085D553 /* GLTextureId_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
 		CF73BFDB15E114E3001CE412 /* FrameTasksExecutor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */; };
 		CF75436315E5161500A0ABC7 /* CameraSingleDragHandler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC596F2815C46DAB008FC230 /* CameraSingleDragHandler.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF75436415E5165500A0ABC7 /* CameraEventHandler.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CC94D7FA15D0FDF70074B12A /* CameraEventHandler.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -922,6 +924,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF6DD7851637488300685212 /* PeriodicalTask.hpp in Headers */,
 				CFCEFF4E163721EA00FC4AB0 /* TrailsRenderer.hpp in Headers */,
 				CFCEFF27163476F100FC4AB0 /* RectangleI.hpp in Headers */,
 				CF0A8184163303E800036277 /* MutableVector2I.hpp in Headers */,
@@ -1038,6 +1041,7 @@
 				A70F5616161C8F9A00340256 /* JSONBoolean.hpp in Headers */,
 				A70F5618161C94A100340256 /* JSONString.hpp in Headers */,
 				A7EE001E161B25FD00C77604 /* JSONArray.hpp in Headers */,
+				CF6DD7861637488300685212 /* GLTextureId_iOS.hpp in Headers */,
 				CF9D832A15FF7A1C0069B555 /* Downloader_iOS.hpp in Headers */,
 				CF9D832B15FF7A1C0069B555 /* StringUtils_iOS.hpp in Headers */,
 				CF9D832C15FF7A1C0069B555 /* ByteBuffer_iOS.hpp in Headers */,

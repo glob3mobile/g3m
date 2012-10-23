@@ -89,7 +89,8 @@ public:
                            const bool                       logFPS,
                            const bool                       logDownloaderStatistics,
                            GTask*                           initializationTask,
-                           bool                             autoDeleteInitializationTask);
+                           bool                             autoDeleteInitializationTask,
+                           std::vector<PeriodicalTask*>     periodicalTasks);
   
   ~G3MWidget();
   
@@ -176,27 +177,28 @@ private:
   
   void initializeGL();
   
-  G3MWidget(FrameTasksExecutor* frameTasksExecutor,
-            IFactory*           factory,
-            const IStringUtils* stringUtils,
-            IThreadUtils*       threadUtils,
-            ILogger*            logger,
-            GL*                 gl,
-            TexturesHandler*    texturesHandler,
-            TextureBuilder*     textureBuilder,
-            IDownloader*        downloader,
-            const Planet*       planet,
+  G3MWidget(FrameTasksExecutor*              frameTasksExecutor,
+            IFactory*                        factory,
+            const IStringUtils*              stringUtils,
+            IThreadUtils*                    threadUtils,
+            ILogger*                         logger,
+            GL*                              gl,
+            TexturesHandler*                 texturesHandler,
+            TextureBuilder*                  textureBuilder,
+            IDownloader*                     downloader,
+            const Planet*                    planet,
             std::vector<ICameraConstrainer*> cameraConstraint,
-            Renderer*           renderer,
-            Renderer*           busyRenderer,
-            EffectsScheduler*   scheduler,
-            int                 width,
-            int                 height,
-            Color               backgroundColor,
-            const bool          logFPS,
-            const bool          logDownloaderStatistics,
+            Renderer*                        renderer,
+            Renderer*                        busyRenderer,
+            EffectsScheduler*                scheduler,
+            int                              width,
+            int                              height,
+            Color                            backgroundColor,
+            const bool                       logFPS,
+            const bool                       logDownloaderStatistics,
             GTask*                           initializationTask,
-            bool                             autoDeleteInitializationTask);
+            bool                             autoDeleteInitializationTask,
+            std::vector<PeriodicalTask*>     periodicalTasks);
   
 };
 

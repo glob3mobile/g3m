@@ -47,7 +47,8 @@ G3MWidget::G3MWidget(FrameTasksExecutor*              frameTasksExecutor,
                      const bool                       logFPS,
                      const bool                       logDownloaderStatistics,
                      GTask*                           initializationTask,
-                     bool                             autoDeleteInitializationTask):
+                     bool                             autoDeleteInitializationTask,
+                     std::vector<PeriodicalTask*>     periodicalTasks):
 _frameTasksExecutor(frameTasksExecutor),
 _factory(factory),
 _stringUtils(stringUtils),
@@ -96,6 +97,10 @@ _autoDeleteInitializationTask(autoDeleteInitializationTask)
   if (_downloader != NULL){
     _downloader->start();
   }
+  
+  for (int i = 0; i < periodicalTasks.size(); i++) {
+    addPeriodicalTask(periodicalTasks[i]);
+  }
 }
 
 
@@ -122,7 +127,8 @@ G3MWidget* G3MWidget::create(FrameTasksExecutor*              frameTasksExecutor
                              const bool                       logFPS,
                              const bool                       logDownloaderStatistics,
                              GTask*                           initializationTask,
-                             bool                             autoDeleteInitializationTask) {
+                             bool                             autoDeleteInitializationTask,
+                             std::vector<PeriodicalTask*>     periodicalTasks) {
   if (logger != NULL) {
     logger->logInfo("Creating G3MWidget...");
   }
@@ -154,7 +160,8 @@ G3MWidget* G3MWidget::create(FrameTasksExecutor*              frameTasksExecutor
                        logFPS,
                        logDownloaderStatistics,
                        initializationTask,
-                       autoDeleteInitializationTask);
+                       autoDeleteInitializationTask,
+                       periodicalTasks);
 }
 
 void G3MWidget::initializeGL() {
