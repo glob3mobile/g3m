@@ -72,33 +72,27 @@ public final class G3MWidget_WebGL
 
    private G3MWidget                     _widget;
 
-
    private int                           _width;
    private int                           _height;
    private final int                     _delayMillis;
    private final String                  _proxy;
 
+   private ArrayList<String>             _imagesToPreload;
 
-   public String getProxy() {
-      return _proxy;
-   }
-
-
-   private ArrayList<String> _imagesToPreload;
-   private IFactory          _factory;
-
-   private GTask             _initializationTask;
+   private GTask                         _initializationTask;
 
 
    public G3MWidget_WebGL(final int delayMillis,
                           final String proxy) {
-      _panel = new FlowPanel();
-
-      initWidget(_panel);
-
       // downloader
       _delayMillis = delayMillis;
       _proxy = proxy;
+
+      initSingletons();
+
+      _panel = new FlowPanel();
+
+      initWidget(_panel);
 
       _canvas = Canvas.createIfSupported();
 
@@ -124,6 +118,19 @@ public final class G3MWidget_WebGL
    }
 
 
+   public void initSingletons() {
+      final ILogger logger = new Logger_WebGL(LogLevel.InfoLevel);
+      final IFactory factory = new Factory_WebGL();
+      final IStringUtils stringUtils = new StringUtils_WebGL();
+      final IThreadUtils threadUtils = new ThreadUtils_WebGL(_delayMillis);
+      final IStringBuilder stringBuilder = new StringBuilder_WebGL();
+      final IMathUtils mathUtils = new MathUtils_WebGL();
+      final IJSONParser jsonParser = new JSONParser_WebGL();
+
+      G3MWidget.initSingletons(logger, factory, stringUtils, threadUtils, stringBuilder, mathUtils, jsonParser);
+   }
+
+
    protected void onSizeChanged(final int w,
                                 final int h) {
       _width = w;
@@ -137,6 +144,11 @@ public final class G3MWidget_WebGL
          _widget.onResizeViewportEvent(_width, _height);
          jsOnResizeViewport(_width, _height);
       }
+   }
+
+
+   public String getProxy() {
+      return _proxy;
    }
 
 
@@ -242,7 +254,6 @@ public final class G3MWidget_WebGL
       _userData = userData;
       _imagesToPreload = images;
       _initializationTask = initializationTask;
-      _factory = new Factory_WebGL();
 
       // TODO TEMP HACK TO PRELOAD IMAGES
       preloadImagesAndInitWidget();
@@ -280,14 +291,8 @@ public final class G3MWidget_WebGL
 
       // final TilesRenderParameters parameters = TilesRenderParameters.createSingleSector(renderDebug, useTilesSplitBudget, forceTopLevelTilesRenderOnStart);
 
-      final ILogger logger = new Logger_WebGL(LogLevel.InfoLevel);
       //      final IStorage storage = new IndexedDBStorage_WebGL();
       final IDownloader downloader = new Downloader_WebGL(8, _delayMillis, _proxy);
-      final IStringUtils stringUtils = new StringUtils_WebGL();
-      final IThreadUtils threadUtils = new ThreadUtils_WebGL(_delayMillis);
-      final IStringBuilder stringBuilder = new StringBuilder_WebGL();
-      final IMathUtils mathUtils = new MathUtils_WebGL();
-
 
       _webGLContext = jsGetWebGLContext();
       if (_webGLContext == null) {
@@ -333,16 +338,8 @@ public final class G3MWidget_WebGL
       final boolean logFPS = false;
       final boolean logDownloaderStatistics = false;
 
-      final IJSONParser jsonParser = new JSONParser_WebGL();
       _widget = G3MWidget.create( //
                frameTasksExecutor, //
-               _factory, //
-               stringUtils, //
-               threadUtils, //
-               stringBuilder, //
-               mathUtils, //
-               jsonParser, //
-               logger, //
                gl, //
                texturesHandler, //
                textureBuilder, //
@@ -377,7 +374,7 @@ public final class G3MWidget_WebGL
 
    private void storeDownloadedImage(final String url,
                                      final JavaScriptObject imgJS) {
-      ((Factory_WebGL) _factory).storeDownloadedImage(url, imgJS);
+      ((Factory_WebGL) IFactory.instance()).storeDownloadedImage(url, imgJS);
    }
 
 
@@ -444,6 +441,5 @@ public final class G3MWidget_WebGL
    public UserData getUserData() {
       return getG3MWidget().getUserData();
    }
-
 
 }
