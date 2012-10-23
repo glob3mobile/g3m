@@ -240,7 +240,7 @@
       void run() {
         ITimer* t = IFactory::instance()->createTimer();
         long long now = t->now().milliseconds();
-        ILogger::instance()->logInfo("Running periodical Task %d %lld ms.\n", _number,  now - _lastExec);
+        ILogger::instance()->logInfo("Running periodical Task %d - %lld ms.\n", _number,  now - _lastExec);
         _lastExec = now;
         IFactory::instance()->deleteTimer(t);
       }

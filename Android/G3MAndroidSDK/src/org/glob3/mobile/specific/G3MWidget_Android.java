@@ -330,7 +330,6 @@ public final class G3MWidget_Android
 
       //Testing Periodical Tasks
       if (true) {
-
          class PeriodicTask
                   extends
                      GTask {
@@ -347,7 +346,7 @@ public final class G3MWidget_Android
             public void run() {
                final ITimer t = IFactory.instance().createTimer();
                final long now = t.now().milliseconds();
-               ILogger.instance().logInfo("PeriodicTask", "Running periodical Task " + _number + (now - _lastExec) + " ms.\n");
+               ILogger.instance().logInfo("Running periodical Task " + _number + " - " + (now - _lastExec) + " ms.\n");
                _lastExec = now;
                IFactory.instance().deleteTimer(t);
             }
