@@ -2,7 +2,7 @@
 //  SceneParser.cpp
 //  G3MiOSSDK
 //
-//  Created by Oliver Koehler on 15/10/12.
+//  Created by Eduardo de la Montaña on 15/10/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -30,6 +30,18 @@
 
 using namespace std;
 
+const std::string SceneParser::LAYERS = "layers";
+const std::string SceneParser::TYPE = "type";
+const std::string SceneParser::DATASOURCE = "datasource";
+const std::string SceneParser::VERSION = "version";
+const std::string SceneParser::ITEMS = "items";
+const std::string SceneParser::STATUS = "status";
+const std::string SceneParser::NAME = "name";
+
+const std::string SceneParser::WMS110 = "1.1.0";
+const std::string SceneParser::WMS111 = "1.1.1";
+const std::string SceneParser::WMS130 = "1.3.0";
+
 SceneParser* SceneParser::_instance = NULL;
 
 SceneParser* SceneParser::instance(){
@@ -48,7 +60,7 @@ SceneParser::SceneParser(){
 void SceneParser::parse(LayerSet* layerSet, std::string namelessParameter){
   
   JSONObject* json = IJSONParser::instance()->parse(namelessParameter)->getObject();
-  parserJSONLayerList(layerSet, json->getObjectForKey(layers)->getObject());
+  parserJSONLayerList(layerSet, json->getObjectForKey(LAYERS)->getObject());
   IJSONParser::instance()->deleteJSONData(json);
 }
 
@@ -57,7 +69,7 @@ void SceneParser::parserJSONLayerList(LayerSet* layerSet, JSONObject* jsonLayers
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addInt(i);
     JSONObject* jsonLayer = jsonLayers->getObjectForKey(isb->getString())->getObject();
-    const layer_type layerType = mapLayerType[jsonLayer->getObjectForKey(type)->getString()->getValue()];
+    const layer_type layerType = mapLayerType[jsonLayer->getObjectForKey(TYPE)->getString()->getValue()];
     
     switch (layerType) {
       case WMS:
@@ -75,19 +87,19 @@ void SceneParser::parserJSONLayerList(LayerSet* layerSet, JSONObject* jsonLayers
 }
 
 void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, JSONObject* jsonLayer){
-  cout << "Parsing WMS Layer " << jsonLayer->getObjectForKey(name)->getString()->getValue() << "..." << endl;
+  cout << "Parsing WMS Layer " << jsonLayer->getObjectForKey(NAME)->getString()->getValue() << "..." << endl;
   
-  const std::string jsonDatasource = jsonLayer->getObjectForKey(datasource)->getString()->getValue();
+  const std::string jsonDatasource = jsonLayer->getObjectForKey(DATASOURCE)->getString()->getValue();
   const int lastIndex = IStringUtils::instance()->indexOf(jsonDatasource,"?");
   const std::string jsonURL = IStringUtils::instance()->substring(jsonDatasource, 0, lastIndex+1);
-  const std::string jsonVersion = jsonLayer->getObjectForKey(version)->getString()->getValue();
+  const std::string jsonVersion = jsonLayer->getObjectForKey(VERSION)->getString()->getValue();
   
-  JSONArray* jsonItems = jsonLayer->getObjectForKey(items)->getArray();
+  JSONArray* jsonItems = jsonLayer->getObjectForKey(ITEMS)->getArray();
   IStringBuilder *layersName = IStringBuilder::newStringBuilder();
     
   for (int i = 0; i<jsonItems->getSize(); i++) {
-      if (jsonItems->getElement(i)->getObject()->getObjectForKey(status)->getBoolean()->getValue()) {
-      layersName->addString(jsonItems->getElement(i)->getObject()->getObjectForKey(name)->getString()->getValue());
+      if (jsonItems->getElement(i)->getObject()->getObjectForKey(STATUS)->getBoolean()->getValue()) {
+      layersName->addString(jsonItems->getElement(i)->getObject()->getObjectForKey(NAME)->getString()->getValue());
       layersName->addString(",");
     }    
   }
@@ -98,7 +110,7 @@ void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, JSONObject* jsonLayer){
   
   //TODO check if wms 1.1.1 is neccessary to have it in account
   WMSServerVersion wmsVersion = WMS_1_1_0;
-  if (jsonVersion.compare(wms130)==0) {
+  if (jsonVersion.compare(WMS130)==0) {
     wmsVersion = WMS_1_3_0;
   }  
   
@@ -115,10 +127,10 @@ void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, JSONObject* jsonLayer){
 }
 
 void SceneParser::parserJSON3DLayer(LayerSet* layerSet, JSONObject* jsonLayer){
-  cout << "Parsing 3D Layer " << jsonLayer->getObjectForKey(name)->getString()->getValue() << "..." << endl;
+  cout << "Parsing 3D Layer " << jsonLayer->getObjectForKey(NAME)->getString()->getValue() << "..." << endl;
 }
 
 void SceneParser::parserJSONPanoLayer(LayerSet* layerSet, JSONObject* jsonLayer){
-  cout << "Parsing Pano Layer " << jsonLayer->getObjectForKey(name)->getString()->getValue() << "..." << endl;
+  cout << "Parsing Pano Layer " << jsonLayer->getObjectForKey(NAME)->getString()->getValue() << "..." << endl;
 }
 

@@ -2,7 +2,7 @@
 //  AppParser.cpp
 //  G3MiOSSDK
 //
-//  Created by Oliver Koehler on 18/10/12.
+//  Created by Eduardo de la Montaña on 18/10/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -24,6 +24,17 @@
 
 #include "MarksRenderer.hpp"
 
+const std::string AppParser::WORLD = "_world";
+const std::string AppParser::BASELAYER = "_baselayer";
+const std::string AppParser::BBOX = "_bbox";
+const std::string AppParser::CUSTOMDATA = "_customdata";
+const std::string AppParser::FEATURES = "features";
+const std::string AppParser::GEOMETRY = "geometry";
+const std::string AppParser::TYPE = "type";
+const std::string AppParser::COORDINATES = "coordinates";
+const std::string AppParser::PROPERTIES = "properties";
+const std::string AppParser::NAME = "name";
+
 AppParser* AppParser::_instance = NULL;
 
 AppParser* AppParser::instance(){
@@ -38,13 +49,13 @@ AppParser::AppParser(){
 
 void AppParser::parse(LayerSet* layerSet, MarksRenderer* marks, std::string namelessParameter){
   JSONObject* json = IJSONParser::instance()->parse(namelessParameter)->getObject();
-  parseWorldConfiguration(layerSet, marks, json->getObjectForKey(world)->getObject());
+  parseWorldConfiguration(layerSet, marks, json->getObjectForKey(WORLD)->getObject());
   IJSONParser::instance()->deleteJSONData(json);
 }
 
 void AppParser::parseWorldConfiguration(LayerSet* layerSet, MarksRenderer* marks, JSONObject* jsonWorld){
-  std::string jsonBaseLayer = jsonWorld->getObjectForKey(baselayer)->getString()->getValue();
-  JSONArray* jsonBbox = jsonWorld->getObjectForKey(bbox)->getArray();
+  std::string jsonBaseLayer = jsonWorld->getObjectForKey(BASELAYER)->getString()->getValue();
+  JSONArray* jsonBbox = jsonWorld->getObjectForKey(BBOX)->getArray();
   
   if (jsonBaseLayer == "BING"){
     WMSLayer* bing = new WMSLayer("ve",
@@ -69,15 +80,15 @@ void AppParser::parseWorldConfiguration(LayerSet* layerSet, MarksRenderer* marks
                                  NULL);
     layerSet->addLayer(osm);
   }
-  parseCustomData(marks, jsonWorld->getObjectForKey(customdata)->getObject());
+  parseCustomData(marks, jsonWorld->getObjectForKey(CUSTOMDATA)->getObject());
 }
 
 void AppParser::parseCustomData(MarksRenderer* marks, JSONObject* jsonCustomData){
-  JSONArray* jsonFeatures = jsonCustomData->getObjectForKey(features)->getArray();
+  JSONArray* jsonFeatures = jsonCustomData->getObjectForKey(FEATURES)->getArray();
   for (int i = 0; i < jsonFeatures->getSize(); i++) {
     JSONObject* jsonFeature = jsonFeatures->getElement(i)->getObject();
-    JSONObject* jsonGeometry = jsonFeature->getObjectForKey(geometry)->getObject();
-    std::string jsonType = jsonGeometry->getObjectForKey(type)->getString()->getValue();
+      JSONObject* jsonGeometry = jsonFeature->getObjectForKey(GEOMETRY)->getObject();
+    std::string jsonType = jsonGeometry->getObjectForKey(TYPE)->getString()->getValue();
     if (jsonType == "Point"){
       parseGEOJSONPointObject(marks, jsonFeature);
     }
@@ -85,11 +96,11 @@ void AppParser::parseCustomData(MarksRenderer* marks, JSONObject* jsonCustomData
 }
   
 void AppParser::parseGEOJSONPointObject(MarksRenderer* marks, JSONObject* point){
-    JSONObject* jsonProperties = point->getObjectForKey(properties)->getObject();
-    JSONObject* jsonGeometry = point->getObjectForKey(geometry)->getObject();
-    JSONArray* jsonCoordinates = jsonGeometry->getObjectForKey(coordinates)->getArray();
+    JSONObject* jsonProperties = point->getObjectForKey(PROPERTIES)->getObject();
+    JSONObject* jsonGeometry = point->getObjectForKey(GEOMETRY)->getObject();
+    JSONArray* jsonCoordinates = jsonGeometry->getObjectForKey(COORDINATES)->getArray();
     
-    Mark* mark = new Mark(jsonProperties->getObjectForKey(name)->getString()->getValue(),
+    Mark* mark = new Mark(jsonProperties->getObjectForKey(NAME)->getString()->getValue(),
                         URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png"),
                           Geodetic3D(Angle::fromDegrees(jsonCoordinates->getElement(1)->getNumber()->getDoubleValue()), Angle::fromDegrees(jsonCoordinates->getElement(0)->getNumber()->getDoubleValue()), 0));
     marks->addMark(mark);

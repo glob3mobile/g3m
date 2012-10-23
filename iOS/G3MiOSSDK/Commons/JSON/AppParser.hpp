@@ -2,7 +2,7 @@
 //  AppParser.hpp
 //  G3MiOSSDK
 //
-//  Created by Oliver Koehler on 18/10/12.
+//  Created by Eduardo de la Montaña on 18/10/12.
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
@@ -13,21 +13,21 @@
 #include "JSONObject.hpp"
 #include "LayerSet.hpp"
 
-const std::string world = "_world";
-const std::string baselayer = "_baselayer";
-const std::string bbox = "_bbox";
-const std::string customdata = "_customdata";
-
-const std::string features = "features";
-const std::string geometry = "geometry";
-const std::string type = "type";
-const std::string coordinates = "coordinates";
-const std::string properties = "properties";
-const std::string name = "name";
-
 class AppParser {
-  
-  static AppParser* _instance;  
+    
+    static const std::string WORLD;
+    static const std::string BASELAYER;
+    static const std::string BBOX;
+    static const std::string CUSTOMDATA;
+    
+    static const std::string FEATURES;
+    static const std::string GEOMETRY;
+    static const std::string TYPE;
+    static const std::string COORDINATES;
+    static const std::string PROPERTIES;
+    static const std::string NAME;
+    
+    static AppParser* _instance;  
 
 private:
 
