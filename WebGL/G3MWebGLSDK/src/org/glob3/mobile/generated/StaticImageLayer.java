@@ -70,7 +70,7 @@ public class StaticImageLayer extends Layer
 	isb.addString("_");
 	isb.addDouble(tileSector.upper().longitude().degrees());
   
-	final URL id = new URL(isb.getString());
+	final URL id = new URL(isb.getString(), false);
   
 	if (isb != null)
 		isb.dispose();

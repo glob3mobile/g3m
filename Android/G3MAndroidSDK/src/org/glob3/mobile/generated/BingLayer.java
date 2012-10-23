@@ -108,7 +108,7 @@ public class BingLayer extends Layer
 	tileURL+="?key=";
 	tileURL+=_key;
   
-	final URL url = new URL(tileURL);
+	final URL url = new URL(tileURL, false);
 	ic.getDownloader().requestBuffer(url, 100000000, new TokenDownloadListener(this), true);
   
   }
@@ -180,7 +180,7 @@ public class BingLayer extends Layer
 		//set the subDomain (round-robbin)
 		url = IStringUtils.instance().replaceSubstring(url, "{subdomain}", _subDomains.get(currentSubDomain % numSubDomains));
 		currentSubDomain++;
-		petitions.add(new Petition(bingSector, new URL(url)));
+		petitions.add(new Petition(bingSector, new URL(url, false)));
   
 	  }
   

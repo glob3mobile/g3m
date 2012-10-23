@@ -187,7 +187,7 @@ public class WMSLayer extends Layer
 	  req += "&TRANSPARENT=FALSE";
 	}
   
-	Petition petition = new Petition(sector, new URL(req));
+	Petition petition = new Petition(sector, new URL(req, false));
 	petitions.add(petition);
   
 	  return petitions;
@@ -320,7 +320,7 @@ public class WMSLayer extends Layer
 	if (isb != null)
 		isb.dispose();
   
-	  return new URL(req);
+	  return new URL(req, false);
   }
 
 
