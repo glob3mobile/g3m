@@ -21,7 +21,6 @@ import org.glob3.mobile.generated.FrameTasksExecutor;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GL;
 import org.glob3.mobile.generated.GTask;
-import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
@@ -383,11 +382,6 @@ public final class G3MWidget_Android
          _g3mWidget.addPeriodicalTask(TimeInterval.fromMilliseconds(4000), new PeriodicTask(1));
          _g3mWidget.addPeriodicalTask(TimeInterval.fromMilliseconds(6000), new PeriodicTask(2));
          _g3mWidget.addPeriodicalTask(TimeInterval.fromMilliseconds(500), new PeriodicTask(3));
-      }
-
-      //Testing GoToPos
-      if (true) {
-         _g3mWidget.setAnimatedPosition(Geodetic3D.fromDegrees(330.0, 40.0, 10000000), TimeInterval.fromSeconds(10));
       }
    }
 
