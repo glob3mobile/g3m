@@ -252,7 +252,7 @@
   TrailsRenderer* trailsRenderer = new TrailsRenderer();
   renderers.push_back(trailsRenderer);
   
-  Trail* trail = new Trail(50);
+  Trail* trail = new Trail(50, Color::fromRGBA(1, 0, 0, 1));
   
 //  37°47′/N 122°25′W
   

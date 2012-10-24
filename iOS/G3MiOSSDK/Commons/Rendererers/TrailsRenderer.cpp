@@ -43,7 +43,7 @@ Mesh* Trail::createMesh(const Planet* planet) {
                          vertices.getCenter(),
                          vertices.create(),
                          indices.create(),
-                         new Color(Color::fromRGBA(1, 0, 0, 1)));
+                         new Color(_color));
 }
 
 Mesh* Trail::getMesh(const Planet* planet) {
