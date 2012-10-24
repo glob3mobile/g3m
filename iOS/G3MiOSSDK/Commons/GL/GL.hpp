@@ -20,6 +20,7 @@
 
 #include "GLConstants.hpp"
 
+
 #include <list>
 
 class IGLProgramId;
@@ -88,8 +89,8 @@ private:
 
   //Get Locations warning of errors
   bool _errorGettingLocationOcurred;
-  int checkedGetAttribLocation(IGLProgramId* program, const std::string& name);
-  IGLUniformID* checkedGetUniformLocation(IGLProgramId* program, const std::string& name);
+  int checkedGetAttribLocation(ShaderProgram* program, const std::string& name);
+  IGLUniformID* checkedGetUniformLocation(ShaderProgram* program, const std::string& name);
   
   IFloatBuffer* _billboardTexCoord;
   IFloatBuffer* getBillboardTexCoord();
@@ -187,7 +188,7 @@ public:
   
   void setProjection(const MutableMatrix44D &projection);
   
-  bool useProgram(IGLProgramId* program);
+  bool useProgram(ShaderProgram* program);
   
   void enablePolygonOffset(float factor, float units);
   

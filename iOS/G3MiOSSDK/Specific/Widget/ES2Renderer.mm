@@ -40,6 +40,7 @@ enum {
 // Create an OpenGL ES 2.0 context
 - (id)init {
   self = [super init];
+  _shaderProgram = NULL;
   
   if (self) {
     _firstRender = true;
@@ -85,7 +86,7 @@ enum {
     glViewport(0, 0, backingWidth, backingHeight);
     
     // Use shader program
-    widget->getGL()->useProgram(program);
+    widget->getGL()->useProgram(_shaderProgram);
   }
   
   widget->render();
@@ -181,7 +182,8 @@ enum {
   NSString *vertShaderPathname, *fragShaderPathname;
   
   // Create shader program
-  int programNum = glCreateProgram();
+  //int programNum = glCreateProgram();
+  _shaderProgram = new ShaderProgram("vertex shader", "fragment shader");
   
   // Create and compile vertex shader
   vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"Shader" ofType:@"vsh"];
@@ -198,10 +200,13 @@ enum {
   }
   
   // Attach vertex shader to program
-  glAttachShader(programNum, vertShader);
+  //glAttachShader(programNum, vertShader);
+  _shaderProgram->attachShader(vertShader);
+  
   
   // Attach fragment shader to program
-  glAttachShader(programNum, fragShader);
+  //glAttachShader(programNum, fragShader);
+  _shaderProgram->attachShader(fragShader);
   
   // Bind attribute locations
   // this needs to be done prior to linking
@@ -209,11 +214,11 @@ enum {
   //glBindAttribLocation(program, ATTRIB_COLOR, "color");
   
   
-  program = (IGLProgramId*) new GLProgramId_iOS(programNum);
+  //program = (IGLProgramId*) new GLProgramId_iOS(programNum);
   
   // Link program
-  if (![self linkProgram:programNum]) {
-    NSLog(@"Failed to link program: %d", programNum);
+  if (![self linkProgram:_shaderProgram->getProgramNum()]) {
+    NSLog(@"Failed to link program: %d", _shaderProgram->getProgramNum());
     
     if (vertShader) {
       glDeleteShader(vertShader);
@@ -223,10 +228,13 @@ enum {
       glDeleteShader(fragShader);
       fragShader = 0;
     }
+    /*
     if (program) {
       glDeleteProgram(programNum);
 //      programNum = 0;
-    }
+    }*/
+    
+    glDeleteProgram(_shaderProgram->getProgramNum());
 
     return FALSE;
   }
@@ -281,10 +289,16 @@ enum {
     depthRenderbuffer = 0;
   }
   
+  /*
   if (program) {
     glDeleteProgram(((GLProgramId_iOS*)program)->getID());
     delete program;
     program = 0;
+  }*/
+  
+  if (_shaderProgram!=NULL) {
+    delete _shaderProgram;
+    _shaderProgram = NULL;
   }
   
   // Tear down context

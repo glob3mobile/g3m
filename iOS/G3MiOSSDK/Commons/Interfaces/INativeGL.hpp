@@ -9,7 +9,7 @@
 #ifndef G3MiOSSDK_INativeGL_hpp
 #define G3MiOSSDK_INativeGL_hpp
 
-class IGLProgramId;
+//class IGLProgramId;
 
 class IFloatBuffer;
 class IIntBuffer;
@@ -22,6 +22,8 @@ class IGLTextureId;
 #include <vector>
 #include <string>
 
+#include "ShaderProgram.hpp"
+
 class MutableMatrix44D;
 
 class INativeGL {
@@ -29,12 +31,13 @@ public:
   
   virtual ~INativeGL() { };
   
-  virtual void useProgram(IGLProgramId* program) const = 0;
+  //virtual void useProgram(IGLProgramId* program) const = 0;
+  virtual void useProgram(ShaderProgram* program) const = 0;
 
-  virtual int getAttribLocation(IGLProgramId* program,
+  virtual int getAttribLocation(ShaderProgram* program,
                                 const std::string& name) const = 0;
   
-  virtual IGLUniformID* getUniformLocation(IGLProgramId* program,
+  virtual IGLUniformID* getUniformLocation(ShaderProgram* program,
                                  const std::string& name) const = 0;
 
   virtual void uniform2f(IGLUniformID* loc,

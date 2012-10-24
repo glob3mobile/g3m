@@ -13,7 +13,7 @@
 
 #include "INativeGL.hpp"
 
-#include "GLProgramId_iOS.hpp"
+//#include "GLProgramId_iOS.hpp"
 #include "GLUniformID_iOS.hpp"
 #include "GLTextureId_iOS.hpp"
 
@@ -21,16 +21,16 @@ class NativeGL2_iOS: public INativeGL
 {
 public:
   
-  void useProgram(IGLProgramId* program) const {
-    glUseProgram(((GLProgramId_iOS*)program)->getID());
+  void useProgram(ShaderProgram* program) const {
+    glUseProgram(program->getProgramNum());
   }
   
-  int getAttribLocation(IGLProgramId* program, const std::string& name) const {
-    return glGetAttribLocation(((GLProgramId_iOS*)program)->getID(), name.c_str());
+  int getAttribLocation(ShaderProgram* program, const std::string& name) const {
+    return glGetAttribLocation(program->getProgramNum(), name.c_str());
   }
   
-  IGLUniformID* getUniformLocation(IGLProgramId* program, const std::string& name) const {
-    int id = glGetUniformLocation(((GLProgramId_iOS*)program)->getID(), name.c_str());
+  IGLUniformID* getUniformLocation(ShaderProgram* program, const std::string& name) const {
+    int id = glGetUniformLocation(program->getProgramNum(), name.c_str());
     return (IGLUniformID*) new GLUniformID_iOS(id);
   }
   
