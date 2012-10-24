@@ -20,6 +20,7 @@ import org.glob3.mobile.generated.FrameTasksExecutor;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GL;
 import org.glob3.mobile.generated.GTask;
+import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
@@ -30,7 +31,6 @@ import org.glob3.mobile.generated.IMathUtils;
 import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.IStringUtils;
 import org.glob3.mobile.generated.IThreadUtils;
-import org.glob3.mobile.generated.ITimer;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.MultiLayerTileTexturizer;
@@ -364,34 +364,34 @@ public final class G3MWidget_WebGL
 
       _widget.setUserData(_userData);
 
-      //Testing Periodical Tasks
-      if (true) {
-         class PeriodicTask
-                  extends
-                     GTask {
-            private long      _lastExec;
-            private final int _number;
-
-
-            public PeriodicTask(final int n) {
-               _number = n;
-            }
-
-
-            @Override
-            public void run() {
-               final ITimer t = IFactory.instance().createTimer();
-               final long now = t.now().milliseconds();
-               ILogger.instance().logInfo("Running periodical Task " + _number + " - " + (now - _lastExec) + " ms.\n");
-               _lastExec = now;
-               IFactory.instance().deleteTimer(t);
-            }
-         }
-
-         _widget.addPeriodicalTask(TimeInterval.fromMilliseconds(4000), new PeriodicTask(1));
-         _widget.addPeriodicalTask(TimeInterval.fromMilliseconds(6000), new PeriodicTask(2));
-         _widget.addPeriodicalTask(TimeInterval.fromMilliseconds(500), new PeriodicTask(3));
-      }
+      //      //Testing Periodical Tasks
+      //      if (true) {
+      //         class PeriodicTask
+      //                  extends
+      //                     GTask {
+      //            private long      _lastExec;
+      //            private final int _number;
+      //
+      //
+      //            public PeriodicTask(final int n) {
+      //               _number = n;
+      //            }
+      //
+      //
+      //            @Override
+      //            public void run() {
+      //               final ITimer t = IFactory.instance().createTimer();
+      //               final long now = t.now().milliseconds();
+      //               ILogger.instance().logInfo("Running periodical Task " + _number + " - " + (now - _lastExec) + " ms.\n");
+      //               _lastExec = now;
+      //               IFactory.instance().deleteTimer(t);
+      //            }
+      //         }
+      //
+      //         _widget.addPeriodicalTask(TimeInterval.fromMilliseconds(4000), new PeriodicTask(1));
+      //         _widget.addPeriodicalTask(TimeInterval.fromMilliseconds(6000), new PeriodicTask(2));
+      //         _widget.addPeriodicalTask(TimeInterval.fromMilliseconds(500), new PeriodicTask(3));
+      //      }
 
       _motionEventProcessor = new MotionEventProcessor(_widget);
 
@@ -474,6 +474,12 @@ public final class G3MWidget_WebGL
 
    public UserData getUserData() {
       return getG3MWidget().getUserData();
+   }
+
+
+   public void setAnimatedPosition(final Geodetic3D position,
+                                   final TimeInterval interval) {
+      getG3MWidget().setAnimatedPosition(position, interval);
    }
 
 }

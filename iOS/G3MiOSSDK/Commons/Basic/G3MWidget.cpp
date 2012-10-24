@@ -405,13 +405,13 @@ void G3MWidget::addPeriodicalTask(const TimeInterval& interval,
   addPeriodicalTask( new PeriodicalTask(interval, task) );
 }
 
-void G3MWidget::setAnimatedPosition(const Geodetic3D& g,
+void G3MWidget::setAnimatedPosition(const Geodetic3D& position,
                                     const TimeInterval& interval) {
   
   Geodetic3D ini = _planet->toGeodetic3D( _currentCamera->getCartesianPosition() );
   
-  double finalLat = g.latitude().degrees();
-  double finalLon = g.longitude().degrees();
+  double finalLat = position.latitude().degrees();
+  double finalLon = position.longitude().degrees();
   
   //Fixing final latitude
   while (finalLat > 90) {
@@ -432,7 +432,7 @@ void G3MWidget::setAnimatedPosition(const Geodetic3D& g,
     finalLon -= 360;
   }
   
-  const Geodetic3D end = Geodetic3D::fromDegrees(finalLat, finalLon, g.height());
+  const Geodetic3D end = Geodetic3D::fromDegrees(finalLat, finalLon, position.height());
   
   EffectTarget* target = _nextCamera->getEffectTarget();
   
