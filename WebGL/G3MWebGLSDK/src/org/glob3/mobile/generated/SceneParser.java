@@ -1,6 +1,18 @@
 package org.glob3.mobile.generated; 
 public class SceneParser
 {
+	private static final String LAYERS = "layers";
+	private static final String TYPE = "type";
+	private static final String DATASOURCE = "datasource";
+	private static final String VERSION = "version";
+	private static final String ITEMS = "items";
+	private static final String STATUS = "status";
+	private static final String NAME = "name";
+
+	private static final String WMS110 = "1.1.0";
+	private static final String WMS111 = "1.1.1";
+	private static final String WMS130 = "1.3.0";
+
   private static SceneParser _instance = null;
   private java.util.HashMap<String, layer_type> mapLayerType = new java.util.HashMap<String, layer_type>();
 
@@ -17,7 +29,7 @@ public class SceneParser
   {
   
 	JSONObject json = IJSONParser.instance().parse(namelessParameter).getObject();
-	parserJSONLayerList(layerSet, json.getObjectForKey(GlobalMembersSceneParser.layers).getObject());
+	parserJSONLayerList(layerSet, json.getObjectForKey(LAYERS).getObject());
 	IJSONParser.instance().deleteJSONData(json);
   }
   public final void parserJSONLayerList(LayerSet layerSet, JSONObject jsonLayers)
@@ -27,7 +39,7 @@ public class SceneParser
 	  IStringBuilder isb = IStringBuilder.newStringBuilder();
 	  isb.addInt(i);
 	  JSONObject jsonLayer = jsonLayers.getObjectForKey(isb.getString()).getObject();
-	  final layer_type layerType = mapLayerType.get(jsonLayer.getObjectForKey(GlobalMembersAppParser.type).getString().getValue());
+	  final layer_type layerType = mapLayerType.get(jsonLayer.getObjectForKey(TYPE).getString().getValue());
   
 	  switch (layerType)
 	  {
@@ -47,23 +59,23 @@ public class SceneParser
   public final void parserJSONWMSLayer(LayerSet layerSet, JSONObject jsonLayer)
   {
 	System.out.print("Parsing WMS Layer ");
-	System.out.print(jsonLayer.getObjectForKey(GlobalMembersAppParser.name).getString().getValue());
+	System.out.print(jsonLayer.getObjectForKey(NAME).getString().getValue());
 	System.out.print("...");
 	System.out.print("\n");
   
-	final String jsonDatasource = jsonLayer.getObjectForKey(GlobalMembersSceneParser.datasource).getString().getValue();
+	final String jsonDatasource = jsonLayer.getObjectForKey(DATASOURCE).getString().getValue();
 	final int lastIndex = IStringUtils.instance().indexOf(jsonDatasource, "?");
 	final String jsonURL = IStringUtils.instance().substring(jsonDatasource, 0, lastIndex+1);
-	final String jsonVersion = jsonLayer.getObjectForKey(GlobalMembersSceneParser.version).getString().getValue();
+	final String jsonVersion = jsonLayer.getObjectForKey(VERSION).getString().getValue();
   
-	JSONArray jsonItems = jsonLayer.getObjectForKey(GlobalMembersSceneParser.items).getArray();
+	JSONArray jsonItems = jsonLayer.getObjectForKey(ITEMS).getArray();
 	IStringBuilder layersName = IStringBuilder.newStringBuilder();
   
 	for (int i = 0; i<jsonItems.getSize(); i++)
 	{
-		if (jsonItems.getElement(i).getObject().getObjectForKey(GlobalMembersSceneParser.status).getBoolean().getValue())
+		if (jsonItems.getElement(i).getObject().getObjectForKey(STATUS).getBoolean().getValue())
 		{
-		layersName.addString(jsonItems.getElement(i).getObject().getObjectForKey(GlobalMembersAppParser.name).getString().getValue());
+		layersName.addString(jsonItems.getElement(i).getObject().getObjectForKey(NAME).getString().getValue());
 		layersName.addString(",");
 	  }
 	}
@@ -75,7 +87,7 @@ public class SceneParser
   
 	//TODO check if wms 1.1.1 is neccessary to have it in account
 	WMSServerVersion wmsVersion = WMSServerVersion.WMS_1_1_0;
-	if (jsonVersion.compareTo(GlobalMembersSceneParser.wms130)==0)
+	if (jsonVersion.compareTo(WMS130)==0)
 	{
 	  wmsVersion = WMSServerVersion.WMS_1_3_0;
 	}
@@ -86,14 +98,14 @@ public class SceneParser
   public final void parserJSON3DLayer(LayerSet layerSet, JSONObject jsonLayer)
   {
 	System.out.print("Parsing 3D Layer ");
-	System.out.print(jsonLayer.getObjectForKey(GlobalMembersAppParser.name).getString().getValue());
+	System.out.print(jsonLayer.getObjectForKey(NAME).getString().getValue());
 	System.out.print("...");
 	System.out.print("\n");
   }
   public final void parserJSONPanoLayer(LayerSet layerSet, JSONObject jsonLayer)
   {
 	System.out.print("Parsing Pano Layer ");
-	System.out.print(jsonLayer.getObjectForKey(GlobalMembersAppParser.name).getString().getValue());
+	System.out.print(jsonLayer.getObjectForKey(NAME).getString().getValue());
 	System.out.print("...");
 	System.out.print("\n");
   }
