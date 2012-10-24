@@ -59,7 +59,7 @@ void AppParser::parseWorldConfiguration(LayerSet* layerSet, MarksRenderer* marks
   
   if (jsonBaseLayer == "BING"){
     WMSLayer* bing = new WMSLayer("ve",
-                                  URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?"),
+                                  URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?",true),
                                   WMS_1_1_0,
                                   Sector::fromDegrees(jsonBbox->getElement(1)->getNumber()->getDoubleValue(), jsonBbox->getElement(0)->getNumber()->getDoubleValue(), jsonBbox->getElement(3)->getNumber()->getDoubleValue(), jsonBbox->getElement(2)->getNumber()->getDoubleValue()),
                                   "image/jpeg",
@@ -70,7 +70,7 @@ void AppParser::parseWorldConfiguration(LayerSet* layerSet, MarksRenderer* marks
     layerSet->addLayer(bing);
   }else{
     WMSLayer* osm = new WMSLayer("osm",
-                                 URL("http://wms.latlon.org/"),
+                                 URL("http://wms.latlon.org/",true),
                                  WMS_1_1_0,
                                  Sector::fromDegrees(jsonBbox->getElement(1)->getNumber()->getDoubleValue(), jsonBbox->getElement(0)->getNumber()->getDoubleValue(), jsonBbox->getElement(3)->getNumber()->getDoubleValue(), jsonBbox->getElement(2)->getNumber()->getDoubleValue()),                                 
                                  "image/jpeg",
@@ -101,7 +101,7 @@ void AppParser::parseGEOJSONPointObject(MarksRenderer* marks, JSONObject* point)
     JSONArray* jsonCoordinates = jsonGeometry->getObjectForKey(COORDINATES)->getArray();
     
     Mark* mark = new Mark(jsonProperties->getObjectForKey(NAME)->getString()->getValue(),
-                        URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png"),
+                        URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",false),
                           Geodetic3D(Angle::fromDegrees(jsonCoordinates->getElement(1)->getNumber()->getDoubleValue()), Angle::fromDegrees(jsonCoordinates->getElement(0)->getNumber()->getDoubleValue()), 0));
     marks->addMark(mark);
 }

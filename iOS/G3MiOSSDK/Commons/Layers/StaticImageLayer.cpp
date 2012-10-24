@@ -35,7 +35,7 @@ std::vector<Petition*> StaticImageLayer::getMapPetitions(const RenderContext* rc
   isb->addString("_");
   isb->addDouble(tileSector.upper().longitude().degrees());
   
-  const URL id = URL(isb->getString());
+  const URL id = URL(isb->getString(), false);
   
   delete isb;
   

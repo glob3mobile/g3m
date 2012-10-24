@@ -200,7 +200,7 @@
     
     const int listenersCount = [_listeners count];
     
-    const URL url( [[_nsURL absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] );
+    const URL url( [[_nsURL absoluteString] cStringUsingEncoding:NSUTF8StringEncoding] , false);
     
     if (dataIsValid) {
       for (int i = 0; i < listenersCount; i++) {

@@ -42,10 +42,14 @@
 - (void)viewDidLoad
 {
   [super viewDidLoad];
+    
+    [[self G3MWidget] initSingletons];
+    
+
 	// Do any additional setup after loading the view, typically from a nib.
   //  [[self G3MWidget] initWidgetDemo];
   [self initWidgetDemo];
-  
+    
   [[self G3MWidget] startAnimation];
 }
 
@@ -55,7 +59,7 @@
   
   if (false) {
     WMSLayer* blueMarble = new WMSLayer("bmng200405",
-                                        URL("http://www.nasa.network.com/wms?"),
+                                        URL("http://www.nasa.network.com/wms?", false),
                                         WMS_1_1_0,
                                         Sector::fullSphere(),
                                         "image/jpeg",
@@ -66,7 +70,7 @@
     layerSet->addLayer(blueMarble);
     
     WMSLayer* i3Landsat = new WMSLayer("esat",
-                                       URL("http://data.worldwind.arc.nasa.gov/wms?"),
+                                       URL("http://data.worldwind.arc.nasa.gov/wms?", false),
                                        WMS_1_1_0,
                                        Sector::fullSphere(),
                                        "image/jpeg",
@@ -91,7 +95,7 @@
   bool useBing = false;
   if (useBing) {
     WMSLayer* bing = new WMSLayer("ve",
-                                  URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?"),
+                                  URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false),
                                   WMS_1_1_0,
                                   Sector::fullSphere(),
                                   "image/jpeg",
@@ -115,7 +119,7 @@
 //                                 NULL);
 //    layerSet->addLayer(osm);
     WMSLayer *osm = new WMSLayer("osm_auto:all",
-                                 URL("http://129.206.228.72/cached/osm"),
+                                 URL("http://129.206.228.72/cached/osm", false),
                                  WMS_1_1_0,
                                 // Sector::fromDegrees(-85.05, -180.0, 85.05, 180.0),
                                  Sector::fullSphere(),
@@ -130,7 +134,7 @@
   const bool usePnoaLayer = false;
   if (usePnoaLayer) {
     WMSLayer *pnoa = new WMSLayer("PNOA",
-                                  URL("http://www.idee.es/wms/PNOA/PNOA"),
+                                  URL("http://www.idee.es/wms/PNOA/PNOA", false),
                                   WMS_1_1_0,
                                   Sector::fromDegrees(21, -18, 45, 6),
                                   "image/png",
@@ -140,6 +144,21 @@
                                   NULL);
     layerSet->addLayer(pnoa);
   }
+    
+    const bool testURLescape = false;
+    if (testURLescape) {
+        WMSLayer *ayto = new WMSLayer(URL::escape("Ejes de via"),
+                                      URL("http://sig.caceres.es/wms_callejero.mapdef?", false),
+                                      WMS_1_1_0,
+                                      Sector::fullSphere(),
+                                      "image/png",
+                                      "EPSG:4326",
+                                      "",
+                                      true,
+                                      NULL);
+        layerSet->addLayer(ayto);
+
+    }
   
   //  WMSLayer *vias = new WMSLayer("VIAS",
   //                                "http://idecan2.grafcan.es/ServicioWMS/Callejero",
@@ -202,21 +221,21 @@
     
     // marks renderer
     const bool readyWhenMarksReady = false;
-    MarksRenderer* marksRenderer = new MarksRenderer(readyWhenMarksReady);
-    renderers.push_back(marksRenderer);
+    MarksRenderer* marks = new MarksRenderer(readyWhenMarksReady);
+    renderers.push_back(marks);
     
-    marksRenderer->setMarkTouchListener(new TestMarkTouchListener(), true);
+    marks->setMarkTouchListener(new TestMarkTouchListener(), true);
     
     Mark* m1 = new Mark("Fuerteventura",
-                        URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png"),
+                        URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
                         Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0));
-    marksRenderer->addMark(m1);
+    marks->addMark(m1);
     
     
     Mark* m2 = new Mark("Las Palmas",
-                        URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png"),
+                        URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
                         Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0));
-    marksRenderer->addMark(m2);
+    marks->addMark(m2);
     
     if (false) {
       for (int i = 0; i < 500; i++) {
@@ -224,9 +243,9 @@
         const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
         //NSLog(@"lat=%f, lon=%f", latitude.degrees(), longitude.degrees());
         
-        marksRenderer->addMark(new Mark("Random",
-                                        URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png"),
-                                        Geodetic3D(latitude, longitude, 0)));
+        marks->addMark(new Mark("Random",
+                                URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
+                                Geodetic3D(latitude, longitude, 0)));
       }
     }
   }

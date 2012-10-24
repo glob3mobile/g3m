@@ -22,6 +22,8 @@ class ITimer;
 class IStringUtils;
 class IThreadUtils;
 class TextureBuilder;
+class IMathUtils;
+class IJSONParser;
 
 class Context {
 protected:
@@ -29,6 +31,8 @@ protected:
   const IStringUtils* _stringUtils;
   IThreadUtils*       _threadUtils;
   const ILogger*      _logger;
+    const IMathUtils* _mathUtils;
+    const IJSONParser* _jsonParser;
   const Planet*       _planet;
   IDownloader*        _downloader;
   EffectsScheduler*   _effectsScheduler;
@@ -37,6 +41,8 @@ protected:
           const IStringUtils* stringUtils,
           IThreadUtils*       threadUtils,
           const ILogger*      logger,
+          const IMathUtils* mathUtils,
+          const IJSONParser* jsonParser,
           const Planet*       planet,
           IDownloader*        downloader,
           EffectsScheduler*   effectsScheduler) :
@@ -44,6 +50,8 @@ protected:
   _stringUtils(stringUtils),
   _threadUtils(threadUtils),
   _logger(logger),
+    _mathUtils(mathUtils),
+    _jsonParser(jsonParser),
   _planet(planet),
   _downloader(downloader),
   _effectsScheduler(effectsScheduler)
@@ -63,6 +71,14 @@ public:
   const ILogger* getLogger() const {
     return _logger;
   }
+    
+    const IMathUtils* getMathUtils() const {
+        return _mathUtils;
+    }
+    
+    const IJSONParser* getJSONParser() const {
+        return _jsonParser;
+    }
   
   const Planet* getPlanet() const {
     return _planet;
@@ -90,6 +106,8 @@ public:
                         const IStringUtils* stringUtils,
                         IThreadUtils*       threadUtils,
                         ILogger*            logger,
+                        const IMathUtils* mathUtils,
+                        const IJSONParser* jsonParser,
                         const Planet*       planet,
                         IDownloader*        downloader,
                         EffectsScheduler*   effectsScheduler) :
@@ -97,6 +115,8 @@ public:
           stringUtils,
           threadUtils,
           logger,
+          mathUtils,
+          jsonParser,
           planet,
           downloader,
           effectsScheduler) {
@@ -111,6 +131,8 @@ public:
                const IStringUtils* stringUtils,
                IThreadUtils*       threadUtils,
                ILogger*            logger,
+               const IMathUtils* mathUtils,
+               const IJSONParser* jsonParser,
                const Planet*       planet,
                IDownloader*        downloader,
                EffectsScheduler*   scheduler) :
@@ -118,6 +140,8 @@ public:
           stringUtils,
           threadUtils,
           logger,
+          mathUtils,
+          jsonParser,
           planet,
           downloader,
           scheduler) {
@@ -146,6 +170,8 @@ public:
                 const IStringUtils* stringUtils,
                 IThreadUtils*       threadUtils,
                 ILogger*            logger,
+                const IMathUtils* mathUtils,
+                const IJSONParser* jsonParser,
                 const Planet*       planet,
                 GL*                 gl,
                 const Camera*       currentCamera,
@@ -159,6 +185,8 @@ public:
           stringUtils,
           threadUtils,
           logger,
+          mathUtils,
+          jsonParser,
           planet,
           downloader,
           scheduler),

@@ -49,10 +49,9 @@
 		A74072CF161EEEA300182A39 /* BingLayer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A74072CE161EEEA300182A39 /* BingLayer.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
 		A74072D1161EEEB900182A39 /* BingLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A74072D0161EEEB900182A39 /* BingLayer.cpp */; };
 		A7BE9EE9162EF99C00E86B91 /* SceneParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A7BE9EE8162EF99C00E86B91 /* SceneParser.cpp */; };
-		A7BE9EEC162EF9B600E86B91 /* SceneParser.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A7BE9EEB162EF9B600E86B91 /* SceneParser.hpp */; };
+		A7BE9EEC162EF9B600E86B91 /* SceneParser.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A7BE9EEB162EF9B600E86B91 /* SceneParser.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		A7BE9EF016300B9900E86B91 /* AppParser.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A7BE9EEF16300B9900E86B91 /* AppParser.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		A7BE9EF216300BB300E86B91 /* AppParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A7BE9EF116300BB300E86B91 /* AppParser.cpp */; };
-		A7BF53851607643400662135 /* JSONBaseObject.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A7BF53841607643400662135 /* JSONBaseObject.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		A7EE00181619CE2B00C77604 /* JSONObject.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A7EE00171619CE2B00C77604 /* JSONObject.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		A7EE001A1619D01900C77604 /* JSONObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A7EE00191619D01900C77604 /* JSONObject.cpp */; };
 		A7EE001C161B245600C77604 /* JSONBaseObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A7EE001B161B245600C77604 /* JSONBaseObject.cpp */; };
@@ -249,6 +248,8 @@
 		D8F42FBE15EB6D78000D1822 /* LeveledTexturedMesh.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF8FF98A15D5539F000F79D1 /* LeveledTexturedMesh.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8F42FBF15EB6D78000D1822 /* SQLiteStorage_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF8B21B115DD32820068601A /* SQLiteStorage_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
 		D8F42FD415EB7B95000D1822 /* IStringBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8A723A715E4D2C500ABDF07 /* IStringBuilder.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		E8B193FE1636E5EF006D9193 /* G3MJSONBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8B193FC1636E5EF006D9193 /* G3MJSONBuilder.cpp */; };
+		E8B193FF1636E5EF006D9193 /* G3MJSONBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E8B193FD1636E5EF006D9193 /* G3MJSONBuilder.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -496,6 +497,8 @@
 		D8EEF3BC1577924D003FEB5E /* G3MiOSSDK-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "G3MiOSSDK-Prefix.pch"; sourceTree = "<group>"; };
 		D8FEDAC615E7BD23007633A0 /* IMathUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IMathUtils.hpp; path = Commons/Interfaces/IMathUtils.hpp; sourceTree = "<group>"; };
 		D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MathUtils_iOS.hpp; path = Specific/Derived/MathUtils_iOS.hpp; sourceTree = "<group>"; };
+		E8B193FC1636E5EF006D9193 /* G3MJSONBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = G3MJSONBuilder.cpp; path = Commons/Basic/G3MJSONBuilder.cpp; sourceTree = "<group>"; };
+		E8B193FD1636E5EF006D9193 /* G3MJSONBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = G3MJSONBuilder.hpp; path = Commons/Basic/G3MJSONBuilder.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -591,6 +594,8 @@
 		383BD3891577EDF40012AC53 /* Basic */ = {
 			isa = PBXGroup;
 			children = (
+				E8B193FC1636E5EF006D9193 /* G3MJSONBuilder.cpp */,
+				E8B193FD1636E5EF006D9193 /* G3MJSONBuilder.hpp */,
 				CFF95F761588E82200B56E11 /* Color.hpp */,
 				383BD38E1577EE500012AC53 /* Context.cpp */,
 				383BD38F1577EE500012AC53 /* Context.hpp */,
@@ -927,6 +932,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7BE9EEC162EF9B600E86B91 /* SceneParser.hpp in Headers */,
+				E8B193FF1636E5EF006D9193 /* G3MJSONBuilder.hpp in Headers */,
 				A7BE9EF016300B9900E86B91 /* AppParser.hpp in Headers */,
 				CF0A8184163303E800036277 /* MutableVector2I.hpp in Headers */,
 				CFD314541631FFAD00B54ED3 /* Vector2I.hpp in Headers */,
@@ -1066,7 +1073,6 @@
 				D8B3A962160B69620085D553 /* GLProgramId_iOS.hpp in Headers */,
 				D8B3A963160B69620085D553 /* GLUniformID_iOS.hpp in Headers */,
 				CF3F3FF11620FB2A00A92CC8 /* Vector4D.hpp in Headers */,
-				A7BE9EEC162EF9B600E86B91 /* SceneParser.hpp in Headers */,
 				CFCEFF27163476F100FC4AB0 /* RectangleI.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1224,6 +1230,7 @@
 				CFD314531631FFAD00B54ED3 /* Vector2I.cpp in Sources */,
 				CF0A8183163303E800036277 /* MutableVector2I.cpp in Sources */,
 				CFCEFF26163476F100FC4AB0 /* RectangleI.cpp in Sources */,
+				E8B193FE1636E5EF006D9193 /* G3MJSONBuilder.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

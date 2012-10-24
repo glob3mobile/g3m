@@ -38,6 +38,8 @@ public:
   
   static SceneParser* instance();
   void parse(LayerSet* layerSet, std::string namelessParameter);
+
+private:
   void parserJSONLayerList(LayerSet* layerSet, JSONObject* jsonLayers);
   void parserJSONWMSLayer(LayerSet* layerSet, JSONObject* jsonLayer);
   void parserJSON3DLayer(LayerSet* layerSet, JSONObject* jsonLayer);

@@ -96,7 +96,7 @@ void BingLayer::initialize(const InitializationContext* ic){
   tileURL+="?key=";
   tileURL+=_key;
 
-  const URL url = URL(tileURL);
+  const URL url = URL(tileURL, false);
   ic->getDownloader()->requestBuffer(url, 100000000L, new TokenDownloadListener(this), true);
   
 }
@@ -203,7 +203,7 @@ std::vector<Petition*> BingLayer::getMapPetitions(const RenderContext* rc,
       //set the subDomain (round-robbin)
       url = IStringUtils::instance()->replaceSubstring(url, "{subdomain}",_subDomains[currentSubDomain % numSubDomains]);
       currentSubDomain++;
-      petitions.push_back(new Petition(bingSector, URL(url)));
+      petitions.push_back(new Petition(bingSector, URL(url, false)));
       
     }
     

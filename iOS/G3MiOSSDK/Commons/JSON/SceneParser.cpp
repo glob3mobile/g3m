@@ -114,8 +114,8 @@ void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, JSONObject* jsonLayer){
     wmsVersion = WMS_1_3_0;
   }  
   
-  WMSLayer* wmsLayer = new WMSLayer(layersSecuence,
-                                      URL(jsonURL),
+  WMSLayer* wmsLayer = new WMSLayer(URL::escape(layersSecuence),
+                                      URL(jsonURL, true),
                                       wmsVersion,
                                       Sector::fullSphere(),
                                       "image/png",

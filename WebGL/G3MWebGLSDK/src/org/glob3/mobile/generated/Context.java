@@ -41,6 +41,10 @@ package org.glob3.mobile.generated;
 //class IThreadUtils;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TextureBuilder;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IMathUtils;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IJSONParser;
 
 public class Context
 {
@@ -48,16 +52,20 @@ public class Context
   protected final IStringUtils _stringUtils;
   protected IThreadUtils _threadUtils;
   protected ILogger _logger;
+	protected final IMathUtils _mathUtils;
+	protected final IJSONParser _jsonParser;
   protected Planet _planet;
   protected IDownloader _downloader;
   protected EffectsScheduler _effectsScheduler;
 
-  protected Context(IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, Planet planet, IDownloader downloader, EffectsScheduler effectsScheduler)
+  protected Context(IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, IDownloader downloader, EffectsScheduler effectsScheduler)
   {
 	  _factory = factory;
 	  _stringUtils = stringUtils;
 	  _threadUtils = threadUtils;
 	  _logger = logger;
+	  _mathUtils = mathUtils;
+	  _jsonParser = jsonParser;
 	  _planet = planet;
 	  _downloader = downloader;
 	  _effectsScheduler = effectsScheduler;
@@ -84,6 +92,20 @@ public class Context
   {
 	return _logger;
   }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const IMathUtils* getMathUtils() const
+	public final IMathUtils getMathUtils()
+	{
+		return _mathUtils;
+	}
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const IJSONParser* getJSONParser() const
+	public final IJSONParser getJSONParser()
+	{
+		return _jsonParser;
+	}
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: const Planet* getPlanet() const

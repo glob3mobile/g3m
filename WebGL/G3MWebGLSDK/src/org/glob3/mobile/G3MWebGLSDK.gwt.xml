@@ -10,4 +10,18 @@
 	<inherits name="com.google.gwt.user.User" />
 	
 	<source path="" />
+	
+	
+	<!-- Deferred Binding -->
+	
+	<!-- Downloader -->
+	<!-- Fall through to this rule if the browser isn't Webkit (safari,chrome) -->
+	<replace-with class="org.glob3.mobile.specific.Downloader_WebGL_Handler_DefaultImpl">
+		<when-type-is class="org.glob3.mobile.specific.Downloader_WebGL_Handler"/>
+	</replace-with>
+	<!-- Webkit needs a different implementation -->
+	<replace-with class="org.glob3.mobile.specific.Downloader_WebGL_Handler_WebkitImpl">
+		<when-type-is class="org.glob3.mobile.specific.Downloader_WebGL_Handler" />
+		<when-property-is name="user.agent" value="safari"/>
+	</replace-with>
 </module>
