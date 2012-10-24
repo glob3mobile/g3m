@@ -33,8 +33,8 @@
 #include "CachedDownloader.hpp"
 #include "Downloader_iOS.hpp"
 
-#include "INativeGL.hpp"
-#include "GL.hpp"
+//#include "INativeGL.hpp"
+//#include "GL.hpp"
 
 #include "MultiLayerTileTexturizer.hpp"
 #include "TilesRenderParameters.hpp"
@@ -49,7 +49,7 @@
 
 #include "Logger_iOS.hpp"
 #include "Factory_iOS.hpp"
-#include "NativeGL2_iOS.hpp"
+//#include "NativeGL2_iOS.hpp"
 #include "StringUtils_iOS.hpp"
 #include "JSONParser_iOS.hpp"
 #include "WMSLayer.hpp"
@@ -126,8 +126,8 @@
   int width = (int) [self frame].size.width;
   int height = (int) [self frame].size.height;
   
-  NativeGL2_iOS* nGL = new NativeGL2_iOS();
-  GL* gl = new GL(nGL);
+  //NativeGL2_iOS* nGL = new NativeGL2_iOS();
+  //GL* gl = new GL(nGL);
   
   IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
   const bool saveInBackground = true;
@@ -159,7 +159,7 @@
   
   
   TextureBuilder* textureBuilder = new CPUTextureBuilder();
-  TexturesHandler* texturesHandler = new TexturesHandler(gl, false);
+  TexturesHandler* texturesHandler = new TexturesHandler([_renderer getGL], false);
   
   const Planet* planet = Planet::createEarth();
   
@@ -198,7 +198,7 @@
   GTask* initializationTask = new SampleInitializationTask();
   
   _widgetVP = G3MWidget::create(frameTasksExecutor,
-                                gl,
+                                [_renderer getGL],
                                 texturesHandler,
                                 textureBuilder,
                                 downloader,

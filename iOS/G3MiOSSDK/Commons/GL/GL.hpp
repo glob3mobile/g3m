@@ -305,6 +305,18 @@ public:
      
   }
   
+  int createProgram() const {
+    return _gl->createProgram();
+  }
+  
+  void deleteProgram(int program) const {
+    _gl->deleteProgram(program);
+  }
+  
+  void attachShader(int program, int shader) const {
+    _gl->attachShader(program, shader);
+  }
+  
 };
 
 #endif

@@ -17,6 +17,8 @@
 //#include "GLProgramId_iOS.hpp"
 #include "ShaderProgram.hpp"
 
+class GL;
+
 
 @interface ES2Renderer :NSObject  {
 @private
@@ -33,11 +35,15 @@
   ShaderProgram* _shaderProgram;
   
   BOOL _firstRender;
+  
+  GL* _gl;
 }
 
 - (void)render: (void*) widget;
 
 - (BOOL)resizeFromLayer:(CAEAGLLayer *)layer;
+
+- (GL*)getGL;
 
 @end
 

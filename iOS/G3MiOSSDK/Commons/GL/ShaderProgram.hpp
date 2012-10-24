@@ -11,18 +11,18 @@
 
 #include <string>
 
-//#include "IGLProgramId.hpp"
+class GL;
 
 
 class ShaderProgram {
   
 private:
-  //IGLProgramId* _program;
-  int           _programNum;
+  int   _programNum;
+  GL*   _gl;
   
   
 public:
-  ShaderProgram(const std::string& vertexShader, const std::string& fragmentShader);
+  ShaderProgram(const std::string& vertexShader, const std::string& fragmentShader, GL* gl);
   ~ShaderProgram();
   
   

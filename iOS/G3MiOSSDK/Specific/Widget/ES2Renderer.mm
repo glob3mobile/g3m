@@ -10,6 +10,7 @@
 
 #include "G3MWidget.hpp"
 #include "GL.hpp"
+#include "NativeGL2_iOS.hpp"
 
 // uniform index
 enum {
@@ -41,7 +42,9 @@ enum {
 - (id)init {
   self = [super init];
   _shaderProgram = NULL;
-  
+  NativeGL2_iOS* nGL = new NativeGL2_iOS();
+  _gl = new GL(nGL);
+
   if (self) {
     _firstRender = true;
     context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
@@ -183,7 +186,7 @@ enum {
   
   // Create shader program
   //int programNum = glCreateProgram();
-  _shaderProgram = new ShaderProgram("vertex shader", "fragment shader");
+  _shaderProgram = new ShaderProgram("vertex shader", "fragment shader", _gl);
   
   // Create and compile vertex shader
   vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"Shader" ofType:@"vsh"];
@@ -307,6 +310,10 @@ enum {
   
   context = nil;
   
+}
+
+- (GL*)getGL {
+  return _gl;
 }
 
 @end

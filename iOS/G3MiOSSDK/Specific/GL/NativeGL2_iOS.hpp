@@ -16,6 +16,9 @@
 //#include "GLProgramId_iOS.hpp"
 #include "GLUniformID_iOS.hpp"
 #include "GLTextureId_iOS.hpp"
+#include "FloatBuffer_iOS.hpp"
+#include "IntBuffer_iOS.hpp"
+#include "Image_iOS.hpp"
 
 class NativeGL2_iOS: public INativeGL
 {
@@ -114,7 +117,7 @@ public:
   void drawElements(int mode,
                     int count,
                     IIntBuffer* buffer) const {
-    int has_to_set_GL_UNSIGNED_INT; //???????
+    //int has_to_set_GL_UNSIGNED_INT; //???????
     int* pointer = ((IntBuffer_iOS*) buffer)->getPointer();
     glDrawElements(mode, count, GL_UNSIGNED_INT, pointer);
   }
@@ -304,6 +307,18 @@ public:
     return GL_NO_ERROR;
   }
   
+  int createProgram() const {
+    return glCreateProgram();
+  }
+  
+  void deleteProgram(int program) const {
+    glDeleteProgram(program);
+  }
+  
+  void attachShader(int program, int shader) const {
+    glAttachShader(program, shader);
+  }
+
 };
 
 #endif

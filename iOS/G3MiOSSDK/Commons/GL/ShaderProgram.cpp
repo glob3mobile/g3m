@@ -9,29 +9,30 @@
 #include <iostream>
 
 #include "ShaderProgram.hpp"
+#include "GL.hpp"
 
 
 
-
+/*
 // ******** ESTO SE DEBE QUITAR y usar la nativa
-#include <OpenGLES/ES2/gl.h>
+#include <OpenGLES/ES2/gl.h>*/
 
 
-ShaderProgram::ShaderProgram(const std::string& vertexShader, const std::string& fragmentShader)
+ShaderProgram::ShaderProgram(const std::string& vertexShader, const std::string& fragmentShader, GL* gl):_gl(gl)
 {
-  _programNum = glCreateProgram();
+  _programNum = _gl->createProgram();
 }
 
 ShaderProgram::~ShaderProgram()
 {
-  glDeleteProgram(_programNum);
+  _gl->deleteProgram(_programNum);
 }
 
 
 // TEMP
 void ShaderProgram::attachShader(unsigned int shader) 
 {
-  glAttachShader(_programNum, shader);
+  _gl->attachShader(_programNum, shader);
 }
 
 

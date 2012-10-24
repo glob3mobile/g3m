@@ -186,6 +186,10 @@ public:
   virtual int Variable_Viewport() const = 0;
   
   virtual int Error_NoError() const = 0;
+  
+  virtual int createProgram() const = 0;
+  virtual void deleteProgram(int program) const = 0;
+  virtual void attachShader(int program, int shader) const = 0;
 
 };
 
