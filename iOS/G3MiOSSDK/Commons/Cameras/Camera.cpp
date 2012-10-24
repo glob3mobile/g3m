@@ -47,9 +47,7 @@ void Camera::copyFrom(const Camera &that) {
   _cartesianCenterOfView = MutableVector3D(that._cartesianCenterOfView);
   
   _geodeticCenterOfView = (that._geodeticCenterOfView == NULL) ? NULL : new Geodetic3D(*that._geodeticCenterOfView);
-  
-  _camEffectTarget = new CameraEffectTarget();
-  
+
 #ifdef C_CODE
   if (_frustum != NULL) {
     delete _frustum;
@@ -63,7 +61,13 @@ void Camera::copyFrom(const Camera &that) {
   if (_halfFrustumInModelCoordinates != NULL) {
     delete _halfFrustumInModelCoordinates;
   }
+  
+  if (_camEffectTarget != NULL) {
+    delete _camEffectTarget;
+  }
 #endif
+  
+  _camEffectTarget = new CameraEffectTarget();
   
   _frustum = (that._frustum == NULL) ? NULL : new Frustum(*that._frustum);
   
