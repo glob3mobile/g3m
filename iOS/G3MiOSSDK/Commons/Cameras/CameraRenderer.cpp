@@ -12,7 +12,6 @@
 #include "TouchEvent.hpp"
 
 
-
 void CameraRenderer::initialize(const InitializationContext* ic) {
   //_logger = ic->getLogger();
   //cameraContext = new CameraContext(
@@ -37,10 +36,6 @@ void CameraRenderer::render(const RenderContext* rc) {
   for (unsigned int i=0; i<_handlers.size(); i++) {
     _handlers[i]->render(rc, _cameraContext);
   }
-  
-  
-  
-  
 }
 
 bool CameraRenderer::onTouchEvent(const EventContext* ec,
@@ -52,10 +47,12 @@ bool CameraRenderer::onTouchEvent(const EventContext* ec,
   }
   
   // pass the event to all the handlers
-  for (unsigned int n=0; n<_handlers.size(); n++)
-    if (_handlers[n]->onTouchEvent(ec, touchEvent, _cameraContext)) return true;
+  for (unsigned int n=0; n<_handlers.size(); n++) {
+    if (_handlers[n]->onTouchEvent(ec, touchEvent, _cameraContext)) {
+      return true;
+    }
+  }
   
   // if any of them processed the event, return false
   return false;
 }
-
