@@ -138,7 +138,6 @@ public class G3MAndroidDemoActivity
          marksRenderer.setMarkTouchListener(new MarkTouchListener() {
             @Override
             public boolean touchedMark(final Mark mark) {
-
                G3MAndroidDemoActivity.this.runOnUiThread(new Runnable() {
                   @Override
                   public void run() {
