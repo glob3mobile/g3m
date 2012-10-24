@@ -15,6 +15,7 @@ import org.glob3.mobile.generated.LevelTileCondition;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarkTouchListener;
 import org.glob3.mobile.generated.MarksRenderer;
+import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
@@ -205,7 +206,8 @@ public class G3MWebGLDemo
       final ArrayList<String> imagesToPreload = new ArrayList<String>();
       //      imagesToPreload.add("../images/world.jpg");
       final GTask initializationTask = null;
-      _widget.initWidget(cameraConstraints, layerSet, renderers, userData, imagesToPreload, initializationTask);
+      final ArrayList<PeriodicalTask> periodicalTasks = null;
+      _widget.initWidget(cameraConstraints, layerSet, renderers, userData, imagesToPreload, initializationTask, periodicalTasks);
    }
 
 

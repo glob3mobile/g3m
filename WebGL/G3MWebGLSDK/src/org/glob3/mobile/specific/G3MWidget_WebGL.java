@@ -84,6 +84,8 @@ public final class G3MWidget_WebGL
 
    private GTask                         _initializationTask;
 
+   private ArrayList<PeriodicalTask>     _periodicalTasks;
+
 
    public G3MWidget_WebGL(final int delayMillis,
                           final String proxy) {
@@ -248,7 +250,8 @@ public final class G3MWidget_WebGL
                           final ArrayList<Renderer> renderers,
                           final UserData userData,
                           final ArrayList<String> images,
-                          final GTask initializationTask) {
+                          final GTask initializationTask,
+                          final ArrayList<PeriodicalTask> periodicalTasks) {
       jsDefineG3MBrowserObjects();
 
       _cameraConstraints = cameraConstraints;
@@ -257,6 +260,7 @@ public final class G3MWidget_WebGL
       _userData = userData;
       _imagesToPreload = images;
       _initializationTask = initializationTask;
+      _periodicalTasks = (periodicalTasks == null) ? new ArrayList<PeriodicalTask>() : periodicalTasks;
 
       // TODO TEMP HACK TO PRELOAD IMAGES
       preloadImagesAndInitWidget();
@@ -341,7 +345,6 @@ public final class G3MWidget_WebGL
       final boolean logFPS = false;
       final boolean logDownloaderStatistics = false;
 
-      final ArrayList<PeriodicalTask> periodicalTasks = new ArrayList<PeriodicalTask>();
       _widget = G3MWidget.create( //
                frameTasksExecutor, //
                gl, //
@@ -360,7 +363,7 @@ public final class G3MWidget_WebGL
                logDownloaderStatistics, //
                _initializationTask, //
                true, //
-               periodicalTasks);
+               _periodicalTasks);
 
       _widget.setUserData(_userData);
 
