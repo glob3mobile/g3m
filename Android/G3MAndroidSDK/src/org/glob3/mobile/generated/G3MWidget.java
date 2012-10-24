@@ -278,13 +278,13 @@ public class G3MWidget
 	addPeriodicalTask(new PeriodicalTask(interval, task));
   }
 
-  public final void setAnimatedPosition(Geodetic3D g, TimeInterval interval)
+  public final void setAnimatedPosition(Geodetic3D position, TimeInterval interval)
   {
   
 	Geodetic3D ini = _planet.toGeodetic3D(_currentCamera.getCartesianPosition());
   
-	double finalLat = g.latitude().degrees();
-	double finalLon = g.longitude().degrees();
+	double finalLat = position.latitude().degrees();
+	double finalLon = position.longitude().degrees();
   
 	//Fixing final latitude
 	while (finalLat > 90)
@@ -310,7 +310,7 @@ public class G3MWidget
 	  finalLon -= 360;
 	}
   
-	final Geodetic3D end = Geodetic3D.fromDegrees(finalLat, finalLon, g.height());
+	final Geodetic3D end = Geodetic3D.fromDegrees(finalLat, finalLon, position.height());
   
 	EffectTarget target = _nextCamera.getEffectTarget();
   
