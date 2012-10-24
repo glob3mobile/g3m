@@ -32,7 +32,8 @@ public class SceneParser
 	parserJSONLayerList(layerSet, json.getObjectForKey(LAYERS).getObject());
 	IJSONParser.instance().deleteJSONData(json);
   }
-  public final void parserJSONLayerList(LayerSet layerSet, JSONObject jsonLayers)
+
+  private void parserJSONLayerList(LayerSet layerSet, JSONObject jsonLayers)
   {
 	for (int i = 0; i < jsonLayers.getObject().getSize(); i++)
 	{
@@ -56,7 +57,7 @@ public class SceneParser
   
 	}
   }
-  public final void parserJSONWMSLayer(LayerSet layerSet, JSONObject jsonLayer)
+  private void parserJSONWMSLayer(LayerSet layerSet, JSONObject jsonLayer)
   {
 	System.out.print("Parsing WMS Layer ");
 	System.out.print(jsonLayer.getObjectForKey(NAME).getString().getValue());
@@ -92,17 +93,17 @@ public class SceneParser
 	  wmsVersion = WMSServerVersion.WMS_1_3_0;
 	}
   
-	WMSLayer wmsLayer = new WMSLayer(layersSecuence, new URL(jsonURL), wmsVersion, Sector.fullSphere(), "image/png", "EPSG:4326", "", true, null);
+	WMSLayer wmsLayer = new WMSLayer(URL.escape(layersSecuence), new URL(jsonURL, true), wmsVersion, Sector.fullSphere(), "image/png", "EPSG:4326", "", true, null);
 	layerSet.addLayer(wmsLayer);
   }
-  public final void parserJSON3DLayer(LayerSet layerSet, JSONObject jsonLayer)
+  private void parserJSON3DLayer(LayerSet layerSet, JSONObject jsonLayer)
   {
 	System.out.print("Parsing 3D Layer ");
 	System.out.print(jsonLayer.getObjectForKey(NAME).getString().getValue());
 	System.out.print("...");
 	System.out.print("\n");
   }
-  public final void parserJSONPanoLayer(LayerSet layerSet, JSONObject jsonLayer)
+  private void parserJSONPanoLayer(LayerSet layerSet, JSONObject jsonLayer)
   {
 	System.out.print("Parsing Pano Layer ");
 	System.out.print(jsonLayer.getObjectForKey(NAME).getString().getValue());
