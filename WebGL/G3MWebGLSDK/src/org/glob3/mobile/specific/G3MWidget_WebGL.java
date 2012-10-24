@@ -87,10 +87,9 @@ public final class G3MWidget_WebGL
    private ArrayList<PeriodicalTask>     _periodicalTasks;
 
 
-   public G3MWidget_WebGL(final int delayMillis,
-                          final String proxy) {
+   public G3MWidget_WebGL(final String proxy) {
       // downloader
-      _delayMillis = delayMillis;
+      _delayMillis = 10;
       _proxy = proxy;
 
       initSingletons();

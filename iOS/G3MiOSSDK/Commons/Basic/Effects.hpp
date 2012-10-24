@@ -214,7 +214,7 @@ public:
   virtual ~EffectsScheduler() {
     _factory->deleteTimer(_timer);
     
-    for (int i = 0; i < _effectsRuns.size(); i++) {
+    for (unsigned int i = 0; i < _effectsRuns.size(); i++) {
       EffectRun* effectRun = _effectsRuns[i];
       delete effectRun;
     }

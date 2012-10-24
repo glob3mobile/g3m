@@ -181,6 +181,8 @@ public:
   
   void drawLines(IIntBuffer* indices);
   
+  void drawLineStrip(IIntBuffer* indices);
+  
   void drawLineLoop(IIntBuffer* indices);
   
   void drawPoints(IIntBuffer* indices);

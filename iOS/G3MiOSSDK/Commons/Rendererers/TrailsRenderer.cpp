@@ -36,12 +36,9 @@ Mesh* Trail::createMesh(const Planet* planet) {
 #endif
     
     indices.add(i);
-    if (i > 0) {
-      indices.add(i);
-    }
   }
   
-  return new IndexedMesh(GLPrimitive::lines(),
+  return new IndexedMesh(GLPrimitive::lineStrip(),
                          true,
                          vertices.getCenter(),
                          vertices.create(),

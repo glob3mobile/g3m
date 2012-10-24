@@ -297,6 +297,12 @@ void GL::drawLines(IIntBuffer* indices) {
                     indices);
 }
 
+void GL::drawLineStrip(IIntBuffer* indices) {
+  _gl->drawElements(GLPrimitive::lineStrip(),
+                    indices->size(),
+                    indices);
+}
+
 void GL::drawLineLoop(IIntBuffer* indices) {
   _gl->drawElements(GLPrimitive::lineLoop(),
                     indices->size(),

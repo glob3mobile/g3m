@@ -46,10 +46,9 @@ public class G3MWebGLDemo
       if (_widget == null) {
          final Panel g3mWidgetHolder = RootPanel.get(g3mWidgetHolderId);
 
-         final int delayMillis = 10;
          final String proxy = jsDefineDefaultProxy();
 
-         _widget = new G3MWidget_WebGL(delayMillis, proxy);
+         _widget = new G3MWidget_WebGL(proxy);
          g3mWidgetHolder.add(_widget);
 
          initWidgetDemo();
