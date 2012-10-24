@@ -354,6 +354,12 @@ public final class NativeGL2_Android
 
 
    @Override
+   public int Primitive_LineStrip() {
+      return GLES20.GL_LINE_STRIP;
+   }
+
+
+   @Override
    public int Primitive_LineLoop() {
       return GLES20.GL_LINE_LOOP;
    }
@@ -447,4 +453,6 @@ public final class NativeGL2_Android
    public int Error_NoError() {
       return GLES20.GL_NO_ERROR;
    }
+
+
 }
