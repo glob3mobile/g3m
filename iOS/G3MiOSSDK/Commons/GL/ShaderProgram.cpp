@@ -12,27 +12,57 @@
 #include "GL.hpp"
 
 
-
-/*
-// ******** ESTO SE DEBE QUITAR y usar la nativa
-#include <OpenGLES/ES2/gl.h>*/
-
-
-ShaderProgram::ShaderProgram(const std::string& vertexShader, const std::string& fragmentShader, GL* gl):_gl(gl)
+ShaderProgram::ShaderProgram(GL* gl):_gl(gl) 
 {
-  _programNum = _gl->createProgram();
+  _program = _gl->createProgram();
 }
+
 
 ShaderProgram::~ShaderProgram()
 {
-  _gl->deleteProgram(_programNum);
+  _gl->deleteProgram(_program);
 }
 
 
-// TEMP
-void ShaderProgram::attachShader(unsigned int shader) 
+bool ShaderProgram::loadShaders(const std::string& vertexSource, const std::string& fragmentSource)
 {
-  _gl->attachShader(_programNum, shader);
+  _vertexShader= _gl->createShader(VERTEX_SHADER);
+  if (!compileShader(_vertexShader, vertexSource)) {
+    _gl->deleteShader(_vertexShader);
+    return false;
+  } 
+  
+  _fragmentShader = _gl->createShader(FRAGMENT_SHADER);
+  if (!compileShader(_fragmentShader, fragmentSource)) {
+    _gl->deleteShader(_fragmentShader);
+    return false;
+  }
+
+  
+  return true;
+}
+  
+
+bool ShaderProgram::compileShader(int shader, const std::string source)
+{
+  bool result = _gl->compileShader(shader, source);
+
+/*  
+#if defined(DEBUG)
+  GLint logLength;
+  glGetShaderiv(*shader, GL_INFO_LOG_LENGTH, &logLength);
+  if (logLength > 0) {
+    GLchar* log = (GLchar* ) malloc(logLength);
+    glGetShaderInfoLog(*shader, logLength, &logLength, log);
+    NSLog(@"Shader compile log:\n%s", log);
+    free(log);
+  }
+#endif
+ */
+  
+  if (result) _gl->attachShader(_program, shader);
+     
+  return result;
 }
 
 

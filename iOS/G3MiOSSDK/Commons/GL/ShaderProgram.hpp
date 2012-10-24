@@ -13,22 +13,32 @@
 
 class GL;
 
+enum ShaderType {
+  VERTEX_SHADER,   
+  FRAGMENT_SHADER
+};
+
 
 class ShaderProgram {
   
 private:
-  int   _programNum;
+  int   _program;
   GL*   _gl;
+  int   _vertexShader, _fragmentShader;
+  
+  bool compileShader(int shader, const std::string source); 
+
   
   
 public:
-  ShaderProgram(const std::string& vertexShader, const std::string& fragmentShader, GL* gl);
+  ShaderProgram(GL* gl);
   ~ShaderProgram();
+  
+  bool loadShaders(const std::string& vertexSource, const std::string& fragmentSource);
   
   
   // TEMP
-  void attachShader(unsigned int shader); 
-  int getProgramNum() { return _programNum; }
+  int getProgram() { return _program; }
 
 };
 

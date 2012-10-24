@@ -190,6 +190,9 @@ public:
   virtual int createProgram() const = 0;
   virtual void deleteProgram(int program) const = 0;
   virtual void attachShader(int program, int shader) const = 0;
+  virtual int createShader(ShaderType type) const = 0;
+  virtual bool compileShader (int shader, const std::string& source) const = 0;
+  virtual void deleteShader(int shader) const = 0;
 
 };
 

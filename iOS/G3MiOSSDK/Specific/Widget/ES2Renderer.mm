@@ -6,6 +6,8 @@
 //  Copyright 2011 Universidad de Las Palmas. All rights reserved.
 //
 
+#include <string>
+
 #import "ES2Renderer.h"
 
 #include "G3MWidget.hpp"
@@ -184,32 +186,37 @@ enum {
   GLuint vertShader, fragShader;
   NSString *vertShaderPathname, *fragShaderPathname;
   
-  // Create shader program
-  //int programNum = glCreateProgram();
-  _shaderProgram = new ShaderProgram("vertex shader", "fragment shader", _gl);
-  
   // Create and compile vertex shader
   vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"Shader" ofType:@"vsh"];
-  if (![self compileShader:&vertShader type:GL_VERTEX_SHADER file:vertShaderPathname]) {
+  std::string vertexSource ([[NSString stringWithContentsOfFile:vertShaderPathname encoding:NSUTF8StringEncoding error:nil] UTF8String]);
+/*  if (![self compileShader:&vertShader type:GL_VERTEX_SHADER file:vertShaderPathname]) {
     NSLog(@"Failed to compile vertex shader");
     return FALSE;
-  }
+  }*/
   
   // Create and compile fragment shader
   fragShaderPathname = [[NSBundle mainBundle] pathForResource:@"Shader" ofType:@"fsh"];
-  if (![self compileShader:&fragShader type:GL_FRAGMENT_SHADER file:fragShaderPathname]) {
+  std::string fragmentSource ([[NSString stringWithContentsOfFile:fragShaderPathname encoding:NSUTF8StringEncoding error:nil] UTF8String]);
+/*  if (![self compileShader:&fragShader type:GL_FRAGMENT_SHADER file:fragShaderPathname]) {
     NSLog(@"Failed to compile fragment shader");
     return FALSE;
-  }
+  }*/
   
+  // Create shader program
+  _shaderProgram = new ShaderProgram(_gl);
+  if (_shaderProgram->loadShaders(vertexSource, fragmentSource)==false) {
+    NSLog(@"Failed to load shaders");
+    return FALSE;
+  }
+
   // Attach vertex shader to program
   //glAttachShader(programNum, vertShader);
-  _shaderProgram->attachShader(vertShader);
+  //_shaderProgram->attachShader(vertShader);
   
   
   // Attach fragment shader to program
   //glAttachShader(programNum, fragShader);
-  _shaderProgram->attachShader(fragShader);
+  //_shaderProgram->attachShader(fragShader);
   
   // Bind attribute locations
   // this needs to be done prior to linking
@@ -218,26 +225,22 @@ enum {
   
   
   //program = (IGLProgramId*) new GLProgramId_iOS(programNum);
+
+  
   
   // Link program
-  if (![self linkProgram:_shaderProgram->getProgramNum()]) {
-    NSLog(@"Failed to link program: %d", _shaderProgram->getProgramNum());
+  if (![self linkProgram:_shaderProgram->getProgram()]) {
+    NSLog(@"Failed to link program: %d", _shaderProgram->getProgram());
     
-    if (vertShader) {
+    /*if (vertShader) {
       glDeleteShader(vertShader);
       vertShader = 0;
     }
     if (fragShader) {
       glDeleteShader(fragShader);
       fragShader = 0;
-    }
-    /*
-    if (program) {
-      glDeleteProgram(programNum);
-//      programNum = 0;
-    }*/
-    
-    glDeleteProgram(_shaderProgram->getProgramNum());
+    }    
+    glDeleteProgram(_shaderProgram->getProgramNum());*/
 
     return FALSE;
   }
@@ -245,11 +248,12 @@ enum {
   // Get uniform locations
   //uniforms[UNIFORM_TRANSLATE] = glGetUniformLocation(program, "translate");
   
+  /*
   // Release vertex and fragment shaders
   if (vertShader)
     glDeleteShader(vertShader);
   if (fragShader)
-    glDeleteShader(fragShader);
+    glDeleteShader(fragShader);*/
   
   return TRUE;
 }

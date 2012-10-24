@@ -317,6 +317,18 @@ public:
     _gl->attachShader(program, shader);
   }
   
+  int createShader(ShaderType type) const {
+    return _gl->createShader(type);
+  }
+  
+  bool compileShader(int shader, const std::string& source) const {
+    return _gl->compileShader(shader, source);
+  }
+
+  void deleteShader(int shader) const {
+    _gl->deleteShader(shader);
+  }
+  
 };
 
 #endif

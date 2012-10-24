@@ -25,15 +25,15 @@ class NativeGL2_iOS: public INativeGL
 public:
   
   void useProgram(ShaderProgram* program) const {
-    glUseProgram(program->getProgramNum());
+    glUseProgram(program->getProgram());
   }
   
   int getAttribLocation(ShaderProgram* program, const std::string& name) const {
-    return glGetAttribLocation(program->getProgramNum(), name.c_str());
+    return glGetAttribLocation(program->getProgram(), name.c_str());
   }
   
   IGLUniformID* getUniformLocation(ShaderProgram* program, const std::string& name) const {
-    int id = glGetUniformLocation(program->getProgramNum(), name.c_str());
+    int id = glGetUniformLocation(program->getProgram(), name.c_str());
     return (IGLUniformID*) new GLUniformID_iOS(id);
   }
   
@@ -318,7 +318,28 @@ public:
   void attachShader(int program, int shader) const {
     glAttachShader(program, shader);
   }
+  
+  int createShader(ShaderType type) const {
+    switch (type) {
+      case VERTEX_SHADER:
+        return glCreateShader(GL_VERTEX_SHADER);
+      case FRAGMENT_SHADER:
+        return glCreateShader(GL_FRAGMENT_SHADER);
+    }  
+  }
+  
+  bool compileShader(int shader, const std::string& source) const {
+    int status;
+    const char *s = source.c_str();
+    glShaderSource(shader, 1, &s, NULL);
+    glCompileShader(shader);
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
+    return status;
+  }
 
+  void deleteShader(int shader) const {
+    glDeleteShader(shader);
+  }
 };
 
 #endif
