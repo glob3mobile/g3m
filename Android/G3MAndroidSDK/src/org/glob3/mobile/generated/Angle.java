@@ -43,25 +43,34 @@ public class Angle
 	return new Angle(degrees);
   }
 
+  public static Angle fromDegreesMinutes(double degrees, double minutes)
+  {
+	return new Angle(degrees + (minutes / 60.0));
+  }
+
+  public static Angle fromDegreesMinutesSeconds(double degrees, double minutes, double seconds)
+  {
+	return new Angle(degrees + (minutes / 60.0) + (seconds / 3600.0));
+  }
+
   public static Angle fromRadians(double radians)
   {
 	return Angle.fromDegrees(radians / IMathUtils.instance().pi() * 180.0);
   }
 
-  public static Angle getMin(Angle a1, Angle a2)
+  public static Angle min(Angle a1, Angle a2)
   {
-	if (a1._degrees < a2._degrees)
-		return a1;
-	else
-		return a2;
+	//    if (a1._degrees < a2._degrees) return a1;
+	//    else return a2;
+
+	return (a1._degrees < a2._degrees) ? a1 : a2;
   }
 
-  public static Angle getMax(Angle a1, Angle a2)
+  public static Angle max(Angle a1, Angle a2)
   {
-	if (a1._degrees > a2._degrees)
-		return a1;
-	else
-		return a2;
+//    if (a1._degrees > a2._degrees) return a1;
+//    else return a2;
+	return (a1._degrees > a2._degrees) ? a1 : a2;
   }
 
   public static Angle zero()
