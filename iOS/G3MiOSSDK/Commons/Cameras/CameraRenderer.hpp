@@ -35,7 +35,7 @@ enum Gesture {
   DoubleDrag
 };
 
-class CameraContext: public EffectTarget {
+class CameraContext {
 private:
   Gesture _currentGesture;
   Camera* _nextCamera;         
@@ -51,10 +51,6 @@ public:
   const Gesture getCurrentGesture() const { return _currentGesture; }
   void setCurrentGesture(const Gesture& gesture) { _currentGesture = gesture; }
   Camera* getNextCamera() { return _nextCamera; }
-  
-  void unusedMethod() const {
-  }
-
 };
 
 
