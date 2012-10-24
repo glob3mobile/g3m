@@ -111,12 +111,12 @@ public class Sector
 //ORIGINAL LINE: Sector intersection(const Sector& s) const
   public final Sector intersection(Sector s)
   {
-	final Angle lowLat = Angle.getMax(lower().latitude(), s.lower().latitude());
-	final Angle lowLon = Angle.getMax(lower().longitude(), s.lower().longitude());
+	final Angle lowLat = Angle.max(lower().latitude(), s.lower().latitude());
+	final Angle lowLon = Angle.max(lower().longitude(), s.lower().longitude());
 	final Geodetic2D low = new Geodetic2D(lowLat, lowLon);
   
-	final Angle upLat = Angle.getMin(upper().latitude(), s.upper().latitude());
-	final Angle upLon = Angle.getMin(upper().longitude(), s.upper().longitude());
+	final Angle upLat = Angle.min(upper().latitude(), s.upper().latitude());
+	final Angle upLon = Angle.min(upper().longitude(), s.upper().longitude());
 	final Geodetic2D up = new Geodetic2D(upLat, upLon);
   
 	return new Sector(low, up);

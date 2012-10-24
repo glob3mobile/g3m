@@ -69,12 +69,12 @@ bool Sector::isBackOriented(const RenderContext *rc) const {
 }
 
 Sector Sector::intersection(const Sector& s) const {
-  const Angle lowLat = Angle::getMax(lower().latitude(), s.lower().latitude());
-  const Angle lowLon = Angle::getMax(lower().longitude(), s.lower().longitude());
+  const Angle lowLat = Angle::max(lower().latitude(),  s.lower().latitude());
+  const Angle lowLon = Angle::max(lower().longitude(), s.lower().longitude());
   const Geodetic2D low(lowLat, lowLon);
   
-  const Angle upLat = Angle::getMin(upper().latitude(), s.upper().latitude());
-  const Angle upLon = Angle::getMin(upper().longitude(), s.upper().longitude());
+  const Angle upLat = Angle::min(upper().latitude(),  s.upper().latitude());
+  const Angle upLon = Angle::min(upper().longitude(), s.upper().longitude());
   const Geodetic2D up(upLat, upLon);
   
   return Sector(low, up);
