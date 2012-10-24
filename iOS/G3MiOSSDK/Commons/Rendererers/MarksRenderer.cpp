@@ -38,22 +38,11 @@ bool MarksRenderer::onTouchEvent(const EventContext* ec,
   
   bool handled = false;
   
-  // if (touchEvent->getType() == LongPress) {
-  if (touchEvent->getType() == Down) {
+  if ( (touchEvent->getType() == Down) && (touchEvent->getTouchCount() == 1) ) {
     
     if (_lastCamera != NULL) {
       const Vector2I touchedPixel = touchEvent->getTouch(0)->getPos();
-      //      const Vector3D ray = _lastCamera->pixel2Ray(touchedPixel);
-      //      const Vector3D origin = _lastCamera->getCartesianPosition();
-      
       const Planet* planet = ec->getPlanet();
-      
-      //      const Vector3D positionCartesian = planet->closestIntersection(origin, ray);
-      //      if (positionCartesian.isNan()) {
-      //        return false;
-      //      }
-      
-      // const Geodetic3D position = planet->toGeodetic3D(positionCartesian);
       
       double minSqDistance = IMathUtils::instance()->maxDouble();
       Mark* nearestMark = NULL;
