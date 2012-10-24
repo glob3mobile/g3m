@@ -174,6 +174,10 @@ public class IndexedMesh extends Mesh
 	{
 	  gl.drawLines(_indices);
 	}
+	else if (_primitive == GLPrimitive.lineStrip())
+	{
+	  gl.drawLineStrip(_indices);
+	}
 	else if (_primitive == GLPrimitive.lineLoop())
 	{
 	  gl.drawLineLoop(_indices);

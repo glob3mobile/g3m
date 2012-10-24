@@ -40,13 +40,9 @@ public class Trail
   	  vertices.add( _positions.get(i) );
   
 	  indices.add(i);
-	  if (i > 0)
-	  {
-		indices.add(i);
-	  }
 	}
   
-	return new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), new Color(Color.fromRGBA(1, 0, 0, 1)));
+	return new IndexedMesh(GLPrimitive.lineStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), new Color(Color.fromRGBA(1, 0, 0, 1)));
   }
 
   private Mesh _mesh;
