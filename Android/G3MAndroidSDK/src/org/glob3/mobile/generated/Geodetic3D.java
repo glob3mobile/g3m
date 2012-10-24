@@ -128,4 +128,33 @@ public class Geodetic3D
 	return s;
   }
 
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Geodetic3D add(const Geodetic3D& that) const
+  public final Geodetic3D add(Geodetic3D that)
+  {
+	return new Geodetic3D(_latitude.add(that._latitude), _longitude.add(that._longitude), _height + that._height);
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Geodetic3D sub(const Geodetic3D& that) const
+  public final Geodetic3D sub(Geodetic3D that)
+  {
+	return new Geodetic3D(_latitude.sub(that._latitude), _longitude.sub(that._longitude), _height - that._height);
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Geodetic3D times(const double magnitude) const
+  public final Geodetic3D times(double magnitude)
+  {
+	return new Geodetic3D(_latitude.times(magnitude), _longitude.times(magnitude), _height * magnitude);
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Geodetic3D div(const double magnitude) const
+  public final Geodetic3D div(double magnitude)
+  {
+	return new Geodetic3D(_latitude.div(magnitude), _longitude.div(magnitude), _height / magnitude);
+  }
+
 }
