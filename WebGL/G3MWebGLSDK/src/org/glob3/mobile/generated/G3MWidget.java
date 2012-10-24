@@ -314,11 +314,8 @@ public class G3MWidget
   
 	GoToPositionEffect gtpe = new GoToPositionEffect(interval, ini, end);
   
-	int todo_get_camera_context; //HOW??
-	//SHOULD THE ANIMATION STOP WITH EVENTS??
-	//SHOULD THE EVENTS BE IGNORED??
-  
-	_effectsScheduler.startEffect(gtpe, new CameraContext(Gesture.None, null));
+	EffectTarget target = _nextCamera.getEffectTarget();
+	_effectsScheduler.startEffect(gtpe, target);
   }
 
   private FrameTasksExecutor _frameTasksExecutor;
