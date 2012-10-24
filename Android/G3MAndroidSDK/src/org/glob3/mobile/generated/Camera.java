@@ -77,8 +77,8 @@ public class Camera
   
 	_geodeticCenterOfView = (that._geodeticCenterOfView == null) ? null : new Geodetic3D(that._geodeticCenterOfView);
   
-	_camEffectTarget = new CameraEffectTarget();
   
+	_camEffectTarget = new CameraEffectTarget();
   
 	_frustum = (that._frustum == null) ? null : new Frustum(that._frustum);
   
