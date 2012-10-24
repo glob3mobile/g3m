@@ -329,6 +329,9 @@ public:
     _gl->deleteShader(shader);
   }
   
+  void printShaderInfoLog(int shader) const {
+    _gl->printShaderInfoLog(shader);
+  }
 };
 
 #endif

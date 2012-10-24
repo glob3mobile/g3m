@@ -340,6 +340,17 @@ public:
   void deleteShader(int shader) const {
     glDeleteShader(shader);
   }
+  
+  void printShaderInfoLog(int shader) const {
+    GLint logLength;
+    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logLength);
+    if (logLength > 0) {
+      GLchar* log = (GLchar* ) malloc(logLength);
+      glGetShaderInfoLog(shader, logLength, &logLength, log);
+      NSLog(@"Shader compile log:\n%s", log);
+      free(log);
+    }
+  }
 };
 
 #endif

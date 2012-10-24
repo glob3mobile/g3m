@@ -38,7 +38,6 @@ bool ShaderProgram::loadShaders(const std::string& vertexSource, const std::stri
     return false;
   }
 
-  
   return true;
 }
   
@@ -46,19 +45,10 @@ bool ShaderProgram::loadShaders(const std::string& vertexSource, const std::stri
 bool ShaderProgram::compileShader(int shader, const std::string source)
 {
   bool result = _gl->compileShader(shader, source);
-
-/*  
+  
 #if defined(DEBUG)
-  GLint logLength;
-  glGetShaderiv(*shader, GL_INFO_LOG_LENGTH, &logLength);
-  if (logLength > 0) {
-    GLchar* log = (GLchar* ) malloc(logLength);
-    glGetShaderInfoLog(*shader, logLength, &logLength, log);
-    NSLog(@"Shader compile log:\n%s", log);
-    free(log);
-  }
+  _gl->printShaderInfoLog(shader);
 #endif
- */
   
   if (result) _gl->attachShader(_program, shader);
      
