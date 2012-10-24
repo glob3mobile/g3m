@@ -65,7 +65,7 @@ public class G3MWebGLDemo
       cameraConstraints.add(scc);
 
       final LayerSet layerSet = new LayerSet();
-      final boolean useBing = true;
+      final boolean useBing = false;
       if (useBing) {
          final WMSLayer bing = new WMSLayer( //
                   "ve", //
@@ -113,12 +113,14 @@ public class G3MWebGLDemo
                   "osm_auto:all", //
                   new URL("http://129.206.228.72/cached/osm", false), //
                   WMSServerVersion.WMS_1_1_0, //
-                  Sector.fromDegrees(-85.05, -180.0, 85.05, 180.0), //
+                  // Sector.fromDegrees(-85.05, -180.0, 85.05, 180.0), //
+                  Sector.fullSphere(), //
                   "image/jpeg", //
                   "EPSG:4326", //
                   "", //
                   false, //
-                  new LevelTileCondition(3, 100));
+                  // new LevelTileCondition(3, 100));
+                  null);
          layerSet.addLayer(osm);
       }
 
@@ -135,7 +137,6 @@ public class G3MWebGLDemo
                   true, //
                   null);
          layerSet.addLayer(ayto);
-
       }
 
 
