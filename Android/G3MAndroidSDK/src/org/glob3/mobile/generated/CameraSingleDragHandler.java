@@ -136,7 +136,9 @@ public class CameraSingleDragHandler extends CameraEventHandler
 	  {
 		// start inertial effect
 		Effect effect = new SingleDragEffect(_axis.asVector3D(), Angle.fromRadians(_radiansStep));
-		eventContext.getEffectsScheduler().startEffect(effect, cameraContext);
+  
+		EffectTarget target = cameraContext.getNextCamera().getEffectTarget();
+		eventContext.getEffectsScheduler().startEffect(effect, target);
 	  }
 	}
   

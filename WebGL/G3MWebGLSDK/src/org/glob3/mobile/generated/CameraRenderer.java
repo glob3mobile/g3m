@@ -53,7 +53,10 @@ public class CameraRenderer extends LeafRenderer
   {
 	// abort all the camera effect currently running
 	if (touchEvent.getType() == TouchEventType.Down)
-	  ec.getEffectsScheduler().cancellAllEffectsFor((EffectTarget) _cameraContext);
+	{
+	  EffectTarget target = _cameraContext.getNextCamera().getEffectTarget();
+	  ec.getEffectsScheduler().cancellAllEffectsFor(target);
+	}
   
 	// pass the event to all the handlers
 	for (int n = 0; n<_handlers.size(); n++)

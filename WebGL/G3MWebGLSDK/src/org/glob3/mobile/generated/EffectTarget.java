@@ -18,6 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public interface EffectTarget
 {
 
