@@ -272,7 +272,8 @@ private:
   
   //The Camera Effect Target
   class CameraEffectTarget: public EffectTarget{
-    void unusedMethod() {}
+  public:
+    void unusedMethod() const {}
   };
   CameraEffectTarget* _camEffectTarget;
   

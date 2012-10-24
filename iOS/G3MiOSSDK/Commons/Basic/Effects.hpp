@@ -22,7 +22,7 @@ class EffectTarget {
 public:  
   
   // added this method only to force the java-translator to consider EffectTarget as an interface (dgd)
-  virtual void unusedMethod() = 0;
+  virtual void unusedMethod() const = 0;
   
 #ifdef C_CODE
   virtual ~EffectTarget(){}

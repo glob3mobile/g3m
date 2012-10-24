@@ -62,7 +62,7 @@ public:
     
   }
 
-  void unusedMethod() {
+  void unusedMethod() const {
     
   }
   
