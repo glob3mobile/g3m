@@ -310,11 +310,13 @@ public class G3MWidget
 	  finalLon -= 360;
 	}
   
-	Geodetic3D end = Geodetic3D.fromDegrees(finalLat, finalLon, g.height());
+	final Geodetic3D end = Geodetic3D.fromDegrees(finalLat, finalLon, g.height());
+  
+	EffectTarget target = _nextCamera.getEffectTarget();
   
 	GoToPositionEffect gtpe = new GoToPositionEffect(interval, ini, end);
   
-	EffectTarget target = _nextCamera.getEffectTarget();
+	_effectsScheduler.cancellAllEffectsFor(target);
 	_effectsScheduler.startEffect(gtpe, target);
   }
 
