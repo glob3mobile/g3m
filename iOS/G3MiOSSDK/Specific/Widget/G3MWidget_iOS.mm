@@ -217,6 +217,12 @@
   
   [self widget]->setUserData(userData);
   
+  
+  //Testing go to pos
+  if (true){
+    [self widget]->setAnimatedPosition(Geodetic3D::fromDegrees(330.0, 40.0, 10000000), TimeInterval::fromSeconds(10));
+  }
+  
 //  //Testing Periodical Tasks
 //  if (true){
 //    

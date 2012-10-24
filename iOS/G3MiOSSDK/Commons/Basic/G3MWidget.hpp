@@ -43,6 +43,8 @@ class IStringBuilder;
 class IMathUtils;
 class IJSONParser;
 
+class Geodetic3D;
+
 
 class UserData {
 private:
@@ -135,6 +137,8 @@ public:
   
   void addPeriodicalTask(const TimeInterval& interval,
                          GTask* task);
+  
+  void setAnimatedPosition(const Geodetic3D& g, const TimeInterval& interval);
   
 private:
   FrameTasksExecutor* _frameTasksExecutor;

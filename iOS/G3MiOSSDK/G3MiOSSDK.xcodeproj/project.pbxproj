@@ -489,6 +489,7 @@
 		D8E17DD515FE2ABF00C980E6 /* IByteBuffer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IByteBuffer.hpp; path = Commons/Interfaces/IByteBuffer.hpp; sourceTree = "<group>"; };
 		D8E17DDC15FE2B4F00C980E6 /* ByteBuffer_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ByteBuffer_iOS.hpp; path = Specific/Derived/ByteBuffer_iOS.hpp; sourceTree = "<group>"; };
 		D8E76950160742FD008EC7B9 /* GLConstants.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GLConstants.hpp; sourceTree = "<group>"; };
+		D8EB78831637F6B500C4EB57 /* GoToPositionEffect.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = GoToPositionEffect.hpp; path = Commons/Basic/GoToPositionEffect.hpp; sourceTree = "<group>"; };
 		D8EEF3B51577924D003FEB5E /* libG3MiOSSDK.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libG3MiOSSDK.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8EEF3B81577924D003FEB5E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D8EEF3BC1577924D003FEB5E /* G3MiOSSDK-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "G3MiOSSDK-Prefix.pch"; sourceTree = "<group>"; };
@@ -649,6 +650,7 @@
 				CF527E19162E2B4200E0BDE0 /* GTask.cpp */,
 				CF527E1A162E2B4200E0BDE0 /* GTask.hpp */,
 				D81FB47C1636A5AE00CC2CA7 /* PeriodicalTask.hpp */,
+				D8EB78831637F6B500C4EB57 /* GoToPositionEffect.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";

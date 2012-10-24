@@ -27,6 +27,11 @@
 
 #include "PeriodicalTask.hpp"
 
+#include "GoToPositionEffect.hpp"
+#include "CameraRenderer.hpp"
+
+#include <math.h>
+
 void G3MWidget::initSingletons(ILogger*             logger,
                                IFactory*            factory,
                                const IStringUtils*  stringUtils,
@@ -398,4 +403,39 @@ void G3MWidget::addPeriodicalTask(PeriodicalTask* periodicalTask) {
 void G3MWidget::addPeriodicalTask(const TimeInterval& interval,
                                   GTask* task) {
   addPeriodicalTask( new PeriodicalTask(interval, task) );
+}
+
+void G3MWidget::setAnimatedPosition(const Geodetic3D& g, const TimeInterval& interval){
+  
+  Geodetic3D ini = _planet->toGeodetic3D( _currentCamera->getCartesianPosition() );
+  
+  double finalLat = g.latitude().degrees();
+  double finalLon = g.longitude().degrees();
+  
+  //Fixing final latitude
+  while (finalLat > 90){
+    finalLat -= 360;
+  }
+  while (finalLat < -90){
+    finalLat += 360;
+  }
+  
+  //Fixing final longitude
+  while (finalLon > 360){
+    finalLon -= 360;
+  }
+  while (finalLon < 0){
+    finalLon += 360;
+  }
+  if (fabs(finalLon - ini.longitude().degrees()) > 180){
+    finalLon -= 360;
+  }
+  
+  Geodetic3D end = Geodetic3D::fromDegrees(finalLat, finalLon, g.height());
+  
+  GoToPositionEffect *gtpe = new GoToPositionEffect(interval, ini, end);
+  
+  int todo_get_camera_context; //HOW??
+  
+  _effectsScheduler->startEffect(gtpe, new CameraContext(None, NULL));
 }

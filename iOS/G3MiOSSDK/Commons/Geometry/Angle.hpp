@@ -64,6 +64,10 @@ public:
   static Angle midAngle(const Angle& angle1, const Angle& angle2) {
     return Angle::fromDegrees((angle1.degrees() + angle2.degrees()) / 2);
   }
+  
+  static Angle interpolation(const Angle& angle1, const Angle& angle2, double v) {
+    return Angle::fromDegrees(((1.0-v) * angle1.degrees() + v * angle2.degrees()));
+  }
 
   
   bool isNan() const {
