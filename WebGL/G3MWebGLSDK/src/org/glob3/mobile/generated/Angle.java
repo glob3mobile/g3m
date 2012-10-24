@@ -79,6 +79,11 @@ public class Angle
 	return Angle.fromDegrees((angle1.degrees() + angle2.degrees()) / 2);
   }
 
+  public static Angle interpolation(Angle angle1, Angle angle2, double v)
+  {
+	return Angle.fromDegrees(((1.0-v) * angle1.degrees() + v * angle2.degrees()));
+  }
+
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: boolean isNan() const

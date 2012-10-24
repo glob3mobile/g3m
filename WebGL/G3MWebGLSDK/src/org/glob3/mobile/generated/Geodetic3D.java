@@ -54,6 +54,13 @@ public class Geodetic3D
 	return new Geodetic3D(Angle.fromDegrees(lat), Angle.fromDegrees(lon), height);
   }
 
+  public static Geodetic3D interpolation(Geodetic3D ini, Geodetic3D end, double v)
+  {
+	Geodetic3D g = new Geodetic3D(Angle.interpolation(ini.latitude(), end.latitude(), v), Angle.interpolation(ini.longitude(), end.longitude(), v), (1-v) * ini.height() + v * end.height());
+
+	return g;
+  }
+
   public Geodetic3D(Angle latitude, Angle longitude, double height)
   {
 	  _latitude = new Angle(latitude);
