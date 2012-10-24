@@ -8,6 +8,7 @@
 
 #include "Effects.hpp"
 
+#include "Context.hpp"
 
 void EffectsScheduler::initialize(const InitializationContext* ic) {
   _factory = ic->getFactory();

@@ -12,9 +12,11 @@
 #include "Renderer.hpp"
 #include "TimeInterval.hpp"
 #include "ITimer.hpp"
-#include "Camera.hpp"
 
 #include "IMathUtils.hpp"
+#include "IFactory.hpp"
+
+#include <vector>
 
 class EffectTarget {
 public:  

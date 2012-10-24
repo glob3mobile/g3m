@@ -48,6 +48,8 @@ void Camera::copyFrom(const Camera &that) {
   
   _geodeticCenterOfView = (that._geodeticCenterOfView == NULL) ? NULL : new Geodetic3D(*that._geodeticCenterOfView);
   
+  _camEffectTarget = new CameraEffectTarget();
+  
 #ifdef C_CODE
   if (_frustum != NULL) {
     delete _frustum;
@@ -89,7 +91,8 @@ _geodeticCenterOfView(NULL),
 _frustum(NULL),
 _frustumInModelCoordinates(NULL),
 _halfFrustumInModelCoordinates(NULL),
-_halfFrustum(NULL)
+_halfFrustum(NULL),
+_camEffectTarget(new CameraEffectTarget())
 {
   resizeViewport(width, height);
 }
