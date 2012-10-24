@@ -27,6 +27,7 @@ private:
   int   _vertexShader, _fragmentShader;
   
   bool compileShader(int shader, const std::string source); 
+  bool linkProgram();
 
   
   

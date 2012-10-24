@@ -351,6 +351,25 @@ public:
       free(log);
     }
   }
+  
+  bool linkProgram(int program) const {
+    int status;
+    glLinkProgram(program);
+    glGetProgramiv(program, GL_LINK_STATUS, &status);
+    return status;
+  }
+  
+  void printProgramInfoLog(int program) const {
+    GLint logLength;
+    glGetProgramiv(program, GL_INFO_LOG_LENGTH, &logLength);
+    if (logLength > 0) {
+      GLchar* log = (GLchar* ) malloc(logLength);
+      glGetProgramInfoLog(program, logLength, &logLength, log);
+      NSLog(@"Program link log:\n%s", log);
+      free(log);
+    }
+  }
+  
 };
 
 #endif

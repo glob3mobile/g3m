@@ -194,6 +194,8 @@ public:
   virtual bool compileShader (int shader, const std::string& source) const = 0;
   virtual void deleteShader(int shader) const = 0;
   virtual void printShaderInfoLog(int shader) const = 0;
+  virtual bool linkProgram(int program) const = 0;
+  virtual void printProgramInfoLog(int program) const = 0;
 
 };
 

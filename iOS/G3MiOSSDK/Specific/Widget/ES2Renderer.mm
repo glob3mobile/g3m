@@ -31,9 +31,9 @@ enum {
 @interface ES2Renderer (PrivateMethods)
 - (BOOL)loadShaders;
 
-- (BOOL)compileShader:(GLuint*)shader type:(GLenum)type file:(NSString *)file;
+//- (BOOL)compileShader:(GLuint*)shader type:(GLenum)type file:(NSString *)file;
 
-- (BOOL)linkProgram:(GLuint)prog;
+//- (BOOL)linkProgram:(GLuint)prog;
 
 - (BOOL)validateProgram:(GLuint)prog;
 @end
@@ -105,6 +105,7 @@ enum {
   [context presentRenderbuffer:GL_RENDERBUFFER];
 }
 
+/*
 - (BOOL)compileShader:(GLuint*)shader type:(GLenum)type file:(NSString *)file {
   GLint status;
   const GLchar* source;
@@ -138,8 +139,9 @@ enum {
   }
   
   return TRUE;
-}
+}*/
 
+/*
 - (BOOL)linkProgram:(GLuint)prog {
   GLint status;
   
@@ -161,7 +163,7 @@ enum {
     return FALSE;
   
   return TRUE;
-}
+}*/
 
 - (BOOL)validateProgram:(GLuint)prog {
   GLint logLength, status;
@@ -183,7 +185,7 @@ enum {
 }
 
 - (BOOL)loadShaders {
-  GLuint vertShader, fragShader;
+  //GLuint vertShader, fragShader;
   NSString *vertShaderPathname, *fragShaderPathname;
   
   // Create and compile vertex shader
@@ -227,12 +229,12 @@ enum {
   //program = (IGLProgramId*) new GLProgramId_iOS(programNum);
 
   
-  
+  /*
   // Link program
   if (![self linkProgram:_shaderProgram->getProgram()]) {
     NSLog(@"Failed to link program: %d", _shaderProgram->getProgram());
     
-    /*if (vertShader) {
+    if (vertShader) {
       glDeleteShader(vertShader);
       vertShader = 0;
     }
@@ -240,10 +242,10 @@ enum {
       glDeleteShader(fragShader);
       fragShader = 0;
     }    
-    glDeleteProgram(_shaderProgram->getProgramNum());*/
+    glDeleteProgram(_shaderProgram->getProgramNum());
 
     return FALSE;
-  }
+  }*/
   
   // Get uniform locations
   //uniforms[UNIFORM_TRANSLATE] = glGetUniformLocation(program, "translate");
