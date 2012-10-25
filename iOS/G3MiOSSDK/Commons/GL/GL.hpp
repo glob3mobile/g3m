@@ -64,8 +64,11 @@ private:
   float _translationY;
   
   IFloatBuffer* _vertices;
+  int           _verticesTimestamp;
   IFloatBuffer* _textureCoordinates;
+  int           _textureCoordinatesTimestamp;
   IFloatBuffer* _colors;
+  int           _colorsTimestamp;
   
   float _flatColorR;
   float _flatColorG;
@@ -115,8 +118,11 @@ public:
   _texturesIdGetCounter(0),
   _texturesIdTakeCounter(0),
   _vertices(NULL),
+  _verticesTimestamp(0),
   _textureCoordinates(NULL),
+  _textureCoordinatesTimestamp(0),
   _colors(NULL),
+  _colorsTimestamp(0),
   _flatColorR(0),
   _flatColorG(0),
   _flatColorB(0),

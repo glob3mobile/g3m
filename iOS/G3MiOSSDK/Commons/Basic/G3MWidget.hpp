@@ -34,6 +34,7 @@ class IStringBuilder;
 class IMathUtils;
 class IJSONParser;
 class Geodetic3D;
+class CameraRenderer;
 
 #include <vector>
 #include <string>
@@ -78,7 +79,8 @@ public:
                            IDownloader*                     downloader,
                            const Planet*                    planet,
                            std::vector<ICameraConstrainer*> cameraConstrainers,
-                           Renderer*                        renderer,
+                           CameraRenderer*                  cameraRenderer,
+                           Renderer*                        mainRenderer,
                            Renderer*                        busyRenderer,
                            EffectsScheduler*                effectsScheduler,
                            int                              width,
@@ -132,14 +134,16 @@ public:
   
   void addPeriodicalTask(const TimeInterval& interval,
                          GTask* task);
-  
-  void setAnimatedPosition(const Geodetic3D& g, const TimeInterval& interval);
-  
+
+  void setAnimatedCameraPosition(const Geodetic3D& g,
+                                 const TimeInterval& interval);
+
 private:
   FrameTasksExecutor* _frameTasksExecutor;
   GL*                 _gl;
   const Planet*       _planet;
 
+  CameraRenderer*     _cameraRenderer;
   Renderer*           _mainRenderer;
   Renderer*           _busyRenderer;
   bool                _mainRendererReady;
@@ -181,6 +185,7 @@ private:
             IDownloader*                     downloader,
             const Planet*                    planet,
             std::vector<ICameraConstrainer*> cameraConstrainers,
+            CameraRenderer*                  cameraRenderer,
             Renderer*                        mainRenderer,
             Renderer*                        busyRenderer,
             EffectsScheduler*                effectsScheduler,

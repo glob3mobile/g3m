@@ -82,10 +82,9 @@ public:
   }
   
   static Angle interpolation(const Angle& angle1, const Angle& angle2, double v) {
-    return Angle::fromDegrees(((1.0-v) * angle1.degrees() + v * angle2.degrees()));
+    return Angle::fromDegrees( (1.0-v) * angle1._degrees + v * angle2._degrees );
   }
 
-  
   bool isNan() const {
     return IMathUtils::instance()->isNan(_degrees);
   }

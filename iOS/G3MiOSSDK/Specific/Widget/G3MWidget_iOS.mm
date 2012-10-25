@@ -135,10 +135,10 @@
                                                  storage,
                                                  saveInBackground);
   
-  CompositeRenderer* composite = new CompositeRenderer();
+  CompositeRenderer* mainRenderer = new CompositeRenderer();
   
-  composite->addRenderer(cameraRenderer);
-  
+//  composite->addRenderer(cameraRenderer);
+
   if (layerSet != NULL) {
     TileTexturizer* texturizer = new MultiLayerTileTexturizer();
     
@@ -148,11 +148,11 @@
                                         layerSet,
                                         parameters,
                                         showStatistics);
-    composite->addRenderer(tr);
+    mainRenderer->addRenderer(tr);
   }
   
   for (int i = 0; i < renderers.size(); i++) {
-    composite->addRenderer(renderers[i]);
+    mainRenderer->addRenderer(renderers[i]);
   }
   
   
@@ -204,7 +204,8 @@
                                 downloader,
                                 planet,
                                 cameraConstraints,
-                                composite,
+                                cameraRenderer,
+                                mainRenderer,
                                 busyRenderer,
                                 scheduler,
                                 width, height,
@@ -219,12 +220,12 @@
   
   //Testing go to pos
   if (true){
-    [self widget]->setAnimatedPosition(Geodetic3D(Angle::fromDegreesMinutes(37, 47),
-                                                  Angle::fromDegreesMinutes(-122, 25),
-                                                  1000000),
-                                       TimeInterval::fromSeconds(10));
+    [self widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegreesMinutes(37, 47),
+                                                        Angle::fromDegreesMinutes(-122, 25),
+                                                        1000000),
+                                             TimeInterval::fromSeconds(10));
   }
-  
+
 //  //Testing Periodical Tasks
 //  if (true){
 //    

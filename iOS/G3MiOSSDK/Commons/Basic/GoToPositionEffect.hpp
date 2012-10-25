@@ -16,8 +16,8 @@ class GoToPositionEffect : public EffectWithDuration {
 public:
   
   GoToPositionEffect(const TimeInterval& duration,
-                     Geodetic3D  initialPos,
-                     Geodetic3D  finalPos):
+                     Geodetic3D initialPos,
+                     Geodetic3D finalPos):
   EffectWithDuration(duration),
   _initialPos(initialPos),
   _finalPos(finalPos)
@@ -51,7 +51,6 @@ public:
   }
   
 private:
-  
   Geodetic3D  _initialPos;
   Geodetic3D  _finalPos;
 };
