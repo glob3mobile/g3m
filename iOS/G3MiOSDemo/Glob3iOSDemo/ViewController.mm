@@ -251,8 +251,6 @@
   
   Trail* trail = new Trail(50, Color::fromRGBA(1, 0, 0, 1));
   
-//  37°47′/N 122°25′W
-  
   Geodetic3D position(Angle::fromDegrees(37.78333333),
                       Angle::fromDegrees(-122.41666666666667),
                       7500);
@@ -320,25 +318,21 @@
     }
 
     void run() {
-      //      ILogger::instance()->logInfo("Running initialization Task");
       printf("Running initialization Task\n");
 
       [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegreesMinutes(37, 47),
-                                                             Angle::fromDegreesMinutes(-122, 25),
-                                                             1000000),
-                                                  TimeInterval::fromSeconds(10));
-
+                                                                Angle::fromDegreesMinutes(-122, 25),
+                                                                1000000),
+                                                     TimeInterval::fromSeconds(10));
     }
   };
-
-  GTask* initializationTask = new SampleInitializationTask([self G3MWidget]);
 
   UserData* userData = NULL;
   [[self G3MWidget] initWidgetWithCameraConstraints: cameraConstraints
                                            layerSet: layerSet
                                           renderers: renderers
                                            userData: userData
-                                 initializationTask: initializationTask
+                                 initializationTask: new SampleInitializationTask([self G3MWidget])
                                     periodicalTasks: periodicalTasks];
 }
 

@@ -81,7 +81,7 @@
                                 layerSet: (LayerSet*) layerSet
                                renderers: (std::vector<Renderer*>) renderers
                                 userData: (UserData*) userData
-                      initializationTask: (GTask *)initializationTask
+                      initializationTask: (GTask *) initializationTask
                          periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
 {
   // creates default camera-renderer and camera-handlers
