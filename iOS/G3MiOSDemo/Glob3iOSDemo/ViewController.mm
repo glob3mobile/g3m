@@ -16,14 +16,12 @@
 #include "TilesRenderParameters.hpp"
 #include "MarksRenderer.hpp"
 #include "CameraConstraints.hpp"
-#include "GLErrorRenderer.hpp"
-
+//#include "GLErrorRenderer.hpp"
 #include "LevelTileCondition.hpp"
-
 #include "BingLayer.hpp"
-//#include "OSMLayer.hpp"
 #include "TrailsRenderer.hpp"
 #include "PeriodicalTask.hpp"
+#include "G3MWidget.hpp"
 
 @implementation ViewController
 
@@ -308,12 +306,39 @@
   std::vector <ICameraConstrainer*> cameraConstraints;
   SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
   cameraConstraints.push_back(scc);
-  
+
+
+  class SampleInitializationTask : public GTask {
+  private:
+    G3MWidget_iOS* _iosWidget;
+    
+  public:
+    SampleInitializationTask(G3MWidget_iOS* iosWidget) :
+    _iosWidget(iosWidget)
+    {
+
+    }
+
+    void run() {
+      //      ILogger::instance()->logInfo("Running initialization Task");
+      printf("Running initialization Task\n");
+
+      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegreesMinutes(37, 47),
+                                                             Angle::fromDegreesMinutes(-122, 25),
+                                                             1000000),
+                                                  TimeInterval::fromSeconds(10));
+
+    }
+  };
+
+  GTask* initializationTask = new SampleInitializationTask([self G3MWidget]);
+
   UserData* userData = NULL;
   [[self G3MWidget] initWidgetWithCameraConstraints: cameraConstraints
                                            layerSet: layerSet
                                           renderers: renderers
                                            userData: userData
+                                 initializationTask: initializationTask
                                     periodicalTasks: periodicalTasks];
 }
 

@@ -81,6 +81,7 @@
                                 layerSet: (LayerSet*) layerSet
                                renderers: (std::vector<Renderer*>) renderers
                                 userData: (UserData*) userData
+                      initializationTask: (GTask *)initializationTask
                          periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
 {
   // creates default camera-renderer and camera-handlers
@@ -110,6 +111,7 @@
                tilesRenderParameters: parameters
                            renderers: renderers
                             userData: userData
+                  initializationTask: initializationTask
                      periodicalTasks: periodicalTasks];
 }
 
@@ -119,6 +121,7 @@
                 tilesRenderParameters: (TilesRenderParameters*) parameters
                             renderers: (std::vector<Renderer*>) renderers
                              userData: (UserData*) userData
+                   initializationTask: (GTask*) initializationTask
                       periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
 {
   
@@ -165,16 +168,6 @@
   EffectsScheduler* scheduler = new EffectsScheduler();
   
   FrameTasksExecutor* frameTasksExecutor = new FrameTasksExecutor();
-      
-  class SampleInitializationTask : public GTask {
-  public:
-    void run() {
-      //      ILogger::instance()->logInfo("Running initialization Task");
-      printf("Running initialization Task\n");
-    }
-  };
-  
-  GTask* initializationTask = new SampleInitializationTask();
   
   _widgetVP = G3MWidget::create(frameTasksExecutor,
                                 gl,
@@ -197,38 +190,7 @@
   
   [self widget]->setUserData(userData);
   
-  //Testing go to pos
-  if (true){
-    [self widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegreesMinutes(37, 47),
-                                                        Angle::fromDegreesMinutes(-122, 25),
-                                                        1000000),
-                                             TimeInterval::fromSeconds(10));
-  }
 
-//  //Testing Periodical Tasks
-//  if (true){
-//    
-//    class TestPeriodicTask : public GTask {
-//      long long _lastExec;
-//      int _number;
-//    public:
-//      TestPeriodicTask(int n):_number(n){}
-//      
-//      void run() {
-//        ITimer* t = IFactory::instance()->createTimer();
-//        long long now = t->now().milliseconds();
-//        ILogger::instance()->logInfo("Running periodical Task %d - %lld ms.", _number,  now - _lastExec);
-//        _lastExec = now;
-//        IFactory::instance()->deleteTimer(t);
-//      }
-//    };
-//    
-//    [self widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(4000), new TestPeriodicTask(1));
-//    [self widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(6000), new TestPeriodicTask(2));
-//    [self widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(500), new TestPeriodicTask(3));
-//  }
-  
-  
 }
 
 //The EAGL view is stored in the nib file. When it's unarchived it's sent -initWithCoder:
