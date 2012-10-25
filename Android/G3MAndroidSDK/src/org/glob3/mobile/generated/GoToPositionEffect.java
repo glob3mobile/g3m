@@ -34,7 +34,7 @@ public class GoToPositionEffect extends EffectWithDuration
 
 	Geodetic3D g = Geodetic3D.interpolation(_initialPos, _finalPos, percent);
 
-	//printf("EFFECT %f - %f, %f, %f\n", percent, g.latitude().degrees(), g.longitude().degrees(), g.height());
+	//printf("EFFECT %f - %f, %f, %f\n", percent, g.latitude()._degrees, g.longitude()._degrees, g.height());
 	camera.setPosition(g);
   }
 
