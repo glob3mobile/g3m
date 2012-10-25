@@ -25,8 +25,6 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class ILogger;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class IFactory;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class GL;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TexturesHandler;
@@ -37,8 +35,6 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Camera;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class ITimer;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class EffectsScheduler;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IStringUtils;
@@ -46,6 +42,15 @@ package org.glob3.mobile.generated;
 //class IThreadUtils;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class GTask;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class TimeInterval;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IFactory;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class ITimer;
+
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class PeriodicalTask;
 
 
 
@@ -65,6 +70,9 @@ package org.glob3.mobile.generated;
 //class IMathUtils;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IJSONParser;
+
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class Geodetic3D;
 
 
 public class UserData

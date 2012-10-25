@@ -42,8 +42,10 @@ private:
   
 public:
   
-  FloatBufferBuilderFromCartesian3D(int cs, const Vector3D& center):
-  _centerStrategy(cs){
+  FloatBufferBuilderFromCartesian3D(int centerStrategy,
+                                    const Vector3D& center):
+  _centerStrategy(centerStrategy)
+  {
     setCenter(center);
   }
   

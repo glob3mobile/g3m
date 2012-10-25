@@ -77,6 +77,21 @@ public class Geodetic2D
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Geodetic2D times(const double magnitude) const
+  public final Geodetic2D times(double magnitude)
+  {
+	return new Geodetic2D(_latitude.times(magnitude), _longitude.times(magnitude));
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Geodetic2D div(const double magnitude) const
+  public final Geodetic2D div(double magnitude)
+  {
+	return new Geodetic2D(_latitude.div(magnitude), _longitude.div(magnitude));
+  }
+
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: boolean closeTo(const Geodetic2D &other) const
   public final boolean closeTo(Geodetic2D other)
   {

@@ -292,7 +292,13 @@ void GL::drawTriangleStrip(IIntBuffer* indices) {
 }
 
 void GL::drawLines(IIntBuffer* indices) {
-  _gl->drawElements(GLPrimitive::lineLoop(),
+  _gl->drawElements(GLPrimitive::lines(),
+                    indices->size(),
+                    indices);
+}
+
+void GL::drawLineStrip(IIntBuffer* indices) {
+  _gl->drawElements(GLPrimitive::lineStrip(),
                     indices->size(),
                     indices);
 }

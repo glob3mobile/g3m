@@ -543,6 +543,12 @@ public final class NativeGL_WebGL
 
 
    @Override
+   public native int Primitive_LineStrip() /*-{
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.LINE_STRIP;
+   }-*/;
+
+
+   @Override
    public native int Primitive_LineLoop() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.LINE_LOOP;
    }-*/;

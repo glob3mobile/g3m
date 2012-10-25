@@ -81,6 +81,7 @@
                                 layerSet: (LayerSet*) layerSet
                                renderers: (std::vector<Renderer*>) renderers
                                 userData: (UserData*) userData
+                         periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
 {
   // creates default camera-renderer and camera-handlers
   CameraRenderer *cameraRenderer = new CameraRenderer();
@@ -108,7 +109,8 @@
                             layerSet: layerSet
                tilesRenderParameters: parameters
                            renderers: renderers
-                            userData: userData];
+                            userData: userData
+                     periodicalTasks: periodicalTasks];
 }
 
 - (void) initWidgetWithCameraRenderer: (CameraRenderer*) cameraRenderer
@@ -117,13 +119,14 @@
                 tilesRenderParameters: (TilesRenderParameters*) parameters
                             renderers: (std::vector<Renderer*>) renderers
                              userData: (UserData*) userData
+                      periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
 {
   
   // create GLOB3M WIDGET
   int width = (int) [self frame].size.width;
   int height = (int) [self frame].size.height;
-
-    NativeGL2_iOS*  nGL           = new NativeGL2_iOS();
+  
+  NativeGL2_iOS* nGL = new NativeGL2_iOS();
   GL* gl = new GL(nGL);
   
   IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
@@ -137,15 +140,15 @@
   composite->addRenderer(cameraRenderer);
   
   if (layerSet != NULL) {
-      TileTexturizer* texturizer = new MultiLayerTileTexturizer();
-      
-      const bool showStatistics = false;
-      TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
-                                          texturizer,
-                                          layerSet,
-                                          parameters,
-                                          showStatistics);
-      composite->addRenderer(tr);
+    TileTexturizer* texturizer = new MultiLayerTileTexturizer();
+    
+    const bool showStatistics = false;
+    TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
+                                        texturizer,
+                                        layerSet,
+                                        parameters,
+                                        showStatistics);
+    composite->addRenderer(tr);
   }
   
   for (int i = 0; i < renderers.size(); i++) {
@@ -187,7 +190,7 @@
   class SampleInitializationTask : public GTask {
   public:
     void run() {
-//      ILogger::instance()->logInfo("Running initialization Task");
+      //      ILogger::instance()->logInfo("Running initialization Task");
       printf("Running initialization Task\n");
     }
   };
@@ -209,9 +212,46 @@
                                 true,
                                 false,
                                 initializationTask,
-                                true);
+                                true,
+                                periodicalTasks);
   
   [self widget]->setUserData(userData);
+  
+  //Testing go to pos
+  if (true){
+//    [self widget]->setAnimatedPosition(Geodetic3D::fromDegrees(330.0, 185.0, 10000000),
+//                                       TimeInterval::fromSeconds(5));
+    
+    [self widget]->setAnimatedPosition(Geodetic3D(Angle::fromDegreesMinutes(37, 47),
+                                                  Angle::fromDegreesMinutes(-122, 25),
+                                                  1000000),
+                                       TimeInterval::fromSeconds(7));
+  }
+  
+//  //Testing Periodical Tasks
+//  if (true){
+//    
+//    class TestPeriodicTask : public GTask {
+//      long long _lastExec;
+//      int _number;
+//    public:
+//      TestPeriodicTask(int n):_number(n){}
+//      
+//      void run() {
+//        ITimer* t = IFactory::instance()->createTimer();
+//        long long now = t->now().milliseconds();
+//        ILogger::instance()->logInfo("Running periodical Task %d - %lld ms.", _number,  now - _lastExec);
+//        _lastExec = now;
+//        IFactory::instance()->deleteTimer(t);
+//      }
+//    };
+//    
+//    [self widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(4000), new TestPeriodicTask(1));
+//    [self widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(6000), new TestPeriodicTask(2));
+//    [self widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(500), new TestPeriodicTask(3));
+//  }
+  
+  
 }
 
 //The EAGL view is stored in the nib file. When it's unarchived it's sent -initWithCoder:

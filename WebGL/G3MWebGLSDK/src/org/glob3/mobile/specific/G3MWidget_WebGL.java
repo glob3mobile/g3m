@@ -20,6 +20,7 @@ import org.glob3.mobile.generated.FrameTasksExecutor;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GL;
 import org.glob3.mobile.generated.GTask;
+import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
@@ -33,12 +34,14 @@ import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.MultiLayerTileTexturizer;
+import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.TextureBuilder;
 import org.glob3.mobile.generated.TexturesHandler;
 import org.glob3.mobile.generated.TileRenderer;
 import org.glob3.mobile.generated.TilesRenderParameters;
+import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.UserData;
 
 import com.google.gwt.canvas.client.Canvas;
@@ -72,33 +75,28 @@ public final class G3MWidget_WebGL
 
    private G3MWidget                     _widget;
 
-
    private int                           _width;
    private int                           _height;
    private final int                     _delayMillis;
    private final String                  _proxy;
 
+   private ArrayList<String>             _imagesToPreload;
 
-   public String getProxy() {
-      return _proxy;
-   }
+   private GTask                         _initializationTask;
 
-
-   private ArrayList<String> _imagesToPreload;
-   private IFactory          _factory;
-
-   private GTask             _initializationTask;
+   private ArrayList<PeriodicalTask>     _periodicalTasks;
 
 
-   public G3MWidget_WebGL(final int delayMillis,
-                          final String proxy) {
+   public G3MWidget_WebGL(final String proxy) {
+      // downloader
+      _delayMillis = 10;
+      _proxy = proxy;
+
+      initSingletons();
+
       _panel = new FlowPanel();
 
       initWidget(_panel);
-
-      // downloader
-      _delayMillis = delayMillis;
-      _proxy = proxy;
 
       _canvas = Canvas.createIfSupported();
 
@@ -124,6 +122,19 @@ public final class G3MWidget_WebGL
    }
 
 
+   public void initSingletons() {
+      final ILogger logger = new Logger_WebGL(LogLevel.InfoLevel);
+      final IFactory factory = new Factory_WebGL();
+      final IStringUtils stringUtils = new StringUtils_WebGL();
+      final IThreadUtils threadUtils = new ThreadUtils_WebGL(_delayMillis);
+      final IStringBuilder stringBuilder = new StringBuilder_WebGL();
+      final IMathUtils mathUtils = new MathUtils_WebGL();
+      final IJSONParser jsonParser = new JSONParser_WebGL();
+
+      G3MWidget.initSingletons(logger, factory, stringUtils, threadUtils, stringBuilder, mathUtils, jsonParser);
+   }
+
+
    protected void onSizeChanged(final int w,
                                 final int h) {
       _width = w;
@@ -137,6 +148,11 @@ public final class G3MWidget_WebGL
          _widget.onResizeViewportEvent(_width, _height);
          jsOnResizeViewport(_width, _height);
       }
+   }
+
+
+   public String getProxy() {
+      return _proxy;
    }
 
 
@@ -233,7 +249,8 @@ public final class G3MWidget_WebGL
                           final ArrayList<Renderer> renderers,
                           final UserData userData,
                           final ArrayList<String> images,
-                          final GTask initializationTask) {
+                          final GTask initializationTask,
+                          final ArrayList<PeriodicalTask> periodicalTasks) {
       jsDefineG3MBrowserObjects();
 
       _cameraConstraints = cameraConstraints;
@@ -242,7 +259,7 @@ public final class G3MWidget_WebGL
       _userData = userData;
       _imagesToPreload = images;
       _initializationTask = initializationTask;
-      _factory = new Factory_WebGL();
+      _periodicalTasks = (periodicalTasks == null) ? new ArrayList<PeriodicalTask>() : periodicalTasks;
 
       // TODO TEMP HACK TO PRELOAD IMAGES
       preloadImagesAndInitWidget();
@@ -280,14 +297,8 @@ public final class G3MWidget_WebGL
 
       // final TilesRenderParameters parameters = TilesRenderParameters.createSingleSector(renderDebug, useTilesSplitBudget, forceTopLevelTilesRenderOnStart);
 
-      final ILogger logger = new Logger_WebGL(LogLevel.InfoLevel);
       //      final IStorage storage = new IndexedDBStorage_WebGL();
       final IDownloader downloader = new Downloader_WebGL(8, _delayMillis, _proxy);
-      final IStringUtils stringUtils = new StringUtils_WebGL();
-      final IThreadUtils threadUtils = new ThreadUtils_WebGL(_delayMillis);
-      final IStringBuilder stringBuilder = new StringBuilder_WebGL();
-      final IMathUtils mathUtils = new MathUtils_WebGL();
-
 
       _webGLContext = jsGetWebGLContext();
       if (_webGLContext == null) {
@@ -333,16 +344,8 @@ public final class G3MWidget_WebGL
       final boolean logFPS = false;
       final boolean logDownloaderStatistics = false;
 
-      final IJSONParser jsonParser = new JSONParser_WebGL();
       _widget = G3MWidget.create( //
                frameTasksExecutor, //
-               _factory, //
-               stringUtils, //
-               threadUtils, //
-               stringBuilder, //
-               mathUtils, //
-               jsonParser, //
-               logger, //
                gl, //
                texturesHandler, //
                textureBuilder, //
@@ -358,9 +361,39 @@ public final class G3MWidget_WebGL
                logFPS, //
                logDownloaderStatistics, //
                _initializationTask, //
-               true);
+               true, //
+               _periodicalTasks);
 
       _widget.setUserData(_userData);
+
+      //      //Testing Periodical Tasks
+      //      if (true) {
+      //         class PeriodicTask
+      //                  extends
+      //                     GTask {
+      //            private long      _lastExec;
+      //            private final int _number;
+      //
+      //
+      //            public PeriodicTask(final int n) {
+      //               _number = n;
+      //            }
+      //
+      //
+      //            @Override
+      //            public void run() {
+      //               final ITimer t = IFactory.instance().createTimer();
+      //               final long now = t.now().milliseconds();
+      //               ILogger.instance().logInfo("Running periodical Task " + _number + " - " + (now - _lastExec) + " ms.\n");
+      //               _lastExec = now;
+      //               IFactory.instance().deleteTimer(t);
+      //            }
+      //         }
+      //
+      //         _widget.addPeriodicalTask(TimeInterval.fromMilliseconds(4000), new PeriodicTask(1));
+      //         _widget.addPeriodicalTask(TimeInterval.fromMilliseconds(6000), new PeriodicTask(2));
+      //         _widget.addPeriodicalTask(TimeInterval.fromMilliseconds(500), new PeriodicTask(3));
+      //      }
 
       _motionEventProcessor = new MotionEventProcessor(_widget);
 
@@ -377,7 +410,7 @@ public final class G3MWidget_WebGL
 
    private void storeDownloadedImage(final String url,
                                      final JavaScriptObject imgJS) {
-      ((Factory_WebGL) _factory).storeDownloadedImage(url, imgJS);
+      ((Factory_WebGL) IFactory.instance()).storeDownloadedImage(url, imgJS);
    }
 
 
@@ -445,5 +478,10 @@ public final class G3MWidget_WebGL
       return getG3MWidget().getUserData();
    }
 
+
+   public void setAnimatedPosition(final Geodetic3D position,
+                                   final TimeInterval interval) {
+      getG3MWidget().setAnimatedPosition(position, interval);
+   }
 
 }

@@ -22,10 +22,8 @@
 
 #include "BingLayer.hpp"
 //#include "OSMLayer.hpp"
-
-#include "IJSONParser.hpp"
-#include "JSONParser_iOS.hpp"
-
+#include "TrailsRenderer.hpp"
+#include "PeriodicalTask.hpp"
 
 @implementation ViewController
 
@@ -91,7 +89,7 @@
   //                                     true,
   //                                     NULL);
   //  layerSet->addLayer(political);
-
+  
   bool useBing = false;
   if (useBing) {
     WMSLayer* bing = new WMSLayer("ve",
@@ -108,20 +106,20 @@
   
   bool useOSM = true;
   if (useOSM) {
-//    WMSLayer *osm = new WMSLayer("osm",
-//                                 URL("http://wms.latlon.org/"),
-//                                 WMS_1_1_0,
-//                                 Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
-//                                 "image/jpeg",
-//                                 "EPSG:4326",
-//                                 "",
-//                                 false,
-//                                 NULL);
-//    layerSet->addLayer(osm);
+    //    WMSLayer *osm = new WMSLayer("osm",
+    //                                 URL("http://wms.latlon.org/"),
+    //                                 WMS_1_1_0,
+    //                                 Sector::fromDegrees(-85.05, -180.0, 85.5, 180.0),
+    //                                 "image/jpeg",
+    //                                 "EPSG:4326",
+    //                                 "",
+    //                                 false,
+    //                                 NULL);
+    //    layerSet->addLayer(osm);
     WMSLayer *osm = new WMSLayer("osm_auto:all",
                                  URL("http://129.206.228.72/cached/osm", false),
                                  WMS_1_1_0,
-                                // Sector::fromDegrees(-85.05, -180.0, 85.05, 180.0),
+                                 // Sector::fromDegrees(-85.05, -180.0, 85.05, 180.0),
                                  Sector::fullSphere(),
                                  "image/jpeg",
                                  "EPSG:4326",
@@ -129,6 +127,7 @@
                                  false,
                                  NULL);
     layerSet->addLayer(osm);
+    
   }
   
   const bool usePnoaLayer = false;
@@ -221,41 +220,91 @@
     
     // marks renderer
     const bool readyWhenMarksReady = false;
-    MarksRenderer* marks = new MarksRenderer(readyWhenMarksReady);
-    renderers.push_back(marks);
+    MarksRenderer* marksRenderer = new MarksRenderer(readyWhenMarksReady);
+    renderers.push_back(marksRenderer);
     
-    marks->setMarkTouchListener(new TestMarkTouchListener(), true);
+    marksRenderer->setMarkTouchListener(new TestMarkTouchListener(), true);
     
     Mark* m1 = new Mark("Fuerteventura",
                         URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
                         Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-14.36), 0));
-    marks->addMark(m1);
+    marksRenderer->addMark(m1);
     
     
     Mark* m2 = new Mark("Las Palmas",
                         URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
                         Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0));
-    marks->addMark(m2);
+    marksRenderer->addMark(m2);
     
     if (false) {
       for (int i = 0; i < 500; i++) {
         const Angle latitude = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
         const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
         //NSLog(@"lat=%f, lon=%f", latitude.degrees(), longitude.degrees());
-        
-        marks->addMark(new Mark("Random",
-                                URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
-                                Geodetic3D(latitude, longitude, 0)));
+
+        marksRenderer->addMark(new Mark("Random",
+                                        URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
+                                        Geodetic3D(latitude, longitude, 0)));
       }
     }
   }
+  
+  TrailsRenderer* trailsRenderer = new TrailsRenderer();
+  renderers.push_back(trailsRenderer);
+  
+  Trail* trail = new Trail(50, Color::fromRGBA(1, 0, 0, 1));
+  
+//  37°47′/N 122°25′W
+  
+  Geodetic3D position(Angle::fromDegrees(37.78333333),
+                      Angle::fromDegrees(-122.41666666666667),
+                      7500);
+  trail->addPosition(position);
+  trailsRenderer->addTrail(trail);
+  
   
   //  if (false) {
   //    LatLonMeshRenderer *renderer = new LatLonMeshRenderer();
   //    renderers.push_back(renderer);
   //  }
+
   
-//  renderers.push_back(new GLErrorRenderer());
+  //  renderers.push_back(new GLErrorRenderer());
+  
+  class TestTrailTask : public GTask {
+  private:
+    Trail* _trail;
+    
+    double _lastLatitudeDegrees;
+    double _lastLongitudeDegrees;
+    double _lastHeight;
+    
+  public:
+    TestTrailTask(Trail* trail,
+                  Geodetic3D lastPosition) :
+    _trail(trail),
+    _lastLatitudeDegrees(lastPosition.latitude().degrees()),
+    _lastLongitudeDegrees(lastPosition.longitude().degrees()),
+    _lastHeight(lastPosition.height())
+    {
+      
+    }
+    
+    void run() {
+      _lastLatitudeDegrees += 0.025;
+      _lastLongitudeDegrees += 0.025;
+      _lastHeight += 200;
+
+      _trail->addPosition(Geodetic3D(Angle::fromDegrees(_lastLatitudeDegrees),
+                                     Angle::fromDegrees(_lastLongitudeDegrees),
+                                     _lastHeight));
+    }
+  };
+  
+  std::vector<PeriodicalTask*> periodicalTasks;
+  periodicalTasks.push_back( new PeriodicalTask(TimeInterval::fromSeconds(1),
+                                                new TestTrailTask(trail, position)));
+  
   
   std::vector <ICameraConstrainer*> cameraConstraints;
   SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
@@ -265,8 +314,8 @@
   [[self G3MWidget] initWidgetWithCameraConstraints: cameraConstraints
                                            layerSet: layerSet
                                           renderers: renderers
-                                           userData: userData];
-  
+                                           userData: userData
+                                    periodicalTasks: periodicalTasks];
 }
 
 - (void)viewDidUnload

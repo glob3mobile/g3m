@@ -87,7 +87,7 @@ public final class Downloader_WebGL
 
       final long requestId;
       Downloader_WebGL_Handler handler = null;
-      final URL proxyUrl = new URL(_proxy + url.getPath());
+      final URL proxyUrl = new URL(_proxy + url.getPath(), false);
 
       _requestsCounter++;
       requestId = _requestIdCounter++;
@@ -123,7 +123,7 @@ public final class Downloader_WebGL
                             final boolean deleteListener) {
       final long requestId;
       Downloader_WebGL_Handler handler = null;
-      final URL proxyUrl = new URL(_proxy + url.getPath());
+      final URL proxyUrl = new URL(_proxy + url.getPath(), false);
 
       _requestsCounter++;
       requestId = _requestIdCounter++;

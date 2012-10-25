@@ -13,17 +13,20 @@ class Renderer;
 class TouchEvent;
 class Planet;
 class ILogger;
-class IFactory;
 class GL;
 class TexturesHandler;
 class Downloader;
 class IDownloader;
 class Camera;
-class ITimer;
 class EffectsScheduler;
 class IStringUtils;
 class IThreadUtils;
 class GTask;
+class TimeInterval;
+class IFactory;
+class ITimer;
+
+class PeriodicalTask;
 
 #include <vector>
 #include <string>
@@ -39,6 +42,8 @@ class G3MWidget;
 class IStringBuilder;
 class IMathUtils;
 class IJSONParser;
+
+class Geodetic3D;
 
 
 class UserData {
@@ -62,15 +67,14 @@ public:
 
 class G3MWidget {
 public:
-    
-    static void initSingletons(ILogger*             logger,
-                               IFactory*            factory,
-                               const IStringUtils*  stringUtils,
-                               IThreadUtils*        threadUtils,
-                               IStringBuilder*      stringBuilder,
-                               IMathUtils*          mathUtils,
-                               IJSONParser*         jsonParser);
-                               
+  
+  static void initSingletons(ILogger*             logger,
+                             IFactory*            factory,
+                             const IStringUtils*  stringUtils,
+                             IThreadUtils*        threadUtils,
+                             IStringBuilder*      stringBuilder,
+                             IMathUtils*          mathUtils,
+                             IJSONParser*         jsonParser);
   
   static G3MWidget* create(FrameTasksExecutor*              frameTasksExecutor,
                            GL*                              gl,
@@ -88,7 +92,8 @@ public:
                            const bool                       logFPS,
                            const bool                       logDownloaderStatistics,
                            GTask*                           initializationTask,
-                           bool                             autoDeleteInitializationTask);
+                           bool                             autoDeleteInitializationTask,
+                           std::vector<PeriodicalTask*>     periodicalTasks);
   
   ~G3MWidget();
   
@@ -106,9 +111,9 @@ public:
     return _gl;
   }
   
-//  const Camera* getCurrentCamera() const {
-//    return _currentCamera;
-//  }
+  //  const Camera* getCurrentCamera() const {
+  //    return _currentCamera;
+  //  }
   
   Camera* getNextCamera() const {
     return _nextCamera;
@@ -127,6 +132,13 @@ public:
   UserData* getUserData() const {
     return _userData;
   }
+  
+  void addPeriodicalTask(PeriodicalTask* periodicalTask);
+  
+  void addPeriodicalTask(const TimeInterval& interval,
+                         GTask* task);
+  
+  void setAnimatedPosition(const Geodetic3D& g, const TimeInterval& interval);
   
 private:
   FrameTasksExecutor* _frameTasksExecutor;
@@ -162,25 +174,28 @@ private:
   GTask* _initializationTask;
   bool   _autoDeleteInitializationTask;
   
+  std::vector<PeriodicalTask*> _periodicalTasks;
+  
   void initializeGL();
   
-  G3MWidget(FrameTasksExecutor* frameTasksExecutor,
-            GL*                 gl,
-            TexturesHandler*    texturesHandler,
-            TextureBuilder*     textureBuilder,
-            IDownloader*        downloader,
-            const Planet*       planet,
-            std::vector<ICameraConstrainer*> cameraConstraint,
-            Renderer*           renderer,
-            Renderer*           busyRenderer,
-            EffectsScheduler*   scheduler,
-            int                 width,
-            int                 height,
-            Color               backgroundColor,
-            const bool          logFPS,
-            const bool          logDownloaderStatistics,
+  G3MWidget(FrameTasksExecutor*              frameTasksExecutor,
+            GL*                              gl,
+            TexturesHandler*                 texturesHandler,
+            TextureBuilder*                  textureBuilder,
+            IDownloader*                     downloader,
+            const Planet*                    planet,
+            std::vector<ICameraConstrainer*> cameraConstrainers,
+            Renderer*                        renderer,
+            Renderer*                        busyRenderer,
+            EffectsScheduler*                effectsScheduler,
+            int                              width,
+            int                              height,
+            Color                            backgroundColor,
+            const bool                       logFPS,
+            const bool                       logDownloaderStatistics,
             GTask*                           initializationTask,
-            bool                             autoDeleteInitializationTask);
+            bool                             autoDeleteInitializationTask,
+            std::vector<PeriodicalTask*>     periodicalTasks);
   
 };
 

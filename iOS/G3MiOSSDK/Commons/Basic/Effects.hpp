@@ -12,9 +12,11 @@
 #include "Renderer.hpp"
 #include "TimeInterval.hpp"
 #include "ITimer.hpp"
-#include "Camera.hpp"
 
 #include "IMathUtils.hpp"
+#include "IFactory.hpp"
+
+#include <vector>
 
 class EffectTarget {
 public:  
@@ -212,7 +214,7 @@ public:
   virtual ~EffectsScheduler() {
     _factory->deleteTimer(_timer);
     
-    for (int i = 0; i < _effectsRuns.size(); i++) {
+    for (unsigned int i = 0; i < _effectsRuns.size(); i++) {
       EffectRun* effectRun = _effectsRuns[i];
       delete effectRun;
     }

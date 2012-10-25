@@ -23,6 +23,7 @@ public class Camera
 	  _frustumInModelCoordinates = (that._frustumInModelCoordinates == null) ? null : new Frustum(that._frustumInModelCoordinates);
 	  _halfFrustum = (that._halfFrustum == null) ? null : new Frustum(that._halfFrustum);
 	  _halfFrustumInModelCoordinates = (that._halfFrustumInModelCoordinates == null) ? null : new Frustum(that._halfFrustumInModelCoordinates);
+	  _camEffectTarget = new CameraEffectTarget();
   }
 
   public Camera(int width, int height)
@@ -44,6 +45,7 @@ public class Camera
 	  _frustumInModelCoordinates = null;
 	  _halfFrustumInModelCoordinates = null;
 	  _halfFrustum = null;
+	  _camEffectTarget = new CameraEffectTarget();
 	resizeViewport(width, height);
   }
 
@@ -75,6 +77,8 @@ public class Camera
   
 	_geodeticCenterOfView = (that._geodeticCenterOfView == null) ? null : new Geodetic3D(that._geodeticCenterOfView);
   
+  
+	_camEffectTarget = new CameraEffectTarget();
   
 	_frustum = (that._frustum == null) ? null : new Frustum(that._frustum);
   
@@ -201,6 +205,11 @@ public class Camera
   public final float getViewPortRatio()
   {
 	return (float) _width / _height;
+  }
+
+  public final EffectTarget getEffectTarget()
+  {
+	return _camEffectTarget;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -418,6 +427,17 @@ public class Camera
   private Frustum _frustumInModelCoordinates;
   private Frustum _halfFrustum; // ONLY FOR DEBUG
   private Frustum _halfFrustumInModelCoordinates; // ONLY FOR DEBUG
+
+  //The Camera Effect Target
+  private static class CameraEffectTarget implements EffectTarget
+  {
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: void unusedMethod() const
+	public final void unusedMethod()
+	{
+	}
+  }
+  private CameraEffectTarget _camEffectTarget;
 
   private void applyTransform(MutableMatrix44D M)
   {

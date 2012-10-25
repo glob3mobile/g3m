@@ -85,18 +85,35 @@ public:
 class GLPrimitive {
   static int _triangleStrip;
   static int _lines;
+  static int _lineStrip;
   static int _lineLoop;
   static int _points;
   
 public:
-  static int triangleStrip(){ return _triangleStrip;}
-  static int lines(){ return _lines;}
-  static int lineLoop(){ return _lineLoop;}
-  static int points(){ return _points;}
+  static int triangleStrip() {
+    return _triangleStrip;
+  }
+  
+  static int lines() {
+    return _lines;
+  }
+  
+  static int lineStrip() {
+    return _lineStrip;
+  }
+  
+  static int lineLoop() {
+    return _lineLoop;
+  }
+  
+  static int points() {
+    return _points;
+  }
   
   static void init(const INativeGL* ngl){
     _triangleStrip = ngl->Primitive_TriangleStrip();
     _lines = ngl->Primitive_Lines();
+    _lineStrip = ngl->Primitive_LineStrip();
     _lineLoop = ngl->Primitive_LineLoop();
     _points = ngl->Primitive_Points();
   }

@@ -27,11 +27,13 @@ import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IJSONParser;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
+import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.IStringUtils;
 import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.MultiLayerTileTexturizer;
+import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.TextureBuilder;
 import org.glob3.mobile.generated.TexturesHandler;
@@ -83,6 +85,8 @@ public final class G3MWidget_Android
    public G3MWidget_Android(final Context context) {
       super(context);
 
+      initSingletons();
+
       setEGLContextClientVersion(2); // OPENGL ES VERSION MUST BE SPECIFED
       setEGLConfigChooser(true); // IT GIVES US A RGB DEPTH OF 8 BITS PER
       // CHANNEL, HAVING TO FORCE PROPER BUFFER
@@ -129,6 +133,19 @@ public final class G3MWidget_Android
          }
       };
       _gestureDetector.setOnDoubleTapListener(_doubleTapListener);
+   }
+
+
+   public void initSingletons() {
+      final ILogger logger = new Logger_Android(LogLevel.ErrorLevel);
+      final IFactory factory = new Factory_Android(getContext());
+      final IStringUtils stringUtils = new StringUtils_Android();
+      final IThreadUtils threadUtils = new ThreadUtils_Android(this);
+      final IStringBuilder stringBuilder = new StringBuilder_Android();
+      final IMathUtils mathUtils = new MathUtils_Android();
+      final IJSONParser jsonParser = new JSONParser_Android();
+
+      G3MWidget.initSingletons(logger, factory, stringUtils, threadUtils, stringBuilder, mathUtils, jsonParser);
    }
 
 
@@ -272,8 +289,6 @@ public final class G3MWidget_Android
       final int width = getWidth();
       final int height = getHeight();
 
-      final IFactory factory = new Factory_Android(getContext());
-      final ILogger logger = new Logger_Android(LogLevel.ErrorLevel);
       final NativeGL2_Android nGL = new NativeGL2_Android();
       final GL gl = new GL(nGL);
 
@@ -314,17 +329,58 @@ public final class G3MWidget_Android
 
       final EffectsScheduler scheduler = new EffectsScheduler();
       final FrameTasksExecutor frameTasksExecutor = new FrameTasksExecutor();
-      final IStringUtils stringUtils = new StringUtils_Android();
-      final IThreadUtils threadUtils = new ThreadUtils_Android(this);
-      final StringBuilder_Android stringBuilder = new StringBuilder_Android();
-      final IMathUtils math = new MathUtils_Android();
-      final IJSONParser jsonParser = new JSONParser_Android();
 
-      _g3mWidget = G3MWidget.create(frameTasksExecutor, factory, stringUtils, threadUtils, stringBuilder, math, jsonParser,
-               logger, gl, texturesHandler, textureBuilder, _downloader, planet, _cameraConstraints, composite, busyRenderer,
-               scheduler, width, height, Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), true, false, initializationTask, true);
+      final ArrayList<PeriodicalTask> periodicalTasks = new ArrayList<PeriodicalTask>();
+
+      _g3mWidget = G3MWidget.create(frameTasksExecutor, //
+               gl, //
+               texturesHandler, //
+               textureBuilder, //
+               _downloader, //
+               planet, //
+               _cameraConstraints, //
+               composite, //
+               busyRenderer, //
+               scheduler, // 
+               width, //
+               height, //
+               Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), //
+               true, // 
+               false, // 
+               initializationTask, //
+               true, //
+               periodicalTasks);
 
       _g3mWidget.setUserData(_userData);
+
+      //      //Testing Periodical Tasks
+      //      if (true) {
+      //         class PeriodicTask
+      //                  extends
+      //                     GTask {
+      //            private long      _lastExec;
+      //            private final int _number;
+      //
+      //
+      //            public PeriodicTask(final int n) {
+      //               _number = n;
+      //            }
+      //
+      //
+      //            @Override
+      //            public void run() {
+      //               final ITimer t = IFactory.instance().createTimer();
+      //               final long now = t.now().milliseconds();
+      //               ILogger.instance().logInfo("Running periodical Task " + _number + " - " + (now - _lastExec) + " ms.\n");
+      //               _lastExec = now;
+      //               IFactory.instance().deleteTimer(t);
+      //            }
+      //         }
+      //
+      //         _g3mWidget.addPeriodicalTask(TimeInterval.fromMilliseconds(4000), new PeriodicTask(1));
+      //         _g3mWidget.addPeriodicalTask(TimeInterval.fromMilliseconds(6000), new PeriodicTask(2));
+      //         _g3mWidget.addPeriodicalTask(TimeInterval.fromMilliseconds(500), new PeriodicTask(3));
+      //      }
    }
 
 
@@ -343,7 +399,7 @@ public final class G3MWidget_Android
       if (_g3mWidget == null) {
          System.err.println("break (point) on me");
       }
-      */
+       */
       super.onPause();
    }
 

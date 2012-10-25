@@ -27,6 +27,7 @@ int GLType::_int = 0;
 
 int GLPrimitive::_triangleStrip = 0;
 int GLPrimitive::_lines = 0;
+int GLPrimitive::_lineStrip = 0;
 int GLPrimitive::_lineLoop = 0;
 int GLPrimitive::_points = 0;
 

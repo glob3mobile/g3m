@@ -118,24 +118,13 @@ public class MarksRenderer extends LeafRenderer
   
 	boolean handled = false;
   
-	// if (touchEvent->getType() == LongPress) {
-	if (touchEvent.getType() == TouchEventType.Down)
+	if ((touchEvent.getType() == TouchEventType.Down) && (touchEvent.getTouchCount() == 1))
 	{
   
 	  if (_lastCamera != null)
 	  {
 		final Vector2I touchedPixel = touchEvent.getTouch(0).getPos();
-		//      const Vector3D ray = _lastCamera->pixel2Ray(touchedPixel);
-		//      const Vector3D origin = _lastCamera->getCartesianPosition();
-  
 		final Planet planet = ec.getPlanet();
-  
-		//      const Vector3D positionCartesian = planet->closestIntersection(origin, ray);
-		//      if (positionCartesian.isNan()) {
-		//        return false;
-		//      }
-  
-		// const Geodetic3D position = planet->toGeodetic3D(positionCartesian);
   
 		double minSqDistance = IMathUtils.instance().maxDouble();
 		Mark nearestMark = null;
