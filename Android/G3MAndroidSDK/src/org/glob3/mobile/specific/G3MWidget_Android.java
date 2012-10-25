@@ -5,7 +5,6 @@ package org.glob3.mobile.specific;
 import java.util.ArrayList;
 
 import org.glob3.mobile.generated.BusyMeshRenderer;
-import org.glob3.mobile.generated.CPUTextureBuilder;
 import org.glob3.mobile.generated.CachedDownloader;
 import org.glob3.mobile.generated.Camera;
 import org.glob3.mobile.generated.CameraDoubleDragHandler;
@@ -17,7 +16,6 @@ import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
 import org.glob3.mobile.generated.EllipsoidalTileTessellator;
 import org.glob3.mobile.generated.G3MWidget;
-import org.glob3.mobile.generated.GL;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
@@ -33,8 +31,6 @@ import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.MultiLayerTileTexturizer;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
-import org.glob3.mobile.generated.TextureBuilder;
-import org.glob3.mobile.generated.TexturesHandler;
 import org.glob3.mobile.generated.TileRenderer;
 import org.glob3.mobile.generated.TilesRenderParameters;
 import org.glob3.mobile.generated.Touch;
@@ -287,8 +283,7 @@ public final class G3MWidget_Android
       final int width = getWidth();
       final int height = getHeight();
 
-      final NativeGL2_Android nGL = new NativeGL2_Android();
-      final GL gl = new GL(nGL);
+      final NativeGL2_Android nativeGL = new NativeGL2_Android();
 
       _storage = new SQLiteStorage_Android("g3m.cache", this.getContext());
 
@@ -318,22 +313,15 @@ public final class G3MWidget_Android
          mainRenderer.addRenderer(renderer);
       }
 
-      final TextureBuilder textureBuilder = new CPUTextureBuilder();
-      final TexturesHandler texturesHandler = new TexturesHandler(gl, false);
 
       final Planet planet = Planet.createEarth();
 
       final org.glob3.mobile.generated.Renderer busyRenderer = new BusyMeshRenderer();
 
-      //      final EffectsScheduler scheduler = new EffectsScheduler();
-      //      final FrameTasksExecutor frameTasksExecutor = new FrameTasksExecutor();
-
       final ArrayList<PeriodicalTask> periodicalTasks = new ArrayList<PeriodicalTask>();
 
       _g3mWidget = G3MWidget.create( //
-               gl, //
-               texturesHandler, //
-               textureBuilder, //
+               nativeGL, //
                _downloader, //
                planet, //
                _cameraConstraints, //
