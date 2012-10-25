@@ -31,10 +31,6 @@ enum {
 @interface ES2Renderer (PrivateMethods)
 - (BOOL)loadShaders;
 
-//- (BOOL)compileShader:(GLuint*)shader type:(GLenum)type file:(NSString *)file;
-
-//- (BOOL)linkProgram:(GLuint)prog;
-
 - (BOOL)validateProgram:(GLuint)prog;
 @end
 
@@ -89,11 +85,10 @@ enum {
     // This call is redundant, but needed if dealing with multiple framebuffers.
     glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);
     glViewport(0, 0, backingWidth, backingHeight);
-    
-    // Use shader program
-    widget->getGL()->useProgram(_shaderProgram);
   }
   
+  // Use shader program
+  widget->getGL()->useProgram(_shaderProgram);
   widget->render();
   
   if (_firstRender) {
@@ -104,66 +99,6 @@ enum {
   }
   [context presentRenderbuffer:GL_RENDERBUFFER];
 }
-
-/*
-- (BOOL)compileShader:(GLuint*)shader type:(GLenum)type file:(NSString *)file {
-  GLint status;
-  const GLchar* source;
-  
-  source = (GLchar *) [[NSString stringWithContentsOfFile:file encoding:NSUTF8StringEncoding error:nil] UTF8String];
-  //NSLog(@"%s\n", source);
-  if (!source) {
-    NSLog(@"Failed to load vertex shader");
-    return FALSE;
-  }
-  
-  *shader = glCreateShader(type);
-  glShaderSource(*shader, 1, &source, NULL);
-  glCompileShader(*shader);
-  
-#if defined(DEBUG)
-  GLint logLength;
-  glGetShaderiv(*shader, GL_INFO_LOG_LENGTH, &logLength);
-  if (logLength > 0) {
-    GLchar* log = (GLchar* ) malloc(logLength);
-    glGetShaderInfoLog(*shader, logLength, &logLength, log);
-    NSLog(@"Shader compile log:\n%s", log);
-    free(log);
-  }
-#endif
-  
-  glGetShaderiv(*shader, GL_COMPILE_STATUS, &status);
-  if (status == 0) {
-    glDeleteShader(*shader);
-    return FALSE;
-  }
-  
-  return TRUE;
-}*/
-
-/*
-- (BOOL)linkProgram:(GLuint)prog {
-  GLint status;
-  
-  glLinkProgram(prog);
-  
-#if defined(DEBUG)
-  GLint logLength;
-  glGetProgramiv(prog, GL_INFO_LOG_LENGTH, &logLength);
-  if (logLength > 0) {
-    GLchar* log = (GLchar* ) malloc(logLength);
-    glGetProgramInfoLog(prog, logLength, &logLength, log);
-    NSLog(@"Program link log:\n%s", log);
-    free(log);
-  }
-#endif
-  
-  glGetProgramiv(prog, GL_LINK_STATUS, &status);
-  if (status == 0)
-    return FALSE;
-  
-  return TRUE;
-}*/
 
 - (BOOL)validateProgram:(GLuint)prog {
   GLint logLength, status;
@@ -185,24 +120,11 @@ enum {
 }
 
 - (BOOL)loadShaders {
-  //GLuint vertShader, fragShader;
   NSString *vertShaderPathname, *fragShaderPathname;
-  
-  // Create and compile vertex shader
   vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"Shader" ofType:@"vsh"];
   std::string vertexSource ([[NSString stringWithContentsOfFile:vertShaderPathname encoding:NSUTF8StringEncoding error:nil] UTF8String]);
-/*  if (![self compileShader:&vertShader type:GL_VERTEX_SHADER file:vertShaderPathname]) {
-    NSLog(@"Failed to compile vertex shader");
-    return FALSE;
-  }*/
-  
-  // Create and compile fragment shader
   fragShaderPathname = [[NSBundle mainBundle] pathForResource:@"Shader" ofType:@"fsh"];
   std::string fragmentSource ([[NSString stringWithContentsOfFile:fragShaderPathname encoding:NSUTF8StringEncoding error:nil] UTF8String]);
-/*  if (![self compileShader:&fragShader type:GL_FRAGMENT_SHADER file:fragShaderPathname]) {
-    NSLog(@"Failed to compile fragment shader");
-    return FALSE;
-  }*/
   
   // Create shader program
   _shaderProgram = new ShaderProgram(_gl);
@@ -210,53 +132,16 @@ enum {
     NSLog(@"Failed to load shaders");
     return FALSE;
   }
-
-  // Attach vertex shader to program
-  //glAttachShader(programNum, vertShader);
-  //_shaderProgram->attachShader(vertShader);
   
-  
-  // Attach fragment shader to program
-  //glAttachShader(programNum, fragShader);
-  //_shaderProgram->attachShader(fragShader);
-  
-  // Bind attribute locations
-  // this needs to be done prior to linking
-  //glBindAttribLocation(program, ATTRIB_VERTEX, "position");
-  //glBindAttribLocation(program, ATTRIB_COLOR, "color");
-  
-  
-  //program = (IGLProgramId*) new GLProgramId_iOS(programNum);
-
-  
-  /*
-  // Link program
-  if (![self linkProgram:_shaderProgram->getProgram()]) {
-    NSLog(@"Failed to link program: %d", _shaderProgram->getProgram());
-    
-    if (vertShader) {
-      glDeleteShader(vertShader);
-      vertShader = 0;
-    }
-    if (fragShader) {
-      glDeleteShader(fragShader);
-      fragShader = 0;
-    }    
-    glDeleteProgram(_shaderProgram->getProgramNum());
-
+  // Create second dummy shader program
+  vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"Shader_dummy" ofType:@"vsh"];
+  std::string vertexSource2 ([[NSString stringWithContentsOfFile:vertShaderPathname encoding:NSUTF8StringEncoding error:nil] UTF8String]);
+  _shaderProgram2 = new ShaderProgram(_gl);
+  if (_shaderProgram2->loadShaders(vertexSource2, fragmentSource)==false) {
+    NSLog(@"Failed to load shaders");
     return FALSE;
-  }*/
-  
-  // Get uniform locations
-  //uniforms[UNIFORM_TRANSLATE] = glGetUniformLocation(program, "translate");
-  
-  /*
-  // Release vertex and fragment shaders
-  if (vertShader)
-    glDeleteShader(vertShader);
-  if (fragShader)
-    glDeleteShader(fragShader);*/
-  
+  }
+
   return TRUE;
 }
 
@@ -297,14 +182,7 @@ enum {
     glDeleteRenderbuffers(1, &depthRenderbuffer);
     depthRenderbuffer = 0;
   }
-  
-  /*
-  if (program) {
-    glDeleteProgram(((GLProgramId_iOS*)program)->getID());
-    delete program;
-    program = 0;
-  }*/
-  
+    
   if (_shaderProgram!=NULL) {
     delete _shaderProgram;
     _shaderProgram = NULL;

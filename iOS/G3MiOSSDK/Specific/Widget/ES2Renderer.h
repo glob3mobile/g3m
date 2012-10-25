@@ -33,6 +33,7 @@ class GL;
   
   //IGLProgramId* program;
   ShaderProgram* _shaderProgram;
+  ShaderProgram* _shaderProgram2;
   
   BOOL _firstRender;
   
