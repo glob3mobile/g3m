@@ -482,4 +482,20 @@ public final class G3MWidget_WebGL
       getG3MWidget().setAnimatedCameraPosition(position, interval);
    }
 
+
+   public void setAnimatedCameraPosition(final Geodetic3D position) {
+      getG3MWidget().setAnimatedCameraPosition(position);
+   }
+
+
+   public void setCameraPosition(final Geodetic3D position) {
+      getG3MWidget().setCameraPosition(position);
+   }
+
+
+   public CameraRenderer getCameraRenderer() {
+      return getG3MWidget().getCameraRenderer();
+   }
+
+
 }
