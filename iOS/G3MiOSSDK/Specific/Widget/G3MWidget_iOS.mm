@@ -112,12 +112,10 @@
                       periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
 {
   
-  // create GLOB3M WIDGET
-  int width = (int) [self frame].size.width;
-  int height = (int) [self frame].size.height;
+  const int width  = (int) [self frame].size.width;
+  const int height = (int) [self frame].size.height;
   
-  NativeGL2_iOS* nGL = new NativeGL2_iOS();
-  GL* gl = new GL(nGL);
+  NativeGL2_iOS* nativeGL = new NativeGL2_iOS();
   
   IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
   const bool saveInBackground = true;
@@ -127,8 +125,6 @@
   
   CompositeRenderer* mainRenderer = new CompositeRenderer();
   
-//  composite->addRenderer(cameraRenderer);
-
   if (layerSet != NULL) {
     TileTexturizer* texturizer = new MultiLayerTileTexturizer();
     
@@ -145,16 +141,11 @@
     mainRenderer->addRenderer(renderers[i]);
   }
   
-  TextureBuilder* textureBuilder = new CPUTextureBuilder();
-  TexturesHandler* texturesHandler = new TexturesHandler(gl, false);
-  
   const Planet* planet = Planet::createEarth();
   
   Renderer* busyRenderer = new BusyMeshRenderer();
   
-  _widgetVP = G3MWidget::create(gl,
-                                texturesHandler,
-                                textureBuilder,
+  _widgetVP = G3MWidget::create(nativeGL,
                                 downloader,
                                 planet,
                                 cameraConstraints,

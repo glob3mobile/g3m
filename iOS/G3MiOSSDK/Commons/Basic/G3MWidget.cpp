@@ -25,7 +25,7 @@
 #include "PeriodicalTask.hpp"
 #include "GoToPositionEffect.hpp"
 #include "CameraRenderer.hpp"
-
+#include "CPUTextureBuilder.hpp"
 #include <math.h>
 
 void G3MWidget::initSingletons(ILogger*            logger,
@@ -49,9 +49,7 @@ void G3MWidget::initSingletons(ILogger*            logger,
   }
 }
 
-G3MWidget::G3MWidget(GL*                              gl,
-                     TexturesHandler*                 texturesHandler,
-                     TextureBuilder*                  textureBuilder,
+G3MWidget::G3MWidget(INativeGL*                       nativeGL,
                      IDownloader*                     downloader,
                      const Planet*                    planet,
                      std::vector<ICameraConstrainer*> cameraConstrainers,
@@ -68,9 +66,9 @@ G3MWidget::G3MWidget(GL*                              gl,
                      std::vector<PeriodicalTask*>     periodicalTasks):
 _frameTasksExecutor( new FrameTasksExecutor() ),
 _effectsScheduler( new EffectsScheduler() ),
-_gl(gl),
-_texturesHandler(texturesHandler),
-_textureBuilder(textureBuilder),
+_gl( new GL(nativeGL) ),
+_texturesHandler( new TexturesHandler(_gl, false) ),
+_textureBuilder( new CPUTextureBuilder() ),
 _planet(planet),
 _cameraConstrainers(cameraConstrainers),
 _cameraRenderer(cameraRenderer),
@@ -121,9 +119,7 @@ _autoDeleteInitializationTask(autoDeleteInitializationTask)
 }
 
 
-G3MWidget* G3MWidget::create(GL*                              gl,
-                             TexturesHandler*                 texturesHandler,
-                             TextureBuilder*                  textureBuilder,
+G3MWidget* G3MWidget::create(INativeGL*                       nativeGL,
                              IDownloader*                     downloader,
                              const Planet*                    planet,
                              std::vector<ICameraConstrainer*> cameraConstrainers,
@@ -139,9 +135,7 @@ G3MWidget* G3MWidget::create(GL*                              gl,
                              bool                             autoDeleteInitializationTask,
                              std::vector<PeriodicalTask*>     periodicalTasks) {
 
-  return new G3MWidget(gl,
-                       texturesHandler,
-                       textureBuilder,
+  return new G3MWidget(nativeGL,
                        downloader,
                        planet,
                        cameraConstrainers,

@@ -14,6 +14,7 @@ class TouchEvent;
 class Planet;
 class ILogger;
 class GL;
+class INativeGL;
 class TexturesHandler;
 class Downloader;
 class IDownloader;
@@ -72,9 +73,7 @@ public:
                              IMathUtils*          mathUtils,
                              IJSONParser*         jsonParser);
 
-  static G3MWidget* create(GL*                              gl,
-                           TexturesHandler*                 texturesHandler,
-                           TextureBuilder*                  textureBuilder,
+  static G3MWidget* create(INativeGL*                       nativeGL,
                            IDownloader*                     downloader,
                            const Planet*                    planet,
                            std::vector<ICameraConstrainer*> cameraConstrainers,
@@ -184,9 +183,7 @@ private:
 
   void initializeGL();
 
-  G3MWidget(GL*                              gl,
-            TexturesHandler*                 texturesHandler,
-            TextureBuilder*                  textureBuilder,
+  G3MWidget(INativeGL*                       nativeGL,
             IDownloader*                     downloader,
             const Planet*                    planet,
             std::vector<ICameraConstrainer*> cameraConstrainers,
