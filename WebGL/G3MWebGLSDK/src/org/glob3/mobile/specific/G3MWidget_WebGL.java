@@ -295,8 +295,6 @@ public final class G3MWidget_WebGL
       final TilesRenderParameters parameters = TilesRenderParameters.createDefault(renderDebug, useTilesSplitBudget,
                forceTopLevelTilesRenderOnStart);
 
-      // final TilesRenderParameters parameters = TilesRenderParameters.createSingleSector(renderDebug, useTilesSplitBudget, forceTopLevelTilesRenderOnStart);
-
       //      final IStorage storage = new IndexedDBStorage_WebGL();
       final IDownloader downloader = new Downloader_WebGL(8, _delayMillis, _proxy);
 
