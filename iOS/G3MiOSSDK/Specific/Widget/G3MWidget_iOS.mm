@@ -57,6 +57,8 @@
 #include "MathUtils_iOS.hpp"
 #include "ThreadUtils_iOS.hpp"
 
+#include "G3MJSONBuilder.hpp"
+
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
 @end
@@ -253,6 +255,92 @@
   
   
 }
+
+- (void) initWidgetWithCameraRendererAndSceneJSON: (CameraRenderer*) cameraRenderer
+                                cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
+                                         layerSet: (LayerSet*) layerSet
+                            tilesRenderParameters: (TilesRenderParameters*) parameters
+                                        renderers: (std::vector<Renderer*>) renderers
+                                         userData: (UserData*) userData
+                      periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
+{
+    
+    
+    CompositeRenderer* composite = new CompositeRenderer();
+    composite->addRenderer(cameraRenderer);
+    
+    IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
+    const bool saveInBackground = true;
+    IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
+                                                   storage,
+                                                   saveInBackground);
+    
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"scene" ofType:@"scn"];
+    if (filePath) {
+        NSString *jsonFile = [NSString stringWithContentsOfFile:filePath];
+        if (jsonFile) {
+            const std::string scene = std::string([jsonFile UTF8String]);
+            G3MJSONBuilder* g3mJSONBuilder = new G3MJSONBuilder(composite, layerSet, parameters, renderers, scene);
+        }else{
+            ILogger::instance()->logWarning("scen.scn file could not be read!");
+        }
+    }else{
+        ILogger::instance()->logWarning("scen.scn file could not be found!");
+    }
+        
+    int width = (int) [self frame].size.width;
+    int height = (int) [self frame].size.height;
+    
+    NativeGL2_iOS*  nGL = new NativeGL2_iOS();
+    GL* gl = new GL(nGL);
+    
+    for (int i = 0; i < renderers.size(); i++) {
+        composite->addRenderer(renderers[i]);
+    }
+    
+    TextureBuilder* textureBuilder = new CPUTextureBuilder();
+    TexturesHandler* texturesHandler = new TexturesHandler(gl, false);
+    
+    const Planet* planet = Planet::createEarth();
+    
+    Renderer* busyRenderer = new BusyMeshRenderer();
+    
+    EffectsScheduler* scheduler = new EffectsScheduler();
+    
+    FrameTasksExecutor* frameTasksExecutor = new FrameTasksExecutor();
+    
+    class SampleInitializationTask : public GTask {
+    public:
+        void run() {
+            //      ILogger::instance()->logInfo("Running initialization Task");
+            printf("Running initialization Task\n");
+        }
+    };
+    
+    GTask* initializationTask = new SampleInitializationTask();
+    
+    _widgetVP = G3MWidget::create(frameTasksExecutor,
+                                  gl,
+                                  texturesHandler,
+                                  textureBuilder,
+                                  downloader,
+                                  planet,
+                                  cameraConstraints,
+                                  composite,
+                                  busyRenderer,
+                                  scheduler,
+                                  width, height,
+                                  Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
+                                  true,
+                                  false,
+                                  initializationTask,
+                                  true,
+                                  periodicalTasks);
+    
+    [self widget]->setUserData(userData);
+    
+}
+
 
 //The EAGL view is stored in the nib file. When it's unarchived it's sent -initWithCoder:
 - (id)initWithCoder:(NSCoder *)coder {

@@ -71,6 +71,14 @@ enum GL_version {
                             userData: (UserData*) userData
                      periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks;
 
+- (void)initWidgetWithCameraRendererAndSceneJSON: (CameraRenderer*) cameraRenderer
+                   cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
+                            layerSet: (LayerSet*) layerSet
+               tilesRenderParameters: (TilesRenderParameters*) parameters
+                           renderers: (std::vector<Renderer*>) renderers
+                            userData: (UserData*) userData
+                     periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks;
+
 - (G3MWidget*) widget;
 
 - (void)initSingletons;
