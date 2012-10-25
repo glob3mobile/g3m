@@ -55,9 +55,6 @@ private:
   
   int _cullFace_face;
 
-  
-  
-  
   float _scaleX;
   float _scaleY;
   float _translationX;
