@@ -129,7 +129,7 @@ void Mark::render(const RenderContext* rc,
   if (_renderedMark) {
     const Vector3D normalAtMarkPosition = planet->geodeticSurfaceNormal(*markPosition);
     
-    if (normalAtMarkPosition.angleBetween(markCameraVector).radians() > GMath.halfPi()) {
+    if (normalAtMarkPosition.angleBetween(markCameraVector)._radians > GMath.halfPi()) {
       GL* gl = rc->getGL();
       
       static Vector2D textureTranslation(0.0, 0.0);

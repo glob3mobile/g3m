@@ -59,12 +59,6 @@ bool Sector::isBackOriented(const RenderContext *rc) const {
   const Vector3D view   = camera->getViewDirection().times(-1);
   const double dot = normal.dot(view);
   
- /* 
-  if (dot<0 && _upper.latitude().degrees()>89) {
-    getClosestPoint(center);
-    printf ("ehh\n");
-  }  */
-  
   return (dot < 0) ? true : false;  
 }
 
@@ -87,16 +81,16 @@ const Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const
     
   // test longitude
   Geodetic2D center = getCenter();
-  double lon        = pos.longitude().degrees();
-  double centerLon  = center.longitude().degrees();
+  double lon        = pos.longitude()._degrees;
+  double centerLon  = center.longitude()._degrees;
   double oppLon1    = centerLon - 180;
   double oppLon2    = centerLon + 180;
   if (lon<oppLon1) 
     lon+=360;
   if (lon>oppLon2) 
     lon-=360;
-  double minLon     = _lower.longitude().degrees();
-  double maxLon     = _upper.longitude().degrees();
+  double minLon     = _lower.longitude()._degrees;
+  double maxLon     = _upper.longitude()._degrees;
   //bool insideLon    = true;
   if (lon < minLon) {
     lon = minLon;
@@ -108,9 +102,9 @@ const Geodetic2D Sector::getClosestPoint(const Geodetic2D& pos) const
   }
 
   // test latitude
-  double lat        = pos.latitude().degrees();
-  double minLat     = _lower.latitude().degrees();
-  double maxLat     = _upper.latitude().degrees();
+  double lat        = pos.latitude()._degrees;
+  double minLat     = _lower.latitude()._degrees;
+  double maxLat     = _upper.latitude()._degrees;
   //bool insideLat    = true;
   if (lat < minLat) {
     lat = minLat;

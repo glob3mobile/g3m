@@ -227,8 +227,8 @@ xyTuple* BingLayer::getTileXY(const Geodetic2D latLon, const int level)const{
   
   //LatLon to Pixels XY
   unsigned int mapSize = (unsigned int) 256 << level;
-  double lonDeg = latLon.longitude().degrees();
-  double latDeg = latLon.latitude().degrees();
+  double lonDeg = latLon.longitude()._degrees;
+  double latDeg = latLon.latitude()._degrees;
   if (latDeg < -85.05112878){
     latDeg = -85.05112878;
   }
@@ -303,7 +303,7 @@ Sector BingLayer::getBingTileAsSector(const int tileXY[], const int level)const{
   }
   else {
     tileBelow[1] = tileXY[1]+1;
-    lowerLatDeg = getLatLon(tileBelow, level).latitude().degrees();
+    lowerLatDeg = getLatLon(tileBelow, level).latitude()._degrees;
   }
   
   
@@ -315,7 +315,7 @@ Sector BingLayer::getBingTileAsSector(const int tileXY[], const int level)const{
   }
   else {
     tileRight[0] = tileXY[0]+1;
-    upperLonDeg = getLatLon(tileRight, level).longitude().degrees();
+    upperLonDeg = getLatLon(tileRight, level).longitude()._degrees;
   }
   
   return Sector(Geodetic2D(Angle::fromDegrees(lowerLatDeg), lowerLon), Geodetic2D(upperLat, Angle::fromDegrees(upperLonDeg)));

@@ -240,7 +240,6 @@
       for (int i = 0; i < 500; i++) {
         const Angle latitude = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
         const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
-        //NSLog(@"lat=%f, lon=%f", latitude.degrees(), longitude.degrees());
 
         marksRenderer->addMark(new Mark("Random",
                                         URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
@@ -283,8 +282,8 @@
     TestTrailTask(Trail* trail,
                   Geodetic3D lastPosition) :
     _trail(trail),
-    _lastLatitudeDegrees(lastPosition.latitude().degrees()),
-    _lastLongitudeDegrees(lastPosition.longitude().degrees()),
+    _lastLatitudeDegrees(lastPosition.latitude()._degrees),
+    _lastLongitudeDegrees(lastPosition.longitude()._degrees),
     _lastHeight(lastPosition.height())
     {
       

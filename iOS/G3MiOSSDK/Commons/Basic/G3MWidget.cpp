@@ -427,8 +427,8 @@ void G3MWidget::setAnimatedCameraPosition(const Geodetic3D& position,
 
   Geodetic3D startPosition = _planet->toGeodetic3D( _currentCamera->getCartesianPosition() );
 
-  double finalLat = position.latitude().degrees();
-  double finalLon = position.longitude().degrees();
+  double finalLat = position.latitude()._degrees;
+  double finalLon = position.longitude()._degrees;
 
   //Fixing final latitude
   while (finalLat > 90) {
@@ -445,7 +445,7 @@ void G3MWidget::setAnimatedCameraPosition(const Geodetic3D& position,
   while (finalLon < 0) {
     finalLon += 360;
   }
-  if (fabs(finalLon - startPosition.longitude().degrees()) > 180) {
+  if (fabs(finalLon - startPosition.longitude()._degrees) > 180) {
     finalLon -= 360;
   }
 
