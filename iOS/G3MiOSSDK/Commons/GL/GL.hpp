@@ -29,7 +29,6 @@ class IGLUniformID;
 
 class GL {
 private:
-  
   INativeGL* const _gl;
   
   MutableMatrix44D            _modelView;
