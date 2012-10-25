@@ -13,49 +13,36 @@
 #include "G3MWidget.hpp"
 #include "CompositeRenderer.hpp"
 #include "Planet.hpp"
-
 #include "CameraRenderer.hpp"
 #include "CameraSingleDragHandler.hpp"
 #include "CameraDoubleDragHandler.hpp"
 #include "CameraRotationHandler.hpp"
 #include "CameraDoubleTapHandler.hpp"
 #include "CameraConstraints.hpp"
-
 #include "TileRenderer.hpp"
-#include "Effects.hpp"
 #include "EllipsoidalTileTessellator.hpp"
-
 #include "SQLiteStorage_iOS.hpp"
 #include "BusyMeshRenderer.hpp"
 #include "CPUTextureBuilder.hpp"
 #include "LayerSet.hpp"
-
 #include "CachedDownloader.hpp"
 #include "Downloader_iOS.hpp"
-
 #include "INativeGL.hpp"
 #include "GL.hpp"
-
 #include "MultiLayerTileTexturizer.hpp"
 #include "TilesRenderParameters.hpp"
-#include "FrameTasksExecutor.hpp"
-
 #include "IStringBuilder.hpp"
-#include "StringBuilder_iOS.hpp"
-
 #include "Box.hpp"
-
 #include "TexturesHandler.hpp"
-
+#include "WMSLayer.hpp"
+#include "MathUtils_iOS.hpp"
+#include "ThreadUtils_iOS.hpp"
 #include "Logger_iOS.hpp"
 #include "Factory_iOS.hpp"
 #include "NativeGL2_iOS.hpp"
 #include "StringUtils_iOS.hpp"
 #include "JSONParser_iOS.hpp"
-#include "WMSLayer.hpp"
-
-#include "MathUtils_iOS.hpp"
-#include "ThreadUtils_iOS.hpp"
+#include "StringBuilder_iOS.hpp"
 
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
@@ -165,12 +152,7 @@
   
   Renderer* busyRenderer = new BusyMeshRenderer();
   
-  EffectsScheduler* scheduler = new EffectsScheduler();
-  
-  FrameTasksExecutor* frameTasksExecutor = new FrameTasksExecutor();
-  
-  _widgetVP = G3MWidget::create(frameTasksExecutor,
-                                gl,
+  _widgetVP = G3MWidget::create(gl,
                                 texturesHandler,
                                 textureBuilder,
                                 downloader,
@@ -179,7 +161,6 @@
                                 cameraRenderer,
                                 mainRenderer,
                                 busyRenderer,
-                                scheduler,
                                 width, height,
                                 Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
                                 true,
@@ -187,10 +168,7 @@
                                 initializationTask,
                                 true,
                                 periodicalTasks);
-  
   [self widget]->setUserData(userData);
-  
-
 }
 
 //The EAGL view is stored in the nib file. When it's unarchived it's sent -initWithCoder:

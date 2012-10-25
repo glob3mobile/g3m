@@ -72,8 +72,7 @@ public:
                              IMathUtils*          mathUtils,
                              IJSONParser*         jsonParser);
 
-  static G3MWidget* create(FrameTasksExecutor*              frameTasksExecutor,
-                           GL*                              gl,
+  static G3MWidget* create(GL*                              gl,
                            TexturesHandler*                 texturesHandler,
                            TextureBuilder*                  textureBuilder,
                            IDownloader*                     downloader,
@@ -82,7 +81,6 @@ public:
                            CameraRenderer*                  cameraRenderer,
                            Renderer*                        mainRenderer,
                            Renderer*                        busyRenderer,
-                           EffectsScheduler*                effectsScheduler,
                            int                              width,
                            int                              height,
                            Color                            backgroundColor,
@@ -186,8 +184,7 @@ private:
 
   void initializeGL();
 
-  G3MWidget(FrameTasksExecutor*              frameTasksExecutor,
-            GL*                              gl,
+  G3MWidget(GL*                              gl,
             TexturesHandler*                 texturesHandler,
             TextureBuilder*                  textureBuilder,
             IDownloader*                     downloader,
@@ -196,7 +193,6 @@ private:
             CameraRenderer*                  cameraRenderer,
             Renderer*                        mainRenderer,
             Renderer*                        busyRenderer,
-            EffectsScheduler*                effectsScheduler,
             int                              width,
             int                              height,
             Color                            backgroundColor,
