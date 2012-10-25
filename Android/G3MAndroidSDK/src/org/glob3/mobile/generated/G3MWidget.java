@@ -340,6 +340,13 @@ public class G3MWidget
 	_effectsScheduler.startEffect(new GoToPositionEffect(interval, startPosition, endPosition), target);
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: CameraRenderer* getCameraRenderer() const
+  public final CameraRenderer getCameraRenderer()
+  {
+	return _cameraRenderer;
+  }
+
   private FrameTasksExecutor _frameTasksExecutor;
   private GL _gl;
   private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
