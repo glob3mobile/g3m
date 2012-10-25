@@ -20,10 +20,10 @@ public class G3MWidget
 	}
   }
 
-  public static G3MWidget create(GL gl, TexturesHandler texturesHandler, TextureBuilder textureBuilder, IDownloader downloader, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, int width, int height, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
+  public static G3MWidget create(INativeGL nativeGL, IDownloader downloader, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, int width, int height, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
   {
   
-	return new G3MWidget(gl, texturesHandler, textureBuilder, downloader, planet, cameraConstrainers, cameraRenderer, mainRenderer, busyRenderer, width, height, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask, periodicalTasks);
+	return new G3MWidget(nativeGL, downloader, planet, cameraConstrainers, cameraRenderer, mainRenderer, busyRenderer, width, height, backgroundColor, logFPS, logDownloaderStatistics, initializationTask, autoDeleteInitializationTask, periodicalTasks);
   }
 
   public void dispose()
@@ -391,13 +391,13 @@ public class G3MWidget
 	_gl.enableCullFace(GLCullFace.back());
   }
 
-  private G3MWidget(GL gl, TexturesHandler texturesHandler, TextureBuilder textureBuilder, IDownloader downloader, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, int width, int height, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
+  private G3MWidget(INativeGL nativeGL, IDownloader downloader, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, int width, int height, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
   {
 	  _frameTasksExecutor = new FrameTasksExecutor();
 	  _effectsScheduler = new EffectsScheduler();
-	  _gl = gl;
-	  _texturesHandler = texturesHandler;
-	  _textureBuilder = textureBuilder;
+	  _gl = new GL(nativeGL);
+	  _texturesHandler = new TexturesHandler(_gl, false);
+	  _textureBuilder = new CPUTextureBuilder();
 	  _planet = planet;
 	  _cameraConstrainers = cameraConstrainers;
 	  _cameraRenderer = cameraRenderer;
