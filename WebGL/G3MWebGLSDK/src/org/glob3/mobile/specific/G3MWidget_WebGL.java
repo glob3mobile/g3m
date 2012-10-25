@@ -309,9 +309,8 @@ public final class G3MWidget_WebGL
       final NativeGL_WebGL nGL = new NativeGL_WebGL(_webGLContext);
       final GL gl = new GL(nGL);
 
-      final CompositeRenderer composite = new CompositeRenderer();
-      composite.addRenderer(cameraRenderer);
-
+      final CompositeRenderer mainRenderer = new CompositeRenderer();
+      //      composite.addRenderer(cameraRenderer);
 
       if (_layerSet != null) {
          final boolean showStatistics = false;
@@ -323,11 +322,11 @@ public final class G3MWidget_WebGL
                   parameters, //
                   showStatistics);
 
-         composite.addRenderer(tr);
+         mainRenderer.addRenderer(tr);
       }
 
       for (int i = 0; i < _renderers.size(); i++) {
-         composite.addRenderer(_renderers.get(i));
+         mainRenderer.addRenderer(_renderers.get(i));
       }
 
       final TextureBuilder textureBuilder = new CPUTextureBuilder();
@@ -350,7 +349,8 @@ public final class G3MWidget_WebGL
                downloader, //
                planet, //
                _cameraConstraints, //
-               composite, //
+               cameraRenderer, //
+               mainRenderer, //
                busyRenderer, //
                scheduler, //
                _width, //
@@ -477,9 +477,9 @@ public final class G3MWidget_WebGL
    }
 
 
-   public void setAnimatedPosition(final Geodetic3D position,
-                                   final TimeInterval interval) {
-      getG3MWidget().setAnimatedPosition(position, interval);
+   public void setAnimatedCameraPosition(final Geodetic3D position,
+                                         final TimeInterval interval) {
+      getG3MWidget().setAnimatedCameraPosition(position, interval);
    }
 
 }

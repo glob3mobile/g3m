@@ -299,9 +299,9 @@ public final class G3MWidget_Android
       final boolean saveInBackground = true;
       _downloader = new CachedDownloader(new Downloader_Android(8, connectTimeout, readTimeout), _storage, saveInBackground);
 
-      final CompositeRenderer composite = new CompositeRenderer();
+      final CompositeRenderer mainRenderer = new CompositeRenderer();
 
-      composite.addRenderer(cameraRenderer);
+      // composite.addRenderer(cameraRenderer);
 
       if (_layerSet != null) {
          final boolean showStatistics = false;
@@ -313,11 +313,11 @@ public final class G3MWidget_Android
                   parameters, //
                   showStatistics);
 
-         composite.addRenderer(tr);
+         mainRenderer.addRenderer(tr);
       }
 
       for (final org.glob3.mobile.generated.Renderer renderer : _renderers) {
-         composite.addRenderer(renderer);
+         mainRenderer.addRenderer(renderer);
       }
 
       final TextureBuilder textureBuilder = new CPUTextureBuilder();
@@ -339,7 +339,8 @@ public final class G3MWidget_Android
                _downloader, //
                planet, //
                _cameraConstraints, //
-               composite, //
+               cameraRenderer, //
+               mainRenderer, //
                busyRenderer, //
                scheduler, // 
                width, //
