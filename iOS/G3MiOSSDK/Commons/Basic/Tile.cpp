@@ -174,7 +174,6 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
   }
   
   
-  int __TODO_tune_render_budget;
   if (trc->getParameters()->_useTilesSplitBudget) {
     if (_subtiles == NULL) { // the tile needs to create the subtiles
       if (trc->getStatistics()->getSplitsCountInFrame() > 1) {
@@ -208,8 +207,6 @@ void Tile::rawRender(const RenderContext *rc,
       const bool needsToCallTexturizer = (_texturizedMesh == NULL) || isTexturizerDirty();
       
       if (needsToCallTexturizer) {
-        int __TODO_tune_render_budget;
-        
         _texturizedMesh = texturizer->texturize(rc,
                                                 trc,
                                                 this,

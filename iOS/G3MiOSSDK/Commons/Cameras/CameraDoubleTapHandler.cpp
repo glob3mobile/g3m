@@ -47,5 +47,6 @@ void CameraDoubleTapHandler::onDown(const EventContext *eventContext,
   // create effect
   Effect* effect = new DoubleTapEffect(TimeInterval::fromSeconds(0.75), axis, angle, distance);
   
-  eventContext->getEffectsScheduler()->startEffect(effect, cameraContext);
+  EffectTarget* target = cameraContext->getNextCamera()->getEffectTarget();
+  eventContext->getEffectsScheduler()->startEffect(effect, target);
 }

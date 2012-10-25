@@ -35,22 +35,38 @@ public:
     return start.add(end.sub(start).times(percent));
   }
   
-  static Angle fromDegrees(const double degrees) {
+  static Angle fromDegrees(double degrees) {
     return Angle(degrees);
   }
   
-  static Angle fromRadians(const double radians) {
+  static Angle fromDegreesMinutes(double degrees,
+                                  double minutes) {
+    return Angle( degrees + ( minutes / 60.0) );
+  }
+  
+  static Angle fromDegreesMinutesSeconds(double degrees,
+                                         double minutes,
+                                         double seconds) {
+    return Angle( degrees + ( minutes / 60.0) + ( seconds / 3600.0 ) );
+  }
+  
+  static Angle fromRadians(double radians) {
     return Angle::fromDegrees(radians / GMath.pi() * 180.0);
   }
   
-  static Angle getMin(const Angle& a1, const Angle& a2) {
-    if (a1._degrees < a2._degrees) return a1;
-    else return a2;
+  static Angle min(const Angle& a1,
+                   const Angle& a2) {
+    //    if (a1._degrees < a2._degrees) return a1;
+    //    else return a2;
+    
+    return (a1._degrees < a2._degrees) ? a1 : a2;
   }
   
-  static Angle getMax(const Angle& a1, const Angle& a2) {
-    if (a1._degrees > a2._degrees) return a1;
-    else return a2;
+  static Angle max(const Angle& a1,
+                   const Angle& a2) {
+//    if (a1._degrees > a2._degrees) return a1;
+//    else return a2;
+    return (a1._degrees > a2._degrees) ? a1 : a2;
   }
   
   static Angle zero() {
@@ -63,6 +79,10 @@ public:
   
   static Angle midAngle(const Angle& angle1, const Angle& angle2) {
     return Angle::fromDegrees((angle1.degrees() + angle2.degrees()) / 2);
+  }
+  
+  static Angle interpolation(const Angle& angle1, const Angle& angle2, double v) {
+    return Angle::fromDegrees(((1.0-v) * angle1.degrees() + v * angle2.degrees()));
   }
 
   

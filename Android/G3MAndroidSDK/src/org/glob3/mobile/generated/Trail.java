@@ -28,6 +28,8 @@ public class Trail
   private final int _maxSteps;
   private boolean _positionsDirty;
 
+  private Color _color ;
+
   private java.util.ArrayList<Geodetic3D> _positions = new java.util.ArrayList<Geodetic3D>();
 
   private Mesh createMesh(Planet planet)
@@ -37,16 +39,12 @@ public class Trail
   
 	for (int i = 0; i < _positions.size(); i++)
 	{
-  //    vertices.add(*(_positions[i]));
   	  vertices.add( _positions.get(i) );
+  
 	  indices.add(i);
-	  if (i > 0)
-	  {
-		indices.add(i);
-	  }
 	}
   
-	return new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), new Color(Color.fromRGBA(1, 0, 0, 1)));
+	return new IndexedMesh(GLPrimitive.lineStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), new Color(_color));
   }
 
   private Mesh _mesh;
@@ -65,12 +63,13 @@ public class Trail
 	return _mesh;
   }
 
-  public Trail(int maxSteps)
+  public Trail(int maxSteps, Color color)
   {
 	  _maxSteps = maxSteps;
 	  _visible = true;
 	  _positionsDirty = true;
 	  _mesh = null;
+	  _color = color;
   }
 
   public void dispose()

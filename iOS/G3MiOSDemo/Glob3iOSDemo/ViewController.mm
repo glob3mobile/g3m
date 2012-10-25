@@ -252,13 +252,13 @@
   TrailsRenderer* trailsRenderer = new TrailsRenderer();
   renderers.push_back(trailsRenderer);
   
-  Trail* trail = new Trail(10);
+  Trail* trail = new Trail(50, Color::fromRGBA(1, 0, 0, 1));
   
 //  37°47′/N 122°25′W
   
   Geodetic3D position(Angle::fromDegrees(37.78333333),
                       Angle::fromDegrees(-122.41666666666667),
-                      5000);
+                      7500);
   trail->addPosition(position);
   trailsRenderer->addTrail(trail);
   
@@ -291,8 +291,8 @@
     }
     
     void run() {
-      _lastLatitudeDegrees += 0.05;
-      _lastLongitudeDegrees += 0.05;
+      _lastLatitudeDegrees += 0.025;
+      _lastLongitudeDegrees += 0.025;
       _lastHeight += 200;
 
       _trail->addPosition(Geodetic3D(Angle::fromDegrees(_lastLatitudeDegrees),

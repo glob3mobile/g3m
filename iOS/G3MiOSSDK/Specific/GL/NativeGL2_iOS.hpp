@@ -258,6 +258,9 @@ public:
   int Primitive_Lines() const{
     return GL_LINES;
   }
+  int Primitive_LineStrip() const{
+    return GL_LINE_STRIP;
+  }
   int Primitive_LineLoop() const{
     return GL_LINE_LOOP;
   }

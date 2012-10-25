@@ -15,6 +15,7 @@ import org.glob3.mobile.generated.LevelTileCondition;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarkTouchListener;
 import org.glob3.mobile.generated.MarksRenderer;
+import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
@@ -45,10 +46,9 @@ public class G3MWebGLDemo
       if (_widget == null) {
          final Panel g3mWidgetHolder = RootPanel.get(g3mWidgetHolderId);
 
-         final int delayMillis = 10;
          final String proxy = jsDefineDefaultProxy();
 
-         _widget = new G3MWidget_WebGL(delayMillis, proxy);
+         _widget = new G3MWidget_WebGL(proxy);
          g3mWidgetHolder.add(_widget);
 
          initWidgetDemo();
@@ -65,7 +65,7 @@ public class G3MWebGLDemo
       cameraConstraints.add(scc);
 
       final LayerSet layerSet = new LayerSet();
-      final boolean useBing = true;
+      final boolean useBing = false;
       if (useBing) {
          final WMSLayer bing = new WMSLayer( //
                   "ve", //
@@ -113,12 +113,14 @@ public class G3MWebGLDemo
                   "osm_auto:all", //
                   new URL("http://129.206.228.72/cached/osm", false), //
                   WMSServerVersion.WMS_1_1_0, //
-                  Sector.fromDegrees(-85.05, -180.0, 85.05, 180.0), //
+                  // Sector.fromDegrees(-85.05, -180.0, 85.05, 180.0), //
+                  Sector.fullSphere(), //
                   "image/jpeg", //
                   "EPSG:4326", //
                   "", //
                   false, //
-                  new LevelTileCondition(3, 100));
+                  // new LevelTileCondition(3, 100));
+                  null);
          layerSet.addLayer(osm);
       }
 
@@ -135,7 +137,6 @@ public class G3MWebGLDemo
                   true, //
                   null);
          layerSet.addLayer(ayto);
-
       }
 
 
@@ -204,7 +205,8 @@ public class G3MWebGLDemo
       final ArrayList<String> imagesToPreload = new ArrayList<String>();
       //      imagesToPreload.add("../images/world.jpg");
       final GTask initializationTask = null;
-      _widget.initWidget(cameraConstraints, layerSet, renderers, userData, imagesToPreload, initializationTask);
+      final ArrayList<PeriodicalTask> periodicalTasks = null;
+      _widget.initWidget(cameraConstraints, layerSet, renderers, userData, imagesToPreload, initializationTask, periodicalTasks);
    }
 
 

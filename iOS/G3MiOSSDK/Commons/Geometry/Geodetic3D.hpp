@@ -42,6 +42,14 @@ public:
     return Geodetic3D(Angle::fromDegrees(lat), Angle::fromDegrees(lon), height);
   }
   
+  static Geodetic3D interpolation(const Geodetic3D& ini, const Geodetic3D& end, double v){
+    Geodetic3D g( Angle::interpolation(ini.latitude(), end.latitude(), v),
+                 Angle::interpolation(ini.longitude(), end.longitude(), v),
+                 (1-v) * ini.height() + v * end.height() );
+    
+    return g;
+  }
+  
   Geodetic3D(const Angle& latitude,
              const Angle& longitude,
              const double height): _latitude(latitude), _longitude(longitude), _height(height) {
@@ -69,9 +77,34 @@ public:
   Geodetic2D asGeodetic2D() const {
     return Geodetic2D(_latitude, _longitude);
   }
-
+  
   const std::string description() const;
-
+  
+  
+  Geodetic3D add(const Geodetic3D& that) const {
+    return Geodetic3D(_latitude.add(that._latitude),
+                      _longitude.add(that._longitude),
+                      _height + that._height);
+  }
+  
+  Geodetic3D sub(const Geodetic3D& that) const {
+    return Geodetic3D(_latitude.sub(that._latitude),
+                      _longitude.sub(that._longitude),
+                      _height - that._height);
+  }
+  
+  Geodetic3D times(const double magnitude) const {
+    return Geodetic3D(_latitude.times(magnitude),
+                      _longitude.times(magnitude),
+                      _height * magnitude);
+  }
+  
+  Geodetic3D div(const double magnitude) const {
+    return Geodetic3D(_latitude.div(magnitude),
+                      _longitude.div(magnitude),
+                      _height / magnitude);
+  }
+  
 };
 
 

@@ -19,6 +19,8 @@
 #include "MutableMatrix44D.hpp"
 #include "Frustum.hpp"
 
+#include "Effects.hpp"
+
 class ILogger;
 
 
@@ -129,7 +131,8 @@ public:
   _frustum((that._frustum == NULL) ? NULL : new Frustum(*that._frustum)),
   _frustumInModelCoordinates((that._frustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._frustumInModelCoordinates)),
   _halfFrustum((that._halfFrustum == NULL) ? NULL : new Frustum(*that._halfFrustum)),
-  _halfFrustumInModelCoordinates((that._halfFrustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._halfFrustumInModelCoordinates))
+  _halfFrustumInModelCoordinates((that._halfFrustumInModelCoordinates == NULL) ? NULL : new Frustum(*that._halfFrustumInModelCoordinates)),
+  _camEffectTarget(new CameraEffectTarget())
   {
   }
 
@@ -137,6 +140,10 @@ public:
   
   ~Camera() {
 #ifdef C_CODE
+    if (_camEffectTarget != NULL){
+      delete _camEffectTarget;
+    }
+    
     if (_frustum != NULL) {
       delete _frustum;
     }
@@ -177,6 +184,10 @@ public:
   
   float getViewPortRatio() const {
     return (float) _width / _height;
+  }
+  
+  EffectTarget* getEffectTarget(){
+    return _camEffectTarget;
   }
   
   Vector3D getCartesianPosition() const { return _position.asVector3D(); }
@@ -258,6 +269,13 @@ private:
   mutable Frustum* _frustumInModelCoordinates;
   mutable Frustum* _halfFrustum;                    // ONLY FOR DEBUG
   mutable Frustum* _halfFrustumInModelCoordinates;  // ONLY FOR DEBUG
+  
+  //The Camera Effect Target
+  class CameraEffectTarget: public EffectTarget{
+  public:
+    void unusedMethod() const {}
+  };
+  CameraEffectTarget* _camEffectTarget;
   
   void applyTransform(const MutableMatrix44D& mat);
 

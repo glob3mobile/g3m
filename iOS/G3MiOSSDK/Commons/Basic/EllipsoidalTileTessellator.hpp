@@ -29,7 +29,7 @@ public:
   _resolution(resolution),
   _skirted(skirted)
   {
-    int __TODO_width_and_height_resolutions;
+//    int __TODO_width_and_height_resolutions;
   }
   
   virtual ~EllipsoidalTileTessellator() { }

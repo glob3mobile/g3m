@@ -7,6 +7,8 @@ public class G3MWidget
   
   
   
+  
+  
   public static void initSingletons(ILogger logger, IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, IStringBuilder stringBuilder, IMathUtils mathUtils, IJSONParser jsonParser)
   {
 	if(ILogger.instance() == null)
@@ -274,6 +276,48 @@ public class G3MWidget
   public final void addPeriodicalTask(TimeInterval interval, GTask task)
   {
 	addPeriodicalTask(new PeriodicalTask(interval, task));
+  }
+
+  public final void setAnimatedPosition(Geodetic3D position, TimeInterval interval)
+  {
+  
+	Geodetic3D ini = _planet.toGeodetic3D(_currentCamera.getCartesianPosition());
+  
+	double finalLat = position.latitude().degrees();
+	double finalLon = position.longitude().degrees();
+  
+	//Fixing final latitude
+	while (finalLat > 90)
+	{
+	  finalLat -= 360;
+	}
+	while (finalLat < -90)
+	{
+	  finalLat += 360;
+	}
+  
+	//Fixing final longitude
+	while (finalLon > 360)
+	{
+	  finalLon -= 360;
+	}
+	while (finalLon < 0)
+	{
+	  finalLon += 360;
+	}
+	if (Math.abs(finalLon - ini.longitude().degrees()) > 180)
+	{
+	  finalLon -= 360;
+	}
+  
+	final Geodetic3D end = Geodetic3D.fromDegrees(finalLat, finalLon, position.height());
+  
+	EffectTarget target = _nextCamera.getEffectTarget();
+  
+	GoToPositionEffect gtpe = new GoToPositionEffect(interval, ini, end);
+  
+	_effectsScheduler.cancellAllEffectsFor(target);
+	_effectsScheduler.startEffect(gtpe, target);
   }
 
   private FrameTasksExecutor _frameTasksExecutor;

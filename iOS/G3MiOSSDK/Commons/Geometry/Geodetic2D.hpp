@@ -55,6 +55,17 @@ public:
                       _longitude.sub(that._longitude));
   }
   
+  Geodetic2D times(const double magnitude) const {
+    return Geodetic2D(_latitude.times(magnitude),
+                      _longitude.times(magnitude));
+  }
+  
+  Geodetic2D div(const double magnitude) const {
+    return Geodetic2D(_latitude.div(magnitude),
+                      _longitude.div(magnitude));
+  }
+
+  
   bool closeTo(const Geodetic2D& other) const;
   
   bool isBetween(const Geodetic2D& min, const Geodetic2D& max) const;

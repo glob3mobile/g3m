@@ -9,8 +9,9 @@
 #include "Context.hpp"
 
 #include "ITimer.hpp"
-
+#include "IFactory.hpp"
 
 RenderContext::~RenderContext() {
-  delete _frameStartTimer;
+//  delete _frameStartTimer;
+  IFactory::instance()->deleteTimer(_frameStartTimer);
 }

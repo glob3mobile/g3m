@@ -85,6 +85,9 @@ void IndexedMesh::render(const RenderContext* rc) const {
   else if (_primitive == GLPrimitive::lines()) {
     gl->drawLines(_indices);
   }
+  else if (_primitive == GLPrimitive::lineStrip()) {
+    gl->drawLineStrip(_indices);
+  }
   else if (_primitive == GLPrimitive::lineLoop()) {
     gl->drawLineLoop(_indices);
   }

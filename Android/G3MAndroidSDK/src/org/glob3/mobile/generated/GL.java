@@ -401,6 +401,11 @@ public class GL
 	_gl.drawElements(GLPrimitive.lines(), indices.size(), indices);
   }
 
+  public final void drawLineStrip(IIntBuffer indices)
+  {
+	_gl.drawElements(GLPrimitive.lineStrip(), indices.size(), indices);
+  }
+
   public final void drawLineLoop(IIntBuffer indices)
   {
 	_gl.drawElements(GLPrimitive.lineLoop(), indices.size(), indices);

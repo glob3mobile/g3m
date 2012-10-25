@@ -12,6 +12,7 @@
 #include "LeafRenderer.hpp"
 #include "Geodetic3D.hpp"
 #include <vector>
+#include "Color.hpp"
 
 class Mesh;
 class Planet;
@@ -22,6 +23,8 @@ private:
   const unsigned long _maxSteps;
   bool _positionsDirty;
   
+  Color _color;
+  
   std::vector<Geodetic3D*> _positions;
   
   Mesh* createMesh(const Planet* planet);
@@ -30,11 +33,12 @@ private:
   Mesh* getMesh(const Planet* planet);
   
 public:
-  Trail(int maxSteps):
+  Trail(int maxSteps, Color color):
   _maxSteps(maxSteps),
   _visible(true),
   _positionsDirty(true),
-  _mesh(NULL)
+  _mesh(NULL),
+  _color(color)
   {
   }
   
