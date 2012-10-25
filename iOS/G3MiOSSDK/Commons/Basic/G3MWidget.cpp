@@ -8,7 +8,6 @@
 
 #include "G3MWidget.hpp"
 
-//#include "ITimer.hpp"
 #include "Renderer.hpp"
 #include "Camera.hpp"
 #include "GL.hpp"
@@ -22,24 +21,21 @@
 #include "IThreadUtils.hpp"
 #include "IStringBuilder.hpp"
 #include "IJSONParser.hpp"
-
 #include "GLConstants.hpp"
-
 #include "PeriodicalTask.hpp"
-
 #include "GoToPositionEffect.hpp"
 #include "CameraRenderer.hpp"
 
 #include <math.h>
 
-void G3MWidget::initSingletons(ILogger*             logger,
-                               IFactory*            factory,
-                               const IStringUtils*  stringUtils,
-                               IThreadUtils*        threadUtils,
-                               IStringBuilder*      stringBuilder,
-                               IMathUtils*          mathUtils,
-                               IJSONParser*         jsonParser) {
-  if(ILogger::instance() == NULL) {
+void G3MWidget::initSingletons(ILogger*            logger,
+                               IFactory*           factory,
+                               const IStringUtils* stringUtils,
+                               IThreadUtils*       threadUtils,
+                               IStringBuilder*     stringBuilder,
+                               IMathUtils*         mathUtils,
+                               IJSONParser*        jsonParser) {
+  if (ILogger::instance() == NULL) {
     ILogger::setInstance(logger);
     IFactory::setInstance(factory);
     IStringUtils::setInstance(stringUtils);
@@ -47,6 +43,9 @@ void G3MWidget::initSingletons(ILogger*             logger,
     IStringBuilder::setInstance(stringBuilder);
     IMathUtils::setInstance(mathUtils);
     IJSONParser::setInstance(jsonParser);
+  }
+  else {
+    ILogger::instance()->logWarning("Singletons already set");
   }
 }
 
@@ -57,7 +56,7 @@ G3MWidget::G3MWidget(FrameTasksExecutor*              frameTasksExecutor,
                      IDownloader*                     downloader,
                      const Planet*                    planet,
                      std::vector<ICameraConstrainer*> cameraConstrainers,
-                     Renderer*                        renderer,
+                     Renderer*                        mainRenderer,
                      Renderer*                        busyRenderer,
                      EffectsScheduler*                effectsScheduler,
                      int                              width,
@@ -74,7 +73,7 @@ _texturesHandler(texturesHandler),
 _textureBuilder(textureBuilder),
 _planet(planet),
 _cameraConstrainers(cameraConstrainers),
-_renderer(renderer),
+_mainRenderer(mainRenderer),
 _busyRenderer(busyRenderer),
 _effectsScheduler(effectsScheduler),
 _currentCamera(new Camera(width, height)),
@@ -85,7 +84,7 @@ _renderCounter(0),
 _totalRenderTime(0),
 _logFPS(logFPS),
 _downloader(downloader),
-_rendererReady(false), // false until first call to G3MWidget::render()
+_mainRendererReady(false), // false until first call to G3MWidget::render()
 _selectedRenderer(NULL),
 _renderStatisticsTimer(NULL),
 _logDownloaderStatistics(logDownloaderStatistics),
@@ -106,7 +105,7 @@ _autoDeleteInitializationTask(autoDeleteInitializationTask)
                            _effectsScheduler);
   
   _effectsScheduler->initialize(&ic);
-  _renderer->initialize(&ic);
+  _mainRenderer->initialize(&ic);
   _busyRenderer->initialize(&ic);
   _currentCamera->initialize(&ic);
   _nextCamera->initialize(&ic);
@@ -175,7 +174,7 @@ G3MWidget::~G3MWidget() {
 #ifdef C_CODE
   delete _planet;
 #endif
-  delete _renderer;
+  delete _mainRenderer;
   delete _busyRenderer;
   delete _effectsScheduler;
   delete _currentCamera;
@@ -207,8 +206,8 @@ G3MWidget::~G3MWidget() {
 }
 
 void G3MWidget::onTouchEvent(const TouchEvent* myEvent) {
-  if (_rendererReady) {
-    if (_renderer->isEnable()) {
+  if (_mainRendererReady) {
+    if (_mainRenderer->isEnable()) {
       EventContext ec(IFactory::instance(),
                       IStringUtils::instance(),
                       IThreadUtils::instance(),
@@ -219,14 +218,14 @@ void G3MWidget::onTouchEvent(const TouchEvent* myEvent) {
                       _downloader,
                       _effectsScheduler);
       
-      _renderer->onTouchEvent(&ec, myEvent);
+      _mainRenderer->onTouchEvent(&ec, myEvent);
     }
   }
 }
 
 void G3MWidget::onResizeViewportEvent(int width, int height) {
-  if (_rendererReady) {
-    if (_renderer->isEnable()) {
+  if (_mainRendererReady) {
+    if (_mainRenderer->isEnable()) {
       EventContext ec(IFactory::instance(),
                       IStringUtils::instance(),
                       IThreadUtils::instance(),
@@ -237,7 +236,7 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
                       _downloader,
                       _effectsScheduler);
       
-      _renderer->onResizeViewportEvent(&ec, width, height);
+      _mainRenderer->onResizeViewportEvent(&ec, width, height);
     }
   }
 }
@@ -292,9 +291,9 @@ void G3MWidget::render() {
   
   _frameTasksExecutor->doPreRenderCycle(&rc);
   
-  _rendererReady = _renderer->isReadyToRender(&rc);
+  _mainRendererReady = _mainRenderer->isReadyToRender(&rc);
   
-  Renderer* selectedRenderer = _rendererReady ? _renderer : _busyRenderer;
+  Renderer* selectedRenderer = _mainRendererReady ? _mainRenderer : _busyRenderer;
   if (selectedRenderer != _selectedRenderer) {
     if (_selectedRenderer != NULL) {
       _selectedRenderer->stop();
@@ -364,7 +363,7 @@ void G3MWidget::onPause() {
                            _downloader,
                            _effectsScheduler);
   
-  _renderer->onPause(&ic);
+  _mainRenderer->onPause(&ic);
   _busyRenderer->onPause(&ic);
   
   _effectsScheduler->onPause(&ic);
@@ -386,7 +385,7 @@ void G3MWidget::onResume() {
                            _downloader,
                            _effectsScheduler);
   
-  _renderer->onResume(&ic);
+  _mainRenderer->onResume(&ic);
   _busyRenderer->onResume(&ic);
   
   _effectsScheduler->onResume(&ic);

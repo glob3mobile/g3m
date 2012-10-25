@@ -25,25 +25,20 @@ class GTask;
 class TimeInterval;
 class IFactory;
 class ITimer;
-
 class PeriodicalTask;
+class ICameraConstrainer;
+class FrameTasksExecutor;
+class TextureBuilder;
+class G3MWidget;
+class IStringBuilder;
+class IMathUtils;
+class IJSONParser;
+class Geodetic3D;
 
 #include <vector>
 #include <string>
 
 #include "Color.hpp"
-
-class ICameraConstrainer;
-class FrameTasksExecutor;
-class TextureBuilder;
-
-class G3MWidget;
-
-class IStringBuilder;
-class IMathUtils;
-class IJSONParser;
-
-class Geodetic3D;
 
 
 class UserData {
@@ -144,8 +139,12 @@ private:
   FrameTasksExecutor* _frameTasksExecutor;
   GL*                 _gl;
   const Planet*       _planet;
-  Renderer*           _renderer;
+
+  Renderer*           _mainRenderer;
   Renderer*           _busyRenderer;
+  bool                _mainRendererReady;
+  Renderer*           _selectedRenderer;
+
   EffectsScheduler*   _effectsScheduler;
   
   std::vector<ICameraConstrainer*> _cameraConstrainers;
@@ -163,9 +162,6 @@ private:
   const bool       _logFPS;
   const bool       _logDownloaderStatistics;
   std::string      _lastCacheStatistics;
-  
-  bool      _rendererReady;
-  Renderer* _selectedRenderer;
   
   ITimer* _renderStatisticsTimer;
   
@@ -185,7 +181,7 @@ private:
             IDownloader*                     downloader,
             const Planet*                    planet,
             std::vector<ICameraConstrainer*> cameraConstrainers,
-            Renderer*                        renderer,
+            Renderer*                        mainRenderer,
             Renderer*                        busyRenderer,
             EffectsScheduler*                effectsScheduler,
             int                              width,
