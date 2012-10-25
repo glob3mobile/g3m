@@ -135,7 +135,11 @@ public:
   void addPeriodicalTask(const TimeInterval& interval,
                          GTask* task);
 
-  void setAnimatedCameraPosition(const Geodetic3D& g,
+  void setCameraPosition(const Geodetic3D& position);
+
+  void setAnimatedCameraPosition(const Geodetic3D& position);
+
+  void setAnimatedCameraPosition(const Geodetic3D& position,
                                  const TimeInterval& interval);
 
 private:

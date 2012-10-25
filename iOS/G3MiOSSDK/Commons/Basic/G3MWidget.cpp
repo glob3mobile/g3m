@@ -422,6 +422,14 @@ void G3MWidget::addPeriodicalTask(const TimeInterval& interval,
   addPeriodicalTask( new PeriodicalTask(interval, task) );
 }
 
+void G3MWidget::setCameraPosition(const Geodetic3D& position) {
+  getNextCamera()->setPosition(position);
+}
+
+void G3MWidget::setAnimatedCameraPosition(const Geodetic3D& position) {
+  setAnimatedCameraPosition(position, TimeInterval::fromSeconds(3));
+}
+
 void G3MWidget::setAnimatedCameraPosition(const Geodetic3D& position,
                                           const TimeInterval& interval) {
 
