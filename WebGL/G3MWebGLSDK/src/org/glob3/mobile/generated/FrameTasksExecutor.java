@@ -75,7 +75,7 @@ public class FrameTasksExecutor
 	  _maxTimePerFrame = TimeInterval.fromMilliseconds(7);
 	  _maxTimePerFrameStressed = TimeInterval.fromMilliseconds(25);
 	  _stressed = false;
-	int __TODO_tune_render_budget;
+
   }
 
   public final void addPreRenderTask(FrameTask preRenderTask)

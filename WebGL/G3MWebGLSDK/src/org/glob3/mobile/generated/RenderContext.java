@@ -80,8 +80,8 @@ public class RenderContext extends Context
 
   public void dispose()
   {
-	if (_frameStartTimer != null)
-		_frameStartTimer.dispose();
+  //  delete _frameStartTimer;
+	IFactory.instance().deleteTimer(_frameStartTimer);
   }
 
 }

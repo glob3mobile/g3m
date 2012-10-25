@@ -48,7 +48,6 @@ public class GoToPositionEffect extends EffectWithDuration
 	// do nothing, just leave the effect in the intermediate state
   }
 
-
   private Geodetic3D _initialPos ;
   private Geodetic3D _finalPos ;
 }
