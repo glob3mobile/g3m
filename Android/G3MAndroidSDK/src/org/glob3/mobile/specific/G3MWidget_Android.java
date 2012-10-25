@@ -15,9 +15,7 @@ import org.glob3.mobile.generated.CameraRotationHandler;
 import org.glob3.mobile.generated.CameraSingleDragHandler;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
-import org.glob3.mobile.generated.EffectsScheduler;
 import org.glob3.mobile.generated.EllipsoidalTileTessellator;
-import org.glob3.mobile.generated.FrameTasksExecutor;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GL;
 import org.glob3.mobile.generated.GTask;
@@ -327,12 +325,12 @@ public final class G3MWidget_Android
 
       final org.glob3.mobile.generated.Renderer busyRenderer = new BusyMeshRenderer();
 
-      final EffectsScheduler scheduler = new EffectsScheduler();
-      final FrameTasksExecutor frameTasksExecutor = new FrameTasksExecutor();
+      //      final EffectsScheduler scheduler = new EffectsScheduler();
+      //      final FrameTasksExecutor frameTasksExecutor = new FrameTasksExecutor();
 
       final ArrayList<PeriodicalTask> periodicalTasks = new ArrayList<PeriodicalTask>();
 
-      _g3mWidget = G3MWidget.create(frameTasksExecutor, //
+      _g3mWidget = G3MWidget.create( //
                gl, //
                texturesHandler, //
                textureBuilder, //
@@ -342,7 +340,6 @@ public final class G3MWidget_Android
                cameraRenderer, //
                mainRenderer, //
                busyRenderer, //
-               scheduler, // 
                width, //
                height, //
                Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), //

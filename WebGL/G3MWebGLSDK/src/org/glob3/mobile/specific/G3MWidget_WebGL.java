@@ -14,9 +14,7 @@ import org.glob3.mobile.generated.CameraRotationHandler;
 import org.glob3.mobile.generated.CameraSingleDragHandler;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
-import org.glob3.mobile.generated.EffectsScheduler;
 import org.glob3.mobile.generated.EllipsoidalTileTessellator;
-import org.glob3.mobile.generated.FrameTasksExecutor;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GL;
 import org.glob3.mobile.generated.GTask;
@@ -333,8 +331,6 @@ public final class G3MWidget_WebGL
       final TexturesHandler texturesHandler = new TexturesHandler(gl, false);
       final Planet planet = Planet.createEarth();
       final BusyMeshRenderer busyRenderer = new BusyMeshRenderer();
-      final EffectsScheduler scheduler = new EffectsScheduler();
-      final FrameTasksExecutor frameTasksExecutor = new FrameTasksExecutor();
 
 
       final Color backgroundColor = Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1);
@@ -342,7 +338,6 @@ public final class G3MWidget_WebGL
       final boolean logDownloaderStatistics = false;
 
       _widget = G3MWidget.create( //
-               frameTasksExecutor, //
                gl, //
                texturesHandler, //
                textureBuilder, //
@@ -352,7 +347,6 @@ public final class G3MWidget_WebGL
                cameraRenderer, //
                mainRenderer, //
                busyRenderer, //
-               scheduler, //
                _width, //
                _height, //
                backgroundColor, //
