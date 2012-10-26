@@ -162,9 +162,9 @@ void Camera::setHeading(const Angle& angle) {
   const Angle currentHeading = getHeading(normal);
   const Angle delta     = currentHeading.sub(angle);
   rotateWithAxisAndPoint(normal, _position.asVector3D(), delta);
-  printf ("previous heading = %f   current heading = %f\n",
-          currentHeading.degrees(),
-          getHeading().degrees());
+//  printf ("previous heading = %f   current heading = %f\n",
+//          currentHeading.degrees(),
+//          getHeading().degrees());
 }
 
 
