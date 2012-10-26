@@ -254,6 +254,8 @@
 		E8A0D81116393C0B003F1942 /* SceneParser.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E8A0D80D16393C0B003F1942 /* SceneParser.hpp */; };
 		E8A0D81516393C20003F1942 /* G3MJSONBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8A0D81316393C20003F1942 /* G3MJSONBuilder.cpp */; };
 		E8A0D81616393C20003F1942 /* G3MJSONBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E8A0D81416393C20003F1942 /* G3MJSONBuilder.hpp */; };
+		E8A0D82A163A9182003F1942 /* GEOJSONDownloadListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8A0D829163A9182003F1942 /* GEOJSONDownloadListener.cpp */; };
+		E8A0D82D163A91A7003F1942 /* GEOJSONDownloadListener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E8A0D82C163A91A7003F1942 /* GEOJSONDownloadListener.hpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -507,6 +509,8 @@
 		E8A0D80D16393C0B003F1942 /* SceneParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SceneParser.hpp; sourceTree = "<group>"; };
 		E8A0D81316393C20003F1942 /* G3MJSONBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = G3MJSONBuilder.cpp; path = Commons/Basic/G3MJSONBuilder.cpp; sourceTree = "<group>"; };
 		E8A0D81416393C20003F1942 /* G3MJSONBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = G3MJSONBuilder.hpp; path = Commons/Basic/G3MJSONBuilder.hpp; sourceTree = "<group>"; };
+		E8A0D829163A9182003F1942 /* GEOJSONDownloadListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GEOJSONDownloadListener.cpp; sourceTree = "<group>"; };
+		E8A0D82C163A91A7003F1942 /* GEOJSONDownloadListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GEOJSONDownloadListener.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -762,6 +766,8 @@
 				A70F5611161C4F8F00340256 /* JSONNumber.cpp */,
 				A70F5613161C4FD000340256 /* JSONNumber.hpp */,
 				A70F5615161C8F9A00340256 /* JSONBoolean.hpp */,
+				E8A0D829163A9182003F1942 /* GEOJSONDownloadListener.cpp */,
+				E8A0D82C163A91A7003F1942 /* GEOJSONDownloadListener.hpp */,
 			);
 			name = JSON;
 			path = Commons/JSON;
@@ -1085,6 +1091,7 @@
 				E8A0D80F16393C0B003F1942 /* AppParser.hpp in Headers */,
 				E8A0D81116393C0B003F1942 /* SceneParser.hpp in Headers */,
 				E8A0D81616393C20003F1942 /* G3MJSONBuilder.hpp in Headers */,
+				E8A0D82D163A91A7003F1942 /* GEOJSONDownloadListener.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1243,6 +1250,7 @@
 				E8A0D80E16393C0B003F1942 /* AppParser.cpp in Sources */,
 				E8A0D81016393C0B003F1942 /* SceneParser.cpp in Sources */,
 				E8A0D81516393C20003F1942 /* G3MJSONBuilder.cpp in Sources */,
+				E8A0D82A163A9182003F1942 /* GEOJSONDownloadListener.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

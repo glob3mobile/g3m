@@ -22,13 +22,18 @@
 
 
 class G3MJSONBuilder {
+     std::string _jsonSource;
 public:   
     
-    G3MJSONBuilder(CompositeRenderer* composite, LayerSet* layerSet, TilesRenderParameters* parameters, std::vector<Renderer*> renderers, IDownloader* downloader, const URL jsonURL);
+    G3MJSONBuilder(const std::string jsonSource){_jsonSource = jsonSource;};
+//    
+//    void initG3MJSONBuilder(std::vector<ICameraConstrainer*> cameraConstraints, std::vector<Renderer*> renderers, UserData* userData, GTask* initializationTask, std::vector<PeriodicalTask*> periodicalTasks);
     
-    G3MJSONBuilder(CompositeRenderer* composite, LayerSet* layerSet, TilesRenderParameters* parameters, std::vector<Renderer*> renderers, const std::string jsonSource);
+//    G3MJSONBuilder(CompositeRenderer* composite, LayerSet* layerSet, TilesRenderParameters* parameters, std::vector<Renderer*> renderers, IDownloader* downloader, const URL jsonURL);
+//    
+//    G3MJSONBuilder(CompositeRenderer* composite, LayerSet* layerSet, TilesRenderParameters* parameters, std::vector<Renderer*>* renderers, IDownloader* downloader, const std::string jsonSource);
     
-    void fromSceneJSON(const std::string json, CompositeRenderer* composite, LayerSet* layerSet, TilesRenderParameters* parameters, std::vector<Renderer*> renderers);
+    void fromSceneJSON(CompositeRenderer* composite, LayerSet* layerSet, TilesRenderParameters* parameters, std::vector<Renderer*>* renderers, IDownloader* downloader);
     
     ~G3MJSONBuilder();
 

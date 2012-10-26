@@ -16,14 +16,12 @@
 #include "TilesRenderParameters.hpp"
 #include "MarksRenderer.hpp"
 #include "CameraConstraints.hpp"
-#include "GLErrorRenderer.hpp"
-
+//#include "GLErrorRenderer.hpp"
 #include "LevelTileCondition.hpp"
-
 #include "BingLayer.hpp"
-//#include "OSMLayer.hpp"
 #include "TrailsRenderer.hpp"
 #include "PeriodicalTask.hpp"
+#include "G3MWidget.hpp"
 
 @implementation ViewController
 
@@ -240,7 +238,6 @@
       for (int i = 0; i < 500; i++) {
         const Angle latitude = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
         const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
-        //NSLog(@"lat=%f, lon=%f", latitude.degrees(), longitude.degrees());
 
         marksRenderer->addMark(new Mark("Random",
                                         URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
@@ -253,8 +250,6 @@
   renderers.push_back(trailsRenderer);
   
   Trail* trail = new Trail(50, Color::fromRGBA(1, 0, 0, 1));
-  
-//  37°47′/N 122°25′W
   
   Geodetic3D position(Angle::fromDegrees(37.78333333),
                       Angle::fromDegrees(-122.41666666666667),
@@ -283,8 +278,8 @@
     TestTrailTask(Trail* trail,
                   Geodetic3D lastPosition) :
     _trail(trail),
-    _lastLatitudeDegrees(lastPosition.latitude().degrees()),
-    _lastLongitudeDegrees(lastPosition.longitude().degrees()),
+    _lastLatitudeDegrees(lastPosition.latitude()._degrees),
+    _lastLongitudeDegrees(lastPosition.longitude()._degrees),
     _lastHeight(lastPosition.height())
     {
       
@@ -309,13 +304,37 @@
   std::vector <ICameraConstrainer*> cameraConstraints;
   SimpleCameraConstrainer* scc = new SimpleCameraConstrainer();
   cameraConstraints.push_back(scc);
-  
+
+
+  class SampleInitializationTask : public GTask {
+  private:
+    G3MWidget_iOS* _iosWidget;
+    
+  public:
+    SampleInitializationTask(G3MWidget_iOS* iosWidget) :
+    _iosWidget(iosWidget)
+    {
+
+    }
+
+    void run() {
+      printf("Running initialization Task\n");
+
+      [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegreesMinutes(37, 47),
+                                                                Angle::fromDegreesMinutes(-122, 25),
+                                                                1000000),
+                                                     TimeInterval::fromSeconds(10));
+    }
+  };
+
   UserData* userData = NULL;
   [[self G3MWidget] initWidgetWithCameraConstraints: cameraConstraints
                                            layerSet: layerSet
                                           renderers: renderers
                                            userData: userData
+                                 initializationTask: new SampleInitializationTask([self G3MWidget])
                                     periodicalTasks: periodicalTasks];
+
 }
 
 - (void)viewDidUnload

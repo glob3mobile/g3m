@@ -55,22 +55,35 @@ public:
 
 
 
-class CameraRenderer: public LeafRenderer
-{
-  
-private:      
-  
+class CameraRenderer: public LeafRenderer {
+private:
+  bool _processTouchEvents;
   std::vector<CameraEventHandler *> _handlers;
-  
   CameraContext *_cameraContext;    
   
 public:
-  CameraRenderer(): _cameraContext(NULL) {}
-  ~CameraRenderer() { if (_cameraContext!=NULL) delete _cameraContext; }
+  CameraRenderer() :
+  _cameraContext(NULL),
+  _processTouchEvents(true)
+  {
+  }
+
+  ~CameraRenderer() {
+    if (_cameraContext != NULL) {
+      delete _cameraContext;
+    }
+  }
     
-  void addHandler(CameraEventHandler *handler) { _handlers.push_back(handler); }
+  void addHandler(CameraEventHandler *handler) {
+    _handlers.push_back(handler);
+  }
+
+  void setProcessTouchEvents(bool processTouchEvents) {
+    _processTouchEvents = processTouchEvents;
+  }
   
   void render(const RenderContext* rc);
+
   void initialize(const InitializationContext* ic);
   
   bool onTouchEvent(const EventContext* ec,

@@ -21,7 +21,7 @@ public:
   
   SingleDragEffect(const Vector3D& axis,
                    const Angle& angle):
-  EffectWithForce(angle.degrees(), 0.975),
+  EffectWithForce(angle._degrees, 0.975),
   _axis(axis)
   {
   }

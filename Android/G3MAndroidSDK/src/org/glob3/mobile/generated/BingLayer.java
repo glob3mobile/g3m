@@ -226,8 +226,8 @@ public class BingLayer extends Layer
   
 	//LatLon to Pixels XY
 	int mapSize = (int) 256 << level;
-	double lonDeg = latLon.longitude().degrees();
-	double latDeg = latLon.latitude().degrees();
+	double lonDeg = latLon.longitude()._degrees;
+	double latDeg = latLon.latitude()._degrees;
 	if (latDeg < -85.05112878)
 	{
 	  latDeg = -85.05112878;
@@ -291,7 +291,7 @@ public class BingLayer extends Layer
 	else
 	{
 	  tileBelow[1] = tileXY[1]+1;
-	  lowerLatDeg = getLatLon(tileBelow, level).latitude().degrees();
+	  lowerLatDeg = getLatLon(tileBelow, level).latitude()._degrees;
 	}
   
   
@@ -305,7 +305,7 @@ public class BingLayer extends Layer
 	else
 	{
 	  tileRight[0] = tileXY[0]+1;
-	  upperLonDeg = getLatLon(tileRight, level).longitude().degrees();
+	  upperLonDeg = getLatLon(tileRight, level).longitude()._degrees;
 	}
   
 	return new Sector(new Geodetic2D(Angle.fromDegrees(lowerLatDeg), lowerLon), new Geodetic2D(upperLat, Angle.fromDegrees(upperLonDeg)));

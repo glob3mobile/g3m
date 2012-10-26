@@ -60,7 +60,7 @@ public:
   _maxTimePerFrameStressed(TimeInterval::fromMilliseconds(25)),
   _stressed(false)
   {
-    int __TODO_tune_render_budget;
+
   }
   
   void addPreRenderTask(FrameTask* preRenderTask) {

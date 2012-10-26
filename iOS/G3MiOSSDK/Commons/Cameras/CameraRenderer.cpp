@@ -32,27 +32,31 @@ void CameraRenderer::render(const RenderContext* rc) {
   
   // render camera object
   rc->getCurrentCamera()->render(rc);
-  
-  for (unsigned int i=0; i<_handlers.size(); i++) {
+
+  const int handlersSize = _handlers.size();
+  for (unsigned int i = 0; i < handlersSize; i++) {
     _handlers[i]->render(rc, _cameraContext);
   }
 }
 
 bool CameraRenderer::onTouchEvent(const EventContext* ec,
                                   const TouchEvent* touchEvent) {
-  // abort all the camera effect currently running
-  if (touchEvent->getType() == Down){
-    EffectTarget* target = _cameraContext->getNextCamera()->getEffectTarget();
-    ec->getEffectsScheduler()->cancellAllEffectsFor(target);
-  }
-  
-  // pass the event to all the handlers
-  for (unsigned int n=0; n<_handlers.size(); n++) {
-    if (_handlers[n]->onTouchEvent(ec, touchEvent, _cameraContext)) {
-      return true;
+  if (_processTouchEvents) {
+    // abort all the camera effect currently running
+    if (touchEvent->getType() == Down){
+      EffectTarget* target = _cameraContext->getNextCamera()->getEffectTarget();
+      ec->getEffectsScheduler()->cancellAllEffectsFor(target);
+    }
+
+    // pass the event to all the handlers
+    const int handlersSize = _handlers.size();
+    for (unsigned int i = 0; i < handlersSize; i++) {
+      if (_handlers[i]->onTouchEvent(ec, touchEvent, _cameraContext)) {
+        return true;
+      }
     }
   }
   
-  // if any of them processed the event, return false
+  // if no handler processed the event, return not-handled
   return false;
 }

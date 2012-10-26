@@ -29,7 +29,12 @@ public:
   virtual bool isReadyToRender(const RenderContext* rc) = 0;
   
   virtual void render(const RenderContext* rc) = 0;
-  
+
+  /*
+   Gives to Renderer the opportunity to process touch, events.
+   
+   The Renderer answer true if the event was processed.
+   */
   virtual bool onTouchEvent(const EventContext* ec,
                             const TouchEvent* touchEvent) = 0;
   

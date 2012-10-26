@@ -109,13 +109,13 @@ public class WMSLayer extends Layer
 		isb.addInt(height);
   
 		isb.addString("&BBOX=");
-		isb.addDouble(sector.lower().latitude().degrees());
+		isb.addDouble(sector.lower().latitude()._degrees);
 		isb.addString(",");
-		isb.addDouble(sector.lower().longitude().degrees());
+		isb.addDouble(sector.lower().longitude()._degrees);
 		isb.addString(",");
-		isb.addDouble(sector.upper().latitude().degrees());
+		isb.addDouble(sector.upper().latitude()._degrees);
 		isb.addString(",");
-		isb.addDouble(sector.upper().longitude().degrees());
+		isb.addDouble(sector.upper().longitude()._degrees);
   
 		req += isb.getString();
 		if (isb != null)
@@ -139,13 +139,13 @@ public class WMSLayer extends Layer
 		isb.addInt(height);
   
 		isb.addString("&BBOX=");
-		isb.addDouble(sector.lower().longitude().degrees());
+		isb.addDouble(sector.lower().longitude()._degrees);
 		isb.addString(",");
-		isb.addDouble(sector.lower().latitude().degrees());
+		isb.addDouble(sector.lower().latitude()._degrees);
 		isb.addString(",");
-		isb.addDouble(sector.upper().longitude().degrees());
+		isb.addDouble(sector.upper().longitude()._degrees);
 		isb.addString(",");
-		isb.addDouble(sector.upper().latitude().degrees());
+		isb.addDouble(sector.upper().latitude()._degrees);
   
 		req += isb.getString();
 		if (isb != null)
@@ -253,13 +253,13 @@ public class WMSLayer extends Layer
 		isb.addInt(height);
   
 		isb.addString("&BBOX=");
-		isb.addDouble(sector.lower().latitude().degrees());
+		isb.addDouble(sector.lower().latitude()._degrees);
 		isb.addString(",");
-		isb.addDouble(sector.lower().longitude().degrees());
+		isb.addDouble(sector.lower().longitude()._degrees);
 		isb.addString(",");
-		isb.addDouble(sector.upper().latitude().degrees());
+		isb.addDouble(sector.upper().latitude()._degrees);
 		isb.addString(",");
-		isb.addDouble(sector.upper().longitude().degrees());
+		isb.addDouble(sector.upper().longitude()._degrees);
   
 		req += isb.getString();
   
@@ -284,13 +284,13 @@ public class WMSLayer extends Layer
 		isb.addInt(height);
   
 		isb.addString("&BBOX=");
-		isb.addDouble(sector.lower().longitude().degrees());
+		isb.addDouble(sector.lower().longitude()._degrees);
 		isb.addString(",");
-		isb.addDouble(sector.lower().latitude().degrees());
+		isb.addDouble(sector.lower().latitude()._degrees);
 		isb.addString(",");
-		isb.addDouble(sector.upper().longitude().degrees());
+		isb.addDouble(sector.upper().longitude()._degrees);
 		isb.addString(",");
-		isb.addDouble(sector.upper().latitude().degrees());
+		isb.addDouble(sector.upper().latitude()._degrees);
   
 		req += isb.getString();
   

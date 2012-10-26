@@ -92,7 +92,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
   {
 	  _resolution = resolution;
 	  _skirted = skirted;
-	int __TODO_width_and_height_resolutions;
+//    int __TODO_width_and_height_resolutions;
   }
 
   public void dispose()

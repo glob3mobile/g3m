@@ -12,10 +12,10 @@
 
 @interface ViewController : UIViewController{
 
-IBOutlet G3MWidget_iOS *G3MWidget;
+IBOutlet G3MWidget_iOS* G3MWidget;
     
 }
 
-@property (retain, nonatomic) G3MWidget_iOS *G3MWidget;
+@property (retain, nonatomic) G3MWidget_iOS* G3MWidget;
 
 @end

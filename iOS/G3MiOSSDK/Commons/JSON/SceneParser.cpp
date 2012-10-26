@@ -24,9 +24,11 @@
 #include "WMSLayer.hpp"
 #include "LayerSet.hpp"
 
-#include <iostream>
 #include <stdio.h>
 #include <string.h>
+
+#include "MarksRenderer.hpp"
+#include "GEOJSONDownloadListener.hpp"
 
 using namespace std;
 
@@ -37,6 +39,8 @@ const std::string SceneParser::VERSION = "version";
 const std::string SceneParser::ITEMS = "items";
 const std::string SceneParser::STATUS = "status";
 const std::string SceneParser::NAME = "name";
+const std::string SceneParser::ICON = "icon";
+
 
 const std::string SceneParser::WMS110 = "1.1.0";
 const std::string SceneParser::WMS111 = "1.1.1";
@@ -52,24 +56,26 @@ SceneParser* SceneParser::instance(){
 }
 
 SceneParser::SceneParser(){
-  mapLayerType["WMS"] = WMS;
-  mapLayerType["THREED"] = THREED;
-  mapLayerType["PANO"] = PANO;  
+  _mapLayerType["WMS"] = WMS;
+  _mapLayerType["THREED"] = THREED;
+  _mapLayerType["PANO"] = PANO;
+  _mapLayerType["GEOJSON"] = GEOJSON;  
+
 }
 
-void SceneParser::parse(LayerSet* layerSet, std::string namelessParameter){
+void SceneParser::parse(LayerSet* layerSet, IDownloader* downloader, std::vector<Renderer*>* renderers, std::string namelessParameter){
   
   JSONObject* json = IJSONParser::instance()->parse(namelessParameter)->getObject();
-  parserJSONLayerList(layerSet, json->getObjectForKey(LAYERS)->getObject());
+  parserJSONLayerList(layerSet, downloader, renderers, json->getObjectForKey(LAYERS)->getObject());
   IJSONParser::instance()->deleteJSONData(json);
 }
 
-void SceneParser::parserJSONLayerList(LayerSet* layerSet, JSONObject* jsonLayers){
+void SceneParser::parserJSONLayerList(LayerSet* layerSet, IDownloader* downloader, std::vector<Renderer*>* renderers, JSONObject* jsonLayers){
   for (int i = 0; i < jsonLayers->getObject()->getSize(); i++) {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addInt(i);
     JSONObject* jsonLayer = jsonLayers->getObjectForKey(isb->getString())->getObject();
-    const layer_type layerType = mapLayerType[jsonLayer->getObjectForKey(TYPE)->getString()->getValue()];
+    const layer_type layerType = _mapLayerType[jsonLayer->getObjectForKey(TYPE)->getString()->getValue()];
     
     switch (layerType) {
       case WMS:
@@ -80,6 +86,9 @@ void SceneParser::parserJSONLayerList(LayerSet* layerSet, JSONObject* jsonLayers
         break;
       case PANO:
         parserJSONPanoLayer(layerSet, jsonLayer);
+        break;
+      case GEOJSON:
+        parserGEOJSONLayer(layerSet, downloader, renderers, jsonLayer);
         break;
     }
     
@@ -132,5 +141,33 @@ void SceneParser::parserJSON3DLayer(LayerSet* layerSet, JSONObject* jsonLayer){
 
 void SceneParser::parserJSONPanoLayer(LayerSet* layerSet, JSONObject* jsonLayer){
   cout << "Parsing Pano Layer " << jsonLayer->getObjectForKey(NAME)->getString()->getValue() << "..." << endl;
+}
+
+void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, IDownloader* downloader, std::vector<Renderer*>* renderers, JSONObject* jsonLayer){
+    cout << "Parsing GEOJSON Layer " << jsonLayer->getObjectForKey(NAME)->getString()->getValue() << "..." << endl;
+    
+    const bool readyWhenMarksReady = false;
+    MarksRenderer* marksRenderer = new MarksRenderer(readyWhenMarksReady);
+    renderers->push_back(marksRenderer);
+    
+    const std::string geojsonDatasource = jsonLayer->getObjectForKey(DATASOURCE)->getString()->getValue();
+    
+    JSONArray* jsonItems = jsonLayer->getObjectForKey(ITEMS)->getArray();
+    for (int i = 0; i<jsonItems->getSize(); i++) {
+        
+        const std::string namefile = jsonItems->getElement(i)->getObject()->getObjectForKey(NAME)->getString()->getValue();
+        const std::string icon = jsonItems->getElement(i)->getObject()->getObjectForKey(ICON)->getString()->getValue();
+        
+        IStringBuilder *url = IStringBuilder::newStringBuilder();
+        url->addString(geojsonDatasource);
+        url->addString("/");
+        url->addString(namefile);
+        
+        cout << "Downloading " << namefile << " file" << endl;
+        
+        downloader->requestBuffer(URL(url->getString(), false), 100000000L, new GEOJSONDownloadListener(marksRenderer, icon), true);
+
+    }
+    
 }
 

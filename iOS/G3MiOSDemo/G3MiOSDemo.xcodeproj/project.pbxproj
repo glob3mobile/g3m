@@ -41,6 +41,9 @@
 		E71B153F1626D27F003D1013 /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15341626D27F003D1013 /* Icon-Small@2x.png */; };
 		E71B15401626D27F003D1013 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15351626D27F003D1013 /* Icon.png */; };
 		E71B15411626D27F003D1013 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E71B15361626D27F003D1013 /* Icon@2x.png */; };
+		E82A6C80163AEAFA00DA5352 /* fullscene.scn in Resources */ = {isa = PBXBuildFile; fileRef = E82A6C7F163AEAFA00DA5352 /* fullscene.scn */; };
+		E82A6C82163AEB9E00DA5352 /* wmsScene.scn in Resources */ = {isa = PBXBuildFile; fileRef = E82A6C81163AEB9E00DA5352 /* wmsScene.scn */; };
+		E82A6C84163AEFBC00DA5352 /* testScene.scn in Resources */ = {isa = PBXBuildFile; fileRef = E82A6C83163AEFBC00DA5352 /* testScene.scn */; };
 		E8B1940216384DCE006D9193 /* scene.scn in Resources */ = {isa = PBXBuildFile; fileRef = E8B1940116384DCE006D9193 /* scene.scn */; };
 /* End PBXBuildFile section */
 
@@ -102,6 +105,9 @@
 		E71B15341626D27F003D1013 /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small@2x.png"; path = "Resources/Icon-Small@2x.png"; sourceTree = "<group>"; };
 		E71B15351626D27F003D1013 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Resources/Icon.png; sourceTree = "<group>"; };
 		E71B15361626D27F003D1013 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Resources/Icon@2x.png"; sourceTree = "<group>"; };
+		E82A6C7F163AEAFA00DA5352 /* fullscene.scn */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fullscene.scn; sourceTree = "<group>"; };
+		E82A6C81163AEB9E00DA5352 /* wmsScene.scn */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = wmsScene.scn; sourceTree = "<group>"; };
+		E82A6C83163AEFBC00DA5352 /* testScene.scn */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = testScene.scn; sourceTree = "<group>"; };
 		E8B1940116384DCE006D9193 /* scene.scn */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = scene.scn; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -216,6 +222,9 @@
 				D8EEF4241577B0D3003FEB5E /* Shader.vsh */,
 				D8EEF4231577B0D3003FEB5E /* Shader.fsh */,
 				E8B1940116384DCE006D9193 /* scene.scn */,
+				E82A6C7F163AEAFA00DA5352 /* fullscene.scn */,
+				E82A6C81163AEB9E00DA5352 /* wmsScene.scn */,
+				E82A6C83163AEFBC00DA5352 /* testScene.scn */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -310,6 +319,9 @@
 				E71B15401626D27F003D1013 /* Icon.png in Resources */,
 				E71B15411626D27F003D1013 /* Icon@2x.png in Resources */,
 				E8B1940216384DCE006D9193 /* scene.scn in Resources */,
+				E82A6C80163AEAFA00DA5352 /* fullscene.scn in Resources */,
+				E82A6C82163AEB9E00DA5352 /* wmsScene.scn in Resources */,
+				E82A6C84163AEFBC00DA5352 /* testScene.scn in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

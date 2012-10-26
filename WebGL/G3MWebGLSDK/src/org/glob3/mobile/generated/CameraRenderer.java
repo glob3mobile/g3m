@@ -1,26 +1,33 @@
 package org.glob3.mobile.generated; 
 public class CameraRenderer extends LeafRenderer
 {
-
-
+  private boolean _processTouchEvents;
   private java.util.ArrayList<CameraEventHandler > _handlers = new java.util.ArrayList<CameraEventHandler >();
-
   private CameraContext _cameraContext;
 
   public CameraRenderer()
   {
 	  _cameraContext = null;
+	  _processTouchEvents = true;
   }
+
   public void dispose()
   {
-	  if (_cameraContext!=null)
-		  if (_cameraContext != null)
-			  _cameraContext.dispose();
+	if (_cameraContext != null)
+	{
+	  if (_cameraContext != null)
+		  _cameraContext.dispose();
+	}
   }
 
   public final void addHandler(CameraEventHandler handler)
   {
-	  _handlers.add(handler);
+	_handlers.add(handler);
+  }
+
+  public final void setProcessTouchEvents(boolean processTouchEvents)
+  {
+	_processTouchEvents = processTouchEvents;
   }
 
   public final void render(RenderContext rc)
@@ -34,11 +41,13 @@ public class CameraRenderer extends LeafRenderer
 	// render camera object
 	rc.getCurrentCamera().render(rc);
   
-	for (int i = 0; i<_handlers.size(); i++)
+	final int handlersSize = _handlers.size();
+	for (int i = 0; i < handlersSize; i++)
 	{
 	  _handlers.get(i).render(rc, _cameraContext);
 	}
   }
+
   public final void initialize(InitializationContext ic)
   {
 	//_logger = ic->getLogger();
@@ -47,23 +56,27 @@ public class CameraRenderer extends LeafRenderer
 
   public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
   {
-	// abort all the camera effect currently running
-	if (touchEvent.getType() == TouchEventType.Down)
+	if (_processTouchEvents)
 	{
-	  EffectTarget target = _cameraContext.getNextCamera().getEffectTarget();
-	  ec.getEffectsScheduler().cancellAllEffectsFor(target);
-	}
-  
-	// pass the event to all the handlers
-	for (int n = 0; n<_handlers.size(); n++)
-	{
-	  if (_handlers.get(n).onTouchEvent(ec, touchEvent, _cameraContext))
+	  // abort all the camera effect currently running
+	  if (touchEvent.getType() == TouchEventType.Down)
 	  {
-		return true;
+		EffectTarget target = _cameraContext.getNextCamera().getEffectTarget();
+		ec.getEffectsScheduler().cancellAllEffectsFor(target);
+	  }
+  
+	  // pass the event to all the handlers
+	  final int handlersSize = _handlers.size();
+	  for (int i = 0; i < handlersSize; i++)
+	  {
+		if (_handlers.get(i).onTouchEvent(ec, touchEvent, _cameraContext))
+		{
+		  return true;
+		}
 	  }
 	}
   
-	// if any of them processed the event, return false
+	// if no handler processed the event, return not-handled
 	return false;
   }
 

@@ -66,7 +66,7 @@ void CameraDoubleDragHandler::onDown(const EventContext *eventContext,
   // fingers difference
   Vector2I difPixel = pixel1.sub(pixel0);
   _initialFingerSeparation = difPixel.length();
-  _initialFingerInclination = difPixel.orientation().radians();
+  _initialFingerInclination = difPixel.orientation()._radians;
   
   //printf ("down 2 finger\n");
 }
@@ -90,7 +90,7 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
   {
     Camera tempCamera(_camera0);
     Angle originalAngle = _initialPoint0.angleBetween(_initialPoint1);
-    double angle = originalAngle.degrees();
+    double angle = originalAngle._degrees;
     
     // compute estimated camera translation
     Vector3D centerPoint = tempCamera.getXYZCenterOfView();    
@@ -99,7 +99,7 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
     tempCamera.moveForward(d);
     dAccum += d;
     //tempCamera.updateModelMatrix();
-    double angle0 = tempCamera.compute3DAngularDistance(pixel0, pixel1).degrees();
+    double angle0 = tempCamera.compute3DAngularDistance(pixel0, pixel1)._degrees;
     if (GMath.isNan(angle0)) return;
     //printf("distancia angular original = %.4f     d=%.1f   angulo step0=%.4f\n", angle, d, angle0);
  
@@ -109,7 +109,7 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
     tempCamera.moveForward(d);
     dAccum += d;
     //tempCamera.updateModelMatrix();
-    double angle1 = tempCamera.compute3DAngularDistance(pixel0, pixel1).degrees();
+    double angle1 = tempCamera.compute3DAngularDistance(pixel0, pixel1)._degrees;
     double angle_n1=angle0, angle_n=angle1;
     
     // iterations
@@ -122,7 +122,7 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
       dAccum += d;
       //tempCamera.updateModelMatrix();
       angle_n1 = angle_n;
-      angle_n = tempCamera.compute3DAngularDistance(pixel0, pixel1).degrees();  
+      angle_n = tempCamera.compute3DAngularDistance(pixel0, pixel1)._degrees;
     }
     //printf("-----------  iteraciones=%d  precision=%f angulo final=%.4f  distancia final=%.1f\n", iter, precision, angle_n, dAccum);
   }
@@ -205,7 +205,7 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
     Vector3D normal = planet->geodeticSurfaceNormal(centerPoint2);
     Vector3D v0     = _initialPoint0.asVector3D().sub(centerPoint2).projectionInPlane(normal);
     Vector3D v1     = tempCamera.pixel2PlanetPoint(pixel0).sub(centerPoint2).projectionInPlane(normal);
-    double angle    = v0.angleBetween(v1).degrees();
+    double angle    = v0.angleBetween(v1)._degrees;
     double sign     = v1.cross(v0).dot(normal);
     if (sign<0) angle = -angle;
     tempCamera.rotateWithAxisAndPoint(normal, centerPoint2, Angle::fromDegrees(angle));
@@ -265,7 +265,7 @@ void CameraDoubleDragHandler::render(const RenderContext* rc, CameraContext *cam
 //      
 //      
 //      //Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
-//      //printf ("zoom with initial point = (%f, %f)\n", g.latitude().degrees(), g.longitude().degrees());
+//      //printf ("zoom with initial point = (%f, %f)\n", g.latitude()._degrees, g.longitude()._degrees);
 //    }
 //  }
 

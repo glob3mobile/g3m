@@ -94,7 +94,6 @@ public class Tile
 	}
   
   
-	int __TODO_tune_render_budget;
 	if (trc.getParameters()._useTilesSplitBudget)
 	{
 	  if (_subtiles == null) // the tile needs to create the subtiles
@@ -158,8 +157,6 @@ public class Tile
   
 		if (needsToCallTexturizer)
 		{
-		  int __TODO_tune_render_budget;
-  
 		  _texturizedMesh = texturizer.texturize(rc, trc, this, tessellatorMesh, _texturizedMesh);
 		}
   

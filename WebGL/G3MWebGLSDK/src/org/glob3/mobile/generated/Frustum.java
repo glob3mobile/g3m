@@ -266,10 +266,6 @@ public class Frustum
   
   //  std::vector<Vector3D> corners = box->getCorners();
   
-	int __ASK_agustin;
-	/* http: //www.flipcode.com/archives/Frustum_Culling.shtml */
-  
-  
 	// test with left plane
 	outside = true;
 	for (int i = 0; i<8; i++)

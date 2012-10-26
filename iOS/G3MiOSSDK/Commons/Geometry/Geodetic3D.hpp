@@ -43,11 +43,9 @@ public:
   }
   
   static Geodetic3D interpolation(const Geodetic3D& ini, const Geodetic3D& end, double v){
-    Geodetic3D g( Angle::interpolation(ini.latitude(), end.latitude(), v),
-                 Angle::interpolation(ini.longitude(), end.longitude(), v),
-                 (1-v) * ini.height() + v * end.height() );
-    
-    return g;
+    return Geodetic3D(Angle::interpolation(ini.latitude(),  end.latitude(),  v),
+                      Angle::interpolation(ini.longitude(), end.longitude(), v),
+                      (1-v) * ini.height() + v * end.height() );
   }
   
   Geodetic3D(const Angle& latitude,

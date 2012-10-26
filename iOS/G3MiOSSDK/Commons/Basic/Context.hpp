@@ -228,7 +228,7 @@ public:
     return _frameTasksExecutor;
   }
   
-  ~RenderContext();
+  virtual ~RenderContext();
   
 };
 

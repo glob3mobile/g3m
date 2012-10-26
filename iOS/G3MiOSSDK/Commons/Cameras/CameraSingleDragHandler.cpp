@@ -143,7 +143,7 @@ void CameraSingleDragHandler::render(const RenderContext* rc, CameraContext *cam
 //      gl->popMatrix();
 //            
 //      //Geodetic2D g = _planet->toGeodetic2D(_initialPoint.asVector3D());
-//      //printf ("zoom with initial point = (%f, %f)\n", g.latitude().degrees(), g.longitude().degrees());
+//      //printf ("zoom with initial point = (%f, %f)\n", g.latitude()._degrees, g.longitude()._degrees);
 //    }
 //  }
 }

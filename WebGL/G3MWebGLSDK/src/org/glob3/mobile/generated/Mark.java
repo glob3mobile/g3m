@@ -145,7 +145,7 @@ public class Mark
 	{
 	  final Vector3D normalAtMarkPosition = planet.geodeticSurfaceNormal(markPosition);
   
-	  if (normalAtMarkPosition.angleBetween(markCameraVector).radians() > IMathUtils.instance().halfPi())
+	  if (normalAtMarkPosition.angleBetween(markCameraVector)._radians > IMathUtils.instance().halfPi())
 	  {
 		GL gl = rc.getGL();
   

@@ -13,49 +13,36 @@
 #include "G3MWidget.hpp"
 #include "CompositeRenderer.hpp"
 #include "Planet.hpp"
-
 #include "CameraRenderer.hpp"
 #include "CameraSingleDragHandler.hpp"
 #include "CameraDoubleDragHandler.hpp"
 #include "CameraRotationHandler.hpp"
 #include "CameraDoubleTapHandler.hpp"
 #include "CameraConstraints.hpp"
-
 #include "TileRenderer.hpp"
-#include "Effects.hpp"
 #include "EllipsoidalTileTessellator.hpp"
-
 #include "SQLiteStorage_iOS.hpp"
 #include "BusyMeshRenderer.hpp"
 #include "CPUTextureBuilder.hpp"
 #include "LayerSet.hpp"
-
 #include "CachedDownloader.hpp"
 #include "Downloader_iOS.hpp"
-
 #include "INativeGL.hpp"
 #include "GL.hpp"
-
 #include "MultiLayerTileTexturizer.hpp"
 #include "TilesRenderParameters.hpp"
-#include "FrameTasksExecutor.hpp"
-
 #include "IStringBuilder.hpp"
-#include "StringBuilder_iOS.hpp"
-
 #include "Box.hpp"
-
 #include "TexturesHandler.hpp"
-
+#include "WMSLayer.hpp"
+#include "MathUtils_iOS.hpp"
+#include "ThreadUtils_iOS.hpp"
 #include "Logger_iOS.hpp"
 #include "Factory_iOS.hpp"
 #include "NativeGL2_iOS.hpp"
 #include "StringUtils_iOS.hpp"
 #include "JSONParser_iOS.hpp"
-#include "WMSLayer.hpp"
-
-#include "MathUtils_iOS.hpp"
-#include "ThreadUtils_iOS.hpp"
+#include "StringBuilder_iOS.hpp"
 
 #include "G3MJSONBuilder.hpp"
 
@@ -83,6 +70,7 @@
                                 layerSet: (LayerSet*) layerSet
                                renderers: (std::vector<Renderer*>) renderers
                                 userData: (UserData*) userData
+                      initializationTask: (GTask *) initializationTask
                          periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
 {
   // creates default camera-renderer and camera-handlers
@@ -112,7 +100,17 @@
                tilesRenderParameters: parameters
                            renderers: renderers
                             userData: userData
+                  initializationTask: initializationTask
                      periodicalTasks: periodicalTasks];
+    
+//    [self initWidgetWithCameraRendererAndSceneJSON: cameraRenderer
+//                     cameraConstraints: cameraConstraints
+//                              layerSet: layerSet
+//                 tilesRenderParameters: parameters
+//                             renderers: renderers
+//                              userData: userData
+//                    initializationTask: initializationTask
+//                       periodicalTasks: periodicalTasks];
 }
 
 - (void) initWidgetWithCameraRenderer: (CameraRenderer*) cameraRenderer
@@ -121,15 +119,14 @@
                 tilesRenderParameters: (TilesRenderParameters*) parameters
                             renderers: (std::vector<Renderer*>) renderers
                              userData: (UserData*) userData
+                   initializationTask: (GTask*) initializationTask
                       periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
 {
   
-  // create GLOB3M WIDGET
-  int width = (int) [self frame].size.width;
-  int height = (int) [self frame].size.height;
+  const int width  = (int) [self frame].size.width;
+  const int height = (int) [self frame].size.height;
   
-  NativeGL2_iOS* nGL = new NativeGL2_iOS();
-  GL* gl = new GL(nGL);
+  NativeGL2_iOS* nativeGL = new NativeGL2_iOS();
   
   IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
   const bool saveInBackground = true;
@@ -137,9 +134,7 @@
                                                  storage,
                                                  saveInBackground);
   
-  CompositeRenderer* composite = new CompositeRenderer();
-  
-  composite->addRenderer(cameraRenderer);
+  CompositeRenderer* mainRenderer = new CompositeRenderer();
   
   if (layerSet != NULL) {
     TileTexturizer* texturizer = new MultiLayerTileTexturizer();
@@ -150,65 +145,24 @@
                                         layerSet,
                                         parameters,
                                         showStatistics);
-    composite->addRenderer(tr);
+    mainRenderer->addRenderer(tr);
   }
   
   for (int i = 0; i < renderers.size(); i++) {
-    composite->addRenderer(renderers[i]);
+    mainRenderer->addRenderer(renderers[i]);
   }
-  
-  
-  
-  
-  TextureBuilder* textureBuilder = new CPUTextureBuilder();
-  TexturesHandler* texturesHandler = new TexturesHandler(gl, false);
   
   const Planet* planet = Planet::createEarth();
   
   Renderer* busyRenderer = new BusyMeshRenderer();
   
-  EffectsScheduler* scheduler = new EffectsScheduler();
-  
-  FrameTasksExecutor* frameTasksExecutor = new FrameTasksExecutor();
-  
-  //  if (true) {
-  //    int __REMOVE_STRING_UTILS_TESTS;
-  //
-  //    std::vector<std::string> lines = stringUtils->splitLines("line1\nline2");
-  //
-  //    printf("%s\n", stringUtils->left("Diego", 1).c_str());
-  //    printf("%s\n", stringUtils->substring("Diego", 1).c_str());
-  //
-  //    std::string line = "name=value";
-  //    int equalsPosition = stringUtils->indexOf(line, "=");
-  //    std::string name = stringUtils->left(line, equalsPosition);
-  //    std::string value = stringUtils->substring(line, equalsPosition+1);
-  //    printf("\"%s\"=\"%s\"\n", name.c_str(), value.c_str());
-  //
-  //    printf("\n");
-  //  }
-  
-    
-  class SampleInitializationTask : public GTask {
-  public:
-    void run() {
-      //      ILogger::instance()->logInfo("Running initialization Task");
-      printf("Running initialization Task\n");
-    }
-  };
-  
-  GTask* initializationTask = new SampleInitializationTask();
-  
-  _widgetVP = G3MWidget::create(frameTasksExecutor,
-                                gl,
-                                texturesHandler,
-                                textureBuilder,
+  _widgetVP = G3MWidget::create(nativeGL,
                                 downloader,
                                 planet,
                                 cameraConstraints,
-                                composite,
+                                cameraRenderer,
+                                mainRenderer,
                                 busyRenderer,
-                                scheduler,
                                 width, height,
                                 Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
                                 true,
@@ -216,45 +170,9 @@
                                 initializationTask,
                                 true,
                                 periodicalTasks);
-  
   [self widget]->setUserData(userData);
-  
-  //Testing go to pos
-  if (true){
-//    [self widget]->setAnimatedPosition(Geodetic3D::fromDegrees(330.0, 185.0, 10000000),
-//                                       TimeInterval::fromSeconds(5));
-    
-    [self widget]->setAnimatedPosition(Geodetic3D(Angle::fromDegreesMinutes(37, 47),
-                                                  Angle::fromDegreesMinutes(-122, 25),
-                                                  1000000),
-                                       TimeInterval::fromSeconds(7));
-  }
-  
-//  //Testing Periodical Tasks
-//  if (true){
-//    
-//    class TestPeriodicTask : public GTask {
-//      long long _lastExec;
-//      int _number;
-//    public:
-//      TestPeriodicTask(int n):_number(n){}
-//      
-//      void run() {
-//        ITimer* t = IFactory::instance()->createTimer();
-//        long long now = t->now().milliseconds();
-//        ILogger::instance()->logInfo("Running periodical Task %d - %lld ms.", _number,  now - _lastExec);
-//        _lastExec = now;
-//        IFactory::instance()->deleteTimer(t);
-//      }
-//    };
-//    
-//    [self widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(4000), new TestPeriodicTask(1));
-//    [self widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(6000), new TestPeriodicTask(2));
-//    [self widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(500), new TestPeriodicTask(3));
-//  }
-  
-  
 }
+
 
 - (void) initWidgetWithCameraRendererAndSceneJSON: (CameraRenderer*) cameraRenderer
                                 cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
@@ -262,10 +180,10 @@
                             tilesRenderParameters: (TilesRenderParameters*) parameters
                                         renderers: (std::vector<Renderer*>) renderers
                                          userData: (UserData*) userData
-                      periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
+                               initializationTask: (GTask*) initializationTask
+                                  periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
 {
-    
-    
+ 
     CompositeRenderer* composite = new CompositeRenderer();
     composite->addRenderer(cameraRenderer);
     
@@ -277,58 +195,52 @@
     
     NSString *filePath = [[NSBundle mainBundle] pathForResource:@"scene" ofType:@"scn"];
     if (filePath) {
-        NSString *jsonFile = [NSString stringWithContentsOfFile:filePath];
+        NSString *jsonFile = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
         if (jsonFile) {
             const std::string scene = std::string([jsonFile UTF8String]);
-            G3MJSONBuilder* g3mJSONBuilder = new G3MJSONBuilder(composite, layerSet, parameters, renderers, scene);
+            G3MJSONBuilder* g3mJSONBuilder = new G3MJSONBuilder(scene);
+            g3mJSONBuilder->fromSceneJSON(composite, layerSet, parameters, &renderers, downloader);
         }else{
             ILogger::instance()->logWarning("scen.scn file could not be read!");
         }
     }else{
         ILogger::instance()->logWarning("scen.scn file could not be found!");
     }
+    
+    const int width  = (int) [self frame].size.width;
+    const int height = (int) [self frame].size.height;
+    
+    NativeGL2_iOS* nativeGL = new NativeGL2_iOS();
+    
+    CompositeRenderer* mainRenderer = new CompositeRenderer();
+    
+    if (layerSet != NULL) {
+        TileTexturizer* texturizer = new MultiLayerTileTexturizer();
         
-    int width = (int) [self frame].size.width;
-    int height = (int) [self frame].size.height;
-    
-    NativeGL2_iOS*  nGL = new NativeGL2_iOS();
-    GL* gl = new GL(nGL);
-    
-    for (int i = 0; i < renderers.size(); i++) {
-        composite->addRenderer(renderers[i]);
+        const bool showStatistics = false;
+        TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
+                                            texturizer,
+                                            layerSet,
+                                            parameters,
+                                            showStatistics);
+        mainRenderer->addRenderer(tr);
     }
     
-    TextureBuilder* textureBuilder = new CPUTextureBuilder();
-    TexturesHandler* texturesHandler = new TexturesHandler(gl, false);
+    for (int i = 0; i < renderers.size(); i++) {
+        mainRenderer->addRenderer(renderers[i]);
+    }
     
     const Planet* planet = Planet::createEarth();
     
     Renderer* busyRenderer = new BusyMeshRenderer();
     
-    EffectsScheduler* scheduler = new EffectsScheduler();
-    
-    FrameTasksExecutor* frameTasksExecutor = new FrameTasksExecutor();
-    
-    class SampleInitializationTask : public GTask {
-    public:
-        void run() {
-            //      ILogger::instance()->logInfo("Running initialization Task");
-            printf("Running initialization Task\n");
-        }
-    };
-    
-    GTask* initializationTask = new SampleInitializationTask();
-    
-    _widgetVP = G3MWidget::create(frameTasksExecutor,
-                                  gl,
-                                  texturesHandler,
-                                  textureBuilder,
+    _widgetVP = G3MWidget::create(nativeGL,
                                   downloader,
                                   planet,
                                   cameraConstraints,
-                                  composite,
+                                  cameraRenderer,
+                                  mainRenderer,
                                   busyRenderer,
-                                  scheduler,
                                   width, height,
                                   Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
                                   true,
@@ -338,7 +250,6 @@
                                   periodicalTasks);
     
     [self widget]->setUserData(userData);
-    
 }
 
 
@@ -620,7 +531,7 @@
 
 - (void)initSingletons {
 
-    ILogger*            logger          = new Logger_iOS(WarningLevel);
+    ILogger*            logger          = new Logger_iOS(InfoLevel);
     IFactory*           factory         = new Factory_iOS();
     const IStringUtils* stringUtils     = new StringUtils_iOS();
     IThreadUtils*       threadUtils     = new ThreadUtils_iOS();

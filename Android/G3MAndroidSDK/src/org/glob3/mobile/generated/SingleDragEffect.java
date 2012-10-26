@@ -25,7 +25,7 @@ public class SingleDragEffect extends EffectWithForce
 
   public SingleDragEffect(Vector3D axis, Angle angle)
   {
-	  super(angle.degrees(), 0.975);
+	  super(angle._degrees, 0.975);
 	  _axis = new Vector3D(axis);
   }
 

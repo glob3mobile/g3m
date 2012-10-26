@@ -24,14 +24,14 @@ package org.glob3.mobile.generated;
 
 public class Angle
 {
-  private final double _degrees;
-  private final double _radians;
-
   private Angle(double degrees) //GMath.pi()
   {
 	  _degrees = degrees;
 	  _radians = degrees / 180.0 * 3.14159265358979323846264338327950288;
   }
+
+  public final double _degrees;
+  public final double _radians;
 
   public static Angle lerp(Angle start, Angle end, float percent)
   {
@@ -85,14 +85,13 @@ public class Angle
 
   public static Angle midAngle(Angle angle1, Angle angle2)
   {
-	return Angle.fromDegrees((angle1.degrees() + angle2.degrees()) / 2);
+	return Angle.fromDegrees((angle1._degrees + angle2._degrees) / 2);
   }
 
   public static Angle interpolation(Angle angle1, Angle angle2, double v)
   {
-	return Angle.fromDegrees(((1.0-v) * angle1.degrees() + v * angle2.degrees()));
+	return Angle.fromDegrees((1.0-v) * angle1._degrees + v * angle2._degrees);
   }
-
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: boolean isNan() const
@@ -133,7 +132,6 @@ public class Angle
 //ORIGINAL LINE: double radians() const
   public final double radians()
   {
-	//return _degrees / 180.0 * GMath.pi();
 	return _radians;
   }
 

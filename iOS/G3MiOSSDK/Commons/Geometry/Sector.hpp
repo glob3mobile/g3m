@@ -32,25 +32,7 @@ private:
 public:
   
   ~Sector(){}
-  
-//  static Sector fromLowerAndUpper(const Geodetic2D& lower,
-//                           const Geodetic2D& upper){
-//    
-//    double upLat = upper.latitude().degrees();
-//    while (lower.latitude().degrees() > upLat){
-//      upLat += 360.0;
-//    }
-//    
-//    double upLon = upper.longitude().degrees();
-//    while (lower.latitude().degrees() > upLon){
-//      upLon += 360.0;
-//    }
-//    
-//    Geodetic2D upper2 = Geodetic2D::fromDegrees(upLat, upLon);
-//    
-//    return Sector(lower, upper2);
-//  }
-  
+    
   Sector(const Geodetic2D& lower,
          const Geodetic2D& upper) :
   _lower(lower),
