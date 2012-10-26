@@ -14,6 +14,7 @@ import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarkTouchListener;
 import org.glob3.mobile.generated.MarksRenderer;
+import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
@@ -207,7 +208,8 @@ public class G3MAndroidDemoActivity
       final UserData userData = null;
 
       final GTask initializationTask = null;
-      widget.initWidget(cameraConstraints, layerSet, renderers, userData, initializationTask);
+      final ArrayList<PeriodicalTask> periodicalTasks = new ArrayList<PeriodicalTask>();
+      widget.initWidget(cameraConstraints, layerSet, renderers, userData, initializationTask, periodicalTasks);
 
    }
 }

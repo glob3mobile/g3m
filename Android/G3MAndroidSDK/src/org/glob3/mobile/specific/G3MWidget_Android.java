@@ -17,6 +17,7 @@ import org.glob3.mobile.generated.CompositeRenderer;
 import org.glob3.mobile.generated.EllipsoidalTileTessellator;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GTask;
+import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
@@ -33,6 +34,7 @@ import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.TileRenderer;
 import org.glob3.mobile.generated.TilesRenderParameters;
+import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.TouchEventType;
@@ -69,6 +71,7 @@ public final class G3MWidget_Android
 
    private IDownloader                                    _downloader;
    private GTask                                          _initializationTask;
+   private ArrayList<PeriodicalTask>                      _periodicalTasks;
 
 
    //   private boolean                                        _isPaused             = false;
@@ -242,12 +245,14 @@ public final class G3MWidget_Android
                           final LayerSet layerSet,
                           final ArrayList<org.glob3.mobile.generated.Renderer> renderers,
                           final UserData userData,
-                          final GTask initializationTask) {
+                          final GTask initializationTask,
+                          final ArrayList<PeriodicalTask> periodicalTasks) {
       _cameraConstraints = cameraConstraints;
       _layerSet = layerSet;
       _renderers = renderers;
       _userData = userData;
       _initializationTask = initializationTask;
+      _periodicalTasks = periodicalTasks;
    }
 
 
@@ -318,7 +323,6 @@ public final class G3MWidget_Android
 
       final org.glob3.mobile.generated.Renderer busyRenderer = new BusyMeshRenderer();
 
-      final ArrayList<PeriodicalTask> periodicalTasks = new ArrayList<PeriodicalTask>();
 
       _g3mWidget = G3MWidget.create( //
                nativeGL, //
@@ -335,7 +339,7 @@ public final class G3MWidget_Android
                false, // 
                initializationTask, //
                true, //
-               periodicalTasks);
+               _periodicalTasks);
 
       _g3mWidget.setUserData(_userData);
 
@@ -442,4 +446,29 @@ public final class G3MWidget_Android
       return getG3MWidget().getUserData();
    }
 
+
+   public G3MWidget getG3mWidget() {
+      return _g3mWidget;
+   }
+
+
+   public void setAnimatedCameraPosition(final Geodetic3D position,
+                                         final TimeInterval interval) {
+      getG3MWidget().setAnimatedCameraPosition(position, interval);
+   }
+
+
+   public void setAnimatedCameraPosition(final Geodetic3D position) {
+      getG3MWidget().setAnimatedCameraPosition(position);
+   }
+
+
+   public void setCameraPosition(final Geodetic3D position) {
+      getG3MWidget().setCameraPosition(position);
+   }
+
+
+   public CameraRenderer getCameraRenderer() {
+      return getG3MWidget().getCameraRenderer();
+   }
 }
