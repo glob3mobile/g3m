@@ -80,6 +80,8 @@ public final class G3MWidget_WebGL
 
    private ArrayList<PeriodicalTask>     _periodicalTasks;
 
+   private boolean                       _incrementalTileQuality;
+
 
    public G3MWidget_WebGL(final String proxy) {
       // downloader
@@ -244,7 +246,8 @@ public final class G3MWidget_WebGL
                           final UserData userData,
                           final ArrayList<String> images,
                           final GTask initializationTask,
-                          final ArrayList<PeriodicalTask> periodicalTasks) {
+                          final ArrayList<PeriodicalTask> periodicalTasks,
+                          final boolean incrementalTileQuality) {
       jsDefineG3MBrowserObjects();
 
       _cameraConstraints = cameraConstraints;
@@ -254,6 +257,8 @@ public final class G3MWidget_WebGL
       _imagesToPreload = images;
       _initializationTask = initializationTask;
       _periodicalTasks = (periodicalTasks == null) ? new ArrayList<PeriodicalTask>() : periodicalTasks;
+
+      _incrementalTileQuality = incrementalTileQuality;
 
       // TODO TEMP HACK TO PRELOAD IMAGES
       preloadImagesAndInitWidget();
@@ -287,7 +292,7 @@ public final class G3MWidget_WebGL
       final boolean forceTopLevelTilesRenderOnStart = true;
 
       final TilesRenderParameters parameters = TilesRenderParameters.createDefault(renderDebug, useTilesSplitBudget,
-               forceTopLevelTilesRenderOnStart);
+               forceTopLevelTilesRenderOnStart, _incrementalTileQuality);
 
       //      final IStorage storage = new IndexedDBStorage_WebGL();
       final IDownloader downloader = new Downloader_WebGL(8, _delayMillis, _proxy);

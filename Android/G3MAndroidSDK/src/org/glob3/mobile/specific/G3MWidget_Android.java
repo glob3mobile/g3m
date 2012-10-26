@@ -72,6 +72,7 @@ public final class G3MWidget_Android
    private IDownloader                                    _downloader;
    private GTask                                          _initializationTask;
    private ArrayList<PeriodicalTask>                      _periodicalTasks;
+   private boolean                                        _incrementalTileQuality;
 
 
    //   private boolean                                        _isPaused             = false;
@@ -246,13 +247,15 @@ public final class G3MWidget_Android
                           final ArrayList<org.glob3.mobile.generated.Renderer> renderers,
                           final UserData userData,
                           final GTask initializationTask,
-                          final ArrayList<PeriodicalTask> periodicalTasks) {
+                          final ArrayList<PeriodicalTask> periodicalTasks,
+                          final boolean incrementalTileQuality) {
       _cameraConstraints = cameraConstraints;
       _layerSet = layerSet;
       _renderers = renderers;
       _userData = userData;
       _initializationTask = initializationTask;
       _periodicalTasks = periodicalTasks;
+      _incrementalTileQuality = incrementalTileQuality;
    }
 
 
@@ -274,7 +277,7 @@ public final class G3MWidget_Android
       final boolean forceTopLevelTilesRenderOnStart = true;
 
       final TilesRenderParameters parameters = TilesRenderParameters.createDefault(renderDebug, useTilesSplitBudget,
-               forceTopLevelTilesRenderOnStart);
+               forceTopLevelTilesRenderOnStart, _incrementalTileQuality);
 
       initWidget(cameraRenderer, parameters, _initializationTask);
    }

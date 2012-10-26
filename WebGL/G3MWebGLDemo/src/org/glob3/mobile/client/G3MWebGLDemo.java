@@ -206,7 +206,9 @@ public class G3MWebGLDemo
       //      imagesToPreload.add("../images/world.jpg");
       final GTask initializationTask = null;
       final ArrayList<PeriodicalTask> periodicalTasks = null;
-      _widget.initWidget(cameraConstraints, layerSet, renderers, userData, imagesToPreload, initializationTask, periodicalTasks);
+      final boolean incrementalTileQuality = true;
+      _widget.initWidget(cameraConstraints, layerSet, renderers, userData, imagesToPreload, initializationTask, periodicalTasks,
+               incrementalTileQuality);
    }
 
 
