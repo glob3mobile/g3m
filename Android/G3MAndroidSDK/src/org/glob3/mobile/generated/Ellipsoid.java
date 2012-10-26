@@ -59,6 +59,13 @@ public class Ellipsoid
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector3D geodeticSurfaceNormal(const MutableVector3D& positionOnEllipsoid) const
+  public final Vector3D geodeticSurfaceNormal(MutableVector3D positionOnEllipsoid)
+  {
+	return positionOnEllipsoid.times(_oneOverRadiiSquared).normalized().asVector3D();
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Vector3D geodeticSurfaceNormal(const Geodetic3D& geodetic) const
   public final Vector3D geodeticSurfaceNormal(Geodetic3D geodetic)
   {
