@@ -244,6 +244,9 @@ public:
       _dirtyFlags.setAll(true);
     }
   }
+  
+  Angle getHeading() const;
+  void setHeading(Angle angle);
     
 private:
   

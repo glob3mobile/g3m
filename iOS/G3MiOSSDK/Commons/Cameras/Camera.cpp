@@ -146,12 +146,32 @@ void Camera::print() {
   ILogger::instance()->logInfo("Width: %d, Height %d\n", _width, _height);
 }
 
-void Camera::render(const RenderContext* rc) const {
 
+Angle Camera::getHeading() const
+{
+  Vector3D normal   = _planet->geodeticSurfaceNormal(_position.asVector3D());
+  Vector3D north2D  = Vector3D(0,0,1).projectionInPlane(normal);
+  Vector3D up2D     = _up.asVector3D().projectionInPlane(normal);
+  return up2D.signedAngleBetween(north2D, normal);
+}
+
+
+void Camera::setHeading(Angle angle)
+{
+  Vector3D normal = _planet->geodeticSurfaceNormal(_position.asVector3D());
+  Angle heading0  = getHeading();
+  Angle delta     = heading0.sub(angle);
+  rotateWithAxisAndPoint(normal, _position.asVector3D(), delta);
+  printf ("previous heading = %f   current heading = %f\n", heading0.degrees(), getHeading().degrees());
+}
+
+
+void Camera::render(const RenderContext* rc) const 
+{
   GL *gl = rc->getGL();
   gl->setProjection(getProjectionMatrix());
   gl->loadMatrixf(getModelMatrix());
-
+  
   // TEMP: TEST TO SEE HALF SIZE FRUSTUM CLIPPING
   if (false) {
     const MutableMatrix44D inversed = getModelMatrix().inversed();
