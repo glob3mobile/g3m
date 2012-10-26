@@ -189,6 +189,7 @@ void Box::createMesh()
                           vertices.getCenter(),
                           vertices.create(),
                           indices.create(),
+                          1,
                           flatColor);
 }
 

@@ -68,7 +68,7 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
 	texCoords.add(1, 0);
 	texCoords.add(1, 1);
   
-	IndexedMesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, Vector3D.zero(), vertices.create(), indices.create());
+	IndexedMesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, Vector3D.zero(), vertices.create(), indices.create(), 1);
   
 	TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true);
   

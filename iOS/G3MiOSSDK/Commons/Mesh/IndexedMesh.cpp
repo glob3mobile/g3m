@@ -36,6 +36,7 @@ IndexedMesh::IndexedMesh(const int primitive,
                          const Vector3D& center,
                          IFloatBuffer* vertices,
                          IIntBuffer* indices,
+                         float lineWidth,
                          const Color* flatColor,
                          IFloatBuffer* colors,
                          const float colorsIntensity) :
@@ -48,8 +49,8 @@ _colors(colors),
 _colorsIntensity(colorsIntensity),
 _extent(NULL),
 _center(center),
-_translationMatrix(center.isNan()? NULL:
-                   new MutableMatrix44D(MutableMatrix44D::createTranslationMatrix(center)))
+_translationMatrix( center.isNan()? NULL: new MutableMatrix44D(MutableMatrix44D::createTranslationMatrix(center)) ),
+_lineWidth(lineWidth)
 {
 }
 
@@ -73,6 +74,8 @@ void IndexedMesh::render(const RenderContext* rc) const {
   }
   
   gl->vertexPointer(3, 0, _vertices);
+
+  gl->lineWidth(_lineWidth);
   
   if (_translationMatrix != NULL){
     gl->pushMatrix();

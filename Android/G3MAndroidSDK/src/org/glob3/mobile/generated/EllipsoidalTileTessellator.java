@@ -85,7 +85,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
 	final Color color = new Color(Color.fromRGBA((float) 1.0, (float) 0, (float) 0, (float) 1.0));
 	final Vector3D center = planet.toCartesian(sector.getCenter());
   
-	return new IndexedMesh(GLPrimitive.lineLoop(), true, center, vertices.create(), indices.create(), color);
+	return new IndexedMesh(GLPrimitive.lineLoop(), true, center, vertices.create(), indices.create(), 1, color);
   }
 
   public EllipsoidalTileTessellator(int resolution, boolean skirted)
@@ -197,7 +197,7 @@ public class EllipsoidalTileTessellator extends TileTessellator
   
 	final Color color = new Color(Color.fromRGBA((float) 0.1, (float) 0.1, (float) 0.1, (float) 1.0));
   
-	return new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), color);
+	return new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, color);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
