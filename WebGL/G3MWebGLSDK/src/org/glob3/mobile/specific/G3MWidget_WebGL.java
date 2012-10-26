@@ -4,6 +4,7 @@ package org.glob3.mobile.specific;
 
 import java.util.ArrayList;
 
+import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BusyMeshRenderer;
 import org.glob3.mobile.generated.Camera;
 import org.glob3.mobile.generated.CameraDoubleDragHandler;
@@ -486,5 +487,9 @@ public final class G3MWidget_WebGL
       return getG3MWidget().getCameraRenderer();
    }
 
+
+   public void setCameraHeading(final Angle angle) {
+      getG3MWidget().setCameraHeading(angle);
+   }
 
 }

@@ -457,3 +457,7 @@ void G3MWidget::setAnimatedCameraPosition(const Geodetic3D& position,
   _effectsScheduler->startEffect(new GoToPositionEffect(interval, startPosition, endPosition),
                                  target);
 }
+
+void G3MWidget::resetCameraPosition() {
+  getNextCamera()->resetPosition();
+}

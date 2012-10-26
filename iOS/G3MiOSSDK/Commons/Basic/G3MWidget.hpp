@@ -142,6 +142,7 @@ public:
   void setAnimatedCameraPosition(const Geodetic3D& position,
                                  const TimeInterval& interval);
 
+  void resetCameraPosition();
 
   CameraRenderer* getCameraRenderer() const {
     return _cameraRenderer;
