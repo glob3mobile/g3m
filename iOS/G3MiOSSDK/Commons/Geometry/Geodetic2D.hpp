@@ -74,7 +74,7 @@ public:
    * Returns the (initial) bearing from this point to the supplied point
    *   see http://williams.best.vwh.net/avform.htm#Crs
    */
-  Angle angle(const Geodetic2D& that) const {
+  Angle bearingTo(const Geodetic2D& that) const {
     const Angle dLon = that.longitude().sub(longitude());
     const Angle lat1 = latitude();
     const Angle lat2 = that.latitude();
