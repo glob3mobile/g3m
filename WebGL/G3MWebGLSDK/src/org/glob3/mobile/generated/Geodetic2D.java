@@ -115,8 +115,8 @@ public class Geodetic2D
    *   see http: //williams.best.vwh.net/avform.htm#Crs
    */
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Angle angle(const Geodetic2D& that) const
-  public final Angle angle(Geodetic2D that)
+//ORIGINAL LINE: Angle bearingTo(const Geodetic2D& that) const
+  public final Angle bearingTo(Geodetic2D that)
   {
 	final Angle dLon = that.longitude().sub(longitude());
 	final Angle lat1 = latitude();
