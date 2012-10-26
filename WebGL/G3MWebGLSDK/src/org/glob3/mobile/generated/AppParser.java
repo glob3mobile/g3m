@@ -53,20 +53,6 @@ public class AppParser
 	}
 	parseCustomData(marks, jsonWorld.getObjectForKey(CUSTOMDATA).getObject());
   }
-  private void parseCustomData(MarksRenderer marks, JSONObject jsonCustomData)
-  {
-	JSONArray jsonFeatures = jsonCustomData.getObjectForKey(FEATURES).getArray();
-	for (int i = 0; i < jsonFeatures.getSize(); i++)
-	{
-	  JSONObject jsonFeature = jsonFeatures.getElement(i).getObject();
-		JSONObject jsonGeometry = jsonFeature.getObjectForKey(GEOMETRY).getObject();
-	  String jsonType = jsonGeometry.getObjectForKey(TYPE).getString().getValue();
-	  if (jsonType.equals("Point"))
-	  {
-		parseGEOJSONPointObject(marks, jsonFeature);
-	  }
-	}
-  }
   private void parseGEOJSONPointObject(MarksRenderer marks, JSONObject point)
   {
 	  JSONObject jsonProperties = point.getObjectForKey(PROPERTIES).getObject();
@@ -92,6 +78,20 @@ public class AppParser
 	parseWorldConfiguration(layerSet, marks, json.getObjectForKey(WORLD).getObject());
 	IJSONParser.instance().deleteJSONData(json);
   }
+	public final void parseCustomData(MarksRenderer marks, JSONObject jsonCustomData)
+	{
+	  JSONArray jsonFeatures = jsonCustomData.getObjectForKey(FEATURES).getArray();
+	  for (int i = 0; i < jsonFeatures.getSize(); i++)
+	  {
+		JSONObject jsonFeature = jsonFeatures.getElement(i).getObject();
+		  JSONObject jsonGeometry = jsonFeature.getObjectForKey(GEOMETRY).getObject();
+		String jsonType = jsonGeometry.getObjectForKey(TYPE).getString().getValue();
+		if (jsonType.equals("Point"))
+		{
+		  parseGEOJSONPointObject(marks, jsonFeature);
+		}
+	  }
+	}
 
 
   protected AppParser()
