@@ -10,6 +10,7 @@
 #define G3MiOSSDK_Ellipsoid_hpp
 
 #include "Vector3D.hpp"
+#include "MutableVector3D.hpp"
 #include "Geodetic3D.hpp"
 
 #include <vector>
@@ -39,7 +40,11 @@ public:
   Vector3D geodeticSurfaceNormal(const Vector3D& positionOnEllipsoid) const {
     return positionOnEllipsoid.times(_oneOverRadiiSquared).normalized();
   }
-  
+
+  Vector3D geodeticSurfaceNormal(const MutableVector3D& positionOnEllipsoid) const {
+    return positionOnEllipsoid.times(_oneOverRadiiSquared).normalized().asVector3D();
+  }
+
   Vector3D geodeticSurfaceNormal(const Geodetic3D& geodetic) const;
   
   Vector3D geodeticSurfaceNormal(const Geodetic2D& geodetic) const;

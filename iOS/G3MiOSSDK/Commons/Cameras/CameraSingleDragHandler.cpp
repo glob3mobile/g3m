@@ -41,8 +41,7 @@ bool CameraSingleDragHandler::onTouchEvent(const EventContext *eventContext,
 
 void CameraSingleDragHandler::onDown(const EventContext *eventContext,
                                      const TouchEvent& touchEvent, 
-                                     CameraContext *cameraContext) 
-{  
+                                     CameraContext *cameraContext) {  
   Camera *camera = cameraContext->getNextCamera();
   _camera0.copyFrom(*camera);
   cameraContext->setCurrentGesture(Drag); 
@@ -55,13 +54,7 @@ void CameraSingleDragHandler::onDown(const EventContext *eventContext,
   _initialPoint = _camera0.pixel2PlanetPoint(pixel).asMutableVector3D();
   
   //printf ("down 1 finger. Initial point = %f %f %f\n", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
-  
-  int TEMP_FOR_DEBUG;
-  if (pixel._x<50) 
-    camera->setHeading(Angle::fromDegrees(30));
-    
 }
-
 
 void CameraSingleDragHandler::onMove(const EventContext *eventContext,
                                      const TouchEvent& touchEvent, 

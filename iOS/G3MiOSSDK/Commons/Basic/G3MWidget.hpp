@@ -41,7 +41,7 @@ class CameraRenderer;
 #include <string>
 
 #include "Color.hpp"
-
+#include "Angle.hpp"
 
 class UserData {
 private:
@@ -132,12 +132,16 @@ public:
   void addPeriodicalTask(const TimeInterval& interval,
                          GTask* task);
 
+
   void setCameraPosition(const Geodetic3D& position);
+  
+  void setCameraHeading(const Angle& angle);
 
   void setAnimatedCameraPosition(const Geodetic3D& position);
 
   void setAnimatedCameraPosition(const Geodetic3D& position,
                                  const TimeInterval& interval);
+
 
   CameraRenderer* getCameraRenderer() const {
     return _cameraRenderer;

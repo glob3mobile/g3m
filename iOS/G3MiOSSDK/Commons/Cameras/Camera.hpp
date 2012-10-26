@@ -246,10 +246,11 @@ public:
   }
   
   Angle getHeading() const;
-  void setHeading(Angle angle);
+  void setHeading(const Angle& angle);
     
 private:
-  
+  Angle getHeading(const Vector3D& normal) const;
+
   //IF A NEW ATTRIBUTE IS ADDED CHECK CONSTRUCTORS AND RESET() !!!!
   int _width;
   int _height;
