@@ -122,13 +122,19 @@ public class Vector2D
 	return Angle.fromRadians(a);
   }
 
-  //  double x() const {
-  //    return _x;
-  //  }
-  //
-  //  double y() const {
-  //    return _y;
-  //  }
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: double x() const
+  public final double x()
+  {
+	return _x;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: double y() const
+  public final double y()
+  {
+	return _y;
+  }
 
   public static Vector2D nan()
   {

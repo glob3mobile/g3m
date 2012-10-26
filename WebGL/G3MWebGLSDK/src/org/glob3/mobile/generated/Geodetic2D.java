@@ -110,6 +110,25 @@ public class Geodetic2D
 	return _latitude.isBetween(min.latitude(), max.latitude()) && _longitude.isBetween(min.longitude(), max.longitude());
   }
 
+  /**
+   * Returns the (initial) bearing from this point to the supplied point
+   *   see http: //williams.best.vwh.net/avform.htm#Crs
+   */
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Angle angle(const Geodetic2D& that) const
+  public final Angle angle(Geodetic2D that)
+  {
+	final Angle dLon = that.longitude().sub(longitude());
+	final Angle lat1 = latitude();
+	final Angle lat2 = that.latitude();
+
+	final double y = dLon.sinus() * lat2.cosinus();
+	final double x = lat1.cosinus()*lat2.sinus() - lat1.sinus()*lat2.cosinus()*dLon.cosinus();
+	final double radians = IMathUtils.instance().atan2(y, x);
+
+	return Angle.fromRadians(radians);
+  }
+
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: boolean lowerThan(const Geodetic2D& that) const
