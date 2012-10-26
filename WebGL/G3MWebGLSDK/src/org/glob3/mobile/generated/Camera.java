@@ -416,7 +416,9 @@ public class Camera
 	final Angle currentHeading = getHeading(normal);
 	final Angle delta = currentHeading.sub(angle);
 	rotateWithAxisAndPoint(normal, _position.asVector3D(), delta);
-	System.out.printf ("previous heading = %f   current heading = %f\n", currentHeading.degrees(), getHeading().degrees());
+  //  printf ("previous heading = %f   current heading = %f\n",
+  //          currentHeading.degrees(),
+  //          getHeading().degrees());
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
