@@ -346,6 +346,10 @@ public class G3MWidget
 	_effectsScheduler.startEffect(new GoToPositionEffect(interval, startPosition, endPosition), target);
   }
 
+  public final void resetCameraPosition()
+  {
+	getNextCamera().resetPosition();
+  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: CameraRenderer* getCameraRenderer() const
