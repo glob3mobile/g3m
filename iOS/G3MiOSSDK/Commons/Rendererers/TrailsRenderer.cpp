@@ -43,6 +43,7 @@ Mesh* Trail::createMesh(const Planet* planet) {
                          vertices.getCenter(),
                          vertices.create(),
                          indices.create(),
+                         _lineWidth,
                          new Color(_color));
 }
 

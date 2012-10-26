@@ -41,6 +41,7 @@ void LatLonMeshRenderer::initialize(const InitializationContext* ic)
                           vertices.getCenter(),
                           vertices.create(),
                           index.create(),
+                          1,
                           flatColor);
 
 }  

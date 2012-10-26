@@ -249,7 +249,7 @@
   TrailsRenderer* trailsRenderer = new TrailsRenderer();
   renderers.push_back(trailsRenderer);
   
-  Trail* trail = new Trail(50, Color::fromRGBA(1, 0, 0, 1));
+  Trail* trail = new Trail(50, Color::fromRGBA(1, 0, 0, 1), 2);
   
   Geodetic3D position(Angle::fromDegrees(37.78333333),
                       Angle::fromDegrees(-122.41666666666667),
