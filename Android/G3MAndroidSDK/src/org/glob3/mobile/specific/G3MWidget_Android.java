@@ -5,7 +5,6 @@ package org.glob3.mobile.specific;
 import java.util.ArrayList;
 
 import org.glob3.mobile.generated.BusyMeshRenderer;
-import org.glob3.mobile.generated.CPUTextureBuilder;
 import org.glob3.mobile.generated.CachedDownloader;
 import org.glob3.mobile.generated.Camera;
 import org.glob3.mobile.generated.CameraDoubleDragHandler;
@@ -15,12 +14,10 @@ import org.glob3.mobile.generated.CameraRotationHandler;
 import org.glob3.mobile.generated.CameraSingleDragHandler;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
-import org.glob3.mobile.generated.EffectsScheduler;
 import org.glob3.mobile.generated.EllipsoidalTileTessellator;
-import org.glob3.mobile.generated.FrameTasksExecutor;
 import org.glob3.mobile.generated.G3MWidget;
-import org.glob3.mobile.generated.GL;
 import org.glob3.mobile.generated.GTask;
+import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
@@ -35,10 +32,9 @@ import org.glob3.mobile.generated.LogLevel;
 import org.glob3.mobile.generated.MultiLayerTileTexturizer;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
-import org.glob3.mobile.generated.TextureBuilder;
-import org.glob3.mobile.generated.TexturesHandler;
 import org.glob3.mobile.generated.TileRenderer;
 import org.glob3.mobile.generated.TilesRenderParameters;
+import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.TouchEventType;
@@ -75,6 +71,7 @@ public final class G3MWidget_Android
 
    private IDownloader                                    _downloader;
    private GTask                                          _initializationTask;
+   private ArrayList<PeriodicalTask>                      _periodicalTasks;
 
 
    //   private boolean                                        _isPaused             = false;
@@ -248,12 +245,14 @@ public final class G3MWidget_Android
                           final LayerSet layerSet,
                           final ArrayList<org.glob3.mobile.generated.Renderer> renderers,
                           final UserData userData,
-                          final GTask initializationTask) {
+                          final GTask initializationTask,
+                          final ArrayList<PeriodicalTask> periodicalTasks) {
       _cameraConstraints = cameraConstraints;
       _layerSet = layerSet;
       _renderers = renderers;
       _userData = userData;
       _initializationTask = initializationTask;
+      _periodicalTasks = periodicalTasks;
    }
 
 
@@ -289,8 +288,7 @@ public final class G3MWidget_Android
       final int width = getWidth();
       final int height = getHeight();
 
-      final NativeGL2_Android nGL = new NativeGL2_Android();
-      final GL gl = new GL(nGL);
+      final NativeGL2_Android nativeGL = new NativeGL2_Android();
 
       _storage = new SQLiteStorage_Android("g3m.cache", this.getContext());
 
@@ -299,9 +297,9 @@ public final class G3MWidget_Android
       final boolean saveInBackground = true;
       _downloader = new CachedDownloader(new Downloader_Android(8, connectTimeout, readTimeout), _storage, saveInBackground);
 
-      final CompositeRenderer composite = new CompositeRenderer();
+      final CompositeRenderer mainRenderer = new CompositeRenderer();
 
-      composite.addRenderer(cameraRenderer);
+      // composite.addRenderer(cameraRenderer);
 
       if (_layerSet != null) {
          final boolean showStatistics = false;
@@ -313,35 +311,27 @@ public final class G3MWidget_Android
                   parameters, //
                   showStatistics);
 
-         composite.addRenderer(tr);
+         mainRenderer.addRenderer(tr);
       }
 
       for (final org.glob3.mobile.generated.Renderer renderer : _renderers) {
-         composite.addRenderer(renderer);
+         mainRenderer.addRenderer(renderer);
       }
 
-      final TextureBuilder textureBuilder = new CPUTextureBuilder();
-      final TexturesHandler texturesHandler = new TexturesHandler(gl, false);
 
       final Planet planet = Planet.createEarth();
 
       final org.glob3.mobile.generated.Renderer busyRenderer = new BusyMeshRenderer();
 
-      final EffectsScheduler scheduler = new EffectsScheduler();
-      final FrameTasksExecutor frameTasksExecutor = new FrameTasksExecutor();
 
-      final ArrayList<PeriodicalTask> periodicalTasks = new ArrayList<PeriodicalTask>();
-
-      _g3mWidget = G3MWidget.create(frameTasksExecutor, //
-               gl, //
-               texturesHandler, //
-               textureBuilder, //
+      _g3mWidget = G3MWidget.create( //
+               nativeGL, //
                _downloader, //
                planet, //
                _cameraConstraints, //
-               composite, //
+               cameraRenderer, //
+               mainRenderer, //
                busyRenderer, //
-               scheduler, // 
                width, //
                height, //
                Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), //
@@ -349,7 +339,7 @@ public final class G3MWidget_Android
                false, // 
                initializationTask, //
                true, //
-               periodicalTasks);
+               _periodicalTasks);
 
       _g3mWidget.setUserData(_userData);
 
@@ -456,4 +446,29 @@ public final class G3MWidget_Android
       return getG3MWidget().getUserData();
    }
 
+
+   public G3MWidget getG3mWidget() {
+      return _g3mWidget;
+   }
+
+
+   public void setAnimatedCameraPosition(final Geodetic3D position,
+                                         final TimeInterval interval) {
+      getG3MWidget().setAnimatedCameraPosition(position, interval);
+   }
+
+
+   public void setAnimatedCameraPosition(final Geodetic3D position) {
+      getG3MWidget().setAnimatedCameraPosition(position);
+   }
+
+
+   public void setCameraPosition(final Geodetic3D position) {
+      getG3MWidget().setCameraPosition(position);
+   }
+
+
+   public CameraRenderer getCameraRenderer() {
+      return getG3MWidget().getCameraRenderer();
+   }
 }

@@ -5,7 +5,6 @@ package org.glob3.mobile.specific;
 import java.util.ArrayList;
 
 import org.glob3.mobile.generated.BusyMeshRenderer;
-import org.glob3.mobile.generated.CPUTextureBuilder;
 import org.glob3.mobile.generated.Camera;
 import org.glob3.mobile.generated.CameraDoubleDragHandler;
 import org.glob3.mobile.generated.CameraDoubleTapHandler;
@@ -14,11 +13,8 @@ import org.glob3.mobile.generated.CameraRotationHandler;
 import org.glob3.mobile.generated.CameraSingleDragHandler;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
-import org.glob3.mobile.generated.EffectsScheduler;
 import org.glob3.mobile.generated.EllipsoidalTileTessellator;
-import org.glob3.mobile.generated.FrameTasksExecutor;
 import org.glob3.mobile.generated.G3MWidget;
-import org.glob3.mobile.generated.GL;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
@@ -37,8 +33,6 @@ import org.glob3.mobile.generated.MultiLayerTileTexturizer;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.Renderer;
-import org.glob3.mobile.generated.TextureBuilder;
-import org.glob3.mobile.generated.TexturesHandler;
 import org.glob3.mobile.generated.TileRenderer;
 import org.glob3.mobile.generated.TilesRenderParameters;
 import org.glob3.mobile.generated.TimeInterval;
@@ -306,12 +300,10 @@ public final class G3MWidget_WebGL
       //CREATING SHADERS PROGRAM
       _program = new Shaders_WebGL(_webGLContext).createProgram();
 
-      final NativeGL_WebGL nGL = new NativeGL_WebGL(_webGLContext);
-      final GL gl = new GL(nGL);
+      final NativeGL_WebGL nativeGL = new NativeGL_WebGL(_webGLContext);
 
-      final CompositeRenderer composite = new CompositeRenderer();
-      composite.addRenderer(cameraRenderer);
-
+      final CompositeRenderer mainRenderer = new CompositeRenderer();
+      //      composite.addRenderer(cameraRenderer);
 
       if (_layerSet != null) {
          final boolean showStatistics = false;
@@ -323,36 +315,28 @@ public final class G3MWidget_WebGL
                   parameters, //
                   showStatistics);
 
-         composite.addRenderer(tr);
+         mainRenderer.addRenderer(tr);
       }
 
       for (int i = 0; i < _renderers.size(); i++) {
-         composite.addRenderer(_renderers.get(i));
+         mainRenderer.addRenderer(_renderers.get(i));
       }
 
-      final TextureBuilder textureBuilder = new CPUTextureBuilder();
-      final TexturesHandler texturesHandler = new TexturesHandler(gl, false);
       final Planet planet = Planet.createEarth();
       final BusyMeshRenderer busyRenderer = new BusyMeshRenderer();
-      final EffectsScheduler scheduler = new EffectsScheduler();
-      final FrameTasksExecutor frameTasksExecutor = new FrameTasksExecutor();
-
 
       final Color backgroundColor = Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1);
       final boolean logFPS = false;
       final boolean logDownloaderStatistics = false;
 
       _widget = G3MWidget.create( //
-               frameTasksExecutor, //
-               gl, //
-               texturesHandler, //
-               textureBuilder, //
+               nativeGL, //
                downloader, //
                planet, //
                _cameraConstraints, //
-               composite, //
+               cameraRenderer, //
+               mainRenderer, //
                busyRenderer, //
-               scheduler, //
                _width, //
                _height, //
                backgroundColor, //
@@ -477,9 +461,25 @@ public final class G3MWidget_WebGL
    }
 
 
-   public void setAnimatedPosition(final Geodetic3D position,
-                                   final TimeInterval interval) {
-      getG3MWidget().setAnimatedPosition(position, interval);
+   public void setAnimatedCameraPosition(final Geodetic3D position,
+                                         final TimeInterval interval) {
+      getG3MWidget().setAnimatedCameraPosition(position, interval);
    }
+
+
+   public void setAnimatedCameraPosition(final Geodetic3D position) {
+      getG3MWidget().setAnimatedCameraPosition(position);
+   }
+
+
+   public void setCameraPosition(final Geodetic3D position) {
+      getG3MWidget().setCameraPosition(position);
+   }
+
+
+   public CameraRenderer getCameraRenderer() {
+      return getG3MWidget().getCameraRenderer();
+   }
+
 
 }

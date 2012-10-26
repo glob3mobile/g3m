@@ -177,10 +177,10 @@ public class Camera
   {
 	final Vector2D p = getModelViewMatrix().project(point, 0, 0, _width, _height);
   
-  //  int __TODO_check_isNan_is_needed;
-  //  if (p.isNan()) {
-  //    return p;
-  //  }
+	//  int __TODO_check_isNan_is_needed;
+	//  if (p.isNan()) {
+	//    return p;
+	//  }
   
 	IMathUtils math = IMathUtils.instance();
   
@@ -323,7 +323,6 @@ public class Camera
   {
 	setCartesianPosition(_planet.toCartesian(g3d).asMutableVector3D());
   }
-
 
   public final Vector3D getHorizontalVector()
   {

@@ -62,13 +62,13 @@ public class StaticImageLayer extends Layer
 	IStringBuilder isb = IStringBuilder.newStringBuilder();
 	isb.addString(_layerID);
 	isb.addString("_");
-	isb.addDouble(tileSector.lower().latitude().degrees());
+	isb.addDouble(tileSector.lower().latitude()._degrees);
 	isb.addString("_");
-	isb.addDouble(tileSector.lower().longitude().degrees());
+	isb.addDouble(tileSector.lower().longitude()._degrees);
 	isb.addString("_");
-	isb.addDouble(tileSector.upper().latitude().degrees());
+	isb.addDouble(tileSector.upper().latitude()._degrees);
 	isb.addString("_");
-	isb.addDouble(tileSector.upper().longitude().degrees());
+	isb.addDouble(tileSector.upper().longitude()._degrees);
   
 	final URL id = new URL(isb.getString(), false);
   
@@ -88,8 +88,8 @@ public class StaticImageLayer extends Layer
 	  }
 	}
   
-	final double widthUV = tileSector.getDeltaLongitude().degrees() / _sector.getDeltaLongitude().degrees();
-	final double heightUV = tileSector.getDeltaLatitude().degrees() / _sector.getDeltaLatitude().degrees();
+	final double widthUV = tileSector.getDeltaLongitude()._degrees / _sector.getDeltaLongitude()._degrees;
+	final double heightUV = tileSector.getDeltaLatitude()._degrees / _sector.getDeltaLatitude()._degrees;
   
 	final Vector2D p = _sector.getUVCoordinates(tileSector.lower());
 	final Vector2D pos = new Vector2D(p._x, p._y - heightUV);

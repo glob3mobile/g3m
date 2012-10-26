@@ -227,9 +227,8 @@ public:
     return getHalfFrustumMC();
   }
   
-  void setPosition(const Geodetic3D& g3d);
-  
-      
+  void setPosition(const Geodetic3D& position);
+
   Vector3D getHorizontalVector();
     
   Angle compute3DAngularDistance(const Vector2I& pixel0,

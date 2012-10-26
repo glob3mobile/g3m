@@ -13,23 +13,18 @@
 #include "G3MWidget.hpp"
 #include "CompositeRenderer.hpp"
 #include "Planet.hpp"
-
 #include "CameraRenderer.hpp"
 #include "CameraSingleDragHandler.hpp"
 #include "CameraDoubleDragHandler.hpp"
 #include "CameraRotationHandler.hpp"
 #include "CameraDoubleTapHandler.hpp"
 #include "CameraConstraints.hpp"
-
 #include "TileRenderer.hpp"
-#include "Effects.hpp"
 #include "EllipsoidalTileTessellator.hpp"
-
 #include "SQLiteStorage_iOS.hpp"
 #include "BusyMeshRenderer.hpp"
 #include "CPUTextureBuilder.hpp"
 #include "LayerSet.hpp"
-
 #include "CachedDownloader.hpp"
 #include "Downloader_iOS.hpp"
 
@@ -38,24 +33,18 @@
 
 #include "MultiLayerTileTexturizer.hpp"
 #include "TilesRenderParameters.hpp"
-#include "FrameTasksExecutor.hpp"
-
 #include "IStringBuilder.hpp"
-#include "StringBuilder_iOS.hpp"
-
 #include "Box.hpp"
-
 #include "TexturesHandler.hpp"
-
+#include "WMSLayer.hpp"
+#include "MathUtils_iOS.hpp"
+#include "ThreadUtils_iOS.hpp"
 #include "Logger_iOS.hpp"
 #include "Factory_iOS.hpp"
 //#include "NativeGL2_iOS.hpp"
 #include "StringUtils_iOS.hpp"
 #include "JSONParser_iOS.hpp"
-#include "WMSLayer.hpp"
-
-#include "MathUtils_iOS.hpp"
-#include "ThreadUtils_iOS.hpp"
+#include "StringBuilder_iOS.hpp"
 
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
@@ -81,6 +70,7 @@
                                 layerSet: (LayerSet*) layerSet
                                renderers: (std::vector<Renderer*>) renderers
                                 userData: (UserData*) userData
+                      initializationTask: (GTask *) initializationTask
                          periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
 {
   // creates default camera-renderer and camera-handlers
@@ -110,6 +100,7 @@
                tilesRenderParameters: parameters
                            renderers: renderers
                             userData: userData
+                  initializationTask: initializationTask
                      periodicalTasks: periodicalTasks];
 }
 
@@ -119,12 +110,12 @@
                 tilesRenderParameters: (TilesRenderParameters*) parameters
                             renderers: (std::vector<Renderer*>) renderers
                              userData: (UserData*) userData
+                   initializationTask: (GTask*) initializationTask
                       periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
 {
   
-  // create GLOB3M WIDGET
-  int width = (int) [self frame].size.width;
-  int height = (int) [self frame].size.height;
+  const int width  = (int) [self frame].size.width;
+  const int height = (int) [self frame].size.height;
   
   //NativeGL2_iOS* nGL = new NativeGL2_iOS();
   //GL* gl = new GL(nGL);
@@ -135,9 +126,7 @@
                                                  storage,
                                                  saveInBackground);
   
-  CompositeRenderer* composite = new CompositeRenderer();
-  
-  composite->addRenderer(cameraRenderer);
+  CompositeRenderer* mainRenderer = new CompositeRenderer();
   
   if (layerSet != NULL) {
     TileTexturizer* texturizer = new MultiLayerTileTexturizer();
@@ -148,23 +137,21 @@
                                         layerSet,
                                         parameters,
                                         showStatistics);
-    composite->addRenderer(tr);
+    mainRenderer->addRenderer(tr);
   }
   
   for (int i = 0; i < renderers.size(); i++) {
-    composite->addRenderer(renderers[i]);
+    mainRenderer->addRenderer(renderers[i]);
   }
   
-  
-  
-  
-  TextureBuilder* textureBuilder = new CPUTextureBuilder();
-  TexturesHandler* texturesHandler = new TexturesHandler([_renderer getGL], false);
+  //TextureBuilder* textureBuilder = new CPUTextureBuilder();
+  //TexturesHandler* texturesHandler = new TexturesHandler([_renderer getGL], false);
   
   const Planet* planet = Planet::createEarth();
   
   Renderer* busyRenderer = new BusyMeshRenderer();
   
+/*<<<<<<< HEAD
   EffectsScheduler* scheduler = new EffectsScheduler();
   
   FrameTasksExecutor* frameTasksExecutor = new FrameTasksExecutor();
@@ -201,12 +188,14 @@
                                 [_renderer getGL],
                                 texturesHandler,
                                 textureBuilder,
+=======*/
+  _widgetVP = G3MWidget::create([_renderer getGL],
                                 downloader,
                                 planet,
                                 cameraConstraints,
-                                composite,
+                                cameraRenderer,
+                                mainRenderer,
                                 busyRenderer,
-                                scheduler,
                                 width, height,
                                 Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
                                 true,
@@ -214,41 +203,7 @@
                                 initializationTask,
                                 true,
                                 periodicalTasks);
-  
   [self widget]->setUserData(userData);
-  
-  //Testing go to pos
-  if (true){
-    [self widget]->setAnimatedPosition(Geodetic3D(Angle::fromDegreesMinutes(37, 47),
-                                                  Angle::fromDegreesMinutes(-122, 25),
-                                                  1000000),
-                                       TimeInterval::fromSeconds(10));
-  }
-  
-//  //Testing Periodical Tasks
-//  if (true){
-//    
-//    class TestPeriodicTask : public GTask {
-//      long long _lastExec;
-//      int _number;
-//    public:
-//      TestPeriodicTask(int n):_number(n){}
-//      
-//      void run() {
-//        ITimer* t = IFactory::instance()->createTimer();
-//        long long now = t->now().milliseconds();
-//        ILogger::instance()->logInfo("Running periodical Task %d - %lld ms.", _number,  now - _lastExec);
-//        _lastExec = now;
-//        IFactory::instance()->deleteTimer(t);
-//      }
-//    };
-//    
-//    [self widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(4000), new TestPeriodicTask(1));
-//    [self widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(6000), new TestPeriodicTask(2));
-//    [self widget]->addPeriodicalTask(TimeInterval::fromMilliseconds(500), new TestPeriodicTask(3));
-//  }
-  
-  
 }
 
 //The EAGL view is stored in the nib file. When it's unarchived it's sent -initWithCoder:

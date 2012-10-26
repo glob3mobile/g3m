@@ -35,6 +35,11 @@ public abstract class Renderer
 
   public abstract void render(RenderContext rc);
 
+  /*
+   Gives to Renderer the opportunity to process touch, events.
+   
+   The Renderer answer true if the event was processed.
+   */
   public abstract boolean onTouchEvent(EventContext ec, TouchEvent touchEvent);
 
   public abstract void onResizeViewportEvent(EventContext ec, int width, int height);

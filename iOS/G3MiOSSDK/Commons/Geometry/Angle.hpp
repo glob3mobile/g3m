@@ -19,9 +19,6 @@
 
 class Angle {
 private:
-  const double _degrees;
-  const double _radians;
-  
   Angle(const double degrees) :
   _degrees( degrees ),
   _radians( degrees / 180.0 * /*GMath.pi()*/ 3.14159265358979323846264338327950288 )
@@ -29,6 +26,9 @@ private:
   }
   
 public:
+  const double _degrees;
+  const double _radians;
+
   static Angle lerp(const Angle& start,
                     const Angle& end,
                     float percent) {
@@ -78,14 +78,13 @@ public:
   }
   
   static Angle midAngle(const Angle& angle1, const Angle& angle2) {
-    return Angle::fromDegrees((angle1.degrees() + angle2.degrees()) / 2);
+    return Angle::fromDegrees((angle1._degrees + angle2._degrees) / 2);
   }
   
   static Angle interpolation(const Angle& angle1, const Angle& angle2, double v) {
-    return Angle::fromDegrees(((1.0-v) * angle1.degrees() + v * angle2.degrees()));
+    return Angle::fromDegrees( (1.0-v) * angle1._degrees + v * angle2._degrees );
   }
 
-  
   bool isNan() const {
     return IMathUtils::instance()->isNan(_degrees);
   }
@@ -108,12 +107,11 @@ public:
   double degrees() const {
     return _degrees;
   }
-  
+
   double radians() const {
-    //return _degrees / 180.0 * GMath.pi();
     return _radians;
   }
-  
+
   bool closeTo(const Angle& other) const {
     return (GMath.abs(_degrees - other._degrees) < THRESHOLD);
   }

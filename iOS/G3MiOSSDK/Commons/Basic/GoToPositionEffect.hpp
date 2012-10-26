@@ -16,8 +16,8 @@ class GoToPositionEffect : public EffectWithDuration {
 public:
   
   GoToPositionEffect(const TimeInterval& duration,
-                     Geodetic3D  initialPos,
-                     Geodetic3D  finalPos):
+                     Geodetic3D initialPos,
+                     Geodetic3D finalPos):
   EffectWithDuration(duration),
   _initialPos(initialPos),
   _finalPos(finalPos)
@@ -37,7 +37,7 @@ public:
     
     Geodetic3D g = Geodetic3D::interpolation(_initialPos, _finalPos, percent);
     
-    //printf("EFFECT %f - %f, %f, %f\n", percent, g.latitude().degrees(), g.longitude().degrees(), g.height());
+    //printf("EFFECT %f - %f, %f, %f\n", percent, g.latitude()._degrees, g.longitude()._degrees, g.height());
     camera->setPosition(g);
   }
   
@@ -51,7 +51,6 @@ public:
   }
   
 private:
-  
   Geodetic3D  _initialPos;
   Geodetic3D  _finalPos;
 };
