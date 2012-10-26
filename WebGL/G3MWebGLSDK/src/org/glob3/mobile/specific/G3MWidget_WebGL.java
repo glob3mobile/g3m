@@ -492,4 +492,9 @@ public final class G3MWidget_WebGL
       getG3MWidget().setCameraHeading(angle);
    }
 
+
+   public void resetCameraPosition() {
+      getG3MWidget().resetCameraPosition();
+   }
+
 }

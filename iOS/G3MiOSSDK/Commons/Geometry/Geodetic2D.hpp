@@ -69,7 +69,23 @@ public:
   bool closeTo(const Geodetic2D& other) const;
   
   bool isBetween(const Geodetic2D& min, const Geodetic2D& max) const;
-  
+
+  /**
+   * Returns the (initial) bearing from this point to the supplied point
+   *   see http://williams.best.vwh.net/avform.htm#Crs
+   */
+  Angle angle(const Geodetic2D& that) const {
+    const Angle dLon = that.longitude().sub(longitude());
+    const Angle lat1 = latitude();
+    const Angle lat2 = that.latitude();
+
+    const double y = dLon.sinus() * lat2.cosinus();
+    const double x = lat1.cosinus()*lat2.sinus() - lat1.sinus()*lat2.cosinus()*dLon.cosinus();
+    const double radians = GMath.atan2(y, x);
+
+    return Angle::fromRadians(radians);
+  }
+
 #ifdef C_CODE
   bool operator<(const Geodetic2D& that) const {
     return lowerThan(that);
