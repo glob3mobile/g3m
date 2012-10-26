@@ -46,7 +46,7 @@ public class LatLonMeshRenderer extends LeafRenderer
   
 	Color flatColor = new Color(Color.fromRGBA((float)1.0, (float)1.0, (float)0.0, (float)1.0));
   
-	_mesh = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), index.create(), flatColor);
+	_mesh = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), index.create(), 1, flatColor);
   
   }
 
