@@ -66,6 +66,7 @@
 
 - (void) initWidgetWithCameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
                                 layerSet: (LayerSet*) layerSet
+                  incrementalTileQuality: (bool) incrementalTileQuality
                                renderers: (std::vector<Renderer*>) renderers
                                 userData: (UserData*) userData
                       initializationTask: (GTask *) initializationTask
@@ -90,7 +91,8 @@
   
   TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug,
                                                                            useTilesSplitBudget,
-                                                                           forceTopLevelTilesRenderOnStart);
+                                                                           forceTopLevelTilesRenderOnStart,
+                                                                           incrementalTileQuality);
   
   [self initWidgetWithCameraRenderer: cameraRenderer
                    cameraConstraints: cameraConstraints

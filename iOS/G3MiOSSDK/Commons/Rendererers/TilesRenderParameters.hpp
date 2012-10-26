@@ -22,11 +22,10 @@ public:
   const int    _tileTextureWidth;
   const int    _tileResolution;
   const bool   _renderDebug;
-  
   const bool   _useTilesSplitBudget;
-  
   const bool   _forceTopLevelTilesRenderOnStart;
-  
+  const bool   _incrementalTileQuality;
+
   TilesRenderParameters(const Sector topSector,
                         const int    splitsByLatitude,
                         const int    splitsByLongitude,
@@ -37,7 +36,8 @@ public:
                         const int    tileResolution,
                         const bool   renderDebug,
                         const bool   useTilesSplitBudget,
-                        const bool   forceTopLevelTilesRenderOnStart) :
+                        const bool   forceTopLevelTilesRenderOnStart,
+                        const bool   incrementalTileQuality) :
   _topSector(topSector),
   _splitsByLatitude(splitsByLatitude),
   _splitsByLongitude(splitsByLongitude),
@@ -48,14 +48,16 @@ public:
   _tileResolution(tileResolution),
   _renderDebug(renderDebug),
   _useTilesSplitBudget(useTilesSplitBudget),
-  _forceTopLevelTilesRenderOnStart(forceTopLevelTilesRenderOnStart)
+  _forceTopLevelTilesRenderOnStart(forceTopLevelTilesRenderOnStart),
+  _incrementalTileQuality(incrementalTileQuality)
   {
     
   }
   
   static TilesRenderParameters* createDefault(const bool renderDebug,
                                               const bool useTilesSplitBudget,
-                                              const bool forceTopLevelTilesRenderOnStart) {
+                                              const bool forceTopLevelTilesRenderOnStart,
+                                              const bool incrementalTileQuality) {
     const int K = 1;
     //const int _TODO_RESET_K_TO_1 = 0;
     const int splitsByLatitude = 2 * K;
@@ -78,13 +80,15 @@ public:
                                      tileResolution,
                                      renderDebug,
                                      useTilesSplitBudget,
-                                     forceTopLevelTilesRenderOnStart);
+                                     forceTopLevelTilesRenderOnStart,
+                                     incrementalTileQuality);
   }
   
   
   static TilesRenderParameters* createSingleSector(const bool renderDebug,
                                                    const bool useTilesSplitBudget,
-                                                   const bool forceTopLevelTilesRenderOnStart) {
+                                                   const bool forceTopLevelTilesRenderOnStart,
+                                                   const bool incrementalQuality) {
     const int splitsByLatitude = 1;
     const int splitsByLongitude = 1;
     const int topLevel = 0;
@@ -109,7 +113,8 @@ public:
                                      tRes,
                                      renderDebug,
                                      useTilesSplitBudget,
-                                     forceTopLevelTilesRenderOnStart);
+                                     forceTopLevelTilesRenderOnStart,
+                                     incrementalQuality);
   }
 };
 

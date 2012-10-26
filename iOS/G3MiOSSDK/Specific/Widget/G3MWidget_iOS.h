@@ -60,6 +60,7 @@ enum GL_version {
 
 - (void)initWidgetWithCameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
                                layerSet: (LayerSet*) layerSet
+                 incrementalTileQuality: (bool) incrementalTileQuality
                               renderers: (std::vector<Renderer*>) renderers
                                userData: (UserData*) userData
                      initializationTask: (GTask*) initializationTask

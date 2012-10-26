@@ -88,7 +88,7 @@
   //                                     NULL);
   //  layerSet->addLayer(political);
   
-  bool useBing = false;
+  bool useBing = true;
   if (useBing) {
     WMSLayer* bing = new WMSLayer("ve",
                                   URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?", false),
@@ -102,7 +102,7 @@
     layerSet->addLayer(bing);
   }
   
-  bool useOSM = true;
+  bool useOSM = false;
   if (useOSM) {
     //    WMSLayer *osm = new WMSLayer("osm",
     //                                 URL("http://wms.latlon.org/"),
@@ -328,8 +328,10 @@
   };
 
   UserData* userData = NULL;
+  const bool incrementalTileQuality = true;
   [[self G3MWidget] initWidgetWithCameraConstraints: cameraConstraints
                                            layerSet: layerSet
+                             incrementalTileQuality: incrementalTileQuality
                                           renderers: renderers
                                            userData: userData
                                  initializationTask: new SampleInitializationTask([self G3MWidget])

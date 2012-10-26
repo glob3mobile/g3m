@@ -226,8 +226,9 @@ public:
     for (int i = 0; i < _petitionsCount; i++) {
       const Petition* petition = _petitions[i];
       
-      //const long priority = _tile->getLevel() * 1000000 + _tile->getRow() * 1000 + _tile->getColumn();
-      const long long priority = _tile->getLevel();
+      const long long priority =  (_parameters->_incrementalTileQuality
+                                   ? 1000 - _tile->getLevel()
+                                   : _tile->getLevel());
       
       const long long requestId = _downloader->requestImage(URL(petition->getURL()),
                                                             priority,
