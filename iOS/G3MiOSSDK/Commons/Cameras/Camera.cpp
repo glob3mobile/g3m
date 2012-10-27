@@ -162,12 +162,20 @@ void Camera::setHeading(const Angle& angle) {
   const Angle currentHeading = getHeading(normal);
   const Angle delta          = currentHeading.sub(angle);
   rotateWithAxisAndPoint(normal, _position.asVector3D(), delta);
+  //printf ("previous heading=%f   current heading=%f\n", currentHeading.degrees(), getHeading().degrees());
 }
 
 Angle Camera::getPitch() const {
   const Vector3D normal = _planet->geodeticSurfaceNormal(_position);
   const Angle angle     = _up.asVector3D().angleBetween(normal);
-  return angle.sub(Angle::fromDegrees(90));
+  return Angle::fromDegrees(90).sub(angle);
+}
+
+void Camera::setPitch(const Angle& angle){
+  const Angle currentPitch  = getPitch();
+  const Vector3D u          = getHorizontalVector();
+  rotateWithAxisAndPoint(u, _position.asVector3D(), angle.sub(currentPitch));
+  //printf ("previous pitch=%f   current pitch=%f\n", currentPitch.degrees(), getPitch().degrees());
 }
 
 void Camera::orbitTo(const Vector3D& pos) {
@@ -185,12 +193,7 @@ void Camera::render(const RenderContext* rc) const {
   GL *gl = rc->getGL();
   gl->setProjection(getProjectionMatrix());
   gl->loadMatrixf(getModelMatrix());
-  
-  
-  
-  Angle angle = getViewDirection().angleBetween(_up.asVector3D());
-  printf ("pitch=%f   angulo up-view=%f\n", getPitch().degrees(), angle.degrees());
-  
+    
   // TEMP: TEST TO SEE HALF SIZE FRUSTUM CLIPPING
   if (false) {
     const MutableMatrix44D inversed = getModelMatrix().inversed();

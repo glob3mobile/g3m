@@ -248,6 +248,7 @@ public:
   Angle getHeading() const;
   void setHeading(const Angle& angle);
   Angle getPitch() const;
+  void setPitch(const Angle& angle);
   
   void orbitTo(const Vector3D& pos);
   void orbitTo(const Geodetic3D& g3d) {

@@ -18,8 +18,7 @@ bool CameraRotationHandler::onTouchEvent(const EventContext *eventContext,
                                          CameraContext *cameraContext) 
 {
   // three finger needed
-  // *** TEMP GUS
-  if (touchEvent->getTouchCount()!=2) return false;
+  if (touchEvent->getTouchCount()!=3) return false;
   
   switch (touchEvent->getType()) {
     case Down:
@@ -49,9 +48,7 @@ void CameraRotationHandler::onDown(const EventContext *eventContext,
   // middle pixel in 2D 
   Vector2I pixel0 = touchEvent.getTouch(0)->getPos();
   Vector2I pixel1 = touchEvent.getTouch(1)->getPos();
-  // *** TEMP GUS
-
-  Vector2I pixel2 = pixel1; //touchEvent.getTouch(2)->getPos();
+  Vector2I pixel2 = touchEvent.getTouch(2)->getPos();
   Vector2I averagePixel = pixel0.add(pixel1).add(pixel2).div(3);
   _initialPixel = MutableVector2I(averagePixel._x, averagePixel._y);
   lastYValid = _initialPixel.y();
@@ -77,8 +74,7 @@ void CameraRotationHandler::onMove(const EventContext *eventContext,
   // current middle pixel in 2D 
   const Vector2I c0 = touchEvent.getTouch(0)->getPos();
   const Vector2I c1 = touchEvent.getTouch(1)->getPos();
-  // *** TEMP GUS
-  const Vector2I c2 = c1; //touchEvent.getTouch(2)->getPos();
+  const Vector2I c2 = touchEvent.getTouch(2)->getPos();
   const Vector2I cm = c0.add(c1).add(c2).div(3);
   
   // compute normal to Initial point
