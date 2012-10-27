@@ -120,10 +120,12 @@ void MarksRenderer::render(const RenderContext* rc) {
   
   gl->enableVerticesPosition();
   gl->enableTextures();
-  gl->enableBlend();
+  //gl->enableBlend();
   
   //gl->disableDepthTest();
   GLState state; 
+  state.disableDepthTest();
+  state.enableBlend();
   gl->setState(state);
   
   const Vector3D radius = rc->getPlanet()->getRadii();
@@ -140,7 +142,7 @@ void MarksRenderer::render(const RenderContext* rc) {
   }
   
   //gl->enableDepthTest();
-  gl->disableBlend();
+  //gl->disableBlend();
   
   gl->disableTextures();
   gl->disableVerticesPosition();

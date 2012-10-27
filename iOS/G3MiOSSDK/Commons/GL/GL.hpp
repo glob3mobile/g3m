@@ -45,13 +45,15 @@ private:
   long                        _texturesIdTakeCounter;
   
   // state handling
+  bool _enableDepthTest;
+  bool _enableBlend;
+
+
   bool _enableTextures;
   bool _enableTexture2D;
   bool _enableVertexColor;
   bool _enableVerticesPosition;
   bool _enableFlatColor;
-  bool _enableDepthTest;
-  bool _enableBlend;
   bool _enableCullFace;
   
   int _cullFace_face;
@@ -221,8 +223,8 @@ public:
   
   void bindTexture(const IGLTextureId* textureId);
   
-  void enableBlend();
-  void disableBlend();
+  //void enableBlend();
+  //void disableBlend();
   
   void drawBillBoard(const IGLTextureId* textureId,
                      IFloatBuffer* vertices,

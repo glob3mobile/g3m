@@ -195,6 +195,7 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
 void Tile::rawRender(const RenderContext *rc,
                      const TileRenderContext* trc) {
   
+  int __TODO_include_glstate_in_TileRenderContext;
   GLState state;
   
   Mesh* tessellatorMesh = getTessellatorMesh(rc, trc);

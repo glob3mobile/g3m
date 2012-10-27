@@ -104,7 +104,7 @@ void BusyMeshRenderer::render(const RenderContext* rc)
   // clear screen
   gl->clearScreen(0.0f, 0.0f, 0.0f, 1.0f);
     
-  gl->enableBlend();
+  //gl->enableBlend();
   gl->setBlendFuncSrcAlpha();
   
   gl->pushMatrix();
@@ -114,9 +114,10 @@ void BusyMeshRenderer::render(const RenderContext* rc)
   
   // draw mesh
   GLState state;
+  state.enableBlend();
   _mesh->render(rc, state);
   
   gl->popMatrix();
   
-  gl->disableBlend();
+  //gl->disableBlend();
 }

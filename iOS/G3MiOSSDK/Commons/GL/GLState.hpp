@@ -14,16 +14,22 @@ class GLState {
   
 public:
   GLState():
-  _depthTest(true) 
+  _depthTest(true),
+  _blend(false)
   {}
   
   void enableDepthTest() { _depthTest = true; }
   void disableDepthTest() { _depthTest = false; }
   bool isEnabledDepthTest() { return _depthTest; }
   
+  void enableBlend() { _blend = true; }
+  void disableBlend() { _blend = false; }
+  bool isEnabledBlend() { return _blend; }
+  
   
 private:
   bool _depthTest;
+  bool _blend;
 };
 
 
