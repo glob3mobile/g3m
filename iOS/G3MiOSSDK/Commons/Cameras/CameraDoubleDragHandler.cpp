@@ -16,8 +16,9 @@ bool CameraDoubleDragHandler::onTouchEvent(const EventContext *eventContext,
                                            const TouchEvent* touchEvent, 
                                            CameraContext *cameraContext) 
 {
+  // *** TEMP GUS
   // only one finger needed
-  if (touchEvent->getTouchCount()!=2) return false;
+  if (touchEvent->getTouchCount()!=3) return false;
   
   switch (touchEvent->getType()) {
     case Down:

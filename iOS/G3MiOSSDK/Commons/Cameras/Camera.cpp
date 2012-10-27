@@ -160,11 +160,24 @@ Angle Camera::getHeading() const {
 void Camera::setHeading(const Angle& angle) {
   const Vector3D normal      = _planet->geodeticSurfaceNormal( _position );
   const Angle currentHeading = getHeading(normal);
-  const Angle delta     = currentHeading.sub(angle);
+  const Angle delta          = currentHeading.sub(angle);
   rotateWithAxisAndPoint(normal, _position.asVector3D(), delta);
-//  printf ("previous heading = %f   current heading = %f\n",
-//          currentHeading.degrees(),
-//          getHeading().degrees());
+}
+
+Angle Camera::getPitch() const {
+  const Vector3D normal = _planet->geodeticSurfaceNormal(_position);
+  const Angle angle     = _up.asVector3D().angleBetween(normal);
+  return angle.sub(Angle::fromDegrees(90));
+}
+
+void Camera::orbitTo(const Vector3D& pos) {
+  MutableVector3D finalPos  = pos.asMutableVector3D();
+  const Vector3D axis       = _position.cross(finalPos).asVector3D();
+  if (axis.length()<1e-3) return;
+  const Angle angle         = _position.angleBetween(finalPos);
+  double dist               = _position.length() - pos.length();
+  rotateWithAxis(axis, angle);
+  moveForward(dist); 
 }
 
 
@@ -172,6 +185,11 @@ void Camera::render(const RenderContext* rc) const {
   GL *gl = rc->getGL();
   gl->setProjection(getProjectionMatrix());
   gl->loadMatrixf(getModelMatrix());
+  
+  
+  
+  Angle angle = getViewDirection().angleBetween(_up.asVector3D());
+  printf ("pitch=%f   angulo up-view=%f\n", getPitch().degrees(), angle.degrees());
   
   // TEMP: TEST TO SEE HALF SIZE FRUSTUM CLIPPING
   if (false) {
