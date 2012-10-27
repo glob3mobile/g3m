@@ -171,7 +171,7 @@ Angle Camera::getPitch() const {
   return Angle::fromDegrees(90).sub(angle);
 }
 
-void Camera::setPitch(const Angle& angle){
+void Camera::setPitch(const Angle& angle) {
   const Angle currentPitch  = getPitch();
   const Vector3D u          = getHorizontalVector();
   rotateWithAxisAndPoint(u, _position.asVector3D(), angle.sub(currentPitch));
@@ -189,7 +189,6 @@ void Camera::orbitTo(const Vector3D& pos) {
   rotateWithAxis(axis, angle);
   moveForward(dist); 
 }
-
 
 void Camera::render(const RenderContext* rc) const {
   GL *gl = rc->getGL();
@@ -327,7 +326,7 @@ Vector3D Camera::centerOfViewOnPlanet() const {
 
 Vector3D Camera::getHorizontalVector() {
   int todo_remove_get_in_matrix;
-  MutableMatrix44D M = getModelMatrix();
+  const MutableMatrix44D M = getModelMatrix();
   return Vector3D(M.get(0), M.get(4), M.get(8));
 }
 
