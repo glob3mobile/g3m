@@ -10,16 +10,17 @@
 
 #include "GL.hpp"
 
-void TexturedMesh::render(const RenderContext* rc) const
+void TexturedMesh::render(const RenderContext* rc, const GLState& state) const
 {
   GL *gl = rc->getGL();
+  gl->setState(state);
   
   gl->enableTextures();
   gl->enableTexture2D();
   
   _textureMapping->bind(rc);
   
-  _mesh->render(rc);
+  _mesh->render(rc, state);
   
   gl->disableTexture2D();
   gl->disableTextures();

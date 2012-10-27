@@ -120,9 +120,11 @@ void MarksRenderer::render(const RenderContext* rc) {
   
   gl->enableVerticesPosition();
   gl->enableTextures();
-  
-  gl->disableDepthTest();
   gl->enableBlend();
+  
+  //gl->disableDepthTest();
+  GLState state; 
+  gl->setState(state);
   
   const Vector3D radius = rc->getPlanet()->getRadii();
   const double minDistanceToCamera = (radius._x + radius._y + radius._z) / 3 * 0.75;
@@ -137,7 +139,7 @@ void MarksRenderer::render(const RenderContext* rc) {
     }
   }
   
-  gl->enableDepthTest();
+  //gl->enableDepthTest();
   gl->disableBlend();
   
   gl->disableTextures();

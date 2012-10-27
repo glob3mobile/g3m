@@ -86,6 +86,10 @@ void DummyRenderer::render(const RenderContext* rc) {
   // obtaing gl object reference
   GL *gl = rc->getGL();
   
+  GLState state;
+  gl->setState(state);
+
+  
   gl->enableVerticesPosition();
   
   // insert pointers

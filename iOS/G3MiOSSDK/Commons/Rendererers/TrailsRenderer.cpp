@@ -62,7 +62,8 @@ void Trail::render(const RenderContext* rc) {
   if (_visible) {
     Mesh* mesh = getMesh(rc->getPlanet());
     if (mesh != NULL) {
-      mesh->render(rc);
+      GLState state;
+      mesh->render(rc, state);
     }
   }
 }

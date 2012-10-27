@@ -123,7 +123,7 @@ void BusyQuadRenderer::render(const RenderContext* rc) {
   
   // clear screen
   gl->clearScreen(0.0f, 0.0f, 0.0f, 1.0f);
-  
+    
   gl->enableBlend();
   gl->setBlendFuncSrcAlpha();
   
@@ -133,7 +133,8 @@ void BusyQuadRenderer::render(const RenderContext* rc) {
   gl->multMatrixf(R1.multiply(R2));
   
   // draw mesh
-  _quadMesh->render(rc);
+  GLState state;
+  _quadMesh->render(rc, state);
   
   gl->popMatrix();
   

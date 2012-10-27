@@ -194,10 +194,10 @@ void Box::createMesh()
 }
 
 
-void Box::render(const RenderContext* rc)
+void Box::render(const RenderContext* rc, const GLState& state)
 {
   if (_mesh == NULL) createMesh(); 
-  _mesh->render(rc);
+  _mesh->render(rc, state);
 }
 
 

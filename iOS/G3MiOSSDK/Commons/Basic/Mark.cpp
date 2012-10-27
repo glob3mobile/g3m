@@ -158,6 +158,9 @@ void Mark::render(const RenderContext* rc,
       }
       
       if (_textureId != NULL) {
+        GLState state;
+        state.disableDepthTest();
+        gl->setState(state);
         gl->drawBillBoard(_textureId,
                           getVertices(planet),
                           camera->getViewPortRatio());

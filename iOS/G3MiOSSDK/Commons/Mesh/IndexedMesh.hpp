@@ -47,7 +47,7 @@ public:
   
   ~IndexedMesh();
   
-  virtual void render(const RenderContext* rc) const;
+  virtual void render(const RenderContext* rc, const GLState& state) const;
   
   Extent* getExtent() const;
   

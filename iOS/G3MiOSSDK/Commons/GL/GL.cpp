@@ -389,7 +389,7 @@ void GL::drawBillBoard(const IGLTextureId* textureId,
   
   _gl->uniform1f(Uniforms.ViewPortRatio, viewPortRatio);
   
-  disableDepthTest();
+  //disableDepthTest();
   
   enableTexture2D();
   color(1, 1, 1, 1);
@@ -401,7 +401,7 @@ void GL::drawBillBoard(const IGLTextureId* textureId,
   
   _gl->drawArrays(GLPrimitive::triangleStrip(), 0, vertices->size() / 3);
   
-  enableDepthTest();
+  //enableDepthTest();
   
   _gl->uniform1i(Uniforms.BillBoard, 0);
 }
@@ -498,7 +498,7 @@ void GL::disableVertexFlatColor() {
   }
 }
 
-void GL::enableDepthTest() {
+/*void GL::enableDepthTest() {
   if (!_enableDepthTest) {
     _gl->enable(GLFeature::depthTest());
     _enableDepthTest = true;
@@ -510,7 +510,7 @@ void GL::disableDepthTest() {
     _gl->disable(GLFeature::depthTest());
     _enableDepthTest = false;
   }
-}
+}*/
 
 void GL::enableBlend() {
   if (!_enableBlend) {
@@ -592,3 +592,16 @@ void GL::deleteTexture(const IGLTextureId* texture) {
     _texturesIdTakeCounter++;
   }
 }
+
+void GL::setState(GLState state) {
+  if (_enableDepthTest != state.isEnabledDepthTest()) {
+    _enableDepthTest = state.isEnabledDepthTest();
+    if (_enableDepthTest) 
+      _gl->enable(GLFeature::depthTest()); 
+    else 
+      _gl->disable(GLFeature::depthTest());
+  }
+}
+
+
+

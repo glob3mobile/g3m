@@ -20,6 +20,8 @@
 
 #include "GLConstants.hpp"
 
+#include "GLState.hpp"
+
 
 #include <list>
 
@@ -50,7 +52,6 @@ private:
   bool _enableFlatColor;
   bool _enableDepthTest;
   bool _enableBlend;
-  
   bool _enableCullFace;
   
   int _cullFace_face;
@@ -93,6 +94,10 @@ private:
   
   IFloatBuffer* _billboardTexCoord;
   IFloatBuffer* getBillboardTexCoord();
+  
+  //void enableDepthTest();
+  //void disableDepthTest();
+  
   
 public:
   
@@ -215,9 +220,6 @@ public:
                              IFloatBuffer* texcoord);
   
   void bindTexture(const IGLTextureId* textureId);
-  
-  void enableDepthTest();
-  void disableDepthTest();
   
   void enableBlend();
   void disableBlend();
@@ -344,6 +346,8 @@ public:
   void deleteProgram(int program) const  {
     _gl->deleteProgram(program);
   }
+  
+  void setState(GLState state);
 };
 
 #endif

@@ -11,6 +11,7 @@
 
 #include "Context.hpp"
 #include "Extent.hpp"
+#include "GLState.hpp"
 
 class Vector3D;
 
@@ -23,7 +24,7 @@ public:
   
   virtual const Vector3D getVertex(int i) const = 0;
   
-  virtual void render(const RenderContext* rc) const = 0;
+  virtual void render(const RenderContext* rc, const GLState& state) const = 0;
   
   virtual Extent* getExtent() const = 0;
   

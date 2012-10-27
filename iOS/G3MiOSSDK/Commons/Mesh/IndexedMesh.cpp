@@ -54,8 +54,9 @@ _lineWidth(lineWidth)
 {
 }
 
-void IndexedMesh::render(const RenderContext* rc) const {
+void IndexedMesh::render(const RenderContext* rc, const GLState& state) const {
   GL *gl = rc->getGL();
+  gl->setState(state);
   
   gl->enableVerticesPosition();
   

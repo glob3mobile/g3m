@@ -13,6 +13,7 @@
 #include "TextureMapping.hpp"
 #include "Vector3D.hpp"
 
+
 class TexturedMesh: public Mesh
 {
 private:
@@ -47,7 +48,7 @@ public:
 #endif
   }
   
-  void render(const RenderContext* rc) const;
+  void render(const RenderContext* rc, const GLState& state) const;
 
   Extent* getExtent()  const {
     return (_mesh == NULL) ? NULL : _mesh->getExtent();

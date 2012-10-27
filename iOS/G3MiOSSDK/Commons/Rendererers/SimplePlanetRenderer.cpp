@@ -181,5 +181,6 @@ void SimplePlanetRenderer::render(const RenderContext* rc){
     }
   }
   
-  _mesh->render(rc);
+  GLState state;
+  _mesh->render(rc, state);
 }

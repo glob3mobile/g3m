@@ -146,7 +146,7 @@ public:
   
   const Vector3D getVertex(int i) const;
   
-  void render(const RenderContext* rc) const;
+  void render(const RenderContext* rc, const GLState& state) const;
   
   Extent* getExtent() const;
 

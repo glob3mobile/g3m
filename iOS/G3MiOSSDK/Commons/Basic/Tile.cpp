@@ -15,6 +15,7 @@
 #include "TileRenderer.hpp"
 #include "TilesRenderParameters.hpp"
 #include "TileKey.hpp"
+#include "GLState.hpp"
 
 Tile::Tile(TileTexturizer* texturizer,
            Tile* parent,
@@ -194,13 +195,15 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
 void Tile::rawRender(const RenderContext *rc,
                      const TileRenderContext* trc) {
   
+  GLState state;
+  
   Mesh* tessellatorMesh = getTessellatorMesh(rc, trc);
   
   TileTexturizer* texturizer = trc->getTexturizer();
   
   if (tessellatorMesh != NULL) {
     if (texturizer == NULL) {
-      tessellatorMesh->render(rc);
+      tessellatorMesh->render(rc, state);
     }
     else {
 //      const bool needsToCallTexturizer = (!isTextureSolved() || (_texturizedMesh == NULL)) && isTexturizerDirty();
@@ -215,10 +218,10 @@ void Tile::rawRender(const RenderContext *rc,
       }
       
       if (_texturizedMesh != NULL) {
-        _texturizedMesh->render(rc);
+        _texturizedMesh->render(rc, state);
       }
       else {
-        tessellatorMesh->render(rc);
+        tessellatorMesh->render(rc, state);
       }
     }
   }
@@ -227,9 +230,10 @@ void Tile::rawRender(const RenderContext *rc,
 
 void Tile::debugRender(const RenderContext* rc,
                        const TileRenderContext* trc) {
+  GLState state;
   Mesh* debugMesh = getDebugMesh(rc, trc);
   if (debugMesh != NULL) {
-    debugMesh->render(rc);
+    debugMesh->render(rc, state);
   }
 }
 
