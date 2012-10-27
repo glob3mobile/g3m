@@ -439,9 +439,11 @@ public class Camera
 	MutableVector3D finalPos = pos.asMutableVector3D();
 	final Vector3D axis = _position.cross(finalPos).asVector3D();
 	if (axis.length()<1e-3)
-		return;
+	{
+	  return;
+	}
 	final Angle angle = _position.angleBetween(finalPos);
-	double dist = _position.length() - pos.length();
+	final double dist = _position.length() - pos.length();
 	rotateWithAxis(axis, angle);
 	moveForward(dist);
   }
