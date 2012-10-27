@@ -410,6 +410,10 @@ void G3MWidget::addPeriodicalTask(const TimeInterval& interval,
   addPeriodicalTask( new PeriodicalTask(interval, task) );
 }
 
+void G3MWidget::setCameraHeading(const Angle& angle) {
+  getNextCamera()->setHeading(angle);
+}
+
 void G3MWidget::setCameraPosition(const Geodetic3D& position) {
   getNextCamera()->setPosition(position);
 }
@@ -452,4 +456,8 @@ void G3MWidget::setAnimatedCameraPosition(const Geodetic3D& position,
 
   _effectsScheduler->startEffect(new GoToPositionEffect(interval, startPosition, endPosition),
                                  target);
+}
+
+void G3MWidget::resetCameraPosition() {
+  getNextCamera()->resetPosition();
 }

@@ -65,6 +65,7 @@ void BusyMeshRenderer::initialize(const InitializationContext* ic)
                           vertices.getCenter(),
                           vertices.create(),
                           indices.create(),
+                          1,
                           NULL,
                           colors.create());
 }

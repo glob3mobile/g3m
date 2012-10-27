@@ -309,8 +309,14 @@ void Tile::render(const RenderContext* rc,
     setIsVisible(true, trc);
     
     statistics->computeVisibleTile(this);
-    
-    if ((toVisitInNextIteration == NULL) || meetsRenderCriteria(rc, trc)) {
+
+    const bool isRawRender = (
+                              (toVisitInNextIteration == NULL) ||
+                              meetsRenderCriteria(rc, trc)     ||
+                              (trc->getParameters()->_incrementalTileQuality && !_textureSolved)
+                              );
+
+    if (isRawRender) {
       rawRender(rc, trc);
       if (trc->getParameters()->_renderDebug) {
         debugRender(rc, trc);

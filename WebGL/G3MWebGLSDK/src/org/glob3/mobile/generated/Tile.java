@@ -404,7 +404,9 @@ public class Tile
   
 	  statistics.computeVisibleTile(this);
   
-	  if ((toVisitInNextIteration == null) || meetsRenderCriteria(rc, trc))
+	  final boolean isRawRender = ((toVisitInNextIteration == null) || meetsRenderCriteria(rc, trc) || (trc.getParameters()._incrementalTileQuality && !_textureSolved));
+  
+	  if (isRawRender)
 	  {
 		rawRender(rc, trc);
 		if (trc.getParameters()._renderDebug)

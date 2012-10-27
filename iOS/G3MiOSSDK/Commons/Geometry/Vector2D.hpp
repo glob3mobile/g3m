@@ -81,15 +81,15 @@ public:
     double a = GMath.atan2(_y, _x);
     return Angle::fromRadians(a);
   }
-  
-  //  double x() const {
-  //    return _x;
-  //  }
-  //
-  //  double y() const {
-  //    return _y;
-  //  }
-  
+
+  double x() const {
+    return _x;
+  }
+
+  double y() const {
+    return _y;
+  }
+
   static Vector2D nan() {
     return Vector2D(GMath.NanD(), GMath.NanD());
   }

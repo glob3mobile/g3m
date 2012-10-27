@@ -29,6 +29,7 @@ public class Trail
   private boolean _positionsDirty;
 
   private Color _color ;
+  private final float _lineWidth;
 
   private java.util.ArrayList<Geodetic3D> _positions = new java.util.ArrayList<Geodetic3D>();
 
@@ -44,7 +45,7 @@ public class Trail
 	  indices.add(i);
 	}
   
-	return new IndexedMesh(GLPrimitive.lineStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), new Color(_color));
+	return new IndexedMesh(GLPrimitive.lineStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), _lineWidth, new Color(_color));
   }
 
   private Mesh _mesh;
@@ -63,13 +64,14 @@ public class Trail
 	return _mesh;
   }
 
-  public Trail(int maxSteps, Color color)
+  public Trail(int maxSteps, Color color, float lineWidth)
   {
 	  _maxSteps = maxSteps;
 	  _visible = true;
 	  _positionsDirty = true;
 	  _mesh = null;
 	  _color = color;
+	  _lineWidth = lineWidth;
   }
 
   public void dispose()
@@ -109,15 +111,18 @@ public class Trail
   {
 	_positionsDirty = true;
 
-	while (_positions.size() >= _maxSteps)
+	if (_maxSteps > 0)
 	{
-	  // const int lastIndex = _positions.size() - 1;
-	  final int index = 0;
+	  while (_positions.size() >= _maxSteps)
+	  {
+		// const int lastIndex = _positions.size() - 1;
+		final int index = 0;
 
-	  if (_positions.get(index) != null)
-		  _positions.get(index).dispose();
+		if (_positions.get(index) != null)
+			_positions.get(index).dispose();
 
-	  _positions.remove( index );
+		_positions.remove( index );
+	  }
 	}
 
 	_positions.add(new Geodetic3D(position));

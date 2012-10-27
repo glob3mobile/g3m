@@ -244,9 +244,20 @@ public:
       _dirtyFlags.setAll(true);
     }
   }
+  
+  Angle getHeading() const;
+  void setHeading(const Angle& angle);
+  Angle getPitch() const;
+  void setPitch(const Angle& angle);
+  
+  void orbitTo(const Vector3D& pos);
+  void orbitTo(const Geodetic3D& g3d) {
+    orbitTo(_planet->toCartesian(g3d));
+  }
     
 private:
-  
+  Angle getHeading(const Vector3D& normal) const;
+
   //IF A NEW ATTRIBUTE IS ADDED CHECK CONSTRUCTORS AND RESET() !!!!
   int _width;
   int _height;

@@ -134,6 +134,7 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
                                     Vector3D::zero(),
                                     ver,
                                     ind,
+                                    1,
                                     flatColor,
                                     vertexColors);
   

@@ -29,6 +29,17 @@ Angle Vector3D::angleBetween(const Vector3D& other) const {
   return Angle::fromRadians(GMath.acos(c));
 }
 
+
+Angle Vector3D::signedAngleBetween(const Vector3D& other, const Vector3D& up) const 
+{
+  Angle angle     = angleBetween(other);
+  if (cross(other).dot(up)>0) 
+    return angle;
+  else 
+    return angle.times(-1);
+}
+
+
 Vector3D Vector3D::rotateAroundAxis(const Vector3D& axis,
                                     const Angle& theta) const {
   const double u = axis._x;

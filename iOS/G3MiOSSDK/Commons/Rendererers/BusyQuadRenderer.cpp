@@ -79,7 +79,8 @@ bool BusyQuadRenderer::initMesh(const RenderContext* rc) {
                                     true,
                                     Vector3D::zero(),
                                     vertices.create(),
-                                    indices.create());
+                                    indices.create(),
+                                    1);
   
   TextureMapping* texMap = new SimpleTextureMapping(texId,
                                                     texCoords.create(),

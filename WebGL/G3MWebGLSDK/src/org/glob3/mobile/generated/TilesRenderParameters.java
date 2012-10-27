@@ -28,12 +28,11 @@ public class TilesRenderParameters
   public final int _tileTextureWidth;
   public final int _tileResolution;
   public final boolean _renderDebug;
-
   public final boolean _useTilesSplitBudget;
-
   public final boolean _forceTopLevelTilesRenderOnStart;
+  public final boolean _incrementalTileQuality;
 
-  public TilesRenderParameters(Sector topSector, int splitsByLatitude, int splitsByLongitude, int topLevel, int maxLevel, int tileTextureHeight, int tileTextureWidth, int tileResolution, boolean renderDebug, boolean useTilesSplitBudget, boolean forceTopLevelTilesRenderOnStart)
+  public TilesRenderParameters(Sector topSector, int splitsByLatitude, int splitsByLongitude, int topLevel, int maxLevel, int tileTextureHeight, int tileTextureWidth, int tileResolution, boolean renderDebug, boolean useTilesSplitBudget, boolean forceTopLevelTilesRenderOnStart, boolean incrementalTileQuality)
   {
 	  _topSector = new Sector(topSector);
 	  _splitsByLatitude = splitsByLatitude;
@@ -46,10 +45,11 @@ public class TilesRenderParameters
 	  _renderDebug = renderDebug;
 	  _useTilesSplitBudget = useTilesSplitBudget;
 	  _forceTopLevelTilesRenderOnStart = forceTopLevelTilesRenderOnStart;
+	  _incrementalTileQuality = incrementalTileQuality;
 
   }
 
-  public static TilesRenderParameters createDefault(boolean renderDebug, boolean useTilesSplitBudget, boolean forceTopLevelTilesRenderOnStart)
+  public static TilesRenderParameters createDefault(boolean renderDebug, boolean useTilesSplitBudget, boolean forceTopLevelTilesRenderOnStart, boolean incrementalTileQuality)
   {
 	final int K = 1;
 	//const int _TODO_RESET_K_TO_1 = 0;
@@ -63,11 +63,11 @@ public class TilesRenderParameters
 //    const int tileTextureWidth = 128;
 	final int tileResolution = 10;
 
-	return new TilesRenderParameters(Sector.fullSphere(), splitsByLatitude, splitsByLongitude, topLevel, maxLevel, tileTextureHeight, tileTextureWidth, tileResolution, renderDebug, useTilesSplitBudget, forceTopLevelTilesRenderOnStart);
+	return new TilesRenderParameters(Sector.fullSphere(), splitsByLatitude, splitsByLongitude, topLevel, maxLevel, tileTextureHeight, tileTextureWidth, tileResolution, renderDebug, useTilesSplitBudget, forceTopLevelTilesRenderOnStart, incrementalTileQuality);
   }
 
 
-  public static TilesRenderParameters createSingleSector(boolean renderDebug, boolean useTilesSplitBudget, boolean forceTopLevelTilesRenderOnStart)
+  public static TilesRenderParameters createSingleSector(boolean renderDebug, boolean useTilesSplitBudget, boolean forceTopLevelTilesRenderOnStart, boolean incrementalQuality)
   {
 	final int splitsByLatitude = 1;
 	final int splitsByLongitude = 1;
@@ -82,6 +82,6 @@ public class TilesRenderParameters
 	//                           Geodetic2D(Angle::fromDegrees(90), Angle::fromDegrees(180)));
 	Sector sector = new Sector(new Geodetic2D(Angle.fromDegrees(0), Angle.fromDegrees(0)), new Geodetic2D(Angle.fromDegrees(90), Angle.fromDegrees(90)));
 
-	return new TilesRenderParameters(sector, splitsByLatitude, splitsByLongitude, topLevel, maxLevel, tileTextureHeight, tileTextureWidth, tRes, renderDebug, useTilesSplitBudget, forceTopLevelTilesRenderOnStart);
+	return new TilesRenderParameters(sector, splitsByLatitude, splitsByLongitude, topLevel, maxLevel, tileTextureHeight, tileTextureWidth, tRes, renderDebug, useTilesSplitBudget, forceTopLevelTilesRenderOnStart, incrementalQuality);
   }
 }

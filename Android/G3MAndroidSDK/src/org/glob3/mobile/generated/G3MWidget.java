@@ -290,9 +290,15 @@ public class G3MWidget
 	addPeriodicalTask(new PeriodicalTask(interval, task));
   }
 
+
   public final void setCameraPosition(Geodetic3D position)
   {
 	getNextCamera().setPosition(position);
+  }
+
+  public final void setCameraHeading(Angle angle)
+  {
+	getNextCamera().setHeading(angle);
   }
 
   public final void setAnimatedCameraPosition(Geodetic3D position)
@@ -338,6 +344,11 @@ public class G3MWidget
 	_effectsScheduler.cancellAllEffectsFor(target);
   
 	_effectsScheduler.startEffect(new GoToPositionEffect(interval, startPosition, endPosition), target);
+  }
+
+  public final void resetCameraPosition()
+  {
+	getNextCamera().resetPosition();
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

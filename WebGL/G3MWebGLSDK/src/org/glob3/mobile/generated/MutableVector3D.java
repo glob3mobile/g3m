@@ -127,6 +127,13 @@ public class MutableVector3D
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: MutableVector3D times(const Vector3D& v) const
+  public final MutableVector3D times(Vector3D v)
+  {
+	return new MutableVector3D(_x * v._x, _y * v._y, _z * v._z);
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: MutableVector3D times(const double magnitude) const
   public final MutableVector3D times(double magnitude)
   {

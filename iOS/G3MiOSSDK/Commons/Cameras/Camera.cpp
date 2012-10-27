@@ -146,12 +146,54 @@ void Camera::print() {
   ILogger::instance()->logInfo("Width: %d, Height %d\n", _width, _height);
 }
 
-void Camera::render(const RenderContext* rc) const {
+Angle Camera::getHeading(const Vector3D& normal) const {
+  const Vector3D north2D  = Vector3D(0,0,1).projectionInPlane(normal);
+  const Vector3D up2D     = _up.asVector3D().projectionInPlane(normal);
+  return up2D.signedAngleBetween(north2D, normal);
+}
 
+Angle Camera::getHeading() const {
+  const Vector3D normal = _planet->geodeticSurfaceNormal( _position );
+  return getHeading(normal);
+}
+
+void Camera::setHeading(const Angle& angle) {
+  const Vector3D normal      = _planet->geodeticSurfaceNormal( _position );
+  const Angle currentHeading = getHeading(normal);
+  const Angle delta          = currentHeading.sub(angle);
+  rotateWithAxisAndPoint(normal, _position.asVector3D(), delta);
+  //printf ("previous heading=%f   current heading=%f\n", currentHeading.degrees(), getHeading().degrees());
+}
+
+Angle Camera::getPitch() const {
+  const Vector3D normal = _planet->geodeticSurfaceNormal(_position);
+  const Angle angle     = _up.asVector3D().angleBetween(normal);
+  return Angle::fromDegrees(90).sub(angle);
+}
+
+void Camera::setPitch(const Angle& angle){
+  const Angle currentPitch  = getPitch();
+  const Vector3D u          = getHorizontalVector();
+  rotateWithAxisAndPoint(u, _position.asVector3D(), angle.sub(currentPitch));
+  //printf ("previous pitch=%f   current pitch=%f\n", currentPitch.degrees(), getPitch().degrees());
+}
+
+void Camera::orbitTo(const Vector3D& pos) {
+  MutableVector3D finalPos  = pos.asMutableVector3D();
+  const Vector3D axis       = _position.cross(finalPos).asVector3D();
+  if (axis.length()<1e-3) return;
+  const Angle angle         = _position.angleBetween(finalPos);
+  double dist               = _position.length() - pos.length();
+  rotateWithAxis(axis, angle);
+  moveForward(dist); 
+}
+
+
+void Camera::render(const RenderContext* rc) const {
   GL *gl = rc->getGL();
   gl->setProjection(getProjectionMatrix());
   gl->loadMatrixf(getModelMatrix());
-
+    
   // TEMP: TEST TO SEE HALF SIZE FRUSTUM CLIPPING
   if (false) {
     const MutableMatrix44D inversed = getModelMatrix().inversed();

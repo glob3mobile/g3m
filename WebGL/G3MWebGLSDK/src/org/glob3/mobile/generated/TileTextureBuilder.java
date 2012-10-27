@@ -85,8 +85,7 @@ public class TileTextureBuilder extends RCObject
 	{
 	  final Petition petition = _petitions.get(i);
 
-	  //const long priority = _tile->getLevel() * 1000000 + _tile->getRow() * 1000 + _tile->getColumn();
-	  final long priority = _tile.getLevel();
+	  final long priority = (_parameters._incrementalTileQuality ? 1000 - _tile.getLevel() : _tile.getLevel());
 
 	  final long requestId = _downloader.requestImage(new URL(petition.getURL()), priority, new BuilderDownloadStepDownloadListener(this, i), true);
 

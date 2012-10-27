@@ -27,7 +27,8 @@ private:
   const Color*      _flatColor;
   IFloatBuffer*     _colors;
   const float       _colorsIntensity;
-  
+  const float       _lineWidth;
+
   mutable Extent*   _extent;
   
   Extent* computeExtent() const;
@@ -39,6 +40,7 @@ public:
               const Vector3D& center,
               IFloatBuffer* vertices,
               IIntBuffer* indices,
+              float lineWidth,
               const Color* flatColor = NULL,
               IFloatBuffer* colors = NULL,
               const float colorsIntensity = (float)0.0);
