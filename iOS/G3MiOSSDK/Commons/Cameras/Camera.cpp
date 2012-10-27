@@ -179,11 +179,13 @@ void Camera::setPitch(const Angle& angle){
 }
 
 void Camera::orbitTo(const Vector3D& pos) {
-  MutableVector3D finalPos  = pos.asMutableVector3D();
-  const Vector3D axis       = _position.cross(finalPos).asVector3D();
-  if (axis.length()<1e-3) return;
-  const Angle angle         = _position.angleBetween(finalPos);
-  double dist               = _position.length() - pos.length();
+  MutableVector3D finalPos = pos.asMutableVector3D();
+  const Vector3D axis      = _position.cross(finalPos).asVector3D();
+  if (axis.length()<1e-3) {
+    return;
+  }
+  const Angle angle = _position.angleBetween(finalPos);
+  const double dist = _position.length() - pos.length();
   rotateWithAxis(axis, angle);
   moveForward(dist); 
 }
