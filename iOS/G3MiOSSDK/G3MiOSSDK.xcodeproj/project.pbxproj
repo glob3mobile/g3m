@@ -603,11 +603,15 @@
 				CF7E626015F7D6FC0086B71D /* FloatBufferBuilder.hpp */,
 				D8CD74D915F8DBE800B801CC /* FloatBufferBuilderFromCartesian2D.hpp */,
 				D8CD74D815F8D56800B801CC /* FloatBufferBuilderFromCartesian3D.hpp */,
+				D8C912D915F9FE78003F92A4 /* FloatBufferBuilderFromColor.hpp */,
 				D8CD74DD15F8DE9500B801CC /* FloatBufferBuilderFromGeodetic.hpp */,
 				CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */,
 				CF73BFDA15E114E3001CE412 /* FrameTasksExecutor.hpp */,
 				383BD3901577EE500012AC53 /* G3MWidget.cpp */,
 				D88B5E5115C162AF0083A43F /* G3MWidget.hpp */,
+				D8EB78831637F6B500C4EB57 /* GoToPositionEffect.hpp */,
+				CF527E19162E2B4200E0BDE0 /* GTask.cpp */,
+				CF527E1A162E2B4200E0BDE0 /* GTask.hpp */,
 				CF9D2D8615F7D3C100B5CE2E /* IBuffer.cpp */,
 				CF9D2D8715F7D3C100B5CE2E /* IBuffer.hpp */,
 				CF6873A315F77F54002EDFD0 /* IFloatBuffer.cpp */,
@@ -622,6 +626,7 @@
 				CF0C3967157F987200646A2F /* Mark.hpp */,
 				CFA71BE315D2E85600F8C78D /* MultiLayerTileTexturizer.cpp */,
 				CFA71BE115D2E84300F8C78D /* MultiLayerTileTexturizer.hpp */,
+				D81FB47C1636A5AE00CC2CA7 /* PeriodicalTask.hpp */,
 				CFE0844315E27B9A0004EC0E /* Petition.cpp */,
 				CFE0844415E27B9A0004EC0E /* Petition.hpp */,
 				CFF8C4BB15DEB6A70034A576 /* RCObject.cpp */,
@@ -646,11 +651,6 @@
 				CFFEC12415C2EB96003FA986 /* URL.hpp */,
 				CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */,
 				CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */,
-				D8C912D915F9FE78003F92A4 /* FloatBufferBuilderFromColor.hpp */,
-				CF527E19162E2B4200E0BDE0 /* GTask.cpp */,
-				CF527E1A162E2B4200E0BDE0 /* GTask.hpp */,
-				D81FB47C1636A5AE00CC2CA7 /* PeriodicalTask.hpp */,
-				D8EB78831637F6B500C4EB57 /* GoToPositionEffect.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -675,26 +675,26 @@
 				D8228EBC157F7F6100BBAF60 /* MutableMatrix44D.hpp */,
 				CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */,
 				CF7A78EB159B9BE300074422 /* MutableVector2D.hpp */,
+				CF0A8181163303E800036277 /* MutableVector2I.cpp */,
+				CF0A8182163303E800036277 /* MutableVector2I.hpp */,
 				D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */,
 				D84D5A30157E0EAA000C5E35 /* MutableVector3D.hpp */,
 				CC41E39F15B1FD5B00B5581C /* Plane.cpp */,
 				CC41E39D15B1FD1300B5581C /* Plane.hpp */,
 				383BD3A61577EE5A0012AC53 /* Planet.hpp */,
 				D87EC5D215BEC73400E38C36 /* RectangleD.hpp */,
+				CFCEFF24163476F100FC4AB0 /* RectangleI.cpp */,
+				CFCEFF25163476F100FC4AB0 /* RectangleI.hpp */,
 				CF883BCA1594B9A500AEE39C /* Sector.cpp */,
 				38D786E71587B52F003BBC75 /* Sector.hpp */,
 				383BD3A71577EE5A0012AC53 /* Vector2D.cpp */,
 				383BD3A81577EE5A0012AC53 /* Vector2D.hpp */,
+				CFD314511631FFAD00B54ED3 /* Vector2I.cpp */,
+				CFD314521631FFAD00B54ED3 /* Vector2I.hpp */,
 				383BD3A91577EE5A0012AC53 /* Vector3D.cpp */,
 				383BD3AA1577EE5A0012AC53 /* Vector3D.hpp */,
 				CF3F3FEE1620FB2A00A92CC8 /* Vector4D.cpp */,
 				CF3F3FEF1620FB2A00A92CC8 /* Vector4D.hpp */,
-				CFD314511631FFAD00B54ED3 /* Vector2I.cpp */,
-				CFD314521631FFAD00B54ED3 /* Vector2I.hpp */,
-				CF0A8181163303E800036277 /* MutableVector2I.cpp */,
-				CF0A8182163303E800036277 /* MutableVector2I.hpp */,
-				CFCEFF24163476F100FC4AB0 /* RectangleI.cpp */,
-				CFCEFF25163476F100FC4AB0 /* RectangleI.hpp */,
 			);
 			name = Geometry;
 			sourceTree = "<group>";
@@ -702,14 +702,16 @@
 		383BD38B1577EE040012AC53 /* Interfaces */ = {
 			isa = PBXGroup;
 			children = (
-				D86EFDF51609BEDA002BF100 /* IGLProgramId.hpp */,
 				CF9CD89815DBE2C800C6FD7E /* CachedDownloader.cpp */,
 				CF9CD89915DBE2C800C6FD7E /* CachedDownloader.hpp */,
-				CF08483515D41EF700327171 /* IGLTextureId.hpp */,
+				D8E17DD515FE2ABF00C980E6 /* IByteBuffer.hpp */,
 				CFFEC11D15C2E645003FA986 /* IDownloader.cpp */,
 				CFFEC11B15C2E636003FA986 /* IDownloader.hpp */,
 				CFA189AD15F926CA0048BF46 /* IFactory.cpp */,
 				383BD3B81577EE630012AC53 /* IFactory.hpp */,
+				D86EFDF51609BEDA002BF100 /* IGLProgramId.hpp */,
+				CF08483515D41EF700327171 /* IGLTextureId.hpp */,
+				D80D3A5D160A0A47004831C5 /* IGLUniformID.hpp */,
 				CC14B64C157D35C100793C92 /* IImage.hpp */,
 				CF59DF8E15C04AFC002173EC /* ILogger.cpp */,
 				383BD3B91577EE630012AC53 /* ILogger.hpp */,
@@ -722,9 +724,7 @@
 				CFB72A6715E6808900A5BAF4 /* IStringUtils.cpp */,
 				CFB72A6815E6808900A5BAF4 /* IStringUtils.hpp */,
 				D8FEDAC615E7BD23007633A0 /* IMathUtils.hpp */,
-				D8E17DD515FE2ABF00C980E6 /* IByteBuffer.hpp */,
 				CF31CBF215878AF90085E8F1 /* ITimer.hpp */,
-				D80D3A5D160A0A47004831C5 /* IGLUniformID.hpp */,
 			);
 			name = Interfaces;
 			sourceTree = "<group>";
@@ -732,18 +732,18 @@
 		A7BF53831607643400662135 /* JSON */ = {
 			isa = PBXGroup;
 			children = (
-				A7BF53841607643400662135 /* JSONBaseObject.hpp */,
-				A70F5617161C94A100340256 /* JSONString.hpp */,
-				A7EE001B161B245600C77604 /* JSONBaseObject.cpp */,
-				A7EE00171619CE2B00C77604 /* JSONObject.hpp */,
-				A7EE00191619D01900C77604 /* JSONObject.cpp */,
-				A7EE001D161B25FD00C77604 /* JSONArray.hpp */,
-				A7EE001F161B274300C77604 /* JSONArray.cpp */,
-				A70F5604161B53D000340256 /* IJSONParser.hpp */,
 				A70F5607161B54A400340256 /* IJSONParser.cpp */,
+				A70F5604161B53D000340256 /* IJSONParser.hpp */,
+				A7EE001F161B274300C77604 /* JSONArray.cpp */,
+				A7EE001D161B25FD00C77604 /* JSONArray.hpp */,
+				A7EE001B161B245600C77604 /* JSONBaseObject.cpp */,
+				A7BF53841607643400662135 /* JSONBaseObject.hpp */,
+				A70F5615161C8F9A00340256 /* JSONBoolean.hpp */,
 				A70F5611161C4F8F00340256 /* JSONNumber.cpp */,
 				A70F5613161C4FD000340256 /* JSONNumber.hpp */,
-				A70F5615161C8F9A00340256 /* JSONBoolean.hpp */,
+				A7EE00191619D01900C77604 /* JSONObject.cpp */,
+				A7EE00171619CE2B00C77604 /* JSONObject.hpp */,
+				A70F5617161C94A100340256 /* JSONString.hpp */,
 			);
 			name = JSON;
 			path = Commons/JSON;
@@ -797,6 +797,8 @@
 				CCC2A02215CA6C7D00923850 /* GLErrorRenderer.hpp */,
 				CCC2A02515CA6C7D00923850 /* LatLonMeshRenderer.cpp */,
 				CCC2A02615CA6C7D00923850 /* LatLonMeshRenderer.hpp */,
+				CF527E1D162E33F500E0BDE0 /* LeafRenderer.cpp */,
+				CF527E1E162E33F500E0BDE0 /* LeafRenderer.hpp */,
 				CCC2A02315CA6C7D00923850 /* MarksRenderer.cpp */,
 				CCC2A02415CA6C7D00923850 /* MarksRenderer.hpp */,
 				CCC2A02715CA6C7D00923850 /* Renderer.hpp */,
@@ -806,8 +808,6 @@
 				CCC2A02D15CA6C7D00923850 /* TileRenderer.hpp */,
 				CFA71BE815D2F6D200F8C78D /* TilesRenderParameters.cpp */,
 				CFA71BE715D2F6C500F8C78D /* TilesRenderParameters.hpp */,
-				CF527E1D162E33F500E0BDE0 /* LeafRenderer.cpp */,
-				CF527E1E162E33F500E0BDE0 /* LeafRenderer.hpp */,
 				CFCEFF4B163721EA00FC4AB0 /* TrailsRenderer.cpp */,
 				CFCEFF4C163721EA00FC4AB0 /* TrailsRenderer.hpp */,
 			);
@@ -817,6 +817,8 @@
 		D87EC5C015BEB12F00E38C36 /* Layers */ = {
 			isa = PBXGroup;
 			children = (
+				A74072D0161EEEB900182A39 /* BingLayer.cpp */,
+				A74072CE161EEEA300182A39 /* BingLayer.hpp */,
 				CFB72A3715E65BAC00A5BAF4 /* Layer.cpp */,
 				D87EC5C115BEB12F00E38C36 /* Layer.hpp */,
 				CFB72A3315E65B1F00A5BAF4 /* LayerCondition.cpp */,
@@ -829,8 +831,6 @@
 				D8E0EC1215C1B1BB0010A68A /* StaticImageLayer.hpp */,
 				D87EC5C415BEB12F00E38C36 /* WMSLayer.cpp */,
 				D87EC5C515BEB12F00E38C36 /* WMSLayer.hpp */,
-				A74072CE161EEEA300182A39 /* BingLayer.hpp */,
-				A74072D0161EEEB900182A39 /* BingLayer.cpp */,
 			);
 			name = Layers;
 			path = Commons/Layers;
@@ -839,10 +839,10 @@
 		D892FBCD15C930E600E69254 /* GL */ = {
 			isa = PBXGroup;
 			children = (
-				D8E76950160742FD008EC7B9 /* GLConstants.hpp */,
-				D81BA16E15CBF19E004EF0B0 /* GL.hpp */,
 				D81BA16F15CBF19E004EF0B0 /* GL.cpp */,
+				D81BA16E15CBF19E004EF0B0 /* GL.hpp */,
 				D81D2071160748EA009A8BA6 /* GLConstants.cpp */,
+				D8E76950160742FD008EC7B9 /* GLConstants.hpp */,
 			);
 			name = GL;
 			path = Commons/GL;
