@@ -60,8 +60,6 @@ public class ShapesRenderer extends LeafRenderer
 
   public final void render(RenderContext rc)
   {
-	int __Diego_at_work;
-  
 	final int shapesCount = _shapes.size();
 	for (int i = 0; i < shapesCount; i++)
 	{
