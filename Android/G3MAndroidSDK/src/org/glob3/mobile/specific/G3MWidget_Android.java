@@ -4,6 +4,7 @@ package org.glob3.mobile.specific;
 
 import java.util.ArrayList;
 
+import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BusyMeshRenderer;
 import org.glob3.mobile.generated.CachedDownloader;
 import org.glob3.mobile.generated.Camera;
@@ -473,5 +474,15 @@ public final class G3MWidget_Android
 
    public CameraRenderer getCameraRenderer() {
       return getG3MWidget().getCameraRenderer();
+   }
+
+
+   public void setCameraHeading(final Angle angle) {
+      getG3MWidget().setCameraHeading(angle);
+   }
+
+
+   public void resetCameraPosition() {
+      getG3MWidget().resetCameraPosition();
    }
 }
