@@ -19,8 +19,8 @@ public:
   
   virtual int get(int i) const = 0;
   
-//  virtual void put(int i, int value) = 0;
-  
+  virtual void put(int i, int value) = 0;
+
   virtual void rawPut(int i, int value) = 0;
   
 };
