@@ -9,8 +9,6 @@
 #include "ShapesRenderer.hpp"
 
 void ShapesRenderer::render(const RenderContext* rc) {
-  int __Diego_at_work;
-
   const int shapesCount = _shapes.size();
   for (int i = 0; i < shapesCount; i++) {
     Shape* shape = _shapes[i];
