@@ -162,9 +162,14 @@ public final class SQLiteStorage_Android
       values.put("name", name);
       values.put("contents", contents);
 
-      final long r = _writeDB.insertWithOnConflict(table, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-      if (r == -1) {
-         ILogger.instance().logError("SQL: Can't write " + table + "in database \"%s\"\n", _databaseName);
+      if (_writeDB != null) {
+         final long r = _writeDB.insertWithOnConflict(table, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+         if (r == -1) {
+            ILogger.instance().logError("SQL: Can't write " + table + "in database \"%s\"\n", _databaseName);
+         }
+      }
+      else {
+         ILogger.instance().logError("SQL: Can't write " + table + "in database \"%s\". _writeDB not available\n", _databaseName);
       }
    }
 

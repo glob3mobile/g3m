@@ -44,6 +44,7 @@ import org.glob3.mobile.generated.Vector2I;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
@@ -82,7 +83,14 @@ public final class G3MWidget_Android
 
 
    public G3MWidget_Android(final Context context) {
-      super(context);
+      this(context, null);
+   }
+
+
+   // Needed to create widget from XML layout
+   public G3MWidget_Android(final Context context,
+                            final AttributeSet attrs) {
+      super(context, attrs);
 
       initSingletons();
 
@@ -132,10 +140,11 @@ public final class G3MWidget_Android
          }
       };
       _gestureDetector.setOnDoubleTapListener(_doubleTapListener);
+
    }
 
 
-   public void initSingletons() {
+   private void initSingletons() {
       final ILogger logger = new Logger_Android(LogLevel.ErrorLevel);
       final IFactory factory = new Factory_Android(getContext());
       final IStringUtils stringUtils = new StringUtils_Android();
