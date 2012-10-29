@@ -136,6 +136,8 @@ public:
   void setCameraPosition(const Geodetic3D& position);
   
   void setCameraHeading(const Angle& angle);
+  
+  void setCameraPitch(const Angle& angle);
 
   void setAnimatedCameraPosition(const Geodetic3D& position);
 

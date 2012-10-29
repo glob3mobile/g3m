@@ -246,9 +246,27 @@
 
 
     ShapesRenderer* shapesRenderer = new ShapesRenderer();
-    QuadShape* quad = new QuadShape(Geodetic3D(Angle::fromDegrees(37.78333333),
-                                               Angle::fromDegrees(-122.41666666666667),
-                                               100));
+
+//    const Geodetic3D& position,
+//    IImage* textureImage,
+//    bool autoDeleteTextureImage,
+//    const std::string textureFilename,
+//    int width,
+//    int height
+
+    std::string textureFileName = "g3m-marker.png";
+    IImage* textureImage = IFactory::instance()->createImageFromFileName(textureFileName);
+
+//    [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegreesMinutes(37, 47),
+//                                                              Angle::fromDegreesMinutes(-122, 25),
+//                                                              1000000),
+
+
+    QuadShape* quad = new QuadShape(Geodetic3D(Angle::fromDegreesMinutes(37, 47),
+                                               Angle::fromDegreesMinutes(-122, 25),
+                                               1000000),
+                                    textureImage, true, textureFileName,
+                                    50000, 50000);
     shapesRenderer->addShape(quad);
     renderers.push_back(shapesRenderer);
   }

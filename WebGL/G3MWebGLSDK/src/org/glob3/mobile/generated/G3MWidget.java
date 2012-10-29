@@ -301,6 +301,11 @@ public class G3MWidget
 	getNextCamera().setHeading(angle);
   }
 
+  public final void setCameraPitch(Angle angle)
+  {
+	getNextCamera().setPitch(angle);
+  }
+
   public final void setAnimatedCameraPosition(Geodetic3D position)
   {
 	setAnimatedCameraPosition(position, TimeInterval.fromSeconds(3));
