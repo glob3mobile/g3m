@@ -414,6 +414,10 @@ void G3MWidget::setCameraHeading(const Angle& angle) {
   getNextCamera()->setHeading(angle);
 }
 
+void G3MWidget::setCameraPitch(const Angle& angle) {
+  getNextCamera()->setPitch(angle);
+}
+
 void G3MWidget::setCameraPosition(const Geodetic3D& position) {
   getNextCamera()->setPosition(position);
 }

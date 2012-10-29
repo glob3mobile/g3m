@@ -21,13 +21,7 @@
 #include "Planet.hpp"
 
 
-#ifdef C_CODE
-const IGLTextureId*
-#endif
-#ifdef JAVA_CODE
-IGLTextureId
-#endif
-QuadShape::getTextureId(const RenderContext* rc) {
+const IGLTextureId* QuadShape::getTextureId(const RenderContext* rc) {
   if (_textureImage == NULL) {
     return NULL;
   }
@@ -122,7 +116,7 @@ void QuadShape::render(const RenderContext* rc) {
     gl->multMatrixf(translationMatrix);
 
     mesh->render(rc);
-
+    
     gl->popMatrix();
   }
 }
