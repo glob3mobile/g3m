@@ -78,11 +78,28 @@ public class QuadShape extends Shape
   private final int _width;
   private final int _height;
 
-
-  IGLTextureId
-//C++ TO JAVA CONVERTER TODO TASK: The following statement was not recognized, possibly due to an unrecognized macro:
-  getTextureId(const RenderContext* rc);
-
+  private IGLTextureId getTextureId(RenderContext rc)
+  {
+	if (_textureImage == null)
+	{
+	  return null;
+	}
+  
+	IGLTextureId texId = null;
+	texId = rc.getTexturesHandler().getGLTextureId(_textureImage, GLFormat.rgba(), _textureFilename, false);
+	if (_autoDeleteTextureImage)
+	{
+	  rc.getFactory().deleteImage(_textureImage);
+	  _textureImage = null;
+	}
+  
+	if (texId == null)
+	{
+	  rc.getLogger().logError("Can't load file %s", _textureFilename);
+	}
+  
+	return texId;
+  }
 
   public QuadShape(Geodetic3D position, IImage textureImage, boolean autoDeleteTextureImage, String textureFilename, int width, int height)
   {
