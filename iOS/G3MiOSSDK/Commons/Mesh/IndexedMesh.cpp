@@ -14,9 +14,7 @@
 #include "IFloatBuffer.hpp"
 #include "IIntBuffer.hpp"
 
-IndexedMesh::~IndexedMesh()
-{
-//#ifdef C_CODE
+IndexedMesh::~IndexedMesh() {
   if (_owner){
     delete _vertices;
     delete _indices;
@@ -25,10 +23,9 @@ IndexedMesh::~IndexedMesh()
     if (_flatColor != NULL) delete _flatColor;
 #endif
   }
-  
+
   if (_extent != NULL) delete _extent;
   if (_translationMatrix != NULL) delete _translationMatrix;
-//#endif
 }
 
 IndexedMesh::IndexedMesh(const int primitive,

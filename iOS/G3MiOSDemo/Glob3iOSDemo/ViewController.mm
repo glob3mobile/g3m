@@ -21,6 +21,8 @@
 #include "BingLayer.hpp"
 #include "TrailsRenderer.hpp"
 #include "PeriodicalTask.hpp"
+#include "ShapesRenderer.hpp"
+#include "QuadShape.hpp"
 #include "G3MWidget.hpp"
 
 @implementation ViewController
@@ -241,6 +243,14 @@
                                         Geodetic3D(latitude, longitude, 0)));
       }
     }
+
+
+    ShapesRenderer* shapesRenderer = new ShapesRenderer();
+    QuadShape* quad = new QuadShape(Geodetic3D(Angle::fromDegrees(37.78333333),
+                                               Angle::fromDegrees(-122.41666666666667),
+                                               100));
+    shapesRenderer->addShape(quad);
+    renderers.push_back(shapesRenderer);
   }
 
   TrailsRenderer* trailsRenderer = new TrailsRenderer();

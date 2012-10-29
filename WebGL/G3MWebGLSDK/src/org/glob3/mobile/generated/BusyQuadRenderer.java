@@ -34,19 +34,16 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
   {
 	//TEXTURED
 	IGLTextureId texId = null;
-	if (true)
+	IImage image = rc.getFactory().createImageFromFileName(_textureFilename);
+  
+	texId = rc.getTexturesHandler().getGLTextureId(image, GLFormat.rgba(), _textureFilename, false);
+  
+	rc.getFactory().deleteImage(image);
+  
+	if (texId == null)
 	{
-	  IImage image = rc.getFactory().createImageFromFileName(_textureFilename);
-  
-	  texId = rc.getTexturesHandler().getGLTextureId(image, GLFormat.rgba(), _textureFilename, false);
-  
-	  rc.getFactory().deleteImage(image);
-  
-	  if (texId == null)
-	  {
-		rc.getLogger().logError("Can't load file %s", _textureFilename);
-		return false;
-	  }
+	  rc.getLogger().logError("Can't load file %s", _textureFilename);
+	  return false;
 	}
   
 	final float halfSize = 16F;

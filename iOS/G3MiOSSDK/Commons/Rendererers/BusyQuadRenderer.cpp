@@ -42,20 +42,18 @@ bool BusyQuadRenderer::initMesh(const RenderContext* rc) {
 #ifdef JAVA_CODE
   IGLTextureId texId = null;
 #endif
-  if (true){
-    IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
-    
-    texId = rc->getTexturesHandler()->getGLTextureId(image, GLFormat::rgba(),
-                                                     _textureFilename, false);
-    
-    rc->getFactory()->deleteImage(image);
-    
-    if (texId == NULL) {
-      rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
-      return false;
-    }
+  IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
+
+  texId = rc->getTexturesHandler()->getGLTextureId(image, GLFormat::rgba(),
+                                                   _textureFilename, false);
+
+  rc->getFactory()->deleteImage(image);
+
+  if (texId == NULL) {
+    rc->getLogger()->logError("Can't load file %s", _textureFilename.c_str());
+    return false;
   }
-  
+
   const float halfSize = 16;
   FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
   vertices.add(-halfSize, +halfSize, 0);

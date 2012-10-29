@@ -114,7 +114,6 @@ public class IndexedMesh extends Mesh
 
   public void dispose()
   {
-  ///#ifdef C_CODE
 	if (_owner)
 	{
 	  if (_vertices != null)
@@ -131,7 +130,6 @@ public class IndexedMesh extends Mesh
 	if (_translationMatrix != null)
 		if (_translationMatrix != null)
 			_translationMatrix.dispose();
-  ///#endif
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
