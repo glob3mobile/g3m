@@ -113,7 +113,7 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
     indices.add(resolution*resolution);
   }
   
-  const Color *color = new Color(Color::fromRGBA((float) 0.1, (float) 0.1, (float) 0.1, (float) 1.0));
+  const Color* color = new Color( Color::fromRGBA((float) 0.1, (float) 0.1, (float) 0.1, (float) 1.0) );
   
   return new IndexedMesh(GLPrimitive::triangleStrip(),
                          true,

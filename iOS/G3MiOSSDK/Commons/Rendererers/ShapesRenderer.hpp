@@ -40,9 +40,9 @@ public:
   }
 
   void initialize(const InitializationContext* ic) {
-
+    
   }
-
+  
   bool isReadyToRender(const RenderContext* rc) {
     return true;
   }

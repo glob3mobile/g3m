@@ -31,12 +31,12 @@ protected:
   const IStringUtils* _stringUtils;
   IThreadUtils*       _threadUtils;
   const ILogger*      _logger;
-    const IMathUtils* _mathUtils;
-    const IJSONParser* _jsonParser;
+  const IMathUtils* _mathUtils;
+  const IJSONParser* _jsonParser;
   const Planet*       _planet;
   IDownloader*        _downloader;
   EffectsScheduler*   _effectsScheduler;
-  
+
   Context(const IFactory*     factory,
           const IStringUtils* stringUtils,
           IThreadUtils*       threadUtils,
@@ -50,48 +50,48 @@ protected:
   _stringUtils(stringUtils),
   _threadUtils(threadUtils),
   _logger(logger),
-    _mathUtils(mathUtils),
-    _jsonParser(jsonParser),
+  _mathUtils(mathUtils),
+  _jsonParser(jsonParser),
   _planet(planet),
   _downloader(downloader),
   _effectsScheduler(effectsScheduler)
   {
   }
-  
+
 public:
-  
+
   const IFactory* getFactory() const {
     return _factory;
   }
-  
+
   const IStringUtils* getStringUtils() const {
     return _stringUtils;
   }
-  
+
   const ILogger* getLogger() const {
     return _logger;
   }
-    
-    const IMathUtils* getMathUtils() const {
-        return _mathUtils;
-    }
-    
-    const IJSONParser* getJSONParser() const {
-        return _jsonParser;
-    }
-  
+
+  const IMathUtils* getMathUtils() const {
+    return _mathUtils;
+  }
+
+  const IJSONParser* getJSONParser() const {
+    return _jsonParser;
+  }
+
   const Planet* getPlanet() const {
     return _planet;
   }
-  
+
   IDownloader* getDownloader() const {
     return _downloader;
   }
-  
+
   EffectsScheduler* getEffectsScheduler() const {
     return _effectsScheduler;
   }
-  
+
   IThreadUtils* getThreadUtils() const {
     return _threadUtils;
   }
@@ -163,7 +163,7 @@ private:
   TexturesHandler*    _texturesHandler;
   TextureBuilder*     _textureBuilder;
   ITimer*             _frameStartTimer;
-  
+
 public:
   RenderContext(FrameTasksExecutor* frameTasksExecutor,
                 IFactory*           factory,
@@ -197,39 +197,39 @@ public:
   _texturesHandler(texturesHandler),
   _textureBuilder(textureBuilder),
   _frameStartTimer(frameStartTimer) {
-    
+
   }
-  
+
   GL* getGL() const {
     return _gl;
   }
-  
+
   const Camera* getCurrentCamera() const {
     return _currentCamera;
   }
-  
+
   Camera* getNextCamera() const {
     return _nextCamera;
   }
-  
+
   TexturesHandler* getTexturesHandler() const {
     return _texturesHandler;
   }
-  
+
   TextureBuilder* getTextureBuilder() const {
     return _textureBuilder;
   }
-  
+
   const ITimer* getFrameStartTimer() const {
     return _frameStartTimer;
   }
-  
+
   FrameTasksExecutor* getFrameTasksExecutor() const {
     return _frameTasksExecutor;
   }
-  
+
   virtual ~RenderContext();
-  
+
 };
 
 

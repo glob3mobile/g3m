@@ -8,6 +8,7 @@
 
 #include "ShapesRenderer.hpp"
 
+
 void ShapesRenderer::render(const RenderContext* rc) {
   const int shapesCount = _shapes.size();
   for (int i = 0; i < shapesCount; i++) {
