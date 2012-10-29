@@ -28,15 +28,7 @@ private:
   const int _width;
   const int _height;
 
-  
-#ifdef C_CODE
-  const IGLTextureId*
-#endif
-#ifdef JAVA_CODE
-  IGLTextureId
-#endif
-  getTextureId(const RenderContext* rc);
-
+  const IGLTextureId* getTextureId(const RenderContext* rc);
 
 public:
   QuadShape(const Geodetic3D& position,
