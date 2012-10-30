@@ -15,7 +15,7 @@
 #include "LayerSet.hpp"
 
 #include "Renderer.hpp"
-#include "MarksRenderer.hpp"
+
 #include "IDownloader.hpp"
 
 enum layer_type {
@@ -49,7 +49,7 @@ private:
   void parserJSONWMSLayer(LayerSet* layerSet, JSONObject* jsonLayer);
   void parserJSON3DLayer(LayerSet* layerSet, JSONObject* jsonLayer);
   void parserJSONPanoLayer(LayerSet* layerSet, JSONObject* jsonLayer);
-  void parserGEOJSONLayer(LayerSet* layerSet, IDownloader* downloader, std::vector<Renderer*>* renderers, JSONObject* jsonLayer, MarksRenderer* marksRenderer);
+  void parserGEOJSONLayer(LayerSet* layerSet, IDownloader* downloader, std::vector<Renderer*>* renderers, JSONObject* jsonLayer);
   
 protected:
   SceneParser();
