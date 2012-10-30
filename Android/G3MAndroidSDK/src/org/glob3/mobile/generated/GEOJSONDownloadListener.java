@@ -29,6 +29,7 @@ public class GEOJSONDownloadListener implements IBufferDownloadListener
 	private static final String COORDINATES = "coordinates";
 	private static final String PROPERTIES = "properties";
 	private static final String DENOMINATION = "DENOMINACI";
+	private static final String CLASE = "CLASE";
 
 
 	private MarksRenderer _marksRenderer;
@@ -85,15 +86,23 @@ public class GEOJSONDownloadListener implements IBufferDownloadListener
 		JSONArray jsonCoordinates = jsonGeometry.getObjectForKey(COORDINATES).getArray();
     
 		JSONBaseObject denominaci = jsonProperties.getObjectForKey(DENOMINATION);
-		if (denominaci != null)
+		JSONBaseObject clase = jsonProperties.getObjectForKey(CLASE);
+    
+		if (denominaci != null && clase != null)
 		{
 			ILogger.instance().logInfo(denominaci.getString().getValue());
+    
 			IStringBuilder iconUrl = IStringBuilder.newStringBuilder();
 			iconUrl.addString("http://glob3m.glob3mobile.com/icons/markers/ayto/");
 			iconUrl.addString(_icon);
 			iconUrl.addString(".png");
     
-			Mark mark = new Mark(denominaci.getString().getValue(), new URL(iconUrl.getString(),false), new Geodetic3D(Angle.fromDegrees(jsonCoordinates.getElement(1).getNumber().getDoubleValue()), Angle.fromDegrees(jsonCoordinates.getElement(0).getNumber().getDoubleValue()), 0));
+			IStringBuilder name = IStringBuilder.newStringBuilder();
+			name.addString(clase.getString().getValue());
+			name.addString(" ");
+			name.addString(denominaci.getString().getValue());
+    
+			Mark mark = new Mark(name.getString(), new URL(iconUrl.getString(),false), new Geodetic3D(Angle.fromDegrees(jsonCoordinates.getElement(1).getNumber().getDoubleValue()), Angle.fromDegrees(jsonCoordinates.getElement(0).getNumber().getDoubleValue()), 0));
     
 			_marksRenderer.addMark(mark);
 		}
