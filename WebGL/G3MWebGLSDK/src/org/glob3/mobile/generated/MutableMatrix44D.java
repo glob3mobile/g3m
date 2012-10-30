@@ -94,6 +94,16 @@ public class MutableMatrix44D
 	_columnMajorFloatArray = null;
   }
 
+  private static Vector3D getTangent0(Vector3D normal)
+  {
+	Vector3D tangent0 = normal.cross(new Vector3D(1, 0, 0));
+	if (tangent0.dot(tangent0) < 0.001)
+	{
+	  return normal.cross(new Vector3D(0, 1, 0)).normalized();
+	}
+	return tangent0.normalized();
+  }
+
 
   //CONTRUCTORS
   public MutableMatrix44D()
@@ -533,14 +543,14 @@ public class MutableMatrix44D
     
 	}
 
-	public static MutableMatrix44D createRotationMatrix(Angle angle, Vector3D p)
+	public static MutableMatrix44D createRotationMatrix(Angle angle, Vector3D axis)
 	{
-	  final Vector3D p0 = p.normalized();
+	  final Vector3D a = axis.normalized();
     
 	  final double c = angle.cosinus();
 	  final double s = angle.sinus();
     
-	  return new MutableMatrix44D(p0._x * p0._x * (1 - c) + c, p0._x * p0._y * (1 - c) + p0._z * s, p0._x * p0._z * (1 - c) - p0._y * s, 0, p0._y * p0._x * (1 - c) - p0._z * s, p0._y * p0._y * (1 - c) + c, p0._y * p0._z * (1 - c) + p0._x * s, 0, p0._x * p0._z * (1 - c) + p0._y * s, p0._y * p0._z * (1 - c) - p0._x * s, p0._z * p0._z * (1 - c) + c, 0, 0, 0, 0, 1);
+	  return new MutableMatrix44D(a._x * a._x * (1 - c) + c, a._x * a._y * (1 - c) + a._z * s, a._x * a._z * (1 - c) - a._y * s, 0, a._y * a._x * (1 - c) - a._z * s, a._y * a._y * (1 - c) + c, a._y * a._z * (1 - c) + a._x * s, 0, a._x * a._z * (1 - c) + a._y * s, a._y * a._z * (1 - c) - a._x * s, a._z * a._z * (1 - c) + c, 0, 0, 0, 0, 1);
 	}
 
 	public static MutableMatrix44D createGeneralRotationMatrix(Angle angle, Vector3D axis, Vector3D point)
@@ -587,15 +597,6 @@ public class MutableMatrix44D
 	  return new MutableMatrix44D(2 / rl, 0, 0, 0, 0, 2 / tb, 0, 0, 0, 0, -2 / fn, 0, -(right+left) / rl, -(top+bottom) / tb, -(zfar+znear) / fn, 1);
 	}
 
-	public static Vector3D getTangent0(Vector3D normal)
-	{
-	  Vector3D tangent0 = normal.cross(new Vector3D(1, 0, 0));
-	  if (tangent0.dot(tangent0) < 0.001)
-	  {
-		return normal.cross(new Vector3D(0, 1, 0)).normalized();
-	  }
-	  return tangent0.normalized();
-	}
 
 	public static MutableMatrix44D createRotationMatrixFromNormal(Vector3D normal)
 	{
@@ -603,8 +604,6 @@ public class MutableMatrix44D
 	  final Vector3D tangent0 = getTangent0(normal);
 	  // Find another vector in the plane
 	  final Vector3D tangent1 = normal.cross(tangent0).normalized();
-	  // Construct a 3x3 matrix by storing three vectors in the columns of the matrix
-	  //  return ColumnVectorsToMatrix(tangent0, tangent1, normal);
     
 	//  return MutableMatrix44D(tangent0._x, tangent1._x, normal._x, 0,
 	//                          tangent0._y, tangent1._y, normal._y, 0,
