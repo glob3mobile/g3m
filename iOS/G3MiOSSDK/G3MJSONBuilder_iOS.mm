@@ -1,0 +1,40 @@
+//
+//  G3MJSONBuilder.mm
+//  G3MiOSSDK
+//
+//  Created by Eduardo de la Montaña on 30/10/12.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//
+
+#include <iostream>
+
+#include "G3MJSONBuilder_iOS.hpp"
+#include "SceneParser.hpp"
+#include "SQLiteStorage_iOS.hpp"
+#include "CachedDownloader.hpp"
+#include "Downloader_iOS.hpp"
+
+#include "IStorage.hpp"
+#include "IDownloader.hpp"
+
+G3MJSONBuilder_iOS::G3MJSONBuilder_iOS(std::string jsonSource, G3MWidget_iOS* g3mWidget): IG3MJSONBuilder(jsonSource), _g3mWidget(g3mWidget) {};
+
+
+void  G3MJSONBuilder_iOS::initWidgetWithCameraConstraints (std::vector<ICameraConstrainer*> cameraConstraints,  LayerSet* layerSet, std::vector<Renderer*> renderers, UserData* userData, GTask* initializationTask, std::vector<PeriodicalTask*> periodicalTasks){
+    
+    IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
+    const bool saveInBackground = true;
+    IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
+                                                   storage,
+                                                   saveInBackground);
+    
+    SceneParser::instance()->parse(layerSet, downloader, &renderers, _jsonSource);
+    
+    [_g3mWidget initWidgetWithCameraConstraints: cameraConstraints
+                                             layerSet: layerSet
+                                            renderers: renderers
+                                             userData: userData
+                                   initializationTask: initializationTask
+                                      periodicalTasks: periodicalTasks];
+
+}

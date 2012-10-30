@@ -44,8 +44,6 @@
 #include "JSONParser_iOS.hpp"
 #include "StringBuilder_iOS.hpp"
 
-#include "G3MJSONBuilder.hpp"
-
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
 @end
@@ -102,15 +100,6 @@
                             userData: userData
                   initializationTask: initializationTask
                      periodicalTasks: periodicalTasks];
-    
-//    [self initWidgetWithCameraRendererAndSceneJSON: cameraRenderer
-//                     cameraConstraints: cameraConstraints
-//                              layerSet: layerSet
-//                 tilesRenderParameters: parameters
-//                             renderers: renderers
-//                              userData: userData
-//                    initializationTask: initializationTask
-//                       periodicalTasks: periodicalTasks];
 }
 
 - (void) initWidgetWithCameraRenderer: (CameraRenderer*) cameraRenderer
@@ -171,85 +160,6 @@
                                 true,
                                 periodicalTasks);
   [self widget]->setUserData(userData);
-}
-
-
-- (void) initWidgetWithCameraRendererAndSceneJSON: (CameraRenderer*) cameraRenderer
-                                cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
-                                         layerSet: (LayerSet*) layerSet
-                            tilesRenderParameters: (TilesRenderParameters*) parameters
-                                        renderers: (std::vector<Renderer*>) renderers
-                                         userData: (UserData*) userData
-                               initializationTask: (GTask*) initializationTask
-                                  periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
-{
- 
-    CompositeRenderer* composite = new CompositeRenderer();
-    composite->addRenderer(cameraRenderer);
-    
-    IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
-    const bool saveInBackground = true;
-    IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
-                                                   storage,
-                                                   saveInBackground);
-    
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"scene" ofType:@"scn"];
-    if (filePath) {
-        NSString *jsonFile = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
-        if (jsonFile) {
-            const std::string scene = std::string([jsonFile UTF8String]);
-            G3MJSONBuilder* g3mJSONBuilder = new G3MJSONBuilder(scene);
-            g3mJSONBuilder->fromSceneJSON(composite, layerSet, parameters, &renderers, downloader);
-        }else{
-            ILogger::instance()->logWarning("scen.scn file could not be read!");
-        }
-    }else{
-        ILogger::instance()->logWarning("scen.scn file could not be found!");
-    }
-    
-    const int width  = (int) [self frame].size.width;
-    const int height = (int) [self frame].size.height;
-    
-    NativeGL2_iOS* nativeGL = new NativeGL2_iOS();
-    
-    CompositeRenderer* mainRenderer = new CompositeRenderer();
-    
-    if (layerSet != NULL) {
-        TileTexturizer* texturizer = new MultiLayerTileTexturizer();
-        
-        const bool showStatistics = false;
-        TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
-                                            texturizer,
-                                            layerSet,
-                                            parameters,
-                                            showStatistics);
-        mainRenderer->addRenderer(tr);
-    }
-    
-    for (int i = 0; i < renderers.size(); i++) {
-        mainRenderer->addRenderer(renderers[i]);
-    }
-    
-    const Planet* planet = Planet::createEarth();
-    
-    Renderer* busyRenderer = new BusyMeshRenderer();
-    
-    _widgetVP = G3MWidget::create(nativeGL,
-                                  downloader,
-                                  planet,
-                                  cameraConstraints,
-                                  cameraRenderer,
-                                  mainRenderer,
-                                  busyRenderer,
-                                  width, height,
-                                  Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
-                                  true,
-                                  false,
-                                  initializationTask,
-                                  true,
-                                  periodicalTasks);
-    
-    [self widget]->setUserData(userData);
 }
 
 

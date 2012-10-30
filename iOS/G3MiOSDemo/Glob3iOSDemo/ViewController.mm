@@ -22,6 +22,8 @@
 #include "TrailsRenderer.hpp"
 #include "PeriodicalTask.hpp"
 #include "G3MWidget.hpp"
+#include "g3mJSONBuilder_iOS.hpp"
+
 
 @implementation ViewController
 
@@ -327,14 +329,35 @@
     }
   };
 
-  UserData* userData = NULL;
-  [[self G3MWidget] initWidgetWithCameraConstraints: cameraConstraints
+    UserData* userData = NULL;
+    
+    const bool classicInitialization = false;
+    
+    if (classicInitialization) {
+    
+        [[self G3MWidget] initWidgetWithCameraConstraints: cameraConstraints
                                            layerSet: layerSet
                                           renderers: renderers
                                            userData: userData
                                  initializationTask: new SampleInitializationTask([self G3MWidget])
                                     periodicalTasks: periodicalTasks];
+    }else{
+        
+        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"wmsScene" ofType:@"scn"];
+        if (filePath) {
+            NSString *jsonFile = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
+            if (jsonFile) {
+                const std::string scene = std::string([jsonFile UTF8String]);
+                G3MJSONBuilder_iOS* g3mJSONBuilder_iOS = new G3MJSONBuilder_iOS(scene,[self G3MWidget]);
+                g3mJSONBuilder_iOS->initWidgetWithCameraConstraints(cameraConstraints, layerSet, renderers, userData, new SampleInitializationTask([self G3MWidget]),  periodicalTasks);
+            }else{
+                ILogger::instance()->logWarning("scene.scn file could not be read!");
+            }
+        }else{
+            ILogger::instance()->logWarning("scene.scn file could not be found!");
+        }
 
+    }
 }
 
 - (void)viewDidUnload
