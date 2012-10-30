@@ -69,7 +69,7 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
   
 	TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true);
   
-	_quadMesh = new TexturedMesh(im, true, texMap, true);
+	_quadMesh = new TexturedMesh(im, true, texMap, true, false);
   
 	return true;
   }

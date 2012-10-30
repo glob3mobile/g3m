@@ -96,7 +96,7 @@ public class IndexedMesh extends Mesh
 	  this(primitive, owner, center, vertices, indices, lineWidth, null, null, (float)0.0);
   }
 //C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
-//ORIGINAL LINE: IndexedMesh(const int primitive, boolean owner, const Vector3D& center, IFloatBuffer* vertices, IIntBuffer* indices, float lineWidth, const Color* flatColor = null, IFloatBuffer* colors = null, const float colorsIntensity = (float)0.0) : _primitive(primitive), _owner(owner), _vertices(vertices), _indices(indices), _flatColor(flatColor), _colors(colors), _colorsIntensity(colorsIntensity), _extent(null), _center(center), _translationMatrix(center.isNan()? null: new MutableMatrix44D(MutableMatrix44D::createTranslationMatrix(center))), _lineWidth(lineWidth)
+//ORIGINAL LINE: IndexedMesh(const int primitive, boolean owner, const Vector3D& center, IFloatBuffer* vertices, IIntBuffer* indices, float lineWidth, const Color* flatColor = null, IFloatBuffer* colors = null, const float colorsIntensity = (float)0.0) : _primitive(primitive), _owner(owner), _vertices(vertices), _indices(indices), _flatColor(flatColor), _colors(colors), _colorsIntensity(colorsIntensity), _extent(null), _center(center), _translationMatrix((center.isNan() || center.isZero()) ? null : new MutableMatrix44D(MutableMatrix44D::createTranslationMatrix(center))), _lineWidth(lineWidth)
   public IndexedMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, IIntBuffer indices, float lineWidth, Color flatColor, IFloatBuffer colors, float colorsIntensity)
   {
 	  _primitive = primitive;
@@ -108,7 +108,7 @@ public class IndexedMesh extends Mesh
 	  _colorsIntensity = colorsIntensity;
 	  _extent = null;
 	  _center = new Vector3D(center);
-	  _translationMatrix = center.isNan()? null: new MutableMatrix44D(MutableMatrix44D.createTranslationMatrix(center));
+	  _translationMatrix = (center.isNan() || center.isZero()) ? null : new MutableMatrix44D(MutableMatrix44D.createTranslationMatrix(center));
 	  _lineWidth = lineWidth;
   }
 

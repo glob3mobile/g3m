@@ -30,11 +30,17 @@ public class QuadShape extends Shape
   
 	final float halfWidth = (float) _width / 2.0f;
 	final float halfHeight = (float) _height / 2.0f;
+  
+	final float left = -halfWidth;
+	final float right = +halfWidth;
+	final float bottom = -halfHeight;
+	final float top = +halfHeight;
+  
 	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
-	vertices.add(-halfWidth, +halfHeight, 0);
-	vertices.add(-halfWidth, -halfHeight, 0);
-	vertices.add(+halfWidth, +halfHeight, 0);
-	vertices.add(+halfWidth, -halfHeight, 0);
+	vertices.add(left, bottom, 0);
+	vertices.add(right, bottom, 0);
+	vertices.add(left, top, 0);
+	vertices.add(right, top, 0);
   
 	IntBufferBuilder indices = new IntBufferBuilder();
 	indices.add(0);
@@ -42,7 +48,11 @@ public class QuadShape extends Shape
 	indices.add(2);
 	indices.add(3);
   
-	IndexedMesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, Vector3D.zero(), vertices.create(), indices.create(), 2, new Color(Color.white()));
+  
+  //  const Vector3D center = rc->getPlanet()->toCartesian( _position );
+	final Vector3D center = Vector3D.zero();
+  
+	IndexedMesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, center, vertices.create(), indices.create(), 1);
   
 	final IGLTextureId texId = getTextureId(rc);
 	if (texId == null)
@@ -51,14 +61,14 @@ public class QuadShape extends Shape
 	}
   
 	FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
-	texCoords.add(0, 0);
-	texCoords.add(0, 1);
-	texCoords.add(1, 0);
 	texCoords.add(1, 1);
+	texCoords.add(1, 0);
+	texCoords.add(0, 1);
+	texCoords.add(0, 0);
   
 	TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true);
   
-	return new TexturedMesh(im, true, texMap, true);
+	return new TexturedMesh(im, true, texMap, true, true);
   }
   private Mesh getMesh(RenderContext rc)
   {
@@ -85,8 +95,8 @@ public class QuadShape extends Shape
 	  return null;
 	}
   
-	IGLTextureId texId = null;
-	texId = rc.getTexturesHandler().getGLTextureId(_textureImage, GLFormat.rgba(), _textureFilename, false);
+	final IGLTextureId texId = rc.getTexturesHandler().getGLTextureId(_textureImage, GLFormat.rgba(), _textureFilename, false);
+  
 	if (_autoDeleteTextureImage)
 	{
 	  rc.getFactory().deleteImage(_textureImage);
@@ -128,12 +138,18 @@ public class QuadShape extends Shape
 	  GL gl = rc.getGL();
   
 	  gl.pushMatrix();
-	  gl.loadMatrixf(MutableMatrix44D.identity());
   
-	  final Vector3D cartesianPosition = rc.getPlanet().toCartesian(_position);
+	  final Planet planet = rc.getPlanet();
+  
+  
+	  final Vector3D cartesianPosition = planet.toCartesian(_position);
 	  MutableMatrix44D translationMatrix = MutableMatrix44D.createTranslationMatrix(cartesianPosition);
-  
 	  gl.multMatrixf(translationMatrix);
+  
+  
+	  MutableMatrix44D rotationMatrix = MutableMatrix44D.createRotationMatrixFromNormal(planet.geodeticSurfaceNormal(_position));
+	  gl.multMatrixf(rotationMatrix);
+  
   
 	  mesh.render(rc);
   

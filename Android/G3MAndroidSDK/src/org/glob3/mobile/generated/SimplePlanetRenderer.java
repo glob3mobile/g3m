@@ -168,7 +168,7 @@ public class SimplePlanetRenderer extends LeafRenderer
   
 	  TextureMapping texMap = new SimpleTextureMapping(texId, texC, true);
   
-	  _mesh = new TexturedMesh(im, true, texMap, true);
+	  _mesh = new TexturedMesh(im, true, texMap, true, false);
 	}
   
   
