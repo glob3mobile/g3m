@@ -26,16 +26,11 @@ const IGLTextureId* QuadShape::getTextureId(const RenderContext* rc) {
     return NULL;
   }
 
-#ifdef C_CODE
-  const IGLTextureId* texId = NULL;
-#endif
-#ifdef JAVA_CODE
-  IGLTextureId texId = null;
-#endif
-  texId = rc->getTexturesHandler()->getGLTextureId(_textureImage,
-                                                   GLFormat::rgba(),
-                                                   _textureFilename,
-                                                   false);
+  const IGLTextureId* texId = rc->getTexturesHandler()->getGLTextureId(_textureImage,
+                                                                       GLFormat::rgba(),
+                                                                       _textureFilename,
+                                                                       false);
+
   if (_autoDeleteTextureImage) {
     rc->getFactory()->deleteImage(_textureImage);
     _textureImage = NULL;
@@ -64,13 +59,16 @@ Mesh* QuadShape::createMesh(const RenderContext* rc) {
   indices.add(2);
   indices.add(3);
 
+
+//  const Vector3D center = rc->getPlanet()->toCartesian( _position );
+  const Vector3D center = Vector3D::zero();
+
   IndexedMesh *im = new IndexedMesh(GLPrimitive::triangleStrip(),
                                     true,
-                                    Vector3D::zero(),
+                                    center,
                                     vertices.create(),
                                     indices.create(),
-                                    2,
-                                    new Color(Color::white()));
+                                    1);
 
   const IGLTextureId* texId = getTextureId(rc);
   if (texId == NULL) {
@@ -87,7 +85,7 @@ Mesh* QuadShape::createMesh(const RenderContext* rc) {
                                                     texCoords.create(),
                                                     true);
 
-  return new TexturedMesh(im, true, texMap, true);
+  return new TexturedMesh(im, true, texMap, true, true);
 }
 
 Mesh* QuadShape::getMesh(const RenderContext* rc) {
@@ -101,6 +99,8 @@ QuadShape::~QuadShape() {
   delete _mesh;
 }
 
+
+
 void QuadShape::render(const RenderContext* rc) {
   int __diego_at_work;
   Mesh* mesh = getMesh(rc);
@@ -108,15 +108,21 @@ void QuadShape::render(const RenderContext* rc) {
     GL* gl = rc->getGL();
 
     gl->pushMatrix();
-    gl->loadMatrixf(MutableMatrix44D::identity());
 
-    const Vector3D cartesianPosition = rc->getPlanet()->toCartesian( _position );
+    const Planet* planet = rc->getPlanet();
+
+
+    const Vector3D cartesianPosition = planet->toCartesian( _position );
     MutableMatrix44D translationMatrix = MutableMatrix44D::createTranslationMatrix(cartesianPosition);
-
     gl->multMatrixf(translationMatrix);
 
+
+    MutableMatrix44D rotationMatrix = MutableMatrix44D::createRotationMatrixFromNormal( planet->geodeticSurfaceNormal(_position) );
+    gl->multMatrixf(rotationMatrix);
+
+
     mesh->render(rc);
-    
+
     gl->popMatrix();
   }
 }

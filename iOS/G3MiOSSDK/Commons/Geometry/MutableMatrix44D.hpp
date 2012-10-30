@@ -171,7 +171,7 @@ public:
   
   MutableMatrix44D inversed() const;
   
-  //MutableMatrix44D transposed() const;
+  MutableMatrix44D transposed() const;
   
   //METHODS TO EXTRACT VALUES FROM THE MATRIX
   
@@ -286,6 +286,11 @@ public:
     static MutableMatrix44D createOrthographicProjectionMatrix(double left, double right,
                                                                double bottom, double top,
                                                                double znear, double zfar);
+
+    static Vector3D getTangent0(const Vector3D& normal);
+
+    static MutableMatrix44D createRotationMatrixFromNormal(const Vector3D& normal);
+
   };
   
 #endif
