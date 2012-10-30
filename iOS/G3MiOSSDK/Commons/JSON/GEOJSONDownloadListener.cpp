@@ -27,6 +27,8 @@ const std::string GEOJSONDownloadListener::TYPE = "type";
 const std::string GEOJSONDownloadListener::COORDINATES = "coordinates";
 const std::string GEOJSONDownloadListener::PROPERTIES = "properties";
 const std::string GEOJSONDownloadListener::DENOMINATION = "DENOMINACI";
+const std::string GEOJSONDownloadListener::CLASE = "CLASE";
+
 
 
 
@@ -65,14 +67,22 @@ void GEOJSONDownloadListener::parsePointObject(JSONObject* point){
     JSONArray* jsonCoordinates = jsonGeometry->getObjectForKey(COORDINATES)->getArray();
 
     JSONBaseObject* denominaci = jsonProperties->getObjectForKey(DENOMINATION);
-    if (denominaci != NULL){
+    JSONBaseObject* clase = jsonProperties->getObjectForKey(CLASE);
+
+    if (denominaci != NULL && clase != NULL){
         ILogger::instance()->logInfo(denominaci->getString()->getValue());
+        
         IStringBuilder *iconUrl = IStringBuilder::newStringBuilder();
         iconUrl->addString("http://glob3m.glob3mobile.com/icons/markers/ayto/");
         iconUrl->addString(_icon);
         iconUrl->addString(".png");
         
-        Mark* mark = new Mark(denominaci->getString()->getValue(),
+        IStringBuilder *name = IStringBuilder::newStringBuilder();
+        name->addString(clase->getString()->getValue());
+        name->addString(" ");
+        name->addString(denominaci->getString()->getValue());
+        
+        Mark* mark = new Mark(name->getString(),
                           URL(iconUrl->getString(),false),
                           Geodetic3D(Angle::fromDegrees(jsonCoordinates->getElement(1)->getNumber()->getDoubleValue()), Angle::fromDegrees(jsonCoordinates->getElement(0)->getNumber()->getDoubleValue()), 0));
     

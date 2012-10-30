@@ -71,6 +71,11 @@ void SceneParser::parse(LayerSet* layerSet, IDownloader* downloader, std::vector
 }
 
 void SceneParser::parserJSONLayerList(LayerSet* layerSet, IDownloader* downloader, std::vector<Renderer*>* renderers, JSONObject* jsonLayers){
+    
+    const bool readyWhenMarksReady = false;
+    MarksRenderer* marksRenderer = new MarksRenderer(readyWhenMarksReady);
+    renderers->push_back(marksRenderer);  
+
   for (int i = 0; i < jsonLayers->getObject()->getSize(); i++) {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addInt(i);
@@ -88,7 +93,7 @@ void SceneParser::parserJSONLayerList(LayerSet* layerSet, IDownloader* downloade
         parserJSONPanoLayer(layerSet, jsonLayer);
         break;
       case GEOJSON:
-        parserGEOJSONLayer(layerSet, downloader, renderers, jsonLayer);
+        parserGEOJSONLayer(layerSet, downloader, renderers, jsonLayer, marksRenderer);
         break;
     }
     
@@ -143,12 +148,8 @@ void SceneParser::parserJSONPanoLayer(LayerSet* layerSet, JSONObject* jsonLayer)
   cout << "Parsing Pano Layer " << jsonLayer->getObjectForKey(NAME)->getString()->getValue() << "..." << endl;
 }
 
-void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, IDownloader* downloader, std::vector<Renderer*>* renderers, JSONObject* jsonLayer){
+void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, IDownloader* downloader, std::vector<Renderer*>* renderers, JSONObject* jsonLayer, MarksRenderer* marksRenderer){
     cout << "Parsing GEOJSON Layer " << jsonLayer->getObjectForKey(NAME)->getString()->getValue() << "..." << endl;
-    
-    const bool readyWhenMarksReady = false;
-    MarksRenderer* marksRenderer = new MarksRenderer(readyWhenMarksReady);
-    renderers->push_back(marksRenderer);
     
     const std::string geojsonDatasource = jsonLayer->getObjectForKey(DATASOURCE)->getString()->getValue();
     
