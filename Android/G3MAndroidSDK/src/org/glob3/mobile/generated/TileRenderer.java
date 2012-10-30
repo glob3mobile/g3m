@@ -274,7 +274,7 @@ public class TileRenderer extends LeafRenderer
 
   public final void setEnable(boolean enable)
   {
-	LeafRenderer.setEnable(enable);
+	super.setEnable(enable);
 
 	if (!enable)
 	{
