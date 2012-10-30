@@ -8,13 +8,14 @@ public class SceneParser
 	private static final String ITEMS = "items";
 	private static final String STATUS = "status";
 	private static final String NAME = "name";
+	private static final String ICON = "icon";
 
 	private static final String WMS110 = "1.1.0";
 	private static final String WMS111 = "1.1.1";
 	private static final String WMS130 = "1.3.0";
 
   private static SceneParser _instance = null;
-  private java.util.HashMap<String, layer_type> mapLayerType = new java.util.HashMap<String, layer_type>();
+  private java.util.HashMap<String, layer_type> _mapLayerType = new java.util.HashMap<String, layer_type>();
 
 
   public static SceneParser instance()
@@ -25,22 +26,22 @@ public class SceneParser
 	}
 	return _instance;
   }
-  public final void parse(LayerSet layerSet, String namelessParameter)
+  public final void parse(LayerSet layerSet, IDownloader downloader, java.util.ArrayList<Renderer> renderers, String namelessParameter)
   {
   
 	JSONObject json = IJSONParser.instance().parse(namelessParameter).getObject();
-	parserJSONLayerList(layerSet, json.getObjectForKey(LAYERS).getObject());
+	parserJSONLayerList(layerSet, downloader, renderers, json.getObjectForKey(LAYERS).getObject());
 	IJSONParser.instance().deleteJSONData(json);
   }
 
-  private void parserJSONLayerList(LayerSet layerSet, JSONObject jsonLayers)
+  private void parserJSONLayerList(LayerSet layerSet, IDownloader downloader, java.util.ArrayList<Renderer> renderers, JSONObject jsonLayers)
   {
 	for (int i = 0; i < jsonLayers.getObject().getSize(); i++)
 	{
 	  IStringBuilder isb = IStringBuilder.newStringBuilder();
 	  isb.addInt(i);
 	  JSONObject jsonLayer = jsonLayers.getObjectForKey(isb.getString()).getObject();
-	  final layer_type layerType = mapLayerType.get(jsonLayer.getObjectForKey(TYPE).getString().getValue());
+	  final layer_type layerType = _mapLayerType.get(jsonLayer.getObjectForKey(TYPE).getString().getValue());
   
 	  switch (layerType)
 	  {
@@ -52,6 +53,9 @@ public class SceneParser
 		  break;
 		case PANO:
 		  parserJSONPanoLayer(layerSet, jsonLayer);
+		  break;
+		case GEOJSON:
+		  parserGEOJSONLayer(layerSet, downloader, renderers, jsonLayer);
 		  break;
 	  }
   
@@ -110,12 +114,49 @@ public class SceneParser
 	System.out.print("...");
 	System.out.print("\n");
   }
+  private void parserGEOJSONLayer(LayerSet layerSet, IDownloader downloader, java.util.ArrayList<Renderer> renderers, JSONObject jsonLayer)
+  {
+	  System.out.print("Parsing GEOJSON Layer ");
+	  System.out.print(jsonLayer.getObjectForKey(NAME).getString().getValue());
+	  System.out.print("...");
+	  System.out.print("\n");
+  
+	  final boolean readyWhenMarksReady = false;
+	  MarksRenderer marksRenderer = new MarksRenderer(readyWhenMarksReady);
+	  renderers.add(marksRenderer);
+  
+	  final String geojsonDatasource = jsonLayer.getObjectForKey(DATASOURCE).getString().getValue();
+  
+	  JSONArray jsonItems = jsonLayer.getObjectForKey(ITEMS).getArray();
+	  for (int i = 0; i<jsonItems.getSize(); i++)
+	  {
+  
+		  final String namefile = jsonItems.getElement(i).getObject().getObjectForKey(NAME).getString().getValue();
+		  final String icon = jsonItems.getElement(i).getObject().getObjectForKey(ICON).getString().getValue();
+  
+		  IStringBuilder url = IStringBuilder.newStringBuilder();
+		  url.addString(geojsonDatasource);
+		  url.addString("/");
+		  url.addString(namefile);
+  
+		  System.out.print("Downloading ");
+		  System.out.print(namefile);
+		  System.out.print(" file");
+		  System.out.print("\n");
+  
+		  downloader.requestBuffer(new URL(url.getString(), false), 100000000, new GEOJSONDownloadListener(marksRenderer, icon), true);
+  
+	  }
+  
+  }
 
   protected SceneParser()
   {
-	mapLayerType.put("WMS", layer_type.WMS);
-	mapLayerType.put("THREED", layer_type.THREED);
-	mapLayerType.put("PANO", layer_type.PANO);
+	_mapLayerType.put("WMS", layer_type.WMS);
+	_mapLayerType.put("THREED", layer_type.THREED);
+	_mapLayerType.put("PANO", layer_type.PANO);
+	_mapLayerType.put("GEOJSON", layer_type.GEOJSON);
+  
   }
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  SceneParser(SceneParser NamelessParameter);

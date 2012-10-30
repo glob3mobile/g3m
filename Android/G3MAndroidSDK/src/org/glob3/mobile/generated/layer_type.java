@@ -19,11 +19,14 @@ package org.glob3.mobile.generated;
 
 
 
+
+
 public enum layer_type
 {
   WMS,
   THREED,
-  PANO;
+  PANO,
+  GEOJSON;
 
 	public int getValue()
 	{
