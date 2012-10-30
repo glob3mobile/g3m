@@ -18,7 +18,8 @@ IndexedMesh::~IndexedMesh() {
   if (_owner){
     delete _vertices;
     delete _indices;
-    if (_colors != NULL) delete _colors;
+    delete _colors;
+    delete _flatColor;
   }
 
   if (_extent != NULL) delete _extent;
