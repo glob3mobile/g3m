@@ -125,8 +125,8 @@ void QuadShape::render(const RenderContext* rc) {
 
     const MutableMatrix44D rotationMatrix = MutableMatrix44D::createRotationMatrixFromNormal( planet->geodeticSurfaceNormal(_position) );
 
-//    const Vector3D pos  = rc->getCurrentCamera()->getCartesianPosition();
-////    const Vector3D pos  = planet->toCartesian(Geodetic3D(Angle::zero(), Angle::zero(), 0));
+////    const Vector3D pos  = rc->getCurrentCamera()->getCartesianPosition();
+//    const Vector3D pos  = planet->toCartesian(Geodetic3D(Angle::zero(), Angle::zero(), 0));
 //    const Vector3D axis = pos.cross(cartesianPosition);
 //    const Angle angle   = pos.angleBetween(cartesianPosition);
 //    const MutableMatrix44D rotationMatrix = MutableMatrix44D::createRotationMatrix(angle, axis);

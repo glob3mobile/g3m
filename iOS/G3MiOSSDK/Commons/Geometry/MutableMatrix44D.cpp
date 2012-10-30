@@ -321,15 +321,16 @@ MutableMatrix44D MutableMatrix44D::createTranslationMatrix(const Vector3D& t) {
 
 }
 
-MutableMatrix44D MutableMatrix44D::createRotationMatrix(const Angle& angle, const Vector3D& p) {
-  const Vector3D p0 = p.normalized();
+MutableMatrix44D MutableMatrix44D::createRotationMatrix(const Angle& angle,
+                                                        const Vector3D& axis) {
+  const Vector3D a = axis.normalized();
 
   const double c = angle.cosinus();
   const double s = angle.sinus();
 
-  return MutableMatrix44D(p0._x * p0._x * (1 - c) + c, p0._x * p0._y * (1 - c) + p0._z * s, p0._x * p0._z * (1 - c) - p0._y * s, 0,
-                          p0._y * p0._x * (1 - c) - p0._z * s, p0._y * p0._y * (1 - c) + c, p0._y * p0._z * (1 - c) + p0._x * s, 0,
-                          p0._x * p0._z * (1 - c) + p0._y * s, p0._y * p0._z * (1 - c) - p0._x * s, p0._z * p0._z * (1 - c) + c, 0,
+  return MutableMatrix44D(a._x * a._x * (1 - c) + c, a._x * a._y * (1 - c) + a._z * s, a._x * a._z * (1 - c) - a._y * s, 0,
+                          a._y * a._x * (1 - c) - a._z * s, a._y * a._y * (1 - c) + c, a._y * a._z * (1 - c) + a._x * s, 0,
+                          a._x * a._z * (1 - c) + a._y * s, a._y * a._z * (1 - c) - a._x * s, a._z * a._z * (1 - c) + c, 0,
                           0, 0, 0, 1);
 }
 
@@ -382,8 +383,6 @@ MutableMatrix44D MutableMatrix44D::createRotationMatrixFromNormal(const Vector3D
   const Vector3D tangent0 = getTangent0(normal);
   // Find another vector in the plane
   const Vector3D tangent1 = normal.cross(tangent0).normalized();
-  // Construct a 3x3 matrix by storing three vectors in the columns of the matrix
-  //  return ColumnVectorsToMatrix(tangent0, tangent1, normal);
 
 //  return MutableMatrix44D(tangent0._x, tangent1._x, normal._x, 0,
 //                          tangent0._y, tangent1._y, normal._y, 0,

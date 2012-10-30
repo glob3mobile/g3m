@@ -180,7 +180,7 @@ void Camera::setPitch(const Angle& angle) {
 
 void Camera::orbitTo(const Vector3D& pos) {
   const MutableVector3D finalPos = pos.asMutableVector3D();
-  const Vector3D axis      = _position.cross(finalPos).asVector3D();
+  const Vector3D        axis     = _position.cross(finalPos).asVector3D();
   if (axis.length()<1e-3) {
     return;
   }
