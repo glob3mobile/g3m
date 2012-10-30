@@ -107,40 +107,45 @@ public final class G3MWidget_Android
          setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
       }
 
-      //Double Tap Listener
-      _gestureDetector = new GestureDetector(this);
-      _doubleTapListener = new OnDoubleTapListener() {
+      if (!isInEditMode()) { // needed to avoid visual edition of this widget
+         //Double Tap Listener
+         _gestureDetector = new GestureDetector(this);
+         _doubleTapListener = new OnDoubleTapListener() {
 
-         @Override
-         public boolean onSingleTapConfirmed(final MotionEvent e) {
-            // TODO Auto-generated method stub
-            return false;
-         }
-
-
-         @Override
-         public boolean onDoubleTapEvent(final MotionEvent event) {
-            return true;
-         }
+            @Override
+            public boolean onSingleTapConfirmed(final MotionEvent e) {
+               // TODO Auto-generated method stub
+               return false;
+            }
 
 
-         @Override
-         public boolean onDoubleTap(final MotionEvent event) {
+            @Override
+            public boolean onDoubleTapEvent(final MotionEvent event) {
+               return true;
+            }
 
-            final TouchEvent te = _motionEventProcessor.processDoubleTapEvent(event);
 
-            queueEvent(new Runnable() {
-               @Override
-               public void run() {
-                  _g3mWidget.onTouchEvent(te);
-               }
-            });
+            @Override
+            public boolean onDoubleTap(final MotionEvent event) {
 
-            return true;
-         }
-      };
-      _gestureDetector.setOnDoubleTapListener(_doubleTapListener);
+               final TouchEvent te = _motionEventProcessor.processDoubleTapEvent(event);
 
+               queueEvent(new Runnable() {
+                  @Override
+                  public void run() {
+                     _g3mWidget.onTouchEvent(te);
+                  }
+               });
+
+               return true;
+            }
+         };
+         _gestureDetector.setOnDoubleTapListener(_doubleTapListener);
+      }
+      else {
+         _gestureDetector = null;
+         _doubleTapListener = null;
+      }
    }
 
 
@@ -488,5 +493,10 @@ public final class G3MWidget_Android
 
    public void resetCameraPosition() {
       getG3MWidget().resetCameraPosition();
+   }
+
+
+   public void setCameraPitch(final Angle angle) {
+      getG3MWidget().setCameraPitch(angle);
    }
 }
