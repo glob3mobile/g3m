@@ -436,15 +436,16 @@ public class Camera
 
   public final void orbitTo(Vector3D pos)
   {
-	MutableVector3D finalPos = pos.asMutableVector3D();
+	final MutableVector3D finalPos = pos.asMutableVector3D();
 	final Vector3D axis = _position.cross(finalPos).asVector3D();
 	if (axis.length()<1e-3)
 	{
 	  return;
 	}
 	final Angle angle = _position.angleBetween(finalPos);
-	final double dist = _position.length() - pos.length();
 	rotateWithAxis(axis, angle);
+  
+	final double dist = _position.length() - pos.length();
 	moveForward(dist);
   }
   public final void orbitTo(Geodetic3D g3d)

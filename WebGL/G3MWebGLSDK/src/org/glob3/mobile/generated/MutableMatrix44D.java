@@ -94,6 +94,16 @@ public class MutableMatrix44D
 	_columnMajorFloatArray = null;
   }
 
+  private static Vector3D getTangent0(Vector3D normal)
+  {
+	Vector3D tangent0 = normal.cross(new Vector3D(1, 0, 0));
+	if (tangent0.dot(tangent0) < 0.001)
+	{
+	  return normal.cross(new Vector3D(0, 1, 0)).normalized();
+	}
+	return tangent0.normalized();
+  }
+
 
   //CONTRUCTORS
   public MutableMatrix44D()
@@ -277,14 +287,6 @@ public class MutableMatrix44D
 	return new MutableMatrix44D(m00, m10, m20, m30, m01, m11, m21, m31, m02, m12, m22, m32, m03, m13, m23, m33);
   }
 
-
-  /*MutableMatrix44D MutableMatrix44D::transposed() const {
-   return MutableMatrix44D(_m00, _m01, _m02, _m03,
-   _m10, _m11, _m12, _m13,
-   _m20, _m21, _m22, _m23,
-   _m30, _m31, _m32, _m33);
-   }*/
-  
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: MutableMatrix44D inversed() const
   public final MutableMatrix44D inversed()
@@ -330,7 +332,12 @@ public class MutableMatrix44D
 	return new MutableMatrix44D(m00, m10, m20, m30, m01, m11, m21, m31, m02, m12, m22, m32, m03, m13, m23, m33);
   }
 
-  //MutableMatrix44D transposed() const;
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: MutableMatrix44D transposed() const
+  public final MutableMatrix44D transposed()
+  {
+	return new MutableMatrix44D(_m00, _m01, _m02, _m03, _m10, _m11, _m12, _m13, _m20, _m21, _m22, _m23, _m30, _m31, _m32, _m33);
+  }
 
   //METHODS TO EXTRACT VALUES FROM THE MATRIX
 
@@ -385,27 +392,27 @@ public class MutableMatrix44D
   {
 	if (_columnMajorFloatBuffer == null)
 	{
-  //    _columnMajorFloatBuffer = IFactory::instance()->createFloatBuffer(16);
-  //
-  //    _columnMajorFloatBuffer->rawPut( 0, (float) _m00);
-  //    _columnMajorFloatBuffer->rawPut( 1, (float) _m10);
-  //    _columnMajorFloatBuffer->rawPut( 2, (float) _m20);
-  //    _columnMajorFloatBuffer->rawPut( 3, (float) _m30);
-  //
-  //    _columnMajorFloatBuffer->rawPut( 4, (float) _m01);
-  //    _columnMajorFloatBuffer->rawPut( 5, (float) _m11);
-  //    _columnMajorFloatBuffer->rawPut( 6, (float) _m21);
-  //    _columnMajorFloatBuffer->rawPut( 7, (float) _m31);
-  //
-  //    _columnMajorFloatBuffer->rawPut( 8, (float) _m02);
-  //    _columnMajorFloatBuffer->rawPut( 9, (float) _m12);
-  //    _columnMajorFloatBuffer->rawPut(10, (float) _m22);
-  //    _columnMajorFloatBuffer->rawPut(11, (float) _m32);
-  //
-  //    _columnMajorFloatBuffer->rawPut(12, (float) _m03);
-  //    _columnMajorFloatBuffer->rawPut(13, (float) _m13);
-  //    _columnMajorFloatBuffer->rawPut(14, (float) _m23);
-  //    _columnMajorFloatBuffer->rawPut(15, (float) _m33);
+	  //    _columnMajorFloatBuffer = IFactory::instance()->createFloatBuffer(16);
+	  //
+	  //    _columnMajorFloatBuffer->rawPut( 0, (float) _m00);
+	  //    _columnMajorFloatBuffer->rawPut( 1, (float) _m10);
+	  //    _columnMajorFloatBuffer->rawPut( 2, (float) _m20);
+	  //    _columnMajorFloatBuffer->rawPut( 3, (float) _m30);
+	  //
+	  //    _columnMajorFloatBuffer->rawPut( 4, (float) _m01);
+	  //    _columnMajorFloatBuffer->rawPut( 5, (float) _m11);
+	  //    _columnMajorFloatBuffer->rawPut( 6, (float) _m21);
+	  //    _columnMajorFloatBuffer->rawPut( 7, (float) _m31);
+	  //
+	  //    _columnMajorFloatBuffer->rawPut( 8, (float) _m02);
+	  //    _columnMajorFloatBuffer->rawPut( 9, (float) _m12);
+	  //    _columnMajorFloatBuffer->rawPut(10, (float) _m22);
+	  //    _columnMajorFloatBuffer->rawPut(11, (float) _m32);
+	  //
+	  //    _columnMajorFloatBuffer->rawPut(12, (float) _m03);
+	  //    _columnMajorFloatBuffer->rawPut(13, (float) _m13);
+	  //    _columnMajorFloatBuffer->rawPut(14, (float) _m23);
+	  //    _columnMajorFloatBuffer->rawPut(15, (float) _m33);
   
 	  _columnMajorFloatBuffer = IFactory.instance().createFloatBuffer((float) _m00, (float) _m10, (float) _m20, (float) _m30, (float) _m01, (float) _m11, (float) _m21, (float) _m31, (float) _m02, (float) _m12, (float) _m22, (float) _m32, (float) _m03, (float) _m13, (float) _m23, (float) _m33);
 	}
@@ -536,14 +543,14 @@ public class MutableMatrix44D
     
 	}
 
-	public static MutableMatrix44D createRotationMatrix(Angle angle, Vector3D p)
+	public static MutableMatrix44D createRotationMatrix(Angle angle, Vector3D axis)
 	{
-	  final Vector3D p0 = p.normalized();
+	  final Vector3D a = axis.normalized();
     
 	  final double c = angle.cosinus();
 	  final double s = angle.sinus();
     
-	  return new MutableMatrix44D(p0._x * p0._x * (1 - c) + c, p0._x * p0._y * (1 - c) + p0._z * s, p0._x * p0._z * (1 - c) - p0._y * s, 0, p0._y * p0._x * (1 - c) - p0._z * s, p0._y * p0._y * (1 - c) + c, p0._y * p0._z * (1 - c) + p0._x * s, 0, p0._x * p0._z * (1 - c) + p0._y * s, p0._y * p0._z * (1 - c) - p0._x * s, p0._z * p0._z * (1 - c) + c, 0, 0, 0, 0, 1);
+	  return new MutableMatrix44D(a._x * a._x * (1 - c) + c, a._x * a._y * (1 - c) + a._z * s, a._x * a._z * (1 - c) - a._y * s, 0, a._y * a._x * (1 - c) - a._z * s, a._y * a._y * (1 - c) + c, a._y * a._z * (1 - c) + a._x * s, 0, a._x * a._z * (1 - c) + a._y * s, a._y * a._z * (1 - c) - a._x * s, a._z * a._z * (1 - c) + c, 0, 0, 0, 0, 1);
 	}
 
 	public static MutableMatrix44D createGeneralRotationMatrix(Angle angle, Vector3D axis, Vector3D point)
@@ -589,4 +596,21 @@ public class MutableMatrix44D
     
 	  return new MutableMatrix44D(2 / rl, 0, 0, 0, 0, 2 / tb, 0, 0, 0, 0, -2 / fn, 0, -(right+left) / rl, -(top+bottom) / tb, -(zfar+znear) / fn, 1);
 	}
+
+
+	public static MutableMatrix44D createRotationMatrixFromNormal(Vector3D normal)
+	{
+	  // Find a vector in the plane
+	  final Vector3D tangent0 = getTangent0(normal);
+	  // Find another vector in the plane
+	  final Vector3D tangent1 = normal.cross(tangent0).normalized();
+    
+	//  return MutableMatrix44D(tangent0._x, tangent1._x, normal._x, 0,
+	//                          tangent0._y, tangent1._y, normal._y, 0,
+	//                          tangent0._z, tangent1._z, normal._z, 0,
+	//                          0, 0, 0, 1).transposed();
+    
+	  return new MutableMatrix44D(tangent0._x, tangent0._y, tangent0._z, 0, tangent1._x, tangent1._y, tangent1._z, 0, normal._x, normal._y, normal._z, 0, 0, 0, 0, 1);
+	}
+
   }

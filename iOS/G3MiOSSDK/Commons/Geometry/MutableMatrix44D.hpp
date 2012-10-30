@@ -87,7 +87,9 @@ private:
     _columnMajorFloatBuffer = NULL;
     _columnMajorFloatArray  = NULL;
   }
-  
+
+  static Vector3D getTangent0(const Vector3D& normal);
+
 public:
   
   //CONTRUCTORS
@@ -267,7 +269,8 @@ public:
     
     static MutableMatrix44D createTranslationMatrix(const Vector3D& t);
     
-    static MutableMatrix44D createRotationMatrix(const Angle& angle, const Vector3D& p);
+    static MutableMatrix44D createRotationMatrix(const Angle& angle,
+                                                 const Vector3D& axis);
     
     static MutableMatrix44D createGeneralRotationMatrix(const Angle& angle,
                                                         const Vector3D& axis,
@@ -287,7 +290,6 @@ public:
                                                                double bottom, double top,
                                                                double znear, double zfar);
 
-    static Vector3D getTangent0(const Vector3D& normal);
 
     static MutableMatrix44D createRotationMatrixFromNormal(const Vector3D& normal);
 

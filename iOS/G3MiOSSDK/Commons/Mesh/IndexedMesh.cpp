@@ -18,7 +18,8 @@ IndexedMesh::~IndexedMesh() {
   if (_owner){
     delete _vertices;
     delete _indices;
-    if (_colors != NULL) delete _colors;
+    delete _colors;
+    delete _flatColor;
   }
 
   if (_extent != NULL) delete _extent;
@@ -31,7 +32,7 @@ IndexedMesh::IndexedMesh(const int primitive,
                          IFloatBuffer* vertices,
                          IIntBuffer* indices,
                          float lineWidth,
-                         const Color* flatColor,
+                         Color* flatColor,
                          IFloatBuffer* colors,
                          const float colorsIntensity) :
 _primitive(primitive),
