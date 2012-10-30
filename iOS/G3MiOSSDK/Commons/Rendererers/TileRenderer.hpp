@@ -389,7 +389,12 @@ public:
   }
 
   void setEnable(bool enable) {
+#ifdef C_CODE
     LeafRenderer::setEnable(enable);
+#endif
+#ifdef JAVA_CODE
+    super.setEnable(enable);
+#endif
 
     if (!enable) {
       pruneTopLevelTiles();
