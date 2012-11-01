@@ -82,10 +82,10 @@ Mesh* QuadShape::createMesh(const RenderContext* rc) {
   }
 
   FloatBufferBuilderFromCartesian2D texCoords;
-  texCoords.add(1, 1);
-  texCoords.add(1, 0);
   texCoords.add(0, 1);
+  texCoords.add(1, 1);
   texCoords.add(0, 0);
+  texCoords.add(1, 0);
 
   TextureMapping* texMap = new SimpleTextureMapping(texId,
                                                     texCoords.create(),
@@ -123,8 +123,11 @@ void QuadShape::render(const RenderContext* rc) {
     gl->multMatrixf(translationMatrix);
 
 
-    const MutableMatrix44D rotationMatrix = MutableMatrix44D::createRotationMatrixFromNormal( planet->geodeticSurfaceNormal(_position) );
-
+    //const MutableMatrix44D rotationMatrix = MutableMatrix44D::createRotationMatrixFromNormal( planet->geodeticSurfaceNormal(_position) );
+    
+    const MutableMatrix44D rotationMatrix = planet->orientationMatrix(_position);
+    
+    
 ////    const Vector3D pos  = rc->getCurrentCamera()->getCartesianPosition();
 //    const Vector3D pos  = planet->toCartesian(Geodetic3D(Angle::zero(), Angle::zero(), 0));
 //    const Vector3D axis = pos.cross(cartesianPosition);

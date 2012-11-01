@@ -251,12 +251,23 @@
   std::string textureFileName = "g3m-marker.png";
   IImage* textureImage = IFactory::instance()->createImageFromFileName(textureFileName);
 
-  QuadShape* quad = new QuadShape(Geodetic3D(Angle::fromDegrees(37.78333333),
+  /*QuadShape* quad = new QuadShape(Geodetic3D(Angle::fromDegrees(37.78333333),
                                              Angle::fromDegrees(-122.41666666666667),
                                              10000),
                                   textureImage, true, textureFileName,
                                   500000, 500000);
-  shapesRenderer->addShape(quad);
+  shapesRenderer->addShape(quad);*/
+  
+  QuadShape* quad_gus = new QuadShape(Geodetic3D(Angle::fromDegrees(60),
+                                             Angle::fromDegrees(90),
+                                             10000),
+                                  textureImage, true, textureFileName,
+                                  3000000, 3000000);
+  shapesRenderer->addShape(quad_gus);
+  
+  
+  
+  
   renderers.push_back(shapesRenderer);
 
 

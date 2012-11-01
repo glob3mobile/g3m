@@ -378,7 +378,8 @@ Vector3D MutableMatrix44D::getTangent0(const Vector3D& normal) {
   return tangent0.normalized();
 }
 
-MutableMatrix44D MutableMatrix44D::createRotationMatrixFromNormal(const Vector3D& normal) {
+/*
+ MutableMatrix44D MutableMatrix44D::createRotationMatrixFromNormal(const Vector3D& normal) {
   // Find a vector in the plane
   const Vector3D tangent0 = getTangent0(normal);
   // Find another vector in the plane
@@ -393,4 +394,6 @@ MutableMatrix44D MutableMatrix44D::createRotationMatrixFromNormal(const Vector3D
                           tangent1._x, tangent1._y, tangent1._z, 0,
                           normal._x,   normal._y,   normal._z,   0,
                           0, 0, 0, 1);
-}
+}*/
+
+

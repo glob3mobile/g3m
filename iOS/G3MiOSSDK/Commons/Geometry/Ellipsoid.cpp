@@ -327,3 +327,20 @@ Vector3D Ellipsoid::closestPointToSphere(const Vector3D& pos, const Vector3D& ra
   Vector3D p = pos.add(ray.times(t));
   return p;
 }
+
+
+MutableMatrix44D Ellipsoid::orientationMatrix(const Geodetic3D& position) const
+{
+  // define rotation matrix to init orientation to latlon(0,0)
+  MutableMatrix44D M(0,1,0,0,0,0,1,0,1,0,0,0,0,0,0,1);
+  
+  // orbit reference system to geodetic position
+  //const Vector3D cartesianPosition = toCartesian(position);
+  //M.multiply(MutableMatrix44D::createTranslationMatrix(cartesianPosition.times(-1)));
+  MutableMatrix44D Rlon = MutableMatrix44D::createRotationMatrix(position.longitude(), Vector3D(0,1,0));
+  MutableMatrix44D Rlat = MutableMatrix44D::createRotationMatrix(position.latitude(), Vector3D(-1,0,0));
+    
+  return M.multiply(Rlon).multiply(Rlat);
+}
+
+
