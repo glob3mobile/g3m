@@ -33,6 +33,9 @@ public:
   _textureMapping(textureMapping),
   _ownedTexMapping(ownedTexMapping)
   {
+    GLState* state = _mesh->getGLState();
+    state->enableTextures();
+    state->enableTexture2D();
   }
   
   ~TexturedMesh(){

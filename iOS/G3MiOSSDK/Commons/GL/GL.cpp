@@ -391,7 +391,7 @@ void GL::drawBillBoard(const IGLTextureId* textureId,
   
   //disableDepthTest();
   
-  enableTexture2D();
+  //enableTexture2D();
   color(1, 1, 1, 1);
   
   bindTexture(textureId);
@@ -406,7 +406,7 @@ void GL::drawBillBoard(const IGLTextureId* textureId,
   _gl->uniform1i(Uniforms.BillBoard, 0);
 }
 
-// state handling
+/*// state handling
 void GL::enableTextures() {
   if (!_enableTextures) {
     _gl->enableVertexAttribArray(Attributes.TextureCoord);
@@ -433,7 +433,7 @@ void GL::disableTexture2D() {
     _gl->uniform1i(Uniforms.EnableTexture, 0);
     _enableTexture2D = false;
   }
-}
+}*/
 
 void GL::enableVertexColor(IFloatBuffer* colors, float intensity) {
   
@@ -609,6 +609,22 @@ void GL::setState(GLState *state) {
       _gl->enable(GLFeature::blend()); 
     else 
       _gl->disable(GLFeature::blend());
+  }
+  
+  if (_enableTextures != state->isEnabledTextures()) {
+    _enableTextures = state->isEnabledTextures();
+    if (_enableTextures) 
+      _gl->enableVertexAttribArray(Attributes.TextureCoord); 
+    else 
+      _gl->disableVertexAttribArray(Attributes.TextureCoord);
+  }
+  
+  if (_enableTexture2D != state->isEnabledTexture2D()) {
+    _enableTexture2D = state->isEnabledTexture2D();
+    if (_enableTexture2D) 
+      _gl->uniform1i(Uniforms.EnableTexture, 1);
+    else 
+      _gl->uniform1i(Uniforms.EnableTexture, 0);
   }
 }
 

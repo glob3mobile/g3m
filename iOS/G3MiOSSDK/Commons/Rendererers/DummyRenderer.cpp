@@ -94,7 +94,7 @@ void DummyRenderer::render(const RenderContext* rc) {
   gl->enableVerticesPosition();
   
   // insert pointers
-  gl->disableTextures();
+  //gl->disableTextures();
   gl->vertexPointer(3, 0, _vertices);
  
   {
@@ -162,6 +162,6 @@ void DummyRenderer::render(const RenderContext* rc) {
     gl->popMatrix();
   }
   
-  gl->enableTextures();
+  //gl->enableTextures();
   
 }

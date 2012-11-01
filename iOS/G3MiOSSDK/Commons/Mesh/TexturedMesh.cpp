@@ -12,16 +12,16 @@
 
 void TexturedMesh::render(const RenderContext* rc) const
 {
-  GL *gl = rc->getGL();
+  //GL *gl = rc->getGL();
   
-  gl->enableTextures();
-  gl->enableTexture2D();
+  //gl->enableTextures();
+  //gl->enableTexture2D();
   
   _textureMapping->bind(rc);
   
   _mesh->render(rc);
   
-  gl->disableTexture2D();
-  gl->disableTextures();
+  //gl->disableTexture2D();
+  //gl->disableTextures();
 
 }

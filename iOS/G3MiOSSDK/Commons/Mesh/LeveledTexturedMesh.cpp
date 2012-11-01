@@ -126,17 +126,20 @@ void LeveledTexturedMesh::render(const RenderContext* rc) const {
     _mesh->render(rc);
   }
   else {
-    GL *gl = rc->getGL();
+    //GL *gl = rc->getGL();
+    GLState* state = _mesh->getGLState();
+    state->enableTextures();
+    state->enableTexture2D();
     
-    gl->enableTextures();
-    gl->enableTexture2D();
+    //gl->enableTextures();
+    //gl->enableTexture2D();
     
     mapping->bind(rc);
     
     _mesh->render(rc);
     
-    gl->disableTexture2D();
-    gl->disableTextures();
+    //gl->disableTexture2D();
+    //gl->disableTextures();
   }
 }
 

@@ -47,10 +47,9 @@ private:
   // state handling
   bool _enableDepthTest;
   bool _enableBlend;
-
-
   bool _enableTextures;
   bool _enableTexture2D;
+  
   bool _enableVertexColor;
   bool _enableVerticesPosition;
   bool _enableFlatColor;
@@ -152,22 +151,22 @@ public:
   
   void enableVerticesPosition();
   
-  void enableTextures();
+  //void enableTextures();
   
   void verticesColors(bool v);
   
-  void enableTexture2D();
+  //void enableTexture2D();
   
   void enableVertexFlatColor(float r, float g, float b, float a,
                              float intensity);
   
   void disableVertexFlatColor();
   
-  void disableTexture2D();
+  //void disableTexture2D();
   
   void disableVerticesPosition();
   
-  void disableTextures();
+  //void disableTextures();
   
   void clearScreen(float r, float g, float b, float a);
   

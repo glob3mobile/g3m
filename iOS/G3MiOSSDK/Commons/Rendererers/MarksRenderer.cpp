@@ -23,6 +23,8 @@ _autoDeleteMarkTouchListener(false)
   _glState = new GLState;
   _glState->disableDepthTest();
   _glState->enableBlend();
+  _glState->enableTextures();
+  _glState->enableTexture2D();
 }
 
 MarksRenderer::~MarksRenderer() {
@@ -145,7 +147,7 @@ void MarksRenderer::render(const RenderContext* rc) {
   GL* gl = rc->getGL();
   
   gl->enableVerticesPosition();
-  gl->enableTextures();
+  //gl->enableTextures();
   //gl->enableBlend();
   
   //gl->disableDepthTest();
@@ -167,7 +169,7 @@ void MarksRenderer::render(const RenderContext* rc) {
   //gl->enableDepthTest();
   //gl->disableBlend();
   
-  gl->disableTextures();
+  //gl->disableTextures();
   gl->disableVerticesPosition();
-  gl->disableTexture2D();
+  //gl->disableTexture2D();
 }
