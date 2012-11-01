@@ -531,7 +531,7 @@ void GL::setBlendFuncSrcAlpha() {
   _gl->blendFunc(GLBlendFactor::srcAlpha(), GLBlendFactor::oneMinusSrcAlpha());
 }
 
-void GL::enableCullFace(int face) {
+/*void GL::enableCullFace(int face) {
   if (!_enableCullFace) {
     _gl->enable(GLFeature::cullFace());
     _enableCullFace = true;
@@ -548,7 +548,7 @@ void GL::disableCullFace() {
     _gl->disable(GLFeature::cullFace());
     _enableCullFace = false;
   }
-}
+}*/
 
 const IGLTextureId* GL::getGLTextureId() {
   if (_texturesIdBag.size() == 0) {
@@ -673,6 +673,20 @@ void GL::setState(GLState *state) {
     }
   } else 
       _gl->uniform1i(Uniforms.EnableFlatColor, 0);
+  
+  // Cull Face
+  if (_enableCullFace != state->isEnabledCullFace()) {
+    _enableCullFace = state->isEnabledCullFace();
+    if (_enableCullFace) { 
+      _gl->enable(GLFeature::cullFace());
+      int face = state->getCulledFace();
+      if (_cullFace_face != face) {
+        _gl->cullFace(face);
+        _cullFace_face = face;
+      }
+    } else 
+      _gl->disable(GLFeature::cullFace());
+  }
   
 }
 

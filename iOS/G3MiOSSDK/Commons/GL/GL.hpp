@@ -52,7 +52,6 @@ private:
   bool _enableVertexColor;
   bool _enableVerticesPosition;
   bool _enableFlatColor;
-  
   bool _enableCullFace;
   
   int _cullFace_face;
@@ -230,8 +229,8 @@ public:
   
   void deleteTexture(const IGLTextureId* textureId);
   
-  void enableCullFace(int face);
-  void disableCullFace();
+  /*void enableCullFace(int face);
+  void disableCullFace();*/
   
   void transformTexCoords(float scaleX,
                           float scaleY,

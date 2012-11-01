@@ -154,7 +154,7 @@ G3MWidget* G3MWidget::create(GL*                              gl,
 void G3MWidget::initializeGL() {
   //_gl->enableDepthTest();
 
-  _gl->enableCullFace(GLCullFace::back());
+  //_gl->enableCullFace(GLCullFace::back());
 }
 
 G3MWidget::~G3MWidget() {

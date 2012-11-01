@@ -12,6 +12,7 @@
 class IFloatBuffer;
 
 #include "Color.hpp"
+#include "GLConstants.hpp"
 
 class GLState {
   
@@ -23,6 +24,7 @@ private:
   bool _vertexColor;
   bool _verticesPosition;
   bool _flatColor;
+  bool _cullFace;
   
   IFloatBuffer* _colors;
   float         _intensity;
@@ -30,6 +32,7 @@ private:
   float         _flatColorG; 
   float         _flatColorB;
   float         _flatColorA; 
+  int           _culledFace;
 
   
 public:
@@ -40,7 +43,9 @@ public:
   _texture2D(false),
   _vertexColor(false),
   _verticesPosition(false),
-  _flatColor(false)
+  _flatColor(false),
+  _cullFace(true),
+  _culledFace(GLCullFace::back())
   {}
   
   void enableDepthTest() { _depthTest = true; }
@@ -86,6 +91,14 @@ public:
   Color getFlatColor() const { 
     return Color::fromRGBA(_flatColorR, _flatColorG, _flatColorB, _flatColorA);
   }
+  
+  void enableCullFace(int face) {
+    _cullFace   = true; 
+    _culledFace = face;
+  }
+  void disableCullFace() { _cullFace = false; }
+  bool isEnabledCullFace() const { return _cullFace; }
+  int getCulledFace() const { return _culledFace; }
   
 };
 
