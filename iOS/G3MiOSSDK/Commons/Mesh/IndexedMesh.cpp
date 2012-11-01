@@ -51,6 +51,8 @@ _translationMatrix(( center.isNan() || center.isZero() )
 _lineWidth(lineWidth)
 {
   _glState = new GLState;
+  if (_colors) 
+    _glState->enableVertexColor(_colors, _colorsIntensity);
 }
 
 void IndexedMesh::render(const RenderContext* rc) const {
@@ -59,12 +61,12 @@ void IndexedMesh::render(const RenderContext* rc) const {
   
   gl->enableVerticesPosition();
   
-  if (_colors == NULL) {
+/*  if (_colors == NULL) {
     gl->disableVertexColor();
   }
   else {
     gl->enableVertexColor(_colors, _colorsIntensity);
-  }
+  }*/
   
   if (_flatColor == NULL) {
     gl->disableVertexFlatColor();

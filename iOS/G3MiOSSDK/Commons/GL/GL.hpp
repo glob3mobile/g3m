@@ -49,8 +49,8 @@ private:
   bool _enableBlend;
   bool _enableTextures;
   bool _enableTexture2D;
-  
   bool _enableVertexColor;
+  
   bool _enableVerticesPosition;
   bool _enableFlatColor;
   bool _enableCullFace;
@@ -172,9 +172,9 @@ public:
   
   void color(float r, float g, float b, float a);
   
-  void enableVertexColor(IFloatBuffer* colors, float intensity);
+  //void enableVertexColor(IFloatBuffer* colors, float intensity);
   
-  void disableVertexColor();
+  //void disableVertexColor();
   
   void pushMatrix();
   

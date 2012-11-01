@@ -435,7 +435,7 @@ void GL::disableTexture2D() {
   }
 }*/
 
-void GL::enableVertexColor(IFloatBuffer* colors, float intensity) {
+/*void GL::enableVertexColor(IFloatBuffer* colors, float intensity) {
   
   if (!_enableVertexColor) {
     _gl->uniform1i(Uniforms.EnableColorPerVertex, 1);
@@ -459,7 +459,7 @@ void GL::disableVertexColor() {
     _gl->uniform1i(Uniforms.EnableColorPerVertex, 0);
     _enableVertexColor = false;
   }
-}
+}*/
 
 void GL::enableVerticesPosition() {
   if (!_enableVerticesPosition) {
@@ -626,6 +626,47 @@ void GL::setState(GLState *state) {
     else 
       _gl->uniform1i(Uniforms.EnableTexture, 0);
   }
+  
+  if (_enableVertexColor != state->isEnabledVertexColor()) {
+    _enableVertexColor = state->isEnabledVertexColor();
+    if (_enableVertexColor) {
+      _gl->uniform1i(Uniforms.EnableColorPerVertex, 1);
+      _gl->enableVertexAttribArray(Attributes.Color);
+      IFloatBuffer* colors = state->getColors();
+      if ((_colors != colors) ||
+          (_colorsTimestamp != colors->timestamp()) ) {
+        _gl->vertexAttribPointer(Attributes.Color, 4, false, 0, colors);
+        _colors = colors;
+        _colorsTimestamp = _colors->timestamp();
+      }
+    } else {
+      _gl->disableVertexAttribArray(Attributes.Color);
+      _gl->uniform1i(Uniforms.EnableColorPerVertex, 0);
+    }
+  }
+  
+  
+  
+  /*void GL::enableVertexColor(IFloatBuffer* colors, float intensity) {
+   
+   if (!_enableVertexColor) {
+   _gl->uniform1i(Uniforms.EnableColorPerVertex, 1);
+   _gl->enableVertexAttribArray(Attributes.Color);
+   _enableVertexColor = true;
+   }
+   
+   
+   _gl->uniform1f(Uniforms.ColorPerVertexIntensity, intensity);
+   }
+   
+   void GL::disableVertexColor() {
+   if (_enableVertexColor) {
+   _gl->disableVertexAttribArray(Attributes.Color);
+   _gl->uniform1i(Uniforms.EnableColorPerVertex, 0);
+   _enableVertexColor = false;
+   }
+   }*/
+
 }
 
 
