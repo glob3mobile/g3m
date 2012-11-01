@@ -196,7 +196,6 @@ void Tile::rawRender(const RenderContext *rc,
                      const TileRenderContext* trc) {
   
   int __TODO_include_glstate_in_TileRenderContext;
-  GLState state;
   
   Mesh* tessellatorMesh = getTessellatorMesh(rc, trc);
   
@@ -204,7 +203,7 @@ void Tile::rawRender(const RenderContext *rc,
   
   if (tessellatorMesh != NULL) {
     if (texturizer == NULL) {
-      tessellatorMesh->render(rc, state);
+      tessellatorMesh->render(rc);
     }
     else {
 //      const bool needsToCallTexturizer = (!isTextureSolved() || (_texturizedMesh == NULL)) && isTexturizerDirty();
@@ -219,10 +218,10 @@ void Tile::rawRender(const RenderContext *rc,
       }
       
       if (_texturizedMesh != NULL) {
-        _texturizedMesh->render(rc, state);
+        _texturizedMesh->render(rc);
       }
       else {
-        tessellatorMesh->render(rc, state);
+        tessellatorMesh->render(rc);
       }
     }
   }
@@ -231,10 +230,9 @@ void Tile::rawRender(const RenderContext *rc,
 
 void Tile::debugRender(const RenderContext* rc,
                        const TileRenderContext* trc) {
-  GLState state;
   Mesh* debugMesh = getDebugMesh(rc, trc);
   if (debugMesh != NULL) {
-    debugMesh->render(rc, state);
+    debugMesh->render(rc);
   }
 }
 

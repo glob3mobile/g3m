@@ -22,11 +22,14 @@ DummyRenderer::~DummyRenderer()
 #ifdef C_CODE
   delete _index;
   delete _vertices;
+  delete _glState;
 #endif
 }
 
 void DummyRenderer::initialize(const InitializationContext* ic)
 {
+  _glState = new GLState;
+  
   int res = 12;
   //_vertices = new float[res * res * 3];
   //_numIndices = 2 * (res - 1) * (res + 1);
@@ -85,9 +88,7 @@ void DummyRenderer::render(const RenderContext* rc) {
   
   // obtaing gl object reference
   GL *gl = rc->getGL();
-  
-  GLState state;
-  gl->setState(state);
+  gl->setState(_glState);
 
   
   gl->enableVerticesPosition();

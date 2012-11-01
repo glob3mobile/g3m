@@ -63,7 +63,6 @@ LeveledTexturedMesh::~LeveledTexturedMesh() {
     delete _mappings;
     _mappings = NULL;
   }
-  
 }
 
 int LeveledTexturedMesh::getVertexCount() const {
@@ -118,11 +117,13 @@ const IGLTextureId* LeveledTexturedMesh::getTopLevelGLTextureId() const {
 }
 
 
-void LeveledTexturedMesh::render(const RenderContext* rc, const GLState& state) const {
+void LeveledTexturedMesh::render(const RenderContext* rc) const {
   LazyTextureMapping* mapping = getCurrentTextureMapping();
   
+  
+  
   if (mapping == NULL) {
-    _mesh->render(rc, state);
+    _mesh->render(rc);
   }
   else {
     GL *gl = rc->getGL();
@@ -132,7 +133,7 @@ void LeveledTexturedMesh::render(const RenderContext* rc, const GLState& state) 
     
     mapping->bind(rc);
     
-    _mesh->render(rc, state);
+    _mesh->render(rc);
     
     gl->disableTexture2D();
     gl->disableTextures();

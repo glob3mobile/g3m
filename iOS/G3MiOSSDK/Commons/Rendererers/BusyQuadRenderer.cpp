@@ -84,8 +84,12 @@ bool BusyQuadRenderer::initMesh(const RenderContext* rc) {
                                                     texCoords.create(),
                                                     true);
   
-  _quadMesh = new TexturedMesh(im, true, texMap, true, false);
+  _quadMesh = new TexturedMesh(im, true, texMap, true);
   
+  // set mesh glstate
+  GLState* state = _quadMesh->getGLState();
+  state->enableBlend();
+
   return true;
 }
 
@@ -131,9 +135,7 @@ void BusyQuadRenderer::render(const RenderContext* rc) {
   gl->multMatrixf(R1.multiply(R2));
   
   // draw mesh
-  GLState state;
-  state.enableBlend();
-  _quadMesh->render(rc, state);
+  _quadMesh->render(rc);
   
   gl->popMatrix();
   

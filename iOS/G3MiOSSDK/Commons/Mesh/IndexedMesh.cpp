@@ -24,6 +24,7 @@ IndexedMesh::~IndexedMesh() {
 
   if (_extent != NULL) delete _extent;
   if (_translationMatrix != NULL) delete _translationMatrix;
+  delete _glState;
 }
 
 IndexedMesh::IndexedMesh(const int primitive,
@@ -49,11 +50,12 @@ _translationMatrix(( center.isNan() || center.isZero() )
                     : new MutableMatrix44D(MutableMatrix44D::createTranslationMatrix(center)) ),
 _lineWidth(lineWidth)
 {
+  _glState = new GLState;
 }
 
-void IndexedMesh::render(const RenderContext* rc, const GLState& state) const {
+void IndexedMesh::render(const RenderContext* rc) const {
   GL *gl = rc->getGL();
-  gl->setState(state);
+  gl->setState(_glState);
   
   gl->enableVerticesPosition();
   

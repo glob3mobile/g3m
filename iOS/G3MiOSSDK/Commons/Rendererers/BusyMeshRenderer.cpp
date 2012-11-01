@@ -68,6 +68,10 @@ void BusyMeshRenderer::initialize(const InitializationContext* ic)
                           1,
                           NULL,
                           colors.create());
+  
+  // set mesh glstate
+  GLState *state = _mesh->getGLState();
+  state->enableBlend();
 }
 
 void BusyMeshRenderer::start() {
@@ -113,9 +117,7 @@ void BusyMeshRenderer::render(const RenderContext* rc)
   gl->multMatrixf(R1.multiply(R2));
   
   // draw mesh
-  GLState state;
-  state.enableBlend();
-  _mesh->render(rc, state);
+  _mesh->render(rc);
   
   gl->popMatrix();
   

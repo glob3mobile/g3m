@@ -13,6 +13,32 @@
 #include "RectangleI.hpp"
 
 
+MarksRenderer::MarksRenderer(bool readyWhenMarksReady) :
+_readyWhenMarksReady(readyWhenMarksReady),
+_initializationContext(NULL),
+_lastCamera(NULL),
+_markTouchListener(NULL),
+_autoDeleteMarkTouchListener(false)
+{
+  _glState = new GLState;
+  _glState->disableDepthTest();
+  _glState->enableBlend();
+}
+
+MarksRenderer::~MarksRenderer() {
+  int marksSize = _marks.size();
+  for (int i = 0; i < marksSize; i++) {
+    delete _marks[i];
+  }
+  
+  if ( (_markTouchListener != NULL) && _autoDeleteMarkTouchListener ) {
+    delete _markTouchListener;
+  }
+  _markTouchListener = NULL;
+  delete _glState;
+};
+
+
 void MarksRenderer::initialize(const InitializationContext* ic) {
   _initializationContext = ic;
   
@@ -123,10 +149,7 @@ void MarksRenderer::render(const RenderContext* rc) {
   //gl->enableBlend();
   
   //gl->disableDepthTest();
-  GLState state; 
-  state.disableDepthTest();
-  state.enableBlend();
-  gl->setState(state);
+  gl->setState(_glState);
   
   const Vector3D radius = rc->getPlanet()->getRadii();
   const double minDistanceToCamera = (radius._x + radius._y + radius._z) / 3 * 0.75;

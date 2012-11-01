@@ -593,18 +593,18 @@ void GL::deleteTexture(const IGLTextureId* texture) {
   }
 }
 
-void GL::setState(GLState state) {
+void GL::setState(GLState *state) {
   
-  if (_enableDepthTest != state.isEnabledDepthTest()) {
-    _enableDepthTest = state.isEnabledDepthTest();
+  if (_enableDepthTest != state->isEnabledDepthTest()) {
+    _enableDepthTest = state->isEnabledDepthTest();
     if (_enableDepthTest) 
       _gl->enable(GLFeature::depthTest()); 
     else 
       _gl->disable(GLFeature::depthTest());
   }
 
-  if (_enableBlend != state.isEnabledBlend()) {
-    _enableBlend = state.isEnabledBlend();
+  if (_enableBlend != state->isEnabledBlend()) {
+    _enableBlend = state->isEnabledBlend();
     if (_enableBlend) 
       _gl->enable(GLFeature::blend()); 
     else 

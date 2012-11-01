@@ -21,22 +21,18 @@ private:
   const TextureMapping* _textureMapping;
   const bool            _ownedMesh;
   const bool            _ownedTexMapping;
-  const bool            _transparent;
   
 public:
   
   TexturedMesh(const Mesh* mesh,
                bool ownedMesh,
                TextureMapping* const textureMapping,
-               bool ownedTexMapping,
-               bool transparent) :
+               bool ownedTexMapping) :
   _mesh(mesh),
   _ownedMesh(ownedMesh),
   _textureMapping(textureMapping),
-  _ownedTexMapping(ownedTexMapping),
-  _transparent(transparent)
+  _ownedTexMapping(ownedTexMapping)
   {
-    
   }
   
   ~TexturedMesh(){
@@ -50,7 +46,7 @@ public:
 #endif
   }
   
-  void render(const RenderContext* rc, const GLState& state) const;
+  void render(const RenderContext* rc) const;
 
   Extent* getExtent()  const {
     return (_mesh == NULL) ? NULL : _mesh->getExtent();
@@ -68,6 +64,7 @@ public:
     return _textureMapping;
   }
 
+  GLState* getGLState() const { return _mesh->getGLState(); }
 };
 
 #endif

@@ -10,31 +10,18 @@
 
 #include "GL.hpp"
 
-void TexturedMesh::render(const RenderContext* rc, const GLState& state) const
+void TexturedMesh::render(const RenderContext* rc) const
 {
   GL *gl = rc->getGL();
-  gl->setState(state);
   
-  /*
-  // TEMP: THIS BLEND IS IN GIT CONFLICT!!
-  if (_transparent) {
-    gl->enableBlend();
-  }*/
-
   gl->enableTextures();
   gl->enableTexture2D();
   
   _textureMapping->bind(rc);
   
-  _mesh->render(rc, state);
+  _mesh->render(rc);
   
   gl->disableTexture2D();
   gl->disableTextures();
-
-  /*
-   // TEMP: THIS BLEND IS IN GIT CONFLICT!!
-  if (_transparent) {
-    gl->disableBlend();
-  }*/
 
 }

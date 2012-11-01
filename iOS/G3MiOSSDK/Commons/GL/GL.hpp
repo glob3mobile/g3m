@@ -349,7 +349,7 @@ public:
     _gl->deleteProgram(program);
   }
   
-  void setState(GLState state);
+  void setState(GLState* state);
 };
 
 #endif

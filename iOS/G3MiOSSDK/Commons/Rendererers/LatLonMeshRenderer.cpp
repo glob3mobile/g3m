@@ -48,6 +48,5 @@ void LatLonMeshRenderer::initialize(const InitializationContext* ic)
 
 
 void LatLonMeshRenderer::render(const RenderContext* rc) {  
-  GLState state;
-  _mesh->render(rc, state);
+  _mesh->render(rc);
 }

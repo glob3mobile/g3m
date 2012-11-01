@@ -33,6 +33,8 @@ private:
   
   Extent* computeExtent() const;
   
+  GLState*          _glState;
+  
   
 public:
   IndexedMesh(const int primitive,
@@ -47,13 +49,15 @@ public:
   
   ~IndexedMesh();
   
-  virtual void render(const RenderContext* rc, const GLState& state) const;
+  virtual void render(const RenderContext* rc) const;
   
   Extent* getExtent() const;
   
   int getVertexCount() const;
   
   const Vector3D getVertex(int i) const;
+  
+  GLState* getGLState() const { return _glState; }
   
 };
 

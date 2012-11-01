@@ -91,12 +91,13 @@ Mesh* QuadShape::createMesh(const RenderContext* rc) {
                                                     texCoords.create(),
                                                     true);
 
-  return new TexturedMesh(im, true, texMap, true, true);
+  return new TexturedMesh(im, true, texMap, true);
 }
 
 Mesh* QuadShape::getMesh(const RenderContext* rc) {
   if (_mesh == NULL) {
     _mesh = createMesh(rc);
+    _mesh->getGLState()->enableBlend();
   }
   return _mesh;
 }
@@ -125,9 +126,7 @@ void QuadShape::render(const RenderContext* rc) {
     const MutableMatrix44D rotationMatrix = planet->orientationMatrix(_position, _heading, _pitch);
     gl->multMatrixf(rotationMatrix);
 
-
-    GLState state;
-    mesh->render(rc, state);
+    mesh->render(rc);
 
     gl->popMatrix();
   }

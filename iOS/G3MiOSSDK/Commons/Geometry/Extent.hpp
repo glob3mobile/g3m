@@ -37,7 +37,7 @@ public:
   
   virtual Vector3D intersectionWithRay(const Vector3D& origin, const Vector3D& direction) const = 0;
   
-  virtual void render(const RenderContext* rc, const GLState& state) = 0;
+  virtual void render(const RenderContext* rc) = 0;
   
   virtual bool touchesBox(const Box *box) const = 0;
 

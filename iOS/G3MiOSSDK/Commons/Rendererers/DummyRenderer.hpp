@@ -13,13 +13,15 @@
 
 class IFloatBuffer;
 class IIntBuffer;
+class GLState;
 
 class DummyRenderer: public LeafRenderer {
 
 private:
-  double _halfSize;
+  double        _halfSize;
+  GLState*      _glState;
   
-  IIntBuffer* _index;
+  IIntBuffer*   _index;
   IFloatBuffer* _vertices;
 
 public:

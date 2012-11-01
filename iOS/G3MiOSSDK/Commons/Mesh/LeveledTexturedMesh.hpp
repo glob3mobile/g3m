@@ -50,7 +50,7 @@ private:
   mutable IFloatBuffer*    _texCoords;
   mutable MutableVector2D  _translation;
   mutable MutableVector2D  _scale;
-  
+    
   TexturesHandler* _texturesHandler;
   
   LazyTextureMapping& operator=(const LazyTextureMapping& that);
@@ -71,7 +71,6 @@ public:
   _texturesHandler(texturesHandler),
   _ownedTexCoords(ownedTexCoords)
   {
-    
   }
   
   virtual ~LazyTextureMapping() {
@@ -121,7 +120,7 @@ private:
   
   mutable int  _currentLevel;
   mutable bool _currentLevelIsValid;
-  
+    
   LazyTextureMapping* getCurrentTextureMapping() const;
 
 public:
@@ -146,7 +145,7 @@ public:
   
   const Vector3D getVertex(int i) const;
   
-  void render(const RenderContext* rc, const GLState& state) const;
+  void render(const RenderContext* rc) const;
   
   Extent* getExtent() const;
 
@@ -157,6 +156,8 @@ public:
 //                                      const const GLTextureId*glTextureId);
   
   const IGLTextureId* getTopLevelGLTextureId() const;
+  
+  GLState* getGLState() const { return _mesh->getGLState(); }
 
 };
 
