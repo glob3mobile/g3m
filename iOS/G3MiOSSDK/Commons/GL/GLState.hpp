@@ -11,6 +11,8 @@
 
 class IFloatBuffer;
 
+#include "Color.hpp"
+
 class GLState {
   
 private:
@@ -20,9 +22,14 @@ private:
   bool _texture2D;
   bool _vertexColor;
   bool _verticesPosition;
+  bool _flatColor;
   
   IFloatBuffer* _colors;
   float         _intensity;
+  float         _flatColorR;
+  float         _flatColorG; 
+  float         _flatColorB;
+  float         _flatColorA; 
 
   
 public:
@@ -32,7 +39,8 @@ public:
   _textures(false),
   _texture2D(false),
   _vertexColor(false),
-  _verticesPosition(false)
+  _verticesPosition(false),
+  _flatColor(false)
   {}
   
   void enableDepthTest() { _depthTest = true; }
@@ -56,14 +64,28 @@ public:
     _colors       = colors;
     _intensity    = intensity;
   }
-  
   void disableVertexColor() { _vertexColor = false; }
   bool isEnabledVertexColor() const { return _vertexColor; }
   IFloatBuffer* getColors() const { return _colors; }
+  float getIntensity() const { return _intensity; }
   
   void enableVerticesPosition() { _verticesPosition = true; }
   void disableVerticesPosition() { _verticesPosition = false; }
   bool isEnabledVerticesPosition() const { return _verticesPosition; }
+  
+  void enableFlatColor(const Color& c, float intensity) { 
+    _flatColor = true; 
+    _flatColorR = c.getRed();
+    _flatColorG = c.getGreen();
+    _flatColorB = c.getBlue();
+    _flatColorA= c.getAlpha();
+    _intensity = intensity;
+  }
+  void disableFlatColor() { _flatColor = false; }
+  bool isEnabledFlatColor() const { return _flatColor; }
+  Color getFlatColor() const { 
+    return Color::fromRGBA(_flatColorR, _flatColorG, _flatColorB, _flatColorA);
+  }
   
 };
 

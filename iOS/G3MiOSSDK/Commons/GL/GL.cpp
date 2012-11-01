@@ -475,7 +475,7 @@ void GL::disableVerticesPosition() {
   }
 }*/
 
-void GL::enableVertexFlatColor(float r, float g, float b, float a,
+/*void GL::enableVertexFlatColor(float r, float g, float b, float a,
                                float intensity) {
   if (!_enableFlatColor) {
     _gl->uniform1i(Uniforms.EnableFlatColor, 1);
@@ -496,7 +496,7 @@ void GL::disableVertexFlatColor() {
     _gl->uniform1i(Uniforms.EnableFlatColor, 0);
     _enableFlatColor = false;
   }
-}
+}*/
 
 /*void GL::enableDepthTest() {
   if (!_enableDepthTest) {
@@ -658,7 +658,21 @@ void GL::setState(GLState *state) {
     else 
       _gl->disableVertexAttribArray(Attributes.Position);
   }
-
+  
+  // Flat Color
+  if (_enableFlatColor != state->isEnabledFlatColor()) {
+    _enableFlatColor = state->isEnabledFlatColor();
+    if (_enableFlatColor) {
+      _gl->uniform1i(Uniforms.EnableFlatColor, 1);
+      color(state->getFlatColor());
+      float intensity = state->getIntensity();
+      if (_flatColorIntensity != intensity) {
+        _gl->uniform1f(Uniforms.FlatColorIntensity, intensity);
+        _flatColorIntensity = intensity;
+      }
+    }
+  } else 
+      _gl->uniform1i(Uniforms.EnableFlatColor, 0);
+  
 }
-
 

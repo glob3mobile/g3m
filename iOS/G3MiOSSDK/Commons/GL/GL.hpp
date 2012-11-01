@@ -51,8 +51,8 @@ private:
   bool _enableTexture2D;
   bool _enableVertexColor;
   bool _enableVerticesPosition;
-  
   bool _enableFlatColor;
+  
   bool _enableCullFace;
   
   int _cullFace_face;
@@ -157,10 +157,9 @@ public:
   
   //void enableTexture2D();
   
-  void enableVertexFlatColor(float r, float g, float b, float a,
-                             float intensity);
+  //void enableVertexFlatColor(float r, float g, float b, float a,float intensity);
   
-  void disableVertexFlatColor();
+  //void disableVertexFlatColor();
   
   //void disableTexture2D();
   
@@ -280,9 +279,9 @@ public:
                 col.getAlpha());
   }
   
-  void enableVertexFlatColor(const Color& c, float intensity) {
+  /*void enableVertexFlatColor(const Color& c, float intensity) {
     enableVertexFlatColor(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha(), intensity);
-  }
+  }*/
   
   void setBlendFuncSrcAlpha();
   
