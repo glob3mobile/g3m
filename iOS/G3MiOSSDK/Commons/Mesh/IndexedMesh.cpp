@@ -51,6 +51,7 @@ _translationMatrix(( center.isNan() || center.isZero() )
 _lineWidth(lineWidth)
 {
   _glState = new GLState;
+  _glState->enableVerticesPosition();
   if (_colors) 
     _glState->enableVertexColor(_colors, _colorsIntensity);
 }
@@ -59,7 +60,7 @@ void IndexedMesh::render(const RenderContext* rc) const {
   GL *gl = rc->getGL();
   gl->setState(_glState);
   
-  gl->enableVerticesPosition();
+  //gl->enableVerticesPosition();
   
 /*  if (_colors == NULL) {
     gl->disableVertexColor();
@@ -104,7 +105,7 @@ void IndexedMesh::render(const RenderContext* rc) const {
     gl->popMatrix();
   }
   
-  gl->disableVerticesPosition();
+  //gl->disableVerticesPosition();
 }
 
 

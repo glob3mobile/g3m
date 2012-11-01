@@ -19,6 +19,7 @@ private:
   bool _textures;
   bool _texture2D;
   bool _vertexColor;
+  bool _verticesPosition;
   
   IFloatBuffer* _colors;
   float         _intensity;
@@ -30,7 +31,8 @@ public:
   _blend(false),
   _textures(false),
   _texture2D(false),
-  _vertexColor(false)
+  _vertexColor(false),
+  _verticesPosition(false)
   {}
   
   void enableDepthTest() { _depthTest = true; }
@@ -58,6 +60,10 @@ public:
   void disableVertexColor() { _vertexColor = false; }
   bool isEnabledVertexColor() const { return _vertexColor; }
   IFloatBuffer* getColors() const { return _colors; }
+  
+  void enableVerticesPosition() { _verticesPosition = true; }
+  void disableVerticesPosition() { _verticesPosition = false; }
+  bool isEnabledVerticesPosition() const { return _verticesPosition; }
   
 };
 

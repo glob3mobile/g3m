@@ -226,14 +226,16 @@ void Camera::render(const RenderContext* rc) const {
     IIntBuffer* _indices = index.create();
     IFloatBuffer* _vertices = vertices.create();
 
-    gl->enableVerticesPosition();
+    GLState* state = new GLState;
+    state->enableVerticesPosition();
+    gl->setState(state);
     gl->vertexPointer(3, 0, _vertices);
     gl->lineWidth(2);
     gl->color(1, 0, 1, 1);
     gl->drawLineLoop(_indices);
-
     gl->lineWidth(1);
     gl->color(1, 1, 1, 1);
+    delete state;
   }
 
 

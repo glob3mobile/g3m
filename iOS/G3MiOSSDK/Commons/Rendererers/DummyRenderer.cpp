@@ -29,6 +29,7 @@ DummyRenderer::~DummyRenderer()
 void DummyRenderer::initialize(const InitializationContext* ic)
 {
   _glState = new GLState;
+  _glState->enableVerticesPosition();
   
   int res = 12;
   //_vertices = new float[res * res * 3];
@@ -91,7 +92,7 @@ void DummyRenderer::render(const RenderContext* rc) {
   gl->setState(_glState);
 
   
-  gl->enableVerticesPosition();
+  //gl->enableVerticesPosition();
   
   // insert pointers
   //gl->disableTextures();

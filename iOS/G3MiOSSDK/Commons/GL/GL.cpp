@@ -461,7 +461,7 @@ void GL::disableVertexColor() {
   }
 }*/
 
-void GL::enableVerticesPosition() {
+/*void GL::enableVerticesPosition() {
   if (!_enableVerticesPosition) {
     _gl->enableVertexAttribArray(Attributes.Position);
     _enableVerticesPosition = true;
@@ -473,7 +473,7 @@ void GL::disableVerticesPosition() {
     _gl->disableVertexAttribArray(Attributes.Position);
     _enableVerticesPosition = false;
   }
-}
+}*/
 
 void GL::enableVertexFlatColor(float r, float g, float b, float a,
                                float intensity) {
@@ -595,6 +595,7 @@ void GL::deleteTexture(const IGLTextureId* texture) {
 
 void GL::setState(GLState *state) {
   
+  // Depth Testh
   if (_enableDepthTest != state->isEnabledDepthTest()) {
     _enableDepthTest = state->isEnabledDepthTest();
     if (_enableDepthTest) 
@@ -603,6 +604,7 @@ void GL::setState(GLState *state) {
       _gl->disable(GLFeature::depthTest());
   }
 
+  // Blending
   if (_enableBlend != state->isEnabledBlend()) {
     _enableBlend = state->isEnabledBlend();
     if (_enableBlend) 
@@ -611,6 +613,7 @@ void GL::setState(GLState *state) {
       _gl->disable(GLFeature::blend());
   }
   
+  // Textures
   if (_enableTextures != state->isEnabledTextures()) {
     _enableTextures = state->isEnabledTextures();
     if (_enableTextures) 
@@ -619,6 +622,7 @@ void GL::setState(GLState *state) {
       _gl->disableVertexAttribArray(Attributes.TextureCoord);
   }
   
+  // Texture2D
   if (_enableTexture2D != state->isEnabledTexture2D()) {
     _enableTexture2D = state->isEnabledTexture2D();
     if (_enableTexture2D) 
@@ -627,6 +631,7 @@ void GL::setState(GLState *state) {
       _gl->uniform1i(Uniforms.EnableTexture, 0);
   }
   
+  // VertexColor
   if (_enableVertexColor != state->isEnabledVertexColor()) {
     _enableVertexColor = state->isEnabledVertexColor();
     if (_enableVertexColor) {
@@ -645,29 +650,15 @@ void GL::setState(GLState *state) {
     }
   }
   
-  
-  
-  /*void GL::enableVertexColor(IFloatBuffer* colors, float intensity) {
-   
-   if (!_enableVertexColor) {
-   _gl->uniform1i(Uniforms.EnableColorPerVertex, 1);
-   _gl->enableVertexAttribArray(Attributes.Color);
-   _enableVertexColor = true;
-   }
-   
-   
-   _gl->uniform1f(Uniforms.ColorPerVertexIntensity, intensity);
-   }
-   
-   void GL::disableVertexColor() {
-   if (_enableVertexColor) {
-   _gl->disableVertexAttribArray(Attributes.Color);
-   _gl->uniform1i(Uniforms.EnableColorPerVertex, 0);
-   _enableVertexColor = false;
-   }
-   }*/
+  // Vertices Position
+  if (_enableVerticesPosition != state->isEnabledVerticesPosition()) {
+    _enableVerticesPosition = state->isEnabledVerticesPosition();
+    if (_enableVerticesPosition) 
+      _gl->enableVertexAttribArray(Attributes.Position);
+    else 
+      _gl->disableVertexAttribArray(Attributes.Position);
+  }
 
 }
-
 
 

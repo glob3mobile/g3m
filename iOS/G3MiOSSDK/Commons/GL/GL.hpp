@@ -50,8 +50,8 @@ private:
   bool _enableTextures;
   bool _enableTexture2D;
   bool _enableVertexColor;
-  
   bool _enableVerticesPosition;
+  
   bool _enableFlatColor;
   bool _enableCullFace;
   
@@ -149,7 +149,7 @@ public:
     GLError::init(gl);
   }
   
-  void enableVerticesPosition();
+  //void enableVerticesPosition();
   
   //void enableTextures();
   
@@ -164,7 +164,7 @@ public:
   
   //void disableTexture2D();
   
-  void disableVerticesPosition();
+  //void disableVerticesPosition();
   
   //void disableTextures();
   
