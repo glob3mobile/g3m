@@ -32,12 +32,14 @@ private:
 
 public:
   QuadShape(const Geodetic3D& position,
+            Angle heading, 
+            Angle pitch,
             IImage* textureImage,
             bool autoDeleteTextureImage,
             const std::string textureFilename,
             int width,
             int height) :
-  Shape(position),
+  Shape(position, heading, pitch),
   _mesh(NULL),
   _textureFilename(textureFilename),
   _textureImage(textureImage),
