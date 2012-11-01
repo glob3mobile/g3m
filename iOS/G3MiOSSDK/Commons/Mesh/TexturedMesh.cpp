@@ -15,6 +15,12 @@ void TexturedMesh::render(const RenderContext* rc, const GLState& state) const
   GL *gl = rc->getGL();
   gl->setState(state);
   
+  /*
+  // TEMP: THIS BLEND IS IN GIT CONFLICT!!
+  if (_transparent) {
+    gl->enableBlend();
+  }*/
+
   gl->enableTextures();
   gl->enableTexture2D();
   
@@ -24,4 +30,11 @@ void TexturedMesh::render(const RenderContext* rc, const GLState& state) const
   
   gl->disableTexture2D();
   gl->disableTextures();
+
+  /*
+   // TEMP: THIS BLEND IS IN GIT CONFLICT!!
+  if (_transparent) {
+    gl->disableBlend();
+  }*/
+
 }

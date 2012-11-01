@@ -24,7 +24,7 @@ private:
   const MutableMatrix44D* _translationMatrix;
   IFloatBuffer*     _vertices;
   IIntBuffer*       _indices;
-  const Color*      _flatColor;
+  Color*            _flatColor;
   IFloatBuffer*     _colors;
   const float       _colorsIntensity;
   const float       _lineWidth;
@@ -41,7 +41,7 @@ public:
               IFloatBuffer* vertices,
               IIntBuffer* indices,
               float lineWidth,
-              const Color* flatColor = NULL,
+              Color* flatColor = NULL,
               IFloatBuffer* colors = NULL,
               const float colorsIntensity = (float)0.0);
   

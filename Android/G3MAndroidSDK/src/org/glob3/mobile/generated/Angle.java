@@ -241,6 +241,21 @@ public class Angle
 	return Angle.fromDegrees(dif);
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Angle normalized() const
+  public final Angle normalized()
+  {
+	double degrees = _degrees;
+	while (degrees < 0)
+	{
+	  degrees += 360;
+	}
+	while (degrees >= 360)
+	{
+	  degrees -= 360;
+	}
+	return new Angle(degrees);
+  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: boolean isZero() const

@@ -103,6 +103,10 @@
 		CF527E22162E35BA00E0BDE0 /* IGLProgramId.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D86EFDF51609BEDA002BF100 /* IGLProgramId.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF527E23162E35BA00E0BDE0 /* IGLUniformID.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D80D3A5D160A0A47004831C5 /* IGLUniformID.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF59DF8F15C04AFC002173EC /* ILogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF59DF8E15C04AFC002173EC /* ILogger.cpp */; };
+		CF5EA5D4163DDC7900D8F797 /* Shape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5EA5D2163DDC7900D8F797 /* Shape.cpp */; };
+		CF5EA5D5163DDC7900D8F797 /* Shape.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF5EA5D3163DDC7900D8F797 /* Shape.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CF5EA5D8163DDCB900D8F797 /* QuadShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5EA5D6163DDCB900D8F797 /* QuadShape.cpp */; };
+		CF5EA5D9163DDCB900D8F797 /* QuadShape.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF5EA5D7163DDCB900D8F797 /* QuadShape.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF6873A515F77F54002EDFD0 /* IFloatBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6873A315F77F54002EDFD0 /* IFloatBuffer.cpp */; };
 		CF6873A615F77F54002EDFD0 /* IFloatBuffer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF6873A415F77F54002EDFD0 /* IFloatBuffer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF6873AA15F77FFC002EDFD0 /* IIntBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF6873A815F77FFC002EDFD0 /* IIntBuffer.cpp */; };
@@ -152,6 +156,8 @@
 		CF9D832A15FF7A1C0069B555 /* Downloader_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFFEC11F15C2E9B0003FA986 /* Downloader_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
 		CF9D832B15FF7A1C0069B555 /* StringUtils_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFB72A6D15E682B400A5BAF4 /* StringUtils_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
 		CF9D832C15FF7A1C0069B555 /* ByteBuffer_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8E17DDC15FE2B4F00C980E6 /* ByteBuffer_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
+		CFA0BB62163DCFF6009185FE /* ShapesRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA0BB60163DCFF6009185FE /* ShapesRenderer.cpp */; };
+		CFA0BB63163DCFF6009185FE /* ShapesRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFA0BB61163DCFF6009185FE /* ShapesRenderer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFA1899A15F8D7CA0048BF46 /* FloatBuffer_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA1899815F8D7CA0048BF46 /* FloatBuffer_iOS.cpp */; };
 		CFA1899B15F8D7CA0048BF46 /* FloatBuffer_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFA1899915F8D7CA0048BF46 /* FloatBuffer_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
 		CFA1899F15F8D9F80048BF46 /* IntBuffer_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFA1899D15F8D9F80048BF46 /* IntBuffer_iOS.cpp */; };
@@ -366,6 +372,10 @@
 		CF527E1D162E33F500E0BDE0 /* LeafRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LeafRenderer.cpp; path = Commons/Rendererers/LeafRenderer.cpp; sourceTree = "<group>"; };
 		CF527E1E162E33F500E0BDE0 /* LeafRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LeafRenderer.hpp; path = Commons/Rendererers/LeafRenderer.hpp; sourceTree = "<group>"; };
 		CF59DF8E15C04AFC002173EC /* ILogger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ILogger.cpp; path = Commons/Interfaces/ILogger.cpp; sourceTree = "<group>"; };
+		CF5EA5D2163DDC7900D8F797 /* Shape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Shape.cpp; path = Commons/Rendererers/Shape.cpp; sourceTree = "<group>"; };
+		CF5EA5D3163DDC7900D8F797 /* Shape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Shape.hpp; path = Commons/Rendererers/Shape.hpp; sourceTree = "<group>"; };
+		CF5EA5D6163DDCB900D8F797 /* QuadShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = QuadShape.cpp; path = Commons/Rendererers/QuadShape.cpp; sourceTree = "<group>"; };
+		CF5EA5D7163DDCB900D8F797 /* QuadShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = QuadShape.hpp; path = Commons/Rendererers/QuadShape.hpp; sourceTree = "<group>"; };
 		CF6873A315F77F54002EDFD0 /* IFloatBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IFloatBuffer.cpp; path = Commons/Basic/IFloatBuffer.cpp; sourceTree = "<group>"; };
 		CF6873A415F77F54002EDFD0 /* IFloatBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IFloatBuffer.hpp; path = Commons/Basic/IFloatBuffer.hpp; sourceTree = "<group>"; };
 		CF6873A815F77FFC002EDFD0 /* IIntBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IIntBuffer.cpp; path = Commons/Basic/IIntBuffer.cpp; sourceTree = "<group>"; };
@@ -402,6 +412,8 @@
 		CF9CD89915DBE2C800C6FD7E /* CachedDownloader.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CachedDownloader.hpp; path = Commons/Interfaces/CachedDownloader.hpp; sourceTree = "<group>"; };
 		CF9D2D8615F7D3C100B5CE2E /* IBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IBuffer.cpp; path = Commons/Basic/IBuffer.cpp; sourceTree = "<group>"; };
 		CF9D2D8715F7D3C100B5CE2E /* IBuffer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IBuffer.hpp; path = Commons/Basic/IBuffer.hpp; sourceTree = "<group>"; };
+		CFA0BB60163DCFF6009185FE /* ShapesRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShapesRenderer.cpp; path = Commons/Rendererers/ShapesRenderer.cpp; sourceTree = "<group>"; };
+		CFA0BB61163DCFF6009185FE /* ShapesRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShapesRenderer.hpp; path = Commons/Rendererers/ShapesRenderer.hpp; sourceTree = "<group>"; };
 		CFA1899815F8D7CA0048BF46 /* FloatBuffer_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = FloatBuffer_iOS.cpp; path = Specific/Derived/FloatBuffer_iOS.cpp; sourceTree = "<group>"; };
 		CFA1899915F8D7CA0048BF46 /* FloatBuffer_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FloatBuffer_iOS.hpp; path = Specific/Derived/FloatBuffer_iOS.hpp; sourceTree = "<group>"; };
 		CFA1899D15F8D9F80048BF46 /* IntBuffer_iOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IntBuffer_iOS.cpp; path = Specific/Derived/IntBuffer_iOS.cpp; sourceTree = "<group>"; };
@@ -607,11 +619,15 @@
 				CF7E626015F7D6FC0086B71D /* FloatBufferBuilder.hpp */,
 				D8CD74D915F8DBE800B801CC /* FloatBufferBuilderFromCartesian2D.hpp */,
 				D8CD74D815F8D56800B801CC /* FloatBufferBuilderFromCartesian3D.hpp */,
+				D8C912D915F9FE78003F92A4 /* FloatBufferBuilderFromColor.hpp */,
 				D8CD74DD15F8DE9500B801CC /* FloatBufferBuilderFromGeodetic.hpp */,
 				CF73BFD915E114E3001CE412 /* FrameTasksExecutor.cpp */,
 				CF73BFDA15E114E3001CE412 /* FrameTasksExecutor.hpp */,
 				383BD3901577EE500012AC53 /* G3MWidget.cpp */,
 				D88B5E5115C162AF0083A43F /* G3MWidget.hpp */,
+				D8EB78831637F6B500C4EB57 /* GoToPositionEffect.hpp */,
+				CF527E19162E2B4200E0BDE0 /* GTask.cpp */,
+				CF527E1A162E2B4200E0BDE0 /* GTask.hpp */,
 				CF9D2D8615F7D3C100B5CE2E /* IBuffer.cpp */,
 				CF9D2D8715F7D3C100B5CE2E /* IBuffer.hpp */,
 				CF6873A315F77F54002EDFD0 /* IFloatBuffer.cpp */,
@@ -626,6 +642,7 @@
 				CF0C3967157F987200646A2F /* Mark.hpp */,
 				CFA71BE315D2E85600F8C78D /* MultiLayerTileTexturizer.cpp */,
 				CFA71BE115D2E84300F8C78D /* MultiLayerTileTexturizer.hpp */,
+				D81FB47C1636A5AE00CC2CA7 /* PeriodicalTask.hpp */,
 				CFE0844315E27B9A0004EC0E /* Petition.cpp */,
 				CFE0844415E27B9A0004EC0E /* Petition.hpp */,
 				CFF8C4BB15DEB6A70034A576 /* RCObject.cpp */,
@@ -650,11 +667,6 @@
 				CFFEC12415C2EB96003FA986 /* URL.hpp */,
 				CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */,
 				CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */,
-				D8C912D915F9FE78003F92A4 /* FloatBufferBuilderFromColor.hpp */,
-				CF527E19162E2B4200E0BDE0 /* GTask.cpp */,
-				CF527E1A162E2B4200E0BDE0 /* GTask.hpp */,
-				D81FB47C1636A5AE00CC2CA7 /* PeriodicalTask.hpp */,
-				D8EB78831637F6B500C4EB57 /* GoToPositionEffect.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -679,26 +691,26 @@
 				D8228EBC157F7F6100BBAF60 /* MutableMatrix44D.hpp */,
 				CF7A78EA159B9BE300074422 /* MutableVector2D.cpp */,
 				CF7A78EB159B9BE300074422 /* MutableVector2D.hpp */,
+				CF0A8181163303E800036277 /* MutableVector2I.cpp */,
+				CF0A8182163303E800036277 /* MutableVector2I.hpp */,
 				D84D5A2F157E0EAA000C5E35 /* MutableVector3D.cpp */,
 				D84D5A30157E0EAA000C5E35 /* MutableVector3D.hpp */,
 				CC41E39F15B1FD5B00B5581C /* Plane.cpp */,
 				CC41E39D15B1FD1300B5581C /* Plane.hpp */,
 				383BD3A61577EE5A0012AC53 /* Planet.hpp */,
 				D87EC5D215BEC73400E38C36 /* RectangleD.hpp */,
+				CFCEFF24163476F100FC4AB0 /* RectangleI.cpp */,
+				CFCEFF25163476F100FC4AB0 /* RectangleI.hpp */,
 				CF883BCA1594B9A500AEE39C /* Sector.cpp */,
 				38D786E71587B52F003BBC75 /* Sector.hpp */,
 				383BD3A71577EE5A0012AC53 /* Vector2D.cpp */,
 				383BD3A81577EE5A0012AC53 /* Vector2D.hpp */,
+				CFD314511631FFAD00B54ED3 /* Vector2I.cpp */,
+				CFD314521631FFAD00B54ED3 /* Vector2I.hpp */,
 				383BD3A91577EE5A0012AC53 /* Vector3D.cpp */,
 				383BD3AA1577EE5A0012AC53 /* Vector3D.hpp */,
 				CF3F3FEE1620FB2A00A92CC8 /* Vector4D.cpp */,
 				CF3F3FEF1620FB2A00A92CC8 /* Vector4D.hpp */,
-				CFD314511631FFAD00B54ED3 /* Vector2I.cpp */,
-				CFD314521631FFAD00B54ED3 /* Vector2I.hpp */,
-				CF0A8181163303E800036277 /* MutableVector2I.cpp */,
-				CF0A8182163303E800036277 /* MutableVector2I.hpp */,
-				CFCEFF24163476F100FC4AB0 /* RectangleI.cpp */,
-				CFCEFF25163476F100FC4AB0 /* RectangleI.hpp */,
 			);
 			name = Geometry;
 			sourceTree = "<group>";
@@ -706,14 +718,16 @@
 		383BD38B1577EE040012AC53 /* Interfaces */ = {
 			isa = PBXGroup;
 			children = (
-				D86EFDF51609BEDA002BF100 /* IGLProgramId.hpp */,
 				CF9CD89815DBE2C800C6FD7E /* CachedDownloader.cpp */,
 				CF9CD89915DBE2C800C6FD7E /* CachedDownloader.hpp */,
-				CF08483515D41EF700327171 /* IGLTextureId.hpp */,
+				D8E17DD515FE2ABF00C980E6 /* IByteBuffer.hpp */,
 				CFFEC11D15C2E645003FA986 /* IDownloader.cpp */,
 				CFFEC11B15C2E636003FA986 /* IDownloader.hpp */,
 				CFA189AD15F926CA0048BF46 /* IFactory.cpp */,
 				383BD3B81577EE630012AC53 /* IFactory.hpp */,
+				D86EFDF51609BEDA002BF100 /* IGLProgramId.hpp */,
+				CF08483515D41EF700327171 /* IGLTextureId.hpp */,
+				D80D3A5D160A0A47004831C5 /* IGLUniformID.hpp */,
 				CC14B64C157D35C100793C92 /* IImage.hpp */,
 				CF59DF8E15C04AFC002173EC /* ILogger.cpp */,
 				383BD3B91577EE630012AC53 /* ILogger.hpp */,
@@ -726,9 +740,7 @@
 				CFB72A6715E6808900A5BAF4 /* IStringUtils.cpp */,
 				CFB72A6815E6808900A5BAF4 /* IStringUtils.hpp */,
 				D8FEDAC615E7BD23007633A0 /* IMathUtils.hpp */,
-				D8E17DD515FE2ABF00C980E6 /* IByteBuffer.hpp */,
 				CF31CBF215878AF90085E8F1 /* ITimer.hpp */,
-				D80D3A5D160A0A47004831C5 /* IGLUniformID.hpp */,
 			);
 			name = Interfaces;
 			sourceTree = "<group>";
@@ -736,18 +748,18 @@
 		A7BF53831607643400662135 /* JSON */ = {
 			isa = PBXGroup;
 			children = (
-				A7BF53841607643400662135 /* JSONBaseObject.hpp */,
-				A70F5617161C94A100340256 /* JSONString.hpp */,
-				A7EE001B161B245600C77604 /* JSONBaseObject.cpp */,
-				A7EE00171619CE2B00C77604 /* JSONObject.hpp */,
-				A7EE00191619D01900C77604 /* JSONObject.cpp */,
-				A7EE001D161B25FD00C77604 /* JSONArray.hpp */,
-				A7EE001F161B274300C77604 /* JSONArray.cpp */,
-				A70F5604161B53D000340256 /* IJSONParser.hpp */,
 				A70F5607161B54A400340256 /* IJSONParser.cpp */,
+				A70F5604161B53D000340256 /* IJSONParser.hpp */,
+				A7EE001F161B274300C77604 /* JSONArray.cpp */,
+				A7EE001D161B25FD00C77604 /* JSONArray.hpp */,
+				A7EE001B161B245600C77604 /* JSONBaseObject.cpp */,
+				A7BF53841607643400662135 /* JSONBaseObject.hpp */,
+				A70F5615161C8F9A00340256 /* JSONBoolean.hpp */,
 				A70F5611161C4F8F00340256 /* JSONNumber.cpp */,
 				A70F5613161C4FD000340256 /* JSONNumber.hpp */,
-				A70F5615161C8F9A00340256 /* JSONBoolean.hpp */,
+				A7EE00191619D01900C77604 /* JSONObject.cpp */,
+				A7EE00171619CE2B00C77604 /* JSONObject.hpp */,
+				A70F5617161C94A100340256 /* JSONString.hpp */,
 			);
 			name = JSON;
 			path = Commons/JSON;
@@ -801,19 +813,25 @@
 				CCC2A02215CA6C7D00923850 /* GLErrorRenderer.hpp */,
 				CCC2A02515CA6C7D00923850 /* LatLonMeshRenderer.cpp */,
 				CCC2A02615CA6C7D00923850 /* LatLonMeshRenderer.hpp */,
+				CF527E1D162E33F500E0BDE0 /* LeafRenderer.cpp */,
+				CF527E1E162E33F500E0BDE0 /* LeafRenderer.hpp */,
 				CCC2A02315CA6C7D00923850 /* MarksRenderer.cpp */,
 				CCC2A02415CA6C7D00923850 /* MarksRenderer.hpp */,
 				CCC2A02715CA6C7D00923850 /* Renderer.hpp */,
+				CFA0BB60163DCFF6009185FE /* ShapesRenderer.cpp */,
+				CFA0BB61163DCFF6009185FE /* ShapesRenderer.hpp */,
 				CCC2A02A15CA6C7D00923850 /* SimplePlanetRenderer.cpp */,
 				CCC2A02B15CA6C7D00923850 /* SimplePlanetRenderer.hpp */,
 				CCC2A02C15CA6C7D00923850 /* TileRenderer.cpp */,
 				CCC2A02D15CA6C7D00923850 /* TileRenderer.hpp */,
 				CFA71BE815D2F6D200F8C78D /* TilesRenderParameters.cpp */,
 				CFA71BE715D2F6C500F8C78D /* TilesRenderParameters.hpp */,
-				CF527E1D162E33F500E0BDE0 /* LeafRenderer.cpp */,
-				CF527E1E162E33F500E0BDE0 /* LeafRenderer.hpp */,
 				CFCEFF4B163721EA00FC4AB0 /* TrailsRenderer.cpp */,
 				CFCEFF4C163721EA00FC4AB0 /* TrailsRenderer.hpp */,
+				CF5EA5D2163DDC7900D8F797 /* Shape.cpp */,
+				CF5EA5D3163DDC7900D8F797 /* Shape.hpp */,
+				CF5EA5D6163DDCB900D8F797 /* QuadShape.cpp */,
+				CF5EA5D7163DDCB900D8F797 /* QuadShape.hpp */,
 			);
 			name = Renderers;
 			sourceTree = "<group>";
@@ -821,6 +839,8 @@
 		D87EC5C015BEB12F00E38C36 /* Layers */ = {
 			isa = PBXGroup;
 			children = (
+				A74072D0161EEEB900182A39 /* BingLayer.cpp */,
+				A74072CE161EEEA300182A39 /* BingLayer.hpp */,
 				CFB72A3715E65BAC00A5BAF4 /* Layer.cpp */,
 				D87EC5C115BEB12F00E38C36 /* Layer.hpp */,
 				CFB72A3315E65B1F00A5BAF4 /* LayerCondition.cpp */,
@@ -833,8 +853,6 @@
 				D8E0EC1215C1B1BB0010A68A /* StaticImageLayer.hpp */,
 				D87EC5C415BEB12F00E38C36 /* WMSLayer.cpp */,
 				D87EC5C515BEB12F00E38C36 /* WMSLayer.hpp */,
-				A74072CE161EEEA300182A39 /* BingLayer.hpp */,
-				A74072D0161EEEB900182A39 /* BingLayer.cpp */,
 			);
 			name = Layers;
 			path = Commons/Layers;
@@ -843,13 +861,13 @@
 		D892FBCD15C930E600E69254 /* GL */ = {
 			isa = PBXGroup;
 			children = (
-				D8E76950160742FD008EC7B9 /* GLConstants.hpp */,
-				D81BA16E15CBF19E004EF0B0 /* GL.hpp */,
 				D81BA16F15CBF19E004EF0B0 /* GL.cpp */,
+				D81BA16E15CBF19E004EF0B0 /* GL.hpp */,
 				D81D2071160748EA009A8BA6 /* GLConstants.cpp */,
 				CC8EFFFC163BE8A0006586B0 /* GLState.hpp */,
 				CC733B461637EF040035C4CC /* ShaderProgram.hpp */,
 				CC733B481637F79E0035C4CC /* ShaderProgram.cpp */,
+				D8E76950160742FD008EC7B9 /* GLConstants.hpp */,
 			);
 			name = GL;
 			path = Commons/GL;
@@ -933,6 +951,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF5EA5D5163DDC7900D8F797 /* Shape.hpp in Headers */,
+				CF5EA5D9163DDCB900D8F797 /* QuadShape.hpp in Headers */,
+				CFA0BB63163DCFF6009185FE /* ShapesRenderer.hpp in Headers */,
 				CF6DD7851637488300685212 /* PeriodicalTask.hpp in Headers */,
 				CFCEFF4E163721EA00FC4AB0 /* TrailsRenderer.hpp in Headers */,
 				CFCEFF27163476F100FC4AB0 /* RectangleI.hpp in Headers */,
@@ -1227,6 +1248,9 @@
 				CFCEFF26163476F100FC4AB0 /* RectangleI.cpp in Sources */,
 				CFCEFF4D163721EA00FC4AB0 /* TrailsRenderer.cpp in Sources */,
 				CC733B491637F79E0035C4CC /* ShaderProgram.cpp in Sources */,
+				CFA0BB62163DCFF6009185FE /* ShapesRenderer.cpp in Sources */,
+				CF5EA5D4163DDC7900D8F797 /* Shape.cpp in Sources */,
+				CF5EA5D8163DDCB900D8F797 /* QuadShape.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

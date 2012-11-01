@@ -4,6 +4,7 @@ package org.glob3.mobile.specific;
 
 import java.util.ArrayList;
 
+import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BusyMeshRenderer;
 import org.glob3.mobile.generated.CachedDownloader;
 import org.glob3.mobile.generated.Camera;
@@ -43,6 +44,7 @@ import org.glob3.mobile.generated.Vector2I;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
@@ -81,7 +83,14 @@ public final class G3MWidget_Android
 
 
    public G3MWidget_Android(final Context context) {
-      super(context);
+      this(context, null);
+   }
+
+
+   // Needed to create widget from XML layout
+   public G3MWidget_Android(final Context context,
+                            final AttributeSet attrs) {
+      super(context, attrs);
 
       initSingletons();
 
@@ -98,43 +107,49 @@ public final class G3MWidget_Android
          setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
       }
 
-      //Double Tap Listener
-      _gestureDetector = new GestureDetector(this);
-      _doubleTapListener = new OnDoubleTapListener() {
+      if (!isInEditMode()) { // needed to avoid visual edition of this widget
+         //Double Tap Listener
+         _gestureDetector = new GestureDetector(this);
+         _doubleTapListener = new OnDoubleTapListener() {
 
-         @Override
-         public boolean onSingleTapConfirmed(final MotionEvent e) {
-            // TODO Auto-generated method stub
-            return false;
-         }
-
-
-         @Override
-         public boolean onDoubleTapEvent(final MotionEvent event) {
-            return true;
-         }
+            @Override
+            public boolean onSingleTapConfirmed(final MotionEvent e) {
+               // TODO Auto-generated method stub
+               return false;
+            }
 
 
-         @Override
-         public boolean onDoubleTap(final MotionEvent event) {
+            @Override
+            public boolean onDoubleTapEvent(final MotionEvent event) {
+               return true;
+            }
 
-            final TouchEvent te = _motionEventProcessor.processDoubleTapEvent(event);
 
-            queueEvent(new Runnable() {
-               @Override
-               public void run() {
-                  _g3mWidget.onTouchEvent(te);
-               }
-            });
+            @Override
+            public boolean onDoubleTap(final MotionEvent event) {
 
-            return true;
-         }
-      };
-      _gestureDetector.setOnDoubleTapListener(_doubleTapListener);
+               final TouchEvent te = _motionEventProcessor.processDoubleTapEvent(event);
+
+               queueEvent(new Runnable() {
+                  @Override
+                  public void run() {
+                     _g3mWidget.onTouchEvent(te);
+                  }
+               });
+
+               return true;
+            }
+         };
+         _gestureDetector.setOnDoubleTapListener(_doubleTapListener);
+      }
+      else {
+         _gestureDetector = null;
+         _doubleTapListener = null;
+      }
    }
 
 
-   public void initSingletons() {
+   private void initSingletons() {
       final ILogger logger = new Logger_Android(LogLevel.ErrorLevel);
       final IFactory factory = new Factory_Android(getContext());
       final IStringUtils stringUtils = new StringUtils_Android();
@@ -450,11 +465,6 @@ public final class G3MWidget_Android
    }
 
 
-   public G3MWidget getG3mWidget() {
-      return _g3mWidget;
-   }
-
-
    public void setAnimatedCameraPosition(final Geodetic3D position,
                                          final TimeInterval interval) {
       getG3MWidget().setAnimatedCameraPosition(position, interval);
@@ -473,5 +483,20 @@ public final class G3MWidget_Android
 
    public CameraRenderer getCameraRenderer() {
       return getG3MWidget().getCameraRenderer();
+   }
+
+
+   public void setCameraHeading(final Angle angle) {
+      getG3MWidget().setCameraHeading(angle);
+   }
+
+
+   public void resetCameraPosition() {
+      getG3MWidget().resetCameraPosition();
+   }
+
+
+   public void setCameraPitch(final Angle angle) {
+      getG3MWidget().setCameraPitch(angle);
    }
 }

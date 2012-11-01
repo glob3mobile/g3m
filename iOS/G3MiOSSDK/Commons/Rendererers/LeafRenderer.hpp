@@ -35,10 +35,17 @@ public:
   bool isEnable() const {
     return _enable;
   }
-  
+
+#ifdef C_CODE
   void setEnable(bool enable) {
     _enable = enable;
   }
+#endif
+#ifdef JAVA_CODE
+  public void setEnable(final boolean enable) {
+    _enable = enable;
+  }
+#endif
   
   virtual void onResume(const InitializationContext* ic) = 0;
   

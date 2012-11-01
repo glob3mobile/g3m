@@ -16,8 +16,36 @@ public final class Image_Android
          extends
             IImage {
 
-   final private Bitmap _bitmap;
-   private byte[]       _source;
+
+   private static class BitmapHolder {
+      private Bitmap _bitmap;
+      int            _referencesCount;
+
+
+      private BitmapHolder(final Bitmap bitmap) {
+         _bitmap = bitmap;
+         _referencesCount = 1;
+      }
+
+
+      private void _retain() {
+         _referencesCount++;
+      }
+
+
+      private void _release() {
+         _referencesCount--;
+         if (_referencesCount == 0) {
+            _bitmap.recycle();
+            _bitmap = null;
+         }
+      }
+   }
+
+
+   //   final private Bitmap _bitmap;
+   final private BitmapHolder _bitmapHolder;
+   private byte[]             _source;
 
 
    public Image_Android(final Bitmap bitmap,
@@ -26,25 +54,37 @@ public final class Image_Android
          throw new RuntimeException("Can't create an Image_Android with a null bitmap");
       }
 
-      _bitmap = bitmap;
+      _bitmapHolder = new BitmapHolder(bitmap);
+      _source = source;
+   }
+
+
+   private Image_Android(final BitmapHolder bitmapHolder,
+                         final byte[] source) {
+      if (bitmapHolder == null) {
+         throw new RuntimeException("Can't create an Image_Android with a null bitmap");
+      }
+      bitmapHolder._retain();
+
+      _bitmapHolder = bitmapHolder;
       _source = source;
    }
 
 
    public Bitmap getBitmap() {
-      return _bitmap;
+      return _bitmapHolder._bitmap;
    }
 
 
    @Override
    public int getWidth() {
-      return (_bitmap == null) ? 0 : _bitmap.getWidth();
+      return (_bitmapHolder._bitmap == null) ? 0 : _bitmapHolder._bitmap.getWidth();
    }
 
 
    @Override
    public int getHeight() {
-      return (_bitmap == null) ? 0 : _bitmap.getHeight();
+      return (_bitmapHolder._bitmap == null) ? 0 : _bitmapHolder._bitmap.getHeight();
    }
 
 
@@ -58,7 +98,7 @@ public final class Image_Android
    public IImage combineWith(final IImage transparent,
                              final int width,
                              final int height) {
-      final Bitmap bm1 = Bitmap.createBitmap(_bitmap, 0, 0, width, height);
+      final Bitmap bm1 = Bitmap.createBitmap(_bitmapHolder._bitmap, 0, 0, width, height);
       final Bitmap bm2 = Bitmap.createBitmap(((Image_Android) transparent).getBitmap(), 0, 0, width, height);
       final Canvas canvas = new Canvas(bm1);
 
@@ -76,11 +116,11 @@ public final class Image_Android
                              final int height) {
 
       Bitmap bm1 = null;
-      if ((_bitmap.getWidth() != width) || (_bitmap.getHeight() != height)) {
-         bm1 = Bitmap.createBitmap(_bitmap, 0, 0, width, height);
+      if ((_bitmapHolder._bitmap.getWidth() != width) || (_bitmapHolder._bitmap.getHeight() != height)) {
+         bm1 = Bitmap.createBitmap(_bitmapHolder._bitmap, 0, 0, width, height);
       }
       else {
-         bm1 = _bitmap;
+         bm1 = _bitmapHolder._bitmap;
       }
       final Bitmap canvasBitmap = bm1.copy(Bitmap.Config.ARGB_8888, true); //MAKE MUTABLE
       final Canvas canvas = new Canvas(canvasBitmap);
@@ -103,7 +143,8 @@ public final class Image_Android
 
    @Override
    public IImage subImage(final RectangleD rect) {
-      final Bitmap bm = Bitmap.createBitmap(_bitmap, (int) rect._x, (int) rect._y, (int) rect._width, (int) rect._height);
+      final Bitmap bm = Bitmap.createBitmap(_bitmapHolder._bitmap, (int) rect._x, (int) rect._y, (int) rect._width,
+               (int) rect._height);
 
       return new Image_Android(bm, null);
    }
@@ -142,7 +183,7 @@ public final class Image_Android
    @Override
    public IImage scale(final int width,
                        final int height) {
-      final Bitmap b = Bitmap.createScaledBitmap(_bitmap, width, height, false);
+      final Bitmap b = Bitmap.createScaledBitmap(_bitmapHolder._bitmap, width, height, false);
       if (b == null) {
          ILogger.instance().logError("Can't scale Image");
          return null;
@@ -153,7 +194,7 @@ public final class Image_Android
 
    @Override
    public String description() {
-      return "Image Android " + getWidth() + " x " + getHeight() + ", _image=(" + _bitmap.describeContents() + ")";
+      return "Image Android " + getWidth() + " x " + getHeight() + ", _image=(" + _bitmapHolder._bitmap.describeContents() + ")";
    }
 
 
@@ -169,8 +210,15 @@ public final class Image_Android
 
    @Override
    public IImage shallowCopy() {
-      return new Image_Android(_bitmap, _source);
+      return new Image_Android(_bitmapHolder, _source);
    }
 
 
+   @Override
+   public void dispose() {
+      super.dispose();
+
+      _bitmapHolder._release();
+      //      _bitmap.recycle();
+   }
 }

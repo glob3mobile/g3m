@@ -21,6 +21,8 @@
 #include "BingLayer.hpp"
 #include "TrailsRenderer.hpp"
 #include "PeriodicalTask.hpp"
+#include "ShapesRenderer.hpp"
+#include "QuadShape.hpp"
 #include "G3MWidget.hpp"
 
 @implementation ViewController
@@ -232,7 +234,7 @@
     marksRenderer->addMark(m2);
 
     if (false) {
-      for (int i = 0; i < 500; i++) {
+      for (int i = 0; i < 2000; i++) {
         const Angle latitude = Angle::fromDegrees( (int) (arc4random() % 180) - 90 );
         const Angle longitude = Angle::fromDegrees( (int) (arc4random() % 360) - 180 );
 
@@ -242,6 +244,24 @@
       }
     }
   }
+
+
+  ShapesRenderer* shapesRenderer = new ShapesRenderer();
+
+  std::string textureFileName = "g3m-marker.png";
+  IImage* textureImage = IFactory::instance()->createImageFromFileName(textureFileName);
+
+  QuadShape* quad = new QuadShape(Geodetic3D(Angle::fromDegrees(37.78333333),
+                                             Angle::fromDegrees(-122.41666666666667),
+                                             10000),
+                                  Angle::fromDegrees(0), Angle::fromDegrees(0),
+                                  textureImage, true, textureFileName,
+                                  500000, 500000);
+  shapesRenderer->addShape(quad);
+  
+  renderers.push_back(shapesRenderer);
+
+
 
   TrailsRenderer* trailsRenderer = new TrailsRenderer();
   renderers.push_back(trailsRenderer);

@@ -166,7 +166,7 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
                                                       texC,
                                                       true);
     
-    _mesh = new TexturedMesh(im, true, texMap, true);
+    _mesh = new TexturedMesh(im, true, texMap, true, false);
   }
   
 

@@ -246,20 +246,20 @@ std::vector<Tile*>* Tile::getSubTiles() {
   return _subtiles;
 }
 
-void Tile::prune(const TileRenderContext* trc) {
+void Tile::prune(TileTexturizer* texturizer) {
   if (_subtiles != NULL) {
     
     //    printf("= pruned tile %s\n", getKey().description().c_str());
     
-    TileTexturizer* texturizer = (trc == NULL) ? NULL : trc->getTexturizer();
-    
+//    TileTexturizer* texturizer = (trc == NULL) ? NULL : trc->getTexturizer();
+
     const int subtilesSize = _subtiles->size();
     for (int i = 0; i < subtilesSize; i++) {
       Tile* subtile = _subtiles->at(i);
       
-      subtile->setIsVisible(false, trc);
+      subtile->setIsVisible(false, texturizer);
       
-      subtile->prune(trc);
+      subtile->prune(texturizer);
       if (texturizer != NULL) {
         texturizer->tileToBeDeleted(subtile, subtile->_texturizedMesh);
       }
@@ -273,20 +273,19 @@ void Tile::prune(const TileRenderContext* trc) {
 }
 
 void Tile::setIsVisible(bool isVisible,
-                        const TileRenderContext* trc) {
+                        TileTexturizer* texturizer) {
   if (_isVisible != isVisible) {
     _isVisible = isVisible;
     
     if (!_isVisible) {
-      deleteTexturizedMesh(trc);
+      deleteTexturizedMesh(texturizer);
     }
   }
 }
 
-void Tile::deleteTexturizedMesh(const TileRenderContext* trc) {
+void Tile::deleteTexturizedMesh(TileTexturizer* texturizer) {
   if ((_level > 0) && (_texturizedMesh != NULL)) {
     
-    TileTexturizer* texturizer = trc->getTexturizer();
     if (texturizer != NULL) {
       texturizer->tileMeshToBeDeleted(this, _texturizedMesh);
     }
@@ -311,7 +310,7 @@ void Tile::render(const RenderContext* rc,
   
   statistics->computeTileProcessed(this);
   if (isVisible(rc, trc)) {
-    setIsVisible(true, trc);
+    setIsVisible(true, trc->getTexturizer());
     
     statistics->computeVisibleTile(this);
 
@@ -329,7 +328,7 @@ void Tile::render(const RenderContext* rc,
       
       statistics->computeTileRendered(this);
       
-      prune(trc);
+      prune(trc->getTexturizer());
     }
     else {
       std::vector<Tile*>* subTiles = getSubTiles();
@@ -347,9 +346,9 @@ void Tile::render(const RenderContext* rc,
     }
   }
   else {
-    setIsVisible(false, trc);
+    setIsVisible(false, trc->getTexturizer());
     
-    prune(trc);
+    prune(trc->getTexturizer());
   }
 }
 

@@ -52,8 +52,8 @@ public class Context
   protected final IStringUtils _stringUtils;
   protected IThreadUtils _threadUtils;
   protected ILogger _logger;
-	protected final IMathUtils _mathUtils;
-	protected final IJSONParser _jsonParser;
+  protected final IMathUtils _mathUtils;
+  protected final IJSONParser _jsonParser;
   protected Planet _planet;
   protected IDownloader _downloader;
   protected EffectsScheduler _effectsScheduler;
@@ -95,17 +95,17 @@ public class Context
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: const IMathUtils* getMathUtils() const
-	public final IMathUtils getMathUtils()
-	{
-		return _mathUtils;
-	}
+  public final IMathUtils getMathUtils()
+  {
+	return _mathUtils;
+  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: const IJSONParser* getJSONParser() const
-	public final IJSONParser getJSONParser()
-	{
-		return _jsonParser;
-	}
+  public final IJSONParser getJSONParser()
+  {
+	return _jsonParser;
+  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: const Planet* getPlanet() const

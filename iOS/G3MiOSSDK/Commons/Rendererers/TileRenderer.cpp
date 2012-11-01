@@ -213,3 +213,10 @@ bool TileRenderer::onTouchEvent(const EventContext* ec,
   return handled;
 }
 
+
+void TileRenderer::pruneTopLevelTiles() {
+  for (int i = 0; i < _topLevelTiles.size(); i++) {
+    Tile* tile = _topLevelTiles[i];
+    tile->prune(_texturizer);
+  }
+}

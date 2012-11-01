@@ -50,6 +50,19 @@ private:
 
   bool _isValid;
   
+  
+  MutableMatrix44D(bool isValid):
+  _isValid(isValid)
+  {
+    _columnMajorFloatBuffer = NULL;
+    _columnMajorFloatArray  = NULL;
+  }
+
+  static Vector3D getTangent0(const Vector3D& normal);
+
+public:
+  
+  //CONTRUCTORS
   //Contructor parameters in column major order
   MutableMatrix44D(double m00, double m10, double m20, double m30,
                    double m01, double m11, double m21, double m31,
@@ -80,17 +93,7 @@ private:
     _columnMajorFloatBuffer = NULL;
     _columnMajorFloatArray = NULL;
   }
-  
-  MutableMatrix44D(bool isValid):
-  _isValid(isValid)
-  {
-    _columnMajorFloatBuffer = NULL;
-    _columnMajorFloatArray  = NULL;
-  }
-  
-public:
-  
-  //CONTRUCTORS
+
   MutableMatrix44D():
   _isValid(true)
   {
@@ -171,7 +174,7 @@ public:
   
   MutableMatrix44D inversed() const;
   
-  //MutableMatrix44D transposed() const;
+  MutableMatrix44D transposed() const;
   
   //METHODS TO EXTRACT VALUES FROM THE MATRIX
   
@@ -267,7 +270,8 @@ public:
     
     static MutableMatrix44D createTranslationMatrix(const Vector3D& t);
     
-    static MutableMatrix44D createRotationMatrix(const Angle& angle, const Vector3D& p);
+    static MutableMatrix44D createRotationMatrix(const Angle& angle,
+                                                 const Vector3D& axis);
     
     static MutableMatrix44D createGeneralRotationMatrix(const Angle& angle,
                                                         const Vector3D& axis,
@@ -286,6 +290,11 @@ public:
     static MutableMatrix44D createOrthographicProjectionMatrix(double left, double right,
                                                                double bottom, double top,
                                                                double znear, double zfar);
+
+
+    //static MutableMatrix44D createRotationMatrixFromNormal(const Vector3D& normal);
+    
+    
   };
   
 #endif
