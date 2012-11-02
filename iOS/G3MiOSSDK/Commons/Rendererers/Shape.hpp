@@ -14,11 +14,13 @@
 
 class Shape {
 protected:
-  const Geodetic3D _position;
+  const Geodetic3D  _position;
+  const Angle       _heading;
+  const Angle       _pitch;
 
 public:
-  Shape(const Geodetic3D& position) :
-  _position(position)
+  Shape(const Geodetic3D& position, Angle heading, Angle pitch) :
+  _position(position), _heading(heading), _pitch(pitch)
   {
 
   }

@@ -50,6 +50,19 @@ private:
 
   bool _isValid;
   
+  
+  MutableMatrix44D(bool isValid):
+  _isValid(isValid)
+  {
+    _columnMajorFloatBuffer = NULL;
+    _columnMajorFloatArray  = NULL;
+  }
+
+  static Vector3D getTangent0(const Vector3D& normal);
+
+public:
+  
+  //CONTRUCTORS
   //Contructor parameters in column major order
   MutableMatrix44D(double m00, double m10, double m20, double m30,
                    double m01, double m11, double m21, double m31,
@@ -80,19 +93,7 @@ private:
     _columnMajorFloatBuffer = NULL;
     _columnMajorFloatArray = NULL;
   }
-  
-  MutableMatrix44D(bool isValid):
-  _isValid(isValid)
-  {
-    _columnMajorFloatBuffer = NULL;
-    _columnMajorFloatArray  = NULL;
-  }
 
-  static Vector3D getTangent0(const Vector3D& normal);
-
-public:
-  
-  //CONTRUCTORS
   MutableMatrix44D():
   _isValid(true)
   {
@@ -291,8 +292,9 @@ public:
                                                                double znear, double zfar);
 
 
-    static MutableMatrix44D createRotationMatrixFromNormal(const Vector3D& normal);
-
+    //static MutableMatrix44D createRotationMatrixFromNormal(const Vector3D& normal);
+    
+    
   };
   
 #endif
