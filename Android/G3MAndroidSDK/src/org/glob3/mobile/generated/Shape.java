@@ -20,10 +20,14 @@ package org.glob3.mobile.generated;
 public abstract class Shape
 {
   protected final Geodetic3D _position ;
+  protected final Angle _heading ;
+  protected final Angle _pitch ;
 
-  public Shape(Geodetic3D position)
+  public Shape(Geodetic3D position, Angle heading, Angle pitch)
   {
 	  _position = new Geodetic3D(position);
+	  _heading = new Angle(heading);
+	  _pitch = new Angle(pitch);
 
   }
 
