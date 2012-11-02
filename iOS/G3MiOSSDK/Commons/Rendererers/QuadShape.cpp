@@ -122,7 +122,7 @@ void QuadShape::render(const RenderContext* rc) {
     const MutableMatrix44D translationMatrix = MutableMatrix44D::createTranslationMatrix(cartesianPosition);
     gl->multMatrixf(translationMatrix);
     
-    const MutableMatrix44D rotationMatrix = planet->orientationMatrix(_position, _heading, _pitch);
+    const MutableMatrix44D rotationMatrix = planet->orientationMatrix(_position.asGeodetic2D(), _heading, _pitch);
     gl->multMatrixf(rotationMatrix);
 
 
