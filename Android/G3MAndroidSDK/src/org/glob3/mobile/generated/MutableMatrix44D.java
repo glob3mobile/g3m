@@ -59,8 +59,28 @@ public class MutableMatrix44D
 
   private boolean _isValid;
 
+
+  private MutableMatrix44D(boolean isValid)
+  {
+	  _isValid = isValid;
+	_columnMajorFloatBuffer = null;
+	_columnMajorFloatArray = null;
+  }
+
+  private static Vector3D getTangent0(Vector3D normal)
+  {
+	Vector3D tangent0 = normal.cross(new Vector3D(1, 0, 0));
+	if (tangent0.dot(tangent0) < 0.001)
+	{
+	  return normal.cross(new Vector3D(0, 1, 0)).normalized();
+	}
+	return tangent0.normalized();
+  }
+
+
+  //CONTRUCTORS
   //Contructor parameters in column major order
-  private MutableMatrix44D(double m00, double m10, double m20, double m30, double m01, double m11, double m21, double m31, double m02, double m12, double m22, double m32, double m03, double m13, double m23, double m33)
+  public MutableMatrix44D(double m00, double m10, double m20, double m30, double m01, double m11, double m21, double m31, double m02, double m12, double m22, double m32, double m03, double m13, double m23, double m33)
   {
 	  _isValid = true;
 	_m00 = m00;
@@ -87,25 +107,6 @@ public class MutableMatrix44D
 	_columnMajorFloatArray = null;
   }
 
-  private MutableMatrix44D(boolean isValid)
-  {
-	  _isValid = isValid;
-	_columnMajorFloatBuffer = null;
-	_columnMajorFloatArray = null;
-  }
-
-  private static Vector3D getTangent0(Vector3D normal)
-  {
-	Vector3D tangent0 = normal.cross(new Vector3D(1, 0, 0));
-	if (tangent0.dot(tangent0) < 0.001)
-	{
-	  return normal.cross(new Vector3D(0, 1, 0)).normalized();
-	}
-	return tangent0.normalized();
-  }
-
-
-  //CONTRUCTORS
   public MutableMatrix44D()
   {
 	  _isValid = true;
@@ -598,19 +599,26 @@ public class MutableMatrix44D
 	}
 
 
-	public static MutableMatrix44D createRotationMatrixFromNormal(Vector3D normal)
-	{
-	  // Find a vector in the plane
-	  final Vector3D tangent0 = getTangent0(normal);
-	  // Find another vector in the plane
-	  final Vector3D tangent1 = normal.cross(tangent0).normalized();
-    
-	//  return MutableMatrix44D(tangent0._x, tangent1._x, normal._x, 0,
-	//                          tangent0._y, tangent1._y, normal._y, 0,
-	//                          tangent0._z, tangent1._z, normal._z, 0,
-	//                          0, 0, 0, 1).transposed();
-    
-	  return new MutableMatrix44D(tangent0._x, tangent0._y, tangent0._z, 0, tangent1._x, tangent1._y, tangent1._z, 0, normal._x, normal._y, normal._z, 0, 0, 0, 0, 1);
-	}
+	//static MutableMatrix44D createRotationMatrixFromNormal(const Vector3D& normal);
+
 
   }
+/*
+ MutableMatrix44D MutableMatrix44D::createRotationMatrixFromNormal(const Vector3D& normal) {
+  // Find a vector in the plane
+  const Vector3D tangent0 = getTangent0(normal);
+  // Find another vector in the plane
+  const Vector3D tangent1 = normal.cross(tangent0).normalized();
+
+//  return MutableMatrix44D(tangent0._x, tangent1._x, normal._x, 0,
+//                          tangent0._y, tangent1._y, normal._y, 0,
+//                          tangent0._z, tangent1._z, normal._z, 0,
+//                          0, 0, 0, 1).transposed();
+
+  return MutableMatrix44D(tangent0._x, tangent0._y, tangent0._z, 0,
+						  tangent1._x, tangent1._y, tangent1._z, 0,
+						  normal._x,   normal._y,   normal._z,   0,
+						  0, 0, 0, 1);
+}*/
+
+

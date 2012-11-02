@@ -61,10 +61,10 @@ public class QuadShape extends Shape
 	}
   
 	FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
-	texCoords.add(1, 1);
-	texCoords.add(1, 0);
 	texCoords.add(0, 1);
+	texCoords.add(1, 1);
 	texCoords.add(0, 0);
+	texCoords.add(1, 0);
   
 	TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true);
   
@@ -111,9 +111,9 @@ public class QuadShape extends Shape
 	return texId;
   }
 
-  public QuadShape(Geodetic3D position, IImage textureImage, boolean autoDeleteTextureImage, String textureFilename, int width, int height)
+  public QuadShape(Geodetic3D position, Angle heading, Angle pitch, IImage textureImage, boolean autoDeleteTextureImage, String textureFilename, int width, int height)
   {
-	  super(position);
+	  super(position, heading, pitch);
 	  _mesh = null;
 	  _textureFilename = textureFilename;
 	  _textureImage = textureImage;
@@ -146,15 +146,7 @@ public class QuadShape extends Shape
 	  final MutableMatrix44D translationMatrix = MutableMatrix44D.createTranslationMatrix(cartesianPosition);
 	  gl.multMatrixf(translationMatrix);
   
-  
-	  final MutableMatrix44D rotationMatrix = MutableMatrix44D.createRotationMatrixFromNormal(planet.geodeticSurfaceNormal(_position));
-  
-  ////    const Vector3D pos  = rc->getCurrentCamera()->getCartesianPosition();
-  //    const Vector3D pos  = planet->toCartesian(Geodetic3D(Angle::zero(), Angle::zero(), 0));
-  //    const Vector3D axis = pos.cross(cartesianPosition);
-  //    const Angle angle   = pos.angleBetween(cartesianPosition);
-  //    const MutableMatrix44D rotationMatrix = MutableMatrix44D::createRotationMatrix(angle, axis);
-  
+	  final MutableMatrix44D rotationMatrix = planet.orientationMatrix(_position.asGeodetic2D(), _heading, _pitch);
 	  gl.multMatrixf(rotationMatrix);
   
   
