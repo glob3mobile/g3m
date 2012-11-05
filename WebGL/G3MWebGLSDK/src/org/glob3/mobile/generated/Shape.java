@@ -123,7 +123,6 @@ public abstract class Shape
 
   public final void render(RenderContext rc)
   {
-	int __diego_at_work;
 	if (isReadyToRender(rc))
 	{
 	  GL gl = rc.getGL();
@@ -131,16 +130,6 @@ public abstract class Shape
 	  gl.pushMatrix();
   
 	  final Planet planet = rc.getPlanet();
-  
-  //    const MutableMatrix44D geodeticTranslation = MutableMatrix44D::createTranslationMatrix( planet->toCartesian(*_position) );
-  //    const MutableMatrix44D geodeticRotation    = planet->orientationMatrix(*_position);
-  //    const MutableMatrix44D geodeticTransform   = geodeticTranslation.multiply(geodeticRotation);
-  //
-  //    const MutableMatrix44D headingRotation  = MutableMatrix44D::createRotationMatrix(*_heading, Vector3D::downZ());
-  //    const MutableMatrix44D pitchRotation    = MutableMatrix44D::createRotationMatrix(*_pitch, Vector3D::upX());
-  //    const MutableMatrix44D localTransform   = headingRotation.multiply(pitchRotation);
-  //
-  //    gl->multMatrixf(geodeticTransform.multiply(localTransform));
   
 	  gl.multMatrixf(getTransformMatrix(planet));
   

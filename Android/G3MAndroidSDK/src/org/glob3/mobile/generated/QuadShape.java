@@ -16,16 +16,15 @@ package org.glob3.mobile.generated;
 //
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class Mesh;
+
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IImage;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IGLTextureId;
 
-public class QuadShape extends Shape
+public class QuadShape extends MeshShape
 {
-  private Mesh createMesh(RenderContext rc)
+  protected final Mesh createMesh(RenderContext rc)
   {
   
 	final float halfWidth = (float) _width / 2.0f;
@@ -70,25 +69,15 @@ public class QuadShape extends Shape
   
 	return new TexturedMesh(im, true, texMap, true, true);
   }
-  private Mesh getMesh(RenderContext rc)
-  {
-	if (_mesh == null)
-	{
-	  _mesh = createMesh(rc);
-	}
-	return _mesh;
-  }
 
-  private Mesh _mesh;
+  protected final String _textureFilename;
+  protected IImage _textureImage;
+  protected final boolean _autoDeleteTextureImage;
 
-  private final String _textureFilename;
-  private IImage _textureImage;
-  private final boolean _autoDeleteTextureImage;
+  protected final int _width;
+  protected final int _height;
 
-  private final int _width;
-  private final int _height;
-
-  private IGLTextureId getTextureId(RenderContext rc)
+  protected final IGLTextureId getTextureId(RenderContext rc)
   {
 	if (_textureImage == null)
 	{
@@ -114,7 +103,6 @@ public class QuadShape extends Shape
   public QuadShape(Geodetic3D position, IImage textureImage, boolean autoDeleteTextureImage, String textureFilename, int width, int height)
   {
 	  super(position);
-	  _mesh = null;
 	  _textureFilename = textureFilename;
 	  _textureImage = textureImage;
 	  _autoDeleteTextureImage = autoDeleteTextureImage;
@@ -125,48 +113,7 @@ public class QuadShape extends Shape
 
   public void dispose()
   {
-	if (_mesh != null)
-		_mesh.dispose();
-  }
 
-  public final boolean isReadyToRender(RenderContext rc)
-  {
-	final Mesh mesh = getMesh(rc);
-	return (mesh != null);
-  }
-
-  public final void rawRender(RenderContext rc)
-  {
-	final Mesh mesh = getMesh(rc);
-	if (mesh != null)
-	{
-	  mesh.render(rc);
-	}
   }
 
 }
-//void QuadShape::render(const RenderContext* rc) {
-//  int __diego_at_work;
-//  Mesh* mesh = getMesh(rc);
-//  if (mesh != NULL) {
-//    GL* gl = rc->getGL();
-//
-//    gl->pushMatrix();
-//
-//    const Planet* planet = rc->getPlanet();
-//
-//
-//    const Vector3D cartesianPosition = planet->toCartesian( _position );
-//    const MutableMatrix44D translationMatrix = MutableMatrix44D::createTranslationMatrix(cartesianPosition);
-//    gl->multMatrixf(translationMatrix);
-//
-//    const MutableMatrix44D rotationMatrix = planet->orientationMatrix(_position.asGeodetic2D(), _heading, _pitch);
-//    gl->multMatrixf(rotationMatrix);
-//
-//
-//    mesh->render(rc);
-//
-//    gl->popMatrix();
-//  }
-//}
-
