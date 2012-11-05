@@ -52,7 +52,9 @@ public:
 
   ~QuadShape();
   
-  void render(const RenderContext* rc);
+  bool isReadyToRender(const RenderContext* rc);
+
+  void rawRender(const RenderContext* rc);
 
 };
 

@@ -257,7 +257,7 @@
                                   Angle::fromDegrees(0),
                                   Angle::fromDegrees(0),
                                   textureImage, true, textureFileName,
-                                  500000, 500000);
+                                  50000, 50000);
   shapesRenderer->addShape(quad);
   
   renderers.push_back(shapesRenderer);

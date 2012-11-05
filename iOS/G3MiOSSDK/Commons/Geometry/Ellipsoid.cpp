@@ -329,18 +329,23 @@ Vector3D Ellipsoid::closestPointToSphere(const Vector3D& pos, const Vector3D& ra
 }
 
 
-MutableMatrix44D Ellipsoid::orientationMatrix(const Geodetic2D& position, Angle heading, Angle pitch) const
-{
+MutableMatrix44D Ellipsoid::orientationMatrix(const Angle& latitude,
+                                              const Angle& longitude,
+                                              const Angle& heading,
+                                              const Angle& pitch) const {
   // define rotation matrix to init orientation to latlon(0,0)
-  const MutableMatrix44D M(0,1,0,0,0,0,1,0,1,0,0,0,0,0,0,1);
-  
+  const MutableMatrix44D M(0, 1, 0, 0,
+                           0, 0, 1, 0,
+                           1, 0, 0, 0,
+                           0, 0, 0, 1);
+
   // orbit reference system to geodetic position
-  const MutableMatrix44D Rlon   = MutableMatrix44D::createRotationMatrix(position.longitude(), Vector3D(0,1,0));
-  const MutableMatrix44D Rlat   = MutableMatrix44D::createRotationMatrix(position.latitude(), Vector3D(-1,0,0));
-  
+  const MutableMatrix44D Rlon   = MutableMatrix44D::createRotationMatrix(longitude, Vector3D(0,1,0));
+  const MutableMatrix44D Rlat   = MutableMatrix44D::createRotationMatrix(latitude, Vector3D(-1,0,0));
+
   // set heading & pitch
   const MutableMatrix44D Rhead  = MutableMatrix44D::createRotationMatrix(heading, Vector3D(0,0,-1));
   const MutableMatrix44D Rpitch = MutableMatrix44D::createRotationMatrix(pitch, Vector3D(1,0,0));
-    
+
   return M.multiply(Rlon).multiply(Rlat).multiply(Rhead).multiply(Rpitch);
 }

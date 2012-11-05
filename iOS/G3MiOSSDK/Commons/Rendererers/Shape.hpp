@@ -14,29 +14,49 @@
 
 class Shape {
 protected:
-  const Geodetic3D  _position;
-  const Angle       _heading;
-  const Angle       _pitch;
+  Geodetic3D*  _position;
+  Angle*       _heading;
+  Angle*       _pitch;
 
 public:
   Shape(const Geodetic3D& position,
         const Angle& heading,
         const Angle& pitch) :
-  _position(position),
-  _heading(heading),
-  _pitch(pitch) {
+  _position( new Geodetic3D(position) ),
+  _heading( new Angle(heading) ),
+  _pitch( new Angle(pitch) ) {
 
   }
 
   virtual ~Shape() {
-
+    delete _position;
+    delete _heading;
+    delete _pitch;
   }
 
   Geodetic3D getPosition() const {
-    return _position;
+    return *_position;
   }
 
-  virtual void render(const RenderContext* rc) = 0;
+  Angle getHeading() const {
+    return *_heading;
+  }
+
+  Angle getPitch() const {
+    return *_pitch;
+  }
+
+  void setPosition(const Geodetic3D& position) {
+    delete _position;
+    _position = new Geodetic3D(position);
+  }
+
+  void render(const RenderContext* rc);
+
+  virtual bool isReadyToRender(const RenderContext* rc) = 0;
+  
+  virtual void rawRender(const RenderContext* rc) = 0;
+
 };
 
 #endif

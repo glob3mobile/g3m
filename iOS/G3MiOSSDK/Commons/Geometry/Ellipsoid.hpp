@@ -82,9 +82,27 @@ public:
   Vector3D closestPointToSphere(const Vector3D& pos, const Vector3D& ray) const;
   
   Vector3D closestIntersection(const Vector3D& pos, const Vector3D& ray) const;
+
+
+  MutableMatrix44D orientationMatrix(const Angle& latitude,
+                                     const Angle& longitude,
+                                     const Angle& heading,
+                                     const Angle& pitch) const;
+
+  MutableMatrix44D orientationMatrix(const Geodetic2D& position,
+                                     const Angle& heading,
+                                     const Angle& pitch) const {
+    return orientationMatrix(position.latitude(), position.longitude(),
+                             heading, pitch);
+  }
   
-  MutableMatrix44D orientationMatrix(const Geodetic2D& position, Angle heading, Angle pitch) const;
-  
+  MutableMatrix44D orientationMatrix(const Geodetic3D& position,
+                                     const Angle& heading,
+                                     const Angle& pitch) const {
+    return orientationMatrix(position.latitude(), position.longitude(),
+                             heading, pitch);
+  }
+
 };
 
 #endif
