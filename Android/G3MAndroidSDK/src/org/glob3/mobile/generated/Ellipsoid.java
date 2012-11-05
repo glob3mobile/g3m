@@ -395,26 +395,6 @@ public class Ellipsoid
 	return pos.add(ray.times(distances.get(0)));
   }
 
-
-//  MutableMatrix44D orientationMatrix(const Angle& latitude,
-//                                     const Angle& longitude,
-//                                     const Angle& heading,
-//                                     const Angle& pitch) const;
-//
-//  MutableMatrix44D orientationMatrix(const Geodetic2D& position,
-//                                     const Angle& heading,
-//                                     const Angle& pitch) const {
-//    return orientationMatrix(position.latitude(), position.longitude(),
-//                             heading, pitch);
-//  }
-//  
-//  MutableMatrix44D orientationMatrix(const Geodetic3D& position,
-//                                     const Angle& heading,
-//                                     const Angle& pitch) const {
-//    return orientationMatrix(position.latitude(), position.longitude(),
-//                             heading, pitch);
-//  }
-
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: MutableMatrix44D orientationMatrix(const Angle& latitude, const Angle& longitude) const
   public final MutableMatrix44D orientationMatrix(Angle latitude, Angle longitude)
