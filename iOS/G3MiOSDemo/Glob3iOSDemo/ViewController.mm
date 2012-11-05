@@ -256,8 +256,8 @@
                                              10000),
                                   textureImage, true, textureFileName,
                                   50000, 50000);
-  quad->setHeading( Angle::fromDegrees(45) );
-  quad->setPitch( Angle::fromDegrees(45) );
+//  quad->setHeading( Angle::fromDegrees(45) );
+//  quad->setPitch( Angle::fromDegrees(45) );
 
   shapesRenderer->addShape(quad);
   

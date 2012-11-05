@@ -201,13 +201,13 @@ public class G3MAndroidDemoActivity
                   new Geodetic3D(Angle.fromDegrees(37.78333333), //
                            Angle.fromDegrees(-122.41666666666667), //
                            10000), //
-                  Angle.fromDegrees(0), //
-                  Angle.fromDegrees(0), //
                   textureImage, //
                   true, //
                   textureFileName, //
                   500000, //
                   500000);
+         quad.setHeading(Angle.fromDegrees(0));
+         quad.setPitch(Angle.fromDegrees(0));
          shapesRenderer.addShape(quad);
 
          renderers.add(shapesRenderer);
