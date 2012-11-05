@@ -400,8 +400,8 @@ public class MutableMatrix44D
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: float[] getColumnMajorFloatArray() const
-  public final float[] getColumnMajorFloatArray()
-  {
+	public final float[] getColumnMajorFloatArray()
+	{
 	  if (_columnMajorFloatArray == null)
 	  {
 		_columnMajorFloatArray = new float[16];
@@ -576,7 +576,16 @@ public class MutableMatrix44D
 	}
 
 
-	//static MutableMatrix44D createRotationMatrixFromNormal(const Vector3D& normal);
+	public static MutableMatrix44D createScaleMatrix(double scaleX, double scaleY, double scaleZ)
+	{
+	  return new MutableMatrix44D(scaleX, 0, 0, 0, 0, scaleY, 0, 0, 0, 0, scaleZ, 0, 0, 0, 0, 1);
 
+	}
+
+	public static MutableMatrix44D createScaleMatrix(Vector3D scale)
+	{
+	  return new MutableMatrix44D(scale._x, 0, 0, 0, 0, scale._y, 0, 0, 0, 0, scale._z, 0, 0, 0, 0, 1);
+    
+	}
 
   }

@@ -21,7 +21,7 @@ public class CircleShape extends MeshShape
 {
   private float _radius;
   private int _steps;
-  private Color _color ;
+  private Color _color;
 
   protected final Mesh createMesh(RenderContext rc)
   {
@@ -53,9 +53,26 @@ public class CircleShape extends MeshShape
   {
 	  super(position);
 	  _radius = radius;
-	  _color = color;
+	  _color = new Color(color);
 	  _steps = steps;
 
   }
+
+  public final void setRadius(float radius)
+  {
+	if (_radius != radius)
+	{
+	  _radius = radius;
+	  cleanMesh();
+	}
+  }
+
+  public final void setColor(Color color)
+  {
+	_color = null;
+	_color = new Color(color);
+	cleanMesh();
+  }
+
 
 }

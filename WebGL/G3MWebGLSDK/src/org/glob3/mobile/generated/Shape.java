@@ -22,8 +22,14 @@ package org.glob3.mobile.generated;
 public abstract class Shape
 {
   private Geodetic3D _position;
+
   private Angle _heading;
   private Angle _pitch;
+
+  private double _scaleX;
+  private double _scaleY;
+  private double _scaleZ;
+
 
   private MutableMatrix44D _transformMatrix;
   private MutableMatrix44D createTransformMatrix(Planet planet)
@@ -32,9 +38,12 @@ public abstract class Shape
 	final MutableMatrix44D geodeticRotation = planet.orientationMatrix(_position);
 	final MutableMatrix44D geodeticTransform = geodeticTranslation.multiply(geodeticRotation);
   
+  
 	final MutableMatrix44D headingRotation = MutableMatrix44D.createRotationMatrix(_heading, Vector3D.downZ());
 	final MutableMatrix44D pitchRotation = MutableMatrix44D.createRotationMatrix(_pitch, Vector3D.upX());
-	final MutableMatrix44D localTransform = headingRotation.multiply(pitchRotation);
+	final MutableMatrix44D scale = MutableMatrix44D.createScaleMatrix(_scaleX, _scaleY, _scaleZ);
+	final MutableMatrix44D localTransform = headingRotation.multiply(pitchRotation).multiply(scale);
+  
   
 	return new MutableMatrix44D(geodeticTransform.multiply(localTransform));
   }
@@ -59,6 +68,9 @@ public abstract class Shape
 	  _position = new Geodetic3D(position);
 	  _heading = new Angle(Angle.zero());
 	  _pitch = new Angle(Angle.zero());
+	  _scaleX = 1;
+	  _scaleY = 1;
+	  _scaleZ = 1;
 	  _transformMatrix = null;
 
   }
@@ -142,5 +154,19 @@ public abstract class Shape
   public abstract boolean isReadyToRender(RenderContext rc);
 
   public abstract void rawRender(RenderContext rc);
+
+  public final void setScale(double scaleX, double scaleY, double scaleZ)
+  {
+	_scaleX = scaleX;
+	_scaleY = scaleY;
+	_scaleZ = scaleZ;
+
+	cleanTransformMatrix();
+  }
+
+  public final void setScale(Vector3D scale)
+  {
+	setScale(scale._x, scale._y, scale._z);
+  }
 
 }

@@ -34,6 +34,13 @@ public abstract class MeshShape extends Shape
 	return _mesh;
   }
 
+  protected final void cleanMesh()
+  {
+	if (_mesh != null)
+		_mesh.dispose();
+	_mesh = null;
+  }
+
   public MeshShape(Geodetic3D position)
   {
 	  super(position);
