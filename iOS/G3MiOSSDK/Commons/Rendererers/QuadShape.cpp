@@ -64,10 +64,9 @@ Mesh* QuadShape::createMesh(const RenderContext* rc) {
   indices.add(3);
 
 
-  //  const Vector3D center = rc->getPlanet()->toCartesian( _position );
   const Vector3D center = Vector3D::zero();
 
-  IndexedMesh *im = new IndexedMesh(GLPrimitive::triangleStrip(),
+  IndexedMesh* im = new IndexedMesh(GLPrimitive::triangleStrip(),
                                     true,
                                     center,
                                     vertices.create(),

@@ -186,6 +186,8 @@
 		CFD314541631FFAD00B54ED3 /* Vector2I.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFD314521631FFAD00B54ED3 /* Vector2I.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFE029541601367100D1E75B /* IImageDownloadListener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFE029531601367100D1E75B /* IImageDownloadListener.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFE0844515E27B9A0004EC0E /* Petition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE0844315E27B9A0004EC0E /* Petition.cpp */; };
+		CFEEE4BD164867B600F45F59 /* CircleShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFEEE4BB164867B600F45F59 /* CircleShape.cpp */; };
+		CFEEE4BE164867B600F45F59 /* CircleShape.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFEEE4BC164867B600F45F59 /* CircleShape.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFF0999B15C18AAD005EAF12 /* TileTexturizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFF8C4BD15DEB6A70034A576 /* RCObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFF8C4BB15DEB6A70034A576 /* RCObject.cpp */; };
 		CFFEC11E15C2E645003FA986 /* IDownloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFFEC11D15C2E645003FA986 /* IDownloader.cpp */; };
@@ -446,6 +448,8 @@
 		CFE0844015E27A310004EC0E /* TerrainTouchEventListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TerrainTouchEventListener.hpp; path = Commons/Basic/TerrainTouchEventListener.hpp; sourceTree = "<group>"; };
 		CFE0844315E27B9A0004EC0E /* Petition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Petition.cpp; path = Commons/Basic/Petition.cpp; sourceTree = "<group>"; };
 		CFE0844415E27B9A0004EC0E /* Petition.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Petition.hpp; path = Commons/Basic/Petition.hpp; sourceTree = "<group>"; };
+		CFEEE4BB164867B600F45F59 /* CircleShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CircleShape.cpp; path = Commons/Rendererers/CircleShape.cpp; sourceTree = "<group>"; };
+		CFEEE4BC164867B600F45F59 /* CircleShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CircleShape.hpp; path = Commons/Rendererers/CircleShape.hpp; sourceTree = "<group>"; };
 		CFF8C4BB15DEB6A70034A576 /* RCObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RCObject.cpp; path = Commons/Basic/RCObject.cpp; sourceTree = "<group>"; };
 		CFF8C4BC15DEB6A70034A576 /* RCObject.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RCObject.hpp; path = Commons/Basic/RCObject.hpp; sourceTree = "<group>"; };
 		CFF95F741588DF0A00B56E11 /* TimeInterval.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TimeInterval.hpp; path = Commons/Basic/TimeInterval.hpp; sourceTree = "<group>"; };
@@ -818,8 +822,7 @@
 				CCC2A02315CA6C7D00923850 /* MarksRenderer.cpp */,
 				CCC2A02415CA6C7D00923850 /* MarksRenderer.hpp */,
 				CCC2A02715CA6C7D00923850 /* Renderer.hpp */,
-				CFA0BB60163DCFF6009185FE /* ShapesRenderer.cpp */,
-				CFA0BB61163DCFF6009185FE /* ShapesRenderer.hpp */,
+				CFEEE4BA1648676800F45F59 /* Shapes */,
 				CCC2A02A15CA6C7D00923850 /* SimplePlanetRenderer.cpp */,
 				CCC2A02B15CA6C7D00923850 /* SimplePlanetRenderer.hpp */,
 				CCC2A02C15CA6C7D00923850 /* TileRenderer.cpp */,
@@ -828,14 +831,25 @@
 				CFA71BE715D2F6C500F8C78D /* TilesRenderParameters.hpp */,
 				CFCEFF4B163721EA00FC4AB0 /* TrailsRenderer.cpp */,
 				CFCEFF4C163721EA00FC4AB0 /* TrailsRenderer.hpp */,
-				CF5EA5D2163DDC7900D8F797 /* Shape.cpp */,
-				CF5EA5D3163DDC7900D8F797 /* Shape.hpp */,
-				CF5EA5D6163DDCB900D8F797 /* QuadShape.cpp */,
-				CF5EA5D7163DDCB900D8F797 /* QuadShape.hpp */,
-				CF45E023164851C5004746BB /* MeshShape.cpp */,
-				CF45E024164851C5004746BB /* MeshShape.hpp */,
 			);
 			name = Renderers;
+			sourceTree = "<group>";
+		};
+		CFEEE4BA1648676800F45F59 /* Shapes */ = {
+			isa = PBXGroup;
+			children = (
+				CF45E023164851C5004746BB /* MeshShape.cpp */,
+				CF45E024164851C5004746BB /* MeshShape.hpp */,
+				CF5EA5D6163DDCB900D8F797 /* QuadShape.cpp */,
+				CF5EA5D7163DDCB900D8F797 /* QuadShape.hpp */,
+				CF5EA5D2163DDC7900D8F797 /* Shape.cpp */,
+				CF5EA5D3163DDC7900D8F797 /* Shape.hpp */,
+				CFA0BB60163DCFF6009185FE /* ShapesRenderer.cpp */,
+				CFA0BB61163DCFF6009185FE /* ShapesRenderer.hpp */,
+				CFEEE4BB164867B600F45F59 /* CircleShape.cpp */,
+				CFEEE4BC164867B600F45F59 /* CircleShape.hpp */,
+			);
+			name = Shapes;
 			sourceTree = "<group>";
 		};
 		D87EC5C015BEB12F00E38C36 /* Layers */ = {
@@ -950,6 +964,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CFEEE4BE164867B600F45F59 /* CircleShape.hpp in Headers */,
 				CF45E026164851C5004746BB /* MeshShape.hpp in Headers */,
 				CF5EA5D5163DDC7900D8F797 /* Shape.hpp in Headers */,
 				CF5EA5D9163DDCB900D8F797 /* QuadShape.hpp in Headers */,
@@ -1251,6 +1266,7 @@
 				CF5EA5D4163DDC7900D8F797 /* Shape.cpp in Sources */,
 				CF5EA5D8163DDCB900D8F797 /* QuadShape.cpp in Sources */,
 				CF45E025164851C5004746BB /* MeshShape.cpp in Sources */,
+				CFEEE4BD164867B600F45F59 /* CircleShape.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

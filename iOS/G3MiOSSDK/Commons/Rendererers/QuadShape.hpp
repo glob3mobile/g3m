@@ -20,8 +20,8 @@ private:
   IImage* _textureImage;
   const bool _autoDeleteTextureImage;
 
-  const int _width;
-  const int _height;
+  const float _width;
+  const float _height;
 
   const IGLTextureId* getTextureId(const RenderContext* rc);
 
@@ -33,8 +33,8 @@ public:
             IImage* textureImage,
             bool autoDeleteTextureImage,
             const std::string textureFilename,
-            int width,
-            int height) :
+            float width,
+            float height) :
   MeshShape(position),
   _textureFilename(textureFilename),
   _textureImage(textureImage),

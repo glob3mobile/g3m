@@ -22,7 +22,8 @@
 #include "TrailsRenderer.hpp"
 #include "PeriodicalTask.hpp"
 #include "ShapesRenderer.hpp"
-#include "QuadShape.hpp"
+//#include "QuadShape.hpp"
+#include "CircleShape.hpp"
 #include "G3MWidget.hpp"
 
 @implementation ViewController
@@ -248,19 +249,25 @@
 
   ShapesRenderer* shapesRenderer = new ShapesRenderer();
 
-  std::string textureFileName = "g3m-marker.png";
-  IImage* textureImage = IFactory::instance()->createImageFromFileName(textureFileName);
+//  std::string textureFileName = "g3m-marker.png";
+//  IImage* textureImage = IFactory::instance()->createImageFromFileName(textureFileName);
+//
+//  Shape* shape = new QuadShape(Geodetic3D(Angle::fromDegrees(37.78333333),
+//                                          Angle::fromDegrees(-122.41666666666667),
+//                                          10000),
+//                               textureImage, true, textureFileName,
+//                               50000, 50000);
+  Shape* shape = new CircleShape(Geodetic3D(Angle::fromDegrees(37.78333333),
+                                            Angle::fromDegrees(-122.41666666666667),
+                                            10000),
+                                 50000,
+                                 Color::fromRGBA(1, 1, 0, 1),
+                                 32);
+  //shape->setHeading( Angle::fromDegrees(45) );
+  //shape->setPitch( Angle::fromDegrees(45) );
 
-  QuadShape* quad = new QuadShape(Geodetic3D(Angle::fromDegrees(37.78333333),
-                                             Angle::fromDegrees(-122.41666666666667),
-                                             10000),
-                                  textureImage, true, textureFileName,
-                                  50000, 50000);
-//  quad->setHeading( Angle::fromDegrees(45) );
-//  quad->setPitch( Angle::fromDegrees(45) );
+  shapesRenderer->addShape(shape);
 
-  shapesRenderer->addShape(quad);
-  
   renderers.push_back(shapesRenderer);
 
 
