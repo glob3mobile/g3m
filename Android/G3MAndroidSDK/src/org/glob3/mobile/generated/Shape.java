@@ -25,8 +25,8 @@ public abstract class Shape
   private Angle _heading;
   private Angle _pitch;
 
-  private MutableMatrix44D _transformationMatrix;
-  private MutableMatrix44D createTransformationMatrix(Planet planet)
+  private MutableMatrix44D _transformMatrix;
+  private MutableMatrix44D createTransformMatrix(Planet planet)
   {
 	final MutableMatrix44D geodeticTranslation = MutableMatrix44D.createTranslationMatrix(planet.toCartesian(_position));
 	final MutableMatrix44D geodeticRotation = planet.orientationMatrix(_position);
@@ -40,18 +40,18 @@ public abstract class Shape
   }
   private MutableMatrix44D getTransformMatrix(Planet planet)
   {
-	if (_transformationMatrix == null)
+	if (_transformMatrix == null)
 	{
-	  _transformationMatrix = createTransformationMatrix(planet);
+	  _transformMatrix = createTransformMatrix(planet);
 	}
-	return _transformationMatrix;
+	return _transformMatrix;
   }
 
-  protected void cleanTransformationMatrix()
+  protected void cleanTransformMatrix()
   {
-	if (_transformationMatrix != null)
-		_transformationMatrix.dispose();
-	_transformationMatrix = null;
+	if (_transformMatrix != null)
+		_transformMatrix.dispose();
+	_transformMatrix = null;
   }
 
   public Shape(Geodetic3D position)
@@ -59,7 +59,7 @@ public abstract class Shape
 	  _position = new Geodetic3D(position);
 	  _heading = new Angle(Angle.zero());
 	  _pitch = new Angle(Angle.zero());
-	  _transformationMatrix = null;
+	  _transformMatrix = null;
 
   }
 
@@ -71,8 +71,8 @@ public abstract class Shape
 		_heading.dispose();
 	if (_pitch != null)
 		_pitch.dispose();
-	if (_transformationMatrix != null)
-		_transformationMatrix.dispose();
+	if (_transformMatrix != null)
+		_transformMatrix.dispose();
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -101,7 +101,7 @@ public abstract class Shape
 	if (_position != null)
 		_position.dispose();
 	_position = new Geodetic3D(position);
-	cleanTransformationMatrix();
+	cleanTransformMatrix();
   }
 
   public final void setHeading(Angle heading)
@@ -109,7 +109,7 @@ public abstract class Shape
 	if (_heading != null)
 		_heading.dispose();
 	_heading = new Angle(heading);
-	cleanTransformationMatrix();
+	cleanTransformMatrix();
   }
 
   public final void setPitch(Angle pitch)
@@ -117,7 +117,7 @@ public abstract class Shape
 	if (_pitch != null)
 		_pitch.dispose();
 	_pitch = new Angle(pitch);
-	cleanTransformationMatrix();
+	cleanTransformMatrix();
   }
 
   public final void render(RenderContext rc)
