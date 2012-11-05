@@ -14,15 +14,15 @@ Shape::~Shape() {
   delete _position;
   delete _heading;
   delete _pitch;
-  delete _transformationMatrix;
+  delete _transformMatrix;
 }
 
-void Shape::cleanTransformationMatrix() {
-  delete _transformationMatrix;
-  _transformationMatrix = NULL;
+void Shape::cleanTransformMatrix() {
+  delete _transformMatrix;
+  _transformMatrix = NULL;
 }
 
-MutableMatrix44D* Shape::createTransformationMatrix(const Planet* planet) {
+MutableMatrix44D* Shape::createTransformMatrix(const Planet* planet) {
   const MutableMatrix44D geodeticTranslation = MutableMatrix44D::createTranslationMatrix( planet->toCartesian(*_position) );
   const MutableMatrix44D geodeticRotation    = planet->orientationMatrix(*_position);
   const MutableMatrix44D geodeticTransform   = geodeticTranslation.multiply(geodeticRotation);
@@ -36,10 +36,10 @@ MutableMatrix44D* Shape::createTransformationMatrix(const Planet* planet) {
 
 
 MutableMatrix44D* Shape::getTransformMatrix(const Planet* planet) {
-  if (_transformationMatrix == NULL) {
-    _transformationMatrix = createTransformationMatrix(planet);
+  if (_transformMatrix == NULL) {
+    _transformMatrix = createTransformMatrix(planet);
   }
-  return _transformationMatrix;
+  return _transformMatrix;
 }
 
 void Shape::render(const RenderContext* rc) {

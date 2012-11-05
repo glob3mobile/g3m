@@ -19,19 +19,19 @@ private:
   Angle*      _heading;
   Angle*      _pitch;
 
-  MutableMatrix44D* _transformationMatrix;
-  MutableMatrix44D* createTransformationMatrix(const Planet* planet);
+  MutableMatrix44D* _transformMatrix;
+  MutableMatrix44D* createTransformMatrix(const Planet* planet);
   MutableMatrix44D* getTransformMatrix(const Planet* planet);
 
 protected:
-  virtual void cleanTransformationMatrix();
+  virtual void cleanTransformMatrix();
 
 public:
   Shape(const Geodetic3D& position) :
   _position( new Geodetic3D(position) ),
   _heading( new Angle(Angle::zero()) ),
   _pitch( new Angle(Angle::zero()) ),
-  _transformationMatrix(NULL) {
+  _transformMatrix(NULL) {
 
   }
 
@@ -52,19 +52,19 @@ public:
   void setPosition(const Geodetic3D& position) {
     delete _position;
     _position = new Geodetic3D(position);
-    cleanTransformationMatrix();
+    cleanTransformMatrix();
   }
 
   void setHeading(const Angle& heading) {
     delete _heading;
     _heading = new Angle(heading);
-    cleanTransformationMatrix();
+    cleanTransformMatrix();
   }
 
   void setPitch(const Angle& pitch) {
     delete _pitch;
     _pitch = new Angle(pitch);
-    cleanTransformationMatrix();
+    cleanTransformMatrix();
   }
 
   void render(const RenderContext* rc);
