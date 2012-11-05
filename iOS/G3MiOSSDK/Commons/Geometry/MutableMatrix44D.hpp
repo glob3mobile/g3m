@@ -58,8 +58,6 @@ private:
     _columnMajorFloatArray  = NULL;
   }
 
-  static Vector3D getTangent0(const Vector3D& normal);
-
 public:
   
   //CONTRUCTORS
