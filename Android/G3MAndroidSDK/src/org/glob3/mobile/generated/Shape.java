@@ -19,9 +19,9 @@ package org.glob3.mobile.generated;
 
 public abstract class Shape
 {
-  protected final Geodetic3D _position ;
-  protected final Angle _heading ;
-  protected final Angle _pitch ;
+  protected Geodetic3D _position;
+  protected Angle _heading;
+  protected Angle _pitch;
 
   public Shape(Geodetic3D position, Angle heading, Angle pitch)
   {
@@ -33,7 +33,12 @@ public abstract class Shape
 
   public void dispose()
   {
-
+	if (_position != null)
+		_position.dispose();
+	if (_heading != null)
+		_heading.dispose();
+	if (_pitch != null)
+		_pitch.dispose();
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -43,5 +48,56 @@ public abstract class Shape
 	return _position;
   }
 
-  public abstract void render(RenderContext rc);
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Angle getHeading() const
+  public final Angle getHeading()
+  {
+	return _heading;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Angle getPitch() const
+  public final Angle getPitch()
+  {
+	return _pitch;
+  }
+
+  public final void setPosition(Geodetic3D position)
+  {
+	if (_position != null)
+		_position.dispose();
+	_position = new Geodetic3D(position);
+  }
+
+  public final void render(RenderContext rc)
+  {
+	int __diego_at_work;
+	if (isReadyToRender(rc))
+	{
+	  GL gl = rc.getGL();
+  
+	  gl.pushMatrix();
+  
+	  final Planet planet = rc.getPlanet();
+  
+  
+	  final Vector3D cartesianPosition = planet.toCartesian(_position);
+	  final MutableMatrix44D translationMatrix = MutableMatrix44D.createTranslationMatrix(cartesianPosition);
+	  gl.multMatrixf(translationMatrix);
+  
+	  final MutableMatrix44D rotationMatrix = planet.orientationMatrix(_position, _heading, _pitch);
+	  gl.multMatrixf(rotationMatrix);
+  
+  
+	  rawRender(rc);
+  
+	  gl.popMatrix();
+	}
+  
+  }
+
+  public abstract boolean isReadyToRender(RenderContext rc);
+
+  public abstract void rawRender(RenderContext rc);
+
 }
