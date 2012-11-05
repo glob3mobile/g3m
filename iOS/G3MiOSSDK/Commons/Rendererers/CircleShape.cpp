@@ -23,7 +23,6 @@ Mesh* CircleShape::createMesh(const RenderContext* rc) {
   // first is the center
   vertices.add(0.0, 0.0, 0.0);
   indices.add(0);
-
   
   const double twicePi = GMath.pi() * 2;
 
@@ -36,13 +35,11 @@ Mesh* CircleShape::createMesh(const RenderContext* rc) {
     indices.add(i + 1);
   }
 
-  IndexedMesh* mesh = new IndexedMesh(GLPrimitive::triangleFan(),
-                                      true,
-                                      Vector3D::zero(),
-                                      vertices.create(),
-                                      indices.create(),
-                                      1,
-                                      new Color(_color));
-  
-  return mesh;
+  return new IndexedMesh(GLPrimitive::triangleFan(),
+                         true,
+                         Vector3D::zero(),
+                         vertices.create(),
+                         indices.create(),
+                         1,
+                         new Color(_color));
 }
