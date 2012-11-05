@@ -14,9 +14,9 @@
 
 class CircleShape : public MeshShape {
 private:
-  float _radius;
-  int   _steps;
-  Color _color;
+  float  _radius;
+  int    _steps;
+  Color* _color;
 
 protected:
   Mesh* createMesh(const RenderContext* rc);
@@ -28,11 +28,25 @@ public:
               int steps) :
   MeshShape(position),
   _radius(radius),
-  _color(color),
+  _color(new Color(color)),
   _steps(steps)
   {
 
   }
+
+  void setRadius(float radius) {
+    if (_radius != radius) {
+      _radius = radius;
+      cleanMesh();
+    }
+  }
+
+  void setColor(const Color& color) {
+    delete _color;
+    _color = new Color(color);
+    cleanMesh();
+  }
+  
 
 };
 

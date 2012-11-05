@@ -11,14 +11,21 @@
 
 #include "Geodetic3D.hpp"
 #include "Context.hpp"
+#include "Vector3D.hpp"
 class MutableMatrix44D;
 
 class Shape {
 private:
   Geodetic3D* _position;
+
   Angle*      _heading;
   Angle*      _pitch;
 
+  double      _scaleX;
+  double      _scaleY;
+  double      _scaleZ;
+
+  
   MutableMatrix44D* _transformMatrix;
   MutableMatrix44D* createTransformMatrix(const Planet* planet);
   MutableMatrix44D* getTransformMatrix(const Planet* planet);
@@ -31,6 +38,9 @@ public:
   _position( new Geodetic3D(position) ),
   _heading( new Angle(Angle::zero()) ),
   _pitch( new Angle(Angle::zero()) ),
+  _scaleX(1),
+  _scaleY(1),
+  _scaleZ(1),
   _transformMatrix(NULL) {
 
   }
@@ -73,6 +83,22 @@ public:
   
   virtual void rawRender(const RenderContext* rc) = 0;
 
+  void setScale(double scaleX,
+                double scaleY,
+                double scaleZ) {
+    _scaleX = scaleX;
+    _scaleY = scaleY;
+    _scaleZ = scaleZ;
+
+    cleanTransformMatrix();
+  }
+
+  void setScale(const Vector3D& scale) {
+    setScale(scale._x,
+             scale._y,
+             scale._z);
+  }
+  
 };
 
 #endif

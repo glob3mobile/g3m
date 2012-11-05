@@ -360,3 +360,12 @@ MutableMatrix44D MutableMatrix44D::createOrthographicProjectionMatrix(double lef
                           0, 0, -2 / fn, 0,
                           -(right+left) / rl, -(top+bottom) / tb, -(zfar+znear) / fn, 1 );
 }
+
+MutableMatrix44D MutableMatrix44D::createScaleMatrix(const Vector3D& scale) {
+  return MutableMatrix44D(scale._x, 0, 0, 0,
+                          0, scale._y, 0, 0,
+                          0, 0, scale._z, 0,
+                          0, 0, 0, 1);
+
+}
+

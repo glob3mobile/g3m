@@ -41,5 +41,5 @@ Mesh* CircleShape::createMesh(const RenderContext* rc) {
                          vertices.create(),
                          indices.create(),
                          1,
-                         new Color(_color));
+                         new Color(*_color));
 }

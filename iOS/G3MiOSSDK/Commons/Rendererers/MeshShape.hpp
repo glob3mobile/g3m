@@ -21,6 +21,8 @@ protected:
 
   Mesh* getMesh(const RenderContext* rc);
 
+  void cleanMesh();
+
 public:
   MeshShape(const Geodetic3D& position) :
   Shape(position),

@@ -13,6 +13,11 @@ MeshShape::~MeshShape() {
   delete _mesh;
 }
 
+void MeshShape::cleanMesh() {
+  delete _mesh;
+  _mesh = NULL;
+}
+
 
 Mesh* MeshShape::getMesh(const RenderContext* rc) {
   if (_mesh == NULL) {
