@@ -348,6 +348,12 @@ public final class NativeGL2_Android
 
 
    @Override
+   public int Primitive_TriangleFan() {
+      return GLES20.GL_TRIANGLE_FAN;
+   }
+
+
+   @Override
    public int Primitive_Lines() {
       return GLES20.GL_LINES;
    }
