@@ -719,20 +719,11 @@ public class GL
 //    }
 
 	if (_vertices != null)
-	{
-	  if (_vertices != null)
-		  _vertices.dispose();
-	}
+		_vertices.dispose();
 	if (_textureCoordinates != null)
-	{
-	  if (_textureCoordinates != null)
-		  _textureCoordinates.dispose();
-	}
+		_textureCoordinates.dispose();
 	if (_colors != null)
-	{
-	  if (_colors != null)
-		  _colors.dispose();
-	}
+		_colors.dispose();
 
   }
 

@@ -125,11 +125,9 @@ public class IndexedMesh extends Mesh
 	  _flatColor = null;
 	}
   
-	if (_extent != null)
-		_extent = null;
+	_extent = null;
 	if (_translationMatrix != null)
-		if (_translationMatrix != null)
-			_translationMatrix.dispose();
+		_translationMatrix.dispose();
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
