@@ -28,8 +28,8 @@ public class QuadShape extends MeshShape
   private IImage _textureImage;
   private final boolean _autoDeleteTextureImage;
 
-  private final int _width;
-  private final int _height;
+  private final float _width;
+  private final float _height;
 
   private IGLTextureId getTextureId(RenderContext rc)
   {
@@ -78,7 +78,6 @@ public class QuadShape extends MeshShape
 	indices.add(3);
   
   
-	//  const Vector3D center = rc->getPlanet()->toCartesian( _position );
 	final Vector3D center = Vector3D.zero();
   
 	IndexedMesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, center, vertices.create(), indices.create(), 1);
@@ -100,7 +99,7 @@ public class QuadShape extends MeshShape
 	return new TexturedMesh(im, true, texMap, true, true);
   }
 
-  public QuadShape(Geodetic3D position, IImage textureImage, boolean autoDeleteTextureImage, String textureFilename, int width, int height)
+  public QuadShape(Geodetic3D position, IImage textureImage, boolean autoDeleteTextureImage, String textureFilename, float width, float height)
   {
 	  super(position);
 	  _textureFilename = textureFilename;
