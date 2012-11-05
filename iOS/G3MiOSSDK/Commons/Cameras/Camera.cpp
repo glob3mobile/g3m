@@ -136,7 +136,7 @@ void Camera::print() {
 }
 
 Angle Camera::getHeading(const Vector3D& normal) const {
-  const Vector3D north2D  = Vector3D(0,0,1).projectionInPlane(normal);
+  const Vector3D north2D  = Vector3D::upZ().projectionInPlane(normal);
   const Vector3D up2D     = _up.asVector3D().projectionInPlane(normal);
   return up2D.signedAngleBetween(north2D, normal);
 }

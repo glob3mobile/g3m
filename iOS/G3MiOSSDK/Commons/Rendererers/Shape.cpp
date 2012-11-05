@@ -10,6 +10,38 @@
 #include "GL.hpp"
 #include "Planet.hpp"
 
+Shape::~Shape() {
+  delete _position;
+  delete _heading;
+  delete _pitch;
+  delete _transformationMatrix;
+}
+
+void Shape::cleanTransformationMatrix() {
+  delete _transformationMatrix;
+  _transformationMatrix = NULL;
+}
+
+MutableMatrix44D* Shape::createTransformationMatrix(const Planet* planet) {
+  const MutableMatrix44D geodeticTranslation = MutableMatrix44D::createTranslationMatrix( planet->toCartesian(*_position) );
+  const MutableMatrix44D geodeticRotation    = planet->orientationMatrix(*_position);
+  const MutableMatrix44D geodeticTransform   = geodeticTranslation.multiply(geodeticRotation);
+
+  const MutableMatrix44D headingRotation  = MutableMatrix44D::createRotationMatrix(*_heading, Vector3D::downZ());
+  const MutableMatrix44D pitchRotation    = MutableMatrix44D::createRotationMatrix(*_pitch, Vector3D::upX());
+  const MutableMatrix44D localTransform   = headingRotation.multiply(pitchRotation);
+
+  return new MutableMatrix44D( geodeticTransform.multiply(localTransform) );
+}
+
+
+MutableMatrix44D* Shape::getTransformMatrix(const Planet* planet) {
+  if (_transformationMatrix == NULL) {
+    _transformationMatrix = createTransformationMatrix(planet);
+  }
+  return _transformationMatrix;
+}
+
 void Shape::render(const RenderContext* rc) {
   int __diego_at_work;
   if (isReadyToRender(rc)) {
@@ -19,18 +51,21 @@ void Shape::render(const RenderContext* rc) {
 
     const Planet* planet = rc->getPlanet();
 
+//    const MutableMatrix44D geodeticTranslation = MutableMatrix44D::createTranslationMatrix( planet->toCartesian(*_position) );
+//    const MutableMatrix44D geodeticRotation    = planet->orientationMatrix(*_position);
+//    const MutableMatrix44D geodeticTransform   = geodeticTranslation.multiply(geodeticRotation);
+//
+//    const MutableMatrix44D headingRotation  = MutableMatrix44D::createRotationMatrix(*_heading, Vector3D::downZ());
+//    const MutableMatrix44D pitchRotation    = MutableMatrix44D::createRotationMatrix(*_pitch, Vector3D::upX());
+//    const MutableMatrix44D localTransform   = headingRotation.multiply(pitchRotation);
+//    
+//    gl->multMatrixf(geodeticTransform.multiply(localTransform));
 
-    const Vector3D cartesianPosition = planet->toCartesian( *_position );
-    const MutableMatrix44D translationMatrix = MutableMatrix44D::createTranslationMatrix(cartesianPosition);
-    gl->multMatrixf(translationMatrix);
-
-    const MutableMatrix44D rotationMatrix = planet->orientationMatrix(*_position, *_heading, *_pitch);
-    gl->multMatrixf(rotationMatrix);
-
+    gl->multMatrixf(*getTransformMatrix(planet));
 
     rawRender(rc);
-
+    
     gl->popMatrix();
   }
-
+  
 }

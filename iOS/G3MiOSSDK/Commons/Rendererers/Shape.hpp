@@ -11,6 +11,7 @@
 
 #include "Geodetic3D.hpp"
 #include "Context.hpp"
+class MutableMatrix44D;
 
 class Shape {
 protected:
@@ -18,22 +19,24 @@ protected:
   Angle*       _heading;
   Angle*       _pitch;
 
+  
+  MutableMatrix44D* _transformationMatrix;
+  MutableMatrix44D* createTransformationMatrix(const Planet* planet);
+  MutableMatrix44D* getTransformMatrix(const Planet* planet);
+
+  virtual void cleanTransformationMatrix();
+
 public:
-  Shape(const Geodetic3D& position,
-        const Angle& heading,
-        const Angle& pitch) :
+  Shape(const Geodetic3D& position) :
   _position( new Geodetic3D(position) ),
-  _heading( new Angle(heading) ),
-  _pitch( new Angle(pitch) ) {
+  _heading( new Angle(Angle::zero()) ),
+  _pitch( new Angle(Angle::zero()) ),
+  _transformationMatrix(NULL) {
 
   }
 
-  virtual ~Shape() {
-    delete _position;
-    delete _heading;
-    delete _pitch;
-  }
-
+  virtual ~Shape();
+  
   Geodetic3D getPosition() const {
     return *_position;
   }
@@ -49,6 +52,19 @@ public:
   void setPosition(const Geodetic3D& position) {
     delete _position;
     _position = new Geodetic3D(position);
+    cleanTransformationMatrix();
+  }
+
+  void setHeading(const Angle& heading) {
+    delete _heading;
+    _heading = new Angle(heading);
+    cleanTransformationMatrix();
+  }
+
+  void setPitch(const Angle& pitch) {
+    delete _pitch;
+    _pitch = new Angle(pitch);
+    cleanTransformationMatrix();
   }
 
   void render(const RenderContext* rc);

@@ -254,10 +254,11 @@
   QuadShape* quad = new QuadShape(Geodetic3D(Angle::fromDegrees(37.78333333),
                                              Angle::fromDegrees(-122.41666666666667),
                                              10000),
-                                  Angle::fromDegrees(0),
-                                  Angle::fromDegrees(0),
                                   textureImage, true, textureFileName,
                                   50000, 50000);
+  quad->setHeading( Angle::fromDegrees(45) );
+  quad->setPitch( Angle::fromDegrees(45) );
+
   shapesRenderer->addShape(quad);
   
   renderers.push_back(shapesRenderer);
