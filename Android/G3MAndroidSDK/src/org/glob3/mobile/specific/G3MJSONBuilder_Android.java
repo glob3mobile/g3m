@@ -33,11 +33,11 @@ public class G3MJSONBuilder_Android
    @Override
    public void initWidgetWithCameraConstraints(final ArrayList<ICameraConstrainer> cameraConstraints,
                                                final LayerSet layerSet,
+                                               final boolean incrementalTileQuality,
                                                final ArrayList<Renderer> renderers,
                                                final UserData userData,
                                                final GTask initializationTask,
                                                final ArrayList<PeriodicalTask> periodicalTasks) {
-
 
       final SQLiteStorage_Android storage = new SQLiteStorage_Android("g3m.cache", _g3mWidget.getContext());
 
@@ -51,9 +51,7 @@ public class G3MJSONBuilder_Android
 
       SceneParser.instance().parse(layerSet, downloader, renderers, _jsonSource);
 
-      _g3mWidget.initWidget(cameraConstraints, layerSet, renderers, userData, initializationTask);
-
+      _g3mWidget.initWidget(cameraConstraints, layerSet, renderers, userData, initializationTask, periodicalTasks,
+               incrementalTileQuality);
    }
-
-
 }
