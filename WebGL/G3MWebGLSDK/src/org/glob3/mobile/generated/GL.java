@@ -399,6 +399,11 @@ public class GL
 	_gl.drawElements(GLPrimitive.triangleStrip(), indices.size(), indices);
   }
 
+  public final void drawTriangleFan(IIntBuffer indices)
+  {
+	_gl.drawElements(GLPrimitive.triangleFan(), indices.size(), indices);
+  }
+
   public final void drawLines(IIntBuffer indices)
   {
 	_gl.drawElements(GLPrimitive.lines(), indices.size(), indices);

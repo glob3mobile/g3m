@@ -24,6 +24,36 @@ package org.glob3.mobile.generated;
 
 public class QuadShape extends MeshShape
 {
+  private final String _textureFilename;
+  private IImage _textureImage;
+  private final boolean _autoDeleteTextureImage;
+
+  private final int _width;
+  private final int _height;
+
+  private IGLTextureId getTextureId(RenderContext rc)
+  {
+	if (_textureImage == null)
+	{
+	  return null;
+	}
+  
+	final IGLTextureId texId = rc.getTexturesHandler().getGLTextureId(_textureImage, GLFormat.rgba(), _textureFilename, false);
+  
+	if (_autoDeleteTextureImage)
+	{
+	  rc.getFactory().deleteImage(_textureImage);
+	  _textureImage = null;
+	}
+  
+	if (texId == null)
+	{
+	  rc.getLogger().logError("Can't load file %s", _textureFilename);
+	}
+  
+	return texId;
+  }
+
   protected final Mesh createMesh(RenderContext rc)
   {
   
@@ -68,36 +98,6 @@ public class QuadShape extends MeshShape
 	TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true);
   
 	return new TexturedMesh(im, true, texMap, true, true);
-  }
-
-  protected final String _textureFilename;
-  protected IImage _textureImage;
-  protected final boolean _autoDeleteTextureImage;
-
-  protected final int _width;
-  protected final int _height;
-
-  protected final IGLTextureId getTextureId(RenderContext rc)
-  {
-	if (_textureImage == null)
-	{
-	  return null;
-	}
-  
-	final IGLTextureId texId = rc.getTexturesHandler().getGLTextureId(_textureImage, GLFormat.rgba(), _textureFilename, false);
-  
-	if (_autoDeleteTextureImage)
-	{
-	  rc.getFactory().deleteImage(_textureImage);
-	  _textureImage = null;
-	}
-  
-	if (texId == null)
-	{
-	  rc.getLogger().logError("Can't load file %s", _textureFilename);
-	}
-  
-	return texId;
   }
 
   public QuadShape(Geodetic3D position, IImage textureImage, boolean autoDeleteTextureImage, String textureFilename, int width, int height)

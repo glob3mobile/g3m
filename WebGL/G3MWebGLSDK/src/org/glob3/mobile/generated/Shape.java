@@ -21,13 +21,12 @@ package org.glob3.mobile.generated;
 
 public abstract class Shape
 {
-  protected Geodetic3D _position;
-  protected Angle _heading;
-  protected Angle _pitch;
+  private Geodetic3D _position;
+  private Angle _heading;
+  private Angle _pitch;
 
-
-  protected MutableMatrix44D _transformationMatrix;
-  protected final MutableMatrix44D createTransformationMatrix(Planet planet)
+  private MutableMatrix44D _transformationMatrix;
+  private MutableMatrix44D createTransformationMatrix(Planet planet)
   {
 	final MutableMatrix44D geodeticTranslation = MutableMatrix44D.createTranslationMatrix(planet.toCartesian(_position));
 	final MutableMatrix44D geodeticRotation = planet.orientationMatrix(_position);
@@ -39,7 +38,7 @@ public abstract class Shape
   
 	return new MutableMatrix44D(geodeticTransform.multiply(localTransform));
   }
-  protected final MutableMatrix44D getTransformMatrix(Planet planet)
+  private MutableMatrix44D getTransformMatrix(Planet planet)
   {
 	if (_transformationMatrix == null)
 	{

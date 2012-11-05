@@ -21,9 +21,10 @@ package org.glob3.mobile.generated;
 
 public abstract class MeshShape extends Shape
 {
+  private Mesh _mesh;
+
   protected abstract Mesh createMesh(RenderContext rc);
 
-  protected Mesh _mesh;
   protected final Mesh getMesh(RenderContext rc)
   {
 	if (_mesh == null)
