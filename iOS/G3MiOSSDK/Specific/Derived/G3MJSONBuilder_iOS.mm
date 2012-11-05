@@ -20,7 +20,7 @@
 G3MJSONBuilder_iOS::G3MJSONBuilder_iOS(std::string jsonSource, G3MWidget_iOS* g3mWidget): IG3MJSONBuilder(jsonSource), _g3mWidget(g3mWidget) {};
 
 
-void  G3MJSONBuilder_iOS::initWidgetWithCameraConstraints (std::vector<ICameraConstrainer*> cameraConstraints,  LayerSet* layerSet, std::vector<Renderer*> renderers, UserData* userData, GTask* initializationTask, std::vector<PeriodicalTask*> periodicalTasks){
+void  G3MJSONBuilder_iOS::initWidgetWithCameraConstraints (std::vector<ICameraConstrainer*> cameraConstraints,  LayerSet* layerSet, bool incrementalTileQuality, std::vector<Renderer*> renderers, UserData* userData, GTask* initializationTask, std::vector<PeriodicalTask*> periodicalTasks){
     
     IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
     const bool saveInBackground = true;
@@ -32,6 +32,7 @@ void  G3MJSONBuilder_iOS::initWidgetWithCameraConstraints (std::vector<ICameraCo
     
     [_g3mWidget initWidgetWithCameraConstraints: cameraConstraints
                                              layerSet: layerSet
+                               incrementalTileQuality: incrementalTileQuality
                                             renderers: renderers
                                              userData: userData
                                    initializationTask: initializationTask

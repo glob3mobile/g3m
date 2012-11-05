@@ -4,6 +4,7 @@ package org.glob3.mobile.specific;
 
 import java.util.ArrayList;
 
+import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BusyMeshRenderer;
 import org.glob3.mobile.generated.Camera;
 import org.glob3.mobile.generated.CameraDoubleDragHandler;
@@ -79,6 +80,8 @@ public final class G3MWidget_WebGL
    private GTask                         _initializationTask;
 
    private ArrayList<PeriodicalTask>     _periodicalTasks;
+
+   private boolean                       _incrementalTileQuality;
 
 
    public G3MWidget_WebGL(final String proxy) {
@@ -244,7 +247,8 @@ public final class G3MWidget_WebGL
                           final UserData userData,
                           final ArrayList<String> images,
                           final GTask initializationTask,
-                          final ArrayList<PeriodicalTask> periodicalTasks) {
+                          final ArrayList<PeriodicalTask> periodicalTasks,
+                          final boolean incrementalTileQuality) {
       jsDefineG3MBrowserObjects();
 
       _cameraConstraints = cameraConstraints;
@@ -254,6 +258,8 @@ public final class G3MWidget_WebGL
       _imagesToPreload = images;
       _initializationTask = initializationTask;
       _periodicalTasks = (periodicalTasks == null) ? new ArrayList<PeriodicalTask>() : periodicalTasks;
+
+      _incrementalTileQuality = incrementalTileQuality;
 
       // TODO TEMP HACK TO PRELOAD IMAGES
       preloadImagesAndInitWidget();
@@ -287,7 +293,7 @@ public final class G3MWidget_WebGL
       final boolean forceTopLevelTilesRenderOnStart = true;
 
       final TilesRenderParameters parameters = TilesRenderParameters.createDefault(renderDebug, useTilesSplitBudget,
-               forceTopLevelTilesRenderOnStart);
+               forceTopLevelTilesRenderOnStart, _incrementalTileQuality);
 
       //      final IStorage storage = new IndexedDBStorage_WebGL();
       final IDownloader downloader = new Downloader_WebGL(8, _delayMillis, _proxy);
@@ -481,5 +487,19 @@ public final class G3MWidget_WebGL
       return getG3MWidget().getCameraRenderer();
    }
 
+
+   public void setCameraHeading(final Angle angle) {
+      getG3MWidget().setCameraHeading(angle);
+   }
+
+
+   public void setCameraPitch(final Angle angle) {
+      getG3MWidget().setCameraPitch(angle);
+   }
+
+
+   public void resetCameraPosition() {
+      getG3MWidget().resetCameraPosition();
+   }
 
 }

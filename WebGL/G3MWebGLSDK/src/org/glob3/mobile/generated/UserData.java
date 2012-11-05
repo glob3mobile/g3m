@@ -73,7 +73,6 @@ package org.glob3.mobile.generated;
 
 
 
-
 public class UserData
 {
   private G3MWidget _widget;

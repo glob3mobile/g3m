@@ -321,7 +321,7 @@ private:
 #ifdef JAVA_CODE
   private Camera               _lastCamera;
 #endif 
-  
+
   std::vector<Tile*>     _topLevelTiles;
   
   ITimer* _lastSplitTimer;      // timer to start every time a tile get splitted into subtiles
@@ -332,7 +332,8 @@ private:
   TilesStatistics _lastStatistics;
   
   bool _firstRender;
-  
+
+  void pruneTopLevelTiles();
   
 public:
   TileRenderer(const TileTessellator* tessellator,
@@ -386,6 +387,20 @@ public:
   void onPause(const InitializationContext* ic) {
     
   }
+
+  void setEnable(bool enable) {
+#ifdef C_CODE
+    LeafRenderer::setEnable(enable);
+#endif
+#ifdef JAVA_CODE
+    super.setEnable(enable);
+#endif
+
+    if (!enable) {
+      pruneTopLevelTiles();
+    }
+  }
+
 
 };
 

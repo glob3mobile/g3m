@@ -113,13 +113,14 @@ Mesh* EllipsoidalTileTessellator::createMesh(const RenderContext* rc,
     indices.add(resolution*resolution);
   }
   
-  const Color *color = new Color(Color::fromRGBA((float) 0.1, (float) 0.1, (float) 0.1, (float) 1.0));
+  Color* color = new Color( Color::fromRGBA((float) 0.1, (float) 0.1, (float) 0.1, (float) 1.0) );
   
   return new IndexedMesh(GLPrimitive::triangleStrip(),
                          true,
                          vertices.getCenter(),
                          vertices.create(),
                          indices.create(),
+                         1,
                          color);
 }
 
@@ -235,7 +236,7 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
     indices.add(posS++);
   }
   
-  const Color *color = new Color(Color::fromRGBA((float) 1.0, (float) 0, (float) 0, (float) 1.0));
+  Color *color = new Color(Color::fromRGBA((float) 1.0, (float) 0, (float) 0, (float) 1.0));
   const Vector3D center = planet->toCartesian(sector.getCenter());
   
   return new IndexedMesh(GLPrimitive::lineLoop(),
@@ -243,5 +244,6 @@ Mesh* EllipsoidalTileTessellator::createDebugMesh(const RenderContext* rc,
                          center,
                          vertices.create(),
                          indices.create(),
+                         1,
                          color);
 }

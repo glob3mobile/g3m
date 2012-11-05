@@ -24,10 +24,11 @@ private:
   const MutableMatrix44D* _translationMatrix;
   IFloatBuffer*     _vertices;
   IIntBuffer*       _indices;
-  const Color*      _flatColor;
+  Color*            _flatColor;
   IFloatBuffer*     _colors;
   const float       _colorsIntensity;
-  
+  const float       _lineWidth;
+
   mutable Extent*   _extent;
   
   Extent* computeExtent() const;
@@ -39,7 +40,8 @@ public:
               const Vector3D& center,
               IFloatBuffer* vertices,
               IIntBuffer* indices,
-              const Color* flatColor = NULL,
+              float lineWidth,
+              Color* flatColor = NULL,
               IFloatBuffer* colors = NULL,
               const float colorsIntensity = (float)0.0);
   

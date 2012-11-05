@@ -84,24 +84,27 @@ public final class IntBuffer_WebGL
    }
 
 
-   //   @Override
-   //   public void put(final int i,
-   //                   final int value) {
-   //      jsPut(i, value);
-   //   }
-   //   private native void jsPut(int i,
-   //                             int value) /*-{
-   //
-   //      if (value < 0 || value > 65535) {
-   //         alert("EXCEDING SHORT RANGE IN UINT16 JAVASCRIPT BUFFER");
-   //      }
-   //
-   //      var thisInstance = this;
-   //      if (thisInstance.@org.glob3.mobile.specific.IntBuffer_WebGL::_buffer[i] != value) {
-   //         thisInstance.@org.glob3.mobile.specific.IntBuffer_WebGL::_buffer[i] = value;
-   //         thisInstance.@org.glob3.mobile.specific.IntBuffer_WebGL::incTimestamp()();
-   //      }
-   //   }-*/;
+   @Override
+   public void put(final int i,
+                   final int value) {
+      jsPut(i, value);
+   }
+
+
+   private native void jsPut(int i,
+                             int value) /*-{
+
+		if (value < 0 || value > 65535) {
+			alert("EXCEDING SHORT RANGE IN UINT16 JAVASCRIPT BUFFER");
+		}
+
+		var thisInstance = this;
+		if (thisInstance.@org.glob3.mobile.specific.IntBuffer_WebGL::_buffer[i] != value) {
+			thisInstance.@org.glob3.mobile.specific.IntBuffer_WebGL::_buffer[i] = value;
+			thisInstance.@org.glob3.mobile.specific.IntBuffer_WebGL::incTimestamp()();
+		}
+   }-*/;
+
 
    @Override
    public native void rawPut(final int i,

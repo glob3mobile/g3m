@@ -59,6 +59,13 @@ public class Ellipsoid
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Vector3D geodeticSurfaceNormal(const MutableVector3D& positionOnEllipsoid) const
+  public final Vector3D geodeticSurfaceNormal(MutableVector3D positionOnEllipsoid)
+  {
+	return positionOnEllipsoid.times(_oneOverRadiiSquared).normalized().asVector3D();
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Vector3D geodeticSurfaceNormal(const Geodetic3D& geodetic) const
   public final Vector3D geodeticSurfaceNormal(Geodetic3D geodetic)
   {
@@ -387,4 +394,23 @@ public class Ellipsoid
 	}
 	return pos.add(ray.times(distances.get(0)));
   }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: MutableMatrix44D orientationMatrix(const Geodetic2D& position, Angle heading, Angle pitch) const
+  public final MutableMatrix44D orientationMatrix(Geodetic2D position, Angle heading, Angle pitch)
+  {
+	// define rotation matrix to init orientation to latlon(0,0)
+	MutableMatrix44D M = new MutableMatrix44D(0,1,0,0,0,0,1,0,1,0,0,0,0,0,0,1);
+  
+	// orbit reference system to geodetic position
+	MutableMatrix44D Rlon = MutableMatrix44D.createRotationMatrix(position.longitude(), new Vector3D(0,1,0));
+	MutableMatrix44D Rlat = MutableMatrix44D.createRotationMatrix(position.latitude(), new Vector3D(-1,0,0));
+  
+	// set heading & pitch
+	MutableMatrix44D Rhead = MutableMatrix44D.createRotationMatrix(heading, new Vector3D(0,0,-1));
+	MutableMatrix44D Rpitch = MutableMatrix44D.createRotationMatrix(pitch, new Vector3D(1,0,0));
+  
+	return M.multiply(Rlon).multiply(Rlat).multiply(Rhead).multiply(Rpitch);
+  }
+
 }

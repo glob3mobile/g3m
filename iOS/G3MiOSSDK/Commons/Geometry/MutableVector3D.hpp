@@ -85,6 +85,12 @@ public:
                            _z * v._z);
   }
   
+  MutableVector3D times(const Vector3D& v) const {
+    return MutableVector3D(_x * v._x,
+                           _y * v._y,
+                           _z * v._z);
+  }
+
   MutableVector3D times(const double magnitude) const {
     return MutableVector3D(_x * magnitude,
                            _y * magnitude,

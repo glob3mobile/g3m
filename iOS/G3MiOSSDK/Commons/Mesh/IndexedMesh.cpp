@@ -14,21 +14,16 @@
 #include "IFloatBuffer.hpp"
 #include "IIntBuffer.hpp"
 
-IndexedMesh::~IndexedMesh()
-{
-//#ifdef C_CODE
+IndexedMesh::~IndexedMesh() {
   if (_owner){
     delete _vertices;
     delete _indices;
-    if (_colors != NULL) delete _colors;
-#ifdef C_CODE
-    if (_flatColor != NULL) delete _flatColor;
-#endif
+    delete _colors;
+    delete _flatColor;
   }
-  
+
   if (_extent != NULL) delete _extent;
   if (_translationMatrix != NULL) delete _translationMatrix;
-//#endif
 }
 
 IndexedMesh::IndexedMesh(const int primitive,
@@ -36,7 +31,8 @@ IndexedMesh::IndexedMesh(const int primitive,
                          const Vector3D& center,
                          IFloatBuffer* vertices,
                          IIntBuffer* indices,
-                         const Color* flatColor,
+                         float lineWidth,
+                         Color* flatColor,
                          IFloatBuffer* colors,
                          const float colorsIntensity) :
 _primitive(primitive),
@@ -48,8 +44,10 @@ _colors(colors),
 _colorsIntensity(colorsIntensity),
 _extent(NULL),
 _center(center),
-_translationMatrix(center.isNan()? NULL:
-                   new MutableMatrix44D(MutableMatrix44D::createTranslationMatrix(center)))
+_translationMatrix(( center.isNan() || center.isZero() )
+                    ? NULL
+                    : new MutableMatrix44D(MutableMatrix44D::createTranslationMatrix(center)) ),
+_lineWidth(lineWidth)
 {
 }
 
@@ -73,6 +71,8 @@ void IndexedMesh::render(const RenderContext* rc) const {
   }
   
   gl->vertexPointer(3, 0, _vertices);
+
+  gl->lineWidth(_lineWidth);
   
   if (_translationMatrix != NULL){
     gl->pushMatrix();

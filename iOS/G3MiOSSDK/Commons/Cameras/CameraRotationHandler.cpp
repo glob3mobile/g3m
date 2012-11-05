@@ -78,7 +78,7 @@ void CameraRotationHandler::onMove(const EventContext *eventContext,
   const Vector2I cm = c0.add(c1).add(c2).div(3);
   
   // compute normal to Initial point
-  Vector3D normal = eventContext->getPlanet()->geodeticSurfaceNormal(_initialPoint.asVector3D());
+  Vector3D normal = eventContext->getPlanet()->geodeticSurfaceNormal(_initialPoint );
   
   // vertical rotation around normal vector to globe
   Camera *camera = cameraContext->getNextCamera();

@@ -40,14 +40,15 @@ public final class IntBuffer_Android
    }
 
 
-   //   @Override
-   //   public void put(final int i,
-   //                   final int value) {
-   //      if (_buffer.get(i) != value) {
-   //         _buffer.put(i, value);
-   //         _timestamp++;
-   //      }
-   //   }
+   @Override
+   public void put(final int i,
+                   final int value) {
+      if (_buffer.get(i) != value) {
+         _buffer.put(i, value);
+         _timestamp++;
+      }
+   }
+
 
    @Override
    public void rawPut(final int i,

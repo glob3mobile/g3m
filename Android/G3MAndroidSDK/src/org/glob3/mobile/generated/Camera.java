@@ -103,7 +103,6 @@ public class Camera
 //ORIGINAL LINE: void render(const RenderContext* rc) const
   public final void render(RenderContext rc)
   {
-  
 	GL gl = rc.getGL();
 	gl.setProjection(getProjectionMatrix());
 	gl.loadMatrixf(getModelMatrix());
@@ -327,7 +326,7 @@ public class Camera
   public final Vector3D getHorizontalVector()
   {
 	int todo_remove_get_in_matrix;
-	MutableMatrix44D M = getModelMatrix();
+	final MutableMatrix44D M = getModelMatrix();
 	return new Vector3D(M.get(0), M.get(4), M.get(8));
   }
 
@@ -404,6 +403,64 @@ public class Camera
 	}
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Angle getHeading() const
+  public final Angle getHeading()
+  {
+	final Vector3D normal = _planet.geodeticSurfaceNormal(_position);
+	return getHeading(normal);
+  }
+  public final void setHeading(Angle angle)
+  {
+	final Vector3D normal = _planet.geodeticSurfaceNormal(_position);
+	final Angle currentHeading = getHeading(normal);
+	final Angle delta = currentHeading.sub(angle);
+	rotateWithAxisAndPoint(normal, _position.asVector3D(), delta);
+	//printf ("previous heading=%f   current heading=%f\n", currentHeading.degrees(), getHeading().degrees());
+  }
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Angle getPitch() const
+  public final Angle getPitch()
+  {
+	final Vector3D normal = _planet.geodeticSurfaceNormal(_position);
+	final Angle angle = _up.asVector3D().angleBetween(normal);
+	return Angle.fromDegrees(90).sub(angle);
+  }
+  public final void setPitch(Angle angle)
+  {
+	final Angle currentPitch = getPitch();
+	final Vector3D u = getHorizontalVector();
+	rotateWithAxisAndPoint(u, _position.asVector3D(), angle.sub(currentPitch));
+	//printf ("previous pitch=%f   current pitch=%f\n", currentPitch.degrees(), getPitch().degrees());
+  }
+
+  public final void orbitTo(Vector3D pos)
+  {
+	final MutableVector3D finalPos = pos.asMutableVector3D();
+	final Vector3D axis = _position.cross(finalPos).asVector3D();
+	if (axis.length()<1e-3)
+	{
+	  return;
+	}
+	final Angle angle = _position.angleBetween(finalPos);
+	rotateWithAxis(axis, angle);
+  
+	final double dist = _position.length() - pos.length();
+	moveForward(dist);
+  }
+  public final void orbitTo(Geodetic3D g3d)
+  {
+	orbitTo(_planet.toCartesian(g3d));
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Angle getHeading(const Vector3D& normal) const
+  private Angle getHeading(Vector3D normal)
+  {
+	final Vector3D north2D = new Vector3D(0,0,1).projectionInPlane(normal);
+	final Vector3D up2D = _up.asVector3D().projectionInPlane(normal);
+	return up2D.signedAngleBetween(north2D, normal);
+  }
 
   //IF A NEW ATTRIBUTE IS ADDED CHECK CONSTRUCTORS AND RESET() !!!!
   private int _width;

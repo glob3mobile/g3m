@@ -62,6 +62,14 @@ public class TileRenderer extends LeafRenderer
 
   private boolean _firstRender;
 
+  private void pruneTopLevelTiles()
+  {
+	for (int i = 0; i < _topLevelTiles.size(); i++)
+	{
+	  Tile tile = _topLevelTiles.get(i);
+	  tile.prune(_texturizer);
+	}
+  }
 
   public TileRenderer(TileTessellator tessellator, TileTexturizer texturizer, LayerSet layerSet, TilesRenderParameters parameters, boolean showStatistics)
   {
@@ -263,5 +271,16 @@ public class TileRenderer extends LeafRenderer
   {
 
   }
+
+  public final void setEnable(boolean enable)
+  {
+	super.setEnable(enable);
+
+	if (!enable)
+	{
+	  pruneTopLevelTiles();
+	}
+  }
+
 
 }

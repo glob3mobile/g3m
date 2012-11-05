@@ -19,7 +19,7 @@ class G3MJSONBuilder_iOS : public IG3MJSONBuilder {
     
 public:
     G3MJSONBuilder_iOS(std::string jsonSource, G3MWidget_iOS* g3mWidget);
-    void initWidgetWithCameraConstraints (std::vector<ICameraConstrainer*> cameraConstraints, LayerSet* layerSet, std::vector<Renderer*> renderers, UserData* userData, GTask* initializationTask, std::vector<PeriodicalTask*> periodicalTasks);
+    void initWidgetWithCameraConstraints (std::vector<ICameraConstrainer*> cameraConstraints, LayerSet* layerSet, bool incrementalTileQuality, std::vector<Renderer*> renderers, UserData* userData, GTask* initializationTask, std::vector<PeriodicalTask*> periodicalTasks);
 };
 
 #endif

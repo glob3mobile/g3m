@@ -141,7 +141,7 @@ public class SimplePlanetRenderer extends LeafRenderer
 	  flatColor = new Color(Color.fromRGBA((float) 0.0, (float) 1.0, (float) 0.0, (float) 1.0));
 	}
   
-	IndexedMesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, Vector3D.zero(), ver, ind, flatColor, vertexColors);
+	IndexedMesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, Vector3D.zero(), ver, ind, 1, flatColor, vertexColors);
   
 	//TEXTURED
 	if (true)
@@ -168,7 +168,7 @@ public class SimplePlanetRenderer extends LeafRenderer
   
 	  TextureMapping texMap = new SimpleTextureMapping(texId, texC, true);
   
-	  _mesh = new TexturedMesh(im, true, texMap, true);
+	  _mesh = new TexturedMesh(im, true, texMap, true, false);
 	}
   
   

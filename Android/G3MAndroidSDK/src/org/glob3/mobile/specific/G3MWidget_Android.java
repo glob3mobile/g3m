@@ -4,6 +4,7 @@ package org.glob3.mobile.specific;
 
 import java.util.ArrayList;
 
+import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.BusyMeshRenderer;
 import org.glob3.mobile.generated.CachedDownloader;
 import org.glob3.mobile.generated.Camera;
@@ -17,6 +18,7 @@ import org.glob3.mobile.generated.CompositeRenderer;
 import org.glob3.mobile.generated.EllipsoidalTileTessellator;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GTask;
+import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IFactory;
@@ -33,6 +35,7 @@ import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Planet;
 import org.glob3.mobile.generated.TileRenderer;
 import org.glob3.mobile.generated.TilesRenderParameters;
+import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.Touch;
 import org.glob3.mobile.generated.TouchEvent;
 import org.glob3.mobile.generated.TouchEventType;
@@ -41,6 +44,7 @@ import org.glob3.mobile.generated.Vector2I;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
@@ -69,6 +73,8 @@ public final class G3MWidget_Android
 
    private IDownloader                                    _downloader;
    private GTask                                          _initializationTask;
+   private ArrayList<PeriodicalTask>                      _periodicalTasks;
+   private boolean                                        _incrementalTileQuality;
 
 
    //   private boolean                                        _isPaused             = false;
@@ -77,7 +83,14 @@ public final class G3MWidget_Android
 
 
    public G3MWidget_Android(final Context context) {
-      super(context);
+      this(context, null);
+   }
+
+
+   // Needed to create widget from XML layout
+   public G3MWidget_Android(final Context context,
+                            final AttributeSet attrs) {
+      super(context, attrs);
 
       initSingletons();
 
@@ -94,43 +107,49 @@ public final class G3MWidget_Android
          setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
       }
 
-      //Double Tap Listener
-      _gestureDetector = new GestureDetector(this);
-      _doubleTapListener = new OnDoubleTapListener() {
+      if (!isInEditMode()) { // needed to avoid visual edition of this widget
+         //Double Tap Listener
+         _gestureDetector = new GestureDetector(this);
+         _doubleTapListener = new OnDoubleTapListener() {
 
-         @Override
-         public boolean onSingleTapConfirmed(final MotionEvent e) {
-            // TODO Auto-generated method stub
-            return false;
-         }
-
-
-         @Override
-         public boolean onDoubleTapEvent(final MotionEvent event) {
-            return true;
-         }
+            @Override
+            public boolean onSingleTapConfirmed(final MotionEvent e) {
+               // TODO Auto-generated method stub
+               return false;
+            }
 
 
-         @Override
-         public boolean onDoubleTap(final MotionEvent event) {
+            @Override
+            public boolean onDoubleTapEvent(final MotionEvent event) {
+               return true;
+            }
 
-            final TouchEvent te = _motionEventProcessor.processDoubleTapEvent(event);
 
-            queueEvent(new Runnable() {
-               @Override
-               public void run() {
-                  _g3mWidget.onTouchEvent(te);
-               }
-            });
+            @Override
+            public boolean onDoubleTap(final MotionEvent event) {
 
-            return true;
-         }
-      };
-      _gestureDetector.setOnDoubleTapListener(_doubleTapListener);
+               final TouchEvent te = _motionEventProcessor.processDoubleTapEvent(event);
+
+               queueEvent(new Runnable() {
+                  @Override
+                  public void run() {
+                     _g3mWidget.onTouchEvent(te);
+                  }
+               });
+
+               return true;
+            }
+         };
+         _gestureDetector.setOnDoubleTapListener(_doubleTapListener);
+      }
+      else {
+         _gestureDetector = null;
+         _doubleTapListener = null;
+      }
    }
 
 
-   public void initSingletons() {
+   private void initSingletons() {
       final ILogger logger = new Logger_Android(LogLevel.ErrorLevel);
       final IFactory factory = new Factory_Android(getContext());
       final IStringUtils stringUtils = new StringUtils_Android();
@@ -242,12 +261,16 @@ public final class G3MWidget_Android
                           final LayerSet layerSet,
                           final ArrayList<org.glob3.mobile.generated.Renderer> renderers,
                           final UserData userData,
-                          final GTask initializationTask) {
+                          final GTask initializationTask,
+                          final ArrayList<PeriodicalTask> periodicalTasks,
+                          final boolean incrementalTileQuality) {
       _cameraConstraints = cameraConstraints;
       _layerSet = layerSet;
       _renderers = renderers;
       _userData = userData;
       _initializationTask = initializationTask;
+      _periodicalTasks = periodicalTasks;
+      _incrementalTileQuality = incrementalTileQuality;
    }
 
 
@@ -269,7 +292,7 @@ public final class G3MWidget_Android
       final boolean forceTopLevelTilesRenderOnStart = true;
 
       final TilesRenderParameters parameters = TilesRenderParameters.createDefault(renderDebug, useTilesSplitBudget,
-               forceTopLevelTilesRenderOnStart);
+               forceTopLevelTilesRenderOnStart, _incrementalTileQuality);
 
       initWidget(cameraRenderer, parameters, _initializationTask);
    }
@@ -318,7 +341,6 @@ public final class G3MWidget_Android
 
       final org.glob3.mobile.generated.Renderer busyRenderer = new BusyMeshRenderer();
 
-      final ArrayList<PeriodicalTask> periodicalTasks = new ArrayList<PeriodicalTask>();
 
       _g3mWidget = G3MWidget.create( //
                nativeGL, //
@@ -335,7 +357,7 @@ public final class G3MWidget_Android
                false, // 
                initializationTask, //
                true, //
-               periodicalTasks);
+               _periodicalTasks);
 
       _g3mWidget.setUserData(_userData);
 
@@ -442,4 +464,39 @@ public final class G3MWidget_Android
       return getG3MWidget().getUserData();
    }
 
+
+   public void setAnimatedCameraPosition(final Geodetic3D position,
+                                         final TimeInterval interval) {
+      getG3MWidget().setAnimatedCameraPosition(position, interval);
+   }
+
+
+   public void setAnimatedCameraPosition(final Geodetic3D position) {
+      getG3MWidget().setAnimatedCameraPosition(position);
+   }
+
+
+   public void setCameraPosition(final Geodetic3D position) {
+      getG3MWidget().setCameraPosition(position);
+   }
+
+
+   public CameraRenderer getCameraRenderer() {
+      return getG3MWidget().getCameraRenderer();
+   }
+
+
+   public void setCameraHeading(final Angle angle) {
+      getG3MWidget().setCameraHeading(angle);
+   }
+
+
+   public void resetCameraPosition() {
+      getG3MWidget().resetCameraPosition();
+   }
+
+
+   public void setCameraPitch(final Angle angle) {
+      getG3MWidget().setCameraPitch(angle);
+   }
 }

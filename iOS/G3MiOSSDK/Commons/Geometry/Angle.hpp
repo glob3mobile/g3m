@@ -153,8 +153,18 @@ public:
   Angle nearestAngleInInterval(const Angle& min, const Angle& max) const;
   
   Angle distanceTo(const Angle& other) const;
-  
-  
+
+  Angle normalized() const {
+    double degrees = _degrees;
+    while (degrees < 0) {
+      degrees += 360;
+    }
+    while (degrees >= 360) {
+      degrees -= 360;
+    }
+    return Angle(degrees);
+  }
+
   bool isZero() const {
     return (_degrees == 0);
   }

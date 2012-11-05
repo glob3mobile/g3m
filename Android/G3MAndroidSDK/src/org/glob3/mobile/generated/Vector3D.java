@@ -169,6 +169,16 @@ public class Vector3D
   
 	return Angle.fromRadians(IMathUtils.instance().acos(c));
   }
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Angle signedAngleBetween(const Vector3D& other, const Vector3D& up) const
+  public final Angle signedAngleBetween(Vector3D other, Vector3D up)
+  {
+	Angle angle = angleBetween(other);
+	if (cross(other).dot(up)>0)
+	  return angle;
+	else
+	  return angle.times(-1);
+  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Vector3D rotateAroundAxis(const Vector3D& axis, const Angle& theta) const

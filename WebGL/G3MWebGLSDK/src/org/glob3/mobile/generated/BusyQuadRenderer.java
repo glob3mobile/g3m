@@ -34,19 +34,16 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
   {
 	//TEXTURED
 	IGLTextureId texId = null;
-	if (true)
+	IImage image = rc.getFactory().createImageFromFileName(_textureFilename);
+  
+	texId = rc.getTexturesHandler().getGLTextureId(image, GLFormat.rgba(), _textureFilename, false);
+  
+	rc.getFactory().deleteImage(image);
+  
+	if (texId == null)
 	{
-	  IImage image = rc.getFactory().createImageFromFileName(_textureFilename);
-  
-	  texId = rc.getTexturesHandler().getGLTextureId(image, GLFormat.rgba(), _textureFilename, false);
-  
-	  rc.getFactory().deleteImage(image);
-  
-	  if (texId == null)
-	  {
-		rc.getLogger().logError("Can't load file %s", _textureFilename);
-		return false;
-	  }
+	  rc.getLogger().logError("Can't load file %s", _textureFilename);
+	  return false;
 	}
   
 	final float halfSize = 16F;
@@ -68,11 +65,11 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
 	texCoords.add(1, 0);
 	texCoords.add(1, 1);
   
-	IndexedMesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, Vector3D.zero(), vertices.create(), indices.create());
+	IndexedMesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, Vector3D.zero(), vertices.create(), indices.create(), 1);
   
 	TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true);
   
-	_quadMesh = new TexturedMesh(im, true, texMap, true);
+	_quadMesh = new TexturedMesh(im, true, texMap, true, false);
   
 	return true;
   }

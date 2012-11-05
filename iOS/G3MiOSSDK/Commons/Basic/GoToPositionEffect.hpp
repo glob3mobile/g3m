@@ -38,7 +38,8 @@ public:
     Geodetic3D g = Geodetic3D::interpolation(_initialPos, _finalPos, percent);
     
     //printf("EFFECT %f - %f, %f, %f\n", percent, g.latitude()._degrees, g.longitude()._degrees, g.height());
-    camera->setPosition(g);
+    //camera->setPosition(g);
+    camera->orbitTo(g);
   }
   
   virtual void stop(const RenderContext *rc,

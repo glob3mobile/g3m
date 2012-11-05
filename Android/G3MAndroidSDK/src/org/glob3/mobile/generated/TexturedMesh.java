@@ -23,15 +23,16 @@ public class TexturedMesh extends Mesh
   private final TextureMapping _textureMapping;
   private final boolean _ownedMesh;
   private final boolean _ownedTexMapping;
+  private final boolean _transparent;
 
 
-
-  public TexturedMesh(Mesh mesh, boolean ownedMesh, TextureMapping textureMapping, boolean ownedTexMapping)
+  public TexturedMesh(Mesh mesh, boolean ownedMesh, TextureMapping textureMapping, boolean ownedTexMapping, boolean transparent)
   {
 	  _mesh = mesh;
 	  _ownedMesh = ownedMesh;
 	  _textureMapping = textureMapping;
 	  _ownedTexMapping = ownedTexMapping;
+	  _transparent = transparent;
 
   }
 
@@ -45,6 +46,11 @@ public class TexturedMesh extends Mesh
   {
 	GL gl = rc.getGL();
   
+	if (_transparent)
+	{
+	  gl.enableBlend();
+	}
+  
 	gl.enableTextures();
 	gl.enableTexture2D();
   
@@ -54,6 +60,12 @@ public class TexturedMesh extends Mesh
   
 	gl.disableTexture2D();
 	gl.disableTextures();
+  
+	if (_transparent)
+	{
+	  gl.disableBlend();
+	}
+  
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

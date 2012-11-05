@@ -10,12 +10,17 @@ import org.glob3.mobile.generated.GLErrorRenderer;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
+import org.glob3.mobile.generated.IFactory;
+import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarkTouchListener;
 import org.glob3.mobile.generated.MarksRenderer;
+import org.glob3.mobile.generated.PeriodicalTask;
+import org.glob3.mobile.generated.QuadShape;
 import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.Sector;
+import org.glob3.mobile.generated.ShapesRenderer;
 import org.glob3.mobile.generated.SimpleCameraConstrainer;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.generated.UserData;
@@ -185,6 +190,29 @@ public class G3MAndroidDemoActivity
 
       }
 
+
+      final boolean useQuadShapes = true;
+      if (useQuadShapes) {
+         final ShapesRenderer shapesRenderer = new ShapesRenderer();
+         final String textureFileName = "g3m-marker.png";
+         final IImage textureImage = IFactory.instance().createImageFromFileName(textureFileName);
+
+         final QuadShape quad = new QuadShape( //
+                  new Geodetic3D(Angle.fromDegrees(37.78333333), //
+                           Angle.fromDegrees(-122.41666666666667), //
+                           10000), //
+                  Angle.fromDegrees(0), //
+                  Angle.fromDegrees(0), //
+                  textureImage, //
+                  true, //
+                  textureFileName, //
+                  500000, //
+                  500000);
+         shapesRenderer.addShape(quad);
+
+         renderers.add(shapesRenderer);
+      }
+
       //  if (false) {
       //    LatLonMeshRenderer *renderer = new LatLonMeshRenderer();
       //    renderers.push_back(renderer);
@@ -207,7 +235,10 @@ public class G3MAndroidDemoActivity
       final UserData userData = null;
 
       final GTask initializationTask = null;
-      widget.initWidget(cameraConstraints, layerSet, renderers, userData, initializationTask);
+      final ArrayList<PeriodicalTask> periodicalTasks = new ArrayList<PeriodicalTask>();
+      final boolean incrementalTileQuality = false;
+      widget.initWidget(cameraConstraints, layerSet, renderers, userData, initializationTask, periodicalTasks,
+               incrementalTileQuality);
 
    }
 }
