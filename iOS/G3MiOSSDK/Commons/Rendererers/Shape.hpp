@@ -14,16 +14,16 @@
 class MutableMatrix44D;
 
 class Shape {
-protected:
-  Geodetic3D*  _position;
-  Angle*       _heading;
-  Angle*       _pitch;
+private:
+  Geodetic3D* _position;
+  Angle*      _heading;
+  Angle*      _pitch;
 
-  
   MutableMatrix44D* _transformationMatrix;
   MutableMatrix44D* createTransformationMatrix(const Planet* planet);
   MutableMatrix44D* getTransformMatrix(const Planet* planet);
 
+protected:
   virtual void cleanTransformationMatrix();
 
 public:

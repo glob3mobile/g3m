@@ -13,10 +13,12 @@
 class Mesh;
 
 class MeshShape : public Shape {
+private:
+  Mesh* _mesh;
+
 protected:
   virtual Mesh* createMesh(const RenderContext* rc) = 0;
 
-  Mesh* _mesh;
   Mesh* getMesh(const RenderContext* rc);
 
 public:
