@@ -40,13 +40,9 @@ public:
   }
   
   ~PeriodicalTask() {
-    if (_task != NULL) {
       delete _task;
-    }
     
-    if (_timer != NULL) {
       IFactory::instance()->deleteTimer(_timer);
-    }
   }
   
   void executeIfNecessary() {

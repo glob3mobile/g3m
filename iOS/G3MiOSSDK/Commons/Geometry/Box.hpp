@@ -30,7 +30,7 @@ public:
   {}
   
   ~Box() {
-    if (_mesh) delete _mesh;
+    delete _mesh;
   };
   
   bool touches(const Frustum* frustum) const {

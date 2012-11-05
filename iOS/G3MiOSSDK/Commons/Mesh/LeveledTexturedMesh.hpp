@@ -75,17 +75,13 @@ public:
   }
   
   virtual ~LazyTextureMapping() {
-    if (_initializer != NULL) {
-      delete _initializer;
-      _initializer = NULL;
-    }
-
-    if (_texCoords != NULL) {
-      if (_ownedTexCoords) {
+    delete _initializer;
+    _initializer = NULL;
+    
+    if (_ownedTexCoords) {
         delete _texCoords;
-      }
-      _texCoords = NULL;
     }
+    _texCoords = NULL;
     
     releaseGLTextureId();
   }

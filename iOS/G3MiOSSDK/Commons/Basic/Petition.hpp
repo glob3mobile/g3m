@@ -56,10 +56,8 @@ public:
   }
   
   void releaseImage() {
-    if (_image != NULL) {
-      delete _image;
-      _image = NULL;
-    }
+    delete _image;
+    _image = NULL;
   }
   
   bool hasImage() const {

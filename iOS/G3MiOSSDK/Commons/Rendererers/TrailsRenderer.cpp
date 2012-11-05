@@ -16,9 +16,7 @@
 #include "GLConstants.hpp"
 
 Trail::~Trail() {
-  if (_mesh != NULL) {
-    delete _mesh;
-  }
+  delete _mesh;
 }
 
 Mesh* Trail::createMesh(const Planet* planet) {
@@ -49,9 +47,7 @@ Mesh* Trail::createMesh(const Planet* planet) {
 
 Mesh* Trail::getMesh(const Planet* planet) {
   if (_positionsDirty || (_mesh == NULL)) {
-    if (_mesh != NULL) {
-      delete _mesh;
-    }
+    delete _mesh;
     
     _mesh = createMesh(planet);
   }

@@ -83,12 +83,8 @@ bool Mark::isReady() const {
 }
 
 Mark::~Mark() {
-  if (_cartesianPosition != NULL) {
-    delete _cartesianPosition;
-  }
-  if (_vertices != NULL) {
-    delete _vertices;
-  }
+  delete _cartesianPosition;
+  delete _vertices;
 }
 
 Vector3D* Mark::getCartesianPosition(const Planet* planet) {
