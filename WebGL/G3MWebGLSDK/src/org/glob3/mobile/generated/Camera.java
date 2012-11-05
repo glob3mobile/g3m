@@ -452,7 +452,7 @@ public class Camera
 //ORIGINAL LINE: Angle getHeading(const Vector3D& normal) const
   private Angle getHeading(Vector3D normal)
   {
-	final Vector3D north2D = new Vector3D(0,0,1).projectionInPlane(normal);
+	final Vector3D north2D = Vector3D.upZ().projectionInPlane(normal);
 	final Vector3D up2D = _up.asVector3D().projectionInPlane(normal);
 	return up2D.signedAngleBetween(north2D, normal);
   }

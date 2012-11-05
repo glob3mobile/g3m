@@ -396,36 +396,51 @@ public class Ellipsoid
   }
 
 
+//  MutableMatrix44D orientationMatrix(const Angle& latitude,
+//                                     const Angle& longitude,
+//                                     const Angle& heading,
+//                                     const Angle& pitch) const;
+//
+//  MutableMatrix44D orientationMatrix(const Geodetic2D& position,
+//                                     const Angle& heading,
+//                                     const Angle& pitch) const {
+//    return orientationMatrix(position.latitude(), position.longitude(),
+//                             heading, pitch);
+//  }
+//  
+//  MutableMatrix44D orientationMatrix(const Geodetic3D& position,
+//                                     const Angle& heading,
+//                                     const Angle& pitch) const {
+//    return orientationMatrix(position.latitude(), position.longitude(),
+//                             heading, pitch);
+//  }
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: MutableMatrix44D orientationMatrix(const Angle& latitude, const Angle& longitude, const Angle& heading, const Angle& pitch) const
-  public final MutableMatrix44D orientationMatrix(Angle latitude, Angle longitude, Angle heading, Angle pitch)
+//ORIGINAL LINE: MutableMatrix44D orientationMatrix(const Angle& latitude, const Angle& longitude) const
+  public final MutableMatrix44D orientationMatrix(Angle latitude, Angle longitude)
   {
 	// define rotation matrix to init orientation to latlon(0,0)
 	final MutableMatrix44D M = new MutableMatrix44D(0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1);
   
 	// orbit reference system to geodetic position
-	final MutableMatrix44D Rlon = MutableMatrix44D.createRotationMatrix(longitude, new Vector3D(0,1,0));
-	final MutableMatrix44D Rlat = MutableMatrix44D.createRotationMatrix(latitude, new Vector3D(-1,0,0));
+	final MutableMatrix44D longitudeRotation = MutableMatrix44D.createRotationMatrix(longitude, Vector3D.upY());
+	final MutableMatrix44D latitudeRotation = MutableMatrix44D.createRotationMatrix(latitude, Vector3D.downX());
   
-	// set heading & pitch
-	final MutableMatrix44D Rhead = MutableMatrix44D.createRotationMatrix(heading, new Vector3D(0,0,-1));
-	final MutableMatrix44D Rpitch = MutableMatrix44D.createRotationMatrix(pitch, new Vector3D(1,0,0));
-  
-	return M.multiply(Rlon).multiply(Rlat).multiply(Rhead).multiply(Rpitch);
+	return M.multiply(longitudeRotation).multiply(latitudeRotation);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: MutableMatrix44D orientationMatrix(const Geodetic2D& position, const Angle& heading, const Angle& pitch) const
-  public final MutableMatrix44D orientationMatrix(Geodetic2D position, Angle heading, Angle pitch)
+//ORIGINAL LINE: MutableMatrix44D orientationMatrix(const Geodetic2D& position) const
+  public final MutableMatrix44D orientationMatrix(Geodetic2D position)
   {
-	return orientationMatrix(position.latitude(), position.longitude(), heading, pitch);
+	return orientationMatrix(position.latitude(), position.longitude());
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: MutableMatrix44D orientationMatrix(const Geodetic3D& position, const Angle& heading, const Angle& pitch) const
-  public final MutableMatrix44D orientationMatrix(Geodetic3D position, Angle heading, Angle pitch)
+//ORIGINAL LINE: MutableMatrix44D orientationMatrix(const Geodetic3D& position) const
+  public final MutableMatrix44D orientationMatrix(Geodetic3D position)
   {
-	return orientationMatrix(position.latitude(), position.longitude(), heading, pitch);
+	return orientationMatrix(position.latitude(), position.longitude());
   }
 
 }

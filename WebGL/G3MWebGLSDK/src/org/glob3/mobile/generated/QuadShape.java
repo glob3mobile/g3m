@@ -111,9 +111,9 @@ public class QuadShape extends Shape
 	return texId;
   }
 
-  public QuadShape(Geodetic3D position, Angle heading, Angle pitch, IImage textureImage, boolean autoDeleteTextureImage, String textureFilename, int width, int height)
+  public QuadShape(Geodetic3D position, IImage textureImage, boolean autoDeleteTextureImage, String textureFilename, int width, int height)
   {
-	  super(position, heading, pitch);
+	  super(position);
 	  _mesh = null;
 	  _textureFilename = textureFilename;
 	  _textureImage = textureImage;

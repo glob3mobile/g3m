@@ -59,7 +59,37 @@ public class Vector3D
 
   public static Vector3D zero()
   {
-	return new Vector3D(0.0, 0.0, 0.0);
+	return new Vector3D(0, 0, 0);
+  }
+
+  public static Vector3D upX()
+  {
+	return new Vector3D(1, 0, 0);
+  }
+
+  public static Vector3D downX()
+  {
+	return new Vector3D(-1, 0, 0);
+  }
+
+  public static Vector3D upY()
+  {
+	return new Vector3D(0, 1, 0);
+  }
+
+  public static Vector3D downY()
+  {
+	return new Vector3D(0, -1, 0);
+  }
+
+  public static Vector3D upZ()
+  {
+	return new Vector3D(0, 0, 1);
+  }
+
+  public static Vector3D downZ()
+  {
+	return new Vector3D(0, 0, -1);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
