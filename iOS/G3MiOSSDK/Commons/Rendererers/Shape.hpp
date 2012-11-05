@@ -19,9 +19,12 @@ protected:
   const Angle       _pitch;
 
 public:
-  Shape(const Geodetic3D& position, Angle heading, Angle pitch) :
-  _position(position), _heading(heading), _pitch(pitch)
-  {
+  Shape(const Geodetic3D& position,
+        const Angle& heading,
+        const Angle& pitch) :
+  _position(position),
+  _heading(heading),
+  _pitch(pitch) {
 
   }
 
