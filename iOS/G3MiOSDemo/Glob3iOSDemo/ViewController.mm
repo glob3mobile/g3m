@@ -257,6 +257,7 @@
 //                                          10000),
 //                               textureImage, true, textureFileName,
 //                               50000, 50000);
+  
   Shape* shape = new CircleShape(Geodetic3D(Angle::fromDegrees(37.78333333),
                                             Angle::fromDegrees(-122.41666666666667),
                                             10000),
