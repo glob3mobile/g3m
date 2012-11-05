@@ -9,17 +9,14 @@
 #ifndef __G3MiOSSDK__QuadShape__
 #define __G3MiOSSDK__QuadShape__
 
-#include "Shape.hpp"
-class Mesh;
+#include "MeshShape.hpp"
+
 class IImage;
 class IGLTextureId;
 
-class QuadShape : public Shape {
-private:
+class QuadShape : public MeshShape {
+protected:
   Mesh* createMesh(const RenderContext* rc);
-  Mesh* getMesh(const RenderContext* rc);
-
-  Mesh* _mesh;
 
   const std::string _textureFilename;
   IImage* _textureImage;
@@ -37,8 +34,7 @@ public:
             const std::string textureFilename,
             int width,
             int height) :
-  Shape(position),
-  _mesh(NULL),
+  MeshShape(position),
   _textureFilename(textureFilename),
   _textureImage(textureImage),
   _autoDeleteTextureImage(autoDeleteTextureImage),
@@ -48,11 +44,9 @@ public:
 
   }
 
-  ~QuadShape();
-  
-  bool isReadyToRender(const RenderContext* rc);
+  virtual ~QuadShape() {
 
-  void rawRender(const RenderContext* rc);
+  }
 
 };
 

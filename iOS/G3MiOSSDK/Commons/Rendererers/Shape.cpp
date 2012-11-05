@@ -28,7 +28,7 @@ MutableMatrix44D* Shape::createTransformationMatrix(const Planet* planet) {
   const MutableMatrix44D geodeticTransform   = geodeticTranslation.multiply(geodeticRotation);
 
   const MutableMatrix44D headingRotation  = MutableMatrix44D::createRotationMatrix(*_heading, Vector3D::downZ());
-  const MutableMatrix44D pitchRotation    = MutableMatrix44D::createRotationMatrix(*_pitch, Vector3D::upX());
+  const MutableMatrix44D pitchRotation    = MutableMatrix44D::createRotationMatrix(*_pitch,   Vector3D::upX());
   const MutableMatrix44D localTransform   = headingRotation.multiply(pitchRotation);
 
   return new MutableMatrix44D( geodeticTransform.multiply(localTransform) );
@@ -43,7 +43,6 @@ MutableMatrix44D* Shape::getTransformMatrix(const Planet* planet) {
 }
 
 void Shape::render(const RenderContext* rc) {
-  int __diego_at_work;
   if (isReadyToRender(rc)) {
     GL* gl = rc->getGL();
 
@@ -51,17 +50,7 @@ void Shape::render(const RenderContext* rc) {
 
     const Planet* planet = rc->getPlanet();
 
-//    const MutableMatrix44D geodeticTranslation = MutableMatrix44D::createTranslationMatrix( planet->toCartesian(*_position) );
-//    const MutableMatrix44D geodeticRotation    = planet->orientationMatrix(*_position);
-//    const MutableMatrix44D geodeticTransform   = geodeticTranslation.multiply(geodeticRotation);
-//
-//    const MutableMatrix44D headingRotation  = MutableMatrix44D::createRotationMatrix(*_heading, Vector3D::downZ());
-//    const MutableMatrix44D pitchRotation    = MutableMatrix44D::createRotationMatrix(*_pitch, Vector3D::upX());
-//    const MutableMatrix44D localTransform   = headingRotation.multiply(pitchRotation);
-//    
-//    gl->multMatrixf(geodeticTransform.multiply(localTransform));
-
-    gl->multMatrixf(*getTransformMatrix(planet));
+    gl->multMatrixf( *getTransformMatrix(planet) );
 
     rawRender(rc);
     

@@ -92,6 +92,8 @@
 		CF31CBF1158776130085E8F1 /* Effects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF31CBF0158776120085E8F1 /* Effects.cpp */; };
 		CF3F3FF01620FB2A00A92CC8 /* Vector4D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF3F3FEE1620FB2A00A92CC8 /* Vector4D.cpp */; };
 		CF3F3FF11620FB2A00A92CC8 /* Vector4D.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF3F3FEF1620FB2A00A92CC8 /* Vector4D.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CF45E025164851C5004746BB /* MeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF45E023164851C5004746BB /* MeshShape.cpp */; };
+		CF45E026164851C5004746BB /* MeshShape.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF45E024164851C5004746BB /* MeshShape.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF47030B15EFB4C000426B8B /* ThreadUtils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */; };
 		CF47030C15EFB4C000426B8B /* ThreadUtils_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF47030A15EFB4C000426B8B /* ThreadUtils_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
 		CF527E1B162E2B4200E0BDE0 /* GTask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF527E19162E2B4200E0BDE0 /* GTask.cpp */; };
@@ -361,6 +363,8 @@
 		CF31CBF315878BE40085E8F1 /* Timer_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Timer_iOS.hpp; path = Specific/Derived/Timer_iOS.hpp; sourceTree = "<group>"; };
 		CF3F3FEE1620FB2A00A92CC8 /* Vector4D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Vector4D.cpp; path = Commons/Geometry/Vector4D.cpp; sourceTree = "<group>"; };
 		CF3F3FEF1620FB2A00A92CC8 /* Vector4D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Vector4D.hpp; path = Commons/Geometry/Vector4D.hpp; sourceTree = "<group>"; };
+		CF45E023164851C5004746BB /* MeshShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MeshShape.cpp; path = Commons/Rendererers/MeshShape.cpp; sourceTree = "<group>"; };
+		CF45E024164851C5004746BB /* MeshShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MeshShape.hpp; path = Commons/Rendererers/MeshShape.hpp; sourceTree = "<group>"; };
 		CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ThreadUtils_iOS.mm; path = Specific/Derived/ThreadUtils_iOS.mm; sourceTree = "<group>"; };
 		CF47030A15EFB4C000426B8B /* ThreadUtils_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ThreadUtils_iOS.hpp; path = Specific/Derived/ThreadUtils_iOS.hpp; sourceTree = "<group>"; };
 		CF527E19162E2B4200E0BDE0 /* GTask.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GTask.cpp; path = Commons/Basic/GTask.cpp; sourceTree = "<group>"; };
@@ -828,6 +832,8 @@
 				CF5EA5D3163DDC7900D8F797 /* Shape.hpp */,
 				CF5EA5D6163DDCB900D8F797 /* QuadShape.cpp */,
 				CF5EA5D7163DDCB900D8F797 /* QuadShape.hpp */,
+				CF45E023164851C5004746BB /* MeshShape.cpp */,
+				CF45E024164851C5004746BB /* MeshShape.hpp */,
 			);
 			name = Renderers;
 			sourceTree = "<group>";
@@ -944,6 +950,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF45E026164851C5004746BB /* MeshShape.hpp in Headers */,
 				CF5EA5D5163DDC7900D8F797 /* Shape.hpp in Headers */,
 				CF5EA5D9163DDCB900D8F797 /* QuadShape.hpp in Headers */,
 				CFA0BB63163DCFF6009185FE /* ShapesRenderer.hpp in Headers */,
@@ -1243,6 +1250,7 @@
 				CFA0BB62163DCFF6009185FE /* ShapesRenderer.cpp in Sources */,
 				CF5EA5D4163DDC7900D8F797 /* Shape.cpp in Sources */,
 				CF5EA5D8163DDCB900D8F797 /* QuadShape.cpp in Sources */,
+				CF45E025164851C5004746BB /* MeshShape.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
