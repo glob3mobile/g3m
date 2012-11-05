@@ -20,6 +20,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 public enum layer_type
 {
   WMS,

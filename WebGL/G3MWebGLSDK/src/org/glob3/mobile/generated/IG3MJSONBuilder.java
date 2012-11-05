@@ -21,7 +21,7 @@ public abstract class IG3MJSONBuilder
 		_jsonSource = jsonSource;
 	}
 
-	public abstract void initWidgetWithCameraConstraints (java.util.ArrayList<ICameraConstrainer> cameraConstraints, LayerSet layerSet, java.util.ArrayList<Renderer> renderers, UserData userData, GTask initializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks);
+	public abstract void initWidgetWithCameraConstraints (java.util.ArrayList<ICameraConstrainer> cameraConstraints, LayerSet layerSet, boolean incrementalTileQuality, java.util.ArrayList<Renderer> renderers, UserData userData, GTask initializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks);
 	public void dispose()
 	{
 	}

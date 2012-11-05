@@ -36,11 +36,6 @@ public class SceneParser
 
   private void parserJSONLayerList(LayerSet layerSet, IDownloader downloader, java.util.ArrayList<Renderer> renderers, JSONObject jsonLayers)
   {
-  
-	  final boolean readyWhenMarksReady = false;
-	  MarksRenderer marksRenderer = new MarksRenderer(readyWhenMarksReady);
-	  renderers.add(marksRenderer);
-  
 	for (int i = 0; i < jsonLayers.getObject().getSize(); i++)
 	{
 	  IStringBuilder isb = IStringBuilder.newStringBuilder();
@@ -60,7 +55,7 @@ public class SceneParser
 		  parserJSONPanoLayer(layerSet, jsonLayer);
 		  break;
 		case GEOJSON:
-		  parserGEOJSONLayer(layerSet, downloader, renderers, jsonLayer, marksRenderer);
+		  parserGEOJSONLayer(layerSet, downloader, renderers, jsonLayer);
 		  break;
 	  }
   
@@ -119,12 +114,16 @@ public class SceneParser
 	System.out.print("...");
 	System.out.print("\n");
   }
-  private void parserGEOJSONLayer(LayerSet layerSet, IDownloader downloader, java.util.ArrayList<Renderer> renderers, JSONObject jsonLayer, MarksRenderer marksRenderer)
+  private void parserGEOJSONLayer(LayerSet layerSet, IDownloader downloader, java.util.ArrayList<Renderer> renderers, JSONObject jsonLayer)
   {
 	  System.out.print("Parsing GEOJSON Layer ");
 	  System.out.print(jsonLayer.getObjectForKey(NAME).getString().getValue());
 	  System.out.print("...");
 	  System.out.print("\n");
+  
+	  final boolean readyWhenMarksReady = false;
+	  MarksRenderer marksRenderer = new MarksRenderer(readyWhenMarksReady);
+	  renderers.add(marksRenderer);
   
 	  final String geojsonDatasource = jsonLayer.getObjectForKey(DATASOURCE).getString().getValue();
   
