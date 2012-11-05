@@ -98,10 +98,7 @@ public class TileRenderer extends LeafRenderer
 	createTopLevelTiles(ic);
   
 	if (_lastSplitTimer != null)
-	{
-	  if (_lastSplitTimer != null)
-		  _lastSplitTimer.dispose();
-	}
+		_lastSplitTimer.dispose();
 	_lastSplitTimer = ic.getFactory().createTimer();
   
 	_layerSet.initialize(ic);

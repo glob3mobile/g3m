@@ -296,15 +296,9 @@ public:
 //      _lastImageData = NULL;
 //    }
 
-    if (_vertices != NULL) {
-      delete _vertices;
-    }
-    if (_textureCoordinates != NULL) {
-      delete _textureCoordinates;
-    }
-    if (_colors != NULL) {
-      delete _colors;
-    }
+    delete _vertices;
+    delete _textureCoordinates;
+    delete _colors;
      
   }
   

@@ -13,11 +13,8 @@ public class CameraRenderer extends LeafRenderer
 
   public void dispose()
   {
-	if (_cameraContext != null)
-	{
 	  if (_cameraContext != null)
 		  _cameraContext.dispose();
-	}
   }
 
   public final void addHandler(CameraEventHandler handler)

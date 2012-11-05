@@ -53,7 +53,7 @@ public:
   
   void setMarkTouchListener(MarkTouchListener* markTouchListener,
                             bool autoDelete) {
-    if ( (_markTouchListener != NULL) && _autoDeleteMarkTouchListener ) {
+    if ( _autoDeleteMarkTouchListener ) {
       delete _markTouchListener;
     }
     
@@ -67,7 +67,7 @@ public:
       delete _marks[i];
     }
     
-    if ( (_markTouchListener != NULL) && _autoDeleteMarkTouchListener ) {
+    if ( _autoDeleteMarkTouchListener ) {
       delete _markTouchListener;
     }
     _markTouchListener = NULL;

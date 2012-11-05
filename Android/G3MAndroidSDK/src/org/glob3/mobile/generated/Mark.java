@@ -88,15 +88,9 @@ public class Mark
   public void dispose()
   {
 	if (_cartesianPosition != null)
-	{
-	  if (_cartesianPosition != null)
-		  _cartesianPosition.dispose();
-	}
+		_cartesianPosition.dispose();
 	if (_vertices != null)
-	{
-	  if (_vertices != null)
-		  _vertices.dispose();
-	}
+		_vertices.dispose();
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

@@ -369,28 +369,23 @@ public class Camera
 	_cartesianCenterOfView = new MutableVector3D();
   
 	if (_geodeticCenterOfView != null)
-		if (_geodeticCenterOfView != null)
-			_geodeticCenterOfView.dispose();
+		_geodeticCenterOfView.dispose();
 	_geodeticCenterOfView = null;
   
 	if (_frustum != null)
-		if (_frustum != null)
-			_frustum.dispose();
+		_frustum.dispose();
 	_frustum = null;
   
 	if (_frustumInModelCoordinates != null)
-		if (_frustumInModelCoordinates != null)
-			_frustumInModelCoordinates.dispose();
+		_frustumInModelCoordinates.dispose();
 	_frustumInModelCoordinates = null;
   
 	if (_halfFrustumInModelCoordinates != null)
-		if (_halfFrustumInModelCoordinates != null)
-			_halfFrustumInModelCoordinates.dispose();
+		_halfFrustumInModelCoordinates.dispose();
 	_halfFrustumInModelCoordinates = null;
   
 	if (_halfFrustum != null)
-		if (_halfFrustum != null)
-			_halfFrustum.dispose();
+		_halfFrustum.dispose();
 	_halfFrustum = null;
   }
 

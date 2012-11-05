@@ -400,15 +400,15 @@ public class Ellipsoid
   public final MutableMatrix44D orientationMatrix(Geodetic2D position, Angle heading, Angle pitch)
   {
 	// define rotation matrix to init orientation to latlon(0,0)
-	MutableMatrix44D M = new MutableMatrix44D(0,1,0,0,0,0,1,0,1,0,0,0,0,0,0,1);
+	final MutableMatrix44D M = new MutableMatrix44D(0,1,0,0,0,0,1,0,1,0,0,0,0,0,0,1);
   
 	// orbit reference system to geodetic position
-	MutableMatrix44D Rlon = MutableMatrix44D.createRotationMatrix(position.longitude(), new Vector3D(0,1,0));
-	MutableMatrix44D Rlat = MutableMatrix44D.createRotationMatrix(position.latitude(), new Vector3D(-1,0,0));
+	final MutableMatrix44D Rlon = MutableMatrix44D.createRotationMatrix(position.longitude(), new Vector3D(0,1,0));
+	final MutableMatrix44D Rlat = MutableMatrix44D.createRotationMatrix(position.latitude(), new Vector3D(-1,0,0));
   
 	// set heading & pitch
-	MutableMatrix44D Rhead = MutableMatrix44D.createRotationMatrix(heading, new Vector3D(0,0,-1));
-	MutableMatrix44D Rpitch = MutableMatrix44D.createRotationMatrix(pitch, new Vector3D(1,0,0));
+	final MutableMatrix44D Rhead = MutableMatrix44D.createRotationMatrix(heading, new Vector3D(0,0,-1));
+	final MutableMatrix44D Rpitch = MutableMatrix44D.createRotationMatrix(pitch, new Vector3D(1,0,0));
   
 	return M.multiply(Rlon).multiply(Rlat).multiply(Rhead).multiply(Rpitch);
   }

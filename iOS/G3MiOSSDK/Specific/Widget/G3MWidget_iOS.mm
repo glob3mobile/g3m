@@ -343,9 +343,8 @@
     pointers.push_back(touch);
   }
   
-  if (lastTouchEvent!=NULL) {
-    delete lastTouchEvent;
-  }
+  delete lastTouchEvent;
+      
   lastTouchEvent = TouchEvent::create(Down, pointers);
   [self widget]->onTouchEvent(lastTouchEvent);
 }
@@ -423,17 +422,14 @@
     pointers.push_back(touch);
   }
   
-  if (lastTouchEvent!=NULL) {
-    delete lastTouchEvent;
-  }
+  delete lastTouchEvent;
+  
   lastTouchEvent = TouchEvent::create(Up, pointers);
   [self widget]->onTouchEvent(lastTouchEvent);
 }
 
 - (void)dealloc {
-  if (lastTouchEvent!=NULL) {
-    delete lastTouchEvent;
-  }
+  delete lastTouchEvent;
 }
 
 - (G3MWidget*) widget {

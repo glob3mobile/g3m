@@ -140,29 +140,12 @@ public:
   
   ~Camera() {
 #ifdef C_CODE
-    if (_camEffectTarget != NULL){
-      delete _camEffectTarget;
-    }
-    
-    if (_frustum != NULL) {
-      delete _frustum;
-    }
-    
-    if (_frustumInModelCoordinates != NULL) {
-      delete _frustumInModelCoordinates;
-    }
-
-    if (_halfFrustum != NULL) {
-      delete _halfFrustum;
-    }
-    
-    if (_halfFrustumInModelCoordinates != NULL) {
-      delete _halfFrustumInModelCoordinates;
-    }
-    
-    if (_geodeticCenterOfView != NULL) {
-      delete _geodeticCenterOfView;
-    }
+    delete _camEffectTarget;
+    delete _frustum;
+    delete _frustumInModelCoordinates;
+    delete _halfFrustum;
+    delete _halfFrustumInModelCoordinates;
+    delete _geodeticCenterOfView;
 #endif
 
   }
@@ -216,7 +199,7 @@ public:
     if (_dirtyFlags._frustumMC) {
       _dirtyFlags._frustumMC = false;
 #ifdef C_CODE
-      if (_frustumInModelCoordinates!=NULL) delete _frustumInModelCoordinates;
+      delete _frustumInModelCoordinates;
 #endif
       _frustumInModelCoordinates = getFrustum()->transformedBy_P(getModelMatrix());
     }
@@ -355,7 +338,7 @@ private:
     if (_dirtyFlags._geodeticCenterOfView) {
       _dirtyFlags._geodeticCenterOfView = false;
 #ifdef C_CODE
-      if (_geodeticCenterOfView) delete _geodeticCenterOfView;
+      delete _geodeticCenterOfView;
 #endif
       _geodeticCenterOfView = new Geodetic3D(_planet->toGeodetic3D(getXYZCenterOfView()));
     }
@@ -367,7 +350,7 @@ private:
     if (_dirtyFlags._frustum) {
       _dirtyFlags._frustum = false;
 #ifdef C_CODE
-      if (_frustum!=NULL) delete _frustum;
+      delete _frustum;
 #endif
       _frustum = new Frustum(getFrustumData());
     }
@@ -381,7 +364,7 @@ private:
     if (_dirtyFlags._halfFrustum) {
       _dirtyFlags._halfFrustum = false;
 #ifdef C_CODE
-      if (_halfFrustum!=NULL) delete _halfFrustum;
+      delete _halfFrustum;
 #endif
       FrustumData data = getFrustumData();
       _halfFrustum = new Frustum(data._left/4, data._right/4,
@@ -395,7 +378,7 @@ private:
     if (_dirtyFlags._halfFrustumMC) {
       _dirtyFlags._halfFrustumMC = false;
 #ifdef C_CODE
-      if (_halfFrustumInModelCoordinates!=NULL) delete _halfFrustumInModelCoordinates;
+      delete _halfFrustumInModelCoordinates;
 #endif
       _halfFrustumInModelCoordinates = getHalfFrustum()->transformedBy_P(getModelMatrix());
     }

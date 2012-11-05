@@ -55,9 +55,7 @@ LeveledTexturedMesh::~LeveledTexturedMesh() {
   if (_mappings != NULL) {
     for (int i = 0; i < _mappings->size(); i++) {
       LazyTextureMapping* mapping = _mappings->at(i);
-      if (mapping != NULL) {
-        delete mapping;
-      }
+      delete mapping;
     }
     
     delete _mappings;

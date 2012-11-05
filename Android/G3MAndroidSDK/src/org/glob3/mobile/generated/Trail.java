@@ -54,10 +54,7 @@ public class Trail
 	if (_positionsDirty || (_mesh == null))
 	{
 	  if (_mesh != null)
-	  {
-		if (_mesh != null)
-			_mesh.dispose();
-	  }
+		  _mesh.dispose();
   
 	  _mesh = createMesh(planet);
 	}
@@ -77,10 +74,7 @@ public class Trail
   public void dispose()
   {
 	if (_mesh != null)
-	{
-	  if (_mesh != null)
-		  _mesh.dispose();
-	}
+		_mesh.dispose();
   }
 
   public final void render(RenderContext rc)

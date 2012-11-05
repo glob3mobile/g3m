@@ -365,8 +365,7 @@ public class Frustum
 
   public void dispose()
   {
-	  if (_extent != null)
-		  _extent = null;
+	  _extent = null;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
