@@ -38,9 +38,9 @@ public class CircleShape extends MeshShape
   
 	for (int i = 0; i <= _steps; i++)
 	{
-	  final double angle = i * twicePi / _steps;
-	  final double x = _radius * IMathUtils.instance().cos(angle);
-	  final double y = _radius * IMathUtils.instance().sin(angle);
+	  final double angleInRadians = i * twicePi / _steps;
+	  final double x = _radius * IMathUtils.instance().cos(angleInRadians);
+	  final double y = _radius * IMathUtils.instance().sin(angleInRadians);
 	  vertices.add(x, y, 0);
   
 	  indices.add(i + 1);

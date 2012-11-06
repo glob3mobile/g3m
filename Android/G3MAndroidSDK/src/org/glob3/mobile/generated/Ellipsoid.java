@@ -395,32 +395,15 @@ public class Ellipsoid
 	return pos.add(ray.times(distances.get(0)));
   }
 
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: MutableMatrix44D orientationMatrix(const Angle& latitude, const Angle& longitude) const
-  public final MutableMatrix44D orientationMatrix(Angle latitude, Angle longitude)
-  {
-	// define rotation matrix to init orientation to latlon(0,0)
-	final MutableMatrix44D M = new MutableMatrix44D(0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1);
-  
-	// orbit reference system to geodetic position
-	final MutableMatrix44D longitudeRotation = MutableMatrix44D.createRotationMatrix(longitude, Vector3D.upY());
-	final MutableMatrix44D latitudeRotation = MutableMatrix44D.createRotationMatrix(latitude, Vector3D.downX());
-  
-	return M.multiply(longitudeRotation).multiply(latitudeRotation);
-  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: MutableMatrix44D orientationMatrix(const Geodetic2D& position) const
-  public final MutableMatrix44D orientationMatrix(Geodetic2D position)
+//ORIGINAL LINE: MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const
+  public final MutableMatrix44D createGeodeticTransformMatrix(Geodetic3D position)
   {
-	return orientationMatrix(position.latitude(), position.longitude());
-  }
-
-//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: MutableMatrix44D orientationMatrix(const Geodetic3D& position) const
-  public final MutableMatrix44D orientationMatrix(Geodetic3D position)
-  {
-	return orientationMatrix(position.latitude(), position.longitude());
+	final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(toCartesian(position));
+	final MutableMatrix44D rotation = MutableMatrix44D.createGeodeticRotationMatrix(position);
+  
+	return translation.multiply(rotation);
   }
 
 }

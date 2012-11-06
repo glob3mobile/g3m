@@ -34,9 +34,11 @@ public abstract class Shape
   private MutableMatrix44D _transformMatrix;
   private MutableMatrix44D createTransformMatrix(Planet planet)
   {
-	final MutableMatrix44D geodeticTranslation = MutableMatrix44D.createTranslationMatrix(planet.toCartesian(_position));
-	final MutableMatrix44D geodeticRotation = planet.orientationMatrix(_position);
-	final MutableMatrix44D geodeticTransform = geodeticTranslation.multiply(geodeticRotation);
+  //  const MutableMatrix44D geodeticTranslation = MutableMatrix44D::createTranslationMatrix( planet->toCartesian(*_position) );
+  //  const MutableMatrix44D geodeticRotation    = MutableMatrix44D::createGeodeticRotationMatrix(*_position);
+  //  const MutableMatrix44D geodeticTransform   = geodeticTranslation.multiply(geodeticRotation);
+  
+	final MutableMatrix44D geodeticTransform = planet.createGeodeticTransformMatrix(_position);
   
   
 	final MutableMatrix44D headingRotation = MutableMatrix44D.createRotationMatrix(_heading, Vector3D.downZ());
