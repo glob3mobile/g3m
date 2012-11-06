@@ -21,7 +21,6 @@ package org.glob3.mobile.generated;
 public class CachedDownloader implements IDownloader
 {
   private IDownloader _downloader;
-  private IStorage _cacheStorage;
 
   private int _requestsCounter;
   private int _cacheHitsCounter;
@@ -29,10 +28,9 @@ public class CachedDownloader implements IDownloader
 
   private final boolean _saveInBackground;
 
-  public CachedDownloader(IDownloader downloader, IStorage cacheStorage, boolean saveInBackground)
+  public CachedDownloader(IDownloader downloader, boolean saveInBackground)
   {
 	  _downloader = downloader;
-	  _cacheStorage = cacheStorage;
 	  _requestsCounter = 0;
 	  _cacheHitsCounter = 0;
 	  _savesCounter = 0;
@@ -49,7 +47,7 @@ public class CachedDownloader implements IDownloader
 
   public final void start()
   {
-	_downloader.start();
+	  _downloader.start();
   }
 
   public final void stop()
@@ -61,11 +59,11 @@ public class CachedDownloader implements IDownloader
   {
 	_requestsCounter++;
   
-	final IByteBuffer cachedBuffer = _cacheStorage.isAvailable() ? _cacheStorage.readBuffer(url) : null;
+	final IByteBuffer cachedBuffer = IStorage.instance().isAvailable() ? IStorage.instance().readBuffer(url) : null;
 	if (cachedBuffer == null)
 	{
 	  // cache miss
-	  return _downloader.requestBuffer(url, priority, new BufferSaverDownloadListener(this, _cacheStorage, listener, deleteListener), true);
+	  return _downloader.requestBuffer(url, priority, new BufferSaverDownloadListener(this, listener, deleteListener), true);
 	}
 	else
 	{
@@ -89,11 +87,11 @@ public class CachedDownloader implements IDownloader
   {
 	_requestsCounter++;
   
-	final IImage cachedImage = _cacheStorage.isAvailable() ? _cacheStorage.readImage(url) : null;
+	final IImage cachedImage = IStorage.instance().isAvailable() ? IStorage.instance().readImage(url) : null;
 	if (cachedImage == null)
 	{
 	  // cache miss
-	  return _downloader.requestImage(url, priority, new ImageSaverDownloadListener(this, _cacheStorage, listener, deleteListener), true);
+	  return _downloader.requestImage(url, priority, new ImageSaverDownloadListener(this, listener, deleteListener), true);
 	}
 	else
 	{
@@ -132,7 +130,8 @@ public class CachedDownloader implements IDownloader
 	isb.addString(", saves=");
 	isb.addInt(_savesCounter);
 	isb.addString(", downloader=");
-	isb.addString(_downloader.statistics());
+  //  isb->addString(IDownloader::instance()->statistics());
+	  isb.addString(_downloader.statistics());
 	final String s = isb.getString();
 	if (isb != null)
 		isb.dispose();
@@ -146,14 +145,16 @@ public class CachedDownloader implements IDownloader
 
   public final void onResume(InitializationContext ic)
   {
-	_downloader.onResume(ic);
-	_cacheStorage.onResume(ic);
+  //  IDownloader::instance()->onResume(ic);
+	  _downloader.onResume(ic);
+	  IStorage.instance().onResume(ic);
   }
 
   public final void onPause(InitializationContext ic)
   {
-	_downloader.onPause(ic);
-	_cacheStorage.onPause(ic);
+  //  IDownloader::instance()->onPause(ic);
+	  _downloader.onPause(ic);
+	IStorage.instance().onPause(ic);
   }
 
 }

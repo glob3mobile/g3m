@@ -4,12 +4,10 @@ public class ImageSaverDownloadListener implements IImageDownloadListener
   private CachedDownloader _downloader;
   private IImageDownloadListener _listener;
   private final boolean _deleteListener;
-  private IStorage _cacheStorage;
 
-  public ImageSaverDownloadListener(CachedDownloader downloader, IStorage cacheStorage, IImageDownloadListener listener, boolean deleteListener)
+  public ImageSaverDownloadListener(CachedDownloader downloader, IImageDownloadListener listener, boolean deleteListener)
   {
 	  _downloader = downloader;
-	  _cacheStorage = cacheStorage;
 	  _listener = listener;
 	  _deleteListener = deleteListener;
 
@@ -17,7 +15,7 @@ public class ImageSaverDownloadListener implements IImageDownloadListener
 
   public final void deleteListener()
   {
-	if (_deleteListener && (_listener != null))
+	if (_deleteListener)
 	{
 	  _listener = null;
 	}
@@ -27,12 +25,12 @@ public class ImageSaverDownloadListener implements IImageDownloadListener
   {
 	if (image != null)
 	{
-	  if (_cacheStorage.isAvailable())
+	  if (IStorage.instance().isAvailable())
 	  {
 		//if (!_cacheStorage->containsImage(url)) {
 		_downloader.countSave();
 
-		_cacheStorage.saveImage(url, image, _downloader.saveInBackground());
+		IStorage.instance().saveImage(url, image, _downloader.saveInBackground());
 		//}
 	  }
 	  else
