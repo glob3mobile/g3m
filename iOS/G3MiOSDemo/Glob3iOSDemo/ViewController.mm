@@ -246,32 +246,32 @@
     }
   }
 
+  if (false) {
+    ShapesRenderer* shapesRenderer = new ShapesRenderer();
 
-  ShapesRenderer* shapesRenderer = new ShapesRenderer();
+    //  std::string textureFileName = "g3m-marker.png";
+    //  IImage* textureImage = IFactory::instance()->createImageFromFileName(textureFileName);
+    //
+    //  Shape* shape = new QuadShape(Geodetic3D(Angle::fromDegrees(37.78333333),
+    //                                          Angle::fromDegrees(-122.41666666666667),
+    //                                          8000),
+    //                               textureImage, true, textureFileName,
+    //                               50000, 50000);
 
-//  std::string textureFileName = "g3m-marker.png";
-//  IImage* textureImage = IFactory::instance()->createImageFromFileName(textureFileName);
-//
-//  Shape* shape = new QuadShape(Geodetic3D(Angle::fromDegrees(37.78333333),
-//                                          Angle::fromDegrees(-122.41666666666667),
-//                                          8000),
-//                               textureImage, true, textureFileName,
-//                               50000, 50000);
+    Shape* shape = new CircleShape(Geodetic3D(Angle::fromDegrees(37.78333333),
+                                              Angle::fromDegrees(-122.41666666666667),
+                                              8000),
+                                   50000,
+                                   Color::fromRGBA(1, 1, 0, 1),
+                                   64);
+    //  shape->setHeading( Angle::fromDegrees(45) );
+    //  shape->setPitch( Angle::fromDegrees(45) );
+    //  shape->setScale(2.0, 0.5, 1);
 
-  Shape* shape = new CircleShape(Geodetic3D(Angle::fromDegrees(37.78333333),
-                                            Angle::fromDegrees(-122.41666666666667),
-                                            8000),
-                                 50000,
-                                 Color::fromRGBA(1, 1, 0, 1),
-                                 64);
-//  shape->setHeading( Angle::fromDegrees(45) );
-//  shape->setPitch( Angle::fromDegrees(45) );
-//  shape->setScale(2.0, 0.5, 1);
-
-  shapesRenderer->addShape(shape);
-
-  renderers.push_back(shapesRenderer);
-
+    shapesRenderer->addShape(shape);
+    
+    renderers.push_back(shapesRenderer);
+  }
 
 
   TrailsRenderer* trailsRenderer = new TrailsRenderer();
