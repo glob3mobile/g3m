@@ -53,10 +53,8 @@ public:
   
   virtual void cancelRequest(long long requestId) = 0;
   
-#ifdef C_CODE
   virtual ~IDownloader() {
   }
-#endif
   
   virtual const std::string statistics() = 0;
   
