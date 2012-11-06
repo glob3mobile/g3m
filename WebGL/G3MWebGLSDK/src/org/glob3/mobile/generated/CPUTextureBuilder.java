@@ -73,7 +73,7 @@ public class CPUTextureBuilder extends TextureBuilder
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: const IImage* createTextureFromImages(GL* gl, const IFactory* factory, const java.util.ArrayList<const IImage*> images, const java.util.ArrayList<const RectangleD*> rectangles, int width, int height) const
-  public final IImage createTextureFromImages(GL gl, IFactory factory, java.util.ArrayList<IImage> images, java.util.ArrayList<const RectangleD> rectangles, int width, int height)
+  public final IImage createTextureFromImages(GL gl, IFactory factory, java.util.ArrayList<IImage> images, java.util.ArrayList<RectangleD> rectangles, int width, int height)
   {
   
 	final int imagesSize = images.size();
