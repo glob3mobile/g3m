@@ -10,6 +10,7 @@ import org.glob3.mobile.generated.ICameraConstrainer;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IG3MJSONBuilder;
 import org.glob3.mobile.generated.LayerSet;
+import org.glob3.mobile.generated.MarkTouchListener;
 import org.glob3.mobile.generated.PeriodicalTask;
 import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.SceneParser;
@@ -37,7 +38,8 @@ public class G3MJSONBuilder_Android
                                                final ArrayList<Renderer> renderers,
                                                final UserData userData,
                                                final GTask initializationTask,
-                                               final ArrayList<PeriodicalTask> periodicalTasks) {
+                                               final ArrayList<PeriodicalTask> periodicalTasks,
+                                               final MarkTouchListener markTouchListener) {
 
       final SQLiteStorage_Android storage = new SQLiteStorage_Android("g3m.cache", _g3mWidget.getContext());
 
@@ -49,7 +51,7 @@ public class G3MJSONBuilder_Android
                saveInBackground);
       downloader.start();
 
-      SceneParser.instance().parse(layerSet, downloader, renderers, _jsonSource);
+      SceneParser.instance().parse(layerSet, downloader, renderers, _jsonSource, markTouchListener);
 
       _g3mWidget.initWidget(cameraConstraints, layerSet, renderers, userData, initializationTask, periodicalTasks,
                incrementalTileQuality);
