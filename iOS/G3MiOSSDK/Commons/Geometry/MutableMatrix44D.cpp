@@ -50,8 +50,8 @@ MutableMatrix44D& MutableMatrix44D::operator=(const MutableMatrix44D &that) {
 }
 
 MutableMatrix44D::~MutableMatrix44D() {
-    delete _columnMajorFloatBuffer;
-    delete [] _columnMajorFloatArray;
+  delete _columnMajorFloatBuffer;
+  delete [] _columnMajorFloatArray;
 }
 
 const IFloatBuffer* MutableMatrix44D::getColumnMajorFloatBuffer() const {
@@ -367,5 +367,20 @@ MutableMatrix44D MutableMatrix44D::createScaleMatrix(const Vector3D& scale) {
                           0, 0, scale._z, 0,
                           0, 0, 0, 1);
 
+}
+
+MutableMatrix44D MutableMatrix44D::createGeodeticRotationMatrix(const Angle& latitude,
+                                                                const Angle& longitude) {
+  // change the reference coordinates system from x-front/y-left/z-up to x-right/y-up/z-back
+  const MutableMatrix44D changeReferenceCoordinatesSystem(0, 1, 0, 0,
+                                                          0, 0, 1, 0,
+                                                          1, 0, 0, 0,
+                                                          0, 0, 0, 1);
+
+  // orbit reference system to geodetic position
+  const MutableMatrix44D longitudeRotation = MutableMatrix44D::createRotationMatrix(longitude, Vector3D::upY());
+  const MutableMatrix44D latitudeRotation  = MutableMatrix44D::createRotationMatrix(latitude,  Vector3D::downX());
+  
+  return changeReferenceCoordinatesSystem.multiply(longitudeRotation).multiply(latitudeRotation);
 }
 

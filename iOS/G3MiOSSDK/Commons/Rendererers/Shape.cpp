@@ -23,9 +23,11 @@ void Shape::cleanTransformMatrix() {
 }
 
 MutableMatrix44D* Shape::createTransformMatrix(const Planet* planet) {
-  const MutableMatrix44D geodeticTranslation = MutableMatrix44D::createTranslationMatrix( planet->toCartesian(*_position) );
-  const MutableMatrix44D geodeticRotation    = planet->orientationMatrix(*_position);
-  const MutableMatrix44D geodeticTransform   = geodeticTranslation.multiply(geodeticRotation);
+//  const MutableMatrix44D geodeticTranslation = MutableMatrix44D::createTranslationMatrix( planet->toCartesian(*_position) );
+//  const MutableMatrix44D geodeticRotation    = MutableMatrix44D::createGeodeticRotationMatrix(*_position);
+//  const MutableMatrix44D geodeticTransform   = geodeticTranslation.multiply(geodeticRotation);
+
+  const MutableMatrix44D geodeticTransform   = planet->createGeodeticTransformMatrix(*_position);
 
 
   const MutableMatrix44D headingRotation = MutableMatrix44D::createRotationMatrix(*_heading, Vector3D::downZ());

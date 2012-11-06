@@ -83,16 +83,8 @@ public:
   
   Vector3D closestIntersection(const Vector3D& pos, const Vector3D& ray) const;
 
-  MutableMatrix44D orientationMatrix(const Angle& latitude,
-                                     const Angle& longitude) const;
 
-  MutableMatrix44D orientationMatrix(const Geodetic2D& position) const {
-    return orientationMatrix(position.latitude(), position.longitude());
-  }
-
-  MutableMatrix44D orientationMatrix(const Geodetic3D& position) const {
-    return orientationMatrix(position.latitude(), position.longitude());
-  }
+  MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const;
 
 };
 

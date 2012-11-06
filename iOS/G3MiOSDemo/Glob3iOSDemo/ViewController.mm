@@ -254,19 +254,19 @@
 //
 //  Shape* shape = new QuadShape(Geodetic3D(Angle::fromDegrees(37.78333333),
 //                                          Angle::fromDegrees(-122.41666666666667),
-//                                          10000),
+//                                          8000),
 //                               textureImage, true, textureFileName,
 //                               50000, 50000);
-  
+
   Shape* shape = new CircleShape(Geodetic3D(Angle::fromDegrees(37.78333333),
                                             Angle::fromDegrees(-122.41666666666667),
-                                            10000),
+                                            8000),
                                  50000,
                                  Color::fromRGBA(1, 1, 0, 1),
                                  64);
-  // shape->setHeading( Angle::fromDegrees(45) );
-  // shape->setPitch( Angle::fromDegrees(45) );
-  // shape->setScale(2.0, 0.5, 1);
+//  shape->setHeading( Angle::fromDegrees(45) );
+//  shape->setPitch( Angle::fromDegrees(45) );
+//  shape->setScale(2.0, 0.5, 1);
 
   shapesRenderer->addShape(shape);
 

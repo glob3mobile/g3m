@@ -27,9 +27,9 @@ Mesh* CircleShape::createMesh(const RenderContext* rc) {
   const double twicePi = GMath.pi() * 2;
 
   for (int i = 0; i <= _steps; i++) {
-    const double angle = i * twicePi / _steps;
-    const double x = _radius * GMath.cos(angle);
-    const double y = _radius * GMath.sin(angle);
+    const double angleInRadians = i * twicePi / _steps;
+    const double x = _radius * GMath.cos(angleInRadians);
+    const double y = _radius * GMath.sin(angleInRadians);
     vertices.add(x, y, 0);
 
     indices.add(i + 1);

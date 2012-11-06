@@ -18,6 +18,9 @@ class IFloatBuffer;
 #include "Angle.hpp"
 
 #include "ILogger.hpp"
+#include "Geodetic2D.hpp"
+#include "Geodetic3D.hpp"
+
 #include <string>
 
 //#include "MutableMatrix44D.hpp"
@@ -301,7 +304,18 @@ public:
     }
     
     static MutableMatrix44D createScaleMatrix(const Vector3D& scale);
-    
+
+    static MutableMatrix44D createGeodeticRotationMatrix(const Angle& latitude,
+                                                         const Angle& longitude);
+
+    static MutableMatrix44D createGeodeticRotationMatrix(const Geodetic2D& position) {
+      return MutableMatrix44D::createGeodeticRotationMatrix(position.latitude(), position.longitude());
+    }
+
+    static MutableMatrix44D createGeodeticRotationMatrix(const Geodetic3D& position) {
+      return MutableMatrix44D::createGeodeticRotationMatrix(position.latitude(), position.longitude());
+    }
+
   };
   
 #endif
