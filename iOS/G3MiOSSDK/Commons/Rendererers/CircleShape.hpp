@@ -24,19 +24,7 @@ protected:
 public:
   CircleShape(const Geodetic3D& position,
               float radius,
-              const Color& color,
-              int steps = 64) :
-  MeshShape(position),
-  _radius(radius),
-  _color(new Color(color)),
-  _steps(steps)
-  {
-
-  }
-
-  CircleShape(const Geodetic3D& position,
-              float radius,
-              Color* color,
+              Color* color = NULL,
               int steps = 64) :
   MeshShape(position),
   _radius(radius),

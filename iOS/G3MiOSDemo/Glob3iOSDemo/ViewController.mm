@@ -262,7 +262,7 @@
                                               Angle::fromDegrees(-122.41666666666667),
                                               8000),
                                    50000,
-                                   Color::fromRGBA(1, 1, 0, 1),
+                                   Color::newFromRGBA(1, 1, 0, 1),
                                    64);
     //  shape->setHeading( Angle::fromDegrees(45) );
     //  shape->setPitch( Angle::fromDegrees(45) );
