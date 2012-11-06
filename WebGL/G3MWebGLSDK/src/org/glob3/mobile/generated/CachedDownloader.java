@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class CachedDownloader implements IDownloader
+public class CachedDownloader extends IDownloader
 {
   private IDownloader _downloader;
 
