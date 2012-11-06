@@ -287,6 +287,11 @@ public class Angle
 		return true;
 	}
 
+  public void dispose()
+  {
+
+  }
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: const String description() const
   public final String description()

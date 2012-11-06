@@ -82,6 +82,9 @@ void IndexedMesh::render(const RenderContext* rc) const {
   if (_primitive == GLPrimitive::triangleStrip()) {
     gl->drawTriangleStrip(_indices);
   }
+  else if (_primitive == GLPrimitive::triangleFan()) {
+    gl->drawTriangleFan(_indices);
+  }
   else if (_primitive == GLPrimitive::lines()) {
     gl->drawLines(_indices);
   }

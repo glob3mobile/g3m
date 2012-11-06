@@ -84,6 +84,7 @@ public:
 
 class GLPrimitive {
   static int _triangleStrip;
+  static int _triangleFan;
   static int _lines;
   static int _lineStrip;
   static int _lineLoop;
@@ -93,7 +94,11 @@ public:
   static int triangleStrip() {
     return _triangleStrip;
   }
-  
+
+  static int triangleFan() {
+    return _triangleFan;
+  }
+
   static int lines() {
     return _lines;
   }
@@ -112,9 +117,12 @@ public:
   
   static void init(const INativeGL* ngl){
     _triangleStrip = ngl->Primitive_TriangleStrip();
-    _lines = ngl->Primitive_Lines();
+    _triangleFan   = ngl->Primitive_TriangleFan();
+
+    _lines     = ngl->Primitive_Lines();
     _lineStrip = ngl->Primitive_LineStrip();
-    _lineLoop = ngl->Primitive_LineLoop();
+    _lineLoop  = ngl->Primitive_LineLoop();
+
     _points = ngl->Primitive_Points();
   }
 };

@@ -7,6 +7,7 @@
 //
 
 #include "QuadShape.hpp"
+
 #include "IGLTextureId.hpp"
 #include "IImage.hpp"
 #include "IFactory.hpp"
@@ -17,9 +18,6 @@
 #include "IndexedMesh.hpp"
 #include "GLConstants.hpp"
 #include "TexturedMesh.hpp"
-#include "GL.hpp"
-#include "Planet.hpp"
-#include "Camera.hpp"
 
 const IGLTextureId* QuadShape::getTextureId(const RenderContext* rc) {
   if (_textureImage == NULL) {
@@ -66,10 +64,9 @@ Mesh* QuadShape::createMesh(const RenderContext* rc) {
   indices.add(3);
 
 
-//  const Vector3D center = rc->getPlanet()->toCartesian( _position );
   const Vector3D center = Vector3D::zero();
 
-  IndexedMesh *im = new IndexedMesh(GLPrimitive::triangleStrip(),
+  IndexedMesh* im = new IndexedMesh(GLPrimitive::triangleStrip(),
                                     true,
                                     center,
                                     vertices.create(),
@@ -94,40 +91,3 @@ Mesh* QuadShape::createMesh(const RenderContext* rc) {
   return new TexturedMesh(im, true, texMap, true, true);
 }
 
-Mesh* QuadShape::getMesh(const RenderContext* rc) {
-  if (_mesh == NULL) {
-    _mesh = createMesh(rc);
-  }
-  return _mesh;
-}
-
-QuadShape::~QuadShape() {
-  delete _mesh;
-}
-
-
-
-void QuadShape::render(const RenderContext* rc) {
-  int __diego_at_work;
-  Mesh* mesh = getMesh(rc);
-  if (mesh != NULL) {
-    GL* gl = rc->getGL();
-
-    gl->pushMatrix();
-
-    const Planet* planet = rc->getPlanet();
-
-
-    const Vector3D cartesianPosition = planet->toCartesian( _position );
-    const MutableMatrix44D translationMatrix = MutableMatrix44D::createTranslationMatrix(cartesianPosition);
-    gl->multMatrixf(translationMatrix);
-    
-    const MutableMatrix44D rotationMatrix = planet->orientationMatrix(_position.asGeodetic2D(), _heading, _pitch);
-    gl->multMatrixf(rotationMatrix);
-
-
-    mesh->render(rc);
-
-    gl->popMatrix();
-  }
-}

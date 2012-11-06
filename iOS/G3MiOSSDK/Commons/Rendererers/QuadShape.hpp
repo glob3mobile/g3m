@@ -9,38 +9,33 @@
 #ifndef __G3MiOSSDK__QuadShape__
 #define __G3MiOSSDK__QuadShape__
 
-#include "Shape.hpp"
-class Mesh;
+#include "MeshShape.hpp"
+
 class IImage;
 class IGLTextureId;
 
-class QuadShape : public Shape {
+class QuadShape : public MeshShape {
 private:
-  Mesh* createMesh(const RenderContext* rc);
-  Mesh* getMesh(const RenderContext* rc);
-
-  Mesh* _mesh;
-
   const std::string _textureFilename;
   IImage* _textureImage;
   const bool _autoDeleteTextureImage;
-  
-  const int _width;
-  const int _height;
+
+  const float _width;
+  const float _height;
 
   const IGLTextureId* getTextureId(const RenderContext* rc);
 
+protected:
+  Mesh* createMesh(const RenderContext* rc);
+
 public:
   QuadShape(const Geodetic3D& position,
-            const Angle& heading,
-            const Angle& pitch,
             IImage* textureImage,
             bool autoDeleteTextureImage,
             const std::string textureFilename,
-            int width,
-            int height) :
-  Shape(position, heading, pitch),
-  _mesh(NULL),
+            float width,
+            float height) :
+  MeshShape(position),
   _textureFilename(textureFilename),
   _textureImage(textureImage),
   _autoDeleteTextureImage(autoDeleteTextureImage),
@@ -50,9 +45,9 @@ public:
 
   }
 
-  ~QuadShape();
-  
-  void render(const RenderContext* rc);
+  virtual ~QuadShape() {
+
+  }
 
 };
 

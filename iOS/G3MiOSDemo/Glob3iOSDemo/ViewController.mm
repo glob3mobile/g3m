@@ -22,7 +22,8 @@
 #include "TrailsRenderer.hpp"
 #include "PeriodicalTask.hpp"
 #include "ShapesRenderer.hpp"
-#include "QuadShape.hpp"
+//#include "QuadShape.hpp"
+#include "CircleShape.hpp"
 #include "G3MWidget.hpp"
 
 @implementation ViewController
@@ -245,23 +246,32 @@
     }
   }
 
+  if (false) {
+    ShapesRenderer* shapesRenderer = new ShapesRenderer();
 
-  ShapesRenderer* shapesRenderer = new ShapesRenderer();
+    //  std::string textureFileName = "g3m-marker.png";
+    //  IImage* textureImage = IFactory::instance()->createImageFromFileName(textureFileName);
+    //
+    //  Shape* shape = new QuadShape(Geodetic3D(Angle::fromDegrees(37.78333333),
+    //                                          Angle::fromDegrees(-122.41666666666667),
+    //                                          8000),
+    //                               textureImage, true, textureFileName,
+    //                               50000, 50000);
 
-  std::string textureFileName = "g3m-marker.png";
-  IImage* textureImage = IFactory::instance()->createImageFromFileName(textureFileName);
+    Shape* shape = new CircleShape(Geodetic3D(Angle::fromDegrees(37.78333333),
+                                              Angle::fromDegrees(-122.41666666666667),
+                                              8000),
+                                   50000,
+                                   Color::fromRGBA(1, 1, 0, 1),
+                                   64);
+    //  shape->setHeading( Angle::fromDegrees(45) );
+    //  shape->setPitch( Angle::fromDegrees(45) );
+    //  shape->setScale(2.0, 0.5, 1);
 
-  QuadShape* quad = new QuadShape(Geodetic3D(Angle::fromDegrees(37.78333333),
-                                             Angle::fromDegrees(-122.41666666666667),
-                                             10000),
-                                  Angle::fromDegrees(0),
-                                  Angle::fromDegrees(0),
-                                  textureImage, true, textureFileName,
-                                  500000, 500000);
-  shapesRenderer->addShape(quad);
-  
-  renderers.push_back(shapesRenderer);
-
+    shapesRenderer->addShape(shape);
+    
+    renderers.push_back(shapesRenderer);
+  }
 
 
   TrailsRenderer* trailsRenderer = new TrailsRenderer();

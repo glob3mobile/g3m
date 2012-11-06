@@ -291,6 +291,12 @@ void GL::drawTriangleStrip(IIntBuffer* indices) {
                     indices);
 }
 
+void GL::drawTriangleFan(IIntBuffer* indices) {
+  _gl->drawElements(GLPrimitive::triangleFan(),
+                    indices->size(),
+                    indices);
+}
+
 void GL::drawLines(IIntBuffer* indices) {
   _gl->drawElements(GLPrimitive::lines(),
                     indices->size(),

@@ -26,9 +26,10 @@ int GLType::_unsignedInt = 0;
 int GLType::_int = 0;
 
 int GLPrimitive::_triangleStrip = 0;
-int GLPrimitive::_lines = 0;
+int GLPrimitive::_triangleFan   = 0;
+int GLPrimitive::_lines     = 0;
 int GLPrimitive::_lineStrip = 0;
-int GLPrimitive::_lineLoop = 0;
+int GLPrimitive::_lineLoop  = 0;
 int GLPrimitive::_points = 0;
 
 int GLBlendFactor::_srcAlpha = 0;

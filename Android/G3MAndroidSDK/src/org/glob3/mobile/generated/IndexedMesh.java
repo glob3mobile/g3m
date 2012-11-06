@@ -170,6 +170,10 @@ public class IndexedMesh extends Mesh
 	{
 	  gl.drawTriangleStrip(_indices);
 	}
+	else if (_primitive == GLPrimitive.triangleFan())
+	{
+	  gl.drawTriangleFan(_indices);
+	}
 	else if (_primitive == GLPrimitive.lines())
 	{
 	  gl.drawLines(_indices);
