@@ -90,6 +90,8 @@
 		CF0C396A157F988100646A2F /* Mark.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0C3969157F988100646A2F /* Mark.cpp */; };
 		CF0D9BB41601F46B00F28B7D /* ByteBuffer_iOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0D9BB31601F46A00F28B7D /* ByteBuffer_iOS.cpp */; };
 		CF31CBF1158776130085E8F1 /* Effects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF31CBF0158776120085E8F1 /* Effects.cpp */; };
+		CF3E07E81649B65000B5CA51 /* CompositeShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF3E07E61649B65000B5CA51 /* CompositeShape.cpp */; };
+		CF3E07E91649B65000B5CA51 /* CompositeShape.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF3E07E71649B65000B5CA51 /* CompositeShape.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF3F3FF01620FB2A00A92CC8 /* Vector4D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF3F3FEE1620FB2A00A92CC8 /* Vector4D.cpp */; };
 		CF3F3FF11620FB2A00A92CC8 /* Vector4D.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF3F3FEF1620FB2A00A92CC8 /* Vector4D.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF45E025164851C5004746BB /* MeshShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF45E023164851C5004746BB /* MeshShape.cpp */; };
@@ -363,6 +365,8 @@
 		CF31CBF0158776120085E8F1 /* Effects.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Effects.cpp; path = Commons/Basic/Effects.cpp; sourceTree = "<group>"; };
 		CF31CBF215878AF90085E8F1 /* ITimer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ITimer.hpp; path = Commons/Interfaces/ITimer.hpp; sourceTree = "<group>"; };
 		CF31CBF315878BE40085E8F1 /* Timer_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Timer_iOS.hpp; path = Specific/Derived/Timer_iOS.hpp; sourceTree = "<group>"; };
+		CF3E07E61649B65000B5CA51 /* CompositeShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CompositeShape.cpp; path = Commons/Rendererers/CompositeShape.cpp; sourceTree = "<group>"; };
+		CF3E07E71649B65000B5CA51 /* CompositeShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CompositeShape.hpp; path = Commons/Rendererers/CompositeShape.hpp; sourceTree = "<group>"; };
 		CF3F3FEE1620FB2A00A92CC8 /* Vector4D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Vector4D.cpp; path = Commons/Geometry/Vector4D.cpp; sourceTree = "<group>"; };
 		CF3F3FEF1620FB2A00A92CC8 /* Vector4D.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Vector4D.hpp; path = Commons/Geometry/Vector4D.hpp; sourceTree = "<group>"; };
 		CF45E023164851C5004746BB /* MeshShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MeshShape.cpp; path = Commons/Rendererers/MeshShape.cpp; sourceTree = "<group>"; };
@@ -838,6 +842,10 @@
 		CFEEE4BA1648676800F45F59 /* Shapes */ = {
 			isa = PBXGroup;
 			children = (
+				CFEEE4BB164867B600F45F59 /* CircleShape.cpp */,
+				CFEEE4BC164867B600F45F59 /* CircleShape.hpp */,
+				CF3E07E61649B65000B5CA51 /* CompositeShape.cpp */,
+				CF3E07E71649B65000B5CA51 /* CompositeShape.hpp */,
 				CF45E023164851C5004746BB /* MeshShape.cpp */,
 				CF45E024164851C5004746BB /* MeshShape.hpp */,
 				CF5EA5D6163DDCB900D8F797 /* QuadShape.cpp */,
@@ -846,8 +854,6 @@
 				CF5EA5D3163DDC7900D8F797 /* Shape.hpp */,
 				CFA0BB60163DCFF6009185FE /* ShapesRenderer.cpp */,
 				CFA0BB61163DCFF6009185FE /* ShapesRenderer.hpp */,
-				CFEEE4BB164867B600F45F59 /* CircleShape.cpp */,
-				CFEEE4BC164867B600F45F59 /* CircleShape.hpp */,
 			);
 			name = Shapes;
 			sourceTree = "<group>";
@@ -964,6 +970,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF3E07E91649B65000B5CA51 /* CompositeShape.hpp in Headers */,
 				CFEEE4BE164867B600F45F59 /* CircleShape.hpp in Headers */,
 				CF45E026164851C5004746BB /* MeshShape.hpp in Headers */,
 				CF5EA5D5163DDC7900D8F797 /* Shape.hpp in Headers */,
@@ -1267,6 +1274,7 @@
 				CF5EA5D8163DDCB900D8F797 /* QuadShape.cpp in Sources */,
 				CF45E025164851C5004746BB /* MeshShape.cpp in Sources */,
 				CFEEE4BD164867B600F45F59 /* CircleShape.cpp in Sources */,
+				CF3E07E81649B65000B5CA51 /* CompositeShape.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

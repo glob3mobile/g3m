@@ -29,7 +29,7 @@ protected:
   Mesh* createMesh(const RenderContext* rc);
 
 public:
-  QuadShape(const Geodetic3D& position,
+  QuadShape(Geodetic3D* position,
             IImage* textureImage,
             bool autoDeleteTextureImage,
             const std::string textureFilename,

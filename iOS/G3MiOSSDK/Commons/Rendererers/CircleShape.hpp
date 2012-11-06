@@ -22,7 +22,7 @@ protected:
   Mesh* createMesh(const RenderContext* rc);
 
 public:
-  CircleShape(const Geodetic3D& position,
+  CircleShape(Geodetic3D* position,
               float radius,
               Color* color = NULL,
               int steps = 64) :
