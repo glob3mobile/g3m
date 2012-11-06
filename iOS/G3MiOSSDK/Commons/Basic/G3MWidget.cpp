@@ -26,6 +26,7 @@
 #include "GoToPositionEffect.hpp"
 #include "CameraRenderer.hpp"
 #include "CPUTextureBuilder.hpp"
+#include "IStorage.hpp"
 #include <math.h>
 
 void G3MWidget::initSingletons(ILogger*            logger,
@@ -34,7 +35,9 @@ void G3MWidget::initSingletons(ILogger*            logger,
                                IThreadUtils*       threadUtils,
                                IStringBuilder*     stringBuilder,
                                IMathUtils*         mathUtils,
-                               IJSONParser*        jsonParser) {
+                               IJSONParser*        jsonParser,
+                               IStorage*           storage,
+                               IDownloader*        downloader) {
   if (ILogger::instance() == NULL) {
     ILogger::setInstance(logger);
     IFactory::setInstance(factory);
@@ -43,6 +46,8 @@ void G3MWidget::initSingletons(ILogger*            logger,
     IStringBuilder::setInstance(stringBuilder);
     IMathUtils::setInstance(mathUtils);
     IJSONParser::setInstance(jsonParser);
+    IStorage::setInstance(storage);
+    IDownloader::setInstance(downloader);
   }
   else {
     ILogger::instance()->logWarning("Singletons already set");
@@ -50,7 +55,6 @@ void G3MWidget::initSingletons(ILogger*            logger,
 }
 
 G3MWidget::G3MWidget(INativeGL*                       nativeGL,
-                     IDownloader*                     downloader,
                      const Planet*                    planet,
                      std::vector<ICameraConstrainer*> cameraConstrainers,
                      CameraRenderer*                  cameraRenderer,
@@ -81,7 +85,6 @@ _timer(IFactory::instance()->createTimer()),
 _renderCounter(0),
 _totalRenderTime(0),
 _logFPS(logFPS),
-_downloader(downloader),
 _mainRendererReady(false), // false until first call to G3MWidget::render()
 _selectedRenderer(NULL),
 _renderStatisticsTimer(NULL),
@@ -99,8 +102,9 @@ _autoDeleteInitializationTask(autoDeleteInitializationTask)
                            IMathUtils::instance(),
                            IJSONParser::instance(),
                            _planet,
-                           _downloader,
-                           _effectsScheduler);
+                           IDownloader::instance(),
+                           _effectsScheduler,
+                           IStorage::instance());
 
   _effectsScheduler->initialize(&ic);
   _cameraRenderer->initialize(&ic);
@@ -109,8 +113,8 @@ _autoDeleteInitializationTask(autoDeleteInitializationTask)
   _currentCamera->initialize(&ic);
   _nextCamera->initialize(&ic);
 
-  if (_downloader != NULL){
-    _downloader->start();
+  if (IDownloader::instance() != NULL){
+    IDownloader::instance()->start();
   }
 
   for (int i = 0; i < periodicalTasks.size(); i++) {
@@ -120,7 +124,6 @@ _autoDeleteInitializationTask(autoDeleteInitializationTask)
 
 
 G3MWidget* G3MWidget::create(INativeGL*                       nativeGL,
-                             IDownloader*                     downloader,
                              const Planet*                    planet,
                              std::vector<ICameraConstrainer*> cameraConstrainers,
                              CameraRenderer*                  cameraRenderer,
@@ -136,7 +139,6 @@ G3MWidget* G3MWidget::create(INativeGL*                       nativeGL,
                              std::vector<PeriodicalTask*>     periodicalTasks) {
 
   return new G3MWidget(nativeGL,
-                       downloader,
                        planet,
                        cameraConstrainers,
                        cameraRenderer,
@@ -173,10 +175,10 @@ G3MWidget::~G3MWidget() {
   delete _texturesHandler;
   delete _timer;
 
-  if (_downloader != NULL) {
-    _downloader->stop();
+  if (IDownloader::instance() != NULL) {
+    IDownloader::instance()->stop();
 #ifdef C_CODE
-    delete _downloader;
+    delete IDownloader::instance();
 #endif
   }
 
@@ -205,8 +207,9 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
                     IMathUtils::instance(),
                     IJSONParser::instance(),
                     _planet,
-                    _downloader,
-                    _effectsScheduler);
+                    IDownloader::instance(),
+                    _effectsScheduler,
+                    IStorage::instance());
 
     bool handled = false;
     if (_mainRenderer->isEnable()) {
@@ -228,8 +231,9 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
                     IMathUtils::instance(),
                     IJSONParser::instance(),
                     _planet,
-                    _downloader,
-                    _effectsScheduler);
+                    IDownloader::instance(),
+                    _effectsScheduler,
+                    IStorage::instance());
 
     _cameraRenderer->onResizeViewportEvent(&ec, width, height);
 
@@ -280,10 +284,10 @@ void G3MWidget::render() {
                    _nextCamera,
                    _texturesHandler,
                    _textureBuilder,
-                   _downloader,
+                   IDownloader::instance(),
                    _effectsScheduler,
-                   IFactory::instance()->createTimer()
-                   );
+                   IFactory::instance()->createTimer(),
+                   IStorage::instance());
 
   _effectsScheduler->doOneCyle(&rc);
 
@@ -342,8 +346,8 @@ void G3MWidget::render() {
   if (_logDownloaderStatistics) {
     std::string cacheStatistics = "";
 
-    if (_downloader != NULL){
-      cacheStatistics = _downloader->statistics();
+    if (IDownloader::instance() != NULL){
+      cacheStatistics = IDownloader::instance()->statistics();
     }
 
     if (cacheStatistics != _lastCacheStatistics) {
@@ -363,16 +367,17 @@ void G3MWidget::onPause() {
                            IMathUtils::instance(),
                            IJSONParser::instance(),
                            _planet,
-                           _downloader,
-                           _effectsScheduler);
+                           IDownloader::instance(),
+                           _effectsScheduler,
+                           IStorage::instance());
 
   _mainRenderer->onPause(&ic);
   _busyRenderer->onPause(&ic);
 
   _effectsScheduler->onPause(&ic);
 
-  if (_downloader != NULL) {
-    _downloader->onPause(&ic);
+  if (IDownloader::instance() != NULL) {
+    IDownloader::instance()->onPause(&ic);
   }
 }
 
@@ -385,16 +390,17 @@ void G3MWidget::onResume() {
                            IMathUtils::instance(),
                            IJSONParser::instance(),
                            _planet,
-                           _downloader,
-                           _effectsScheduler);
+                           IDownloader::instance(),
+                           _effectsScheduler,
+                           IStorage::instance());
 
   _mainRenderer->onResume(&ic);
   _busyRenderer->onResume(&ic);
 
   _effectsScheduler->onResume(&ic);
 
-  if (_downloader != NULL) {
-    _downloader->onResume(&ic);
+  if (IDownloader::instance() != NULL) {
+    IDownloader::instance()->onResume(&ic);
   }
 }
 

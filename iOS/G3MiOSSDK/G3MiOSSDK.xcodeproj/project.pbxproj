@@ -254,6 +254,7 @@
 		D8F42FBE15EB6D78000D1822 /* LeveledTexturedMesh.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF8FF98A15D5539F000F79D1 /* LeveledTexturedMesh.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8F42FBF15EB6D78000D1822 /* SQLiteStorage_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF8B21B115DD32820068601A /* SQLiteStorage_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
 		D8F42FD415EB7B95000D1822 /* IStringBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8A723A715E4D2C500ABDF07 /* IStringBuilder.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		E745CC7916484A9A00819711 /* IStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E745CC7716484A9900819711 /* IStorage.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -507,6 +508,7 @@
 		D8EEF3BC1577924D003FEB5E /* G3MiOSSDK-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "G3MiOSSDK-Prefix.pch"; sourceTree = "<group>"; };
 		D8FEDAC615E7BD23007633A0 /* IMathUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IMathUtils.hpp; path = Commons/Interfaces/IMathUtils.hpp; sourceTree = "<group>"; };
 		D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MathUtils_iOS.hpp; path = Specific/Derived/MathUtils_iOS.hpp; sourceTree = "<group>"; };
+		E745CC7716484A9900819711 /* IStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IStorage.cpp; path = Commons/Interfaces/IStorage.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -737,6 +739,7 @@
 				CFB72A6815E6808900A5BAF4 /* IStringUtils.hpp */,
 				D8FEDAC615E7BD23007633A0 /* IMathUtils.hpp */,
 				CF31CBF215878AF90085E8F1 /* ITimer.hpp */,
+				E745CC7716484A9900819711 /* IStorage.cpp */,
 			);
 			name = Interfaces;
 			sourceTree = "<group>";
@@ -1243,6 +1246,7 @@
 				CFA0BB62163DCFF6009185FE /* ShapesRenderer.cpp in Sources */,
 				CF5EA5D4163DDC7900D8F797 /* Shape.cpp in Sources */,
 				CF5EA5D8163DDCB900D8F797 /* QuadShape.cpp in Sources */,
+				E745CC7916484A9A00819711 /* IStorage.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
