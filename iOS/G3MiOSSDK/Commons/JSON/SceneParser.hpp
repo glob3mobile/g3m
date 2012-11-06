@@ -15,8 +15,8 @@
 #include "LayerSet.hpp"
 
 #include "Renderer.hpp"
-
 #include "IDownloader.hpp"
+#include "MarksRenderer.hpp"
 
 enum layer_type {
   WMS,THREED,PANO,GEOJSON
@@ -42,14 +42,14 @@ class SceneParser{
 public:
   
   static SceneParser* instance();
-  void parse(LayerSet* layerSet, IDownloader* downloader, std::vector<Renderer*>* renderers, std::string namelessParameter);
+  void parse(LayerSet* layerSet, IDownloader* downloader, std::vector<Renderer*>* renderers, std::string namelessParameter, MarkTouchListener* markTouchListener);
 
 private:
-  void parserJSONLayerList(LayerSet* layerSet, IDownloader* downloader, std::vector<Renderer*>* renderers, JSONObject* jsonLayers);
+  void parserJSONLayerList(LayerSet* layerSet, IDownloader* downloader, std::vector<Renderer*>* renderers, JSONObject* jsonLayers, MarkTouchListener* markTouchListener);
   void parserJSONWMSLayer(LayerSet* layerSet, JSONObject* jsonLayer);
   void parserJSON3DLayer(LayerSet* layerSet, JSONObject* jsonLayer);
   void parserJSONPanoLayer(LayerSet* layerSet, JSONObject* jsonLayer);
-  void parserGEOJSONLayer(LayerSet* layerSet, IDownloader* downloader, std::vector<Renderer*>* renderers, JSONObject* jsonLayer);
+  void parserGEOJSONLayer(LayerSet* layerSet, IDownloader* downloader, std::vector<Renderer*>* renderers, JSONObject* jsonLayer, MarkTouchListener* markTouchListener);
   
 protected:
   SceneParser();

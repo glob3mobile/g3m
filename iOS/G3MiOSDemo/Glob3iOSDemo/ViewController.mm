@@ -361,13 +361,27 @@
                                     periodicalTasks: periodicalTasks];
     }else{
         
-        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"wmsScene" ofType:@"scn"];
+        class CustomTouchListener : public MarkTouchListener {
+        public:
+            bool touchedMark(Mark* mark) {
+                NSString* message = [NSString stringWithFormat: @"%s", mark->getName().c_str()];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Información"
+                                                                message:message
+                                                               delegate:nil
+                                                      cancelButtonTitle:@"OK"
+                                                      otherButtonTitles:nil];
+                [alert show];
+                return true;
+            }
+        };
+        
+        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"testScene" ofType:@"scn"];
         if (filePath) {
             NSString *jsonFile = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
             if (jsonFile) {
                 const std::string scene = std::string([jsonFile UTF8String]);
                 G3MJSONBuilder_iOS* g3mJSONBuilder_iOS = new G3MJSONBuilder_iOS(scene,[self G3MWidget]);
-                g3mJSONBuilder_iOS->initWidgetWithCameraConstraints(cameraConstraints, layerSet, incrementalTileQuality, renderers, userData, new SampleInitializationTask([self G3MWidget]),  periodicalTasks);
+                g3mJSONBuilder_iOS->initWidgetWithCameraConstraints(cameraConstraints, layerSet, incrementalTileQuality, renderers, userData, new SampleInitializationTask([self G3MWidget]), periodicalTasks, new CustomTouchListener());
             }else{
                 ILogger::instance()->logWarning("scene.scn file could not be read!");
             }

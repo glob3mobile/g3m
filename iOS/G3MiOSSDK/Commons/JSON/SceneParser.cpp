@@ -60,17 +60,16 @@ SceneParser::SceneParser(){
   _mapLayerType["THREED"] = THREED;
   _mapLayerType["PANO"] = PANO;
   _mapLayerType["GEOJSON"] = GEOJSON;  
-
 }
 
-void SceneParser::parse(LayerSet* layerSet, IDownloader* downloader, std::vector<Renderer*>* renderers, std::string namelessParameter){
+void SceneParser::parse(LayerSet* layerSet, IDownloader* downloader, std::vector<Renderer*>* renderers, std::string namelessParameter, MarkTouchListener* markTouchListener){
   
   JSONObject* json = IJSONParser::instance()->parse(namelessParameter)->getObject();
-  parserJSONLayerList(layerSet, downloader, renderers, json->getObjectForKey(LAYERS)->getObject());
+  parserJSONLayerList(layerSet, downloader, renderers, json->getObjectForKey(LAYERS)->getObject(), markTouchListener);
   IJSONParser::instance()->deleteJSONData(json);
 }
 
-void SceneParser::parserJSONLayerList(LayerSet* layerSet, IDownloader* downloader, std::vector<Renderer*>* renderers, JSONObject* jsonLayers){
+void SceneParser::parserJSONLayerList(LayerSet* layerSet, IDownloader* downloader, std::vector<Renderer*>* renderers, JSONObject* jsonLayers, MarkTouchListener* markTouchListener){
   for (int i = 0; i < jsonLayers->getObject()->getSize(); i++) {
     IStringBuilder* isb = IStringBuilder::newStringBuilder();
     isb->addInt(i);
@@ -88,7 +87,7 @@ void SceneParser::parserJSONLayerList(LayerSet* layerSet, IDownloader* downloade
         parserJSONPanoLayer(layerSet, jsonLayer);
         break;
       case GEOJSON:
-        parserGEOJSONLayer(layerSet, downloader, renderers, jsonLayer);
+        parserGEOJSONLayer(layerSet, downloader, renderers, jsonLayer, markTouchListener);
         break;
     }
     
@@ -143,11 +142,14 @@ void SceneParser::parserJSONPanoLayer(LayerSet* layerSet, JSONObject* jsonLayer)
   cout << "Parsing Pano Layer " << jsonLayer->getObjectForKey(NAME)->getString()->getValue() << "..." << endl;
 }
 
-void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, IDownloader* downloader, std::vector<Renderer*>* renderers, JSONObject* jsonLayer){
+void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, IDownloader* downloader, std::vector<Renderer*>* renderers, JSONObject* jsonLayer, MarkTouchListener* markTouchListener){
     cout << "Parsing GEOJSON Layer " << jsonLayer->getObjectForKey(NAME)->getString()->getValue() << "..." << endl;
     
     const bool readyWhenMarksReady = false;
     MarksRenderer* marksRenderer = new MarksRenderer(readyWhenMarksReady);
+    if (markTouchListener != NULL) {
+        marksRenderer->setMarkTouchListener(markTouchListener, true);
+    }
     renderers->push_back(marksRenderer);
     
     const std::string geojsonDatasource = jsonLayer->getObjectForKey(DATASOURCE)->getString()->getValue();

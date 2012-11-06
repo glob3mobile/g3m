@@ -20,15 +20,16 @@
 G3MJSONBuilder_iOS::G3MJSONBuilder_iOS(std::string jsonSource, G3MWidget_iOS* g3mWidget): IG3MJSONBuilder(jsonSource), _g3mWidget(g3mWidget) {};
 
 
-void  G3MJSONBuilder_iOS::initWidgetWithCameraConstraints (std::vector<ICameraConstrainer*> cameraConstraints,  LayerSet* layerSet, bool incrementalTileQuality, std::vector<Renderer*> renderers, UserData* userData, GTask* initializationTask, std::vector<PeriodicalTask*> periodicalTasks){
+void  G3MJSONBuilder_iOS::initWidgetWithCameraConstraints (std::vector<ICameraConstrainer*> cameraConstraints,  LayerSet* layerSet, bool incrementalTileQuality, std::vector<Renderer*> renderers, UserData* userData, GTask* initializationTask, std::vector<PeriodicalTask*> periodicalTasks, MarkTouchListener* markTouchListener){
     
     IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
     const bool saveInBackground = true;
     IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
                                                    storage,
                                                    saveInBackground);
+    downloader->start();
     
-    SceneParser::instance()->parse(layerSet, downloader, &renderers, _jsonSource);
+    SceneParser::instance()->parse(layerSet, downloader, &renderers, _jsonSource, markTouchListener);
     
     [_g3mWidget initWidgetWithCameraConstraints: cameraConstraints
                                              layerSet: layerSet
