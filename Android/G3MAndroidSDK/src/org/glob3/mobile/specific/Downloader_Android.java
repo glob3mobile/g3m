@@ -16,7 +16,7 @@ import org.glob3.mobile.generated.URL;
 
 
 public final class Downloader_Android
-         implements
+         extends
             IDownloader {
 
    final static String                                      TAG = "Downloader_Android";
