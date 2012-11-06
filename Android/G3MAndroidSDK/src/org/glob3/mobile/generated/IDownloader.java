@@ -56,6 +56,9 @@ public abstract class IDownloader
 
   public abstract void cancelRequest(long requestId);
 
+  public void dispose()
+  {
+  }
 
   public abstract String statistics();
 
