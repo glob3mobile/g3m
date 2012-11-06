@@ -26,15 +26,15 @@ public class SceneParser
 	}
 	return _instance;
   }
-  public final void parse(LayerSet layerSet, IDownloader downloader, java.util.ArrayList<Renderer> renderers, String namelessParameter)
+  public final void parse(LayerSet layerSet, IDownloader downloader, java.util.ArrayList<Renderer> renderers, String namelessParameter, MarkTouchListener markTouchListener)
   {
   
 	JSONObject json = IJSONParser.instance().parse(namelessParameter).getObject();
-	parserJSONLayerList(layerSet, downloader, renderers, json.getObjectForKey(LAYERS).getObject());
+	parserJSONLayerList(layerSet, downloader, renderers, json.getObjectForKey(LAYERS).getObject(), markTouchListener);
 	IJSONParser.instance().deleteJSONData(json);
   }
 
-  private void parserJSONLayerList(LayerSet layerSet, IDownloader downloader, java.util.ArrayList<Renderer> renderers, JSONObject jsonLayers)
+  private void parserJSONLayerList(LayerSet layerSet, IDownloader downloader, java.util.ArrayList<Renderer> renderers, JSONObject jsonLayers, MarkTouchListener markTouchListener)
   {
 	for (int i = 0; i < jsonLayers.getObject().getSize(); i++)
 	{
@@ -55,7 +55,7 @@ public class SceneParser
 		  parserJSONPanoLayer(layerSet, jsonLayer);
 		  break;
 		case GEOJSON:
-		  parserGEOJSONLayer(layerSet, downloader, renderers, jsonLayer);
+		  parserGEOJSONLayer(layerSet, downloader, renderers, jsonLayer, markTouchListener);
 		  break;
 	  }
   
@@ -114,7 +114,7 @@ public class SceneParser
 	System.out.print("...");
 	System.out.print("\n");
   }
-  private void parserGEOJSONLayer(LayerSet layerSet, IDownloader downloader, java.util.ArrayList<Renderer> renderers, JSONObject jsonLayer)
+  private void parserGEOJSONLayer(LayerSet layerSet, IDownloader downloader, java.util.ArrayList<Renderer> renderers, JSONObject jsonLayer, MarkTouchListener markTouchListener)
   {
 	  System.out.print("Parsing GEOJSON Layer ");
 	  System.out.print(jsonLayer.getObjectForKey(NAME).getString().getValue());
@@ -123,6 +123,10 @@ public class SceneParser
   
 	  final boolean readyWhenMarksReady = false;
 	  MarksRenderer marksRenderer = new MarksRenderer(readyWhenMarksReady);
+	  if (markTouchListener != null)
+	  {
+		  marksRenderer.setMarkTouchListener(markTouchListener, true);
+	  }
 	  renderers.add(marksRenderer);
   
 	  final String geojsonDatasource = jsonLayer.getObjectForKey(DATASOURCE).getString().getValue();
@@ -156,7 +160,6 @@ public class SceneParser
 	_mapLayerType.put("THREED", layer_type.THREED);
 	_mapLayerType.put("PANO", layer_type.PANO);
 	_mapLayerType.put("GEOJSON", layer_type.GEOJSON);
-  
   }
 //C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
 //  SceneParser(SceneParser NamelessParameter);
