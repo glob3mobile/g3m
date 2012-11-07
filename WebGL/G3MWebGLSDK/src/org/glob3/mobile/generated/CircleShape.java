@@ -60,7 +60,7 @@ public class CircleShape extends MeshShape
 	  this(position, radius, null, 64);
   }
 //C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
-//ORIGINAL LINE: CircleShape(const Geodetic3D& position, float radius, Color* color = null, int steps = 64) : MeshShape(position), _radius(radius), _color(color), _steps(steps)
+//ORIGINAL LINE: CircleShape(Geodetic3D* position, float radius, Color* color = null, int steps = 64) : MeshShape(position), _radius(radius), _color(color), _steps(steps)
   public CircleShape(Geodetic3D position, float radius, Color color, int steps)
   {
 	  super(position);
