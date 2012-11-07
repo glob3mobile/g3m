@@ -42,4 +42,6 @@ void SceneJSShapesParser::pvtParse(const std::string& json) {
 
 Shape* SceneJSShapesParser::toShape(JSONBaseObject* jsonObject) const {
   int ____DIEGO_AT_WORK;
+
+  return NULL;
 }
