@@ -17,7 +17,8 @@ public class JSONParser_Android
 
    @Override
    public JSONBaseObject parse(final String string) {
-      org.glob3.mobile.generated.JSONBaseObject g3mJSONBaseObject = new JSONBaseObject();
+      //      org.glob3.mobile.generated.JSONBaseObject g3mJSONBaseObject = new JSONBaseObject();
+      org.glob3.mobile.generated.JSONBaseObject g3mJSONBaseObject = null;
 
       Object rawJson;
       try {
