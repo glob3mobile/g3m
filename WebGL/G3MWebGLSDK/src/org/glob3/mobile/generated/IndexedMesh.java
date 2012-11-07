@@ -125,11 +125,9 @@ public class IndexedMesh extends Mesh
 	  _flatColor = null;
 	}
   
-	if (_extent != null)
-		_extent = null;
+	_extent = null;
 	if (_translationMatrix != null)
-		if (_translationMatrix != null)
-			_translationMatrix.dispose();
+		_translationMatrix.dispose();
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -171,6 +169,10 @@ public class IndexedMesh extends Mesh
 	if (_primitive == GLPrimitive.triangleStrip())
 	{
 	  gl.drawTriangleStrip(_indices);
+	}
+	else if (_primitive == GLPrimitive.triangleFan())
+	{
+	  gl.drawTriangleFan(_indices);
 	}
 	else if (_primitive == GLPrimitive.lines())
 	{

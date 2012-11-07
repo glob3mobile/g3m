@@ -29,6 +29,7 @@ package org.glob3.mobile.generated;
 
 
 
+
 ///#include "MutableMatrix44D.hpp"
 
 
@@ -65,16 +66,6 @@ public class MutableMatrix44D
 	  _isValid = isValid;
 	_columnMajorFloatBuffer = null;
 	_columnMajorFloatArray = null;
-  }
-
-  private static Vector3D getTangent0(Vector3D normal)
-  {
-	Vector3D tangent0 = normal.cross(new Vector3D(1, 0, 0));
-	if (tangent0.dot(tangent0) < 0.001)
-	{
-	  return normal.cross(new Vector3D(0, 1, 0)).normalized();
-	}
-	return tangent0.normalized();
   }
 
 
@@ -190,17 +181,11 @@ public class MutableMatrix44D
 	  _isValid = that._isValid;
   
 	  if (_columnMajorFloatBuffer != null)
-	  {
-		if (_columnMajorFloatBuffer != null)
-			_columnMajorFloatBuffer.dispose();
-		_columnMajorFloatBuffer = null;
-	  }
+		  _columnMajorFloatBuffer.dispose();
+	  _columnMajorFloatBuffer = null;
   
-	  if (_columnMajorFloatArray != null)
-	  {
-		_columnMajorFloatArray = null;
-		_columnMajorFloatArray = null;
-	  }
+	  _columnMajorFloatArray = null;
+	  _columnMajorFloatArray = null;
 	}
   
 	return this;
@@ -209,15 +194,8 @@ public class MutableMatrix44D
   public void dispose()
   {
 	if (_columnMajorFloatBuffer != null)
-	{
-	  if (_columnMajorFloatBuffer != null)
-		  _columnMajorFloatBuffer.dispose();
-	}
-  
-	if (_columnMajorFloatArray != null)
-	{
-	  _columnMajorFloatArray = null;
-	}
+		_columnMajorFloatBuffer.dispose();
+	_columnMajorFloatArray = null;
   }
 
   public static MutableMatrix44D identity()
@@ -423,8 +401,8 @@ public class MutableMatrix44D
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: float[] getColumnMajorFloatArray() const
-  public final float[] getColumnMajorFloatArray()
-  {
+	public final float[] getColumnMajorFloatArray()
+	{
 	  if (_columnMajorFloatArray == null)
 	  {
 		_columnMajorFloatArray = new float[16];
@@ -599,26 +577,38 @@ public class MutableMatrix44D
 	}
 
 
-	//static MutableMatrix44D createRotationMatrixFromNormal(const Vector3D& normal);
+	public static MutableMatrix44D createScaleMatrix(double scaleX, double scaleY, double scaleZ)
+	{
+	  return new MutableMatrix44D(scaleX, 0, 0, 0, 0, scaleY, 0, 0, 0, 0, scaleZ, 0, 0, 0, 0, 1);
 
+	}
+
+	public static MutableMatrix44D createScaleMatrix(Vector3D scale)
+	{
+	  return new MutableMatrix44D(scale._x, 0, 0, 0, 0, scale._y, 0, 0, 0, 0, scale._z, 0, 0, 0, 0, 1);
+    
+	}
+
+	public static MutableMatrix44D createGeodeticRotationMatrix(Angle latitude, Angle longitude)
+	{
+	  // change the reference coordinates system from x-front/y-left/z-up to x-right/y-up/z-back
+	  final MutableMatrix44D changeReferenceCoordinatesSystem = new MutableMatrix44D(0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1);
+    
+	  // orbit reference system to geodetic position
+	  final MutableMatrix44D longitudeRotation = MutableMatrix44D.createRotationMatrix(longitude, Vector3D.upY());
+	  final MutableMatrix44D latitudeRotation = MutableMatrix44D.createRotationMatrix(latitude, Vector3D.downX());
+    
+	  return changeReferenceCoordinatesSystem.multiply(longitudeRotation).multiply(latitudeRotation);
+	}
+
+	public static MutableMatrix44D createGeodeticRotationMatrix(Geodetic2D position)
+	{
+	  return MutableMatrix44D.createGeodeticRotationMatrix(position.latitude(), position.longitude());
+	}
+
+	public static MutableMatrix44D createGeodeticRotationMatrix(Geodetic3D position)
+	{
+	  return MutableMatrix44D.createGeodeticRotationMatrix(position.latitude(), position.longitude());
+	}
 
   }
-/*
- MutableMatrix44D MutableMatrix44D::createRotationMatrixFromNormal(const Vector3D& normal) {
-  // Find a vector in the plane
-  const Vector3D tangent0 = getTangent0(normal);
-  // Find another vector in the plane
-  const Vector3D tangent1 = normal.cross(tangent0).normalized();
-
-//  return MutableMatrix44D(tangent0._x, tangent1._x, normal._x, 0,
-//                          tangent0._y, tangent1._y, normal._y, 0,
-//                          tangent0._z, tangent1._z, normal._z, 0,
-//                          0, 0, 0, 1).transposed();
-
-  return MutableMatrix44D(tangent0._x, tangent0._y, tangent0._z, 0,
-						  tangent1._x, tangent1._y, tangent1._z, 0,
-						  normal._x,   normal._y,   normal._z,   0,
-						  0, 0, 0, 1);
-}*/
-
-

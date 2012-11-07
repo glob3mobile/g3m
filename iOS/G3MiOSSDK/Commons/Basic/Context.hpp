@@ -24,28 +24,31 @@ class IThreadUtils;
 class TextureBuilder;
 class IMathUtils;
 class IJSONParser;
+class IStorage;
 
 class Context {
 protected:
   const IFactory*     _factory;
   const IStringUtils* _stringUtils;
-  IThreadUtils*       _threadUtils;
+  const IThreadUtils*       _threadUtils;
   const ILogger*      _logger;
-  const IMathUtils* _mathUtils;
-  const IJSONParser* _jsonParser;
+  const IMathUtils*   _mathUtils;
+  const IJSONParser*  _jsonParser;
   const Planet*       _planet;
   IDownloader*        _downloader;
   EffectsScheduler*   _effectsScheduler;
+    IStorage*         _storage;
 
   Context(const IFactory*     factory,
           const IStringUtils* stringUtils,
-          IThreadUtils*       threadUtils,
+          const IThreadUtils* threadUtils,
           const ILogger*      logger,
-          const IMathUtils* mathUtils,
-          const IJSONParser* jsonParser,
+          const IMathUtils*   mathUtils,
+          const IJSONParser*  jsonParser,
           const Planet*       planet,
           IDownloader*        downloader,
-          EffectsScheduler*   effectsScheduler) :
+          EffectsScheduler*   effectsScheduler,
+          IStorage*           storage) :
   _factory(factory),
   _stringUtils(stringUtils),
   _threadUtils(threadUtils),
@@ -54,7 +57,8 @@ protected:
   _jsonParser(jsonParser),
   _planet(planet),
   _downloader(downloader),
-  _effectsScheduler(effectsScheduler)
+  _effectsScheduler(effectsScheduler),
+    _storage(storage)
   {
   }
 
@@ -87,12 +91,16 @@ public:
   IDownloader* getDownloader() const {
     return _downloader;
   }
+    
+    IStorage* getStorage() const {
+        return _storage;
+    }
 
   EffectsScheduler* getEffectsScheduler() const {
     return _effectsScheduler;
   }
 
-  IThreadUtils* getThreadUtils() const {
+  const IThreadUtils* getThreadUtils() const {
     return _threadUtils;
   }
 };
@@ -102,15 +110,16 @@ public:
 
 class InitializationContext: public Context {
 public:
-  InitializationContext(IFactory*           factory,
+  InitializationContext(const IFactory*           factory,
                         const IStringUtils* stringUtils,
-                        IThreadUtils*       threadUtils,
-                        ILogger*            logger,
+                        const IThreadUtils*       threadUtils,
+                        const ILogger*            logger,
                         const IMathUtils* mathUtils,
                         const IJSONParser* jsonParser,
                         const Planet*       planet,
                         IDownloader*        downloader,
-                        EffectsScheduler*   effectsScheduler) :
+                        EffectsScheduler*   effectsScheduler,
+                        IStorage*           storage) :
   Context(factory,
           stringUtils,
           threadUtils,
@@ -119,7 +128,8 @@ public:
           jsonParser,
           planet,
           downloader,
-          effectsScheduler) {
+          effectsScheduler,
+          storage) {
   }
 };
 
@@ -127,15 +137,16 @@ public:
 
 class EventContext: public Context {
 public:
-  EventContext(IFactory*           factory,
+  EventContext(const IFactory*           factory,
                const IStringUtils* stringUtils,
-               IThreadUtils*       threadUtils,
-               ILogger*            logger,
+               const IThreadUtils*       threadUtils,
+               const ILogger*            logger,
                const IMathUtils* mathUtils,
                const IJSONParser* jsonParser,
                const Planet*       planet,
                IDownloader*        downloader,
-               EffectsScheduler*   scheduler) :
+               EffectsScheduler*   scheduler,
+               IStorage*           storage) :
   Context(factory,
           stringUtils,
           threadUtils,
@@ -144,7 +155,8 @@ public:
           jsonParser,
           planet,
           downloader,
-          scheduler) {
+          scheduler,
+          storage) {
   }
 };
 
@@ -166,10 +178,10 @@ private:
 
 public:
   RenderContext(FrameTasksExecutor* frameTasksExecutor,
-                IFactory*           factory,
+                const IFactory*           factory,
                 const IStringUtils* stringUtils,
-                IThreadUtils*       threadUtils,
-                ILogger*            logger,
+                const IThreadUtils*       threadUtils,
+                const ILogger*            logger,
                 const IMathUtils* mathUtils,
                 const IJSONParser* jsonParser,
                 const Planet*       planet,
@@ -180,7 +192,8 @@ public:
                 TextureBuilder*     textureBuilder,
                 IDownloader*        downloader,
                 EffectsScheduler*   scheduler,
-                ITimer*             frameStartTimer) :
+                ITimer*             frameStartTimer,
+                IStorage*           storage) :
   Context(factory,
           stringUtils,
           threadUtils,
@@ -189,7 +202,8 @@ public:
           jsonParser,
           planet,
           downloader,
-          scheduler),
+          scheduler,
+          storage),
   _frameTasksExecutor(frameTasksExecutor),
   _gl(gl),
   _currentCamera(currentCamera),

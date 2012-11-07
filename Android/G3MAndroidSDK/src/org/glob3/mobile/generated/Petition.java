@@ -56,11 +56,8 @@ public class Petition
 
   public final void releaseImage()
   {
-	if (_image != null)
-	{
-	  _image = null;
-	  _image = null;
-	}
+	_image = null;
+	_image = null;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

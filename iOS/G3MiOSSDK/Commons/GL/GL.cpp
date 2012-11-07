@@ -73,24 +73,24 @@ public:
   
   void deleteUniformsIDs(){
 #ifdef C_CODE
-    if (Projection == NULL) delete Projection;
-    if (Modelview == NULL) delete Modelview;
-    if (Sampler == NULL) delete Sampler;
-    if (EnableTexture == NULL) delete EnableTexture;
-    if (FlatColor == NULL) delete FlatColor;
-    if (TranslationTexCoord == NULL) delete TranslationTexCoord;
-    if (ScaleTexCoord == NULL) delete ScaleTexCoord;
-    if (PointSize == NULL) delete PointSize;
+    delete Projection;
+    delete Modelview;
+    delete Sampler;
+    delete EnableTexture;
+    delete FlatColor;
+    delete TranslationTexCoord;
+    delete ScaleTexCoord;
+    delete PointSize;
     
     //FOR BILLBOARDING
-    if (BillBoard == NULL) delete BillBoard;
-    if (ViewPortRatio == NULL) delete ViewPortRatio;
+    delete BillBoard;
+    delete ViewPortRatio;
     
     //FOR COLOR MIXING
-    if (FlatColorIntensity == NULL) delete FlatColorIntensity;
-    if (EnableColorPerVertex == NULL) delete EnableColorPerVertex;
-    if (EnableFlatColor == NULL) delete EnableFlatColor;
-    if (ColorPerVertexIntensity == NULL) delete ColorPerVertexIntensity;
+    delete FlatColorIntensity;
+    delete EnableColorPerVertex;
+    delete EnableFlatColor;
+    delete ColorPerVertexIntensity;
 #endif
   }
   
@@ -287,6 +287,12 @@ void GL::vertexPointer(int size, int stride, IFloatBuffer* vertices) {
 
 void GL::drawTriangleStrip(IIntBuffer* indices) {
   _gl->drawElements(GLPrimitive::triangleStrip(),
+                    indices->size(),
+                    indices);
+}
+
+void GL::drawTriangleFan(IIntBuffer* indices) {
+  _gl->drawElements(GLPrimitive::triangleFan(),
                     indices->size(),
                     indices);
 }

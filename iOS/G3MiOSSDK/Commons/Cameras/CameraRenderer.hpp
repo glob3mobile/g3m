@@ -69,9 +69,7 @@ public:
   }
 
   ~CameraRenderer() {
-    if (_cameraContext != NULL) {
       delete _cameraContext;
-    }
   }
     
   void addHandler(CameraEventHandler *handler) {

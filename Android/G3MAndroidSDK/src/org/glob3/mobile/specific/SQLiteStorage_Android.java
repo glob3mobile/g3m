@@ -25,7 +25,7 @@ import android.util.Log;
 
 
 public final class SQLiteStorage_Android
-         implements
+         extends
             IStorage {
 
    private final String             _databaseName;

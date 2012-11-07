@@ -537,6 +537,12 @@ public final class NativeGL_WebGL
 
 
    @Override
+   public native int Primitive_TriangleFan() /*-{
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.TRIANGLE_FAN;
+   }-*/;
+
+
+   @Override
    public native int Primitive_Lines() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.LINES;
    }-*/;
@@ -649,5 +655,6 @@ public final class NativeGL_WebGL
          //         System.out.println(msg);
       }
    }
+
 
 }

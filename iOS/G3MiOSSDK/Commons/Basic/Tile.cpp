@@ -53,24 +53,16 @@ Tile::~Tile() {
   
   prune(NULL);
   
-  if (_debugMesh != NULL) {
-    delete _debugMesh;
-  }
+  delete _debugMesh;
   
-  if (_tessellatorMesh != NULL) {
-    delete _tessellatorMesh;
-  }
+  delete _tessellatorMesh;
   
-  if (_texturizerData != NULL) {
 #ifdef C_CODE
     delete _texturizerData;
 #endif
     _texturizerData = NULL;
-  }
   
-  if (_texturizedMesh != NULL) {
-    delete _texturizedMesh;
-  }
+  delete _texturizedMesh;
 }
 
 void Tile::ancestorTexturedSolvedChanged(Tile* ancestor,

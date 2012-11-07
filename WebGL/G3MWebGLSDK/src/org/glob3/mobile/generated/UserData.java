@@ -70,6 +70,8 @@ package org.glob3.mobile.generated;
 //class Geodetic3D;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class CameraRenderer;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IStorage;
 
 
 

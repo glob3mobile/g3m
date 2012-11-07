@@ -119,12 +119,6 @@
   
   NativeGL2_iOS* nativeGL = new NativeGL2_iOS();
   
-  IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
-  const bool saveInBackground = true;
-  IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
-                                                 storage,
-                                                 saveInBackground);
-  
   CompositeRenderer* mainRenderer = new CompositeRenderer();
   
   if (layerSet != NULL) {
@@ -148,7 +142,6 @@
   Renderer* busyRenderer = new BusyMeshRenderer();
   
   _widgetVP = G3MWidget::create(nativeGL,
-                                downloader,
                                 planet,
                                 cameraConstraints,
                                 cameraRenderer,
@@ -344,9 +337,8 @@
     pointers.push_back(touch);
   }
   
-  if (lastTouchEvent!=NULL) {
-    delete lastTouchEvent;
-  }
+  delete lastTouchEvent;
+      
   lastTouchEvent = TouchEvent::create(Down, pointers);
   [self widget]->onTouchEvent(lastTouchEvent);
 }
@@ -424,17 +416,14 @@
     pointers.push_back(touch);
   }
   
-  if (lastTouchEvent!=NULL) {
-    delete lastTouchEvent;
-  }
+  delete lastTouchEvent;
+  
   lastTouchEvent = TouchEvent::create(Up, pointers);
   [self widget]->onTouchEvent(lastTouchEvent);
 }
 
 - (void)dealloc {
-  if (lastTouchEvent!=NULL) {
-    delete lastTouchEvent;
-  }
+  delete lastTouchEvent;
 }
 
 - (G3MWidget*) widget {
@@ -451,7 +440,12 @@
     IMathUtils*         mathUtils       = new MathUtils_iOS();
     IJSONParser*        jsonParser      = new JSONParser_iOS();
     
-    G3MWidget::initSingletons(logger, factory, stringUtils, threadUtils, stringBuilder, mathUtils, jsonParser);
+    IStorage*           storage         = new SQLiteStorage_iOS("g3m.cache");
+    const bool          saveInBackground= true;
+    IDownloader*        downloader      = new CachedDownloader(new Downloader_iOS(8),
+                                                   saveInBackground);
+    
+    G3MWidget::initSingletons(logger, factory, stringUtils, threadUtils, stringBuilder, mathUtils, jsonParser, storage, downloader);
 }
 
 @end

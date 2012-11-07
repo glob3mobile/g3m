@@ -47,21 +47,15 @@ public class LazyTextureMapping extends TextureMapping
   public void dispose()
   {
 	if (_initializer != null)
-	{
-	  if (_initializer != null)
-		  _initializer.dispose();
-	  _initializer = null;
-	}
+		_initializer.dispose();
+	_initializer = null;
 
-	if (_texCoords != null)
+	if (_ownedTexCoords)
 	{
-	  if (_ownedTexCoords)
-	  {
 		if (_texCoords != null)
 			_texCoords.dispose();
-	  }
-	  _texCoords = null;
 	}
+	_texCoords = null;
 
 	releaseGLTextureId();
   }

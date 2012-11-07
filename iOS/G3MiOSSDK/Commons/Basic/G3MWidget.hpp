@@ -36,6 +36,7 @@ class IMathUtils;
 class IJSONParser;
 class Geodetic3D;
 class CameraRenderer;
+class IStorage;
 
 #include <vector>
 #include <string>
@@ -71,10 +72,11 @@ public:
                              IThreadUtils*        threadUtils,
                              IStringBuilder*      stringBuilder,
                              IMathUtils*          mathUtils,
-                             IJSONParser*         jsonParser);
+                             IJSONParser*         jsonParser,
+                             IStorage*            storage,
+                             IDownloader*         downloader);
 
   static G3MWidget* create(INativeGL*                       nativeGL,
-                           IDownloader*                     downloader,
                            const Planet*                    planet,
                            std::vector<ICameraConstrainer*> cameraConstrainers,
                            CameraRenderer*                  cameraRenderer,
@@ -114,9 +116,8 @@ public:
   }
 
   void setUserData(UserData* userData) {
-    if (_userData != NULL) {
       delete _userData;
-    }
+        
     _userData = userData;
     if (_userData != NULL) {
       _userData->setWidget(this);
@@ -167,7 +168,6 @@ private:
 
   Camera*          _currentCamera;
   Camera*          _nextCamera;
-  IDownloader*     _downloader;
   TexturesHandler* _texturesHandler;
   TextureBuilder*  _textureBuilder;
   const Color      _backgroundColor;
@@ -191,7 +191,6 @@ private:
   void initializeGL();
 
   G3MWidget(INativeGL*                       nativeGL,
-            IDownloader*                     downloader,
             const Planet*                    planet,
             std::vector<ICameraConstrainer*> cameraConstrainers,
             CameraRenderer*                  cameraRenderer,

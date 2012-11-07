@@ -234,9 +234,7 @@
 
 - (void)dealloc
 {
-	if (_url) {
     delete _url;
-  }
 }
 
 @end

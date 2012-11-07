@@ -39,28 +39,19 @@ MutableMatrix44D& MutableMatrix44D::operator=(const MutableMatrix44D &that) {
 
     _isValid = that._isValid;
 
-    if (_columnMajorFloatBuffer != NULL) {
-      delete _columnMajorFloatBuffer;
-      _columnMajorFloatBuffer = NULL;
-    }
+    delete _columnMajorFloatBuffer;
+    _columnMajorFloatBuffer = NULL;
 
-    if (_columnMajorFloatArray != NULL) {
-      delete [] _columnMajorFloatArray;
-      _columnMajorFloatArray = NULL;
-    }
+    delete [] _columnMajorFloatArray;
+    _columnMajorFloatArray = NULL;
   }
 
   return *this;
 }
 
 MutableMatrix44D::~MutableMatrix44D() {
-  if (_columnMajorFloatBuffer != NULL) {
-    delete _columnMajorFloatBuffer;
-  }
-
-  if (_columnMajorFloatArray != NULL) {
-    delete [] _columnMajorFloatArray;
-  }
+  delete _columnMajorFloatBuffer;
+  delete [] _columnMajorFloatArray;
 }
 
 const IFloatBuffer* MutableMatrix44D::getColumnMajorFloatBuffer() const {
@@ -370,30 +361,26 @@ MutableMatrix44D MutableMatrix44D::createOrthographicProjectionMatrix(double lef
                           -(right+left) / rl, -(top+bottom) / tb, -(zfar+znear) / fn, 1 );
 }
 
-Vector3D MutableMatrix44D::getTangent0(const Vector3D& normal) {
-  Vector3D tangent0 = normal.cross(Vector3D(1, 0, 0));
-  if (tangent0.dot(tangent0) < 0.001) {
-    return normal.cross(Vector3D(0, 1, 0)).normalized();
-  }
-  return tangent0.normalized();
+MutableMatrix44D MutableMatrix44D::createScaleMatrix(const Vector3D& scale) {
+  return MutableMatrix44D(scale._x, 0, 0, 0,
+                          0, scale._y, 0, 0,
+                          0, 0, scale._z, 0,
+                          0, 0, 0, 1);
+
 }
 
-/*
- MutableMatrix44D MutableMatrix44D::createRotationMatrixFromNormal(const Vector3D& normal) {
-  // Find a vector in the plane
-  const Vector3D tangent0 = getTangent0(normal);
-  // Find another vector in the plane
-  const Vector3D tangent1 = normal.cross(tangent0).normalized();
+MutableMatrix44D MutableMatrix44D::createGeodeticRotationMatrix(const Angle& latitude,
+                                                                const Angle& longitude) {
+  // change the reference coordinates system from x-front/y-left/z-up to x-right/y-up/z-back
+  const MutableMatrix44D changeReferenceCoordinatesSystem(0, 1, 0, 0,
+                                                          0, 0, 1, 0,
+                                                          1, 0, 0, 0,
+                                                          0, 0, 0, 1);
 
-//  return MutableMatrix44D(tangent0._x, tangent1._x, normal._x, 0,
-//                          tangent0._y, tangent1._y, normal._y, 0,
-//                          tangent0._z, tangent1._z, normal._z, 0,
-//                          0, 0, 0, 1).transposed();
-
-  return MutableMatrix44D(tangent0._x, tangent0._y, tangent0._z, 0,
-                          tangent1._x, tangent1._y, tangent1._z, 0,
-                          normal._x,   normal._y,   normal._z,   0,
-                          0, 0, 0, 1);
-}*/
-
+  // orbit reference system to geodetic position
+  const MutableMatrix44D longitudeRotation = MutableMatrix44D::createRotationMatrix(longitude, Vector3D::upY());
+  const MutableMatrix44D latitudeRotation  = MutableMatrix44D::createRotationMatrix(latitude,  Vector3D::downX());
+  
+  return changeReferenceCoordinatesSystem.multiply(longitudeRotation).multiply(latitudeRotation);
+}
 

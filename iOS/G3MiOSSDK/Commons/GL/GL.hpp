@@ -179,8 +179,10 @@ public:
   
   void vertexPointer(int size, int stride, IFloatBuffer* vertices);
   
-  void drawTriangleStrip(IIntBuffer* indices) ;
-  
+  void drawTriangleStrip(IIntBuffer* indices);
+
+  void drawTriangleFan(IIntBuffer* indices);
+
   void drawLines(IIntBuffer* indices);
   
   void drawLineStrip(IIntBuffer* indices);
@@ -296,15 +298,9 @@ public:
 //      _lastImageData = NULL;
 //    }
 
-    if (_vertices != NULL) {
-      delete _vertices;
-    }
-    if (_textureCoordinates != NULL) {
-      delete _textureCoordinates;
-    }
-    if (_colors != NULL) {
-      delete _colors;
-    }
+    delete _vertices;
+    delete _textureCoordinates;
+    delete _colors;
      
   }
   

@@ -295,27 +295,15 @@ public class Tile
 	prune(null);
   
 	if (_debugMesh != null)
-	{
-	  if (_debugMesh != null)
-		  _debugMesh.dispose();
-	}
+		_debugMesh.dispose();
   
 	if (_tessellatorMesh != null)
-	{
-	  if (_tessellatorMesh != null)
-		  _tessellatorMesh.dispose();
-	}
+		_tessellatorMesh.dispose();
   
-	if (_texturizerData != null)
-	{
 	  _texturizerData = null;
-	}
   
 	if (_texturizedMesh != null)
-	{
-	  if (_texturizedMesh != null)
-		  _texturizedMesh.dispose();
-	}
+		_texturizedMesh.dispose();
   }
 
 

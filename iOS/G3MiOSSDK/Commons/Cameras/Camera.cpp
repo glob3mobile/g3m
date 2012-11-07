@@ -49,22 +49,11 @@ void Camera::copyFrom(const Camera &that) {
   _geodeticCenterOfView = (that._geodeticCenterOfView == NULL) ? NULL : new Geodetic3D(*that._geodeticCenterOfView);
 
 #ifdef C_CODE
-  if (_frustum != NULL) {
     delete _frustum;
-  }
-  if (_frustumInModelCoordinates != NULL) {
     delete _frustumInModelCoordinates;
-  }
-  if (_halfFrustum != NULL) {
     delete _halfFrustum;
-  }
-  if (_halfFrustumInModelCoordinates != NULL) {
     delete _halfFrustumInModelCoordinates;
-  }
-
-  if (_camEffectTarget != NULL) {
     delete _camEffectTarget;
-  }
 #endif
 
   _camEffectTarget = new CameraEffectTarget();
@@ -114,19 +103,19 @@ void Camera::resetPosition() {
   _modelViewMatrix = MutableMatrix44D();
   _cartesianCenterOfView = MutableVector3D();
 
-  if (_geodeticCenterOfView != NULL) delete _geodeticCenterOfView;
+  delete _geodeticCenterOfView;
   _geodeticCenterOfView = NULL;
 
-  if (_frustum != NULL) delete _frustum;
+  delete _frustum;
   _frustum = NULL;
 
-  if (_frustumInModelCoordinates != NULL) delete _frustumInModelCoordinates;
+  delete _frustumInModelCoordinates;
   _frustumInModelCoordinates = NULL;
 
-  if (_halfFrustumInModelCoordinates != NULL) delete _halfFrustumInModelCoordinates;
+  delete _halfFrustumInModelCoordinates;
   _halfFrustumInModelCoordinates = NULL;
 
-  if (_halfFrustum != NULL) delete _halfFrustum;
+  delete _halfFrustum;
   _halfFrustum = NULL;
 }
 
@@ -147,7 +136,7 @@ void Camera::print() {
 }
 
 Angle Camera::getHeading(const Vector3D& normal) const {
-  const Vector3D north2D  = Vector3D(0,0,1).projectionInPlane(normal);
+  const Vector3D north2D  = Vector3D::upZ().projectionInPlane(normal);
   const Vector3D up2D     = _up.asVector3D().projectionInPlane(normal);
   return up2D.signedAngleBetween(north2D, normal);
 }

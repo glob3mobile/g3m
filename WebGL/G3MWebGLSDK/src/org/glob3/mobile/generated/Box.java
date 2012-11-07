@@ -35,8 +35,7 @@ public class Box extends Extent
   public void dispose()
   {
 	if (_mesh != null)
-		if (_mesh != null)
-			_mesh.dispose();
+		_mesh.dispose();
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

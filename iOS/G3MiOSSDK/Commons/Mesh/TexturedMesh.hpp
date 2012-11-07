@@ -42,7 +42,7 @@ public:
 #ifdef C_CODE
     if (_ownedMesh) {
       delete _mesh;
-    }
+    } 
     if (_ownedTexMapping){
       delete _textureMapping;
     }

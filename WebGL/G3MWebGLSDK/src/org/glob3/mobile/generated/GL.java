@@ -399,6 +399,11 @@ public class GL
 	_gl.drawElements(GLPrimitive.triangleStrip(), indices.size(), indices);
   }
 
+  public final void drawTriangleFan(IIntBuffer indices)
+  {
+	_gl.drawElements(GLPrimitive.triangleFan(), indices.size(), indices);
+  }
+
   public final void drawLines(IIntBuffer indices)
   {
 	_gl.drawElements(GLPrimitive.lines(), indices.size(), indices);
@@ -719,20 +724,11 @@ public class GL
 //    }
 
 	if (_vertices != null)
-	{
-	  if (_vertices != null)
-		  _vertices.dispose();
-	}
+		_vertices.dispose();
 	if (_textureCoordinates != null)
-	{
-	  if (_textureCoordinates != null)
-		  _textureCoordinates.dispose();
-	}
+		_textureCoordinates.dispose();
 	if (_colors != null)
-	{
-	  if (_colors != null)
-		  _colors.dispose();
-	}
+		_colors.dispose();
 
   }
 

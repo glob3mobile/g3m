@@ -45,20 +45,23 @@ package org.glob3.mobile.generated;
 //class IMathUtils;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IJSONParser;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IStorage;
 
 public class Context
 {
   protected final IFactory _factory;
   protected final IStringUtils _stringUtils;
-  protected IThreadUtils _threadUtils;
+  protected final IThreadUtils _threadUtils;
   protected ILogger _logger;
   protected final IMathUtils _mathUtils;
   protected final IJSONParser _jsonParser;
   protected Planet _planet;
   protected IDownloader _downloader;
   protected EffectsScheduler _effectsScheduler;
+	protected IStorage _storage;
 
-  protected Context(IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, IDownloader downloader, EffectsScheduler effectsScheduler)
+  protected Context(IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, IDownloader downloader, EffectsScheduler effectsScheduler, IStorage storage)
   {
 	  _factory = factory;
 	  _stringUtils = stringUtils;
@@ -69,6 +72,7 @@ public class Context
 	  _planet = planet;
 	  _downloader = downloader;
 	  _effectsScheduler = effectsScheduler;
+	  _storage = storage;
   }
 
 
@@ -122,6 +126,13 @@ public class Context
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: IStorage* getStorage() const
+	public final IStorage getStorage()
+	{
+		return _storage;
+	}
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: EffectsScheduler* getEffectsScheduler() const
   public final EffectsScheduler getEffectsScheduler()
   {
@@ -129,7 +140,7 @@ public class Context
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: IThreadUtils* getThreadUtils() const
+//ORIGINAL LINE: const IThreadUtils* getThreadUtils() const
   public final IThreadUtils getThreadUtils()
   {
 	return _threadUtils;

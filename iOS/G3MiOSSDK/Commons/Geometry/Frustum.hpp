@@ -144,16 +144,16 @@ public:
   _rtf(Vector3D(zfar/znear*right, zfar/znear*top,     -zfar)),
   _lbf(Vector3D(zfar/znear*left,  zfar/znear*bottom,  -zfar)),
   _rbf(Vector3D(zfar/znear*right, zfar/znear*bottom,  -zfar)),
-  _leftPlane(Plane(Vector3D(0, 0, 0),
+  _leftPlane(Plane(Vector3D::zero(),
                    Vector3D(left, top, -znear),
                    Vector3D(left, bottom, -znear))),
-  _bottomPlane(Plane(Vector3D(0, 0, 0),
+  _bottomPlane(Plane(Vector3D::zero(),
                      Vector3D(left, bottom, -znear),
                      Vector3D(right, bottom, -znear))),
-  _rightPlane(Plane(Vector3D(0, 0, 0),
+  _rightPlane(Plane(Vector3D::zero(),
                     Vector3D(right, bottom, -znear),
                     Vector3D(right, top, -znear))),
-  _topPlane(Plane(Vector3D(0, 0, 0),
+  _topPlane(Plane(Vector3D::zero(),
                   Vector3D(right, top, -znear),
                   Vector3D(left, top, -znear))),
   _nearPlane(Plane(Vector3D(0, 0, 1), znear)),
@@ -193,7 +193,7 @@ public:
     return new Frustum(this, matrix, matrix.inversed());
   }
   
-  ~Frustum(){ if (_extent) delete _extent; }
+  ~Frustum(){ delete _extent; }
   
   Extent *getExtent() const { return _extent; }
 };

@@ -11,21 +11,19 @@
 #include "IImageDownloadListener.hpp"
 #include "IStringBuilder.hpp"
 #include "ILogger.hpp"
+#include "IStorage.hpp"
 
 
 class BufferSaverDownloadListener : public IBufferDownloadListener {
   CachedDownloader*        _downloader;
   IBufferDownloadListener* _listener;
   const bool               _deleteListener;
-  IStorage*                _cacheStorage;
   
 public:
   BufferSaverDownloadListener(CachedDownloader* downloader,
-                              IStorage* cacheStorage,
                               IBufferDownloadListener* listener,
                               bool deleteListener) :
   _downloader(downloader),
-  _cacheStorage(cacheStorage),
   _listener(listener),
   _deleteListener(deleteListener)
   {
@@ -33,7 +31,7 @@ public:
   }
   
   void deleteListener() {
-    if (_deleteListener && (_listener != NULL)) {
+    if (_deleteListener) {
 #ifdef C_CODE
       delete _listener;
 #endif
@@ -44,11 +42,11 @@ public:
   void saveBuffer(const URL& url,
                   const IByteBuffer* buffer) {
     if (buffer != NULL) {
-      if (_cacheStorage->isAvailable()) {
+      if (IStorage::instance()->isAvailable()) {
         //if (!_cacheStorage->containsBuffer(url)) {
         _downloader->countSave();
         
-        _cacheStorage->saveBuffer(url, buffer, _downloader->saveInBackground());
+        IStorage::instance()->saveBuffer(url, buffer, _downloader->saveInBackground());
         //}
       }
       else {
@@ -93,15 +91,12 @@ class ImageSaverDownloadListener : public IImageDownloadListener {
   CachedDownloader*       _downloader;
   IImageDownloadListener* _listener;
   const bool              _deleteListener;
-  IStorage*               _cacheStorage;
   
 public:
   ImageSaverDownloadListener(CachedDownloader* downloader,
-                             IStorage* cacheStorage,
                              IImageDownloadListener* listener,
                              bool deleteListener) :
   _downloader(downloader),
-  _cacheStorage(cacheStorage),
   _listener(listener),
   _deleteListener(deleteListener)
   {
@@ -109,7 +104,7 @@ public:
   }
   
   void deleteListener() {
-    if (_deleteListener && (_listener != NULL)) {
+    if (_deleteListener) {
 #ifdef C_CODE
       delete _listener;
 #endif
@@ -120,11 +115,11 @@ public:
   void saveImage(const URL& url,
                  const IImage* image) {
     if (image != NULL) {
-      if (_cacheStorage->isAvailable()) {
+      if (IStorage::instance()->isAvailable()) {
         //if (!_cacheStorage->containsImage(url)) {
         _downloader->countSave();
         
-        _cacheStorage->saveImage(url, image, _downloader->saveInBackground());
+        IStorage::instance()->saveImage(url, image, _downloader->saveInBackground());
         //}
       }
       else {
@@ -167,7 +162,7 @@ public:
 
 
 void CachedDownloader::start() {
-  _downloader->start();
+    _downloader->start();
 }
 
 void CachedDownloader::stop() {
@@ -184,13 +179,12 @@ long long CachedDownloader::requestImage(const URL& url,
                                          bool deleteListener) {
   _requestsCounter++;
   
-  const IImage* cachedImage = _cacheStorage->isAvailable() ? _cacheStorage->readImage(url) : NULL;
+  const IImage* cachedImage = IStorage::instance()->isAvailable() ? IStorage::instance()->readImage(url) : NULL;
   if (cachedImage == NULL) {
     // cache miss
     return _downloader->requestImage(url,
                                      priority,
                                      new ImageSaverDownloadListener(this,
-                                                                    _cacheStorage,
                                                                     listener,
                                                                     deleteListener),
                                      true);
@@ -220,13 +214,12 @@ long long CachedDownloader::requestBuffer(const URL& url,
                                           bool deleteListener) {
   _requestsCounter++;
   
-  const IByteBuffer* cachedBuffer = _cacheStorage->isAvailable() ? _cacheStorage->readBuffer(url) : NULL;
+  const IByteBuffer* cachedBuffer = IStorage::instance()->isAvailable() ? IStorage::instance()->readBuffer(url) : NULL;
   if (cachedBuffer == NULL) {
     // cache miss
     return _downloader->requestBuffer(url,
                                       priority,
                                       new BufferSaverDownloadListener(this,
-                                                                      _cacheStorage,
                                                                       listener,
                                                                       deleteListener),
                                       true);
@@ -259,18 +252,21 @@ const std::string CachedDownloader::statistics() {
   isb->addString(", saves=");
   isb->addInt(_savesCounter);
   isb->addString(", downloader=");
-  isb->addString(_downloader->statistics());
+//  isb->addString(IDownloader::instance()->statistics());
+    isb->addString(_downloader->statistics());
   const std::string s = isb->getString();
   delete isb;
   return s;
 }
 
 void CachedDownloader::onResume(const InitializationContext* ic) {
-  _downloader->onResume(ic);
-  _cacheStorage->onResume(ic);
+//  IDownloader::instance()->onResume(ic);
+    _downloader->onResume(ic);
+    IStorage::instance()->onResume(ic);
 }
 
 void CachedDownloader::onPause(const InitializationContext* ic) {
-  _downloader->onPause(ic);
-  _cacheStorage->onPause(ic);
+//  IDownloader::instance()->onPause(ic);
+    _downloader->onPause(ic);
+  IStorage::instance()->onPause(ic);
 }

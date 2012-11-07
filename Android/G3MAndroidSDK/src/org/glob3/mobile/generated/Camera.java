@@ -369,28 +369,23 @@ public class Camera
 	_cartesianCenterOfView = new MutableVector3D();
   
 	if (_geodeticCenterOfView != null)
-		if (_geodeticCenterOfView != null)
-			_geodeticCenterOfView.dispose();
+		_geodeticCenterOfView.dispose();
 	_geodeticCenterOfView = null;
   
 	if (_frustum != null)
-		if (_frustum != null)
-			_frustum.dispose();
+		_frustum.dispose();
 	_frustum = null;
   
 	if (_frustumInModelCoordinates != null)
-		if (_frustumInModelCoordinates != null)
-			_frustumInModelCoordinates.dispose();
+		_frustumInModelCoordinates.dispose();
 	_frustumInModelCoordinates = null;
   
 	if (_halfFrustumInModelCoordinates != null)
-		if (_halfFrustumInModelCoordinates != null)
-			_halfFrustumInModelCoordinates.dispose();
+		_halfFrustumInModelCoordinates.dispose();
 	_halfFrustumInModelCoordinates = null;
   
 	if (_halfFrustum != null)
-		if (_halfFrustum != null)
-			_halfFrustum.dispose();
+		_halfFrustum.dispose();
 	_halfFrustum = null;
   }
 
@@ -457,7 +452,7 @@ public class Camera
 //ORIGINAL LINE: Angle getHeading(const Vector3D& normal) const
   private Angle getHeading(Vector3D normal)
   {
-	final Vector3D north2D = new Vector3D(0,0,1).projectionInPlane(normal);
+	final Vector3D north2D = Vector3D.upZ().projectionInPlane(normal);
 	final Vector3D up2D = _up.asVector3D().projectionInPlane(normal);
 	return up2D.signedAngleBetween(north2D, normal);
   }

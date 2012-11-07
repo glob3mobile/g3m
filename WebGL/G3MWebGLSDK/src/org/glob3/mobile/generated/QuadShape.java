@@ -16,77 +16,20 @@ package org.glob3.mobile.generated;
 //
 
 
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class Mesh;
+
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IImage;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IGLTextureId;
 
-public class QuadShape extends Shape
+public class QuadShape extends MeshShape
 {
-  private Mesh createMesh(RenderContext rc)
-  {
-  
-	final float halfWidth = (float) _width / 2.0f;
-	final float halfHeight = (float) _height / 2.0f;
-  
-	final float left = -halfWidth;
-	final float right = +halfWidth;
-	final float bottom = -halfHeight;
-	final float top = +halfHeight;
-  
-	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
-	vertices.add(left, bottom, 0);
-	vertices.add(right, bottom, 0);
-	vertices.add(left, top, 0);
-	vertices.add(right, top, 0);
-  
-	IntBufferBuilder indices = new IntBufferBuilder();
-	indices.add(0);
-	indices.add(1);
-	indices.add(2);
-	indices.add(3);
-  
-  
-  //  const Vector3D center = rc->getPlanet()->toCartesian( _position );
-	final Vector3D center = Vector3D.zero();
-  
-	IndexedMesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, center, vertices.create(), indices.create(), 1);
-  
-	final IGLTextureId texId = getTextureId(rc);
-	if (texId == null)
-	{
-	  return im;
-	}
-  
-	FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
-	texCoords.add(0, 1);
-	texCoords.add(1, 1);
-	texCoords.add(0, 0);
-	texCoords.add(1, 0);
-  
-	TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true);
-  
-	return new TexturedMesh(im, true, texMap, true, true);
-  }
-  private Mesh getMesh(RenderContext rc)
-  {
-	if (_mesh == null)
-	{
-	  _mesh = createMesh(rc);
-	}
-	return _mesh;
-  }
-
-  private Mesh _mesh;
-
   private final String _textureFilename;
   private IImage _textureImage;
   private final boolean _autoDeleteTextureImage;
 
-  private final int _width;
-  private final int _height;
+  private final float _width;
+  private final float _height;
 
   private IGLTextureId getTextureId(RenderContext rc)
   {
@@ -111,10 +54,54 @@ public class QuadShape extends Shape
 	return texId;
   }
 
-  public QuadShape(Geodetic3D position, Angle heading, Angle pitch, IImage textureImage, boolean autoDeleteTextureImage, String textureFilename, int width, int height)
+  protected final Mesh createMesh(RenderContext rc)
   {
-	  super(position, heading, pitch);
-	  _mesh = null;
+  
+	final float halfWidth = (float) _width / 2.0f;
+	final float halfHeight = (float) _height / 2.0f;
+  
+	final float left = -halfWidth;
+	final float right = +halfWidth;
+	final float bottom = -halfHeight;
+	final float top = +halfHeight;
+  
+	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
+	vertices.add(left, bottom, 0);
+	vertices.add(right, bottom, 0);
+	vertices.add(left, top, 0);
+	vertices.add(right, top, 0);
+  
+	IntBufferBuilder indices = new IntBufferBuilder();
+	indices.add(0);
+	indices.add(1);
+	indices.add(2);
+	indices.add(3);
+  
+  
+	final Vector3D center = Vector3D.zero();
+  
+	IndexedMesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, center, vertices.create(), indices.create(), 1);
+  
+	final IGLTextureId texId = getTextureId(rc);
+	if (texId == null)
+	{
+	  return im;
+	}
+  
+	FloatBufferBuilderFromCartesian2D texCoords = new FloatBufferBuilderFromCartesian2D();
+	texCoords.add(0, 1);
+	texCoords.add(1, 1);
+	texCoords.add(0, 0);
+	texCoords.add(1, 0);
+  
+	TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true);
+  
+	return new TexturedMesh(im, true, texMap, true, true);
+  }
+
+  public QuadShape(Geodetic3D position, IImage textureImage, boolean autoDeleteTextureImage, String textureFilename, float width, float height)
+  {
+	  super(position);
 	  _textureFilename = textureFilename;
 	  _textureImage = textureImage;
 	  _autoDeleteTextureImage = autoDeleteTextureImage;
@@ -125,35 +112,7 @@ public class QuadShape extends Shape
 
   public void dispose()
   {
-	if (_mesh != null)
-		_mesh.dispose();
-  }
 
-  public final void render(RenderContext rc)
-  {
-	int __diego_at_work;
-	Mesh mesh = getMesh(rc);
-	if (mesh != null)
-	{
-	  GL gl = rc.getGL();
-  
-	  gl.pushMatrix();
-  
-	  final Planet planet = rc.getPlanet();
-  
-  
-	  final Vector3D cartesianPosition = planet.toCartesian(_position);
-	  final MutableMatrix44D translationMatrix = MutableMatrix44D.createTranslationMatrix(cartesianPosition);
-	  gl.multMatrixf(translationMatrix);
-  
-	  final MutableMatrix44D rotationMatrix = planet.orientationMatrix(_position.asGeodetic2D(), _heading, _pitch);
-	  gl.multMatrixf(rotationMatrix);
-  
-  
-	  mesh.render(rc);
-  
-	  gl.popMatrix();
-	}
   }
 
 }

@@ -25,6 +25,7 @@ import org.glob3.mobile.generated.IFactory;
 import org.glob3.mobile.generated.IJSONParser;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
+import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.IStringUtils;
 import org.glob3.mobile.generated.IThreadUtils;
@@ -60,7 +61,7 @@ public final class G3MWidget_Android
 
    private G3MWidget                                      _g3mWidget;
    private ES2Renderer                                    _es2renderer;
-   private SQLiteStorage_Android                          _storage              = null;
+   //   private SQLiteStorage_Android                          _storage              = null;
 
    private final MotionEventProcessor                     _motionEventProcessor = new MotionEventProcessor();
    private final OnDoubleTapListener                      _doubleTapListener;
@@ -71,7 +72,7 @@ public final class G3MWidget_Android
    private ArrayList<org.glob3.mobile.generated.Renderer> _renderers;
    private UserData                                       _userData;
 
-   private IDownloader                                    _downloader;
+   //   private IDownloader                                    _downloader;
    private GTask                                          _initializationTask;
    private ArrayList<PeriodicalTask>                      _periodicalTasks;
    private boolean                                        _incrementalTileQuality;
@@ -157,8 +158,15 @@ public final class G3MWidget_Android
       final IStringBuilder stringBuilder = new StringBuilder_Android();
       final IMathUtils mathUtils = new MathUtils_Android();
       final IJSONParser jsonParser = new JSONParser_Android();
+      final IStorage storage = new SQLiteStorage_Android("g3m.cache", this.getContext());
+      final int connectTimeout = 60000;
+      final int readTimeout = 60000;
+      final boolean saveInBackground = true;
+      final IDownloader downloader = new CachedDownloader(new Downloader_Android(8, connectTimeout, readTimeout),
+               saveInBackground);
 
-      G3MWidget.initSingletons(logger, factory, stringUtils, threadUtils, stringBuilder, mathUtils, jsonParser);
+      G3MWidget.initSingletons(logger, factory, stringUtils, threadUtils, stringBuilder, mathUtils, jsonParser, storage,
+               downloader);
    }
 
 
@@ -308,13 +316,6 @@ public final class G3MWidget_Android
 
       final NativeGL2_Android nativeGL = new NativeGL2_Android();
 
-      _storage = new SQLiteStorage_Android("g3m.cache", this.getContext());
-
-      final int connectTimeout = 60000;
-      final int readTimeout = 60000;
-      final boolean saveInBackground = true;
-      _downloader = new CachedDownloader(new Downloader_Android(8, connectTimeout, readTimeout), _storage, saveInBackground);
-
       final CompositeRenderer mainRenderer = new CompositeRenderer();
 
       // composite.addRenderer(cameraRenderer);
@@ -344,7 +345,6 @@ public final class G3MWidget_Android
 
       _g3mWidget = G3MWidget.create( //
                nativeGL, //
-               _downloader, //
                planet, //
                _cameraConstraints, //
                cameraRenderer, //
@@ -445,12 +445,12 @@ public final class G3MWidget_Android
 
 
    public void closeStorage() {
-      if (_downloader != null) {
-         _downloader.stop();
+      if (IDownloader.instance() != null) {
+         IDownloader.instance().stop();
       }
-      if (_storage != null) {
+      if (IStorage.instance() != null) {
          // _storage.onPause(null);
-         _storage.close();
+         ((SQLiteStorage_Android) IStorage.instance()).close();
       }
    }
 

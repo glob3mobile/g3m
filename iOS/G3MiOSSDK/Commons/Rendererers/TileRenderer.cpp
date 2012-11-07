@@ -76,9 +76,7 @@ void TileRenderer::initialize(const InitializationContext* ic) {
   clearTopLevelTiles();
   createTopLevelTiles(ic);
   
-  if (_lastSplitTimer != NULL) {
-    delete _lastSplitTimer;
-  }
+  delete _lastSplitTimer;
   _lastSplitTimer      = ic->getFactory()->createTimer();
   
   _layerSet->initialize(ic);

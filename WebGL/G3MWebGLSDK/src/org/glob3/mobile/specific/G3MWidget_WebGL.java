@@ -25,6 +25,7 @@ import org.glob3.mobile.generated.IGLProgramId;
 import org.glob3.mobile.generated.IJSONParser;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IMathUtils;
+import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IStringBuilder;
 import org.glob3.mobile.generated.IStringUtils;
 import org.glob3.mobile.generated.IThreadUtils;
@@ -127,8 +128,11 @@ public final class G3MWidget_WebGL
       final IStringBuilder stringBuilder = new StringBuilder_WebGL();
       final IMathUtils mathUtils = new MathUtils_WebGL();
       final IJSONParser jsonParser = new JSONParser_WebGL();
+      final IStorage storage = null;
+      final IDownloader downloader = new Downloader_WebGL(8, _delayMillis, _proxy);
 
-      G3MWidget.initSingletons(logger, factory, stringUtils, threadUtils, stringBuilder, mathUtils, jsonParser);
+      G3MWidget.initSingletons(logger, factory, stringUtils, threadUtils, stringBuilder, mathUtils, jsonParser, storage,
+               downloader);
    }
 
 
@@ -295,9 +299,6 @@ public final class G3MWidget_WebGL
       final TilesRenderParameters parameters = TilesRenderParameters.createDefault(renderDebug, useTilesSplitBudget,
                forceTopLevelTilesRenderOnStart, _incrementalTileQuality);
 
-      //      final IStorage storage = new IndexedDBStorage_WebGL();
-      final IDownloader downloader = new Downloader_WebGL(8, _delayMillis, _proxy);
-
       _webGLContext = jsGetWebGLContext();
       if (_webGLContext == null) {
          throw new RuntimeException("webGLContext null");
@@ -337,7 +338,6 @@ public final class G3MWidget_WebGL
 
       _widget = G3MWidget.create( //
                nativeGL, //
-               downloader, //
                planet, //
                _cameraConstraints, //
                cameraRenderer, //

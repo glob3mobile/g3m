@@ -25,23 +25,41 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class InitializationContext;
 
-public interface IDownloader
+public abstract class IDownloader
 {
-  void onResume(InitializationContext ic);
+	private static IDownloader _instance = null;
+	public static void setInstance(IDownloader downloader)
+	{
+		if (_instance != null)
+		{
+			ILogger.instance().logWarning("Warning, IDownloader instance set twice\n");
+		}
+		_instance = downloader;
+	}
 
-  void onPause(InitializationContext ic);
+	public static IDownloader instance()
+	{
+		return _instance;
+	}
 
-  void start();
+  public abstract void onResume(InitializationContext ic);
 
-  void stop();
+  public abstract void onPause(InitializationContext ic);
 
-  long requestBuffer(URL url, long priority, IBufferDownloadListener listener, boolean deleteListener);
+  public abstract void start();
 
-  long requestImage(URL url, long priority, IImageDownloadListener listener, boolean deleteListener);
+  public abstract void stop();
 
-  void cancelRequest(long requestId);
+  public abstract long requestBuffer(URL url, long priority, IBufferDownloadListener listener, boolean deleteListener);
 
+  public abstract long requestImage(URL url, long priority, IImageDownloadListener listener, boolean deleteListener);
 
-  String statistics();
+  public abstract void cancelRequest(long requestId);
+
+  public void dispose()
+  {
+  }
+
+  public abstract String statistics();
 
 }
