@@ -59,6 +59,8 @@ public class SceneJSShapesParser
   private Shape toShape(JSONBaseObject jsonObject)
   {
 	int ____DIEGO_AT_WORK;
+  
+	return null;
   }
 
 
