@@ -19,7 +19,7 @@
 #include "MarksRenderer.hpp"
 
 enum layer_type {
-  WMS,THREED,PANO,GEOJSON
+    WMS,THREED,PANO,GEOJSON
 };
 
 class SceneParser{
@@ -36,26 +36,28 @@ class SceneParser{
     static const std::string WMS111;
     static const std::string WMS130;
     
-  static SceneParser* _instance;
-  std::map<std::string, layer_type> _mapLayerType;
-  
+    static SceneParser* _instance;
+    std::map<std::string, layer_type> _mapLayerType;
+    std::map<std::string, std::string> _mapGeoJSONSources;
+    
 public:
-  
-  static SceneParser* instance();
-  void parse(LayerSet* layerSet, IDownloader* downloader, std::vector<Renderer*>* renderers, std::string namelessParameter, MarkTouchListener* markTouchListener);
-
+    
+    static SceneParser* instance();
+    void parse(LayerSet* layerSet, std::string namelessParameter);
+    std::map<std::string, std::string> getMapGeoJSONSources();
+    
 private:
-  void parserJSONLayerList(LayerSet* layerSet, IDownloader* downloader, std::vector<Renderer*>* renderers, JSONObject* jsonLayers, MarkTouchListener* markTouchListener);
-  void parserJSONWMSLayer(LayerSet* layerSet, JSONObject* jsonLayer);
-  void parserJSON3DLayer(LayerSet* layerSet, JSONObject* jsonLayer);
-  void parserJSONPanoLayer(LayerSet* layerSet, JSONObject* jsonLayer);
-  void parserGEOJSONLayer(LayerSet* layerSet, IDownloader* downloader, std::vector<Renderer*>* renderers, JSONObject* jsonLayer, MarkTouchListener* markTouchListener);
-  
+    void parserJSONLayerList(LayerSet* layerSet,JSONObject* jsonLayers);
+    void parserJSONWMSLayer(LayerSet* layerSet, JSONObject* jsonLayer);
+    void parserJSON3DLayer(LayerSet* layerSet, JSONObject* jsonLayer);
+    void parserJSONPanoLayer(LayerSet* layerSet, JSONObject* jsonLayer);
+    void parserGEOJSONLayer(LayerSet* layerSet, JSONObject* jsonLayer);
+    
 protected:
-  SceneParser();
-  SceneParser(const SceneParser &);
-  SceneParser &operator= (const SceneParser &);
-  
+    SceneParser();
+    SceneParser(const SceneParser &);
+    SceneParser &operator= (const SceneParser &);
+    
 };
 
 #endif

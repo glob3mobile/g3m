@@ -49,80 +49,82 @@ const std::string SceneParser::WMS130 = "1.3.0";
 SceneParser* SceneParser::_instance = NULL;
 
 SceneParser* SceneParser::instance(){
-  if (_instance == NULL){
-    _instance = new SceneParser();
-  }
-  return _instance;
+    if (_instance == NULL){
+        _instance = new SceneParser();
+    }
+    return _instance;
 }
 
 SceneParser::SceneParser(){
-  _mapLayerType["WMS"] = WMS;
-  _mapLayerType["THREED"] = THREED;
-  _mapLayerType["PANO"] = PANO;
-  _mapLayerType["GEOJSON"] = GEOJSON;  
+    _mapLayerType["WMS"] = WMS;
+    _mapLayerType["THREED"] = THREED;
+    _mapLayerType["PANO"] = PANO;
+    _mapLayerType["GEOJSON"] = GEOJSON;  
 }
 
-void SceneParser::parse(LayerSet* layerSet, IDownloader* downloader, std::vector<Renderer*>* renderers, std::string namelessParameter, MarkTouchListener* markTouchListener){
-  
-  JSONObject* json = IJSONParser::instance()->parse(namelessParameter)->getObject();
-  parserJSONLayerList(layerSet, downloader, renderers, json->getObjectForKey(LAYERS)->getObject(), markTouchListener);
-  IJSONParser::instance()->deleteJSONData(json);
-}
-
-void SceneParser::parserJSONLayerList(LayerSet* layerSet, IDownloader* downloader, std::vector<Renderer*>* renderers, JSONObject* jsonLayers, MarkTouchListener* markTouchListener){
-  for (int i = 0; i < jsonLayers->getObject()->getSize(); i++) {
-    IStringBuilder* isb = IStringBuilder::newStringBuilder();
-    isb->addInt(i);
-    JSONObject* jsonLayer = jsonLayers->getObjectForKey(isb->getString())->getObject();
-    const layer_type layerType = _mapLayerType[jsonLayer->getObjectForKey(TYPE)->getString()->getValue()];
+void SceneParser::parse(LayerSet* layerSet, std::string namelessParameter){
     
-    switch (layerType) {
-      case WMS:
-        parserJSONWMSLayer(layerSet, jsonLayer);
-        break;
-      case THREED:
-        parserJSON3DLayer(layerSet, jsonLayer);
-        break;
-      case PANO:
-        parserJSONPanoLayer(layerSet, jsonLayer);
-        break;
-      case GEOJSON:
-        parserGEOJSONLayer(layerSet, downloader, renderers, jsonLayer, markTouchListener);
-        break;
+    _mapGeoJSONSources.clear();
+    
+    JSONObject* json = IJSONParser::instance()->parse(namelessParameter)->getObject();
+    parserJSONLayerList(layerSet, json->getObjectForKey(LAYERS)->getObject());
+    IJSONParser::instance()->deleteJSONData(json);
+}
+
+void SceneParser::parserJSONLayerList(LayerSet* layerSet, JSONObject* jsonLayers){
+    for (int i = 0; i < jsonLayers->getObject()->getSize(); i++) {
+        IStringBuilder* isb = IStringBuilder::newStringBuilder();
+        isb->addInt(i);
+        JSONObject* jsonLayer = jsonLayers->getObjectForKey(isb->getString())->getObject();
+        const layer_type layerType = _mapLayerType[jsonLayer->getObjectForKey(TYPE)->getString()->getValue()];
+        
+        switch (layerType) {
+            case WMS:
+                parserJSONWMSLayer(layerSet, jsonLayer);
+                break;
+            case THREED:
+                parserJSON3DLayer(layerSet, jsonLayer);
+                break;
+            case PANO:
+                parserJSONPanoLayer(layerSet, jsonLayer);
+                break;
+            case GEOJSON:
+                parserGEOJSONLayer(layerSet, jsonLayer);
+                break;
+        }
+        
     }
-    
-  }
 }
 
 void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, JSONObject* jsonLayer){
-  cout << "Parsing WMS Layer " << jsonLayer->getObjectForKey(NAME)->getString()->getValue() << "..." << endl;
-  
-  const std::string jsonDatasource = jsonLayer->getObjectForKey(DATASOURCE)->getString()->getValue();
-  const int lastIndex = IStringUtils::instance()->indexOf(jsonDatasource,"?");
-  const std::string jsonURL = IStringUtils::instance()->substring(jsonDatasource, 0, lastIndex+1);
-  const std::string jsonVersion = jsonLayer->getObjectForKey(VERSION)->getString()->getValue();
-  
-  JSONArray* jsonItems = jsonLayer->getObjectForKey(ITEMS)->getArray();
-  IStringBuilder *layersName = IStringBuilder::newStringBuilder();
+    cout << "Parsing WMS Layer " << jsonLayer->getObjectForKey(NAME)->getString()->getValue() << "..." << endl;
     
-  for (int i = 0; i<jsonItems->getSize(); i++) {
-      if (jsonItems->getElement(i)->getObject()->getObjectForKey(STATUS)->getBoolean()->getValue()) {
-      layersName->addString(jsonItems->getElement(i)->getObject()->getObjectForKey(NAME)->getString()->getValue());
-      layersName->addString(",");
-    }    
-  }
-  std::string layersSecuence = layersName->getString();
-  if (layersName->getString().length() > 0) {
-    layersSecuence = IStringUtils::instance()->substring(layersSecuence, 0, layersSecuence.length()-1);
-  }
-  
-  //TODO check if wms 1.1.1 is neccessary to have it in account
-  WMSServerVersion wmsVersion = WMS_1_1_0;
-  if (jsonVersion.compare(WMS130)==0) {
-    wmsVersion = WMS_1_3_0;
-  }  
-  
-  WMSLayer* wmsLayer = new WMSLayer(URL::escape(layersSecuence),
+    const std::string jsonDatasource = jsonLayer->getObjectForKey(DATASOURCE)->getString()->getValue();
+    const int lastIndex = IStringUtils::instance()->indexOf(jsonDatasource,"?");
+    const std::string jsonURL = IStringUtils::instance()->substring(jsonDatasource, 0, lastIndex+1);
+    const std::string jsonVersion = jsonLayer->getObjectForKey(VERSION)->getString()->getValue();
+    
+    JSONArray* jsonItems = jsonLayer->getObjectForKey(ITEMS)->getArray();
+    IStringBuilder *layersName = IStringBuilder::newStringBuilder();
+    
+    for (int i = 0; i<jsonItems->getSize(); i++) {
+        if (jsonItems->getElement(i)->getObject()->getObjectForKey(STATUS)->getBoolean()->getValue()) {
+            layersName->addString(jsonItems->getElement(i)->getObject()->getObjectForKey(NAME)->getString()->getValue());
+            layersName->addString(",");
+        }    
+    }
+    std::string layersSecuence = layersName->getString();
+    if (layersName->getString().length() > 0) {
+        layersSecuence = IStringUtils::instance()->substring(layersSecuence, 0, layersSecuence.length()-1);
+    }
+    
+    //TODO check if wms 1.1.1 is neccessary to have it in account
+    WMSServerVersion wmsVersion = WMS_1_1_0;
+    if (jsonVersion.compare(WMS130)==0) {
+        wmsVersion = WMS_1_3_0;
+    }  
+    
+    WMSLayer* wmsLayer = new WMSLayer(URL::escape(layersSecuence),
                                       URL(jsonURL, false),
                                       wmsVersion,
                                       Sector::fullSphere(),
@@ -131,26 +133,19 @@ void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, JSONObject* jsonLayer){
                                       "",
                                       true,
                                       NULL);
-  layerSet->addLayer(wmsLayer);
+    layerSet->addLayer(wmsLayer);
 }
 
 void SceneParser::parserJSON3DLayer(LayerSet* layerSet, JSONObject* jsonLayer){
-  cout << "Parsing 3D Layer " << jsonLayer->getObjectForKey(NAME)->getString()->getValue() << "..." << endl;
+    cout << "Parsing 3D Layer " << jsonLayer->getObjectForKey(NAME)->getString()->getValue() << "..." << endl;
 }
 
 void SceneParser::parserJSONPanoLayer(LayerSet* layerSet, JSONObject* jsonLayer){
-  cout << "Parsing Pano Layer " << jsonLayer->getObjectForKey(NAME)->getString()->getValue() << "..." << endl;
+    cout << "Parsing Pano Layer " << jsonLayer->getObjectForKey(NAME)->getString()->getValue() << "..." << endl;
 }
 
-void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, IDownloader* downloader, std::vector<Renderer*>* renderers, JSONObject* jsonLayer, MarkTouchListener* markTouchListener){
+void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, JSONObject* jsonLayer){
     cout << "Parsing GEOJSON Layer " << jsonLayer->getObjectForKey(NAME)->getString()->getValue() << "..." << endl;
-    
-    const bool readyWhenMarksReady = false;
-    MarksRenderer* marksRenderer = new MarksRenderer(readyWhenMarksReady);
-    if (markTouchListener != NULL) {
-        marksRenderer->setMarkTouchListener(markTouchListener, true);
-    }
-    renderers->push_back(marksRenderer);
     
     const std::string geojsonDatasource = jsonLayer->getObjectForKey(DATASOURCE)->getString()->getValue();
     
@@ -165,11 +160,16 @@ void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, IDownloader* downloader
         url->addString("/");
         url->addString(namefile);
         
-        cout << "Downloading " << namefile << " file" << endl;
+        _mapGeoJSONSources[url->getString()] = icon;
         
-        downloader->requestBuffer(URL(url->getString(), false), 100000000L, new GEOJSONDownloadListener(marksRenderer, icon), true);
-
+        //        cout << "Downloading " << namefile << " file" << endl;
+        //        
+        //        downloader->requestBuffer(URL(url->getString(), false), 100000000L, new GEOJSONDownloadListener(marksRenderer, icon), true);
+        
     }
-    
+}
+
+std::map<std::string, std::string> SceneParser::getMapGeoJSONSources(){
+    return _mapGeoJSONSources;   
 }
 

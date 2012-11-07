@@ -40,7 +40,7 @@ GEOJSONDownloadListener::GEOJSONDownloadListener(MarksRenderer* marksRenderer, s
 }
 
 void GEOJSONDownloadListener::onDownload(const URL& url,
-                                               const IByteBuffer* buffer){
+                                         const IByteBuffer* buffer){
     std::string string = buffer->getAsString();
     JSONObject* json = IJSONParser::instance()->parse(string)->getObject();
     ILogger::instance()->logInfo(url.getPath());
@@ -65,10 +65,10 @@ void GEOJSONDownloadListener::parsePointObject(JSONObject* point){
     JSONObject* jsonProperties = point->getObjectForKey(PROPERTIES)->getObject();
     JSONObject* jsonGeometry = point->getObjectForKey(GEOMETRY)->getObject();
     JSONArray* jsonCoordinates = jsonGeometry->getObjectForKey(COORDINATES)->getArray();
-
+    
     JSONBaseObject* denominaci = jsonProperties->getObjectForKey(DENOMINATION);
     JSONBaseObject* clase = jsonProperties->getObjectForKey(CLASE);
-
+    
     if (denominaci != NULL && clase != NULL){
         ILogger::instance()->logInfo(denominaci->getString()->getValue());
         
@@ -82,10 +82,18 @@ void GEOJSONDownloadListener::parsePointObject(JSONObject* point){
         name->addString(" ");
         name->addString(denominaci->getString()->getValue());
         
+        std::cout<<name->getString()<<std::endl;
+        std::cout<<iconUrl->getString()<<std::endl;
+        std::cout<<jsonCoordinates->getElement(1)->getNumber()->getDoubleValue()<<std::endl;
+        std::cout<<jsonCoordinates->getElement(0)->getNumber()->getDoubleValue()<<std::endl;
+        
+        const Angle latitude = Angle::fromDegrees( jsonCoordinates->getElement(1)->getNumber()->getDoubleValue() );
+        const Angle longitude = Angle::fromDegrees( jsonCoordinates->getElement(0)->getNumber()->getDoubleValue() );
+        
         Mark* mark = new Mark(name->getString(),
-                          URL(iconUrl->getString(),false),
-                          Geodetic3D(Angle::fromDegrees(jsonCoordinates->getElement(1)->getNumber()->getDoubleValue()), Angle::fromDegrees(jsonCoordinates->getElement(0)->getNumber()->getDoubleValue()), 0));
-    
+                              URL(iconUrl->getString(),false),
+                              Geodetic3D(latitude, longitude, 0));
+        
         _marksRenderer->addMark(mark);
     }
 }
