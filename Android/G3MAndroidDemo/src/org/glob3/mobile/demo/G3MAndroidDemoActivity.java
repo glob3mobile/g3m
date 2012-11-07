@@ -6,18 +6,16 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import org.glob3.mobile.generated.Angle;
-import org.glob3.mobile.generated.GLErrorRenderer;
+import org.glob3.mobile.generated.CircleShape;
+import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
-import org.glob3.mobile.generated.IFactory;
-import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.Mark;
 import org.glob3.mobile.generated.MarkTouchListener;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.generated.PeriodicalTask;
-import org.glob3.mobile.generated.QuadShape;
 import org.glob3.mobile.generated.Renderer;
 import org.glob3.mobile.generated.Sector;
 import org.glob3.mobile.generated.ShapesRenderer;
@@ -194,39 +192,43 @@ public class G3MAndroidDemoActivity
       final boolean useQuadShapes = true;
       if (useQuadShapes) {
          final ShapesRenderer shapesRenderer = new ShapesRenderer();
-         final String textureFileName = "g3m-marker.png";
-         final IImage textureImage = IFactory.instance().createImageFromFileName(textureFileName);
 
-         final QuadShape quad = new QuadShape( //
-                  new Geodetic3D(Angle.fromDegrees(37.78333333), //
-                           Angle.fromDegrees(-122.41666666666667), //
-                           10000), //
-                  textureImage, //
-                  true, //
-                  textureFileName, //
-                  500000, //
-                  500000);
-         quad.setHeading(Angle.fromDegrees(0));
-         quad.setPitch(Angle.fromDegrees(0));
-         shapesRenderer.addShape(quad);
+         //         final String textureFileName = "g3m-marker.png";
+         //         final IImage textureImage = IFactory.instance().createImageFromFileName(textureFileName);
+         //
+         //         final QuadShape quad = new QuadShape( //
+         //                  new Geodetic3D(Angle.fromDegrees(37.78333333), //
+         //                           Angle.fromDegrees(-122.41666666666667), //
+         //                           10000), //
+         //                  textureImage, //
+         //                  true, //
+         //                  textureFileName, //
+         //                  500000, //
+         //                  500000);
+         //         quad.setHeading(Angle.fromDegrees(0));
+         //         quad.setPitch(Angle.fromDegrees(0));
+         //         shapesRenderer.addShape(quad);
+
+         final Geodetic3D circlePosition = new Geodetic3D( //
+                  Angle.fromDegrees(37.78333333), //
+                  Angle.fromDegrees(-122.41666666666667), //
+                  8000);
+         final int circleRadius = 50000;
+         final Color circleColor = Color.newFromRGBA(1, 1, 0, 1);
+         final CircleShape circle = new CircleShape(circlePosition, circleRadius, circleColor);
+
+         //circle.setHeading(Angle.fromDegrees(45));
+         //circle.setPitch(Angle.fromDegrees(45));
+         //circle.setScale(2.0, 0.5, 1);
+         //circle.setRadius(circleRadius);
+
+         shapesRenderer.addShape(circle);
 
          renderers.add(shapesRenderer);
       }
 
-      //  if (false) {
-      //    LatLonMeshRenderer *renderer = new LatLonMeshRenderer();
-      //    renderers.push_back(renderer);
-      //  }
 
-      //  if (false) {
-      //    SceneGraphRenderer* sgr = new SceneGraphRenderer();
-      //    SGCubeNode* cube = new SGCubeNode();
-      //    // cube->setScale(Vector3D(6378137.0, 6378137.0, 6378137.0));
-      //    sgr->getRootNode()->addChild(cube);
-      //    renderers.push_back(sgr);
-      //  }
-
-      renderers.add(new GLErrorRenderer());
+      //      renderers.add(new GLErrorRenderer());
 
       final ArrayList<ICameraConstrainer> cameraConstraints = new ArrayList<ICameraConstrainer>();
       final SimpleCameraConstrainer scc = new SimpleCameraConstrainer();
@@ -237,7 +239,13 @@ public class G3MAndroidDemoActivity
       final GTask initializationTask = null;
       final ArrayList<PeriodicalTask> periodicalTasks = new ArrayList<PeriodicalTask>();
       final boolean incrementalTileQuality = false;
-      widget.initWidget(cameraConstraints, layerSet, renderers, userData, initializationTask, periodicalTasks,
+      widget.initWidget( //
+               cameraConstraints, //
+               layerSet, //
+               renderers, //
+               userData, //
+               initializationTask, //
+               periodicalTasks, //
                incrementalTileQuality);
 
    }

@@ -88,26 +88,25 @@ _renderStatisticsTimer(NULL),
 _logDownloaderStatistics(logDownloaderStatistics),
 _userData(NULL),
 _initializationTask(initializationTask),
-_autoDeleteInitializationTask(autoDeleteInitializationTask)
+_autoDeleteInitializationTask(autoDeleteInitializationTask),
+_initializationContext(new InitializationContext(IFactory::instance(),
+                                                 IStringUtils::instance(),
+                                                 IThreadUtils::instance(),
+                                                 ILogger::instance(),
+                                                 IMathUtils::instance(),
+                                                 IJSONParser::instance(),
+                                                 _planet,
+                                                 _downloader,
+                                                 _effectsScheduler))
 {
   initializeGL();
 
-  InitializationContext ic(IFactory::instance(),
-                           IStringUtils::instance(),
-                           IThreadUtils::instance(),
-                           ILogger::instance(),
-                           IMathUtils::instance(),
-                           IJSONParser::instance(),
-                           _planet,
-                           _downloader,
-                           _effectsScheduler);
-
-  _effectsScheduler->initialize(&ic);
-  _cameraRenderer->initialize(&ic);
-  _mainRenderer->initialize(&ic);
-  _busyRenderer->initialize(&ic);
-  _currentCamera->initialize(&ic);
-  _nextCamera->initialize(&ic);
+  _effectsScheduler->initialize(_initializationContext);
+  _cameraRenderer->initialize(_initializationContext);
+  _mainRenderer->initialize(_initializationContext);
+  _busyRenderer->initialize(_initializationContext);
+  _currentCamera->initialize(_initializationContext);
+  _nextCamera->initialize(_initializationContext);
 
   if (_downloader != NULL){
     _downloader->start();
@@ -158,7 +157,7 @@ void G3MWidget::initializeGL() {
 }
 
 G3MWidget::~G3MWidget() {
-    delete _userData;
+  delete _userData;
 
   delete _gl;
 #ifdef C_CODE
@@ -194,6 +193,8 @@ G3MWidget::~G3MWidget() {
     delete periodicalTask;
   }
 #endif
+
+  delete _initializationContext;
 }
 
 void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
