@@ -66,6 +66,7 @@ JSONString* JSONObject::getAsString(const std::string& key) const {
 }
 
 std::vector<std::string> JSONObject::keys() const {
+#ifdef C_CODE
   std::vector<std::string> result;
 
   std::map<std::string, JSONBaseObject*>::const_iterator it = _entries.begin();
@@ -74,6 +75,10 @@ std::vector<std::string> JSONObject::keys() const {
   }
 
   return result;
+#endif
+#if JAVA_CODE
+  return new java.util.ArrayList<String>(_entries.keySet());
+#endif
 }
 
 void JSONObject::putKeyAndValueDescription(const std::string& key,
