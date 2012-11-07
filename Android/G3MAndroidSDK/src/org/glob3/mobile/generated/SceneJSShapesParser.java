@@ -55,10 +55,20 @@ public class SceneJSShapesParser
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Shape* toShape(JSONBaseObject* jsonObject) const
-  private Shape toShape(JSONBaseObject jsonObject)
+//ORIGINAL LINE: Shape* toShape(JSONBaseObject* jsonBaseObject) const
+  private Shape toShape(JSONBaseObject jsonBaseObject)
   {
-	int ____DIEGO_AT_WORK;
+  //  int ____DIEGO_AT_WORK;
+	JSONObject jsonObject = jsonBaseObject.asObject();
+  
+	java.util.ArrayList<String> keys = jsonObject.keys();
+  
+	for (int i = 0; i < keys.size(); i++)
+	{
+	  String key = keys.get(i);
+	  String value = jsonObject.get(key).description();
+	  System.out.printf("%s=%s", key, value);
+	}
   
 	return null;
   }

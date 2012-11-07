@@ -73,4 +73,38 @@ public class JSONNumber extends JSONBaseObject
 	return this;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const String description() const
+  public final String description()
+  {
+	IStringBuilder isb = IStringBuilder.newStringBuilder();
+  
+	switch (_type)
+	{
+	  case int_type:
+		isb.addString("int/");
+		isb.addInt(_intValue);
+		break;
+  
+	  case float_type:
+		isb.addString("float/");
+		isb.addFloat(_floatValue);
+		break;
+  
+	  case double_type:
+		isb.addString("double/");
+		isb.addDouble(_doubleValue);
+		break;
+  
+	  default:
+		isb.addString("[unknown number type]");
+		break;
+	}
+  
+	final String s = isb.getString();
+	if (isb != null)
+		isb.dispose();
+	return s;
+  }
+
 }

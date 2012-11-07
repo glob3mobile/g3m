@@ -17,10 +17,22 @@ package org.glob3.mobile.generated;
 
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class IStringBuilder;
 
 public class JSONObject extends JSONBaseObject
 {
   private java.util.HashMap<String, JSONBaseObject> _entries = new java.util.HashMap<String, JSONBaseObject>();
+
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: void putKeyAndValueDescription(const String& key, IStringBuilder *isb) const
+  private void putKeyAndValueDescription(String key, IStringBuilder isb)
+  {
+	isb.addString(key);
+	isb.addString("=");
+	isb.addString(get(key).description());
+  }
 
   public void dispose()
   {
@@ -82,6 +94,50 @@ public class JSONObject extends JSONBaseObject
   public final int size()
   {
 	return _entries.size();
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: java.util.ArrayList<String> keys() const
+  public final java.util.ArrayList<String> keys()
+  {
+	java.util.ArrayList<String> result = new java.util.ArrayList<String>();
+  
+	java.util.Iterator<String, JSONBaseObject> it = _entries.iterator();
+	while (it.hasNext())
+	{
+	  result.add(it.next().getKey());
+	}
+  
+	return result;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const String description() const
+  public final String description()
+  {
+	IStringBuilder isb = IStringBuilder.newStringBuilder();
+  
+	isb.addString("{");
+  
+	java.util.ArrayList<String> keys = this.keys();
+  
+	int keysCount = keys.size();
+	if (keysCount > 0)
+	{
+	  putKeyAndValueDescription(keys.get(0), isb);
+	  for (int i = 1; i < keysCount; i++)
+	  {
+		isb.addString(",");
+		putKeyAndValueDescription(keys.get(i), isb);
+	  }
+	}
+  
+	isb.addString("}");
+  
+	final String s = isb.getString();
+	if (isb != null)
+		isb.dispose();
+	return s;
   }
 
 }

@@ -1,6 +1,14 @@
 package org.glob3.mobile.generated; 
 //
-//  JSONBoolean.h
+//  JSONBoolean.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 11/7/12.
+//
+//
+
+//
+//  JSONBoolean.hpp
 //  G3MiOSSDK
 //
 //  Created by Oliver Koehler on 03/10/12.
@@ -28,6 +36,18 @@ public class JSONBoolean extends JSONBaseObject
   public final JSONBoolean asBoolean()
   {
 	return this;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const String description() const
+  public final String description()
+  {
+	IStringBuilder isb = IStringBuilder.newStringBuilder();
+	isb.addBool(_value);
+	final String s = isb.getString();
+	if (isb != null)
+		isb.dispose();
+	return s;
   }
 
 }

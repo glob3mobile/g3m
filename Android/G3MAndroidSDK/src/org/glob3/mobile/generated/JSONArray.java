@@ -87,4 +87,48 @@ public class JSONArray extends JSONBaseObject
 	_entries.add(object);
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const String description() const
+  public final String description()
+  {
+	IStringBuilder isb = IStringBuilder.newStringBuilder();
+  
+	int size = this.size();
+  
+	isb.addString("[size=");
+	isb.addInt(size);
+  
+	if (size > 0)
+	{
+	  isb.addString("/");
+  
+	  isb.addString(this.get(0).description());
+  
+	  if (size <= 10)
+	  {
+		for (int i = 1; i < size; i++)
+		{
+		  isb.addString(",");
+		  isb.addString(this.get(i).description());
+		}
+	  }
+	  else
+	  {
+		for (int i = 1; i < 10; i++)
+		{
+		  isb.addString(",");
+		  isb.addString(this.get(i).description());
+		}
+		isb.addString(",...");
+	  }
+	}
+  
+	isb.addString("]");
+  
+	final String s = isb.getString();
+	if (isb != null)
+		isb.dispose();
+	return s;
+  }
+
 }

@@ -27,7 +27,8 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class JSONString;
 
-public class JSONBaseObject
+
+public abstract class JSONBaseObject
 {
 
   public void dispose()
@@ -59,5 +60,9 @@ public class JSONBaseObject
 	ILogger.instance().logError("The requested Object is not of type JSONString!");
 	return null;
   }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual const String description() const = 0;
+  public abstract String description();
 
 }
