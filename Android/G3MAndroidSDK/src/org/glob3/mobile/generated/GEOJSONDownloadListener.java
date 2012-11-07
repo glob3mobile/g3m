@@ -102,7 +102,19 @@ public class GEOJSONDownloadListener implements IBufferDownloadListener
 			name.addString(" ");
 			name.addString(denominaci.getString().getValue());
     
-			Mark mark = new Mark(name.getString(), new URL(iconUrl.getString(),false), new Geodetic3D(Angle.fromDegrees(jsonCoordinates.getElement(1).getNumber().getDoubleValue()), Angle.fromDegrees(jsonCoordinates.getElement(0).getNumber().getDoubleValue()), 0));
+			System.out.print(name.getString());
+			System.out.print("\n");
+			System.out.print(iconUrl.getString());
+			System.out.print("\n");
+			System.out.print(jsonCoordinates.getElement(1).getNumber().getDoubleValue());
+			System.out.print("\n");
+			System.out.print(jsonCoordinates.getElement(0).getNumber().getDoubleValue());
+			System.out.print("\n");
+    
+			final Angle latitude = Angle.fromDegrees(jsonCoordinates.getElement(1).getNumber().getDoubleValue());
+			final Angle longitude = Angle.fromDegrees(jsonCoordinates.getElement(0).getNumber().getDoubleValue());
+    
+			Mark mark = new Mark(name.getString(), new URL(iconUrl.getString(),false), new Geodetic3D(latitude, longitude, 0));
     
 			_marksRenderer.addMark(mark);
 		}

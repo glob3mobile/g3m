@@ -22,10 +22,10 @@ package org.glob3.mobile.generated;
 
 public enum layer_type
 {
-  WMS,
-  THREED,
-  PANO,
-  GEOJSON;
+	WMS,
+	THREED,
+	PANO,
+	GEOJSON;
 
 	public int getValue()
 	{

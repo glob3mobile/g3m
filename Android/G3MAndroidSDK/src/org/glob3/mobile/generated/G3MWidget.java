@@ -433,26 +433,15 @@ public class G3MWidget
 	  _userData = null;
 	  _initializationTask = initializationTask;
 	  _autoDeleteInitializationTask = autoDeleteInitializationTask;
-	  _initializationContext = new InitializationContext(IFactory.instance(), IStringUtils.instance(), IThreadUtils.instance(), ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler);
+	  _initializationContext = new InitializationContext(IFactory.instance(), IStringUtils.instance(), IThreadUtils.instance(), ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, IDownloader.instance(), _effectsScheduler, IStorage.instance());
 	initializeGL();
   
-<<<<<<< HEAD
-	InitializationContext ic = new InitializationContext(IFactory.instance(), IStringUtils.instance(), IThreadUtils.instance(), ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, IDownloader.instance(), _effectsScheduler, IStorage.instance());
-  
-	_effectsScheduler.initialize(ic);
-	_cameraRenderer.initialize(ic);
-	_mainRenderer.initialize(ic);
-	_busyRenderer.initialize(ic);
-	_currentCamera.initialize(ic);
-	_nextCamera.initialize(ic);
-=======
 	_effectsScheduler.initialize(_initializationContext);
 	_cameraRenderer.initialize(_initializationContext);
 	_mainRenderer.initialize(_initializationContext);
 	_busyRenderer.initialize(_initializationContext);
 	_currentCamera.initialize(_initializationContext);
 	_nextCamera.initialize(_initializationContext);
->>>>>>> webgl-port
   
 	if (IDownloader.instance() != null)
 	{
