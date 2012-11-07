@@ -59,6 +59,9 @@ protected:
   }
 
 public:
+  virtual ~Context() {
+
+  }
 
   const IFactory* getFactory() const {
     return _factory;
