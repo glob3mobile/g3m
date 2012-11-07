@@ -10,7 +10,7 @@
 
 #include "IJSONParser.hpp"
 #include "IByteBuffer.hpp"
-
+#include "JSONObject.hpp"
 
 Shape* SceneJSShapesParser::parse(const std::string& json) {
   return SceneJSShapesParser(json).getRootShape();
@@ -40,8 +40,17 @@ void SceneJSShapesParser::pvtParse(const std::string& json) {
   _rootShape = toShape(jsonRootObject);
 }
 
-Shape* SceneJSShapesParser::toShape(JSONBaseObject* jsonObject) const {
-  int ____DIEGO_AT_WORK;
+Shape* SceneJSShapesParser::toShape(JSONBaseObject* jsonBaseObject) const {
+//  int ____DIEGO_AT_WORK;
+  JSONObject* jsonObject = jsonBaseObject->asObject();
+
+  std::vector<std::string> keys = jsonObject->keys();
+
+  for (int i = 0; i < keys.size(); i++) {
+    std::string key = keys[i];
+    std::string value = jsonObject->get(key)->description();
+    printf("%s=%s", key.c_str(), value.c_str());
+  }
 
   return NULL;
 }

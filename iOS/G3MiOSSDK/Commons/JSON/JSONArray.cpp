@@ -8,6 +8,7 @@
 
 #include "JSONArray.hpp"
 #include "JSONBaseObject.hpp"
+#include "IStringBuilder.hpp"
 
 
 JSONArray::~JSONArray() {
@@ -47,4 +48,40 @@ JSONNumber* JSONArray::getAsNumber(const int index) const {
 
 JSONString* JSONArray::getAsString(const int index) const {
   return get(index)->asString();
+}
+
+
+const std::string JSONArray::description() const {
+  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+
+  int size = this->size();
+
+  isb->addString("[size=");
+  isb->addInt(size);
+
+  if (size > 0) {
+    isb->addString("/");
+
+    isb->addString(this->get(0)->description());
+
+    if (size <= 10) {
+      for (int i = 1; i < size; i++) {
+        isb->addString(",");
+        isb->addString(this->get(i)->description());
+      }
+    }
+    else {
+      for (int i = 1; i < 10; i++) {
+        isb->addString(",");
+        isb->addString(this->get(i)->description());
+      }
+      isb->addString(",...");
+    }
+  }
+
+  isb->addString("]");
+
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
 }

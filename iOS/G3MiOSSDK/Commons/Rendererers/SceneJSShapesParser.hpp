@@ -29,7 +29,7 @@ private:
 
   void pvtParse(const std::string& json);
 
-  Shape* toShape(JSONBaseObject* jsonObject) const;
+  Shape* toShape(JSONBaseObject* jsonBaseObject) const;
 
 public:
 

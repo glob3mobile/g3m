@@ -9,15 +9,20 @@
 #ifndef G3MiOSSDK_JSONObject_hpp
 #define G3MiOSSDK_JSONObject_hpp
 
-#include <map>
 #include "JSONBaseObject.hpp"
-#include "ILogger.hpp"
+#include <map>
+#include <vector>
 
+class IStringBuilder;
 
 class JSONObject : public JSONBaseObject{
 private:
   std::map<std::string, JSONBaseObject*> _entries;
-  
+
+
+  void putKeyAndValueDescription(const std::string& key,
+                                 IStringBuilder *isb) const;
+
 public:
   ~JSONObject();
 
@@ -37,7 +42,11 @@ public:
            JSONBaseObject* object);
   
   int size() const;
+
+  std::vector<std::string> keys() const;
   
+  const std::string description() const;
+
 };
 
 #endif

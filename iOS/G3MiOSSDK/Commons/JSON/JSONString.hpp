@@ -30,7 +30,9 @@ public:
   JSONString* asString() {
     return this;
   }
-  
+
+  const std::string description() const;
+
 };
 
 #endif

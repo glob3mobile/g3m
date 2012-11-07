@@ -7,7 +7,9 @@
 //
 
 #include "JSONObject.hpp"
-#include <string>
+#include "ILogger.hpp"
+#include "IStringBuilder.hpp"
+
 
 JSONObject::~JSONObject(){
 #ifdef C_CODE
@@ -22,7 +24,7 @@ JSONObject::~JSONObject(){
 JSONBaseObject* JSONObject::get(const std::string& key) const {
 #ifdef C_CODE
   std::map<std::string, JSONBaseObject*>::const_iterator it = _entries.find(key);
-  if(it != _entries.end()){
+  if (it != _entries.end()){
     return _entries.at(key);
   }
   ILogger::instance()->logError("The JSONObject does not contain the key \""+key+"\"");
@@ -62,3 +64,45 @@ JSONNumber* JSONObject::getAsNumber(const std::string& key) const {
 JSONString* JSONObject::getAsString(const std::string& key) const {
   return get(key)->asString();
 }
+
+std::vector<std::string> JSONObject::keys() const {
+  std::vector<std::string> result;
+
+  std::map<std::string, JSONBaseObject*>::const_iterator it = _entries.begin();
+  while (it != _entries.end()) {
+    result.push_back(it->first);
+  }
+
+  return result;
+}
+
+void JSONObject::putKeyAndValueDescription(const std::string& key,
+                                           IStringBuilder *isb) const {
+  isb->addString(key);
+  isb->addString("=");
+  isb->addString(get(key)->description());
+}
+
+const std::string JSONObject::description() const {
+  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+
+  isb->addString("{");
+
+  std::vector<std::string> keys = this->keys();
+
+  int keysCount = keys.size();
+  if (keysCount > 0) {
+    putKeyAndValueDescription(keys[0], isb);
+    for (int i = 1; i < keysCount; i++) {
+      isb->addString(",");
+      putKeyAndValueDescription(keys[i], isb);
+    }
+  }
+
+  isb->addString("}");
+
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
+}
+

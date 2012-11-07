@@ -190,6 +190,8 @@
 		CFE0844515E27B9A0004EC0E /* Petition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE0844315E27B9A0004EC0E /* Petition.cpp */; };
 		CFE3B579164AE32E009975A5 /* SceneJSShapesParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B577164AE32E009975A5 /* SceneJSShapesParser.cpp */; };
 		CFE3B57A164AE32E009975A5 /* SceneJSShapesParser.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFE3B578164AE32E009975A5 /* SceneJSShapesParser.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CFE3DBA7164AFC4100910037 /* JSONBoolean.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3DBA5164AFC4100910037 /* JSONBoolean.cpp */; };
+		CFE3DBAC164AFDB000910037 /* JSONString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3DBAA164AFDB000910037 /* JSONString.cpp */; };
 		CFEEE4BD164867B600F45F59 /* CircleShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFEEE4BB164867B600F45F59 /* CircleShape.cpp */; };
 		CFEEE4BE164867B600F45F59 /* CircleShape.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFEEE4BC164867B600F45F59 /* CircleShape.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFF0999B15C18AAD005EAF12 /* TileTexturizer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -456,6 +458,8 @@
 		CFE0844415E27B9A0004EC0E /* Petition.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Petition.hpp; path = Commons/Basic/Petition.hpp; sourceTree = "<group>"; };
 		CFE3B577164AE32E009975A5 /* SceneJSShapesParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SceneJSShapesParser.cpp; path = Commons/Rendererers/SceneJSShapesParser.cpp; sourceTree = "<group>"; };
 		CFE3B578164AE32E009975A5 /* SceneJSShapesParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SceneJSShapesParser.hpp; path = Commons/Rendererers/SceneJSShapesParser.hpp; sourceTree = "<group>"; };
+		CFE3DBA5164AFC4100910037 /* JSONBoolean.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONBoolean.cpp; sourceTree = "<group>"; };
+		CFE3DBAA164AFDB000910037 /* JSONString.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JSONString.cpp; sourceTree = "<group>"; };
 		CFEEE4BB164867B600F45F59 /* CircleShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CircleShape.cpp; path = Commons/Rendererers/CircleShape.cpp; sourceTree = "<group>"; };
 		CFEEE4BC164867B600F45F59 /* CircleShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CircleShape.hpp; path = Commons/Rendererers/CircleShape.hpp; sourceTree = "<group>"; };
 		CFF8C4BB15DEB6A70034A576 /* RCObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RCObject.cpp; path = Commons/Basic/RCObject.cpp; sourceTree = "<group>"; };
@@ -766,12 +770,14 @@
 				A7EE001D161B25FD00C77604 /* JSONArray.hpp */,
 				A7EE001B161B245600C77604 /* JSONBaseObject.cpp */,
 				A7BF53841607643400662135 /* JSONBaseObject.hpp */,
+				CFE3DBA5164AFC4100910037 /* JSONBoolean.cpp */,
 				A70F5615161C8F9A00340256 /* JSONBoolean.hpp */,
 				A70F5611161C4F8F00340256 /* JSONNumber.cpp */,
 				A70F5613161C4FD000340256 /* JSONNumber.hpp */,
 				A7EE00191619D01900C77604 /* JSONObject.cpp */,
 				A7EE00171619CE2B00C77604 /* JSONObject.hpp */,
 				A70F5617161C94A100340256 /* JSONString.hpp */,
+				CFE3DBAA164AFDB000910037 /* JSONString.cpp */,
 			);
 			name = JSON;
 			path = Commons/JSON;
@@ -1283,6 +1289,8 @@
 				CFEEE4BD164867B600F45F59 /* CircleShape.cpp in Sources */,
 				CF3E07E81649B65000B5CA51 /* CompositeShape.cpp in Sources */,
 				CFE3B579164AE32E009975A5 /* SceneJSShapesParser.cpp in Sources */,
+				CFE3DBA7164AFC4100910037 /* JSONBoolean.cpp in Sources */,
+				CFE3DBAC164AFDB000910037 /* JSONString.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

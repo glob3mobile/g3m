@@ -15,6 +15,8 @@ class JSONBoolean;
 class JSONNumber;
 class JSONString;
 
+#include <string>
+
 class JSONBaseObject {
   
 public:
@@ -26,6 +28,8 @@ public:
   virtual JSONBoolean* asBoolean();
   virtual JSONNumber*  asNumber();
   virtual JSONString*  asString();
+
+  virtual const std::string description() const = 0;
 
 };
 

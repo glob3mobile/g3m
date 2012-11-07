@@ -36,6 +36,8 @@ public:
 
   void add(JSONBaseObject* object);
 
+  const std::string description() const;
+
 };
 
 #endif

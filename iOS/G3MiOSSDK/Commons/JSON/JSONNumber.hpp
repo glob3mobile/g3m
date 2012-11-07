@@ -59,6 +59,8 @@ public:
     return this;
   }
   
+  const std::string description() const;
+
 };
 
 

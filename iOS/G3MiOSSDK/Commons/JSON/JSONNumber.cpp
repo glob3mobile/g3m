@@ -7,6 +7,7 @@
 //
 
 #include "JSONNumber.hpp"
+#include "IStringBuilder.hpp"
 
 int JSONNumber::intValue() const {
   if (_type != int_type) {
@@ -33,4 +34,34 @@ double JSONNumber::doubleValue() const {
   }
 
   return _doubleValue;
+}
+
+
+const std::string JSONNumber::description() const {
+  IStringBuilder *isb = IStringBuilder::newStringBuilder();
+
+  switch (_type) {
+    case int_type:
+      isb->addString("int/");
+      isb->addInt(_intValue);
+      break;
+
+    case float_type:
+      isb->addString("float/");
+      isb->addFloat(_floatValue);
+      break;
+
+    case double_type:
+      isb->addString("double/");
+      isb->addDouble(_doubleValue);
+      break;
+
+    default:
+      isb->addString("[unknown number type]");
+      break;
+  }
+
+  const std::string s = isb->getString();
+  delete isb;
+  return s;
 }
