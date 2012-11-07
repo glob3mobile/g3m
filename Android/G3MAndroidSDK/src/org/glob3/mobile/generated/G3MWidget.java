@@ -212,31 +212,27 @@ public class G3MWidget
 
   public final void onPause()
   {
-	InitializationContext ic = new InitializationContext(IFactory.instance(), IStringUtils.instance(), IThreadUtils.instance(), ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler);
+	_mainRenderer.onPause(_initializationContext);
+	_busyRenderer.onPause(_initializationContext);
   
-	_mainRenderer.onPause(ic);
-	_busyRenderer.onPause(ic);
-  
-	_effectsScheduler.onPause(ic);
+	_effectsScheduler.onPause(_initializationContext);
   
 	if (_downloader != null)
 	{
-	  _downloader.onPause(ic);
+	  _downloader.onPause(_initializationContext);
 	}
   }
 
   public final void onResume()
   {
-	InitializationContext ic = new InitializationContext(IFactory.instance(), IStringUtils.instance(), IThreadUtils.instance(), ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler);
+	_mainRenderer.onResume(_initializationContext);
+	_busyRenderer.onResume(_initializationContext);
   
-	_mainRenderer.onResume(ic);
-	_busyRenderer.onResume(ic);
-  
-	_effectsScheduler.onResume(ic);
+	_effectsScheduler.onResume(_initializationContext);
   
 	if (_downloader != null)
 	{
-	  _downloader.onResume(ic);
+	  _downloader.onResume(_initializationContext);
 	}
   }
 

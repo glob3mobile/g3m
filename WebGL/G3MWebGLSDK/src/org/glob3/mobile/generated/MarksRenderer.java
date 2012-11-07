@@ -217,7 +217,7 @@ public class MarksRenderer extends LeafRenderer
 
   public final void onResume(InitializationContext ic)
   {
-
+	_initializationContext = ic;
   }
 
   public final void onPause(InitializationContext ic)
