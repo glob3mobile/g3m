@@ -20,18 +20,24 @@ private:
   
 public:
   ~JSONObject();
-  JSONObject* getObject(){
+
+  JSONObject* asObject() {
     return this;
   }
   
-  JSONBaseObject* getObjectForKey(const std::string key);
+  JSONBaseObject* get(const std::string& key) const;
   
-  void putObject(const std::string key, JSONBaseObject* object);
+  JSONObject*  getAsObject (const std::string& key) const;
+  JSONArray*   getAsArray  (const std::string& key) const;
+  JSONBoolean* getAsBoolean(const std::string& key) const;
+  JSONNumber*  getAsNumber (const std::string& key) const;
+  JSONString*  getAsString (const std::string& key) const;
+
+  void put(const std::string& key,
+           JSONBaseObject* object);
   
-  int getSize();
+  int size() const;
   
 };
-
-
 
 #endif

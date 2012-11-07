@@ -18,7 +18,7 @@ JSONBaseObject* JSONParser_iOS::parse(IByteBuffer* buffer){
   return parse(buffer->getAsString());
 }
 
-JSONBaseObject* JSONParser_iOS::parse(std::string inputString){
+JSONBaseObject* JSONParser_iOS::parse(const std::string& inputString) {
   
   NSString *string = [[NSString alloc]initWithUTF8String:inputString.c_str()];
   _jsonData = [string dataUsingEncoding:NSUTF8StringEncoding];
@@ -30,7 +30,7 @@ JSONBaseObject* JSONParser_iOS::parse(std::string inputString){
     NSArray *jsonArray = (NSArray *)nsJsonObject;
     JSONArray* topLevelArray = new JSONArray();
     for (NSObject *element in jsonArray){
-      topLevelArray->appendElement(makeJSONElement(element));
+      topLevelArray->add(makeJSONElement(element));
     }
     return topLevelArray;
   }
@@ -43,8 +43,9 @@ JSONBaseObject* JSONParser_iOS::parse(std::string inputString){
     int count = [keys count];
     for (int i = 0; i<count; i++){
       NSUInteger objI = i;
-      std::string *cKey = new std::string([[keys objectAtIndex:objI]UTF8String]);
-      topLevelObject->putObject(*cKey, makeJSONElement([jsonDictionary objectForKey:[keys objectAtIndex:objI]]));
+      const std::string cKey = std::string( [[keys objectAtIndex:objI] UTF8String] );
+      topLevelObject->put(cKey,
+                          makeJSONElement([jsonDictionary objectForKey:[keys objectAtIndex:objI]]));
     }
     return topLevelObject;    
   }
@@ -58,7 +59,7 @@ JSONBaseObject* JSONParser_iOS::makeJSONElement(NSObject* object){
     NSArray *jsonArray = (NSArray *)object;
     JSONArray* array = new JSONArray();
     for (NSObject *element in jsonArray){ 
-      array->appendElement(makeJSONElement(element));
+      array->add(makeJSONElement(element));
     }
     return array;
   }
@@ -69,11 +70,11 @@ JSONBaseObject* JSONParser_iOS::makeJSONElement(NSObject* object){
     int count = [keys count];
     for (int i = 0; i<count; i++){
       NSUInteger objI = i;
-      std::string *cKey = new std::string([[keys objectAtIndex:objI]UTF8String]);
-      dictionary->putObject(*cKey, makeJSONElement([jsonDict objectForKey:[keys objectAtIndex:objI]]));
+      std::string cKey = std::string( [[keys objectAtIndex:objI] UTF8String] );
+      dictionary->put(cKey,
+                      makeJSONElement([jsonDict objectForKey:[keys objectAtIndex:objI]]));
     }
     return dictionary;
-    
   }
   else if ([object isKindOfClass:[NSNumber class]]){
     NSNumber *jsonNumber = (NSNumber *) object;

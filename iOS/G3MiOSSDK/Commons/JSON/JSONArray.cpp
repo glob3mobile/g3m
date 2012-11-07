@@ -10,22 +10,41 @@
 #include "JSONBaseObject.hpp"
 
 
-JSONArray::~JSONArray(){
-  for (int i =0; i<_entries.size(); i++){
+JSONArray::~JSONArray() {
+  for (int i = 0; i < _entries.size(); i++) {
     delete _entries[i];
   }
   _entries.clear();
 }
 
-JSONBaseObject* JSONArray::getElement(const int index){
+JSONBaseObject* JSONArray::get(const int index) const {
   return _entries[index];
 }
 
-void JSONArray::appendElement (JSONBaseObject* object){
+void JSONArray::add(JSONBaseObject* object) {
   _entries.push_back(object);
 }
 
-int JSONArray::getSize(){
+int JSONArray::size() const {
   return _entries.size();
 }
 
+JSONObject* JSONArray::getAsObject(const int index) const {
+  return get(index)->asObject();
+}
+
+JSONArray* JSONArray::getAsArray(const int index) const {
+  return get(index)->asArray();
+}
+
+JSONBoolean* JSONArray::getAsBoolean(const int index) const {
+  return get(index)->asBoolean();
+}
+
+JSONNumber* JSONArray::getAsNumber(const int index) const {
+  return get(index)->asNumber();
+}
+
+JSONString* JSONArray::getAsString(const int index) const {
+  return get(index)->asString();
+}

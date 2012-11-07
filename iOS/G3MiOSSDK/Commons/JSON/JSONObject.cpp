@@ -19,11 +19,11 @@ JSONObject::~JSONObject(){
 
 }
 
-JSONBaseObject* JSONObject::getObjectForKey(const std::string key){
+JSONBaseObject* JSONObject::get(const std::string& key) const {
 #ifdef C_CODE
-  std::map<std::string, JSONBaseObject*>::iterator it =_entries.find(key);
+  std::map<std::string, JSONBaseObject*>::const_iterator it = _entries.find(key);
   if(it != _entries.end()){
-    return _entries[key];
+    return _entries.at(key);
   }
   ILogger::instance()->logError("The JSONObject does not contain the key \""+key+"\"");
   return NULL;
@@ -34,10 +34,31 @@ JSONBaseObject* JSONObject::getObjectForKey(const std::string key){
 #endif
 }
 
-void JSONObject::putObject(const std::string key, JSONBaseObject* object){
+void JSONObject::put(const std::string& key,
+                     JSONBaseObject* object) {
   _entries[key]=object;
 }
 
-int JSONObject::getSize(){
+int JSONObject::size() const {
   return _entries.size();
+}
+
+JSONObject* JSONObject::getAsObject(const std::string& key) const {
+  return get(key)->asObject();
+}
+
+JSONArray* JSONObject::getAsArray(const std::string& key) const {
+  return get(key)->asArray();
+}
+
+JSONBoolean* JSONObject::getAsBoolean(const std::string& key) const {
+  return get(key)->asBoolean();
+}
+
+JSONNumber* JSONObject::getAsNumber(const std::string& key) const {
+  return get(key)->asNumber();
+}
+
+JSONString* JSONObject::getAsString(const std::string& key) const {
+  return get(key)->asString();
 }
