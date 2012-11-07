@@ -11,22 +11,25 @@ package org.glob3.mobile.generated;
 
 public class JSONString extends JSONBaseObject
 {
-  private String _value;
+  private final String _value;
 
   public void dispose()
   {
   }
+
   public JSONString(String value)
   {
 	  _value = value;
   }
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const String getValue()const
-  public final String getValue()
+//ORIGINAL LINE: const String value() const
+  public final String value()
   {
 	return _value;
   }
-  public final JSONString getString()
+
+  public final JSONString asString()
   {
 	return this;
   }

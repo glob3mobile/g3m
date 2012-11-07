@@ -22,30 +22,69 @@ public class JSONArray extends JSONBaseObject
 {
   private java.util.ArrayList<JSONBaseObject> _entries = new java.util.ArrayList<JSONBaseObject>();
 
-  public final JSONArray getArray()
+  public final JSONArray asArray()
   {
 	return this;
   }
+
   public void dispose()
   {
-	for (int i = 0; i<_entries.size(); i++)
+	for (int i = 0; i < _entries.size(); i++)
 	{
 	  if (_entries.get(i) != null)
 		  _entries.get(i).dispose();
 	}
 	_entries.clear();
   }
-  public final JSONBaseObject getElement(int index)
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: JSONBaseObject* get(const int index) const
+  public final JSONBaseObject get(int index)
   {
 	return _entries.get(index);
   }
-  public final int getSize()
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: JSONObject* getAsObject(const int index) const
+  public final JSONObject getAsObject(int index)
+  {
+	return get(index).asObject();
+  }
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: JSONArray* getAsArray(const int index) const
+  public final JSONArray getAsArray(int index)
+  {
+	return get(index).asArray();
+  }
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: JSONBoolean* getAsBoolean(const int index) const
+  public final JSONBoolean getAsBoolean(int index)
+  {
+	return get(index).asBoolean();
+  }
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: JSONNumber* getAsNumber(const int index) const
+  public final JSONNumber getAsNumber(int index)
+  {
+	return get(index).asNumber();
+  }
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: JSONString* getAsString(const int index) const
+  public final JSONString getAsString(int index)
+  {
+	return get(index).asString();
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: int size() const
+  public final int size()
   {
 	return _entries.size();
   }
 
-  public final void appendElement (JSONBaseObject object)
+  public final void add(JSONBaseObject object)
   {
 	_entries.add(object);
   }
+
 }

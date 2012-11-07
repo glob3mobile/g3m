@@ -17,11 +17,15 @@ public class JSONBoolean extends JSONBaseObject
   {
 	  _value = value;
   }
-  public final boolean getValue()
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const boolean value() const
+  public final boolean value()
   {
 	return _value;
   }
-  public final JSONBoolean getBoolean()
+
+  public final JSONBoolean asBoolean()
   {
 	return this;
   }

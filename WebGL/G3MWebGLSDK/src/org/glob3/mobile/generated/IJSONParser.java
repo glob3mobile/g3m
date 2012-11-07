@@ -45,8 +45,10 @@ public abstract class IJSONParser
   {
   }
 
-  public abstract JSONBaseObject parse(String NamelessParameter);
+  public abstract JSONBaseObject parse(String json);
+
   public abstract JSONBaseObject parse(IByteBuffer buffer);
+
   public void deleteJSONData(JSONBaseObject object)
   {
 	if (object != null)

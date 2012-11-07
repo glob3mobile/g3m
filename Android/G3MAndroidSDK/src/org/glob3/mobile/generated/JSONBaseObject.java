@@ -30,36 +30,34 @@ package org.glob3.mobile.generated;
 public class JSONBaseObject
 {
 
-
   public void dispose()
   {
   }
 
-  public JSONObject getObject()
+  public JSONObject asObject()
   {
 	ILogger.instance().logError("The requested Object is not of type JSONObject!");
 	return null;
   }
-  public JSONArray getArray()
+  public JSONArray asArray()
   {
 	ILogger.instance().logError("The requested Object is not of type JSONArray!");
 	return null;
   }
-  public JSONBoolean getBoolean()
+  public JSONBoolean asBoolean()
   {
 	ILogger.instance().logError("The requested Object is not of type JSONBoolean!");
 	return null;
   }
-  public JSONNumber getNumber()
+  public JSONNumber asNumber()
   {
 	ILogger.instance().logError("The requested Object is not of type JSONNumber!");
 	return null;
   }
-  public JSONString getString()
+  public JSONString asString()
   {
 	ILogger.instance().logError("The requested Object is not of type JSONString!");
 	return null;
   }
-
 
 }

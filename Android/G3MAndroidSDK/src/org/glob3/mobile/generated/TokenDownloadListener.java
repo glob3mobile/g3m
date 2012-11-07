@@ -15,26 +15,26 @@ public class TokenDownloadListener implements IBufferDownloadListener
 	String String = buffer.getAsString();
 	JSONBaseObject json = IJSONParser.instance().parse(String);
   
-	String authentication = json.getObject().getObjectForKey("authenticationResultCode").getString().getValue();
+	String authentication = json.asObject().getAsString("authenticationResultCode").value();
 	if (authentication.compareTo("ValidCredentials")!=0)
 	{
 	  ILogger.instance().logError("Could not validate against Bing. Please check your key!");
 	}
 	else
 	{
-	  JSONObject data = json.getObject().getObjectForKey("resourceSets").getArray().getElement(0).getObject().getObjectForKey("resources").getArray().getElement(0).getObject();
+	  JSONObject data = json.asObject().getAsArray("resourceSets").getAsObject(0).getAsArray("resources").getAsObject(0);
   
-	  JSONArray subDomArray = data.getObjectForKey("imageUrlSubdomains").getArray();
+	  JSONArray subDomArray = data.getAsArray("imageUrlSubdomains");
 	  java.util.ArrayList<String> subdomains = new java.util.ArrayList<String>();
-	  int numSubdomains = subDomArray.getSize();
+	  int numSubdomains = subDomArray.size();
 	  for (int i = 0; i<numSubdomains; i++)
 	  {
-		subdomains.add(subDomArray.getElement(i).getString().getValue());
+		subdomains.add(subDomArray.getAsString(i).value());
 	  }
 	  _bingLayer.setSubDomains(subdomains);
   
   
-	  String tileURL = data.getObjectForKey("imageUrl").getString().getValue();
+	  String tileURL = data.getAsString("imageUrl").value();
   
 	  //set language
 	  tileURL = IStringUtils.instance().replaceSubstring(tileURL, "{culture}", _bingLayer.getLocale());
