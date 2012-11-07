@@ -71,6 +71,10 @@ public class Context
 	  _effectsScheduler = effectsScheduler;
   }
 
+  public void dispose()
+  {
+
+  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: const IFactory* getFactory() const
