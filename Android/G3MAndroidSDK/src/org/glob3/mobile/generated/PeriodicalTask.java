@@ -36,16 +36,10 @@ public class PeriodicalTask
 
   public void dispose()
   {
-	if (_task != null)
-	{
 	  if (_task != null)
 		  _task.dispose();
-	}
 
-	if (_timer != null)
-	{
 	  IFactory.instance().deleteTimer(_timer);
-	}
   }
 
   public final void executeIfNecessary()

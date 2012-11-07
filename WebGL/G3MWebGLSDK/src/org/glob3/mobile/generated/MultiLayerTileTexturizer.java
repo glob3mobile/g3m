@@ -78,12 +78,9 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 
   public void dispose()
   {
-	if (_texCoordsCache != null)
-	{
 	  if (_texCoordsCache != null)
 		  _texCoordsCache.dispose();
 	  _texCoordsCache = null;
-	}
   }
 
   public final boolean isReady(RenderContext rc, LayerSet layerSet)

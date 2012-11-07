@@ -394,4 +394,16 @@ public class Ellipsoid
 	}
 	return pos.add(ray.times(distances.get(0)));
   }
+
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: MutableMatrix44D createGeodeticTransformMatrix(const Geodetic3D& position) const
+  public final MutableMatrix44D createGeodeticTransformMatrix(Geodetic3D position)
+  {
+	final MutableMatrix44D translation = MutableMatrix44D.createTranslationMatrix(toCartesian(position));
+	final MutableMatrix44D rotation = MutableMatrix44D.createGeodeticRotationMatrix(position);
+  
+	return translation.multiply(rotation);
+  }
+
 }

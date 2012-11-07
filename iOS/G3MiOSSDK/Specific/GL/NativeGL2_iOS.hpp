@@ -255,6 +255,9 @@ public:
   int Primitive_TriangleStrip() const{
     return GL_TRIANGLE_STRIP;
   }
+  int Primitive_TriangleFan() const{
+    return GL_TRIANGLE_FAN;
+  }
   int Primitive_Lines() const{
     return GL_LINES;
   }

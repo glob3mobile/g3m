@@ -24,16 +24,20 @@ public class Color
 
   }
 
-
-  public Color(Color c)
+  public Color(Color that)
   {
-	  _red = c._red;
-	  _green = c._green;
-	  _blue = c._blue;
-	  _alpha = c._alpha;
+	  _red = that._red;
+	  _green = that._green;
+	  _blue = that._blue;
+	  _alpha = that._alpha;
   }
 
   public static Color fromRGBA(float red, float green, float blue, float alpha)
+  {
+	return new Color(red, green, blue, alpha);
+  }
+
+  public static Color newFromRGBA(float red, float green, float blue, float alpha)
   {
 	return new Color(red, green, blue, alpha);
   }

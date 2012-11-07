@@ -161,6 +161,7 @@ public:
   virtual int Type_Int() const = 0;
   
   virtual int Primitive_TriangleStrip() const = 0;
+  virtual int Primitive_TriangleFan() const = 0;
   virtual int Primitive_Lines() const = 0;
   virtual int Primitive_LineStrip() const = 0;
   virtual int Primitive_LineLoop() const = 0;

@@ -233,8 +233,7 @@ public final class MotionEventProcessor {
 		$wnd.g3mMouseWheelHandler = function(e) {
 			// cross-browser wheel delta
 			var e = $wnd.event || e; // old IE support
-			var delta = -(Math
-					.max(-1, Math.min(1, (e.wheelDelta || -e.detail))));
+			var delta = (Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))));
 			thisInstance.@org.glob3.mobile.specific.MotionEventProcessor::mouseWheelHandler(III)(delta, e.clientX, e.clientY);
 		};
 

@@ -34,7 +34,7 @@ MarksRenderer::~MarksRenderer() {
     delete _marks[i];
   }
   
-  if ( (_markTouchListener != NULL) && _autoDeleteMarkTouchListener ) {
+  if ( _autoDeleteMarkTouchListener ) {
     delete _markTouchListener;
   }
   _markTouchListener = NULL;

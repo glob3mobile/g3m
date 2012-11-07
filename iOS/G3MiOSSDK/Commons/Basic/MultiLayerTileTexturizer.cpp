@@ -529,10 +529,8 @@ _texturesHandler(NULL)
 }
 
 MultiLayerTileTexturizer::~MultiLayerTileTexturizer() {
-  if (_texCoordsCache != NULL) {
     delete _texCoordsCache;
     _texCoordsCache = NULL;
-  }
 }
 
 void MultiLayerTileTexturizer::initialize(const InitializationContext* ic,

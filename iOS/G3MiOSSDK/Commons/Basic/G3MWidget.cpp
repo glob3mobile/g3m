@@ -158,10 +158,7 @@ void G3MWidget::initializeGL() {
 }
 
 G3MWidget::~G3MWidget() {
-  if (_userData != NULL) {
     delete _userData;
-  }
-
 
   delete _gl;
 #ifdef C_CODE

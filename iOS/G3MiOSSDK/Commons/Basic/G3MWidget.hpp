@@ -114,9 +114,8 @@ public:
   }
 
   void setUserData(UserData* userData) {
-    if (_userData != NULL) {
       delete _userData;
-    }
+        
     _userData = userData;
     if (_userData != NULL) {
       _userData->setWidget(this);

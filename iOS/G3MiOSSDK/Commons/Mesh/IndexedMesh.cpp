@@ -22,9 +22,9 @@ IndexedMesh::~IndexedMesh() {
     delete _flatColor;
   }
 
-  if (_extent != NULL) delete _extent;
-  if (_translationMatrix != NULL) delete _translationMatrix;
   delete _glState;
+  delete _extent;
+  delete _translationMatrix;
 }
 
 IndexedMesh::IndexedMesh(const int primitive,
@@ -89,6 +89,9 @@ void IndexedMesh::render(const RenderContext* rc) const {
   
   if (_primitive == GLPrimitive::triangleStrip()) {
     gl->drawTriangleStrip(_indices);
+  }
+  else if (_primitive == GLPrimitive::triangleFan()) {
+    gl->drawTriangleFan(_indices);
   }
   else if (_primitive == GLPrimitive::lines()) {
     gl->drawLines(_indices);

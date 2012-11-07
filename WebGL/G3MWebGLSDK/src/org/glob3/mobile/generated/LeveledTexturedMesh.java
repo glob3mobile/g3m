@@ -79,10 +79,7 @@ public class LeveledTexturedMesh extends Mesh
 	  {
 		LazyTextureMapping mapping = _mappings.get(i);
 		if (mapping != null)
-		{
-		  if (mapping != null)
-			  mapping.dispose();
-		}
+			mapping.dispose();
 	  }
   
 	  _mappings = null;

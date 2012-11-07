@@ -48,7 +48,7 @@ public:
   MarksRenderer(bool readyWhenMarksReady);  
   void setMarkTouchListener(MarkTouchListener* markTouchListener,
                             bool autoDelete) {
-    if ( (_markTouchListener != NULL) && _autoDeleteMarkTouchListener ) {
+    if ( _autoDeleteMarkTouchListener ) {
       delete _markTouchListener;
     }
     
@@ -64,9 +64,9 @@ public:
   
   void addMark(Mark* mark);
   
-  virtual bool onTouchEvent(const EventContext* ec,
-                            const TouchEvent* touchEvent);
-  
+  bool onTouchEvent(const EventContext* ec,
+                    const TouchEvent* touchEvent);
+
   void onResizeViewportEvent(const EventContext* ec,
                              int width, int height) {
     

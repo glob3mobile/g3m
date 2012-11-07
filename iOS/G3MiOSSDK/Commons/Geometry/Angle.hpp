@@ -193,7 +193,11 @@ public:
         return true;
 	}
 #endif
-  
+
+  ~Angle() {
+
+  }
+
   const std::string description() const;
 };
 

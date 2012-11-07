@@ -22,7 +22,7 @@ public class MarksRenderer extends LeafRenderer
 
   public final void setMarkTouchListener(MarkTouchListener markTouchListener, boolean autoDelete)
   {
-	if ((_markTouchListener != null) && _autoDeleteMarkTouchListener)
+	if (_autoDeleteMarkTouchListener)
 	{
 	  if (_markTouchListener != null)
 		  _markTouchListener.dispose();
@@ -41,7 +41,7 @@ public class MarksRenderer extends LeafRenderer
 		  _marks.get(i).dispose();
 	}
 
-	if ((_markTouchListener != null) && _autoDeleteMarkTouchListener)
+	if (_autoDeleteMarkTouchListener)
 	{
 	  if (_markTouchListener != null)
 		  _markTouchListener.dispose();
@@ -109,7 +109,7 @@ public class MarksRenderer extends LeafRenderer
 	}
   }
 
-  public boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
+  public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
   {
 	if (_markTouchListener == null)
 	{
