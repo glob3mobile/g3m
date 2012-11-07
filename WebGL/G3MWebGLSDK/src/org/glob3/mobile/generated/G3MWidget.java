@@ -28,8 +28,8 @@ public class G3MWidget
 
   public void dispose()
   {
-	  if (_userData != null)
-		  _userData.dispose();
+	if (_userData != null)
+		_userData.dispose();
   
 	if (_gl != null)
 		_gl.dispose();
@@ -58,6 +58,9 @@ public class G3MWidget
 	if (_frameTasksExecutor != null)
 		_frameTasksExecutor.dispose();
   
+  
+	if (_initializationContext != null)
+		_initializationContext.dispose();
   }
 
   public final void render()
@@ -401,6 +404,8 @@ public class G3MWidget
 	_gl.enableCullFace(GLCullFace.back());
   }
 
+  private final InitializationContext _initializationContext;
+
   private G3MWidget(INativeGL nativeGL, IDownloader downloader, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, int width, int height, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
   {
 	  _frameTasksExecutor = new FrameTasksExecutor();
@@ -428,16 +433,15 @@ public class G3MWidget
 	  _userData = null;
 	  _initializationTask = initializationTask;
 	  _autoDeleteInitializationTask = autoDeleteInitializationTask;
+	  _initializationContext = new InitializationContext(IFactory.instance(), IStringUtils.instance(), IThreadUtils.instance(), ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler);
 	initializeGL();
   
-	InitializationContext ic = new InitializationContext(IFactory.instance(), IStringUtils.instance(), IThreadUtils.instance(), ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler);
-  
-	_effectsScheduler.initialize(ic);
-	_cameraRenderer.initialize(ic);
-	_mainRenderer.initialize(ic);
-	_busyRenderer.initialize(ic);
-	_currentCamera.initialize(ic);
-	_nextCamera.initialize(ic);
+	_effectsScheduler.initialize(_initializationContext);
+	_cameraRenderer.initialize(_initializationContext);
+	_mainRenderer.initialize(_initializationContext);
+	_busyRenderer.initialize(_initializationContext);
+	_currentCamera.initialize(_initializationContext);
+	_nextCamera.initialize(_initializationContext);
   
 	if (_downloader != null)
 	{
