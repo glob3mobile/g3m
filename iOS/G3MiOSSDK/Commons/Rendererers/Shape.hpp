@@ -95,6 +95,10 @@ public:
 
   void render(const RenderContext* rc);
 
+  virtual void initialize(const InitializationContext* ic) {
+
+  }
+
   virtual bool isReadyToRender(const RenderContext* rc) = 0;
   
   virtual void rawRender(const RenderContext* rc) = 0;
