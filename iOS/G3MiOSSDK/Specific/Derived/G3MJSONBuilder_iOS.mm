@@ -35,12 +35,12 @@ void  G3MJSONBuilder_iOS::initWidgetWithCameraConstraints (std::vector<ICameraCo
     
     SceneParser::instance()->parse(layerSet, _jsonSource);
     
-    class CustomInitializationTask : public GTask {
+    class G3MJSONBuilderInitializationTask : public GTask {
     private:
         MarksRenderer* _marksRenderer;
         std::map<std::string, std::string> _mapGeoJSONSources;
     public:
-        CustomInitializationTask(MarksRenderer* marksRenderer){
+        G3MJSONBuilderInitializationTask(MarksRenderer* marksRenderer){
             _marksRenderer = marksRenderer;
             _mapGeoJSONSources = SceneParser::instance()->getMapGeoJSONSources();
         }
@@ -62,7 +62,7 @@ void  G3MJSONBuilder_iOS::initWidgetWithCameraConstraints (std::vector<ICameraCo
                          incrementalTileQuality: incrementalTileQuality
                                       renderers: renderers
                                        userData: userData
-                             initializationTask: new CustomInitializationTask(marksRenderer)
+                             initializationTask: new G3MJSONBuilderInitializationTask(marksRenderer)
                                 periodicalTasks: periodicalTasks];
     
 }
