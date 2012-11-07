@@ -100,15 +100,10 @@ public class JSONObject extends JSONBaseObject
 //ORIGINAL LINE: java.util.ArrayList<String> keys() const
   public final java.util.ArrayList<String> keys()
   {
-	java.util.ArrayList<String> result = new java.util.ArrayList<String>();
-  
-	java.util.Iterator<String, JSONBaseObject> it = _entries.iterator();
-	while (it.hasNext())
-	{
-	  result.add(it.next().getKey());
-	}
-  
-	return result;
+//C++ TO JAVA CONVERTER TODO TASK: There is no preprocessor in Java:
+//#if JAVA_CODE
+	return new java.util.ArrayList<String>(_entries.keySet());
+//#endif
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
