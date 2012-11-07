@@ -35,11 +35,13 @@ Mesh* CircleShape::createMesh(const RenderContext* rc) {
     indices.add(i + 1);
   }
 
+  Color* color = (_color == NULL) ? NULL : new Color(*_color);
+  
   return new IndexedMesh(GLPrimitive::triangleFan(),
                          true,
                          Vector3D::zero(),
                          vertices.create(),
                          indices.create(),
                          1,
-                         new Color(*_color));
+                         color);
 }

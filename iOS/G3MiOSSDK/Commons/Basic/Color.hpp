@@ -35,14 +35,21 @@ public:
   _blue(that._blue),
   _alpha(that._alpha) {
   }
-  
+
   static Color fromRGBA(const float red,
                         const float green,
                         const float blue,
                         const float alpha) {
     return Color(red, green, blue, alpha);
   }
-  
+
+  static Color* newFromRGBA(const float red,
+                        const float green,
+                        const float blue,
+                        const float alpha) {
+    return new Color(red, green, blue, alpha);
+  }
+
   static Color black() {
     return Color::fromRGBA(0, 0, 0, 1);
   }

@@ -46,14 +46,26 @@ public class CircleShape extends MeshShape
 	  indices.add(i + 1);
 	}
   
-	return new IndexedMesh(GLPrimitive.triangleFan(), true, Vector3D.zero(), vertices.create(), indices.create(), 1, new Color(_color));
+	Color color = (_color == null) ? null : new Color(_color);
+  
+	return new IndexedMesh(GLPrimitive.triangleFan(), true, Vector3D.zero(), vertices.create(), indices.create(), 1, color);
   }
 
+  public CircleShape(Geodetic3D position, float radius, Color color)
+  {
+	  this(position, radius, color, 64);
+  }
+  public CircleShape(Geodetic3D position, float radius)
+  {
+	  this(position, radius, null, 64);
+  }
+//C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
+//ORIGINAL LINE: CircleShape(Geodetic3D* position, float radius, Color* color = null, int steps = 64) : MeshShape(position), _radius(radius), _color(color), _steps(steps)
   public CircleShape(Geodetic3D position, float radius, Color color, int steps)
   {
 	  super(position);
 	  _radius = radius;
-	  _color = new Color(color);
+	  _color = color;
 	  _steps = steps;
 
   }

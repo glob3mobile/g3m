@@ -37,6 +37,11 @@ public class Color
 	return new Color(red, green, blue, alpha);
   }
 
+  public static Color newFromRGBA(float red, float green, float blue, float alpha)
+  {
+	return new Color(red, green, blue, alpha);
+  }
+
   public static Color black()
   {
 	return Color.fromRGBA(0, 0, 0, 1);

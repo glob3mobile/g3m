@@ -24,7 +24,7 @@ protected:
   void cleanMesh();
 
 public:
-  MeshShape(const Geodetic3D& position) :
+  MeshShape(Geodetic3D* position) :
   Shape(position),
   _mesh(NULL) {
 

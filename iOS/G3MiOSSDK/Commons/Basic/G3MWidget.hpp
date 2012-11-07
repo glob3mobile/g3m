@@ -44,6 +44,8 @@ class IStorage;
 #include "Color.hpp"
 #include "Angle.hpp"
 
+class InitializationContext;
+
 class UserData {
 private:
   G3MWidget* _widget;
@@ -189,6 +191,8 @@ private:
   std::vector<PeriodicalTask*> _periodicalTasks;
 
   void initializeGL();
+
+  const InitializationContext* _initializationContext;
 
   G3MWidget(INativeGL*                       nativeGL,
             const Planet*                    planet,
