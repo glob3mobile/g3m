@@ -42,7 +42,7 @@ void DummyRenderer::initialize(const InitializationContext* ic)
   // create vertices
   
   if (ic != NULL && ic->getPlanet() != NULL)
-    _halfSize = ic->getPlanet()->getRadii()._x / 2.0;
+    _halfSize = ic->getPlanet()->getRadii()._x * 0.7;
   else     
     _halfSize = 7e6;
   
@@ -53,6 +53,9 @@ void DummyRenderer::initialize(const InitializationContext* ic)
       vertices.add((float)0, 
                    (float)(-_halfSize + i / (float) (res - 1) * 2*_halfSize),
                    (float)(_halfSize - j / (float) (res - 1) * 2*_halfSize));
+      printf ("%f %f %f\n",(float)0, 
+              (float)(-_halfSize + i / (float) (res - 1) * 2*_halfSize),
+              (float)(_halfSize - j / (float) (res - 1) * 2*_halfSize));
 //      _vertices[n++] = (float) 0;
 //      _vertices[n++] = (float) (-_halfSize + i / (float) (res - 1) * 2*_halfSize);
 //      _vertices[n++] = (float) (_halfSize - j / (float) (res - 1) * 2*_halfSize);

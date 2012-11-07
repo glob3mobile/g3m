@@ -19,6 +19,8 @@ uniform float PointSize;
 varying vec4 VertexColor;
 varying vec2 TextureCoordOut;
 
+varying float z_glob;
+
 /* //USEFUL VARIABLES FOR LIGHTING
 varying float DiffuseLighting;
 uniform vec3 LightDirection; // light direction in eye coords
@@ -35,10 +37,13 @@ void main() {
     gl_Position.x += (-0.05 + TextureCoord.x * 0.1) * gl_Position.w;
     gl_Position.y -= (-0.05 + TextureCoord.y * 0.1) * gl_Position.w * ViewPortRatio;
   }
-  
+
+    
   TextureCoordOut = TextureCoord;
   
   VertexColor = Color;
   
   gl_PointSize = PointSize;
+  
+  z_glob = Position.z;
 }

@@ -136,8 +136,10 @@ enum {
   // Create second dummy shader program
   vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"Shader_dummy" ofType:@"vsh"];
   std::string vertexSource2 ([[NSString stringWithContentsOfFile:vertShaderPathname encoding:NSUTF8StringEncoding error:nil] UTF8String]);
+  fragShaderPathname = [[NSBundle mainBundle] pathForResource:@"Shader_dummy" ofType:@"fsh"];
+  std::string fragmentSource2 ([[NSString stringWithContentsOfFile:fragShaderPathname encoding:NSUTF8StringEncoding error:nil] UTF8String]);
   _shaderProgram2 = new ShaderProgram(_gl);
-  if (_shaderProgram2->loadShaders(vertexSource2, fragmentSource)==false) {
+  if (_shaderProgram2->loadShaders(vertexSource2, fragmentSource2)==false) {
     NSLog(@"Failed to load shaders");
     return FALSE;
   }

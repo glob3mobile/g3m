@@ -13,6 +13,8 @@
 #include "FloatBufferBuilderFromGeodetic.hpp"
 #include "IntBufferBuilder.hpp"
 #include "IIntBuffer.hpp"
+#include "IndexedMesh.hpp"
+
 
 
 LatLonMeshRenderer::~LatLonMeshRenderer()

@@ -10,8 +10,8 @@
 #define G3MiOSSDK_LatLonMeshRenderer_h
 
 #include "LeafRenderer.hpp"
-#include "IndexedMesh.hpp"
 
+class Mesh;
 
 class LatLonMeshRenderer: public LeafRenderer {
   

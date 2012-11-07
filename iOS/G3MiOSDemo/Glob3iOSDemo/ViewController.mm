@@ -25,6 +25,8 @@
 //#include "QuadShape.hpp"
 #include "CircleShape.hpp"
 #include "G3MWidget.hpp"
+#include "DummyRenderer.hpp"
+#include "LatLonMeshRenderer.hpp"
 
 @implementation ViewController
 
@@ -184,11 +186,11 @@
 
   std::vector<Renderer*> renderers;
 
-  //  if (false) {
-  //    // dummy renderer with a simple box
-  //    DummyRenderer* dum = new DummyRenderer();
-  //    comp->addRenderer(dum);
-  //  }
+    if (true) {
+      // dummy renderer with a simple box
+      DummyRenderer* dum = new DummyRenderer();
+      renderers.push_back(dum);
+    }
 
   //  if (false) {
   //    // simple planet renderer, with a basic world image
@@ -285,10 +287,10 @@
   trailsRenderer->addTrail(trail);
 
 
-  //  if (false) {
-  //    LatLonMeshRenderer *renderer = new LatLonMeshRenderer();
-  //    renderers.push_back(renderer);
-  //  }
+    if (false) {
+      LatLonMeshRenderer *renderer = new LatLonMeshRenderer();
+      renderers.push_back(renderer);
+    }
 
 
   //  renderers.push_back(new GLErrorRenderer());
