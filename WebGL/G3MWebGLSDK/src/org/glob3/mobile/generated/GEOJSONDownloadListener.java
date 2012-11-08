@@ -90,7 +90,6 @@ public class GEOJSONDownloadListener implements IBufferDownloadListener
     
 		if (denominaci != null && clase != null)
 		{
-			ILogger.instance().logInfo(denominaci.getString().getValue());
     
 			IStringBuilder iconUrl = IStringBuilder.newStringBuilder();
 			iconUrl.addString("http://glob3m.glob3mobile.com/icons/markers/ayto/");
@@ -101,15 +100,6 @@ public class GEOJSONDownloadListener implements IBufferDownloadListener
 			name.addString(clase.getString().getValue());
 			name.addString(" ");
 			name.addString(denominaci.getString().getValue());
-    
-			System.out.print(name.getString());
-			System.out.print("\n");
-			System.out.print(iconUrl.getString());
-			System.out.print("\n");
-			System.out.print(jsonCoordinates.getElement(1).getNumber().getDoubleValue());
-			System.out.print("\n");
-			System.out.print(jsonCoordinates.getElement(0).getNumber().getDoubleValue());
-			System.out.print("\n");
     
 			final Angle latitude = Angle.fromDegrees(jsonCoordinates.getElement(1).getNumber().getDoubleValue());
 			final Angle longitude = Angle.fromDegrees(jsonCoordinates.getElement(0).getNumber().getDoubleValue());

@@ -143,11 +143,6 @@ public class SceneParser
 			url.addString(namefile);
     
 			_mapGeoJSONSources.put(url.getString(), icon);
-    
-			//        cout << "Downloading " << namefile << " file" << endl;
-			//
-			//        downloader->requestBuffer(URL(url->getString(), false), 100000000L, new GEOJSONDownloadListener(marksRenderer, icon), true);
-    
 		}
 	}
 
