@@ -161,11 +161,6 @@ void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, JSONObject* jsonLayer){
         url->addString(namefile);
         
         _mapGeoJSONSources[url->getString()] = icon;
-        
-        //        cout << "Downloading " << namefile << " file" << endl;
-        //        
-        //        downloader->requestBuffer(URL(url->getString(), false), 100000000L, new GEOJSONDownloadListener(marksRenderer, icon), true);
-        
     }
 }
 

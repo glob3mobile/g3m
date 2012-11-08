@@ -45,9 +45,7 @@ void  G3MJSONBuilder_iOS::initWidgetWithCameraConstraints (std::vector<ICameraCo
             _mapGeoJSONSources = SceneParser::instance()->getMapGeoJSONSources();
         }
         
-        void run() {
-            printf("Running CustomInitializationTask\n");
-            
+        void run() {            
             if(!_mapGeoJSONSources.empty()){
                 for (std::map<std::string, std::string>::iterator it=_mapGeoJSONSources.begin(); it!=_mapGeoJSONSources.end(); it++){
                     IDownloader::instance()->requestBuffer(URL(it->first, false), 100000000L, new GEOJSONDownloadListener(_marksRenderer, it->second), true);

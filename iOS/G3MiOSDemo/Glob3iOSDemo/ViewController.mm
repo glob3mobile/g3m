@@ -391,6 +391,7 @@
             }
         };
         
+        
         NSString *filePath = [[NSBundle mainBundle] pathForResource:@"scene" ofType:@"scn"];
         if (filePath) {
             NSString *jsonFile = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];

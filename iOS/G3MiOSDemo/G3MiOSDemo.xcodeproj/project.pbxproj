@@ -45,6 +45,7 @@
 		E82A6C82163AEB9E00DA5352 /* wmsScene.scn in Resources */ = {isa = PBXBuildFile; fileRef = E82A6C81163AEB9E00DA5352 /* wmsScene.scn */; };
 		E82A6C84163AEFBC00DA5352 /* testScene.scn in Resources */ = {isa = PBXBuildFile; fileRef = E82A6C83163AEFBC00DA5352 /* testScene.scn */; };
 		E8B1940216384DCE006D9193 /* scene.scn in Resources */ = {isa = PBXBuildFile; fileRef = E8B1940116384DCE006D9193 /* scene.scn */; };
+		E8C76114164BC68C009DB131 /* turismo.scn in Resources */ = {isa = PBXBuildFile; fileRef = E8C76113164BC68C009DB131 /* turismo.scn */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -109,6 +110,7 @@
 		E82A6C81163AEB9E00DA5352 /* wmsScene.scn */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = wmsScene.scn; sourceTree = "<group>"; };
 		E82A6C83163AEFBC00DA5352 /* testScene.scn */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = testScene.scn; sourceTree = "<group>"; };
 		E8B1940116384DCE006D9193 /* scene.scn */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = scene.scn; sourceTree = "<group>"; };
+		E8C76113164BC68C009DB131 /* turismo.scn */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = turismo.scn; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -225,6 +227,7 @@
 				E82A6C7F163AEAFA00DA5352 /* fullscene.scn */,
 				E82A6C81163AEB9E00DA5352 /* wmsScene.scn */,
 				E82A6C83163AEFBC00DA5352 /* testScene.scn */,
+				E8C76113164BC68C009DB131 /* turismo.scn */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -322,6 +325,7 @@
 				E82A6C80163AEAFA00DA5352 /* fullscene.scn in Resources */,
 				E82A6C82163AEB9E00DA5352 /* wmsScene.scn in Resources */,
 				E82A6C84163AEFBC00DA5352 /* testScene.scn in Resources */,
+				E8C76114164BC68C009DB131 /* turismo.scn in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

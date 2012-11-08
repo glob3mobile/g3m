@@ -70,7 +70,6 @@ void GEOJSONDownloadListener::parsePointObject(JSONObject* point){
     JSONBaseObject* clase = jsonProperties->getObjectForKey(CLASE);
     
     if (denominaci != NULL && clase != NULL){
-        ILogger::instance()->logInfo(denominaci->getString()->getValue());
         
         IStringBuilder *iconUrl = IStringBuilder::newStringBuilder();
         iconUrl->addString("http://glob3m.glob3mobile.com/icons/markers/ayto/");
@@ -81,11 +80,6 @@ void GEOJSONDownloadListener::parsePointObject(JSONObject* point){
         name->addString(clase->getString()->getValue());
         name->addString(" ");
         name->addString(denominaci->getString()->getValue());
-        
-        std::cout<<name->getString()<<std::endl;
-        std::cout<<iconUrl->getString()<<std::endl;
-        std::cout<<jsonCoordinates->getElement(1)->getNumber()->getDoubleValue()<<std::endl;
-        std::cout<<jsonCoordinates->getElement(0)->getNumber()->getDoubleValue()<<std::endl;
         
         const Angle latitude = Angle::fromDegrees( jsonCoordinates->getElement(1)->getNumber()->getDoubleValue() );
         const Angle longitude = Angle::fromDegrees( jsonCoordinates->getElement(0)->getNumber()->getDoubleValue() );
