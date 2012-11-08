@@ -27,10 +27,10 @@ JSONBaseObject* JSONObject::get(const std::string& key) const {
   if (it != _entries.end()){
     return _entries.at(key);
   }
-  ILogger::instance()->logError("The JSONObject does not contain the key \""+key+"\"");
+  //ILogger::instance()->logError("The JSONObject does not contain the key \"" + key + "\"");
   return NULL;
 #endif
-  
+
 #ifdef JAVA_CODE
   return _entries.get(key);
 #endif
@@ -38,7 +38,7 @@ JSONBaseObject* JSONObject::get(const std::string& key) const {
 
 void JSONObject::put(const std::string& key,
                      JSONBaseObject* object) {
-  _entries[key]=object;
+  _entries[key] = object;
 }
 
 int JSONObject::size() const {
@@ -46,23 +46,28 @@ int JSONObject::size() const {
 }
 
 JSONObject* JSONObject::getAsObject(const std::string& key) const {
-  return get(key)->asObject();
+  JSONBaseObject* object = get(key);
+  return (object == NULL) ? NULL : object->asObject();
 }
 
 JSONArray* JSONObject::getAsArray(const std::string& key) const {
-  return get(key)->asArray();
+  JSONBaseObject* object = get(key);
+  return (object == NULL) ? NULL : object->asArray();
 }
 
 JSONBoolean* JSONObject::getAsBoolean(const std::string& key) const {
-  return get(key)->asBoolean();
+  JSONBaseObject* object = get(key);
+  return (object == NULL) ? NULL : object->asBoolean();
 }
 
 JSONNumber* JSONObject::getAsNumber(const std::string& key) const {
-  return get(key)->asNumber();
+  JSONBaseObject* object = get(key);
+  return (object == NULL) ? NULL : object->asNumber();
 }
 
 JSONString* JSONObject::getAsString(const std::string& key) const {
-  return get(key)->asString();
+  JSONBaseObject* object = get(key);
+  return (object == NULL) ? NULL : object->asString();
 }
 
 std::vector<std::string> JSONObject::keys() const {
@@ -72,6 +77,7 @@ std::vector<std::string> JSONObject::keys() const {
   std::map<std::string, JSONBaseObject*>::const_iterator it = _entries.begin();
   while (it != _entries.end()) {
     result.push_back(it->first);
+    it++;
   }
 
   return result;
@@ -83,8 +89,9 @@ std::vector<std::string> JSONObject::keys() const {
 
 void JSONObject::putKeyAndValueDescription(const std::string& key,
                                            IStringBuilder *isb) const {
+  isb->addString("\"");
   isb->addString(key);
-  isb->addString("=");
+  isb->addString("\"=");
   isb->addString(get(key)->description());
 }
 
@@ -99,7 +106,7 @@ const std::string JSONObject::description() const {
   if (keysCount > 0) {
     putKeyAndValueDescription(keys[0], isb);
     for (int i = 1; i < keysCount; i++) {
-      isb->addString(",");
+      isb->addString(", ");
       putKeyAndValueDescription(keys[i], isb);
     }
   }
@@ -110,4 +117,3 @@ const std::string JSONObject::description() const {
   delete isb;
   return s;
 }
-

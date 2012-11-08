@@ -17,7 +17,9 @@ private:
   Mesh* _mesh;
 
 protected:
-  virtual Mesh* createMesh(const RenderContext* rc) = 0;
+  virtual Mesh* createMesh(const RenderContext* rc) {
+    return NULL;
+  }
 
   Mesh* getMesh(const RenderContext* rc);
 
@@ -30,6 +32,13 @@ public:
 
   }
   
+  MeshShape(Geodetic3D* position,
+            Mesh* mesh) :
+  Shape(position),
+  _mesh(mesh) {
+
+  }
+
   bool isReadyToRender(const RenderContext* rc);
 
   void rawRender(const RenderContext* rc);

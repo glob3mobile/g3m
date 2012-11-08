@@ -79,7 +79,10 @@ void IndexedMesh::render(const RenderContext* rc) const {
     gl->multMatrixf(*_translationMatrix);
   }
   
-  if (_primitive == GLPrimitive::triangleStrip()) {
+  if (_primitive == GLPrimitive::triangles()) {
+    gl->drawTriangles(_indices);
+  }
+  else if (_primitive == GLPrimitive::triangleStrip()) {
     gl->drawTriangleStrip(_indices);
   }
   else if (_primitive == GLPrimitive::triangleFan()) {

@@ -11,9 +11,11 @@
 
 
 #include <string>
+
 class Shape;
 class IByteBuffer;
 class JSONBaseObject;
+class JSONObject;
 
 
 class SceneJSShapesParser {
@@ -30,6 +32,11 @@ private:
   void pvtParse(const std::string& json);
 
   Shape* toShape(JSONBaseObject* jsonBaseObject) const;
+  
+  Shape* convertNode(const std::string& type,
+                     JSONObject* jsonObject) const;
+
+  Shape* convertGeometry(JSONObject* jsonObject) const;
 
 public:
 

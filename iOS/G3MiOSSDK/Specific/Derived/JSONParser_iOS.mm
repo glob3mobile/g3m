@@ -19,14 +19,16 @@ JSONBaseObject* JSONParser_iOS::parse(IByteBuffer* buffer){
 }
 
 JSONBaseObject* JSONParser_iOS::parse(const std::string& inputString) {
-  
-  NSString *string = [[NSString alloc]initWithUTF8String:inputString.c_str()];
+
+  NSString *string = [[NSString alloc] initWithUTF8String:inputString.c_str()];
   _jsonData = [string dataUsingEncoding:NSUTF8StringEncoding];
-  
+
   NSError *e = nil;
-  id nsJsonObject = [NSJSONSerialization JSONObjectWithData:_jsonData options:kNilOptions error:&e];
-  
-  if ([nsJsonObject isKindOfClass:[NSArray class]]){
+  id nsJsonObject = [NSJSONSerialization JSONObjectWithData:_jsonData
+                                                    options:kNilOptions
+                                                      error:&e];
+
+  if ([nsJsonObject isKindOfClass:[NSArray class]]) {
     NSArray *jsonArray = (NSArray *)nsJsonObject;
     JSONArray* topLevelArray = new JSONArray();
     for (NSObject *element in jsonArray){
@@ -34,31 +36,29 @@ JSONBaseObject* JSONParser_iOS::parse(const std::string& inputString) {
     }
     return topLevelArray;
   }
-  
-  
-  else if ([nsJsonObject isKindOfClass:[NSDictionary class]]){
+  else if ([nsJsonObject isKindOfClass:[NSDictionary class]]) {
     NSDictionary *jsonDictionary = (NSDictionary *)nsJsonObject;
     JSONObject* topLevelObject = new JSONObject();
     NSArray *keys = [jsonDictionary allKeys];
-    int count = [keys count];
+    const int count = [keys count];
     for (int i = 0; i<count; i++){
-      NSUInteger objI = i;
-      const std::string cKey = std::string( [[keys objectAtIndex:objI] UTF8String] );
-      topLevelObject->put(cKey,
-                          makeJSONElement([jsonDictionary objectForKey:[keys objectAtIndex:objI]]));
+      const std::string key = std::string( [[keys objectAtIndex:i] UTF8String] );
+      topLevelObject->put(key,
+                          makeJSONElement([jsonDictionary objectForKey:[keys objectAtIndex:i]]));
     }
-    return topLevelObject;    
+    return topLevelObject;
   }
-  
+
   ILogger::instance()->logWarning("JSON Parser: Malformed JSON: The top-level object is neither an Object nor an Array");
+  
   return NULL;
 }
 
 JSONBaseObject* JSONParser_iOS::makeJSONElement(NSObject* object){
-  if([object isKindOfClass:[NSArray class]]){
+  if ([object isKindOfClass:[NSArray class]]) {
     NSArray *jsonArray = (NSArray *)object;
     JSONArray* array = new JSONArray();
-    for (NSObject *element in jsonArray){ 
+    for (NSObject *element in jsonArray){
       array->add(makeJSONElement(element));
     }
     return array;
@@ -67,37 +67,29 @@ JSONBaseObject* JSONParser_iOS::makeJSONElement(NSObject* object){
     NSDictionary *jsonDict = (NSDictionary *) object;
     JSONObject* dictionary = new JSONObject();
     NSArray *keys = [jsonDict allKeys];
-    int count = [keys count];
+    const int count = [keys count];
     for (int i = 0; i<count; i++){
       NSUInteger objI = i;
-      std::string cKey = std::string( [[keys objectAtIndex:objI] UTF8String] );
-      dictionary->put(cKey,
+      const std::string key = std::string( [[keys objectAtIndex:objI] UTF8String] );
+      dictionary->put(key,
                       makeJSONElement([jsonDict objectForKey:[keys objectAtIndex:objI]]));
     }
     return dictionary;
   }
   else if ([object isKindOfClass:[NSNumber class]]){
     NSNumber *jsonNumber = (NSNumber *) object;
-    
+
     //Booleans are also encoded as NSNumbers
-    if(strcmp([jsonNumber objCType], @encode(BOOL))==0){
+    if (strcmp([jsonNumber objCType], @encode(BOOL))==0) {
       return new JSONBoolean([jsonNumber boolValue]);
     }
-    //Integer
     else if (strcmp([jsonNumber objCType], @encode(int))==0) {
       return new JSONNumber([jsonNumber intValue]);
     }
-    /*//Long
-    else if (strcmp([jsonNumber objCType], @encode(long))==0) {
-      JSONNumber* numberObj = new JSONNumber([jsonNumber longValue]);
-      return numberObj;
-    }*/
-    //Float
     else if (strcmp([jsonNumber objCType], @encode(float))==0) {
       return new JSONNumber([jsonNumber floatValue]);
     }
-    //Default: double
-    else{
+    else {
       JSONNumber* numberObj = new JSONNumber([jsonNumber doubleValue]);
       return numberObj;
     }
@@ -105,7 +97,6 @@ JSONBaseObject* JSONParser_iOS::makeJSONElement(NSObject* object){
   else if ([object isKindOfClass:[NSString class]]){
     return new JSONString([(NSString *) object UTF8String]);
   }
-   
-   return NULL; 
-}
 
+  return NULL;
+}
