@@ -391,14 +391,23 @@
             }
         };
         
+        class CustomInitializationTask : public GTask {
+        private:
+            G3MWidget_iOS* _g3mWidget;
+        public:
+            CustomInitializationTask(G3MWidget_iOS* g3mWidget): _g3mWidget(g3mWidget){};
+            void run() { 
+                [_g3mWidget widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegrees(39.527348), Angle::fromDegrees(-6.377563), 100000),TimeInterval::fromSeconds(10));
+            }
+        };
         
-        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"scene" ofType:@"scn"];
+        NSString *filePath = [[NSBundle mainBundle] pathForResource:@"turismo" ofType:@"scn"];
         if (filePath) {
             NSString *jsonFile = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
             if (jsonFile) {
                 const std::string scene = std::string([jsonFile UTF8String]);
                 G3MJSONBuilder_iOS* g3mJSONBuilder_iOS = new G3MJSONBuilder_iOS(scene,[self G3MWidget]);
-                g3mJSONBuilder_iOS->initWidgetWithCameraConstraints(cameraConstraints, layerSet, incrementalTileQuality, renderers, userData, NULL, periodicalTasks, new CustomTouchListener());
+                g3mJSONBuilder_iOS->initWidgetWithCameraConstraints(cameraConstraints, layerSet, incrementalTileQuality, renderers, userData, new CustomInitializationTask([self G3MWidget]), periodicalTasks, new CustomTouchListener());
                 
 
             }else{
