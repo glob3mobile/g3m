@@ -66,17 +66,17 @@ void SceneParser::parse(LayerSet* layerSet, std::string namelessParameter){
     
     _mapGeoJSONSources.clear();
     
-    JSONObject* json = IJSONParser::instance()->parse(namelessParameter)->getObject();
-    parserJSONLayerList(layerSet, json->getObjectForKey(LAYERS)->getObject());
+    JSONObject* json = IJSONParser::instance()->parse(namelessParameter)->asObject();
+    parserJSONLayerList(layerSet, json->getAsObject(LAYERS));
     IJSONParser::instance()->deleteJSONData(json);
 }
 
 void SceneParser::parserJSONLayerList(LayerSet* layerSet, JSONObject* jsonLayers){
-    for (int i = 0; i < jsonLayers->getObject()->getSize(); i++) {
+    for (int i = 0; i < jsonLayers->size(); i++) {
         IStringBuilder* isb = IStringBuilder::newStringBuilder();
         isb->addInt(i);
-        JSONObject* jsonLayer = jsonLayers->getObjectForKey(isb->getString())->getObject();
-        const layer_type layerType = _mapLayerType[jsonLayer->getObjectForKey(TYPE)->getString()->getValue()];
+        JSONObject* jsonLayer = jsonLayers->getAsObject(isb->getString());
+        const layer_type layerType = _mapLayerType[jsonLayer->getAsString(TYPE)->value()];
         
         switch (layerType) {
             case WMS:
@@ -97,19 +97,19 @@ void SceneParser::parserJSONLayerList(LayerSet* layerSet, JSONObject* jsonLayers
 }
 
 void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, JSONObject* jsonLayer){
-    cout << "Parsing WMS Layer " << jsonLayer->getObjectForKey(NAME)->getString()->getValue() << "..." << endl;
+    cout << "Parsing WMS Layer " << jsonLayer->getAsString(NAME)->value() << "..." << endl;
     
-    const std::string jsonDatasource = jsonLayer->getObjectForKey(DATASOURCE)->getString()->getValue();
+    const std::string jsonDatasource = jsonLayer->getAsString(DATASOURCE)->value();
     const int lastIndex = IStringUtils::instance()->indexOf(jsonDatasource,"?");
     const std::string jsonURL = IStringUtils::instance()->substring(jsonDatasource, 0, lastIndex+1);
-    const std::string jsonVersion = jsonLayer->getObjectForKey(VERSION)->getString()->getValue();
+    const std::string jsonVersion = jsonLayer->getAsString(VERSION)->value();
     
-    JSONArray* jsonItems = jsonLayer->getObjectForKey(ITEMS)->getArray();
+    JSONArray* jsonItems = jsonLayer->getAsArray(ITEMS);
     IStringBuilder *layersName = IStringBuilder::newStringBuilder();
     
-    for (int i = 0; i<jsonItems->getSize(); i++) {
-        if (jsonItems->getElement(i)->getObject()->getObjectForKey(STATUS)->getBoolean()->getValue()) {
-            layersName->addString(jsonItems->getElement(i)->getObject()->getObjectForKey(NAME)->getString()->getValue());
+    for (int i = 0; i<jsonItems->size(); i++) {
+        if (jsonItems->getAsObject(i)->getAsBoolean(STATUS)->value()) {
+            layersName->addString(jsonItems->getAsObject(i)->getAsString(NAME)->value());
             layersName->addString(",");
         }    
     }
@@ -137,23 +137,23 @@ void SceneParser::parserJSONWMSLayer(LayerSet* layerSet, JSONObject* jsonLayer){
 }
 
 void SceneParser::parserJSON3DLayer(LayerSet* layerSet, JSONObject* jsonLayer){
-    cout << "Parsing 3D Layer " << jsonLayer->getObjectForKey(NAME)->getString()->getValue() << "..." << endl;
+    cout << "Parsing 3D Layer " << jsonLayer->getAsString(NAME)->value() << "..." << endl;
 }
 
 void SceneParser::parserJSONPanoLayer(LayerSet* layerSet, JSONObject* jsonLayer){
-    cout << "Parsing Pano Layer " << jsonLayer->getObjectForKey(NAME)->getString()->getValue() << "..." << endl;
+    cout << "Parsing Pano Layer " << jsonLayer->getAsString(NAME)->value() << "..." << endl;
 }
 
 void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, JSONObject* jsonLayer){
-    cout << "Parsing GEOJSON Layer " << jsonLayer->getObjectForKey(NAME)->getString()->getValue() << "..." << endl;
+    cout << "Parsing GEOJSON Layer " << jsonLayer->getAsString(NAME)->value() << "..." << endl;
     
-    const std::string geojsonDatasource = jsonLayer->getObjectForKey(DATASOURCE)->getString()->getValue();
+    const std::string geojsonDatasource = jsonLayer->getAsString(DATASOURCE)->value();
     
-    JSONArray* jsonItems = jsonLayer->getObjectForKey(ITEMS)->getArray();
-    for (int i = 0; i<jsonItems->getSize(); i++) {
-        
-        const std::string namefile = jsonItems->getElement(i)->getObject()->getObjectForKey(NAME)->getString()->getValue();
-        const std::string icon = jsonItems->getElement(i)->getObject()->getObjectForKey(ICON)->getString()->getValue();
+    JSONArray* jsonItems = jsonLayer->getAsArray(ITEMS);
+    for (int i = 0; i<jsonItems->size(); i++) {
+    
+        const std::string namefile = jsonItems->getAsObject(i)->getAsString(NAME)->value();
+        const std::string icon = jsonItems->getAsObject(i)->getAsString(ICON)->value();
         
         IStringBuilder *url = IStringBuilder::newStringBuilder();
         url->addString(geojsonDatasource);

@@ -30,10 +30,6 @@ const std::string GEOJSONDownloadListener::DENOMINATION = "DENOMINACI";
 const std::string GEOJSONDownloadListener::CLASE = "CLASE";
 
 
-
-
-
-
 GEOJSONDownloadListener::GEOJSONDownloadListener(MarksRenderer* marksRenderer, std::string icon){
     _marksRenderer = marksRenderer;
     _icon = icon;
@@ -42,7 +38,7 @@ GEOJSONDownloadListener::GEOJSONDownloadListener(MarksRenderer* marksRenderer, s
 void GEOJSONDownloadListener::onDownload(const URL& url,
                                          const IByteBuffer* buffer){
     std::string string = buffer->getAsString();
-    JSONObject* json = IJSONParser::instance()->parse(string)->getObject();
+    JSONObject* json = IJSONParser::instance()->parse(string)->asObject();
     ILogger::instance()->logInfo(url.getPath());
     parseGEOJSON(json);
     
@@ -50,11 +46,11 @@ void GEOJSONDownloadListener::onDownload(const URL& url,
 
 
 void GEOJSONDownloadListener::parseGEOJSON(JSONObject* geojson){
-    JSONArray* jsonFeatures = geojson->getObjectForKey(FEATURES)->getArray();
-    for (int i = 0; i < jsonFeatures->getSize(); i++) {
-        JSONObject* jsonFeature = jsonFeatures->getElement(i)->getObject();
-        JSONObject* jsonGeometry = jsonFeature->getObjectForKey(GEOMETRY)->getObject();
-        std::string jsonType = jsonGeometry->getObjectForKey(TYPE)->getString()->getValue();
+    JSONArray* jsonFeatures = geojson->get(FEATURES)->asArray();
+    for (int i = 0; i < jsonFeatures->size(); i++) {
+        JSONObject* jsonFeature = jsonFeatures->getAsObject(i);
+        JSONObject* jsonGeometry = jsonFeature->getAsObject(GEOMETRY);
+        std::string jsonType = jsonGeometry->getAsString(TYPE)->value();
         if (jsonType == "Point"){
             parsePointObject(jsonFeature);
         }
@@ -62,12 +58,12 @@ void GEOJSONDownloadListener::parseGEOJSON(JSONObject* geojson){
 }
 
 void GEOJSONDownloadListener::parsePointObject(JSONObject* point){
-    JSONObject* jsonProperties = point->getObjectForKey(PROPERTIES)->getObject();
-    JSONObject* jsonGeometry = point->getObjectForKey(GEOMETRY)->getObject();
-    JSONArray* jsonCoordinates = jsonGeometry->getObjectForKey(COORDINATES)->getArray();
+    JSONObject* jsonProperties = point->getAsObject(PROPERTIES);
+    JSONObject* jsonGeometry = point->getAsObject(GEOMETRY);
+    JSONArray* jsonCoordinates = jsonGeometry->getAsArray(COORDINATES);
     
-    JSONBaseObject* denominaci = jsonProperties->getObjectForKey(DENOMINATION);
-    JSONBaseObject* clase = jsonProperties->getObjectForKey(CLASE);
+    JSONBaseObject* denominaci = jsonProperties->get(DENOMINATION);
+    JSONBaseObject* clase = jsonProperties->get(CLASE);
     
     if (denominaci != NULL && clase != NULL){
         
@@ -77,12 +73,12 @@ void GEOJSONDownloadListener::parsePointObject(JSONObject* point){
         iconUrl->addString(".png");
         
         IStringBuilder *name = IStringBuilder::newStringBuilder();
-        name->addString(clase->getString()->getValue());
+        name->addString(clase->asString()->value());
         name->addString(" ");
-        name->addString(denominaci->getString()->getValue());
+        name->addString(denominaci->asString()->value());
         
-        const Angle latitude = Angle::fromDegrees( jsonCoordinates->getElement(1)->getNumber()->getDoubleValue() );
-        const Angle longitude = Angle::fromDegrees( jsonCoordinates->getElement(0)->getNumber()->getDoubleValue() );
+        const Angle latitude = Angle::fromDegrees( jsonCoordinates->getAsNumber(1)->doubleValue() );
+        const Angle longitude = Angle::fromDegrees( jsonCoordinates->getAsNumber(0)->doubleValue() );
         
         Mark* mark = new Mark(name->getString(),
                               URL(iconUrl->getString(),false),

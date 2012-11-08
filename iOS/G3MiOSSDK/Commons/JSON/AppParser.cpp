@@ -48,20 +48,20 @@ AppParser::AppParser(){
 }
 
 void AppParser::parse(LayerSet* layerSet, MarksRenderer* marks, std::string namelessParameter){
-  JSONObject* json = IJSONParser::instance()->parse(namelessParameter)->getObject();
-  parseWorldConfiguration(layerSet, marks, json->getObjectForKey(WORLD)->getObject());
+  JSONObject* json = IJSONParser::instance()->parse(namelessParameter)->asObject();
+  parseWorldConfiguration(layerSet, marks, json->get(WORLD)->asObject());
   IJSONParser::instance()->deleteJSONData(json);
 }
 
 void AppParser::parseWorldConfiguration(LayerSet* layerSet, MarksRenderer* marks, JSONObject* jsonWorld){
-  std::string jsonBaseLayer = jsonWorld->getObjectForKey(BASELAYER)->getString()->getValue();
-  JSONArray* jsonBbox = jsonWorld->getObjectForKey(BBOX)->getArray();
+  std::string jsonBaseLayer = jsonWorld->getAsString(BASELAYER)->value();
+  JSONArray* jsonBbox = jsonWorld->getAsArray(BBOX);
   
   if (jsonBaseLayer == "BING"){
     WMSLayer* bing = new WMSLayer("ve",
                                   URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?",true),
                                   WMS_1_1_0,
-                                  Sector::fromDegrees(jsonBbox->getElement(1)->getNumber()->getDoubleValue(), jsonBbox->getElement(0)->getNumber()->getDoubleValue(), jsonBbox->getElement(3)->getNumber()->getDoubleValue(), jsonBbox->getElement(2)->getNumber()->getDoubleValue()),
+                                  Sector::fromDegrees(jsonBbox->getAsNumber(1)->doubleValue(), jsonBbox->getAsNumber(0)->doubleValue(), jsonBbox->getAsNumber(3)->doubleValue(), jsonBbox->getAsNumber(2)->doubleValue()),
                                   "image/jpeg",
                                   "EPSG:4326",
                                   "",
@@ -72,7 +72,7 @@ void AppParser::parseWorldConfiguration(LayerSet* layerSet, MarksRenderer* marks
     WMSLayer* osm = new WMSLayer("osm",
                                  URL("http://wms.latlon.org/",true),
                                  WMS_1_1_0,
-                                 Sector::fromDegrees(jsonBbox->getElement(1)->getNumber()->getDoubleValue(), jsonBbox->getElement(0)->getNumber()->getDoubleValue(), jsonBbox->getElement(3)->getNumber()->getDoubleValue(), jsonBbox->getElement(2)->getNumber()->getDoubleValue()),                                 
+                                 Sector::fromDegrees(jsonBbox->getAsNumber(1)->doubleValue(), jsonBbox->getAsNumber(0)->doubleValue(), jsonBbox->getAsNumber(3)->doubleValue(), jsonBbox->getAsNumber(2)->doubleValue()),                                 
                                  "image/jpeg",
                                  "EPSG:4326",
                                  "",
@@ -80,15 +80,15 @@ void AppParser::parseWorldConfiguration(LayerSet* layerSet, MarksRenderer* marks
                                  NULL);
     layerSet->addLayer(osm);
   }
-  parseCustomData(marks, jsonWorld->getObjectForKey(CUSTOMDATA)->getObject());
+  parseCustomData(marks, jsonWorld->getAsObject(CUSTOMDATA));
 }
 
 void AppParser::parseCustomData(MarksRenderer* marks, JSONObject* jsonCustomData){
-  JSONArray* jsonFeatures = jsonCustomData->getObjectForKey(FEATURES)->getArray();
-  for (int i = 0; i < jsonFeatures->getSize(); i++) {
-    JSONObject* jsonFeature = jsonFeatures->getElement(i)->getObject();
-      JSONObject* jsonGeometry = jsonFeature->getObjectForKey(GEOMETRY)->getObject();
-    std::string jsonType = jsonGeometry->getObjectForKey(TYPE)->getString()->getValue();
+  JSONArray* jsonFeatures = jsonCustomData->getAsArray(FEATURES);
+  for (int i = 0; i < jsonFeatures->size(); i++) {
+    JSONObject* jsonFeature = jsonFeatures->getAsObject(i);
+      JSONObject* jsonGeometry = jsonFeature->getAsObject(GEOMETRY);
+    std::string jsonType = jsonGeometry->getAsString(TYPE)->value();
     if (jsonType == "Point"){
       parseGEOJSONPointObject(marks, jsonFeature);
     }
@@ -96,12 +96,12 @@ void AppParser::parseCustomData(MarksRenderer* marks, JSONObject* jsonCustomData
 }
   
 void AppParser::parseGEOJSONPointObject(MarksRenderer* marks, JSONObject* point){
-    JSONObject* jsonProperties = point->getObjectForKey(PROPERTIES)->getObject();
-    JSONObject* jsonGeometry = point->getObjectForKey(GEOMETRY)->getObject();
-    JSONArray* jsonCoordinates = jsonGeometry->getObjectForKey(COORDINATES)->getArray();
+    JSONObject* jsonProperties = point->getAsObject(PROPERTIES);
+    JSONObject* jsonGeometry = point->getAsObject(GEOMETRY);
+    JSONArray* jsonCoordinates = jsonGeometry->getAsArray(COORDINATES);
     
-    Mark* mark = new Mark(jsonProperties->getObjectForKey(NAME)->getString()->getValue(),
+    Mark* mark = new Mark(jsonProperties->getAsString(NAME)->value(),
                         URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",false),
-                          Geodetic3D(Angle::fromDegrees(jsonCoordinates->getElement(1)->getNumber()->getDoubleValue()), Angle::fromDegrees(jsonCoordinates->getElement(0)->getNumber()->getDoubleValue()), 0));
+                          Geodetic3D(Angle::fromDegrees(jsonCoordinates->getAsNumber(1)->doubleValue()), Angle::fromDegrees(jsonCoordinates->getAsNumber(0)->doubleValue()), 0));
     marks->addMark(mark);
 }
