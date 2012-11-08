@@ -1,74 +1,110 @@
 package org.glob3.mobile.generated; 
 public class JSONNumber extends JSONBaseObject
 {
-  //const Number_value _value;
-  private int _int_value;
-  private float _float_value;
-  private double _double_value;
+  private int _intValue;
+  private float _floatValue;
+  private double _doubleValue;
   private final number_type _type;
 
 
   public JSONNumber(int value)
   {
-	  _int_value = value;
-	  _float_value = 0.0F;
-	  _double_value = 0.0;
+	  _intValue = value;
+	  _floatValue = 0.0F;
+	  _doubleValue = 0.0;
 	  _type = number_type.int_type;
   }
+
   public JSONNumber(float value)
   {
-	  _int_value = 0;
-	  _float_value = value;
-	  _double_value = 0.0;
+	  _intValue = 0;
+	  _floatValue = value;
+	  _doubleValue = 0.0;
 	  _type = number_type.float_type;
   }
+
   public JSONNumber(double value)
   {
-	  _int_value = 0;
-	  _float_value = 0.0F;
-	  _double_value = value;
+	  _intValue = 0;
+	  _floatValue = 0.0F;
+	  _doubleValue = value;
 	  _type = number_type.double_type;
   }
-  public final int getIntValue()
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: int intValue() const
+  public final int intValue()
   {
 	if (_type != number_type.int_type)
 	{
 	  ILogger.instance().logError("The value you are requesting is not of type int - returning 0!");
 	  return 0;
 	}
-	return _int_value;
-  }
-  //const long getLongValue()const;
-
-  /*const long JSONNumber::getLongValue()const{
-	if (_type != long_type){
-	  ILogger::instance()->logError("The value you are requesting is not of type long - returning 0!");
-	  return 0;
-	}
-	return _value.long_value;
-  }*/
   
-  public final float getFloatValue()
+	return _intValue;
+  }
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: float floatValue() const
+  public final float floatValue()
   {
 	if (_type != number_type.float_type)
 	{
 	  ILogger.instance().logError("The value you are requesting is not of type float - returning 0!");
 	  return 0;
 	}
-	return _float_value;
+  
+	return _floatValue;
   }
-  public final double getDoubleValue()
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: double doubleValue() const
+  public final double doubleValue()
   {
 	if (_type != number_type.double_type)
 	{
 	  ILogger.instance().logError("The value you are requesting is not of type double - returning 0!");
 	  return 0;
 	}
-	return _double_value;
+  
+	return _doubleValue;
   }
-  public final JSONNumber getNumber()
+
+  public final JSONNumber asNumber()
   {
 	return this;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const String description() const
+  public final String description()
+  {
+	IStringBuilder isb = IStringBuilder.newStringBuilder();
+  
+	switch (_type)
+	{
+	  case int_type:
+		isb.addString("int/");
+		isb.addInt(_intValue);
+		break;
+  
+	  case float_type:
+		isb.addString("float/");
+		isb.addFloat(_floatValue);
+		break;
+  
+	  case double_type:
+		isb.addString("double/");
+		isb.addDouble(_doubleValue);
+		break;
+  
+	  default:
+		isb.addString("[unknown number type]");
+		break;
+	}
+  
+	final String s = isb.getString();
+	if (isb != null)
+		isb.dispose();
+	return s;
   }
 
 }

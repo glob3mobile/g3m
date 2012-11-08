@@ -158,6 +158,11 @@ public abstract class Shape
 	}
   }
 
+  public void initialize(InitializationContext ic)
+  {
+
+  }
+
   public abstract boolean isReadyToRender(RenderContext rc);
 
   public abstract void rawRender(RenderContext rc);

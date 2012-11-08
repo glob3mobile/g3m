@@ -15,19 +15,22 @@ class JSONBoolean;
 class JSONNumber;
 class JSONString;
 
-class JSONBaseObject{
+#include <string>
+
+class JSONBaseObject {
   
 public:
+  virtual ~JSONBaseObject() {
+  };
   
-  virtual ~JSONBaseObject(){};
-  
-  virtual JSONObject* getObject(); 
-  virtual JSONArray* getArray();
-  virtual JSONBoolean* getBoolean();
-  virtual JSONNumber* getNumber();
-  virtual JSONString* getString();
+  virtual JSONObject*  asObject();
+  virtual JSONArray*   asArray();
+  virtual JSONBoolean* asBoolean();
+  virtual JSONNumber*  asNumber();
+  virtual JSONString*  asString();
 
-  
+  virtual const std::string description() const = 0;
+
 };
 
 

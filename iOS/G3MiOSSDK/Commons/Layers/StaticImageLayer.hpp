@@ -27,7 +27,7 @@ private:
   
 public:
   
-  StaticImageLayer(std::string layerID,
+  StaticImageLayer(const std::string& layerID,
                    IImage* image,
                    const Sector& sector,
                    IStorage* storage,

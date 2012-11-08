@@ -214,31 +214,46 @@ public class G3MWidget
 
   public final void onPause()
   {
+<<<<<<< HEAD
 	InitializationContext ic = new InitializationContext(IFactory.instance(), IStringUtils.instance(), IThreadUtils.instance(), ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, IDownloader.instance(), _effectsScheduler, IStorage.instance());
+=======
+	_mainRenderer.onPause(_initializationContext);
+	_busyRenderer.onPause(_initializationContext);
+>>>>>>> webgl-port
   
-	_mainRenderer.onPause(ic);
-	_busyRenderer.onPause(ic);
-  
-	_effectsScheduler.onPause(ic);
+	_effectsScheduler.onPause(_initializationContext);
   
 	if (IDownloader.instance() != null)
 	{
+<<<<<<< HEAD
 	  IDownloader.instance().onPause(ic);
+=======
+	  _downloader.onPause(_initializationContext);
+>>>>>>> webgl-port
 	}
   }
 
   public final void onResume()
   {
+<<<<<<< HEAD
 	InitializationContext ic = new InitializationContext(IFactory.instance(), IStringUtils.instance(), IThreadUtils.instance(), ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, IDownloader.instance(), _effectsScheduler, IStorage.instance());
   
 	_mainRenderer.onResume(ic);
 	_busyRenderer.onResume(ic);
+=======
+	_mainRenderer.onResume(_initializationContext);
+	_busyRenderer.onResume(_initializationContext);
+>>>>>>> webgl-port
   
-	_effectsScheduler.onResume(ic);
+	_effectsScheduler.onResume(_initializationContext);
   
 	if (IDownloader.instance() != null)
 	{
+<<<<<<< HEAD
 	  IDownloader.instance().onResume(ic);
+=======
+	  _downloader.onResume(_initializationContext);
+>>>>>>> webgl-port
 	}
   }
 

@@ -372,13 +372,13 @@ void G3MWidget::onPause() {
                            _effectsScheduler,
                            IStorage::instance());
 
-  _mainRenderer->onPause(&ic);
-  _busyRenderer->onPause(&ic);
+  _mainRenderer->onPause(_initializationContext);
+  _busyRenderer->onPause(_initializationContext);
 
-  _effectsScheduler->onPause(&ic);
+  _effectsScheduler->onPause(_initializationContext);
 
   if (IDownloader::instance() != NULL) {
-    IDownloader::instance()->onPause(&ic);
+    IDownloader::instance()->onPause(_initializationContext);
   }
 }
 
@@ -395,13 +395,13 @@ void G3MWidget::onResume() {
                            _effectsScheduler,
                            IStorage::instance());
 
-  _mainRenderer->onResume(&ic);
-  _busyRenderer->onResume(&ic);
+  _mainRenderer->onResume(_initializationContext);
+  _busyRenderer->onResume(_initializationContext);
 
-  _effectsScheduler->onResume(&ic);
+  _effectsScheduler->onResume(_initializationContext);
 
   if (IDownloader::instance() != NULL) {
-    IDownloader::instance()->onResume(&ic);
+    IDownloader::instance()->onResume(_initializationContext);
   }
 }
 

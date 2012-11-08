@@ -1,5 +1,5 @@
 //
-//  JSONBoolean.h
+//  JSONBoolean.hpp
 //  G3MiOSSDK
 //
 //  Created by Oliver Koehler on 03/10/12.
@@ -16,14 +16,21 @@ private:
   bool _value;
   
 public:
-  JSONBoolean(bool value):_value(value){}
-  const bool getValue(){
+  JSONBoolean(bool value) :
+  _value(value)
+  {
+  }
+
+  const bool value() const {
     return _value;
   }
-  JSONBoolean* getBoolean(){
+  
+  JSONBoolean* asBoolean() {
     return this;
   }
-  
+
+  const std::string description() const;
+
 };
 
 

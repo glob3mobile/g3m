@@ -98,7 +98,7 @@ public:
   }
   
   void onResume(const InitializationContext* ic) {
-    
+    _initializationContext = ic;
   }
   
   void onPause(const InitializationContext* ic) {
