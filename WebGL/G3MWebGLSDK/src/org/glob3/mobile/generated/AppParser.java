@@ -38,28 +38,28 @@ public class AppParser
 
   private void parseWorldConfiguration(LayerSet layerSet, MarksRenderer marks, JSONObject jsonWorld)
   {
-	String jsonBaseLayer = jsonWorld.getObjectForKey(BASELAYER).getString().getValue();
-	JSONArray jsonBbox = jsonWorld.getObjectForKey(BBOX).getArray();
+	String jsonBaseLayer = jsonWorld.getAsString(BASELAYER).value();
+	JSONArray jsonBbox = jsonWorld.getAsArray(BBOX);
   
 	if (jsonBaseLayer.equals("BING"))
 	{
-	  WMSLayer bing = new WMSLayer("ve", new URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?",true), WMSServerVersion.WMS_1_1_0, Sector.fromDegrees(jsonBbox.getElement(1).getNumber().getDoubleValue(), jsonBbox.getElement(0).getNumber().getDoubleValue(), jsonBbox.getElement(3).getNumber().getDoubleValue(), jsonBbox.getElement(2).getNumber().getDoubleValue()), "image/jpeg", "EPSG:4326", "", false, null);
+	  WMSLayer bing = new WMSLayer("ve", new URL("http://worldwind27.arc.nasa.gov/wms/virtualearth?",true), WMSServerVersion.WMS_1_1_0, Sector.fromDegrees(jsonBbox.getAsNumber(1).doubleValue(), jsonBbox.getAsNumber(0).doubleValue(), jsonBbox.getAsNumber(3).doubleValue(), jsonBbox.getAsNumber(2).doubleValue()), "image/jpeg", "EPSG:4326", "", false, null);
 	  layerSet.addLayer(bing);
 	}
 	else
 	{
-	  WMSLayer osm = new WMSLayer("osm", new URL("http://wms.latlon.org/",true), WMSServerVersion.WMS_1_1_0, Sector.fromDegrees(jsonBbox.getElement(1).getNumber().getDoubleValue(), jsonBbox.getElement(0).getNumber().getDoubleValue(), jsonBbox.getElement(3).getNumber().getDoubleValue(), jsonBbox.getElement(2).getNumber().getDoubleValue()), "image/jpeg", "EPSG:4326", "", false, null);
+	  WMSLayer osm = new WMSLayer("osm", new URL("http://wms.latlon.org/",true), WMSServerVersion.WMS_1_1_0, Sector.fromDegrees(jsonBbox.getAsNumber(1).doubleValue(), jsonBbox.getAsNumber(0).doubleValue(), jsonBbox.getAsNumber(3).doubleValue(), jsonBbox.getAsNumber(2).doubleValue()), "image/jpeg", "EPSG:4326", "", false, null);
 	  layerSet.addLayer(osm);
 	}
-	parseCustomData(marks, jsonWorld.getObjectForKey(CUSTOMDATA).getObject());
+	parseCustomData(marks, jsonWorld.getAsObject(CUSTOMDATA));
   }
   private void parseGEOJSONPointObject(MarksRenderer marks, JSONObject point)
   {
-	  JSONObject jsonProperties = point.getObjectForKey(PROPERTIES).getObject();
-	  JSONObject jsonGeometry = point.getObjectForKey(GEOMETRY).getObject();
-	  JSONArray jsonCoordinates = jsonGeometry.getObjectForKey(COORDINATES).getArray();
+	  JSONObject jsonProperties = point.getAsObject(PROPERTIES);
+	  JSONObject jsonGeometry = point.getAsObject(GEOMETRY);
+	  JSONArray jsonCoordinates = jsonGeometry.getAsArray(COORDINATES);
   
-	  Mark mark = new Mark(jsonProperties.getObjectForKey(NAME).getString().getValue(), new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",false), new Geodetic3D(Angle.fromDegrees(jsonCoordinates.getElement(1).getNumber().getDoubleValue()), Angle.fromDegrees(jsonCoordinates.getElement(0).getNumber().getDoubleValue()), 0));
+	  Mark mark = new Mark(jsonProperties.getAsString(NAME).value(), new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",false), new Geodetic3D(Angle.fromDegrees(jsonCoordinates.getAsNumber(1).doubleValue()), Angle.fromDegrees(jsonCoordinates.getAsNumber(0).doubleValue()), 0));
 	  marks.addMark(mark);
   }
 
@@ -74,18 +74,18 @@ public class AppParser
   }
   public final void parse(LayerSet layerSet, MarksRenderer marks, String namelessParameter)
   {
-	JSONObject json = IJSONParser.instance().parse(namelessParameter).getObject();
-	parseWorldConfiguration(layerSet, marks, json.getObjectForKey(WORLD).getObject());
+	JSONObject json = IJSONParser.instance().parse(namelessParameter).asObject();
+	parseWorldConfiguration(layerSet, marks, json.get(WORLD).asObject());
 	IJSONParser.instance().deleteJSONData(json);
   }
 	public final void parseCustomData(MarksRenderer marks, JSONObject jsonCustomData)
 	{
-	  JSONArray jsonFeatures = jsonCustomData.getObjectForKey(FEATURES).getArray();
-	  for (int i = 0; i < jsonFeatures.getSize(); i++)
+	  JSONArray jsonFeatures = jsonCustomData.getAsArray(FEATURES);
+	  for (int i = 0; i < jsonFeatures.size(); i++)
 	  {
-		JSONObject jsonFeature = jsonFeatures.getElement(i).getObject();
-		  JSONObject jsonGeometry = jsonFeature.getObjectForKey(GEOMETRY).getObject();
-		String jsonType = jsonGeometry.getObjectForKey(TYPE).getString().getValue();
+		JSONObject jsonFeature = jsonFeatures.getAsObject(i);
+		  JSONObject jsonGeometry = jsonFeature.getAsObject(GEOMETRY);
+		String jsonType = jsonGeometry.getAsString(TYPE).value();
 		if (jsonType.equals("Point"))
 		{
 		  parseGEOJSONPointObject(marks, jsonFeature);

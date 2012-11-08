@@ -44,7 +44,7 @@ public class GEOJSONDownloadListener implements IBufferDownloadListener
 	public final void onDownload(URL url, IByteBuffer buffer)
 	{
 		String String = buffer.getAsString();
-		JSONObject json = IJSONParser.instance().parse(String).getObject();
+		JSONObject json = IJSONParser.instance().parse(String).asObject();
 		ILogger.instance().logInfo(url.getPath());
 		parseGEOJSON(json);
     
@@ -67,12 +67,12 @@ public class GEOJSONDownloadListener implements IBufferDownloadListener
 	}
 	private void parseGEOJSON(JSONObject geojson)
 	{
-		JSONArray jsonFeatures = geojson.getObjectForKey(FEATURES).getArray();
-		for (int i = 0; i < jsonFeatures.getSize(); i++)
+		JSONArray jsonFeatures = geojson.get(FEATURES).asArray();
+		for (int i = 0; i < jsonFeatures.size(); i++)
 		{
-			JSONObject jsonFeature = jsonFeatures.getElement(i).getObject();
-			JSONObject jsonGeometry = jsonFeature.getObjectForKey(GEOMETRY).getObject();
-			String jsonType = jsonGeometry.getObjectForKey(TYPE).getString().getValue();
+			JSONObject jsonFeature = jsonFeatures.getAsObject(i);
+			JSONObject jsonGeometry = jsonFeature.getAsObject(GEOMETRY);
+			String jsonType = jsonGeometry.getAsString(TYPE).value();
 			if (jsonType.equals("Point"))
 			{
 				parsePointObject(jsonFeature);
@@ -81,12 +81,12 @@ public class GEOJSONDownloadListener implements IBufferDownloadListener
 	}
 	private void parsePointObject(JSONObject point)
 	{
-		JSONObject jsonProperties = point.getObjectForKey(PROPERTIES).getObject();
-		JSONObject jsonGeometry = point.getObjectForKey(GEOMETRY).getObject();
-		JSONArray jsonCoordinates = jsonGeometry.getObjectForKey(COORDINATES).getArray();
+		JSONObject jsonProperties = point.getAsObject(PROPERTIES);
+		JSONObject jsonGeometry = point.getAsObject(GEOMETRY);
+		JSONArray jsonCoordinates = jsonGeometry.getAsArray(COORDINATES);
     
-		JSONBaseObject denominaci = jsonProperties.getObjectForKey(DENOMINATION);
-		JSONBaseObject clase = jsonProperties.getObjectForKey(CLASE);
+		JSONBaseObject denominaci = jsonProperties.get(DENOMINATION);
+		JSONBaseObject clase = jsonProperties.get(CLASE);
     
 		if (denominaci != null && clase != null)
 		{
@@ -97,12 +97,12 @@ public class GEOJSONDownloadListener implements IBufferDownloadListener
 			iconUrl.addString(".png");
     
 			IStringBuilder name = IStringBuilder.newStringBuilder();
-			name.addString(clase.getString().getValue());
+			name.addString(clase.asString().value());
 			name.addString(" ");
-			name.addString(denominaci.getString().getValue());
+			name.addString(denominaci.asString().value());
     
-			final Angle latitude = Angle.fromDegrees(jsonCoordinates.getElement(1).getNumber().getDoubleValue());
-			final Angle longitude = Angle.fromDegrees(jsonCoordinates.getElement(0).getNumber().getDoubleValue());
+			final Angle latitude = Angle.fromDegrees(jsonCoordinates.getAsNumber(1).doubleValue());
+			final Angle longitude = Angle.fromDegrees(jsonCoordinates.getAsNumber(0).doubleValue());
     
 			Mark mark = new Mark(name.getString(), new URL(iconUrl.getString(),false), new Geodetic3D(latitude, longitude, 0));
     

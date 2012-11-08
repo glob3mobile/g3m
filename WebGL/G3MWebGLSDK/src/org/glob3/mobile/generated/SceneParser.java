@@ -32,8 +32,8 @@ public class SceneParser
     
 		_mapGeoJSONSources.clear();
     
-		JSONObject json = IJSONParser.instance().parse(namelessParameter).getObject();
-		parserJSONLayerList(layerSet, json.getObjectForKey(LAYERS).getObject());
+		JSONObject json = IJSONParser.instance().parse(namelessParameter).asObject();
+		parserJSONLayerList(layerSet, json.getAsObject(LAYERS));
 		IJSONParser.instance().deleteJSONData(json);
 	}
 	public final java.util.HashMap<String, String> getMapGeoJSONSources()
@@ -43,12 +43,12 @@ public class SceneParser
 
 	private void parserJSONLayerList(LayerSet layerSet, JSONObject jsonLayers)
 	{
-		for (int i = 0; i < jsonLayers.getObject().getSize(); i++)
+		for (int i = 0; i < jsonLayers.size(); i++)
 		{
 			IStringBuilder isb = IStringBuilder.newStringBuilder();
 			isb.addInt(i);
-			JSONObject jsonLayer = jsonLayers.getObjectForKey(isb.getString()).getObject();
-			final layer_type layerType = _mapLayerType.get(jsonLayer.getObjectForKey(TYPE).getString().getValue());
+			JSONObject jsonLayer = jsonLayers.getAsObject(isb.getString());
+			final layer_type layerType = _mapLayerType.get(jsonLayer.getAsString(TYPE).value());
     
 			switch (layerType)
 			{
@@ -71,23 +71,23 @@ public class SceneParser
 	private void parserJSONWMSLayer(LayerSet layerSet, JSONObject jsonLayer)
 	{
 		System.out.print("Parsing WMS Layer ");
-		System.out.print(jsonLayer.getObjectForKey(NAME).getString().getValue());
+		System.out.print(jsonLayer.getAsString(NAME).value());
 		System.out.print("...");
 		System.out.print("\n");
     
-		final String jsonDatasource = jsonLayer.getObjectForKey(DATASOURCE).getString().getValue();
+		final String jsonDatasource = jsonLayer.getAsString(DATASOURCE).value();
 		final int lastIndex = IStringUtils.instance().indexOf(jsonDatasource, "?");
 		final String jsonURL = IStringUtils.instance().substring(jsonDatasource, 0, lastIndex+1);
-		final String jsonVersion = jsonLayer.getObjectForKey(VERSION).getString().getValue();
+		final String jsonVersion = jsonLayer.getAsString(VERSION).value();
     
-		JSONArray jsonItems = jsonLayer.getObjectForKey(ITEMS).getArray();
+		JSONArray jsonItems = jsonLayer.getAsArray(ITEMS);
 		IStringBuilder layersName = IStringBuilder.newStringBuilder();
     
-		for (int i = 0; i<jsonItems.getSize(); i++)
+		for (int i = 0; i<jsonItems.size(); i++)
 		{
-			if (jsonItems.getElement(i).getObject().getObjectForKey(STATUS).getBoolean().getValue())
+			if (jsonItems.getAsObject(i).getAsBoolean(STATUS).value())
 			{
-				layersName.addString(jsonItems.getElement(i).getObject().getObjectForKey(NAME).getString().getValue());
+				layersName.addString(jsonItems.getAsObject(i).getAsString(NAME).value());
 				layersName.addString(",");
 			}
 		}
@@ -110,32 +110,32 @@ public class SceneParser
 	private void parserJSON3DLayer(LayerSet layerSet, JSONObject jsonLayer)
 	{
 		System.out.print("Parsing 3D Layer ");
-		System.out.print(jsonLayer.getObjectForKey(NAME).getString().getValue());
+		System.out.print(jsonLayer.getAsString(NAME).value());
 		System.out.print("...");
 		System.out.print("\n");
 	}
 	private void parserJSONPanoLayer(LayerSet layerSet, JSONObject jsonLayer)
 	{
 		System.out.print("Parsing Pano Layer ");
-		System.out.print(jsonLayer.getObjectForKey(NAME).getString().getValue());
+		System.out.print(jsonLayer.getAsString(NAME).value());
 		System.out.print("...");
 		System.out.print("\n");
 	}
 	private void parserGEOJSONLayer(LayerSet layerSet, JSONObject jsonLayer)
 	{
 		System.out.print("Parsing GEOJSON Layer ");
-		System.out.print(jsonLayer.getObjectForKey(NAME).getString().getValue());
+		System.out.print(jsonLayer.getAsString(NAME).value());
 		System.out.print("...");
 		System.out.print("\n");
     
-		final String geojsonDatasource = jsonLayer.getObjectForKey(DATASOURCE).getString().getValue();
+		final String geojsonDatasource = jsonLayer.getAsString(DATASOURCE).value();
     
-		JSONArray jsonItems = jsonLayer.getObjectForKey(ITEMS).getArray();
-		for (int i = 0; i<jsonItems.getSize(); i++)
+		JSONArray jsonItems = jsonLayer.getAsArray(ITEMS);
+		for (int i = 0; i<jsonItems.size(); i++)
 		{
     
-			final String namefile = jsonItems.getElement(i).getObject().getObjectForKey(NAME).getString().getValue();
-			final String icon = jsonItems.getElement(i).getObject().getObjectForKey(ICON).getString().getValue();
+			final String namefile = jsonItems.getAsObject(i).getAsString(NAME).value();
+			final String icon = jsonItems.getAsObject(i).getAsString(ICON).value();
     
 			IStringBuilder url = IStringBuilder.newStringBuilder();
 			url.addString(geojsonDatasource);
