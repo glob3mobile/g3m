@@ -49,6 +49,8 @@ void SceneJSShapesParser::pvtParse(const std::string& json) {
   JSONBaseObject* jsonRootObject = IJSONParser::instance()->parse(json);
 
   _rootShape = toShape(jsonRootObject);
+
+  delete jsonRootObject;
 }
 
 Shape* SceneJSShapesParser::convertNode(const std::string& type,
@@ -78,6 +80,16 @@ Shape* SceneJSShapesParser::convertNode(const std::string& type,
     }
     processedKeys++;
   }
+
+//  JSONObject* jsSpecularColor = jsonObject->getAsObject("specularColor");
+//  if (jsSpecularColor != NULL) {
+//    const double r = jsSpecularColor->getAsNumber("r")->value();
+//    const double g = jsSpecularColor->getAsNumber("g")->value();
+//    const double b = jsSpecularColor->getAsNumber("b")->value();
+//    const double a = jsSpecularColor->getAsNumber("a")->value();
+//    result->setColor(Color::newFromRGBA(r, g, b, a));
+//    processedKeys++;
+//  }
 
   std::vector<std::string> keys = jsonObject->keys();
   if (processedKeys != keys.size()) {
@@ -210,8 +222,6 @@ Shape* SceneJSShapesParser::toShape(JSONBaseObject* jsonBaseObject) const {
         ILogger::instance()->logWarning("Unknown type \"%s\"", type.c_str());
       }
     }
-
-    delete jsonObject;
   }
   
   return result;
