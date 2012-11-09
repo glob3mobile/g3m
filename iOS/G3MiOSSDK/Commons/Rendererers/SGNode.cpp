@@ -56,11 +56,17 @@ void SGNode::prepareRender(const RenderContext* rc) {
 }
 
 void SGNode::cleanUpRender(const RenderContext* rc) {
-  
+
+}
+
+void SGNode::rawRender(const RenderContext* rc) {
+
 }
 
 void SGNode::render(const RenderContext* rc) {
   prepareRender(rc);
+
+  rawRender(rc);
 
   const int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {

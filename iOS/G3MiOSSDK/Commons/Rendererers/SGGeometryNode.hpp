@@ -16,12 +16,19 @@ class IIntBuffer;
 
 class SGGeometryNode : public SGNode {
 private:
-  const int           _primitive;
-  const IFloatBuffer* _vertices;
-  const IFloatBuffer* _colors;
-  const IFloatBuffer* _uv;
-  const IFloatBuffer* _normals;
-  const IIntBuffer*   _indices;
+  int           _primitive;
+  IFloatBuffer* _vertices;
+  IFloatBuffer* _colors;
+  IFloatBuffer* _uv;
+  IFloatBuffer* _normals;
+  IIntBuffer*   _indices;
+
+protected:
+  void prepareRender(const RenderContext* rc);
+
+  void cleanUpRender(const RenderContext* rc);
+
+  void rawRender(const RenderContext* rc);
 
 public:
 
@@ -40,7 +47,7 @@ public:
   {
 
   }
-  
+
 };
 
 #endif

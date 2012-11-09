@@ -36,6 +36,8 @@ protected:
 
   virtual void cleanUpRender(const RenderContext* rc);
 
+  virtual void rawRender(const RenderContext* rc);
+
 public:
 
   SGNode() :
@@ -55,7 +57,7 @@ public:
     _id = id;
   }
 
-  bool isReadyToRender(const RenderContext* rc);
+  virtual bool isReadyToRender(const RenderContext* rc);
 
   void render(const RenderContext* rc);
 
