@@ -28,205 +28,242 @@ package org.glob3.mobile.generated;
 public class Mark
 {
 
-  private final String _name;
-  private URL _textureURL = new URL();
-  private final Geodetic3D _position ;
+	private final String _name;
+	private URL _textureURL = new URL();
+	private final Geodetic3D _position ;
+	private Object _userData;
+	private final double _minDistanceToCamera;
 
-  private IGLTextureId _textureId;
+	private IGLTextureId _textureId;
 
-  private Vector3D _cartesianPosition;
-  private Vector3D getCartesianPosition(Planet planet)
-  {
-	if (_cartesianPosition == null)
+	private Vector3D _cartesianPosition;
+	private Vector3D getCartesianPosition(Planet planet)
 	{
-	  _cartesianPosition = new Vector3D(planet.toCartesian(_position));
+		if (_cartesianPosition == null)
+		{
+			_cartesianPosition = new Vector3D(planet.toCartesian(_position));
+		}
+		return _cartesianPosition;
 	}
-	return _cartesianPosition;
-  }
 
-  private IFloatBuffer _vertices;
-  private IFloatBuffer getVertices(Planet planet)
-  {
-	if (_vertices == null)
+	private IFloatBuffer _vertices;
+	private IFloatBuffer getVertices(Planet planet)
 	{
-	  final Vector3D pos = getCartesianPosition(planet);
-  
-	  FloatBufferBuilderFromCartesian3D vertex = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
-	  vertex.add(pos);
-	  vertex.add(pos);
-	  vertex.add(pos);
-	  vertex.add(pos);
-  
-	  _vertices = vertex.create();
+		if (_vertices == null)
+		{
+			final Vector3D pos = getCartesianPosition(planet);
+    
+			FloatBufferBuilderFromCartesian3D vertex = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
+			vertex.add(pos);
+			vertex.add(pos);
+			vertex.add(pos);
+			vertex.add(pos);
+    
+			_vertices = vertex.create();
+		}
+		return _vertices;
 	}
-	return _vertices;
-  }
 
-  private boolean _textureSolved;
-  private IImage _textureImage;
-  private int _textureWidth;
-  private int _textureHeight;
+	private boolean _textureSolved;
+	private IImage _textureImage;
+	private int _textureWidth;
+	private int _textureHeight;
 
-  private boolean _renderedMark;
+	private boolean _renderedMark;
 
-  public Mark(String name, URL textureURL, Geodetic3D position)
-  {
-	  _name = name;
-	  _textureURL = new URL(textureURL);
-	  _position = new Geodetic3D(position);
-	  _textureId = null;
-	  _cartesianPosition = null;
-	  _vertices = null;
-	  _textureSolved = false;
-	  _textureImage = null;
-	  _renderedMark = false;
-	  _textureWidth = 0;
-	  _textureHeight = 0;
+	public Mark(String name, URL textureURL, Geodetic3D position, Object userData)
+	{
+		this(name, textureURL, position, userData, null);
+	}
+	public Mark(String name, URL textureURL, Geodetic3D position)
+	{
+		this(name, textureURL, position, null, null);
+	}
+//C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
+//ORIGINAL LINE: Mark(const String name, const URL textureURL, const Geodetic3D position, Object* userData=null, const double minDistanceToCamera=null) : _name(name), _textureURL(textureURL), _position(position), _userData(userData), _minDistanceToCamera(minDistanceToCamera), _textureId(null), _cartesianPosition(null), _vertices(null), _textureSolved(false), _textureImage(null), _renderedMark(false), _textureWidth(0), _textureHeight(0)
+	public Mark(String name, URL textureURL, Geodetic3D position, Object userData, double minDistanceToCamera)
+	{
+		_name = name;
+		_textureURL = new URL(textureURL);
+		_position = new Geodetic3D(position);
+		_userData = userData;
+		_minDistanceToCamera = minDistanceToCamera;
+		_textureId = null;
+		_cartesianPosition = null;
+		_vertices = null;
+		_textureSolved = false;
+		_textureImage = null;
+		_renderedMark = false;
+		_textureWidth = 0;
+		_textureHeight = 0;
 
-  }
+	}
 
-  public void dispose()
-  {
-	if (_cartesianPosition != null)
-		_cartesianPosition.dispose();
-	if (_vertices != null)
-		_vertices.dispose();
-  }
+	public void dispose()
+	{
+		if (_cartesianPosition != null)
+			_cartesianPosition.dispose();
+		if (_vertices != null)
+			_vertices.dispose();
+	}
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: const String getName() const
-  public final String getName()
-  {
-	return _name;
-  }
+	public final String getName()
+	{
+		return _name;
+	}
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: const Geodetic3D getPosition() const
-  public final Geodetic3D getPosition()
-  {
-	return _position;
-  }
-
-  public final void initialize(InitializationContext ic)
-  {
-	//  todo;
-	if (!_textureSolved)
+	public final Geodetic3D getPosition()
 	{
-	  IDownloader downloader = ic.getDownloader();
-  
-	  downloader.requestImage(_textureURL, 1000000, new TextureDownloadListener(this), true);
+		return _position;
 	}
-  }
+
+	public final void initialize(InitializationContext ic)
+	{
+		//  todo;
+		if (!_textureSolved)
+		{
+			IDownloader downloader = ic.getDownloader();
+    
+			downloader.requestImage(_textureURL, 1000000, new TextureDownloadListener(this), true);
+		}
+	}
 
 //C++ TO JAVA CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in Java):
-  private Vector2D render_textureTranslation = new Vector2D(0.0, 0.0);
+	private Vector2D render_textureTranslation = new Vector2D(0.0, 0.0);
 //C++ TO JAVA CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in Java):
-  private Vector2D render_textureScale = new Vector2D(1.0, 1.0);
-  public final void render(RenderContext rc, double minDistanceToCamera)
-  {
-	final Camera camera = rc.getCurrentCamera();
-	final Planet planet = rc.getPlanet();
-  
-	final Vector3D cameraPosition = camera.getCartesianPosition();
-	final Vector3D markPosition = getCartesianPosition(planet);
-  
-	final Vector3D markCameraVector = markPosition.sub(cameraPosition);
-	final double distanceToCamera = markCameraVector.length();
-	_renderedMark = distanceToCamera <= minDistanceToCamera;
-  //  const bool renderMark = true;
-  
-	if (_renderedMark)
+	private Vector2D render_textureScale = new Vector2D(1.0, 1.0);
+	public final void render(RenderContext rc)
 	{
-	  final Vector3D normalAtMarkPosition = planet.geodeticSurfaceNormal(markPosition);
-  
-	  if (normalAtMarkPosition.angleBetween(markCameraVector)._radians > IMathUtils.instance().halfPi())
-	  {
-		GL gl = rc.getGL();
-  
-//C++ TO JAVA CONVERTER NOTE: This static local variable declaration (not allowed in Java) has been moved just prior to the method:
-//		static Vector2D textureTranslation(0.0, 0.0);
-//C++ TO JAVA CONVERTER NOTE: This static local variable declaration (not allowed in Java) has been moved just prior to the method:
-//		static Vector2D textureScale(1.0, 1.0);
-		gl.transformTexCoords(render_textureScale, render_textureTranslation);
-  
-		if (_textureId == null)
+		final Camera camera = rc.getCurrentCamera();
+		final Planet planet = rc.getPlanet();
+    
+		final Vector3D cameraPosition = camera.getCartesianPosition();
+		final Vector3D markPosition = getCartesianPosition(planet);
+    
+		final Vector3D markCameraVector = markPosition.sub(cameraPosition);
+		final double distanceToCamera = markCameraVector.length();
+    
+		if (_minDistanceToCamera != 0)
 		{
-		  //        IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
-		  //
-		  //        _textureId = rc->getTexturesHandler()->getGLTextureId(image,
-		  //                                                              GLFormat::rgba(),
-		  //                                                              _textureFilename,
-		  //                                                              false);
-		  //
-		  //        rc->getFactory()->deleteImage(image);
-  
-		  if (_textureImage != null)
-		  {
-			_textureId = rc.getTexturesHandler().getGLTextureId(_textureImage, GLFormat.rgba(), _textureURL.getPath(), false);
-  
-			rc.getFactory().deleteImage(_textureImage);
-			_textureImage = null;
-		  }
+			_renderedMark = distanceToCamera <= _minDistanceToCamera;
 		}
-  
-		if (_textureId != null)
+		else
 		{
-		  gl.drawBillBoard(_textureId, getVertices(planet), camera.getViewPortRatio());
+			final Vector3D radius = rc.getPlanet().getRadii();
+			final double minDistanceToCamera = (radius._x + radius._y + radius._z) / 3 * 0.75;
+    
+			_renderedMark = distanceToCamera <= minDistanceToCamera;
 		}
-	  }
+		//  const bool renderMark = true;
+    
+		if (_renderedMark)
+		{
+			final Vector3D normalAtMarkPosition = planet.geodeticSurfaceNormal(markPosition);
+    
+			if (normalAtMarkPosition.angleBetween(markCameraVector)._radians > IMathUtils.instance().halfPi())
+			{
+				GL gl = rc.getGL();
+    
+//C++ TO JAVA CONVERTER NOTE: This static local variable declaration (not allowed in Java) has been moved just prior to the method:
+//				static Vector2D textureTranslation(0.0, 0.0);
+//C++ TO JAVA CONVERTER NOTE: This static local variable declaration (not allowed in Java) has been moved just prior to the method:
+//				static Vector2D textureScale(1.0, 1.0);
+				gl.transformTexCoords(render_textureScale, render_textureTranslation);
+    
+				if (_textureId == null)
+				{
+					//        IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
+					//
+					//        _textureId = rc->getTexturesHandler()->getGLTextureId(image,
+					//                                                              GLFormat::rgba(),
+					//                                                              _textureFilename,
+					//                                                              false);
+					//
+					//        rc->getFactory()->deleteImage(image);
+    
+					if (_textureImage != null)
+					{
+						_textureId = rc.getTexturesHandler().getGLTextureId(_textureImage, GLFormat.rgba(), _textureURL.getPath(), false);
+    
+						rc.getFactory().deleteImage(_textureImage);
+						_textureImage = null;
+					}
+				}
+    
+				if (_textureId != null)
+				{
+					gl.drawBillBoard(_textureId, getVertices(planet), camera.getViewPortRatio());
+				}
+			}
+		}
+    
 	}
-  
-  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: boolean isReady() const
-  public final boolean isReady()
-  {
-	return _textureSolved;
-  }
+	public final boolean isReady()
+	{
+		return _textureSolved;
+	}
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: boolean isRendered() const
-  public final boolean isRendered()
-  {
-	return _renderedMark;
-  }
+	public final boolean isRendered()
+	{
+		return _renderedMark;
+	}
 
-  public final void onTextureDownloadError()
-  {
-	_textureSolved = true;
-  
-	ILogger.instance().logError("Can't load image \"%s\"", _textureURL.getPath());
-  }
+	public final void onTextureDownloadError()
+	{
+		_textureSolved = true;
+    
+		ILogger.instance().logError("Can't load image \"%s\"", _textureURL.getPath());
+	}
 
-  public final void onTextureDownload(IImage image)
-  {
-	_textureSolved = true;
-	_textureImage = image.shallowCopy();
-	_textureWidth = _textureImage.getWidth();
-	_textureHeight = _textureImage.getHeight();
-  }
+	public final void onTextureDownload(IImage image)
+	{
+		_textureSolved = true;
+		_textureImage = image.shallowCopy();
+		_textureWidth = _textureImage.getWidth();
+		_textureHeight = _textureImage.getHeight();
+	}
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: int getTextureWidth() const
-  public final int getTextureWidth()
-  {
-  //  return (_textureImage == NULL) ? 0 : _textureImage->getWidth();
-	return _textureWidth;
-  }
+	public final int getTextureWidth()
+	{
+		//  return (_textureImage == NULL) ? 0 : _textureImage->getWidth();
+		return _textureWidth;
+	}
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: int getTextureHeight() const
-  public final int getTextureHeight()
-  {
-  //  return (_textureImage == NULL) ? 0 : _textureImage->getHeight();
-	return _textureHeight;
-  }
+	public final int getTextureHeight()
+	{
+		//  return (_textureImage == NULL) ? 0 : _textureImage->getHeight();
+		return _textureHeight;
+	}
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Vector2I getTextureExtent() const
-  public final Vector2I getTextureExtent()
-  {
-  //  return (_textureImage == NULL) ? Vector2I::zero() : _textureImage->getExtent();
-	return new Vector2I(_textureWidth, _textureHeight);
-  }
+	public final Vector2I getTextureExtent()
+	{
+		//  return (_textureImage == NULL) ? Vector2I::zero() : _textureImage->getExtent();
+		return new Vector2I(_textureWidth, _textureHeight);
+	}
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const Object* getUserData() const
+	public final Object getUserData()
+	{
+		return _userData;
+	}
+
+	public final void setUserData(Object userData)
+	{
+		_userData = userData;
+	}
 
 }
