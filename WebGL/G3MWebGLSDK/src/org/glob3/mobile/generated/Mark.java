@@ -73,14 +73,14 @@ public class Mark
 
 	public Mark(String name, URL textureURL, Geodetic3D position, Object userData)
 	{
-		this(name, textureURL, position, userData, null);
+		this(name, textureURL, position, userData, 0);
 	}
 	public Mark(String name, URL textureURL, Geodetic3D position)
 	{
-		this(name, textureURL, position, null, null);
+		this(name, textureURL, position, null, 0);
 	}
 //C++ TO JAVA CONVERTER NOTE: Java does not allow default values for parameters. Overloaded methods are inserted above.
-//ORIGINAL LINE: Mark(const String name, const URL textureURL, const Geodetic3D position, Object* userData=null, const double minDistanceToCamera=null) : _name(name), _textureURL(textureURL), _position(position), _userData(userData), _minDistanceToCamera(minDistanceToCamera), _textureId(null), _cartesianPosition(null), _vertices(null), _textureSolved(false), _textureImage(null), _renderedMark(false), _textureWidth(0), _textureHeight(0)
+//ORIGINAL LINE: Mark(const String name, const URL textureURL, const Geodetic3D position, Object* userData=null, const double minDistanceToCamera=0) : _name(name), _textureURL(textureURL), _position(position), _userData(userData), _minDistanceToCamera(minDistanceToCamera), _textureId(null), _cartesianPosition(null), _vertices(null), _textureSolved(false), _textureImage(null), _renderedMark(false), _textureWidth(0), _textureHeight(0)
 	public Mark(String name, URL textureURL, Geodetic3D position, Object userData, double minDistanceToCamera)
 	{
 		_name = name;
@@ -147,7 +147,7 @@ public class Mark
 		final Vector3D markCameraVector = markPosition.sub(cameraPosition);
 		final double distanceToCamera = markCameraVector.length();
     
-		if (_minDistanceToCamera != 0)
+		if (_minDistanceToCamera!=0)
 		{
 			_renderedMark = distanceToCamera <= _minDistanceToCamera;
 		}
