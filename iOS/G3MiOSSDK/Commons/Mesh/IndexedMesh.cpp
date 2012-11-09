@@ -15,7 +15,7 @@
 #include "IIntBuffer.hpp"
 
 IndexedMesh::~IndexedMesh() {
-  if (_owner){
+  if (_owner) {
     delete _vertices;
     delete _indices;
     delete _colors;

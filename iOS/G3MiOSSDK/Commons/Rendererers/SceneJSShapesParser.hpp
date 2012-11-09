@@ -16,7 +16,12 @@ class Shape;
 class IByteBuffer;
 class JSONBaseObject;
 class JSONObject;
-
+class SGNode;
+class SGRotateNode;
+class SGMaterialNode;
+class SGTextureNode;
+class SGGeometryNode;
+class SGTranslateNode;
 
 class SceneJSShapesParser {
 private:
@@ -31,12 +36,24 @@ private:
 
   void pvtParse(const std::string& json);
 
-  Shape* toShape(JSONBaseObject* jsonBaseObject) const;
-  
-  Shape* convertNode(const std::string& type,
-                     JSONObject* jsonObject) const;
+  SGNode* toNode(JSONBaseObject* jsonBaseObject) const;
 
-  Shape* convertGeometry(JSONObject* jsonObject) const;
+  int parseCommons(JSONObject* jsonObject,
+                   SGNode* node) const;
+
+  void checkProcessedKeys(JSONObject* jsonObject,
+                          int processedKeys) const;
+
+  SGNode*          createNode         (JSONObject* jsonObject) const;
+  SGRotateNode*    createRotateNode   (JSONObject* jsonObject) const;
+  SGTranslateNode* createTranslateNode(JSONObject* jsonObject) const;
+  SGMaterialNode*  createMaterialNode (JSONObject* jsonObject) const;
+  SGTextureNode*   createTextureNode  (JSONObject* jsonObject) const;
+  SGGeometryNode*  createGeometryNode (JSONObject* jsonObject) const;
+
+//  Shape* convertNode(const std::string& type,
+//                     JSONObject* jsonObject) const;
+//  Shape* convertGeometry(JSONObject* jsonObject) const;
 
 public:
 

@@ -98,6 +98,8 @@
 		CF45E026164851C5004746BB /* MeshShape.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF45E024164851C5004746BB /* MeshShape.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF47030B15EFB4C000426B8B /* ThreadUtils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */; };
 		CF47030C15EFB4C000426B8B /* ThreadUtils_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF47030A15EFB4C000426B8B /* ThreadUtils_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
+		CF4CA477164C669D009BB7EB /* SGNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF4CA475164C669D009BB7EB /* SGNode.cpp */; };
+		CF4CA478164C669D009BB7EB /* SGNode.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF4CA476164C669D009BB7EB /* SGNode.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF527E1B162E2B4200E0BDE0 /* GTask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF527E19162E2B4200E0BDE0 /* GTask.cpp */; };
 		CF527E1C162E2B4200E0BDE0 /* GTask.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF527E1A162E2B4200E0BDE0 /* GTask.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF527E1F162E33F500E0BDE0 /* LeafRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF527E1D162E33F500E0BDE0 /* LeafRenderer.cpp */; };
@@ -137,6 +139,16 @@
 		CF7E626215F7D6FC0086B71D /* FloatBufferBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF7E626015F7D6FC0086B71D /* FloatBufferBuilder.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF7E626615F7DD740086B71D /* IntBufferBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF7E626415F7DD740086B71D /* IntBufferBuilder.cpp */; };
 		CF7E626715F7DD740086B71D /* IntBufferBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF7E626515F7DD740086B71D /* IntBufferBuilder.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CF857B2E164C757A0089F1DE /* SGRotateNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF857B2C164C757A0089F1DE /* SGRotateNode.cpp */; };
+		CF857B2F164C757A0089F1DE /* SGRotateNode.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF857B2D164C757A0089F1DE /* SGRotateNode.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CF857B33164C77B00089F1DE /* SGMaterialNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF857B31164C77B00089F1DE /* SGMaterialNode.cpp */; };
+		CF857B34164C77B00089F1DE /* SGMaterialNode.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF857B32164C77B00089F1DE /* SGMaterialNode.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CF857B37164C78B10089F1DE /* SGTextureNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF857B35164C78B10089F1DE /* SGTextureNode.cpp */; };
+		CF857B38164C78B10089F1DE /* SGTextureNode.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF857B36164C78B10089F1DE /* SGTextureNode.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CF857B3B164C7AFC0089F1DE /* SGGeometryNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF857B39164C7AFC0089F1DE /* SGGeometryNode.cpp */; };
+		CF857B3C164C7AFC0089F1DE /* SGGeometryNode.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF857B3A164C7AFC0089F1DE /* SGGeometryNode.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CF857B3F164C80DB0089F1DE /* SGTranslateNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF857B3D164C80DB0089F1DE /* SGTranslateNode.cpp */; };
+		CF857B40164C80DB0089F1DE /* SGTranslateNode.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF857B3E164C80DB0089F1DE /* SGTranslateNode.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF883B821590984900AEE39C /* TexturesHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF883B811590984900AEE39C /* TexturesHandler.cpp */; };
 		CF883BCB1594B9A500AEE39C /* Sector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF883BCA1594B9A500AEE39C /* Sector.cpp */; };
 		CF8A234E15C4306800FD56C9 /* Downloader_iOS_Handler.h in Headers */ = {isa = PBXBuildFile; fileRef = CF8A234C15C4306800FD56C9 /* Downloader_iOS_Handler.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -177,6 +189,8 @@
 		CFB72A6A15E6808900A5BAF4 /* IStringUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFB72A6815E6808900A5BAF4 /* IStringUtils.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFB72A6E15E682B400A5BAF4 /* StringUtils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFB72A6C15E682B400A5BAF4 /* StringUtils_iOS.mm */; };
 		CFB73CDE15EFC51B00261631 /* MathUtils_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
+		CFC3BCC9164C6C7300A8D37D /* SGShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC3BCC7164C6C7300A8D37D /* SGShape.cpp */; };
+		CFC3BCCA164C6C7300A8D37D /* SGShape.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFC3BCC8164C6C7300A8D37D /* SGShape.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFCE679D15EFB06700B35FE0 /* IThreadUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCE679B15EFB06700B35FE0 /* IThreadUtils.cpp */; };
 		CFCE679E15EFB06700B35FE0 /* IThreadUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFCE679C15EFB06700B35FE0 /* IThreadUtils.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFCEFF26163476F100FC4AB0 /* RectangleI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCEFF24163476F100FC4AB0 /* RectangleI.cpp */; };
@@ -377,6 +391,8 @@
 		CF45E024164851C5004746BB /* MeshShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MeshShape.hpp; path = Commons/Rendererers/MeshShape.hpp; sourceTree = "<group>"; };
 		CF47030915EFB4C000426B8B /* ThreadUtils_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ThreadUtils_iOS.mm; path = Specific/Derived/ThreadUtils_iOS.mm; sourceTree = "<group>"; };
 		CF47030A15EFB4C000426B8B /* ThreadUtils_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ThreadUtils_iOS.hpp; path = Specific/Derived/ThreadUtils_iOS.hpp; sourceTree = "<group>"; };
+		CF4CA475164C669D009BB7EB /* SGNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGNode.cpp; path = Commons/Rendererers/SGNode.cpp; sourceTree = "<group>"; };
+		CF4CA476164C669D009BB7EB /* SGNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SGNode.hpp; path = Commons/Rendererers/SGNode.hpp; sourceTree = "<group>"; };
 		CF527E19162E2B4200E0BDE0 /* GTask.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GTask.cpp; path = Commons/Basic/GTask.cpp; sourceTree = "<group>"; };
 		CF527E1A162E2B4200E0BDE0 /* GTask.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GTask.hpp; path = Commons/Basic/GTask.hpp; sourceTree = "<group>"; };
 		CF527E1D162E33F500E0BDE0 /* LeafRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LeafRenderer.cpp; path = Commons/Rendererers/LeafRenderer.cpp; sourceTree = "<group>"; };
@@ -400,6 +416,16 @@
 		CF7E626015F7D6FC0086B71D /* FloatBufferBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = FloatBufferBuilder.hpp; path = Commons/Basic/FloatBufferBuilder.hpp; sourceTree = "<group>"; };
 		CF7E626415F7DD740086B71D /* IntBufferBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IntBufferBuilder.cpp; path = Commons/Basic/IntBufferBuilder.cpp; sourceTree = "<group>"; };
 		CF7E626515F7DD740086B71D /* IntBufferBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IntBufferBuilder.hpp; path = Commons/Basic/IntBufferBuilder.hpp; sourceTree = "<group>"; };
+		CF857B2C164C757A0089F1DE /* SGRotateNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGRotateNode.cpp; path = Commons/Rendererers/SGRotateNode.cpp; sourceTree = "<group>"; };
+		CF857B2D164C757A0089F1DE /* SGRotateNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SGRotateNode.hpp; path = Commons/Rendererers/SGRotateNode.hpp; sourceTree = "<group>"; };
+		CF857B31164C77B00089F1DE /* SGMaterialNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGMaterialNode.cpp; path = Commons/Rendererers/SGMaterialNode.cpp; sourceTree = "<group>"; };
+		CF857B32164C77B00089F1DE /* SGMaterialNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SGMaterialNode.hpp; path = Commons/Rendererers/SGMaterialNode.hpp; sourceTree = "<group>"; };
+		CF857B35164C78B10089F1DE /* SGTextureNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGTextureNode.cpp; path = Commons/Rendererers/SGTextureNode.cpp; sourceTree = "<group>"; };
+		CF857B36164C78B10089F1DE /* SGTextureNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SGTextureNode.hpp; path = Commons/Rendererers/SGTextureNode.hpp; sourceTree = "<group>"; };
+		CF857B39164C7AFC0089F1DE /* SGGeometryNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGGeometryNode.cpp; path = Commons/Rendererers/SGGeometryNode.cpp; sourceTree = "<group>"; };
+		CF857B3A164C7AFC0089F1DE /* SGGeometryNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SGGeometryNode.hpp; path = Commons/Rendererers/SGGeometryNode.hpp; sourceTree = "<group>"; };
+		CF857B3D164C80DB0089F1DE /* SGTranslateNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGTranslateNode.cpp; path = Commons/Rendererers/SGTranslateNode.cpp; sourceTree = "<group>"; };
+		CF857B3E164C80DB0089F1DE /* SGTranslateNode.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SGTranslateNode.hpp; path = Commons/Rendererers/SGTranslateNode.hpp; sourceTree = "<group>"; };
 		CF883B7F1590983B00AEE39C /* TexturesHandler.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TexturesHandler.hpp; path = Commons/Basic/TexturesHandler.hpp; sourceTree = "<group>"; };
 		CF883B811590984900AEE39C /* TexturesHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = TexturesHandler.cpp; path = Commons/Basic/TexturesHandler.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CF883BCA1594B9A500AEE39C /* Sector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Sector.cpp; path = Commons/Geometry/Sector.cpp; sourceTree = "<group>"; };
@@ -442,6 +468,8 @@
 		CFB72A6815E6808900A5BAF4 /* IStringUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IStringUtils.hpp; path = Commons/Interfaces/IStringUtils.hpp; sourceTree = "<group>"; };
 		CFB72A6C15E682B400A5BAF4 /* StringUtils_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = StringUtils_iOS.mm; path = Specific/Derived/StringUtils_iOS.mm; sourceTree = "<group>"; };
 		CFB72A6D15E682B400A5BAF4 /* StringUtils_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StringUtils_iOS.hpp; path = Specific/Derived/StringUtils_iOS.hpp; sourceTree = "<group>"; };
+		CFC3BCC7164C6C7300A8D37D /* SGShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGShape.cpp; path = Commons/Rendererers/SGShape.cpp; sourceTree = "<group>"; };
+		CFC3BCC8164C6C7300A8D37D /* SGShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SGShape.hpp; path = Commons/Rendererers/SGShape.hpp; sourceTree = "<group>"; };
 		CFCE679B15EFB06700B35FE0 /* IThreadUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IThreadUtils.cpp; path = Commons/Basic/IThreadUtils.cpp; sourceTree = "<group>"; };
 		CFCE679C15EFB06700B35FE0 /* IThreadUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IThreadUtils.hpp; path = Commons/Basic/IThreadUtils.hpp; sourceTree = "<group>"; };
 		CFCEFF24163476F100FC4AB0 /* RectangleI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RectangleI.cpp; path = Commons/Geometry/RectangleI.cpp; sourceTree = "<group>"; };
@@ -862,6 +890,20 @@
 				CF5EA5D7163DDCB900D8F797 /* QuadShape.hpp */,
 				CFE3B577164AE32E009975A5 /* SceneJSShapesParser.cpp */,
 				CFE3B578164AE32E009975A5 /* SceneJSShapesParser.hpp */,
+				CF857B39164C7AFC0089F1DE /* SGGeometryNode.cpp */,
+				CF857B3A164C7AFC0089F1DE /* SGGeometryNode.hpp */,
+				CF857B31164C77B00089F1DE /* SGMaterialNode.cpp */,
+				CF857B32164C77B00089F1DE /* SGMaterialNode.hpp */,
+				CF4CA475164C669D009BB7EB /* SGNode.cpp */,
+				CF4CA476164C669D009BB7EB /* SGNode.hpp */,
+				CF857B2C164C757A0089F1DE /* SGRotateNode.cpp */,
+				CF857B2D164C757A0089F1DE /* SGRotateNode.hpp */,
+				CFC3BCC7164C6C7300A8D37D /* SGShape.cpp */,
+				CFC3BCC8164C6C7300A8D37D /* SGShape.hpp */,
+				CF857B35164C78B10089F1DE /* SGTextureNode.cpp */,
+				CF857B36164C78B10089F1DE /* SGTextureNode.hpp */,
+				CF857B3D164C80DB0089F1DE /* SGTranslateNode.cpp */,
+				CF857B3E164C80DB0089F1DE /* SGTranslateNode.hpp */,
 				CF5EA5D2163DDC7900D8F797 /* Shape.cpp */,
 				CF5EA5D3163DDC7900D8F797 /* Shape.hpp */,
 				CFA0BB60163DCFF6009185FE /* ShapesRenderer.cpp */,
@@ -982,6 +1024,13 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CFC3BCCA164C6C7300A8D37D /* SGShape.hpp in Headers */,
+				CF857B2F164C757A0089F1DE /* SGRotateNode.hpp in Headers */,
+				CF857B34164C77B00089F1DE /* SGMaterialNode.hpp in Headers */,
+				CF857B38164C78B10089F1DE /* SGTextureNode.hpp in Headers */,
+				CF857B3C164C7AFC0089F1DE /* SGGeometryNode.hpp in Headers */,
+				CF857B40164C80DB0089F1DE /* SGTranslateNode.hpp in Headers */,
+				CF4CA478164C669D009BB7EB /* SGNode.hpp in Headers */,
 				CFE3B57A164AE32E009975A5 /* SceneJSShapesParser.hpp in Headers */,
 				CF3E07E91649B65000B5CA51 /* CompositeShape.hpp in Headers */,
 				CFEEE4BE164867B600F45F59 /* CircleShape.hpp in Headers */,
@@ -1291,6 +1340,13 @@
 				CFE3B579164AE32E009975A5 /* SceneJSShapesParser.cpp in Sources */,
 				CFE3DBA7164AFC4100910037 /* JSONBoolean.cpp in Sources */,
 				CFE3DBAC164AFDB000910037 /* JSONString.cpp in Sources */,
+				CF4CA477164C669D009BB7EB /* SGNode.cpp in Sources */,
+				CFC3BCC9164C6C7300A8D37D /* SGShape.cpp in Sources */,
+				CF857B2E164C757A0089F1DE /* SGRotateNode.cpp in Sources */,
+				CF857B33164C77B00089F1DE /* SGMaterialNode.cpp in Sources */,
+				CF857B37164C78B10089F1DE /* SGTextureNode.cpp in Sources */,
+				CF857B3B164C7AFC0089F1DE /* SGGeometryNode.cpp in Sources */,
+				CF857B3F164C80DB0089F1DE /* SGTranslateNode.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

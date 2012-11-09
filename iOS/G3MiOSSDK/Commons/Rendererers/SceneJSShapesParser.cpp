@@ -15,9 +15,13 @@
 #include "JSONArray.hpp"
 #include "JSONNumber.hpp"
 
-#include "CompositeShape.hpp"
-#include "MeshShape.hpp"
-#include "IndexedMesh.hpp"
+#include "SGNode.hpp"
+#include "SGShape.hpp"
+#include "SGRotateNode.hpp"
+#include "SGTranslateNode.hpp"
+#include "SGMaterialNode.hpp"
+#include "SGTextureNode.hpp"
+#include "SGGeometryNode.hpp"
 #include "GLConstants.hpp"
 #include "IFactory.hpp"
 #include "IFloatBuffer.hpp"
@@ -48,21 +52,22 @@ _rootShape(NULL)
 void SceneJSShapesParser::pvtParse(const std::string& json) {
   JSONBaseObject* jsonRootObject = IJSONParser::instance()->parse(json);
 
-  _rootShape = toShape(jsonRootObject);
+//  _rootShape = toShape(jsonRootObject);
+
+  SGNode* node = toNode(jsonRootObject);
+
+  _rootShape = new SGShape(node);
 
   delete jsonRootObject;
 }
 
-Shape* SceneJSShapesParser::convertNode(const std::string& type,
-                                        JSONObject* jsonObject) const {
-
-  int processedKeys = 1; // "type" is already processed
-
-  CompositeShape* result = new CompositeShape();
+int SceneJSShapesParser::parseCommons(JSONObject* jsonObject,
+                                       SGNode* node) const {
+  int processedKeys = 0;
 
   JSONString* jsId = jsonObject->getAsString("id");
   if (jsId != NULL) {
-    result->setId(jsId->value());
+    node->setId(jsId->value());
     processedKeys++;
   }
 
@@ -72,14 +77,59 @@ Shape* SceneJSShapesParser::convertNode(const std::string& type,
     for (int i = 0; i < nodesCount; i++) {
       JSONObject* child = jsNodes->getAsObject(i);
       if (child != NULL) {
-        Shape* childShape = toShape(child);
-        if (childShape != NULL) {
-          result->addShape(childShape);
+        SGNode* childNode = toNode(child);
+        if (childNode != NULL) {
+          node->addNode(childNode);
         }
       }
     }
     processedKeys++;
   }
+
+  return processedKeys;
+}
+
+void SceneJSShapesParser::checkProcessedKeys(JSONObject* jsonObject,
+                                             int processedKeys) const {
+  std::vector<std::string> keys = jsonObject->keys();
+  if (processedKeys != keys.size()) {
+    for (int i = 0; i < keys.size(); i++) {
+      printf("%s\n", keys.at(i).c_str());
+    }
+
+    //    ILogger::instance()->logWarning("Not all keys processed in node of type \"%s\"", type.c_str());
+    ILogger::instance()->logWarning("Not all keys processed in node, processed %i of %i", processedKeys, keys.size());
+  }
+}
+
+SGNode* SceneJSShapesParser::createNode(JSONObject* jsonObject) const {
+
+  int processedKeys = 1; // "type" is already processed
+
+  SGNode* node = new SGNode();
+
+  processedKeys += parseCommons(jsonObject, node);
+  
+//  JSONString* jsId = jsonObject->getAsString("id");
+//  if (jsId != NULL) {
+//    node->setId(jsId->value());
+//    processedKeys++;
+//  }
+//
+//  JSONArray* jsNodes = jsonObject->getAsArray("nodes");
+//  if (jsNodes != NULL) {
+//    const int nodesCount = jsNodes->size();
+//    for (int i = 0; i < nodesCount; i++) {
+//      JSONObject* child = jsNodes->getAsObject(i);
+//      if (child != NULL) {
+//        SGNode* childNode = toNode(child);
+//        if (childNode != NULL) {
+//          node->addNode(childNode);
+//        }
+//      }
+//    }
+//    processedKeys++;
+//  }
 
 //  JSONObject* jsSpecularColor = jsonObject->getAsObject("specularColor");
 //  if (jsSpecularColor != NULL) {
@@ -91,20 +141,72 @@ Shape* SceneJSShapesParser::convertNode(const std::string& type,
 //    processedKeys++;
 //  }
 
-  std::vector<std::string> keys = jsonObject->keys();
-  if (processedKeys != keys.size()) {
-    for (int i = 0; i < keys.size(); i++) {
-      printf("%s\n", keys.at(i).c_str());
-    }
+//  std::vector<std::string> keys = jsonObject->keys();
+//  if (processedKeys != keys.size()) {
+//    for (int i = 0; i < keys.size(); i++) {
+//      printf("%s\n", keys.at(i).c_str());
+//    }
+//
+////    ILogger::instance()->logWarning("Not all keys processed in node of type \"%s\"", type.c_str());
+//    ILogger::instance()->logWarning("Not all keys processed in node");
+//  }
+//
 
-    ILogger::instance()->logWarning("Not all keys processed in node of type \"%s\"", type.c_str());
-  }
+  checkProcessedKeys(jsonObject, processedKeys);
 
-  return result;
+  return node;
 }
 
-Shape* SceneJSShapesParser::convertGeometry(JSONObject* jsonObject) const {
+SGRotateNode* SceneJSShapesParser::createRotateNode(JSONObject* jsonObject) const {
+  int processedKeys = 1; // "type" is already processed
 
+  SGRotateNode* node = new SGRotateNode();
+
+  processedKeys += parseCommons(jsonObject, node);
+
+  checkProcessedKeys(jsonObject, processedKeys);
+
+  return node;
+}
+
+SGTranslateNode* SceneJSShapesParser::createTranslateNode(JSONObject* jsonObject) const {
+  int processedKeys = 1; // "type" is already processed
+
+  SGTranslateNode* node = new SGTranslateNode();
+
+  processedKeys += parseCommons(jsonObject, node);
+
+  checkProcessedKeys(jsonObject, processedKeys);
+
+  return node;
+}
+
+SGMaterialNode* SceneJSShapesParser::createMaterialNode(JSONObject* jsonObject) const {
+  int processedKeys = 1; // "type" is already processed
+
+  SGMaterialNode* node = new SGMaterialNode();
+
+  processedKeys += parseCommons(jsonObject, node);
+
+  checkProcessedKeys(jsonObject, processedKeys);
+
+  return node;
+}
+
+SGTextureNode* SceneJSShapesParser::createTextureNode(JSONObject* jsonObject) const {
+  int processedKeys = 1; // "type" is already processed
+
+  SGTextureNode* node = new SGTextureNode();
+
+  processedKeys += parseCommons(jsonObject, node);
+
+  checkProcessedKeys(jsonObject, processedKeys);
+
+  return node;
+}
+
+SGGeometryNode* SceneJSShapesParser::createGeometryNode(JSONObject* jsonObject) const {
+  int processedKeys = 1; // "type" is already processed
 
   JSONString* jsPrimitive = jsonObject->getAsString("primitive");
   int primitive = GLPrimitive::triangles(); // triangles is the default
@@ -134,22 +236,46 @@ Shape* SceneJSShapesParser::convertGeometry(JSONObject* jsonObject) const {
     }
   }
 
-//  JSONArray* jsNormals = jsonObject->getAsArray("normals");
-//  JSONArray* jsUV = jsonObject->getAsArray("uv");
-
-  
   JSONArray* jsPositions = jsonObject->getAsArray("positions");
   if (jsPositions == NULL) {
     ILogger::instance()->logError("Mandatory positions are not present");
     return NULL;
   }
+  processedKeys++;
   int verticesCount = jsPositions->size();
   IFloatBuffer* vertices = IFactory::instance()->createFloatBuffer(verticesCount);
   for (int i = 0; i < verticesCount; i++) {
     vertices->put(i, (float) jsPositions->getAsNumber(i)->value());
   }
 
-  
+  JSONArray* jsColors = jsonObject->getAsArray("colors");
+  IFloatBuffer* colors = NULL;
+  if (jsColors != NULL) {
+    const int colorsCount = jsColors->size();
+    colors = IFactory::instance()->createFloatBuffer(colorsCount);
+    for (int i = 0; i < colorsCount; i++) {
+      colors->put(i, (float) jsColors->getAsNumber(i)->value());
+    }
+    processedKeys++;
+  }
+
+  JSONArray* jsUV = jsonObject->getAsArray("uv");
+  IFloatBuffer* uv = NULL;
+  if (jsUV != NULL) {
+    const int uvCount = jsUV->size();
+    uv = IFactory::instance()->createFloatBuffer(uvCount);
+    for (int i = 0; i < uvCount; i++) {
+      uv->put(i, (float) jsUV->getAsNumber(i)->value());
+    }
+    processedKeys++;
+  }
+
+  JSONArray* jsNormals = jsonObject->getAsArray("normals");
+  IFloatBuffer* normals = NULL;
+  if (jsNormals != NULL) {
+    processedKeys++;
+  }
+
   JSONArray* jsIndices = jsonObject->getAsArray("indices");
   if (jsIndices == NULL) {
     ILogger::instance()->logError("Non indexed geometries not supported");
@@ -160,32 +286,25 @@ Shape* SceneJSShapesParser::convertGeometry(JSONObject* jsonObject) const {
   for (int i = 0; i < indicesCount; i++) {
     indices->put(i, (int) jsIndices->getAsNumber(i)->value());
   }
+  processedKeys++;
 
+  SGGeometryNode* node = new SGGeometryNode(primitive,
+                                            vertices,
+                                            colors,
+                                            uv,
+                                            normals,
+                                            indices);
 
-//  IndexedMesh(const int primitive,
-//              bool owner,
-//              const Vector3D& center,
-//              IFloatBuffer* vertices,
-//              IIntBuffer* indices,
-//              float lineWidth,
-//              Color* flatColor = NULL,
-//              IFloatBuffer* colors = NULL,
-//              const float colorsIntensity = (float)0.0);
+  processedKeys += parseCommons(jsonObject, node);
 
-  Mesh* mesh = new IndexedMesh(primitive,
-                               true,
-                               Vector3D::zero(),
-                               vertices,
-                               indices,
-                               1,
-                               Color::newFromRGBA(1, 0, 1, 1));
-  
-  MeshShape* result = new MeshShape(NULL, mesh);
+  checkProcessedKeys(jsonObject, processedKeys);
 
-  return result;
+  return node;
 }
 
-Shape* SceneJSShapesParser::toShape(JSONBaseObject* jsonBaseObject) const {
+
+
+SGNode* SceneJSShapesParser::toNode(JSONBaseObject* jsonBaseObject) const {
 
   if (jsonBaseObject == NULL) {
     return NULL;
@@ -194,29 +313,29 @@ Shape* SceneJSShapesParser::toShape(JSONBaseObject* jsonBaseObject) const {
   int ____DIEGO_AT_WORK;
   JSONObject* jsonObject = jsonBaseObject->asObject();
 
-  Shape* result = NULL;
+  SGNode* result = NULL;
 
   if (jsonObject != NULL) {
     JSONString* jsType = jsonObject->getAsString("type");
     if (jsType != NULL) {
       const std::string type = jsType->value();
       if (type.compare("node") == 0) {
-        result = convertNode(type, jsonObject);
+        result = createNode(jsonObject);
       }
       else if (type.compare("rotate") == 0) {
-        result = convertNode(type, jsonObject);
+        result = createRotateNode(jsonObject);
       }
       else if (type.compare("translate") == 0) {
-        result = convertNode(type, jsonObject);
+        result = createTranslateNode(jsonObject);
       }
       else if (type.compare("material") == 0) {
-        result = convertNode(type, jsonObject);
+        result = createMaterialNode(jsonObject);
       }
       else if (type.compare("texture") == 0) {
-        result = convertNode(type, jsonObject);
+        result = createTextureNode(jsonObject);
       }
       else if (type.compare("geometry") == 0) {
-        result = convertGeometry(jsonObject);
+        result = createGeometryNode(jsonObject);
       }
       else {
         ILogger::instance()->logWarning("Unknown type \"%s\"", type.c_str());
