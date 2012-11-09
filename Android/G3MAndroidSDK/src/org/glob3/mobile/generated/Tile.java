@@ -300,7 +300,7 @@ public class Tile
 	if (_tessellatorMesh != null)
 		_tessellatorMesh.dispose();
   
-	  _texturizerData = null;
+	_texturizerData = null;
   
 	if (_texturizedMesh != null)
 		_texturizedMesh.dispose();
