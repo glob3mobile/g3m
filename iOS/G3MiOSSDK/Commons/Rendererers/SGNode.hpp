@@ -18,20 +18,22 @@ class RenderContext;
 class SGNode {
 private:
   std::string _id;
-  
+  std::string _sId;
+
   SGNode*              _parent;
   std::vector<SGNode*> _children;
 
-#ifdef C_CODE
-  const InitializationContext* _initializationContext;
-#endif
-#ifdef JAVA_CODE
-  private InitializationContext _initializationContext;
-#endif
 
   void setParent(SGNode* parent);
 
 protected:
+#ifdef C_CODE
+  const InitializationContext* _initializationContext;
+#endif
+#ifdef JAVA_CODE
+  protected InitializationContext _initializationContext;
+#endif
+
   virtual void prepareRender(const RenderContext* rc);
 
   virtual void cleanUpRender(const RenderContext* rc);
@@ -55,6 +57,10 @@ public:
 
   void setId(const std::string& id) {
     _id = id;
+  }
+
+  void setSId(const std::string& sId) {
+    _sId = sId;
   }
 
   virtual bool isReadyToRender(const RenderContext* rc);

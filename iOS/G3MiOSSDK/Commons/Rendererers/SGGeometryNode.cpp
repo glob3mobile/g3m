@@ -11,13 +11,13 @@
 #include "Context.hpp"
 #include "GL.hpp"
 
-void SGGeometryNode::prepareRender(const RenderContext* rc) {
-
-}
-
-void SGGeometryNode::cleanUpRender(const RenderContext* rc) {
-
-}
+//void SGGeometryNode::prepareRender(const RenderContext* rc) {
+//
+//}
+//
+//void SGGeometryNode::cleanUpRender(const RenderContext* rc) {
+//
+//}
 
 void SGGeometryNode::rawRender(const RenderContext* rc) {
   GL *gl = rc->getGL();

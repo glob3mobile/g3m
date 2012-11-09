@@ -22,6 +22,7 @@ class SGMaterialNode;
 class SGTextureNode;
 class SGGeometryNode;
 class SGTranslateNode;
+class SGLayerNode;
 
 class SceneJSShapesParser {
 private:
@@ -51,9 +52,8 @@ private:
   SGTextureNode*   createTextureNode  (JSONObject* jsonObject) const;
   SGGeometryNode*  createGeometryNode (JSONObject* jsonObject) const;
 
-//  Shape* convertNode(const std::string& type,
-//                     JSONObject* jsonObject) const;
-//  Shape* convertGeometry(JSONObject* jsonObject) const;
+  SGLayerNode*     createLayerNode  (JSONObject* jsonObject) const;
+
 
 public:
 
