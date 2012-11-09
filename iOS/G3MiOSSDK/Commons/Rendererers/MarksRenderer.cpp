@@ -124,8 +124,8 @@ void MarksRenderer::render(const RenderContext* rc) {
   gl->disableDepthTest();
   gl->enableBlend();
   
-  const Vector3D radius = rc->getPlanet()->getRadii();
-  const double minDistanceToCamera = (radius._x + radius._y + radius._z) / 3 * 0.75;
+//  const Vector3D radius = rc->getPlanet()->getRadii();
+//  const double minDistanceToCamera = (radius._x + radius._y + radius._z) / 3 * 0.75;
   
   int marksSize = _marks.size();
   for (int i = 0; i < marksSize; i++) {
@@ -133,7 +133,8 @@ void MarksRenderer::render(const RenderContext* rc) {
     //rc->getLogger()->logInfo("Rendering Mark: \"%s\"", mark->getName().c_str());
     
     if (mark->isReady()) {
-      mark->render(rc, minDistanceToCamera);
+//      mark->render(rc, minDistanceToCamera);
+        mark->render(rc);
     }
   }
   

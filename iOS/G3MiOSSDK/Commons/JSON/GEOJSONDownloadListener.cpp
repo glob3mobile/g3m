@@ -82,7 +82,7 @@ void GEOJSONDownloadListener::parsePointObject(JSONObject* point){
         
         Mark* mark = new Mark(name->getString(),
                               URL(iconUrl->getString(),false),
-                              Geodetic3D(latitude, longitude, 0));
+                              Geodetic3D(latitude, longitude, 0),NULL,10000);
         
         _marksRenderer->addMark(mark);
     }
