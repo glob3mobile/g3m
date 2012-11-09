@@ -29,8 +29,9 @@ public class JSONObject extends JSONBaseObject
 //ORIGINAL LINE: void putKeyAndValueDescription(const String& key, IStringBuilder *isb) const
   private void putKeyAndValueDescription(String key, IStringBuilder isb)
   {
+	isb.addString("\"");
 	isb.addString(key);
-	isb.addString("=");
+	isb.addString("\"=");
 	isb.addString(get(key).description());
   }
 
@@ -57,31 +58,36 @@ public class JSONObject extends JSONBaseObject
 //ORIGINAL LINE: JSONObject* getAsObject(const String& key) const
   public final JSONObject getAsObject(String key)
   {
-	return get(key).asObject();
+	JSONBaseObject object = get(key);
+	return (object == null) ? null : object.asObject();
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: JSONArray* getAsArray(const String& key) const
   public final JSONArray getAsArray(String key)
   {
-	return get(key).asArray();
+	JSONBaseObject object = get(key);
+	return (object == null) ? null : object.asArray();
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: JSONBoolean* getAsBoolean(const String& key) const
   public final JSONBoolean getAsBoolean(String key)
   {
-	return get(key).asBoolean();
+	JSONBaseObject object = get(key);
+	return (object == null) ? null : object.asBoolean();
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: JSONNumber* getAsNumber(const String& key) const
   public final JSONNumber getAsNumber(String key)
   {
-	return get(key).asNumber();
+	JSONBaseObject object = get(key);
+	return (object == null) ? null : object.asNumber();
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: JSONString* getAsString(const String& key) const
   public final JSONString getAsString(String key)
   {
-	return get(key).asString();
+	JSONBaseObject object = get(key);
+	return (object == null) ? null : object.asString();
   }
 
   public final void put(String key, JSONBaseObject object)
@@ -122,7 +128,7 @@ public class JSONObject extends JSONBaseObject
 	  putKeyAndValueDescription(keys.get(0), isb);
 	  for (int i = 1; i < keysCount; i++)
 	  {
-		isb.addString(",");
+		isb.addString(", ");
 		putKeyAndValueDescription(keys.get(i), isb);
 	  }
 	}

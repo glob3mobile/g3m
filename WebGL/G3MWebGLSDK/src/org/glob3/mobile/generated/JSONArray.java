@@ -48,31 +48,36 @@ public class JSONArray extends JSONBaseObject
 //ORIGINAL LINE: JSONObject* getAsObject(const int index) const
   public final JSONObject getAsObject(int index)
   {
-	return get(index).asObject();
+	JSONBaseObject object = get(index);
+	return (object == null) ? null : object.asObject();
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: JSONArray* getAsArray(const int index) const
   public final JSONArray getAsArray(int index)
   {
-	return get(index).asArray();
+	JSONBaseObject object = get(index);
+	return (object == null) ? null : object.asArray();
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: JSONBoolean* getAsBoolean(const int index) const
   public final JSONBoolean getAsBoolean(int index)
   {
-	return get(index).asBoolean();
+	JSONBaseObject object = get(index);
+	return (object == null) ? null : object.asBoolean();
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: JSONNumber* getAsNumber(const int index) const
   public final JSONNumber getAsNumber(int index)
   {
-	return get(index).asNumber();
+	JSONBaseObject object = get(index);
+	return (object == null) ? null : object.asNumber();
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: JSONString* getAsString(const int index) const
   public final JSONString getAsString(int index)
   {
-	return get(index).asString();
+	JSONBaseObject object = get(index);
+	return (object == null) ? null : object.asString();
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -95,12 +100,13 @@ public class JSONArray extends JSONBaseObject
   
 	int size = this.size();
   
-	isb.addString("[size=");
-	isb.addInt(size);
+	isb.addString("[");
+  //  isb->addString("[size=");
+  //  isb->addInt(size);
   
 	if (size > 0)
 	{
-	  isb.addString("/");
+	  //isb->addString(" ");
   
 	  isb.addString(this.get(0).description());
   
@@ -108,7 +114,7 @@ public class JSONArray extends JSONBaseObject
 	  {
 		for (int i = 1; i < size; i++)
 		{
-		  isb.addString(",");
+		  isb.addString(", ");
 		  isb.addString(this.get(i).description());
 		}
 	  }
@@ -116,10 +122,13 @@ public class JSONArray extends JSONBaseObject
 	  {
 		for (int i = 1; i < 10; i++)
 		{
-		  isb.addString(",");
+		  isb.addString(", ");
 		  isb.addString(this.get(i).description());
 		}
-		isb.addString(",...");
+		isb.addString(", ...");
+		isb.addString(" size=");
+		isb.addInt(size);
+  
 	  }
 	}
   

@@ -68,6 +68,25 @@ public class JSONNumber extends JSONBaseObject
 	return _doubleValue;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: double value() const
+  public final double value()
+  {
+	if (_type == number_type.double_type)
+	{
+	  return _doubleValue;
+	}
+	else if (_type == number_type.int_type)
+	{
+	  return _intValue;
+	}
+	else if (_type == number_type.float_type)
+	{
+	  return _floatValue;
+	}
+	return 0;
+  }
+
   public final JSONNumber asNumber()
   {
 	return this;
@@ -82,17 +101,17 @@ public class JSONNumber extends JSONBaseObject
 	switch (_type)
 	{
 	  case int_type:
-		isb.addString("int/");
+		//isb->addString("int/");
 		isb.addInt(_intValue);
 		break;
   
 	  case float_type:
-		isb.addString("float/");
+		//isb->addString("float/");
 		isb.addFloat(_floatValue);
 		break;
   
 	  case double_type:
-		isb.addString("double/");
+		//isb->addString("double/");
 		isb.addDouble(_doubleValue);
 		break;
   

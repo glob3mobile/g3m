@@ -16,6 +16,8 @@ package org.glob3.mobile.generated;
 //
 
 
+///#include <string>
+
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class MutableMatrix44D;
 
@@ -29,7 +31,6 @@ public abstract class Shape
   private double _scaleX;
   private double _scaleY;
   private double _scaleZ;
-
 
   private MutableMatrix44D _transformMatrix;
   private MutableMatrix44D createTransformMatrix(Planet planet)
@@ -52,6 +53,8 @@ public abstract class Shape
 	return _transformMatrix;
   }
 
+//  std::string _id;
+
   protected void cleanTransformMatrix()
   {
 	if (_transformMatrix != null)
@@ -70,6 +73,10 @@ public abstract class Shape
 	  _transformMatrix = null;
 
   }
+
+//  void setId(const std::string& id) {
+//    _id = id;
+//  }
 
   public void dispose()
   {
@@ -133,7 +140,6 @@ public abstract class Shape
 	_scaleX = scaleX;
 	_scaleY = scaleY;
 	_scaleZ = scaleZ;
-
 	cleanTransformMatrix();
   }
 

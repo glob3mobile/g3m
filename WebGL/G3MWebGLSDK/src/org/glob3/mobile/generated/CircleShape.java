@@ -70,6 +70,11 @@ public class CircleShape extends MeshShape
 
   }
 
+  public void dispose()
+  {
+	_color = null;
+  }
+
   public final void setRadius(float radius)
   {
 	if (_radius != radius)
@@ -82,7 +87,7 @@ public class CircleShape extends MeshShape
   public final void setColor(Color color)
   {
 	_color = null;
-	_color = new Color(color);
+	_color = color;
 	cleanMesh();
   }
 

@@ -166,7 +166,11 @@ public class IndexedMesh extends Mesh
 	  gl.multMatrixf(_translationMatrix);
 	}
   
-	if (_primitive == GLPrimitive.triangleStrip())
+	if (_primitive == GLPrimitive.triangles())
+	{
+	  gl.drawTriangles(_indices);
+	}
+	else if (_primitive == GLPrimitive.triangleStrip())
 	{
 	  gl.drawTriangleStrip(_indices);
 	}
