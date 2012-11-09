@@ -54,7 +54,7 @@ public:
     Mark(const std::string name,
          const URL         textureURL,
          const Geodetic3D  position,
-         void* userData=NULL, const double minDistanceToCamera=NULL) :
+         void* userData=NULL, const double minDistanceToCamera=0) :
     _name(name),
     _textureURL(textureURL),
     _position(position),

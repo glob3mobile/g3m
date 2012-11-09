@@ -119,7 +119,7 @@ void Mark::render(const RenderContext* rc) {
     const Vector3D markCameraVector = markPosition->sub(cameraPosition);
     const double distanceToCamera = markCameraVector.length();
     
-    if (_minDistanceToCamera) {
+    if (_minDistanceToCamera!=0) {
         _renderedMark = distanceToCamera <= _minDistanceToCamera;
     }else{
         const Vector3D radius = rc->getPlanet()->getRadii();
