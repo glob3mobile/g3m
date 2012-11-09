@@ -32,9 +32,7 @@ TileRenderer::~TileRenderer() {
 void TileRenderer::clearTopLevelTiles() {
   for (int i = 0; i < _topLevelTiles.size(); i++) {
     Tile* tile = _topLevelTiles[i];
-//#ifdef C_CODE
     delete tile;
-//#endif
   }
   
   _topLevelTiles.clear();
