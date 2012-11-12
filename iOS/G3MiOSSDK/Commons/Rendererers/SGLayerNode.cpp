@@ -16,6 +16,5 @@ void SGLayerNode::prepareRender(const RenderContext* rc) {
 
 void SGLayerNode::cleanUpRender(const RenderContext* rc) {
 
-
   SGNode::cleanUpRender(rc);
 }
