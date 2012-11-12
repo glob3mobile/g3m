@@ -19,10 +19,8 @@ public class TileRenderer extends LeafRenderer
 	for (int i = 0; i < _topLevelTiles.size(); i++)
 	{
 	  Tile tile = _topLevelTiles.get(i);
-  ///#ifdef C_CODE
 	  if (tile != null)
 		  tile.dispose();
-  ///#endif
 	}
   
 	_topLevelTiles.clear();

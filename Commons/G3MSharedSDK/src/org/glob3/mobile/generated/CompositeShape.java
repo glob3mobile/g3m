@@ -1,0 +1,79 @@
+package org.glob3.mobile.generated; 
+//
+//  CompositeShape.cpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 11/6/12.
+//
+//
+
+//
+//  CompositeShape.hpp
+//  G3MiOSSDK
+//
+//  Created by Diego Gomez Deck on 11/6/12.
+//
+//
+
+
+
+
+public class CompositeShape extends Shape
+{
+  private java.util.ArrayList<Shape> _children = new java.util.ArrayList<Shape>();
+
+  public CompositeShape()
+  {
+	  super(null);
+
+  }
+
+  public CompositeShape(Geodetic3D position)
+  {
+	  super(position);
+
+  }
+
+
+  public void dispose()
+  {
+	int childrenCount = _children.size();
+	for (int i = 0; i < childrenCount; i++)
+	{
+	  Shape child = _children.get(i);
+	  if (child != null)
+		  child.dispose();
+	}
+  }
+
+  public final void addShape(Shape shape)
+  {
+	_children.add(shape);
+  }
+
+  public final boolean isReadyToRender(RenderContext rc)
+  {
+	int childrenCount = _children.size();
+	for (int i = 0; i < childrenCount; i++)
+	{
+	  Shape child = _children.get(i);
+	  if (child.isReadyToRender(rc))
+	  {
+		return true;
+	  }
+	}
+  
+	return false;
+  }
+
+  public final void rawRender(RenderContext rc)
+  {
+	int childrenCount = _children.size();
+	for (int i = 0; i < childrenCount; i++)
+	{
+	  Shape child = _children.get(i);
+	  child.render(rc);
+	}
+  }
+
+}
