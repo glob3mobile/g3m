@@ -248,36 +248,36 @@
     }
   }
 
-//  if (true) {
-    ShapesRenderer* shapesRenderer = new ShapesRenderer();
+  //  if (true) {
+  ShapesRenderer* shapesRenderer = new ShapesRenderer();
 
-//    //  std::string textureFileName = "g3m-marker.png";
-//    //  IImage* textureImage = IFactory::instance()->createImageFromFileName(textureFileName);
-//    //
-//    //  Shape* shape = new QuadShape(Geodetic3D(Angle::fromDegrees(37.78333333),
-//    //                                          Angle::fromDegrees(-122.41666666666667),
-//    //                                          8000),
-//    //                               textureImage, true, textureFileName,
-//    //                               50000, 50000);
-//
-//    Shape* shape = new CircleShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
-//                                                  Angle::fromDegrees(-122.41666666666667),
-//                                                  8000),
-//                                   50000,
-//                                   Color::newFromRGBA(1, 1, 0, 1));
-//    //  shape->setHeading( Angle::fromDegrees(45) );
-//    //  shape->setPitch( Angle::fromDegrees(45) );
-//    //  shape->setScale(2.0, 0.5, 1);
-//
-//    shapesRenderer->addShape(shape);
+  //    //  std::string textureFileName = "g3m-marker.png";
+  //    //  IImage* textureImage = IFactory::instance()->createImageFromFileName(textureFileName);
+  //    //
+  //    //  Shape* shape = new QuadShape(Geodetic3D(Angle::fromDegrees(37.78333333),
+  //    //                                          Angle::fromDegrees(-122.41666666666667),
+  //    //                                          8000),
+  //    //                               textureImage, true, textureFileName,
+  //    //                               50000, 50000);
+  //
+  //    Shape* shape = new CircleShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
+  //                                                  Angle::fromDegrees(-122.41666666666667),
+  //                                                  8000),
+  //                                   50000,
+  //                                   Color::newFromRGBA(1, 1, 0, 1));
+  //    //  shape->setHeading( Angle::fromDegrees(45) );
+  //    //  shape->setPitch( Angle::fromDegrees(45) );
+  //    //  shape->setScale(2.0, 0.5, 1);
+  //
+  //    shapesRenderer->addShape(shape);
 
-    // CompositeShape* group = new CompositeShape();
-    // group->addShape(shape);
-    // shapesRenderer->addShape(group);
+  // CompositeShape* group = new CompositeShape();
+  // group->addShape(shape);
+  // shapesRenderer->addShape(group);
 
 
-    renderers.push_back(shapesRenderer);
-//  }
+  renderers.push_back(shapesRenderer);
+  //  }
 
 
   TrailsRenderer* trailsRenderer = new TrailsRenderer();
@@ -362,7 +362,8 @@
                                                                 1000000),
                                                      TimeInterval::fromSeconds(10));
 
-      NSString *filePath = [[NSBundle mainBundle] pathForResource:@"seymour-plane" ofType:@"json"];
+      NSString *filePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
+                                                           ofType: @"json"];
       if (filePath) {
         NSString *nsString = [NSString stringWithContentsOfFile: filePath
                                                        encoding: NSUTF8StringEncoding
@@ -378,7 +379,6 @@
           _shapesRenderer->addShape(tank);
         }
       }
-      
 
     }
   };

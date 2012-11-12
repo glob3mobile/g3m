@@ -236,7 +236,6 @@ SGMaterialNode* SceneJSShapesParser::createMaterialNode(JSONObject* jsonObject) 
 }
 
 SGLayerNode* SceneJSShapesParser::createLayerNode(JSONObject* jsonObject) const {
-//  int processedKeys = 1; // "type" is already processed
   int processedKeys = 0; //  Layer has not "type"
 
   SGLayerNode* node = new SGLayerNode();

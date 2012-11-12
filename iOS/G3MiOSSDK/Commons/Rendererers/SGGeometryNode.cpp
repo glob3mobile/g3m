@@ -24,6 +24,26 @@ void SGGeometryNode::rawRender(const RenderContext* rc) {
     gl->enableVertexColor(_colors, colorsIntensity);
   }
 
+
+//  if (_transparent) {
+//    gl->enableBlend();
+//  }
+//
+//  gl->enableTextures();
+//  gl->enableTexture2D();
+//
+//  _textureMapping->bind(rc);
+//
+//  _mesh->render(rc);
+//
+//  gl->disableTexture2D();
+//  gl->disableTextures();
+//
+//  if (_transparent) {
+//    gl->disableBlend();
+//  }
+
+
   gl->vertexPointer(3, 0, _vertices);
 
   if (_primitive == GLPrimitive::triangles()) {
