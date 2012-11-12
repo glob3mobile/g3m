@@ -48,6 +48,13 @@ public abstract class MeshShape extends Shape
 
   }
 
+//  MeshShape(Geodetic3D* position,
+//            Mesh* mesh) :
+//  Shape(position),
+//  _mesh(mesh) {
+//
+//  }
+
   public final boolean isReadyToRender(RenderContext rc)
   {
 	final Mesh mesh = getMesh(rc);

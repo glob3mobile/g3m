@@ -22,16 +22,20 @@ protected:
   Mesh* createMesh(const RenderContext* rc);
 
 public:
-  CircleShape(const Geodetic3D& position,
+  CircleShape(Geodetic3D* position,
               float radius,
-              const Color& color,
-              int steps) :
+              Color* color = NULL,
+              int steps = 64) :
   MeshShape(position),
   _radius(radius),
-  _color(new Color(color)),
+  _color(color),
   _steps(steps)
   {
 
+  }
+
+  ~CircleShape() {
+    delete _color;
   }
 
   void setRadius(float radius) {
@@ -41,9 +45,9 @@ public:
     }
   }
 
-  void setColor(const Color& color) {
+  void setColor(Color* color) {
     delete _color;
-    _color = new Color(color);
+    _color = color;
     cleanMesh();
   }
   

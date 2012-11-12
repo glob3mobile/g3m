@@ -531,6 +531,12 @@ public final class NativeGL_WebGL
 
 
    @Override
+   public native int Primitive_Triangles() /*-{
+		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.TRIANGLES;
+   }-*/;
+
+
+   @Override
    public native int Primitive_TriangleStrip() /*-{
 		return this.@org.glob3.mobile.specific.NativeGL_WebGL::_gl.TRIANGLE_STRIP;
    }-*/;

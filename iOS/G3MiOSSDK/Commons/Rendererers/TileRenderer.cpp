@@ -32,9 +32,7 @@ TileRenderer::~TileRenderer() {
 void TileRenderer::clearTopLevelTiles() {
   for (int i = 0; i < _topLevelTiles.size(); i++) {
     Tile* tile = _topLevelTiles[i];
-#ifdef C_CODE
     delete tile;
-#endif
   }
   
   _topLevelTiles.clear();
@@ -144,14 +142,8 @@ void TileRenderer::render(const RenderContext* rc) {
       toVisit.push_back(_topLevelTiles[i]);
     }
     
-    //    DistanceToCenterTileComparison predicate = DistanceToCenterTileComparison(rc->getCurrentCamera(),
-    //                                                                              rc->getPlanet());
-    
     while (toVisit.size() > 0) {
       std::list<Tile*> toVisitInNextIteration;
-      
-      //      predicate.initialize();
-      //      toVisit.sort(predicate);
       
       for (std::list<Tile*>::iterator iter = toVisit.begin();
            iter != toVisit.end();

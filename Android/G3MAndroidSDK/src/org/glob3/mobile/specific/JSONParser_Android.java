@@ -17,7 +17,8 @@ public class JSONParser_Android
 
    @Override
    public JSONBaseObject parse(final String string) {
-      org.glob3.mobile.generated.JSONBaseObject g3mJSONBaseObject = new JSONBaseObject();
+      //      org.glob3.mobile.generated.JSONBaseObject g3mJSONBaseObject = new JSONBaseObject();
+      org.glob3.mobile.generated.JSONBaseObject g3mJSONBaseObject = null;
 
       Object rawJson;
       try {
@@ -29,7 +30,7 @@ public class JSONParser_Android
             g3mJSONBaseObject = new org.glob3.mobile.generated.JSONArray();
 
             for (int i = 0; i < jsonArray.length(); i++) {
-               g3mJSONBaseObject.getArray().appendElement(parse(jsonArray.get(i).toString()));
+               g3mJSONBaseObject.asArray().add(parse(jsonArray.get(i).toString()));
             }
          }
          else if (rawJson instanceof JSONObject) {
@@ -40,8 +41,7 @@ public class JSONParser_Android
             g3mJSONBaseObject = new org.glob3.mobile.generated.JSONObject();
 
             for (int i = 0; i < attributes.length(); i++) {
-               g3mJSONBaseObject.getObject().putObject(attributes.getString(i),
-                        parse(jsonObj.get(attributes.getString(i)).toString()));
+               g3mJSONBaseObject.asObject().put(attributes.getString(i), parse(jsonObj.get(attributes.getString(i)).toString()));
             }
          }
          else if (rawJson instanceof String) {

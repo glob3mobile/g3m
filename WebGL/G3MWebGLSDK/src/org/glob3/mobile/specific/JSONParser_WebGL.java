@@ -59,7 +59,7 @@ public class JSONParser_WebGL
          final int size = jsonArray.size();
          for (int i = 0; i < size; i++) {
             final com.google.gwt.json.client.JSONValue element = jsonArray.get(i);
-            array.appendElement(convert(element));
+            array.add(convert(element));
          }
          return array;
       }
@@ -68,7 +68,7 @@ public class JSONParser_WebGL
       if (jsonObject != null) {
          final JSONObject object = new JSONObject();
          for (final String key : jsonObject.keySet()) {
-            object.putObject(key, convert(jsonObject.get(key)));
+            object.put(key, convert(jsonObject.get(key)));
          }
          return object;
       }

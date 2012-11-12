@@ -13,20 +13,26 @@
 
 class JSONString : public JSONBaseObject{
 private:
-  std::string _value;
+  const std::string _value;
   
 public:
-  ~JSONString(){}
-  JSONString(std::string value): _value(value){}
-  const std::string getValue()const{
+  ~JSONString() { }
+
+  JSONString(const std::string& value) :
+  _value(value)
+  {
+  }
+
+  const std::string value() const {
     return _value;
   }
-  JSONString* getString(){
+
+  JSONString* asString() {
     return this;
   }
-  
+
+  const std::string description() const;
+
 };
-
-
 
 #endif

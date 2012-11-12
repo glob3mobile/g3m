@@ -16,6 +16,8 @@ package org.glob3.mobile.generated;
 //
 
 
+///#include <string>
+
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class MutableMatrix44D;
 
@@ -30,22 +32,15 @@ public abstract class Shape
   private double _scaleY;
   private double _scaleZ;
 
-
   private MutableMatrix44D _transformMatrix;
   private MutableMatrix44D createTransformMatrix(Planet planet)
   {
-  //  const MutableMatrix44D geodeticTranslation = MutableMatrix44D::createTranslationMatrix( planet->toCartesian(*_position) );
-  //  const MutableMatrix44D geodeticRotation    = MutableMatrix44D::createGeodeticRotationMatrix(*_position);
-  //  const MutableMatrix44D geodeticTransform   = geodeticTranslation.multiply(geodeticRotation);
-  
-	final MutableMatrix44D geodeticTransform = planet.createGeodeticTransformMatrix(_position);
-  
+	final MutableMatrix44D geodeticTransform = (_position == null) ? MutableMatrix44D.identity() : planet.createGeodeticTransformMatrix(_position);
   
 	final MutableMatrix44D headingRotation = MutableMatrix44D.createRotationMatrix(_heading, Vector3D.downZ());
 	final MutableMatrix44D pitchRotation = MutableMatrix44D.createRotationMatrix(_pitch, Vector3D.upX());
 	final MutableMatrix44D scale = MutableMatrix44D.createScaleMatrix(_scaleX, _scaleY, _scaleZ);
 	final MutableMatrix44D localTransform = headingRotation.multiply(pitchRotation).multiply(scale);
-  
   
 	return new MutableMatrix44D(geodeticTransform.multiply(localTransform));
   }
@@ -58,6 +53,8 @@ public abstract class Shape
 	return _transformMatrix;
   }
 
+//  std::string _id;
+
   protected void cleanTransformMatrix()
   {
 	if (_transformMatrix != null)
@@ -67,7 +64,7 @@ public abstract class Shape
 
   public Shape(Geodetic3D position)
   {
-	  _position = new Geodetic3D(position);
+	  _position = position;
 	  _heading = new Angle(Angle.zero());
 	  _pitch = new Angle(Angle.zero());
 	  _scaleX = 1;
@@ -76,6 +73,10 @@ public abstract class Shape
 	  _transformMatrix = null;
 
   }
+
+//  void setId(const std::string& id) {
+//    _id = id;
+//  }
 
   public void dispose()
   {
@@ -90,21 +91,21 @@ public abstract class Shape
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Geodetic3D getPosition() const
+//ORIGINAL LINE: const Geodetic3D getPosition() const
   public final Geodetic3D getPosition()
   {
 	return _position;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Angle getHeading() const
+//ORIGINAL LINE: const Angle getHeading() const
   public final Angle getHeading()
   {
 	return _heading;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Angle getPitch() const
+//ORIGINAL LINE: const Angle getPitch() const
   public final Angle getPitch()
   {
 	return _pitch;
@@ -114,7 +115,7 @@ public abstract class Shape
   {
 	if (_position != null)
 		_position.dispose();
-	_position = new Geodetic3D(position);
+	_position = position;
 	cleanTransformMatrix();
   }
 
@@ -134,6 +135,19 @@ public abstract class Shape
 	cleanTransformMatrix();
   }
 
+  public final void setScale(double scaleX, double scaleY, double scaleZ)
+  {
+	_scaleX = scaleX;
+	_scaleY = scaleY;
+	_scaleZ = scaleZ;
+	cleanTransformMatrix();
+  }
+
+  public final void setScale(Vector3D scale)
+  {
+	setScale(scale._x, scale._y, scale._z);
+  }
+
   public final void render(RenderContext rc)
   {
 	if (isReadyToRender(rc))
@@ -142,33 +156,21 @@ public abstract class Shape
   
 	  gl.pushMatrix();
   
-	  final Planet planet = rc.getPlanet();
-  
-	  gl.multMatrixf(getTransformMatrix(planet));
+	  gl.multMatrixf(getTransformMatrix(rc.getPlanet()));
   
 	  rawRender(rc);
   
 	  gl.popMatrix();
 	}
-  
+  }
+
+  public void initialize(InitializationContext ic)
+  {
+
   }
 
   public abstract boolean isReadyToRender(RenderContext rc);
 
   public abstract void rawRender(RenderContext rc);
-
-  public final void setScale(double scaleX, double scaleY, double scaleZ)
-  {
-	_scaleX = scaleX;
-	_scaleY = scaleY;
-	_scaleZ = scaleZ;
-
-	cleanTransformMatrix();
-  }
-
-  public final void setScale(Vector3D scale)
-  {
-	setScale(scale._x, scale._y, scale._z);
-  }
 
 }

@@ -27,7 +27,7 @@ protected:
 public:
   
   IStringBuilder* addBool(bool b){
-    _oss << b;
+    _oss << (b ? "true" : "false");
     return this;
   }
   

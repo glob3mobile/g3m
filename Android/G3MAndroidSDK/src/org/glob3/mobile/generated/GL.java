@@ -394,6 +394,11 @@ public class GL
 	}
   }
 
+  public final void drawTriangles(IIntBuffer indices)
+  {
+	_gl.drawElements(GLPrimitive.triangles(), indices.size(), indices);
+  }
+
   public final void drawTriangleStrip(IIntBuffer indices)
   {
 	_gl.drawElements(GLPrimitive.triangleStrip(), indices.size(), indices);

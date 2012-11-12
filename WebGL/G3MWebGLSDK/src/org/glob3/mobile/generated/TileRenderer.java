@@ -19,6 +19,10 @@ public class TileRenderer extends LeafRenderer
 	for (int i = 0; i < _topLevelTiles.size(); i++)
 	{
 	  Tile tile = _topLevelTiles.get(i);
+  ///#ifdef C_CODE
+	  if (tile != null)
+		  tile.dispose();
+  ///#endif
 	}
   
 	_topLevelTiles.clear();
@@ -134,15 +138,9 @@ public class TileRenderer extends LeafRenderer
 		toVisit.addLast(_topLevelTiles.get(i));
 	  }
   
-	  //    DistanceToCenterTileComparison predicate = DistanceToCenterTileComparison(rc->getCurrentCamera(),
-	  //                                                                              rc->getPlanet());
-  
 	  while (toVisit.size() > 0)
 	  {
 		java.util.LinkedList<Tile> toVisitInNextIteration = new java.util.LinkedList<Tile>();
-  
-		//      predicate.initialize();
-		//      toVisit.sort(predicate);
   
 		for (java.util.Iterator<Tile> iter = toVisit.iterator(); iter.hasNext();)
 		{
