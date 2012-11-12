@@ -221,6 +221,9 @@ public abstract class INativeGL
   public abstract int Type_Int();
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual int Primitive_Triangles() const = 0;
+  public abstract int Primitive_Triangles();
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual int Primitive_TriangleStrip() const = 0;
   public abstract int Primitive_TriangleStrip();
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

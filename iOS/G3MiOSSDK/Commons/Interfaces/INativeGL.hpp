@@ -157,6 +157,7 @@ public:
   virtual int Type_UnsignedInt() const = 0;
   virtual int Type_Int() const = 0;
   
+  virtual int Primitive_Triangles() const = 0;
   virtual int Primitive_TriangleStrip() const = 0;
   virtual int Primitive_TriangleFan() const = 0;
   virtual int Primitive_Lines() const = 0;

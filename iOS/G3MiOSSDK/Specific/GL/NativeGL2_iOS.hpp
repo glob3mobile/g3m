@@ -249,6 +249,9 @@ public:
   int Type_Int() const{
     return GL_INT;
   }
+  int Primitive_Triangles() const{
+    return GL_TRIANGLES;
+  }
   int Primitive_TriangleStrip() const{
     return GL_TRIANGLE_STRIP;
   }

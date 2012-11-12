@@ -79,9 +79,9 @@ public:
   
   void addMark(Mark* mark);
   
-  virtual bool onTouchEvent(const EventContext* ec,
-                            const TouchEvent* touchEvent);
-  
+  bool onTouchEvent(const EventContext* ec,
+                    const TouchEvent* touchEvent);
+
   void onResizeViewportEvent(const EventContext* ec,
                              int width, int height) {
     
@@ -98,7 +98,7 @@ public:
   }
   
   void onResume(const InitializationContext* ic) {
-    
+    _initializationContext = ic;
   }
   
   void onPause(const InitializationContext* ic) {

@@ -11,27 +11,27 @@
 #include "JSONArray.hpp"
 #include "JSONNumber.hpp"
 
-JSONObject* JSONBaseObject::getObject(){
+JSONObject* JSONBaseObject::asObject() {
   ILogger::instance()->logError("The requested Object is not of type JSONObject!");
   return NULL;
 }
 
-JSONArray* JSONBaseObject::getArray(){
+JSONArray* JSONBaseObject::asArray() {
   ILogger::instance()->logError("The requested Object is not of type JSONArray!");
   return NULL;
 }
 
-JSONNumber* JSONBaseObject::getNumber(){
+JSONNumber* JSONBaseObject::asNumber() {
   ILogger::instance()->logError("The requested Object is not of type JSONNumber!");
   return NULL;
 }
 
-JSONString* JSONBaseObject::getString(){
+JSONString* JSONBaseObject::asString() {
   ILogger::instance()->logError("The requested Object is not of type JSONString!");
   return NULL;
 }
 
-JSONBoolean* JSONBaseObject::getBoolean(){
+JSONBoolean* JSONBaseObject::asBoolean() {
   ILogger::instance()->logError("The requested Object is not of type JSONBoolean!");
   return NULL;
 }

@@ -109,7 +109,7 @@ public class MarksRenderer extends LeafRenderer
 	}
   }
 
-  public boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
+  public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
   {
 	if (_markTouchListener == null)
 	{
@@ -217,7 +217,7 @@ public class MarksRenderer extends LeafRenderer
 
   public final void onResume(InitializationContext ic)
   {
-
+	_initializationContext = ic;
   }
 
   public final void onPause(InitializationContext ic)

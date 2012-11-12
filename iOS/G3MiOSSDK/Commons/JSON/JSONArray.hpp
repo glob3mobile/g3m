@@ -13,21 +13,31 @@
 
 #include "JSONBaseObject.hpp"
 
-class JSONArray : public JSONBaseObject{
+class JSONArray : public JSONBaseObject {
 private:
   std::vector<JSONBaseObject*> _entries;
-  
+
 public:
-  JSONArray* getArray(){
+  JSONArray* asArray() {
     return this;
   }
+
   ~JSONArray();
-  JSONBaseObject* getElement(const int index);
-  int getSize();
-  
-  void appendElement( JSONBaseObject* object);
+
+  JSONBaseObject* get(const int index) const;
+
+  JSONObject*  getAsObject (const int index) const;
+  JSONArray*   getAsArray  (const int index) const;
+  JSONBoolean* getAsBoolean(const int index) const;
+  JSONNumber*  getAsNumber (const int index) const;
+  JSONString*  getAsString (const int index) const;
+
+  int size() const;
+
+  void add(JSONBaseObject* object);
+
+  const std::string description() const;
+
 };
-
-
 
 #endif

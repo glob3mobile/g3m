@@ -342,6 +342,12 @@ public final class NativeGL2_Android
 
 
    @Override
+   public int Primitive_Triangles() {
+      return GLES20.GL_TRIANGLES;
+   }
+
+
+   @Override
    public int Primitive_TriangleStrip() {
       return GLES20.GL_TRIANGLE_STRIP;
    }
