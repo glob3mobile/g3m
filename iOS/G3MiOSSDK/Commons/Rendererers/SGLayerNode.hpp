@@ -12,6 +12,50 @@
 #include "SGNode.hpp"
 
 class SGLayerNode : public SGNode {
+private:
+  std::string _uri;
+  std::string _applyTo;
+  std::string _blendMode;
+  bool        _flipY;
+
+  std::string _magFilter;
+  std::string _minFilter;
+  std::string _wrapS;
+  std::string _wrapT;
+
+public:
+
+  void setUri(const std::string& uri) {
+    _uri = uri;
+  }
+  
+  void setApplyTo(const std::string& applyTo) {
+    _applyTo = applyTo;
+  }
+
+  void setBlendMode(const std::string& blendMode) {
+    _blendMode = blendMode;
+  }
+
+  void setFlipY(bool flipY) {
+    _flipY = flipY;
+  }
+
+  void setMagFilter(const std::string& magFilter) {
+    _magFilter = magFilter;
+  }
+
+  void setMinFilter(const std::string& minFilter) {
+    _minFilter = minFilter;
+  }
+
+  void setWrapS(const std::string& wrapS) {
+    _wrapS = wrapS;
+  }
+
+  void setWrapT(const std::string& wrapT) {
+    _wrapT = wrapT;
+  }
 
 };
 

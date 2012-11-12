@@ -143,6 +143,30 @@ SGRotateNode* SceneJSShapesParser::createRotateNode(JSONObject* jsonObject) cons
 
   processedKeys += parseCommons(jsonObject, node);
 
+  JSONNumber* jsX = jsonObject->getAsNumber("x");
+  if (jsX != NULL) {
+    node->setX( jsX->value() );
+    processedKeys++;
+  }
+
+  JSONNumber* jsY = jsonObject->getAsNumber("y");
+  if (jsY != NULL) {
+    node->setY( jsY->value() );
+    processedKeys++;
+  }
+
+  JSONNumber* jsZ = jsonObject->getAsNumber("z");
+  if (jsZ != NULL) {
+    node->setZ( jsZ->value() );
+    processedKeys++;
+  }
+
+  JSONNumber* jsAngle = jsonObject->getAsNumber("angle");
+  if (jsAngle != NULL) {
+    node->setAngle( jsAngle->value() );
+    processedKeys++;
+  }
+
   checkProcessedKeys(jsonObject, processedKeys);
 
   return node;
@@ -154,6 +178,24 @@ SGTranslateNode* SceneJSShapesParser::createTranslateNode(JSONObject* jsonObject
   SGTranslateNode* node = new SGTranslateNode();
 
   processedKeys += parseCommons(jsonObject, node);
+
+  JSONNumber* jsX = jsonObject->getAsNumber("x");
+  if (jsX != NULL) {
+    node->setX( jsX->value() );
+    processedKeys++;
+  }
+
+  JSONNumber* jsY = jsonObject->getAsNumber("y");
+  if (jsY != NULL) {
+    node->setY( jsY->value() );
+    processedKeys++;
+  }
+
+  JSONNumber* jsZ = jsonObject->getAsNumber("z");
+  if (jsZ != NULL) {
+    node->setZ( jsZ->value() );
+    processedKeys++;
+  }
 
   checkProcessedKeys(jsonObject, processedKeys);
 
@@ -177,66 +219,78 @@ SGMaterialNode* SceneJSShapesParser::createMaterialNode(JSONObject* jsonObject) 
     processedKeys++;
   }
 
+  JSONNumber* jsShine = jsonObject->getAsNumber("shine");
+  if (jsShine != NULL) {
+    node->setShine( jsShine->value() );
+    processedKeys++;
+  }
+  JSONNumber* jsSpecular = jsonObject->getAsNumber("specular");
+  if (jsSpecular != NULL) {
+    node->setSpecular( jsSpecular->value() );
+    processedKeys++;
+  }
+
   checkProcessedKeys(jsonObject, processedKeys);
 
   return node;
 }
 
 SGLayerNode* SceneJSShapesParser::createLayerNode(JSONObject* jsonObject) const {
-  int processedKeys = 1; // "type" is already processed
+//  int processedKeys = 1; // "type" is already processed
+  int processedKeys = 0; //  Layer has not "type"
 
   SGLayerNode* node = new SGLayerNode();
 
   processedKeys += parseCommons(jsonObject, node);
 
   int ____DIEGO_AT_WORK;
-//  JSONString* jsUri = jsonObject->getAsString("uri");
-//  if (jsUri != NULL) {
-//    node->setUri( jsUri->value() );
-//    processedKeys++;
-//  }
-//
-//  JSONString* jsApplyTo = jsonObject->getAsString("applyTo");
-//  if (jsApplyTo != NULL) {
-//    node->setApplyTo( jsApplyTo->value() );
-//    processedKeys++;
-//  }
-//
-//  JSONString* jsBlendMode = jsonObject->getAsString("blendMode");
-//  if (jsBlendMode != NULL) {
-//    node->setBlendMode( jsBlendMode->value() );
-//    processedKeys++;
-//  }
-//
-//  JSONBoolean* jsFlipY = jsonObject->getAsBoolean("flipY");
-//  if (jsFlipY != NULL) {
-//    node->setFlipY( jsFlipY->value() );
-//    processedKeys++;
-//  }
-//
-//  JSONString* jsMagFilter = jsonObject->getAsString("magFilter");
-//  if (jsMagFilter != NULL) {
-//    node->setMagFilter( jsMagFilter->value() );
-//    processedKeys++;
-//  }
-//
-//  JSONString* jsMinFilter = jsonObject->getAsString("minFilter");
-//  if (jsMinFilter != NULL) {
-//    node->setMinFilter( jsMinFilter->value() );
-//    processedKeys++;
-//  }
-//
-//  JSONString* jsWrapS = jsonObject->getAsString("wrapS");
-//  if (jsWrapS != NULL) {
-//    node->setWrapS( jsWrapS->value() );
-//    processedKeys++;
-//  }
-//
-//  JSONString* jsWrapT = jsonObject->getAsString("wrapT");
-//  if (jsWrapT != NULL) {
-//    node->setWrapT( jsWrapT->value() );
-//    processedKeys++;
-//  }
+  JSONString* jsUri = jsonObject->getAsString("uri");
+  if (jsUri != NULL) {
+    node->setUri( jsUri->value() );
+    processedKeys++;
+  }
+
+  JSONString* jsApplyTo = jsonObject->getAsString("applyTo");
+  if (jsApplyTo != NULL) {
+    node->setApplyTo( jsApplyTo->value() );
+    processedKeys++;
+  }
+
+  JSONString* jsBlendMode = jsonObject->getAsString("blendMode");
+  if (jsBlendMode != NULL) {
+    node->setBlendMode( jsBlendMode->value() );
+    processedKeys++;
+  }
+
+  JSONBoolean* jsFlipY = jsonObject->getAsBoolean("flipY");
+  if (jsFlipY != NULL) {
+    node->setFlipY( jsFlipY->value() );
+    processedKeys++;
+  }
+
+  JSONString* jsMagFilter = jsonObject->getAsString("magFilter");
+  if (jsMagFilter != NULL) {
+    node->setMagFilter( jsMagFilter->value() );
+    processedKeys++;
+  }
+
+  JSONString* jsMinFilter = jsonObject->getAsString("minFilter");
+  if (jsMinFilter != NULL) {
+    node->setMinFilter( jsMinFilter->value() );
+    processedKeys++;
+  }
+
+  JSONString* jsWrapS = jsonObject->getAsString("wrapS");
+  if (jsWrapS != NULL) {
+    node->setWrapS( jsWrapS->value() );
+    processedKeys++;
+  }
+
+  JSONString* jsWrapT = jsonObject->getAsString("wrapT");
+  if (jsWrapT != NULL) {
+    node->setWrapT( jsWrapT->value() );
+    processedKeys++;
+  }
 
   checkProcessedKeys(jsonObject, processedKeys);
 

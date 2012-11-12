@@ -16,6 +16,9 @@ class SGMaterialNode : public SGNode {
 private:
   Color* _specularColor;
 
+  double _shine;
+  double _specular;
+
 protected:
   void prepareRender(const RenderContext* rc);
 
@@ -24,7 +27,9 @@ protected:
 
 public:
   SGMaterialNode() :
-  _specularColor(NULL)
+  _specularColor(NULL),
+  _shine(0),
+  _specular(0)
   {
 
   }
@@ -37,6 +42,15 @@ public:
     delete _specularColor;
     _specularColor = color;
   }
+
+  void setShine(double shine) {
+    _shine = shine;
+  }
+
+  void setSpecular(double specular) {
+    _specular = specular;
+  }
+
 };
 
 #endif
