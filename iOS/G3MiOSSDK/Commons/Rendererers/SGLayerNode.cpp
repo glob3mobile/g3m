@@ -7,3 +7,15 @@
 //
 
 #include "SGLayerNode.hpp"
+
+
+void SGLayerNode::prepareRender(const RenderContext* rc) {
+
+  SGNode::prepareRender(rc);
+}
+
+void SGLayerNode::cleanUpRender(const RenderContext* rc) {
+
+
+  SGNode::cleanUpRender(rc);
+}

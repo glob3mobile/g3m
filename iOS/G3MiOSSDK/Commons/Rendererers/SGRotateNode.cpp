@@ -18,9 +18,13 @@ void SGRotateNode::prepareRender(const RenderContext* rc) {
   gl->pushMatrix();
   gl->multMatrixf(MutableMatrix44D::createRotationMatrix(Angle::fromDegrees(_angle),
                                                          Vector3D(_x, _y, _z)));
+
+  SGNode::prepareRender(rc);
 }
 
 void SGRotateNode::cleanUpRender(const RenderContext* rc) {
   GL* gl = rc->getGL();
   gl->popMatrix();
+
+  SGNode::prepareRender(rc);
 }

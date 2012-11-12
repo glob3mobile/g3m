@@ -11,14 +11,6 @@
 #include "Context.hpp"
 #include "GL.hpp"
 
-//void SGGeometryNode::prepareRender(const RenderContext* rc) {
-//
-//}
-//
-//void SGGeometryNode::cleanUpRender(const RenderContext* rc) {
-//
-//}
-
 void SGGeometryNode::rawRender(const RenderContext* rc) {
   GL *gl = rc->getGL();
 
@@ -31,13 +23,6 @@ void SGGeometryNode::rawRender(const RenderContext* rc) {
     const float colorsIntensity = 1;
     gl->enableVertexColor(_colors, colorsIntensity);
   }
-
-//  if (_flatColor == NULL) {
-//    gl->disableVertexFlatColor();
-//  }
-//  else {
-//    gl->enableVertexFlatColor(*_flatColor, _colorsIntensity);
-//  }
 
   gl->vertexPointer(3, 0, _vertices);
 

@@ -16,9 +16,13 @@ void SGTranslateNode::prepareRender(const RenderContext* rc) {
 
   gl->pushMatrix();
   gl->multMatrixf(MutableMatrix44D::createTranslationMatrix(_x, _y, _z));
+
+  SGNode::prepareRender(rc);
 }
 
 void SGTranslateNode::cleanUpRender(const RenderContext* rc) {
   GL* gl = rc->getGL();
   gl->popMatrix();
+
+  SGNode::cleanUpRender(rc);
 }

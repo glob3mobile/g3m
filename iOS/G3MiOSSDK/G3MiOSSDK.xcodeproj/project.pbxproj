@@ -896,6 +896,8 @@
 				CFE3B578164AE32E009975A5 /* SceneJSShapesParser.hpp */,
 				CF857B39164C7AFC0089F1DE /* SGGeometryNode.cpp */,
 				CF857B3A164C7AFC0089F1DE /* SGGeometryNode.hpp */,
+				CF11E8C4164D653000935052 /* SGLayerNode.cpp */,
+				CF11E8C5164D653000935052 /* SGLayerNode.hpp */,
 				CF857B31164C77B00089F1DE /* SGMaterialNode.cpp */,
 				CF857B32164C77B00089F1DE /* SGMaterialNode.hpp */,
 				CF4CA475164C669D009BB7EB /* SGNode.cpp */,
@@ -912,8 +914,6 @@
 				CF5EA5D3163DDC7900D8F797 /* Shape.hpp */,
 				CFA0BB60163DCFF6009185FE /* ShapesRenderer.cpp */,
 				CFA0BB61163DCFF6009185FE /* ShapesRenderer.hpp */,
-				CF11E8C4164D653000935052 /* SGLayerNode.cpp */,
-				CF11E8C5164D653000935052 /* SGLayerNode.hpp */,
 			);
 			name = Shapes;
 			sourceTree = "<group>";

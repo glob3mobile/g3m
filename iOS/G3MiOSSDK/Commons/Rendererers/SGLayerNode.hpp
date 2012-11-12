@@ -23,6 +23,11 @@ private:
   std::string _wrapS;
   std::string _wrapT;
 
+protected:
+  virtual void prepareRender(const RenderContext* rc);
+
+  virtual void cleanUpRender(const RenderContext* rc);
+
 public:
 
   void setUri(const std::string& uri) {

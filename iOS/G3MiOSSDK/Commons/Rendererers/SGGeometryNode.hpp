@@ -24,10 +24,6 @@ private:
   IIntBuffer*   _indices;
 
 protected:
-//  void prepareRender(const RenderContext* rc);
-//
-//  void cleanUpRender(const RenderContext* rc);
-
   void rawRender(const RenderContext* rc);
 
 public:

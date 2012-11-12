@@ -22,10 +22,13 @@ void SGMaterialNode::prepareRender(const RenderContext* rc) {
     gl->enableVertexFlatColor(*_specularColor, colorsIntensity);
   }
 
+  SGNode::prepareRender(rc);
 }
 
 void SGMaterialNode::cleanUpRender(const RenderContext* rc) {
   GL *gl = rc->getGL();
 
   gl->disableVertexFlatColor();
+
+  SGNode::cleanUpRender(rc);
 }
