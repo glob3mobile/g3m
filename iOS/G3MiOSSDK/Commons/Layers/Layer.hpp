@@ -26,11 +26,17 @@ class Layer {
 private:
   LayerCondition*                         _condition;
   std::vector<TerrainTouchEventListener*> _listeners;
+
+  LayerSet* _layerSet;
+
+protected:
+  void notifyChanges() const;
   
 public:
   
   Layer(LayerCondition* condition) :
-  _condition(condition)
+  _condition(condition),
+  _layerSet(NULL)
   {
     
   }
@@ -74,6 +80,8 @@ public:
       }
     }
   }
+
+  void setLayerSet(LayerSet* layerSet);
   
 };
 

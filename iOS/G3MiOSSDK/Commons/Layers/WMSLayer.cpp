@@ -130,6 +130,11 @@ std::vector<Petition*> WMSLayer::getMapPetitions(const RenderContext* rc,
   else {
     req += "&TRANSPARENT=FALSE";
   }
+
+  if (_extraParameter.compare("") != 0) {
+    req += "&";
+    req += _extraParameter;
+  }
   
   Petition *petition = new Petition(sector, URL(req, false));
   petitions.push_back(petition);

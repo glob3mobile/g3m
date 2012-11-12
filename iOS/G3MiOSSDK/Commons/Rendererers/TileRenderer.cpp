@@ -17,16 +17,43 @@
 #include "TouchEvent.hpp"
 #include "LayerSet.hpp"
 
+TileRenderer::TileRenderer(const TileTessellator* tessellator,
+                           TileTexturizer*  texturizer,
+                           LayerSet* layerSet,
+                           const TilesRenderParameters* parameters,
+                           bool showStatistics) :
+_tessellator(tessellator),
+_texturizer(texturizer),
+_layerSet(layerSet),
+_parameters(parameters),
+_showStatistics(showStatistics),
+_lastStatistics(),
+_topTilesJustCreated(false),
+_lastSplitTimer(NULL),
+_lastCamera(NULL),
+_firstRender(false),
+_initializationContext(NULL)
+{
+  _layerSet->setChangeListener(this);
+}
+
+void TileRenderer::changed(const LayerSet* layerSet) {
+  pruneTopLevelTiles();
+  clearTopLevelTiles();
+  _firstRender = true;
+  createTopLevelTiles(_initializationContext);
+}
+
 TileRenderer::~TileRenderer() {
   clearTopLevelTiles();
-  
-#ifdef C_CODE
+
+//#ifdef C_CODE
   delete _tessellator;
   delete _texturizer;
   delete _parameters;
-  
+
   delete _lastSplitTimer;
-#endif
+//#endif
 }
 
 void TileRenderer::clearTopLevelTiles() {
@@ -34,49 +61,51 @@ void TileRenderer::clearTopLevelTiles() {
     Tile* tile = _topLevelTiles[i];
     delete tile;
   }
-  
+
   _topLevelTiles.clear();
 }
 
 void TileRenderer::createTopLevelTiles(const InitializationContext* ic) {
   const Angle fromLatitude  = _parameters->_topSector.lower().latitude();
   const Angle fromLongitude = _parameters->_topSector.lower().longitude();
-  
+
   const Angle deltaLan = _parameters->_topSector.getDeltaLatitude();
   const Angle deltaLon = _parameters->_topSector.getDeltaLongitude();
-  
+
   const Angle tileHeight = deltaLan.div(_parameters->_splitsByLatitude);
   const Angle tileWidth = deltaLon.div(_parameters->_splitsByLongitude);
-  
+
   for (int row = 0; row < _parameters->_splitsByLatitude; row++) {
     const Angle tileLatFrom = tileHeight.times(row).add(fromLatitude);
     const Angle tileLatTo = tileLatFrom.add(tileHeight);
-    
+
     for (int col = 0; col < _parameters->_splitsByLongitude; col++) {
       const Angle tileLonFrom = tileWidth.times(col).add(fromLongitude);
       const Angle tileLonTo = tileLonFrom.add(tileWidth);
-      
+
       const Geodetic2D tileLower(tileLatFrom, tileLonFrom);
       const Geodetic2D tileUpper(tileLatTo, tileLonTo);
       const Sector sector(tileLower, tileUpper);
-      
+
       Tile* tile = new Tile(_texturizer, NULL, sector, _parameters->_topLevel, row, col);
       _topLevelTiles.push_back(tile);
     }
   }
-  
+
   ic->getLogger()->logInfo("Created %d top level tiles", _topLevelTiles.size());
-  
+
   _topTilesJustCreated = true;
 }
 
 void TileRenderer::initialize(const InitializationContext* ic) {
+  _initializationContext = ic;
+
   clearTopLevelTiles();
   createTopLevelTiles(ic);
-  
+
   delete _lastSplitTimer;
   _lastSplitTimer      = ic->getFactory()->createTimer();
-  
+
   _layerSet->initialize(ic);
   _texturizer->initialize(ic, _parameters);
 }
@@ -92,21 +121,21 @@ bool TileRenderer::isReadyToRender(const RenderContext *rc) {
     }
     _topTilesJustCreated = false;
   }
-  
+
   if (_parameters->_forceTopLevelTilesRenderOnStart) {
     if (_tessellator != NULL) {
       if (!_tessellator->isReady(rc)) {
         return false;
       }
     }
-    
+
     if (_texturizer != NULL) {
       if (!_texturizer->isReady(rc, _layerSet)) {
         return false;
       }
     }
   }
-  
+
   return true;
 }
 
@@ -115,7 +144,7 @@ void TileRenderer::render(const RenderContext* rc) {
   _lastCamera = rc->getCurrentCamera();
 
   TilesStatistics statistics;
-  
+
   TileRenderContext trc(_tessellator,
                         _texturizer,
                         _layerSet,
@@ -123,12 +152,12 @@ void TileRenderer::render(const RenderContext* rc) {
                         &statistics,
                         _lastSplitTimer,
                         _firstRender /* if first render, force full render */);
-  
+
   if (_firstRender && _parameters->_forceTopLevelTilesRenderOnStart) {
     // force one render of the topLevel tiles to make the (toplevel) textures loaded as they
     // will be used as last-chance fallback texture for any tile.
     _firstRender = false;
-    
+
     for (int i = 0; i < _topLevelTiles.size(); i++) {
       Tile* tile = _topLevelTiles[i];
       tile->render(rc,
@@ -141,24 +170,24 @@ void TileRenderer::render(const RenderContext* rc) {
     for (int i = 0; i < _topLevelTiles.size(); i++) {
       toVisit.push_back(_topLevelTiles[i]);
     }
-    
+
     while (toVisit.size() > 0) {
       std::list<Tile*> toVisitInNextIteration;
-      
+
       for (std::list<Tile*>::iterator iter = toVisit.begin();
            iter != toVisit.end();
            iter++) {
         Tile* tile = *iter;
-        
+
         tile->render(rc,
                      &trc,
                      &toVisitInNextIteration);
       }
-      
+
       toVisit = toVisitInNextIteration;
     }
   }
-  
+
   if (_showStatistics) {
     if (!_lastStatistics.equalsTo(statistics)) {
       _lastStatistics  = statistics;
@@ -172,23 +201,23 @@ void TileRenderer::render(const RenderContext* rc) {
 bool TileRenderer::onTouchEvent(const EventContext* ec,
                                 const TouchEvent* touchEvent) {
   bool handled = false;
-  
+
   if (touchEvent->getType() == LongPress) {
-    
+
     if (_lastCamera != NULL) {
       const Vector2I pixel = touchEvent->getTouch(0)->getPos();
       const Vector3D ray = _lastCamera->pixel2Ray(pixel);
       const Vector3D origin = _lastCamera->getCartesianPosition();
-      
+
       const Planet* planet = ec->getPlanet();
-      
+
       const Vector3D positionCartesian = planet->closestIntersection(origin, ray);
       if (positionCartesian.isNan()) {
         return false;
       }
-      
+
       const Geodetic3D position = planet->toGeodetic3D(positionCartesian);
-      
+
       for (int i = 0; i < _topLevelTiles.size(); i++) {
         const Tile* tile = _topLevelTiles[i]->getDeepestTileContaining(position);
         if (tile != NULL) {
@@ -197,9 +226,9 @@ bool TileRenderer::onTouchEvent(const EventContext* ec,
         }
       }
     }
-    
+
   }
-  
+
   return handled;
 }
 
