@@ -45,9 +45,9 @@ std::vector<OrderedRenderable*>* RenderContext::getSortedOrderedRenderables() co
                                _orderedRenderables,
                                new java.util.Comparator<OrderedRenderable>() {
                                  @Override
-                                 public int compare(final OrderedRenderable o1,
-                                                    final OrderedRenderable o2) {
-                                   return Double.compare(o2.distanceFromEye(), o1.distanceFromEye());
+                                 public int compare(final OrderedRenderable or1,
+                                                    final OrderedRenderable or2) {
+                                   return Double.compare(or2.distanceFromEye(), or1.distanceFromEye());
                                  }
                                });
 #endif
