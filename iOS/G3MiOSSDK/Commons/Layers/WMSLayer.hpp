@@ -44,13 +44,8 @@ private:
   const std::string   _style;
   const bool          _isTransparent;
 
-#ifdef C_CODE
   std::string         _extraParameter;
-#endif
-#ifdef JAVA_CODE
-    private String _extraParameter = "";
-#endif
-
+    
 public:
   
   
@@ -77,7 +72,8 @@ public:
   _format(format),
   _srs(srs),
   _style(style),
-  _isTransparent(isTransparent)
+  _isTransparent(isTransparent),
+  _extraParameter("")
   {
     
   }
@@ -102,7 +98,8 @@ public:
   _format(format),
   _srs(srs),
   _style(style),
-  _isTransparent(isTransparent)
+  _isTransparent(isTransparent),
+  _extraParameter("")
   {
     
   }
