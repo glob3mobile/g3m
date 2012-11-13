@@ -17,9 +17,11 @@ class Petition;
 
 class LayerSetChangedListener {
 public:
+#ifdef C_CODE
   virtual ~LayerSetChangedListener() {
 
   }
+#endif
 
   virtual void changed(const LayerSet* layerSet) = 0;
 };
