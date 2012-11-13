@@ -19,7 +19,7 @@ public class WMSLayer extends Layer
   private final String _style;
   private final boolean _isTransparent;
 
-	private String _extraParameter = "";
+  private String _extraParameter;
 
 
 
@@ -37,6 +37,7 @@ public class WMSLayer extends Layer
 	  _srs = srs;
 	  _style = style;
 	  _isTransparent = isTransparent;
+	  _extraParameter = "";
 
   }
 
@@ -54,6 +55,7 @@ public class WMSLayer extends Layer
 	  _srs = srs;
 	  _style = style;
 	  _isTransparent = isTransparent;
+	  _extraParameter = "";
 
   }
 
@@ -189,7 +191,7 @@ public class WMSLayer extends Layer
 	  req += "&TRANSPARENT=FALSE";
 	}
   
-	if (_extraParameter.compare("") != 0)
+	if (_extraParameter.compareTo("") != 0)
 	{
 	  req += "&";
 	  req += _extraParameter;
