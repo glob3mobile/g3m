@@ -47,13 +47,13 @@ void TileRenderer::changed(const LayerSet* layerSet) {
 TileRenderer::~TileRenderer() {
   clearTopLevelTiles();
 
-//#ifdef C_CODE
   delete _tessellator;
   delete _texturizer;
+#ifdef C_CODE
   delete _parameters;
+#endif
 
   delete _lastSplitTimer;
-//#endif
 }
 
 void TileRenderer::clearTopLevelTiles() {

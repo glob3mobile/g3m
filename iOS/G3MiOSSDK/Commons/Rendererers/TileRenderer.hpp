@@ -334,7 +334,13 @@ private:
   
   bool _firstRender;
 
+//  const InitializationContext* _initializationContext;
+#ifdef C_CODE
   const InitializationContext* _initializationContext;
+#endif
+#ifdef JAVA_CODE
+  private InitializationContext _initializationContext;
+#endif
 
   void pruneTopLevelTiles();
   
