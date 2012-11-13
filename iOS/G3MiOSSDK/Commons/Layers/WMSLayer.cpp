@@ -135,7 +135,7 @@ std::vector<Petition*> WMSLayer::getMapPetitions(const RenderContext* rc,
   if (_extraParameter.compare("") != 0) {
 #endif
 #ifdef JAVA_CODE
-  if (_extraParameter != null && _extraParameter.compare("") != 0) {
+  if (_extraParameter != null && _extraParameter.compareTo("") != 0) {
 #endif
     req += "&";
     req += _extraParameter;
