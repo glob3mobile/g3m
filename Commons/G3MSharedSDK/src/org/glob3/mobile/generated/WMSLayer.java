@@ -37,6 +37,7 @@ public class WMSLayer extends Layer
 	  _srs = srs;
 	  _style = style;
 	  _isTransparent = isTransparent;
+	  _extraParameter = "";
 
   }
 
@@ -54,6 +55,7 @@ public class WMSLayer extends Layer
 	  _srs = srs;
 	  _style = style;
 	  _isTransparent = isTransparent;
+	  _extraParameter = "";
 
   }
 
@@ -189,10 +191,17 @@ public class WMSLayer extends Layer
 	  req += "&TRANSPARENT=FALSE";
 	}
   
-	if (_extraParameter != null && _extraParameter.compareTo("") != 0) {
+	if (_extraParameter.compareTo("") != 0)
+	{
 	  req += "&";
 	  req += _extraParameter;
 	}
+  
+	Petition petition = new Petition(sector, new URL(req, false));
+	petitions.add(petition);
+  
+	  return petitions;
+  }
 
 //  bool isTransparent() const{
 //    return _isTransparent;

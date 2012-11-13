@@ -45,7 +45,7 @@ private:
   const bool          _isTransparent;
 
   std::string         _extraParameter;
-
+    
 public:
   
   
@@ -72,7 +72,8 @@ public:
   _format(format),
   _srs(srs),
   _style(style),
-  _isTransparent(isTransparent)
+  _isTransparent(isTransparent),
+  _extraParameter("")
   {
     
   }
@@ -97,7 +98,8 @@ public:
   _format(format),
   _srs(srs),
   _style(style),
-  _isTransparent(isTransparent)
+  _isTransparent(isTransparent),
+  _extraParameter("")
   {
     
   }

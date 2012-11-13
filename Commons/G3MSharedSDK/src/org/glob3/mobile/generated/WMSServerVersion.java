@@ -1,6 +1,4 @@
 package org.glob3.mobile.generated; 
-}
-
 //
 //  WMSLayer.cpp
 //  G3MiOSSDK
