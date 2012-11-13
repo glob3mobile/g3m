@@ -25,6 +25,9 @@ class TextureBuilder;
 class IMathUtils;
 class IJSONParser;
 class IStorage;
+class OrderedRenderable;
+
+#include <vector>
 
 class Context {
 protected:
@@ -168,6 +171,10 @@ public:
 
 class FrameTasksExecutor;
 
+#ifdef C_CODE
+bool MyDataSortPredicate(const OrderedRenderable* or1,
+                         const OrderedRenderable* or2);
+#endif
 
 class RenderContext: public Context {
 private:
@@ -178,6 +185,7 @@ private:
   TexturesHandler*    _texturesHandler;
   TextureBuilder*     _textureBuilder;
   ITimer*             _frameStartTimer;
+  std::vector<OrderedRenderable*>* _orderedRenderables;
 
 public:
   RenderContext(FrameTasksExecutor* frameTasksExecutor,
@@ -213,7 +221,9 @@ public:
   _nextCamera(nextCamera),
   _texturesHandler(texturesHandler),
   _textureBuilder(textureBuilder),
-  _frameStartTimer(frameStartTimer) {
+  _frameStartTimer(frameStartTimer),
+  _orderedRenderables(NULL)
+  {
 
   }
 
@@ -246,6 +256,13 @@ public:
   }
 
   virtual ~RenderContext();
+
+  /*
+   Get the OrderedRenderables, sorted by distanceFromEye()
+   */
+  std::vector<OrderedRenderable*>* getSortedOrderedRenderables() const;
+
+  void addOrderedRenderable(OrderedRenderable* orderedRenderable);
 
 };
 
