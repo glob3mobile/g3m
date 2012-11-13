@@ -226,6 +226,34 @@ public class SceneJSShapesParser
   
 	processedKeys += parseCommons(jsonObject, node);
   
+	JSONNumber jsX = jsonObject.getAsNumber("x");
+	if (jsX != null)
+	{
+	  node.setX(jsX.value());
+	  processedKeys++;
+	}
+  
+	JSONNumber jsY = jsonObject.getAsNumber("y");
+	if (jsY != null)
+	{
+	  node.setY(jsY.value());
+	  processedKeys++;
+	}
+  
+	JSONNumber jsZ = jsonObject.getAsNumber("z");
+	if (jsZ != null)
+	{
+	  node.setZ(jsZ.value());
+	  processedKeys++;
+	}
+  
+	JSONNumber jsAngle = jsonObject.getAsNumber("angle");
+	if (jsAngle != null)
+	{
+	  node.setAngle(jsAngle.value());
+	  processedKeys++;
+	}
+  
 	checkProcessedKeys(jsonObject, processedKeys);
   
 	return node;
@@ -239,6 +267,27 @@ public class SceneJSShapesParser
 	SGTranslateNode node = new SGTranslateNode();
   
 	processedKeys += parseCommons(jsonObject, node);
+  
+	JSONNumber jsX = jsonObject.getAsNumber("x");
+	if (jsX != null)
+	{
+	  node.setX(jsX.value());
+	  processedKeys++;
+	}
+  
+	JSONNumber jsY = jsonObject.getAsNumber("y");
+	if (jsY != null)
+	{
+	  node.setY(jsY.value());
+	  processedKeys++;
+	}
+  
+	JSONNumber jsZ = jsonObject.getAsNumber("z");
+	if (jsZ != null)
+	{
+	  node.setZ(jsZ.value());
+	  processedKeys++;
+	}
   
 	checkProcessedKeys(jsonObject, processedKeys);
   
@@ -262,6 +311,19 @@ public class SceneJSShapesParser
 	  final double b = jsSpecularColor.getAsNumber("b").value();
 	  final double a = jsSpecularColor.getAsNumber("a").value();
 	  node.setSpecularColor(Color.newFromRGBA((float) r, (float) g, (float) b, (float) a));
+	  processedKeys++;
+	}
+  
+	JSONNumber jsShine = jsonObject.getAsNumber("shine");
+	if (jsShine != null)
+	{
+	  node.setShine(jsShine.value());
+	  processedKeys++;
+	}
+	JSONNumber jsSpecular = jsonObject.getAsNumber("specular");
+	if (jsSpecular != null)
+	{
+	  node.setSpecular(jsSpecular.value());
 	  processedKeys++;
 	}
   
@@ -415,60 +477,68 @@ public class SceneJSShapesParser
 //ORIGINAL LINE: SGLayerNode* createLayerNode(JSONObject* jsonObject) const
   private SGLayerNode createLayerNode(JSONObject jsonObject)
   {
-	int processedKeys = 1; // "type" is already processed
+	int processedKeys = 0; // Layer has not "type"
   
 	SGLayerNode node = new SGLayerNode();
   
 	processedKeys += parseCommons(jsonObject, node);
   
 	int ____DIEGO_AT_WORK;
-  //  JSONString* jsUri = jsonObject->getAsString("uri");
-  //  if (jsUri != NULL) {
-  //    node->setUri( jsUri->value() );
-  //    processedKeys++;
-  //  }
-  //
-  //  JSONString* jsApplyTo = jsonObject->getAsString("applyTo");
-  //  if (jsApplyTo != NULL) {
-  //    node->setApplyTo( jsApplyTo->value() );
-  //    processedKeys++;
-  //  }
-  //
-  //  JSONString* jsBlendMode = jsonObject->getAsString("blendMode");
-  //  if (jsBlendMode != NULL) {
-  //    node->setBlendMode( jsBlendMode->value() );
-  //    processedKeys++;
-  //  }
-  //
-  //  JSONBoolean* jsFlipY = jsonObject->getAsBoolean("flipY");
-  //  if (jsFlipY != NULL) {
-  //    node->setFlipY( jsFlipY->value() );
-  //    processedKeys++;
-  //  }
-  //
-  //  JSONString* jsMagFilter = jsonObject->getAsString("magFilter");
-  //  if (jsMagFilter != NULL) {
-  //    node->setMagFilter( jsMagFilter->value() );
-  //    processedKeys++;
-  //  }
-  //
-  //  JSONString* jsMinFilter = jsonObject->getAsString("minFilter");
-  //  if (jsMinFilter != NULL) {
-  //    node->setMinFilter( jsMinFilter->value() );
-  //    processedKeys++;
-  //  }
-  //
-  //  JSONString* jsWrapS = jsonObject->getAsString("wrapS");
-  //  if (jsWrapS != NULL) {
-  //    node->setWrapS( jsWrapS->value() );
-  //    processedKeys++;
-  //  }
-  //
-  //  JSONString* jsWrapT = jsonObject->getAsString("wrapT");
-  //  if (jsWrapT != NULL) {
-  //    node->setWrapT( jsWrapT->value() );
-  //    processedKeys++;
-  //  }
+	JSONString jsUri = jsonObject.getAsString("uri");
+	if (jsUri != null)
+	{
+	  node.setUri(jsUri.value());
+	  processedKeys++;
+	}
+  
+	JSONString jsApplyTo = jsonObject.getAsString("applyTo");
+	if (jsApplyTo != null)
+	{
+	  node.setApplyTo(jsApplyTo.value());
+	  processedKeys++;
+	}
+  
+	JSONString jsBlendMode = jsonObject.getAsString("blendMode");
+	if (jsBlendMode != null)
+	{
+	  node.setBlendMode(jsBlendMode.value());
+	  processedKeys++;
+	}
+  
+	JSONBoolean jsFlipY = jsonObject.getAsBoolean("flipY");
+	if (jsFlipY != null)
+	{
+	  node.setFlipY(jsFlipY.value());
+	  processedKeys++;
+	}
+  
+	JSONString jsMagFilter = jsonObject.getAsString("magFilter");
+	if (jsMagFilter != null)
+	{
+	  node.setMagFilter(jsMagFilter.value());
+	  processedKeys++;
+	}
+  
+	JSONString jsMinFilter = jsonObject.getAsString("minFilter");
+	if (jsMinFilter != null)
+	{
+	  node.setMinFilter(jsMinFilter.value());
+	  processedKeys++;
+	}
+  
+	JSONString jsWrapS = jsonObject.getAsString("wrapS");
+	if (jsWrapS != null)
+	{
+	  node.setWrapS(jsWrapS.value());
+	  processedKeys++;
+	}
+  
+	JSONString jsWrapT = jsonObject.getAsString("wrapT");
+	if (jsWrapT != null)
+	{
+	  node.setWrapT(jsWrapT.value());
+	  processedKeys++;
+	}
   
 	checkProcessedKeys(jsonObject, processedKeys);
   

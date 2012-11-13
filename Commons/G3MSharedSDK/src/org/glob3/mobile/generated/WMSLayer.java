@@ -19,6 +19,8 @@ public class WMSLayer extends Layer
   private final String _style;
   private final boolean _isTransparent;
 
+  private String _extraParameter;
+
 
 
   public WMSLayer(String mapLayer, URL mapServerURL, WMSServerVersion mapServerVersion, String queryLayer, URL queryServerURL, WMSServerVersion queryServerVersion, Sector sector, String format, String srs, String style, boolean isTransparent, LayerCondition condition)
@@ -187,6 +189,12 @@ public class WMSLayer extends Layer
 	  req += "&TRANSPARENT=FALSE";
 	}
   
+	if (_extraParameter.compareTo("") != 0)
+	{
+	  req += "&";
+	  req += _extraParameter;
+	}
+  
 	Petition petition = new Petition(sector, new URL(req, false));
 	petitions.add(petition);
   
@@ -323,5 +331,11 @@ public class WMSLayer extends Layer
 	  return new URL(req, false);
   }
 
+
+  public final void setExtraParameter(String extraParameter)
+  {
+	_extraParameter = extraParameter;
+	notifyChanges();
+  }
 
 }

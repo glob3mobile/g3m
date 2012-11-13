@@ -1,5 +1,6 @@
 package org.glob3.mobile.generated; 
-public class TileRenderer extends LeafRenderer
+//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
+public class TileRenderer extends LeafRenderer, LayerSetChangedListener
 {
   private final TileTessellator _tessellator;
   private TileTexturizer _texturizer;
@@ -64,6 +65,8 @@ public class TileRenderer extends LeafRenderer
 
   private boolean _firstRender;
 
+  private final InitializationContext _initializationContext;
+
   private void pruneTopLevelTiles()
   {
 	for (int i = 0; i < _topLevelTiles.size(); i++)
@@ -85,17 +88,31 @@ public class TileRenderer extends LeafRenderer
 	  _lastSplitTimer = null;
 	  _lastCamera = null;
 	  _firstRender = false;
-
+	  _initializationContext = null;
+	_layerSet.setChangeListener(this);
   }
 
   public void dispose()
   {
 	clearTopLevelTiles();
   
+  ///#ifdef C_CODE
+	if (_tessellator != null)
+		_tessellator.dispose();
+	if (_texturizer != null)
+		_texturizer.dispose();
+	if (_parameters != null)
+		_parameters.dispose();
+  
+	if (_lastSplitTimer != null)
+		_lastSplitTimer.dispose();
+  ///#endif
   }
 
   public final void initialize(InitializationContext ic)
   {
+	_initializationContext = ic;
+  
 	clearTopLevelTiles();
 	createTopLevelTiles(ic);
   
@@ -275,5 +292,12 @@ public class TileRenderer extends LeafRenderer
 	}
   }
 
+  public final void changed(LayerSet layerSet)
+  {
+	pruneTopLevelTiles();
+	clearTopLevelTiles();
+	_firstRender = true;
+	createTopLevelTiles(_initializationContext);
+  }
 
 }

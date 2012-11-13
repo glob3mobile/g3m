@@ -519,7 +519,11 @@ public class MutableMatrix44D
 	public static MutableMatrix44D createTranslationMatrix(Vector3D t)
 	{
 	  return new MutableMatrix44D(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, t._x, t._y, t._z, 1);
-    
+	}
+
+	public static MutableMatrix44D createTranslationMatrix(double x, double y, double z)
+	{
+	  return new MutableMatrix44D(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, x, y, z, 1);
 	}
 
 	public static MutableMatrix44D createRotationMatrix(Angle angle, Vector3D axis)

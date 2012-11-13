@@ -21,6 +21,9 @@ public class SGMaterialNode extends SGNode
 {
   private Color _specularColor;
 
+  private double _shine;
+  private double _specular;
+
   protected final void prepareRender(RenderContext rc)
   {
 	GL gl = rc.getGL();
@@ -35,6 +38,7 @@ public class SGMaterialNode extends SGNode
 	  gl.enableVertexFlatColor(_specularColor, colorsIntensity);
 	}
   
+	super.prepareRender(rc);
   }
 
   protected final void cleanUpRender(RenderContext rc)
@@ -42,12 +46,16 @@ public class SGMaterialNode extends SGNode
 	GL gl = rc.getGL();
   
 	gl.disableVertexFlatColor();
+  
+	super.cleanUpRender(rc);
   }
 
 
   public SGMaterialNode()
   {
 	  _specularColor = null;
+	  _shine = 0;
+	  _specular = 0;
 
   }
 
@@ -61,4 +69,15 @@ public class SGMaterialNode extends SGNode
 	_specularColor = null;
 	_specularColor = color;
   }
+
+  public final void setShine(double shine)
+  {
+	_shine = shine;
+  }
+
+  public final void setSpecular(double specular)
+  {
+	_specular = specular;
+  }
+
 }

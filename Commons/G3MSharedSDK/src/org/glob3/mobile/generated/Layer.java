@@ -32,10 +32,27 @@ public abstract class Layer
   private LayerCondition _condition;
   private java.util.ArrayList<TerrainTouchEventListener> _listeners = new java.util.ArrayList<TerrainTouchEventListener>();
 
+  private LayerSet _layerSet;
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: void notifyChanges() const
+  protected final void notifyChanges()
+  {
+	if (_layerSet == null)
+	{
+	  ILogger.instance().logError("Can't notify changes, _layerSet was not set");
+	}
+	else
+	{
+	  _layerSet.layerChanged(this);
+	}
+  }
+
 
   public Layer(LayerCondition condition)
   {
 	  _condition = condition;
+	  _layerSet = null;
 
   }
 
@@ -103,6 +120,15 @@ public abstract class Layer
 		listener.onTerrainTouchEvent(ec, tte);
 	  }
 	}
+  }
+
+  public final void setLayerSet(LayerSet layerSet)
+  {
+	if (_layerSet != null)
+	{
+	  ILogger.instance().logError("LayerSet already set.");
+	}
+	_layerSet = layerSet;
   }
 
 }

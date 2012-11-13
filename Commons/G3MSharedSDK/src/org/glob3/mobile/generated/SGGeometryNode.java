@@ -31,19 +31,6 @@ public class SGGeometryNode extends SGNode
   private IFloatBuffer _normals;
   private IIntBuffer _indices;
 
-//  void prepareRender(const RenderContext* rc);
-//
-//  void cleanUpRender(const RenderContext* rc);
-
-
-  //void SGGeometryNode::prepareRender(const RenderContext* rc) {
-  //
-  //}
-  //
-  //void SGGeometryNode::cleanUpRender(const RenderContext* rc) {
-  //
-  //}
-  
   protected final void rawRender(RenderContext rc)
   {
 	GL gl = rc.getGL();
@@ -60,12 +47,25 @@ public class SGGeometryNode extends SGNode
 	  gl.enableVertexColor(_colors, colorsIntensity);
 	}
   
-  //  if (_flatColor == NULL) {
-  //    gl->disableVertexFlatColor();
+  
+  //  if (_transparent) {
+  //    gl->enableBlend();
   //  }
-  //  else {
-  //    gl->enableVertexFlatColor(*_flatColor, _colorsIntensity);
+  //
+  //  gl->enableTextures();
+  //  gl->enableTexture2D();
+  //
+  //  _textureMapping->bind(rc);
+  //
+  //  _mesh->render(rc);
+  //
+  //  gl->disableTexture2D();
+  //  gl->disableTextures();
+  //
+  //  if (_transparent) {
+  //    gl->disableBlend();
   //  }
+  
   
 	gl.vertexPointer(3, 0, _vertices);
   

@@ -1,29 +1,15 @@
 package org.glob3.mobile.generated; 
-//
-//  LayerSet.cpp
-//  G3MiOSSDK
-//
-//  Created by José Miguel S N on 23/07/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
-//
-
-//
-//  LayerSet.hpp
-//  G3MiOSSDK
-//
-//  Created by José Miguel S N on 23/07/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
-//
-
-
-
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class Petition;
-
 public class LayerSet
 {
   private java.util.ArrayList<Layer> _layers = new java.util.ArrayList<Layer>();
 
+  private LayerSetChangedListener _listener;
+
+  public LayerSet()
+  {
+	  _listener = null;
+
+  }
 
   public void dispose()
   {
@@ -36,7 +22,16 @@ public class LayerSet
 
   public final void addLayer(Layer layer)
   {
+	layer.setLayerSet(this);
 	_layers.add(layer);
+	if (_listener == null)
+	{
+	  ILogger.instance().logError("Can't notify, _listener not set");
+	}
+	else
+	{
+	  _listener.changed(this);
+	}
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -115,6 +110,29 @@ public class LayerSet
   public final int size()
   {
 	return _layers.size();
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: void layerChanged(const Layer* layer) const
+  public final void layerChanged(Layer layer)
+  {
+	if (_listener == null)
+	{
+	  ILogger.instance().logError("Can't notify, _listener not set");
+	}
+	else
+	{
+	  _listener.changed(this);
+	}
+  }
+
+  public final void setChangeListener(LayerSetChangedListener listener)
+  {
+	if (_listener != null)
+	{
+	  ILogger.instance().logError("Listener already set");
+	}
+	_listener = listener;
   }
 
 }
