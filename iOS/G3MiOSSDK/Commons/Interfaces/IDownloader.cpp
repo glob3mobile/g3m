@@ -7,3 +7,5 @@
 //
 
 #include "IDownloader.hpp"
+
+IDownloader* IDownloader::_instance = NULL;

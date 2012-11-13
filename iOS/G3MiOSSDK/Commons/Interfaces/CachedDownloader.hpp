@@ -17,8 +17,7 @@
 class CachedDownloader : public IDownloader {
 private:
   IDownloader* _downloader;
-  IStorage*    _cacheStorage;
-  
+    
   long _requestsCounter;
   long _cacheHitsCounter;
   long _savesCounter;
@@ -27,10 +26,8 @@ private:
   
 public:
   CachedDownloader(IDownloader* downloader,
-                   IStorage*    cacheStorage,
                    bool         saveInBackground) :
-  _downloader(downloader),
-  _cacheStorage(cacheStorage),
+    _downloader(downloader),
   _requestsCounter(0),
   _cacheHitsCounter(0),
   _savesCounter(0),
