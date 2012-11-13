@@ -189,17 +189,10 @@ public class WMSLayer extends Layer
 	  req += "&TRANSPARENT=FALSE";
 	}
   
-	if (_extraParameter.compareTo("") != 0)
-	{
+	if (_extraParameter != NULL && _extraParameter.compare("") != 0) {
 	  req += "&";
 	  req += _extraParameter;
 	}
-  
-	Petition petition = new Petition(sector, new URL(req, false));
-	petitions.add(petition);
-  
-	  return petitions;
-  }
 
 //  bool isTransparent() const{
 //    return _isTransparent;
