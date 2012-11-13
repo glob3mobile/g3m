@@ -1,6 +1,5 @@
 package org.glob3.mobile.generated; 
-//C++ TO JAVA CONVERTER TODO TASK: Multiple inheritance is not available in Java:
-public class TileRenderer extends LeafRenderer, LayerSetChangedListener
+public class TileRenderer extends LeafRenderer implements LayerSetChangedListener
 {
   private final TileTessellator _tessellator;
   private TileTexturizer _texturizer;

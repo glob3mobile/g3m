@@ -21,12 +21,8 @@ package org.glob3.mobile.generated;
 //class Petition;
 
 
-public abstract class LayerSetChangedListener
+public interface LayerSetChangedListener
 {
-  public void dispose()
-  {
 
-  }
-
-  public abstract void changed(LayerSet layerSet);
+  void changed(LayerSet layerSet);
 }
