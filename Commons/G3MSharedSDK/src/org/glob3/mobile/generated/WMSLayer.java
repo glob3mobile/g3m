@@ -189,7 +189,7 @@ public class WMSLayer extends Layer
 	  req += "&TRANSPARENT=FALSE";
 	}
   
-	if (_extraParameter != null && _extraParameter.compare("") != 0) {
+	if (_extraParameter != null && _extraParameter.compareTo("") != 0) {
 	  req += "&";
 	  req += _extraParameter;
 	}
