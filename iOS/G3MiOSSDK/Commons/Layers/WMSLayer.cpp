@@ -131,7 +131,12 @@ std::vector<Petition*> WMSLayer::getMapPetitions(const RenderContext* rc,
     req += "&TRANSPARENT=FALSE";
   }
 
+#ifdef C_CODE
   if (_extraParameter.compare("") != 0) {
+#endif
+#ifdef JAVA_CODE
+  if (_extraParameter != NULL && _extraParameter.compare("") != 0) {
+#endif
     req += "&";
     req += _extraParameter;
   }
