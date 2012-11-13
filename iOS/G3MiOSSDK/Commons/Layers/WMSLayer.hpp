@@ -44,7 +44,12 @@ private:
   const std::string   _style;
   const bool          _isTransparent;
 
+#ifdef C_CODE
   std::string         _extraParameter;
+#endif
+#ifdef JAVA_CODE
+    private String _extraParameter = "";
+#endif
 
 public:
   
