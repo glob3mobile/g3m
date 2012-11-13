@@ -64,7 +64,8 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 
   private boolean _firstRender;
 
-  private final InitializationContext _initializationContext;
+//  const InitializationContext* _initializationContext;
+  private InitializationContext _initializationContext;
 
   private void pruneTopLevelTiles()
   {
@@ -95,17 +96,13 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   {
 	clearTopLevelTiles();
   
-  ///#ifdef C_CODE
 	if (_tessellator != null)
 		_tessellator.dispose();
 	if (_texturizer != null)
 		_texturizer.dispose();
-	if (_parameters != null)
-		_parameters.dispose();
   
 	if (_lastSplitTimer != null)
 		_lastSplitTimer.dispose();
-  ///#endif
   }
 
   public final void initialize(InitializationContext ic)
