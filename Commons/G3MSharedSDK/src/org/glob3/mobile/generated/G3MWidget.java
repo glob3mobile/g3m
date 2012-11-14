@@ -128,6 +128,20 @@ public class G3MWidget
 	  _selectedRenderer.render(rc);
 	}
   
+  
+	java.util.ArrayList<OrderedRenderable> orderedRenderables = rc.getSortedOrderedRenderables();
+	if (orderedRenderables != null)
+	{
+	  final int orderedRenderablesCount = orderedRenderables.size();
+	  for (int i = 0; i < orderedRenderablesCount; i++)
+	  {
+		OrderedRenderable orderedRenderable = orderedRenderables.get(i);
+		orderedRenderable.render(rc);
+		if (orderedRenderable != null)
+			orderedRenderable.dispose();
+	  }
+	}
+  
 	//  _frameTasksExecutor->doPostRenderCycle(&rc);
   
 	final TimeInterval elapsedTime = _timer.elapsedTime();

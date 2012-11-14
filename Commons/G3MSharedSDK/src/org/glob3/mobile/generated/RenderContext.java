@@ -15,6 +15,7 @@ public class RenderContext extends Context
   private TexturesHandler _texturesHandler;
   private TextureBuilder _textureBuilder;
   private ITimer _frameStartTimer;
+  private java.util.ArrayList<OrderedRenderable> _orderedRenderables;
 
   public RenderContext(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, GL gl, Camera currentCamera, Camera nextCamera, TexturesHandler texturesHandler, TextureBuilder textureBuilder, IDownloader downloader, EffectsScheduler scheduler, ITimer frameStartTimer, IStorage storage)
   {
@@ -26,6 +27,7 @@ public class RenderContext extends Context
 	  _texturesHandler = texturesHandler;
 	  _textureBuilder = textureBuilder;
 	  _frameStartTimer = frameStartTimer;
+	  _orderedRenderables = null;
 
   }
 
@@ -80,8 +82,41 @@ public class RenderContext extends Context
 
   public void dispose()
   {
-  //  delete _frameStartTimer;
+	//  delete _frameStartTimer;
 	IFactory.instance().deleteTimer(_frameStartTimer);
+	_orderedRenderables = null;
+  }
+
+  /*
+   Get the OrderedRenderables, sorted by distanceFromEye()
+   */
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: java.util.ArrayList<OrderedRenderable*>* getSortedOrderedRenderables() const
+  public final java.util.ArrayList<OrderedRenderable> getSortedOrderedRenderables()
+  {
+	if (_orderedRenderables != null)
+	{
+  	java.util.Collections.sort(
+  							   _orderedRenderables,
+  							   new java.util.Comparator<OrderedRenderable>() {
+  								 @Override
+  								 public int compare(final OrderedRenderable or1,
+  													final OrderedRenderable or2) {
+  								   return Double.compare(or2.distanceFromEye(), or1.distanceFromEye());
+  								 }
+  							   });
+	}
+  
+	return _orderedRenderables;
+  }
+
+  public final void addOrderedRenderable(OrderedRenderable orderedRenderable)
+  {
+	if (_orderedRenderables == null)
+	{
+	  _orderedRenderables = new java.util.ArrayList<OrderedRenderable>();
+	}
+	_orderedRenderables.add(orderedRenderable);
   }
 
 }

@@ -27,6 +27,7 @@
 #include "CameraRenderer.hpp"
 #include "CPUTextureBuilder.hpp"
 #include "IStorage.hpp"
+#include "OrderedRenderable.hpp"
 #include <math.h>
 
 void G3MWidget::initSingletons(ILogger*            logger,
@@ -312,6 +313,17 @@ void G3MWidget::render() {
 
   if (_selectedRenderer->isEnable()) {
     _selectedRenderer->render(&rc);
+  }
+
+
+  std::vector<OrderedRenderable*>* orderedRenderables = rc.getSortedOrderedRenderables();
+  if (orderedRenderables != NULL) {
+    const int orderedRenderablesCount = orderedRenderables->size();
+    for (int i = 0; i < orderedRenderablesCount; i++) {
+      OrderedRenderable* orderedRenderable = orderedRenderables->at(i);
+      orderedRenderable->render(&rc);
+      delete orderedRenderable;
+    }
   }
 
   //  _frameTasksExecutor->doPostRenderCycle(&rc);
