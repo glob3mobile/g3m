@@ -31,8 +31,6 @@ private:
   MutableMatrix44D* createTransformMatrix(const Planet* planet);
   MutableMatrix44D* getTransformMatrix(const Planet* planet);
 
-//  std::string _id;
-
 protected:
   virtual void cleanTransformMatrix();
 
@@ -47,10 +45,6 @@ public:
   _transformMatrix(NULL) {
 
   }
-
-//  void setId(const std::string& id) {
-//    _id = id;
-//  }
 
   virtual ~Shape();
   

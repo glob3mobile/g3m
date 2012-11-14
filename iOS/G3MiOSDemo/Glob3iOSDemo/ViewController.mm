@@ -361,7 +361,7 @@
                                                                 Angle::fromDegreesMinutes(-122, 25),
                                                                 1000000),
                                                      TimeInterval::fromSeconds(10));
-      /*
+      /**/
       NSString *filePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
                                                            ofType: @"json"];
       if (filePath) {
@@ -370,16 +370,17 @@
                                                           error: nil];
         if (nsString) {
           std::string str = [nsString UTF8String];
-          Shape* tank = SceneJSShapesParser::parse(str);
+          Shape* plane = SceneJSShapesParser::parse(str);
 
-          tank->setPosition( new Geodetic3D(Angle::fromDegrees(37.78333333),
-                                            Angle::fromDegrees(-122.41666666666667),
-                                            100) );
-          tank->setScale(10, 10, 10);
-          _shapesRenderer->addShape(tank);
+          plane->setPosition( new Geodetic3D(Angle::fromDegrees(37.78333333),
+                                             Angle::fromDegrees(-122.41666666666667),
+                                             100) );
+          plane->setScale(100, 100, 100);
+          plane->setPitch(Angle::fromDegrees(-90));
+          _shapesRenderer->addShape(plane);
         }
       }
-       */
+      /* */
     }
   };
 
