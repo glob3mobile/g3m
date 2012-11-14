@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import org.glob3.mobile.generated.Angle;
-import org.glob3.mobile.generated.CircleShape;
-import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
@@ -214,15 +212,15 @@ public class G3MAndroidDemoActivity
                   Angle.fromDegrees(-122.41666666666667), //
                   8000);
          final int circleRadius = 50000;
-         final Color circleColor = Color.newFromRGBA(1, 1, 0, 1);
-         final CircleShape circle = new CircleShape(circlePosition, circleRadius, circleColor);
+         //         final Color circleColor = Color.newFromRGBA(1, 1, 0, 1);
+         //         final CircleShape circle = new CircleShape(circlePosition, circleRadius, circleColor);
 
          //circle.setHeading(Angle.fromDegrees(45));
          //circle.setPitch(Angle.fromDegrees(45));
          //circle.setScale(2.0, 0.5, 1);
          //circle.setRadius(circleRadius);
 
-         shapesRenderer.addShape(circle);
+         //    shapesRenderer.addShape(circle);
 
          renderers.add(shapesRenderer);
       }
