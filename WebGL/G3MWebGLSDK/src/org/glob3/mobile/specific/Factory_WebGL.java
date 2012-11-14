@@ -65,18 +65,8 @@ public final class Factory_WebGL
    @Override
    public IImage createImageFromSize(final int width,
                                      final int height) {
-      return new Image_WebGL(jsCreateImageFromSize(width, height));
+      return new Image_WebGL(width, height);
    }
-
-
-   private native JavaScriptObject jsCreateImageFromSize(final int width,
-                                                         final int height) /*-{
-		var img = new Image();
-		img.width = width;
-		img.height = height;
-
-		return img;
-   }-*/;
 
 
    @Override

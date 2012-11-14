@@ -43,6 +43,13 @@ public final class Image_WebGL
    }
 
 
+   public Image_WebGL(final int width,
+                      final int height) {
+      jsInitImgHandlingObjects(width, height);
+      _imgObject = jsCreateFromCanvasDataURL(width, height);
+   }
+
+
    private native boolean jsIsDataValid(final int width,
                                         final int height) /*-{
 		var that = this;
@@ -53,6 +60,19 @@ public final class Image_WebGL
 			that.@org.glob3.mobile.specific.Image_WebGL::_imgObject.height = height;
 			return true;
 		}
+   }-*/;
+
+
+   private native JavaScriptObject jsCreateFromCanvasDataURL(final int width,
+                                                             final int height) /*-{
+		var img = new Image();
+		img.src = this.@org.glob3.mobile.specific.Image_WebGL::_canvas
+				.toDataURL();
+		img.width = width;
+		img.height = height;
+
+		return img;
+
    }-*/;
 
 
