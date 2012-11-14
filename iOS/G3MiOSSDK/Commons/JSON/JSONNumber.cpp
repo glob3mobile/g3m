@@ -36,23 +36,35 @@ double JSONNumber::doubleValue() const {
   return _doubleValue;
 }
 
+double JSONNumber::value() const {
+  if (_type == double_type) {
+    return _doubleValue;
+  }
+  else if (_type == int_type) {
+    return _intValue;
+  }
+  else if (_type == float_type) {
+    return _floatValue;
+  }
+  return 0;
+}
 
 const std::string JSONNumber::description() const {
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
 
   switch (_type) {
     case int_type:
-      isb->addString("int/");
+      //isb->addString("int/");
       isb->addInt(_intValue);
       break;
 
     case float_type:
-      isb->addString("float/");
+      //isb->addString("float/");
       isb->addFloat(_floatValue);
       break;
 
     case double_type:
-      isb->addString("double/");
+      //isb->addString("double/");
       isb->addDouble(_doubleValue);
       break;
 

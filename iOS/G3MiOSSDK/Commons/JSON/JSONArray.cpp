@@ -31,51 +31,59 @@ int JSONArray::size() const {
 }
 
 JSONObject* JSONArray::getAsObject(const int index) const {
-  return get(index)->asObject();
+  JSONBaseObject* object = get(index);
+  return (object == NULL) ? NULL : object->asObject();
 }
 
 JSONArray* JSONArray::getAsArray(const int index) const {
-  return get(index)->asArray();
+  JSONBaseObject* object = get(index);
+  return (object == NULL) ? NULL : object->asArray();
 }
 
 JSONBoolean* JSONArray::getAsBoolean(const int index) const {
-  return get(index)->asBoolean();
+  JSONBaseObject* object = get(index);
+  return (object == NULL) ? NULL : object->asBoolean();
 }
 
 JSONNumber* JSONArray::getAsNumber(const int index) const {
-  return get(index)->asNumber();
+  JSONBaseObject* object = get(index);
+  return (object == NULL) ? NULL : object->asNumber();
 }
 
 JSONString* JSONArray::getAsString(const int index) const {
-  return get(index)->asString();
+  JSONBaseObject* object = get(index);
+  return (object == NULL) ? NULL : object->asString();
 }
-
 
 const std::string JSONArray::description() const {
   IStringBuilder *isb = IStringBuilder::newStringBuilder();
 
   int size = this->size();
 
-  isb->addString("[size=");
-  isb->addInt(size);
+  isb->addString("[");
+//  isb->addString("[size=");
+//  isb->addInt(size);
 
   if (size > 0) {
-    isb->addString("/");
+    //isb->addString(" ");
 
     isb->addString(this->get(0)->description());
 
     if (size <= 10) {
       for (int i = 1; i < size; i++) {
-        isb->addString(",");
+        isb->addString(", ");
         isb->addString(this->get(i)->description());
       }
     }
     else {
       for (int i = 1; i < 10; i++) {
-        isb->addString(",");
+        isb->addString(", ");
         isb->addString(this->get(i)->description());
       }
-      isb->addString(",...");
+      isb->addString(", ...");
+      isb->addString(" size=");
+      isb->addInt(size);
+
     }
   }
 

@@ -55,6 +55,8 @@ public:
   float  floatValue()  const;
   double doubleValue() const;
 
+  double value() const;
+
   JSONNumber* asNumber(){
     return this;
   }

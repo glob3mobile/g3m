@@ -270,6 +270,10 @@ public:
                      const int vpHeight) const;
 
     static MutableMatrix44D createTranslationMatrix(const Vector3D& t);
+    
+    static MutableMatrix44D createTranslationMatrix(double x,
+                                                    double y,
+                                                    double z);
 
     static MutableMatrix44D createRotationMatrix(const Angle& angle,
                                                  const Vector3D& axis);

@@ -12,6 +12,8 @@
 #include "Geodetic3D.hpp"
 #include "Context.hpp"
 #include "Vector3D.hpp"
+//#include <string>
+
 class MutableMatrix44D;
 
 class Shape {
@@ -25,10 +27,11 @@ private:
   double      _scaleY;
   double      _scaleZ;
 
-  
   MutableMatrix44D* _transformMatrix;
   MutableMatrix44D* createTransformMatrix(const Planet* planet);
   MutableMatrix44D* getTransformMatrix(const Planet* planet);
+
+//  std::string _id;
 
 protected:
   virtual void cleanTransformMatrix();
@@ -44,6 +47,10 @@ public:
   _transformMatrix(NULL) {
 
   }
+
+//  void setId(const std::string& id) {
+//    _id = id;
+//  }
 
   virtual ~Shape();
   
@@ -83,7 +90,6 @@ public:
     _scaleX = scaleX;
     _scaleY = scaleY;
     _scaleZ = scaleZ;
-
     cleanTransformMatrix();
   }
 

@@ -8,7 +8,7 @@
 
 #include "Layer.hpp"
 #include "LayerCondition.hpp"
-
+#include "LayerSet.hpp"
 
 bool Layer::isAvailable(const RenderContext* rc,
                          const Tile* tile) const {
@@ -24,4 +24,20 @@ bool Layer::isAvailable(const EventContext* ec,
     return true;
   }
   return _condition->isAvailable(ec, tile);
+}
+
+void Layer::setLayerSet(LayerSet* layerSet) {
+  if (_layerSet != NULL) {
+    ILogger::instance()->logError("LayerSet already set.");
+  }
+  _layerSet = layerSet;
+}
+
+void Layer::notifyChanges() const {
+  if (_layerSet == NULL) {
+    ILogger::instance()->logError("Can't notify changes, _layerSet was not set");
+  }
+  else {
+    _layerSet->layerChanged(this);
+  }
 }

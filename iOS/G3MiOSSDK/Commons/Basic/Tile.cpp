@@ -50,18 +50,18 @@ Tile::~Tile() {
 //  if (_isVisible) {
 //    deleteTexturizedMesh();
 //  }
-  
+
   prune(NULL);
-  
+
   delete _debugMesh;
-  
+
   delete _tessellatorMesh;
-  
+
 #ifdef C_CODE
-    delete _texturizerData;
+  delete _texturizerData;
 #endif
-    _texturizerData = NULL;
-  
+  _texturizerData = NULL;
+
   delete _texturizedMesh;
 }
 
