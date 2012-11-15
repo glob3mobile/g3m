@@ -361,7 +361,7 @@
                                                                 Angle::fromDegreesMinutes(-122, 25),
                                                                 1000000),
                                                      TimeInterval::fromSeconds(10));
-      /**/
+      /* */
       NSString *filePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
                                                            ofType: @"json"];
       if (filePath) {
