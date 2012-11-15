@@ -79,7 +79,7 @@ void GEOJSONDownloadListener::parsePointObject(JSONObject* point){
         const Angle longitude = Angle::fromDegrees( jsonCoordinates->getAsNumber(0)->doubleValue() );
 
         Mark* mark;
-        if (!_icon.empty()) {
+        if (_icon.length() > 0) {
             mark = new Mark(name->getString(),
                                   URL(_icon,false),
                                   Geodetic3D(latitude, longitude, 0),NULL,10000);
