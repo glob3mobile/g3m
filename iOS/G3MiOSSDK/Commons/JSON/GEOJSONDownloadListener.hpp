@@ -23,6 +23,7 @@ class GEOJSONDownloadListener : public IBufferDownloadListener {
     static const std::string PROPERTIES;
     static const std::string DENOMINATION;
     static const std::string CLASE;
+    static const std::string URLICON;
 
     
     MarksRenderer* _marksRenderer;

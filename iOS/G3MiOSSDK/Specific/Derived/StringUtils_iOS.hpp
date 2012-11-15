@@ -38,6 +38,8 @@ public:
   std::string rtrim(const std::string& string) const;
   
   std::string ltrim(const std::string& string) const;
+    
+  std::string capitalize(const std::string& string) const;
   
 };
 

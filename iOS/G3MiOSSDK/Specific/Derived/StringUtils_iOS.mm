@@ -72,3 +72,9 @@ std::string StringUtils_iOS::rtrim(const std::string& string) const {
   s.erase(std::find_if(s.rbegin(), s.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), s.end());
   return s;
 }
+
+std::string StringUtils_iOS::capitalize(const std::string& string) const {
+
+  NSString* nsString = toNSString(string);
+  return std::string([[nsString capitalizedString] UTF8String]);
+}

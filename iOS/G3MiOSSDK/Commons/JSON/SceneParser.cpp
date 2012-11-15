@@ -39,7 +39,7 @@ const std::string SceneParser::VERSION = "version";
 const std::string SceneParser::ITEMS = "items";
 const std::string SceneParser::STATUS = "status";
 const std::string SceneParser::NAME = "name";
-const std::string SceneParser::ICON = "icon";
+const std::string SceneParser::URLICON = "urlIcon";
 
 
 const std::string SceneParser::WMS110 = "1.1.0";
@@ -153,7 +153,7 @@ void SceneParser::parserGEOJSONLayer(LayerSet* layerSet, JSONObject* jsonLayer){
     for (int i = 0; i<jsonItems->size(); i++) {
     
         const std::string namefile = jsonItems->getAsObject(i)->getAsString(NAME)->value();
-        const std::string icon = jsonItems->getAsObject(i)->getAsString(ICON)->value();
+        const std::string icon = jsonItems->getAsObject(i)->getAsString(URLICON)->value();
         
         IStringBuilder *url = IStringBuilder::newStringBuilder();
         url->addString(geojsonDatasource);

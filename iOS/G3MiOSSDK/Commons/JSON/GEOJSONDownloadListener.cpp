@@ -14,6 +14,7 @@
 
 #include "ILogger.hpp"
 #include "IStringBuilder.hpp"
+#include "IStringUtils.hpp"
 #include "IJSONParser.hpp"
 #include "JSONObject.hpp"
 #include "JSONArray.hpp"
@@ -28,6 +29,8 @@ const std::string GEOJSONDownloadListener::COORDINATES = "coordinates";
 const std::string GEOJSONDownloadListener::PROPERTIES = "properties";
 const std::string GEOJSONDownloadListener::DENOMINATION = "DENOMINACI";
 const std::string GEOJSONDownloadListener::CLASE = "CLASE";
+const std::string GEOJSONDownloadListener::URLICON = "URLICON";
+
 
 
 GEOJSONDownloadListener::GEOJSONDownloadListener(MarksRenderer* marksRenderer, std::string icon){
@@ -66,24 +69,25 @@ void GEOJSONDownloadListener::parsePointObject(JSONObject* point){
     JSONBaseObject* clase = jsonProperties->get(CLASE);
     
     if (denominaci != NULL && clase != NULL){
-        
-        IStringBuilder *iconUrl = IStringBuilder::newStringBuilder();
-        iconUrl->addString("http://glob3m.glob3mobile.com/icons/markers/ayto/");
-        iconUrl->addString(_icon);
-        iconUrl->addString(".png");
-        
+                
         IStringBuilder *name = IStringBuilder::newStringBuilder();
-        name->addString(clase->asString()->value());
+        name->addString(IStringUtils::instance()->capitalize(clase->asString()->value()));
         name->addString(" ");
         name->addString(denominaci->asString()->value());
         
         const Angle latitude = Angle::fromDegrees( jsonCoordinates->getAsNumber(1)->doubleValue() );
         const Angle longitude = Angle::fromDegrees( jsonCoordinates->getAsNumber(0)->doubleValue() );
-        
-        Mark* mark = new Mark(name->getString(),
-                              URL(iconUrl->getString(),false),
-                              Geodetic3D(latitude, longitude, 0),NULL,10000);
-        
+
+        Mark* mark;
+        if (!_icon.empty()) {
+            mark = new Mark(name->getString(),
+                                  URL(_icon,false),
+                                  Geodetic3D(latitude, longitude, 0),NULL,10000);
+        } else {
+            mark = new Mark(name->getString(),
+                                  URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",false),
+                                  Geodetic3D(latitude, longitude, 0),NULL,10000);
+        }
         _marksRenderer->addMark(mark);
     }
 }

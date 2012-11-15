@@ -30,7 +30,7 @@ class SceneParser{
     static const std::string ITEMS;
     static const std::string STATUS;
     static const std::string NAME;
-    static const std::string ICON;
+    static const std::string URLICON;
     
     static const std::string WMS110;
     static const std::string WMS111;
