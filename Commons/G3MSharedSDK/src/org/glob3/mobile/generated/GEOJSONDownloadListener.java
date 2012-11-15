@@ -30,6 +30,7 @@ public class GEOJSONDownloadListener implements IBufferDownloadListener
 	private static final String PROPERTIES = "properties";
 	private static final String DENOMINATION = "DENOMINACI";
 	private static final String CLASE = "CLASE";
+	private static final String URLICON = "URLICON";
 
 
 	private MarksRenderer _marksRenderer;
@@ -91,21 +92,23 @@ public class GEOJSONDownloadListener implements IBufferDownloadListener
 		if (denominaci != null && clase != null)
 		{
     
-			IStringBuilder iconUrl = IStringBuilder.newStringBuilder();
-			iconUrl.addString("http://glob3m.glob3mobile.com/icons/markers/ayto/");
-			iconUrl.addString(_icon);
-			iconUrl.addString(".png");
-    
 			IStringBuilder name = IStringBuilder.newStringBuilder();
-			name.addString(clase.asString().value());
+			name.addString(IStringUtils.instance().capitalize(clase.asString().value()));
 			name.addString(" ");
 			name.addString(denominaci.asString().value());
     
 			final Angle latitude = Angle.fromDegrees(jsonCoordinates.getAsNumber(1).doubleValue());
 			final Angle longitude = Angle.fromDegrees(jsonCoordinates.getAsNumber(0).doubleValue());
     
-			Mark mark = new Mark(name.getString(), new URL(iconUrl.getString(),false), new Geodetic3D(latitude, longitude, 0),null,10000);
-    
+			Mark mark;
+			if (!_icon.length() == 0)
+			{
+				mark = new Mark(name.getString(), new URL(_icon,false), new Geodetic3D(latitude, longitude, 0),null,10000);
+			}
+			else
+			{
+				mark = new Mark(name.getString(), new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",false), new Geodetic3D(latitude, longitude, 0),null,10000);
+			}
 			_marksRenderer.addMark(mark);
 		}
 	}

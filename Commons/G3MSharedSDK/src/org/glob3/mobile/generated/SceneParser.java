@@ -8,7 +8,7 @@ public class SceneParser
 	private static final String ITEMS = "items";
 	private static final String STATUS = "status";
 	private static final String NAME = "name";
-	private static final String ICON = "icon";
+	private static final String URLICON = "urlIcon";
 
 	private static final String WMS110 = "1.1.0";
 	private static final String WMS111 = "1.1.1";
@@ -135,7 +135,7 @@ public class SceneParser
 		{
     
 			final String namefile = jsonItems.getAsObject(i).getAsString(NAME).value();
-			final String icon = jsonItems.getAsObject(i).getAsString(ICON).value();
+			final String icon = jsonItems.getAsObject(i).getAsString(URLICON).value();
     
 			IStringBuilder url = IStringBuilder.newStringBuilder();
 			url.addString(geojsonDatasource);
