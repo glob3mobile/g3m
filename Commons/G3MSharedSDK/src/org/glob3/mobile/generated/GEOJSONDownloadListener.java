@@ -101,7 +101,7 @@ public class GEOJSONDownloadListener implements IBufferDownloadListener
 			final Angle longitude = Angle.fromDegrees(jsonCoordinates.getAsNumber(0).doubleValue());
     
 			Mark mark;
-			if (!_icon.length() == 0)
+			if (_icon.length() > 0)
 			{
 				mark = new Mark(name.getString(), new URL(_icon,false), new Geodetic3D(latitude, longitude, 0),null,10000);
 			}
