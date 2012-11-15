@@ -17,9 +17,11 @@ public:
 
   virtual void render(const RenderContext* rc) = 0;
 
+#ifdef C_CODE
   virtual ~OrderedRenderable() {
 
   }
+#endif
 };
 
 #endif

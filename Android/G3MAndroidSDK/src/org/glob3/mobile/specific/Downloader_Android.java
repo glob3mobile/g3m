@@ -46,10 +46,6 @@ public final class Downloader_Android
       _queuedHandlers = new HashMap<String, Downloader_Android_Handler>();
       _workers = new ArrayList<Downloader_Android_WorkerThread>(maxConcurrentOperationCount);
 
-      for (int i = 0; i < _maxConcurrentOperationCount; i++) {
-         final Downloader_Android_WorkerThread da = new Downloader_Android_WorkerThread(this);
-         _workers.add(da);
-      }
       _connectTimeout = connectTimeoutMillis;
       _readTimeout = readTimeoutMillis;
    }
@@ -58,6 +54,12 @@ public final class Downloader_Android
    @Override
    public void start() {
       if (!_started) {
+         for (int i = 0; i < _maxConcurrentOperationCount; i++) {
+            final Downloader_Android_WorkerThread da = new Downloader_Android_WorkerThread(this);
+            _workers.add(da);
+         }
+
+
          final Iterator<Downloader_Android_WorkerThread> iter = _workers.iterator();
          while (iter.hasNext()) {
             final Downloader_Android_WorkerThread worker = iter.next();
@@ -87,6 +89,8 @@ public final class Downloader_Android
             }
          }
          while (!allWorkersStopped);
+
+         _workers.clear();
 
          //         boolean allStopped = true;
          //         while (_started) {
