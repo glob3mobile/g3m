@@ -52,7 +52,7 @@ public final class Downloader_Android
 
 
    @Override
-   public void start() {
+   public synchronized void start() {
       if (!_started) {
          for (int i = 0; i < _maxConcurrentOperationCount; i++) {
             final Downloader_Android_WorkerThread da = new Downloader_Android_WorkerThread(this);
@@ -71,7 +71,7 @@ public final class Downloader_Android
 
 
    @Override
-   public void stop() {
+   public synchronized void stop() {
       if (_started) {
          for (final Downloader_Android_WorkerThread worker : _workers) {
             worker.stopWorkerThread();
