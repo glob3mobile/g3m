@@ -111,7 +111,7 @@ public class G3MBuilder {
       cameraConstraints.add(scc);
 
       final LayerSet layerSet = new LayerSet();
-      layerSet.addLayer(bingLayer);
+      layerSet.addLayer(osmLayer);
 
 
       final ArrayList<Renderer> renderers = new ArrayList<Renderer>();

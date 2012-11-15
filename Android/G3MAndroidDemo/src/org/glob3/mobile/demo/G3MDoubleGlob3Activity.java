@@ -21,8 +21,8 @@ public class G3MDoubleGlob3Activity
          extends
             Activity {
 
-   private G3MWidget_Android       _widgetAndroidUp   = null;
-   private final G3MWidget_Android _widgetAndroidDown = null;
+   private G3MWidget_Android _widgetAndroidUp   = null;
+   private G3MWidget_Android _widgetAndroidDown = null;
 
 
    @Override
@@ -40,9 +40,9 @@ public class G3MDoubleGlob3Activity
       final FrameLayout layoutUp = (FrameLayout) findViewById(R.id.glob3up);
       layoutUp.addView(_widgetAndroidUp);
 
-      //      _widgetAndroidDown = glob3Builder.getSimpleOSMGlob3(getApplicationContext());
-      //      final FrameLayout layoutDown = (FrameLayout) findViewById(R.id.glob3down);
-      //      layoutDown.addView(_widgetAndroidDown);
+      _widgetAndroidDown = glob3Builder.getSimpleOSMGlob3(getApplicationContext());
+      final FrameLayout layoutDown = (FrameLayout) findViewById(R.id.glob3down);
+      layoutDown.addView(_widgetAndroidDown);
 
 
    }
@@ -54,7 +54,7 @@ public class G3MDoubleGlob3Activity
       Log.d("Demo", "Activity destroyed");
       //TODO HACK TO CLOSE SQL DB
       _widgetAndroidUp.closeStorage();
-      //  _widgetAndroidDown.closeStorage();
+      _widgetAndroidDown.closeStorage();
    }
 
 }
