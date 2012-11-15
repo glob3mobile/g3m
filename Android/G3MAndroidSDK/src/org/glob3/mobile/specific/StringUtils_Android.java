@@ -77,4 +77,11 @@ public final class StringUtils_Android
       return String.substring(index, String.length());
    }
 
+
+   public String capitalize(final String string) {
+      if (!string.isEmpty()) {
+         return string.substring(0, 1).toUpperCase() + string.substring(1, string.length()).toLowerCase();
+      }
+      return string;
+   }
 }
