@@ -30,5 +30,17 @@ public class G3MDemoActivity
             startActivity(intent);
          }
       });
+
+      final Button doubleG3MButton = (Button) findViewById(R.id.doubleGlob3G3MButton);
+
+
+      doubleG3MButton.setOnClickListener(new OnClickListener() {
+         @Override
+         public void onClick(final View v) {
+            final Intent intent = new Intent(getApplicationContext(), G3MDoubleGlob3Activity.class);
+            startActivity(intent);
+         }
+      });
+
    }
 }

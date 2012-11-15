@@ -27,6 +27,9 @@
             android:name=".G3MSimplestGlob3Activity"
             android:label="@string/title_activity_g3_msimplest" >
         </activity>
+        <activity
+            android:name="G3MDoubleGlob3Activity">
+        </activity>
     </application>
 
 </manifest>
