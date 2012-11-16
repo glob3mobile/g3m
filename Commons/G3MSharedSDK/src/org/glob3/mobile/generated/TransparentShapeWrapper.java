@@ -1,5 +1,5 @@
 package org.glob3.mobile.generated; 
-public class TransparentShapeWrapper implements OrderedRenderable
+public class TransparentShapeWrapper extends OrderedRenderable
 {
   private Shape _shape;
   private final double _squaredDistanceFromEye;
