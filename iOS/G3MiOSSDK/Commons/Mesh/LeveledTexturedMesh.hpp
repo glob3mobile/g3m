@@ -58,10 +58,13 @@ private:
   LazyTextureMapping(const LazyTextureMapping& that);
   void releaseGLTextureId();
 
+  const bool _transparent;
+
 public:
   LazyTextureMapping(LazyTextureMappingInitializer* initializer,
                      TexturesHandler* texturesHandler,
-                     bool ownedTexCoords) :
+                     bool ownedTexCoords,
+                     bool transparent) :
   _initializer(initializer),
   _glTextureId(NULL),
   _initialized(false),
@@ -69,7 +72,8 @@ public:
   _translation(0,0),
   _scale(1,1),
   _texturesHandler(texturesHandler),
-  _ownedTexCoords(ownedTexCoords)
+  _ownedTexCoords(ownedTexCoords),
+  _transparent(transparent)
   {
     
   }
@@ -100,6 +104,10 @@ public:
 
   const const IGLTextureId* getGLTextureId() const {
     return _glTextureId;
+  }
+
+  bool isTransparent(const RenderContext* rc) const {
+    return _transparent;
   }
 
 };
@@ -154,6 +162,8 @@ public:
   
   const IGLTextureId* getTopLevelGLTextureId() const;
 
+  bool isTransparent(const RenderContext* rc) const;
+  
 };
 
 #endif

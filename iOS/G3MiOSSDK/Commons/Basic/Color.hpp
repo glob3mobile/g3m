@@ -90,6 +90,10 @@ public:
     
     return Color::fromRGBA(newRed, newGreen, newBlue, newAlpha);
   }
+
+  bool isTransparent() const {
+    return (_alpha < 1);
+  }
     
 };
 

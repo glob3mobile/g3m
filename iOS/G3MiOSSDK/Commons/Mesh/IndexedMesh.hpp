@@ -54,7 +54,9 @@ public:
   int getVertexCount() const;
   
   const Vector3D getVertex(int i) const;
-  
+
+  bool isTransparent(const RenderContext* rc) const;
+
 };
 
 #endif

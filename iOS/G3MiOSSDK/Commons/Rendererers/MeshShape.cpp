@@ -37,3 +37,11 @@ void MeshShape::rawRender(const RenderContext* rc) {
     mesh->render(rc);
   }
 }
+
+bool MeshShape::isTransparent(const RenderContext* rc) {
+  const Mesh* mesh = getMesh(rc);
+  if (mesh == NULL) {
+    return false;
+  }
+  return mesh->isTransparent(rc);
+}

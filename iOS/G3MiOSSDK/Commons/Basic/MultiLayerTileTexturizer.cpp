@@ -424,6 +424,7 @@ public:
                                                             ancestor,
                                                             _texCoords),
                                          _texturesHandler,
+                                         false,
                                          false);
       }
       

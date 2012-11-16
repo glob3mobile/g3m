@@ -22,3 +22,9 @@ bool SGShape::isReadyToRender(const RenderContext* rc) {
 void SGShape::rawRender(const RenderContext* rc) {
   _node->render(rc);
 }
+
+bool SGShape::isTransparent(const RenderContext* rc) {
+  int __DIEGO_AT_WORK;
+//  return _node->isTransparent(rc);
+  return false;
+}

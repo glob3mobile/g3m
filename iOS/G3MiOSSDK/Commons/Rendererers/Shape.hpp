@@ -103,6 +103,8 @@ public:
   
   virtual void rawRender(const RenderContext* rc) = 0;
 
+  virtual bool isTransparent(const RenderContext* rc) = 0;
+
 };
 
 #endif

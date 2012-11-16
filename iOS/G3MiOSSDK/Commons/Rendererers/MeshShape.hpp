@@ -43,6 +43,8 @@ public:
 
   virtual ~MeshShape();
 
+  bool isTransparent(const RenderContext* rc);
+
 };
 
 #endif

@@ -32,6 +32,8 @@ public:
 
   void rawRender(const RenderContext* rc);
 
+  bool isTransparent(const RenderContext* rc);
+
 };
 
 #endif

@@ -19,7 +19,7 @@ RenderContext::~RenderContext() {
   delete _orderedRenderables;
 }
 
-void RenderContext::addOrderedRenderable(OrderedRenderable* orderedRenderable) {
+void RenderContext::addOrderedRenderable(OrderedRenderable* orderedRenderable) const {
   if (_orderedRenderables == NULL) {
     _orderedRenderables = new std::vector<OrderedRenderable*>;
   }
@@ -29,7 +29,7 @@ void RenderContext::addOrderedRenderable(OrderedRenderable* orderedRenderable) {
 #ifdef C_CODE
 bool MyDataSortPredicate(const OrderedRenderable* or1,
                          const OrderedRenderable* or2) {
-  return ( or1->distanceFromEye() >= or2->distanceFromEye() );
+  return ( or1->squaredDistanceFromEye() >= or2->squaredDistanceFromEye() );
 }
 #endif
 
@@ -47,7 +47,8 @@ std::vector<OrderedRenderable*>* RenderContext::getSortedOrderedRenderables() co
                                  @Override
                                  public int compare(final OrderedRenderable or1,
                                                     final OrderedRenderable or2) {
-                                   return Double.compare(or2.distanceFromEye(), or1.distanceFromEye());
+                                   return Double.compare(or2.squaredDistanceFromEye(),
+                                                         or1.squaredDistanceFromEye());
                                  }
                                });
 #endif

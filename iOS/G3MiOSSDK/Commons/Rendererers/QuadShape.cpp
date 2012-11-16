@@ -86,6 +86,7 @@ Mesh* QuadShape::createMesh(const RenderContext* rc) {
 
   TextureMapping* texMap = new SimpleTextureMapping(texId,
                                                     texCoords.create(),
+                                                    true,
                                                     true);
 
   return new TexturedMesh(im, true, texMap, true, true);

@@ -62,11 +62,17 @@ void IndexedMesh::render(const RenderContext* rc) const {
   else {
     gl->enableVertexColor(_colors, _colorsIntensity);
   }
-  
+
+  bool blend = false;
   if (_flatColor == NULL) {
     gl->disableVertexFlatColor();
   }
   else {
+    if (_flatColor->isTransparent()) {
+      gl->enableBlend();
+      gl->setBlendFuncSrcAlpha();
+      blend = true;
+    }
     gl->enableVertexFlatColor(*_flatColor, _colorsIntensity);
   }
   
@@ -104,7 +110,11 @@ void IndexedMesh::render(const RenderContext* rc) const {
   if (_translationMatrix != NULL) {
     gl->popMatrix();
   }
-  
+
+  if (blend) {
+    gl->disableBlend();
+  }
+
   gl->disableVerticesPosition();
 }
 
@@ -156,4 +166,11 @@ const Vector3D IndexedMesh::getVertex(int i) const {
 
 int IndexedMesh::getVertexCount() const {
   return _vertices->size() / 3;
+}
+
+bool IndexedMesh::isTransparent(const RenderContext* rc) const {
+  if (_flatColor == NULL) {
+    return false;
+  }
+  return _flatColor->isTransparent();
 }

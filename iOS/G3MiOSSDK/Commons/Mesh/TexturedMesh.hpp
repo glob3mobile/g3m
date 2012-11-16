@@ -67,6 +67,10 @@ public:
     return _textureMapping;
   }
 
+  bool isTransparent(const RenderContext* rc) const {
+    return _transparent;
+  }
+
 };
 
 #endif
