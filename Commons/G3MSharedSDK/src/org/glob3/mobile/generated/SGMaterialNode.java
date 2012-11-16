@@ -24,6 +24,15 @@ public class SGMaterialNode extends SGNode
   private double _shine;
   private double _specular;
 
+//  baseColor { r: 0.0, g: 0.0, b: 0.0 }
+//  specularColor { r: 0.0, g: 0.0, b: 0.0 }
+//
+//  specular 1
+//  shine 10
+//  alpha 1.0
+//  emit 0.0
+
+
   protected final void prepareRender(RenderContext rc)
   {
 	GL gl = rc.getGL();

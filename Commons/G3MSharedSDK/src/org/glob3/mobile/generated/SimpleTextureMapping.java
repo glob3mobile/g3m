@@ -2,25 +2,26 @@ package org.glob3.mobile.generated;
 public class SimpleTextureMapping extends TextureMapping
 {
   private final IGLTextureId _glTextureId;
+
   private IFloatBuffer _texCoords;
   private final boolean _ownedTexCoords;
 
   private MutableVector2D _translation = new MutableVector2D();
   private MutableVector2D _scale = new MutableVector2D();
 
+  private final boolean _isTransparent;
 
-  public SimpleTextureMapping(IGLTextureId glTextureId, IFloatBuffer texCoords, boolean ownedTexCoords)
+
+  public SimpleTextureMapping(IGLTextureId glTextureId, IFloatBuffer texCoords, boolean ownedTexCoords, boolean isTransparent)
   {
 	  _glTextureId = glTextureId;
 	  _texCoords = texCoords;
 	  _translation = new MutableVector2D(0, 0);
 	  _scale = new MutableVector2D(1, 1);
 	  _ownedTexCoords = ownedTexCoords;
+	  _isTransparent = isTransparent;
 
   }
-
-//  SimpleTextureMapping(const GLTextureId& glTextureId,
-//                       std::vector<MutableVector2D> texCoords);
 
   public final void setTranslationAndScale(Vector2D translation, Vector2D scale)
   {
@@ -48,27 +49,9 @@ public class SimpleTextureMapping extends TextureMapping
 //ORIGINAL LINE: IFloatBuffer* getTexCoords() const
   public final IFloatBuffer getTexCoords()
   {
-	  return _texCoords;
+	return _texCoords;
   }
 
-
-  //SimpleTextureMapping::SimpleTextureMapping(const GLTextureId& glTextureId,
-  //                                           std::vector<MutableVector2D> texCoords) :
-  //_glTextureId(glTextureId),
-  //_translation(0, 0),
-  //_scale(1, 1),
-  //_ownedTexCoords(true)
-  //{
-  //  const int texCoordsSize = texCoords.size();
-  //  float* texCoordsA = new float[2 * texCoordsSize];
-  //  int p = 0;
-  //  for (int i = 0; i < texCoordsSize; i++) {
-  //    texCoordsA[p++] = (float) texCoords[i].x();
-  //    texCoordsA[p++] = (float) texCoords[i].y();
-  //  }
-  //  _texCoords = texCoordsA;
-  //}
-  
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: void bind(const RenderContext* rc) const
   public final void bind(RenderContext rc)
@@ -78,6 +61,13 @@ public class SimpleTextureMapping extends TextureMapping
 	gl.transformTexCoords(_scale, _translation);
 	gl.bindTexture(_glTextureId);
 	gl.setTextureCoordinates(2, 0, _texCoords);
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isTransparent(const RenderContext* rc) const
+  public final boolean isTransparent(RenderContext rc)
+  {
+	return _isTransparent;
   }
 
 }

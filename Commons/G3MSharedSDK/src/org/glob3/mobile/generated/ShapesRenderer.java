@@ -95,11 +95,24 @@ public class ShapesRenderer extends LeafRenderer
 
   public final void render(RenderContext rc)
   {
+	final Vector3D cameraPosition = rc.getCurrentCamera().getCartesianPosition();
+  
 	final int shapesCount = _shapes.size();
 	for (int i = 0; i < shapesCount; i++)
 	{
 	  Shape shape = _shapes.get(i);
-	  shape.render(rc);
+	  if (shape.isTransparent(rc))
+	  {
+		final Planet planet = rc.getPlanet();
+		final Vector3D shapePosition = planet.toCartesian(shape.getPosition());
+		final double squaredDistanceFromEye = shapePosition.sub(cameraPosition).squaredLength();
+  
+		rc.addOrderedRenderable(new TransparentShapeWrapper(shape, squaredDistanceFromEye));
+	  }
+	  else
+	  {
+		shape.render(rc);
+	  }
 	}
   }
 

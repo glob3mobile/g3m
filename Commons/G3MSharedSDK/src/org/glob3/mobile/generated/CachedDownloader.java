@@ -47,7 +47,7 @@ public class CachedDownloader extends IDownloader
 
   public final void start()
   {
-	  _downloader.start();
+	_downloader.start();
   }
 
   public final void stop()
@@ -130,8 +130,8 @@ public class CachedDownloader extends IDownloader
 	isb.addString(", saves=");
 	isb.addInt(_savesCounter);
 	isb.addString(", downloader=");
-  //  isb->addString(IDownloader::instance()->statistics());
-	  isb.addString(_downloader.statistics());
+	//isb->addString(IDownloader::instance()->statistics());
+	isb.addString(_downloader.statistics());
 	final String s = isb.getString();
 	if (isb != null)
 		isb.dispose();
@@ -145,15 +145,15 @@ public class CachedDownloader extends IDownloader
 
   public final void onResume(InitializationContext ic)
   {
-  //  IDownloader::instance()->onResume(ic);
-	  _downloader.onResume(ic);
-	  IStorage.instance().onResume(ic);
+	//IDownloader::instance()->onResume(ic);
+	_downloader.onResume(ic);
+	IStorage.instance().onResume(ic);
   }
 
   public final void onPause(InitializationContext ic)
   {
-  //  IDownloader::instance()->onPause(ic);
-	  _downloader.onPause(ic);
+	//IDownloader::instance()->onPause(ic);
+	_downloader.onPause(ic);
 	IStorage.instance().onPause(ic);
   }
 

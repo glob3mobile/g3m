@@ -17,16 +17,12 @@ package org.glob3.mobile.generated;
 
 
 
-public abstract class OrderedRenderable
+public interface OrderedRenderable
 {
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual double distanceFromEye() const = 0;
-  public abstract double distanceFromEye();
+//ORIGINAL LINE: virtual double squaredDistanceFromEye() const = 0;
+  double squaredDistanceFromEye();
 
-  public abstract void render(RenderContext rc);
+  void render(RenderContext rc);
 
-  public void dispose()
-  {
-
-  }
 }

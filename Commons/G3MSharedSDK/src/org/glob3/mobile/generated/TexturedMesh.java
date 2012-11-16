@@ -96,4 +96,11 @@ public class TexturedMesh extends Mesh
 	return _textureMapping;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isTransparent(const RenderContext* rc) const
+  public final boolean isTransparent(RenderContext rc)
+  {
+	return _transparent;
+  }
+
 }

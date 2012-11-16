@@ -37,4 +37,8 @@ public abstract class TextureMapping
 //ORIGINAL LINE: virtual void bind(const RenderContext* rc) const = 0;
   public abstract void bind(RenderContext rc);
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual boolean isTransparent(const RenderContext* rc) const = 0;
+  public abstract boolean isTransparent(RenderContext rc);
+
 }

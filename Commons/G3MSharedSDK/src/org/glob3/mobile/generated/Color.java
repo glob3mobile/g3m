@@ -101,4 +101,11 @@ public class Color
 	return Color.fromRGBA(newRed, newGreen, newBlue, newAlpha);
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isTransparent() const
+  public final boolean isTransparent()
+  {
+	return (_alpha < 1);
+  }
+
 }

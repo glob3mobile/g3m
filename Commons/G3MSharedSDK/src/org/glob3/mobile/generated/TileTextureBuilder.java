@@ -293,7 +293,7 @@ public class TileTextureBuilder extends RCObject
 	  }
 	  else
 	  {
-		mapping = new LazyTextureMapping(new LTMInitializer(_tile, ancestor, _texCoords), _texturesHandler, false);
+		mapping = new LazyTextureMapping(new LTMInitializer(_tile, ancestor, _texCoords), _texturesHandler, false, false);
 	  }
 
 	  if (ancestor != _tile)

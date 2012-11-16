@@ -43,4 +43,8 @@ public abstract class Mesh
 //ORIGINAL LINE: virtual Extent* getExtent() const = 0;
   public abstract Extent getExtent();
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual boolean isTransparent(const RenderContext* rc) const = 0;
+  public abstract boolean isTransparent(RenderContext rc);
+
 }

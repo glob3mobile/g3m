@@ -18,7 +18,7 @@ package org.glob3.mobile.generated;
 
 
 
-public class CompositeShape extends Shape
+public abstract class CompositeShape extends Shape
 {
   private java.util.ArrayList<Shape> _children = new java.util.ArrayList<Shape>();
 

@@ -76,4 +76,14 @@ public abstract class MeshShape extends Shape
 		_mesh.dispose();
   }
 
+  public final boolean isTransparent(RenderContext rc)
+  {
+	final Mesh mesh = getMesh(rc);
+	if (mesh == null)
+	{
+	  return false;
+	}
+	return mesh.isTransparent(rc);
+  }
+
 }
