@@ -110,6 +110,8 @@
 		CF527E22162E35BA00E0BDE0 /* IGLProgramId.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D86EFDF51609BEDA002BF100 /* IGLProgramId.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF527E23162E35BA00E0BDE0 /* IGLUniformID.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D80D3A5D160A0A47004831C5 /* IGLUniformID.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF59DF8F15C04AFC002173EC /* ILogger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF59DF8E15C04AFC002173EC /* ILogger.cpp */; };
+		CF5A8A321656B67F00508C38 /* BoxShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5A8A301656B67F00508C38 /* BoxShape.cpp */; };
+		CF5A8A331656B67F00508C38 /* BoxShape.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF5A8A311656B67F00508C38 /* BoxShape.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF5EA5D4163DDC7900D8F797 /* Shape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5EA5D2163DDC7900D8F797 /* Shape.cpp */; };
 		CF5EA5D5163DDC7900D8F797 /* Shape.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF5EA5D3163DDC7900D8F797 /* Shape.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF5EA5D8163DDCB900D8F797 /* QuadShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF5EA5D6163DDCB900D8F797 /* QuadShape.cpp */; };
@@ -162,7 +164,7 @@
 		CF8D0BFE15AF0D32005B5433 /* TileTexturizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */; };
 		CF8FF98B15D5539F000F79D1 /* LeveledTexturedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8FF98915D5539F000F79D1 /* LeveledTexturedMesh.cpp */; };
 		CF9592AE1652E28500CB7AC8 /* OrderedRenderable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9592AC1652E28500CB7AC8 /* OrderedRenderable.cpp */; };
-		CF9592AF1652E28500CB7AC8 /* OrderedRenderable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF9592AD1652E28500CB7AC8 /* OrderedRenderable.hpp */; };
+		CF9592AF1652E28500CB7AC8 /* OrderedRenderable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF9592AD1652E28500CB7AC8 /* OrderedRenderable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF9AEBC2159B3FEB004C3558 /* EllipsoidalTileTessellator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9AEBC1159B3FEA004C3558 /* EllipsoidalTileTessellator.cpp */; };
 		CF9CD89A15DBE2C800C6FD7E /* CachedDownloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9CD89815DBE2C800C6FD7E /* CachedDownloader.cpp */; };
 		CF9D2D8815F7D3C100B5CE2E /* IBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9D2D8615F7D3C100B5CE2E /* IBuffer.cpp */; };
@@ -405,6 +407,8 @@
 		CF527E1D162E33F500E0BDE0 /* LeafRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LeafRenderer.cpp; path = Commons/Rendererers/LeafRenderer.cpp; sourceTree = "<group>"; };
 		CF527E1E162E33F500E0BDE0 /* LeafRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LeafRenderer.hpp; path = Commons/Rendererers/LeafRenderer.hpp; sourceTree = "<group>"; };
 		CF59DF8E15C04AFC002173EC /* ILogger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ILogger.cpp; path = Commons/Interfaces/ILogger.cpp; sourceTree = "<group>"; };
+		CF5A8A301656B67F00508C38 /* BoxShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = BoxShape.cpp; path = Commons/Rendererers/BoxShape.cpp; sourceTree = "<group>"; };
+		CF5A8A311656B67F00508C38 /* BoxShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = BoxShape.hpp; path = Commons/Rendererers/BoxShape.hpp; sourceTree = "<group>"; };
 		CF5EA5D2163DDC7900D8F797 /* Shape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Shape.cpp; path = Commons/Rendererers/Shape.cpp; sourceTree = "<group>"; };
 		CF5EA5D3163DDC7900D8F797 /* Shape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Shape.hpp; path = Commons/Rendererers/Shape.hpp; sourceTree = "<group>"; };
 		CF5EA5D6163DDCB900D8F797 /* QuadShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = QuadShape.cpp; path = Commons/Rendererers/QuadShape.cpp; sourceTree = "<group>"; };
@@ -893,6 +897,8 @@
 		CFEEE4BA1648676800F45F59 /* Shapes */ = {
 			isa = PBXGroup;
 			children = (
+				CF5A8A301656B67F00508C38 /* BoxShape.cpp */,
+				CF5A8A311656B67F00508C38 /* BoxShape.hpp */,
 				CFEEE4BB164867B600F45F59 /* CircleShape.cpp */,
 				CFEEE4BC164867B600F45F59 /* CircleShape.hpp */,
 				CF3E07E61649B65000B5CA51 /* CompositeShape.cpp */,
@@ -1039,6 +1045,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF9592AF1652E28500CB7AC8 /* OrderedRenderable.hpp in Headers */,
+				CF5A8A331656B67F00508C38 /* BoxShape.hpp in Headers */,
 				CF11E8C7164D653000935052 /* SGLayerNode.hpp in Headers */,
 				CFC3BCCA164C6C7300A8D37D /* SGShape.hpp in Headers */,
 				CF857B2F164C757A0089F1DE /* SGRotateNode.hpp in Headers */,
@@ -1192,7 +1200,6 @@
 				A70F560A161B5C6000340256 /* JSONParser_iOS.hpp in Headers */,
 				CFA189A015F8D9F80048BF46 /* IntBuffer_iOS.hpp in Headers */,
 				A74072CF161EEEA300182A39 /* BingLayer.hpp in Headers */,
-				CF9592AF1652E28500CB7AC8 /* OrderedRenderable.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1367,6 +1374,7 @@
 				CF857B3F164C80DB0089F1DE /* SGTranslateNode.cpp in Sources */,
 				CF11E8C6164D653000935052 /* SGLayerNode.cpp in Sources */,
 				CF9592AE1652E28500CB7AC8 /* OrderedRenderable.cpp in Sources */,
+				CF5A8A321656B67F00508C38 /* BoxShape.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

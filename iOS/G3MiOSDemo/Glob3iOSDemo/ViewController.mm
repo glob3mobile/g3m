@@ -24,6 +24,7 @@
 #include "ShapesRenderer.hpp"
 //#include "QuadShape.hpp"
 #include "CircleShape.hpp"
+#include "BoxShape.hpp"
 //#include "CompositeShape.hpp"
 #include "SceneJSShapesParser.hpp"
 #include "G3MWidget.hpp"
@@ -271,11 +272,17 @@
 
   shapesRenderer->addShape(yellowShape);
 
-  Shape* redShape = new CircleShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
-                                                   Angle::fromDegrees(-122.41666666666667),
-                                                   15000),
-                                    35000,
-                                    Color::newFromRGBA(1, 0, 0, 0.5));
+//  Shape* redShape = new CircleShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
+//                                                   Angle::fromDegrees(-122.41666666666667),
+//                                                   15000),
+//                                    35000,
+//                                    Color::newFromRGBA(1, 0, 0, 0.5));
+  Shape* redShape = new BoxShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
+                                                Angle::fromDegrees(-122.41666666666667),
+                                                15000),
+                                 Vector3D(20000, 30000, 50000),
+                                 Color::newFromRGBA(1, 0, 0, 0.5));
+
   shapesRenderer->addShape(redShape);
 
   // CompositeShape* group = new CompositeShape();
