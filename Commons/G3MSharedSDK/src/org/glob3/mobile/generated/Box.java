@@ -159,7 +159,6 @@ public class Box extends Extent
 //ORIGINAL LINE: Vector3D intersectionWithRay(const Vector3D& origin, const Vector3D& direction) const
   public final Vector3D intersectionWithRay(Vector3D origin, Vector3D direction)
   {
-  
 	//MIN X
 	{
 	  Plane p = new Plane(new Vector3D(1.0, 0.0, 0.0), _lower._x);
@@ -214,7 +213,9 @@ public class Box extends Extent
   public final void render(RenderContext rc)
   {
 	if (_mesh == null)
-		createMesh();
+	{
+	  createMesh(Color.newFromRGBA((float)1.0, (float)1.0, (float)0.0, (float)1.0));
+	}
 	_mesh.render(rc);
   }
 
@@ -237,17 +238,41 @@ public class Box extends Extent
 	return true;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Extent* mergedWith(const Extent* that) const
+  public final Extent mergedWith(Extent that)
+  {
+	if (that == null)
+	{
+	  return null;
+	}
+	return that.mergedWithBox(this);
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: Extent* mergedWithBox(const Box* that) const
+  public final Extent mergedWithBox(Box that)
+  {
+	final double lowerX = IMathUtils.instance().min(_lower._x, that._lower._x);
+	final double lowerY = IMathUtils.instance().min(_lower._y, that._lower._y);
+	final double lowerZ = IMathUtils.instance().min(_lower._z, that._lower._z);
+  
+	final double upperX = IMathUtils.instance().max(_upper._x, that._upper._x);
+	final double upperY = IMathUtils.instance().max(_upper._y, that._upper._y);
+	final double upperZ = IMathUtils.instance().max(_upper._z, that._upper._z);
+  
+	return new Box(new Vector3D(lowerX, lowerY, lowerZ), new Vector3D(upperX, upperY, upperZ));
+  }
+
 
   private final Vector3D _lower ;
   private final Vector3D _upper ;
 
-  java.util.ArrayList<Vector3D> _corners = null; // cache for getCorners() method
+  private java.util.ArrayList<Vector3D> _corners = null; // cache for getCorners() method
 
   private Mesh _mesh;
-  private void createMesh()
+  private void createMesh(Color color)
   {
-	int numVertices = 8;
-	int numIndices = 48;
   
 	float[] v = { (float) _lower._x, (float) _lower._y, (float) _lower._z, (float) _lower._x, (float) _upper._y, (float) _lower._z, (float) _lower._x, (float) _upper._y, (float) _upper._z, (float) _lower._x, (float) _lower._y, (float) _upper._z, (float) _upper._x, (float) _lower._y, (float) _lower._z, (float) _upper._x, (float) _upper._y, (float) _lower._z, (float) _upper._x, (float) _upper._y, (float) _upper._z, (float) _upper._x, (float) _lower._y, (float) _upper._z };
   
@@ -256,16 +281,19 @@ public class Box extends Extent
 	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
 	IntBufferBuilder indices = new IntBufferBuilder();
   
+	final int numVertices = 8;
 	for (int n = 0; n<numVertices; n++)
+	{
 	  vertices.add(v[n *3], v[n *3+1], v[n *3+2]);
+	}
   
+	final int numIndices = 48;
 	for (int n = 0; n<numIndices; n++)
+	{
 	  indices.add(i[n]);
+	}
   
-	Color flatColor = new Color(Color.fromRGBA((float)1.0, (float)1.0, (float)0.0, (float)1.0));
-  
-	// create mesh
-	_mesh = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, flatColor);
+	_mesh = new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, color);
   }
 
 }

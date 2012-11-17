@@ -197,4 +197,11 @@ public abstract class IMathUtils
 //ORIGINAL LINE: virtual int toInt(float value) const = 0;
   public abstract int toInt(float value);
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual double min(double d1, double d2) const = 0;
+  public abstract double min(double d1, double d2);
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual double max(double d1, double d2) const = 0;
+  public abstract double max(double d1, double d2);
+
 }

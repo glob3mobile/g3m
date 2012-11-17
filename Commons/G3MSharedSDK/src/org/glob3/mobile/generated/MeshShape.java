@@ -48,13 +48,6 @@ public abstract class MeshShape extends Shape
 
   }
 
-//  MeshShape(Geodetic3D* position,
-//            Mesh* mesh) :
-//  Shape(position),
-//  _mesh(mesh) {
-//
-//  }
-
   public final boolean isReadyToRender(RenderContext rc)
   {
 	final Mesh mesh = getMesh(rc);
@@ -66,10 +59,19 @@ public abstract class MeshShape extends Shape
 	final Mesh mesh = getMesh(rc);
 	if (mesh != null)
 	{
+  //    GL* gl = rc->getGL();
+  //
+  //    gl->disableCullFace();
+  
 	  mesh.render(rc);
+  
+  //    gl->enableCullFace(GLCullFace::back());
 	}
   }
 
+
+  ///#include "GL.hpp"
+  
   public void dispose()
   {
 	if (_mesh != null)
