@@ -8,6 +8,7 @@
 
 #include "MeshShape.hpp"
 #include "Mesh.hpp"
+//#include "GL.hpp"
 
 MeshShape::~MeshShape() {
   delete _mesh;
@@ -34,7 +35,13 @@ bool MeshShape::isReadyToRender(const RenderContext* rc) {
 void MeshShape::rawRender(const RenderContext* rc) {
   const Mesh* mesh = getMesh(rc);
   if (mesh != NULL) {
+//    GL* gl = rc->getGL();
+//    
+//    gl->disableCullFace();
+
     mesh->render(rc);
+
+//    gl->enableCullFace(GLCullFace::back());
   }
 }
 

@@ -261,49 +261,40 @@
   //                               textureImage, true, textureFileName,
   //                               50000, 50000);
 
-  Shape* yellowShape = new CircleShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
-                                                      Angle::fromDegrees(-122.76666666666667),
-                                                      8000),
-                                       50000,
-                                       Color::newFromRGBA(1, 1, 0, 0.5));
-  //  shape->setHeading( Angle::fromDegrees(45) );
-  //  shape->setPitch( Angle::fromDegrees(45) );
-  //  shape->setScale(2.0, 0.5, 1);
+  Shape* circle = new CircleShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
+                                                 Angle::fromDegrees(-122.76666666666667),
+                                                 8000),
+                                  50000,
+                                  Color::newFromRGBA(1, 1, 0, 0.5));
+  //  circle->setHeading( Angle::fromDegrees(45) );
+  //  circle->setPitch( Angle::fromDegrees(45) );
+  //  circle->setScale(2.0, 0.5, 1);
+  shapesRenderer->addShape(circle);
 
-  shapesRenderer->addShape(yellowShape);
-
-//  Shape* redShape = new CircleShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
-//                                                   Angle::fromDegrees(-122.41666666666667),
-//                                                   15000),
-//                                    35000,
-//                                    Color::newFromRGBA(1, 0, 0, 0.5));
-  Shape* redShape = new BoxShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
-                                                Angle::fromDegrees(-122.41666666666667),
-                                                15000),
-                                 Vector3D(20000, 30000, 50000),
-                                 Color::newFromRGBA(1, 0, 0, 0.5));
-
-  shapesRenderer->addShape(redShape);
-
-  // CompositeShape* group = new CompositeShape();
-  // group->addShape(shape);
-  // shapesRenderer->addShape(group);
+  Shape* box = new BoxShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
+                                           Angle::fromDegrees(-122.41666666666667),
+                                           45000),
+                            Vector3D(20000, 30000, 50000),
+                            2,
+                            Color::newFromRGBA(1,    0, 0, 0.5),
+                            Color::newFromRGBA(0.75, 0, 0, 0.75));
+  shapesRenderer->addShape(box);
 
 
   renderers.push_back(shapesRenderer);
   //  }
 
 
-//  TrailsRenderer* trailsRenderer = new TrailsRenderer();
-//  renderers.push_back(trailsRenderer);
-//
-//  Trail* trail = new Trail(50, Color::fromRGBA(1, 1, 1, 1), 2);
-//
-//  Geodetic3D position(Angle::fromDegrees(37.78333333),
-//                      Angle::fromDegrees(-122.41666666666667),
-//                      7500);
-//  trail->addPosition(position);
-//  trailsRenderer->addTrail(trail);
+  //  TrailsRenderer* trailsRenderer = new TrailsRenderer();
+  //  renderers.push_back(trailsRenderer);
+  //
+  //  Trail* trail = new Trail(50, Color::fromRGBA(1, 1, 1, 1), 2);
+  //
+  //  Geodetic3D position(Angle::fromDegrees(37.78333333),
+  //                      Angle::fromDegrees(-122.41666666666667),
+  //                      7500);
+  //  trail->addPosition(position);
+  //  trailsRenderer->addTrail(trail);
 
 
   //  if (false) {
@@ -314,39 +305,39 @@
 
   //  renderers.push_back(new GLErrorRenderer());
 
-//  class TestTrailTask : public GTask {
-//  private:
-//    Trail* _trail;
-//
-//    double _lastLatitudeDegrees;
-//    double _lastLongitudeDegrees;
-//    double _lastHeight;
-//
-//  public:
-//    TestTrailTask(Trail* trail,
-//                  Geodetic3D lastPosition) :
-//    _trail(trail),
-//    _lastLatitudeDegrees(lastPosition.latitude()._degrees),
-//    _lastLongitudeDegrees(lastPosition.longitude()._degrees),
-//    _lastHeight(lastPosition.height())
-//    {
-//
-//    }
-//
-//    void run() {
-//      _lastLatitudeDegrees += 0.025;
-//      _lastLongitudeDegrees += 0.025;
-//      _lastHeight += 200;
-//
-//      _trail->addPosition(Geodetic3D(Angle::fromDegrees(_lastLatitudeDegrees),
-//                                     Angle::fromDegrees(_lastLongitudeDegrees),
-//                                     _lastHeight));
-//    }
-//  };
+  //  class TestTrailTask : public GTask {
+  //  private:
+  //    Trail* _trail;
+  //
+  //    double _lastLatitudeDegrees;
+  //    double _lastLongitudeDegrees;
+  //    double _lastHeight;
+  //
+  //  public:
+  //    TestTrailTask(Trail* trail,
+  //                  Geodetic3D lastPosition) :
+  //    _trail(trail),
+  //    _lastLatitudeDegrees(lastPosition.latitude()._degrees),
+  //    _lastLongitudeDegrees(lastPosition.longitude()._degrees),
+  //    _lastHeight(lastPosition.height())
+  //    {
+  //
+  //    }
+  //
+  //    void run() {
+  //      _lastLatitudeDegrees += 0.025;
+  //      _lastLongitudeDegrees += 0.025;
+  //      _lastHeight += 200;
+  //
+  //      _trail->addPosition(Geodetic3D(Angle::fromDegrees(_lastLatitudeDegrees),
+  //                                     Angle::fromDegrees(_lastLongitudeDegrees),
+  //                                     _lastHeight));
+  //    }
+  //  };
 
   std::vector<PeriodicalTask*> periodicalTasks;
-//  periodicalTasks.push_back( new PeriodicalTask(TimeInterval::fromSeconds(1),
-//                                                new TestTrailTask(trail, position)));
+  //  periodicalTasks.push_back( new PeriodicalTask(TimeInterval::fromSeconds(1),
+  //                                                new TestTrailTask(trail, position)));
 
 
   std::vector <ICameraConstrainer*> cameraConstraints;
@@ -376,25 +367,25 @@
                                                                 1000000),
                                                      TimeInterval::fromSeconds(5));
       /*
-      NSString *filePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
-                                                           ofType: @"json"];
-      if (filePath) {
-        NSString *nsString = [NSString stringWithContentsOfFile: filePath
-                                                       encoding: NSUTF8StringEncoding
-                                                          error: nil];
-        if (nsString) {
-          std::string str = [nsString UTF8String];
-          Shape* plane = SceneJSShapesParser::parse(str);
+       NSString *filePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
+       ofType: @"json"];
+       if (filePath) {
+       NSString *nsString = [NSString stringWithContentsOfFile: filePath
+       encoding: NSUTF8StringEncoding
+       error: nil];
+       if (nsString) {
+       std::string str = [nsString UTF8String];
+       Shape* plane = SceneJSShapesParser::parse(str);
 
-          plane->setPosition( new Geodetic3D(Angle::fromDegrees(37.78333333),
-                                             Angle::fromDegrees(-122.41666666666667),
-                                             100) );
-          plane->setScale(100, 100, 100);
-          plane->setPitch(Angle::fromDegrees(-90));
-          _shapesRenderer->addShape(plane);
-        }
-      }
-      */
+       plane->setPosition( new Geodetic3D(Angle::fromDegrees(37.78333333),
+       Angle::fromDegrees(-122.41666666666667),
+       100) );
+       plane->setScale(100, 100, 100);
+       plane->setPitch(Angle::fromDegrees(-90));
+       _shapesRenderer->addShape(plane);
+       }
+       }
+       */
     }
   };
 

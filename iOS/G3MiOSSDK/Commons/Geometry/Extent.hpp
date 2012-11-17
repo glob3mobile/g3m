@@ -40,6 +40,10 @@ public:
 
   virtual bool touchesBox(const Box *box) const = 0;
 
+  virtual Extent* mergedWith(const Extent* that) const = 0;
+
+  virtual Extent* mergedWithBox(const Box* that) const = 0;
+
 };
 
 

@@ -53,13 +53,22 @@ public:
 
   bool touchesBox(const Box* box) const;
 
+  Extent* mergedWith(const Extent* that) const {
+    if (that == NULL) {
+      return NULL;
+    }
+    return that->mergedWithBox(this);
+  }
+
+  Extent* mergedWithBox(const Box* that) const;
+
   
 private:
   const Vector3D _lower;
   const Vector3D _upper;
   
 #ifdef JAVA_CODE
-  java.util.ArrayList<Vector3D> _corners = null; // cache for getCorners() method
+  private java.util.ArrayList<Vector3D> _corners = null; // cache for getCorners() method
 #endif
   
   Mesh *_mesh;  

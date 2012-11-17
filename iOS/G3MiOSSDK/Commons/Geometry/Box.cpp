@@ -146,8 +146,6 @@ Vector3D Box::intersectionWithRay(const Vector3D& origin, const Vector3D& direct
 
 
 void Box::createMesh(Color* color) {
-  unsigned int numVertices = 8;
-  int numIndices = 48;
   
   float v[] = {
     (float) _lower._x, (float) _lower._y, (float) _lower._z,
@@ -172,15 +170,17 @@ void Box::createMesh(Color* color) {
   FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
   IntBufferBuilder indices;
   
+  const unsigned int numVertices = 8;
   for (unsigned int n=0; n<numVertices; n++) {
     vertices.add(v[n*3], v[n*3+1], v[n*3+2]);
   }
   
+  const int numIndices = 48;
   for (unsigned int n=0; n<numIndices; n++) {
     indices.add(i[n]);
   }
   
-  _mesh = new IndexedMesh(GLPrimitive::triangleStrip(),
+  _mesh = new IndexedMesh(GLPrimitive::lines(),
                           true,
                           vertices.getCenter(),
                           vertices.create(),
@@ -204,4 +204,17 @@ bool Box::touchesBox(const Box* box) const {
   if (_lower._z > box->_upper._z) return false;
   if (_upper._z < box->_lower._z) return false;
   return true;
+}
+
+Extent* Box::mergedWithBox(const Box* that) const {
+  const double lowerX = IMathUtils::instance()->min(_lower._x, that->_lower._x);
+  const double lowerY = IMathUtils::instance()->min(_lower._y, that->_lower._y);
+  const double lowerZ = IMathUtils::instance()->min(_lower._z, that->_lower._z);
+
+  const double upperX = IMathUtils::instance()->max(_upper._x, that->_upper._x);
+  const double upperY = IMathUtils::instance()->max(_upper._y, that->_upper._y);
+  const double upperZ = IMathUtils::instance()->max(_upper._z, that->_upper._z);
+
+  return new Box(Vector3D(lowerX, lowerY, lowerZ),
+                 Vector3D(upperX, upperY, upperZ));
 }

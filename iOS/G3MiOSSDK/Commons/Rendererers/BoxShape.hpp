@@ -17,7 +17,14 @@ private:
   double _extentX;
   double _extentY;
   double _extentZ;
-  Color* _color;
+
+  float _borderWidth;
+  
+  Color* _surfaceColor;
+  Color* _borderColor;
+
+  Mesh* createBorderMesh(const RenderContext* rc);
+  Mesh* createSurfaceMesh(const RenderContext* rc);
 
 protected:
   Mesh* createMesh(const RenderContext* rc);
@@ -25,18 +32,23 @@ protected:
 public:
   BoxShape(Geodetic3D* position,
            const Vector3D& extent,
-           Color* color = NULL) :
+           float borderWidth,
+           Color* surfaceColor = NULL,
+           Color* borderColor = NULL) :
   MeshShape(position),
   _extentX(extent._x),
   _extentY(extent._y),
   _extentZ(extent._z),
-  _color(color)
+  _borderWidth(borderWidth),
+  _surfaceColor(surfaceColor),
+  _borderColor(borderColor)
   {
 
   }
 
   ~BoxShape() {
-    delete _color;
+    delete _surfaceColor;
+    delete _borderColor;
   }
 
   void setExtent(const Vector3D& extent) {
@@ -50,12 +62,25 @@ public:
     }
   }
 
-  void setColor(Color* color) {
-    delete _color;
-    _color = color;
+  void setSurfaceColor(Color* color) {
+    delete _surfaceColor;
+    _surfaceColor = color;
     cleanMesh();
   }
-  
+
+  void setBorderColor(Color* color) {
+    delete _borderColor;
+    _borderColor = color;
+    cleanMesh();
+  }
+
+  void setBorderWidth(float borderWidth) {
+    if (_borderWidth != borderWidth) {
+      _borderWidth = borderWidth;
+      cleanMesh();
+    }
+  }
+
 };
 
 #endif

@@ -104,7 +104,10 @@ public:
   
   virtual int toInt(double value) const = 0;
   virtual int toInt(float value) const = 0;
-  
+
+  virtual double min(double d1, double d2) const = 0;
+  virtual double max(double d1, double d2) const = 0;
+
 };
 
 

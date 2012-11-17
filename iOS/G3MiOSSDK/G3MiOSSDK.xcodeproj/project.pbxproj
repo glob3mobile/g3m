@@ -197,6 +197,8 @@
 		CFB73CDE15EFC51B00261631 /* MathUtils_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
 		CFC3BCC9164C6C7300A8D37D /* SGShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC3BCC7164C6C7300A8D37D /* SGShape.cpp */; };
 		CFC3BCCA164C6C7300A8D37D /* SGShape.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFC3BCC8164C6C7300A8D37D /* SGShape.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CFCB5EDA16582BCC007D051A /* CompositeMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCB5ED816582BCC007D051A /* CompositeMesh.cpp */; };
+		CFCB5EDB16582BCC007D051A /* CompositeMesh.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFCB5ED916582BCC007D051A /* CompositeMesh.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFCE679D15EFB06700B35FE0 /* IThreadUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCE679B15EFB06700B35FE0 /* IThreadUtils.cpp */; };
 		CFCE679E15EFB06700B35FE0 /* IThreadUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFCE679C15EFB06700B35FE0 /* IThreadUtils.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFCEFF26163476F100FC4AB0 /* RectangleI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCEFF24163476F100FC4AB0 /* RectangleI.cpp */; };
@@ -483,6 +485,8 @@
 		CFB72A6D15E682B400A5BAF4 /* StringUtils_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StringUtils_iOS.hpp; path = Specific/Derived/StringUtils_iOS.hpp; sourceTree = "<group>"; };
 		CFC3BCC7164C6C7300A8D37D /* SGShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGShape.cpp; path = Commons/Rendererers/SGShape.cpp; sourceTree = "<group>"; };
 		CFC3BCC8164C6C7300A8D37D /* SGShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SGShape.hpp; path = Commons/Rendererers/SGShape.hpp; sourceTree = "<group>"; };
+		CFCB5ED816582BCC007D051A /* CompositeMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CompositeMesh.cpp; path = Commons/Mesh/CompositeMesh.cpp; sourceTree = "<group>"; };
+		CFCB5ED916582BCC007D051A /* CompositeMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = CompositeMesh.hpp; path = Commons/Mesh/CompositeMesh.hpp; sourceTree = "<group>"; };
 		CFCE679B15EFB06700B35FE0 /* IThreadUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IThreadUtils.cpp; path = Commons/Basic/IThreadUtils.cpp; sourceTree = "<group>"; };
 		CFCE679C15EFB06700B35FE0 /* IThreadUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IThreadUtils.hpp; path = Commons/Basic/IThreadUtils.hpp; sourceTree = "<group>"; };
 		CFCEFF24163476F100FC4AB0 /* RectangleI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RectangleI.cpp; path = Commons/Geometry/RectangleI.cpp; sourceTree = "<group>"; };
@@ -970,6 +974,8 @@
 		D8A5601915AEF47300035086 /* Mesh */ = {
 			isa = PBXGroup;
 			children = (
+				CFCB5ED816582BCC007D051A /* CompositeMesh.cpp */,
+				CFCB5ED916582BCC007D051A /* CompositeMesh.hpp */,
 				D8A5601B15AEF64E00035086 /* IndexedMesh.cpp */,
 				D8A5601C15AEF64E00035086 /* IndexedMesh.hpp */,
 				CF8FF98915D5539F000F79D1 /* LeveledTexturedMesh.cpp */,
@@ -1045,6 +1051,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CFCB5EDB16582BCC007D051A /* CompositeMesh.hpp in Headers */,
 				CF9592AF1652E28500CB7AC8 /* OrderedRenderable.hpp in Headers */,
 				CF5A8A331656B67F00508C38 /* BoxShape.hpp in Headers */,
 				CF11E8C7164D653000935052 /* SGLayerNode.hpp in Headers */,
@@ -1375,6 +1382,7 @@
 				CF11E8C6164D653000935052 /* SGLayerNode.cpp in Sources */,
 				CF9592AE1652E28500CB7AC8 /* OrderedRenderable.cpp in Sources */,
 				CF5A8A321656B67F00508C38 /* BoxShape.cpp in Sources */,
+				CFCB5EDA16582BCC007D051A /* CompositeMesh.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
