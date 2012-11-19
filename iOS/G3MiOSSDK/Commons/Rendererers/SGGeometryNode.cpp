@@ -14,6 +14,8 @@
 void SGGeometryNode::rawRender(const RenderContext* rc) {
   GL *gl = rc->getGL();
 
+  // TEMP_commented_by_Agustin_until_decision_about_glstate
+  /*
   gl->enableVerticesPosition();
 
   if (_colors == NULL) {
@@ -22,7 +24,7 @@ void SGGeometryNode::rawRender(const RenderContext* rc) {
   else {
     const float colorsIntensity = 1;
     gl->enableVertexColor(_colors, colorsIntensity);
-  }
+  }*/
 
 
 //  if (_transparent) {
@@ -68,5 +70,5 @@ void SGGeometryNode::rawRender(const RenderContext* rc) {
     gl->drawPoints(_indices);
   }
 
-  gl->disableVerticesPosition();
+  //gl->disableVerticesPosition();
 }

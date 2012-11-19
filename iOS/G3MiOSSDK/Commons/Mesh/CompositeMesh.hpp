@@ -18,6 +18,9 @@ private:
   Extent* calculateExtent() const;
 
   mutable Extent* _extent;
+  
+  GLState*          _glState;
+
 
 public:
   virtual ~CompositeMesh();
@@ -33,6 +36,9 @@ public:
   bool isTransparent(const RenderContext* rc) const;
 
   void addMesh(Mesh* mesh);
+  
+  GLState* getGLState() const { return _glState; }
+
 
 };
 

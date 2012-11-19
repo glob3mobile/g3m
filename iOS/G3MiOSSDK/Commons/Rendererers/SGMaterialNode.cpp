@@ -14,7 +14,7 @@
 void SGMaterialNode::prepareRender(const RenderContext* rc) {
   GL *gl = rc->getGL();
 
-  // TEMP_commented_by_Agustin_until_decision_about_glstate
+  int TEMP_commented_by_Agustin_until_decision_about_glstate;
   /*
   if (_specularColor == NULL) {
     gl->disableVertexFlatColor();
@@ -30,7 +30,7 @@ void SGMaterialNode::prepareRender(const RenderContext* rc) {
 void SGMaterialNode::cleanUpRender(const RenderContext* rc) {
   GL *gl = rc->getGL();
 
-  // TEMP_commented_by_Agustin_until_decision_about_glstate
+  int TEMP_commented_by_Agustin_until_decision_about_glstate;
   /*
   gl->disableVertexFlatColor();
    */
