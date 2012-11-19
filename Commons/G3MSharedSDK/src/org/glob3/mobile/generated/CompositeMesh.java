@@ -43,6 +43,7 @@ public class CompositeMesh extends Mesh
 
   private Extent _extent;
 
+
   public void dispose()
   {
 	final int childrenCount = _children.size();
@@ -136,5 +137,13 @@ public class CompositeMesh extends Mesh
   
 	_children.add(mesh);
   }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: GLState* getGLState() const
+  public final GLState getGLState()
+  {
+	  return null;
+  }
+
 
 }

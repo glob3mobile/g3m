@@ -21,11 +21,14 @@ package org.glob3.mobile.generated;
 //class IFloatBuffer;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IIntBuffer;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class GLState;
 
 public class DummyRenderer extends LeafRenderer
 {
 
   private double _halfSize;
+  private GLState _glState;
 
   private IIntBuffer _index;
   private IFloatBuffer _vertices;
@@ -36,6 +39,9 @@ public class DummyRenderer extends LeafRenderer
 
   public final void initialize(InitializationContext ic)
   {
+	_glState = new GLState();
+	_glState.enableVerticesPosition();
+  
 	int res = 12;
 	//_vertices = new float[res * res * 3];
 	//_numIndices = 2 * (res - 1) * (res + 1);
@@ -47,7 +53,7 @@ public class DummyRenderer extends LeafRenderer
 	// create vertices
   
 	if (ic != null && ic.getPlanet() != null)
-	  _halfSize = ic.getPlanet().getRadii()._x / 2.0;
+	  _halfSize = ic.getPlanet().getRadii()._x * 0.7;
 	else
 	  _halfSize = 7e6;
   
@@ -58,6 +64,7 @@ public class DummyRenderer extends LeafRenderer
 	  {
   
 		vertices.add((float)0, (float)(-_halfSize + i / (float)(res - 1) * 2 *_halfSize), (float)(_halfSize - j / (float)(res - 1) * 2 *_halfSize));
+		System.out.printf ("%f %f %f\n",(float)0, (float)(-_halfSize + i / (float)(res - 1) * 2 *_halfSize), (float)(_halfSize - j / (float)(res - 1) * 2 *_halfSize));
   //      _vertices[n++] = (float) 0;
   //      _vertices[n++] = (float) (-_halfSize + i / (float) (res - 1) * 2*_halfSize);
   //      _vertices[n++] = (float) (_halfSize - j / (float) (res - 1) * 2*_halfSize);
@@ -92,11 +99,13 @@ public class DummyRenderer extends LeafRenderer
   
 	// obtaing gl object reference
 	GL gl = rc.getGL();
+	gl.setState(_glState);
   
-	gl.enableVerticesPosition();
+  
+	//gl->enableVerticesPosition();
   
 	// insert pointers
-	gl.disableTextures();
+	//gl->disableTextures();
 	gl.vertexPointer(3, 0, _vertices);
   
 	{
@@ -164,7 +173,7 @@ public class DummyRenderer extends LeafRenderer
 	  gl.popMatrix();
 	}
   
-	gl.enableTextures();
+	//gl->enableTextures();
   
   }
 

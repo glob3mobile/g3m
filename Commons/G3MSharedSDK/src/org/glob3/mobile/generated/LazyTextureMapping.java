@@ -44,7 +44,6 @@ public class LazyTextureMapping extends TextureMapping
 	  _texturesHandler = texturesHandler;
 	  _ownedTexCoords = ownedTexCoords;
 	  _transparent = transparent;
-
   }
 
   public void dispose()

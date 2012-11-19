@@ -37,15 +37,15 @@ public class SGMaterialNode extends SGNode
   {
 	GL gl = rc.getGL();
   
-	if (_specularColor == null)
-	{
-	  gl.disableVertexFlatColor();
+	int TEMP_commented_by_Agustin_until_decision_about_glstate;
+	/*
+	if (_specularColor == NULL) {
+	  gl->disableVertexFlatColor();
 	}
-	else
-	{
-	  final float colorsIntensity = 1F;
-	  gl.enableVertexFlatColor(_specularColor, colorsIntensity);
-	}
+	else {
+	  const float colorsIntensity = 1;
+	  gl->enableVertexFlatColor(*_specularColor, colorsIntensity);
+	}*/
   
 	super.prepareRender(rc);
   }
@@ -54,7 +54,10 @@ public class SGMaterialNode extends SGNode
   {
 	GL gl = rc.getGL();
   
-	gl.disableVertexFlatColor();
+	int TEMP_commented_by_Agustin_until_decision_about_glstate;
+	/*
+	gl->disableVertexFlatColor();
+	 */
   
 	super.cleanUpRender(rc);
   }

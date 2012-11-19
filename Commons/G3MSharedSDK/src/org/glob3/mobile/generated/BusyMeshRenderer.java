@@ -76,6 +76,10 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
   
 	// create mesh
 	_mesh = new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), 1, null, colors.create());
+  
+	// set mesh glstate
+	GLState state = _mesh.getGLState();
+	state.enableBlend();
   }
 
   public final boolean isReadyToRender(RenderContext rc)
@@ -111,7 +115,7 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
 	// clear screen
 	gl.clearScreen(0.0f, 0.0f, 0.0f, 1.0f);
   
-	gl.enableBlend();
+	//gl->enableBlend();
 	gl.setBlendFuncSrcAlpha();
   
 	gl.pushMatrix();
@@ -124,7 +128,7 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
   
 	gl.popMatrix();
   
-	gl.disableBlend();
+	//gl->disableBlend();
   }
 
   public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)

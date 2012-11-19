@@ -85,7 +85,6 @@ public class LeveledTexturedMesh extends Mesh
 	  _mappings = null;
 	  _mappings = null;
 	}
-  
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -108,23 +107,28 @@ public class LeveledTexturedMesh extends Mesh
   {
 	LazyTextureMapping mapping = getCurrentTextureMapping();
   
+  
+  
 	if (mapping == null)
 	{
 	  _mesh.render(rc);
 	}
 	else
 	{
-	  GL gl = rc.getGL();
+	  //GL *gl = rc->getGL();
+	  GLState state = _mesh.getGLState();
+	  state.enableTextures();
+	  state.enableTexture2D();
   
-	  gl.enableTextures();
-	  gl.enableTexture2D();
+	  //gl->enableTextures();
+	  //gl->enableTexture2D();
   
 	  mapping.bind(rc);
   
 	  _mesh.render(rc);
   
-	  gl.disableTexture2D();
-	  gl.disableTextures();
+	  //gl->disableTexture2D();
+	  //gl->disableTextures();
 	}
   }
 
@@ -167,6 +171,13 @@ public class LeveledTexturedMesh extends Mesh
 	}
   
 	return null;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: GLState* getGLState() const
+  public final GLState getGLState()
+  {
+	  return _mesh.getGLState();
   }
 
 

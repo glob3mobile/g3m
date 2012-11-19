@@ -18,6 +18,8 @@ package org.glob3.mobile.generated;
 //class Frustum;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class Box;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class GLState;
 
 public abstract class Extent
 {

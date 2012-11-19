@@ -82,6 +82,8 @@ public class IndexedMesh extends Mesh
 	return new Box(new Vector3D(minx, miny, minz), new Vector3D(maxx, maxy, maxz));
   }
 
+  private GLState _glState;
+
 
   public IndexedMesh(int primitive, boolean owner, Vector3D center, IFloatBuffer vertices, IIntBuffer indices, float lineWidth, Color flatColor, IFloatBuffer colors)
   {
@@ -110,6 +112,18 @@ public class IndexedMesh extends Mesh
 	  _center = new Vector3D(center);
 	  _translationMatrix = (center.isNan() || center.isZero()) ? null : new MutableMatrix44D(MutableMatrix44D.createTranslationMatrix(center));
 	  _lineWidth = lineWidth;
+	_glState = new GLState();
+	_glState.enableVerticesPosition();
+	if (_colors != null)
+	  _glState.enableVertexColor(_colors, _colorsIntensity);
+	if (_flatColor != null)
+	{
+	  _glState.enableFlatColor(_flatColor, _colorsIntensity);
+	  if (_flatColor.isTransparent())
+	  {
+		_glState.enableBlend();
+	  }
+	}
   }
 
   public void dispose()
@@ -125,6 +139,8 @@ public class IndexedMesh extends Mesh
 	  _flatColor = null;
 	}
   
+	if (_glState != null)
+		_glState.dispose();
 	_extent = null;
 	if (_translationMatrix != null)
 		_translationMatrix.dispose();
@@ -135,33 +151,41 @@ public class IndexedMesh extends Mesh
   public void render(RenderContext rc)
   {
 	GL gl = rc.getGL();
+	gl.setState(_glState);
   
-	gl.enableVerticesPosition();
+	//gl->enableVerticesPosition();
   
-	if (_colors == null)
-	{
-	  gl.disableVertexColor();
+  /*  if (_colors == NULL) {
+	  gl->disableVertexColor();
 	}
-	else
-	{
-	  gl.enableVertexColor(_colors, _colorsIntensity);
+	else {
+	  gl->enableVertexColor(_colors, _colorsIntensity);
+  <<<<<<< HEAD
+	}*/
+  
+  /*  if (_flatColor == NULL) {
+  =======
 	}
   
-	boolean blend = false;
-	if (_flatColor == null)
-	{
-	  gl.disableVertexFlatColor();
+	bool blend = false;
+	if (_flatColor == NULL) {
+  >>>>>>> origin/webgl-port
+	  gl->disableVertexFlatColor();
 	}
-	else
-	{
-	  if (_flatColor.isTransparent())
-	  {
-		gl.enableBlend();
-		gl.setBlendFuncSrcAlpha();
+	else {
+	  if (_flatColor->isTransparent()) {
+		gl->enableBlend();
+		gl->setBlendFuncSrcAlpha();
 		blend = true;
 	  }
-	  gl.enableVertexFlatColor(_flatColor, _colorsIntensity);
-	}
+	  gl->enableVertexFlatColor(*_flatColor, _colorsIntensity);
+	}*/
+  
+  
+	if (_flatColor != null)
+	  if (_flatColor.isTransparent())
+		gl.setBlendFuncSrcAlpha();
+  
   
 	gl.vertexPointer(3, 0, _vertices);
   
@@ -206,13 +230,11 @@ public class IndexedMesh extends Mesh
 	{
 	  gl.popMatrix();
 	}
+	//gl->disableVerticesPosition();
   
-	if (blend)
-	{
-	  gl.disableBlend();
-	}
-  
-	gl.disableVerticesPosition();
+	/*if (blend) {
+	  gl->disableBlend();
+	}*/
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -240,6 +262,14 @@ public class IndexedMesh extends Mesh
 	final int p = i * 3;
 	return new Vector3D(_vertices.get(p) + _center._x, _vertices.get(p+1) + _center._y, _vertices.get(p+2) + _center._z);
   }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: GLState* getGLState() const
+  public final GLState getGLState()
+  {
+	  return _glState;
+  }
+
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: boolean isTransparent(const RenderContext* rc) const
