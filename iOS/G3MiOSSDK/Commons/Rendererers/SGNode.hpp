@@ -14,6 +14,7 @@
 
 class InitializationContext;
 class RenderContext;
+class SGShape;
 
 class SGNode {
 private:
@@ -34,6 +35,8 @@ protected:
   protected InitializationContext _initializationContext;
 #endif
 
+  SGShape *_shape;
+
   virtual void prepareRender(const RenderContext* rc);
 
   virtual void cleanUpRender(const RenderContext* rc);
@@ -44,6 +47,7 @@ public:
 
   SGNode() :
   _initializationContext(NULL),
+  _shape(NULL),
   _parent(NULL)
   {
 
@@ -51,7 +55,8 @@ public:
 
   virtual ~SGNode();
 
-  void initialize(const InitializationContext* ic);
+  void initialize(const InitializationContext* ic,
+                  SGShape *shape);
 
   void addNode(SGNode* child);
 

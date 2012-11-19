@@ -11,19 +11,28 @@
 
 #include "Shape.hpp"
 
+#include <string>
+
 class SGNode;
 
 class SGShape : public Shape {
 private:
   SGNode* _node;
-
+  const std::string& _uriPrefix;
+  
 public:
 
-  SGShape(SGNode* node) :
+  SGShape(SGNode* node,
+          const std::string& uriPrefix) :
   Shape(NULL),
-  _node(node)
+  _node(node),
+  _uriPrefix(uriPrefix)
   {
 
+  }
+
+  const std::string getURIPrefix() const {
+    return _uriPrefix;
   }
 
   void initialize(const InitializationContext* ic);

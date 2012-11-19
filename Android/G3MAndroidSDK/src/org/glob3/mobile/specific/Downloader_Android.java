@@ -14,6 +14,8 @@ import org.glob3.mobile.generated.IImageDownloadListener;
 import org.glob3.mobile.generated.InitializationContext;
 import org.glob3.mobile.generated.URL;
 
+import android.util.Log;
+
 
 public final class Downloader_Android
          extends
@@ -59,13 +61,17 @@ public final class Downloader_Android
             _workers.add(da);
          }
 
-
-         final Iterator<Downloader_Android_WorkerThread> iter = _workers.iterator();
-         while (iter.hasNext()) {
-            final Downloader_Android_WorkerThread worker = iter.next();
+         for (final Downloader_Android_WorkerThread worker : _workers) {
             worker.start();
          }
+
+         //         final Iterator<Downloader_Android_WorkerThread> iter = _workers.iterator();
+         //         while (iter.hasNext()) {
+         //            final Downloader_Android_WorkerThread worker = iter.next();
+         //            worker.start();
+         //         }
          _started = true;
+         Log.i(TAG, "Downloader started");
       }
    }
 
@@ -91,6 +97,7 @@ public final class Downloader_Android
          while (!allWorkersStopped);
 
          _workers.clear();
+         Log.i(TAG, "Downloader stopped");
 
          //         boolean allStopped = true;
          //         while (_started) {

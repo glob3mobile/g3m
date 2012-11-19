@@ -12,7 +12,7 @@
 
 
 void SGShape::initialize(const InitializationContext* ic) {
-  _node->initialize(ic);
+  _node->initialize(ic, this);
 }
 
 bool SGShape::isReadyToRender(const RenderContext* rc) {

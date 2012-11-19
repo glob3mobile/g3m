@@ -46,7 +46,6 @@ public final class Downloader_Android_WorkerThread
          else {
             try {
                Thread.sleep(25);
-               //               Log.i(TAG, "awake");
             }
             catch (final InterruptedException e) {
                Log.e(TAG, "InterruptedException worker=" + this.toString());
@@ -55,7 +54,7 @@ public final class Downloader_Android_WorkerThread
          }
       }
       _isStopped = true;
-      Log.i(TAG, "finish run");
+      Log.i(TAG, "Downloader-WorkerThread stopped");
    }
 
 
