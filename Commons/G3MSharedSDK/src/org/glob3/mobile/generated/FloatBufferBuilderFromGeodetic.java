@@ -101,6 +101,6 @@ public class FloatBufferBuilderFromGeodetic extends FloatBufferBuilder
 
   public final Vector3D getCenter()
   {
-	return new Vector3D((double)_cx,(double)_cy,(double)_cz);
+	return new Vector3D(_cx, _cy, _cz);
   }
 }

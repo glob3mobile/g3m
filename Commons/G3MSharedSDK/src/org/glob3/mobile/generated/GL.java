@@ -39,8 +39,8 @@ public class GL
 
   private final java.util.LinkedList<IGLTextureId> _texturesIdBag = new java.util.LinkedList<IGLTextureId>();
   private int _texturesIdAllocationCounter;
-  private int _texturesIdGetCounter;
-  private int _texturesIdTakeCounter;
+//  long                        _texturesIdGetCounter;
+//  long                        _texturesIdTakeCounter;
 
   // state handling
   private boolean _enableTextures;
@@ -110,7 +110,7 @@ public class GL
 	  ILogger.instance().logInfo("= Created %d texturesIds (accumulated %d).", bugdetSize, _texturesIdAllocationCounter);
 	}
   
-	_texturesIdGetCounter++;
+  //  _texturesIdGetCounter++;
   
 	final IGLTextureId result = _texturesIdBag.getLast();
 	_texturesIdBag.removeLast();
@@ -177,6 +177,8 @@ public class GL
 
   public GL(INativeGL gl)
 //  _enableFlatColor(false),
+//  _texturesIdGetCounter(0),
+//  _texturesIdTakeCounter(0),
   {
 	  _gl = gl;
 	  _enableTextures = false;
@@ -192,8 +194,6 @@ public class GL
 	  _scaleY = 1F;
 	  _translationX = 0F;
 	  _translationY = 0F;
-	  _texturesIdGetCounter = 0;
-	  _texturesIdTakeCounter = 0;
 	  _vertices = null;
 	  _verticesTimestamp = 0;
 	  _textureCoordinates = null;
@@ -635,7 +635,7 @@ public class GL
 		_texturesIdBag.addLast(texture);
 	  }
   
-	  _texturesIdTakeCounter++;
+  //    _texturesIdTakeCounter++;
 	}
   }
 

@@ -57,8 +57,8 @@ public class QuadShape extends MeshShape
   protected final Mesh createMesh(RenderContext rc)
   {
   
-	final float halfWidth = (float) _width / 2.0f;
-	final float halfHeight = (float) _height / 2.0f;
+	final float halfWidth = _width / 2.0f;
+	final float halfHeight = _height / 2.0f;
   
 	final float left = -halfWidth;
 	final float right = +halfWidth;

@@ -38,6 +38,18 @@ public class TexturedMesh extends Mesh
 
   public void dispose()
   {
+///#ifdef C_CODE
+	if (_ownedMesh)
+	{
+	  if (_mesh != null)
+		  _mesh.dispose();
+	}
+	if (_ownedTexMapping)
+	{
+	  if (_textureMapping != null)
+		  _textureMapping.dispose();
+	}
+///#endif
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
