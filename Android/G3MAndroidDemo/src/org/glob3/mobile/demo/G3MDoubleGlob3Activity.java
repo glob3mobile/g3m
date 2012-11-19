@@ -55,6 +55,7 @@ public class G3MDoubleGlob3Activity
       //TODO HACK TO CLOSE SQL DB
       _widgetAndroidUp.closeStorage();
       _widgetAndroidDown.closeStorage();
+      android.os.Process.killProcess(android.os.Process.myPid());
    }
 
 }
