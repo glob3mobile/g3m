@@ -50,7 +50,7 @@ void CameraSingleDragHandler::onDown(const EventContext *eventContext,
   
   // dragging
   const Vector2I pixel = touchEvent.getTouch(0)->getPos();
-  _initialPixel = pixel.asMutableVector2I();
+  //_initialPixel = pixel.asMutableVector2I();
   _initialPoint = _camera0.pixel2PlanetPoint(pixel).asMutableVector3D();
   
   //printf ("down 1 finger. Initial point = %f %f %f\n", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
@@ -117,7 +117,7 @@ void CameraSingleDragHandler::onUp(const EventContext *eventContext,
   
   // update gesture
   cameraContext->setCurrentGesture(None);
-  _initialPixel = MutableVector2I::zero();
+  //_initialPixel = MutableVector2I::zero();
 }
 
 void CameraSingleDragHandler::render(const RenderContext* rc, CameraContext *cameraContext)

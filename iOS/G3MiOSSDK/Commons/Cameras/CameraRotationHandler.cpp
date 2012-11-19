@@ -51,7 +51,7 @@ void CameraRotationHandler::onDown(const EventContext *eventContext,
   Vector2I pixel2 = touchEvent.getTouch(2)->getPos();
   Vector2I averagePixel = pixel0.add(pixel1).add(pixel2).div(3);
   _initialPixel = MutableVector2I(averagePixel._x, averagePixel._y);
-  lastYValid = _initialPixel.y();
+  //_lastYValid = _initialPixel.y();
   
   // compute center of view
   _initialPoint = camera->getXYZCenterOfView().asMutableVector3D();

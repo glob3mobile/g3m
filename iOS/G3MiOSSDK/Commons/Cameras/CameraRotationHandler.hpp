@@ -18,7 +18,7 @@ private:
   MutableVector3D _initialPoint;  //Initial point at dragging
   MutableVector2I _initialPixel;  //Initial pixel at start of gesture
 
-  int lastYValid;
+//  int _lastYValid;
   Camera _camera0;         //Initial Camera saved on Down event
 
 public:

@@ -113,10 +113,10 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
     double angle_n1=angle0, angle_n=angle1;
     
     // iterations
-    int iter=0;
+//    int iter=0;
     double precision = GMath.pow(10, GMath.log10(distance)-8.5);
     while (GMath.abs(angle_n-angle) > precision) {
-      iter++;
+//      iter++;
       if ((angle_n1-angle_n)/(angle_n-angle) < 0) d*=-0.5;
       tempCamera.moveForward(d);
       dAccum += d;

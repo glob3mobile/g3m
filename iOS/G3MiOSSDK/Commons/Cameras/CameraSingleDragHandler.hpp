@@ -51,7 +51,7 @@ public:
   CameraSingleDragHandler(bool useInertia):
   _camera0(Camera(0, 0)),
   _initialPoint(0,0,0),
-  _initialPixel(0,0),
+//  _initialPixel(0,0),
   _useInertia(useInertia)
   {}
   
@@ -79,7 +79,7 @@ private:
   Camera _camera0;         //Initial Camera saved on Down event
   
   MutableVector3D _initialPoint;  //Initial point at dragging
-  MutableVector2I _initialPixel;  //Initial pixel at start of gesture
+  //MutableVector2I _initialPixel;  //Initial pixel at start of gesture
   
   MutableVector3D _axis;
   double          _lastRadians;

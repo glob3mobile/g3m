@@ -226,7 +226,7 @@ URL BingLayer::getFeatureInfoURL(const Geodetic2D& g,
 xyTuple* BingLayer::getTileXY(const Geodetic2D latLon, const int level)const{
   
   //LatLon to Pixels XY
-  unsigned int mapSize = (unsigned int) 256 << level;
+  unsigned int mapSize = 256 << level;
   double lonDeg = latLon.longitude()._degrees;
   double latDeg = latLon.latitude()._degrees;
   if (latDeg < -85.05112878){
@@ -329,7 +329,7 @@ Geodetic2D BingLayer::getLatLon(const int tileXY[], const int level)const{
   int pixelY = tileXY[1]*256;
   
   //Pixel XY to LatLon
-  unsigned int mapSize = (unsigned int) 256 << level;
+  unsigned int mapSize = 256 << level;
   if (pixelX < 0) pixelX = 0;
   if (pixelY < 0) pixelY = 0;
   if (pixelX > mapSize-1) pixelX = mapSize-1;
