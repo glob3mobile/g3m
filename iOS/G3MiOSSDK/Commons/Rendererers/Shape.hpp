@@ -12,6 +12,8 @@
 #include "Geodetic3D.hpp"
 #include "Context.hpp"
 #include "Vector3D.hpp"
+//#include <string>
+
 class MutableMatrix44D;
 
 class Shape {
@@ -25,7 +27,6 @@ private:
   double      _scaleY;
   double      _scaleZ;
 
-  
   MutableMatrix44D* _transformMatrix;
   MutableMatrix44D* createTransformMatrix(const Planet* planet);
   MutableMatrix44D* getTransformMatrix(const Planet* planet);
@@ -34,8 +35,8 @@ protected:
   virtual void cleanTransformMatrix();
 
 public:
-  Shape(const Geodetic3D& position) :
-  _position( new Geodetic3D(position) ),
+  Shape(Geodetic3D* position) :
+  _position( position ),
   _heading( new Angle(Angle::zero()) ),
   _pitch( new Angle(Angle::zero()) ),
   _scaleX(1),
@@ -47,21 +48,21 @@ public:
 
   virtual ~Shape();
   
-  Geodetic3D getPosition() const {
+  const Geodetic3D getPosition() const {
     return *_position;
   }
 
-  Angle getHeading() const {
+  const Angle getHeading() const {
     return *_heading;
   }
 
-  Angle getPitch() const {
+  const Angle getPitch() const {
     return *_pitch;
   }
 
-  void setPosition(const Geodetic3D& position) {
+  void setPosition(Geodetic3D* position) {
     delete _position;
-    _position = new Geodetic3D(position);
+    _position = position;
     cleanTransformMatrix();
   }
 
@@ -77,19 +78,12 @@ public:
     cleanTransformMatrix();
   }
 
-  void render(const RenderContext* rc);
-
-  virtual bool isReadyToRender(const RenderContext* rc) = 0;
-  
-  virtual void rawRender(const RenderContext* rc) = 0;
-
   void setScale(double scaleX,
                 double scaleY,
                 double scaleZ) {
     _scaleX = scaleX;
     _scaleY = scaleY;
     _scaleZ = scaleZ;
-
     cleanTransformMatrix();
   }
 
@@ -98,7 +92,19 @@ public:
              scale._y,
              scale._z);
   }
+
+  void render(const RenderContext* rc);
+
+  virtual void initialize(const InitializationContext* ic) {
+
+  }
+
+  virtual bool isReadyToRender(const RenderContext* rc) = 0;
   
+  virtual void rawRender(const RenderContext* rc) = 0;
+
+  virtual bool isTransparent(const RenderContext* rc) = 0;
+
 };
 
 #endif

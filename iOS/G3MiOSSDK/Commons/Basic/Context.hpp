@@ -24,28 +24,34 @@ class IThreadUtils;
 class TextureBuilder;
 class IMathUtils;
 class IJSONParser;
+class IStorage;
+class OrderedRenderable;
+
+#include <vector>
 
 class Context {
 protected:
   const IFactory*     _factory;
   const IStringUtils* _stringUtils;
-  IThreadUtils*       _threadUtils;
+  const IThreadUtils*       _threadUtils;
   const ILogger*      _logger;
-  const IMathUtils* _mathUtils;
-  const IJSONParser* _jsonParser;
+  const IMathUtils*   _mathUtils;
+  const IJSONParser*  _jsonParser;
   const Planet*       _planet;
   IDownloader*        _downloader;
   EffectsScheduler*   _effectsScheduler;
+    IStorage*         _storage;
 
   Context(const IFactory*     factory,
           const IStringUtils* stringUtils,
-          IThreadUtils*       threadUtils,
+          const IThreadUtils* threadUtils,
           const ILogger*      logger,
-          const IMathUtils* mathUtils,
-          const IJSONParser* jsonParser,
+          const IMathUtils*   mathUtils,
+          const IJSONParser*  jsonParser,
           const Planet*       planet,
           IDownloader*        downloader,
-          EffectsScheduler*   effectsScheduler) :
+          EffectsScheduler*   effectsScheduler,
+          IStorage*           storage) :
   _factory(factory),
   _stringUtils(stringUtils),
   _threadUtils(threadUtils),
@@ -54,11 +60,15 @@ protected:
   _jsonParser(jsonParser),
   _planet(planet),
   _downloader(downloader),
-  _effectsScheduler(effectsScheduler)
+  _effectsScheduler(effectsScheduler),
+    _storage(storage)
   {
   }
 
 public:
+  virtual ~Context() {
+
+  }
 
   const IFactory* getFactory() const {
     return _factory;
@@ -87,12 +97,16 @@ public:
   IDownloader* getDownloader() const {
     return _downloader;
   }
+    
+    IStorage* getStorage() const {
+        return _storage;
+    }
 
   EffectsScheduler* getEffectsScheduler() const {
     return _effectsScheduler;
   }
 
-  IThreadUtils* getThreadUtils() const {
+  const IThreadUtils* getThreadUtils() const {
     return _threadUtils;
   }
 };
@@ -102,15 +116,16 @@ public:
 
 class InitializationContext: public Context {
 public:
-  InitializationContext(IFactory*           factory,
+  InitializationContext(const IFactory*           factory,
                         const IStringUtils* stringUtils,
-                        IThreadUtils*       threadUtils,
-                        ILogger*            logger,
+                        const IThreadUtils*       threadUtils,
+                        const ILogger*            logger,
                         const IMathUtils* mathUtils,
                         const IJSONParser* jsonParser,
                         const Planet*       planet,
                         IDownloader*        downloader,
-                        EffectsScheduler*   effectsScheduler) :
+                        EffectsScheduler*   effectsScheduler,
+                        IStorage*           storage) :
   Context(factory,
           stringUtils,
           threadUtils,
@@ -119,7 +134,8 @@ public:
           jsonParser,
           planet,
           downloader,
-          effectsScheduler) {
+          effectsScheduler,
+          storage) {
   }
 };
 
@@ -127,15 +143,16 @@ public:
 
 class EventContext: public Context {
 public:
-  EventContext(IFactory*           factory,
+  EventContext(const IFactory*           factory,
                const IStringUtils* stringUtils,
-               IThreadUtils*       threadUtils,
-               ILogger*            logger,
+               const IThreadUtils*       threadUtils,
+               const ILogger*            logger,
                const IMathUtils* mathUtils,
                const IJSONParser* jsonParser,
                const Planet*       planet,
                IDownloader*        downloader,
-               EffectsScheduler*   scheduler) :
+               EffectsScheduler*   scheduler,
+               IStorage*           storage) :
   Context(factory,
           stringUtils,
           threadUtils,
@@ -144,7 +161,8 @@ public:
           jsonParser,
           planet,
           downloader,
-          scheduler) {
+          scheduler,
+          storage) {
   }
 };
 
@@ -153,6 +171,10 @@ public:
 
 class FrameTasksExecutor;
 
+#ifdef C_CODE
+bool MyDataSortPredicate(const OrderedRenderable* or1,
+                         const OrderedRenderable* or2);
+#endif
 
 class RenderContext: public Context {
 private:
@@ -163,13 +185,15 @@ private:
   TexturesHandler*    _texturesHandler;
   TextureBuilder*     _textureBuilder;
   ITimer*             _frameStartTimer;
+  
+  mutable std::vector<OrderedRenderable*>* _orderedRenderables;
 
 public:
   RenderContext(FrameTasksExecutor* frameTasksExecutor,
-                IFactory*           factory,
+                const IFactory*           factory,
                 const IStringUtils* stringUtils,
-                IThreadUtils*       threadUtils,
-                ILogger*            logger,
+                const IThreadUtils*       threadUtils,
+                const ILogger*            logger,
                 const IMathUtils* mathUtils,
                 const IJSONParser* jsonParser,
                 const Planet*       planet,
@@ -180,7 +204,8 @@ public:
                 TextureBuilder*     textureBuilder,
                 IDownloader*        downloader,
                 EffectsScheduler*   scheduler,
-                ITimer*             frameStartTimer) :
+                ITimer*             frameStartTimer,
+                IStorage*           storage) :
   Context(factory,
           stringUtils,
           threadUtils,
@@ -189,14 +214,17 @@ public:
           jsonParser,
           planet,
           downloader,
-          scheduler),
+          scheduler,
+          storage),
   _frameTasksExecutor(frameTasksExecutor),
   _gl(gl),
   _currentCamera(currentCamera),
   _nextCamera(nextCamera),
   _texturesHandler(texturesHandler),
   _textureBuilder(textureBuilder),
-  _frameStartTimer(frameStartTimer) {
+  _frameStartTimer(frameStartTimer),
+  _orderedRenderables(NULL)
+  {
 
   }
 
@@ -229,6 +257,13 @@ public:
   }
 
   virtual ~RenderContext();
+
+  /*
+   Get the OrderedRenderables, sorted by distanceFromEye()
+   */
+  std::vector<OrderedRenderable*>* getSortedOrderedRenderables() const;
+
+  void addOrderedRenderable(OrderedRenderable* orderedRenderable) const;
 
 };
 

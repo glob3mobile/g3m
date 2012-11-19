@@ -15,7 +15,21 @@
 class InitializationContext;
 
 class IStorage {
+private:
+    static IStorage* _instance;
+    
 public:
+    
+    static void setInstance(IStorage* storage) {
+        if (_instance != NULL) {
+            ILogger::instance()->logWarning("Warning, IStorage instance set twice\n");
+        }
+        _instance = storage;
+    }
+    
+    static IStorage* instance() {
+        return _instance;
+    }
   
   virtual bool containsBuffer(const URL& url) = 0;
   

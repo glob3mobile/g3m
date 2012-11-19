@@ -67,7 +67,14 @@ public:
     return _textureMapping;
   }
 
+<<<<<<< HEAD
   GLState* getGLState() const { return _mesh->getGLState(); }
+=======
+  bool isTransparent(const RenderContext* rc) const {
+    return _transparent;
+  }
+
+>>>>>>> origin/webgl-port
 };
 
 #endif

@@ -285,6 +285,12 @@ void GL::vertexPointer(int size, int stride, IFloatBuffer* vertices) {
   }
 }
 
+void GL::drawTriangles(IIntBuffer* indices) {
+  _gl->drawElements(GLPrimitive::triangles(),
+                    indices->size(),
+                    indices);
+}
+
 void GL::drawTriangleStrip(IIntBuffer* indices) {
   _gl->drawElements(GLPrimitive::triangleStrip(),
                     indices->size(),

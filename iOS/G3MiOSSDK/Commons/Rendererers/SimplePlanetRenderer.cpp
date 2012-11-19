@@ -139,7 +139,7 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
                                     vertexColors);
   
   //TEXTURED
-  if (true){
+  if (true) {
     
     IImage* image = rc->getFactory()->createImageFromFileName(_textureFilename);
     
@@ -164,12 +164,11 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
     
     TextureMapping* texMap = new SimpleTextureMapping(texId,
                                                       texC,
-                                                      true);
+                                                      true,
+                                                      false);
     
     _mesh = new TexturedMesh(im, true, texMap, true);
   }
-  
-
   
   return true;
 }

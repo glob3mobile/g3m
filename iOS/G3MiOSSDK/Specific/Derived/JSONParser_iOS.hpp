@@ -21,7 +21,7 @@ private:
   NSData* _jsonData;
   
 public:
-  JSONBaseObject* parse(std::string inputString);
+  JSONBaseObject* parse(const std::string& string);
   JSONBaseObject* parse(IByteBuffer* buffer);
   
   JSONBaseObject* makeJSONElement(NSObject *object);

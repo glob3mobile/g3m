@@ -3,5 +3,12 @@
 
     <string name="hello">Hello World, G3MAndroidDemoActivity!</string>
     <string name="app_name">G3MAndroidDemo</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_g3_mdemo">G3MDemo</string>
+    <string name="simplest_glob3">Simplest glob3</string>
+    <string name="switch_layers">Switch Layers</string>
+    <string name="title_activity_g3_msimplest">G3MSimplestActivity</string>
+     <string name="doubleGlob3">Double Glob3</string>
 
 </resources>

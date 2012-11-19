@@ -59,6 +59,9 @@ public:
   
   GLState* getGLState() const { return _glState; }
   
+
+  bool isTransparent(const RenderContext* rc) const;
+
 };
 
 #endif

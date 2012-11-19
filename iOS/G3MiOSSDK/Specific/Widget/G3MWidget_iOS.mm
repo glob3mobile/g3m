@@ -122,12 +122,6 @@
   //NativeGL2_iOS* nGL = new NativeGL2_iOS();
   //GL* gl = new GL(nGL);
   
-  IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
-  const bool saveInBackground = true;
-  IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
-                                                 storage,
-                                                 saveInBackground);
-  
   CompositeRenderer* mainRenderer = new CompositeRenderer();
   
   if (layerSet != NULL) {
@@ -153,46 +147,7 @@
   
   Renderer* busyRenderer = new BusyMeshRenderer();
   
-/*<<<<<<< HEAD
-  EffectsScheduler* scheduler = new EffectsScheduler();
-  
-  FrameTasksExecutor* frameTasksExecutor = new FrameTasksExecutor();
-  
-  //  if (true) {
-  //    int __REMOVE_STRING_UTILS_TESTS;
-  //
-  //    std::vector<std::string> lines = stringUtils->splitLines("line1\nline2");
-  //
-  //    printf("%s\n", stringUtils->left("Diego", 1).c_str());
-  //    printf("%s\n", stringUtils->substring("Diego", 1).c_str());
-  //
-  //    std::string line = "name=value";
-  //    int equalsPosition = stringUtils->indexOf(line, "=");
-  //    std::string name = stringUtils->left(line, equalsPosition);
-  //    std::string value = stringUtils->substring(line, equalsPosition+1);
-  //    printf("\"%s\"=\"%s\"\n", name.c_str(), value.c_str());
-  //
-  //    printf("\n");
-  //  }
-  
-    
-  class SampleInitializationTask : public GTask {
-  public:
-    void run() {
-      //      ILogger::instance()->logInfo("Running initialization Task");
-      printf("Running initialization Task\n");
-    }
-  };
-  
-  GTask* initializationTask = new SampleInitializationTask();
-  
-  _widgetVP = G3MWidget::create(frameTasksExecutor,
-                                [_renderer getGL],
-                                texturesHandler,
-                                textureBuilder,
-=======*/
   _widgetVP = G3MWidget::create([_renderer getGL],
-                                downloader,
                                 planet,
                                 cameraConstraints,
                                 cameraRenderer,
@@ -490,7 +445,12 @@
     IMathUtils*         mathUtils       = new MathUtils_iOS();
     IJSONParser*        jsonParser      = new JSONParser_iOS();
     
-    G3MWidget::initSingletons(logger, factory, stringUtils, threadUtils, stringBuilder, mathUtils, jsonParser);
+    IStorage*           storage         = new SQLiteStorage_iOS("g3m.cache");
+    const bool          saveInBackground= true;
+    IDownloader*        downloader      = new CachedDownloader(new Downloader_iOS(8),
+                                                   saveInBackground);
+    
+    G3MWidget::initSingletons(logger, factory, stringUtils, threadUtils, stringBuilder, mathUtils, jsonParser, storage, downloader);
 }
 
 @end

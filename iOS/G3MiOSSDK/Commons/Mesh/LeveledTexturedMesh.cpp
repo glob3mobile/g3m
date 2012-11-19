@@ -159,3 +159,17 @@ bool LeveledTexturedMesh::setGLTextureIdForLevel(int level,
 //  const int level = _mappings->size() - inversedLevel - 1;
 //  setGLTextureIdForLevel(level, glTextureId);
 //}
+
+bool LeveledTexturedMesh::isTransparent(const RenderContext* rc) const {
+  if (_mesh->isTransparent(rc)) {
+    return true;
+  }
+
+  LazyTextureMapping* mapping = getCurrentTextureMapping();
+
+  if (mapping == NULL) {
+    return false;
+  }
+
+  return mapping->isTransparent(rc);
+}

@@ -82,7 +82,8 @@ bool BusyQuadRenderer::initMesh(const RenderContext* rc) {
   
   TextureMapping* texMap = new SimpleTextureMapping(texId,
                                                     texCoords.create(),
-                                                    true);
+                                                    true,
+                                                    false);
   
   _quadMesh = new TexturedMesh(im, true, texMap, true);
   

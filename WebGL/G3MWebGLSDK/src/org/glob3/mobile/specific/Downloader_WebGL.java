@@ -17,7 +17,7 @@ import com.google.gwt.user.client.Timer;
 
 
 public final class Downloader_WebGL
-         implements
+         extends
             IDownloader {
 
    final private int                                _maxConcurrentOperationCount;

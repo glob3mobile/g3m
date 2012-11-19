@@ -58,23 +58,23 @@ void TokenDownloadListener::onDownload(const URL& url,
   std::string string = buffer->getAsString();
   JSONBaseObject* json = IJSONParser::instance()->parse(string);
   
-  std::string authentication = json->getObject()->getObjectForKey("authenticationResultCode")->getString()->getValue();
+  std::string authentication = json->asObject()->getAsString("authenticationResultCode")->value();
   if (authentication.compare("ValidCredentials")!=0){
     ILogger::instance()->logError("Could not validate against Bing. Please check your key!");
   }
   else {
-    JSONObject* data = json->getObject()->getObjectForKey("resourceSets")->getArray()->getElement(0)->getObject()->getObjectForKey("resources")->getArray()->getElement(0)->getObject();
+    JSONObject* data = json->asObject()->getAsArray("resourceSets")->getAsObject(0)->getAsArray("resources")->getAsObject(0);
     
-    JSONArray* subDomArray = data->getObjectForKey("imageUrlSubdomains")->getArray();
+    JSONArray* subDomArray = data->getAsArray("imageUrlSubdomains");
     std::vector<std::string> subdomains;
-    int numSubdomains = subDomArray->getSize();
+    int numSubdomains = subDomArray->size();
     for (int i = 0; i<numSubdomains; i++){
-      subdomains.push_back(subDomArray->getElement(i)->getString()->getValue());
+      subdomains.push_back(subDomArray->getAsString(i)->value());
     }
     _bingLayer->setSubDomains(subdomains);
 
     
-    std::string tileURL = data->getObjectForKey("imageUrl")->getString()->getValue();
+    std::string tileURL = data->getAsString("imageUrl")->value();
     
     //set language
     tileURL = IStringUtils::instance()->replaceSubstring(tileURL, "{culture}", _bingLayer->getLocale());

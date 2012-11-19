@@ -25,6 +25,7 @@ class LayerSet;
 #include "TileKey.hpp"
 #include "Camera.hpp"
 
+#include "LayerSet.hpp"
 
 //class TileCacheEntry {
 //public:
@@ -306,7 +307,7 @@ public:
 };
 
 
-class TileRenderer: public LeafRenderer {
+class TileRenderer: public LeafRenderer, LayerSetChangedListener {
 private:
   const TileTessellator*       _tessellator;
   TileTexturizer*              _texturizer;
@@ -333,6 +334,14 @@ private:
   
   bool _firstRender;
 
+//  const InitializationContext* _initializationContext;
+#ifdef C_CODE
+  const InitializationContext* _initializationContext;
+#endif
+#ifdef JAVA_CODE
+  private InitializationContext _initializationContext;
+#endif
+
   void pruneTopLevelTiles();
   
 public:
@@ -340,20 +349,7 @@ public:
                TileTexturizer*  texturizer,
                LayerSet* layerSet,
                const TilesRenderParameters* parameters,
-               bool showStatistics) :
-  _tessellator(tessellator),
-  _texturizer(texturizer),
-  _layerSet(layerSet),
-  _parameters(parameters),
-  _showStatistics(showStatistics),
-  _lastStatistics(),
-  _topTilesJustCreated(false),
-  _lastSplitTimer(NULL),
-  _lastCamera(NULL),
-  _firstRender(false)
-  {
-    
-  }
+               bool showStatistics);
   
   ~TileRenderer();
   
@@ -401,6 +397,7 @@ public:
     }
   }
 
+  void changed(const LayerSet* layerSet);
 
 };
 

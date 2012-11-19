@@ -10,6 +10,7 @@
 #define G3MiOSSDK_IDownloader_hpp
 
 #include "URL.hpp"
+#include "ILogger.hpp"
 
 #include <string>
 
@@ -18,7 +19,20 @@ class IImageDownloadListener;
 class InitializationContext;
 
 class IDownloader {
+private:
+    static IDownloader* _instance;
 public:
+    static void setInstance(IDownloader* downloader) {
+        if (_instance != NULL) {
+            ILogger::instance()->logWarning("Warning, IDownloader instance set twice\n");
+        }
+        _instance = downloader;
+    }
+    
+    static IDownloader* instance() {
+        return _instance;
+    }
+    
   virtual void onResume(const InitializationContext* ic) = 0;
   
   virtual void onPause(const InitializationContext* ic) = 0;
@@ -39,10 +53,8 @@ public:
   
   virtual void cancelRequest(long long requestId) = 0;
   
-#ifdef C_CODE
   virtual ~IDownloader() {
   }
-#endif
   
   virtual const std::string statistics() = 0;
   

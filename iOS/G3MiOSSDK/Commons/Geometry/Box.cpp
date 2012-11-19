@@ -15,8 +15,7 @@
 #include "GLConstants.hpp"
 
 
-const std::vector<Vector3D> Box::getCorners() const
-{
+const std::vector<Vector3D> Box::getCorners() const {
 #ifdef C_CODE
   const Vector3D c[8] = {
     _lower,
@@ -85,7 +84,7 @@ double Box::squaredProjectedArea(const RenderContext* rc) const {
   return extent._x * extent._y;
 }
 
-bool Box::contains(const Vector3D& p) const{
+bool Box::contains(const Vector3D& p) const {
   const static double margin = 1e-3;
   if (p._x < _lower._x - margin) return false;
   if (p._x > _upper._x + margin) return false;
@@ -99,8 +98,7 @@ bool Box::contains(const Vector3D& p) const{
   return true;
 }
 
-Vector3D Box::intersectionWithRay(const Vector3D& origin, const Vector3D& direction) const{
-  
+Vector3D Box::intersectionWithRay(const Vector3D& origin, const Vector3D& direction) const {
   //MIN X
   {
     Plane p( Vector3D(1.0, 0.0, 0.0), _lower._x);
@@ -147,10 +145,7 @@ Vector3D Box::intersectionWithRay(const Vector3D& origin, const Vector3D& direct
 }
 
 
-void Box::createMesh()
-{
-  unsigned int numVertices = 8;
-  int numIndices = 48;
+void Box::createMesh(Color* color) {
   
   float v[] = {
     (float) _lower._x, (float) _lower._y, (float) _lower._z,
@@ -175,34 +170,33 @@ void Box::createMesh()
   FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
   IntBufferBuilder indices;
   
-  for (unsigned int n=0; n<numVertices; n++)
+  const unsigned int numVertices = 8;
+  for (unsigned int n=0; n<numVertices; n++) {
     vertices.add(v[n*3], v[n*3+1], v[n*3+2]);
+  }
   
-  for (unsigned int n=0; n<numIndices; n++)
+  const int numIndices = 48;
+  for (unsigned int n=0; n<numIndices; n++) {
     indices.add(i[n]);
+  }
   
-  Color *flatColor = new Color(Color::fromRGBA((float)1.0, (float)1.0, (float)0.0, (float)1.0));
-    
-  // create mesh
-  _mesh = new IndexedMesh(GLPrimitive::triangleStrip(),
+  _mesh = new IndexedMesh(GLPrimitive::lines(),
                           true,
                           vertices.getCenter(),
                           vertices.create(),
                           indices.create(),
                           1,
-                          flatColor);
+                          color);
 }
 
-
-void Box::render(const RenderContext* rc)
-{
-  if (_mesh == NULL) createMesh(); 
+void Box::render(const RenderContext* rc) {
+  if (_mesh == NULL) {
+    createMesh(Color::newFromRGBA((float)1.0, (float)1.0, (float)0.0, (float)1.0));
+  }
   _mesh->render(rc);
 }
 
-
-bool Box::touchesBox(const Box* box) const
-{
+bool Box::touchesBox(const Box* box) const {
   if (_lower._x > box->_upper._x) return false;
   if (_upper._x < box->_lower._x) return false;
   if (_lower._y > box->_upper._y) return false;
@@ -210,4 +204,17 @@ bool Box::touchesBox(const Box* box) const
   if (_lower._z > box->_upper._z) return false;
   if (_upper._z < box->_lower._z) return false;
   return true;
+}
+
+Extent* Box::mergedWithBox(const Box* that) const {
+  const double lowerX = IMathUtils::instance()->min(_lower._x, that->_lower._x);
+  const double lowerY = IMathUtils::instance()->min(_lower._y, that->_lower._y);
+  const double lowerZ = IMathUtils::instance()->min(_lower._z, that->_lower._z);
+
+  const double upperX = IMathUtils::instance()->max(_upper._x, that->_upper._x);
+  const double upperY = IMathUtils::instance()->max(_upper._y, that->_upper._y);
+  const double upperZ = IMathUtils::instance()->max(_upper._z, that->_upper._z);
+
+  return new Box(Vector3D(lowerX, lowerY, lowerZ),
+                 Vector3D(upperX, upperY, upperZ));
 }

@@ -49,10 +49,21 @@ class GLFeature {
   static int _cullFace;
   
 public:
-  static int polygonOffsetFill(){ return _polygonOffsetFill;}
-  static int depthTest(){ return _depthTest;}
-  static int blend(){ return _blend;}
-  static int cullFace(){ return _cullFace;}
+  static int polygonOffsetFill() {
+    return _polygonOffsetFill;
+  }
+
+  static int depthTest() {
+    return _depthTest;
+  }
+
+  static int blend() {
+    return _blend;
+  }
+
+  static int cullFace() {
+    return _cullFace;
+  }
 
   static void init(const INativeGL* ngl){
     _polygonOffsetFill = ngl->Feature_PolygonOffsetFill();
@@ -83,14 +94,21 @@ public:
 };
 
 class GLPrimitive {
+  static int _triangles;
   static int _triangleStrip;
   static int _triangleFan;
+
   static int _lines;
   static int _lineStrip;
   static int _lineLoop;
+
   static int _points;
   
 public:
+  static int triangles() {
+    return _triangles;
+  }
+
   static int triangleStrip() {
     return _triangleStrip;
   }
@@ -116,6 +134,7 @@ public:
   }
   
   static void init(const INativeGL* ngl){
+    _triangles     = ngl->Primitive_Triangles();
     _triangleStrip = ngl->Primitive_TriangleStrip();
     _triangleFan   = ngl->Primitive_TriangleFan();
 

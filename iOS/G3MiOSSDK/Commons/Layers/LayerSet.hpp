@@ -14,22 +14,39 @@
 
 class Petition;
 
-class LayerSet
-{
+
+class LayerSetChangedListener {
+public:
+#ifdef C_CODE
+  virtual ~LayerSetChangedListener() {
+
+  }
+#endif
+
+  virtual void changed(const LayerSet* layerSet) = 0;
+};
+
+
+class LayerSet {
 private:
   std::vector<Layer*> _layers;
+
+  LayerSetChangedListener* _listener;
   
 public:
-  
+  LayerSet() :
+  _listener(NULL)
+  {
+
+  }
+
   ~LayerSet() {
     for (unsigned int i = 0; i < _layers.size(); i++) {
       delete _layers[i];
     }
   }
   
-  void addLayer(Layer* layer) {
-    _layers.push_back(layer);
-  }
+  void addLayer(Layer* layer);
   
   std::vector<Petition*> createTileMapPetitions(const RenderContext* rc,
                                                 const Tile* tile,
@@ -46,7 +63,16 @@ public:
   int size() const {
     return _layers.size();
   }
-  
+
+  void layerChanged(const Layer* layer) const;
+
+  void setChangeListener(LayerSetChangedListener* listener) {
+    if (_listener != NULL) {
+      ILogger::instance()->logError("Listener already set");
+    }
+    _listener = listener;
+  }
+
 };
 
 #endif

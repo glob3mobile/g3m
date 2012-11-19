@@ -15,7 +15,7 @@
 #include "IIntBuffer.hpp"
 
 IndexedMesh::~IndexedMesh() {
-  if (_owner){
+  if (_owner) {
     delete _vertices;
     delete _indices;
     delete _colors;
@@ -69,12 +69,24 @@ void IndexedMesh::render(const RenderContext* rc) const {
   }
   else {
     gl->enableVertexColor(_colors, _colorsIntensity);
+<<<<<<< HEAD
   }*/
   
 /*  if (_flatColor == NULL) {
+=======
+  }
+
+  bool blend = false;
+  if (_flatColor == NULL) {
+>>>>>>> origin/webgl-port
     gl->disableVertexFlatColor();
   }
   else {
+    if (_flatColor->isTransparent()) {
+      gl->enableBlend();
+      gl->setBlendFuncSrcAlpha();
+      blend = true;
+    }
     gl->enableVertexFlatColor(*_flatColor, _colorsIntensity);
   }*/
   
@@ -87,7 +99,10 @@ void IndexedMesh::render(const RenderContext* rc) const {
     gl->multMatrixf(*_translationMatrix);
   }
   
-  if (_primitive == GLPrimitive::triangleStrip()) {
+  if (_primitive == GLPrimitive::triangles()) {
+    gl->drawTriangles(_indices);
+  }
+  else if (_primitive == GLPrimitive::triangleStrip()) {
     gl->drawTriangleStrip(_indices);
   }
   else if (_primitive == GLPrimitive::triangleFan()) {
@@ -109,8 +124,11 @@ void IndexedMesh::render(const RenderContext* rc) const {
   if (_translationMatrix != NULL) {
     gl->popMatrix();
   }
-  
   //gl->disableVerticesPosition();
+
+  /*if (blend) {
+    gl->disableBlend();
+  }*/
 }
 
 
@@ -161,4 +179,11 @@ const Vector3D IndexedMesh::getVertex(int i) const {
 
 int IndexedMesh::getVertexCount() const {
   return _vertices->size() / 3;
+}
+
+bool IndexedMesh::isTransparent(const RenderContext* rc) const {
+  if (_flatColor == NULL) {
+    return false;
+  }
+  return _flatColor->isTransparent();
 }

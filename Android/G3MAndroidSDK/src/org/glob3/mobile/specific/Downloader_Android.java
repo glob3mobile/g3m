@@ -16,7 +16,7 @@ import org.glob3.mobile.generated.URL;
 
 
 public final class Downloader_Android
-         implements
+         extends
             IDownloader {
 
    final static String                                      TAG = "Downloader_Android";
@@ -46,18 +46,20 @@ public final class Downloader_Android
       _queuedHandlers = new HashMap<String, Downloader_Android_Handler>();
       _workers = new ArrayList<Downloader_Android_WorkerThread>(maxConcurrentOperationCount);
 
-      for (int i = 0; i < _maxConcurrentOperationCount; i++) {
-         final Downloader_Android_WorkerThread da = new Downloader_Android_WorkerThread(this);
-         _workers.add(da);
-      }
       _connectTimeout = connectTimeoutMillis;
       _readTimeout = readTimeoutMillis;
    }
 
 
    @Override
-   public void start() {
+   public synchronized void start() {
       if (!_started) {
+         for (int i = 0; i < _maxConcurrentOperationCount; i++) {
+            final Downloader_Android_WorkerThread da = new Downloader_Android_WorkerThread(this);
+            _workers.add(da);
+         }
+
+
          final Iterator<Downloader_Android_WorkerThread> iter = _workers.iterator();
          while (iter.hasNext()) {
             final Downloader_Android_WorkerThread worker = iter.next();
@@ -69,7 +71,7 @@ public final class Downloader_Android
 
 
    @Override
-   public void stop() {
+   public synchronized void stop() {
       if (_started) {
          for (final Downloader_Android_WorkerThread worker : _workers) {
             worker.stopWorkerThread();
@@ -87,6 +89,8 @@ public final class Downloader_Android
             }
          }
          while (!allWorkersStopped);
+
+         _workers.clear();
 
          //         boolean allStopped = true;
          //         while (_started) {

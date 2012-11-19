@@ -30,6 +30,9 @@ public:
   
   virtual GLState* getGLState() const = 0;
   
+
+  virtual bool isTransparent(const RenderContext* rc) const = 0;
+
 };
 
 

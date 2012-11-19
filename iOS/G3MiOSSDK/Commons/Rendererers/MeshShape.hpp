@@ -18,13 +18,13 @@ private:
 
 protected:
   virtual Mesh* createMesh(const RenderContext* rc) = 0;
-
+  
   Mesh* getMesh(const RenderContext* rc);
 
   void cleanMesh();
 
 public:
-  MeshShape(const Geodetic3D& position) :
+  MeshShape(Geodetic3D* position) :
   Shape(position),
   _mesh(NULL) {
 
@@ -35,6 +35,8 @@ public:
   void rawRender(const RenderContext* rc);
 
   virtual ~MeshShape();
+
+  bool isTransparent(const RenderContext* rc);
 
 };
 

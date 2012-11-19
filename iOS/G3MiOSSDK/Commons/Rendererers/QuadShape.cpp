@@ -86,50 +86,10 @@ Mesh* QuadShape::createMesh(const RenderContext* rc) {
 
   TextureMapping* texMap = new SimpleTextureMapping(texId,
                                                     texCoords.create(),
+                                                    true,
                                                     true);
 
   return new TexturedMesh(im, true, texMap, true);
 }
 
-/***
- <<<<<<< HEAD
-Mesh* QuadShape::getMesh(const RenderContext* rc) {
-  if (_mesh == NULL) {
-    _mesh = createMesh(rc);
-    _mesh->getGLState()->enableBlend();
-  }
-  return _mesh;
-}
 
-QuadShape::~QuadShape() {
-  delete _mesh;
-}
-
-
-
-void QuadShape::render(const RenderContext* rc) {
-  int __diego_at_work;
-  Mesh* mesh = getMesh(rc);
-  if (mesh != NULL) {
-    GL* gl = rc->getGL();
-
-    gl->pushMatrix();
-
-    const Planet* planet = rc->getPlanet();
-
-
-    const Vector3D cartesianPosition = planet->toCartesian( _position );
-    const MutableMatrix44D translationMatrix = MutableMatrix44D::createTranslationMatrix(cartesianPosition);
-    gl->multMatrixf(translationMatrix);
-    
-    const MutableMatrix44D rotationMatrix = planet->orientationMatrix(_position, _heading, _pitch);
-    gl->multMatrixf(rotationMatrix);
-
-    mesh->render(rc);
-
-    gl->popMatrix();
-  }
-}
-=======
->>>>>>> origin/webgl-port
- ***/

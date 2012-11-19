@@ -43,7 +43,9 @@ private:
   const std::string   _srs;
   const std::string   _style;
   const bool          _isTransparent;
-  
+
+  std::string         _extraParameter;
+    
 public:
   
   
@@ -70,7 +72,8 @@ public:
   _format(format),
   _srs(srs),
   _style(style),
-  _isTransparent(isTransparent)
+  _isTransparent(isTransparent),
+  _extraParameter("")
   {
     
   }
@@ -95,7 +98,8 @@ public:
   _format(format),
   _srs(srs),
   _style(style),
-  _isTransparent(isTransparent)
+  _isTransparent(isTransparent),
+  _extraParameter("")
   {
     
   }
@@ -113,7 +117,12 @@ public:
                         const Sector& sector,
                         int width, int height) const;
   
-  
+
+  void setExtraParameter(const std::string& extraParameter) {
+    _extraParameter = extraParameter;
+    notifyChanges();
+  }
+
 };
 
 #endif

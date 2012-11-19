@@ -184,6 +184,8 @@ public:
   
   void vertexPointer(int size, int stride, IFloatBuffer* vertices);
   
+  void drawTriangles(IIntBuffer* indices);
+  
   void drawTriangleStrip(IIntBuffer* indices);
 
   void drawTriangleFan(IIntBuffer* indices);
