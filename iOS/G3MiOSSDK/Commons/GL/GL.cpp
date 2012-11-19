@@ -580,8 +580,8 @@ const IGLTextureId* GL::getGLTextureId() {
     ILogger::instance()->logInfo("= Created %d texturesIds (accumulated %d).", bugdetSize, _texturesIdAllocationCounter);
   }
   
-  _texturesIdGetCounter++;
-  
+//  _texturesIdGetCounter++;
+
   const IGLTextureId* result = _texturesIdBag.back();
   _texturesIdBag.pop_back();
   
@@ -601,6 +601,6 @@ void GL::deleteTexture(const IGLTextureId* texture) {
       _texturesIdBag.push_back(texture);
     }
     
-    _texturesIdTakeCounter++;
+//    _texturesIdTakeCounter++;
   }
 }

@@ -43,8 +43,8 @@ const IGLTextureId* QuadShape::getTextureId(const RenderContext* rc) {
 
 Mesh* QuadShape::createMesh(const RenderContext* rc) {
 
-  const float halfWidth  = (float) _width / 2.0f;
-  const float halfHeight = (float) _height / 2.0f;
+  const float halfWidth  = _width / 2.0f;
+  const float halfHeight = _height / 2.0f;
 
   const float left   = -halfWidth;
   const float right  = +halfWidth;
