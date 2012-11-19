@@ -85,7 +85,7 @@ bool BusyQuadRenderer::initMesh(const RenderContext* rc) {
                                                     true,
                                                     false);
   
-  _quadMesh = new TexturedMesh(im, true, texMap, true);
+  _quadMesh = new TexturedMesh(im, true, texMap, true, false);
   
   // set mesh glstate
   GLState* state = _quadMesh->getGLState();

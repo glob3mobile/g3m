@@ -89,7 +89,7 @@ Mesh* QuadShape::createMesh(const RenderContext* rc) {
                                                     true,
                                                     true);
 
-  return new TexturedMesh(im, true, texMap, true);
+  return new TexturedMesh(im, true, texMap, true, true);
 }
 
 
