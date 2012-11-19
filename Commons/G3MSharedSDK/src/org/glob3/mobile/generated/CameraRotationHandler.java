@@ -26,7 +26,7 @@ public class CameraRotationHandler extends CameraEventHandler
   private MutableVector3D _initialPoint = new MutableVector3D(); //Initial point at dragging
   private MutableVector2I _initialPixel = new MutableVector2I(); //Initial pixel at start of gesture
 
-  private int lastYValid;
+//  int _lastYValid;
   private Camera _camera0 ; //Initial Camera saved on Down event
 
   public CameraRotationHandler()
@@ -100,7 +100,7 @@ public class CameraRotationHandler extends CameraEventHandler
 	Vector2I pixel2 = touchEvent.getTouch(2).getPos();
 	Vector2I averagePixel = pixel0.add(pixel1).add(pixel2).div(3);
 	_initialPixel = new MutableVector2I(averagePixel._x, averagePixel._y);
-	lastYValid = _initialPixel.y();
+	//_lastYValid = _initialPixel.y();
   
 	// compute center of view
 	_initialPoint = camera.getXYZCenterOfView().asMutableVector3D();

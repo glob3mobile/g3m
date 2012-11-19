@@ -179,11 +179,11 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 	  double angle_n = angle1;
   
 	  // iterations
-	  int iter = 0;
+  //    int iter=0;
 	  double precision = IMathUtils.instance().pow(10, IMathUtils.instance().log10(distance)-8.5);
 	  while (IMathUtils.instance().abs(angle_n-angle) > precision)
 	  {
-		iter++;
+  //      iter++;
 		if ((angle_n1-angle_n)/(angle_n-angle) < 0)
 			d*=-0.5;
 		tempCamera.moveForward(d);

@@ -3,10 +3,10 @@ public class CameraSingleDragHandler extends CameraEventHandler
 {
 
   public CameraSingleDragHandler(boolean useInertia)
+//  _initialPixel(0,0),
   {
 	  _camera0 = new Camera(new Camera(0, 0));
 	  _initialPoint = new MutableVector3D(0,0,0);
-	  _initialPixel = new MutableVector2I(0,0);
 	  _useInertia = useInertia;
   }
 
@@ -77,7 +77,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
   
 	// dragging
 	final Vector2I pixel = touchEvent.getTouch(0).getPos();
-	_initialPixel = pixel.asMutableVector2I();
+	//_initialPixel = pixel.asMutableVector2I();
 	_initialPoint = _camera0.pixel2PlanetPoint(pixel).asMutableVector3D();
   
 	//printf ("down 1 finger. Initial point = %f %f %f\n", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
@@ -144,13 +144,13 @@ public class CameraSingleDragHandler extends CameraEventHandler
   
 	// update gesture
 	cameraContext.setCurrentGesture(Gesture.None);
-	_initialPixel = MutableVector2I.zero();
+	//_initialPixel = MutableVector2I::zero();
   }
 
   private Camera _camera0 ; //Initial Camera saved on Down event
 
   private MutableVector3D _initialPoint = new MutableVector3D(); //Initial point at dragging
-  private MutableVector2I _initialPixel = new MutableVector2I(); //Initial pixel at start of gesture
+  //MutableVector2I _initialPixel;  //Initial pixel at start of gesture
 
   private MutableVector3D _axis = new MutableVector3D();
   private double _lastRadians;

@@ -225,7 +225,7 @@ public class BingLayer extends Layer
   {
   
 	//LatLon to Pixels XY
-	int mapSize = (int) 256 << level;
+	int mapSize = 256 << level;
 	double lonDeg = latLon.longitude()._degrees;
 	double latDeg = latLon.latitude()._degrees;
 	if (latDeg < -85.05112878)
@@ -322,7 +322,7 @@ public class BingLayer extends Layer
 	int pixelY = tileXY[1]*256;
   
 	//Pixel XY to LatLon
-	int mapSize = (int) 256 << level;
+	int mapSize = 256 << level;
 	if (pixelX < 0)
 		pixelX = 0;
 	if (pixelY < 0)
