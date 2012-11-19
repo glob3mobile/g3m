@@ -19,8 +19,6 @@ private:
 
   mutable Extent* _extent;
   
-  GLState*          _glState;
-
 
 public:
   virtual ~CompositeMesh();
@@ -37,7 +35,7 @@ public:
 
   void addMesh(Mesh* mesh);
   
-  GLState* getGLState() const { return _glState; }
+  GLState* getGLState() const { return NULL; }
 
 
 };

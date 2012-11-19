@@ -41,6 +41,8 @@ public:
     GLState* state = _mesh->getGLState();
     state->enableTextures();
     state->enableTexture2D();
+    if (_transparent)
+      state->enableBlend();
   }
   
   ~TexturedMesh(){

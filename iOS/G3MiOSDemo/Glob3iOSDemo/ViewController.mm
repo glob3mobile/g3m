@@ -189,11 +189,11 @@
 
   std::vector<Renderer*> renderers;
 
-    if (true) {
+  /*  if (true) {
       // dummy renderer with a simple box
       DummyRenderer* dum = new DummyRenderer();
       renderers.push_back(dum);
-    }
+    }*/
 
   //  if (false) {
   //    // simple planet renderer, with a basic world image

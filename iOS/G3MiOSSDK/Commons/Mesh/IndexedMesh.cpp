@@ -54,8 +54,12 @@ _lineWidth(lineWidth)
   _glState->enableVerticesPosition();
   if (_colors) 
     _glState->enableVertexColor(_colors, _colorsIntensity);
-  if (_flatColor)    
+  if (_flatColor) {   
     _glState->enableFlatColor(*_flatColor, _colorsIntensity);
+    if (_flatColor->isTransparent()) {
+      _glState->enableBlend();
+    }
+  }
 }
 
 void IndexedMesh::render(const RenderContext* rc) const {
@@ -89,6 +93,12 @@ void IndexedMesh::render(const RenderContext* rc) const {
     }
     gl->enableVertexFlatColor(*_flatColor, _colorsIntensity);
   }*/
+  
+  
+  if (_flatColor)
+    if (_flatColor->isTransparent())
+      gl->setBlendFuncSrcAlpha();
+  
   
   gl->vertexPointer(3, 0, _vertices);
 
