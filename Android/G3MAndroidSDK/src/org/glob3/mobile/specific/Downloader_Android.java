@@ -14,12 +14,15 @@ import org.glob3.mobile.generated.IImageDownloadListener;
 import org.glob3.mobile.generated.InitializationContext;
 import org.glob3.mobile.generated.URL;
 
+import android.content.Context;
+
 
 public final class Downloader_Android
          extends
             IDownloader {
 
-   final static String                                      TAG = "Downloader_Android";
+   public final static String                               ASSET_URL = "file:///";
+   final static String                                      TAG       = "Downloader_Android";
 
    private boolean                                          _started;
    private final int                                        _maxConcurrentOperationCount;
@@ -31,13 +34,16 @@ public final class Downloader_Android
    private final Map<String, Downloader_Android_Handler>    _queuedHandlers;
    private final int                                        _connectTimeout;
    private final int                                        _readTimeout;
+   private final Context                                    _appContext;
 
 
    public Downloader_Android(final int maxConcurrentOperationCount,
                              final int connectTimeoutMillis,
-                             final int readTimeoutMillis) {
+                             final int readTimeoutMillis,
+                             final Context appContext) {
       _started = false;
       _maxConcurrentOperationCount = maxConcurrentOperationCount;
+      _appContext = appContext;
       _requestIdCounter = 1;
       _requestsCounter = 0;
       _cancelsCounter = 0;
@@ -286,4 +292,8 @@ public final class Downloader_Android
    public void onPause(final InitializationContext ic) {
    }
 
+
+   public Context getAppContext() {
+      return _appContext;
+   }
 }

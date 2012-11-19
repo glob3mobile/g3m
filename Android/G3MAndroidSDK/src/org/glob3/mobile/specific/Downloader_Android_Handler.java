@@ -5,6 +5,7 @@ package org.glob3.mobile.specific;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -42,10 +43,10 @@ public final class Downloader_Android_Handler {
       }
       catch (final MalformedURLException e) {
          if (ILogger.instance() != null) {
-            ILogger.instance().logError(TAG + "Downloader_Android_Handler: MalformedURLException url=" + _url.getPath());
+            ILogger.instance().logError(TAG + " MalformedURLException url=" + _url.getPath());
          }
          else {
-            Log.e(TAG, "Downloader_Android_Handler: MalformedURLException url=" + _url.getPath());
+            Log.e(TAG, "MalformedURLException url=" + _url.getPath());
          }
          e.printStackTrace();
       }
@@ -66,10 +67,10 @@ public final class Downloader_Android_Handler {
       }
       catch (final MalformedURLException e) {
          if (ILogger.instance() != null) {
-            ILogger.instance().logError(TAG + "Downloader_Android_Handler: MalformedURLException url=" + _url.getPath());
+            ILogger.instance().logError(TAG + " MalformedURLException url=" + _url.getPath());
          }
          else {
-            Log.e(TAG, "Downloader_Android_Handler: MalformedURLException url=" + _url.getPath());
+            Log.e(TAG, "MalformedURLException url=" + _url.getPath());
          }
          e.printStackTrace();
       }
@@ -164,42 +165,33 @@ public final class Downloader_Android_Handler {
 
    public void runWithDownloader(final IDownloader downloader) {
       //      Log.i(TAG, "runWithDownloader url=" + _url.getPath());
-
       final Downloader_Android dl = (Downloader_Android) downloader;
-      HttpURLConnection connection = null;
       int statusCode = 0;
       byte[] data = null;
+      HttpURLConnection connection = null;
+
       try {
-         connection = (HttpURLConnection) _URL.openConnection();
-         connection.setConnectTimeout(dl.getConnectTimeout());
-         connection.setReadTimeout(dl.getReadTimeout());
-         connection.setUseCaches(false);
-         connection.connect();
-         statusCode = connection.getResponseCode();
-
-         if (statusCode == 200) {
-            final BufferedInputStream bis = new BufferedInputStream(connection.getInputStream());
-            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            final byte[] buffer = new byte[4096];
-            int length = 0;
-
-            while ((length = bis.read(buffer)) > 0) {
-               baos.write(buffer, 0, length);
+         if (_url.getPath().startsWith(Downloader_Android.ASSET_URL)) {
+            data = getData(dl.getAppContext().getAssets().open(_url.getPath().replaceFirst(Downloader_Android.ASSET_URL, "")));
+            if (data != null) {
+               statusCode = 200;
             }
+         }
+         else {
+            connection = (HttpURLConnection) _URL.openConnection();
+            connection.setConnectTimeout(dl.getConnectTimeout());
+            connection.setReadTimeout(dl.getReadTimeout());
+            connection.setUseCaches(false);
+            connection.connect();
+            statusCode = connection.getResponseCode();
 
-            baos.flush();
-            data = baos.toByteArray();
-            baos.close();
-            bis.close();
+            if (statusCode == 200) {
+               data = getData(connection.getInputStream());
+            }
          }
       }
       catch (final IOException e) {
-         if (ILogger.instance() != null) {
-            ILogger.instance().logError(TAG + "runWithDownloader: IOException url=" + _url.getPath());
-         }
-         else {
-            Log.e(TAG, "runWithDownloader: IOException url=" + _url.getPath());
-         }
+         ILogger.instance().logError(TAG + " runWithDownloader: IOException url=" + _url.getPath());
          e.printStackTrace();
       }
       finally {
@@ -207,10 +199,38 @@ public final class Downloader_Android_Handler {
             connection.disconnect();
          }
       }
+
       // inform downloader to remove myself, to avoid adding new Listener
       dl.removeDownloadingHandlerForUrl(_url.getPath());
 
       IThreadUtils.instance().invokeInRendererThread(new ProcessResponseGTask(statusCode, data, this), true);
+   }
+
+
+   private byte[] getData(final InputStream is) {
+      byte[] data = null;
+
+      try {
+         final BufferedInputStream bis = new BufferedInputStream(is);
+         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+         final byte[] buffer = new byte[4096];
+         int length = 0;
+
+         while ((length = bis.read(buffer)) > 0) {
+            baos.write(buffer, 0, length);
+         }
+
+         baos.flush();
+         data = baos.toByteArray();
+         baos.close();
+         bis.close();
+      }
+      catch (final IOException e) {
+         ILogger.instance().logError(TAG + " getData: IOException url=" + _url.getPath());
+         e.printStackTrace();
+      }
+
+      return data;
    }
 
    public class ProcessResponseGTask
@@ -254,7 +274,7 @@ public final class Downloader_Android_Handler {
             else {
                if (ILogger.instance() != null) {
                   ILogger.instance().logError(
-                           TAG + "Error runWithDownloader: statusCode=" + _statusCode + ", url=" + _url.getPath());
+                           TAG + " Error runWithDownloader: statusCode=" + _statusCode + ", url=" + _url.getPath());
                }
                else {
                   Log.e(TAG, "Error runWithDownloader: statusCode=" + _statusCode + ", url=" + _url.getPath());

@@ -232,7 +232,7 @@
 
 
     Mark* m2 = new Mark("Las Palmas",
-                        URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png", false),
+                        URL("file:///plane.png", false),
                         Geodetic3D(Angle::fromDegrees(28.05), Angle::fromDegrees(-15.36), 0));
     marksRenderer->addMark(m2);
 
