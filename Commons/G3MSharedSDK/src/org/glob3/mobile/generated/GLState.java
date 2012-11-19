@@ -46,6 +46,10 @@ public class GLState
 	  _culledFace = GLCullFace.back();
   }
 
+  public void dispose()
+  {
+  }
+
   public final void enableDepthTest()
   {
 	  _depthTest = true;
