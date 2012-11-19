@@ -674,17 +674,19 @@ void GL::setState(GLState *state) {
   // Flat Color
   if (_enableFlatColor != state->isEnabledFlatColor()) {
     _enableFlatColor = state->isEnabledFlatColor();
-    if (_enableFlatColor) {
+    if (_enableFlatColor) 
       _gl->uniform1i(Uniforms.EnableFlatColor, 1);
-      color(state->getFlatColor());
-      float intensity = state->getIntensity();
-      if (_flatColorIntensity != intensity) {
-        _gl->uniform1f(Uniforms.FlatColorIntensity, intensity);
-        _flatColorIntensity = intensity;
-      }
-    }
-  } else 
+    else 
       _gl->uniform1i(Uniforms.EnableFlatColor, 0);
+  } 
+  if (_enableFlatColor) {
+    color(state->getFlatColor());
+    float intensity = state->getIntensity();
+    if (_flatColorIntensity != intensity) {
+      _gl->uniform1f(Uniforms.FlatColorIntensity, intensity);
+      _flatColorIntensity = intensity;
+    }
+  }
   
   // Cull Face
   if (_enableCullFace != state->isEnabledCullFace()) {
