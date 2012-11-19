@@ -47,6 +47,8 @@ public:
   _cullFace(true),
   _culledFace(GLCullFace::back())
   {}
+
+  ~GLState() {}
   
   void enableDepthTest() { _depthTest = true; }
   void disableDepthTest() { _depthTest = false; }
