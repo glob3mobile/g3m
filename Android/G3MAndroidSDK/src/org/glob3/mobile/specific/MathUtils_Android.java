@@ -279,4 +279,18 @@ public final class MathUtils_Android
    }
 
 
+   @Override
+   public double min(final double d1,
+                     final double d2) {
+      return (d1 < d2) ? d1 : d2;
+   }
+
+
+   @Override
+   public double max(final double d1,
+                     final double d2) {
+      return (d1 > d2) ? d1 : d2;
+   }
+
+
 }

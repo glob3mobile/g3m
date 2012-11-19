@@ -483,7 +483,6 @@ public class SceneJSShapesParser
   
 	processedKeys += parseCommons(jsonObject, node);
   
-	int ____DIEGO_AT_WORK;
 	JSONString jsUri = jsonObject.getAsString("uri");
 	if (jsUri != null)
 	{

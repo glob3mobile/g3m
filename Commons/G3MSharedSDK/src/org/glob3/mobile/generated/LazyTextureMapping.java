@@ -31,7 +31,9 @@ public class LazyTextureMapping extends TextureMapping
 	}
   }
 
-  public LazyTextureMapping(LazyTextureMappingInitializer initializer, TexturesHandler texturesHandler, boolean ownedTexCoords)
+  private final boolean _transparent;
+
+  public LazyTextureMapping(LazyTextureMappingInitializer initializer, TexturesHandler texturesHandler, boolean ownedTexCoords, boolean transparent)
   {
 	  _initializer = initializer;
 	  _glTextureId = null;
@@ -41,6 +43,7 @@ public class LazyTextureMapping extends TextureMapping
 	  _scale = new MutableVector2D(1,1);
 	  _texturesHandler = texturesHandler;
 	  _ownedTexCoords = ownedTexCoords;
+	  _transparent = transparent;
 
   }
 
@@ -105,6 +108,13 @@ public class LazyTextureMapping extends TextureMapping
   public final IGLTextureId getGLTextureId()
   {
 	return _glTextureId;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isTransparent(const RenderContext* rc) const
+  public final boolean isTransparent(RenderContext rc)
+  {
+	return _transparent;
   }
 
 }

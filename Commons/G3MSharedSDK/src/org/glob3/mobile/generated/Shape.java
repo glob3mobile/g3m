@@ -53,8 +53,6 @@ public abstract class Shape
 	return _transformMatrix;
   }
 
-//  std::string _id;
-
   protected void cleanTransformMatrix()
   {
 	if (_transformMatrix != null)
@@ -73,10 +71,6 @@ public abstract class Shape
 	  _transformMatrix = null;
 
   }
-
-//  void setId(const std::string& id) {
-//    _id = id;
-//  }
 
   public void dispose()
   {
@@ -172,5 +166,7 @@ public abstract class Shape
   public abstract boolean isReadyToRender(RenderContext rc);
 
   public abstract void rawRender(RenderContext rc);
+
+  public abstract boolean isTransparent(RenderContext rc);
 
 }

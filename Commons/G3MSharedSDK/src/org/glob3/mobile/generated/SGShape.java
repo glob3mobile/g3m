@@ -47,4 +47,11 @@ public class SGShape extends Shape
 	_node.render(rc);
   }
 
+  public final boolean isTransparent(RenderContext rc)
+  {
+	int __DIEGO_AT_WORK;
+  //  return _node->isTransparent(rc);
+	return false;
+  }
+
 }

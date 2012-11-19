@@ -67,7 +67,7 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
   
 	IndexedMesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, Vector3D.zero(), vertices.create(), indices.create(), 1);
   
-	TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true);
+	TextureMapping texMap = new SimpleTextureMapping(texId, texCoords.create(), true, false);
   
 	_quadMesh = new TexturedMesh(im, true, texMap, true, false);
   

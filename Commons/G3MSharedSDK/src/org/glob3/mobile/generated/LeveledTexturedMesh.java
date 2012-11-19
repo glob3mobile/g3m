@@ -169,9 +169,30 @@ public class LeveledTexturedMesh extends Mesh
 	return null;
   }
 
+
+  //void LeveledTexturedMesh::setGLTextureIdForInversedLevel(int inversedLevel,
+  //                                                         const const GLTextureId*glTextureId) {
+  //  const int level = _mappings->size() - inversedLevel - 1;
+  //  setGLTextureIdForLevel(level, glTextureId);
+  //}
+  
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean isTransparent(const RenderContext* rc) const
+  public final boolean isTransparent(RenderContext rc)
+  {
+	if (_mesh.isTransparent(rc))
+	{
+	  return true;
+	}
+  
+	LazyTextureMapping mapping = getCurrentTextureMapping();
+  
+	if (mapping == null)
+	{
+	  return false;
+	}
+  
+	return mapping.isTransparent(rc);
+  }
+
 }
-//void LeveledTexturedMesh::setGLTextureIdForInversedLevel(int inversedLevel,
-//                                                         const const GLTextureId*glTextureId) {
-//  const int level = _mappings->size() - inversedLevel - 1;
-//  setGLTextureIdForLevel(level, glTextureId);
-//}

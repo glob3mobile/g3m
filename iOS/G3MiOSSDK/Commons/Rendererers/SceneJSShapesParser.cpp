@@ -242,7 +242,6 @@ SGLayerNode* SceneJSShapesParser::createLayerNode(JSONObject* jsonObject) const 
 
   processedKeys += parseCommons(jsonObject, node);
 
-  int ____DIEGO_AT_WORK;
   JSONString* jsUri = jsonObject->getAsString("uri");
   if (jsUri != NULL) {
     node->setUri( jsUri->value() );

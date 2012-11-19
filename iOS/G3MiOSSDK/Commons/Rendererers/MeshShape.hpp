@@ -30,18 +30,13 @@ public:
 
   }
   
-//  MeshShape(Geodetic3D* position,
-//            Mesh* mesh) :
-//  Shape(position),
-//  _mesh(mesh) {
-//
-//  }
-
   bool isReadyToRender(const RenderContext* rc);
 
   void rawRender(const RenderContext* rc);
 
   virtual ~MeshShape();
+
+  bool isTransparent(const RenderContext* rc);
 
 };
 

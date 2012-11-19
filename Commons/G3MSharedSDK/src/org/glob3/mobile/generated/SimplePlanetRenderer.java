@@ -166,12 +166,10 @@ public class SimplePlanetRenderer extends LeafRenderer
 	  }
 	  texC = createTextureCoordinates();
   
-	  TextureMapping texMap = new SimpleTextureMapping(texId, texC, true);
+	  TextureMapping texMap = new SimpleTextureMapping(texId, texC, true, false);
   
 	  _mesh = new TexturedMesh(im, true, texMap, true, false);
 	}
-  
-  
   
 	return true;
   }

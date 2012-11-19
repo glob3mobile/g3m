@@ -8,19 +8,22 @@ public class GLFeature
 
   public static int polygonOffsetFill()
   {
-	  return _polygonOffsetFill;
+	return _polygonOffsetFill;
   }
+
   public static int depthTest()
   {
-	  return _depthTest;
+	return _depthTest;
   }
+
   public static int blend()
   {
-	  return _blend;
+	return _blend;
   }
+
   public static int cullFace()
   {
-	  return _cullFace;
+	return _cullFace;
   }
 
   public static void init(INativeGL ngl)

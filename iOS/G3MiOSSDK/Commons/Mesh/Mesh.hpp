@@ -26,7 +26,9 @@ public:
   virtual void render(const RenderContext* rc) const = 0;
   
   virtual Extent* getExtent() const = 0;
-  
+
+  virtual bool isTransparent(const RenderContext* rc) const = 0;
+
 };
 
 

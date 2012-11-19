@@ -55,4 +55,12 @@ public abstract class Extent
 //ORIGINAL LINE: virtual boolean touchesBox(const Box *box) const = 0;
   public abstract boolean touchesBox(Box box);
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual Extent* mergedWith(const Extent* that) const = 0;
+  public abstract Extent mergedWith(Extent that);
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual Extent* mergedWithBox(const Box* that) const = 0;
+  public abstract Extent mergedWithBox(Box that);
+
 }

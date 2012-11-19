@@ -15,6 +15,7 @@ public class RenderContext extends Context
   private TexturesHandler _texturesHandler;
   private TextureBuilder _textureBuilder;
   private ITimer _frameStartTimer;
+
   private java.util.ArrayList<OrderedRenderable> _orderedRenderables;
 
   public RenderContext(FrameTasksExecutor frameTasksExecutor, IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, GL gl, Camera currentCamera, Camera nextCamera, TexturesHandler texturesHandler, TextureBuilder textureBuilder, IDownloader downloader, EffectsScheduler scheduler, ITimer frameStartTimer, IStorage storage)
@@ -102,7 +103,8 @@ public class RenderContext extends Context
   								 @Override
   								 public int compare(final OrderedRenderable or1,
   													final OrderedRenderable or2) {
-  								   return Double.compare(or2.distanceFromEye(), or1.distanceFromEye());
+  								   return Double.compare(or2.squaredDistanceFromEye(),
+  														 or1.squaredDistanceFromEye());
   								 }
   							   });
 	}
@@ -110,6 +112,8 @@ public class RenderContext extends Context
 	return _orderedRenderables;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: void addOrderedRenderable(OrderedRenderable* orderedRenderable) const
   public final void addOrderedRenderable(OrderedRenderable orderedRenderable)
   {
 	if (_orderedRenderables == null)

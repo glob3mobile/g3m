@@ -185,7 +185,8 @@ private:
   TexturesHandler*    _texturesHandler;
   TextureBuilder*     _textureBuilder;
   ITimer*             _frameStartTimer;
-  std::vector<OrderedRenderable*>* _orderedRenderables;
+  
+  mutable std::vector<OrderedRenderable*>* _orderedRenderables;
 
 public:
   RenderContext(FrameTasksExecutor* frameTasksExecutor,
@@ -262,7 +263,7 @@ public:
    */
   std::vector<OrderedRenderable*>* getSortedOrderedRenderables() const;
 
-  void addOrderedRenderable(OrderedRenderable* orderedRenderable);
+  void addOrderedRenderable(OrderedRenderable* orderedRenderable) const;
 
 };
 
