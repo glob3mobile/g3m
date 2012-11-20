@@ -32,7 +32,6 @@ public class G3MAndroidDemoActivity
          extends
             G3MBaseActivity {
 
-   @Override
    protected void initializeWidget(final G3MWidget_Android widget) {
       final LayerSet layerSet = new LayerSet();
 
@@ -246,5 +245,12 @@ public class G3MAndroidDemoActivity
                periodicalTasks, //
                incrementalTileQuality);
 
+   }
+
+
+   @Override
+   protected G3MWidget_Android getWidgetAndroid() {
+      // TODO Auto-generated method stub
+      return null;
    }
 }
