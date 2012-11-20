@@ -34,6 +34,11 @@ public class TrailsRenderer extends LeafRenderer
 
   }
 
+  public final void onDestroy(InitializationContext ic)
+  {
+
+  }
+
   public final void initialize(InitializationContext ic)
   {
 
