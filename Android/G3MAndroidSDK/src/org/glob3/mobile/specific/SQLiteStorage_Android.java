@@ -310,6 +310,12 @@ public final class SQLiteStorage_Android
 
 
    @Override
+   public void onDestroy(final InitializationContext ic) {
+      final int __DIEGO_AT_WORK;
+   }
+
+
+   @Override
    public synchronized boolean isAvailable() {
       return (_readDB != null) && (_writeDB != null);
    }

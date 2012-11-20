@@ -297,4 +297,10 @@ public final class Downloader_Android
    public void onPause(final InitializationContext ic) {
    }
 
+
+   @Override
+   public void onDestroy(final InitializationContext ic) {
+      final int __DIEGO_AT_WORK;
+   }
+
 }
