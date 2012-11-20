@@ -72,6 +72,16 @@ public:
 
   void render(const RenderContext* rc);
 
+  SGShape* getShape() const {
+    // return (_parent == NULL) ? _shape : _parent->getShape();
+    if (_shape != NULL) {
+      return _shape;
+    }
+    if (_parent != NULL) {
+      return _parent->getShape();
+    }
+    return NULL;
+  }
 };
 
 #endif

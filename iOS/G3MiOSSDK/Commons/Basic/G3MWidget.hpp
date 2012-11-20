@@ -105,6 +105,8 @@ public:
 
   void onResume();
 
+  void onDestroy();
+
   GL* getGL() const {
     return _gl;
   }

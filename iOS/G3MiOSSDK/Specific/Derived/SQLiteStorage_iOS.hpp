@@ -65,6 +65,10 @@ public:
   void onPause(const InitializationContext* ic) {
     
   }
+
+  void onDestroy(const InitializationContext* ic) {
+
+  }
   
   bool isAvailable() {
     return (_readDB != NULL) && (_writeDB != NULL);

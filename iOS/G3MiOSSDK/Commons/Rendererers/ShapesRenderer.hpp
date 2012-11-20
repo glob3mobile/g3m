@@ -52,6 +52,11 @@ public:
   }
 
   void onPause(const InitializationContext* ic) {
+
+  }
+
+  void onDestroy(const InitializationContext* ic) {
+
   }
 
   void initialize(const InitializationContext* ic) {

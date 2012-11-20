@@ -20,9 +20,6 @@ public:
   
   virtual void setEnable(bool enable) = 0;
   
-  virtual void onResume(const InitializationContext* ic) = 0;
-  
-  virtual void onPause(const InitializationContext* ic) = 0;
   
   virtual void initialize(const InitializationContext* ic) = 0;
   
@@ -46,6 +43,14 @@ public:
   virtual void stop() = 0;
   
   virtual ~Renderer() { };
+
+  // Android activity lifecyle
+  virtual void onResume(const InitializationContext* ic) = 0;
+
+  virtual void onPause(const InitializationContext* ic) = 0;
+
+  virtual void onDestroy(const InitializationContext* ic) = 0;
+
 };
 
 

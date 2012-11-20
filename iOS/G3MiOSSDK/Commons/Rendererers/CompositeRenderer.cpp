@@ -103,6 +103,13 @@ void CompositeRenderer::onPause(const InitializationContext* ic) {
   }
 }
 
+void CompositeRenderer::onDestroy(const InitializationContext* ic) {
+  const int rendersSize = _renderers.size();
+  for (int i = 0; i < rendersSize; i++) {
+    _renderers[i]->onDestroy(ic);
+  }
+}
+
 bool CompositeRenderer::isEnable() const {
   if (!_enable) {
     return false;

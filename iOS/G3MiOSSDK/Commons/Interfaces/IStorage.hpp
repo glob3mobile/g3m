@@ -52,6 +52,9 @@ public:
   virtual void onResume(const InitializationContext* ic) = 0;
   
   virtual void onPause(const InitializationContext* ic) = 0;
+
+  virtual void onDestroy(const InitializationContext* ic) = 0;
+  
   
   virtual bool isAvailable() = 0;
   

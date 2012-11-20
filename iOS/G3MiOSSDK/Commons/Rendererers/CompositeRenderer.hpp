@@ -57,6 +57,8 @@ public:
   void onResume(const InitializationContext* ic);
   
   void onPause(const InitializationContext* ic);
+
+  void onDestroy(const InitializationContext* ic);
   
 };
 

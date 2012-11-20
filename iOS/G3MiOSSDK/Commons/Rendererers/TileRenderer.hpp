@@ -384,6 +384,10 @@ public:
     
   }
 
+  void onDestroy(const InitializationContext* ic) {
+
+  }
+
   void setEnable(bool enable) {
 #ifdef C_CODE
     LeafRenderer::setEnable(enable);

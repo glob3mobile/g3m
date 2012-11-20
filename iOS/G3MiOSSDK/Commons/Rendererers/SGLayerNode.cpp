@@ -8,13 +8,23 @@
 
 #include "SGLayerNode.hpp"
 
+//#include "IGLTextureId.hpp"
 
 void SGLayerNode::prepareRender(const RenderContext* rc) {
+
+//  SGShape* shape = getShape();
+
+//  IGLTextureId* texId = getTextureId();
+//  if (texId != ) {
+//    
+//  }
+
 
   SGNode::prepareRender(rc);
 }
 
 void SGLayerNode::cleanUpRender(const RenderContext* rc) {
-
   SGNode::cleanUpRender(rc);
+
+  
 }
