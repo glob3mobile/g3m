@@ -261,14 +261,12 @@ const std::string CachedDownloader::statistics() {
 
 void CachedDownloader::onResume(const InitializationContext* ic) {
   _downloader->onResume(ic);
-  IStorage::instance()->onResume(ic);
 }
 
 void CachedDownloader::onPause(const InitializationContext* ic) {
   _downloader->onPause(ic);
-  IStorage::instance()->onPause(ic);
 }
 
 void CachedDownloader::onDestroy(const InitializationContext* ic) {
-  IStorage::instance()->onDestroy(ic);
+  _downloader->onDestroy(ic);
 }

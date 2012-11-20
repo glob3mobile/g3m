@@ -78,11 +78,6 @@ public final class G3MWidget_Android
    private boolean                                        _incrementalTileQuality;
 
 
-   //   private boolean                                        _isPaused             = false;
-   //   private final LinkedList<Runnable>                     _pausedRunnableQueue  = new LinkedList<Runnable>();
-   //   private final Object                                   _pausedMutex          = new Object();
-
-
    public G3MWidget_Android(final Context context) {
       this(context, null);
    }
@@ -414,33 +409,17 @@ public final class G3MWidget_Android
 
    @Override
    public void onResume() {
+      super.onResume();
+
       if (_es2renderer != null) {
          super.onResume();
          _g3mWidget.onResume();
       }
-
-      //      synchronized (_pausedMutex) {
-      //         _isPaused = false;
-      //
-      //         // drain queue
-      //         for (final Runnable runnable : _pausedRunnableQueue) {
-      //            super.queueEvent(runnable);
-      //         }
-      //         _pausedRunnableQueue.clear();
-      //      }
    }
 
 
-   @Override
-   public void queueEvent(final Runnable runnable) {
-      //      synchronized (_pausedMutex) {
-      //         if (_isPaused) {
-      //            _pausedRunnableQueue.add(runnable);
-      //         }
-      //         else {
-      super.queueEvent(runnable);
-      //         }
-      //      }
+   public void onDestroy() {
+      getG3MWidget().onDestroy();
    }
 
 
@@ -501,8 +480,4 @@ public final class G3MWidget_Android
    }
 
 
-   public void onDestroy() {
-      getG3MWidget().onDestroy();
-
-   }
 }

@@ -370,37 +370,37 @@ void G3MWidget::render() {
 
 }
 
+
+
 void G3MWidget::onPause() {
+  _effectsScheduler->onPause(_initializationContext);
+
   _mainRenderer->onPause(_initializationContext);
   _busyRenderer->onPause(_initializationContext);
 
-  _effectsScheduler->onPause(_initializationContext);
-
-  if (IDownloader::instance() != NULL) {
-    IDownloader::instance()->onPause(_initializationContext);
-  }
+  IDownloader::instance()->onPause(_initializationContext);
+  IStorage::instance()->onPause(_initializationContext);
 }
 
 void G3MWidget::onResume() {
+  IStorage::instance()->onResume(_initializationContext);
+
+  IDownloader::instance()->onResume(_initializationContext);
+
   _mainRenderer->onResume(_initializationContext);
   _busyRenderer->onResume(_initializationContext);
 
   _effectsScheduler->onResume(_initializationContext);
-
-  if (IDownloader::instance() != NULL) {
-    IDownloader::instance()->onResume(_initializationContext);
-  }
 }
 
 void G3MWidget::onDestroy() {
+  _effectsScheduler->onDestroy(_initializationContext);
+
   _mainRenderer->onDestroy(_initializationContext);
   _busyRenderer->onDestroy(_initializationContext);
 
-  _effectsScheduler->onDestroy(_initializationContext);
-
-  if (IDownloader::instance() != NULL) {
-    IDownloader::instance()->onDestroy(_initializationContext);
-  }
+  IDownloader::instance()->onDestroy(_initializationContext);
+  IStorage::instance()->onDestroy(_initializationContext);
 }
 
 void G3MWidget::addPeriodicalTask(PeriodicalTask* periodicalTask) {
