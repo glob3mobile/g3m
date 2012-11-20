@@ -278,6 +278,11 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 
   }
 
+  public final void onDestroy(InitializationContext ic)
+  {
+
+  }
+
   public final void setEnable(boolean enable)
   {
 	super.setEnable(enable);

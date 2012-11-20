@@ -110,5 +110,9 @@ public class CameraRenderer extends LeafRenderer
 
   }
 
+  public final void onDestroy(InitializationContext ic)
+  {
+
+  }
 
 }

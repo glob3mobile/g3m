@@ -178,4 +178,13 @@ public class CompositeRenderer extends Renderer
 	}
   }
 
+  public final void onDestroy(InitializationContext ic)
+  {
+	final int rendersSize = _renderers.size();
+	for (int i = 0; i < rendersSize; i++)
+	{
+	  _renderers.get(i).onDestroy(ic);
+	}
+  }
+
 }

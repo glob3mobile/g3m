@@ -25,9 +25,6 @@ public abstract class Renderer
 
   public abstract void setEnable(boolean enable);
 
-  public abstract void onResume(InitializationContext ic);
-
-  public abstract void onPause(InitializationContext ic);
 
   public abstract void initialize(InitializationContext ic);
 
@@ -51,4 +48,12 @@ public abstract class Renderer
   public void dispose()
   {
   }
+
+  // Android activity lifecyle
+  public abstract void onResume(InitializationContext ic);
+
+  public abstract void onPause(InitializationContext ic);
+
+  public abstract void onDestroy(InitializationContext ic);
+
 }

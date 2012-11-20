@@ -57,6 +57,12 @@ public class ShapesRenderer extends LeafRenderer
 
   public final void onPause(InitializationContext ic)
   {
+
+  }
+
+  public final void onDestroy(InitializationContext ic)
+  {
+
   }
 
   public final void initialize(InitializationContext ic)

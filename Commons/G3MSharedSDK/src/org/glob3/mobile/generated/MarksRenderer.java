@@ -225,4 +225,9 @@ public class MarksRenderer extends LeafRenderer
 
   }
 
+  public final void onDestroy(InitializationContext ic)
+  {
+
+  }
+
 }

@@ -41,7 +41,7 @@ public class SGTextureNode extends SGNode
   
 	if (_initializationContext != null)
 	{
-	  layer.initialize(_initializationContext);
+	  layer.initialize(_initializationContext, _shape);
 	}
   }
 

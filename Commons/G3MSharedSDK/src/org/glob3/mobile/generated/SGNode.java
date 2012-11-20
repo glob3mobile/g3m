@@ -21,6 +21,8 @@ package org.glob3.mobile.generated;
 //class InitializationContext;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class RenderContext;
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class SGShape;
 
 public class SGNode
 {
@@ -37,6 +39,8 @@ public class SGNode
   }
 
   protected InitializationContext _initializationContext;
+
+  protected SGShape _shape;
 
   protected void prepareRender(RenderContext rc)
   {
@@ -57,6 +61,7 @@ public class SGNode
   public SGNode()
   {
 	  _initializationContext = null;
+	  _shape = null;
 	  _parent = null;
 
   }
@@ -72,15 +77,16 @@ public class SGNode
 	}
   }
 
-  public final void initialize(InitializationContext ic)
+  public final void initialize(InitializationContext ic, SGShape shape)
   {
 	_initializationContext = ic;
+	_shape = shape;
   
 	final int childrenCount = _children.size();
 	for (int i = 0; i < childrenCount; i++)
 	{
 	  SGNode child = _children.get(i);
-	  child.initialize(ic);
+	  child.initialize(ic, shape);
 	}
   }
 
@@ -90,7 +96,7 @@ public class SGNode
 	_children.add(child);
 	if (_initializationContext != null)
 	{
-	  child.initialize(_initializationContext);
+	  child.initialize(_initializationContext, _shape);
 	}
   }
 
@@ -135,4 +141,19 @@ public class SGNode
 	cleanUpRender(rc);
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: SGShape* getShape() const
+  public final SGShape getShape()
+  {
+	// return (_parent == NULL) ? _shape : _parent->getShape();
+	if (_shape != null)
+	{
+	  return _shape;
+	}
+	if (_parent != null)
+	{
+	  return _parent.getShape();
+	}
+	return null;
+  }
 }

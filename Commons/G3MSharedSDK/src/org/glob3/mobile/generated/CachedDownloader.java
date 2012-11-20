@@ -145,16 +145,19 @@ public class CachedDownloader extends IDownloader
 
   public final void onResume(InitializationContext ic)
   {
-	//IDownloader::instance()->onResume(ic);
 	_downloader.onResume(ic);
 	IStorage.instance().onResume(ic);
   }
 
   public final void onPause(InitializationContext ic)
   {
-	//IDownloader::instance()->onPause(ic);
 	_downloader.onPause(ic);
 	IStorage.instance().onPause(ic);
+  }
+
+  public final void onDestroy(InitializationContext ic)
+  {
+	IStorage.instance().onDestroy(ic);
   }
 
 }

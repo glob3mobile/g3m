@@ -188,4 +188,10 @@ public class EffectsScheduler
 
   }
 
+  public final void onDestroy(InitializationContext ic)
+  {
+
+  }
+
+
 }

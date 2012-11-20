@@ -233,9 +233,9 @@ public class G3MWidget
   
 	_effectsScheduler.onPause(_initializationContext);
   
-	  if (IDownloader.instance() != null)
-	  {
-		  IDownloader.instance().onPause(_initializationContext);
+	if (IDownloader.instance() != null)
+	{
+	  IDownloader.instance().onPause(_initializationContext);
 	}
   }
 
@@ -246,9 +246,22 @@ public class G3MWidget
   
 	_effectsScheduler.onResume(_initializationContext);
   
-	  if (IDownloader.instance() != null)
-	  {
-		  IDownloader.instance().onResume(_initializationContext);
+	if (IDownloader.instance() != null)
+	{
+	  IDownloader.instance().onResume(_initializationContext);
+	}
+  }
+
+  public final void onDestroy()
+  {
+	_mainRenderer.onDestroy(_initializationContext);
+	_busyRenderer.onDestroy(_initializationContext);
+  
+	_effectsScheduler.onDestroy(_initializationContext);
+  
+	if (IDownloader.instance() != null)
+	{
+	  IDownloader.instance().onDestroy(_initializationContext);
 	}
   }
 

@@ -46,6 +46,8 @@ public abstract class IDownloader
 
   public abstract void onPause(InitializationContext ic);
 
+  public abstract void onDestroy(InitializationContext ic);
+
   public abstract void start();
 
   public abstract void stop();

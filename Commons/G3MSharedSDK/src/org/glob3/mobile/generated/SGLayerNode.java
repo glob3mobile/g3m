@@ -29,16 +29,28 @@ public class SGLayerNode extends SGNode
   private String _wrapS;
   private String _wrapT;
 
+
+  ///#include "IGLTextureId.hpp"
+  
   protected void prepareRender(RenderContext rc)
   {
+  
+  //  SGShape* shape = getShape();
+  
+  //  IGLTextureId* texId = getTextureId();
+  //  if (texId != ) {
+  //
+  //  }
+  
   
 	super.prepareRender(rc);
   }
 
   protected void cleanUpRender(RenderContext rc)
   {
-  
 	super.cleanUpRender(rc);
+  
+  
   }
 
 

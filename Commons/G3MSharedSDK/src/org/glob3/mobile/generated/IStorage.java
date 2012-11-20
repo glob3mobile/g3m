@@ -56,6 +56,9 @@ public abstract class IStorage
 
   public abstract void onPause(InitializationContext ic);
 
+  public abstract void onDestroy(InitializationContext ic);
+
+
   public abstract boolean isAvailable();
 
 
