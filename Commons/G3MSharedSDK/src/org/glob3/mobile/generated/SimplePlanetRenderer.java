@@ -242,5 +242,9 @@ public class SimplePlanetRenderer extends LeafRenderer
 
   }
 
+  public final void onDestroy(InitializationContext ic)
+  {
+
+  }
 
 }

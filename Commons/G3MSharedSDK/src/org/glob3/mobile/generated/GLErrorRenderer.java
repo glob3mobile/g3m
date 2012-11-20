@@ -77,4 +77,9 @@ public class GLErrorRenderer extends LeafRenderer
 
   }
 
+  public final void onDestroy(InitializationContext ic)
+  {
+
+  }
+
 }

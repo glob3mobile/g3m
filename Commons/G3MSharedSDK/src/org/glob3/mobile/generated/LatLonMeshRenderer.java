@@ -89,4 +89,9 @@ public class LatLonMeshRenderer extends LeafRenderer
 
   }
 
+  public final void onDestroy(InitializationContext ic)
+  {
+
+  }
+
 }

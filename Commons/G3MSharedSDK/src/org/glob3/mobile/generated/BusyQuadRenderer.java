@@ -187,6 +187,11 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
 
   }
 
+  public final void onDestroy(InitializationContext ic)
+  {
+
+  }
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: void unusedMethod() const
   public final void unusedMethod()

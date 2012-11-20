@@ -203,4 +203,9 @@ public class DummyRenderer extends LeafRenderer
 
   }
 
+  public final void onDestroy(InitializationContext ic)
+  {
+
+  }
+
 }
