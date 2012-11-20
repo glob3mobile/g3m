@@ -389,10 +389,6 @@ public final class G3MWidget_Android
 
    @Override
    public void onPause() {
-      //      synchronized (_pausedMutex) {
-      //         _isPaused = true;
-      //      }
-
       final int __TODO_check_onpause;
       if (_es2renderer != null) {
          _g3mWidget.onPause();
@@ -409,8 +405,6 @@ public final class G3MWidget_Android
 
    @Override
    public void onResume() {
-      super.onResume();
-
       if (_es2renderer != null) {
          super.onResume();
          _g3mWidget.onResume();
