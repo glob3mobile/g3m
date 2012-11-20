@@ -228,41 +228,36 @@ public class G3MWidget
 
   public final void onPause()
   {
+	_effectsScheduler.onPause(_initializationContext);
+  
 	_mainRenderer.onPause(_initializationContext);
 	_busyRenderer.onPause(_initializationContext);
   
-	_effectsScheduler.onPause(_initializationContext);
-  
-	if (IDownloader.instance() != null)
-	{
-	  IDownloader.instance().onPause(_initializationContext);
-	}
+	IDownloader.instance().onPause(_initializationContext);
+	IStorage.instance().onPause(_initializationContext);
   }
 
   public final void onResume()
   {
+	IStorage.instance().onResume(_initializationContext);
+  
+	IDownloader.instance().onResume(_initializationContext);
+  
 	_mainRenderer.onResume(_initializationContext);
 	_busyRenderer.onResume(_initializationContext);
   
 	_effectsScheduler.onResume(_initializationContext);
-  
-	if (IDownloader.instance() != null)
-	{
-	  IDownloader.instance().onResume(_initializationContext);
-	}
   }
 
   public final void onDestroy()
   {
+	_effectsScheduler.onDestroy(_initializationContext);
+  
 	_mainRenderer.onDestroy(_initializationContext);
 	_busyRenderer.onDestroy(_initializationContext);
   
-	_effectsScheduler.onDestroy(_initializationContext);
-  
-	if (IDownloader.instance() != null)
-	{
-	  IDownloader.instance().onDestroy(_initializationContext);
-	}
+	IDownloader.instance().onDestroy(_initializationContext);
+	IStorage.instance().onDestroy(_initializationContext);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

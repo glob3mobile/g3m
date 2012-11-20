@@ -146,18 +146,16 @@ public class CachedDownloader extends IDownloader
   public final void onResume(InitializationContext ic)
   {
 	_downloader.onResume(ic);
-	IStorage.instance().onResume(ic);
   }
 
   public final void onPause(InitializationContext ic)
   {
 	_downloader.onPause(ic);
-	IStorage.instance().onPause(ic);
   }
 
   public final void onDestroy(InitializationContext ic)
   {
-	IStorage.instance().onDestroy(ic);
+	_downloader.onDestroy(ic);
   }
 
 }
