@@ -159,8 +159,8 @@ public final class G3MWidget_Android
       final IMathUtils mathUtils = new MathUtils_Android();
       final IJSONParser jsonParser = new JSONParser_Android();
       final IStorage storage = new SQLiteStorage_Android("g3m.cache", this.getContext());
-      final int connectTimeout = 60000;
-      final int readTimeout = 60000;
+      final int connectTimeout = 20000;
+      final int readTimeout = 30000;
       final boolean saveInBackground = true;
       final IDownloader downloader = new CachedDownloader(new Downloader_Android(8, connectTimeout, readTimeout),
                saveInBackground);
