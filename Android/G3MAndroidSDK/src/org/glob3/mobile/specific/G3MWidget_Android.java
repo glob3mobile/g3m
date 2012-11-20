@@ -499,4 +499,10 @@ public final class G3MWidget_Android
    public void setCameraPitch(final Angle angle) {
       getG3MWidget().setCameraPitch(angle);
    }
+
+
+   public void onDestroy() {
+      getG3MWidget().onDestroy();
+
+   }
 }
