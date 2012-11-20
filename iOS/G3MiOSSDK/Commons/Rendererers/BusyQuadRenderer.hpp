@@ -72,6 +72,10 @@ public:
     
   }
 
+  void onDestroy(const InitializationContext* ic) {
+
+  }
+
   void unusedMethod() const {
     
   }

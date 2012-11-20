@@ -76,7 +76,10 @@ public:
     
   }
 
-  
+  void onDestroy(const InitializationContext* ic) {
+
+  }
+
 };
 
 

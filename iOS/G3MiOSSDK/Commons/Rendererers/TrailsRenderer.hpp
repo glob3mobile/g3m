@@ -103,6 +103,10 @@ public:
 
   }
 
+  void onDestroy(const InitializationContext* ic) {
+
+  }
+
   void initialize(const InitializationContext* ic) {
 
   }
