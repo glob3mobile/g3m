@@ -58,6 +58,11 @@ public final class IndexedDBStorage_WebGL
    }
 
 
+   @Override
+   public void onDestroy(final InitializationContext ic) {
+   }
+
+
    private native void jsCreateOrOpenDB() /*-{
 		//		debugger;
 		var thisInstance = this;
@@ -125,5 +130,6 @@ public final class IndexedDBStorage_WebGL
                          final IImage image,
                          final boolean saveInBackground) {
    }
+
 
 }

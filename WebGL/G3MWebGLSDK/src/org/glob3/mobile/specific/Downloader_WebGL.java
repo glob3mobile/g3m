@@ -245,13 +245,16 @@ public final class Downloader_WebGL
 
    @Override
    public void onResume(final InitializationContext ic) {
-
    }
 
 
    @Override
    public void onPause(final InitializationContext ic) {
+   }
 
+
+   @Override
+   public void onDestroy(final InitializationContext ic) {
    }
 
 }
