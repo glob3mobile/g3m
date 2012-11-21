@@ -31,6 +31,7 @@ public class GEOJSONDownloadListener implements IBufferDownloadListener
 	private static final String DENOMINATION = "DENOMINACI";
 	private static final String CLASE = "CLASE";
 	private static final String URLICON = "URLICON";
+	private static final String URLWEB = "URL";
 
 
 	private MarksRenderer _marksRenderer;
@@ -86,8 +87,13 @@ public class GEOJSONDownloadListener implements IBufferDownloadListener
 		JSONObject jsonGeometry = point.getAsObject(GEOMETRY);
 		JSONArray jsonCoordinates = jsonGeometry.getAsArray(COORDINATES);
     
+		final Angle latitude = Angle.fromDegrees(jsonCoordinates.getAsNumber(1).doubleValue());
+		final Angle longitude = Angle.fromDegrees(jsonCoordinates.getAsNumber(0).doubleValue());
+    
 		JSONBaseObject denominaci = jsonProperties.get(DENOMINATION);
 		JSONBaseObject clase = jsonProperties.get(CLASE);
+    
+		Mark mark;
     
 		if (denominaci != null && clase != null)
 		{
@@ -97,20 +103,20 @@ public class GEOJSONDownloadListener implements IBufferDownloadListener
 			name.addString(" ");
 			name.addString(denominaci.asString().value());
     
-			final Angle latitude = Angle.fromDegrees(jsonCoordinates.getAsNumber(1).doubleValue());
-			final Angle longitude = Angle.fromDegrees(jsonCoordinates.getAsNumber(0).doubleValue());
-    
-			Mark mark;
 			if (_icon.length() > 0)
 			{
-				mark = new Mark(name.getString(), new URL(_icon,false), new Geodetic3D(latitude, longitude, 0),null,10000);
+				mark = new Mark(name.getString(), new URL(_icon,false), new Geodetic3D(latitude, longitude, 0),jsonProperties.getAsString(URLWEB),10000);
 			}
 			else
 			{
-				mark = new Mark(name.getString(), new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",false), new Geodetic3D(latitude, longitude, 0),null,10000);
+				mark = new Mark(name.getString(), new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",false), new Geodetic3D(latitude, longitude, 0),jsonProperties.getAsString(URLWEB),10000);
 			}
-			_marksRenderer.addMark(mark);
 		}
+		else
+		{
+			mark = new Mark("Unknown POI", new URL("http://glob3m.glob3mobile.com/icons/markers/g3m.png",false), new Geodetic3D(latitude, longitude, 0),null,10000);
+		}
+		_marksRenderer.addMark(mark);
 	}
 
 }
