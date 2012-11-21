@@ -86,9 +86,12 @@ public class CircleShape extends MeshShape
 
   public final void setColor(Color color)
   {
-	_color = null;
-	_color = color;
-	cleanMesh();
+	if (_color != color)
+	{
+	  _color = null;
+	  _color = color;
+	  cleanMesh();
+	}
   }
 
 

@@ -65,22 +65,20 @@ public class CachedDownloader extends IDownloader
 	  // cache miss
 	  return _downloader.requestBuffer(url, priority, new BufferSaverDownloadListener(this, listener, deleteListener), true);
 	}
-	else
+  
+	// cache hit
+	_cacheHitsCounter++;
+  
+	listener.onDownload(url, cachedBuffer);
+  
+	if (deleteListener)
 	{
-	  // cache hit
-	  _cacheHitsCounter++;
-  
-	  listener.onDownload(url, cachedBuffer);
-  
-	  if (deleteListener)
-	  {
-		listener = null;
-	  }
-  
-	  if (cachedBuffer != null)
-		  cachedBuffer.dispose();
-	  return -1;
+	  listener = null;
 	}
+  
+	if (cachedBuffer != null)
+		cachedBuffer.dispose();
+	return -1;
   }
 
   public final long requestImage(URL url, long priority, IImageDownloadListener listener, boolean deleteListener)
@@ -93,22 +91,20 @@ public class CachedDownloader extends IDownloader
 	  // cache miss
 	  return _downloader.requestImage(url, priority, new ImageSaverDownloadListener(this, listener, deleteListener), true);
 	}
-	else
+  
+	// cache hit
+	_cacheHitsCounter++;
+  
+	listener.onDownload(url, cachedImage);
+  
+	if (deleteListener)
 	{
-	  // cache hit
-	  _cacheHitsCounter++;
-  
-	  listener.onDownload(url, cachedImage);
-  
-	  if (deleteListener)
-	  {
-		listener = null;
-	  }
-  
-	  if (cachedImage != null)
-		  cachedImage.dispose();
-	  return -1;
+	  listener = null;
 	}
+  
+	if (cachedImage != null)
+		cachedImage.dispose();
+	return -1;
   }
 
   public final void cancelRequest(long requestId)

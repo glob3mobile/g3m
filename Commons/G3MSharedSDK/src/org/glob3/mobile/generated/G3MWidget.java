@@ -217,6 +217,8 @@ public class G3MWidget
 	{
 	  EventContext ec = new EventContext(IFactory.instance(), IStringUtils.instance(), IThreadUtils.instance(), ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, IDownloader.instance(), _effectsScheduler, IStorage.instance());
   
+	  _nextCamera.resizeViewport(width, height);
+  
 	  _cameraRenderer.onResizeViewportEvent(ec, width, height);
   
 	  if (_mainRenderer.isEnable())

@@ -473,16 +473,14 @@ public class Tile
 	  {
 		return this;
 	  }
-	  else
+  
+	  for (int i = 0; i < _subtiles.size(); i++)
 	  {
-		for (int i = 0; i < _subtiles.size(); i++)
+		final Tile subtile = _subtiles.get(i);
+		final Tile subtileResult = subtile.getDeepestTileContaining(position);
+		if (subtileResult != null)
 		{
-		  final Tile subtile = _subtiles.get(i);
-		  final Tile subtileResult = subtile.getDeepestTileContaining(position);
-		  if (subtileResult != null)
-		  {
-			return subtileResult;
-		  }
+		  return subtileResult;
 		}
 	  }
 	}
