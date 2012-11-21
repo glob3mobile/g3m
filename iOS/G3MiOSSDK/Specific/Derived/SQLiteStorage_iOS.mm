@@ -14,6 +14,7 @@
 #include "ILogger.hpp"
 
 #include "IThreadUtils.hpp"
+#include "Context.hpp"
 
 NSString* SQLiteStorage_iOS::getDBPath() const {
   
@@ -152,7 +153,7 @@ public:
     
   }
   
-  void run() {
+  void run(const InitializationContext* ic) {
     _storage->rawSave(_table, _name, _contents);
   }
 };
@@ -177,8 +178,8 @@ void SQLiteStorage_iOS::saveBuffer(const URL& url,
                                     length: buffer_iOS->size()];
   
   if (saveInBackground) {
-    IThreadUtils::instance()->invokeInBackground(new SaverTask(this, @"buffer", name, contents),
-                                                 true);
+    _initializationContext->getThreadUtils()->invokeInBackground(new SaverTask(this, @"buffer", name, contents),
+                                                                 true);
   }
   else {
     rawSave(@"buffer", name, contents);
@@ -239,8 +240,8 @@ void SQLiteStorage_iOS::saveImage(const URL& url,
   //  }
   
   if (saveInBackground) {
-    IThreadUtils::instance()->invokeInBackground(new SaverTask(this, @"image", name, contents),
-                                                 true);
+    _initializationContext->getThreadUtils()->invokeInBackground(new SaverTask(this, @"image", name, contents),
+                                                                 true);
   }
   else {
     rawSave(@"image", name, contents);

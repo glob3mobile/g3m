@@ -359,14 +359,14 @@
 
     }
 
-    void run() {
+    void run(const InitializationContext* ic) {
       printf("Running initialization Task\n");
 
       [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegreesMinutes(37, 47),
                                                                 Angle::fromDegreesMinutes(-122, 25),
                                                                 1000000),
                                                      TimeInterval::fromSeconds(5));
-      /**/
+      /*
       NSString *filePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
                                                            ofType: @"json"];
       if (filePath) {
@@ -385,7 +385,7 @@
           _shapesRenderer->addShape(plane);
         }
       }
-      /**/
+      */
     }
   };
 

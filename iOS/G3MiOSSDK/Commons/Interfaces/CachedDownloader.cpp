@@ -18,14 +18,17 @@ class BufferSaverDownloadListener : public IBufferDownloadListener {
   CachedDownloader*        _downloader;
   IBufferDownloadListener* _listener;
   const bool               _deleteListener;
-
+  IStorage*                _storage;
+  
 public:
   BufferSaverDownloadListener(CachedDownloader* downloader,
                               IBufferDownloadListener* listener,
-                              bool deleteListener) :
+                              bool deleteListener,
+                              IStorage* storage) :
   _downloader(downloader),
   _listener(listener),
-  _deleteListener(deleteListener)
+  _deleteListener(deleteListener),
+  _storage(storage)
   {
 
   }
@@ -42,11 +45,11 @@ public:
   void saveBuffer(const URL& url,
                   const IByteBuffer* buffer) {
     if (buffer != NULL) {
-      if (IStorage::instance()->isAvailable()) {
+      if (_storage->isAvailable()) {
         //if (!_cacheStorage->containsBuffer(url)) {
         _downloader->countSave();
 
-        IStorage::instance()->saveBuffer(url, buffer, _downloader->saveInBackground());
+        _storage->saveBuffer(url, buffer, _downloader->saveInBackground());
         //}
       }
       else {
@@ -91,14 +94,17 @@ class ImageSaverDownloadListener : public IImageDownloadListener {
   CachedDownloader*       _downloader;
   IImageDownloadListener* _listener;
   const bool              _deleteListener;
+  IStorage*               _storage;
 
 public:
   ImageSaverDownloadListener(CachedDownloader* downloader,
                              IImageDownloadListener* listener,
-                             bool deleteListener) :
+                             bool deleteListener,
+                             IStorage* storage) :
   _downloader(downloader),
   _listener(listener),
-  _deleteListener(deleteListener)
+  _deleteListener(deleteListener),
+  _storage(storage)
   {
 
   }
@@ -115,11 +121,11 @@ public:
   void saveImage(const URL& url,
                  const IImage* image) {
     if (image != NULL) {
-      if (IStorage::instance()->isAvailable()) {
+      if (_storage->isAvailable()) {
         //if (!_cacheStorage->containsImage(url)) {
         _downloader->countSave();
 
-        IStorage::instance()->saveImage(url, image, _downloader->saveInBackground());
+        _storage->saveImage(url, image, _downloader->saveInBackground());
         //}
       }
       else {
@@ -178,14 +184,15 @@ long long CachedDownloader::requestImage(const URL& url,
                                          bool deleteListener) {
   _requestsCounter++;
 
-  const IImage* cachedImage = IStorage::instance()->isAvailable() ? IStorage::instance()->readImage(url) : NULL;
+  const IImage* cachedImage = _storage->isAvailable() ? _storage->readImage(url) : NULL;
   if (cachedImage == NULL) {
     // cache miss
     return _downloader->requestImage(url,
                                      priority,
                                      new ImageSaverDownloadListener(this,
                                                                     listener,
-                                                                    deleteListener),
+                                                                    deleteListener,
+                                                                    _storage),
                                      true);
   }
 
@@ -212,14 +219,15 @@ long long CachedDownloader::requestBuffer(const URL& url,
                                           bool deleteListener) {
   _requestsCounter++;
 
-  const IByteBuffer* cachedBuffer = IStorage::instance()->isAvailable() ? IStorage::instance()->readBuffer(url) : NULL;
+  const IByteBuffer* cachedBuffer = _storage->isAvailable() ? _storage->readBuffer(url) : NULL;
   if (cachedBuffer == NULL) {
     // cache miss
     return _downloader->requestBuffer(url,
                                       priority,
                                       new BufferSaverDownloadListener(this,
                                                                       listener,
-                                                                      deleteListener),
+                                                                      deleteListener,
+                                                                      _storage),
                                       true);
   }
 

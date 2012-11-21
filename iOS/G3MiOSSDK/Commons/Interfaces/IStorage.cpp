@@ -8,4 +8,6 @@
 
 #include "IStorage.hpp"
 
-IStorage* IStorage::_instance = NULL;
+void IStorage::initialize(const InitializationContext* ic) {
+  _initializationContext = ic;
+}

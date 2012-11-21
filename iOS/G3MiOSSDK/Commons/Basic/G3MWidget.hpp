@@ -71,14 +71,14 @@ public:
   static void initSingletons(ILogger*             logger,
                              IFactory*            factory,
                              const IStringUtils*  stringUtils,
-                             IThreadUtils*        threadUtils,
                              IStringBuilder*      stringBuilder,
                              IMathUtils*          mathUtils,
-                             IJSONParser*         jsonParser,
-                             IStorage*            storage,
-                             IDownloader*         downloader);
+                             IJSONParser*         jsonParser);
 
   static G3MWidget* create(INativeGL*                       nativeGL,
+                           IStorage*                        storage,
+                           IDownloader*                     downloader,
+                           IThreadUtils*                    threadUtils,
                            const Planet*                    planet,
                            std::vector<ICameraConstrainer*> cameraConstrainers,
                            CameraRenderer*                  cameraRenderer,
@@ -156,6 +156,10 @@ public:
   }
 
 private:
+  IStorage*            _storage;
+  IDownloader*         _downloader;
+  IThreadUtils*        _threadUtils;
+
   FrameTasksExecutor* _frameTasksExecutor;
   GL*                 _gl;
   const Planet*       _planet;
@@ -197,6 +201,9 @@ private:
   const InitializationContext* _initializationContext;
 
   G3MWidget(INativeGL*                       nativeGL,
+            IStorage*                        storage,
+            IDownloader*                     downloader,
+            IThreadUtils*                    threadUtils,
             const Planet*                    planet,
             std::vector<ICameraConstrainer*> cameraConstrainers,
             CameraRenderer*                  cameraRenderer,

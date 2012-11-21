@@ -8,7 +8,6 @@
 
 #include "IThreadUtils.hpp"
 
-#include <cstring>
-
-IThreadUtils* IThreadUtils::_instance = NULL;
-
+void IThreadUtils::initialize(const InitializationContext* ic) {
+  _initializationContext = ic;
+}

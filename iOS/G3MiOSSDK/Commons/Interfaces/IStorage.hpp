@@ -15,22 +15,23 @@
 class InitializationContext;
 
 class IStorage {
-private:
-    static IStorage* _instance;
-    
+protected:
+#ifdef C_CODE
+  const InitializationContext* _initializationContext;
+#endif
+#ifdef JAVA_CODE
+  protected InitializationContext _initializationContext;
+#endif
+
 public:
+  IStorage() :
+  _initializationContext(NULL)
+  {
     
-    static void setInstance(IStorage* storage) {
-        if (_instance != NULL) {
-            ILogger::instance()->logWarning("Warning, IStorage instance set twice\n");
-        }
-        _instance = storage;
-    }
-    
-    static IStorage* instance() {
-        return _instance;
-    }
-  
+  }
+
+  virtual void initialize(const InitializationContext* ic);
+
   virtual bool containsBuffer(const URL& url) = 0;
   
   virtual void saveBuffer(const URL& url,

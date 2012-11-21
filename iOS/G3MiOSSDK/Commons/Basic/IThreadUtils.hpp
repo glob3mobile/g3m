@@ -11,32 +11,36 @@
 
 #include "GTask.hpp"
 
+class InitializationContext;
+
 class IThreadUtils {
-private:
-  static IThreadUtils* _instance;
-  
+protected:
+#ifdef C_CODE
+  const InitializationContext* _initializationContext;
+#endif
+#ifdef JAVA_CODE
+  protected InitializationContext _initializationContext;
+#endif
+
 public:
-  
-  static void setInstance(IThreadUtils* logger) {
-    //    if (_instance != NULL) {
-    //      printf("Warning, IThreadUtils instance set two times\n");
-    //    }
-    _instance = logger;
+
+  IThreadUtils() :
+  _initializationContext(0)
+  {
+
   }
   
-  static IThreadUtils* instance() {
-    return _instance;
-  }
-  
+  virtual void initialize(const InitializationContext* ic);
+
   virtual ~IThreadUtils() {
     
   }
   
   virtual void invokeInRendererThread(GTask* task,
-                                      bool autoDelete) = 0;
+                                      bool autoDelete) const = 0;
   
   virtual void invokeInBackground(GTask* task,
-                                  bool autoDelete) = 0;
+                                  bool autoDelete) const = 0;
   
 };
 

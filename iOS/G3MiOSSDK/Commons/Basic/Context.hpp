@@ -33,14 +33,14 @@ class Context {
 protected:
   const IFactory*     _factory;
   const IStringUtils* _stringUtils;
-  const IThreadUtils*       _threadUtils;
+  const IThreadUtils* _threadUtils;
   const ILogger*      _logger;
   const IMathUtils*   _mathUtils;
   const IJSONParser*  _jsonParser;
   const Planet*       _planet;
   IDownloader*        _downloader;
   EffectsScheduler*   _effectsScheduler;
-    IStorage*         _storage;
+  IStorage*           _storage;
 
   Context(const IFactory*     factory,
           const IStringUtils* stringUtils,
@@ -61,7 +61,7 @@ protected:
   _planet(planet),
   _downloader(downloader),
   _effectsScheduler(effectsScheduler),
-    _storage(storage)
+  _storage(storage)
   {
   }
 
@@ -97,10 +97,10 @@ public:
   IDownloader* getDownloader() const {
     return _downloader;
   }
-    
-    IStorage* getStorage() const {
-        return _storage;
-    }
+
+  IStorage* getStorage() const {
+    return _storage;
+  }
 
   EffectsScheduler* getEffectsScheduler() const {
     return _effectsScheduler;
@@ -116,12 +116,12 @@ public:
 
 class InitializationContext: public Context {
 public:
-  InitializationContext(const IFactory*           factory,
+  InitializationContext(const IFactory*     factory,
                         const IStringUtils* stringUtils,
-                        const IThreadUtils*       threadUtils,
-                        const ILogger*            logger,
-                        const IMathUtils* mathUtils,
-                        const IJSONParser* jsonParser,
+                        const IThreadUtils* threadUtils,
+                        const ILogger*      logger,
+                        const IMathUtils*   mathUtils,
+                        const IJSONParser*  jsonParser,
                         const Planet*       planet,
                         IDownloader*        downloader,
                         EffectsScheduler*   effectsScheduler,
@@ -143,12 +143,12 @@ public:
 
 class EventContext: public Context {
 public:
-  EventContext(const IFactory*           factory,
+  EventContext(const IFactory*     factory,
                const IStringUtils* stringUtils,
-               const IThreadUtils*       threadUtils,
-               const ILogger*            logger,
-               const IMathUtils* mathUtils,
-               const IJSONParser* jsonParser,
+               const IThreadUtils* threadUtils,
+               const ILogger*      logger,
+               const IMathUtils*   mathUtils,
+               const IJSONParser*  jsonParser,
                const Planet*       planet,
                IDownloader*        downloader,
                EffectsScheduler*   scheduler,
@@ -185,17 +185,17 @@ private:
   TexturesHandler*    _texturesHandler;
   TextureBuilder*     _textureBuilder;
   ITimer*             _frameStartTimer;
-  
+
   mutable std::vector<OrderedRenderable*>* _orderedRenderables;
 
 public:
   RenderContext(FrameTasksExecutor* frameTasksExecutor,
-                const IFactory*           factory,
+                const IFactory*     factory,
                 const IStringUtils* stringUtils,
-                const IThreadUtils*       threadUtils,
-                const ILogger*            logger,
-                const IMathUtils* mathUtils,
-                const IJSONParser* jsonParser,
+                const IThreadUtils* threadUtils,
+                const ILogger*      logger,
+                const IMathUtils*   mathUtils,
+                const IJSONParser*  jsonParser,
                 const Planet*       planet,
                 GL*                 gl,
                 const Camera*       currentCamera,
@@ -264,7 +264,7 @@ public:
   std::vector<OrderedRenderable*>* getSortedOrderedRenderables() const;
 
   void addOrderedRenderable(OrderedRenderable* orderedRenderable) const;
-
+  
 };
 
 
