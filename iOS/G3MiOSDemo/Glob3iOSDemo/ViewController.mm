@@ -390,7 +390,7 @@
   };
 
   UserData* userData = NULL;
-  const bool incrementalTileQuality = true;
+  const bool incrementalTileQuality = false;
   [[self G3MWidget] initWidgetWithCameraConstraints: cameraConstraints
                                            layerSet: layerSet
                              incrementalTileQuality: incrementalTileQuality
