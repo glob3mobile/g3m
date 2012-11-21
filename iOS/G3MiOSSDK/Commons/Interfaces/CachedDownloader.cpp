@@ -160,7 +160,6 @@ public:
 
 };
 
-
 void CachedDownloader::start() {
   _downloader->start();
 }
@@ -189,23 +188,22 @@ long long CachedDownloader::requestImage(const URL& url,
                                                                     deleteListener),
                                      true);
   }
-  else {
-    // cache hit
-    _cacheHitsCounter++;
 
-    listener->onDownload(url, cachedImage);
+  // cache hit
+  _cacheHitsCounter++;
 
-    if (deleteListener) {
+  listener->onDownload(url, cachedImage);
+
+  if (deleteListener) {
 #ifdef C_CODE
-      delete listener;
+    delete listener;
 #else
-      listener = NULL;
+    listener = NULL;
 #endif
-    }
-
-    delete cachedImage;
-    return -1;
   }
+
+  delete cachedImage;
+  return -1;
 }
 
 long long CachedDownloader::requestBuffer(const URL& url,
@@ -224,23 +222,22 @@ long long CachedDownloader::requestBuffer(const URL& url,
                                                                       deleteListener),
                                       true);
   }
-  else {
-    // cache hit
-    _cacheHitsCounter++;
 
-    listener->onDownload(url, cachedBuffer);
+  // cache hit
+  _cacheHitsCounter++;
 
-    if (deleteListener) {
+  listener->onDownload(url, cachedBuffer);
+
+  if (deleteListener) {
 #ifdef C_CODE
-      delete listener;
+    delete listener;
 #else
-      listener = NULL;
+    listener = NULL;
 #endif
-    }
-
-    delete cachedBuffer;
-    return -1;
   }
+
+  delete cachedBuffer;
+  return -1;
 }
 
 const std::string CachedDownloader::statistics() {

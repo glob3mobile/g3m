@@ -396,16 +396,15 @@ const Tile* Tile::getDeepestTileContaining(const Geodetic3D& position) const {
     if (_subtiles == NULL) {
       return this;
     }
-    else {
-      for (int i = 0; i < _subtiles->size(); i++) {
-        const Tile* subtile = _subtiles->at(i);
-        const Tile* subtileResult = subtile->getDeepestTileContaining(position);
-        if (subtileResult != NULL) {
-          return subtileResult;
-        }
+
+    for (int i = 0; i < _subtiles->size(); i++) {
+      const Tile* subtile = _subtiles->at(i);
+      const Tile* subtileResult = subtile->getDeepestTileContaining(position);
+      if (subtileResult != NULL) {
+        return subtileResult;
       }
     }
   }
-  
+
   return NULL;
 }

@@ -46,9 +46,11 @@ public:
   }
 
   void setColor(Color* color) {
-    delete _color;
-    _color = color;
-    cleanMesh();
+    if (_color != color) {
+      delete _color;
+      _color = color;
+      cleanMesh();
+    }
   }
   
 

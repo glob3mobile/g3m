@@ -21,9 +21,8 @@ public final class Downloader_Android
          extends
             IDownloader {
 
-   final static String                                      TAG = "Downloader_Android";
+   final static String                                      TAG             = "Downloader_Android";
 
-   private boolean                                          _started;
    private final int                                        _maxConcurrentOperationCount;
    private int                                              _requestIdCounter;
    private long                                             _requestsCounter;
@@ -33,6 +32,9 @@ public final class Downloader_Android
    private final Map<String, Downloader_Android_Handler>    _queuedHandlers;
    private final int                                        _connectTimeout;
    private final int                                        _readTimeout;
+
+   private boolean                                          _started;
+   private final Object                                     _startStopMutex = new Object();
 
 
    public Downloader_Android(final int maxConcurrentOperationCount,
@@ -54,58 +56,62 @@ public final class Downloader_Android
 
 
    @Override
-   public synchronized void start() {
-      if (!_started) {
-         for (int i = 0; i < _maxConcurrentOperationCount; i++) {
-            final Downloader_Android_WorkerThread da = new Downloader_Android_WorkerThread(this);
-            _workers.add(da);
-         }
+   public void start() {
+      synchronized (_startStopMutex) {
+         if (!_started) {
+            for (int i = 0; i < _maxConcurrentOperationCount; i++) {
+               final Downloader_Android_WorkerThread da = new Downloader_Android_WorkerThread(this, i);
+               _workers.add(da);
+            }
 
-         for (final Downloader_Android_WorkerThread worker : _workers) {
-            worker.start();
-         }
+            for (final Downloader_Android_WorkerThread worker : _workers) {
+               worker.start();
+            }
 
-         //         final Iterator<Downloader_Android_WorkerThread> iter = _workers.iterator();
-         //         while (iter.hasNext()) {
-         //            final Downloader_Android_WorkerThread worker = iter.next();
-         //            worker.start();
-         //         }
-         _started = true;
-         Log.i(TAG, "Downloader started");
+            _started = true;
+            Log.i(TAG, "Downloader started");
+         }
       }
    }
 
 
    @Override
-   public synchronized void stop() {
-      if (_started) {
-         for (final Downloader_Android_WorkerThread worker : _workers) {
-            worker.stopWorkerThread();
-         }
-         _started = false;
-
-         boolean allWorkersStopped;
-         do {
-            allWorkersStopped = true;
+   public void stop() {
+      synchronized (_startStopMutex) {
+         if (_started) {
             for (final Downloader_Android_WorkerThread worker : _workers) {
-               if (!worker.isStopped()) {
-                  allWorkersStopped = false;
-                  break;
+               worker.stopWorkerThread();
+            }
+            _started = false;
+
+            boolean allWorkersStopped;
+            do {
+               allWorkersStopped = true;
+               for (final Downloader_Android_WorkerThread worker : _workers) {
+                  if (!worker.isStopped()) {
+                     allWorkersStopped = false;
+                     try {
+                        Thread.sleep(2);
+                     }
+                     catch (final InterruptedException e) {
+                     }
+                     break;
+                  }
                }
             }
+            while (!allWorkersStopped);
+
+            _workers.clear();
+            Log.i(TAG, "Downloader stopped");
+
+            //         boolean allStopped = true;
+            //         while (_started) {
+            //            for (final Downloader_Android_WorkerThread worker : _workers) {
+            //               allStopped = allStopped && worker.isStopping();
+            //            }
+            //         _started = allStopped;
+            //         }
          }
-         while (!allWorkersStopped);
-
-         _workers.clear();
-         Log.i(TAG, "Downloader stopped");
-
-         //         boolean allStopped = true;
-         //         while (_started) {
-         //            for (final Downloader_Android_WorkerThread worker : _workers) {
-         //               allStopped = allStopped && worker.isStopping();
-         //            }
-         //         _started = allStopped;
-         //         }
       }
    }
 
@@ -230,7 +236,7 @@ public final class Downloader_Android
 
 
    public Downloader_Android_Handler getHandlerToRun() {
-      long selectedPriority = -100000000; // TODO: LONG_MAX_VALUE;
+      long selectedPriority = Long.MIN_VALUE;
       Downloader_Android_Handler selectedHandler = null;
       String selectedURL = null;
 
@@ -290,17 +296,20 @@ public final class Downloader_Android
 
    @Override
    public void onResume(final InitializationContext ic) {
+      start();
    }
 
 
    @Override
    public void onPause(final InitializationContext ic) {
+      stop();
    }
 
 
    @Override
    public void onDestroy(final InitializationContext ic) {
-      final int __DIEGO_AT_WORK;
+      //      final int __DIEGO_AT_WORK;
+      stop();
    }
 
 }

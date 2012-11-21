@@ -310,8 +310,8 @@ public final class SQLiteStorage_Android
 
 
    @Override
-   public void onDestroy(final InitializationContext ic) {
-      final int __DIEGO_AT_WORK;
+   public synchronized void onDestroy(final InitializationContext ic) {
+      close();
    }
 
 

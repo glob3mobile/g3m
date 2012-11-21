@@ -236,6 +236,8 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
                     _effectsScheduler,
                     IStorage::instance());
 
+    _nextCamera->resizeViewport(width, height);
+
     _cameraRenderer->onResizeViewportEvent(&ec, width, height);
 
     if (_mainRenderer->isEnable()) {

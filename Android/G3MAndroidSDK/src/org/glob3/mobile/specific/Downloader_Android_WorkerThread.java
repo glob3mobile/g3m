@@ -9,19 +9,24 @@ public final class Downloader_Android_WorkerThread
          extends
             Thread {
 
-   final static String              TAG        = "Downloader_Android_WorkerThread";
 
    private final Downloader_Android _downloader;
    private boolean                  _stopping;
 
    private boolean                  _isStopped = false;
 
+   private final int                _id;
 
-   public Downloader_Android_WorkerThread(final Downloader_Android downloader) {
+
+   public Downloader_Android_WorkerThread(final Downloader_Android downloader,
+                                          final int id) {
       _downloader = downloader;
       _stopping = false;
+      _id = id;
 
-      this.setPriority(9);
+      setName("Downloader_WorkerThread #" + _id);
+
+      this.setPriority(Thread.NORM_PRIORITY + 1);
    }
 
 
@@ -32,6 +37,13 @@ public final class Downloader_Android_WorkerThread
 
    public synchronized boolean isStopping() {
       return _stopping;
+   }
+
+
+   @Override
+   public synchronized void start() {
+      super.start();
+      Log.i(getClass().getName(), "Downloader-WorkerThread #" + _id + " started");
    }
 
 
@@ -48,13 +60,15 @@ public final class Downloader_Android_WorkerThread
                Thread.sleep(25);
             }
             catch (final InterruptedException e) {
-               Log.e(TAG, "InterruptedException worker=" + this.toString());
+               Log.e(getClass().getName(), "InterruptedException worker: " + this.toString());
                e.printStackTrace();
             }
          }
       }
-      _isStopped = true;
-      Log.i(TAG, "Downloader-WorkerThread stopped");
+      synchronized (this) {
+         _isStopped = true;
+      }
+      Log.i(getClass().getName(), "Downloader-WorkerThread #" + _id + " stopped");
    }
 
 

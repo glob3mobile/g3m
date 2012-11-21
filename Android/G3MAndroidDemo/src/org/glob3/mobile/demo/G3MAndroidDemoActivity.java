@@ -206,11 +206,11 @@ public class G3MAndroidDemoActivity
          //         quad.setPitch(Angle.fromDegrees(0));
          //         shapesRenderer.addShape(quad);
 
-         final Geodetic3D circlePosition = new Geodetic3D( //
-                  Angle.fromDegrees(37.78333333), //
-                  Angle.fromDegrees(-122.41666666666667), //
-                  8000);
-         final int circleRadius = 50000;
+         //         final Geodetic3D circlePosition = new Geodetic3D( //
+         //                  Angle.fromDegrees(37.78333333), //
+         //                  Angle.fromDegrees(-122.41666666666667), //
+         //                  8000);
+         //         final int circleRadius = 50000;
          //         final Color circleColor = Color.newFromRGBA(1, 1, 0, 1);
          //         final CircleShape circle = new CircleShape(circlePosition, circleRadius, circleColor);
 

@@ -19,9 +19,10 @@ void CameraRenderer::initialize(const InitializationContext* ic) {
 
 void CameraRenderer::onResizeViewportEvent(const EventContext* ec,
                                            int width, int height) {
-  if (_cameraContext != NULL) {
-    _cameraContext->getNextCamera()->resizeViewport(width, height);
-  }
+  // moved to G3MWidget::onResizeViewportEvent
+//  if (_cameraContext != NULL) {
+//    _cameraContext->getNextCamera()->resizeViewport(width, height);
+//  }
 }
 
 void CameraRenderer::render(const RenderContext* rc) {

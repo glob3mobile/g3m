@@ -255,6 +255,7 @@ public final class G3MWidget_Android
    public G3MWidget getG3MWidget() {
       if (_g3mWidget == null) {
          initWidget();
+         _g3mWidget.onResume();
       }
       return _g3mWidget;
    }
