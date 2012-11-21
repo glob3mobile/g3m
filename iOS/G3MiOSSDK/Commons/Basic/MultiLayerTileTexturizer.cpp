@@ -409,9 +409,6 @@ public:
     stepDone();
   }
 
-#if JAVA_CODE
-  @SuppressWarnings("null")
-#endif
   LeveledTexturedMesh* createMesh() const {
     std::vector<LazyTextureMapping*>* mappings = new std::vector<LazyTextureMapping*>();
     
