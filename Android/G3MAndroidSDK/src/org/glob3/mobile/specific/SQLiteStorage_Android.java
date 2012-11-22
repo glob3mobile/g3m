@@ -5,7 +5,7 @@ package org.glob3.mobile.specific;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 
-import org.glob3.mobile.generated.Context;
+import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.IImage;
@@ -140,7 +140,7 @@ public final class SQLiteStorage_Android
          _context.getThreadUtils().invokeInBackground( //
                   new GTask() {
                      @Override
-                     public void run(final Context context) {
+                     public void run(final G3MContext context) {
                         rawSave(table, name, contents);
                      }
                   }, //
@@ -227,7 +227,7 @@ public final class SQLiteStorage_Android
          _context.getThreadUtils().invokeInBackground( //
                   new GTask() {
                      @Override
-                     public void run(final Context context) {
+                     public void run(final G3MContext context) {
                         rawSave(table, name, contentsF);
                      }
                   }, //
@@ -291,7 +291,7 @@ public final class SQLiteStorage_Android
 
 
    @Override
-   public synchronized void onResume(final Context context) {
+   public synchronized void onResume(final G3MContext context) {
       if (_writeDB == null) {
          _writeDB = _dbHelper.getWritableDatabase();
       }
@@ -302,13 +302,13 @@ public final class SQLiteStorage_Android
 
 
    @Override
-   public synchronized void onPause(final Context context) {
+   public synchronized void onPause(final G3MContext context) {
       close();
    }
 
 
    @Override
-   public synchronized void onDestroy(final Context context) {
+   public synchronized void onDestroy(final G3MContext context) {
       close();
    }
 

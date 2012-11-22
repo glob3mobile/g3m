@@ -15,6 +15,7 @@ import org.glob3.mobile.generated.CameraSingleDragHandler;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
 import org.glob3.mobile.generated.EllipsoidalTileTessellator;
+import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic3D;
@@ -504,6 +505,11 @@ public final class G3MWidget_WebGL
 
    public void resetCameraPosition() {
       getG3MWidget().resetCameraPosition();
+   }
+
+
+   public G3MContext getG3MContext() {
+      return getG3MWidget().getG3MContext();
    }
 
 }

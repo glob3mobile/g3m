@@ -10,7 +10,7 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.glob3.mobile.generated.Context;
+import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IImageDownloadListener;
@@ -29,14 +29,14 @@ public final class Downloader_Android_Handler {
    private java.net.URL                   _URL;
    private final ArrayList<ListenerEntry> _listeners = new ArrayList<ListenerEntry>();
 
-   private final Context                  _context;
+   private final G3MContext               _context;
 
 
    Downloader_Android_Handler(final URL url,
                               final IBufferDownloadListener listener,
                               final long priority,
                               final long requestId,
-                              final Context context) {
+                              final G3MContext context) {
       _context = context;
       _priority = priority;
       _url = url;
@@ -62,7 +62,7 @@ public final class Downloader_Android_Handler {
                               final IImageDownloadListener listener,
                               final long priority,
                               final long requestId,
-                              final Context context) {
+                              final G3MContext context) {
       _context = context;
       _priority = priority;
       _url = url;
@@ -237,7 +237,7 @@ public final class Downloader_Android_Handler {
 
 
       @Override
-      public void run(final Context context) {
+      public void run(final G3MContext context) {
          synchronized (_handler) {
             final boolean dataIsValid = (_data != null) && (_statusCode == 200);
 

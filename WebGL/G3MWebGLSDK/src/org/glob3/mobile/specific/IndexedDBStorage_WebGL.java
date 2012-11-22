@@ -2,7 +2,7 @@
 
 package org.glob3.mobile.specific;
 
-import org.glob3.mobile.generated.Context;
+import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IStorage;
@@ -49,17 +49,17 @@ public final class IndexedDBStorage_WebGL
 
 
    @Override
-   public void onResume(final Context context) {
+   public void onResume(final G3MContext context) {
    }
 
 
    @Override
-   public void onPause(final Context context) {
+   public void onPause(final G3MContext context) {
    }
 
 
    @Override
-   public void onDestroy(final Context context) {
+   public void onDestroy(final G3MContext context) {
    }
 
 

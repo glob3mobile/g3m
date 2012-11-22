@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.glob3.mobile.generated.Context;
+import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IImageDownloadListener;
@@ -36,7 +36,7 @@ public final class Downloader_Android
    private boolean                                          _started;
    private final Object                                     _startStopMutex = new Object();
 
-   private Context                                          _context;
+   private G3MContext                                       _context;
 
 
    public Downloader_Android(final int maxConcurrentOperationCount,
@@ -297,26 +297,26 @@ public final class Downloader_Android
 
 
    @Override
-   public void onResume(final Context context) {
+   public void onResume(final G3MContext context) {
       start();
    }
 
 
    @Override
-   public void onPause(final Context context) {
+   public void onPause(final G3MContext context) {
       stop();
    }
 
 
    @Override
-   public void onDestroy(final Context context) {
+   public void onDestroy(final G3MContext context) {
       //      final int __DIEGO_AT_WORK;
       stop();
    }
 
 
    @Override
-   public void initialize(final Context context) {
+   public void initialize(final G3MContext context) {
       _context = context;
    }
 
