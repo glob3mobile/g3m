@@ -31,6 +31,8 @@ public abstract class IDownloader
   {
   }
 
+  public abstract void initialize(Context context);
+
   public abstract void onResume(Context context);
 
   public abstract void onPause(Context context);

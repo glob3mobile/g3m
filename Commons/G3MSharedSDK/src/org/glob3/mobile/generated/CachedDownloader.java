@@ -158,4 +158,9 @@ public class CachedDownloader extends IDownloader
 	_downloader.onDestroy(context);
   }
 
+  public final void initialize(Context context)
+  {
+	_downloader.initialize(context);
+  }
+
 }
