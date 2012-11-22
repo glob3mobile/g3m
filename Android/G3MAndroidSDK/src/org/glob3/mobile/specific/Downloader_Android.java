@@ -36,6 +36,8 @@ public final class Downloader_Android
    private boolean                                          _started;
    private final Object                                     _startStopMutex = new Object();
 
+   private Context                                          _context;
+
 
    public Downloader_Android(final int maxConcurrentOperationCount,
                              final int connectTimeoutMillis,
@@ -310,6 +312,12 @@ public final class Downloader_Android
    public void onDestroy(final Context context) {
       //      final int __DIEGO_AT_WORK;
       stop();
+   }
+
+
+   @Override
+   public void initialize(final Context context) {
+      _context = context;
    }
 
 }

@@ -149,19 +149,11 @@ public final class G3MWidget_Android
       final ILogger logger = new Logger_Android(LogLevel.ErrorLevel);
       final IFactory factory = new Factory_Android(getContext());
       final IStringUtils stringUtils = new StringUtils_Android();
-      final IThreadUtils threadUtils = new ThreadUtils_Android(this);
       final IStringBuilder stringBuilder = new StringBuilder_Android();
       final IMathUtils mathUtils = new MathUtils_Android();
       final IJSONParser jsonParser = new JSONParser_Android();
-      final IStorage storage = new SQLiteStorage_Android("g3m.cache", this.getContext());
-      final int connectTimeout = 20000;
-      final int readTimeout = 30000;
-      final boolean saveInBackground = true;
-      final IDownloader downloader = new CachedDownloader(new Downloader_Android(8, connectTimeout, readTimeout),
-               saveInBackground);
 
-      G3MWidget.initSingletons(logger, factory, stringUtils, threadUtils, stringBuilder, mathUtils, jsonParser, storage,
-               downloader);
+      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser);
    }
 
 
@@ -339,8 +331,21 @@ public final class G3MWidget_Android
       final org.glob3.mobile.generated.Renderer busyRenderer = new BusyMeshRenderer();
 
 
+      final IThreadUtils threadUtils = new ThreadUtils_Android(this);
+      final IStorage storage = new SQLiteStorage_Android("g3m.cache", this.getContext());
+      final int connectTimeout = 20000;
+      final int readTimeout = 30000;
+      final boolean saveInBackground = true;
+      final IDownloader downloader = new CachedDownloader( //
+               new Downloader_Android(8, connectTimeout, readTimeout), //
+               storage, //
+               saveInBackground);
+
       _g3mWidget = G3MWidget.create( //
                nativeGL, //
+               storage, //
+               downloader, //
+               threadUtils, //
                planet, //
                _cameraConstraints, //
                cameraRenderer, //

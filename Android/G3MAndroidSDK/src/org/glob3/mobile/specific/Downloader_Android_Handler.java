@@ -15,7 +15,6 @@ import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IImageDownloadListener;
 import org.glob3.mobile.generated.ILogger;
-import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.URL;
 
 import android.util.Log;
@@ -215,7 +214,8 @@ public final class Downloader_Android_Handler {
       // inform downloader to remove myself, to avoid adding new Listener
       downloader.removeDownloadingHandlerForUrl(_url.getPath());
 
-      IThreadUtils.instance().invokeInRendererThread(new ProcessResponseGTask(statusCode, data, this), true);
+
+      _context.getThreadUtils().invokeInRendererThread(new ProcessResponseGTask(statusCode, data, this), true);
    }
 
    public class ProcessResponseGTask

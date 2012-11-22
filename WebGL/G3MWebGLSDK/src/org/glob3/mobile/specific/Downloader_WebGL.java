@@ -257,4 +257,10 @@ public final class Downloader_WebGL
    public void onDestroy(final Context context) {
    }
 
+
+   @Override
+   public void initialize(final Context context) {
+
+   }
+
 }
