@@ -357,10 +357,8 @@ private:
     return _frustum;
   }
 
-
-  int __temporal_test_for_clipping;
-
   Frustum* getHalfFrustum() const {
+    // __temporal_test_for_clipping;
     if (_dirtyFlags._halfFrustum) {
       _dirtyFlags._halfFrustum = false;
 #ifdef C_CODE
