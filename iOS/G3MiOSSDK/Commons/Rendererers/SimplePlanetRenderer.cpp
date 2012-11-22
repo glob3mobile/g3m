@@ -125,10 +125,10 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   
   //FLAT COLOR
   Color * flatColor = NULL;
-  if (false){
-    flatColor = new Color( Color::fromRGBA(0.0, 1.0, 0.0, 1.0) );
-  }
-  
+//  if (false){
+//    flatColor = new Color( Color::fromRGBA(0.0, 1.0, 0.0, 1.0) );
+//  }
+
   IndexedMesh *im = new IndexedMesh(GLPrimitive::triangleStrip(),
                                     true,
                                     Vector3D::zero(),

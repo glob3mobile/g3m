@@ -84,21 +84,21 @@ public:
   }
 };
 
-void TexturesHandler::showHolders(const std::string message) const {
-  if (false) {
-    std::string holdersString = ">>>> " + message + ", Holders=(";
-    for (int i = 0; i < _textureHolders.size(); i++) {
-      TextureHolder* holder = _textureHolders[i];
-      
-      if (i > 0) {
-        holdersString += ", ";
-      }
-      holdersString += holder->description();
-    }
-    holdersString += ")";
-    
-    ILogger::instance()->logInfo("%s\n", holdersString.c_str() );
-  }
+void TexturesHandler::showHolders(const std::string& message) const {
+//  if (false) {
+//    std::string holdersString = ">>>> " + message + ", Holders=(";
+//    for (int i = 0; i < _textureHolders.size(); i++) {
+//      TextureHolder* holder = _textureHolders[i];
+//      
+//      if (i > 0) {
+//        holdersString += ", ";
+//      }
+//      holdersString += holder->description();
+//    }
+//    holdersString += ")";
+//    
+//    ILogger::instance()->logInfo("%s\n", holdersString.c_str() );
+//  }
 }
 
 const IGLTextureId* TexturesHandler::getGLTextureIdIfAvailable(const TextureSpec& textureSpec) {

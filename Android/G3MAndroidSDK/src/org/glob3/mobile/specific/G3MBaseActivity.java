@@ -15,7 +15,7 @@ public abstract class G3MBaseActivity
 
 
    @Override
-   protected void onResume() {
+   final protected void onResume() {
       super.onResume();
       //      Log.i(getClass().toString(), "Starting the downloader");
       //      IDownloader.instance().start();
@@ -24,7 +24,7 @@ public abstract class G3MBaseActivity
 
 
    @Override
-   protected void onPause() {
+   final protected void onPause() {
       if (isFinishing()) {
          getWidgetAndroid().onDestroy();
       }
@@ -36,7 +36,7 @@ public abstract class G3MBaseActivity
 
 
    @Override
-   protected void onDestroy() {
+   final protected void onDestroy() {
       Log.i(getClass().toString(), "Killing process");
       // android.os.Process.killProcess(android.os.Process.myPid());
       super.onDestroy();

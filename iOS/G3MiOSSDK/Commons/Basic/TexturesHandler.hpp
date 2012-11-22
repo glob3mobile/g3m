@@ -143,7 +143,7 @@ private:
   
   const bool _verbose;
   
-  void showHolders(const std::string message) const;
+  void showHolders(const std::string& message) const;
   
 public:
   
