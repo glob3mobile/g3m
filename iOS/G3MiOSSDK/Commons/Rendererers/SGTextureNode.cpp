@@ -13,8 +13,8 @@
 void SGTextureNode::addLayer(SGLayerNode* layer) {
   _layers.push_back(layer);
 
-  if (_initializationContext != NULL) {
-    layer->initialize(_initializationContext, _shape);
+  if (_context != NULL) {
+    layer->initialize(_context, _shape);
   }
 }
 

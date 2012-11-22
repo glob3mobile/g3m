@@ -44,7 +44,7 @@ class IStorage;
 #include "Color.hpp"
 #include "Angle.hpp"
 
-class InitializationContext;
+class Context;
 
 class UserData {
 private:
@@ -198,7 +198,7 @@ private:
 
   void initializeGL();
 
-  const InitializationContext* _initializationContext;
+  const Context* _context;
 
   G3MWidget(INativeGL*                       nativeGL,
             IStorage*                        storage,

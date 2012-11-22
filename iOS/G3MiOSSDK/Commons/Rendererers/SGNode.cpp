@@ -17,23 +17,23 @@ SGNode::~SGNode() {
 }
 
 
-void SGNode::initialize(const InitializationContext* ic,
+void SGNode::initialize(const Context* context,
                         SGShape *shape) {
-  _initializationContext = ic;
+  _context = context;
   _shape = shape;
 
   const int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
     SGNode* child = _children[i];
-    child->initialize(ic, shape);
+    child->initialize(context, shape);
   }
 }
 
 void SGNode::addNode(SGNode* child) {
   child->setParent(this);
   _children.push_back(child);
-  if (_initializationContext != NULL) {
-    child->initialize(_initializationContext, _shape);
+  if (_context != NULL) {
+    child->initialize(_context, _shape);
   }
 }
 

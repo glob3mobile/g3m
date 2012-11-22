@@ -37,7 +37,7 @@ SimplePlanetRenderer::~SimplePlanetRenderer()
   delete _mesh;
 }
 
-void SimplePlanetRenderer::initialize(const InitializationContext* ic)
+void SimplePlanetRenderer::initialize(const Context* context)
 {
   
 }

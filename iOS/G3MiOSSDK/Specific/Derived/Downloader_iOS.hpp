@@ -68,15 +68,15 @@ public:
   
   const std::string statistics();
   
-  void onResume(const InitializationContext* ic) {
+  void onResume(const Context* context) {
     
   }
   
-  void onPause(const InitializationContext* ic) {
+  void onPause(const Context* context) {
     
   }
   
-  void onDestroy(const InitializationContext* ic) {
+  void onDestroy(const Context* context) {
 
   }
 

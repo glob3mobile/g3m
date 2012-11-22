@@ -85,7 +85,7 @@ public:
   
   std::string getMapTypeString() const;
   
-  void initialize(const InitializationContext* ic);
+  void initialize(const Context* context);
   
   std::vector<Petition*> getMapPetitions(const RenderContext* rc,
                                          const Tile* tile,

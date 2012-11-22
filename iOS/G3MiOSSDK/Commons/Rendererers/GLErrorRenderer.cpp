@@ -12,7 +12,7 @@
 #include "GL.hpp"
 
 
-void GLErrorRenderer::initialize(const InitializationContext* ic) {
+void GLErrorRenderer::initialize(const Context* context) {
   
 }
 

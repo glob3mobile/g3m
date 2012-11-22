@@ -65,7 +65,7 @@ public:
     return true;
   }
   
-  virtual void initialize(const InitializationContext* ic) {}
+  virtual void initialize(const Context* context) {}
   
   void addTerrainTouchEventListener(TerrainTouchEventListener* listener) {
     _listeners.push_back(listener);

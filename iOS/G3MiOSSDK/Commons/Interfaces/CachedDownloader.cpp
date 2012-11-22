@@ -264,14 +264,14 @@ const std::string CachedDownloader::statistics() {
   return s;
 }
 
-void CachedDownloader::onResume(const InitializationContext* ic) {
-  _downloader->onResume(ic);
+void CachedDownloader::onResume(const Context* context) {
+  _downloader->onResume(context);
 }
 
-void CachedDownloader::onPause(const InitializationContext* ic) {
-  _downloader->onPause(ic);
+void CachedDownloader::onPause(const Context* context) {
+  _downloader->onPause(context);
 }
 
-void CachedDownloader::onDestroy(const InitializationContext* ic) {
-  _downloader->onDestroy(ic);
+void CachedDownloader::onDestroy(const Context* context) {
+  _downloader->onDestroy(context);
 }

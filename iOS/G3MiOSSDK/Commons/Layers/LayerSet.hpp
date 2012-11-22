@@ -58,7 +58,7 @@ public:
   
   bool isReady() const;
   
-  void initialize(const InitializationContext* ic)const;
+  void initialize(const Context* context)const;
   
   int size() const {
     return _layers.size();

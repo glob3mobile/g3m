@@ -42,7 +42,7 @@ public:
   SimplePlanetRenderer(const std::string textureFilename);
   ~SimplePlanetRenderer();
   
-  void initialize(const InitializationContext* ic);  
+  void initialize(const Context* context);  
   
   void render(const RenderContext* rc);
   
@@ -68,15 +68,15 @@ public:
     
   }
 
-  void onResume(const InitializationContext* ic) {
+  void onResume(const Context* context) {
     
   }
   
-  void onPause(const InitializationContext* ic) {
+  void onPause(const Context* context) {
     
   }
 
-  void onDestroy(const InitializationContext* ic) {
+  void onDestroy(const Context* context) {
 
   }
 

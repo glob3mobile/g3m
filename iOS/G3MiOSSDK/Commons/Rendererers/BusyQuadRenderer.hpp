@@ -35,7 +35,7 @@ public:
   _textureFilename(textureFilename)
   {}
   
-  void initialize(const InitializationContext* ic) {}
+  void initialize(const Context* context) {}
   
   bool isReadyToRender(const RenderContext* rc) {
     return true;
@@ -64,15 +64,15 @@ public:
   
   void stop();
   
-  void onResume(const InitializationContext* ic) {
+  void onResume(const Context* context) {
     
   }
   
-  void onPause(const InitializationContext* ic) {
+  void onPause(const Context* context) {
     
   }
 
-  void onDestroy(const InitializationContext* ic) {
+  void onDestroy(const Context* context) {
 
   }
 

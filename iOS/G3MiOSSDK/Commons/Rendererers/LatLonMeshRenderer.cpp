@@ -21,9 +21,11 @@ LatLonMeshRenderer::~LatLonMeshRenderer()
 }
 
 
-void LatLonMeshRenderer::initialize(const InitializationContext* ic)
+void LatLonMeshRenderer::initialize(const Context* context)
 {
-  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(), ic->getPlanet(), Geodetic2D::zero());
+  FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
+                                          context->getPlanet(),
+                                          Geodetic2D::zero());
   vertices.add(Geodetic3D::fromDegrees(28.753213, -17.898788, 500) );
   vertices.add(Geodetic3D::fromDegrees(28.680347, -17.898788, 500) );
   vertices.add(Geodetic3D::fromDegrees(28.753213, -17.83287,  500) );

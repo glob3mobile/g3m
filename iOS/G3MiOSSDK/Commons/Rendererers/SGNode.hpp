@@ -12,7 +12,7 @@
 #include <string>
 #include <vector>
 
-class InitializationContext;
+class Context;
 class RenderContext;
 class SGShape;
 
@@ -29,10 +29,10 @@ private:
 
 protected:
 #ifdef C_CODE
-  const InitializationContext* _initializationContext;
+  const Context* _context;
 #endif
 #ifdef JAVA_CODE
-  protected InitializationContext _initializationContext;
+  protected Context _context;
 #endif
 
   SGShape *_shape;
@@ -46,7 +46,7 @@ protected:
 public:
 
   SGNode() :
-  _initializationContext(NULL),
+  _context(NULL),
   _shape(NULL),
   _parent(NULL)
   {
@@ -55,7 +55,7 @@ public:
 
   virtual ~SGNode();
 
-  void initialize(const InitializationContext* ic,
+  void initialize(const Context* context,
                   SGShape *shape);
 
   void addNode(SGNode* child);

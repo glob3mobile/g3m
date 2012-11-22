@@ -11,26 +11,26 @@
 
 #include "GTask.hpp"
 
-class InitializationContext;
+class Context;
 
 class IThreadUtils {
 protected:
 #ifdef C_CODE
-  const InitializationContext* _initializationContext;
+  const Context* _context;
 #endif
 #ifdef JAVA_CODE
-  protected InitializationContext _initializationContext;
+  protected Context _context;
 #endif
 
 public:
 
   IThreadUtils() :
-  _initializationContext(0)
+  _context(0)
   {
 
   }
   
-  virtual void initialize(const InitializationContext* ic);
+  virtual void initialize(const Context* context);
 
   virtual ~IThreadUtils() {
     

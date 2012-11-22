@@ -8,19 +8,19 @@
 
 #include "CompositeRenderer.hpp"
 
-void CompositeRenderer::initialize(const InitializationContext* ic) {
-  _ic = ic;
+void CompositeRenderer::initialize(const Context* context) {
+  _context = context;
   
   const int rendersSize = _renderers.size();
   for (int i = 0; i < rendersSize; i++) {
-    _renderers[i]->initialize(ic);
+    _renderers[i]->initialize(context);
   }
 }
 
 void CompositeRenderer::addRenderer(Renderer *renderer) {
   _renderers.push_back(renderer);
-  if (_ic != NULL) {
-    renderer->initialize(_ic);
+  if (_context != NULL) {
+    renderer->initialize(_context);
   }
 }
 
@@ -89,24 +89,24 @@ void CompositeRenderer::stop() {
   }
 }
 
-void CompositeRenderer::onResume(const InitializationContext* ic) {
+void CompositeRenderer::onResume(const Context* context) {
   const int rendersSize = _renderers.size();
   for (int i = 0; i < rendersSize; i++) {
-    _renderers[i]->onResume(ic);
+    _renderers[i]->onResume(context);
   }
 }
 
-void CompositeRenderer::onPause(const InitializationContext* ic) {
+void CompositeRenderer::onPause(const Context* context) {
   const int rendersSize = _renderers.size();
   for (int i = 0; i < rendersSize; i++) {
-    _renderers[i]->onPause(ic);
+    _renderers[i]->onPause(context);
   }
 }
 
-void CompositeRenderer::onDestroy(const InitializationContext* ic) {
+void CompositeRenderer::onDestroy(const Context* context) {
   const int rendersSize = _renderers.size();
   for (int i = 0; i < rendersSize; i++) {
-    _renderers[i]->onDestroy(ic);
+    _renderers[i]->onDestroy(context);
   }
 }
 

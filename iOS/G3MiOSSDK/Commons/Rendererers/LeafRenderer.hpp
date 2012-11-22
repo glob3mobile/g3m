@@ -47,11 +47,11 @@ public:
   }
 #endif
   
-  virtual void onResume(const InitializationContext* ic) = 0;
+  virtual void onResume(const Context* context) = 0;
   
-  virtual void onPause(const InitializationContext* ic) = 0;
+  virtual void onPause(const Context* context) = 0;
   
-  virtual void initialize(const InitializationContext* ic) = 0;
+  virtual void initialize(const Context* context) = 0;
   
   virtual bool isReadyToRender(const RenderContext* rc) = 0;
   

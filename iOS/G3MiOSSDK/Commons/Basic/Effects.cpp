@@ -10,8 +10,8 @@
 
 #include "Context.hpp"
 
-void EffectsScheduler::initialize(const InitializationContext* ic) {
-  _factory = ic->getFactory();
+void EffectsScheduler::initialize(const Context* context) {
+  _factory = context->getFactory();
   _timer = _factory->createTimer();
 }
 

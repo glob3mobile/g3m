@@ -153,7 +153,7 @@ public:
     
   }
   
-  void run(const InitializationContext* ic) {
+  void run(const Context* context) {
     _storage->rawSave(_table, _name, _contents);
   }
 };
@@ -178,8 +178,8 @@ void SQLiteStorage_iOS::saveBuffer(const URL& url,
                                     length: buffer_iOS->size()];
   
   if (saveInBackground) {
-    _initializationContext->getThreadUtils()->invokeInBackground(new SaverTask(this, @"buffer", name, contents),
-                                                                 true);
+    _context->getThreadUtils()->invokeInBackground(new SaverTask(this, @"buffer", name, contents),
+                                                   true);
   }
   else {
     rawSave(@"buffer", name, contents);
@@ -240,8 +240,8 @@ void SQLiteStorage_iOS::saveImage(const URL& url,
   //  }
   
   if (saveInBackground) {
-    _initializationContext->getThreadUtils()->invokeInBackground(new SaverTask(this, @"image", name, contents),
-                                                                 true);
+    _context->getThreadUtils()->invokeInBackground(new SaverTask(this, @"image", name, contents),
+                                                   true);
   }
   else {
     rawSave(@"image", name, contents);

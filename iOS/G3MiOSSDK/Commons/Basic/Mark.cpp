@@ -52,10 +52,10 @@ public:
 };
 
 
-void Mark::initialize(const InitializationContext* ic) {
+void Mark::initialize(const Context* context) {
   //  todo;
   if (!_textureSolved) {
-    IDownloader* downloader = ic->getDownloader();
+    IDownloader* downloader = context->getDownloader();
     
     downloader->requestImage(_textureURL,
                              1000000,

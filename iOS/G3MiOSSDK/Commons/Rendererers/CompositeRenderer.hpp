@@ -17,13 +17,13 @@ class CompositeRenderer: public Renderer
 private:
   std::vector<Renderer*> _renderers;
   
-  const InitializationContext* _ic;
+  const Context* _context;
   
   bool _enable;
   
 public:
   CompositeRenderer():
-  _ic(NULL),
+  _context(NULL),
   _enable(true)
   {
     _renderers = std::vector<Renderer*>();
@@ -36,7 +36,7 @@ public:
 
   void setEnable(bool enable);
   
-  void initialize(const InitializationContext* ic);
+  void initialize(const Context* context);
   
   bool isReadyToRender(const RenderContext* rc);
 
@@ -54,11 +54,11 @@ public:
   
   void stop();
 
-  void onResume(const InitializationContext* ic);
+  void onResume(const Context* context);
   
-  void onPause(const InitializationContext* ic);
+  void onPause(const Context* context);
 
-  void onDestroy(const InitializationContext* ic);
+  void onDestroy(const Context* context);
   
 };
 

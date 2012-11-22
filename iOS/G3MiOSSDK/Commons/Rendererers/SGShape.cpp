@@ -11,8 +11,8 @@
 #include "SGNode.hpp"
 
 
-void SGShape::initialize(const InitializationContext* ic) {
-  _node->initialize(ic, this);
+void SGShape::initialize(const Context* context) {
+  _node->initialize(context, this);
 }
 
 bool SGShape::isReadyToRender(const RenderContext* rc) {

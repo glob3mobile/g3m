@@ -32,7 +32,7 @@ _topTilesJustCreated(false),
 _lastSplitTimer(NULL),
 _lastCamera(NULL),
 _firstRender(false),
-_initializationContext(NULL)
+_context(NULL)
 {
   _layerSet->setChangeListener(this);
 }
@@ -41,7 +41,7 @@ void TileRenderer::changed(const LayerSet* layerSet) {
   pruneTopLevelTiles();
   clearTopLevelTiles();
   _firstRender = true;
-  createTopLevelTiles(_initializationContext);
+  createTopLevelTiles(_context);
 }
 
 TileRenderer::~TileRenderer() {
@@ -65,7 +65,7 @@ void TileRenderer::clearTopLevelTiles() {
   _topLevelTiles.clear();
 }
 
-void TileRenderer::createTopLevelTiles(const InitializationContext* ic) {
+void TileRenderer::createTopLevelTiles(const Context* context) {
   const Angle fromLatitude  = _parameters->_topSector.lower().latitude();
   const Angle fromLongitude = _parameters->_topSector.lower().longitude();
 
@@ -92,22 +92,22 @@ void TileRenderer::createTopLevelTiles(const InitializationContext* ic) {
     }
   }
 
-  ic->getLogger()->logInfo("Created %d top level tiles", _topLevelTiles.size());
+  context->getLogger()->logInfo("Created %d top level tiles", _topLevelTiles.size());
 
   _topTilesJustCreated = true;
 }
 
-void TileRenderer::initialize(const InitializationContext* ic) {
-  _initializationContext = ic;
+void TileRenderer::initialize(const Context* context) {
+  _context = context;
 
   clearTopLevelTiles();
-  createTopLevelTiles(ic);
+  createTopLevelTiles(context);
 
   delete _lastSplitTimer;
-  _lastSplitTimer      = ic->getFactory()->createTimer();
+  _lastSplitTimer      = context->getFactory()->createTimer();
 
-  _layerSet->initialize(ic);
-  _texturizer->initialize(ic, _parameters);
+  _layerSet->initialize(context);
+  _texturizer->initialize(context, _parameters);
 }
 
 bool TileRenderer::isReadyToRender(const RenderContext *rc) {

@@ -9,7 +9,7 @@
 #ifndef __G3MiOSSDK__GTask__
 #define __G3MiOSSDK__GTask__
 
-class InitializationContext;
+class Context;
 
 class GTask {
 public:
@@ -17,7 +17,7 @@ public:
     
   }
   
-  virtual void run(const InitializationContext* ic) = 0;
+  virtual void run(const Context* context) = 0;
   
 };
 

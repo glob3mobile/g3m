@@ -18,16 +18,16 @@ private:
   std::vector<Shape*> _shapes;
 
 #ifdef C_CODE
-  const InitializationContext* _initializationContext;
+  const Context* _context;
 #endif
 #ifdef JAVA_CODE
-  private InitializationContext _initializationContext;
+  private Context _context;
 #endif
 
 public:
 
   ShapesRenderer() :
-  _initializationContext(NULL)
+  _context(NULL)
   {
 
   }
@@ -42,30 +42,30 @@ public:
 
   void addShape(Shape* shape) {
     _shapes.push_back(shape);
-    if (_initializationContext != NULL) {
-      shape->initialize(_initializationContext);
+    if (_context != NULL) {
+      shape->initialize(_context);
     }
   }
 
-  void onResume(const InitializationContext* ic) {
-    _initializationContext = ic;
+  void onResume(const Context* context) {
+    _context = context;
   }
 
-  void onPause(const InitializationContext* ic) {
-
-  }
-
-  void onDestroy(const InitializationContext* ic) {
+  void onPause(const Context* context) {
 
   }
 
-  void initialize(const InitializationContext* ic) {
-    _initializationContext = ic;
+  void onDestroy(const Context* context) {
+
+  }
+
+  void initialize(const Context* context) {
+    _context = context;
 
     const int shapesCount = _shapes.size();
     for (int i = 0; i < shapesCount; i++) {
       Shape* shape = _shapes[i];
-      shape->initialize(ic);
+      shape->initialize(context);
     }
   }
   

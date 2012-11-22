@@ -8,6 +8,6 @@
 
 #include "IThreadUtils.hpp"
 
-void IThreadUtils::initialize(const InitializationContext* ic) {
-  _initializationContext = ic;
+void IThreadUtils::initialize(const Context* context) {
+  _context = context;
 }

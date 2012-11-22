@@ -29,12 +29,12 @@ private:
   std::vector<Mark*> _marks;
   
 #ifdef C_CODE
-  const InitializationContext* _initializationContext;
-  const Camera*                _lastCamera;
+  const Context* _context;
+  const Camera*  _lastCamera;
 #endif
 #ifdef JAVA_CODE
-  private InitializationContext _initializationContext;
-  private Camera                _lastCamera;
+  private Context _context;
+  private Camera  _lastCamera;
 #endif
   
   MarkTouchListener* _markTouchListener;
@@ -44,7 +44,7 @@ public:
   
   MarksRenderer(bool readyWhenMarksReady) :
   _readyWhenMarksReady(readyWhenMarksReady),
-  _initializationContext(NULL),
+  _context(NULL),
   _lastCamera(NULL),
   _markTouchListener(NULL),
   _autoDeleteMarkTouchListener(false)
@@ -73,7 +73,7 @@ public:
     _markTouchListener = NULL;
   };
   
-  virtual void initialize(const InitializationContext* ic);
+  virtual void initialize(const Context* context);
   
   virtual void render(const RenderContext* rc);
   
@@ -97,15 +97,15 @@ public:
     
   }
   
-  void onResume(const InitializationContext* ic) {
-    _initializationContext = ic;
+  void onResume(const Context* context) {
+    _context = context;
   }
   
-  void onPause(const InitializationContext* ic) {
+  void onPause(const Context* context) {
 
   }
 
-  void onDestroy(const InitializationContext* ic) {
+  void onDestroy(const Context* context) {
 
   }
 

@@ -534,7 +534,7 @@ MultiLayerTileTexturizer::~MultiLayerTileTexturizer() {
     _texCoordsCache = NULL;
 }
 
-void MultiLayerTileTexturizer::initialize(const InitializationContext* ic,
+void MultiLayerTileTexturizer::initialize(const Context* context,
                                           const TilesRenderParameters* parameters) {
   _parameters = parameters;
 //  _layerSet->initialize(ic);

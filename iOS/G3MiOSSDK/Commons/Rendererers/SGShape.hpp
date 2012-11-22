@@ -35,7 +35,7 @@ public:
     return _uriPrefix;
   }
 
-  void initialize(const InitializationContext* ic);
+  void initialize(const Context* context);
   
   bool isReadyToRender(const RenderContext* rc);
 

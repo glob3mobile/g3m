@@ -18,9 +18,9 @@
 #include "IntBufferBuilder.hpp"
 
 
-void Camera::initialize(const InitializationContext* ic)
+void Camera::initialize(const Context* context)
 {
-  _planet = ic->getPlanet();
+  _planet = context->getPlanet();
   setCartesianPosition( MutableVector3D(_planet->getRadii().maxAxis() * 5, 0, 0) );
   _dirtyFlags.setAll(true);
 }

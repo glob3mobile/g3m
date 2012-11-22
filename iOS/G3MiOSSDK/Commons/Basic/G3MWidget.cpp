@@ -93,32 +93,32 @@ _logDownloaderStatistics(logDownloaderStatistics),
 _userData(NULL),
 _initializationTask(initializationTask),
 _autoDeleteInitializationTask(autoDeleteInitializationTask),
-_initializationContext(new InitializationContext(IFactory::instance(),
-                                                 IStringUtils::instance(),
-                                                 threadUtils,
-                                                 ILogger::instance(),
-                                                 IMathUtils::instance(),
-                                                 IJSONParser::instance(),
-                                                 _planet,
-                                                 downloader,
-                                                 _effectsScheduler,
-                                                 storage))
+_context(new Context(IFactory::instance(),
+                     IStringUtils::instance(),
+                     threadUtils,
+                     ILogger::instance(),
+                     IMathUtils::instance(),
+                     IJSONParser::instance(),
+                     _planet,
+                     downloader,
+                     _effectsScheduler,
+                     storage))
 {
   initializeGL();
 
-  _effectsScheduler->initialize(_initializationContext);
-  _cameraRenderer->initialize(_initializationContext);
-  _mainRenderer->initialize(_initializationContext);
-  _busyRenderer->initialize(_initializationContext);
-  _currentCamera->initialize(_initializationContext);
-  _nextCamera->initialize(_initializationContext);
+  _effectsScheduler->initialize(_context);
+  _cameraRenderer->initialize(_context);
+  _mainRenderer->initialize(_context);
+  _busyRenderer->initialize(_context);
+  _currentCamera->initialize(_context);
+  _nextCamera->initialize(_context);
 
   if (_threadUtils != NULL) {
-    _threadUtils->initialize(_initializationContext);
+    _threadUtils->initialize(_context);
   }
 
   if (_storage != NULL) {
-    _storage->initialize(_initializationContext);
+    _storage->initialize(_context);
   }
 
   if (_downloader != NULL){
@@ -212,7 +212,7 @@ G3MWidget::~G3MWidget() {
   }
 #endif
 
-  delete _initializationContext;
+  delete _context;
 }
 
 void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
@@ -270,7 +270,7 @@ void G3MWidget::render() {
   const int periodicalTasksCount = _periodicalTasks.size();
   for (int i = 0; i < periodicalTasksCount; i++) {
     PeriodicalTask* pt = _periodicalTasks[i];
-    pt->executeIfNecessary(_initializationContext);
+    pt->executeIfNecessary(_context);
   }
 
   // give to the CameraContrainers the opportunity to change the nextCamera
@@ -285,7 +285,7 @@ void G3MWidget::render() {
 
 
   if (_initializationTask != NULL) {
-    _initializationTask->run(_initializationContext);
+    _initializationTask->run(_context);
     if (_autoDeleteInitializationTask) {
       delete _initializationTask;
     }
@@ -393,34 +393,34 @@ void G3MWidget::render() {
 
 
 void G3MWidget::onPause() {
-  _effectsScheduler->onPause(_initializationContext);
+  _effectsScheduler->onPause(_context);
 
-  _mainRenderer->onPause(_initializationContext);
-  _busyRenderer->onPause(_initializationContext);
+  _mainRenderer->onPause(_context);
+  _busyRenderer->onPause(_context);
 
-  _downloader->onPause(_initializationContext);
-  _storage->onPause(_initializationContext);
+  _downloader->onPause(_context);
+  _storage->onPause(_context);
 }
 
 void G3MWidget::onResume() {
-  _storage->onResume(_initializationContext);
+  _storage->onResume(_context);
 
-  _downloader->onResume(_initializationContext);
+  _downloader->onResume(_context);
 
-  _mainRenderer->onResume(_initializationContext);
-  _busyRenderer->onResume(_initializationContext);
+  _mainRenderer->onResume(_context);
+  _busyRenderer->onResume(_context);
 
-  _effectsScheduler->onResume(_initializationContext);
+  _effectsScheduler->onResume(_context);
 }
 
 void G3MWidget::onDestroy() {
-  _effectsScheduler->onDestroy(_initializationContext);
+  _effectsScheduler->onDestroy(_context);
 
-  _mainRenderer->onDestroy(_initializationContext);
-  _busyRenderer->onDestroy(_initializationContext);
+  _mainRenderer->onDestroy(_context);
+  _busyRenderer->onDestroy(_context);
 
-  _downloader->onDestroy(_initializationContext);
-  _storage->onDestroy(_initializationContext);
+  _downloader->onDestroy(_context);
+  _storage->onDestroy(_context);
 }
 
 void G3MWidget::addPeriodicalTask(PeriodicalTask* periodicalTask) {

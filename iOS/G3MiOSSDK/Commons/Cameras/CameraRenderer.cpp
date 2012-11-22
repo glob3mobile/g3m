@@ -12,7 +12,7 @@
 #include "TouchEvent.hpp"
 
 
-void CameraRenderer::initialize(const InitializationContext* ic) {
+void CameraRenderer::initialize(const Context* context) {
   //_logger = ic->getLogger();
   //cameraContext = new CameraContext(
 }

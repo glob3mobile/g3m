@@ -23,7 +23,7 @@
 
 #include "GLConstants.hpp"
 
-void BusyMeshRenderer::initialize(const InitializationContext* ic)
+void BusyMeshRenderer::initialize(const Context* context)
 {
   unsigned int numStrides = 60;
   

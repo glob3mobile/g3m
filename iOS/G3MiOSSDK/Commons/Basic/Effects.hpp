@@ -209,7 +209,7 @@ public:
   
   void doOneCyle(const RenderContext *rc);
 
-  void initialize(const InitializationContext* ic);
+  void initialize(const Context* context);
   
   virtual ~EffectsScheduler() {
     _factory->deleteTimer(_timer);
@@ -225,15 +225,15 @@ public:
   
   void cancellAllEffectsFor(EffectTarget* target);
   
-  void onResume(const InitializationContext* ic) {
+  void onResume(const Context* context) {
     
   }
   
-  void onPause(const InitializationContext* ic) {
+  void onPause(const Context* context) {
     
   }
 
-  void onDestroy(const InitializationContext* ic) {
+  void onDestroy(const Context* context) {
 
   }
 

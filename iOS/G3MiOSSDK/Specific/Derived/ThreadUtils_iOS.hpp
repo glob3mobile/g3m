@@ -31,7 +31,7 @@ public:
   void invokeInRendererThread(GTask* task,
                               bool autoDelete) const {
     dispatch_async( dispatch_get_main_queue(), ^{
-      task->run(_initializationContext);
+      task->run(_context);
       if (autoDelete) {
         delete task;
       }
@@ -41,7 +41,7 @@ public:
   void invokeInBackground(GTask* task,
                           bool autoDelete) const {
     [ _backgroundQueue addOperationWithBlock:^{
-     task->run(_initializationContext);
+     task->run(_context);
      if (autoDelete) {
        delete task;
      }

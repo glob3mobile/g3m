@@ -328,7 +328,7 @@ private:
   ITimer* _lastSplitTimer;      // timer to start every time a tile get splitted into subtiles
   
   void clearTopLevelTiles();
-  void createTopLevelTiles(const InitializationContext* ic);
+  void createTopLevelTiles(const Context* context);
   
   TilesStatistics _lastStatistics;
   
@@ -336,10 +336,10 @@ private:
 
 //  const InitializationContext* _initializationContext;
 #ifdef C_CODE
-  const InitializationContext* _initializationContext;
+  const Context* _context;
 #endif
 #ifdef JAVA_CODE
-  private InitializationContext _initializationContext;
+  private Context _context;
 #endif
 
   void pruneTopLevelTiles();
@@ -353,7 +353,7 @@ public:
   
   ~TileRenderer();
   
-  void initialize(const InitializationContext* ic);
+  void initialize(const Context* context);
   
   void render(const RenderContext* rc);
   
@@ -376,15 +376,15 @@ public:
     _firstRender = false;
   }
   
-  void onResume(const InitializationContext* ic) {
+  void onResume(const Context* context) {
     
   }
   
-  void onPause(const InitializationContext* ic) {
+  void onPause(const Context* context) {
     
   }
 
-  void onDestroy(const InitializationContext* ic) {
+  void onDestroy(const Context* context) {
 
   }
 

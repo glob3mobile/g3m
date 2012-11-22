@@ -13,20 +13,20 @@
 #include "RectangleI.hpp"
 
 
-void MarksRenderer::initialize(const InitializationContext* ic) {
-  _initializationContext = ic;
-  
+void MarksRenderer::initialize(const Context* context) {
+  _context = context;
+
   int marksSize = _marks.size();
   for (int i = 0; i < marksSize; i++) {
     Mark* mark = _marks[i];
-    mark->initialize(_initializationContext);
+    mark->initialize(context);
   }
 }
 
 void MarksRenderer::addMark(Mark* mark) {
   _marks.push_back(mark);
-  if (_initializationContext != NULL) {
-    mark->initialize(_initializationContext);
+  if (_context != NULL) {
+    mark->initialize(_context);
   }
 }
 

@@ -12,25 +12,25 @@
 #include "URL.hpp"
 #include "IByteBuffer.hpp"
 #include "IImage.hpp"
-class InitializationContext;
+class Context;
 
 class IStorage {
 protected:
 #ifdef C_CODE
-  const InitializationContext* _initializationContext;
+  const Context* _context;
 #endif
 #ifdef JAVA_CODE
-  protected InitializationContext _initializationContext;
+  protected Context _context;
 #endif
 
 public:
   IStorage() :
-  _initializationContext(NULL)
+  _context(NULL)
   {
     
   }
 
-  virtual void initialize(const InitializationContext* ic);
+  virtual void initialize(const Context* context);
 
   virtual bool containsBuffer(const URL& url) = 0;
   
@@ -50,11 +50,11 @@ public:
   virtual const IImage* readImage(const URL& url) = 0;
   
   
-  virtual void onResume(const InitializationContext* ic) = 0;
+  virtual void onResume(const Context* context) = 0;
   
-  virtual void onPause(const InitializationContext* ic) = 0;
+  virtual void onPause(const Context* context) = 0;
 
-  virtual void onDestroy(const InitializationContext* ic) = 0;
+  virtual void onDestroy(const Context* context) = 0;
 
   
   virtual bool isAvailable() = 0;

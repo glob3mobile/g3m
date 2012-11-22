@@ -42,6 +42,7 @@ protected:
   EffectsScheduler*   _effectsScheduler;
   IStorage*           _storage;
 
+public:
   Context(const IFactory*     factory,
           const IStringUtils* stringUtils,
           const IThreadUtils* threadUtils,
@@ -65,7 +66,6 @@ protected:
   {
   }
 
-public:
   virtual ~Context() {
 
   }
@@ -114,30 +114,30 @@ public:
 //************************************************************
 
 
-class InitializationContext: public Context {
-public:
-  InitializationContext(const IFactory*     factory,
-                        const IStringUtils* stringUtils,
-                        const IThreadUtils* threadUtils,
-                        const ILogger*      logger,
-                        const IMathUtils*   mathUtils,
-                        const IJSONParser*  jsonParser,
-                        const Planet*       planet,
-                        IDownloader*        downloader,
-                        EffectsScheduler*   effectsScheduler,
-                        IStorage*           storage) :
-  Context(factory,
-          stringUtils,
-          threadUtils,
-          logger,
-          mathUtils,
-          jsonParser,
-          planet,
-          downloader,
-          effectsScheduler,
-          storage) {
-  }
-};
+//class InitializationContext: public Context {
+//public:
+//  InitializationContext(const IFactory*     factory,
+//                        const IStringUtils* stringUtils,
+//                        const IThreadUtils* threadUtils,
+//                        const ILogger*      logger,
+//                        const IMathUtils*   mathUtils,
+//                        const IJSONParser*  jsonParser,
+//                        const Planet*       planet,
+//                        IDownloader*        downloader,
+//                        EffectsScheduler*   effectsScheduler,
+//                        IStorage*           storage) :
+//  Context(factory,
+//          stringUtils,
+//          threadUtils,
+//          logger,
+//          mathUtils,
+//          jsonParser,
+//          planet,
+//          downloader,
+//          effectsScheduler,
+//          storage) {
+//  }
+//};
 
 //************************************************************
 
