@@ -123,9 +123,9 @@ public class EffectsScheduler
   
   
   
-  public final void initialize(InitializationContext ic)
+  public final void initialize(Context context)
   {
-	_factory = ic.getFactory();
+	_factory = context.getFactory();
 	_timer = _factory.createTimer();
   }
 
@@ -178,17 +178,17 @@ public class EffectsScheduler
   
   }
 
-  public final void onResume(InitializationContext ic)
+  public final void onResume(Context context)
   {
 
   }
 
-  public final void onPause(InitializationContext ic)
+  public final void onPause(Context context)
   {
 
   }
 
-  public final void onDestroy(InitializationContext ic)
+  public final void onDestroy(Context context)
   {
 
   }

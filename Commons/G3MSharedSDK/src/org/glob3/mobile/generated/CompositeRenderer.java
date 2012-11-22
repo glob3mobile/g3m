@@ -21,13 +21,13 @@ public class CompositeRenderer extends Renderer
 {
   private java.util.ArrayList<Renderer> _renderers = new java.util.ArrayList<Renderer>();
 
-  private InitializationContext _ic; // CHANGED BY CONVERSOR RULE
+  private final Context _context;
 
   private boolean _enable;
 
   public CompositeRenderer()
   {
-	  _ic = null;
+	  _context = null;
 	  _enable = true;
 	_renderers = new java.util.ArrayList<Renderer>();
   }
@@ -61,14 +61,14 @@ public class CompositeRenderer extends Renderer
 	_enable = enable;
   }
 
-  public final void initialize(InitializationContext ic)
+  public final void initialize(Context context)
   {
-	_ic = ic;
+	_context = context;
   
 	final int rendersSize = _renderers.size();
 	for (int i = 0; i < rendersSize; i++)
 	{
-	  _renderers.get(i).initialize(ic);
+	  _renderers.get(i).initialize(context);
 	}
   }
 
@@ -136,9 +136,9 @@ public class CompositeRenderer extends Renderer
   public final void addRenderer(Renderer renderer)
   {
 	_renderers.add(renderer);
-	if (_ic != null)
+	if (_context != null)
 	{
-	  renderer.initialize(_ic);
+	  renderer.initialize(_context);
 	}
   }
 
@@ -160,30 +160,30 @@ public class CompositeRenderer extends Renderer
 	}
   }
 
-  public final void onResume(InitializationContext ic)
+  public final void onResume(Context context)
   {
 	final int rendersSize = _renderers.size();
 	for (int i = 0; i < rendersSize; i++)
 	{
-	  _renderers.get(i).onResume(ic);
+	  _renderers.get(i).onResume(context);
 	}
   }
 
-  public final void onPause(InitializationContext ic)
+  public final void onPause(Context context)
   {
 	final int rendersSize = _renderers.size();
 	for (int i = 0; i < rendersSize; i++)
 	{
-	  _renderers.get(i).onPause(ic);
+	  _renderers.get(i).onPause(context);
 	}
   }
 
-  public final void onDestroy(InitializationContext ic)
+  public final void onDestroy(Context context)
   {
 	final int rendersSize = _renderers.size();
 	for (int i = 0; i < rendersSize; i++)
 	{
-	  _renderers.get(i).onDestroy(ic);
+	  _renderers.get(i).onDestroy(context);
 	}
   }
 

@@ -45,7 +45,7 @@ public class CameraRenderer extends LeafRenderer
 	}
   }
 
-  public final void initialize(InitializationContext ic)
+  public final void initialize(Context context)
   {
 	//_logger = ic->getLogger();
 	//cameraContext = new CameraContext(
@@ -100,17 +100,17 @@ public class CameraRenderer extends LeafRenderer
 
   }
 
-  public final void onResume(InitializationContext ic)
+  public final void onResume(Context context)
   {
 
   }
 
-  public final void onPause(InitializationContext ic)
+  public final void onPause(Context context)
   {
 
   }
 
-  public final void onDestroy(InitializationContext ic)
+  public final void onDestroy(Context context)
   {
 
   }

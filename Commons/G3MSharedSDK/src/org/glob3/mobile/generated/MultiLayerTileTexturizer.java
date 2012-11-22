@@ -97,7 +97,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 	//  return (_pendingTopTileRequests <= 0) && _layerSet->isReady();
   }
 
-  public final void initialize(InitializationContext ic, TilesRenderParameters parameters)
+  public final void initialize(Context context, TilesRenderParameters parameters)
   {
 	_parameters = parameters;
   //  _layerSet->initialize(ic);

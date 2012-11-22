@@ -34,7 +34,7 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
 	  _degrees = 0;
   }
 
-  public final void initialize(InitializationContext ic)
+  public final void initialize(Context context)
   {
 	int numStrides = 60;
   
@@ -158,17 +158,17 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
 	//int _TODO_stop_effects;
   }
 
-  public final void onResume(InitializationContext ic)
+  public final void onResume(Context context)
   {
 
   }
 
-  public final void onPause(InitializationContext ic)
+  public final void onPause(Context context)
   {
 
   }
 
-  public final void onDestroy(InitializationContext ic)
+  public final void onDestroy(Context context)
   {
 
   }

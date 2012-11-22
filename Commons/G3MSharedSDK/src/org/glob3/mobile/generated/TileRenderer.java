@@ -25,7 +25,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
 	_topLevelTiles.clear();
   }
-  private void createTopLevelTiles(InitializationContext ic)
+  private void createTopLevelTiles(Context context)
   {
 	final Angle fromLatitude = _parameters._topSector.lower().latitude();
 	final Angle fromLongitude = _parameters._topSector.lower().longitude();
@@ -55,7 +55,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 	  }
 	}
   
-	ic.getLogger().logInfo("Created %d top level tiles", _topLevelTiles.size());
+	context.getLogger().logInfo("Created %d top level tiles", _topLevelTiles.size());
   
 	_topTilesJustCreated = true;
   }
@@ -65,7 +65,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   private boolean _firstRender;
 
 //  const InitializationContext* _initializationContext;
-  private InitializationContext _initializationContext;
+  private Context _context;
 
   private void pruneTopLevelTiles()
   {
@@ -88,7 +88,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 	  _lastSplitTimer = null;
 	  _lastCamera = null;
 	  _firstRender = false;
-	  _initializationContext = null;
+	  _context = null;
 	_layerSet.setChangeListener(this);
   }
 
@@ -105,19 +105,19 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 		_lastSplitTimer.dispose();
   }
 
-  public final void initialize(InitializationContext ic)
+  public final void initialize(Context context)
   {
-	_initializationContext = ic;
+	_context = context;
   
 	clearTopLevelTiles();
-	createTopLevelTiles(ic);
+	createTopLevelTiles(context);
   
 	if (_lastSplitTimer != null)
 		_lastSplitTimer.dispose();
-	_lastSplitTimer = ic.getFactory().createTimer();
+	_lastSplitTimer = context.getFactory().createTimer();
   
-	_layerSet.initialize(ic);
-	_texturizer.initialize(ic, _parameters);
+	_layerSet.initialize(context);
+	_texturizer.initialize(context, _parameters);
   }
 
   public final void render(RenderContext rc)
@@ -268,17 +268,17 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 	_firstRender = false;
   }
 
-  public final void onResume(InitializationContext ic)
+  public final void onResume(Context context)
   {
 
   }
 
-  public final void onPause(InitializationContext ic)
+  public final void onPause(Context context)
   {
 
   }
 
-  public final void onDestroy(InitializationContext ic)
+  public final void onDestroy(Context context)
   {
 
   }
@@ -298,7 +298,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 	pruneTopLevelTiles();
 	clearTopLevelTiles();
 	_firstRender = true;
-	createTopLevelTiles(_initializationContext);
+	createTopLevelTiles(_context);
   }
 
 }

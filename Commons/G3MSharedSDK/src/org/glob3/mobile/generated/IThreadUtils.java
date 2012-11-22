@@ -17,22 +17,23 @@ package org.glob3.mobile.generated;
 
 
 
+//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
+//class Context;
+
 public abstract class IThreadUtils
 {
-  private static IThreadUtils _instance = null;
+  protected Context _context;
 
 
-  public static void setInstance(IThreadUtils logger)
+  public IThreadUtils()
   {
-	//    if (_instance != NULL) {
-	//      printf("Warning, IThreadUtils instance set two times\n");
-	//    }
-	_instance = logger;
+	  _context = 0;
+
   }
 
-  public static IThreadUtils instance()
+  public void initialize(Context context)
   {
-	return _instance;
+	_context = context;
   }
 
   public void dispose()
@@ -40,8 +41,12 @@ public abstract class IThreadUtils
 
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual void invokeInRendererThread(GTask* task, boolean autoDelete) const = 0;
   public abstract void invokeInRendererThread(GTask task, boolean autoDelete);
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual void invokeInBackground(GTask* task, boolean autoDelete) const = 0;
   public abstract void invokeInBackground(GTask task, boolean autoDelete);
 
 }

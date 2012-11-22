@@ -96,12 +96,12 @@ public class LayerSet
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void initialize(const InitializationContext* ic)const
-  public final void initialize(InitializationContext ic)
+//ORIGINAL LINE: void initialize(const Context* context)const
+  public final void initialize(Context context)
   {
 	for (int i = 0; i<_layers.size(); i++)
 	{
-	  _layers.get(i).initialize(ic);
+	  _layers.get(i).initialize(context);
 	}
   }
 

@@ -25,7 +25,7 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TileTessellator;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class InitializationContext;
+//class Context;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TilesRenderParameters;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
@@ -44,7 +44,7 @@ public abstract class TileTexturizer
 
   public abstract boolean isReady(RenderContext rc, LayerSet layerSet);
 
-  public abstract void initialize(InitializationContext ic, TilesRenderParameters parameters);
+  public abstract void initialize(Context context, TilesRenderParameters parameters);
 
   public abstract Mesh texturize(RenderContext rc, TileRenderContext trc, Tile tile, Mesh tessellatorMesh, Mesh previousMesh);
 

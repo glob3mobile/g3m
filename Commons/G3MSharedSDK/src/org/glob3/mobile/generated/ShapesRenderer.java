@@ -21,12 +21,12 @@ public class ShapesRenderer extends LeafRenderer
 {
   private java.util.ArrayList<Shape> _shapes = new java.util.ArrayList<Shape>();
 
-  private InitializationContext _initializationContext;
+  private Context _context;
 
 
   public ShapesRenderer()
   {
-	  _initializationContext = null;
+	  _context = null;
 
   }
 
@@ -44,36 +44,36 @@ public class ShapesRenderer extends LeafRenderer
   public final void addShape(Shape shape)
   {
 	_shapes.add(shape);
-	if (_initializationContext != null)
+	if (_context != null)
 	{
-	  shape.initialize(_initializationContext);
+	  shape.initialize(_context);
 	}
   }
 
-  public final void onResume(InitializationContext ic)
+  public final void onResume(Context context)
   {
-	_initializationContext = ic;
+	_context = context;
   }
 
-  public final void onPause(InitializationContext ic)
-  {
-
-  }
-
-  public final void onDestroy(InitializationContext ic)
+  public final void onPause(Context context)
   {
 
   }
 
-  public final void initialize(InitializationContext ic)
+  public final void onDestroy(Context context)
   {
-	_initializationContext = ic;
+
+  }
+
+  public final void initialize(Context context)
+  {
+	_context = context;
 
 	final int shapesCount = _shapes.size();
 	for (int i = 0; i < shapesCount; i++)
 	{
 	  Shape shape = _shapes.get(i);
-	  shape.initialize(ic);
+	  shape.initialize(context);
 	}
   }
 

@@ -107,12 +107,12 @@ public class Mark
 	return _position;
   }
 
-  public final void initialize(InitializationContext ic)
+  public final void initialize(Context context)
   {
 	//  todo;
 	if (!_textureSolved)
 	{
-	  IDownloader downloader = ic.getDownloader();
+	  IDownloader downloader = context.getDownloader();
   
 	  downloader.requestImage(_textureURL, 1000000, new TextureDownloadListener(this), true);
 	}

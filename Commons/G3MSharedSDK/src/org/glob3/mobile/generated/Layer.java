@@ -99,7 +99,7 @@ public abstract class Layer
 	return true;
   }
 
-  public void initialize(InitializationContext ic)
+  public void initialize(Context context)
   {
   }
 

@@ -34,7 +34,7 @@ public class DummyRenderer extends LeafRenderer
   {
   }
 
-  public final void initialize(InitializationContext ic)
+  public final void initialize(Context context)
   {
 	int res = 12;
 	//_vertices = new float[res * res * 3];
@@ -46,10 +46,14 @@ public class DummyRenderer extends LeafRenderer
   
 	// create vertices
   
-	if (ic != null && ic.getPlanet() != null)
-	  _halfSize = ic.getPlanet().getRadii()._x / 2.0;
+	if (context != null && context.getPlanet() != null)
+	{
+	  _halfSize = context.getPlanet().getRadii()._x / 2.0;
+	}
 	else
+	{
 	  _halfSize = 7e6;
+	}
   
 	//int n = 0;
 	for (int j = 0; j < res; j++)
@@ -193,17 +197,17 @@ public class DummyRenderer extends LeafRenderer
 
   }
 
-  public final void onResume(InitializationContext ic)
+  public final void onResume(Context context)
   {
 
   }
 
-  public final void onPause(InitializationContext ic)
+  public final void onPause(Context context)
   {
 
   }
 
-  public final void onDestroy(InitializationContext ic)
+  public final void onDestroy(Context context)
   {
 
   }

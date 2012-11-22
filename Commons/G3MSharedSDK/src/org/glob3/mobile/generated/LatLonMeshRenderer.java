@@ -30,9 +30,9 @@ public class LatLonMeshRenderer extends LeafRenderer
 		_mesh.dispose();
   }
 
-  public final void initialize(InitializationContext ic)
+  public final void initialize(Context context)
   {
-	FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), ic.getPlanet(), Geodetic2D.zero());
+	FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), context.getPlanet(), Geodetic2D.zero());
 	vertices.add(Geodetic3D.fromDegrees(28.753213, -17.898788, 500));
 	vertices.add(Geodetic3D.fromDegrees(28.680347, -17.898788, 500));
 	vertices.add(Geodetic3D.fromDegrees(28.753213, -17.83287, 500));
@@ -79,17 +79,17 @@ public class LatLonMeshRenderer extends LeafRenderer
 
   }
 
-  public final void onResume(InitializationContext ic)
+  public final void onResume(Context context)
   {
 
   }
 
-  public final void onPause(InitializationContext ic)
+  public final void onPause(Context context)
   {
 
   }
 
-  public final void onDestroy(InitializationContext ic)
+  public final void onDestroy(Context context)
   {
 
   }

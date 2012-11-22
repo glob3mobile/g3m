@@ -21,6 +21,7 @@ package org.glob3.mobile.generated;
 public class CachedDownloader extends IDownloader
 {
   private IDownloader _downloader;
+  private IStorage _storage;
 
   private int _requestsCounter;
   private int _cacheHitsCounter;
@@ -28,9 +29,10 @@ public class CachedDownloader extends IDownloader
 
   private final boolean _saveInBackground;
 
-  public CachedDownloader(IDownloader downloader, boolean saveInBackground)
+  public CachedDownloader(IDownloader downloader, IStorage storage, boolean saveInBackground)
   {
 	  _downloader = downloader;
+	  _storage = storage;
 	  _requestsCounter = 0;
 	  _cacheHitsCounter = 0;
 	  _savesCounter = 0;
@@ -59,11 +61,11 @@ public class CachedDownloader extends IDownloader
   {
 	_requestsCounter++;
   
-	final IByteBuffer cachedBuffer = IStorage.instance().isAvailable() ? IStorage.instance().readBuffer(url) : null;
+	final IByteBuffer cachedBuffer = _storage.isAvailable() ? _storage.readBuffer(url) : null;
 	if (cachedBuffer == null)
 	{
 	  // cache miss
-	  return _downloader.requestBuffer(url, priority, new BufferSaverDownloadListener(this, listener, deleteListener), true);
+	  return _downloader.requestBuffer(url, priority, new BufferSaverDownloadListener(this, listener, deleteListener, _storage), true);
 	}
   
 	// cache hit
@@ -85,11 +87,11 @@ public class CachedDownloader extends IDownloader
   {
 	_requestsCounter++;
   
-	final IImage cachedImage = IStorage.instance().isAvailable() ? IStorage.instance().readImage(url) : null;
+	final IImage cachedImage = _storage.isAvailable() ? _storage.readImage(url) : null;
 	if (cachedImage == null)
 	{
 	  // cache miss
-	  return _downloader.requestImage(url, priority, new ImageSaverDownloadListener(this, listener, deleteListener), true);
+	  return _downloader.requestImage(url, priority, new ImageSaverDownloadListener(this, listener, deleteListener, _storage), true);
 	}
   
 	// cache hit
@@ -114,6 +116,8 @@ public class CachedDownloader extends IDownloader
 
   public void dispose()
   {
+	if (_downloader != null)
+		_downloader.dispose();
   }
 
   public final String statistics()
@@ -139,19 +143,19 @@ public class CachedDownloader extends IDownloader
 	_savesCounter++;
   }
 
-  public final void onResume(InitializationContext ic)
+  public final void onResume(Context context)
   {
-	_downloader.onResume(ic);
+	_downloader.onResume(context);
   }
 
-  public final void onPause(InitializationContext ic)
+  public final void onPause(Context context)
   {
-	_downloader.onPause(ic);
+	_downloader.onPause(context);
   }
 
-  public final void onDestroy(InitializationContext ic)
+  public final void onDestroy(Context context)
   {
-	_downloader.onDestroy(ic);
+	_downloader.onDestroy(context);
   }
 
 }

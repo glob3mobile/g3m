@@ -158,7 +158,7 @@ public abstract class Shape
 	}
   }
 
-  public void initialize(InitializationContext ic)
+  public void initialize(Context context)
   {
 
   }

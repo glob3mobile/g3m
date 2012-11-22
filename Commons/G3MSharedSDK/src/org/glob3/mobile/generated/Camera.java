@@ -347,9 +347,9 @@ public class Camera
 	return point0.angleBetween(point1);
   }
 
-  public final void initialize(InitializationContext ic)
+  public final void initialize(Context context)
   {
-	_planet = ic.getPlanet();
+	_planet = context.getPlanet();
 	setCartesianPosition(new MutableVector3D(_planet.getRadii().maxAxis() * 5, 0, 0));
 	_dirtyFlags.setAll(true);
   }

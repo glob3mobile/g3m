@@ -83,7 +83,7 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
 	  _textureFilename = textureFilename;
   }
 
-  public final void initialize(InitializationContext ic)
+  public final void initialize(Context context)
   {
   }
 
@@ -177,17 +177,17 @@ public class BusyQuadRenderer extends LeafRenderer implements EffectTarget
 	//int _TODO_stop_effects;
   }
 
-  public final void onResume(InitializationContext ic)
+  public final void onResume(Context context)
   {
 
   }
 
-  public final void onPause(InitializationContext ic)
+  public final void onPause(Context context)
   {
 
   }
 
-  public final void onDestroy(InitializationContext ic)
+  public final void onDestroy(Context context)
   {
 
   }

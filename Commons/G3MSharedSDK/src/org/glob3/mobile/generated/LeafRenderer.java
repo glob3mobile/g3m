@@ -49,11 +49,11 @@ public abstract class LeafRenderer extends Renderer
 	_enable = enable;
   }
 
-  public abstract void onResume(InitializationContext ic);
+  public abstract void onResume(Context context);
 
-  public abstract void onPause(InitializationContext ic);
+  public abstract void onPause(Context context);
 
-  public abstract void initialize(InitializationContext ic);
+  public abstract void initialize(Context context);
 
   public abstract boolean isReadyToRender(RenderContext rc);
 

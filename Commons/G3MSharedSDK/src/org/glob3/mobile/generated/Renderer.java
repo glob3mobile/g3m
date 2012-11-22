@@ -11,7 +11,7 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TouchEvent;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class InitializationContext;
+//class Context;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class RenderContext;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
@@ -26,7 +26,7 @@ public abstract class Renderer
   public abstract void setEnable(boolean enable);
 
 
-  public abstract void initialize(InitializationContext ic);
+  public abstract void initialize(Context context);
 
   public abstract boolean isReadyToRender(RenderContext rc);
 
@@ -50,10 +50,10 @@ public abstract class Renderer
   }
 
   // Android activity lifecyle
-  public abstract void onResume(InitializationContext ic);
+  public abstract void onResume(Context context);
 
-  public abstract void onPause(InitializationContext ic);
+  public abstract void onPause(Context context);
 
-  public abstract void onDestroy(InitializationContext ic);
+  public abstract void onDestroy(Context context);
 
 }

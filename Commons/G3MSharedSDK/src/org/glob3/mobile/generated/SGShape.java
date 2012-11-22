@@ -42,9 +42,9 @@ public class SGShape extends Shape
 	return _uriPrefix;
   }
 
-  public final void initialize(InitializationContext ic)
+  public final void initialize(Context context)
   {
-	_node.initialize(ic, this);
+	_node.initialize(context, this);
   }
 
   public final boolean isReadyToRender(RenderContext rc)

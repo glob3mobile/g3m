@@ -98,7 +98,7 @@ public class BingLayer extends Layer
 	return "Aerial";
   }
 
-  public final void initialize(InitializationContext ic)
+  public final void initialize(Context context)
   {
   
 	String tileURL = "";
@@ -109,7 +109,7 @@ public class BingLayer extends Layer
 	tileURL+=_key;
   
 	final URL url = new URL(tileURL, false);
-	ic.getDownloader().requestBuffer(url, 100000000, new TokenDownloadListener(this), true);
+	context.getDownloader().requestBuffer(url, 100000000, new TokenDownloadListener(this), true);
   
   }
 

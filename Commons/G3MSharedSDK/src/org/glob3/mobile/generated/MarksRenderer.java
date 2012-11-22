@@ -4,8 +4,8 @@ public class MarksRenderer extends LeafRenderer
   private final boolean _readyWhenMarksReady;
   private java.util.ArrayList<Mark> _marks = new java.util.ArrayList<Mark>();
 
-  private InitializationContext _initializationContext;
-  private Camera                _lastCamera;
+  private Context _context;
+  private Camera  _lastCamera;
 
   private MarkTouchListener _markTouchListener;
   private boolean _autoDeleteMarkTouchListener;
@@ -14,7 +14,7 @@ public class MarksRenderer extends LeafRenderer
   public MarksRenderer(boolean readyWhenMarksReady)
   {
 	  _readyWhenMarksReady = readyWhenMarksReady;
-	  _initializationContext = null;
+	  _context = null;
 	  _lastCamera = null;
 	  _markTouchListener = null;
 	  _autoDeleteMarkTouchListener = false;
@@ -49,15 +49,15 @@ public class MarksRenderer extends LeafRenderer
 	_markTouchListener = null;
   }
 
-  public void initialize(InitializationContext ic)
+  public void initialize(Context context)
   {
-	_initializationContext = ic;
+	_context = context;
   
 	int marksSize = _marks.size();
 	for (int i = 0; i < marksSize; i++)
 	{
 	  Mark mark = _marks.get(i);
-	  mark.initialize(_initializationContext);
+	  mark.initialize(context);
 	}
   }
 
@@ -103,9 +103,9 @@ public class MarksRenderer extends LeafRenderer
   public final void addMark(Mark mark)
   {
 	_marks.add(mark);
-	if (_initializationContext != null)
+	if (_context != null)
 	{
-	  mark.initialize(_initializationContext);
+	  mark.initialize(_context);
 	}
   }
 
@@ -215,17 +215,17 @@ public class MarksRenderer extends LeafRenderer
 
   }
 
-  public final void onResume(InitializationContext ic)
+  public final void onResume(Context context)
   {
-	_initializationContext = ic;
+	_context = context;
   }
 
-  public final void onPause(InitializationContext ic)
+  public final void onPause(Context context)
   {
 
   }
 
-  public final void onDestroy(InitializationContext ic)
+  public final void onDestroy(Context context)
   {
 
   }
