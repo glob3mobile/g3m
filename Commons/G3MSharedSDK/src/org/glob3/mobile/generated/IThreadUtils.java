@@ -27,7 +27,7 @@ public abstract class IThreadUtils
 
   public IThreadUtils()
   {
-	  _context = 0;
+	  _context = null;
 
   }
 

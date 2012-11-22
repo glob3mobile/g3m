@@ -27,6 +27,9 @@ package org.glob3.mobile.generated;
 
 public abstract class IDownloader
 {
+  public void dispose()
+  {
+  }
 
   public abstract void onResume(Context context);
 
@@ -43,10 +46,6 @@ public abstract class IDownloader
   public abstract long requestImage(URL url, long priority, IImageDownloadListener listener, boolean deleteListener);
 
   public abstract void cancelRequest(long requestId);
-
-  public void dispose()
-  {
-  }
 
   public abstract String statistics();
 
