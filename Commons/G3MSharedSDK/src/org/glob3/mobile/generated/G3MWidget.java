@@ -236,6 +236,8 @@ public class G3MWidget
 
   public final void onPause()
   {
+	_threadUtils.onPause(_context);
+  
 	_effectsScheduler.onPause(_context);
   
 	_mainRenderer.onPause(_context);
@@ -255,10 +257,14 @@ public class G3MWidget
 	_busyRenderer.onResume(_context);
   
 	_effectsScheduler.onResume(_context);
+  
+	_threadUtils.onResume(_context);
   }
 
   public final void onDestroy()
   {
+	_threadUtils.onDestroy(_context);
+  
 	_effectsScheduler.onDestroy(_context);
   
 	_mainRenderer.onDestroy(_context);

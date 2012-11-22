@@ -31,6 +31,12 @@ public abstract class IThreadUtils
 
   }
 
+  public abstract void onResume(G3MContext context);
+
+  public abstract void onPause(G3MContext context);
+
+  public abstract void onDestroy(G3MContext context);
+
   public void initialize(G3MContext context)
   {
 	_context = context;
