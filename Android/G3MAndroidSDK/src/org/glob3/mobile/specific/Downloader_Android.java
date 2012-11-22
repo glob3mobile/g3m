@@ -66,6 +66,11 @@ public final class Downloader_Android
                _workers.add(da);
             }
 
+
+            for (final Downloader_Android_WorkerThread worker : _workers) {
+               worker.initialize(_context);
+            }
+
             for (final Downloader_Android_WorkerThread worker : _workers) {
                worker.start();
             }
@@ -136,7 +141,7 @@ public final class Downloader_Android
             handler = _queuedHandlers.get(url.getPath());
             if (handler == null) {
                // new handler, queue it
-               handler = new Downloader_Android_Handler(url, listener, priority, requestId, _context);
+               handler = new Downloader_Android_Handler(url, listener, priority, requestId);
                _queuedHandlers.put(url.getPath(), handler);
             }
             else {
@@ -172,7 +177,7 @@ public final class Downloader_Android
             handler = _queuedHandlers.get(url.getPath());
             if (handler == null) {
                // new handler, queue it
-               handler = new Downloader_Android_Handler(url, listener, priority, requestId, _context);
+               handler = new Downloader_Android_Handler(url, listener, priority, requestId);
                _queuedHandlers.put(url.getPath(), handler);
             }
             else {
@@ -237,16 +242,31 @@ public final class Downloader_Android
    }
 
 
-   public Downloader_Android_Handler getHandlerToRun() {
+   @Override
+   public synchronized void initialize(final G3MContext context) {
+      _context = context;
+      for (final Downloader_Android_WorkerThread worker : _workers) {
+         worker.initialize(_context);
+      }
+   }
+
+
+   Downloader_Android_Handler getHandlerToRun() {
       long selectedPriority = Long.MIN_VALUE;
       Downloader_Android_Handler selectedHandler = null;
       String selectedURL = null;
 
       synchronized (this) {
-         final Iterator<Map.Entry<String, Downloader_Android_Handler>> it = _queuedHandlers.entrySet().iterator();
 
-         while (it.hasNext()) {
-            final Map.Entry<String, Downloader_Android_Handler> e = it.next();
+         if (_context == null) {
+            return null;
+         }
+
+         //         final Iterator<Map.Entry<String, Downloader_Android_Handler>> it = _queuedHandlers.entrySet().iterator();
+         //
+         //         while (it.hasNext()) {
+         for (final Map.Entry<String, Downloader_Android_Handler> e : _queuedHandlers.entrySet()) {
+            //            final Map.Entry<String, Downloader_Android_Handler> e = it.next();
             final String url = e.getKey();
             final Downloader_Android_Handler handler = e.getValue();
             final long priority = handler.getPriority();
@@ -314,10 +334,5 @@ public final class Downloader_Android
       stop();
    }
 
-
-   @Override
-   public void initialize(final G3MContext context) {
-      _context = context;
-   }
 
 }

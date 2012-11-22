@@ -29,15 +29,11 @@ public final class Downloader_Android_Handler {
    private java.net.URL                   _URL;
    private final ArrayList<ListenerEntry> _listeners = new ArrayList<ListenerEntry>();
 
-   private final G3MContext               _context;
-
 
    Downloader_Android_Handler(final URL url,
                               final IBufferDownloadListener listener,
                               final long priority,
-                              final long requestId,
-                              final G3MContext context) {
-      _context = context;
+                              final long requestId) {
       _priority = priority;
       _url = url;
       try {
@@ -61,9 +57,7 @@ public final class Downloader_Android_Handler {
    Downloader_Android_Handler(final URL url,
                               final IImageDownloadListener listener,
                               final long priority,
-                              final long requestId,
-                              final G3MContext context) {
-      _context = context;
+                              final long requestId) {
       _priority = priority;
       _url = url;
       try {
@@ -167,7 +161,8 @@ public final class Downloader_Android_Handler {
    }
 
 
-   void runWithDownloader(final Downloader_Android downloader) {
+   void runWithDownloader(final Downloader_Android downloader,
+                          final G3MContext context) {
       //      Log.i(TAG, "runWithDownloader url=" + _url.getPath());
 
       HttpURLConnection connection = null;
@@ -215,7 +210,7 @@ public final class Downloader_Android_Handler {
       downloader.removeDownloadingHandlerForUrl(_url.getPath());
 
 
-      _context.getThreadUtils().invokeInRendererThread(new ProcessResponseGTask(statusCode, data, this), true);
+      context.getThreadUtils().invokeInRendererThread(new ProcessResponseGTask(statusCode, data, this), true);
    }
 
    public class ProcessResponseGTask

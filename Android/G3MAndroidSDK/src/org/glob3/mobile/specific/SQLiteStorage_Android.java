@@ -153,9 +153,9 @@ public final class SQLiteStorage_Android
    }
 
 
-   private void rawSave(final String table,
-                        final String name,
-                        final byte[] contents) {
+   private synchronized void rawSave(final String table,
+                                     final String name,
+                                     final byte[] contents) {
       final ContentValues values = new ContentValues();
       values.put("name", name);
       values.put("contents", contents);

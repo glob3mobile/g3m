@@ -5,12 +5,10 @@
 
 package org.glob3.mobile.demo;
 
-import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.specific.G3MWidget_Android;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.FrameLayout;
 
 
@@ -49,21 +47,42 @@ public class G3MDoubleGlob3Activity
    }
 
 
+   //   @Override
+   //   protected void onResume() {
+   //      IDownloader.instance().start();
+   //      super.onResume();
+   //   }
+   //
+   //
+   //   @Override
+   //   protected void onDestroy() {
+   //      super.onDestroy();
+   //      Log.d("Demo", "Activity destroyed");
+   //      //TODO HACK TO CLOSE SQL DB
+   //      //      _widgetAndroidUp.closeStorage();
+   //      //      _widgetAndroidDown.closeStorage();
+   //      //      android.os.Process.killProcess(android.os.Process.myPid());
+   //   }
+
    @Override
    protected void onResume() {
-      IDownloader.instance().start();
       super.onResume();
+      _widgetAndroidUp.onResume();
+      _widgetAndroidDown.onResume();
    }
 
 
    @Override
-   protected void onDestroy() {
-      super.onDestroy();
-      Log.d("Demo", "Activity destroyed");
-      //TODO HACK TO CLOSE SQL DB
-      //      _widgetAndroidUp.closeStorage();
-      //      _widgetAndroidDown.closeStorage();
-      //      android.os.Process.killProcess(android.os.Process.myPid());
+   protected void onPause() {
+      if (isFinishing()) {
+         _widgetAndroidUp.onDestroy();
+         _widgetAndroidDown.onDestroy();
+      }
+      else {
+         _widgetAndroidUp.onPause();
+         _widgetAndroidDown.onPause();
+      }
+      super.onPause();
    }
 
 }

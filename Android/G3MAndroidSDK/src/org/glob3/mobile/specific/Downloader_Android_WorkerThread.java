@@ -2,6 +2,8 @@
 
 package org.glob3.mobile.specific;
 
+import org.glob3.mobile.generated.G3MContext;
+
 import android.util.Log;
 
 
@@ -16,6 +18,7 @@ public final class Downloader_Android_WorkerThread
    private boolean                  _isStopped = false;
 
    private final int                _id;
+   private G3MContext               _context;
 
 
    public Downloader_Android_WorkerThread(final Downloader_Android downloader,
@@ -53,7 +56,7 @@ public final class Downloader_Android_WorkerThread
          final Downloader_Android_Handler handler = _downloader.getHandlerToRun();
 
          if (handler != null) {
-            handler.runWithDownloader(_downloader);
+            handler.runWithDownloader(_downloader, _context);
          }
          else {
             try {
@@ -74,6 +77,11 @@ public final class Downloader_Android_WorkerThread
 
    public synchronized boolean isStopped() {
       return _isStopped;
+   }
+
+
+   public void initialize(final G3MContext context) {
+      _context = context;
    }
 
 }
