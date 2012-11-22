@@ -13,7 +13,7 @@
 #include <vector>
 
 class G3MContext;
-class RenderContext;
+class G3MRenderContext;
 class SGShape;
 
 class SGNode {
@@ -37,11 +37,11 @@ protected:
 
   SGShape *_shape;
 
-  virtual void prepareRender(const RenderContext* rc);
+  virtual void prepareRender(const G3MRenderContext* rc);
 
-  virtual void cleanUpRender(const RenderContext* rc);
+  virtual void cleanUpRender(const G3MRenderContext* rc);
 
-  virtual void rawRender(const RenderContext* rc);
+  virtual void rawRender(const G3MRenderContext* rc);
 
 public:
 
@@ -68,9 +68,9 @@ public:
     _sId = sId;
   }
 
-  virtual bool isReadyToRender(const RenderContext* rc);
+  virtual bool isReadyToRender(const G3MRenderContext* rc);
 
-  void render(const RenderContext* rc);
+  void render(const G3MRenderContext* rc);
 
   SGShape* getShape() const {
     // return (_parent == NULL) ? _shape : _parent->getShape();

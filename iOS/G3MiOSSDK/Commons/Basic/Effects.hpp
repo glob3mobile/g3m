@@ -72,16 +72,16 @@ protected:
   }
   
 public:
-  virtual void start(const RenderContext *rc,
+  virtual void start(const G3MRenderContext *rc,
                      const TimeInterval& now) = 0;
   
-  virtual void doStep(const RenderContext *rc,
+  virtual void doStep(const G3MRenderContext *rc,
                       const TimeInterval& now) = 0;
   
-  virtual bool isDone(const RenderContext *rc,
+  virtual bool isDone(const G3MRenderContext *rc,
                       const TimeInterval& now) = 0;
   
-  virtual void stop(const RenderContext *rc,
+  virtual void stop(const G3MRenderContext *rc,
                     const TimeInterval& now) = 0;
   
   virtual void cancel(const TimeInterval& now) = 0;
@@ -117,17 +117,17 @@ protected:
   
   
 public:
-  virtual void stop(const RenderContext *rc,
+  virtual void stop(const G3MRenderContext *rc,
                     const TimeInterval& now) {
     
   }
   
-  virtual void start(const RenderContext *rc,
+  virtual void start(const G3MRenderContext *rc,
                      const TimeInterval& now) {
     _started = now.milliseconds();
   }
   
-  virtual bool isDone(const RenderContext *rc,
+  virtual bool isDone(const G3MRenderContext *rc,
                       const TimeInterval& now) {
     const double percent = percentDone(now);
     return percent >= 1;
@@ -155,12 +155,12 @@ protected:
   }
   
 public:
-  virtual void doStep(const RenderContext *rc,
+  virtual void doStep(const G3MRenderContext *rc,
                       const TimeInterval& now) {
     _force *= _friction;
   };
   
-  virtual bool isDone(const RenderContext *rc,
+  virtual bool isDone(const G3MRenderContext *rc,
                       const TimeInterval& now) {
     return (GMath.abs(_force) < 1e-6);
   }
@@ -199,7 +199,7 @@ private:
   const IFactory*         _factory;
   
   
-  void processFinishedEffects(const RenderContext *rc,
+  void processFinishedEffects(const G3MRenderContext *rc,
                               const TimeInterval& now);
   
 public:
@@ -207,7 +207,7 @@ public:
     
   };
   
-  void doOneCyle(const RenderContext *rc);
+  void doOneCyle(const G3MRenderContext *rc);
 
   void initialize(const G3MContext* context);
   
@@ -248,20 +248,20 @@ public:
 //  SampleEffect(TimeInterval duration) : EffectWithDuration(duration) {
 //  }
 //  
-//  virtual void start(const RenderContext *rc,
+//  virtual void start(const G3MRenderContext *rc,
 //                     const TimeInterval& now) {
 //    EffectWithDuration::start(rc, now);
 //    _lastPercent = 0;
 //  }
 //  
-//  virtual void doStep(const RenderContext *rc,
+//  virtual void doStep(const G3MRenderContext *rc,
 //                      const TimeInterval& now) {
 //    const double percent = pace( percentDone(now) );
 //    rc->getNextCamera()->moveForward((percent-_lastPercent)*1e7);
 //    _lastPercent = percent;
 //  }
 //  
-//  virtual void stop(const RenderContext *rc,
+//  virtual void stop(const G3MRenderContext *rc,
 //                    const TimeInterval& now) {
 //    EffectWithDuration::stop(rc, now);
 //  }

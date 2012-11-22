@@ -93,17 +93,17 @@ public:
              scale._z);
   }
 
-  void render(const RenderContext* rc);
+  void render(const G3MRenderContext* rc);
 
   virtual void initialize(const G3MContext* context) {
 
   }
 
-  virtual bool isReadyToRender(const RenderContext* rc) = 0;
+  virtual bool isReadyToRender(const G3MRenderContext* rc) = 0;
   
-  virtual void rawRender(const RenderContext* rc) = 0;
+  virtual void rawRender(const G3MRenderContext* rc) = 0;
 
-  virtual bool isTransparent(const RenderContext* rc) = 0;
+  virtual bool isTransparent(const G3MRenderContext* rc) = 0;
 
 };
 

@@ -43,14 +43,14 @@ public:
   
   void initialize(const G3MContext* context);
   
-  bool isReadyToRender(const RenderContext* rc);
+  bool isReadyToRender(const G3MRenderContext* rc);
 
-  void render(const RenderContext* rc);
+  void render(const G3MRenderContext* rc);
   
-  bool onTouchEvent(const EventContext* ec,
+  bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent);
 
-  void onResizeViewportEvent(const EventContext* ec,
+  void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height);
   
   void addRenderer(Renderer* renderer);

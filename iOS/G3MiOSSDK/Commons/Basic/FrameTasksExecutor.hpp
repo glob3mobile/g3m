@@ -13,7 +13,7 @@
 
 #include "TimeInterval.hpp"
 
-class RenderContext;
+class G3MRenderContext;
 
 
 class FrameTask {
@@ -22,9 +22,9 @@ public:
     
   }
   
-  virtual bool isCanceled(const RenderContext *rc) = 0;
+  virtual bool isCanceled(const G3MRenderContext *rc) = 0;
   
-  virtual void execute(const RenderContext* rc) = 0;
+  virtual void execute(const G3MRenderContext* rc) = 0;
   
 };
 
@@ -46,7 +46,7 @@ private:
   
   std::list<FrameTask*> _preRenderTasks;
   
-  inline bool canExecutePreRenderStep(const RenderContext* rc,
+  inline bool canExecutePreRenderStep(const G3MRenderContext* rc,
                                       int executedTasksCounter);
   
   bool _stressed;
@@ -67,7 +67,7 @@ public:
     _preRenderTasks.push_back(preRenderTask);
   }
   
-  void doPreRenderCycle(const RenderContext* rc);
+  void doPreRenderCycle(const G3MRenderContext* rc);
   
   ~FrameTasksExecutor(){}
   

@@ -50,13 +50,13 @@ public:
   
   virtual ~MultiLayerTileTexturizer();
   
-  bool isReady(const RenderContext *rc,
+  bool isReady(const G3MRenderContext *rc,
                LayerSet* layerSet);
   
   void initialize(const G3MContext* context,
                   const TilesRenderParameters* parameters);
   
-  Mesh* texturize(const RenderContext* rc,
+  Mesh* texturize(const G3MRenderContext* rc,
                   const TileRenderContext* trc,
                   Tile* tile,
                   Mesh* tessellatorMesh,
@@ -67,7 +67,7 @@ public:
   
   bool tileMeetsRenderCriteria(Tile* tile);
   
-  void justCreatedTopTile(const RenderContext* rc,
+  void justCreatedTopTile(const G3MRenderContext* rc,
                           Tile* tile,
                           LayerSet* layerSet);
   
@@ -77,7 +77,7 @@ public:
   
   const IGLTextureId* getTopLevelGLTextureIdForTile(Tile* tile);
   
-  void onTerrainTouchEvent(const EventContext* ec,
+  void onTerrainTouchEvent(const G3MEventContext* ec,
                            const Geodetic3D& g3d,
                            const Tile* tile,
                            LayerSet* layerSet);

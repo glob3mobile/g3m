@@ -19,9 +19,9 @@ private:
   double _angle;
 
 protected:
-  void prepareRender(const RenderContext* rc);
+  void prepareRender(const G3MRenderContext* rc);
 
-  void cleanUpRender(const RenderContext* rc);
+  void cleanUpRender(const G3MRenderContext* rc);
 
 public:
   SGRotateNode() :

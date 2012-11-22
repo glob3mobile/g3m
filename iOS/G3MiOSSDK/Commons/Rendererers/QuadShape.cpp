@@ -19,7 +19,7 @@
 #include "GLConstants.hpp"
 #include "TexturedMesh.hpp"
 
-const IGLTextureId* QuadShape::getTextureId(const RenderContext* rc) {
+const IGLTextureId* QuadShape::getTextureId(const G3MRenderContext* rc) {
   if (_textureImage == NULL) {
     return NULL;
   }
@@ -41,7 +41,7 @@ const IGLTextureId* QuadShape::getTextureId(const RenderContext* rc) {
   return texId;
 }
 
-Mesh* QuadShape::createMesh(const RenderContext* rc) {
+Mesh* QuadShape::createMesh(const G3MRenderContext* rc) {
 
   const float halfWidth  = _width / 2.0f;
   const float halfHeight = _height / 2.0f;

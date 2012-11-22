@@ -29,13 +29,13 @@ public:
   _distance(distance)
   {}
   
-  virtual void start(const RenderContext *rc,
+  virtual void start(const G3MRenderContext *rc,
                      const TimeInterval& now) {
     EffectWithDuration::start(rc, now);
     _lastPercent = 0;
   }
   
-  virtual void doStep(const RenderContext *rc,
+  virtual void doStep(const G3MRenderContext *rc,
                       const TimeInterval& now) {
     //const double percent = gently(percentDone(now), 0.2, 0.9);
     //const double percent = pace( percentDone(now) );
@@ -47,7 +47,7 @@ public:
     _lastPercent = percent;
   }
   
-  virtual void stop(const RenderContext *rc,
+  virtual void stop(const G3MRenderContext *rc,
                     const TimeInterval& now) {
     EffectWithDuration::stop(rc, now);
   }
@@ -72,22 +72,22 @@ public:
   
   ~CameraDoubleTapHandler() {}
   
-  bool onTouchEvent(const EventContext *eventContext,
+  bool onTouchEvent(const G3MEventContext *eventContext,
                     const TouchEvent* touchEvent,
                     CameraContext *cameraContext);
   
-  void render(const RenderContext* rc,
+  void render(const G3MRenderContext* rc,
               CameraContext *cameraContext) {
     
   }
   
-  void onDown(const EventContext *eventContext,
+  void onDown(const G3MEventContext *eventContext,
               const TouchEvent& touchEvent,
               CameraContext *cameraContext);
-  void onMove(const EventContext *eventContext,
+  void onMove(const G3MEventContext *eventContext,
               const TouchEvent& touchEvent,
               CameraContext *cameraContext) {}
-  void onUp(const EventContext *eventContext,
+  void onUp(const G3MEventContext *eventContext,
             const TouchEvent& touchEvent,
             CameraContext *cameraContext) {}
   

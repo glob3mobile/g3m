@@ -97,7 +97,7 @@ IFloatBuffer* SimplePlanetRenderer::createTextureCoordinates() const
   return texCoords.create();
 }
 
-bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
+bool SimplePlanetRenderer::initializeMesh(const G3MRenderContext* rc) {
   
   
   const Planet* planet = rc->getPlanet();
@@ -173,7 +173,7 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   return true;
 }
 
-void SimplePlanetRenderer::render(const RenderContext* rc){
+void SimplePlanetRenderer::render(const G3MRenderContext* rc){
   if (_mesh == NULL){
     if (!initializeMesh(rc)) {
       return;

@@ -10,7 +10,7 @@
 
 //#include "IGLTextureId.hpp"
 
-void SGLayerNode::prepareRender(const RenderContext* rc) {
+void SGLayerNode::prepareRender(const G3MRenderContext* rc) {
 
 //  SGShape* shape = getShape();
 
@@ -23,7 +23,7 @@ void SGLayerNode::prepareRender(const RenderContext* rc) {
   SGNode::prepareRender(rc);
 }
 
-void SGLayerNode::cleanUpRender(const RenderContext* rc) {
+void SGLayerNode::cleanUpRender(const G3MRenderContext* rc) {
   SGNode::cleanUpRender(rc);
 
   

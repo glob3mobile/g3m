@@ -37,11 +37,11 @@ public:
 
   void initialize(const G3MContext* context);
   
-  bool isReadyToRender(const RenderContext* rc);
+  bool isReadyToRender(const G3MRenderContext* rc);
 
-  void rawRender(const RenderContext* rc);
+  void rawRender(const G3MRenderContext* rc);
 
-  bool isTransparent(const RenderContext* rc);
+  bool isTransparent(const G3MRenderContext* rc);
 
 };
 

@@ -98,7 +98,7 @@ void Tile::setTextureSolved(bool textureSolved) {
   }
 }
 
-Mesh* Tile::getTessellatorMesh(const RenderContext* rc,
+Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                const TileRenderContext* trc) {
   if (_tessellatorMesh == NULL) {
     _tessellatorMesh = trc->getTessellator()->createMesh(rc, this);
@@ -106,7 +106,7 @@ Mesh* Tile::getTessellatorMesh(const RenderContext* rc,
   return _tessellatorMesh;
 }
 
-Mesh* Tile::getDebugMesh(const RenderContext* rc,
+Mesh* Tile::getDebugMesh(const G3MRenderContext* rc,
                          const TileRenderContext* trc) {
   if (_debugMesh == NULL) {
     _debugMesh = trc->getTessellator()->createDebugMesh(rc, this);
@@ -114,7 +114,7 @@ Mesh* Tile::getDebugMesh(const RenderContext* rc,
   return _debugMesh;
 }
 
-bool Tile::isVisible(const RenderContext *rc,
+bool Tile::isVisible(const G3MRenderContext *rc,
                      const TileRenderContext* trc) {
   // test if sector is back oriented with respect to the camera
   //  if (_sector.isBackOriented(rc)) {
@@ -129,7 +129,7 @@ bool Tile::isVisible(const RenderContext *rc,
   //return extent->touches( rc->getCurrentCamera()->getHalfFrustuminModelCoordinates() );
 }
 
-bool Tile::meetsRenderCriteria(const RenderContext *rc,
+bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
                                const TileRenderContext* trc) {
   const TilesRenderParameters* parameters = trc->getParameters();
   
@@ -183,7 +183,7 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
   return false;
 }
 
-void Tile::rawRender(const RenderContext *rc,
+void Tile::rawRender(const G3MRenderContext *rc,
                      const TileRenderContext* trc) {
   
   Mesh* tessellatorMesh = getTessellatorMesh(rc, trc);
@@ -217,7 +217,7 @@ void Tile::rawRender(const RenderContext *rc,
   
 }
 
-void Tile::debugRender(const RenderContext* rc,
+void Tile::debugRender(const G3MRenderContext* rc,
                        const TileRenderContext* trc) {
   Mesh* debugMesh = getDebugMesh(rc, trc);
   if (debugMesh != NULL) {
@@ -290,7 +290,7 @@ void Tile::deleteTexturizedMesh(TileTexturizer* texturizer) {
   }
 }
 
-void Tile::render(const RenderContext* rc,
+void Tile::render(const G3MRenderContext* rc,
                   const TileRenderContext* trc,
                   std::list<Tile*>* toVisitInNextIteration) {
   TilesStatistics* statistics = trc->getStatistics();

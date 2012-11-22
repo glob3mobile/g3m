@@ -16,7 +16,7 @@
 
 class TextureBuilder;
 class IImage;
-class RenderContext;
+class G3MRenderContext;
 class TextureHolder;
 class GL;
 class IFactory;

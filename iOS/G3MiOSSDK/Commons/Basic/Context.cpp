@@ -13,13 +13,13 @@
 
 #include "OrderedRenderable.hpp"
 
-RenderContext::~RenderContext() {
+G3MRenderContext::~G3MRenderContext() {
   //  delete _frameStartTimer;
   IFactory::instance()->deleteTimer(_frameStartTimer);
   delete _orderedRenderables;
 }
 
-void RenderContext::addOrderedRenderable(OrderedRenderable* orderedRenderable) const {
+void G3MRenderContext::addOrderedRenderable(OrderedRenderable* orderedRenderable) const {
   if (_orderedRenderables == NULL) {
     _orderedRenderables = new std::vector<OrderedRenderable*>;
   }
@@ -33,7 +33,7 @@ bool MyDataSortPredicate(const OrderedRenderable* or1,
 }
 #endif
 
-std::vector<OrderedRenderable*>* RenderContext::getSortedOrderedRenderables() const {
+std::vector<OrderedRenderable*>* G3MRenderContext::getSortedOrderedRenderables() const {
   if (_orderedRenderables != NULL) {
 #ifdef C_CODE
     std::sort(_orderedRenderables->begin(),

@@ -51,7 +51,7 @@ _lineWidth(lineWidth)
 {
 }
 
-void IndexedMesh::render(const RenderContext* rc) const {
+void IndexedMesh::render(const G3MRenderContext* rc) const {
   GL *gl = rc->getGL();
   
   gl->enableVerticesPosition();
@@ -168,7 +168,7 @@ int IndexedMesh::getVertexCount() const {
   return _vertices->size() / 3;
 }
 
-bool IndexedMesh::isTransparent(const RenderContext* rc) const {
+bool IndexedMesh::isTransparent(const G3MRenderContext* rc) const {
   if (_flatColor == NULL) {
     return false;
   }

@@ -218,16 +218,16 @@ G3MWidget::~G3MWidget() {
 
 void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
   if (_mainRendererReady) {
-    EventContext ec(IFactory::instance(),
-                    IStringUtils::instance(),
-                    _threadUtils,
-                    ILogger::instance(),
-                    IMathUtils::instance(),
-                    IJSONParser::instance(),
-                    _planet,
-                    _downloader,
-                    _effectsScheduler,
-                    _storage);
+    G3MEventContext ec(IFactory::instance(),
+                       IStringUtils::instance(),
+                       _threadUtils,
+                       ILogger::instance(),
+                       IMathUtils::instance(),
+                       IJSONParser::instance(),
+                       _planet,
+                       _downloader,
+                       _effectsScheduler,
+                       _storage);
 
     bool handled = false;
     if (_mainRenderer->isEnable()) {
@@ -242,16 +242,16 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
 
 void G3MWidget::onResizeViewportEvent(int width, int height) {
   if (_mainRendererReady) {
-    EventContext ec(IFactory::instance(),
-                    IStringUtils::instance(),
-                    _threadUtils,
-                    ILogger::instance(),
-                    IMathUtils::instance(),
-                    IJSONParser::instance(),
-                    _planet,
-                    _downloader,
-                    _effectsScheduler,
-                    _storage);
+    G3MEventContext ec(IFactory::instance(),
+                       IStringUtils::instance(),
+                       _threadUtils,
+                       ILogger::instance(),
+                       IMathUtils::instance(),
+                       IJSONParser::instance(),
+                       _planet,
+                       _downloader,
+                       _effectsScheduler,
+                       _storage);
 
     _nextCamera->resizeViewport(width, height);
 
@@ -293,23 +293,23 @@ void G3MWidget::render() {
     _initializationTask = NULL;
   }
 
-  RenderContext rc(_frameTasksExecutor,
-                   IFactory::instance(),
-                   IStringUtils::instance(),
-                   _threadUtils,
-                   ILogger::instance(),
-                   IMathUtils::instance(),
-                   IJSONParser::instance(),
-                   _planet,
-                   _gl,
-                   _currentCamera,
-                   _nextCamera,
-                   _texturesHandler,
-                   _textureBuilder,
-                   _downloader,
-                   _effectsScheduler,
-                   IFactory::instance()->createTimer(),
-                   _storage);
+  G3MRenderContext rc(_frameTasksExecutor,
+                      IFactory::instance(),
+                      IStringUtils::instance(),
+                      _threadUtils,
+                      ILogger::instance(),
+                      IMathUtils::instance(),
+                      IJSONParser::instance(),
+                      _planet,
+                      _gl,
+                      _currentCamera,
+                      _nextCamera,
+                      _texturesHandler,
+                      _textureBuilder,
+                      _downloader,
+                      _effectsScheduler,
+                      IFactory::instance()->createTimer(),
+                      _storage);
 
   _effectsScheduler->doOneCyle(&rc);
 

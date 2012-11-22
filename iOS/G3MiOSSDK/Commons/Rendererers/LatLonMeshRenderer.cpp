@@ -49,6 +49,6 @@ void LatLonMeshRenderer::initialize(const G3MContext* context)
 }  
 
 
-void LatLonMeshRenderer::render(const RenderContext* rc) {  
+void LatLonMeshRenderer::render(const G3MRenderContext* rc) {  
   _mesh->render(rc);
 }

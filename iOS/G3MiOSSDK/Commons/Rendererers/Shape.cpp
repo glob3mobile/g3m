@@ -41,7 +41,7 @@ MutableMatrix44D* Shape::getTransformMatrix(const Planet* planet) {
   return _transformMatrix;
 }
 
-void Shape::render(const RenderContext* rc) {
+void Shape::render(const G3MRenderContext* rc) {
   if (isReadyToRender(rc)) {
     GL* gl = rc->getGL();
 

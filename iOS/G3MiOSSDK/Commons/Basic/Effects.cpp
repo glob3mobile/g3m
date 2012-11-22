@@ -46,7 +46,7 @@ void EffectsScheduler::cancellAllEffectsFor(EffectTarget* target) {
 
 }
 
-void EffectsScheduler::processFinishedEffects(const RenderContext *rc,
+void EffectsScheduler::processFinishedEffects(const G3MRenderContext *rc,
                                               const TimeInterval& now) {
   std::vector<int> indicesToRemove;
   for (int i = 0; i < _effectsRuns.size(); i++) {
@@ -75,7 +75,7 @@ void EffectsScheduler::processFinishedEffects(const RenderContext *rc,
   }
 }
 
-void EffectsScheduler::doOneCyle(const RenderContext *rc) {
+void EffectsScheduler::doOneCyle(const G3MRenderContext *rc) {
   const TimeInterval now = _timer->now();
   
   

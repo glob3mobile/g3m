@@ -33,20 +33,20 @@ public:
   ~CameraDoubleDragHandler() {}
   
   
-  bool onTouchEvent(const EventContext *eventContext,
+  bool onTouchEvent(const G3MEventContext *eventContext,
                     const TouchEvent* touchEvent,
                     CameraContext *cameraContext);
   
-  void render(const RenderContext* rc,
+  void render(const G3MRenderContext* rc,
               CameraContext *cameraContext);
   
-  void onDown(const EventContext *eventContext,
+  void onDown(const G3MEventContext *eventContext,
               const TouchEvent& touchEvent,
               CameraContext *cameraContext);
-  void onMove(const EventContext *eventContext,
+  void onMove(const G3MEventContext *eventContext,
               const TouchEvent& touchEvent,
               CameraContext *cameraContext);
-  void onUp(const EventContext *eventContext,
+  void onUp(const G3MEventContext *eventContext,
             const TouchEvent& touchEvent,
             CameraContext *cameraContext);
   

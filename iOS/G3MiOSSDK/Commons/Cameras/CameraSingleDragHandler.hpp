@@ -26,15 +26,18 @@ public:
   {
   }
   
-  virtual void start(const RenderContext *rc, const TimeInterval& now) {
+  virtual void start(const G3MRenderContext *rc,
+                     const TimeInterval& now) {
   }
   
-  virtual void doStep(const RenderContext *rc, const TimeInterval& now) {
+  virtual void doStep(const G3MRenderContext *rc,
+                      const TimeInterval& now) {
     EffectWithForce::doStep(rc, now);
     rc->getNextCamera()->rotateWithAxis(_axis, Angle::fromDegrees(getForce()));
   }
   
-  virtual void stop(const RenderContext *rc, const TimeInterval& now) { }
+  virtual void stop(const G3MRenderContext *rc,
+                    const TimeInterval& now) { }
   
   virtual void cancel(const TimeInterval& now) {
     // do nothing, just leave the effect in the intermediate state
@@ -58,20 +61,21 @@ public:
   ~CameraSingleDragHandler() {}
   
   
-  bool onTouchEvent(const EventContext *eventContext,
+  bool onTouchEvent(const G3MEventContext *eventContext,
                     const TouchEvent* touchEvent,
                     CameraContext *cameraContext);
   
-  void render(const RenderContext* rc, CameraContext *cameraContext);
+  void render(const G3MRenderContext* rc,
+              CameraContext *cameraContext);
   
   const bool _useInertia;
-  void onDown(const EventContext *eventContext,
+  void onDown(const G3MEventContext *eventContext,
               const TouchEvent& touchEvent,
               CameraContext *cameraContext);
-  void onMove(const EventContext *eventContext,
+  void onMove(const G3MEventContext *eventContext,
               const TouchEvent& touchEvent,
               CameraContext *cameraContext);
-  void onUp(const EventContext *eventContext,
+  void onUp(const G3MEventContext *eventContext,
             const TouchEvent& touchEvent,
             CameraContext *cameraContext);
 private:

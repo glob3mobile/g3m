@@ -12,7 +12,7 @@
 
 
 
-bool CameraDoubleDragHandler::onTouchEvent(const EventContext *eventContext,
+bool CameraDoubleDragHandler::onTouchEvent(const G3MEventContext *eventContext,
                                            const TouchEvent* touchEvent, 
                                            CameraContext *cameraContext) 
 {
@@ -36,7 +36,7 @@ bool CameraDoubleDragHandler::onTouchEvent(const EventContext *eventContext,
 }
 
 
-void CameraDoubleDragHandler::onDown(const EventContext *eventContext,
+void CameraDoubleDragHandler::onDown(const G3MEventContext *eventContext,
                                      const TouchEvent& touchEvent, 
                                      CameraContext *cameraContext) 
 {
@@ -72,7 +72,7 @@ void CameraDoubleDragHandler::onDown(const EventContext *eventContext,
 }
 
 
-void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
+void CameraDoubleDragHandler::onMove(const G3MEventContext *eventContext,
                                      const TouchEvent& touchEvent, 
                                      CameraContext *cameraContext) 
 {
@@ -219,7 +219,7 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
 }
 
 
-void CameraDoubleDragHandler::onUp(const EventContext *eventContext,
+void CameraDoubleDragHandler::onUp(const G3MEventContext *eventContext,
                                    const TouchEvent& touchEvent, 
                                    CameraContext *cameraContext) 
 {
@@ -230,7 +230,8 @@ void CameraDoubleDragHandler::onUp(const EventContext *eventContext,
 }
 
 
-void CameraDoubleDragHandler::render(const RenderContext* rc, CameraContext *cameraContext)
+void CameraDoubleDragHandler::render(const G3MRenderContext* rc,
+                                     CameraContext *cameraContext)
 {  
 //  // TEMP TO DRAW A POINT WHERE USER PRESS
 //  if (false) {

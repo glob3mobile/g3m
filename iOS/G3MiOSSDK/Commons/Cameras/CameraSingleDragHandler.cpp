@@ -14,7 +14,7 @@
 #include "GL.hpp"
 
 
-bool CameraSingleDragHandler::onTouchEvent(const EventContext *eventContext,
+bool CameraSingleDragHandler::onTouchEvent(const G3MEventContext *eventContext,
                                            const TouchEvent* touchEvent, 
                                            CameraContext *cameraContext) 
 {
@@ -39,7 +39,7 @@ bool CameraSingleDragHandler::onTouchEvent(const EventContext *eventContext,
 }
 
 
-void CameraSingleDragHandler::onDown(const EventContext *eventContext,
+void CameraSingleDragHandler::onDown(const G3MEventContext *eventContext,
                                      const TouchEvent& touchEvent, 
                                      CameraContext *cameraContext) {  
   Camera *camera = cameraContext->getNextCamera();
@@ -56,7 +56,7 @@ void CameraSingleDragHandler::onDown(const EventContext *eventContext,
   //printf ("down 1 finger. Initial point = %f %f %f\n", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
 }
 
-void CameraSingleDragHandler::onMove(const EventContext *eventContext,
+void CameraSingleDragHandler::onMove(const G3MEventContext *eventContext,
                                      const TouchEvent& touchEvent, 
                                      CameraContext *cameraContext) {
   
@@ -96,7 +96,7 @@ void CameraSingleDragHandler::onMove(const EventContext *eventContext,
 }
 
 
-void CameraSingleDragHandler::onUp(const EventContext *eventContext,
+void CameraSingleDragHandler::onUp(const G3MEventContext *eventContext,
                                    const TouchEvent& touchEvent, 
                                    CameraContext *cameraContext) {
   if (_useInertia) {
@@ -120,7 +120,7 @@ void CameraSingleDragHandler::onUp(const EventContext *eventContext,
   //_initialPixel = MutableVector2I::zero();
 }
 
-void CameraSingleDragHandler::render(const RenderContext* rc, CameraContext *cameraContext)
+void CameraSingleDragHandler::render(const G3MRenderContext* rc, CameraContext *cameraContext)
 {
 //  // TEMP TO DRAW A POINT WHERE USER PRESS
 //  if (false) {

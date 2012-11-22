@@ -19,12 +19,12 @@ private:
 
 protected:
 
-  void rawRender(const RenderContext* rc);
+  void rawRender(const G3MRenderContext* rc);
 
 public:
   void addLayer(SGLayerNode* layer);
 
-  bool isReadyToRender(const RenderContext* rc);
+  bool isReadyToRender(const G3MRenderContext* rc);
 
 };
 

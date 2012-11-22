@@ -78,12 +78,12 @@ void DummyRenderer::initialize(const G3MContext* context)
 }  
 
 
-bool DummyRenderer::onTouchEvent(const EventContext* ec,
+bool DummyRenderer::onTouchEvent(const G3MEventContext* ec,
                                  const TouchEvent* touchEvent){
   return false;
 }
 
-void DummyRenderer::render(const RenderContext* rc) {
+void DummyRenderer::render(const G3MRenderContext* rc) {
   
   // obtaing gl object reference
   GL *gl = rc->getGL();

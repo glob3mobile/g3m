@@ -109,7 +109,7 @@ IFloatBuffer* Mark::getVertices(const Planet* planet) {
   return _vertices;
 }
 
-void Mark::render(const RenderContext* rc,
+void Mark::render(const G3MRenderContext* rc,
                   const double minDistanceToCamera) {
   const Camera* camera = rc->getCurrentCamera();
   const Planet* planet = rc->getPlanet();

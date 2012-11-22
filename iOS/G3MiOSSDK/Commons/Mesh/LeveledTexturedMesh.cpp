@@ -14,7 +14,7 @@
 #include "TexturesHandler.hpp"
 
 
-void LazyTextureMapping::bind(const RenderContext* rc) const {
+void LazyTextureMapping::bind(const G3MRenderContext* rc) const {
   if (!_initialized) {
     _initializer->initialize();
     
@@ -116,7 +116,7 @@ const IGLTextureId* LeveledTexturedMesh::getTopLevelGLTextureId() const {
 }
 
 
-void LeveledTexturedMesh::render(const RenderContext* rc) const {
+void LeveledTexturedMesh::render(const G3MRenderContext* rc) const {
   LazyTextureMapping* mapping = getCurrentTextureMapping();
   
   if (mapping == NULL) {
@@ -156,7 +156,7 @@ bool LeveledTexturedMesh::setGLTextureIdForLevel(int level,
 //  setGLTextureIdForLevel(level, glTextureId);
 //}
 
-bool LeveledTexturedMesh::isTransparent(const RenderContext* rc) const {
+bool LeveledTexturedMesh::isTransparent(const G3MRenderContext* rc) const {
   if (_mesh->isTransparent(rc)) {
     return true;
   }

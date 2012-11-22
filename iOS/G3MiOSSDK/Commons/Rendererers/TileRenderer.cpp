@@ -110,7 +110,7 @@ void TileRenderer::initialize(const G3MContext* context) {
   _texturizer->initialize(context, _parameters);
 }
 
-bool TileRenderer::isReadyToRender(const RenderContext *rc) {
+bool TileRenderer::isReadyToRender(const G3MRenderContext *rc) {
   if (_topTilesJustCreated) {
     if (_texturizer != NULL) {
       const int topLevelTilesSize = _topLevelTiles.size();
@@ -139,7 +139,7 @@ bool TileRenderer::isReadyToRender(const RenderContext *rc) {
   return true;
 }
 
-void TileRenderer::render(const RenderContext* rc) {
+void TileRenderer::render(const G3MRenderContext* rc) {
   // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
 
@@ -198,7 +198,7 @@ void TileRenderer::render(const RenderContext* rc) {
 }
 
 
-bool TileRenderer::onTouchEvent(const EventContext* ec,
+bool TileRenderer::onTouchEvent(const G3MEventContext* ec,
                                 const TouchEvent* touchEvent) {
   bool handled = false;
 

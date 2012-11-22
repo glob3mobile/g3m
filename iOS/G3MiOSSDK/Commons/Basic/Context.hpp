@@ -115,18 +115,18 @@ public:
 
 
 
-class EventContext: public G3MContext {
+class G3MEventContext: public G3MContext {
 public:
-  EventContext(const IFactory*     factory,
-               const IStringUtils* stringUtils,
-               const IThreadUtils* threadUtils,
-               const ILogger*      logger,
-               const IMathUtils*   mathUtils,
-               const IJSONParser*  jsonParser,
-               const Planet*       planet,
-               IDownloader*        downloader,
-               EffectsScheduler*   scheduler,
-               IStorage*           storage) :
+  G3MEventContext(const IFactory*     factory,
+                  const IStringUtils* stringUtils,
+                  const IThreadUtils* threadUtils,
+                  const ILogger*      logger,
+                  const IMathUtils*   mathUtils,
+                  const IJSONParser*  jsonParser,
+                  const Planet*       planet,
+                  IDownloader*        downloader,
+                  EffectsScheduler*   scheduler,
+                  IStorage*           storage) :
   G3MContext(factory,
              stringUtils,
              threadUtils,
@@ -150,7 +150,7 @@ bool MyDataSortPredicate(const OrderedRenderable* or1,
                          const OrderedRenderable* or2);
 #endif
 
-class RenderContext: public G3MContext {
+class G3MRenderContext: public G3MContext {
 private:
   FrameTasksExecutor* _frameTasksExecutor;
   GL*                 _gl;
@@ -163,23 +163,23 @@ private:
   mutable std::vector<OrderedRenderable*>* _orderedRenderables;
 
 public:
-  RenderContext(FrameTasksExecutor* frameTasksExecutor,
-                const IFactory*     factory,
-                const IStringUtils* stringUtils,
-                const IThreadUtils* threadUtils,
-                const ILogger*      logger,
-                const IMathUtils*   mathUtils,
-                const IJSONParser*  jsonParser,
-                const Planet*       planet,
-                GL*                 gl,
-                const Camera*       currentCamera,
-                Camera*             nextCamera,
-                TexturesHandler*    texturesHandler,
-                TextureBuilder*     textureBuilder,
-                IDownloader*        downloader,
-                EffectsScheduler*   scheduler,
-                ITimer*             frameStartTimer,
-                IStorage*           storage) :
+  G3MRenderContext(FrameTasksExecutor* frameTasksExecutor,
+                   const IFactory*     factory,
+                   const IStringUtils* stringUtils,
+                   const IThreadUtils* threadUtils,
+                   const ILogger*      logger,
+                   const IMathUtils*   mathUtils,
+                   const IJSONParser*  jsonParser,
+                   const Planet*       planet,
+                   GL*                 gl,
+                   const Camera*       currentCamera,
+                   Camera*             nextCamera,
+                   TexturesHandler*    texturesHandler,
+                   TextureBuilder*     textureBuilder,
+                   IDownloader*        downloader,
+                   EffectsScheduler*   scheduler,
+                   ITimer*             frameStartTimer,
+                   IStorage*           storage) :
   G3MContext(factory,
              stringUtils,
              threadUtils,
@@ -230,7 +230,7 @@ public:
     return _frameTasksExecutor;
   }
 
-  virtual ~RenderContext();
+  virtual ~G3MRenderContext();
 
   /*
    Get the OrderedRenderables, sorted by distanceFromEye()

@@ -24,7 +24,7 @@ private:
   const std::string _textureFilename;
   Mesh *  _quadMesh;
   
-  bool initMesh(const RenderContext* rc);
+  bool initMesh(const G3MRenderContext* rc);
   
   
   
@@ -38,18 +38,18 @@ public:
   void initialize(const G3MContext* context) {
   }
   
-  bool isReadyToRender(const RenderContext* rc) {
+  bool isReadyToRender(const G3MRenderContext* rc) {
     return true;
   }
   
-  void render(const RenderContext* rc);
+  void render(const G3MRenderContext* rc);
   
-  bool onTouchEvent(const EventContext* ec,
+  bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent) {
     return false;
   }
   
-  void onResizeViewportEvent(const EventContext* ec,
+  void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
     
   }
@@ -96,14 +96,17 @@ public:
   _renderer(renderer)
   { }
   
-  virtual void start(const RenderContext *rc, const TimeInterval& now) {}
+  virtual void start(const G3MRenderContext *rc,
+                     const TimeInterval& now) {}
   
-  virtual void doStep(const RenderContext *rc, const TimeInterval& now) {
+  virtual void doStep(const G3MRenderContext *rc,
+                      const TimeInterval& now) {
     EffectWithForce::doStep(rc, now);
     _renderer->incDegrees(3);
   }
   
-  virtual void stop(const RenderContext *rc, const TimeInterval& now) { }
+  virtual void stop(const G3MRenderContext *rc,
+                    const TimeInterval& now) { }
   
   virtual void cancel(const TimeInterval& now) {
     // do nothing, just leave the effect in the intermediate state

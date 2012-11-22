@@ -11,8 +11,8 @@
 
 class TouchEvent;
 class G3MContext;
-class RenderContext;
-class EventContext;
+class G3MRenderContext;
+class G3MEventContext;
 
 class Renderer {
 public:
@@ -23,19 +23,19 @@ public:
   
   virtual void initialize(const G3MContext* context) = 0;
   
-  virtual bool isReadyToRender(const RenderContext* rc) = 0;
+  virtual bool isReadyToRender(const G3MRenderContext* rc) = 0;
   
-  virtual void render(const RenderContext* rc) = 0;
+  virtual void render(const G3MRenderContext* rc) = 0;
 
   /*
    Gives to Renderer the opportunity to process touch, events.
    
    The Renderer answer true if the event was processed.
    */
-  virtual bool onTouchEvent(const EventContext* ec,
+  virtual bool onTouchEvent(const G3MEventContext* ec,
                             const TouchEvent* touchEvent) = 0;
   
-  virtual void onResizeViewportEvent(const EventContext* ec,
+  virtual void onResizeViewportEvent(const G3MEventContext* ec,
                                      int width, int height) = 0;
   
   virtual void start() = 0;

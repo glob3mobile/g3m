@@ -18,7 +18,7 @@ void SGTextureNode::addLayer(SGLayerNode* layer) {
   }
 }
 
-bool SGTextureNode::isReadyToRender(const RenderContext* rc) {
+bool SGTextureNode::isReadyToRender(const G3MRenderContext* rc) {
   const int layersCount = _layers.size();
   for (int i = 0; i < layersCount; i++) {
     SGLayerNode* layer = _layers[i];
@@ -30,7 +30,7 @@ bool SGTextureNode::isReadyToRender(const RenderContext* rc) {
   return SGNode::isReadyToRender(rc);
 }
 
-void SGTextureNode::rawRender(const RenderContext* rc) {
+void SGTextureNode::rawRender(const G3MRenderContext* rc) {
   const int layersCount = _layers.size();
   for (int i = 0; i < layersCount; i++) {
     SGLayerNode* layer = _layers[i];

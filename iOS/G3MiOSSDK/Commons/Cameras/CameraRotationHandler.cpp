@@ -13,7 +13,7 @@
 
 
 
-bool CameraRotationHandler::onTouchEvent(const EventContext *eventContext,
+bool CameraRotationHandler::onTouchEvent(const G3MEventContext *eventContext,
                                          const TouchEvent* touchEvent, 
                                          CameraContext *cameraContext) 
 {
@@ -37,7 +37,7 @@ bool CameraRotationHandler::onTouchEvent(const EventContext *eventContext,
 }
 
 
-void CameraRotationHandler::onDown(const EventContext *eventContext,
+void CameraRotationHandler::onDown(const G3MEventContext *eventContext,
                                    const TouchEvent& touchEvent, 
                                    CameraContext *cameraContext) 
 {  
@@ -64,7 +64,7 @@ void CameraRotationHandler::onDown(const EventContext *eventContext,
 }
 
 
-void CameraRotationHandler::onMove(const EventContext *eventContext,
+void CameraRotationHandler::onMove(const G3MEventContext *eventContext,
                                    const TouchEvent& touchEvent, 
                                    CameraContext *cameraContext) 
 {
@@ -112,7 +112,7 @@ void CameraRotationHandler::onMove(const EventContext *eventContext,
 }
 
 
-void CameraRotationHandler::onUp(const EventContext *eventContext,
+void CameraRotationHandler::onUp(const G3MEventContext *eventContext,
                                  const TouchEvent& touchEvent, 
                                  CameraContext *cameraContext) 
 {
@@ -121,7 +121,7 @@ void CameraRotationHandler::onUp(const EventContext *eventContext,
 }
 
 
-void CameraRotationHandler::render(const RenderContext* rc,
+void CameraRotationHandler::render(const G3MRenderContext* rc,
                                    CameraContext *cameraContext)
 {
 //  // TEMP TO DRAW A POINT WHERE USER PRESS

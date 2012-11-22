@@ -180,7 +180,7 @@ void Camera::orbitTo(const Vector3D& pos) {
   moveForward(dist);
 }
 
-void Camera::render(const RenderContext* rc) const {
+void Camera::render(const G3MRenderContext* rc) const {
   GL *gl = rc->getGL();
   gl->setProjection(getProjectionMatrix());
   gl->loadMatrixf(getModelMatrix());

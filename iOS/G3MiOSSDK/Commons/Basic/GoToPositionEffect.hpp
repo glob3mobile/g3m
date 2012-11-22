@@ -23,12 +23,12 @@ public:
   _finalPos(finalPos)
   {}
   
-  virtual void start(const RenderContext *rc,
+  virtual void start(const G3MRenderContext *rc,
                      const TimeInterval& now) {
     EffectWithDuration::start(rc, now);
   }
   
-  virtual void doStep(const RenderContext *rc,
+  virtual void doStep(const G3MRenderContext *rc,
                       const TimeInterval& now) {
     //const double percent = gently(percentDone(now), 0.2, 0.9);
     //const double percent = pace( percentDone(now) );
@@ -42,7 +42,7 @@ public:
     camera->orbitTo(g);
   }
   
-  virtual void stop(const RenderContext *rc,
+  virtual void stop(const G3MRenderContext *rc,
                     const TimeInterval& now) {
     EffectWithDuration::stop(rc, now);
   }

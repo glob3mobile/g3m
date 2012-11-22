@@ -78,7 +78,7 @@ void BusyMeshRenderer::stop() {
   //int _TODO_stop_effects;
 }
 
-void BusyMeshRenderer::render(const RenderContext* rc)
+void BusyMeshRenderer::render(const G3MRenderContext* rc)
 {
   GL* gl = rc->getGL();
   

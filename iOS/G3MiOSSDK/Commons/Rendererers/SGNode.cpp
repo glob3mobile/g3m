@@ -41,7 +41,7 @@ void SGNode::setParent(SGNode* parent) {
   _parent = parent;
 }
 
-bool SGNode::isReadyToRender(const RenderContext* rc) {
+bool SGNode::isReadyToRender(const G3MRenderContext* rc) {
   const int childrenCount = _children.size();
   for (int i = 0; i < childrenCount; i++) {
     SGNode* child = _children[i];
@@ -53,19 +53,19 @@ bool SGNode::isReadyToRender(const RenderContext* rc) {
   return true;
 }
 
-void SGNode::prepareRender(const RenderContext* rc) {
+void SGNode::prepareRender(const G3MRenderContext* rc) {
 
 }
 
-void SGNode::cleanUpRender(const RenderContext* rc) {
+void SGNode::cleanUpRender(const G3MRenderContext* rc) {
 
 }
 
-void SGNode::rawRender(const RenderContext* rc) {
+void SGNode::rawRender(const G3MRenderContext* rc) {
 
 }
 
-void SGNode::render(const RenderContext* rc) {
+void SGNode::render(const G3MRenderContext* rc) {
   prepareRender(rc);
 
   rawRender(rc);

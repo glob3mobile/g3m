@@ -19,7 +19,7 @@ private:
   Color* _color;
 
 protected:
-  Mesh* createMesh(const RenderContext* rc);
+  Mesh* createMesh(const G3MRenderContext* rc);
 
 public:
   CircleShape(Geodetic3D* position,
