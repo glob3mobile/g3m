@@ -52,7 +52,7 @@ public:
 };
 
 
-void Mark::initialize(const Context* context) {
+void Mark::initialize(const G3MContext* context) {
   //  todo;
   if (!_textureSolved) {
     IDownloader* downloader = context->getDownloader();

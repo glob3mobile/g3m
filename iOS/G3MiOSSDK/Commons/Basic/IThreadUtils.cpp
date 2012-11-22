@@ -8,6 +8,6 @@
 
 #include "IThreadUtils.hpp"
 
-void IThreadUtils::initialize(const Context* context) {
+void IThreadUtils::initialize(const G3MContext* context) {
   _context = context;
 }

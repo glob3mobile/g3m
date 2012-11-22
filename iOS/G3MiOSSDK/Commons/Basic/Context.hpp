@@ -29,7 +29,7 @@ class OrderedRenderable;
 
 #include <vector>
 
-class Context {
+class G3MContext {
 protected:
   const IFactory*     _factory;
   const IStringUtils* _stringUtils;
@@ -43,16 +43,16 @@ protected:
   IStorage*           _storage;
 
 public:
-  Context(const IFactory*     factory,
-          const IStringUtils* stringUtils,
-          const IThreadUtils* threadUtils,
-          const ILogger*      logger,
-          const IMathUtils*   mathUtils,
-          const IJSONParser*  jsonParser,
-          const Planet*       planet,
-          IDownloader*        downloader,
-          EffectsScheduler*   effectsScheduler,
-          IStorage*           storage) :
+  G3MContext(const IFactory*     factory,
+             const IStringUtils* stringUtils,
+             const IThreadUtils* threadUtils,
+             const ILogger*      logger,
+             const IMathUtils*   mathUtils,
+             const IJSONParser*  jsonParser,
+             const Planet*       planet,
+             IDownloader*        downloader,
+             EffectsScheduler*   effectsScheduler,
+             IStorage*           storage) :
   _factory(factory),
   _stringUtils(stringUtils),
   _threadUtils(threadUtils),
@@ -66,7 +66,7 @@ public:
   {
   }
 
-  virtual ~Context() {
+  virtual ~G3MContext() {
 
   }
 
@@ -114,34 +114,8 @@ public:
 //************************************************************
 
 
-//class InitializationContext: public Context {
-//public:
-//  InitializationContext(const IFactory*     factory,
-//                        const IStringUtils* stringUtils,
-//                        const IThreadUtils* threadUtils,
-//                        const ILogger*      logger,
-//                        const IMathUtils*   mathUtils,
-//                        const IJSONParser*  jsonParser,
-//                        const Planet*       planet,
-//                        IDownloader*        downloader,
-//                        EffectsScheduler*   effectsScheduler,
-//                        IStorage*           storage) :
-//  Context(factory,
-//          stringUtils,
-//          threadUtils,
-//          logger,
-//          mathUtils,
-//          jsonParser,
-//          planet,
-//          downloader,
-//          effectsScheduler,
-//          storage) {
-//  }
-//};
 
-//************************************************************
-
-class EventContext: public Context {
+class EventContext: public G3MContext {
 public:
   EventContext(const IFactory*     factory,
                const IStringUtils* stringUtils,
@@ -153,16 +127,16 @@ public:
                IDownloader*        downloader,
                EffectsScheduler*   scheduler,
                IStorage*           storage) :
-  Context(factory,
-          stringUtils,
-          threadUtils,
-          logger,
-          mathUtils,
-          jsonParser,
-          planet,
-          downloader,
-          scheduler,
-          storage) {
+  G3MContext(factory,
+             stringUtils,
+             threadUtils,
+             logger,
+             mathUtils,
+             jsonParser,
+             planet,
+             downloader,
+             scheduler,
+             storage) {
   }
 };
 
@@ -176,7 +150,7 @@ bool MyDataSortPredicate(const OrderedRenderable* or1,
                          const OrderedRenderable* or2);
 #endif
 
-class RenderContext: public Context {
+class RenderContext: public G3MContext {
 private:
   FrameTasksExecutor* _frameTasksExecutor;
   GL*                 _gl;
@@ -206,16 +180,16 @@ public:
                 EffectsScheduler*   scheduler,
                 ITimer*             frameStartTimer,
                 IStorage*           storage) :
-  Context(factory,
-          stringUtils,
-          threadUtils,
-          logger,
-          mathUtils,
-          jsonParser,
-          planet,
-          downloader,
-          scheduler,
-          storage),
+  G3MContext(factory,
+             stringUtils,
+             threadUtils,
+             logger,
+             mathUtils,
+             jsonParser,
+             planet,
+             downloader,
+             scheduler,
+             storage),
   _frameTasksExecutor(frameTasksExecutor),
   _gl(gl),
   _currentCamera(currentCamera),
@@ -262,7 +236,7 @@ public:
    Get the OrderedRenderables, sorted by distanceFromEye()
    */
   std::vector<OrderedRenderable*>* getSortedOrderedRenderables() const;
-
+  
   void addOrderedRenderable(OrderedRenderable* orderedRenderable) const;
   
 };

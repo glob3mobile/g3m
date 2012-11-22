@@ -18,10 +18,10 @@ private:
   std::vector<Renderer*> _renderers;
   
 #ifdef C_CODE
-  const Context* _context;
+  const G3MContext* _context;
 #endif
 #ifdef JAVA_CODE
-  protected Context _context;
+  protected G3MContext _context;
 #endif
 
   bool _enable;
@@ -41,7 +41,7 @@ public:
 
   void setEnable(bool enable);
   
-  void initialize(const Context* context);
+  void initialize(const G3MContext* context);
   
   bool isReadyToRender(const RenderContext* rc);
 
@@ -59,11 +59,11 @@ public:
   
   void stop();
 
-  void onResume(const Context* context);
+  void onResume(const G3MContext* context);
   
-  void onPause(const Context* context);
+  void onPause(const G3MContext* context);
 
-  void onDestroy(const Context* context);
+  void onDestroy(const G3MContext* context);
   
 };
 

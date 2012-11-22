@@ -153,7 +153,7 @@ public:
     
   }
   
-  void run(const Context* context) {
+  void run(const G3MContext* context) {
     _storage->rawSave(_table, _name, _contents);
   }
 };

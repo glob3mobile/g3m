@@ -13,7 +13,7 @@ class Mesh;
 class RenderContext;
 class Tile;
 class TileTessellator;
-class Context;
+class G3MContext;
 class TilesRenderParameters;
 class TileRenderContext;
 class Geodetic3D;
@@ -29,7 +29,7 @@ public:
   virtual bool isReady(const RenderContext *rc,
                        LayerSet* layerSet) = 0;
   
-  virtual void initialize(const Context* context,
+  virtual void initialize(const G3MContext* context,
                           const TilesRenderParameters* parameters) = 0;
   
   virtual Mesh* texturize(const RenderContext* rc,

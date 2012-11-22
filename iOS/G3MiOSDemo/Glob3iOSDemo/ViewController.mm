@@ -359,7 +359,7 @@
 
     }
 
-    void run(const Context* context) {
+    void run(const G3MContext* context) {
       printf("Running initialization Task\n");
 
       [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegreesMinutes(37, 47),

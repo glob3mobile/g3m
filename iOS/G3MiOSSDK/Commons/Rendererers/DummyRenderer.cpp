@@ -25,7 +25,7 @@ DummyRenderer::~DummyRenderer()
 #endif
 }
 
-void DummyRenderer::initialize(const Context* context)
+void DummyRenderer::initialize(const G3MContext* context)
 {
   int res = 12;
   //_vertices = new float[res * res * 3];

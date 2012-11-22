@@ -53,7 +53,7 @@ public:
   bool isReady(const RenderContext *rc,
                LayerSet* layerSet);
   
-  void initialize(const Context* context,
+  void initialize(const G3MContext* context,
                   const TilesRenderParameters* parameters);
   
   Mesh* texturize(const RenderContext* rc,

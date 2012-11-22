@@ -58,15 +58,15 @@ public:
   
   const IImage* readImage(const URL& url);
   
-  void onResume(const Context* context) {
+  void onResume(const G3MContext* context) {
     
   }
   
-  void onPause(const Context* context) {
+  void onPause(const G3MContext* context) {
     
   }
 
-  void onDestroy(const Context* context) {
+  void onDestroy(const G3MContext* context) {
 
   }
   

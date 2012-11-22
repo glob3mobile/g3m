@@ -87,7 +87,7 @@ void TokenDownloadListener::onDownload(const URL& url,
 
 
 
-void BingLayer::initialize(const Context* context){
+void BingLayer::initialize(const G3MContext* context){
   
   std::string tileURL = "";
   tileURL+=_mapServerURL.getPath();

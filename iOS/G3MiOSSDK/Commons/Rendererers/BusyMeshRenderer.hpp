@@ -25,7 +25,7 @@ private:
 public:    
   BusyMeshRenderer(): _degrees(0) {}
   
-  void initialize(const Context* context);
+  void initialize(const G3MContext* context);
   
   bool isReadyToRender(const RenderContext* rc) {
     return true;
@@ -54,15 +54,15 @@ public:
   
   void stop();
   
-  void onResume(const Context* context) {
+  void onResume(const G3MContext* context) {
     
   }
   
-  void onPause(const Context* context) {
+  void onPause(const G3MContext* context) {
     
   }
 
-  void onDestroy(const Context* context) {
+  void onDestroy(const G3MContext* context) {
 
   }
 

@@ -16,20 +16,20 @@
 
 class IBufferDownloadListener;
 class IImageDownloadListener;
-class Context;
+class G3MContext;
 
 class IDownloader {
 public:
   virtual ~IDownloader() {
   }
 
-  virtual void initialize(const Context* context) = 0;
+  virtual void initialize(const G3MContext* context) = 0;
 
-  virtual void onResume(const Context* context) = 0;
+  virtual void onResume(const G3MContext* context) = 0;
 
-  virtual void onPause(const Context* context) = 0;
+  virtual void onPause(const G3MContext* context) = 0;
 
-  virtual void onDestroy(const Context* context) = 0;
+  virtual void onDestroy(const G3MContext* context) = 0;
 
   virtual void start() = 0;
 

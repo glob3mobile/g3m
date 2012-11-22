@@ -13,7 +13,7 @@
 #include "RectangleI.hpp"
 
 
-void MarksRenderer::initialize(const Context* context) {
+void MarksRenderer::initialize(const G3MContext* context) {
   _context = context;
 
   int marksSize = _marks.size();

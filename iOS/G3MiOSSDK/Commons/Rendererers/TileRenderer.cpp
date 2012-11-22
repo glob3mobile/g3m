@@ -65,7 +65,7 @@ void TileRenderer::clearTopLevelTiles() {
   _topLevelTiles.clear();
 }
 
-void TileRenderer::createTopLevelTiles(const Context* context) {
+void TileRenderer::createTopLevelTiles(const G3MContext* context) {
   const Angle fromLatitude  = _parameters->_topSector.lower().latitude();
   const Angle fromLongitude = _parameters->_topSector.lower().longitude();
 
@@ -97,7 +97,7 @@ void TileRenderer::createTopLevelTiles(const Context* context) {
   _topTilesJustCreated = true;
 }
 
-void TileRenderer::initialize(const Context* context) {
+void TileRenderer::initialize(const G3MContext* context) {
   _context = context;
 
   clearTopLevelTiles();

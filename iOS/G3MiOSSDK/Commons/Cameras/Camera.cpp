@@ -18,7 +18,7 @@
 //#include "IntBufferBuilder.hpp"
 
 
-void Camera::initialize(const Context* context)
+void Camera::initialize(const G3MContext* context)
 {
   _planet = context->getPlanet();
   setCartesianPosition( MutableVector3D(_planet->getRadii().maxAxis() * 5, 0, 0) );

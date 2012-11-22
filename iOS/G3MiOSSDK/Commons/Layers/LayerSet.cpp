@@ -50,7 +50,7 @@ void LayerSet::onTerrainTouchEvent(const EventContext* ec,
   
 }
 
-void LayerSet::initialize(const Context* context)const{
+void LayerSet::initialize(const G3MContext* context)const{
   for (int i = 0; i<_layers.size(); i++){
     _layers[i]->initialize(context);
   }

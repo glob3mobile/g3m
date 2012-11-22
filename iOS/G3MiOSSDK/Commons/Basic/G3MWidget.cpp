@@ -93,16 +93,16 @@ _logDownloaderStatistics(logDownloaderStatistics),
 _userData(NULL),
 _initializationTask(initializationTask),
 _autoDeleteInitializationTask(autoDeleteInitializationTask),
-_context(new Context(IFactory::instance(),
-                     IStringUtils::instance(),
-                     threadUtils,
-                     ILogger::instance(),
-                     IMathUtils::instance(),
-                     IJSONParser::instance(),
-                     _planet,
-                     downloader,
-                     _effectsScheduler,
-                     storage))
+_context(new G3MContext(IFactory::instance(),
+                        IStringUtils::instance(),
+                        threadUtils,
+                        ILogger::instance(),
+                        IMathUtils::instance(),
+                        IJSONParser::instance(),
+                        _planet,
+                        downloader,
+                        _effectsScheduler,
+                        storage))
 {
   initializeGL();
 

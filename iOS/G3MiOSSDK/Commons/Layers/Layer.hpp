@@ -65,7 +65,7 @@ public:
     return true;
   }
   
-  virtual void initialize(const Context* context) {}
+  virtual void initialize(const G3MContext* context) {}
   
   void addTerrainTouchEventListener(TerrainTouchEventListener* listener) {
     _listeners.push_back(listener);

@@ -8,7 +8,7 @@
 
 #include "CompositeRenderer.hpp"
 
-void CompositeRenderer::initialize(const Context* context) {
+void CompositeRenderer::initialize(const G3MContext* context) {
   _context = context;
   
   const int rendersSize = _renderers.size();
@@ -89,21 +89,21 @@ void CompositeRenderer::stop() {
   }
 }
 
-void CompositeRenderer::onResume(const Context* context) {
+void CompositeRenderer::onResume(const G3MContext* context) {
   const int rendersSize = _renderers.size();
   for (int i = 0; i < rendersSize; i++) {
     _renderers[i]->onResume(context);
   }
 }
 
-void CompositeRenderer::onPause(const Context* context) {
+void CompositeRenderer::onPause(const G3MContext* context) {
   const int rendersSize = _renderers.size();
   for (int i = 0; i < rendersSize; i++) {
     _renderers[i]->onPause(context);
   }
 }
 
-void CompositeRenderer::onDestroy(const Context* context) {
+void CompositeRenderer::onDestroy(const G3MContext* context) {
   const int rendersSize = _renderers.size();
   for (int i = 0; i < rendersSize; i++) {
     _renderers[i]->onDestroy(context);

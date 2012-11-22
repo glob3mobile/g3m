@@ -217,7 +217,7 @@ public:
   Angle compute3DAngularDistance(const Vector2I& pixel0,
                                  const Vector2I& pixel1);
   
-  void initialize(const Context* context); 
+  void initialize(const G3MContext* context); 
 
   void resetPosition();
   

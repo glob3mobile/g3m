@@ -8,6 +8,6 @@
 
 #include "IStorage.hpp"
 
-void IStorage::initialize(const Context* context) {
+void IStorage::initialize(const G3MContext* context) {
   _context = context;
 }

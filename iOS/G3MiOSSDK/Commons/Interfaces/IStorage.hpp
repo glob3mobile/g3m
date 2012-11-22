@@ -12,15 +12,15 @@
 #include "URL.hpp"
 #include "IByteBuffer.hpp"
 #include "IImage.hpp"
-class Context;
+class G3MContext;
 
 class IStorage {
 protected:
 #ifdef C_CODE
-  const Context* _context;
+  const G3MContext* _context;
 #endif
 #ifdef JAVA_CODE
-  protected Context _context;
+  protected G3MContext _context;
 #endif
 
 public:
@@ -34,7 +34,7 @@ public:
 
   }
 
-  virtual void initialize(const Context* context);
+  virtual void initialize(const G3MContext* context);
 
   virtual bool containsBuffer(const URL& url) = 0;
   
@@ -54,11 +54,11 @@ public:
   virtual const IImage* readImage(const URL& url) = 0;
   
   
-  virtual void onResume(const Context* context) = 0;
+  virtual void onResume(const G3MContext* context) = 0;
   
-  virtual void onPause(const Context* context) = 0;
+  virtual void onPause(const G3MContext* context) = 0;
 
-  virtual void onDestroy(const Context* context) = 0;
+  virtual void onDestroy(const G3MContext* context) = 0;
 
   
   virtual bool isAvailable() = 0;

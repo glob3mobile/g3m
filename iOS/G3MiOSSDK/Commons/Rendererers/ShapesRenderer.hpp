@@ -18,10 +18,10 @@ private:
   std::vector<Shape*> _shapes;
 
 #ifdef C_CODE
-  const Context* _context;
+  const G3MContext* _context;
 #endif
 #ifdef JAVA_CODE
-  private Context _context;
+  private G3MContext _context;
 #endif
 
 public:
@@ -47,19 +47,19 @@ public:
     }
   }
 
-  void onResume(const Context* context) {
+  void onResume(const G3MContext* context) {
     _context = context;
   }
 
-  void onPause(const Context* context) {
+  void onPause(const G3MContext* context) {
 
   }
 
-  void onDestroy(const Context* context) {
+  void onDestroy(const G3MContext* context) {
 
   }
 
-  void initialize(const Context* context) {
+  void initialize(const G3MContext* context) {
     _context = context;
 
     const int shapesCount = _shapes.size();

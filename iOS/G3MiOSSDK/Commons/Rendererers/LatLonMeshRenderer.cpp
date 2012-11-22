@@ -21,7 +21,7 @@ LatLonMeshRenderer::~LatLonMeshRenderer()
 }
 
 
-void LatLonMeshRenderer::initialize(const Context* context)
+void LatLonMeshRenderer::initialize(const G3MContext* context)
 {
   FloatBufferBuilderFromGeodetic vertices(CenterStrategy::firstVertex(),
                                           context->getPlanet(),

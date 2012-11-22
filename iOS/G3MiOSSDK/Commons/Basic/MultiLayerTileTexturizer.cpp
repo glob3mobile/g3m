@@ -534,7 +534,7 @@ MultiLayerTileTexturizer::~MultiLayerTileTexturizer() {
     _texCoordsCache = NULL;
 }
 
-void MultiLayerTileTexturizer::initialize(const Context* context,
+void MultiLayerTileTexturizer::initialize(const G3MContext* context,
                                           const TilesRenderParameters* parameters) {
   _parameters = parameters;
 //  _layerSet->initialize(ic);

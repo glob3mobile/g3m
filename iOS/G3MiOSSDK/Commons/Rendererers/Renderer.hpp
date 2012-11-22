@@ -10,7 +10,7 @@
 #define G3MiOSSDK_IRenderer_h
 
 class TouchEvent;
-class Context;
+class G3MContext;
 class RenderContext;
 class EventContext;
 
@@ -21,7 +21,7 @@ public:
   virtual void setEnable(bool enable) = 0;
   
   
-  virtual void initialize(const Context* context) = 0;
+  virtual void initialize(const G3MContext* context) = 0;
   
   virtual bool isReadyToRender(const RenderContext* rc) = 0;
   
@@ -45,11 +45,11 @@ public:
   virtual ~Renderer() { };
 
   // Android activity lifecyle
-  virtual void onResume(const Context* context) = 0;
+  virtual void onResume(const G3MContext* context) = 0;
 
-  virtual void onPause(const Context* context) = 0;
+  virtual void onPause(const G3MContext* context) = 0;
 
-  virtual void onDestroy(const Context* context) = 0;
+  virtual void onDestroy(const G3MContext* context) = 0;
 
 };
 

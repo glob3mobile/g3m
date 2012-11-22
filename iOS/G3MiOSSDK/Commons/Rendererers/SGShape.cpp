@@ -11,7 +11,7 @@
 #include "SGNode.hpp"
 
 
-void SGShape::initialize(const Context* context) {
+void SGShape::initialize(const G3MContext* context) {
   _node->initialize(context, this);
 }
 

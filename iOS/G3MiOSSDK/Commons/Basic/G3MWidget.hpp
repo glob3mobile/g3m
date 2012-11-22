@@ -44,7 +44,7 @@ class IStorage;
 #include "Color.hpp"
 #include "Angle.hpp"
 
-class Context;
+class G3MContext;
 
 class UserData {
 private:
@@ -155,7 +155,7 @@ public:
     return _cameraRenderer;
   }
 
-  const Context* getContext() const {
+  const G3MContext* getG3MContext() const {
     return _context;
   }
 
@@ -202,7 +202,7 @@ private:
 
   void initializeGL();
 
-  const Context* _context;
+  const G3MContext* _context;
 
   G3MWidget(INativeGL*                       nativeGL,
             IStorage*                        storage,

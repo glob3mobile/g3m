@@ -12,15 +12,15 @@
 #include "GTask.hpp"
 #include <stdlib.h>
 
-class Context;
+class G3MContext;
 
 class IThreadUtils {
 protected:
 #ifdef C_CODE
-  const Context* _context;
+  const G3MContext* _context;
 #endif
 #ifdef JAVA_CODE
-  protected Context _context;
+  protected G3MContext _context;
 #endif
 
 public:
@@ -31,7 +31,7 @@ public:
 
   }
   
-  virtual void initialize(const Context* context);
+  virtual void initialize(const G3MContext* context);
 
   virtual ~IThreadUtils() {
     

@@ -328,7 +328,7 @@ private:
   ITimer* _lastSplitTimer;      // timer to start every time a tile get splitted into subtiles
   
   void clearTopLevelTiles();
-  void createTopLevelTiles(const Context* context);
+  void createTopLevelTiles(const G3MContext* context);
   
   TilesStatistics _lastStatistics;
   
@@ -336,10 +336,10 @@ private:
 
 //  const InitializationContext* _initializationContext;
 #ifdef C_CODE
-  const Context* _context;
+  const G3MContext* _context;
 #endif
 #ifdef JAVA_CODE
-  private Context _context;
+  private G3MContext _context;
 #endif
 
   void pruneTopLevelTiles();
@@ -353,7 +353,7 @@ public:
   
   ~TileRenderer();
   
-  void initialize(const Context* context);
+  void initialize(const G3MContext* context);
   
   void render(const RenderContext* rc);
   
@@ -376,15 +376,15 @@ public:
     _firstRender = false;
   }
   
-  void onResume(const Context* context) {
+  void onResume(const G3MContext* context) {
     
   }
   
-  void onPause(const Context* context) {
+  void onPause(const G3MContext* context) {
     
   }
 
-  void onDestroy(const Context* context) {
+  void onDestroy(const G3MContext* context) {
 
   }
 

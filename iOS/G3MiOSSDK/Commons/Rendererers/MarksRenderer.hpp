@@ -29,12 +29,12 @@ private:
   std::vector<Mark*> _marks;
   
 #ifdef C_CODE
-  const Context* _context;
-  const Camera*  _lastCamera;
+  const G3MContext* _context;
+  const Camera*     _lastCamera;
 #endif
 #ifdef JAVA_CODE
-  private Context _context;
-  private Camera  _lastCamera;
+  private G3MContext _context;
+  private Camera     _lastCamera;
 #endif
   
   MarkTouchListener* _markTouchListener;
@@ -73,7 +73,7 @@ public:
     _markTouchListener = NULL;
   };
   
-  virtual void initialize(const Context* context);
+  virtual void initialize(const G3MContext* context);
   
   virtual void render(const RenderContext* rc);
   
@@ -97,15 +97,15 @@ public:
     
   }
   
-  void onResume(const Context* context) {
+  void onResume(const G3MContext* context) {
     _context = context;
   }
   
-  void onPause(const Context* context) {
+  void onPause(const G3MContext* context) {
 
   }
 
-  void onDestroy(const Context* context) {
+  void onDestroy(const G3MContext* context) {
 
   }
 

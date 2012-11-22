@@ -10,7 +10,7 @@
 
 #include "Context.hpp"
 
-void EffectsScheduler::initialize(const Context* context) {
+void EffectsScheduler::initialize(const G3MContext* context) {
   _factory = context->getFactory();
   _timer = _factory->createTimer();
 }

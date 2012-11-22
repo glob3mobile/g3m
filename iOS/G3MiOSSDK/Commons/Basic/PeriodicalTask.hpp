@@ -45,7 +45,7 @@ public:
       IFactory::instance()->deleteTimer(_timer);
   }
   
-  void executeIfNecessary(const Context* context) {
+  void executeIfNecessary(const G3MContext* context) {
     long long now = getTimer()->now().milliseconds();
     
     long long interval = now - _lastExecutionMS;

@@ -17,7 +17,7 @@ SGNode::~SGNode() {
 }
 
 
-void SGNode::initialize(const Context* context,
+void SGNode::initialize(const G3MContext* context,
                         SGShape *shape) {
   _context = context;
   _shape = shape;

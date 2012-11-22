@@ -77,7 +77,7 @@ public:
     return _position;
   }
   
-  void initialize(const Context* context);
+  void initialize(const G3MContext* context);
   
   void render(const RenderContext* rc,
               const double minDistanceToCamera);

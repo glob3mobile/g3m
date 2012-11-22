@@ -35,7 +35,7 @@ public:
     return _uriPrefix;
   }
 
-  void initialize(const Context* context);
+  void initialize(const G3MContext* context);
   
   bool isReadyToRender(const RenderContext* rc);
 

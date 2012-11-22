@@ -95,7 +95,7 @@ public:
 
   void render(const RenderContext* rc);
 
-  virtual void initialize(const Context* context) {
+  virtual void initialize(const G3MContext* context) {
 
   }
 
