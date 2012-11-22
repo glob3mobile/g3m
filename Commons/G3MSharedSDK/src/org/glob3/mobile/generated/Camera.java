@@ -626,13 +626,11 @@ public class Camera
 	return _frustum;
   }
 
-
-  private int __temporal_test_for_clipping;
-
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Frustum* getHalfFrustum() const
   private Frustum getHalfFrustum()
   {
+	// __temporal_test_for_clipping;
 	if (_dirtyFlags._halfFrustum)
 	{
 	  _dirtyFlags._halfFrustum = false;
