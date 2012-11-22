@@ -96,7 +96,7 @@ public final class Downloader_WebGL
          // assumes the URL is a relative URL to the server, no need to use proxy
          proxyUrl = url;
       }
- final s
+
       _requestsCounter++;
       requestId = _requestIdCounter++;
       handler = _downloadingHandlers.get(proxyUrl);
