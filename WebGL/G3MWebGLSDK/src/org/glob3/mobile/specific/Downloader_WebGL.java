@@ -87,7 +87,14 @@ public final class Downloader_WebGL
 
       final long requestId;
       Downloader_WebGL_Handler handler = null;
-      final URL proxyUrl = new URL(_proxy + url.getPath(), false);
+      final URL proxyUrl;
+      final String urlPath = url.getPath();
+      if (urlPath.startsWith("http://") || urlPath.startsWith("https://")) {
+         proxyUrl = new URL(_proxy + urlPath, false);
+      }
+      else {
+         proxyUrl = url;
+      }
 
       _requestsCounter++;
       requestId = _requestIdCounter++;
