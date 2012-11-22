@@ -15,6 +15,7 @@ import org.glob3.mobile.generated.CameraRotationHandler;
 import org.glob3.mobile.generated.CameraSingleDragHandler;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
+import org.glob3.mobile.generated.Context;
 import org.glob3.mobile.generated.EllipsoidalTileTessellator;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GTask;
@@ -43,7 +44,6 @@ import org.glob3.mobile.generated.TouchEventType;
 import org.glob3.mobile.generated.UserData;
 import org.glob3.mobile.generated.Vector2I;
 
-import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
@@ -78,13 +78,13 @@ public final class G3MWidget_Android
    private boolean                                        _incrementalTileQuality;
 
 
-   public G3MWidget_Android(final Context context) {
+   public G3MWidget_Android(final android.content.Context context) {
       this(context, null);
    }
 
 
    // Needed to create widget from XML layout
-   public G3MWidget_Android(final Context context,
+   public G3MWidget_Android(final android.content.Context context,
                             final AttributeSet attrs) {
       super(context, attrs);
 
@@ -477,5 +477,9 @@ public final class G3MWidget_Android
       getG3MWidget().setCameraPitch(angle);
    }
 
+
+   public Context getG3MContext() {
+      return getG3MWidget().getContext();
+   }
 
 }
