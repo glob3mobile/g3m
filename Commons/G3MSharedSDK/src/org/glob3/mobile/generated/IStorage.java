@@ -29,6 +29,11 @@ public abstract class IStorage
 
   }
 
+  public void dispose()
+  {
+
+  }
+
   public void initialize(Context context)
   {
 	_context = context;
@@ -56,6 +61,5 @@ public abstract class IStorage
 
 
   public abstract boolean isAvailable();
-
 
 }

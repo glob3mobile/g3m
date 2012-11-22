@@ -21,7 +21,7 @@ public class CompositeRenderer extends Renderer
 {
   private java.util.ArrayList<Renderer> _renderers = new java.util.ArrayList<Renderer>();
 
-  private final Context _context;
+  protected Context _context;
 
   private boolean _enable;
 
