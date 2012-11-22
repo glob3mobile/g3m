@@ -155,6 +155,10 @@ public:
     return _cameraRenderer;
   }
 
+  const Context* getContext() const {
+    return _context;
+  }
+
 private:
   IStorage*            _storage;
   IDownloader*         _downloader;
