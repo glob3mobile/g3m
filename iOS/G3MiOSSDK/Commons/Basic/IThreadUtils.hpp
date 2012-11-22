@@ -10,6 +10,7 @@
 #define __G3MiOSSDK__IThreadUtils__
 
 #include "GTask.hpp"
+#include <stdlib.h>
 
 class Context;
 
@@ -25,7 +26,7 @@ protected:
 public:
 
   IThreadUtils() :
-  _context(0)
+  _context(NULL)
   {
 
   }

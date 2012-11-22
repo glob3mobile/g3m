@@ -418,15 +418,15 @@ public final class G3MWidget_Android
    }
 
 
-   public void closeStorage() {
-      if (IDownloader.instance() != null) {
-         IDownloader.instance().stop();
-      }
-      if (IStorage.instance() != null) {
-         // _storage.onPause(null);
-         ((SQLiteStorage_Android) IStorage.instance()).close();
-      }
-   }
+   //   public void closeStorage() {
+   //      if (IDownloader.instance() != null) {
+   //         IDownloader.instance().stop();
+   //      }
+   //      if (IStorage.instance() != null) {
+   //         // _storage.onPause(null);
+   //         ((SQLiteStorage_Android) IStorage.instance()).close();
+   //      }
+   //   }
 
 
    public Camera getNextCamera() {

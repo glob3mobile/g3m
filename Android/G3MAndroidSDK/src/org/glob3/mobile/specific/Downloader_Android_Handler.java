@@ -13,7 +13,6 @@ import java.util.Iterator;
 import org.glob3.mobile.generated.Context;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.IBufferDownloadListener;
-import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IImageDownloadListener;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IThreadUtils;
@@ -163,17 +162,16 @@ public final class Downloader_Android_Handler {
    }
 
 
-   public void runWithDownloader(final IDownloader downloader) {
+   void runWithDownloader(final Downloader_Android downloader) {
       //      Log.i(TAG, "runWithDownloader url=" + _url.getPath());
 
-      final Downloader_Android dl = (Downloader_Android) downloader;
       HttpURLConnection connection = null;
       int statusCode = 0;
       byte[] data = null;
       try {
          connection = (HttpURLConnection) _URL.openConnection();
-         connection.setConnectTimeout(dl.getConnectTimeout());
-         connection.setReadTimeout(dl.getReadTimeout());
+         connection.setConnectTimeout(downloader.getConnectTimeout());
+         connection.setReadTimeout(downloader.getReadTimeout());
          connection.setUseCaches(false);
          connection.connect();
          statusCode = connection.getResponseCode();
@@ -209,7 +207,7 @@ public final class Downloader_Android_Handler {
          }
       }
       // inform downloader to remove myself, to avoid adding new Listener
-      dl.removeDownloadingHandlerForUrl(_url.getPath());
+      downloader.removeDownloadingHandlerForUrl(_url.getPath());
 
       IThreadUtils.instance().invokeInRendererThread(new ProcessResponseGTask(statusCode, data, this), true);
    }

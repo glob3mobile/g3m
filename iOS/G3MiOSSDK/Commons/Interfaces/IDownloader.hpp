@@ -20,6 +20,8 @@ class Context;
 
 class IDownloader {
 public:
+  virtual ~IDownloader() {
+  }
 
   virtual void onResume(const Context* context) = 0;
 
@@ -42,9 +44,6 @@ public:
                                  bool deleteListener) = 0;
 
   virtual void cancelRequest(long long requestId) = 0;
-
-  virtual ~IDownloader() {
-  }
 
   virtual const std::string statistics() = 0;
 
