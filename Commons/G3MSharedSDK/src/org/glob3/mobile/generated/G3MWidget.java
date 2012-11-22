@@ -388,6 +388,13 @@ public class G3MWidget
 	return _cameraRenderer;
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const Context* getContext() const
+  public final Context getContext()
+  {
+	return _context;
+  }
+
   private IStorage _storage;
   private IDownloader _downloader;
   private IThreadUtils _threadUtils;
