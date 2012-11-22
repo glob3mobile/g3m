@@ -394,6 +394,8 @@ void G3MWidget::render() {
 
 
 void G3MWidget::onPause() {
+  _threadUtils->onPause(_context);
+
   _effectsScheduler->onPause(_context);
 
   _mainRenderer->onPause(_context);
@@ -412,9 +414,13 @@ void G3MWidget::onResume() {
   _busyRenderer->onResume(_context);
 
   _effectsScheduler->onResume(_context);
+
+  _threadUtils->onResume(_context);
 }
 
 void G3MWidget::onDestroy() {
+  _threadUtils->onDestroy(_context);
+
   _effectsScheduler->onDestroy(_context);
 
   _mainRenderer->onDestroy(_context);

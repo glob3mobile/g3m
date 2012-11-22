@@ -91,6 +91,7 @@ public final class Downloader_Android
             }
             _started = false;
 
+
             boolean allWorkersStopped;
             do {
                allWorkersStopped = true;
@@ -108,16 +109,9 @@ public final class Downloader_Android
             }
             while (!allWorkersStopped);
 
+
             _workers.clear();
             Log.i(TAG, "Downloader stopped");
-
-            //         boolean allStopped = true;
-            //         while (_started) {
-            //            for (final Downloader_Android_WorkerThread worker : _workers) {
-            //               allStopped = allStopped && worker.isStopping();
-            //            }
-            //         _started = allStopped;
-            //         }
          }
       }
    }
@@ -330,7 +324,6 @@ public final class Downloader_Android
 
    @Override
    public void onDestroy(final G3MContext context) {
-      //      final int __DIEGO_AT_WORK;
       stop();
    }
 

@@ -30,6 +30,12 @@ public:
   {
 
   }
+
+  virtual void onResume(const G3MContext* context) = 0;
+
+  virtual void onPause(const G3MContext* context) = 0;
+
+  virtual void onDestroy(const G3MContext* context) = 0;
   
   virtual void initialize(const G3MContext* context);
 

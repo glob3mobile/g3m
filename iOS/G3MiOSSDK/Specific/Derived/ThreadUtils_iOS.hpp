@@ -48,6 +48,18 @@ public:
      }];
   }
 
+  void onResume(const G3MContext* context) {
+    
+  }
+
+  void onPause(const G3MContext* context) {
+
+  }
+
+  void onDestroy(const G3MContext* context) {
+
+  }
+  
 };
 
 #endif
