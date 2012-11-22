@@ -7,6 +7,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.IThreadUtils;
 
@@ -61,6 +62,24 @@ public final class ThreadUtils_Android
             }
          }
       });
+   }
+
+
+   @Override
+   public void onResume(final G3MContext context) {
+      final int ___DIEGO_AT_WORK;
+   }
+
+
+   @Override
+   public void onPause(final G3MContext context) {
+      final int ___DIEGO_AT_WORK;
+   }
+
+
+   @Override
+   public void onDestroy(final G3MContext context) {
+
    }
 
 }
