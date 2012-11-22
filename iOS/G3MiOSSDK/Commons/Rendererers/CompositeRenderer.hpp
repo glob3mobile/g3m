@@ -17,8 +17,13 @@ class CompositeRenderer: public Renderer
 private:
   std::vector<Renderer*> _renderers;
   
+#ifdef C_CODE
   const Context* _context;
-  
+#endif
+#ifdef JAVA_CODE
+  protected Context _context;
+#endif
+
   bool _enable;
   
 public:

@@ -5,17 +5,16 @@ package org.glob3.mobile.specific;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 
+import org.glob3.mobile.generated.Context;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IStorage;
 import org.glob3.mobile.generated.IThreadUtils;
-import org.glob3.mobile.generated.InitializationContext;
 import org.glob3.mobile.generated.URL;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -28,20 +27,20 @@ public final class SQLiteStorage_Android
          extends
             IStorage {
 
-   private final String             _databaseName;
-   private final Context            _context;
+   private final String                  _databaseName;
+   private final android.content.Context _context;
 
 
-   private final MySQLiteOpenHelper _dbHelper;
-   private SQLiteDatabase           _writeDB;
-   private SQLiteDatabase           _readDB;
+   private final MySQLiteOpenHelper      _dbHelper;
+   private SQLiteDatabase                _writeDB;
+   private SQLiteDatabase                _readDB;
 
 
    private class MySQLiteOpenHelper
             extends
                SQLiteOpenHelper {
 
-      public MySQLiteOpenHelper(final Context context,
+      public MySQLiteOpenHelper(final android.content.Context context,
                                 final String name) {
          super(context, name, null, 1);
       }
@@ -89,7 +88,7 @@ public final class SQLiteStorage_Android
 
 
    SQLiteStorage_Android(final String path,
-                         final Context context) {
+                         final android.content.Context context) {
       _databaseName = path;
       _context = context;
 
@@ -142,7 +141,7 @@ public final class SQLiteStorage_Android
          IThreadUtils.instance().invokeInBackground( //
                   new GTask() {
                      @Override
-                     public void run() {
+                     public void run(final Context context) {
                         rawSave(table, name, contents);
                      }
                   }, //
@@ -229,7 +228,7 @@ public final class SQLiteStorage_Android
          IThreadUtils.instance().invokeInBackground( //
                   new GTask() {
                      @Override
-                     public void run() {
+                     public void run(final Context context) {
                         rawSave(table, name, contentsF);
                      }
                   }, //
@@ -293,7 +292,7 @@ public final class SQLiteStorage_Android
 
 
    @Override
-   public synchronized void onResume(final InitializationContext ic) {
+   public synchronized void onResume(final Context context) {
       if (_writeDB == null) {
          _writeDB = _dbHelper.getWritableDatabase();
       }
@@ -304,13 +303,13 @@ public final class SQLiteStorage_Android
 
 
    @Override
-   public synchronized void onPause(final InitializationContext ic) {
+   public synchronized void onPause(final Context context) {
       close();
    }
 
 
    @Override
-   public synchronized void onDestroy(final InitializationContext ic) {
+   public synchronized void onDestroy(final Context context) {
       close();
    }
 

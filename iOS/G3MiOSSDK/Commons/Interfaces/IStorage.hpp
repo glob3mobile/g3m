@@ -30,6 +30,10 @@ public:
     
   }
 
+  virtual ~IStorage() {
+
+  }
+
   virtual void initialize(const Context* context);
 
   virtual bool containsBuffer(const URL& url) = 0;
@@ -58,10 +62,6 @@ public:
 
   
   virtual bool isAvailable() = 0;
-  
-#ifdef C_CODE
-  virtual ~IStorage() {}
-#endif
   
 };
 

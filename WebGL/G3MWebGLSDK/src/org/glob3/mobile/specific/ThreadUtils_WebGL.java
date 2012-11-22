@@ -25,7 +25,7 @@ public final class ThreadUtils_WebGL
       final Timer timer = new Timer() {
          @Override
          public void run() {
-            task.run();
+            task.run(_context);
             if (autoDelete) {
                task.dispose();
             }

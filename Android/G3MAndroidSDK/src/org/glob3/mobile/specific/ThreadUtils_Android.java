@@ -40,7 +40,7 @@ public final class ThreadUtils_Android
       _widgetAndroid.queueEvent(new Runnable() {
          @Override
          public void run() {
-            task.run();
+            task.run(_context);
             if (autoDelete) {
                task.dispose();
             }
@@ -55,7 +55,7 @@ public final class ThreadUtils_Android
       _backgroundExecutor.execute(new Runnable() {
          @Override
          public void run() {
-            task.run();
+            task.run(_context);
             if (autoDelete) {
                task.dispose();
             }

@@ -2,10 +2,10 @@
 
 package org.glob3.mobile.specific;
 
+import org.glob3.mobile.generated.Context;
 import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.IStorage;
-import org.glob3.mobile.generated.InitializationContext;
 import org.glob3.mobile.generated.URL;
 
 import com.google.gwt.core.client.JavaScriptObject;
@@ -49,17 +49,17 @@ public final class IndexedDBStorage_WebGL
 
 
    @Override
-   public void onResume(final InitializationContext ic) {
+   public void onResume(final Context context) {
    }
 
 
    @Override
-   public void onPause(final InitializationContext ic) {
+   public void onPause(final Context context) {
    }
 
 
    @Override
-   public void onDestroy(final InitializationContext ic) {
+   public void onDestroy(final Context context) {
    }
 
 

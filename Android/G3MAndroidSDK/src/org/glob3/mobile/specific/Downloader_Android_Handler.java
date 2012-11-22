@@ -10,6 +10,7 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.glob3.mobile.generated.Context;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IDownloader;
@@ -232,7 +233,7 @@ public final class Downloader_Android_Handler {
 
 
       @Override
-      public void run() {
+      public void run(final Context context) {
          synchronized (_handler) {
             final boolean dataIsValid = (_data != null) && (_statusCode == 200);
 
