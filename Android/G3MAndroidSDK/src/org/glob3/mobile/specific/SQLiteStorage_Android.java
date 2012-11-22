@@ -11,7 +11,6 @@ import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IStorage;
-import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.URL;
 
 import android.content.ContentValues;
@@ -28,7 +27,7 @@ public final class SQLiteStorage_Android
             IStorage {
 
    private final String                  _databaseName;
-   private final android.content.Context _context;
+   private final android.content.Context _androidContext;
 
 
    private final MySQLiteOpenHelper      _dbHelper;
@@ -72,9 +71,9 @@ public final class SQLiteStorage_Android
 
 
    private String getPath() {
-      File f = _context.getExternalCacheDir();
+      File f = _androidContext.getExternalCacheDir();
       if ((f == null) || !f.exists()) {
-         f = _context.getCacheDir();
+         f = _androidContext.getCacheDir();
       }
       final String documentsDirectory = f.getAbsolutePath();
 
@@ -90,7 +89,7 @@ public final class SQLiteStorage_Android
    SQLiteStorage_Android(final String path,
                          final android.content.Context context) {
       _databaseName = path;
-      _context = context;
+      _androidContext = context;
 
 
       _dbHelper = new MySQLiteOpenHelper(context, getPath());
@@ -138,7 +137,7 @@ public final class SQLiteStorage_Android
       final String name = url.getPath();
 
       if (saveInBackground) {
-         IThreadUtils.instance().invokeInBackground( //
+         _context.getThreadUtils().invokeInBackground( //
                   new GTask() {
                      @Override
                      public void run(final Context context) {
@@ -225,7 +224,7 @@ public final class SQLiteStorage_Android
 
       final byte[] contentsF = contents;
       if (saveInBackground) {
-         IThreadUtils.instance().invokeInBackground( //
+         _context.getThreadUtils().invokeInBackground( //
                   new GTask() {
                      @Override
                      public void run(final Context context) {

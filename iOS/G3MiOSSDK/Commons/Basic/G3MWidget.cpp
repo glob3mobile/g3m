@@ -122,6 +122,7 @@ _context(new Context(IFactory::instance(),
   }
 
   if (_downloader != NULL){
+    _downloader->initialize(_context);
     _downloader->start();
   }
 

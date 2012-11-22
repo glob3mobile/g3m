@@ -275,3 +275,7 @@ void CachedDownloader::onPause(const Context* context) {
 void CachedDownloader::onDestroy(const Context* context) {
   _downloader->onDestroy(context);
 }
+
+void CachedDownloader::initialize(const Context* context) {
+  _downloader->initialize(context);
+}

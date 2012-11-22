@@ -23,6 +23,8 @@ public:
   virtual ~IDownloader() {
   }
 
+  virtual void initialize(const Context* context) = 0;
+
   virtual void onResume(const Context* context) = 0;
 
   virtual void onPause(const Context* context) = 0;

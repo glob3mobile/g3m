@@ -134,7 +134,7 @@ public final class Downloader_Android
             handler = _queuedHandlers.get(url.getPath());
             if (handler == null) {
                // new handler, queue it
-               handler = new Downloader_Android_Handler(url, listener, priority, requestId);
+               handler = new Downloader_Android_Handler(url, listener, priority, requestId, _context);
                _queuedHandlers.put(url.getPath(), handler);
             }
             else {
@@ -170,7 +170,7 @@ public final class Downloader_Android
             handler = _queuedHandlers.get(url.getPath());
             if (handler == null) {
                // new handler, queue it
-               handler = new Downloader_Android_Handler(url, listener, priority, requestId);
+               handler = new Downloader_Android_Handler(url, listener, priority, requestId, _context);
                _queuedHandlers.put(url.getPath(), handler);
             }
             else {

@@ -75,6 +75,8 @@ public:
 
   void onDestroy(const Context* context);
 
+  void initialize(const Context* context);
+
 };
 
 #endif

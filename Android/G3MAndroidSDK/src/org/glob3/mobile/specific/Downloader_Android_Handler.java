@@ -30,11 +30,15 @@ public final class Downloader_Android_Handler {
    private java.net.URL                   _URL;
    private final ArrayList<ListenerEntry> _listeners = new ArrayList<ListenerEntry>();
 
+   private final Context                  _context;
 
-   public Downloader_Android_Handler(final URL url,
-                                     final IBufferDownloadListener listener,
-                                     final long priority,
-                                     final long requestId) {
+
+   Downloader_Android_Handler(final URL url,
+                              final IBufferDownloadListener listener,
+                              final long priority,
+                              final long requestId,
+                              final Context context) {
+      _context = context;
       _priority = priority;
       _url = url;
       try {
@@ -55,10 +59,12 @@ public final class Downloader_Android_Handler {
    }
 
 
-   public Downloader_Android_Handler(final URL url,
-                                     final IImageDownloadListener listener,
-                                     final long priority,
-                                     final long requestId) {
+   Downloader_Android_Handler(final URL url,
+                              final IImageDownloadListener listener,
+                              final long priority,
+                              final long requestId,
+                              final Context context) {
+      _context = context;
       _priority = priority;
       _url = url;
       try {

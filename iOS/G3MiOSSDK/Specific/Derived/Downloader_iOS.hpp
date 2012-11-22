@@ -80,7 +80,10 @@ public:
 
   }
 
-};
+  void initialize(const Context* context) {
 
+  }
+
+};
 
 #endif
