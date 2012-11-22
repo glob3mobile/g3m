@@ -163,7 +163,7 @@ public final class G3MWidget_Android
       super.onSizeChanged(w, h, oldw, oldh);
 
       if (_es2renderer == null) {
-         _es2renderer = new ES2Renderer(this.getContext(), this);
+         _es2renderer = new ES2Renderer(this);
          setRenderer(_es2renderer);
       }
    }
