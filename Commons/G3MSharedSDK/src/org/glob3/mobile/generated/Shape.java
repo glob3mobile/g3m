@@ -142,7 +142,7 @@ public abstract class Shape
 	setScale(scale._x, scale._y, scale._z);
   }
 
-  public final void render(RenderContext rc)
+  public final void render(G3MRenderContext rc)
   {
 	if (isReadyToRender(rc))
 	{
@@ -158,15 +158,15 @@ public abstract class Shape
 	}
   }
 
-  public void initialize(Context context)
+  public void initialize(G3MContext context)
   {
 
   }
 
-  public abstract boolean isReadyToRender(RenderContext rc);
+  public abstract boolean isReadyToRender(G3MRenderContext rc);
 
-  public abstract void rawRender(RenderContext rc);
+  public abstract void rawRender(G3MRenderContext rc);
 
-  public abstract boolean isTransparent(RenderContext rc);
+  public abstract boolean isTransparent(G3MRenderContext rc);
 
 }

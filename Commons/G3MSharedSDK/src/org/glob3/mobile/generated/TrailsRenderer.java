@@ -24,37 +24,37 @@ public class TrailsRenderer extends LeafRenderer
 	_trails.clear();
   }
 
-  public final void onResume(Context context)
+  public final void onResume(G3MContext context)
   {
 
   }
 
-  public final void onPause(Context context)
+  public final void onPause(G3MContext context)
   {
 
   }
 
-  public final void onDestroy(Context context)
+  public final void onDestroy(G3MContext context)
   {
 
   }
 
-  public final void initialize(Context context)
+  public final void initialize(G3MContext context)
   {
 
   }
 
-  public final boolean isReadyToRender(RenderContext rc)
+  public final boolean isReadyToRender(G3MRenderContext rc)
   {
 	return true;
   }
 
-  public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
+  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
 	return false;
   }
 
-  public final void onResizeViewportEvent(EventContext ec, int width, int height)
+  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
 
   }
@@ -69,7 +69,7 @@ public class TrailsRenderer extends LeafRenderer
 
   }
 
-  public final void render(RenderContext rc)
+  public final void render(G3MRenderContext rc)
   {
 	final int trailsCount = _trails.size();
 	for (int i = 0; i < trailsCount; i++)

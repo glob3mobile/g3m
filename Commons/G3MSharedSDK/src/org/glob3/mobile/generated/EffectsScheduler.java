@@ -29,7 +29,7 @@ public class EffectsScheduler
   private IFactory _factory; // FINAL WORD REMOVE BY CONVERSOR RULE
 
 
-  private void processFinishedEffects(RenderContext rc, TimeInterval now)
+  private void processFinishedEffects(G3MRenderContext rc, TimeInterval now)
   {
 	java.util.ArrayList<Integer> indicesToRemove = new java.util.ArrayList<Integer>();
 	for (int i = 0; i < _effectsRuns.size(); i++)
@@ -64,7 +64,7 @@ public class EffectsScheduler
 
   }
 
-  public final void doOneCyle(RenderContext rc)
+  public final void doOneCyle(G3MRenderContext rc)
   {
 	final TimeInterval now = _timer.now();
   
@@ -93,20 +93,20 @@ public class EffectsScheduler
   //  SampleEffect(TimeInterval duration) : EffectWithDuration(duration) {
   //  }
   //  
-  //  virtual void start(const RenderContext *rc,
+  //  virtual void start(const G3MRenderContext *rc,
   //                     const TimeInterval& now) {
   //    EffectWithDuration::start(rc, now);
   //    _lastPercent = 0;
   //  }
   //  
-  //  virtual void doStep(const RenderContext *rc,
+  //  virtual void doStep(const G3MRenderContext *rc,
   //                      const TimeInterval& now) {
   //    const double percent = pace( percentDone(now) );
   //    rc->getNextCamera()->moveForward((percent-_lastPercent)*1e7);
   //    _lastPercent = percent;
   //  }
   //  
-  //  virtual void stop(const RenderContext *rc,
+  //  virtual void stop(const G3MRenderContext *rc,
   //                    const TimeInterval& now) {
   //    EffectWithDuration::stop(rc, now);
   //  }
@@ -123,7 +123,7 @@ public class EffectsScheduler
   
   
   
-  public final void initialize(Context context)
+  public final void initialize(G3MContext context)
   {
 	_factory = context.getFactory();
 	_timer = _factory.createTimer();
@@ -178,17 +178,17 @@ public class EffectsScheduler
   
   }
 
-  public final void onResume(Context context)
+  public final void onResume(G3MContext context)
   {
 
   }
 
-  public final void onPause(Context context)
+  public final void onPause(G3MContext context)
   {
 
   }
 
-  public final void onDestroy(Context context)
+  public final void onDestroy(G3MContext context)
   {
 
   }

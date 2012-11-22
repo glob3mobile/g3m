@@ -42,7 +42,7 @@ public class PeriodicalTask
 	  IFactory.instance().deleteTimer(_timer);
   }
 
-  public final void executeIfNecessary(Context context)
+  public final void executeIfNecessary(G3MContext context)
   {
 	long now = getTimer().now().milliseconds();
 

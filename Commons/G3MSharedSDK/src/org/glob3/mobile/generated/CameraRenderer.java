@@ -27,7 +27,7 @@ public class CameraRenderer extends LeafRenderer
 	_processTouchEvents = processTouchEvents;
   }
 
-  public final void render(RenderContext rc)
+  public final void render(G3MRenderContext rc)
   {
 	// create the CameraContext
 	if (_cameraContext == null)
@@ -45,13 +45,13 @@ public class CameraRenderer extends LeafRenderer
 	}
   }
 
-  public final void initialize(Context context)
+  public final void initialize(G3MContext context)
   {
 	//_logger = ic->getLogger();
 	//cameraContext = new CameraContext(
   }
 
-  public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
+  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
 	if (_processTouchEvents)
 	{
@@ -77,7 +77,7 @@ public class CameraRenderer extends LeafRenderer
 	return false;
   }
 
-  public final void onResizeViewportEvent(EventContext ec, int width, int height)
+  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
 	// moved to G3MWidget::onResizeViewportEvent
   //  if (_cameraContext != NULL) {
@@ -85,7 +85,7 @@ public class CameraRenderer extends LeafRenderer
   //  }
   }
 
-  public final boolean isReadyToRender(RenderContext rc)
+  public final boolean isReadyToRender(G3MRenderContext rc)
   {
 	return true;
   }
@@ -100,17 +100,17 @@ public class CameraRenderer extends LeafRenderer
 
   }
 
-  public final void onResume(Context context)
+  public final void onResume(G3MContext context)
   {
 
   }
 
-  public final void onPause(Context context)
+  public final void onPause(G3MContext context)
   {
 
   }
 
-  public final void onDestroy(Context context)
+  public final void onDestroy(G3MContext context)
   {
 
   }

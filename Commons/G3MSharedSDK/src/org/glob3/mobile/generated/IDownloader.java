@@ -23,7 +23,7 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IImageDownloadListener;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class Context;
+//class G3MContext;
 
 public abstract class IDownloader
 {
@@ -31,13 +31,13 @@ public abstract class IDownloader
   {
   }
 
-  public abstract void initialize(Context context);
+  public abstract void initialize(G3MContext context);
 
-  public abstract void onResume(Context context);
+  public abstract void onResume(G3MContext context);
 
-  public abstract void onPause(Context context);
+  public abstract void onPause(G3MContext context);
 
-  public abstract void onDestroy(Context context);
+  public abstract void onDestroy(G3MContext context);
 
   public abstract void start();
 

@@ -107,7 +107,7 @@ public class Mark
 	return _position;
   }
 
-  public final void initialize(Context context)
+  public final void initialize(G3MContext context)
   {
 	//  todo;
 	if (!_textureSolved)
@@ -122,7 +122,7 @@ public class Mark
   private Vector2D render_textureTranslation = new Vector2D(0.0, 0.0);
 //C++ TO JAVA CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in Java):
   private Vector2D render_textureScale = new Vector2D(1.0, 1.0);
-  public final void render(RenderContext rc, double minDistanceToCamera)
+  public final void render(G3MRenderContext rc, double minDistanceToCamera)
   {
 	final Camera camera = rc.getCurrentCamera();
 	final Planet planet = rc.getPlanet();

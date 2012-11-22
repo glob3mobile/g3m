@@ -32,7 +32,7 @@ public class SGLayerNode extends SGNode
 
   ///#include "IGLTextureId.hpp"
   
-  protected void prepareRender(RenderContext rc)
+  protected void prepareRender(G3MRenderContext rc)
   {
   
   //  SGShape* shape = getShape();
@@ -46,7 +46,7 @@ public class SGLayerNode extends SGNode
 	super.prepareRender(rc);
   }
 
-  protected void cleanUpRender(RenderContext rc)
+  protected void cleanUpRender(G3MRenderContext rc)
   {
 	super.cleanUpRender(rc);
   

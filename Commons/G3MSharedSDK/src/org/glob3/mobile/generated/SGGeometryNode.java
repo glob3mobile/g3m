@@ -31,7 +31,7 @@ public class SGGeometryNode extends SGNode
   private IFloatBuffer _normals;
   private IIntBuffer _indices;
 
-  protected final void rawRender(RenderContext rc)
+  protected final void rawRender(G3MRenderContext rc)
   {
 	GL gl = rc.getGL();
   

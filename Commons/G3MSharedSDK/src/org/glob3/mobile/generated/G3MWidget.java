@@ -103,7 +103,7 @@ public class G3MWidget
 	  _initializationTask = null;
 	}
   
-	RenderContext rc = new RenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _textureBuilder, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage);
+	G3MRenderContext rc = new G3MRenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _textureBuilder, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage);
   
 	_effectsScheduler.doOneCyle(rc);
   
@@ -202,7 +202,7 @@ public class G3MWidget
   {
 	if (_mainRendererReady)
 	{
-	  EventContext ec = new EventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage);
+	  G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage);
   
 	  boolean handled = false;
 	  if (_mainRenderer.isEnable())
@@ -221,7 +221,7 @@ public class G3MWidget
   {
 	if (_mainRendererReady)
 	{
-	  EventContext ec = new EventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage);
+	  G3MEventContext ec = new G3MEventContext(IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _downloader, _effectsScheduler, _storage);
   
 	  _nextCamera.resizeViewport(width, height);
   
@@ -389,8 +389,8 @@ public class G3MWidget
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const Context* getContext() const
-  public final Context getContext()
+//ORIGINAL LINE: const G3MContext* getG3MContext() const
+  public final G3MContext getG3MContext()
   {
 	return _context;
   }
@@ -442,7 +442,7 @@ public class G3MWidget
 	_gl.enableCullFace(GLCullFace.back());
   }
 
-  private final Context _context;
+  private final G3MContext _context;
 
   private G3MWidget(INativeGL nativeGL, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, int width, int height, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
   {
@@ -473,7 +473,7 @@ public class G3MWidget
 	  _userData = null;
 	  _initializationTask = initializationTask;
 	  _autoDeleteInitializationTask = autoDeleteInitializationTask;
-	  _context = new Context(IFactory.instance(), IStringUtils.instance(), threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, downloader, _effectsScheduler, storage);
+	  _context = new G3MContext(IFactory.instance(), IStringUtils.instance(), threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, downloader, _effectsScheduler, storage);
 	initializeGL();
   
 	_effectsScheduler.initialize(_context);

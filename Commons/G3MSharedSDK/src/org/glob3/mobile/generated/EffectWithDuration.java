@@ -27,17 +27,17 @@ public abstract class EffectWithDuration extends Effect
   }
 
 
-  public void stop(RenderContext rc, TimeInterval now)
+  public void stop(G3MRenderContext rc, TimeInterval now)
   {
 
   }
 
-  public void start(RenderContext rc, TimeInterval now)
+  public void start(G3MRenderContext rc, TimeInterval now)
   {
 	_started = now.milliseconds();
   }
 
-  public boolean isDone(RenderContext rc, TimeInterval now)
+  public boolean isDone(G3MRenderContext rc, TimeInterval now)
   {
 	final double percent = percentDone(now);
 	return percent >= 1;

@@ -50,13 +50,13 @@ public abstract class Effect
 	return m * x + b2;
   }
 
-  public abstract void start(RenderContext rc, TimeInterval now);
+  public abstract void start(G3MRenderContext rc, TimeInterval now);
 
-  public abstract void doStep(RenderContext rc, TimeInterval now);
+  public abstract void doStep(G3MRenderContext rc, TimeInterval now);
 
-  public abstract boolean isDone(RenderContext rc, TimeInterval now);
+  public abstract boolean isDone(G3MRenderContext rc, TimeInterval now);
 
-  public abstract void stop(RenderContext rc, TimeInterval now);
+  public abstract void stop(G3MRenderContext rc, TimeInterval now);
 
   public abstract void cancel(TimeInterval now);
 

@@ -24,7 +24,7 @@ public class SGRotateNode extends SGNode
   private double _z;
   private double _angle;
 
-  protected final void prepareRender(RenderContext rc)
+  protected final void prepareRender(G3MRenderContext rc)
   {
 	GL gl = rc.getGL();
   
@@ -34,7 +34,7 @@ public class SGRotateNode extends SGNode
 	super.prepareRender(rc);
   }
 
-  protected final void cleanUpRender(RenderContext rc)
+  protected final void cleanUpRender(G3MRenderContext rc)
   {
 	GL gl = rc.getGL();
 	gl.popMatrix();

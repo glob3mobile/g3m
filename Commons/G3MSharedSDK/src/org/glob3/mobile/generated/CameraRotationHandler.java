@@ -40,7 +40,7 @@ public class CameraRotationHandler extends CameraEventHandler
   {
   }
 
-  public final boolean onTouchEvent(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	// three finger needed
 	if (touchEvent.getTouchCount()!=3)
@@ -63,7 +63,7 @@ public class CameraRotationHandler extends CameraEventHandler
 	return true;
   }
 
-  public final void render(RenderContext rc, CameraContext cameraContext)
+  public final void render(G3MRenderContext rc, CameraContext cameraContext)
   {
   //  // TEMP TO DRAW A POINT WHERE USER PRESS
   //  if (false) {
@@ -88,7 +88,7 @@ public class CameraRotationHandler extends CameraEventHandler
   //  }
   }
 
-  public final void onDown(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	Camera camera = cameraContext.getNextCamera();
 	_camera0.copyFrom(camera);
@@ -112,7 +112,8 @@ public class CameraRotationHandler extends CameraEventHandler
   
 	//printf ("down 3 fingers\n");
   }
-  public final void onMove(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+
+  public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	//_currentGesture = getGesture(touchEvent);
 	if (cameraContext.getCurrentGesture() != Gesture.Rotate)
@@ -160,7 +161,8 @@ public class CameraRotationHandler extends CameraEventHandler
 	  camera.copyFrom(tempCamera);
 	}
   }
-  public final void onUp(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+
+  public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	cameraContext.setCurrentGesture(Gesture.None);
 	_initialPixel = MutableVector2I.zero();

@@ -12,17 +12,17 @@ public class BusyEffect extends EffectWithForce
 	  _renderer = renderer;
   }
 
-  public void start(RenderContext rc, TimeInterval now)
+  public void start(G3MRenderContext rc, TimeInterval now)
   {
   }
 
-  public void doStep(RenderContext rc, TimeInterval now)
+  public void doStep(G3MRenderContext rc, TimeInterval now)
   {
 	super.doStep(rc, now);
 	_renderer.incDegrees(3);
   }
 
-  public void stop(RenderContext rc, TimeInterval now)
+  public void stop(G3MRenderContext rc, TimeInterval now)
   {
   }
 

@@ -98,7 +98,7 @@ public class BingLayer extends Layer
 	return "Aerial";
   }
 
-  public final void initialize(Context context)
+  public final void initialize(G3MContext context)
   {
   
 	String tileURL = "";
@@ -114,8 +114,8 @@ public class BingLayer extends Layer
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: java.util.ArrayList<Petition*> getMapPetitions(const RenderContext* rc, const Tile* tile, int width, int height) const
-  public final java.util.ArrayList<Petition> getMapPetitions(RenderContext rc, Tile tile, int width, int height)
+//ORIGINAL LINE: java.util.ArrayList<Petition*> getMapPetitions(const G3MRenderContext* rc, const Tile* tile, int width, int height) const
+  public final java.util.ArrayList<Petition> getMapPetitions(G3MRenderContext rc, Tile tile, int width, int height)
   {
   
 	java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();

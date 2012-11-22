@@ -17,12 +17,12 @@ public abstract class EffectWithForce extends Effect
 	return _force;
   }
 
-  public void doStep(RenderContext rc, TimeInterval now)
+  public void doStep(G3MRenderContext rc, TimeInterval now)
   {
 	_force *= _friction;
   }
 
-  public boolean isDone(RenderContext rc, TimeInterval now)
+  public boolean isDone(G3MRenderContext rc, TimeInterval now)
   {
 	return (IMathUtils.instance().abs(_force) < 1e-6);
   }

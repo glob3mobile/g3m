@@ -31,7 +31,7 @@ public class QuadShape extends MeshShape
   private final float _width;
   private final float _height;
 
-  private IGLTextureId getTextureId(RenderContext rc)
+  private IGLTextureId getTextureId(G3MRenderContext rc)
   {
 	if (_textureImage == null)
 	{
@@ -54,7 +54,7 @@ public class QuadShape extends MeshShape
 	return texId;
   }
 
-  protected final Mesh createMesh(RenderContext rc)
+  protected final Mesh createMesh(G3MRenderContext rc)
   {
   
 	final float halfWidth = _width / 2.0f;

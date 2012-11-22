@@ -18,9 +18,9 @@ package org.glob3.mobile.generated;
 
 
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class Context;
+//class G3MContext;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class RenderContext;
+//class G3MRenderContext;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class SGShape;
 
@@ -38,21 +38,21 @@ public class SGNode
 	_parent = parent;
   }
 
-  protected Context _context;
+  protected G3MContext _context;
 
   protected SGShape _shape;
 
-  protected void prepareRender(RenderContext rc)
+  protected void prepareRender(G3MRenderContext rc)
   {
   
   }
 
-  protected void cleanUpRender(RenderContext rc)
+  protected void cleanUpRender(G3MRenderContext rc)
   {
   
   }
 
-  protected void rawRender(RenderContext rc)
+  protected void rawRender(G3MRenderContext rc)
   {
   
   }
@@ -77,7 +77,7 @@ public class SGNode
 	}
   }
 
-  public final void initialize(Context context, SGShape shape)
+  public final void initialize(G3MContext context, SGShape shape)
   {
 	_context = context;
 	_shape = shape;
@@ -110,7 +110,7 @@ public class SGNode
 	_sId = sId;
   }
 
-  public boolean isReadyToRender(RenderContext rc)
+  public boolean isReadyToRender(G3MRenderContext rc)
   {
 	final int childrenCount = _children.size();
 	for (int i = 0; i < childrenCount; i++)
@@ -125,7 +125,7 @@ public class SGNode
 	return true;
   }
 
-  public final void render(RenderContext rc)
+  public final void render(G3MRenderContext rc)
   {
 	prepareRender(rc);
   

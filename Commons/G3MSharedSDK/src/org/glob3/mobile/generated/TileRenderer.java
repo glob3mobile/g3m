@@ -25,7 +25,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
 	_topLevelTiles.clear();
   }
-  private void createTopLevelTiles(Context context)
+  private void createTopLevelTiles(G3MContext context)
   {
 	final Angle fromLatitude = _parameters._topSector.lower().latitude();
 	final Angle fromLongitude = _parameters._topSector.lower().longitude();
@@ -65,7 +65,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   private boolean _firstRender;
 
 //  const InitializationContext* _initializationContext;
-  private Context _context;
+  private G3MContext _context;
 
   private void pruneTopLevelTiles()
   {
@@ -105,7 +105,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 		_lastSplitTimer.dispose();
   }
 
-  public final void initialize(Context context)
+  public final void initialize(G3MContext context)
   {
 	_context = context;
   
@@ -120,7 +120,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 	_texturizer.initialize(context, _parameters);
   }
 
-  public final void render(RenderContext rc)
+  public final void render(G3MRenderContext rc)
   {
 	// Saving camera for use in onTouchEvent
 	_lastCamera = rc.getCurrentCamera();
@@ -175,7 +175,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
   }
 
-  public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
+  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
 	boolean handled = false;
   
@@ -214,12 +214,12 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 	return handled;
   }
 
-  public final void onResizeViewportEvent(EventContext ec, int width, int height)
+  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
 
   }
 
-  public final boolean isReadyToRender(RenderContext rc)
+  public final boolean isReadyToRender(G3MRenderContext rc)
   {
 	if (_topTilesJustCreated)
 	{
@@ -268,17 +268,17 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 	_firstRender = false;
   }
 
-  public final void onResume(Context context)
+  public final void onResume(G3MContext context)
   {
 
   }
 
-  public final void onPause(Context context)
+  public final void onPause(G3MContext context)
   {
 
   }
 
-  public final void onDestroy(Context context)
+  public final void onDestroy(G3MContext context)
   {
 
   }

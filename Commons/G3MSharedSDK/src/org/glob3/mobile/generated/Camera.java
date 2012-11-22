@@ -100,8 +100,8 @@ public class Camera
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void render(const RenderContext* rc) const
-  public final void render(RenderContext rc)
+//ORIGINAL LINE: void render(const G3MRenderContext* rc) const
+  public final void render(G3MRenderContext rc)
   {
 	GL gl = rc.getGL();
 	gl.setProjection(getProjectionMatrix());
@@ -356,7 +356,7 @@ public class Camera
   ///#include "IntBufferBuilder.hpp"
   
   
-  public final void initialize(Context context)
+  public final void initialize(G3MContext context)
   {
 	_planet = context.getPlanet();
 	setCartesianPosition(new MutableVector3D(_planet.getRadii().maxAxis() * 5, 0, 0));

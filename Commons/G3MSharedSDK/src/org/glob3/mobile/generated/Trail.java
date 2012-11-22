@@ -77,7 +77,7 @@ public class Trail
 		_mesh.dispose();
   }
 
-  public final void render(RenderContext rc)
+  public final void render(G3MRenderContext rc)
   {
 	if (_visible)
 	{

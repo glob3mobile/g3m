@@ -38,7 +38,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   }
 
 
-  public final boolean onTouchEvent(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	// only one finger needed
 	if (touchEvent.getTouchCount()!=2)
@@ -61,7 +61,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
 	return true;
   }
 
-  public final void render(RenderContext rc, CameraContext cameraContext)
+  public final void render(G3MRenderContext rc, CameraContext cameraContext)
   {
   //  // TEMP TO DRAW A POINT WHERE USER PRESS
   //  if (false) {
@@ -102,7 +102,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   
   }
 
-  public final void onDown(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	Camera camera = cameraContext.getNextCamera();
 	_camera0.copyFrom(camera);
@@ -135,7 +135,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   
 	//printf ("down 2 finger\n");
   }
-  public final void onMove(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	if (cameraContext.getCurrentGesture() != Gesture.DoubleDrag)
 		return;
@@ -290,7 +290,7 @@ public class CameraDoubleDragHandler extends CameraEventHandler
   
 	//printf ("moving 2 fingers\n");
   }
-  public final void onUp(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	cameraContext.setCurrentGesture(Gesture.None);
 	_initialPixel = Vector3D.nan().asMutableVector3D();

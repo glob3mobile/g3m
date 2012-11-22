@@ -35,8 +35,8 @@ public class LayerSet
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: java.util.ArrayList<Petition*> createTileMapPetitions(const RenderContext* rc, const Tile* tile, int width, int height) const
-  public final java.util.ArrayList<Petition> createTileMapPetitions(RenderContext rc, Tile tile, int width, int height)
+//ORIGINAL LINE: java.util.ArrayList<Petition*> createTileMapPetitions(const G3MRenderContext* rc, const Tile* tile, int width, int height) const
+  public final java.util.ArrayList<Petition> createTileMapPetitions(G3MRenderContext rc, Tile tile, int width, int height)
   {
 	java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
   
@@ -64,8 +64,8 @@ public class LayerSet
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void onTerrainTouchEvent(const EventContext* ec, const Geodetic3D& position, const Tile* tile) const
-  public final void onTerrainTouchEvent(EventContext ec, Geodetic3D position, Tile tile)
+//ORIGINAL LINE: void onTerrainTouchEvent(const G3MEventContext* ec, const Geodetic3D& position, const Tile* tile) const
+  public final void onTerrainTouchEvent(G3MEventContext ec, Geodetic3D position, Tile tile)
   {
   
 	for (int i = 0; i < _layers.size(); i++)
@@ -96,8 +96,8 @@ public class LayerSet
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void initialize(const Context* context)const
-  public final void initialize(Context context)
+//ORIGINAL LINE: void initialize(const G3MContext* context)const
+  public final void initialize(G3MContext context)
   {
 	for (int i = 0; i<_layers.size(); i++)
 	{

@@ -23,7 +23,7 @@ public class SGTranslateNode extends SGNode
   private double _y;
   private double _z;
 
-  protected final void prepareRender(RenderContext rc)
+  protected final void prepareRender(G3MRenderContext rc)
   {
 	GL gl = rc.getGL();
   
@@ -33,7 +33,7 @@ public class SGTranslateNode extends SGNode
 	super.prepareRender(rc);
   }
 
-  protected final void cleanUpRender(RenderContext rc)
+  protected final void cleanUpRender(G3MRenderContext rc)
   {
 	GL gl = rc.getGL();
 	gl.popMatrix();

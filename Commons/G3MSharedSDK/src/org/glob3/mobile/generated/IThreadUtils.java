@@ -18,11 +18,11 @@ package org.glob3.mobile.generated;
 
 
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class Context;
+//class G3MContext;
 
 public abstract class IThreadUtils
 {
-  protected Context _context;
+  protected G3MContext _context;
 
 
   public IThreadUtils()
@@ -31,7 +31,7 @@ public abstract class IThreadUtils
 
   }
 
-  public void initialize(Context context)
+  public void initialize(G3MContext context)
   {
 	_context = context;
   }

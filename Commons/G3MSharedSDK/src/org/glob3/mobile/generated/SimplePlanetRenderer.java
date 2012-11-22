@@ -105,7 +105,7 @@ public class SimplePlanetRenderer extends LeafRenderer
 	return texCoords.create();
   }
 
-  private boolean initializeMesh(RenderContext rc)
+  private boolean initializeMesh(G3MRenderContext rc)
   {
   
   
@@ -188,12 +188,12 @@ public class SimplePlanetRenderer extends LeafRenderer
 		_mesh.dispose();
   }
 
-  public final void initialize(Context context)
+  public final void initialize(G3MContext context)
   {
   
   }
 
-  public final void render(RenderContext rc)
+  public final void render(G3MRenderContext rc)
   {
 	if (_mesh == null)
 	{
@@ -206,17 +206,17 @@ public class SimplePlanetRenderer extends LeafRenderer
 	_mesh.render(rc);
   }
 
-  public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
+  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
 	return false;
   }
 
-  public final void onResizeViewportEvent(EventContext ec, int width, int height)
+  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
 
   }
 
-  public final boolean isReadyToRender(RenderContext rc)
+  public final boolean isReadyToRender(G3MRenderContext rc)
   {
 	return true;
   }
@@ -231,17 +231,17 @@ public class SimplePlanetRenderer extends LeafRenderer
 
   }
 
-  public final void onResume(Context context)
+  public final void onResume(G3MContext context)
   {
 
   }
 
-  public final void onPause(Context context)
+  public final void onPause(G3MContext context)
   {
 
   }
 
-  public final void onDestroy(Context context)
+  public final void onDestroy(G3MContext context)
   {
 
   }

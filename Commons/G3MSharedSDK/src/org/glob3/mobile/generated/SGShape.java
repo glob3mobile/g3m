@@ -42,22 +42,22 @@ public class SGShape extends Shape
 	return _uriPrefix;
   }
 
-  public final void initialize(Context context)
+  public final void initialize(G3MContext context)
   {
 	_node.initialize(context, this);
   }
 
-  public final boolean isReadyToRender(RenderContext rc)
+  public final boolean isReadyToRender(G3MRenderContext rc)
   {
 	return _node.isReadyToRender(rc);
   }
 
-  public final void rawRender(RenderContext rc)
+  public final void rawRender(G3MRenderContext rc)
   {
 	_node.render(rc);
   }
 
-  public final boolean isTransparent(RenderContext rc)
+  public final boolean isTransparent(G3MRenderContext rc)
   {
 	int __DIEGO_AT_WORK;
   //  return _node->isTransparent(rc);

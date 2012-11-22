@@ -143,22 +143,22 @@ public class CachedDownloader extends IDownloader
 	_savesCounter++;
   }
 
-  public final void onResume(Context context)
+  public final void onResume(G3MContext context)
   {
 	_downloader.onResume(context);
   }
 
-  public final void onPause(Context context)
+  public final void onPause(G3MContext context)
   {
 	_downloader.onPause(context);
   }
 
-  public final void onDestroy(Context context)
+  public final void onDestroy(G3MContext context)
   {
 	_downloader.onDestroy(context);
   }
 
-  public final void initialize(Context context)
+  public final void initialize(G3MContext context)
   {
 	_downloader.initialize(context);
   }

@@ -17,11 +17,11 @@ package org.glob3.mobile.generated;
 
 
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class Context;
+//class G3MContext;
 
 public abstract class IStorage
 {
-  protected Context _context;
+  protected G3MContext _context;
 
   public IStorage()
   {
@@ -34,7 +34,7 @@ public abstract class IStorage
 
   }
 
-  public void initialize(Context context)
+  public void initialize(G3MContext context)
   {
 	_context = context;
   }
@@ -53,11 +53,11 @@ public abstract class IStorage
   public abstract IImage readImage(URL url);
 
 
-  public abstract void onResume(Context context);
+  public abstract void onResume(G3MContext context);
 
-  public abstract void onPause(Context context);
+  public abstract void onPause(G3MContext context);
 
-  public abstract void onDestroy(Context context);
+  public abstract void onDestroy(G3MContext context);
 
 
   public abstract boolean isAvailable();

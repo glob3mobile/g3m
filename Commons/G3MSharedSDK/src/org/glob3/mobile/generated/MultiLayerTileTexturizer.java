@@ -83,7 +83,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 	  _texCoordsCache = null;
   }
 
-  public final boolean isReady(RenderContext rc, LayerSet layerSet)
+  public final boolean isReady(G3MRenderContext rc, LayerSet layerSet)
   {
 	if (_pendingTopTileRequests > 0)
 	{
@@ -97,13 +97,13 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 	//  return (_pendingTopTileRequests <= 0) && _layerSet->isReady();
   }
 
-  public final void initialize(Context context, TilesRenderParameters parameters)
+  public final void initialize(G3MContext context, TilesRenderParameters parameters)
   {
 	_parameters = parameters;
   //  _layerSet->initialize(ic);
   }
 
-  public final Mesh texturize(RenderContext rc, TileRenderContext trc, Tile tile, Mesh tessellatorMesh, Mesh previousMesh)
+  public final Mesh texturize(G3MRenderContext rc, TileRenderContext trc, Tile tile, Mesh tessellatorMesh, Mesh previousMesh)
   {
 	_texturesHandler = rc.getTexturesHandler();
   
@@ -139,12 +139,12 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 //		  _builder->_release();
 //		}
 //  
-//		void execute(const RenderContext* rc)
+//		void execute(const G3MRenderContext* rc)
 //		{
 //		  _builder->start();
 //		}
 //  
-//		boolean isCanceled(const RenderContext *rc)
+//		boolean isCanceled(const G3MRenderContext *rc)
 //		{
 //		  return _builder->isCanceled();
 //		}
@@ -181,7 +181,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 	return false;
   }
 
-  public final void justCreatedTopTile(RenderContext rc, Tile tile, LayerSet layerSet)
+  public final void justCreatedTopTile(G3MRenderContext rc, Tile tile, LayerSet layerSet)
   {
 	java.util.ArrayList<Petition> petitions = layerSet.createTileMapPetitions(rc, tile, _parameters._tileTextureWidth, _parameters._tileTextureHeight);
   
@@ -243,7 +243,7 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 	return (mesh == null) ? null : mesh.getTopLevelGLTextureId();
   }
 
-  public final void onTerrainTouchEvent(EventContext ec, Geodetic3D position, Tile tile, LayerSet layerSet)
+  public final void onTerrainTouchEvent(G3MEventContext ec, Geodetic3D position, Tile tile, LayerSet layerSet)
   {
 	if (layerSet != null)
 	{

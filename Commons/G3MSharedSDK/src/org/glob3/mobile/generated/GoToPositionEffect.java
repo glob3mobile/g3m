@@ -20,12 +20,12 @@ public class GoToPositionEffect extends EffectWithDuration
 	  _finalPos = new Geodetic3D(finalPos);
   }
 
-  public void start(RenderContext rc, TimeInterval now)
+  public void start(G3MRenderContext rc, TimeInterval now)
   {
 	super.start(rc, now);
   }
 
-  public void doStep(RenderContext rc, TimeInterval now)
+  public void doStep(G3MRenderContext rc, TimeInterval now)
   {
 	//const double percent = gently(percentDone(now), 0.2, 0.9);
 	//const double percent = pace( percentDone(now) );
@@ -39,7 +39,7 @@ public class GoToPositionEffect extends EffectWithDuration
 	camera.orbitTo(g);
   }
 
-  public void stop(RenderContext rc, TimeInterval now)
+  public void stop(G3MRenderContext rc, TimeInterval now)
   {
 	super.stop(rc, now);
   }

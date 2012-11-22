@@ -23,9 +23,9 @@ public abstract class MeshShape extends Shape
 {
   private Mesh _mesh;
 
-  protected abstract Mesh createMesh(RenderContext rc);
+  protected abstract Mesh createMesh(G3MRenderContext rc);
 
-  protected final Mesh getMesh(RenderContext rc)
+  protected final Mesh getMesh(G3MRenderContext rc)
   {
 	if (_mesh == null)
 	{
@@ -48,13 +48,13 @@ public abstract class MeshShape extends Shape
 
   }
 
-  public final boolean isReadyToRender(RenderContext rc)
+  public final boolean isReadyToRender(G3MRenderContext rc)
   {
 	final Mesh mesh = getMesh(rc);
 	return (mesh != null);
   }
 
-  public final void rawRender(RenderContext rc)
+  public final void rawRender(G3MRenderContext rc)
   {
 	final Mesh mesh = getMesh(rc);
 	if (mesh != null)
@@ -78,7 +78,7 @@ public abstract class MeshShape extends Shape
 		_mesh.dispose();
   }
 
-  public final boolean isTransparent(RenderContext rc)
+  public final boolean isTransparent(G3MRenderContext rc)
   {
 	final Mesh mesh = getMesh(rc);
 	if (mesh == null)

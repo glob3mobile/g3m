@@ -30,7 +30,7 @@ public class LatLonMeshRenderer extends LeafRenderer
 		_mesh.dispose();
   }
 
-  public final void initialize(Context context)
+  public final void initialize(G3MContext context)
   {
 	FloatBufferBuilderFromGeodetic vertices = new FloatBufferBuilderFromGeodetic(CenterStrategy.firstVertex(), context.getPlanet(), Geodetic2D.zero());
 	vertices.add(Geodetic3D.fromDegrees(28.753213, -17.898788, 500));
@@ -50,21 +50,21 @@ public class LatLonMeshRenderer extends LeafRenderer
   
   }
 
-  public final void render(RenderContext rc)
+  public final void render(G3MRenderContext rc)
   {
 	_mesh.render(rc);
   }
 
-  public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
+  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
 	return false;
   }
 
-  public final void onResizeViewportEvent(EventContext ec, int width, int height)
+  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
   }
 
-  public final boolean isReadyToRender(RenderContext rc)
+  public final boolean isReadyToRender(G3MRenderContext rc)
   {
 	return true;
   }
@@ -79,17 +79,17 @@ public class LatLonMeshRenderer extends LeafRenderer
 
   }
 
-  public final void onResume(Context context)
+  public final void onResume(G3MContext context)
   {
 
   }
 
-  public final void onPause(Context context)
+  public final void onPause(G3MContext context)
   {
 
   }
 
-  public final void onDestroy(Context context)
+  public final void onDestroy(G3MContext context)
   {
 
   }

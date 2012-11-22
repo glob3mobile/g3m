@@ -15,7 +15,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
   }
 
 
-  public final boolean onTouchEvent(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	// only one finger needed
 	if (touchEvent.getTouchCount()!=1)
@@ -40,7 +40,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
 	return true;
   }
 
-  public final void render(RenderContext rc, CameraContext cameraContext)
+  public final void render(G3MRenderContext rc, CameraContext cameraContext)
   {
   //  // TEMP TO DRAW A POINT WHERE USER PRESS
   //  if (false) {
@@ -67,7 +67,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
   }
 
   public final boolean _useInertia;
-  public final void onDown(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	Camera camera = cameraContext.getNextCamera();
 	_camera0.copyFrom(camera);
@@ -82,7 +82,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
   
 	//printf ("down 1 finger. Initial point = %f %f %f\n", _initialPoint.x(), _initialPoint.y(), _initialPoint.z());
   }
-  public final void onMove(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
   
 	if (cameraContext.getCurrentGesture()!=Gesture.Drag)
@@ -122,7 +122,7 @@ public class CameraSingleDragHandler extends CameraEventHandler
 	_radiansStep = radians - _lastRadians;
 	_lastRadians = radians;
   }
-  public final void onUp(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	if (_useInertia)
 	{

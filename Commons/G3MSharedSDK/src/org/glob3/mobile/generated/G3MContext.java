@@ -51,7 +51,7 @@ package org.glob3.mobile.generated;
 //class OrderedRenderable;
 
 
-public class Context
+public class G3MContext
 {
   protected final IFactory _factory;
   protected final IStringUtils _stringUtils;
@@ -64,7 +64,7 @@ public class Context
   protected EffectsScheduler _effectsScheduler;
   protected IStorage _storage;
 
-  public Context(IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, IDownloader downloader, EffectsScheduler effectsScheduler, IStorage storage)
+  public G3MContext(IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, IDownloader downloader, EffectsScheduler effectsScheduler, IStorage storage)
   {
 	  _factory = factory;
 	  _stringUtils = stringUtils;

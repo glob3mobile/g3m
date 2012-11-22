@@ -21,7 +21,7 @@ public class CompositeRenderer extends Renderer
 {
   private java.util.ArrayList<Renderer> _renderers = new java.util.ArrayList<Renderer>();
 
-  protected Context _context;
+  protected G3MContext _context;
 
   private boolean _enable;
 
@@ -61,7 +61,7 @@ public class CompositeRenderer extends Renderer
 	_enable = enable;
   }
 
-  public final void initialize(Context context)
+  public final void initialize(G3MContext context)
   {
 	_context = context;
   
@@ -72,7 +72,7 @@ public class CompositeRenderer extends Renderer
 	}
   }
 
-  public final boolean isReadyToRender(RenderContext rc)
+  public final boolean isReadyToRender(G3MRenderContext rc)
   {
 	final int rendersSize = _renderers.size();
 	for (int i = 0; i < rendersSize; i++)
@@ -90,7 +90,7 @@ public class CompositeRenderer extends Renderer
 	return true;
   }
 
-  public final void render(RenderContext rc)
+  public final void render(G3MRenderContext rc)
   {
 	//rc->getLogger()->logInfo("CompositeRenderer::render()");
   
@@ -105,7 +105,7 @@ public class CompositeRenderer extends Renderer
 	}
   }
 
-  public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
+  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
 	// the events are processed bottom to top
 	final int rendersSize = _renderers.size();
@@ -123,7 +123,7 @@ public class CompositeRenderer extends Renderer
 	return false;
   }
 
-  public final void onResizeViewportEvent(EventContext ec, int width, int height)
+  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
 	// the events are processed bottom to top
 	final int rendersSize = _renderers.size();
@@ -160,7 +160,7 @@ public class CompositeRenderer extends Renderer
 	}
   }
 
-  public final void onResume(Context context)
+  public final void onResume(G3MContext context)
   {
 	final int rendersSize = _renderers.size();
 	for (int i = 0; i < rendersSize; i++)
@@ -169,7 +169,7 @@ public class CompositeRenderer extends Renderer
 	}
   }
 
-  public final void onPause(Context context)
+  public final void onPause(G3MContext context)
   {
 	final int rendersSize = _renderers.size();
 	for (int i = 0; i < rendersSize; i++)
@@ -178,7 +178,7 @@ public class CompositeRenderer extends Renderer
 	}
   }
 
-  public final void onDestroy(Context context)
+  public final void onDestroy(G3MContext context)
   {
 	final int rendersSize = _renderers.size();
 	for (int i = 0; i < rendersSize; i++)
