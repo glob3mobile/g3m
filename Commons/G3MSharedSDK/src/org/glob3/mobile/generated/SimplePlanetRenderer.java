@@ -136,10 +136,9 @@ public class SimplePlanetRenderer extends LeafRenderer
   
 	//FLAT COLOR
 	Color flatColor = null;
-	if (false)
-	{
-	  flatColor = new Color(Color.fromRGBA((float) 0.0, (float) 1.0, (float) 0.0, (float) 1.0));
-	}
+  //  if (false){
+  //    flatColor = new Color( Color::fromRGBA(0.0, 1.0, 0.0, 1.0) );
+  //  }
   
 	IndexedMesh im = new IndexedMesh(GLPrimitive.triangleStrip(), true, Vector3D.zero(), ver, ind, 1, flatColor, vertexColors);
   
