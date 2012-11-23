@@ -242,6 +242,7 @@ public class G3MWidget
   public final void onPause()
   {
 	_paused = true;
+  
 	_threadUtils.onPause(_context);
   
 	_effectsScheduler.onPause(_context);
@@ -256,6 +257,7 @@ public class G3MWidget
   public final void onResume()
   {
 	_paused = false;
+  
 	_storage.onResume(_context);
   
 	_downloader.onResume(_context);

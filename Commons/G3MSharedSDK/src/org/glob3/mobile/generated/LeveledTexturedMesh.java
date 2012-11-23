@@ -72,25 +72,28 @@ public class LeveledTexturedMesh extends Mesh
 
   public void dispose()
   {
-	if (_ownedMesh)
-	{
-	  if (_mesh != null)
-		  _mesh.dispose();
-	}
+	synchronized (this) {
   
-	if (_mappings != null)
-	{
-	  for (int i = 0; i < _mappings.size(); i++)
+	  if (_ownedMesh)
 	  {
-		LazyTextureMapping mapping = _mappings.get(i);
-		if (mapping != null)
-			mapping.dispose();
+		if (_mesh != null)
+			_mesh.dispose();
 	  }
   
-	  _mappings = null;
-	  _mappings = null;
-	}
+	  if (_mappings != null)
+	  {
+		for (int i = 0; i < _mappings.size(); i++)
+		{
+		  LazyTextureMapping mapping = _mappings.get(i);
+		  if (mapping != null)
+			  mapping.dispose();
+		}
   
+		_mappings = null;
+		_mappings = null;
+	  }
+  
+	}
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
