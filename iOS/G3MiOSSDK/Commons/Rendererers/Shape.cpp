@@ -68,12 +68,13 @@ void Shape::render(const G3MRenderContext* rc) {
   }
 }
 
-void Shape::setAnimatedScale(double scaleX,
+void Shape::setAnimatedScale(const TimeInterval& duration,
+                             double scaleX,
                              double scaleY,
                              double scaleZ) {
   delete _pendingEffect;
 
-  _pendingEffect = new ShapeScaleEffect(TimeInterval::fromSeconds(1),
+  _pendingEffect = new ShapeScaleEffect(duration,
                                         this,
                                         _scaleX, _scaleY, _scaleZ,
                                         scaleX, scaleY, scaleZ);

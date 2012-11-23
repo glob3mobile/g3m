@@ -83,6 +83,7 @@ public:
     cleanTransformMatrix();
   }
 
+  
   void setScale(double scaleX,
                 double scaleY,
                 double scaleZ) {
@@ -98,12 +99,29 @@ public:
              scale._z);
   }
 
-  void setAnimatedScale(double scaleX,
+  
+  void setAnimatedScale(const TimeInterval& duration,
+                        double scaleX,
                         double scaleY,
                         double scaleZ);
-  
+
+  void setAnimatedScale(double scaleX,
+                        double scaleY,
+                        double scaleZ) {
+    setAnimatedScale(TimeInterval::fromSeconds(1),
+                     scaleX, scaleY, scaleZ);
+  }
+
   void setAnimatedScale(const Vector3D& scale) {
     setAnimatedScale(scale._x,
+                     scale._y,
+                     scale._z);
+  }
+
+  void setAnimatedScale(const TimeInterval& duration,
+                        const Vector3D& scale) {
+    setAnimatedScale(duration,
+                     scale._x,
                      scale._y,
                      scale._z);
   }
