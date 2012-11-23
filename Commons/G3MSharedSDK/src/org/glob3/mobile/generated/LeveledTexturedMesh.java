@@ -16,6 +16,11 @@ public class LeveledTexturedMesh extends Mesh
 //ORIGINAL LINE: LazyTextureMapping* getCurrentTextureMapping() const
   private LazyTextureMapping getCurrentTextureMapping()
   {
+	if (_mappings == null)
+	{
+	  return null;
+	}
+  
 	if (!_currentLevelIsValid)
 	{
 	  for (int i = 0; i < _levelsCount; i++)
