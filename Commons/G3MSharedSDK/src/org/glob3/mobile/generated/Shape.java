@@ -136,6 +136,7 @@ public abstract class Shape implements EffectTarget
 	cleanTransformMatrix();
   }
 
+
   public final void setScale(double scaleX, double scaleY, double scaleZ)
   {
 	_scaleX = scaleX;
@@ -149,17 +150,28 @@ public abstract class Shape implements EffectTarget
 	setScale(scale._x, scale._y, scale._z);
   }
 
-  public final void setAnimatedScale(double scaleX, double scaleY, double scaleZ)
+
+  public final void setAnimatedScale(TimeInterval duration, double scaleX, double scaleY, double scaleZ)
   {
 	if (_pendingEffect != null)
 		_pendingEffect.dispose();
   
-	_pendingEffect = new ShapeScaleEffect(TimeInterval.fromSeconds(1), this, _scaleX, _scaleY, _scaleZ, scaleX, scaleY, scaleZ);
+	_pendingEffect = new ShapeScaleEffect(duration, this, _scaleX, _scaleY, _scaleZ, scaleX, scaleY, scaleZ);
+  }
+
+  public final void setAnimatedScale(double scaleX, double scaleY, double scaleZ)
+  {
+	setAnimatedScale(TimeInterval.fromSeconds(1), scaleX, scaleY, scaleZ);
   }
 
   public final void setAnimatedScale(Vector3D scale)
   {
 	setAnimatedScale(scale._x, scale._y, scale._z);
+  }
+
+  public final void setAnimatedScale(TimeInterval duration, Vector3D scale)
+  {
+	setAnimatedScale(duration, scale._x, scale._y, scale._z);
   }
 
 
