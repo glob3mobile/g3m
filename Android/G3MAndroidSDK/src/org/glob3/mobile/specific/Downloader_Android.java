@@ -92,22 +92,22 @@ public final class Downloader_Android
             _started = false;
 
 
-            boolean allWorkersStopped;
-            do {
-               allWorkersStopped = true;
-               for (final Downloader_Android_WorkerThread worker : _workers) {
-                  if (!worker.isStopped()) {
-                     allWorkersStopped = false;
-                     try {
-                        Thread.sleep(2);
-                     }
-                     catch (final InterruptedException e) {
-                     }
-                     break;
-                  }
-               }
-            }
-            while (!allWorkersStopped);
+            //            boolean allWorkersStopped;
+            //            do {
+            //               allWorkersStopped = true;
+            //               for (final Downloader_Android_WorkerThread worker : _workers) {
+            //                  if (!worker.isStopped()) {
+            //                     allWorkersStopped = false;
+            //                     try {
+            //                        Thread.sleep(2);
+            //                     }
+            //                     catch (final InterruptedException e) {
+            //                     }
+            //                     break;
+            //                  }
+            //               }
+            //            }
+            //            while (!allWorkersStopped);
 
 
             _workers.clear();
