@@ -73,8 +73,6 @@ public class TileRendererBuilder
 			_texturizer.dispose();
 		if (_layerSet != null)
 			_layerSet.dispose();
-		if (_parameters != null)
-			_parameters.dispose();
 	}
 	public final TileRenderer create()
 	{
@@ -113,8 +111,6 @@ public class TileRendererBuilder
 	{
 		if (_parameters != parameters)
 		{
-			if (_parameters != null)
-				_parameters.dispose();
 			_parameters = parameters;
 		}
 	}

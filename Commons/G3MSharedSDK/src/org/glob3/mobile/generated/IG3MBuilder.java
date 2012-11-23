@@ -139,15 +139,11 @@ public class IG3MBuilder
 	}
 	public void dispose()
 	{
-		if (_planet != null)
-			_planet.dispose();
 		if (_cameraRenderer != null)
 			_cameraRenderer.dispose();
 		_backgroundColor = null;
 		if (_layerSet != null)
 			_layerSet.dispose();
-		if (_parameters != null)
-			_parameters.dispose();
 		if (_tileRenderer != null)
 			_tileRenderer.dispose();
 		if (_busyRenderer != null)
@@ -203,8 +199,6 @@ public class IG3MBuilder
 		{
 			if (_parameters != parameters)
 			{
-				if (_parameters != null)
-					_parameters.dispose();
 				_parameters = parameters;
 			}
 		}
