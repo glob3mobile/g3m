@@ -204,6 +204,8 @@ private:
 
   const G3MContext* _context;
 
+  bool _paused;
+
   G3MWidget(INativeGL*                       nativeGL,
             IStorage*                        storage,
             IDownloader*                     downloader,

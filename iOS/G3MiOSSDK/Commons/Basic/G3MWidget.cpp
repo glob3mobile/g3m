@@ -102,7 +102,8 @@ _context(new G3MContext(IFactory::instance(),
                         _planet,
                         downloader,
                         _effectsScheduler,
-                        storage))
+                        storage)),
+_paused(false)
 {
   initializeGL();
 
@@ -264,6 +265,10 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
 }
 
 void G3MWidget::render() {
+  if (_paused) {
+    return;
+  }
+
   _timer->start();
   _renderCounter++;
 
@@ -394,6 +399,7 @@ void G3MWidget::render() {
 
 
 void G3MWidget::onPause() {
+  _paused = true;
   _threadUtils->onPause(_context);
 
   _effectsScheduler->onPause(_context);
@@ -406,6 +412,7 @@ void G3MWidget::onPause() {
 }
 
 void G3MWidget::onResume() {
+  _paused = false;
   _storage->onResume(_context);
 
   _downloader->onResume(_context);
