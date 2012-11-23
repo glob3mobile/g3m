@@ -35,13 +35,7 @@ bool MeshShape::isReadyToRender(const G3MRenderContext* rc) {
 void MeshShape::rawRender(const G3MRenderContext* rc) {
   const Mesh* mesh = getMesh(rc);
   if (mesh != NULL) {
-//    GL* gl = rc->getGL();
-//    
-//    gl->disableCullFace();
-
     mesh->render(rc);
-
-//    gl->enableCullFace(GLCullFace::back());
   }
 }
 

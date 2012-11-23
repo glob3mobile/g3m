@@ -396,8 +396,6 @@ void G3MWidget::render() {
 
 }
 
-
-
 void G3MWidget::onPause() {
   _paused = true;
   
@@ -467,7 +465,7 @@ void G3MWidget::setAnimatedCameraPosition(const Geodetic3D& position) {
 void G3MWidget::setAnimatedCameraPosition(const Geodetic3D& position,
                                           const TimeInterval& interval) {
 
-  Geodetic3D startPosition = _planet->toGeodetic3D( _currentCamera->getCartesianPosition() );
+  const Geodetic3D startPosition = _planet->toGeodetic3D( _currentCamera->getCartesianPosition() );
 
   double finalLat = position.latitude()._degrees;
   double finalLon = position.longitude()._degrees;
