@@ -77,6 +77,10 @@ Extent* LeveledTexturedMesh::getExtent() const {
 }
 
 LazyTextureMapping* LeveledTexturedMesh::getCurrentTextureMapping() const {
+  if (_mappings == NULL) {
+    return NULL;
+  }
+
   if (!_currentLevelIsValid) {
     for (int i = 0; i < _levelsCount; i++) {
       LazyTextureMapping* mapping = _mappings->at(i);
