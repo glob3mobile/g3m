@@ -71,6 +71,11 @@ public class G3MWidget
 
   public final void render()
   {
+	if (_paused)
+	{
+	  return;
+	}
+  
 	_timer.start();
 	_renderCounter++;
   
@@ -236,6 +241,7 @@ public class G3MWidget
 
   public final void onPause()
   {
+	_paused = true;
 	_threadUtils.onPause(_context);
   
 	_effectsScheduler.onPause(_context);
@@ -249,6 +255,7 @@ public class G3MWidget
 
   public final void onResume()
   {
+	_paused = false;
 	_storage.onResume(_context);
   
 	_downloader.onResume(_context);
@@ -450,6 +457,8 @@ public class G3MWidget
 
   private final G3MContext _context;
 
+  private boolean _paused;
+
   private G3MWidget(INativeGL nativeGL, IStorage storage, IDownloader downloader, IThreadUtils threadUtils, Planet planet, java.util.ArrayList<ICameraConstrainer> cameraConstrainers, CameraRenderer cameraRenderer, Renderer mainRenderer, Renderer busyRenderer, int width, int height, Color backgroundColor, boolean logFPS, boolean logDownloaderStatistics, GTask initializationTask, boolean autoDeleteInitializationTask, java.util.ArrayList<PeriodicalTask> periodicalTasks)
   {
 	  _frameTasksExecutor = new FrameTasksExecutor();
@@ -480,6 +489,7 @@ public class G3MWidget
 	  _initializationTask = initializationTask;
 	  _autoDeleteInitializationTask = autoDeleteInitializationTask;
 	  _context = new G3MContext(IFactory.instance(), IStringUtils.instance(), threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, downloader, _effectsScheduler, storage);
+	  _paused = false;
 	initializeGL();
   
 	_effectsScheduler.initialize(_context);
