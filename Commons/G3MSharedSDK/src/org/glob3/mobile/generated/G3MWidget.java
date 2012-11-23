@@ -354,7 +354,7 @@ public class G3MWidget
   public final void setAnimatedCameraPosition(Geodetic3D position, TimeInterval interval)
   {
   
-	Geodetic3D startPosition = _planet.toGeodetic3D(_currentCamera.getCartesianPosition());
+	final Geodetic3D startPosition = _planet.toGeodetic3D(_currentCamera.getCartesianPosition());
   
 	double finalLat = position.latitude()._degrees;
 	double finalLon = position.longitude()._degrees;

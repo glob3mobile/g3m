@@ -59,13 +59,7 @@ public abstract class MeshShape extends Shape
 	final Mesh mesh = getMesh(rc);
 	if (mesh != null)
 	{
-  //    GL* gl = rc->getGL();
-  //
-  //    gl->disableCullFace();
-  
 	  mesh.render(rc);
-  
-  //    gl->enableCullFace(GLCullFace::back());
 	}
   }
 

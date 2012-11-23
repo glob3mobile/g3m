@@ -8,7 +8,7 @@ package org.glob3.mobile.generated;
 //
 
 //
-//  Shape.h
+//  Shape.hpp
 //  G3MiOSSDK
 //
 //  Created by Diego Gomez Deck on 10/28/12.

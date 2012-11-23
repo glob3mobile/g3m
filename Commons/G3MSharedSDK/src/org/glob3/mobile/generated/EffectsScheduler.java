@@ -29,7 +29,7 @@ public class EffectsScheduler
   private IFactory _factory; // FINAL WORD REMOVE BY CONVERSOR RULE
 
 
-  private void processFinishedEffects(G3MRenderContext rc, TimeInterval now)
+  private void processFinishedEffects(G3MRenderContext rc, TimeInterval when)
   {
 	java.util.ArrayList<Integer> indicesToRemove = new java.util.ArrayList<Integer>();
 	for (int i = 0; i < _effectsRuns.size(); i++)
@@ -38,9 +38,9 @@ public class EffectsScheduler
   
 	  if (effectRun._started == true)
 	  {
-		if (effectRun._effect.isDone(rc, now))
+		if (effectRun._effect.isDone(rc, when))
 		{
-		  effectRun._effect.stop(rc, now);
+		  effectRun._effect.stop(rc, when);
   
 		  indicesToRemove.add(i);
 		}
@@ -94,24 +94,24 @@ public class EffectsScheduler
   //  }
   //  
   //  virtual void start(const G3MRenderContext *rc,
-  //                     const TimeInterval& now) {
+  //                     const TimeInterval& when) {
   //    EffectWithDuration::start(rc, now);
   //    _lastPercent = 0;
   //  }
   //  
   //  virtual void doStep(const G3MRenderContext *rc,
-  //                      const TimeInterval& now) {
+  //                      const TimeInterval& when) {
   //    const double percent = pace( percentDone(now) );
   //    rc->getNextCamera()->moveForward((percent-_lastPercent)*1e7);
   //    _lastPercent = percent;
   //  }
   //  
   //  virtual void stop(const G3MRenderContext *rc,
-  //                    const TimeInterval& now) {
+  //                    const TimeInterval& when) {
   //    EffectWithDuration::stop(rc, now);
   //  }
   //  
-  //  virtual void cancel(const TimeInterval& now) {
+  //  virtual void cancel(const TimeInterval& when) {
   //    // do nothing, just leave the effect in the intermediate state
   //  }
   //

@@ -59,7 +59,7 @@ public class SGShape extends Shape
 
   public final boolean isTransparent(G3MRenderContext rc)
   {
-	int __DIEGO_AT_WORK;
+	int ____DIEGO_AT_WORK;
   //  return _node->isTransparent(rc);
 	return false;
   }
