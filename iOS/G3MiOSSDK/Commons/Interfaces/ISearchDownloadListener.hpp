@@ -12,10 +12,17 @@
 #include <iostream>
 
 #include "IBufferDownloadListener.hpp"
+#include "JSONArray.hpp"
 
 class ISearchDownloadListener : public IBufferDownloadListener {
     
+    void* _unknownObject;
+    
 public:
+
+    ISearchDownloadListener(void* unknownObject):_unknownObject(unknownObject){
+        
+    }
     
     virtual void onDownload(const URL& url,
                     const IByteBuffer* buffer) = 0;
@@ -27,7 +34,7 @@ public:
     virtual void onCanceledDownload(const URL& url,
                                     const IByteBuffer* data) = 0;
     
-    virtual void updateResults(void* userData) = 0;
+    virtual void updateResults(JSONArray json) = 0;
     
     virtual ~ISearchDownloadListener(){}
     
