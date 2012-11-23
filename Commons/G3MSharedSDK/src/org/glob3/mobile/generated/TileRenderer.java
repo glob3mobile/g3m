@@ -275,7 +275,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 
   public final void onPause(G3MContext context)
   {
-
+	recreateTiles();
   }
 
   public final void onDestroy(G3MContext context)
@@ -294,6 +294,15 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   }
 
   public final void changed(LayerSet layerSet)
+  {
+  //  pruneTopLevelTiles();
+  //  clearTopLevelTiles();
+  //  _firstRender = true;
+  //  createTopLevelTiles(_context);
+	recreateTiles();
+  }
+
+  public final void recreateTiles()
   {
 	pruneTopLevelTiles();
 	clearTopLevelTiles();
