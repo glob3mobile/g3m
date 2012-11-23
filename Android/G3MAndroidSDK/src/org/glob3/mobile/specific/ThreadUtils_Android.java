@@ -2,6 +2,8 @@
 
 package org.glob3.mobile.specific;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -18,6 +20,10 @@ public final class ThreadUtils_Android
 
    private final G3MWidget_Android  _widgetAndroid;
    private final ThreadPoolExecutor _backgroundExecutor;
+   private boolean                  _running             = true;
+
+   private final List<Runnable>     _backgroundQueue     = new ArrayList<Runnable>();
+   private final List<Runnable>     _rendererThreadQueue = new ArrayList<Runnable>();
 
 
    public ThreadUtils_Android(final G3MWidget_Android widgetAndroid) {
@@ -32,13 +38,13 @@ public final class ThreadUtils_Android
 
 
    @Override
-   public void invokeInRendererThread(final GTask task,
-                                      final boolean autoDelete) {
+   public synchronized void invokeInRendererThread(final GTask task,
+                                                   final boolean autoDelete) {
       if (task == null) {
          throw new IllegalArgumentException("task can't be null");
       }
 
-      _widgetAndroid.queueEvent(new Runnable() {
+      final Runnable runnable = new Runnable() {
          @Override
          public void run() {
             task.run(_context);
@@ -46,14 +52,21 @@ public final class ThreadUtils_Android
                task.dispose();
             }
          }
-      });
+      };
+
+      if (_running) {
+         _widgetAndroid.queueEvent(runnable);
+      }
+      else {
+         _rendererThreadQueue.add(runnable);
+      }
    }
 
 
    @Override
-   public void invokeInBackground(final GTask task,
-                                  final boolean autoDelete) {
-      _backgroundExecutor.execute(new Runnable() {
+   public synchronized void invokeInBackground(final GTask task,
+                                               final boolean autoDelete) {
+      final Runnable runnable = new Runnable() {
          @Override
          public void run() {
             task.run(_context);
@@ -61,25 +74,52 @@ public final class ThreadUtils_Android
                task.dispose();
             }
          }
-      });
+      };
+
+      if (_running) {
+         _backgroundExecutor.execute(runnable);
+      }
+      else {
+         _backgroundQueue.add(runnable);
+      }
    }
 
 
    @Override
-   public void onResume(final G3MContext context) {
+   public synchronized void onResume(final G3MContext context) {
       final int ___DIEGO_AT_WORK;
+      if (!_running) {
+         _running = true;
+         drainQueues();
+      }
+   }
+
+
+   private void drainQueues() {
+      for (final Runnable runnable : _backgroundQueue) {
+         _backgroundExecutor.execute(runnable);
+      }
+      _backgroundQueue.clear();
+
+      for (final Runnable runnable : _rendererThreadQueue) {
+         _widgetAndroid.queueEvent(runnable);
+      }
+      _rendererThreadQueue.clear();
    }
 
 
    @Override
-   public void onPause(final G3MContext context) {
-      final int ___DIEGO_AT_WORK;
+   public synchronized void onPause(final G3MContext context) {
+      //      final int ___DIEGO_AT_WORK;
+      //      if (_running) {
+      _running = false;
+      //      }
    }
 
 
    @Override
    public void onDestroy(final G3MContext context) {
-
+      onPause(context);
    }
 
 }

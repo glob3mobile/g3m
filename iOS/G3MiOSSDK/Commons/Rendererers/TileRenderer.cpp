@@ -37,11 +37,19 @@ _context(NULL)
   _layerSet->setChangeListener(this);
 }
 
-void TileRenderer::changed(const LayerSet* layerSet) {
+void TileRenderer::recreateTiles() {
   pruneTopLevelTiles();
   clearTopLevelTiles();
   _firstRender = true;
   createTopLevelTiles(_context);
+}
+
+void TileRenderer::changed(const LayerSet* layerSet) {
+//  pruneTopLevelTiles();
+//  clearTopLevelTiles();
+//  _firstRender = true;
+//  createTopLevelTiles(_context);
+  recreateTiles();
 }
 
 TileRenderer::~TileRenderer() {

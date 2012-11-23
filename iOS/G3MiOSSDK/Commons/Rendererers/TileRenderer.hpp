@@ -381,7 +381,7 @@ public:
   }
   
   void onPause(const G3MContext* context) {
-    
+    recreateTiles();
   }
 
   void onDestroy(const G3MContext* context) {
@@ -402,6 +402,8 @@ public:
   }
 
   void changed(const LayerSet* layerSet);
+  
+  void recreateTiles();
 
 };
 
