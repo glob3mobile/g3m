@@ -21,7 +21,8 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class MutableMatrix44D;
 
-public abstract class Shape
+
+public abstract class Shape implements EffectTarget
 {
   private Geodetic3D _position;
 
@@ -53,6 +54,8 @@ public abstract class Shape
 	return _transformMatrix;
   }
 
+  private Effect _pendingEffect;
+
   protected void cleanTransformMatrix()
   {
 	if (_transformMatrix != null)
@@ -69,11 +72,15 @@ public abstract class Shape
 	  _scaleY = 1;
 	  _scaleZ = 1;
 	  _transformMatrix = null;
+	  _pendingEffect = null;
 
   }
 
   public void dispose()
   {
+	if (_pendingEffect != null)
+		_pendingEffect.dispose();
+  
 	if (_position != null)
 		_position.dispose();
 	if (_heading != null)
@@ -142,10 +149,34 @@ public abstract class Shape
 	setScale(scale._x, scale._y, scale._z);
   }
 
+  public final void setAnimatedScale(double scaleX, double scaleY, double scaleZ)
+  {
+	if (_pendingEffect != null)
+		_pendingEffect.dispose();
+  
+	_pendingEffect = new ShapeScaleEffect(TimeInterval.fromSeconds(10), this, _scaleX, _scaleY, _scaleZ, scaleX, scaleY, scaleZ);
+  }
+
+  public final void setAnimatedScale(Vector3D scale)
+  {
+	setAnimatedScale(scale._x, scale._y, scale._z);
+  }
+
+
   public final void render(G3MRenderContext rc)
   {
 	if (isReadyToRender(rc))
 	{
+	  if (_pendingEffect != null)
+	  {
+		EffectsScheduler effectsScheduler = rc.getEffectsScheduler();
+  
+		effectsScheduler.cancellAllEffectsFor(this);
+		effectsScheduler.startEffect(_pendingEffect, this);
+  
+		_pendingEffect = null;
+	  }
+  
 	  GL gl = rc.getGL();
   
 	  gl.pushMatrix();
@@ -168,5 +199,11 @@ public abstract class Shape
   public abstract void rawRender(G3MRenderContext rc);
 
   public abstract boolean isTransparent(G3MRenderContext rc);
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: void unusedMethod() const
+  public final void unusedMethod()
+  {
+  }
 
 }
