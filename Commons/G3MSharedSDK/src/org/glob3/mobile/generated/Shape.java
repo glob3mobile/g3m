@@ -154,7 +154,7 @@ public abstract class Shape implements EffectTarget
 	if (_pendingEffect != null)
 		_pendingEffect.dispose();
   
-	_pendingEffect = new ShapeScaleEffect(TimeInterval.fromSeconds(10), this, _scaleX, _scaleY, _scaleZ, scaleX, scaleY, scaleZ);
+	_pendingEffect = new ShapeScaleEffect(TimeInterval.fromSeconds(1), this, _scaleX, _scaleY, _scaleZ, scaleX, scaleY, scaleZ);
   }
 
   public final void setAnimatedScale(Vector3D scale)
