@@ -266,9 +266,6 @@
                                                  8000),
                                   50000,
                                   Color::newFromRGBA(1, 1, 0, 0.5));
-  //  circle->setHeading( Angle::fromDegrees(45) );
-  //  circle->setPitch( Angle::fromDegrees(45) );
-  //  circle->setScale(2.0, 0.5, 1);
   shapesRenderer->addShape(circle);
 
   Shape* box = new BoxShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
@@ -278,6 +275,9 @@
                             2,
                             Color::newFromRGBA(1,    0, 0, 0.5),
                             Color::newFromRGBA(0.75, 0, 0, 0.75));
+
+  box->setAnimatedScale(1, 1, 20);
+
   shapesRenderer->addShape(box);
 
 

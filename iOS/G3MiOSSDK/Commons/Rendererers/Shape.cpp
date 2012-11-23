@@ -10,7 +10,11 @@
 #include "GL.hpp"
 #include "Planet.hpp"
 
+#include "ShapeScaleEffect.hpp"
+
 Shape::~Shape() {
+  delete _pendingEffect;
+
   delete _position;
   delete _heading;
   delete _pitch;
@@ -43,6 +47,15 @@ MutableMatrix44D* Shape::getTransformMatrix(const Planet* planet) {
 
 void Shape::render(const G3MRenderContext* rc) {
   if (isReadyToRender(rc)) {
+    if (_pendingEffect != NULL) {
+      EffectsScheduler* effectsScheduler = rc->getEffectsScheduler();
+
+      effectsScheduler->cancellAllEffectsFor(this);
+      effectsScheduler->startEffect(_pendingEffect, this);
+
+      _pendingEffect = NULL;
+    }
+
     GL* gl = rc->getGL();
 
     gl->pushMatrix();
@@ -50,7 +63,18 @@ void Shape::render(const G3MRenderContext* rc) {
     gl->multMatrixf( *getTransformMatrix( rc->getPlanet() ) );
 
     rawRender(rc);
-    
+
     gl->popMatrix();
   }
+}
+
+void Shape::setAnimatedScale(double scaleX,
+                             double scaleY,
+                             double scaleZ) {
+  delete _pendingEffect;
+
+  _pendingEffect = new ShapeScaleEffect(TimeInterval::fromSeconds(10),
+                                        this,
+                                        _scaleX, _scaleY, _scaleZ,
+                                        scaleX, scaleY, scaleZ);
 }

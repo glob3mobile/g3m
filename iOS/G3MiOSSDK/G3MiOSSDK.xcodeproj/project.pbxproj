@@ -206,6 +206,8 @@
 		CFCEFF4D163721EA00FC4AB0 /* TrailsRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCEFF4B163721EA00FC4AB0 /* TrailsRenderer.cpp */; };
 		CFCEFF4E163721EA00FC4AB0 /* TrailsRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFCEFF4C163721EA00FC4AB0 /* TrailsRenderer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFD0021B15D3C94C00735FD8 /* TileKey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD0021915D3C94C00735FD8 /* TileKey.cpp */; };
+		CFD1A47516602B050039EFA9 /* ShapeScaleEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD1A47316602B050039EFA9 /* ShapeScaleEffect.cpp */; };
+		CFD1A47616602B050039EFA9 /* ShapeScaleEffect.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFD1A47416602B050039EFA9 /* ShapeScaleEffect.hpp */; };
 		CFD314531631FFAD00B54ED3 /* Vector2I.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD314511631FFAD00B54ED3 /* Vector2I.cpp */; };
 		CFD314541631FFAD00B54ED3 /* Vector2I.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFD314521631FFAD00B54ED3 /* Vector2I.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFE029541601367100D1E75B /* IImageDownloadListener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFE029531601367100D1E75B /* IImageDownloadListener.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -495,6 +497,8 @@
 		CFCEFF4C163721EA00FC4AB0 /* TrailsRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TrailsRenderer.hpp; path = Commons/Rendererers/TrailsRenderer.hpp; sourceTree = "<group>"; };
 		CFD0021915D3C94C00735FD8 /* TileKey.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileKey.cpp; path = Commons/Basic/TileKey.cpp; sourceTree = "<group>"; };
 		CFD0021A15D3C94C00735FD8 /* TileKey.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileKey.hpp; path = Commons/Basic/TileKey.hpp; sourceTree = "<group>"; };
+		CFD1A47316602B050039EFA9 /* ShapeScaleEffect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShapeScaleEffect.cpp; path = Commons/Rendererers/ShapeScaleEffect.cpp; sourceTree = "<group>"; };
+		CFD1A47416602B050039EFA9 /* ShapeScaleEffect.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShapeScaleEffect.hpp; path = Commons/Rendererers/ShapeScaleEffect.hpp; sourceTree = "<group>"; };
 		CFD314511631FFAD00B54ED3 /* Vector2I.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Vector2I.cpp; path = Commons/Geometry/Vector2I.cpp; sourceTree = "<group>"; };
 		CFD314521631FFAD00B54ED3 /* Vector2I.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Vector2I.hpp; path = Commons/Geometry/Vector2I.hpp; sourceTree = "<group>"; };
 		CFE029531601367100D1E75B /* IImageDownloadListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IImageDownloadListener.hpp; path = Commons/Downloader/IImageDownloadListener.hpp; sourceTree = "<group>"; };
@@ -933,6 +937,8 @@
 				CF5EA5D3163DDC7900D8F797 /* Shape.hpp */,
 				CFA0BB60163DCFF6009185FE /* ShapesRenderer.cpp */,
 				CFA0BB61163DCFF6009185FE /* ShapesRenderer.hpp */,
+				CFD1A47316602B050039EFA9 /* ShapeScaleEffect.cpp */,
+				CFD1A47416602B050039EFA9 /* ShapeScaleEffect.hpp */,
 			);
 			name = Shapes;
 			sourceTree = "<group>";
@@ -1207,6 +1213,7 @@
 				A70F560A161B5C6000340256 /* JSONParser_iOS.hpp in Headers */,
 				CFA189A015F8D9F80048BF46 /* IntBuffer_iOS.hpp in Headers */,
 				A74072CF161EEEA300182A39 /* BingLayer.hpp in Headers */,
+				CFD1A47616602B050039EFA9 /* ShapeScaleEffect.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1383,6 +1390,7 @@
 				CF9592AE1652E28500CB7AC8 /* OrderedRenderable.cpp in Sources */,
 				CF5A8A321656B67F00508C38 /* BoxShape.cpp in Sources */,
 				CFCB5EDA16582BCC007D051A /* CompositeMesh.cpp in Sources */,
+				CFD1A47516602B050039EFA9 /* ShapeScaleEffect.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

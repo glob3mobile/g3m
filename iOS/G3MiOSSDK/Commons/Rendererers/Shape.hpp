@@ -16,7 +16,9 @@
 
 class MutableMatrix44D;
 
-class Shape {
+#include "Effects.hpp"
+
+class Shape : public EffectTarget {
 private:
   Geodetic3D* _position;
 
@@ -31,6 +33,8 @@ private:
   MutableMatrix44D* createTransformMatrix(const Planet* planet);
   MutableMatrix44D* getTransformMatrix(const Planet* planet);
 
+  Effect* _pendingEffect;
+
 protected:
   virtual void cleanTransformMatrix();
 
@@ -42,12 +46,13 @@ public:
   _scaleX(1),
   _scaleY(1),
   _scaleZ(1),
-  _transformMatrix(NULL) {
+  _transformMatrix(NULL),
+  _pendingEffect(NULL) {
 
   }
 
   virtual ~Shape();
-  
+
   const Geodetic3D getPosition() const {
     return *_position;
   }
@@ -93,6 +98,17 @@ public:
              scale._z);
   }
 
+  void setAnimatedScale(double scaleX,
+                        double scaleY,
+                        double scaleZ);
+  
+  void setAnimatedScale(const Vector3D& scale) {
+    setAnimatedScale(scale._x,
+                     scale._y,
+                     scale._z);
+  }
+
+
   void render(const G3MRenderContext* rc);
 
   virtual void initialize(const G3MContext* context) {
@@ -100,10 +116,13 @@ public:
   }
 
   virtual bool isReadyToRender(const G3MRenderContext* rc) = 0;
-  
-  virtual void rawRender(const G3MRenderContext* rc) = 0;
 
+  virtual void rawRender(const G3MRenderContext* rc) = 0;
+  
   virtual bool isTransparent(const G3MRenderContext* rc) = 0;
+
+  void unusedMethod() const {
+  }
 
 };
 
