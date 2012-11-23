@@ -47,14 +47,14 @@ void EffectsScheduler::cancellAllEffectsFor(EffectTarget* target) {
 }
 
 void EffectsScheduler::processFinishedEffects(const G3MRenderContext *rc,
-                                              const TimeInterval& now) {
+                                              const TimeInterval& when) {
   std::vector<int> indicesToRemove;
   for (int i = 0; i < _effectsRuns.size(); i++) {
     EffectRun* effectRun = _effectsRuns[i];
     
     if (effectRun->_started == true) {
-      if (effectRun->_effect->isDone(rc, now)) {
-        effectRun->_effect->stop(rc, now);
+      if (effectRun->_effect->isDone(rc, when)) {
+        effectRun->_effect->stop(rc, when);
         
         indicesToRemove.push_back(i);
       }

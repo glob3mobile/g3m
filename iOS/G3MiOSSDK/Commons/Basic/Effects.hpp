@@ -73,18 +73,18 @@ protected:
   
 public:
   virtual void start(const G3MRenderContext *rc,
-                     const TimeInterval& now) = 0;
+                     const TimeInterval& when) = 0;
   
   virtual void doStep(const G3MRenderContext *rc,
-                      const TimeInterval& now) = 0;
+                      const TimeInterval& when) = 0;
   
   virtual bool isDone(const G3MRenderContext *rc,
-                      const TimeInterval& now) = 0;
+                      const TimeInterval& when) = 0;
   
   virtual void stop(const G3MRenderContext *rc,
-                    const TimeInterval& now) = 0;
+                    const TimeInterval& when) = 0;
   
-  virtual void cancel(const TimeInterval& now) = 0;
+  virtual void cancel(const TimeInterval& when) = 0;
 
   virtual ~Effect() { }
 };
@@ -106,9 +106,9 @@ protected:
     
   }
   
-  double percentDone(const TimeInterval& now) const {
-    const long long elapsed = now.milliseconds() - _started;
-    
+  double percentDone(const TimeInterval& when) const {
+    const long long elapsed = when.milliseconds() - _started;
+
     const double percent = (double) elapsed / _duration;
     if (percent > 1) return 1;
     if (percent < 0) return 0;
@@ -118,18 +118,18 @@ protected:
   
 public:
   virtual void stop(const G3MRenderContext *rc,
-                    const TimeInterval& now) {
+                    const TimeInterval& when) {
     
   }
   
   virtual void start(const G3MRenderContext *rc,
-                     const TimeInterval& now) {
-    _started = now.milliseconds();
+                     const TimeInterval& when) {
+    _started = when.milliseconds();
   }
   
   virtual bool isDone(const G3MRenderContext *rc,
-                      const TimeInterval& now) {
-    const double percent = percentDone(now);
+                      const TimeInterval& when) {
+    const double percent = percentDone(when);
     return percent >= 1;
   }
   
@@ -156,12 +156,12 @@ protected:
   
 public:
   virtual void doStep(const G3MRenderContext *rc,
-                      const TimeInterval& now) {
+                      const TimeInterval& when) {
     _force *= _friction;
   };
   
   virtual bool isDone(const G3MRenderContext *rc,
-                      const TimeInterval& now) {
+                      const TimeInterval& when) {
     return (GMath.abs(_force) < 1e-6);
   }
   
@@ -200,7 +200,7 @@ private:
   
   
   void processFinishedEffects(const G3MRenderContext *rc,
-                              const TimeInterval& now);
+                              const TimeInterval& when);
   
 public:
   EffectsScheduler(): _effectsRuns(std::vector<EffectRun*>()) {
@@ -249,24 +249,24 @@ public:
 //  }
 //  
 //  virtual void start(const G3MRenderContext *rc,
-//                     const TimeInterval& now) {
+//                     const TimeInterval& when) {
 //    EffectWithDuration::start(rc, now);
 //    _lastPercent = 0;
 //  }
 //  
 //  virtual void doStep(const G3MRenderContext *rc,
-//                      const TimeInterval& now) {
+//                      const TimeInterval& when) {
 //    const double percent = pace( percentDone(now) );
 //    rc->getNextCamera()->moveForward((percent-_lastPercent)*1e7);
 //    _lastPercent = percent;
 //  }
 //  
 //  virtual void stop(const G3MRenderContext *rc,
-//                    const TimeInterval& now) {
+//                    const TimeInterval& when) {
 //    EffectWithDuration::stop(rc, now);
 //  }
 //  
-//  virtual void cancel(const TimeInterval& now) {
+//  virtual void cancel(const TimeInterval& when) {
 //    // do nothing, just leave the effect in the intermediate state
 //  }
 //

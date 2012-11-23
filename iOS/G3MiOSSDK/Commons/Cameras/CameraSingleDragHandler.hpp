@@ -27,19 +27,19 @@ public:
   }
   
   virtual void start(const G3MRenderContext *rc,
-                     const TimeInterval& now) {
+                     const TimeInterval& when) {
   }
   
   virtual void doStep(const G3MRenderContext *rc,
-                      const TimeInterval& now) {
-    EffectWithForce::doStep(rc, now);
+                      const TimeInterval& when) {
+    EffectWithForce::doStep(rc, when);
     rc->getNextCamera()->rotateWithAxis(_axis, Angle::fromDegrees(getForce()));
   }
   
   virtual void stop(const G3MRenderContext *rc,
-                    const TimeInterval& now) { }
+                    const TimeInterval& when) { }
   
-  virtual void cancel(const TimeInterval& now) {
+  virtual void cancel(const TimeInterval& when) {
     // do nothing, just leave the effect in the intermediate state
   }
   

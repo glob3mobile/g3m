@@ -30,16 +30,16 @@ public:
   {}
   
   virtual void start(const G3MRenderContext *rc,
-                     const TimeInterval& now) {
-    EffectWithDuration::start(rc, now);
+                     const TimeInterval& when) {
+    EffectWithDuration::start(rc, when);
     _lastPercent = 0;
   }
   
   virtual void doStep(const G3MRenderContext *rc,
-                      const TimeInterval& now) {
-    //const double percent = gently(percentDone(now), 0.2, 0.9);
-    //const double percent = pace( percentDone(now) );
-    const double percent = percentDone(now);
+                      const TimeInterval& when) {
+    //const double percent = gently(percentDone(when), 0.2, 0.9);
+    //const double percent = pace( percentDone(when) );
+    const double percent = percentDone(when);
     Camera *camera = rc->getNextCamera();
     const double step = percent - _lastPercent;
     camera->rotateWithAxis(_axis, _angle.times(step));
@@ -48,11 +48,11 @@ public:
   }
   
   virtual void stop(const G3MRenderContext *rc,
-                    const TimeInterval& now) {
-    EffectWithDuration::stop(rc, now);
+                    const TimeInterval& when) {
+    EffectWithDuration::stop(rc, when);
   }
   
-  virtual void cancel(const TimeInterval& now) {
+  virtual void cancel(const TimeInterval& when) {
     // do nothing, just leave the effect in the intermediate state
   }
   
