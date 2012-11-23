@@ -13,6 +13,14 @@ package org.glob3.mobile.generated;
 public abstract class ISearchDownloadListener implements IBufferDownloadListener
 {
 
+	private Object _unknownObject;
+
+
+	public ISearchDownloadListener(Object unknownObject)
+	{
+		_unknownObject = unknownObject;
+
+	}
 
 	public abstract void onDownload(URL url, IByteBuffer buffer);
 
@@ -22,7 +30,7 @@ public abstract class ISearchDownloadListener implements IBufferDownloadListener
 
 	public abstract void onCanceledDownload(URL url, IByteBuffer data);
 
-	public abstract void updateResults(Object userData);
+	public abstract void updateResults(JSONArray json);
 
 	public void dispose()
 	{

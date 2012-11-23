@@ -49,7 +49,7 @@ public class GEOJSONDownloadListener implements IBufferDownloadListener
 		JSONObject json = IJSONParser.instance().parse(String).asObject();
 		ILogger.instance().logInfo(url.getPath());
 		parseGEOJSON(json);
-		//IJSONParser::instance()->deleteJSONData(json);
+		IJSONParser.instance().deleteJSONData(json);
     
 	}
 
