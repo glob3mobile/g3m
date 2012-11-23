@@ -75,6 +75,8 @@ enum GL_version {
                   initializationTask: (GTask*) initializationTask
                      periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks;
 
+- (void)setWidget: (G3MWidget*) widget;
+
 - (G3MWidget*) widget;
 
 - (void)initSingletons;

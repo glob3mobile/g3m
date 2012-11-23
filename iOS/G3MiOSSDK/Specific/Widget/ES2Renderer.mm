@@ -82,13 +82,13 @@ enum {
     // This application only creates a single default framebuffer which is already bound at this point.
     // This call is redundant, but needed if dealing with multiple framebuffers.
     glBindFramebuffer(GL_FRAMEBUFFER, defaultFramebuffer);
-    glViewport(0, 0, backingWidth, backingHeight);
+    glViewport(0, 0, _width, _height);
     
     // Use shader program
     widget->getGL()->useProgram(program);
   }
   
-  widget->render();
+  widget->render(_width, _height);
   
   if (_firstRender) {
     // This application only creates a single color renderbuffer which is already bound at this point.
@@ -249,12 +249,12 @@ enum {
   // Allocate color buffer backing based on the current layer size
   glBindRenderbuffer(GL_RENDERBUFFER, colorRenderbuffer);
   [context renderbufferStorage:GL_RENDERBUFFER fromDrawable:layer];
-  glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &backingWidth);
-  glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &backingHeight);
+  glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &_width);
+  glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &_height);
 
   // damos tamaño al buffer de profundidad
   glBindRenderbuffer(GL_RENDERBUFFER, depthRenderbuffer);
-  glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, backingWidth, backingHeight);
+  glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, _width, _height);
   
   if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
     NSLog(@"Failed to make complete framebuffer object %x", glCheckFramebufferStatus(GL_FRAMEBUFFER));

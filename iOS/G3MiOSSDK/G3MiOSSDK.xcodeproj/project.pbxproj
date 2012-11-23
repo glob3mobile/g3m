@@ -286,7 +286,13 @@
 		D8F42FBE15EB6D78000D1822 /* LeveledTexturedMesh.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF8FF98A15D5539F000F79D1 /* LeveledTexturedMesh.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8F42FBF15EB6D78000D1822 /* SQLiteStorage_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF8B21B115DD32820068601A /* SQLiteStorage_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
 		D8F42FD415EB7B95000D1822 /* IStringBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8A723A715E4D2C500ABDF07 /* IStringBuilder.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		E705123C165E782C00AEADB9 /* TileRendererBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E705123A165E782C00AEADB9 /* TileRendererBuilder.cpp */; };
+		E705123D165E782C00AEADB9 /* TileRendererBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E705123B165E782C00AEADB9 /* TileRendererBuilder.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		E7051241165E916000AEADB9 /* G3MBuilder_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E705123F165E916000AEADB9 /* G3MBuilder_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
+		E7051242165E916000AEADB9 /* G3MBuilder_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7051240165E916000AEADB9 /* G3MBuilder_iOS.mm */; };
 		E745CC7916484A9A00819711 /* IStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E745CC7716484A9900819711 /* IStorage.cpp */; };
+		E77A100A165BEDC500FE5515 /* IG3MBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E77A1008165BEDC500FE5515 /* IG3MBuilder.cpp */; };
+		E77A100B165BEDC500FE5515 /* IG3MBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E77A1009165BEDC500FE5515 /* IG3MBuilder.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -572,7 +578,13 @@
 		D8EEF3BC1577924D003FEB5E /* G3MiOSSDK-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "G3MiOSSDK-Prefix.pch"; sourceTree = "<group>"; };
 		D8FEDAC615E7BD23007633A0 /* IMathUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IMathUtils.hpp; path = Commons/Interfaces/IMathUtils.hpp; sourceTree = "<group>"; };
 		D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MathUtils_iOS.hpp; path = Specific/Derived/MathUtils_iOS.hpp; sourceTree = "<group>"; };
+		E705123A165E782C00AEADB9 /* TileRendererBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileRendererBuilder.cpp; path = Commons/Basic/TileRendererBuilder.cpp; sourceTree = "<group>"; };
+		E705123B165E782C00AEADB9 /* TileRendererBuilder.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileRendererBuilder.hpp; path = Commons/Basic/TileRendererBuilder.hpp; sourceTree = "<group>"; };
+		E705123F165E916000AEADB9 /* G3MBuilder_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = G3MBuilder_iOS.hpp; path = Specific/Derived/G3MBuilder_iOS.hpp; sourceTree = "<group>"; };
+		E7051240165E916000AEADB9 /* G3MBuilder_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = G3MBuilder_iOS.mm; path = Specific/Derived/G3MBuilder_iOS.mm; sourceTree = "<group>"; };
 		E745CC7716484A9900819711 /* IStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IStorage.cpp; path = Commons/Interfaces/IStorage.cpp; sourceTree = "<group>"; };
+		E77A1008165BEDC500FE5515 /* IG3MBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IG3MBuilder.cpp; path = Commons/Basic/IG3MBuilder.cpp; sourceTree = "<group>"; };
+		E77A1009165BEDC500FE5515 /* IG3MBuilder.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; name = IG3MBuilder.hpp; path = Commons/Basic/IG3MBuilder.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -633,6 +645,8 @@
 				CF31CBF315878BE40085E8F1 /* Timer_iOS.hpp */,
 				A70F5609161B5C6000340256 /* JSONParser_iOS.hpp */,
 				A70F560C161B5CD800340256 /* JSONParser_iOS.mm */,
+				E705123F165E916000AEADB9 /* G3MBuilder_iOS.hpp */,
+				E7051240165E916000AEADB9 /* G3MBuilder_iOS.mm */,
 			);
 			name = Derived;
 			sourceTree = "<group>";
@@ -731,6 +745,10 @@
 				CFFEC12415C2EB96003FA986 /* URL.hpp */,
 				CF8D0BFB15AF0D23005B5433 /* TileTexturizer.hpp */,
 				CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */,
+				E77A1008165BEDC500FE5515 /* IG3MBuilder.cpp */,
+				E77A1009165BEDC500FE5515 /* IG3MBuilder.hpp */,
+				E705123A165E782C00AEADB9 /* TileRendererBuilder.cpp */,
+				E705123B165E782C00AEADB9 /* TileRendererBuilder.hpp */,
 			);
 			name = Basic;
 			sourceTree = "<group>";
@@ -1051,6 +1069,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E705123D165E782C00AEADB9 /* TileRendererBuilder.hpp in Headers */,
+				E77A100B165BEDC500FE5515 /* IG3MBuilder.hpp in Headers */,
 				CFCB5EDB16582BCC007D051A /* CompositeMesh.hpp in Headers */,
 				CF9592AF1652E28500CB7AC8 /* OrderedRenderable.hpp in Headers */,
 				CF5A8A331656B67F00508C38 /* BoxShape.hpp in Headers */,
@@ -1186,6 +1206,7 @@
 				A70F5616161C8F9A00340256 /* JSONBoolean.hpp in Headers */,
 				A70F5618161C94A100340256 /* JSONString.hpp in Headers */,
 				A7EE001E161B25FD00C77604 /* JSONArray.hpp in Headers */,
+				E7051241165E916000AEADB9 /* G3MBuilder_iOS.hpp in Headers */,
 				CF6DD7861637488300685212 /* GLTextureId_iOS.hpp in Headers */,
 				CF9D832A15FF7A1C0069B555 /* Downloader_iOS.hpp in Headers */,
 				CF9D832B15FF7A1C0069B555 /* StringUtils_iOS.hpp in Headers */,
@@ -1383,6 +1404,9 @@
 				CF9592AE1652E28500CB7AC8 /* OrderedRenderable.cpp in Sources */,
 				CF5A8A321656B67F00508C38 /* BoxShape.cpp in Sources */,
 				CFCB5EDA16582BCC007D051A /* CompositeMesh.cpp in Sources */,
+				E77A100A165BEDC500FE5515 /* IG3MBuilder.cpp in Sources */,
+				E705123C165E782C00AEADB9 /* TileRendererBuilder.cpp in Sources */,
+				E7051242165E916000AEADB9 /* G3MBuilder_iOS.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

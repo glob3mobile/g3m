@@ -113,10 +113,6 @@
                    initializationTask: (GTask*) initializationTask
                       periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
 {
-  
-  const int width  = (int) [self frame].size.width;
-  const int height = (int) [self frame].size.height;
-  
   NativeGL2_iOS* nativeGL = new NativeGL2_iOS();
   
   CompositeRenderer* mainRenderer = new CompositeRenderer();
@@ -147,7 +143,6 @@
                                 cameraRenderer,
                                 mainRenderer,
                                 busyRenderer,
-                                width, height,
                                 Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
                                 true,
                                 false,
@@ -156,6 +151,11 @@
                                 periodicalTasks);
   [self widget]->setUserData(userData);
 }
+
+- (void)setWidget:(G3MWidget*) widget {
+    _widgetVP = widget;
+}
+
 
 //The EAGL view is stored in the nib file. When it's unarchived it's sent -initWithCoder:
 - (id)initWithCoder:(NSCoder *)coder {

@@ -84,8 +84,6 @@ public:
                            CameraRenderer*                  cameraRenderer,
                            Renderer*                        mainRenderer,
                            Renderer*                        busyRenderer,
-                           int                              width,
-                           int                              height,
                            Color                            backgroundColor,
                            const bool                       logFPS,
                            const bool                       logDownloaderStatistics,
@@ -95,7 +93,7 @@ public:
 
   ~G3MWidget();
 
-  void render();
+  void render(int width, int height);
 
   void onTouchEvent(const TouchEvent* myEvent);
 
@@ -189,6 +187,9 @@ private:
   bool   _autoDeleteInitializationTask;
 
   std::vector<PeriodicalTask*> _periodicalTasks;
+    
+    int _width;
+    int _height;
 
   void initializeGL();
 
@@ -200,8 +201,6 @@ private:
             CameraRenderer*                  cameraRenderer,
             Renderer*                        mainRenderer,
             Renderer*                        busyRenderer,
-            int                              width,
-            int                              height,
             Color                            backgroundColor,
             const bool                       logFPS,
             const bool                       logDownloaderStatistics,
