@@ -46,6 +46,7 @@ void GEOJSONDownloadListener::onDownload(const URL& url,
     JSONObject* json = IJSONParser::instance()->parse(string)->asObject();
     ILogger::instance()->logInfo(url.getPath());
     parseGEOJSON(json);
+    //IJSONParser::instance()->deleteJSONData(json);
     
 }
 
