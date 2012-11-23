@@ -31,11 +31,13 @@ IG3MBuilder::IG3MBuilder() {
 }
 
 IG3MBuilder::~IG3MBuilder() {
+#ifdef C_CODE
     delete _planet;
+    delete _parameters;
+#endif
     delete _cameraRenderer;
     delete _backgroundColor;
     delete _layerSet;
-    delete _parameters;
     delete _tileRenderer;
     delete _busyRenderer;
     delete _initializationTask;
@@ -163,7 +165,9 @@ void IG3MBuilder::setLayerSet(LayerSet *layerSet) {
 void IG3MBuilder::setTileRendererParameters(TilesRenderParameters *parameters) {
     if (!_tileRenderer) {
         if (_parameters != parameters) {
+#ifdef C_CODE
             delete _parameters;
+#endif
             _parameters = parameters;
         }
     }
