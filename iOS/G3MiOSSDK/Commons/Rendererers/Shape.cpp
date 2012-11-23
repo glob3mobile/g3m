@@ -73,7 +73,7 @@ void Shape::setAnimatedScale(double scaleX,
                              double scaleZ) {
   delete _pendingEffect;
 
-  _pendingEffect = new ShapeScaleEffect(TimeInterval::fromSeconds(10),
+  _pendingEffect = new ShapeScaleEffect(TimeInterval::fromSeconds(1),
                                         this,
                                         _scaleX, _scaleY, _scaleZ,
                                         scaleX, scaleY, scaleZ);
