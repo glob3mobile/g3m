@@ -23,8 +23,6 @@ class IFloatBuffer;
 
 class MultiLayerTileTexturizer : public TileTexturizer {
 private:
-//  LayerSet* _layerSet;
-  
 #ifdef C_CODE
   const TilesRenderParameters* _parameters;
 #else

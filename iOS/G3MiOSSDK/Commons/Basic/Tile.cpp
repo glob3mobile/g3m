@@ -187,34 +187,34 @@ void Tile::rawRender(const G3MRenderContext *rc,
                      const TileRenderContext* trc) {
   
   Mesh* tessellatorMesh = getTessellatorMesh(rc, trc);
-  
+  if (tessellatorMesh == NULL) {
+    return;
+  }
+
   TileTexturizer* texturizer = trc->getTexturizer();
-  
-  if (tessellatorMesh != NULL) {
-    if (texturizer == NULL) {
-      tessellatorMesh->render(rc);
+  if (texturizer == NULL) {
+    tessellatorMesh->render(rc);
+  }
+  else {
+    // const bool needsToCallTexturizer = (!isTextureSolved() || (_texturizedMesh == NULL)) && isTexturizerDirty();
+    const bool needsToCallTexturizer = (_texturizedMesh == NULL) || isTexturizerDirty();
+
+    if (needsToCallTexturizer) {
+      _texturizedMesh = texturizer->texturize(rc,
+                                              trc,
+                                              this,
+                                              tessellatorMesh,
+                                              _texturizedMesh);
+    }
+
+    if (_texturizedMesh != NULL) {
+      _texturizedMesh->render(rc);
     }
     else {
-//      const bool needsToCallTexturizer = (!isTextureSolved() || (_texturizedMesh == NULL)) && isTexturizerDirty();
-      const bool needsToCallTexturizer = (_texturizedMesh == NULL) || isTexturizerDirty();
-      
-      if (needsToCallTexturizer) {
-        _texturizedMesh = texturizer->texturize(rc,
-                                                trc,
-                                                this,
-                                                tessellatorMesh,
-                                                _texturizedMesh);
-      }
-      
-      if (_texturizedMesh != NULL) {
-        _texturizedMesh->render(rc);
-      }
-      else {
-        tessellatorMesh->render(rc);
-      }
+      tessellatorMesh->render(rc);
     }
   }
-  
+
 }
 
 void Tile::debugRender(const G3MRenderContext* rc,

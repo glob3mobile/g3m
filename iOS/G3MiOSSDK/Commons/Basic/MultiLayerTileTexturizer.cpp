@@ -28,6 +28,8 @@
 #include "IDownloader.hpp"
 #include "Petition.hpp"
 
+#define TILE_DOWNLOAD_PRIORITY 1000000000
+
 enum PetitionStatus {
   STATUS_PENDING,
   STATUS_DOWNLOADED,
@@ -226,10 +228,11 @@ public:
     for (int i = 0; i < _petitionsCount; i++) {
       const Petition* petition = _petitions[i];
       
-      const long long priority =  (_parameters->_incrementalTileQuality
-                                   ? 1000 - _tile->getLevel()
-                                   : _tile->getLevel());
-      
+//      const long long priority =  (_parameters->_incrementalTileQuality
+//                                   ? 1000 - _tile->getLevel()
+//                                   : _tile->getLevel());
+      const long long priority = TILE_DOWNLOAD_PRIORITY + _tile->getLevel();
+
       const long long requestId = _downloader->requestImage(URL(petition->getURL()),
                                                             priority,
                                                             new BuilderDownloadStepDownloadListener(this, i),
@@ -749,7 +752,8 @@ void MultiLayerTileTexturizer::justCreatedTopTile(const G3MRenderContext* rc,
   
   _pendingTopTileRequests += petitions.size();
   
-  const long priority = 1000000000;  // very big priority for toplevel tiles
+//  const long priority = 1000000000;  // very big priority for toplevel tiles
+  const long priority = TILE_DOWNLOAD_PRIORITY + 128;
   for (int i = 0; i < petitions.size(); i++) {
     const Petition* petition = petitions[i];
     rc->getDownloader()->requestImage(URL(petition->getURL()),
