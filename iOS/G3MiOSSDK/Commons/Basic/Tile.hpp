@@ -126,7 +126,10 @@ public:
   Tile* getParent() const {
     return _parent;
   }
-  
+
+  void prepareForFullRendering(const G3MRenderContext* rc,
+                               const TileRenderContext* trc);
+
   void render(const G3MRenderContext* rc,
               const TileRenderContext* trc,
               std::list<Tile*>* toVisitInNextIteration);

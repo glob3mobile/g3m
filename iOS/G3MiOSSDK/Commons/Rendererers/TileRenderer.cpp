@@ -116,17 +116,45 @@ void TileRenderer::initialize(const G3MContext* context) {
 
 bool TileRenderer::isReadyToRender(const G3MRenderContext *rc) {
   if (_topTilesJustCreated) {
+    _topTilesJustCreated = false;
+
+    const int topLevelTilesCount = _topLevelTiles.size();
+
+    if (_parameters->_forceTopLevelTilesRenderOnStart) {
+      TilesStatistics statistics;
+
+      TileRenderContext trc(_tessellator,
+                            _texturizer,
+                            _layerSet,
+                            _parameters,
+                            &statistics,
+                            _lastSplitTimer,
+                            true);
+
+      for (int i = 0; i < topLevelTilesCount; i++) {
+        Tile* tile = _topLevelTiles[i];
+        tile->prepareForFullRendering(rc, &trc);
+      }
+    }
+
     if (_texturizer != NULL) {
-      const int topLevelTilesCount = _topLevelTiles.size();
       for (int i = 0; i < topLevelTilesCount; i++) {
         Tile* tile = _topLevelTiles[i];
         _texturizer->justCreatedTopTile(rc, tile, _layerSet);
       }
     }
-    _topTilesJustCreated = false;
   }
 
   if (_parameters->_forceTopLevelTilesRenderOnStart) {
+    const int topLevelTilesCount = _topLevelTiles.size();
+    for (int i = 0; i < topLevelTilesCount; i++) {
+      Tile* tile = _topLevelTiles[i];
+      if (!tile->isTextureSolved()) {
+        int ___________WORK_ON_FIRST_FULL_RENDER;
+        return false;
+      }
+    }
+
     if (_tessellator != NULL) {
       if (!_tessellator->isReady(rc)) {
         return false;

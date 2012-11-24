@@ -289,15 +289,6 @@ void G3MWidget::render() {
   }
   _currentCamera->copyFrom(*_nextCamera);
 
-
-  if (_initializationTask != NULL) {
-    _initializationTask->run(_context);
-    if (_autoDeleteInitializationTask) {
-      delete _initializationTask;
-    }
-    _initializationTask = NULL;
-  }
-
   G3MRenderContext rc(_frameTasksExecutor,
                       IFactory::instance(),
                       IStringUtils::instance(),
@@ -316,11 +307,22 @@ void G3MWidget::render() {
                       IFactory::instance()->createTimer(),
                       _storage);
 
+  _mainRendererReady = _mainRenderer->isReadyToRender(&rc);
+
+  if (_mainRendererReady) {
+    if (_initializationTask != NULL) {
+      _initializationTask->run(_context);
+      if (_autoDeleteInitializationTask) {
+        delete _initializationTask;
+      }
+      _initializationTask = NULL;
+    }
+  }
+
   _effectsScheduler->doOneCyle(&rc);
 
   _frameTasksExecutor->doPreRenderCycle(&rc);
 
-  _mainRendererReady = _mainRenderer->isReadyToRender(&rc);
 
   Renderer* selectedRenderer = _mainRendererReady ? _mainRenderer : _busyRenderer;
   if (selectedRenderer != _selectedRenderer) {

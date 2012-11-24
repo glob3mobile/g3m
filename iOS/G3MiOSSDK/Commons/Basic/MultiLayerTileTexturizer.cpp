@@ -526,7 +526,7 @@ void BuilderDownloadStepDownloadListener::onCancel(const URL& url) {
 MultiLayerTileTexturizer::MultiLayerTileTexturizer() :
 _parameters(NULL),
 _texCoordsCache(NULL),
-_pendingTopTileRequests(0),
+//_pendingTopTileRequests(0),
 _texturesHandler(NULL)
 {
   
@@ -709,66 +709,70 @@ IFloatBuffer* MultiLayerTileTexturizer::getTextureCoordinates(const TileRenderCo
   return _texCoordsCache;
 }
 
-class TopTileDownloadListener : public IImageDownloadListener {
-private:
-  MultiLayerTileTexturizer* _texturizer;
-  
-public:
-  TopTileDownloadListener(MultiLayerTileTexturizer* texturizer) :
-  _texturizer(texturizer)
-  {
-  }
-  
-  virtual ~TopTileDownloadListener() {
-    
-  }
-  
-  void onDownload(const URL& url,
-                  const IImage* image) {
-    _texturizer->countTopTileRequest();
-  }
-  
-  void onError(const URL& url) {
-    _texturizer->countTopTileRequest();
-  }
-  
-  void onCanceledDownload(const URL& url,
-                          const IImage* image) {
-  }
-  
-  void onCancel(const URL& url) {
-    _texturizer->countTopTileRequest();
-  }
-  
-};
+//class TopTileDownloadListener : public IImageDownloadListener {
+//private:
+//  MultiLayerTileTexturizer* _texturizer;
+//  
+//public:
+//  TopTileDownloadListener(MultiLayerTileTexturizer* texturizer) :
+//  _texturizer(texturizer)
+//  {
+//  }
+//  
+//  virtual ~TopTileDownloadListener() {
+//    
+//  }
+//  
+//  void onDownload(const URL& url,
+//                  const IImage* image) {
+//    _texturizer->countTopTileRequest();
+//  }
+//  
+//  void onError(const URL& url) {
+//    _texturizer->countTopTileRequest();
+//  }
+//  
+//  void onCanceledDownload(const URL& url,
+//                          const IImage* image) {
+//  }
+//  
+//  void onCancel(const URL& url) {
+//    _texturizer->countTopTileRequest();
+//  }
+//  
+//};
 
 void MultiLayerTileTexturizer::justCreatedTopTile(const G3MRenderContext* rc,
                                                   Tile* tile,
                                                   LayerSet* layerSet) {
-  std::vector<Petition*> petitions = layerSet->createTileMapPetitions(rc,
-                                                                      tile,
-                                                                      _parameters->_tileTextureWidth,
-                                                                      _parameters->_tileTextureHeight);
-  
-  _pendingTopTileRequests += petitions.size();
-  
-  const long priority = TILE_DOWNLOAD_PRIORITY + 128; // very big priority for toplevel tiles
-  for (int i = 0; i < petitions.size(); i++) {
-    const Petition* petition = petitions[i];
-    rc->getDownloader()->requestImage(URL(petition->getURL()),
-                                      priority,
-                                      new TopTileDownloadListener(this),
-                                      true);
-    
-    delete petition;
-  }
+  int ___________WORK_ON_FIRST_FULL_RENDER;
+
+//  std::vector<Petition*> petitions = layerSet->createTileMapPetitions(rc,
+//                                                                      tile,
+//                                                                      _parameters->_tileTextureWidth,
+//                                                                      _parameters->_tileTextureHeight);
+//  
+//  _pendingTopTileRequests += petitions.size();
+//  
+//  const long priority = TILE_DOWNLOAD_PRIORITY + 128; // very big priority for toplevel tiles
+//  for (int i = 0; i < petitions.size(); i++) {
+//    const Petition* petition = petitions[i];
+//    rc->getDownloader()->requestImage(URL(petition->getURL()),
+//                                      priority,
+//                                      new TopTileDownloadListener(this),
+//                                      true);
+//    
+//    delete petition;
+//  }
 }
 
 bool MultiLayerTileTexturizer::isReady(const G3MRenderContext *rc,
                                        LayerSet* layerSet) {
-  if (_pendingTopTileRequests > 0) {
-    return false;
-  }
+  int ___________WORK_ON_FIRST_FULL_RENDER;
+
+//  if (_pendingTopTileRequests > 0) {
+//    return false;
+//  }
   if (layerSet != NULL) {
     return layerSet->isReady();
   }

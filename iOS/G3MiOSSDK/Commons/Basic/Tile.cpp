@@ -183,6 +183,30 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
   return false;
 }
 
+void Tile::prepareForFullRendering(const G3MRenderContext* rc,
+                                   const TileRenderContext* trc) {
+  int ___________WORK_ON_FIRST_FULL_RENDER;
+
+  Mesh* tessellatorMesh = getTessellatorMesh(rc, trc);
+  if (tessellatorMesh == NULL) {
+    return;
+  }
+
+  TileTexturizer* texturizer = trc->getTexturizer();
+  if (texturizer != NULL) {
+    // const bool needsToCallTexturizer = (!isTextureSolved() || (_texturizedMesh == NULL)) && isTexturizerDirty();
+    const bool needsToCallTexturizer = (_texturizedMesh == NULL) || isTexturizerDirty();
+
+    if (needsToCallTexturizer) {
+      _texturizedMesh = texturizer->texturize(rc,
+                                              trc,
+                                              this,
+                                              tessellatorMesh,
+                                              _texturizedMesh);
+    }
+  }
+}
+
 void Tile::rawRender(const G3MRenderContext *rc,
                      const TileRenderContext* trc) {
   

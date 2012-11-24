@@ -33,8 +33,8 @@ private:
   
   IFloatBuffer* getTextureCoordinates(const TileRenderContext* trc) const;
   
-  long _pendingTopTileRequests;
-  
+//  long _pendingTopTileRequests;
+
   TexturesHandler* _texturesHandler;
   
   inline LeveledTexturedMesh* getMesh(Tile* tile) const;
@@ -42,10 +42,10 @@ private:
 public:
   MultiLayerTileTexturizer() ;
   
-  void countTopTileRequest() {
-    _pendingTopTileRequests--;
-  }
-  
+//  void countTopTileRequest() {
+//    _pendingTopTileRequests--;
+//  }
+
   virtual ~MultiLayerTileTexturizer();
   
   bool isReady(const G3MRenderContext *rc,
