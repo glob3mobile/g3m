@@ -442,7 +442,7 @@
 }
 
 - (void)initSingletons {
-  ILogger*            logger          = new Logger_iOS(WarningLevel);
+  ILogger*            logger          = new Logger_iOS(InfoLevel);
   IFactory*           factory         = new Factory_iOS();
   const IStringUtils* stringUtils     = new StringUtils_iOS();
   IStringBuilder*     stringBuilder   = new StringBuilder_iOS();
