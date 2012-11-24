@@ -752,8 +752,7 @@ void MultiLayerTileTexturizer::justCreatedTopTile(const G3MRenderContext* rc,
   
   _pendingTopTileRequests += petitions.size();
   
-//  const long priority = 1000000000;  // very big priority for toplevel tiles
-  const long priority = TILE_DOWNLOAD_PRIORITY + 128;
+  const long priority = TILE_DOWNLOAD_PRIORITY + 128; // very big priority for toplevel tiles
   for (int i = 0; i < petitions.size(); i++) {
     const Petition* petition = petitions[i];
     rc->getDownloader()->requestImage(URL(petition->getURL()),
