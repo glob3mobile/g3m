@@ -26,6 +26,7 @@ public class MarksRenderer extends LeafRenderer
 	_glState.enableTexture2D();
 	_glState.enableVerticesPosition();
   }
+
   public final void setMarkTouchListener(MarkTouchListener markTouchListener, boolean autoDelete)
   {
 	if (_autoDeleteMarkTouchListener)

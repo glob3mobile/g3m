@@ -44,17 +44,12 @@ public abstract class Mesh
   public abstract Extent getExtent();
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-<<<<<<< HEAD
 //ORIGINAL LINE: virtual GLState* getGLState() const = 0;
   public abstract GLState getGLState();
 
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual boolean isTransparent(const RenderContext* rc) const = 0;
-  public abstract boolean isTransparent(RenderContext rc);
-=======
 //ORIGINAL LINE: virtual boolean isTransparent(const G3MRenderContext* rc) const = 0;
   public abstract boolean isTransparent(G3MRenderContext rc);
->>>>>>> origin/webgl-port
 
 }

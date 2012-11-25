@@ -52,15 +52,10 @@ public class DummyRenderer extends LeafRenderer
   
 	// create vertices
   
-<<<<<<< HEAD
-	if (ic != null && ic.getPlanet() != null)
-	  _halfSize = ic.getPlanet().getRadii()._x * 0.7;
-=======
 	if (context != null && context.getPlanet() != null)
 	{
 	  _halfSize = context.getPlanet().getRadii()._x / 2.0;
 	}
->>>>>>> origin/webgl-port
 	else
 	{
 	  _halfSize = 7e6;

@@ -106,7 +106,6 @@ public class TexturedMesh extends Mesh
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-<<<<<<< HEAD
 //ORIGINAL LINE: GLState* getGLState() const
   public final GLState getGLState()
   {
@@ -114,12 +113,8 @@ public class TexturedMesh extends Mesh
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isTransparent(const RenderContext* rc) const
-  public final boolean isTransparent(RenderContext rc)
-=======
 //ORIGINAL LINE: boolean isTransparent(const G3MRenderContext* rc) const
   public final boolean isTransparent(G3MRenderContext rc)
->>>>>>> origin/webgl-port
   {
 	return _transparent;
   }

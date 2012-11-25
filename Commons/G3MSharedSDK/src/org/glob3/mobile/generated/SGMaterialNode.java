@@ -35,7 +35,7 @@ public class SGMaterialNode extends SGNode
 
   protected final void prepareRender(G3MRenderContext rc)
   {
-	GL gl = rc.getGL();
+	//GL *gl = rc->getGL();
   
 	int TEMP_commented_by_Agustin_until_decision_about_glstate;
 	/*
@@ -52,7 +52,7 @@ public class SGMaterialNode extends SGNode
 
   protected final void cleanUpRender(G3MRenderContext rc)
   {
-	GL gl = rc.getGL();
+	//GL *gl = rc->getGL();
   
 	int TEMP_commented_by_Agustin_until_decision_about_glstate;
 	/*

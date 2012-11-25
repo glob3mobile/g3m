@@ -107,46 +107,6 @@ public class Camera
 	gl.setProjection(getProjectionMatrix());
 	gl.loadMatrixf(getModelMatrix());
   
-<<<<<<< HEAD
-	// TEMP: TEST TO SEE HALF SIZE FRUSTUM CLIPPING
-	if (false)
-	{
-	  final MutableMatrix44D inversed = getModelMatrix().inversed();
-  
-	  final FrustumData data = calculateFrustumData();
-	  final Vector3D p0 = new Vector3D(new Vector3D(data._left/4, data._top/4, -data._znear-10).transformedBy(inversed, 1));
-	  final Vector3D p1 = new Vector3D(new Vector3D(data._left/4, data._bottom/4, -data._znear-10).transformedBy(inversed, 1));
-	  final Vector3D p2 = new Vector3D(new Vector3D(data._right/4, data._bottom/4, -data._znear-10).transformedBy(inversed, 1));
-	  final Vector3D p3 = new Vector3D(new Vector3D(data._right/4, data._top/4, -data._znear-10).transformedBy(inversed, 1));
-  
-	  float[] v = { (float) p0._x, (float) p0._y, (float) p0._z, (float) p1._x, (float) p1._y, (float) p1._z, (float) p2._x, (float) p2._y, (float) p2._z, (float) p3._x, (float) p3._y, (float) p3._z };
-	  int[] i = {0, 1, 2, 3};
-  
-	  FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
-	  IntBufferBuilder index = new IntBufferBuilder();
-  
-	  for (int n = 0; n<4; n++)
-		vertices.add(v[3 *n], v[3 *n+1], v[3 *n+2]);
-  
-	  for (int n = 0; n<4; n++)
-		index.add(i[n]);
-  
-	  IIntBuffer _indices = index.create();
-	  IFloatBuffer _vertices = vertices.create();
-  
-	  GLState state = new GLState();
-	  state.enableVerticesPosition();
-	  gl.setState(state);
-	  gl.vertexPointer(3, 0, _vertices);
-	  gl.lineWidth(2);
-	  gl.color(1, 0, 1, 1);
-	  gl.drawLineLoop(_indices);
-	  gl.lineWidth(1);
-	  gl.color(1, 1, 1, 1);
-	  if (state != null)
-		  state.dispose();
-	}
-=======
   //  // TEMP: TEST TO SEE HALF SIZE FRUSTUM CLIPPING
   //  if (false) {
   //    const MutableMatrix44D inversed = getModelMatrix().inversed();
@@ -186,7 +146,6 @@ public class Camera
   //    gl->lineWidth(1);
   //    gl->color(1, 1, 1, 1);
   //  }
->>>>>>> origin/webgl-port
   
   
   }

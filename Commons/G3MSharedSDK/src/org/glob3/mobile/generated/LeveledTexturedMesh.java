@@ -80,10 +80,6 @@ public class LeveledTexturedMesh extends Mesh
 			_mesh.dispose();
 	  }
   
-<<<<<<< HEAD
-	  _mappings = null;
-	  _mappings = null;
-=======
 	  if (_mappings != null)
 	  {
 		for (int i = 0; i < _mappings.size(); i++)
@@ -97,7 +93,6 @@ public class LeveledTexturedMesh extends Mesh
 		_mappings = null;
 	  }
   
->>>>>>> origin/webgl-port
 	}
   }
 
@@ -120,9 +115,6 @@ public class LeveledTexturedMesh extends Mesh
   public final void render(G3MRenderContext rc)
   {
 	LazyTextureMapping mapping = getCurrentTextureMapping();
-  
-  
-  
 	if (mapping == null)
 	{
 	  _mesh.render(rc);
