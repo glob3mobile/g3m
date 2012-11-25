@@ -266,6 +266,10 @@ public:
   }
   
   void composeAndUploadTexture() const {
+    if (_mesh == NULL) {
+      return;
+    }
+
     std::vector<const IImage*>     images;
     std::vector<const RectangleD*> rectangles;
     std::string textureId = _tile->getKey().tinyDescription();
