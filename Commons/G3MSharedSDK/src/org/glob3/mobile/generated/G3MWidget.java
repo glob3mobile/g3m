@@ -96,25 +96,28 @@ public class G3MWidget
 	}
 	_currentCamera.copyFrom(_nextCamera);
   
-  
-	if (_initializationTask != null)
-	{
-	  _initializationTask.run(_context);
-	  if (_autoDeleteInitializationTask)
-	  {
-		if (_initializationTask != null)
-			_initializationTask.dispose();
-	  }
-	  _initializationTask = null;
-	}
-  
 	G3MRenderContext rc = new G3MRenderContext(_frameTasksExecutor, IFactory.instance(), IStringUtils.instance(), _threadUtils, ILogger.instance(), IMathUtils.instance(), IJSONParser.instance(), _planet, _gl, _currentCamera, _nextCamera, _texturesHandler, _textureBuilder, _downloader, _effectsScheduler, IFactory.instance().createTimer(), _storage);
+  
+	_mainRendererReady = _mainRenderer.isReadyToRender(rc);
+  
+	if (_mainRendererReady)
+	{
+	  if (_initializationTask != null)
+	  {
+		_initializationTask.run(_context);
+		if (_autoDeleteInitializationTask)
+		{
+		  if (_initializationTask != null)
+			  _initializationTask.dispose();
+		}
+		_initializationTask = null;
+	  }
+	}
   
 	_effectsScheduler.doOneCyle(rc);
   
 	_frameTasksExecutor.doPreRenderCycle(rc);
   
-	_mainRendererReady = _mainRenderer.isReadyToRender(rc);
   
 	Renderer selectedRenderer = _mainRendererReady ? _mainRenderer : _busyRenderer;
 	if (selectedRenderer != _selectedRenderer)

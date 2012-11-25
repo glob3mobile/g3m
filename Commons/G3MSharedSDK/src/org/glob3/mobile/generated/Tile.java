@@ -141,33 +141,33 @@ public class Tile
   {
   
 	Mesh tessellatorMesh = getTessellatorMesh(rc, trc);
+	if (tessellatorMesh == null)
+	{
+	  return;
+	}
   
 	TileTexturizer texturizer = trc.getTexturizer();
-  
-	if (tessellatorMesh != null)
+	if (texturizer == null)
 	{
-	  if (texturizer == null)
+	  tessellatorMesh.render(rc);
+	}
+	else
+	{
+	  // const bool needsToCallTexturizer = (!isTextureSolved() || (_texturizedMesh == NULL)) && isTexturizerDirty();
+	  final boolean needsToCallTexturizer = (_texturizedMesh == null) || isTexturizerDirty();
+  
+	  if (needsToCallTexturizer)
 	  {
-		tessellatorMesh.render(rc);
+		_texturizedMesh = texturizer.texturize(rc, trc, this, tessellatorMesh, _texturizedMesh);
+	  }
+  
+	  if (_texturizedMesh != null)
+	  {
+		_texturizedMesh.render(rc);
 	  }
 	  else
 	  {
-  //      const bool needsToCallTexturizer = (!isTextureSolved() || (_texturizedMesh == NULL)) && isTexturizerDirty();
-		final boolean needsToCallTexturizer = (_texturizedMesh == null) || isTexturizerDirty();
-  
-		if (needsToCallTexturizer)
-		{
-		  _texturizedMesh = texturizer.texturize(rc, trc, this, tessellatorMesh, _texturizedMesh);
-		}
-  
-		if (_texturizedMesh != null)
-		{
-		  _texturizedMesh.render(rc);
-		}
-		else
-		{
-		  tessellatorMesh.render(rc);
-		}
+		tessellatorMesh.render(rc);
 	  }
 	}
   
@@ -347,6 +347,29 @@ public class Tile
   public final Tile getParent()
   {
 	return _parent;
+  }
+
+  public final void prepareForFullRendering(G3MRenderContext rc, TileRenderContext trc)
+  {
+	int ___________WORK_ON_FIRST_FULL_RENDER;
+  
+	Mesh tessellatorMesh = getTessellatorMesh(rc, trc);
+	if (tessellatorMesh == null)
+	{
+	  return;
+	}
+  
+	TileTexturizer texturizer = trc.getTexturizer();
+	if (texturizer != null)
+	{
+	  // const bool needsToCallTexturizer = (!isTextureSolved() || (_texturizedMesh == NULL)) && isTexturizerDirty();
+	  final boolean needsToCallTexturizer = (_texturizedMesh == null) || isTexturizerDirty();
+  
+	  if (needsToCallTexturizer)
+	  {
+		_texturizedMesh = texturizer.texturize(rc, trc, this, tessellatorMesh, _texturizedMesh);
+	  }
+	}
   }
 
   public final void render(G3MRenderContext rc, TileRenderContext trc, java.util.LinkedList<Tile> toVisitInNextIteration)
