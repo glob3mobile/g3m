@@ -7,7 +7,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GL;
-import org.glob3.mobile.generated.IGLProgramId;
+//import org.glob3.mobile.generated.IGLProgramId;
 import org.glob3.mobile.generated.ShaderProgram;
 
 import android.opengl.GLES20;
@@ -22,7 +22,7 @@ public final class ES2Renderer
 
    final private G3MWidget_Android _widgetAndroid;
 
-   private IGLProgramId            _program;
+   //private IGLProgramId            _program;
    private boolean                 _hasRendered = false;
    private GL 					   _gl;
    private ShaderProgram		   _shaderProgram;

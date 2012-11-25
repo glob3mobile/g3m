@@ -556,7 +556,7 @@ public boolean linkProgram(int program) {
     GLES20.glLinkProgram(program);
     final int[] linkStatus = new int[1];
     GLES20.glGetProgramiv(program, GLES20.GL_LINK_STATUS, linkStatus, 0);
-    if (linkStatus[0] != GLES20.GL_TRUE) 
+    if (linkStatus[0] == GLES20.GL_TRUE) 
       return true;
     else
       return false;
@@ -567,7 +567,7 @@ public boolean linkProgram(int program) {
 public void printProgramInfoLog(int program) {
     final int[] linkStatus = new int[1];
     GLES20.glGetProgramiv(program, GLES20.GL_LINK_STATUS, linkStatus, 0);
-    if (linkStatus[0] != GLES20.GL_TRUE) {
+    if (linkStatus[0] == GLES20.GL_TRUE) {
       Log.e("GL2Shaders", "Could not link program: ");
       Log.e("GL2Shaders", GLES20.glGetProgramInfoLog(program));
     }
