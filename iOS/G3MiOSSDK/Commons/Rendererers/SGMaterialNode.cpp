@@ -12,7 +12,7 @@
 #include "GL.hpp"
 
 void SGMaterialNode::prepareRender(const G3MRenderContext* rc) {
-  GL *gl = rc->getGL();
+  //GL *gl = rc->getGL();
 
   int TEMP_commented_by_Agustin_until_decision_about_glstate;
   /*
@@ -28,7 +28,7 @@ void SGMaterialNode::prepareRender(const G3MRenderContext* rc) {
 }
 
 void SGMaterialNode::cleanUpRender(const G3MRenderContext* rc) {
-  GL *gl = rc->getGL();
+  //GL *gl = rc->getGL();
 
   int TEMP_commented_by_Agustin_until_decision_about_glstate;
   /*
