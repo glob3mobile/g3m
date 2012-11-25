@@ -122,6 +122,11 @@ public class TileTextureBuilder extends RCObject
 //ORIGINAL LINE: void composeAndUploadTexture() const
   public final void composeAndUploadTexture()
   {
+	if (_mesh == null)
+	{
+	  return;
+	}
+
 	final java.util.ArrayList<IImage> images = new java.util.ArrayList<IImage>();
 	final java.util.ArrayList<RectangleD> rectangles = new java.util.ArrayList<RectangleD>();
 	String textureId = _tile.getKey().tinyDescription();
