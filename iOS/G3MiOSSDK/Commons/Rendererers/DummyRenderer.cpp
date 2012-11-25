@@ -26,7 +26,7 @@ DummyRenderer::~DummyRenderer()
 #endif
 }
 
-void DummyRenderer::initialize(const InitializationContext* ic)
+void DummyRenderer::initialize(const G3MContext* context)
 {
   _glState = new GLState;
   _glState->enableVerticesPosition();
@@ -41,10 +41,12 @@ void DummyRenderer::initialize(const InitializationContext* ic)
 
   // create vertices
   
-  if (ic != NULL && ic->getPlanet() != NULL)
-    _halfSize = ic->getPlanet()->getRadii()._x * 0.7;
-  else     
+  if (context != NULL && context->getPlanet() != NULL) {
+    _halfSize = context->getPlanet()->getRadii()._x / 2.0;
+  }
+  else {
     _halfSize = 7e6;
+  }
   
   //int n = 0;
   for (int j = 0; j < res; j++) {
@@ -83,12 +85,12 @@ void DummyRenderer::initialize(const InitializationContext* ic)
 }  
 
 
-bool DummyRenderer::onTouchEvent(const EventContext* ec,
+bool DummyRenderer::onTouchEvent(const G3MEventContext* ec,
                                  const TouchEvent* touchEvent){
   return false;
 }
 
-void DummyRenderer::render(const RenderContext* rc) {
+void DummyRenderer::render(const G3MRenderContext* rc) {
   
   // obtaing gl object reference
   GL *gl = rc->getGL();

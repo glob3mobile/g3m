@@ -48,7 +48,7 @@ public:
 
   ~Trail();
 
-  void render(const RenderContext* rc);
+  void render(const G3MRenderContext* rc);
 
   void setVisible(bool visible) {
     _visible = visible;
@@ -95,28 +95,32 @@ public:
 
   virtual ~TrailsRenderer();
 
-  void onResume(const InitializationContext* ic) {
+  void onResume(const G3MContext* context) {
 
   }
 
-  void onPause(const InitializationContext* ic) {
+  void onPause(const G3MContext* context) {
 
   }
 
-  void initialize(const InitializationContext* ic) {
+  void onDestroy(const G3MContext* context) {
 
   }
 
-  bool isReadyToRender(const RenderContext* rc) {
+  void initialize(const G3MContext* context) {
+
+  }
+
+  bool isReadyToRender(const G3MRenderContext* rc) {
     return true;
   }
 
-  bool onTouchEvent(const EventContext* ec,
+  bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent) {
     return false;
   }
 
-  void onResizeViewportEvent(const EventContext* ec,
+  void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
 
   }
@@ -129,7 +133,7 @@ public:
 
   }
 
-  void render(const RenderContext* rc);
+  void render(const G3MRenderContext* rc);
   
 };
 

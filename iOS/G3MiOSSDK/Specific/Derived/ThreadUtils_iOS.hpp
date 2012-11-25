@@ -13,57 +13,51 @@
 
 class ThreadUtils_iOS : public IThreadUtils {
 private:
-  //  dispatch_queue_t _backgroundQueue;
   NSOperationQueue* _backgroundQueue;
-  
+
 public:
-  
+
   ThreadUtils_iOS() {
-    //    _backgroundQueue = dispatch_queue_create("com.glob3.backgroundqueue", NULL);
     _backgroundQueue = [[NSOperationQueue alloc] init];
-    
+
     [_backgroundQueue setMaxConcurrentOperationCount: 1];
     [_backgroundQueue setName:@"com.glob3.backgroundqueue"];
   }
-  
+
   ~ThreadUtils_iOS() {
     [_backgroundQueue waitUntilAllOperationsAreFinished];
-    
-    //    dispatch_release(_backgroundQueue);
   }
-  
+
   void invokeInRendererThread(GTask* task,
-                              bool autoDelete) {
-    
+                              bool autoDelete) const {
     dispatch_async( dispatch_get_main_queue(), ^{
-      task->run();
+      task->run(_context);
       if (autoDelete) {
         delete task;
       }
     });
+  }
+
+  void invokeInBackground(GTask* task,
+                          bool autoDelete) const {
+    [ _backgroundQueue addOperationWithBlock:^{
+     task->run(_context);
+     if (autoDelete) {
+       delete task;
+     }
+     }];
+  }
+
+  void onResume(const G3MContext* context) {
     
   }
-  
-  
-  void invokeInBackground(GTask* task,
-                          bool autoDelete) {
-    //    dispatch_async( _backgroundQueue, ^{
-    //      task->run();
-    //      if (autoDelete) {
-    //        delete task;
-    //      }
-    //    });
-    
-    
-    
-    
-    [ _backgroundQueue addOperationWithBlock:^{
-      task->run();
-      if (autoDelete) {
-        delete task;
-      }
-     }];
-    
+
+  void onPause(const G3MContext* context) {
+
+  }
+
+  void onDestroy(const G3MContext* context) {
+
   }
   
 };

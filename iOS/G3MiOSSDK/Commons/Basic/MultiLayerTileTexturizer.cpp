@@ -171,7 +171,7 @@ public:
   LeveledTexturedMesh* _mesh;
   
   TileTextureBuilder(MultiLayerTileTexturizer*    texturizer,
-                     const RenderContext*         rc,
+                     const G3MRenderContext*         rc,
                      const LayerSet*              layerSet,
                      const TilesRenderParameters* parameters,
                      IDownloader*                 downloader,
@@ -408,7 +408,7 @@ public:
     
     stepDone();
   }
-  
+
   LeveledTexturedMesh* createMesh() const {
     std::vector<LazyTextureMapping*>* mappings = new std::vector<LazyTextureMapping*>();
     
@@ -534,7 +534,7 @@ MultiLayerTileTexturizer::~MultiLayerTileTexturizer() {
     _texCoordsCache = NULL;
 }
 
-void MultiLayerTileTexturizer::initialize(const InitializationContext* ic,
+void MultiLayerTileTexturizer::initialize(const G3MContext* context,
                                           const TilesRenderParameters* parameters) {
   _parameters = parameters;
 //  _layerSet->initialize(ic);
@@ -555,16 +555,16 @@ public:
     _builder->_release();
   }
   
-  void execute(const RenderContext* rc) {
+  void execute(const G3MRenderContext* rc) {
     _builder->start();
   }
   
-  bool isCanceled(const RenderContext *rc){
+  bool isCanceled(const G3MRenderContext *rc){
     return false;
   }
 };
 
-Mesh* MultiLayerTileTexturizer::texturize(const RenderContext* rc,
+Mesh* MultiLayerTileTexturizer::texturize(const G3MRenderContext* rc,
                                           const TileRenderContext* trc,
                                           Tile* tile,
                                           Mesh* tessellatorMesh,
@@ -605,11 +605,11 @@ Mesh* MultiLayerTileTexturizer::texturize(const RenderContext* rc,
         _builder->_release();
       }
       
-      void execute(const RenderContext* rc) {
+      void execute(const G3MRenderContext* rc) {
         _builder->start();
       }
       
-      bool isCanceled(const RenderContext *rc) {
+      bool isCanceled(const G3MRenderContext *rc) {
         return _builder->isCanceled();
       }
     };
@@ -739,7 +739,7 @@ public:
   
 };
 
-void MultiLayerTileTexturizer::justCreatedTopTile(const RenderContext* rc,
+void MultiLayerTileTexturizer::justCreatedTopTile(const G3MRenderContext* rc,
                                                   Tile* tile,
                                                   LayerSet* layerSet) {
   std::vector<Petition*> petitions = layerSet->createTileMapPetitions(rc,
@@ -761,7 +761,7 @@ void MultiLayerTileTexturizer::justCreatedTopTile(const RenderContext* rc,
   }
 }
 
-bool MultiLayerTileTexturizer::isReady(const RenderContext *rc,
+bool MultiLayerTileTexturizer::isReady(const G3MRenderContext *rc,
                                        LayerSet* layerSet) {
   if (_pendingTopTileRequests > 0) {
     return false;
@@ -773,7 +773,7 @@ bool MultiLayerTileTexturizer::isReady(const RenderContext *rc,
   //  return (_pendingTopTileRequests <= 0) && _layerSet->isReady();
 }
 
-void MultiLayerTileTexturizer::onTerrainTouchEvent(const EventContext* ec,
+void MultiLayerTileTexturizer::onTerrainTouchEvent(const G3MEventContext* ec,
                                                    const Geodetic3D& position,
                                                    const Tile* tile,
                                                    LayerSet* layerSet){

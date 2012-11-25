@@ -23,7 +23,7 @@
 
 #include "GLConstants.hpp"
 
-void BusyMeshRenderer::initialize(const InitializationContext* ic)
+void BusyMeshRenderer::initialize(const G3MContext* context)
 {
   unsigned int numStrides = 60;
   
@@ -82,7 +82,7 @@ void BusyMeshRenderer::stop() {
   //int _TODO_stop_effects;
 }
 
-void BusyMeshRenderer::render(const RenderContext* rc)
+void BusyMeshRenderer::render(const G3MRenderContext* rc)
 {
   GL* gl = rc->getGL();
   

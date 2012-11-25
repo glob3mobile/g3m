@@ -147,8 +147,8 @@ public class IndexedMesh extends Mesh
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual void render(const RenderContext* rc) const
-  public void render(RenderContext rc)
+//ORIGINAL LINE: virtual void render(const G3MRenderContext* rc) const
+  public void render(G3MRenderContext rc)
   {
 	GL gl = rc.getGL();
 	gl.setState(_glState);
@@ -264,6 +264,7 @@ public class IndexedMesh extends Mesh
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+<<<<<<< HEAD
 //ORIGINAL LINE: GLState* getGLState() const
   public final GLState getGLState()
   {
@@ -274,6 +275,10 @@ public class IndexedMesh extends Mesh
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: boolean isTransparent(const RenderContext* rc) const
   public final boolean isTransparent(RenderContext rc)
+=======
+//ORIGINAL LINE: boolean isTransparent(const G3MRenderContext* rc) const
+  public final boolean isTransparent(G3MRenderContext rc)
+>>>>>>> origin/webgl-port
   {
 	if (_flatColor == null)
 	{

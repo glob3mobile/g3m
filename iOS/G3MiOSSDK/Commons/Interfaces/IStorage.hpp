@@ -12,25 +12,30 @@
 #include "URL.hpp"
 #include "IByteBuffer.hpp"
 #include "IImage.hpp"
-class InitializationContext;
+class G3MContext;
 
 class IStorage {
-private:
-    static IStorage* _instance;
-    
+protected:
+#ifdef C_CODE
+  const G3MContext* _context;
+#endif
+#ifdef JAVA_CODE
+  protected G3MContext _context;
+#endif
+
 public:
+  IStorage() :
+  _context(NULL)
+  {
     
-    static void setInstance(IStorage* storage) {
-        if (_instance != NULL) {
-            ILogger::instance()->logWarning("Warning, IStorage instance set twice\n");
-        }
-        _instance = storage;
-    }
-    
-    static IStorage* instance() {
-        return _instance;
-    }
-  
+  }
+
+  virtual ~IStorage() {
+
+  }
+
+  virtual void initialize(const G3MContext* context);
+
   virtual bool containsBuffer(const URL& url) = 0;
   
   virtual void saveBuffer(const URL& url,
@@ -49,15 +54,14 @@ public:
   virtual const IImage* readImage(const URL& url) = 0;
   
   
-  virtual void onResume(const InitializationContext* ic) = 0;
+  virtual void onResume(const G3MContext* context) = 0;
   
-  virtual void onPause(const InitializationContext* ic) = 0;
+  virtual void onPause(const G3MContext* context) = 0;
+
+  virtual void onDestroy(const G3MContext* context) = 0;
+
   
   virtual bool isAvailable() = 0;
-  
-#ifdef C_CODE
-  virtual ~IStorage() {}
-#endif
   
 };
 

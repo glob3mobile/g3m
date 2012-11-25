@@ -32,20 +32,21 @@ private:
   GLState*           _glState;
   
 #ifdef C_CODE
-  const InitializationContext* _initializationContext;
-  const Camera*                _lastCamera;
+  const G3MContext* _context;
+  const Camera*     _lastCamera;
 #endif
 #ifdef JAVA_CODE
-  private InitializationContext _initializationContext;
-  private Camera                _lastCamera;
+  private G3MContext _context;
+  private Camera     _lastCamera;
 #endif
   
   MarkTouchListener* _markTouchListener;
   bool               _autoDeleteMarkTouchListener;
   
 public:
-  
+
   MarksRenderer(bool readyWhenMarksReady);  
+  
   void setMarkTouchListener(MarkTouchListener* markTouchListener,
                             bool autoDelete) {
     if ( _autoDeleteMarkTouchListener ) {
@@ -58,21 +59,21 @@ public:
   
   virtual ~MarksRenderer();
   
-  virtual void initialize(const InitializationContext* ic);
+  virtual void initialize(const G3MContext* context);
   
-  virtual void render(const RenderContext* rc);
+  virtual void render(const G3MRenderContext* rc);
   
   void addMark(Mark* mark);
   
-  bool onTouchEvent(const EventContext* ec,
+  bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent);
 
-  void onResizeViewportEvent(const EventContext* ec,
+  void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
     
   }
   
-  bool isReadyToRender(const RenderContext* rc);
+  bool isReadyToRender(const G3MRenderContext* rc);
   
   void start() {
     
@@ -82,14 +83,18 @@ public:
     
   }
   
-  void onResume(const InitializationContext* ic) {
-    _initializationContext = ic;
+  void onResume(const G3MContext* context) {
+    _context = context;
   }
   
-  void onPause(const InitializationContext* ic) {
-    
+  void onPause(const G3MContext* context) {
+
   }
-  
+
+  void onDestroy(const G3MContext* context) {
+
+  }
+
 };
 
 #endif

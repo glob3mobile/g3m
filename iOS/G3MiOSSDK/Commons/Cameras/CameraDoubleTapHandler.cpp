@@ -12,7 +12,7 @@
 #include "GL.hpp"
 #include "TouchEvent.hpp"
 
-bool CameraDoubleTapHandler::onTouchEvent(const EventContext *eventContext,
+bool CameraDoubleTapHandler::onTouchEvent(const G3MEventContext *eventContext,
                                           const TouchEvent* touchEvent,
                                           CameraContext *cameraContext) {
   // only one finger needed
@@ -24,7 +24,7 @@ bool CameraDoubleTapHandler::onTouchEvent(const EventContext *eventContext,
   return true;
 }
 
-void CameraDoubleTapHandler::onDown(const EventContext *eventContext,
+void CameraDoubleTapHandler::onDown(const G3MEventContext *eventContext,
                                     const TouchEvent& touchEvent,
                                     CameraContext *cameraContext) {
   // compute globe point where user tapped

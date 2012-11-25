@@ -45,11 +45,23 @@ public class TexturedMesh extends Mesh
 
   public void dispose()
   {
+///#ifdef C_CODE
+	if (_ownedMesh)
+	{
+	  if (_mesh != null)
+		  _mesh.dispose();
+	}
+	if (_ownedTexMapping)
+	{
+	  if (_textureMapping != null)
+		  _textureMapping.dispose();
+	}
+///#endif
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void render(const RenderContext* rc) const
-  public final void render(RenderContext rc)
+//ORIGINAL LINE: void render(const G3MRenderContext* rc) const
+  public final void render(G3MRenderContext rc)
   {
 	//GL *gl = rc->getGL();
   
@@ -94,6 +106,7 @@ public class TexturedMesh extends Mesh
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+<<<<<<< HEAD
 //ORIGINAL LINE: GLState* getGLState() const
   public final GLState getGLState()
   {
@@ -103,6 +116,10 @@ public class TexturedMesh extends Mesh
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: boolean isTransparent(const RenderContext* rc) const
   public final boolean isTransparent(RenderContext rc)
+=======
+//ORIGINAL LINE: boolean isTransparent(const G3MRenderContext* rc) const
+  public final boolean isTransparent(G3MRenderContext rc)
+>>>>>>> origin/webgl-port
   {
 	return _transparent;
   }

@@ -6,10 +6,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IImageDownloadListener;
-import org.glob3.mobile.generated.InitializationContext;
 import org.glob3.mobile.generated.URL;
 
 import com.google.gwt.core.client.GWT;
@@ -87,7 +87,15 @@ public final class Downloader_WebGL
 
       final long requestId;
       Downloader_WebGL_Handler handler = null;
-      final URL proxyUrl = new URL(_proxy + url.getPath(), false);
+      final URL proxyUrl;
+      final String urlPath = url.getPath();
+      if (urlPath.startsWith("http://") || urlPath.startsWith("https://")) {
+         proxyUrl = new URL(_proxy + urlPath, false);
+      }
+      else {
+         // assumes the URL is a relative URL to the server, no need to use proxy
+         proxyUrl = url;
+      }
 
       _requestsCounter++;
       requestId = _requestIdCounter++;
@@ -244,13 +252,22 @@ public final class Downloader_WebGL
 
 
    @Override
-   public void onResume(final InitializationContext ic) {
-
+   public void onResume(final G3MContext context) {
    }
 
 
    @Override
-   public void onPause(final InitializationContext ic) {
+   public void onPause(final G3MContext context) {
+   }
+
+
+   @Override
+   public void onDestroy(final G3MContext context) {
+   }
+
+
+   @Override
+   public void initialize(final G3MContext context) {
 
    }
 

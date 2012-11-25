@@ -77,9 +77,9 @@ public:
     return _position;
   }
   
-  void initialize(const InitializationContext* ic);
+  void initialize(const G3MContext* context);
   
-  void render(const RenderContext* rc,
+  void render(const G3MRenderContext* rc,
               const double minDistanceToCamera);
   
   bool isReady() const;

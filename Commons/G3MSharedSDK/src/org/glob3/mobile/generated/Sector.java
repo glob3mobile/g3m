@@ -237,8 +237,8 @@ public class Sector
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isBackOriented(const RenderContext *rc) const
-  public final boolean isBackOriented(RenderContext rc)
+//ORIGINAL LINE: boolean isBackOriented(const G3MRenderContext *rc) const
+  public final boolean isBackOriented(G3MRenderContext rc)
   {
 	final Camera camera = rc.getCurrentCamera();
 	final Planet planet = rc.getPlanet();

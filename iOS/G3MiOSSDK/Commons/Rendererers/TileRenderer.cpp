@@ -32,16 +32,24 @@ _topTilesJustCreated(false),
 _lastSplitTimer(NULL),
 _lastCamera(NULL),
 _firstRender(false),
-_initializationContext(NULL)
+_context(NULL)
 {
   _layerSet->setChangeListener(this);
 }
 
-void TileRenderer::changed(const LayerSet* layerSet) {
+void TileRenderer::recreateTiles() {
   pruneTopLevelTiles();
   clearTopLevelTiles();
   _firstRender = true;
-  createTopLevelTiles(_initializationContext);
+  createTopLevelTiles(_context);
+}
+
+void TileRenderer::changed(const LayerSet* layerSet) {
+//  pruneTopLevelTiles();
+//  clearTopLevelTiles();
+//  _firstRender = true;
+//  createTopLevelTiles(_context);
+  recreateTiles();
 }
 
 TileRenderer::~TileRenderer() {
@@ -65,7 +73,7 @@ void TileRenderer::clearTopLevelTiles() {
   _topLevelTiles.clear();
 }
 
-void TileRenderer::createTopLevelTiles(const InitializationContext* ic) {
+void TileRenderer::createTopLevelTiles(const G3MContext* context) {
   const Angle fromLatitude  = _parameters->_topSector.lower().latitude();
   const Angle fromLongitude = _parameters->_topSector.lower().longitude();
 
@@ -92,25 +100,25 @@ void TileRenderer::createTopLevelTiles(const InitializationContext* ic) {
     }
   }
 
-  ic->getLogger()->logInfo("Created %d top level tiles", _topLevelTiles.size());
+  context->getLogger()->logInfo("Created %d top level tiles", _topLevelTiles.size());
 
   _topTilesJustCreated = true;
 }
 
-void TileRenderer::initialize(const InitializationContext* ic) {
-  _initializationContext = ic;
+void TileRenderer::initialize(const G3MContext* context) {
+  _context = context;
 
   clearTopLevelTiles();
-  createTopLevelTiles(ic);
+  createTopLevelTiles(context);
 
   delete _lastSplitTimer;
-  _lastSplitTimer      = ic->getFactory()->createTimer();
+  _lastSplitTimer      = context->getFactory()->createTimer();
 
-  _layerSet->initialize(ic);
-  _texturizer->initialize(ic, _parameters);
+  _layerSet->initialize(context);
+  _texturizer->initialize(context, _parameters);
 }
 
-bool TileRenderer::isReadyToRender(const RenderContext *rc) {
+bool TileRenderer::isReadyToRender(const G3MRenderContext *rc) {
   if (_topTilesJustCreated) {
     if (_texturizer != NULL) {
       const int topLevelTilesSize = _topLevelTiles.size();
@@ -139,7 +147,7 @@ bool TileRenderer::isReadyToRender(const RenderContext *rc) {
   return true;
 }
 
-void TileRenderer::render(const RenderContext* rc) {
+void TileRenderer::render(const G3MRenderContext* rc) {
   // Saving camera for use in onTouchEvent
   _lastCamera = rc->getCurrentCamera();
 
@@ -198,7 +206,7 @@ void TileRenderer::render(const RenderContext* rc) {
 }
 
 
-bool TileRenderer::onTouchEvent(const EventContext* ec,
+bool TileRenderer::onTouchEvent(const G3MEventContext* ec,
                                 const TouchEvent* touchEvent) {
   bool handled = false;
 

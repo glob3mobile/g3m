@@ -45,13 +45,13 @@ public:
       IFactory::instance()->deleteTimer(_timer);
   }
   
-  void executeIfNecessary() {
+  void executeIfNecessary(const G3MContext* context) {
     long long now = getTimer()->now().milliseconds();
     
     long long interval = now - _lastExecutionMS;
     
     if (interval >= _intervalMS) {
-      _task->run();
+      _task->run(context);
       _lastExecutionMS = now;
     }
   }

@@ -16,6 +16,7 @@ import org.glob3.mobile.generated.CameraSingleDragHandler;
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.CompositeRenderer;
 import org.glob3.mobile.generated.EllipsoidalTileTessellator;
+import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic3D;
@@ -43,7 +44,6 @@ import org.glob3.mobile.generated.TouchEventType;
 import org.glob3.mobile.generated.UserData;
 import org.glob3.mobile.generated.Vector2I;
 
-import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
@@ -78,18 +78,13 @@ public final class G3MWidget_Android
    private boolean                                        _incrementalTileQuality;
 
 
-   //   private boolean                                        _isPaused             = false;
-   //   private final LinkedList<Runnable>                     _pausedRunnableQueue  = new LinkedList<Runnable>();
-   //   private final Object                                   _pausedMutex          = new Object();
-
-
-   public G3MWidget_Android(final Context context) {
+   public G3MWidget_Android(final android.content.Context context) {
       this(context, null);
    }
 
 
    // Needed to create widget from XML layout
-   public G3MWidget_Android(final Context context,
+   public G3MWidget_Android(final android.content.Context context,
                             final AttributeSet attrs) {
       super(context, attrs);
 
@@ -104,9 +99,7 @@ public final class G3MWidget_Android
       setLongClickable(true);
 
       // Debug flags
-      if (false) {
-         setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
-      }
+      // setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
 
       if (!isInEditMode()) { // needed to avoid visual edition of this widget
          //Double Tap Listener
@@ -154,19 +147,11 @@ public final class G3MWidget_Android
       final ILogger logger = new Logger_Android(LogLevel.ErrorLevel);
       final IFactory factory = new Factory_Android(getContext());
       final IStringUtils stringUtils = new StringUtils_Android();
-      final IThreadUtils threadUtils = new ThreadUtils_Android(this);
       final IStringBuilder stringBuilder = new StringBuilder_Android();
       final IMathUtils mathUtils = new MathUtils_Android();
       final IJSONParser jsonParser = new JSONParser_Android();
-      final IStorage storage = new SQLiteStorage_Android("g3m.cache", this.getContext());
-      final int connectTimeout = 60000;
-      final int readTimeout = 60000;
-      final boolean saveInBackground = true;
-      final IDownloader downloader = new CachedDownloader(new Downloader_Android(8, connectTimeout, readTimeout),
-               saveInBackground);
 
-      G3MWidget.initSingletons(logger, factory, stringUtils, threadUtils, stringBuilder, mathUtils, jsonParser, storage,
-               downloader);
+      G3MWidget.initSingletons(logger, factory, stringUtils, stringBuilder, mathUtils, jsonParser);
    }
 
 
@@ -178,7 +163,7 @@ public final class G3MWidget_Android
       super.onSizeChanged(w, h, oldw, oldh);
 
       if (_es2renderer == null) {
-         _es2renderer = new ES2Renderer(this.getContext(), this);
+         _es2renderer = new ES2Renderer(this);
          setRenderer(_es2renderer);
       }
    }
@@ -260,6 +245,7 @@ public final class G3MWidget_Android
    public G3MWidget getG3MWidget() {
       if (_g3mWidget == null) {
          initWidget();
+         _g3mWidget.onResume();
       }
       return _g3mWidget;
    }
@@ -343,8 +329,21 @@ public final class G3MWidget_Android
       final org.glob3.mobile.generated.Renderer busyRenderer = new BusyMeshRenderer();
 
 
+      final IThreadUtils threadUtils = new ThreadUtils_Android(this);
+      final IStorage storage = new SQLiteStorage_Android("g3m.cache", this.getContext());
+      final int connectTimeout = 20000;
+      final int readTimeout = 30000;
+      final boolean saveInBackground = true;
+      final IDownloader downloader = new CachedDownloader( //
+               new Downloader_Android(8, connectTimeout, readTimeout), //
+               storage, //
+               saveInBackground);
+
       _g3mWidget = G3MWidget.create( //
                nativeGL, //
+               storage, //
+               downloader, //
+               threadUtils, //
                planet, //
                _cameraConstraints, //
                cameraRenderer, //
@@ -394,21 +393,10 @@ public final class G3MWidget_Android
 
    @Override
    public void onPause() {
-      //      synchronized (_pausedMutex) {
-      //         _isPaused = true;
-      //      }
-
-      final int __TODO_check_onpause;
       if (_es2renderer != null) {
          _g3mWidget.onPause();
+         super.onPause();
       }
-
-      /*
-      if (_g3mWidget == null) {
-         System.err.println("break (point) on me");
-      }
-       */
-      super.onPause();
    }
 
 
@@ -418,41 +406,23 @@ public final class G3MWidget_Android
          super.onResume();
          _g3mWidget.onResume();
       }
-
-      //      synchronized (_pausedMutex) {
-      //         _isPaused = false;
-      //
-      //         // drain queue
-      //         for (final Runnable runnable : _pausedRunnableQueue) {
-      //            super.queueEvent(runnable);
-      //         }
-      //         _pausedRunnableQueue.clear();
-      //      }
    }
 
 
-   @Override
-   public void queueEvent(final Runnable runnable) {
-      //      synchronized (_pausedMutex) {
-      //         if (_isPaused) {
-      //            _pausedRunnableQueue.add(runnable);
-      //         }
-      //         else {
-      super.queueEvent(runnable);
-      //         }
-      //      }
+   public void onDestroy() {
+      getG3MWidget().onDestroy();
    }
 
 
-   public void closeStorage() {
-      if (IDownloader.instance() != null) {
-         IDownloader.instance().stop();
-      }
-      if (IStorage.instance() != null) {
-         // _storage.onPause(null);
-         ((SQLiteStorage_Android) IStorage.instance()).close();
-      }
-   }
+   //   public void closeStorage() {
+   //      if (IDownloader.instance() != null) {
+   //         IDownloader.instance().stop();
+   //      }
+   //      if (IStorage.instance() != null) {
+   //         // _storage.onPause(null);
+   //         ((SQLiteStorage_Android) IStorage.instance()).close();
+   //      }
+   //   }
 
 
    public Camera getNextCamera() {
@@ -499,4 +469,10 @@ public final class G3MWidget_Android
    public void setCameraPitch(final Angle angle) {
       getG3MWidget().setCameraPitch(angle);
    }
+
+
+   public G3MContext getG3MContext() {
+      return getG3MWidget().getG3MContext();
+   }
+
 }

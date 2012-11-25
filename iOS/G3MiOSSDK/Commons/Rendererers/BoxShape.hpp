@@ -23,11 +23,11 @@ private:
   Color* _surfaceColor;
   Color* _borderColor;
 
-  Mesh* createBorderMesh(const RenderContext* rc);
-  Mesh* createSurfaceMesh(const RenderContext* rc);
+  Mesh* createBorderMesh(const G3MRenderContext* rc);
+  Mesh* createSurfaceMesh(const G3MRenderContext* rc);
 
 protected:
-  Mesh* createMesh(const RenderContext* rc);
+  Mesh* createMesh(const G3MRenderContext* rc);
 
 public:
   BoxShape(Geodetic3D* position,

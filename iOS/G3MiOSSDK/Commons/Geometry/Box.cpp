@@ -47,7 +47,7 @@ const std::vector<Vector3D> Box::getCorners() const {
 #endif
 }
 
-Vector2I Box::projectedExtent(const RenderContext *rc) const {
+Vector2I Box::projectedExtent(const G3MRenderContext *rc) const {
   const std::vector<Vector3D> corners = getCorners();
 
   const Camera* currentCamera = rc->getCurrentCamera();
@@ -79,7 +79,7 @@ Vector2I Box::projectedExtent(const RenderContext *rc) const {
   return Vector2I(width, height);
 }
 
-double Box::squaredProjectedArea(const RenderContext* rc) const {
+double Box::squaredProjectedArea(const G3MRenderContext* rc) const {
   const Vector2I extent = projectedExtent(rc);
   return extent._x * extent._y;
 }
@@ -189,7 +189,7 @@ void Box::createMesh(Color* color) {
                           color);
 }
 
-void Box::render(const RenderContext* rc) {
+void Box::render(const G3MRenderContext* rc) {
   if (_mesh == NULL) {
     createMesh(Color::newFromRGBA((float)1.0, (float)1.0, (float)0.0, (float)1.0));
   }

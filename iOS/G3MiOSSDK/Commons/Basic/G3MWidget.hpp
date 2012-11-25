@@ -44,7 +44,7 @@ class IStorage;
 #include "Color.hpp"
 #include "Angle.hpp"
 
-class InitializationContext;
+class G3MContext;
 
 class UserData {
 private:
@@ -71,14 +71,14 @@ public:
   static void initSingletons(ILogger*             logger,
                              IFactory*            factory,
                              const IStringUtils*  stringUtils,
-                             IThreadUtils*        threadUtils,
                              IStringBuilder*      stringBuilder,
                              IMathUtils*          mathUtils,
-                             IJSONParser*         jsonParser,
-                             IStorage*            storage,
-                             IDownloader*         downloader);
+                             IJSONParser*         jsonParser);
 
   static G3MWidget* create(GL*                              gl,
+                           IStorage*                        storage,
+                           IDownloader*                     downloader,
+                           IThreadUtils*                    threadUtils,
                            const Planet*                    planet,
                            std::vector<ICameraConstrainer*> cameraConstrainers,
                            CameraRenderer*                  cameraRenderer,
@@ -104,6 +104,8 @@ public:
   void onPause();
 
   void onResume();
+
+  void onDestroy();
 
   GL* getGL() const {
     return _gl;
@@ -153,7 +155,15 @@ public:
     return _cameraRenderer;
   }
 
+  const G3MContext* getG3MContext() const {
+    return _context;
+  }
+
 private:
+  IStorage*            _storage;
+  IDownloader*         _downloader;
+  IThreadUtils*        _threadUtils;
+
   FrameTasksExecutor* _frameTasksExecutor;
   GL*                 _gl;
   const Planet*       _planet;
@@ -192,9 +202,14 @@ private:
 
   void initializeGL();
 
-  const InitializationContext* _initializationContext;
+  const G3MContext* _context;
+
+  bool _paused;
 
   G3MWidget(GL*                              gl,
+            IStorage*                        storage,
+            IDownloader*                     downloader,
+            IThreadUtils*                    threadUtils,
             const Planet*                    planet,
             std::vector<ICameraConstrainer*> cameraConstrainers,
             CameraRenderer*                  cameraRenderer,

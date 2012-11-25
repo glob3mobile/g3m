@@ -23,7 +23,7 @@ public class CircleShape extends MeshShape
   private int _steps;
   private Color _color;
 
-  protected final Mesh createMesh(RenderContext rc)
+  protected final Mesh createMesh(G3MRenderContext rc)
   {
   
 	FloatBufferBuilderFromCartesian3D vertices = new FloatBufferBuilderFromCartesian3D(CenterStrategy.noCenter(), Vector3D.zero());
@@ -86,9 +86,12 @@ public class CircleShape extends MeshShape
 
   public final void setColor(Color color)
   {
-	_color = null;
-	_color = color;
-	cleanMesh();
+	if (_color != color)
+	{
+	  _color = null;
+	  _color = color;
+	  cleanMesh();
+	}
   }
 
 

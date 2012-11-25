@@ -42,7 +42,7 @@ public class PeriodicalTask
 	  IFactory.instance().deleteTimer(_timer);
   }
 
-  public final void executeIfNecessary()
+  public final void executeIfNecessary(G3MContext context)
   {
 	long now = getTimer().now().milliseconds();
 
@@ -50,7 +50,7 @@ public class PeriodicalTask
 
 	if (interval >= _intervalMS)
 	{
-	  _task.run();
+	  _task.run(context);
 	  _lastExecutionMS = now;
 	}
   }

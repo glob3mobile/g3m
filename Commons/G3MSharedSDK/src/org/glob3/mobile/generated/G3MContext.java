@@ -51,7 +51,7 @@ package org.glob3.mobile.generated;
 //class OrderedRenderable;
 
 
-public class Context
+public class G3MContext
 {
   protected final IFactory _factory;
   protected final IStringUtils _stringUtils;
@@ -62,9 +62,9 @@ public class Context
   protected Planet _planet;
   protected IDownloader _downloader;
   protected EffectsScheduler _effectsScheduler;
-	protected IStorage _storage;
+  protected IStorage _storage;
 
-  protected Context(IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, IDownloader downloader, EffectsScheduler effectsScheduler, IStorage storage)
+  public G3MContext(IFactory factory, IStringUtils stringUtils, IThreadUtils threadUtils, ILogger logger, IMathUtils mathUtils, IJSONParser jsonParser, Planet planet, IDownloader downloader, EffectsScheduler effectsScheduler, IStorage storage)
   {
 	  _factory = factory;
 	  _stringUtils = stringUtils;
@@ -134,10 +134,10 @@ public class Context
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: IStorage* getStorage() const
-	public final IStorage getStorage()
-	{
-		return _storage;
-	}
+  public final IStorage getStorage()
+  {
+	return _storage;
+  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: EffectsScheduler* getEffectsScheduler() const

@@ -30,13 +30,14 @@ Angle Vector3D::angleBetween(const Vector3D& other) const {
 }
 
 
-Angle Vector3D::signedAngleBetween(const Vector3D& other, const Vector3D& up) const 
-{
-  Angle angle     = angleBetween(other);
-  if (cross(other).dot(up)>0) 
+Angle Vector3D::signedAngleBetween(const Vector3D& other,
+                                   const Vector3D& up) const {
+  const Angle angle = angleBetween(other);
+  if (cross(other).dot(up) > 0) {
     return angle;
-  else 
-    return angle.times(-1);
+  }
+
+  return angle.times(-1);
 }
 
 

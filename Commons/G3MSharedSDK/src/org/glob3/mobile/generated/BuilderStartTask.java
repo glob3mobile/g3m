@@ -14,12 +14,12 @@ public class BuilderStartTask extends FrameTask
 	_builder._release();
   }
 
-  public final void execute(RenderContext rc)
+  public final void execute(G3MRenderContext rc)
   {
 	_builder.start();
   }
 
-  public final boolean isCanceled(RenderContext rc)
+  public final boolean isCanceled(G3MRenderContext rc)
   {
 	return false;
   }

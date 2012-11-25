@@ -71,7 +71,7 @@ public class SceneJSShapesParser
   
 	SGNode node = toNode(jsonRootObject);
   
-	_rootShape = new SGShape(node);
+	_rootShape = new SGShape(node, "file:///");
   
 	if (jsonRootObject != null)
 		jsonRootObject.dispose();

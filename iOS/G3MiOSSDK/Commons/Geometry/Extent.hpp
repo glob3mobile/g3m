@@ -27,17 +27,17 @@ public:
   virtual bool touches(const Frustum *frustum) const = 0;
   
   
-  virtual double projectedArea(const RenderContext* rc) const {
+  virtual double projectedArea(const G3MRenderContext* rc) const {
     return GMath.sqrt(squaredProjectedArea(rc));
   }
 
-  virtual double squaredProjectedArea(const RenderContext* rc) const = 0;
+  virtual double squaredProjectedArea(const G3MRenderContext* rc) const = 0;
   
-  virtual Vector2I projectedExtent(const RenderContext* rc) const = 0;
+  virtual Vector2I projectedExtent(const G3MRenderContext* rc) const = 0;
   
   virtual Vector3D intersectionWithRay(const Vector3D& origin, const Vector3D& direction) const = 0;
   
-  virtual void render(const RenderContext* rc) = 0;
+  virtual void render(const G3MRenderContext* rc) = 0;
 
   virtual bool touchesBox(const Box *box) const = 0;
 

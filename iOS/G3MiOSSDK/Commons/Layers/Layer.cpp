@@ -10,7 +10,7 @@
 #include "LayerCondition.hpp"
 #include "LayerSet.hpp"
 
-bool Layer::isAvailable(const RenderContext* rc,
+bool Layer::isAvailable(const G3MRenderContext* rc,
                          const Tile* tile) const {
   if (_condition == NULL) {
     return true;
@@ -18,7 +18,7 @@ bool Layer::isAvailable(const RenderContext* rc,
   return _condition->isAvailable(rc, tile);
 }
 
-bool Layer::isAvailable(const EventContext* ec,
+bool Layer::isAvailable(const G3MEventContext* ec,
                          const Tile* tile) const {
   if (_condition == NULL) {
     return true;

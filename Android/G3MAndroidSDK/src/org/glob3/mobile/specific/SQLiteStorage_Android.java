@@ -5,17 +5,15 @@ package org.glob3.mobile.specific;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 
+import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.IByteBuffer;
 import org.glob3.mobile.generated.IImage;
 import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.IStorage;
-import org.glob3.mobile.generated.IThreadUtils;
-import org.glob3.mobile.generated.InitializationContext;
 import org.glob3.mobile.generated.URL;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -28,20 +26,20 @@ public final class SQLiteStorage_Android
          extends
             IStorage {
 
-   private final String             _databaseName;
-   private final Context            _context;
+   private final String                  _databaseName;
+   private final android.content.Context _androidContext;
 
 
-   private final MySQLiteOpenHelper _dbHelper;
-   private SQLiteDatabase           _writeDB;
-   private SQLiteDatabase           _readDB;
+   private final MySQLiteOpenHelper      _dbHelper;
+   private SQLiteDatabase                _writeDB;
+   private SQLiteDatabase                _readDB;
 
 
    private class MySQLiteOpenHelper
             extends
                SQLiteOpenHelper {
 
-      public MySQLiteOpenHelper(final Context context,
+      public MySQLiteOpenHelper(final android.content.Context context,
                                 final String name) {
          super(context, name, null, 1);
       }
@@ -73,9 +71,9 @@ public final class SQLiteStorage_Android
 
 
    private String getPath() {
-      File f = _context.getExternalCacheDir();
+      File f = _androidContext.getExternalCacheDir();
       if ((f == null) || !f.exists()) {
-         f = _context.getCacheDir();
+         f = _androidContext.getCacheDir();
       }
       final String documentsDirectory = f.getAbsolutePath();
 
@@ -89,9 +87,9 @@ public final class SQLiteStorage_Android
 
 
    SQLiteStorage_Android(final String path,
-                         final Context context) {
+                         final android.content.Context context) {
       _databaseName = path;
-      _context = context;
+      _androidContext = context;
 
 
       _dbHelper = new MySQLiteOpenHelper(context, getPath());
@@ -139,10 +137,10 @@ public final class SQLiteStorage_Android
       final String name = url.getPath();
 
       if (saveInBackground) {
-         IThreadUtils.instance().invokeInBackground( //
+         _context.getThreadUtils().invokeInBackground( //
                   new GTask() {
                      @Override
-                     public void run() {
+                     public void run(final G3MContext context) {
                         rawSave(table, name, contents);
                      }
                   }, //
@@ -155,9 +153,9 @@ public final class SQLiteStorage_Android
    }
 
 
-   private void rawSave(final String table,
-                        final String name,
-                        final byte[] contents) {
+   private synchronized void rawSave(final String table,
+                                     final String name,
+                                     final byte[] contents) {
       final ContentValues values = new ContentValues();
       values.put("name", name);
       values.put("contents", contents);
@@ -226,10 +224,10 @@ public final class SQLiteStorage_Android
 
       final byte[] contentsF = contents;
       if (saveInBackground) {
-         IThreadUtils.instance().invokeInBackground( //
+         _context.getThreadUtils().invokeInBackground( //
                   new GTask() {
                      @Override
-                     public void run() {
+                     public void run(final G3MContext context) {
                         rawSave(table, name, contentsF);
                      }
                   }, //
@@ -293,7 +291,7 @@ public final class SQLiteStorage_Android
 
 
    @Override
-   public synchronized void onResume(final InitializationContext ic) {
+   public synchronized void onResume(final G3MContext context) {
       if (_writeDB == null) {
          _writeDB = _dbHelper.getWritableDatabase();
       }
@@ -304,7 +302,13 @@ public final class SQLiteStorage_Android
 
 
    @Override
-   public synchronized void onPause(final InitializationContext ic) {
+   public synchronized void onPause(final G3MContext context) {
+      close();
+   }
+
+
+   @Override
+   public synchronized void onDestroy(final G3MContext context) {
       close();
    }
 

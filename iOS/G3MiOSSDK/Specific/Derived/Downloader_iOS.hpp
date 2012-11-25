@@ -68,15 +68,22 @@ public:
   
   const std::string statistics();
   
-  void onResume(const InitializationContext* ic) {
+  void onResume(const G3MContext* context) {
     
   }
   
-  void onPause(const InitializationContext* ic) {
+  void onPause(const G3MContext* context) {
     
+  }
+  
+  void onDestroy(const G3MContext* context) {
+
+  }
+
+  void initialize(const G3MContext* context) {
+
   }
 
 };
-
 
 #endif

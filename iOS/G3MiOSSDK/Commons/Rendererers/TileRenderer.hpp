@@ -328,7 +328,7 @@ private:
   ITimer* _lastSplitTimer;      // timer to start every time a tile get splitted into subtiles
   
   void clearTopLevelTiles();
-  void createTopLevelTiles(const InitializationContext* ic);
+  void createTopLevelTiles(const G3MContext* context);
   
   TilesStatistics _lastStatistics;
   
@@ -336,10 +336,10 @@ private:
 
 //  const InitializationContext* _initializationContext;
 #ifdef C_CODE
-  const InitializationContext* _initializationContext;
+  const G3MContext* _context;
 #endif
 #ifdef JAVA_CODE
-  private InitializationContext _initializationContext;
+  private G3MContext _context;
 #endif
 
   void pruneTopLevelTiles();
@@ -353,19 +353,19 @@ public:
   
   ~TileRenderer();
   
-  void initialize(const InitializationContext* ic);
+  void initialize(const G3MContext* context);
   
-  void render(const RenderContext* rc);
+  void render(const G3MRenderContext* rc);
   
-  bool onTouchEvent(const EventContext* ec,
+  bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent);
   
-  void onResizeViewportEvent(const EventContext* ec,
+  void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
     
   }
   
-  bool isReadyToRender(const RenderContext* rc);
+  bool isReadyToRender(const G3MRenderContext* rc);
 
   
   void start() {
@@ -376,12 +376,16 @@ public:
     _firstRender = false;
   }
   
-  void onResume(const InitializationContext* ic) {
+  void onResume(const G3MContext* context) {
     
   }
   
-  void onPause(const InitializationContext* ic) {
-    
+  void onPause(const G3MContext* context) {
+    recreateTiles();
+  }
+
+  void onDestroy(const G3MContext* context) {
+
   }
 
   void setEnable(bool enable) {
@@ -398,6 +402,8 @@ public:
   }
 
   void changed(const LayerSet* layerSet);
+  
+  void recreateTiles();
 
 };
 

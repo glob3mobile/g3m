@@ -34,7 +34,7 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
 	  _degrees = 0;
   }
 
-  public final void initialize(InitializationContext ic)
+  public final void initialize(G3MContext context)
   {
 	int numStrides = 60;
   
@@ -82,14 +82,14 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
 	state.enableBlend();
   }
 
-  public final boolean isReadyToRender(RenderContext rc)
+  public final boolean isReadyToRender(G3MRenderContext rc)
   {
 	return true;
   }
 
 //C++ TO JAVA CONVERTER NOTE: This was formerly a static local variable declaration (not allowed in Java):
   private boolean render_firstTime = true;
-  public final void render(RenderContext rc)
+  public final void render(G3MRenderContext rc)
   {
 	GL gl = rc.getGL();
   
@@ -131,12 +131,12 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
 	//gl->disableBlend();
   }
 
-  public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
+  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
 	return false;
   }
 
-  public final void onResizeViewportEvent(EventContext ec, int width, int height)
+  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
 
   }
@@ -162,12 +162,17 @@ public class BusyMeshRenderer extends LeafRenderer implements EffectTarget
 	//int _TODO_stop_effects;
   }
 
-  public final void onResume(InitializationContext ic)
+  public final void onResume(G3MContext context)
   {
 
   }
 
-  public final void onPause(InitializationContext ic)
+  public final void onPause(G3MContext context)
+  {
+
+  }
+
+  public final void onDestroy(G3MContext context)
   {
 
   }

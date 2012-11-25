@@ -17,9 +17,9 @@ private:
   Mesh* _mesh;
 
 protected:
-  virtual Mesh* createMesh(const RenderContext* rc) = 0;
+  virtual Mesh* createMesh(const G3MRenderContext* rc) = 0;
   
-  Mesh* getMesh(const RenderContext* rc);
+  Mesh* getMesh(const G3MRenderContext* rc);
 
   void cleanMesh();
 
@@ -30,13 +30,13 @@ public:
 
   }
   
-  bool isReadyToRender(const RenderContext* rc);
+  bool isReadyToRender(const G3MRenderContext* rc);
 
-  void rawRender(const RenderContext* rc);
+  void rawRender(const G3MRenderContext* rc);
 
   virtual ~MeshShape();
 
-  bool isTransparent(const RenderContext* rc);
+  bool isTransparent(const G3MRenderContext* rc);
 
 };
 

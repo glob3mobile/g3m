@@ -28,7 +28,7 @@ public class BoxShape extends MeshShape
   private Color _surfaceColor;
   private Color _borderColor;
 
-  private Mesh createBorderMesh(RenderContext rc)
+  private Mesh createBorderMesh(G3MRenderContext rc)
   {
 	final float lowerX = (float) -(_extentX / 2);
 	final float upperX = (float) +(_extentX / 2);
@@ -60,7 +60,7 @@ public class BoxShape extends MeshShape
   
 	return new IndexedMesh(GLPrimitive.lines(), true, vertices.getCenter(), vertices.create(), indices.create(), _borderWidth, borderColor);
   }
-  private Mesh createSurfaceMesh(RenderContext rc)
+  private Mesh createSurfaceMesh(G3MRenderContext rc)
   {
 	final float lowerX = (float) -(_extentX / 2);
 	final float upperX = (float) +(_extentX / 2);
@@ -91,7 +91,7 @@ public class BoxShape extends MeshShape
 	return new IndexedMesh(GLPrimitive.triangleStrip(), true, vertices.getCenter(), vertices.create(), indices.create(), _borderWidth, _surfaceColor);
   }
 
-  protected final Mesh createMesh(RenderContext rc)
+  protected final Mesh createMesh(G3MRenderContext rc)
   {
   
 	//  const float lowerX = (float) -(_extentX / 2);

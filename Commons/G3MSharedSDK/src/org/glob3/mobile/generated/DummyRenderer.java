@@ -37,7 +37,7 @@ public class DummyRenderer extends LeafRenderer
   {
   }
 
-  public final void initialize(InitializationContext ic)
+  public final void initialize(G3MContext context)
   {
 	_glState = new GLState();
 	_glState.enableVerticesPosition();
@@ -52,10 +52,19 @@ public class DummyRenderer extends LeafRenderer
   
 	// create vertices
   
+<<<<<<< HEAD
 	if (ic != null && ic.getPlanet() != null)
 	  _halfSize = ic.getPlanet().getRadii()._x * 0.7;
+=======
+	if (context != null && context.getPlanet() != null)
+	{
+	  _halfSize = context.getPlanet().getRadii()._x / 2.0;
+	}
+>>>>>>> origin/webgl-port
 	else
+	{
 	  _halfSize = 7e6;
+	}
   
 	//int n = 0;
 	for (int j = 0; j < res; j++)
@@ -94,7 +103,7 @@ public class DummyRenderer extends LeafRenderer
 	_vertices = vertices.create();
   }
 
-  public final void render(RenderContext rc)
+  public final void render(G3MRenderContext rc)
   {
   
 	// obtaing gl object reference
@@ -177,17 +186,17 @@ public class DummyRenderer extends LeafRenderer
   
   }
 
-  public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
+  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
 	return false;
   }
 
-  public final void onResizeViewportEvent(EventContext ec, int width, int height)
+  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
 
   }
 
-  public final boolean isReadyToRender(RenderContext rc)
+  public final boolean isReadyToRender(G3MRenderContext rc)
   {
 	return true;
   }
@@ -202,12 +211,17 @@ public class DummyRenderer extends LeafRenderer
 
   }
 
-  public final void onResume(InitializationContext ic)
+  public final void onResume(G3MContext context)
   {
 
   }
 
-  public final void onPause(InitializationContext ic)
+  public final void onPause(G3MContext context)
+  {
+
+  }
+
+  public final void onDestroy(G3MContext context)
   {
 
   }

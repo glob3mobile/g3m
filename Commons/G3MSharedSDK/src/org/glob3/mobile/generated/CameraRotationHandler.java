@@ -26,7 +26,7 @@ public class CameraRotationHandler extends CameraEventHandler
   private MutableVector3D _initialPoint = new MutableVector3D(); //Initial point at dragging
   private MutableVector2I _initialPixel = new MutableVector2I(); //Initial pixel at start of gesture
 
-  private int lastYValid;
+//  int _lastYValid;
   private Camera _camera0 ; //Initial Camera saved on Down event
 
   public CameraRotationHandler()
@@ -40,7 +40,7 @@ public class CameraRotationHandler extends CameraEventHandler
   {
   }
 
-  public final boolean onTouchEvent(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final boolean onTouchEvent(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	// three finger needed
 	if (touchEvent.getTouchCount()!=3)
@@ -63,7 +63,7 @@ public class CameraRotationHandler extends CameraEventHandler
 	return true;
   }
 
-  public final void render(RenderContext rc, CameraContext cameraContext)
+  public final void render(G3MRenderContext rc, CameraContext cameraContext)
   {
   //  // TEMP TO DRAW A POINT WHERE USER PRESS
   //  if (false) {
@@ -88,7 +88,7 @@ public class CameraRotationHandler extends CameraEventHandler
   //  }
   }
 
-  public final void onDown(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+  public final void onDown(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	Camera camera = cameraContext.getNextCamera();
 	_camera0.copyFrom(camera);
@@ -100,7 +100,7 @@ public class CameraRotationHandler extends CameraEventHandler
 	Vector2I pixel2 = touchEvent.getTouch(2).getPos();
 	Vector2I averagePixel = pixel0.add(pixel1).add(pixel2).div(3);
 	_initialPixel = new MutableVector2I(averagePixel._x, averagePixel._y);
-	lastYValid = _initialPixel.y();
+	//_lastYValid = _initialPixel.y();
   
 	// compute center of view
 	_initialPoint = camera.getXYZCenterOfView().asMutableVector3D();
@@ -112,7 +112,8 @@ public class CameraRotationHandler extends CameraEventHandler
   
 	//printf ("down 3 fingers\n");
   }
-  public final void onMove(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+
+  public final void onMove(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	//_currentGesture = getGesture(touchEvent);
 	if (cameraContext.getCurrentGesture() != Gesture.Rotate)
@@ -160,7 +161,8 @@ public class CameraRotationHandler extends CameraEventHandler
 	  camera.copyFrom(tempCamera);
 	}
   }
-  public final void onUp(EventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
+
+  public final void onUp(G3MEventContext eventContext, TouchEvent touchEvent, CameraContext cameraContext)
   {
 	cameraContext.setCurrentGesture(Gesture.None);
 	_initialPixel = MutableVector2I.zero();

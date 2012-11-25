@@ -27,10 +27,10 @@ public:
   virtual ~LevelTileCondition() {
   }
   
-  bool isAvailable(const RenderContext* rc,
+  bool isAvailable(const G3MRenderContext* rc,
                    const Tile* tile) const;
   
-  bool isAvailable(const EventContext* ec,
+  bool isAvailable(const G3MEventContext* ec,
                    const Tile* tile) const;
   
 };

@@ -41,9 +41,9 @@ private:
   
   std::list<const IGLTextureId*>      _texturesIdBag;
   long                        _texturesIdAllocationCounter;
-  long                        _texturesIdGetCounter;
-  long                        _texturesIdTakeCounter;
-  
+//  long                        _texturesIdGetCounter;
+//  long                        _texturesIdTakeCounter;
+
   // state handling
   bool _enableDepthTest;
   bool _enableBlend;
@@ -117,8 +117,8 @@ public:
   _scaleY(1),
   _translationX(0),
   _translationY(0),
-  _texturesIdGetCounter(0),
-  _texturesIdTakeCounter(0),
+//  _texturesIdGetCounter(0),
+//  _texturesIdTakeCounter(0),
   _vertices(NULL),
   _verticesTimestamp(0),
   _textureCoordinates(NULL),

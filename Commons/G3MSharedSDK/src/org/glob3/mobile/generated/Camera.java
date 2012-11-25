@@ -100,13 +100,14 @@ public class Camera
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void render(const RenderContext* rc) const
-  public final void render(RenderContext rc)
+//ORIGINAL LINE: void render(const G3MRenderContext* rc) const
+  public final void render(G3MRenderContext rc)
   {
 	GL gl = rc.getGL();
 	gl.setProjection(getProjectionMatrix());
 	gl.loadMatrixf(getModelMatrix());
   
+<<<<<<< HEAD
 	// TEMP: TEST TO SEE HALF SIZE FRUSTUM CLIPPING
 	if (false)
 	{
@@ -145,6 +146,47 @@ public class Camera
 	  if (state != null)
 		  state.dispose();
 	}
+=======
+  //  // TEMP: TEST TO SEE HALF SIZE FRUSTUM CLIPPING
+  //  if (false) {
+  //    const MutableMatrix44D inversed = getModelMatrix().inversed();
+  //
+  //    const FrustumData data = calculateFrustumData();
+  //    const Vector3D p0(Vector3D(data._left/4, data._top/4, -data._znear-10).transformedBy(inversed, 1));
+  //    const Vector3D p1(Vector3D(data._left/4, data._bottom/4, -data._znear-10).transformedBy(inversed, 1));
+  //    const Vector3D p2(Vector3D(data._right/4, data._bottom/4, -data._znear-10).transformedBy(inversed, 1));
+  //    const Vector3D p3(Vector3D(data._right/4, data._top/4, -data._znear-10).transformedBy(inversed, 1));
+  //
+  //    const float v[] = {
+  //      (float) p0._x, (float) p0._y, (float) p0._z,
+  //      (float) p1._x, (float) p1._y, (float) p1._z,
+  //      (float) p2._x, (float) p2._y, (float) p2._z,
+  //      (float) p3._x, (float) p3._y, (float) p3._z
+  //    };
+  //    const int i[] = {0, 1, 2, 3};
+  //
+  //    FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
+  //    IntBufferBuilder index;
+  //
+  //    for (unsigned int n=0; n<4; n++)
+  //      vertices.add(v[3*n], v[3*n+1], v[3*n+2]);
+  //
+  //    for (unsigned int n=0; n<4; n++)
+  //      index.add(i[n]);
+  //
+  //    IIntBuffer* _indices = index.create();
+  //    IFloatBuffer* _vertices = vertices.create();
+  //
+  //    gl->enableVerticesPosition();
+  //    gl->vertexPointer(3, 0, _vertices);
+  //    gl->lineWidth(2);
+  //    gl->color(1, 0, 1, 1);
+  //    gl->drawLineLoop(_indices);
+  //
+  //    gl->lineWidth(1);
+  //    gl->color(1, 1, 1, 1);
+  //  }
+>>>>>>> origin/webgl-port
   
   
   }
@@ -350,9 +392,14 @@ public class Camera
 	return point0.angleBetween(point1);
   }
 
-  public final void initialize(InitializationContext ic)
+
+  ///#include "FloatBufferBuilderFromCartesian3D.hpp"
+  ///#include "IntBufferBuilder.hpp"
+  
+  
+  public final void initialize(G3MContext context)
   {
-	_planet = ic.getPlanet();
+	_planet = context.getPlanet();
 	setCartesianPosition(new MutableVector3D(_planet.getRadii().maxAxis() * 5, 0, 0));
 	_dirtyFlags.setAll(true);
   }
@@ -620,13 +667,11 @@ public class Camera
 	return _frustum;
   }
 
-
-  private int __temporal_test_for_clipping;
-
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: Frustum* getHalfFrustum() const
   private Frustum getHalfFrustum()
   {
+	// __temporal_test_for_clipping;
 	if (_dirtyFlags._halfFrustum)
 	{
 	  _dirtyFlags._halfFrustum = false;

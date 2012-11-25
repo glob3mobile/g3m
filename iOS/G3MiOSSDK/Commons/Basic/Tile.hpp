@@ -12,7 +12,7 @@
 #include "Sector.hpp"
 #include <list>
 
-class RenderContext;
+class G3MRenderContext;
 class Mesh;
 class TileTessellator;
 class TileTexturizer;
@@ -51,24 +51,24 @@ private:
   
   bool _texturizerDirty;
   
-  inline Mesh* getTessellatorMesh(const RenderContext* rc,
+  inline Mesh* getTessellatorMesh(const G3MRenderContext* rc,
                                   const TileRenderContext* trc);
   
-  Mesh* getDebugMesh(const RenderContext* rc,
+  Mesh* getDebugMesh(const G3MRenderContext* rc,
                      const TileRenderContext* trc);
   
-  inline bool isVisible(const RenderContext* rc,
+  inline bool isVisible(const G3MRenderContext* rc,
                         const TileRenderContext* trc);
   
-  inline bool meetsRenderCriteria(const RenderContext* rc,
+  inline bool meetsRenderCriteria(const G3MRenderContext* rc,
                                   const TileRenderContext* trc);
   
   inline std::vector<Tile*>* createSubTiles();
   
-  inline void rawRender(const RenderContext* rc,
+  inline void rawRender(const G3MRenderContext* rc,
                         const TileRenderContext* trc);
   
-  void debugRender(const RenderContext* rc,
+  void debugRender(const G3MRenderContext* rc,
                    const TileRenderContext* trc);
   
   inline Tile* createSubTile(const Angle& lowerLat, const Angle& lowerLon,
@@ -127,7 +127,7 @@ public:
     return _parent;
   }
   
-  void render(const RenderContext* rc,
+  void render(const G3MRenderContext* rc,
               const TileRenderContext* trc,
               std::list<Tile*>* toVisitInNextIteration);
   

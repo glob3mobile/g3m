@@ -18,7 +18,7 @@ public class Tile
 
   private boolean _texturizerDirty;
 
-  private Mesh getTessellatorMesh(RenderContext rc, TileRenderContext trc)
+  private Mesh getTessellatorMesh(G3MRenderContext rc, TileRenderContext trc)
   {
 	if (_tessellatorMesh == null)
 	{
@@ -27,7 +27,7 @@ public class Tile
 	return _tessellatorMesh;
   }
 
-  private Mesh getDebugMesh(RenderContext rc, TileRenderContext trc)
+  private Mesh getDebugMesh(G3MRenderContext rc, TileRenderContext trc)
   {
 	if (_debugMesh == null)
 	{
@@ -36,7 +36,7 @@ public class Tile
 	return _debugMesh;
   }
 
-  private boolean isVisible(RenderContext rc, TileRenderContext trc)
+  private boolean isVisible(G3MRenderContext rc, TileRenderContext trc)
   {
 	// test if sector is back oriented with respect to the camera
 	//  if (_sector.isBackOriented(rc)) {
@@ -52,7 +52,7 @@ public class Tile
 	//return extent->touches( rc->getCurrentCamera()->getHalfFrustuminModelCoordinates() );
   }
 
-  private boolean meetsRenderCriteria(RenderContext rc, TileRenderContext trc)
+  private boolean meetsRenderCriteria(G3MRenderContext rc, TileRenderContext trc)
   {
 	final TilesRenderParameters parameters = trc.getParameters();
   
@@ -137,7 +137,7 @@ public class Tile
 	return subTiles;
   }
 
-  private void rawRender(RenderContext rc, TileRenderContext trc)
+  private void rawRender(G3MRenderContext rc, TileRenderContext trc)
   {
   
 	int __TODO_include_glstate_in_TileRenderContext;
@@ -175,7 +175,7 @@ public class Tile
   
   }
 
-  private void debugRender(RenderContext rc, TileRenderContext trc)
+  private void debugRender(G3MRenderContext rc, TileRenderContext trc)
   {
 	Mesh debugMesh = getDebugMesh(rc, trc);
 	if (debugMesh != null)
@@ -351,7 +351,7 @@ public class Tile
 	return _parent;
   }
 
-  public final void render(RenderContext rc, TileRenderContext trc, java.util.LinkedList<Tile> toVisitInNextIteration)
+  public final void render(G3MRenderContext rc, TileRenderContext trc, java.util.LinkedList<Tile> toVisitInNextIteration)
   {
 	TilesStatistics statistics = trc.getStatistics();
   
@@ -475,16 +475,14 @@ public class Tile
 	  {
 		return this;
 	  }
-	  else
+  
+	  for (int i = 0; i < _subtiles.size(); i++)
 	  {
-		for (int i = 0; i < _subtiles.size(); i++)
+		final Tile subtile = _subtiles.get(i);
+		final Tile subtileResult = subtile.getDeepestTileContaining(position);
+		if (subtileResult != null)
 		{
-		  final Tile subtile = _subtiles.get(i);
-		  final Tile subtileResult = subtile.getDeepestTileContaining(position);
-		  if (subtileResult != null)
-		  {
-			return subtileResult;
-		  }
+		  return subtileResult;
 		}
 	  }
 	}

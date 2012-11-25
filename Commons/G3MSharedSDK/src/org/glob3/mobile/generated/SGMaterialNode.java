@@ -33,7 +33,7 @@ public class SGMaterialNode extends SGNode
 //  emit 0.0
 
 
-  protected final void prepareRender(RenderContext rc)
+  protected final void prepareRender(G3MRenderContext rc)
   {
 	GL gl = rc.getGL();
   
@@ -50,7 +50,7 @@ public class SGMaterialNode extends SGNode
 	super.prepareRender(rc);
   }
 
-  protected final void cleanUpRender(RenderContext rc)
+  protected final void cleanUpRender(G3MRenderContext rc)
   {
 	GL gl = rc.getGL();
   

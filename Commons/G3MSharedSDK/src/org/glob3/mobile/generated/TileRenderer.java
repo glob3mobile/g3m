@@ -25,7 +25,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
 	_topLevelTiles.clear();
   }
-  private void createTopLevelTiles(InitializationContext ic)
+  private void createTopLevelTiles(G3MContext context)
   {
 	final Angle fromLatitude = _parameters._topSector.lower().latitude();
 	final Angle fromLongitude = _parameters._topSector.lower().longitude();
@@ -55,7 +55,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 	  }
 	}
   
-	ic.getLogger().logInfo("Created %d top level tiles", _topLevelTiles.size());
+	context.getLogger().logInfo("Created %d top level tiles", _topLevelTiles.size());
   
 	_topTilesJustCreated = true;
   }
@@ -65,7 +65,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   private boolean _firstRender;
 
 //  const InitializationContext* _initializationContext;
-  private InitializationContext _initializationContext;
+  private G3MContext _context;
 
   private void pruneTopLevelTiles()
   {
@@ -88,7 +88,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 	  _lastSplitTimer = null;
 	  _lastCamera = null;
 	  _firstRender = false;
-	  _initializationContext = null;
+	  _context = null;
 	_layerSet.setChangeListener(this);
   }
 
@@ -105,22 +105,22 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 		_lastSplitTimer.dispose();
   }
 
-  public final void initialize(InitializationContext ic)
+  public final void initialize(G3MContext context)
   {
-	_initializationContext = ic;
+	_context = context;
   
 	clearTopLevelTiles();
-	createTopLevelTiles(ic);
+	createTopLevelTiles(context);
   
 	if (_lastSplitTimer != null)
 		_lastSplitTimer.dispose();
-	_lastSplitTimer = ic.getFactory().createTimer();
+	_lastSplitTimer = context.getFactory().createTimer();
   
-	_layerSet.initialize(ic);
-	_texturizer.initialize(ic, _parameters);
+	_layerSet.initialize(context);
+	_texturizer.initialize(context, _parameters);
   }
 
-  public final void render(RenderContext rc)
+  public final void render(G3MRenderContext rc)
   {
 	// Saving camera for use in onTouchEvent
 	_lastCamera = rc.getCurrentCamera();
@@ -175,7 +175,7 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
   
   }
 
-  public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
+  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
 	boolean handled = false;
   
@@ -214,12 +214,12 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 	return handled;
   }
 
-  public final void onResizeViewportEvent(EventContext ec, int width, int height)
+  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
 
   }
 
-  public final boolean isReadyToRender(RenderContext rc)
+  public final boolean isReadyToRender(G3MRenderContext rc)
   {
 	if (_topTilesJustCreated)
 	{
@@ -268,12 +268,17 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 	_firstRender = false;
   }
 
-  public final void onResume(InitializationContext ic)
+  public final void onResume(G3MContext context)
   {
 
   }
 
-  public final void onPause(InitializationContext ic)
+  public final void onPause(G3MContext context)
+  {
+	recreateTiles();
+  }
+
+  public final void onDestroy(G3MContext context)
   {
 
   }
@@ -290,10 +295,19 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 
   public final void changed(LayerSet layerSet)
   {
+  //  pruneTopLevelTiles();
+  //  clearTopLevelTiles();
+  //  _firstRender = true;
+  //  createTopLevelTiles(_context);
+	recreateTiles();
+  }
+
+  public final void recreateTiles()
+  {
 	pruneTopLevelTiles();
 	clearTopLevelTiles();
 	_firstRender = true;
-	createTopLevelTiles(_initializationContext);
+	createTopLevelTiles(_context);
   }
 
 }

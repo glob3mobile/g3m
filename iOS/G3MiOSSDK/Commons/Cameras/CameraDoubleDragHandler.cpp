@@ -12,7 +12,7 @@
 
 
 
-bool CameraDoubleDragHandler::onTouchEvent(const EventContext *eventContext,
+bool CameraDoubleDragHandler::onTouchEvent(const G3MEventContext *eventContext,
                                            const TouchEvent* touchEvent, 
                                            CameraContext *cameraContext) 
 {
@@ -36,7 +36,7 @@ bool CameraDoubleDragHandler::onTouchEvent(const EventContext *eventContext,
 }
 
 
-void CameraDoubleDragHandler::onDown(const EventContext *eventContext,
+void CameraDoubleDragHandler::onDown(const G3MEventContext *eventContext,
                                      const TouchEvent& touchEvent, 
                                      CameraContext *cameraContext) 
 {
@@ -72,7 +72,7 @@ void CameraDoubleDragHandler::onDown(const EventContext *eventContext,
 }
 
 
-void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
+void CameraDoubleDragHandler::onMove(const G3MEventContext *eventContext,
                                      const TouchEvent& touchEvent, 
                                      CameraContext *cameraContext) 
 {
@@ -113,10 +113,10 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
     double angle_n1=angle0, angle_n=angle1;
     
     // iterations
-    int iter=0;
+//    int iter=0;
     double precision = GMath.pow(10, GMath.log10(distance)-8.5);
     while (GMath.abs(angle_n-angle) > precision) {
-      iter++;
+//      iter++;
       if ((angle_n1-angle_n)/(angle_n-angle) < 0) d*=-0.5;
       tempCamera.moveForward(d);
       dAccum += d;
@@ -151,36 +151,6 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
   //tempCamera.updateModelMatrix();
   Vector3D centerPoint2 = tempCamera.getXYZCenterOfView();
   
-//<<<<<<< HEAD
-//  // rotate the camera
-//  {
-//    tempCamera.updateModelMatrix();
-//    Vector3D normal = _planet->geodeticSurfaceNormal(_initialPoint.asVector3D());
-//    tempCamera.rotateWithAxis(normal, Angle::fromRadians(angle));
-//  }
-//   
-//  // detect new final point
-//  {
-//    // compute 3D point of view center
-//    tempCamera.updateModelMatrix();
-//    Vector3D newCenterPoint = tempCamera.centerOfViewOnPlanet(_planet);
-//    
-//    // middle point in 3D
-//    Vector3D ray0 = tempCamera.pixel2Ray(pixel0);
-//    Vector3D P0 = _planet->closestIntersection(tempCamera.getPosition(), ray0);
-//    Vector3D ray1 = tempCamera.pixel2Ray(pixel1);
-//    Vector3D P1 = _planet->closestIntersection(tempCamera.getPosition(), ray1);
-//    Geodetic2D g = _planet->getMidPoint(_planet->toGeodetic2D(P0), _planet->toGeodetic2D(P1));
-//    Vector3D finalPoint = _planet->toVector3D(g);    
-//    
-//    // rotate globe from newCenterPoint to finalPoint
-//    const Vector3D rotationAxis = newCenterPoint.cross(finalPoint);
-//    const Angle rotationDelta = Angle::fromRadians( - acos(newCenterPoint.normalized().dot(finalPoint.normalized())) );
-//    if (rotationDelta.isNan()) {
-//      return;
-//    }
-//    tempCamera.rotateWithAxis(rotationAxis, rotationDelta);  
-//=======
   // middle point in 3D
   Vector3D P0 = tempCamera.pixel2PlanetPoint(pixel0);
   Vector3D P1 = tempCamera.pixel2PlanetPoint(pixel1);
@@ -193,7 +163,6 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
   const Angle rotationDelta = Angle::fromRadians( - GMath.acos(centerPoint2.normalized().dot(finalPoint.normalized())) );
   if (rotationDelta.isNan()) {
     return;
-//>>>>>>> master
   }
   tempCamera.rotateWithAxis(rotationAxis, rotationDelta);  
   
@@ -219,7 +188,7 @@ void CameraDoubleDragHandler::onMove(const EventContext *eventContext,
 }
 
 
-void CameraDoubleDragHandler::onUp(const EventContext *eventContext,
+void CameraDoubleDragHandler::onUp(const G3MEventContext *eventContext,
                                    const TouchEvent& touchEvent, 
                                    CameraContext *cameraContext) 
 {
@@ -230,7 +199,8 @@ void CameraDoubleDragHandler::onUp(const EventContext *eventContext,
 }
 
 
-void CameraDoubleDragHandler::render(const RenderContext* rc, CameraContext *cameraContext)
+void CameraDoubleDragHandler::render(const G3MRenderContext* rc,
+                                     CameraContext *cameraContext)
 {  
 //  // TEMP TO DRAW A POINT WHERE USER PRESS
 //  if (false) {

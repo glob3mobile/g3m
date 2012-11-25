@@ -59,7 +59,7 @@ void SceneJSShapesParser::pvtParse(const std::string& json) {
 
   SGNode* node = toNode(jsonRootObject);
 
-  _rootShape = new SGShape(node);
+  _rootShape = new SGShape(node, "file:///");
 
   delete jsonRootObject;
 }

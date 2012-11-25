@@ -25,7 +25,7 @@ public class SGTextureNode extends SGNode
   private java.util.ArrayList<SGLayerNode> _layers = new java.util.ArrayList<SGLayerNode>();
 
 
-  protected final void rawRender(RenderContext rc)
+  protected final void rawRender(G3MRenderContext rc)
   {
 	final int layersCount = _layers.size();
 	for (int i = 0; i < layersCount; i++)
@@ -39,13 +39,13 @@ public class SGTextureNode extends SGNode
   {
 	_layers.add(layer);
   
-	if (_initializationContext != null)
+	if (_context != null)
 	{
-	  layer.initialize(_initializationContext);
+	  layer.initialize(_context, _shape);
 	}
   }
 
-  public final boolean isReadyToRender(RenderContext rc)
+  public final boolean isReadyToRender(G3MRenderContext rc)
   {
 	final int layersCount = _layers.size();
 	for (int i = 0; i < layersCount; i++)
