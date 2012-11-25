@@ -17,6 +17,7 @@ import org.glob3.mobile.generated.CompositeRenderer;
 import org.glob3.mobile.generated.EllipsoidalTileTessellator;
 import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.G3MWidget;
+import org.glob3.mobile.generated.GL;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.ICameraConstrainer;
@@ -305,6 +306,7 @@ public final class G3MWidget_WebGL
       _program = new Shaders_WebGL(_webGLContext).createProgram();
 
       final NativeGL_WebGL nativeGL = new NativeGL_WebGL(_webGLContext);
+      GL _gl = new GL(nativeGL);
 
       final CompositeRenderer mainRenderer = new CompositeRenderer();
       //      composite.addRenderer(cameraRenderer);
@@ -339,7 +341,8 @@ public final class G3MWidget_WebGL
 
 
       _widget = G3MWidget.create( //
-               nativeGL, //
+//               nativeGL, //
+    		   _gl,
                storage, //
                downloader, //
                threadUtils, //
