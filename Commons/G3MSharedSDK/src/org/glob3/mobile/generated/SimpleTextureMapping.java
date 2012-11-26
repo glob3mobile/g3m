@@ -56,11 +56,18 @@ public class SimpleTextureMapping extends TextureMapping
 //ORIGINAL LINE: void bind(const G3MRenderContext* rc) const
   public final void bind(G3MRenderContext rc)
   {
-	GL gl = rc.getGL();
+	if (_texCoords != null)
+	{
+	  GL gl = rc.getGL();
   
-	gl.transformTexCoords(_scale, _translation);
-	gl.bindTexture(_glTextureId);
-	gl.setTextureCoordinates(2, 0, _texCoords);
+	  gl.transformTexCoords(_scale, _translation);
+	  gl.bindTexture(_glTextureId);
+	  gl.setTextureCoordinates(2, 0, _texCoords);
+	}
+	else
+	{
+	  ILogger.instance().logError("SimpleTextureMapping::bind() with _texCoords == NULL");
+	}
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
