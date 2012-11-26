@@ -304,8 +304,13 @@ void GL::disablePolygonOffset() {
   _gl->disable(GLFeature::polygonOffsetFill());
 }
 
-void GL::vertexPointer(int size, int stride, IFloatBuffer* vertices) {
-  if (VERBOSE) ILogger::instance()->logInfo("GL::vertexPointer()");
+void GL::vertexPointer(int size,
+                       int stride,
+                       IFloatBuffer* vertices) {
+  if (VERBOSE) ILogger::instance()->logInfo("GL::vertexPointer(size=%i, stride=%i, vertices=%s)",
+                                            size,
+                                            stride,
+                                            vertices->description().c_str());
 
   if ((_vertices != vertices) ||
       (_verticesTimestamp != vertices->timestamp()) ) {
@@ -424,8 +429,13 @@ const IGLTextureId* GL::uploadTexture(const IImage* image, int format, bool gene
   return texId;
 }
 
-void GL::setTextureCoordinates(int size, int stride, IFloatBuffer* textureCoordinates) {
-  if (VERBOSE) ILogger::instance()->logInfo("GL::setTextureCoordinates()");
+void GL::setTextureCoordinates(int size,
+                               int stride,
+                               IFloatBuffer* textureCoordinates) {
+  if (VERBOSE) ILogger::instance()->logInfo("GL::setTextureCoordinates(_size=%i, stride=%i, textureCoordinates=%s)",
+                                            size,
+                                            stride,
+                                            textureCoordinates->description().c_str());
 
   if ((_textureCoordinates != textureCoordinates) ||
       (_textureCoordinatesTimestamp != textureCoordinates->timestamp()) ) {
@@ -522,7 +532,9 @@ void GL::disableTexture2D() {
 }
 
 void GL::enableVertexColor(IFloatBuffer* colors, float intensity) {
-  if (VERBOSE) ILogger::instance()->logInfo("GL::enableVertexColor()");
+  if (VERBOSE) ILogger::instance()->logInfo("GL::enableVertexColor(color=%s, intensity=%f)",
+                                            colors->description().c_str(),
+                                            intensity);
 
   if (!_enableVertexColor) {
     _gl->uniform1i(Uniforms.EnableColorPerVertex, 1);
