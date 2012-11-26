@@ -79,7 +79,9 @@ public class GL
   private void loadModelView()
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::loadModelView()");
+	}
   
 	_gl.uniformMatrix4fv(GlobalMembersGL.Uniforms.Modelview, false, _modelView);
   }
@@ -87,7 +89,9 @@ public class GL
   private IGLTextureId getGLTextureId()
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::getGLTextureId()");
+	}
   
 	if (_texturesIdBag.size() == 0)
 	{
@@ -137,7 +141,9 @@ public class GL
   private int checkedGetAttribLocation(IGLProgramId program, String name)
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::checkedGetAttribLocation()");
+	}
   
 	int l = _gl.getAttribLocation(program, name);
 	if (l == -1)
@@ -150,7 +156,9 @@ public class GL
   private IGLUniformID checkedGetUniformLocation(IGLProgramId program, String name)
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::checkedGetUniformLocation()");
+	}
   
 	IGLUniformID uID = _gl.getUniformLocation(program, name);
 	if (!uID.isValid())
@@ -165,7 +173,9 @@ public class GL
   private IFloatBuffer getBillboardTexCoord()
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::getBillboardTexCoord()");
+	}
   
 	if (_billboardTexCoord == null)
 	{
@@ -238,7 +248,9 @@ public class GL
   public final void enableVerticesPosition()
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::enableVerticesPosition()");
+	}
   
 	if (!_enableVerticesPosition)
 	{
@@ -252,7 +264,9 @@ public class GL
   public final void enableTextures()
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::enableTextures()");
+	}
   
 	if (!_enableTextures)
 	{
@@ -264,7 +278,9 @@ public class GL
   public final void enableTexture2D()
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::enableTexture2D()");
+	}
   
 	if (!_enableTexture2D)
 	{
@@ -276,7 +292,9 @@ public class GL
   public final void enableVertexFlatColor(float r, float g, float b, float a, float intensity)
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::enableVertexFlatColor()");
+	}
   
 	if (!_enableFlatColor)
 	{
@@ -297,7 +315,9 @@ public class GL
   public final void disableVertexFlatColor()
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::disableVertexFlatColor()");
+	}
   
 	if (_enableFlatColor)
 	{
@@ -309,7 +329,9 @@ public class GL
   public final void disableTexture2D()
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::disableTexture2D()");
+	}
   
 	if (_enableTexture2D)
 	{
@@ -321,7 +343,9 @@ public class GL
   public final void disableVerticesPosition()
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::disableVerticesPosition()");
+	}
   
 	if (_enableVerticesPosition)
 	{
@@ -333,7 +357,9 @@ public class GL
   public final void disableTextures()
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::disableTextures()");
+	}
   
 	if (_enableTextures)
 	{
@@ -345,7 +371,9 @@ public class GL
   public final void clearScreen(float r, float g, float b, float a)
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::clearScreen()");
+	}
   
 	_gl.clearColor(r, g, b, a);
 	_gl.clear(GLBufferType.colorBuffer() | GLBufferType.depthBuffer());
@@ -354,7 +382,9 @@ public class GL
   public final void color(float r, float g, float b, float a)
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::color()");
+	}
   
 	if ((_flatColorR != r) || (_flatColorG != g) || (_flatColorB != b) || (_flatColorA != a))
 	{
@@ -370,7 +400,9 @@ public class GL
   public final void enableVertexColor(IFloatBuffer colors, float intensity)
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::enableVertexColor(color=%s, intensity=%f)", colors.description(), intensity);
+	}
   
 	if (!_enableVertexColor)
 	{
@@ -392,7 +424,9 @@ public class GL
   public final void disableVertexColor()
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::disableVertexColor()");
+	}
   
 	if (_enableVertexColor)
 	{
@@ -405,7 +439,9 @@ public class GL
   public final void pushMatrix()
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::pushMatrix()");
+	}
   
 	_matrixStack.addLast(_modelView);
   }
@@ -413,7 +449,9 @@ public class GL
   public final void popMatrix()
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::popMatrix()");
+	}
   
 	_modelView = _matrixStack.getLast();
 	_matrixStack.removeLast();
@@ -424,7 +462,9 @@ public class GL
   public final void loadMatrixf(MutableMatrix44D modelView)
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::loadMatrixf()");
+	}
   
 	_modelView = modelView;
   
@@ -434,7 +474,9 @@ public class GL
   public final void multMatrixf(MutableMatrix44D m)
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::multMatrixf()");
+	}
   
 	_modelView = _modelView.multiply(m);
   
@@ -444,7 +486,9 @@ public class GL
   public final void vertexPointer(int size, int stride, IFloatBuffer vertices)
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::vertexPointer(size=%d, stride=%d, vertices=%s)", size, stride, vertices.description());
+	}
   
 	if ((_vertices != vertices) || (_verticesTimestamp != vertices.timestamp()))
 	{
@@ -457,7 +501,9 @@ public class GL
   public final void drawTriangles(IIntBuffer indices)
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::drawTriangles(%s)", indices.description());
+	}
   
 	_gl.drawElements(GLPrimitive.triangles(), indices.size(), indices);
   }
@@ -465,7 +511,9 @@ public class GL
   public final void drawTriangleStrip(IIntBuffer indices)
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::drawTriangleStrip(%s)", indices.description());
+	}
   
 	_gl.drawElements(GLPrimitive.triangleStrip(), indices.size(), indices);
   }
@@ -473,7 +521,9 @@ public class GL
   public final void drawTriangleFan(IIntBuffer indices)
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::drawTriangleFan(%s)", indices.description());
+	}
   
 	_gl.drawElements(GLPrimitive.triangleFan(), indices.size(), indices);
   }
@@ -481,7 +531,9 @@ public class GL
   public final void drawLines(IIntBuffer indices)
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::drawLines(%s)", indices.description());
+	}
   
 	_gl.drawElements(GLPrimitive.lines(), indices.size(), indices);
   }
@@ -489,7 +541,9 @@ public class GL
   public final void drawLineStrip(IIntBuffer indices)
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::drawLineStrip(%s)", indices.description());
+	}
   
 	_gl.drawElements(GLPrimitive.lineStrip(), indices.size(), indices);
   }
@@ -497,7 +551,9 @@ public class GL
   public final void drawLineLoop(IIntBuffer indices)
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::drawLineLoop(%s)", indices.description());
+	}
   
 	_gl.drawElements(GLPrimitive.lineLoop(), indices.size(), indices);
   }
@@ -505,7 +561,9 @@ public class GL
   public final void drawPoints(IIntBuffer indices)
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::drawPoints(%s)", indices.description());
+	}
   
 	_gl.drawElements(GLPrimitive.points(), indices.size(), indices);
   }
@@ -513,7 +571,9 @@ public class GL
   public final void setProjection(MutableMatrix44D projection)
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::setProjection()");
+	}
   
 	_gl.uniformMatrix4fv(GlobalMembersGL.Uniforms.Projection, false, projection);
   }
@@ -521,7 +581,9 @@ public class GL
   public final boolean useProgram(IGLProgramId program)
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::useProgram()");
+	}
   
 	// set shaders
 	_gl.useProgram(program);
@@ -570,7 +632,9 @@ public class GL
   public final void enablePolygonOffset(float factor, float units)
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::enablePolygonOffset()");
+	}
   
 	_gl.enable(GLFeature.polygonOffsetFill());
 	_gl.polygonOffset(factor, units);
@@ -579,7 +643,9 @@ public class GL
   public final void disablePolygonOffset()
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::disablePolygonOffset()");
+	}
   
 	_gl.disable(GLFeature.polygonOffsetFill());
   }
@@ -587,7 +653,9 @@ public class GL
   public final void lineWidth(float width)
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::lineWidth()");
+	}
   
 	_gl.lineWidth(width);
   }
@@ -595,7 +663,9 @@ public class GL
   public final void pointSize(float size)
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::pointSize()");
+	}
   
 	_gl.uniform1f(GlobalMembersGL.Uniforms.PointSize, size);
   }
@@ -603,7 +673,9 @@ public class GL
   public final int getError()
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::getError()()");
+	}
   
 	return _gl.getError();
   }
@@ -611,12 +683,13 @@ public class GL
   public final IGLTextureId uploadTexture(IImage image, int format, boolean generateMipmap)
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::uploadTexture()");
+	}
   
 	final IGLTextureId texId = getGLTextureId();
 	if (texId != null)
 	{
-  
 	  _gl.blendFunc(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
 	  _gl.pixelStorei(GLAlignment.unpack(), 1);
   
@@ -648,7 +721,9 @@ public class GL
   public final void setTextureCoordinates(int size, int stride, IFloatBuffer textureCoordinates)
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::setTextureCoordinates(size=%d, stride=%d, textureCoordinates=%s)", size, stride, textureCoordinates.description());
+	}
   
 	if ((_textureCoordinates != textureCoordinates) || (_textureCoordinatesTimestamp != textureCoordinates.timestamp()))
 	{
@@ -661,7 +736,9 @@ public class GL
   public final void bindTexture(IGLTextureId textureId)
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::bindTexture()");
+	}
   
 	_gl.bindTexture(GLTextureType.texture2D(), textureId);
   }
@@ -669,7 +746,9 @@ public class GL
   public final void enableDepthTest()
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::enableDepthTest()");
+	}
   
 	if (!_enableDepthTest)
 	{
@@ -680,7 +759,9 @@ public class GL
   public final void disableDepthTest()
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::disableDepthTest()");
+	}
   
 	if (_enableDepthTest)
 	{
@@ -692,7 +773,9 @@ public class GL
   public final void enableBlend()
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::enableBlend()");
+	}
   
 	if (!_enableBlend)
 	{
@@ -703,7 +786,9 @@ public class GL
   public final void disableBlend()
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::disableBlend()");
+	}
   
 	if (_enableBlend)
 	{
@@ -716,7 +801,9 @@ public class GL
   public final void drawBillBoard(IGLTextureId textureId, IFloatBuffer vertices, float viewPortRatio)
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::drawBillBoard()");
+	}
   
 	int TODO_refactor_billboard;
   
@@ -744,7 +831,9 @@ public class GL
   public final void deleteTexture(IGLTextureId texture)
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::deleteTexture()");
+	}
   
 	if (texture != null)
 	{
@@ -760,7 +849,9 @@ public class GL
   public final void enableCullFace(int face)
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::enableCullFace()");
+	}
   
 	if (!_enableCullFace)
 	{
@@ -777,7 +868,9 @@ public class GL
   public final void disableCullFace()
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::disableCullFace()");
+	}
   
 	if (_enableCullFace)
 	{
@@ -789,7 +882,9 @@ public class GL
   public final void transformTexCoords(float scaleX, float scaleY, float translationX, float translationY)
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::transformTexCoords()");
+	}
   
 	if ((_scaleX != scaleX) || (_scaleY != scaleY))
 	{
@@ -858,7 +953,9 @@ public class GL
   public final void setBlendFuncSrcAlpha()
   {
 	if (true)
+	{
 	  ILogger.instance().logInfo("GL::setBlendFuncSrcAlpha()");
+	}
   
 	_gl.blendFunc(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
   }
