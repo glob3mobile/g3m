@@ -381,7 +381,7 @@ public class GL
   public final void enableVertexColor(IFloatBuffer colors, float intensity)
   {
 	if (true)
-		ILogger.instance().logInfo("GL::enableVertexColor()");
+		ILogger.instance().logInfo("GL::enableVertexColor(color=%s, intensity=%f)", colors.description(), intensity);
   
 	if (!_enableVertexColor)
 	{
@@ -455,7 +455,7 @@ public class GL
   public final void vertexPointer(int size, int stride, IFloatBuffer vertices)
   {
 	if (true)
-		ILogger.instance().logInfo("GL::vertexPointer()");
+		ILogger.instance().logInfo("GL::vertexPointer(size=%i, stride=%i, vertices=%s)", size, stride, vertices.description());
   
 	if ((_vertices != vertices) || (_verticesTimestamp != vertices.timestamp()))
 	{
@@ -670,7 +670,7 @@ public class GL
   public final void setTextureCoordinates(int size, int stride, IFloatBuffer textureCoordinates)
   {
 	if (true)
-		ILogger.instance().logInfo("GL::setTextureCoordinates()");
+		ILogger.instance().logInfo("GL::setTextureCoordinates(_size=%i, stride=%i, textureCoordinates=%s)", size, stride, textureCoordinates.description());
   
 	if ((_textureCoordinates != textureCoordinates) || (_textureCoordinatesTimestamp != textureCoordinates.timestamp()))
 	{
