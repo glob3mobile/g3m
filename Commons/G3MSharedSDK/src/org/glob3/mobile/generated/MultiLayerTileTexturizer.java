@@ -82,17 +82,11 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 
   public final boolean isReady(G3MRenderContext rc, LayerSet layerSet)
   {
-	int ___________WORK_ON_FIRST_FULL_RENDER;
-  
-  //  if (_pendingTopTileRequests > 0) {
-  //    return false;
-  //  }
 	if (layerSet != null)
 	{
 	  return layerSet.isReady();
 	}
 	return true;
-	//  return (_pendingTopTileRequests <= 0) && _layerSet->isReady();
   }
 
   public final void initialize(G3MContext context, TilesRenderParameters parameters)
@@ -179,61 +173,8 @@ public class MultiLayerTileTexturizer extends TileTexturizer
 	return false;
   }
 
-
-  //class TopTileDownloadListener : public IImageDownloadListener {
-  //private:
-  //  MultiLayerTileTexturizer* _texturizer;
-  //  
-  //public:
-  //  TopTileDownloadListener(MultiLayerTileTexturizer* texturizer) :
-  //  _texturizer(texturizer)
-  //  {
-  //  }
-  //  
-  //  virtual ~TopTileDownloadListener() {
-  //    
-  //  }
-  //  
-  //  void onDownload(const URL& url,
-  //                  const IImage* image) {
-  //    _texturizer->countTopTileRequest();
-  //  }
-  //  
-  //  void onError(const URL& url) {
-  //    _texturizer->countTopTileRequest();
-  //  }
-  //  
-  //  void onCanceledDownload(const URL& url,
-  //                          const IImage* image) {
-  //  }
-  //  
-  //  void onCancel(const URL& url) {
-  //    _texturizer->countTopTileRequest();
-  //  }
-  //  
-  //};
-  
   public final void justCreatedTopTile(G3MRenderContext rc, Tile tile, LayerSet layerSet)
   {
-	int ___________WORK_ON_FIRST_FULL_RENDER;
-  
-  //  std::vector<Petition*> petitions = layerSet->createTileMapPetitions(rc,
-  //                                                                      tile,
-  //                                                                      _parameters->_tileTextureWidth,
-  //                                                                      _parameters->_tileTextureHeight);
-  //
-  //  _pendingTopTileRequests += petitions.size();
-  //
-  //  const long priority = TILE_DOWNLOAD_PRIORITY + 128; // very big priority for toplevel tiles
-  //  for (int i = 0; i < petitions.size(); i++) {
-  //    const Petition* petition = petitions[i];
-  //    rc->getDownloader()->requestImage(URL(petition->getURL()),
-  //                                      priority,
-  //                                      new TopTileDownloadListener(this),
-  //                                      true);
-  //
-  //    delete petition;
-  //  }
   }
 
   public final void ancestorTexturedSolvedChanged(Tile tile, Tile ancestorTile, boolean textureSolved)

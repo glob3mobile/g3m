@@ -260,7 +260,6 @@ public class TileRenderer extends LeafRenderer implements LayerSetChangedListene
 		Tile tile = _topLevelTiles.get(i);
 		if (!tile.isTextureSolved())
 		{
-		  int ___________WORK_ON_FIRST_FULL_RENDER;
 		  return false;
 		}
 	  }
