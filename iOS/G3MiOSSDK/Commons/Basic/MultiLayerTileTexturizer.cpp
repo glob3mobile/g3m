@@ -266,67 +266,74 @@ public:
   }
   
   void composeAndUploadTexture() const {
-    if (_mesh == NULL) {
-      return;
-    }
+#ifdef JAVA_CODE
+    synchronized (this) {
+#endif
 
-    std::vector<const IImage*>     images;
-    std::vector<const RectangleD*> rectangles;
-    std::string textureId = _tile->getKey().tinyDescription();
-    
-    const int textureWidth  = _parameters->_tileTextureWidth;
-    const int textureHeight = _parameters->_tileTextureHeight;
-    
-    const Sector tileSector = _tile->getSector();
-    
-    for (int i = 0; i < _petitionsCount; i++) {
-      const Petition* petition = _petitions[i];
-      const IImage* image = petition->getImage();
-      
-      if (image != NULL) {
-        images.push_back(image);
-        
-        rectangles.push_back(getImageRectangleInTexture(tileSector,
-                                                        petition->getSector(),
-                                                        textureWidth,
-                                                        textureHeight));
-        
-        textureId += petition->getURL().getPath();
-        textureId += "_";
+      if (_mesh == NULL) {
+        return;
       }
-    }
-    
-    if (images.size() > 0) {
-      //        int __TESTING_mipmapping;
-      const bool isMipmap = false;
-      
-      const IImage* image = _textureBuilder->createTextureFromImages(_gl,
-                                                                     _factory,
-                                                                     images,
-                                                                     rectangles,
-                                                                     textureWidth,
-                                                                     textureHeight);
-      
-      const IGLTextureId* glTextureId = _texturesHandler->getGLTextureId(image,
-                                                                         GLFormat::rgba(),
-                                                                         textureId,
-                                                                         isMipmap);
-      
-      if (glTextureId != NULL) {
-        if (!_mesh->setGLTextureIdForLevel(0, glTextureId)) {
-          _texturesHandler->releaseGLTextureId(glTextureId);
+
+      std::vector<const IImage*>     images;
+      std::vector<const RectangleD*> rectangles;
+      std::string textureId = _tile->getKey().tinyDescription();
+
+      const int textureWidth  = _parameters->_tileTextureWidth;
+      const int textureHeight = _parameters->_tileTextureHeight;
+
+      const Sector tileSector = _tile->getSector();
+
+      for (int i = 0; i < _petitionsCount; i++) {
+        const Petition* petition = _petitions[i];
+        const IImage* image = petition->getImage();
+
+        if (image != NULL) {
+          images.push_back(image);
+
+          rectangles.push_back(getImageRectangleInTexture(tileSector,
+                                                          petition->getSector(),
+                                                          textureWidth,
+                                                          textureHeight));
+
+          textureId += petition->getURL().getPath();
+          textureId += "_";
         }
       }
-      
-      delete image;
-    }
-    
+
+      if (images.size() > 0) {
+        //        int __TESTING_mipmapping;
+        const bool isMipmap = false;
+
+        const IImage* image = _textureBuilder->createTextureFromImages(_gl,
+                                                                       _factory,
+                                                                       images,
+                                                                       rectangles,
+                                                                       textureWidth,
+                                                                       textureHeight);
+
+        const IGLTextureId* glTextureId = _texturesHandler->getGLTextureId(image,
+                                                                           GLFormat::rgba(),
+                                                                           textureId,
+                                                                           isMipmap);
+
+        if (glTextureId != NULL) {
+          if (!_mesh->setGLTextureIdForLevel(0, glTextureId)) {
+            _texturesHandler->releaseGLTextureId(glTextureId);
+          }
+        }
+
+        delete image;
+      }
+
 #ifdef C_CODE
-    for (int i = 0; i < rectangles.size(); i++) {
-      delete rectangles[i];
+      for (int i = 0; i < rectangles.size(); i++) {
+        delete rectangles[i];
+      }
+#endif
+      
+#ifdef JAVA_CODE
     }
 #endif
-    
   }
   
   void finalize() {
@@ -469,9 +476,17 @@ public:
   }
   
   void cleanMesh() {
-    if (_mesh != NULL) {
-      _mesh = NULL;
+#ifdef JAVA_CODE
+    synchronized (this) {
+#endif
+
+      if (_mesh != NULL) {
+        _mesh = NULL;
+      }
+
+#ifdef JAVA_CODE
     }
+#endif
   }
   
   void cleanTile() {
