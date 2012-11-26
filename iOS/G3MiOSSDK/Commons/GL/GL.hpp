@@ -92,6 +92,10 @@ private:
   
   IFloatBuffer* _billboardTexCoord;
   IFloatBuffer* getBillboardTexCoord();
+
+  void info(const std::string x, ...) const {
+    ILogger::instance()->logInfo(x);
+  }
   
 public:
   
@@ -145,8 +149,6 @@ public:
   void enableVerticesPosition();
   
   void enableTextures();
-  
-  void verticesColors(bool v);
   
   void enableTexture2D();
   
@@ -243,6 +245,8 @@ public:
                           double scaleY,
                           double translationX,
                           double translationY) {
+    info("GL::transformTexCoords()");
+
     transformTexCoords((float) scaleX,
                        (float) scaleY,
                        (float) translationX,
@@ -251,6 +255,8 @@ public:
   
   void transformTexCoords(const Vector2D& scale,
                           const Vector2D& translation) {
+    info("GL::transformTexCoords()");
+
     transformTexCoords((float) scale._x,
                        (float) scale._y,
                        (float) translation._x,
@@ -259,6 +265,8 @@ public:
   
   void transformTexCoords(const MutableVector2D& scale,
                           const MutableVector2D& translation) {
+    info("GL::transformTexCoords()");
+
     transformTexCoords((float) scale.x(),
                        (float) scale.y(),
                        (float) translation.x(),
@@ -267,13 +275,17 @@ public:
   
   
   void color(const Color& col) {
+    info("GL::color()");
+
     color(col.getRed(),
           col.getGreen(),
           col.getBlue(),
           col.getAlpha());
   }
   
-  void clearScreen(const Color& col){
+  void clearScreen(const Color& col) {
+    info("GL::clearScreen()");
+
     clearScreen(col.getRed(),
                 col.getGreen(),
                 col.getBlue(),
@@ -281,12 +293,16 @@ public:
   }
   
   void enableVertexFlatColor(const Color& c, float intensity) {
+    info("GL::enableVertexFlatColor()");
+
     enableVertexFlatColor(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha(), intensity);
   }
   
   void setBlendFuncSrcAlpha();
   
-  void getViewport(int v[]){
+  void getViewport(int v[]) {
+    info("GL::getViewport()");
+
     _gl->getIntegerv(GLVariable::viewport(), v);
   }
   
