@@ -251,6 +251,11 @@ public final class NativeGL2_Android
                             final int count,
                             final IIntBuffer indices) {
       final IntBuffer indexBuffer = ((IntBuffer_Android) indices).getBuffer();
+
+      System.err.println("mode=" + mode + //
+                         ", count=" + count + //
+                         ", drawElements=" + indexBuffer);
+
       GLES20.glDrawElements(mode, count, GLES20.GL_UNSIGNED_INT, indexBuffer);
    }
 

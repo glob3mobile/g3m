@@ -185,8 +185,6 @@ bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
 
 void Tile::prepareForFullRendering(const G3MRenderContext* rc,
                                    const TileRenderContext* trc) {
-  int ___________WORK_ON_FIRST_FULL_RENDER;
-
   Mesh* tessellatorMesh = getTessellatorMesh(rc, trc);
   if (tessellatorMesh == NULL) {
     return;
