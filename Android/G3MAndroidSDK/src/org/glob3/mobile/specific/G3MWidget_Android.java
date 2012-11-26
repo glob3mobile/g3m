@@ -309,9 +309,6 @@ public final class G3MWidget_Android
                            final GTask initializationTask) {
 
       // create GLOB3M WIDGET
-      final int width = getWidth();
-      final int height = getHeight();
-
       final NativeGL2_Android nativeGL = new NativeGL2_Android();
 
       final CompositeRenderer mainRenderer = new CompositeRenderer();
@@ -348,8 +345,7 @@ public final class G3MWidget_Android
                cameraRenderer, //
                mainRenderer, //
                busyRenderer, //
-               width, //
-               height, //
+
                Color.fromRGBA(0, (float) 0.1, (float) 0.2, 1), //
                true, // 
                false, // 
@@ -496,5 +492,10 @@ public final class G3MWidget_Android
 
    public void setCameraPitch(final Angle angle) {
       getG3MWidget().setCameraPitch(angle);
+   }
+
+
+   public void setWidget(final G3MWidget widget) {
+      _g3mWidget = widget;
    }
 }

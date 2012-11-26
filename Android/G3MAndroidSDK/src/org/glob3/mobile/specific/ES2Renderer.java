@@ -23,12 +23,16 @@ public final class ES2Renderer
    private IGLProgramId    _program;
    private final Context   _context;
    private boolean         _hasRendered = false;
+   private int             _width;
+   private int             _height;
 
 
    public ES2Renderer(final Context context,
                       final G3MWidget_Android widget) {
       _context = context;
       _widgetAndroid = widget;
+      _width = 1;
+      _height = 1;
    }
 
 
@@ -50,7 +54,7 @@ public final class ES2Renderer
       GLES20.glEnable(GLES20.GL_DEPTH_TEST);
       GLES20.glEnable(GLES20.GL_CULL_FACE);
 
-      widget.render();
+      widget.render(_width, _height);
    }
 
 
@@ -61,6 +65,8 @@ public final class ES2Renderer
       // Ignore the passed-in GL10 interface, and use the GLES20
       // class's static methods instead.
       GLES20.glViewport(0, 0, width, height);
+      _width = width;
+      _height = height;
 
       if (_hasRendered) {
          _widgetAndroid.getG3MWidget().onResizeViewportEvent(width, height);
