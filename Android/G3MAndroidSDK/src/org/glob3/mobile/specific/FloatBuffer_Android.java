@@ -97,4 +97,10 @@ public final class FloatBuffer_Android
       return _buffer;
    }
 
+
+   @Override
+   public String description() {
+      return "FloatBuffer_Android(timestamp=" + _timestamp + ", buffer=" + _buffer + ")";
+   }
+
 }
