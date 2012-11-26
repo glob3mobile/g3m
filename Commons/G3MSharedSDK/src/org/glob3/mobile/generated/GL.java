@@ -75,6 +75,8 @@ public class GL
 
   private void loadModelView()
   {
+	info("GL::loadModelView()");
+  
   ///#ifdef C_CODE
   //  float* M = _modelView.getColumnMajorFloatArray();
   ///#else
@@ -91,6 +93,8 @@ public class GL
 
   private IGLTextureId getGLTextureId()
   {
+	info("GL::getGLTextureId()");
+  
 	if (_texturesIdBag.size() == 0)
 	{
 	  final int bugdetSize = 256;
@@ -138,6 +142,8 @@ public class GL
   private boolean _errorGettingLocationOcurred;
   private int checkedGetAttribLocation(IGLProgramId program, String name)
   {
+	info("GL::checkedGetAttribLocation()");
+  
 	int l = _gl.getAttribLocation(program, name);
 	if (l == -1)
 	{
@@ -148,6 +154,8 @@ public class GL
   }
   private IGLUniformID checkedGetUniformLocation(IGLProgramId program, String name)
   {
+	info("GL::checkedGetUniformLocation()");
+  
 	IGLUniformID uID = _gl.getUniformLocation(program, name);
 	if (!uID.isValid())
 	{
@@ -160,6 +168,7 @@ public class GL
   private IFloatBuffer _billboardTexCoord;
   private IFloatBuffer getBillboardTexCoord()
   {
+	info("GL::getBillboardTexCoord()");
   
 	if (_billboardTexCoord == null)
 	{
@@ -172,6 +181,13 @@ public class GL
 	}
   
 	return _billboardTexCoord;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: void info(const String x, ...) const
+  private void info(String x, Object... LegacyParamArray)
+  {
+	ILogger.instance().logInfo(x);
   }
 
 
@@ -224,6 +240,8 @@ public class GL
 
   public final void enableVerticesPosition()
   {
+	info("GL::enableVerticesPosition()");
+  
 	if (!_enableVerticesPosition)
 	{
 	  _gl.enableVertexAttribArray(GlobalMembersGL.Attributes.Position);
@@ -235,6 +253,8 @@ public class GL
   // state handling
   public final void enableTextures()
   {
+	info("GL::enableTextures()");
+  
 	if (!_enableTextures)
 	{
 	  _gl.enableVertexAttribArray(GlobalMembersGL.Attributes.TextureCoord);
@@ -242,11 +262,10 @@ public class GL
 	}
   }
 
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  void verticesColors(boolean v);
-
   public final void enableTexture2D()
   {
+	info("GL::enableTexture2D()");
+  
 	if (!_enableTexture2D)
 	{
 	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableTexture, 1);
@@ -256,6 +275,8 @@ public class GL
 
   public final void enableVertexFlatColor(float r, float g, float b, float a, float intensity)
   {
+	info("GL::enableVertexFlatColor()");
+  
 	if (!_enableFlatColor)
 	{
 	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableFlatColor, 1);
@@ -274,6 +295,8 @@ public class GL
 
   public final void disableVertexFlatColor()
   {
+	info("GL::disableVertexFlatColor()");
+  
 	if (_enableFlatColor)
 	{
 	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableFlatColor, 0);
@@ -283,6 +306,8 @@ public class GL
 
   public final void disableTexture2D()
   {
+	info("GL::disableTexture2D()");
+  
 	if (_enableTexture2D)
 	{
 	  _gl.uniform1i(GlobalMembersGL.Uniforms.EnableTexture, 0);
@@ -292,6 +317,8 @@ public class GL
 
   public final void disableVerticesPosition()
   {
+	info("GL::disableVerticesPosition()");
+  
 	if (_enableVerticesPosition)
 	{
 	  _gl.disableVertexAttribArray(GlobalMembersGL.Attributes.Position);
@@ -301,6 +328,8 @@ public class GL
 
   public final void disableTextures()
   {
+	info("GL::disableTextures()");
+  
 	if (_enableTextures)
 	{
 	  _gl.disableVertexAttribArray(GlobalMembersGL.Attributes.TextureCoord);
@@ -310,12 +339,16 @@ public class GL
 
   public final void clearScreen(float r, float g, float b, float a)
   {
+	info("GL::clearScreen()");
+  
 	_gl.clearColor(r, g, b, a);
 	_gl.clear(GLBufferType.colorBuffer() | GLBufferType.depthBuffer());
   }
 
   public final void color(float r, float g, float b, float a)
   {
+	info("GL::color()");
+  
 	if ((_flatColorR != r) || (_flatColorG != g) || (_flatColorB != b) || (_flatColorA != a))
 	{
 	  _gl.uniform4f(GlobalMembersGL.Uniforms.FlatColor, r, g, b, a);
@@ -329,6 +362,7 @@ public class GL
 
   public final void enableVertexColor(IFloatBuffer colors, float intensity)
   {
+	info("GL::enableVertexColor()");
   
 	if (!_enableVertexColor)
 	{
@@ -349,6 +383,8 @@ public class GL
 
   public final void disableVertexColor()
   {
+	info("GL::disableVertexColor()");
+  
 	if (_enableVertexColor)
 	{
 	  _gl.disableVertexAttribArray(GlobalMembersGL.Attributes.Color);
@@ -359,11 +395,15 @@ public class GL
 
   public final void pushMatrix()
   {
+	info("GL::pushMatrix()");
+  
 	_matrixStack.addLast(_modelView);
   }
 
   public final void popMatrix()
   {
+	info("GL::popMatrix()");
+  
 	_modelView = _matrixStack.getLast();
 	_matrixStack.removeLast();
   
@@ -372,6 +412,8 @@ public class GL
 
   public final void loadMatrixf(MutableMatrix44D modelView)
   {
+	info("GL::loadMatrixf()");
+  
 	_modelView = modelView;
   
 	loadModelView();
@@ -379,6 +421,8 @@ public class GL
 
   public final void multMatrixf(MutableMatrix44D m)
   {
+	info("GL::multMatrixf()");
+  
 	_modelView = _modelView.multiply(m);
   
 	loadModelView();
@@ -386,6 +430,8 @@ public class GL
 
   public final void vertexPointer(int size, int stride, IFloatBuffer vertices)
   {
+	info("GL::vertexPointer()");
+  
 	if ((_vertices != vertices) || (_verticesTimestamp != vertices.timestamp()))
 	{
 	  _gl.vertexAttribPointer(GlobalMembersGL.Attributes.Position, size, false, stride, vertices);
@@ -396,41 +442,57 @@ public class GL
 
   public final void drawTriangles(IIntBuffer indices)
   {
+	info("GL::drawTriangles()");
+  
 	_gl.drawElements(GLPrimitive.triangles(), indices.size(), indices);
   }
 
   public final void drawTriangleStrip(IIntBuffer indices)
   {
+	info("GL::drawTriangleStrip()");
+  
 	_gl.drawElements(GLPrimitive.triangleStrip(), indices.size(), indices);
   }
 
   public final void drawTriangleFan(IIntBuffer indices)
   {
+	info("GL::drawTriangleFan()");
+  
 	_gl.drawElements(GLPrimitive.triangleFan(), indices.size(), indices);
   }
 
   public final void drawLines(IIntBuffer indices)
   {
+	info("GL::drawLines()");
+  
 	_gl.drawElements(GLPrimitive.lines(), indices.size(), indices);
   }
 
   public final void drawLineStrip(IIntBuffer indices)
   {
+	info("GL::drawLineStrip()");
+  
 	_gl.drawElements(GLPrimitive.lineStrip(), indices.size(), indices);
   }
 
   public final void drawLineLoop(IIntBuffer indices)
   {
+	info("GL::drawLineLoop()");
+  
 	_gl.drawElements(GLPrimitive.lineLoop(), indices.size(), indices);
   }
 
   public final void drawPoints(IIntBuffer indices)
   {
+	info("GL::drawPoints()");
+  
 	_gl.drawElements(GLPrimitive.points(), indices.size(), indices);
   }
 
   public final void setProjection(MutableMatrix44D projection)
   {
+	info("GL::setProjection()");
+  
   ///#ifdef C_CODE
   //  float* M = projection.getColumnMajorFloatArray();
   ///#else
@@ -447,6 +509,8 @@ public class GL
 
   public final boolean useProgram(IGLProgramId program)
   {
+	info("GL::useProgram()");
+  
 	// set shaders
 	_gl.useProgram(program);
   
@@ -493,32 +557,44 @@ public class GL
 
   public final void enablePolygonOffset(float factor, float units)
   {
+	info("GL::enablePolygonOffset()");
+  
 	_gl.enable(GLFeature.polygonOffsetFill());
 	_gl.polygonOffset(factor, units);
   }
 
   public final void disablePolygonOffset()
   {
+	info("GL::disablePolygonOffset()");
+  
 	_gl.disable(GLFeature.polygonOffsetFill());
   }
 
   public final void lineWidth(float width)
   {
+	info("GL::lineWidth()");
+  
 	_gl.lineWidth(width);
   }
 
   public final void pointSize(float size)
   {
+	info("GL::pointSize()");
+  
 	_gl.uniform1f(GlobalMembersGL.Uniforms.PointSize, size);
   }
 
   public final int getError()
   {
+	info("GL::getError()()");
+  
 	return _gl.getError();
   }
 
   public final IGLTextureId uploadTexture(IImage image, int format, boolean generateMipmap)
   {
+	info("GL::uploadTexture()");
+  
 	final IGLTextureId texId = getGLTextureId();
 	if (texId != null)
 	{
@@ -553,6 +629,8 @@ public class GL
 
   public final void setTextureCoordinates(int size, int stride, IFloatBuffer textureCoordinates)
   {
+	info("GL::setTextureCoordinates()");
+  
 	if ((_textureCoordinates != textureCoordinates) || (_textureCoordinatesTimestamp != textureCoordinates.timestamp()))
 	{
 	  _gl.vertexAttribPointer(GlobalMembersGL.Attributes.TextureCoord, size, false, stride, textureCoordinates);
@@ -563,11 +641,15 @@ public class GL
 
   public final void bindTexture(IGLTextureId textureId)
   {
+	info("GL::bindTexture()");
+  
 	_gl.bindTexture(GLTextureType.texture2D(), textureId);
   }
 
   public final void enableDepthTest()
   {
+	info("GL::enableDepthTest()");
+  
 	if (!_enableDepthTest)
 	{
 	  _gl.enable(GLFeature.depthTest());
@@ -576,6 +658,8 @@ public class GL
   }
   public final void disableDepthTest()
   {
+	info("GL::disableDepthTest()");
+  
 	if (_enableDepthTest)
 	{
 	  _gl.disable(GLFeature.depthTest());
@@ -585,6 +669,8 @@ public class GL
 
   public final void enableBlend()
   {
+	info("GL::enableBlend()");
+  
 	if (!_enableBlend)
 	{
 	  _gl.enable(GLFeature.blend());
@@ -593,6 +679,8 @@ public class GL
   }
   public final void disableBlend()
   {
+	info("GL::disableBlend()");
+  
 	if (_enableBlend)
 	{
 	  _gl.disable(GLFeature.blend());
@@ -603,6 +691,8 @@ public class GL
 
   public final void drawBillBoard(IGLTextureId textureId, IFloatBuffer vertices, float viewPortRatio)
   {
+	info("GL::drawBillBoard()");
+  
 	int TODO_refactor_billboard;
   
 	_gl.uniform1i(GlobalMembersGL.Uniforms.BillBoard, 1);
@@ -628,6 +718,8 @@ public class GL
 
   public final void deleteTexture(IGLTextureId texture)
   {
+	info("GL::deleteTexture()");
+  
 	if (texture != null)
 	{
 	  if (_gl.deleteTexture(texture))
@@ -641,6 +733,8 @@ public class GL
 
   public final void enableCullFace(int face)
   {
+	info("GL::enableCullFace()");
+  
 	if (!_enableCullFace)
 	{
 	  _gl.enable(GLFeature.cullFace());
@@ -655,6 +749,8 @@ public class GL
   }
   public final void disableCullFace()
   {
+	info("GL::disableCullFace()");
+  
 	if (_enableCullFace)
 	{
 	  _gl.disable(GLFeature.cullFace());
@@ -664,6 +760,8 @@ public class GL
 
   public final void transformTexCoords(float scaleX, float scaleY, float translationX, float translationY)
   {
+	info("GL::transformTexCoords()");
+  
 	if ((_scaleX != scaleX) || (_scaleY != scaleY))
 	{
 	  _gl.uniform2f(GlobalMembersGL.Uniforms.ScaleTexCoord, scaleX, scaleY);
@@ -681,42 +779,58 @@ public class GL
 
   public final void transformTexCoords(double scaleX, double scaleY, double translationX, double translationY)
   {
+	info("GL::transformTexCoords()");
+
 	transformTexCoords((float) scaleX, (float) scaleY, (float) translationX, (float) translationY);
   }
 
   public final void transformTexCoords(Vector2D scale, Vector2D translation)
   {
+	info("GL::transformTexCoords()");
+
 	transformTexCoords((float) scale._x, (float) scale._y, (float) translation._x, (float) translation._y);
   }
 
   public final void transformTexCoords(MutableVector2D scale, MutableVector2D translation)
   {
+	info("GL::transformTexCoords()");
+
 	transformTexCoords((float) scale.x(), (float) scale.y(), (float) translation.x(), (float) translation.y());
   }
 
 
   public final void color(Color col)
   {
+	info("GL::color()");
+
 	color(col.getRed(), col.getGreen(), col.getBlue(), col.getAlpha());
   }
 
   public final void clearScreen(Color col)
   {
+	info("GL::clearScreen()");
+
 	clearScreen(col.getRed(), col.getGreen(), col.getBlue(), col.getAlpha());
   }
 
   public final void enableVertexFlatColor(Color c, float intensity)
   {
+	info("GL::enableVertexFlatColor()");
+
 	enableVertexFlatColor(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha(), intensity);
   }
 
   public final void setBlendFuncSrcAlpha()
   {
+	info("GL::setBlendFuncSrcAlpha()");
+  
 	_gl.blendFunc(GLBlendFactor.srcAlpha(), GLBlendFactor.oneMinusSrcAlpha());
   }
 
   public final void getViewport(int[] v)
   {
+	info("GL::getViewport()");
+
 	_gl.getIntegerv(GLVariable.viewport(), v);
   }
 
