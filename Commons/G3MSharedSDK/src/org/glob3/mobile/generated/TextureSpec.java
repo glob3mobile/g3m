@@ -23,7 +23,7 @@ package org.glob3.mobile.generated;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IImage;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class RenderContext;
+//class G3MRenderContext;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class TextureHolder;
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:

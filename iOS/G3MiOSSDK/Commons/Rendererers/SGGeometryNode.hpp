@@ -24,7 +24,7 @@ private:
   IIntBuffer*   _indices;
 
 protected:
-  void rawRender(const RenderContext* rc);
+  void rawRender(const G3MRenderContext* rc);
 
 public:
 

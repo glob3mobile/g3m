@@ -58,12 +58,16 @@ public:
   
   const IImage* readImage(const URL& url);
   
-  void onResume(const InitializationContext* ic) {
+  void onResume(const G3MContext* context) {
     
   }
   
-  void onPause(const InitializationContext* ic) {
+  void onPause(const G3MContext* context) {
     
+  }
+
+  void onDestroy(const G3MContext* context) {
+
   }
   
   bool isAvailable() {

@@ -8,23 +8,23 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.IBufferDownloadListener;
 import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IImageDownloadListener;
-import org.glob3.mobile.generated.InitializationContext;
 import org.glob3.mobile.generated.URL;
 
 import android.content.Context;
+import android.util.Log;
 
 
 public final class Downloader_Android
          extends
             IDownloader {
 
-   public final static String                               ASSET_URL = "file:///";
-   final static String                                      TAG       = "Downloader_Android";
+   public final static String                               ASSET_URL       = "file:///";
+   final static String                                      TAG             = "Downloader_Android";
 
-   private boolean                                          _started;
    private final int                                        _maxConcurrentOperationCount;
    private int                                              _requestIdCounter;
    private long                                             _requestsCounter;
@@ -35,6 +35,11 @@ public final class Downloader_Android
    private final int                                        _connectTimeout;
    private final int                                        _readTimeout;
    private final Context                                    _appContext;
+
+   private boolean                                          _started;
+   private final Object                                     _startStopMutex = new Object();
+
+   private G3MContext                                       _context;
 
 
    public Downloader_Android(final int maxConcurrentOperationCount,
@@ -58,53 +63,61 @@ public final class Downloader_Android
 
 
    @Override
-   public synchronized void start() {
-      if (!_started) {
-         for (int i = 0; i < _maxConcurrentOperationCount; i++) {
-            final Downloader_Android_WorkerThread da = new Downloader_Android_WorkerThread(this);
-            _workers.add(da);
-         }
+   public void start() {
+      synchronized (_startStopMutex) {
+         if (!_started) {
+            for (int i = 0; i < _maxConcurrentOperationCount; i++) {
+               final Downloader_Android_WorkerThread da = new Downloader_Android_WorkerThread(this, i);
+               _workers.add(da);
+            }
 
 
-         final Iterator<Downloader_Android_WorkerThread> iter = _workers.iterator();
-         while (iter.hasNext()) {
-            final Downloader_Android_WorkerThread worker = iter.next();
-            worker.start();
+            for (final Downloader_Android_WorkerThread worker : _workers) {
+               worker.initialize(_context);
+            }
+
+            for (final Downloader_Android_WorkerThread worker : _workers) {
+               worker.start();
+            }
+
+            _started = true;
+            Log.i(TAG, "Downloader started");
          }
-         _started = true;
       }
    }
 
 
    @Override
-   public synchronized void stop() {
-      if (_started) {
-         for (final Downloader_Android_WorkerThread worker : _workers) {
-            worker.stopWorkerThread();
-         }
-         _started = false;
-
-         boolean allWorkersStopped;
-         do {
-            allWorkersStopped = true;
+   public void stop() {
+      synchronized (_startStopMutex) {
+         if (_started) {
             for (final Downloader_Android_WorkerThread worker : _workers) {
-               if (!worker.isStopped()) {
-                  allWorkersStopped = false;
-                  break;
-               }
+               worker.stopWorkerThread();
             }
+            _started = false;
+
+
+            //            boolean allWorkersStopped;
+            //            do {
+            //               allWorkersStopped = true;
+            //               for (final Downloader_Android_WorkerThread worker : _workers) {
+            //                  if (!worker.isStopped()) {
+            //                     allWorkersStopped = false;
+            //                     try {
+            //                        Thread.sleep(2);
+            //                     }
+            //                     catch (final InterruptedException e) {
+            //                     }
+            //                     break;
+            //                  }
+            //               }
+            //            }
+            //            while (!allWorkersStopped);
+
+
+            _workers.clear();
+            Log.i(TAG, "Downloader stopped");
          }
-         while (!allWorkersStopped);
-
-         _workers.clear();
-
-         //         boolean allStopped = true;
-         //         while (_started) {
-         //            for (final Downloader_Android_WorkerThread worker : _workers) {
-         //               allStopped = allStopped && worker.isStopping();
-         //            }
-         //         _started = allStopped;
-         //         }
       }
    }
 
@@ -228,16 +241,31 @@ public final class Downloader_Android
    }
 
 
-   public Downloader_Android_Handler getHandlerToRun() {
-      long selectedPriority = -100000000; // TODO: LONG_MAX_VALUE;
+   @Override
+   public synchronized void initialize(final G3MContext context) {
+      _context = context;
+      for (final Downloader_Android_WorkerThread worker : _workers) {
+         worker.initialize(_context);
+      }
+   }
+
+
+   Downloader_Android_Handler getHandlerToRun() {
+      long selectedPriority = Long.MIN_VALUE;
       Downloader_Android_Handler selectedHandler = null;
       String selectedURL = null;
 
       synchronized (this) {
-         final Iterator<Map.Entry<String, Downloader_Android_Handler>> it = _queuedHandlers.entrySet().iterator();
 
-         while (it.hasNext()) {
-            final Map.Entry<String, Downloader_Android_Handler> e = it.next();
+         if (_context == null) {
+            return null;
+         }
+
+         //         final Iterator<Map.Entry<String, Downloader_Android_Handler>> it = _queuedHandlers.entrySet().iterator();
+         //
+         //         while (it.hasNext()) {
+         for (final Map.Entry<String, Downloader_Android_Handler> e : _queuedHandlers.entrySet()) {
+            //            final Map.Entry<String, Downloader_Android_Handler> e = it.next();
             final String url = e.getKey();
             final Downloader_Android_Handler handler = e.getValue();
             final long priority = handler.getPriority();
@@ -288,16 +316,25 @@ public final class Downloader_Android
 
 
    @Override
-   public void onResume(final InitializationContext ic) {
+   public void onResume(final G3MContext context) {
+      start();
    }
 
 
    @Override
-   public void onPause(final InitializationContext ic) {
+   public void onPause(final G3MContext context) {
+      stop();
    }
 
 
    public Context getAppContext() {
       return _appContext;
    }
+
+
+   @Override
+   public void onDestroy(final G3MContext context) {
+      stop();
+   }
+
 }

@@ -46,7 +46,7 @@ const Geodetic2D Sector::getInnerPoint(double u, double v) const {
                     Angle::lerp( _lower.longitude(), _upper.longitude(), (float)      u  ) );
 }
 
-bool Sector::isBackOriented(const RenderContext *rc) const {
+bool Sector::isBackOriented(const G3MRenderContext *rc) const {
   const Camera* camera = rc->getCurrentCamera();
   const Planet* planet = rc->getPlanet();
   

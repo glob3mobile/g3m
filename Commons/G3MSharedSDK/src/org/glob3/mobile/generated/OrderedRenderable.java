@@ -23,7 +23,7 @@ public abstract class OrderedRenderable
 //ORIGINAL LINE: virtual double squaredDistanceFromEye() const = 0;
   public abstract double squaredDistanceFromEye();
 
-  public abstract void render(RenderContext rc);
+  public abstract void render(G3MRenderContext rc);
 
   public void dispose()
   {

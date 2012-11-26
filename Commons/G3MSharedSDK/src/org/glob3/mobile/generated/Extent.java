@@ -31,25 +31,25 @@ public abstract class Extent
 
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual double projectedArea(const RenderContext* rc) const
-  public double projectedArea(RenderContext rc)
+//ORIGINAL LINE: virtual double projectedArea(const G3MRenderContext* rc) const
+  public double projectedArea(G3MRenderContext rc)
   {
 	return IMathUtils.instance().sqrt(squaredProjectedArea(rc));
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual double squaredProjectedArea(const RenderContext* rc) const = 0;
-  public abstract double squaredProjectedArea(RenderContext rc);
+//ORIGINAL LINE: virtual double squaredProjectedArea(const G3MRenderContext* rc) const = 0;
+  public abstract double squaredProjectedArea(G3MRenderContext rc);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual Vector2I projectedExtent(const RenderContext* rc) const = 0;
-  public abstract Vector2I projectedExtent(RenderContext rc);
+//ORIGINAL LINE: virtual Vector2I projectedExtent(const G3MRenderContext* rc) const = 0;
+  public abstract Vector2I projectedExtent(G3MRenderContext rc);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual Vector3D intersectionWithRay(const Vector3D& origin, const Vector3D& direction) const = 0;
   public abstract Vector3D intersectionWithRay(Vector3D origin, Vector3D direction);
 
-  public abstract void render(RenderContext rc);
+  public abstract void render(G3MRenderContext rc);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: virtual boolean touchesBox(const Box *box) const = 0;

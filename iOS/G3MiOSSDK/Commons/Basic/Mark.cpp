@@ -52,10 +52,10 @@ public:
 };
 
 
-void Mark::initialize(const InitializationContext* ic) {
+void Mark::initialize(const G3MContext* context) {
   //  todo;
   if (!_textureSolved) {
-    IDownloader* downloader = ic->getDownloader();
+    IDownloader* downloader = context->getDownloader();
     
     downloader->requestImage(_textureURL,
                              1000000,
@@ -109,7 +109,7 @@ IFloatBuffer* Mark::getVertices(const Planet* planet) {
   return _vertices;
 }
 
-void Mark::render(const RenderContext* rc,
+void Mark::render(const G3MRenderContext* rc,
                   const double minDistanceToCamera) {
   const Camera* camera = rc->getCurrentCamera();
   const Planet* planet = rc->getPlanet();

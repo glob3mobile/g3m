@@ -16,7 +16,7 @@
 
 class TextureBuilder;
 class IImage;
-class RenderContext;
+class G3MRenderContext;
 class TextureHolder;
 class GL;
 class IFactory;
@@ -143,7 +143,7 @@ private:
   
   const bool _verbose;
   
-  void showHolders(const std::string message) const;
+  void showHolders(const std::string& message) const;
   
 public:
   

@@ -29,7 +29,7 @@ public class EffectsScheduler
   private IFactory _factory; // FINAL WORD REMOVE BY CONVERSOR RULE
 
 
-  private void processFinishedEffects(RenderContext rc, TimeInterval now)
+  private void processFinishedEffects(G3MRenderContext rc, TimeInterval when)
   {
 	java.util.ArrayList<Integer> indicesToRemove = new java.util.ArrayList<Integer>();
 	for (int i = 0; i < _effectsRuns.size(); i++)
@@ -38,9 +38,9 @@ public class EffectsScheduler
   
 	  if (effectRun._started == true)
 	  {
-		if (effectRun._effect.isDone(rc, now))
+		if (effectRun._effect.isDone(rc, when))
 		{
-		  effectRun._effect.stop(rc, now);
+		  effectRun._effect.stop(rc, when);
   
 		  indicesToRemove.add(i);
 		}
@@ -64,7 +64,7 @@ public class EffectsScheduler
 
   }
 
-  public final void doOneCyle(RenderContext rc)
+  public final void doOneCyle(G3MRenderContext rc)
   {
 	final TimeInterval now = _timer.now();
   
@@ -93,25 +93,25 @@ public class EffectsScheduler
   //  SampleEffect(TimeInterval duration) : EffectWithDuration(duration) {
   //  }
   //  
-  //  virtual void start(const RenderContext *rc,
-  //                     const TimeInterval& now) {
+  //  virtual void start(const G3MRenderContext *rc,
+  //                     const TimeInterval& when) {
   //    EffectWithDuration::start(rc, now);
   //    _lastPercent = 0;
   //  }
   //  
-  //  virtual void doStep(const RenderContext *rc,
-  //                      const TimeInterval& now) {
+  //  virtual void doStep(const G3MRenderContext *rc,
+  //                      const TimeInterval& when) {
   //    const double percent = pace( percentDone(now) );
   //    rc->getNextCamera()->moveForward((percent-_lastPercent)*1e7);
   //    _lastPercent = percent;
   //  }
   //  
-  //  virtual void stop(const RenderContext *rc,
-  //                    const TimeInterval& now) {
+  //  virtual void stop(const G3MRenderContext *rc,
+  //                    const TimeInterval& when) {
   //    EffectWithDuration::stop(rc, now);
   //  }
   //  
-  //  virtual void cancel(const TimeInterval& now) {
+  //  virtual void cancel(const TimeInterval& when) {
   //    // do nothing, just leave the effect in the intermediate state
   //  }
   //
@@ -123,9 +123,9 @@ public class EffectsScheduler
   
   
   
-  public final void initialize(InitializationContext ic)
+  public final void initialize(G3MContext context)
   {
-	_factory = ic.getFactory();
+	_factory = context.getFactory();
 	_timer = _factory.createTimer();
   }
 
@@ -178,14 +178,20 @@ public class EffectsScheduler
   
   }
 
-  public final void onResume(InitializationContext ic)
+  public final void onResume(G3MContext context)
   {
 
   }
 
-  public final void onPause(InitializationContext ic)
+  public final void onPause(G3MContext context)
   {
 
   }
+
+  public final void onDestroy(G3MContext context)
+  {
+
+  }
+
 
 }

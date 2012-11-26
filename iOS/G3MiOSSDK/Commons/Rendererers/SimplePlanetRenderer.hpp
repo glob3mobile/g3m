@@ -36,27 +36,27 @@ private:
   IIntBuffer*  createMeshIndex() const;
   IFloatBuffer* createTextureCoordinates() const;
   
-  bool initializeMesh(const RenderContext* rc);
+  bool initializeMesh(const G3MRenderContext* rc);
   
 public:
   SimplePlanetRenderer(const std::string textureFilename);
   ~SimplePlanetRenderer();
   
-  void initialize(const InitializationContext* ic);  
+  void initialize(const G3MContext* context);  
   
-  void render(const RenderContext* rc);
+  void render(const G3MRenderContext* rc);
   
-  bool onTouchEvent(const EventContext* ec,
+  bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent) {
     return false;
   }
   
-  void onResizeViewportEvent(const EventContext* ec,
+  void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
     
   }
   
-  bool isReadyToRender(const RenderContext* rc) {
+  bool isReadyToRender(const G3MRenderContext* rc) {
     return true;
   }
   
@@ -68,15 +68,18 @@ public:
     
   }
 
-  void onResume(const InitializationContext* ic) {
+  void onResume(const G3MContext* context) {
     
   }
   
-  void onPause(const InitializationContext* ic) {
+  void onPause(const G3MContext* context) {
     
   }
 
-  
+  void onDestroy(const G3MContext* context) {
+
+  }
+
 };
 
 

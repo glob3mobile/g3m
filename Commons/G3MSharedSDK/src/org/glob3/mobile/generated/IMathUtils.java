@@ -204,4 +204,14 @@ public abstract class IMathUtils
 //ORIGINAL LINE: virtual double max(double d1, double d2) const = 0;
   public abstract double max(double d1, double d2);
 
+  public double lerp(double from, double to, double alpha)
+  {
+	return from + ((to - from) * alpha);
+  }
+
+  public float lerp(float from, float to, float alpha)
+  {
+	return from + ((to - from) * alpha);
+  }
+
 }

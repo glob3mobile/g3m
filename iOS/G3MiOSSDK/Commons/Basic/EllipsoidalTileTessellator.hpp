@@ -21,7 +21,7 @@ private:
   const bool         _skirted;
   
 public:
-  Mesh* createDebugMesh(const RenderContext* rc,
+  Mesh* createDebugMesh(const G3MRenderContext* rc,
                         const Tile* tile) const;
   
   EllipsoidalTileTessellator(const unsigned int resolution,
@@ -34,10 +34,10 @@ public:
   
   virtual ~EllipsoidalTileTessellator() { }
   
-  Mesh* createMesh(const RenderContext* rc,
+  Mesh* createMesh(const G3MRenderContext* rc,
                    const Tile* tile) const;
   
-  bool isReady(const RenderContext *rc) const {
+  bool isReady(const G3MRenderContext *rc) const {
     return true;
   }
   

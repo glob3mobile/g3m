@@ -47,7 +47,7 @@ public:
   
   ~IndexedMesh();
   
-  virtual void render(const RenderContext* rc) const;
+  virtual void render(const G3MRenderContext* rc) const;
   
   Extent* getExtent() const;
   
@@ -55,7 +55,7 @@ public:
   
   const Vector3D getVertex(int i) const;
 
-  bool isTransparent(const RenderContext* rc) const;
+  bool isTransparent(const G3MRenderContext* rc) const;
 
 };
 

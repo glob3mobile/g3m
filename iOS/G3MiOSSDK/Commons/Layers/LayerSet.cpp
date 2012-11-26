@@ -10,7 +10,7 @@
 #include "Tile.hpp"
 #include "TileKey.hpp"
 
-std::vector<Petition*> LayerSet::createTileMapPetitions(const RenderContext* rc,
+std::vector<Petition*> LayerSet::createTileMapPetitions(const G3MRenderContext* rc,
                                                         const Tile* tile,
                                                         int width, int height) const {
   std::vector<Petition*> petitions;
@@ -35,7 +35,7 @@ std::vector<Petition*> LayerSet::createTileMapPetitions(const RenderContext* rc,
   return petitions;
 }
 
-void LayerSet::onTerrainTouchEvent(const EventContext* ec,
+void LayerSet::onTerrainTouchEvent(const G3MEventContext* ec,
                                    const Geodetic3D& position,
                                    const Tile* tile) const {
   
@@ -50,9 +50,9 @@ void LayerSet::onTerrainTouchEvent(const EventContext* ec,
   
 }
 
-void LayerSet::initialize(const InitializationContext* ic)const{
+void LayerSet::initialize(const G3MContext* context)const{
   for (int i = 0; i<_layers.size(); i++){
-    _layers[i]->initialize(ic);
+    _layers[i]->initialize(context);
   }
 }
 

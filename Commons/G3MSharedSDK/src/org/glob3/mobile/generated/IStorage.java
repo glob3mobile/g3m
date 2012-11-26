@@ -17,26 +17,27 @@ package org.glob3.mobile.generated;
 
 
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class InitializationContext;
+//class G3MContext;
 
 public abstract class IStorage
 {
-	private static IStorage _instance = null;
+  protected G3MContext _context;
 
+  public IStorage()
+  {
+	  _context = null;
 
-	public static void setInstance(IStorage storage)
-	{
-		if (_instance != null)
-		{
-			ILogger.instance().logWarning("Warning, IStorage instance set twice\n");
-		}
-		_instance = storage;
-	}
+  }
 
-	public static IStorage instance()
-	{
-		return _instance;
-	}
+  public void dispose()
+  {
+
+  }
+
+  public void initialize(G3MContext context)
+  {
+	_context = context;
+  }
 
   public abstract boolean containsBuffer(URL url);
 
@@ -52,11 +53,13 @@ public abstract class IStorage
   public abstract IImage readImage(URL url);
 
 
-  public abstract void onResume(InitializationContext ic);
+  public abstract void onResume(G3MContext context);
 
-  public abstract void onPause(InitializationContext ic);
+  public abstract void onPause(G3MContext context);
+
+  public abstract void onDestroy(G3MContext context);
+
 
   public abstract boolean isAvailable();
-
 
 }

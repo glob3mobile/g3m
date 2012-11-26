@@ -91,8 +91,8 @@ public class CompositeMesh extends Mesh
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void render(const RenderContext* rc) const
-  public final void render(RenderContext rc)
+//ORIGINAL LINE: void render(const G3MRenderContext* rc) const
+  public final void render(G3MRenderContext rc)
   {
 	final int childrenCount = _children.size();
 	for (int i = 0; i < childrenCount; i++)
@@ -114,8 +114,8 @@ public class CompositeMesh extends Mesh
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isTransparent(const RenderContext* rc) const
-  public final boolean isTransparent(RenderContext rc)
+//ORIGINAL LINE: boolean isTransparent(const G3MRenderContext* rc) const
+  public final boolean isTransparent(G3MRenderContext rc)
   {
 	final int childrenCount = _children.size();
 	for (int i = 0; i < childrenCount; i++)

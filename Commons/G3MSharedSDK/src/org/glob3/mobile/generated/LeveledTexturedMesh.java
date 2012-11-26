@@ -16,6 +16,11 @@ public class LeveledTexturedMesh extends Mesh
 //ORIGINAL LINE: LazyTextureMapping* getCurrentTextureMapping() const
   private LazyTextureMapping getCurrentTextureMapping()
   {
+	if (_mappings == null)
+	{
+	  return null;
+	}
+  
 	if (!_currentLevelIsValid)
 	{
 	  for (int i = 0; i < _levelsCount; i++)
@@ -67,25 +72,28 @@ public class LeveledTexturedMesh extends Mesh
 
   public void dispose()
   {
-	if (_ownedMesh)
-	{
-	  if (_mesh != null)
-		  _mesh.dispose();
-	}
+	synchronized (this) {
   
-	if (_mappings != null)
-	{
-	  for (int i = 0; i < _mappings.size(); i++)
+	  if (_ownedMesh)
 	  {
-		LazyTextureMapping mapping = _mappings.get(i);
-		if (mapping != null)
-			mapping.dispose();
+		if (_mesh != null)
+			_mesh.dispose();
 	  }
   
-	  _mappings = null;
-	  _mappings = null;
-	}
+	  if (_mappings != null)
+	  {
+		for (int i = 0; i < _mappings.size(); i++)
+		{
+		  LazyTextureMapping mapping = _mappings.get(i);
+		  if (mapping != null)
+			  mapping.dispose();
+		}
   
+		_mappings = null;
+		_mappings = null;
+	  }
+  
+	}
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -103,8 +111,8 @@ public class LeveledTexturedMesh extends Mesh
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void render(const RenderContext* rc) const
-  public final void render(RenderContext rc)
+//ORIGINAL LINE: void render(const G3MRenderContext* rc) const
+  public final void render(G3MRenderContext rc)
   {
 	LazyTextureMapping mapping = getCurrentTextureMapping();
   
@@ -177,8 +185,8 @@ public class LeveledTexturedMesh extends Mesh
   //}
   
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean isTransparent(const RenderContext* rc) const
-  public final boolean isTransparent(RenderContext rc)
+//ORIGINAL LINE: boolean isTransparent(const G3MRenderContext* rc) const
+  public final boolean isTransparent(G3MRenderContext rc)
   {
 	if (_mesh.isTransparent(rc))
 	{

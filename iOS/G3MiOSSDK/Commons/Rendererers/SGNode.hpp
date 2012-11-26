@@ -12,8 +12,9 @@
 #include <string>
 #include <vector>
 
-class InitializationContext;
-class RenderContext;
+class G3MContext;
+class G3MRenderContext;
+class SGShape;
 
 class SGNode {
 private:
@@ -28,22 +29,25 @@ private:
 
 protected:
 #ifdef C_CODE
-  const InitializationContext* _initializationContext;
+  const G3MContext* _context;
 #endif
 #ifdef JAVA_CODE
-  protected InitializationContext _initializationContext;
+  protected G3MContext _context;
 #endif
 
-  virtual void prepareRender(const RenderContext* rc);
+  SGShape *_shape;
 
-  virtual void cleanUpRender(const RenderContext* rc);
+  virtual void prepareRender(const G3MRenderContext* rc);
 
-  virtual void rawRender(const RenderContext* rc);
+  virtual void cleanUpRender(const G3MRenderContext* rc);
+
+  virtual void rawRender(const G3MRenderContext* rc);
 
 public:
 
   SGNode() :
-  _initializationContext(NULL),
+  _context(NULL),
+  _shape(NULL),
   _parent(NULL)
   {
 
@@ -51,7 +55,8 @@ public:
 
   virtual ~SGNode();
 
-  void initialize(const InitializationContext* ic);
+  void initialize(const G3MContext* context,
+                  SGShape *shape);
 
   void addNode(SGNode* child);
 
@@ -63,10 +68,20 @@ public:
     _sId = sId;
   }
 
-  virtual bool isReadyToRender(const RenderContext* rc);
+  virtual bool isReadyToRender(const G3MRenderContext* rc);
 
-  void render(const RenderContext* rc);
+  void render(const G3MRenderContext* rc);
 
+  SGShape* getShape() const {
+    // return (_parent == NULL) ? _shape : _parent->getShape();
+    if (_shape != NULL) {
+      return _shape;
+    }
+    if (_parent != NULL) {
+      return _parent->getShape();
+    }
+    return NULL;
+  }
 };
 
 #endif

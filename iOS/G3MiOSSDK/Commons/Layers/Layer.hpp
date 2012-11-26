@@ -29,6 +29,8 @@ private:
 
   LayerSet* _layerSet;
 
+  bool _enable;
+
 protected:
   void notifyChanges() const;
   
@@ -36,22 +38,30 @@ public:
   
   Layer(LayerCondition* condition) :
   _condition(condition),
-  _layerSet(NULL)
+  _layerSet(NULL),
+  _enable(true)
   {
     
   }
-  
+
+  virtual void setEnable(bool enable) {
+    if (enable != _enable) {
+      _enable = enable;
+      notifyChanges();
+    }
+  }
+
   virtual ~Layer() {
-  };
+  }
   
-  virtual std::vector<Petition*> getMapPetitions(const RenderContext* rc,
+  virtual std::vector<Petition*> getMapPetitions(const G3MRenderContext* rc,
                                                  const Tile* tile,
                                                  int width, int height) const = 0;
   
-  virtual bool isAvailable(const RenderContext* rc,
+  virtual bool isAvailable(const G3MRenderContext* rc,
                            const Tile* tile) const;
   
-  virtual bool isAvailable(const EventContext* ec,
+  virtual bool isAvailable(const G3MEventContext* ec,
                            const Tile* tile) const;
   
 //  virtual bool isTransparent() const = 0;
@@ -65,13 +75,13 @@ public:
     return true;
   }
   
-  virtual void initialize(const InitializationContext* ic) {}
+  virtual void initialize(const G3MContext* context) {}
   
   void addTerrainTouchEventListener(TerrainTouchEventListener* listener) {
     _listeners.push_back(listener);
   }
   
-  void onTerrainTouchEventListener(const EventContext* ec,
+  void onTerrainTouchEventListener(const G3MEventContext* ec,
                                    TerrainTouchEvent& tte) const {
     for (unsigned int i = 0; i < _listeners.size(); i++) {
       TerrainTouchEventListener* listener = _listeners[i];

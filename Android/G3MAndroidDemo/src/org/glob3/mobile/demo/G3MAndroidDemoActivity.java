@@ -32,7 +32,6 @@ public class G3MAndroidDemoActivity
          extends
             G3MBaseActivity {
 
-   @Override
    protected void initializeWidget(final G3MWidget_Android widget) {
       final LayerSet layerSet = new LayerSet();
 
@@ -207,11 +206,11 @@ public class G3MAndroidDemoActivity
          //         quad.setPitch(Angle.fromDegrees(0));
          //         shapesRenderer.addShape(quad);
 
-         final Geodetic3D circlePosition = new Geodetic3D( //
-                  Angle.fromDegrees(37.78333333), //
-                  Angle.fromDegrees(-122.41666666666667), //
-                  8000);
-         final int circleRadius = 50000;
+         //         final Geodetic3D circlePosition = new Geodetic3D( //
+         //                  Angle.fromDegrees(37.78333333), //
+         //                  Angle.fromDegrees(-122.41666666666667), //
+         //                  8000);
+         //         final int circleRadius = 50000;
          //         final Color circleColor = Color.newFromRGBA(1, 1, 0, 1);
          //         final CircleShape circle = new CircleShape(circlePosition, circleRadius, circleColor);
 
@@ -246,5 +245,12 @@ public class G3MAndroidDemoActivity
                periodicalTasks, //
                incrementalTileQuality);
 
+   }
+
+
+   @Override
+   protected G3MWidget_Android getWidgetAndroid() {
+      // TODO Auto-generated method stub
+      return null;
    }
 }

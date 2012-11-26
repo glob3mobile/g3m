@@ -2,17 +2,15 @@
 
 package org.glob3.mobile.demo;
 
-import org.glob3.mobile.generated.IDownloader;
+import org.glob3.mobile.specific.G3MBaseActivity;
 import org.glob3.mobile.specific.G3MWidget_Android;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 
 
 public class G3MSimplestGlob3Activity
          extends
-            Activity {
+            G3MBaseActivity {
 
    private G3MWidget_Android _widgetAndroid = null;
 
@@ -28,20 +26,7 @@ public class G3MSimplestGlob3Activity
 
 
    @Override
-   protected void onResume() {
-      IDownloader.instance().start();
-      super.onResume();
-
-   }
-
-
-   @Override
-   protected void onDestroy() {
-      super.onDestroy();
-      Log.d("Demo", "Activity destroyed");
-      //TODO HACK TO CLOSE SQL DB
-      _widgetAndroid.closeStorage();
-      android.os.Process.killProcess(android.os.Process.myPid());
-
+   protected G3MWidget_Android getWidgetAndroid() {
+      return _widgetAndroid;
    }
 }

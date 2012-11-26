@@ -9,7 +9,7 @@
 #ifndef G3MiOSSDK_TileTessellator_hpp
 #define G3MiOSSDK_TileTessellator_hpp
 
-class RenderContext;
+class G3MRenderContext;
 class Mesh;
 class Tile;
 class MutableVector2D;
@@ -19,12 +19,12 @@ class TileTessellator {
 public:
   virtual ~TileTessellator() { };
   
-  virtual bool isReady(const RenderContext *rc) const = 0;
+  virtual bool isReady(const G3MRenderContext *rc) const = 0;
   
-  virtual Mesh* createMesh(const RenderContext* rc,
+  virtual Mesh* createMesh(const G3MRenderContext* rc,
                            const Tile* tile) const = 0;
   
-  virtual Mesh* createDebugMesh(const RenderContext* rc,
+  virtual Mesh* createDebugMesh(const G3MRenderContext* rc,
                                 const Tile* tile) const = 0;
 
   virtual IFloatBuffer* createUnitTextCoords() const = 0;

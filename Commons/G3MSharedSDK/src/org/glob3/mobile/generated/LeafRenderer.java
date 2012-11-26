@@ -49,19 +49,19 @@ public abstract class LeafRenderer extends Renderer
 	_enable = enable;
   }
 
-  public abstract void onResume(InitializationContext ic);
+  public abstract void onResume(G3MContext context);
 
-  public abstract void onPause(InitializationContext ic);
+  public abstract void onPause(G3MContext context);
 
-  public abstract void initialize(InitializationContext ic);
+  public abstract void initialize(G3MContext context);
 
-  public abstract boolean isReadyToRender(RenderContext rc);
+  public abstract boolean isReadyToRender(G3MRenderContext rc);
 
-  public abstract void render(RenderContext rc);
+  public abstract void render(G3MRenderContext rc);
 
-  public abstract boolean onTouchEvent(EventContext ec, TouchEvent touchEvent);
+  public abstract boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent);
 
-  public abstract void onResizeViewportEvent(EventContext ec, int width, int height);
+  public abstract void onResizeViewportEvent(G3MEventContext ec, int width, int height);
 
   public abstract void start();
 

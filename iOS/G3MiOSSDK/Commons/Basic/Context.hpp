@@ -29,29 +29,30 @@ class OrderedRenderable;
 
 #include <vector>
 
-class Context {
+class G3MContext {
 protected:
   const IFactory*     _factory;
   const IStringUtils* _stringUtils;
-  const IThreadUtils*       _threadUtils;
+  const IThreadUtils* _threadUtils;
   const ILogger*      _logger;
   const IMathUtils*   _mathUtils;
   const IJSONParser*  _jsonParser;
   const Planet*       _planet;
   IDownloader*        _downloader;
   EffectsScheduler*   _effectsScheduler;
-    IStorage*         _storage;
+  IStorage*           _storage;
 
-  Context(const IFactory*     factory,
-          const IStringUtils* stringUtils,
-          const IThreadUtils* threadUtils,
-          const ILogger*      logger,
-          const IMathUtils*   mathUtils,
-          const IJSONParser*  jsonParser,
-          const Planet*       planet,
-          IDownloader*        downloader,
-          EffectsScheduler*   effectsScheduler,
-          IStorage*           storage) :
+public:
+  G3MContext(const IFactory*     factory,
+             const IStringUtils* stringUtils,
+             const IThreadUtils* threadUtils,
+             const ILogger*      logger,
+             const IMathUtils*   mathUtils,
+             const IJSONParser*  jsonParser,
+             const Planet*       planet,
+             IDownloader*        downloader,
+             EffectsScheduler*   effectsScheduler,
+             IStorage*           storage) :
   _factory(factory),
   _stringUtils(stringUtils),
   _threadUtils(threadUtils),
@@ -61,12 +62,11 @@ protected:
   _planet(planet),
   _downloader(downloader),
   _effectsScheduler(effectsScheduler),
-    _storage(storage)
+  _storage(storage)
   {
   }
 
-public:
-  virtual ~Context() {
+  virtual ~G3MContext() {
 
   }
 
@@ -97,10 +97,10 @@ public:
   IDownloader* getDownloader() const {
     return _downloader;
   }
-    
-    IStorage* getStorage() const {
-        return _storage;
-    }
+
+  IStorage* getStorage() const {
+    return _storage;
+  }
 
   EffectsScheduler* getEffectsScheduler() const {
     return _effectsScheduler;
@@ -114,55 +114,29 @@ public:
 //************************************************************
 
 
-class InitializationContext: public Context {
-public:
-  InitializationContext(const IFactory*           factory,
-                        const IStringUtils* stringUtils,
-                        const IThreadUtils*       threadUtils,
-                        const ILogger*            logger,
-                        const IMathUtils* mathUtils,
-                        const IJSONParser* jsonParser,
-                        const Planet*       planet,
-                        IDownloader*        downloader,
-                        EffectsScheduler*   effectsScheduler,
-                        IStorage*           storage) :
-  Context(factory,
-          stringUtils,
-          threadUtils,
-          logger,
-          mathUtils,
-          jsonParser,
-          planet,
-          downloader,
-          effectsScheduler,
-          storage) {
-  }
-};
 
-//************************************************************
-
-class EventContext: public Context {
+class G3MEventContext: public G3MContext {
 public:
-  EventContext(const IFactory*           factory,
-               const IStringUtils* stringUtils,
-               const IThreadUtils*       threadUtils,
-               const ILogger*            logger,
-               const IMathUtils* mathUtils,
-               const IJSONParser* jsonParser,
-               const Planet*       planet,
-               IDownloader*        downloader,
-               EffectsScheduler*   scheduler,
-               IStorage*           storage) :
-  Context(factory,
-          stringUtils,
-          threadUtils,
-          logger,
-          mathUtils,
-          jsonParser,
-          planet,
-          downloader,
-          scheduler,
-          storage) {
+  G3MEventContext(const IFactory*     factory,
+                  const IStringUtils* stringUtils,
+                  const IThreadUtils* threadUtils,
+                  const ILogger*      logger,
+                  const IMathUtils*   mathUtils,
+                  const IJSONParser*  jsonParser,
+                  const Planet*       planet,
+                  IDownloader*        downloader,
+                  EffectsScheduler*   scheduler,
+                  IStorage*           storage) :
+  G3MContext(factory,
+             stringUtils,
+             threadUtils,
+             logger,
+             mathUtils,
+             jsonParser,
+             planet,
+             downloader,
+             scheduler,
+             storage) {
   }
 };
 
@@ -176,7 +150,7 @@ bool MyDataSortPredicate(const OrderedRenderable* or1,
                          const OrderedRenderable* or2);
 #endif
 
-class RenderContext: public Context {
+class G3MRenderContext: public G3MContext {
 private:
   FrameTasksExecutor* _frameTasksExecutor;
   GL*                 _gl;
@@ -185,37 +159,37 @@ private:
   TexturesHandler*    _texturesHandler;
   TextureBuilder*     _textureBuilder;
   ITimer*             _frameStartTimer;
-  
+
   mutable std::vector<OrderedRenderable*>* _orderedRenderables;
 
 public:
-  RenderContext(FrameTasksExecutor* frameTasksExecutor,
-                const IFactory*           factory,
-                const IStringUtils* stringUtils,
-                const IThreadUtils*       threadUtils,
-                const ILogger*            logger,
-                const IMathUtils* mathUtils,
-                const IJSONParser* jsonParser,
-                const Planet*       planet,
-                GL*                 gl,
-                const Camera*       currentCamera,
-                Camera*             nextCamera,
-                TexturesHandler*    texturesHandler,
-                TextureBuilder*     textureBuilder,
-                IDownloader*        downloader,
-                EffectsScheduler*   scheduler,
-                ITimer*             frameStartTimer,
-                IStorage*           storage) :
-  Context(factory,
-          stringUtils,
-          threadUtils,
-          logger,
-          mathUtils,
-          jsonParser,
-          planet,
-          downloader,
-          scheduler,
-          storage),
+  G3MRenderContext(FrameTasksExecutor* frameTasksExecutor,
+                   const IFactory*     factory,
+                   const IStringUtils* stringUtils,
+                   const IThreadUtils* threadUtils,
+                   const ILogger*      logger,
+                   const IMathUtils*   mathUtils,
+                   const IJSONParser*  jsonParser,
+                   const Planet*       planet,
+                   GL*                 gl,
+                   const Camera*       currentCamera,
+                   Camera*             nextCamera,
+                   TexturesHandler*    texturesHandler,
+                   TextureBuilder*     textureBuilder,
+                   IDownloader*        downloader,
+                   EffectsScheduler*   scheduler,
+                   ITimer*             frameStartTimer,
+                   IStorage*           storage) :
+  G3MContext(factory,
+             stringUtils,
+             threadUtils,
+             logger,
+             mathUtils,
+             jsonParser,
+             planet,
+             downloader,
+             scheduler,
+             storage),
   _frameTasksExecutor(frameTasksExecutor),
   _gl(gl),
   _currentCamera(currentCamera),
@@ -256,15 +230,15 @@ public:
     return _frameTasksExecutor;
   }
 
-  virtual ~RenderContext();
+  virtual ~G3MRenderContext();
 
   /*
    Get the OrderedRenderables, sorted by distanceFromEye()
    */
   std::vector<OrderedRenderable*>* getSortedOrderedRenderables() const;
-
+  
   void addOrderedRenderable(OrderedRenderable* orderedRenderable) const;
-
+  
 };
 
 

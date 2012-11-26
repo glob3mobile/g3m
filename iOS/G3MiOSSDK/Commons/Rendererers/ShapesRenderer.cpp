@@ -29,13 +29,13 @@ public:
     return _squaredDistanceFromEye;
   }
 
-  void render(const RenderContext* rc) {
+  void render(const G3MRenderContext* rc) {
     _shape->render(rc);
   }
 
 };
 
-void ShapesRenderer::render(const RenderContext* rc) {
+void ShapesRenderer::render(const G3MRenderContext* rc) {
   const Vector3D cameraPosition = rc->getCurrentCamera()->getCartesianPosition();
 
   const int shapesCount = _shapes.size();

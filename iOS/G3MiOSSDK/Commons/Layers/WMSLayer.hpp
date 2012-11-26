@@ -104,7 +104,7 @@ public:
     
   }
   
-  std::vector<Petition*> getMapPetitions(const RenderContext* rc,
+  std::vector<Petition*> getMapPetitions(const G3MRenderContext* rc,
                                          const Tile* tile,
                                          int width, int height) const;
   

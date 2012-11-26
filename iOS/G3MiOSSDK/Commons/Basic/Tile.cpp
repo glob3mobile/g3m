@@ -98,7 +98,7 @@ void Tile::setTextureSolved(bool textureSolved) {
   }
 }
 
-Mesh* Tile::getTessellatorMesh(const RenderContext* rc,
+Mesh* Tile::getTessellatorMesh(const G3MRenderContext* rc,
                                const TileRenderContext* trc) {
   if (_tessellatorMesh == NULL) {
     _tessellatorMesh = trc->getTessellator()->createMesh(rc, this);
@@ -106,7 +106,7 @@ Mesh* Tile::getTessellatorMesh(const RenderContext* rc,
   return _tessellatorMesh;
 }
 
-Mesh* Tile::getDebugMesh(const RenderContext* rc,
+Mesh* Tile::getDebugMesh(const G3MRenderContext* rc,
                          const TileRenderContext* trc) {
   if (_debugMesh == NULL) {
     _debugMesh = trc->getTessellator()->createDebugMesh(rc, this);
@@ -114,7 +114,7 @@ Mesh* Tile::getDebugMesh(const RenderContext* rc,
   return _debugMesh;
 }
 
-bool Tile::isVisible(const RenderContext *rc,
+bool Tile::isVisible(const G3MRenderContext *rc,
                      const TileRenderContext* trc) {
   // test if sector is back oriented with respect to the camera
   //  if (_sector.isBackOriented(rc)) {
@@ -129,7 +129,7 @@ bool Tile::isVisible(const RenderContext *rc,
   //return extent->touches( rc->getCurrentCamera()->getHalfFrustuminModelCoordinates() );
 }
 
-bool Tile::meetsRenderCriteria(const RenderContext *rc,
+bool Tile::meetsRenderCriteria(const G3MRenderContext *rc,
                                const TileRenderContext* trc) {
   const TilesRenderParameters* parameters = trc->getParameters();
   
@@ -183,41 +183,65 @@ bool Tile::meetsRenderCriteria(const RenderContext *rc,
   return false;
 }
 
-void Tile::rawRender(const RenderContext *rc,
+void Tile::prepareForFullRendering(const G3MRenderContext* rc,
+                                   const TileRenderContext* trc) {
+  int ___________WORK_ON_FIRST_FULL_RENDER;
+
+  Mesh* tessellatorMesh = getTessellatorMesh(rc, trc);
+  if (tessellatorMesh == NULL) {
+    return;
+  }
+
+  TileTexturizer* texturizer = trc->getTexturizer();
+  if (texturizer != NULL) {
+    // const bool needsToCallTexturizer = (!isTextureSolved() || (_texturizedMesh == NULL)) && isTexturizerDirty();
+    const bool needsToCallTexturizer = (_texturizedMesh == NULL) || isTexturizerDirty();
+
+    if (needsToCallTexturizer) {
+      _texturizedMesh = texturizer->texturize(rc,
+                                              trc,
+                                              this,
+                                              tessellatorMesh,
+                                              _texturizedMesh);
+    }
+  }
+}
+
+void Tile::rawRender(const G3MRenderContext *rc,
                      const TileRenderContext* trc) {
   
   Mesh* tessellatorMesh = getTessellatorMesh(rc, trc);
-  
+  if (tessellatorMesh == NULL) {
+    return;
+  }
+
   TileTexturizer* texturizer = trc->getTexturizer();
-  
-  if (tessellatorMesh != NULL) {
-    if (texturizer == NULL) {
-      tessellatorMesh->render(rc);
+  if (texturizer == NULL) {
+    tessellatorMesh->render(rc);
+  }
+  else {
+    // const bool needsToCallTexturizer = (!isTextureSolved() || (_texturizedMesh == NULL)) && isTexturizerDirty();
+    const bool needsToCallTexturizer = (_texturizedMesh == NULL) || isTexturizerDirty();
+
+    if (needsToCallTexturizer) {
+      _texturizedMesh = texturizer->texturize(rc,
+                                              trc,
+                                              this,
+                                              tessellatorMesh,
+                                              _texturizedMesh);
+    }
+
+    if (_texturizedMesh != NULL) {
+      _texturizedMesh->render(rc);
     }
     else {
-//      const bool needsToCallTexturizer = (!isTextureSolved() || (_texturizedMesh == NULL)) && isTexturizerDirty();
-      const bool needsToCallTexturizer = (_texturizedMesh == NULL) || isTexturizerDirty();
-      
-      if (needsToCallTexturizer) {
-        _texturizedMesh = texturizer->texturize(rc,
-                                                trc,
-                                                this,
-                                                tessellatorMesh,
-                                                _texturizedMesh);
-      }
-      
-      if (_texturizedMesh != NULL) {
-        _texturizedMesh->render(rc);
-      }
-      else {
-        tessellatorMesh->render(rc);
-      }
+      tessellatorMesh->render(rc);
     }
   }
-  
+
 }
 
-void Tile::debugRender(const RenderContext* rc,
+void Tile::debugRender(const G3MRenderContext* rc,
                        const TileRenderContext* trc) {
   Mesh* debugMesh = getDebugMesh(rc, trc);
   if (debugMesh != NULL) {
@@ -290,7 +314,7 @@ void Tile::deleteTexturizedMesh(TileTexturizer* texturizer) {
   }
 }
 
-void Tile::render(const RenderContext* rc,
+void Tile::render(const G3MRenderContext* rc,
                   const TileRenderContext* trc,
                   std::list<Tile*>* toVisitInNextIteration) {
   TilesStatistics* statistics = trc->getStatistics();
@@ -396,16 +420,15 @@ const Tile* Tile::getDeepestTileContaining(const Geodetic3D& position) const {
     if (_subtiles == NULL) {
       return this;
     }
-    else {
-      for (int i = 0; i < _subtiles->size(); i++) {
-        const Tile* subtile = _subtiles->at(i);
-        const Tile* subtileResult = subtile->getDeepestTileContaining(position);
-        if (subtileResult != NULL) {
-          return subtileResult;
-        }
+
+    for (int i = 0; i < _subtiles->size(); i++) {
+      const Tile* subtile = _subtiles->at(i);
+      const Tile* subtileResult = subtile->getDeepestTileContaining(position);
+      if (subtileResult != NULL) {
+        return subtileResult;
       }
     }
   }
-  
+
   return NULL;
 }

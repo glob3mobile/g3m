@@ -18,7 +18,7 @@ public class Tile
 
   private boolean _texturizerDirty;
 
-  private Mesh getTessellatorMesh(RenderContext rc, TileRenderContext trc)
+  private Mesh getTessellatorMesh(G3MRenderContext rc, TileRenderContext trc)
   {
 	if (_tessellatorMesh == null)
 	{
@@ -27,7 +27,7 @@ public class Tile
 	return _tessellatorMesh;
   }
 
-  private Mesh getDebugMesh(RenderContext rc, TileRenderContext trc)
+  private Mesh getDebugMesh(G3MRenderContext rc, TileRenderContext trc)
   {
 	if (_debugMesh == null)
 	{
@@ -36,7 +36,7 @@ public class Tile
 	return _debugMesh;
   }
 
-  private boolean isVisible(RenderContext rc, TileRenderContext trc)
+  private boolean isVisible(G3MRenderContext rc, TileRenderContext trc)
   {
 	// test if sector is back oriented with respect to the camera
 	//  if (_sector.isBackOriented(rc)) {
@@ -52,7 +52,7 @@ public class Tile
 	//return extent->touches( rc->getCurrentCamera()->getHalfFrustuminModelCoordinates() );
   }
 
-  private boolean meetsRenderCriteria(RenderContext rc, TileRenderContext trc)
+  private boolean meetsRenderCriteria(G3MRenderContext rc, TileRenderContext trc)
   {
 	final TilesRenderParameters parameters = trc.getParameters();
   
@@ -137,43 +137,43 @@ public class Tile
 	return subTiles;
   }
 
-  private void rawRender(RenderContext rc, TileRenderContext trc)
+  private void rawRender(G3MRenderContext rc, TileRenderContext trc)
   {
   
 	Mesh tessellatorMesh = getTessellatorMesh(rc, trc);
+	if (tessellatorMesh == null)
+	{
+	  return;
+	}
   
 	TileTexturizer texturizer = trc.getTexturizer();
-  
-	if (tessellatorMesh != null)
+	if (texturizer == null)
 	{
-	  if (texturizer == null)
+	  tessellatorMesh.render(rc);
+	}
+	else
+	{
+	  // const bool needsToCallTexturizer = (!isTextureSolved() || (_texturizedMesh == NULL)) && isTexturizerDirty();
+	  final boolean needsToCallTexturizer = (_texturizedMesh == null) || isTexturizerDirty();
+  
+	  if (needsToCallTexturizer)
 	  {
-		tessellatorMesh.render(rc);
+		_texturizedMesh = texturizer.texturize(rc, trc, this, tessellatorMesh, _texturizedMesh);
+	  }
+  
+	  if (_texturizedMesh != null)
+	  {
+		_texturizedMesh.render(rc);
 	  }
 	  else
 	  {
-  //      const bool needsToCallTexturizer = (!isTextureSolved() || (_texturizedMesh == NULL)) && isTexturizerDirty();
-		final boolean needsToCallTexturizer = (_texturizedMesh == null) || isTexturizerDirty();
-  
-		if (needsToCallTexturizer)
-		{
-		  _texturizedMesh = texturizer.texturize(rc, trc, this, tessellatorMesh, _texturizedMesh);
-		}
-  
-		if (_texturizedMesh != null)
-		{
-		  _texturizedMesh.render(rc);
-		}
-		else
-		{
-		  tessellatorMesh.render(rc);
-		}
+		tessellatorMesh.render(rc);
 	  }
 	}
   
   }
 
-  private void debugRender(RenderContext rc, TileRenderContext trc)
+  private void debugRender(G3MRenderContext rc, TileRenderContext trc)
   {
 	Mesh debugMesh = getDebugMesh(rc, trc);
 	if (debugMesh != null)
@@ -349,7 +349,30 @@ public class Tile
 	return _parent;
   }
 
-  public final void render(RenderContext rc, TileRenderContext trc, java.util.LinkedList<Tile> toVisitInNextIteration)
+  public final void prepareForFullRendering(G3MRenderContext rc, TileRenderContext trc)
+  {
+	int ___________WORK_ON_FIRST_FULL_RENDER;
+  
+	Mesh tessellatorMesh = getTessellatorMesh(rc, trc);
+	if (tessellatorMesh == null)
+	{
+	  return;
+	}
+  
+	TileTexturizer texturizer = trc.getTexturizer();
+	if (texturizer != null)
+	{
+	  // const bool needsToCallTexturizer = (!isTextureSolved() || (_texturizedMesh == NULL)) && isTexturizerDirty();
+	  final boolean needsToCallTexturizer = (_texturizedMesh == null) || isTexturizerDirty();
+  
+	  if (needsToCallTexturizer)
+	  {
+		_texturizedMesh = texturizer.texturize(rc, trc, this, tessellatorMesh, _texturizedMesh);
+	  }
+	}
+  }
+
+  public final void render(G3MRenderContext rc, TileRenderContext trc, java.util.LinkedList<Tile> toVisitInNextIteration)
   {
 	TilesStatistics statistics = trc.getStatistics();
   
@@ -473,16 +496,14 @@ public class Tile
 	  {
 		return this;
 	  }
-	  else
+  
+	  for (int i = 0; i < _subtiles.size(); i++)
 	  {
-		for (int i = 0; i < _subtiles.size(); i++)
+		final Tile subtile = _subtiles.get(i);
+		final Tile subtileResult = subtile.getDeepestTileContaining(position);
+		if (subtileResult != null)
 		{
-		  final Tile subtile = _subtiles.get(i);
-		  final Tile subtileResult = subtile.getDeepestTileContaining(position);
-		  if (subtileResult != null)
-		  {
-			return subtileResult;
-		  }
+		  return subtileResult;
 		}
 	  }
 	}

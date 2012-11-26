@@ -33,22 +33,16 @@
 void G3MWidget::initSingletons(ILogger*            logger,
                                IFactory*           factory,
                                const IStringUtils* stringUtils,
-                               IThreadUtils*       threadUtils,
                                IStringBuilder*     stringBuilder,
                                IMathUtils*         mathUtils,
-                               IJSONParser*        jsonParser,
-                               IStorage*           storage,
-                               IDownloader*        downloader) {
+                               IJSONParser*        jsonParser) {
   if (ILogger::instance() == NULL) {
     ILogger::setInstance(logger);
     IFactory::setInstance(factory);
     IStringUtils::setInstance(stringUtils);
-    IThreadUtils::setInstance(threadUtils);
     IStringBuilder::setInstance(stringBuilder);
     IMathUtils::setInstance(mathUtils);
     IJSONParser::setInstance(jsonParser);
-    IStorage::setInstance(storage);
-    IDownloader::setInstance(downloader);
   }
   else {
     ILogger::instance()->logWarning("Singletons already set");
@@ -56,6 +50,9 @@ void G3MWidget::initSingletons(ILogger*            logger,
 }
 
 G3MWidget::G3MWidget(INativeGL*                       nativeGL,
+                     IStorage*                        storage,
+                     IDownloader*                     downloader,
+                     IThreadUtils*                    threadUtils,
                      const Planet*                    planet,
                      std::vector<ICameraConstrainer*> cameraConstrainers,
                      CameraRenderer*                  cameraRenderer,
@@ -72,6 +69,9 @@ G3MWidget::G3MWidget(INativeGL*                       nativeGL,
 _frameTasksExecutor( new FrameTasksExecutor() ),
 _effectsScheduler( new EffectsScheduler() ),
 _gl( new GL(nativeGL) ),
+_downloader(downloader),
+_storage(storage),
+_threadUtils(threadUtils),
 _texturesHandler( new TexturesHandler(_gl, false) ),
 _textureBuilder( new CPUTextureBuilder() ),
 _planet(planet),
@@ -93,27 +93,38 @@ _logDownloaderStatistics(logDownloaderStatistics),
 _userData(NULL),
 _initializationTask(initializationTask),
 _autoDeleteInitializationTask(autoDeleteInitializationTask),
-_initializationContext(new InitializationContext(IFactory::instance(),
-                                                 IStringUtils::instance(),
-                                                 IThreadUtils::instance(),
-                                                 ILogger::instance(),
-                                                 IMathUtils::instance(),
-                                                 IJSONParser::instance(),
-                                                 _planet,
-                                                 IDownloader::instance(),
-                                                 _effectsScheduler,
-                                                 IStorage::instance()))
+_context(new G3MContext(IFactory::instance(),
+                        IStringUtils::instance(),
+                        threadUtils,
+                        ILogger::instance(),
+                        IMathUtils::instance(),
+                        IJSONParser::instance(),
+                        _planet,
+                        downloader,
+                        _effectsScheduler,
+                        storage)),
+_paused(false)
 {
   initializeGL();
-  _effectsScheduler->initialize(_initializationContext);
-  _cameraRenderer->initialize(_initializationContext);
-  _mainRenderer->initialize(_initializationContext);
-  _busyRenderer->initialize(_initializationContext);
-  _currentCamera->initialize(_initializationContext);
-  _nextCamera->initialize(_initializationContext);
 
-  if (IDownloader::instance() != NULL){
-    IDownloader::instance()->start();
+  _effectsScheduler->initialize(_context);
+  _cameraRenderer->initialize(_context);
+  _mainRenderer->initialize(_context);
+  _busyRenderer->initialize(_context);
+  _currentCamera->initialize(_context);
+  _nextCamera->initialize(_context);
+
+  if (_threadUtils != NULL) {
+    _threadUtils->initialize(_context);
+  }
+
+  if (_storage != NULL) {
+    _storage->initialize(_context);
+  }
+
+  if (_downloader != NULL){
+    _downloader->initialize(_context);
+    _downloader->start();
   }
 
   for (int i = 0; i < periodicalTasks.size(); i++) {
@@ -123,6 +134,9 @@ _initializationContext(new InitializationContext(IFactory::instance(),
 
 
 G3MWidget* G3MWidget::create(INativeGL*                       nativeGL,
+                             IStorage*                        storage,
+                             IDownloader*                     downloader,
+                             IThreadUtils*                    threadUtils,
                              const Planet*                    planet,
                              std::vector<ICameraConstrainer*> cameraConstrainers,
                              CameraRenderer*                  cameraRenderer,
@@ -138,6 +152,9 @@ G3MWidget* G3MWidget::create(INativeGL*                       nativeGL,
                              std::vector<PeriodicalTask*>     periodicalTasks) {
 
   return new G3MWidget(nativeGL,
+                       storage,
+                       downloader,
+                       threadUtils,
                        planet,
                        cameraConstrainers,
                        cameraRenderer,
@@ -174,12 +191,13 @@ G3MWidget::~G3MWidget() {
   delete _texturesHandler;
   delete _timer;
 
-  if (IDownloader::instance() != NULL) {
-    IDownloader::instance()->stop();
-#ifdef C_CODE
-    delete IDownloader::instance();
-#endif
+  if (_downloader != NULL) {
+    _downloader->stop();
+    delete _downloader;
   }
+
+  delete _storage;
+  delete _threadUtils;
 
 #ifdef C_CODE
   for (unsigned int n=0; n<_cameraConstrainers.size(); n++)
@@ -196,21 +214,21 @@ G3MWidget::~G3MWidget() {
   }
 #endif
 
-  delete _initializationContext;
+  delete _context;
 }
 
 void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
   if (_mainRendererReady) {
-    EventContext ec(IFactory::instance(),
-                    IStringUtils::instance(),
-                    IThreadUtils::instance(),
-                    ILogger::instance(),
-                    IMathUtils::instance(),
-                    IJSONParser::instance(),
-                    _planet,
-                    IDownloader::instance(),
-                    _effectsScheduler,
-                    IStorage::instance());
+    G3MEventContext ec(IFactory::instance(),
+                       IStringUtils::instance(),
+                       _threadUtils,
+                       ILogger::instance(),
+                       IMathUtils::instance(),
+                       IJSONParser::instance(),
+                       _planet,
+                       _downloader,
+                       _effectsScheduler,
+                       _storage);
 
     bool handled = false;
     if (_mainRenderer->isEnable()) {
@@ -225,16 +243,18 @@ void G3MWidget::onTouchEvent(const TouchEvent* touchEvent) {
 
 void G3MWidget::onResizeViewportEvent(int width, int height) {
   if (_mainRendererReady) {
-    EventContext ec(IFactory::instance(),
-                    IStringUtils::instance(),
-                    IThreadUtils::instance(),
-                    ILogger::instance(),
-                    IMathUtils::instance(),
-                    IJSONParser::instance(),
-                    _planet,
-                    IDownloader::instance(),
-                    _effectsScheduler,
-                    IStorage::instance());
+    G3MEventContext ec(IFactory::instance(),
+                       IStringUtils::instance(),
+                       _threadUtils,
+                       ILogger::instance(),
+                       IMathUtils::instance(),
+                       IJSONParser::instance(),
+                       _planet,
+                       _downloader,
+                       _effectsScheduler,
+                       _storage);
+
+    _nextCamera->resizeViewport(width, height);
 
     _cameraRenderer->onResizeViewportEvent(&ec, width, height);
 
@@ -245,56 +265,64 @@ void G3MWidget::onResizeViewportEvent(int width, int height) {
 }
 
 void G3MWidget::render() {
+  if (_paused) {
+    return;
+  }
+
   _timer->start();
   _renderCounter++;
 
   //Start periodical task
-  for (int i = 0; i < _periodicalTasks.size(); i++) {
+  const int periodicalTasksCount = _periodicalTasks.size();
+  for (int i = 0; i < periodicalTasksCount; i++) {
     PeriodicalTask* pt = _periodicalTasks[i];
-    pt->executeIfNecessary();
+    pt->executeIfNecessary(_context);
   }
 
   // give to the CameraContrainers the opportunity to change the nextCamera
-  for (int i = 0; i< _cameraConstrainers.size(); i++) {
-    ICameraConstrainer* constrainer =  _cameraConstrainers[i];
+  const int cameraConstrainersCount = _cameraConstrainers.size();
+  for (int i = 0; i< cameraConstrainersCount; i++) {
+    ICameraConstrainer* constrainer = _cameraConstrainers[i];
     constrainer->onCameraChange(_planet,
                                 _currentCamera,
                                 _nextCamera);
   }
   _currentCamera->copyFrom(*_nextCamera);
 
+  G3MRenderContext rc(_frameTasksExecutor,
+                      IFactory::instance(),
+                      IStringUtils::instance(),
+                      _threadUtils,
+                      ILogger::instance(),
+                      IMathUtils::instance(),
+                      IJSONParser::instance(),
+                      _planet,
+                      _gl,
+                      _currentCamera,
+                      _nextCamera,
+                      _texturesHandler,
+                      _textureBuilder,
+                      _downloader,
+                      _effectsScheduler,
+                      IFactory::instance()->createTimer(),
+                      _storage);
 
-  if (_initializationTask != NULL) {
-    _initializationTask->run();
-    if (_autoDeleteInitializationTask) {
-      delete _initializationTask;
+  _mainRendererReady = _mainRenderer->isReadyToRender(&rc);
+
+  if (_mainRendererReady) {
+    if (_initializationTask != NULL) {
+      _initializationTask->run(_context);
+      if (_autoDeleteInitializationTask) {
+        delete _initializationTask;
+      }
+      _initializationTask = NULL;
     }
-    _initializationTask = NULL;
   }
-
-  RenderContext rc(_frameTasksExecutor,
-                   IFactory::instance(),
-                   IStringUtils::instance(),
-                   IThreadUtils::instance(),
-                   ILogger::instance(),
-                   IMathUtils::instance(),
-                   IJSONParser::instance(),
-                   _planet,
-                   _gl,
-                   _currentCamera,
-                   _nextCamera,
-                   _texturesHandler,
-                   _textureBuilder,
-                   IDownloader::instance(),
-                   _effectsScheduler,
-                   IFactory::instance()->createTimer(),
-                   IStorage::instance());
 
   _effectsScheduler->doOneCyle(&rc);
 
   _frameTasksExecutor->doPreRenderCycle(&rc);
 
-  _mainRendererReady = _mainRenderer->isReadyToRender(&rc);
 
   Renderer* selectedRenderer = _mainRendererReady ? _mainRenderer : _busyRenderer;
   if (selectedRenderer != _selectedRenderer) {
@@ -358,8 +386,8 @@ void G3MWidget::render() {
   if (_logDownloaderStatistics) {
     std::string cacheStatistics = "";
 
-    if (IDownloader::instance() != NULL){
-      cacheStatistics = IDownloader::instance()->statistics();
+    if (_downloader != NULL){
+      cacheStatistics = _downloader->statistics();
     }
 
     if (cacheStatistics != _lastCacheStatistics) {
@@ -371,25 +399,44 @@ void G3MWidget::render() {
 }
 
 void G3MWidget::onPause() {
-  _mainRenderer->onPause(_initializationContext);
-  _busyRenderer->onPause(_initializationContext);
+  _paused = true;
+  
+  _threadUtils->onPause(_context);
 
-  _effectsScheduler->onPause(_initializationContext);
+  _effectsScheduler->onPause(_context);
 
-    if (IDownloader::instance() != NULL) {
-        IDownloader::instance()->onPause(_initializationContext);
-  }
+  _mainRenderer->onPause(_context);
+  _busyRenderer->onPause(_context);
+
+  _downloader->onPause(_context);
+  _storage->onPause(_context);
 }
 
 void G3MWidget::onResume() {
-  _mainRenderer->onResume(_initializationContext);
-  _busyRenderer->onResume(_initializationContext);
+  _paused = false;
+  
+  _storage->onResume(_context);
 
-  _effectsScheduler->onResume(_initializationContext);
+  _downloader->onResume(_context);
 
-    if (IDownloader::instance() != NULL) {
-        IDownloader::instance()->onResume(_initializationContext);
-  }
+  _mainRenderer->onResume(_context);
+  _busyRenderer->onResume(_context);
+
+  _effectsScheduler->onResume(_context);
+
+  _threadUtils->onResume(_context);
+}
+
+void G3MWidget::onDestroy() {
+  _threadUtils->onDestroy(_context);
+
+  _effectsScheduler->onDestroy(_context);
+
+  _mainRenderer->onDestroy(_context);
+  _busyRenderer->onDestroy(_context);
+
+  _downloader->onDestroy(_context);
+  _storage->onDestroy(_context);
 }
 
 void G3MWidget::addPeriodicalTask(PeriodicalTask* periodicalTask) {
@@ -420,7 +467,7 @@ void G3MWidget::setAnimatedCameraPosition(const Geodetic3D& position) {
 void G3MWidget::setAnimatedCameraPosition(const Geodetic3D& position,
                                           const TimeInterval& interval) {
 
-  Geodetic3D startPosition = _planet->toGeodetic3D( _currentCamera->getCartesianPosition() );
+  const Geodetic3D startPosition = _planet->toGeodetic3D( _currentCamera->getCartesianPosition() );
 
   double finalLat = position.latitude()._degrees;
   double finalLon = position.longitude()._degrees;

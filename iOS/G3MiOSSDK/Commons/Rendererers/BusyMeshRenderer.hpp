@@ -25,20 +25,20 @@ private:
 public:    
   BusyMeshRenderer(): _degrees(0) {}
   
-  void initialize(const InitializationContext* ic);
+  void initialize(const G3MContext* context);
   
-  bool isReadyToRender(const RenderContext* rc) {
+  bool isReadyToRender(const G3MRenderContext* rc) {
     return true;
   }
   
-  void render(const RenderContext* rc);
+  void render(const G3MRenderContext* rc);
   
-  bool onTouchEvent(const EventContext* ec,
+  bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent) {
     return false;
   }
   
-  void onResizeViewportEvent(const EventContext* ec,
+  void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
     
   }
@@ -54,12 +54,16 @@ public:
   
   void stop();
   
-  void onResume(const InitializationContext* ic) {
+  void onResume(const G3MContext* context) {
     
   }
   
-  void onPause(const InitializationContext* ic) {
+  void onPause(const G3MContext* context) {
     
+  }
+
+  void onDestroy(const G3MContext* context) {
+
   }
 
   void unusedMethod() const {
@@ -81,16 +85,19 @@ public:
   _renderer(renderer)
   { }
   
-  virtual void start(const RenderContext *rc, const TimeInterval& now) {}
+  virtual void start(const G3MRenderContext *rc,
+                     const TimeInterval& when) {}
   
-  virtual void doStep(const RenderContext *rc, const TimeInterval& now) {
-    EffectWithForce::doStep(rc, now);
+  virtual void doStep(const G3MRenderContext *rc,
+                      const TimeInterval& when) {
+    EffectWithForce::doStep(rc, when);
     _renderer->incDegrees(5);
   }
   
-  virtual void stop(const RenderContext *rc, const TimeInterval& now) { }
+  virtual void stop(const G3MRenderContext *rc,
+                    const TimeInterval& when) { }
   
-  virtual void cancel(const TimeInterval& now) {
+  virtual void cancel(const TimeInterval& when) {
     // do nothing, just leave the effect in the intermediate state
   }
  

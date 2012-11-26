@@ -39,17 +39,17 @@ public:
   }
   
   ~TexturedMesh(){
-#ifdef C_CODE
+//#ifdef C_CODE
     if (_ownedMesh) {
       delete _mesh;
     } 
     if (_ownedTexMapping){
       delete _textureMapping;
     }
-#endif
+//#endif
   }
   
-  void render(const RenderContext* rc) const;
+  void render(const G3MRenderContext* rc) const;
 
   Extent* getExtent()  const {
     return (_mesh == NULL) ? NULL : _mesh->getExtent();
@@ -67,7 +67,7 @@ public:
     return _textureMapping;
   }
 
-  bool isTransparent(const RenderContext* rc) const {
+  bool isTransparent(const G3MRenderContext* rc) const {
     return _transparent;
   }
 

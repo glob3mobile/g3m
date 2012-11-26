@@ -14,7 +14,7 @@
 #include "GLConstants.hpp"
 #include "IMathUtils.hpp"
 
-Mesh* CircleShape::createMesh(const RenderContext* rc) {
+Mesh* CircleShape::createMesh(const G3MRenderContext* rc) {
 
   FloatBufferBuilderFromCartesian3D vertices(CenterStrategy::noCenter(), Vector3D::zero());
 

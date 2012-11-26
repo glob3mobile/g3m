@@ -26,11 +26,11 @@ public:
 
   const Vector3D getVertex(int i) const;
 
-  void render(const RenderContext* rc) const;
+  void render(const G3MRenderContext* rc) const;
 
   Extent* getExtent() const;
 
-  bool isTransparent(const RenderContext* rc) const;
+  bool isTransparent(const G3MRenderContext* rc) const;
 
   void addMesh(Mesh* mesh);
 

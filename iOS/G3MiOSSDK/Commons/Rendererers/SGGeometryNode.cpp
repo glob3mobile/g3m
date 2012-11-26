@@ -11,7 +11,7 @@
 #include "Context.hpp"
 #include "GL.hpp"
 
-void SGGeometryNode::rawRender(const RenderContext* rc) {
+void SGGeometryNode::rawRender(const G3MRenderContext* rc) {
   GL *gl = rc->getGL();
 
   gl->enableVerticesPosition();

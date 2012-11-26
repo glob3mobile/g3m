@@ -78,15 +78,15 @@ public class Box extends Extent
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double squaredProjectedArea(const RenderContext* rc) const
-  public final double squaredProjectedArea(RenderContext rc)
+//ORIGINAL LINE: double squaredProjectedArea(const G3MRenderContext* rc) const
+  public final double squaredProjectedArea(G3MRenderContext rc)
   {
 	final Vector2I extent = projectedExtent(rc);
 	return extent._x * extent._y;
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Vector2I projectedExtent(const RenderContext *rc) const
-  public final Vector2I projectedExtent(RenderContext rc)
+//ORIGINAL LINE: Vector2I projectedExtent(const G3MRenderContext *rc) const
+  public final Vector2I projectedExtent(G3MRenderContext rc)
   {
 	final java.util.ArrayList<Vector3D> corners = getCorners();
   
@@ -210,7 +210,7 @@ public class Box extends Extent
 	return Vector3D.nan();
   }
 
-  public final void render(RenderContext rc)
+  public final void render(G3MRenderContext rc)
   {
 	if (_mesh == null)
 	{

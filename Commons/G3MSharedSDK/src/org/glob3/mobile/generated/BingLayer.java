@@ -98,7 +98,7 @@ public class BingLayer extends Layer
 	return "Aerial";
   }
 
-  public final void initialize(InitializationContext ic)
+  public final void initialize(G3MContext context)
   {
   
 	String tileURL = "";
@@ -109,13 +109,13 @@ public class BingLayer extends Layer
 	tileURL+=_key;
   
 	final URL url = new URL(tileURL, false);
-	ic.getDownloader().requestBuffer(url, 100000000, new TokenDownloadListener(this), true);
+	context.getDownloader().requestBuffer(url, 100000000, new TokenDownloadListener(this), true);
   
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: java.util.ArrayList<Petition*> getMapPetitions(const RenderContext* rc, const Tile* tile, int width, int height) const
-  public final java.util.ArrayList<Petition> getMapPetitions(RenderContext rc, Tile tile, int width, int height)
+//ORIGINAL LINE: java.util.ArrayList<Petition*> getMapPetitions(const G3MRenderContext* rc, const Tile* tile, int width, int height) const
+  public final java.util.ArrayList<Petition> getMapPetitions(G3MRenderContext rc, Tile tile, int width, int height)
   {
   
 	java.util.ArrayList<Petition> petitions = new java.util.ArrayList<Petition>();
@@ -225,7 +225,7 @@ public class BingLayer extends Layer
   {
   
 	//LatLon to Pixels XY
-	int mapSize = (int) 256 << level;
+	int mapSize = 256 << level;
 	double lonDeg = latLon.longitude()._degrees;
 	double latDeg = latLon.latitude()._degrees;
 	if (latDeg < -85.05112878)
@@ -322,7 +322,7 @@ public class BingLayer extends Layer
 	int pixelY = tileXY[1]*256;
   
 	//Pixel XY to LatLon
-	int mapSize = (int) 256 << level;
+	int mapSize = 256 << level;
 	if (pixelX < 0)
 		pixelX = 0;
 	if (pixelY < 0)
