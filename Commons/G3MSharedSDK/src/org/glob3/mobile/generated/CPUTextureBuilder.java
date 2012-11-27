@@ -30,17 +30,13 @@ public class CPUTextureBuilder extends TextureBuilder
 	  ILogger.instance().logWarning("Creating blank Image");
 	  return factory.createImageFromSize(width, height);
 	}
-	else
+  
+	if (image.getHeight() == height && image.getWidth() == width)
 	{
-	  if (image.getHeight() == height && image.getWidth() == width)
-	  {
-		return image.shallowCopy();
-	  }
-	  else
-	  {
-		return image.scale(width, height);
-	  }
+	  return image.shallowCopy();
 	}
+  
+	return image.scale(width, height);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -55,20 +51,18 @@ public class CPUTextureBuilder extends TextureBuilder
 	  ILogger.instance().logWarning("Creating blank Image");
 	  return factory.createImageFromSize(width, height);
 	}
-	else
+  
+	IImage im = images.get(0).shallowCopy();
+	IImage im2 = null;
+	for (int i = 1; i < imagesSize; i++)
 	{
-	  IImage im = images.get(0).shallowCopy();
-	  IImage im2 = null;
-	  for (int i = 1; i < imagesSize; i++)
-	  {
-		IImage imTrans = images.get(i);
-		im2 = im.combineWith(imTrans, width, height);
-		if (im != null)
-			im.dispose();
-		im = im2;
-	  }
-	  return im;
+	  IImage imTrans = images.get(i);
+	  im2 = im.combineWith(imTrans, width, height);
+	  if (im != null)
+		  im.dispose();
+	  im = im2;
 	}
+	return im;
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
@@ -83,34 +77,33 @@ public class CPUTextureBuilder extends TextureBuilder
 	  ILogger.instance().logWarning("Creating blank Image");
 	  return factory.createImageFromSize(width, height);
 	}
+  
+	IImage base;
+	int i;
+	final RectangleD baseRec = new RectangleD(0,0, width, height);
+	if (rectangles.size() > 0 && rectangles.get(0).equalTo(baseRec))
+	{
+	  base = images.get(0).shallowCopy();
+	  i = 1;
+	}
 	else
 	{
-	  IImage base;
-	  int i;
-	  final RectangleD baseRec = new RectangleD(0,0, width, height);
-	  if (rectangles.size() > 0 && rectangles.get(0).equalTo(baseRec))
-	  {
-		base = images.get(0).shallowCopy();
-		i = 1;
-	  }
-	  else
-	  {
-		base = factory.createImageFromSize(width, height);
-		i = 0;
-	  }
-  
-	  for (; i < images.size(); i++)
-	  {
-		final IImage newIm = images.get(i);
-		final RectangleD newRect = rectangles.get(i);
-  
-		IImage im2 = base.combineWith(newIm, newRect, width, height);
-		if (base != null)
-			base.dispose();
-		base = im2;
-	  }
-	  return base;
+	  base = factory.createImageFromSize(width, height);
+	  i = 0;
 	}
+  
+	for (; i < images.size(); i++)
+	{
+	  final IImage newIm = images.get(i);
+	  final RectangleD newRect = rectangles.get(i);
+  
+	  IImage im2 = base.combineWith(newIm, newRect, width, height);
+	  if (base != null)
+		  base.dispose();
+	  base = im2;
+	}
+	return base;
+  
   }
 
 }

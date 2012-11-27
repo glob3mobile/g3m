@@ -16,6 +16,9 @@ class G3MBuilder_iOS : public IG3MBuilder {
 
 private:
     G3MWidget_iOS* _nativeWidget;
+    IThreadUtils* createThreadUtils();
+    IStorage* createStorage();
+    IDownloader* createDownloader();
 
 public:
     G3MBuilder_iOS(G3MWidget_iOS* nativeWidget);

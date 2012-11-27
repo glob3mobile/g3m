@@ -8,7 +8,6 @@ import javax.microedition.khronos.opengles.GL10;
 import org.glob3.mobile.generated.G3MWidget;
 import org.glob3.mobile.generated.IGLProgramId;
 
-import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.os.Looper;
@@ -18,18 +17,15 @@ public final class ES2Renderer
          implements
             GLSurfaceView.Renderer {
 
-   final G3MWidget_Android _widgetAndroid;
+   final private G3MWidget_Android _widgetAndroid;
 
    private IGLProgramId    _program;
-   private final Context   _context;
    private boolean         _hasRendered = false;
    private int             _width;
    private int             _height;
 
 
-   public ES2Renderer(final Context context,
-                      final G3MWidget_Android widget) {
-      _context = context;
+   public ES2Renderer(final G3MWidget_Android widget) {
       _widgetAndroid = widget;
       _width = 1;
       _height = 1;

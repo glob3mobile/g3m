@@ -10,7 +10,7 @@
 
 #include "GL.hpp"
 
-void TexturedMesh::render(const RenderContext* rc) const
+void TexturedMesh::render(const G3MRenderContext* rc) const
 {
   GL *gl = rc->getGL();
 

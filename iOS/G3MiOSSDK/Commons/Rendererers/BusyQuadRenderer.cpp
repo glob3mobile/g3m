@@ -34,7 +34,7 @@ void BusyQuadRenderer::stop() {
 }
 
 
-bool BusyQuadRenderer::initMesh(const RenderContext* rc) {
+bool BusyQuadRenderer::initMesh(const G3MRenderContext* rc) {
   //TEXTURED
 #ifdef C_CODE
   const IGLTextureId* texId = NULL;
@@ -91,7 +91,7 @@ bool BusyQuadRenderer::initMesh(const RenderContext* rc) {
 }
 
 
-void BusyQuadRenderer::render(const RenderContext* rc) {
+void BusyQuadRenderer::render(const G3MRenderContext* rc) {
   GL* gl = rc->getGL();
   
   if (_quadMesh == NULL){

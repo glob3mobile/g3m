@@ -8,26 +8,23 @@ public class TexturesHandler
   private final boolean _verbose;
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void showHolders(const String message) const
+//ORIGINAL LINE: void showHolders(const String& message) const
   private void showHolders(String message)
   {
-	if (false)
-	{
-	  String holdersString = ">>>> " + message + ", Holders=(";
-	  for (int i = 0; i < _textureHolders.size(); i++)
-	  {
-		TextureHolder holder = _textureHolders.get(i);
-  
-		if (i > 0)
-		{
-		  holdersString += ", ";
-		}
-		holdersString += holder.description();
-	  }
-	  holdersString += ")";
-  
-	  ILogger.instance().logInfo("%s\n", holdersString);
-	}
+  //  if (false) {
+  //    std::string holdersString = ">>>> " + message + ", Holders=(";
+  //    for (int i = 0; i < _textureHolders.size(); i++) {
+  //      TextureHolder* holder = _textureHolders[i];
+  //
+  //      if (i > 0) {
+  //        holdersString += ", ";
+  //      }
+  //      holdersString += holder->description();
+  //    }
+  //    holdersString += ")";
+  //
+  //    ILogger::instance()->logInfo("%s\n", holdersString.c_str() );
+  //  }
   }
 
 

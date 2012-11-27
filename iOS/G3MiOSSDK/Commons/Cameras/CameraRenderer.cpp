@@ -12,12 +12,12 @@
 #include "TouchEvent.hpp"
 
 
-void CameraRenderer::initialize(const InitializationContext* ic) {
+void CameraRenderer::initialize(const G3MContext* context) {
   //_logger = ic->getLogger();
   //cameraContext = new CameraContext(
 }
 
-void CameraRenderer::onResizeViewportEvent(const EventContext* ec,
+void CameraRenderer::onResizeViewportEvent(const G3MEventContext* ec,
                                            int width, int height) {
 //  moved to G3MWidget::onResizeViewportEvent
 //  if (_cameraContext != NULL) {
@@ -25,7 +25,7 @@ void CameraRenderer::onResizeViewportEvent(const EventContext* ec,
 //  }
 }
 
-void CameraRenderer::render(const RenderContext* rc) {
+void CameraRenderer::render(const G3MRenderContext* rc) {
   // create the CameraContext
   if (_cameraContext == NULL) {
     _cameraContext = new CameraContext(None, rc->getNextCamera());
@@ -40,7 +40,7 @@ void CameraRenderer::render(const RenderContext* rc) {
   }
 }
 
-bool CameraRenderer::onTouchEvent(const EventContext* ec,
+bool CameraRenderer::onTouchEvent(const G3MEventContext* ec,
                                   const TouchEvent* touchEvent) {
   if (_processTouchEvents) {
     // abort all the camera effect currently running

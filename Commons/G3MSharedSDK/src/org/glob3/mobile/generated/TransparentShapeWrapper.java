@@ -18,7 +18,7 @@ public class TransparentShapeWrapper extends OrderedRenderable
 	return _squaredDistanceFromEye;
   }
 
-  public final void render(RenderContext rc)
+  public final void render(G3MRenderContext rc)
   {
 	_shape.render(rc);
   }

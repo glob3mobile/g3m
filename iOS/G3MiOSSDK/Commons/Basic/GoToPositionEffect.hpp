@@ -23,16 +23,16 @@ public:
   _finalPos(finalPos)
   {}
   
-  virtual void start(const RenderContext *rc,
-                     const TimeInterval& now) {
-    EffectWithDuration::start(rc, now);
+  virtual void start(const G3MRenderContext *rc,
+                     const TimeInterval& when) {
+    EffectWithDuration::start(rc, when);
   }
   
-  virtual void doStep(const RenderContext *rc,
-                      const TimeInterval& now) {
-    //const double percent = gently(percentDone(now), 0.2, 0.9);
-    //const double percent = pace( percentDone(now) );
-    const double percent = percentDone(now);
+  virtual void doStep(const G3MRenderContext *rc,
+                      const TimeInterval& when) {
+    //const double percent = gently(percentDone(when), 0.2, 0.9);
+    //const double percent = pace( percentDone(when) );
+    const double percent = percentDone(when);
     Camera *camera = rc->getNextCamera();
     
     Geodetic3D g = Geodetic3D::interpolation(_initialPos, _finalPos, percent);
@@ -42,12 +42,12 @@ public:
     camera->orbitTo(g);
   }
   
-  virtual void stop(const RenderContext *rc,
-                    const TimeInterval& now) {
-    EffectWithDuration::stop(rc, now);
+  virtual void stop(const G3MRenderContext *rc,
+                    const TimeInterval& when) {
+    EffectWithDuration::stop(rc, when);
   }
   
-  virtual void cancel(const TimeInterval& now) {
+  virtual void cancel(const TimeInterval& when) {
     // do nothing, just leave the effect in the intermediate state
   }
   

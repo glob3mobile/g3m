@@ -26,6 +26,8 @@ class IG3MBuilder {
 
 private:
     INativeGL* _nativeGL;
+    IDownloader* _downloader;
+    IThreadUtils* _threadUtils;
     const Planet* _planet;
     std::vector<ICameraConstrainer*> _cameraConstraints;
     CameraRenderer* _cameraRenderer;
@@ -44,14 +46,22 @@ private:
     
     std::vector<ICameraConstrainer*> createCameraConstraints();
     CameraRenderer* createCameraRenderer();
+    virtual IThreadUtils* createThreadUtils() = 0;
+    virtual IStorage* createStorage() = 0;
+    virtual IDownloader* createDownloader() = 0; 
     
 protected:
+    IStorage* _storage;
+    
     G3MWidget* create();
+    void setNativeGL(INativeGL* nativeGL);
     
 public:
     IG3MBuilder();
-    ~IG3MBuilder();
-    void setNativeGL(INativeGL* nativeGL);
+    virtual ~IG3MBuilder();
+    void setStorage(IStorage* storage);
+    void setDownloader(IDownloader* downloader);
+    void setThreadUtils(IThreadUtils* threadUtils);
     void setPlanet(const Planet* planet);
     void addCameraConstraint(ICameraConstrainer* cameraConstraint);
     void setCameraRenderer(CameraRenderer* cameraRenderer);

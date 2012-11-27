@@ -42,14 +42,14 @@ public:
   
   inline const std::vector<Vector3D> getCorners() const;
   
-  double squaredProjectedArea(const RenderContext* rc) const;
-  Vector2I projectedExtent(const RenderContext* rc) const;
+  double squaredProjectedArea(const G3MRenderContext* rc) const;
+  Vector2I projectedExtent(const G3MRenderContext* rc) const;
   
   bool contains(const Vector3D& p) const;
   
   Vector3D intersectionWithRay(const Vector3D& origin, const Vector3D& direction) const;
   
-  void render(const RenderContext* rc);
+  void render(const G3MRenderContext* rc);
 
   bool touchesBox(const Box* box) const;
 

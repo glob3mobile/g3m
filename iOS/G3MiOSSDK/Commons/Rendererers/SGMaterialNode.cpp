@@ -11,7 +11,7 @@
 #include "Context.hpp"
 #include "GL.hpp"
 
-void SGMaterialNode::prepareRender(const RenderContext* rc) {
+void SGMaterialNode::prepareRender(const G3MRenderContext* rc) {
   GL *gl = rc->getGL();
 
   if (_specularColor == NULL) {
@@ -25,7 +25,7 @@ void SGMaterialNode::prepareRender(const RenderContext* rc) {
   SGNode::prepareRender(rc);
 }
 
-void SGMaterialNode::cleanUpRender(const RenderContext* rc) {
+void SGMaterialNode::cleanUpRender(const G3MRenderContext* rc) {
   GL *gl = rc->getGL();
 
   gl->disableVertexFlatColor();

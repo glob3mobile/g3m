@@ -51,7 +51,7 @@ public abstract class CompositeShape extends Shape
 	_children.add(shape);
   }
 
-  public final boolean isReadyToRender(RenderContext rc)
+  public final boolean isReadyToRender(G3MRenderContext rc)
   {
 	int childrenCount = _children.size();
 	for (int i = 0; i < childrenCount; i++)
@@ -66,7 +66,7 @@ public abstract class CompositeShape extends Shape
 	return false;
   }
 
-  public final void rawRender(RenderContext rc)
+  public final void rawRender(G3MRenderContext rc)
   {
 	int childrenCount = _children.size();
 	for (int i = 0; i < childrenCount; i++)

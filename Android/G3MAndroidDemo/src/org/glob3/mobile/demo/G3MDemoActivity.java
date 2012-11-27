@@ -6,6 +6,7 @@ package org.glob3.mobile.demo;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -14,6 +15,21 @@ import android.widget.Button;
 public class G3MDemoActivity
          extends
             Activity {
+
+
+   @Override
+   protected void onDestroy() {
+      Log.i(getClass().toString(), "Destroy");
+      super.onDestroy();
+   }
+
+
+   @Override
+   protected void onPause() {
+      Log.i(getClass().toString(), "Pause");
+      super.onDestroy();
+   }
+
 
    @Override
    public void onCreate(final Bundle savedInstanceState) {

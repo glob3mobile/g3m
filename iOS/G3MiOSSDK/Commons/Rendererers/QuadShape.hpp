@@ -23,10 +23,10 @@ private:
   const float _width;
   const float _height;
 
-  const IGLTextureId* getTextureId(const RenderContext* rc);
+  const IGLTextureId* getTextureId(const G3MRenderContext* rc);
 
 protected:
-  Mesh* createMesh(const RenderContext* rc);
+  Mesh* createMesh(const G3MRenderContext* rc);
 
 public:
   QuadShape(Geodetic3D* position,

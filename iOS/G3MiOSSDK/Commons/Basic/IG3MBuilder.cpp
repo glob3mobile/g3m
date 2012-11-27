@@ -16,6 +16,10 @@
 #include "CompositeRenderer.hpp"
 
 IG3MBuilder::IG3MBuilder() {
+    _nativeGL = NULL;
+    _storage = NULL;
+    _downloader = NULL;
+    _threadUtils = NULL;
     _planet = Planet::createEarth();
     _cameraRenderer = createCameraRenderer();
     _backgroundColor = Color::newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1);
@@ -47,6 +51,18 @@ IG3MBuilder::~IG3MBuilder() {
 G3MWidget* IG3MBuilder::create() {
     
     if (_nativeGL) {
+        if (!_threadUtils) {
+            _threadUtils = createThreadUtils();
+        }
+        
+        if (!_storage) {
+            _storage = createStorage();
+        }
+        
+        if (!_downloader) {
+            _downloader = createDownloader();
+        }
+        
         Color backgroundColor = Color::fromRGBA(_backgroundColor->getRed(), _backgroundColor->getGreen(), _backgroundColor->getBlue(), _backgroundColor->getAlpha());
         
         if (_cameraConstraints.size() == 0) {
@@ -86,17 +102,21 @@ G3MWidget* IG3MBuilder::create() {
         }
     
         G3MWidget * g3mWidget = G3MWidget::create(_nativeGL,
-                                              _planet,
-                                              _cameraConstraints,
-                                              _cameraRenderer,
-                                              mainRenderer,
-                                              _busyRenderer,
-                                              backgroundColor,
-                                              _logFPS,
-                                              _logDownloaderStatistics,
-                                              _initializationTask,
-                                              _autoDeleteInitializationTask,
-                                              _periodicalTasks);
+                                                  _storage,
+                                                  _downloader,
+                                                  _threadUtils,
+                                                  _planet,
+                                                  _cameraConstraints,
+                                                  _cameraRenderer,
+                                                  mainRenderer,
+                                                  _busyRenderer,
+                                                  backgroundColor,
+                                                  _logFPS,
+                                                  _logDownloaderStatistics,
+                                                  _initializationTask,
+                                                  _autoDeleteInitializationTask,
+                                                  _periodicalTasks);
+        
         g3mWidget->setUserData(_userData);
         
         return g3mWidget;
@@ -129,6 +149,18 @@ CameraRenderer* IG3MBuilder::createCameraRenderer() {
 
 void IG3MBuilder::setNativeGL(INativeGL *nativeGL) {
     _nativeGL = nativeGL;
+}
+
+void IG3MBuilder::setStorage(IStorage *storage) {
+    _storage = storage;
+}
+
+void IG3MBuilder::setDownloader(IDownloader *downloader) {
+    _downloader = downloader;
+}
+
+void IG3MBuilder::setThreadUtils(IThreadUtils *threadUtils) {
+    _threadUtils = threadUtils;
 }
 
 void IG3MBuilder::setPlanet(const Planet *planet) {

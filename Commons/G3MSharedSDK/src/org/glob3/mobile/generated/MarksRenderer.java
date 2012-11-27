@@ -4,8 +4,8 @@ public class MarksRenderer extends LeafRenderer
   private final boolean _readyWhenMarksReady;
   private java.util.ArrayList<Mark> _marks = new java.util.ArrayList<Mark>();
 
-  private InitializationContext _initializationContext;
-  private Camera                _lastCamera;
+  private G3MContext _context;
+  private Camera     _lastCamera;
 
   private MarkTouchListener _markTouchListener;
   private boolean _autoDeleteMarkTouchListener;
@@ -14,7 +14,7 @@ public class MarksRenderer extends LeafRenderer
   public MarksRenderer(boolean readyWhenMarksReady)
   {
 	  _readyWhenMarksReady = readyWhenMarksReady;
-	  _initializationContext = null;
+	  _context = null;
 	  _lastCamera = null;
 	  _markTouchListener = null;
 	  _autoDeleteMarkTouchListener = false;
@@ -49,19 +49,19 @@ public class MarksRenderer extends LeafRenderer
 	_markTouchListener = null;
   }
 
-  public void initialize(InitializationContext ic)
+  public void initialize(G3MContext context)
   {
-	_initializationContext = ic;
+	_context = context;
   
 	int marksSize = _marks.size();
 	for (int i = 0; i < marksSize; i++)
 	{
 	  Mark mark = _marks.get(i);
-	  mark.initialize(_initializationContext);
+	  mark.initialize(context);
 	}
   }
 
-  public void render(RenderContext rc)
+  public void render(G3MRenderContext rc)
   {
 	//  rc.getLogger()->logInfo("MarksRenderer::render()");
   
@@ -103,13 +103,13 @@ public class MarksRenderer extends LeafRenderer
   public final void addMark(Mark mark)
   {
 	_marks.add(mark);
-	if (_initializationContext != null)
+	if (_context != null)
 	{
-	  mark.initialize(_initializationContext);
+	  mark.initialize(_context);
 	}
   }
 
-  public final boolean onTouchEvent(EventContext ec, TouchEvent touchEvent)
+  public final boolean onTouchEvent(G3MEventContext ec, TouchEvent touchEvent)
   {
 	if (_markTouchListener == null)
 	{
@@ -183,12 +183,12 @@ public class MarksRenderer extends LeafRenderer
 	return handled;
   }
 
-  public final void onResizeViewportEvent(EventContext ec, int width, int height)
+  public final void onResizeViewportEvent(G3MEventContext ec, int width, int height)
   {
 
   }
 
-  public final boolean isReadyToRender(RenderContext rc)
+  public final boolean isReadyToRender(G3MRenderContext rc)
   {
 	if (_readyWhenMarksReady)
 	{
@@ -215,12 +215,17 @@ public class MarksRenderer extends LeafRenderer
 
   }
 
-  public final void onResume(InitializationContext ic)
+  public final void onResume(G3MContext context)
   {
-	_initializationContext = ic;
+	_context = context;
   }
 
-  public final void onPause(InitializationContext ic)
+  public final void onPause(G3MContext context)
+  {
+
+  }
+
+  public final void onDestroy(G3MContext context)
   {
 
   }

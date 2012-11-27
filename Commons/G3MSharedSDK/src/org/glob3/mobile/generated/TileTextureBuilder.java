@@ -33,7 +33,7 @@ public class TileTextureBuilder extends RCObject
 
   public LeveledTexturedMesh _mesh;
 
-  public TileTextureBuilder(MultiLayerTileTexturizer texturizer, RenderContext rc, LayerSet layerSet, TilesRenderParameters parameters, IDownloader downloader, Tile tile, Mesh tessellatorMesh, IFloatBuffer texCoords)
+  public TileTextureBuilder(MultiLayerTileTexturizer texturizer, G3MRenderContext rc, LayerSet layerSet, TilesRenderParameters parameters, IDownloader downloader, Tile tile, Mesh tessellatorMesh, IFloatBuffer texCoords)
   //_tileKey(tile->getKey()),
   {
 	  _texturizer = texturizer;
@@ -85,7 +85,10 @@ public class TileTextureBuilder extends RCObject
 	{
 	  final Petition petition = _petitions.get(i);
 
-	  final long priority = (_parameters._incrementalTileQuality ? 1000 - _tile.getLevel() : _tile.getLevel());
+//      const long long priority =  (_parameters->_incrementalTileQuality
+//                                   ? 1000 - _tile->getLevel()
+//                                   : _tile->getLevel());
+	  final long priority = DefineConstants.TILE_DOWNLOAD_PRIORITY + _tile.getLevel();
 
 	  final long requestId = _downloader.requestImage(new URL(petition.getURL()), priority, new BuilderDownloadStepDownloadListener(this, i), true);
 
@@ -119,6 +122,11 @@ public class TileTextureBuilder extends RCObject
 //ORIGINAL LINE: void composeAndUploadTexture() const
   public final void composeAndUploadTexture()
   {
+	if (_mesh == null)
+	{
+	  return;
+	}
+
 	final java.util.ArrayList<IImage> images = new java.util.ArrayList<IImage>();
 	final java.util.ArrayList<RectangleD> rectangles = new java.util.ArrayList<RectangleD>();
 	String textureId = _tile.getKey().tinyDescription();

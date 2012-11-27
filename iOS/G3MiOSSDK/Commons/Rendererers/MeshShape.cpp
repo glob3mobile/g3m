@@ -20,32 +20,26 @@ void MeshShape::cleanMesh() {
 }
 
 
-Mesh* MeshShape::getMesh(const RenderContext* rc) {
+Mesh* MeshShape::getMesh(const G3MRenderContext* rc) {
   if (_mesh == NULL) {
     _mesh = createMesh(rc);
   }
   return _mesh;
 }
 
-bool MeshShape::isReadyToRender(const RenderContext* rc) {
+bool MeshShape::isReadyToRender(const G3MRenderContext* rc) {
   const Mesh* mesh = getMesh(rc);
   return (mesh != NULL);
 }
 
-void MeshShape::rawRender(const RenderContext* rc) {
+void MeshShape::rawRender(const G3MRenderContext* rc) {
   const Mesh* mesh = getMesh(rc);
   if (mesh != NULL) {
-//    GL* gl = rc->getGL();
-//    
-//    gl->disableCullFace();
-
     mesh->render(rc);
-
-//    gl->enableCullFace(GLCullFace::back());
   }
 }
 
-bool MeshShape::isTransparent(const RenderContext* rc) {
+bool MeshShape::isTransparent(const G3MRenderContext* rc) {
   const Mesh* mesh = getMesh(rc);
   if (mesh == NULL) {
     return false;

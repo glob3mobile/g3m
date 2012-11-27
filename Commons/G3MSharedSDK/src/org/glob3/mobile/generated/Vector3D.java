@@ -203,11 +203,13 @@ public class Vector3D
 //ORIGINAL LINE: Angle signedAngleBetween(const Vector3D& other, const Vector3D& up) const
   public final Angle signedAngleBetween(Vector3D other, Vector3D up)
   {
-	Angle angle = angleBetween(other);
-	if (cross(other).dot(up)>0)
+	final Angle angle = angleBetween(other);
+	if (cross(other).dot(up) > 0)
+	{
 	  return angle;
-	else
-	  return angle.times(-1);
+	}
+  
+	return angle.times(-1);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:

@@ -24,9 +24,9 @@ private:
   std::string _wrapT;
 
 protected:
-  virtual void prepareRender(const RenderContext* rc);
+  virtual void prepareRender(const G3MRenderContext* rc);
 
-  virtual void cleanUpRender(const RenderContext* rc);
+  virtual void cleanUpRender(const G3MRenderContext* rc);
 
 public:
 

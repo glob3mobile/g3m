@@ -154,7 +154,7 @@ public:
   
   void resizeViewport(int width, int height);
   
-  void render(const RenderContext* rc) const;
+  void render(const G3MRenderContext* rc) const;
   
   Vector3D pixel2Ray(const Vector2I& pixel) const;
   
@@ -217,7 +217,7 @@ public:
   Angle compute3DAngularDistance(const Vector2I& pixel0,
                                  const Vector2I& pixel1);
   
-  void initialize(const InitializationContext* ic); 
+  void initialize(const G3MContext* context); 
 
   void resetPosition();
   
@@ -357,10 +357,8 @@ private:
     return _frustum;
   }
 
-
-  int __temporal_test_for_clipping;
-
   Frustum* getHalfFrustum() const {
+    // __temporal_test_for_clipping;
     if (_dirtyFlags._halfFrustum) {
       _dirtyFlags._halfFrustum = false;
 #ifdef C_CODE

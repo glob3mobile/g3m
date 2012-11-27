@@ -11,12 +11,11 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.GTask;
 import org.glob3.mobile.generated.IBufferDownloadListener;
-import org.glob3.mobile.generated.IDownloader;
 import org.glob3.mobile.generated.IImageDownloadListener;
 import org.glob3.mobile.generated.ILogger;
-import org.glob3.mobile.generated.IThreadUtils;
 import org.glob3.mobile.generated.URL;
 
 import android.util.Log;
@@ -32,10 +31,10 @@ public final class Downloader_Android_Handler {
    private final ArrayList<ListenerEntry> _listeners = new ArrayList<ListenerEntry>();
 
 
-   public Downloader_Android_Handler(final URL url,
-                                     final IBufferDownloadListener listener,
-                                     final long priority,
-                                     final long requestId) {
+   Downloader_Android_Handler(final URL url,
+                              final IBufferDownloadListener listener,
+                              final long priority,
+                              final long requestId) {
       _priority = priority;
       _url = url;
       try {
@@ -56,10 +55,10 @@ public final class Downloader_Android_Handler {
    }
 
 
-   public Downloader_Android_Handler(final URL url,
-                                     final IImageDownloadListener listener,
-                                     final long priority,
-                                     final long requestId) {
+   Downloader_Android_Handler(final URL url,
+                              final IImageDownloadListener listener,
+                              final long priority,
+                              final long requestId) {
       _priority = priority;
       _url = url;
       try {
@@ -163,24 +162,26 @@ public final class Downloader_Android_Handler {
    }
 
 
-   public void runWithDownloader(final IDownloader downloader) {
+   void runWithDownloader(final Downloader_Android downloader,
+                          final G3MContext context) {
       //      Log.i(TAG, "runWithDownloader url=" + _url.getPath());
-      final Downloader_Android dl = (Downloader_Android) downloader;
+
       int statusCode = 0;
       byte[] data = null;
       HttpURLConnection connection = null;
 
       try {
          if (_url.getPath().startsWith(Downloader_Android.ASSET_URL)) {
-            data = getData(dl.getAppContext().getAssets().open(_url.getPath().replaceFirst(Downloader_Android.ASSET_URL, "")));
+            data = getData(downloader.getAppContext().getAssets().open(
+                     _url.getPath().replaceFirst(Downloader_Android.ASSET_URL, "")));
             if (data != null) {
                statusCode = 200;
             }
          }
          else {
             connection = (HttpURLConnection) _URL.openConnection();
-            connection.setConnectTimeout(dl.getConnectTimeout());
-            connection.setReadTimeout(dl.getReadTimeout());
+            connection.setConnectTimeout(downloader.getConnectTimeout());
+            connection.setReadTimeout(downloader.getReadTimeout());
             connection.setUseCaches(false);
             connection.connect();
             statusCode = connection.getResponseCode();
@@ -201,9 +202,10 @@ public final class Downloader_Android_Handler {
       }
 
       // inform downloader to remove myself, to avoid adding new Listener
-      dl.removeDownloadingHandlerForUrl(_url.getPath());
+      downloader.removeDownloadingHandlerForUrl(_url.getPath());
 
-      IThreadUtils.instance().invokeInRendererThread(new ProcessResponseGTask(statusCode, data, this), true);
+
+      context.getThreadUtils().invokeInRendererThread(new ProcessResponseGTask(statusCode, data, this), true);
    }
 
 
@@ -252,7 +254,7 @@ public final class Downloader_Android_Handler {
 
 
       @Override
-      public void run() {
+      public void run(final G3MContext context) {
          synchronized (_handler) {
             final boolean dataIsValid = (_data != null) && (_statusCode == 200);
 

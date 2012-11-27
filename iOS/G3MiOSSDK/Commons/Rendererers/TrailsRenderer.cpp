@@ -54,7 +54,7 @@ Mesh* Trail::getMesh(const Planet* planet) {
   return _mesh;
 }
 
-void Trail::render(const RenderContext* rc) {
+void Trail::render(const G3MRenderContext* rc) {
   if (_visible) {
     Mesh* mesh = getMesh(rc->getPlanet());
     if (mesh != NULL) {
@@ -76,7 +76,7 @@ void TrailsRenderer::addTrail(Trail* trail) {
   _trails.push_back(trail);
 }
 
-void TrailsRenderer::render(const RenderContext* rc) {
+void TrailsRenderer::render(const G3MRenderContext* rc) {
   const int trailsCount = _trails.size();
   for (int i = 0; i < trailsCount; i++) {
     Trail* trail = _trails[i];

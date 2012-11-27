@@ -101,7 +101,7 @@ public:
   }
   
   Vector3D getCenter() {
-    return Vector3D((double)_cx,(double)_cy,(double)_cz);
+    return Vector3D(_cx, _cy, _cz);
   }
 };
 

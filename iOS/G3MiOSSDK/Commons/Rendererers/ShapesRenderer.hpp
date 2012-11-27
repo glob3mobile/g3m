@@ -18,16 +18,16 @@ private:
   std::vector<Shape*> _shapes;
 
 #ifdef C_CODE
-  const InitializationContext* _initializationContext;
+  const G3MContext* _context;
 #endif
 #ifdef JAVA_CODE
-  private InitializationContext _initializationContext;
+  private G3MContext _context;
 #endif
 
 public:
 
   ShapesRenderer() :
-  _initializationContext(NULL)
+  _context(NULL)
   {
 
   }
@@ -42,38 +42,43 @@ public:
 
   void addShape(Shape* shape) {
     _shapes.push_back(shape);
-    if (_initializationContext != NULL) {
-      shape->initialize(_initializationContext);
+    if (_context != NULL) {
+      shape->initialize(_context);
     }
   }
 
-  void onResume(const InitializationContext* ic) {
-    _initializationContext = ic;
+  void onResume(const G3MContext* context) {
+    _context = context;
   }
 
-  void onPause(const InitializationContext* ic) {
+  void onPause(const G3MContext* context) {
+
   }
 
-  void initialize(const InitializationContext* ic) {
-    _initializationContext = ic;
+  void onDestroy(const G3MContext* context) {
+
+  }
+
+  void initialize(const G3MContext* context) {
+    _context = context;
 
     const int shapesCount = _shapes.size();
     for (int i = 0; i < shapesCount; i++) {
       Shape* shape = _shapes[i];
-      shape->initialize(ic);
+      shape->initialize(context);
     }
   }
   
-  bool isReadyToRender(const RenderContext* rc) {
+  bool isReadyToRender(const G3MRenderContext* rc) {
     return true;
   }
 
-  bool onTouchEvent(const EventContext* ec,
+  bool onTouchEvent(const G3MEventContext* ec,
                     const TouchEvent* touchEvent) {
     return false;
   }
 
-  void onResizeViewportEvent(const EventContext* ec,
+  void onResizeViewportEvent(const G3MEventContext* ec,
                              int width, int height) {
   }
 
@@ -83,7 +88,7 @@ public:
   void stop() {
   }
 
-  void render(const RenderContext* rc);
+  void render(const G3MRenderContext* rc);
 
 };
 

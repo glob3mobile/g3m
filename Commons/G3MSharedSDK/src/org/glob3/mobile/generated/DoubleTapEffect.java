@@ -32,17 +32,17 @@ public class DoubleTapEffect extends EffectWithDuration
 	  _distance = distance;
   }
 
-  public void start(RenderContext rc, TimeInterval now)
+  public void start(G3MRenderContext rc, TimeInterval when)
   {
-	super.start(rc, now);
+	super.start(rc, when);
 	_lastPercent = 0;
   }
 
-  public void doStep(RenderContext rc, TimeInterval now)
+  public void doStep(G3MRenderContext rc, TimeInterval when)
   {
-	//const double percent = gently(percentDone(now), 0.2, 0.9);
-	//const double percent = pace( percentDone(now) );
-	final double percent = percentDone(now);
+	//const double percent = gently(percentDone(when), 0.2, 0.9);
+	//const double percent = pace( percentDone(when) );
+	final double percent = percentDone(when);
 	Camera camera = rc.getNextCamera();
 	final double step = percent - _lastPercent;
 	camera.rotateWithAxis(_axis, _angle.times(step));
@@ -50,12 +50,12 @@ public class DoubleTapEffect extends EffectWithDuration
 	_lastPercent = percent;
   }
 
-  public void stop(RenderContext rc, TimeInterval now)
+  public void stop(G3MRenderContext rc, TimeInterval when)
   {
-	super.stop(rc, now);
+	super.stop(rc, when);
   }
 
-  public void cancel(TimeInterval now)
+  public void cancel(TimeInterval when)
   {
 	// do nothing, just leave the effect in the intermediate state
   }

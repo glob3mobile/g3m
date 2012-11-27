@@ -37,7 +37,7 @@ SimplePlanetRenderer::~SimplePlanetRenderer()
   delete _mesh;
 }
 
-void SimplePlanetRenderer::initialize(const InitializationContext* ic)
+void SimplePlanetRenderer::initialize(const G3MContext* context)
 {
   
 }
@@ -97,7 +97,7 @@ IFloatBuffer* SimplePlanetRenderer::createTextureCoordinates() const
   return texCoords.create();
 }
 
-bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
+bool SimplePlanetRenderer::initializeMesh(const G3MRenderContext* rc) {
   
   
   const Planet* planet = rc->getPlanet();
@@ -125,10 +125,10 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   
   //FLAT COLOR
   Color * flatColor = NULL;
-  if (false){
-    flatColor = new Color( Color::fromRGBA(0.0, 1.0, 0.0, 1.0) );
-  }
-  
+//  if (false){
+//    flatColor = new Color( Color::fromRGBA(0.0, 1.0, 0.0, 1.0) );
+//  }
+
   IndexedMesh *im = new IndexedMesh(GLPrimitive::triangleStrip(),
                                     true,
                                     Vector3D::zero(),
@@ -173,7 +173,7 @@ bool SimplePlanetRenderer::initializeMesh(const RenderContext* rc) {
   return true;
 }
 
-void SimplePlanetRenderer::render(const RenderContext* rc){
+void SimplePlanetRenderer::render(const G3MRenderContext* rc){
   if (_mesh == NULL){
     if (!initializeMesh(rc)) {
       return;

@@ -13,10 +13,10 @@ public abstract class EffectWithDuration extends Effect
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double percentDone(const TimeInterval& now) const
-  protected final double percentDone(TimeInterval now)
+//ORIGINAL LINE: double percentDone(const TimeInterval& when) const
+  protected final double percentDone(TimeInterval when)
   {
-	final long elapsed = now.milliseconds() - _started;
+	final long elapsed = when.milliseconds() - _started;
 
 	final double percent = (double) elapsed / _duration;
 	if (percent > 1)
@@ -27,19 +27,19 @@ public abstract class EffectWithDuration extends Effect
   }
 
 
-  public void stop(RenderContext rc, TimeInterval now)
+  public void stop(G3MRenderContext rc, TimeInterval when)
   {
 
   }
 
-  public void start(RenderContext rc, TimeInterval now)
+  public void start(G3MRenderContext rc, TimeInterval when)
   {
-	_started = now.milliseconds();
+	_started = when.milliseconds();
   }
 
-  public boolean isDone(RenderContext rc, TimeInterval now)
+  public boolean isDone(G3MRenderContext rc, TimeInterval when)
   {
-	final double percent = percentDone(now);
+	final double percent = percentDone(when);
 	return percent >= 1;
   }
 

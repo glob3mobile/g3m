@@ -424,7 +424,7 @@
             
         }
         
-        void run() {
+        void run(const G3MContext* context) {
             printf("Running initialization Task\n");
             
             [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegreesMinutes(37, 47),
@@ -499,7 +499,7 @@
 
         }
 
-        void run() {
+        void run(const G3MContext* context) {
           _lastLatitudeDegrees += 0.025;
           _lastLongitudeDegrees += 0.025;
           _lastHeight += 200;
@@ -731,9 +731,6 @@
                                                  8000),
                                   50000,
                                   Color::newFromRGBA(1, 1, 0, 0.5));
-  //  circle->setHeading( Angle::fromDegrees(45) );
-  //  circle->setPitch( Angle::fromDegrees(45) );
-  //  circle->setScale(2.0, 0.5, 1);
   shapesRenderer->addShape(circle);
 
   Shape* box = new BoxShape(new Geodetic3D(Angle::fromDegrees(37.78333333),
@@ -743,6 +740,9 @@
                             2,
                             Color::newFromRGBA(1,    0, 0, 0.5),
                             Color::newFromRGBA(0.75, 0, 0, 0.75));
+
+  box->setAnimatedScale(1, 1, 20);
+
   shapesRenderer->addShape(box);
 
 
@@ -824,7 +824,7 @@
 
     }
 
-    void run() {
+    void run(const G3MContext* context) {
       printf("Running initialization Task\n");
 
       [_iosWidget widget]->setAnimatedCameraPosition(Geodetic3D(Angle::fromDegreesMinutes(37, 47),
@@ -832,30 +832,30 @@
                                                                 1000000),
                                                      TimeInterval::fromSeconds(5));
       / *
-       NSString *filePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
-       ofType: @"json"];
-       if (filePath) {
-       NSString *nsString = [NSString stringWithContentsOfFile: filePath
-       encoding: NSUTF8StringEncoding
-       error: nil];
-       if (nsString) {
-       std::string str = [nsString UTF8String];
-       Shape* plane = SceneJSShapesParser::parse(str);
+      NSString *filePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
+                                                           ofType: @"json"];
+      if (filePath) {
+        NSString *nsString = [NSString stringWithContentsOfFile: filePath
+                                                       encoding: NSUTF8StringEncoding
+                                                          error: nil];
+        if (nsString) {
+          std::string str = [nsString UTF8String];
+          Shape* plane = SceneJSShapesParser::parse(str);
 
-       plane->setPosition( new Geodetic3D(Angle::fromDegrees(37.78333333),
-       Angle::fromDegrees(-122.41666666666667),
-       100) );
-       plane->setScale(100, 100, 100);
-       plane->setPitch(Angle::fromDegrees(-90));
-       _shapesRenderer->addShape(plane);
-       }
-       }
-       * /
+          plane->setPosition( new Geodetic3D(Angle::fromDegrees(37.78333333),
+                                             Angle::fromDegrees(-122.41666666666667),
+                                             100) );
+          plane->setScale(100, 100, 100);
+          plane->setPitch(Angle::fromDegrees(-90));
+          _shapesRenderer->addShape(plane);
+        }
+      }
+      * /
     }
   };
 
   UserData* userData = NULL;
-  const bool incrementalTileQuality = true;
+  const bool incrementalTileQuality = false;
   [[self G3MWidget] initWidgetWithCameraConstraints: cameraConstraints
                                            layerSet: layerSet
                              incrementalTileQuality: incrementalTileQuality

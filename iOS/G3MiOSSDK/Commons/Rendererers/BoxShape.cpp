@@ -14,7 +14,7 @@
 #include "GLConstants.hpp"
 #include "CompositeMesh.hpp"
 
-Mesh* BoxShape::createBorderMesh(const RenderContext* rc) {
+Mesh* BoxShape::createBorderMesh(const G3MRenderContext* rc) {
   const float lowerX = (float) -(_extentX / 2);
   const float upperX = (float) +(_extentX / 2);
   const float lowerY = (float) -(_extentY / 2);
@@ -66,7 +66,7 @@ Mesh* BoxShape::createBorderMesh(const RenderContext* rc) {
                          borderColor);
 }
 
-Mesh* BoxShape::createSurfaceMesh(const RenderContext* rc) {
+Mesh* BoxShape::createSurfaceMesh(const G3MRenderContext* rc) {
   const float lowerX = (float) -(_extentX / 2);
   const float upperX = (float) +(_extentX / 2);
   const float lowerY = (float) -(_extentY / 2);
@@ -114,7 +114,7 @@ Mesh* BoxShape::createSurfaceMesh(const RenderContext* rc) {
 }
 
 
-Mesh* BoxShape::createMesh(const RenderContext* rc) {
+Mesh* BoxShape::createMesh(const G3MRenderContext* rc) {
 
   //  const float lowerX = (float) -(_extentX / 2);
   //  const float upperX = (float) +(_extentX / 2);

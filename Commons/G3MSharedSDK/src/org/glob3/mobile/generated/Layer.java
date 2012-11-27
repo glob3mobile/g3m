@@ -34,6 +34,8 @@ public abstract class Layer
 
   private LayerSet _layerSet;
 
+  private boolean _enable;
+
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: void notifyChanges() const
   protected final void notifyChanges()
@@ -53,7 +55,17 @@ public abstract class Layer
   {
 	  _condition = condition;
 	  _layerSet = null;
+	  _enable = true;
 
+  }
+
+  public void setEnable(boolean enable)
+  {
+	if (enable != _enable)
+	{
+	  _enable = enable;
+	  notifyChanges();
+	}
   }
 
   public void dispose()
@@ -61,12 +73,12 @@ public abstract class Layer
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual java.util.ArrayList<Petition*> getMapPetitions(const RenderContext* rc, const Tile* tile, int width, int height) const = 0;
-  public abstract java.util.ArrayList<Petition> getMapPetitions(RenderContext rc, Tile tile, int width, int height);
+//ORIGINAL LINE: virtual java.util.ArrayList<Petition*> getMapPetitions(const G3MRenderContext* rc, const Tile* tile, int width, int height) const = 0;
+  public abstract java.util.ArrayList<Petition> getMapPetitions(G3MRenderContext rc, Tile tile, int width, int height);
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual boolean isAvailable(const RenderContext* rc, const Tile* tile) const
-  public boolean isAvailable(RenderContext rc, Tile tile)
+//ORIGINAL LINE: virtual boolean isAvailable(const G3MRenderContext* rc, const Tile* tile) const
+  public boolean isAvailable(G3MRenderContext rc, Tile tile)
   {
 	if (_condition == null)
 	{
@@ -76,8 +88,8 @@ public abstract class Layer
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: virtual boolean isAvailable(const EventContext* ec, const Tile* tile) const
-  public boolean isAvailable(EventContext ec, Tile tile)
+//ORIGINAL LINE: virtual boolean isAvailable(const G3MEventContext* ec, const Tile* tile) const
+  public boolean isAvailable(G3MEventContext ec, Tile tile)
   {
 	if (_condition == null)
 	{
@@ -99,7 +111,7 @@ public abstract class Layer
 	return true;
   }
 
-  public void initialize(InitializationContext ic)
+  public void initialize(G3MContext context)
   {
   }
 
@@ -109,8 +121,8 @@ public abstract class Layer
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void onTerrainTouchEventListener(const EventContext* ec, TerrainTouchEvent& tte) const
-  public final void onTerrainTouchEventListener(EventContext ec, TerrainTouchEvent tte)
+//ORIGINAL LINE: void onTerrainTouchEventListener(const G3MEventContext* ec, TerrainTouchEvent& tte) const
+  public final void onTerrainTouchEventListener(G3MEventContext ec, TerrainTouchEvent tte)
   {
 	for (int i = 0; i < _listeners.size(); i++)
 	{
