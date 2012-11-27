@@ -46,15 +46,15 @@ private:
     
     std::vector<ICameraConstrainer*> createCameraConstraints();
     CameraRenderer* createCameraRenderer();
-    virtual IThreadUtils* createThreadUtils() = 0;
-    virtual IStorage* createStorage() = 0;
-    virtual IDownloader* createDownloader() = 0; 
     
 protected:
     IStorage* _storage;
     
     G3MWidget* create();
     void setNativeGL(INativeGL* nativeGL);
+    virtual IThreadUtils* createThreadUtils() = 0;
+    virtual IStorage* createStorage() = 0;
+    virtual IDownloader* createDownloader() = 0;
     
 public:
     IG3MBuilder();
