@@ -62,9 +62,6 @@ public abstract class IG3MBuilder
     
 		return cameraRenderer;
 	}
-	private abstract IThreadUtils createThreadUtils();
-	private abstract IStorage createStorage();
-	private abstract IDownloader createDownloader();
 
 	protected IStorage _storage;
 
@@ -148,6 +145,9 @@ public abstract class IG3MBuilder
 	{
 		_nativeGL = nativeGL;
 	}
+	protected abstract IThreadUtils createThreadUtils();
+	protected abstract IStorage createStorage();
+	protected abstract IDownloader createDownloader();
 
 	public IG3MBuilder()
 	{
