@@ -283,10 +283,6 @@
 		D8F42FBF15EB6D78000D1822 /* SQLiteStorage_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF8B21B115DD32820068601A /* SQLiteStorage_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
 		D8F42FD415EB7B95000D1822 /* IStringBuilder.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8A723A715E4D2C500ABDF07 /* IStringBuilder.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		E745CC7916484A9A00819711 /* IStorage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E745CC7716484A9900819711 /* IStorage.cpp */; };
-		E80D62F0165F8DEA00BD91B2 /* Search.h in Headers */ = {isa = PBXBuildFile; fileRef = E80D62EF165F8DEA00BD91B2 /* Search.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E80D62F2165F9EE900BD91B2 /* ISearchDownloadListener.hpp in Sources */ = {isa = PBXBuildFile; fileRef = E80D62F1165F9EE900BD91B2 /* ISearchDownloadListener.hpp */; };
-		E80D62F3165FAC6600BD91B2 /* ISearchDownloadListener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E80D62F1165F9EE900BD91B2 /* ISearchDownloadListener.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		E80D62F7165FCC2C00BD91B2 /* Search.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E80D62F6165FCC2C00BD91B2 /* Search.cpp */; };
 		E8891FB31647DCF500B0E481 /* AppParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8891FB11647DCF500B0E481 /* AppParser.cpp */; };
 		E8891FB41647DCF500B0E481 /* AppParser.hpp in Headers */ = {isa = PBXBuildFile; fileRef = E8891FB21647DCF500B0E481 /* AppParser.hpp */; };
 		E8891FBA1647DD0E00B0E481 /* GEOJSONDownloadListener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8891FB61647DD0D00B0E481 /* GEOJSONDownloadListener.cpp */; };
@@ -578,9 +574,6 @@
 		D8FEDAC615E7BD23007633A0 /* IMathUtils.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = IMathUtils.hpp; path = Commons/Interfaces/IMathUtils.hpp; sourceTree = "<group>"; };
 		D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = MathUtils_iOS.hpp; path = Specific/Derived/MathUtils_iOS.hpp; sourceTree = "<group>"; };
 		E745CC7716484A9900819711 /* IStorage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = IStorage.cpp; path = Commons/Interfaces/IStorage.cpp; sourceTree = "<group>"; };
-		E80D62EF165F8DEA00BD91B2 /* Search.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Search.h; sourceTree = "<group>"; };
-		E80D62F1165F9EE900BD91B2 /* ISearchDownloadListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ISearchDownloadListener.hpp; path = Commons/Interfaces/ISearchDownloadListener.hpp; sourceTree = "<group>"; };
-		E80D62F6165FCC2C00BD91B2 /* Search.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Search.cpp; sourceTree = "<group>"; };
 		E8891FB11647DCF500B0E481 /* AppParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppParser.cpp; sourceTree = "<group>"; };
 		E8891FB21647DCF500B0E481 /* AppParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AppParser.hpp; sourceTree = "<group>"; };
 		E8891FB61647DD0D00B0E481 /* GEOJSONDownloadListener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GEOJSONDownloadListener.cpp; sourceTree = "<group>"; };
@@ -670,7 +663,6 @@
 		383BD3881577EDE30012AC53 /* Commons */ = {
 			isa = PBXGroup;
 			children = (
-				E80D62EC165F8DCB00BD91B2 /* Tools */,
 				A7BF53831607643400662135 /* JSON */,
 				D892FBCD15C930E600E69254 /* GL */,
 				383BD3891577EDF40012AC53 /* Basic */,
@@ -827,7 +819,6 @@
 				D8FEDAC615E7BD23007633A0 /* IMathUtils.hpp */,
 				CF31CBF215878AF90085E8F1 /* ITimer.hpp */,
 				E745CC7716484A9900819711 /* IStorage.cpp */,
-				E80D62F1165F9EE900BD91B2 /* ISearchDownloadListener.hpp */,
 			);
 			name = Interfaces;
 			sourceTree = "<group>";
@@ -1068,16 +1059,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		E80D62EC165F8DCB00BD91B2 /* Tools */ = {
-			isa = PBXGroup;
-			children = (
-				E80D62EF165F8DEA00BD91B2 /* Search.h */,
-				E80D62F6165FCC2C00BD91B2 /* Search.cpp */,
-			);
-			name = Tools;
-			path = Commons/Tools;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1085,8 +1066,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E80D62F3165FAC6600BD91B2 /* ISearchDownloadListener.hpp in Headers */,
-				E80D62F0165F8DEA00BD91B2 /* Search.h in Headers */,
 				CF11E8C7164D653000935052 /* SGLayerNode.hpp in Headers */,
 				CFC3BCCA164C6C7300A8D37D /* SGShape.hpp in Headers */,
 				CF857B2F164C757A0089F1DE /* SGRotateNode.hpp in Headers */,
@@ -1424,8 +1403,6 @@
 				CF857B3F164C80DB0089F1DE /* SGTranslateNode.cpp in Sources */,
 				CF11E8C6164D653000935052 /* SGLayerNode.cpp in Sources */,
 				CF9592AE1652E28500CB7AC8 /* OrderedRenderable.cpp in Sources */,
-				E80D62F2165F9EE900BD91B2 /* ISearchDownloadListener.hpp in Sources */,
-				E80D62F7165FCC2C00BD91B2 /* Search.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
