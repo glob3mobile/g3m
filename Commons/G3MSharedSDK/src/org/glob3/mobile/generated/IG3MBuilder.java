@@ -19,10 +19,12 @@ package org.glob3.mobile.generated;
 
 
 
-public class IG3MBuilder
+public abstract class IG3MBuilder
 {
 
 	private INativeGL _nativeGL;
+	private IDownloader _downloader;
+	private IThreadUtils _threadUtils;
 	private Planet _planet; // REMOVED FINAL WORD BY CONVERSOR RULE
 	private java.util.ArrayList<ICameraConstrainer> _cameraConstraints = new java.util.ArrayList<ICameraConstrainer>();
 	private CameraRenderer _cameraRenderer;
@@ -60,12 +62,32 @@ public class IG3MBuilder
     
 		return cameraRenderer;
 	}
+	private abstract IThreadUtils createThreadUtils();
+	private abstract IStorage createStorage();
+	private abstract IDownloader createDownloader();
+
+	protected IStorage _storage;
 
 	protected final G3MWidget create()
 	{
     
 		if (_nativeGL != null)
 		{
+			if (_threadUtils == null)
+			{
+				_threadUtils = createThreadUtils();
+			}
+    
+			if (_storage == null)
+			{
+				_storage = createStorage();
+			}
+    
+			if (_downloader == null)
+			{
+				_downloader = createDownloader();
+			}
+    
 			Color backgroundColor = Color.fromRGBA(_backgroundColor.getRed(), _backgroundColor.getGreen(), _backgroundColor.getBlue(), _backgroundColor.getAlpha());
     
 			if (_cameraConstraints.size() == 0)
@@ -114,16 +136,25 @@ public class IG3MBuilder
 				mainRenderer = _tileRenderer;
 			}
     
-			G3MWidget g3mWidget = G3MWidget.create(_nativeGL, _planet, _cameraConstraints, _cameraRenderer, mainRenderer, _busyRenderer, backgroundColor, _logFPS, _logDownloaderStatistics, _initializationTask, _autoDeleteInitializationTask, _periodicalTasks);
+			G3MWidget g3mWidget = G3MWidget.create(_nativeGL, _storage, _downloader, _threadUtils, _planet, _cameraConstraints, _cameraRenderer, mainRenderer, _busyRenderer, backgroundColor, _logFPS, _logDownloaderStatistics, _initializationTask, _autoDeleteInitializationTask, _periodicalTasks);
+    
 			g3mWidget.setUserData(_userData);
     
 			return g3mWidget;
 		}
 		return null;
 	}
+	protected final void setNativeGL(INativeGL nativeGL)
+	{
+		_nativeGL = nativeGL;
+	}
 
 	public IG3MBuilder()
 	{
+		_nativeGL = null;
+		_storage = null;
+		_downloader = null;
+		_threadUtils = null;
 		_planet = Planet.createEarth();
 		_cameraRenderer = createCameraRenderer();
 		_backgroundColor = Color.newFromRGBA((float)0, (float)0.1, (float)0.2, (float)1);
@@ -153,9 +184,17 @@ public class IG3MBuilder
 		if (_userData != null)
 			_userData.dispose();
 	}
-	public final void setNativeGL(INativeGL nativeGL)
+	public final void setStorage(IStorage storage)
 	{
-		_nativeGL = nativeGL;
+		_storage = storage;
+	}
+	public final void setDownloader(IDownloader downloader)
+	{
+		_downloader = downloader;
+	}
+	public final void setThreadUtils(IThreadUtils threadUtils)
+	{
+		_threadUtils = threadUtils;
 	}
 	public final void setPlanet(Planet planet)
 	{
