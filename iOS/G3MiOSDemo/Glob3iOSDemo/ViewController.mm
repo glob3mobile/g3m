@@ -57,14 +57,50 @@
 {
   [super viewDidLoad];
 
+    // initialize a customized widget without using a builder
+//    [[self G3MWidget] initSingletons];
+//    [self initCustomizedWithoutBuilder];
+    
+    // initizalize a default widget by using a builder
 //    [self initDefaultWithBuilder];
+    
+    // initialize a customized widget by using a buider
     [self initCustomizedWithBuilder];
 
-//    to be removed
-//  [[self G3MWidget] initSingletons];
-//  [self initWidgetDemo];
-
   [[self G3MWidget] startAnimation];
+}
+
+- (void) initCustomizedWithoutBuilder
+{
+    
+    TileRenderer* tileRenderer = [self createTileRenderer: [self createTileRenderParameters]
+                                                 layerSet: [self createLayerSet]];
+
+    std::vector<Renderer*> renderers;
+    
+    MarksRenderer* marksRenderer = [self createMarksRenderer];
+    renderers.push_back(marksRenderer);
+    
+    ShapesRenderer* shapesRenderer = [self createShapesRenderer];
+    renderers.push_back(shapesRenderer);
+    
+    std::vector<PeriodicalTask*> periodicalTasks;
+    
+    [[self G3MWidget] initWidget: NULL
+               cameraConstraints: [self createCameraConstraints]
+                  cameraRenderer: [self createCameraRenderer]
+                        layerSet: NULL
+           tilesRenderParameters: NULL
+                    busyRenderer: NULL
+                    tileRenderer: tileRenderer
+                       renderers: renderers
+                 backgroundColor: Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1)
+                          logFPS: true
+         logDownloaderStatistics: false
+              initializationTask: [self createSampleInitializationTask: shapesRenderer]
+    autoDeleteInitializationTask: true
+                 periodicalTasks: periodicalTasks
+                        userData: NULL ];
 }
 
 - (void) initDefaultWithBuilder

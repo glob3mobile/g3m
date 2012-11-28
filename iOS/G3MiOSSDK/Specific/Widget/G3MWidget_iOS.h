@@ -15,11 +15,14 @@
 
 @class ES2Renderer;
 
+class Planet;
+class Color;
 class CameraRenderer;
 class LayerSet;
 class ICameraConstrainer;
 class Renderer;
 class UserData;
+class TileRenderer;
 class TilesRenderParameters;
 class G3MWidget;
 class PeriodicalTask;
@@ -58,22 +61,21 @@ enum GL_version {
 
 - (void)drawView: (id)sender;
 
-- (void)initWidgetWithCameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
-                               layerSet: (LayerSet*) layerSet
-                 incrementalTileQuality: (bool) incrementalTileQuality
-                              renderers: (std::vector<Renderer*>) renderers
-                               userData: (UserData*) userData
-                     initializationTask: (GTask*) initializationTask
-                        periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks;
-
-- (void)initWidgetWithCameraRenderer: (CameraRenderer*) cameraRenderer
-                   cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
-                            layerSet: (LayerSet*) layerSet
-               tilesRenderParameters: (TilesRenderParameters*) parameters
-                           renderers: (std::vector<Renderer*>) renderers
-                            userData: (UserData*) userData
-                  initializationTask: (GTask*) initializationTask
-                     periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks;
+- (void)initWidget: (Planet*) planet
+ cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
+    cameraRenderer: (CameraRenderer*) cameraRenderer
+          layerSet: (LayerSet*) layerSet
+tilesRenderParameters: (TilesRenderParameters*) parameters
+      busyRenderer: (Renderer*) busyRenderer
+      tileRenderer: (TileRenderer*) tileRenderer
+         renderers: (std::vector<Renderer*>) renderers
+   backgroundColor: (Color) backgroundColor
+            logFPS: (bool) logFPS
+logDownloaderStatistics: (bool) logDownloaderStatistics
+initializationTask: (GTask*) initializationTask
+autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
+   periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
+          userData: (UserData*) userData;
 
 - (void)setWidget: (G3MWidget*) widget;
 

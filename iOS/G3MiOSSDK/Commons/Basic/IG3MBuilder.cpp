@@ -51,10 +51,6 @@ IG3MBuilder::~IG3MBuilder() {
 G3MWidget* IG3MBuilder::create() {
     
     if (_nativeGL) {
-        if (!_threadUtils) {
-            _threadUtils = createThreadUtils();
-        }
-        
         if (!_storage) {
             _storage = createStorage();
         }
@@ -63,12 +59,23 @@ G3MWidget* IG3MBuilder::create() {
             _downloader = createDownloader();
         }
         
-        Color backgroundColor = Color::fromRGBA(_backgroundColor->getRed(), _backgroundColor->getGreen(), _backgroundColor->getBlue(), _backgroundColor->getAlpha());
+        if (!_threadUtils) {
+            _threadUtils = createThreadUtils();
+        }
+        
+        if (!_planet) {
+            _planet = Planet::createEarth();
+        }
         
         if (_cameraConstraints.size() == 0) {
             _cameraConstraints = createCameraConstraints();
         }
         
+        if (!_cameraRenderer) {
+            _cameraRenderer = createCameraRenderer();
+        }
+        
+
         if (!_tileRenderer) {
             TileRendererBuilder* tileRendererBuilder = new TileRendererBuilder();
             if (_layerSet) {
@@ -91,15 +98,22 @@ G3MWidget* IG3MBuilder::create() {
         Renderer* mainRenderer = NULL;
         if (_renderers.size() > 0) {
             mainRenderer = new CompositeRenderer();
-            ((CompositeRenderer *)mainRenderer)->addRenderer(_tileRenderer);
+            ((CompositeRenderer *) mainRenderer)->addRenderer(_tileRenderer);
             
             for (int i = 0; i < _renderers.size(); i++) {
-                ((CompositeRenderer *)mainRenderer)->addRenderer(_renderers[i]);
+                ((CompositeRenderer *) mainRenderer)->addRenderer(_renderers[i]);
             }
         }
         else {
             mainRenderer = _tileRenderer;
         }
+
+        
+        if (!_busyRenderer) {
+            _busyRenderer = new BusyMeshRenderer();
+        }
+        
+        Color backgroundColor = Color::fromRGBA(_backgroundColor->getRed(), _backgroundColor->getGreen(), _backgroundColor->getBlue(), _backgroundColor->getAlpha());
     
         G3MWidget * g3mWidget = G3MWidget::create(_nativeGL,
                                                   _storage,

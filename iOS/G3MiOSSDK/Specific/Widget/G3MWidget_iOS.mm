@@ -10,39 +10,13 @@
 
 #import "ES2Renderer.h"
 
-#include "G3MWidget.hpp"
-#include "CompositeRenderer.hpp"
-#include "Planet.hpp"
-#include "CameraRenderer.hpp"
-#include "CameraSingleDragHandler.hpp"
-#include "CameraDoubleDragHandler.hpp"
-#include "CameraRotationHandler.hpp"
-#include "CameraDoubleTapHandler.hpp"
-#include "CameraConstraints.hpp"
-#include "TileRenderer.hpp"
-#include "EllipsoidalTileTessellator.hpp"
-#include "SQLiteStorage_iOS.hpp"
-#include "BusyMeshRenderer.hpp"
-#include "CPUTextureBuilder.hpp"
-#include "LayerSet.hpp"
-#include "CachedDownloader.hpp"
-#include "Downloader_iOS.hpp"
-#include "INativeGL.hpp"
-#include "GL.hpp"
-#include "MultiLayerTileTexturizer.hpp"
-#include "TilesRenderParameters.hpp"
-#include "IStringBuilder.hpp"
-#include "Box.hpp"
-#include "TexturesHandler.hpp"
-#include "WMSLayer.hpp"
 #include "MathUtils_iOS.hpp"
-#include "ThreadUtils_iOS.hpp"
 #include "Logger_iOS.hpp"
 #include "Factory_iOS.hpp"
-#include "NativeGL2_iOS.hpp"
 #include "StringUtils_iOS.hpp"
 #include "JSONParser_iOS.hpp"
 #include "StringBuilder_iOS.hpp"
+#include "G3MBuilder_iOS.hpp"
 
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
@@ -64,104 +38,65 @@
   return [CAEAGLLayer class];
 }
 
-- (void) initWidgetWithCameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
-                                layerSet: (LayerSet*) layerSet
-                  incrementalTileQuality: (bool) incrementalTileQuality
-                               renderers: (std::vector<Renderer*>) renderers
-                                userData: (UserData*) userData
-                      initializationTask: (GTask *) initializationTask
-                         periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
+- (void)initWidget: (Planet*) planet
+ cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
+    cameraRenderer: (CameraRenderer*) cameraRenderer
+          layerSet: (LayerSet*) layerSet
+tilesRenderParameters: (TilesRenderParameters*) parameters
+      busyRenderer: (Renderer*) busyRenderer
+      tileRenderer: (TileRenderer*) tileRenderer
+         renderers: (std::vector<Renderer*>) renderers
+   backgroundColor: (Color) backgroundColor
+            logFPS: (bool) logFPS
+logDownloaderStatistics: (bool) logDownloaderStatistics
+initializationTask: (GTask*) initializationTask
+autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
+   periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
+          userData: (UserData*) userData
 {
-  // creates default camera-renderer and camera-handlers
-  CameraRenderer *cameraRenderer = new CameraRenderer();
+    G3MBuilder_iOS* builder = new G3MBuilder_iOS(self);
+    
+    builder->setPlanet(planet);
+    
+    for (int i = 0; i < cameraConstraints.size(); i++) {
+        builder->addCameraConstraint(cameraConstraints[i]);
+    }
+    
+    builder->setCameraRenderer(cameraRenderer);
+    
+    builder->setLayerSet(layerSet);
+    
+    builder->setTileRendererParameters(parameters);
+    
+    builder->setTileRenderer(tileRenderer);
+    
+    for (int i = 0; i < renderers.size(); i++) {
+        builder->addRenderer(renderers[i]);
+    }
 
-  const bool useInertia = true;
-  cameraRenderer->addHandler(new CameraSingleDragHandler(useInertia));
-
-  const bool processRotation = true;
-  const bool processZoom = true;
-  cameraRenderer->addHandler(new CameraDoubleDragHandler(processRotation,
-                                                         processZoom));
-  cameraRenderer->addHandler(new CameraRotationHandler());
-  cameraRenderer->addHandler(new CameraDoubleTapHandler());
-
-  const bool renderDebug = false;
-  const bool useTilesSplitBudget = true;
-  const bool forceTopLevelTilesRenderOnStart = true;
-
-  TilesRenderParameters* parameters = TilesRenderParameters::createDefault(renderDebug,
-                                                                           useTilesSplitBudget,
-                                                                           forceTopLevelTilesRenderOnStart,
-                                                                           incrementalTileQuality);
-
-  [self initWidgetWithCameraRenderer: cameraRenderer
-                   cameraConstraints: cameraConstraints
-                            layerSet: layerSet
-               tilesRenderParameters: parameters
-                           renderers: renderers
-                            userData: userData
-                  initializationTask: initializationTask
-                     periodicalTasks: periodicalTasks];
-}
-
-- (void) initWidgetWithCameraRenderer: (CameraRenderer*) cameraRenderer
-                    cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
-                             layerSet: (LayerSet*) layerSet
-                tilesRenderParameters: (TilesRenderParameters*) parameters
-                            renderers: (std::vector<Renderer*>) renderers
-                             userData: (UserData*) userData
-                   initializationTask: (GTask*) initializationTask
-                      periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
-{
-  NativeGL2_iOS* nativeGL = new NativeGL2_iOS();
-
-  IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
-
-  const bool saveInBackground = true;
-  IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
-                                                 storage,
-                                                 saveInBackground);
-
-  IThreadUtils* threadUtils = new ThreadUtils_iOS();
-
-  CompositeRenderer* mainRenderer = new CompositeRenderer();
-
-  if (layerSet != NULL) {
-    TileTexturizer* texturizer = new MultiLayerTileTexturizer();
-
-    const bool showStatistics = false;
-    TileRenderer* tr = new TileRenderer(new EllipsoidalTileTessellator(parameters->_tileResolution, true),
-                                        texturizer,
-                                        layerSet,
-                                        parameters,
-                                        showStatistics);
-    mainRenderer->addRenderer(tr);
-  }
-
-  for (int i = 0; i < renderers.size(); i++) {
-    mainRenderer->addRenderer(renderers[i]);
-  }
-
-  const Planet* planet = Planet::createEarth();
-
-  Renderer* busyRenderer = new BusyMeshRenderer();
-
-  _widgetVP = G3MWidget::create(nativeGL,
-                                storage,
-                                downloader,
-                                threadUtils,
-                                planet,
-                                cameraConstraints,
-                                cameraRenderer,
-                                mainRenderer,
-                                busyRenderer,
-                                Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1),
-                                true,
-                                false,
-                                initializationTask,
-                                true,
-                                periodicalTasks);
-  [self widget]->setUserData(userData);
+    builder->setBusyRenderer(busyRenderer);
+    
+    builder->setBackgroundColor(Color::newFromRGBA(
+                                                   backgroundColor.getRed(),
+                                                   backgroundColor.getGreen(),
+                                                   backgroundColor.getBlue(),
+                                                   backgroundColor.getAlpha()));
+    
+    builder->setLogFPS(logFPS);
+    
+    builder->setLogDownloaderStatistics(logDownloaderStatistics);
+    
+    builder->setInitializationTask(initializationTask);
+    
+    builder->setAutoDeleteInitializationTask(autoDeleteInitializationTask);
+    
+    for (int i = 0; i < periodicalTasks.size(); i++) {
+        builder->addPeriodicalTask(periodicalTasks[i]);
+    }
+    
+    builder->setUserData(userData);
+    
+    builder->initializeWidget();    
 }
 
 - (void)setWidget:(G3MWidget*) widget {
