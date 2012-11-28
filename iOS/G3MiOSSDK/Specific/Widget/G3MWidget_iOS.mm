@@ -10,13 +10,13 @@
 
 #import "ES2Renderer.h"
 
+#include "G3MWidget.hpp"
 #include "MathUtils_iOS.hpp"
 #include "Logger_iOS.hpp"
 #include "Factory_iOS.hpp"
 #include "StringUtils_iOS.hpp"
 #include "JSONParser_iOS.hpp"
 #include "StringBuilder_iOS.hpp"
-#include "G3MBuilder_iOS.hpp"
 
 @interface G3MWidget_iOS ()
 @property(nonatomic, getter=isAnimating) BOOL animating;
@@ -38,14 +38,15 @@
   return [CAEAGLLayer class];
 }
 
-- (void)initWidget: (Planet*) planet
+- (void)initWidget: (INativeGL*) nativeGL
+           storage: (IStorage*) storage
+        downloader: (IDownloader*) downloader
+       threadUtils: (IThreadUtils*) threadUtils
+            planet: (const Planet*) planet
  cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
     cameraRenderer: (CameraRenderer*) cameraRenderer
-          layerSet: (LayerSet*) layerSet
-tilesRenderParameters: (TilesRenderParameters*) parameters
+      mainRenderer: (Renderer*) mainRenderer
       busyRenderer: (Renderer*) busyRenderer
-      tileRenderer: (TileRenderer*) tileRenderer
-         renderers: (std::vector<Renderer*>) renderers
    backgroundColor: (Color) backgroundColor
             logFPS: (bool) logFPS
 logDownloaderStatistics: (bool) logDownloaderStatistics
@@ -54,49 +55,22 @@ autoDeleteInitializationTask: (bool) autoDeleteInitializationTask
    periodicalTasks: (std::vector<PeriodicalTask*>) periodicalTasks
           userData: (UserData*) userData
 {
-    G3MBuilder_iOS* builder = new G3MBuilder_iOS(self);
-    
-    builder->setPlanet(planet);
-    
-    for (int i = 0; i < cameraConstraints.size(); i++) {
-        builder->addCameraConstraint(cameraConstraints[i]);
-    }
-    
-    builder->setCameraRenderer(cameraRenderer);
-    
-    builder->setLayerSet(layerSet);
-    
-    builder->setTileRendererParameters(parameters);
-    
-    builder->setTileRenderer(tileRenderer);
-    
-    for (int i = 0; i < renderers.size(); i++) {
-        builder->addRenderer(renderers[i]);
-    }
-
-    builder->setBusyRenderer(busyRenderer);
-    
-    builder->setBackgroundColor(Color::newFromRGBA(
-                                                   backgroundColor.getRed(),
-                                                   backgroundColor.getGreen(),
-                                                   backgroundColor.getBlue(),
-                                                   backgroundColor.getAlpha()));
-    
-    builder->setLogFPS(logFPS);
-    
-    builder->setLogDownloaderStatistics(logDownloaderStatistics);
-    
-    builder->setInitializationTask(initializationTask);
-    
-    builder->setAutoDeleteInitializationTask(autoDeleteInitializationTask);
-    
-    for (int i = 0; i < periodicalTasks.size(); i++) {
-        builder->addPeriodicalTask(periodicalTasks[i]);
-    }
-    
-    builder->setUserData(userData);
-    
-    builder->initializeWidget();    
+    _widgetVP = G3MWidget::create(nativeGL,
+                                  storage,
+                                  downloader,
+                                  threadUtils,
+                                  planet,
+                                  cameraConstraints,
+                                  cameraRenderer,
+                                  mainRenderer,
+                                  busyRenderer,
+                                  backgroundColor,
+                                  logFPS,
+                                  logDownloaderStatistics,
+                                  initializationTask,
+                                  autoDeleteInitializationTask,
+                                  periodicalTasks);
+    [self widget]->setUserData(userData);
 }
 
 - (void)setWidget:(G3MWidget*) widget {

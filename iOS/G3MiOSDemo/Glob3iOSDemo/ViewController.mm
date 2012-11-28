@@ -30,6 +30,7 @@
 #include "SceneJSShapesParser.hpp"
 #include "G3MWidget.hpp"
 
+#include "G3MBuilder_iOS.hpp"
 #include "BusyMeshRenderer.hpp"
 #include "CompositeRenderer.hpp"
 #include "TileRendererBuilder.hpp"
@@ -38,8 +39,12 @@
 #include "CameraDoubleDragHandler.hpp"
 #include "CameraRotationHandler.hpp"
 #include "CameraDoubleTapHandler.hpp"
-
-#include "G3MBuilder_iOS.hpp"
+#include "NativeGL2_iOS.hpp"
+#include "SQLiteStorage_iOS.hpp"
+#include "CachedDownloader.hpp"
+#include "Downloader_iOS.hpp"
+#include "ThreadUtils_iOS.hpp"
+#include "Planet.hpp"
 
 @implementation ViewController
 
@@ -59,7 +64,7 @@
 
     // initialize a customized widget without using a builder
 //    [[self G3MWidget] initSingletons];
-//    [self initCustomizedWithoutBuilder];
+//    [self initWithoutBuilder];
     
     // initizalize a default widget by using a builder
 //    [self initDefaultWithBuilder];
@@ -70,37 +75,54 @@
   [[self G3MWidget] startAnimation];
 }
 
-- (void) initCustomizedWithoutBuilder
+- (void) initWithoutBuilder
 {
+    INativeGL* nativeGL = new NativeGL2_iOS();
+    
+    IStorage* storage = new SQLiteStorage_iOS("g3m.cache");
+    
+    const bool saveInBackground = true;
+    IDownloader* downloader = new CachedDownloader(new Downloader_iOS(8),
+                                                   storage,
+                                                   saveInBackground);
+    
+    IThreadUtils* threadUtils = new ThreadUtils_iOS();
+    
+    const Planet* planet = Planet::createEarth();
+    
+    CompositeRenderer* mainRenderer = new CompositeRenderer();
     
     TileRenderer* tileRenderer = [self createTileRenderer: [self createTileRenderParameters]
                                                  layerSet: [self createLayerSet]];
-
-    std::vector<Renderer*> renderers;
+    mainRenderer->addRenderer(tileRenderer);
     
     MarksRenderer* marksRenderer = [self createMarksRenderer];
-    renderers.push_back(marksRenderer);
+    mainRenderer->addRenderer(marksRenderer);
     
     ShapesRenderer* shapesRenderer = [self createShapesRenderer];
-    renderers.push_back(shapesRenderer);
+    mainRenderer->addRenderer(shapesRenderer);
+    
+    Renderer* busyRenderer = new BusyMeshRenderer();
     
     std::vector<PeriodicalTask*> periodicalTasks;
-    
-    [[self G3MWidget] initWidget: NULL
+   
+    [[self G3MWidget] initWidget: nativeGL
+                         storage: storage
+                      downloader: downloader
+                     threadUtils: threadUtils
+                          planet: planet
                cameraConstraints: [self createCameraConstraints]
                   cameraRenderer: [self createCameraRenderer]
-                        layerSet: NULL
-           tilesRenderParameters: NULL
-                    busyRenderer: NULL
-                    tileRenderer: tileRenderer
-                       renderers: renderers
+                    mainRenderer: mainRenderer
+                    busyRenderer: busyRenderer
                  backgroundColor: Color::fromRGBA((float)0, (float)0.1, (float)0.2, (float)1)
                           logFPS: true
          logDownloaderStatistics: false
               initializationTask: [self createSampleInitializationTask: shapesRenderer]
     autoDeleteInitializationTask: true
                  periodicalTasks: periodicalTasks
-                        userData: NULL ];
+                        userData: NULL];
+    
 }
 
 - (void) initDefaultWithBuilder

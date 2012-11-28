@@ -15,6 +15,10 @@
 
 @class ES2Renderer;
 
+class INativeGL;
+class IStorage;
+class IDownloader;
+class IThreadUtils;
 class Planet;
 class Color;
 class CameraRenderer;
@@ -61,14 +65,15 @@ enum GL_version {
 
 - (void)drawView: (id)sender;
 
-- (void)initWidget: (Planet*) planet
- cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstraints
+- (void)initWidget: (INativeGL*) nativeGL
+           storage: (IStorage*) storage
+        downloader: (IDownloader*) downloader
+       threadUtils: (IThreadUtils*) threadUtils
+            planet: (const Planet*) planet
+ cameraConstraints: (std::vector<ICameraConstrainer*>) cameraConstrainers
     cameraRenderer: (CameraRenderer*) cameraRenderer
-          layerSet: (LayerSet*) layerSet
-tilesRenderParameters: (TilesRenderParameters*) parameters
+      mainRenderer: (Renderer*) mainRenderer
       busyRenderer: (Renderer*) busyRenderer
-      tileRenderer: (TileRenderer*) tileRenderer
-         renderers: (std::vector<Renderer*>) renderers
    backgroundColor: (Color) backgroundColor
             logFPS: (bool) logFPS
 logDownloaderStatistics: (bool) logDownloaderStatistics
