@@ -90,14 +90,14 @@ public class G3MBuilder {
 
       final ArrayList<Renderer> renderers = new ArrayList<Renderer>();
 
-      glob3.initWidget( //
-               cameraConstraints, //
-               layerSet, //
-               renderers, //
-               userData, //
-               initializationTask, //
-               periodicalTasks, //
-               incrementalTileQuality);
+      //      glob3.initWidget( //
+      //               cameraConstraints, //
+      //               layerSet, //
+      //               renderers, //
+      //               userData, //
+      //               initializationTask, //
+      //               periodicalTasks, //
+      //               incrementalTileQuality);
 
       return glob3;
    }
@@ -116,14 +116,14 @@ public class G3MBuilder {
 
       final ArrayList<Renderer> renderers = new ArrayList<Renderer>();
 
-      glob3.initWidget( //
-               cameraConstraints, //
-               layerSet, //
-               renderers, //
-               userData, //
-               initializationTask, //
-               periodicalTasks, //
-               incrementalTileQuality);
+      //      glob3.initWidget( //
+      //               cameraConstraints, //
+      //               layerSet, //
+      //               renderers, //
+      //               userData, //
+      //               initializationTask, //
+      //               periodicalTasks, //
+      //               incrementalTileQuality);
 
       return glob3;
    }
@@ -141,14 +141,14 @@ public class G3MBuilder {
 
       final ArrayList<Renderer> renderers = new ArrayList<Renderer>();
 
-      glob3.initWidget( //
-               cameraConstraints, //
-               layerSet, //
-               renderers, //
-               userData, //
-               initializationTask, //
-               periodicalTasks, //
-               incrementalTileQuality);
+      //      glob3.initWidget( //
+      //               cameraConstraints, //
+      //               layerSet, //
+      //               renderers, //
+      //               userData, //
+      //               initializationTask, //
+      //               periodicalTasks, //
+      //               incrementalTileQuality);
 
       return glob3;
    }

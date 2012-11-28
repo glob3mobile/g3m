@@ -86,8 +86,8 @@ public final class SQLiteStorage_Android
    }
 
 
-   SQLiteStorage_Android(final String path,
-                         final android.content.Context context) {
+   public SQLiteStorage_Android(final String path,
+                                final android.content.Context context) {
       _databaseName = path;
       _androidContext = context;
 
