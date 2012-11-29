@@ -68,6 +68,13 @@ public abstract class Layer
 	}
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: virtual boolean isEnable() const
+  public boolean isEnable()
+  {
+	return _enable;
+  }
+
   public void dispose()
   {
   }
