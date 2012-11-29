@@ -107,7 +107,7 @@ struct AttributesStruct {
 } Attributes;
 
 int GL::checkedGetAttribLocation(IGLProgramId* program, const std::string& name) {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::checkedGetAttribLocation()");
   }
 
@@ -119,7 +119,7 @@ int GL::checkedGetAttribLocation(IGLProgramId* program, const std::string& name)
   return l;
 }
 IGLUniformID* GL::checkedGetUniformLocation(IGLProgramId* program, const std::string& name) {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::checkedGetUniformLocation()");
   }
 
@@ -132,7 +132,7 @@ IGLUniformID* GL::checkedGetUniformLocation(IGLProgramId* program, const std::st
 }
 
 bool GL::useProgram(IGLProgramId* program) {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::useProgram()");
   }
 
@@ -181,7 +181,7 @@ bool GL::useProgram(IGLProgramId* program) {
 }
 
 void GL::loadModelView() {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::loadModelView()");
   }
 
@@ -191,7 +191,7 @@ void GL::loadModelView() {
 }
 
 void GL::setProjection(const MutableMatrix44D &projection) {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::setProjection()");
   }
 
@@ -201,7 +201,7 @@ void GL::setProjection(const MutableMatrix44D &projection) {
 }
 
 void GL::loadMatrixf(const MutableMatrix44D &modelView) {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::loadMatrixf()");
   }
 
@@ -211,7 +211,7 @@ void GL::loadMatrixf(const MutableMatrix44D &modelView) {
 }
 
 void GL::multMatrixf(const MutableMatrix44D &m) {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::multMatrixf()");
   }
 
@@ -221,7 +221,7 @@ void GL::multMatrixf(const MutableMatrix44D &m) {
 }
 
 void GL::popMatrix() {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::popMatrix()");
   }
 
@@ -232,7 +232,7 @@ void GL::popMatrix() {
 }
 
 void GL::pushMatrix() {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::pushMatrix()");
   }
 
@@ -240,7 +240,7 @@ void GL::pushMatrix() {
 }
 
 void GL::clearScreen(float r, float g, float b, float a) {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::clearScreen()");
   }
 
@@ -249,7 +249,7 @@ void GL::clearScreen(float r, float g, float b, float a) {
 }
 
 void GL::color(float r, float g, float b, float a) {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::color()");
   }
 
@@ -272,7 +272,7 @@ void GL::transformTexCoords(float scaleX,
                             float scaleY,
                             float translationX,
                             float translationY) {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::transformTexCoords()");
   }
 
@@ -294,7 +294,7 @@ void GL::transformTexCoords(float scaleX,
 }
 
 void GL::enablePolygonOffset(float factor, float units) {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::enablePolygonOffset()");
   }
 
@@ -303,7 +303,7 @@ void GL::enablePolygonOffset(float factor, float units) {
 }
 
 void GL::disablePolygonOffset() {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::disablePolygonOffset()");
   }
 
@@ -313,7 +313,7 @@ void GL::disablePolygonOffset() {
 void GL::vertexPointer(int size,
                        int stride,
                        IFloatBuffer* vertices) {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::vertexPointer(size=%d, stride=%d, vertices=%s)",
                                  size,
                                  stride,
@@ -329,7 +329,7 @@ void GL::vertexPointer(int size,
 }
 
 void GL::drawTriangles(IIntBuffer* indices) {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::drawTriangles(%s)",
                                  indices->description().c_str());
   }
@@ -340,7 +340,7 @@ void GL::drawTriangles(IIntBuffer* indices) {
 }
 
 void GL::drawTriangleStrip(IIntBuffer* indices) {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::drawTriangleStrip(%s)",
                                  indices->description().c_str());
   }
@@ -351,7 +351,7 @@ void GL::drawTriangleStrip(IIntBuffer* indices) {
 }
 
 void GL::drawTriangleFan(IIntBuffer* indices) {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::drawTriangleFan(%s)",
                                  indices->description().c_str());
   }
@@ -362,7 +362,7 @@ void GL::drawTriangleFan(IIntBuffer* indices) {
 }
 
 void GL::drawLines(IIntBuffer* indices) {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::drawLines(%s)",
                                  indices->description().c_str());
   }
@@ -373,7 +373,7 @@ void GL::drawLines(IIntBuffer* indices) {
 }
 
 void GL::drawLineStrip(IIntBuffer* indices) {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::drawLineStrip(%s)",
                                  indices->description().c_str());
   }
@@ -384,7 +384,7 @@ void GL::drawLineStrip(IIntBuffer* indices) {
 }
 
 void GL::drawLineLoop(IIntBuffer* indices) {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::drawLineLoop(%s)",
                                  indices->description().c_str());
   }
@@ -395,7 +395,7 @@ void GL::drawLineLoop(IIntBuffer* indices) {
 }
 
 void GL::drawPoints(IIntBuffer* indices) {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::drawPoints(%s)",
                                  indices->description().c_str());
   }
@@ -406,7 +406,7 @@ void GL::drawPoints(IIntBuffer* indices) {
 }
 
 void GL::lineWidth(float width) {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::lineWidth()");
   }
 
@@ -414,7 +414,7 @@ void GL::lineWidth(float width) {
 }
 
 void GL::pointSize(float size) {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::pointSize()");
   }
 
@@ -422,7 +422,7 @@ void GL::pointSize(float size) {
 }
 
 int GL::getError() {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::getError()()");
   }
 
@@ -430,7 +430,7 @@ int GL::getError() {
 }
 
 const IGLTextureId* GL::uploadTexture(const IImage* image, int format, bool generateMipmap){
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::uploadTexture()");
   }
 
@@ -469,7 +469,7 @@ const IGLTextureId* GL::uploadTexture(const IImage* image, int format, bool gene
 void GL::setTextureCoordinates(int size,
                                int stride,
                                IFloatBuffer* textureCoordinates) {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::setTextureCoordinates(size=%d, stride=%d, textureCoordinates=%s)",
                                  size,
                                  stride,
@@ -485,7 +485,7 @@ void GL::setTextureCoordinates(int size,
 }
 
 void GL::bindTexture(const IGLTextureId* textureId) {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::bindTexture()");
   }
 
@@ -493,7 +493,7 @@ void GL::bindTexture(const IGLTextureId* textureId) {
 }
 
 IFloatBuffer* GL::getBillboardTexCoord() {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::getBillboardTexCoord()");
   }
 
@@ -512,7 +512,7 @@ IFloatBuffer* GL::getBillboardTexCoord() {
 void GL::drawBillBoard(const IGLTextureId* textureId,
                        IFloatBuffer* vertices,
                        const float viewPortRatio) {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::drawBillBoard()");
   }
 
@@ -541,7 +541,7 @@ void GL::drawBillBoard(const IGLTextureId* textureId,
 
 // state handling
 void GL::enableTextures() {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::enableTextures()");
   }
 
@@ -552,7 +552,7 @@ void GL::enableTextures() {
 }
 
 void GL::disableTextures() {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::disableTextures()");
   }
 
@@ -563,7 +563,7 @@ void GL::disableTextures() {
 }
 
 void GL::enableTexture2D() {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::enableTexture2D()");
   }
 
@@ -574,7 +574,7 @@ void GL::enableTexture2D() {
 }
 
 void GL::disableTexture2D() {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::disableTexture2D()");
   }
 
@@ -585,7 +585,7 @@ void GL::disableTexture2D() {
 }
 
 void GL::enableVertexColor(IFloatBuffer* colors, float intensity) {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::enableVertexColor(color=%s, intensity=%f)",
                                  colors->description().c_str(),
                                  intensity);
@@ -608,7 +608,7 @@ void GL::enableVertexColor(IFloatBuffer* colors, float intensity) {
 }
 
 void GL::disableVertexColor() {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::disableVertexColor()");
   }
 
@@ -620,7 +620,7 @@ void GL::disableVertexColor() {
 }
 
 void GL::enableVerticesPosition() {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::enableVerticesPosition()");
   }
 
@@ -631,7 +631,7 @@ void GL::enableVerticesPosition() {
 }
 
 void GL::disableVerticesPosition() {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::disableVerticesPosition()");
   }
 
@@ -643,7 +643,7 @@ void GL::disableVerticesPosition() {
 
 void GL::enableVertexFlatColor(float r, float g, float b, float a,
                                float intensity) {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::enableVertexFlatColor()");
   }
 
@@ -662,7 +662,7 @@ void GL::enableVertexFlatColor(float r, float g, float b, float a,
 }
 
 void GL::disableVertexFlatColor() {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::disableVertexFlatColor()");
   }
 
@@ -673,7 +673,7 @@ void GL::disableVertexFlatColor() {
 }
 
 void GL::enableDepthTest() {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::enableDepthTest()");
   }
 
@@ -684,7 +684,7 @@ void GL::enableDepthTest() {
 }
 
 void GL::disableDepthTest() {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::disableDepthTest()");
   }
 
@@ -695,7 +695,7 @@ void GL::disableDepthTest() {
 }
 
 void GL::enableBlend() {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::enableBlend()");
   }
 
@@ -706,7 +706,7 @@ void GL::enableBlend() {
 }
 
 void GL::disableBlend() {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::disableBlend()");
   }
 
@@ -718,7 +718,7 @@ void GL::disableBlend() {
 }
 
 void GL::setBlendFuncSrcAlpha() {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::setBlendFuncSrcAlpha()");
   }
 
@@ -726,7 +726,7 @@ void GL::setBlendFuncSrcAlpha() {
 }
 
 void GL::enableCullFace(int face) {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::enableCullFace()");
   }
 
@@ -742,7 +742,7 @@ void GL::enableCullFace(int face) {
 }
 
 void GL::disableCullFace() {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::disableCullFace()");
   }
 
@@ -753,7 +753,7 @@ void GL::disableCullFace() {
 }
 
 const IGLTextureId* GL::getGLTextureId() {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::getGLTextureId()");
   }
 
@@ -790,7 +790,7 @@ const IGLTextureId* GL::getGLTextureId() {
 }
 
 void GL::deleteTexture(const IGLTextureId* texture) {
-  if (VERBOSE) {
+  if (_verbose) {
     ILogger::instance()->logInfo("GL::deleteTexture()");
   }
   

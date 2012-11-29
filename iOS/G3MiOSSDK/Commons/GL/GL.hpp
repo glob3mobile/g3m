@@ -27,8 +27,6 @@ class IGLUniformID;
 
 #include "IGLTextureId.hpp"
 
-#define VERBOSE false
-
 class GL {
 private:
   INativeGL* const _gl;
@@ -95,17 +93,15 @@ private:
   IFloatBuffer* _billboardTexCoord;
   IFloatBuffer* getBillboardTexCoord();
 
-//  void info(const std::string x, ...) const {
-//    va_list args;
-//    va_start (args, x);
-//    ILogger::instance()->logInfo(x, args);
-//    va_end(args);
-//  }
+
+  const bool _verbose;
 
 public:
   
-  GL(INativeGL* const gl) :
+  GL(INativeGL* const gl,
+     bool verbose) :
   _gl(gl),
+  _verbose(verbose),
   _enableTextures(false),
   _enableTexture2D(false),
   _enableVertexColor(false),
@@ -253,7 +249,7 @@ public:
                           double scaleY,
                           double translationX,
                           double translationY) {
-    if (VERBOSE) ILogger::instance()->logInfo("GL::transformTexCoords()");
+    if (_verbose) ILogger::instance()->logInfo("GL::transformTexCoords()");
 
     transformTexCoords((float) scaleX,
                        (float) scaleY,
@@ -263,7 +259,7 @@ public:
   
   void transformTexCoords(const Vector2D& scale,
                           const Vector2D& translation) {
-    if (VERBOSE) ILogger::instance()->logInfo("GL::transformTexCoords()");
+    if (_verbose) ILogger::instance()->logInfo("GL::transformTexCoords()");
 
     transformTexCoords((float) scale._x,
                        (float) scale._y,
@@ -273,7 +269,7 @@ public:
   
   void transformTexCoords(const MutableVector2D& scale,
                           const MutableVector2D& translation) {
-    if (VERBOSE) ILogger::instance()->logInfo("GL::transformTexCoords()");
+    if (_verbose) ILogger::instance()->logInfo("GL::transformTexCoords()");
 
     transformTexCoords((float) scale.x(),
                        (float) scale.y(),
@@ -283,7 +279,7 @@ public:
   
   
   void color(const Color& col) {
-    if (VERBOSE) ILogger::instance()->logInfo("GL::color()");
+    if (_verbose) ILogger::instance()->logInfo("GL::color()");
 
     color(col.getRed(),
           col.getGreen(),
@@ -292,7 +288,7 @@ public:
   }
   
   void clearScreen(const Color& col) {
-    if (VERBOSE) ILogger::instance()->logInfo("GL::clearScreen()");
+    if (_verbose) ILogger::instance()->logInfo("GL::clearScreen()");
 
     clearScreen(col.getRed(),
                 col.getGreen(),
@@ -301,7 +297,7 @@ public:
   }
   
   void enableVertexFlatColor(const Color& c, float intensity) {
-    if (VERBOSE) ILogger::instance()->logInfo("GL::enableVertexFlatColor()");
+    if (_verbose) ILogger::instance()->logInfo("GL::enableVertexFlatColor()");
 
     enableVertexFlatColor(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha(), intensity);
   }
@@ -309,7 +305,7 @@ public:
   void setBlendFuncSrcAlpha();
   
   void getViewport(int v[]) {
-    if (VERBOSE) ILogger::instance()->logInfo("GL::getViewport()");
+    if (_verbose) ILogger::instance()->logInfo("GL::getViewport()");
 
     _gl->getIntegerv(GLVariable::viewport(), v);
   }
