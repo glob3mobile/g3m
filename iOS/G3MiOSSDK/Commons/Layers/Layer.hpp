@@ -51,6 +51,10 @@ public:
     }
   }
 
+  virtual bool isEnable() const {
+    return _enable;
+  }
+
   virtual ~Layer() {
   }
   
