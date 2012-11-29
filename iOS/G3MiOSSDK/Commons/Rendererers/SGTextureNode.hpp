@@ -17,14 +17,6 @@ class SGTextureNode : public SGNode {
 private:
   std::vector<SGLayerNode*> _layers;
 
-protected:
-
-  void rawRender(const G3MRenderContext* rc);
-  
-  void prepareRender(const G3MRenderContext* rc);
-
-  void cleanUpRender(const G3MRenderContext* rc);
-
 public:
   SGTextureNode(const std::string& id,
                 const std::string& sId) :
@@ -39,6 +31,12 @@ public:
 
   void initialize(const G3MContext* context,
                   SGShape *shape);
+
+  void rawRender(const G3MRenderContext* rc);
+
+  void prepareRender(const G3MRenderContext* rc);
+
+  void cleanUpRender(const G3MRenderContext* rc);
 
 };
 

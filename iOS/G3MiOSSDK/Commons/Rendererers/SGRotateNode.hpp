@@ -18,11 +18,6 @@ private:
   const double _z;
   const double _angle;
 
-protected:
-  void prepareRender(const G3MRenderContext* rc);
-
-  void cleanUpRender(const G3MRenderContext* rc);
-
 public:
   SGRotateNode(const std::string& id,
                const std::string& sId,
@@ -38,6 +33,11 @@ public:
   {
 
   }
+
+  void prepareRender(const G3MRenderContext* rc);
+
+  void cleanUpRender(const G3MRenderContext* rc);
+
 };
 
 #endif

@@ -41,7 +41,7 @@ void Layer::setLayerSet(LayerSet* layerSet) {
 
 void Layer::notifyChanges() const {
   if (_layerSet == NULL) {
-    ILogger::instance()->logError("Can't notify changes, _layerSet was not set");
+//    ILogger::instance()->logError("Can't notify changes, _layerSet was not set");
   }
   else {
     _layerSet->layerChanged(this);

@@ -23,9 +23,6 @@ private:
   IFloatBuffer* _normals;
   IIntBuffer*   _indices;
 
-protected:
-  void rawRender(const G3MRenderContext* rc);
-
 public:
 
   SGGeometryNode(const std::string& id,
@@ -48,6 +45,8 @@ public:
   }
 
   ~SGGeometryNode();
+
+  void rawRender(const G3MRenderContext* rc);
 
 };
 

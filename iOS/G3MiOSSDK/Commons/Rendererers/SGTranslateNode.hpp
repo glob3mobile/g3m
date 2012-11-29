@@ -17,11 +17,6 @@ private:
   const double _y;
   const double _z;
 
-protected:
-  void prepareRender(const G3MRenderContext* rc);
-
-  void cleanUpRender(const G3MRenderContext* rc);
-
 public:
 
   SGTranslateNode(const std::string& id,
@@ -36,6 +31,10 @@ public:
   {
 
   }
+
+  void prepareRender(const G3MRenderContext* rc);
+
+  void cleanUpRender(const G3MRenderContext* rc);
   
 };
 

@@ -22,22 +22,8 @@ private:
   const double _alpha;
   const double _emit;
 
-//  baseColor { r: 0.0, g: 0.0, b: 0.0 }
-//  specularColor { r: 0.0, g: 0.0, b: 0.0 }
-//
-//  specular 1
-//  shine 10
-//  alpha 1.0
-//  emit 0.0
-
-
-protected:
-  void prepareRender(const G3MRenderContext* rc);
-
-  void cleanUpRender(const G3MRenderContext* rc);
-
-
 public:
+
   SGMaterialNode(const std::string& id,
                  const std::string& sId,
                  Color* baseColor,
@@ -61,6 +47,10 @@ public:
     delete _baseColor;
     delete _specularColor;
   }
+
+  void prepareRender(const G3MRenderContext* rc);
+
+  void cleanUpRender(const G3MRenderContext* rc);
 
 };
 

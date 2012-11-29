@@ -35,7 +35,12 @@ private:
   IImage* _downloadedImage;
   void requestImage();
 
+#ifdef C_CODE
   const IGLTextureId* _textureId;
+#endif
+#ifdef JAVA_CODE
+  private IGLTextureId _textureId;
+#endif
 
   URL getURL() const;
 
