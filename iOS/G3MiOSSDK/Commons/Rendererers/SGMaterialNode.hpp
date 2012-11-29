@@ -14,10 +14,13 @@
 
 class SGMaterialNode : public SGNode {
 private:
-  Color* _specularColor;
+  const Color* _baseColor;
+  const Color* _specularColor;
 
-  double _shine;
-  double _specular;
+  const double _specular;
+  const double _shine;
+  const double _alpha;
+  const double _emit;
 
 //  baseColor { r: 0.0, g: 0.0, b: 0.0 }
 //  specularColor { r: 0.0, g: 0.0, b: 0.0 }
@@ -35,29 +38,28 @@ protected:
 
 
 public:
-  SGMaterialNode() :
-  _specularColor(NULL),
-  _shine(0),
-  _specular(0)
+  SGMaterialNode(const std::string& id,
+                 const std::string& sId,
+                 Color* baseColor,
+                 Color* specularColor,
+                 double specular,
+                 double shine,
+                 double alpha,
+                 double emit) :
+  SGNode(id, sId),
+  _baseColor(baseColor),
+  _specularColor(specularColor),
+  _specular(specular),
+  _shine(shine),
+  _alpha(alpha),
+  _emit(emit)
   {
 
   }
 
   ~SGMaterialNode() {
+    delete _baseColor;
     delete _specularColor;
-  }
-
-  void setSpecularColor(Color* color) {
-    delete _specularColor;
-    _specularColor = color;
-  }
-
-  void setShine(double shine) {
-    _shine = shine;
-  }
-
-  void setSpecular(double specular) {
-    _specular = specular;
   }
 
 };

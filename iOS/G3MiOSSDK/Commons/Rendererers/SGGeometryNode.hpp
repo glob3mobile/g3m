@@ -16,7 +16,7 @@ class IIntBuffer;
 
 class SGGeometryNode : public SGNode {
 private:
-  int           _primitive;
+  const int     _primitive;
   IFloatBuffer* _vertices;
   IFloatBuffer* _colors;
   IFloatBuffer* _uv;
@@ -28,12 +28,15 @@ protected:
 
 public:
 
-  SGGeometryNode(int           primitive,
-                 IFloatBuffer* vertices,
-                 IFloatBuffer* colors,
-                 IFloatBuffer* uv,
-                 IFloatBuffer* normals,
-                 IIntBuffer*   indices) :
+  SGGeometryNode(const std::string& id,
+                 const std::string& sId,
+                 int                primitive,
+                 IFloatBuffer*      vertices,
+                 IFloatBuffer*      colors,
+                 IFloatBuffer*      uv,
+                 IFloatBuffer*      normals,
+                 IIntBuffer*        indices) :
+  SGNode(id, sId),
   _primitive(primitive),
   _vertices(vertices),
   _colors(colors),
@@ -43,6 +46,8 @@ public:
   {
 
   }
+
+  ~SGGeometryNode();
 
 };
 

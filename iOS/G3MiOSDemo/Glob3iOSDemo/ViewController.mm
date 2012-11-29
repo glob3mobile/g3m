@@ -102,10 +102,11 @@
                                   "",
                                   false,
                                   NULL);
+    bing->setEnable(true);
     layerSet->addLayer(bing);
   }
 
-  bool useOSM = false;
+  bool useOSM = true;
   if (useOSM) {
     //    WMSLayer *osm = new WMSLayer("osm",
     //                                 URL("http://wms.latlon.org/"),
@@ -127,6 +128,7 @@
                                  "",
                                  false,
                                  NULL);
+    osm->setEnable(false);
     layerSet->addLayer(osm);
 
   }
@@ -366,7 +368,7 @@
                                                                 Angle::fromDegreesMinutes(-122, 25),
                                                                 1000000),
                                                      TimeInterval::fromSeconds(5));
-      /*
+      /**/
       NSString *filePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
                                                            ofType: @"json"];
       if (filePath) {
@@ -375,17 +377,17 @@
                                                           error: nil];
         if (nsString) {
           std::string str = [nsString UTF8String];
-          Shape* plane = SceneJSShapesParser::parse(str);
+          Shape* plane = SceneJSShapesParser::parse(str, "file:///");
 
           plane->setPosition( new Geodetic3D(Angle::fromDegrees(37.78333333),
                                              Angle::fromDegrees(-122.41666666666667),
-                                             100) );
+                                             500) );
           plane->setScale(100, 100, 100);
-          plane->setPitch(Angle::fromDegrees(-90));
+          plane->setPitch(Angle::fromDegrees(90));
           _shapesRenderer->addShape(plane);
         }
       }
-      */
+      /**/
     }
   };
 

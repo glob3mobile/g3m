@@ -32,6 +32,15 @@ public:
   JSONNumber*  getAsNumber (const int index) const;
   JSONString*  getAsString (const int index) const;
 
+  bool getAsBoolean(const int index,
+                    bool defaultValue) const;
+
+  double getAsNumber(const int index,
+                     double defaultValue) const;
+
+  const std::string getAsString(const int index,
+                                std::string& defaultValue) const;
+
   int size() const;
 
   void add(JSONBaseObject* object);

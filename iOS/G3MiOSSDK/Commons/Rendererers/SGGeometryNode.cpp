@@ -11,6 +11,17 @@
 #include "Context.hpp"
 #include "GL.hpp"
 
+#include "IFloatBuffer.hpp"
+#include "IIntBuffer.hpp"
+
+SGGeometryNode::~SGGeometryNode() {
+  delete _vertices;
+  delete _colors;
+  delete _uv;
+  delete _normals;
+  delete _indices;
+}
+
 void SGGeometryNode::rawRender(const G3MRenderContext* rc) {
   GL *gl = rc->getGL();
 
@@ -24,6 +35,12 @@ void SGGeometryNode::rawRender(const G3MRenderContext* rc) {
     gl->enableVertexColor(_colors, colorsIntensity);
   }
 
+  if (_uv != NULL) {
+    gl->transformTexCoords(1.0f, 1.0f,
+                           0.0f, 0.0f);
+
+    gl->setTextureCoordinates(2, 0, _uv);
+  }
 
 //  if (_transparent) {
 //    gl->enableBlend();

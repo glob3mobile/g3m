@@ -27,7 +27,7 @@ class IGLUniformID;
 
 #include "IGLTextureId.hpp"
 
-#define VERBOSE true
+#define VERBOSE false
 
 class GL {
 private:
@@ -172,7 +172,8 @@ public:
   
   void color(float r, float g, float b, float a);
   
-  void enableVertexColor(IFloatBuffer* colors, float intensity);
+  void enableVertexColor(IFloatBuffer* colors,
+                         float intensity);
   
   void disableVertexColor();
   
@@ -184,7 +185,9 @@ public:
   
   void multMatrixf(const MutableMatrix44D &m);
   
-  void vertexPointer(int size, int stride, IFloatBuffer* vertices);
+  void vertexPointer(int size,
+                     int stride,
+                     IFloatBuffer* vertices);
   
   void drawTriangles(IIntBuffer* indices);
   

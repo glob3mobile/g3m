@@ -10,57 +10,71 @@
 #define __G3MiOSSDK__SGLayerNode__
 
 #include "SGNode.hpp"
+#include "URL.hpp"
+
+class IGLTextureId;
+class IImage;
 
 class SGLayerNode : public SGNode {
 private:
-  std::string _uri;
-  std::string _applyTo;
-  std::string _blendMode;
-  bool        _flipY;
+  const std::string _uri;
 
-  std::string _magFilter;
-  std::string _minFilter;
-  std::string _wrapS;
-  std::string _wrapT;
+  const std::string _applyTo;
+  const std::string _blendMode;
+  const bool        _flipY;
 
-protected:
-  virtual void prepareRender(const G3MRenderContext* rc);
+  const std::string _magFilter;
+  const std::string _minFilter;
+  const std::string _wrapS;
+  const std::string _wrapT;
 
-  virtual void cleanUpRender(const G3MRenderContext* rc);
+  bool _textureBound;
+
+  const IGLTextureId* getTextureId(const G3MRenderContext* rc);
+
+  IImage* _downloadedImage;
+  void requestImage();
+
+  const IGLTextureId* _textureId;
+
+  URL getURL() const;
 
 public:
 
-  void setUri(const std::string& uri) {
-    _uri = uri;
-  }
-  
-  void setApplyTo(const std::string& applyTo) {
-    _applyTo = applyTo;
+  SGLayerNode(const std::string& id,
+              const std::string& sId,
+              const std::string& uri,
+              const std::string& applyTo,
+              const std::string& blendMode,
+              bool flipY,
+              const std::string& magFilter,
+              const std::string& minFilter,
+              const std::string& wrapS,
+              const std::string& wrapT) :
+  SGNode(id, sId),
+  _uri(uri),
+  _applyTo(applyTo),
+  _blendMode(blendMode),
+  _flipY(flipY),
+  _magFilter(magFilter),
+  _minFilter(minFilter),
+  _wrapS(wrapS),
+  _wrapT(wrapT),
+  _textureBound(false),
+  _downloadedImage(NULL),
+  _textureId(NULL)
+  {
+
   }
 
-  void setBlendMode(const std::string& blendMode) {
-    _blendMode = blendMode;
-  }
+  void onImageDownload(const IImage* image);
 
-  void setFlipY(bool flipY) {
-    _flipY = flipY;
-  }
+  void initialize(const G3MContext* context,
+                  SGShape *shape);
 
-  void setMagFilter(const std::string& magFilter) {
-    _magFilter = magFilter;
-  }
+  void prepareRender(const G3MRenderContext* rc);
 
-  void setMinFilter(const std::string& minFilter) {
-    _minFilter = minFilter;
-  }
-
-  void setWrapS(const std::string& wrapS) {
-    _wrapS = wrapS;
-  }
-
-  void setWrapT(const std::string& wrapT) {
-    _wrapT = wrapT;
-  }
+  void cleanUpRender(const G3MRenderContext* rc);
 
 };
 

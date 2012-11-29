@@ -13,9 +13,9 @@
 
 class SGTranslateNode : public SGNode {
 private:
-  double _x;
-  double _y;
-  double _z;
+  const double _x;
+  const double _y;
+  const double _z;
 
 protected:
   void prepareRender(const G3MRenderContext* rc);
@@ -24,26 +24,19 @@ protected:
 
 public:
 
-  SGTranslateNode() :
-  _x(0),
-  _y(0),
-  _z(0)
+  SGTranslateNode(const std::string& id,
+                  const std::string& sId,
+                  double x,
+                  double y,
+                  double z) :
+  SGNode(id, sId),
+  _x(x),
+  _y(y),
+  _z(z)
   {
 
   }
-
-  void setX(double x) {
-    _x = x;
-  }
-
-  void setY(double y) {
-    _y = y;
-  }
-
-  void setZ(double z) {
-    _z = z;
-  }
-
+  
 };
 
 #endif
