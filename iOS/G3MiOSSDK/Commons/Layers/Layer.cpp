@@ -12,6 +12,9 @@
 
 bool Layer::isAvailable(const G3MRenderContext* rc,
                         const Tile* tile) const {
+  if (!isEnable()) {
+    return false;
+  }
   if (_condition == NULL) {
     return true;
   }
