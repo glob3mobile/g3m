@@ -19,10 +19,13 @@ package org.glob3.mobile.generated;
 
 public class SGMaterialNode extends SGNode
 {
-  private Color _specularColor;
+  private final Color _baseColor;
+  private final Color _specularColor;
 
-  private double _shine;
-  private double _specular;
+  private final double _specular;
+  private final double _shine;
+  private final double _alpha;
+  private final double _emit;
 
 //  baseColor { r: 0.0, g: 0.0, b: 0.0 }
 //  specularColor { r: 0.0, g: 0.0, b: 0.0 }
@@ -60,33 +63,24 @@ public class SGMaterialNode extends SGNode
   }
 
 
-  public SGMaterialNode()
+  public SGMaterialNode(String id, String sId, Color baseColor, Color specularColor, double specular, double shine, double alpha, double emit)
   {
-	  _specularColor = null;
-	  _shine = 0;
-	  _specular = 0;
+	  super(id, sId);
+	  _baseColor = baseColor;
+	  _specularColor = specularColor;
+	  _specular = specular;
+	  _shine = shine;
+	  _alpha = alpha;
+	  _emit = emit;
 
   }
 
   public void dispose()
   {
-	_specularColor = null;
-  }
-
-  public final void setSpecularColor(Color color)
-  {
-	_specularColor = null;
-	_specularColor = color;
-  }
-
-  public final void setShine(double shine)
-  {
-	_shine = shine;
-  }
-
-  public final void setSpecular(double specular)
-  {
-	_specular = specular;
+	if (_baseColor != null)
+		_baseColor.dispose();
+	if (_specularColor != null)
+		_specularColor.dispose();
   }
 
 }

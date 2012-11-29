@@ -24,7 +24,7 @@ package org.glob3.mobile.generated;
 
 public class SGGeometryNode extends SGNode
 {
-  private int _primitive;
+  private final int _primitive;
   private IFloatBuffer _vertices;
   private IFloatBuffer _colors;
   private IFloatBuffer _uv;
@@ -47,6 +47,12 @@ public class SGGeometryNode extends SGNode
 	  gl.enableVertexColor(_colors, colorsIntensity);
 	}
   
+	if (_uv != null)
+	{
+	  gl.transformTexCoords(1.0f, 1.0f, 0.0f, 0.0f);
+  
+	  gl.setTextureCoordinates(2, 0, _uv);
+	}
   
   //  if (_transparent) {
   //    gl->enableBlend();
@@ -102,8 +108,9 @@ public class SGGeometryNode extends SGNode
   }
 
 
-  public SGGeometryNode(int primitive, IFloatBuffer vertices, IFloatBuffer colors, IFloatBuffer uv, IFloatBuffer normals, IIntBuffer indices)
+  public SGGeometryNode(String id, String sId, int primitive, IFloatBuffer vertices, IFloatBuffer colors, IFloatBuffer uv, IFloatBuffer normals, IIntBuffer indices)
   {
+	  super(id, sId);
 	  _primitive = primitive;
 	  _vertices = vertices;
 	  _colors = colors;
@@ -111,6 +118,20 @@ public class SGGeometryNode extends SGNode
 	  _normals = normals;
 	  _indices = indices;
 
+  }
+
+  public void dispose()
+  {
+	if (_vertices != null)
+		_vertices.dispose();
+	if (_colors != null)
+		_colors.dispose();
+	if (_uv != null)
+		_uv.dispose();
+	if (_normals != null)
+		_normals.dispose();
+	if (_indices != null)
+		_indices.dispose();
   }
 
 }

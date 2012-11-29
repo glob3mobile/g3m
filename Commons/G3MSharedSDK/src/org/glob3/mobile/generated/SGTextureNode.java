@@ -31,8 +31,34 @@ public class SGTextureNode extends SGNode
 	for (int i = 0; i < layersCount; i++)
 	{
 	  SGLayerNode layer = _layers.get(i);
-	  layer.render(rc);
+	  layer.rawRender(rc);
 	}
+  }
+
+  protected final void prepareRender(G3MRenderContext rc)
+  {
+	final int layersCount = _layers.size();
+	for (int i = 0; i < layersCount; i++)
+	{
+	  SGLayerNode layer = _layers.get(i);
+	  layer.prepareRender(rc);
+	}
+  }
+
+  protected final void cleanUpRender(G3MRenderContext rc)
+  {
+	final int layersCount = _layers.size();
+	for (int i = 0; i < layersCount; i++)
+	{
+	  SGLayerNode layer = _layers.get(i);
+	  layer.cleanUpRender(rc);
+	}
+  }
+
+  public SGTextureNode(String id, String sId)
+  {
+	  super(id, sId);
+
   }
 
   public final void addLayer(SGLayerNode layer)
@@ -58,6 +84,18 @@ public class SGTextureNode extends SGNode
 	}
   
 	return super.isReadyToRender(rc);
+  }
+
+  public final void initialize(G3MContext context, SGShape shape)
+  {
+	super.initialize(context, shape);
+  
+	final int layersCount = _layers.size();
+	for (int i = 0; i < layersCount; i++)
+	{
+	  SGLayerNode child = _layers.get(i);
+	  child.initialize(context, shape);
+	}
   }
 
 }

@@ -81,6 +81,21 @@ public class JSONArray extends JSONBaseObject
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean getAsBoolean(const int index, boolean defaultValue) const;
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  boolean getAsBoolean(int index, boolean defaultValue);
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: double getAsNumber(const int index, double defaultValue) const;
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  double getAsNumber(int index, double defaultValue);
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const String getAsString(const int index, String& defaultValue) const;
+//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
+//  String getAsString(int index, String defaultValue);
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: int size() const
   public final int size()
   {

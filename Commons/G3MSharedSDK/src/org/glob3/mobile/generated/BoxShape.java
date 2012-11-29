@@ -186,8 +186,10 @@ public class BoxShape extends MeshShape
 
   public void dispose()
   {
-	_surfaceColor = null;
-	_borderColor = null;
+	if (_surfaceColor != null)
+		_surfaceColor.dispose();
+	if (_borderColor != null)
+		_borderColor.dispose();
   }
 
   public final void setExtent(Vector3D extent)
@@ -203,14 +205,16 @@ public class BoxShape extends MeshShape
 
   public final void setSurfaceColor(Color color)
   {
-	_surfaceColor = null;
+	if (_surfaceColor != null)
+		_surfaceColor.dispose();
 	_surfaceColor = color;
 	cleanMesh();
   }
 
   public final void setBorderColor(Color color)
   {
-	_borderColor = null;
+	if (_borderColor != null)
+		_borderColor.dispose();
 	_borderColor = color;
 	cleanMesh();
   }

@@ -67,7 +67,7 @@ public class Trail
 	  _visible = true;
 	  _positionsDirty = true;
 	  _mesh = null;
-	  _color = color;
+	  _color = new Color(color);
 	  _lineWidth = lineWidth;
   }
 

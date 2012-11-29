@@ -19,10 +19,10 @@ package org.glob3.mobile.generated;
 
 public class SGRotateNode extends SGNode
 {
-  private double _x;
-  private double _y;
-  private double _z;
-  private double _angle;
+  private final double _x;
+  private final double _y;
+  private final double _z;
+  private final double _angle;
 
   protected final void prepareRender(G3MRenderContext rc)
   {
@@ -42,33 +42,13 @@ public class SGRotateNode extends SGNode
 	super.prepareRender(rc);
   }
 
-  public SGRotateNode()
+  public SGRotateNode(String id, String sId, double x, double y, double z, double angle)
   {
-	  _x = 0;
-	  _y = 0;
-	  _z = 0;
-	  _angle = 0;
+	  super(id, sId);
+	  _x = x;
+	  _y = y;
+	  _z = z;
+	  _angle = angle;
 
   }
-
-  public final void setX(double x)
-  {
-	_x = x;
-  }
-
-  public final void setY(double y)
-  {
-	_y = y;
-  }
-
-  public final void setZ(double z)
-  {
-	_z = z;
-  }
-
-  public final void setAngle(double angle)
-  {
-	_angle = angle;
-  }
-
 }

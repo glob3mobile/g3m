@@ -90,6 +90,30 @@ public class JSONObject extends JSONBaseObject
 	return (object == null) ? null : object.asString();
   }
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: boolean getAsBoolean(const String& key, boolean defaultValue) const
+  public final boolean getAsBoolean(String key, boolean defaultValue)
+  {
+	JSONBaseObject object = get(key);
+	return (object == null) ? defaultValue : object.asBoolean().value();
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: double getAsNumber(const String& key, double defaultValue) const
+  public final double getAsNumber(String key, double defaultValue)
+  {
+	JSONBaseObject object = get(key);
+	return (object == null) ? defaultValue : object.asNumber().value();
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const String getAsString(const String& key, const String& defaultValue) const
+  public final String getAsString(String key, String defaultValue)
+  {
+	JSONBaseObject object = get(key);
+	return (object == null) ? defaultValue : object.asString().value();
+  }
+
   public final void put(String key, JSONBaseObject object)
   {
 	_entries.put(key, object);

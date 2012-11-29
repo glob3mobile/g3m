@@ -481,7 +481,7 @@ public class G3MWidget
 	  _busyRenderer = busyRenderer;
 	  _currentCamera = new Camera(width, height);
 	  _nextCamera = new Camera(width, height);
-	  _backgroundColor = backgroundColor;
+	  _backgroundColor = new Color(backgroundColor);
 	  _timer = IFactory.instance().createTimer();
 	  _renderCounter = 0;
 	  _totalRenderTime = 0;
