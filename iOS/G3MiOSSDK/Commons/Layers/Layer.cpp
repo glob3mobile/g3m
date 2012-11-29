@@ -23,6 +23,9 @@ bool Layer::isAvailable(const G3MRenderContext* rc,
 
 bool Layer::isAvailable(const G3MEventContext* ec,
                         const Tile* tile) const {
+  if (!isEnable()) {
+    return false;
+  }
   if (_condition == NULL) {
     return true;
   }
