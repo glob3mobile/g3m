@@ -468,7 +468,7 @@ public class G3MWidget
   {
 	  _frameTasksExecutor = new FrameTasksExecutor();
 	  _effectsScheduler = new EffectsScheduler();
-	  _gl = new GL(nativeGL);
+	  _gl = new GL(nativeGL, false);
 	  _downloader = downloader;
 	  _storage = storage;
 	  _threadUtils = threadUtils;
