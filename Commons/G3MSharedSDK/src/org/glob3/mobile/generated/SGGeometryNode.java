@@ -31,7 +31,34 @@ public class SGGeometryNode extends SGNode
   private IFloatBuffer _normals;
   private IIntBuffer _indices;
 
-  protected final void rawRender(G3MRenderContext rc)
+
+  public SGGeometryNode(String id, String sId, int primitive, IFloatBuffer vertices, IFloatBuffer colors, IFloatBuffer uv, IFloatBuffer normals, IIntBuffer indices)
+  {
+	  super(id, sId);
+	  _primitive = primitive;
+	  _vertices = vertices;
+	  _colors = colors;
+	  _uv = uv;
+	  _normals = normals;
+	  _indices = indices;
+
+  }
+
+  public void dispose()
+  {
+	if (_vertices != null)
+		_vertices.dispose();
+	if (_colors != null)
+		_colors.dispose();
+	if (_uv != null)
+		_uv.dispose();
+	if (_normals != null)
+		_normals.dispose();
+	if (_indices != null)
+		_indices.dispose();
+  }
+
+  public final void rawRender(G3MRenderContext rc)
   {
 	GL gl = rc.getGL();
   
@@ -105,33 +132,6 @@ public class SGGeometryNode extends SGNode
 	}
   
 	gl.disableVerticesPosition();
-  }
-
-
-  public SGGeometryNode(String id, String sId, int primitive, IFloatBuffer vertices, IFloatBuffer colors, IFloatBuffer uv, IFloatBuffer normals, IIntBuffer indices)
-  {
-	  super(id, sId);
-	  _primitive = primitive;
-	  _vertices = vertices;
-	  _colors = colors;
-	  _uv = uv;
-	  _normals = normals;
-	  _indices = indices;
-
-  }
-
-  public void dispose()
-  {
-	if (_vertices != null)
-		_vertices.dispose();
-	if (_colors != null)
-		_colors.dispose();
-	if (_uv != null)
-		_uv.dispose();
-	if (_normals != null)
-		_normals.dispose();
-	if (_indices != null)
-		_indices.dispose();
   }
 
 }

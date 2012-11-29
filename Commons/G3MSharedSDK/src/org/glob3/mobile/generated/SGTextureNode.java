@@ -24,37 +24,6 @@ public class SGTextureNode extends SGNode
 {
   private java.util.ArrayList<SGLayerNode> _layers = new java.util.ArrayList<SGLayerNode>();
 
-
-  protected final void rawRender(G3MRenderContext rc)
-  {
-	final int layersCount = _layers.size();
-	for (int i = 0; i < layersCount; i++)
-	{
-	  SGLayerNode layer = _layers.get(i);
-	  layer.rawRender(rc);
-	}
-  }
-
-  protected final void prepareRender(G3MRenderContext rc)
-  {
-	final int layersCount = _layers.size();
-	for (int i = 0; i < layersCount; i++)
-	{
-	  SGLayerNode layer = _layers.get(i);
-	  layer.prepareRender(rc);
-	}
-  }
-
-  protected final void cleanUpRender(G3MRenderContext rc)
-  {
-	final int layersCount = _layers.size();
-	for (int i = 0; i < layersCount; i++)
-	{
-	  SGLayerNode layer = _layers.get(i);
-	  layer.cleanUpRender(rc);
-	}
-  }
-
   public SGTextureNode(String id, String sId)
   {
 	  super(id, sId);
@@ -95,6 +64,36 @@ public class SGTextureNode extends SGNode
 	{
 	  SGLayerNode child = _layers.get(i);
 	  child.initialize(context, shape);
+	}
+  }
+
+  public final void rawRender(G3MRenderContext rc)
+  {
+	final int layersCount = _layers.size();
+	for (int i = 0; i < layersCount; i++)
+	{
+	  SGLayerNode layer = _layers.get(i);
+	  layer.rawRender(rc);
+	}
+  }
+
+  public final void prepareRender(G3MRenderContext rc)
+  {
+	final int layersCount = _layers.size();
+	for (int i = 0; i < layersCount; i++)
+	{
+	  SGLayerNode layer = _layers.get(i);
+	  layer.prepareRender(rc);
+	}
+  }
+
+  public final void cleanUpRender(G3MRenderContext rc)
+  {
+	final int layersCount = _layers.size();
+	for (int i = 0; i < layersCount; i++)
+	{
+	  SGLayerNode layer = _layers.get(i);
+	  layer.cleanUpRender(rc);
 	}
   }
 

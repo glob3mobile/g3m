@@ -88,7 +88,7 @@ public class SGLayerNode extends SGNode
 	_context.getDownloader().requestImage(getURL(), DefineConstants.TEXTURES_DOWNLOAD_PRIORITY, new ImageDownloadListener(this), true);
   }
 
-  private final IGLTextureId _textureId;
+  private IGLTextureId _textureId;
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: URL getURL() const

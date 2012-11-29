@@ -26,7 +26,7 @@ public class LayerSet
 	_layers.add(layer);
 	if (_listener == null)
 	{
-	  ILogger.instance().logError("Can't notify, _listener not set");
+  //    ILogger::instance()->logError("Can't notify, _listener not set");
 	}
 	else
 	{
@@ -118,7 +118,7 @@ public class LayerSet
   {
 	if (_listener == null)
 	{
-	  ILogger.instance().logError("Can't notify, _listener not set");
+  //    ILogger::instance()->logError("Can't notify, _listener not set");
 	}
 	else
 	{

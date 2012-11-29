@@ -24,24 +24,6 @@ public class SGRotateNode extends SGNode
   private final double _z;
   private final double _angle;
 
-  protected final void prepareRender(G3MRenderContext rc)
-  {
-	GL gl = rc.getGL();
-  
-	gl.pushMatrix();
-	gl.multMatrixf(MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_angle), new Vector3D(_x, _y, _z)));
-  
-	super.prepareRender(rc);
-  }
-
-  protected final void cleanUpRender(G3MRenderContext rc)
-  {
-	GL gl = rc.getGL();
-	gl.popMatrix();
-  
-	super.prepareRender(rc);
-  }
-
   public SGRotateNode(String id, String sId, double x, double y, double z, double angle)
   {
 	  super(id, sId);
@@ -51,4 +33,23 @@ public class SGRotateNode extends SGNode
 	  _angle = angle;
 
   }
+
+  public final void prepareRender(G3MRenderContext rc)
+  {
+	GL gl = rc.getGL();
+  
+	gl.pushMatrix();
+	gl.multMatrixf(MutableMatrix44D.createRotationMatrix(Angle.fromDegrees(_angle), new Vector3D(_x, _y, _z)));
+  
+	super.prepareRender(rc);
+  }
+
+  public final void cleanUpRender(G3MRenderContext rc)
+  {
+	GL gl = rc.getGL();
+	gl.popMatrix();
+  
+	super.prepareRender(rc);
+  }
+
 }

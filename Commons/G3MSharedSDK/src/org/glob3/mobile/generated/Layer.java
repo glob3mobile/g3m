@@ -42,7 +42,7 @@ public abstract class Layer
   {
 	if (_layerSet == null)
 	{
-	  ILogger.instance().logError("Can't notify changes, _layerSet was not set");
+  //    ILogger::instance()->logError("Can't notify changes, _layerSet was not set");
 	}
 	else
 	{
