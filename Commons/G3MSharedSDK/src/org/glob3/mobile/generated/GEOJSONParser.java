@@ -18,8 +18,6 @@ package org.glob3.mobile.generated;
 
 
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
-//class G3MContext;
-//C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
 //class IByteBuffer;
 
 //C++ TO JAVA CONVERTER NOTE: Java has no need of forward class declarations:
@@ -46,12 +44,10 @@ package org.glob3.mobile.generated;
 public class GEOJSONParser
 {
   private final String _json;
-  private final G3MContext _context;
 
-  private GEOJSONParser(G3MContext context, String json)
+  private GEOJSONParser(String json)
   {
 	  _json = json;
-	  _context = context;
 
   }
 
@@ -131,7 +127,7 @@ public class GEOJSONParser
   
 	final JSONBaseObject jsId = JSONBaseObject.deepCopy(jsonObject.get("id"));
   
-	final JSONObject jsGeometry = jsonObject.getAsObject("geometry");
+	JSONObject jsProperties = jsonObject.getAsObject("properties");
 	GEOGeometry geometry = createGeometry(jsGeometry);
   
 	final JSONObject jsProperties = jsonObject.getAsObject("properties");
@@ -336,15 +332,15 @@ public class GEOJSONParser
   }
 
 
-  public static GEOObject parse(G3MContext context, IByteBuffer json)
+  public static GEOObject parse(String json)
   {
-	return parse(context, json.getAsString());
+	GEOJSONParser parser = new GEOJSONParser(json);
+	return parser.pvtParse();
   }
 
-  public static GEOObject parse(G3MContext context, String json)
+  public static GEOObject parse(IByteBuffer json)
   {
-	GEOJSONParser parser = new GEOJSONParser(context, json);
-	return parser.pvtParse();
+	return parse(json.getAsString());
   }
 
 }
