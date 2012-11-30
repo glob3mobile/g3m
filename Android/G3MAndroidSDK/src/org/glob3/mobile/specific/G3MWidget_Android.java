@@ -77,7 +77,8 @@ public final class G3MWidget_Android
       setLongClickable(true);
 
       // Debug flags
-      // setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
+      //      setDebugFlags(DEBUG_CHECK_GL_ERROR | DEBUG_LOG_GL_CALLS);
+      setDebugFlags(DEBUG_CHECK_GL_ERROR);
 
       if (!isInEditMode()) { // needed to allow visual edition of this widget
          //Double Tap Listener

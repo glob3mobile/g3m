@@ -150,7 +150,6 @@ bool TileRenderer::isReadyToRender(const G3MRenderContext *rc) {
     for (int i = 0; i < topLevelTilesCount; i++) {
       Tile* tile = _topLevelTiles[i];
       if (!tile->isTextureSolved()) {
-        int ___________WORK_ON_FIRST_FULL_RENDER;
         return false;
       }
     }

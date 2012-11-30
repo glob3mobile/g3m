@@ -66,7 +66,7 @@ G3MWidget::G3MWidget(INativeGL*                       nativeGL,
                      std::vector<PeriodicalTask*>     periodicalTasks):
 _frameTasksExecutor( new FrameTasksExecutor() ),
 _effectsScheduler( new EffectsScheduler() ),
-_gl( new GL(nativeGL) ),
+_gl( new GL(nativeGL, false) ),
 _downloader(downloader),
 _storage(storage),
 _threadUtils(threadUtils),

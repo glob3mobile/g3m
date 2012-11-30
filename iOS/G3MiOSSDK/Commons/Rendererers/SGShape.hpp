@@ -18,7 +18,7 @@ class SGNode;
 class SGShape : public Shape {
 private:
   SGNode* _node;
-  const std::string& _uriPrefix;
+  const std::string _uriPrefix;
   
 public:
 

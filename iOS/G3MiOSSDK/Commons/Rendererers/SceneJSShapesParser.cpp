@@ -30,22 +30,28 @@
 #include "IIntBuffer.hpp"
 
 
-Shape* SceneJSShapesParser::parse(const std::string& json) {
-  return SceneJSShapesParser(json).getRootShape();
+Shape* SceneJSShapesParser::parse(const std::string& json,
+                                  const std::string& uriPrefix) {
+  return SceneJSShapesParser(json, uriPrefix).getRootShape();
 }
 
-Shape* SceneJSShapesParser::parse(const IByteBuffer* json) {
-  return SceneJSShapesParser(json).getRootShape();
+Shape* SceneJSShapesParser::parse(const IByteBuffer* json,
+                                  const std::string& uriPrefix) {
+  return SceneJSShapesParser(json, uriPrefix).getRootShape();
 }
 
 
-SceneJSShapesParser::SceneJSShapesParser(const IByteBuffer* json) :
+SceneJSShapesParser::SceneJSShapesParser(const IByteBuffer* json,
+                                         const std::string& uriPrefix) :
+_uriPrefix(uriPrefix),
 _rootShape(NULL)
 {
   pvtParse(json->getAsString());
 }
 
-SceneJSShapesParser::SceneJSShapesParser(const std::string& json):
+SceneJSShapesParser::SceneJSShapesParser(const std::string& json,
+                                         const std::string& uriPrefix):
+_uriPrefix(uriPrefix),
 _rootShape(NULL)
 {
   pvtParse(json);
@@ -59,26 +65,14 @@ void SceneJSShapesParser::pvtParse(const std::string& json) {
 
   SGNode* node = toNode(jsonRootObject);
 
-  _rootShape = new SGShape(node, "file:///");
+  _rootShape = new SGShape(node, _uriPrefix);
 
   delete jsonRootObject;
 }
 
-int SceneJSShapesParser::parseCommons(JSONObject* jsonObject,
-                                      SGNode* node) const {
+int SceneJSShapesParser::parseChildren(JSONObject* jsonObject,
+                                       SGNode* node) const {
   int processedKeys = 0;
-
-  JSONString* jsId = jsonObject->getAsString("id");
-  if (jsId != NULL) {
-    node->setId(jsId->value());
-    processedKeys++;
-  }
-
-  JSONString* jsSId = jsonObject->getAsString("sid");
-  if (jsSId != NULL) {
-    node->setSId(jsSId->value());
-    processedKeys++;
-  }
 
   JSONArray* jsNodes = jsonObject->getAsArray("nodes");
   if (jsNodes != NULL) {
@@ -116,9 +110,19 @@ SGNode* SceneJSShapesParser::createNode(JSONObject* jsonObject) const {
 
   int processedKeys = 1; // "type" is already processed
 
-  SGNode* node = new SGNode();
+  const std::string id = jsonObject->getAsString("id", "");
+  if (id.compare("") != 0) {
+    processedKeys++;
+  }
 
-  processedKeys += parseCommons(jsonObject, node);
+  const std::string sId = jsonObject->getAsString("sid", "");
+  if (sId.compare("") != 0) {
+    processedKeys++;
+  }
+
+  SGNode* node = new SGNode(id, sId);
+
+  processedKeys += parseChildren(jsonObject, node);
 
   //  std::vector<std::string> keys = jsonObject->keys();
   //  if (processedKeys != keys.size()) {
@@ -139,33 +143,49 @@ SGNode* SceneJSShapesParser::createNode(JSONObject* jsonObject) const {
 SGRotateNode* SceneJSShapesParser::createRotateNode(JSONObject* jsonObject) const {
   int processedKeys = 1; // "type" is already processed
 
-  SGRotateNode* node = new SGRotateNode();
+  const std::string id = jsonObject->getAsString("id", "");
+  if (id.compare("") != 0) {
+    processedKeys++;
+  }
 
-  processedKeys += parseCommons(jsonObject, node);
+  const std::string sId = jsonObject->getAsString("sid", "");
+  if (sId.compare("") != 0) {
+    processedKeys++;
+  }
 
   JSONNumber* jsX = jsonObject->getAsNumber("x");
+  double x = 0.0;
   if (jsX != NULL) {
-    node->setX( jsX->value() );
+    x = jsX->value();
     processedKeys++;
   }
 
   JSONNumber* jsY = jsonObject->getAsNumber("y");
+  double y = 0.0;
   if (jsY != NULL) {
-    node->setY( jsY->value() );
+    y = jsY->value();
     processedKeys++;
   }
 
   JSONNumber* jsZ = jsonObject->getAsNumber("z");
+  double z = 0.0;
   if (jsZ != NULL) {
-    node->setZ( jsZ->value() );
+    z = jsZ->value();
     processedKeys++;
   }
 
   JSONNumber* jsAngle = jsonObject->getAsNumber("angle");
+  double angle = 0;
   if (jsAngle != NULL) {
-    node->setAngle( jsAngle->value() );
+    angle = jsAngle->value();
     processedKeys++;
   }
+
+  SGRotateNode* node = new SGRotateNode(id, sId,
+                                        x, y, z,
+                                        angle);
+
+  processedKeys += parseChildren(jsonObject, node);
 
   checkProcessedKeys(jsonObject, processedKeys);
 
@@ -175,60 +195,126 @@ SGRotateNode* SceneJSShapesParser::createRotateNode(JSONObject* jsonObject) cons
 SGTranslateNode* SceneJSShapesParser::createTranslateNode(JSONObject* jsonObject) const {
   int processedKeys = 1; // "type" is already processed
 
-  SGTranslateNode* node = new SGTranslateNode();
+  const std::string id = jsonObject->getAsString("id", "");
+  if (id.compare("") != 0) {
+    processedKeys++;
+  }
 
-  processedKeys += parseCommons(jsonObject, node);
+  const std::string sId = jsonObject->getAsString("sid", "");
+  if (sId.compare("") != 0) {
+    processedKeys++;
+  }
 
   JSONNumber* jsX = jsonObject->getAsNumber("x");
+  double x = 0.0;
   if (jsX != NULL) {
-    node->setX( jsX->value() );
+    x = jsX->value();
     processedKeys++;
   }
 
   JSONNumber* jsY = jsonObject->getAsNumber("y");
+  double y = 0.0;
   if (jsY != NULL) {
-    node->setY( jsY->value() );
+    y = jsY->value();
     processedKeys++;
   }
 
   JSONNumber* jsZ = jsonObject->getAsNumber("z");
+  double z = 0.0;
   if (jsZ != NULL) {
-    node->setZ( jsZ->value() );
+    z = jsZ->value();
     processedKeys++;
   }
+
+  SGTranslateNode* node = new SGTranslateNode(id, sId,
+                                              x, y, z);
+
+  processedKeys += parseChildren(jsonObject, node);
 
   checkProcessedKeys(jsonObject, processedKeys);
 
   return node;
 }
 
+Color* SceneJSShapesParser::parseColor(JSONObject* jsColor) const {
+  const float r = (float) jsColor->getAsNumber("r", 0.0);
+  const float g = (float) jsColor->getAsNumber("g", 0.0);
+  const float b = (float) jsColor->getAsNumber("b", 0.0);
+  const float a = (float) jsColor->getAsNumber("a", 1.0);
+
+  return Color::newFromRGBA(r, g, b, a);
+}
+
 SGMaterialNode* SceneJSShapesParser::createMaterialNode(JSONObject* jsonObject) const {
   int processedKeys = 1; // "type" is already processed
 
-  SGMaterialNode* node = new SGMaterialNode();
+  const std::string id = jsonObject->getAsString("id", "");
+  if (id.compare("") != 0) {
+    processedKeys++;
+  }
 
-  processedKeys += parseCommons(jsonObject, node);
+  const std::string sId = jsonObject->getAsString("sid", "");
+  if (sId.compare("") != 0) {
+    processedKeys++;
+  }
+
+  JSONObject* jsBaseColor = jsonObject->getAsObject("baseColor");
+  Color* baseColor;
+  if (jsBaseColor == NULL) {
+    baseColor = Color::newFromRGBA(0, 0, 0, 1);
+  }
+  else {
+    baseColor = parseColor(jsBaseColor);
+    processedKeys++;
+  }
 
   JSONObject* jsSpecularColor = jsonObject->getAsObject("specularColor");
-  if (jsSpecularColor != NULL) {
-    const double r = jsSpecularColor->getAsNumber("r")->value();
-    const double g = jsSpecularColor->getAsNumber("g")->value();
-    const double b = jsSpecularColor->getAsNumber("b")->value();
-    const double a = jsSpecularColor->getAsNumber("a")->value();
-    node->setSpecularColor(Color::newFromRGBA((float) r, (float) g, (float) b, (float) a));
+  Color* specularColor;
+  if (jsSpecularColor == NULL) {
+    specularColor = Color::newFromRGBA(0, 0, 0, 1);
+  }
+  else {
+    specularColor = parseColor(jsSpecularColor);
     processedKeys++;
   }
 
   JSONNumber* jsShine = jsonObject->getAsNumber("shine");
+  double shine = 10;
   if (jsShine != NULL) {
-    node->setShine( jsShine->value() );
+    shine = jsShine->value();
     processedKeys++;
   }
+
   JSONNumber* jsSpecular = jsonObject->getAsNumber("specular");
+  double specular = 1.0;
   if (jsSpecular != NULL) {
-    node->setSpecular( jsSpecular->value() );
+    specular = jsSpecular->value();
     processedKeys++;
   }
+
+  JSONNumber* jsAlpha = jsonObject->getAsNumber("alpha");
+  double alpha = 1.0;
+  if (jsAlpha != NULL) {
+    alpha = jsAlpha->value();
+    processedKeys++;
+  }
+
+  JSONNumber* jsEmit = jsonObject->getAsNumber("emit");
+  double emit = 0.0;
+  if (jsEmit != NULL) {
+    emit = jsEmit->value();
+    processedKeys++;
+  }
+
+  SGMaterialNode* node = new SGMaterialNode(id, sId,
+                                            baseColor,
+                                            specularColor,
+                                            specular,
+                                            shine,
+                                            alpha,
+                                            emit);
+
+  processedKeys += parseChildren(jsonObject, node);
 
   checkProcessedKeys(jsonObject, processedKeys);
 
@@ -238,57 +324,70 @@ SGMaterialNode* SceneJSShapesParser::createMaterialNode(JSONObject* jsonObject) 
 SGLayerNode* SceneJSShapesParser::createLayerNode(JSONObject* jsonObject) const {
   int processedKeys = 0; //  Layer has not "type"
 
-  SGLayerNode* node = new SGLayerNode();
 
-  processedKeys += parseCommons(jsonObject, node);
-
-  JSONString* jsUri = jsonObject->getAsString("uri");
-  if (jsUri != NULL) {
-    node->setUri( jsUri->value() );
+  const std::string id = jsonObject->getAsString("id", "");
+  if (id.compare("") != 0) {
     processedKeys++;
   }
 
-  JSONString* jsApplyTo = jsonObject->getAsString("applyTo");
-  if (jsApplyTo != NULL) {
-    node->setApplyTo( jsApplyTo->value() );
+  const std::string sId = jsonObject->getAsString("sid", "");
+  if (sId.compare("") != 0) {
     processedKeys++;
   }
 
-  JSONString* jsBlendMode = jsonObject->getAsString("blendMode");
-  if (jsBlendMode != NULL) {
-    node->setBlendMode( jsBlendMode->value() );
+  const std::string uri = jsonObject->getAsString("uri", "");
+  if (uri.compare("") != 0) {
+    processedKeys++;
+  }
+
+  const std::string applyTo = jsonObject->getAsString("applyTo", "");
+  if (applyTo.compare("") != 0) {
+    processedKeys++;
+  }
+
+  const std::string blendMode = jsonObject->getAsString("blendMode", "");
+  if (blendMode.compare("") != 0) {
     processedKeys++;
   }
 
   JSONBoolean* jsFlipY = jsonObject->getAsBoolean("flipY");
+  bool flipY = true;
   if (jsFlipY != NULL) {
-    node->setFlipY( jsFlipY->value() );
+    flipY = jsFlipY->value();
     processedKeys++;
   }
 
-  JSONString* jsMagFilter = jsonObject->getAsString("magFilter");
-  if (jsMagFilter != NULL) {
-    node->setMagFilter( jsMagFilter->value() );
+  const std::string magFilter = jsonObject->getAsString("magFilter", "");
+  if (magFilter.compare("") != 0) {
     processedKeys++;
   }
 
-  JSONString* jsMinFilter = jsonObject->getAsString("minFilter");
-  if (jsMinFilter != NULL) {
-    node->setMinFilter( jsMinFilter->value() );
+  const std::string minFilter = jsonObject->getAsString("minFilter", "");
+  if (minFilter.compare("") != 0) {
     processedKeys++;
   }
 
-  JSONString* jsWrapS = jsonObject->getAsString("wrapS");
-  if (jsWrapS != NULL) {
-    node->setWrapS( jsWrapS->value() );
+  const std::string wrapS = jsonObject->getAsString("wrapS", "");
+  if (wrapS.compare("") != 0) {
     processedKeys++;
   }
 
-  JSONString* jsWrapT = jsonObject->getAsString("wrapT");
-  if (jsWrapT != NULL) {
-    node->setWrapT( jsWrapT->value() );
+  const std::string wrapT = jsonObject->getAsString("wrapT", "");
+  if (wrapT.compare("") != 0) {
     processedKeys++;
   }
+
+  SGLayerNode* node = new SGLayerNode(id, sId,
+                                      uri,
+                                      applyTo,
+                                      blendMode,
+                                      flipY,
+                                      magFilter,
+                                      minFilter,
+                                      wrapS,
+                                      wrapT);
+
+  processedKeys += parseChildren(jsonObject, node);
 
   checkProcessedKeys(jsonObject, processedKeys);
 
@@ -299,9 +398,19 @@ SGLayerNode* SceneJSShapesParser::createLayerNode(JSONObject* jsonObject) const 
 SGTextureNode* SceneJSShapesParser::createTextureNode(JSONObject* jsonObject) const {
   int processedKeys = 1; // "type" is already processed
 
-  SGTextureNode* node = new SGTextureNode();
+  const std::string id = jsonObject->getAsString("id", "");
+  if (id.compare("") != 0) {
+    processedKeys++;
+  }
 
-  processedKeys += parseCommons(jsonObject, node);
+  const std::string sId = jsonObject->getAsString("sid", "");
+  if (sId.compare("") != 0) {
+    processedKeys++;
+  }
+
+  SGTextureNode* node = new SGTextureNode(id, sId);
+
+  processedKeys += parseChildren(jsonObject, node);
 
   JSONArray* jsLayers = jsonObject->getAsArray("layers");
   if (jsLayers != NULL) {
@@ -323,6 +432,17 @@ SGTextureNode* SceneJSShapesParser::createTextureNode(JSONObject* jsonObject) co
 
 SGGeometryNode* SceneJSShapesParser::createGeometryNode(JSONObject* jsonObject) const {
   int processedKeys = 1; // "type" is already processed
+
+  const std::string id = jsonObject->getAsString("id", "");
+  if (id.compare("") != 0) {
+    processedKeys++;
+  }
+
+  const std::string sId = jsonObject->getAsString("sid", "");
+  if (sId.compare("") != 0) {
+    processedKeys++;
+  }
+  
 
   JSONString* jsPrimitive = jsonObject->getAsString("primitive");
   int primitive = GLPrimitive::triangles(); // triangles is the default
@@ -380,8 +500,16 @@ SGGeometryNode* SceneJSShapesParser::createGeometryNode(JSONObject* jsonObject) 
   if (jsUV != NULL) {
     const int uvCount = jsUV->size();
     uv = IFactory::instance()->createFloatBuffer(uvCount);
+    bool isY = false;
     for (int i = 0; i < uvCount; i++) {
-      uv->put(i, (float) jsUV->getAsNumber(i)->value());
+      float value = (float) jsUV->getAsNumber(i)->value();
+      if (isY) {
+        value = 1 - value;
+      }
+      isY = !isY;
+      uv->put(i, value);
+
+      int __TEXTURES_AT_WORK;
     }
     processedKeys++;
   }
@@ -404,14 +532,15 @@ SGGeometryNode* SceneJSShapesParser::createGeometryNode(JSONObject* jsonObject) 
   }
   processedKeys++;
 
-  SGGeometryNode* node = new SGGeometryNode(primitive,
+  SGGeometryNode* node = new SGGeometryNode(id, sId,
+                                            primitive,
                                             vertices,
                                             colors,
                                             uv,
                                             normals,
                                             indices);
 
-  processedKeys += parseCommons(jsonObject, node);
+  processedKeys += parseChildren(jsonObject, node);
 
   checkProcessedKeys(jsonObject, processedKeys);
 

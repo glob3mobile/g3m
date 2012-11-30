@@ -23,13 +23,17 @@ class SGTextureNode;
 class SGGeometryNode;
 class SGTranslateNode;
 class SGLayerNode;
+class Color;
 
 class SceneJSShapesParser {
 private:
   Shape* _rootShape;
-
-  SceneJSShapesParser(const std::string& json);
-  SceneJSShapesParser(const IByteBuffer* json);
+  const std::string& _uriPrefix;
+  
+  SceneJSShapesParser(const std::string& json,
+                      const std::string& uriPrefix);
+  SceneJSShapesParser(const IByteBuffer* json,
+                      const std::string& uriPrefix);
 
   Shape* getRootShape() const {
     return _rootShape;
@@ -39,8 +43,8 @@ private:
 
   SGNode* toNode(JSONBaseObject* jsonBaseObject) const;
 
-  int parseCommons(JSONObject* jsonObject,
-                   SGNode* node) const;
+  int parseChildren(JSONObject* jsonObject,
+                    SGNode* node) const;
 
   void checkProcessedKeys(JSONObject* jsonObject,
                           int processedKeys) const;
@@ -55,10 +59,14 @@ private:
   SGLayerNode*     createLayerNode  (JSONObject* jsonObject) const;
 
 
+  Color* parseColor(JSONObject* jsColor) const;
+
 public:
 
-  static Shape* parse(const std::string& json);
-  static Shape* parse(const IByteBuffer* json);
+  static Shape* parse(const std::string& json,
+                      const std::string& uriPrefix);
+  static Shape* parse(const IByteBuffer* json,
+                      const std::string& uriPrefix);
 
 };
 

@@ -12,6 +12,9 @@
 
 bool Layer::isAvailable(const G3MRenderContext* rc,
                         const Tile* tile) const {
+  if (!isEnable()) {
+    return false;
+  }
   if (_condition == NULL) {
     return true;
   }
@@ -20,6 +23,9 @@ bool Layer::isAvailable(const G3MRenderContext* rc,
 
 bool Layer::isAvailable(const G3MEventContext* ec,
                         const Tile* tile) const {
+  if (!isEnable()) {
+    return false;
+  }
   if (_condition == NULL) {
     return true;
   }
@@ -35,7 +41,7 @@ void Layer::setLayerSet(LayerSet* layerSet) {
 
 void Layer::notifyChanges() const {
   if (_layerSet == NULL) {
-    ILogger::instance()->logError("Can't notify changes, _layerSet was not set");
+//    ILogger::instance()->logError("Can't notify changes, _layerSet was not set");
   }
   else {
     _layerSet->layerChanged(this);

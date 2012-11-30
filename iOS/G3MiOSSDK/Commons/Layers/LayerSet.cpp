@@ -69,7 +69,7 @@ void LayerSet::addLayer(Layer* layer) {
   layer->setLayerSet(this);
   _layers.push_back(layer);
   if (_listener == NULL) {
-    ILogger::instance()->logError("Can't notify, _listener not set");
+//    ILogger::instance()->logError("Can't notify, _listener not set");
   }
   else {
     _listener->changed(this);
@@ -78,7 +78,7 @@ void LayerSet::addLayer(Layer* layer) {
 
 void LayerSet::layerChanged(const Layer* layer) const {
   if (_listener == NULL) {
-    ILogger::instance()->logError("Can't notify, _listener not set");
+//    ILogger::instance()->logError("Can't notify, _listener not set");
   }
   else {
     _listener->changed(this);

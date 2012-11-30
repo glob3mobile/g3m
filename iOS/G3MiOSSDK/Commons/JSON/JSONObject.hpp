@@ -38,6 +38,15 @@ public:
   JSONNumber*  getAsNumber (const std::string& key) const;
   JSONString*  getAsString (const std::string& key) const;
 
+  bool getAsBoolean(const std::string& key,
+                    bool defaultValue) const;
+  
+  double getAsNumber(const std::string& key,
+                      double defaultValue) const;
+  
+  const std::string getAsString(const std::string& key,
+                          const std::string& defaultValue) const;
+
   void put(const std::string& key,
            JSONBaseObject* object);
   

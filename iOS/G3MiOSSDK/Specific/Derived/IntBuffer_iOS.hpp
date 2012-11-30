@@ -55,7 +55,9 @@ public:
   int* getPointer() const {
     return _values;
   }
-  
+
+  const std::string description() const;
+
 };
 
 #endif

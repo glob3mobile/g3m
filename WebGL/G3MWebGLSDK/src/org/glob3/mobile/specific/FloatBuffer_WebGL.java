@@ -173,4 +173,10 @@ public final class FloatBuffer_WebGL
 		return new Float32Array(size);
    }-*/;
 
+
+   @Override
+   public String description() {
+      return "FloatBuffer_WebGL(timestamp=" + _timestamp + ", buffer=" + _buffer + ")";
+   }
+
 }

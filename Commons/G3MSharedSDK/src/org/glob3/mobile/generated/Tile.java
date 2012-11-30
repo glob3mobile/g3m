@@ -351,8 +351,6 @@ public class Tile
 
   public final void prepareForFullRendering(G3MRenderContext rc, TileRenderContext trc)
   {
-	int ___________WORK_ON_FIRST_FULL_RENDER;
-  
 	Mesh tessellatorMesh = getTessellatorMesh(rc, trc);
 	if (tessellatorMesh == null)
 	{
