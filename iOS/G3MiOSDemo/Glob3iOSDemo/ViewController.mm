@@ -28,6 +28,7 @@
 //#include "CompositeShape.hpp"
 #include "SceneJSShapesParser.hpp"
 #include "G3MWidget.hpp"
+#include "GEOJSONParser.hpp"
 
 @implementation ViewController
 
@@ -299,12 +300,6 @@
   //  trailsRenderer->addTrail(trail);
 
 
-  //  if (false) {
-  //    LatLonMeshRenderer *renderer = new LatLonMeshRenderer();
-  //    renderers.push_back(renderer);
-  //  }
-
-
   //  renderers.push_back(new GLErrorRenderer());
 
   //  class TestTrailTask : public GTask {
@@ -369,15 +364,15 @@
                                                                 1000000),
                                                      TimeInterval::fromSeconds(5));
       /**/
-      NSString *filePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
-                                                           ofType: @"json"];
-      if (filePath) {
-        NSString *nsString = [NSString stringWithContentsOfFile: filePath
+      NSString *planeFilePath = [[NSBundle mainBundle] pathForResource: @"seymour-plane"
+                                                                ofType: @"json"];
+      if (planeFilePath) {
+        NSString *nsPlaneJSON = [NSString stringWithContentsOfFile: planeFilePath
                                                        encoding: NSUTF8StringEncoding
                                                           error: nil];
-        if (nsString) {
-          std::string str = [nsString UTF8String];
-          Shape* plane = SceneJSShapesParser::parse(str, "file:///");
+        if (nsPlaneJSON) {
+          std::string planeJSON = [nsPlaneJSON UTF8String];
+          Shape* plane = SceneJSShapesParser::parse(planeJSON, "file:///");
 
           plane->setPosition( new Geodetic3D(Angle::fromDegrees(37.78333333),
                                              Angle::fromDegrees(-122.41666666666667),
@@ -388,6 +383,21 @@
         }
       }
       /**/
+
+      /*
+      NSString *geoJSONFilePath = [[NSBundle mainBundle] pathForResource: @"geojson/boundary_lines_land"
+                                                                  ofType: @"geojson"];
+      if (geoJSONFilePath) {
+        NSString *nsGEOJSON = [NSString stringWithContentsOfFile: geoJSONFilePath
+                                                          encoding: NSUTF8StringEncoding
+                                                             error: nil];
+        if (nsGEOJSON) {
+          std::string geoJSON = [nsGEOJSON UTF8String];
+
+          GEOObject* geoObject = GEOJSONParser::parse(context, geoJSON);
+        }
+      }
+      */
     }
   };
 

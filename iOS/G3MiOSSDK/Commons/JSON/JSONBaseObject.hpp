@@ -20,19 +20,24 @@ class JSONString;
 class JSONBaseObject {
   
 public:
+
+  static JSONBaseObject* deepCopy(const JSONBaseObject* object) {
+    return (object == NULL) ? NULL : object->deepCopy();
+  }
+
   virtual ~JSONBaseObject() {
   };
   
-  virtual JSONObject*  asObject();
-  virtual JSONArray*   asArray();
-  virtual JSONBoolean* asBoolean();
-  virtual JSONNumber*  asNumber();
-  virtual JSONString*  asString();
+  virtual const JSONObject*  asObject()  const;
+  virtual const JSONArray*   asArray()   const;
+  virtual const JSONBoolean* asBoolean() const;
+  virtual const JSONNumber*  asNumber()  const;
+  virtual const JSONString*  asString()  const;
+
+  virtual JSONBaseObject* deepCopy() const = 0;
 
   virtual const std::string description() const = 0;
 
 };
-
-
 
 #endif

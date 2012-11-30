@@ -11,9 +11,9 @@
 
 #include "JSONBaseObject.hpp"
 
-class JSONBoolean : public JSONBaseObject{
+class JSONBoolean : public JSONBaseObject {
 private:
-  bool _value;
+  const bool _value;
   
 public:
   JSONBoolean(bool value) :
@@ -25,11 +25,16 @@ public:
     return _value;
   }
   
-  JSONBoolean* asBoolean() {
+  const JSONBoolean* asBoolean() const {
     return this;
   }
 
   const std::string description() const;
+  
+  JSONBoolean* deepCopy() const {
+    return new JSONBoolean(_value);
+  }
+
 
 };
 

@@ -18,19 +18,19 @@ private:
   std::vector<JSONBaseObject*> _entries;
 
 public:
-  JSONArray* asArray() {
+  const JSONArray* asArray() const {
     return this;
   }
 
   ~JSONArray();
 
-  JSONBaseObject* get(const int index) const;
+  const JSONBaseObject* get(const int index) const;
 
-  JSONObject*  getAsObject (const int index) const;
-  JSONArray*   getAsArray  (const int index) const;
-  JSONBoolean* getAsBoolean(const int index) const;
-  JSONNumber*  getAsNumber (const int index) const;
-  JSONString*  getAsString (const int index) const;
+  const JSONObject*  getAsObject (const int index) const;
+  const JSONArray*   getAsArray  (const int index) const;
+  const JSONBoolean* getAsBoolean(const int index) const;
+  const JSONNumber*  getAsNumber (const int index) const;
+  const JSONString*  getAsString (const int index) const;
 
   bool getAsBoolean(const int index,
                     bool defaultValue) const;
@@ -39,13 +39,15 @@ public:
                      double defaultValue) const;
 
   const std::string getAsString(const int index,
-                                std::string& defaultValue) const;
+                                const std::string& defaultValue) const;
 
   int size() const;
 
   void add(JSONBaseObject* object);
 
   const std::string description() const;
+  
+  JSONArray* deepCopy() const;
 
 };
 

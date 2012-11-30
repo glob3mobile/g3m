@@ -78,13 +78,13 @@
 		CCC2A03515CA6C7D00923850 /* GLErrorRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02215CA6C7D00923850 /* GLErrorRenderer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CCC2A03615CA6C7D00923850 /* MarksRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02315CA6C7D00923850 /* MarksRenderer.cpp */; };
 		CCC2A03715CA6C7D00923850 /* MarksRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02415CA6C7D00923850 /* MarksRenderer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
-		CCC2A03815CA6C7D00923850 /* LatLonMeshRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02515CA6C7D00923850 /* LatLonMeshRenderer.cpp */; };
-		CCC2A03915CA6C7D00923850 /* LatLonMeshRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02615CA6C7D00923850 /* LatLonMeshRenderer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CCC2A03A15CA6C7D00923850 /* Renderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02715CA6C7D00923850 /* Renderer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CCC2A03D15CA6C7D00923850 /* SimplePlanetRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02A15CA6C7D00923850 /* SimplePlanetRenderer.cpp */; };
 		CCC2A03E15CA6C7D00923850 /* SimplePlanetRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02B15CA6C7D00923850 /* SimplePlanetRenderer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CCC2A03F15CA6C7D00923850 /* TileRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CCC2A02C15CA6C7D00923850 /* TileRenderer.cpp */; };
 		CCC2A04015CA6C7D00923850 /* TileRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CCC2A02D15CA6C7D00923850 /* TileRenderer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CF022386166836F500024B73 /* GEOJSONParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF022384166836F500024B73 /* GEOJSONParser.cpp */; };
+		CF022387166836F500024B73 /* GEOJSONParser.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF022385166836F500024B73 /* GEOJSONParser.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF0A8183163303E800036277 /* MutableVector2I.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0A8181163303E800036277 /* MutableVector2I.cpp */; };
 		CF0A8184163303E800036277 /* MutableVector2I.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF0A8182163303E800036277 /* MutableVector2I.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF0C396A157F988100646A2F /* Mark.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF0C3969157F988100646A2F /* Mark.cpp */; };
@@ -163,6 +163,10 @@
 		CF8B21C015DD345D0068601A /* SQDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = CF8B21BE15DD345D0068601A /* SQDatabase.m */; };
 		CF8D0BFE15AF0D32005B5433 /* TileTexturizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */; };
 		CF8FF98B15D5539F000F79D1 /* LeveledTexturedMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF8FF98915D5539F000F79D1 /* LeveledTexturedMesh.cpp */; };
+		CF94EB8F1669225600F2283C /* GEOLineStringGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF94EB8D1669225600F2283C /* GEOLineStringGeometry.cpp */; };
+		CF94EB901669225600F2283C /* GEOLineStringGeometry.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF94EB8E1669225600F2283C /* GEOLineStringGeometry.hpp */; };
+		CF94EB941669307700F2283C /* GEO2DLineStringGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF94EB921669307700F2283C /* GEO2DLineStringGeometry.cpp */; };
+		CF94EB951669307700F2283C /* GEO2DLineStringGeometry.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF94EB931669307700F2283C /* GEO2DLineStringGeometry.hpp */; };
 		CF9592AE1652E28500CB7AC8 /* OrderedRenderable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9592AC1652E28500CB7AC8 /* OrderedRenderable.cpp */; };
 		CF9592AF1652E28500CB7AC8 /* OrderedRenderable.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CF9592AD1652E28500CB7AC8 /* OrderedRenderable.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF9AEBC2159B3FEB004C3558 /* EllipsoidalTileTessellator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CF9AEBC1159B3FEA004C3558 /* EllipsoidalTileTessellator.cpp */; };
@@ -195,6 +199,10 @@
 		CFB72A6A15E6808900A5BAF4 /* IStringUtils.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFB72A6815E6808900A5BAF4 /* IStringUtils.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFB72A6E15E682B400A5BAF4 /* StringUtils_iOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = CFB72A6C15E682B400A5BAF4 /* StringUtils_iOS.mm */; };
 		CFB73CDE15EFC51B00261631 /* MathUtils_iOS.hpp in Headers */ = {isa = PBXBuildFile; fileRef = D8FEDAC815E7C219007633A0 /* MathUtils_iOS.hpp */; settings = {ATTRIBUTES = (Private, ); }; };
+		CFBF0D121669368F0045B882 /* GEOMultiLineStringGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBF0D101669368F0045B882 /* GEOMultiLineStringGeometry.cpp */; };
+		CFBF0D131669368F0045B882 /* GEOMultiLineStringGeometry.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFBF0D111669368F0045B882 /* GEOMultiLineStringGeometry.hpp */; };
+		CFBF0D16166946350045B882 /* GEO2DMultiLineStringGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFBF0D14166946350045B882 /* GEO2DMultiLineStringGeometry.cpp */; };
+		CFBF0D17166946350045B882 /* GEO2DMultiLineStringGeometry.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFBF0D15166946350045B882 /* GEO2DMultiLineStringGeometry.hpp */; };
 		CFC3BCC9164C6C7300A8D37D /* SGShape.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFC3BCC7164C6C7300A8D37D /* SGShape.cpp */; };
 		CFC3BCCA164C6C7300A8D37D /* SGShape.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFC3BCC8164C6C7300A8D37D /* SGShape.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFCB5EDA16582BCC007D051A /* CompositeMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFCB5ED816582BCC007D051A /* CompositeMesh.cpp */; };
@@ -207,9 +215,17 @@
 		CFCEFF4E163721EA00FC4AB0 /* TrailsRenderer.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFCEFF4C163721EA00FC4AB0 /* TrailsRenderer.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFD0021B15D3C94C00735FD8 /* TileKey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD0021915D3C94C00735FD8 /* TileKey.cpp */; };
 		CFD1A47516602B050039EFA9 /* ShapeScaleEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD1A47316602B050039EFA9 /* ShapeScaleEffect.cpp */; };
-		CFD1A47616602B050039EFA9 /* ShapeScaleEffect.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFD1A47416602B050039EFA9 /* ShapeScaleEffect.hpp */; };
+		CFD1A47616602B050039EFA9 /* ShapeScaleEffect.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFD1A47416602B050039EFA9 /* ShapeScaleEffect.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFD314531631FFAD00B54ED3 /* Vector2I.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFD314511631FFAD00B54ED3 /* Vector2I.cpp */; };
 		CFD314541631FFAD00B54ED3 /* Vector2I.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFD314521631FFAD00B54ED3 /* Vector2I.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CFDAE7A4166841C2006F6A00 /* GEOObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFDAE7A2166841C2006F6A00 /* GEOObject.cpp */; };
+		CFDAE7A5166841C2006F6A00 /* GEOObject.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFDAE7A3166841C2006F6A00 /* GEOObject.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CFDAE7A816684208006F6A00 /* GEOFeatureCollection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFDAE7A616684208006F6A00 /* GEOFeatureCollection.cpp */; };
+		CFDAE7A916684208006F6A00 /* GEOFeatureCollection.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFDAE7A716684208006F6A00 /* GEOFeatureCollection.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CFDAE7AC16684929006F6A00 /* GEOFeature.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFDAE7AA16684929006F6A00 /* GEOFeature.cpp */; };
+		CFDAE7AD16684929006F6A00 /* GEOFeature.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFDAE7AB16684929006F6A00 /* GEOFeature.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		CFDAE7B016691982006F6A00 /* GEOGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFDAE7AE16691982006F6A00 /* GEOGeometry.cpp */; };
+		CFDAE7B116691982006F6A00 /* GEOGeometry.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFDAE7AF16691982006F6A00 /* GEOGeometry.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFE029541601367100D1E75B /* IImageDownloadListener.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CFE029531601367100D1E75B /* IImageDownloadListener.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
 		CFE0844515E27B9A0004EC0E /* Petition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE0844315E27B9A0004EC0E /* Petition.cpp */; };
 		CFE3B579164AE32E009975A5 /* SceneJSShapesParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CFE3B577164AE32E009975A5 /* SceneJSShapesParser.cpp */; };
@@ -377,13 +393,13 @@
 		CCC2A02215CA6C7D00923850 /* GLErrorRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GLErrorRenderer.hpp; path = Commons/Rendererers/GLErrorRenderer.hpp; sourceTree = "<group>"; };
 		CCC2A02315CA6C7D00923850 /* MarksRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MarksRenderer.cpp; path = Commons/Rendererers/MarksRenderer.cpp; sourceTree = "<group>"; };
 		CCC2A02415CA6C7D00923850 /* MarksRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MarksRenderer.hpp; path = Commons/Rendererers/MarksRenderer.hpp; sourceTree = "<group>"; };
-		CCC2A02515CA6C7D00923850 /* LatLonMeshRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LatLonMeshRenderer.cpp; path = Commons/Rendererers/LatLonMeshRenderer.cpp; sourceTree = "<group>"; };
-		CCC2A02615CA6C7D00923850 /* LatLonMeshRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LatLonMeshRenderer.hpp; path = Commons/Rendererers/LatLonMeshRenderer.hpp; sourceTree = "<group>"; };
 		CCC2A02715CA6C7D00923850 /* Renderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Renderer.hpp; path = Commons/Rendererers/Renderer.hpp; sourceTree = "<group>"; };
 		CCC2A02A15CA6C7D00923850 /* SimplePlanetRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SimplePlanetRenderer.cpp; path = Commons/Rendererers/SimplePlanetRenderer.cpp; sourceTree = "<group>"; };
 		CCC2A02B15CA6C7D00923850 /* SimplePlanetRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SimplePlanetRenderer.hpp; path = Commons/Rendererers/SimplePlanetRenderer.hpp; sourceTree = "<group>"; };
 		CCC2A02C15CA6C7D00923850 /* TileRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; name = TileRenderer.cpp; path = Commons/Rendererers/TileRenderer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		CCC2A02D15CA6C7D00923850 /* TileRenderer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TileRenderer.hpp; path = Commons/Rendererers/TileRenderer.hpp; sourceTree = "<group>"; };
+		CF022384166836F500024B73 /* GEOJSONParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOJSONParser.cpp; path = Commons/GEO/GEOJSONParser.cpp; sourceTree = "<group>"; };
+		CF022385166836F500024B73 /* GEOJSONParser.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOJSONParser.hpp; path = Commons/GEO/GEOJSONParser.hpp; sourceTree = "<group>"; };
 		CF08483515D41EF700327171 /* IGLTextureId.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IGLTextureId.hpp; path = Commons/Interfaces/IGLTextureId.hpp; sourceTree = "<group>"; };
 		CF0A8181163303E800036277 /* MutableVector2I.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MutableVector2I.cpp; path = Commons/Geometry/MutableVector2I.cpp; sourceTree = "<group>"; };
 		CF0A8182163303E800036277 /* MutableVector2I.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = MutableVector2I.hpp; path = Commons/Geometry/MutableVector2I.hpp; sourceTree = "<group>"; };
@@ -456,6 +472,10 @@
 		CF8D0BFD15AF0D32005B5433 /* TileTexturizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TileTexturizer.cpp; path = Commons/Basic/TileTexturizer.cpp; sourceTree = "<group>"; };
 		CF8FF98915D5539F000F79D1 /* LeveledTexturedMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LeveledTexturedMesh.cpp; path = Commons/Mesh/LeveledTexturedMesh.cpp; sourceTree = "<group>"; };
 		CF8FF98A15D5539F000F79D1 /* LeveledTexturedMesh.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = LeveledTexturedMesh.hpp; path = Commons/Mesh/LeveledTexturedMesh.hpp; sourceTree = "<group>"; };
+		CF94EB8D1669225600F2283C /* GEOLineStringGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOLineStringGeometry.cpp; path = Commons/GEO/GEOLineStringGeometry.cpp; sourceTree = "<group>"; };
+		CF94EB8E1669225600F2283C /* GEOLineStringGeometry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOLineStringGeometry.hpp; path = Commons/GEO/GEOLineStringGeometry.hpp; sourceTree = "<group>"; };
+		CF94EB921669307700F2283C /* GEO2DLineStringGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEO2DLineStringGeometry.cpp; path = Commons/GEO/GEO2DLineStringGeometry.cpp; sourceTree = "<group>"; };
+		CF94EB931669307700F2283C /* GEO2DLineStringGeometry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEO2DLineStringGeometry.hpp; path = Commons/GEO/GEO2DLineStringGeometry.hpp; sourceTree = "<group>"; };
 		CF9592AC1652E28500CB7AC8 /* OrderedRenderable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = OrderedRenderable.cpp; path = Commons/Basic/OrderedRenderable.cpp; sourceTree = "<group>"; };
 		CF9592AD1652E28500CB7AC8 /* OrderedRenderable.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = OrderedRenderable.hpp; path = Commons/Basic/OrderedRenderable.hpp; sourceTree = "<group>"; };
 		CF9AEBBD159B3B95004C3558 /* TileTessellator.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = TileTessellator.hpp; path = Commons/Basic/TileTessellator.hpp; sourceTree = "<group>"; };
@@ -485,6 +505,10 @@
 		CFB72A6815E6808900A5BAF4 /* IStringUtils.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IStringUtils.hpp; path = Commons/Interfaces/IStringUtils.hpp; sourceTree = "<group>"; };
 		CFB72A6C15E682B400A5BAF4 /* StringUtils_iOS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = StringUtils_iOS.mm; path = Specific/Derived/StringUtils_iOS.mm; sourceTree = "<group>"; };
 		CFB72A6D15E682B400A5BAF4 /* StringUtils_iOS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = StringUtils_iOS.hpp; path = Specific/Derived/StringUtils_iOS.hpp; sourceTree = "<group>"; };
+		CFBF0D101669368F0045B882 /* GEOMultiLineStringGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOMultiLineStringGeometry.cpp; path = Commons/GEO/GEOMultiLineStringGeometry.cpp; sourceTree = "<group>"; };
+		CFBF0D111669368F0045B882 /* GEOMultiLineStringGeometry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOMultiLineStringGeometry.hpp; path = Commons/GEO/GEOMultiLineStringGeometry.hpp; sourceTree = "<group>"; };
+		CFBF0D14166946350045B882 /* GEO2DMultiLineStringGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEO2DMultiLineStringGeometry.cpp; path = Commons/GEO/GEO2DMultiLineStringGeometry.cpp; sourceTree = "<group>"; };
+		CFBF0D15166946350045B882 /* GEO2DMultiLineStringGeometry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEO2DMultiLineStringGeometry.hpp; path = Commons/GEO/GEO2DMultiLineStringGeometry.hpp; sourceTree = "<group>"; };
 		CFC3BCC7164C6C7300A8D37D /* SGShape.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGShape.cpp; path = Commons/Rendererers/SGShape.cpp; sourceTree = "<group>"; };
 		CFC3BCC8164C6C7300A8D37D /* SGShape.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SGShape.hpp; path = Commons/Rendererers/SGShape.hpp; sourceTree = "<group>"; };
 		CFCB5ED816582BCC007D051A /* CompositeMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CompositeMesh.cpp; path = Commons/Mesh/CompositeMesh.cpp; sourceTree = "<group>"; };
@@ -501,6 +525,14 @@
 		CFD1A47416602B050039EFA9 /* ShapeScaleEffect.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShapeScaleEffect.hpp; path = Commons/Rendererers/ShapeScaleEffect.hpp; sourceTree = "<group>"; };
 		CFD314511631FFAD00B54ED3 /* Vector2I.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Vector2I.cpp; path = Commons/Geometry/Vector2I.cpp; sourceTree = "<group>"; };
 		CFD314521631FFAD00B54ED3 /* Vector2I.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Vector2I.hpp; path = Commons/Geometry/Vector2I.hpp; sourceTree = "<group>"; };
+		CFDAE7A2166841C2006F6A00 /* GEOObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOObject.cpp; path = Commons/GEO/GEOObject.cpp; sourceTree = "<group>"; };
+		CFDAE7A3166841C2006F6A00 /* GEOObject.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOObject.hpp; path = Commons/GEO/GEOObject.hpp; sourceTree = "<group>"; };
+		CFDAE7A616684208006F6A00 /* GEOFeatureCollection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOFeatureCollection.cpp; path = Commons/GEO/GEOFeatureCollection.cpp; sourceTree = "<group>"; };
+		CFDAE7A716684208006F6A00 /* GEOFeatureCollection.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOFeatureCollection.hpp; path = Commons/GEO/GEOFeatureCollection.hpp; sourceTree = "<group>"; };
+		CFDAE7AA16684929006F6A00 /* GEOFeature.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOFeature.cpp; path = Commons/GEO/GEOFeature.cpp; sourceTree = "<group>"; };
+		CFDAE7AB16684929006F6A00 /* GEOFeature.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOFeature.hpp; path = Commons/GEO/GEOFeature.hpp; sourceTree = "<group>"; };
+		CFDAE7AE16691982006F6A00 /* GEOGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GEOGeometry.cpp; path = Commons/GEO/GEOGeometry.cpp; sourceTree = "<group>"; };
+		CFDAE7AF16691982006F6A00 /* GEOGeometry.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GEOGeometry.hpp; path = Commons/GEO/GEOGeometry.hpp; sourceTree = "<group>"; };
 		CFE029531601367100D1E75B /* IImageDownloadListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = IImageDownloadListener.hpp; path = Commons/Downloader/IImageDownloadListener.hpp; sourceTree = "<group>"; };
 		CFE0844015E27A310004EC0E /* TerrainTouchEventListener.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = TerrainTouchEventListener.hpp; path = Commons/Basic/TerrainTouchEventListener.hpp; sourceTree = "<group>"; };
 		CFE0844315E27B9A0004EC0E /* Petition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Petition.cpp; path = Commons/Basic/Petition.cpp; sourceTree = "<group>"; };
@@ -665,6 +697,7 @@
 				D87EC5C015BEB12F00E38C36 /* Layers */,
 				D8A5601915AEF47300035086 /* Mesh */,
 				CCC2A01A15CA6B8200923850 /* Renderers */,
+				CFDAE7A1166840E0006F6A00 /* GEO */,
 			);
 			name = Commons;
 			sourceTree = "<group>";
@@ -882,8 +915,6 @@
 				CCC2A02015CA6C7D00923850 /* DummyRenderer.hpp */,
 				CCC2A02115CA6C7D00923850 /* GLErrorRenderer.cpp */,
 				CCC2A02215CA6C7D00923850 /* GLErrorRenderer.hpp */,
-				CCC2A02515CA6C7D00923850 /* LatLonMeshRenderer.cpp */,
-				CCC2A02615CA6C7D00923850 /* LatLonMeshRenderer.hpp */,
 				CF527E1D162E33F500E0BDE0 /* LeafRenderer.cpp */,
 				CF527E1E162E33F500E0BDE0 /* LeafRenderer.hpp */,
 				CCC2A02315CA6C7D00923850 /* MarksRenderer.cpp */,
@@ -900,6 +931,31 @@
 				CFCEFF4C163721EA00FC4AB0 /* TrailsRenderer.hpp */,
 			);
 			name = Renderers;
+			sourceTree = "<group>";
+		};
+		CFDAE7A1166840E0006F6A00 /* GEO */ = {
+			isa = PBXGroup;
+			children = (
+				CF022384166836F500024B73 /* GEOJSONParser.cpp */,
+				CF022385166836F500024B73 /* GEOJSONParser.hpp */,
+				CFDAE7A2166841C2006F6A00 /* GEOObject.cpp */,
+				CFDAE7A3166841C2006F6A00 /* GEOObject.hpp */,
+				CFDAE7A616684208006F6A00 /* GEOFeatureCollection.cpp */,
+				CFDAE7A716684208006F6A00 /* GEOFeatureCollection.hpp */,
+				CFDAE7AA16684929006F6A00 /* GEOFeature.cpp */,
+				CFDAE7AB16684929006F6A00 /* GEOFeature.hpp */,
+				CFDAE7AE16691982006F6A00 /* GEOGeometry.cpp */,
+				CFDAE7AF16691982006F6A00 /* GEOGeometry.hpp */,
+				CF94EB8D1669225600F2283C /* GEOLineStringGeometry.cpp */,
+				CF94EB8E1669225600F2283C /* GEOLineStringGeometry.hpp */,
+				CF94EB921669307700F2283C /* GEO2DLineStringGeometry.cpp */,
+				CF94EB931669307700F2283C /* GEO2DLineStringGeometry.hpp */,
+				CFBF0D101669368F0045B882 /* GEOMultiLineStringGeometry.cpp */,
+				CFBF0D111669368F0045B882 /* GEOMultiLineStringGeometry.hpp */,
+				CFBF0D14166946350045B882 /* GEO2DMultiLineStringGeometry.cpp */,
+				CFBF0D15166946350045B882 /* GEO2DMultiLineStringGeometry.hpp */,
+			);
+			name = GEO;
 			sourceTree = "<group>";
 		};
 		CFEEE4BA1648676800F45F59 /* Shapes */ = {
@@ -1057,6 +1113,12 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CFDAE7A5166841C2006F6A00 /* GEOObject.hpp in Headers */,
+				CFDAE7A916684208006F6A00 /* GEOFeatureCollection.hpp in Headers */,
+				CFDAE7AD16684929006F6A00 /* GEOFeature.hpp in Headers */,
+				CFDAE7B116691982006F6A00 /* GEOGeometry.hpp in Headers */,
+				CFD1A47616602B050039EFA9 /* ShapeScaleEffect.hpp in Headers */,
+				CF022387166836F500024B73 /* GEOJSONParser.hpp in Headers */,
 				CFCB5EDB16582BCC007D051A /* CompositeMesh.hpp in Headers */,
 				CF9592AF1652E28500CB7AC8 /* OrderedRenderable.hpp in Headers */,
 				CF5A8A331656B67F00508C38 /* BoxShape.hpp in Headers */,
@@ -1168,7 +1230,6 @@
 				CCC2A03315CA6C7D00923850 /* DummyRenderer.hpp in Headers */,
 				CCC2A03515CA6C7D00923850 /* GLErrorRenderer.hpp in Headers */,
 				CCC2A03715CA6C7D00923850 /* MarksRenderer.hpp in Headers */,
-				CCC2A03915CA6C7D00923850 /* LatLonMeshRenderer.hpp in Headers */,
 				CCC2A03A15CA6C7D00923850 /* Renderer.hpp in Headers */,
 				D8F42FBB15EB6D78000D1822 /* GL.hpp in Headers */,
 				D8F42FB915EB6D78000D1822 /* TileKey.hpp in Headers */,
@@ -1213,7 +1274,10 @@
 				A70F560A161B5C6000340256 /* JSONParser_iOS.hpp in Headers */,
 				CFA189A015F8D9F80048BF46 /* IntBuffer_iOS.hpp in Headers */,
 				A74072CF161EEEA300182A39 /* BingLayer.hpp in Headers */,
-				CFD1A47616602B050039EFA9 /* ShapeScaleEffect.hpp in Headers */,
+				CF94EB901669225600F2283C /* GEOLineStringGeometry.hpp in Headers */,
+				CF94EB951669307700F2283C /* GEO2DLineStringGeometry.hpp in Headers */,
+				CFBF0D131669368F0045B882 /* GEOMultiLineStringGeometry.hpp in Headers */,
+				CFBF0D17166946350045B882 /* GEO2DMultiLineStringGeometry.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1317,7 +1381,6 @@
 				CCC2A03215CA6C7D00923850 /* DummyRenderer.cpp in Sources */,
 				CCC2A03415CA6C7D00923850 /* GLErrorRenderer.cpp in Sources */,
 				CCC2A03615CA6C7D00923850 /* MarksRenderer.cpp in Sources */,
-				CCC2A03815CA6C7D00923850 /* LatLonMeshRenderer.cpp in Sources */,
 				CCC2A03D15CA6C7D00923850 /* SimplePlanetRenderer.cpp in Sources */,
 				CCC2A03F15CA6C7D00923850 /* TileRenderer.cpp in Sources */,
 				D81BA17115CBF19F004EF0B0 /* GL.cpp in Sources */,
@@ -1391,6 +1454,15 @@
 				CF5A8A321656B67F00508C38 /* BoxShape.cpp in Sources */,
 				CFCB5EDA16582BCC007D051A /* CompositeMesh.cpp in Sources */,
 				CFD1A47516602B050039EFA9 /* ShapeScaleEffect.cpp in Sources */,
+				CF022386166836F500024B73 /* GEOJSONParser.cpp in Sources */,
+				CFDAE7A4166841C2006F6A00 /* GEOObject.cpp in Sources */,
+				CFDAE7A816684208006F6A00 /* GEOFeatureCollection.cpp in Sources */,
+				CFDAE7AC16684929006F6A00 /* GEOFeature.cpp in Sources */,
+				CFDAE7B016691982006F6A00 /* GEOGeometry.cpp in Sources */,
+				CF94EB8F1669225600F2283C /* GEOLineStringGeometry.cpp in Sources */,
+				CF94EB941669307700F2283C /* GEO2DLineStringGeometry.cpp in Sources */,
+				CFBF0D121669368F0045B882 /* GEOMultiLineStringGeometry.cpp in Sources */,
+				CFBF0D16166946350045B882 /* GEO2DMultiLineStringGeometry.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
