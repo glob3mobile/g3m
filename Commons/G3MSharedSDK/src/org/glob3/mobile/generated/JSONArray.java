@@ -22,6 +22,8 @@ public class JSONArray extends JSONBaseObject
 {
   private java.util.ArrayList<JSONBaseObject> _entries = new java.util.ArrayList<JSONBaseObject>();
 
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: const JSONArray* asArray() const
   public final JSONArray asArray()
   {
 	return this;
@@ -38,62 +40,71 @@ public class JSONArray extends JSONBaseObject
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: JSONBaseObject* get(const int index) const
+//ORIGINAL LINE: const JSONBaseObject* get(const int index) const
   public final JSONBaseObject get(int index)
   {
 	return _entries.get(index);
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: JSONObject* getAsObject(const int index) const
+//ORIGINAL LINE: const JSONObject* getAsObject(const int index) const
   public final JSONObject getAsObject(int index)
   {
-	JSONBaseObject object = get(index);
+	final JSONBaseObject object = get(index);
 	return (object == null) ? null : object.asObject();
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: JSONArray* getAsArray(const int index) const
+//ORIGINAL LINE: const JSONArray* getAsArray(const int index) const
   public final JSONArray getAsArray(int index)
   {
-	JSONBaseObject object = get(index);
+	final JSONBaseObject object = get(index);
 	return (object == null) ? null : object.asArray();
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: JSONBoolean* getAsBoolean(const int index) const
+//ORIGINAL LINE: const JSONBoolean* getAsBoolean(const int index) const
   public final JSONBoolean getAsBoolean(int index)
   {
-	JSONBaseObject object = get(index);
+	final JSONBaseObject object = get(index);
 	return (object == null) ? null : object.asBoolean();
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: JSONNumber* getAsNumber(const int index) const
+//ORIGINAL LINE: const JSONNumber* getAsNumber(const int index) const
   public final JSONNumber getAsNumber(int index)
   {
-	JSONBaseObject object = get(index);
+	final JSONBaseObject object = get(index);
 	return (object == null) ? null : object.asNumber();
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: JSONString* getAsString(const int index) const
+//ORIGINAL LINE: const JSONString* getAsString(const int index) const
   public final JSONString getAsString(int index)
   {
-	JSONBaseObject object = get(index);
+	final JSONBaseObject object = get(index);
 	return (object == null) ? null : object.asString();
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: boolean getAsBoolean(const int index, boolean defaultValue) const;
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  boolean getAsBoolean(int index, boolean defaultValue);
+//ORIGINAL LINE: boolean getAsBoolean(const int index, boolean defaultValue) const
+  public final boolean getAsBoolean(int index, boolean defaultValue)
+  {
+	final JSONBoolean jsBool = getAsBoolean(index);
+	return (jsBool == null) ? defaultValue : jsBool.value();
+  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: double getAsNumber(const int index, double defaultValue) const;
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  double getAsNumber(int index, double defaultValue);
+//ORIGINAL LINE: double getAsNumber(const int index, double defaultValue) const
+  public final double getAsNumber(int index, double defaultValue)
+  {
+	final JSONNumber jsNumber = getAsNumber(index);
+	return (jsNumber == null) ? defaultValue : jsNumber.value();
+  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: const String getAsString(const int index, String& defaultValue) const;
-//C++ TO JAVA CONVERTER TODO TASK: The implementation of the following method could not be found:
-//  String getAsString(int index, String defaultValue);
+//ORIGINAL LINE: const String getAsString(const int index, const String& defaultValue) const
+  public final String getAsString(int index, String defaultValue)
+  {
+	final JSONString jsString = getAsString(index);
+	return (jsString == null) ? defaultValue : jsString.value();
+  }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
 //ORIGINAL LINE: int size() const
@@ -116,8 +127,8 @@ public class JSONArray extends JSONBaseObject
 	int size = this.size();
   
 	isb.addString("[");
-  //  isb->addString("[size=");
-  //  isb->addInt(size);
+	//  isb->addString("[size=");
+	//  isb->addInt(size);
   
 	if (size > 0)
 	{
@@ -153,6 +164,21 @@ public class JSONArray extends JSONBaseObject
 	if (isb != null)
 		isb.dispose();
 	return s;
+  }
+
+//C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
+//ORIGINAL LINE: JSONArray* deepCopy() const
+  public final JSONArray deepCopy()
+  {
+	JSONArray result = new JSONArray();
+  
+	final int size = this.size();
+	for (int i = 0; i < size; i++)
+	{
+	  result.add(JSONBaseObject.deepCopy(get(i)));
+	}
+  
+	return result;
   }
 
 }

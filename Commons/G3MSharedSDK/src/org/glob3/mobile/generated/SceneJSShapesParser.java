@@ -83,7 +83,7 @@ public class SceneJSShapesParser
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: SGNode* toNode(JSONBaseObject* jsonBaseObject) const
+//ORIGINAL LINE: SGNode* toNode(const JSONBaseObject* jsonBaseObject) const
   private SGNode toNode(JSONBaseObject jsonBaseObject)
   {
   
@@ -93,13 +93,13 @@ public class SceneJSShapesParser
 	}
   
 	int ____DIEGO_AT_WORK;
-	JSONObject jsonObject = jsonBaseObject.asObject();
+	final JSONObject jsonObject = jsonBaseObject.asObject();
   
 	SGNode result = null;
   
 	if (jsonObject != null)
 	{
-	  JSONString jsType = jsonObject.getAsString("type");
+	  final JSONString jsType = jsonObject.getAsString("type");
 	  if (jsType != null)
 	  {
 		final String type = jsType.value();
@@ -129,7 +129,7 @@ public class SceneJSShapesParser
 		}
 		else
 		{
-		  ILogger.instance().logWarning("Unknown type \"%s\"", type);
+		  ILogger.instance().logWarning("SceneJS: Unknown type \"%s\"", type);
 		}
 	  }
 	}
@@ -138,18 +138,18 @@ public class SceneJSShapesParser
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: int parseChildren(JSONObject* jsonObject, SGNode* node) const
+//ORIGINAL LINE: int parseChildren(const JSONObject* jsonObject, SGNode* node) const
   private int parseChildren(JSONObject jsonObject, SGNode node)
   {
 	int processedKeys = 0;
   
-	JSONArray jsNodes = jsonObject.getAsArray("nodes");
+	final JSONArray jsNodes = jsonObject.getAsArray("nodes");
 	if (jsNodes != null)
 	{
 	  final int nodesCount = jsNodes.size();
 	  for (int i = 0; i < nodesCount; i++)
 	  {
-		JSONObject child = jsNodes.getAsObject(i);
+		final JSONObject child = jsNodes.getAsObject(i);
 		if (child != null)
 		{
 		  SGNode childNode = toNode(child);
@@ -166,7 +166,7 @@ public class SceneJSShapesParser
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: void checkProcessedKeys(JSONObject* jsonObject, int processedKeys) const
+//ORIGINAL LINE: void checkProcessedKeys(const JSONObject* jsonObject, int processedKeys) const
   private void checkProcessedKeys(JSONObject jsonObject, int processedKeys)
   {
 	java.util.ArrayList<String> keys = jsonObject.keys();
@@ -182,7 +182,7 @@ public class SceneJSShapesParser
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: SGNode* createNode(JSONObject* jsonObject) const
+//ORIGINAL LINE: SGNode* createNode(const JSONObject* jsonObject) const
   private SGNode createNode(JSONObject jsonObject)
   {
   
@@ -220,7 +220,7 @@ public class SceneJSShapesParser
 	return node;
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: SGRotateNode* createRotateNode(JSONObject* jsonObject) const
+//ORIGINAL LINE: SGRotateNode* createRotateNode(const JSONObject* jsonObject) const
   private SGRotateNode createRotateNode(JSONObject jsonObject)
   {
 	int processedKeys = 1; // "type" is already processed
@@ -237,7 +237,7 @@ public class SceneJSShapesParser
 	  processedKeys++;
 	}
   
-	JSONNumber jsX = jsonObject.getAsNumber("x");
+	final JSONNumber jsX = jsonObject.getAsNumber("x");
 	double x = 0.0;
 	if (jsX != null)
 	{
@@ -245,7 +245,7 @@ public class SceneJSShapesParser
 	  processedKeys++;
 	}
   
-	JSONNumber jsY = jsonObject.getAsNumber("y");
+	final JSONNumber jsY = jsonObject.getAsNumber("y");
 	double y = 0.0;
 	if (jsY != null)
 	{
@@ -253,7 +253,7 @@ public class SceneJSShapesParser
 	  processedKeys++;
 	}
   
-	JSONNumber jsZ = jsonObject.getAsNumber("z");
+	final JSONNumber jsZ = jsonObject.getAsNumber("z");
 	double z = 0.0;
 	if (jsZ != null)
 	{
@@ -261,7 +261,7 @@ public class SceneJSShapesParser
 	  processedKeys++;
 	}
   
-	JSONNumber jsAngle = jsonObject.getAsNumber("angle");
+	final JSONNumber jsAngle = jsonObject.getAsNumber("angle");
 	double angle = 0;
 	if (jsAngle != null)
 	{
@@ -278,7 +278,7 @@ public class SceneJSShapesParser
 	return node;
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: SGTranslateNode* createTranslateNode(JSONObject* jsonObject) const
+//ORIGINAL LINE: SGTranslateNode* createTranslateNode(const JSONObject* jsonObject) const
   private SGTranslateNode createTranslateNode(JSONObject jsonObject)
   {
 	int processedKeys = 1; // "type" is already processed
@@ -295,7 +295,7 @@ public class SceneJSShapesParser
 	  processedKeys++;
 	}
   
-	JSONNumber jsX = jsonObject.getAsNumber("x");
+	final JSONNumber jsX = jsonObject.getAsNumber("x");
 	double x = 0.0;
 	if (jsX != null)
 	{
@@ -303,7 +303,7 @@ public class SceneJSShapesParser
 	  processedKeys++;
 	}
   
-	JSONNumber jsY = jsonObject.getAsNumber("y");
+	final JSONNumber jsY = jsonObject.getAsNumber("y");
 	double y = 0.0;
 	if (jsY != null)
 	{
@@ -311,7 +311,7 @@ public class SceneJSShapesParser
 	  processedKeys++;
 	}
   
-	JSONNumber jsZ = jsonObject.getAsNumber("z");
+	final JSONNumber jsZ = jsonObject.getAsNumber("z");
 	double z = 0.0;
 	if (jsZ != null)
 	{
@@ -328,7 +328,7 @@ public class SceneJSShapesParser
 	return node;
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: SGMaterialNode* createMaterialNode(JSONObject* jsonObject) const
+//ORIGINAL LINE: SGMaterialNode* createMaterialNode(const JSONObject* jsonObject) const
   private SGMaterialNode createMaterialNode(JSONObject jsonObject)
   {
 	int processedKeys = 1; // "type" is already processed
@@ -345,7 +345,7 @@ public class SceneJSShapesParser
 	  processedKeys++;
 	}
   
-	JSONObject jsBaseColor = jsonObject.getAsObject("baseColor");
+	final JSONObject jsBaseColor = jsonObject.getAsObject("baseColor");
 	Color baseColor;
 	if (jsBaseColor == null)
 	{
@@ -357,7 +357,7 @@ public class SceneJSShapesParser
 	  processedKeys++;
 	}
   
-	JSONObject jsSpecularColor = jsonObject.getAsObject("specularColor");
+	final JSONObject jsSpecularColor = jsonObject.getAsObject("specularColor");
 	Color specularColor;
 	if (jsSpecularColor == null)
 	{
@@ -369,7 +369,7 @@ public class SceneJSShapesParser
 	  processedKeys++;
 	}
   
-	JSONNumber jsShine = jsonObject.getAsNumber("shine");
+	final JSONNumber jsShine = jsonObject.getAsNumber("shine");
 	double shine = 10;
 	if (jsShine != null)
 	{
@@ -377,7 +377,7 @@ public class SceneJSShapesParser
 	  processedKeys++;
 	}
   
-	JSONNumber jsSpecular = jsonObject.getAsNumber("specular");
+	final JSONNumber jsSpecular = jsonObject.getAsNumber("specular");
 	double specular = 1.0;
 	if (jsSpecular != null)
 	{
@@ -385,7 +385,7 @@ public class SceneJSShapesParser
 	  processedKeys++;
 	}
   
-	JSONNumber jsAlpha = jsonObject.getAsNumber("alpha");
+	final JSONNumber jsAlpha = jsonObject.getAsNumber("alpha");
 	double alpha = 1.0;
 	if (jsAlpha != null)
 	{
@@ -393,7 +393,7 @@ public class SceneJSShapesParser
 	  processedKeys++;
 	}
   
-	JSONNumber jsEmit = jsonObject.getAsNumber("emit");
+	final JSONNumber jsEmit = jsonObject.getAsNumber("emit");
 	double emit = 0.0;
 	if (jsEmit != null)
 	{
@@ -410,7 +410,7 @@ public class SceneJSShapesParser
 	return node;
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: SGTextureNode* createTextureNode(JSONObject* jsonObject) const
+//ORIGINAL LINE: SGTextureNode* createTextureNode(const JSONObject* jsonObject) const
   private SGTextureNode createTextureNode(JSONObject jsonObject)
   {
 	int processedKeys = 1; // "type" is already processed
@@ -431,13 +431,13 @@ public class SceneJSShapesParser
   
 	processedKeys += parseChildren(jsonObject, node);
   
-	JSONArray jsLayers = jsonObject.getAsArray("layers");
+	final JSONArray jsLayers = jsonObject.getAsArray("layers");
 	if (jsLayers != null)
 	{
 	  int layersCount = jsLayers.size();
 	  for (int i = 0; i < layersCount; i++)
 	  {
-		JSONObject jsLayer = jsLayers.getAsObject(i);
+		final JSONObject jsLayer = jsLayers.getAsObject(i);
 		if (jsLayer != null)
 		{
 		  node.addLayer(createLayerNode(jsLayer));
@@ -452,7 +452,7 @@ public class SceneJSShapesParser
 	return node;
   }
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: SGGeometryNode* createGeometryNode(JSONObject* jsonObject) const
+//ORIGINAL LINE: SGGeometryNode* createGeometryNode(const JSONObject* jsonObject) const
   private SGGeometryNode createGeometryNode(JSONObject jsonObject)
   {
 	int processedKeys = 1; // "type" is already processed
@@ -470,7 +470,7 @@ public class SceneJSShapesParser
 	}
   
   
-	JSONString jsPrimitive = jsonObject.getAsString("primitive");
+	final JSONString jsPrimitive = jsonObject.getAsString("primitive");
 	int primitive = GLPrimitive.triangles(); // triangles is the default
 	if (jsPrimitive != null)
 	{
@@ -506,7 +506,7 @@ public class SceneJSShapesParser
 	  }
 	}
   
-	JSONArray jsPositions = jsonObject.getAsArray("positions");
+	final JSONArray jsPositions = jsonObject.getAsArray("positions");
 	if (jsPositions == null)
 	{
 	  ILogger.instance().logError("Mandatory positions are not present");
@@ -520,7 +520,7 @@ public class SceneJSShapesParser
 	  vertices.put(i, (float) jsPositions.getAsNumber(i).value());
 	}
   
-	JSONArray jsColors = jsonObject.getAsArray("colors");
+	final JSONArray jsColors = jsonObject.getAsArray("colors");
 	IFloatBuffer colors = null;
 	if (jsColors != null)
 	{
@@ -533,7 +533,7 @@ public class SceneJSShapesParser
 	  processedKeys++;
 	}
   
-	JSONArray jsUV = jsonObject.getAsArray("uv");
+	final JSONArray jsUV = jsonObject.getAsArray("uv");
 	IFloatBuffer uv = null;
 	if (jsUV != null)
 	{
@@ -555,14 +555,14 @@ public class SceneJSShapesParser
 	  processedKeys++;
 	}
   
-	JSONArray jsNormals = jsonObject.getAsArray("normals");
+	final JSONArray jsNormals = jsonObject.getAsArray("normals");
 	IFloatBuffer normals = null;
 	if (jsNormals != null)
 	{
 	  processedKeys++;
 	}
   
-	JSONArray jsIndices = jsonObject.getAsArray("indices");
+	final JSONArray jsIndices = jsonObject.getAsArray("indices");
 	if (jsIndices == null)
 	{
 	  ILogger.instance().logError("Non indexed geometries not supported");
@@ -586,7 +586,7 @@ public class SceneJSShapesParser
   }
 
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: SGLayerNode* createLayerNode(JSONObject* jsonObject) const
+//ORIGINAL LINE: SGLayerNode* createLayerNode(const JSONObject* jsonObject) const
   private SGLayerNode createLayerNode(JSONObject jsonObject)
   {
 	int processedKeys = 0; // Layer has not "type"
@@ -622,7 +622,7 @@ public class SceneJSShapesParser
 	  processedKeys++;
 	}
   
-	JSONBoolean jsFlipY = jsonObject.getAsBoolean("flipY");
+	final JSONBoolean jsFlipY = jsonObject.getAsBoolean("flipY");
 	boolean flipY = true;
 	if (jsFlipY != null)
 	{
@@ -663,9 +663,8 @@ public class SceneJSShapesParser
 	return node;
   }
 
-
 //C++ TO JAVA CONVERTER WARNING: 'const' methods are not available in Java:
-//ORIGINAL LINE: Color* parseColor(JSONObject* jsColor) const
+//ORIGINAL LINE: Color* parseColor(const JSONObject* jsColor) const
   private Color parseColor(JSONObject jsColor)
   {
 	final float r = (float) jsColor.getAsNumber("r", 0.0);
